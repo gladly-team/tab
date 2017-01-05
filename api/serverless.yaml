@@ -14,15 +14,13 @@ provider:
 
 functions:
   api:
+    name: api
     handler: handler.graphql
     events:
     - http:
         path: graphql
         method: post
         cors: true
-        response:
-          headers:
-            Access-Control-Allow-Origin: "'*'"
 
 resources:
   Resources:
