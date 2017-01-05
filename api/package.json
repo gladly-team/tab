@@ -1,10 +1,10 @@
 {
-  "name": "serverless-graphql",
+  "name": "tab",
   "version": "0.0.0",
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git@github.com:serverless/serverless-graphql.git"
+    "url": "git@github.com:gladly-team/tab.git"
   },
   "dependencies": {
     "babel-polyfill": "6.13.0",

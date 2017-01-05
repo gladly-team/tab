@@ -1,8 +1,11 @@
-service: serverless-graphql
+service: tab
 
 provider:
   name: aws
   runtime: nodejs4.3
+  profile: serverless-admin
+  stage: dev # Set the default stage used. Default is dev
+  region: us-west-2 # Overwrite the default region used. Default is us-east-1
   iamRoleStatements:
     - Effect: "Allow"
       Action:
@@ -19,14 +22,14 @@ functions:
         cors: true
         response:
           headers:
-            Access-Control-Allow-Origin: "*"
+            Access-Control-Allow-Origin: "'*'"
 
 resources:
   Resources:
     WebsiteS3Bucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: <your-s3-bucket-name>
+        BucketName: tab-website
         AccessControl: PublicRead
         WebsiteConfiguration:
           IndexDocument: index.html
