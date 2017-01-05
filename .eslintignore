@@ -1,0 +1,10 @@
+.DS_Store
+node_modules
+npm-debug.log
+graphql/schema.graphql
+coverage/
+
+# build
+build/
+api/graphql
+api/config.js
