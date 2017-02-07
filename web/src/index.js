@@ -1,9 +1,21 @@
+
+import App from './js/components/App';
+import AppHomeRoute from './js/routes/AppHomeRoute';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
-import './index.css';
+import Relay, {
+  DefaultNetworkLayer,
+} from 'react-relay';
+
+Relay.injectNetworkLayer(
+  new DefaultNetworkLayer('http://localhost:8080')
+);
 
 ReactDOM.render(
-  <App />,
+  <Relay.Renderer
+    environment={Relay.Store}
+    Container={App}
+    queryConfig={new AppHomeRoute()}
+  />,
   document.getElementById('root')
 );

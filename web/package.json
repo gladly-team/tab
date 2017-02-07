@@ -1,14 +1,19 @@
 {
-  "name": "web",
+  "name": "tab-web",
   "version": "0.1.0",
+  "description": "Web app for Tab for a Cause.",
   "private": true,
   "devDependencies": {
     "autoprefixer": "6.5.1",
     "babel-core": "6.17.0",
     "babel-eslint": "7.1.1",
     "babel-jest": "17.0.2",
-    "babel-loader": "6.2.7",
+    "babel-loader": "^6.2.7",
+    "babel-polyfill": "^6.22.0",
+    "babel-preset-es2015": "^6.22.0",
     "babel-preset-react-app": "^2.0.1",
+    "babel-preset-stage-0": "^6.22.0",
+    "babel-relay-plugin": "^0.10.0",
     "case-sensitive-paths-webpack-plugin": "1.1.4",
     "chalk": "1.1.3",
     "connect-history-api-fallback": "1.3.0",
@@ -48,7 +53,8 @@
   },
   "dependencies": {
     "react": "^15.4.2",
-    "react-dom": "^15.4.2"
+    "react-dom": "^15.4.2",
+    "react-relay": "^0.10.0"
   },
   "scripts": {
     "start": "node scripts/start.js",
@@ -80,11 +86,22 @@
     }
   },
   "babel": {
+    "plugins": [
+      "babel/babelRelayPlugin"
+    ],
     "presets": [
       "react-app"
     ]
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gladly-team/tab.git"
+  },
+  "author": "Gladly Team",
+  "bugs": {
+    "url": "https://github.com/gladly-team/tab/issues"
   }
 }

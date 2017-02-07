@@ -5,9 +5,25 @@ services:
     restart: always
     build:
       context: ./web/
+    links:
+      - graphql:graphql
     ports:
       - "80:3000"
     volumes:
       - ./web:/web
       - ./web/node_modules:/web/node_modules # http://stackoverflow.com/a/32785014/1332513
+    command: ["npm", "start"]
+
+  graphql:
+    restart: always
+    build:
+      context: ./graphql/
+    expose:
+      - "8080"
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./graphql:/graphql
+      - ./graphql/node_modules:/graphql/node_modules
+    # command: ["npm", "run", "update-schema", "&&", "npm", "start"]
     command: ["npm", "start"]
