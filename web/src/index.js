@@ -6,6 +6,7 @@ import ReactDOM from 'react-dom';
 import Relay, {
   DefaultNetworkLayer,
 } from 'react-relay';
+import './schema-refresh';
 
 Relay.injectNetworkLayer(
   new DefaultNetworkLayer('http://localhost:8080')

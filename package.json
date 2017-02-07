@@ -1,0 +1,29 @@
+{
+  "name": "tab",
+  "version": "0.1.0",
+  "description": "Tab for a Cause.",
+  "private": true,
+  "config": {
+    "graphql_schema": "graphql/data/schema.json",
+    "graphql_schema_dest": "web/data/schema.json"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  },
+  "scripts": {
+    "develop": "npm run web:graphqlschema:monitor",
+    "web:graphqlschema:monitor": "nodemon --watch $npm_package_config_graphql_schema --exec \"npm run web:graphqlschema:update\"",
+    "web:graphqlschema:update": "cp $npm_package_config_graphql_schema $npm_package_config_graphql_schema_dest && npm run web:graphqlschema:reload",
+    "web:graphqlschema:reload": "./scripts/web-graphqlschema-reload.sh && osascript -e 'display notification \"Updating web GraphQL schema.\"  with title \"Schema reloading\"'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gladly-team/tab.git"
+  },
+  "author": "Gladly Team",
+  "bugs": {
+    "url": "https://github.com/gladly-team/tab/issues"
+  },
+  "homepage": "https://github.com/gladly-team/tab#readme"
+}
