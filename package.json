@@ -14,6 +14,7 @@
   "scripts": {
     "build": "docker-compose build & npm run web:npminstall & npm run graphql:npminstall",
     "start": "docker-compose up & npm run web:graphqlschema:monitor",
+    "stop": "docker-compose stop",
     "test": "npm run web:test",
     "graphql:npminstall": "cd ./graphql && npm install",
     "web:graphqlschema:monitor": "nodemon --watch $npm_package_config_graphql_schema --exec \"npm run web:graphqlschema:update\"",
