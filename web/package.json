@@ -37,6 +37,7 @@
     "http-proxy-middleware": "0.17.2",
     "jest": "17.0.2",
     "json-loader": "0.5.4",
+    "nodemon": "^1.11.0",
     "object-assign": "4.1.0",
     "path-exists": "2.1.0",
     "postcss-loader": "1.0.0",
@@ -57,7 +58,7 @@
     "react-relay": "^0.10.0"
   },
   "scripts": {
-    "start": "node scripts/start.js",
+    "start": "nodemon --watch data/schema.json scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom"
   },
