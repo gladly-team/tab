@@ -86,14 +86,6 @@
       "^react-native$": "react-native-web"
     }
   },
-  "babel": {
-    "plugins": [
-      "babel/babelRelayPlugin"
-    ],
-    "presets": [
-      "react-app"
-    ]
-  },
   "eslintConfig": {
     "extends": "react-app"
   },
