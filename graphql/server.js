@@ -43,8 +43,7 @@ function startServer(callback) {
     console.log(stdout);
     let doneTasks = 0;
     function handleTaskDone() {
-      doneTasks++;
-      if (doneTasks === 2 && callback) {
+      if (callback) {
         callback();
       }
     }
@@ -57,7 +56,7 @@ const watcher = chokidar.watch('./data/{database,schema}.js');
 watcher.on('change', path => {
   console.log(`\`${path}\` changed. Restarting.`);
   startServer(() =>
-    console.log('Restart your browser to use the updated schema.')
+    console.log('GraphQL server schema updated.')
   );
 });
 
