@@ -123,7 +123,6 @@ module.exports = {
       {
         test: /\.(js|jsx)$/,
         include: paths.appSrc,
-        // Need to rely on .babelrc to include babelRelayPlugin.
         loader: 'babel-loader',
         query: {
           
