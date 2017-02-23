@@ -41,7 +41,6 @@ function startServer(callback) {
   // Compile the schema
   exec('npm run update-schema', (error, stdout) => {
     console.log(stdout);
-    let doneTasks = 0;
     function handleTaskDone() {
       if (callback) {
         callback();
