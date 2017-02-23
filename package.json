@@ -3,10 +3,6 @@
   "version": "0.1.0",
   "description": "Tab for a Cause.",
   "private": true,
-  "config": {
-    "graphql_schema": "graphql/data/schema.json",
-    "graphql_schema_dest": "web/data/schema.json"
-  },
   "dependencies": {},
   "devDependencies": {
     "nodemon": "^1.11.0"
@@ -17,8 +13,8 @@
     "stop": "docker-compose stop",
     "test": "npm run web:test",
     "graphql:npminstall": "cd ./graphql && npm install",
-    "web:graphqlschema:monitor": "nodemon --watch $npm_package_config_graphql_schema --exec \"npm run web:graphqlschema:update\"",
-    "web:graphqlschema:update": "cp $npm_package_config_graphql_schema $npm_package_config_graphql_schema_dest",
+    "web:graphqlschema:monitor": "nodemon --watch graphql/data/schema.json --exec \"npm run web:graphqlschema:update\"",
+    "web:graphqlschema:update": "cp graphql/data/schema.json web/data/schema.json",
     "web:npminstall": "cd ./web && npm install",
     "web:test": "cd ./web && npm test"
   },
