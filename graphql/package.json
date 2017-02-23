@@ -1,0 +1,38 @@
+{
+  "name": "tab-graphql",
+  "version": "0.1.0",
+  "description": "GraphQL server for Tab for a Cause.",
+  "private": true,
+  "dependencies": {
+    "babel-core": "^6.22.1",
+    "babel-loader": "^6.2.10",
+    "babel-polyfill": "^6.22.0",
+    "babel-preset-es2015": "^6.22.0",
+    "babel-preset-stage-0": "^6.22.0",
+    "babel-relay-plugin": "^0.11.0",
+    "chokidar": "^1.6.1",
+    "cors": "^2.8.1",
+    "express": "^4.14.1",
+    "express-graphql": "^0.6.3",
+    "graphql": "^0.9.1",
+    "graphql-relay": "^0.5.1",
+    "webpack": "^2.2.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.22.2",
+    "require-clean": "^0.1.3"
+  },
+  "scripts": {
+    "start": "babel-node ./server.js",
+    "update-schema": "babel-node ./scripts/updateSchema.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gladly-team/tab.git"
+  },
+  "author": "Gladly Team",
+  "bugs": {
+    "url": "https://github.com/gladly-team/tab/issues"
+  },
+  "homepage": "https://github.com/gladly-team/tab#readme"
+}
