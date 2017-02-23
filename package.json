@@ -8,7 +8,7 @@
     "nodemon": "^1.11.0"
   },
   "scripts": {
-    "build": "docker-compose build & npm run web:npminstall & npm run graphql:npminstall",
+    "build": "npm install & docker-compose build & npm run web:npminstall & npm run graphql:npminstall",
     "start": "docker-compose up & npm run web:graphqlschema:monitor",
     "stop": "docker-compose stop",
     "test": "npm run web:test",
