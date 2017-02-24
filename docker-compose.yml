@@ -27,3 +27,16 @@ services:
       - ./graphql/node_modules:/graphql/node_modules
     # command: ["npm", "run", "update-schema", "&&", "npm", "start"]
     command: ["npm", "start"]
+
+  dynamodb:
+    restart: always
+    build:
+      context: ./dynamodb/
+    expose:
+      - "8000"
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./dynamodb:/dynamodb
+      - ./dynamodb/node_modules:/dynamodb/node_modules
+

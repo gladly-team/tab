@@ -1,0 +1,22 @@
+{
+  "name": "tab-dynamodb",
+  "version": "0.1.0",
+  "description": "Local DynamoDB server for Tab for a Cause.",
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+    "aws-sdk": "^2.18.0"
+  },
+  "scripts": {
+    "load-dev-data": "echo 'TODO'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gladly-team/tab.git"
+  },
+  "author": "Gladly Team",
+  "bugs": {
+    "url": "https://github.com/gladly-team/tab/issues"
+  },
+  "homepage": "https://github.com/gladly-team/tab#readme"
+}
