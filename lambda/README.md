@@ -10,24 +10,27 @@ The backend for Tab is implemented using the [Serverless](https://serverless.com
 3. Add a `serverless_handler` function to your endpoint's exports:
 
 ```javascript
-const serverlessHandler = (event, context, callback) => {
-  const response = {
+const handler = (event) => {
+  return Promise.resolve({
     statusCode: 200,
     body: JSON.stringify({
       message: 'Hello world from hearts!',
       input: event,
     }),
-  };
-
-  callback(null, response);
+  });
 };
 
-
+const serverlessHandler = (event, context, callback) => {
+  handler(event)
+    .then( response => callback(null, response) );
+}
 module.exports = {
+  handler: handler,
   serverlessHandler: serverlessHandler,
 } 
 ``` 
-Try to keep this function as minimal as possible, so that your code remains testable.
+Try to keep the `serverlessHandler` function as minimal as possible, so that your code remains testable and usable outside the serverless framework.
+The endpoint should also present a promise-based, event-driven `handler` function which takes an event and provides a `JSON` response and a status code.
 
 4. Hook up your new endpoint in `serverless.yml`
 
