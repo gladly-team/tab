@@ -1,0 +1,14 @@
+[
+  {
+    "user_id": 1,
+    "vc_current": 0
+  },
+  {
+    "user_id": 2,
+    "vc_current": 50
+  },
+  {
+    "user_id": 3,
+    "vc_current": 400
+  }
+]
