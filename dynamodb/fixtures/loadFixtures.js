@@ -30,6 +30,10 @@ var fixtures = [
   {
     tableName: 'Users',
     jsonFile: 'UserData.json'
+  },
+  {
+    tableName: 'Charities',
+    jsonFile: 'CharityData.json'
   }
 ];
 
