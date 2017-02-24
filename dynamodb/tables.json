@@ -1,0 +1,30 @@
+[
+  {
+    "TableName": "Users",
+    "KeySchema": [       
+      { "AttributeName": "user_id", "KeyType": "HASH"},
+      { "AttributeName": "vc_current", "KeyType": "RANGE" }
+    ],
+    "AttributeDefinitions": [       
+      { "AttributeName": "user_id", "AttributeType": "N" },
+      { "AttributeName": "vc_current", "AttributeType": "N" }
+    ],
+    "ProvisionedThroughput": {       
+      "ReadCapacityUnits": 10, 
+      "WriteCapacityUnits": 10
+    }
+  },
+  {
+    "TableName": "Charities",
+    "KeySchema": [       
+      { "AttributeName": "charity_id", "KeyType": "HASH"}
+    ],
+    "AttributeDefinitions": [       
+      { "AttributeName": "charity_id", "AttributeType": "N" }
+    ],
+    "ProvisionedThroughput": {       
+      "ReadCapacityUnits": 10, 
+      "WriteCapacityUnits": 10
+    }
+  }
+]
