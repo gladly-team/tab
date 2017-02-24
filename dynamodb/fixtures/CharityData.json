@@ -1,34 +1,34 @@
 [
   {
-    "charity_id": 1,
-    "name": "Water.org"
+    "CharityId": 1,
+    "Name": "Water.org"
   },
   {
-    "charity_id": 2,
-    "name": "Save the Children"
+    "CharityId": 2,
+    "Name": "Save the Children"
   },
   {
-    "charity_id": 3,
-    "name": "Room to Read"
+    "CharityId": 3,
+    "Name": "Room to Read"
   },
   {
-    "charity_id": 4,
-    "name": "Educate!"
+    "CharityId": 4,
+    "Name": "Educate!"
   },
   {
-    "charity_id": 5,
-    "name": "Human Rights Watch"
+    "CharityId": 5,
+    "Name": "Human Rights Watch"
   },
   {
-    "charity_id": 6,
-    "name": "Conservation International"
+    "CharityId": 6,
+    "Name": "Conservation International"
   },
   {
-    "charity_id": 7,
-    "name": "Action Against Hunger"
+    "CharityId": 7,
+    "Name": "Action Against Hunger"
   },
   {
-    "charity_id": 8,
-    "name": "The Foundation to Decrease Worldsuck"
+    "CharityId": 8,
+    "Name": "The Foundation to Decrease Worldsuck"
   }
 ]

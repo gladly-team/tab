@@ -2,12 +2,12 @@
   {
     "TableName": "Users",
     "KeySchema": [       
-      { "AttributeName": "user_id", "KeyType": "HASH"},
-      { "AttributeName": "vc_current", "KeyType": "RANGE" }
+      { "AttributeName": "UserId", "KeyType": "HASH"},
+      { "AttributeName": "UserName", "KeyType": "RANGE" }
     ],
     "AttributeDefinitions": [       
-      { "AttributeName": "user_id", "AttributeType": "N" },
-      { "AttributeName": "vc_current", "AttributeType": "N" }
+      { "AttributeName": "UserId", "AttributeType": "N" },
+      { "AttributeName": "UserName", "AttributeType": "S" }
     ],
     "ProvisionedThroughput": {       
       "ReadCapacityUnits": 10, 
@@ -17,10 +17,10 @@
   {
     "TableName": "Charities",
     "KeySchema": [       
-      { "AttributeName": "charity_id", "KeyType": "HASH"}
+      { "AttributeName": "CharityId", "KeyType": "HASH"}
     ],
     "AttributeDefinitions": [       
-      { "AttributeName": "charity_id", "AttributeType": "N" }
+      { "AttributeName": "CharityId", "AttributeType": "N" }
     ],
     "ProvisionedThroughput": {       
       "ReadCapacityUnits": 10, 

@@ -1,14 +1,17 @@
 [
   {
-    "user_id": 1,
-    "vc_current": 0
+    "UserId": 1,
+    "UserName": "kevin",
+    "VcCurrent": 0
   },
   {
-    "user_id": 2,
-    "vc_current": 50
+    "UserId": 2,
+    "UserName": "asp2insp",
+    "VcCurrent": 50
   },
   {
-    "user_id": 3,
-    "vc_current": 400
+    "UserId": 3,
+    "UserName": "sandra",
+    "VcCurrent": 400
   }
 ]

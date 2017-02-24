@@ -5,14 +5,14 @@ var docClient = new AWS.DynamoDB.DocumentClient();
 
 var table = 'Users';
 
-var vc_current = 50;
-var user_id = 2;
+var userId = 3;
+var username = 'sandra';
 
 var params = {
     TableName: table,
-    Key:{
-        'vc_current': vc_current,
-        'user_id': user_id
+    Key: {
+        'UserId': userId,
+        'UserName': username,
     }
 };
 
