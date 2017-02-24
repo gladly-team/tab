@@ -1,0 +1,17 @@
+[
+  {
+    "UserId": 1,
+    "UserName": "kevin",
+    "VcCurrent": 0
+  },
+  {
+    "UserId": 2,
+    "UserName": "asp2insp",
+    "VcCurrent": 50
+  },
+  {
+    "UserId": 3,
+    "UserName": "sandra",
+    "VcCurrent": 400
+  }
+]

@@ -1,0 +1,34 @@
+[
+  {
+    "CharityId": 1,
+    "Name": "Water.org"
+  },
+  {
+    "CharityId": 2,
+    "Name": "Save the Children"
+  },
+  {
+    "CharityId": 3,
+    "Name": "Room to Read"
+  },
+  {
+    "CharityId": 4,
+    "Name": "Educate!"
+  },
+  {
+    "CharityId": 5,
+    "Name": "Human Rights Watch"
+  },
+  {
+    "CharityId": 6,
+    "Name": "Conservation International"
+  },
+  {
+    "CharityId": 7,
+    "Name": "Action Against Hunger"
+  },
+  {
+    "CharityId": 8,
+    "Name": "The Foundation to Decrease Worldsuck"
+  }
+]

@@ -8,10 +8,12 @@
     "nodemon": "^1.11.0"
   },
   "scripts": {
-    "build": "npm install & docker-compose build & npm run web:npminstall & npm run graphql:npminstall",
+    "build": "npm run all:npminstall & docker-compose build",
     "start": "docker-compose up & npm run web:graphqlschema:monitor",
     "stop": "docker-compose stop",
     "test": "npm run web:test",
+    "all:npminstall": "npm install & npm run web:npminstall & npm run graphql:npminstall & npm run dynamodb:npminstall",
+    "dynamodb:npminstall": "cd ./dynamodb && npm install",
     "graphql:npminstall": "cd ./graphql && npm install",
     "web:graphqlschema:monitor": "nodemon --watch graphql/data/schema.json --exec \"npm run web:graphqlschema:update\"",
     "web:graphqlschema:update": "cp graphql/data/schema.json web/data/schema.json",
