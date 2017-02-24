@@ -10,7 +10,8 @@
     "jest": "^19.0.2"
   },
   "scripts": {
-    "test": "jest --no-watchman"
+    "test": "jest --no-watchman",
+    "test:watch": "jest --no-watchman --watch"
   },
   "repository": {
     "type": "git",
