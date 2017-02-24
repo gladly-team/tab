@@ -1,0 +1,21 @@
+{
+  "name": "tab-lambda",
+  "version": "0.1.0",
+  "description": "Tab for a Cause.",
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+  },
+  "scripts": {
+    "test": "echo BAZINGA!! TESTED!"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gladly-team/tab.git"
+  },
+  "author": "Gladly Team",
+  "bugs": {
+    "url": "https://github.com/gladly-team/tab/issues"
+  },
+  "homepage": "https://github.com/gladly-team/tab#readme"
+}
