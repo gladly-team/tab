@@ -8,7 +8,10 @@
     "aws-sdk": "^2.18.0"
   },
   "scripts": {
-    "load-dev-data": "echo 'TODO'"
+    "bootstrap": "npm run create-tables && npm run load-fixtures",
+    "create-tables": "node createTables.js",
+    "delete-tables": "node deleteTables.js",
+    "load-fixtures": "node ./fixtures/loadFixtures.js"
   },
   "repository": {
     "type": "git",
