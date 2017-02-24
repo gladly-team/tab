@@ -1,18 +1,46 @@
 'use strict';
+const db = require('../utils/database');
 
-const serverless_handler = (event, context, callback) => {
-  const response = {
-    statusCode: 200,
-    body: JSON.stringify({
-      message: 'User {UserName} has {NumHearts} hearts!',
-      input: event,
-    }),
-  };
-
-  callback(null, response);
+const getHeartsForUser = (userId) => {
+  return db.get({
+    TableName: 'Users',
+    Key: {
+      UserId: userId,
+    },
+  })
+  .then( user => user.hearts);
 };
 
+const handler = (event) => {
+  if (!event.params.id) {
+    return Promise.resolve({
+      statusCode: 400,
+      body: JSON.stringify({ message: 'The id query param must be set to a valid user id' }),
+    });
+  }
+  return getHeartsForUser(event.params.id)
+    .then(
+      hearts => {
+        return {
+          statusCode: 200,
+          body: JSON.stringify({ message: `User ${event.params.id} has ${hearts} hearts!` }),
+        };
+      },
+      () => {
+        return {
+          statusCode: 404,
+          body: JSON.stringify({ message: `User ID ${event.params.id} not found ` }),
+        };
+      }
+    );
+};
+
+const serverlessHandler = (event, context, callback) => {
+  handler(event)
+    .then( response => callback(null, response) );
+}
 
 module.exports = {
-  serverless_handler: serverless_handler,
+  handler: handler,
+  serverlessHandler: serverlessHandler,
 }
