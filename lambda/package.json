@@ -1,0 +1,25 @@
+{
+  "name": "tab-lambda",
+  "version": "0.1.0",
+  "description": "Tab for a Cause.",
+  "private": true,
+  "dependencies": {
+    "aws-sdk": "^2.19.0"
+  },
+  "devDependencies": {
+    "jest": "^19.0.2"
+  },
+  "scripts": {
+    "test": "jest --no-watchman",
+    "test:watch": "jest --no-watchman --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gladly-team/tab.git"
+  },
+  "author": "Gladly Team",
+  "bugs": {
+    "url": "https://github.com/gladly-team/tab/issues"
+  },
+  "homepage": "https://github.com/gladly-team/tab#readme"
+}
