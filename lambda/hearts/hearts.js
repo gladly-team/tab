@@ -8,7 +8,7 @@ const getHeartsForUser = (userId) => {
       UserId: userId,
     },
   })
-  .then( user => user.hearts);
+  .then( data => data.Item.VcCurrent);
 };
 
 const handler = (event) => {
@@ -20,13 +20,14 @@ const handler = (event) => {
   }
   return getHeartsForUser(event.params.id)
     .then(
-      hearts => {
+      (hearts) => {
         return {
           statusCode: 200,
           body: JSON.stringify({ message: `User ${event.params.id} has ${hearts} hearts!` }),
         };
       },
-      () => {
+      (err) => {
+        console.log('Error:', err);
         return {
           statusCode: 404,
           body: JSON.stringify({ message: `User ID ${event.params.id} not found ` }),

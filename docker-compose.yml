@@ -51,4 +51,6 @@ services:
     volumes:
       - ./lambda:/lambda
       - ./lambda/node_modules:/lambda/node_modules
+    links:
+      - dynamodb:dynamodb
 
