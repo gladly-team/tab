@@ -32,9 +32,7 @@ function startServer(callback) {
   // TODO: specify get/post
   lambdas.forEach((lambda) => {
     app.get('/' + lambda.name, (req, res) => {
-      // TODO: real params
-      console.log('Getting!');
-      lambda.handler({ params: { id: 3 }})
+      lambda.handler({ params: req.query})
         .then( response => res.send(response));
     });
   });
