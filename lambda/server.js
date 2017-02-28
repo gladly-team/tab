@@ -6,7 +6,7 @@ import chokidar from 'chokidar';
 import cors from 'cors';
 import express from 'express';
 
-import lambdas from './lambdas';
+import getLambdas from './lambdas';
 
 const EXPRESS_PORT = 8001;
 let appServer;
@@ -21,12 +21,8 @@ function startServer(callback) {
   const app = express();
   app.use(cors());
 
-  app.get('/', (req, res) => {
-    res.send({test: 'hi'});
-  });
-
-
   // Set endpoints for lambda functions.
+  const lambdas = getLambdas();
   console.log(lambdas);
 
   // TODO: specify get/post
