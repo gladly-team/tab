@@ -6,13 +6,11 @@ var docClient = new AWS.DynamoDB.DocumentClient();
 var table = 'Users';
 
 var userId = 3;
-var username = 'sandra';
 
 var params = {
     TableName: table,
     Key: {
-        'UserId': userId,
-        'UserName': username,
+        'UserId': userId
     }
 };
 

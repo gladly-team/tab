@@ -40,10 +40,16 @@ function createOrUpdateTable(tableConfig) {
       };
       // Only include ProvisionedThroughput if it's changed.
       // Identical values will throw a ValidationException when calling `updateTable`.
-      if (
-        tableDescription.Table.ProvisionedThroughput.ReadCapacityUnits !== tableConfig.ProvisionedThroughput.ReadCapacityUnits ||
-        tableDescription.Table.ProvisionedThroughput.WriteCapacityUnits !== tableConfig.ProvisionedThroughput.WriteCapacityUnits) {
-          updateParams.ProvisionedThroughput =tableConfig.ProvisionedThroughput;
+      if (!tableDescription && tableConfig.ProvisionedThroughput) {
+        updateParams.ProvisionedThroughput = tableConfig.ProvisionedThroughput;
+      } else {
+        var oldTableConfig = tableDescription.Table.ProvisionedThroughput;
+        var newTableConfig = tableConfig.ProvisionedThroughput;
+        if (
+          oldTableConfig.ReadCapacityUnits !== newTableConfig.ReadCapacityUnits ||
+          oldTableConfig.WriteCapacityUnits !== newTableConfig.WriteCapacityUnits) {
+            updateParams.ProvisionedThroughput = newTableConfig;
+        }
       }
 
       dynamodb.updateTable(updateParams, function(err, data) {

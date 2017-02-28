@@ -1,6 +1,12 @@
 'use strict';
 const db = require('../utils/database');
 
+/**
+ * Fetches a user ID from the database.
+ * @constructor
+ * @param {integer} userId - The user's ID
+ * @return {integer} The number of Hearts a user has.
+ */
 const getHeartsForUser = (userId) => {
   return db.get({
     TableName: 'Users',
@@ -8,7 +14,7 @@ const getHeartsForUser = (userId) => {
       UserId: userId,
     },
   })
-  .then( user => user.hearts);
+  .then( data => data.Item.VcCurrent);
 };
 
 const handler = (event) => {
@@ -18,18 +24,20 @@ const handler = (event) => {
       body: JSON.stringify({ message: 'The id query param must be set to a valid user id' }),
     });
   }
-  return getHeartsForUser(event.params.id)
+  let userId = parseInt(event.params.id, 10) || 0;
+  return getHeartsForUser(userId)
     .then(
-      hearts => {
+      (hearts) => {
         return {
           statusCode: 200,
-          body: JSON.stringify({ message: `User ${event.params.id} has ${hearts} hearts!` }),
+          body: JSON.stringify({ message: `User ${userId} has ${hearts} hearts!` }),
         };
       },
-      () => {
+      (err) => {
+        // console.log('Error:', err);
         return {
           statusCode: 404,
-          body: JSON.stringify({ message: `User ID ${event.params.id} not found ` }),
+          body: JSON.stringify({ message: `User ID ${userId} not found ` }),
         };
       }
     );

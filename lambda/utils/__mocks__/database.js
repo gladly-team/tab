@@ -1,7 +1,13 @@
 // Mock our database to return data for id 42 but no others
-get_fn = (params) => {
+const get_fn = (params) => {
   if (params.Key.UserId == 42) {
-    return Promise.resolve({ hearts: 100 });
+    return Promise.resolve({
+      Item: {
+        UserName: 'fake_user',
+        UserId: 42,
+        VcCurrent: 350
+      }
+    });
   } else {
     return Promise.reject();
   }
