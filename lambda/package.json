@@ -21,7 +21,7 @@
     "yamljs": "^0.2.8"
   },
   "scripts": {
-    "start": "nodemon --exec \"babel-node\" ./server.js",
+    "start": "nodemon -e js,json,yml --exec \"babel-node\" ./server.js",
     "test": "jest --no-watchman",
     "test:watch": "jest --no-watchman --watch"
   },

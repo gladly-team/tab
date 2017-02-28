@@ -23,14 +23,20 @@ function startServer(callback) {
 
   // Set endpoints for lambda functions.
   const lambdas = getLambdas();
-  console.log(lambdas);
-
-  // TODO: specify get/post
   lambdas.forEach((lambda) => {
-    app.get('/' + lambda.name, (req, res) => {
-      lambda.handler({ params: req.query})
-        .then( response => res.send(response));
-    });
+    if (lambda.httpMethod === 'get') {
+      app.get('/' + lambda.path, (req, res) => {
+        lambda.handler({ params: req.query})
+          .then( response => res.send(response));
+      });
+      console.log('Set up GET method at /' + lambda.path + ' for service "' + lambda.name + '".');
+    } else if (lambda.httpMethod === 'post') {
+      app.post('/' + lambda.path, (req, res) => {
+        lambda.handler({ params: req.query})
+          .then( response => res.send(response));
+      });
+      console.log('Set up POST method at /' + lambda.path + ' for service "' + lambda.name + '".');
+    }
   });
 
   appServer = app.listen(EXPRESS_PORT, () => {
