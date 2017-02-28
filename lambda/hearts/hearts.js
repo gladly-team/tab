@@ -34,7 +34,7 @@ const handler = (event) => {
         };
       },
       (err) => {
-        console.log('Error:', err);
+        // console.log('Error:', err);
         return {
           statusCode: 404,
           body: JSON.stringify({ message: `User ID ${userId} not found ` }),
