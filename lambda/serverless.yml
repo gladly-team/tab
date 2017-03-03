@@ -20,11 +20,9 @@ service: lambda
 provider:
   name: aws
   runtime: nodejs4.3
-
-# you can overwrite defaults here
 #  stage: dev
-#  region: us-east-1
-
+  region: us-west-2
+  profile: tab-sls
 # you can add statements to the Lambda function's IAM Role here
 #  iamRoleStatements:
 #    - Effect: "Allow"
@@ -60,6 +58,9 @@ functions:
       - http:
           path: hearts/
           method: get
+          authorizer:
+            name: authorizer_${opt:stage}
+            arn:  arn:aws:cognito-idp:us-west-2:167811431063:userpool/us-west-2_9MWuEqLeW 
       # - http:
       #     path: hearts/
       #     method: post
