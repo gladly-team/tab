@@ -2,7 +2,6 @@
 import path from 'path';
 import {exec} from 'child_process';
 
-import chokidar from 'chokidar';
 import cors from 'cors';
 import express from 'express';
 
