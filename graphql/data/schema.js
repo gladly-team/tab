@@ -19,6 +19,7 @@ import {
   globalIdField,
   mutationWithClientMutationId,
   nodeDefinitions,
+  connectionFromPromisedArray,
 } from 'graphql-relay';
 
 import {
@@ -29,6 +30,7 @@ import {
   getViewer,
   getWidget,
   getWidgets,
+  getCharities,
 } from './database';
 
 /**
@@ -74,6 +76,12 @@ var userType = new GraphQLObjectType({
       args: connectionArgs,
       resolve: (_, args) => connectionFromArray(getWidgets(), args),
     },
+    charities: {
+      type: charityConnection,
+      description: 'The charities in the app',
+      args: connectionArgs,
+      resolve: (_, args) => connectionFromPromisedArray(getCharities(), args),
+    }
   }),
   interfaces: [nodeInterface],
 });
@@ -91,11 +99,27 @@ var widgetType = new GraphQLObjectType({
   interfaces: [nodeInterface],
 });
 
+var charityType = new GraphQLObjectType({
+  name: 'Charity',
+  description: 'A charitable charity',
+  fields: () => ({
+    id: globalIdField('Charity'),
+    name: {
+      type: GraphQLString,
+      description: 'the charity name',
+    }
+  }),
+  interfaces: [nodeInterface],
+});
+
 /**
  * Define your own connection types here
  */
 var {connectionType: widgetConnection} =
   connectionDefinitions({name: 'Widget', nodeType: widgetType});
+
+var {connectionType: charityConnection} =
+  connectionDefinitions({name: 'Charity', nodeType: charityType});
 
 /**
  * This is the type that will be the root of our query,
