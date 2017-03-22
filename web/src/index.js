@@ -1,8 +1,19 @@
+//https://github.com/stylelint/stylelint/issues/1316
+if (!global._babelPolyfill) {
+   require('babel-polyfill');
+}
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
-import '../node_modules/react-mdl/extra/material';
 import Root from './root';
+
+import injectTapEventPlugin from 'react-tap-event-plugin';
+
+// Needed for onTouchTap
+// http://stackoverflow.com/a/34015469/988941
+injectTapEventPlugin();
+
 
 import Relay, {
   DefaultNetworkLayer,
