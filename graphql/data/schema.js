@@ -19,7 +19,8 @@ import {
   globalIdField,
   mutationWithClientMutationId,
   nodeDefinitions,
-  cursorForObjectInConnection
+  cursorForObjectInConnection,
+  connectionFromPromisedArray
 } from 'graphql-relay';
 
 import {
@@ -81,6 +82,12 @@ const userType = new GraphQLObjectType({
       type: GraphQLString,
       description: 'User\'s website'
     }
+    // charities: {
+    //   type: charityConnection,
+    //   description: 'The charities in the app',
+    //   args: connectionArgs,
+    //   resolve: (_, args) => connectionFromPromisedArray(getCharities(), args),
+    // }
   }),
   interfaces: [nodeInterface]
 });
@@ -104,6 +111,19 @@ const featureType = new GraphQLObjectType({
     }
   }),
   interfaces: [nodeInterface]
+});
+
+var charityType = new GraphQLObjectType({
+  name: 'Charity',
+  description: 'A charitable charity',
+  fields: () => ({
+    id: globalIdField('Charity'),
+    name: {
+      type: GraphQLString,
+      description: 'the charity name',
+    }
+  }),
+  interfaces: [nodeInterface],
 });
 
 /**
@@ -140,6 +160,9 @@ const addFeatureMutation = mutationWithClientMutationId({
   mutateAndGetPayload: ({ name, description, url }) => addFeature(name, description, url)
 });
 
+
+var {connectionType: charityConnection} =
+  connectionDefinitions({name: 'Charity', nodeType: charityType});
 
 /**
  * This is the type that will be the root of our query,

@@ -16,6 +16,15 @@ class Feature {
   }
 }
 
+var AWS = require('aws-sdk');
+AWS.config.update({
+  region: 'us-west-2',
+  endpoint: 'http://dynamodb:8000',
+  accessKeyId: 'fakeKey123',
+  secretAccessKey: 'fakeSecretKey456'
+});
+var docClient = new AWS.DynamoDB.DocumentClient();
+
 const lvarayut = new User(1, 'Varayut Lerdkanlayanawat', 'lvarayut', 'https://github.com/lvarayut/relay-fullstack');
 const features = [
   new Feature(1, 'React', 'A JavaScript library for building user interfaces.', 'https://facebook.github.io/react'),
@@ -52,6 +61,27 @@ function getFeature(id) {
 
 function getFeatures() {
   return features;
+}
+
+function getCharities() {
+  var table = "Charities";
+
+  var params = {
+      TableName: table,
+      ProjectionExpression: "CharityId, CharityName",
+  };
+
+  return docClient.scan(params).promise().then(function(data) {
+    console.log("Async scan succeeded:", JSON.stringify(data, null, 2));
+    return data.Items.map((charity, i) => {
+        var charityObj = new Charity();
+        charityObj.id = charity.CharityId;
+        charityObj.name = charity.CharityName;
+        return charityObj;
+      });
+  }).catch(function(err) {
+     console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
+  });
 }
 
 export {
