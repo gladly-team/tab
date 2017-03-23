@@ -1,33 +1,64 @@
-/**
- *  Copyright (c) 2015, Facebook, Inc.
- *  All rights reserved.
- *
- *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant
- *  of patent rights can be found in the PATENTS file in the same directory.
- */
+class User {
+  constructor(id, name, username, website) {
+    this.id = id;
+    this.name = name;
+    this.username = username;
+    this.website = website;
+  }
+}
 
-// Model types
-class User {}
-class Widget {}
+class Feature {
+  constructor(id, name, description, url) {
+    this.id = id;
+    this.name = name;
+    this.description = description;
+    this.url = url;
+  }
+}
 
-// Mock data
-var viewer = new User();
-viewer.id = '1';
-viewer.name = 'Anonymous';
-var widgets = ['Hi, what\'s-it', 'Who\'s-it', 'How\'s-it'].map((name, i) => {
-  var widget = new Widget();
-  widget.name = name;
-  widget.id = `${i}`;
-  return widget;
-});
+const lvarayut = new User(1, 'Varayut Lerdkanlayanawat', 'lvarayut', 'https://github.com/lvarayut/relay-fullstack');
+const features = [
+  new Feature(1, 'React', 'A JavaScript library for building user interfaces.', 'https://facebook.github.io/react'),
+  new Feature(2, 'Relay', 'A JavaScript framework for building data-driven react applications.', 'https://facebook.github.io/relay'),
+  new Feature(3, 'GraphQL', 'A reference implementation of GraphQL for JavaScript.', 'http://graphql.org'),
+  new Feature(4, 'Express', 'Fast, unopinionated, minimalist web framework for Node.js.', 'http://expressjs.com'),
+  new Feature(5, 'Webpack', 'Webpack is a module bundler that packs modules for the browser.', 'https://webpack.github.io'),
+  new Feature(6, 'Babel', 'Babel is a JavaScript compiler. Use next generation JavaScript, today.', 'https://babeljs.io'),
+  new Feature(7, 'PostCSS', 'PostCSS. A tool for transforming CSS with JavaScript.', 'http://postcss.org'),
+  new Feature(8, 'MDL', 'Material Design Lite lets you add a Material Design to your websites.', 'http://www.getmdl.io')
+];
 
-module.exports = {
-  // Export methods that your schema can use to interact with your database
-  getUser: (id) => id === viewer.id ? viewer : null,
-  getViewer: () => viewer,
-  getWidget: (id) => widgets.find(w => w.id === id),
-  getWidgets: () => widgets,
+/*
+* Add feature in memory
+*/
+
+let curFeatures = 9;
+function addFeature(name, description, url) {
+  const newFeature = new Feature(curFeatures, name, description, url);
+  features.push(newFeature);
+  newFeature.id = curFeatures;
+  curFeatures += 1;
+  return newFeature;
+}
+
+
+function getUser(id) {
+  return id === lvarayut.id ? lvarayut : null;
+}
+
+function getFeature(id) {
+  return features.find(w => w.id === id);
+}
+
+function getFeatures() {
+  return features;
+}
+
+export {
   User,
-  Widget,
+  Feature,
+  getUser,
+  getFeature,
+  getFeatures,
+  addFeature
 };

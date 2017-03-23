@@ -1,3 +1,53 @@
+input AddFeatureInput {
+  name: String!
+  description: String!
+  url: String!
+  clientMutationId: String
+}
+
+type AddFeaturePayload {
+  featureEdge: FeatureEdge
+  viewer: User
+  clientMutationId: String
+}
+
+# Feature integrated in our starter kit
+type Feature implements Node {
+  # The ID of an object
+  id: ID!
+
+  # Name of the feature
+  name: String
+
+  # Description of the feature
+  description: String
+
+  # Url of the feature
+  url: String
+}
+
+# A connection to a list of items.
+type FeatureConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [FeatureEdge]
+}
+
+# An edge in a connection.
+type FeatureEdge {
+  # The item at the end of the edge
+  node: Feature
+
+  # A cursor for use in pagination
+  cursor: String!
+}
+
+type Mutation {
+  addFeature(input: AddFeatureInput!): AddFeaturePayload
+}
+
 # An object with an ID
 interface Node {
   # The id of the object.
@@ -33,33 +83,12 @@ type User implements Node {
   # The ID of an object
   id: ID!
 
-  # A person's collection of widgets
-  widgets(after: String, first: Int, before: String, last: Int): WidgetConnection
-}
+  # Features that I have
+  features(after: String, first: Int, before: String, last: Int): FeatureConnection
 
-# A shiny widget
-type Widget implements Node {
-  # The ID of an object
-  id: ID!
+  # Users's username
+  username: String
 
-  # The name of the widget
-  name: String
-}
-
-# A connection to a list of items.
-type WidgetConnection {
-  # Information to aid in pagination.
-  pageInfo: PageInfo!
-
-  # A list of edges.
-  edges: [WidgetEdge]
-}
-
-# An edge in a connection.
-type WidgetEdge {
-  # The item at the end of the edge
-  node: Widget
-
-  # A cursor for use in pagination
-  cursor: String!
+  # User's website
+  website: String
 }

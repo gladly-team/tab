@@ -1,4 +1,4 @@
-
+/* eslint-disable no-unused-vars, no-use-before-define */
 import {
   GraphQLBoolean,
   GraphQLFloat,
@@ -8,7 +8,7 @@ import {
   GraphQLNonNull,
   GraphQLObjectType,
   GraphQLSchema,
-  GraphQLString,
+  GraphQLString
 } from 'graphql';
 
 import {
@@ -19,17 +19,18 @@ import {
   globalIdField,
   mutationWithClientMutationId,
   nodeDefinitions,
+  cursorForObjectInConnection
 } from 'graphql-relay';
 
 import {
-  // Import methods that your schema can use to interact with your database
   User,
-  Widget,
+  Feature,
   getUser,
-  getViewer,
-  getWidget,
-  getWidgets,
+  getFeature,
+  getFeatures,
+  addFeature
 } from './database';
+
 
 /**
  * We get the node interface and field from the Relay library.
@@ -37,25 +38,23 @@ import {
  * The first method defines the way we resolve an ID to its object.
  * The second defines the way we resolve an object to its GraphQL type.
  */
-var {nodeInterface, nodeField} = nodeDefinitions(
+const { nodeInterface, nodeField } = nodeDefinitions(
   (globalId) => {
-    var {type, id} = fromGlobalId(globalId);
+    const { type, id } = fromGlobalId(globalId);
     if (type === 'User') {
       return getUser(id);
-    } else if (type === 'Widget') {
-      return getWidget(id);
-    } else {
-      return null;
+    } else if (type === 'Feature') {
+      return getFeature(id);
     }
+    return null;
   },
   (obj) => {
     if (obj instanceof User) {
       return userType;
-    } else if (obj instanceof Widget)  {
-      return widgetType;
-    } else {
-      return null;
+    } else if (obj instanceof Feature) {
+      return featureType;
     }
+    return null;
   }
 );
 
@@ -63,63 +62,109 @@ var {nodeInterface, nodeField} = nodeDefinitions(
  * Define your own types here
  */
 
-var userType = new GraphQLObjectType({
+const userType = new GraphQLObjectType({
   name: 'User',
   description: 'A person who uses our app',
   fields: () => ({
     id: globalIdField('User'),
-    widgets: {
-      type: widgetConnection,
-      description: 'A person\'s collection of widgets',
+    features: {
+      type: featureConnection,
+      description: 'Features that I have',
       args: connectionArgs,
-      resolve: (_, args) => connectionFromArray(getWidgets(), args),
+      resolve: (_, args) => connectionFromArray(getFeatures(), args)
     },
+    username: {
+      type: GraphQLString,
+      description: 'Users\'s username'
+    },
+    website: {
+      type: GraphQLString,
+      description: 'User\'s website'
+    }
   }),
-  interfaces: [nodeInterface],
+  interfaces: [nodeInterface]
 });
 
-var widgetType = new GraphQLObjectType({
-  name: 'Widget',
-  description: 'A shiny widget',
+const featureType = new GraphQLObjectType({
+  name: 'Feature',
+  description: 'Feature integrated in our starter kit',
   fields: () => ({
-    id: globalIdField('Widget'),
+    id: globalIdField('Feature'),
     name: {
       type: GraphQLString,
-      description: 'The name of the widget',
+      description: 'Name of the feature'
     },
+    description: {
+      type: GraphQLString,
+      description: 'Description of the feature'
+    },
+    url: {
+      type: GraphQLString,
+      description: 'Url of the feature'
+    }
   }),
-  interfaces: [nodeInterface],
+  interfaces: [nodeInterface]
 });
 
 /**
  * Define your own connection types here
  */
-var {connectionType: widgetConnection} =
-  connectionDefinitions({name: 'Widget', nodeType: widgetType});
+const { connectionType: featureConnection, edgeType: featureEdge } = connectionDefinitions({ name: 'Feature', nodeType: featureType });
+
+/**
+ * Create feature example
+ */
+
+const addFeatureMutation = mutationWithClientMutationId({
+  name: 'AddFeature',
+  inputFields: {
+    name: { type: new GraphQLNonNull(GraphQLString) },
+    description: { type: new GraphQLNonNull(GraphQLString) },
+    url: { type: new GraphQLNonNull(GraphQLString) },
+  },
+
+  outputFields: {
+    featureEdge: {
+      type: featureEdge,
+      resolve: (obj) => {
+        const cursorId = cursorForObjectInConnection(getFeatures(), obj);
+        return { node: obj, cursor: cursorId };
+      }
+    },
+    viewer: {
+      type: userType,
+      resolve: () => getUser(1)
+    }
+  },
+
+  mutateAndGetPayload: ({ name, description, url }) => addFeature(name, description, url)
+});
+
 
 /**
  * This is the type that will be the root of our query,
  * and the entry point into our schema.
  */
-var queryType = new GraphQLObjectType({
+const queryType = new GraphQLObjectType({
   name: 'Query',
   fields: () => ({
     node: nodeField,
     // Add your own root fields here
     viewer: {
       type: userType,
-      resolve: () => getViewer(),
-    },
-  }),
+      resolve: () => getUser(1)
+    }
+  })
 });
 
 /**
  * This is the type that will be the root of our mutations,
  * and the entry point into performing writes in our schema.
  */
-var mutationType = new GraphQLObjectType({
+const mutationType = new GraphQLObjectType({
   name: 'Mutation',
   fields: () => ({
+    addFeature: addFeatureMutation
     // Add your own mutations here
   })
 });
@@ -130,6 +175,5 @@ var mutationType = new GraphQLObjectType({
  */
 export var Schema = new GraphQLSchema({
   query: queryType,
-  // Uncomment the following after adding some mutation fields:
-  // mutation: mutationType
+  mutation: mutationType
 });
