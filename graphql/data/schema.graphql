@@ -1,3 +1,30 @@
+# A charitable charity
+type Charity implements Node {
+  # The ID of an object
+  id: ID!
+
+  # the charity name
+  name: String
+}
+
+# A connection to a list of items.
+type CharityConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [CharityEdge]
+}
+
+# An edge in a connection.
+type CharityEdge {
+  # The item at the end of the edge
+  node: Charity
+
+  # A cursor for use in pagination
+  cursor: String!
+}
+
 # An object with an ID
 interface Node {
   # The id of the object.
@@ -35,6 +62,9 @@ type User implements Node {
 
   # A person's collection of widgets
   widgets(after: String, first: Int, before: String, last: Int): WidgetConnection
+
+  # The charities in the app
+  charities(after: String, first: Int, before: String, last: Int): CharityConnection
 }
 
 # A shiny widget
