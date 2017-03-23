@@ -1,11 +1,20 @@
-/**
- *  Copyright (c) 2015, Facebook, Inc.
- *  All rights reserved.
- *
- *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant
- *  of patent rights can be found in the PATENTS file in the same directory.
- */
+class User {
+  constructor(id, name, username, website) {
+    this.id = id;
+    this.name = name;
+    this.username = username;
+    this.website = website;
+  }
+}
+
+class Feature {
+  constructor(id, name, description, url) {
+    this.id = id;
+    this.name = name;
+    this.description = description;
+    this.url = url;
+  }
+}
 
 var AWS = require('aws-sdk');
 AWS.config.update({
@@ -16,53 +25,96 @@ AWS.config.update({
 });
 var docClient = new AWS.DynamoDB.DocumentClient();
 
+const lvarayut = new User(1, 'Varayut Lerdkanlayanawat', 'lvarayut', 'https://github.com/lvarayut/relay-fullstack');
+
+let curFeatures = 9;
+function addFeature(name, description, url) {
+  var table = "Features";
+  var params = {
+    TableName:table,
+    Item:{
+        "FeatureId": curFeatures,
+        "FeatureName": name, 
+        "Description": description, 
+        "FeatureUrl": url
+    }
+  };
+
+  console.log("Adding a new item...");
+  docClient.put(params).promise().then(function(data) {
+      const feature = params.Item;
+      console.error("Added object:", JSON.stringify(feature, null, 2));
+  }).catch(function(err) {
+     console.error("Unable to add item. Error JSON:", JSON.stringify(err, null, 2));
+  });
+
+  const feature = params.Item;
+  var featureObj = new Feature();
+  featureObj.id = feature.FeatureId;
+  featureObj.name = feature.FeatureName;
+  featureObj.description = feature.Description;
+  featureObj.url = feature.FeatureUrl;
+  curFeatures += 1;
+  return featureObj;
+
+}
 
 
-// Model types
-class User {}
-class Widget {}
-class Charity {}
+function getUser(id) {
+  return id === lvarayut.id ? lvarayut : null;
+}
 
-// Mock data
-var viewer = new User();
-viewer.id = '1';
-viewer.name = 'Anonymous';
-var widgets = ['Hi, what\'s-it', 'Who\'s-it', 'How\'s-it'].map((name, i) => {
-  var widget = new Widget();
-  widget.name = name;
-  widget.id = `${i}`;
-  return widget;
-});
-
-function getCharities() {
-  var table = "Charities";
+// Example of fetching a feature by id from DynamoDB.
+function getFeature(id) {
+  var table = "Features";
 
   var params = {
       TableName: table,
-      ProjectionExpression: "CharityId, CharityName",
+      Key: {
+        'FeatureId': id
+      }
+  };
+
+  return docClient.get(params).promise().then(function(feature) {
+      var featureObj = new Feature();
+      featureObj.id = feature.FeatureId;
+      featureObj.name = feature.FeatureName;
+      featureObj.description = feature.Description;
+      featureObj.url = feature.FeatureUrl;
+      return featureObj;
+  }).catch(function(err) {
+     console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
+  });
+}
+
+// Example of fetching many from DynamoDB.
+function getFeatures() {
+  var table = "Features";
+
+  var params = {
+      TableName: table,
+      ProjectionExpression: "FeatureId, FeatureName, Description, FeatureUrl",
   };
 
   return docClient.scan(params).promise().then(function(data) {
-    console.log("Async scan succeeded:", JSON.stringify(data, null, 2));
-    return data.Items.map((charity, i) => {
-        var charityObj = new Charity();
-        charityObj.id = charity.CharityId;
-        charityObj.name = charity.CharityName;
-        return charityObj;
+    return data.Items.map((feature, i) => {
+        var featureObj = new Feature();
+        featureObj.id = feature.FeatureId;
+        featureObj.name = feature.FeatureName;
+        featureObj.description = feature.Description;
+        featureObj.url = feature.FeatureUrl;
+        return featureObj;
       });
   }).catch(function(err) {
      console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
   });
 }
 
-
-module.exports = {
-  // Export methods that your schema can use to interact with your database
-  getUser: (id) => id === viewer.id ? viewer : null,
-  getCharities: getCharities,
-  getViewer: () => viewer,
-  getWidget: (id) => widgets.find(w => w.id === id),
-  getWidgets: () => widgets,
+export {
   User,
-  Widget,
+  Feature,
+  getUser,
+  getFeature,
+  getFeatures,
+  addFeature
 };

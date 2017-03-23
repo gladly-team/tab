@@ -34,6 +34,10 @@ var fixtures = [
   {
     tableName: 'Charities',
     jsonFile: 'CharityData.json'
+  },
+  {
+    tableName: 'Features',
+    jsonFile: 'FeatureData.json'
   }
 ];
 

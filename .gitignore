@@ -3,3 +3,7 @@ node_modules
 npm-debug.log
 .env
 web/jest
+
+# generated schema files
+graphql/data/schema.json
+graphql/data/schema.graphql

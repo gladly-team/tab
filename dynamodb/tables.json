@@ -24,5 +24,18 @@
       "ReadCapacityUnits": 10, 
       "WriteCapacityUnits": 10
     }
+  },
+  {
+    "TableName": "Features",
+    "KeySchema": [       
+      { "AttributeName": "FeatureId", "KeyType": "HASH"}
+    ],
+    "AttributeDefinitions": [       
+      { "AttributeName": "FeatureId", "AttributeType": "N" }
+    ],
+    "ProvisionedThroughput": {       
+      "ReadCapacityUnits": 10, 
+      "WriteCapacityUnits": 10
+    }
   }
 ]

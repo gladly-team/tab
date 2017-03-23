@@ -9,7 +9,7 @@
   },
   "scripts": {
     "build": "npm run all:npminstall & docker-compose build",
-    "start": "docker-compose up & npm run web:graphqlschema:monitor",
+    "start": "docker-compose up & npm run web:graphqlschema:monitor & npm run web:start",
     "stop": "docker-compose stop",
     "test": "npm run web:test",
     "all:npminstall": "npm install & npm run web:npminstall & npm run graphql:npminstall & npm run dynamodb:npminstall & npm run lambda:npminstall",
@@ -19,7 +19,8 @@
     "web:graphqlschema:monitor": "nodemon --watch graphql/data/schema.json --exec \"npm run web:graphqlschema:update\"",
     "web:graphqlschema:update": "cp graphql/data/schema.json web/data/schema.json",
     "web:npminstall": "cd ./web && npm install",
-    "web:test": "cd ./web && npm test"
+    "web:test": "cd ./web && npm test",
+    "web:start": "cd ./web && npm run start"
   },
   "repository": {
     "type": "git",

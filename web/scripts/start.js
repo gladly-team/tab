@@ -24,7 +24,7 @@ var paths = require('../config/paths');
 
 var useYarn = pathExists.sync(paths.yarnLockFile);
 var cli = useYarn ? 'yarn' : 'npm';
-var isInteractive = process.stdout.isTTY;
+var isInteractive = false;//process.stdout.isTTY;
 
 // Warn and crash if required files are missing
 if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {

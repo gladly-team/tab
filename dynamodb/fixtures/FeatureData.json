@@ -1,0 +1,50 @@
+[
+  {
+    "FeatureId": 1,
+    "FeatureName": "React",
+    "Description": "A JavaScript library for building user interfaces.",
+    "FeatureUrl": "https://facebook.github.io/react"
+  },
+  {
+    "FeatureId": 2,
+    "FeatureName": "Relay",
+    "Description": "A JavaScript framework for building data-driven react applications.",
+    "FeatureUrl": "https://facebook.github.io/relay"
+  },
+  {
+    "FeatureId": 3,
+    "FeatureName": "GraphQL",
+    "Description": "A reference implementation of GraphQL for JavaScript.",
+    "FeatureUrl": "http://graphql.org"
+  },
+  {
+    "FeatureId": 4,
+    "FeatureName": "Express",
+    "Description": "Fast, unopinionated, minimalist web framework for Node.js.",
+    "FeatureUrl": "http://expressjs.com"
+  },
+  {
+    "FeatureId": 5,
+    "FeatureName": "Webpack",
+    "Description": "Webpack is a module bundler that packs modules for the browser.",
+    "FeatureUrl": "https://webpack.github.io"
+  },
+  {
+    "FeatureId": 6,
+    "FeatureName": "Babel",
+    "Description": "Babel is a JavaScript compiler. Use next generation JavaScript, today.",
+    "FeatureUrl": "https://babeljs.io"
+  },
+  {
+    "FeatureId": 7,
+    "FeatureName": "PostCSS",
+    "Description": "PostCSS. A tool for transforming CSS with JavaScript.",
+    "FeatureUrl": "http://postcss.org"
+  },
+  {
+    "FeatureId": 8,
+    "FeatureName": "MDL",
+    "Description": "Material Design Lite lets you add a Material Design to your websites.",
+    "FeatureUrl": "http://www.getmdl.io"
+  }
+]
