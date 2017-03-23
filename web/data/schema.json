@@ -104,11 +104,6 @@
               "kind": "OBJECT",
               "name": "Feature",
               "ofType": null
-            },
-            {
-              "kind": "OBJECT",
-              "name": "Charity",
-              "ofType": null
             }
           ]
         },
@@ -205,59 +200,6 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "charities",
-              "description": "The charities in the app",
-              "args": [
-                {
-                  "name": "after",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "first",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "before",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "last",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                }
-              ],
-              "type": {
-                "kind": "OBJECT",
-                "name": "CharityConnection",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -525,7 +467,6 @@
         },
         {
           "kind": "OBJECT",
-<<<<<<< HEAD
           "name": "Mutation",
           "description": null,
           "fields": [
@@ -552,39 +493,6 @@
                 "kind": "OBJECT",
                 "name": "AddFeaturePayload",
                 "ofType": null
-=======
-          "name": "CharityConnection",
-          "description": "A connection to a list of items.",
-          "fields": [
-            {
-              "name": "pageInfo",
-              "description": "Information to aid in pagination.",
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "PageInfo",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "edges",
-              "description": "A list of edges.",
-              "args": [],
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "CharityEdge",
-                  "ofType": null
-                }
->>>>>>> master
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -596,7 +504,6 @@
           "possibleTypes": null
         },
         {
-<<<<<<< HEAD
           "kind": "INPUT_OBJECT",
           "name": "AddFeatureInput",
           "description": null,
@@ -633,28 +540,6 @@
             {
               "name": "url",
               "description": null,
-=======
-          "kind": "OBJECT",
-          "name": "CharityEdge",
-          "description": "An edge in a connection.",
-          "fields": [
-            {
-              "name": "node",
-              "description": "The item at the end of the edge",
-              "args": [],
-              "type": {
-                "kind": "OBJECT",
-                "name": "Charity",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "cursor",
-              "description": "A cursor for use in pagination",
-              "args": [],
->>>>>>> master
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -664,7 +549,6 @@
                   "ofType": null
                 }
               },
-<<<<<<< HEAD
               "defaultValue": null
             },
             {
@@ -679,20 +563,11 @@
             }
           ],
           "interfaces": null,
-=======
-              "isDeprecated": false,
-              "deprecationReason": null
-            }
-          ],
-          "inputFields": null,
-          "interfaces": [],
->>>>>>> master
           "enumValues": null,
           "possibleTypes": null
         },
         {
           "kind": "OBJECT",
-<<<<<<< HEAD
           "name": "AddFeaturePayload",
           "description": null,
           "fields": [
@@ -716,35 +591,13 @@
                 "kind": "OBJECT",
                 "name": "User",
                 "ofType": null
-=======
-          "name": "Charity",
-          "description": "A charitable charity",
-          "fields": [
-            {
-              "name": "id",
-              "description": "The ID of an object",
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ID",
-                  "ofType": null
-                }
->>>>>>> master
               },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-<<<<<<< HEAD
               "name": "clientMutationId",
               "description": null,
-=======
-              "name": "name",
-              "description": "the charity name",
->>>>>>> master
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -756,17 +609,7 @@
             }
           ],
           "inputFields": null,
-<<<<<<< HEAD
           "interfaces": [],
-=======
-          "interfaces": [
-            {
-              "kind": "INTERFACE",
-              "name": "Node",
-              "ofType": null
-            }
-          ],
->>>>>>> master
           "enumValues": null,
           "possibleTypes": null
         },
