@@ -72,7 +72,7 @@ const userType = new GraphQLObjectType({
       type: featureConnection,
       description: 'Features that I have',
       args: connectionArgs,
-      resolve: (_, args) => connectionFromArray(getFeatures(), args)
+      resolve: (_, args) => connectionFromPromisedArray(getFeatures(), args)
     },
     username: {
       type: GraphQLString,
@@ -160,9 +160,6 @@ const addFeatureMutation = mutationWithClientMutationId({
   mutateAndGetPayload: ({ name, description, url }) => addFeature(name, description, url)
 });
 
-
-var {connectionType: charityConnection} =
-  connectionDefinitions({name: 'Charity', nodeType: charityType});
 
 /**
  * This is the type that will be the root of our query,

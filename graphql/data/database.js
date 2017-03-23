@@ -26,28 +26,37 @@ AWS.config.update({
 var docClient = new AWS.DynamoDB.DocumentClient();
 
 const lvarayut = new User(1, 'Varayut Lerdkanlayanawat', 'lvarayut', 'https://github.com/lvarayut/relay-fullstack');
-const features = [
-  new Feature(1, 'React', 'A JavaScript library for building user interfaces.', 'https://facebook.github.io/react'),
-  new Feature(2, 'Relay', 'A JavaScript framework for building data-driven react applications.', 'https://facebook.github.io/relay'),
-  new Feature(3, 'GraphQL', 'A reference implementation of GraphQL for JavaScript.', 'http://graphql.org'),
-  new Feature(4, 'Express', 'Fast, unopinionated, minimalist web framework for Node.js.', 'http://expressjs.com'),
-  new Feature(5, 'Webpack', 'Webpack is a module bundler that packs modules for the browser.', 'https://webpack.github.io'),
-  new Feature(6, 'Babel', 'Babel is a JavaScript compiler. Use next generation JavaScript, today.', 'https://babeljs.io'),
-  new Feature(7, 'PostCSS', 'PostCSS. A tool for transforming CSS with JavaScript.', 'http://postcss.org'),
-  new Feature(8, 'MDL', 'Material Design Lite lets you add a Material Design to your websites.', 'http://www.getmdl.io')
-];
-
-/*
-* Add feature in memory
-*/
 
 let curFeatures = 9;
 function addFeature(name, description, url) {
-  const newFeature = new Feature(curFeatures, name, description, url);
-  features.push(newFeature);
-  newFeature.id = curFeatures;
+  var table = "Features";
+  var params = {
+    TableName:table,
+    Item:{
+        "FeatureId": curFeatures,
+        "FeatureName": name, 
+        "Description": description, 
+        "FeatureUrl": url
+    }
+  };
+
+  console.log("Adding a new item...");
+  docClient.put(params).promise().then(function(data) {
+      const feature = params.Item;
+      console.error("Added object:", JSON.stringify(feature, null, 2));
+  }).catch(function(err) {
+     console.error("Unable to add item. Error JSON:", JSON.stringify(err, null, 2));
+  });
+
+  const feature = params.Item;
+  var featureObj = new Feature();
+  featureObj.id = feature.FeatureId;
+  featureObj.name = feature.FeatureName;
+  featureObj.description = feature.Description;
+  featureObj.url = feature.FeatureUrl;
   curFeatures += 1;
-  return newFeature;
+  return featureObj;
+
 }
 
 
@@ -55,29 +64,46 @@ function getUser(id) {
   return id === lvarayut.id ? lvarayut : null;
 }
 
+// Example of fetching a feature by id from DynamoDB.
 function getFeature(id) {
-  return features.find(w => w.id === id);
-}
-
-function getFeatures() {
-  return features;
-}
-
-function getCharities() {
-  var table = "Charities";
+  var table = "Features";
 
   var params = {
       TableName: table,
-      ProjectionExpression: "CharityId, CharityName",
+      Key: {
+        'FeatureId': id
+      }
+  };
+
+  return docClient.get(params).promise().then(function(feature) {
+      var featureObj = new Feature();
+      featureObj.id = feature.FeatureId;
+      featureObj.name = feature.FeatureName;
+      featureObj.description = feature.Description;
+      featureObj.url = feature.FeatureUrl;
+      return featureObj;
+  }).catch(function(err) {
+     console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
+  });
+}
+
+// Example of fetching many from DynamoDB.
+function getFeatures() {
+  var table = "Features";
+
+  var params = {
+      TableName: table,
+      ProjectionExpression: "FeatureId, FeatureName, Description, FeatureUrl",
   };
 
   return docClient.scan(params).promise().then(function(data) {
-    console.log("Async scan succeeded:", JSON.stringify(data, null, 2));
-    return data.Items.map((charity, i) => {
-        var charityObj = new Charity();
-        charityObj.id = charity.CharityId;
-        charityObj.name = charity.CharityName;
-        return charityObj;
+    return data.Items.map((feature, i) => {
+        var featureObj = new Feature();
+        featureObj.id = feature.FeatureId;
+        featureObj.name = feature.FeatureName;
+        featureObj.description = feature.Description;
+        featureObj.url = feature.FeatureUrl;
+        return featureObj;
       });
   }).catch(function(err) {
      console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
