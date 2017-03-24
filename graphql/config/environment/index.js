@@ -1,5 +1,5 @@
 /* eslint-disable global-require */
-import _ from 'lodash';
+import { extend } from 'lodash';
 
 const config = {
   env: process.env.NODE_ENV || 'development',
@@ -9,4 +9,4 @@ const config = {
   }
 };
 
-export default _.extend(config, require(`./${config.env}`).default);
+export default extend(config, require(`./${config.env}`).default);
