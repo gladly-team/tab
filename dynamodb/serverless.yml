@@ -1,0 +1,25 @@
+
+service: dynamodb
+
+provider:
+  name: aws
+  runtime: nodejs4.3
+  region: us-west-2
+  profile: tab-sls
+  stage: dev
+
+resources:
+  Resources:
+    usersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: usersTable-${opt:stage, self:provider.stage}
+        KeySchema:
+          - AttributeName: UserId
+            KeyType: HASH
+        AttributeDefinitions:
+          - AttributeName: UserId
+            AttributeType: S
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
