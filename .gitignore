@@ -7,3 +7,6 @@ web/jest
 # generated schema files
 graphql/data/schema.json
 graphql/data/schema.graphql
+
+# serverless
+.serverless
