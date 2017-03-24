@@ -1,1 +1,0 @@
-sed -i '' -e "s/\/\/ Last updated: \(..*\)/\/\/ Last updated: $(date)/" ./web/src/schema-refresh.js
