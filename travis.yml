@@ -1,0 +1,7 @@
+language: node_js
+node_js:
+- '6'
+env:
+  global:
+  - AWS_REGION=us-west-2
+script: "./test.sh"
