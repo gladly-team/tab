@@ -8,6 +8,7 @@
     "aws-sdk": "^2.18.0"
   },
   "scripts": {
+    "init": "npm run delete-tables && npm run bootstrap",
     "bootstrap": "npm run create-tables && npm run load-fixtures",
     "create-tables": "node createTables.js",
     "delete-tables": "node deleteTables.js",

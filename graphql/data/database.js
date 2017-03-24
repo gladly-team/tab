@@ -7,6 +7,9 @@ class User {
   }
 }
 
+// We are not doing any mapping to this model,
+// We directly use the object returned by 
+// dynamoDB. (?)
 class Feature {
   constructor(id, name, description, url) {
     this.id = id;
@@ -24,41 +27,29 @@ AWS.config.update({
   secretAccessKey: 'fakeSecretKey456'
 });
 var docClient = new AWS.DynamoDB.DocumentClient();
+const featuresTableName = 'Features';
 
 const lvarayut = new User(1, 'Varayut Lerdkanlayanawat', 'lvarayut', 'https://github.com/lvarayut/relay-fullstack');
 
 let curFeatures = 9;
 function addFeature(name, description, url) {
-  var table = "Features";
+  const feature = new Feature(curFeatures, name, description, url);
+  curFeatures += 1;
   var params = {
-    TableName:table,
-    Item:{
-        "FeatureId": curFeatures,
-        "FeatureName": name, 
-        "Description": description, 
-        "FeatureUrl": url
-    }
+    TableName: featuresTableName,
+    Item: feature
   };
 
-  console.log("Adding a new item...");
-  docClient.put(params).promise().then(function(data) {
-      const feature = params.Item;
-      console.error("Added object:", JSON.stringify(feature, null, 2));
-  }).catch(function(err) {
+  return docClient.put(params).promise().then(data => {
+    // This data object it's empty. Even if it contains an object it wouldn't
+    // be the same object(in memory) that we get when fetching all the 
+    // features. Related to AddFeature mutation in schema.js 
+    console.error("Added new feature: ", JSON.stringify(feature, null, 2));
+    return feature;
+  }).catch(err => {
      console.error("Unable to add item. Error JSON:", JSON.stringify(err, null, 2));
   });
-
-  const feature = params.Item;
-  var featureObj = new Feature();
-  featureObj.id = feature.FeatureId;
-  featureObj.name = feature.FeatureName;
-  featureObj.description = feature.Description;
-  featureObj.url = feature.FeatureUrl;
-  curFeatures += 1;
-  return featureObj;
-
 }
-
 
 function getUser(id) {
   return id === lvarayut.id ? lvarayut : null;
@@ -66,47 +57,37 @@ function getUser(id) {
 
 // Example of fetching a feature by id from DynamoDB.
 function getFeature(id) {
-  var table = "Features";
-
+ 
   var params = {
-      TableName: table,
+      TableName: featuresTableName,
       Key: {
-        'FeatureId': id
+        'id': id
       }
   };
 
-  return docClient.get(params).promise().then(function(feature) {
-      var featureObj = new Feature();
-      featureObj.id = feature.FeatureId;
-      featureObj.name = feature.FeatureName;
-      featureObj.description = feature.Description;
-      featureObj.url = feature.FeatureUrl;
-      return featureObj;
-  }).catch(function(err) {
+  return docClient.get(params).promise()
+    .then(feature => {
+      return feature;
+    })
+    .catch(function(err) {
      console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
-  });
+    });
 }
 
 // Example of fetching many from DynamoDB.
 function getFeatures() {
-  var table = "Features";
-
   var params = {
-      TableName: table,
-      ProjectionExpression: "FeatureId, FeatureName, Description, FeatureUrl",
+    TableName: featuresTableName,
+    AttributesToGet: [
+      'id', 
+      'name', 
+      'description', 
+      'url'
+    ],
   };
 
-  return docClient.scan(params).promise().then(function(data) {
-    return data.Items.map((feature, i) => {
-        var featureObj = new Feature();
-        featureObj.id = feature.FeatureId;
-        featureObj.name = feature.FeatureName;
-        featureObj.description = feature.Description;
-        featureObj.url = feature.FeatureUrl;
-        return featureObj;
-      });
-  }).catch(function(err) {
-     console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
+  return docClient.scan(params).promise().then(data => data["Items"]).catch(err => {
+    console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
   });
 }
 
