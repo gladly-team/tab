@@ -1,19 +1,6 @@
 
 version: '2'
 services:
-  graphql:
-    restart: always
-    build:
-      context: ./graphql/
-    expose:
-      - "8080"
-    ports:
-      - "8080:8080"
-    volumes:
-      - ./graphql:/graphql
-      - ./graphql/node_modules:/graphql/node_modules
-    # command: ["npm", "run", "update-schema", "&&", "npm", "start"]
-    command: ["npm", "start"]
 
   dynamodb:
     restart: always
@@ -26,18 +13,3 @@ services:
     volumes:
       - ./dynamodb:/dynamodb
       - ./dynamodb/node_modules:/dynamodb/node_modules
-
-  lambda:
-    restart: always
-    build:
-      context: ./lambda/
-    expose:
-      - "8001"
-    ports:
-      - "8001:8001"
-    volumes:
-      - ./lambda:/lambda
-      - ./lambda/node_modules:/lambda/node_modules
-    links:
-      - dynamodb:dynamodb
-
