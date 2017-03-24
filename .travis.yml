@@ -3,6 +3,8 @@ node_js:
 - '6'
 env:
   global:
+  - CI=true
+  - NODE_ENV=test
   - AWS_REGION=us-west-2
 install: npm run build
 script: "./scripts/test.sh"
