@@ -20,7 +20,8 @@ import {
   mutationWithClientMutationId,
   nodeDefinitions,
   cursorForObjectInConnection,
-  connectionFromPromisedArray
+  connectionFromPromisedArray,
+  offsetToCursor
 } from 'graphql-relay';
 
 import {
@@ -147,8 +148,37 @@ const addFeatureMutation = mutationWithClientMutationId({
     featureEdge: {
       type: featureEdge,
       resolve: (obj) => {
-        const cursorId = cursorForObjectInConnection(getFeatures(), obj);
-        return { node: obj, cursor: cursorId };
+        return Promise.resolve(getFeatures())
+        .then(features => {
+            // This code it's what we should actually do in here 
+
+            // const cursorId = cursorForObjectInConnection(features, obj);
+            // return { node: features[offset], cursor: cursorId};
+
+            // The previous code doesn't work because the cursorForObjectInConnection 
+            // uses indexOf(compare using memory reference) to get the position of object 
+            // obj in features check cursorForObjectInConnection
+            // definition at https://github.com/graphql/graphql-relay-js/blob/master/src/connection/arrayconnection.js
+            // The following code it's a workaround to the previous one. 
+            // It searches for the obj by id in the list of features, then
+            // encode the index and return the edge object.
+
+            var offset = -1;
+            for(var i = 0, len = features.length; i < len; i++) {
+                if (features[i].id === obj.id) {
+                    offset = i;
+                    break;
+                }
+            }
+
+            // offsetToCursor creates a hash using the position of the object.
+            if (offset >= 0) {
+              return { node: features[offset], cursor: offsetToCursor(offset)};
+            }
+        })
+        .catch(
+          err => console.error("Unable get the features:", JSON.stringify(err, null, 2))
+        );
       }
     },
     viewer: {
