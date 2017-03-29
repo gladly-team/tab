@@ -18,7 +18,7 @@ RUN curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash - \
     && apt-get update \
     && apt-get install -y nodejs
 
-ENTRYPOINT ["java", "-Djava.library.path=.", "-jar", "/opt/dynamodb/DynamoDBLocal.jar", "-dbPath", "/opt/dynamodb/db"]
+ENTRYPOINT ["java", "-Djava.library.path=.", "-jar", "/opt/dynamodb/DynamoDBLocal.jar", "-dbPath", "/opt/dynamodb/db", "-sharedDb"]
 CMD ["-port", "8000"]
 
 VOLUME ["/opt/dynamodb/db"]
