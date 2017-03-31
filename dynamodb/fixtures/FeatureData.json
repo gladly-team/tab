@@ -1,48 +1,48 @@
 [
   {
-    "id": 1,
+    "id": "45bbefbf-63d1-4d36-931e-212fbe2bc3d9",
     "name": "React",
     "description": "A JavaScript library for building user interfaces.",
     "url": "https://facebook.github.io/react"
   },
   {
-    "id": 2,
+    "id": "25cde869-7523-4605-81a6-3029651f2e10",
     "name": "Relay",
     "description": "A JavaScript framework for building data-driven react applications.",
     "url": "https://facebook.github.io/relay"
   },
   {
-    "id": 3,
+    "id": "82718869-afea-4f49-9138-0b4e46df7dbf",
     "name": "GraphQL",
     "description": "A reference implementation of GraphQL for JavaScript.",
     "url": "http://graphql.org"
   },
   {
-    "id": 4,
+    "id": "3e7b5071-9963-4c25-a20e-49f6d8fe7034",
     "name": "Express",
     "description": "Fast, unopinionated, minimalist web framework for Node.js.",
     "url": "http://expressjs.com"
   },
   {
-    "id": 5,
+    "id": "3cc180ad-9d5c-4b8e-95fc-08cb6011fd6b",
     "name": "Webpack",
     "description": "Webpack is a module bundler that packs modules for the browser.",
     "url": "https://webpack.github.io"
   },
   {
-    "id": 6,
+    "id": "619eedfb-cfbc-4381-8591-75803b9078a2",
     "name": "Babel",
     "description": "Babel is a JavaScript compiler. Use next generation JavaScript, today.",
     "url": "https://babeljs.io"
   },
   {
-    "id": 7,
+    "id": "050f1a48-77cc-4320-b7ec-e24a1676c6d4",
     "name": "PostCSS",
     "description": "PostCSS. A tool for transforming CSS with JavaScript.",
     "url": "http://postcss.org"
   },
   {
-    "id": 8,
+    "id": "5a5a74c9-8af6-4208-8c02-4cc152caeec2",
     "name": "MDL",
     "description": "Material Design Lite lets you add a Material Design to your websites.",
     "url": "http://www.getmdl.io"

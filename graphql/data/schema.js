@@ -25,13 +25,16 @@ import {
 } from 'graphql-relay';
 
 import {
-  User,
   Feature,
-  getUser,
+  addFeature,
   getFeature,
-  getFeatures,
-  addFeature
-} from './database';
+  getFeatures
+} from '../database/features/feature';
+
+import {
+  User,
+  getUser
+} from '../database/users/user';
 
 
 /**
