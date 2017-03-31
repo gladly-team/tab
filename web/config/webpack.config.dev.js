@@ -77,7 +77,7 @@ module.exports = {
   // The first two entry points enable "hot" CSS and auto-refreshes for JS.
   entry: {
     app: appEntry,
-    vendor: ['react-mdl']
+    vendor: ['material-ui']
   },
   output: {
     // Next line is not used in dev but WebpackDevServer crashes without it:
