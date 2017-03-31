@@ -16,6 +16,7 @@
     "express-graphql": "^0.6.3",
     "graphql": "^0.9.1",
     "graphql-relay": "^0.5.1",
+    "moment": "^2.18.1",
     "uuid": "3.0.1",
     "webpack": "^2.2.1"
   },

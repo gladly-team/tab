@@ -3,6 +3,7 @@ import 'normalize.css/normalize.css';
 import 'react-mdl/extra/css/material.cyan-red.min.css';
 import Navbar from '../Navbar/NavbarComponent';
 import Footer from '../Footer/FooterContainer';
+import VcUser from '../User/VcUserContainer';
 import styles from './App.scss';
 import yeoman from '../../assets/yeoman.png';
 
@@ -24,6 +25,7 @@ export default class App extends React.Component {
         <div className={styles.content}>
           {this.props.children}
         </div>
+        <VcUser viewer={this.props.viewer} />
         <Footer viewer={this.props.viewer} />
       </div>
     );

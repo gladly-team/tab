@@ -26,4 +26,8 @@ database.scan = function(params) {
   return dynamoDb.scan(params).promise();
 };
 
+database.update = function(params) {
+  return dynamoDb.update(params).promise();
+};
+
 module.exports = database;

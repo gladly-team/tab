@@ -1,21 +1,67 @@
-import db from '../database';
+import BaseModel from '../base/model';
+const tablesNames = require('../tables');
+const db = require('../database');
 
-class User {
-  constructor(id, name, username, website) {
-    this.id = id;
-    this.name = name;
+class User extends BaseModel {
+  
+  constructor(id, name, username, email) {
+  	super(id);
+
+  	// Model Requiered fields.
+  	this.name = name;
     this.username = username;
-    this.website = website;
+    this.email = email;
+
+  	// Model optional fields with default values.
+    this.vcCurrent = 0;
+  }
+
+  static getTableName() {
+  	return tablesNames.users;
+  }
+
+  static deserialize(obj) {
+  	
+  	const user = new User(
+  		obj.id, 
+  		obj.name, 
+  		obj.username, 
+  		obj.email);
+
+  	user.vcCurrent = obj.vcCurrent;
+  	return user;
   }
 }
 
-const lvarayut = new User(1, 'Varayut Lerdkanlayanawat', 'lvarayut', 'https://github.com/lvarayut/relay-fullstack');
-
 function getUser(id) {
-  return id === lvarayut.id ? lvarayut : null;
+	
+	return User.get(id)
+		.then(user => user)
+		.catch(err => {
+		    console.error("Error while getting the user. Error JSON:", JSON.stringify(err, null, 2));
+		});
+}
+
+function updateUserVc(userId, vc=0) {
+
+	var params = {
+	    UpdateExpression: "set vcCurrent = vcCurrent + :val",
+	    ExpressionAttributeValues:{
+	        ":val": vc
+	    },
+	    ReturnValues:"UPDATED_NEW"
+	};
+
+	return User.update(userId, params)
+	  	.then(data => {
+		    return {userId: userId, data: data};
+		}).catch(err => {
+		    console.error("Error while trying to update user: "  + userId + " vc. Error JSON:", JSON.stringify(err, null, 2));
+		});
 }
 
 export {
   User,
-  getUser
+  getUser,
+  updateUserVc
 };
