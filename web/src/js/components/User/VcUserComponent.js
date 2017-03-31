@@ -1,7 +1,5 @@
 import React from 'react';
 import Relay from 'react-relay';
-import 'normalize.css/normalize.css';
-import 'react-mdl/extra/css/material.cyan-red.min.css';
 import UpdateVcMutation from './UpdateVcMutation';
 
 class VcUser extends React.Component {
@@ -21,8 +19,8 @@ class VcUser extends React.Component {
       bottom: 0,
       left: 0,
       background: 'black',
-      width: 300,
-      height: 300,
+      width: '100vw',
+      height: 150,
     };
 
     const text = {

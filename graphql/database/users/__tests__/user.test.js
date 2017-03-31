@@ -17,18 +17,6 @@ test('create with existing id', () => {
 	expect(user.id).toBe('some_bad_id');
 });
 
-test('serialize to be implemented', () => {
-	const user = new User('some_bad_id', 'test_name', 'test_username', 'test@tfac.com');
-	const obj = user.serialize();
-	
-	expect(obj.id).toBe('some_bad_id');
-	expect(obj.name).toBe('test_name');
-	expect(obj.username).toBe('test_username');
-	expect(obj.email).toBe('test@tfac.com');
-
-	expect(obj.vcCurrent).toBe(0);
-});
-
 test('deserialize to be implemented', () => {
 	const user = User.deserialize({
 		id: 'someid',
