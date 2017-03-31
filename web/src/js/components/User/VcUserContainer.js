@@ -1,12 +1,12 @@
 import Relay from 'react-relay';
-import Footer from './FooterComponent';
+import VcUser from './VcUserComponent';
 
-export default Relay.createContainer(Footer, {
+export default Relay.createContainer(VcUser, {
   fragments: {
     viewer: () => Relay.QL`
       fragment on User {
-        username
-        email
+      	id
+        vcCurrent
       }`
   }
 });

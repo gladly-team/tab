@@ -33,7 +33,8 @@ import {
 
 import {
   User,
-  getUser
+  getUser,
+  updateUserVc
 } from '../database/users/user';
 
 
@@ -82,16 +83,14 @@ const userType = new GraphQLObjectType({
       type: GraphQLString,
       description: 'Users\'s username'
     },
-    website: {
+    email: {
       type: GraphQLString,
-      description: 'User\'s website'
+      description: 'User\'s email'
+    },
+    vcCurrent: {
+      type: GraphQLInt,
+      description: 'User\'s vc'
     }
-    // charities: {
-    //   type: charityConnection,
-    //   description: 'The charities in the app',
-    //   args: connectionArgs,
-    //   resolve: (_, args) => connectionFromPromisedArray(getCharities(), args),
-    // }
   }),
   interfaces: [nodeInterface]
 });
@@ -138,6 +137,25 @@ const { connectionType: featureConnection, edgeType: featureEdge } = connectionD
 /**
  * Create feature example
  */
+
+const updateVcMutation = mutationWithClientMutationId({
+  name: 'UpdateVc',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+  },
+  outputFields: {
+    viewer: {
+      type: userType,
+      resolve: ({userId, data}) => {
+        return getUser(userId);
+      }
+    }
+  },
+  mutateAndGetPayload: ({userId}) => {
+    const { type, id } = fromGlobalId(userId);
+    return updateUserVc(id, 1);
+  }
+});
 
 const addFeatureMutation = mutationWithClientMutationId({
   name: 'AddFeature',
@@ -186,7 +204,7 @@ const addFeatureMutation = mutationWithClientMutationId({
     },
     viewer: {
       type: userType,
-      resolve: () => getUser(1)
+      resolve: () => getUser("45bbefbf-63d1-4d36-931e-212fbe2bc3d9")
     }
   },
 
@@ -205,7 +223,7 @@ const queryType = new GraphQLObjectType({
     // Add your own root fields here
     viewer: {
       type: userType,
-      resolve: () => getUser(1)
+      resolve: () => getUser("45bbefbf-63d1-4d36-931e-212fbe2bc3d9")
     }
   })
 });
@@ -217,8 +235,8 @@ const queryType = new GraphQLObjectType({
 const mutationType = new GraphQLObjectType({
   name: 'Mutation',
   fields: () => ({
-    addFeature: addFeatureMutation
-    // Add your own mutations here
+    addFeature: addFeatureMutation,
+    updateVc: updateVcMutation
   })
 });
 

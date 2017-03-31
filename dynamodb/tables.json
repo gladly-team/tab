@@ -2,10 +2,10 @@
   {
     "TableName": "Users",
     "KeySchema": [       
-      { "AttributeName": "UserId", "KeyType": "HASH"}
+      { "AttributeName": "id", "KeyType": "HASH"}
     ],
     "AttributeDefinitions": [       
-      { "AttributeName": "UserId", "AttributeType": "N" }
+      { "AttributeName": "id", "AttributeType": "S" }
     ],
     "ProvisionedThroughput": {       
       "ReadCapacityUnits": 10, 
