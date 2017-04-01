@@ -212,7 +212,19 @@
             },
             {
               "name": "vcCurrent",
-              "description": "User's vc",
+              "description": "User's current vc",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "vcAllTime",
+              "description": "User's vc of all time",
               "args": [],
               "type": {
                 "kind": "SCALAR",

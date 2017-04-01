@@ -48,8 +48,15 @@ function getUser(id) {
 
 function updateUserVc(userId, vc=0) {
 
+  var updateExpression;
+  if(vc > 0){
+    updateExpression = "set vcCurrent = vcCurrent + :val, vcAllTime = vcAllTime + :val";
+  } else {
+    updateExpression = "set vcCurrent = vcCurrent + :val";
+  }
+
 	var params = {
-	    UpdateExpression: "set vcCurrent = vcCurrent + :val",
+	    UpdateExpression: updateExpression,
 	    ExpressionAttributeValues:{
 	        ":val": vc
 	    },

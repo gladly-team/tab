@@ -17,7 +17,10 @@ class UpdateVcMutation extends Relay.Mutation {
   getFatQuery() {
     return Relay.QL`
       fragment on UpdateVcPayload {
-        viewer { vcCurrent }
+        viewer { 
+          vcCurrent 
+          vcAllTime
+        }
       }
     `;
   }
@@ -35,6 +38,7 @@ class UpdateVcMutation extends Relay.Mutation {
     return {
       viewer: {
         vcCurrent: this.props.viewer.vcCurrent + 1,
+        vcAllTime: this.props.viewer.vcAllTime + 1,
       }
     };
   }

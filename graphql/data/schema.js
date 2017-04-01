@@ -111,7 +111,11 @@ const userType = new GraphQLObjectType({
     },
     vcCurrent: {
       type: GraphQLInt,
-      description: 'User\'s vc'
+      description: 'User\'s current vc'
+    },
+    vcAllTime: {
+      type: GraphQLInt,
+      description: 'User\'s vc of all time'
     },
     level: {
       type: GraphQLInt,
