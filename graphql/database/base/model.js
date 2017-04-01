@@ -4,13 +4,11 @@ const db = require('../database');
 import {NotImplementedException} from '../../utils/exceptions';
 
 class BaseModel {
-	constructor(id, table) {
+	constructor(id) {
 		this.id = id || uuid();
-		this.tableName = table;
 	}
 
 	static get(id, args={}) {
-	 	
 	    var params = Object.assign({}, {
 	      TableName: this.getTableName(),
 	      Key: {
