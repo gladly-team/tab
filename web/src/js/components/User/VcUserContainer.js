@@ -7,6 +7,11 @@ export default Relay.createContainer(VcUser, {
       fragment on User {
       	id
         vcCurrent
+        vcAllTime
+        level
+        nextLevelHearts {
+	      hearts
+	    }
       }`
   }
 });

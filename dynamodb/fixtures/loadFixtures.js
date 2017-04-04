@@ -38,6 +38,10 @@ var fixtures = [
   {
     tableName: 'Features',
     jsonFile: 'FeatureData.json'
+  },
+  {
+    tableName: 'UserLevels',
+    jsonFile: 'UserLevels.json'
   }
 ];
 

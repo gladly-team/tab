@@ -14,6 +14,8 @@ class User extends BaseModel {
 
   	// Model optional fields with default values.
     this.vcCurrent = 0;
+    this.vcAllTime = 0;
+    this.level = 1;
   }
 
   static getTableName() {
@@ -24,11 +26,13 @@ class User extends BaseModel {
   	
   	const user = new User(
   		obj.id, 
-  		obj.name, 
   		obj.username, 
   		obj.email);
 
-  	user.vcCurrent = obj.vcCurrent;
+  	user.vcCurrent = obj.vcCurrent || user.vcCurrent;
+    user.vcAllTime = obj.vcAllTime || user.vcAllTime;
+    user.level = obj.level || user.level;
+
   	return user;
   }
 }
@@ -44,8 +48,15 @@ function getUser(id) {
 
 function updateUserVc(userId, vc=0) {
 
+  var updateExpression;
+  if(vc > 0){
+    updateExpression = "set vcCurrent = vcCurrent + :val, vcAllTime = vcAllTime + :val";
+  } else {
+    updateExpression = "set vcCurrent = vcCurrent + :val";
+  }
+
 	var params = {
-	    UpdateExpression: "set vcCurrent = vcCurrent + :val",
+	    UpdateExpression: updateExpression,
 	    ExpressionAttributeValues:{
 	        ":val": vc
 	    },
