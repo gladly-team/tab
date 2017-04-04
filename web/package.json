@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "description": "Web app for Tab for a Cause.",
   "private": true,
-  "devDependencies": {},
+  "devDependencies": {
+    "enzyme": "^2.8.0",
+    "react-addons-test-utils": "^15.4.2"
+  },
   "dependencies": {
     "autoprefixer": "6.5.1",
     "babel-core": "^6.23.1",

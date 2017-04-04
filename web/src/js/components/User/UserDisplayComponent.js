@@ -1,6 +1,5 @@
 import React from 'react';
 import Relay from 'react-relay';
-import UpdateVcMutation from './UpdateVcMutation';
 
 class UserDisplay extends React.Component {
   static propTypes = {

@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {Component} from 'react';
 import Relay from 'react-relay';
 import UpdateVcMutation from './UpdateVcMutation';
 import LinearProgress from 'material-ui/LinearProgress';
 
-class VcUser extends React.Component {
+class VcUser extends Component {
   static propTypes = {
     viewer: React.PropTypes.object.isRequired
   };
@@ -54,22 +54,25 @@ class VcUser extends React.Component {
       height: 8,
     }
 
-
     return (
       <div style={container}>
         <div style={userProgress}>
           <div style={progressContainer}>
-            <div style={text}>Level {viewer.level} Tabber</div>
+            <div 
+              data-test-id={'tabber-level'}
+              style={text}>Level {viewer.level} Tabber</div>
             <LinearProgress 
               style={progressBar}
               color={'orange'}
-              mode="determinate" 
+              mode={'determinate'}
               value={viewer.vcAllTime} 
               max={viewer.nextLevelHearts.hearts}/>
             <div style={text}>{heartsToLevelUp} Hearts to level-up</div>
           </div>
           <div style={currentStatsContainer}>
-            <p style={text}>{viewer.vcCurrent} Hearts</p>
+            <p 
+              data-test-id={'current-hearts'}
+              style={text}>{viewer.vcCurrent} Hearts</p>
           </div>
         </div>
       </div>
