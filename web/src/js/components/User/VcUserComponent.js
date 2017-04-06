@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Relay from 'react-relay';
-import UpdateVcMutation from './UpdateVcMutation';
+import UpdateVcMutation from 'mutations/UpdateVcMutation';
 import LinearProgress from 'material-ui/LinearProgress';
 
 class VcUser extends Component {

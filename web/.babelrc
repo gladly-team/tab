@@ -12,9 +12,10 @@
   ],
   "plugins": [
     ["module-resolver", {
-      "root": ["./utils"],
+      "root": ["./"],
       "alias": {
-        "relay-test-utils": "relay-test-utils"
+        "relay-test-utils": "utils/relay-test-utils",
+        "mutations": "./src/js/mutations"
       }
     }]
   ],
