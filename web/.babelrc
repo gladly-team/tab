@@ -10,6 +10,14 @@
     ["es2015", { "modules": false }],
     "stage-0"
   ],
+  "plugins": [
+    ["module-resolver", {
+      "root": ["./utils"],
+      "alias": {
+        "relay-test-utils": "relay-test-utils"
+      }
+    }]
+  ],
   "env": {
     "development": {
       "plugins": [
