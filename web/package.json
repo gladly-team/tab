@@ -4,6 +4,7 @@
   "description": "Web app for Tab for a Cause.",
   "private": true,
   "devDependencies": {
+    "babel-plugin-module-resolver": "^2.7.0",
     "enzyme": "^2.8.0",
     "react-addons-test-utils": "^15.4.2"
   },

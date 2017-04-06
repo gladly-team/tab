@@ -20,7 +20,6 @@ test('create with existing id', () => {
 test('deserialize to be implemented', () => {
 	const user = User.deserialize({
 		id: 'someid',
-  		name: 'test_name',
   		username: 'test_username',
   		email: 'test@tfac.com',
   		vcCurrent: 4
@@ -28,7 +27,6 @@ test('deserialize to be implemented', () => {
 
 	expect(user instanceof User ).toBe(true);
 	expect(user.id).toBe('someid');
-	expect(user.name).toBe('test_name');
 	expect(user.username).toBe('test_username');
 	expect(user.email).toBe('test@tfac.com');
 	expect(user.vcCurrent).toBe(4);

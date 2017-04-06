@@ -1,12 +1,9 @@
 import React, {Component} from 'react';
 import Relay from 'react-relay';
-import UpdateVcMutation from './UpdateVcMutation';
+import UpdateVcMutation from 'mutations/UpdateVcMutation';
 import LinearProgress from 'material-ui/LinearProgress';
 
 class VcUser extends Component {
-  static propTypes = {
-    viewer: React.PropTypes.object.isRequired
-  };
 
   componentDidMount() {
     const updateVcMutation = new UpdateVcMutation({ viewer: this.props.viewer });
@@ -78,6 +75,14 @@ class VcUser extends Component {
       </div>
     );
   }
+}
+
+VcUser.propTypes = {
+  viewer: React.PropTypes.object.isRequired
+};
+
+VcUser.defaultProps = {
+  
 }
 
 export default VcUser;
