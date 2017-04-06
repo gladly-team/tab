@@ -4,11 +4,10 @@ const db = require('../database');
 
 class User extends BaseModel {
   
-  constructor(id, name, username, email) {
+  constructor(id, username, email) {
   	super(id);
 
   	// Model Requiered fields.
-  	this.name = name;
     this.username = username;
     this.email = email;
 

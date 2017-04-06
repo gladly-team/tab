@@ -8,7 +8,6 @@ test('fetch user by id', () => {
         expect(user).not.toBe(null);
     	expect(user instanceof User).toBe(true);
     	expect(user.id).toBe('45bbefbf-63d1-4d36-931e-212fbe2bc3d9');
-    	expect(user.name).toBe('Raul');
     	expect(user.username).toBe('raulchall');
     	expect(user.email).toBe('raul@tfac.com');
         expect(user.vcCurrent).toBe(100);
