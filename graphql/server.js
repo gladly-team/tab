@@ -51,7 +51,11 @@ function startServer(callback) {
 }
 
 // Watch for DB or schema changes.
-const watcher = chokidar.watch('./data/{database,schema}.js');
+const watcher = chokidar.watch([
+  './data/{schema}.js', 
+  './database/*.js',
+  './database/*/*.js']);
+
 watcher.on('change', path => {
   console.log(`\`${path}\` changed. Restarting.`);
   startServer(() =>

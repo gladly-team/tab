@@ -20,18 +20,27 @@ import {
   mutationWithClientMutationId,
   nodeDefinitions,
   cursorForObjectInConnection,
-  connectionFromPromisedArray
+  connectionFromPromisedArray,
+  offsetToCursor
 } from 'graphql-relay';
 
 import {
-  User,
   Feature,
-  getUser,
+  addFeature,
   getFeature,
-  getFeatures,
-  addFeature
-} from './database';
+  getFeatures
+} from '../database/features/feature';
 
+import {
+  User,
+  getUser,
+  updateUserVc
+} from '../database/users/user';
+
+import {
+  UserLevel,
+  getUserLevel
+} from '../database/userLevels/userLevel';
 
 /**
  * We get the node interface and field from the Relay library.
@@ -47,6 +56,9 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     } else if (type === 'Feature') {
       return getFeature(id);
     }
+    else if (type === 'UserLevel') {
+      return getUserLevel(id);
+    }
     return null;
   },
   (obj) => {
@@ -54,6 +66,8 @@ const { nodeInterface, nodeField } = nodeDefinitions(
       return userType;
     } else if (obj instanceof Feature) {
       return featureType;
+    } else if (obj instanceof UserLevel) {
+      return UserLevelType;
     }
     return null;
   }
@@ -62,6 +76,19 @@ const { nodeInterface, nodeField } = nodeDefinitions(
 /**
  * Define your own types here
  */
+
+const UserLevelType = new GraphQLObjectType({
+  name: 'UserLevel',
+  description: 'An user level.',
+  fields: () => ({
+    id: globalIdField('UserLevel'),
+    hearts: {
+      type: GraphQLInt,
+      description: 'The level hearts requiered'
+    }
+  }),
+  interfaces: [nodeInterface]
+});
 
 const userType = new GraphQLObjectType({
   name: 'User',
@@ -78,16 +105,26 @@ const userType = new GraphQLObjectType({
       type: GraphQLString,
       description: 'Users\'s username'
     },
-    website: {
+    email: {
       type: GraphQLString,
-      description: 'User\'s website'
+      description: 'User\'s email'
+    },
+    vcCurrent: {
+      type: GraphQLInt,
+      description: 'User\'s current vc'
+    },
+    vcAllTime: {
+      type: GraphQLInt,
+      description: 'User\'s vc of all time'
+    },
+    level: {
+      type: GraphQLInt,
+      description: 'User\'s vc'
+    },
+    nextLevelHearts: {
+      type: UserLevelType,
+      resolve: (user) => getUserLevel(user.level + 1)
     }
-    // charities: {
-    //   type: charityConnection,
-    //   description: 'The charities in the app',
-    //   args: connectionArgs,
-    //   resolve: (_, args) => connectionFromPromisedArray(getCharities(), args),
-    // }
   }),
   interfaces: [nodeInterface]
 });
@@ -135,6 +172,25 @@ const { connectionType: featureConnection, edgeType: featureEdge } = connectionD
  * Create feature example
  */
 
+const updateVcMutation = mutationWithClientMutationId({
+  name: 'UpdateVc',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+  },
+  outputFields: {
+    viewer: {
+      type: userType,
+      resolve: ({userId, data}) => {
+        return getUser(userId);
+      }
+    }
+  },
+  mutateAndGetPayload: ({userId}) => {
+    const { type, id } = fromGlobalId(userId);
+    return updateUserVc(id, 1);
+  }
+});
+
 const addFeatureMutation = mutationWithClientMutationId({
   name: 'AddFeature',
   inputFields: {
@@ -147,13 +203,42 @@ const addFeatureMutation = mutationWithClientMutationId({
     featureEdge: {
       type: featureEdge,
       resolve: (obj) => {
-        const cursorId = cursorForObjectInConnection(getFeatures(), obj);
-        return { node: obj, cursor: cursorId };
+        return Promise.resolve(getFeatures())
+        .then(features => {
+            // This code it's what we should actually do in here 
+
+            // const cursorId = cursorForObjectInConnection(features, obj);
+            // return { node: features[offset], cursor: cursorId};
+
+            // The previous code doesn't work because the cursorForObjectInConnection 
+            // uses indexOf(compare using memory reference) to get the position of object 
+            // obj in features check cursorForObjectInConnection
+            // definition at https://github.com/graphql/graphql-relay-js/blob/master/src/connection/arrayconnection.js
+            // The following code it's a workaround to the previous one. 
+            // It searches for the obj by id in the list of features, then
+            // encode the index and return the edge object.
+
+            var offset = -1;
+            for(var i = 0, len = features.length; i < len; i++) {
+                if (features[i].id === obj.id) {
+                    offset = i;
+                    break;
+                }
+            }
+
+            // offsetToCursor creates a hash using the position of the object.
+            if (offset >= 0) {
+              return { node: features[offset], cursor: offsetToCursor(offset)};
+            }
+        })
+        .catch(
+          err => console.error("Unable get the features:", JSON.stringify(err, null, 2))
+        );
       }
     },
     viewer: {
       type: userType,
-      resolve: () => getUser(1)
+      resolve: () => getUser("45bbefbf-63d1-4d36-931e-212fbe2bc3d9")
     }
   },
 
@@ -172,7 +257,7 @@ const queryType = new GraphQLObjectType({
     // Add your own root fields here
     viewer: {
       type: userType,
-      resolve: () => getUser(1)
+      resolve: () => getUser("45bbefbf-63d1-4d36-931e-212fbe2bc3d9")
     }
   })
 });
@@ -184,8 +269,8 @@ const queryType = new GraphQLObjectType({
 const mutationType = new GraphQLObjectType({
   name: 'Mutation',
   fields: () => ({
-    addFeature: addFeatureMutation
-    // Add your own mutations here
+    addFeature: addFeatureMutation,
+    updateVc: updateVcMutation
   })
 });
 
