@@ -10,6 +10,15 @@
     ["es2015", { "modules": false }],
     "stage-0"
   ],
+  "plugins": [
+    ["module-resolver", {
+      "root": ["./"],
+      "alias": {
+        "relay-test-utils": "utils/relay-test-utils",
+        "mutations": "./src/js/mutations"
+      }
+    }]
+  ],
   "env": {
     "development": {
       "plugins": [
@@ -23,6 +32,13 @@
             "imports": ["react", "redbox-react"]
           }]
         }]
+      ]
+    },
+    "test": {
+      "presets": [
+        "react",
+        "es2015",
+        "stage-0"
       ]
     }
   }

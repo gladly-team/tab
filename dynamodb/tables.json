@@ -2,10 +2,10 @@
   {
     "TableName": "Users",
     "KeySchema": [       
-      { "AttributeName": "UserId", "KeyType": "HASH"}
+      { "AttributeName": "id", "KeyType": "HASH"}
     ],
     "AttributeDefinitions": [       
-      { "AttributeName": "UserId", "AttributeType": "N" }
+      { "AttributeName": "id", "AttributeType": "S" }
     ],
     "ProvisionedThroughput": {       
       "ReadCapacityUnits": 10, 
@@ -28,10 +28,23 @@
   {
     "TableName": "Features",
     "KeySchema": [       
-      { "AttributeName": "FeatureId", "KeyType": "HASH"}
+      { "AttributeName": "id", "KeyType": "HASH"}
     ],
     "AttributeDefinitions": [       
-      { "AttributeName": "FeatureId", "AttributeType": "N" }
+      { "AttributeName": "id", "AttributeType": "S" }
+    ],
+    "ProvisionedThroughput": {       
+      "ReadCapacityUnits": 10, 
+      "WriteCapacityUnits": 10
+    }
+  },
+  {
+    "TableName": "UserLevels",
+    "KeySchema": [       
+      { "AttributeName": "id", "KeyType": "HASH"}
+    ],
+    "AttributeDefinitions": [       
+      { "AttributeName": "id", "AttributeType": "N" }
     ],
     "ProvisionedThroughput": {       
       "ReadCapacityUnits": 10, 
