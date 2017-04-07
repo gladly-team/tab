@@ -7,6 +7,19 @@ test('getTable name to be implemented', () => {
 	expect(User.getTableName()).toBe(tablesNames.users);
 });
 
+test('getFields to be implemented', () => {
+	const expected = [
+      'username',
+      'email',
+      'vcCurrent',
+      'vcAllTime',
+      'level'
+    ];
+
+	expect(User.getFields().length).toBe(expected.length);
+    expect(User.getFields()).toEqual(expect.arrayContaining(expected));
+});
+
 test('auto create id', () => {
 	const user = new User(null, 'test_name', 'test_username', 'test@tfac.com');
 	expect(user.id).not.toBe(null);

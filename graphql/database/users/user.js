@@ -3,15 +3,11 @@ const tablesNames = require('../tables');
 const db = require('../database');
 
 class User extends BaseModel {
-  
-  constructor(id, username, email) {
+  constructor(id) {
   	super(id);
 
-  	// Model Requiered fields.
-    this.username = username;
-    this.email = email;
-
-  	// Model optional fields with default values.
+    this.username = '';
+    this.email = '';
     this.vcCurrent = 0;
     this.vcAllTime = 0;
     this.level = 1;
@@ -21,18 +17,14 @@ class User extends BaseModel {
   	return tablesNames.users;
   }
 
-  static deserialize(obj) {
-  	
-  	const user = new User(
-  		obj.id, 
-  		obj.username, 
-  		obj.email);
-
-  	user.vcCurrent = obj.vcCurrent || user.vcCurrent;
-    user.vcAllTime = obj.vcAllTime || user.vcAllTime;
-    user.level = obj.level || user.level;
-
-  	return user;
+  static getFields() {
+    return [
+      'username',
+      'email',
+      'vcCurrent',
+      'vcAllTime',
+      'level'
+    ];
   }
 }
 

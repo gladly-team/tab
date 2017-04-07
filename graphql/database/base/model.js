@@ -50,10 +50,24 @@ class BaseModel {
 		throw new NotImplementedException();
 	}
 
-	// Override in child class. 
+	// Override in child class to get the list of fields that map to DB.
+	static getFields() {
+		throw new NotImplementedException();
+	}
+
 	// Gets a database object and returns a model object.
 	static deserialize(obj){
-		throw new NotImplementedException();
+		const cls = this;
+		const instance = new cls(
+	  		obj.id);
+
+		var field = '';
+		const fields = this.getFields();
+		for (var index in fields) {
+			field = fields[index];
+			instance[field] = obj[field] || instance[field];
+		}
+  		return instance;
 	}
 
 }
