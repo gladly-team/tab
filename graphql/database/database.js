@@ -22,6 +22,14 @@ database.get = function(params) {
   return dynamoDb.get(params).promise();
 };
 
+database.batchGet = function(params) {
+  return dynamoDb.batchGet(params).promise();
+};
+
+database.query = function(params) {
+  return dynamoDb.query(params).promise();
+};
+
 database.scan = function(params) {
   return dynamoDb.scan(params).promise();
 };

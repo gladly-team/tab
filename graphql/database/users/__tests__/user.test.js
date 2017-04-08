@@ -13,7 +13,8 @@ test('getFields to be implemented', () => {
       'email',
       'vcCurrent',
       'vcAllTime',
-      'level'
+      'level',
+      'heartsUntilNextLevel'
     ];
 
 	expect(User.getFields().length).toBe(expected.length);

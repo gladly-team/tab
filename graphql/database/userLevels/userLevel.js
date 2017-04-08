@@ -15,13 +15,10 @@ class UserLevel extends BaseModel {
   	return tablesNames.userLevels;
   }
 
-  static deserialize(obj) {
-  	
-  	const userLevel = new UserLevel(
-  		obj.id, 
-  		obj.hearts);
-
-  	return userLevel;
+  static getFields() {
+    return [
+      'hearts'
+    ];
   }
 }
 
@@ -33,7 +30,42 @@ function getUserLevel(id) {
 		});
 }
 
+function getUserLevelsFrom(id) {
+
+    const keys = [
+        {id: 2},
+        {id: 3},
+        {id: 4}
+    ];
+
+    const args = {
+      ProjectionExpression: "id, hearts"
+    };
+
+    return UserLevel.getBatch(keys, args)
+    .then(levels => {
+      console.log(levels);
+      return levels;
+    });
+
+    //  var args = {
+    //     KeyConditionExpression: "#userLevelId > :val",
+    //     ExpressionAttributeNames:{
+    //         "#userLevelId": "id"
+    //     },
+    //     ExpressionAttributeValues: {
+    //         ":val":id
+    //     }
+    // };
+
+    // return UserLevel.query(args)
+    // .then(levels => {
+    //   return levels;
+    // });
+}
+
 export {
   UserLevel,
-  getUserLevel
+  getUserLevel,
+  getUserLevelsFrom
 };

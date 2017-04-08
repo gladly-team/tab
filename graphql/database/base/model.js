@@ -22,6 +22,34 @@ class BaseModel {
 		});
 	}
 
+	static getBatch(keys, args={}) {
+		
+		var params = {};
+		params['RequestItems'] = {};
+		params['RequestItems'][this.getTableName()] = Object.assign({}, {
+			Keys: keys,
+		}, args);
+
+
+		const self = this;
+	    return db.batchGet(params).then(data => {
+	    	const items = data['Responses'][self.getTableName()];
+		    const result = [];
+		    for(var index in items) {
+		    	result.push(self.deserialize(items[index]));
+		    }
+		    return result;
+		});
+	}
+
+	static query(args={}) {
+		var params = Object.assign({}, {
+	      TableName: this.getTableName(),
+	    }, args);
+
+	    return db.query(params);
+	}
+
 	static add(item, args={}) {
 
 	  var params = Object.assign({}, {
@@ -42,7 +70,7 @@ class BaseModel {
 	      ...args
 	    };
 
-	    return db.update(params);
+	    return db.update(params)
 	}
 
 	// Override in child class to get the table name.

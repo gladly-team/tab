@@ -39,7 +39,8 @@ import {
 
 import {
   UserLevel,
-  getUserLevel
+  getUserLevel,
+  getUserLevelsFrom
 } from '../database/userLevels/userLevel';
 
 /**
@@ -100,6 +101,12 @@ const userType = new GraphQLObjectType({
       description: 'Features that I have',
       args: connectionArgs,
       resolve: (_, args) => connectionFromPromisedArray(getFeatures(), args)
+    },
+    levels: {
+      type: userLevelsConnection,
+      description: 'Get all the user levels',
+      args: connectionArgs,
+      resolve: (_, args) => connectionFromPromisedArray(getUserLevelsFrom(1), args)
     },
     username: {
       type: GraphQLString,
@@ -167,7 +174,7 @@ var charityType = new GraphQLObjectType({
  * Define your own connection types here
  */
 const { connectionType: featureConnection, edgeType: featureEdge } = connectionDefinitions({ name: 'Feature', nodeType: featureType });
-
+const { connectionType: userLevelsConnection, edgeType: userLevelsEdge } = connectionDefinitions({ name: 'UserLevel', nodeType: UserLevelType });
 /**
  * Create feature example
  */
@@ -180,9 +187,7 @@ const updateVcMutation = mutationWithClientMutationId({
   outputFields: {
     viewer: {
       type: userType,
-      resolve: ({userId, data}) => {
-        return getUser(userId);
-      }
+      resolve: user => user
     }
   },
   mutateAndGetPayload: ({userId}) => {
