@@ -1,8 +1,10 @@
 import BaseModel from '../base/model';
-import { UserLevel } from '../userLevels/userLevel';
+import { getNextLevelFor } from '../userLevels/userLevel';
 const tablesNames = require('../tables');
 const db = require('../database');
 
+import { UserReachedMaxLevelException } from '../../utils/exceptions';
+import { logger } from '../../utils/dev-tools';
 
 class User extends BaseModel {
   constructor(id) {
@@ -15,7 +17,7 @@ class User extends BaseModel {
     this.level = 1;
 
     // This value needs to match the hearts requiered for lv2 in DB.
-    this.heartsUntilNextLevel = 200;
+    this.heartsUntilNextLevel = 5;
   }
 
   static getTableName() {
@@ -35,12 +37,11 @@ class User extends BaseModel {
 }
 
 function getUser(id) {
-	console.log('getUser', id);
 	return User.get(id)
-		.then(user => user)
-		.catch(err => {
-		    console.error("Error while getting the user. Error JSON:", JSON.stringify(err, null, 2));
-		});
+        		.then(user => user)
+        		.catch(err => {
+                logger.error("Error while getting the user.", err);
+        		});
 }
 
 function updateUserVc(userId, vc=0) {
@@ -63,66 +64,54 @@ function updateUserVc(userId, vc=0) {
 	};
 
 	return User.update(userId, params)
-    .then(data => {
-      console.log('Update user response:', data);
-      const attrs = data['Attributes'];
-      return updateUserLevel(User.deserialize(attrs));
-    })
-    .then(user => {
-      console.log('Get user after update response', user);
-      return user;
-    })
-    .catch(err => {
-		    console.error("Error while trying to update user: "  + userId + " vc. Error JSON:", JSON.stringify(err, null, 2));
-		});
+            .then(user => {
+              if(user.heartsUntilNextLevel <= 0) {
+                return _updateUserLevel(user);
+              }
+              return user;
+            }).then(user => {
+              return user;
+            })
+            .catch(err => {
+                logger.error("Error while trying to update user.", err);
+        		});
 }
 
-function updateUserLevel(user) {
-    var heartsUntilNextLevel = user.heartsUntilNextLevel;
-    var nextLevel = data[level] + 1;
-    
-    const keys = [
-        {
-         "id": {
-           N: (nextLevel + 1).toString()
-          }
-        },
-        {
-         "id": {
-           N: (nextLevel + 2).toString()
-          }
-        },
-        {
-         "id": {
-           N: (nextLevel + 3).toString()
-          }
-        }
-    ];
+function _updateUserLevel(user) {
+  return getNextLevelFor(user.level + 1, user.vcAllTime)
+            .then(level => {
+              if(level) {
+                return _updateToLevel(level, user);
+              }
+              throw new UserReachedMaxLevelException();
+            })
+            .catch(err => {
+                logger.error("Error while trying to update the user level.", err);
+            });
+}
 
-    const args = {
-      ProjectionExpression: "hearts"
-    };
+function _updateToLevel(level, user) {
+  const userLevel = level.id - 1;
+  //Update user to userLevel.
+  const updateExpression = `set #lvl = :level, 
+                  heartsUntilNextLevel = :nextLevelHearts`;
+  const params = {
+      UpdateExpression: updateExpression,
+      ExpressionAttributeNames:{
+          "#lvl": "level",
+      },
+      ExpressionAttributeValues:{
+          ":level": userLevel,
+          ":nextLevelHearts": level.hearts - user.vcAllTime
+      },
+      ReturnValues:"ALL_NEW"
+  };
 
-    // return UserLevel.getBatch(keys, args)
-    // .then(levels => {
-    //   console.log(levels);
-    //   return levels;
-    // });
-
-    // UserLevel.getBatch(keys, args)
-    // .then(levels => {
-    //   console.log('getBatch', levels);
-    //   return levels;
-    // })
-    // .catch(err => {
-    //     console.error("getBatch Error JSON:", JSON.stringify(err, null, 2));
-    // });
-
-    return User.get(user.id)
-        .then(user => user)
-        .catch(err => {
-            console.error("Error JSON:", JSON.stringify(err, null, 2));
-        });
+  return User.update(user.id, params)
+            .then(updatedUser => updatedUser)
+            .catch(err => {
+                logger.error("Error while updating user.", err);
+            });
 }
 
 export {

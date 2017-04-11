@@ -47,7 +47,15 @@ class BaseModel {
 	      TableName: this.getTableName(),
 	    }, args);
 
-	    return db.query(params);
+		const self = this;
+	    return db.query(params).then(data => {
+		    const result = [];
+		    const items = data.Items;
+		    for(var index in items) {
+		    	result.push(self.deserialize(items[index]));
+		    }
+		    return result;
+		});
 	}
 
 	static add(item, args={}) {
@@ -70,7 +78,11 @@ class BaseModel {
 	      ...args
 	    };
 
-	    return db.update(params)
+	    const self = this;
+	    return db.update(params).then(data => {
+          const updatedUser = self.deserialize(data.Attributes);
+          return updatedUser;
+        });
 	}
 
 	// Override in child class to get the table name.
@@ -91,9 +103,21 @@ class BaseModel {
 
 		var field = '';
 		const fields = this.getFields();
+		var defaultValue;
+		var value;
 		for (var index in fields) {
 			field = fields[index];
-			instance[field] = obj[field] || instance[field];
+			value = obj[field];
+			defaultValue = instance[field];
+
+			if(!obj.hasOwnProperty(field)){
+				instance[field] = defaultValue;
+			}
+			else if(value === parseInt(value, 10)){
+				instance[field] = value;
+			} else {
+				instance[field] = obj[field] || instance[field];
+			}
 		}
   		return instance;
 	}

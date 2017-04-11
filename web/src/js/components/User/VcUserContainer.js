@@ -9,9 +9,7 @@ export default Relay.createContainer(VcUser, {
         vcCurrent
         vcAllTime
         level
-        nextLevelHearts {
-	      hearts
-	    }
+        heartsUntilNextLevel 
       }`
   }
 });

@@ -5,7 +5,8 @@
     "email": "kevin@tfac.com",
     "vcCurrent": 0,
     "vcAllTime": 0,
-    "heartsUntilNextLevel": 200
+    "level": 1,
+    "heartsUntilNextLevel": 5
   },
   {
     "id": "25cde869-7523-4605-81a6-3029651f2e10",
