@@ -1,21 +1,36 @@
 import BaseModel from '../base/model';
-const tablesNames = require('../tables');
-const db = require('../database');
-
+import tablesNames from '../tables';
+import db from '../database';
 import { logger } from '../../utils/dev-tools';
 
+/*
+ * Represents a User level. 
+ * @extends BaseModel
+ */
 class UserLevel extends BaseModel {
   
+  /**
+   * Creates a UserLevel instance.
+   * @param {number} id - The instance id in the database.
+   */
   constructor(id) {
   	super(id);
 
   	this.hearts = 0;
   }
 
+  /**
+   * Overrides getTableName from BaseModel.
+   * Refer to `getTableName` in BaseModel for more details.
+   */
   static getTableName() {
   	return tablesNames.userLevels;
   }
 
+  /**
+   * Overrides getFields from BaseModel.
+   * Refer to `getFields` in BaseModel for more details.
+   */
   static getFields() {
     return [
       'hearts'
@@ -23,6 +38,13 @@ class UserLevel extends BaseModel {
   }
 }
 
+/**
+ * Fetch the next level for the given level and all time vc.
+ * @param {number} level - The user level id. 
+ * @param {number} vc - The user all time vc.
+ * @return {Promise<UserLevel> | null}  A promise that 
+ * resolve into an UserLevel object or null if there is no next level.
+ */
 function getNextLevelFor(level, vc) {
     
   const keys = [

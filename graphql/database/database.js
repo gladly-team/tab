@@ -1,13 +1,7 @@
-import config from '../config/environment';
+/** @module database */
 
-const logger = {
-  action: (action, params) => {
-    console.log(`Received action: ${action} with params: `, params);
-  },
-  response: (action, data) => {
-    console.log(`Response from action: ${action}: `, data);
-  }
-}
+import config from '../config/environment';
+import { DBLogger } from '../utils/dev-tools';
 
 var AWS = require('aws-sdk');
 
@@ -20,63 +14,100 @@ AWS.config.update({
 
 var dynamoDb = new AWS.DynamoDB.DocumentClient();
 
-// Dynamo DB wrapper.
+/** Dynamo DB wrapper. */ 
 var database = {};
 
+/**
+ * Represents a put operation.
+ * @param {Object} params - the query parameters.
+ * @return {Promise<Object>} A promise that resolve 
+ * into the response data.
+ */
 database.put = function(params) {
-  logger.action('put', params);
+  DBLogger.action('put', params);
   return dynamoDb.put(params).promise()
             .then(data => {
-              logger.response('put', data);
+              DBLogger.response('put', data);
               return data;
             });
 };
 
+/**
+ * Represents a get operation.
+ * @param {Object} params - the query parameters.
+ * @return {Promise<Object>} A promise that resolve 
+ * into the response data.
+ */
 database.get = function(params) {
-  logger.action('get', params);
+  DBLogger.action('get', params);
   return dynamoDb.get(params).promise()
             .then(data => {
-              logger.response('get', data);
+              DBLogger.response('get', data);
               return data;
             });
 };
 
+/**
+ * Represents a batchGet operation.
+ * @param {Object} params - the query parameters.
+ * @return {Promise<Object>} A promise that resolve 
+ * into the response data.
+ */
 database.batchGet = function(params) {
-  logger.action('get', params);
+  DBLogger.action('get', params);
   return dynamoDb.batchGet(params).promise()
             .then(data => {
-              logger.response('get', data);
+              DBLogger.response('get', data);
               return data;
             });
 };
 
+/**
+ * Represents a query operation.
+ * @param {Object} params - the query parameters.
+ * @return {Promise<Object>} A promise that resolve 
+ * into the response data.
+ */
 database.query = function(params) {
-  logger.action('query', params);
+  DBLogger.action('query', params);
   return dynamoDb.query(params).promise()
             .then(data => {
-              logger.response('query', data);
+              DBLogger.response('query', data);
               return data;
             });
 };
 
+/**
+ * Represents a scan operation.
+ * @param {Object} params - the query parameters.
+ * @return {Promise<Object>} A promise that resolve 
+ * into the response data.
+ */
 database.scan = function(params) {
-  logger.action('scan', params);
+  DBLogger.action('scan', params);
   return dynamoDb.scan(params).promise()
             .then(data => {
-              logger.response('scan', data);
+              DBLogger.response('scan', data);
               return data;
             });
 
 };
 
+/**
+ * Represents an update operation.
+ * @param {Object} params - the query parameters.
+ * @return {Promise<Object>} A promise that resolve 
+ * into the response data.
+ */
 database.update = function(params) {
-  logger.action('update', params);
+  DBLogger.action('update', params);
   return dynamoDb.update(params).promise()
   .then(data => {
-    logger.response('update', data);
+    DBLogger.response('update', data);
     return data;
   });
   return ;
 };
 
-module.exports = database;
+/** Dynamo DB wrapper. */
+export default database;

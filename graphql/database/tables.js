@@ -4,4 +4,4 @@ const tableNames = {
 	userLevels: 'UserLevels',
 };
 
-module.exports = tableNames;
+export default tableNames;

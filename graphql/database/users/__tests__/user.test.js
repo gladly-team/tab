@@ -1,6 +1,6 @@
 jest.mock('../../database');
-const tablesNames = require('../../tables');
 
+import tablesNames from '../../tables';
 import { User } from '../user';
 
 test('getTable name to be implemented', () => {

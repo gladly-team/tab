@@ -1,12 +1,20 @@
 import BaseModel from '../base/model';
+import database from '../database';
+import tablesNames from '../tables';
 import { getNextLevelFor } from '../userLevels/userLevel';
-const tablesNames = require('../tables');
-const db = require('../database');
-
 import { UserReachedMaxLevelException } from '../../utils/exceptions';
 import { logger } from '../../utils/dev-tools';
 
+/*
+ * Represents a User. 
+ * @extends BaseModel
+ */
 class User extends BaseModel {
+
+  /**
+   * Creates a User instance.
+   * @param {string} id - The instance id in the database.
+   */
   constructor(id) {
   	super(id);
 
@@ -20,10 +28,18 @@ class User extends BaseModel {
     this.heartsUntilNextLevel = 5;
   }
 
+  /**
+   * Overrides getTableName from BaseModel.
+   * Refer to `getTableName` in BaseModel for more details.
+   */
   static getTableName() {
   	return tablesNames.users;
   }
 
+  /**
+   * Overrides getFields from BaseModel.
+   * Refer to `getFields` in BaseModel for more details.
+   */
   static getFields() {
     return [
       'username',
@@ -36,6 +52,12 @@ class User extends BaseModel {
   }
 }
 
+
+/**
+ * Fetch the user by id.
+ * @param {string} id - The user id. 
+ * @return {Promise<User>}  A promise that resolve into a User instance.
+ */
 function getUser(id) {
 	return User.get(id)
         		.then(user => user)
@@ -44,13 +66,24 @@ function getUser(id) {
         		});
 }
 
-function updateUserVc(userId, vc=0) {
+/**
+ * Updates the user Vc by adding the specified vc. Note that 
+ * vc can be negative so the user vcCurrent will be decreased by 
+ * that amount.
+ * Also updates the user level if requiered.
+ * @param {string} id - The user id. 
+ * @param {number} vc - The user all time vc.
+ * @return {Promise<User>}  A promise that resolve into a User instance.
+ */
+function updateUserVc(id, vc=0) {
   var updateExpression;
   if(vc > 0){
     updateExpression = `add vcCurrent :val, 
                         vcAllTime :val, 
                         heartsUntilNextLevel :subval`;
   } else {
+    //TODO(raul): Look how to accomplish something like
+    //  set vcCurrent = max(vcCurrent + :val, 0)
     updateExpression = "set vcCurrent = vcCurrent + :val";
   }
 
@@ -63,7 +96,7 @@ function updateUserVc(userId, vc=0) {
 	    ReturnValues:"ALL_NEW"
 	};
 
-	return User.update(userId, params)
+	return User.update(id, params)
             .then(user => {
               if(user.heartsUntilNextLevel <= 0) {
                 return _updateUserLevel(user);

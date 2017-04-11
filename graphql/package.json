@@ -26,6 +26,12 @@
     "jest": "^19.0.2",
     "require-clean": "^0.1.3"
   },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "<rootDir>[/\\\\](node_modules|config)[/\\\\]"
+    ],
+    "testEnvironment": "node"
+  },
   "scripts": {
     "start": "babel-node ./server.js",
     "update-schema": "babel-node ./scripts/updateSchema.js",
