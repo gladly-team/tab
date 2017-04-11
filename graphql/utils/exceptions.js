@@ -16,6 +16,37 @@ class NotImplementedException extends ExtendableError {
 	}
 }
 
+class UserReachedMaxLevelException extends ExtendableError {
+  constructor() {
+    super('There are no more levels user at max level.')
+  }
+}
+
+class MockDatabaseException extends ExtendableError {
+  constructor(message) {
+    super(message);
+  }
+}
+
+class EmptyOperationStackException extends MockDatabaseException {
+  constructor() {
+    super('Operation stack is empty. Check if you set your expected data in the test.');
+  }
+}
+
+class OperationMissmatchException extends MockDatabaseException {
+  constructor(expectedOperation, receivedOperation) {
+    const message = `Expected <${expectedOperation}> operation but 
+              received <${receivedOperation}> operation instead.`;
+
+    super(message);
+  }
+}
+
+
 export {
 	NotImplementedException,
+  UserReachedMaxLevelException,
+  EmptyOperationStackException,
+  OperationMissmatchException
 };

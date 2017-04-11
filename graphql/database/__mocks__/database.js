@@ -1,53 +1,70 @@
+import { DatabaseOperation, OperationType } from '../../utils/test-utils';
+import { 
+	EmptyOperationStackException, 
+	OperationMissmatchException 
+} from '../../utils/exceptions';
+
 class DatabaseMock {
 	constructor() {
-		this.store = {};
+		this.store = [];
 	}
 
 	init() {
-		this.store = {};
+		this.store = [];
 	}
 
-	setMockDataFor(operationType, resolver) {
-		this.store[operationType] = resolver;
-	}
-
-	put() {
-		var response = {};
-
-		if(this.store.hasOwnProperty(DatabaseMock.PUT)) {
-			response = this.store[DatabaseMock.PUT](params);
+	validateOperation(operation) {
+		if(this.store.length == 0) {
+			throw new EmptyOperationStackException();
 		}
 
-		return Promise.resolve(response);
+		if(this._operationMissmatch(operation)) {
+			const expectedOperation = this.store[0].operation;
+			const receivedOperation = operation;
+			throw new OperationMissmatchException(expectedOperation, receivedOperation);
+		}
+	}
+
+	pushDatabaseOperation(databaseOperation) {
+		this.store.push(databaseOperation);
+	}
+
+	put(params) {
+		this.validateOperation(OperationType.PUT)
+		return this._resolveNext(params);
 	}
 
 	get(params) {
-		var response = {};
-
-		if(this.store.hasOwnProperty(DatabaseMock.GET)) {
-			response = this.store[DatabaseMock.GET](params);
-		}
-
-		return Promise.resolve(response);
+		this.validateOperation(OperationType.GET)
+		return this._resolveNext(params);
 	}
 
-	scan() {
-		var response = {};
+	batchGet(params) {
+		this.validateOperation(OperationType.BATCHGET)
+		return this._resolveNext(params);
+	}
 
-		if(this.store.hasOwnProperty(DatabaseMock.SCAN)) {
-			response = this.store[DatabaseMock.SCAN](params);
-		}
-
-		return Promise.resolve(response);
+	scan(params) {
+		this.validateOperation(OperationType.SCAN)
+		return this._resolveNext(params);
 	}
 
 	update(params) {
-		var response = {};
+		this.validateOperation(OperationType.UPDATE)
+		return this._resolveNext(params);
+	}
 
-		if(this.store.hasOwnProperty(DatabaseMock.UPDATE)) {
-			response = this.store[DatabaseMock.UPDATE](params);
-		}
 
+	// Private methods...............................
+
+	_operationMissmatch(operation) {
+		return this.store[0].operation != operation;
+	}
+
+	_resolveNext(params) {
+		const resolver = this.store[0].resolver;
+		const response = resolver(params);
+		this.store.shift();
 		return Promise.resolve(response);
 	}
 }
@@ -70,4 +87,4 @@ var Singleton = (function () {
     };
 })();
 
-module.exports = Singleton.getDatabase();
+export default Singleton.getDatabase();
