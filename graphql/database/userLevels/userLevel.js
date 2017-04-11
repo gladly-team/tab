@@ -23,21 +23,14 @@ class UserLevel extends BaseModel {
   }
 }
 
-function getUserLevel(id) {
-	return UserLevel.get(id)
-      		.then(userLevel => userLevel)
-      		.catch(err => {
-      		    logger.error("Error while getting the user level.", err);
-      		});
-}
-
 function getNextLevelFor(level, vc) {
     
   const keys = [
     {id: level + 1},
     {id: level + 2},
     {id: level + 3},
-    {id: level + 4}
+    {id: level + 4},
+    {id: level + 5}
   ];
 
   const args = {
@@ -66,6 +59,5 @@ function getNextLevelFor(level, vc) {
 
 export {
   UserLevel,
-  getUserLevel,
   getNextLevelFor
 };

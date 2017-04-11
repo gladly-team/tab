@@ -1,4 +1,4 @@
-jest.mock('../../database');  
+jest.mock('../../database');
 const tablesNames = require('../../tables');
 
 import { User } from '../user';
@@ -22,12 +22,12 @@ test('getFields to be implemented', () => {
 });
 
 test('auto create id', () => {
-	const user = new User(null, 'test_name', 'test_username', 'test@tfac.com');
+	const user = new User(null);
 	expect(user.id).not.toBe(null);
 });
 
 test('create with existing id', () => {
-	const user = new User('some_bad_id', 'test_name', 'test_username', 'test@tfac.com');
+	const user = new User('some_bad_id');
 	expect(user.id).toBe('some_bad_id');
 });
 
