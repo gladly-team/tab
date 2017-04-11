@@ -1,8 +1,6 @@
 import mockDatabase from '../../__mocks__/database';
 import { DatabaseOperation, OperationType } from '../../../utils/test-utils';
 
-const tablesNames = require('../../tables');
-
 jest.mock('../../database', () => {
 	return mockDatabase;
 });
