@@ -2,38 +2,62 @@ import BaseModel from '../base/model';
 const tablesNames = require('../tables');
 const db = require('../database');
 
+import { logger } from '../../utils/dev-tools';
+
 class UserLevel extends BaseModel {
   
-  constructor(id, hearts) {
+  constructor(id) {
   	super(id);
 
-  	// Model Requiered fields.
-  	this.hearts = hearts;
+  	this.hearts = 0;
   }
 
   static getTableName() {
   	return tablesNames.userLevels;
   }
 
-  static deserialize(obj) {
-  	
-  	const userLevel = new UserLevel(
-  		obj.id, 
-  		obj.hearts);
-
-  	return userLevel;
+  static getFields() {
+    return [
+      'hearts'
+    ];
   }
 }
 
-function getUserLevel(id) {
-	return UserLevel.get(id)
-		.then(userLevel => userLevel)
-		.catch(err => {
-		    console.error("Error while getting the user level object. Error JSON:", JSON.stringify(err, null, 2));
-		});
+function getNextLevelFor(level, vc) {
+    
+  const keys = [
+    {id: level + 1},
+    {id: level + 2},
+    {id: level + 3},
+    {id: level + 4},
+    {id: level + 5}
+  ];
+
+  const args = {
+    ProjectionExpression: "id, hearts"
+  };
+
+  return UserLevel.getBatch(keys, args)
+            .then(levels => {
+              const sortedLevels = levels.sort((lv1,lv2) => lv1.id > lv2.id? 1: -1);
+              for(var index in sortedLevels) {
+                if(sortedLevels[index].hearts > vc) {
+                  return sortedLevels[index];
+                }
+              }
+              
+              if(!levels || !levels.length){
+                return null;
+              }
+
+              return getNextLevelFor(levels[levels.length - 1].id, vc);
+            })
+            .catch(err => {
+                logger.error('Error while fething the user levels', err);
+            });
 }
 
 export {
   UserLevel,
-  getUserLevel
+  getNextLevelFor
 };

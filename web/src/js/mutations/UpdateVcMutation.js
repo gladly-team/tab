@@ -20,6 +20,8 @@ class UpdateVcMutation extends Relay.Mutation {
         viewer { 
           vcCurrent 
           vcAllTime
+          heartsUntilNextLevel
+          level
         }
       }
     `;

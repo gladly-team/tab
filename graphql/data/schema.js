@@ -37,11 +37,6 @@ import {
   updateUserVc
 } from '../database/users/user';
 
-import {
-  UserLevel,
-  getUserLevel
-} from '../database/userLevels/userLevel';
-
 /**
  * We get the node interface and field from the Relay library.
  *
@@ -56,9 +51,6 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     } else if (type === 'Feature') {
       return getFeature(id);
     }
-    else if (type === 'UserLevel') {
-      return getUserLevel(id);
-    }
     return null;
   },
   (obj) => {
@@ -66,8 +58,6 @@ const { nodeInterface, nodeField } = nodeDefinitions(
       return userType;
     } else if (obj instanceof Feature) {
       return featureType;
-    } else if (obj instanceof UserLevel) {
-      return UserLevelType;
     }
     return null;
   }
@@ -76,19 +66,6 @@ const { nodeInterface, nodeField } = nodeDefinitions(
 /**
  * Define your own types here
  */
-
-const UserLevelType = new GraphQLObjectType({
-  name: 'UserLevel',
-  description: 'An user level.',
-  fields: () => ({
-    id: globalIdField('UserLevel'),
-    hearts: {
-      type: GraphQLInt,
-      description: 'The level hearts requiered'
-    }
-  }),
-  interfaces: [nodeInterface]
-});
 
 const userType = new GraphQLObjectType({
   name: 'User',
@@ -121,9 +98,9 @@ const userType = new GraphQLObjectType({
       type: GraphQLInt,
       description: 'User\'s vc'
     },
-    nextLevelHearts: {
-      type: UserLevelType,
-      resolve: (user) => getUserLevel(user.level + 1)
+    heartsUntilNextLevel: {
+      type: GraphQLInt,
+      description: 'Remaing hearts until next level.'
     }
   }),
   interfaces: [nodeInterface]
@@ -167,7 +144,6 @@ var charityType = new GraphQLObjectType({
  * Define your own connection types here
  */
 const { connectionType: featureConnection, edgeType: featureEdge } = connectionDefinitions({ name: 'Feature', nodeType: featureType });
-
 /**
  * Create feature example
  */
@@ -180,9 +156,7 @@ const updateVcMutation = mutationWithClientMutationId({
   outputFields: {
     viewer: {
       type: userType,
-      resolve: ({userId, data}) => {
-        return getUser(userId);
-      }
+      resolve: user => user
     }
   },
   mutateAndGetPayload: ({userId}) => {
