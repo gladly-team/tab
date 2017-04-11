@@ -1,7 +1,6 @@
 import BaseModel from '../base/model';
-const tablesNames = require('../tables');
-const db = require('../database');
-
+import tablesNames from '../tables';
+import db from '../database';
 import { logger } from '../../utils/dev-tools';
 
 /*

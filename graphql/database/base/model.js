@@ -1,6 +1,5 @@
-const uuid = require('uuid/v4');
-const db = require('../database');
-
+import uuid from 'uuid/v4';
+import database from '../database';
 import { NotImplementedException } from '../../utils/exceptions';
 
 /*
@@ -34,7 +33,7 @@ class BaseModel {
 	    }, args);
 
 	    const self = this;
-	    return db.get(params).then(data => {
+	    return database.get(params).then(data => {
 		    return self.deserialize(data['Item']);
 		});
 	}
@@ -56,7 +55,7 @@ class BaseModel {
 
 
 		const self = this;
-	    return db.batchGet(params).then(data => {
+	    return database.batchGet(params).then(data => {
 	    	const items = data['Responses'][self.getTableName()];
 		    const result = [];
 		    for(var index in items) {
@@ -78,7 +77,7 @@ class BaseModel {
 	    }, args);
 
 		const self = this;
-	    return db.query(params).then(data => {
+	    return database.query(params).then(data => {
 		    const result = [];
 		    const items = data.Items;
 		    for(var index in items) {
@@ -101,7 +100,7 @@ class BaseModel {
 	    Item: item
 	  }, args);
 
-	  return db.put(params);
+	  return database.put(params);
 	}
 
 	/**
@@ -122,7 +121,7 @@ class BaseModel {
 	    };
 
 	    const self = this;
-	    return db.update(params).then(data => {
+	    return database.update(params).then(data => {
           const updatedUser = self.deserialize(data.Attributes);
           return updatedUser;
         });

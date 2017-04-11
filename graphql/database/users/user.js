@@ -1,8 +1,7 @@
 import BaseModel from '../base/model';
+import database from '../database';
+import tablesNames from '../tables';
 import { getNextLevelFor } from '../userLevels/userLevel';
-const tablesNames = require('../tables');
-const db = require('../database');
-
 import { UserReachedMaxLevelException } from '../../utils/exceptions';
 import { logger } from '../../utils/dev-tools';
 
