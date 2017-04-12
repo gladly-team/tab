@@ -3,6 +3,9 @@ import tablesNames from '../tables';
 import db from '../database';
 import { logger } from '../../utils/dev-tools';
 
+import Async from 'asyncawait/async';
+import Await from 'asyncawait/await';
+
 /*
  * Represents a User level. 
  * @extends BaseModel
@@ -45,7 +48,7 @@ class UserLevel extends BaseModel {
  * @return {Promise<UserLevel> | null}  A promise that 
  * resolve into an UserLevel object or null if there is no next level.
  */
-function getNextLevelFor(level, vc) {
+var getNextLevelFor = Async (function(level, vc) {
     
   const keys = [
     {id: level + 1},
@@ -59,25 +62,21 @@ function getNextLevelFor(level, vc) {
     ProjectionExpression: "id, hearts"
   };
 
-  return UserLevel.getBatch(keys, args)
-            .then(levels => {
-              const sortedLevels = levels.sort((lv1,lv2) => lv1.id > lv2.id? 1: -1);
-              for(var index in sortedLevels) {
-                if(sortedLevels[index].hearts > vc) {
-                  return sortedLevels[index];
-                }
-              }
-              
-              if(!levels || !levels.length){
-                return null;
-              }
+  const levels = Await (UserLevel.getBatch(keys, args));
+  
+  const sortedLevels = levels.sort((lv1,lv2) => lv1.id > lv2.id? 1: -1);
+  for(var index in sortedLevels) {
+    if(sortedLevels[index].hearts > vc) {
+      return sortedLevels[index];
+    }
+  }
+  
+  if(!levels || !levels.length){
+    return null;
+  }
 
-              return getNextLevelFor(levels[levels.length - 1].id, vc);
-            })
-            .catch(err => {
-                logger.error('Error while fething the user levels', err);
-            });
-}
+  return getNextLevelFor(levels[levels.length - 1].id, vc);
+});
 
 export {
   UserLevel,

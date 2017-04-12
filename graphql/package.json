@@ -4,6 +4,7 @@
   "description": "GraphQL server for Tab for a Cause.",
   "private": true,
   "dependencies": {
+    "asyncawait": "^1.0.6",
     "babel-core": "^6.22.1",
     "babel-loader": "^6.2.10",
     "babel-polyfill": "^6.22.0",
@@ -28,7 +29,7 @@
   },
   "jest": {
     "testPathIgnorePatterns": [
-      "<rootDir>[/\\\\](node_modules|config)[/\\\\]"
+      "<rootDir>[/\\\\](config)[/\\\\]"
     ],
     "testEnvironment": "node"
   },
