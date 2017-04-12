@@ -23,7 +23,6 @@ class Dashboard extends React.Component {
     };
 
     const greeting = {
-      
       color: 'white',
       height: 330,
       paddingTop: 50,
