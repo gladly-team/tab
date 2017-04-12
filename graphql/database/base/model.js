@@ -39,6 +39,24 @@ class BaseModel {
 	}
 
 	/**
+     * Get the object with the respective id from the database.
+     * @param {Object} id 
+     * @param {Object} [args={}] optional query parameters.
+     * @return {Promise<BaseModel>} A promise that resolve into an 
+     * object from the child class.
+     */
+	static getAll(args={}) {
+	    var params = Object.assign({}, {
+	      TableName: this.getTableName(),
+	    }, args);
+
+	    const self = this;
+	    return database.scan(params).then(data => {
+		    return self.deserialize(data.Items);
+		});
+	}
+
+	/**
      * Get a batch of objects with the specified ids.
      * @param {Object[]} keys The keys to fetch from the database 
      * @param {Object} [args={}] optional query parameters.
@@ -147,33 +165,49 @@ class BaseModel {
 	}
 
 	/**
-	 * Converts from a database object to a child class object.
-     * @return {BaseModel} the child class object.
+	 * Converts from a database object or 
+	 * list of objects to a child class object.
+	 * @param {Object || Object[]} The database object or list of objects.
+     * @return {BaseModel | BaseModel[]} the child class object or list.
      */
 	static deserialize(obj){
-		const cls = this;
-		const instance = new cls(
-	  		obj.id);
 
-		var field = '';
-		const fields = this.getFields();
-		var defaultValue;
-		var value;
-		for (var index in fields) {
-			field = fields[index];
-			value = obj[field];
-			defaultValue = instance[field];
+		const self = this;
+		const deserializeObj = (obj) => {
+			const cls = self;
+			const instance = new cls(
+		  		obj.id);
 
-			if(!obj.hasOwnProperty(field)){
-				instance[field] = defaultValue;
+			var field = '';
+			const fields = self.getFields();
+			var defaultValue;
+			var value;
+			for (var index in fields) {
+				field = fields[index];
+				value = obj[field];
+				defaultValue = instance[field];
+
+				if(!obj.hasOwnProperty(field)){
+					instance[field] = defaultValue;
+				}
+				else if(value === parseInt(value, 10)){
+					instance[field] = value;
+				} else {
+					instance[field] = obj[field] || instance[field];
+				}
 			}
-			else if(value === parseInt(value, 10)){
-				instance[field] = value;
-			} else {
-				instance[field] = obj[field] || instance[field];
-			}
+	  		return instance;
 		}
-  		return instance;
+
+		if(obj instanceof Array) {
+			const result = [];
+		    for(var index in obj) {
+		    	result.push(deserializeObj(obj[index]));
+		    }
+		    return result;
+		}
+
+		return deserializeObj(obj);
 	}
 
 }

@@ -15,14 +15,14 @@
   {
     "TableName": "Charities",
     "KeySchema": [       
-      { "AttributeName": "CharityId", "KeyType": "HASH"}
+      { "AttributeName": "id", "KeyType": "HASH"}
     ],
     "AttributeDefinitions": [       
-      { "AttributeName": "CharityId", "AttributeType": "N" }
+      { "AttributeName": "id", "AttributeType": "S" }
     ],
     "ProvisionedThroughput": {       
-      "ReadCapacityUnits": 10, 
-      "WriteCapacityUnits": 10
+      "ReadCapacityUnits": 20, 
+      "WriteCapacityUnits": 5
     }
   },
   {
