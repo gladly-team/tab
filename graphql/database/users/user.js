@@ -5,8 +5,8 @@ import { getNextLevelFor } from '../userLevels/userLevel';
 import { UserReachedMaxLevelException } from '../../utils/exceptions';
 import { logger } from '../../utils/dev-tools';
 
-// var async = require('asyncawait/async');
-// var await = require('asyncawait/await');
+import Async from 'asyncawait/async';
+import Await from 'asyncawait/await';
 
 /*
  * Represents a User. 
@@ -69,39 +69,6 @@ function getUser(id) {
         		});
 }
 
-// var updateUserVc = async (function (id, vc=0) {
-//     var updateExpression;
-//     if(vc > 0){
-//       updateExpression = `add vcCurrent :val, 
-//                           vcAllTime :val, 
-//                           heartsUntilNextLevel :subval`;
-//     } else {
-//       //TODO(raul): Look how to accomplish something like
-//       //  set vcCurrent = max(vcCurrent + :val, 0)
-//       updateExpression = "set vcCurrent = vcCurrent + :val";
-//     }
-
-//     var params = {
-//         UpdateExpression: updateExpression,
-//         ExpressionAttributeValues:{
-//             ":val": vc,
-//             ":subval": -vc
-//         },
-//         ReturnValues:"ALL_NEW"
-//     };
-
-//     const user = await (User.update(id, params));
-//     if(user.heartsUntilNextLevel <= 0) {
-//       const level = await (getNextLevelFor(user.level + 1, user.vcAllTime));
-//       if(level) {
-//         const updatedUser = await(_updateToLevel(level, user));
-//         return updatedUser;
-//       }
-//       throw new UserReachedMaxLevelException();
-//     }
-//     return user;
-// });
-
 /**
  * Updates the user Vc by adding the specified vc. Note that 
  * vc can be negative so the user vcCurrent will be decreased by 
@@ -111,55 +78,48 @@ function getUser(id) {
  * @param {number} vc - The user all time vc.
  * @return {Promise<User>}  A promise that resolve into a User instance.
  */
-function updateUserVc(id, vc=0) {
-  var updateExpression;
-  if(vc > 0){
-    updateExpression = `add vcCurrent :val, 
-                        vcAllTime :val, 
-                        heartsUntilNextLevel :subval`;
-  } else {
-    //TODO(raul): Look how to accomplish something like
-    //  set vcCurrent = max(vcCurrent + :val, 0)
-    updateExpression = "set vcCurrent = vcCurrent + :val";
-  }
+var updateUserVc = Async (function (id, vc=0) {
+    var updateExpression;
+    if(vc > 0){
+      updateExpression = `add vcCurrent :val, 
+                          vcAllTime :val, 
+                          heartsUntilNextLevel :subval`;
+    } else {
+      //TODO(raul): Look how to accomplish something like
+      //  set vcCurrent = max(vcCurrent + :val, 0)
+      updateExpression = "set vcCurrent = vcCurrent + :val";
+    }
 
-	var params = {
-	    UpdateExpression: updateExpression,
-	    ExpressionAttributeValues:{
-	        ":val": vc,
-          ":subval": -vc
-	    },
-	    ReturnValues:"ALL_NEW"
-	};
+    var params = {
+        UpdateExpression: updateExpression,
+        ExpressionAttributeValues:{
+            ":val": vc,
+            ":subval": -vc
+        },
+        ReturnValues:"ALL_NEW"
+    };
 
-	return User.update(id, params)
-            .then(user => {
-              if(user.heartsUntilNextLevel <= 0) {
-                return _updateUserLevel(user);
-              }
-              return user;
-            }).then(user => {
-              return user;
-            })
-            .catch(err => {
-                logger.error("Error while trying to update user.", err);
-        		});
-}
+    const user = Await (User.update(id, params));
+    if(user.heartsUntilNextLevel <= 0) {
+      const level = Await (getNextLevelFor(user.level + 1, user.vcAllTime));
+      if(level) {
+        const updatedUser = Await(updateFromNextLevel(level, user));
+        return updatedUser;
+      }
+      throw new UserReachedMaxLevelException();
+    }
+    return user;
+});
 
-function _updateUserLevel(user) {
-  return getNextLevelFor(user.level + 1, user.vcAllTime)
-            .then(level => {
-              if(level) {
-                return _updateToLevel(level, user);
-              }
-              throw new UserReachedMaxLevelException();
-            })
-            .catch(err => {
-                logger.error("Error while trying to update the user level.", err);
-            });
-}
 
-function _updateToLevel(level, user) {
+/**
+ * Updates the user level and the heartsUntilNextLevel 
+ * from the level specified. 
+ * @param {UserLevel} level - The next level for this user. 
+ * @param {User} user - The user.
+ * @return {Promise<User>}  A promise that resolve into a User instance.
+ */
+function updateFromNextLevel(level, user) {
   const userLevel = level.id - 1;
   //Update user to userLevel.
   const updateExpression = `set #lvl = :level, 
