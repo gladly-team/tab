@@ -37,6 +37,12 @@ import {
   updateUserVc
 } from '../database/users/user';
 
+import {
+  Charity,
+  getCharity,
+  getCharities
+} from '../database/charities/charity';
+
 /**
  * We get the node interface and field from the Relay library.
  *
@@ -50,6 +56,8 @@ const { nodeInterface, nodeField } = nodeDefinitions(
       return getUser(id);
     } else if (type === 'Feature') {
       return getFeature(id);
+    } else if (type === 'Charity') {
+      return getCharity(id);
     }
     return null;
   },
@@ -58,6 +66,8 @@ const { nodeInterface, nodeField } = nodeDefinitions(
       return userType;
     } else if (obj instanceof Feature) {
       return featureType;
+    } else if (obj instanceof Charity) {
+      return charityType;
     }
     return null;
   }
@@ -77,6 +87,12 @@ const userType = new GraphQLObjectType({
       description: 'Features that I have',
       args: connectionArgs,
       resolve: (_, args) => connectionFromPromisedArray(getFeatures(), args)
+    },
+    charities: {
+      type: charityConnection,
+      description: 'All the charities',
+      args: connectionArgs,
+      resolve: (_, args) => connectionFromPromisedArray(getCharities(), args)
     },
     username: {
       type: GraphQLString,
@@ -127,7 +143,7 @@ const featureType = new GraphQLObjectType({
   interfaces: [nodeInterface]
 });
 
-var charityType = new GraphQLObjectType({
+const charityType = new GraphQLObjectType({
   name: 'Charity',
   description: 'A charitable charity',
   fields: () => ({
@@ -135,7 +151,11 @@ var charityType = new GraphQLObjectType({
     name: {
       type: GraphQLString,
       description: 'the charity name',
-    }
+    },
+    category: {
+      type: GraphQLString,
+      description: 'the charity category',
+    },
   }),
   interfaces: [nodeInterface],
 });
@@ -144,6 +164,7 @@ var charityType = new GraphQLObjectType({
  * Define your own connection types here
  */
 const { connectionType: featureConnection, edgeType: featureEdge } = connectionDefinitions({ name: 'Feature', nodeType: featureType });
+const { connectionType: charityConnection, edgeType: charityEdge } = connectionDefinitions({ name: 'Charity', nodeType: charityType });
 /**
  * Create feature example
  */

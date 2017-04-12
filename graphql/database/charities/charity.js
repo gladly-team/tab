@@ -46,9 +46,22 @@ class Charity extends BaseModel {
 }
 
 /**
- * Fetch the user by id.
- * @param {string} id - The user id. 
- * @return {Promise<User>}  A promise that resolve into a User instance.
+ * Fetch a charity by id.
+ * @param {string} id - The charity id. 
+ * @return {Promise<Charity>}  A promise that resolve into a Charity instance.
+ */
+function getCharity(id) {
+  return Charity.get(id)
+            .then(charity => charity)
+            .catch(err => {
+                logger.error("Error while getting the charity.", err);
+            });
+}
+
+/**
+ * Fetch all the charities.
+ * @return {Promise<Charity[]>}  A promise that resolve 
+ * into a list of Charity.
  */
 function getCharities() {
   var params = {
@@ -68,5 +81,6 @@ function getCharities() {
 
 export {
   Charity,
+  getCharity,
   getCharities
 };
