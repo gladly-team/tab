@@ -5,6 +5,9 @@ import { getNextLevelFor } from '../userLevels/userLevel';
 import { UserReachedMaxLevelException } from '../../utils/exceptions';
 import { logger } from '../../utils/dev-tools';
 
+// var async = require('asyncawait/async');
+// var await = require('asyncawait/await');
+
 /*
  * Represents a User. 
  * @extends BaseModel
@@ -65,6 +68,39 @@ function getUser(id) {
                 logger.error("Error while getting the user.", err);
         		});
 }
+
+// var updateUserVc = async (function (id, vc=0) {
+//     var updateExpression;
+//     if(vc > 0){
+//       updateExpression = `add vcCurrent :val, 
+//                           vcAllTime :val, 
+//                           heartsUntilNextLevel :subval`;
+//     } else {
+//       //TODO(raul): Look how to accomplish something like
+//       //  set vcCurrent = max(vcCurrent + :val, 0)
+//       updateExpression = "set vcCurrent = vcCurrent + :val";
+//     }
+
+//     var params = {
+//         UpdateExpression: updateExpression,
+//         ExpressionAttributeValues:{
+//             ":val": vc,
+//             ":subval": -vc
+//         },
+//         ReturnValues:"ALL_NEW"
+//     };
+
+//     const user = await (User.update(id, params));
+//     if(user.heartsUntilNextLevel <= 0) {
+//       const level = await (getNextLevelFor(user.level + 1, user.vcAllTime));
+//       if(level) {
+//         const updatedUser = await(_updateToLevel(level, user));
+//         return updatedUser;
+//       }
+//       throw new UserReachedMaxLevelException();
+//     }
+//     return user;
+// });
 
 /**
  * Updates the user Vc by adding the specified vc. Note that 
