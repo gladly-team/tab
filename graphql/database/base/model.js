@@ -114,11 +114,13 @@ class BaseModel {
 	static add(item, args={}) {
 
 	  var params = Object.assign({}, {
-	    TableName: this.tableName,
+	    TableName: this.getTableName(),
 	    Item: item
 	  }, args);
 
-	  return database.put(params);
+	  return database.put(params).then(data => {
+	  	return { Item: item, Data: data }
+	  });
 	}
 
 	/**

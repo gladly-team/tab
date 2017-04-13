@@ -43,6 +43,10 @@ import {
   getCharities
 } from '../database/charities/charity';
 
+import {
+  donateVc
+} from '../database/donations/donation';
+
 /**
  * We get the node interface and field from the Relay library.
  *
@@ -165,10 +169,10 @@ const charityType = new GraphQLObjectType({
  */
 const { connectionType: featureConnection, edgeType: featureEdge } = connectionDefinitions({ name: 'Feature', nodeType: featureType });
 const { connectionType: charityConnection, edgeType: charityEdge } = connectionDefinitions({ name: 'Charity', nodeType: charityType });
-/**
- * Create feature example
- */
 
+/**
+ * Updated the user vc.
+ */
 const updateVcMutation = mutationWithClientMutationId({
   name: 'UpdateVc',
   inputFields: {
@@ -183,6 +187,29 @@ const updateVcMutation = mutationWithClientMutationId({
   mutateAndGetPayload: ({userId}) => {
     const { type, id } = fromGlobalId(userId);
     return updateUserVc(id, 1);
+  }
+});
+
+/**
+ * Donate to a charity.
+ */
+const donateVcMutation = mutationWithClientMutationId({
+  name: 'DonateVc',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    charityId: { type: new GraphQLNonNull(GraphQLString) },
+    vc: { type: new GraphQLNonNull(GraphQLInt) },
+  },
+  outputFields: {
+    viewer: {
+      type: userType,
+      resolve: user => user
+    }
+  },
+  mutateAndGetPayload: ({userId, charityId, vc}) => {
+    const userGlobalObj = fromGlobalId(userId);
+    const charityGlobalObj = fromGlobalId(charityId);
+    return donateVc(userGlobalObj.id, charityGlobalObj.id, vc);
   }
 });
 
@@ -265,7 +292,8 @@ const mutationType = new GraphQLObjectType({
   name: 'Mutation',
   fields: () => ({
     addFeature: addFeatureMutation,
-    updateVc: updateVcMutation
+    updateVc: updateVcMutation,
+    donateVc: donateVcMutation
   })
 });
 

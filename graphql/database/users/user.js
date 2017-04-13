@@ -80,27 +80,33 @@ function getUser(id) {
  */
 var updateUserVc = Async (function (id, vc=0) {
     var updateExpression;
+    var expressionAttributeValues;
     if(vc > 0){
       updateExpression = `add vcCurrent :val, 
                           vcAllTime :val, 
                           heartsUntilNextLevel :subval`;
+      expressionAttributeValues = {
+         ":val": vc,
+          ":subval": -vc
+      }
     } else {
       //TODO(raul): Look how to accomplish something like
       //  set vcCurrent = max(vcCurrent + :val, 0)
       updateExpression = "set vcCurrent = vcCurrent + :val";
+      expressionAttributeValues = {
+         ":val": vc,
+      }
     }
 
     var params = {
         UpdateExpression: updateExpression,
-        ExpressionAttributeValues:{
-            ":val": vc,
-            ":subval": -vc
-        },
+        ExpressionAttributeValues:expressionAttributeValues,
         ReturnValues:"ALL_NEW"
     };
 
     const user = Await (User.update(id, params));
-    if(user.heartsUntilNextLevel <= 0) {
+
+    if( vc > 0 && user.heartsUntilNextLevel <= 0) {
       const level = Await (getNextLevelFor(user.level + 1, user.vcAllTime));
       if(level) {
         const updatedUser = Await(updateFromNextLevel(level, user));
