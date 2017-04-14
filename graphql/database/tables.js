@@ -2,7 +2,8 @@ const tableNames = {
 	features: 'Features',
 	users: 'Users',
 	userLevels: 'UserLevels',
-	charities: 'Charities'
+	charities: 'Charities',
+	vcDonationLog: 'VcDonationLog'
 };
 
 export default tableNames;
