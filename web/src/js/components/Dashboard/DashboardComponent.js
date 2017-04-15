@@ -2,6 +2,7 @@
 import React from 'react';
 import VcUser from '../User/VcUserContainer';
 import UserDisplay from '../User/UserDisplayContainer';
+import UserBackgroundImage from '../User/UserBackgroundImageContainer';
 import yeoman from '../../assets/yeoman.png';
 
 import {
@@ -15,12 +16,22 @@ class Dashboard extends React.Component {
   };
 
   render() {
-  	const root = {
+
+    const {viewer} = this.props;
+
+    const content = {
       display: 'flex',
       flexDirection: 'column',
       height: '100vh',
-      backgroundColor: deepPurple500,
-    };
+      position: 'absolute',
+      top: 0,
+      bottom: 0,
+      right: 0,
+      left: 0,
+      width: '100vw',
+      height: '100vh',
+      zIndex: 'auto'
+    }
 
     const greeting = {
       color: 'white',
@@ -30,13 +41,16 @@ class Dashboard extends React.Component {
     };
 
     return (
-      <div style={root}>
-        <div style={greeting}>
-          <UserDisplay viewer={this.props.viewer} />
+      <div>
+        <UserBackgroundImage viewer={viewer} />
+        <div style={content}>
+          <div style={greeting}>
+          <UserDisplay viewer={viewer} />
           <p>Surf the web, save the world.</p>
           <img src={yeoman} alt='yeoman' />
         </div>
-        <VcUser viewer={this.props.viewer} />
+         <VcUser viewer={viewer} />
+        </div>
       </div>
     );
   }

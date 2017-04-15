@@ -4,5 +4,8 @@ export default {
 	    endpoint: 'http://localhost:8000',
 	    accessKeyId: 'fakeKey123',
 	    secretAccessKey: 'fakeSecretKey456'
+	},
+	staticFiles: {
+		root: 'http://localhost:9000/'
 	}
 };
