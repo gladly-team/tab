@@ -15,6 +15,11 @@ export default Relay.createContainer(BackgroundImagePicker, {
 	        }
 	      }
 	    }
+	    backgroundImage {
+  	      id
+  	      name
+  	      url
+  	    }
       }`
   }
 });
