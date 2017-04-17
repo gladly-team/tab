@@ -11,12 +11,12 @@ class UserDisplay extends React.Component {
     const { viewer } = this.props; 
 
     const sawasdee = {
-      fontSize: '2.5em',
+      fontSize: '2em',
       fontWeight: 'normal',
     };
 
     return (
-      <h1 style={sawasdee}>Welcome, {viewer.username}({viewer.email})</h1>
+      <h1 style={sawasdee}>Welcome, {viewer.username}</h1>
     );
   }
 }

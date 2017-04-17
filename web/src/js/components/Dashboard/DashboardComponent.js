@@ -30,14 +30,20 @@ class Dashboard extends React.Component {
       left: 0,
       width: '100vw',
       height: '100vh',
-      zIndex: 'auto'
+      zIndex: 'auto',
+      backgroundColor: 'rgba(0,0,0,.4)'
     }
 
     const greeting = {
       color: 'white',
       height: 330,
       paddingTop: 50,
-      textAlign: 'center',
+      textAlign: 'center'
+    };
+
+    const subtitle = {
+      fontSize: '3em',
+      fontWeight: 'bold',
     };
 
     return (
@@ -45,10 +51,9 @@ class Dashboard extends React.Component {
         <UserBackgroundImage viewer={viewer} />
         <div style={content}>
           <div style={greeting}>
-          <UserDisplay viewer={viewer} />
-          <p>Surf the web, save the world.</p>
-          <img src={yeoman} alt='yeoman' />
-        </div>
+            <UserDisplay viewer={viewer} />
+            <h1 style={subtitle}>Surf the web, save the world.</h1>
+          </div>
          <VcUser viewer={viewer} />
         </div>
       </div>
