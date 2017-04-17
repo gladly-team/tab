@@ -2,6 +2,7 @@ import BaseModel from '../base/model';
 import database from '../database';
 import tablesNames from '../tables';
 import { getNextLevelFor } from '../userLevels/userLevel';
+import { getBackgroundImage } from '../backgroundImages/backgroundImage';
 import { UserReachedMaxLevelException } from '../../utils/exceptions';
 import { logger } from '../../utils/dev-tools';
 
@@ -26,9 +27,15 @@ class User extends BaseModel {
     this.vcCurrent = 0;
     this.vcAllTime = 0;
     this.level = 1;
-
+    
     // This value needs to match the hearts requiered for lv2 in DB.
     this.heartsUntilNextLevel = 5;
+
+    this.backgroundImage = {
+      id: 'fb5082cc-151a-4a9a-9289-06906670fd4e',
+      name: 'Mountain Lake',
+      fileName: 'lake.jpg'
+    };
   }
 
   /**
@@ -50,7 +57,8 @@ class User extends BaseModel {
       'vcCurrent',
       'vcAllTime',
       'level',
-      'heartsUntilNextLevel'
+      'heartsUntilNextLevel',
+      'backgroundImage'
     ];
   }
 }
@@ -68,6 +76,35 @@ function getUser(id) {
                 logger.error("Error while getting the user.", err);
         		});
 }
+
+/**
+ * Set user background image.
+ * @param {string} userId - The user id. 
+ * @param {string} imageId - The image id.
+ * @return {Promise<User>}  A promise that resolve into a User instance.
+ */
+var setUserBackgroundImage =  Async (function(userId, imageId) {
+
+    const image = Await (getBackgroundImage(imageId));
+
+    var updateExpression = `SET #backgroundImage = :backgroundImage`;
+    var expressionAttributeNames = {
+         '#backgroundImage': 'backgroundImage'
+    };
+    var expressionAttributeValues = {
+         ':backgroundImage': image
+    };
+    
+    var params = {
+        UpdateExpression: updateExpression,
+        ExpressionAttributeNames: expressionAttributeNames,
+        ExpressionAttributeValues: expressionAttributeValues,
+        ReturnValues:"ALL_NEW"
+    };
+
+    const user = Await (User.update(userId, params));
+    return user;
+});
 
 /**
  * Updates the user Vc by adding the specified vc. Note that 
@@ -152,5 +189,6 @@ function updateFromNextLevel(level, user) {
 export {
   User,
   getUser,
-  updateUserVc
+  updateUserVc,
+  setUserBackgroundImage
 };

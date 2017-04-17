@@ -14,7 +14,8 @@ test('getFields to be implemented', () => {
       'vcCurrent',
       'vcAllTime',
       'level',
-      'heartsUntilNextLevel'
+      'heartsUntilNextLevel',
+      'backgroundImage'
     ];
 
 	expect(User.getFields().length).toBe(expected.length);

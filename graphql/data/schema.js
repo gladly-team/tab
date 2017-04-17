@@ -1,4 +1,6 @@
 /* eslint-disable no-unused-vars, no-use-before-define */
+import config from '../config/environment';
+
 import {
   GraphQLBoolean,
   GraphQLFloat,
@@ -34,7 +36,8 @@ import {
 import {
   User,
   getUser,
-  updateUserVc
+  updateUserVc,
+  setUserBackgroundImage
 } from '../database/users/user';
 
 import {
@@ -46,6 +49,12 @@ import {
 import {
   donateVc
 } from '../database/donations/donation';
+
+import {
+  BackgroundImage,
+  getBackgroundImage,
+  getBackgroundImages
+} from '../database/backgroundImages/backgroundImage';
 
 /**
  * We get the node interface and field from the Relay library.
@@ -62,6 +71,8 @@ const { nodeInterface, nodeField } = nodeDefinitions(
       return getFeature(id);
     } else if (type === 'Charity') {
       return getCharity(id);
+    } else if (type === 'BackgroundImage') {
+      return getBackgroundImage(id);
     }
     return null;
   },
@@ -72,6 +83,8 @@ const { nodeInterface, nodeField } = nodeDefinitions(
       return featureType;
     } else if (obj instanceof Charity) {
       return charityType;
+    } else if (obj instanceof BackgroundImage) {
+      return backgroundImageType;
     }
     return null;
   }
@@ -80,6 +93,54 @@ const { nodeInterface, nodeField } = nodeDefinitions(
 /**
  * Define your own types here
  */
+
+const backgroundImageType = new GraphQLObjectType({
+  name: 'BackgroundImage',
+  description: 'A background image',
+  fields: () => ({
+    id: globalIdField('BackgroundImage'),
+    name: {
+      type: GraphQLString,
+      description: 'the background image name',
+    },
+    fileName: {
+      type: GraphQLString,
+      description: 'The image file name'
+    },
+    url: {
+      type: GraphQLString,
+      resolve: (image) => {
+        return config.staticFiles.root + image.fileName
+      }
+    }
+  }),
+  interfaces: [nodeInterface],
+});
+
+const imageType = new GraphQLObjectType({
+  name: 'Image',
+  description: 'An image object',
+  fields: () => ({
+    id: {
+      type: GraphQLString,
+      description: 'The image id'
+    },
+    name: {
+      type: GraphQLString,
+      description: 'The image name'
+    },
+    fileName: {
+      type: GraphQLString,
+      description: 'The image file name'
+    },
+    url: {
+      type: GraphQLString,
+      resolve: (image) => {
+        return config.staticFiles.root + image.fileName
+      }
+    }
+  })
+});
 
 const userType = new GraphQLObjectType({
   name: 'User',
@@ -97,6 +158,16 @@ const userType = new GraphQLObjectType({
       description: 'All the charities',
       args: connectionArgs,
       resolve: (_, args) => connectionFromPromisedArray(getCharities(), args)
+    },
+    backgroundImages: {
+      type: backgroundImageConnection,
+      description: 'All the background Images',
+      args: connectionArgs,
+      resolve: (_, args) => connectionFromPromisedArray(getBackgroundImages(), args)
+    },
+    backgroundImage: {
+      type: imageType,
+      description: 'Users\'s background image'
     },
     username: {
       type: GraphQLString,
@@ -169,6 +240,7 @@ const charityType = new GraphQLObjectType({
  */
 const { connectionType: featureConnection, edgeType: featureEdge } = connectionDefinitions({ name: 'Feature', nodeType: featureType });
 const { connectionType: charityConnection, edgeType: charityEdge } = connectionDefinitions({ name: 'Charity', nodeType: charityType });
+const { connectionType: backgroundImageConnection, edgeType: backgroundImageEdge } = connectionDefinitions({ name: 'BackgroundImage', nodeType: backgroundImageType });
 
 /**
  * Updated the user vc.
@@ -210,6 +282,28 @@ const donateVcMutation = mutationWithClientMutationId({
     const userGlobalObj = fromGlobalId(userId);
     const charityGlobalObj = fromGlobalId(charityId);
     return donateVc(userGlobalObj.id, charityGlobalObj.id, vc);
+  }
+});
+
+/**
+ * Set user background image mutation.
+ */
+const setUserBkgImageMutation = mutationWithClientMutationId({
+  name: 'SetUserBkgImage',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    imageId: { type: new GraphQLNonNull(GraphQLString) }
+  },
+  outputFields: {
+    viewer: {
+      type: userType,
+      resolve: user => user
+    }
+  },
+  mutateAndGetPayload: ({userId, imageId}) => {
+    const userGlobalObj = fromGlobalId(userId);
+    const bckImageGlobalObj = fromGlobalId(imageId);
+    return setUserBackgroundImage(userGlobalObj.id, bckImageGlobalObj.id);
   }
 });
 
@@ -293,7 +387,8 @@ const mutationType = new GraphQLObjectType({
   fields: () => ({
     addFeature: addFeatureMutation,
     updateVc: updateVcMutation,
-    donateVc: donateVcMutation
+    donateVc: donateVcMutation,
+    setUserBkgImage: setUserBkgImageMutation
   })
 });
 

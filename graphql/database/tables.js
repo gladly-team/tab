@@ -3,7 +3,8 @@ const tableNames = {
 	users: 'Users',
 	userLevels: 'UserLevels',
 	charities: 'Charities',
-	vcDonationLog: 'VcDonationLog'
+	vcDonationLog: 'VcDonationLog',
+	backgroundImages: 'BackgroundImages'
 };
 
 export default tableNames;

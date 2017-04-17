@@ -2,6 +2,7 @@
 import React from 'react';
 import VcUser from '../User/VcUserContainer';
 import UserDisplay from '../User/UserDisplayContainer';
+import UserBackgroundImage from '../User/UserBackgroundImageContainer';
 import yeoman from '../../assets/yeoman.png';
 
 import {
@@ -15,28 +16,46 @@ class Dashboard extends React.Component {
   };
 
   render() {
-  	const root = {
+
+    const {viewer} = this.props;
+
+    const content = {
       display: 'flex',
       flexDirection: 'column',
       height: '100vh',
-      backgroundColor: deepPurple500,
-    };
+      position: 'absolute',
+      top: 0,
+      bottom: 0,
+      right: 0,
+      left: 0,
+      width: '100vw',
+      height: '100vh',
+      zIndex: 'auto',
+      backgroundColor: 'rgba(0,0,0,.4)'
+    }
 
     const greeting = {
       color: 'white',
       height: 330,
       paddingTop: 50,
-      textAlign: 'center',
+      textAlign: 'center'
+    };
+
+    const subtitle = {
+      fontSize: '3em',
+      fontWeight: 'bold',
     };
 
     return (
-      <div style={root}>
-        <div style={greeting}>
-          <UserDisplay viewer={this.props.viewer} />
-          <p>Surf the web, save the world.</p>
-          <img src={yeoman} alt='yeoman' />
+      <div>
+        <UserBackgroundImage viewer={viewer} />
+        <div style={content}>
+          <div style={greeting}>
+            <UserDisplay viewer={viewer} />
+            <h1 style={subtitle}>Surf the web, save the world.</h1>
+          </div>
+         <VcUser viewer={viewer} />
         </div>
-        <VcUser viewer={this.props.viewer} />
       </div>
     );
   }
