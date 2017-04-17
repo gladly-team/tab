@@ -43,8 +43,9 @@ class BackgroundImage extends BaseModel {
 
 /**
  * Fetch the background image by id.
- * @param {string} id - The user id. 
- * @return {Promise<BackgroundImage>}  A promise that resolve into a User instance.
+ * @param {string} id - The background image id. 
+ * @return {Promise<BackgroundImage>}  A promise that resolve
+ * into a BackgroundImage instance.
  */
 function getBackgroundImage(id) {
 	return BackgroundImage.get(id)
@@ -56,7 +57,8 @@ function getBackgroundImage(id) {
 
 /**
  * Get all the background images.
- * @return {Promise<BackgroundImage[]>}  A promise that resolve into a User instance.
+ * @return {Promise<BackgroundImage[]>}  A promise that resolve 
+ * into a BackgroundImage array instance.
  */
 function getBackgroundImages() {
   var params = {
