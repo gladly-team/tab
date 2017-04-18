@@ -4,20 +4,24 @@
     "username": "kevin",
     "email": "kevin@tfac.com",
     "vcCurrent": 0,
-    "vcAllTime": 0
+    "vcAllTime": 0,
+    "level": 1,
+    "heartsUntilNextLevel": 5
   },
   {
     "id": "25cde869-7523-4605-81a6-3029651f2e10",
     "username": "asp2insp",
     "email": "asp2insp@tfac.com",
     "vcCurrent": 50,
-    "vcAllTime": 100
+    "vcAllTime": 100,
+    "heartsUntilNextLevel": 200
   },
   {
     "id": "82718869-afea-4f49-9138-0b4e46df7dbf",
     "username": "sandra",
     "email": "sandra@tfac.com",
     "vcCurrent": 400,
-    "vcAllTime": 550
+    "vcAllTime": 550,
+    "heartsUntilNextLevel": 700
   }
 ]

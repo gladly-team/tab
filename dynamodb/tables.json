@@ -15,14 +15,14 @@
   {
     "TableName": "Charities",
     "KeySchema": [       
-      { "AttributeName": "CharityId", "KeyType": "HASH"}
+      { "AttributeName": "id", "KeyType": "HASH"}
     ],
     "AttributeDefinitions": [       
-      { "AttributeName": "CharityId", "AttributeType": "N" }
+      { "AttributeName": "id", "AttributeType": "S" }
     ],
     "ProvisionedThroughput": {       
-      "ReadCapacityUnits": 10, 
-      "WriteCapacityUnits": 10
+      "ReadCapacityUnits": 20, 
+      "WriteCapacityUnits": 5
     }
   },
   {
@@ -45,6 +45,34 @@
     ],
     "AttributeDefinitions": [       
       { "AttributeName": "id", "AttributeType": "N" }
+    ],
+    "ProvisionedThroughput": {       
+      "ReadCapacityUnits": 10, 
+      "WriteCapacityUnits": 10
+    }
+  },
+  {
+    "TableName": "VcDonationLog",
+    "KeySchema": [       
+      { "AttributeName": "id", "KeyType": "HASH"},
+      { "AttributeName": "timestamp", "KeyType": "RANGE"}
+    ],
+    "AttributeDefinitions": [       
+      { "AttributeName": "id", "AttributeType": "S" },
+      { "AttributeName": "timestamp", "AttributeType": "S" }
+    ],
+    "ProvisionedThroughput": {       
+      "ReadCapacityUnits": 10, 
+      "WriteCapacityUnits": 10
+    }
+  },
+  {
+    "TableName": "BackgroundImages",
+    "KeySchema": [       
+      { "AttributeName": "id", "KeyType": "HASH"}
+    ],
+    "AttributeDefinitions": [       
+      { "AttributeName": "id", "AttributeType": "S" }
     ],
     "ProvisionedThroughput": {       
       "ReadCapacityUnits": 10, 

@@ -2,6 +2,9 @@ const tableNames = {
 	features: 'Features',
 	users: 'Users',
 	userLevels: 'UserLevels',
+	charities: 'Charities',
+	vcDonationLog: 'VcDonationLog',
+	backgroundImages: 'BackgroundImages'
 };
 
-module.exports = tableNames;
+export default tableNames;

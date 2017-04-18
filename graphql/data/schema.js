@@ -1,4 +1,6 @@
 /* eslint-disable no-unused-vars, no-use-before-define */
+import config from '../config/environment';
+
 import {
   GraphQLBoolean,
   GraphQLFloat,
@@ -34,13 +36,25 @@ import {
 import {
   User,
   getUser,
-  updateUserVc
+  updateUserVc,
+  setUserBackgroundImage
 } from '../database/users/user';
 
 import {
-  UserLevel,
-  getUserLevel
-} from '../database/userLevels/userLevel';
+  Charity,
+  getCharity,
+  getCharities
+} from '../database/charities/charity';
+
+import {
+  donateVc
+} from '../database/donations/donation';
+
+import {
+  BackgroundImage,
+  getBackgroundImage,
+  getBackgroundImages
+} from '../database/backgroundImages/backgroundImage';
 
 /**
  * We get the node interface and field from the Relay library.
@@ -55,9 +69,10 @@ const { nodeInterface, nodeField } = nodeDefinitions(
       return getUser(id);
     } else if (type === 'Feature') {
       return getFeature(id);
-    }
-    else if (type === 'UserLevel') {
-      return getUserLevel(id);
+    } else if (type === 'Charity') {
+      return getCharity(id);
+    } else if (type === 'BackgroundImage') {
+      return getBackgroundImage(id);
     }
     return null;
   },
@@ -66,8 +81,10 @@ const { nodeInterface, nodeField } = nodeDefinitions(
       return userType;
     } else if (obj instanceof Feature) {
       return featureType;
-    } else if (obj instanceof UserLevel) {
-      return UserLevelType;
+    } else if (obj instanceof Charity) {
+      return charityType;
+    } else if (obj instanceof BackgroundImage) {
+      return backgroundImageType;
     }
     return null;
   }
@@ -77,17 +94,52 @@ const { nodeInterface, nodeField } = nodeDefinitions(
  * Define your own types here
  */
 
-const UserLevelType = new GraphQLObjectType({
-  name: 'UserLevel',
-  description: 'An user level.',
+const backgroundImageType = new GraphQLObjectType({
+  name: 'BackgroundImage',
+  description: 'A background image',
   fields: () => ({
-    id: globalIdField('UserLevel'),
-    hearts: {
-      type: GraphQLInt,
-      description: 'The level hearts requiered'
+    id: globalIdField('BackgroundImage'),
+    name: {
+      type: GraphQLString,
+      description: 'the background image name',
+    },
+    fileName: {
+      type: GraphQLString,
+      description: 'The image file name'
+    },
+    url: {
+      type: GraphQLString,
+      resolve: (image) => {
+        return config.staticFiles.root + image.fileName
+      }
     }
   }),
-  interfaces: [nodeInterface]
+  interfaces: [nodeInterface],
+});
+
+const imageType = new GraphQLObjectType({
+  name: 'Image',
+  description: 'An image object',
+  fields: () => ({
+    id: {
+      type: GraphQLString,
+      description: 'The image id'
+    },
+    name: {
+      type: GraphQLString,
+      description: 'The image name'
+    },
+    fileName: {
+      type: GraphQLString,
+      description: 'The image file name'
+    },
+    url: {
+      type: GraphQLString,
+      resolve: (image) => {
+        return config.staticFiles.root + image.fileName
+      }
+    }
+  })
 });
 
 const userType = new GraphQLObjectType({
@@ -100,6 +152,22 @@ const userType = new GraphQLObjectType({
       description: 'Features that I have',
       args: connectionArgs,
       resolve: (_, args) => connectionFromPromisedArray(getFeatures(), args)
+    },
+    charities: {
+      type: charityConnection,
+      description: 'All the charities',
+      args: connectionArgs,
+      resolve: (_, args) => connectionFromPromisedArray(getCharities(), args)
+    },
+    backgroundImages: {
+      type: backgroundImageConnection,
+      description: 'All the background Images',
+      args: connectionArgs,
+      resolve: (_, args) => connectionFromPromisedArray(getBackgroundImages(), args)
+    },
+    backgroundImage: {
+      type: imageType,
+      description: 'Users\'s background image'
     },
     username: {
       type: GraphQLString,
@@ -121,9 +189,9 @@ const userType = new GraphQLObjectType({
       type: GraphQLInt,
       description: 'User\'s vc'
     },
-    nextLevelHearts: {
-      type: UserLevelType,
-      resolve: (user) => getUserLevel(user.level + 1)
+    heartsUntilNextLevel: {
+      type: GraphQLInt,
+      description: 'Remaing hearts until next level.'
     }
   }),
   interfaces: [nodeInterface]
@@ -150,7 +218,7 @@ const featureType = new GraphQLObjectType({
   interfaces: [nodeInterface]
 });
 
-var charityType = new GraphQLObjectType({
+const charityType = new GraphQLObjectType({
   name: 'Charity',
   description: 'A charitable charity',
   fields: () => ({
@@ -158,7 +226,11 @@ var charityType = new GraphQLObjectType({
     name: {
       type: GraphQLString,
       description: 'the charity name',
-    }
+    },
+    category: {
+      type: GraphQLString,
+      description: 'the charity category',
+    },
   }),
   interfaces: [nodeInterface],
 });
@@ -167,11 +239,12 @@ var charityType = new GraphQLObjectType({
  * Define your own connection types here
  */
 const { connectionType: featureConnection, edgeType: featureEdge } = connectionDefinitions({ name: 'Feature', nodeType: featureType });
+const { connectionType: charityConnection, edgeType: charityEdge } = connectionDefinitions({ name: 'Charity', nodeType: charityType });
+const { connectionType: backgroundImageConnection, edgeType: backgroundImageEdge } = connectionDefinitions({ name: 'BackgroundImage', nodeType: backgroundImageType });
 
 /**
- * Create feature example
+ * Updated the user vc.
  */
-
 const updateVcMutation = mutationWithClientMutationId({
   name: 'UpdateVc',
   inputFields: {
@@ -180,14 +253,57 @@ const updateVcMutation = mutationWithClientMutationId({
   outputFields: {
     viewer: {
       type: userType,
-      resolve: ({userId, data}) => {
-        return getUser(userId);
-      }
+      resolve: user => user
     }
   },
   mutateAndGetPayload: ({userId}) => {
     const { type, id } = fromGlobalId(userId);
     return updateUserVc(id, 1);
+  }
+});
+
+/**
+ * Donate to a charity.
+ */
+const donateVcMutation = mutationWithClientMutationId({
+  name: 'DonateVc',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    charityId: { type: new GraphQLNonNull(GraphQLString) },
+    vc: { type: new GraphQLNonNull(GraphQLInt) },
+  },
+  outputFields: {
+    viewer: {
+      type: userType,
+      resolve: user => user
+    }
+  },
+  mutateAndGetPayload: ({userId, charityId, vc}) => {
+    const userGlobalObj = fromGlobalId(userId);
+    const charityGlobalObj = fromGlobalId(charityId);
+    return donateVc(userGlobalObj.id, charityGlobalObj.id, vc);
+  }
+});
+
+/**
+ * Set user background image mutation.
+ */
+const setUserBkgImageMutation = mutationWithClientMutationId({
+  name: 'SetUserBkgImage',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    imageId: { type: new GraphQLNonNull(GraphQLString) }
+  },
+  outputFields: {
+    viewer: {
+      type: userType,
+      resolve: user => user
+    }
+  },
+  mutateAndGetPayload: ({userId, imageId}) => {
+    const userGlobalObj = fromGlobalId(userId);
+    const bckImageGlobalObj = fromGlobalId(imageId);
+    return setUserBackgroundImage(userGlobalObj.id, bckImageGlobalObj.id);
   }
 });
 
@@ -270,7 +386,9 @@ const mutationType = new GraphQLObjectType({
   name: 'Mutation',
   fields: () => ({
     addFeature: addFeatureMutation,
-    updateVc: updateVcMutation
+    updateVc: updateVcMutation,
+    donateVc: donateVcMutation,
+    setUserBkgImage: setUserBkgImageMutation
   })
 });
 

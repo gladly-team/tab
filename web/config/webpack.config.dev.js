@@ -10,7 +10,7 @@ var getClientEnvironment = require('./env');
 var paths = require('./paths');
 
 const htmlTemplate = new HtmlWebpackPlugin({
-  title: 'Relay Starter Kit - Integrated with Relay, GraphQL, Express, ES6/ES7, JSX, Webpack, Babel, Material Design Lite, and PostCSS',
+  title: 'Tab for a cause 2017',
   template: paths.appHtml,
   mobile: true,
   inject: false

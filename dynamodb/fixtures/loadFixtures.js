@@ -42,6 +42,14 @@ var fixtures = [
   {
     tableName: 'UserLevels',
     jsonFile: 'UserLevels.json'
+  },
+  {
+    tableName: 'VcDonationLog',
+    jsonFile: 'VcDonationLog.json'
+  },
+  {
+    tableName: 'BackgroundImages',
+    jsonFile: 'BackgroundImages.json'
   }
 ];
 

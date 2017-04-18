@@ -26,7 +26,7 @@ function setup(state) {
 describe('UserDisplay', function() {
     it('should render without error', function() {
       var { output } = setup();
-  	  expect(output.find('h1').text()).toBe('Welcome, jamesbond(jamesbond@tfac.com)');
+  	  expect(output.find('h1').text()).toBe('Welcome, jamesbond');
     });
 });
 

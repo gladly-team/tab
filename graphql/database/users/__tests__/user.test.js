@@ -1,19 +1,34 @@
-jest.mock('../../database');  
-const tablesNames = require('../../tables');
+jest.mock('../../database');
 
+import tablesNames from '../../tables';
 import { User } from '../user';
 
 test('getTable name to be implemented', () => {
 	expect(User.getTableName()).toBe(tablesNames.users);
 });
 
+test('getFields to be implemented', () => {
+	const expected = [
+      'username',
+      'email',
+      'vcCurrent',
+      'vcAllTime',
+      'level',
+      'heartsUntilNextLevel',
+      'backgroundImage'
+    ];
+
+	expect(User.getFields().length).toBe(expected.length);
+    expect(User.getFields()).toEqual(expect.arrayContaining(expected));
+});
+
 test('auto create id', () => {
-	const user = new User(null, 'test_name', 'test_username', 'test@tfac.com');
+	const user = new User(null);
 	expect(user.id).not.toBe(null);
 });
 
 test('create with existing id', () => {
-	const user = new User('some_bad_id', 'test_name', 'test_username', 'test@tfac.com');
+	const user = new User('some_bad_id');
 	expect(user.id).toBe('some_bad_id');
 });
 

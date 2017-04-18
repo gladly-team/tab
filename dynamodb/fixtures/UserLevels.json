@@ -1,22 +1,22 @@
 [
   {
     "id": 2,
-    "hearts": 200
+    "hearts": 5
   },
   {
     "id": 3,
-    "hearts": 300
+    "hearts": 20
   },
   {
     "id": 4,
-    "hearts": 400
+    "hearts": 30
   },
   {
     "id": 5,
-    "hearts": 500
+    "hearts": 40
   },
   {
     "id": 6,
-    "hearts": 600
+    "hearts": 1000
   }
 ]
