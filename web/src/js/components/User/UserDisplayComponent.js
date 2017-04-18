@@ -3,12 +3,12 @@ import Relay from 'react-relay';
 
 class UserDisplay extends React.Component {
   static propTypes = {
-    viewer: React.PropTypes.object.isRequired
+    user: React.PropTypes.object.isRequired
   };
 
   render() {
 
-    const { viewer } = this.props; 
+    const { user } = this.props; 
 
     const sawasdee = {
       fontSize: '2em',
@@ -16,7 +16,7 @@ class UserDisplay extends React.Component {
     };
 
     return (
-      <h1 style={sawasdee}>Welcome, {viewer.username}</h1>
+      <h1 style={sawasdee}>Welcome, {user.username}</h1>
     );
   }
 }

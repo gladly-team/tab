@@ -4,15 +4,15 @@ import React from 'react';
 class UserBackgroundImage extends React.Component {
   
   static propTypes = {
-    viewer: React.PropTypes.object.isRequired
+    user: React.PropTypes.object.isRequired
   };
 
   render() {
 
-    const {viewer} = this.props;
+    const { user } = this.props;
 
     const backgroundImage = {
-      backgroundImage: 'url(' + viewer.backgroundImage.url + ')',
+      backgroundImage: 'url(' + user.backgroundImage.url + ')',
       opacity: 1,
       backgroundRepeat: 'no-repeat',
       backgroundPosition: 'center',

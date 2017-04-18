@@ -1,19 +1,19 @@
 import React, {Component} from 'react';
 import Relay from 'react-relay';
-import UpdateVcMutation from 'mutations/UpdateVcMutation';
+// import UpdateVcMutation from 'mutations/UpdateVcMutation';
 import LinearProgress from 'material-ui/LinearProgress';
 
 class VcUser extends Component {
 
   componentDidMount() {
-    const updateVcMutation = new UpdateVcMutation({ viewer: this.props.viewer });
-    Relay.Store.commitUpdate(updateVcMutation);
+    // const updateVcMutation = new UpdateVcMutation({ userId: this.props.user.id });
+    // Relay.Store.commitUpdate(updateVcMutation);
   }
 
   render() {
 
-    const { viewer } = this.props;
-    const heartsToLevelUp = viewer.heartsUntilNextLevel;
+    const { user } = this.props;
+    const heartsToLevelUp = user.heartsUntilNextLevel;
 
     const container = {
       position: 'fixed',
@@ -57,19 +57,19 @@ class VcUser extends Component {
           <div style={progressContainer}>
             <div 
               data-test-id={'tabber-level'}
-              style={text}>Level {viewer.level} Tabber</div>
+              style={text}>Level {user.level} Tabber</div>
             <LinearProgress 
               style={progressBar}
               color={'orange'}
               mode={'determinate'}
-              value={viewer.vcAllTime} 
-              max={viewer.vcAllTime + viewer.heartsUntilNextLevel}/>
+              value={user.vcAllTime} 
+              max={user.vcAllTime + user.heartsUntilNextLevel}/>
             <div style={text}>{heartsToLevelUp} Hearts to level-up</div>
           </div>
           <div style={currentStatsContainer}>
             <p 
               data-test-id={'current-hearts'}
-              style={text}>{viewer.vcCurrent} Hearts</p>
+              style={text}>{user.vcCurrent} Hearts</p>
           </div>
         </div>
       </div>
@@ -78,11 +78,7 @@ class VcUser extends Component {
 }
 
 VcUser.propTypes = {
-  viewer: React.PropTypes.object.isRequired
+  user: React.PropTypes.object.isRequired
 };
-
-VcUser.defaultProps = {
-  
-}
 
 export default VcUser;

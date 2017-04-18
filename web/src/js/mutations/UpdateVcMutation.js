@@ -10,7 +10,7 @@ class UpdateVcMutation extends Relay.Mutation {
 
   getVariables() {
     return {
-      userId: this.props.viewer.id,
+      userId: this.props.userId,
     };
   }
 

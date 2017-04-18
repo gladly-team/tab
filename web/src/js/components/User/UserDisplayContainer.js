@@ -3,9 +3,9 @@ import UserDisplay from './UserDisplayComponent';
 
 export default Relay.createContainer(UserDisplay, {
   fragments: {
-    viewer: () => Relay.QL`
+    user: () => Relay.QL`
       fragment on User {
-        id
+      	id
         username
         email
       }`

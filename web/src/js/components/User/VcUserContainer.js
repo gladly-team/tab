@@ -3,7 +3,7 @@ import VcUser from './VcUserComponent';
 
 export default Relay.createContainer(VcUser, {
   fragments: {
-    viewer: () => Relay.QL`
+    user: () => Relay.QL`
       fragment on User {
       	id
         vcCurrent
