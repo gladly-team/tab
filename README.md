@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/gladly-team/tab.svg?branch=master)](https://travis-ci.org/gladly-team/tab)
 # Tab for a Cause
 *Surf the web, save the world.*
 
