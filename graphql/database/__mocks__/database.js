@@ -1,66 +1,90 @@
-import tablesNames from '../tables';
+import { DatabaseOperation, OperationType } from '../../utils/test-utils';
+import { 
+	EmptyOperationStackException, 
+	OperationMissmatchException 
+} from '../../utils/exceptions';
 
-// Import your mock data.
-import features from './fixtures/features';
-import users from './fixtures/users';
-
-var database = {};
-
-database.put = function(params) {
-	switch(params.TableName) {
-	  	case tablesNames.features:
-	  		return Promise.resolve(params.Item);
-	  	default:
-	  		return Promise.reject();
+class DatabaseMock {
+	constructor() {
+		this.store = [];
 	}
-};
 
-database.get = function(params) {
-	switch(params.TableName) {
-	  	case tablesNames.features:{
-	  		if (params.Key.id == features[0].id) {
-				return Promise.resolve(features[0]);
-			}
-			if (params.Key.id == features[1].id) {
-				return Promise.resolve(features[1]);
-			}
-			return Promise.reject();
-	  	}
-	  	case tablesNames.users: {
-	  		for(var i in users){
-	  			if(users[i].id === params.Key.id){
-	  				return Promise.resolve({
-	  					Item: users[i]
-	  				});
-	  			}
-	  		}
-	  		Promise.reject();
-	  	}
-	  	default:
-	  		return Promise.reject();
+	init() {
+		this.store = [];
 	}
-};
 
-database.scan = function(params) {
-  switch(params.TableName) {
-  	case tablesNames.features:
-  		return Promise.resolve({
-	      Items: features
-	    });
-  	default:
-  		return Promise.reject();
-  }
-};
+	validateOperation(operation) {
+		if(this.store.length == 0) {
+			throw new EmptyOperationStackException();
+		}
 
-database.update = function(params) {
-	switch(params.TableName) {
-	  	case tablesNames.features:
-	  		return Promise.resolve({});
-	  	case tablesNames.users:
-	  		return Promise.resolve({});
-	  	default:
-	  		return Promise.reject();
+		if(this._operationMissmatch(operation)) {
+			const expectedOperation = this.store[0].operation;
+			const receivedOperation = operation;
+			throw new OperationMissmatchException(expectedOperation, receivedOperation);
+		}
 	}
-};
 
-module.exports = database;
+	pushDatabaseOperation(databaseOperation) {
+		this.store.push(databaseOperation);
+	}
+
+	put(params) {
+		this.validateOperation(OperationType.PUT)
+		return this._resolveNext(params);
+	}
+
+	get(params) {
+		this.validateOperation(OperationType.GET)
+		return this._resolveNext(params);
+	}
+
+	batchGet(params) {
+		this.validateOperation(OperationType.BATCHGET)
+		return this._resolveNext(params);
+	}
+
+	scan(params) {
+		this.validateOperation(OperationType.SCAN)
+		return this._resolveNext(params);
+	}
+
+	update(params) {
+		this.validateOperation(OperationType.UPDATE)
+		return this._resolveNext(params);
+	}
+
+
+	// Private methods...............................
+
+	_operationMissmatch(operation) {
+		return this.store[0].operation != operation;
+	}
+
+	_resolveNext(params) {
+		const resolver = this.store[0].resolver;
+		const response = resolver(params);
+		this.store.shift();
+		return Promise.resolve(response);
+	}
+}
+
+var Singleton = (function () {
+    var mockDatabase;
+ 
+    function createDatabase() {
+        var database = new DatabaseMock();
+        return database;
+    }
+ 
+    return {
+        getDatabase: function () {
+            if (!mockDatabase) {
+                mockDatabase = createDatabase();
+            }
+            return mockDatabase;
+        }
+    };
+})();
+
+export default Singleton.getDatabase();

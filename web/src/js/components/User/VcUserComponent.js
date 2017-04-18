@@ -13,7 +13,7 @@ class VcUser extends Component {
   render() {
 
     const { viewer } = this.props;
-    const heartsToLevelUp = viewer.nextLevelHearts.hearts - viewer.vcAllTime;
+    const heartsToLevelUp = viewer.heartsUntilNextLevel;
 
     const container = {
       position: 'fixed',
@@ -63,7 +63,7 @@ class VcUser extends Component {
               color={'orange'}
               mode={'determinate'}
               value={viewer.vcAllTime} 
-              max={viewer.nextLevelHearts.hearts}/>
+              max={viewer.vcAllTime + viewer.heartsUntilNextLevel}/>
             <div style={text}>{heartsToLevelUp} Hearts to level-up</div>
           </div>
           <div style={currentStatsContainer}>

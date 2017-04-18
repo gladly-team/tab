@@ -10,10 +10,10 @@
   },
   "scripts": {
     "build": "npm run all:install & docker-compose build",
-    "start": "npm run docker:start & npm run web:graphqlschema:monitor & npm run web:start & npm run graphql:start & npm run lambda:start",
+    "start": "npm run docker:start & npm run s3:start & npm run web:graphqlschema:monitor & npm run web:start & npm run graphql:start & npm run lambda:start",
     "stop": "docker-compose stop",
     "test": "npm run web:test & npm run graphql:test",
-    "all:install": "yarn install & npm run web:install & npm run graphql:install & npm run dynamodb:install & npm run lambda:install",
+    "all:install": "yarn install & npm run s3:install & npm run web:install & npm run graphql:install & npm run dynamodb:install & npm run lambda:install",
     "docker:start": "docker-compose up 2>&1 | node scripts/log-prefix.js [docker] cyan",
     "dynamodb:install": "cd ./dynamodb && yarn install",
     "graphql:install": "cd ./graphql && yarn install",
@@ -25,7 +25,9 @@
     "web:graphqlschema:update": "cp graphql/data/schema.json web/data/schema.json",
     "web:install": "cd ./web && yarn install",
     "web:test": "cd ./web && npm test",
-    "web:start": "cd ./web && npm run start 2>&1 | node ../scripts/log-prefix.js [web] blue"
+    "web:start": "cd ./web && npm run start 2>&1 | node ../scripts/log-prefix.js [web] blue",
+    "s3:install": "cd ./s3 && yarn install",
+    "s3:start": "cd ./s3 && npm run start | node ../scripts/log-prefix.js [s3] yellow"
   },
   "repository": {
     "type": "git",

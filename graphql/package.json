@@ -4,6 +4,7 @@
   "description": "GraphQL server for Tab for a Cause.",
   "private": true,
   "dependencies": {
+    "asyncawait": "^1.0.6",
     "babel-core": "^6.22.1",
     "babel-loader": "^6.2.10",
     "babel-polyfill": "^6.22.0",
@@ -25,6 +26,12 @@
     "babel-cli": "^6.22.2",
     "jest": "^19.0.2",
     "require-clean": "^0.1.3"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "<rootDir>[/\\\\](config)[/\\\\]"
+    ],
+    "testEnvironment": "node"
   },
   "scripts": {
     "start": "babel-node ./server.js",
