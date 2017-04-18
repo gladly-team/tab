@@ -233,7 +233,7 @@ const updateVcMutation = mutationWithClientMutationId({
     userId: { type: new GraphQLNonNull(GraphQLString) },
   },
   outputFields: {
-    viewer: {
+    user: {
       type: userType,
       resolve: user => user
     }
@@ -255,7 +255,7 @@ const donateVcMutation = mutationWithClientMutationId({
     vc: { type: new GraphQLNonNull(GraphQLInt) },
   },
   outputFields: {
-    viewer: {
+    user: {
       type: userType,
       resolve: user => user
     }
@@ -277,7 +277,7 @@ const setUserBkgImageMutation = mutationWithClientMutationId({
     imageId: { type: new GraphQLNonNull(GraphQLString) }
   },
   outputFields: {
-    viewer: {
+    user: {
       type: userType,
       resolve: user => user
     }
