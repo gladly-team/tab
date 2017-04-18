@@ -9,7 +9,7 @@
     "npmlog": "^4.0.2"
   },
   "scripts": {
-    "build": "yarn cache clean && npm run all:install & docker-compose build",
+    "build": "npm run all:install & docker-compose build",
     "start": "npm run docker:start & npm run s3:start & npm run web:graphqlschema:monitor & npm run web:start & npm run graphql:start & npm run lambda:start",
     "stop": "docker-compose stop",
     "test": "npm run graphql:test && npm run lambda:test && npm run web:test",
