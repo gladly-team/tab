@@ -77,8 +77,8 @@
   "scripts": {
     "start": "nodemon --watch data/schema.json scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "jest --no-watchman",
-    "test:watch": "jest --no-watchman --watch"
+    "test": "jest --env=jsdom",
+    "test:watch": "jest --env=jsdom --watch"
   },
   "jest": {
     "collectCoverageFrom": [
