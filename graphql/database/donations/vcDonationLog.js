@@ -1,5 +1,5 @@
 import BaseModel from '../base/model';
-import { updateUserVc } from '../users/User';
+import { updateUserVc } from '../users/user';
 
 import tablesNames from '../tables';
 import { logger } from '../../utils/dev-tools';

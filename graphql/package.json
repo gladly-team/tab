@@ -17,6 +17,7 @@
     "express-graphql": "^0.6.3",
     "graphql": "^0.9.1",
     "graphql-relay": "^0.5.1",
+    "lodash": "^4.17.4",
     "moment": "^2.18.1",
     "uuid": "3.0.1",
     "webpack": "^2.2.1"
@@ -36,7 +37,8 @@
   "scripts": {
     "start": "babel-node ./server.js",
     "update-schema": "babel-node ./scripts/updateSchema.js",
-    "test": "jest"
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "repository": {
     "type": "git",
