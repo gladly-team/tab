@@ -4,13 +4,20 @@
 
 ## Developing
 
+### Prerequesites
+* [Node.js](https://nodejs.org/en/) 6+
+* [Docker Engine](https://docs.docker.com/engine/installation/)
+* [Yarn](https://yarnpkg.com/en/)
+
 ### Getting Started
 
 1. Clone this repository.
-2. Install [Docker Engine](https://docs.docker.com/engine/installation/) and [Node.js](https://nodejs.org/en/) 6+.
-3. In the top level directory, run `npm run build`. This installs Node dependencies and builds Docker images for the services in local  development.
-4. Run `npm start`. Once the development server has launched, visit `localhost`.
+2. In the top level directory, run `npm run build`. This installs dependencies and builds Docker images.
+3. Run `npm start`.
+4. On first run, you'll have to create database tables and load fixtures.
+    * `cd dynamodb`
+    * `npm run init`
 
 ### Development Tips
 
-* `docker-compose.yml` describes the running services.
+* The `start` script in the top-level `package.json` orchestrates running services.
