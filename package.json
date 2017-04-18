@@ -5,27 +5,29 @@
   "private": true,
   "dependencies": {},
   "devDependencies": {
-    "nodemon": "^1.11.0"
+    "nodemon": "^1.11.0",
+    "npmlog": "^4.0.2"
   },
   "scripts": {
     "build": "npm run all:install & docker-compose build",
-    "start": "docker-compose up & npm run s3:start & npm run web:graphqlschema:monitor & npm run web:start & npm run graphql:start & npm run lambda:start",
+    "start": "npm run docker:start & npm run s3:start & npm run web:graphqlschema:monitor & npm run web:start & npm run graphql:start & npm run lambda:start",
     "stop": "docker-compose stop",
     "test": "npm run web:test & npm run graphql:test",
     "all:install": "yarn install & npm run s3:install & npm run web:install & npm run graphql:install & npm run dynamodb:install & npm run lambda:install",
+    "docker:start": "docker-compose up 2>&1 | node scripts/log-prefix.js [docker] cyan",
     "dynamodb:install": "cd ./dynamodb && yarn install",
     "graphql:install": "cd ./graphql && yarn install",
-    "graphql:start": "cd ./graphql && npm run start",
+    "graphql:start": "cd ./graphql && npm run start 2>&1 | node ../scripts/log-prefix.js [graphql] green",
     "graphql:test": "cd ./graphql && npm test",
     "lambda:install": "cd ./lambda && yarn install",
-    "lambda:start": "cd ./lambda && npm run start",
-    "web:graphqlschema:monitor": "nodemon --watch graphql/data/schema.json --exec \"npm run web:graphqlschema:update\"",
+    "lambda:start": "cd ./lambda && npm run start 2>&1 | node ../scripts/log-prefix.js [lambda] red",
+    "web:graphqlschema:monitor": "nodemon --watch graphql/data/schema.json --exec \"npm run web:graphqlschema:update\" 2>&1 | node scripts/log-prefix.js [node] grey",
     "web:graphqlschema:update": "cp graphql/data/schema.json web/data/schema.json",
     "web:install": "cd ./web && yarn install",
     "web:test": "cd ./web && npm test",
-    "web:start": "cd ./web && npm run start",
+    "web:start": "cd ./web && npm run start 2>&1 | node ../scripts/log-prefix.js [web] blue",
     "s3:install": "cd ./s3 && yarn install",
-    "s3:start": "cd ./s3 && npm run start"
+    "s3:start": "cd ./s3 && npm run start | node ../scripts/log-prefix.js [s3] yellow"
   },
   "repository": {
     "type": "git",

@@ -10,3 +10,6 @@ graphql/data/schema.graphql
 
 # serverless
 .serverless
+
+# yarn
+yarn-error.log
