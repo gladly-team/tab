@@ -1,13 +1,18 @@
 import React, {Component} from 'react';
 import Relay from 'react-relay';
-// import UpdateVcMutation from 'mutations/UpdateVcMutation';
+import UpdateVcMutation from 'mutations/UpdateVcMutation';
 import LinearProgress from 'material-ui/LinearProgress';
 
 class VcUser extends Component {
 
   componentDidMount() {
-    // const updateVcMutation = new UpdateVcMutation({ userId: this.props.user.id });
-    // Relay.Store.commitUpdate(updateVcMutation);
+    const updateVcMutation = new UpdateVcMutation({ 
+      userId: this.props.user.id,
+      vcCurrent: this.props.user.vcCurrent,
+      vcAllTime: this.props.user.vcAllTime 
+    });
+
+    Relay.Store.commitUpdate(updateVcMutation);
   }
 
   render() {

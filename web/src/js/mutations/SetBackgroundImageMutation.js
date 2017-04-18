@@ -10,7 +10,7 @@ class SetBackgroundImageMutation extends Relay.Mutation {
 
   getVariables() {
     return {
-      userId: this.props.viewer.id,
+      userId: this.props.userId,
       imageId: this.props.imageId
     };
   }
@@ -18,7 +18,7 @@ class SetBackgroundImageMutation extends Relay.Mutation {
   getFatQuery() {
     return Relay.QL`
       fragment on SetUserBkgImagePayload {
-        viewer { 
+        user { 
           backgroundImage {
             id
             name
@@ -33,7 +33,7 @@ class SetBackgroundImageMutation extends Relay.Mutation {
     return [{
       type: 'FIELDS_CHANGE',
       fieldIDs: {
-        viewer: this.props.viewer.id,
+        user: this.props.userId,
       },
     }];
   }

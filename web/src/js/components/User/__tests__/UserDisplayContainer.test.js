@@ -7,7 +7,7 @@ import UserDisplayContainer from '../UserDisplayContainer';
 function setup(state) {
 
   	const fixtures = {
-	  viewer: {
+	  user: {
 	    id: "007",
 	    username: "jamesbond",
 	    email: 'jamesbond@tfac.com'

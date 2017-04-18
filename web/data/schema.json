@@ -1303,7 +1303,7 @@
           "description": null,
           "fields": [
             {
-              "name": "viewer",
+              "name": "user",
               "description": null,
               "args": [],
               "type": {
@@ -1401,7 +1401,7 @@
           "description": null,
           "fields": [
             {
-              "name": "viewer",
+              "name": "user",
               "description": null,
               "args": [],
               "type": {
@@ -1485,7 +1485,7 @@
           "description": null,
           "fields": [
             {
-              "name": "viewer",
+              "name": "user",
               "description": null,
               "args": [],
               "type": {

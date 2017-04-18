@@ -9,7 +9,7 @@ import VcUserContainer from '../VcUserContainer';
 function setup(state) {
 
     const fixtures = {
-	  viewer: {
+	  user: {
 	    id: 'someId',
         vcCurrent: 50,
         vcAllTime: 100,

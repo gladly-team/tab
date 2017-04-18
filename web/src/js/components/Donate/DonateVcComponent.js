@@ -38,7 +38,8 @@ class DonateVc extends React.Component {
 
   donateHearts() {
     const donateVcMutation = new DonateVcMutation({ 
-      viewer: this.props.viewer,
+      vcCurrent: this.props.user.vcCurrent,
+      userId: this.props.user.id,
       charityId: this.state.selectedCharity.id,
       vcToDonate: this.state.donateSlider });
 
@@ -48,8 +49,8 @@ class DonateVc extends React.Component {
   }
 
   render() {
-    const { viewer } = this.props;
-    if(viewer.vcCurrent < 1) {
+    const { viewer, user } = this.props;
+    if(user.vcCurrent < 1) {
       return (<p>Not enough hearts to donate. :(</p>)
     }
     
@@ -87,7 +88,7 @@ class DonateVc extends React.Component {
         <Divider />
         <Slider
           min={0}
-          max={viewer.vcCurrent}
+          max={user.vcCurrent}
           step={1}
           defaultValue={1}
           value={this.state.donateSlider}
@@ -105,7 +106,8 @@ class DonateVc extends React.Component {
 }
 
 DonateVc.propTypes = {
-	viewer: React.PropTypes.object.isRequired
+	viewer: React.PropTypes.object.isRequired,
+  user: React.PropTypes.object.isRequired
 };
 
 export default DonateVc;

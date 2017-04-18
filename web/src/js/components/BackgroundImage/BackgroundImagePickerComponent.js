@@ -34,7 +34,7 @@ class BackgroundImagePicker extends React.Component {
 
   updateImageBackground() {
     const setBckImageMutation = new SetBackgroundImageMutation({ 
-      viewer: this.props.viewer,
+      userId: this.props.user.id,
       imageId: this.state.selectedImage.id});
 
     Relay.Store.commitUpdate(setBckImageMutation);
@@ -89,7 +89,8 @@ class BackgroundImagePicker extends React.Component {
 }
 
 BackgroundImagePicker.propTypes = {
-  viewer: React.PropTypes.object.isRequired
+  viewer: React.PropTypes.object.isRequired,
+  user: React.PropTypes.object.isRequired
 };
 
 export default BackgroundImagePicker;

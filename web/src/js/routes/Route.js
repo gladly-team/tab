@@ -17,19 +17,11 @@ export default (
   <Route path='/' component={AppContainer} queries={ViewerQuery}>
     <IndexRoute component={userWrapper(DashboardContainer)} queries={ViewerQuery}/>
     <Route path='/charities' component={CharitiesContainer} queries={ViewerQuery}/>
-    <Route path='/donate' component={DonateVcContainer} queries={ViewerQuery}/>
-    <Route path='/background' component={BackgroundImagePickerContainer} queries={ViewerQuery}/>
+    <Route path='/donate' component={userWrapper(DonateVcContainer)} queries={ViewerQuery}/>
+    <Route path='/background' component={userWrapper(BackgroundImagePickerContainer)} queries={ViewerQuery}/>
     <Redirect from='*' to='/' />
   </Route>
 );
-
-// export default (
-//   <Route path='/' component={AppContainer} queries={ViewerQuery}>
-//     <IndexRoute component={CharitiesContainer} queries={ViewerQuery}/>
-//     <Route path='/user' component={userWrapper(UserDisplayContainer)} queries={ViewerQuery}/>
-//     <Redirect from='*' to='/' />
-//   </Route>
-// );
 
 // <Route path='/signup' component={SignupComponent} />
 // <Route path='/login' component={LoginComponent} />
