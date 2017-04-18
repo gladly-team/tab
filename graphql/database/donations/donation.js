@@ -1,5 +1,5 @@
 import { updateUserVc } from '../users/user';
-import { addVcDonationLog } from './VcDonationLog';
+import { addVcDonationLog } from './vcDonationLog';
 
 import Async from 'asyncawait/async';
 import Await from 'asyncawait/await';
