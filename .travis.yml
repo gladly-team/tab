@@ -12,6 +12,6 @@ before_install:
   - echo "deb http://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
   - sudo apt-get update -qq
   - sudo apt-get install -y -qq yarn=0.22.0-1
-install: npm run build
+install: npm run all:install
 script: npm test
 cache: yarn
