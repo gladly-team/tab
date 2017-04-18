@@ -13,7 +13,7 @@
     "start": "npm run docker:start & npm run s3:start & npm run web:graphqlschema:monitor & npm run web:start & npm run graphql:start & npm run lambda:start",
     "stop": "docker-compose stop",
     "test": "npm run web:test & npm run graphql:test",
-    "all:install": "yarn install & npm run s3:install & npm run web:install & npm run graphql:install & npm run dynamodb:install & npm run lambda:install",
+    "all:install": "yarn install && npm run s3:install && npm run web:install && npm run graphql:install && npm run dynamodb:install && npm run lambda:install",
     "docker:start": "docker-compose up 2>&1 | node scripts/log-prefix.js [docker] cyan",
     "dynamodb:install": "cd ./dynamodb && yarn install",
     "graphql:install": "cd ./graphql && yarn install",
