@@ -14,6 +14,7 @@
     "babel-preset-es2015": "^6.22.0",
     "babel-preset-stage-0": "^6.22.0",
     "cors": "^2.8.1",
+    "coveralls": "^2.13.0",
     "express": "^4.14.1",
     "jest": "^19.0.2",
     "lodash": "^4.17.4",
@@ -22,7 +23,7 @@
   },
   "scripts": {
     "start": "nodemon -e js,json,yml --exec \"babel-node\" ./server.js",
-    "test": "jest --coverage",
+    "test": "jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "test:watch": "jest --watch"
   },
   "repository": {
