@@ -10,14 +10,14 @@ class UpdateVcMutation extends Relay.Mutation {
 
   getVariables() {
     return {
-      userId: this.props.viewer.id,
+      userId: this.props.userId,
     };
   }
 
   getFatQuery() {
     return Relay.QL`
       fragment on UpdateVcPayload {
-        viewer { 
+        user { 
           vcCurrent 
           vcAllTime
           heartsUntilNextLevel
@@ -31,16 +31,16 @@ class UpdateVcMutation extends Relay.Mutation {
     return [{
       type: 'FIELDS_CHANGE',
       fieldIDs: {
-        viewer: this.props.viewer.id,
+        user: this.props.userId,
       },
     }];
   }
 
   getOptimisticResponse() {
     return {
-      viewer: {
-        vcCurrent: this.props.viewer.vcCurrent + 1,
-        vcAllTime: this.props.viewer.vcAllTime + 1,
+      user: {
+        vcCurrent: this.props.vcCurrent + 1,
+        vcAllTime: this.props.vcAllTime + 1,
       }
     };
   }

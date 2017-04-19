@@ -147,24 +147,6 @@ const userType = new GraphQLObjectType({
   description: 'A person who uses our app',
   fields: () => ({
     id: globalIdField('User'),
-    features: {
-      type: featureConnection,
-      description: 'Features that I have',
-      args: connectionArgs,
-      resolve: (_, args) => connectionFromPromisedArray(getFeatures(), args)
-    },
-    charities: {
-      type: charityConnection,
-      description: 'All the charities',
-      args: connectionArgs,
-      resolve: (_, args) => connectionFromPromisedArray(getCharities(), args)
-    },
-    backgroundImages: {
-      type: backgroundImageConnection,
-      description: 'All the background Images',
-      args: connectionArgs,
-      resolve: (_, args) => connectionFromPromisedArray(getBackgroundImages(), args)
-    },
     backgroundImage: {
       type: imageType,
       description: 'Users\'s background image'
@@ -251,7 +233,7 @@ const updateVcMutation = mutationWithClientMutationId({
     userId: { type: new GraphQLNonNull(GraphQLString) },
   },
   outputFields: {
-    viewer: {
+    user: {
       type: userType,
       resolve: user => user
     }
@@ -273,7 +255,7 @@ const donateVcMutation = mutationWithClientMutationId({
     vc: { type: new GraphQLNonNull(GraphQLInt) },
   },
   outputFields: {
-    viewer: {
+    user: {
       type: userType,
       resolve: user => user
     }
@@ -295,7 +277,7 @@ const setUserBkgImageMutation = mutationWithClientMutationId({
     imageId: { type: new GraphQLNonNull(GraphQLString) }
   },
   outputFields: {
-    viewer: {
+    user: {
       type: userType,
       resolve: user => user
     }
@@ -370,10 +352,38 @@ const queryType = new GraphQLObjectType({
   name: 'Query',
   fields: () => ({
     node: nodeField,
-    // Add your own root fields here
+    id: {
+      type: GraphQLInt,
+      resolve: () => 1
+    },
     viewer: {
+      type: new GraphQLNonNull(queryType),
+      resolve: () => ({})
+    },
+    user: {
       type: userType,
-      resolve: () => getUser("45bbefbf-63d1-4d36-931e-212fbe2bc3d9")
+      args: {
+        userId: { type: new GraphQLNonNull(GraphQLString) }
+      },
+      resolve: (_, args) => getUser(args.userId)
+    },
+    features: {
+      type: featureConnection,
+      description: 'Features that I have',
+      args: connectionArgs,
+      resolve: (_, args) => connectionFromPromisedArray(getFeatures(), args)
+    },
+    charities: {
+      type: charityConnection,
+      description: 'All the charities',
+      args: connectionArgs,
+      resolve: (_, args) => connectionFromPromisedArray(getCharities(), args)
+    },
+    backgroundImages: {
+      type: backgroundImageConnection,
+      description: 'All the background Images',
+      args: connectionArgs,
+      resolve: (_, args) => connectionFromPromisedArray(getBackgroundImages(), args)
     }
   })
 });

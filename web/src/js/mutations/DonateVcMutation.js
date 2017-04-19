@@ -10,7 +10,7 @@ class DonateVcMutation extends Relay.Mutation {
 
   getVariables() {
     return {
-      userId: this.props.viewer.id,
+      userId: this.props.userId,
       charityId: this.props.charityId,
       vc: this.props.vcToDonate
     };
@@ -19,7 +19,7 @@ class DonateVcMutation extends Relay.Mutation {
   getFatQuery() {
     return Relay.QL`
       fragment on DonateVcPayload {
-        viewer { 
+        user { 
           vcCurrent
         }
       }
@@ -30,15 +30,15 @@ class DonateVcMutation extends Relay.Mutation {
     return [{
       type: 'FIELDS_CHANGE',
       fieldIDs: {
-        viewer: this.props.viewer.id,
+        user: this.props.userId,
       },
     }];
   }
 
   getOptimisticResponse() {
-    const remainingVc = this.props.viewer.vcCurrent - this.props.vcToDonate;
+    const remainingVc = this.props.vcCurrent - this.props.vcToDonate;
     return {
-      viewer: {
+      user: {
         vcCurrent: Math.max(remainingVc, 0),
       }
     };

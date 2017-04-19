@@ -3,10 +3,13 @@ import DonateVc from './DonateVcComponent';
 
 export default Relay.createContainer(DonateVc, {
   fragments: {
-    viewer: () => Relay.QL`
+    user: () => Relay.QL`
       fragment on User {
       	id
       	vcCurrent
+      }`,
+    viewer: () => Relay.QL`
+      fragment on Query {
         charities(first:20){
 	      edges{
 	        node{

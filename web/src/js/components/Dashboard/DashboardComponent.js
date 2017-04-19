@@ -12,12 +12,13 @@ import {
 class Dashboard extends React.Component {
   
   static propTypes = {
-    viewer: React.PropTypes.object.isRequired
+    viewer: React.PropTypes.object.isRequired,
+    user: React.PropTypes.object.isRequired,
   };
 
   render() {
 
-    const {viewer} = this.props;
+    const {viewer, user} = this.props;
 
     const content = {
       display: 'flex',
@@ -48,17 +49,19 @@ class Dashboard extends React.Component {
 
     return (
       <div>
-        <UserBackgroundImage viewer={viewer} />
+        <UserBackgroundImage user={user} />
         <div style={content}>
           <div style={greeting}>
-            <UserDisplay viewer={viewer} />
+            <UserDisplay user={user} />
             <h1 style={subtitle}>Surf the web, save the world.</h1>
           </div>
-         <VcUser viewer={viewer} />
+         <VcUser user={user} />
         </div>
       </div>
     );
   }
 }
+
+
 
 export default Dashboard;

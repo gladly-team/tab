@@ -3,9 +3,17 @@ import BackgroundImagePicker from './BackgroundImagePickerComponent';
 
 export default Relay.createContainer(BackgroundImagePicker, {
   fragments: {
-    viewer: () => Relay.QL`
+  	user: () => Relay.QL`
       fragment on User {
-      	id
+        id
+        backgroundImage {
+          id
+          name
+          url
+        }
+    }`,
+    viewer: () => Relay.QL`
+      fragment on Query {
         backgroundImages(first:20){
 	      edges{
 	        node{
@@ -15,11 +23,6 @@ export default Relay.createContainer(BackgroundImagePicker, {
 	        }
 	      }
 	    }
-	    backgroundImage {
-  	      id
-  	      name
-  	      url
-  	    }
-      }`
+    }`
   }
 });

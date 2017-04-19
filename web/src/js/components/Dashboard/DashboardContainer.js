@@ -7,10 +7,15 @@ import UserBackgroundImage from '../User/UserBackgroundImageContainer';
 export default Relay.createContainer(Dashboard, {
   fragments: {
     viewer: () => Relay.QL`
+      fragment on Query {
+        id
+      }`,
+    user: () => Relay.QL`
       fragment on User {
-        ${VcUser.getFragment('viewer')}
-        ${UserDisplay.getFragment('viewer')}
-        ${UserBackgroundImage.getFragment('viewer')}
+        ${UserBackgroundImage.getFragment('user')}
+        ${VcUser.getFragment('user')}
+        ${UserDisplay.getFragment('user')}
       }`
   }
 });
+
