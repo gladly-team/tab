@@ -37,7 +37,7 @@
   "scripts": {
     "start": "babel-node ./server.js",
     "update-schema": "babel-node ./scripts/updateSchema.js",
-    "test": "jest",
+    "test": "jest --coverage",
     "test:watch": "jest --watch"
   },
   "repository": {

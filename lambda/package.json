@@ -22,8 +22,8 @@
   },
   "scripts": {
     "start": "nodemon -e js,json,yml --exec \"babel-node\" ./server.js",
-    "test": "jest --no-watchman",
-    "test:watch": "jest --no-watchman --watch"
+    "test": "jest --coverage",
+    "test:watch": "jest --watch"
   },
   "repository": {
     "type": "git",
