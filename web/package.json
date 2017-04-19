@@ -7,6 +7,7 @@
     "babel-plugin-module-resolver": "^2.7.0",
     "codecov": "^2.1.0",
     "enzyme": "^2.8.0",
+    "if-env": "^1.0.0",
     "react-addons-test-utils": "^15.4.2"
   },
   "dependencies": {
@@ -78,7 +79,7 @@
   "scripts": {
     "start": "nodemon --watch data/schema.json scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "jest --env=jsdom --coverage && codecov",
+    "test": "jest --env=jsdom --coverage && if-env NODE_ENV=test && codecov || echo 'Skipping test coverage logging.'",
     "test:watch": "jest --env=jsdom --watch"
   },
   "jest": {
