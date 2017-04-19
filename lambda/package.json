@@ -13,8 +13,10 @@
     "babel-polyfill": "^6.23.0",
     "babel-preset-es2015": "^6.22.0",
     "babel-preset-stage-0": "^6.22.0",
+    "codecov": "^2.1.0",
     "cors": "^2.8.1",
     "express": "^4.14.1",
+    "if-env": "^1.0.0",
     "jest": "^19.0.2",
     "lodash": "^4.17.4",
     "nodemon": "^1.11.0",
@@ -22,8 +24,8 @@
   },
   "scripts": {
     "start": "nodemon -e js,json,yml --exec \"babel-node\" ./server.js",
-    "test": "jest --no-watchman",
-    "test:watch": "jest --no-watchman --watch"
+    "test": "jest --coverage && if-env NODE_ENV=test && codecov || echo 'Skipping test coverage logging.'",
+    "test:watch": "jest --watch"
   },
   "repository": {
     "type": "git",
