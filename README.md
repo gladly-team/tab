@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/gladly-team/tab.svg?branch=master)](https://travis-ci.org/gladly-team/tab)
+[![codecov](https://codecov.io/gh/gladly-team/tab/branch/master/graph/badge.svg)](https://codecov.io/gh/gladly-team/tab)
 # Tab for a Cause
 *Surf the web, save the world.*
 
