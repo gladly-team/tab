@@ -5,6 +5,7 @@
   "private": true,
   "devDependencies": {
     "babel-plugin-module-resolver": "^2.7.0",
+    "codecov": "^2.1.0",
     "enzyme": "^2.8.0",
     "react-addons-test-utils": "^15.4.2"
   },
@@ -77,8 +78,8 @@
   "scripts": {
     "start": "nodemon --watch data/schema.json scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "jest --env=jsdom --coverage",
-    "test:coverage": "jest --env=jsdom --watch"
+    "test": "jest --env=jsdom --coverage && codecov",
+    "test:watch": "jest --env=jsdom --watch"
   },
   "jest": {
     "collectCoverageFrom": [
