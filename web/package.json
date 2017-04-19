@@ -5,7 +5,6 @@
   "private": true,
   "devDependencies": {
     "babel-plugin-module-resolver": "^2.7.0",
-    "coveralls": "^2.13.0",
     "enzyme": "^2.8.0",
     "react-addons-test-utils": "^15.4.2"
   },
@@ -78,7 +77,7 @@
   "scripts": {
     "start": "nodemon --watch data/schema.json scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "jest --env=jsdom --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "test": "jest --env=jsdom --coverage",
     "test:coverage": "jest --env=jsdom --watch"
   },
   "jest": {
