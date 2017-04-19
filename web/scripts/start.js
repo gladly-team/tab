@@ -1,5 +1,7 @@
 process.env.NODE_ENV = 'development';
 
+var exec = require('child_process').exec;
+
 // Load environment variables from .env file. Suppress warnings using silent
 // if this file is missing. dotenv will never modify any environment variables
 // that have already been set.
@@ -268,11 +270,26 @@ function runDevServer(host, port, protocol) {
   });
 }
 
+function runRelayCompiler(callback) {
+  // Compile the relay app.
+  exec('yarn run relay', (error, stdout) => {
+    console.log(stdout);
+    function handleTaskDone() {
+      if (callback) {
+        callback();
+      }
+    }
+    handleTaskDone();
+  });
+}
+
 function run(port) {
   var protocol = process.env.HTTPS === 'true' ? "https" : "http";
   var host = process.env.HOST || 'localhost';
-  setupCompiler(host, port, protocol);
-  runDevServer(host, port, protocol);
+  runRelayCompiler(() => {
+    setupCompiler(host, port, protocol);
+    runDevServer(host, port, protocol);
+  });
 }
 
 run(DEFAULT_PORT);

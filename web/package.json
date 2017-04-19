@@ -5,10 +5,12 @@
   "private": true,
   "devDependencies": {
     "babel-plugin-module-resolver": "^2.7.0",
+    "babel-plugin-relay": "dev",
     "codecov": "^2.1.0",
     "enzyme": "^2.8.0",
     "if-env": "^1.0.0",
-    "react-addons-test-utils": "^15.4.2"
+    "react-addons-test-utils": "^15.4.2",
+    "relay-compiler": "dev"
   },
   "dependencies": {
     "autoprefixer": "6.5.1",
@@ -60,9 +62,8 @@
     "react-dom": "^15.4.2",
     "react-dropdown": "^1.2.0",
     "react-hot-loader": "3.0.0-beta.6",
-    "react-relay": "^0.10.0",
+    "react-relay": "dev",
     "react-router": "^3.0.0",
-    "react-router-relay": "^0.13.5",
     "react-tap-event-plugin": "^2.0.1",
     "react-transform-catch-errors": "^1.0.2",
     "react-transform-hmr": "^1.0.4",
@@ -77,10 +78,11 @@
     "whatwg-fetch": "1.0.0"
   },
   "scripts": {
-    "start": "nodemon --watch data/schema.json scripts/start.js",
+    "start": "nodemon --watch data/schema.graphql scripts/start.js",
     "build": "node scripts/build.js",
     "test": "jest --env=jsdom --coverage && if-env NODE_ENV=test && codecov || echo 'Skipping test coverage logging.'",
-    "test:watch": "jest --env=jsdom --watch"
+    "test:watch": "jest --env=jsdom --watch",
+    "relay": "relay-compiler --src ./src/ --schema ./data/schema.graphql"
   },
   "jest": {
     "collectCoverageFrom": [
