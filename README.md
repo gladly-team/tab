@@ -22,3 +22,4 @@
 ### Development Tips
 
 * The `start` script in the top-level `package.json` orchestrates running services.
+* The lambda, graphql, and web services use [dotenv-extended](https://www.npmjs.com/package/dotenv-extended) to manage environment variables. The `.env.defaults` files specify defaults, which you can override with your file named `.env`.

@@ -1,11 +1,17 @@
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.NODE_ENV = 'production';
 
+var path = require('path');
+
 // Load environment variables from .env file. Suppress warnings using silent
 // if this file is missing. dotenv will never modify any environment variables
 // that have already been set.
-// https://github.com/motdotla/dotenv
-require('dotenv').config({silent: true});
+// https://github.com/keithmorris/node-dotenv-extended
+require('dotenv-extended').load({
+  path: path.join(__dirname, '..', '.env'),
+  defaults: path.join(__dirname, '..', '.env.defaults'),
+  schema: path.join(__dirname, '..', '.env.schema'),
+});
 
 var chalk = require('chalk');
 var fs = require('fs-extra');

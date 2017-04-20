@@ -13,7 +13,7 @@ import Relay, {
 } from 'react-relay';
 
 Relay.injectNetworkLayer(
-  new DefaultNetworkLayer('http://localhost:8080')
+  new DefaultNetworkLayer(process.env.GRAPHQL_ENDPOINT)
 );
 
 const rootNode = document.createElement('div');

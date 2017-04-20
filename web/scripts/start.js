@@ -1,10 +1,16 @@
 process.env.NODE_ENV = 'development';
 
+var path = require('path');
+
 // Load environment variables from .env file. Suppress warnings using silent
 // if this file is missing. dotenv will never modify any environment variables
 // that have already been set.
-// https://github.com/motdotla/dotenv
-require('dotenv').config({silent: true});
+// https://github.com/keithmorris/node-dotenv-extended
+require('dotenv-extended').load({
+  path: path.join(__dirname, '..', '.env'),
+  defaults: path.join(__dirname, '..', '.env.defaults'),
+  schema: path.join(__dirname, '..', '.env.schema'),
+});
 
 var chalk = require('chalk');
 var webpack = require('webpack');
@@ -32,7 +38,7 @@ if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
 }
 
 // Tools like Cloud9 rely on this.
-var DEFAULT_PORT = process.env.PORT || 3000;
+var DEFAULT_PORT = process.env.WEB_PORT || 3000;
 var compiler;
 var handleCompile;
 
@@ -270,7 +276,7 @@ function runDevServer(host, port, protocol) {
 
 function run(port) {
   var protocol = process.env.HTTPS === 'true' ? "https" : "http";
-  var host = process.env.HOST || 'localhost';
+  var host = process.env.WEB_HOST || 'localhost';
   setupCompiler(host, port, protocol);
   runDevServer(host, port, protocol);
 }
