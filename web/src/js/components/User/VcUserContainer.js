@@ -1,15 +1,19 @@
-import Relay from 'react-relay';
+import React from 'react';
+import {
+  createFragmentContainer,
+  graphql,
+} from 'react-relay/compat';
+
 import VcUser from './VcUserComponent';
 
-export default Relay.createContainer(VcUser, {
-  fragments: {
-    viewer: () => Relay.QL`
-      fragment on User {
-      	id
-        vcCurrent
-        vcAllTime
-        level
-        heartsUntilNextLevel 
-      }`
-  }
+export default createFragmentContainer(VcUser, {
+  user: graphql`
+    fragment VcUserContainer_user on User {
+      id
+      vcCurrent
+      vcAllTime
+      level
+      heartsUntilNextLevel 
+    }
+  `
 });

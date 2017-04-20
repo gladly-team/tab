@@ -3,8 +3,8 @@
  *   relay-compiler
  *
  * @providesModule relay_rootQuery.graphql
- * @generated SignedSource<<b296ace0afa01bc277a6983b194d628a>>
- * @relayHash aef80257c96a87d889657b7565675077
+ * @generated SignedSource<<a872a7eef9a9ec7bdf35ecc77e2607a9>>
+ * @relayHash 488de0fc984f2d54c6fc90e435ab7c05
  * @flow
  * @nogrep
  */
@@ -19,24 +19,98 @@ import type {ConcreteBatch} from 'relay-runtime';
 /* eslint-disable comma-dangle, quotes */
 
 /*
-query relay_rootQuery {
-  viewer {
-    ...AppContainer_viewer
+query relay_rootQuery(
+  $userId: String!
+) {
+  app {
+    ...DashboardContainer_app
+    id
+  }
+  user(userId: $userId) {
+    ...DashboardContainer_user
     id
   }
 }
 
-fragment AppContainer_viewer on User {
+fragment DashboardContainer_app on App {
+  ...BackgroundImagePickerContainer_app
+  ...DonateVcContainer_app
+}
+
+fragment DashboardContainer_user on User {
+  ...UserDisplayContainer_user
+  ...UserBackgroundImageContainer_user
+  ...VcUserContainer_user
+  ...BackgroundImagePickerContainer_user
+  ...DonateVcContainer_user
+}
+
+fragment UserDisplayContainer_user on User {
   id
   username
   email
+}
+
+fragment UserBackgroundImageContainer_user on User {
+  backgroundImage {
+    id
+    name
+    url
+  }
+}
+
+fragment VcUserContainer_user on User {
+  id
+  vcCurrent
+  vcAllTime
   level
+  heartsUntilNextLevel
+}
+
+fragment BackgroundImagePickerContainer_user on User {
+  id
+}
+
+fragment DonateVcContainer_user on User {
+  id
+  vcCurrent
+}
+
+fragment BackgroundImagePickerContainer_app on App {
+  backgroundImages(first: 20) {
+    edges {
+      node {
+        id
+        name
+        url
+      }
+    }
+  }
+}
+
+fragment DonateVcContainer_app on App {
+  charities(first: 20) {
+    edges {
+      node {
+        id
+        name
+        category
+      }
+    }
+  }
 }
 */
 
 const batch /*: ConcreteBatch*/ = {
   "fragment": {
-    "argumentDefinitions": [],
+    "argumentDefinitions": [
+      {
+        "kind": "LocalArgument",
+        "name": "userId",
+        "type": "String!",
+        "defaultValue": null
+      }
+    ],
     "kind": "Fragment",
     "metadata": null,
     "name": "relay_rootQuery",
@@ -45,13 +119,36 @@ const batch /*: ConcreteBatch*/ = {
         "kind": "LinkedField",
         "alias": null,
         "args": null,
-        "concreteType": "User",
-        "name": "viewer",
+        "concreteType": "App",
+        "name": "app",
         "plural": false,
         "selections": [
           {
             "kind": "FragmentSpread",
-            "name": "AppContainer_viewer",
+            "name": "DashboardContainer_app",
+            "args": null
+          }
+        ],
+        "storageKey": null
+      },
+      {
+        "kind": "LinkedField",
+        "alias": null,
+        "args": [
+          {
+            "kind": "Variable",
+            "name": "userId",
+            "variableName": "userId",
+            "type": "String!"
+          }
+        ],
+        "concreteType": "User",
+        "name": "user",
+        "plural": false,
+        "selections": [
+          {
+            "kind": "FragmentSpread",
+            "name": "DashboardContainer_user",
             "args": null
           }
         ],
@@ -65,7 +162,14 @@ const batch /*: ConcreteBatch*/ = {
   "metadata": {},
   "name": "relay_rootQuery",
   "query": {
-    "argumentDefinitions": [],
+    "argumentDefinitions": [
+      {
+        "kind": "LocalArgument",
+        "name": "userId",
+        "type": "String!",
+        "defaultValue": null
+      }
+    ],
     "kind": "Root",
     "name": "relay_rootQuery",
     "operation": "query",
@@ -74,8 +178,155 @@ const batch /*: ConcreteBatch*/ = {
         "kind": "LinkedField",
         "alias": null,
         "args": null,
+        "concreteType": "App",
+        "name": "app",
+        "plural": false,
+        "selections": [
+          {
+            "kind": "LinkedField",
+            "alias": null,
+            "args": [
+              {
+                "kind": "Literal",
+                "name": "first",
+                "value": 20,
+                "type": "Int"
+              }
+            ],
+            "concreteType": "BackgroundImageConnection",
+            "name": "backgroundImages",
+            "plural": false,
+            "selections": [
+              {
+                "kind": "LinkedField",
+                "alias": null,
+                "args": null,
+                "concreteType": "BackgroundImageEdge",
+                "name": "edges",
+                "plural": true,
+                "selections": [
+                  {
+                    "kind": "LinkedField",
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "BackgroundImage",
+                    "name": "node",
+                    "plural": false,
+                    "selections": [
+                      {
+                        "kind": "ScalarField",
+                        "alias": null,
+                        "args": null,
+                        "name": "id",
+                        "storageKey": null
+                      },
+                      {
+                        "kind": "ScalarField",
+                        "alias": null,
+                        "args": null,
+                        "name": "name",
+                        "storageKey": null
+                      },
+                      {
+                        "kind": "ScalarField",
+                        "alias": null,
+                        "args": null,
+                        "name": "url",
+                        "storageKey": null
+                      }
+                    ],
+                    "storageKey": null
+                  }
+                ],
+                "storageKey": null
+              }
+            ],
+            "storageKey": "backgroundImages{\"first\":20}"
+          },
+          {
+            "kind": "LinkedField",
+            "alias": null,
+            "args": [
+              {
+                "kind": "Literal",
+                "name": "first",
+                "value": 20,
+                "type": "Int"
+              }
+            ],
+            "concreteType": "CharityConnection",
+            "name": "charities",
+            "plural": false,
+            "selections": [
+              {
+                "kind": "LinkedField",
+                "alias": null,
+                "args": null,
+                "concreteType": "CharityEdge",
+                "name": "edges",
+                "plural": true,
+                "selections": [
+                  {
+                    "kind": "LinkedField",
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "Charity",
+                    "name": "node",
+                    "plural": false,
+                    "selections": [
+                      {
+                        "kind": "ScalarField",
+                        "alias": null,
+                        "args": null,
+                        "name": "id",
+                        "storageKey": null
+                      },
+                      {
+                        "kind": "ScalarField",
+                        "alias": null,
+                        "args": null,
+                        "name": "name",
+                        "storageKey": null
+                      },
+                      {
+                        "kind": "ScalarField",
+                        "alias": null,
+                        "args": null,
+                        "name": "category",
+                        "storageKey": null
+                      }
+                    ],
+                    "storageKey": null
+                  }
+                ],
+                "storageKey": null
+              }
+            ],
+            "storageKey": "charities{\"first\":20}"
+          },
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "args": null,
+            "name": "id",
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      },
+      {
+        "kind": "LinkedField",
+        "alias": null,
+        "args": [
+          {
+            "kind": "Variable",
+            "name": "userId",
+            "variableName": "userId",
+            "type": "String!"
+          }
+        ],
         "concreteType": "User",
-        "name": "viewer",
+        "name": "user",
         "plural": false,
         "selections": [
           {
@@ -100,10 +351,63 @@ const batch /*: ConcreteBatch*/ = {
             "storageKey": null
           },
           {
+            "kind": "LinkedField",
+            "alias": null,
+            "args": null,
+            "concreteType": "Image",
+            "name": "backgroundImage",
+            "plural": false,
+            "selections": [
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "id",
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "name",
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "url",
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          },
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "args": null,
+            "name": "vcCurrent",
+            "storageKey": null
+          },
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "args": null,
+            "name": "vcAllTime",
+            "storageKey": null
+          },
+          {
             "kind": "ScalarField",
             "alias": null,
             "args": null,
             "name": "level",
+            "storageKey": null
+          },
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "args": null,
+            "name": "heartsUntilNextLevel",
             "storageKey": null
           }
         ],
@@ -111,7 +415,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query relay_rootQuery {\n  viewer {\n    ...AppContainer_viewer\n    id\n  }\n}\n\nfragment AppContainer_viewer on User {\n  id\n  username\n  email\n  level\n}\n"
+  "text": "query relay_rootQuery(\n  $userId: String!\n) {\n  app {\n    ...DashboardContainer_app\n    id\n  }\n  user(userId: $userId) {\n    ...DashboardContainer_user\n    id\n  }\n}\n\nfragment DashboardContainer_app on App {\n  ...BackgroundImagePickerContainer_app\n  ...DonateVcContainer_app\n}\n\nfragment DashboardContainer_user on User {\n  ...UserDisplayContainer_user\n  ...UserBackgroundImageContainer_user\n  ...VcUserContainer_user\n  ...BackgroundImagePickerContainer_user\n  ...DonateVcContainer_user\n}\n\nfragment UserDisplayContainer_user on User {\n  id\n  username\n  email\n}\n\nfragment UserBackgroundImageContainer_user on User {\n  backgroundImage {\n    id\n    name\n    url\n  }\n}\n\nfragment VcUserContainer_user on User {\n  id\n  vcCurrent\n  vcAllTime\n  level\n  heartsUntilNextLevel\n}\n\nfragment BackgroundImagePickerContainer_user on User {\n  id\n}\n\nfragment DonateVcContainer_user on User {\n  id\n  vcCurrent\n}\n\nfragment BackgroundImagePickerContainer_app on App {\n  backgroundImages(first: 20) {\n    edges {\n      node {\n        id\n        name\n        url\n      }\n    }\n  }\n}\n\nfragment DonateVcContainer_app on App {\n  charities(first: 20) {\n    edges {\n      node {\n        id\n        name\n        category\n      }\n    }\n  }\n}\n"
 };
 
 module.exports = batch;

@@ -16,29 +16,51 @@ import {QueryRenderer} from 'react-relay/compat';
 import RelayClassic from 'react-relay/classic'
 import AppContainer from './js/components/App/AppContainer';
 import environment from './relay-env';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import {deepPurple500} from 'material-ui/styles/colors';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+
+import DashboardContainer from './js/components/Dashboard/DashboardContainer';
+
+const muiTheme = getMuiTheme({
+  palette: {
+    accent1Color: deepPurple500,
+  },
+});
+
+// Needed for onTouchTap 
+// http://stackoverflow.com/a/34015469/988941 
+injectTapEventPlugin();
 
 class RelayRoot extends React.Component { 
   render() {
-    return (<QueryRenderer
-        environment={environment}
-        query={graphql`
-          query relay_rootQuery($userId: ID!) {
-            viewer {
-              ...AppContainer_viewer
+    return (
+      <MuiThemeProvider muiTheme={muiTheme}>
+        <QueryRenderer
+          environment={environment}
+          query={graphql`
+            query relay_rootQuery($userId: String!) {
+              app {
+                ...DashboardContainer_app
+              }
+              user(userId: $userId) {
+                ...DashboardContainer_user
+              }
             }
-            user(userId: $userId) {
-              ...AppContainer_user
+          `}
+          variables={{userId: "45bbefbf-63d1-4d36-931e-212fbe2bc3d9"}}
+          render={({error, props}) => {
+            if (props) {
+              return (
+                <AppContainer viewer={props.viewer}>
+                  <DashboardContainer app={props.app} user={props.user}/>
+                </AppContainer>)
+            } else {
+              return null;
             }
-          }
-        `}
-        variables={{userId: "45bbefbf-63d1-4d36-931e-212fbe2bc3d9"}}
-        render={({error, props}) => {
-          if (props) {
-            return <AppContainer viewer={props.viewer} />
-          } else {
-            return <div>Loading</div>;
-          }
-        }}/>
+          }}/>
+      </MuiThemeProvider>
     );
   }
 }

@@ -1,42 +1,56 @@
-import Relay from 'react-relay';
+import {
+  commitMutation,
+  graphql,
+} from 'react-relay/compat';
 
-class SetBackgroundImageMutation extends Relay.Mutation {
-
-  getMutation() {
-    return Relay.QL`
-      mutation { setUserBkgImage }
-    `;
-  }
-
-  getVariables() {
-    return {
-      userId: this.props.viewer.id,
-      imageId: this.props.imageId
-    };
-  }
-
-  getFatQuery() {
-    return Relay.QL`
-      fragment on SetUserBkgImagePayload {
-        viewer { 
-          backgroundImage {
-            id
-            name
-            url
-          }
+const mutation = graphql`
+  mutation SetBackgroundImageMutation($input: SetUserBkgImageInput!) {
+    setUserBkgImage(input: $input) {
+      user {
+        backgroundImage {
+          id
+          name
+          url
         }
       }
-    `;
+    }
   }
+`;
 
-  getConfigs() {
-    return [{
-      type: 'FIELDS_CHANGE',
-      fieldIDs: {
-        viewer: this.props.viewer.id,
-      },
-    }];
-  }
+function getConfigs(userId) {
+  return [{
+    type: 'FIELDS_CHANGE',
+    fieldIDs: {
+      user: userId,
+    }
+  }];
 }
 
-export default SetBackgroundImageMutation;
+function getOptimisticResponse(image) {
+  return {
+    user: {
+      backgroundImage: {
+        id: image.id,
+        name: image.name,
+        url: image.url
+      }
+    }
+  };
+}
+
+function commit(environment, userId, image) {
+  const imageId = image.id;
+  return commitMutation(
+    environment,
+    {
+      mutation,
+      variables: {
+        input: { userId, imageId }
+      },
+      configs: getConfigs(userId),
+      optimisticResponse: () => getOptimisticResponse(image)
+    }
+  );
+}
+
+export default {commit};

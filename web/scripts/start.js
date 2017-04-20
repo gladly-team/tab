@@ -274,16 +274,13 @@ function runRelayCompiler(callback) {
   // Compile the relay app.
   exec('yarn run relay', (error, stdout) => {
     console.log(stdout);
+    console.log(error);
     function handleTaskDone() {
       if (callback) {
         callback();
       }
     }
-    if(!error){
-      handleTaskDone();
-    } else {
-      throw error;
-    }
+    handleTaskDone();
     
   });
 }

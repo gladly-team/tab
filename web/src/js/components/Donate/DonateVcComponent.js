@@ -6,9 +6,6 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {List, ListItem} from 'material-ui/List';
 import DonateVcMutation from 'mutations/DonateVcMutation';
 
-import { browserHistory } from 'react-router';
-
-
 class DonateVc extends React.Component {
   
   constructor(props) {
@@ -20,9 +17,9 @@ class DonateVc extends React.Component {
   }
 
   componentDidMount() {
-    const { viewer } = this.props;
+    const { app } = this.props;
     this.setState({
-      selectedCharity: viewer.charities.edges[0].node
+      selectedCharity: app.charities.edges[0].node
     });
   }
 
@@ -37,19 +34,17 @@ class DonateVc extends React.Component {
   }
 
   donateHearts() {
-    const donateVcMutation = new DonateVcMutation({ 
-      viewer: this.props.viewer,
-      charityId: this.state.selectedCharity.id,
-      vcToDonate: this.state.donateSlider });
-
-    Relay.Store.commitUpdate(donateVcMutation);
-
-    browserHistory.push('/');
+    DonateVcMutation.commit(
+      this.props.relay.environment,
+      this.props.user,
+      this.state.selectedCharity.id,
+      this.state.donateSlider
+    );
   }
 
   render() {
-    const { viewer } = this.props;
-    if(viewer.vcCurrent < 1) {
+    const { user, app } = this.props;
+    if(user.vcCurrent < 1) {
       return (<p>Not enough hearts to donate. :(</p>)
     }
     
@@ -78,7 +73,7 @@ class DonateVc extends React.Component {
       <div style={main}>
         <h1 style={title}>Donate to a Charity of your choice</h1>
         <List>
-          {viewer.charities.edges.map((edge) => {
+          {app.charities.edges.map((edge) => {
               return (<ListItem onClick={this.onCharitySelected.bind(this, edge.node)} key={edge.node.id} primaryText={edge.node.name} />)
           })}
         </List>
@@ -87,7 +82,7 @@ class DonateVc extends React.Component {
         <Divider />
         <Slider
           min={0}
-          max={viewer.vcCurrent}
+          max={user.vcCurrent}
           step={1}
           defaultValue={1}
           value={this.state.donateSlider}
@@ -105,7 +100,8 @@ class DonateVc extends React.Component {
 }
 
 DonateVc.propTypes = {
-	viewer: React.PropTypes.object.isRequired
+	app: React.PropTypes.object.isRequired,
+  user: React.PropTypes.object.isRequired
 };
 
 export default DonateVc;

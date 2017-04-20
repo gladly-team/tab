@@ -11,6 +11,21 @@ type AddFeaturePayload {
   clientMutationId: String
 }
 
+# Global app fields
+type App implements Node {
+  # The ID of an object
+  id: ID!
+
+  # Features that I have
+  features(after: String, first: Int, before: String, last: Int): FeatureConnection
+
+  # All the charities
+  charities(after: String, first: Int, before: String, last: Int): CharityConnection
+
+  # All the background Images
+  backgroundImages(after: String, first: Int, before: String, last: Int): BackgroundImageConnection
+}
+
 # A background image
 type BackgroundImage implements Node {
   # The ID of an object
@@ -80,7 +95,7 @@ input DonateVcInput {
 }
 
 type DonateVcPayload {
-  viewer: User
+  user: User
   clientMutationId: String
 }
 
@@ -164,7 +179,8 @@ type Query {
     # The ID of an object
     id: ID!
   ): Node
-  viewer: User
+  app: App
+  user(userId: String!): User
 }
 
 input SetUserBkgImageInput {
@@ -174,7 +190,7 @@ input SetUserBkgImageInput {
 }
 
 type SetUserBkgImagePayload {
-  viewer: User
+  user: User
   clientMutationId: String
 }
 
@@ -184,7 +200,7 @@ input UpdateVcInput {
 }
 
 type UpdateVcPayload {
-  viewer: User
+  user: User
   clientMutationId: String
 }
 
@@ -192,15 +208,6 @@ type UpdateVcPayload {
 type User implements Node {
   # The ID of an object
   id: ID!
-
-  # Features that I have
-  features(after: String, first: Int, before: String, last: Int): FeatureConnection
-
-  # All the charities
-  charities(after: String, first: Int, before: String, last: Int): CharityConnection
-
-  # All the background Images
-  backgroundImages(after: String, first: Int, before: String, last: Int): BackgroundImageConnection
 
   # Users's background image
   backgroundImage: Image

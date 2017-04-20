@@ -56,6 +56,15 @@ import {
   getBackgroundImages
 } from '../database/backgroundImages/backgroundImage';
 
+class App {
+  constructor(id) {
+    this.id = id;
+  }
+
+  static getApp(id) {
+    return new App(id);
+  }
+}
 /**
  * We get the node interface and field from the Relay library.
  *
@@ -65,7 +74,9 @@ import {
 const { nodeInterface, nodeField } = nodeDefinitions(
   (globalId) => {
     const { type, id } = fromGlobalId(globalId);
-    if (type === 'User') {
+    if (type === 'App') {
+      return App.getApp(id);
+    } else if (type === 'User') {
       return getUser(id);
     } else if (type === 'Feature') {
       return getFeature(id);
@@ -77,7 +88,9 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     return null;
   },
   (obj) => {
-    if (obj instanceof User) {
+    if (obj instanceof App) {
+      return appType;
+    } else if (obj instanceof User) {
       return userType;
     } else if (obj instanceof Feature) {
       return featureType;
@@ -147,24 +160,6 @@ const userType = new GraphQLObjectType({
   description: 'A person who uses our app',
   fields: () => ({
     id: globalIdField('User'),
-    features: {
-      type: featureConnection,
-      description: 'Features that I have',
-      args: connectionArgs,
-      resolve: (_, args) => connectionFromPromisedArray(getFeatures(), args)
-    },
-    charities: {
-      type: charityConnection,
-      description: 'All the charities',
-      args: connectionArgs,
-      resolve: (_, args) => connectionFromPromisedArray(getCharities(), args)
-    },
-    backgroundImages: {
-      type: backgroundImageConnection,
-      description: 'All the background Images',
-      args: connectionArgs,
-      resolve: (_, args) => connectionFromPromisedArray(getBackgroundImages(), args)
-    },
     backgroundImage: {
       type: imageType,
       description: 'Users\'s background image'
@@ -235,6 +230,33 @@ const charityType = new GraphQLObjectType({
   interfaces: [nodeInterface],
 });
 
+const appType = new GraphQLObjectType({
+  name: 'App',
+  description: 'Global app fields',
+  fields: () => ({
+    id: globalIdField('App'),
+    features: {
+      type: featureConnection,
+      description: 'Features that I have',
+      args: connectionArgs,
+      resolve: (_, args) => connectionFromPromisedArray(getFeatures(), args)
+    },
+    charities: {
+      type: charityConnection,
+      description: 'All the charities',
+      args: connectionArgs,
+      resolve: (_, args) => connectionFromPromisedArray(getCharities(), args)
+    },
+    backgroundImages: {
+      type: backgroundImageConnection,
+      description: 'All the background Images',
+      args: connectionArgs,
+      resolve: (_, args) => connectionFromPromisedArray(getBackgroundImages(), args)
+    }
+  }),
+  interfaces: [nodeInterface]
+});
+
 /**
  * Define your own connection types here
  */
@@ -251,7 +273,7 @@ const updateVcMutation = mutationWithClientMutationId({
     userId: { type: new GraphQLNonNull(GraphQLString) },
   },
   outputFields: {
-    viewer: {
+    user: {
       type: userType,
       resolve: user => user
     }
@@ -273,7 +295,7 @@ const donateVcMutation = mutationWithClientMutationId({
     vc: { type: new GraphQLNonNull(GraphQLInt) },
   },
   outputFields: {
-    viewer: {
+    user: {
       type: userType,
       resolve: user => user
     }
@@ -295,7 +317,7 @@ const setUserBkgImageMutation = mutationWithClientMutationId({
     imageId: { type: new GraphQLNonNull(GraphQLString) }
   },
   outputFields: {
-    viewer: {
+    user: {
       type: userType,
       resolve: user => user
     }
@@ -371,9 +393,9 @@ const queryType = new GraphQLObjectType({
   fields: () => ({
     node: nodeField,
     // Add your own root fields here
-    viewer: {
-      type: userType,
-      resolve: () => getUser("45bbefbf-63d1-4d36-931e-212fbe2bc3d9")
+    app: {
+      type: appType,
+      resolve: () => App.getApp(1)
     },
     user: {
       type: userType,
