@@ -6,15 +6,7 @@ if (!global._babelPolyfill) {
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
-import Root from './root';
-
-import Relay, {
-  DefaultNetworkLayer,
-} from 'react-relay';
-
-Relay.injectNetworkLayer(
-  new DefaultNetworkLayer('http://localhost:8080')
-);
+import Root from './relay-root';
 
 const rootNode = document.createElement('div');
 document.body.appendChild(rootNode);

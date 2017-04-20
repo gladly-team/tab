@@ -1,12 +1,10 @@
 import React from 'react';
-import VcUser from '../User/VcUserContainer';
-import yeoman from '../../assets/yeoman.png';
 
 export default class App extends React.Component {
-  static propTypes = {
-    children: React.PropTypes.object.isRequired,
-    viewer: React.PropTypes.object.isRequired
-  };
+  // static propTypes = {
+  //   children: React.PropTypes.object.isRequired,
+  //   viewer: React.PropTypes.object.isRequired
+  // };
 
   render() {
     
@@ -16,8 +14,12 @@ export default class App extends React.Component {
 
     return (
       <div style={root}>
-        {this.props.children}
+        <h1>{this.props.viewer.username}</h1>
       </div>
     );
   }
 }
+
+// <div style={root}>
+//   {this.props.children}
+// </div>

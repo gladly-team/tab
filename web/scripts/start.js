@@ -279,15 +279,20 @@ function runRelayCompiler(callback) {
         callback();
       }
     }
-    handleTaskDone();
+    if(!error){
+      handleTaskDone();
+    } else {
+      throw error;
+    }
+    
   });
 }
 
 function run(port) {
   var protocol = process.env.HTTPS === 'true' ? "https" : "http";
   var host = process.env.HOST || 'localhost';
+  setupCompiler(host, port, protocol);
   runRelayCompiler(() => {
-    setupCompiler(host, port, protocol);
     runDevServer(host, port, protocol);
   });
 }
