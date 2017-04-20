@@ -15,6 +15,7 @@
     "babel-preset-stage-0": "^6.22.0",
     "codecov": "^2.1.0",
     "cors": "^2.8.1",
+    "dotenv-extended": "^1.0.4",
     "express": "^4.14.1",
     "if-env": "^1.0.0",
     "jest": "^19.0.2",
