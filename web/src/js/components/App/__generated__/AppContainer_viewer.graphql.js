@@ -3,7 +3,7 @@
  *   relay-compiler
  *
  * @providesModule AppContainer_viewer.graphql
- * @generated SignedSource<<fdad603d3534e50d71a4d4b4a77981d1>>
+ * @generated SignedSource<<32e13d9f36b92132bc0614c1667ec064>>
  * @flow
  * @nogrep
  */
@@ -15,6 +15,8 @@ import type {ConcreteFragment} from 'relay-runtime';
 export type AppContainer_viewer = {
   id: string;
   username?: ?string;
+  email?: ?string;
+  level?: ?number;
 };
 */
 
@@ -38,6 +40,20 @@ const fragment /*: ConcreteFragment*/ = {
       "alias": null,
       "args": null,
       "name": "username",
+      "storageKey": null
+    },
+    {
+      "kind": "ScalarField",
+      "alias": null,
+      "args": null,
+      "name": "email",
+      "storageKey": null
+    },
+    {
+      "kind": "ScalarField",
+      "alias": null,
+      "args": null,
+      "name": "level",
       "storageKey": null
     }
   ],

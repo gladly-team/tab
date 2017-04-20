@@ -374,6 +374,13 @@ const queryType = new GraphQLObjectType({
     viewer: {
       type: userType,
       resolve: () => getUser("45bbefbf-63d1-4d36-931e-212fbe2bc3d9")
+    },
+    user: {
+      type: userType,
+      args: {
+        userId: { type: new GraphQLNonNull(GraphQLString) }
+      },
+      resolve: (_, args) => getUser(args.userId)
     }
   })
 });

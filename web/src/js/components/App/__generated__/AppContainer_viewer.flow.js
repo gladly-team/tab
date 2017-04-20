@@ -5,7 +5,7 @@
  *   relay-compiler
  *
  * @providesModule AppContainer_viewer.flow
- * @generated SignedSource<<7286866e02a0c6ea82aa325cfa6e7920>>
+ * @generated SignedSource<<59ef09e2a168b3ea619991875b8ac9b2>>
  * @flow
  */
 
@@ -14,4 +14,6 @@
 export type AppContainer_viewer = {
   id: string;
   username?: ?string;
+  email?: ?string;
+  level?: ?number;
 };

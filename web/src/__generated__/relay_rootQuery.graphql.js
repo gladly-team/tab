@@ -3,8 +3,8 @@
  *   relay-compiler
  *
  * @providesModule relay_rootQuery.graphql
- * @generated SignedSource<<70d01991c5628cddf2bb3cc70c1bc028>>
- * @relayHash 3a81d03efae2d1b74035a4b092b72bd3
+ * @generated SignedSource<<b296ace0afa01bc277a6983b194d628a>>
+ * @relayHash aef80257c96a87d889657b7565675077
  * @flow
  * @nogrep
  */
@@ -29,6 +29,8 @@ query relay_rootQuery {
 fragment AppContainer_viewer on User {
   id
   username
+  email
+  level
 }
 */
 
@@ -89,13 +91,27 @@ const batch /*: ConcreteBatch*/ = {
             "args": null,
             "name": "username",
             "storageKey": null
+          },
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "args": null,
+            "name": "email",
+            "storageKey": null
+          },
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "args": null,
+            "name": "level",
+            "storageKey": null
           }
         ],
         "storageKey": null
       }
     ]
   },
-  "text": "query relay_rootQuery {\n  viewer {\n    ...AppContainer_viewer\n    id\n  }\n}\n\nfragment AppContainer_viewer on User {\n  id\n  username\n}\n"
+  "text": "query relay_rootQuery {\n  viewer {\n    ...AppContainer_viewer\n    id\n  }\n}\n\nfragment AppContainer_viewer on User {\n  id\n  username\n  email\n  level\n}\n"
 };
 
 module.exports = batch;

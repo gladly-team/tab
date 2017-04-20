@@ -25,6 +25,16 @@ export default createFragmentContainer(App, {
     fragment AppContainer_viewer on User {
       id
       username
+      email
+      level
     }
   `,
+  user: graphql`
+    fragment AppContainer_user on User {
+      id
+      username
+      email
+      level
+    }
+  `
 });

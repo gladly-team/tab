@@ -22,13 +22,16 @@ class RelayRoot extends React.Component {
     return (<QueryRenderer
         environment={environment}
         query={graphql`
-          query relay_rootQuery {
+          query relay_rootQuery($userId: ID!) {
             viewer {
               ...AppContainer_viewer
             }
+            user(userId: $userId) {
+              ...AppContainer_user
+            }
           }
         `}
-        variables={{status: null}}
+        variables={{userId: "45bbefbf-63d1-4d36-931e-212fbe2bc3d9"}}
         render={({error, props}) => {
           if (props) {
             return <AppContainer viewer={props.viewer} />
