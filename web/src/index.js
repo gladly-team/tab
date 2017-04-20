@@ -6,7 +6,7 @@ if (!global._babelPolyfill) {
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
-import Root from './relay-root';
+import Root from './root';
 
 const rootNode = document.createElement('div');
 document.body.appendChild(rootNode);
