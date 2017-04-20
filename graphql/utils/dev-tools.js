@@ -1,4 +1,4 @@
-import config from '../config/environment';
+
 const logger = {};
 
 logger.error = function(msg, error) {
@@ -8,13 +8,13 @@ logger.error = function(msg, error) {
 
 const DBLogger = {
   action: (action, params) => {
-  	if(config.env == 'prod' || config.env == 'production')
-  		return
+  	if(process.env.NODE_ENV === 'production')
+  		return;
     console.log(`Received action: ${action} with params: `, params);
   },
   response: (action, data) => {
-  	if(config.env == 'prod' || config.env == 'production')
-  		return
+  	if(process.env.NODE_ENV === 'production')
+  		return;
     console.log(`Response from action: ${action}: `, data);
   }
 }
