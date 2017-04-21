@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Relay from 'react-relay';
 import UpdateVcMutation from 'mutations/UpdateVcMutation';
-import LinearProgress from 'material-ui/LinearProgress';
+import FontIcon from 'material-ui/FontIcon';
 
 class VcUser extends Component {
 
@@ -18,61 +18,39 @@ class VcUser extends Component {
     const heartsToLevelUp = user.heartsUntilNextLevel;
 
     const container = {
-      position: 'fixed',
-      bottom: 0,
-      left: 0,
-      background: 'black',
-      width: '100vw',
-      height: 90,
+      textAlign: 'center'
     };
-
-    const text = {
-      color: 'white',
-      textAlign: 'center',
-    }
-
-    const userProgress = {
-      display: 'flex',
-      width: 250,
-      justifyContent: 'center'
-    }
 
     const progressContainer = {
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'space-between',
-      alignItems: 'left',
-      padding: 10,
+      alignItems: 'center',
     }
 
-    const currentStatsContainer = {
-      padding: 10
+    const currentVc = {
+      color: 'white',
+      fontSize: '7em',
+      fontWeight: 'normal',
+      fontFamily: "'Helvetica Neue', Roboto, 'Segoe UI', Calibri, sans-serif",
+      marginTop: 10,
+      marginBottom: 10,
     }
 
-    const progressBar = {
-      height: 8,
+    const text = {
+      color: 'white',
+      textAlign: 'center',
+      fontSize: '2em',
+      fontWeight: 'normal',
+      fontFamily: "'Comic Sans MS', cursive, sans-serif"
     }
+
 
     return (
       <div style={container}>
-        <div style={userProgress}>
-          <div style={progressContainer}>
-            <div 
-              data-test-id={'tabber-level'}
-              style={text}>Level {user.level} Tabber</div>
-            <LinearProgress 
-              style={progressBar}
-              color={'orange'}
-              mode={'determinate'}
-              value={user.vcAllTime} 
-              max={user.vcAllTime + user.heartsUntilNextLevel}/>
-            <div style={text}>{heartsToLevelUp} Hearts to level-up</div>
-          </div>
-          <div style={currentStatsContainer}>
-            <p 
-              data-test-id={'current-hearts'}
-              style={text}>{user.vcCurrent} Hearts</p>
-          </div>
+        <div style={progressContainer}>
+          <h1 style={currentVc}>{user.vcCurrent} <i className="fa fa-heart-o"/></h1>
+          <div style={text}>Level {user.level} Tabber</div>
         </div>
       </div>
     );
