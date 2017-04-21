@@ -7,7 +7,13 @@ import express from 'express';
 
 import getLambdas from './lambdas';
 
-const EXPRESS_PORT = 8001;
+// Load environment variables from .env file.
+// https://github.com/keithmorris/node-dotenv-extended
+require('dotenv-extended').load();
+
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+const LAMBDA_PORT = process.env.LAMBDA_PORT;
+
 let appServer;
 
 function startServer(callback) {
@@ -38,9 +44,9 @@ function startServer(callback) {
     }
   });
 
-  appServer = app.listen(EXPRESS_PORT, () => {
+  appServer = app.listen(LAMBDA_PORT, () => {
     console.log(
-      `Lambda service is now running on http://localhost:${EXPRESS_PORT}`
+      `Lambda service is now running on http://localhost:${LAMBDA_PORT}`
     );
     if (callback) {
       callback();

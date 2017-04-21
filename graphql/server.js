@@ -6,7 +6,12 @@ import path from 'path';
 import {clean} from 'require-clean';
 import {exec} from 'child_process';
 
-const GRAPHQL_PORT = 8080;
+// Load environment variables from .env file.
+// https://github.com/keithmorris/node-dotenv-extended
+require('dotenv-extended').load();
+
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+const GRAPHQL_PORT = process.env.GRAPHQL_PORT;
 
 let graphQLServer;
 

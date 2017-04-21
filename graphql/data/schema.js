@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars, no-use-before-define */
-import config from '../config/environment';
+
+const staticRoot = process.env.S3_ENDPOINT;
 
 import {
   GraphQLBoolean,
@@ -123,7 +124,7 @@ const backgroundImageType = new GraphQLObjectType({
     url: {
       type: GraphQLString,
       resolve: (image) => {
-        return config.staticFiles.root + image.fileName
+        return staticRoot + '/' + image.fileName;
       }
     }
   }),
@@ -149,7 +150,7 @@ const imageType = new GraphQLObjectType({
     url: {
       type: GraphQLString,
       resolve: (image) => {
-        return config.staticFiles.root + image.fileName
+        return staticRoot + '/' + image.fileName;
       }
     }
   })

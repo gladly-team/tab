@@ -16,22 +16,10 @@ const htmlTemplate = new HtmlWebpackPlugin({
   inject: false
 });
 const favIcon = new FaviconsWebpackPlugin(paths.appLogo);
-let plugins;
-plugins = [
-    new webpack.optimize.CommonsChunkPlugin({name: 'vendor', filename: 'vendor.js'}),
-    new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NamedModulesPlugin(),
-    new webpack.DefinePlugin({
-      __DEV__: true
-    }),
-    htmlTemplate,
-    favIcon
-  ];
 
 let appEntry;
 appEntry = [
-    'webpack-dev-server/client?http://localhost:3000',
+    `webpack-dev-server/client?http://${process.env.WEB_HOST}:${process.env.WEB_PORT}`,
     'webpack/hot/only-dev-server',
     'react-hot-loader/patch',
     // Include an alternative client for WebpackDevServer. A client's job is to
@@ -191,7 +179,17 @@ module.exports = {
   //     }),
   //   ];
   // },
-  plugins,
+  plugins: [
+    new webpack.optimize.CommonsChunkPlugin({name: 'vendor', filename: 'vendor.js'}),
+    new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NamedModulesPlugin(),
+    // Makes some environment variables available to the JS code, for example:
+    // if (process.env.NODE_ENV === 'development') { ... }. See `./env.js`.
+    new webpack.DefinePlugin(env),
+    htmlTemplate,
+    favIcon
+  ],
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.
   node: {

@@ -1,15 +1,14 @@
 /** @module database */
 
-import config from '../config/environment';
 import { DBLogger } from '../utils/dev-tools';
 
 var AWS = require('aws-sdk');
 
 AWS.config.update({
-  region: config.dynamoDB.region,
-  endpoint: config.dynamoDB.endpoint,
-  accessKeyId: config.dynamoDB.accessKeyId,
-  secretAccessKey: config.dynamoDB.secretAccessKey
+  region: process.env.AWS_REGION,
+  endpoint: process.env.DYNAMODB_ENDPOINT,
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_KEY
 });
 
 var dynamoDb = new AWS.DynamoDB.DocumentClient();
