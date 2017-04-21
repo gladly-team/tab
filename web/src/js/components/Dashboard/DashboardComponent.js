@@ -7,11 +7,13 @@ import BackgroundImagePickerContainer from '../BackgroundImage/BackgroundImagePi
 import DonateVcContainer from '../Donate/DonateVcContainer';
 
 import Dialog from 'material-ui/Dialog';
-import RaisedButton from 'material-ui/RaisedButton';
+import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
 
 import {
-	deepPurple500
+	deepPurple500,
+  grey300,
+  grey50
 } from 'material-ui/styles/colors';
 
 class Dashboard extends React.Component {
@@ -43,7 +45,6 @@ class Dashboard extends React.Component {
 
     const content = {
       display: 'flex',
-      flexDirection: 'column',
       height: '100vh',
       position: 'absolute',
       top: 0,
@@ -53,27 +54,41 @@ class Dashboard extends React.Component {
       width: '100vw',
       height: '100vh',
       zIndex: 'auto',
-      backgroundColor: 'rgba(0,0,0,.4)'
+      backgroundColor: 'rgba(0,0,0,.6)',
+      alignItems: 'center',
+      justifyContent: 'center',
     }
 
     const greeting = {
-      color: 'white',
-      height: 330,
-      paddingTop: 50,
       textAlign: 'center'
     };
 
     const subtitle = {
-      fontSize: '3em',
-      fontWeight: 'bold',
+      color: 'white',
+      fontSize: '2.5em',
+      fontWeight: 'lighter',
     };
 
     const actioBtnContainer = {
       position: 'absolute',
-      bottom: 10,
-      right: 10,
+      top: 10,
+      left: 50,
       display: 'flex',
-      flexDirection: 'column',
+      width: 100,
+      justifyContent: 'space-around'
+    }
+
+    const quote = {
+      position: 'absolute',
+      bottom: 10,
+      color: 'white',
+      textAlign: 'center',
+      fontSize: '1em',
+      fontWeight: 'normal',
+      fontFamily: "'Comic Sans MS', cursive, sans-serif",
+      width: 300,
+      marginLeft: 'auto',
+      marginRight: 'auto',
     }
 
     return (
@@ -82,30 +97,28 @@ class Dashboard extends React.Component {
         <div style={content}>
           <div style={greeting}>
             <UserDisplay user={user} />
-            <h1 style={subtitle}>Surf the web, save the world.</h1>
+            <VcUser user={user} />
+            <h1 style={quote}>“Surf the web, save the world.”</h1>
           </div>
         </div>
-        <VcUser user={user} />
         <div style={actioBtnContainer}>
-          <RaisedButton 
-            onClick={this.changeBkgSelectorState.bind(this, true)}
-            label={"CHANGE BACKGROUND"} 
-            primary={true}
-            icon={
-              <FontIcon 
-                className="fa fa-picture-o" />
-            }/>
+          <IconButton 
+            tooltip="Change background"
+            onClick={this.changeBkgSelectorState.bind(this, true)}>
+              <FontIcon
+                color={grey300}
+                hoverColor={'#FFF'}
+                className="fa fa-picture-o fa-lg" />
+          </IconButton>
 
-          <br/>
-          
-          <RaisedButton 
-            onClick={this.changeDonateDialogState.bind(this, true)}
-            label={"DONATE"} 
-            secondary={true}
-            icon={
-              <FontIcon 
-                className="fa fa-heart"/>
-            }/>
+          <IconButton 
+            tooltip="Donate to a Charity"
+            onClick={this.changeDonateDialogState.bind(this, true)}>
+            <FontIcon 
+              color={grey300}
+              hoverColor={'#FFF'}
+              className="fa fa-heart-o fa-lg" />
+          </IconButton>
         </div>
 
         <Dialog

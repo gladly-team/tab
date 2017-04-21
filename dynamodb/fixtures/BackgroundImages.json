@@ -13,5 +13,25 @@
     "id": "3caf69b6-9803-4495-9a5c-5ae0316bf367",
     "name": "Cup of Joe",
     "fileName": "cup.jpg"
+  },
+  {
+    "id": "a9f5ed54-6246-46ae-af0a-d58685e93ea5",
+    "name": "Invoker",
+    "fileName": "invoker.jpg"
+  },
+  {
+    "id": "74f24001-61dd-4080-81ac-9455f1df5ee8",
+    "name": "Slark",
+    "fileName": "slark.jpg"
+  },
+  {
+    "id": "e9175123-f763-446d-b99f-df4ef4ffd18e",
+    "name": "Dota2",
+    "fileName": "dota2.jpg"
+  },
+  {
+    "id": "eac49a7c-c933-4618-8ddc-a7a1ee0e0abf",
+    "name": "Shadow Fiend",
+    "fileName": "shadowfiend.jpg"
   }
 ]
