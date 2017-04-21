@@ -13,7 +13,7 @@ function fetchQuery(
   cacheConfig,
   uploadables,
 ) {
-  return fetch('http://localhost:8080/', {
+  return fetch(process.env.GRAPHQL_ENDPOINT, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
