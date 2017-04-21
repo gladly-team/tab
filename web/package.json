@@ -79,11 +79,11 @@
     "whatwg-fetch": "2.0.2"
   },
   "scripts": {
-    "start": "nodemon --watch data/schema.graphql scripts/start.js",
+    "start": "node scripts/start.js & yarn run relay",
     "build": "node scripts/build.js",
+    "relay": "relay-compiler --src ./src/ --schema ./data/schema.graphql --watch",
     "test": "jest --env=jsdom --coverage && if-env NODE_ENV=test && codecov || echo 'Skipping test coverage logging.'",
-    "test:watch": "jest --env=jsdom --watch",
-    "relay": "relay-compiler --src ./src/ --schema ./data/schema.graphql"
+    "test:watch": "jest --env=jsdom --watch"
   },
   "jest": {
     "collectCoverageFrom": [
