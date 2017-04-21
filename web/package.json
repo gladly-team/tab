@@ -10,9 +10,9 @@
     "dotenv-extended": "^1.0.4",
     "enzyme": "^2.8.0",
     "if-env": "^1.0.0",
-    "relay-compiler": "dev",
     "lodash": "^4.17.4",
-    "react-addons-test-utils": "^15.4.2"
+    "react-addons-test-utils": "^15.4.2",
+    "relay-compiler": "1.0.0-rc.2"
   },
   "dependencies": {
     "autoprefixer": "6.5.1",
