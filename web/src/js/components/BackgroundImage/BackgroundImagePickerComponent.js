@@ -6,9 +6,6 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {List, ListItem} from 'material-ui/List';
 import SetBackgroundImageMutation from 'mutations/SetBackgroundImageMutation';
 
-import { browserHistory } from 'react-router';
-
-
 class BackgroundImagePicker extends React.Component {
   
   constructor(props) {
@@ -19,9 +16,9 @@ class BackgroundImagePicker extends React.Component {
   }
 
   componentDidMount() {
-    const { viewer } = this.props;
+    const { app } = this.props;
     this.setState({
-      selectedImage: viewer.backgroundImages.edges[0].node
+      selectedImage: app.backgroundImages.edges[0].node
     });
   }
 
@@ -33,17 +30,17 @@ class BackgroundImagePicker extends React.Component {
   }
 
   updateImageBackground() {
-    const setBckImageMutation = new SetBackgroundImageMutation({ 
-      viewer: this.props.viewer,
-      imageId: this.state.selectedImage.id});
+    SetBackgroundImageMutation.commit(
+      this.props.relay.environment,
+      this.props.user.id,
+      this.state.selectedImage
+    );
 
-    Relay.Store.commitUpdate(setBckImageMutation);
-
-    browserHistory.push('/');
+    this.props.onImageSelected(this.state.selectedImage);
   }
 
   render() {
-    const { viewer } = this.props;
+    const { app } = this.props;
     
     
     const main = {
@@ -71,7 +68,7 @@ class BackgroundImagePicker extends React.Component {
       <div style={main}>
         <h1 style={title}>Choose a cool background image</h1>
         <List>
-          {viewer.backgroundImages.edges.map((edge) => {
+          {app.backgroundImages.edges.map((edge) => {
               return (<ListItem onClick={this.onImageSelected.bind(this, edge.node)} key={edge.node.id} primaryText={edge.node.name} />)
           })}
         </List>
@@ -89,7 +86,9 @@ class BackgroundImagePicker extends React.Component {
 }
 
 BackgroundImagePicker.propTypes = {
-  viewer: React.PropTypes.object.isRequired
+  app: React.PropTypes.object.isRequired,
+  user: React.PropTypes.object.isRequired,
+  onImageSelected: React.PropTypes.func.isRequired
 };
 
 export default BackgroundImagePicker;

@@ -1,5 +1,6 @@
 process.env.NODE_ENV = 'development';
 
+var exec = require('child_process').exec;
 var path = require('path');
 
 // Load environment variables from .env file. Suppress warnings using silent
@@ -274,11 +275,31 @@ function runDevServer(host, port, protocol) {
   });
 }
 
+function runRelayCompiler(callback) {
+  // Compile the relay app.
+  exec('yarn run relay', (error, stdout) => {
+    console.log(stdout);
+    
+    if(error) {
+      console.log('Relay Compiler Failed with; ', error);
+    }
+    
+    function handleTaskDone() {
+      if (callback) {
+        callback();
+      }
+    }
+    handleTaskDone();
+  });
+}
+
 function run(port) {
   var protocol = process.env.HTTPS === 'true' ? "https" : "http";
   var host = process.env.WEB_HOST || 'localhost';
   setupCompiler(host, port, protocol);
-  runDevServer(host, port, protocol);
+  runRelayCompiler(() => {
+    runDevServer(host, port, protocol);
+  });
 }
 
 run(DEFAULT_PORT);

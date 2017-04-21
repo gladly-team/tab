@@ -1,16 +1,25 @@
-import Relay from 'react-relay';
-import Dashboard from './DashboardComponent';
-import VcUser from '../User/VcUserContainer';
-import UserDisplay from '../User/UserDisplayContainer';
-import UserBackgroundImage from '../User/UserBackgroundImageContainer';
+import React from 'react';
+import {
+  createFragmentContainer,
+  graphql,
+} from 'react-relay/compat';
 
-export default Relay.createContainer(Dashboard, {
-  fragments: {
-    viewer: () => Relay.QL`
-      fragment on User {
-        ${VcUser.getFragment('viewer')}
-        ${UserDisplay.getFragment('viewer')}
-        ${UserBackgroundImage.getFragment('viewer')}
-      }`
-  }
+import Dashboard from './DashboardComponent';
+
+export default createFragmentContainer(Dashboard, {
+  user: graphql`
+    fragment DashboardContainer_user on User {
+      ...UserDisplayContainer_user,
+      ...UserBackgroundImageContainer_user,
+      ...VcUserContainer_user,
+      ...BackgroundImagePickerContainer_user,
+      ...DonateVcContainer_user,
+    }
+  `,
+  app: graphql`
+    fragment DashboardContainer_app on App {
+      ...BackgroundImagePickerContainer_app,
+      ...DonateVcContainer_app,
+    }
+  `
 });

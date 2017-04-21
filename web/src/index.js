@@ -8,14 +8,6 @@ import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import Root from './root';
 
-import Relay, {
-  DefaultNetworkLayer,
-} from 'react-relay';
-
-Relay.injectNetworkLayer(
-  new DefaultNetworkLayer(process.env.GRAPHQL_ENDPOINT)
-);
-
 const rootNode = document.createElement('div');
 document.body.appendChild(rootNode);
 

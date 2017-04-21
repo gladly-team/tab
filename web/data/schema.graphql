@@ -1,0 +1,232 @@
+input AddFeatureInput {
+  name: String!
+  description: String!
+  url: String!
+  clientMutationId: String
+}
+
+type AddFeaturePayload {
+  featureEdge: FeatureEdge
+  viewer: User
+  clientMutationId: String
+}
+
+# Global app fields
+type App implements Node {
+  # The ID of an object
+  id: ID!
+
+  # Features that I have
+  features(after: String, first: Int, before: String, last: Int): FeatureConnection
+
+  # All the charities
+  charities(after: String, first: Int, before: String, last: Int): CharityConnection
+
+  # All the background Images
+  backgroundImages(after: String, first: Int, before: String, last: Int): BackgroundImageConnection
+}
+
+# A background image
+type BackgroundImage implements Node {
+  # The ID of an object
+  id: ID!
+
+  # the background image name
+  name: String
+
+  # The image file name
+  fileName: String
+  url: String
+}
+
+# A connection to a list of items.
+type BackgroundImageConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [BackgroundImageEdge]
+}
+
+# An edge in a connection.
+type BackgroundImageEdge {
+  # The item at the end of the edge
+  node: BackgroundImage
+
+  # A cursor for use in pagination
+  cursor: String!
+}
+
+# A charitable charity
+type Charity implements Node {
+  # The ID of an object
+  id: ID!
+
+  # the charity name
+  name: String
+
+  # the charity category
+  category: String
+}
+
+# A connection to a list of items.
+type CharityConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [CharityEdge]
+}
+
+# An edge in a connection.
+type CharityEdge {
+  # The item at the end of the edge
+  node: Charity
+
+  # A cursor for use in pagination
+  cursor: String!
+}
+
+input DonateVcInput {
+  userId: String!
+  charityId: String!
+  vc: Int!
+  clientMutationId: String
+}
+
+type DonateVcPayload {
+  user: User
+  clientMutationId: String
+}
+
+# Feature integrated in our starter kit
+type Feature implements Node {
+  # The ID of an object
+  id: ID!
+
+  # Name of the feature
+  name: String
+
+  # Description of the feature
+  description: String
+
+  # Url of the feature
+  url: String
+}
+
+# A connection to a list of items.
+type FeatureConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [FeatureEdge]
+}
+
+# An edge in a connection.
+type FeatureEdge {
+  # The item at the end of the edge
+  node: Feature
+
+  # A cursor for use in pagination
+  cursor: String!
+}
+
+# An image object
+type Image {
+  # The image id
+  id: String
+
+  # The image name
+  name: String
+
+  # The image file name
+  fileName: String
+  url: String
+}
+
+type Mutation {
+  addFeature(input: AddFeatureInput!): AddFeaturePayload
+  updateVc(input: UpdateVcInput!): UpdateVcPayload
+  donateVc(input: DonateVcInput!): DonateVcPayload
+  setUserBkgImage(input: SetUserBkgImageInput!): SetUserBkgImagePayload
+}
+
+# An object with an ID
+interface Node {
+  # The id of the object.
+  id: ID!
+}
+
+# Information about pagination in a connection.
+type PageInfo {
+  # When paginating forwards, are there more items?
+  hasNextPage: Boolean!
+
+  # When paginating backwards, are there more items?
+  hasPreviousPage: Boolean!
+
+  # When paginating backwards, the cursor to continue.
+  startCursor: String
+
+  # When paginating forwards, the cursor to continue.
+  endCursor: String
+}
+
+type Query {
+  # Fetches an object given its ID
+  node(
+    # The ID of an object
+    id: ID!
+  ): Node
+  app: App
+  user(userId: String!): User
+}
+
+input SetUserBkgImageInput {
+  userId: String!
+  imageId: String!
+  clientMutationId: String
+}
+
+type SetUserBkgImagePayload {
+  user: User
+  clientMutationId: String
+}
+
+input UpdateVcInput {
+  userId: String!
+  clientMutationId: String
+}
+
+type UpdateVcPayload {
+  user: User
+  clientMutationId: String
+}
+
+# A person who uses our app
+type User implements Node {
+  # The ID of an object
+  id: ID!
+
+  # Users's background image
+  backgroundImage: Image
+
+  # Users's username
+  username: String
+
+  # User's email
+  email: String
+
+  # User's current vc
+  vcCurrent: Int
+
+  # User's vc of all time
+  vcAllTime: Int
+
+  # User's vc
+  level: Int
+
+  # Remaing hearts until next level.
+  heartsUntilNextLevel: Int
+}

@@ -1,9 +1,9 @@
 import React from 'react';
-import Relay from 'react-relay';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import { browserHistory, applyRouterMiddleware, Router } from 'react-router';
-import useRelay from 'react-router-relay';
+
+import { browserHistory, Router } from 'react-router';
 import Routes from './js/routes/Route';
+
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {deepPurple500} from 'material-ui/styles/colors';
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -21,9 +21,8 @@ injectTapEventPlugin();
 const Root = () => (
 	<MuiThemeProvider muiTheme={muiTheme}>
 	  <Router
-	    history={browserHistory} routes={Routes} render={applyRouterMiddleware(useRelay)}
-	    environment={Relay.Store}
-	  />
+	    history={browserHistory} 
+	    routes={Routes} />
 	</MuiThemeProvider>
 );
 
