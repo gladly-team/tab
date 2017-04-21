@@ -150,9 +150,20 @@ module.exports = {
 
           }
         ]
+      },
+      {
+        test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: "assets/[hash].[ext]"
+            }
+          }
+        ]
       }, 
       {
-        test: /\.(png|jpg|jpeg|gif|svg|woff|woff2)$/,
+        test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|ttf)$/,
         use: [
           {
             loader: 'url-loader',

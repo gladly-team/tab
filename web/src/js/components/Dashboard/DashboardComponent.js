@@ -8,6 +8,7 @@ import DonateVcContainer from '../Donate/DonateVcContainer';
 
 import Dialog from 'material-ui/Dialog';
 import RaisedButton from 'material-ui/RaisedButton';
+import FontIcon from 'material-ui/FontIcon';
 
 import {
 	deepPurple500
@@ -89,14 +90,22 @@ class Dashboard extends React.Component {
           <RaisedButton 
             onClick={this.changeBkgSelectorState.bind(this, true)}
             label={"CHANGE BACKGROUND"} 
-            primary={true}/>
+            primary={true}
+            icon={
+              <FontIcon 
+                className="fa fa-picture-o" />
+            }/>
 
           <br/>
           
           <RaisedButton 
             onClick={this.changeDonateDialogState.bind(this, true)}
             label={"DONATE"} 
-            secondary={true}/>
+            secondary={true}
+            icon={
+              <FontIcon 
+                className="fa fa-heart"/>
+            }/>
         </div>
 
         <Dialog
