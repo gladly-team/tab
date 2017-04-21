@@ -10,9 +10,9 @@
     "dotenv-extended": "^1.0.4",
     "enzyme": "^2.8.0",
     "if-env": "^1.0.0",
-    "relay-compiler": "dev",
     "lodash": "^4.17.4",
-    "react-addons-test-utils": "^15.4.2"
+    "react-addons-test-utils": "^15.4.2",
+    "relay-compiler": "1.0.0-rc.2"
   },
   "dependencies": {
     "autoprefixer": "6.5.1",
@@ -79,11 +79,12 @@
     "whatwg-fetch": "2.0.2"
   },
   "scripts": {
-    "start": "nodemon --watch data/schema.graphql scripts/start.js",
+    "start":  "yarn run relay && nodemon --watch data/schema.graphql scripts/start.js & yarn run relay:watch",
     "build": "node scripts/build.js",
+    "relay": "relay-compiler --src ./src/ --schema ./data/schema.graphql",
+    "relay:watch": "nodemon --watch src/ --watch data/schema.graphql --ignore **/__generated__/**/* --exec \"yarn run relay\"",
     "test": "jest --env=jsdom --coverage && if-env NODE_ENV=test && codecov || echo 'Skipping test coverage logging.'",
-    "test:watch": "jest --env=jsdom --watch",
-    "relay": "relay-compiler --src ./src/ --schema ./data/schema.graphql"
+    "test:watch": "jest --env=jsdom --watch"
   },
   "jest": {
     "collectCoverageFrom": [
