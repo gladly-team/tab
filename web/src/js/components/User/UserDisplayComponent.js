@@ -1,6 +1,8 @@
 import React from 'react';
 import Relay from 'react-relay';
 
+import { FormattedMessage } from 'react-intl';
+
 class UserDisplay extends React.Component {
 
   render() {
@@ -24,11 +26,18 @@ class UserDisplay extends React.Component {
 
     return (
       <span style={container}>
-        <h1 style={title}>Welcome, {user.username}</h1>
+        <h1 style={title}>
+          <FormattedMessage
+            id={'app.welcome'}
+            defaultMessage={ 'Welcome, {name}' }
+            values={{ name: user.username }}/>
+        </h1>
       </span>
     );
   }
 }
+
+// Welcome, {user.username}
 
 UserDisplay.propTypes = {
   user: React.PropTypes.object.isRequired

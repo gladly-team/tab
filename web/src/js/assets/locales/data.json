@@ -1,0 +1,8 @@
+{ "en": 
+	{
+  		"app.welcome": "Welcome, {name}"
+  	},
+  "es": {
+  		"app.welcome": "Bienvenido, {name}"
+  	}
+}
