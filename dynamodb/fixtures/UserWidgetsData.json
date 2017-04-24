@@ -1,0 +1,26 @@
+[
+  {
+  	"userId": "45bbefbf-63d1-4d36-931e-212fbe2bc3d9",
+    "widgetId": "a458d2da-550b-414f-895a-7bcb2cbc9d62",
+    "enabled": true,
+    "data": {
+    	"bookmarks": [
+    		{
+    			"id": 1,
+    			"display": "Google",
+    			"link": "https://www.google.com/" 
+    		},
+    		{
+    			"id": 2,
+    			"display": "Netflix",
+    			"link": "https://www.netflix.com/" 
+    		},
+    		{
+    			"id": 3,
+    			"display": "Beyond the Summit",
+    			"link": "https://www.twitch.tv/beyondthesummit" 
+    		}
+    	]
+    }
+  }
+]

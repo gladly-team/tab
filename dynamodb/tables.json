@@ -26,7 +26,7 @@
     }
   },
   {
-    "TableName": "Features",
+    "TableName": "Widgets",
     "KeySchema": [       
       { "AttributeName": "id", "KeyType": "HASH"}
     ],
@@ -73,6 +73,19 @@
     ],
     "AttributeDefinitions": [       
       { "AttributeName": "id", "AttributeType": "S" }
+    ],
+    "ProvisionedThroughput": {       
+      "ReadCapacityUnits": 10, 
+      "WriteCapacityUnits": 10
+    }
+  },
+  {
+    "TableName": "UserWidgets",
+    "KeySchema": [       
+      { "AttributeName": "userId", "KeyType": "HASH"}
+    ],
+    "AttributeDefinitions": [       
+      { "AttributeName": "userId", "AttributeType": "S" }
     ],
     "ProvisionedThroughput": {       
       "ReadCapacityUnits": 10, 

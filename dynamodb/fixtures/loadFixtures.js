@@ -50,6 +50,14 @@ var fixtures = [
   {
     tableName: 'BackgroundImages',
     jsonFile: 'BackgroundImages.json'
+  },
+  {
+    tableName: 'Widgets',
+    jsonFile: 'WidgetsData.json'
+  },
+  {
+    tableName: 'UserWidgets',
+    jsonFile: 'UserWidgetsData.json'
   }
 ];
 

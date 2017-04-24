@@ -28,11 +28,10 @@ import {
 } from 'graphql-relay';
 
 import {
-  Feature,
-  addFeature,
-  getFeature,
-  getFeatures
-} from '../database/features/feature';
+  Widget,
+  getWidget,
+  getUserWidgets
+} from '../database/widgets/widgets';
 
 import {
   User,
@@ -79,8 +78,8 @@ const { nodeInterface, nodeField } = nodeDefinitions(
       return App.getApp(id);
     } else if (type === 'User') {
       return getUser(id);
-    } else if (type === 'Feature') {
-      return getFeature(id);
+    } else if (type === 'Widget') {
+      return getWidget(id);
     } else if (type === 'Charity') {
       return getCharity(id);
     } else if (type === 'BackgroundImage') {
@@ -93,8 +92,8 @@ const { nodeInterface, nodeField } = nodeDefinitions(
       return appType;
     } else if (obj instanceof User) {
       return userType;
-    } else if (obj instanceof Feature) {
-      return featureType;
+    } else if (obj instanceof Widget) {
+      return widgetType;
     } else if (obj instanceof Charity) {
       return charityType;
     } else if (obj instanceof BackgroundImage) {
@@ -188,27 +187,41 @@ const userType = new GraphQLObjectType({
     heartsUntilNextLevel: {
       type: GraphQLInt,
       description: 'Remaing hearts until next level.'
-    }
+    },
+    widgets: {
+      type: widgetConnection,
+      description: 'User widgets',
+      args: connectionArgs,
+      resolve: (user, args) => connectionFromPromisedArray(getUserWidgets(user.id), args)
+    },
   }),
   interfaces: [nodeInterface]
 });
 
-const featureType = new GraphQLObjectType({
-  name: 'Feature',
-  description: 'Feature integrated in our starter kit',
+const widgetType = new GraphQLObjectType({
+  name: 'Widget',
+  description: 'App widget',
   fields: () => ({
-    id: globalIdField('Feature'),
+    id: globalIdField('Widget'),
     name: {
       type: GraphQLString,
-      description: 'Name of the feature'
+      description: 'Widget display name'
     },
-    description: {
+    type: {
       type: GraphQLString,
-      description: 'Description of the feature'
+      description: 'Widget type'
     },
-    url: {
+    icon: {
       type: GraphQLString,
-      description: 'Url of the feature'
+      description: 'Widget icon'
+    },
+    enabled: {
+      type: GraphQLBoolean,
+      description: 'The Widget enabled state'
+    },
+    data: {
+      type: GraphQLString,
+      description: 'Widget data.'
     }
   }),
   interfaces: [nodeInterface]
@@ -236,12 +249,6 @@ const appType = new GraphQLObjectType({
   description: 'Global app fields',
   fields: () => ({
     id: globalIdField('App'),
-    features: {
-      type: featureConnection,
-      description: 'Features that I have',
-      args: connectionArgs,
-      resolve: (_, args) => connectionFromPromisedArray(getFeatures(), args)
-    },
     charities: {
       type: charityConnection,
       description: 'All the charities',
@@ -261,7 +268,7 @@ const appType = new GraphQLObjectType({
 /**
  * Define your own connection types here
  */
-const { connectionType: featureConnection, edgeType: featureEdge } = connectionDefinitions({ name: 'Feature', nodeType: featureType });
+const { connectionType: widgetConnection, edgeType: widgetEdge } = connectionDefinitions({ name: 'Widget', nodeType: widgetType });
 const { connectionType: charityConnection, edgeType: charityEdge } = connectionDefinitions({ name: 'Charity', nodeType: charityType });
 const { connectionType: backgroundImageConnection, edgeType: backgroundImageEdge } = connectionDefinitions({ name: 'BackgroundImage', nodeType: backgroundImageType });
 
@@ -330,59 +337,59 @@ const setUserBkgImageMutation = mutationWithClientMutationId({
   }
 });
 
-const addFeatureMutation = mutationWithClientMutationId({
-  name: 'AddFeature',
-  inputFields: {
-    name: { type: new GraphQLNonNull(GraphQLString) },
-    description: { type: new GraphQLNonNull(GraphQLString) },
-    url: { type: new GraphQLNonNull(GraphQLString) },
-  },
+// const addFeatureMutation = mutationWithClientMutationId({
+//   name: 'AddFeature',
+//   inputFields: {
+//     name: { type: new GraphQLNonNull(GraphQLString) },
+//     description: { type: new GraphQLNonNull(GraphQLString) },
+//     url: { type: new GraphQLNonNull(GraphQLString) },
+//   },
 
-  outputFields: {
-    featureEdge: {
-      type: featureEdge,
-      resolve: (obj) => {
-        return Promise.resolve(getFeatures())
-        .then(features => {
-            // This code it's what we should actually do in here 
+//   outputFields: {
+//     featureEdge: {
+//       type: featureEdge,
+//       resolve: (obj) => {
+//         return Promise.resolve(getFeatures())
+//         .then(features => {
+//             // This code it's what we should actually do in here 
 
-            // const cursorId = cursorForObjectInConnection(features, obj);
-            // return { node: features[offset], cursor: cursorId};
+//             // const cursorId = cursorForObjectInConnection(features, obj);
+//             // return { node: features[offset], cursor: cursorId};
 
-            // The previous code doesn't work because the cursorForObjectInConnection 
-            // uses indexOf(compare using memory reference) to get the position of object 
-            // obj in features check cursorForObjectInConnection
-            // definition at https://github.com/graphql/graphql-relay-js/blob/master/src/connection/arrayconnection.js
-            // The following code it's a workaround to the previous one. 
-            // It searches for the obj by id in the list of features, then
-            // encode the index and return the edge object.
+//             // The previous code doesn't work because the cursorForObjectInConnection 
+//             // uses indexOf(compare using memory reference) to get the position of object 
+//             // obj in features check cursorForObjectInConnection
+//             // definition at https://github.com/graphql/graphql-relay-js/blob/master/src/connection/arrayconnection.js
+//             // The following code it's a workaround to the previous one. 
+//             // It searches for the obj by id in the list of features, then
+//             // encode the index and return the edge object.
 
-            var offset = -1;
-            for(var i = 0, len = features.length; i < len; i++) {
-                if (features[i].id === obj.id) {
-                    offset = i;
-                    break;
-                }
-            }
+//             var offset = -1;
+//             for(var i = 0, len = features.length; i < len; i++) {
+//                 if (features[i].id === obj.id) {
+//                     offset = i;
+//                     break;
+//                 }
+//             }
 
-            // offsetToCursor creates a hash using the position of the object.
-            if (offset >= 0) {
-              return { node: features[offset], cursor: offsetToCursor(offset)};
-            }
-        })
-        .catch(
-          err => console.error("Unable get the features:", JSON.stringify(err, null, 2))
-        );
-      }
-    },
-    viewer: {
-      type: userType,
-      resolve: () => getUser("45bbefbf-63d1-4d36-931e-212fbe2bc3d9")
-    }
-  },
+//             // offsetToCursor creates a hash using the position of the object.
+//             if (offset >= 0) {
+//               return { node: features[offset], cursor: offsetToCursor(offset)};
+//             }
+//         })
+//         .catch(
+//           err => console.error("Unable get the features:", JSON.stringify(err, null, 2))
+//         );
+//       }
+//     },
+//     viewer: {
+//       type: userType,
+//       resolve: () => getUser("45bbefbf-63d1-4d36-931e-212fbe2bc3d9")
+//     }
+//   },
 
-  mutateAndGetPayload: ({ name, description, url }) => addFeature(name, description, url)
-});
+//   mutateAndGetPayload: ({ name, description, url }) => addFeature(name, description, url)
+// });
 
 
 /**
@@ -415,7 +422,6 @@ const queryType = new GraphQLObjectType({
 const mutationType = new GraphQLObjectType({
   name: 'Mutation',
   fields: () => ({
-    addFeature: addFeatureMutation,
     updateVc: updateVcMutation,
     donateVc: donateVcMutation,
     setUserBkgImage: setUserBkgImageMutation
