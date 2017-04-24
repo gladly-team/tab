@@ -144,11 +144,7 @@ var getUserWidgets =  Async (function(userId) {
     if(!keys.length)
       return [];
 
-    const args = {
-      ProjectionExpression: "id, name, type, icon"
-    };
-
-    const widgets = Await (Widget.getBatch(keys, args));
+    const widgets = Await (Widget.getBatch(keys));
 
     const result = [];
     for(var index in widgets) {
