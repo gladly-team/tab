@@ -20,6 +20,10 @@
   "env": {
     "development": {
       "plugins": [
+        ["react-intl", {
+            "messagesDir": "./build/messages/"
+          }
+        ],
         [ "relay", {
             "compat": true, 
             "schema": "data/schema.graphql",

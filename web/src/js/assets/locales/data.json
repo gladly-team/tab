@@ -1,0 +1,10 @@
+{ "en": 
+	{
+  		"app.welcome": "Welcome, {name}",
+  		"app.quote": "“Surf the web, save the world.”"
+  	},
+  "es": {
+  		"app.welcome": "Bienvenido, {name}",
+  		"app.quote": "“Navega la web, salva el mundo.”"
+  	}
+}
