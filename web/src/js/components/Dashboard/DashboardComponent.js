@@ -6,6 +6,8 @@ import UserBackgroundImage from '../User/UserBackgroundImageContainer';
 import BackgroundImagePickerContainer from '../BackgroundImage/BackgroundImagePickerContainer';
 import DonateVcContainer from '../Donate/DonateVcContainer';
 
+import { FormattedMessage } from 'react-intl';
+
 import Dialog from 'material-ui/Dialog';
 import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
@@ -98,7 +100,11 @@ class Dashboard extends React.Component {
           <div style={greeting}>
             <UserDisplay user={user} />
             <VcUser user={user} />
-            <h1 style={quote}>“Surf the web, save the world.”</h1>
+            <h1 style={quote}>
+              <FormattedMessage
+                id={'app.quote'}
+                defaultMessage={ '“Surf the web, save the world.”' }/>
+            </h1>
           </div>
         </div>
         <div style={actioBtnContainer}>
