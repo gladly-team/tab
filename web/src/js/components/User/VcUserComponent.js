@@ -18,7 +18,10 @@ class VcUser extends Component {
     const heartsToLevelUp = user.heartsUntilNextLevel;
 
     const container = {
-      textAlign: 'center'
+      textAlign: 'center',
+      position: 'absolute',
+      top: 10,
+      right: 10,
     };
 
     const progressContainer = {
@@ -30,7 +33,7 @@ class VcUser extends Component {
 
     const currentVc = {
       color: 'white',
-      fontSize: '7em',
+      fontSize: '2em',
       fontWeight: 'normal',
       fontFamily: "'Helvetica Neue', Roboto, 'Segoe UI', Calibri, sans-serif",
       marginTop: 10,
@@ -40,7 +43,7 @@ class VcUser extends Component {
     const text = {
       color: 'white',
       textAlign: 'center',
-      fontSize: '2em',
+      fontSize: '1em',
       fontWeight: 'normal',
       fontFamily: "'Comic Sans MS', cursive, sans-serif"
     }

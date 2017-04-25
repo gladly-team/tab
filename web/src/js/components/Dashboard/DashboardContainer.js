@@ -14,6 +14,7 @@ export default createFragmentContainer(Dashboard, {
       ...VcUserContainer_user,
       ...BackgroundImagePickerContainer_user,
       ...DonateVcContainer_user,
+      ...WidgetsContainer_user
     }
   `,
   app: graphql`

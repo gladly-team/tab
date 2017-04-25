@@ -19,7 +19,17 @@
     			"id": 3,
     			"display": "Beyond the Summit",
     			"link": "https://www.twitch.tv/beyondthesummit" 
-    		}
+    		},
+            {
+                "id": 4,
+                "display": "Hulu",
+                "link": "https://www.hulu.com/" 
+            },
+            {
+                "id": 5,
+                "display": "CNN",
+                "link": "https://www.cnn.com/" 
+            }
     	]
     }
   }
