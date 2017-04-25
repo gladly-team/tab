@@ -203,6 +203,7 @@ var getUserWidgets =  Async (function(userId) {
 function getWidgets(userId) {
   
   var params = {
+      IndexName: "Widgets",
       KeyConditionExpression: "#id = :id",
       ExpressionAttributeNames:{
           "#id": 'userId'
@@ -227,8 +228,6 @@ function getWidgets(userId) {
  */
 var updateUserWidgetData =  Async (function(userId, widgetId, data) {
 
-    const userWidget = Await (getUserWidget(userId, widgetId));
-
     var updateExpression = `SET #data = :data`;
     var expressionAttributeNames = {
          '#data': 'data'
@@ -238,6 +237,7 @@ var updateUserWidgetData =  Async (function(userId, widgetId, data) {
     };
     
     var params = {
+        IndexName: "UserWidget",
         UpdateExpression: updateExpression,
         ExpressionAttributeNames: expressionAttributeNames,
         ExpressionAttributeValues: expressionAttributeValues,

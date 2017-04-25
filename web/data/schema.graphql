@@ -1,3 +1,16 @@
+input AddBookmarkInput {
+  userId: String!
+  widgetId: String!
+  name: String!
+  link: String!
+  clientMutationId: String
+}
+
+type AddBookmarkPayload {
+  data: String
+  clientMutationId: String
+}
+
 # Global app fields
 type App implements Node {
   # The ID of an object
@@ -100,6 +113,7 @@ type Mutation {
   updateVc(input: UpdateVcInput!): UpdateVcPayload
   donateVc(input: DonateVcInput!): DonateVcPayload
   setUserBkgImage(input: SetUserBkgImageInput!): SetUserBkgImagePayload
+  addBookmark(input: AddBookmarkInput!): AddBookmarkPayload
 }
 
 # An object with an ID

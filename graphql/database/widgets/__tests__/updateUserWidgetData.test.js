@@ -24,21 +24,6 @@ test('update user widget data', () => {
 
 
 	database.pushDatabaseOperation(
-		new DatabaseOperation(OperationType.QUERY, (params) => {
-			return { 
-				Items: [
-					{
-						userId: userId,
-						widgetId: widgetId,
-						enabled: true,
-						data: oldData,
-					}
-				] 
-			};
-		})
-	);
-	
-	database.pushDatabaseOperation(
 		new DatabaseOperation(OperationType.UPDATE, (params) => {
 			
 			const receivedData = params.ExpressionAttributeValues[':data'];

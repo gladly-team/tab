@@ -80,7 +80,7 @@ class BookmarksWidget extends React.Component {
                     return (<MenuItem 
                               key={bookmark.id}
                               onClick={this.openLink.bind(this, bookmark.link)}
-                              primaryText={bookmark.display}
+                              primaryText={bookmark.name}
                               leftIcon={
                                 (<img 
                                   style={{width: 16, height: 16, top: 4}}

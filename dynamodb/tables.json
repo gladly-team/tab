@@ -82,7 +82,8 @@
   {
     "TableName": "UserWidgets",
     "KeySchema": [       
-      { "AttributeName": "userId", "KeyType": "HASH"}
+      { "AttributeName": "userId", "KeyType": "HASH"},
+      { "AttributeName": "widgetId", "KeyType": "RANGE"}
     ],
     "AttributeDefinitions": [       
       { "AttributeName": "userId", "AttributeType": "S" },
@@ -90,15 +91,11 @@
     ],
     "GlobalSecondaryIndexes": [ 
       { 
-         "IndexName": "UserWidget",
+         "IndexName": "Widgets",
          "KeySchema": [ 
             { 
                "AttributeName": "userId",
                "KeyType": "HASH"
-            },
-            { 
-               "AttributeName": "widgetId",
-               "KeyType": "RANGE"
             }
          ],
          "Projection": {

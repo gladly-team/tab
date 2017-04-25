@@ -34,6 +34,12 @@ import {
 } from '../database/widgets/widgets';
 
 import {
+  updateBookmarkPosition,
+  addBookmark,
+  deleteBookmark
+} from '../database/widgets/bookmarkWidget';
+
+import {
   User,
   getUser,
   updateUserVc,
@@ -337,6 +343,34 @@ const setUserBkgImageMutation = mutationWithClientMutationId({
   }
 });
 
+/**
+ * Set user background image mutation.
+ */
+const addBookmarkMutation = mutationWithClientMutationId({
+  name: 'AddBookmark',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    widgetId: { type: new GraphQLNonNull(GraphQLString) },
+    name: { type: new GraphQLNonNull(GraphQLString) },
+    link: { type: new GraphQLNonNull(GraphQLString) }
+  },
+  outputFields: {
+    data: {
+      type: GraphQLString,
+      resolve: (userWidget) => {
+        return JSON.stringify(userWidget.data)
+      }
+    }
+  },
+  mutateAndGetPayload: ({userId, widgetId, name, link}) => {
+    const userGlobalObj = fromGlobalId(userId);
+    const widgetGlobalObj = fromGlobalId(widgetId);
+    return addBookmark(userGlobalObj.id, widgetGlobalObj.id, name, link);
+  }
+});
+
+
+
 // const addFeatureMutation = mutationWithClientMutationId({
 //   name: 'AddFeature',
 //   inputFields: {
@@ -424,7 +458,9 @@ const mutationType = new GraphQLObjectType({
   fields: () => ({
     updateVc: updateVcMutation,
     donateVc: donateVcMutation,
-    setUserBkgImage: setUserBkgImageMutation
+    setUserBkgImage: setUserBkgImageMutation,
+
+    addBookmark: addBookmarkMutation,
   })
 });
 
