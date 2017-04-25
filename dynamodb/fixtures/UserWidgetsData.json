@@ -6,28 +6,23 @@
     "data": {
     	"bookmarks": [
     		{
-    			"id": 1,
-    			"display": "Google",
+    			"name": "Google",
     			"link": "https://www.google.com/" 
     		},
     		{
-    			"id": 2,
-    			"display": "Netflix",
+    			"name": "Netflix",
     			"link": "https://www.netflix.com/" 
     		},
     		{
-    			"id": 3,
-    			"display": "Beyond the Summit",
+    			"name": "Beyond the Summit",
     			"link": "https://www.twitch.tv/beyondthesummit" 
     		},
             {
-                "id": 4,
-                "display": "Hulu",
+                "name": "Hulu",
                 "link": "https://www.hulu.com/" 
             },
             {
-                "id": 5,
-                "display": "CNN",
+                "name": "CNN",
                 "link": "https://www.cnn.com/" 
             }
     	]

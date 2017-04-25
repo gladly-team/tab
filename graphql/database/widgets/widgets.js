@@ -1,13 +1,11 @@
 import BaseModel from '../base/model';
 import database from '../database';
 import tablesNames from '../tables';
-import { getNextLevelFor } from '../userLevels/userLevel';
-import { getBackgroundImage } from '../backgroundImages/backgroundImage';
-import { UserReachedMaxLevelException } from '../../utils/exceptions';
-import { logger } from '../../utils/dev-tools';
 
 import Async from 'asyncawait/async';
 import Await from 'asyncawait/await';
+
+import { logger } from '../../utils/dev-tools';
 
 /*
  * Represents a Base Widget. 
@@ -93,9 +91,12 @@ class UserWidget extends BaseModel {
    * Refer to `getKey` in BaseModel for more details.
    */
   static getKey(id) {
-    const key = {}
-    key['userId'] = id
-    return key;
+    if(typeof id === 'string') {
+      return {
+        userId: id,
+      }
+    }
+    return id;
   }
 }
 
@@ -107,6 +108,36 @@ class UserWidget extends BaseModel {
 function getWidget(id) {
   return Widget.get(id)
             .then(widget => widget)
+            .catch(err => {
+                logger.error("Error while getting the widget.", err);
+            });
+}
+
+/**
+ * Fetch the  user widget info from the userId and the widgetId.
+ * @param {string} userId - The user id. 
+ * @param {string} widgetId - The widget id. 
+ * @return {Promise<UserWidget>}  Returns a Promise that resolve into
+ * a UserWidget instance.
+ */
+function getUserWidget(userId, widgetId) {
+  
+  var params = {
+      KeyConditionExpression: "#userId = :userId and #widgetId = :widgetId",
+      ExpressionAttributeNames:{
+          "#userId": 'userId',
+          "#widgetId": 'widgetId'
+      },
+      ExpressionAttributeValues: {
+          ":userId": userId,
+          ":widgetId": widgetId
+      }
+  };
+
+  return UserWidget.query(params)
+            .then(widgets => {
+              return widgets[0];
+            })
             .catch(err => {
                 logger.error("Error while getting the widget.", err);
             });
@@ -188,12 +219,47 @@ function getWidgets(userId) {
             });
 }
 
+/**
+ * Update widget data.
+ * @param {string} userId - The user id. 
+ * @return {Promise<Widget[]>}  Returns a promise that resolves into a
+ * list of widgets.
+ */
+var updateUserWidgetData =  Async (function(userId, widgetId, data) {
+
+    const userWidget = Await (getUserWidget(userId, widgetId));
+
+    var updateExpression = `SET #data = :data`;
+    var expressionAttributeNames = {
+         '#data': 'data'
+    };
+    var expressionAttributeValues = {
+         ':data': data
+    };
+    
+    var params = {
+        UpdateExpression: updateExpression,
+        ExpressionAttributeNames: expressionAttributeNames,
+        ExpressionAttributeValues: expressionAttributeValues,
+        ReturnValues:"ALL_NEW"
+    };
+
+    const key = {
+      userId: userId,
+      widgetId: widgetId
+    };
+
+    return Await (UserWidget.update(key, params));
+});
+
 export {
   Widget,
   UserWidget,
   getWidget,
   getUserWidgets,
-  getWidgets
+  getWidgets,
+  getUserWidget,
+  updateUserWidgetData
 };
 
 

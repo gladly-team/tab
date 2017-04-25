@@ -85,8 +85,31 @@
       { "AttributeName": "userId", "KeyType": "HASH"}
     ],
     "AttributeDefinitions": [       
-      { "AttributeName": "userId", "AttributeType": "S" }
+      { "AttributeName": "userId", "AttributeType": "S" },
+      { "AttributeName": "widgetId", "AttributeType": "S" }
     ],
+    "GlobalSecondaryIndexes": [ 
+      { 
+         "IndexName": "UserWidget",
+         "KeySchema": [ 
+            { 
+               "AttributeName": "userId",
+               "KeyType": "HASH"
+            },
+            { 
+               "AttributeName": "widgetId",
+               "KeyType": "RANGE"
+            }
+         ],
+         "Projection": {
+            "ProjectionType": "ALL"
+         },
+         "ProvisionedThroughput": { 
+            "ReadCapacityUnits": 10,
+            "WriteCapacityUnits": 10
+         }
+      }
+   ],
     "ProvisionedThroughput": {       
       "ReadCapacityUnits": 10, 
       "WriteCapacityUnits": 10

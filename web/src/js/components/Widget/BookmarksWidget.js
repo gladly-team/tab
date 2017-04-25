@@ -65,7 +65,7 @@ class BookmarksWidget extends React.Component {
                 <FontIcon
                   color={grey300}
                   hoverColor={'#FFF'}
-                  className="fa fa-bookmark"/>
+                  className="fa fa-bookmark-o"/>
           </IconButton>
           <Popover
             open={this.state.open}
