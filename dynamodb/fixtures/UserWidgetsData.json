@@ -1,7 +1,7 @@
 [
   {
   	"userId": "45bbefbf-63d1-4d36-931e-212fbe2bc3d9",
-    "widgetId": "a458d2da-550b-414f-895a-7bcb2cbc9d62",
+    "widgetId": "4262cc79-d192-4435-91bd-5fda9b6f7c08",
     "enabled": true,
     "data": {
     	"bookmarks": [
@@ -26,6 +26,15 @@
                 "link": "https://www.cnn.com/" 
             }
     	]
+    }
+  },
+  {
+    "userId": "45bbefbf-63d1-4d36-931e-212fbe2bc3d9",
+    "widgetId": "a458d2da-550b-414f-895a-7bcb2cbc9d62",
+    "enabled": true,
+    "data": {
+        "engine": "Google",
+        "searchApi": "https://www.google.com/search?q="
     }
   }
 ]
