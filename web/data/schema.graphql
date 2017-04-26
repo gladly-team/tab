@@ -114,6 +114,7 @@ type Mutation {
   donateVc(input: DonateVcInput!): DonateVcPayload
   setUserBkgImage(input: SetUserBkgImageInput!): SetUserBkgImagePayload
   addBookmark(input: AddBookmarkInput!): AddBookmarkPayload
+  removeBookmark(input: RemoveBookmarkInput!): RemoveBookmarkPayload
 }
 
 # An object with an ID
@@ -145,6 +146,18 @@ type Query {
   ): Node
   app: App
   user(userId: String!): User
+}
+
+input RemoveBookmarkInput {
+  userId: String!
+  widgetId: String!
+  position: Int!
+  clientMutationId: String
+}
+
+type RemoveBookmarkPayload {
+  widget: Widget
+  clientMutationId: String
 }
 
 input SetUserBkgImageInput {

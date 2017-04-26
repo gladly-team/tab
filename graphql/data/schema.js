@@ -344,7 +344,7 @@ const setUserBkgImageMutation = mutationWithClientMutationId({
 });
 
 /**
- * Set user background image mutation.
+ * Add a new bookmark.
  */
 const addBookmarkMutation = mutationWithClientMutationId({
   name: 'AddBookmark',
@@ -370,6 +370,35 @@ const addBookmarkMutation = mutationWithClientMutationId({
     return addBookmark(userGlobalObj.id, widgetGlobalObj.id, name, link);
   }
 });
+
+/**
+ * Remove a bookmark.
+ */
+const removeBookmarkMutation = mutationWithClientMutationId({
+  name: 'RemoveBookmark',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    widgetId: { type: new GraphQLNonNull(GraphQLString) },
+    position: { type: new GraphQLNonNull(GraphQLInt) }
+  },
+  outputFields: {
+    widget: {
+      type: widgetType,
+      resolve: (userWidget) => {
+        userWidget.id = userWidget.widgetId;
+        userWidget.data = JSON.stringify(userWidget.data);
+        return userWidget;
+      }
+    }
+  },
+  mutateAndGetPayload: ({userId, widgetId, position}) => {
+    const userGlobalObj = fromGlobalId(userId);
+    const widgetGlobalObj = fromGlobalId(widgetId);
+    return deleteBookmark(userGlobalObj.id, widgetGlobalObj.id, position);
+  }
+});
+
+
 
 
 
@@ -463,6 +492,7 @@ const mutationType = new GraphQLObjectType({
     setUserBkgImage: setUserBkgImageMutation,
 
     addBookmark: addBookmarkMutation,
+    removeBookmark: removeBookmarkMutation,
   })
 });
 

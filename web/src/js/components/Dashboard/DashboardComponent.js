@@ -3,9 +3,9 @@ import React from 'react';
 import VcUser from '../User/VcUserContainer';
 import UserDisplay from '../User/UserDisplayContainer';
 import UserBackgroundImage from '../User/UserBackgroundImageContainer';
-import BackgroundImagePickerContainer from '../BackgroundImage/BackgroundImagePickerContainer';
-import DonateVcContainer from '../Donate/DonateVcContainer';
-import Widgets from '../Widget/WidgetsContainer';
+import BackgroundImagePickerView from '../BackgroundImage/BackgroundImagePickerView';
+import DonateVcView from '../Donate/DonateVcView';
+import WidgetsView from '../Widget/WidgetsView';
 
 import { FormattedMessage } from 'react-intl';
 
@@ -42,7 +42,7 @@ class Dashboard extends React.Component {
 
   render() {
 
-    const {app, user} = this.props;
+    const { user } = this.props;
 
     const content = {
       height: '100vh',
@@ -98,7 +98,7 @@ class Dashboard extends React.Component {
               defaultMessage={ '“Surf the web, save the world.”' }/>
           </h1>
         </div>
-        <Widgets user={user} />
+        <WidgetsView />
         <div style={actioBtnContainer}>
           <IconButton 
             tooltip="Change background"
@@ -124,9 +124,7 @@ class Dashboard extends React.Component {
           open={this.state.bkgSelectorOpened}
           autoScrollBodyContent={true}
           onRequestClose={this.changeBkgSelectorState.bind(this, false)}>
-            <BackgroundImagePickerContainer 
-              app={app} 
-              user={user}
+            <BackgroundImagePickerView
               onImageSelected={this.changeBkgSelectorState.bind(this, false)}/>
         </Dialog>
         <Dialog
@@ -134,9 +132,7 @@ class Dashboard extends React.Component {
           open={this.state.donateDialogOpened}
           autoScrollBodyContent={true}
           onRequestClose={this.changeDonateDialogState.bind(this, false)}>
-            <DonateVcContainer 
-              app={app} 
-              user={user}/>
+            <DonateVcView />
         </Dialog>
       </div>
     );
@@ -144,8 +140,7 @@ class Dashboard extends React.Component {
 }
 
 Dashboard.propTypes = {
-  user: React.PropTypes.object.isRequired,
-  app: React.PropTypes.object.isRequired
+  user: React.PropTypes.object.isRequired
 };
 
 export default Dashboard;

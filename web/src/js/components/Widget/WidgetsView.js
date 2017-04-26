@@ -2,17 +2,17 @@ import React from 'react';
 import {QueryRenderer} from 'react-relay/compat';
 import environment from '../../../relay-env';
 
-import DashboardContainer from './DashboardContainer';
+import Widgets from './WidgetsContainer';
 
-class DashboardView extends React.Component { 
+class WidgetsView extends React.Component { 
   render() {
     return (
         <QueryRenderer
           environment={environment}
           query={graphql`
-            query DashboardViewQuery($userId: String!) {
+            query WidgetsViewQuery($userId: String!) {
               user(userId: $userId) {
-                ...DashboardContainer_user
+                ...WidgetsContainer_user
               }
             }
           `}
@@ -20,7 +20,7 @@ class DashboardView extends React.Component {
           render={({error, props}) => {
             if (props) {
               return (
-                  <DashboardContainer user={props.user}/>
+                  <Widgets user={props.user}/>
               )
             } else {
               return null;
@@ -30,4 +30,4 @@ class DashboardView extends React.Component {
   }
 }
 
-export default DashboardView;
+export default WidgetsView;

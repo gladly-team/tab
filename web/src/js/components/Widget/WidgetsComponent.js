@@ -1,18 +1,7 @@
 import React from 'react';
-import Widget from './Widget';
-import AddBookmarkMutation from 'mutations/AddBookmarkMutation';
+import Widget from './WidgetContainer';
 
 class Widgets extends React.Component {
-
-  addBookmark(widget, name, link) {
-    AddBookmarkMutation.commit(
-      this.props.relay.environment,
-      this.props.user,
-      widget,
-      name,
-      link
-    );
-  }
   
   render() {
     const { user } = this.props; 
@@ -30,9 +19,9 @@ class Widgets extends React.Component {
       <div style={widgetsContainer}>
         {user.widgets.edges.map((edge, index) => {
             return (<Widget 
-                      key={index} 
-                      widget={edge.node}
-                      addBookmark={this.addBookmark.bind(this)}/>)
+                      key={index}
+                      user={user}
+                      widget={edge.node}/>)
         })}
       </div>
     );

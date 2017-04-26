@@ -1,18 +1,18 @@
 import React from 'react';
 
 // Widget Types.
-import BookmarksWidget from './BookmarksWidget';
+import BookmarksWidget from './Widgets/Bookmarks/BookmarksWidgetContainer';
 
 class Widget extends React.Component {
   
   render() {
-    const { widget } = this.props; 
+    const { widget, user } = this.props; 
 
     switch(widget.type) {
       case 'bookmarks':
         return (<BookmarksWidget 
                   widget={widget}
-                  addBookmark={this.props.addBookmark}/>)
+                  user={user}/>)
       default:
         return null;
     }
@@ -20,7 +20,8 @@ class Widget extends React.Component {
 }
 
 Widget.propTypes = {
-  widget: React.PropTypes.object.isRequired
+  widget: React.PropTypes.object.isRequired,
+  user: React.PropTypes.object.isRequired,
 };
 
 export default Widget;
