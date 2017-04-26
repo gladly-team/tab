@@ -2,17 +2,20 @@ import React from 'react';
 import {QueryRenderer} from 'react-relay/compat';
 import environment from '../../../relay-env';
 
-import DashboardContainer from './DashboardContainer';
+import BackgroundImagePicker from './BackgroundImagePickerContainer';
 
-class DashboardView extends React.Component { 
+class BackgroundImagePickerView extends React.Component { 
   render() {
     return (
         <QueryRenderer
           environment={environment}
           query={graphql`
-            query DashboardViewQuery($userId: String!) {
+            query BackgroundImagePickerViewQuery($userId: String!) {
+              app {
+                ...BackgroundImagePickerContainer_app
+              }
               user(userId: $userId) {
-                ...DashboardContainer_user
+                ...BackgroundImagePickerContainer_user
               }
             }
           `}
@@ -20,7 +23,10 @@ class DashboardView extends React.Component {
           render={({error, props}) => {
             if (props) {
               return (
-                  <DashboardContainer user={props.user}/>
+                  <BackgroundImagePicker
+                    app={props.app} 
+                    user={props.user}
+                    onImageSelected={this.props.onImageSelected}/>
               )
             } else {
               return null;
@@ -30,4 +36,4 @@ class DashboardView extends React.Component {
   }
 }
 
-export default DashboardView;
+export default BackgroundImagePickerView;

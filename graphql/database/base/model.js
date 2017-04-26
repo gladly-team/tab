@@ -18,6 +18,19 @@ class BaseModel {
 	}
 
 	/**
+     * Gets the key object from data. By default assume that data
+     * is a primitive type and that the KeyName for this type is id.
+     * Override in the child class to get a different behavior.
+     * @param {Object} data
+     * @return {Object} Key for this type.
+     */
+	static getKey(data) {
+		return {
+	        id: data
+        };
+	}
+
+	/**
      * Get the object with the respective id from the database.
      * @param {Object} id 
      * @param {Object} [args={}] optional query parameters.
@@ -25,11 +38,12 @@ class BaseModel {
      * object from the child class.
      */
 	static get(id, args={}) {
+
+		const key = this.getKey(id);
+
 	    var params = Object.assign({}, {
 	      TableName: this.getTableName(),
-	      Key: {
-	        id: id
-	      }
+	      Key: key
 	    }, args);
 
 	    const self = this;
@@ -132,11 +146,11 @@ class BaseModel {
      */
 	static update(id, args={}) {
 
+		const key = this.getKey(id);
+
 		var params = {
 	      TableName: this.getTableName(),
-	      Key: {
-	        id: id
-	      },
+	      Key: key,
 	      ...args
 	    };
 
@@ -177,8 +191,8 @@ class BaseModel {
 		const self = this;
 		const deserializeObj = (obj) => {
 			const cls = self;
-			const instance = new cls(
-		  		obj.id);
+			const id = obj.hasOwnProperty('id')? obj['id']: '';
+			const instance = new cls(id);
 
 			var field = '';
 			const fields = self.getFields();

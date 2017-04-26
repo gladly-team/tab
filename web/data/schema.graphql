@@ -1,13 +1,13 @@
-input AddFeatureInput {
+input AddBookmarkInput {
+  userId: String!
+  widgetId: String!
   name: String!
-  description: String!
-  url: String!
+  link: String!
   clientMutationId: String
 }
 
-type AddFeaturePayload {
-  featureEdge: FeatureEdge
-  viewer: User
+type AddBookmarkPayload {
+  widget: Widget
   clientMutationId: String
 }
 
@@ -15,9 +15,6 @@ type AddFeaturePayload {
 type App implements Node {
   # The ID of an object
   id: ID!
-
-  # Features that I have
-  features(after: String, first: Int, before: String, last: Int): FeatureConnection
 
   # All the charities
   charities(after: String, first: Int, before: String, last: Int): CharityConnection
@@ -99,39 +96,6 @@ type DonateVcPayload {
   clientMutationId: String
 }
 
-# Feature integrated in our starter kit
-type Feature implements Node {
-  # The ID of an object
-  id: ID!
-
-  # Name of the feature
-  name: String
-
-  # Description of the feature
-  description: String
-
-  # Url of the feature
-  url: String
-}
-
-# A connection to a list of items.
-type FeatureConnection {
-  # Information to aid in pagination.
-  pageInfo: PageInfo!
-
-  # A list of edges.
-  edges: [FeatureEdge]
-}
-
-# An edge in a connection.
-type FeatureEdge {
-  # The item at the end of the edge
-  node: Feature
-
-  # A cursor for use in pagination
-  cursor: String!
-}
-
 # An image object
 type Image {
   # The image id
@@ -146,10 +110,11 @@ type Image {
 }
 
 type Mutation {
-  addFeature(input: AddFeatureInput!): AddFeaturePayload
   updateVc(input: UpdateVcInput!): UpdateVcPayload
   donateVc(input: DonateVcInput!): DonateVcPayload
   setUserBkgImage(input: SetUserBkgImageInput!): SetUserBkgImagePayload
+  addBookmark(input: AddBookmarkInput!): AddBookmarkPayload
+  removeBookmark(input: RemoveBookmarkInput!): RemoveBookmarkPayload
 }
 
 # An object with an ID
@@ -181,6 +146,18 @@ type Query {
   ): Node
   app: App
   user(userId: String!): User
+}
+
+input RemoveBookmarkInput {
+  userId: String!
+  widgetId: String!
+  position: Int!
+  clientMutationId: String
+}
+
+type RemoveBookmarkPayload {
+  widget: Widget
+  clientMutationId: String
 }
 
 input SetUserBkgImageInput {
@@ -229,4 +206,46 @@ type User implements Node {
 
   # Remaing hearts until next level.
   heartsUntilNextLevel: Int
+
+  # User widgets
+  widgets(after: String, first: Int, before: String, last: Int): WidgetConnection
+}
+
+# App widget
+type Widget implements Node {
+  # The ID of an object
+  id: ID!
+
+  # Widget display name
+  name: String
+
+  # Widget type
+  type: String
+
+  # Widget icon
+  icon: String
+
+  # The Widget enabled state
+  enabled: Boolean
+
+  # Widget data.
+  data: String
+}
+
+# A connection to a list of items.
+type WidgetConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [WidgetEdge]
+}
+
+# An edge in a connection.
+type WidgetEdge {
+  # The item at the end of the edge
+  node: Widget
+
+  # A cursor for use in pagination
+  cursor: String!
 }

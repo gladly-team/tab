@@ -1,0 +1,31 @@
+[
+  {
+  	"userId": "45bbefbf-63d1-4d36-931e-212fbe2bc3d9",
+    "widgetId": "a458d2da-550b-414f-895a-7bcb2cbc9d62",
+    "enabled": true,
+    "data": {
+    	"bookmarks": [
+    		{
+    			"name": "Google",
+    			"link": "https://www.google.com/" 
+    		},
+    		{
+    			"name": "Netflix",
+    			"link": "https://www.netflix.com/" 
+    		},
+    		{
+    			"name": "Beyond the Summit",
+    			"link": "https://www.twitch.tv/beyondthesummit" 
+    		},
+            {
+                "name": "Hulu",
+                "link": "https://www.hulu.com/" 
+            },
+            {
+                "name": "CNN",
+                "link": "https://www.cnn.com/" 
+            }
+    	]
+    }
+  }
+]

@@ -3,8 +3,9 @@ import React from 'react';
 import VcUser from '../User/VcUserContainer';
 import UserDisplay from '../User/UserDisplayContainer';
 import UserBackgroundImage from '../User/UserBackgroundImageContainer';
-import BackgroundImagePickerContainer from '../BackgroundImage/BackgroundImagePickerContainer';
-import DonateVcContainer from '../Donate/DonateVcContainer';
+import BackgroundImagePickerView from '../BackgroundImage/BackgroundImagePickerView';
+import DonateVcView from '../Donate/DonateVcView';
+import WidgetsView from '../Widget/WidgetsView';
 
 import { FormattedMessage } from 'react-intl';
 
@@ -13,9 +14,7 @@ import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
 
 import {
-	deepPurple500,
   grey300,
-  grey50
 } from 'material-ui/styles/colors';
 
 class Dashboard extends React.Component {
@@ -43,10 +42,9 @@ class Dashboard extends React.Component {
 
   render() {
 
-    const {app, user} = this.props;
+    const { user } = this.props;
 
     const content = {
-      display: 'flex',
       height: '100vh',
       position: 'absolute',
       top: 0,
@@ -57,13 +55,7 @@ class Dashboard extends React.Component {
       height: '100vh',
       zIndex: 'auto',
       backgroundColor: 'rgba(0,0,0,.6)',
-      alignItems: 'center',
-      justifyContent: 'center',
     }
-
-    const greeting = {
-      textAlign: 'center'
-    };
 
     const subtitle = {
       color: 'white',
@@ -73,8 +65,8 @@ class Dashboard extends React.Component {
 
     const actioBtnContainer = {
       position: 'absolute',
-      top: 10,
-      left: 50,
+      bottom: 10,
+      right: 50,
       display: 'flex',
       width: 100,
       justifyContent: 'space-around'
@@ -83,8 +75,8 @@ class Dashboard extends React.Component {
     const quote = {
       position: 'absolute',
       bottom: 10,
+      left: 40,
       color: 'white',
-      textAlign: 'center',
       fontSize: '1em',
       fontWeight: 'normal',
       fontFamily: "'Comic Sans MS', cursive, sans-serif",
@@ -93,20 +85,20 @@ class Dashboard extends React.Component {
       marginRight: 'auto',
     }
 
+    // <UserDisplay user={user} />
+
     return (
       <div>
         <UserBackgroundImage user={user} />
         <div style={content}>
-          <div style={greeting}>
-            <UserDisplay user={user} />
-            <VcUser user={user} />
-            <h1 style={quote}>
-              <FormattedMessage
-                id={'app.quote'}
-                defaultMessage={ '“Surf the web, save the world.”' }/>
-            </h1>
-          </div>
+          <VcUser user={user} />
+          <h1 style={quote}>
+            <FormattedMessage
+              id={'app.quote'}
+              defaultMessage={ '“Surf the web, save the world.”' }/>
+          </h1>
         </div>
+        <WidgetsView />
         <div style={actioBtnContainer}>
           <IconButton 
             tooltip="Change background"
@@ -132,9 +124,7 @@ class Dashboard extends React.Component {
           open={this.state.bkgSelectorOpened}
           autoScrollBodyContent={true}
           onRequestClose={this.changeBkgSelectorState.bind(this, false)}>
-            <BackgroundImagePickerContainer 
-              app={app} 
-              user={user}
+            <BackgroundImagePickerView
               onImageSelected={this.changeBkgSelectorState.bind(this, false)}/>
         </Dialog>
         <Dialog
@@ -142,9 +132,7 @@ class Dashboard extends React.Component {
           open={this.state.donateDialogOpened}
           autoScrollBodyContent={true}
           onRequestClose={this.changeDonateDialogState.bind(this, false)}>
-            <DonateVcContainer 
-              app={app} 
-              user={user}/>
+            <DonateVcView />
         </Dialog>
       </div>
     );
@@ -152,8 +140,7 @@ class Dashboard extends React.Component {
 }
 
 Dashboard.propTypes = {
-  user: React.PropTypes.object.isRequired,
-  app: React.PropTypes.object.isRequired
+  user: React.PropTypes.object.isRequired
 };
 
 export default Dashboard;

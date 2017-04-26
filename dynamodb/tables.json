@@ -26,7 +26,7 @@
     }
   },
   {
-    "TableName": "Features",
+    "TableName": "Widgets",
     "KeySchema": [       
       { "AttributeName": "id", "KeyType": "HASH"}
     ],
@@ -74,6 +74,39 @@
     "AttributeDefinitions": [       
       { "AttributeName": "id", "AttributeType": "S" }
     ],
+    "ProvisionedThroughput": {       
+      "ReadCapacityUnits": 10, 
+      "WriteCapacityUnits": 10
+    }
+  },
+  {
+    "TableName": "UserWidgets",
+    "KeySchema": [       
+      { "AttributeName": "userId", "KeyType": "HASH"},
+      { "AttributeName": "widgetId", "KeyType": "RANGE"}
+    ],
+    "AttributeDefinitions": [       
+      { "AttributeName": "userId", "AttributeType": "S" },
+      { "AttributeName": "widgetId", "AttributeType": "S" }
+    ],
+    "GlobalSecondaryIndexes": [ 
+      { 
+         "IndexName": "Widgets",
+         "KeySchema": [ 
+            { 
+               "AttributeName": "userId",
+               "KeyType": "HASH"
+            }
+         ],
+         "Projection": {
+            "ProjectionType": "ALL"
+         },
+         "ProvisionedThroughput": { 
+            "ReadCapacityUnits": 10,
+            "WriteCapacityUnits": 10
+         }
+      }
+   ],
     "ProvisionedThroughput": {       
       "ReadCapacityUnits": 10, 
       "WriteCapacityUnits": 10

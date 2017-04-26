@@ -44,6 +44,11 @@ class DatabaseMock {
 		return this._resolveNext(params);
 	}
 
+	query(params) {
+		this.validateOperation(OperationType.QUERY)
+		return this._resolveNext(params);
+	}
+
 	scan(params) {
 		this.validateOperation(OperationType.SCAN)
 		return this._resolveNext(params);

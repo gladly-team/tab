@@ -1,0 +1,20 @@
+import {
+  createFragmentContainer,
+  graphql,
+} from 'react-relay/compat';
+
+import Widget from './WidgetComponent';
+
+export default createFragmentContainer(Widget, {
+  widget: graphql`
+    fragment WidgetContainer_widget on Widget {
+      type
+      ...BookmarksWidgetContainer_widget
+    }
+  `,
+  user: graphql`
+    fragment WidgetContainer_user on User {
+      ...BookmarksWidgetContainer_user
+    }
+  `
+});
