@@ -7,6 +7,7 @@ import Avatar from 'material-ui/Avatar';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import Subheader from 'material-ui/Subheader';
+import TextField from 'material-ui/TextField';
 
 import {
   grey300,
@@ -31,7 +32,6 @@ class BookmarksWidget extends React.Component {
       open: true,
       anchorEl: event.currentTarget,
     });
-
   }
 
   handleRequestClose() {
@@ -51,11 +51,37 @@ class BookmarksWidget extends React.Component {
     return "https://www.google.com/s2/favicons?domain_url=" + encodeURI(link);
   }
 
+  addBookmark() {
+    const { widget } = this.props; 
+
+    const name = this.bName.input.value;
+    const link = this.bLink.input.value;
+
+    if(!name || !link)
+      return;
+
+    this.props.addBookmark(widget, name, link);
+    this.bName.input.value = '';
+    this.bLink.input.value = '';
+  }
+
+  _handleKeyPress(e) {
+    if (e.key === 'Enter') {
+      this.addBookmark();
+    }
+  }
+
   render() {
     const { widget } = this.props; 
 
     const data = JSON.parse(widget.data);
     const bookmarks = data.bookmarks;
+
+    const addBookmarkContainer = {
+      display: 'flex',
+      flexDirection: 'column',
+      padding: 10,
+    }
 
     return (
         <div>
@@ -73,12 +99,27 @@ class BookmarksWidget extends React.Component {
             anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
             targetOrigin={{horizontal: 'left', vertical: 'top'}}
             onRequestClose={this.handleRequestClose.bind(this)}>
-              <Menu>
+              <div style={addBookmarkContainer}>
+                <TextField
+                  ref={(input) => { this.bName = input; }}
+                  onKeyPress = {this._handleKeyPress.bind(this)}
+                  hintText="Ex: Google"
+                  floatingLabelText="Name"/>
+
+                <TextField
+                  ref={(input) => { this.bLink = input; }}
+                  onKeyPress = {this._handleKeyPress.bind(this)}
+                  hintText="Ex: https://www.google.com/"
+                  floatingLabelText="Link"/>
+                
+              </div>
+              <Menu
+                disableAutoFocus={true}>
                 <Subheader>Bookmarks</Subheader>
                 {
-                  bookmarks.map((bookmark) => {
+                  bookmarks.map((bookmark, index) => {
                     return (<MenuItem 
-                              key={bookmark.id}
+                              key={index}
                               onClick={this.openLink.bind(this, bookmark.link)}
                               primaryText={bookmark.name}
                               leftIcon={

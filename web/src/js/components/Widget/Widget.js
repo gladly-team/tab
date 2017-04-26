@@ -10,7 +10,9 @@ class Widget extends React.Component {
 
     switch(widget.type) {
       case 'bookmarks':
-        return (<BookmarksWidget widget={widget}/>)
+        return (<BookmarksWidget 
+                  widget={widget}
+                  addBookmark={this.props.addBookmark}/>)
       default:
         return null;
     }

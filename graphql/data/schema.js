@@ -355,10 +355,12 @@ const addBookmarkMutation = mutationWithClientMutationId({
     link: { type: new GraphQLNonNull(GraphQLString) }
   },
   outputFields: {
-    data: {
-      type: GraphQLString,
+    widget: {
+      type: widgetType,
       resolve: (userWidget) => {
-        return JSON.stringify(userWidget.data)
+        userWidget.id = userWidget.widgetId;
+        userWidget.data = JSON.stringify(userWidget.data);
+        return userWidget;
       }
     }
   },

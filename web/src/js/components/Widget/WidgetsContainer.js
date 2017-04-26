@@ -8,6 +8,7 @@ import Widgets from './WidgetsComponent';
 export default createFragmentContainer(Widgets, {
   user: graphql`
     fragment WidgetsContainer_user on User {
+      id
       widgets(first: 20) {
         edges {
           node {

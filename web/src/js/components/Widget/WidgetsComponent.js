@@ -1,7 +1,18 @@
 import React from 'react';
 import Widget from './Widget';
+import AddBookmarkMutation from 'mutations/AddBookmarkMutation';
 
 class Widgets extends React.Component {
+
+  addBookmark(widget, name, link) {
+    AddBookmarkMutation.commit(
+      this.props.relay.environment,
+      this.props.user,
+      widget,
+      name,
+      link
+    );
+  }
   
   render() {
     const { user } = this.props; 
@@ -17,10 +28,11 @@ class Widgets extends React.Component {
 
     return (
       <div style={widgetsContainer}>
-        {user.widgets.edges.map((edge) => {
+        {user.widgets.edges.map((edge, index) => {
             return (<Widget 
-                      key={edge.node.id} 
-                      widget={edge.node}/>)
+                      key={index} 
+                      widget={edge.node}
+                      addBookmark={this.addBookmark.bind(this)}/>)
         })}
       </div>
     );
