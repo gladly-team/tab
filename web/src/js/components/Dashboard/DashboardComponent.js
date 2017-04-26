@@ -102,6 +102,7 @@ class Dashboard extends React.Component {
         <div style={actioBtnContainer}>
           <IconButton 
             tooltip="Change background"
+            tooltipPosition="top-center"
             onClick={this.changeBkgSelectorState.bind(this, true)}>
               <FontIcon
                 color={grey300}
@@ -111,6 +112,7 @@ class Dashboard extends React.Component {
 
           <IconButton 
             tooltip="Donate to a Charity"
+            tooltipPosition="top-center"
             onClick={this.changeDonateDialogState.bind(this, true)}>
             <FontIcon 
               color={grey300}

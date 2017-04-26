@@ -8,10 +8,10 @@ class Widgets extends React.Component {
 
     const widgetsContainer = {
       position: 'absolute',
-      top: 10,
+      top: 20,
       left: 20,
       display: 'flex',
-      width: 100,
+      width: 300,
       justifyContent: 'space-around'
     }
 

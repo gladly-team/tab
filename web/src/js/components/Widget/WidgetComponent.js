@@ -2,6 +2,7 @@ import React from 'react';
 
 // Widget Types.
 import BookmarksWidget from './Widgets/Bookmarks/BookmarksWidgetContainer';
+import SearchWidget from './Widgets/Search/SearchWidgetContainer';
 
 class Widget extends React.Component {
   
@@ -11,6 +12,10 @@ class Widget extends React.Component {
     switch(widget.type) {
       case 'bookmarks':
         return (<BookmarksWidget 
+                  widget={widget}
+                  user={user}/>)
+      case 'search':
+        return (<SearchWidget 
                   widget={widget}
                   user={user}/>)
       default:

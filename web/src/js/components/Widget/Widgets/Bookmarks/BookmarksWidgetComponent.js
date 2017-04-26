@@ -45,7 +45,7 @@ class BookmarksWidget extends React.Component {
   }
 
   openLink(link) {
-    window.open(link); 
+    window.open(link, '_self'); 
     this.setState({
       open: false,
     });
