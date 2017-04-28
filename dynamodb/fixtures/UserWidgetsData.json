@@ -36,5 +36,13 @@
         "engine": "Google",
         "searchApi": "https://www.google.com/search?q="
     }
+  },
+  {
+    "userId": "45bbefbf-63d1-4d36-931e-212fbe2bc3d9",
+    "widgetId": "ab58d2da-550b-414f-895a-7bcb2cbc9d62",
+    "enabled": true,
+    "data": {
+        "format24": true
+    }
   }
 ]

@@ -109,7 +109,6 @@ class Dashboard extends React.Component {
                 hoverColor={'#FFF'}
                 className="fa fa-picture-o fa-lg" />
           </IconButton>
-
           <IconButton 
             tooltip="Donate to a Charity"
             tooltipPosition="top-center"
@@ -120,7 +119,6 @@ class Dashboard extends React.Component {
               className="fa fa-heart-o fa-lg" />
           </IconButton>
         </div>
-
         <Dialog
           title="Select a background image"
           open={this.state.bkgSelectorOpened}
