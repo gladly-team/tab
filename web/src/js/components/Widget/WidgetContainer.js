@@ -12,6 +12,7 @@ export default createFragmentContainer(Widget, {
       ...BookmarksWidgetContainer_widget
       ...SearchWidgetContainer_widget
       ...ClockWidgetContainer_widget
+      ...NotesWidgetContainer_widget
     }
   `,
   user: graphql`
@@ -19,6 +20,7 @@ export default createFragmentContainer(Widget, {
       ...BookmarksWidgetContainer_user
       ...SearchWidgetContainer_user
       ...ClockWidgetContainer_user
+      ...NotesWidgetContainer_user
     }
   `
 });

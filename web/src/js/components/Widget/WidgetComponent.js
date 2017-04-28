@@ -4,6 +4,7 @@ import React from 'react';
 import BookmarksWidget from './Widgets/Bookmarks/BookmarksWidgetContainer';
 import SearchWidget from './Widgets/Search/SearchWidgetContainer';
 import ClockWidget from './Widgets/Clock/ClockWidgetContainer';
+import NotesWidget from './Widgets/Notes/NotesWidgetContainer';
 
 class Widget extends React.Component {
   
@@ -22,6 +23,11 @@ class Widget extends React.Component {
 
       case 'clock':
         return (<ClockWidget 
+                  widget={widget}
+                  user={user}/>)
+
+      case 'notes':
+        return (<NotesWidget 
                   widget={widget}
                   user={user}/>)
       default:
