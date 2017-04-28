@@ -30,7 +30,7 @@ class BookmarkWidget {
 
     /**
     * Updates the bookmarks of the current UserWidget.
-    * @return {Object<UserWidget>}  Returns the UserWidget with 
+    * @return {Promise<UserWidget>}  Returns the UserWidget with 
     * the updated data.
     */
     this.updateWidgetData = Async (function() {
@@ -51,7 +51,7 @@ class BookmarkWidget {
     * Updates the position of a bookmark.
     * @param {int} oldPos - The bookmark's old position. 
     * @param {int} newPos - The bookmark's new position. 
-    * @return {Object<UserWidget>}  Returns a UserWidget with the updated data.
+    * @return {Promise<UserWidget>}  Returns a UserWidget with the updated data.
     */
     this.updateBookmarkPosition = Async (function(oldPos, newPos) {
         const bookmark = this.getBookmark(oldPos);
@@ -74,7 +74,7 @@ class BookmarkWidget {
     * Adds a new bookmark.
     * @param {string} name - The bookmark's name. 
     * @param {string} link - The bookmark's link. 
-    * @return {Object<UserWidget>}  Returns a UserWidget with the updated data.
+    * @return {Promise<UserWidget>}  Returns a UserWidget with the updated data.
     */
     this.addBookmark = Async (function(name, link) {
         const bookmark = {
@@ -90,7 +90,7 @@ class BookmarkWidget {
     /**
     * Deletes a bookmark at a given position.
     * @param {int} position - The bookmark's position.
-    * @return {Object<UserWidget>}  Returns a UserWidget with the updated data.
+    * @return {Promise<UserWidget>}  Returns a UserWidget with the updated data.
     */
     this.deleteBookmark = Async (function(position) {
         if(position >= 0 && position < this.bookmarks.length){
