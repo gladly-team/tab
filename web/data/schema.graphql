@@ -113,6 +113,7 @@ type Mutation {
   updateVc(input: UpdateVcInput!): UpdateVcPayload
   donateVc(input: DonateVcInput!): DonateVcPayload
   setUserBkgImage(input: SetUserBkgImageInput!): SetUserBkgImagePayload
+  updateWidgetData(input: UpdateWidgetDataInput!): UpdateWidgetDataPayload
   addBookmark(input: AddBookmarkInput!): AddBookmarkPayload
   removeBookmark(input: RemoveBookmarkInput!): RemoveBookmarkPayload
 }
@@ -178,6 +179,18 @@ input UpdateVcInput {
 
 type UpdateVcPayload {
   user: User
+  clientMutationId: String
+}
+
+input UpdateWidgetDataInput {
+  userId: String!
+  widgetId: String!
+  data: String!
+  clientMutationId: String
+}
+
+type UpdateWidgetDataPayload {
+  widget: Widget
   clientMutationId: String
 }
 

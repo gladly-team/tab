@@ -30,7 +30,8 @@ import {
 import {
   Widget,
   getWidget,
-  getUserWidgets
+  getUserWidgets,
+  updateUserWidgetData
 } from '../database/widgets/widgets';
 
 import {
@@ -398,6 +399,35 @@ const removeBookmarkMutation = mutationWithClientMutationId({
   }
 });
 
+/**
+ * Update widget data.
+ */
+const updateWidgetDataMutation = mutationWithClientMutationId({
+  name: 'UpdateWidgetData',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    widgetId: { type: new GraphQLNonNull(GraphQLString) },
+    data: { type: new GraphQLNonNull(GraphQLString) }
+  },
+  outputFields: {
+    widget: {
+      type: widgetType,
+      resolve: (userWidget) => {
+        userWidget.id = userWidget.widgetId;
+        userWidget.data = JSON.stringify(userWidget.data);
+        return userWidget;
+      }
+    }
+  },
+  mutateAndGetPayload: ({userId, widgetId, data}) => {
+    const userGlobalObj = fromGlobalId(userId);
+    const widgetGlobalObj = fromGlobalId(widgetId);
+    const parsedData = JSON.parse(data);
+    return updateUserWidgetData(userGlobalObj.id, widgetGlobalObj.id, parsedData);
+  }
+});
+
+
 
 
 
@@ -490,6 +520,7 @@ const mutationType = new GraphQLObjectType({
     updateVc: updateVcMutation,
     donateVc: donateVcMutation,
     setUserBkgImage: setUserBkgImageMutation,
+    updateWidgetData: updateWidgetDataMutation,
 
     addBookmark: addBookmarkMutation,
     removeBookmark: removeBookmarkMutation,

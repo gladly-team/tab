@@ -1,6 +1,6 @@
 [
   {
-    "id": "4262cc79-d192-4435-91bd-5fda9b6f7c08",
+    "id": "4162cc79-d192-4435-91bd-5fda9b6f7c08",
     "icon": null,
     "name": "Bookmarks",
     "type": "bookmarks"
@@ -16,5 +16,11 @@
     "icon": null,
     "name": "Clock",
     "type": "clock"
+  },
+  {
+    "id": "4262cc79-d192-4435-91bd-5fda9b6f7c08",
+    "icon": null,
+    "name": "Notes",
+    "type": "notes"
   }
 ]
