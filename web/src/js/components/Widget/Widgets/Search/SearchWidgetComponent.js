@@ -30,10 +30,12 @@ class SearchWidget extends React.Component {
 
   executeSearch() {
     const { widget } = this.props; 
-
     const data = JSON.parse(widget.data);
+    const engine = data.engine;
+    
+    const searchApi = this.getSearchApi(engine);
     const searchTerm = this.searchInput.input.value;
-    window.open(data.searchApi + searchTerm, '_self'); 
+    window.open(searchApi + searchTerm, '_self'); 
 
     this.searchInput.input.value = '';
   }
@@ -42,6 +44,15 @@ class SearchWidget extends React.Component {
     this.setState({
       focused: focused,
     })
+  }
+
+  getSearchApi(engine) {
+    switch(engine) {
+      case 'Google':
+        return "https://www.google.com/search?q=";
+      default:
+        return "https://www.google.com/search?q=";
+    }
   }
 
   render() {
