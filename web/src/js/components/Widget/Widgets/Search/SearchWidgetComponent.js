@@ -52,7 +52,7 @@ class SearchWidget extends React.Component {
 
     const searchContainer = {
       position: 'relative',
-      top: -25,
+      top: -27,
     }
 
     const floatingLabelStyle = {

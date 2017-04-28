@@ -11,8 +11,8 @@ class Widgets extends React.Component {
       top: 20,
       left: 20,
       display: 'flex',
-      width: 300,
-      justifyContent: 'space-around'
+      justifyContent: 'flex-start',
+      width: '100vw',
     }
 
     return (

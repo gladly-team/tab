@@ -53,6 +53,7 @@
     "jest": "17.0.2",
     "json-loader": "0.5.4",
     "material-ui": "^0.17.1",
+    "moment": "^2.18.1",
     "nodemon": "^1.11.0",
     "normalize.css": "^5.0.0",
     "object-assign": "4.1.0",

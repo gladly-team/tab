@@ -11,12 +11,14 @@ export default createFragmentContainer(Widget, {
       type
       ...BookmarksWidgetContainer_widget
       ...SearchWidgetContainer_widget
+      ...ClockWidgetContainer_widget
     }
   `,
   user: graphql`
     fragment WidgetContainer_user on User {
       ...BookmarksWidgetContainer_user
       ...SearchWidgetContainer_user
+      ...ClockWidgetContainer_user
     }
   `
 });

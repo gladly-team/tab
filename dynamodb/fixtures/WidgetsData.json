@@ -10,5 +10,11 @@
     "icon": null,
     "name": "Search",
     "type": "search"
+  },
+  {
+    "id": "ab58d2da-550b-414f-895a-7bcb2cbc9d62",
+    "icon": null,
+    "name": "Clock",
+    "type": "clock"
   }
 ]
