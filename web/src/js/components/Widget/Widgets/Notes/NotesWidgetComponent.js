@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 
 import UpdateWidgetDataMutation from 'mutations/UpdateWidgetDataMutation';
 
@@ -37,6 +38,8 @@ class NotesWidget extends React.Component {
     const notes = data.notes;
     this.setState({
       notes: notes,
+      open: widget.visible,
+      anchorEl: ReactDOM.findDOMNode(this.bIcon),
     });
   }
 
@@ -55,6 +58,9 @@ class NotesWidget extends React.Component {
       open: true,
       anchorEl: event.currentTarget,
     });
+
+    this.props.popoverWidgetVisibilityChanged(
+      this.props.user, this.props.widget, true);
   }
 
   handleRequestClose() {
@@ -62,6 +68,9 @@ class NotesWidget extends React.Component {
       open: false,
       addForm: false,
     });
+
+    this.props.popoverWidgetVisibilityChanged(
+      this.props.user, this.props.widget, false);
   }
 
   onNoteUpdated(index) {
@@ -206,6 +215,7 @@ class NotesWidget extends React.Component {
     return (
         <div>
           <IconButton 
+              ref={(bIcon) => { this.bIcon = bIcon; }}
               tooltip={widget.name}
               onClick={this.handleRequestOpen.bind(this)}>
                 <FontIcon
@@ -272,6 +282,7 @@ class NotesWidget extends React.Component {
 NotesWidget.propTypes = {
   widget: React.PropTypes.object.isRequired,
   user: React.PropTypes.object.isRequired,
+  popoverWidgetVisibilityChanged: React.PropTypes.func.isRequired
 };
 
 export default NotesWidget;

@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 
 import UpdateWidgetDataMutation from 'mutations/UpdateWidgetDataMutation';
 
@@ -39,6 +40,8 @@ class TodosWidget extends React.Component {
     this.setState({
       completed: data.completed,
       todos: data.todos,
+      open: widget.visible,
+      anchorEl: ReactDOM.findDOMNode(this.bIcon),
     });
   }
 
@@ -46,6 +49,9 @@ class TodosWidget extends React.Component {
     this.setState({
       open: false,
     });
+
+    this.props.popoverWidgetVisibilityChanged(
+      this.props.user, this.props.widget, false);
   }
 
   handleRequestOpen(event) {
@@ -57,6 +63,9 @@ class TodosWidget extends React.Component {
       open: true,
       anchorEl: event.currentTarget,
     });
+
+    this.props.popoverWidgetVisibilityChanged(
+      this.props.user, this.props.widget, true);
   }
 
   _handleKeyPress(e) {
@@ -221,6 +230,7 @@ class TodosWidget extends React.Component {
     return (
         <div>
           <IconButton 
+              ref={(bIcon) => { this.bIcon = bIcon; }}
               tooltip={widget.name}
               onClick={this.handleRequestOpen.bind(this)}>
                 <FontIcon
@@ -309,6 +319,7 @@ class TodosWidget extends React.Component {
 TodosWidget.propTypes = {
   widget: React.PropTypes.object.isRequired,
   user: React.PropTypes.object.isRequired,
+  popoverWidgetVisibilityChanged: React.PropTypes.func.isRequired
 };
 
 export default TodosWidget;

@@ -31,7 +31,8 @@ import {
   Widget,
   getWidget,
   getUserWidgets,
-  updateUserWidgetData
+  updateUserWidgetData,
+  updateUserWidgetVisibility
 } from '../database/widgets/widgets';
 
 import {
@@ -225,6 +226,10 @@ const widgetType = new GraphQLObjectType({
     enabled: {
       type: GraphQLBoolean,
       description: 'The Widget enabled state'
+    },
+    visible: {
+      type: GraphQLBoolean,
+      description: 'The Widget visible state'
     },
     data: {
       type: GraphQLString,
@@ -427,10 +432,31 @@ const updateWidgetDataMutation = mutationWithClientMutationId({
   }
 });
 
-
-
-
-
+/**
+ * Update widget visibility.
+ */
+const updateWidgetVisibilityMutation = mutationWithClientMutationId({
+  name: 'UpdateWidgetVisibility',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    widgetId: { type: new GraphQLNonNull(GraphQLString) },
+    visible: { type: new GraphQLNonNull(GraphQLBoolean) }
+  },
+  outputFields: {
+    widget: {
+      type: widgetType,
+      resolve: (userWidget) => {
+        userWidget.id = userWidget.widgetId;
+        return userWidget;
+      }
+    }
+  },
+  mutateAndGetPayload: ({userId, widgetId, visible}) => {
+    const userGlobalObj = fromGlobalId(userId);
+    const widgetGlobalObj = fromGlobalId(widgetId);
+    return updateUserWidgetVisibility(userGlobalObj.id, widgetGlobalObj.id, visible);
+  }
+});
 
 // const addFeatureMutation = mutationWithClientMutationId({
 //   name: 'AddFeature',
@@ -521,6 +547,7 @@ const mutationType = new GraphQLObjectType({
     donateVc: donateVcMutation,
     setUserBkgImage: setUserBkgImageMutation,
     updateWidgetData: updateWidgetDataMutation,
+    updateWidgetVisibility: updateWidgetVisibilityMutation,
 
     addBookmark: addBookmarkMutation,
     removeBookmark: removeBookmarkMutation,

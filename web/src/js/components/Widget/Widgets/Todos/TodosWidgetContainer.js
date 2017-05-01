@@ -11,6 +11,7 @@ export default createFragmentContainer(TodosWidget, {
       id
       name
       enabled
+      visible
       data
       icon
       type

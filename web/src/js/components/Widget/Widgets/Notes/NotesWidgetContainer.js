@@ -11,6 +11,7 @@ export default createFragmentContainer(NotesWidget, {
       id
       name
       enabled
+      visible
       data
       icon
       type
