@@ -30,7 +30,7 @@
   },
   {
     "userId": "45bbefbf-63d1-4d36-931e-212fbe2bc3d9",
-    "widgetId": "a458d2da-550b-414f-895a-7bcb2cbc9d62",
+    "widgetId": "426ccc79-d192-4435-91bd-5fda9b6f7c08",
     "enabled": true,
     "data": {
         "engine": "Google"
@@ -61,6 +61,45 @@
                 "content": "Believe you can and you're halfway there. Theodore Roosevelt"
             }
 
+        ]
+    }
+  },
+  {
+    "userId": "45bbefbf-63d1-4d36-931e-212fbe2bc3d9",
+    "widgetId": "a458d2da-550b-414f-895a-7bcb2cbc9d62",
+    "enabled": true,
+    "data": {
+        "completed": [
+            {
+                "id": "abcdef",
+                "text": "Buy apples"
+            },
+            {
+                "id": "lalala",
+                "text": "Pickup granma from airport"
+            }
+        ],
+        "todos": [
+            {
+                "id": "lelele",
+                "text": "Fix the shower"
+            },
+            {
+                "id": "lilili",
+                "text": "Call the car insurance"
+            },
+            {
+                "id": "lololo",
+                "text": "Pay the bills"
+            },
+            {
+                "id": "xoxoxo",
+                "text": "Call Kevin"
+            },
+            {
+                "id": "vivivi",
+                "text": "Go to USPS to send the package"
+            }
         ]
     }
   }

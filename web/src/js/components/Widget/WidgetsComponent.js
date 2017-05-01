@@ -9,14 +9,17 @@ class Widgets extends React.Component {
     const widgetsContainer = {
       position: 'absolute',
       top: 20,
-      left: 20,
       display: 'flex',
       justifyContent: 'flex-start',
-      width: '100vw',
+    }
+
+    const separator = {
+      width: 20,
     }
 
     return (
       <div style={widgetsContainer}>
+        <div style={separator}></div>
         {user.widgets.edges.map((edge, index) => {
             return (<Widget 
                       key={index}

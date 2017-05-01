@@ -63,6 +63,7 @@ class SearchWidget extends React.Component {
 
     const searchContainer = {
       position: 'relative',
+      paddingLeft: 12,
       top: -27,
     }
 
