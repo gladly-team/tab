@@ -117,6 +117,10 @@ class BookmarksWidget extends React.Component {
     const data = JSON.parse(widget.data);
     const bookmarks = data.bookmarks;
 
+    const popoverStyle = {
+      backgroundColor: 'rgba(0,0,0,.54)',
+    }
+
     const addBookmarkContainer = {
       display: 'flex',
       flexDirection: 'column',
@@ -128,10 +132,37 @@ class BookmarksWidget extends React.Component {
       right: 5,
     }
 
-    const togglerIconColor = 'rgba(0, 0, 0, 0.541176)';
+    const bookmarkListItemStyle = {
+      color: '#FFF',
+    }
+
     const togglerIcon = {
       fontSize: 14,
     };
+
+    const header = {
+      color: '#FFF',
+    }
+
+    const floatingLabelStyle = {
+      color: '#FFF',
+    }
+
+    const floatingLabelFocusStyle = {
+      color: '#FFF',
+    }
+
+    const underlineStyle = {
+      borderColor: 'transparent',
+    }
+
+    const underlineFocusStyle = {
+      borderColor: '#FFF',
+    }
+
+    const addBookmarkTextField = {
+      color: '#FFF',
+    }
 
     var addBookmarkForm;
     var togglerIconClass = 'fa fa-plus';
@@ -143,13 +174,25 @@ class BookmarksWidget extends React.Component {
                 ref={(input) => { this.bName = input; }}
                 onKeyPress = {this._handleKeyPress.bind(this)}
                 hintText="Ex: Google"
-                floatingLabelText="Name"/>
+                floatingLabelText="Name"
+                inputStyle={addBookmarkTextField}
+                hintStyle={floatingLabelFocusStyle}
+                floatingLabelStyle={floatingLabelStyle}
+                floatingLabelFocusStyle={floatingLabelFocusStyle}
+                underlineStyle={underlineStyle}
+                underlineFocusStyle={underlineFocusStyle}/>
 
               <TextField
                 ref={(input) => { this.bLink = input; }}
                 onKeyPress = {this._handleKeyPress.bind(this)}
                 hintText="Ex: https://www.google.com/"
-                floatingLabelText="Link"/>
+                floatingLabelText="Link"
+                inputStyle={addBookmarkTextField}
+                hintStyle={floatingLabelFocusStyle}
+                floatingLabelStyle={floatingLabelStyle}
+                floatingLabelFocusStyle={floatingLabelFocusStyle}
+                underlineStyle={underlineStyle}
+                underlineFocusStyle={underlineFocusStyle}/>
           </div>
         );
     }
@@ -165,6 +208,7 @@ class BookmarksWidget extends React.Component {
                   className="fa fa-bookmark-o"/>
           </IconButton>
           <Popover
+            style={popoverStyle}
             open={this.state.open}
             anchorEl={this.state.anchorEl}
             anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
@@ -172,14 +216,14 @@ class BookmarksWidget extends React.Component {
             onRequestClose={this.handleRequestClose.bind(this)}>
               {addBookmarkForm}
               <List>
-                <Subheader>Bookmarks
+                <Subheader style={header}>Bookmarks
                   <IconButton 
                       style={addBookmarkToggler}
                       onClick={this.toggleAddBookmarkForm.bind(this)}>
                         <FontIcon
                           style={togglerIcon}
-                          color={togglerIconColor}
-                          hoverColor={'#000'}
+                          color={grey300}
+                          hoverColor={'#FFF'}
                           className={togglerIconClass}/>
                   </IconButton>
                 </Subheader>
@@ -188,6 +232,7 @@ class BookmarksWidget extends React.Component {
                   bookmarks.map((bookmark, index) => {
                     return (<ListItem 
                               key={index}
+                              style={bookmarkListItemStyle}
                               onClick={this.openLink.bind(this, bookmark.link)}
                               primaryText={bookmark.name}
                               rightIconButton={
@@ -195,7 +240,7 @@ class BookmarksWidget extends React.Component {
                                     onClick={this.removeBookmark.bind(this, index)}>
                                       <FontIcon
                                         color={grey300}
-                                        hoverColor={'#000'}
+                                        hoverColor={'#FFF'}
                                         className="fa fa-times"/>
                                 </IconButton>)
                               }
