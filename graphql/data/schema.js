@@ -29,8 +29,11 @@ import {
 
 import {
   Widget,
-  getWidget,
-  getUserWidgets,
+  getWidget
+} from '../database/widgets/widget/baseWidget';
+
+import {
+  getEnabledUserWidgets,
   updateUserWidgetData,
   updateUserWidgetVisibility
 } from '../database/widgets/widgets';
@@ -39,7 +42,7 @@ import {
   updateBookmarkPosition,
   addBookmark,
   deleteBookmark
-} from '../database/widgets/bookmarkWidget';
+} from '../database/widgets/widgetTypes/bookmarkWidget';
 
 import {
   User,
@@ -200,7 +203,7 @@ const userType = new GraphQLObjectType({
       type: widgetConnection,
       description: 'User widgets',
       args: connectionArgs,
-      resolve: (user, args) => connectionFromPromisedArray(getUserWidgets(user.id), args)
+      resolve: (user, args) => connectionFromPromisedArray(getEnabledUserWidgets(user.id), args)
     },
   }),
   interfaces: [nodeInterface]

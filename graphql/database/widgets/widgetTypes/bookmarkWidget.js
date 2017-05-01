@@ -1,15 +1,15 @@
-import database from '../database';
+import database from '../../database';
 import array from 'lodash/array';
 
 import { 
   getUserWidget,
   updateUserWidgetData 
-} from './widgets';
+} from '../userWidget/userWidget';
 
 import Async from 'asyncawait/async';
 import Await from 'asyncawait/await';
 
-import { logger } from '../../utils/dev-tools';
+import { logger } from '../../../utils/dev-tools';
 
 /*
  * Helper Class to manage the BookmarkWidget.

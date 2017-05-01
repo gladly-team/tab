@@ -1,7 +1,7 @@
-jest.mock('../../database');
+jest.mock('../../../database');
 
-import tablesNames from '../../tables';
-import { UserWidget } from '../widgets';
+import tablesNames from '../../../tables';
+import { UserWidget } from '../userWidget';
 
 test('getTable name to be implemented', () => {
 	expect(UserWidget.getTableName()).toBe(tablesNames.userWidgets);

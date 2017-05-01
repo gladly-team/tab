@@ -1,11 +1,11 @@
-import mockDatabase from '../../__mocks__/database';
-import { DatabaseOperation, OperationType } from '../../../utils/test-utils';
+import mockDatabase from '../../../__mocks__/database';
+import { DatabaseOperation, OperationType } from '../../../../utils/test-utils';
 
-jest.mock('../../database', () => {
+jest.mock('../../../database', () => {
 	return mockDatabase;
 });
 
-import { updateUserWidgetData, UserWidget } from '../widgets';
+import { updateWidgetData, UserWidget } from '../userWidget';
 
 function setup() {
 	mockDatabase.init();
@@ -43,7 +43,7 @@ test('update user widget data', () => {
 		})
 	);
 
-	return updateUserWidgetData(userId, widgetId,  newData)
+	return updateWidgetData(userId, widgetId,  newData)
     .then(userWidget => {
         expect(userWidget).not.toBe(null);
         expect(userWidget.userId).toBe(userId);
