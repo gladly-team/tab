@@ -61,6 +61,7 @@ class UserWidget extends BaseModel {
 
     this.widgetId = '';
     this.enabled = false;
+    this.visible = false,
     this.data = {};
     this.icon = null;
   }
@@ -82,6 +83,7 @@ class UserWidget extends BaseModel {
       'userId',
       'widgetId',
       'enabled',
+      'visible',
       'data'
     ];
   }
@@ -223,8 +225,9 @@ function getWidgets(userId) {
 /**
  * Update widget data.
  * @param {string} userId - The user id. 
- * @return {Promise<Widget[]>}  Returns a promise that resolves into a
- * list of widgets.
+ * @param {string} widgetId - The widget id. 
+ * @return {Promise<Widget>}  Returns a promise that resolves into a
+ * Widget.
  */
 var updateUserWidgetData =  Async (function(userId, widgetId, data) {
 
@@ -252,6 +255,38 @@ var updateUserWidgetData =  Async (function(userId, widgetId, data) {
     return Await (UserWidget.update(key, params));
 });
 
+/**
+ * Update widget visible state.
+ * @param {string} userId - The user id. 
+ * @param {string} widgetId - The widget id.
+ * @return {Promise<Widget>}  Returns a promise that resolves into a
+ * widget.
+ */
+var updateUserWidgetVisibility =  Async (function(userId, widgetId, visible) {
+
+    var updateExpression = `SET #visible = :visible`;
+    var expressionAttributeNames = {
+         '#visible': 'visible'
+    };
+    var expressionAttributeValues = {
+         ':visible': visible
+    };
+    
+    var params = {
+        UpdateExpression: updateExpression,
+        ExpressionAttributeNames: expressionAttributeNames,
+        ExpressionAttributeValues: expressionAttributeValues,
+        ReturnValues:"ALL_NEW"
+    };
+
+    const key = {
+      userId: userId,
+      widgetId: widgetId
+    };
+
+    return Await (UserWidget.update(key, params));
+});
+
 export {
   Widget,
   UserWidget,
@@ -259,7 +294,8 @@ export {
   getUserWidgets,
   getWidgets,
   getUserWidget,
-  updateUserWidgetData
+  updateUserWidgetData,
+  updateUserWidgetVisibility,
 };
 
 

@@ -114,6 +114,7 @@ type Mutation {
   donateVc(input: DonateVcInput!): DonateVcPayload
   setUserBkgImage(input: SetUserBkgImageInput!): SetUserBkgImagePayload
   updateWidgetData(input: UpdateWidgetDataInput!): UpdateWidgetDataPayload
+  updateWidgetVisibility(input: UpdateWidgetVisibilityInput!): UpdateWidgetVisibilityPayload
   addBookmark(input: AddBookmarkInput!): AddBookmarkPayload
   removeBookmark(input: RemoveBookmarkInput!): RemoveBookmarkPayload
 }
@@ -194,6 +195,18 @@ type UpdateWidgetDataPayload {
   clientMutationId: String
 }
 
+input UpdateWidgetVisibilityInput {
+  userId: String!
+  widgetId: String!
+  visible: Boolean!
+  clientMutationId: String
+}
+
+type UpdateWidgetVisibilityPayload {
+  widget: Widget
+  clientMutationId: String
+}
+
 # A person who uses our app
 type User implements Node {
   # The ID of an object
@@ -240,6 +253,9 @@ type Widget implements Node {
 
   # The Widget enabled state
   enabled: Boolean
+
+  # The Widget visible state
+  visible: Boolean
 
   # Widget data.
   data: String

@@ -1,5 +1,7 @@
 import React from 'react';
 
+import UpdateWidgetVisibilityMutation from 'mutations/UpdateWidgetVisibilityMutation';
+
 // Widget Types.
 import BookmarksWidget from './Widgets/Bookmarks/BookmarksWidgetContainer';
 import SearchWidget from './Widgets/Search/SearchWidgetContainer';
@@ -8,6 +10,15 @@ import NotesWidget from './Widgets/Notes/NotesWidgetContainer';
 import TodosWidget from './Widgets/Todos/TodosWidgetContainer';
 
 class Widget extends React.Component {
+
+  popoverWidgetVisibilityChanged(user, widget, visible) {
+    UpdateWidgetVisibilityMutation.commit(
+      this.props.relay.environment,
+      user,
+      widget,
+      visible
+    );
+  }
   
   render() {
     const { widget, user } = this.props; 
@@ -16,7 +27,8 @@ class Widget extends React.Component {
       case 'bookmarks':
         return (<BookmarksWidget 
                   widget={widget}
-                  user={user}/>)
+                  user={user}
+                  popoverWidgetVisibilityChanged={this.popoverWidgetVisibilityChanged.bind(this)}/>)
       case 'search':
         return (<SearchWidget 
                   widget={widget}
@@ -30,12 +42,14 @@ class Widget extends React.Component {
       case 'notes':
         return (<NotesWidget 
                   widget={widget}
-                  user={user}/>)
+                  user={user}
+                  popoverWidgetVisibilityChanged={this.popoverWidgetVisibilityChanged.bind(this)}/>)
 
       case 'todos':
         return (<TodosWidget 
                   widget={widget}
-                  user={user}/>)
+                  user={user}
+                  popoverWidgetVisibilityChanged={this.popoverWidgetVisibilityChanged.bind(this)}/>)
       default:
         return null;
     }

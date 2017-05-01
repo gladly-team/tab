@@ -12,6 +12,7 @@ test('getFields to be implemented', () => {
       'userId',
       'widgetId',
       'enabled',
+      'visible',
       'data'
     ];
 
@@ -34,6 +35,7 @@ test('deserialize to be implemented', () => {
 		userId: 'someUserid',
 		widgetId: 'someWidgetid',
   		enabled: true,
+  		visible: false,
   		data: { field: 'value'}
 	});
 
@@ -41,6 +43,7 @@ test('deserialize to be implemented', () => {
 	expect(userWidget.userId).toBe('someUserid');
 	expect(userWidget.widgetId).toBe('someWidgetid');
 	expect(userWidget.enabled).toBe(true);
+	expect(userWidget.visible).toBe(false);
 	expect(userWidget.data.field).toBe('value');
 });
 

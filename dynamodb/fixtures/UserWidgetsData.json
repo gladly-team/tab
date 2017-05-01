@@ -3,6 +3,7 @@
   	"userId": "45bbefbf-63d1-4d36-931e-212fbe2bc3d9",
     "widgetId": "4162cc79-d192-4435-91bd-5fda9b6f7c08",
     "enabled": true,
+    "visible": false,
     "data": {
     	"bookmarks": [
     		{
@@ -32,6 +33,7 @@
     "userId": "45bbefbf-63d1-4d36-931e-212fbe2bc3d9",
     "widgetId": "426ccc79-d192-4435-91bd-5fda9b6f7c08",
     "enabled": true,
+    "visible": false,
     "data": {
         "engine": "Google"
     }
@@ -40,6 +42,7 @@
     "userId": "45bbefbf-63d1-4d36-931e-212fbe2bc3d9",
     "widgetId": "ab58d2da-550b-414f-895a-7bcb2cbc9d62",
     "enabled": true,
+    "visible": false,
     "data": {
         "format24": true
     }
@@ -48,6 +51,7 @@
     "userId": "45bbefbf-63d1-4d36-931e-212fbe2bc3d9",
     "widgetId": "4262cc79-d192-4435-91bd-5fda9b6f7c08",
     "enabled": true,
+    "visible": false,
     "data": {
         "notes": [
             {
@@ -68,6 +72,7 @@
     "userId": "45bbefbf-63d1-4d36-931e-212fbe2bc3d9",
     "widgetId": "a458d2da-550b-414f-895a-7bcb2cbc9d62",
     "enabled": true,
+    "visible": false,
     "data": {
         "completed": [
             {

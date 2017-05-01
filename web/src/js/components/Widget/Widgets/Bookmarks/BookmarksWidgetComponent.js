@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 
 import AddBookmarkMutation from 'mutations/AddBookmarkMutation';
 import RemoveBookmarkMutation from 'mutations/RemoveBookmarkMutation';
@@ -26,8 +27,14 @@ class BookmarksWidget extends React.Component {
     };
   }
 
-  handleRequestOpen(event) {
+  componentDidMount() {
+    this.setState({
+      open: this.props.widget.visible,
+      anchorEl: ReactDOM.findDOMNode(this.bIcon),
+    });
+  }
 
+  handleRequestOpen(event) {
     // This prevents ghost click.
     event.preventDefault();
 
@@ -35,6 +42,9 @@ class BookmarksWidget extends React.Component {
       open: true,
       anchorEl: event.currentTarget,
     });
+
+    this.props.popoverWidgetVisibilityChanged(
+      this.props.user, this.props.widget, true);
   }
 
   handleRequestClose() {
@@ -42,6 +52,9 @@ class BookmarksWidget extends React.Component {
       open: false,
       addForm: false,
     });
+
+    this.props.popoverWidgetVisibilityChanged(
+      this.props.user, this.props.widget, false);
   }
 
   openLink(link) {
@@ -200,6 +213,7 @@ class BookmarksWidget extends React.Component {
     return (
         <div>
           <IconButton 
+              ref={(bIcon) => { this.bIcon = bIcon; }}
               tooltip={widget.name}
               onClick={this.handleRequestOpen.bind(this)}>
                 <FontIcon
@@ -260,6 +274,7 @@ class BookmarksWidget extends React.Component {
 BookmarksWidget.propTypes = {
   widget: React.PropTypes.object.isRequired,
   user: React.PropTypes.object.isRequired,
+  popoverWidgetVisibilityChanged: React.PropTypes.func.isRequired,
 };
 
 export default BookmarksWidget;

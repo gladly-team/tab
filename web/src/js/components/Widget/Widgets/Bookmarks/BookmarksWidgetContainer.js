@@ -11,6 +11,7 @@ export default createFragmentContainer(BookmarksWidget, {
       id
       name
       enabled
+      visible
       data
       icon
       type
