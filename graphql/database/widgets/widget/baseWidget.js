@@ -23,6 +23,7 @@ class Widget extends BaseModel {
     this.name = '';
     this.type = '';
     this.icon = null;
+    this.settings = {};
   }
 
   /**
@@ -41,7 +42,8 @@ class Widget extends BaseModel {
     return [
       'name',
       'type',
-      'icon'
+      'icon',
+      'settings'
     ];
   }
 }

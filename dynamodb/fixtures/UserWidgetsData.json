@@ -34,7 +34,8 @@
     "widgetId": "426ccc79-d192-4435-91bd-5fda9b6f7c08",
     "enabled": 1,
     "visible": false,
-    "data": {
+    "data": {},
+    "config": {
         "engine": "Google"
     }
   },
@@ -43,7 +44,8 @@
     "widgetId": "ab58d2da-550b-414f-895a-7bcb2cbc9d62",
     "enabled": 1,
     "visible": false,
-    "data": {
+    "data": {},
+    "config": {
         "format24": true
     }
   },

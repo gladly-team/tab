@@ -11,7 +11,8 @@ test('getFields to be implemented', () => {
 	const expected = [
       'name',
       'type',
-      'icon'
+      'icon',
+      'settings'
     ];
 
 	expect(Widget.getFields().length).toBe(expected.length);

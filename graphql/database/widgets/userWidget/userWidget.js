@@ -24,6 +24,7 @@ class UserWidget extends BaseModel {
     this.enabled = false;
     this.visible = false,
     this.data = {};
+    this.config = {};
     this.icon = null;
   }
 
@@ -45,7 +46,8 @@ class UserWidget extends BaseModel {
       'widgetId',
       'enabled',
       'visible',
-      'data'
+      'data',
+      'config'
     ];
   }
 

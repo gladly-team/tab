@@ -9,13 +9,28 @@
     "id": "426ccc79-d192-4435-91bd-5fda9b6f7c08",
     "icon": null,
     "name": "Search",
-    "type": "search"
+    "type": "search",
+    "settings": [ 
+      {
+        "field": "engine",
+        "type": "choices",
+        "display": "Search engine",
+        "choices": ["Google", "Bing", "Ecosia"]
+      }
+    ]
   },
   {
     "id": "ab58d2da-550b-414f-895a-7bcb2cbc9d62",
     "icon": null,
     "name": "Clock",
-    "type": "clock"
+    "type": "clock",
+    "settings": [ 
+      {
+        "field": "format24",
+        "type": "boolean",
+        "display": "Use 24 hours format"
+      }
+    ]
   },
   {
     "id": "4262cc79-d192-4435-91bd-5fda9b6f7c08",

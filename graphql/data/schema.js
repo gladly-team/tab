@@ -237,6 +237,14 @@ const widgetType = new GraphQLObjectType({
     data: {
       type: GraphQLString,
       description: 'Widget data.'
+    },
+    config: {
+      type: GraphQLString,
+      description: 'Widget user specific configuration.'
+    },
+    settings: {
+      type: GraphQLString,
+      description: 'Widget general configuration.'
     }
   }),
   interfaces: [nodeInterface]

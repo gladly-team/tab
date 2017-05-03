@@ -13,7 +13,8 @@ test('getFields to be implemented', () => {
       'widgetId',
       'enabled',
       'visible',
-      'data'
+      'data',
+      'config',
     ];
 
 	expect(UserWidget.getFields().length).toBe(expected.length);

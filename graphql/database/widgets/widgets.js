@@ -29,12 +29,15 @@ import {
   * with all the widget information.
   */
 function getFullWidget(userWidget, widget) {
+
   return Object.assign({}, 
     userWidget,
     widget,
     { 
       id: userWidget.widgetId,
-      data: JSON.stringify(userWidget.data)
+      data: JSON.stringify(userWidget.data),
+      config: JSON.stringify(userWidget.config),
+      settings: JSON.stringify(widget.settings)
     }
   );  
 }
