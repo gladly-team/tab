@@ -259,6 +259,12 @@ type Widget implements Node {
 
   # Widget data.
   data: String
+
+  # Widget user specific configuration.
+  config: String
+
+  # Widget general configuration.
+  settings: String
 }
 
 # A connection to a list of items.

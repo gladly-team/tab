@@ -8,6 +8,7 @@ import DonateVcView from '../Donate/DonateVcView';
 import WidgetsView from '../Widget/WidgetsView';
 
 import { FormattedMessage } from 'react-intl';
+import { goTo } from 'navigation/navigation';
 
 import Dialog from 'material-ui/Dialog';
 import IconButton from 'material-ui/IconButton';
@@ -26,6 +27,10 @@ class Dashboard extends React.Component {
       bkgSelectorOpened: false,
       donateDialogOpened: false
     };
+  }
+
+  goToSettings() {
+    goTo('/settings');
   }
 
   changeBkgSelectorState(state) {
@@ -117,6 +122,15 @@ class Dashboard extends React.Component {
               color={grey300}
               hoverColor={'#FFF'}
               className="fa fa-heart-o fa-lg" />
+          </IconButton>
+          <IconButton 
+            tooltip="Settings"
+            tooltipPosition="top-center"
+            onClick={this.goToSettings.bind(this)}>
+            <FontIcon 
+              color={grey300}
+              hoverColor={'#FFF'}
+              className="fa fa fa-cog fa-lg" />
           </IconButton>
         </div>
         <Dialog

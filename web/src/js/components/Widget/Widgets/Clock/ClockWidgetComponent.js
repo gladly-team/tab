@@ -27,8 +27,8 @@ class ClockWidget extends React.Component {
 
   setDateTime() {
     const { widget } = this.props; 
-    const data = JSON.parse(widget.data);
-    const format24 = data.format24;
+    const config = JSON.parse(widget.config);
+    const format24 = config.format24;
 
     var date = moment().format("ddd, MMMM D");
     var time;
@@ -47,9 +47,6 @@ class ClockWidget extends React.Component {
 
   render() {
     const { widget } = this.props; 
-
-    const data = JSON.parse(widget.data);
-    const format24 = data.format24;
 
     const clockContainer = {
       textAlign: 'center',
