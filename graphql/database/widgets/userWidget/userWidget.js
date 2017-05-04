@@ -147,6 +147,7 @@ function getUserWidgetsByEnabledState(userId, enabled) {
  * Update widget data.
  * @param {string} userId - The user id. 
  * @param {string} widgetId - The widget id. 
+ * @param {Object} data - The new widget data. 
  * @return {Promise<Widget>}  Returns a promise that resolves into a
  * Widget.
  */
@@ -161,7 +162,39 @@ var updateWidgetData =  Async (function(userId, widgetId, data) {
     };
     
     var params = {
-        IndexName: "UserWidget",
+        UpdateExpression: updateExpression,
+        ExpressionAttributeNames: expressionAttributeNames,
+        ExpressionAttributeValues: expressionAttributeValues,
+        ReturnValues:"ALL_NEW"
+    };
+
+    const key = {
+      userId: userId,
+      widgetId: widgetId
+    };
+
+    return Await (UserWidget.update(key, params));
+});
+
+/**
+ * Update widget config.
+ * @param {string} userId - The user id. 
+ * @param {string} widgetId - The widget id. 
+ * @param {Object} config - The new widget config. 
+ * @return {Promise<Widget>}  Returns a promise that resolves into a
+ * Widget.
+ */
+var updateWidgetConfig =  Async (function(userId, widgetId, config) {
+
+    var updateExpression = `SET #config = :config`;
+    var expressionAttributeNames = {
+         '#config': 'config'
+    };
+    var expressionAttributeValues = {
+         ':config': config
+    };
+    
+    var params = {
         UpdateExpression: updateExpression,
         ExpressionAttributeNames: expressionAttributeNames,
         ExpressionAttributeValues: expressionAttributeValues,
@@ -180,6 +213,7 @@ var updateWidgetData =  Async (function(userId, widgetId, data) {
  * Update widget visible state.
  * @param {string} userId - The user id. 
  * @param {string} widgetId - The widget id.
+ * @param {boolean} visible - The new visible state.
  * @return {Promise<Widget>}  Returns a promise that resolves into a
  * widget.
  */
@@ -208,6 +242,39 @@ var updateWidgetVisibility =  Async (function(userId, widgetId, visible) {
     return Await (UserWidget.update(key, params));
 });
 
+/**
+ * Update widget enabled state.
+ * @param {string} userId - The user id. 
+ * @param {string} widgetId - The widget id.
+ * @param {boolean} enabled - The new enabled state.
+ * @return {Promise<Widget>}  Returns a promise that resolves into a
+ * widget.
+ */
+var updateWidgetEnabled =  Async (function(userId, widgetId, enabled) {
+
+    var updateExpression = `SET #enabled = :enabled`;
+    var expressionAttributeNames = {
+         '#enabled': 'enabled'
+    };
+    var expressionAttributeValues = {
+         ':enabled': enabled
+    };
+    
+    var params = {
+        UpdateExpression: updateExpression,
+        ExpressionAttributeNames: expressionAttributeNames,
+        ExpressionAttributeValues: expressionAttributeValues,
+        ReturnValues:"ALL_NEW"
+    };
+
+    const key = {
+      userId: userId,
+      widgetId: widgetId
+    };
+
+    return Await (UserWidget.update(key, params));
+});
+
 export {
   UserWidget,
   getUserWidgets,
@@ -215,4 +282,6 @@ export {
   getUserWidgetsByEnabledState,
   updateWidgetData,
   updateWidgetVisibility,
+  updateWidgetEnabled,
+  updateWidgetConfig
 };

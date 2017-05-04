@@ -35,7 +35,9 @@ import {
 import {
   getEnabledUserWidgets,
   updateUserWidgetData,
-  updateUserWidgetVisibility
+  updateUserWidgetVisibility,
+  updateUserWidgetEnabled,
+  updateUserWidgetConfig
 } from '../database/widgets/widgets';
 
 import {
@@ -429,8 +431,6 @@ const updateWidgetDataMutation = mutationWithClientMutationId({
     widget: {
       type: widgetType,
       resolve: (userWidget) => {
-        userWidget.id = userWidget.widgetId;
-        userWidget.data = JSON.stringify(userWidget.data);
         return userWidget;
       }
     }
@@ -438,8 +438,7 @@ const updateWidgetDataMutation = mutationWithClientMutationId({
   mutateAndGetPayload: ({userId, widgetId, data}) => {
     const userGlobalObj = fromGlobalId(userId);
     const widgetGlobalObj = fromGlobalId(widgetId);
-    const parsedData = JSON.parse(data);
-    return updateUserWidgetData(userGlobalObj.id, widgetGlobalObj.id, parsedData);
+    return updateUserWidgetData(userGlobalObj.id, widgetGlobalObj.id, data);
   }
 });
 
@@ -457,7 +456,6 @@ const updateWidgetVisibilityMutation = mutationWithClientMutationId({
     widget: {
       type: widgetType,
       resolve: (userWidget) => {
-        userWidget.id = userWidget.widgetId;
         return userWidget;
       }
     }
@@ -469,60 +467,55 @@ const updateWidgetVisibilityMutation = mutationWithClientMutationId({
   }
 });
 
-// const addFeatureMutation = mutationWithClientMutationId({
-//   name: 'AddFeature',
-//   inputFields: {
-//     name: { type: new GraphQLNonNull(GraphQLString) },
-//     description: { type: new GraphQLNonNull(GraphQLString) },
-//     url: { type: new GraphQLNonNull(GraphQLString) },
-//   },
+/**
+ * Update widget enable.
+ */
+const updateWidgetEnableMutation = mutationWithClientMutationId({
+  name: 'UpdateWidgetEnable',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    widgetId: { type: new GraphQLNonNull(GraphQLString) },
+    enabled: { type: new GraphQLNonNull(GraphQLBoolean) }
+  },
+  outputFields: {
+    widget: {
+      type: widgetType,
+      resolve: (userWidget) => {
+        return userWidget;
+      }
+    }
+  },
+  mutateAndGetPayload: ({userId, widgetId, enabled}) => {
+    const userGlobalObj = fromGlobalId(userId);
+    const widgetGlobalObj = fromGlobalId(widgetId);
+    return updateUserWidgetEnabled(userGlobalObj.id, widgetGlobalObj.id, enabled);
+  }
+});
 
-//   outputFields: {
-//     featureEdge: {
-//       type: featureEdge,
-//       resolve: (obj) => {
-//         return Promise.resolve(getFeatures())
-//         .then(features => {
-//             // This code it's what we should actually do in here 
-
-//             // const cursorId = cursorForObjectInConnection(features, obj);
-//             // return { node: features[offset], cursor: cursorId};
-
-//             // The previous code doesn't work because the cursorForObjectInConnection 
-//             // uses indexOf(compare using memory reference) to get the position of object 
-//             // obj in features check cursorForObjectInConnection
-//             // definition at https://github.com/graphql/graphql-relay-js/blob/master/src/connection/arrayconnection.js
-//             // The following code it's a workaround to the previous one. 
-//             // It searches for the obj by id in the list of features, then
-//             // encode the index and return the edge object.
-
-//             var offset = -1;
-//             for(var i = 0, len = features.length; i < len; i++) {
-//                 if (features[i].id === obj.id) {
-//                     offset = i;
-//                     break;
-//                 }
-//             }
-
-//             // offsetToCursor creates a hash using the position of the object.
-//             if (offset >= 0) {
-//               return { node: features[offset], cursor: offsetToCursor(offset)};
-//             }
-//         })
-//         .catch(
-//           err => console.error("Unable get the features:", JSON.stringify(err, null, 2))
-//         );
-//       }
-//     },
-//     viewer: {
-//       type: userType,
-//       resolve: () => getUser("45bbefbf-63d1-4d36-931e-212fbe2bc3d9")
-//     }
-//   },
-
-//   mutateAndGetPayload: ({ name, description, url }) => addFeature(name, description, url)
-// });
-
+/**
+ * Update widget config.
+ */
+const updateWidgetConfigMutation = mutationWithClientMutationId({
+  name: 'UpdateWidgetConfig',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    widgetId: { type: new GraphQLNonNull(GraphQLString) },
+    config: { type: new GraphQLNonNull(GraphQLString) }
+  },
+  outputFields: {
+    widget: {
+      type: widgetType,
+      resolve: (userWidget) => {
+        return userWidget;
+      }
+    }
+  },
+  mutateAndGetPayload: ({userId, widgetId, config}) => {
+    const userGlobalObj = fromGlobalId(userId);
+    const widgetGlobalObj = fromGlobalId(widgetId);
+    return updateUserWidgetConfig(userGlobalObj.id, widgetGlobalObj.id, config);
+  }
+});
 
 /**
  * This is the type that will be the root of our query,
@@ -559,6 +552,8 @@ const mutationType = new GraphQLObjectType({
     setUserBkgImage: setUserBkgImageMutation,
     updateWidgetData: updateWidgetDataMutation,
     updateWidgetVisibility: updateWidgetVisibilityMutation,
+    updateWidgetEnable: updateWidgetEnableMutation,
+    updateWidgetConfig: updateWidgetConfigMutation,
 
     addBookmark: addBookmarkMutation,
     removeBookmark: removeBookmarkMutation,

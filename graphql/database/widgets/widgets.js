@@ -18,6 +18,8 @@ import {
   getUserWidgetsByEnabledState,
   updateWidgetData,
   updateWidgetVisibility,
+  updateWidgetEnabled,
+  updateWidgetConfig
 } from './userWidget/userWidget';
 
 /**
@@ -88,13 +90,15 @@ var getEnabledUserWidgets =  Async (function(userId) {
 /**
  * Update widget data.
  * @param {string} userId - The user id. 
- * @param {string} widgetId - The widget id. 
+ * @param {string} widgetId - The widget id.
+ * @param {Object} data - The new widget data.  
  * @return {Promise<Widget>}  Returns a promise that resolves into a
  * Widget.
  */
 var updateUserWidgetData =  Async (function(userId, widgetId, data) {
+  const parsedData = JSON.parse(data);
   const widget = Await (getWidget(widgetId));
-  const userWidget = Await (updateWidgetData(userId, widgetId, data));
+  const userWidget = Await (updateWidgetData(userId, widgetId, parsedData));
   return getFullWidget(userWidget, widget);
 });
 
@@ -102,6 +106,7 @@ var updateUserWidgetData =  Async (function(userId, widgetId, data) {
  * Update widget visible state.
  * @param {string} userId - The user id. 
  * @param {string} widgetId - The widget id.
+ * @param {boolean} visible - The new visible state.
  * @return {Promise<Widget>}  Returns a promise that resolves into a
  * widget.
  */
@@ -111,10 +116,41 @@ var updateUserWidgetVisibility =  Async (function(userId, widgetId, visible) {
   return getFullWidget(userWidget, widget);
 });
 
+/**
+ * Update widget enabled state.
+ * @param {string} userId - The user id. 
+ * @param {string} widgetId - The widget id.
+ * @param {boolean} enabled - The new enabled state.
+ * @return {Promise<Widget>}  Returns a promise that resolves into a
+ * widget.
+ */
+var updateUserWidgetEnabled =  Async (function(userId, widgetId, enabled) {
+  const widget = Await (getWidget(widgetId));
+  const userWidget = Await (updateWidgetEnabled(userId, widgetId, enabled));
+  return getFullWidget(userWidget, widget);
+});
+
+/**
+ * Update widget config.
+ * @param {string} userId - The user id. 
+ * @param {string} widgetId - The widget id. 
+ * @param {Object} config - The new widget config. 
+ * @return {Promise<Widget>}  Returns a promise that resolves into a
+ * Widget.
+ */
+var updateUserWidgetConfig =  Async (function(userId, widgetId, config) {
+  const parsedConfig = JSON.parse(config);
+  const widget = Await (getWidget(widgetId));
+  const userWidget = Await (updateWidgetData(userId, widgetId, parsedConfig));
+  return getFullWidget(userWidget, widget);
+});
+
 export {
   getEnabledUserWidgets,
   updateUserWidgetData,
-  updateUserWidgetVisibility
+  updateUserWidgetVisibility,
+  updateUserWidgetEnabled,
+  updateUserWidgetConfig
 };
 
 
