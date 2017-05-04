@@ -1,6 +1,7 @@
 import React from 'react';
 import {QueryRenderer} from 'react-relay/compat';
 import environment from '../../../relay-env';
+import FullScreenProgress from 'general/FullScreenProgress';
 
 import Settigns from './SettingsContainer';
 
@@ -24,7 +25,7 @@ class SettingsView extends React.Component {
                     user={props.user}/>
               )
             } else {
-              return (<h1>Loading Settings</h1>);
+              return (<FullScreenProgress />);
             }
           }}/>
     );

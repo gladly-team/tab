@@ -10,6 +10,8 @@ class ClockWidget extends React.Component {
   constructor(props) {
     super(props);
 
+    this.updateClockInterval = 0;
+
     this.state = {
         date: '',
         time: '',
@@ -20,9 +22,13 @@ class ClockWidget extends React.Component {
     this.setDateTime();
     
     const self = this;
-    setInterval(() => {
+    this.updateClockInterval = setInterval(() => {
       self.setDateTime();
     }, 1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.updateClockInterval);
   }
 
   setDateTime() {

@@ -3,6 +3,7 @@ import {QueryRenderer} from 'react-relay/compat';
 import environment from '../../../../relay-env';
 
 import WidgetsSettigns from './WidgetsSettingsContainer';
+import FullScreenProgress from 'general/FullScreenProgress';
 
 class WidgetsSettingsView extends React.Component { 
   render() {
@@ -24,7 +25,7 @@ class WidgetsSettingsView extends React.Component {
                     user={props.user}/>
               )
             } else {
-              return (<h1>Loading Widget Settings</h1>);
+              return (<FullScreenProgress />);
             }
           }}/>
     );
