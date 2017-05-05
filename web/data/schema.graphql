@@ -16,6 +16,9 @@ type App implements Node {
   # The ID of an object
   id: ID!
 
+  # All the widgets
+  widgets(after: String, first: Int, before: String, last: Int): WidgetConnection
+
   # All the charities
   charities(after: String, first: Int, before: String, last: Int): CharityConnection
 
@@ -115,6 +118,8 @@ type Mutation {
   setUserBkgImage(input: SetUserBkgImageInput!): SetUserBkgImagePayload
   updateWidgetData(input: UpdateWidgetDataInput!): UpdateWidgetDataPayload
   updateWidgetVisibility(input: UpdateWidgetVisibilityInput!): UpdateWidgetVisibilityPayload
+  updateWidgetEnabled(input: UpdateWidgetEnabledInput!): UpdateWidgetEnabledPayload
+  updateWidgetConfig(input: UpdateWidgetConfigInput!): UpdateWidgetConfigPayload
   addBookmark(input: AddBookmarkInput!): AddBookmarkPayload
   removeBookmark(input: RemoveBookmarkInput!): RemoveBookmarkPayload
 }
@@ -183,6 +188,18 @@ type UpdateVcPayload {
   clientMutationId: String
 }
 
+input UpdateWidgetConfigInput {
+  userId: String!
+  widgetId: String!
+  config: String!
+  clientMutationId: String
+}
+
+type UpdateWidgetConfigPayload {
+  widget: Widget
+  clientMutationId: String
+}
+
 input UpdateWidgetDataInput {
   userId: String!
   widgetId: String!
@@ -191,6 +208,18 @@ input UpdateWidgetDataInput {
 }
 
 type UpdateWidgetDataPayload {
+  widget: Widget
+  clientMutationId: String
+}
+
+input UpdateWidgetEnabledInput {
+  userId: String!
+  widgetId: String!
+  enabled: Boolean!
+  clientMutationId: String
+}
+
+type UpdateWidgetEnabledPayload {
   widget: Widget
   clientMutationId: String
 }

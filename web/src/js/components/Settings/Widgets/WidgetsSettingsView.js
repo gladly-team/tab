@@ -12,6 +12,9 @@ class WidgetsSettingsView extends React.Component {
           environment={environment}
           query={graphql`
             query WidgetsSettingsViewQuery($userId: String!) {
+              app {
+                ...WidgetsSettingsContainer_app
+              }
               user(userId: $userId) {
                 ...WidgetsSettingsContainer_user
               }
@@ -22,6 +25,7 @@ class WidgetsSettingsView extends React.Component {
             if (props) {
               return (
                   <WidgetsSettigns 
+                    app={props.app}
                     user={props.user}/>
               )
             } else {

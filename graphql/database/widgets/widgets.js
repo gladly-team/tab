@@ -9,12 +9,12 @@ import { logger } from '../../utils/dev-tools';
 
 import {
   Widget,
-  getWidget
+  getWidget,
+  getWidgets
 } from './widget/baseWidget';
 
 import {
   UserWidget,
-  getUserWidgets as getWidgets,
   getUserWidgetsByEnabledState,
   updateWidgetData,
   updateWidgetVisibility,
@@ -141,8 +141,25 @@ var updateUserWidgetEnabled =  Async (function(userId, widgetId, enabled) {
 var updateUserWidgetConfig =  Async (function(userId, widgetId, config) {
   const parsedConfig = JSON.parse(config);
   const widget = Await (getWidget(widgetId));
-  const userWidget = Await (updateWidgetData(userId, widgetId, parsedConfig));
+  const userWidget = Await (updateWidgetConfig(userId, widgetId, parsedConfig));
   return getFullWidget(userWidget, widget);
+});
+
+/**
+ * Get all widgets.
+ * @param {string} userId - The user id. 
+ * @param {string} widgetId - The widget id. 
+ * @param {Object} config - The new widget config. 
+ * @return {Promise<Widget>}  Returns a promise that resolves into a
+ * Widget.
+ */
+var getAllWidgets =  Async (function() {
+  const widgets = Await (getWidgets());
+  for(var i = 0; i < widgets.length; i++) {
+    widgets[i].widgetId = widgets[i].id;
+    widgets[i].settings = JSON.stringify(widgets[i].settings);
+  }
+  return widgets;
 });
 
 export {
@@ -150,7 +167,8 @@ export {
   updateUserWidgetData,
   updateUserWidgetVisibility,
   updateUserWidgetEnabled,
-  updateUserWidgetConfig
+  updateUserWidgetConfig,
+  getAllWidgets
 };
 
 

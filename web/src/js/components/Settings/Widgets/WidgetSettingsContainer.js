@@ -19,5 +19,14 @@ export default createFragmentContainer(WidgetSettings, {
     fragment WidgetSettingsContainer_user on User {
       id
     }
+  `,
+  appWidget: graphql`
+    fragment WidgetSettingsContainer_appWidget on Widget {
+      id
+      icon
+      name
+      type
+      settings
+    }
   `
 });

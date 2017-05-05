@@ -15,7 +15,8 @@
         "field": "engine",
         "type": "choices",
         "display": "Search engine",
-        "choices": ["Google", "Bing", "Ecosia"]
+        "choices": ["Google", "Bing", "Ecosia"],
+        "defaultValue": "Google"
       }
     ]
   },
@@ -28,7 +29,8 @@
       {
         "field": "format24",
         "type": "boolean",
-        "display": "Use 24 hours format"
+        "display": "Use 24 hours format",
+        "defaultValue": false
       }
     ]
   },

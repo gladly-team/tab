@@ -37,7 +37,8 @@ import {
   updateUserWidgetData,
   updateUserWidgetVisibility,
   updateUserWidgetEnabled,
-  updateUserWidgetConfig
+  updateUserWidgetConfig,
+  getAllWidgets
 } from '../database/widgets/widgets';
 
 import {
@@ -274,6 +275,12 @@ const appType = new GraphQLObjectType({
   description: 'Global app fields',
   fields: () => ({
     id: globalIdField('App'),
+    widgets: {
+      type: widgetConnection,
+      description: 'All the widgets',
+      args: connectionArgs,
+      resolve: (_, args) => connectionFromPromisedArray(getAllWidgets(), args)
+    },
     charities: {
       type: charityConnection,
       description: 'All the charities',
@@ -470,8 +477,8 @@ const updateWidgetVisibilityMutation = mutationWithClientMutationId({
 /**
  * Update widget enable.
  */
-const updateWidgetEnableMutation = mutationWithClientMutationId({
-  name: 'UpdateWidgetEnable',
+const updateWidgetEnabledMutation = mutationWithClientMutationId({
+  name: 'UpdateWidgetEnabled',
   inputFields: {
     userId: { type: new GraphQLNonNull(GraphQLString) },
     widgetId: { type: new GraphQLNonNull(GraphQLString) },
@@ -552,7 +559,7 @@ const mutationType = new GraphQLObjectType({
     setUserBkgImage: setUserBkgImageMutation,
     updateWidgetData: updateWidgetDataMutation,
     updateWidgetVisibility: updateWidgetVisibilityMutation,
-    updateWidgetEnable: updateWidgetEnableMutation,
+    updateWidgetEnabled: updateWidgetEnabledMutation,
     updateWidgetConfig: updateWidgetConfigMutation,
 
     addBookmark: addBookmarkMutation,

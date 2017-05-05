@@ -4,6 +4,9 @@ import Toggle from 'material-ui/Toggle';
 import WidgetConfig from './WidgetConfigComponent';
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 
+import UpdateWidgetEnabledMutation from 'mutations/UpdateWidgetEnabledMutation';
+import UpdateWidgetConfigMutation from 'mutations/UpdateWidgetConfigMutation';
+
 class WidgetSettings extends React.Component {
 
   constructor(props) {
@@ -15,11 +18,16 @@ class WidgetSettings extends React.Component {
   }
 
   componentDidMount() {
-    const { widget, user } = this.props;
+    const { appWidget, widget, user } = this.props;
+
+    var config;
+    if(widget) {
+      config = JSON.parse(widget.config);
+    } 
 
     const settings = this.getConfig(
-      JSON.parse(widget.settings), 
-      JSON.parse(widget.config));
+      JSON.parse(appWidget.settings), 
+      config);
 
     this.setState({
       settings: settings,
@@ -30,31 +38,54 @@ class WidgetSettings extends React.Component {
     if(!settings.length)
       return [];
 
+    var value;
     for(var i = 0; i < settings.length; i++) {
-      settings[i].value = config[settings[i].field];
+      if(!config || !settings[i].field in config){
+        value = settings[i].defaultValue;
+      } else {
+        value = config[settings[i].field];
+      }
+
+      settings[i].value = value;
     }
     return settings;
   }
 
   onWidgetEnableChange(event, checked) {
     // Call mutation to update widget enabled status.
-    const { widget, user } = this.props;
-    console.log(widget.name + ' enabled:', checked);
+    const { appWidget, user } = this.props;
+    UpdateWidgetEnabledMutation.commit(
+      this.props.relay.environment,
+      user,
+      appWidget,
+      checked
+    );
   }
 
   onWidgetConfigUpdated(field, value) {
-    const { widget, user } = this.props;
-    const widgetConfig = JSON.parse(widget.config);
+    const { widget, user, appWidget } = this.props;
+    var widgetConfig = {};
+    if(widget) {
+       widgetConfig = JSON.parse(widget.config);
+    }
+    
     widgetConfig[field] = value;
 
     const strConfig = JSON.stringify(widgetConfig);
     // Call mutation to update widget config.
-    console.log(widget.name + ' config:', strConfig);
 
+    UpdateWidgetConfigMutation.commit(
+      this.props.relay.environment,
+      user,
+      appWidget,
+      strConfig
+    );
   }
 
   render() {
-    const { widget, user } = this.props;
+    const { appWidget, widget, user } = this.props;
+
+    const enabled = widget && widget.enabled;
     const settings = this.state.settings || [];
 
     const settingsContainer = {
@@ -91,13 +122,13 @@ class WidgetSettings extends React.Component {
     return (
       <Card style={card}>
         <CardHeader
-          title={widget.name}
-          subtitle={widget.name}
+          title={appWidget.name}
+          subtitle={appWidget.name}
           actAsExpander={false}
           showExpandableButton={false}>
             <Toggle 
               style={enableToggle}
-              defaultToggled={widget.enabled}
+              defaultToggled={enabled}
               onToggle={this.onWidgetEnableChange.bind(this)}/>
         </CardHeader>
         {settingsComponent}
@@ -107,7 +138,8 @@ class WidgetSettings extends React.Component {
 }
 
 WidgetSettings.propTypes = {
-  widget: React.PropTypes.object.isRequired,
+  widget: React.PropTypes.object,
+  appWidget: React.PropTypes.object.isRequired,
   user: React.PropTypes.object.isRequired,
 };
 

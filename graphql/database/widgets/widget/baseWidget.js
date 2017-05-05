@@ -61,9 +61,32 @@ function getWidget(id) {
             });
 }
 
-
+/**
+ * Fetch all the widgets.
+ * @return {Promise<Widgets[]>}  A promise that resolve into a list 
+ * of Widget instances.
+ */
+function getWidgets() {
+  var params = {
+      ProjectionExpression: "#id, #name, #type, #icon, #settings",
+      ExpressionAttributeNames: {
+          "#id": "id",
+          "#name": "name",
+          "#type": "type",
+          "#icon": "icon",
+          "#settings": "settings"
+      }
+  };
+  
+  return Widget.getAll(params)
+            .then(widgets => widgets)
+            .catch(err => {
+                logger.error("Error while fetching the widgets.", err);
+            });
+}
 
 export {
   Widget,
-  getWidget
+  getWidget,
+  getWidgets
 };

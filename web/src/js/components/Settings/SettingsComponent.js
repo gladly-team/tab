@@ -1,7 +1,11 @@
 import React from 'react';
+import { goTo } from 'navigation/navigation';
 
+import AppBar from 'material-ui/AppBar';
+import FontIcon from 'material-ui/FontIcon';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
+
 import WidgetsSettingsView from './Widgets/WidgetsSettingsView';
 
 class Settings extends React.Component {
@@ -18,6 +22,10 @@ class Settings extends React.Component {
   		selection: selection,
   	});
   }	
+
+  goToHome() {
+    goTo('/');
+  }
   
   render() {
     const { user } = this.props; 
@@ -60,6 +68,11 @@ class Settings extends React.Component {
 
     return (
     	<div>
+        <AppBar
+          title="Settings"
+          iconClassNameLeft="fa fa-arrow-left"
+          onLeftIconButtonTouchTap={this.goToHome.bind(this)}
+        />
 	    	<Drawer open={true}>
 	    	  <MenuItem 
 	    	  	style={profile}
@@ -72,10 +85,11 @@ class Settings extends React.Component {
   				onClick={this.openSettingsFor.bind(this, 'widgets')}>
   					Widgets
   			  </MenuItem>
-	          <MenuItem 
-	          	style={background}
-	          	onClick={this.openSettingsFor.bind(this, 'background')}>Background</MenuItem>
-	        </Drawer>
+          <MenuItem 
+          	style={background}
+          	onClick={this.openSettingsFor.bind(this, 'background')}>Background</MenuItem>
+        </Drawer>
+
 	    	<div style={container}>
 	      		{settingView}
 	      	</div>

@@ -58,8 +58,8 @@ class SearchWidget extends React.Component {
   render() {
     const { widget } = this.props; 
 
-    const data = JSON.parse(widget.data);
-    const engine = data.engine;
+    const config = JSON.parse(widget.config);
+    const engine = config.engine;
 
     const searchContainer = {
       position: 'relative',

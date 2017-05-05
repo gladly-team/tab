@@ -257,7 +257,7 @@ var updateWidgetEnabled =  Async (function(userId, widgetId, enabled) {
          '#enabled': 'enabled'
     };
     var expressionAttributeValues = {
-         ':enabled': enabled
+         ':enabled': enabled?1:0
     };
     
     var params = {

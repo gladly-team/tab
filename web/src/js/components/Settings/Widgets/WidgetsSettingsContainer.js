@@ -12,7 +12,22 @@ export default createFragmentContainer(WidgetsSettings, {
       widgets(first: 20) {
         edges {
           node {
+            id
+            name
             ...WidgetSettingsContainer_widget
+          }
+        }
+      }
+    }
+  `,
+  app: graphql`
+    fragment WidgetsSettingsContainer_app on App {
+      widgets(first: 20) {
+        edges {
+          node {
+            id
+            name
+            ...WidgetSettingsContainer_appWidget
           }
         }
       }
