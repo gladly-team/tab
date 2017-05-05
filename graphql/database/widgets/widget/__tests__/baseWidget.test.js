@@ -1,7 +1,7 @@
-jest.mock('../../database');
+jest.mock('../../../database');
 
-import tablesNames from '../../tables';
-import { Widget } from '../widgets';
+import tablesNames from '../../../tables';
+import { Widget } from '../baseWidget';
 
 test('getTable name to be implemented', () => {
 	expect(Widget.getTableName()).toBe(tablesNames.widgets);
@@ -11,7 +11,8 @@ test('getFields to be implemented', () => {
 	const expected = [
       'name',
       'type',
-      'icon'
+      'icon',
+      'settings'
     ];
 
 	expect(Widget.getFields().length).toBe(expected.length);

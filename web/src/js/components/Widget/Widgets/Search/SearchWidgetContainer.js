@@ -12,6 +12,8 @@ export default createFragmentContainer(SearchWidget, {
       name
       enabled
       data
+      config
+      settings
       icon
       type
     }

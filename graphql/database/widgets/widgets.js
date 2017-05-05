@@ -7,142 +7,41 @@ import Await from 'asyncawait/await';
 
 import { logger } from '../../utils/dev-tools';
 
-/*
- * Represents a Base Widget. 
- * @extends BaseModel
- */
-class Widget extends BaseModel {
+import {
+  Widget,
+  getWidget,
+  getWidgets
+} from './widget/baseWidget';
 
-  /**
-   * Creates a Widget instance.
-   * @param {string} id - The instance id in the database.
-   */
-  constructor(id) {
-    super(id);
+import {
+  UserWidget,
+  getUserWidgets as getAllUserWidgets,
+  getUserWidgetsByEnabledState,
+  updateWidgetData,
+  updateWidgetVisibility,
+  updateWidgetEnabled,
+  updateWidgetConfig
+} from './userWidget/userWidget';
 
-    this.name = '';
-    this.type = '';
-    this.icon = null;
-  }
-
-  /**
-   * Overrides getTableName from BaseModel.
-   * Refer to `getTableName` in BaseModel for more details.
-   */
-  static getTableName() {
-    return tablesNames.widgets;
-  }
-
-  /**
-   * Overrides getFields from BaseModel.
-   * Refer to `getFields` in BaseModel for more details.
-   */
-  static getFields() {
-    return [
-      'name',
-      'type',
-      'icon'
-    ];
-  }
-}
-
-/*
- * Represents a  UserWidget. 
- * @extends BaseModel
- */
-class UserWidget extends BaseModel {
-
-  /**
-   * Creates a Widget instance.
-   * @param {string} id - The instance id in the database.
-   */
-  constructor(id) {
-    super(id);
-
-    this.widgetId = '';
-    this.enabled = false;
-    this.visible = false,
-    this.data = {};
-    this.icon = null;
-  }
-
-  /**
-   * Overrides getTableName from BaseModel.
-   * Refer to `getTableName` in BaseModel for more details.
-   */
-  static getTableName() {
-    return tablesNames.userWidgets;
-  }
-
-  /**
-   * Overrides getFields from BaseModel.
-   * Refer to `getFields` in BaseModel for more details.
-   */
-  static getFields() {
-    return [
-      'userId',
-      'widgetId',
-      'enabled',
-      'visible',
-      'data'
-    ];
-  }
-
-  /**
-   * Overrides getKey from BaseModel.
-   * Refer to `getKey` in BaseModel for more details.
-   */
-  static getKey(id) {
-    if(typeof id === 'string') {
-      return {
-        userId: id,
-      }
+/**
+  * Merge the user widget with the widget data to create an object
+  * with all the widget information.
+  * @param {Object<UserWidget>} userWidget
+  * @param {Object<UserWidget>} widget 
+  * @return {Object<UserWidget>}  Returns an instance of UserWidget 
+  * with all the widget information.
+  */
+function getFullWidget(userWidget, widget) {
+  return Object.assign({}, 
+    userWidget,
+    widget,
+    { 
+      id: userWidget.widgetId,
+      data: JSON.stringify(userWidget.data),
+      config: JSON.stringify(userWidget.config),
+      settings: JSON.stringify(widget.settings)
     }
-    return id;
-  }
-}
-
-/**
- * Fetch the widget by id.
- * @param {string} id - The widget id. 
- * @return {Promise<Widget>}  A promise that resolve into a Widget instance.
- */
-function getWidget(id) {
-  return Widget.get(id)
-            .then(widget => widget)
-            .catch(err => {
-                logger.error("Error while getting the widget.", err);
-            });
-}
-
-/**
- * Fetch the  user widget info from the userId and the widgetId.
- * @param {string} userId - The user id. 
- * @param {string} widgetId - The widget id. 
- * @return {Promise<UserWidget>}  Returns a Promise that resolve into
- * a UserWidget instance.
- */
-function getUserWidget(userId, widgetId) {
-  
-  var params = {
-      KeyConditionExpression: "#userId = :userId and #widgetId = :widgetId",
-      ExpressionAttributeNames:{
-          "#userId": 'userId',
-          "#widgetId": 'widgetId'
-      },
-      ExpressionAttributeValues: {
-          ":userId": userId,
-          ":widgetId": widgetId
-      }
-  };
-
-  return UserWidget.query(params)
-            .then(widgets => {
-              return widgets[0];
-            })
-            .catch(err => {
-                logger.error("Error while getting the widget.", err);
-            });
+  );  
 }
 
 /**
@@ -154,17 +53,18 @@ function getUserWidget(userId, widgetId) {
  * the user data on the widget information.
  */
 
-var getUserWidgets =  Async (function(userId) {
-
-    const userWidgets = Await (getWidgets(userId));
+var getUserWidgets =  Async (function(userId, enabled) {
+    var userWidgets;
+    if(typeof enabled !== 'undefined') {
+      userWidgets = Await (getUserWidgetsByEnabledState(userId, enabled)); 
+    } else {
+      userWidgets = Await (getAllUserWidgets(userId)); 
+    }
 
     const keys = [];
     const indexMapper = {}
 
     for(var index in userWidgets) {
-        if(!userWidgets[index].enabled)
-          continue;
-
         var widgetId = userWidgets[index].widgetId;
 
         keys.push({
@@ -185,117 +85,94 @@ var getUserWidgets =  Async (function(userId) {
         var widgetId = widgets[index].id;
         var userWidget = userWidgets[indexMapper[widgetId]];
 
-        result.push(Object.assign({}, 
-          userWidget,
-          widgets[index],
-          { 
-            data: JSON.stringify(userWidget.data)
-          }
-        ));  
+        result.push(
+          getFullWidget(userWidget, widgets[index]));  
     }
     return result;
 });
 
 /**
- * Fetch the widgets for a user.
- * @param {string} userId - The user id. 
- * @return {Promise<Widget[]>}  Returns a promise that resolves into a
- * list of widgets.
- */
-function getWidgets(userId) {
-  
-  var params = {
-      IndexName: "Widgets",
-      KeyConditionExpression: "#id = :id",
-      ExpressionAttributeNames:{
-          "#id": 'userId'
-      },
-      ExpressionAttributeValues: {
-          ":id": userId
-      }
-  };
-
-  return UserWidget.query(params)
-            .then(widgets => widgets)
-            .catch(err => {
-                logger.error("Error while getting the widgets.", err);
-            });
-}
-
-/**
  * Update widget data.
  * @param {string} userId - The user id. 
- * @param {string} widgetId - The widget id. 
+ * @param {string} widgetId - The widget id.
+ * @param {Object} data - The new widget data.  
  * @return {Promise<Widget>}  Returns a promise that resolves into a
  * Widget.
  */
 var updateUserWidgetData =  Async (function(userId, widgetId, data) {
-
-    var updateExpression = `SET #data = :data`;
-    var expressionAttributeNames = {
-         '#data': 'data'
-    };
-    var expressionAttributeValues = {
-         ':data': data
-    };
-    
-    var params = {
-        IndexName: "UserWidget",
-        UpdateExpression: updateExpression,
-        ExpressionAttributeNames: expressionAttributeNames,
-        ExpressionAttributeValues: expressionAttributeValues,
-        ReturnValues:"ALL_NEW"
-    };
-
-    const key = {
-      userId: userId,
-      widgetId: widgetId
-    };
-
-    return Await (UserWidget.update(key, params));
+  const parsedData = JSON.parse(data);
+  const widget = Await (getWidget(widgetId));
+  const userWidget = Await (updateWidgetData(userId, widgetId, parsedData));
+  return getFullWidget(userWidget, widget);
 });
 
 /**
  * Update widget visible state.
  * @param {string} userId - The user id. 
  * @param {string} widgetId - The widget id.
+ * @param {boolean} visible - The new visible state.
  * @return {Promise<Widget>}  Returns a promise that resolves into a
  * widget.
  */
 var updateUserWidgetVisibility =  Async (function(userId, widgetId, visible) {
+  const widget = Await (getWidget(widgetId));
+  const userWidget = Await (updateWidgetVisibility(userId, widgetId, visible));
+  return getFullWidget(userWidget, widget);
+});
 
-    var updateExpression = `SET #visible = :visible`;
-    var expressionAttributeNames = {
-         '#visible': 'visible'
-    };
-    var expressionAttributeValues = {
-         ':visible': visible
-    };
-    
-    var params = {
-        UpdateExpression: updateExpression,
-        ExpressionAttributeNames: expressionAttributeNames,
-        ExpressionAttributeValues: expressionAttributeValues,
-        ReturnValues:"ALL_NEW"
-    };
+/**
+ * Update widget enabled state.
+ * @param {string} userId - The user id. 
+ * @param {string} widgetId - The widget id.
+ * @param {boolean} enabled - The new enabled state.
+ * @return {Promise<Widget>}  Returns a promise that resolves into a
+ * widget.
+ */
+var updateUserWidgetEnabled =  Async (function(userId, widgetId, enabled) {
+  const widget = Await (getWidget(widgetId));
+  const userWidget = Await (updateWidgetEnabled(userId, widgetId, enabled));
+  return getFullWidget(userWidget, widget);
+});
 
-    const key = {
-      userId: userId,
-      widgetId: widgetId
-    };
+/**
+ * Update widget config.
+ * @param {string} userId - The user id. 
+ * @param {string} widgetId - The widget id. 
+ * @param {Object} config - The new widget config. 
+ * @return {Promise<Widget>}  Returns a promise that resolves into a
+ * Widget.
+ */
+var updateUserWidgetConfig =  Async (function(userId, widgetId, config) {
+  const parsedConfig = JSON.parse(config);
+  const widget = Await (getWidget(widgetId));
+  const userWidget = Await (updateWidgetConfig(userId, widgetId, parsedConfig));
+  return getFullWidget(userWidget, widget);
+});
 
-    return Await (UserWidget.update(key, params));
+/**
+ * Get all widgets.
+ * @param {string} userId - The user id. 
+ * @param {string} widgetId - The widget id. 
+ * @param {Object} config - The new widget config. 
+ * @return {Promise<Widget>}  Returns a promise that resolves into a
+ * Widget.
+ */
+var getAllWidgets =  Async (function() {
+  const widgets = Await (getWidgets());
+  for(var i = 0; i < widgets.length; i++) {
+    widgets[i].widgetId = widgets[i].id;
+    widgets[i].settings = JSON.stringify(widgets[i].settings);
+  }
+  return widgets;
 });
 
 export {
-  Widget,
-  UserWidget,
-  getWidget,
   getUserWidgets,
-  getWidgets,
-  getUserWidget,
   updateUserWidgetData,
   updateUserWidgetVisibility,
+  updateUserWidgetEnabled,
+  updateUserWidgetConfig,
+  getAllWidgets
 };
 
 

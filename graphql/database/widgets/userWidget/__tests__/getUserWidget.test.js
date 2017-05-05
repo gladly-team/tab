@@ -1,11 +1,11 @@
-import mockDatabase from '../../__mocks__/database';
-import { DatabaseOperation, OperationType } from '../../../utils/test-utils';
+import mockDatabase from '../../../__mocks__/database';
+import { DatabaseOperation, OperationType } from '../../../../utils/test-utils';
 
-jest.mock('../../database', () => {
+jest.mock('../../../database', () => {
 	return mockDatabase;
 });
 
-import { getUserWidget, UserWidget } from '../widgets';
+import { getUserWidget, UserWidget } from '../userWidget';
 
 function setup() {
 	mockDatabase.init();
@@ -21,16 +21,14 @@ test('fetch the user widget by user id and widget id', () => {
 
 
 	database.pushDatabaseOperation(
-		new DatabaseOperation(OperationType.QUERY, (params) => {
+		new DatabaseOperation(OperationType.GET, (params) => {
 			return { 
-				Items: [
-					{
-						userId: userId,
-						widgetId: widgetId,
-						enabled: true,
-						data: { key: 'value'},
-					}
-				] 
+				Item: {
+					userId: userId,
+					widgetId: widgetId,
+					enabled: true,
+					data: { key: 'value'},
+				}
 			};
 		})
 	);

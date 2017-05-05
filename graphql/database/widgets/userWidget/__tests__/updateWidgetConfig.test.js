@@ -1,11 +1,11 @@
-import mockDatabase from '../../__mocks__/database';
-import { DatabaseOperation, OperationType } from '../../../utils/test-utils';
+import mockDatabase from '../../../__mocks__/database';
+import { DatabaseOperation, OperationType } from '../../../../utils/test-utils';
 
-jest.mock('../../database', () => {
+jest.mock('../../../database', () => {
 	return mockDatabase;
 });
 
-import { updateUserWidgetData, UserWidget } from '../widgets';
+import { updateWidgetConfig, UserWidget } from '../userWidget';
 
 function setup() {
 	mockDatabase.init();
@@ -19,15 +19,14 @@ test('update user widget data', () => {
 	const userId = 'some-user-id';
 	const widgetId = 'some-widget-id';
 
-	const oldData = { key: 1};
-	const newData = { key: 100 };
+	const newConfig = { field: 100 };
 
 
 	database.pushDatabaseOperation(
 		new DatabaseOperation(OperationType.UPDATE, (params) => {
 			
-			const receivedData = params.ExpressionAttributeValues[':data'];
-			expect(receivedData.key).toBe(newData.key);
+			const receivedData = params.ExpressionAttributeValues[':config'];
+			expect(receivedData.field).toBe(newConfig.field);
 
 			const receivedKey = params.Key;
 			expect(receivedKey.userId).toBe(userId);
@@ -37,17 +36,17 @@ test('update user widget data', () => {
 				Attributes: {
 					userId: userId,
 					widgetId: widgetId,
-					data: newData
+					config: newConfig
 				}
 			};
 		})
 	);
 
-	return updateUserWidgetData(userId, widgetId,  newData)
+	return updateWidgetConfig(userId, widgetId,  newConfig)
     .then(userWidget => {
         expect(userWidget).not.toBe(null);
         expect(userWidget.userId).toBe(userId);
         expect(userWidget.widgetId).toBe(widgetId);
-        expect(userWidget.data.key).toBe(newData.key);
+        expect(userWidget.config.field).toBe(newConfig.field);
     });
 });

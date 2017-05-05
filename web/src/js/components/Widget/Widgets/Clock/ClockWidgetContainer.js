@@ -11,7 +11,8 @@ export default createFragmentContainer(ClockWidget, {
       id
       name
       enabled
-      data
+      config
+      settings
       icon
       type
     }

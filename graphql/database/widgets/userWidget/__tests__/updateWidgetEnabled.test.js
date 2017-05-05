@@ -1,31 +1,31 @@
-import mockDatabase from '../../__mocks__/database';
-import { DatabaseOperation, OperationType } from '../../../utils/test-utils';
+import mockDatabase from '../../../__mocks__/database';
+import { DatabaseOperation, OperationType } from '../../../../utils/test-utils';
 
-jest.mock('../../database', () => {
+jest.mock('../../../database', () => {
 	return mockDatabase;
 });
 
-import { updateUserWidgetVisibility, UserWidget } from '../widgets';
+import { updateWidgetEnabled, UserWidget } from '../userWidget';
 
 function setup() {
 	mockDatabase.init();
 	return mockDatabase;
 }
 
-test('update user widget visibility', () => {
+test('update user widget enabled', () => {
 
 	const database = setup();
 
 	const userId = 'some-user-id';
 	const widgetId = 'some-widget-id';
-	const visibility = true;
+	const enabled = true;
 
 
 	database.pushDatabaseOperation(
 		new DatabaseOperation(OperationType.UPDATE, (params) => {
 			
-			const receivedState = params.ExpressionAttributeValues[':visible'];
-			expect(receivedState).toBe(visibility);
+			const receivedState = params.ExpressionAttributeValues[':enabled'];
+			expect(receivedState).toBe(enabled);
 
 			const receivedKey = params.Key;
 			expect(receivedKey.userId).toBe(userId);
@@ -35,17 +35,17 @@ test('update user widget visibility', () => {
 				Attributes: {
 					userId: userId,
 					widgetId: widgetId,
-					visible: visibility
+					enabled: enabled
 				}
 			};
 		})
 	);
 
-	return updateUserWidgetVisibility(userId, widgetId,  visibility)
+	return updateWidgetEnabled(userId, widgetId,  enabled)
     .then(userWidget => {
         expect(userWidget).not.toBe(null);
         expect(userWidget.userId).toBe(userId);
         expect(userWidget.widgetId).toBe(widgetId);
-        expect(userWidget.visible).toBe(visibility);
+        expect(userWidget.enabled).toBe(enabled);
     });
 });

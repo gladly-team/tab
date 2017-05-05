@@ -22,7 +22,7 @@ const mockBookmarks = [
     }
 ];
 
-jest.mock('../widgets', () => {
+jest.mock('../../userWidget/userWidget', () => {
 	return {
 		getUserWidget: jest.fn((userId, widgetId) => {
 			return Promise.resolve({
@@ -33,7 +33,7 @@ jest.mock('../widgets', () => {
 			});
 		}),
 
-		updateUserWidgetData: jest.fn((userId, widgetId, data) => {
+		updateWidgetData: jest.fn((userId, widgetId, data) => {
 			return Promise.resolve({
 				userId: userId,
 				widgetId: widgetId,

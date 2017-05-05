@@ -13,17 +13,13 @@ function setup() {
 	return mockDatabase;
 }
 
-test('fetch user widgets with the widget information and serialized data', () => {
+test('fetch enabled user widgets with the widget information and serialized data', () => {
 
 	const database = setup();
+	const userId = '45bbefbf-63d1-4d36-931e-212fbe2bc3d9';
+	const enabled = true;
 
 	const userWidgets = [
-		{
-			userId: '45bbefbf-63d1-4d36-931e-212fbe2bc3d9',
-		    widgetId: '1e0465b2-f1f1-42e2-9a27-94f4099f67bd',
-		    enabled: false,
-		    data: { bookmarks: [] }
-		},
 		{
 			userId: '45bbefbf-63d1-4d36-931e-212fbe2bc3d9',
 		    widgetId: '7db4b390-02bb-4958-b4bc-a5ba66939579',
@@ -60,7 +56,7 @@ test('fetch user widgets with the widget information and serialized data', () =>
 		})
 	);
 
-	return getUserWidgets()
+	return getUserWidgets(userId, enabled)
     .then(response => {
         expect(response).not.toBe(null);
     	expect(response instanceof Array).toBe(true);

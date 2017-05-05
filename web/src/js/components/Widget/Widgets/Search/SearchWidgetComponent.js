@@ -1,4 +1,5 @@
 import React from 'react';
+import { getWidgetConfig } from '../../../../utils/widgets-utils';
 
 import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
@@ -15,11 +16,19 @@ class SearchWidget extends React.Component {
 
     this.state = {
       focused: false,
+      config: {},
     };
   }
 
-  focusSearch() {
+  componentDidMount() {
+    const { widget } = this.props; 
 
+    const config = JSON.parse(widget.config);
+    const settings = JSON.parse(widget.settings);
+    const configuration = getWidgetConfig(config, settings);
+    this.setState({
+      config: configuration,
+    })
   }
 
   _handleKeyPress(e) {
@@ -56,10 +65,8 @@ class SearchWidget extends React.Component {
   }
 
   render() {
-    const { widget } = this.props; 
 
-    const data = JSON.parse(widget.data);
-    const engine = data.engine;
+    const engine = this.state.config.engine || '';
 
     const searchContainer = {
       position: 'relative',

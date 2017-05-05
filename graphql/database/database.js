@@ -53,7 +53,7 @@ database.get = function(params) {
  * into the response data.
  */
 database.batchGet = function(params) {
-  DBLogger.action('get', params);
+  DBLogger.action('batchGet', params);
   return dynamoDb.batchGet(params).promise()
             .then(data => {
               DBLogger.response('get', data);

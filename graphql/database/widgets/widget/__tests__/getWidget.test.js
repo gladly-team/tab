@@ -1,11 +1,11 @@
-import mockDatabase from '../../__mocks__/database';
-import { DatabaseOperation, OperationType } from '../../../utils/test-utils';
+import mockDatabase from '../../../__mocks__/database';
+import { DatabaseOperation, OperationType } from '../../../../utils/test-utils';
 
-jest.mock('../../database', () => {
+jest.mock('../../../database', () => {
 	return mockDatabase;
 });
 
-import { getWidget, Widget } from '../widgets';
+import { getWidget, Widget } from '../baseWidget';
 
 function setup() {
 	mockDatabase.init();
