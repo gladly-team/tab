@@ -3,7 +3,8 @@ import { goTo } from 'navigation/navigation';
 
 import AppBar from 'material-ui/AppBar';
 import FontIcon from 'material-ui/FontIcon';
-import Drawer from 'material-ui/Drawer';
+import Paper from 'material-ui/Paper';
+import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 
 import WidgetsSettingsView from './Widgets/WidgetsSettingsView';
@@ -36,6 +37,12 @@ class Settings extends React.Component {
     	display: 'flex',
     	justifyContent: 'center',
     }
+
+    const paper = {
+      display: 'inline-block',
+      position: 'absolute',
+      margin: 28,
+    };
 
     const defaultMenuItem = {
 
@@ -73,22 +80,24 @@ class Settings extends React.Component {
           iconClassNameLeft="fa fa-arrow-left"
           onLeftIconButtonTouchTap={this.goToHome.bind(this)}
         />
-	    	<Drawer open={true}>
-	    	  <MenuItem 
-	    	  	style={profile}
-	    	  	onClick={this.openSettingsFor.bind(this, 'profile')}>Profile</MenuItem>
-	    	  <MenuItem 
-	    	  	style={general}
-	    	  	onClick={this.openSettingsFor.bind(this, 'general')}>General</MenuItem>
-	          <MenuItem 
-	          	style={widgets}
-  				onClick={this.openSettingsFor.bind(this, 'widgets')}>
-  					Widgets
-  			  </MenuItem>
-          <MenuItem 
-          	style={background}
-          	onClick={this.openSettingsFor.bind(this, 'background')}>Background</MenuItem>
-        </Drawer>
+        <Paper style={paper}>
+          <Menu>
+            <MenuItem 
+              style={profile}
+              onClick={this.openSettingsFor.bind(this, 'profile')}>Profile</MenuItem>
+            <MenuItem 
+              style={general}
+              onClick={this.openSettingsFor.bind(this, 'general')}>General</MenuItem>
+              <MenuItem 
+                style={widgets}
+            onClick={this.openSettingsFor.bind(this, 'widgets')}>
+              Widgets
+            </MenuItem>
+            <MenuItem 
+              style={background}
+              onClick={this.openSettingsFor.bind(this, 'background')}>Background</MenuItem>
+          </Menu>
+        </Paper>
 
 	    	<div style={container}>
 	      		{settingView}
