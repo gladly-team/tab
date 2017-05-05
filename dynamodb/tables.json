@@ -87,8 +87,7 @@
     ],
     "AttributeDefinitions": [       
       { "AttributeName": "userId", "AttributeType": "S" },
-      { "AttributeName": "widgetId", "AttributeType": "S" },
-      { "AttributeName": "enabled", "AttributeType": "N" }
+      { "AttributeName": "widgetId", "AttributeType": "S" }
     ],
     "GlobalSecondaryIndexes": [ 
       { 
@@ -97,26 +96,6 @@
             { 
                "AttributeName": "userId",
                "KeyType": "HASH"
-            }
-         ],
-         "Projection": {
-            "ProjectionType": "ALL"
-         },
-         "ProvisionedThroughput": { 
-            "ReadCapacityUnits": 10,
-            "WriteCapacityUnits": 10
-         }
-      },
-      { 
-         "IndexName": "EnabledWidgets",
-         "KeySchema": [ 
-            { 
-               "AttributeName": "userId",
-               "KeyType": "HASH"
-            },
-            { 
-               "AttributeName": "enabled",
-               "KeyType": "RANGE"
             }
          ],
          "Projection": {

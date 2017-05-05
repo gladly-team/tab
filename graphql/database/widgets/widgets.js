@@ -15,6 +15,7 @@ import {
 
 import {
   UserWidget,
+  getUserWidgets as getAllUserWidgets,
   getUserWidgetsByEnabledState,
   updateWidgetData,
   updateWidgetVisibility,
@@ -31,7 +32,6 @@ import {
   * with all the widget information.
   */
 function getFullWidget(userWidget, widget) {
-
   return Object.assign({}, 
     userWidget,
     widget,
@@ -53,9 +53,13 @@ function getFullWidget(userWidget, widget) {
  * the user data on the widget information.
  */
 
-var getEnabledUserWidgets =  Async (function(userId) {
-
-    const userWidgets = Await (getUserWidgetsByEnabledState(userId, true));
+var getUserWidgets =  Async (function(userId, enabled) {
+    var userWidgets;
+    if(typeof enabled !== 'undefined') {
+      userWidgets = Await (getUserWidgetsByEnabledState(userId, enabled)); 
+    } else {
+      userWidgets = Await (getAllUserWidgets(userId)); 
+    }
 
     const keys = [];
     const indexMapper = {}
@@ -163,7 +167,7 @@ var getAllWidgets =  Async (function() {
 });
 
 export {
-  getEnabledUserWidgets,
+  getUserWidgets,
   updateUserWidgetData,
   updateUserWidgetVisibility,
   updateUserWidgetEnabled,

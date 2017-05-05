@@ -124,20 +124,26 @@ function getUserWidgets(userId) {
 function getUserWidgetsByEnabledState(userId, enabled) {
   
   var params = {
-      IndexName: "EnabledWidgets",
-      KeyConditionExpression: "#userId = :userId and #enabled = :enabled",
+      IndexName: "Widgets",
+      KeyConditionExpression: "#userId = :userId",
       ExpressionAttributeNames:{
-          "#userId": 'userId',
-          "#enabled": 'enabled'
+          "#userId": 'userId'
       },
       ExpressionAttributeValues: {
-          ":userId": userId,
-          ":enabled": enabled?1:0
+          ":userId": userId
       }
   };
 
   return UserWidget.query(params)
-            .then(widgets => widgets)
+            .then(widgets => {
+              const result = []
+              for(var index in widgets){
+                if(widgets[index].enabled == enabled){
+                  result.push(widgets[index]);
+                }
+              }
+              return result;
+            })
             .catch(err => {
                 logger.error("Error while getting the widgets.", err);
             });
@@ -257,7 +263,7 @@ var updateWidgetEnabled =  Async (function(userId, widgetId, enabled) {
          '#enabled': 'enabled'
     };
     var expressionAttributeValues = {
-         ':enabled': enabled?1:0
+         ':enabled': enabled
     };
     
     var params = {

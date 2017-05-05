@@ -6,7 +6,7 @@ jest.mock('../../database', () => {
 	return mockDatabase;
 });
 
-import { getEnabledUserWidgets, Widget } from '../widgets';
+import { getUserWidgets, Widget } from '../widgets';
 
 function setup() {
 	mockDatabase.init();
@@ -16,6 +16,8 @@ function setup() {
 test('fetch enabled user widgets with the widget information and serialized data', () => {
 
 	const database = setup();
+	const userId = '45bbefbf-63d1-4d36-931e-212fbe2bc3d9';
+	const enabled = true;
 
 	const userWidgets = [
 		{
@@ -54,7 +56,7 @@ test('fetch enabled user widgets with the widget information and serialized data
 		})
 	);
 
-	return getEnabledUserWidgets()
+	return getUserWidgets(userId, enabled)
     .then(response => {
         expect(response).not.toBe(null);
     	expect(response instanceof Array).toBe(true);

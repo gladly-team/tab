@@ -1,6 +1,8 @@
 import React from 'react';
 import moment from 'moment';
 
+import { getWidgetConfig } from '../../../../utils/widgets-utils';
+
 import {
   grey300,
 } from 'material-ui/styles/colors';
@@ -15,27 +17,34 @@ class ClockWidget extends React.Component {
     this.state = {
         date: '',
         time: '',
+        config: {},
     }
   }
 
   componentDidMount() {
-    this.setDateTime();
-    
     const self = this;
     this.updateClockInterval = setInterval(() => {
-      self.setDateTime();
+      self.setDateTime(self.state.config);
     }, 1000);
+
+    const { widget } = this.props; 
+
+    const config = JSON.parse(widget.config);
+    const settings = JSON.parse(widget.settings);
+    const configuration = getWidgetConfig(config, settings);
+    this.setState({
+      config: configuration,
+    });
+
+    this.setDateTime(configuration);
   }
 
   componentWillUnmount() {
     clearInterval(this.updateClockInterval);
   }
 
-  setDateTime() {
-    const { widget } = this.props; 
-    const config = JSON.parse(widget.config);
+  setDateTime(config) {
     const format24 = config.format24;
-
     var date = moment().format("ddd, MMMM D");
     var time;
     if(format24) {
@@ -52,8 +61,6 @@ class ClockWidget extends React.Component {
   }
 
   render() {
-    const { widget } = this.props; 
-
     const clockContainer = {
       textAlign: 'center',
       position: 'absolute',

@@ -3,7 +3,7 @@ import array from 'lodash/array';
 
 import { 
   getUserWidget,
-  updateUserWidgetData 
+  updateWidgetData as updateUserWidgetData
 } from '../userWidget/userWidget';
 
 import Async from 'asyncawait/async';

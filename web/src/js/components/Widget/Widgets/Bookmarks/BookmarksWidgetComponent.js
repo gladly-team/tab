@@ -83,6 +83,7 @@ class BookmarksWidget extends React.Component {
   }
 
   _addBookmark(widget, name, link) {
+    console.log(widget);
     AddBookmarkMutation.commit(
       this.props.relay.environment,
       this.props.user,

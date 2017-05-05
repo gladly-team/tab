@@ -1,6 +1,10 @@
 
 const logger = {};
 
+logger.log = function(msg) {
+  console.log(msg);
+}
+
 logger.error = function(msg, error) {
 	console.error(msg, error);
 	console.error(error.stack);

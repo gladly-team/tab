@@ -35,7 +35,7 @@ class NotesWidget extends React.Component {
   componentDidMount() {
     const { widget } = this.props; 
     const data = JSON.parse(widget.data);
-    const notes = data.notes;
+    const notes = data.notes || [];
     this.setState({
       notes: notes,
       open: widget.visible,

@@ -2,112 +2,15 @@
   {
   	"userId": "45bbefbf-63d1-4d36-931e-212fbe2bc3d9",
     "widgetId": "4162cc79-d192-4435-91bd-5fda9b6f7c08",
-    "enabled": 0,
+    "enabled": 1,
     "visible": false,
     "data": {
     	"bookmarks": [
     		{
     			"name": "Google",
     			"link": "https://www.google.com/" 
-    		},
-    		{
-    			"name": "Netflix",
-    			"link": "https://www.netflix.com/" 
-    		},
-    		{
-    			"name": "Beyond the Summit",
-    			"link": "https://www.twitch.tv/beyondthesummit" 
-    		},
-            {
-                "name": "Hulu",
-                "link": "https://www.hulu.com/" 
-            },
-            {
-                "name": "CNN",
-                "link": "https://www.cnn.com/" 
-            }
+    		}
     	]
-    }
-  },
-  {
-    "userId": "45bbefbf-63d1-4d36-931e-212fbe2bc3d9",
-    "widgetId": "426ccc79-d192-4435-91bd-5fda9b6f7c08",
-    "enabled": 1,
-    "visible": false,
-    "data": {},
-    "config": {
-        "engine": "Google"
-    }
-  },
-  {
-    "userId": "45bbefbf-63d1-4d36-931e-212fbe2bc3d9",
-    "widgetId": "ab58d2da-550b-414f-895a-7bcb2cbc9d62",
-    "enabled": 1,
-    "visible": false,
-    "data": {},
-    "config": {
-        "format24": true
-    }
-  },
-  {
-    "userId": "45bbefbf-63d1-4d36-931e-212fbe2bc3d9",
-    "widgetId": "4262cc79-d192-4435-91bd-5fda9b6f7c08",
-    "enabled": 1,
-    "visible": false,
-    "data": {
-        "notes": [
-            {
-                "id": "abcdef",
-                "color": "#A5D6A7",
-                "content": "Your work is going to fill a large part of your life, and the only way to be truly satisfied is to do what you believe is great work. And the only way to do great work is to love what you do. If you haven't found it yet, keep looking. Don't settle. As with all matters of the heart, you'll know when you find it. Steve Jobs"
-            },
-            {
-                "id": "ghijkl",
-                "color": "#FFF59D",
-                "content": "Believe you can and you're halfway there. Theodore Roosevelt"
-            }
-
-        ]
-    }
-  },
-  {
-    "userId": "45bbefbf-63d1-4d36-931e-212fbe2bc3d9",
-    "widgetId": "a458d2da-550b-414f-895a-7bcb2cbc9d62",
-    "enabled": 1,
-    "visible": false,
-    "data": {
-        "completed": [
-            {
-                "id": "abcdef",
-                "text": "Buy apples"
-            },
-            {
-                "id": "lalala",
-                "text": "Pickup granma from airport"
-            }
-        ],
-        "todos": [
-            {
-                "id": "lelele",
-                "text": "Fix the shower"
-            },
-            {
-                "id": "lilili",
-                "text": "Call the car insurance"
-            },
-            {
-                "id": "lololo",
-                "text": "Pay the bills"
-            },
-            {
-                "id": "xoxoxo",
-                "text": "Call Kevin"
-            },
-            {
-                "id": "vivivi",
-                "text": "Go to USPS to send the package"
-            }
-        ]
     }
   }
 ]

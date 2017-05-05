@@ -21,7 +21,7 @@ class WidgetSettings extends React.Component {
     const { appWidget, widget, user } = this.props;
 
     var config;
-    if(widget) {
+    if(widget && widget.config) {
       config = JSON.parse(widget.config);
     } 
 
@@ -35,16 +35,19 @@ class WidgetSettings extends React.Component {
   }
 
   getConfig(settings, config) {
+
     if(!settings.length)
       return [];
 
     var value;
     for(var i = 0; i < settings.length; i++) {
-      if(!config || !settings[i].field in config){
+      if(!config || !(settings[i].field in config)){
         value = settings[i].defaultValue;
       } else {
         value = config[settings[i].field];
       }
+
+
 
       settings[i].value = value;
     }

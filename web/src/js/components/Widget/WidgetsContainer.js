@@ -9,7 +9,7 @@ export default createFragmentContainer(Widgets, {
   user: graphql`
     fragment WidgetsContainer_user on User {
       ...WidgetContainer_user
-      widgets(first: 20) {
+      widgets(first: 20 enabled:true) {
         edges {
           node {
             ...WidgetContainer_widget

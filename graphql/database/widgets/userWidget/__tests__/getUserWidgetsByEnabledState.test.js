@@ -24,7 +24,7 @@ test('fetch enabled user widgets ', () => {
 		{
 			userId: userId,
 		    widgetId: '1e0465b2-f1f1-42e2-9a27-94f4099f67bd',
-		    enabled: true,
+		    enabled: false,
 		    data: { bookmarks: [] }
 		},
 		{
@@ -37,7 +37,6 @@ test('fetch enabled user widgets ', () => {
 
 	database.pushDatabaseOperation(
 		new DatabaseOperation(OperationType.QUERY, (params) => {
-			expect(params.ExpressionAttributeValues[':enabled']).toBe(enabled?1:0)
 			return { Items: userWidgets};
 		})
 	);
@@ -46,6 +45,6 @@ test('fetch enabled user widgets ', () => {
     .then(response => {
         expect(response).not.toBe(null);
     	expect(response instanceof Array).toBe(true);
-    	expect(response.length).toBe(userWidgets.length);
+    	expect(response.length).toBe(1);
     });
 });

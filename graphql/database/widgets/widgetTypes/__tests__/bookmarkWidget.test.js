@@ -33,7 +33,7 @@ jest.mock('../../userWidget/userWidget', () => {
 			});
 		}),
 
-		updateUserWidgetData: jest.fn((userId, widgetId, data) => {
+		updateWidgetData: jest.fn((userId, widgetId, data) => {
 			return Promise.resolve({
 				userId: userId,
 				widgetId: widgetId,

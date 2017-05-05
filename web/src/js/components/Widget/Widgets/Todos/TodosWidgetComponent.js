@@ -38,8 +38,8 @@ class TodosWidget extends React.Component {
     const data = JSON.parse(widget.data);
 
     this.setState({
-      completed: data.completed,
-      todos: data.todos,
+      completed: data.completed || [],
+      todos: data.todos || [],
       open: widget.visible,
       anchorEl: ReactDOM.findDOMNode(this.bIcon),
     });

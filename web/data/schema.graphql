@@ -263,7 +263,7 @@ type User implements Node {
   heartsUntilNextLevel: Int
 
   # User widgets
-  widgets(after: String, first: Int, before: String, last: Int): WidgetConnection
+  widgets(after: String, first: Int, before: String, last: Int, enabled: Boolean): WidgetConnection
 }
 
 # App widget

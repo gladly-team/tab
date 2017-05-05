@@ -33,7 +33,7 @@ import {
 } from '../database/widgets/widget/baseWidget';
 
 import {
-  getEnabledUserWidgets,
+  getUserWidgets,
   updateUserWidgetData,
   updateUserWidgetVisibility,
   updateUserWidgetEnabled,
@@ -205,8 +205,11 @@ const userType = new GraphQLObjectType({
     widgets: {
       type: widgetConnection,
       description: 'User widgets',
-      args: connectionArgs,
-      resolve: (user, args) => connectionFromPromisedArray(getEnabledUserWidgets(user.id), args)
+      args: {
+         ...connectionArgs,
+         enabled: { type: GraphQLBoolean }
+      },
+      resolve: (user, args) => connectionFromPromisedArray(getUserWidgets(user.id, args.enabled), args)
     },
   }),
   interfaces: [nodeInterface]
