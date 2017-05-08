@@ -2,12 +2,14 @@ import BaseModel from '../base/model';
 import database from '../database';
 import tablesNames from '../tables';
 import { getNextLevelFor } from '../userLevels/userLevel';
-import { getBackgroundImage } from '../backgroundImages/backgroundImage';
+import { getBackgroundImage, getRandomImage } from '../backgroundImages/backgroundImage';
 import { UserReachedMaxLevelException } from '../../utils/exceptions';
 import { logger } from '../../utils/dev-tools';
 
+
 import Async from 'asyncawait/async';
 import Await from 'asyncawait/await';
+import moment from 'moment';
 
 /*
  * Represents a User. 
@@ -34,8 +36,13 @@ class User extends BaseModel {
     this.backgroundImage = {
       id: 'fb5082cc-151a-4a9a-9289-06906670fd4e',
       name: 'Mountain Lake',
-      fileName: 'lake.jpg'
+      fileName: 'lake.jpg',
+      timestamp: moment.utc().format()
     };
+
+    this.backgroundOption = User.BACKGROUND_OPTION_PHOTO;
+    this.customImage = null;
+    this.backgroundColor = null;
   }
 
   /**
@@ -58,10 +65,18 @@ class User extends BaseModel {
       'vcAllTime',
       'level',
       'heartsUntilNextLevel',
-      'backgroundImage'
+      'backgroundImage',
+      'backgroundOption',
+      'customImage',
+      'backgroundColor'
     ];
   }
 }
+
+User.BACKGROUND_OPTION_DAILY = 'daily';
+User.BACKGROUND_OPTION_CUSTOM = 'custom';
+User.BACKGROUND_OPTION_COLOR = 'color';
+User.BACKGROUND_OPTION_PHOTO = 'photo';
 
 
 /**
@@ -83,16 +98,28 @@ function getUser(id) {
  * @param {string} imageId - The image id.
  * @return {Promise<User>}  A promise that resolve into a User instance.
  */
-var setUserBackgroundImage =  Async (function(userId, imageId) {
-
+var setUserBackgroundImage =  Async (function(userId, imageId, mode) {
     const image = Await (getBackgroundImage(imageId));
+    image.timestamp = moment.utc().format();
+    const user = Await (_setUserBackgroundImage(userId, image, mode));
+    return user;
+});
 
-    var updateExpression = `SET #backgroundImage = :backgroundImage`;
+var _setUserBackgroundImage =  Async (function(userId, image, mode) {
+
+    if(!mode) {
+      mode = User.BACKGROUND_OPTION_PHOTO;
+    }
+
+    var updateExpression = `SET #backgroundImage = :backgroundImage,
+    #backgroundOption = :backgroundOption`;
     var expressionAttributeNames = {
-         '#backgroundImage': 'backgroundImage'
+         '#backgroundImage': 'backgroundImage',
+         '#backgroundOption': 'backgroundOption'
     };
     var expressionAttributeValues = {
-         ':backgroundImage': image
+         ':backgroundImage': image,
+         ':backgroundOption': mode
     };
     
     var params = {
@@ -186,9 +213,85 @@ function updateFromNextLevel(level, user) {
             });
 }
 
+/**
+ * Set user background color.
+ * @param {string} userId - The user id. 
+ * @param {string} color - The background color.
+ * @return {Promise<User>}  A promise that resolve into a User instance.
+ */
+var setUserBackgroundColor =  Async (function(userId, color) {
+
+    var updateExpression = `SET #backgroundColor = :backgroundColor,
+    #backgroundOption = :backgroundOption`;
+    var expressionAttributeNames = {
+         '#backgroundColor': 'backgroundColor',
+         '#backgroundOption': 'backgroundOption'
+    };
+    var expressionAttributeValues = {
+         ':backgroundColor': color,
+         ':backgroundOption': User.BACKGROUND_OPTION_COLOR,
+    };
+    
+    var params = {
+        UpdateExpression: updateExpression,
+        ExpressionAttributeNames: expressionAttributeNames,
+        ExpressionAttributeValues: expressionAttributeValues,
+        ReturnValues:"ALL_NEW"
+    };
+
+    const user = Await (User.update(userId, params));
+    return user;
+});
+
+/**
+ * Set user background from custom url.
+ * @param {string} userId - The user id. 
+ * @param {string} imageUrl - The url for the image to use as background.
+ * @return {Promise<User>}  A promise that resolve into a User instance.
+ */
+var setUserBackgroundFromCustomUrl =  Async (function(userId, imageUrl) {
+
+    var updateExpression = `SET #customImage = :customImage,
+    #backgroundOption = :backgroundOption`;
+    var expressionAttributeNames = {
+         '#customImage': 'customImage',
+         '#backgroundOption': 'backgroundOption'
+    };
+    var expressionAttributeValues = {
+         ':customImage': imageUrl,
+         ':backgroundOption': User.BACKGROUND_OPTION_CUSTOM,
+    };
+    
+    var params = {
+        UpdateExpression: updateExpression,
+        ExpressionAttributeNames: expressionAttributeNames,
+        ExpressionAttributeValues: expressionAttributeValues,
+        ReturnValues:"ALL_NEW"
+    };
+
+    const user = Await (User.update(userId, params));
+    return user;
+});
+
+/**
+ * Set user background option to daily and updates the current background.
+ * @param {string} userId - The user id.
+ * @return {Promise<User>}  A promise that resolve into a User instance.
+ */
+var setUserBackgroundDaily =  Async (function(userId) {
+    const image = Await (getRandomImage());
+    image.timestamp = moment.utc().format();
+    const mode = User.BACKGROUND_OPTION_DAILY;
+    const user = Await (_setUserBackgroundImage(userId, image, mode));
+    return user;
+});
+
 export {
   User,
   getUser,
   updateUserVc,
-  setUserBackgroundImage
+  setUserBackgroundImage,
+  setUserBackgroundColor,
+  setUserBackgroundFromCustomUrl,
+  setUserBackgroundDaily
 };
