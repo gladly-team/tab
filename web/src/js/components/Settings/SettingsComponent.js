@@ -3,18 +3,19 @@ import { goTo } from 'navigation/navigation';
 
 import AppBar from 'material-ui/AppBar';
 import FontIcon from 'material-ui/FontIcon';
-import Paper from 'material-ui/Paper';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
+import Drawer from 'material-ui/Drawer';
 
 import WidgetsSettingsView from './Widgets/WidgetsSettingsView';
+import BackgroundSettingsView from './Background/BackgroundSettingsView';
 
 class Settings extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-    	selection: 'widgets',
+    	selection: 'background',
     };
   }
 
@@ -29,20 +30,20 @@ class Settings extends React.Component {
   }
   
   render() {
-    const { user } = this.props; 
+    const { user } = this.props;
+
+    const settings = {
+      backgroundColor: '#F2F2F2',
+      width: '100%',
+      height: '100%',
+    };
+
     const container = {
     	backgroundColor: '#F2F2F2',
     	width: '100vw',
-    	height: '100vh',
     	display: 'flex',
     	justifyContent: 'center',
     }
-
-    const paper = {
-      display: 'inline-block',
-      position: 'absolute',
-      margin: 28,
-    };
 
     const defaultMenuItem = {
 
@@ -69,19 +70,25 @@ class Settings extends React.Component {
     	case 'widgets':
     		settingView = (<WidgetsSettingsView />);
     		break;
+      case 'background':
+        settingView = (<BackgroundSettingsView />);
+        break;
     	default:
     		break;
     }
 
     return (
-    	<div>
-        <AppBar
-          title="Settings"
-          iconClassNameLeft="fa fa-arrow-left"
-          onLeftIconButtonTouchTap={this.goToHome.bind(this)}
-        />
-        <Paper style={paper}>
-          <Menu>
+    	<div style={settings}>
+          <AppBar
+            title="Settings"
+            iconClassNameLeft="fa fa-arrow-left"
+            onLeftIconButtonTouchTap={this.goToHome.bind(this)}
+          />
+          <Drawer>
+            <AppBar 
+              title="Settings" 
+              iconClassNameLeft="fa fa-arrow-left"
+              onLeftIconButtonTouchTap={this.goToHome.bind(this)}/>
             <MenuItem 
               style={profile}
               onClick={this.openSettingsFor.bind(this, 'profile')}>Profile</MenuItem>
@@ -96,10 +103,9 @@ class Settings extends React.Component {
             <MenuItem 
               style={background}
               onClick={this.openSettingsFor.bind(this, 'background')}>Background</MenuItem>
-          </Menu>
-        </Paper>
+          </Drawer>
 
-	    	<div style={container}>
+	    	  <div style={container}>
 	      		{settingView}
 	      	</div>
       	</div>

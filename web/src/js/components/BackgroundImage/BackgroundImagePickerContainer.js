@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   createFragmentContainer,
   graphql,
@@ -7,6 +6,16 @@ import {
 import BackgroundImagePicker from './BackgroundImagePickerComponent';
 
 export default createFragmentContainer(BackgroundImagePicker, {
+  user: graphql`
+    fragment BackgroundImagePickerContainer_user on User {
+      id
+      backgroundImage {
+        id
+        name
+        url
+      }
+    }
+  `,
   app: graphql`
     fragment BackgroundImagePickerContainer_app on App {
       backgroundImages(first: 20) {
@@ -20,9 +29,4 @@ export default createFragmentContainer(BackgroundImagePicker, {
       }
     }
   `,
-  user: graphql`
-    fragment BackgroundImagePickerContainer_user on User {
-      id
-    }
-  `
 });

@@ -17,38 +17,17 @@ const mutation = graphql`
   }
 `;
 
-function getConfigs(userId) {
-  return [{
-    type: 'FIELDS_CHANGE',
-    fieldIDs: {
-      user: userId,
-    }
-  }];
-}
-
-function getOptimisticResponse(image) {
-  return {
-    user: {
-      backgroundImage: {
-        id: image.id,
-        name: image.name,
-        url: image.url
-      }
-    }
-  };
-}
-
-function commit(environment, userId, image) {
+function commit(environment, user, image) {
+  const userId = user.id;
   const imageId = image.id;
+
   return commitMutation(
     environment,
     {
       mutation,
       variables: {
         input: { userId, imageId }
-      },
-      configs: getConfigs(userId),
-      optimisticResponse: () => getOptimisticResponse(image)
+      }
     }
   );
 }

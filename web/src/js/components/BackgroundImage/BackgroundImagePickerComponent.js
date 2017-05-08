@@ -1,10 +1,9 @@
 import React from 'react';
-import Relay from 'react-relay';
-import Slider from 'material-ui/Slider';
-import Divider from 'material-ui/Divider';
-import RaisedButton from 'material-ui/RaisedButton';
-import {List, ListItem} from 'material-ui/List';
 import SetBackgroundImageMutation from 'mutations/SetBackgroundImageMutation';
+
+import {GridList, GridTile} from 'material-ui/GridList';
+import IconButton from 'material-ui/IconButton';
+import FontIcon from 'material-ui/FontIcon';
 
 class BackgroundImagePicker extends React.Component {
   
@@ -16,70 +15,63 @@ class BackgroundImagePicker extends React.Component {
   }
 
   componentDidMount() {
-    const { app } = this.props;
+    const { app, user } = this.props;
     this.setState({
-      selectedImage: app.backgroundImages.edges[0].node
+      selectedImage: user.backgroundImage
     });
   }
-
 
   onImageSelected(image) {
     this.setState({
       selectedImage: image
     });
-  }
 
-  updateImageBackground() {
     SetBackgroundImageMutation.commit(
       this.props.relay.environment,
-      this.props.user.id,
-      this.state.selectedImage
+      this.props.user,
+      image
     );
-
-    this.props.onImageSelected(this.state.selectedImage);
   }
 
   render() {
     const { app } = this.props;
-    
-    
-    const main = {
-      width: '60%',
-      marginRight: 'auto',
-      marginLeft: 'auto',
-      padding: 50,
-    }
-
-    var selectedImage = '';
-    if(this.state.selectedImage) {
-      selectedImage = this.state.selectedImage.name;
-    }
-
-    const style = {
-      margin: 12,
+    const root = {
+      display: 'flex',
+      flexWrap: 'wrap',
+      justifyContent: 'space-around',
     };
 
-    const title = {
-      fontSize: '2.5em',
-      fontWeight: 'normal',
+    const gridList = {
+      width: '100%',
+      overflowY: 'auto',
     };
 
     return (
-      <div style={main}>
-        <h1 style={title}>Choose a cool background image</h1>
-        <List>
+      <div style={root}>
+        <GridList
+          cols={3}
+          cellHeight={170}
+          style={gridList}>
           {app.backgroundImages.edges.map((edge) => {
-              return (<ListItem onClick={this.onImageSelected.bind(this, edge.node)} key={edge.node.id} primaryText={edge.node.name} />)
+              const checked = this.state.selectedImage &&
+                this.state.selectedImage.url === edge.node.url;
+
+              return (
+                  <GridTile
+                    key={edge.node.url}
+                    title={edge.node.name}
+                    subtitle={<span>by <b>{'Gladly'}</b></span>}
+                    actionIcon={
+                      <IconButton
+                          onClick={this.onImageSelected.bind(this, edge.node)}>
+                        <FontIcon 
+                          className={checked?"fa fa-check-circle":"fa fa-circle-o"}
+                          color="white" />
+                      </IconButton>}>
+                    <img src={edge.node.url} />
+                  </GridTile>)
           })}
-        </List>
-        <Divider />
-        <p>Selected image: {selectedImage}</p>
-        
-        <RaisedButton 
-          onClick={this.updateImageBackground.bind(this)}
-          label={"Update"} 
-          primary={true} 
-          style={style} />
+        </GridList>
       </div>
     );
   }
@@ -87,8 +79,7 @@ class BackgroundImagePicker extends React.Component {
 
 BackgroundImagePicker.propTypes = {
   app: React.PropTypes.object.isRequired,
-  user: React.PropTypes.object.isRequired,
-  onImageSelected: React.PropTypes.func.isRequired
+  user: React.PropTypes.object.isRequired
 };
 
 export default BackgroundImagePicker;

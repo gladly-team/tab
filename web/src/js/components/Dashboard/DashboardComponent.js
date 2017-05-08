@@ -3,7 +3,6 @@ import React from 'react';
 import VcUser from '../User/VcUserContainer';
 import UserDisplay from '../User/UserDisplayContainer';
 import UserBackgroundImage from '../User/UserBackgroundImageContainer';
-import BackgroundImagePickerView from '../BackgroundImage/BackgroundImagePickerView';
 import DonateVcView from '../Donate/DonateVcView';
 import WidgetsView from '../Widget/WidgetsView';
 
@@ -59,7 +58,7 @@ class Dashboard extends React.Component {
       width: '100vw',
       height: '100vh',
       zIndex: 'auto',
-      backgroundColor: 'rgba(0,0,0,.6)',
+      backgroundColor: 'rgba(0,0,0,.2)',
     }
 
     const subtitle = {
@@ -133,14 +132,6 @@ class Dashboard extends React.Component {
               className="fa fa fa-cog fa-lg" />
           </IconButton>
         </div>
-        <Dialog
-          title="Select a background image"
-          open={this.state.bkgSelectorOpened}
-          autoScrollBodyContent={true}
-          onRequestClose={this.changeBkgSelectorState.bind(this, false)}>
-            <BackgroundImagePickerView
-              onImageSelected={this.changeBkgSelectorState.bind(this, false)}/>
-        </Dialog>
         <Dialog
           title="Donate"
           open={this.state.donateDialogOpened}
