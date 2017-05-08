@@ -4,6 +4,9 @@ import tablesNames from '../tables';
 
 import { logger } from '../../utils/dev-tools';
 
+import Async from 'asyncawait/async';
+import Await from 'asyncawait/await';
+
 /*
  * Represents a User BackgroundImage. 
  * @extends BaseModel
@@ -76,9 +79,20 @@ function getBackgroundImages() {
             });
 }
 
+/**
+ * Fetch a Random image from the image base. 
+ * @return {Promise<BackgroundImage>}  A promise that resolve
+ * into a BackgroundImage instance.
+ */
+var getRandomImage =  Async (function() {
+    const images = Await (getBackgroundImages());
+    return images[Math.floor(Math.random() * images.length)];
+});
+
 
 export {
   BackgroundImage,
   getBackgroundImage,
-  getBackgroundImages
+  getBackgroundImages,
+  getRandomImage
 };

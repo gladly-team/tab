@@ -39,7 +39,7 @@ class WidgetsSettings extends React.Component {
 
     const container = {
       width: '100%',
-      marginLeft: 200,
+      marginLeft: 256,
       marginRight: 'auto',
       padding: 20,
     };

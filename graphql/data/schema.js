@@ -51,7 +51,10 @@ import {
   User,
   getUser,
   updateUserVc,
-  setUserBackgroundImage
+  setUserBackgroundImage,
+  setUserBackgroundColor,
+  setUserBackgroundFromCustomUrl,
+  setUserBackgroundDaily
 } from '../database/users/user';
 
 import {
@@ -211,6 +214,18 @@ const userType = new GraphQLObjectType({
       },
       resolve: (user, args) => connectionFromPromisedArray(getUserWidgets(user.id, args.enabled), args)
     },
+    backgroundOption: {
+      type: GraphQLString,
+      description: 'User\'s background option'
+    },
+    customImage: {
+      type: GraphQLString,
+      description: 'User\'s background custom image'
+    },
+    backgroundColor: {
+      type: GraphQLString,
+      description: 'User\'s background color'
+    }
   }),
   interfaces: [nodeInterface]
 });
@@ -369,6 +384,69 @@ const setUserBkgImageMutation = mutationWithClientMutationId({
     const userGlobalObj = fromGlobalId(userId);
     const bckImageGlobalObj = fromGlobalId(imageId);
     return setUserBackgroundImage(userGlobalObj.id, bckImageGlobalObj.id);
+  }
+});
+
+/**
+ * Set user background color mutation.
+ */
+const setUserBkgColorMutation = mutationWithClientMutationId({
+  name: 'SetUserBkgColor',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    color: { type: new GraphQLNonNull(GraphQLString) }
+  },
+  outputFields: {
+    user: {
+      type: userType,
+      resolve: user => user
+    }
+  },
+  mutateAndGetPayload: ({userId, color}) => {
+    const userGlobalObj = fromGlobalId(userId);
+    return setUserBackgroundColor(userGlobalObj.id, color);
+  }
+});
+
+/**
+ * Set user background custom image mutation.
+ */
+const setUserBkgCustomImageMutation = mutationWithClientMutationId({
+  name: 'SetUserBkgCustomImage',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    image: { type: new GraphQLNonNull(GraphQLString) }
+  },
+  outputFields: {
+    user: {
+      type: userType,
+      resolve: user => user
+    }
+  },
+  mutateAndGetPayload: ({userId, image}) => {
+    const userGlobalObj = fromGlobalId(userId);
+    return setUserBackgroundFromCustomUrl(userGlobalObj.id, image);
+  }
+});
+
+
+/**
+ * Set user background daily image.
+ */
+const setUserBkgDailyImageMutation = mutationWithClientMutationId({
+  name: 'SetUserBkgDailyImage',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) }
+  },
+  outputFields: {
+    user: {
+      type: userType,
+      resolve: user => user
+    }
+  },
+  mutateAndGetPayload: ({userId}) => {
+    const userGlobalObj = fromGlobalId(userId);
+    return setUserBackgroundDaily(userGlobalObj.id);
   }
 });
 
@@ -559,7 +637,12 @@ const mutationType = new GraphQLObjectType({
   fields: () => ({
     updateVc: updateVcMutation,
     donateVc: donateVcMutation,
+
     setUserBkgImage: setUserBkgImageMutation,
+    setUserBkgColor: setUserBkgColorMutation,
+    setUserBkgCustomImage: setUserBkgCustomImageMutation,
+    setUserBkgDailyImage: setUserBkgDailyImageMutation,
+
     updateWidgetData: updateWidgetDataMutation,
     updateWidgetVisibility: updateWidgetVisibilityMutation,
     updateWidgetEnabled: updateWidgetEnabledMutation,

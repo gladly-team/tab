@@ -7,8 +7,7 @@ class UserBackgroundImage extends React.Component {
 
     const {user} = this.props;
 
-    const backgroundImage = {
-      backgroundImage: 'url(' + user.backgroundImage.url + ')',
+    const defaultStyle = {
       opacity: 1,
       backgroundRepeat: 'no-repeat',
       backgroundPosition: 'center',
@@ -24,7 +23,22 @@ class UserBackgroundImage extends React.Component {
       width: '100vw',
       height: '100vh',
       zIndex: 'auto'
-    };
+    }
+
+    var backgroundImage;
+    if(user.backgroundOption === 'custom'){
+      backgroundImage = Object.assign({}, defaultStyle, {
+        backgroundImage: 'url(' + user.customImage + ')',
+      });
+    } else if(user.backgroundOption === 'color') {
+      backgroundImage = Object.assign({}, defaultStyle, {
+        backgroundColor: user.backgroundColor,
+      });
+    } else {
+      backgroundImage = Object.assign({}, defaultStyle, {
+        backgroundImage: 'url(' + user.backgroundImage.url + ')',
+      });
+    }
 
     return (
       <div style={backgroundImage}></div>
