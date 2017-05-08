@@ -9,7 +9,11 @@ export default createFragmentContainer(BackgroundSettings, {
   user: graphql`
     fragment BackgroundSettingsContainer_user on User {
       id
+      backgroundOption
       ...BackgroundImagePickerContainer_user
+      ...BackgroundColorPickerContainer_user
+      ...BackgroundCustomImagePickerContainer_user
+      ...BackgroundDailyImageContainer_user
     }
   `,
   app: graphql`

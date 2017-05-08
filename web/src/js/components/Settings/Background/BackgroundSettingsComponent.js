@@ -3,18 +3,30 @@ import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import Divider from 'material-ui/Divider';
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 
-import BackgroundImagePicker from '../../BackgroundImage/BackgroundImagePickerContainer';
+import BackgroundImagePicker from '../../Background/BackgroundImagePickerContainer';
+import BackgroundColorPicker from '../../Background/BackgroundColorPickerContainer';
+import BackgroundCustomImagePicker from '../../Background/BackgroundCustomImagePickerContainer';
+import BackgroundDailyImage from '../../Background/BackgroundDailyImageContainer';
 
 class BackgroundSettings extends React.Component {
   
   constructor(props) {
       super(props);
 
-      this.defaultSelection = 'select';
+      this.defaultSelection = 'photo';
 
       this.state = {
         selected: this.defaultSelection,
       }
+  }
+
+  componentDidMount() {
+
+    const { user } = this.props;
+
+    this.setState({
+      selected: user.backgroundOption || this.defaultSelection,
+    });
   }
 
   onChange(event, value) {
@@ -54,14 +66,21 @@ class BackgroundSettings extends React.Component {
     }
 
     var selectedOption;
+    var dividerCmp = (<Divider style={divider}/>);
     switch(this.state.selected) {
       case 'daily':
+        dividerCmp = null;
+        selectedOption = (<BackgroundDailyImage 
+                            user={user}
+                            updateOnMount={user.backgroundOption != 'daily'}/>)
         break;
       case 'custom':
+        selectedOption = (<BackgroundCustomImagePicker user={user}/>)
         break;
       case 'color':
+        selectedOption = (<BackgroundColorPicker user={user}/>)
         break;
-      case 'select':
+      case 'photo':
         selectedOption = (<BackgroundImagePicker app={app} user={user}/>);
         break;
       default:
@@ -74,7 +93,7 @@ class BackgroundSettings extends React.Component {
           style={optionContainer}>
           <CardHeader
             title={'Background'}
-            subtitle={'Select a beautiful photo'}
+            subtitle={'Set your background options'}
             actAsExpander={false}
             showExpandableButton={false}>
           </CardHeader>
@@ -82,7 +101,7 @@ class BackgroundSettings extends React.Component {
             <RadioButtonGroup 
               onChange={this.onChange.bind(this)}
               name="photoModes" 
-              defaultSelected={this.defaultSelection}>
+              valueSelected={this.state.selected}>
               <RadioButton
                 style={radioBtn}
                 value="daily"
@@ -97,10 +116,10 @@ class BackgroundSettings extends React.Component {
                 label="Use a color"/>
               <RadioButton
                 style={radioBtn}
-                value="select"
+                value="photo"
                 label="Selected photo"/>
             </RadioButtonGroup>
-            <Divider style={divider}/>
+            {dividerCmp}
             {selectedOption}
           </div>
         </Card>

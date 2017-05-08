@@ -116,6 +116,9 @@ type Mutation {
   updateVc(input: UpdateVcInput!): UpdateVcPayload
   donateVc(input: DonateVcInput!): DonateVcPayload
   setUserBkgImage(input: SetUserBkgImageInput!): SetUserBkgImagePayload
+  setUserBkgColor(input: SetUserBkgColorInput!): SetUserBkgColorPayload
+  setUserBkgCustomImage(input: SetUserBkgCustomImageInput!): SetUserBkgCustomImagePayload
+  setUserBkgDailyImage(input: SetUserBkgDailyImageInput!): SetUserBkgDailyImagePayload
   updateWidgetData(input: UpdateWidgetDataInput!): UpdateWidgetDataPayload
   updateWidgetVisibility(input: UpdateWidgetVisibilityInput!): UpdateWidgetVisibilityPayload
   updateWidgetEnabled(input: UpdateWidgetEnabledInput!): UpdateWidgetEnabledPayload
@@ -164,6 +167,38 @@ input RemoveBookmarkInput {
 
 type RemoveBookmarkPayload {
   widget: Widget
+  clientMutationId: String
+}
+
+input SetUserBkgColorInput {
+  userId: String!
+  color: String!
+  clientMutationId: String
+}
+
+type SetUserBkgColorPayload {
+  user: User
+  clientMutationId: String
+}
+
+input SetUserBkgCustomImageInput {
+  userId: String!
+  image: String!
+  clientMutationId: String
+}
+
+type SetUserBkgCustomImagePayload {
+  user: User
+  clientMutationId: String
+}
+
+input SetUserBkgDailyImageInput {
+  userId: String!
+  clientMutationId: String
+}
+
+type SetUserBkgDailyImagePayload {
+  user: User
   clientMutationId: String
 }
 
@@ -264,6 +299,15 @@ type User implements Node {
 
   # User widgets
   widgets(after: String, first: Int, before: String, last: Int, enabled: Boolean): WidgetConnection
+
+  # User's background option
+  backgroundOption: String
+
+  # User's background custom image
+  customImage: String
+
+  # User's background color
+  backgroundColor: String
 }
 
 # App widget

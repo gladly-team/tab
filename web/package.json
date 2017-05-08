@@ -62,6 +62,7 @@
     "precss": "^1.4.0",
     "promise": "7.1.1",
     "react": "^15.4.2",
+    "react-color": "^2.11.7",
     "react-dev-utils": "^0.4.2",
     "react-dom": "^15.4.2",
     "react-dropdown": "^1.2.0",

@@ -4,6 +4,8 @@ import SetBackgroundImageMutation from 'mutations/SetBackgroundImageMutation';
 import {GridList, GridTile} from 'material-ui/GridList';
 import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
+import Subheader from 'material-ui/Subheader';
+import Divider from 'material-ui/Divider';
 
 class BackgroundImagePicker extends React.Component {
   
@@ -16,9 +18,18 @@ class BackgroundImagePicker extends React.Component {
 
   componentDidMount() {
     const { app, user } = this.props;
-    this.setState({
-      selectedImage: user.backgroundImage
-    });
+    const selectedImage = user.backgroundImage;
+    if(selectedImage) {
+      var image;
+      for(var index in app.backgroundImages.edges) {
+        var bkgImage = app.backgroundImages.edges[index].node;
+        if(selectedImage.url === bkgImage.url) {
+          image = bkgImage;
+          break;
+        }
+      }
+      this.onImageSelected(image);
+    }
   }
 
   onImageSelected(image) {
@@ -46,8 +57,18 @@ class BackgroundImagePicker extends React.Component {
       overflowY: 'auto',
     };
 
+    const header = {
+      paddingLeft: 0,
+    }
+
+    const divider = {
+      marginBottom: 10,
+    }
+
     return (
       <div style={root}>
+        <Subheader style={header}>Select your photo</Subheader>
+        <Divider style={divider}/>
         <GridList
           cols={3}
           cellHeight={170}
