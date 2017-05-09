@@ -67,6 +67,17 @@ type Charity implements Node {
 
   # the charity category
   category: String
+
+  # the charity website
+  website: String
+
+  # the charity description
+  description: String
+
+  # the charity impact message
+  impact: String
+  logo: String
+  image: String
 }
 
 # A connection to a list of items.

@@ -1,28 +1,28 @@
-import React from 'react';
-import CharityDisplay from './CharityDisplay';
+// import React from 'react';
+// import Charity from './CharityContainer';
 
-class Charities extends React.Component {
+// class Charities extends React.Component {
   
-  render() {
-    const { app } = this.props; 
+//   render() {
+//     const { app } = this.props; 
 
-    const sawasdee = {
-      fontSize: '2.5em',
-      fontWeight: 'normal',
-    };
+//     const sawasdee = {
+//       fontSize: '2.5em',
+//       fontWeight: 'normal',
+//     };
 
-    return (
-      <ul>
-        {app.charities.edges.map((edge) => {
-            return (<CharityDisplay key={edge.node.id} charity={edge.node}/>)
-        })}
-      </ul>
-    );
-  }
-}
+//     return (
+//       <ul>
+//         {app.charities.edges.map((edge) => {
+//             return (<Charity key={edge.node.id} charity={edge.node}/>)
+//         })}
+//       </ul>
+//     );
+//   }
+// }
 
-Charities.propTypes = {
-  app: React.PropTypes.object.isRequired
-};
+// Charities.propTypes = {
+//   app: React.PropTypes.object.isRequired
+// };
 
-export default Charities;
+// export default Charities;

@@ -9,21 +9,13 @@ import DonateVc from './DonateVcComponent';
 export default createFragmentContainer(DonateVc, {
   app: graphql`
     fragment DonateVcContainer_app on App {
-      charities(first: 20) {
-        edges {
-          node {
-            id
-            name
-            category
-          }
-        }
-      }
+      ...CharitiesContainer_app
     }
   `,
   user: graphql`
     fragment DonateVcContainer_user on User {
       id
-      vcCurrent
+      ...CharitiesContainer_user
     }
   `
 });
