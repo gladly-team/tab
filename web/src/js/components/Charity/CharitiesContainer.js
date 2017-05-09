@@ -1,22 +1,21 @@
-import {
-  createFragmentContainer,
-  graphql,
-} from 'react-relay/compat';
+// import {
+//   createFragmentContainer,
+//   graphql,
+// } from 'react-relay/compat';
 
-import Charities from './CharitiesComponent';
+// import Charities from './CharitiesComponent';
 
-export default createFragmentContainer(Charities, {
-  app: graphql`
-    fragment CharitiesContainer_app on App {
-      charities(first: 20) {
-        edges {
-          node {
-            id
-            name
-            category
-          }
-        }
-      }
-    }
-  `
-});
+// export default createFragmentContainer(Charities, {
+//   app: graphql`
+//     fragment CharitiesContainer_app on App {
+//       charities(first: 20) {
+//         edges {
+//           node {
+//             id
+//             ...CharityContainer_charity
+//           }
+//         }
+//       }
+//     }
+//   `
+// });

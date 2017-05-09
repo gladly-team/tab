@@ -12,7 +12,10 @@ test('getFields to be implemented', () => {
       'name',
       'category',
       'logo',
-      'image'
+      'image',
+      'website',
+      'description',
+      'impact'
     ];
 
 	expect(Charity.getFields().length).toBe(expected.length);

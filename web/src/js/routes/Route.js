@@ -14,7 +14,6 @@ import WidgetsSettingsView from '../components/Settings/Widgets/WidgetsSettingsV
 export default (
   <Route path='/' component={App}>
     <IndexRoute component={DashboardView}/>
-    <Route path='charities' component={CharitiesView}/>
     <Route path='donate' component={DonateVcView}/>
     <Route path='settings' component={SettingsView}>
     	<IndexRoute component={WidgetsSettingsView}/>
@@ -28,3 +27,4 @@ export default (
 // <Route path='/charities' component={CharitiesContainer} queries={ViewerQuery}/>
 // <Route path='/donate' component={DonateVcContainer} queries={ViewerQuery}/>
 // <Route path='/background' component={BackgroundImagePickerContainer} queries={ViewerQuery}/>
+    // <Route path='charities' component={CharitiesView}/>

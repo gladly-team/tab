@@ -25,6 +25,9 @@ class Charity extends BaseModel {
     this.category = '';
     this.logo = '';
     this.image = '';
+    this.website = '';
+    this.description = '';
+    this.impact = '';
   }
 
   /**
@@ -44,7 +47,10 @@ class Charity extends BaseModel {
       'name',
       'category',
       'logo',
-      'image'
+      'image',
+      'website',
+      'description',
+      'impact'
     ];
   }
 }
