@@ -22,7 +22,10 @@ class SettingsView extends React.Component {
             if (props) {
               return (
                   <Settigns 
-                    user={props.user}/>
+                    user={props.user}
+                    {...this.props}>
+                    {this.props.children}
+                  </Settigns>
               )
             } else {
               return (<FullScreenProgress />);

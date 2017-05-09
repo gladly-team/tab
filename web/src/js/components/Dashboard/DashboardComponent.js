@@ -32,6 +32,10 @@ class Dashboard extends React.Component {
     goTo('/settings');
   }
 
+  goToDonate() {
+    goTo('/donate');
+  }
+
   changeBkgSelectorState(state) {
     this.setState({
       bkgSelectorOpened: state,
@@ -70,7 +74,7 @@ class Dashboard extends React.Component {
     const actioBtnContainer = {
       position: 'absolute',
       bottom: 10,
-      right: 50,
+      right: 0,
       display: 'flex',
       width: 100,
       justifyContent: 'space-around'
@@ -105,22 +109,13 @@ class Dashboard extends React.Component {
         <WidgetsView />
         <div style={actioBtnContainer}>
           <IconButton 
-            tooltip="Change background"
+            tooltip="Donate"
             tooltipPosition="top-center"
-            onClick={this.changeBkgSelectorState.bind(this, true)}>
-              <FontIcon
-                color={grey300}
-                hoverColor={'#FFF'}
-                className="fa fa-picture-o fa-lg" />
-          </IconButton>
-          <IconButton 
-            tooltip="Donate to a Charity"
-            tooltipPosition="top-center"
-            onClick={this.changeDonateDialogState.bind(this, true)}>
+            onClick={this.goToDonate.bind(this)}>
             <FontIcon 
               color={grey300}
               hoverColor={'#FFF'}
-              className="fa fa-heart-o fa-lg" />
+              className="fa fa fa-heart fa-lg" />
           </IconButton>
           <IconButton 
             tooltip="Settings"
@@ -132,13 +127,6 @@ class Dashboard extends React.Component {
               className="fa fa fa-cog fa-lg" />
           </IconButton>
         </div>
-        <Dialog
-          title="Donate"
-          open={this.state.donateDialogOpened}
-          autoScrollBodyContent={true}
-          onRequestClose={this.changeDonateDialogState.bind(this, false)}>
-            <DonateVcView />
-        </Dialog>
       </div>
     );
   }

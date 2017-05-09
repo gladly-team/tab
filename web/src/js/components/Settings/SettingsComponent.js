@@ -15,14 +15,31 @@ class Settings extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-    	selection: 'profile',
+    	selection: 'widgets',
     };
+  }
+
+  componentDidMount() {
+     this.setState({
+      selection: this.getRouteName(),
+     })
+  }
+
+  getRouteName() {
+    var currentPath = this.props.location.pathname;
+    if(currentPath[currentPath.length - 1] == '/'){
+      currentPath = currentPath.slice(0, currentPath.length - 1);
+    }
+    var index = currentPath.lastIndexOf('/');
+    return currentPath.slice(index + 1);
   }
 
   openSettingsFor(selection) {
   	this.setState({
   		selection: selection,
   	});
+
+    goTo('/settings/' + selection);
   }	
 
   goToHome() {
@@ -46,36 +63,16 @@ class Settings extends React.Component {
     }
 
     const defaultMenuItem = {
-
     };
 
-    const profile = Object.assign({}, defaultMenuItem, {
-    	fontWeight: (this.state.selection == 'profile')?'bold':'normal'
-    });
-
-    const general = Object.assign({}, defaultMenuItem, {
-    	fontWeight: (this.state.selection == 'general')?'bold':'normal'
-    });
-
     const widgets = Object.assign({}, defaultMenuItem, {
-    	fontWeight: (this.state.selection == 'widgets')?'bold':'normal'
+    	fontWeight: (this.state.selection == 'widgets' || 
+        this.state.selection == 'settings')?'bold':'normal'
     });
 
     const background = Object.assign({}, defaultMenuItem, {
     	fontWeight: (this.state.selection == 'background')?'bold':'normal'
     });
-
-    var settingView;
-    switch(this.state.selection) {
-    	case 'widgets':
-    		settingView = (<WidgetsSettingsView />);
-    		break;
-      case 'background':
-        settingView = (<BackgroundSettingsView />);
-        break;
-    	default:
-    		break;
-    }
 
     return (
     	<div style={settings}>
@@ -90,23 +87,16 @@ class Settings extends React.Component {
               iconClassNameLeft="fa fa-arrow-left"
               onLeftIconButtonTouchTap={this.goToHome.bind(this)}/>
             <MenuItem 
-              style={profile}
-              onClick={this.openSettingsFor.bind(this, 'profile')}>Profile</MenuItem>
-            <MenuItem 
-              style={general}
-              onClick={this.openSettingsFor.bind(this, 'general')}>General</MenuItem>
-              <MenuItem 
                 style={widgets}
-            onClick={this.openSettingsFor.bind(this, 'widgets')}>
-              Widgets
+                onClick={this.openSettingsFor.bind(this, 'widgets')}>
+                Widgets
             </MenuItem>
             <MenuItem 
               style={background}
               onClick={this.openSettingsFor.bind(this, 'background')}>Background</MenuItem>
           </Drawer>
-
 	    	  <div style={container}>
-	      		{settingView}
+	      		{this.props.children}
 	      	</div>
       	</div>
     );
