@@ -2,41 +2,57 @@
   {
     "id": "fb5082cc-151a-4a9a-9289-06906670fd4e",
     "name": "Water.org",
-    "category": "Water"
+    "category": "Water",
+    "logo": "water-dot-org.jpg",
+    "image": "water-dot-org.jpg"
   },
   {
     "id": "90bfe202-54a9-4eea-9003-5e91572387dd",
     "name": "Save the Children",
-    "category": "Health"
+    "category": "Health",
+    "logo": "save-the-children.jpg",
+    "image": "save-the-children.jpg"
   },
   {
     "id": "3caf69b6-9803-4495-9a5c-5ae0316bf367",
     "name": "Room to Read",
-    "category": "Education"
+    "category": "Education",
+    "logo": "room-to-read.jpg",
+    "image": "room-to-read.jpg"
   },
   {
     "id": "1ff620f3-dd55-496d-be37-2b66c4d1c807",
     "name": "Educate!",
-    "category": "Education"
+    "category": "Education",
+    "logo": "educate.jpg",
+    "image": "educate.jpg"
   },
   {
     "id": "53aa6c29-74dc-44ca-a8e5-9d78321341b7",
     "name": "Human Rights Watch",
-    "category": "Human Rights"
+    "category": "Human Rights",
+    "logo": "human-rights-watch.jpg",
+    "image": "human-rights-watch.jpg"
   },
   {
     "id": "fecda3ac-7adc-49cd-9a8c-b78073e15e7a",
     "name": "Conservation International",
-    "category": "The Environment"
+    "category": "The Environment",
+    "logo": "conservation-international.jpg",
+    "image": "conservation-international.jpg"
   },
   {
     "id": "ea019270-1cda-411f-b41e-90406fbe15ee",
     "name": "Action Against Hunger",
-    "category": "Health"
+    "category": "Health",
+    "logo": "acfusa.jpg",
+    "image": "acfusa.jpg"
   },
   {
     "id": "978ee12f-6bc1-464e-af3a-2f56b6274292",
     "name": "The Foundation to Decrease Worldsuck",
-    "category": "Human Rights"
+    "category": "Human Rights",
+    "logo": "ftdws.jpg",
+    "image": "ftdws.jpg"
   }
 ]

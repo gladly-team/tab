@@ -1,6 +1,7 @@
 import React from 'react';
 import {QueryRenderer} from 'react-relay/compat';
 import environment from '../../../relay-env';
+import FullScreenProgress from 'general/FullScreenProgress';
 
 import DonateVc from './DonateVcContainer';
 
@@ -28,7 +29,7 @@ class DonateVcView extends React.Component {
                     user={props.user}/>
               )
             } else {
-              return null;
+              return (<FullScreenProgress />);
             }
           }}/>
     );

@@ -10,7 +10,9 @@ test('getTable name to be implemented', () => {
 test('getFields to be implemented', () => {
 	const expected = [
       'name',
-      'category'
+      'category',
+      'logo',
+      'image'
     ];
 
 	expect(Charity.getFields().length).toBe(expected.length);

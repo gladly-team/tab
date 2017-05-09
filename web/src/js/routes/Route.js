@@ -5,6 +5,8 @@ import App from '../components/App/AppComponent';
 import DashboardView from '../components/Dashboard/DashboardView';
 import CharitiesView from '../components/Charity/CharitiesView';
 
+import DonateVcView from '../components/Donate/DonateVcView';
+
 import SettingsView from '../components/Settings/SettingsView';
 import BackgroundSettingsView from '../components/Settings/Background/BackgroundSettingsView';
 import WidgetsSettingsView from '../components/Settings/Widgets/WidgetsSettingsView';
@@ -13,6 +15,7 @@ export default (
   <Route path='/' component={App}>
     <IndexRoute component={DashboardView}/>
     <Route path='charities' component={CharitiesView}/>
+    <Route path='donate' component={DonateVcView}/>
     <Route path='settings' component={SettingsView}>
     	<IndexRoute component={WidgetsSettingsView}/>
     	<Route path='widgets' component={WidgetsSettingsView}/>

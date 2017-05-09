@@ -23,6 +23,8 @@ class Charity extends BaseModel {
 
     this.name = '';
     this.category = '';
+    this.logo = '';
+    this.image = '';
   }
 
   /**
@@ -40,7 +42,9 @@ class Charity extends BaseModel {
   static getFields() {
     return [
       'name',
-      'category'
+      'category',
+      'logo',
+      'image'
     ];
   }
 }
@@ -64,15 +68,7 @@ function getCharity(id) {
  * into a list of Charity.
  */
 function getCharities() {
-  var params = {
-      ProjectionExpression: "#id, #name, #category",
-      ExpressionAttributeNames: {
-          "#id": "id",
-          "#name": "name",
-          "#category": "category",
-      }
-  };
-	return Charity.getAll(params)
+	return Charity.getAll()
         		.then(charities => charities)
         		.catch(err => {
                 logger.error("Error while fetching the charities.", err);

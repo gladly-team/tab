@@ -284,6 +284,18 @@ const charityType = new GraphQLObjectType({
       type: GraphQLString,
       description: 'the charity category',
     },
+    logo: {
+      type: GraphQLString,
+      resolve: (charity) => {
+        return staticRoot + '/charities/charity-logos/' + charity.logo;
+      }
+    },
+    image: {
+      type: GraphQLString,
+      resolve: (charity) => {
+        return staticRoot + '/charities/charity-post-donation-images/' + charity.image;
+      }
+    }
   }),
   interfaces: [nodeInterface],
 });
