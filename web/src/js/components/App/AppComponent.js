@@ -1,6 +1,14 @@
 import React from 'react';
+import UpdateVcMutation from 'mutations/UpdateVcMutation';
 
 class App extends React.Component {
+
+  componentDidMount() {
+    UpdateVcMutation.commit(
+      this.props.relay.environment,
+      this.props.user
+    );
+  }
 
   render() {
 
@@ -15,6 +23,11 @@ class App extends React.Component {
     );
   }
 }
+
+
+App.propTypes = {
+  user: React.PropTypes.object.isRequired
+};
 
 export default App;
 
