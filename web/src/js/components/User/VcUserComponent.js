@@ -1,16 +1,8 @@
 import React, {Component} from 'react';
 import Relay from 'react-relay';
-import UpdateVcMutation from 'mutations/UpdateVcMutation';
 import FontIcon from 'material-ui/FontIcon';
 
 class VcUser extends Component {
-
-  componentDidMount() {
-    UpdateVcMutation.commit(
-      this.props.relay.environment,
-      this.props.user
-    );
-  }
 
   render() {
 

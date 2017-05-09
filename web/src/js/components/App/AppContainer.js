@@ -7,9 +7,13 @@ import {
 import App from './AppComponent';
 
 export default createFragmentContainer(App, {
-  viewer: graphql`
-    fragment AppContainer_viewer on User {
-      ...DashboardContainer_viewer
+  user: graphql`
+    fragment AppContainer_user on User {
+      id
+      vcCurrent
+      vcAllTime
+      level
+      heartsUntilNextLevel 
     }
   `
 });

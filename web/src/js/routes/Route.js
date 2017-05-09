@@ -1,7 +1,7 @@
 import React from 'react';
 import { IndexRoute, Route, Redirect } from 'react-router';
 
-import App from '../components/App/AppComponent';
+import AppView from '../components/App/AppView';
 import DashboardView from '../components/Dashboard/DashboardView';
 import CharitiesView from '../components/Charity/CharitiesView';
 
@@ -12,7 +12,7 @@ import BackgroundSettingsView from '../components/Settings/Background/Background
 import WidgetsSettingsView from '../components/Settings/Widgets/WidgetsSettingsView';
 
 export default (
-  <Route path='/' component={App}>
+  <Route path='/' component={AppView}>
     <IndexRoute component={DashboardView}/>
     <Route path='donate' component={DonateVcView}/>
     <Route path='settings' component={SettingsView}>
