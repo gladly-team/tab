@@ -3,7 +3,7 @@ import { IndexRoute, Route, Redirect } from 'react-router';
 
 import AppView from '../components/App/AppView';
 import DashboardView from '../components/Dashboard/DashboardView';
-import CharitiesView from '../components/Charity/CharitiesView';
+import Authentication from '../components/Authentication/Authentication';
 
 import DonateVcView from '../components/Donate/DonateVcView';
 
@@ -14,6 +14,7 @@ import WidgetsSettingsView from '../components/Settings/Widgets/WidgetsSettingsV
 export default (
   <Route path='/' component={AppView}>
     <IndexRoute component={DashboardView}/>
+    <Route path='auth' component={Authentication}/>
     <Route path='donate' component={DonateVcView}/>
     <Route path='settings' component={SettingsView}>
     	<IndexRoute component={WidgetsSettingsView}/>
@@ -23,8 +24,3 @@ export default (
     <Redirect from='*' to='/' />
   </Route>
 );
-
-// <Route path='/charities' component={CharitiesContainer} queries={ViewerQuery}/>
-// <Route path='/donate' component={DonateVcContainer} queries={ViewerQuery}/>
-// <Route path='/background' component={BackgroundImagePickerContainer} queries={ViewerQuery}/>
-    // <Route path='charities' component={CharitiesView}/>

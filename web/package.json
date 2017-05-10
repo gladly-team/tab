@@ -15,6 +15,7 @@
     "relay-compiler": "1.0.0-rc.2"
   },
   "dependencies": {
+    "amazon-cognito-identity-js": "^1.16.0",
     "autoprefixer": "6.5.1",
     "babel-core": "^6.23.1",
     "babel-eslint": "7.1.1",
