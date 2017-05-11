@@ -3,7 +3,7 @@ service: dynamodb
 
 provider:
   name: aws
-  runtime: nodejs4.3
+  runtime: nodejs6.10
   region: us-west-2
   profile: tab-sls
   stage: dev
