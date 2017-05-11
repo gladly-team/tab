@@ -41,7 +41,7 @@ function generateLambdaEventObj(req) {
     pathParameters: {},
     stageVariables: {},
     requestContext: {},
-    body: req.body,
+    body: JSON.stringify(req.body),
     isBase64Encoded: false,
   }
 }
