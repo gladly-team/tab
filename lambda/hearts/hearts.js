@@ -11,10 +11,10 @@ const getHeartsForUser = (userId) => {
   return db.get({
     TableName: 'Users',
     Key: {
-      UserId: userId,
+      id: userId,
     },
   })
-  .then( data => data.Item.VcCurrent);
+  .then( data => data.Item.vcCurrent);
 };
 
 const handler = (event) => {
@@ -24,7 +24,7 @@ const handler = (event) => {
       body: JSON.stringify({ message: 'The id query param must be set to a valid user id' }),
     });
   }
-  let userId = parseInt(event.params.id, 10) || 0;
+  let userId = event.params.id;
   return getHeartsForUser(userId)
     .then(
       (hearts) => {
