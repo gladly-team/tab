@@ -9,13 +9,31 @@ provider:
   profile: tab-sls
   stage: dev
 
+# Package each function individually to reduce file sizes.
+# https://serverless.com/framework/docs/providers/aws/guide/packaging#packaging-functions-separately
+# Relevant Github issues addressing this:
+#   https://github.com/serverless/serverless/issues/569
+#   https://github.com/serverless/serverless/issues/2709
+package:
+  individually: true
+  exclude:
+    - node_modules/**
+    - __mocks__/**
+    - __tests__/**
+    - yarn-error.log
+
+
 functions:
   hearts:
     handler: hearts/hearts.serverlessHandler
+    package:
+      include:
+        - hearts/**
     events:
       - http:
           path: hearts/
           method: get
-          authorizer:
-            name: authorizer_${opt:stage, self:provider.stage}
-            arn:  arn:aws:cognito-idp:us-west-2:167811431063:userpool/us-west-2_9MWuEqLeW 
+          ## TODO: reenable later
+          # authorizer:
+          #   name: authorizer_${opt:stage, self:provider.stage}
+          #   arn:  arn:aws:cognito-idp:us-west-2:167811431063:userpool/us-west-2_9MWuEqLeW 
