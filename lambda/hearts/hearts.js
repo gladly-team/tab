@@ -18,13 +18,13 @@ const getHeartsForUser = (userId) => {
 };
 
 const handler = (event) => {
-  if (!event.params.id) {
+  if (!event.queryStringParameters.id) {
     return Promise.resolve({
       statusCode: 400,
       body: JSON.stringify({ message: 'The id query param must be set to a valid user id' }),
     });
   }
-  let userId = event.params.id;
+  let userId = event.queryStringParameters.id;
   return getHeartsForUser(userId)
     .then(
       (hearts) => {
