@@ -10,16 +10,119 @@ provider:
 
 resources:
   Resources:
-    usersTable:
+
+    usersTable:  
       Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: usersTable-${opt:stage, self:provider.stage}
+      Properties:  
+        TableName: users-${opt:stage, self:provider.stage}
         KeySchema:
-          - AttributeName: UserId
+          - AttributeName: id
             KeyType: HASH
         AttributeDefinitions:
-          - AttributeName: UserId
+          - AttributeName: id
             AttributeType: S
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+    charitiesTable:  
+      Type: AWS::DynamoDB::Table
+      Properties:  
+        TableName: charities-${opt:stage, self:provider.stage}
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+    widgetsTable:  
+      Type: AWS::DynamoDB::Table
+      Properties:  
+        TableName: widgets-${opt:stage, self:provider.stage}
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+    userLevelsTable:  
+      Type: AWS::DynamoDB::Table
+      Properties:  
+        TableName: userLevels-${opt:stage, self:provider.stage}
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: N
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+    vcDonationLogTable:  
+      Type: AWS::DynamoDB::Table
+      Properties:  
+        TableName: vcDonationLog-${opt:stage, self:provider.stage}
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+          - AttributeName: timestamp
+            KeyType: RANGE
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+          - AttributeName: timestamp
+            AttributeType: S
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+    backgroundImagesTable:  
+      Type: AWS::DynamoDB::Table
+      Properties:  
+        TableName: backgroundImages-${opt:stage, self:provider.stage}
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+    userWidgetsTable:  
+      Type: AWS::DynamoDB::Table
+      Properties:  
+        TableName: userWidgets-${opt:stage, self:provider.stage}
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+          - AttributeName: widgetId
+            KeyType: RANGE
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: widgetId
+            AttributeType: S
+        GlobalSecondaryIndexes:
+          - IndexName: Widgets
+            KeySchema:
+            - AttributeName: userId
+              KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
