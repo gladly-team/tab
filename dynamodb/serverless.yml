@@ -1,5 +1,6 @@
 
 service: dynamodb
+frameworkVersion: "=1.13.0"
 
 provider:
   name: aws

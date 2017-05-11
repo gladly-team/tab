@@ -1,5 +1,6 @@
 
 service: lambda
+frameworkVersion: "=1.13.0"
 
 provider:
   name: aws
