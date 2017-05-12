@@ -26,6 +26,7 @@
   "devDependencies": {
     "aws-sdk": "^2.18.0",
     "babel-cli": "^6.22.2",
+    "body-parser": "^1.17.1",
     "codecov": "^2.1.0",
     "if-env": "^1.0.0",
     "jest": "^19.0.2",

@@ -1,6 +1,8 @@
 /* eslint-disable no-unused-vars, no-use-before-define */
 
-const staticRoot = process.env.S3_ENDPOINT;
+// TODO: use config
+// const staticRoot = process.env.S3_ENDPOINT;
+const staticRoot = 'http://localhost:9000';
 
 import {
   GraphQLBoolean,
