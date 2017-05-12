@@ -40,6 +40,8 @@
   },
   "scripts": {
     "start": "babel-node ./server.js",
+    "build": "NODE_ENV=production npm run update-schema && babel --out-dir='build' --ignore='build,coverage,node_modules' ./",
+    "deploy": "npm run build && serverless deploy",
     "update-schema": "babel-node ./scripts/updateSchema.js",
     "test": "jest --coverage && if-env NODE_ENV=test && codecov || echo 'Skipping test coverage logging.'",
     "test:watch": "jest --watch"

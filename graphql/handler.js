@@ -16,7 +16,13 @@ const createResponse = function(statusCode, body) {
 };
 
 export const handler = function(event) {
-  const body = JSON.parse(event.body);
+  var body;
+  try {
+    body = JSON.parse(event.body);
+  } catch(e) {
+    return Promise.resolve(createResponse(500, e));
+  }
+  
   return graphql(Schema, body.query, null, {}, body.variables)
     .then(data => createResponse(200, data))
     .catch(err => createResponse(500, err));

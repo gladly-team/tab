@@ -12,7 +12,7 @@ provider:
 # TODO: exclude devdependencies
 functions:
   graphql:
-    handler: handler.serverlessHandler
+    handler: build/handler.serverlessHandler
     package:
       exclude:
         - coverage/**
