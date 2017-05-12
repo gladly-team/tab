@@ -32,6 +32,10 @@ let appServer;
 //     "isBase64Encoded": "A boolean flag to indicate if the applicable request payload is Base64-encode"
 // }
 function generateLambdaEventObj(req) {
+
+  // Need to use body-parser if we want this to be populated
+  const body = req.body ? JSON.stringify(req.body) : '';
+
   return {
     resource: '',
     path: req.baseUrl,
@@ -41,7 +45,7 @@ function generateLambdaEventObj(req) {
     pathParameters: {},
     stageVariables: {},
     requestContext: {},
-    body: JSON.stringify(req.body),
+    body: body,
     isBase64Encoded: false,
   }
 }
