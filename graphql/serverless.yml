@@ -1,0 +1,23 @@
+
+service: graphql
+frameworkVersion: "=1.13.0"
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  region: us-west-2
+  profile: tab-sls
+  stage: dev
+
+# TODO: exclude devdependencies
+functions:
+  graphql:
+    handler: handler.serverlessHandler
+    package:
+      exclude:
+        - coverage/**
+        - yarn-error.log
+    events:
+      - http:
+          path: graphql/
+          method: post
