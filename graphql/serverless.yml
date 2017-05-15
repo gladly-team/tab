@@ -9,14 +9,21 @@ provider:
   profile: tab-sls
   stage: dev
 
-# TODO: exclude devdependencies
+plugins:
+  # Include only the required node modules.
+  # https://github.com/dougmoscrop/serverless-plugin-include-dependencies
+  - serverless-plugin-include-dependencies
+
+# Only include the build and its node modules.
+package:
+  exclude:
+    - ./**
+  include:
+    - build/**
+
 functions:
   graphql:
     handler: build/handler.serverlessHandler
-    package:
-      exclude:
-        - coverage/**
-        - yarn-error.log
     events:
       - http:
           path: graphql/
