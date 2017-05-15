@@ -206,6 +206,13 @@ asynckit@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
 
+auto-parse@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/auto-parse/-/auto-parse-1.3.0.tgz#c3450c3147a2a4a94bfa1d07011cbcf0d8d22003"
+  dependencies:
+    lodash "^4.16.3"
+    typpy "^2.3.6"
+
 aws-sdk@^2.18.0:
   version "2.32.0"
   resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.32.0.tgz#9fe278b2ec1b12fddd1afeb74439581cdc2e5990"
@@ -1104,6 +1111,10 @@ camelcase@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-3.0.0.tgz#32fc4b9fcdaf845fcdf7e73bb97cac2261f0ab0a"
 
+camelcase@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-4.1.0.tgz#d545635be1e33c542649c69173e5de6acfae34dd"
+
 caseless@~0.11.0:
   version "0.11.0"
   resolved "https://registry.yarnpkg.com/caseless/-/caseless-0.11.0.tgz#715b96ea9841593cc33067923f5ec60ebda4f7d7"
@@ -1486,16 +1497,20 @@ domain-browser@^1.1.1:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/domain-browser/-/domain-browser-1.1.7.tgz#867aa4b093faa05f1de08c06f4d7b21fdf8698bc"
 
-dotenv-extended@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/dotenv-extended/-/dotenv-extended-1.0.4.tgz#56f28bdbaadb72856c60b12e8b7cbf6c847fcdc4"
+dotenv-extended@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/dotenv-extended/-/dotenv-extended-2.0.0.tgz#4938b4544de7260901f3030e5f12e424973d35db"
   dependencies:
-    dotenv "^2.0.0"
+    auto-parse "^1.3.0"
+    camelcase "^4.1.0"
+    cross-spawn "^5.1.0"
+    dotenv "^4.0.0"
+    is-windows "^1.0.0"
     lodash "^4.3.0"
 
-dotenv@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-2.0.0.tgz#bd759c357aaa70365e01c96b7b0bec08a6e0d949"
+dotenv@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-4.0.0.tgz#864ef1379aced55ce6f95debecdce179f7a0cd1d"
 
 duplexer@~0.1.1:
   version "0.1.1"
@@ -1826,6 +1841,12 @@ fstream@^1.0.0, fstream@^1.0.10, fstream@^1.0.2:
     inherits "~2.0.0"
     mkdirp ">=0.5 0"
     rimraf "2"
+
+function.name@^1.0.3:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/function.name/-/function.name-1.0.8.tgz#d11c12e4a7dfa7de7c71d9c504567083bb6be05b"
+  dependencies:
+    noop6 "^1.0.1"
 
 gauge@~2.7.1:
   version "2.7.3"
@@ -2641,7 +2662,7 @@ lodash@3.x, lodash@v3.10.1:
   version "3.10.1"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
 
-lodash@^4.14.0, lodash@^4.17.4, lodash@^4.2.0, lodash@^4.3.0:
+lodash@^4.14.0, lodash@^4.16.3, lodash@^4.17.4, lodash@^4.2.0, lodash@^4.3.0:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
@@ -2861,6 +2882,10 @@ node-source-walk@^3.0.0, node-source-walk@^3.2.0:
   resolved "https://registry.yarnpkg.com/node-source-walk/-/node-source-walk-3.2.1.tgz#12bb1b9a3fb1873f785c4a7547b6034f953f669f"
   dependencies:
     babylon "^6.17.0"
+
+noop6@^1.0.1:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/noop6/-/noop6-1.0.6.tgz#eb2b6b5ee1248a02838ee0cea12e8dd5caaf849b"
 
 nopt@^4.0.1:
   version "4.0.1"
@@ -3822,6 +3847,12 @@ type-is@~1.6.14:
   dependencies:
     media-typer "0.3.0"
     mime-types "~2.1.13"
+
+typpy@^2.3.6:
+  version "2.3.8"
+  resolved "https://registry.yarnpkg.com/typpy/-/typpy-2.3.8.tgz#5dfc0a1e9b9e4f9287ef8fa94dce8aa18103e581"
+  dependencies:
+    function.name "^1.0.3"
 
 uglify-js@^2.6, uglify-js@^2.8.5:
   version "2.8.15"
