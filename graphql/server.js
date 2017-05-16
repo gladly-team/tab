@@ -53,19 +53,23 @@ function startGraphQLServer(callback) {
   graphQLApp.use(bodyParser.urlencoded({ extended: true }));
 
 
-  // TODO: flag to use express-graphql in development
-  // graphQLApp.use('/', graphQLHTTP({
-  //   graphiql: true,
-  //   pretty: true,
-  //   schema: Schema,
-  // }));
+  // Use express-graphql in development if desired.
+  // Otherwise, just use our plain Lambda handler.
+  if (config.NODE_ENV === 'development' && config.ENABLE_GRAPHIQL) {
+    graphQLApp.use('/', graphQLHTTP({
+      graphiql: true,
+      pretty: true,
+      schema: Schema,
+    }));
+  } else {
+    graphQLApp.post('/', (req, res) => {
+      const event = generateLambdaEventObj(req);
+      handler(event)
+        // Use only the body (the rest is for use within an AWS Lambda context)
+        .then(response => res.send(response.body));
+    });
 
-  graphQLApp.post('/', (req, res) => {
-    const event = generateLambdaEventObj(req);
-    handler(event)
-      // Use only the body (the rest is for use within an AWS Lambda context)
-      .then(response => res.send(response.body));
-  });
+  }
 
   graphQLServer = graphQLApp.listen(GRAPHQL_PORT, () => {
     console.log(

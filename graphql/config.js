@@ -14,4 +14,5 @@ module.exports = {
   S3_ENDPOINT: process.env.S3_ENDPOINT,
   GRAPHQL_PORT: process.env.GRAPHQL_PORT,
   LOGGING_ENABLED: process.env.LOGGING_ENABLED === '1',
+  ENABLE_GRAPHIQL: process.env.ENABLE_GRAPHIQL === '1',
 };
