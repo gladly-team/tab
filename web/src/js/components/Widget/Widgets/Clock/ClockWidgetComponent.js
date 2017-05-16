@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 
 import { getWidgetConfig } from '../../../../utils/widgets-utils';
@@ -93,8 +94,8 @@ class ClockWidget extends React.Component {
 }
 
 ClockWidget.propTypes = {
-  widget: React.PropTypes.object.isRequired,
-  user: React.PropTypes.object.isRequired,
+  widget: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
 };
 
 export default ClockWidget;

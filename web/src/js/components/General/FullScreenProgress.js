@@ -1,5 +1,6 @@
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import CircularProgress from 'material-ui/CircularProgress';
 
 class FullScreenProgress extends React.Component { 
@@ -17,8 +18,8 @@ class FullScreenProgress extends React.Component {
 }
 
 FullScreenProgress.propTypes = {
-  containerStyle: React.PropTypes.object,
-  progressStyle: React.PropTypes.object,
+  containerStyle: PropTypes.object,
+  progressStyle: PropTypes.object,
 };
 
 FullScreenProgress.defaultProps = {

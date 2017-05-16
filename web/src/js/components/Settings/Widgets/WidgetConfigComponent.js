@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import Toggle from 'material-ui/Toggle';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
@@ -27,8 +28,8 @@ class WidgetConfig extends React.Component {
 }
 
 WidgetConfig.propTypes = {
-  setting: React.PropTypes.object.isRequired,
-  onConfigUpdated: React.PropTypes.func.isRequired,
+  setting: PropTypes.object.isRequired,
+  onConfigUpdated: PropTypes.func.isRequired,
 };
 
 export default WidgetConfig;

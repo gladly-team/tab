@@ -5,11 +5,11 @@
   "private": true,
   "dependencies": {},
   "devDependencies": {
-    "aws-sdk": "^2.18.0"
+    "aws-sdk": "^2.52.0"
   },
   "scripts": {
-    "init": "npm run delete-tables && npm run bootstrap",
-    "bootstrap": "npm run create-tables && npm run load-fixtures",
+    "init": "yarn run delete-tables && yarn run bootstrap",
+    "bootstrap": "yarn run create-tables && yarn run load-fixtures",
     "create-tables": "node createTables.js",
     "delete-tables": "node deleteTables.js",
     "load-fixtures": "node ./fixtures/loadFixtures.js"

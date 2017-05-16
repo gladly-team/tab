@@ -1,5 +1,6 @@
 import React from 'react';
 import UpdateVcMutation from 'mutations/UpdateVcMutation';
+import PropTypes from 'prop-types';
 
 class App extends React.Component {
 
@@ -26,7 +27,7 @@ class App extends React.Component {
 
 
 App.propTypes = {
-  user: React.PropTypes.object.isRequired
+  user: PropTypes.object.isRequired
 };
 
 export default App;

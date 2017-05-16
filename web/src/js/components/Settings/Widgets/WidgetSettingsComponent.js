@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import Toggle from 'material-ui/Toggle';
 import WidgetConfig from './WidgetConfigComponent';
@@ -141,9 +142,9 @@ class WidgetSettings extends React.Component {
 }
 
 WidgetSettings.propTypes = {
-  widget: React.PropTypes.object,
-  appWidget: React.PropTypes.object.isRequired,
-  user: React.PropTypes.object.isRequired,
+  widget: PropTypes.object,
+  appWidget: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
 };
 
 export default WidgetSettings;
