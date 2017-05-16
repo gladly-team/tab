@@ -21,11 +21,14 @@
     "jest": "^20.0.1",
     "lodash": "^4.17.4",
     "nodemon": "^1.11.0",
+    "npm-run-all": "^4.0.2",
     "yamljs": "^0.2.8"
   },
   "scripts": {
     "start": "nodemon -e js,json,yml --exec \"babel-node\" ./server.js",
-    "test": "jest --coverage && if-env NODE_ENV=test && codecov || echo 'Skipping test coverage logging.'",
+    "test": "npm-run-all -s test:run test:codecov",
+    "test:run": "jest --coverage",
+    "test:codecov": "if-env NODE_ENV=test && codecov || echo 'Skipping test coverage logging.'",
     "test:watch": "jest --watch"
   },
   "repository": {
