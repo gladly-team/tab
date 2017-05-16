@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import Divider from 'material-ui/Divider';
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
@@ -129,8 +130,8 @@ class BackgroundSettings extends React.Component {
 }
 
 BackgroundSettings.propTypes = {
-  app: React.PropTypes.object.isRequired,
-  user: React.PropTypes.object.isRequired
+  app: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired
 };
 
 export default BackgroundSettings;

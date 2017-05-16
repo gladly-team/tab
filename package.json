@@ -6,7 +6,7 @@
   "dependencies": {},
   "devDependencies": {
     "nodemon": "^1.11.0",
-    "npmlog": "^4.0.2"
+    "npmlog": "^4.1.0"
   },
   "scripts": {
     "build": "npm run all:install & docker-compose build",

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import DonateVcMutation from 'mutations/DonateVcMutation';
 import { goTo } from 'navigation/navigation';
 
@@ -263,7 +264,7 @@ class Charity extends React.Component {
 }
 
 Charity.propTypes = {
-	charity: React.PropTypes.object.isRequired
+	charity: PropTypes.object.isRequired
 };
 
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import Widget from './WidgetContainer';
+import PropTypes from 'prop-types';
 
 class Widgets extends React.Component {
   
@@ -32,7 +33,7 @@ class Widgets extends React.Component {
 }
 
 Widgets.propTypes = {
-  user: React.PropTypes.object.isRequired
+  user: PropTypes.object.isRequired
 };
 
 export default Widgets;

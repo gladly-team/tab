@@ -7,6 +7,7 @@ import { SketchPicker } from 'react-color';
 import Paper from 'material-ui/Paper';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
+import PropTypes from 'prop-types';
 
 class BackgroundColorPicker extends React.Component {
   
@@ -93,7 +94,7 @@ class BackgroundColorPicker extends React.Component {
 }
 
 BackgroundColorPicker.propTypes = {
-  user: React.PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
 };
 
 export default BackgroundColorPicker;

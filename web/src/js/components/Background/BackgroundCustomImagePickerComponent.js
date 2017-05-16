@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import SetBackgroundCustomImageMutation from 'mutations/SetBackgroundCustomImageMutation';
 
@@ -79,7 +80,7 @@ class BackgroundCustomeImagePicker extends React.Component {
 }
 
 BackgroundCustomeImagePicker.propTypes = {
-  user: React.PropTypes.object.isRequired
+  user: PropTypes.object.isRequired
 };
 
 export default BackgroundCustomeImagePicker;

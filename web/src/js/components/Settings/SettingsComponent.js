@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { goTo } from 'navigation/navigation';
 
 import AppBar from 'material-ui/AppBar';
@@ -104,7 +105,7 @@ class Settings extends React.Component {
 }
 
 Settings.propTypes = {
-  user: React.PropTypes.object.isRequired
+  user: PropTypes.object.isRequired
 };
 
 export default Settings;
