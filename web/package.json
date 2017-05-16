@@ -11,6 +11,7 @@
     "enzyme": "^2.8.2",
     "if-env": "^1.0.0",
     "lodash": "^4.17.4",
+    "npm-run-all": "^4.0.2",
     "react-test-renderer": "^15.5.4",
     "relay-compiler": "^1.0.0-rc.4"
   },
@@ -89,7 +90,9 @@
     "build": "node scripts/build.js",
     "relay": "relay-compiler --src ./src/ --schema ./data/schema.graphql",
     "relay:watch": "nodemon --watch src/ --watch data/schema.graphql --ignore **/__generated__/**/* --exec \"yarn run relay\"",
-    "test": "jest --env=jsdom --coverage && if-env NODE_ENV=test && codecov || echo 'Skipping test coverage logging.'",
+    "test": "npm-run-all -s test:run test:codecov",
+    "test:run": "jest --env=jsdom --coverage",
+    "test:codecov": "if-env NODE_ENV=test && codecov || echo 'Skipping test coverage logging.'",
     "test:watch": "jest --env=jsdom --watch",
     "build:langs": "node scripts/translate.js"
   },
