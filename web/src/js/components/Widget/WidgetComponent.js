@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import UpdateWidgetVisibilityMutation from 'mutations/UpdateWidgetVisibilityMutation';
 
@@ -57,8 +58,8 @@ class Widget extends React.Component {
 }
 
 Widget.propTypes = {
-  widget: React.PropTypes.object.isRequired,
-  user: React.PropTypes.object.isRequired,
+  widget: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
 };
 
 export default Widget;

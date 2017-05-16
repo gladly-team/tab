@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/href-no-hash */
 import React from 'react';
+import PropTypes from 'prop-types';
 import VcUser from '../User/VcUserContainer';
 import UserDisplay from '../User/UserDisplayContainer';
 import UserBackgroundImage from '../User/UserBackgroundImageContainer';
@@ -133,7 +134,7 @@ class Dashboard extends React.Component {
 }
 
 Dashboard.propTypes = {
-  user: React.PropTypes.object.isRequired
+  user: PropTypes.object.isRequired
 };
 
 export default Dashboard;

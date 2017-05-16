@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/href-no-hash */
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class UserBackgroundImage extends React.Component {
   
@@ -47,7 +48,7 @@ class UserBackgroundImage extends React.Component {
 }
 
 UserBackgroundImage.propTypes = {
-    user: React.PropTypes.object.isRequired
+    user: PropTypes.object.isRequired
   };
 
 export default UserBackgroundImage;

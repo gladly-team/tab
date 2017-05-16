@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import Relay from 'react-relay';
 import FontIcon from 'material-ui/FontIcon';
 
@@ -53,7 +54,7 @@ class VcUser extends Component {
 }
 
 VcUser.propTypes = {
-  user: React.PropTypes.object.isRequired
+  user: PropTypes.object.isRequired
 };
 
 VcUser.defaultProps = {

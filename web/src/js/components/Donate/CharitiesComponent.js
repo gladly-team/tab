@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Charity from './CharityContainer';
 import Subheader from 'material-ui/Subheader';
 import {GridList} from 'material-ui/GridList';
@@ -41,7 +42,7 @@ class Charities extends React.Component {
 }
 
 Charities.propTypes = {
-  app: React.PropTypes.object.isRequired
+  app: PropTypes.object.isRequired
 };
 
 export default Charities;

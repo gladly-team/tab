@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Relay from 'react-relay';
 
 import { FormattedMessage } from 'react-intl';
@@ -40,7 +41,7 @@ class UserDisplay extends React.Component {
 // Welcome, {user.username}
 
 UserDisplay.propTypes = {
-  user: React.PropTypes.object.isRequired
+  user: PropTypes.object.isRequired
 };
 
 export default UserDisplay;

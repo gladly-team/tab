@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 
 import UpdateWidgetDataMutation from 'mutations/UpdateWidgetDataMutation';
@@ -280,9 +281,9 @@ class NotesWidget extends React.Component {
 }
 
 NotesWidget.propTypes = {
-  widget: React.PropTypes.object.isRequired,
-  user: React.PropTypes.object.isRequired,
-  popoverWidgetVisibilityChanged: React.PropTypes.func.isRequired
+  widget: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
+  popoverWidgetVisibilityChanged: PropTypes.func.isRequired
 };
 
 export default NotesWidget;

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Relay from 'react-relay';
 
 import { goTo } from 'navigation/navigation';
@@ -41,8 +42,8 @@ class DonateVc extends React.Component {
 }
 
 DonateVc.propTypes = {
-	app: React.PropTypes.object.isRequired,
-  user: React.PropTypes.object.isRequired
+	app: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired
 };
 
 export default DonateVc;

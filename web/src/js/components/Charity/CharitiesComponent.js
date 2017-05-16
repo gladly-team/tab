@@ -22,7 +22,7 @@
 // }
 
 // Charities.propTypes = {
-//   app: React.PropTypes.object.isRequired
+//   app: PropTypes.object.isRequired
 // };
 
 // export default Charities;

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import SetBackgroundDailyImageMutation from 'mutations/SetBackgroundDailyImageMutation';
 
 class BackgroundDailyImage extends React.Component {
@@ -22,8 +23,8 @@ class BackgroundDailyImage extends React.Component {
 }
 
 BackgroundDailyImage.propTypes = {
-  user: React.PropTypes.object.isRequired,
-  updateOnMount: React.PropTypes.bool,
+  user: PropTypes.object.isRequired,
+  updateOnMount: PropTypes.bool,
 };
 
 BackgroundDailyImage.defaultProps = {

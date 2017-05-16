@@ -1,4 +1,5 @@
 // import React from 'react';
+// import PropTypes from 'prop-types';
 
 // class Charity extends React.Component {
 
@@ -13,7 +14,7 @@
 // }
 
 // Charity.propTypes = {
-// 	charity: React.PropTypes.object.isRequired
+// 	charity: PropTypes.object.isRequired
 // };
 
 

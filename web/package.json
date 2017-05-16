@@ -61,6 +61,7 @@
     "postcss-loader": "^2.0.5",
     "precss": "^1.4.0",
     "promise": "7.1.1",
+    "prop-types": "^15.5.10",
     "react": "^15.4.2",
     "react-color": "^2.11.7",
     "react-dev-utils": "^0.5.2",
