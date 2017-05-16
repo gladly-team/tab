@@ -568,7 +568,7 @@ babel-plugin-react-transform@^2.0.2:
   dependencies:
     lodash "^4.6.1"
 
-babel-plugin-relay@dev:
+babel-plugin-relay@^1.0.1-rc.4:
   version "1.0.1-rc.4"
   resolved "https://registry.yarnpkg.com/babel-plugin-relay/-/babel-plugin-relay-1.0.1-rc.4.tgz#bf3c32f537b683711dd784d97ec1f8ece6092f77"
   dependencies:
@@ -3147,7 +3147,7 @@ graphql@0.9.1:
   dependencies:
     iterall "1.0.3"
 
-graphql@^0.9.1, graphql@^0.9.5:
+graphql@^0.9.5:
   version "0.9.6"
   resolved "https://registry.yarnpkg.com/graphql/-/graphql-0.9.6.tgz#514421e9d225c29dfc8fd305459abae58815ef2c"
   dependencies:
@@ -5968,7 +5968,7 @@ react-proxy@^3.0.0-alpha.0:
   dependencies:
     lodash "^4.6.1"
 
-react-relay@dev:
+react-relay@^1.0.0-rc.4:
   version "1.0.0-rc.4"
   resolved "https://registry.yarnpkg.com/react-relay/-/react-relay-1.0.0-rc.4.tgz#f9d165db67977f2cbe51ba098b22070f154e3843"
   dependencies:
@@ -6227,9 +6227,9 @@ relateurl@0.2.x:
   version "0.2.7"
   resolved "https://registry.yarnpkg.com/relateurl/-/relateurl-0.2.7.tgz#54dbf377e51440aca90a4cd274600d3ff2d888a9"
 
-relay-compiler@1.0.0-rc.2:
-  version "1.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/relay-compiler/-/relay-compiler-1.0.0-rc.2.tgz#f9ff5254bfb04c7a2320ad3bd5bd9ee1931028c0"
+relay-compiler@^1.0.0-rc.4:
+  version "1.0.0-rc.4"
+  resolved "https://registry.yarnpkg.com/relay-compiler/-/relay-compiler-1.0.0-rc.4.tgz#ec7aecf5f50e11b547799f41781b5168087cb846"
   dependencies:
     babel-generator "6.24.0"
     babel-runtime "^6.23.0"
@@ -6238,18 +6238,11 @@ relay-compiler@1.0.0-rc.2:
     babylon "6.16.1"
     fb-watchman "^2.0.0"
     fbjs "^0.8.1"
-    graphql "^0.9.1"
+    graphql "^0.9.5"
     immutable "^3.8.1"
-    relay-runtime "1.0.0-rc.2"
+    relay-runtime "1.0.0-rc.4"
     signedsource "^1.0.0"
     yargs "^7.0.2"
-
-relay-runtime@1.0.0-rc.2:
-  version "1.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/relay-runtime/-/relay-runtime-1.0.0-rc.2.tgz#3a90c5912aca3c40cd976e689fda5001f8241827"
-  dependencies:
-    babel-runtime "^6.23.0"
-    fbjs "^0.8.1"
 
 relay-runtime@1.0.0-rc.4:
   version "1.0.0-rc.4"
