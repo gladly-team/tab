@@ -173,9 +173,9 @@ auto-parse@^1.3.0:
     lodash "^4.16.3"
     typpy "^2.3.6"
 
-aws-sdk@^2.19.0:
-  version "2.51.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.51.0.tgz#7d0f19c7a98a4d4a0f808d85439aa1835d1ad1ca"
+aws-sdk@^2.52.0:
+  version "2.52.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.52.0.tgz#e4d090b845c3f5df13dd065e38a7243ba0a08b3b"
   dependencies:
     buffer "5.0.6"
     crypto-browserify "1.0.9"

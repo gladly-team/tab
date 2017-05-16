@@ -5,7 +5,7 @@
   "private": true,
   "dependencies": {},
   "devDependencies": {
-    "aws-sdk": "^2.18.0"
+    "aws-sdk": "^2.52.0"
   },
   "scripts": {
     "init": "npm run delete-tables && npm run bootstrap",

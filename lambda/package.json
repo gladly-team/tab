@@ -4,7 +4,7 @@
   "description": "Tab for a Cause.",
   "private": true,
   "dependencies": {
-    "aws-sdk": "^2.19.0"
+    "aws-sdk": "^2.52.0"
   },
   "devDependencies": {
     "babel-cli": "^6.23.0",
