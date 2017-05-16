@@ -43,7 +43,7 @@
   "scripts": {
     "start": "babel-node ./server.js",
     "build": "rm -rf ./build && npm run build:compile",
-    "build:compile": "npm run build:config && cross-env NODE_ENV=production babel --out-dir='build' --ignore='build,coverage,node_modules,config.js,server.js' ./",
+    "build:compile": "npm run build:config && cross-env NODE_ENV=production babel --out-dir='build' --ignore='build,coverage,__mocks__,__tests__,node_modules,config.js,server.js' ./",
     "build:config": "NODE_ENV=production node -r dotenv-extended/config ./scripts/generateConfig.js",
     "deploy": "npm run build && serverless deploy",
     "update-schema": "babel-node ./scripts/updateSchema.js",
