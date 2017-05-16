@@ -17,7 +17,6 @@
     "babel-cli": "^6.22.2",
     "babel-core": "^6.22.1",
     "babel-loader": "^6.2.10",
-    "babel-plugin-transform-inline-environment-variables": "^0.0.2",
     "babel-polyfill": "^6.22.0",
     "babel-preset-es2015": "^6.22.0",
     "babel-preset-stage-0": "^6.22.0",
@@ -43,7 +42,9 @@
   },
   "scripts": {
     "start": "babel-node ./server.js",
-    "build": "cross-env NODE_ENV=production babel --out-dir='build' --ignore='build,coverage,node_modules' ./",
+    "build": "rm -rf ./build && npm run build:compile",
+    "build:compile": "npm run build:config && cross-env NODE_ENV=production babel --out-dir='build' --ignore='build,coverage,node_modules,config.js,server.js' ./",
+    "build:config": "NODE_ENV=production node -r dotenv-extended/config ./scripts/generateConfig.js",
     "deploy": "npm run build && serverless deploy",
     "update-schema": "babel-node ./scripts/updateSchema.js",
     "test": "jest --coverage && if-env NODE_ENV=test && codecov || echo 'Skipping test coverage logging.'",
