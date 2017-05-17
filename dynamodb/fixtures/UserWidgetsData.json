@@ -2,7 +2,7 @@
   {
   	"userId": "45bbefbf-63d1-4d36-931e-212fbe2bc3d9",
     "widgetId": "4162cc79-d192-4435-91bd-5fda9b6f7c08",
-    "enabled": 1,
+    "enabled": true,
     "visible": false,
     "data": {
     	"bookmarks": [
