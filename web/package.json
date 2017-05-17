@@ -18,6 +18,7 @@
   "dependencies": {
     "amazon-cognito-identity-js": "^1.16.0",
     "autoprefixer": "^7.1.0",
+    "aws-sdk": "^2.52.0",
     "babel-core": "^6.23.1",
     "babel-eslint": "^7.2.3",
     "babel-jest": "^20.0.1",
