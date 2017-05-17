@@ -5,7 +5,7 @@ const config = require('../config');
 
 
 const configPath = path.join(__dirname, '../build/config.js');
-const content = JSON.stringify(config);
+const content = 'module.exports = ' + JSON.stringify(config) + ';';
 
 function writeFile(filePath, contents, cb) {
 
