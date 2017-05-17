@@ -1,10 +1,11 @@
 import AWS, {
-  Config,
   CognitoIdentityCredentials,
-  CognitoIdentityServiceProvider
+  Config
 } from 'aws-sdk';
 
 import {
+  AuthenticationDetails,
+  CognitoUser,
   CognitoUserPool,
   CognitoUserAttribute
 } from 'amazon-cognito-identity-js';
@@ -44,16 +45,14 @@ function login(email, password, onSuccessCallback, onFailureCallback) {
         Password: password,
     };
 
-    var authenticationDetails = new CognitoIdentityServiceProvider.
-    							AuthenticationDetails(authenticationData);
+    var authenticationDetails = new AuthenticationDetails(authenticationData);
     
     var userData = {
       Username: email,
       Pool: userPool
     };
 
-    var cognitoUser = new CognitoIdentityServiceProvider.
-    									CognitoUser(userData);
+    var cognitoUser = new CognitoUser(userData);
 
     cognitoUser.authenticateUser(authenticationDetails, {
       onSuccess: function (result) {
@@ -100,8 +99,7 @@ function confirmRegistration(code, email, onSuccess, onFailure) {
       Pool: userPool
     };
 
-    var cognitoUser = new CognitoIdentityServiceProvider.
-    									CognitoUser(userData);
+    var cognitoUser = new CognitoUser(userData);
 
     cognitoUser.confirmRegistration(code, true, function(err, result) {
         if (err) {
@@ -120,8 +118,7 @@ function resendConfirmation(email, onSuccess, onFailure) {
       Pool: userPool
     };
 
-    var cognitoUser = new CognitoIdentityServiceProvider.
-    									CognitoUser(userData);
+    var cognitoUser = new CognitoUser(userData);
 
     cognitoUser.resendConfirmationCode(function(err, result) {
         if (err) {
