@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { getWidgetConfig } from '../../../../utils/widgets-utils';
 
 import IconButton from 'material-ui/IconButton';
@@ -127,8 +128,8 @@ class SearchWidget extends React.Component {
 }
 
 SearchWidget.propTypes = {
-  widget: React.PropTypes.object.isRequired,
-  user: React.PropTypes.object.isRequired,
+  widget: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
 };
 
 export default SearchWidget;

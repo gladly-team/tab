@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import SetBackgroundImageMutation from 'mutations/SetBackgroundImageMutation';
 
 import {GridList, GridTile} from 'material-ui/GridList';
@@ -99,8 +100,8 @@ class BackgroundImagePicker extends React.Component {
 }
 
 BackgroundImagePicker.propTypes = {
-  app: React.PropTypes.object.isRequired,
-  user: React.PropTypes.object.isRequired
+  app: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired
 };
 
 export default BackgroundImagePicker;

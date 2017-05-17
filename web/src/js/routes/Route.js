@@ -8,7 +8,6 @@ import DashboardView from '../components/Dashboard/DashboardView';
 import Authentication from '../components/Authentication/Authentication';
 
 import DonateVcView from '../components/Donate/DonateVcView';
-
 import SettingsView from '../components/Settings/SettingsView';
 import BackgroundSettingsView from '../components/Settings/Background/BackgroundSettingsView';
 import WidgetsSettingsView from '../components/Settings/Widgets/WidgetsSettingsView';

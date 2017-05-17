@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import WidgetSettings from './WidgetSettingsContainer';
 import {List} from 'material-ui/List';
 import FullScreenProgress from 'general/FullScreenProgress';
@@ -68,8 +69,8 @@ class WidgetsSettings extends React.Component {
 }
 
 WidgetsSettings.propTypes = {
-  user: React.PropTypes.object.isRequired,
-  app: React.PropTypes.object.isRequired
+  user: PropTypes.object.isRequired,
+  app: PropTypes.object.isRequired
 };
 
 export default WidgetsSettings;

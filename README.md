@@ -13,11 +13,11 @@
 ### Getting Started
 
 1. Clone this repository.
-2. In the top level directory, run `npm run build`. This installs dependencies and builds Docker images.
+2. In the top level directory, run `yarn run build`. This installs dependencies and builds Docker images.
 3. Run `npm start`.
 4. On first run, you'll have to create database tables and load fixtures.
     * `cd dynamodb`
-    * `npm run init`
+    * `yarn run init`
 
 ### Development Tips
 

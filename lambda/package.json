@@ -4,7 +4,7 @@
   "description": "Tab for a Cause.",
   "private": true,
   "dependencies": {
-    "aws-sdk": "^2.19.0"
+    "aws-sdk": "^2.52.0"
   },
   "devDependencies": {
     "babel-cli": "^6.23.0",
@@ -15,17 +15,20 @@
     "babel-preset-stage-0": "^6.22.0",
     "codecov": "^2.1.0",
     "cors": "^2.8.1",
-    "dotenv-extended": "^1.0.4",
+    "dotenv-extended": "^2.0.0",
     "express": "^4.14.1",
     "if-env": "^1.0.0",
-    "jest": "^19.0.2",
+    "jest": "^20.0.1",
     "lodash": "^4.17.4",
     "nodemon": "^1.11.0",
+    "npm-run-all": "^4.0.2",
     "yamljs": "^0.2.8"
   },
   "scripts": {
     "start": "nodemon -e js,json,yml --exec \"babel-node\" ./server.js",
-    "test": "jest --coverage && if-env NODE_ENV=test && codecov || echo 'Skipping test coverage logging.'",
+    "test": "npm-run-all -s test:run test:codecov",
+    "test:run": "jest --coverage",
+    "test:codecov": "if-env NODE_ENV=test && codecov || echo 'Skipping test coverage logging.'",
     "test:watch": "jest --watch"
   },
   "repository": {
