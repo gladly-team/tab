@@ -83,7 +83,6 @@ class BookmarksWidget extends React.Component {
   }
 
   _addBookmark(widget, name, link) {
-    console.log(widget);
     AddBookmarkMutation.commit(
       this.props.relay.environment,
       this.props.user,
@@ -129,10 +128,11 @@ class BookmarksWidget extends React.Component {
     const { widget } = this.props; 
 
     const data = JSON.parse(widget.data);
-    const bookmarks = data.bookmarks;
+    const bookmarks = data.bookmarks || [];
 
     const popoverStyle = {
       backgroundColor: 'rgba(0,0,0,.54)',
+      width: 300,
     }
 
     const addBookmarkContainer = {

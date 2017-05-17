@@ -7,7 +7,7 @@ import DonateVcView from '../Donate/DonateVcView';
 import WidgetsView from '../Widget/WidgetsView';
 
 import { FormattedMessage } from 'react-intl';
-import { goTo } from 'navigation/navigation';
+import { goToSettings, goToDonate } from 'navigation/navigation';
 
 import Dialog from 'material-ui/Dialog';
 import IconButton from 'material-ui/IconButton';
@@ -28,12 +28,12 @@ class Dashboard extends React.Component {
     };
   }
 
-  goToSettings() {
-    goTo('/settings');
+  _goToSettings() {
+    goToSettings();
   }
 
-  goToDonate() {
-    goTo('/donate');
+  _goToDonate() {
+    goToDonate();
   }
 
   changeBkgSelectorState(state) {
@@ -75,7 +75,7 @@ class Dashboard extends React.Component {
       position: 'absolute',
       bottom: 10,
       display: 'flex',
-      width: 100,
+      width: 120,
       justifyContent: 'space-around'
     }
 
@@ -92,6 +92,10 @@ class Dashboard extends React.Component {
       marginRight: 'auto',
     }
 
+    const paddingDiv = {
+      width: 20,
+    }
+
     // <UserDisplay user={user} />
 
     return (
@@ -102,24 +106,25 @@ class Dashboard extends React.Component {
         </div>
         <WidgetsView />
         <div style={actioBtnContainer}>
+          <div style={paddingDiv}></div>
           <IconButton 
             tooltip="Settings"
             tooltipPosition="top-center"
-            onClick={this.goToSettings.bind(this)}>
+            onClick={this._goToSettings.bind(this)}>
             <FontIcon 
               color={grey300}
               hoverColor={'#FFF'}
-              className="fa fa fa-cog fa-lg" />
+              className="fa fa-cog fa-lg" />
           </IconButton>
           
           <IconButton 
             tooltip="Donate"
             tooltipPosition="top-center"
-            onClick={this.goToDonate.bind(this)}>
+            onClick={this._goToDonate.bind(this)}>
             <FontIcon 
               color={grey300}
               hoverColor={'#FFF'}
-              className="fa fa fa-heart fa-lg" />
+              className="fa fa-heart fa-lg" />
           </IconButton>
         </div>
       </div>

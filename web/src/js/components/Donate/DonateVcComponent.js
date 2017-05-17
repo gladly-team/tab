@@ -1,7 +1,7 @@
 import React from 'react';
 import Relay from 'react-relay';
 
-import { goTo } from 'navigation/navigation';
+import { goToDashboard } from 'navigation/navigation';
 
 import Charities from './CharitiesContainer';
 import AppBar from 'material-ui/AppBar';
@@ -13,7 +13,7 @@ class DonateVc extends React.Component {
   }
 
   goToHome() {
-    goTo('/');
+    goToDashboard();
   }
 
   render() {
