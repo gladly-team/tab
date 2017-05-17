@@ -16,8 +16,6 @@ const appConfig = {
   ClientId: process.env.COGNITO_CLIENTID
 };
 
-import localStorageMgr from './local-storage-mgr';
-
 Config.region = appConfig.region;
 
 const userPool = new CognitoUserPool({
@@ -169,10 +167,7 @@ function getCurrentUser(callback) {
 function logoutUser(callback) {
 	var cognitoUser = userPool.getCurrentUser();
     if (cognitoUser != null) {
-    	
       cognitoUser.signOut();
-      localStorageMgr.logoutUser();
-
     	callback(true)
     } else {
       callback(false);
