@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import ConfirmationForm from './ConfirmationForm';
 import TextField from 'material-ui/TextField';
 import { login, getCurrentUser } from '../../utils/cognito-auth';
@@ -113,8 +114,8 @@ class LoginForm extends React.Component {
 }
 
 LoginForm.propTypes = {
-	email: React.PropTypes.string.isRequired,
-  confirmed: React.PropTypes.bool,
+	email: PropTypes.string.isRequired,
+  confirmed: PropTypes.bool,
 } 
 
 LoginForm.defaultProps = {

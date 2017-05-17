@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import Snackbar from 'material-ui/Snackbar';
@@ -106,8 +107,8 @@ class ConfirmationForm extends React.Component {
 }
 
 ConfirmationForm.propTypes = {
-	onConfirmed: React.PropTypes.func.isRequired,
-	email: React.PropTypes.string.isRequired,
+	onConfirmed: PropTypes.func.isRequired,
+	email: PropTypes.string.isRequired,
 } 
 
 export default ConfirmationForm;

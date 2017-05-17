@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import TextField from 'material-ui/TextField';
 import ConfirmationForm from './ConfirmationForm';
 import { signup, login, getCurrentUser } from '../../utils/cognito-auth';
@@ -101,7 +102,7 @@ class SignUpForm extends React.Component {
 }
 
 SignUpForm.propTypes = {
-	email: React.PropTypes.string.isRequired,
+	email: PropTypes.string.isRequired,
 } 
 
 export default SignUpForm;

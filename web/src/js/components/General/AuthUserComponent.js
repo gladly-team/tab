@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import FullScreenProgress from 'general/FullScreenProgress';
 import { getCurrentUser } from '../../utils/cognito-auth';
 import { goToLogin } from 'navigation/navigation';
@@ -53,7 +54,7 @@ class AuthUserComponent extends React.Component {
 }
 
 AuthUserComponent.propTypes = {
-	variables: React.PropTypes.object,
+	variables: PropTypes.object,
 }
 
 AuthUserComponent.defaultProps = {

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import TextField from 'material-ui/TextField';
 import { checkUserExist } from '../../utils/cognito-auth';
 
@@ -65,7 +66,7 @@ class EmailForm extends React.Component {
 }
 
 EmailForm.propTypes = {
-	onResponse: React.PropTypes.func.isRequired,
+	onResponse: PropTypes.func.isRequired,
 } 
 
 export default EmailForm;
