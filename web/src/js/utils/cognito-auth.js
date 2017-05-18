@@ -190,6 +190,31 @@ function logoutUser(callback) {
     }
 } 
 
+function forgotPassword(email) {
+  var userData = {
+    Username: email,
+    Pool: userPool
+  };
+
+  var cognitoUser = new CognitoUser(userData);
+
+  cognitoUser.forgotPassword({
+        onSuccess: function () {
+            // successfully initiated reset password request
+        },
+        onFailure: function(err) {
+            alert(err);
+        },
+        //Optional automatic callback
+        inputVerificationCode: function(data) {
+            console.log('Code sent to: ' + data);
+            var verificationCode = prompt('Please input verification code ' ,'');
+            var newPassword = prompt('Enter new password ' ,'');
+            cognitoUser.confirmPassword(verificationCode, newPassword, this);
+        }
+    });
+}
+
 export {
 	login,
 	signup,
@@ -198,5 +223,6 @@ export {
 	getCurrentUser,
 	logoutUser,
 	checkUserExist,
-  getOrCreate
+  getOrCreate,
+  forgotPassword
 }

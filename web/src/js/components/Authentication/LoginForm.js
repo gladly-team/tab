@@ -1,9 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {QueryRenderer} from 'react-relay/compat';
+import environment from '../../../relay-env';
 import ConfirmationForm from './ConfirmationForm';
 import TextField from 'material-ui/TextField';
-import { login, getOrCreate } from '../../utils/cognito-auth';
-import { goTo, goToDashboard } from 'navigation/navigation';
+import { login, getOrCreate, getCurrentUser } from '../../utils/cognito-auth';
+import { goTo, goToDashboard, goToLogin } from 'navigation/navigation';
+
+import CreateNewUserMutation from 'mutations/CreateNewUserMutation';
 
 import {
   blue500,
@@ -35,7 +39,7 @@ class LoginForm extends React.Component {
       getOrCreate(this.props.email, password, 
         (response, created, confirmed) => {
           if(!created && confirmed) {
-            this.goToApp();
+            goToDashboard();
             return;
           } 
 
@@ -61,18 +65,33 @@ class LoginForm extends React.Component {
       });
   }
 
-  goToApp() {
-    goToDashboard();
-  }
-
   onConfirmed() {
-    this.logUserIn(this.state.password, this.goToCreateNewUser, (err) => {
+    this.logUserIn(this.state.password, this.createNewUser, (err) => {
       console.error(err);
     });
   }
 
-  goToCreateNewUser() {
-    goTo('/new-user');
+  createNewUser() {
+     getCurrentUser((user) => {
+        if (user == null) {
+          goToLogin();
+        }
+
+        const sub = user.sub;
+        const email = user.email;
+
+        CreateNewUserMutation.commit(
+          environment,
+          sub,
+          email,
+          (response) => {
+            goToDashboard();
+          },
+          (err) => {
+            console.error(err);
+          }
+        );
+      });
   }
 
   render() {

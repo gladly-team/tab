@@ -1,20 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import TextField from 'material-ui/TextField';
-import { checkUserExist, forgotPassword } from '../../utils/cognito-auth';
-import { goToRetrievePassword } from 'navigation/navigation';
+import { forgotPassword } from '../../utils/cognito-auth';
 
 import {
-  deepPurple500,
+  red500,
 } from 'material-ui/styles/colors';
 
-
-
-class EmailForm extends React.Component {
+class PasswordRetrieve extends React.Component {
   constructor(props) {
     super(props);
 
     this.email = null;
+    this.state = {
+      email: '',
+      code: null,
+      password: null,
+    }
+  }
+
+  componentDidMount() {
+    //forgotPassword(email);
   }
 
   _handleKeyPress(e) {
@@ -34,14 +40,14 @@ class EmailForm extends React.Component {
   	}
   }
 
-  retrievePassword() {
-    goToRetrievePassword();
+  retrievePassword(email) {
+    forgotPassword(email);
   }
 
   render() {
   	
   	const main = {
-  		backgroundColor: deepPurple500,
+  		backgroundColor: red500,
   		height: '100%',
   		width: '100%',
   		display: 'flex',
@@ -58,17 +64,6 @@ class EmailForm extends React.Component {
   		color: '#FFF',
   	};
 
-    const retrievePasswordContainer = {
-      marginTop: 20,
-      width: 256,
-    }
-
-    const retrievePasswordLink = {
-      color: '#FFF',
-      cursor: 'pointer',
-      textAlign: 'left',
-    }
-
     return (
     	<div style={main}>
     		<TextField
@@ -76,19 +71,11 @@ class EmailForm extends React.Component {
     		  onKeyPress = {this._handleKeyPress.bind(this)}
 		      floatingLabelText="Email"
 		      floatingLabelStyle={floatingLabelStyle}
-		      inputStyle={inputStyle}/>
-        <div style={retrievePasswordContainer}>
-          <span 
-            style={retrievePasswordLink}
-            onClick={this.retrievePassword.bind(this)}>Forgot your password?</span>
-        </div>
+		      inputStyle={inputStyle}
+          defaultValue={this.state.email}/>
 		</div>
     );
   }
 }
 
-EmailForm.propTypes = {
-	onResponse: PropTypes.func.isRequired,
-} 
-
-export default EmailForm;
+export default PasswordRetrieve;
