@@ -13,8 +13,7 @@ class Authentication extends React.Component {
     this.state = {
       userId: null,
       email: null,
-      newUser: false,
-      confirmed: false
+      login: false,
     };
   }
 
@@ -26,11 +25,10 @@ class Authentication extends React.Component {
     });
   }
 
-  onUserChecked(email, newUser, confirmed) {
+  onEmailSet(email) {
     this.setState({
       email: email,
-      newUser: newUser,
-      confirmed: confirmed,
+      login: true,
     });
   }
 
@@ -42,19 +40,12 @@ class Authentication extends React.Component {
 
     var currentState = (
       <EmailForm 
-        onResponse={this.onUserChecked.bind(this)}/>);
+        onResponse={this.onEmailSet.bind(this)}/>);
     
-    if(this.state.email) {
-      if(!this.state.newUser) {
-        currentState = (
+    if(this.state.email && this.state.login) {
+      currentState = (
           <LoginForm 
-            email={this.state.email}
-            confirmed={this.state.confirmed}/>);
-      } else {
-        currentState = (
-          <SignUpForm 
             email={this.state.email}/>);
-      }
     } 
 
     return (
@@ -64,9 +55,6 @@ class Authentication extends React.Component {
     );
   }
 }
-
-// <SignUp onSignUp={this.onSignUp.bind(this)}/>
-//         <SignIn onSignIn={this.onSignIn.bind(this)}/>
 
 export default Authentication;
 

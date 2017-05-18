@@ -22,14 +22,14 @@ class EmailForm extends React.Component {
     }
   }
 
+  isValid() {
+    return this.email.input && this.email.input.value;
+  }
+
   handleSubmit() {
-  	if(this.email.input && this.email.input.value) {
+  	if(this.isValid()) {
   		const email = this.email.input.value.trim();
-  		checkUserExist(email, (_, confirmed) => {
-  			this.props.onResponse(email, false, confirmed);
-  		}, (_) => {
-  			this.props.onResponse(email, true, false);
-  		});
+      this.props.onResponse(email);
   	}
   }
 
@@ -57,7 +57,7 @@ class EmailForm extends React.Component {
     		<TextField
     		  ref={(input) => { this.email = input; }}
     		  onKeyPress = {this._handleKeyPress.bind(this)}
-		      floatingLabelText="Enter your email"
+		      floatingLabelText="Email"
 		      floatingLabelStyle={floatingLabelStyle}
 		      inputStyle={inputStyle}/>
 		</div>

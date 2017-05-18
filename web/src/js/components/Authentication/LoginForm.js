@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ConfirmationForm from './ConfirmationForm';
 import TextField from 'material-ui/TextField';
-import { login, getCurrentUser } from '../../utils/cognito-auth';
+import { login, getOrCreate } from '../../utils/cognito-auth';
 import { goTo, goToDashboard } from 'navigation/navigation';
 
 import {
@@ -17,14 +17,9 @@ class LoginForm extends React.Component {
 
     this.state = {
       password: null,
-      confirmed: false,
+      created: false,
+      confirmed: true,
     }
-  }
-
-  componentDidMount() {
-    this.setState({
-      confirmed: this.props.confirmed,
-    })
   }
 
   _handleKeyPress(e) {
@@ -37,13 +32,22 @@ class LoginForm extends React.Component {
   	if(this.password.input && this.password.input.value) {
       const password = this.password.input.value.trim();
 
-      if(this.state.confirmed) {
-        this.logUserIn(password, this.goToApp);
-      } else {
-        this.setState({
-          password: password,
-        });
-      }
+      getOrCreate(this.props.email, password, 
+        (response, created, confirmed) => {
+          if(!created && confirmed) {
+            this.goToApp();
+            return;
+          } 
+
+          this.setState({
+            password: password,
+            created: created,
+            confirmed: confirmed,
+          });
+        },
+        (err) => {
+          console.error(err);
+        })
   	}
   }
 
@@ -53,21 +57,18 @@ class LoginForm extends React.Component {
       }, (err) => {
         if(failure)
           failure();
-
         console.error(err);
       });
   }
 
   goToApp() {
-    getCurrentUser((user) => {
-      if (user && user.sub) {
-        goToDashboard();
-      }
-    });
+    goToDashboard();
   }
 
   onConfirmed() {
-    this.logUserIn(this.state.password, this.goToCreateNewUser);
+    this.logUserIn(this.state.password, this.goToCreateNewUser, (err) => {
+      console.error(err);
+    });
   }
 
   goToCreateNewUser() {
@@ -76,7 +77,7 @@ class LoginForm extends React.Component {
 
   render() {
 
-    if(!this.state.confirmed && this.state.password) {
+    if(!this.state.confirmed) {
       return (<ConfirmationForm 
                 email={this.props.email}
                 onConfirmed={this.onConfirmed.bind(this)}/>);
@@ -104,7 +105,7 @@ class LoginForm extends React.Component {
     		<TextField
     		  ref={(input) => { this.password = input; }}
     		  onKeyPress = {this._handleKeyPress.bind(this)}
-		      floatingLabelText="Enter your password"
+		      floatingLabelText="Password"
 		      floatingLabelStyle={floatingLabelStyle}
           type={"password"}
 		      inputStyle={inputStyle}/>
@@ -115,11 +116,6 @@ class LoginForm extends React.Component {
 
 LoginForm.propTypes = {
 	email: PropTypes.string.isRequired,
-  confirmed: PropTypes.bool,
-} 
-
-LoginForm.defaultProps = {
-  confirmed: false,
 } 
 
 export default LoginForm;

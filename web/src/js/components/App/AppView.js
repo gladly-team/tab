@@ -23,6 +23,7 @@ class AppView extends React.Component {
           `}
           render={({error, props}) => {
             if (props) {
+              console.log('AppView query renderer', props.user);
               return (
                   <AppContainer 
                     user={props.user}

@@ -38,6 +38,26 @@ function checkUserExist(email, onSuccess, onFailure) {
 	});
 }
 
+//onSuccess(response, created, confirmed)
+//onFailure(err)
+function getOrCreate(email, password, onSuccess, onFailure) {
+  login(
+    email, 
+    password, 
+    (response) => onSuccess(response, false, true), 
+    (err) => {
+      if(err.statusCode === 400) {
+        if(err.code === 'UserNotFoundException') {
+          signup(email, password, (res) => onSuccess(res, true), onFailure);
+        } else if(err.code === 'NotAuthorizedException') {
+          onFailure(err);
+        } else if(err.code === 'UserNotConfirmedException') {
+          onSuccess(err);
+        }
+      }
+  });
+}
+
 function login(email, password, onSuccessCallback, onFailureCallback) {
 
 	var authenticationData = {
@@ -122,7 +142,6 @@ function resendConfirmation(email, onSuccess, onFailure) {
 
     cognitoUser.resendConfirmationCode(function(err, result) {
         if (err) {
-            console.error(err);
         	onFailure(err);
         	return;
         }
@@ -178,5 +197,6 @@ export {
 	resendConfirmation,
 	getCurrentUser,
 	logoutUser,
-	checkUserExist
+	checkUserExist,
+  getOrCreate
 }
