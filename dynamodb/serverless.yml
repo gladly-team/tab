@@ -15,7 +15,7 @@ resources:
     usersTable:  
       Type: AWS::DynamoDB::Table
       Properties:  
-        TableName: users-${opt:stage, self:provider.stage}
+        TableName: Users-${opt:stage, self:provider.stage}
         KeySchema:
           - AttributeName: id
             KeyType: HASH
@@ -29,7 +29,7 @@ resources:
     charitiesTable:  
       Type: AWS::DynamoDB::Table
       Properties:  
-        TableName: charities-${opt:stage, self:provider.stage}
+        TableName: Charities-${opt:stage, self:provider.stage}
         KeySchema:
           - AttributeName: id
             KeyType: HASH
@@ -43,7 +43,7 @@ resources:
     widgetsTable:  
       Type: AWS::DynamoDB::Table
       Properties:  
-        TableName: widgets-${opt:stage, self:provider.stage}
+        TableName: Widgets-${opt:stage, self:provider.stage}
         KeySchema:
           - AttributeName: id
             KeyType: HASH
@@ -57,7 +57,7 @@ resources:
     userLevelsTable:  
       Type: AWS::DynamoDB::Table
       Properties:  
-        TableName: userLevels-${opt:stage, self:provider.stage}
+        TableName: UserLevels-${opt:stage, self:provider.stage}
         KeySchema:
           - AttributeName: id
             KeyType: HASH
@@ -71,7 +71,7 @@ resources:
     vcDonationLogTable:  
       Type: AWS::DynamoDB::Table
       Properties:  
-        TableName: vcDonationLog-${opt:stage, self:provider.stage}
+        TableName: VcDonationLog-${opt:stage, self:provider.stage}
         KeySchema:
           - AttributeName: id
             KeyType: HASH
@@ -89,7 +89,7 @@ resources:
     backgroundImagesTable:  
       Type: AWS::DynamoDB::Table
       Properties:  
-        TableName: backgroundImages-${opt:stage, self:provider.stage}
+        TableName: BackgroundImages-${opt:stage, self:provider.stage}
         KeySchema:
           - AttributeName: id
             KeyType: HASH
@@ -103,7 +103,7 @@ resources:
     userWidgetsTable:  
       Type: AWS::DynamoDB::Table
       Properties:  
-        TableName: userWidgets-${opt:stage, self:provider.stage}
+        TableName: UserWidgets-${opt:stage, self:provider.stage}
         KeySchema:
           - AttributeName: userId
             KeyType: HASH

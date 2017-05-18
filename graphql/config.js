@@ -15,4 +15,5 @@ module.exports = {
   GRAPHQL_PORT: process.env.GRAPHQL_PORT,
   LOGGING_ENABLED: process.env.LOGGING_ENABLED === '1',
   ENABLE_GRAPHIQL: process.env.ENABLE_GRAPHIQL === '1',
+  TABLE_NAME_APPENDIX: process.env.TABLE_NAME_APPENDIX,
 };
