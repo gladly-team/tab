@@ -24,7 +24,7 @@ class User extends BaseModel {
   constructor(id) {
   	super(id);
 
-    this.username = '';
+    this.username = null;
     this.email = '';
     this.vcCurrent = 0;
     this.vcAllTime = 0;
@@ -78,6 +78,18 @@ User.BACKGROUND_OPTION_CUSTOM = 'custom';
 User.BACKGROUND_OPTION_COLOR = 'color';
 User.BACKGROUND_OPTION_PHOTO = 'photo';
 
+/**
+ * Creates a new user.
+ * @param {string} userId - The new user id.
+ * @param {string} email - The new user email.
+ * @return {Promise<User>}  A promise that resolve into a User instance.
+ */
+var createUser =  Async (function(userId, email) {
+    const user = new User(userId);
+    user.email = email;
+    Await (User.add(user));
+    return user;
+});
 
 /**
  * Fetch the user by id.
@@ -286,6 +298,7 @@ var setUserBackgroundDaily =  Async (function(userId) {
     return user;
 });
 
+
 export {
   User,
   getUser,
@@ -293,5 +306,6 @@ export {
   setUserBackgroundImage,
   setUserBackgroundColor,
   setUserBackgroundFromCustomUrl,
-  setUserBackgroundDaily
+  setUserBackgroundDaily,
+  createUser
 };

@@ -25,6 +25,14 @@ const mockBookmarks = [
 jest.mock('../../userWidget/userWidget', () => {
 	return {
 		getUserWidget: jest.fn((userId, widgetId) => {
+			if(userId == 'userId2' && widgetId == 'widgetId2'){
+				return Promise.resolve({
+					userId: userId,
+					widgetId: widgetId,
+					enabled: true
+				});
+			}
+
 			return Promise.resolve({
 				userId: userId,
 				widgetId: widgetId,
@@ -83,6 +91,20 @@ test('init bookmarkWidget manager', () => {
 						expect(manager.bookmarks[index].link)
 							.toBe(mockBookmarks[index].link);
 					}
+			    });
+});
+
+test('init bookmarkWidget manager when no data', () => {
+
+	const userId = 'userId2';
+	const widgetId = 'widgetId2';
+
+	return getBookmarkWidgetManager(userId, widgetId)
+			    .then(manager => {
+			        expect(manager.userId).toBe(userId);
+					expect(manager.widgetId).toBe(widgetId);
+					expect(Array.isArray(manager.bookmarks)).toBeTruthy();
+					expect(manager.bookmarks.length).toBe(0);
 			    });
 });
 
