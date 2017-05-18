@@ -26,7 +26,7 @@ class BookmarkWidget {
     this.widget = widget;
     this.userId = userId;
     this.widgetId = widgetId;
-    this.bookmarks = widget.data.bookmarks;
+    this.bookmarks = widget.data.bookmarks || [];
 
     /**
     * Updates the bookmarks of the current UserWidget.
