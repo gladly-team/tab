@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import TextField from 'material-ui/TextField';
-import { checkUserExist } from '../../utils/cognito-auth';
+import { checkUserExist, forgotPassword } from '../../utils/cognito-auth';
+import { goToRetrievePassword } from 'navigation/navigation';
 
 import {
   deepPurple500,
@@ -33,6 +34,10 @@ class EmailForm extends React.Component {
   	}
   }
 
+  retrievePassword() {
+    goToRetrievePassword();
+  }
+
   render() {
   	
   	const main = {
@@ -40,6 +45,7 @@ class EmailForm extends React.Component {
   		height: '100%',
   		width: '100%',
   		display: 'flex',
+      flexDirection: 'column',
   		justifyContent: 'center',
   		alignItems: 'center',
   	};
@@ -52,6 +58,17 @@ class EmailForm extends React.Component {
   		color: '#FFF',
   	};
 
+    const retrievePasswordContainer = {
+      marginTop: 20,
+      width: 256,
+    }
+
+    const retrievePasswordLink = {
+      color: '#FFF',
+      cursor: 'pointer',
+      textAlign: 'left',
+    }
+
     return (
     	<div style={main}>
     		<TextField
@@ -60,6 +77,11 @@ class EmailForm extends React.Component {
 		      floatingLabelText="Email"
 		      floatingLabelStyle={floatingLabelStyle}
 		      inputStyle={inputStyle}/>
+        <div style={retrievePasswordContainer}>
+          <span 
+            style={retrievePasswordLink}
+            onClick={this.retrievePassword.bind(this)}>Forgot your password?</span>
+        </div>
 		</div>
     );
   }

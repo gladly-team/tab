@@ -190,6 +190,32 @@ function logoutUser(callback) {
     }
 } 
 
+function forgotPassword(email, onSuccess, onFailure) {
+  var userData = {
+    Username: email,
+    Pool: userPool
+  };
+
+  var cognitoUser = new CognitoUser(userData);
+  cognitoUser.forgotPassword({
+        onSuccess: onSuccess,
+        onFailure: onFailure
+    });
+}
+
+function confirmPassword(email, verificationCode, newPassword, onSuccess, onFailure) {
+  var userData = {
+    Username: email,
+    Pool: userPool
+  };
+
+  var cognitoUser = new CognitoUser(userData);
+  cognitoUser.confirmPassword(verificationCode, newPassword, {
+      onSuccess: onSuccess,
+      onFailure: onFailure,
+  });
+}
+
 export {
 	login,
 	signup,
@@ -198,5 +224,7 @@ export {
 	getCurrentUser,
 	logoutUser,
 	checkUserExist,
-  getOrCreate
+  getOrCreate,
+  forgotPassword,
+  confirmPassword
 }

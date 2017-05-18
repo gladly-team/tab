@@ -5,19 +5,23 @@ function goTo(route) {
 }
 
 function goToLogin() {
-	goTo('/auth');
+	goTo('/auth/login/');
 }
 
 function goToSettings() {
-	goTo('/app/settings/');
+	goTo('/tab/settings/');
 }
 
 function goToDonate() {
-	goTo('/app/donate/');
+	goTo('/tab/donate/');
 }
 
 function goToDashboard() {
-	goTo('/app/');
+	goTo('/tab/');
+}
+
+function goToRetrievePassword() {
+	goTo('/auth/recovery');
 }
 
 export {
@@ -25,5 +29,6 @@ export {
 	goToLogin,
 	goToSettings,
 	goToDonate,
-	goToDashboard
+	goToDashboard,
+	goToRetrievePassword
 }

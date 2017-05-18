@@ -42,7 +42,7 @@ class Settings extends React.Component {
   		selection: selection,
   	});
 
-    goTo('/app/settings/' + selection);
+    goTo('/tab/settings/' + selection);
   }	
 
   goToHome() {
