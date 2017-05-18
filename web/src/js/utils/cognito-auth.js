@@ -190,29 +190,30 @@ function logoutUser(callback) {
     }
 } 
 
-function forgotPassword(email) {
+function forgotPassword(email, onSuccess, onFailure) {
   var userData = {
     Username: email,
     Pool: userPool
   };
 
   var cognitoUser = new CognitoUser(userData);
-
   cognitoUser.forgotPassword({
-        onSuccess: function () {
-            // successfully initiated reset password request
-        },
-        onFailure: function(err) {
-            alert(err);
-        },
-        //Optional automatic callback
-        inputVerificationCode: function(data) {
-            console.log('Code sent to: ' + data);
-            var verificationCode = prompt('Please input verification code ' ,'');
-            var newPassword = prompt('Enter new password ' ,'');
-            cognitoUser.confirmPassword(verificationCode, newPassword, this);
-        }
+        onSuccess: onSuccess,
+        onFailure: onFailure
     });
+}
+
+function confirmPassword(email, verificationCode, newPassword, onSuccess, onFailure) {
+  var userData = {
+    Username: email,
+    Pool: userPool
+  };
+
+  var cognitoUser = new CognitoUser(userData);
+  cognitoUser.confirmPassword(verificationCode, newPassword, {
+      onSuccess: onSuccess,
+      onFailure: onFailure,
+  });
 }
 
 export {
@@ -224,5 +225,6 @@ export {
 	logoutUser,
 	checkUserExist,
   getOrCreate,
-  forgotPassword
+  forgotPassword,
+  confirmPassword
 }
