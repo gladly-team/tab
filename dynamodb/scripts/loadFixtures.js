@@ -1,6 +1,7 @@
 
 import fs from 'fs';
 import path from 'path';
+import { map } from 'lodash/collection';
 
 import AWS from '../aws-client';
 import confirmCommand from './confirmCommand';
@@ -9,7 +10,7 @@ const docClient = new AWS.DynamoDB.DocumentClient();
 function loadTable(fixture) {
   const tableName = fixture.tableName;
   const jsonFile = path.join(__dirname, '../fixtures/', fixture.jsonFile);
-  console.log(`Loading ${tableName} table data from ${jsonFile}.`);
+  console.log(`Loading "${tableName}" table data from ${jsonFile}.`);
 
   const items = JSON.parse(fs.readFileSync(jsonFile), 'utf8');
   items.forEach(function(item) {
@@ -28,7 +29,7 @@ function loadTable(fixture) {
   });
 }
 
-const fixtures = [
+const allFixtures = [
   {
     tableName: 'Users',
     jsonFile: 'UserData.json'
@@ -62,6 +63,17 @@ const fixtures = [
     jsonFile: 'UserWidgetsData.json'
   }
 ];
+
+// Add an appendix to the table name if required.
+const tableNameAppendix = (
+  process.env.TABLE_NAME_APPENDIX ?
+  process.env.TABLE_NAME_APPENDIX :
+  ''
+);
+const fixtures = map(allFixtures, (fixtureObj) => {
+  fixtureObj.tableName = `${fixtureObj.tableName}${tableNameAppendix}`;
+  return fixtureObj;
+});
 
 confirmCommand(() => {
   console.log('Importing tables into DynamoDB. Please wait.');
