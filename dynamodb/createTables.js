@@ -3,6 +3,7 @@ var fs = require('fs');
 
 var AWS = require('./aws-client');
 var dynamodb = new AWS.DynamoDB();
+var confirmCommand = require('./confirmCommand');
 
 var tablesJsonFile = 'tables.json';
 var tables = JSON.parse(fs.readFileSync(__dirname + '/' + tablesJsonFile, 'utf8'));
@@ -65,6 +66,9 @@ function createOrUpdateTable(tableConfig) {
   }); 
 }
 
-tables.forEach(function(table) {
-  createOrUpdateTable(table);
+confirmCommand(function() {
+  tables.forEach(function(table) {
+    createOrUpdateTable(table);
+  });
 });
+

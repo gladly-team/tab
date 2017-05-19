@@ -6,6 +6,7 @@
   "dependencies": {},
   "devDependencies": {
     "aws-sdk": "^2.52.0",
+    "dotenv-extended": "^2.0.0",
     "serverless": "^1.13.2"
   },
   "scripts": {

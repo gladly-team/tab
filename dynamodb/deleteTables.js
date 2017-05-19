@@ -3,6 +3,7 @@ var fs = require('fs');
 
 var AWS = require('./aws-client');
 var dynamodb = new AWS.DynamoDB();
+var confirmCommand = require('./confirmCommand');
 
 var tablesJsonFile = 'tables.json';
 var tables = JSON.parse(fs.readFileSync(__dirname + '/' + tablesJsonFile, 'utf8'));
@@ -20,6 +21,8 @@ function deleteTable(tableConfig) {
   });
 }
 
-tables.forEach(function(table) {
-  deleteTable(table);
+confirmCommand(function() {
+  tables.forEach(function(table) {
+    deleteTable(table);
+  });
 });

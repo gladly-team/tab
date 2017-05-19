@@ -3,6 +3,7 @@ var fs = require('fs');
 
 var AWS = require('../aws-client');
 var docClient = new AWS.DynamoDB.DocumentClient();
+var confirmCommand = require('../confirmCommand');
 
 function loadTable(fixture) {
   var tableName = fixture.tableName;
@@ -61,8 +62,10 @@ var fixtures = [
   }
 ];
 
-console.log('Importing tables into DynamoDB. Please wait.');
+confirmCommand(function() {
+  console.log('Importing tables into DynamoDB. Please wait.');
 
-fixtures.forEach(function(fixture) {
-  loadTable(fixture);
-});
+  fixtures.forEach(function(fixture) {
+    loadTable(fixture);
+  });
+})
