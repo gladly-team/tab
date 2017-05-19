@@ -5,6 +5,7 @@ import { map } from 'lodash/collection';
 
 import AWS from '../aws-client';
 import confirmCommand from './confirmCommand';
+import getFixtures from './getFixtures';
 const docClient = new AWS.DynamoDB.DocumentClient();
 
 function loadTable(fixture) {
@@ -29,53 +30,9 @@ function loadTable(fixture) {
   });
 }
 
-const allFixtures = [
-  {
-    tableName: 'Users',
-    jsonFile: 'UserData.json'
-  },
-  {
-    tableName: 'Charities',
-    jsonFile: 'CharityData.json'
-  },
-  {
-    tableName: 'Features',
-    jsonFile: 'FeatureData.json'
-  },
-  {
-    tableName: 'UserLevels',
-    jsonFile: 'UserLevels.json'
-  },
-  {
-    tableName: 'VcDonationLog',
-    jsonFile: 'VcDonationLog.json'
-  },
-  {
-    tableName: 'BackgroundImages',
-    jsonFile: 'BackgroundImages.json'
-  },
-  {
-    tableName: 'Widgets',
-    jsonFile: 'WidgetsData.json'
-  },
-  {
-    tableName: 'UserWidgets',
-    jsonFile: 'UserWidgetsData.json'
-  }
-];
-
-// Add an appendix to the table name if required.
-const tableNameAppendix = (
-  process.env.TABLE_NAME_APPENDIX ?
-  process.env.TABLE_NAME_APPENDIX :
-  ''
-);
-const fixtures = map(allFixtures, (fixtureObj) => {
-  fixtureObj.tableName = `${fixtureObj.tableName}${tableNameAppendix}`;
-  return fixtureObj;
-});
+const fixtures = getFixtures();
 
 confirmCommand(() => {
   console.log('Importing tables into DynamoDB. Please wait.');
   fixtures.forEach((fixture) => loadTable(fixture))
-})
+});
