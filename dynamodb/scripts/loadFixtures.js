@@ -15,18 +15,18 @@ function loadTable(fixture) {
 
   const items = JSON.parse(fs.readFileSync(jsonFile), 'utf8');
   items.forEach(function(item) {
-      const params = {
-          TableName: tableName,
-          Item: item
-      };
+    const params = {
+      TableName: tableName,
+      Item: item
+    };
 
-      docClient.put(params, function(err, data) {
-         if (err) {
-             console.error(`Unable to add item ${JSON.stringify(item)}. Error JSON: ${JSON.stringify(err, null, 2)}`);
-         } else {
-             console.log(`PutItem succeeded: ${JSON.stringify(item)}`);
-         }
-      });
+    docClient.put(params, function(err, data) {
+      if (err) {
+        console.error(`Unable to add item ${JSON.stringify(item)}. Error JSON: ${JSON.stringify(err, null, 2)}`);
+      } else {
+        console.log(`PutItem succeeded: ${JSON.stringify(item)}`);
+      }
+    });
   });
 }
 
