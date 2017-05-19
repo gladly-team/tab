@@ -1,31 +1,29 @@
 
-var fs = require('fs');
-var path = require('path');
+import fs from 'fs';
+import path from 'path';
 
-var AWS = require('../aws-client');
-var dynamodb = new AWS.DynamoDB();
-var confirmCommand = require('./confirmCommand');
+import AWS from '../aws-client';
+import confirmCommand from './confirmCommand';
+const dynamodb = new AWS.DynamoDB();
 
-var tablesJsonFile = 'tables.json';
-var tables = JSON.parse(fs.readFileSync(
+const tablesJsonFile = 'tables.json';
+const tables = JSON.parse(fs.readFileSync(
   path.join(__dirname, '../' + tablesJsonFile),
   'utf8'));
 
-function deleteTable(tableConfig) {
-  var params = {
+const deleteTable = function(tableConfig) {
+  const params = {
     TableName: tableConfig.TableName
   };
-  dynamodb.deleteTable(params, function(err, data) {
+  dynamodb.deleteTable(params, (err, data) => {
     if (err) {
-      console.error('Unable to delete table "' + tableConfig.TableName + '". Error JSON:', JSON.stringify(err, null, 2));
+      console.error(`Unable to delete table "${tableConfig.TableName}". Error JSON: ${JSON.stringify(err, null, 2)}`);
     } else {
-      console.log('Deleted table "' + tableConfig.TableName + '".');
+      console.log(`Deleted table "${tableConfig.TableName}".`);
     }
   });
 }
 
-confirmCommand(function() {
-  tables.forEach(function(table) {
-    deleteTable(table);
-  });
+confirmCommand(() => {
+  tables.forEach((table) => deleteTable(table));
 });

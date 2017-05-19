@@ -1,34 +1,34 @@
 
-var fs = require('fs');
-var path = require('path');
+import fs from 'fs';
+import path from 'path';
 
-var AWS = require('../aws-client');
-var docClient = new AWS.DynamoDB.DocumentClient();
-var confirmCommand = require('./confirmCommand');
+import AWS from '../aws-client';
+import confirmCommand from './confirmCommand';
+const docClient = new AWS.DynamoDB.DocumentClient();
 
 function loadTable(fixture) {
-  var tableName = fixture.tableName;
-  var jsonFile = path.join(__dirname, '../fixtures/', fixture.jsonFile);
-  console.log('Loading ' + tableName + ' table data from ' + jsonFile);
+  const tableName = fixture.tableName;
+  const jsonFile = path.join(__dirname, '../fixtures/', fixture.jsonFile);
+  console.log(`Loading ${tableName} table data from ${jsonFile}.`);
 
-  var items = JSON.parse(fs.readFileSync(jsonFile), 'utf8');
+  const items = JSON.parse(fs.readFileSync(jsonFile), 'utf8');
   items.forEach(function(item) {
-      var params = {
+      const params = {
           TableName: tableName,
           Item: item
       };
 
       docClient.put(params, function(err, data) {
          if (err) {
-             console.error('Unable to add item', item, '. Error JSON:', JSON.stringify(err, null, 2));
+             console.error(`Unable to add item ${JSON.stringify(item)}. Error JSON: ${JSON.stringify(err, null, 2)}`);
          } else {
-             console.log('PutItem succeeded:', item);
+             console.log(`PutItem succeeded: ${JSON.stringify(item)}`);
          }
       });
   });
 }
 
-var fixtures = [
+const fixtures = [
   {
     tableName: 'Users',
     jsonFile: 'UserData.json'
@@ -63,10 +63,7 @@ var fixtures = [
   }
 ];
 
-confirmCommand(function() {
+confirmCommand(() => {
   console.log('Importing tables into DynamoDB. Please wait.');
-
-  fixtures.forEach(function(fixture) {
-    loadTable(fixture);
-  });
+  fixtures.forEach((fixture) => loadTable(fixture))
 })
