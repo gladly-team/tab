@@ -27,7 +27,6 @@ class AuthUserComponent extends React.Component {
   }
 
   render() {
-  	console.log(this.state.userId);
   	if(!this.state.userId){
   		return (<FullScreenProgress />);
   	}
