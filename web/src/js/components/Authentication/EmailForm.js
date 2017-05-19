@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TextField from 'material-ui/TextField';
 import EmailField from 'general/EmailField';
 import { checkUserExist, forgotPassword } from '../../utils/cognito-auth';
 import { goToRetrievePassword } from 'navigation/navigation';
@@ -19,8 +18,6 @@ class EmailForm extends React.Component {
     if (e.key === 'Enter') {
       this.handleSubmit();
     }
-
-    this.email.validate();
   }
 
   handleSubmit() {

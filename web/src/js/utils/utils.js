@@ -4,6 +4,10 @@ function validateEmail(email) {
     return re.test(email);
 }
 
+function validateCode(code) {
+	return (new RegExp('^\\d+$')).test(code);
+}
+
 function validatePassword(password, config) {
 	var regex = {
 		lowercase: "^(?=.*[a-z])",
@@ -19,7 +23,7 @@ function validatePassword(password, config) {
 	const result = {
 		valid: true,
 	};
-	
+
 	for(var prop in config) {
 		if(config[prop] && regex[prop]) {
 			result[prop] = (new RegExp(regex[prop])).test(password)
@@ -35,5 +39,6 @@ function validatePassword(password, config) {
 
 export {
 	validateEmail,
-	validatePassword
+	validatePassword,
+	validateCode
 }
