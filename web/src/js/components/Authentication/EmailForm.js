@@ -1,55 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import TextField from 'material-ui/TextField';
+import EmailField from 'general/EmailField';
 import { checkUserExist, forgotPassword } from '../../utils/cognito-auth';
 import { goToRetrievePassword } from 'navigation/navigation';
-
-import {validateEmail} from 'web-utils';
 
 import {
   deepPurple500,
 } from 'material-ui/styles/colors';
 
-
-
 class EmailForm extends React.Component {
   constructor(props) {
     super(props);
-
     this.email = null;
-    this.state = {
-      error: null,
-    }
   }
 
   _handleKeyPress(e) {
     if (e.key === 'Enter') {
       this.handleSubmit();
     }
-    if(this.state.error) {
-      if(this.isValid() || !this.email.input.value) {
-        this.setState({
-          error: null,
-        })
-      }
-    }
-  }
 
-  isValid() {
-    if(!this.email.input || !this.email.input.value)
-      return false;
-    return validateEmail(this.email.input.value.trim());
+    this.email.validate();
   }
 
   handleSubmit() {
-  	if(this.isValid()) {
-  		const email = this.email.input.value.trim();
+  	if(this.email.validate()) {
+  		const email = this.email.getValue();
       this.props.onResponse(email);
-  	} else {
-      this.setState({
-        error: 'Invalid email'
-      })
-    }
+  	}
   }
 
   retrievePassword() {
@@ -89,14 +67,12 @@ class EmailForm extends React.Component {
 
     return (
     	<div style={main}>
-    		<TextField
+    		<EmailField
     		  ref={(input) => { this.email = input; }}
     		  onKeyPress = {this._handleKeyPress.bind(this)}
 		      floatingLabelText="Email"
 		      floatingLabelStyle={floatingLabelStyle}
-		      inputStyle={inputStyle}
-          errorText={this.state.error}
-          value={'raul@gladly.io'}/>
+		      inputStyle={inputStyle}/>
         <div style={retrievePasswordContainer}>
           <span 
             style={retrievePasswordLink}
