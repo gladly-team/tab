@@ -5,14 +5,16 @@
   "private": true,
   "dependencies": {},
   "devDependencies": {
-    "aws-sdk": "^2.52.0"
+    "aws-sdk": "^2.52.0",
+    "serverless": "^1.13.2"
   },
   "scripts": {
     "init": "yarn run delete-tables && yarn run bootstrap",
     "bootstrap": "yarn run create-tables && yarn run load-fixtures",
     "create-tables": "node createTables.js",
     "delete-tables": "node deleteTables.js",
-    "load-fixtures": "node ./fixtures/loadFixtures.js"
+    "load-fixtures": "node ./fixtures/loadFixtures.js",
+    "deploy": "serverless deploy"
   },
   "repository": {
     "type": "git",
