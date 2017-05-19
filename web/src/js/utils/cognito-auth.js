@@ -24,6 +24,8 @@ const userPool = new CognitoUserPool({
   ClientId: appConfig.ClientId,
 });
 
+const IS_DEVELOPMENT = process.env.NODE_ENV === 'development';
+
 function checkUserExist(email, onSuccess, onFailure) {
 	login(email, '', () => {}, (err) => {
 		if(err.statusCode === 400) {
@@ -149,7 +151,20 @@ function resendConfirmation(email, onSuccess, onFailure) {
     });
 }
 
+function getCurrentUserForDev(callback) {
+  callback({
+    sub: process.env.DEV_AUTHENTICATED_USER,
+  });
+}
+
 function getCurrentUser(callback) {
+  
+  // Mock the user authentication on development.
+  if(IS_DEVELOPMENT && process.env.MOCK_DEV_AUTHENTICATION) {
+    getCurrentUserForDev(callback);
+    return;
+  }
+
 	var cognitoUser = userPool.getCurrentUser();
 
   if (cognitoUser != null) {
