@@ -33,6 +33,7 @@ functions:
       - http:
           path: hearts/
           method: get
+          cors: true
           ## TODO: reenable later
           # authorizer:
           #   name: authorizer_${opt:stage, self:provider.stage}
