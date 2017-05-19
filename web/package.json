@@ -13,7 +13,8 @@
     "lodash": "^4.17.4",
     "npm-run-all": "^4.0.2",
     "react-test-renderer": "^15.5.4",
-    "relay-compiler": "^1.0.0-rc.4"
+    "relay-compiler": "^1.0.0-rc.4",
+    "serverless-single-page-app-plugin": "file:./serverless-single-page-app-plugin"
   },
   "dependencies": {
     "autoprefixer": "^7.1.0",
