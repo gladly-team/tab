@@ -1,16 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {QueryRenderer} from 'react-relay/compat';
 import environment from '../../../relay-env';
 import ConfirmationForm from './ConfirmationForm';
-import TextField from 'material-ui/TextField';
+import PasswordField from 'general/PasswordField';
 import { login, getOrCreate, getCurrentUser } from '../../utils/cognito-auth';
 import { goTo, goToDashboard, goToLogin } from 'navigation/navigation';
 
 import CreateNewUserMutation from 'mutations/CreateNewUserMutation';
 
 import {
-  blue500,
+  indigo500,
 } from 'material-ui/styles/colors';
 
 class LoginForm extends React.Component {
@@ -33,9 +32,8 @@ class LoginForm extends React.Component {
   }
 
   handleSubmit() {
-  	if(this.password.input && this.password.input.value) {
-      const password = this.password.input.value.trim();
-
+  	if(this.password.validate()) {
+      const password = this.password.getValue();
       getOrCreate(this.props.email, password, 
         (response, created, confirmed) => {
           if(!created && confirmed) {
@@ -103,7 +101,7 @@ class LoginForm extends React.Component {
     }
   	
   	const main = {
-  		backgroundColor: blue500,
+  		backgroundColor: indigo500,
   		height: '100%',
   		width: '100%',
   		display: 'flex',
@@ -121,13 +119,14 @@ class LoginForm extends React.Component {
 
     return (
     	<div style={main}>
-    		<TextField
-    		  ref={(input) => { this.password = input; }}
-    		  onKeyPress = {this._handleKeyPress.bind(this)}
-		      floatingLabelText="Password"
-		      floatingLabelStyle={floatingLabelStyle}
+        <PasswordField 
+          ref={(input) => { this.password = input; }}
+          onKeyPress = {this._handleKeyPress.bind(this)}
+          floatingLabelText="Password"
+          floatingLabelStyle={floatingLabelStyle}
           type={"password"}
-		      inputStyle={inputStyle}/>
+          inputStyle={inputStyle}
+        />
 		  </div>
     );
   }

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TextField from 'material-ui/TextField';
+import EmailField from 'general/EmailField';
 import { checkUserExist, forgotPassword } from '../../utils/cognito-auth';
 import { goToRetrievePassword } from 'navigation/navigation';
 
@@ -8,12 +8,9 @@ import {
   deepPurple500,
 } from 'material-ui/styles/colors';
 
-
-
 class EmailForm extends React.Component {
   constructor(props) {
     super(props);
-
     this.email = null;
   }
 
@@ -23,13 +20,9 @@ class EmailForm extends React.Component {
     }
   }
 
-  isValid() {
-    return this.email.input && this.email.input.value;
-  }
-
   handleSubmit() {
-  	if(this.isValid()) {
-  		const email = this.email.input.value.trim();
+  	if(this.email.validate()) {
+  		const email = this.email.getValue();
       this.props.onResponse(email);
   	}
   }
@@ -71,7 +64,7 @@ class EmailForm extends React.Component {
 
     return (
     	<div style={main}>
-    		<TextField
+    		<EmailField
     		  ref={(input) => { this.email = input; }}
     		  onKeyPress = {this._handleKeyPress.bind(this)}
 		      floatingLabelText="Email"

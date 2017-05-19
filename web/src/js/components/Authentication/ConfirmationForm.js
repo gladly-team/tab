@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TextField from 'material-ui/TextField';
+import CodeField from 'general/CodeField';
 import FlatButton from 'material-ui/FlatButton';
 import Snackbar from 'material-ui/Snackbar';
 import { confirmRegistration, resendConfirmation } from '../../utils/cognito-auth';
 
 import {
-  blue500,
+  indigo500,
 } from 'material-ui/styles/colors';
 
 class ConfirmationForm extends React.Component {
@@ -27,8 +27,8 @@ class ConfirmationForm extends React.Component {
   }
 
   handleSubmit() {
-  	if(this.code.input && this.code.input.value) {
-      const code = this.code.input.value.trim();
+  	if(this.code.validate()) {
+      const code = this.code.getValue();
       confirmRegistration(code, this.props.email, (res) => {
         this.props.onConfirmed(res);
       }, (err) => {
@@ -61,7 +61,7 @@ class ConfirmationForm extends React.Component {
   render() {
   	
   	const main = {
-  		backgroundColor: blue500,
+  		backgroundColor: indigo500,
   		height: '100%',
   		width: '100%',
   		display: 'flex',
@@ -85,7 +85,7 @@ class ConfirmationForm extends React.Component {
 
     return (
     	<div style={main}>
-    		<TextField
+    		<CodeField
     		  ref={(input) => { this.code = input; }}
     		  onKeyPress = {this._handleKeyPress.bind(this)}
 		      floatingLabelText="Enter your code"

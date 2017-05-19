@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TextField from 'material-ui/TextField';
+import CodeField from 'general/CodeField';
+import PasswordField from 'general/PasswordField';
+import EmailField from 'general/EmailField';
 import { forgotPassword, confirmPassword, login } from '../../utils/cognito-auth';
 import { goTo, goToDashboard, goToLogin } from 'navigation/navigation';
 import Snackbar from 'material-ui/Snackbar';
 
 import {
-  red500,
+  indigo500,
 } from 'material-ui/styles/colors';
 
 class PasswordRetrieve extends React.Component {
@@ -23,14 +25,10 @@ class PasswordRetrieve extends React.Component {
     }
   }
 
-  isValid() {
-    return this.email.input && this.email.input.value;
-  }
-
   _setEmail(e) {
     if (e.key === 'Enter') {
-      if(this.isValid()) { 
-        const email = this.email.input.value.trim();
+      if(this.email.validate()) { 
+        const email = this.email.getValue();
         this.sendPasswordRecoveryRequest(email);
       }
     }
@@ -55,17 +53,14 @@ class PasswordRetrieve extends React.Component {
   }
 
   dataIsValid() {
-    return this.code.input && 
-           this.code.input.value &&
-           this.password.input && 
-           this.password.input.value;
+    return this.code.validate() && this.password.validate();
   }
 
   _confirmPasswordHandler(e) {
      if (e.key === 'Enter') {
         if(this.dataIsValid()) { 
-          const code = this.code.input.value.trim();
-          const password = this.password.input.value.trim();
+          const code = this.code.getValue();
+          const password = this.password.getValue();
           this.confirmPasswordRequest(code, password);
         }
       }
@@ -99,7 +94,7 @@ class PasswordRetrieve extends React.Component {
   render() {
   	
   	const main = {
-  		backgroundColor: red500,
+  		backgroundColor: indigo500,
   		height: '100%',
   		width: '100%',
   		display: 'flex',
@@ -120,25 +115,24 @@ class PasswordRetrieve extends React.Component {
     var code;
     var password;
     if(!this.state.email) {
-      email = (<TextField
+      email = (<EmailField
             ref={(input) => { this.email = input; }}
             onKeyPress = {this._setEmail.bind(this)}
             floatingLabelText="Email"
             floatingLabelStyle={floatingLabelStyle}
             inputStyle={inputStyle}/>);
     } else {
-      code = (<TextField
+      code = (<CodeField
             ref={(input) => { this.code = input; }}
             onKeyPress = {this._confirmPasswordHandler.bind(this)}
             floatingLabelText="Enter your code"
             floatingLabelStyle={floatingLabelStyle}
             inputStyle={inputStyle}/>);
-      password = (<TextField
+      password = (<PasswordField
             ref={(input) => { this.password = input; }}
             onKeyPress = {this._confirmPasswordHandler.bind(this)}
             floatingLabelText="Password"
             floatingLabelStyle={floatingLabelStyle}
-            type={"password"}
             inputStyle={inputStyle}/>);
     }
 

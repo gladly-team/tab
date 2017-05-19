@@ -25,6 +25,7 @@ const userPool = new CognitoUserPool({
 });
 
 const IS_DEVELOPMENT = process.env.NODE_ENV === 'development';
+const MOCK_DEV_AUTHENTICATION = process.env.MOCK_DEV_AUTHENTICATION === 'true';
 
 function checkUserExist(email, onSuccess, onFailure) {
 	login(email, '', () => {}, (err) => {
@@ -158,9 +159,8 @@ function getCurrentUserForDev(callback) {
 }
 
 function getCurrentUser(callback) {
-  
   // Mock the user authentication on development.
-  if(IS_DEVELOPMENT && process.env.MOCK_DEV_AUTHENTICATION) {
+  if(IS_DEVELOPMENT && MOCK_DEV_AUTHENTICATION) {
     getCurrentUserForDev(callback);
     return;
   }
