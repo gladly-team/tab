@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import environment from '../../../relay-env';
 import ConfirmationForm from './ConfirmationForm';
-import TextField from 'material-ui/TextField';
 import PasswordField from 'general/PasswordField';
 import { login, getOrCreate, getCurrentUser } from '../../utils/cognito-auth';
 import { goTo, goToDashboard, goToLogin } from 'navigation/navigation';

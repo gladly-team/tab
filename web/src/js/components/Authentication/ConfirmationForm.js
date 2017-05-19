@@ -6,7 +6,7 @@ import Snackbar from 'material-ui/Snackbar';
 import { confirmRegistration, resendConfirmation } from '../../utils/cognito-auth';
 
 import {
-  blue500,
+  indigo500,
 } from 'material-ui/styles/colors';
 
 class ConfirmationForm extends React.Component {
@@ -61,7 +61,7 @@ class ConfirmationForm extends React.Component {
   render() {
   	
   	const main = {
-  		backgroundColor: blue500,
+  		backgroundColor: indigo500,
   		height: '100%',
   		width: '100%',
   		display: 'flex',
