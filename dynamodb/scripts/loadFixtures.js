@@ -1,16 +1,17 @@
 
 var fs = require('fs');
+var path = require('path');
 
 var AWS = require('../aws-client');
 var docClient = new AWS.DynamoDB.DocumentClient();
-var confirmCommand = require('../confirmCommand');
+var confirmCommand = require('./confirmCommand');
 
 function loadTable(fixture) {
   var tableName = fixture.tableName;
-  var jsonFile = fixture.jsonFile;
+  var jsonFile = path.join(__dirname, '../fixtures/', fixture.jsonFile);
   console.log('Loading ' + tableName + ' table data from ' + jsonFile);
 
-  var items = JSON.parse(fs.readFileSync(__dirname + '/' + jsonFile, 'utf8'));
+  var items = JSON.parse(fs.readFileSync(jsonFile), 'utf8');
   items.forEach(function(item) {
       var params = {
           TableName: tableName,

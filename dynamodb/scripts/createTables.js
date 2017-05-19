@@ -1,12 +1,15 @@
 
 var fs = require('fs');
+var path = require('path');
 
-var AWS = require('./aws-client');
+var AWS = require('../aws-client');
 var dynamodb = new AWS.DynamoDB();
 var confirmCommand = require('./confirmCommand');
 
 var tablesJsonFile = 'tables.json';
-var tables = JSON.parse(fs.readFileSync(__dirname + '/' + tablesJsonFile, 'utf8'));
+var tables = JSON.parse(fs.readFileSync(
+  path.join(__dirname, '../' + tablesJsonFile),
+  'utf8'));
 
 function createOrUpdateTable(tableConfig) {
 

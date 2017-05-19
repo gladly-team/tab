@@ -12,9 +12,9 @@
   "scripts": {
     "init": "yarn run delete-tables && yarn run bootstrap",
     "bootstrap": "yarn run create-tables && yarn run load-fixtures",
-    "create-tables": "node createTables.js",
-    "delete-tables": "node deleteTables.js",
-    "load-fixtures": "node ./fixtures/loadFixtures.js",
+    "create-tables": "node ./scripts/createTables.js",
+    "delete-tables": "node ./scripts/deleteTables.js",
+    "load-fixtures": "node ./scripts/loadFixtures.js",
     "deploy": "serverless deploy"
   },
   "repository": {
