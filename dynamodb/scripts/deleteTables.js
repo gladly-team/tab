@@ -1,15 +1,11 @@
 
-import fs from 'fs';
-import path from 'path';
-
 import AWS from '../aws-client';
 import confirmCommand from './confirmCommand';
+import getTableInfo from './getTableInfo';
 const dynamodb = new AWS.DynamoDB();
 
-const tablesJsonFile = 'tables.json';
-const tables = JSON.parse(fs.readFileSync(
-  path.join(__dirname, '../' + tablesJsonFile),
-  'utf8'));
+
+const tables = getTableInfo();
 
 const deleteTable = function(tableConfig) {
   const params = {
