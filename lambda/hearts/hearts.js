@@ -1,5 +1,7 @@
 'use strict';
-const db = require('../utils/database');
+
+import db from '../utils/database';
+import tablesNames from '../utils/tables';
 
 /**
  * Fetches a user ID from the database.
@@ -9,7 +11,7 @@ const db = require('../utils/database');
  */
 const getHeartsForUser = (userId) => {
   return db.get({
-    TableName: 'Users',
+    TableName: tablesNames.users,
     Key: {
       id: userId,
     },

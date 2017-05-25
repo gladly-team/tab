@@ -1,6 +1,6 @@
 'use strict';
 
-var AWS = require('aws-sdk');
+import AWS from 'aws-sdk';
 AWS.config.update({
   region: process.env.AWS_REGION,
   endpoint: process.env.DYNAMODB_ENDPOINT,
@@ -19,4 +19,4 @@ database.get = function(params) {
   return dynamoDb.get(params).promise();
 };
 
-module.exports = database;
+export default database;
