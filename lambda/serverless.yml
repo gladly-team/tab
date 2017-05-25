@@ -27,22 +27,21 @@ provider:
         - "dynamodb:UpdateItem"
       Resource: "*"
 
-# Reduce file sizes.
-# https://serverless.com/framework/docs/providers/aws/guide/packaging#packaging-functions-separately
-# Relevant Github issues addressing this:
-#   https://github.com/serverless/serverless/issues/569
-#   https://github.com/serverless/serverless/issues/2709
+plugins:
+  # Include only the required node modules.
+  # https://github.com/dougmoscrop/serverless-plugin-include-dependencies
+  - serverless-plugin-include-dependencies
+
+# Only include the build and its node modules.
 package:
   exclude:
-    - node_modules/**
-    - __mocks__/**
-    - __tests__/**
-    - yarn-error.log
-
+    - ./**
+  include:
+    - build/**
 
 functions:
   hearts:
-    handler: hearts/hearts.serverlessHandler
+    handler: build/hearts/hearts.serverlessHandler
     events:
       - http:
           path: hearts/
