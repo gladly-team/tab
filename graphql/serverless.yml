@@ -8,6 +8,24 @@ provider:
   region: us-west-2
   profile: tab-sls
   stage: dev
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:BatchGetItem"
+        - "dynamodb:BatchWriteItem"
+        - "dynamodb:DeleteItem"
+        - "dynamodb:DescribeReservedCapacity"
+        - "dynamodb:DescribeReservedCapacityOfferings"
+        - "dynamodb:DescribeTable"
+        - "dynamodb:DescribeTimeToLive"
+        - "dynamodb:GetItem"
+        - "dynamodb:ListTables"
+        - "dynamodb:ListTagsOfResource"
+        - "dynamodb:PutItem"
+        - "dynamodb:Query"
+        - "dynamodb:Scan"
+        - "dynamodb:UpdateItem"
+      Resource: "*"
 
 plugins:
   # Include only the required node modules.
