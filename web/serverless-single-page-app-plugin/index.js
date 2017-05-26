@@ -8,7 +8,7 @@ class ServerlessPlugin {
     this.options = options;
     this.commands = {
       syncToS3: {
-        usage: 'Deploys the `app` directory to your bucket',
+        usage: 'Deploys the `build` directory to your bucket',
         lifecycleEvents: [
           'sync',
         ],
@@ -27,13 +27,13 @@ class ServerlessPlugin {
     };
   }
 
-  // syncs the `app` directory to the provided bucket
+  // syncs the `build` directory to the provided bucket
   syncDirectory() {
     const s3Bucket = this.serverless.variables.service.custom.s3Bucket;
     const args = [
       's3',
       'sync',
-      'app/',
+      'build/',
       `s3://${s3Bucket}/`,
     ];
     const result = spawnSync('aws', args);
