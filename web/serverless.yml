@@ -13,7 +13,7 @@ plugins:
   - serverless-single-page-app-plugin
 
 custom:
-  s3Bucket: tab2017
+  s3Bucket: dev-tab2017.gladly.io
   webAppName: Tab2017
   domainNameAlias: tab.gladly.io
 
@@ -21,7 +21,7 @@ resources:
   Resources:
 
     # S3 Bucket
-    WebAppS3Bucket:
+    TabS3Bucket:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: ${self:custom.s3Bucket}
@@ -31,11 +31,11 @@ resources:
           ErrorDocument: index.html
 
     # Specifying the policies to make sure all files inside the Bucket are available to CloudFront
-    WebAppS3BucketPolicy:
+    TabS3BucketPolicy:
       Type: AWS::S3::BucketPolicy
       Properties:
         Bucket:
-          Ref: WebAppS3Bucket
+          Ref: TabS3Bucket
         PolicyDocument:
           Statement:
             - Sid: PublicReadGetObject
