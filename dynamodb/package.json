@@ -16,7 +16,7 @@
     "jest": "^20.0.3",
     "lodash": "^4.17.4",
     "npm-run-all": "^4.0.2",
-    "serverless": "^1.13.2"
+    "serverless": "^1.14.0"
   },
   "scripts": {
     "init": "yarn run delete-tables && yarn run bootstrap",

@@ -332,8 +332,8 @@ autoprefixer@^7.1.0:
     postcss-value-parser "^3.2.3"
 
 aws-sdk@^2.7.13:
-  version "2.54.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.54.0.tgz#de97bdc82a975a71ad9f63192c8c75f623992c18"
+  version "2.58.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.58.0.tgz#7ea8c3aa59e97a87c570dbe12d0042082ac1debf"
   dependencies:
     buffer "5.0.6"
     crypto-browserify "1.0.9"
@@ -2134,12 +2134,12 @@ decompress-tarbz2@^4.0.0:
     unbzip2-stream "^1.0.9"
 
 decompress-targz@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/decompress-targz/-/decompress-targz-4.0.0.tgz#a21206fb1267c5ece65501ec03a39da5bc7662cc"
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/decompress-targz/-/decompress-targz-4.1.0.tgz#475b9c406be621ae836274802d9b25f9913ead59"
   dependencies:
     decompress-tar "^4.0.0"
-    file-type "^3.8.0"
-    pify "^2.3.0"
+    file-type "^4.3.0"
+    is-stream "^1.1.0"
 
 decompress-unzip@^4.0.1:
   version "4.0.1"
@@ -2983,6 +2983,10 @@ file-loader@^0.11.1:
 file-type@^3.1.0, file-type@^3.8.0:
   version "3.9.0"
   resolved "https://registry.yarnpkg.com/file-type/-/file-type-3.9.0.tgz#257a078384d1db8087bc449d107d52a52672b9e9"
+
+file-type@^4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/file-type/-/file-type-4.3.0.tgz#b26f0a35e03f6857848d18b8a27238448caa79a5"
 
 filename-regex@^2.0.0:
   version "2.0.1"
@@ -7595,8 +7599,8 @@ uid-number@^0.0.6:
   resolved "https://registry.yarnpkg.com/uid-number/-/uid-number-0.0.6.tgz#0ea10e8035e8eb5b8e4449f06da1c730663baa81"
 
 unbzip2-stream@^1.0.9:
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/unbzip2-stream/-/unbzip2-stream-1.0.11.tgz#204f55549cd1dd800fdd835b86676830e7492d8f"
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/unbzip2-stream/-/unbzip2-stream-1.2.4.tgz#8c84c84d5b4cc28fc1f9f577203bbd3cb860a16a"
   dependencies:
     buffer "^3.0.1"
     through "^2.3.6"

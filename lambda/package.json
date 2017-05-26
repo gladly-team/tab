@@ -23,7 +23,7 @@
     "lodash": "^4.17.4",
     "nodemon": "^1.11.0",
     "npm-run-all": "^4.0.2",
-    "serverless": "^1.13.2",
+    "serverless": "^1.14.0",
     "serverless-plugin-include-dependencies": "^2.1.2",
     "yamljs": "^0.2.8"
   },
