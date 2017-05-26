@@ -6,6 +6,7 @@ var CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 var InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 var WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 var FaviconsWebpackPlugin = require('favicons-webpack-plugin');
+var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 var getClientEnvironment = require('./env');
 var paths = require('./paths');
 
@@ -64,8 +65,7 @@ module.exports = {
   // This means they will be the "root" imports that are included in JS bundle.
   // The first two entry points enable "hot" CSS and auto-refreshes for JS.
   entry: {
-    app: appEntry,
-    vendor: ['material-ui']
+    app: appEntry
   },
   output: {
     // Next line is not used in dev but WebpackDevServer crashes without it:
@@ -191,7 +191,19 @@ module.exports = {
   //   ];
   // },
   plugins: [
-    new webpack.optimize.CommonsChunkPlugin({name: 'vendor', filename: 'vendor.js'}),
+    // https://medium.com/@adamrackis/vendor-and-code-splitting-in-webpack-2-6376358f1923
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      filename: 'vendor.js',
+      minChunks(module, count) {
+        var context = module.context;
+        return context && context.indexOf('node_modules') >= 0;
+      },
+    }),
+    new BundleAnalyzerPlugin({
+      // set to 'static' for analysis or 'disabled' for none
+      analyzerMode: 'disabled'
+    }),
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(),
