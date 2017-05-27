@@ -6,6 +6,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var ManifestPlugin = require('webpack-manifest-plugin');
 var InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
+var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 var paths = require('./paths');
 var getClientEnvironment = require('./env');
 
@@ -55,6 +56,12 @@ module.exports = {
     require.resolve('./polyfills'),
     paths.appIndexJs
   ],
+  entry: {
+    app: [
+      require.resolve('./polyfills'),
+      paths.appIndexJs  
+    ],
+  },
   output: {
     // The build folder.
     path: paths.appBuild,
@@ -62,7 +69,7 @@ module.exports = {
     // There will be one main bundle, and one file per asynchronous chunk.
     // We don't currently advertise code splitting but Webpack supports it.
     filename: 'static/js/[name].[chunkhash:8].js',
-    chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js',
+    chunkFilename: 'static/js/[name].[chunkhash:8].js',
     // We inferred the "public path" (such as / or /my-project) from homepage.
     publicPath: publicPath
   },
@@ -189,6 +196,20 @@ module.exports = {
   //  ];
   //},
   plugins: [
+    // https://medium.com/@adamrackis/vendor-and-code-splitting-in-webpack-2-6376358f1923
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      filename: 'static/js/[name].[chunkhash:8].js',
+      minChunks(module, count) {
+        var context = module.context;
+        return context && context.indexOf('node_modules') >= 0;
+      },
+    }),
+    new BundleAnalyzerPlugin({
+      // set to 'static' for analysis or 'disabled' for none
+      analyzerMode: 'disabled'
+    }),
+
     // Makes some environment variables available in index.html.
     // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
     // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
