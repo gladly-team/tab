@@ -13,6 +13,7 @@ plugins:
   - serverless-single-page-app-plugin
 
 custom:
+  # TODO: use env variable
   s3Bucket: dev-tab2017.gladly.io
   webAppName: Tab2017
   domainNameAlias: tab.gladly.io

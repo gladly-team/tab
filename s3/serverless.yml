@@ -1,0 +1,42 @@
+
+service: tab-media
+frameworkVersion: ">=1.14.0 <2.0.0"
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  region: us-west-2
+  profile: tab-sls
+  stage: dev
+
+custom:
+  # TODO: use env variable
+  s3Bucket: dev-tab2017-media.gladly.io
+
+resources:
+  Resources:
+
+    # S3 Bucket
+    TabMediaBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.s3Bucket}
+        AccessControl: PublicRead
+        WebsiteConfiguration:
+          IndexDocument: index.html
+          ErrorDocument: error.html
+
+    # Bucket policy (public read)
+    TabS3BucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket:
+          Ref: TabMediaBucket
+        PolicyDocument:
+          Statement:
+            - Sid: PublicReadGetObject
+              Effect: Allow
+              Principal: "*"
+              Action:
+                - s3:GetObject
+              Resource: arn:aws:s3:::${self:custom.s3Bucket}/*
