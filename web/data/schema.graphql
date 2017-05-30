@@ -98,6 +98,17 @@ type CharityEdge {
   cursor: String!
 }
 
+input CreateNewUserInput {
+  userId: String!
+  email: String!
+  clientMutationId: String
+}
+
+type CreateNewUserPayload {
+  user: User
+  clientMutationId: String
+}
+
 input DonateVcInput {
   userId: String!
   charityId: String!
@@ -136,6 +147,7 @@ type Mutation {
   updateWidgetConfig(input: UpdateWidgetConfigInput!): UpdateWidgetConfigPayload
   addBookmark(input: AddBookmarkInput!): AddBookmarkPayload
   removeBookmark(input: RemoveBookmarkInput!): RemoveBookmarkPayload
+  createNewUser(input: CreateNewUserInput!): CreateNewUserPayload
 }
 
 # An object with an ID

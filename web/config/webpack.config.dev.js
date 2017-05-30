@@ -126,6 +126,10 @@ module.exports = {
         ],
       }, 
       {
+        test: /\.json$/,
+        use: 'json-loader'
+      }, 
+      {
         test: /\.scss$/,
         use: [
           'style-loader',

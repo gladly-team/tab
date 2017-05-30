@@ -19,8 +19,8 @@
     "serverless": "^1.14.0"
   },
   "scripts": {
-    "init": "yarn run delete-tables && yarn run bootstrap",
-    "bootstrap": "yarn run create-tables && yarn run load-fixtures",
+    "init": "npm run delete-tables && npm run bootstrap",
+    "bootstrap": "npm run create-tables && npm run load-fixtures",
     "create-tables": "babel-node ./scripts/createTables.js",
     "delete-tables": "babel-node ./scripts/deleteTables.js",
     "load-fixtures": "babel-node ./scripts/loadFixtures.js",

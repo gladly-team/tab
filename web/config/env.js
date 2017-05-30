@@ -4,7 +4,16 @@
 var includes = require('lodash/includes');
 
 // Our own defined variables we want to include in the build.
-var envVars = ['WEB_HOST', 'WEB_PORT', 'GRAPHQL_ENDPOINT'];
+var envVars = [
+'WEB_HOST', 
+'WEB_PORT', 
+'GRAPHQL_ENDPOINT', 
+'COGNITO_REGION', 
+'COGNITO_IDENTITYPOOLID',
+'COGNITO_USERPOOLID',
+'COGNITO_CLIENTID',
+'MOCK_DEV_AUTHENTICATION',
+'DEV_AUTHENTICATED_USER'];
 
 var REACT_APP = /^REACT_APP_/i;
 

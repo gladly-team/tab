@@ -1,15 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { goTo } from 'navigation/navigation';
-
+import { goTo, goToDashboard } from 'navigation/navigation';
 import AppBar from 'material-ui/AppBar';
 import FontIcon from 'material-ui/FontIcon';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import Drawer from 'material-ui/Drawer';
+import FlatButton from 'material-ui/FlatButton';
 
 import WidgetsSettingsView from './Widgets/WidgetsSettingsView';
 import BackgroundSettingsView from './Background/BackgroundSettingsView';
+
+import { logoutUser } from '../../utils/cognito-auth';
 
 class Settings extends React.Component {
 
@@ -40,11 +42,23 @@ class Settings extends React.Component {
   		selection: selection,
   	});
 
-    goTo('/settings/' + selection);
+    goTo('/tab/settings/' + selection);
   }	
 
   goToHome() {
-    goTo('/');
+    goToDashboard();
+  }
+
+  logout() {
+    logoutUser((loggedOut) => {
+      if(loggedOut) {
+        this.goToLogin();
+      }
+    });
+  }
+
+  goToLogin() {
+    goTo('/auth');
   }
   
   render() {
@@ -75,13 +89,23 @@ class Settings extends React.Component {
     	fontWeight: (this.state.selection == 'background')?'bold':'normal'
     });
 
+    const logoutBtn = (
+      <FlatButton
+        onClick={this.logout.bind(this)} 
+        label="Sign Out"
+        labelPosition="before"
+        icon={<FontIcon
+              color={'#FFF'}
+              className="fa fa-sign-out"/>}/>
+    );
+
     return (
     	<div style={settings}>
           <AppBar
             title="Settings"
             iconClassNameLeft="fa fa-arrow-left"
             onLeftIconButtonTouchTap={this.goToHome.bind(this)}
-          />
+            iconElementRight={logoutBtn}/>
           <Drawer>
             <AppBar 
               title="Settings" 

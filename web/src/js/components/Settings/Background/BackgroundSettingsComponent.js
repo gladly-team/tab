@@ -43,7 +43,6 @@ class BackgroundSettings extends React.Component {
     const { app, user } = this.props;
 
     const main = {
-      width: '100%',
       marginLeft: 256,
       marginRight: 'auto',
       padding: 20,

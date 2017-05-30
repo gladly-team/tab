@@ -56,7 +56,8 @@ import {
   setUserBackgroundImage,
   setUserBackgroundColor,
   setUserBackgroundFromCustomUrl,
-  setUserBackgroundDaily
+  setUserBackgroundDaily,
+  createUser
 } from '../database/users/user';
 
 import {
@@ -632,6 +633,27 @@ const updateWidgetConfigMutation = mutationWithClientMutationId({
 });
 
 /**
+ * Create a new user.
+ */
+const createNewUserMutation = mutationWithClientMutationId({
+  name: 'CreateNewUser',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    email: { type: new GraphQLNonNull(GraphQLString) }
+  },
+  outputFields: {
+    user: {
+      type: userType,
+      resolve: user => user
+    }
+  },
+  mutateAndGetPayload: ({userId, email}) => {
+    return createUser(userId, email);
+  }
+});
+
+
+/**
  * This is the type that will be the root of our query,
  * and the entry point into our schema.
  */
@@ -676,6 +698,8 @@ const mutationType = new GraphQLObjectType({
 
     addBookmark: addBookmarkMutation,
     removeBookmark: removeBookmarkMutation,
+
+    createNewUser: createNewUserMutation,
   })
 });
 

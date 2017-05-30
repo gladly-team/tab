@@ -2,11 +2,16 @@ import React from 'react';
 import {QueryRenderer} from 'react-relay/compat';
 import environment from '../../../relay-env';
 
+import FullScreenProgress from 'general/FullScreenProgress';
+import AuthUserComponent from 'general/AuthUserComponent';
+
 import Widgets from './WidgetsContainer';
 
 class WidgetsView extends React.Component { 
+  
   render() {
     return (
+      <AuthUserComponent>
         <QueryRenderer
           environment={environment}
           query={graphql`
@@ -16,7 +21,6 @@ class WidgetsView extends React.Component {
               }
             }
           `}
-          variables={{userId: "45bbefbf-63d1-4d36-931e-212fbe2bc3d9"}}
           render={({error, props}) => {
             if (props) {
               return (
@@ -26,6 +30,7 @@ class WidgetsView extends React.Component {
               return null;
             }
           }}/>
+      </AuthUserComponent>
     );
   }
 }
