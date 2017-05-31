@@ -1,31 +1,76 @@
 import chokidar from 'chokidar';
 import cors from 'cors';
 import express from 'express';
+import bodyParser from 'body-parser';
 import graphQLHTTP from 'express-graphql';
 import path from 'path';
 import {clean} from 'require-clean';
 import {exec} from 'child_process';
 
-// Load environment variables from .env file.
-// https://github.com/keithmorris/node-dotenv-extended
-require('dotenv-extended').load();
+import config from './config';
+import { handler } from './handler';
 
-process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-const GRAPHQL_PORT = process.env.GRAPHQL_PORT;
+const GRAPHQL_PORT = config.GRAPHQL_PORT;
 
 let graphQLServer;
 
+// Approximate an AWS Lambda event object from the request.
+// https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-set-up-simple-proxy.html#api-gateway-simple-proxy-for-lambda-input-format
+// 
+// {
+//     "resource": "Resource path",
+//     "path": "Path parameter",
+//     "httpMethod": "Incoming request's method name"
+//     "headers": {Incoming request headers}
+//     "queryStringParameters": {query string parameters }
+//     "pathParameters":  {path parameters}
+//     "stageVariables": {Applicable stage variables}
+//     "requestContext": {Request context, including authorizer-returned key-value pairs}
+//     "body": "A JSON string of the request payload."
+//     "isBase64Encoded": "A boolean flag to indicate if the applicable request payload is Base64-encode"
+// }
+function generateLambdaEventObj(req) {
+  return {
+    resource: '',
+    path: req.baseUrl,
+    httpMethod: req.method,
+    headers: req.headers,
+    queryStringParameters: req.query,
+    pathParameters: {},
+    stageVariables: {},
+    requestContext: {},
+    body: JSON.stringify(req.body),
+    isBase64Encoded: false,
+  }
+}
+
 function startGraphQLServer(callback) {
-  // Expose a GraphQL endpoint
   clean('./data/schema');
   const {Schema} = require('./data/schema');
   const graphQLApp = express();
   graphQLApp.use(cors());
-  graphQLApp.use('/', graphQLHTTP({
-    graphiql: true,
-    pretty: true,
-    schema: Schema,
-  }));
+  graphQLApp.use(bodyParser.json());
+  graphQLApp.use(bodyParser.urlencoded({ extended: true }));
+
+
+  // Use express-graphql in development if desired.
+  // Otherwise, just use our plain Lambda handler.
+  if (config.NODE_ENV === 'development' && config.ENABLE_GRAPHIQL) {
+    graphQLApp.use('/', graphQLHTTP({
+      graphiql: true,
+      pretty: true,
+      schema: Schema,
+    }));
+  } else {
+    graphQLApp.post('/', (req, res) => {
+      const event = generateLambdaEventObj(req);
+      handler(event)
+        // Use only the body (the rest is for use within an AWS Lambda context)
+        .then(response => res.send(response.body));
+    });
+
+  }
+
   graphQLServer = graphQLApp.listen(GRAPHQL_PORT, () => {
     console.log(
       `GraphQL server is now running on http://localhost:${GRAPHQL_PORT}`

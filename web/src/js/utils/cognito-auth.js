@@ -160,7 +160,8 @@ function getCurrentUserForDev(callback) {
 
 function getCurrentUser(callback) {
   // Mock the user authentication on development.
-  if(IS_DEVELOPMENT && MOCK_DEV_AUTHENTICATION) {
+  // TODO: check for `IS_DEVELOPMENT` once we have a staging auth service
+  if(MOCK_DEV_AUTHENTICATION) {
     getCurrentUserForDev(callback);
     return;
   }

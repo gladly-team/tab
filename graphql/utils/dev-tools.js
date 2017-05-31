@@ -1,4 +1,6 @@
 
+import config from '../config';
+
 const logger = {};
 
 logger.log = function(msg) {
@@ -12,12 +14,12 @@ logger.error = function(msg, error) {
 
 const DBLogger = {
   action: (action, params) => {
-  	if(process.env.NODE_ENV === 'production')
+  	if(config.LOGGING_ENABLED)
   		return;
     console.log(`Received action: ${action} with params: `, params);
   },
   response: (action, data) => {
-  	if(process.env.NODE_ENV === 'production')
+  	if(config.LOGGING_ENABLED)
   		return;
     console.log(`Response from action: ${action}: `, data);
   }

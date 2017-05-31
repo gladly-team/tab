@@ -6,9 +6,12 @@
   "dependencies": {
     "express": "^4.14.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "serverless": "^1.14.0"
+  },
   "scripts": {
-    "start": "node ./server.js"
+    "start": "node ./server.js",
+    "deploy": "serverless deploy"
   },
   "repository": {
     "type": "git",

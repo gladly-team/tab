@@ -1,5 +1,7 @@
 'use strict';
-const db = require('../utils/database');
+
+import db from '../utils/database';
+import tablesNames from '../utils/tables';
 
 /**
  * Fetches a user ID from the database.
@@ -9,22 +11,22 @@ const db = require('../utils/database');
  */
 const getHeartsForUser = (userId) => {
   return db.get({
-    TableName: 'Users',
+    TableName: tablesNames.users,
     Key: {
-      UserId: userId,
+      id: userId,
     },
   })
-  .then( data => data.Item.VcCurrent);
+  .then( data => data.Item.vcCurrent);
 };
 
 const handler = (event) => {
-  if (!event.params.id) {
+  if (!event.queryStringParameters.id) {
     return Promise.resolve({
       statusCode: 400,
       body: JSON.stringify({ message: 'The id query param must be set to a valid user id' }),
     });
   }
-  let userId = parseInt(event.params.id, 10) || 0;
+  let userId = event.queryStringParameters.id;
   return getHeartsForUser(userId)
     .then(
       (hearts) => {

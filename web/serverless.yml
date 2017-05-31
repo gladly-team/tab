@@ -1,0 +1,107 @@
+
+service: web 
+frameworkVersion: ">=1.14.0 <2.0.0"
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  region: us-west-2
+  profile: tab-sls
+  stage: dev
+
+plugins:
+  - serverless-single-page-app-plugin
+
+custom:
+  # TODO: use env variable
+  s3Bucket: dev-tab2017.gladly.io
+  webAppName: Tab2017
+  domainNameAlias: tab.gladly.io
+
+resources:
+  Resources:
+
+    # S3 Bucket
+    TabS3Bucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.s3Bucket}
+        AccessControl: PublicRead
+        WebsiteConfiguration:
+          IndexDocument: index.html
+          ErrorDocument: index.html
+
+    # Specifying the policies to make sure all files inside the Bucket are available to CloudFront
+    TabS3BucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket:
+          Ref: TabS3Bucket
+        PolicyDocument:
+          Statement:
+            - Sid: PublicReadGetObject
+              Effect: Allow
+              Principal: "*"
+              Action:
+                - s3:GetObject
+              Resource: arn:aws:s3:::${self:custom.s3Bucket}/*
+
+  #   # TODO: enable Cloudfront later.
+  #   # Specifying the CloudFront Distribution to serve the app
+  #   WebAppCloudFrontDistribution:
+  #     Type: AWS::CloudFront::Distribution
+  #     Properties:
+  #       DistributionConfig:
+  #         Origins:
+  #           - DomainName: ${self:custom.s3Bucket}.s3.amazonaws.com
+  #             # An identifier for the origin which must be unique within the distribution
+  #             Id: ${self:custom.webAppName}
+  #             CustomOriginConfig:
+  #               HTTPPort: 80
+  #               HTTPSPort: 443
+  #               OriginProtocolPolicy: https-only
+  #             ## In case you want to restrict the bucket access use S3OriginConfig and remove CustomOriginConfig
+  #             # S3OriginConfig:
+  #             #   OriginAccessIdentity: origin-access-identity/cloudfront/E127EXAMPLE51Z
+  #         Enabled: 'true'
+  #         ## Uncomment the following section in case you are using a custom domain
+  #         # Aliases:
+  #         # - ${self:custom.domainNameAlias}
+  #         DefaultRootObject: index.html
+  #         ## Since the Single Page App is taking care of the routing we need to make sure ever path is served with index.html
+  #         ## The only exception are files that actually exist e.h. app.js, reset.css
+  #         CustomErrorResponses:
+  #           - ErrorCode: 404
+  #             ResponseCode: 200
+  #             ResponsePagePath: /index.html
+  #         DefaultCacheBehavior:
+  #           AllowedMethods:
+  #             - DELETE
+  #             - GET
+  #             - HEAD
+  #             - OPTIONS
+  #             - PATCH
+  #             - POST
+  #             - PUT
+  #           # The origin id defined above
+  #           TargetOriginId: ${self:custom.webAppName}
+  #           ##Defining if and how the QueryString and Cookies are forwarded to the origin, which in this case is S3
+  #           ForwardedValues:
+  #             QueryString: 'false'
+  #             Cookies:
+  #               Forward: none
+  #           # The protocol that users can use to access the files in the origin. To allow HTTP use `allow-all`
+  #           ViewerProtocolPolicy: redirect-to-https
+  #         ## The certificate to use when viewers use HTTPS to request objects.
+  #         ViewerCertificate:
+  #           CloudFrontDefaultCertificate: 'true'
+  #         ## Uncomment the following section in case you want to enable logging for CloudFront requests
+  #         # Logging:
+  #         #   IncludeCookies: 'false'
+  #         #   Bucket: mylogs.s3.amazonaws.com
+  #         #   Prefix: myprefix
+  
+  # In order to print out the hosted domain via `serverless info` we need to define the DomainName output for CloudFormation
+  Outputs:
+    WebAppCloudFrontDistributionOutput:
+      Value: ${self:custom.s3Bucket}.s3.amazonaws.com

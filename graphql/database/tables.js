@@ -1,4 +1,14 @@
-const tableNames = {
+
+import { mapValues } from 'lodash/object';
+import config from '../config';
+
+const tableNameAppendix = (
+  config.TABLE_NAME_APPENDIX ?
+  config.TABLE_NAME_APPENDIX :
+  ''
+);
+
+const tables = {
 	features: 'Features',
 	users: 'Users',
 	userLevels: 'UserLevels',
@@ -9,4 +19,4 @@ const tableNames = {
 	userWidgets: 'UserWidgets',
 };
 
-export default tableNames;
+export default mapValues(tables, (name) => `${name}${tableNameAppendix}`);
