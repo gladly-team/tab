@@ -1,5 +1,6 @@
 'use strict';
 
+var path = require('path');
 var autoprefixer = require('autoprefixer');
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -7,13 +8,22 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var ManifestPlugin = require('webpack-manifest-plugin');
 var InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
+// Load environment variables from .env file. Suppress warnings using silent
+// if this file is missing. dotenv will never modify any environment variables
+// that have already been set.
+// https://github.com/keithmorris/node-dotenv-extended
+require('dotenv-extended').load({
+  path: path.join(__dirname, '..', '.env'),
+  defaults: path.join(__dirname, '..', '.env.defaults'),
+  schema: path.join(__dirname, '..', '.env.schema'),
+});
 var paths = require('./paths');
 var getClientEnvironment = require('./env');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
-// TODO: may want to use an absolute path.
-var publicPath = './';
+var publicPath = process.env.PUBLIC_PATH;
 // Some apps do not use client-side routing with pushState.
 // For these, "homepage" can be set to "." to enable relative asset paths.
 var shouldUseRelativeAssetPaths = publicPath === './';

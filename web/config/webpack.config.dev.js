@@ -1,3 +1,5 @@
+
+var path = require('path');
 var autoprefixer = require('autoprefixer');
 var precss = require('precss');
 var webpack = require('webpack');
@@ -7,6 +9,16 @@ var InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 var WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 var FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
+// Load environment variables from .env file. Suppress warnings using silent
+// if this file is missing. dotenv will never modify any environment variables
+// that have already been set.
+// https://github.com/keithmorris/node-dotenv-extended
+require('dotenv-extended').load({
+  path: path.join(__dirname, '..', '.env'),
+  defaults: path.join(__dirname, '..', '.env.defaults'),
+  schema: path.join(__dirname, '..', '.env.schema'),
+});
 var getClientEnvironment = require('./env');
 var paths = require('./paths');
 
@@ -46,7 +58,7 @@ appEntry = [
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
-var publicPath = '/';
+var publicPath = process.env.PUBLIC_PATH || '/';
 // `publicUrl` is just like `publicPath`, but we will provide it to our app
 // as %PUBLIC_URL% in `index.html` and `process.env.PUBLIC_URL` in JavaScript.
 // Omit trailing slash as %PUBLIC_PATH%/xyz looks better than %PUBLIC_PATH%xyz.
