@@ -4,8 +4,46 @@ node_js:
 env:
   global:
   - CI=true
-  - NODE_ENV=test
-  - AWS_REGION=us-west-2
+  ########## Test stage ##########
+  - TEST_NODE_ENV=production
+  - TEST_AWS_REGION=us-west-2
+  # AWS Cognito
+  - TEST_COGNITO_REGION=us-west-2
+  - TEST_COGNITO_IDENTITYPOOLID=arn:aws:cognito-idp:us-west-2:123456789:userpool/us-west-2_abcdefghi
+  - TEST_COGNITO_USERPOOLID=us-west-2_abcdefghi
+  - TEST_COGNITO_CLIENTID=abc123def456ghi789
+  # Web app
+  - TEST_PUBLIC_PATH=/
+  - TEST_WEB_HOST=localhost
+  - TEST_WEB_PORT=3000
+  # GraphQL
+  - TEST_TABLE_NAME_APPENDIX=""
+  - TEST_GRAPHQL_PORT=8080
+  # Endpoints
+  - TEST_GRAPHQL_ENDPOINT=http://localhost:8080
+  - TEST_DYNAMODB_ENDPOINT=http://localhost:8000
+  - TEST_S3_ENDPOINT=http://localhost:9000
+  # Secrets
+  # TODO: access keys
+  ########## Dev stage ##########
+  - DEV_NODE_ENV=production
+  - DEV_AWS_REGION=us-west-2
+  # AWS Cognito
+  - DEV_COGNITO_REGION=us-west-2
+  - DEV_COGNITO_IDENTITYPOOLID=arn:aws:cognito-idp:us-west-2:167811431063:userpool/us-west-2_9MWuEqLeW
+  - DEV_COGNITO_USERPOOLID=us-west-2_9MWuEqLeW
+  - DEV_COGNITO_CLIENTID=5d08amkokqkkd16ofvt7lisk6c
+  # Web app
+  - DEV_PUBLIC_PATH=http://dev-tab2017.gladly.io/
+  # GraphQL
+  - DEV_TABLE_NAME_APPENDIX="-dev"
+  # Endpoints
+  - DEV_GRAPHQL_ENDPOINT=https://53a9uos12e.execute-api.us-west-2.amazonaws.com/dev/graphql
+  - DEV_DYNAMODB_ENDPOINT=dynamodb.us-west-2.amazonaws.com
+  - DEV_S3_ENDPOINT=https://s3-us-west-2.amazonaws.com/dev-tab2017-media.gladly.io
+  # Secrets
+  # TODO: access keys
+  ########## TODO: production stage ##########
 before_install:
   # Repo for Yarn
   - sudo apt-key adv --fetch-keys http://dl.yarnpkg.com/debian/pubkey.gpg
