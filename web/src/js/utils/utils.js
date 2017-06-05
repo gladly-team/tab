@@ -1,5 +1,10 @@
+import localStorageMgr from './localstorage-mgr';
+
 const referralParams = {
-    REFERRING_USER: 'referringUser',
+    REFERRING_USER: {
+    	urlKey: 'r',
+    	key: 'referringUser'
+    }
 }
 
 // 'utm_medium'
@@ -56,28 +61,29 @@ function getUrlParameters() {
     return vars;
 }
 
-function updateReferralData(urlParams) {
+function setReferralData(urlParams) {
 	for(var fieldKey in referralParams){
 		var field = referralParams[fieldKey];
-		if(urlParams[field]){
-			// update in local storage
+		if(urlParams[field.urlKey]){
+			localStorageMgr.setItem(field.key, urlParams[field.urlKey])
 		}
 	}
 }
 
 function getReferralData() {
-	// var data = {};
-	// for(var fieldKey in referralParams){
-	// 	var field = referralParams[fieldKey]; 
-	// 	data[field] = null; // get field from localstorage.
-	// }
-	// return data;
-
-	return {
-		referringUser: 'raul',
+	var data = null;
+	for(var fieldKey in referralParams){
+		var field = referralParams[fieldKey]; 
+		var fieldData = localStorageMgr.getItem(field.key);
+		if(fieldData){
+		   if(!data){
+		   	 data = {};
+		   }
+		   data[field.key] = fieldData;
+		}
 	}
+	return data;
 }
-
 
 export {
 	validateEmail,
@@ -85,5 +91,5 @@ export {
 	validateCode,
 	getUrlParameters,
 	getReferralData,
-	updateReferralData
+	setReferralData
 }
