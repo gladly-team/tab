@@ -36,19 +36,15 @@ class PasswordRetrieve extends React.Component {
 
   sendPasswordRecoveryRequest(email) {
     forgotPassword(email, () => {
-      console.log('sendPasswordRecoveryRequest success');
       this.setState({
         email: email,
-        responseNotify: true,
-        notificationMsg: 'Check your email to get the confirmation code',
       });
+      this.showNotificationAlert('Check your email to get the confirmation code');
     }, (err) => {
-      console.log('sendPasswordRecoveryRequest error', err);
       this.setState({
         email: null,
-        responseNotify: true,
-        notificationMsg: "We couldn't find an account that match this email",
       });
+      this.showNotificationAlert("We couldn't find an account that match this email");
     });
   }
 
@@ -70,7 +66,7 @@ class PasswordRetrieve extends React.Component {
     confirmPassword(this.state.email, code, password, () => {
       this.logUserIn(this.state.email, password, goToDashboard);
     }, (err) => {
-      console.error(err);
+      this.showNotificationAlert(err.message);
     });
   }
 
@@ -79,8 +75,7 @@ class PasswordRetrieve extends React.Component {
         success();
       }, (err) => {
         if(failure)
-          failure();
-        console.error(err);
+          failure(err);
       });
   }
 
@@ -88,6 +83,13 @@ class PasswordRetrieve extends React.Component {
     this.setState({
       responseNotify: false,
       notificationMsg: '',
+    });
+  }
+
+  showNotificationAlert(msg) {
+    this.setState({
+      responseNotify: true,
+      notificationMsg: msg,
     });
   }
 

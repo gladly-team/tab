@@ -126,11 +126,9 @@ function confirmRegistration(code, email, onSuccess, onFailure) {
 
     cognitoUser.confirmRegistration(code, true, function(err, result) {
         if (err) {
-        	console.error(err);
         	onFailure(err);
         	return;
         }
-        console.log(result);
         onSuccess(result);
     });
 }
