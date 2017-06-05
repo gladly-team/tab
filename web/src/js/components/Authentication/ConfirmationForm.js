@@ -32,7 +32,7 @@ class ConfirmationForm extends React.Component {
       confirmRegistration(code, this.props.email, (res) => {
         this.props.onConfirmed(res);
       }, (err) => {
-        console.error(err);
+        this.showAlert(err.message);
       });
   	}
   }
@@ -56,6 +56,13 @@ class ConfirmationForm extends React.Component {
         confirmSentNotify: value,
         confirmMsg: message,
     })
+  }
+
+  showAlert(msg) {
+    this.setState({
+      confirmSentNotify: true,
+      confirmMsg: msg,
+    });
   }
 
   render() {

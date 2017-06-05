@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import environment from '../../../relay-env';
 import ConfirmationForm from './ConfirmationForm';
 import PasswordField from 'general/PasswordField';
+import Snackbar from 'material-ui/Snackbar';
 import { login, getOrCreate, getCurrentUser } from '../../utils/cognito-auth';
 import { goTo, goToDashboard, goToLogin } from 'navigation/navigation';
 
@@ -22,6 +23,9 @@ class LoginForm extends React.Component {
       password: null,
       created: false,
       confirmed: true,
+      alertOpen: false,
+      alertMsg: '',
+      createOnPasswordConfirm: false,
     }
   }
 
@@ -36,6 +40,11 @@ class LoginForm extends React.Component {
       const password = this.password.getValue();
       getOrCreate(this.props.email, password, 
         (response, created, confirmed) => {
+          if(this.state.createOnPasswordConfirm) {
+            this.createNewUser();
+            return;
+          }
+
           if(!created && confirmed) {
             goToDashboard();
             return;
@@ -48,7 +57,7 @@ class LoginForm extends React.Component {
           });
         },
         (err) => {
-          console.error(err);
+          this.showAlert(err.message);
         })
   	}
   }
@@ -58,14 +67,17 @@ class LoginForm extends React.Component {
         success();
       }, (err) => {
         if(failure)
-          failure();
-        console.error(err);
+          failure(err);
       });
   }
 
   onConfirmed() {
     this.logUserIn(this.state.password, this.createNewUser, (err) => {
-      console.error(err);
+      this.showAlert(err.message);
+      this.setState({
+        confirmed: true,
+        createOnPasswordConfirm: true,
+      })
     });
   }
 
@@ -90,6 +102,20 @@ class LoginForm extends React.Component {
           }
         );
       });
+  }
+
+  handleAlertRequestClose(){
+    this.setState({
+      alertOpen: false,
+      alertMsg: '',
+    });
+  }
+
+  showAlert(msg) {
+    this.setState({
+      alertOpen: true,
+      alertMsg: msg,
+    });
   }
 
   render() {
@@ -126,6 +152,12 @@ class LoginForm extends React.Component {
           floatingLabelStyle={floatingLabelStyle}
           type={"password"}
           inputStyle={inputStyle}
+        />
+        <Snackbar
+          open={this.state.alertOpen}
+          message={this.state.alertMsg}
+          autoHideDuration={3000}
+          onRequestClose={this.handleAlertRequestClose.bind(this)}
         />
 		  </div>
     );
