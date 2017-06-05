@@ -66,12 +66,16 @@ function updateReferralData(urlParams) {
 }
 
 function getReferralData() {
-	var data = {};
-	for(var fieldKey in referralParams){
-		var field = referralParams[fieldKey]; 
-		data[field] = null; // get field from localstorage.
+	// var data = {};
+	// for(var fieldKey in referralParams){
+	// 	var field = referralParams[fieldKey]; 
+	// 	data[field] = null; // get field from localstorage.
+	// }
+	// return data;
+
+	return {
+		referringUser: 'raul',
 	}
-	return data;
 }
 
 
