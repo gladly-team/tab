@@ -2,6 +2,7 @@ import BaseModel from '../base/model';
 import database from '../database';
 import tablesNames from '../tables';
 import { getNextLevelFor } from '../userLevels/userLevel';
+import { logReferralData } from '../referrals/referralData';
 import { getBackgroundImage, getRandomImage } from '../backgroundImages/backgroundImage';
 import { UserReachedMaxLevelException } from '../../utils/exceptions';
 import { logger } from '../../utils/dev-tools';
@@ -84,10 +85,15 @@ User.BACKGROUND_OPTION_PHOTO = 'photo';
  * @param {string} email - The new user email.
  * @return {Promise<User>}  A promise that resolve into a User instance.
  */
-var createUser =  Async (function(userId, email) {
+var createUser =  Async (function(userId, email, referralData) {
     const user = new User(userId);
     user.email = email;
     Await (User.add(user));
+    
+    if(referralData) {
+      Await (logReferralData(userId, referralData));
+    }
+    
     return user;
 });
 

@@ -1,5 +1,5 @@
 const referralParams = {
-    REFERRING_USER: 'referring_user',
+    REFERRING_USER: 'referringUser',
 }
 
 // 'utm_medium'

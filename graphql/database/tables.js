@@ -17,6 +17,7 @@ const tables = {
 	backgroundImages: 'BackgroundImages',
 	widgets: 'Widgets',
 	userWidgets: 'UserWidgets',
+	referralDataLog: 'ReferralDataLog'
 };
 
 export default mapValues(tables, (name) => `${name}${tableNameAppendix}`);
