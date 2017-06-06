@@ -13,7 +13,8 @@ import {
   GraphQLNonNull,
   GraphQLObjectType,
   GraphQLSchema,
-  GraphQLString
+  GraphQLString,
+  GraphQLInputObjectType
 } from 'graphql';
 
 import {
@@ -632,6 +633,13 @@ const updateWidgetConfigMutation = mutationWithClientMutationId({
   }
 });
 
+const ReferralDataInput = new GraphQLInputObjectType({
+  name: 'ReferralData',
+  fields: {
+    referringUser: { type: new GraphQLNonNull(GraphQLString) }
+  }
+});
+
 /**
  * Create a new user.
  */
@@ -639,7 +647,8 @@ const createNewUserMutation = mutationWithClientMutationId({
   name: 'CreateNewUser',
   inputFields: {
     userId: { type: new GraphQLNonNull(GraphQLString) },
-    email: { type: new GraphQLNonNull(GraphQLString) }
+    email: { type: new GraphQLNonNull(GraphQLString) },
+    referralData: { type: ReferralDataInput }
   },
   outputFields: {
     user: {
@@ -647,8 +656,8 @@ const createNewUserMutation = mutationWithClientMutationId({
       resolve: user => user
     }
   },
-  mutateAndGetPayload: ({userId, email}) => {
-    return createUser(userId, email);
+  mutateAndGetPayload: ({userId, email, referralData}) => {
+    return createUser(userId, email, referralData);
   }
 });
 

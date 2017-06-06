@@ -101,6 +101,7 @@ type CharityEdge {
 input CreateNewUserInput {
   userId: String!
   email: String!
+  referralData: ReferralData
   clientMutationId: String
 }
 
@@ -179,6 +180,10 @@ type Query {
   ): Node
   app: App
   user(userId: String!): User
+}
+
+input ReferralData {
+  referringUser: String!
 }
 
 input RemoveBookmarkInput {

@@ -6,6 +6,7 @@ import PasswordField from 'general/PasswordField';
 import Snackbar from 'material-ui/Snackbar';
 import { login, getOrCreate, getCurrentUser } from '../../utils/cognito-auth';
 import { goTo, goToDashboard, goToLogin } from 'navigation/navigation';
+import { getReferralData } from 'web-utils';
 
 import CreateNewUserMutation from 'mutations/CreateNewUserMutation';
 
@@ -90,10 +91,13 @@ class LoginForm extends React.Component {
         const sub = user.sub;
         const email = user.email;
 
+        const referralData = getReferralData();
+
         CreateNewUserMutation.commit(
           environment,
           sub,
           email,
+          referralData,
           (response) => {
             goToDashboard();
           },

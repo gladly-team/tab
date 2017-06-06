@@ -2,6 +2,7 @@ import React from 'react';
 import { IndexRoute, Route, Redirect } from 'react-router';
 
 import BaseContainer from 'general/BaseContainer';
+import DownloadApp from 'general/DownloadApp';
 
 import AppView from '../components/App/AppView';
 import DashboardView from '../components/Dashboard/DashboardView';
@@ -16,6 +17,7 @@ import WidgetsSettingsView from '../components/Settings/Widgets/WidgetsSettingsV
 
 export default (
   <Route path='/' component={BaseContainer}>
+    <Route path='get-tab' component={DownloadApp}/>
     <IndexRoute component={Authentication}/>
     <Route path='auth' component={BaseContainer}>
         <IndexRoute component={Authentication}/>
