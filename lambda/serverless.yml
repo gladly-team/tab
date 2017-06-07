@@ -40,6 +40,13 @@ package:
     - build/**
 
 functions:
+  migrate:
+    handler: build/migrate/migrate.serverlessHandler
+    events:
+      - http:
+          path: migrate/
+          method: get
+          cors: true
   hearts:
     handler: build/hearts/hearts.serverlessHandler
     events:
