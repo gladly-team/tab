@@ -657,7 +657,9 @@ const createNewUserMutation = mutationWithClientMutationId({
     }
   },
   mutateAndGetPayload: ({userId, email, referralData}) => {
-    return createUser(userId, email, referralData);
+    const user = new User(userId);
+    user.email = email;
+    return createUser(user, referralData);
   }
 });
 

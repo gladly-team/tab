@@ -30,7 +30,7 @@ tfacMgr.fetchUserProfile = (userId) => {
 		vcAllTime: 248,
 		level: 4,
 		heartsUntilNextLevel: 10,
-		backgroundOption: 'image', // image | color | custom 
+		backgroundOption: 'photo', // photo | color | custom | daily
 		backgroundImage: 'Mountain Lake',
 		backgroundColor: '#232323',
 		customImage: 'path/to/image'

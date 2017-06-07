@@ -81,19 +81,14 @@ User.BACKGROUND_OPTION_PHOTO = 'photo';
 
 /**
  * Creates a new user.
- * @param {string} userId - The new user id.
- * @param {string} email - The new user email.
+ * @param {Object<User>} user - The user instance.
  * @return {Promise<User>}  A promise that resolve into a User instance.
  */
-var createUser =  Async (function(userId, email, referralData) {
-    const user = new User(userId);
-    user.email = email;
+var createUser =  Async (function(user, referralData) {
     Await (User.add(user));
-    
     if(referralData) {
       Await (logReferralData(userId, referralData));
     }
-    
     return user;
 });
 
