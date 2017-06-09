@@ -31,7 +31,7 @@ tfacMgr.fetchUserProfile = (userId) => {
 		level: 4,
 		heartsUntilNextLevel: 10,
 		backgroundOption: 'photo', // photo | color | custom | daily
-		backgroundImage: 'Mountain Lake',
+		backgroundImage: 'Puppy Eyes',
 		backgroundColor: '#232323',
 		customImage: 'path/to/image'
 	};

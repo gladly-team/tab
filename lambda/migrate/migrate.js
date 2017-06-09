@@ -79,10 +79,12 @@ const setUserProfile = Async((userProfile) => {
     user.customImage = userProfile.customImage || null;
     user.backgroundColor = userProfile.backgroundColor || null;
 
+
     Await (createUser(user));
     
     return true;
   } catch(err) {
+    console.log('Error while setting the user profile data', err);
     // Log the err in here
     return false;
   }
@@ -109,7 +111,7 @@ const setBookmarksData = Async((userId, bookmarks) => {
 
     return true;
   } catch(err) {
-    // Log the err in here
+    console.log('Error while setting the bookmarks data', err);
     return false;
   }
 });
