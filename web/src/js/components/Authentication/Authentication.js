@@ -3,8 +3,10 @@ import EmailForm from './EmailForm';
 import LoginForm from './LoginForm';
 import SignUpForm from './SignUpForm';
 import ConfirmationForm from './ConfirmationForm';
-import { getCurrentUser } from '../../utils/cognito-auth';
+import { getCurrentUser, login } from '../../utils/cognito-auth';
 import { goTo, goToDashboard } from 'navigation/navigation';
+
+import { getUserCredentials } from '../../utils/tfac-mgr';
 
 class Authentication extends React.Component {
 
@@ -21,8 +23,25 @@ class Authentication extends React.Component {
     getCurrentUser((user) => {
       if (user && user.sub) {
         goToDashboard();
+        return;
       }
+
+      // Auto login from migration.
+      this.tryToLoginWithTfac();
     });
+
+  }
+
+  // Auto login from migration.
+  tryToLoginWithTfac() {
+    getUserCredentials()
+      .then(user => {
+          login(user.email, user.password, (res) => {
+            goToDashboard();
+          }, (err) => {
+            console.log(err);
+          });
+      })
   }
 
   onEmailSet(email) {
