@@ -87,7 +87,7 @@ User.BACKGROUND_OPTION_PHOTO = 'photo';
 var createUser =  Async (function(user, referralData) {
     Await (User.add(user));
     if(referralData) {
-      Await (logReferralData(userId, referralData));
+      Await (logReferralData(user.id, referralData));
     }
     return user;
 });
