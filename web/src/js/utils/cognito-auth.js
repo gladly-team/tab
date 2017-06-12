@@ -51,7 +51,7 @@ function getOrCreate(email, password, onSuccess, onFailure) {
     (err) => {
       if(err.statusCode === 400) {
         if(err.code === 'UserNotFoundException') {
-          signup(email, password, (res) => onSuccess(res, true), onFailure);
+          signup(email, password, (res) => onSuccess(res, true, res.userConfirmed), onFailure);
         } else if(err.code === 'NotAuthorizedException') {
           onFailure(err);
         } else if(err.code === 'UserNotConfirmedException') {
@@ -110,7 +110,7 @@ function signup(email, password, onSuccessCallback, onFailureCallback) {
         onFailureCallback(err);
         return;
       }
-
+      console.log('signup', result);
       onSuccessCallback(result);
     });
 }
@@ -169,14 +169,13 @@ function getCurrentUser(callback) {
   if (cognitoUser != null) {
     	cognitoUser.getSession(function(err, session) {
         if (err) {
-          alert(err);
+          callback(null);
           return;
         }
 
         // NOTE: getSession must be called to authenticate user before calling getUserAttributes
         cognitoUser.getUserAttributes(function(err, attributes) {
           if (err) {
-            console.error(err);
             callback(null);
           } else {
             const user = {};

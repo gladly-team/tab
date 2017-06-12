@@ -45,11 +45,15 @@ class LoginForm extends React.Component {
             this.createNewUser();
             return;
           }
-
-          if(!created && confirmed) {
-            goToDashboard();
+          
+          if(confirmed) {
+            if(!created) {
+              goToDashboard();
+            } else {
+              this.onConfirmed(password);
+            }
             return;
-          } 
+          }
 
           this.setState({
             password: password,
@@ -72,8 +76,9 @@ class LoginForm extends React.Component {
       });
   }
 
-  onConfirmed() {
-    this.logUserIn(this.state.password, this.createNewUser, (err) => {
+  onConfirmed(password) {
+    password = password || this.state.password;
+    this.logUserIn(password, this.createNewUser, (err) => {
       this.showAlert(err.message);
       this.setState({
         confirmed: true,
