@@ -1,7 +1,7 @@
 jest.mock('../tfac_auth');
 
-var mockRegisterUser = jest.fn((user) => {
-  return Promise.resolve({
+var mockRegisterUser = jest.fn((email, password, onSuccessCallback, onFailureCallback) => {
+  onSuccessCallback({
     sub: 'some-sub',
     email: 'user@email.com',
     password: 'SomeUserPassword1'
@@ -24,7 +24,7 @@ describe('Migrate Auth', function() {
   });
 
   it('migrate auth returns 200 when migration finish', () => {
-    return migrateAuth.handler({ queryStringParameters: { id: 'abc123' }})
+    return migrateAuth.handler({ queryStringParameters: { id: 'abc123', email: 'user@email.com' }})
       .then( response => {
           expect(response.statusCode).toBe(200);
           expect(response.body).toBe(JSON.stringify({
@@ -48,7 +48,12 @@ describe('Migrate Auth', function() {
                   calls[mockRegisterUser.mock.calls.length - 1];
           
           expect(registerUser[0]).toBe(parameters.email);
-          expect(registerUser[1]).toBe('SomePassword1');
+
+          const p = registerUser[1];
+          const passwordCorrect = (/[a-z]/.test(p)) && 
+              (/[A-Z]/.test(p)) && (/[0-9]/.test(p));
+
+          expect(passwordCorrect).toBe(true);
       });
   });
 

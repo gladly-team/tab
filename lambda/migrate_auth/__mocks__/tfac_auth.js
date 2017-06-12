@@ -1,8 +1,4 @@
 
-var urls = {
-	setCognitoCredentials: 'http://tab.gladly.io/url/to/setcognitocredentials/endpoint',
-};
-
 var tfacMgr = {};
 
 /**

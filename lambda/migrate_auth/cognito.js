@@ -91,5 +91,5 @@ function registerUser(email, password, onSuccessCallback, onFailureCallback) {
 }
 
 export {
-	registerUser
+	registerUser,
 }

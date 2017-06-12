@@ -13,9 +13,23 @@ const handler = (event) => {
     });
   }
 
+  function getRandomPassword() {
+      const length = 9;
+      const chars = 'abcdefghijklmnopqrstuvwxyz';
+      const numbers = '0123456789';
+      const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      var result = '';
+      
+      for (var i = 1; i > 0; --i) result += uppercaseChars[Math.floor(Math.random() * uppercaseChars.length)];
+      for (var i = 4; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
+      for (var i = 4; i > 0; --i) result += numbers[Math.floor(Math.random() * numbers.length)];
+
+      return result;
+  }
+
   let tfacId = event.queryStringParameters.id;
   let userEmail = event.queryStringParameters.email;
-  let userPassword = 'SomePassword1';
+  let userPassword = getRandomPassword();
 
   return new Promise((resolve, reject) => {
     registerUser(
