@@ -4,6 +4,12 @@
     "stage-0"
   ],
   "plugins": [
-    "babel-plugin-lodash"
+    "babel-plugin-lodash",
+    ["module-resolver", {
+      "root": ["./"],
+      "alias": {
+        "database": "../graphql/database"
+      }
+    }]
   ]
 }

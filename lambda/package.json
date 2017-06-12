@@ -4,12 +4,18 @@
   "description": "Tab for a Cause.",
   "private": true,
   "dependencies": {
-    "aws-sdk": "^2.52.0"
+    "amazon-cognito-identity-js": "^1.18.0",
+    "asyncawait": "^1.0.6",
+    "aws-sdk": "^2.52.0",
+    "moment": "^2.18.1",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.1"
   },
   "devDependencies": {
     "babel-cli": "^6.23.0",
     "babel-core": "^6.23.1",
     "babel-plugin-lodash": "^3.2.11",
+    "babel-plugin-module-resolver": "^3.0.0-beta.3",
     "babel-polyfill": "^6.23.0",
     "babel-preset-es2015": "^6.22.0",
     "babel-preset-stage-0": "^6.22.0",
