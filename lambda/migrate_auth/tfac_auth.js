@@ -33,9 +33,6 @@ tfacMgr.setCognitoCredentials = (tfacUserId, userCognito) => {
 	 
 	return rp(options)
 			    .then((response) => response)
-			    .catch((err) => {
-			        console.error('Error while sending the cognito credentials')
-			    });
 }
 
 export default tfacMgr;

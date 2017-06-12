@@ -17,23 +17,36 @@ const handler = (event) => {
   let userEmail = event.queryStringParameters.email;
   let userPassword = 'SomePassword1';
 
-  registerUser(
-    userEmail, 
-    userPassword, 
-    (user) => {
-      tfac.setCognitoCredentials(tfacId, {
-        sub: user.sub,
-        email: user.email,
-        password: userPassword
+  return new Promise((resolve, reject) => {
+    registerUser(
+      userEmail, 
+      userPassword, 
+      (user) => {
+        const data = {
+          sub: user.sub,
+          email: user.email,
+          password: userPassword
+        };
+        tfac.setCognitoCredentials(tfacId, data)
+                    .then((response) => {
+                      resolve({
+                        statusCode: 200,
+                        body: JSON.stringify({ message: 'User created.' }),
+                      });
+                    })
+                    .catch((err) => {
+                        resolve({
+                          statusCode: 400,
+                          body: JSON.stringify({ message: 'Error while sending credentials to tfac.', error: err }),
+                        });
+                    });
+      },
+      (error) => {
+        resolve({
+          statusCode: 400,
+          body: JSON.stringify({ message: 'An error ocurred while user registration', error: error }),
+        });
       });
-    },
-    (error) => {
-      console.log('An error ocurred while user registration', error);
-    });
-
-  return Promise.resolve({
-    statusCode: 200,
-    body: JSON.stringify({ message: 'User created.' }),
   });
 };
 
