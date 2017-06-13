@@ -6,7 +6,6 @@
 ## Developing
 
 ### Prerequesites
-* [Node.js](https://nodejs.org/en/) 6+
 * [Docker Engine](https://docs.docker.com/engine/installation/)
 * [Yarn](https://yarnpkg.com/en/)
 
@@ -14,7 +13,7 @@
 
 1. Clone this repository.
 2. In the top level directory, run `yarn run build`. This installs dependencies and builds Docker images.
-3. Run `npm start`.
+3. Run `yarn start`.
 4. On first run, you'll have to create database tables and load fixtures.
     * `cd dynamodb`
     * `yarn run init`
