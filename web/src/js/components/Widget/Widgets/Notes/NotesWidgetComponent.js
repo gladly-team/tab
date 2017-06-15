@@ -2,19 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 
+import WidgetSharedSpace from 'general/WidgetSharedSpace';
+import Note from './Note';
+import NotesHeader from './NotesHeader';
 import UpdateWidgetDataMutation from 'mutations/UpdateWidgetDataMutation';
 
 import Popover from 'material-ui/Popover';
 import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
-import {List, ListItem} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
-import Paper from 'material-ui/Paper';
-import TextField from 'material-ui/TextField';
 
 import {
   grey300,
-  grey700,
 } from 'material-ui/styles/colors';
 
 class NotesWidget extends React.Component {
@@ -29,7 +28,6 @@ class NotesWidget extends React.Component {
       open: false,
       notes: [],
       saved: true,
-      hovering: -1,
     };
   }
 
@@ -40,7 +38,6 @@ class NotesWidget extends React.Component {
     this.setState({
       notes: notes,
       open: widget.visible,
-      anchorEl: ReactDOM.findDOMNode(this.bIcon),
     });
   }
 
@@ -50,37 +47,21 @@ class NotesWidget extends React.Component {
     }
   }
 
-  handleRequestOpen(event) {
-
-    // This prevents ghost click.
-    event.preventDefault();
+  toggleWidgetContent() {
+    const open = !this.state.open;
 
     this.setState({
-      open: true,
-      anchorEl: event.currentTarget,
+      open: open,
     });
 
-    this.props.popoverWidgetVisibilityChanged(
-      this.props.user, this.props.widget, true);
+    this.props.widgetVisibilityChanged(
+      this.props.user, this.props.widget, open);
   }
 
-  handleRequestClose() {
-    this.setState({
-      open: false,
-      addForm: false,
-    });
-
-    this.props.popoverWidgetVisibilityChanged(
-      this.props.user, this.props.widget, false);
-  }
-
-  onNoteUpdated(index) {
+  onNoteUpdated(index, content) {
     if(this.updateNoteTimer){
       clearTimeout(this.updateNoteTimer);
     }
-
-    const noteElm = this.noteElms['note' + index];
-    const content = noteElm.input.refs.input.value;
 
     this.state.notes[index].content = content;
     this.setState({
@@ -144,21 +125,6 @@ class NotesWidget extends React.Component {
     this.updateWidget();
   }
 
-  onNoteMouseOver(index) {
-    // this.setState({
-    //   hovering: index,
-    // });
-  }
-
-  onNoteMouseLeave(index) {
-    // if(this.state.hovering == index) {
-    //   this.setState({
-    //     hovering: -1,
-    //   });
-    // }
-  }
-
-
   // This is a temporary solution since we are updating the 
   // widget data, if we have specific mutations for the notes
   // then we should generate the id of the note on the server.
@@ -170,12 +136,6 @@ class NotesWidget extends React.Component {
   }
 
   render() {
-    const { widget } = this.props; 
-
-    const containerStyle = {
-      backgroundColor: 'rgba(0,0,0,.54)',
-      width: 300,
-    }
 
     const notesContainer = {
       display: 'flex',
@@ -183,99 +143,39 @@ class NotesWidget extends React.Component {
       maxHeight: 500,
     }
 
-    const headerStyle = {
-      color: '#FFF',
-    }
-
-    const defaultPaper = {
-      color: '#000',
-      margin: 10,
-      marginBottom: 5,
-      marginTop: 5
-    }
-
-    const noteContent = {
-      padding: 15,
-      color: '#000',
-    }
-
-    const underlineStyle = {
-      borderColor: 'transparent',
-    }
-
-    const addNoteBtn = {
-      position: 'absolute',
-      right: 5,
-    }
-
-    const removeNoteBtn = {
-      position: 'relative',
-      float: 'right',
+    var widgetContent;
+    if(this.state.open){
+      widgetContent = (
+          <WidgetSharedSpace>
+            <div style={notesContainer}>
+              <NotesHeader
+                addNote={this.addStickyNote.bind(this)}/>
+              {this.state.notes.map((note, index) => {
+                  return (
+                    <Note
+                      key={note.id}
+                      index={index}
+                      removeStickyNote={this.removeStickyNote.bind(this)}
+                      onNoteUpdated={this.onNoteUpdated.bind(this)}
+                      note={note}>
+                    </Note>
+                  );
+              })}
+            </div>
+          </WidgetSharedSpace>
+      );
     }
 
     return (
         <div>
-          <IconButton 
-              ref={(bIcon) => { this.bIcon = bIcon; }}
-              tooltip={widget.name}
-              onClick={this.handleRequestOpen.bind(this)}>
+          <IconButton
+              onClick={this.toggleWidgetContent.bind(this)}>
                 <FontIcon
                   color={grey300}
                   hoverColor={'#FFF'}
                   className="fa fa-sticky-note-o"/>
           </IconButton>
-          <Popover
-            style={containerStyle}
-            open={this.state.open}
-            anchorEl={this.state.anchorEl}
-            anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
-            targetOrigin={{horizontal: 'left', vertical: 'top'}}
-            onRequestClose={this.handleRequestClose.bind(this)}>
-              <div style={notesContainer}>
-                <Subheader style={headerStyle}>Notes
-                      <IconButton
-                          style={addNoteBtn}
-                          onClick={this.addStickyNote.bind(this)}>
-                            <FontIcon
-                              color={'#FFF'}
-                              hoverColor={'#FFF'}
-                              className={'fa fa-plus'}/>
-                      </IconButton>
-                </Subheader>
-                {this.state.notes.map((note, index) => {
-                    return (<Paper 
-                              onMouseOver={this.onNoteMouseOver.bind(this, index)}
-                              onMouseLeave={this.onNoteMouseLeave.bind(this, index)}
-                              key={note.id}
-                              style={Object.assign({}, defaultPaper, {
-                                backgroundColor: note.color
-                              })}  
-                              zDepth={2} 
-                              rounded={false}>
-                                <IconButton
-                                    style={removeNoteBtn}
-                                    onClick={this.removeStickyNote.bind(this, index)}>
-                                      <FontIcon
-                                        color={grey700}
-                                        hoverColor={'#000'}
-                                        className={'fa fa-times'}/>
-                                </IconButton>
-                                <div style={noteContent}>
-                                  <TextField
-                                    ref={(input) => { this.noteElms["note" + index] = input; }}
-                                    onChange={this.onNoteUpdated.bind(this, index)}
-                                    id={"note" + index}
-                                    defaultValue={note.content}
-                                    hintText={"Your note here..."}
-                                    underlineStyle={underlineStyle}
-                                    underlineFocusStyle={underlineStyle}
-                                    multiLine={true}/>
-                                </div>
-                            </Paper>
-                    );
-                })}
-              </div>
-          </Popover>
+          {widgetContent}
         </div>);
   }
 }
@@ -283,7 +183,7 @@ class NotesWidget extends React.Component {
 NotesWidget.propTypes = {
   widget: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired,
-  popoverWidgetVisibilityChanged: PropTypes.func.isRequired
+  widgetVisibilityChanged: PropTypes.func.isRequired
 };
 
 export default NotesWidget;

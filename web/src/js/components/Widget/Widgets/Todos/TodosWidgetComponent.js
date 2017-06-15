@@ -51,7 +51,7 @@ class TodosWidget extends React.Component {
       open: false,
     });
 
-    this.props.popoverWidgetVisibilityChanged(
+    this.props.widgetVisibilityChanged(
       this.props.user, this.props.widget, false);
   }
 
@@ -65,7 +65,7 @@ class TodosWidget extends React.Component {
       anchorEl: event.currentTarget,
     });
 
-    this.props.popoverWidgetVisibilityChanged(
+    this.props.widgetVisibilityChanged(
       this.props.user, this.props.widget, true);
   }
 
@@ -320,7 +320,7 @@ class TodosWidget extends React.Component {
 TodosWidget.propTypes = {
   widget: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired,
-  popoverWidgetVisibilityChanged: PropTypes.func.isRequired
+  widgetVisibilityChanged: PropTypes.func.isRequired
 };
 
 export default TodosWidget;

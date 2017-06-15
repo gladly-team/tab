@@ -12,7 +12,7 @@ import TodosWidget from './Widgets/Todos/TodosWidgetContainer';
 
 class Widget extends React.Component {
 
-  popoverWidgetVisibilityChanged(user, widget, visible) {
+  widgetVisibilityChanged(user, widget, visible) {
     UpdateWidgetVisibilityMutation.commit(
       this.props.relay.environment,
       user,
@@ -29,7 +29,7 @@ class Widget extends React.Component {
         return (<BookmarksWidget 
                   widget={widget}
                   user={user}
-                  popoverWidgetVisibilityChanged={this.popoverWidgetVisibilityChanged.bind(this)}/>)
+                  widgetVisibilityChanged={this.widgetVisibilityChanged.bind(this)}/>)
       case 'search':
         return (<SearchWidget 
                   widget={widget}
@@ -44,13 +44,13 @@ class Widget extends React.Component {
         return (<NotesWidget 
                   widget={widget}
                   user={user}
-                  popoverWidgetVisibilityChanged={this.popoverWidgetVisibilityChanged.bind(this)}/>)
+                  widgetVisibilityChanged={this.widgetVisibilityChanged.bind(this)}/>)
 
       case 'todos':
         return (<TodosWidget 
                   widget={widget}
                   user={user}
-                  popoverWidgetVisibilityChanged={this.popoverWidgetVisibilityChanged.bind(this)}/>)
+                  widgetVisibilityChanged={this.widgetVisibilityChanged.bind(this)}/>)
       default:
         return null;
     }
