@@ -19,27 +19,27 @@ class BookmarksWidget extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      open: false,
-    };
+    // this.state = {
+    //   open: false,
+    // };
   }
 
-  componentDidMount() {
-    this.setState({
-      open: this.props.widget.visible,
-    });
-  }
+  // componentDidMount() {
+  //   this.setState({
+  //     open: this.props.widget.visible,
+  //   });
+  // }
 
-  toggleWidgetContent() {
-    const open = !this.state.open;
+  // toggleWidgetContent() {
+  //   const open = !this.state.open;
 
-    this.setState({
-      open: open,
-    });
+  //   this.setState({
+  //     open: open,
+  //   });
 
-    this.props.widgetVisibilityChanged(
-      this.props.user, this.props.widget, open);
-  }
+  //   this.props.widgetVisibilityChanged(
+  //     this.props.user, this.props.widget, open);
+  // }
 
   getFavicon(link) {
     return "https://www.google.com/s2/favicons?domain_url=" + encodeURI(link);
@@ -78,10 +78,7 @@ class BookmarksWidget extends React.Component {
       flexWrap: 'wrap',
     }
 
-    var widgetContent;
-    if(this.state.open){
-      widgetContent = (
-          <WidgetSharedSpace>
+    return (<WidgetSharedSpace>
             <AddBookmarkForm
               addBookmark={this.addBookmark.bind(this)}/>
             <div style={wrapper}>
@@ -96,21 +93,7 @@ class BookmarksWidget extends React.Component {
                 })
               }
             </div>
-          </WidgetSharedSpace>
-      );
-    }
-
-    return (
-        <div>
-          <IconButton 
-              onClick={this.toggleWidgetContent.bind(this)}>
-                <FontIcon
-                  color={appTheme.fontIcon.color}
-                  hoverColor={appTheme.fontIcon.hoverColor}
-                  className="fa fa-bookmark-o"/>
-          </IconButton>
-          {widgetContent}
-        </div>);
+          </WidgetSharedSpace>);
   }
 }
 

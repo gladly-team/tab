@@ -2,7 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
+import WidgetSharedSpace from 'general/WidgetSharedSpace';
 import UpdateWidgetDataMutation from 'mutations/UpdateWidgetDataMutation';
+import Todo from './Todo';
 
 import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
@@ -18,6 +20,8 @@ import RadioButtonUnchecked from 'material-ui/svg-icons/toggle/radio-button-unch
 
 import SvgIcon from 'material-ui/SvgIcon';
 
+import appTheme from 'theme/default';
+
 import {
   grey300,
 } from 'material-ui/styles/colors';
@@ -28,7 +32,7 @@ class TodosWidget extends React.Component {
     super(props);
     
     this.state = {
-      open: false,
+      // open: false,
       completed: [],
       todos: [],
     }
@@ -41,33 +45,20 @@ class TodosWidget extends React.Component {
     this.setState({
       completed: data.completed || [],
       todos: data.todos || [],
-      open: widget.visible,
-      anchorEl: ReactDOM.findDOMNode(this.bIcon),
+      // open: widget.visible,
     });
   }
 
-  handleRequestClose() {
-    this.setState({
-      open: false,
-    });
+  // toggleWidgetContent() {
+  //   const open = !this.state.open;
 
-    this.props.widgetVisibilityChanged(
-      this.props.user, this.props.widget, false);
-  }
+  //   this.setState({
+  //     open: open,
+  //   });
 
-  handleRequestOpen(event) {
-
-    // This prevents ghost click.
-    event.preventDefault();
-
-    this.setState({
-      open: true,
-      anchorEl: event.currentTarget,
-    });
-
-    this.props.widgetVisibilityChanged(
-      this.props.user, this.props.widget, true);
-  }
+  //   this.props.widgetVisibilityChanged(
+  //     this.props.user, this.props.widget, open);
+  // }
 
   _handleKeyPress(e) {
     if (e.key === 'Enter') {
@@ -166,43 +157,29 @@ class TodosWidget extends React.Component {
 
     const headerStyle = {
       color: '#FFF',
+      fontSize: 14,
+      fontFamily: appTheme.fontFamily,
     }
 
     const todosContainer = {
       display: 'flex',
       flexDirection: 'column',
-      maxHeight: 500,
     }
 
-    const todoListItem = {
-      color: "#FFF",
-    }
-
-    const completedListItem = {
-      color: "#FFF",
-      textDecoration: 'line-through',
-    }
-
-    const checkedIcon = (
-      <CheckCircle
-          color="FFF"
-          style={{color: '#FFF'}}/>);
-
-    const uncheckedIcon =(
-      <SvgIcon color={'#FFF'}>
-        <svg fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
-            <path d="M0 0h24v24H0z" fill="none"/>
-        </svg>
-      </SvgIcon>
-    );
 
     const floatingLabelStyle = {
       color: '#FFF',
+      fontFamily: appTheme.fontFamily,
+      backgroundColor: appTheme.palette.primary1Color,
+      borderRadius: 16,
+      padding: 5,
+      paddingLeft: 12,
+      paddingRight: 12,
     }
 
     const floatingLabelFocusStyle = {
       color: '#FFF',
+      backgroundColor: 'transparent',
     }
 
     const underlineStyle = {
@@ -215,46 +192,32 @@ class TodosWidget extends React.Component {
 
     const addTodoContainer = {
       display: 'flex',
-      justifyContent: 'center',
-      position: 'relative',
-      top: -20,
+      justifyContent: 'flex-start',
     }
 
     const addTodoStyle = {
+      top: -20,
+    }
+
+    const addTodoInpuStyle = {
       color: '#FFF',
+      fontSize: 14,
+      fontFamily: appTheme.fontFamily,
     }
 
     const removeIconStyle = {
       fontSize: '14px'
     }
 
-    return (
-        <div>
-          <IconButton 
-              ref={(bIcon) => { this.bIcon = bIcon; }}
-              tooltip={widget.name}
-              onClick={this.handleRequestOpen.bind(this)}>
-                <FontIcon
-                  color={grey300}
-                  hoverColor={'#FFF'}
-                  className="fa fa-list-ul"/>
-          </IconButton>
-          <Popover
-            style={containerStyle}
-            open={this.state.open}
-            anchorEl={this.state.anchorEl}
-            anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
-            targetOrigin={{horizontal: 'left', vertical: 'top'}}
-            onRequestClose={this.handleRequestClose.bind(this)}>
+    return (<WidgetSharedSpace>
               <div style={todosContainer}>
-                <List>
-                  <Subheader style={headerStyle}>Todos</Subheader>
                   <div style={addTodoContainer}>
                     <TextField
                       ref={(input) => { this.newTodo = input; }}
                       onKeyPress = {this._handleKeyPress.bind(this)}
-                      inputStyle={addTodoStyle}
-                      floatingLabelText="Add new"
+                      style={addTodoStyle}
+                      inputStyle={addTodoInpuStyle}
+                      floatingLabelText="Add new Todo"
                       floatingLabelStyle={floatingLabelStyle}
                       floatingLabelFocusStyle={floatingLabelFocusStyle}
                       underlineStyle={underlineStyle}
@@ -262,58 +225,30 @@ class TodosWidget extends React.Component {
                   </div>
                   {this.state.todos.map((todo, index) => {
                       return (
-                        <ListItem
-                          style={todoListItem}
+                        <Todo
                           key={todo.id}
-                          rightIconButton={
-                            (<IconButton
-                                onClick={this.removeTodo.bind(this, index)}>
-                                  <FontIcon
-                                    color={grey300}
-                                    hoverColor={'#FFF'}
-                                    className="fa fa-times"/>
-                            </IconButton>)
-                          }
-                          leftCheckbox={
-                            <Checkbox
-                              onCheck={this.completeTodo.bind(this, index)}
-                              defaultChecked={false}
-                              checkedIcon={checkedIcon}
-                              uncheckedIcon={uncheckedIcon} />
-                          }
-                          primaryText={todo.text}/>);
+                          todo={todo}
+                          index={index}
+                          completed={false}
+                          onCompletedChange={this.completeTodo.bind(this)}
+                          remove={this.removeTodo.bind(this)}/>
+                      );
                   })}
                   
                   <Subheader style={headerStyle}>Completed</Subheader>
                   {this.state.completed.map((todo, index) => {
                       return (
-                        <ListItem
+                        <Todo
                           key={todo.id}
-                          style={completedListItem}
-                          rightIconButton={
-                            (<IconButton
-                                onClick={this.removeCompletedTodo.bind(this, index)}>
-                                  <FontIcon
-                                    style={removeIconStyle}
-                                    color={grey300}
-                                    hoverColor={'#FFF'}
-                                    className="fa fa-times"/>
-                            </IconButton>)
-                          }
-                          leftCheckbox={
-                            <Checkbox
-                              onCheck={this.setNotCompleted.bind(this, index)}
-                              defaultChecked={true}
-                              checkedIcon={checkedIcon}
-                              uncheckedIcon={uncheckedIcon} />
-                          }
-                          primaryText={todo.text}/>);
+                          todo={todo}
+                          index={index}
+                          completed={true}
+                          onCompletedChange={this.setNotCompleted.bind(this)}
+                          remove={this.removeCompletedTodo.bind(this)}/>
+                        );
                   })}
-                </List>
               </div>
-
-          </Popover>
-        </div>);
+          </WidgetSharedSpace>);
   }
 }
 

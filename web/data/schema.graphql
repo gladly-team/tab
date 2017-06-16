@@ -148,6 +148,7 @@ type Mutation {
   updateWidgetConfig(input: UpdateWidgetConfigInput!): UpdateWidgetConfigPayload
   addBookmark(input: AddBookmarkInput!): AddBookmarkPayload
   removeBookmark(input: RemoveBookmarkInput!): RemoveBookmarkPayload
+  setUserActiveWidget(input: SetUserActiveWidgetInput!): SetUserActiveWidgetPayload
   createNewUser(input: CreateNewUserInput!): CreateNewUserPayload
 }
 
@@ -195,6 +196,17 @@ input RemoveBookmarkInput {
 
 type RemoveBookmarkPayload {
   widget: Widget
+  clientMutationId: String
+}
+
+input SetUserActiveWidgetInput {
+  userId: String!
+  widgetId: String!
+  clientMutationId: String
+}
+
+type SetUserActiveWidgetPayload {
+  user: User
   clientMutationId: String
 }
 
@@ -327,6 +339,9 @@ type User implements Node {
 
   # User widgets
   widgets(after: String, first: Int, before: String, last: Int, enabled: Boolean): WidgetConnection
+
+  # User's active widget id
+  activeWidget: String
 
   # User's background option
   backgroundOption: String

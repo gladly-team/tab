@@ -14,6 +14,10 @@ class WidgetSharedSpace extends React.Component {
       left: 20,
       backgroundColor: 'transparent',
       width: 300,
+      height: '80vh',
+      overflowX: 'hidden',
+      overflowY: 'scroll',
+      padding: 10,
     }
 
     return (

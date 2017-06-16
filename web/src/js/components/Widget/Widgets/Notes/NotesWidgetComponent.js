@@ -25,7 +25,7 @@ class NotesWidget extends React.Component {
     this.noteColors = ["#A5D6A7", "#FFF59D", "#FFF", "#FF4081", "#2196F3", "#757575", "#FF3D00"]
 
     this.state = {
-      open: false,
+      // open: false,
       notes: [],
       saved: true,
     };
@@ -37,7 +37,7 @@ class NotesWidget extends React.Component {
     const notes = data.notes || [];
     this.setState({
       notes: notes,
-      open: widget.visible,
+      // open: widget.visible,
     });
   }
 
@@ -47,16 +47,16 @@ class NotesWidget extends React.Component {
     }
   }
 
-  toggleWidgetContent() {
-    const open = !this.state.open;
+  // toggleWidgetContent() {
+  //   const open = !this.state.open;
 
-    this.setState({
-      open: open,
-    });
+  //   this.setState({
+  //     open: open,
+  //   });
 
-    this.props.widgetVisibilityChanged(
-      this.props.user, this.props.widget, open);
-  }
+  //   this.props.widgetVisibilityChanged(
+  //     this.props.user, this.props.widget, open);
+  // }
 
   onNoteUpdated(index, content) {
     if(this.updateNoteTimer){
@@ -143,10 +143,7 @@ class NotesWidget extends React.Component {
       maxHeight: 500,
     }
 
-    var widgetContent;
-    if(this.state.open){
-      widgetContent = (
-          <WidgetSharedSpace>
+    return (<WidgetSharedSpace>
             <div style={notesContainer}>
               <NotesHeader
                 addNote={this.addStickyNote.bind(this)}/>
@@ -162,21 +159,7 @@ class NotesWidget extends React.Component {
                   );
               })}
             </div>
-          </WidgetSharedSpace>
-      );
-    }
-
-    return (
-        <div>
-          <IconButton
-              onClick={this.toggleWidgetContent.bind(this)}>
-                <FontIcon
-                  color={grey300}
-                  hoverColor={'#FFF'}
-                  className="fa fa-sticky-note-o"/>
-          </IconButton>
-          {widgetContent}
-        </div>);
+          </WidgetSharedSpace>);
   }
 }
 
