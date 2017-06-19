@@ -1,5 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
+import FadeInAnimation from 'general/FadeInAnimation';
+
 import { goTo, goToDashboard } from 'navigation/navigation';
 import AppBar from 'material-ui/AppBar';
 import FontIcon from 'material-ui/FontIcon';
@@ -100,30 +103,34 @@ class Settings extends React.Component {
     );
 
     return (
-    	<div style={settings}>
-          <AppBar
-            title="Settings"
-            iconClassNameLeft="fa fa-arrow-left"
-            onLeftIconButtonTouchTap={this.goToHome.bind(this)}
-            iconElementRight={logoutBtn}/>
-          <Drawer>
-            <AppBar 
-              title="Settings" 
+      <FadeInAnimation>
+      	<div 
+          key={'settings-view-key'}
+          style={settings}>
+            <AppBar
+              title="Settings"
               iconClassNameLeft="fa fa-arrow-left"
-              onLeftIconButtonTouchTap={this.goToHome.bind(this)}/>
-            <MenuItem 
-                style={widgets}
-                onClick={this.openSettingsFor.bind(this, 'widgets')}>
-                Widgets
-            </MenuItem>
-            <MenuItem 
-              style={background}
-              onClick={this.openSettingsFor.bind(this, 'background')}>Background</MenuItem>
-          </Drawer>
-	    	  <div style={container}>
-	      		{this.props.children}
-	      	</div>
-      	</div>
+              onLeftIconButtonTouchTap={this.goToHome.bind(this)}
+              iconElementRight={logoutBtn}/>
+            <Drawer>
+              <AppBar 
+                title="Settings" 
+                iconClassNameLeft="fa fa-arrow-left"
+                onLeftIconButtonTouchTap={this.goToHome.bind(this)}/>
+              <MenuItem 
+                  style={widgets}
+                  onClick={this.openSettingsFor.bind(this, 'widgets')}>
+                  Widgets
+              </MenuItem>
+              <MenuItem 
+                style={background}
+                onClick={this.openSettingsFor.bind(this, 'background')}>Background</MenuItem>
+            </Drawer>
+  	    	  <div style={container}>
+  	      		{this.props.children}
+  	      	</div>
+        	</div>
+      </FadeInAnimation>
     );
   }
 }

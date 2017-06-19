@@ -48,8 +48,8 @@ class Todo extends React.Component {
         alignItems: 'center',
         overflowWrap: 'break-word',
         backgroundColor: 'rgba(0,0,0,.3)',
-        borderRadius: 5,
-        margin: '5px 10px',
+        borderRadius: 3,
+        margin: '5px 5px',
         paddingLeft: 5,
       },
       defaultTodoText: {

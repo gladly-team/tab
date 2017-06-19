@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Relay from 'react-relay';
 
+import FadeInAnimation from 'general/FadeInAnimation';
+
 import { goToDashboard } from 'navigation/navigation';
 
 import Charities from './CharitiesContainer';
@@ -29,14 +31,18 @@ class DonateVc extends React.Component {
     }
 
     return (
-      <div style={main}>
-        <AppBar
-          title="Donate"
-          iconClassNameLeft="fa fa-arrow-left"
-          onLeftIconButtonTouchTap={this.goToHome.bind(this)}
-        />
-        <Charities app={app} user={user}/>
-      </div>
+      <FadeInAnimation>
+        <div 
+          key={'donate-view-key'}
+          style={main}>
+          <AppBar
+            title="Donate"
+            iconClassNameLeft="fa fa-arrow-left"
+            onLeftIconButtonTouchTap={this.goToHome.bind(this)}
+          />
+          <Charities app={app} user={user}/>
+        </div>
+      </FadeInAnimation>
     );
   }
 }

@@ -4,6 +4,8 @@ import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import Divider from 'material-ui/Divider';
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 
+import FadeInAnimation from 'general/FadeInAnimation';
+
 import BackgroundImagePicker from '../../Background/BackgroundImagePickerContainer';
 import BackgroundColorPicker from '../../Background/BackgroundColorPickerContainer';
 import BackgroundCustomImagePicker from '../../Background/BackgroundCustomImagePickerContainer';
@@ -88,7 +90,10 @@ class BackgroundSettings extends React.Component {
     }
 
     return (
-      <div style={main}>
+      <FadeInAnimation>
+      <div 
+        key={'background-settings-container-key'} 
+        style={main}>
         <Card 
           style={optionContainer}>
           <CardHeader
@@ -124,6 +129,7 @@ class BackgroundSettings extends React.Component {
           </div>
         </Card>
       </div>
+      </FadeInAnimation>
     );
   }
 }

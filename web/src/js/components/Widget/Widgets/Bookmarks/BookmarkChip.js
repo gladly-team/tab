@@ -57,6 +57,7 @@ class BookmarkChip extends React.Component {
         height: 50,
         justifyContent: 'center',
         alignItems: 'center',
+        borderRadius: 3,
       },
       labelStyle: {
         width: '100%',

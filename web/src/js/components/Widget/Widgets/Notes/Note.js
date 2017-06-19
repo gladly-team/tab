@@ -39,11 +39,9 @@ class NotesWidget extends React.Component {
     const { note } = this.props;
 
     const defaultPaper = {
-      margin: 10,
-      marginBottom: 5,
-      marginTop: 5,
+      margin: 5,
       backgroundColor: 'rgba(0,0,0,.3)',
-      borderRadius: 5,
+      borderRadius: 3,
     }
 
     const noteContent = {

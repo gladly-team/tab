@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import FadeInAnimation from 'general/FadeInAnimation';
+
 import TextField from 'material-ui/TextField';
 import Chip from 'material-ui/Chip';
-
 import DeleteIcon from 'material-ui/svg-icons/navigation/cancel';
 import CheckCircle from 'material-ui/svg-icons/action/check-circle';
 import AddCircle from 'material-ui/svg-icons/content/add-circle';
@@ -96,6 +97,7 @@ class AddBookmarkForm extends React.Component {
       const chip = {
         style: {
           margin: 5,
+          borderRadius: 3,
         },
         labelStyle: {
           width: '100%',
@@ -119,27 +121,30 @@ class AddBookmarkForm extends React.Component {
                     chip.addIcon.hoverColor: chip.addIcon.color
 
       return (
-        <Chip
-          backgroundColor={chip.backgroundColor}
-          labelColor={chip.labelColor}
-          labelStyle={chip.labelStyle}
-          style={chip.style}>
-            Bookmarks
-            <div style={{display: 'inline', marginLeft: 10,}}>
-              <AddCircle
-              color={addIconColor}
-              style={chip.addIcon}
-              onClick={this.openForm.bind(this)}
-              onMouseEnter={this.onAddBtnMouseMove.bind(this, true)}
-              onMouseLeave={this.onAddBtnMouseMove.bind(this, false)}/>
-            <ModeEdit
-              color={editIconColor}
-              style={chip.addIcon}
-              onClick={this.onEditModeClicked.bind(this)}
-              onMouseEnter={this.onEditBtnMouseMove.bind(this, true)}
-              onMouseLeave={this.onEditBtnMouseMove.bind(this, false)}/>
-            </div>
-        </Chip>
+        <FadeInAnimation>
+          <Chip
+            key={'bookmarks-header-key'}
+            backgroundColor={chip.backgroundColor}
+            labelColor={chip.labelColor}
+            labelStyle={chip.labelStyle}
+            style={chip.style}>
+              Bookmarks
+              <div style={{display: 'inline', marginLeft: 10,}}>
+                <AddCircle
+                color={addIconColor}
+                style={chip.addIcon}
+                onClick={this.openForm.bind(this)}
+                onMouseEnter={this.onAddBtnMouseMove.bind(this, true)}
+                onMouseLeave={this.onAddBtnMouseMove.bind(this, false)}/>
+              <ModeEdit
+                color={editIconColor}
+                style={chip.addIcon}
+                onClick={this.onEditModeClicked.bind(this)}
+                onMouseEnter={this.onEditBtnMouseMove.bind(this, true)}
+                onMouseLeave={this.onEditBtnMouseMove.bind(this, false)}/>
+              </div>
+          </Chip>
+        </FadeInAnimation>
       );
     }
 
@@ -148,7 +153,8 @@ class AddBookmarkForm extends React.Component {
       flexDirection: 'column',
       padding: 10,
       backgroundColor: appTheme.palette.primary1Color,
-      borderRadius: 15,
+      borderRadius: 3,
+      margin: 5,
     }
 
     const actionContainer = {
@@ -196,7 +202,10 @@ class AddBookmarkForm extends React.Component {
                     cancelIcon.hoverColor: cancelIcon.color
 
     return (
-        <div style={addBookmarkContainer}>
+      <FadeInAnimation>
+        <div 
+          key={'add-bookmark-form-key'}
+          style={addBookmarkContainer}>
             <div style={actionContainer}>
               <DeleteIcon
                 color={cancelIconColor}
@@ -233,7 +242,8 @@ class AddBookmarkForm extends React.Component {
                 underlineStyle={textField.underlineStyle}
                 underlineFocusStyle={textField.underlineFocusStyle}/>
             </div>
-        </div>);
+        </div>
+      </FadeInAnimation>);
   }
 }
 
