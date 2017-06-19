@@ -35,7 +35,7 @@ module.exports = {
   appPublic: resolveApp('public'),
   appHtml: resolveApp('public/index.html'),
   appIndexJs: resolveApp('src/index.js'),
-  appLogo: resolveApp('src/js/assets/logo.png'),
+  appLogo: resolveApp('src/js/assets/logos/logo500.jpg'),
   appPackageJson: resolveApp('package.json'),
   appSrc: resolveApp('src'),
   yarnLockFile: resolveApp('yarn.lock'),

@@ -1,18 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import environment from '../../../relay-env';
-import ConfirmationForm from './ConfirmationForm';
-import PasswordField from 'general/PasswordField';
-import Snackbar from 'material-ui/Snackbar';
-import { login, getOrCreate, getCurrentUser } from '../../utils/cognito-auth';
-import { goTo, goToDashboard, goToLogin } from 'navigation/navigation';
 import { getReferralData } from 'web-utils';
+import { goTo, goToDashboard, goToLogin } from 'navigation/navigation';
+
+import environment from '../../../relay-env';
+
+import ConfirmationForm from './ConfirmationForm';
+import CircleButton from 'general/CircleButton';
+import PasswordField from 'general/PasswordField';
+import { login, getOrCreate, getCurrentUser } from '../../utils/cognito-auth';
 
 import CreateNewUserMutation from 'mutations/CreateNewUserMutation';
 
-import {
-  indigo500,
-} from 'material-ui/styles/colors';
+import FlatButton from 'material-ui/FlatButton';
+import Snackbar from 'material-ui/Snackbar';
+
+import appTheme from 'theme/default';
 
 class LoginForm extends React.Component {
   
@@ -136,13 +139,19 @@ class LoginForm extends React.Component {
     }
   	
   	const main = {
-  		backgroundColor: indigo500,
-  		height: '100%',
+  		backgroundColor: '#7C4DFF',
+      height: '100%',
   		width: '100%',
   		display: 'flex',
   		justifyContent: 'center',
   		alignItems: 'center',
   	};
+
+    const container = {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+    };
 
   	const floatingLabelStyle = {
   		color: '#FFF',
@@ -152,16 +161,44 @@ class LoginForm extends React.Component {
   		color: '#FFF',
   	};
 
+    const underlineStyle = {
+      borderColor: appTheme.palette.borderColor,
+    }
+
+    const underlineFocusStyle = {
+      borderColor: appTheme.palette.alternateTextColor,
+    }
+
+    const backBtn = {
+      position: 'absolute',
+      top: 10,
+      left: 10,
+      color: appTheme.palette.alternateTextColor,
+    }
+
     return (
     	<div style={main}>
-        <PasswordField 
-          ref={(input) => { this.password = input; }}
-          onKeyPress = {this._handleKeyPress.bind(this)}
-          floatingLabelText="Password"
-          floatingLabelStyle={floatingLabelStyle}
-          type={"password"}
-          inputStyle={inputStyle}
-        />
+        <FlatButton 
+          style={backBtn}
+          label="CHANGE EMAIL" 
+          onClick={this.props.onBack}/>
+        
+        <div 
+          style={container}>
+          <PasswordField 
+            ref={(input) => { this.password = input; }}
+            onKeyPress = {this._handleKeyPress.bind(this)}
+            floatingLabelText="Password"
+            floatingLabelStyle={floatingLabelStyle}
+            underlineStyle={underlineStyle}
+            underlineFocusStyle={underlineFocusStyle}
+            type={"password"}
+            inputStyle={inputStyle}
+          />
+          <CircleButton
+            size={40}
+            onClick={this.handleSubmit.bind(this)}/>
+        </div>
         <Snackbar
           open={this.state.alertOpen}
           message={this.state.alertMsg}
@@ -174,7 +211,8 @@ class LoginForm extends React.Component {
 }
 
 LoginForm.propTypes = {
-	email: PropTypes.string.isRequired,
+	email: PropTypes.string,
+  onBack: PropTypes.func,
 } 
 
 export default LoginForm;

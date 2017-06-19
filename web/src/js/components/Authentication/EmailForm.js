@@ -3,10 +3,9 @@ import PropTypes from 'prop-types';
 import EmailField from 'general/EmailField';
 import { checkUserExist, forgotPassword } from '../../utils/cognito-auth';
 import { goToRetrievePassword } from 'navigation/navigation';
+import CircleButton from 'general/CircleButton';
 
-import {
-  deepPurple500,
-} from 'material-ui/styles/colors';
+import appTheme from 'theme/default';
 
 class EmailForm extends React.Component {
   constructor(props) {
@@ -34,14 +33,20 @@ class EmailForm extends React.Component {
   render() {
   	
   	const main = {
-  		backgroundColor: deepPurple500,
-  		height: '100%',
+  		backgroundColor: appTheme.palette.primary1Color,
+      height: '100%',
   		width: '100%',
   		display: 'flex',
       flexDirection: 'column',
   		justifyContent: 'center',
   		alignItems: 'center',
   	};
+
+    const container = {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+    };
 
   	const floatingLabelStyle = {
   		color: '#FFF',
@@ -51,25 +56,44 @@ class EmailForm extends React.Component {
   		color: '#FFF',
   	};
 
+    const underlineStyle = {
+      borderColor: appTheme.palette.borderColor,
+    }
+
+    const underlineFocusStyle = {
+      borderColor: appTheme.palette.alternateTextColor,
+    }
+
     const retrievePasswordContainer = {
       marginTop: 20,
       width: 256,
+      textAlign: 'center',
     }
 
     const retrievePasswordLink = {
       color: '#FFF',
       cursor: 'pointer',
-      textAlign: 'left',
+      fontSize: 14,
     }
 
     return (
     	<div style={main}>
-    		<EmailField
-    		  ref={(input) => { this.email = input; }}
-    		  onKeyPress = {this._handleKeyPress.bind(this)}
-		      floatingLabelText="Email"
-		      floatingLabelStyle={floatingLabelStyle}
-		      inputStyle={inputStyle}/>
+        <div 
+          style={container}>
+          <EmailField
+          ref={(input) => { this.email = input; }}
+          onKeyPress = {this._handleKeyPress.bind(this)}
+          floatingLabelText="Email"
+          defaultValue={this.props.email}
+          floatingLabelStyle={floatingLabelStyle}
+          underlineStyle={underlineStyle}
+          underlineFocusStyle={underlineFocusStyle}
+          inputStyle={inputStyle}/>
+          <CircleButton
+            size={40}
+            onClick={this.handleSubmit.bind(this)}/>
+        </div>
+    		
         <div style={retrievePasswordContainer}>
           <span 
             style={retrievePasswordLink}
@@ -81,7 +105,12 @@ class EmailForm extends React.Component {
 }
 
 EmailForm.propTypes = {
+  email: PropTypes.string,
 	onResponse: PropTypes.func.isRequired,
 } 
+
+EmailForm.defaultProps = {
+  email: '',
+}
 
 export default EmailForm;
