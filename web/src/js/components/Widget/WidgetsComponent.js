@@ -26,13 +26,6 @@ class Widgets extends React.Component {
       user,
       widget
     );
-
-    // UpdateWidgetVisibilityMutation.commit(
-    //   this.props.relay.environment,
-    //   user,
-    //   widget,
-    //   false
-    // );
   }
   
   render() {

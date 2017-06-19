@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
+import RandomAppearAnimation from 'general/RandomAppearAnimation';
 import WidgetSharedSpace from 'general/WidgetSharedSpace';
 import UpdateWidgetDataMutation from 'mutations/UpdateWidgetDataMutation';
 
@@ -48,8 +49,7 @@ class Todo extends React.Component {
         overflowWrap: 'break-word',
         backgroundColor: 'rgba(0,0,0,.3)',
         borderRadius: 5,
-        marginBottom: 5,
-        marginTop: 5,
+        margin: '5px 10px',
         paddingLeft: 5,
       },
       defaultTodoText: {
@@ -97,27 +97,31 @@ class Todo extends React.Component {
       float: 'right',
       margin: '5px 5px 0px 10px',
       hoverColor: appTheme.fontIcon.color,
-      color: 'rgba(255,255,255,.3)',
+      color: 'rgba(255,255,255,0)',
       display: 'inline-block',
     };
 
     var deleteIconColor = (this.state.hoveringDelete)?
           deleteIcon.hoverColor: deleteIcon.color;
 
-    return (<div
-              style={styles.container}>
-                {checkBtn}
-                <p 
-                  style={todoTextStyle}>
-                    {todo.text}
-                </p>
-                <DeleteIcon
-                  color={deleteIconColor}
-                  style={deleteIcon}
-                  onClick={this.removeTodo.bind(this)}
-                  onMouseEnter={this.onDeleteBtnMouseMove.bind(this, true)}
-                  onMouseLeave={this.onDeleteBtnMouseMove.bind(this, false)}/>
-            </div>
+    return (
+      <RandomAppearAnimation
+        delayRange={300}>
+          <div
+            style={styles.container}
+            onMouseEnter={this.onDeleteBtnMouseMove.bind(this, true)}
+            onMouseLeave={this.onDeleteBtnMouseMove.bind(this, false)}>
+              {checkBtn}
+              <p 
+                style={todoTextStyle}>
+                  {todo.text}
+              </p>
+              <DeleteIcon
+                color={deleteIconColor}
+                style={deleteIcon}
+                onClick={this.removeTodo.bind(this)}/>
+          </div>
+      </RandomAppearAnimation>
     );
   }
 }

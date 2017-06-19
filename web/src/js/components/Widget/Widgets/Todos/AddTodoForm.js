@@ -7,11 +7,10 @@ import Chip from 'material-ui/Chip';
 import DeleteIcon from 'material-ui/svg-icons/navigation/cancel';
 import CheckCircle from 'material-ui/svg-icons/action/check-circle';
 import AddCircle from 'material-ui/svg-icons/content/add-circle';
-import ModeEdit from 'material-ui/svg-icons/editor/mode-edit';
 
 import appTheme from 'theme/default';
 
-class AddBookmarkForm extends React.Component {
+class AddTodoForm extends React.Component {
 
   constructor(props) {
     super(props);
@@ -19,28 +18,29 @@ class AddBookmarkForm extends React.Component {
       hoveringCancel: false,
       hoveringCreate: false,
       hoveringAdd: false,
-      hoveringEdit: false,
       show: false,
+      errorText: 'Use Shift + Enter to create a new line.'
     }
   }
 
   _handleKeyPress(e) {
     if (e.key === 'Enter') {
-      this.create();
+      if(!e.shiftKey){
+        e.stopPropagation();
+        e.preventDefault();
+        this.create();
+      }
     }
   }
 
   create() {
-      const name = this.bName.input.value;
-      const link = this.bLink.input.value;
+      const text = this.btext.input.refs.input.value;
       
-      if(!name || !link)
+      if(!text)
       return;
 
-      this.props.addBookmark(name, link);
-      this.bName.input.value = '';
-      this.bLink.input.value = '';
-
+      this.props.addTodo(text);
+      this.btext.input.value = '';
       this.closeForm();
   }
 
@@ -62,12 +62,6 @@ class AddBookmarkForm extends React.Component {
     })
   }
 
-  onEditBtnMouseMove(enter) {
-    this.setState({
-      hoveringEdit: enter,
-    })
-  }
-
   closeForm() {
     this.setState({
       show: false,
@@ -86,19 +80,12 @@ class AddBookmarkForm extends React.Component {
     })
   }
 
-  onEditModeClicked() {
-    this.props.onEditModeClicked();
-  }
-
   render() {
 
     if(!this.state.show) {
       const chip = {
         style: {
           margin: 5,
-        },
-        labelStyle: {
-          width: '100%',
         },
         backgroundColor: appTheme.palette.primary1Color,
         labelColor: '#FFF',
@@ -113,31 +100,21 @@ class AddBookmarkForm extends React.Component {
       }
 
       var addIconColor = (this.state.hoveringAdd)?
-                    chip.addIcon.hoverColor: chip.addIcon.color;
-
-      var editIconColor = (this.state.hoveringEdit)?
                     chip.addIcon.hoverColor: chip.addIcon.color
 
       return (
         <Chip
           backgroundColor={chip.backgroundColor}
           labelColor={chip.labelColor}
-          labelStyle={chip.labelStyle}
           style={chip.style}>
-            Bookmarks
+            Todos
             <div style={{display: 'inline', marginLeft: 10,}}>
               <AddCircle
-              color={addIconColor}
-              style={chip.addIcon}
-              onClick={this.openForm.bind(this)}
-              onMouseEnter={this.onAddBtnMouseMove.bind(this, true)}
-              onMouseLeave={this.onAddBtnMouseMove.bind(this, false)}/>
-            <ModeEdit
-              color={editIconColor}
-              style={chip.addIcon}
-              onClick={this.onEditModeClicked.bind(this)}
-              onMouseEnter={this.onEditBtnMouseMove.bind(this, true)}
-              onMouseLeave={this.onEditBtnMouseMove.bind(this, false)}/>
+                color={addIconColor}
+                style={chip.addIcon}
+                onClick={this.openForm.bind(this)}
+                onMouseEnter={this.onAddBtnMouseMove.bind(this, true)}
+                onMouseLeave={this.onAddBtnMouseMove.bind(this, false)}/>
             </div>
         </Chip>
       );
@@ -160,6 +137,7 @@ class AddBookmarkForm extends React.Component {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
+      paddingBottom: 10,
     }
 
     const textField = {
@@ -177,8 +155,8 @@ class AddBookmarkForm extends React.Component {
         color: '#FFF',
         fontSize: 14,
       },
-      style: {
-        height: 35,
+      errorStyle: {
+        color: appTheme.textField.underlineColor,
       }
     }
 
@@ -214,36 +192,27 @@ class AddBookmarkForm extends React.Component {
 
             <div style={formContainer}>
               <TextField
-                ref={(input) => { this.bName = input; }}
+                ref={(input) => { this.btext = input; }}
+                multiLine={true}
                 onKeyPress = {this._handleKeyPress.bind(this)}
-                hintText="Ex: Google"
-                style={textField.style}
-                inputStyle={textField.inputStyle}
+                hintText="Your todo here..."
+                textareaStyle={textField.inputStyle}
                 hintStyle={textField.hintStyle}
                 underlineStyle={textField.underlineStyle}
-                underlineFocusStyle={textField.underlineFocusStyle}/>
-
-              <TextField
-                ref={(input) => { this.bLink = input; }}
-                onKeyPress = {this._handleKeyPress.bind(this)}
-                hintText="Ex: https://www.google.com/"
-                style={textField.style}
-                inputStyle={textField.inputStyle}
-                hintStyle={textField.hintStyle}
-                underlineStyle={textField.underlineStyle}
-                underlineFocusStyle={textField.underlineFocusStyle}/>
+                underlineFocusStyle={textField.underlineFocusStyle}
+                errorStyle={textField.errorStyle}
+                errorText={this.state.errorText}/>
             </div>
         </div>);
   }
 }
 
-AddBookmarkForm.propTypes = {
-  addBookmark: PropTypes.func.isRequired,
-  onEditModeClicked: PropTypes.func.isRequired,
+AddTodoForm.propTypes = {
+  addTodo: PropTypes.func.isRequired,
 };
 
-AddBookmarkForm.defaultProps = {
+AddTodoForm.defaultProps = {
 };
 
 
-export default AddBookmarkForm;
+export default AddTodoForm;

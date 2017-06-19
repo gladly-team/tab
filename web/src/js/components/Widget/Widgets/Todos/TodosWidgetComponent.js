@@ -1,30 +1,16 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
 import WidgetSharedSpace from 'general/WidgetSharedSpace';
+import {List, ListItem} from 'general/List';
 import UpdateWidgetDataMutation from 'mutations/UpdateWidgetDataMutation';
 import Todo from './Todo';
+import AddTodoForm from './AddTodoForm';
 
-import IconButton from 'material-ui/IconButton';
-import FontIcon from 'material-ui/FontIcon';
-import Divider from 'material-ui/Divider';
-import Popover from 'material-ui/Popover';
 import Subheader from 'material-ui/Subheader';
-import {List, ListItem} from 'material-ui/List';
-import Checkbox from 'material-ui/Checkbox';
 import TextField from 'material-ui/TextField';
 
-import CheckCircle from 'material-ui/svg-icons/action/check-circle';
-import RadioButtonUnchecked from 'material-ui/svg-icons/toggle/radio-button-unchecked';
-
-import SvgIcon from 'material-ui/SvgIcon';
-
 import appTheme from 'theme/default';
-
-import {
-  grey300,
-} from 'material-ui/styles/colors';
 
 class TodosWidget extends React.Component {
 
@@ -32,7 +18,6 @@ class TodosWidget extends React.Component {
     super(props);
     
     this.state = {
-      // open: false,
       completed: [],
       todos: [],
     }
@@ -45,25 +30,7 @@ class TodosWidget extends React.Component {
     this.setState({
       completed: data.completed || [],
       todos: data.todos || [],
-      // open: widget.visible,
     });
-  }
-
-  // toggleWidgetContent() {
-  //   const open = !this.state.open;
-
-  //   this.setState({
-  //     open: open,
-  //   });
-
-  //   this.props.widgetVisibilityChanged(
-  //     this.props.user, this.props.widget, open);
-  // }
-
-  _handleKeyPress(e) {
-    if (e.key === 'Enter') {
-      this.addNewTodo();
-    }
   }
 
   completeTodo(index) {
@@ -86,8 +53,8 @@ class TodosWidget extends React.Component {
     this.updateWidget();
   }
 
-  addNewTodo() {
-    const content = this.newTodo.input.value;
+  addNewTodo(text) {
+    const content = text;
     if(content) {
         const newTodo = {
           id: this.randomString(6),
@@ -97,7 +64,6 @@ class TodosWidget extends React.Component {
         this.setState({
           todos: this.state.todos,
         });
-        this.newTodo.input.value = '';
         this.updateWidget();
     }
   }
@@ -150,10 +116,11 @@ class TodosWidget extends React.Component {
   render() {
     const { widget } = this.props;
 
-    const containerStyle = {
-      backgroundColor: 'rgba(0,0,0,.54)',
-      width: 300,
-    } 
+    const sharedSpaceStyle = {
+      overflowX: 'visible',
+      overflowY: 'visible',
+      overflow: 'visible',
+    }
 
     const headerStyle = {
       color: '#FFF',
@@ -162,10 +129,10 @@ class TodosWidget extends React.Component {
     }
 
     const todosContainer = {
-      display: 'flex',
-      flexDirection: 'column',
-    }
-
+      overflowY: 'scroll',
+      overflowX: 'hidden',
+      height: '70vh',
+    };
 
     const floatingLabelStyle = {
       color: '#FFF',
@@ -190,13 +157,14 @@ class TodosWidget extends React.Component {
       borderColor: '#FFF',
     }
 
-    const addTodoContainer = {
+    const mainContainer = {
       display: 'flex',
-      justifyContent: 'flex-start',
+      flexDirection: 'column',
+      marginTop: 27,
     }
 
     const addTodoStyle = {
-      top: -20,
+      top: -5,
     }
 
     const addTodoInpuStyle = {
@@ -209,45 +177,39 @@ class TodosWidget extends React.Component {
       fontSize: '14px'
     }
 
-    return (<WidgetSharedSpace>
-              <div style={todosContainer}>
-                  <div style={addTodoContainer}>
-                    <TextField
-                      ref={(input) => { this.newTodo = input; }}
-                      onKeyPress = {this._handleKeyPress.bind(this)}
-                      style={addTodoStyle}
-                      inputStyle={addTodoInpuStyle}
-                      floatingLabelText="Add new Todo"
-                      floatingLabelStyle={floatingLabelStyle}
-                      floatingLabelFocusStyle={floatingLabelFocusStyle}
-                      underlineStyle={underlineStyle}
-                      underlineFocusStyle={underlineFocusStyle}/>
-                  </div>
-                  {this.state.todos.map((todo, index) => {
-                      return (
-                        <Todo
-                          key={todo.id}
-                          todo={todo}
-                          index={index}
-                          completed={false}
-                          onCompletedChange={this.completeTodo.bind(this)}
-                          remove={this.removeTodo.bind(this)}/>
-                      );
-                  })}
-                  
-                  <Subheader style={headerStyle}>Completed</Subheader>
-                  {this.state.completed.map((todo, index) => {
-                      return (
-                        <Todo
-                          key={todo.id}
-                          todo={todo}
-                          index={index}
-                          completed={true}
-                          onCompletedChange={this.setNotCompleted.bind(this)}
-                          remove={this.removeCompletedTodo.bind(this)}/>
-                        );
-                  })}
-              </div>
+    return (<WidgetSharedSpace
+              containerStyle={sharedSpaceStyle}>
+                <div style={mainContainer}>
+                  <AddTodoForm
+                    addTodo={this.addNewTodo.bind(this)}/>
+                  <List 
+                    containerStyle={todosContainer}>
+                      {this.state.todos.map((todo, index) => {
+                          return (
+                            <Todo
+                              key={todo.id}
+                              todo={todo}
+                              index={index}
+                              completed={false}
+                              onCompletedChange={this.completeTodo.bind(this)}
+                              remove={this.removeTodo.bind(this)}/>
+                          );
+                      })}
+                      
+                      <Subheader style={headerStyle}>Completed</Subheader>
+                      {this.state.completed.map((todo, index) => {
+                          return (
+                            <Todo
+                              key={todo.id}
+                              todo={todo}
+                              index={index}
+                              completed={true}
+                              onCompletedChange={this.setNotCompleted.bind(this)}
+                              remove={this.removeCompletedTodo.bind(this)}/>
+                            );
+                      })}
+                  </List>
+                </div>
           </WidgetSharedSpace>);
   }
 }

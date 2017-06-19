@@ -25,7 +25,6 @@ class NotesWidget extends React.Component {
     this.noteColors = ["#A5D6A7", "#FFF59D", "#FFF", "#FF4081", "#2196F3", "#757575", "#FF3D00"]
 
     this.state = {
-      // open: false,
       notes: [],
       saved: true,
     };
@@ -37,7 +36,6 @@ class NotesWidget extends React.Component {
     const notes = data.notes || [];
     this.setState({
       notes: notes,
-      // open: widget.visible,
     });
   }
 
@@ -46,17 +44,6 @@ class NotesWidget extends React.Component {
       this.updateWidget();
     }
   }
-
-  // toggleWidgetContent() {
-  //   const open = !this.state.open;
-
-  //   this.setState({
-  //     open: open,
-  //   });
-
-  //   this.props.widgetVisibilityChanged(
-  //     this.props.user, this.props.widget, open);
-  // }
 
   onNoteUpdated(index, content) {
     if(this.updateNoteTimer){
@@ -141,6 +128,7 @@ class NotesWidget extends React.Component {
       display: 'flex',
       flexDirection: 'column',
       maxHeight: 500,
+      marginTop: 27,
     }
 
     return (<WidgetSharedSpace>

@@ -51,12 +51,14 @@ class NotesHeader extends React.Component {
         labelColor={chip.labelColor}
         style={chip.style}>
           Notes
-          <AddCircle
-            color={addIconColor}
-            style={chip.addIcon}
-            onClick={this.addNote.bind(this)}
-            onMouseEnter={this.onAddBtnMouseMove.bind(this, true)}
-            onMouseLeave={this.onAddBtnMouseMove.bind(this, false)}/>
+          <div style={{display: 'inline', marginLeft: 10,}}>
+            <AddCircle
+              color={addIconColor}
+              style={chip.addIcon}
+              onClick={this.addNote.bind(this)}
+              onMouseEnter={this.onAddBtnMouseMove.bind(this, true)}
+              onMouseLeave={this.onAddBtnMouseMove.bind(this, false)}/>
+          </div>
       </Chip>
     );
   }

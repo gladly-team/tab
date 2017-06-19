@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Paper from 'material-ui/Paper';
+import RandomAppearAnimation from 'general/RandomAppearAnimation';
+
 import TextField from 'material-ui/TextField';
 import DeleteIcon from 'material-ui/svg-icons/navigation/cancel';
 import Avatar from 'material-ui/Avatar';
@@ -76,7 +77,7 @@ class NotesWidget extends React.Component {
       float: 'right',
       margin: '5px 5px 0px 0px',
       hoverColor: appTheme.fontIcon.color,
-      color: 'rgba(255,255,255,.3)',
+      color: 'rgba(255,255,255,0)',
       display: 'inline-block',
     };
 
@@ -84,38 +85,40 @@ class NotesWidget extends React.Component {
           deleteIcon.hoverColor: deleteIcon.color;
 
     return (
-      <Paper
-        style={defaultPaper}  
-        zDepth={2} 
-        rounded={false}>
-          <div style={{display: 'inline-block'}}>
-            <Chip
-              labelColor={chip.labelColor}
-              backgroundColor={chip.backgroundColor}
-              style={chip.style}>
-              <Avatar size={32} backgroundColor={note.color}/>
-              March, 13
-            </Chip>
+      <RandomAppearAnimation
+        delayRange={300}>
+          <div
+            key={'note_' + this.props.index}
+            style={defaultPaper}
+            onMouseEnter={this.onDeleteBtnMouseMove.bind(this, true)}
+            onMouseLeave={this.onDeleteBtnMouseMove.bind(this, false)}>
+              <div style={{display: 'inline-block'}}>
+                <Chip
+                  labelColor={chip.labelColor}
+                  backgroundColor={chip.backgroundColor}
+                  style={chip.style}>
+                  <Avatar size={32} backgroundColor={note.color}/>
+                  March, 13
+                </Chip>
+              </div>
+              <DeleteIcon
+                  color={deleteIconColor}
+                  style={deleteIcon}
+                  onClick={this.removeStickyNote.bind(this)}/>
+              <div style={noteContent}>
+                <TextField
+                  ref={(input) => { this.note = input; }}
+                  onChange={this.onNoteUpdated.bind(this)}
+                  defaultValue={note.content}
+                  textareaStyle={textField.inputStyle}
+                  hintStyle={textField.hintStyle}
+                  hintText={"Your note here..."}
+                  underlineStyle={textField.underlineStyle}
+                  underlineFocusStyle={textField.underlineStyle}
+                  multiLine={true}/>
+              </div>
           </div>
-          <DeleteIcon
-              color={deleteIconColor}
-              style={deleteIcon}
-              onClick={this.removeStickyNote.bind(this)}
-              onMouseEnter={this.onDeleteBtnMouseMove.bind(this, true)}
-              onMouseLeave={this.onDeleteBtnMouseMove.bind(this, false)}/>
-          <div style={noteContent}>
-            <TextField
-              ref={(input) => { this.note = input; }}
-              onChange={this.onNoteUpdated.bind(this)}
-              defaultValue={note.content}
-              textareaStyle={textField.inputStyle}
-              hintStyle={textField.hintStyle}
-              hintText={"Your note here..."}
-              underlineStyle={textField.underlineStyle}
-              underlineFocusStyle={textField.underlineStyle}
-              multiLine={true}/>
-          </div>
-      </Paper>
+      </RandomAppearAnimation>
     );
   }
 }

@@ -17,11 +17,10 @@ class WidgetSharedSpace extends React.Component {
       height: '80vh',
       overflowX: 'hidden',
       overflowY: 'scroll',
-      padding: 10,
     }
 
     return (
-      <div style={main}>
+      <div style={Object.assign({}, main, this.props.containerStyle)}>
         {this.props.children}
       </div>
     );
@@ -29,9 +28,11 @@ class WidgetSharedSpace extends React.Component {
 }
 
 WidgetSharedSpace.propTypes = {
+  containerStyle: PropTypes.object,
 }
 
 WidgetSharedSpace.defaultProps = {
+  containerStyle: {}
 }
 
 export default WidgetSharedSpace;
