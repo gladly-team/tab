@@ -78,15 +78,6 @@ class CenteredSearch extends React.Component {
       // justifyContent: 'center',
     }
 
-    const floatingLabelStyle = {
-      color: '#FFF',
-      textAlign: 'center',
-    }
-
-    const floatingLabelFocusStyle = {
-      color: '#FFF',
-    }
-
     const underlineStyle = {
       borderColor: appTheme.palette.borderColor,
     }
@@ -113,6 +104,10 @@ class CenteredSearch extends React.Component {
       fontFamily: appTheme.fontFamily,
     }
 
+    var engineText;
+    if(this.state.focused) {
+      engineText = engine;
+    }
 
     return (
         <div style={searchContainer}>
@@ -123,11 +118,9 @@ class CenteredSearch extends React.Component {
                 ref={(input) => { this.searchInput = input; }}
                 onKeyPress = {this._handleKeyPress.bind(this)}
                 inputStyle={inputStyle}
-                floatingLabelStyle={floatingLabelStyle}
-                floatingLabelFocusStyle={floatingLabelFocusStyle}
                 underlineStyle={underlineStyle}
                 underlineFocusStyle={underlineFocusStyle}
-                errorText={engine}
+                errorText={engineText}
                 errorStyle={errorStyle}>
           </TextField>
         </div>);
