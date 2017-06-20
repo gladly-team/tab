@@ -58,6 +58,7 @@ import {
   setUserBackgroundColor,
   setUserBackgroundFromCustomUrl,
   setUserBackgroundDaily,
+  setUserActiveWidget,
   createUser
 } from '../database/users/user';
 
@@ -217,6 +218,10 @@ const userType = new GraphQLObjectType({
          enabled: { type: GraphQLBoolean }
       },
       resolve: (user, args) => connectionFromPromisedArray(getUserWidgets(user.id, args.enabled), args)
+    },
+    activeWidget: {
+      type: GraphQLString,
+      description: 'User\'s active widget id'
     },
     backgroundOption: {
       type: GraphQLString,
@@ -479,6 +484,27 @@ const setUserBkgDailyImageMutation = mutationWithClientMutationId({
 });
 
 /**
+ * Set user background daily image.
+ */
+const setUserActiveWidgetMutation = mutationWithClientMutationId({
+  name: 'SetUserActiveWidget',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    widgetId: { type: new GraphQLNonNull(GraphQLString) }
+  },
+  outputFields: {
+    user: {
+      type: userType,
+      resolve: user => user
+    }
+  },
+  mutateAndGetPayload: ({userId, widgetId}) => {
+    const userGlobalObj = fromGlobalId(userId);
+    return setUserActiveWidget(userGlobalObj.id, widgetId);
+  }
+});
+
+/**
  * Add a new bookmark.
  */
 const addBookmarkMutation = mutationWithClientMutationId({
@@ -709,6 +735,7 @@ const mutationType = new GraphQLObjectType({
 
     addBookmark: addBookmarkMutation,
     removeBookmark: removeBookmarkMutation,
+    setUserActiveWidget: setUserActiveWidgetMutation,
 
     createNewUser: createNewUserMutation,
   })

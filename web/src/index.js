@@ -4,6 +4,7 @@ if (!global._babelPolyfill) {
 }
 
 require('font-awesome/css/font-awesome.css');
+require('./index.css');
 
 import React from 'react';
 import ReactDOM from 'react-dom';

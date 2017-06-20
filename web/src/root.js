@@ -14,14 +14,11 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 // Our translated strings
 import localeData from './js/assets/locales/data.json';
 
+import defaultTheme from './js/theme/default';
+
 addLocaleData([...en, ...es]);
 
-const muiTheme = getMuiTheme({
-    palette: {
-      accent1Color: deepPurple500,
-    },
-  });
-
+const muiTheme = getMuiTheme(defaultTheme);
 
 // Define user's language. Different browsers have the user locale defined
 // on different fields on the `navigator` object, so we make sure to account

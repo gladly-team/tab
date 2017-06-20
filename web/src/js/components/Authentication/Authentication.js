@@ -5,8 +5,12 @@ import SignUpForm from './SignUpForm';
 import ConfirmationForm from './ConfirmationForm';
 import { getCurrentUser, login } from '../../utils/cognito-auth';
 import { goTo, goToDashboard } from 'navigation/navigation';
+import SlideFromRightAnimation from 'general/SlideFromRightAnimation';
+import SlideFromLeftAnimation from 'general/SlideFromLeftAnimation';
 
 import { getUserCredentials } from '../../utils/tfac-mgr';
+
+import appTheme from 'theme/default';
 
 class Authentication extends React.Component {
 
@@ -27,7 +31,7 @@ class Authentication extends React.Component {
       }
 
       // Auto login from migration.
-      this.tryToLoginWithTfac();
+      // this.tryToLoginWithTfac();
     });
 
   }
@@ -51,26 +55,54 @@ class Authentication extends React.Component {
     });
   }
 
-  render() {
-    const root = {
-      height: '100%',
-      width: '100%'
-    };
+  onLoginBack() {
+    this.setState({
+      login: false,
+    });
+  }
 
+  render() {
+    var backgroundColor = appTheme.palette.primary1Color;
     var currentState = (
       <EmailForm 
         onResponse={this.onEmailSet.bind(this)}/>);
+
+    if(this.state.email && !this.state.login) {
+      backgroundColor = '#7C4DFF';
+      currentState = (
+        <SlideFromLeftAnimation
+          enterAnimationTimeout={0}
+          enter={true}>
+            <EmailForm 
+              email={this.state.email}
+              onResponse={this.onEmailSet.bind(this)}/>
+        </SlideFromLeftAnimation>);
+    }
     
     if(this.state.email && this.state.login) {
+      backgroundColor = appTheme.palette.primary1Color;
+
       currentState = (
-          <LoginForm 
-            email={this.state.email}/>);
+        <SlideFromRightAnimation
+          enterAnimationTimeout={0}
+          enter={true}>
+            <LoginForm
+              onBack={this.onLoginBack.bind(this)} 
+              email={this.state.email}/>
+        </SlideFromRightAnimation>);
     } 
 
+    const root = {
+      height: '100%',
+      width: '100%',
+      backgroundColor: backgroundColor,
+    };
+
     return (
-      <div style={root}>
-        {currentState}
-      </div>
+          <div 
+            style={root}>
+            {currentState}
+          </div>
     );
   }
 }

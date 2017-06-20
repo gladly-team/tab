@@ -1,5 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
+import FadeInAnimation from 'general/FadeInAnimation';
+
 import Charity from './CharityContainer';
 import Subheader from 'material-ui/Subheader';
 import {GridList} from 'material-ui/GridList';
@@ -22,7 +25,10 @@ class Charities extends React.Component {
     };
 
     return (
-      <div style={container}>
+      <FadeInAnimation>
+      <div 
+        key={'charities-container-key'}
+        style={container}>
         <GridList
           cols={3}
           padding={50}
@@ -37,6 +43,7 @@ class Charities extends React.Component {
           })}
         </GridList>
       </div>
+      </FadeInAnimation>
     );
   }
 }

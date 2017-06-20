@@ -16,7 +16,9 @@
         "mutations": "./src/js/mutations",
         "navigation": "./src/js/navigation",
         "general": "./src/js/components/General",
-        "web-utils": "./src/js/utils/utils"
+        "web-utils": "./src/js/utils/utils",
+        "theme": "./src/js/theme",
+        "assets": "./src/js/assets"
       }
     }]
   ],

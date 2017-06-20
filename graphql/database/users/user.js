@@ -44,6 +44,7 @@ class User extends BaseModel {
     this.backgroundOption = User.BACKGROUND_OPTION_PHOTO;
     this.customImage = null;
     this.backgroundColor = null;
+    this.activeWidget = null;
   }
 
   /**
@@ -69,7 +70,8 @@ class User extends BaseModel {
       'backgroundImage',
       'backgroundOption',
       'customImage',
-      'backgroundColor'
+      'backgroundColor',
+      'activeWidget'
     ];
   }
 }
@@ -299,6 +301,33 @@ var setUserBackgroundDaily =  Async (function(userId) {
     return user;
 });
 
+/**
+ * Set user active widget.
+ * @param {string} userId - The user id. 
+ * @param {string} widgetId - The widget Id.
+ * @return {Promise<User>}  A promise that resolve into a User instance.
+ */
+var setUserActiveWidget =  Async (function(userId, widgetId) {
+
+    var updateExpression = `SET #activeWidget = :activeWidget`;
+    var expressionAttributeNames = {
+         '#activeWidget': 'activeWidget',
+    };
+    var expressionAttributeValues = {
+         ':activeWidget': widgetId,
+    };
+    
+    var params = {
+        UpdateExpression: updateExpression,
+        ExpressionAttributeNames: expressionAttributeNames,
+        ExpressionAttributeValues: expressionAttributeValues,
+        ReturnValues:"ALL_NEW"
+    };
+
+    const user = Await (User.update(userId, params));
+    return user;
+});
+
 
 export {
   User,
@@ -308,5 +337,6 @@ export {
   setUserBackgroundColor,
   setUserBackgroundFromCustomUrl,
   setUserBackgroundDaily,
+  setUserActiveWidget,
   createUser
 };

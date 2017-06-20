@@ -3,3 +3,68 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+
+.zoom-opacity-enter {
+  opacity: 0.01;
+}
+
+.zoom-opacity-enter.zoom-opacity-enter-active {
+  opacity: 1;
+  transition: opacity 300ms ease-in;
+}
+
+.zoom-opacity-leave {
+  opacity: 1;
+}
+
+.zoom-opacity-leave.zoom-opacity-leave-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
+}
+
+.zoom-opacity-appear {
+  opacity: 0.01;
+  transform: scale(0.1);
+}
+
+.zoom-opacity-appear.zoom-opacity-appear-active {
+  opacity: 1;
+  transition: all .3s ease-in;
+  -webkit-transition: all .3s ease-in;
+  -ms-transition: all .3s ease-in;
+  -moz-transition: all .3s ease-in;
+  transform: scale(1);
+  -webkit-transform: scale(1); 
+  -ms-transform: scale(1); 
+  -moz-transform: scale(1);
+}
+
+.fade-enter {
+  opacity: 0.01;
+}
+
+.fade-enter.fade-enter-active {
+  opacity: 1;
+  transition: opacity 300ms ease-in;
+}
+
+.fade-leave {
+  opacity: 1;
+}
+
+.fade-leave.fade-leave-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
+}
+
+.fade-appear {
+  opacity: 0.01;
+}
+
+.fade-appear.fade-appear-active {
+  opacity: 1;
+  transition: opacity .3s ease-in;
+  -webkit-transition: opacity .3s ease-in;
+  -ms-transition: opacity .3s ease-in;
+  -moz-transition: opacity .3s ease-in;
+}

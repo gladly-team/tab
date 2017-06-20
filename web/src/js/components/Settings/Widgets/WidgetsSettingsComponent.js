@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import WidgetSettings from './WidgetSettingsContainer';
+
+import FadeInAnimation from 'general/FadeInAnimation';
+
 import {List} from 'material-ui/List';
 import FullScreenProgress from 'general/FullScreenProgress';
 
@@ -53,17 +56,21 @@ class WidgetsSettings extends React.Component {
 
     const self = this;
     return (
-      <div style={container}>
-        <List>
-          {app.widgets.edges.map((edge, index) => {
-              return (<WidgetSettings 
-                        key={index}
-                        user={user}
-                        appWidget={edge.node}
-                        widget={self.state.userWidgets[edge.node.name]}/>)
-          })}
-        </List>
+      <FadeInAnimation>
+      <div 
+        key={'widgets-settings-container-key'} 
+        style={container}>
+          <List>
+            {app.widgets.edges.map((edge, index) => {
+                return (<WidgetSettings 
+                          key={index}
+                          user={user}
+                          appWidget={edge.node}
+                          widget={self.state.userWidgets[edge.node.name]}/>)
+            })}
+          </List>
       </div>
+      </FadeInAnimation>
     );
   }
 }
