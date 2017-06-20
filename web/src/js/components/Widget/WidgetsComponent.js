@@ -3,6 +3,7 @@ import WidgetIcon from './WidgetIconContainer';
 import Widget from './WidgetContainer';
 import PropTypes from 'prop-types';
 
+import CenteredWidgetsContainer from 'general/CenteredWidgetsContainer';
 import UpdateWidgetVisibilityMutation from 'mutations/UpdateWidgetVisibilityMutation';
 import SetUserActiveWidgetMutation from 'mutations/SetUserActiveWidgetMutation';
 
@@ -53,11 +54,22 @@ class Widgets extends React.Component {
                           onWidgetIconClicked={this.onWidgetIconClicked.bind(this)}/>)
             })}
         </div>
+        <CenteredWidgetsContainer>
+          {user.widgets.edges.map((edge, index) => {
+              if(edge.node.type == 'clock' || 
+                  edge.node.type == 'search'){
+                return (
+                  <Widget
+                      key={index}
+                      user={user}
+                      widget={edge.node}/>
+                )
+              }
+          })}
+        </CenteredWidgetsContainer>
         {user.widgets.edges.map((edge, index) => {
-            if((user.activeWidget && 
-                edge.node.id == user.activeWidget) || 
-                edge.node.type == 'clock' || 
-                edge.node.type == 'search') {
+            if(user.activeWidget && 
+                edge.node.id == user.activeWidget) {
               return (
                 <Widget
                     key={index}

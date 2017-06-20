@@ -4,9 +4,7 @@ import moment from 'moment';
 
 import { getWidgetConfig } from '../../../../utils/widgets-utils';
 
-import {
-  grey300,
-} from 'material-ui/styles/colors';
+import appTheme from 'theme/default';
 
 class ClockWidget extends React.Component {
 
@@ -63,9 +61,7 @@ class ClockWidget extends React.Component {
 
   render() {
     const clockContainer = {
-      textAlign: 'center',
-      position: 'absolute',
-      width: '100vw',
+      marginTop: 20,
       pointerEvents: 'none',
     }
 
@@ -74,14 +70,14 @@ class ClockWidget extends React.Component {
       fontSize: '3em',
       fontWeight: 'normal',
       margin: 0,
-      fontFamily: "'Comic Sans MS', cursive, sans-serif",
+      fontFamily: appTheme.fontFamily,
     };
 
     const dateStyle = {
       color: '#FFF',
       margin: 0,
       fontWeight: 'normal',
-      fontFamily: "'Comic Sans MS', cursive, sans-serif",
+      fontFamily: appTheme.fontFamily,
     };
 
     return (

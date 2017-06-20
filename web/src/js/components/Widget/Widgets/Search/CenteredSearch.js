@@ -6,9 +6,7 @@ import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
 import TextField from 'material-ui/TextField';
 
-import {
-  grey300,
-} from 'material-ui/styles/colors';
+import appTheme from 'theme/default';
 
 class CenteredSearch extends React.Component {
 
@@ -70,10 +68,14 @@ class CenteredSearch extends React.Component {
     const engine = this.state.config.engine || '';
 
     const searchContainer = {
-      position: 'absolute',
-      width: '100vw',
-      textAlign: 'center',
-      top: 100,
+      // position: 'absolute',
+      // top: 0,
+      // left: 0,
+      // width: '100vw',
+      // height: '100%',
+      // display: 'flex',
+      // alignItems: 'center',
+      // justifyContent: 'center',
     }
 
     const floatingLabelStyle = {
@@ -86,7 +88,7 @@ class CenteredSearch extends React.Component {
     }
 
     const underlineStyle = {
-      borderColor: 'transparent',
+      borderColor: appTheme.palette.borderColor,
     }
 
     const underlineFocusStyle = {
@@ -94,21 +96,28 @@ class CenteredSearch extends React.Component {
     }
 
     const inputStyle = {
+      textAlign: 'center',
       color: '#FFF',
+      fontSize: 22,
+      fontFamily: appTheme.fontFamily,
     }
 
     const errorStyle = {
       color: '#FFF',
     }
 
-    var engineText = ''
-    if(this.state.focused) {
-      engineText = engine;
+    const header = {
+      textAlign: 'center',
+      color: '#FFF',
+      fontSize: 16,
+      fontFamily: appTheme.fontFamily,
     }
+
 
     return (
         <div style={searchContainer}>
           <TextField
+                id={'tab-search-id'}
                 onFocus={this.onInputFocusChanged.bind(this, true)}
                 onBlur={this.onInputFocusChanged.bind(this, false)}
                 ref={(input) => { this.searchInput = input; }}
@@ -118,12 +127,8 @@ class CenteredSearch extends React.Component {
                 floatingLabelFocusStyle={floatingLabelFocusStyle}
                 underlineStyle={underlineStyle}
                 underlineFocusStyle={underlineFocusStyle}
-                errorText={engineText}
-                errorStyle={errorStyle}
-                floatingLabelText={(<FontIcon
-            color={grey300}
-            hoverColor={'#FFF'}
-            className="fa fa-search"/>)}>
+                errorText={engine}
+                errorStyle={errorStyle}>
           </TextField>
         </div>);
   }
