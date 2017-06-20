@@ -3,26 +3,21 @@ import PropTypes from 'prop-types';
 
 import RandomAppearAnimation from 'general/RandomAppearAnimation';
 
-import TextField from 'material-ui/TextField';
 import DeleteIcon from 'material-ui/svg-icons/navigation/cancel';
 import Avatar from 'material-ui/Avatar';
 import Chip from 'material-ui/Chip';
 
 import appTheme from 'theme/default';
 
-class NotesWidget extends React.Component {
+class Note extends React.Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
       hoveringDelete: false,
+      editMode: false,
     };
-  }
-
-  onNoteUpdated() {
-    const content = this.note.input.refs.input.value;
-    this.props.onNoteUpdated(this.props.index, content);
   }
 
   removeStickyNote() {
@@ -48,20 +43,6 @@ class NotesWidget extends React.Component {
       padding: '0 15px 5px 15px',
     }
 
-    const textField = {
-      hintStyle: {
-        color: appTheme.textField.underlineColor,
-        fontSize: 14,
-      },
-      inputStyle: {
-        color: '#EEE',
-        fontSize: 14,
-      },
-      underlineStyle: {
-        borderColor: 'transparent',
-      }
-    }
-
     const chip = {
       style: {
         margin: 5,
@@ -81,6 +62,12 @@ class NotesWidget extends React.Component {
 
     var deleteIconColor = (this.state.hoveringDelete)?
           deleteIcon.hoverColor: deleteIcon.color;
+
+    const textStyle = {
+      fontSize: 14,
+      color: '#EEE',
+      fontFamily: appTheme.fontFamily,
+    };
 
     return (
       <RandomAppearAnimation
@@ -104,16 +91,7 @@ class NotesWidget extends React.Component {
                   style={deleteIcon}
                   onClick={this.removeStickyNote.bind(this)}/>
               <div style={noteContent}>
-                <TextField
-                  ref={(input) => { this.note = input; }}
-                  onChange={this.onNoteUpdated.bind(this)}
-                  defaultValue={note.content}
-                  textareaStyle={textField.inputStyle}
-                  hintStyle={textField.hintStyle}
-                  hintText={"Your note here..."}
-                  underlineStyle={textField.underlineStyle}
-                  underlineFocusStyle={textField.underlineStyle}
-                  multiLine={true}/>
+                <p style={textStyle}>{note.content}</p>
               </div>
           </div>
       </RandomAppearAnimation>
@@ -121,11 +99,10 @@ class NotesWidget extends React.Component {
   }
 }
 
-NotesWidget.propTypes = {
+Note.propTypes = {
   index: PropTypes.number.isRequired,
   removeStickyNote: PropTypes.func.isRequired,
-  onNoteUpdated: PropTypes.func.isRequired,
   note: PropTypes.object.isRequired,
 };
 
-export default NotesWidget;
+export default Note;

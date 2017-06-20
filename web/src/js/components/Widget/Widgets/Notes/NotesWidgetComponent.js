@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 
 import WidgetSharedSpace from 'general/WidgetSharedSpace';
+import {List, ListItem} from 'general/List';
+
 import Note from './Note';
-import NotesHeader from './NotesHeader';
+import AddNoteForm from './AddNoteForm';
 import UpdateWidgetDataMutation from 'mutations/UpdateWidgetDataMutation';
 
 import Popover from 'material-ui/Popover';
@@ -20,96 +22,62 @@ class NotesWidget extends React.Component {
 
   constructor(props) {
     super(props);
-
-    this.noteElms = {};
     this.noteColors = ["#A5D6A7", "#FFF59D", "#FFF", "#FF4081", "#2196F3", "#757575", "#FF3D00"]
-
     this.state = {
       notes: [],
-      saved: true,
     };
   }
 
   componentDidMount() {
     const { widget } = this.props; 
+
     const data = JSON.parse(widget.data);
     const notes = data.notes || [];
+
     this.setState({
       notes: notes,
     });
   }
 
-  componentWillUnmount() {
-    if(!this.state.saved) {
-      this.updateWidget();
-    }
-  }
-
-  onNoteUpdated(index, content) {
-    if(this.updateNoteTimer){
-      clearTimeout(this.updateNoteTimer);
-    }
-
-    this.state.notes[index].content = content;
-    this.setState({
-      notes: this.state.notes,
-      saved: false,
-    });
-
-    const self = this;
-    this.updateNoteTimer = setTimeout(() => {
-      self.updateWidget();
-    }, 500);
-  }
-
-  getWidgetData() {
-    const data = {
-      notes: this.state.notes,
-    }
-    return JSON.stringify(data);
-  }
-
-  updateWidget() {
-    const data = this.getWidgetData();
+  updateWidget(notes) {
     
+    const widgetData = {
+      notes: notes,
+    }
+
+    const data = JSON.stringify(widgetData);
+
     UpdateWidgetDataMutation.commit(
       this.props.relay.environment,
       this.props.user,
       this.props.widget,
       data
     );
-
-    this.setState({
-      saved: true,
-    });
   }
 
-  addStickyNote() {
-
+  addNewNote(text) {
     const colorIndex = Math.floor(Math.random() * this.noteColors.length);
     const newNote = {
       id: this.randomString(6),
       color: this.noteColors[colorIndex],
-      content: '',
+      content: text,
     };
 
     this.state.notes.splice(0, 0, newNote);
+    this.updateWidget(this.state.notes);
 
     this.setState({
       notes: this.state.notes,
-      saved: false,
     });
   }
 
   removeStickyNote(index) {
     this.state.notes.splice(index, 1);
+    this.updateWidget(this.state.notes);
 
     this.setState({
       notes: this.state.notes,
-      saved: false,
     });
-
-    this.updateWidget();
   }
 
   // This is a temporary solution since we are updating the 
@@ -124,29 +92,43 @@ class NotesWidget extends React.Component {
 
   render() {
 
+    const sharedSpaceStyle = {
+      overflowX: 'visible',
+      overflowY: 'visible',
+      overflow: 'visible',
+    }
+
     const notesContainer = {
+      overflowY: 'scroll',
+      overflowX: 'hidden',
+      height: '70vh',
+    };
+
+    const mainContainer = {
       display: 'flex',
       flexDirection: 'column',
-      maxHeight: 500,
       marginTop: 27,
     }
 
-    return (<WidgetSharedSpace>
-            <div style={notesContainer}>
-              <NotesHeader
-                addNote={this.addStickyNote.bind(this)}/>
-              {this.state.notes.map((note, index) => {
-                  return (
-                    <Note
-                      key={note.id}
-                      index={index}
-                      removeStickyNote={this.removeStickyNote.bind(this)}
-                      onNoteUpdated={this.onNoteUpdated.bind(this)}
-                      note={note}>
-                    </Note>
-                  );
-              })}
-            </div>
+    return (<WidgetSharedSpace
+                containerStyle={sharedSpaceStyle}>
+              <div style={mainContainer}>
+                <AddNoteForm
+                  addNote={this.addNewNote.bind(this)}/>
+                <List 
+                    containerStyle={notesContainer}>
+                      {this.state.notes.map((note, index) => {
+                          return (
+                            <Note
+                              key={note.id}
+                              index={index}
+                              removeStickyNote={this.removeStickyNote.bind(this)}
+                              note={note}>
+                            </Note>
+                          );
+                      })}
+                </List>
+              </div>
           </WidgetSharedSpace>);
   }
 }
