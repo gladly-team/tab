@@ -3,9 +3,12 @@ import PropTypes from 'prop-types';
 import { getReferralData } from 'web-utils';
 import { goTo, goToDashboard, goToLogin } from 'navigation/navigation';
 
+import FadeInAnimation from 'general/FadeInAnimation';
+
 import environment from '../../../relay-env';
 
 import ConfirmationForm from './ConfirmationForm';
+import LoadingPage from 'general/LoadingPage';
 import CircleButton from 'general/CircleButton';
 import PasswordField from 'general/PasswordField';
 import { login, getOrCreate, getCurrentUser } from '../../utils/cognito-auth';
@@ -30,6 +33,8 @@ class LoginForm extends React.Component {
       alertOpen: false,
       alertMsg: '',
       createOnPasswordConfirm: false,
+      loading: false,
+      loadingMsg: '',
     }
   }
 
@@ -42,6 +47,12 @@ class LoginForm extends React.Component {
   handleSubmit() {
   	if(this.password.validate()) {
       const password = this.password.getValue();
+      
+      this.setState({
+        loading: true,
+        loadingMsg: 'Checking provided credentials...'
+      });
+
       getOrCreate(this.props.email, password, 
         (response, created, confirmed) => {
           if(this.state.createOnPasswordConfirm) {
@@ -51,7 +62,7 @@ class LoginForm extends React.Component {
           
           if(confirmed) {
             if(!created) {
-              goToDashboard();
+              this._goToDashboard();
             } else {
               this.onConfirmed(password);
             }
@@ -59,6 +70,8 @@ class LoginForm extends React.Component {
           }
 
           this.setState({
+            loading: false,
+            loadingMsg: '',
             password: password,
             created: created,
             confirmed: confirmed,
@@ -80,8 +93,14 @@ class LoginForm extends React.Component {
   }
 
   onConfirmed(password) {
-    password = password || this.state.password;
-    this.logUserIn(password, this.createNewUser, (err) => {
+    
+    this.setState({
+      loading: true,
+      loadingMsg: 'Setting your profile...'
+    });
+
+    password = this.state.password || password;
+    this.logUserIn(password, this.createNewUser.bind(this), (err) => {
       this.showAlert(err.message);
       this.setState({
         confirmed: true,
@@ -100,17 +119,17 @@ class LoginForm extends React.Component {
         const email = user.email;
 
         const referralData = getReferralData();
-
+        const self = this;
         CreateNewUserMutation.commit(
           environment,
           sub,
           email,
           referralData,
           (response) => {
-            goToDashboard();
+            self._goToDashboard();
           },
           (err) => {
-            console.error(err);
+            self.showAlert(err.message);
           }
         );
       });
@@ -125,17 +144,38 @@ class LoginForm extends React.Component {
 
   showAlert(msg) {
     this.setState({
+      loading: false,
+      loadingMsg: '',
       alertOpen: true,
       alertMsg: msg,
     });
   }
 
+  _goToDashboard() {
+    this.setState({
+      loading: true,
+      loadingMsg: 'Redirecting to dashboard...'
+    });
+
+    setTimeout(() => {
+      goToDashboard();
+    }, 2000);
+  }
+
   render() {
 
+    if(this.state.loading) {
+      return (<LoadingPage
+                msg={this.state.loadingMsg}/>)
+    }
+
     if(!this.state.confirmed) {
-      return (<ConfirmationForm 
-                email={this.props.email}
-                onConfirmed={this.onConfirmed.bind(this)}/>);
+      return (
+        <FadeInAnimation>
+          <ConfirmationForm 
+            email={this.props.email}
+            onConfirmed={this.onConfirmed.bind(this)}/>
+        </FadeInAnimation>);
     }
   	
   	const main = {

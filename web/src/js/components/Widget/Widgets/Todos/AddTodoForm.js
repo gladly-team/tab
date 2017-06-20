@@ -20,7 +20,8 @@ class AddTodoForm extends React.Component {
       hoveringCreate: false,
       hoveringAdd: false,
       show: false,
-      errorText: 'Use Shift + Enter to create a new line.'
+      errorText: 'Use Shift + Enter to create a new line.',
+      animating: false, 
     }
   }
 
@@ -65,23 +66,43 @@ class AddTodoForm extends React.Component {
 
   closeForm() {
     this.setState({
-      show: false,
-      hoveringCancel: false,
-      hoveringCreate: false,
-      hoveringAdd: false,
-    })
+      animating: true,
+    });
+
+    setTimeout(() => {
+      this.setState({
+        animating: false,
+        show: false,
+        hoveringCancel: false,
+        hoveringCreate: false,
+        hoveringAdd: false,
+      });
+    }, 200);
   }
 
   openForm() {
+    
     this.setState({
-      show: true,
-      hoveringCancel: false,
-      hoveringCreate: false,
-      hoveringAdd: false,
-    })
+      animating: true,
+    });
+
+    setTimeout(() => {
+      this.setState({
+        animating: false,
+        show: true,
+        hoveringCancel: false,
+        hoveringCreate: false,
+        hoveringAdd: false,
+      });
+    }, 200);
   }
 
   render() {
+
+
+    if(this.state.animating) {
+      return (<div style={{height: 113}}></div>);
+    }
 
     if(!this.state.show) {
       const chip = {

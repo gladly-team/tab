@@ -10,6 +10,8 @@ import WidgetsView from '../Widget/WidgetsView';
 import { FormattedMessage } from 'react-intl';
 import { goToSettings, goToDonate } from 'navigation/navigation';
 
+import FadeInAnimation from 'general/FadeInAnimation';
+
 import Dialog from 'material-ui/Dialog';
 import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
@@ -100,35 +102,37 @@ class Dashboard extends React.Component {
     // <UserDisplay user={user} />
 
     return (
-      <div>
-        <UserBackgroundImage user={user} />
-        <div style={content}>
-          <VcUser user={user} />
+      <FadeInAnimation>
+        <div key={'dashboard-key'}>
+          <UserBackgroundImage user={user} />
+          <div style={content}>
+            <VcUser user={user} />
+          </div>
+          <WidgetsView />
+          <div style={actioBtnContainer}>
+            <div style={paddingDiv}></div>
+            <IconButton 
+              tooltip="Settings"
+              tooltipPosition="top-center"
+              onClick={this._goToSettings.bind(this)}>
+              <FontIcon 
+                color={grey300}
+                hoverColor={'#FFF'}
+                className="fa fa-cog fa-lg" />
+            </IconButton>
+            
+            <IconButton 
+              tooltip="Donate"
+              tooltipPosition="top-center"
+              onClick={this._goToDonate.bind(this)}>
+              <FontIcon 
+                color={grey300}
+                hoverColor={'#FFF'}
+                className="fa fa-heart fa-lg" />
+            </IconButton>
+          </div>
         </div>
-        <WidgetsView />
-        <div style={actioBtnContainer}>
-          <div style={paddingDiv}></div>
-          <IconButton 
-            tooltip="Settings"
-            tooltipPosition="top-center"
-            onClick={this._goToSettings.bind(this)}>
-            <FontIcon 
-              color={grey300}
-              hoverColor={'#FFF'}
-              className="fa fa-cog fa-lg" />
-          </IconButton>
-          
-          <IconButton 
-            tooltip="Donate"
-            tooltipPosition="top-center"
-            onClick={this._goToDonate.bind(this)}>
-            <FontIcon 
-              color={grey300}
-              hoverColor={'#FFF'}
-              className="fa fa-heart fa-lg" />
-          </IconButton>
-        </div>
-      </div>
+    </FadeInAnimation>
     );
   }
 }

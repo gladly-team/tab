@@ -22,6 +22,8 @@ class AddBookmarkForm extends React.Component {
       hoveringAdd: false,
       hoveringEdit: false,
       show: false,
+      animating: false, 
+      editMode: false,
     }
   }
 
@@ -71,27 +73,54 @@ class AddBookmarkForm extends React.Component {
 
   closeForm() {
     this.setState({
-      show: false,
-      hoveringCancel: false,
-      hoveringCreate: false,
-      hoveringAdd: false,
-    })
+      animating: true,
+    });
+
+    setTimeout(() => {
+      this.setState({
+        animating: false,
+        show: false,
+        hoveringCancel: false,
+        hoveringCreate: false,
+        hoveringAdd: false,
+      });
+    }, 200);
   }
 
   openForm() {
+    if(this.state.editMode) {
+      this.props.onEditModeClicked();
+    }
+
     this.setState({
-      show: true,
-      hoveringCancel: false,
-      hoveringCreate: false,
-      hoveringAdd: false,
-    })
+      animating: true,
+      editMode: false,
+    });
+
+    setTimeout(() => {
+      this.setState({
+        animating: false,
+        show: true,
+        hoveringCancel: false,
+        hoveringCreate: false,
+        hoveringAdd: false,
+      });
+    }, 200);
   }
 
   onEditModeClicked() {
+    this.setState({
+      editMode: !this.state.editMode,
+    });
+
     this.props.onEditModeClicked();
   }
 
   render() {
+
+    if(this.state.animating) {
+      return (<div style={{height: 125}}></div>);
+    }
 
     if(!this.state.show) {
       const chip = {

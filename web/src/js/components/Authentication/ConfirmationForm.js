@@ -9,6 +9,8 @@ import {
   indigo500,
 } from 'material-ui/styles/colors';
 
+import appTheme from 'theme/default';
+
 class ConfirmationForm extends React.Component {
   
   constructor(props) {
@@ -90,6 +92,14 @@ class ConfirmationForm extends React.Component {
       color: '#FFF',
     }
 
+    const underlineStyle = {
+      borderColor: appTheme.palette.borderColor,
+    }
+
+    const underlineFocusStyle = {
+      borderColor: appTheme.palette.alternateTextColor,
+    }
+
     return (
     	<div style={main}>
     		<CodeField
@@ -97,6 +107,8 @@ class ConfirmationForm extends React.Component {
     		  onKeyPress = {this._handleKeyPress.bind(this)}
 		      floatingLabelText="Enter your code"
 		      floatingLabelStyle={floatingLabelStyle}
+          underlineStyle={underlineStyle}
+          underlineFocusStyle={underlineFocusStyle}
 		      inputStyle={inputStyle}/>
         <FlatButton
           onClick={this.resendConfirmationCode.bind(this)}

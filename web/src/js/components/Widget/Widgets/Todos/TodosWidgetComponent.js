@@ -177,6 +177,16 @@ class TodosWidget extends React.Component {
       fontSize: '14px'
     }
 
+    var completedHeader;
+    if(this.state.completed.length) {
+      completedHeader = (
+          <Subheader 
+            style={headerStyle}>
+              Completed
+          </Subheader>);
+    }
+      
+
     return (<WidgetSharedSpace
               containerStyle={sharedSpaceStyle}>
                 <div style={mainContainer}>
@@ -195,8 +205,7 @@ class TodosWidget extends React.Component {
                               remove={this.removeTodo.bind(this)}/>
                           );
                       })}
-                      
-                      <Subheader style={headerStyle}>Completed</Subheader>
+                      {completedHeader}
                       {this.state.completed.map((todo, index) => {
                           return (
                             <Todo
@@ -211,7 +220,7 @@ class TodosWidget extends React.Component {
                   </List>
                 </div>
           </WidgetSharedSpace>);
-  }
+    }
 }
 
 TodosWidget.propTypes = {
