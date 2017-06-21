@@ -19,7 +19,7 @@ class BackgroundSettings extends React.Component {
       this.defaultSelection = 'photo';
 
       this.state = {
-        selected: this.defaultSelection,
+        selected: null,
       }
   }
 
@@ -43,6 +43,8 @@ class BackgroundSettings extends React.Component {
 
   render() {
     const { app, user } = this.props;
+    if(!this.state.selected)
+      return null;
 
     const main = {
       marginLeft: 256,
