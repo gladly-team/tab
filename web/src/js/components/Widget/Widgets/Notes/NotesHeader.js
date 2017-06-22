@@ -1,37 +1,35 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 
-import FadeInAnimation from 'general/FadeInAnimation';
+import FadeInAnimation from 'general/FadeInAnimation'
 
-import Chip from 'material-ui/Chip';
-import AddCircle from 'material-ui/svg-icons/content/add-circle';
-import appTheme from 'theme/default';
+import Chip from 'material-ui/Chip'
+import AddCircle from 'material-ui/svg-icons/content/add-circle'
+import appTheme from 'theme/default'
 
 class NotesHeader extends React.Component {
-
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
     this.state = {
-      hoveringAdd: false,
+      hoveringAdd: false
     }
   }
 
-  addNote() {
-    this.props.addNote();
+  addNote () {
+    this.props.addNote()
   }
 
-  onAddBtnMouseMove(enter) {
+  onAddBtnMouseMove (enter) {
     this.setState({
-      hoveringAdd: enter,
+      hoveringAdd: enter
     })
   }
 
-  render() {
-
+  render () {
     const chip = {
       style: {
         margin: 5,
-        borderRadius: 3,
+        borderRadius: 3
       },
       backgroundColor: appTheme.palette.primary1Color,
       labelColor: '#FFF',
@@ -41,12 +39,12 @@ class NotesHeader extends React.Component {
         margin: '4px -4px 0px 4px',
         hoverColor: appTheme.fontIcon.color,
         color: 'rgba(255,255,255,.3)',
-        display: 'inline-block',
+        display: 'inline-block'
       }
     }
 
-    var addIconColor = (this.state.hoveringAdd)?
-                  chip.addIcon.hoverColor: chip.addIcon.color
+    var addIconColor = (this.state.hoveringAdd)
+                  ? chip.addIcon.hoverColor : chip.addIcon.color
 
     return (
       <FadeInAnimation>
@@ -56,26 +54,25 @@ class NotesHeader extends React.Component {
           labelColor={chip.labelColor}
           style={chip.style}>
             Notes
-            <div style={{display: 'inline', marginLeft: 10,}}>
+            <div style={{display: 'inline', marginLeft: 10}}>
               <AddCircle
                 color={addIconColor}
                 style={chip.addIcon}
                 onClick={this.addNote.bind(this)}
                 onMouseEnter={this.onAddBtnMouseMove.bind(this, true)}
-                onMouseLeave={this.onAddBtnMouseMove.bind(this, false)}/>
+                onMouseLeave={this.onAddBtnMouseMove.bind(this, false)} />
             </div>
         </Chip>
       </FadeInAnimation>
-    );
+    )
   }
 }
 
 NotesHeader.propTypes = {
-  addNote: PropTypes.func.isRequired,
-};
+  addNote: PropTypes.func.isRequired
+}
 
 NotesHeader.defaultProps = {
-};
+}
 
-
-export default NotesHeader;
+export default NotesHeader

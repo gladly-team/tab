@@ -1,22 +1,21 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 // import DefaultSearch from './DefaultSearch';
-import CenteredSearch from './CenteredSearch';
+import CenteredSearch from './CenteredSearch'
 
 class SearchWidget extends React.Component {
-
-  render() {
+  render () {
     return (
       <CenteredSearch
         widget={this.props.widget}
-        user={this.props.user}/>
-    );
+        user={this.props.user} />
+    )
   }
 }
 
 SearchWidget.propTypes = {
   widget: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired,
-};
+  user: PropTypes.object.isRequired
+}
 
-export default SearchWidget;
+export default SearchWidget

@@ -1,4 +1,4 @@
-import Relay from 'react-relay';
+import Relay from 'react-relay'
 
 export default {
   viewer: Component => Relay.QL`
@@ -8,4 +8,4 @@ export default {
       }
     }
   `
-};
+}

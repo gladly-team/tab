@@ -1,7 +1,7 @@
 import {
   commitMutation,
-  graphql,
-} from 'react-relay/compat';
+  graphql
+} from 'react-relay/compat'
 
 const mutation = graphql`
   mutation CreateNewUserMutation($input: CreateNewUserInput!) {
@@ -12,9 +12,9 @@ const mutation = graphql`
       }
     }
   }
-`;
+`
 
-function commit(environment, userId, email, referralData, onCompleted, onError) {
+function commit (environment, userId, email, referralData, onCompleted, onError) {
   return commitMutation(
     environment,
     {
@@ -23,14 +23,13 @@ function commit(environment, userId, email, referralData, onCompleted, onError) 
         input: { userId, email, referralData }
       },
       onCompleted: (response) => {
-        onCompleted(response);
+        onCompleted(response)
       },
       onError: (err) => {
-        onError(err);
+        onError(err)
       }
     }
-  );
+  )
 }
 
-export default {commit};
-
+export default {commit}

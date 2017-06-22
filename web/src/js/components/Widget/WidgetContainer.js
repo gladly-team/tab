@@ -1,9 +1,9 @@
 import {
   createFragmentContainer,
-  graphql,
-} from 'react-relay/compat';
+  graphql
+} from 'react-relay/compat'
 
-import Widget from './WidgetComponent';
+import Widget from './WidgetComponent'
 
 export default createFragmentContainer(Widget, {
   widget: graphql`
@@ -25,4 +25,4 @@ export default createFragmentContainer(Widget, {
       ...TodosWidgetContainer_user
     }
   `
-});
+})

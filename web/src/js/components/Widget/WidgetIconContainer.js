@@ -1,16 +1,16 @@
 import {
   createFragmentContainer,
-  graphql,
-} from 'react-relay/compat';
+  graphql
+} from 'react-relay/compat'
 
-import WidgetIcon from './WidgetIconComponent';
+import WidgetIcon from './WidgetIconComponent'
 
 export default createFragmentContainer(WidgetIcon, {
   widget: graphql`
     fragment WidgetIconContainer_widget on Widget {
-   	  id
+      id
       type
       visible
     }
   `
-});
+})

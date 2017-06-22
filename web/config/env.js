@@ -1,31 +1,31 @@
 // Grab NODE_ENV and REACT_APP_* environment variables and prepare them to be
 // injected into the application via DefinePlugin in Webpack configuration.
 
-var includes = require('lodash/includes');
+var includes = require('lodash/includes')
 
 // Our own defined variables we want to include in the build.
 var envVars = [
-'WEB_HOST', 
-'WEB_PORT', 
-'GRAPHQL_ENDPOINT', 
-'COGNITO_REGION', 
-'COGNITO_IDENTITYPOOLID',
-'COGNITO_USERPOOLID',
-'COGNITO_CLIENTID',
-'MOCK_DEV_AUTHENTICATION',
-'DEV_AUTHENTICATED_USER'];
+  'WEB_HOST',
+  'WEB_PORT',
+  'GRAPHQL_ENDPOINT',
+  'COGNITO_REGION',
+  'COGNITO_IDENTITYPOOLID',
+  'COGNITO_USERPOOLID',
+  'COGNITO_CLIENTID',
+  'MOCK_DEV_AUTHENTICATION',
+  'DEV_AUTHENTICATED_USER']
 
-var REACT_APP = /^REACT_APP_/i;
+var REACT_APP = /^REACT_APP_/i
 
-function getClientEnvironment(publicUrl) {
+function getClientEnvironment (publicUrl) {
   var processEnv = Object
     .keys(process.env)
     .filter((key) => {
-      return REACT_APP.test(key) || includes(envVars, key);
+      return REACT_APP.test(key) || includes(envVars, key)
     })
     .reduce((env, key) => {
-      env[key] = JSON.stringify(process.env[key]);
-      return env;
+      env[key] = JSON.stringify(process.env[key])
+      return env
     }, {
       // Useful for determining whether we’re running in production mode.
       // Most importantly, it switches React into the correct mode.
@@ -37,8 +37,8 @@ function getClientEnvironment(publicUrl) {
       // This should only be used as an escape hatch. Normally you would put
       // images into the `src` and `import` them in code to get their paths.
       'PUBLIC_URL': JSON.stringify(publicUrl)
-    });
-  return {'process.env': processEnv};
+    })
+  return {'process.env': processEnv}
 }
 
-module.exports = getClientEnvironment;
+module.exports = getClientEnvironment

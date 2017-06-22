@@ -1,21 +1,21 @@
 
-function getWidgetConfig(config, settings) {
-  const configuration = {};
-  var value;
-  var field;
-  for(var index in settings) {
-    field = settings[index].field;
-    if(!config || !(field in config)) {
-      value = settings[index].defaultValue;
+function getWidgetConfig (config, settings) {
+  const configuration = {}
+  var value
+  var field
+  for (var index in settings) {
+    field = settings[index].field
+    if (!config || !(field in config)) {
+      value = settings[index].defaultValue
     } else {
-      value = config[field];
+      value = config[field]
     }
-    configuration[field] = value;
+    configuration[field] = value
   }
 
-  return configuration;
+  return configuration
 }
 
 export {
-	getWidgetConfig,
+  getWidgetConfig
 }

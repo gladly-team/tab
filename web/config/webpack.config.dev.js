@@ -1,14 +1,9 @@
 
-var path = require('path');
-var autoprefixer = require('autoprefixer');
-var precss = require('precss');
-var webpack = require('webpack');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-var InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
-var WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
-var FaviconsWebpackPlugin = require('favicons-webpack-plugin');
-var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+var path = require('path')
+var webpack = require('webpack')
+var HtmlWebpackPlugin = require('html-webpack-plugin')
+var FaviconsWebpackPlugin = require('favicons-webpack-plugin')
+var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 // Load environment variables from .env file. Suppress warnings using silent
 // if this file is missing. dotenv will never modify any environment variables
@@ -17,24 +12,24 @@ var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlug
 require('dotenv-extended').load({
   path: path.join(__dirname, '..', '.env'),
   defaults: path.join(__dirname, '..', '.env.defaults'),
-  schema: path.join(__dirname, '..', '.env.schema'),
-});
-var getClientEnvironment = require('./env');
-var paths = require('./paths');
+  schema: path.join(__dirname, '..', '.env.schema')
+})
+var getClientEnvironment = require('./env')
+var paths = require('./paths')
 
 const htmlTemplate = new HtmlWebpackPlugin({
   title: 'Tab for a cause 2017',
   template: paths.appHtml,
   mobile: true,
   inject: false
-});
-const favIcon = new FaviconsWebpackPlugin(paths.appLogo);
+})
+const favIcon = new FaviconsWebpackPlugin(paths.appLogo)
 
-let appEntry;
+let appEntry
 appEntry = [
-    `webpack-dev-server/client?http://${process.env.WEB_HOST}:${process.env.WEB_PORT}`,
-    'webpack/hot/only-dev-server',
-    'react-hot-loader/patch',
+  `webpack-dev-server/client?http://${process.env.WEB_HOST}:${process.env.WEB_PORT}`,
+  'webpack/hot/only-dev-server',
+  'react-hot-loader/patch',
     // Include an alternative client for WebpackDevServer. A client's job is to
     // connect to WebpackDevServer by a socket and get notified about changes.
     // When you save a file, the client will either apply hot updates (in case
@@ -47,24 +42,23 @@ appEntry = [
     // require.resolve('webpack/hot/dev-server'),
     // require.resolve('react-dev-utils/webpackHotDevClient'),
     // We ship a few polyfills by default:
-    require.resolve('./polyfills'),
+  require.resolve('./polyfills'),
     // Finally, this is your app's code:
-    paths.appIndexJs
+  paths.appIndexJs
     // We include the app code last so that if there is a runtime error during
     // initialization, it doesn't blow up the WebpackDevServer client, and
     // changing JS code would still trigger a refresh.
-];
-
+]
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
-var publicPath = process.env.PUBLIC_PATH || '/';
+var publicPath = process.env.PUBLIC_PATH || '/'
 // `publicUrl` is just like `publicPath`, but we will provide it to our app
 // as %PUBLIC_URL% in `index.html` and `process.env.PUBLIC_URL` in JavaScript.
 // Omit trailing slash as %PUBLIC_PATH%/xyz looks better than %PUBLIC_PATH%xyz.
-var publicUrl = '';
+var publicUrl = ''
 // Get environment variables to inject into our app.
-var env = getClientEnvironment(publicUrl);
+var env = getClientEnvironment(publicUrl)
 
 // This is the development configuration.
 // It is focused on developer experience and fast rebuilds.
@@ -112,7 +106,7 @@ module.exports = {
       'react': paths.reactPath
     }
   },
-  
+
   module: {
     // First, run the linter.
     // It's important to do this before Babel processes the JS.
@@ -129,18 +123,18 @@ module.exports = {
         test: /\.jsx?$/,
         use: 'babel-loader',
         exclude: /node_modules/
-      }, 
+      },
       {
         test: /\.css$/,
         use: [
           'style-loader',
           'css-loader'
-        ],
-      }, 
+        ]
+      },
       {
         test: /\.json$/,
         use: 'json-loader'
-      }, 
+      },
       {
         test: /\.scss$/,
         use: [
@@ -150,15 +144,16 @@ module.exports = {
             options: {
               modules: true,
               importLoaders: 1,
-              localIdentName: "[name]__[local]___[hash:base64:5]",
+              localIdentName: '[name]__[local]___[hash:base64:5]'
             }
           },
           {
             loader: 'postcss-loader',
             options: {
-              //https://github.com/postcss/postcss-loader/issues/164
+              // https://github.com/postcss/postcss-loader/issues/164
               // use ident if passing a function
-              ident: 'postcss', plugins: () => [
+              ident: 'postcss',
+              plugins: () => [
                 require('precss'),
                 require('autoprefixer')
               ]
@@ -173,11 +168,11 @@ module.exports = {
           {
             loader: 'file-loader',
             options: {
-              name: "assets/[hash].[ext]"
+              name: 'assets/[hash].[ext]'
             }
           }
         ]
-      }, 
+      },
       {
         test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|ttf)$/,
         use: [
@@ -185,36 +180,22 @@ module.exports = {
             loader: 'url-loader',
             options: {
               limit: 1000,
-              name: "assets/[hash].[ext]"
+              name: 'assets/[hash].[ext]'
             }
           }
         ]
       }
     ]
   },
-  // We use PostCSS for autoprefixing only.
-  // Unsupported config on webpack 2.0
-  // postcss: function() {
-  //   return [
-  //     autoprefixer({
-  //       browsers: [
-  //         '>1%',
-  //         'last 4 versions',
-  //         'Firefox ESR',
-  //         'not ie < 9', // React doesn't support IE8 anyway
-  //       ]
-  //     }),
-  //   ];
-  // },
   plugins: [
     // https://medium.com/@adamrackis/vendor-and-code-splitting-in-webpack-2-6376358f1923
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
       filename: 'vendor.js',
-      minChunks(module, count) {
-        var context = module.context;
-        return context && context.indexOf('node_modules') >= 0;
-      },
+      minChunks (module, count) {
+        var context = module.context
+        return context && context.indexOf('node_modules') >= 0
+      }
     }),
     new BundleAnalyzerPlugin({
       // set to 'static' for analysis or 'disabled' for none
@@ -236,4 +217,4 @@ module.exports = {
     net: 'empty',
     tls: 'empty'
   }
-};
+}

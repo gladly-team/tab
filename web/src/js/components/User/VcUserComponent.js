@@ -1,27 +1,22 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import Relay from 'react-relay';
-import FontIcon from 'material-ui/FontIcon';
+import React, {Component} from 'react'
+import PropTypes from 'prop-types'
 
 class VcUser extends Component {
-
-  render() {
-
-    const { user } = this.props;
-    const heartsToLevelUp = user.heartsUntilNextLevel;
+  render () {
+    const { user } = this.props
 
     const container = {
       textAlign: 'center',
       position: 'absolute',
       top: 10,
-      right: 10,
-    };
+      right: 10
+    }
 
     const progressContainer = {
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'space-between',
-      alignItems: 'center',
+      alignItems: 'center'
     }
 
     const currentVc = {
@@ -30,7 +25,7 @@ class VcUser extends Component {
       fontWeight: 'normal',
       fontFamily: "'Helvetica Neue', Roboto, 'Segoe UI', Calibri, sans-serif",
       marginTop: 10,
-      marginBottom: 10,
+      marginBottom: 10
     }
 
     const text = {
@@ -41,24 +36,23 @@ class VcUser extends Component {
       fontFamily: "'Comic Sans MS', cursive, sans-serif"
     }
 
-
     return (
       <div style={container}>
         <div style={progressContainer}>
-          <h1 style={currentVc}>{user.vcCurrent} <i className="fa fa-heart-o"/></h1>
+          <h1 style={currentVc}>{user.vcCurrent} <i className='fa fa-heart-o' /></h1>
           <div style={text}>Level {user.level} Tabber</div>
         </div>
       </div>
-    );
+    )
   }
 }
 
 VcUser.propTypes = {
   user: PropTypes.object.isRequired
-};
-
-VcUser.defaultProps = {
-  
 }
 
-export default VcUser;
+VcUser.defaultProps = {
+
+}
+
+export default VcUser

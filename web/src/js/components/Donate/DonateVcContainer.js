@@ -1,10 +1,9 @@
-import React from 'react';
 import {
   createFragmentContainer,
-  graphql,
-} from 'react-relay/compat';
+  graphql
+} from 'react-relay/compat'
 
-import DonateVc from './DonateVcComponent';
+import DonateVc from './DonateVcComponent'
 
 export default createFragmentContainer(DonateVc, {
   app: graphql`
@@ -18,4 +17,4 @@ export default createFragmentContainer(DonateVc, {
       ...CharitiesContainer_user
     }
   `
-});
+})

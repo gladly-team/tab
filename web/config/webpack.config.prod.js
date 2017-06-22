@@ -1,13 +1,10 @@
-'use strict';
+'use strict'
 
-var path = require('path');
-var autoprefixer = require('autoprefixer');
-var webpack = require('webpack');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var ManifestPlugin = require('webpack-manifest-plugin');
-var InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
-var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+var path = require('path')
+var webpack = require('webpack')
+var HtmlWebpackPlugin = require('html-webpack-plugin')
+var ManifestPlugin = require('webpack-manifest-plugin')
+var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 // Load environment variables from .env file. Suppress warnings using silent
 // if this file is missing. dotenv will never modify any environment variables
@@ -16,41 +13,26 @@ var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlug
 require('dotenv-extended').load({
   path: path.join(__dirname, '..', '.env'),
   defaults: path.join(__dirname, '..', '.env.defaults'),
-  schema: path.join(__dirname, '..', '.env.schema'),
-});
-var paths = require('./paths');
-var getClientEnvironment = require('./env');
+  schema: path.join(__dirname, '..', '.env.schema')
+})
+var paths = require('./paths')
+var getClientEnvironment = require('./env')
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
-var publicPath = process.env.PUBLIC_PATH;
-// Some apps do not use client-side routing with pushState.
-// For these, "homepage" can be set to "." to enable relative asset paths.
-var shouldUseRelativeAssetPaths = publicPath === './';
+var publicPath = process.env.PUBLIC_PATH
 // `publicUrl` is just like `publicPath`, but we will provide it to our app
 // as %PUBLIC_URL% in `index.html` and `process.env.PUBLIC_URL` in JavaScript.
 // Omit trailing slash as %PUBLIC_URL%/xyz looks better than %PUBLIC_URL%xyz.
-var publicUrl = publicPath.slice(0, -1);
+var publicUrl = publicPath.slice(0, -1)
 // Get environment variables to inject into our app.
-var env = getClientEnvironment(publicUrl);
+var env = getClientEnvironment(publicUrl)
 
 // Assert this just to be safe.
 // Development builds of React are slow and not intended for production.
 if (env['process.env'].NODE_ENV !== '"production"') {
-  throw new Error('Production builds must have NODE_ENV=production.');
+  throw new Error('Production builds must have NODE_ENV=production.')
 }
-
-// Note: defined here because it will be used more than once.
-const cssFilename = 'static/css/[name].[contenthash:8].css';
-
-// ExtractTextPlugin expects the build output to be flat.
-// (See https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/27)
-// However, our output is structured with css, js and media folders.
-// To have this structure working with relative paths, we have to use custom options.
-const extractTextPluginOptions = shouldUseRelativeAssetPaths
-  // Making sure that the publicPath goes back to to build folder.
-  ? { publicPath: Array(cssFilename.split('/').length).join('../') }
-  : undefined;
 
 // This is the production configuration.
 // It compiles slowly and is focused on producing a fast and minimal bundle.
@@ -62,15 +44,11 @@ module.exports = {
   // You can exclude the *.map files from the build during deployment.
   devtool: 'source-map',
   // In production, we only want to load the polyfills and the app code.
-  entry: [
-    require.resolve('./polyfills'),
-    paths.appIndexJs
-  ],
   entry: {
     app: [
       require.resolve('./polyfills'),
-      paths.appIndexJs  
-    ],
+      paths.appIndexJs
+    ]
   },
   output: {
     // The build folder.
@@ -94,7 +72,7 @@ module.exports = {
     // We also include JSX as a common component filename extension to support
     // some tools, although we do not recommend using it, see:
     // https://github.com/facebookincubator/create-react-app/issues/290
-    extensions: ['.js', '.json', '.jsx', ],
+    extensions: ['.js', '.json', '.jsx'],
     alias: {
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
@@ -102,16 +80,6 @@ module.exports = {
     }
   },
   module: {
-    // First, run the linter.
-    // It's important to do this before Babel processes the JS.
-    // rules: [
-    //   {
-    //     enforce: 'pre',
-    //     test: /\.(js|jsx)$/,
-    //     loader: 'eslint-loader',
-    //     include: paths.appSrc
-    //   }
-    // ],
     loaders: [
       // ** ADDING/UPDATING LOADERS **
       // The "url" loader handles all assets unless explicitly excluded.
@@ -139,14 +107,14 @@ module.exports = {
       {
         test: /\.(js|jsx)$/,
         include: paths.appSrc,
-        loader: 'babel-loader',
+        loader: 'babel-loader'
       },
       {
         test: /\.css$/,
         use: [
           'style-loader',
           'css-loader'
-        ],
+        ]
       },
       {
         test: /\.scss$/,
@@ -157,15 +125,16 @@ module.exports = {
             options: {
               modules: true,
               importLoaders: 1,
-              localIdentName: "[name]__[local]___[hash:base64:5]",
+              localIdentName: '[name]__[local]___[hash:base64:5]'
             }
           },
           {
             loader: 'postcss-loader',
             options: {
-              //https://github.com/postcss/postcss-loader/issues/164
+              // https://github.com/postcss/postcss-loader/issues/164
               // use ident if passing a function
-              ident: 'postcss', plugins: () => [
+              ident: 'postcss',
+              plugins: () => [
                 require('precss'),
                 require('autoprefixer')
               ]
@@ -193,7 +162,7 @@ module.exports = {
     ]
   },
   // We use PostCSS for autoprefixing only.
-  //postcss: function() {
+  // postcss: function() {
   //  return [
   //    autoprefixer({
   //      browsers: [
@@ -204,16 +173,16 @@ module.exports = {
   //      ]
   //    }),
   //  ];
-  //},
+  // },
   plugins: [
     // https://medium.com/@adamrackis/vendor-and-code-splitting-in-webpack-2-6376358f1923
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
       filename: 'static/js/[name].[chunkhash:8].js',
-      minChunks(module, count) {
-        var context = module.context;
-        return context && context.indexOf('node_modules') >= 0;
-      },
+      minChunks (module, count) {
+        var context = module.context
+        return context && context.indexOf('node_modules') >= 0
+      }
     }),
     new BundleAnalyzerPlugin({
       // set to 'static' for analysis or 'disabled' for none
@@ -266,11 +235,6 @@ module.exports = {
         screw_ie8: true
       }
     }),
-    // Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
-    // new ExtractTextPlugin(cssFilename),
-    // Generate a manifest file which contains a mapping of all asset filenames
-    // to their corresponding output file so that tools can pick it up without
-    // having to parse `index.html`.
     new ManifestPlugin({
       fileName: 'asset-manifest.json'
     })
@@ -282,4 +246,4 @@ module.exports = {
     net: 'empty',
     tls: 'empty'
   }
-};
+}

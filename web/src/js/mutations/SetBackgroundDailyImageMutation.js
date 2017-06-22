@@ -1,7 +1,7 @@
 import {
   commitMutation,
-  graphql,
-} from 'react-relay/compat';
+  graphql
+} from 'react-relay/compat'
 
 const mutation = graphql`
   mutation SetBackgroundDailyImageMutation($input: SetUserBkgDailyImageInput!) {
@@ -16,10 +16,10 @@ const mutation = graphql`
       }
     }
   }
-`;
+`
 
-function commit(environment, user) {
-  const userId = user.id;
+function commit (environment, user) {
+  const userId = user.id
 
   return commitMutation(
     environment,
@@ -29,7 +29,7 @@ function commit(environment, user) {
         input: { userId }
       }
     }
-  );
+  )
 }
 
-export default {commit};
+export default {commit}
