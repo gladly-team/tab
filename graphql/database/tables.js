@@ -1,23 +1,23 @@
 
-import { mapValues } from 'lodash/object';
-import config from '../config';
+import { mapValues } from 'lodash/object'
+import config from '../config'
 
 const tableNameAppendix = (
-  config.TABLE_NAME_APPENDIX ?
-  config.TABLE_NAME_APPENDIX :
-  ''
-);
+  config.TABLE_NAME_APPENDIX
+  ? config.TABLE_NAME_APPENDIX
+  : ''
+)
 
 const tables = {
-	features: 'Features',
-	users: 'Users',
-	userLevels: 'UserLevels',
-	charities: 'Charities',
-	vcDonationLog: 'VcDonationLog',
-	backgroundImages: 'BackgroundImages',
-	widgets: 'Widgets',
-	userWidgets: 'UserWidgets',
-	referralDataLog: 'ReferralDataLog'
-};
+  features: 'Features',
+  users: 'Users',
+  userLevels: 'UserLevels',
+  charities: 'Charities',
+  vcDonationLog: 'VcDonationLog',
+  backgroundImages: 'BackgroundImages',
+  widgets: 'Widgets',
+  userWidgets: 'UserWidgets',
+  referralDataLog: 'ReferralDataLog'
+}
 
-export default mapValues(tables, (name) => `${name}${tableNameAppendix}`);
+export default mapValues(tables, (name) => `${name}${tableNameAppendix}`)

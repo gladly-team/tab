@@ -1,22 +1,21 @@
-import chokidar from 'chokidar';
-import cors from 'cors';
-import express from 'express';
-import bodyParser from 'body-parser';
-import graphQLHTTP from 'express-graphql';
-import path from 'path';
-import {clean} from 'require-clean';
-import {exec} from 'child_process';
+import chokidar from 'chokidar'
+import cors from 'cors'
+import express from 'express'
+import bodyParser from 'body-parser'
+import graphQLHTTP from 'express-graphql'
+import {clean} from 'require-clean'
+import {exec} from 'child_process'
 
-import config from './config';
-import { handler } from './handler';
+import config from './config'
+import { handler } from './handler'
 
-const GRAPHQL_PORT = config.GRAPHQL_PORT;
+const GRAPHQL_PORT = config.GRAPHQL_PORT
 
-let graphQLServer;
+let graphQLServer
 
 // Approximate an AWS Lambda event object from the request.
 // https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-set-up-simple-proxy.html#api-gateway-simple-proxy-for-lambda-input-format
-// 
+//
 // {
 //     "resource": "Resource path",
 //     "path": "Path parameter",
@@ -29,7 +28,7 @@ let graphQLServer;
 //     "body": "A JSON string of the request payload."
 //     "isBase64Encoded": "A boolean flag to indicate if the applicable request payload is Base64-encode"
 // }
-function generateLambdaEventObj(req) {
+function generateLambdaEventObj (req) {
   return {
     resource: '',
     path: req.baseUrl,
@@ -40,18 +39,17 @@ function generateLambdaEventObj(req) {
     stageVariables: {},
     requestContext: {},
     body: JSON.stringify(req.body),
-    isBase64Encoded: false,
+    isBase64Encoded: false
   }
 }
 
-function startGraphQLServer(callback) {
-  clean('./data/schema');
-  const {Schema} = require('./data/schema');
-  const graphQLApp = express();
-  graphQLApp.use(cors());
-  graphQLApp.use(bodyParser.json());
-  graphQLApp.use(bodyParser.urlencoded({ extended: true }));
-
+function startGraphQLServer (callback) {
+  clean('./data/schema')
+  const {Schema} = require('./data/schema')
+  const graphQLApp = express()
+  graphQLApp.use(cors())
+  graphQLApp.use(bodyParser.json())
+  graphQLApp.use(bodyParser.urlencoded({ extended: true }))
 
   // Use express-graphql in development if desired.
   // Otherwise, just use our plain Lambda handler.
@@ -59,58 +57,56 @@ function startGraphQLServer(callback) {
     graphQLApp.use('/', graphQLHTTP({
       graphiql: true,
       pretty: true,
-      schema: Schema,
-    }));
+      schema: Schema
+    }))
   } else {
     graphQLApp.post('/', (req, res) => {
-      const event = generateLambdaEventObj(req);
+      const event = generateLambdaEventObj(req)
       handler(event)
         // Use only the body (the rest is for use within an AWS Lambda context)
-        .then(response => res.send(response.body));
-    });
-
+        .then(response => res.send(response.body))
+    })
   }
 
   graphQLServer = graphQLApp.listen(GRAPHQL_PORT, () => {
     console.log(
       `GraphQL server is now running on http://localhost:${GRAPHQL_PORT}`
-    );
+    )
     if (callback) {
-      callback();
+      callback()
     }
-  });
+  })
 }
 
-function startServer(callback) {
-
+function startServer (callback) {
   // Shut down the server
   if (graphQLServer) {
-    graphQLServer.close();
+    graphQLServer.close()
   }
 
   // Compile the schema
   exec('yarn run update-schema', (error, stdout) => {
-    console.log(stdout);
-    function handleTaskDone() {
+    console.log(stdout)
+    function handleTaskDone () {
       if (callback) {
-        callback();
+        callback(new Error(error))
       }
     }
-    startGraphQLServer(handleTaskDone);
-  });
+    startGraphQLServer(handleTaskDone)
+  })
 }
 
 // Watch for DB or schema changes.
 const watcher = chokidar.watch([
-  './data/{schema}.js', 
+  './data/{schema}.js',
   './database/*.js',
-  './database/*/*.js']);
+  './database/*/*.js'])
 
 watcher.on('change', path => {
-  console.log(`\`${path}\` changed. Restarting.`);
+  console.log(`\`${path}\` changed. Restarting.`)
   startServer(() =>
     console.log('GraphQL server schema updated.')
-  );
-});
+  )
+})
 
-startServer();
+startServer()

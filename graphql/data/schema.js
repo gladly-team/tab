@@ -1,8 +1,6 @@
 /* eslint-disable no-unused-vars, no-use-before-define */
 
-import config from '../config';
-
-const staticRoot = config.S3_ENDPOINT;
+import config from '../config'
 
 import {
   GraphQLBoolean,
@@ -15,7 +13,7 @@ import {
   GraphQLSchema,
   GraphQLString,
   GraphQLInputObjectType
-} from 'graphql';
+} from 'graphql'
 
 import {
   connectionArgs,
@@ -28,12 +26,12 @@ import {
   cursorForObjectInConnection,
   connectionFromPromisedArray,
   offsetToCursor
-} from 'graphql-relay';
+} from 'graphql-relay'
 
 import {
   Widget,
   getWidget
-} from '../database/widgets/widget/baseWidget';
+} from '../database/widgets/widget/baseWidget'
 
 import {
   getUserWidgets,
@@ -42,13 +40,13 @@ import {
   updateUserWidgetEnabled,
   updateUserWidgetConfig,
   getAllWidgets
-} from '../database/widgets/widgets';
+} from '../database/widgets/widgets'
 
 import {
   updateBookmarkPosition,
   addBookmark,
   deleteBookmark
-} from '../database/widgets/widgetTypes/bookmarkWidget';
+} from '../database/widgets/widgetTypes/bookmarkWidget'
 
 import {
   User,
@@ -60,31 +58,33 @@ import {
   setUserBackgroundDaily,
   setUserActiveWidget,
   createUser
-} from '../database/users/user';
+} from '../database/users/user'
 
 import {
   Charity,
   getCharity,
   getCharities
-} from '../database/charities/charity';
+} from '../database/charities/charity'
 
 import {
   donateVc
-} from '../database/donations/donation';
+} from '../database/donations/donation'
 
 import {
   BackgroundImage,
   getBackgroundImage,
   getBackgroundImages
-} from '../database/backgroundImages/backgroundImage';
+} from '../database/backgroundImages/backgroundImage'
+
+const staticRoot = config.S3_ENDPOINT
 
 class App {
-  constructor(id) {
-    this.id = id;
+  constructor (id) {
+    this.id = id
   }
 
-  static getApp(id) {
-    return new App(id);
+  static getApp (id) {
+    return new App(id)
   }
 }
 /**
@@ -95,35 +95,35 @@ class App {
  */
 const { nodeInterface, nodeField } = nodeDefinitions(
   (globalId) => {
-    const { type, id } = fromGlobalId(globalId);
+    const { type, id } = fromGlobalId(globalId)
     if (type === 'App') {
-      return App.getApp(id);
+      return App.getApp(id)
     } else if (type === 'User') {
-      return getUser(id);
+      return getUser(id)
     } else if (type === 'Widget') {
-      return getWidget(id);
+      return getWidget(id)
     } else if (type === 'Charity') {
-      return getCharity(id);
+      return getCharity(id)
     } else if (type === 'BackgroundImage') {
-      return getBackgroundImage(id);
+      return getBackgroundImage(id)
     }
-    return null;
+    return null
   },
   (obj) => {
     if (obj instanceof App) {
-      return appType;
+      return appType
     } else if (obj instanceof User) {
-      return userType;
+      return userType
     } else if (obj instanceof Widget) {
-      return widgetType;
+      return widgetType
     } else if (obj instanceof Charity) {
-      return charityType;
+      return charityType
     } else if (obj instanceof BackgroundImage) {
-      return backgroundImageType;
+      return backgroundImageType
     }
-    return null;
+    return null
   }
-);
+)
 
 /**
  * Define your own types here
@@ -136,7 +136,7 @@ const backgroundImageType = new GraphQLObjectType({
     id: globalIdField('BackgroundImage'),
     name: {
       type: GraphQLString,
-      description: 'the background image name',
+      description: 'the background image name'
     },
     fileName: {
       type: GraphQLString,
@@ -145,12 +145,12 @@ const backgroundImageType = new GraphQLObjectType({
     url: {
       type: GraphQLString,
       resolve: (image) => {
-        return staticRoot + '/' + image.fileName;
+        return staticRoot + '/' + image.fileName
       }
     }
   }),
-  interfaces: [nodeInterface],
-});
+  interfaces: [nodeInterface]
+})
 
 const imageType = new GraphQLObjectType({
   name: 'Image',
@@ -171,11 +171,11 @@ const imageType = new GraphQLObjectType({
     url: {
       type: GraphQLString,
       resolve: (image) => {
-        return staticRoot + '/' + image.fileName;
+        return staticRoot + '/' + image.fileName
       }
     }
   })
-});
+})
 
 const userType = new GraphQLObjectType({
   name: 'User',
@@ -214,8 +214,8 @@ const userType = new GraphQLObjectType({
       type: widgetConnection,
       description: 'User widgets',
       args: {
-         ...connectionArgs,
-         enabled: { type: GraphQLBoolean }
+        ...connectionArgs,
+        enabled: { type: GraphQLBoolean }
       },
       resolve: (user, args) => connectionFromPromisedArray(getUserWidgets(user.id, args.enabled), args)
     },
@@ -237,7 +237,7 @@ const userType = new GraphQLObjectType({
     }
   }),
   interfaces: [nodeInterface]
-});
+})
 
 const widgetType = new GraphQLObjectType({
   name: 'Widget',
@@ -278,7 +278,7 @@ const widgetType = new GraphQLObjectType({
     }
   }),
   interfaces: [nodeInterface]
-});
+})
 
 const charityType = new GraphQLObjectType({
   name: 'Charity',
@@ -287,39 +287,39 @@ const charityType = new GraphQLObjectType({
     id: globalIdField('Charity'),
     name: {
       type: GraphQLString,
-      description: 'the charity name',
+      description: 'the charity name'
     },
     category: {
       type: GraphQLString,
-      description: 'the charity category',
+      description: 'the charity category'
     },
     website: {
       type: GraphQLString,
-      description: 'the charity website',
+      description: 'the charity website'
     },
     description: {
       type: GraphQLString,
-      description: 'the charity description',
+      description: 'the charity description'
     },
     impact: {
       type: GraphQLString,
-      description: 'the charity impact message',
+      description: 'the charity impact message'
     },
     logo: {
       type: GraphQLString,
       resolve: (charity) => {
-        return staticRoot + '/charities/charity-logos/' + charity.logo;
+        return staticRoot + '/charities/charity-logos/' + charity.logo
       }
     },
     image: {
       type: GraphQLString,
       resolve: (charity) => {
-        return staticRoot + '/charities/charity-post-donation-images/' + charity.image;
+        return staticRoot + '/charities/charity-post-donation-images/' + charity.image
       }
     }
   }),
-  interfaces: [nodeInterface],
-});
+  interfaces: [nodeInterface]
+})
 
 const appType = new GraphQLObjectType({
   name: 'App',
@@ -346,14 +346,14 @@ const appType = new GraphQLObjectType({
     }
   }),
   interfaces: [nodeInterface]
-});
+})
 
 /**
  * Define your own connection types here
  */
-const { connectionType: widgetConnection, edgeType: widgetEdge } = connectionDefinitions({ name: 'Widget', nodeType: widgetType });
-const { connectionType: charityConnection, edgeType: charityEdge } = connectionDefinitions({ name: 'Charity', nodeType: charityType });
-const { connectionType: backgroundImageConnection, edgeType: backgroundImageEdge } = connectionDefinitions({ name: 'BackgroundImage', nodeType: backgroundImageType });
+const { connectionType: widgetConnection, edgeType: widgetEdge } = connectionDefinitions({ name: 'Widget', nodeType: widgetType })
+const { connectionType: charityConnection, edgeType: charityEdge } = connectionDefinitions({ name: 'Charity', nodeType: charityType })
+const { connectionType: backgroundImageConnection, edgeType: backgroundImageEdge } = connectionDefinitions({ name: 'BackgroundImage', nodeType: backgroundImageType })
 
 /**
  * Updated the user vc.
@@ -361,7 +361,7 @@ const { connectionType: backgroundImageConnection, edgeType: backgroundImageEdge
 const updateVcMutation = mutationWithClientMutationId({
   name: 'UpdateVc',
   inputFields: {
-    userId: { type: new GraphQLNonNull(GraphQLString) },
+    userId: { type: new GraphQLNonNull(GraphQLString) }
   },
   outputFields: {
     user: {
@@ -370,10 +370,10 @@ const updateVcMutation = mutationWithClientMutationId({
     }
   },
   mutateAndGetPayload: ({userId}) => {
-    const { type, id } = fromGlobalId(userId);
-    return updateUserVc(id, 1);
+    const { type, id } = fromGlobalId(userId)
+    return updateUserVc(id, 1)
   }
-});
+})
 
 /**
  * Donate to a charity.
@@ -383,7 +383,7 @@ const donateVcMutation = mutationWithClientMutationId({
   inputFields: {
     userId: { type: new GraphQLNonNull(GraphQLString) },
     charityId: { type: new GraphQLNonNull(GraphQLString) },
-    vc: { type: new GraphQLNonNull(GraphQLInt) },
+    vc: { type: new GraphQLNonNull(GraphQLInt) }
   },
   outputFields: {
     user: {
@@ -392,11 +392,11 @@ const donateVcMutation = mutationWithClientMutationId({
     }
   },
   mutateAndGetPayload: ({userId, charityId, vc}) => {
-    const userGlobalObj = fromGlobalId(userId);
-    const charityGlobalObj = fromGlobalId(charityId);
-    return donateVc(userGlobalObj.id, charityGlobalObj.id, vc);
+    const userGlobalObj = fromGlobalId(userId)
+    const charityGlobalObj = fromGlobalId(charityId)
+    return donateVc(userGlobalObj.id, charityGlobalObj.id, vc)
   }
-});
+})
 
 /**
  * Set user background image mutation.
@@ -414,11 +414,11 @@ const setUserBkgImageMutation = mutationWithClientMutationId({
     }
   },
   mutateAndGetPayload: ({userId, imageId}) => {
-    const userGlobalObj = fromGlobalId(userId);
-    const bckImageGlobalObj = fromGlobalId(imageId);
-    return setUserBackgroundImage(userGlobalObj.id, bckImageGlobalObj.id);
+    const userGlobalObj = fromGlobalId(userId)
+    const bckImageGlobalObj = fromGlobalId(imageId)
+    return setUserBackgroundImage(userGlobalObj.id, bckImageGlobalObj.id)
   }
-});
+})
 
 /**
  * Set user background color mutation.
@@ -436,10 +436,10 @@ const setUserBkgColorMutation = mutationWithClientMutationId({
     }
   },
   mutateAndGetPayload: ({userId, color}) => {
-    const userGlobalObj = fromGlobalId(userId);
-    return setUserBackgroundColor(userGlobalObj.id, color);
+    const userGlobalObj = fromGlobalId(userId)
+    return setUserBackgroundColor(userGlobalObj.id, color)
   }
-});
+})
 
 /**
  * Set user background custom image mutation.
@@ -457,11 +457,10 @@ const setUserBkgCustomImageMutation = mutationWithClientMutationId({
     }
   },
   mutateAndGetPayload: ({userId, image}) => {
-    const userGlobalObj = fromGlobalId(userId);
-    return setUserBackgroundFromCustomUrl(userGlobalObj.id, image);
+    const userGlobalObj = fromGlobalId(userId)
+    return setUserBackgroundFromCustomUrl(userGlobalObj.id, image)
   }
-});
-
+})
 
 /**
  * Set user background daily image.
@@ -478,10 +477,10 @@ const setUserBkgDailyImageMutation = mutationWithClientMutationId({
     }
   },
   mutateAndGetPayload: ({userId}) => {
-    const userGlobalObj = fromGlobalId(userId);
-    return setUserBackgroundDaily(userGlobalObj.id);
+    const userGlobalObj = fromGlobalId(userId)
+    return setUserBackgroundDaily(userGlobalObj.id)
   }
-});
+})
 
 /**
  * Set user background daily image.
@@ -499,10 +498,10 @@ const setUserActiveWidgetMutation = mutationWithClientMutationId({
     }
   },
   mutateAndGetPayload: ({userId, widgetId}) => {
-    const userGlobalObj = fromGlobalId(userId);
-    return setUserActiveWidget(userGlobalObj.id, widgetId);
+    const userGlobalObj = fromGlobalId(userId)
+    return setUserActiveWidget(userGlobalObj.id, widgetId)
   }
-});
+})
 
 /**
  * Add a new bookmark.
@@ -519,18 +518,18 @@ const addBookmarkMutation = mutationWithClientMutationId({
     widget: {
       type: widgetType,
       resolve: (userWidget) => {
-        userWidget.id = userWidget.widgetId;
-        userWidget.data = JSON.stringify(userWidget.data);
-        return userWidget;
+        userWidget.id = userWidget.widgetId
+        userWidget.data = JSON.stringify(userWidget.data)
+        return userWidget
       }
     }
   },
   mutateAndGetPayload: ({userId, widgetId, name, link}) => {
-    const userGlobalObj = fromGlobalId(userId);
-    const widgetGlobalObj = fromGlobalId(widgetId);
-    return addBookmark(userGlobalObj.id, widgetGlobalObj.id, name, link);
+    const userGlobalObj = fromGlobalId(userId)
+    const widgetGlobalObj = fromGlobalId(widgetId)
+    return addBookmark(userGlobalObj.id, widgetGlobalObj.id, name, link)
   }
-});
+})
 
 /**
  * Remove a bookmark.
@@ -546,18 +545,18 @@ const removeBookmarkMutation = mutationWithClientMutationId({
     widget: {
       type: widgetType,
       resolve: (userWidget) => {
-        userWidget.id = userWidget.widgetId;
-        userWidget.data = JSON.stringify(userWidget.data);
-        return userWidget;
+        userWidget.id = userWidget.widgetId
+        userWidget.data = JSON.stringify(userWidget.data)
+        return userWidget
       }
     }
   },
   mutateAndGetPayload: ({userId, widgetId, position}) => {
-    const userGlobalObj = fromGlobalId(userId);
-    const widgetGlobalObj = fromGlobalId(widgetId);
-    return deleteBookmark(userGlobalObj.id, widgetGlobalObj.id, position);
+    const userGlobalObj = fromGlobalId(userId)
+    const widgetGlobalObj = fromGlobalId(widgetId)
+    return deleteBookmark(userGlobalObj.id, widgetGlobalObj.id, position)
   }
-});
+})
 
 /**
  * Update widget data.
@@ -573,16 +572,16 @@ const updateWidgetDataMutation = mutationWithClientMutationId({
     widget: {
       type: widgetType,
       resolve: (userWidget) => {
-        return userWidget;
+        return userWidget
       }
     }
   },
   mutateAndGetPayload: ({userId, widgetId, data}) => {
-    const userGlobalObj = fromGlobalId(userId);
-    const widgetGlobalObj = fromGlobalId(widgetId);
-    return updateUserWidgetData(userGlobalObj.id, widgetGlobalObj.id, data);
+    const userGlobalObj = fromGlobalId(userId)
+    const widgetGlobalObj = fromGlobalId(widgetId)
+    return updateUserWidgetData(userGlobalObj.id, widgetGlobalObj.id, data)
   }
-});
+})
 
 /**
  * Update widget visibility.
@@ -598,16 +597,16 @@ const updateWidgetVisibilityMutation = mutationWithClientMutationId({
     widget: {
       type: widgetType,
       resolve: (userWidget) => {
-        return userWidget;
+        return userWidget
       }
     }
   },
   mutateAndGetPayload: ({userId, widgetId, visible}) => {
-    const userGlobalObj = fromGlobalId(userId);
-    const widgetGlobalObj = fromGlobalId(widgetId);
-    return updateUserWidgetVisibility(userGlobalObj.id, widgetGlobalObj.id, visible);
+    const userGlobalObj = fromGlobalId(userId)
+    const widgetGlobalObj = fromGlobalId(widgetId)
+    return updateUserWidgetVisibility(userGlobalObj.id, widgetGlobalObj.id, visible)
   }
-});
+})
 
 /**
  * Update widget enable.
@@ -623,16 +622,16 @@ const updateWidgetEnabledMutation = mutationWithClientMutationId({
     widget: {
       type: widgetType,
       resolve: (userWidget) => {
-        return userWidget;
+        return userWidget
       }
     }
   },
   mutateAndGetPayload: ({userId, widgetId, enabled}) => {
-    const userGlobalObj = fromGlobalId(userId);
-    const widgetGlobalObj = fromGlobalId(widgetId);
-    return updateUserWidgetEnabled(userGlobalObj.id, widgetGlobalObj.id, enabled);
+    const userGlobalObj = fromGlobalId(userId)
+    const widgetGlobalObj = fromGlobalId(widgetId)
+    return updateUserWidgetEnabled(userGlobalObj.id, widgetGlobalObj.id, enabled)
   }
-});
+})
 
 /**
  * Update widget config.
@@ -648,23 +647,23 @@ const updateWidgetConfigMutation = mutationWithClientMutationId({
     widget: {
       type: widgetType,
       resolve: (userWidget) => {
-        return userWidget;
+        return userWidget
       }
     }
   },
   mutateAndGetPayload: ({userId, widgetId, config}) => {
-    const userGlobalObj = fromGlobalId(userId);
-    const widgetGlobalObj = fromGlobalId(widgetId);
-    return updateUserWidgetConfig(userGlobalObj.id, widgetGlobalObj.id, config);
+    const userGlobalObj = fromGlobalId(userId)
+    const widgetGlobalObj = fromGlobalId(widgetId)
+    return updateUserWidgetConfig(userGlobalObj.id, widgetGlobalObj.id, config)
   }
-});
+})
 
 const ReferralDataInput = new GraphQLInputObjectType({
   name: 'ReferralData',
   fields: {
     referringUser: { type: new GraphQLNonNull(GraphQLString) }
   }
-});
+})
 
 /**
  * Create a new user.
@@ -683,12 +682,11 @@ const createNewUserMutation = mutationWithClientMutationId({
     }
   },
   mutateAndGetPayload: ({userId, email, referralData}) => {
-    const user = new User(userId);
-    user.email = email;
-    return createUser(user, referralData);
+    const user = new User(userId)
+    user.email = email
+    return createUser(user, referralData)
   }
-});
-
+})
 
 /**
  * This is the type that will be the root of our query,
@@ -711,7 +709,7 @@ const queryType = new GraphQLObjectType({
       resolve: (_, args) => getUser(args.userId)
     }
   })
-});
+})
 
 /**
  * This is the type that will be the root of our mutations,
@@ -737,9 +735,9 @@ const mutationType = new GraphQLObjectType({
     removeBookmark: removeBookmarkMutation,
     setUserActiveWidget: setUserActiveWidgetMutation,
 
-    createNewUser: createNewUserMutation,
+    createNewUser: createNewUserMutation
   })
-});
+})
 
 /**
  * Finally, we construct our schema (whose starting query type is the query
@@ -748,4 +746,4 @@ const mutationType = new GraphQLObjectType({
 export var Schema = new GraphQLSchema({
   query: queryType,
   mutation: mutationType
-});
+})
