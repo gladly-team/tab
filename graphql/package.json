@@ -50,11 +50,11 @@
     "build:config": "NODE_ENV=production node -r dotenv-extended/config ./scripts/generateConfig.js",
     "deploy": "npm run build && serverless deploy",
     "update-schema": "babel-node ./scripts/updateSchema.js",
-    "test": "npm-run-all -s test:run test:codecov",
+    "test": "npm run test:lint && npm-run-all -s test:run test:codecov",
     "test:run": "jest --coverage",
     "test:codecov": "if-env NODE_ENV=test && codecov || echo 'Skipping test coverage logging.'",
     "test:watch": "jest --watch",
-    "lint": "standard --fix"
+    "test:lint": "standard --fix"
   },
   "repository": {
     "type": "git",
