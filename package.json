@@ -13,6 +13,7 @@
     "start": "yarn run docker:start & yarn run s3:start & yarn run web:graphqlschema:monitor & yarn run web:start & yarn run graphql:start & yarn run lambda:start",
     "stop": "docker-compose stop",
     "test": "yarn run graphql:test && yarn run lambda:test && yarn run web:test && yarn run dynamodb:test",
+    "lint": "yarn run graphql:lint && yarn run lambda:lint && yarn run web:lint",
     "all:install": "yarn install && yarn run s3:install && yarn run web:install && yarn run graphql:install && yarn run dynamodb:install && yarn run lambda:install",
     "docker:start": "docker-compose up 2>&1 | node scripts/log-prefix.js [docker] cyan",
     "dynamodb:install": "cd ./dynamodb && yarn install",
@@ -29,7 +30,10 @@
     "web:test": "cd ./web && yarn test",
     "web:start": "cd ./web && yarn run start 2>&1 | node ../scripts/log-prefix.js [web] blue",
     "s3:install": "cd ./s3 && yarn install",
-    "s3:start": "cd ./s3 && yarn run start | node ../scripts/log-prefix.js [s3] yellow"
+    "s3:start": "cd ./s3 && yarn run start | node ../scripts/log-prefix.js [s3] yellow",
+    "graphql:lint": "cd ./graphql && yarn lint",
+    "lambda:lint": "cd ./lambda && yarn lint",
+    "web:lint": "cd ./web && yarn lint"
   },
   "repository": {
     "type": "git",

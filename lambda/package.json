@@ -31,6 +31,7 @@
     "npm-run-all": "^4.0.2",
     "serverless": "^1.14.0",
     "serverless-plugin-include-dependencies": "^2.1.2",
+    "standard": "^10.0.2",
     "yamljs": "^0.2.8"
   },
   "scripts": {
@@ -41,7 +42,8 @@
     "test": "npm-run-all -s test:run test:codecov",
     "test:run": "jest --coverage",
     "test:codecov": "if-env NODE_ENV=test && codecov || echo 'Skipping test coverage logging.'",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "lint": "standard --fix"
   },
   "repository": {
     "type": "git",
