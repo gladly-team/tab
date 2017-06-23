@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import InvitePopover from './InvitePopover';
+import InvitePopover from './InvitePopover'
 import IconButton from 'material-ui/IconButton'
 import FontIcon from 'material-ui/FontIcon'
 
@@ -10,35 +10,34 @@ import {
 } from 'material-ui/styles/colors'
 
 class InviteFriend extends React.Component {
-
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.state = {
-      open: false,
+      open: false
     }
   }
 
-  handleTouchTap = (event) => {
+  handleTouchTap (event) {
     // This prevents ghost click.
     event.preventDefault()
 
     this.setState({
       open: true,
-      anchorEl: event.currentTarget,
+      anchorEl: event.currentTarget
     })
   }
 
-  handleInvitePopoverRequestClose = () => {
+  handleInvitePopoverRequestClose () {
     this.setState({
-      open: false,
+      open: false
     })
   }
 
   render () {
     const { user } = this.props
-    const userId = user? user.id: '';
-    
+    const userId = user ? user.id : ''
+
     return (
       <div>
         <IconButton
@@ -51,11 +50,11 @@ class InviteFriend extends React.Component {
             className='fa fa-users fa-lg' />
         </IconButton>
 
-        <InvitePopover 
+        <InvitePopover
           open={this.state.open}
           anchorEl={this.state.anchorEl}
           userId={userId}
-          onRequestClose={this.handleInvitePopoverRequestClose.bind(this)}/>
+          onRequestClose={this.handleInvitePopoverRequestClose.bind(this)} />
       </div>
     )
   }

@@ -28,7 +28,7 @@ class InviteFriendView extends React.Component {
 
             return (
               <InviteFriend
-                user={props? props.user: null } />
+                user={props ? props.user : null} />
             )
           }} />
       </AuthUserComponent>

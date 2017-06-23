@@ -104,7 +104,8 @@
     "test:codecov": "if-env NODE_ENV=test && codecov || echo 'Skipping test coverage logging.'",
     "test:watch": "jest --env=jsdom --watch",
     "build:langs": "node scripts/translate.js",
-    "test:lint": "standard"
+    "test:lint": "standard",
+    "lint:fix": "standard --fix"
   },
   "jest": {
     "collectCoverageFrom": [

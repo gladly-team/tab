@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import VcUser from '../User/VcUserContainer'
 import UserBackgroundImage from '../User/UserBackgroundImageContainer'
 import WidgetsView from '../Widget/WidgetsView'
-import InviteFriend from '../InviteFriend/InviteFriendView';
+import InviteFriend from '../InviteFriend/InviteFriendView'
 
 import { FormattedMessage } from 'react-intl'
 import { goToSettings, goToDonate } from 'navigation/navigation'
