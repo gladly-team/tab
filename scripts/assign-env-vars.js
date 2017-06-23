@@ -21,21 +21,20 @@ const envVars = [
   // Endpoints
   'GRAPHQL_ENDPOINT',
   'DYNAMODB_ENDPOINT',
-  'S3_ENDPOINT',
+  'S3_ENDPOINT'
   // Secrets
-];
+]
 
 // Expect one argument, the stage name.
-const assignEnvVars = function(stageName) {
-
+const assignEnvVars = function (stageName) {
   // Using the name of the stage, assign the stage-specific
   // value to the environment value name.
-  const stageNameUppercase = stageName ? stageName.toUpperCase() : '';
-  const stagePrefix = stageNameUppercase ? `${stageNameUppercase}_` : '';
+  const stageNameUppercase = stageName ? stageName.toUpperCase() : ''
+  const stagePrefix = stageNameUppercase ? `${stageNameUppercase}_` : ''
   envVars.forEach((envVar) => {
     let stageEnvVar = `${stagePrefix}${envVar}`
-    process.env[envVar] = process.env[stageEnvVar];
-  });
+    process.env[envVar] = process.env[stageEnvVar]
+  })
 }
 
-module.exports = assignEnvVars;
+module.exports = assignEnvVars

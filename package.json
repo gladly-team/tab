@@ -6,13 +6,16 @@
   "dependencies": {},
   "devDependencies": {
     "nodemon": "^1.11.0",
-    "npmlog": "^4.1.0"
+    "npmlog": "^4.1.0",
+    "standard": "^10.0.2"
   },
   "scripts": {
     "build": "yarn run all:install & docker-compose build",
     "start": "yarn run docker:start & yarn run s3:start & yarn run web:graphqlschema:monitor & yarn run web:start & yarn run graphql:start & yarn run lambda:start",
     "stop": "docker-compose stop",
     "test": "yarn run graphql:test && yarn run lambda:test && yarn run web:test && yarn run dynamodb:test",
+    "lint": "standard \"scripts/**/*.js\"",
+    "lint:fix": "standard \"scripts/**/*.js\" --fix",
     "all:install": "yarn install && yarn run s3:install && yarn run web:install && yarn run graphql:install && yarn run dynamodb:install && yarn run lambda:install",
     "docker:start": "docker-compose up 2>&1 | node scripts/log-prefix.js [docker] cyan",
     "dynamodb:install": "cd ./dynamodb && yarn install",
