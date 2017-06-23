@@ -1,111 +1,105 @@
-import React from 'react';
-import EmailForm from './EmailForm';
-import LoginForm from './LoginForm';
-import SignUpForm from './SignUpForm';
-import ConfirmationForm from './ConfirmationForm';
-import { getCurrentUser, login } from '../../utils/cognito-auth';
-import { goTo, goToDashboard } from 'navigation/navigation';
-import SlideFromRightAnimation from 'general/SlideFromRightAnimation';
-import SlideFromLeftAnimation from 'general/SlideFromLeftAnimation';
+import React from 'react'
+import EmailForm from './EmailForm'
+import LoginForm from './LoginForm'
+import { getCurrentUser, login } from '../../utils/cognito-auth'
+import { goToDashboard } from 'navigation/navigation'
+import SlideFromRightAnimation from 'general/SlideFromRightAnimation'
+import SlideFromLeftAnimation from 'general/SlideFromLeftAnimation'
 
-import { getUserCredentials } from '../../utils/tfac-mgr';
+import { getUserCredentials } from '../../utils/tfac-mgr'
 
-import appTheme from 'theme/default';
+import appTheme from 'theme/default'
 
 class Authentication extends React.Component {
-
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
     this.state = {
       userId: null,
       email: null,
-      login: false,
-    };
+      login: false
+    }
   }
 
-  componentDidMount() {
+  componentDidMount () {
     getCurrentUser((user) => {
       if (user && user.sub) {
-        goToDashboard();
-        return;
+        goToDashboard()
       }
 
       // Auto login from migration.
       // this.tryToLoginWithTfac();
-    });
-
+    })
   }
 
   // Auto login from migration.
-  tryToLoginWithTfac() {
+  tryToLoginWithTfac () {
     getUserCredentials()
       .then(user => {
-          login(user.email, user.password, (res) => {
-            goToDashboard();
-          }, (err) => {
-            console.log(err);
-          });
+        login(user.email, user.password, (res) => {
+          goToDashboard()
+        }, (err) => {
+          console.log(err)
+        })
       })
   }
 
-  onEmailSet(email) {
+  onEmailSet (email) {
     this.setState({
       email: email,
-      login: true,
-    });
+      login: true
+    })
   }
 
-  onLoginBack() {
+  onLoginBack () {
     this.setState({
-      login: false,
-    });
+      login: false
+    })
   }
 
-  render() {
-    var backgroundColor = appTheme.palette.primary1Color;
+  render () {
+    var backgroundColor = appTheme.palette.primary1Color
     var currentState = (
-      <EmailForm 
-        onResponse={this.onEmailSet.bind(this)}/>);
+      <EmailForm
+        onResponse={this.onEmailSet.bind(this)} />)
 
-    if(this.state.email && !this.state.login) {
-      backgroundColor = '#7C4DFF';
+    if (this.state.email && !this.state.login) {
+      backgroundColor = '#7C4DFF'
       currentState = (
         <SlideFromLeftAnimation
           enterAnimationTimeout={0}
-          enter={true}>
-            <EmailForm 
-              email={this.state.email}
-              onResponse={this.onEmailSet.bind(this)}/>
-        </SlideFromLeftAnimation>);
+          enter>
+          <EmailForm
+            email={this.state.email}
+            onResponse={this.onEmailSet.bind(this)} />
+        </SlideFromLeftAnimation>)
     }
-    
-    if(this.state.email && this.state.login) {
-      backgroundColor = appTheme.palette.primary1Color;
+
+    if (this.state.email && this.state.login) {
+      backgroundColor = appTheme.palette.primary1Color
 
       currentState = (
         <SlideFromRightAnimation
           enterAnimationTimeout={0}
-          enter={true}>
-            <LoginForm
-              onBack={this.onLoginBack.bind(this)} 
-              email={this.state.email}/>
-        </SlideFromRightAnimation>);
-    } 
+          enter>
+          <LoginForm
+            onBack={this.onLoginBack.bind(this)}
+            email={this.state.email} />
+        </SlideFromRightAnimation>)
+    }
 
     const root = {
       height: '100%',
       width: '100%',
-      backgroundColor: backgroundColor,
-    };
+      backgroundColor: backgroundColor
+    }
 
     return (
-          <div 
-            style={root}>
-            {currentState}
-          </div>
-    );
+      <div
+        style={root}>
+        {currentState}
+      </div>
+    )
   }
 }
 
-export default Authentication;
-
+export default Authentication

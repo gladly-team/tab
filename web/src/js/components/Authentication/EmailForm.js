@@ -1,116 +1,114 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import EmailField from 'general/EmailField';
-import { checkUserExist, forgotPassword } from '../../utils/cognito-auth';
-import { goToRetrievePassword } from 'navigation/navigation';
-import CircleButton from 'general/CircleButton';
+import React from 'react'
+import PropTypes from 'prop-types'
+import EmailField from 'general/EmailField'
+import { goToRetrievePassword } from 'navigation/navigation'
+import CircleButton from 'general/CircleButton'
 
-import appTheme from 'theme/default';
+import appTheme from 'theme/default'
 
 class EmailForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.email = null;
+  constructor (props) {
+    super(props)
+    this.email = null
   }
 
-  _handleKeyPress(e) {
+  _handleKeyPress (e) {
     if (e.key === 'Enter') {
-      this.handleSubmit();
+      this.handleSubmit()
     }
   }
 
-  handleSubmit() {
-  	if(this.email.validate()) {
-  		const email = this.email.getValue();
-      this.props.onResponse(email);
-  	}
+  handleSubmit () {
+    if (this.email.validate()) {
+      const email = this.email.getValue()
+      this.props.onResponse(email)
+    }
   }
 
-  retrievePassword() {
-    goToRetrievePassword();
+  retrievePassword () {
+    goToRetrievePassword()
   }
 
-  render() {
-  	
-  	const main = {
-  		backgroundColor: appTheme.palette.primary1Color,
+  render () {
+    const main = {
+      backgroundColor: appTheme.palette.primary1Color,
       height: '100%',
-  		width: '100%',
-  		display: 'flex',
+      width: '100%',
+      display: 'flex',
       flexDirection: 'column',
-  		justifyContent: 'center',
-  		alignItems: 'center',
-  	};
+      justifyContent: 'center',
+      alignItems: 'center'
+    }
 
     const container = {
       display: 'flex',
       justifyContent: 'center',
-      alignItems: 'center',
-    };
+      alignItems: 'center'
+    }
 
-  	const floatingLabelStyle = {
-  		color: '#FFF',
-  	};
+    const floatingLabelStyle = {
+      color: '#FFF'
+    }
 
-  	const inputStyle = {
-  		color: '#FFF',
-  	};
+    const inputStyle = {
+      color: '#FFF'
+    }
 
     const underlineStyle = {
-      borderColor: appTheme.palette.borderColor,
+      borderColor: appTheme.palette.borderColor
     }
 
     const underlineFocusStyle = {
-      borderColor: appTheme.palette.alternateTextColor,
+      borderColor: appTheme.palette.alternateTextColor
     }
 
     const retrievePasswordContainer = {
       marginTop: 20,
       width: 256,
-      textAlign: 'center',
+      textAlign: 'center'
     }
 
     const retrievePasswordLink = {
       color: '#FFF',
       cursor: 'pointer',
-      fontSize: 14,
+      fontSize: 14
     }
 
     return (
-    	<div style={main}>
-        <div 
+      <div style={main}>
+        <div
           style={container}>
           <EmailField
-          ref={(input) => { this.email = input; }}
-          onKeyPress = {this._handleKeyPress.bind(this)}
-          floatingLabelText="Email"
-          defaultValue={this.props.email}
-          floatingLabelStyle={floatingLabelStyle}
-          underlineStyle={underlineStyle}
-          underlineFocusStyle={underlineFocusStyle}
-          inputStyle={inputStyle}/>
+            ref={(input) => { this.email = input }}
+            onKeyPress={this._handleKeyPress.bind(this)}
+            floatingLabelText='Email'
+            defaultValue={this.props.email}
+            floatingLabelStyle={floatingLabelStyle}
+            underlineStyle={underlineStyle}
+            underlineFocusStyle={underlineFocusStyle}
+            inputStyle={inputStyle} />
           <CircleButton
             size={40}
-            onClick={this.handleSubmit.bind(this)}/>
+            onClick={this.handleSubmit.bind(this)} />
         </div>
-    		
+
         <div style={retrievePasswordContainer}>
-          <span 
+          <span
             style={retrievePasswordLink}
             onClick={this.retrievePassword.bind(this)}>Forgot your password?</span>
         </div>
-		</div>
-    );
+      </div>
+    )
   }
 }
 
 EmailForm.propTypes = {
   email: PropTypes.string,
-	onResponse: PropTypes.func.isRequired,
-} 
-
-EmailForm.defaultProps = {
-  email: '',
+  onResponse: PropTypes.func.isRequired
 }
 
-export default EmailForm;
+EmailForm.defaultProps = {
+  email: ''
+}
+
+export default EmailForm

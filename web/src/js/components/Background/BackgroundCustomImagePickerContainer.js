@@ -1,9 +1,9 @@
 import {
   createFragmentContainer,
-  graphql,
-} from 'react-relay/compat';
+  graphql
+} from 'react-relay/compat'
 
-import BackgroundCustomImagePicker from './BackgroundCustomImagePickerComponent';
+import BackgroundCustomImagePicker from './BackgroundCustomImagePickerComponent'
 
 export default createFragmentContainer(BackgroundCustomImagePicker, {
   user: graphql`
@@ -12,4 +12,4 @@ export default createFragmentContainer(BackgroundCustomImagePicker, {
       customImage
     }
   `
-});
+})

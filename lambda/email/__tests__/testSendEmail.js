@@ -1,6 +1,5 @@
-const hearts = require('../email');
-
+/* global test expect */
 // TODO
 test('welcome email sends', () => {
-  expect(true).toBe(true);
-});
+  expect(true).toBe(true)
+})

@@ -1,7 +1,7 @@
 import {
   commitMutation,
-  graphql,
-} from 'react-relay/compat';
+  graphql
+} from 'react-relay/compat'
 
 const mutation = graphql`
   mutation UpdateWidgetDataMutation($input: UpdateWidgetDataInput!) {
@@ -11,11 +11,11 @@ const mutation = graphql`
       }
     }
   }
-`;
+`
 
-function commit(environment, user, widget, data) {
-  const userId = user.id;
-  const widgetId = widget.id;
+function commit (environment, user, widget, data) {
+  const userId = user.id
+  const widgetId = widget.id
 
   return commitMutation(
     environment,
@@ -25,8 +25,7 @@ function commit(environment, user, widget, data) {
         input: { userId, widgetId, data }
       }
     }
-  );
+  )
 }
 
-export default {commit};
-
+export default {commit}

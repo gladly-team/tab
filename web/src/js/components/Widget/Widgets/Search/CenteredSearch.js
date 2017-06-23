@@ -1,71 +1,66 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { getWidgetConfig } from '../../../../utils/widgets-utils';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { getWidgetConfig } from '../../../../utils/widgets-utils'
 
-import IconButton from 'material-ui/IconButton';
-import FontIcon from 'material-ui/FontIcon';
-import TextField from 'material-ui/TextField';
-
-import appTheme from 'theme/default';
+import TextField from 'material-ui/TextField'
+import appTheme from 'theme/default'
 
 class CenteredSearch extends React.Component {
-
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
 
     this.state = {
       focused: false,
-      config: {},
-    };
+      config: {}
+    }
   }
 
-  componentDidMount() {
-    const { widget } = this.props; 
+  componentDidMount () {
+    const { widget } = this.props
 
-    const config = JSON.parse(widget.config);
-    const settings = JSON.parse(widget.settings);
-    const configuration = getWidgetConfig(config, settings);
+    const config = JSON.parse(widget.config)
+    const settings = JSON.parse(widget.settings)
+    const configuration = getWidgetConfig(config, settings)
     this.setState({
-      config: configuration,
+      config: configuration
     })
   }
 
-  _handleKeyPress(e) {
+  _handleKeyPress (e) {
     if (e.key === 'Enter') {
-      this.executeSearch();
+      this.executeSearch()
     }
   }
 
-  executeSearch() {
-    const { widget } = this.props; 
-    const data = JSON.parse(widget.data);
-    const engine = data.engine;
-    
-    const searchApi = this.getSearchApi(engine);
-    const searchTerm = this.searchInput.input.value;
-    window.open(searchApi + searchTerm, '_self'); 
+  executeSearch () {
+    const { widget } = this.props
+    const data = JSON.parse(widget.data)
+    const engine = data.engine
 
-    this.searchInput.input.value = '';
+    const searchApi = this.getSearchApi(engine)
+    const searchTerm = this.searchInput.input.value
+    window.open(searchApi + searchTerm, '_self')
+
+    this.searchInput.input.value = ''
   }
 
-  onInputFocusChanged(focused) {
+  onInputFocusChanged (focused) {
     this.setState({
-      focused: focused,
+      focused: focused
     })
   }
 
-  getSearchApi(engine) {
-    switch(engine) {
+  getSearchApi (engine) {
+    switch (engine) {
       case 'Google':
-        return "https://www.google.com/search?q=";
+        return 'https://www.google.com/search?q='
       default:
-        return "https://www.google.com/search?q=";
+        return 'https://www.google.com/search?q='
     }
   }
 
-  render() {
-
-    const engine = this.state.config.engine || '';
+  render () {
+    const engine = this.state.config.engine || ''
 
     const searchContainer = {
       // position: 'absolute',
@@ -79,57 +74,49 @@ class CenteredSearch extends React.Component {
     }
 
     const underlineStyle = {
-      borderColor: appTheme.palette.borderColor,
+      borderColor: appTheme.palette.borderColor
     }
 
     const underlineFocusStyle = {
-      borderColor: '#FFF',
+      borderColor: '#FFF'
     }
 
     const inputStyle = {
       textAlign: 'center',
       color: '#FFF',
       fontSize: 22,
-      fontFamily: appTheme.fontFamily,
+      fontFamily: appTheme.fontFamily
     }
 
     const errorStyle = {
-      color: '#FFF',
+      color: '#FFF'
     }
 
-    const header = {
-      textAlign: 'center',
-      color: '#FFF',
-      fontSize: 16,
-      fontFamily: appTheme.fontFamily,
-    }
-
-    var engineText;
-    if(this.state.focused) {
-      engineText = engine;
+    var engineText
+    if (this.state.focused) {
+      engineText = engine
     }
 
     return (
-        <div style={searchContainer}>
-          <TextField
-                id={'tab-search-id'}
-                onFocus={this.onInputFocusChanged.bind(this, true)}
-                onBlur={this.onInputFocusChanged.bind(this, false)}
-                ref={(input) => { this.searchInput = input; }}
-                onKeyPress = {this._handleKeyPress.bind(this)}
-                inputStyle={inputStyle}
-                underlineStyle={underlineStyle}
-                underlineFocusStyle={underlineFocusStyle}
-                errorText={engineText}
-                errorStyle={errorStyle}>
-          </TextField>
-        </div>);
+      <div style={searchContainer}>
+        <TextField
+          id={'tab-search-id'}
+          onFocus={this.onInputFocusChanged.bind(this, true)}
+          onBlur={this.onInputFocusChanged.bind(this, false)}
+          ref={(input) => { this.searchInput = input }}
+          onKeyPress={this._handleKeyPress.bind(this)}
+          inputStyle={inputStyle}
+          underlineStyle={underlineStyle}
+          underlineFocusStyle={underlineFocusStyle}
+          errorText={engineText}
+          errorStyle={errorStyle} />
+      </div>)
   }
 }
 
 CenteredSearch.propTypes = {
   widget: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired,
-};
+  user: PropTypes.object.isRequired
+}
 
-export default CenteredSearch;
+export default CenteredSearch

@@ -15,6 +15,7 @@
     "react-test-renderer": "^15.5.4",
     "relay-compiler": "^1.0.0-rc.4",
     "serverless-single-page-app-plugin": "file:./serverless-single-page-app-plugin",
+    "standard": "^10.0.2",
     "webpack-bundle-analyzer": "^2.8.2"
   },
   "dependencies": {
@@ -98,11 +99,12 @@
     "deploy": "yarn run build && serverless deploy && serverless syncToS3",
     "relay": "relay-compiler --src ./src/ --schema ./data/schema.graphql",
     "relay:watch": "nodemon --watch src/ --watch data/schema.graphql --ignore **/__generated__/**/* --exec \"yarn run relay\"",
-    "test": "npm-run-all -s test:run test:codecov",
+    "test": "npm-run-all -s test:lint test:run test:codecov",
     "test:run": "jest --env=jsdom --coverage",
     "test:codecov": "if-env NODE_ENV=test && codecov || echo 'Skipping test coverage logging.'",
     "test:watch": "jest --env=jsdom --watch",
-    "build:langs": "node scripts/translate.js"
+    "build:langs": "node scripts/translate.js",
+    "test:lint": "standard"
   },
   "jest": {
     "collectCoverageFrom": [

@@ -1,5 +1,5 @@
 
-var tfacMgr = {};
+var tfacMgr = {}
 
 /**
  * Calls to TFAC to set the cognito credentials for a tfac user.
@@ -8,7 +8,7 @@ var tfacMgr = {};
  * @return {Promise<Object>} A promise that resolve into a response.
  */
 tfacMgr.setCognitoCredentials = (tfacUserId, userCognito) => {
-	return Promise.resolve({});
+  return Promise.resolve({})
 }
 
-export default tfacMgr;
+export default tfacMgr

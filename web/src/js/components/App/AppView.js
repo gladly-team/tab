@@ -1,15 +1,15 @@
-import React from 'react';
-import {QueryRenderer} from 'react-relay/compat';
-import environment from '../../../relay-env';
-import FullScreenProgress from 'general/FullScreenProgress';
-import AuthUserComponent from 'general/AuthUserComponent';
+/* global graphql */
 
-import AppContainer from './AppContainer';
+import React from 'react'
+import {QueryRenderer} from 'react-relay/compat'
+import environment from '../../../relay-env'
+import FullScreenProgress from 'general/FullScreenProgress'
+import AuthUserComponent from 'general/AuthUserComponent'
 
-class AppView extends React.Component { 
+import AppContainer from './AppContainer'
 
-  render() {
-
+class AppView extends React.Component {
+  render () {
     return (
       <AuthUserComponent>
         <QueryRenderer
@@ -22,21 +22,26 @@ class AppView extends React.Component {
             }
           `}
           render={({error, props}) => {
+            if (error) {
+              console.error(error)
+              return
+            }
+
             if (props) {
               return (
-                  <AppContainer 
-                    user={props.user}
-                    {...this.props}>
-                     {this.props.children}
-                  </AppContainer>
+                <AppContainer
+                  user={props.user}
+                  {...this.props}>
+                  {this.props.children}
+                </AppContainer>
               )
             } else {
-              return (<FullScreenProgress />);
+              return (<FullScreenProgress />)
             }
-          }}/>
+          }} />
       </AuthUserComponent>
-    );
+    )
   }
 }
 
-export default AppView;
+export default AppView

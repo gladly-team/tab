@@ -1,48 +1,41 @@
-import BaseModel from '../base/model';
-import database from '../database';
-import tablesNames from '../tables';
-import { getNextLevelFor } from '../userLevels/userLevel';
-import { UserReachedMaxLevelException } from '../../utils/exceptions';
-import { logger } from '../../utils/dev-tools';
-
-import Async from 'asyncawait/async';
-import Await from 'asyncawait/await';
+import BaseModel from '../base/model'
+import tablesNames from '../tables'
+import { logger } from '../../utils/dev-tools'
 
 /*
- * Represents a Charity. 
+ * Represents a Charity.
  * @extends BaseModel
  */
 class Charity extends BaseModel {
-
   /**
    * Creates a Charity instance.
    * @param {string} id - The instance id in the database.
    */
-  constructor(id) {
-  	super(id);
+  constructor (id) {
+    super(id)
 
-    this.name = '';
-    this.category = '';
-    this.logo = '';
-    this.image = '';
-    this.website = '';
-    this.description = '';
-    this.impact = '';
+    this.name = ''
+    this.category = ''
+    this.logo = ''
+    this.image = ''
+    this.website = ''
+    this.description = ''
+    this.impact = ''
   }
 
   /**
    * Overrides getTableName from BaseModel.
    * Refer to `getTableName` in BaseModel for more details.
    */
-  static getTableName() {
-  	return tablesNames.charities;
+  static getTableName () {
+    return tablesNames.charities
   }
 
   /**
    * Overrides getFields from BaseModel.
    * Refer to `getFields` in BaseModel for more details.
    */
-  static getFields() {
+  static getFields () {
     return [
       'name',
       'category',
@@ -51,38 +44,38 @@ class Charity extends BaseModel {
       'website',
       'description',
       'impact'
-    ];
+    ]
   }
 }
 
 /**
  * Fetch a charity by id.
- * @param {string} id - The charity id. 
+ * @param {string} id - The charity id.
  * @return {Promise<Charity>}  A promise that resolve into a Charity instance.
  */
-function getCharity(id) {
+function getCharity (id) {
   return Charity.get(id)
             .then(charity => charity)
             .catch(err => {
-                logger.error("Error while getting the charity.", err);
-            });
+              logger.error('Error while getting the charity.', err)
+            })
 }
 
 /**
  * Fetch all the charities.
- * @return {Promise<Charity[]>}  A promise that resolve 
+ * @return {Promise<Charity[]>}  A promise that resolve
  * into a list of Charity.
  */
-function getCharities() {
-	return Charity.getAll()
-        		.then(charities => charities)
-        		.catch(err => {
-                logger.error("Error while fetching the charities.", err);
-        		});
+function getCharities () {
+  return Charity.getAll()
+            .then(charities => charities)
+            .catch(err => {
+              logger.error('Error while fetching the charities.', err)
+            })
 }
 
 export {
   Charity,
   getCharity,
   getCharities
-};
+}

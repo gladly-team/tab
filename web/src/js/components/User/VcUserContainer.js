@@ -1,10 +1,9 @@
-import React from 'react';
 import {
   createFragmentContainer,
-  graphql,
-} from 'react-relay/compat';
+  graphql
+} from 'react-relay/compat'
 
-import VcUser from './VcUserComponent';
+import VcUser from './VcUserComponent'
 
 export default createFragmentContainer(VcUser, {
   user: graphql`
@@ -16,4 +15,4 @@ export default createFragmentContainer(VcUser, {
       heartsUntilNextLevel 
     }
   `
-});
+})

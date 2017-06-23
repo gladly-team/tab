@@ -1,10 +1,9 @@
-import React from 'react';
 import {
   createFragmentContainer,
-  graphql,
-} from 'react-relay/compat';
+  graphql
+} from 'react-relay/compat'
 
-import Dashboard from './DashboardComponent';
+import Dashboard from './DashboardComponent'
 
 export default createFragmentContainer(Dashboard, {
   user: graphql`
@@ -14,4 +13,4 @@ export default createFragmentContainer(Dashboard, {
       ...VcUserContainer_user
     }
   `
-});
+})

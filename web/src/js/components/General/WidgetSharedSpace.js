@@ -1,13 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 
 class WidgetSharedSpace extends React.Component {
-  
-  constructor(props) {
-  	super(props);
-  }
-
-  render() {
+  render () {
     const main = {
       position: 'absolute',
       top: 50,
@@ -16,23 +11,23 @@ class WidgetSharedSpace extends React.Component {
       width: 300,
       height: '80vh',
       overflowX: 'hidden',
-      overflowY: 'scroll',
+      overflowY: 'scroll'
     }
 
     return (
       <div style={Object.assign({}, main, this.props.containerStyle)}>
         {this.props.children}
       </div>
-    );
+    )
   }
 }
 
 WidgetSharedSpace.propTypes = {
-  containerStyle: PropTypes.object,
+  containerStyle: PropTypes.object
 }
 
 WidgetSharedSpace.defaultProps = {
   containerStyle: {}
 }
 
-export default WidgetSharedSpace;
+export default WidgetSharedSpace

@@ -1,14 +1,16 @@
-import React from 'react';
-import {QueryRenderer} from 'react-relay/compat';
-import environment from '../../../relay-env';
+/* global graphql */
 
-import FullScreenProgress from 'general/FullScreenProgress';
-import AuthUserComponent from 'general/AuthUserComponent';
+import React from 'react'
+import {QueryRenderer} from 'react-relay/compat'
+import environment from '../../../relay-env'
 
-import DonateVc from './DonateVcContainer';
+import FullScreenProgress from 'general/FullScreenProgress'
+import AuthUserComponent from 'general/AuthUserComponent'
 
-class DonateVcView extends React.Component { 
-  render() {
+import DonateVc from './DonateVcContainer'
+
+class DonateVcView extends React.Component {
+  render () {
     return (
       <AuthUserComponent>
         <QueryRenderer
@@ -24,19 +26,24 @@ class DonateVcView extends React.Component {
             }
           `}
           render={({error, props}) => {
+            if (error) {
+              console.error(error)
+              return
+            }
+
             if (props) {
               return (
-                  <DonateVc
-                    app={props.app} 
-                    user={props.user}/>
+                <DonateVc
+                  app={props.app}
+                  user={props.user} />
               )
             } else {
-              return (<FullScreenProgress />);
+              return (<FullScreenProgress />)
             }
-          }}/>
+          }} />
       </AuthUserComponent>
-    );
+    )
   }
 }
 
-export default DonateVcView;
+export default DonateVcView

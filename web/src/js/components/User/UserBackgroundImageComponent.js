@@ -1,12 +1,10 @@
 /* eslint-disable jsx-a11y/href-no-hash */
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 
 class UserBackgroundImage extends React.Component {
-  
-  render() {
-
-    const {user} = this.props;
+  render () {
+    const {user} = this.props
 
     const defaultStyle = {
       opacity: 1,
@@ -26,29 +24,29 @@ class UserBackgroundImage extends React.Component {
       zIndex: 'auto'
     }
 
-    var backgroundImage;
-    if(user.backgroundOption === 'custom'){
+    var backgroundImage
+    if (user.backgroundOption === 'custom') {
       backgroundImage = Object.assign({}, defaultStyle, {
-        backgroundImage: 'url(' + user.customImage + ')',
-      });
-    } else if(user.backgroundOption === 'color') {
+        backgroundImage: 'url(' + user.customImage + ')'
+      })
+    } else if (user.backgroundOption === 'color') {
       backgroundImage = Object.assign({}, defaultStyle, {
-        backgroundColor: user.backgroundColor,
-      });
+        backgroundColor: user.backgroundColor
+      })
     } else {
       backgroundImage = Object.assign({}, defaultStyle, {
-        backgroundImage: 'url(' + user.backgroundImage.url + ')',
-      });
+        backgroundImage: 'url(' + user.backgroundImage.url + ')'
+      })
     }
 
     return (
-      <div style={backgroundImage}></div>
-    );
+      <div style={backgroundImage} />
+    )
   }
 }
 
 UserBackgroundImage.propTypes = {
-    user: PropTypes.object.isRequired
-  };
+  user: PropTypes.object.isRequired
+}
 
-export default UserBackgroundImage;
+export default UserBackgroundImage

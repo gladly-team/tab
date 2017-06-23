@@ -1,12 +1,12 @@
-import React from 'react';
+/* global jest */
+import React from 'react'
 
-
-export default function relayWrap(component, relayOptions){
-  relayOptions = relayOptions || {};
+export default function relayWrap (component, relayOptions) {
+  relayOptions = relayOptions || {}
   const variables = relayOptions.variables || {}
   let initialVariables = {}
   // TODO prepareVariables
-  if(component.type && component.type.getRelaySpecs){
+  if (component.type && component.type.getRelaySpecs) {
     initialVariables = component.type.getRelaySpecs().initialVariables
   }
 
@@ -20,7 +20,7 @@ export default function relayWrap(component, relayOptions){
         ...this.variables,
         ...variables
       }
-      if(fn){
+      if (fn) {
         fn()
       }
     }),
@@ -28,6 +28,6 @@ export default function relayWrap(component, relayOptions){
       ...initialVariables,
       ...variables
     }
-  };
-  return React.cloneElement(component, { relay: relaySpec });
+  }
+  return React.cloneElement(component, { relay: relaySpec })
 }
