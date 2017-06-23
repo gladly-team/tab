@@ -55,7 +55,18 @@ function logReferralData (userId, referralData) {
             })
 }
 
+/**
+ * Gets the referring user id from the referral data.
+ * @param {object} referralData - The referral data.
+ * @return {String}  The referring user id.
+ */
+
+function getReferringUserId (referralData) {
+  return referralData.referringUser
+}
+
 export {
   ReferralData,
-  logReferralData
+  logReferralData,
+  getReferringUserId
 }
