@@ -8,6 +8,7 @@
 ### Prerequesites
 * [Docker Engine](https://docs.docker.com/engine/installation/)
 * [Yarn](https://yarnpkg.com/en/)
+* If you run into any `node-gyp`-related errors when installing Node packages, download the [`node-gyp` dependencies](https://github.com/nodejs/node-gyp#installation). _Note: `node-gyp` is a dependency of [`asyncawait`](https://github.com/yortus/asyncawait)._
 
 ### Getting Started
 
