@@ -26,14 +26,23 @@ const envVars = [
 ]
 
 // Expect one argument, the stage name.
-const assignEnvVars = function (stageName) {
+const assignEnvVars = function (stageName, allEnvVarsRequired = true) {
   // Using the name of the stage, assign the stage-specific
   // value to the environment value name.
   const stageNameUppercase = stageName ? stageName.toUpperCase() : ''
   const stagePrefix = stageNameUppercase ? `${stageNameUppercase}_` : ''
   envVars.forEach((envVar) => {
-    let stageEnvVar = `${stagePrefix}${envVar}`
-    process.env[envVar] = process.env[stageEnvVar]
+    let stageEnvVarName = `${stagePrefix}${envVar}`
+    let stageEnvVar = process.env[stageEnvVarName]
+
+    // Optionally throw an error if an env variable is not set.
+    if (
+      (typeof stageEnvVar === 'undefined' || stageEnvVar === null) &&
+      allEnvVarsRequired
+    ) {
+      throw new Error(`Environment variable ${stageEnvVarName} must be set.`)
+    }
+    process.env[envVar] = stageEnvVar
   })
 }
 
