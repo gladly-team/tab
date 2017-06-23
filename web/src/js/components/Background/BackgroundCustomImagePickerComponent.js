@@ -1,88 +1,80 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 
-import SetBackgroundCustomImageMutation from 'mutations/SetBackgroundCustomImageMutation';
+import SetBackgroundCustomImageMutation from 'mutations/SetBackgroundCustomImageMutation'
 
-import FontIcon from 'material-ui/FontIcon';
-import Subheader from 'material-ui/Subheader';
-import TextField from 'material-ui/TextField';
-import Divider from 'material-ui/Divider';
+import Subheader from 'material-ui/Subheader'
+import TextField from 'material-ui/TextField'
+import Divider from 'material-ui/Divider'
 
 class BackgroundCustomeImagePicker extends React.Component {
-  
-  constructor(props) {
-      super(props);
-  }
-
-  componentDidMount() {
-    const { user } = this.props;
-    if(user.customImage) {
-        this.onChange(null, user.customImage);
+  componentDidMount () {
+    const { user } = this.props
+    if (user.customImage) {
+      this.onChange(null, user.customImage)
     }
   }
 
-  isValid(value) {
-    return true;
+  isValid (value) {
+    return true
   }
 
-  onChange(event, newValue) {
-    if(this.isValid(newValue)){
+  onChange (event, newValue) {
+    if (this.isValid(newValue)) {
       SetBackgroundCustomImageMutation.commit(
         this.props.relay.environment,
         this.props.user,
         newValue
-      );
-    } 
+      )
+    }
   }
 
-  render() {
-    const { user } = this.props;
+  render () {
+    const { user } = this.props
 
     const root = {
       display: 'flex',
       flexWrap: 'wrap',
-      justifyContent: 'space-around',
-    };
+      justifyContent: 'space-around'
+    }
 
     const gridList = {
       display: 'flex',
       width: '100%'
-    };
+    }
 
     const textInput = {
       width: '100%'
-    };
+    }
 
     const header = {
-      paddingLeft: 0,
+      paddingLeft: 0
     }
 
     const divider = {
-      marginBottom: 10,
+      marginBottom: 10
     }
 
     return (
       <div style={root}>
         <Subheader style={header}>Paste your image source</Subheader>
-        <Divider style={divider}/>
+        <Divider style={divider} />
         <div
           style={gridList}>
           <TextField
-              style={textInput}
-              defaultValue={user.customImage || ''}
-              hintText="Paste here the url to your image"
-              onChange={this.onChange.bind(this)}
+            style={textInput}
+            defaultValue={user.customImage || ''}
+            hintText='Paste here the url to your image'
+            onChange={this.onChange.bind(this)}
             />
         </div>
       </div>
-    );
+    )
   }
 }
 
 BackgroundCustomeImagePicker.propTypes = {
   user: PropTypes.object.isRequired
-};
+}
 
-export default BackgroundCustomeImagePicker;
-
-
+export default BackgroundCustomeImagePicker

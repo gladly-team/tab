@@ -1,9 +1,9 @@
 import {
   createFragmentContainer,
-  graphql,
-} from 'react-relay/compat';
+  graphql
+} from 'react-relay/compat'
 
-import BookmarksWidget from './BookmarksWidgetComponent';
+import BookmarksWidget from './BookmarksWidgetComponent'
 
 export default createFragmentContainer(BookmarksWidget, {
   widget: graphql`
@@ -22,4 +22,4 @@ export default createFragmentContainer(BookmarksWidget, {
       id
     }
   `
-});
+})

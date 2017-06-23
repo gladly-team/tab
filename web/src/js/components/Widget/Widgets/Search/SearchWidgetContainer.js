@@ -1,9 +1,9 @@
 import {
   createFragmentContainer,
-  graphql,
-} from 'react-relay/compat';
+  graphql
+} from 'react-relay/compat'
 
-import SearchWidget from './SearchWidgetComponent';
+import SearchWidget from './SearchWidgetComponent'
 
 export default createFragmentContainer(SearchWidget, {
   widget: graphql`
@@ -23,4 +23,4 @@ export default createFragmentContainer(SearchWidget, {
       id
     }
   `
-});
+})

@@ -1,70 +1,68 @@
 
-
-export default function relayMock(Relay){
-
+export default function relayMock (Relay) {
   class Mutation extends Relay.Mutation {
-    constructor(props){
+    constructor (props) {
       super(props)
-      this.props = props;
+      this.props = props
     }
-    _resolveProps(props) {
-      this.props = props;
+    _resolveProps (props) {
+      this.props = props
     }
   }
 
   class MockStore {
-    reset() {
-      this.successResponse = undefined;
-      this.failureResponse = undefined;
-      this.spyCommitUpdate = undefined;
-      this.spyApplyUpdate = undefined;
+    reset () {
+      this.successResponse = undefined
+      this.failureResponse = undefined
+      this.spyCommitUpdate = undefined
+      this.spyApplyUpdate = undefined
     }
 
-    mockCommitUpdate(spy){
+    mockCommitUpdate (spy) {
       this.spyCommitUpdate = spy
     }
 
-    mockApplyUpdate(spy){
+    mockApplyUpdate (spy) {
       this.spyApplyUpdate = spy
     }
 
-    succeedWith(response) {
-      this.reset();
-      this.successResponse = response;
+    succeedWith (response) {
+      this.reset()
+      this.successResponse = response
     }
 
-    failWith(response) {
-      this.reset();
-      this.failureResponse = response;
+    failWith (response) {
+      this.reset()
+      this.failureResponse = response
     }
 
-    update(callbacks) {
+    update (callbacks) {
       if (this.successResponse) {
-        callbacks.onSuccess(this.successResponse);
+        callbacks.onSuccess(this.successResponse)
       } else if (this.failureResponse) {
-        callbacks.onFailure(this.failureResponse);
+        callbacks.onFailure(this.failureResponse)
       }
-      this.reset();
+      this.reset()
     }
 
-    commitUpdate(mutation, callbacks) {
-      if(this.spyCommitUpdate){
+    commitUpdate (mutation, callbacks) {
+      if (this.spyCommitUpdate) {
         this.spyCommitUpdate(mutation, callbacks)
       }
-      return this.update(callbacks);
+      return this.update(callbacks)
     }
 
-    applyUpdate(mutation, callbacks) {
-      if(this.spyApplyUpdate){
+    applyUpdate (mutation, callbacks) {
+      if (this.spyApplyUpdate) {
         this.spyApplyUpdate(mutation, callbacks)
       }
-      return this.update(callbacks);
+      return this.update(callbacks)
     }
   }
 
-   const Store = new MockStore();
-   const Route = Relay.Route;
-   const PropTypes = Relay.PropTypes;
+  const Store = new MockStore()
+  const Route = Relay.Route
+  const PropTypes = Relay.PropTypes
 
   return {
     QL: Relay.QL,
@@ -74,9 +72,8 @@ export default function relayMock(Relay){
     Store,
     createContainer: (component, specs) => {
       /* eslint no-param-reassign:0 */
-      component.getRelaySpecs = () => specs;
-      return component;
-    },
-  };
-
+      component.getRelaySpecs = () => specs
+      return component
+    }
+  }
 }

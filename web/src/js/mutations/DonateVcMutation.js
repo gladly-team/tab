@@ -1,7 +1,7 @@
 import {
   commitMutation,
-  graphql,
-} from 'react-relay/compat';
+  graphql
+} from 'react-relay/compat'
 
 const mutation = graphql`
   mutation DonateVcMutation($input: DonateVcInput!) {
@@ -11,10 +11,10 @@ const mutation = graphql`
       }
     }
   }
-`;
+`
 
-function commit(environment, user, charityId, vc) {
-  const userId = user.id;
+function commit (environment, user, charityId, vc) {
+  const userId = user.id
 
   return commitMutation(
     environment,
@@ -24,8 +24,7 @@ function commit(environment, user, charityId, vc) {
         input: { userId, charityId, vc }
       }
     }
-  );
+  )
 }
 
-export default {commit};
-
+export default {commit}

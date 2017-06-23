@@ -1,9 +1,9 @@
 import {
   createFragmentContainer,
-  graphql,
-} from 'react-relay/compat';
+  graphql
+} from 'react-relay/compat'
 
-import BackgroundDailyImage from './BackgroundDailyImageComponent';
+import BackgroundDailyImage from './BackgroundDailyImageComponent'
 
 export default createFragmentContainer(BackgroundDailyImage, {
   user: graphql`
@@ -11,4 +11,4 @@ export default createFragmentContainer(BackgroundDailyImage, {
       id
     }
   `
-});
+})

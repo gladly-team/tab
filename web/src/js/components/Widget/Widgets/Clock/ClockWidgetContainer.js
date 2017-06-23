@@ -1,9 +1,9 @@
 import {
   createFragmentContainer,
-  graphql,
-} from 'react-relay/compat';
+  graphql
+} from 'react-relay/compat'
 
-import ClockWidget from './ClockWidgetComponent';
+import ClockWidget from './ClockWidgetComponent'
 
 export default createFragmentContainer(ClockWidget, {
   widget: graphql`
@@ -22,4 +22,4 @@ export default createFragmentContainer(ClockWidget, {
       id
     }
   `
-});
+})

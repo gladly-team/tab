@@ -1,34 +1,34 @@
-import { browserHistory } from 'react-router';
+import { browserHistory } from 'react-router'
 
-function goTo(route) {
-	browserHistory.push(route);
+function goTo (route) {
+  browserHistory.push(route)
 }
 
-function goToLogin() {
-	goTo('/auth/login/');
+function goToLogin () {
+  goTo('/auth/login/')
 }
 
-function goToSettings() {
-	goTo('/tab/settings/');
+function goToSettings () {
+  goTo('/tab/settings/')
 }
 
-function goToDonate() {
-	goTo('/tab/donate/');
+function goToDonate () {
+  goTo('/tab/donate/')
 }
 
-function goToDashboard() {
-	goTo('/tab/');
+function goToDashboard () {
+  goTo('/tab/')
 }
 
-function goToRetrievePassword() {
-	goTo('/auth/recovery');
+function goToRetrievePassword () {
+  goTo('/auth/recovery')
 }
 
 export {
-	goTo,
-	goToLogin,
-	goToSettings,
-	goToDonate,
-	goToDashboard,
-	goToRetrievePassword
+   goTo,
+   goToLogin,
+   goToSettings,
+   goToDonate,
+   goToDashboard,
+   goToRetrievePassword
 }

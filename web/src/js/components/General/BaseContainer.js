@@ -1,20 +1,18 @@
-import React from 'react';
+import React from 'react'
 
 class BaseContainer extends React.Component {
-
-  render() {
+  render () {
     const root = {
       width: '100vw',
-      height: '100vh',
-    };
+      height: '100vh'
+    }
 
     return (
       <div style={root}>
         {this.props.children}
       </div>
-    );
+    )
   }
 }
 
-export default BaseContainer;
-
+export default BaseContainer

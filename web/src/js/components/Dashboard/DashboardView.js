@@ -1,13 +1,14 @@
-import React from 'react';
-import {QueryRenderer} from 'react-relay/compat';
-import environment from '../../../relay-env';
-import FullScreenProgress from 'general/FullScreenProgress';
-import AuthUserComponent from 'general/AuthUserComponent';
+/* global graphql */
 
-import DashboardContainer from './DashboardContainer';
+import React from 'react'
+import {QueryRenderer} from 'react-relay/compat'
+import environment from '../../../relay-env'
+import AuthUserComponent from 'general/AuthUserComponent'
 
-class DashboardView extends React.Component { 
-  render() {
+import DashboardContainer from './DashboardContainer'
+
+class DashboardView extends React.Component {
+  render () {
     return (
       <AuthUserComponent>
         <QueryRenderer
@@ -20,17 +21,22 @@ class DashboardView extends React.Component {
             }
           `}
           render={({error, props}) => {
+            if (error) {
+              console.error(error)
+              return
+            }
+
             if (props) {
               return (
-                  <DashboardContainer user={props.user}/>
+                <DashboardContainer user={props.user} />
               )
             } else {
-              return null;
+              return null
             }
-          }}/>
+          }} />
       </AuthUserComponent>
-    );
+    )
   }
 }
 
-export default DashboardView;
+export default DashboardView

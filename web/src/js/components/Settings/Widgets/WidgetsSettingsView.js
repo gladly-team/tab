@@ -1,14 +1,16 @@
-import React from 'react';
-import {QueryRenderer} from 'react-relay/compat';
-import environment from '../../../../relay-env';
+/* global graphql */
 
-import WidgetsSettigns from './WidgetsSettingsContainer';
+import React from 'react'
+import {QueryRenderer} from 'react-relay/compat'
+import environment from '../../../../relay-env'
 
-import FullScreenProgress from 'general/FullScreenProgress';
-import AuthUserComponent from 'general/AuthUserComponent';
+import WidgetsSettigns from './WidgetsSettingsContainer'
 
-class WidgetsSettingsView extends React.Component { 
-  render() {
+import FullScreenProgress from 'general/FullScreenProgress'
+import AuthUserComponent from 'general/AuthUserComponent'
+
+class WidgetsSettingsView extends React.Component {
+  render () {
     return (
       <AuthUserComponent>
         <QueryRenderer
@@ -24,19 +26,24 @@ class WidgetsSettingsView extends React.Component {
             }
           `}
           render={({error, props}) => {
+            if (error) {
+              console.error(error)
+              return
+            }
+
             if (props) {
               return (
-                  <WidgetsSettigns 
-                    app={props.app}
-                    user={props.user}/>
+                <WidgetsSettigns
+                  app={props.app}
+                  user={props.user} />
               )
             } else {
-              return (<FullScreenProgress />);
+              return (<FullScreenProgress />)
             }
-          }}/>
+          }} />
       </AuthUserComponent>
-    );
+    )
   }
 }
 
-export default WidgetsSettingsView;
+export default WidgetsSettingsView

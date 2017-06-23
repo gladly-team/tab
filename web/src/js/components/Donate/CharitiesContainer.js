@@ -1,9 +1,9 @@
 import {
   createFragmentContainer,
-  graphql,
-} from 'react-relay/compat';
+  graphql
+} from 'react-relay/compat'
 
-import Charities from './CharitiesComponent';
+import Charities from './CharitiesComponent'
 
 export default createFragmentContainer(Charities, {
   app: graphql`
@@ -23,4 +23,4 @@ export default createFragmentContainer(Charities, {
       ...CharityContainer_user
     }
   `
-});
+})
