@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import VcUser from '../User/VcUserContainer'
 import UserBackgroundImage from '../User/UserBackgroundImageContainer'
 import WidgetsView from '../Widget/WidgetsView'
+import InviteFriend from '../InviteFriend/InviteFriendView'
 
 import { FormattedMessage } from 'react-intl'
 import { goToSettings, goToDonate } from 'navigation/navigation'
@@ -66,19 +67,18 @@ class Dashboard extends React.Component {
       position: 'absolute',
       bottom: 10,
       display: 'flex',
-      width: 120,
       justifyContent: 'space-around'
     }
 
     const quote = {
       position: 'absolute',
       bottom: 10,
-      left: 40,
       color: 'white',
       fontSize: '1em',
       fontWeight: 'normal',
       fontFamily: "'Comic Sans MS', cursive, sans-serif",
-      width: 300,
+      width: '100%',
+      textAlign: 'center',
       marginLeft: 'auto',
       marginRight: 'auto'
     }
@@ -116,6 +116,7 @@ class Dashboard extends React.Component {
                 hoverColor={'#FFF'}
                 className='fa fa-heart fa-lg' />
             </IconButton>
+            <InviteFriend />
           </div>
           <h1 style={quote}>
             <FormattedMessage
