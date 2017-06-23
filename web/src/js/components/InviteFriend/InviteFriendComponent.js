@@ -36,7 +36,7 @@ class InviteFriend extends React.Component {
 
   render () {
     const { user } = this.props
-    const userId = user ? user.id : ''
+    const userId = user ? user.userId : ''
 
     return (
       <div>
