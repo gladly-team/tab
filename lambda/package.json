@@ -39,11 +39,11 @@
     "deploy": "serverless deploy",
     "build": "rm -rf ./build && npm run build:compile",
     "build:compile": "cross-env NODE_ENV=production babel --out-dir='build' --ignore='build,coverage,__mocks__,__tests__,node_modules' ./",
-    "test": "npm run test:lint && npm-run-all -s test:run test:codecov",
+    "test": "npm-run-all -s test:lint test:run test:codecov",
     "test:run": "jest --coverage",
     "test:codecov": "if-env NODE_ENV=test && codecov || echo 'Skipping test coverage logging.'",
     "test:watch": "jest --watch",
-    "test:lint": "standard --fix"
+    "test:lint": "standard"
   },
   "repository": {
     "type": "git",
