@@ -1,4 +1,4 @@
-/* global expect jest describe it */
+/* eslint-env jest */
 
 import mockDatabase from '../../__mocks__/database'
 import { DatabaseOperation, OperationType } from '../../../utils/test-utils'

@@ -1,4 +1,4 @@
-/* global jest expect test */
+/* eslint-env jest */
 
 import {
   getBookmarkWidgetManager,

@@ -1,8 +1,8 @@
-/* global jest expect test */
+/* eslint-env jest */
 
 import mockDatabase from '../../__mocks__/database'
 import { DatabaseOperation, OperationType } from '../../../utils/test-utils'
-import { updateUserVc } from '../user'
+import { updateUserVc } from '../updateUserVc'
 
 jest.mock('../../database', () => {
   return mockDatabase

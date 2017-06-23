@@ -1,4 +1,4 @@
-/* global jest expect test */
+/* eslint-env jest */
 
 import tablesNames from '../../../tables'
 import { UserWidget } from '../userWidget'

@@ -1,4 +1,4 @@
-/* global jest expect test */
+/* eslint-env jest */
 
 import tablesNames from '../../tables'
 import { VcDonationLog } from '../vcDonationLog'

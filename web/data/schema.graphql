@@ -316,6 +316,9 @@ type User implements Node {
   # The ID of an object
   id: ID!
 
+  # Users's username
+  userId: String
+
   # Users's background image
   backgroundImage: Image
 
