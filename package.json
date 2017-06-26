@@ -10,6 +10,7 @@
     "babel-jest": "^20.0.3",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
+    "jest": "^20.0.4",
     "nodemon": "^1.11.0",
     "npmlog": "^4.1.0",
     "standard": "^10.0.2"
