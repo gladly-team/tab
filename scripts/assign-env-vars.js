@@ -3,7 +3,7 @@
 // to the env var names used in app code.
 
 // All env vars we want to pick up from the CI environment.
-const envVars = [
+export const envVars = [
   'NODE_ENV',
   'AWS_REGION',
   // AWS Cognito
