@@ -13,9 +13,10 @@
     "build": "yarn run all:install & docker-compose build",
     "start": "yarn run docker:start & yarn run s3:start & yarn run web:graphqlschema:monitor & yarn run web:start & yarn run graphql:start & yarn run lambda:start",
     "stop": "docker-compose stop",
-    "test": "yarn run graphql:test && yarn run lambda:test && yarn run web:test && yarn run dynamodb:test",
-    "lint": "standard \"scripts/**/*.js\"",
-    "lint:fix": "standard \"scripts/**/*.js\" --fix",
+    "test": "yarn run parent:test && yarn run graphql:test && yarn run lambda:test && yarn run web:test && yarn run dynamodb:test",
+    "parent:lint": "standard \"scripts/**/*.js\"",
+    "parent:lint:fix": "standard \"scripts/**/*.js\" --fix",
+    "parent:test": "yarn run parent:lint && jest",
     "all:install": "yarn install && yarn run s3:install && yarn run web:install && yarn run graphql:install && yarn run dynamodb:install && yarn run lambda:install",
     "docker:start": "docker-compose up 2>&1 | node scripts/log-prefix.js [docker] cyan",
     "dynamodb:install": "cd ./dynamodb && yarn install",
@@ -33,6 +34,9 @@
     "web:start": "cd ./web && yarn run start 2>&1 | node ../scripts/log-prefix.js [web] blue",
     "s3:install": "cd ./s3 && yarn install",
     "s3:start": "cd ./s3 && yarn run start | node ../scripts/log-prefix.js [s3] yellow"
+  },
+  "jest": {
+    "roots": ["<rootDir>/scripts/"]
   },
   "repository": {
     "type": "git",
