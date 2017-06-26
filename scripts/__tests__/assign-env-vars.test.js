@@ -24,20 +24,27 @@ const envVarPrefixes = ['', 'DEV_', 'TEST_', 'STAGING_', 'PROD_']
 
 const allEnvVars = getPrefixVariants(envVars, envVarPrefixes)
 
-// Store environment variable values at the time we run
-// the tests.
+// Store environment variables' values prior to running any tests.
 const originalEnvVarVals = {}
-
 function storeEnvVars () {
   allEnvVars.forEach((envVarName) => {
     originalEnvVarVals[envVarName] = process.env[envVarName]
   })
 }
 
-// Set environment variable values to their original values.
+// Reset environment variable values to their original
+// (pre-test) values.
 function restoreEnvVars () {
   allEnvVars.forEach((envVarName) => {
-    process.env[envVarName] = originalEnvVarVals[envVarName]
+    const envVarVal = originalEnvVarVals[envVarName]
+
+    // If the env var was originally defined, reassign its original
+    // value. If it was not defined, delete its value.
+    if (typeof envVarVal !== 'undefined' && envVarVal !== null) {
+      process.env[envVarName] = envVarVal
+    } else {
+      delete process.env[envVarName]
+    }
   })
 }
 
@@ -98,5 +105,33 @@ describe('assign-env-vars script', () => {
       process.env[`${envStageName}_${envVarName}`] = 'foo'
     })
     assignEnvVars(envStageName)
+  })
+
+  it('assigns a stage-specific env value to the root env varible name', () => {
+    const envStageName = 'DEV'
+    allEnvVars.forEach((envVarName) => {
+      process.env[`${envStageName}_${envVarName}`] = 'xyz'
+    })
+    expect(process.env.GRAPHQL_ENDPOINT).not.toBeDefined()
+    assignEnvVars(envStageName)
+    expect(process.env.GRAPHQL_ENDPOINT).toBe('xyz')
+  })
+
+  it('ignores the stage name caps when assigning the env varible value', () => {
+    allEnvVars.forEach((envVarName) => {
+      process.env[`STAGING_${envVarName}`] = 'foobar'
+    })
+    expect(process.env.GRAPHQL_ENDPOINT).not.toBeDefined()
+    assignEnvVars('staging')
+    expect(process.env.GRAPHQL_ENDPOINT).toBe('foobar')
+  })
+
+  it('does not assign value to an unlisted env variable name', () => {
+    const envStageName = 'STAGING'
+    allEnvVars.forEach((envVarName) => {
+      process.env[`STAGING_${envVarName}`] = 'abc'
+    })
+    assignEnvVars(envStageName)
+    expect(process.env.THIS_VAR_IS_UNUSED).not.toBeDefined()
   })
 })
