@@ -5,6 +5,11 @@
   "private": true,
   "dependencies": {},
   "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-core": "^6.25.0",
+    "babel-jest": "^20.0.3",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
     "nodemon": "^1.11.0",
     "npmlog": "^4.1.0",
     "standard": "^10.0.2"
@@ -14,6 +19,8 @@
     "start": "yarn run docker:start & yarn run s3:start & yarn run web:graphqlschema:monitor & yarn run web:start & yarn run graphql:start & yarn run lambda:start",
     "stop": "docker-compose stop",
     "test": "yarn run parent:test && yarn run graphql:test && yarn run lambda:test && yarn run web:test && yarn run dynamodb:test",
+    "ci:deploy": "babel-node ./scripts/deploy.js",
+    "ci:test": "babel-node ./scripts/runTests.js",
     "parent:lint": "standard \"scripts/**/*.js\"",
     "parent:lint:fix": "standard \"scripts/**/*.js\" --fix",
     "parent:test": "yarn run parent:lint && jest",
@@ -36,7 +43,9 @@
     "s3:start": "cd ./s3 && yarn run start | node ../scripts/log-prefix.js [s3] yellow"
   },
   "jest": {
-    "roots": ["<rootDir>/scripts/"]
+    "roots": [
+      "<rootDir>/scripts/"
+    ]
   },
   "repository": {
     "type": "git",

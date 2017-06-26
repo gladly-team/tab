@@ -1,7 +1,7 @@
 // Used to test in CI.
 
-const spawn = require('child_process').spawn
-const assignEnvVars = require('./assign-env-vars')
+import { spawn } from 'child_process'
+import assignEnvVars from './assign-env-vars'
 
 // Set env vars.
 const requireAllEnvVarsSet = false // TODO: set to true for CI

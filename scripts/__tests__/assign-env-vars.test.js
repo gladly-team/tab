@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-const assignEnvVars = require('../assign-env-vars')
+import assignEnvVars from '../assign-env-vars'
 
 const envVarsUsedInTests = [
   'WEB_HOST',

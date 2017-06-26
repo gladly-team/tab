@@ -46,4 +46,4 @@ const assignEnvVars = function (stageName, allEnvVarsRequired = true) {
   })
 }
 
-module.exports = assignEnvVars
+export default assignEnvVars

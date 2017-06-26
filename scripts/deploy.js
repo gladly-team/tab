@@ -1,6 +1,6 @@
 // Used to deploy from CI.
 
-const assignEnvVars = require('./assign-env-vars')
+import assignEnvVars from './assign-env-vars'
 
 // Expect one argument, the stage name.
 const args = process.argv.slice(2)
