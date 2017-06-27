@@ -55,6 +55,6 @@ before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -y -qq yarn=0.22.0-1
 install: yarn run all:install
-script:
-  - yarn run ci:test
+script: yarn run ci:test
+after_success: yarn run ci:deploy dev
 cache: yarn
