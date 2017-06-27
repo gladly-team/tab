@@ -116,6 +116,7 @@ describe('assign-env-vars script', () => {
 
   it('assigns a stage-specific env value to the root env varible name', () => {
     const envStageName = 'DEV'
+    delete process.env.GRAPHQL_ENDPOINT
     allEnvVars.forEach((envVarName) => {
       process.env[`${envStageName}_${envVarName}`] = 'xyz'
     })
@@ -125,6 +126,7 @@ describe('assign-env-vars script', () => {
   })
 
   it('ignores the stage name caps when assigning the env varible value', () => {
+    delete process.env.GRAPHQL_ENDPOINT
     allEnvVars.forEach((envVarName) => {
       process.env[`STAGING_${envVarName}`] = 'foobar'
     })
