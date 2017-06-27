@@ -24,7 +24,7 @@ export const envVars = [
   'S3_ENDPOINT',
   // Secrets
   'AWS_ACCESS_KEY_ID',
-  'AWS_SECRET_KEY'
+  'AWS_SECRET_ACCESS_KEY'
 ]
 
 // Expect one argument, the stage name.
