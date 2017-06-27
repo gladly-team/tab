@@ -108,6 +108,7 @@ describe('assign-env-vars script', () => {
 
   it('does not set an undefined env variable value as "undefined" string', () => {
     const envStageName = 'DEV'
+    delete process.env.S3_ENDPOINT
     delete process.env.DEV_S3_ENDPOINT
     assignEnvVars(envStageName, false)
     expect(process.env.S3_ENDPOINT).not.toBeDefined()
