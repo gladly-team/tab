@@ -55,5 +55,6 @@ before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -y -qq yarn=0.22.0-1
 install: yarn run all:install
-script: npm test
+script:
+  - yarn run ci:test
 cache: yarn
