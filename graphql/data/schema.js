@@ -182,6 +182,11 @@ const userType = new GraphQLObjectType({
   description: 'A person who uses our app',
   fields: () => ({
     id: globalIdField('User'),
+    userId: {
+      type: GraphQLString,
+      description: 'Users\'s username',
+      resolve: (user, _) => user.id
+    },
     backgroundImage: {
       type: imageType,
       description: 'Users\'s background image'

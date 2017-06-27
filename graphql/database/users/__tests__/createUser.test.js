@@ -1,29 +1,37 @@
-/* global expect jest describe it */
+/* eslint-env jest */
 
 import moment from 'moment'
 import mockDatabase from '../../__mocks__/database'
 import { DatabaseOperation, OperationType } from '../../../utils/test-utils'
+import { User, createUser } from '../base'
+import { rewardReferringUser } from '../rewardReferringUser'
+import { logReferralData } from '../../referrals/referralData'
 
 jest.mock('../../database', () => {
   return mockDatabase
 })
 
-var mockLogReferralData = jest.fn((userId, data) => {
-  return Promise.resolve(true)
-})
-
 jest.mock('../../referrals/referralData', () => {
   return {
-    logReferralData: mockLogReferralData
+    logReferralData: jest.fn((userId, data) => {
+      return Promise.resolve(true)
+    }),
+    getReferringUserId: (referralData) => {
+      return referralData.referringUser
+    }
   }
 })
 
-const _user = require('../user')
-
-let User = _user.User
-let createUser = _user.createUser
+jest.mock('../rewardReferringUser', () => {
+  return {
+    rewardReferringUser: jest.fn((referringUserId) => {
+      return Promise.resolve(true)
+    })
+  }
+})
 
 function setup () {
+  jest.resetAllMocks()
   mockDatabase.init()
   return mockDatabase
 }
@@ -91,14 +99,45 @@ describe('Create new user tests', function () {
 
     return createUser(userData, referralData)
         .then(user => {
-          const referralLogCalls = mockLogReferralData.mock.calls.length
+          const referralLogCalls = logReferralData.mock.calls.length
           expect(referralLogCalls).toBe(1)
 
-          const referralLog = mockLogReferralData.mock
-                  .calls[mockLogReferralData.mock.calls.length - 1]
+          const referralLogMock = logReferralData.mock
+                  .calls[logReferralData.mock.calls.length - 1]
 
-          expect(referralLog[0]).toBe(userId)
-          expect(referralLog[1]).toBe(referralData)
+          expect(referralLogMock[0]).toBe(userId)
+          expect(referralLogMock[1]).toBe(referralData)
+        })
+  })
+
+  it('should call to reward the referring user', () => {
+    const database = setup()
+    const userId = 'referred-user-id'
+    const userEmail = 'testuser@gladly.io'
+
+    database.pushDatabaseOperation(
+            new DatabaseOperation(OperationType.PUT, (params) => {
+              return { Item: params.Item }
+            })
+        )
+
+    const userData = new User(userId)
+    userData.email = userEmail
+
+    const referringUser = 'referring-user-id'
+    const referralData = {
+      referringUser: referringUser
+    }
+
+    return createUser(userData, referralData)
+        .then(user => {
+          const rewardReferringUserCalls = rewardReferringUser.mock.calls.length
+          expect(rewardReferringUserCalls).toBe(1)
+
+          const rewardReferringUserMock = rewardReferringUser.mock
+                  .calls[rewardReferringUser.mock.calls.length - 1]
+
+          expect(rewardReferringUserMock[0]).toBe(referringUser)
         })
   })
 })
