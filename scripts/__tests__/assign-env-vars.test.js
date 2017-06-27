@@ -87,7 +87,14 @@ describe('env variable name generation', () => {
 describe('assign-env-vars script', () => {
   it('fails if a required env var is not set', () => {
     const envStageName = 'DEV'
-    delete process.env.DEV_WEB_HOST
+
+    // Assign values to all env vars, then delete one.
+    // This ensures test consistency across environments.
+    allEnvVars.forEach((envVarName) => {
+      process.env[`${envStageName}_${envVarName}`] = 'abc'
+    })
+    delete process.env.DEV_S3_ENDPOINT
+
     expect(() => {
       assignEnvVars(envStageName)
     }).toThrow()
@@ -95,15 +102,15 @@ describe('assign-env-vars script', () => {
 
   it('optionally does not fail if an env var is not set', () => {
     const envStageName = 'DEV'
-    delete process.env.DEV_WEB_HOST
+    delete process.env.DEV_S3_ENDPOINT
     assignEnvVars(envStageName, false)
   })
 
   it('does not set an undefined env variable value as "undefined" string', () => {
     const envStageName = 'DEV'
-    delete process.env.DEV_WEB_HOST
+    delete process.env.DEV_S3_ENDPOINT
     assignEnvVars(envStageName, false)
-    expect(process.env.WEB_HOST).not.toBeDefined()
+    expect(process.env.S3_ENDPOINT).not.toBeDefined()
   })
 
   it('does not fail if all env vars are set', () => {
