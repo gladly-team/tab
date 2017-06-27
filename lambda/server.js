@@ -1,7 +1,7 @@
 import cors from 'cors'
 import express from 'express'
 
-import getLambdas from './lambdas'
+import getLambdas from './src/lambdas'
 
 // Load environment variables from .env file.
 // https://github.com/keithmorris/node-dotenv-extended

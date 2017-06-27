@@ -15,7 +15,7 @@ const lambdas = require('../lambdas')
 describe('test lambda function loading from Serverless YAML', () => {
   test('it creates correct lambda info from serverless.yml with no events', () => {
     const config = {
-      './serverless.yml': {
+      '../serverless.yml': {
         service: 'lambda',
         provider: {
           name: 'aws',
@@ -30,7 +30,7 @@ describe('test lambda function loading from Serverless YAML', () => {
 
   test('it creates correct lambda info from serverless.yml with one "get" event', () => {
     const config = {
-      './serverless.yml': {
+      '../serverless.yml': {
         service: 'lambda',
         provider: {
           name: 'aws',
@@ -65,7 +65,7 @@ describe('test lambda function loading from Serverless YAML', () => {
 
   test('it creates correct lambda info from serverless.yml with multiple HTTP events', () => {
     const config = {
-      './serverless.yml': {
+      '../serverless.yml': {
         service: 'lambda',
         provider: {
           name: 'aws',
@@ -129,7 +129,7 @@ describe('test lambda function loading from Serverless YAML', () => {
 
   test('it ignores lambda functions that are not HTTP events', () => {
     const config = {
-      './serverless.yml': {
+      '../serverless.yml': {
         service: 'lambda',
         provider: {
           name: 'aws',

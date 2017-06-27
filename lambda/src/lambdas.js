@@ -8,7 +8,7 @@ import { has } from 'lodash'
 // Return objects that include the handler function for
 // each endpoint.
 function getLambdas () {
-  const serverlessConfig = YAML.load('./serverless.yml')
+  const serverlessConfig = YAML.load('../serverless.yml')
   const lambdaFunctions = []
   if (serverlessConfig['functions']) {
     const lambdas = serverlessConfig['functions']
