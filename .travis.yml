@@ -60,6 +60,5 @@ deploy:
   provider: script
   script: yarn run ci:deploy dev
   on:
-    tags: true
     all_branches: true
 cache: yarn
