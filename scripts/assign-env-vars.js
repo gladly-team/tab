@@ -21,8 +21,10 @@ export const envVars = [
   // Endpoints
   'GRAPHQL_ENDPOINT',
   'DYNAMODB_ENDPOINT',
-  'S3_ENDPOINT'
+  'S3_ENDPOINT',
   // Secrets
+  'AWS_ACCESS_KEY_ID',
+  'AWS_SECRET_KEY'
 ]
 
 // Expect one argument, the stage name.
