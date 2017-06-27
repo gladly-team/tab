@@ -95,7 +95,7 @@
   },
   "scripts": {
     "start": "yarn run relay && nodemon --watch data/schema.graphql scripts/start.js & yarn run relay:watch",
-    "build": "node scripts/build.js",
+    "build": "yarn run relay && node scripts/build.js",
     "deploy": "yarn run build && serverless deploy && serverless syncToS3",
     "relay": "relay-compiler --src ./src/ --schema ./data/schema.graphql",
     "relay:watch": "nodemon --watch src/ --watch data/schema.graphql --ignore **/__generated__/**/* --exec \"yarn run relay\"",
