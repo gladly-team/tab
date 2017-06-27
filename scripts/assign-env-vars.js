@@ -37,14 +37,14 @@ const assignEnvVars = function (stageName, allEnvVarsRequired = true) {
     let stageEnvVarName = `${stagePrefix}${envVar}`
     let stageEnvVar = process.env[stageEnvVarName]
 
-    // Optionally throw an error if an env variable is not set.
-    if (
-      (typeof stageEnvVar === 'undefined' || stageEnvVar === null) &&
-      allEnvVarsRequired
-    ) {
-      throw new Error(`Environment variable ${stageEnvVarName} must be set.`)
+    if (typeof stageEnvVar === 'undefined' || stageEnvVar === null) {
+      // Optionally throw an error if an env variable is not set.
+      if (allEnvVarsRequired) {
+        throw new Error(`Environment variable ${stageEnvVarName} must be set.`)
+      }
+    } else {
+      process.env[envVar] = stageEnvVar
     }
-    process.env[envVar] = stageEnvVar
   })
 }
 

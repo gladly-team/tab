@@ -99,6 +99,13 @@ describe('assign-env-vars script', () => {
     assignEnvVars(envStageName, false)
   })
 
+  it('does not set an undefined env variable value as "undefined" string', () => {
+    const envStageName = 'DEV'
+    delete process.env.DEV_WEB_HOST
+    assignEnvVars(envStageName, false)
+    expect(process.env.WEB_HOST).not.toBeDefined()
+  })
+
   it('does not fail if all env vars are set', () => {
     const envStageName = 'DEV'
     allEnvVars.forEach((envVarName) => {
