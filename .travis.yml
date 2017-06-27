@@ -61,4 +61,6 @@ deploy:
   script: yarn run ci:deploy dev
   on:
     all_branches: true
+  # don't reset working directory after script step
+  skip_cleanup: true
 cache: yarn
