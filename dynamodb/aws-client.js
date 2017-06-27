@@ -1,7 +1,7 @@
-var AWS = require('aws-sdk');
+var AWS = require('aws-sdk')
 
 // Load environment variables from .env file.
-require('dotenv-extended').load();
+require('dotenv-extended').load()
 
 AWS.config.update({
   region: process.env.AWS_REGION,
@@ -10,4 +10,4 @@ AWS.config.update({
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
 })
 
-module.exports = AWS;
+module.exports = AWS
