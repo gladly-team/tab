@@ -4,6 +4,7 @@ node_js:
 env:
   global:
   - CI=true
+  - SLS_DEBUG=true
   ########## Test stage ##########
   - TEST_NODE_ENV=production
   - TEST_AWS_REGION=us-west-2
