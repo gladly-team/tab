@@ -28,7 +28,7 @@
     "parent:lint": "standard \"scripts/**/*.js\"",
     "parent:lint:fix": "standard \"scripts/**/*.js\" --fix",
     "parent:test": "yarn run parent:lint && jest",
-    "all:install": "npm-run-all -s parent:install s3:install web:install graphql:install dynamodb:install lambda:install",
+    "all:install": "yarn run parent:install && npm-run-all -s s3:install web:install graphql:install dynamodb:install lambda:install",
     "docker:start": "docker-compose up 2>&1 | node scripts/log-prefix.js [docker] cyan",
     "dynamodb:deploy": "cd ./dynamodb && yarn run deploy",
     "dynamodb:install": "cd ./dynamodb && yarn install",
