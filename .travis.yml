@@ -83,11 +83,12 @@ before_install:
   # End Watchman install.
 install: yarn run all:install
 script: yarn run ci:test
+# TODO: master branch deploy to prod; other logic for test/dev
 deploy:
   provider: script
-  script: yarn run ci:deploy test
+  script: yarn run ci:deploy dev
   on:
-    all_branches: true
+    branch: master
   # don't reset working directory after script step
   skip_cleanup: true
 cache: yarn
