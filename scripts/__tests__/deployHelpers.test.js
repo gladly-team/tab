@@ -37,14 +37,14 @@ describe('getServerlessStageName helper', () => {
   })
 
   it('succeeds as expected with "dev" stage', () => {
-    checkDeployValidity('dev', 'true')
+    getServerlessStageName('dev')
   })
 
   it('succeeds as expected with "prod" stage', () => {
-    checkDeployValidity('prod', 'true')
+    getServerlessStageName('prod')
   })
 
   it('is not case sensitive', () => {
-    checkDeployValidity('DEV', 'true')
+    getServerlessStageName('DEV')
   })
 })
