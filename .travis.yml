@@ -79,7 +79,7 @@ install: yarn run all:install
 script: yarn run ci:test
 deploy:
   provider: script
-  script: yarn run ci:deploy dev
+  script: yarn run ci:deploy test
   on:
     all_branches: true
   # don't reset working directory after script step

@@ -2,7 +2,7 @@
 
 import { spawn } from 'child_process'
 import assignEnvVars from './assign-env-vars'
-import { checkDeployValidity } from './deployHelpers'
+import { checkDeployValidity, getServerlessStageName } from './deployHelpers'
 
 // Expect one argument, the stage name.
 const args = process.argv.slice(2)
@@ -15,6 +15,11 @@ checkDeployValidity(stageName, process.env.CI)
 console.log('Assigning environment variables...')
 assignEnvVars(stageName)
 
-console.log('Deploying...')
+// Set env var to the Serverless stage name value.
+// Services use the value to determine their deploy stage.
+const serverlessStage = getServerlessStageName(stageName)
+process.env.SLS_STAGE = serverlessStage
+console.log(`Set Serverless stage (SLS_STAGE) to "${serverlessStage}".`)
 
+console.log('Deploying...')
 spawn('yarn', ['run', 'ci:deployservices'], {stdio: 'inherit'})

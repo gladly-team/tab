@@ -16,3 +16,17 @@ export const checkDeployValidity = function (stageName, envCI) {
   }
   return true
 }
+
+/**
+ * Get the formatted Serverless stage name from the provided stage.
+ * @param {string} stageName - The name of the deployment stage
+ * @return {string} Returns the corresponding stage name string.
+ */
+export const getServerlessStageName = function (stageName) {
+  const acceptableSlsStages = ['dev', 'test', 'staging', 'prod']
+  const slsStageName = stageName.toLowerCase()
+  if (acceptableSlsStages.indexOf(slsStageName) === -1) {
+    throw new Error(`Serverless stage must be one of: dev, test, staging, prod`)
+  }
+  return slsStageName
+}
