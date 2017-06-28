@@ -1,6 +1,7 @@
 // This file gets all lambda functions from the Serverless
 // config and exports the handlers and endpoint info.
 
+import path from 'path'
 import YAML from 'yamljs'
 import { has } from 'lodash'
 
@@ -8,7 +9,8 @@ import { has } from 'lodash'
 // Return objects that include the handler function for
 // each endpoint.
 function getLambdas () {
-  const serverlessConfig = YAML.load('../serverless.yml')
+  const serverlessConfig = YAML.load(
+    path.join(__dirname, '..', 'serverless.yml'))
   const lambdaFunctions = []
   if (serverlessConfig['functions']) {
     const lambdas = serverlessConfig['functions']
