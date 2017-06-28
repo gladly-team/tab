@@ -1,6 +1,8 @@
 
 // Used to assign stage-specific env vars in our CI setup
 // to the env var names used in app code.
+// For example, in the "dev" stage, we assign the value of
+// process.envDEV_WEB_HOST to process.env.WEB_HOST.
 
 // All env vars we want to pick up from the CI environment.
 export const envVars = [
@@ -22,6 +24,9 @@ export const envVars = [
   'GRAPHQL_ENDPOINT',
   'DYNAMODB_ENDPOINT',
   'S3_ENDPOINT',
+  // Deployment
+  'WEB_S3_BUCKET_NAME',
+  'MEDIA_S3_BUCKET_NAME',
   // Secrets
   'AWS_ACCESS_KEY_ID',
   'AWS_SECRET_ACCESS_KEY'

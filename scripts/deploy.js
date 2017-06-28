@@ -22,4 +22,4 @@ process.env.SLS_STAGE = serverlessStage
 console.log(`Set Serverless stage (SLS_STAGE) to "${serverlessStage}".`)
 
 console.log('Deploying...')
-spawn('yarn', ['run', 'ci:deployservices'])
+spawn('yarn', ['run', 'ci:deployservices'], {stdio: 'inherit'})

@@ -14,8 +14,7 @@ plugins:
 
 custom:
   stageDefault: dev
-  # TODO: use env variable
-  s3Bucket: dev-tab2017.gladly.io
+  s3Bucket: ${env:WEB_S3_BUCKET_NAME}
   webAppName: Tab2017
   domainNameAlias: tab.gladly.io
 
