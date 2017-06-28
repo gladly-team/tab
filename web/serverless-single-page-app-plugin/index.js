@@ -1,4 +1,3 @@
-The react/jsx-space-before-closing rule is deprecated. Please use the react/jsx-tag-spacing rule with the "beforeSelfClosing" option instead.
 'use strict'
 
 const spawnSync = require('child_process').spawnSync
