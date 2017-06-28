@@ -1,3 +1,4 @@
+The react/jsx-space-before-closing rule is deprecated. Please use the react/jsx-tag-spacing rule with the "beforeSelfClosing" option instead.
 'use strict'
 
 const spawnSync = require('child_process').spawnSync
@@ -37,8 +38,6 @@ class ServerlessPlugin {
       `s3://${s3Bucket}/`
     ]
     const result = spawnSync('aws', args)
-    console.log(s3Bucket, args)
-    console.log(result)
     const stdout = result.stdout ? result.stdout.toString() : ''
     const sterr = result.stderr ? result.stderr.toString() : ''
     if (stdout) {
