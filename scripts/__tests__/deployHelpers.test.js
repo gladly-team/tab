@@ -47,8 +47,4 @@ describe('getServerlessStageName helper', () => {
   it('is not case sensitive', () => {
     getServerlessStageName('DEV')
   })
-
-  it('fails', () => {
-    expect(false).toBe(true)
-  })
 })
