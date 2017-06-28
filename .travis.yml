@@ -5,6 +5,7 @@ env:
   global:
   - CI=true
   - SLS_DEBUG=true
+  - LOG_TEST_COVERAGE=true
   ########## Test stage ##########
   - TEST_NODE_ENV=production
   - TEST_AWS_REGION=us-west-2
