@@ -7,7 +7,7 @@ provider:
   runtime: nodejs6.10
   region: us-west-2
   profile: tab-sls
-  stage: dev
+  stage: ${env:SLS_STAGE, self:custom.stageDefault}
   iamRoleStatements:
     - Effect: "Allow"
       Action:
@@ -26,6 +26,9 @@ provider:
         - "dynamodb:Scan"
         - "dynamodb:UpdateItem"
       Resource: "*"
+
+custom:
+  stageDefault: dev
 
 plugins:
   # Include only the required node modules.

@@ -1,13 +1,13 @@
-var AWS = require('aws-sdk');
+var AWS = require('aws-sdk')
 
 // Load environment variables from .env file.
-require('dotenv-extended').load();
+require('dotenv-extended').load()
 
 AWS.config.update({
   region: process.env.AWS_REGION,
   endpoint: process.env.DYNAMODB_ENDPOINT,
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_KEY
-});
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+})
 
-module.exports = AWS;
+module.exports = AWS

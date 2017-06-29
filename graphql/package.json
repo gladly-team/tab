@@ -54,7 +54,7 @@
     "update-schema": "babel-node ./scripts/updateSchema.js",
     "test": "npm-run-all -s test:lint test:run test:codecov",
     "test:run": "jest --coverage",
-    "test:codecov": "if-env NODE_ENV=test && codecov || echo 'Skipping test coverage logging.'",
+    "test:codecov": "if-env LOG_TEST_COVERAGE=true && codecov || echo 'Skipping test coverage logging.'",
     "test:watch": "jest --watch",
     "test:lint": "standard"
   },

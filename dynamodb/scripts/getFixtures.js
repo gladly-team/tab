@@ -1,7 +1,6 @@
 
-import { map } from 'lodash/collection';
-import { cloneDeep } from 'lodash/lang';
-
+import { map } from 'lodash/collection'
+import { cloneDeep } from 'lodash/lang'
 
 const allFixtures = [
   {
@@ -36,22 +35,20 @@ const allFixtures = [
     tableName: 'UserWidgets',
     jsonFile: 'UserWidgetsData.json'
   }
-];
+]
 
-const getFixtures = function() {
-
+const getFixtures = function () {
   // Add an appendix to the table name if required.
   const tableNameAppendix = (
-    process.env.TABLE_NAME_APPENDIX ?
-    process.env.TABLE_NAME_APPENDIX :
-    ''
-  );
+    process.env.TABLE_NAME_APPENDIX
+    ? process.env.TABLE_NAME_APPENDIX
+    : ''
+  )
   return map(allFixtures, (fixtureObj) => {
-    const newFixtureObj = cloneDeep(fixtureObj);
-    newFixtureObj.tableName = `${fixtureObj.tableName}${tableNameAppendix}`;
-    return newFixtureObj;
-  });
+    const newFixtureObj = cloneDeep(fixtureObj)
+    newFixtureObj.tableName = `${fixtureObj.tableName}${tableNameAppendix}`
+    return newFixtureObj
+  })
+}
 
-};
-
-export default getFixtures;
+export default getFixtures

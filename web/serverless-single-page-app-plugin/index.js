@@ -37,8 +37,8 @@ class ServerlessPlugin {
       `s3://${s3Bucket}/`
     ]
     const result = spawnSync('aws', args)
-    const stdout = result.stdout.toString()
-    const sterr = result.stderr.toString()
+    const stdout = result.stdout ? result.stdout.toString() : ''
+    const sterr = result.stderr ? result.stderr.toString() : ''
     if (stdout) {
       this.serverless.cli.log(stdout)
     }

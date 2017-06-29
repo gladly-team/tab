@@ -7,11 +7,11 @@ provider:
   runtime: nodejs6.10
   region: us-west-2
   profile: tab-sls
-  stage: dev
+  stage: ${env:SLS_STAGE, self:custom.stageDefault}
 
 custom:
-  # TODO: use env variable
-  s3Bucket: dev-tab2017-media.gladly.io
+  stageDefault: dev
+  s3Bucket: ${env:MEDIA_S3_BUCKET_NAME}
 
 resources:
   Resources:

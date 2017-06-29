@@ -9,7 +9,7 @@ AWS.config.update({
   region: config.AWS_REGION,
   endpoint: config.DYNAMODB_ENDPOINT,
   accessKeyId: config.AWS_ACCESS_KEY_ID,
-  secretAccessKey: config.AWS_SECRET_KEY
+  secretAccessKey: config.AWS_SECRET_ACCESS_KEY
 })
 
 var dynamoDb = new AWS.DynamoDB.DocumentClient()

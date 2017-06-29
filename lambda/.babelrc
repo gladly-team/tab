@@ -6,7 +6,7 @@
   "plugins": [
     "babel-plugin-lodash",
     ["module-resolver", {
-      "root": ["./"],
+      "root": ["../"],
       "alias": {
         "database": "../graphql/database"
       }

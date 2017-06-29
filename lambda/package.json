@@ -36,12 +36,12 @@
   },
   "scripts": {
     "start": "nodemon -e js,json,yml --exec \"babel-node\" ./server.js",
-    "deploy": "serverless deploy",
+    "deploy": "yarn run build && serverless deploy",
     "build": "rm -rf ./build && npm run build:compile",
-    "build:compile": "cross-env NODE_ENV=production babel --out-dir='build' --ignore='build,coverage,__mocks__,__tests__,node_modules' ./",
+    "build:compile": "cross-env NODE_ENV=production babel --out-dir='build' --ignore='build,coverage,__mocks__,__tests__,node_modules' ./src/",
     "test": "npm-run-all -s test:lint test:run test:codecov",
     "test:run": "jest --coverage",
-    "test:codecov": "if-env NODE_ENV=test && codecov || echo 'Skipping test coverage logging.'",
+    "test:codecov": "if-env LOG_TEST_COVERAGE=true && codecov || echo 'Skipping test coverage logging.'",
     "test:watch": "jest --watch",
     "test:lint": "standard"
   },
