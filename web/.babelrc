@@ -17,6 +17,7 @@
         "navigation": "./src/js/navigation",
         "general": "./src/js/components/General",
         "web-utils": "./src/js/utils/utils",
+        "ads": "./src/js/ads",
         "theme": "./src/js/theme",
         "assets": "./src/js/assets"
       }
