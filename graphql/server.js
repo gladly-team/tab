@@ -9,7 +9,7 @@ import {clean} from 'require-clean'
 import {exec} from 'child_process'
 
 import config from './config'
-import { handler } from './handler'
+// import { handler } from './handler'
 
 const GRAPHQL_PORT = config.GRAPHQL_PORT
 
