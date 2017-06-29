@@ -37,6 +37,7 @@ let graphQLServer
 //     "body": "A JSON string of the request payload."
 //     "isBase64Encoded": "A boolean flag to indicate if the applicable request payload is Base64-encode"
 // }
+
 function generateLambdaEventObj (req) {
   return {
     resource: '',
@@ -133,7 +134,12 @@ function startGraphQLServer (callback) {
     res.send(err.stack)
   })
 
-  graphQLServer = graphQLApp.listen(GRAPHQL_PORT, () => {
+  graphQLServer = graphQLApp.listen(GRAPHQL_PORT, (err) => {
+    if (err) {
+      console.log(pe.render(err)) // eslint-disable-line no-console
+      return err
+    }
+
     console.log(
       `GraphQL server is now running on http://localhost:${GRAPHQL_PORT}`
     )
