@@ -13,3 +13,20 @@ services:
     volumes:
       - ./dynamodb:/dynamodb
       - ./dynamodb/node_modules:/dynamodb/node_modules
+
+  dbadmin:
+    restart: always
+    image: wheniwork/dynamodb-admin
+    expose:
+      - "8001"
+    ports:
+      - "8001:8001"
+    depends_on:
+      - dynamodb
+    volumes:
+      - ./dbadmin:/dbadmin
+      - ./dbadmin/node_modules:/dbadmin/node_modules
+    env_file:
+      - ./dynamodb/.env.defaults
+    environment:
+      - DYNAMO_ENDPOINT=dynamodb:8000
