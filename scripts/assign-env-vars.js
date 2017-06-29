@@ -15,6 +15,7 @@ export const envVars = [
   'COGNITO_CLIENTID',
   // Web app
   'PUBLIC_PATH',
+  'AD_CLIENT_NAME',
   // 'WEB_HOST', // optional
   // 'WEB_PORT', // optional
   // GraphQL
