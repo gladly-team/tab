@@ -17,9 +17,6 @@ const pe = new PrettyError()
 pe.skipNodeFiles()
 pe.skipPackage('express', 'graphql')
 
-// Must configure Raven before doing anything else with it
-raven.config(config.SENTRY_DSN).install()
-
 let graphQLServer
 
 // Approximate an AWS Lambda event object from the request.
@@ -38,22 +35,25 @@ let graphQLServer
 //     "isBase64Encoded": "A boolean flag to indicate if the applicable request payload is Base64-encode"
 // }
 
-function generateLambdaEventObj (req) {
-  return {
-    resource: '',
-    path: req.baseUrl,
-    httpMethod: req.method,
-    headers: req.headers,
-    queryStringParameters: req.query,
-    pathParameters: {},
-    stageVariables: {},
-    requestContext: {},
-    body: JSON.stringify(req.body),
-    isBase64Encoded: false
-  }
-}
+// function generateLambdaEventObj (req) {
+//   return {
+//     resource: '',
+//     path: req.baseUrl,
+//     httpMethod: req.method,
+//     headers: req.headers,
+//     queryStringParameters: req.query,
+//     pathParameters: {},
+//     stageVariables: {},
+//     requestContext: {},
+//     body: JSON.stringify(req.body),
+//     isBase64Encoded: false
+//   }
+// }
 
-function getGraphQLMiddleware () {
+function getGraphQLMiddlewareWithSentryLogging () {
+  // Must configure Raven before doing anything else with it
+  raven.config(config.SENTRY_DSN).install()
+
   clean('./data/schema')
   const {Schema} = require('./data/schema')
 
@@ -104,27 +104,63 @@ function getGraphQLMiddleware () {
   return graphQLMiddleware
 }
 
+function getGraphQLMiddleware () {
+  clean('./data/schema')
+  const {Schema} = require('./data/schema')
+
+  const graphQLMiddleware = graphQLHTTP(req => ({
+    graphiql: true,
+    pretty: true,
+    schema: Schema,
+    formatError: (error) => {
+      if (error.path || error.name !== 'GraphQLError') {
+        console.error(pe.render(error))
+      } else {
+        console.error(pe.render(error.message))
+      }
+      return {
+        message: error.message,
+        stack: process.env.NODE_ENV === 'development' ? error.stack.split('\n') : null
+      }
+    },
+    context: {
+      userId: req.userId,
+      userEmail: req.userEmail,
+      admin: req.admin,
+      getUserPromise: req.getUserPromise ? req.getUserPromise.bind(req) : null,
+      getAdminPromise: req.getAdminPromise ? req.getAdminPromise.bind(req) : null,
+      ip: req.ip || (req.connection || {}).remoteAddress
+    }
+  }))
+
+  return graphQLMiddleware
+}
+
 function startGraphQLServer (callback) {
   const graphQLApp = express()
+
   graphQLApp.use(cors())
   graphQLApp.use(bodyParser.json())
   graphQLApp.use(bodyParser.urlencoded({ extended: true }))
 
-  // The request handler must be the first middleware on the app
-  graphQLApp.use(raven.requestHandler())
-
-  // Use express-graphql in development if desired.
-  // Otherwise, just use our plain Lambda handler.
-  if (config.NODE_ENV === 'development' && config.ENABLE_GRAPHIQL) {
-    graphQLApp.use('/', getGraphQLMiddleware())
+  if (config.USE_SENTRY) {
+    // The request handler must be the first middleware on the app
+    graphQLApp.use(raven.requestHandler())
+    graphQLApp.use('/', getGraphQLMiddlewareWithSentryLogging())
   } else {
-    graphQLApp.post('/', (req, res) => {
-      const event = generateLambdaEventObj(req)
-      handler(event)
-        // Use only the body (the rest is for use within an AWS Lambda context)
-        .then(response => res.send(response.body))
-    })
+    graphQLApp.use('/', getGraphQLMiddleware())
   }
+
+  // if (config.NODE_ENV === 'development' && config.ENABLE_GRAPHIQL) {
+  //   graphQLApp.use('/', getGraphQLMiddleware())
+  // } else {
+  //   graphQLApp.post('/', (req, res) => {
+  //     const event = generateLambdaEventObj(req)
+  //     handler(event)
+  //       // Use only the body (the rest is for use within an AWS Lambda context)
+  //       .then(response => res.send(response.body))
+  //   })
+  // }
 
   // Error handling
   graphQLApp.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
