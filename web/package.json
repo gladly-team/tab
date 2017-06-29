@@ -95,17 +95,19 @@
   },
   "scripts": {
     "start": "yarn run relay && nodemon --watch data/schema.graphql scripts/start.js & yarn run relay:watch",
-    "build": "node scripts/build.js",
-    "deploy": "yarn run build && serverless deploy && serverless syncToS3",
+    "build": "yarn run relay && node scripts/build.js",
+    "deploy": "npm-run-all -s build sls:deploy sls:s3sync",
     "relay": "relay-compiler --src ./src/ --schema ./data/schema.graphql",
     "relay:watch": "nodemon --watch src/ --watch data/schema.graphql --ignore **/__generated__/**/* --exec \"yarn run relay\"",
     "test": "npm-run-all -s test:lint test:run test:codecov",
     "test:run": "jest --env=jsdom --coverage",
-    "test:codecov": "if-env NODE_ENV=test && codecov || echo 'Skipping test coverage logging.'",
+    "test:codecov": "if-env LOG_TEST_COVERAGE=true && codecov || echo 'Skipping test coverage logging.'",
     "test:watch": "jest --env=jsdom --watch",
     "build:langs": "node scripts/translate.js",
     "test:lint": "standard",
-    "lint:fix": "standard --fix"
+    "lint:fix": "standard --fix",
+    "sls:deploy": "serverless deploy",
+    "sls:s3sync": "serverless syncToS3"
   },
   "jest": {
     "collectCoverageFrom": [

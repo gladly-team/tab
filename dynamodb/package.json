@@ -13,10 +13,12 @@
     "babel-preset-stage-0": "^6.24.1",
     "codecov": "^2.2.0",
     "dotenv-extended": "^2.0.0",
+    "if-env": "^1.0.0",
     "jest": "^20.0.3",
     "lodash": "^4.17.4",
     "npm-run-all": "^4.0.2",
-    "serverless": "^1.14.0"
+    "serverless": "^1.14.0",
+    "standard": "^10.0.2"
   },
   "scripts": {
     "init": "npm run delete-tables && npm run bootstrap",
@@ -24,10 +26,12 @@
     "create-tables": "babel-node ./scripts/createTables.js",
     "delete-tables": "babel-node ./scripts/deleteTables.js",
     "load-fixtures": "babel-node ./scripts/loadFixtures.js",
-    "test": "npm-run-all -s test:run test:codecov",
+    "test": "npm-run-all -s lint test:run test:codecov",
     "test:run": "jest --coverage",
-    "test:codecov": "if-env NODE_ENV=test && codecov || echo 'Skipping test coverage logging.'",
+    "test:codecov": "if-env LOG_TEST_COVERAGE=true && codecov || echo 'Skipping test coverage logging.'",
     "test:watch": "jest --watch",
+    "lint": "standard",
+    "lint:fix": "standard --fix",
     "deploy": "serverless deploy"
   },
   "repository": {
