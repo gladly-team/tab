@@ -1,7 +1,6 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-// import { defineAdSlot, displayAd } from 'ads-manager'
 import AdClient from 'ads/AdClient'
 
 // Suggestions on React component using DFP:
