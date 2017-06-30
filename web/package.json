@@ -140,6 +140,11 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "standard": {
+    "ignore": [
+      "src/js/ads/prebid/prebid.js"
+    ]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gladly-team/tab.git"
