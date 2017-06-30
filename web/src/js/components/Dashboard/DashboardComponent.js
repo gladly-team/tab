@@ -135,6 +135,17 @@ class Dashboard extends React.Component {
               right: 10,
               display: 'block'
             }} />
+          <Ad
+            adId='div-gpt-ad-8765432190123-0' // TODO: real ID
+            adSlotId='/87654321/ABCD' // TODO: real ID
+            width={728}
+            height={90}
+            style={{
+              position: 'absolute',
+              bottom: 10,
+              right: 320,
+              display: 'block'
+            }} />
         </div>
       </FadeInAnimation>
     )

@@ -53,7 +53,7 @@ export class MockAdClient extends AdClientBase {
     console.log('Mock ad server: displayAd')
 
     // Mock returning an ad.
-    const mockNetworkDelayMs = 1200
+    const mockNetworkDelayMs = Math.random() * (1500 - 900) + 900
     setTimeout(() => {
       const elem = document.getElementById(adId)
       elem.setAttribute('style', `
