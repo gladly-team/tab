@@ -6309,9 +6309,9 @@ postcss@^6.0.1, postcss@^6.x:
     source-map "^0.5.6"
     supports-color "^3.2.3"
 
-prebid.js@^0.25.0:
-  version "0.25.0"
-  resolved "https://registry.yarnpkg.com/prebid.js/-/prebid.js-0.25.0.tgz#ed082086b98a5116921b7d9ca8ad22b1173c39c2"
+prebid.js@0.24.1:
+  version "0.24.1"
+  resolved "https://registry.yarnpkg.com/prebid.js/-/prebid.js-0.24.1.tgz#a491a1b056375385c354676c264077d99ddc902c"
   dependencies:
     babel-plugin-transform-object-assign "^6.22.0"
     core-js "^2.4.1"

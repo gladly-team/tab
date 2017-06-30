@@ -65,7 +65,7 @@
     "object-assign": "^4.1.1",
     "path-exists": "^3.0.0",
     "postcss-loader": "^2.0.5",
-    "prebid.js": "^0.25.0",
+    "prebid.js": "0.24.1",
     "precss": "^1.4.0",
     "promise": "7.1.1",
     "prop-types": "^15.5.10",
@@ -108,7 +108,7 @@
     "test:lint": "standard",
     "lint:fix": "standard --fix",
     "prebid:build": "npm-run-all -s prebid:generate prebid:cp",
-    "prebid:generate": "cd ./node_modules/prebid.js/ && gulp build",
+    "prebid:generate": "cd ./node_modules/prebid.js/ && yarn install && gulp build",
     "prebid:cp": "cp ./node_modules/prebid.js/build/dist/prebid.js ./src/js/ads/prebid/",
     "sls:deploy": "serverless deploy",
     "sls:s3sync": "serverless syncToS3"
