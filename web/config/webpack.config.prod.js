@@ -48,7 +48,8 @@ module.exports = {
     app: [
       require.resolve('./polyfills'),
       paths.appIndexJs
-    ]
+    ],
+    ads: './src/js/ads/ads.js'
   },
   output: {
     // The build folder.
@@ -199,6 +200,20 @@ module.exports = {
     new HtmlWebpackPlugin({
       inject: false,
       template: paths.appHtml,
+      // https://github.com/jantimon/html-webpack-plugin/issues/481#issuecomment-262414169
+      chunks: ['vendor', 'ads', 'app'],
+      chunksSortMode: function (chunk1, chunk2) {
+        var orders = ['vendor', 'ads', 'app']
+        var order1 = orders.indexOf(chunk1.names[0])
+        var order2 = orders.indexOf(chunk2.names[0])
+        if (order1 > order2) {
+          return 1
+        } else if (order1 < order2) {
+          return -1
+        } else {
+          return 0
+        }
+      },
       minify: {
         removeComments: true,
         collapseWhitespace: true,
