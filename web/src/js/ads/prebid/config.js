@@ -91,12 +91,22 @@ const adUnits = [{
 
 // Prebid boilerplate section START
 const googletag = window.googletag || {}
+// We're not running in global scope, so make sure to
+// assign to the window.
+if (!window.googletag) {
+  window.googletag = googletag
+}
 googletag.cmd = googletag.cmd || []
 googletag.cmd.push(function () {
   googletag.pubads().disableInitialLoad()
 })
 
 const pbjs = window.pbjs || {}
+// We're not running in global scope, so make sure to
+// assign to the window.
+if (!window.pbjs) {
+  window.pbjs = pbjs
+}
 pbjs.que = pbjs.que || []
 
 pbjs.que.push(function () {
