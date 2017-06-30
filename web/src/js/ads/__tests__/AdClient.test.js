@@ -34,14 +34,14 @@ describe('AdServer import', function () {
     expect(AdServer).toBeInstanceOf(DFP)
   })
 
-  it('throws with an invalid ad server name', () => {
+  it('returns an instance of MockAdClient if no name match', () => {
     jest.mock('../activeAdClient', () => {
       return {
         getActiveAdServerName: () => 'fakeAdserverName'
       }
     })
-    expect(() => {
-      const AdServer = require('../AdClient').default // eslint-disable-line
-    }).toThrow()
+    const AdServer = require('../AdClient').default
+    const MockAdClient = require('../AdClient').MockAdClient
+    expect(AdServer).toBeInstanceOf(MockAdClient)
   })
 })

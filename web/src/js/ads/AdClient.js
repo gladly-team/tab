@@ -83,7 +83,7 @@ switch (adServerName) {
     adServer = new DFP()
     break
   default:
-    throw new Error(`Ad server name ${adServerName} not recognized.`)
+    adServer = new MockAdClient()
 }
 
 export default adServer
