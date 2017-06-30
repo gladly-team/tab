@@ -8,7 +8,7 @@ import AdClient from 'ads/AdClient'
 class Ad extends React.Component {
   defineAdSlot () {
     AdClient.defineAdSlot(
-      this.props.adSlot,
+      this.props.adSlotId,
       [this.props.width, this.props.height],
       this.props.adId
     )
