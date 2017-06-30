@@ -29,11 +29,13 @@ class CircleButton extends React.Component {
       defaultStyle, this.props.buttonStyle)
 
     const props = Object.assign({}, this.props)
+    delete props['buttonId']
     delete props['buttonStyle']
     delete props['size']
 
     return (
       <FlatButton
+        id={this.props.buttonId}
         {...props}
         style={finalStyle}
         backgroundColor='transparent'
@@ -44,13 +46,15 @@ class CircleButton extends React.Component {
 }
 
 CircleButton.propTypes = {
+  buttonId: PropTypes.string,
   size: PropTypes.number,
   buttonStyle: PropTypes.object
 }
 
 CircleButton.defaultProps = {
   buttonStyle: {},
-  size: 50
+  size: 50,
+  buttonId: ''
 }
 
 export default CircleButton

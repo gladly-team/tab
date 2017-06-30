@@ -75,10 +75,14 @@ class EmailForm extends React.Component {
     }
 
     return (
-      <div style={main}>
+      <div
+        data-test-id={'email-form-test-id'}
+        style={main}>
         <div
+          data-test-id={'email-input-container'}
           style={container}>
           <EmailField
+            inputId={'login-email-input-id'}
             ref={(input) => { this.email = input }}
             onKeyPress={this._handleKeyPress.bind(this)}
             floatingLabelText='Email'
@@ -88,6 +92,7 @@ class EmailForm extends React.Component {
             underlineFocusStyle={underlineFocusStyle}
             inputStyle={inputStyle} />
           <CircleButton
+            buttonId={'confirm-email-btn-id'}
             size={40}
             onClick={this.handleSubmit.bind(this)} />
         </div>
