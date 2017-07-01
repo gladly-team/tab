@@ -16,6 +16,7 @@ export const envVars = [
   // Web app
   'PUBLIC_PATH',
   'AD_CLIENT_NAME',
+  'ADS_ENABLED',
   // 'WEB_HOST', // optional
   // 'WEB_PORT', // optional
   // GraphQL

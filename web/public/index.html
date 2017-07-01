@@ -78,8 +78,10 @@
 <script src="<%= htmlWebpackPlugin.options.devServer%>/webpack-dev-server.js"></script>
 <% } %>
 
+<% if (htmlWebpackPlugin.options.tabAdsEnabled) { %>
 <!-- OpenX bidder -->
 <script type="text/javascript" src="//tabforacause-d.openx.net/w/1.0/jstag?nc=43865596-TabForACause"></script>
+<% } %>
 
 </body>
 </html>

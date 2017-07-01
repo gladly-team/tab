@@ -19,6 +19,7 @@ env:
   - TEST_WEB_HOST=localhost
   - TEST_WEB_PORT=3000
   - TEST_AD_CLIENT_NAME=mock
+  - TEST_ADS_ENABLED=false
   # GraphQL
   - TEST_TABLE_NAME_APPENDIX=""
   - TEST_GRAPHQL_PORT=8080
@@ -43,6 +44,7 @@ env:
   # Web app
   - DEV_PUBLIC_PATH=http://dev-tab2017.gladly.io/
   - DEV_AD_CLIENT_NAME=mock # TODO: change to dfp
+  - DEV_ADS_ENABLED=false
   # GraphQL
   - DEV_TABLE_NAME_APPENDIX="-dev"
   # Endpoints

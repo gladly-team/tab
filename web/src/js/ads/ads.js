@@ -5,9 +5,7 @@ import googleTagManager from './googleTagManager'
 import googleAdSlotDefinitions from './googleAdSlotDefinitions'
 import openxConfig from './openxConfig'
 
-// TODO: env var
-const adsEnabled = true
-
+const adsEnabled = process.env.ADS_ENABLED === 'true'
 if (adsEnabled) {
   prebid()
   prebidConfig()
