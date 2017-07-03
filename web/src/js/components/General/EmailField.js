@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import TextField from 'material-ui/TextField'
 
 import {validateEmail} from 'web-utils'
@@ -50,13 +51,21 @@ class EmailField extends React.Component {
   }
 
   render () {
+    const props = Object.assign({}, this.props)
+    delete props['inputId']
+
     return (
       <TextField
+        id={this.props.inputId}
         ref={(input) => { this.email = input }}
-        {...this.props}
+        {...props}
         errorText={this.state.error} />
     )
   }
+}
+
+EmailField.propTypes = {
+  inputId: PropTypes.string.isRequired
 }
 
 export default EmailField

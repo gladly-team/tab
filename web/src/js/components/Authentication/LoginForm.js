@@ -213,7 +213,9 @@ class LoginForm extends React.Component {
     }
 
     return (
-      <div style={main}>
+      <div
+        data-test-id={'password-form-container-test-id'}
+        style={main}>
         <FlatButton
           style={backBtn}
           label='CHANGE EMAIL'
