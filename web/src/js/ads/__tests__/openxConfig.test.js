@@ -9,16 +9,14 @@ beforeEach(() => {
 
 describe('OpenX config', function () {
   it('sets window.OX_dfp_options', () => {
+    expect(window.OX_dfp_options).toBeUndefined()
     openxConfig()
     expect(window.OX_dfp_options).toEqual({ prefetch: true })
   })
 
   it('sets window.OX_dfp_ads', () => {
+    expect(window.OX_dfp_ads).toBeUndefined()
     openxConfig()
     expect(window.OX_dfp_ads.length).toBe(2)
-  })
-
-  it('does not define window vars before code execution', () => {
-    expect(window.OX_dfp_options).toBeUndefined()
   })
 })
