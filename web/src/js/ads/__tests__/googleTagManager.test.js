@@ -4,6 +4,9 @@ import googleTagManager from '../googleTagManager'
 
 beforeEach(() => {
   document.documentElement.innerHTML = '<!doctype html><html><head></head><body></body></html>'
+})
+
+afterEach(() => {
   delete window.googletag
 })
 

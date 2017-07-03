@@ -2,7 +2,7 @@
 
 import openxConfig from '../openxConfig'
 
-beforeEach(() => {
+afterEach(() => {
   delete window.OX_dfp_options
   delete window.OX_dfp_ads
 })
