@@ -15,8 +15,8 @@ export const envVars = [
   'COGNITO_CLIENTID',
   // Web app
   'PUBLIC_PATH',
-  // 'WEB_HOST', // optional
-  // 'WEB_PORT', // optional
+  'WEB_HOST',
+  'WEB_PORT',
   // GraphQL
   'TABLE_NAME_APPENDIX',
   // 'GRAPHQL_PORT', // optional
@@ -29,7 +29,9 @@ export const envVars = [
   'MEDIA_S3_BUCKET_NAME',
   // Secrets
   'AWS_ACCESS_KEY_ID',
-  'AWS_SECRET_ACCESS_KEY'
+  'AWS_SECRET_ACCESS_KEY',
+  // Selenium Driver
+  'SELENIUM_DRIVER_TYPE'
 ]
 
 // Expect one argument, the stage name.
