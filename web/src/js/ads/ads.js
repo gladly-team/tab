@@ -1,7 +1,7 @@
 
 import adsEnabled from './adsEnabledStatus'
 import prebid from './prebid/prebidModule'
-import prebidConfig from './prebid/config'
+import prebidConfig from './prebid/prebidConfig'
 import googleTagManager from './googleTagManager'
 import googleAdSlotDefinitions from './googleAdSlotDefinitions'
 import openxConfig from './openxConfig'
