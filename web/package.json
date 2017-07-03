@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "amazon-cognito-identity-js": "^1.16.0",
+    "asyncawait": "^1.0.6",
     "autoprefixer": "^7.1.0",
     "aws-sdk": "^2.52.0",
     "babel-core": "^6.23.1",

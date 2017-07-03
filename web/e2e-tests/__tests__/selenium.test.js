@@ -1,8 +1,10 @@
 /* eslint-env jest */
-var webdriver = require('selenium-webdriver')
-var driverUtils = require('../utils/driverUtils')
-var By = webdriver.By
+import Async from 'asyncawait/async'
+import Await from 'asyncawait/await'
+import webdriver from 'selenium-webdriver'
+import driverUtils from '../utils/driverUtils'
 
+var By = webdriver.By
 let driver
 
 beforeAll(() => {
@@ -18,24 +20,20 @@ beforeEach(() => {
 })
 
 describe('Authentication tests', function () {
-  it('should render the email request view', () => {
+  it('should render the email request view', Async(() => {
     const emailInputId = 'login-email-input-id'
-    return driverUtils(driver).waitForElementVisibleByCustomSelector(
-      By.id(emailInputId))
-  })
+    Await(driverUtils(driver).waitForElementVisibleByCustomSelector(
+      By.id(emailInputId)))
+  }))
 
-  it('should go to the password request view after setting the email', () => {
+  it('should go to the password request view after setting the email', Async(() => {
     const emailInputId = 'login-email-input-id'
     const confirmEmailBtnId = 'confirm-email-btn-id'
     const passwordConfirmationContainerId = 'password-form-container-test-id'
 
-    return driverUtils(driver).waitForElementVisibleByCustomSelector(By.id(emailInputId))
-            .then((_) => {
-              driverUtils(driver).setValue(By.id(emailInputId), 'kevin@gladly.io').then(() => {
-                driverUtils(driver).click(By.id(confirmEmailBtnId)).then(() => {
-                  driverUtils(driver).waitForElementVisible(passwordConfirmationContainerId)
-                })
-              })
-            })
-  })
+    Await(driverUtils(driver).waitForElementVisibleByCustomSelector(By.id(emailInputId)))
+    Await(driverUtils(driver).setValue(By.id(emailInputId), 'kevin@gladly.io'))
+    Await(driverUtils(driver).click(By.id(confirmEmailBtnId)))
+    Await(driverUtils(driver).waitForElementVisible(passwordConfirmationContainerId))
+  }))
 })
