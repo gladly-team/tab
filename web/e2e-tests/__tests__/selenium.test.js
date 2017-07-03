@@ -32,7 +32,7 @@ describe('Authentication tests', function () {
     const passwordConfirmationContainerId = 'password-form-container-test-id'
 
     Await(driverUtils(driver).waitForElementVisibleByCustomSelector(By.id(emailInputId)))
-    Await(driverUtils(driver).setValue(By.id(emailInputId), 'kevin@gladly.io'))
+    Await(driverUtils(driver).setValue(By.id(emailInputId), 'raul@tfac.com'))
     Await(driverUtils(driver).click(By.id(confirmEmailBtnId)))
     Await(driverUtils(driver).waitForElementVisible(passwordConfirmationContainerId))
   }))
