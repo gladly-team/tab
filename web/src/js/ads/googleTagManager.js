@@ -15,7 +15,7 @@ export default function () {
     var useSSL = document.location.protocol === 'https:'
     gads.src = (useSSL ? 'https:' : 'http:') +
       '//www.googletagservices.com/tag/js/gpt.js'
-    var node = document.getElementsByTagName('script')[0]
-    node.parentNode.insertBefore(gads, node)
+    var head = document.getElementsByTagName('head')[0]
+    head.appendChild(gads)
   })()
 }
