@@ -24,5 +24,8 @@ module.exports = driver => ({
   },
   click: function (selector) {
     return driver.findElement(selector).click()
+  },
+  navigateTo: function (url) {
+    return driver.navigate().to(url)
   }
 })

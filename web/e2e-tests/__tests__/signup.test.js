@@ -3,12 +3,13 @@ import Async from 'asyncawait/async'
 import Await from 'asyncawait/await'
 import webdriver from 'selenium-webdriver'
 import driverUtils from '../utils/driverUtils'
+import { getDriver, getAppBaseUrl } from '../utils/driverMgr'
 
 var By = webdriver.By
 let driver
 
 beforeAll(() => {
-  driver = new webdriver.Builder().forBrowser('chrome').build()
+  driver = getDriver()
 })
 
 afterAll(() => {
@@ -16,7 +17,7 @@ afterAll(() => {
 })
 
 beforeEach(() => {
-  return driver.navigate().to('http://localhost:3000/')
+  return driverUtils(driver).navigateTo(getAppBaseUrl())
 })
 
 describe('Authentication tests', function () {
