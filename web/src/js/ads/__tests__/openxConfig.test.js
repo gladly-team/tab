@@ -3,10 +3,12 @@
 import openxConfig from '../openxConfig'
 
 beforeEach(() => {
+  console.log(window.OX_dfp_ads)
   delete global.OX_dfp_options
   delete window.OX_dfp_options
   delete global.OX_dfp_ads
   delete window.OX_dfp_ads
+  console.log(window.OX_dfp_ads)
 })
 
 describe('OpenX config', function () {
