@@ -47,7 +47,7 @@ env:
   - DEV_COGNITO_CLIENTID=5d08amkokqkkd16ofvt7lisk6c
   # Web app
   - DEV_PUBLIC_PATH=http://dev-tab2017.gladly.io/
-  - DEV_ADS_ENABLED=false
+  - DEV_ADS_ENABLED=true
   # GraphQL
   - DEV_TABLE_NAME_APPENDIX="-dev"
   # Endpoints
