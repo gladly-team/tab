@@ -2,7 +2,7 @@
 
 const mockGoogleDisplayAd = jest.fn()
 const mockMockDisplayAd = jest.fn()
-jest.mock('../googleDisplayAd', () => mockGoogleDisplayAd)
+jest.mock('../google/googleDisplayAd', () => mockGoogleDisplayAd)
 jest.mock('../mockDisplayAd', () => mockMockDisplayAd)
 
 beforeEach(() => {

@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
 import prebidConfig from '../prebidConfig'
-import { getGoogleTag } from '../../googleTag'
+import { getGoogleTag } from '../../google/googleTag'
 import { getPrebidPbjs } from '../getPrebidPbjs'
 
 afterEach(() => {

@@ -9,8 +9,8 @@ const mockOpenXconfig = jest.fn()
 jest.mock('../adsEnabledStatus', () => mockAdsEnabledStatus)
 jest.mock('../prebid/prebidModule', () => mockPrebidModule)
 jest.mock('../prebid/prebidConfig', () => mockPrebidConfig)
-jest.mock('../googleTagManager', () => mockGoogleTagManager)
-jest.mock('../googleAdSlotDefinitions', () => mockGoogleAdSlotDefinitions)
+jest.mock('../google/googleTagManager', () => mockGoogleTagManager)
+jest.mock('../google/googleAdSlotDefinitions', () => mockGoogleAdSlotDefinitions)
 jest.mock('../openxConfig', () => mockOpenXconfig)
 
 beforeEach(() => {
