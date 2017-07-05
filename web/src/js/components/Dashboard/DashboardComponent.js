@@ -89,7 +89,9 @@ class Dashboard extends React.Component {
 
     return (
       <FadeInAnimation>
-        <div key={'dashboard-key'}>
+        <div
+          data-test-id={'app-dashboard-id'}
+          key={'dashboard-key'}>
           <UserBackgroundImage user={user} />
           <div style={content}>
             <VcUser user={user} />

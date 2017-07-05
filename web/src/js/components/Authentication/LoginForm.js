@@ -224,6 +224,7 @@ class LoginForm extends React.Component {
         <div
           style={container}>
           <PasswordField
+            inputId={'login-password-input-id'}
             ref={(input) => { this.password = input }}
             onKeyPress={this._handleKeyPress.bind(this)}
             floatingLabelText='Password'
@@ -234,10 +235,12 @@ class LoginForm extends React.Component {
             inputStyle={inputStyle}
           />
           <CircleButton
+            buttonId={'confirm-password-btn-id'}
             size={40}
             onClick={this.handleSubmit.bind(this)} />
         </div>
         <Snackbar
+          data-test-id={'signup-error-snackbar'}
           open={this.state.alertOpen}
           message={this.state.alertMsg}
           autoHideDuration={3000}
