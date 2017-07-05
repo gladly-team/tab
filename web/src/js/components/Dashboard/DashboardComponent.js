@@ -125,8 +125,8 @@ class Dashboard extends React.Component {
               defaultMessage={'“Surf the web, save the world.”'} />
           </h1>
           <Ad
-            adId='div-gpt-ad-1234567890123-0' // TODO: real ID
-            adSlotId='/12345678/ABCD' // TODO: real ID
+            adId='div-gpt-ad-1464385742501-0'
+            adSlotId='/43865596/HBTR'
             width={300}
             height={250}
             style={{
@@ -136,8 +136,8 @@ class Dashboard extends React.Component {
               display: 'block'
             }} />
           <Ad
-            adId='div-gpt-ad-8765432190123-0' // TODO: real ID
-            adSlotId='/87654321/ABCD' // TODO: real ID
+            adId='div-gpt-ad-1464385677836-0'
+            adSlotId='/43865596/HBTL'
             width={728}
             height={90}
             style={{
