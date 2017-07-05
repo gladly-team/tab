@@ -10,6 +10,8 @@
     "graphql-relay": "^0.5.1",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
+    "pretty-error": "^2.1.1",
+    "raven": "^2.1.0",
     "uuid": "3.0.1"
   },
   "devDependencies": {
