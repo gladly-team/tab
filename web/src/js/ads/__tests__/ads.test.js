@@ -11,7 +11,7 @@ jest.mock('../prebid/prebidModule', () => mockPrebidModule)
 jest.mock('../prebid/prebidConfig', () => mockPrebidConfig)
 jest.mock('../google/googleTagManager', () => mockGoogleTagManager)
 jest.mock('../google/googleAdSlotDefinitions', () => mockGoogleAdSlotDefinitions)
-jest.mock('../openxConfig', () => mockOpenXconfig)
+jest.mock('../openx/openxConfig', () => mockOpenXconfig)
 
 beforeEach(() => {
   jest.resetModules()

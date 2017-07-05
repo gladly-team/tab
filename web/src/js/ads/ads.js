@@ -4,7 +4,7 @@ import prebid from './prebid/prebidModule'
 import prebidConfig from './prebid/prebidConfig'
 import googleTagManager from './google/googleTagManager'
 import googleAdSlotDefinitions from './google/googleAdSlotDefinitions'
-import openxConfig from './openxConfig'
+import openxConfig from './openx/openxConfig'
 
 if (adsEnabled) {
   prebid()
