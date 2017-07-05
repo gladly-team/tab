@@ -2,10 +2,11 @@
 import { getGoogleTag } from '../google/googleTag'
 import { getPrebidPbjs } from './getPrebidPbjs'
 
+// See: http://prebid.org/dev-docs/examples/basic-example.html
 export default function () {
   // Prebid config section START
   // Make sure this is inserted before your GPT tag.
-  const PREBID_TIMEOUT = 1200
+  const prebidTimeoutMs = 1200
 
   const adUnits = [{
     code: 'div-gpt-ad-1464385742501-0',
@@ -93,16 +94,15 @@ export default function () {
   }]
   // Prebid config section END
 
-  // Prebid boilerplate section START
   const googletag = getGoogleTag()
 
-  googletag.cmd.push(function () {
+  googletag.cmd.push(() => {
     googletag.pubads().disableInitialLoad()
   })
 
   const pbjs = getPrebidPbjs()
 
-  pbjs.que.push(function () {
+  pbjs.que.push(() => {
     // Randomize the order in which bidders are called to
     // level the playing field.
     pbjs.setBidderSequence('random')
@@ -124,19 +124,19 @@ export default function () {
   })
 
   function sendAdserverRequest () {
-    if (pbjs.adserverRequestSent) return
+    if (pbjs.adserverRequestSent) {
+      return
+    }
     pbjs.adserverRequestSent = true
-    googletag.cmd.push(function () {
-      pbjs.que.push(function () {
+    googletag.cmd.push(() => {
+      pbjs.que.push(() => {
         pbjs.setTargetingForGPTAsync()
         googletag.pubads().refresh()
       })
     })
   }
 
-  setTimeout(function () {
+  setTimeout(() => {
     sendAdserverRequest()
-  }, PREBID_TIMEOUT)
-
-  // Prebid boilerplate section END
+  }, prebidTimeoutMs)
 }
