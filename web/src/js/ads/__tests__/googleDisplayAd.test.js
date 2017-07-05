@@ -6,14 +6,20 @@ beforeEach(() => {
   delete window.googletag
 })
 
+afterEach(() => {
+  delete window.googletag
+})
+
 describe('googleDisplayAd', function () {
   it('runs without error', () => {
-    googleDisplayAd()
+    googleDisplayAd('my-ad')
   })
 
-  it('pushes a command to googletag.cmd', () => {
+  it('pushes commands to googletag.cmd', () => {
     expect(window.googletag).toBeUndefined()
-    googleDisplayAd()
+    googleDisplayAd('some-ad')
     expect(window.googletag.cmd.length).toBe(1)
+    googleDisplayAd('another-ad')
+    expect(window.googletag.cmd.length).toBe(2)
   })
 })
