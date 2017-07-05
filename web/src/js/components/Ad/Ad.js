@@ -1,24 +1,13 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import AdClient from 'ads/AdClient'
+import displayAd from 'ads/displayAd'
 
 // Suggestions on React component using DFP:
 // https://stackoverflow.com/q/25435066/1332513
 class Ad extends React.Component {
-  defineAdSlot () {
-    AdClient.defineAdSlot(
-      this.props.adSlotId,
-      [this.props.width, this.props.height],
-      this.props.adId
-    )
-  }
-
   componentDidMount () {
-    // TODO: probably move this into a parent ad manager
-    this.defineAdSlot()
-
-    AdClient.displayAd(this.props.adId)
+    displayAd(this.props.adId)
   }
 
   render () {
