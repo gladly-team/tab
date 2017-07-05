@@ -66,6 +66,7 @@
     "object-assign": "^4.1.1",
     "path-exists": "^3.0.0",
     "postcss-loader": "^2.0.5",
+    "prebid.js": "0.24.1",
     "precss": "^1.4.0",
     "promise": "7.1.1",
     "prop-types": "^15.5.10",
@@ -97,7 +98,7 @@
   },
   "scripts": {
     "start": "yarn run relay && nodemon --watch data/schema.graphql scripts/start.js & yarn run relay:watch",
-    "build": "yarn run relay && node scripts/build.js",
+    "build": "yarn run relay && node scripts/build.js && yarn run prebid:build",
     "deploy": "npm-run-all -s build sls:deploy sls:s3sync",
     "relay": "relay-compiler --src ./src/ --schema ./data/schema.graphql",
     "relay:watch": "nodemon --watch src/ --watch data/schema.graphql --ignore **/__generated__/**/* --exec \"yarn run relay\"",
@@ -110,6 +111,9 @@
     "build:langs": "node scripts/translate.js",
     "test:lint": "standard",
     "lint:fix": "standard --fix",
+    "prebid:build": "npm-run-all -s prebid:generate prebid:cp",
+    "prebid:generate": "cd ./node_modules/prebid.js/ && yarn install && gulp build  --adapters \"../../src/js/ads/prebid/adapters.json\" --analyticsAdapters \"../../src/js/ads/prebid/analytics.json\"",
+    "prebid:cp": "cp ./node_modules/prebid.js/build/dist/prebid.js ./src/js/ads/prebid/",
     "sls:deploy": "serverless deploy",
     "sls:s3sync": "serverless syncToS3"
   },
@@ -139,6 +143,11 @@
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "standard": {
+    "ignore": [
+      "src/js/ads/prebid/prebid.js"
+    ]
   },
   "repository": {
     "type": "git",
