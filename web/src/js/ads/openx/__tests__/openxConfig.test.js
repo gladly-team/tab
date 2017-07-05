@@ -7,6 +7,11 @@ beforeEach(() => {
   delete window.OX_dfp_ads
 })
 
+afterAll(() => {
+  delete window.OX_dfp_options
+  delete window.OX_dfp_ads
+})
+
 describe('OpenX config', function () {
   it('sets window.OX_dfp_options', () => {
     expect(window.OX_dfp_options).toBeUndefined()

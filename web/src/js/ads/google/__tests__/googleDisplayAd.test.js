@@ -6,7 +6,7 @@ beforeEach(() => {
   delete window.googletag
 })
 
-afterEach(() => {
+afterAll(() => {
   delete window.googletag
 })
 

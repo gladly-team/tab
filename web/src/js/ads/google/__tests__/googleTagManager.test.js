@@ -7,6 +7,10 @@ beforeEach(() => {
   delete window.googletag
 })
 
+afterAll(() => {
+  delete window.googletag
+})
+
 describe('Google Tag Manager', function () {
   it('creates the Google tag services script', () => {
     googleTagManager()
