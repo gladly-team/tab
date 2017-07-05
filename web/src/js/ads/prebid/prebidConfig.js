@@ -1,5 +1,5 @@
 
-import { getGoogleTag } from './googleTag'
+import { getGoogleTag } from '../googleTag'
 import { getPrebidPbjs } from './getPrebidPbjs'
 
 export default function () {
