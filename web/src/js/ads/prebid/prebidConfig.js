@@ -1,5 +1,6 @@
 
 import { getGoogleTag } from './googleTag'
+import { getPrebidPbjs } from './getPrebidPbjs'
 
 export default function () {
   // Prebid config section START
@@ -99,13 +100,7 @@ export default function () {
     googletag.pubads().disableInitialLoad()
   })
 
-  const pbjs = window.pbjs || {}
-  // We're not running in global scope, so make sure to
-  // assign to the window.
-  if (!window.pbjs) {
-    window.pbjs = pbjs
-  }
-  pbjs.que = pbjs.que || []
+  const pbjs = getPrebidPbjs()
 
   pbjs.que.push(function () {
     // Randomize the order in which bidders are called to
