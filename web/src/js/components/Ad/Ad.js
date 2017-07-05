@@ -10,6 +10,12 @@ class Ad extends React.Component {
     displayAd(this.props.adId)
   }
 
+  // Never update. This prevents unexpected unmounting or
+  // rerendering of third-party ad content.
+  shouldComponentUpdate (nextProps, nextState) {
+    return false
+  }
+
   render () {
     const adStyle = Object.assign(
       {},

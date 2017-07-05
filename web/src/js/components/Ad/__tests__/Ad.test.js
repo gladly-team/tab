@@ -78,4 +78,19 @@ describe('Ad component', function () {
     expect(elemStyle.display).toBe('inline')
     expect(elemStyle.color).toBe('green')
   })
+
+  it('does not rerender after initial mount', function () {
+    const wrapper = mount(
+      <Ad
+        adId='abc123'
+        adSlotId='def'
+        width={300}
+        height={250} />
+    )
+    const elem = findDOMNode(wrapper.getNode())
+    expect(elem.offsetWidth).toBe(300)
+    wrapper.setProps({ width: 1000 }, () => {
+      expect(elem.offsetWidth).toBe(300)
+    })
+  })
 })
