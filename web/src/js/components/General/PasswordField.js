@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import TextField from 'material-ui/TextField'
 
 import {validatePassword} from 'web-utils'
@@ -71,14 +72,22 @@ class PasswordField extends React.Component {
   }
 
   render () {
+    const props = Object.assign({}, this.props)
+    delete props['inputId']
+
     return (
       <TextField
+        id={this.props.inputId}
         ref={(input) => { this.password = input }}
-        {...this.props}
+        {...props}
         type={'password'}
         errorText={this.state.error} />
     )
   }
+}
+
+PasswordField.propTypes = {
+  inputId: PropTypes.string.isRequired
 }
 
 export default PasswordField

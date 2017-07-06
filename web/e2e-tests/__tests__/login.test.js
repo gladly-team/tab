@@ -1,4 +1,4 @@
-/* eslint-env jest */
+ /* eslint-env jest */
 import Async from 'asyncawait/async'
 import Await from 'asyncawait/await'
 import driverUtils from '../utils/driver-utils'
@@ -25,34 +25,21 @@ var testSetup = (Async(() => {
   Await(driverUtils(driver).navigateTo(getAppBaseUrl()))
 }))
 
-describe('Sign Up Tests', function () {
-  it('should create a new user and signout the user', Async(() => {
-    Await(testSetup())
-
-    const newUserEmail = randomString(6) + '@tfac.com'
-    Await(createUser(driver, newUserEmail, 'NewUserPassword1'))
-
-    Await(signOutUser(driver))
-  }), 20000)
-
-  it('should not create a user if email already registered', Async(() => {
+describe('Login Tests', function () {
+  it('should login an existing user', Async(() => {
     Await(testSetup())
 
     const userEmail = randomString(6) + '@tfac.com'
     const userPassword = 'NewUserPassword1'
-
     Await(createUser(driver, userEmail, userPassword))
-
     Await(signOutUser(driver))
 
     Await(testSetup())
 
-    const wrongPassword = userPassword + 'Bad'
-
     Await(setUserEmail(driver, userEmail))
-    Await(setUserPassword(driver, wrongPassword))
-
-    const signUpErrorSnackBarId = 'signup-error-snackbar'
-    Await(driverUtils(driver).waitForElementVisible(signUpErrorSnackBarId))
-  }), 20000)
+    Await(setUserPassword(driver, userPassword))
+    const dashboardId = 'app-dashboard-id'
+    Await(driverUtils(driver).waitForElementVisible(dashboardId))
+    Await(signOutUser(driver))
+  }), 30000)
 })

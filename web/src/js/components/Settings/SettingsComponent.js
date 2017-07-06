@@ -87,6 +87,7 @@ class Settings extends React.Component {
 
     const logoutBtn = (
       <FlatButton
+        id={'app-signout-btn'}
         onClick={this.logout.bind(this)}
         label='Sign Out'
         labelPosition='before'
@@ -98,6 +99,7 @@ class Settings extends React.Component {
     return (
       <FadeInAnimation>
         <div
+          data-test-id={'app-settings-id'}
           key={'settings-view-key'}
           style={settings}>
           <AppBar
