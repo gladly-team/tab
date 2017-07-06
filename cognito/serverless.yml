@@ -1,0 +1,37 @@
+
+service: cognito
+frameworkVersion: ">=1.14.0 <2.0.0"
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  region: us-west-2
+  profile: tab-sls
+  stage: ${env:SLS_STAGE, self:custom.stageDefault}
+
+custom:
+  stageDefault: dev
+
+resources:
+  Resources:
+    UserPool:
+      Type: "AWS::Cognito::UserPool"
+      Properties:
+        UserPoolName: tab-${opt:stage, self:provider.stage}
+        AutoVerifiedAttributes:
+          - email
+        MfaConfiguration: "OFF"
+        Schema:
+          - Name: email
+            AttributeDataType: String
+            Mutable: false
+            Required: true
+    UserPoolClient:
+      Type: "AWS::Cognito::UserPoolClient"
+      Properties:
+        ClientName: tab-${opt:stage, self:provider.stage}-client
+        GenerateSecret: false
+        UserPoolId: 
+          Ref: UserPool
+
+

@@ -1,0 +1,16 @@
+{
+  "name": "tab-cognito",
+  "version": "0.1.0",
+  "description": "Tab for a cause cognito service",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gladly-team/tab.git"
+  },
+  "devDependencies": {
+    "serverless": "^1.17.0"
+  },
+  "scripts": {
+    "deploy": "serverless deploy"
+  },
+  "author": "Gladly Team"
+}
