@@ -47,6 +47,13 @@ export default function () {
         params: {
           placementId: '10955690'
         }
+      },
+      {
+        bidder: 'openx',
+        params: {
+          unit: '538658529',
+          delDomain: 'tabforacause-d.openx.net'
+        }
       }
     ]
   },
@@ -88,6 +95,13 @@ export default function () {
         bidder: 'brealtime',
         params: {
           placementId: '10955287'
+        }
+      },
+      {
+        bidder: 'openx',
+        params: {
+          unit: '538658529',
+          delDomain: 'tabforacause-d.openx.net'
         }
       }
     ]

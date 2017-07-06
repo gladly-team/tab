@@ -4,6 +4,7 @@
     "pulsepoint",
     "sonobi",
     "sovrn",
+    "openx",
     {
       "appnexus": {
         "alias": "brealtime"
