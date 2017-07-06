@@ -7,10 +7,16 @@
     "url": "git+https://github.com/gladly-team/tab.git"
   },
   "devDependencies": {
-    "serverless": "^1.17.0"
+    "serverless": "^1.17.0",
+    "babel-cli": "^6.23.0",
+    "babel-core": "^6.23.1",
+    "babel-preset-es2015": "^6.22.0",
+    "babel-preset-stage-0": "^6.22.0"
   },
   "scripts": {
-    "deploy": "serverless deploy"
+    "deploy": "yarn run build && serverless deploy",
+    "build": "rm -rf ./build && npm run build:compile",
+    "build:compile": "babel --out-dir='build' --ignore='build,coverage,__mocks__,__tests__,node_modules' ./src/"
   },
   "author": "Gladly Team"
 }

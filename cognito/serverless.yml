@@ -34,4 +34,13 @@ resources:
         UserPoolId: 
           Ref: UserPool
 
+functions:
+  preSignUp:
+    handler: build/triggers/preSignUp.handler
+    events:
+      - cognitoUserPool:
+          pool: tab-${opt:stage, self:provider.stage}
+          trigger: PreSignUp
+
+
 
