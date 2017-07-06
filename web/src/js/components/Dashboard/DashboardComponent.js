@@ -5,6 +5,7 @@ import VcUser from '../User/VcUserContainer'
 import UserBackgroundImage from '../User/UserBackgroundImageContainer'
 import WidgetsView from '../Widget/WidgetsView'
 import InviteFriend from '../InviteFriend/InviteFriendView'
+import Ad from '../Ad/Ad'
 
 import { FormattedMessage } from 'react-intl'
 import { goToSettings, goToDonate } from 'navigation/navigation'
@@ -125,6 +126,28 @@ class Dashboard extends React.Component {
               id={'app.quote'}
               defaultMessage={'“Surf the web, save the world.”'} />
           </h1>
+          <Ad
+            adId='div-gpt-ad-1464385742501-0'
+            adSlotId='/43865596/HBTR'
+            width={300}
+            height={250}
+            style={{
+              position: 'absolute',
+              bottom: 10,
+              right: 10,
+              display: 'block'
+            }} />
+          <Ad
+            adId='div-gpt-ad-1464385677836-0'
+            adSlotId='/43865596/HBTL'
+            width={728}
+            height={90}
+            style={{
+              position: 'absolute',
+              bottom: 10,
+              right: 320,
+              display: 'block'
+            }} />
         </div>
       </FadeInAnimation>
     )

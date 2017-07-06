@@ -1,9 +1,12 @@
 language: node_js
+# Node 6 has a bug that affects some of our unit tests:
+# https://github.com/facebook/jest/issues/3152#issuecomment-287496730
 node_js:
-- '6'
+- '7'
 env:
   global:
   - CI=true
+  - CXX=g++-5
   - SLS_DEBUG=true
   - LOG_TEST_COVERAGE=true
   ########## Test stage ##########
@@ -18,6 +21,7 @@ env:
   - TEST_PUBLIC_PATH=/
   - TEST_WEB_HOST=localhost
   - TEST_WEB_PORT=3000
+  - TEST_ADS_ENABLED=false
   # GraphQL
   - TEST_TABLE_NAME_APPENDIX=""
   - TEST_GRAPHQL_PORT=8080
@@ -43,6 +47,7 @@ env:
   - DEV_COGNITO_CLIENTID=5d08amkokqkkd16ofvt7lisk6c
   # Web app
   - DEV_PUBLIC_PATH=http://dev-tab2017.gladly.io/
+  - DEV_ADS_ENABLED=true
   # GraphQL
   - DEV_TABLE_NAME_APPENDIX="-dev"
   # Endpoints
@@ -60,12 +65,23 @@ env:
   ########## TODO: production stage ##########
   - secure: aHjjaEjCNXRimME1tROAfN/iFbyg9W8Uu+/sQT8gEC0vCsqblFK4/eI9wga0eljO6nhOS68MUTdaFQhBDrRQCum5v3y9tLxBI+XQP1vauXPtFJToh6QeB4bCu0w2dNBzcCXcwew0YP66D7UAMQQx0o9t1UshFSUdVxRvv7s4A9ro1vahD9dZuPy+MJJQPYILmq/svioWi2MgfLQSLWIzck7VCFLgEPwgBati6o/lMIoMiUuUmNQDS68ceUtR2sqWpzj1UiIf0S4YzuzpLKL7YzhsdB7MOvI0nJ9SB5Z/S2E+pHKIVUqS0RjCCzQR+XdoTM/dgrLizjBwt2aKx6ElFzXU2XMimv/50l6I0utnZboT+oR9XrZ65j0gq0zYQWrixJ+aQbbnodJGUAK3ab4+mQG0i+/BA+lTreCmFHLIVglSm55pTIaCT6fDZCKPMqIaf4uZ4XiMDtbW4LUeT4MzRO9b0GtEjdKFeAaBihkv/m8sneHfqWurpNIKBdXEb8G21+dIaxPKxWC6fjDfX0Rhv476d7r+kJYLi4YScRhkBBHQ1BpOj4Fi6XU6gK6+C6sEf4Q//w3xXCHNNDS2ynWgtGTESabSY0Xg8ge6p+KmQCMi6yc8u6fGiFwf5JCgefLKSV7KpICEsEoN8F/tkxUVrVIB084V1iMkvw0z86GMAEc=
   - secure: li6wI7k7TEUJ15KT9vzZEjcJq1nVcGO9gwSXv9vRbktfpztTaRrORc5N5T4/SeHHlURDMr5PxhwB6lYuXIeRhWIh/j48La01HOoMPzhz8qTzK+HaakN/Ebzyx1/mJb28A4JZqpiHiaRWKZopCj5OMGTnZlBUAHFC9dDfgbTXyatn02SwRrAy7tMs0IdmsKnDXGB8zV2LvpxL6b0XenwwZQJ4oI5whWAut9PGhfnB1IWjDlE7TlYC43mEqVHFaHZsEoOf68utVLA6iMHzLja0Lh4SIIDDk0qo99yxt8+EXhiI7WQ4vhPcL42m2/E8QQbiPmRHkrjtSyhN46qAJdzdbju+1krgslruHBXFO9X4qZ4KhGYUl1xzW9KbYbhI0i5mbH5lmaDXf1T9eyLdmeluHee0xO/VkP4WwYQyAQm0T/2C0xAqR59t9aevQpX0ALVUh5eKoVkTVo1TT30b2YBtOkoqdleWMOsguifkV8kTvvCpope8hMRPUzOPJWk1qoPqXoKLhh9Q5PboaQgGpHGEXQ/3RhTra+qkKWDxLPVvfF0Lj4zjOsNkAZTEBn+018BAMl36pU3KYeb6d924n/5bqraTg0rxJk951Kx++YLuRRjuZX1B0JbXOtqjLJQEO+to57vda1pW1fUt18Cc1MWFy87yJUtAxojvcMs1acffxP4=
+addons:
+  # For node-gyp:
+  # https://github.com/nodejs/node-gyp#on-unix
+  # https://stackoverflow.com/a/40802733/1332513
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - g++-5  
 before_install:
   # Repo for Yarn
   - sudo apt-key adv --fetch-keys http://dl.yarnpkg.com/debian/pubkey.gpg
   - echo "deb http://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
   - sudo apt-get update -qq
   - sudo apt-get install -y -qq yarn=0.22.0-1
+  # Gulp (used in Prebid.js build)
+  - yarn global add gulp
   # AWS CLI
   - pip install --user awscli
   - export PATH=$PATH:$HOME/.local/bin
