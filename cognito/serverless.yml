@@ -12,9 +12,17 @@ provider:
 custom:
   stageDefault: dev
 
+functions:
+  preSignUp:
+    handler: build/triggers/preSignUp.handler
+    events:
+      - cognitoUserPool:
+          pool: TabUserPool
+          trigger: PreSignUp
+
 resources:
   Resources:
-    UserPool:
+    CognitoUserPoolTabUserPool:
       Type: "AWS::Cognito::UserPool"
       Properties:
         UserPoolName: tab-${opt:stage, self:provider.stage}
@@ -32,15 +40,9 @@ resources:
         ClientName: tab-${opt:stage, self:provider.stage}-client
         GenerateSecret: false
         UserPoolId: 
-          Ref: UserPool
+          Ref: CognitoUserPoolTabUserPool
 
-functions:
-  preSignUp:
-    handler: build/triggers/preSignUp.handler
-    events:
-      - cognitoUserPool:
-          pool: tab-${opt:stage, self:provider.stage}
-          trigger: PreSignUp
+
 
 
 
