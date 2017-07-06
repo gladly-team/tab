@@ -112,7 +112,7 @@
     "test:lint": "standard",
     "lint:fix": "standard --fix",
     "prebid:build": "npm-run-all -s prebid:generate prebid:cp",
-    "prebid:generate": "cd ./node_modules/prebid.js/ && yarn install && ./node_modules/gulp/bin/gulp.js build  --adapters \"../../src/js/ads/prebid/adapters.json\" --analyticsAdapters \"../../src/js/ads/prebid/analytics.json\"",
+    "prebid:generate": "cd ./node_modules/prebid.js/ && yarn install && gulp build  --adapters \"../../src/js/ads/prebid/adapters.json\" --analyticsAdapters \"../../src/js/ads/prebid/analytics.json\"",
     "prebid:cp": "cp ./node_modules/prebid.js/build/dist/prebid.js ./src/js/ads/prebid/",
     "sls:deploy": "serverless deploy",
     "sls:s3sync": "serverless syncToS3"
