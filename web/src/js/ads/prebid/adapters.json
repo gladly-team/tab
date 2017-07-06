@@ -1,0 +1,12 @@
+[
+    "aol",
+    "appnexus",
+    "pulsepoint",
+    "sonobi",
+    "sovrn",
+    {
+      "appnexus": {
+        "alias": "brealtime"
+      }
+    }
+]

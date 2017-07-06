@@ -20,8 +20,23 @@ var paths = require('./paths')
 const htmlTemplate = new HtmlWebpackPlugin({
   title: 'Tab for a cause 2017',
   template: paths.appHtml,
+  // https://github.com/jantimon/html-webpack-plugin/issues/481#issuecomment-262414169
+  chunks: ['vendor', 'ads', 'app'],
+  chunksSortMode: function (chunk1, chunk2) {
+    var orders = ['vendor', 'ads', 'app']
+    var order1 = orders.indexOf(chunk1.names[0])
+    var order2 = orders.indexOf(chunk2.names[0])
+    if (order1 > order2) {
+      return 1
+    } else if (order1 < order2) {
+      return -1
+    } else {
+      return 0
+    }
+  },
   mobile: true,
-  inject: false
+  inject: false,
+  tabAdsEnabled: process.env.ADS_ENABLED === 'true'
 })
 const favIcon = new FaviconsWebpackPlugin(paths.appLogo)
 
@@ -71,7 +86,8 @@ module.exports = {
   // This means they will be the "root" imports that are included in JS bundle.
   // The first two entry points enable "hot" CSS and auto-refreshes for JS.
   entry: {
-    app: appEntry
+    app: appEntry,
+    ads: './src/js/ads/ads.js'
   },
   output: {
     // Next line is not used in dev but WebpackDevServer crashes without it:
