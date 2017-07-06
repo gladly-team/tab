@@ -98,7 +98,7 @@
   },
   "scripts": {
     "start": "yarn run relay && nodemon --watch data/schema.graphql scripts/start.js & yarn run relay:watch",
-    "build": "yarn run relay && node scripts/build.js && yarn run prebid:build",
+    "build": "yarn run relay && node scripts/build.js",
     "deploy": "npm-run-all -s build sls:deploy sls:s3sync",
     "relay": "relay-compiler --src ./src/ --schema ./data/schema.graphql",
     "relay:watch": "nodemon --watch src/ --watch data/schema.graphql --ignore **/__generated__/**/* --exec \"yarn run relay\"",
@@ -112,7 +112,7 @@
     "test:lint": "standard",
     "lint:fix": "standard --fix",
     "prebid:build": "npm-run-all -s prebid:install prebid:generate prebid:cp",
-    "prebid:install": "cd ./node_modules/prebid.js/ && yarn install && ls ./ && ls ./node_modules/gulp/",
+    "prebid:install": "cd ./node_modules/prebid.js/ && yarn install",
     "prebid:generate": "cd ./node_modules/prebid.js/ && ./node_modules/gulp/bin/gulp.js build  --adapters \"../../src/js/ads/prebid/adapters.json\" --analyticsAdapters \"../../src/js/ads/prebid/analytics.json\"",
     "prebid:cp": "cp ./node_modules/prebid.js/build/dist/prebid.js ./src/js/ads/prebid/",
     "sls:deploy": "serverless deploy",
