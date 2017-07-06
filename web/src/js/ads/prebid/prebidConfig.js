@@ -107,6 +107,13 @@ export default function () {
     // level the playing field.
     pbjs.setBidderSequence('random')
 
+    pbjs.enableAnalytics({
+      provider: 'roxot',
+      options: {
+        publisherIds: ['3cc4009c-e5a8-4e42-b1e1-340448ebf317']
+      }
+    })
+
     pbjs.addAdUnits(adUnits)
 
     pbjs.bidderSettings = {
