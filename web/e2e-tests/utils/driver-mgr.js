@@ -1,7 +1,7 @@
 import webdriver from 'selenium-webdriver'
 
 const BROWSER_NAME = 'chrome'
-const BROWSERSTACK_PROJECT = 'tab-tests'
+const BROWSERSTACK_PROJECT = 'tab'
 const BROWSERSTACK_BUILD = 'tab-'
 
 function getDriver (testName) {
