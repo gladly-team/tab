@@ -8,8 +8,8 @@
       { "AttributeName": "id", "AttributeType": "S" }
     ],
     "ProvisionedThroughput": {       
-      "ReadCapacityUnits": 10, 
-      "WriteCapacityUnits": 10
+      "ReadCapacityUnits": 1, 
+      "WriteCapacityUnits": 1
     }
   },
   {
@@ -21,8 +21,8 @@
       { "AttributeName": "id", "AttributeType": "S" }
     ],
     "ProvisionedThroughput": {       
-      "ReadCapacityUnits": 20, 
-      "WriteCapacityUnits": 5
+      "ReadCapacityUnits": 1, 
+      "WriteCapacityUnits": 1
     }
   },
   {
@@ -34,8 +34,8 @@
       { "AttributeName": "id", "AttributeType": "S" }
     ],
     "ProvisionedThroughput": {       
-      "ReadCapacityUnits": 10, 
-      "WriteCapacityUnits": 10
+      "ReadCapacityUnits": 1, 
+      "WriteCapacityUnits": 1
     }
   },
   {
@@ -47,8 +47,8 @@
       { "AttributeName": "id", "AttributeType": "N" }
     ],
     "ProvisionedThroughput": {       
-      "ReadCapacityUnits": 10, 
-      "WriteCapacityUnits": 10
+      "ReadCapacityUnits": 1, 
+      "WriteCapacityUnits": 1
     }
   },
   {
@@ -62,8 +62,8 @@
       { "AttributeName": "timestamp", "AttributeType": "S" }
     ],
     "ProvisionedThroughput": {       
-      "ReadCapacityUnits": 10, 
-      "WriteCapacityUnits": 10
+      "ReadCapacityUnits": 1, 
+      "WriteCapacityUnits": 1
     }
   },
   {
@@ -75,8 +75,8 @@
       { "AttributeName": "id", "AttributeType": "S" }
     ],
     "ProvisionedThroughput": {       
-      "ReadCapacityUnits": 10, 
-      "WriteCapacityUnits": 10
+      "ReadCapacityUnits": 1, 
+      "WriteCapacityUnits": 1
     }
   },
   {
@@ -102,14 +102,14 @@
             "ProjectionType": "ALL"
          },
          "ProvisionedThroughput": { 
-            "ReadCapacityUnits": 10,
-            "WriteCapacityUnits": 10
+            "ReadCapacityUnits": 1,
+            "WriteCapacityUnits": 1
          }
       }
    ],
     "ProvisionedThroughput": {       
-      "ReadCapacityUnits": 10, 
-      "WriteCapacityUnits": 10
+      "ReadCapacityUnits": 1, 
+      "WriteCapacityUnits": 1
     }
   },
   {
@@ -123,8 +123,8 @@
       { "AttributeName": "timestamp", "AttributeType": "S" }
     ],
     "ProvisionedThroughput": {       
-      "ReadCapacityUnits": 10, 
-      "WriteCapacityUnits": 10
+      "ReadCapacityUnits": 1, 
+      "WriteCapacityUnits": 1
     }
   }
 ]
