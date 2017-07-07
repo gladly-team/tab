@@ -31,9 +31,11 @@ export const envVars = [
   'MEDIA_S3_BUCKET_NAME',
   // Secrets
   'AWS_ACCESS_KEY_ID',
-  'AWS_SECRET_ACCESS_KEY',
+  'AWS_SECRET_ACCESS_KEY'
   // Selenium Driver
-  'SELENIUM_DRIVER_TYPE'
+  // 'SELENIUM_DRIVER_TYPE', // optional
+  // 'BROWSERSTACK_USER', // optional
+  // 'BROWSERSTACK_KEY' // optional
 ]
 
 // Expect one argument, the stage name.
