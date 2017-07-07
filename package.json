@@ -23,7 +23,7 @@
     "test": "npm-run-all -s parent:test graphql:test lambda:test web:test dynamodb:test",
     "test-e2e": "npm-run-all -s web:test-e2e",
     "ci:deploy": "babel-node ./scripts/deploy.js",
-    "ci:deployservices": "npm-run-all -s graphql:deploy lambda:deploy web:deploy dynamodb:deploy s3:deploy",
+    "ci:deployservices": "npm-run-all -s graphql:deploy lambda:deploy web:deploy dynamodb:deploy s3:deploy cognito:deploy",
     "ci:test": "babel-node ./scripts/runTests.js",
     "parent:install": "yarn install",
     "parent:lint": "standard \"scripts/**/*.js\"",
@@ -51,7 +51,8 @@
     "web:start": "cd ./web && yarn run start 2>&1 | node ../scripts/log-prefix.js [web] blue",
     "s3:deploy": "cd ./s3 && yarn run deploy",
     "s3:install": "cd ./s3 && yarn install",
-    "s3:start": "cd ./s3 && yarn run start | node ../scripts/log-prefix.js [s3] yellow"
+    "s3:start": "cd ./s3 && yarn run start | node ../scripts/log-prefix.js [s3] yellow",
+    "cognito:deploy": "cd ./cognito && yarn run deploy"
   },
   "jest": {
     "roots": [

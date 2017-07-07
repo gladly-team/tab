@@ -17,6 +17,7 @@ env:
   - TEST_COGNITO_IDENTITYPOOLID=arn:aws:cognito-idp:us-west-2:123456789:userpool/us-west-2_abcdefghi
   - TEST_COGNITO_USERPOOLID=us-west-2_abcdefghi
   - TEST_COGNITO_CLIENTID=abc123def456ghi789
+  - TEST_MOCK_DEV_AUTHENTICATION=false
   # Web app
   - TEST_PUBLIC_PATH=/
   - TEST_WEB_HOST=localhost
@@ -42,9 +43,10 @@ env:
   - DEV_AWS_REGION=us-west-2
   # AWS Cognito
   - DEV_COGNITO_REGION=us-west-2
-  - DEV_COGNITO_IDENTITYPOOLID=arn:aws:cognito-idp:us-west-2:167811431063:userpool/us-west-2_9MWuEqLeW
-  - DEV_COGNITO_USERPOOLID=us-west-2_9MWuEqLeW
-  - DEV_COGNITO_CLIENTID=5d08amkokqkkd16ofvt7lisk6c
+  - DEV_COGNITO_IDENTITYPOOLID=arn:aws:cognito-idp:us-west-2:167811431063:userpool/us-west-2_Fanhcwb0v
+  - DEV_COGNITO_USERPOOLID=us-west-2_Fanhcwb0v
+  - DEV_COGNITO_CLIENTID=4u22d41ov53ccgkan6parirqkb
+  - DEV_MOCK_DEV_AUTHENTICATION=false
   # Web app
   - DEV_PUBLIC_PATH=http://dev-tab2017.gladly.io/
   - DEV_ADS_ENABLED=true
