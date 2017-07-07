@@ -11,10 +11,12 @@ import {
   signOutUser
 } from '../utils/test-utils'
 
+const testName = 'Sign Up Tests'
+
 let driver
 
 beforeAll(() => {
-  driver = getDriver()
+  driver = getDriver(testName)
 })
 
 afterAll(() => {
@@ -25,7 +27,7 @@ var testSetup = (Async(() => {
   Await(driverUtils(driver).navigateTo(getAppBaseUrl()))
 }))
 
-describe('Sign Up Tests', function () {
+describe(testName, function () {
   it('should create a new user and signout the user', Async(() => {
     Await(testSetup())
 
