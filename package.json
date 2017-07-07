@@ -29,7 +29,7 @@
     "parent:lint": "standard \"scripts/**/*.js\"",
     "parent:lint:fix": "standard \"scripts/**/*.js\" --fix",
     "parent:test": "yarn run parent:lint && jest",
-    "all:install": "yarn run parent:install && npm-run-all -s s3:install web:install graphql:install dynamodb:install lambda:install",
+    "all:install": "yarn run parent:install && npm-run-all -s s3:install web:install graphql:install dynamodb:install lambda:install cognito:install",
     "docker:start": "docker-compose up 2>&1 | node scripts/log-prefix.js [docker] cyan",
     "dynamodb:deploy": "cd ./dynamodb && yarn run deploy",
     "dynamodb:install": "cd ./dynamodb && yarn install",
@@ -52,6 +52,7 @@
     "s3:deploy": "cd ./s3 && yarn run deploy",
     "s3:install": "cd ./s3 && yarn install",
     "s3:start": "cd ./s3 && yarn run start | node ../scripts/log-prefix.js [s3] yellow",
+    "cognito:install": "cd ./cognito && yarn install",
     "cognito:deploy": "cd ./cognito && yarn run deploy"
   },
   "jest": {
