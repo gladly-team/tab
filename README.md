@@ -36,3 +36,4 @@ See [Deployment Overview](./DEPLOYMENT.md) for how deployment works.
 Thank you to the following projects and companies for supporting open source projects like this one:
 * [TravisCI](https://travis-ci.org/)
 * [Browserstack](https://www.browserstack.com)
+* [Codecov](https://codecov.io)
