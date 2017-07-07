@@ -14,22 +14,19 @@ env:
   - TEST_AWS_REGION=us-west-2
   # AWS Cognito
   - TEST_COGNITO_REGION=us-west-2
-  - TEST_COGNITO_IDENTITYPOOLID=arn:aws:cognito-idp:us-west-2:123456789:userpool/us-west-2_abcdefghi
-  - TEST_COGNITO_USERPOOLID=us-west-2_abcdefghi
-  - TEST_COGNITO_CLIENTID=abc123def456ghi789
+  - TEST_COGNITO_IDENTITYPOOLID=arn:aws:cognito-idp:us-west-2:167811431063:userpool/us-west-2_4pEiAmG9D
+  - TEST_COGNITO_USERPOOLID=us-west-2_4pEiAmG9D
+  - TEST_COGNITO_CLIENTID=2giue783gp26os74dumfl0ahcb
   - TEST_MOCK_DEV_AUTHENTICATION=false
   # Web app
-  - TEST_PUBLIC_PATH=/
-  - TEST_WEB_HOST=localhost
-  - TEST_WEB_PORT=3000
+  - TEST_PUBLIC_PATH=http://test-tab2017.gladly.io/
   - TEST_ADS_ENABLED=false
   # GraphQL
-  - TEST_TABLE_NAME_APPENDIX=""
-  - TEST_GRAPHQL_PORT=8080
+  - TEST_TABLE_NAME_APPENDIX="-test"
   # Endpoints
-  - TEST_GRAPHQL_ENDPOINT=http://localhost:8080
-  - TEST_DYNAMODB_ENDPOINT=http://localhost:8000
-  - TEST_S3_ENDPOINT=http://localhost:9000
+  - TEST_GRAPHQL_ENDPOINT=https://53a9uos12e.execute-api.us-west-2.amazonaws.com/test/graphql
+  - TEST_DYNAMODB_ENDPOINT=dynamodb.us-west-2.amazonaws.com
+  - TEST_S3_ENDPOINT=https://s3-us-west-2.amazonaws.com/test-tab2017-media.gladly.io
   # Deployment
   - TEST_WEB_S3_BUCKET_NAME=test-tab2017.gladly.io
   - TEST_MEDIA_S3_BUCKET_NAME=test-tab2017-media.gladly.io
@@ -105,7 +102,12 @@ before_install:
   - cd ../
   # End Watchman install.
 install: yarn run all:install
-script: yarn run ci:test
+script:
+  - yarn run ci:test
+  # TODO: handle PR restrictions. See:
+  # https://docs.travis-ci.com/user/pull-requests#Pull-Requests-and-Security-Restrictions
+  - yarn run ci:deploy test
+  # TODO: run end-to-end tests
 # TODO: master branch deploy to prod; other logic for test/dev
 deploy:
   provider: script
