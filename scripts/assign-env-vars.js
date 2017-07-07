@@ -34,6 +34,7 @@ export const envVars = [
   'AWS_SECRET_ACCESS_KEY'
   // Selenium Driver
   // 'SELENIUM_DRIVER_TYPE', // optional
+  // 'SELENIUM_HOST', // optional
   // 'BROWSERSTACK_USER', // optional
   // 'BROWSERSTACK_KEY' // optional
 ]

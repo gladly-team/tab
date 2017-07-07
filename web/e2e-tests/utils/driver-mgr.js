@@ -27,13 +27,16 @@ function getDriver (testName) {
 }
 
 function getAppBaseUrl () {
-  var appBaseUrl = 'http://dev-tab2017.gladly.io/'
-
-  if (process.env.PUBLIC_PATH) {
-    appBaseUrl = process.env.PUBLIC_PATH
+  const seleniumHostDefault = 'http://localhost:3000'
+  var seleniumHost
+  if (process.env.SELENIUM_HOST) {
+    seleniumHost = process.env.SELENIUM_HOST
+  } else {
+    console.warn(`Environment variable "SELENIUM_HOST" is not set. Using default of "${seleniumHostDefault}".`)
+    seleniumHost = seleniumHostDefault
   }
 
-  return appBaseUrl
+  return seleniumHost
 }
 
 export {
