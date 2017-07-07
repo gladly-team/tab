@@ -5,7 +5,7 @@ import assignEnvVars from './assign-env-vars'
 
 // Set env vars.
 const requireAllEnvVarsSet = true
-assignEnvVars('dev', requireAllEnvVarsSet)
+assignEnvVars('test', requireAllEnvVarsSet)
 
 const tests = spawn('yarn', ['run', 'test'], {stdio: 'inherit'})
 

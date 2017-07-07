@@ -25,6 +25,7 @@
     "ci:deploy": "babel-node ./scripts/deploy.js",
     "ci:deployservices": "npm-run-all -s graphql:deploy lambda:deploy web:deploy dynamodb:deploy s3:deploy cognito:deploy",
     "ci:test": "babel-node ./scripts/runTests.js",
+    "ci:test-e2e": "npm-run-all -s web:test-e2e",
     "parent:install": "yarn install",
     "parent:lint": "standard \"scripts/**/*.js\"",
     "parent:lint:fix": "standard \"scripts/**/*.js\" --fix",
