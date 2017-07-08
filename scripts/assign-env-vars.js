@@ -5,38 +5,40 @@
 // process.envDEV_WEB_HOST to process.env.WEB_HOST.
 
 // All env vars we want to pick up from the CI environment.
+// Set key "optional: true" if the env var does not need
+// to be set in all environments.
 export const envVars = [
-  'NODE_ENV',
-  'AWS_REGION',
+  { name: 'NODE_ENV' },
+  { name: 'AWS_REGION' },
   // AWS Cognito
-  'COGNITO_REGION',
-  'COGNITO_IDENTITYPOOLID',
-  'COGNITO_USERPOOLID',
-  'COGNITO_CLIENTID',
-  'MOCK_DEV_AUTHENTICATION',
+  { name: 'COGNITO_REGION' },
+  { name: 'COGNITO_IDENTITYPOOLID' },
+  { name: 'COGNITO_USERPOOLID' },
+  { name: 'COGNITO_CLIENTID' },
+  { name: 'MOCK_DEV_AUTHENTICATION' },
   // Web app
-  'PUBLIC_PATH',
-  'ADS_ENABLED',
-  // 'WEB_HOST', // optional
-  // 'WEB_PORT', // optional
+  { name: 'PUBLIC_PATH' },
+  { name: 'ADS_ENABLED' },
+  { name: 'WEB_HOST', optional: true },
+  { name: 'WEB_PORT', optional: true },
   // GraphQL
-  'TABLE_NAME_APPENDIX',
-  // 'GRAPHQL_PORT', // optional
+  { name: 'TABLE_NAME_APPENDIX' },
+  { name: 'GRAPHQL_PORT', optional: true },
   // Endpoints
-  'GRAPHQL_ENDPOINT',
-  'DYNAMODB_ENDPOINT',
-  'S3_ENDPOINT',
+  { name: 'GRAPHQL_ENDPOINT' },
+  { name: 'DYNAMODB_ENDPOINT' },
+  { name: 'S3_ENDPOINT' },
   // Deployment
-  'WEB_S3_BUCKET_NAME',
-  'MEDIA_S3_BUCKET_NAME',
+  { name: 'WEB_S3_BUCKET_NAME' },
+  { name: 'MEDIA_S3_BUCKET_NAME' },
   // Secrets
-  'AWS_ACCESS_KEY_ID',
-  'AWS_SECRET_ACCESS_KEY'
+  { name: 'AWS_ACCESS_KEY_ID' },
+  { name: 'AWS_SECRET_ACCESS_KEY' },
   // Selenium Driver
-  // 'SELENIUM_DRIVER_TYPE', // optional
-  // 'SELENIUM_HOST', // optional
-  // 'BROWSERSTACK_USER', // optional
-  // 'BROWSERSTACK_KEY' // optional
+  { name: 'SELENIUM_DRIVER_TYPE', optional: true },
+  { name: 'SELENIUM_HOST', optional: true },
+  { name: 'BROWSERSTACK_USER', optional: true },
+  {name: 'BROWSERSTACK_KEY', optional: true}
 ]
 
 // Expect one argument, the stage name.
@@ -46,16 +48,25 @@ const assignEnvVars = function (stageName, allEnvVarsRequired = true) {
   const stageNameUppercase = stageName ? stageName.toUpperCase() : ''
   const stagePrefix = stageNameUppercase ? `${stageNameUppercase}_` : ''
   envVars.forEach((envVar) => {
-    let stageEnvVarName = `${stagePrefix}${envVar}`
+    const envVarName = envVar.name
+
+    // Delete the existing env var so that any undefined,
+    // optional stage-specific env vars remain undefined.
+    delete process.env[envVarName]
+
+    let stageEnvVarName = `${stagePrefix}${envVarName}`
     let stageEnvVar = process.env[stageEnvVarName]
 
     if (typeof stageEnvVar === 'undefined' || stageEnvVar === null) {
-      // Optionally throw an error if an env variable is not set.
-      if (allEnvVarsRequired) {
+      // If the env var is optional and unset, log the info.
+      // If the env var is required and unset, optionally throw an error.
+      if (envVar.optional) {
+        console.info(`Optional environment variable ${envVarName} is not set.`)
+      } else if (allEnvVarsRequired) {
         throw new Error(`Environment variable ${stageEnvVarName} must be set.`)
       }
     } else {
-      process.env[envVar] = stageEnvVar
+      process.env[envVarName] = stageEnvVar
     }
   })
 }
