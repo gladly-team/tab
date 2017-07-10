@@ -68,6 +68,14 @@ class NotesWidget extends React.Component {
     })
   }
 
+  updateStickyNote (content, index) {
+    this.state.notes[index].content = content
+    this.updateWidget(this.state.notes)
+    this.setState({
+      notes: this.state.notes
+    })
+  }
+
   // This is a temporary solution since we are updating the
   // widget data, if we have specific mutations for the notes
   // then we should generate the id of the note on the server.
@@ -110,6 +118,7 @@ class NotesWidget extends React.Component {
                 key={note.id}
                 index={index}
                 removeStickyNote={this.removeStickyNote.bind(this)}
+                onNoteUpdated={this.updateStickyNote.bind(this)}
                 note={note} />
             )
           })}

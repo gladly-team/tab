@@ -6,6 +6,7 @@ import RandomAppearAnimation from 'general/RandomAppearAnimation'
 import DeleteIcon from 'material-ui/svg-icons/navigation/cancel'
 import Avatar from 'material-ui/Avatar'
 import Chip from 'material-ui/Chip'
+import TextField from 'material-ui/TextField'
 
 import appTheme from 'theme/default'
 
@@ -17,6 +18,8 @@ class Note extends React.Component {
       hoveringDelete: false,
       editMode: false
     }
+
+    this.noteChangedTimer = 0
   }
 
   removeStickyNote () {
@@ -27,6 +30,17 @@ class Note extends React.Component {
     this.setState({
       hoveringDelete: enter
     })
+  }
+
+  onNoteChanged(event, value) {
+    if(this.noteChangedTimer){
+      clearTimeout(this.noteChangedTimer)
+    }
+    this.noteChangedTimer = setTimeout(() => {
+      if(this.props.onNoteUpdated){
+        this.props.onNoteUpdated(value, this.props.index)
+      }
+    }, 500)
   }
 
   render () {
@@ -90,7 +104,13 @@ class Note extends React.Component {
             style={deleteIcon}
             onClick={this.removeStickyNote.bind(this)} />
           <div style={noteContent}>
-            <p style={textStyle}>{note.content}</p>
+            <TextField
+              id={'note-content-'+ this.props.index}
+              onChange={this.onNoteChanged.bind(this)}
+              textareaStyle={textStyle}
+              multiLine={true}
+              defaultValue={note.content}
+              underlineShow={false}/>
           </div>
         </div>
       </RandomAppearAnimation>
@@ -101,7 +121,8 @@ class Note extends React.Component {
 Note.propTypes = {
   index: PropTypes.number.isRequired,
   removeStickyNote: PropTypes.func.isRequired,
-  note: PropTypes.object.isRequired
+  note: PropTypes.object.isRequired,
+  onNoteUpdated: PropTypes.func,
 }
 
 export default Note
