@@ -52,7 +52,9 @@ class NotesWidget extends React.Component {
     }
 
     this.state.notes.splice(0, 0, newNote)
-    this.updateWidget(this.state.notes)
+    if(text && text.length){
+      this.updateWidget(this.state.notes)
+    }
 
     this.setState({
       notes: this.state.notes
@@ -109,6 +111,7 @@ class NotesWidget extends React.Component {
       containerStyle={sharedSpaceStyle}>
       <div style={mainContainer}>
         <AddNoteForm
+          addForm={false}
           addNote={this.addNewNote.bind(this)} />
         <List
           containerStyle={notesContainer}>

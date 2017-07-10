@@ -107,6 +107,7 @@ class Note extends React.Component {
             <TextField
               id={'note-content-'+ this.props.index}
               onChange={this.onNoteChanged.bind(this)}
+              hintText="Your note here..."
               textareaStyle={textStyle}
               multiLine={true}
               defaultValue={note.content}

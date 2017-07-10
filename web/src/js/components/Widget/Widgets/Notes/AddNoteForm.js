@@ -79,19 +79,23 @@ class AddNoteForm extends React.Component {
   }
 
   openForm () {
-    this.setState({
-      animating: true
-    })
-
-    setTimeout(() => {
+    if(this.props.addForm){
       this.setState({
-        animating: false,
-        show: true,
-        hoveringCancel: false,
-        hoveringCreate: false,
-        hoveringAdd: false
+        animating: true
       })
-    }, 200)
+
+      setTimeout(() => {
+        this.setState({
+          animating: false,
+          show: true,
+          hoveringCancel: false,
+          hoveringCreate: false,
+          hoveringAdd: false
+        })
+      }, 200)
+    } else {
+      this.props.addNote('')
+    }
   }
 
   render () {
@@ -234,10 +238,12 @@ class AddNoteForm extends React.Component {
 }
 
 AddNoteForm.propTypes = {
-  addNote: PropTypes.func.isRequired
+  addNote: PropTypes.func.isRequired,
+  addForm: PropTypes.bool
 }
 
 AddNoteForm.defaultProps = {
+  addForm: true
 }
 
 export default AddNoteForm
