@@ -32,12 +32,12 @@ class Note extends React.Component {
     })
   }
 
-  onNoteChanged(event, value) {
-    if(this.noteChangedTimer){
+  onNoteChanged (event, value) {
+    if (this.noteChangedTimer) {
       clearTimeout(this.noteChangedTimer)
     }
     this.noteChangedTimer = setTimeout(() => {
-      if(this.props.onNoteUpdated){
+      if (this.props.onNoteUpdated) {
         this.props.onNoteUpdated(value, this.props.index)
       }
     }, 500)
@@ -105,13 +105,13 @@ class Note extends React.Component {
             onClick={this.removeStickyNote.bind(this)} />
           <div style={noteContent}>
             <TextField
-              id={'note-content-'+ this.props.index}
+              id={'note-content-' + this.props.index}
               onChange={this.onNoteChanged.bind(this)}
-              hintText="Your note here..."
+              hintText='Your note here...'
               textareaStyle={textStyle}
-              multiLine={true}
+              multiLine
               defaultValue={note.content}
-              underlineShow={false}/>
+              underlineShow={false} />
           </div>
         </div>
       </RandomAppearAnimation>
@@ -123,7 +123,7 @@ Note.propTypes = {
   index: PropTypes.number.isRequired,
   removeStickyNote: PropTypes.func.isRequired,
   note: PropTypes.object.isRequired,
-  onNoteUpdated: PropTypes.func,
+  onNoteUpdated: PropTypes.func
 }
 
 export default Note

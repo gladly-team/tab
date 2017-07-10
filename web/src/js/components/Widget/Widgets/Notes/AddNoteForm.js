@@ -79,7 +79,7 @@ class AddNoteForm extends React.Component {
   }
 
   openForm () {
-    if(this.props.addForm){
+    if (this.props.addForm) {
       this.setState({
         animating: true
       })

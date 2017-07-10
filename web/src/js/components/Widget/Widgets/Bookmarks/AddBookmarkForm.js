@@ -1,3 +1,5 @@
+/* eslint no-useless-escape: 0 */
+
 import React from 'react'
 import PropTypes from 'prop-types'
 
@@ -32,9 +34,21 @@ class AddBookmarkForm extends React.Component {
     }
   }
 
+  checkUrl (url) {
+    const isUrl = (s) => {
+      var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
+      return regexp.test(s)
+    }
+
+    if (!isUrl(url)) {
+      return 'http://' + url
+    }
+    return url
+  }
+
   create () {
     const name = this.bName.input.value
-    const link = this.bLink.input.value
+    const link = this.checkUrl(this.bLink.input.value)
 
     if (!name || !link) { return }
 

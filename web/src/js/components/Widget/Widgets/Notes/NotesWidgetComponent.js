@@ -52,7 +52,7 @@ class NotesWidget extends React.Component {
     }
 
     this.state.notes.splice(0, 0, newNote)
-    if(text && text.length){
+    if (text && text.length) {
       this.updateWidget(this.state.notes)
     }
 
