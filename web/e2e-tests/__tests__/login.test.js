@@ -17,7 +17,7 @@ afterEach(() => {
   return driver.quit()
 })
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 180e3
 
 describe('Login Tests', function () {
   it('should login an existing user', Async(() => {
@@ -37,5 +37,5 @@ describe('Login Tests', function () {
     const dashboardId = 'app-dashboard-id'
     Await(driverUtils(driver).waitForElementVisible(dashboardId))
     Await(signOutUser(driver))
-  }), 60000)
+  }), 90e3)
 })
