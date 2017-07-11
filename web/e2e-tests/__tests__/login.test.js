@@ -18,7 +18,7 @@ afterEach(() => {
 
 describe('Login Tests', function () {
   it('should login an existing user', Async(() => {
-    driver = getDriver('Login Tests: should login an existing user')
+    driver = getDriver('Login: should login an existing user')
     Await(driverUtils(driver).navigateTo(getAppBaseUrl()))
 
     // Create a new user

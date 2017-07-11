@@ -17,8 +17,8 @@ afterEach(() => {
 })
 
 describe('Sign Up Tests', function () {
-  it('should create a new user and signout the user', Async(() => {
-    driver = getDriver('Sign Up Tests: create new user and sign out')
+  it('should create a new user and sign out the user', Async(() => {
+    driver = getDriver('Sign Up: should create a new user and sign out the user')
     Await(driverUtils(driver).navigateTo(getAppBaseUrl()))
     const newUserEmail = randomString(6) + '@tfac.com'
     Await(createUser(driver, newUserEmail, 'NewUserPassword1'))
@@ -26,7 +26,7 @@ describe('Sign Up Tests', function () {
   }), 60000)
 
   it('should not create a user if email already registered', Async(() => {
-    driver = getDriver('Sign Up Tests: do not create user if duplicate email')
+    driver = getDriver('Sign Up: should not create a user if email already registered')
     Await(driverUtils(driver).navigateTo(getAppBaseUrl()))
 
     // Create a new user
