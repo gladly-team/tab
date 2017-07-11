@@ -45,6 +45,7 @@ class Widgets extends React.Component {
             return (<WidgetIcon
               key={index}
               widget={edge.node}
+              active={user.activeWidget && edge.node.id === user.activeWidget}
               onWidgetIconClicked={this.onWidgetIconClicked.bind(this)} />)
           })}
         </div>
