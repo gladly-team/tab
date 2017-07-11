@@ -14,6 +14,8 @@ import RaisedButton from 'material-ui/RaisedButton'
 import Slider from 'material-ui/Slider'
 import Subheader from 'material-ui/Subheader'
 
+import appTheme from 'theme/default'
+
 class Charity extends React.Component {
   constructor (props) {
     super(props)
@@ -105,10 +107,20 @@ class Charity extends React.Component {
       justifyContent: 'center'
     }
 
-    const customDonationLink = {
-      fontSize: 11,
-      color: '#2196F3',
-      cursor: 'pointer'
+    var customDonationLink;
+    if(this.state.donateSlider > 1) {
+      
+      const customDonationLinkStyle = {
+        fontSize: 11,
+        color: appTheme.palette.accent1Color,
+        cursor: 'pointer'
+      }
+
+      customDonationLink = (<span
+        style={customDonationLinkStyle}
+        onClick={this.handleOpen.bind(this)}>
+           Want to donate another quantity?
+      </span>);
     }
 
     const sliderContainer = {
@@ -202,11 +214,7 @@ class Charity extends React.Component {
               onClick={this.donateHearts.bind(this)} />
 
             <br />
-            <span
-              style={customDonationLink}
-              onClick={this.handleOpen.bind(this)}>
-                Want to donate another quantity?
-            </span>
+            {customDonationLink}
           </CardActions>
         </Card>
         <Popover
