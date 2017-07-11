@@ -6,7 +6,7 @@ const BROWSERSTACK_BUILD = 'tab-'
 
 function getDriver (testName) {
   var driver
-  if (!process.env.SELENIUM_DRIVER_TYPE || process.env.SELENIUM_DRIVER_TYPE !== 'remote') {
+  if (process.env.SELENIUM_DRIVER_TYPE === 'remote') {
     driver = new webdriver.Builder().forBrowser(BROWSER_NAME).build()
   } else {
     var capabilities = {
