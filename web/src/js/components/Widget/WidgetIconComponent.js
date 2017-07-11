@@ -42,7 +42,7 @@ class WidgetIcon extends React.Component {
 WidgetIcon.propTypes = {
   widget: PropTypes.object.isRequired,
   onWidgetIconClicked: PropTypes.func.isRequired,
-  active: PropTypes.bool,
+  active: PropTypes.bool
 }
 
 WidgetIcon.defaultProps = {

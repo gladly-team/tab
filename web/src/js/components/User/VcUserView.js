@@ -5,31 +5,28 @@ import {QueryRenderer} from 'react-relay/compat'
 import environment from '../../../relay-env'
 import AuthUserComponent from 'general/AuthUserComponent'
 
-import AppContainer from './AppContainer'
+import VcUserContainer from './VcUserContainer'
 
-class AppView extends React.Component {
+class VcUserView extends React.Component {
   render () {
     return (
       <AuthUserComponent>
         <QueryRenderer
           environment={environment}
           query={graphql`
-            query AppViewQuery($userId: String!) {
+            query VcUserViewQuery($userId: String!) {
               user(userId: $userId) {
-                ...AppContainer_user
+                ...VcUserContainer_user
               }
             }
           `}
           render={({error, props}) => {
             if (error) {
-              console.error(error)
-              return
+              return null
             }
-
             if (props) {
               return (
-                <AppContainer
-                  user={props.user} />
+                <VcUserContainer user={props.user} />
               )
             } else {
               return null
@@ -40,4 +37,4 @@ class AppView extends React.Component {
   }
 }
 
-export default AppView
+export default VcUserView

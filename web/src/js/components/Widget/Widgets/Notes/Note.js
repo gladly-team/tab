@@ -5,7 +5,6 @@ import moment from 'moment'
 import RandomAppearAnimation from 'general/RandomAppearAnimation'
 
 import DeleteIcon from 'material-ui/svg-icons/navigation/cancel'
-import Avatar from 'material-ui/Avatar'
 import Chip from 'material-ui/Chip'
 import TextField from 'material-ui/TextField'
 
@@ -44,11 +43,11 @@ class Note extends React.Component {
     }, 500)
   }
 
-  getNoteDate() {
+  getNoteDate () {
     var noteDateFormat = 'MMM, DD'
     var now = moment()
     var noteDate = moment(this.props.note.created)
-    if(now.date() === noteDate.date()) {
+    if (now.date() === noteDate.date()) {
       noteDateFormat = 'h:mm A'
     }
     return noteDate.format(noteDateFormat)
@@ -63,7 +62,7 @@ class Note extends React.Component {
       borderRadius: 3,
       borderLeftStyle: 'solid',
       borderLeftColor: note.color,
-      borderLeftWidth: 5,
+      borderLeftWidth: 5
     }
 
     const noteContent = {
@@ -111,8 +110,8 @@ class Note extends React.Component {
               labelColor={chip.labelColor}
               backgroundColor={chip.backgroundColor}
               style={chip.style}>
-                  {noteDate}
-                </Chip>
+              {noteDate}
+            </Chip>
           </div>
           <DeleteIcon
             color={deleteIconColor}

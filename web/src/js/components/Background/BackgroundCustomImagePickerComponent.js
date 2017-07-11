@@ -24,6 +24,7 @@ class BackgroundCustomeImagePicker extends React.Component {
       this.setState({
         image: user.customImage
       })
+      this.updateUserCustomImg(user.customImage)
     }
   }
 

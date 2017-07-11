@@ -1,8 +1,7 @@
 /* eslint-disable jsx-a11y/href-no-hash */
 import React from 'react'
-import PropTypes from 'prop-types'
-import VcUser from '../User/VcUserContainer'
-import UserBackgroundImage from '../User/UserBackgroundImageContainer'
+import VcUser from '../User/VcUserView'
+import UserBackgroundImage from '../User/UserBackgroundImageView'
 import WidgetsView from '../Widget/WidgetsView'
 import InviteFriend from '../InviteFriend/InviteFriendView'
 import Ad from '../Ad/Ad'
@@ -50,8 +49,6 @@ class Dashboard extends React.Component {
   }
 
   render () {
-    const { user } = this.props
-
     const content = {
       position: 'absolute',
       top: 0,
@@ -93,9 +90,9 @@ class Dashboard extends React.Component {
         <div
           data-test-id={'app-dashboard-id'}
           key={'dashboard-key'}>
-          <UserBackgroundImage user={user} />
+          <UserBackgroundImage />
           <div style={content}>
-            <VcUser user={user} />
+            <VcUser />
           </div>
           <WidgetsView />
           <div style={actioBtnContainer}>
@@ -152,10 +149,6 @@ class Dashboard extends React.Component {
       </FadeInAnimation>
     )
   }
-}
-
-Dashboard.propTypes = {
-  user: PropTypes.object.isRequired
 }
 
 export default Dashboard

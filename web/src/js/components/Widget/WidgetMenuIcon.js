@@ -19,18 +19,17 @@ class WidgetMenuIcon extends React.Component {
   }
 
   render () {
-
     const style = {
       container: {
         background: 'transparent',
         padding: 0,
         borderRadius: '100%',
-        margin: 5,
+        margin: 5
       }
     }
 
-    var activeStyle = {};
-    if(this.props.active) {
+    var activeStyle = {}
+    if (this.props.active) {
       activeStyle = {
         // This styles are for using a border bottom for active icon instead of full circle.
         // border: 'none',
@@ -40,7 +39,7 @@ class WidgetMenuIcon extends React.Component {
         background: appTheme.palette.primary1Color,
         boxShadow: 'rgba(0, 0, 0, 0.3) 0px 19px 60px, rgba(0, 0, 0, 0.22) 0px 15px 20px',
         transform: 'scale(1.2)',
-        WebkitBoxShadow: 'rgba(0, 0, 0, 0.3) 0px 19px 60px, rgba(0, 0, 0, 0.22) 0px 15px 20px',
+        WebkitBoxShadow: 'rgba(0, 0, 0, 0.3) 0px 19px 60px, rgba(0, 0, 0, 0.22) 0px 15px 20px'
       }
     }
 

@@ -107,9 +107,8 @@ class Charity extends React.Component {
       justifyContent: 'center'
     }
 
-    var customDonationLink;
-    if(this.state.donateSlider > 1) {
-      
+    var customDonationLink
+    if (this.state.donateSlider > 1) {
       const customDonationLinkStyle = {
         fontSize: 11,
         color: appTheme.palette.accent1Color,
@@ -120,7 +119,7 @@ class Charity extends React.Component {
         style={customDonationLinkStyle}
         onClick={this.handleOpen.bind(this)}>
            Want to donate another quantity?
-      </span>);
+      </span>)
     }
 
     const sliderContainer = {
