@@ -11,37 +11,28 @@ import {
   signOutUser
 } from '../utils/test-utils'
 
-const testName = 'Login Tests'
-
 let driver
-
-beforeAll(() => {
-  driver = getDriver(testName)
-})
-
-afterAll(() => {
+afterEach(() => {
   return driver.quit()
 })
 
-var testSetup = (Async(() => {
-  Await(driverUtils(driver).navigateTo(getAppBaseUrl()))
-}))
-
-describe(testName, function () {
+describe('Login Tests', function () {
   it('should login an existing user', Async(() => {
-    Await(testSetup())
+    driver = getDriver('Login Tests: should login an existing user')
+    Await(driverUtils(driver).navigateTo(getAppBaseUrl()))
 
+    // Create a new user
     const userEmail = randomString(6) + '@tfac.com'
     const userPassword = 'NewUserPassword1'
     Await(createUser(driver, userEmail, userPassword))
     Await(signOutUser(driver))
 
-    Await(testSetup())
-
+    // Log in as that user
+    Await(driverUtils(driver).navigateTo(getAppBaseUrl()))
     Await(setUserEmail(driver, userEmail))
     Await(setUserPassword(driver, userPassword))
     const dashboardId = 'app-dashboard-id'
     Await(driverUtils(driver).waitForElementVisible(dashboardId))
     Await(signOutUser(driver))
-  }), 30000)
+  }), 60000)
 })
