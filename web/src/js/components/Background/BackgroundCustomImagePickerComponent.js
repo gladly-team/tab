@@ -5,18 +5,16 @@ import SetBackgroundCustomImageMutation from 'mutations/SetBackgroundCustomImage
 
 import Subheader from 'material-ui/Subheader'
 import TextField from 'material-ui/TextField'
-import Divider from 'material-ui/Divider'
 import RaisedButton from 'material-ui/RaisedButton'
 
 import brokenImage from 'assets/nopicture.jpg'
 
 class BackgroundCustomeImagePicker extends React.Component {
-  
-  constructor(props) {
-    super(props);
-    
+  constructor (props) {
+    super(props)
+
     this.state = {
-      image: null,
+      image: null
     }
   }
 
@@ -24,7 +22,7 @@ class BackgroundCustomeImagePicker extends React.Component {
     const { user } = this.props
     if (user.customImage) {
       this.setState({
-        image: user.customImage,
+        image: user.customImage
       })
     }
   }
@@ -36,12 +34,12 @@ class BackgroundCustomeImagePicker extends React.Component {
   onChange (event, newValue) {
     if (this.isValid(newValue)) {
       this.setState({
-        image: newValue,
+        image: newValue
       })
     }
   }
 
-  updateUserCustomImg(imgUrl) {
+  updateUserCustomImg (imgUrl) {
     SetBackgroundCustomImageMutation.commit(
       this.props.relay.environment,
       this.props.user,
@@ -49,36 +47,34 @@ class BackgroundCustomeImagePicker extends React.Component {
     )
   }
 
-  clear() {
+  clear () {
     this.imgLink.input.value = ''
     this.setState({
-      image: null,
+      image: null
     })
   }
 
-  onImgLoaded() {
+  onImgLoaded () {
     const { user } = this.props
-    if(this.state.image && this.state.image !== user.customImage){
+    if (this.state.image && this.state.image !== user.customImage) {
       this.updateUserCustomImg(this.state.image)
     }
   }
 // http://cdn.wallpapersafari.com/66/6/leY
-  onErrorLoadingImg() {
+  onErrorLoadingImg () {
     this.setState({
-      image: null,
+      image: null
     })
   }
 
   render () {
-    const { user } = this.props
-    const imageUrl = this.state.image || ''
     const image = this.state.image || brokenImage
 
     const root = {
       width: '100%',
       display: 'flex',
       flexWrap: 'wrap',
-      justifyContent: 'space-around',
+      justifyContent: 'space-around'
     }
 
     const textInput = {
@@ -97,46 +93,42 @@ class BackgroundCustomeImagePicker extends React.Component {
       paddingLeft: 0
     }
 
-    const divider = {
-      marginBottom: 10
-    }
-
     const preview = {
       height: 'auto',
       transform: 'translateY(-0%)',
       position: 'relative',
       left: 0,
       width: '100%',
-      top: 0,
+      top: 0
     }
 
     const clear = {
       margin: 5,
-      marginLeft: 0,
+      marginLeft: 0
     }
 
     return (
       <div style={root}>
-        <div 
+        <div
           style={column1}>
           <Subheader style={header}>Paste your image source</Subheader>
           <TextField
             ref={(input) => { this.imgLink = input }}
             style={textInput}
-            value={this.state.image}
+            value={this.state.image || ''}
             hintText='Paste here the url to your image'
-            onChange={this.onChange.bind(this)}/>
-          <RaisedButton 
-            label="CLEAR" 
+            onChange={this.onChange.bind(this)} />
+          <RaisedButton
+            label='CLEAR'
             onClick={this.clear.bind(this)}
-            secondary={true} 
-            style={clear}/>
+            secondary
+            style={clear} />
         </div>
         <div style={column2}>
-          <img 
-            onLoad={this.onImgLoaded.bind(this)} 
+          <img
+            onLoad={this.onImgLoaded.bind(this)}
             onError={this.onErrorLoadingImg.bind(this)}
-            style={preview} 
+            style={preview}
             src={image} />
         </div>
       </div>
