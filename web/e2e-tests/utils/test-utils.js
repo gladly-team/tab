@@ -42,7 +42,8 @@ var signOutUser = (Async((driver) => {
   const settingsViewId = 'app-settings-id'
   const signOutBtnId = 'app-signout-btn'
   const emailInputId = 'login-email-input-id'
-  const settingsUrl = getAppBaseUrl() + 'tab/settings/'
+
+  const settingsUrl = getAppBaseUrl() + '/tab/settings/'
 
   Await(driverUtils(driver).navigateTo(settingsUrl))
   Await(driverUtils(driver).waitForElementVisible(settingsViewId))

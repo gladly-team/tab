@@ -20,9 +20,21 @@ function getPrefixVariants (items, prefixes) {
 }
 
 // Prefixes to assign to all env vars.
-const envVarPrefixes = ['', 'DEV_', 'TEST_', 'STAGING_', 'PROD_']
+const envVarPrefixes = ['DEV_', 'TEST_', 'STAGING_', 'PROD_']
 
-const allEnvVars = getPrefixVariants(envVars, envVarPrefixes)
+// Array of env var names (strings).
+const envVarNames = envVars.reduce((acc, obj) => {
+  acc.push(obj.name)
+  return acc
+}, [])
+
+// Every combination of prefix and env var names.
+// In other words, every environment variable name we'd
+// use across all stages.
+const allEnvVars = getPrefixVariants(
+  envVarNames,
+  envVarPrefixes
+)
 
 // Store environment variables' values prior to running any tests.
 const originalEnvVarVals = {}
@@ -54,6 +66,7 @@ beforeAll(() => {
 
 beforeEach(() => {
   restoreEnvVars()
+  console.info = jest.fn()
 })
 
 afterAll(() => {
@@ -72,8 +85,8 @@ describe('env variable name generation', () => {
   })
 
   it('creates expected values in `allEnvVars`', () => {
-    const firstEnvName = envVars[0]
-    const lastEnvName = envVars[envVars.length - 1]
+    const firstEnvName = envVars[0].name
+    const lastEnvName = envVars[envVars.length - 1].name
 
     // The list of all env vars should contain each env var
     // with each prefix.
@@ -90,9 +103,11 @@ describe('assign-env-vars script', () => {
 
     // Assign values to all env vars, then delete one.
     // This ensures test consistency across environments.
-    allEnvVars.forEach((envVarName) => {
+    envVarNames.forEach((envVarName) => {
       process.env[`${envStageName}_${envVarName}`] = 'abc'
     })
+
+    // Expects that S3_ENDPOINT is a required env var.
     delete process.env.DEV_S3_ENDPOINT
 
     expect(() => {
@@ -100,10 +115,45 @@ describe('assign-env-vars script', () => {
     }).toThrow()
   })
 
-  it('optionally does not fail if an env var is not set', () => {
+  it('optionally does not fail if a required env var is not set', () => {
     const envStageName = 'DEV'
+
+    // Expects that S3_ENDPOINT is a required env var.
     delete process.env.DEV_S3_ENDPOINT
     assignEnvVars(envStageName, false)
+  })
+
+  it('does not fail if an optional env var is not set', () => {
+    const envStageName = 'DEV'
+
+    // Assign values to all env vars, then delete one.
+    // This ensures test consistency across environments.
+    envVarNames.forEach((envVarName) => {
+      process.env[`${envStageName}_${envVarName}`] = 'abc'
+    })
+
+    // Expects that SELENIUM_DRIVER_TYPE is an optional env var.
+    delete process.env.DEV_SELENIUM_DRIVER_TYPE
+    assignEnvVars(envStageName)
+  })
+
+  it('deletes existing "root" env vars if the stage-specific env var is not set', () => {
+    const envStageName = 'DEV'
+
+    // Assign values to all env vars, then delete one.
+    // This ensures test consistency across environments.
+    envVarNames.forEach((envVarName) => {
+      process.env[`${envStageName}_${envVarName}`] = 'abc'
+    })
+
+    // Expects that SELENIUM_DRIVER_TYPE is an optional env var.
+    delete process.env.DEV_SELENIUM_DRIVER_TYPE
+
+    // This should not be used.
+    process.env.SELENIUM_DRIVER_TYPE = 'blah'
+    assignEnvVars(envStageName)
+
+    expect(process.env.SELENIUM_DRIVER_TYPE).not.toBeDefined()
   })
 
   it('does not set an undefined env variable value as "undefined" string', () => {
@@ -116,7 +166,7 @@ describe('assign-env-vars script', () => {
 
   it('does not fail if all env vars are set', () => {
     const envStageName = 'DEV'
-    allEnvVars.forEach((envVarName) => {
+    envVarNames.forEach((envVarName) => {
       process.env[`${envStageName}_${envVarName}`] = 'foo'
     })
     assignEnvVars(envStageName)
@@ -125,7 +175,7 @@ describe('assign-env-vars script', () => {
   it('assigns a stage-specific env value to the root env varible name', () => {
     const envStageName = 'DEV'
     delete process.env.GRAPHQL_ENDPOINT
-    allEnvVars.forEach((envVarName) => {
+    envVarNames.forEach((envVarName) => {
       process.env[`${envStageName}_${envVarName}`] = 'xyz'
     })
     expect(process.env.GRAPHQL_ENDPOINT).not.toBeDefined()
@@ -135,7 +185,7 @@ describe('assign-env-vars script', () => {
 
   it('ignores the stage name caps when assigning the env varible value', () => {
     delete process.env.GRAPHQL_ENDPOINT
-    allEnvVars.forEach((envVarName) => {
+    envVarNames.forEach((envVarName) => {
       process.env[`STAGING_${envVarName}`] = 'foobar'
     })
     expect(process.env.GRAPHQL_ENDPOINT).not.toBeDefined()
@@ -145,7 +195,7 @@ describe('assign-env-vars script', () => {
 
   it('does not assign value to an unlisted env variable name', () => {
     const envStageName = 'STAGING'
-    allEnvVars.forEach((envVarName) => {
+    envVarNames.forEach((envVarName) => {
       process.env[`STAGING_${envVarName}`] = 'abc'
     })
     assignEnvVars(envStageName)

@@ -1,4 +1,5 @@
  /* eslint-env jest */
+ /* global jasmine */
 import Async from 'asyncawait/async'
 import Await from 'asyncawait/await'
 import driverUtils from '../utils/driver-utils'
@@ -12,34 +13,29 @@ import {
 } from '../utils/test-utils'
 
 let driver
-
-beforeAll(() => {
-  driver = getDriver()
-})
-
-afterAll(() => {
+afterEach(() => {
   return driver.quit()
 })
 
-var testSetup = (Async(() => {
-  Await(driverUtils(driver).navigateTo(getAppBaseUrl()))
-}))
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 180e3
 
 describe('Login Tests', function () {
   it('should login an existing user', Async(() => {
-    Await(testSetup())
+    driver = getDriver('Login: should login an existing user')
+    Await(driverUtils(driver).navigateTo(getAppBaseUrl()))
 
+    // Create a new user
     const userEmail = randomString(6) + '@tfac.com'
     const userPassword = 'NewUserPassword1'
     Await(createUser(driver, userEmail, userPassword))
     Await(signOutUser(driver))
 
-    Await(testSetup())
-
+    // Log in as that user
+    Await(driverUtils(driver).navigateTo(getAppBaseUrl()))
     Await(setUserEmail(driver, userEmail))
     Await(setUserPassword(driver, userPassword))
     const dashboardId = 'app-dashboard-id'
     Await(driverUtils(driver).waitForElementVisible(dashboardId))
     Await(signOutUser(driver))
-  }), 30000)
+  }), 90e3)
 })

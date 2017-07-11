@@ -34,6 +34,14 @@ resources:
             AttributeDataType: String
             Mutable: false
             Required: true
+        Policies:
+          PasswordPolicy:
+            MinimumLength: 8
+            RequireLowercase: false
+            RequireNumbers: false
+            RequireSymbols: false
+            RequireUppercase: false
+    
     UserPoolClient:
       Type: "AWS::Cognito::UserPoolClient"
       Properties:

@@ -7,7 +7,7 @@ import environment from '../../../relay-env'
 import FullScreenProgress from 'general/FullScreenProgress'
 import AuthUserComponent from 'general/AuthUserComponent'
 
-import Settigns from './SettingsContainer'
+import Settings from './SettingsContainer'
 
 class SettingsView extends React.Component {
   render () {
@@ -30,11 +30,11 @@ class SettingsView extends React.Component {
 
             if (props) {
               return (
-                <Settigns
+                <Settings
                   user={props.user}
                   {...this.props}>
                   {this.props.children}
-                </Settigns>
+                </Settings>
               )
             } else {
               return (<FullScreenProgress />)
