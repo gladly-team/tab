@@ -1,4 +1,5 @@
  /* eslint-env jest */
+ /* global jasmine */
 import Async from 'asyncawait/async'
 import Await from 'asyncawait/await'
 import driverUtils from '../utils/driver-utils'
@@ -15,6 +16,8 @@ let driver
 afterEach(() => {
   return driver.quit()
 })
+
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000
 
 describe('Login Tests', function () {
   it('should login an existing user', Async(() => {
