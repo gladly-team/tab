@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import moment from 'moment'
 
 import RandomAppearAnimation from 'general/RandomAppearAnimation'
 
@@ -43,13 +44,26 @@ class Note extends React.Component {
     }, 500)
   }
 
+  getNoteDate() {
+    var noteDateFormat = 'MMM, DD'
+    var now = moment()
+    var noteDate = moment(this.props.note.created)
+    if(now.date() === noteDate.date()) {
+      noteDateFormat = 'h:mm A'
+    }
+    return noteDate.format(noteDateFormat)
+  }
+
   render () {
     const { note } = this.props
 
     const defaultPaper = {
       margin: 5,
       backgroundColor: 'rgba(0,0,0,.3)',
-      borderRadius: 3
+      borderRadius: 3,
+      borderLeftStyle: 'solid',
+      borderLeftColor: note.color,
+      borderLeftWidth: 5,
     }
 
     const noteContent = {
@@ -82,6 +96,8 @@ class Note extends React.Component {
       fontFamily: appTheme.fontFamily
     }
 
+    var noteDate = this.getNoteDate()
+
     return (
       <RandomAppearAnimation
         delayRange={300}>
@@ -95,8 +111,7 @@ class Note extends React.Component {
               labelColor={chip.labelColor}
               backgroundColor={chip.backgroundColor}
               style={chip.style}>
-              <Avatar size={32} backgroundColor={note.color} />
-                  March, 13
+                  {noteDate}
                 </Chip>
           </div>
           <DeleteIcon

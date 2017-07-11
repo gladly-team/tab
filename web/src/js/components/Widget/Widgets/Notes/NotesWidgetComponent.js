@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import moment from 'moment'
 
 import WidgetSharedSpace from 'general/WidgetSharedSpace'
 import {List} from 'general/List'
@@ -48,7 +49,8 @@ class NotesWidget extends React.Component {
     const newNote = {
       id: this.randomString(6),
       color: this.noteColors[colorIndex],
-      content: text
+      content: text,
+      created: moment.utc().format()
     }
 
     this.state.notes.splice(0, 0, newNote)
