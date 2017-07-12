@@ -5,38 +5,33 @@ import {QueryRenderer} from 'react-relay/compat'
 import environment from '../../../relay-env'
 import AuthUserComponent from 'general/AuthUserComponent'
 
-import DashboardContainer from './DashboardContainer'
+import UserBackgroundImage from './UserBackgroundImageContainer'
 
-class DashboardView extends React.Component {
+class UserBackgroundImageView extends React.Component {
   render () {
     return (
       <AuthUserComponent>
         <QueryRenderer
           environment={environment}
           query={graphql`
-            query DashboardViewQuery($userId: String!) {
+            query UserBackgroundImageViewQuery($userId: String!) {
               user(userId: $userId) {
-                ...DashboardContainer_user
+                ...UserBackgroundImageContainer_user
               }
             }
           `}
           render={({error, props}) => {
             if (error) {
-              console.error(error)
-              return
-            }
-
-            if (props) {
-              return (
-                <DashboardContainer user={props.user} />
-              )
-            } else {
               return null
             }
+            var user = (props && props.user) ? props.user : null
+            return (
+              <UserBackgroundImage user={user} />
+            )
           }} />
       </AuthUserComponent>
     )
   }
 }
 
-export default DashboardView
+export default UserBackgroundImageView

@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import FullScreenProgress from 'general/FullScreenProgress'
 import { getCurrentUser } from '../../utils/cognito-auth'
 import { goToLogin } from 'navigation/navigation'
 
@@ -27,7 +26,7 @@ class AuthUserComponent extends React.Component {
 
   render () {
     if (!this.state.userId) {
-      return (<FullScreenProgress />)
+      return null
     }
 
     const root = {

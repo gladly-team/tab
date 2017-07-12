@@ -1,11 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import moment from 'moment'
 
 import RandomAppearAnimation from 'general/RandomAppearAnimation'
 
 import DeleteIcon from 'material-ui/svg-icons/navigation/cancel'
-import Avatar from 'material-ui/Avatar'
 import Chip from 'material-ui/Chip'
+import TextField from 'material-ui/TextField'
 
 import appTheme from 'theme/default'
 
@@ -17,6 +18,8 @@ class Note extends React.Component {
       hoveringDelete: false,
       editMode: false
     }
+
+    this.noteChangedTimer = 0
   }
 
   removeStickyNote () {
@@ -29,13 +32,37 @@ class Note extends React.Component {
     })
   }
 
+  onNoteChanged (event, value) {
+    if (this.noteChangedTimer) {
+      clearTimeout(this.noteChangedTimer)
+    }
+    this.noteChangedTimer = setTimeout(() => {
+      if (this.props.onNoteUpdated) {
+        this.props.onNoteUpdated(value, this.props.index)
+      }
+    }, 500)
+  }
+
+  getNoteDate () {
+    var noteDateFormat = 'MMM, DD'
+    var now = moment()
+    var noteDate = moment(this.props.note.created)
+    if (now.date() === noteDate.date()) {
+      noteDateFormat = 'h:mm A'
+    }
+    return noteDate.format(noteDateFormat)
+  }
+
   render () {
     const { note } = this.props
 
     const defaultPaper = {
       margin: 5,
       backgroundColor: 'rgba(0,0,0,.3)',
-      borderRadius: 3
+      borderRadius: 3,
+      borderLeftStyle: 'solid',
+      borderLeftColor: note.color,
+      borderLeftWidth: 5
     }
 
     const noteContent = {
@@ -68,6 +95,8 @@ class Note extends React.Component {
       fontFamily: appTheme.fontFamily
     }
 
+    var noteDate = this.getNoteDate()
+
     return (
       <RandomAppearAnimation
         delayRange={300}>
@@ -81,16 +110,22 @@ class Note extends React.Component {
               labelColor={chip.labelColor}
               backgroundColor={chip.backgroundColor}
               style={chip.style}>
-              <Avatar size={32} backgroundColor={note.color} />
-                  March, 13
-                </Chip>
+              {noteDate}
+            </Chip>
           </div>
           <DeleteIcon
             color={deleteIconColor}
             style={deleteIcon}
             onClick={this.removeStickyNote.bind(this)} />
           <div style={noteContent}>
-            <p style={textStyle}>{note.content}</p>
+            <TextField
+              id={'note-content-' + this.props.index}
+              onChange={this.onNoteChanged.bind(this)}
+              hintText='Your note here...'
+              textareaStyle={textStyle}
+              multiLine
+              defaultValue={note.content}
+              underlineShow={false} />
           </div>
         </div>
       </RandomAppearAnimation>
@@ -101,7 +136,8 @@ class Note extends React.Component {
 Note.propTypes = {
   index: PropTypes.number.isRequired,
   removeStickyNote: PropTypes.func.isRequired,
-  note: PropTypes.object.isRequired
+  note: PropTypes.object.isRequired,
+  onNoteUpdated: PropTypes.func
 }
 
 export default Note

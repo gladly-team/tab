@@ -27,8 +27,8 @@ class Charities extends React.Component {
           key={'charities-container-key'}
           style={container}>
           <GridList
-            cols={3}
-            padding={50}
+            cols={4}
+            padding={30}
             style={gridList}
             cellHeight={'auto'}>
             {app.charities.edges.map((edge) => {

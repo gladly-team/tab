@@ -14,6 +14,8 @@ import RaisedButton from 'material-ui/RaisedButton'
 import Slider from 'material-ui/Slider'
 import Subheader from 'material-ui/Subheader'
 
+import appTheme from 'theme/default'
+
 class Charity extends React.Component {
   constructor (props) {
     super(props)
@@ -105,10 +107,20 @@ class Charity extends React.Component {
       justifyContent: 'center'
     }
 
-    const customDonationLink = {
-      fontSize: 11,
-      color: '#2196F3',
-      cursor: 'pointer'
+    var customDonationLink
+    if (this.state.donateSlider > 1) {
+      const customDonationLinkStyle = {
+        fontSize: 11,
+        color: appTheme.palette.accent1Color,
+        cursor: 'pointer',
+        marginTop: 5
+      }
+
+      customDonationLink = (<span
+        style={customDonationLinkStyle}
+        onClick={this.handleOpen.bind(this)}>
+           Want to donate another quantity?
+      </span>)
     }
 
     const sliderContainer = {
@@ -142,11 +154,18 @@ class Charity extends React.Component {
     }
 
     const cardTitle = {
-      height: 70
+      style: {
+        height: 70
+      },
+      title: {
+        lineHeight: '100%'
+      }
     }
 
     const cardText = {
-      height: 70
+      height: 70,
+      paddingTop: 0,
+      paddingBottom: 0
     }
 
     var slider
@@ -187,7 +206,8 @@ class Charity extends React.Component {
               onClick={this.openCharityWebsite.bind(this)} />
           </CardMedia>
           <CardTitle
-            style={cardTitle}
+            titleStyle={cardTitle.title}
+            style={cardTitle.style}
             title={charity.name}
             subtitle={charity.category} />
           <CardText
@@ -201,12 +221,7 @@ class Charity extends React.Component {
               disabled={this.state.donateSlider <= 0}
               onClick={this.donateHearts.bind(this)} />
 
-            <br />
-            <span
-              style={customDonationLink}
-              onClick={this.handleOpen.bind(this)}>
-                Want to donate another quantity?
-            </span>
+            {customDonationLink}
           </CardActions>
         </Card>
         <Popover

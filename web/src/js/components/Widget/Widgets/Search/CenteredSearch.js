@@ -33,10 +33,7 @@ class CenteredSearch extends React.Component {
   }
 
   executeSearch () {
-    const { widget } = this.props
-    const data = JSON.parse(widget.data)
-    const engine = data.engine
-
+    const engine = this.state.config.engine || 'Google'
     const searchApi = this.getSearchApi(engine)
     const searchTerm = this.searchInput.input.value
     window.open(searchApi + searchTerm, '_self')
@@ -54,6 +51,10 @@ class CenteredSearch extends React.Component {
     switch (engine) {
       case 'Google':
         return 'https://www.google.com/search?q='
+      case 'Bing':
+        return 'https://www.bing.com/search?q='
+      case 'Ecosia':
+        return 'https://www.ecosia.org/search?q='
       default:
         return 'https://www.google.com/search?q='
     }

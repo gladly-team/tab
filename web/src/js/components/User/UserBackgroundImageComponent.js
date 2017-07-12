@@ -1,10 +1,32 @@
 /* eslint-disable jsx-a11y/href-no-hash */
 import React from 'react'
 import PropTypes from 'prop-types'
+import localBkgStorageMgr from 'utils/local-bkg-settings'
 
 class UserBackgroundImage extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      user: localBkgStorageMgr.getLocalBkgSettings()
+    }
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (!this.props.user && nextProps.user) {
+      this.setState({
+        user: nextProps.user
+      })
+    }
+
+    if (nextProps.user) {
+      if (localBkgStorageMgr.shouldUpdateLocalBkgSettings(nextProps.user)) {
+        localBkgStorageMgr.setLocalBkgSettings(nextProps.user)
+      }
+    }
+  }
+
   render () {
-    const {user} = this.props
+    const user = this.state.user
 
     const defaultStyle = {
       opacity: 1,
@@ -46,7 +68,7 @@ class UserBackgroundImage extends React.Component {
 }
 
 UserBackgroundImage.propTypes = {
-  user: PropTypes.object.isRequired
+  user: PropTypes.object
 }
 
 export default UserBackgroundImage

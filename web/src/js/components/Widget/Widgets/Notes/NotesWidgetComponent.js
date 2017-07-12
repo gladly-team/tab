@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import moment from 'moment'
 
 import WidgetSharedSpace from 'general/WidgetSharedSpace'
 import {List} from 'general/List'
@@ -48,11 +49,14 @@ class NotesWidget extends React.Component {
     const newNote = {
       id: this.randomString(6),
       color: this.noteColors[colorIndex],
-      content: text
+      content: text,
+      created: moment.utc().format()
     }
 
     this.state.notes.splice(0, 0, newNote)
-    this.updateWidget(this.state.notes)
+    if (text && text.length) {
+      this.updateWidget(this.state.notes)
+    }
 
     this.setState({
       notes: this.state.notes
@@ -63,6 +67,14 @@ class NotesWidget extends React.Component {
     this.state.notes.splice(index, 1)
     this.updateWidget(this.state.notes)
 
+    this.setState({
+      notes: this.state.notes
+    })
+  }
+
+  updateStickyNote (content, index) {
+    this.state.notes[index].content = content
+    this.updateWidget(this.state.notes)
     this.setState({
       notes: this.state.notes
     })
@@ -88,7 +100,7 @@ class NotesWidget extends React.Component {
     const notesContainer = {
       overflowY: 'scroll',
       overflowX: 'hidden',
-      height: '70vh'
+      height: '60vh'
     }
 
     const mainContainer = {
@@ -101,6 +113,7 @@ class NotesWidget extends React.Component {
       containerStyle={sharedSpaceStyle}>
       <div style={mainContainer}>
         <AddNoteForm
+          addForm={false}
           addNote={this.addNewNote.bind(this)} />
         <List
           containerStyle={notesContainer}>
@@ -110,6 +123,7 @@ class NotesWidget extends React.Component {
                 key={note.id}
                 index={index}
                 removeStickyNote={this.removeStickyNote.bind(this)}
+                onNoteUpdated={this.updateStickyNote.bind(this)}
                 note={note} />
             )
           })}

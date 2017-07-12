@@ -4,8 +4,8 @@ import { IndexRoute, Route, Redirect } from 'react-router'
 import BaseContainer from 'general/BaseContainer'
 import DownloadApp from 'general/DownloadApp'
 
-import AppView from '../components/App/AppView'
-import DashboardView from '../components/Dashboard/DashboardView'
+import App from '../components/App/App'
+import Dashboard from '../components/Dashboard/DashboardComponent'
 
 import Authentication from '../components/Authentication/Authentication'
 import PasswordRetrieve from '../components/Authentication/PasswordRetrieve'
@@ -24,8 +24,8 @@ export default (
       <Route path='login' component={Authentication} />
       <Route path='recovery' component={PasswordRetrieve} />
     </Route>
-    <Route path='tab' component={AppView}>
-      <IndexRoute component={DashboardView} />
+    <Route path='tab' component={App}>
+      <IndexRoute component={Dashboard} />
       <Route path='donate' component={DonateVcView} />
       <Route path='settings' component={SettingsView}>
         <IndexRoute component={WidgetsSettingsView} />
