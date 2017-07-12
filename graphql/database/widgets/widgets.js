@@ -157,6 +157,7 @@ var getAllWidgets = Async(function () {
     widgets[i].widgetId = widgets[i].id
     widgets[i].settings = JSON.stringify(widgets[i].settings)
   }
+  Widget.sorted(widgets)
   return widgets
 })
 
