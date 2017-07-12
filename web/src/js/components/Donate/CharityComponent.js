@@ -113,7 +113,7 @@ class Charity extends React.Component {
         fontSize: 11,
         color: appTheme.palette.accent1Color,
         cursor: 'pointer',
-        marginTop: 5,
+        marginTop: 5
       }
 
       customDonationLink = (<span
@@ -165,7 +165,7 @@ class Charity extends React.Component {
     const cardText = {
       height: 70,
       paddingTop: 0,
-      paddingBottom: 0,
+      paddingBottom: 0
     }
 
     var slider

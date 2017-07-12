@@ -1,7 +1,6 @@
 'use strict'
 
 var path = require('path')
-var paths = require('./paths')
 var webpack = require('webpack')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var ManifestPlugin = require('webpack-manifest-plugin')
