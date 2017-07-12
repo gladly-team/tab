@@ -37,6 +37,7 @@ test('fetch enabled user widgets with the widget information and serialized data
   const widgets = [
     {
       id: '7db4b390-02bb-4958-b4bc-a5ba66939579',
+      position: 1,
       name: 'Clock',
       type: 'clock',
       icon: null
