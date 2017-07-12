@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/href-no-hash */
 import React from 'react'
 import VcUser from '../User/VcUserView'
+import MoneyRaised from '../MoneyRaised/MoneyRaisedView'
 import UserBackgroundImage from '../User/UserBackgroundImageView'
 import WidgetsView from '../Widget/WidgetsView'
 import InviteFriend from '../InviteFriend/InviteFriendView'
@@ -93,6 +94,7 @@ class Dashboard extends React.Component {
           <UserBackgroundImage />
           <div style={content}>
             <VcUser />
+            <MoneyRaised />
           </div>
           <WidgetsView />
           <div style={actioBtnContainer}>

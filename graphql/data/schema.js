@@ -76,6 +76,12 @@ import {
   getBackgroundImages
 } from '../database/backgroundImages/backgroundImage'
 
+import {
+  Globals,
+  getMoneyRaised,
+  getDollarsPerDayRate
+} from '../database/globals/globals'
+
 const staticRoot = config.S3_ENDPOINT
 
 class App {
@@ -331,6 +337,18 @@ const appType = new GraphQLObjectType({
   description: 'Global app fields',
   fields: () => ({
     id: globalIdField('App'),
+    moneyRaised: {
+      type: GraphQLFloat,
+      resolve: () => {
+        return getMoneyRaised()
+      }
+    },
+    dollarsPerDayRate: {
+      type: GraphQLFloat,
+      resolve: () => {
+        return getDollarsPerDayRate()
+      }
+    },
     widgets: {
       type: widgetConnection,
       description: 'All the widgets',
