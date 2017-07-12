@@ -1,9 +1,11 @@
 'use strict'
 
 var path = require('path')
+var paths = require('./paths')
 var webpack = require('webpack')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var ManifestPlugin = require('webpack-manifest-plugin')
+var FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 // Load environment variables from .env file. Suppress warnings using silent
@@ -198,6 +200,7 @@ module.exports = {
     // new InterpolateHtmlPlugin(env.raw),
     // Generates an `index.html` file with the <script> injected.
     new HtmlWebpackPlugin({
+      title: 'Tab for a Cause',
       inject: false,
       template: paths.appHtml,
       // https://github.com/jantimon/html-webpack-plugin/issues/481#issuecomment-262414169
@@ -228,6 +231,7 @@ module.exports = {
       },
       tabAdsEnabled: process.env.ADS_ENABLED === 'true'
     }),
+    new FaviconsWebpackPlugin(paths.appLogo),
     // Makes some environment variables available to the JS code, for example:
     // if (process.env.NODE_ENV === 'production') { ... }. See `./env.js`.
     // It is absolutely essential that NODE_ENV was set to production here.

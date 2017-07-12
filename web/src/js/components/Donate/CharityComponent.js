@@ -112,7 +112,8 @@ class Charity extends React.Component {
       const customDonationLinkStyle = {
         fontSize: 11,
         color: appTheme.palette.accent1Color,
-        cursor: 'pointer'
+        cursor: 'pointer',
+        marginTop: 5,
       }
 
       customDonationLink = (<span
@@ -153,11 +154,18 @@ class Charity extends React.Component {
     }
 
     const cardTitle = {
-      height: 70
+      style: {
+        height: 70
+      },
+      title: {
+        lineHeight: '100%'
+      }
     }
 
     const cardText = {
-      height: 70
+      height: 70,
+      paddingTop: 0,
+      paddingBottom: 0,
     }
 
     var slider
@@ -198,7 +206,8 @@ class Charity extends React.Component {
               onClick={this.openCharityWebsite.bind(this)} />
           </CardMedia>
           <CardTitle
-            style={cardTitle}
+            titleStyle={cardTitle.title}
+            style={cardTitle.style}
             title={charity.name}
             subtitle={charity.category} />
           <CardText
@@ -212,7 +221,6 @@ class Charity extends React.Component {
               disabled={this.state.donateSlider <= 0}
               onClick={this.donateHearts.bind(this)} />
 
-            <br />
             {customDonationLink}
           </CardActions>
         </Card>

@@ -18,7 +18,7 @@ var getClientEnvironment = require('./env')
 var paths = require('./paths')
 
 const htmlTemplate = new HtmlWebpackPlugin({
-  title: 'Tab for a cause 2017',
+  title: 'Tab for a Cause',
   template: paths.appHtml,
   // https://github.com/jantimon/html-webpack-plugin/issues/481#issuecomment-262414169
   chunks: ['vendor', 'ads', 'app'],
