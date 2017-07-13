@@ -5,27 +5,9 @@ class VcUser extends Component {
   render () {
     const { user } = this.props
 
-    const container = {
-      textAlign: 'center',
-      position: 'absolute',
-      top: 10,
-      right: 10
-    }
-
     const progressContainer = {
       display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-between',
-      alignItems: 'center'
-    }
-
-    const currentVc = {
-      color: 'white',
-      fontSize: '2em',
-      fontWeight: 'normal',
-      fontFamily: "'Helvetica Neue', Roboto, 'Segoe UI', Calibri, sans-serif",
-      marginTop: 10,
-      marginBottom: 10
+      justifyContent: 'space-around'
     }
 
     const text = {
@@ -37,11 +19,9 @@ class VcUser extends Component {
     }
 
     return (
-      <div style={container}>
-        <div style={progressContainer}>
-          <h1 style={currentVc}>{user.vcCurrent} <i className='fa fa-heart-o' /></h1>
-          <div style={text}>Level {user.level} Tabber</div>
-        </div>
+      <div style={progressContainer}>
+        <div style={text}>{user.vcCurrent} <i className='fa fa-heart-o' /></div>
+        <div style={text}>Level {user.level} Tabber</div>
       </div>
     )
   }

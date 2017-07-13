@@ -42,7 +42,7 @@ class InviteFriend extends React.Component {
       <div>
         <IconButton
           tooltip='Invite Friend'
-          tooltipPosition='top-center'
+          tooltipPosition='top-left'
           onTouchTap={this.handleTouchTap.bind(this)}>
           <FontIcon
             color={grey300}

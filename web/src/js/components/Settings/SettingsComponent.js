@@ -12,6 +12,8 @@ import FlatButton from 'material-ui/FlatButton'
 
 import { logoutUser } from '../../utils/cognito-auth'
 
+import appTheme from 'theme/default'
+
 class Settings extends React.Component {
   constructor (props) {
     super(props)
@@ -85,14 +87,21 @@ class Settings extends React.Component {
       fontWeight: (this.state.selection === 'background') ? 'bold' : 'normal'
     })
 
+    const logoutContainer = {
+      position: 'absolute',
+      bottom: 20,
+      left: 60
+    }
+
     const logoutBtn = (
       <FlatButton
         id={'app-signout-btn'}
         onClick={this.logout.bind(this)}
         label='Sign Out'
         labelPosition='before'
+        style={{color: appTheme.palette.accent1Color}}
         icon={<FontIcon
-          color={'#FFF'}
+          color={appTheme.palette.accent1Color}
           className='fa fa-sign-out' />} />
     )
 
@@ -105,8 +114,7 @@ class Settings extends React.Component {
           <AppBar
             title='Settings'
             iconClassNameLeft='fa fa-arrow-left'
-            onLeftIconButtonTouchTap={this.goToHome.bind(this)}
-            iconElementRight={logoutBtn} />
+            onLeftIconButtonTouchTap={this.goToHome.bind(this)} />
           <Drawer>
             <AppBar
               title='Settings'
@@ -120,6 +128,9 @@ class Settings extends React.Component {
             <MenuItem
               style={background}
               onClick={this.openSettingsFor.bind(this, 'background')}>Background</MenuItem>
+            <div style={logoutContainer}>
+              {logoutBtn}
+            </div>
           </Drawer>
           <div style={container}>
             {this.props.children}
