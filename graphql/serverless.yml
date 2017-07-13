@@ -9,6 +9,12 @@ provider:
   profile: tab-sls
   stage: ${env:SLS_STAGE, self:custom.stageDefault}
   iamRoleStatements:
+    # Rules for fine-grained DynamoDB access:
+    #   https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/specifying-conditions.html
+    # See rules based on Cognito user ID:
+    #   https://stackoverflow.com/a/25888309
+    # May want to reference DynamoDB table ARNs via variables:
+    #   https://serverless.com/framework/docs/providers/aws/guide/variables#reference-cloudformation-outputs
     - Effect: "Allow"
       Action:
         - "dynamodb:BatchGetItem"

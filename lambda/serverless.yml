@@ -64,6 +64,8 @@ functions:
           path: hearts/
           method: get
           cors: true
+          # Authorizer docs:
+          # https://serverless.com/framework/docs/providers/aws/events/apigateway/#http-endpoints-with-custom-authorizers
           ## TODO: reenable later
           # authorizer:
           #   name: authorizer_${opt:stage, self:provider.stage}

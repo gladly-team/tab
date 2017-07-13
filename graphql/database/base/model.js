@@ -2,6 +2,9 @@ import uuid from 'uuid/v4'
 import database from '../database'
 import { NotImplementedException } from '../../utils/exceptions'
 
+// Consider an authorization layer here. This could be additional
+// security on top of AWS IAM Policy restrictions.
+// See: http://graphql.org/learn/authorization/
 /*
  * Class representing a BaseModel.
  * BaseModel is the parent class of all our Model classes.
