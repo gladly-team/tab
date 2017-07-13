@@ -104,8 +104,8 @@
     "relay:watch": "nodemon --watch src/ --watch data/schema.graphql --ignore **/__generated__/**/* --exec \"yarn run relay\"",
     "test": "npm-run-all -s test:lint test:run test:codecov",
     "test-e2e": "npm-run-all -s test:lint test-e2e:run test:codecov",
-    "test-e2e:run": "jest --config=./e2e_jest_config.json --coverage",
-    "test:run": "jest --env=jsdom --coverage",
+    "test-e2e:run": "jest --testPathPattern=e2e-tests --coverage",
+    "test:run": "jest --env=jsdom --testPathIgnorePatterns=e2e-tests --coverage",
     "test:codecov": "if-env LOG_TEST_COVERAGE=true && codecov || echo 'Skipping test coverage logging.'",
     "test:watch": "jest --env=jsdom --watch",
     "build:langs": "node scripts/translate.js",
@@ -126,7 +126,7 @@
       "<rootDir>/config/polyfills.js"
     ],
     "testPathIgnorePatterns": [
-      "<rootDir>[/\\\\](build|docs|node_modules|e2e-tests)[/\\\\]"
+      "<rootDir>[/\\\\](build|docs|node_modules)[/\\\\]"
     ],
     "testEnvironment": "node",
     "testURL": "http://localhost",
