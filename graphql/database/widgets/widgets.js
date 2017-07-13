@@ -70,7 +70,8 @@ var getUserWidgets = Async(function (userId, enabled) {
 
   if (!keys.length) { return [] }
 
-  const widgets = Await(Widget.getBatch(keys))
+  var widgets = Await(Widget.getBatch(keys))
+  Widget.sorted(widgets)
 
   const result = []
   var userWidget
@@ -156,6 +157,7 @@ var getAllWidgets = Async(function () {
     widgets[i].widgetId = widgets[i].id
     widgets[i].settings = JSON.stringify(widgets[i].settings)
   }
+  Widget.sorted(widgets)
   return widgets
 })
 

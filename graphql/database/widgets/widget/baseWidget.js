@@ -15,6 +15,7 @@ class Widget extends BaseModel {
   constructor (id) {
     super(id)
 
+    this.position = 0
     this.name = ''
     this.type = ''
     this.icon = null
@@ -35,11 +36,20 @@ class Widget extends BaseModel {
    */
   static getFields () {
     return [
+      'position',
       'name',
       'type',
       'icon',
       'settings'
     ]
+  }
+
+  static sorted (widgets) {
+    widgets.sort((widget1, widget2) => {
+      if (!widget1.position) return 1
+      if (!widget2.position) return -1
+      return (widget1.position > widget2.position) ? 1 : ((widget2.position > widget1.position) ? -1 : 0)
+    })
   }
 }
 
@@ -63,9 +73,10 @@ function getWidget (id) {
  */
 function getWidgets () {
   var params = {
-    ProjectionExpression: '#id, #name, #type, #icon, #settings',
+    ProjectionExpression: '#id, #position, #name, #type, #icon, #settings',
     ExpressionAttributeNames: {
       '#id': 'id',
+      '#position': 'position',
       '#name': 'name',
       '#type': 'type',
       '#icon': 'icon',
