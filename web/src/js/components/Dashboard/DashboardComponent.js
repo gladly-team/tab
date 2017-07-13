@@ -7,7 +7,7 @@ import WidgetsView from '../Widget/WidgetsView'
 import InviteFriend from '../InviteFriend/InviteFriendView'
 import Ad from '../Ad/Ad'
 
-import { FormattedMessage } from 'react-intl'
+// import { FormattedMessage } from 'react-intl'
 import { goToSettings, goToDonate } from 'navigation/navigation'
 
 import FadeInAnimation from 'general/FadeInAnimation'
@@ -62,28 +62,21 @@ class Dashboard extends React.Component {
       backgroundColor: 'rgba(0,0,0,.2)'
     }
 
-    const actioBtnContainer = {
-      position: 'absolute',
-      bottom: 10,
-      display: 'flex',
-      justifyContent: 'space-around'
-    }
-
-    const quote = {
-      position: 'absolute',
-      bottom: 10,
-      color: 'white',
-      fontSize: '1em',
-      fontWeight: 'normal',
-      fontFamily: "'Comic Sans MS', cursive, sans-serif",
-      width: '100%',
-      textAlign: 'center',
-      marginLeft: 'auto',
-      marginRight: 'auto'
-    }
-
-    const paddingDiv = {
-      width: 20
+    const topRightItems = {
+      main: {
+        position: 'absolute',
+        top: 10,
+        right: 0,
+        display: 'flex',
+        zIndex: 2147483647
+      },
+      leftContainer: {
+        padding: 5
+      },
+      rightContainer: {
+        display: 'flex',
+        flexDirection: 'column'
+      }
     }
 
     return (
@@ -93,38 +86,36 @@ class Dashboard extends React.Component {
           key={'dashboard-key'}>
           <UserBackgroundImage />
           <div style={content}>
-            <VcUser />
-            <MoneyRaised />
+            <div style={topRightItems.main}>
+              <div style={topRightItems.leftContainer}>
+                <MoneyRaised />
+                <VcUser />
+              </div>
+              <div style={topRightItems.rightContainer}>
+                <IconButton
+                  tooltip='Settings'
+                  tooltipPosition='bottom-left'
+                  onClick={this._goToSettings.bind(this)}>
+                  <FontIcon
+                    color={grey300}
+                    hoverColor={'#FFF'}
+                    className='fa fa-cog fa-lg' />
+                </IconButton>
+
+                <IconButton
+                  tooltip='Donate'
+                  tooltipPosition='top-left'
+                  onClick={this._goToDonate.bind(this)}>
+                  <FontIcon
+                    color={grey300}
+                    hoverColor={'#FFF'}
+                    className='fa fa-heart fa-lg' />
+                </IconButton>
+                <InviteFriend />
+              </div>
+            </div>
           </div>
           <WidgetsView />
-          <div style={actioBtnContainer}>
-            <div style={paddingDiv} />
-            <IconButton
-              tooltip='Settings'
-              tooltipPosition='top-center'
-              onClick={this._goToSettings.bind(this)}>
-              <FontIcon
-                color={grey300}
-                hoverColor={'#FFF'}
-                className='fa fa-cog fa-lg' />
-            </IconButton>
-
-            <IconButton
-              tooltip='Donate'
-              tooltipPosition='top-center'
-              onClick={this._goToDonate.bind(this)}>
-              <FontIcon
-                color={grey300}
-                hoverColor={'#FFF'}
-                className='fa fa-heart fa-lg' />
-            </IconButton>
-            <InviteFriend />
-          </div>
-          <h1 style={quote}>
-            <FormattedMessage
-              id={'app.quote'}
-              defaultMessage={'“Surf the web, save the world.”'} />
-          </h1>
           <Ad
             adId='div-gpt-ad-1464385742501-0'
             adSlotId='/43865596/HBTR'
@@ -152,5 +143,11 @@ class Dashboard extends React.Component {
     )
   }
 }
+
+// <h1>
+//   <FormattedMessage
+//     id={'app.quote'}
+//     defaultMessage={'“Surf the web, save the world.”'} />
+// </h1>
 
 export default Dashboard

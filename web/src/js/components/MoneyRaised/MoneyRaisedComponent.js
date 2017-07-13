@@ -1,13 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { commaFormatted, currencyFormatted } from 'utils/utils'
+import MoneyRaisedPopover from './MoneyRaisedPopover'
 
 class MoneyRaised extends React.Component {
   constructor (props) {
     super(props)
     this.timer = 0
     this.state = {
-      amountDonated: 0
+      amountDonated: 0,
+      open: false
     }
   }
 
@@ -52,33 +54,50 @@ class MoneyRaised extends React.Component {
     clearInterval(this.timer)
   }
 
+  handleTouchTap (event) {
+    // This prevents ghost click.
+    event.preventDefault()
+    console.log('Enters')
+    this.setState({
+      open: true,
+      anchorEl: event.currentTarget
+    })
+  }
+
+  handlePopoverRequestClose () {
+    this.setState({
+      open: false
+    })
+  }
+
   render () {
     if (!this.props.app) { return null }
 
-    const { app } = this.props
-
     const container = {
-      textAlign: 'center',
-      position: 'absolute',
-      top: 100,
-      right: 20
+      textAlign: 'center'
     }
 
     const text = {
       color: 'white',
       fontSize: '2em',
       fontWeight: 'normal',
-      fontFamily: "'Helvetica Neue', Roboto, 'Segoe UI', Calibri, sans-serif",
-      marginTop: 10,
-      marginBottom: 10
+      fontFamily: "'Helvetica Neue', Roboto, 'Segoe UI', Calibri, sans-serif"
     }
 
     const moneyRaised = this.state.amountDonated
     var amountDonated = '$' + commaFormatted(currencyFormatted(moneyRaised))
 
     return (
-      <div style={container}>
-        <span style={text}>{amountDonated}</span>
+      <div
+        onMouseEnter={this.handleTouchTap.bind(this)}
+        onMouseLeave={this.handlePopoverRequestClose.bind(this)}
+        style={container}>
+        <span
+          style={text}>{amountDonated}</span>
+        <MoneyRaisedPopover
+          open={this.state.open}
+          anchorEl={this.state.anchorEl}
+          onRequestClose={this.handlePopoverRequestClose.bind(this)} />
       </div>
     )
   }
