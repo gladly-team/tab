@@ -7,7 +7,7 @@ class VcUser extends Component {
 
     const progressContainer = {
       display: 'flex',
-      justifyContent: 'space-around'
+      justifyContent: 'flex-end'
     }
 
     const text = {
@@ -20,8 +20,7 @@ class VcUser extends Component {
 
     return (
       <div style={progressContainer}>
-        <div style={text}>{user.vcCurrent} <i className='fa fa-heart-o' /></div>
-        <div style={text}>Level {user.level} Tabber</div>
+        <div style={text}>{user.vcCurrent} <i className='fa fa-heart-o' /> Level {user.level}</div>
       </div>
     )
   }

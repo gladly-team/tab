@@ -57,7 +57,6 @@ class MoneyRaised extends React.Component {
   handleTouchTap (event) {
     // This prevents ghost click.
     event.preventDefault()
-    console.log('Enters')
     this.setState({
       open: true,
       anchorEl: event.currentTarget
@@ -79,7 +78,7 @@ class MoneyRaised extends React.Component {
 
     const text = {
       color: 'white',
-      fontSize: '2.1em',
+      fontSize: '1.7em',
       fontWeight: 'normal',
       fontFamily: "'Helvetica Neue', Roboto, 'Segoe UI', Calibri, sans-serif"
     }
