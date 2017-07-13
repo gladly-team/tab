@@ -79,7 +79,7 @@ class MoneyRaised extends React.Component {
 
     const text = {
       color: 'white',
-      fontSize: '2em',
+      fontSize: '2.1em',
       fontWeight: 'normal',
       fontFamily: "'Helvetica Neue', Roboto, 'Segoe UI', Calibri, sans-serif"
     }

@@ -16,13 +16,16 @@ class Globals {
  */
 function getMoneyRaised () {
   const globals = new Globals()
+  const secsInDay = 60 * 60 * 24
 
   const totalRaised = globals.raised
   const datetimeOfLastEntry = globals.raisedUpdateTime
   const moneyRaisedRate = globals.dollarsPerDayRate
   const now = moment()
-  const diff = now.diff(datetimeOfLastEntry, 'days')
-  return totalRaised + (diff * moneyRaisedRate)
+  const diff = now.diff(datetimeOfLastEntry, 'seconds')
+  const secondsToDays = diff / secsInDay
+  const finalRaised = totalRaised + (secondsToDays * moneyRaisedRate)
+  return finalRaised.toFixed(2)
 }
 
 function getDollarsPerDayRate () {

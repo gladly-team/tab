@@ -65,7 +65,7 @@ class Dashboard extends React.Component {
     const topRightItems = {
       main: {
         position: 'absolute',
-        top: 10,
+        top: 20,
         right: 0,
         display: 'flex',
         zIndex: 2147483647
