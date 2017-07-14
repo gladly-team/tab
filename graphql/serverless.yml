@@ -56,3 +56,7 @@ functions:
           path: graphql/
           method: post
           cors: true
+          # Require user to be authenticated with AWS Cognito.
+          authorizer:
+            name: tab_auth_${self:provider.stage}
+            arn: ${env:COGNITO_IDENTITYPOOLID}
