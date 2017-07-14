@@ -1,13 +1,19 @@
+import config from '../../config'
 var AWS = require('aws-sdk')
 
-// Load environment variables from .env file.
-require('dotenv-extended').load()
+var dynamoDBEndpoint
+if (!config.DYNAMODB_ENDPOINT) {
+  dynamoDBEndpoint = 'http://localhost:8000'
+  console.warn(`Env var DYNAMODB_ENDPOINT is not set. Using default ${dynamoDBEndpoint}.`)
+} else {
+  dynamoDBEndpoint = config.DYNAMODB_ENDPOINT
+}
 
 AWS.config.update({
-  region: process.env.AWS_REGION,
-  endpoint: process.env.DYNAMODB_ENDPOINT,
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+  region: config.AWS_REGION || 'us-west-2',
+  endpoint: dynamoDBEndpoint,
+  accessKeyId: config.AWS_ACCESS_KEY_ID || 'fakeKey123',
+  secretAccessKey: config.AWS_SECRET_ACCESS_KEY || 'fakeSecretKey123'
 })
 
 module.exports = AWS
