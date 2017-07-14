@@ -44,7 +44,7 @@ export const tableFixtureFileNames = {
   charities: '',
   vcDonationLog: '',
   backgroundImages: '',
-  widgets: 'widgets.json',
+  widgets: 'Widgets.json',
   userWidgets: 'UserWidgets.json',
   referralDataLog: ''
 }
