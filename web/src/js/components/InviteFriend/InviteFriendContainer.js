@@ -8,7 +8,7 @@ import InviteFriend from './InviteFriendComponent'
 export default createFragmentContainer(InviteFriend, {
   user: graphql`
     fragment InviteFriendContainer_user on User {
-      userId
+      username
     }
   `
 })

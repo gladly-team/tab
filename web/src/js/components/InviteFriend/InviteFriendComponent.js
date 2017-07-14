@@ -36,7 +36,7 @@ class InviteFriend extends React.Component {
 
   render () {
     const { user } = this.props
-    const userId = user ? user.userId : ''
+    const username = user ? user.username : ''
 
     return (
       <div>
@@ -53,7 +53,7 @@ class InviteFriend extends React.Component {
         <InvitePopover
           open={this.state.open}
           anchorEl={this.state.anchorEl}
-          userId={userId}
+          username={username}
           onRequestClose={this.handleInvitePopoverRequestClose.bind(this)} />
       </div>
     )
