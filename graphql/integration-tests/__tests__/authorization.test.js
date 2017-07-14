@@ -1,12 +1,15 @@
 /* eslint-env jest */
 
-import { loadFixtureIntoTable } from '../utils/fixture-utils'
+import {
+    loadFixturesIntoTable,
+    deleteFixturesFromTable
+} from '../utils/fixture-utils'
 import fetchQuery from '../utils/fetch-graphql'
 
 describe('GraphQL authorization', () => {
   // TODO: actually use authorization
   test('it fetches the user when authorized', async () => {
-    loadFixtureIntoTable('Users.json', 'Users')
+    await loadFixturesIntoTable('Users.json', 'Users')
     const response = await fetchQuery(`
       query UserViewQuery(
         $userId: String!
@@ -20,5 +23,6 @@ describe('GraphQL authorization', () => {
       }
     )
     expect(response.data.user.username).toBe('susan')
+    await deleteFixturesFromTable('Users.json', 'Users', 'id')
   })
 })
