@@ -2,10 +2,16 @@
 import fs from 'fs'
 import path from 'path'
 
+import {
+  tableNames,
+  tableKeys,
+  tableFixtureFileNames
+} from './table-utils'
+
 import AWS from './aws-client'
 const docClient = new AWS.DynamoDB.DocumentClient()
 
-export const loadItemsIntoTable = async (items, tableName) => {
+const loadItemsIntoTable = async (items, tableName) => {
   const promises = []
   items.forEach(function (item) {
     const params = {
@@ -25,7 +31,7 @@ export const loadItemsIntoTable = async (items, tableName) => {
   return Promise.all(promises)
 }
 
-export const deleteItemsFromTable = async (items, tableName, hashKeyName, rangeKeyName) => {
+const deleteItemsFromTable = async (items, tableName, hashKeyName, rangeKeyName) => {
   const promises = []
   items.forEach(function (item) {
     const keyValues = {
@@ -51,18 +57,32 @@ export const deleteItemsFromTable = async (items, tableName, hashKeyName, rangeK
   return Promise.all(promises)
 }
 
-export const getItemsFromJsonFile = function (fileName) {
+const getItemsFromJsonFile = function (fileName) {
   const filePath = path.join(__dirname, '../fixtures/', fileName)
   const items = JSON.parse(fs.readFileSync(filePath), 'utf8')
   return items
 }
 
-export const loadFixturesIntoTable = async (fileName, tableName) => {
+const loadFixturesIntoTable = async (fileName, tableName) => {
   const items = getItemsFromJsonFile(fileName)
   return loadItemsIntoTable(items, tableName)
 }
 
-export const deleteFixturesFromTable = async (fileName, tableName, hashKeyName, rangeKeyName = null) => {
+const deleteFixturesFromTable = async (fileName, tableName, hashKeyName, rangeKeyName = null) => {
   const items = getItemsFromJsonFile(fileName)
   return deleteItemsFromTable(items, tableName, hashKeyName, rangeKeyName)
+}
+
+export const loadFixtures = async (tableNameRef) => {
+  const tableName = tableNames[tableNameRef]
+  const fixtureFileName = tableFixtureFileNames[tableNameRef]
+  return loadFixturesIntoTable(fixtureFileName, tableName)
+}
+
+export const deleteFixtures = async (tableNameRef) => {
+  const tableName = tableNames[tableNameRef]
+  const fixtureFileName = tableFixtureFileNames[tableNameRef]
+  const hashKeyName = tableKeys[tableNameRef]['hash']
+  const rangeKeyName = tableKeys[tableNameRef]['range']
+  return deleteFixturesFromTable(fixtureFileName, tableName, hashKeyName, rangeKeyName)
 }

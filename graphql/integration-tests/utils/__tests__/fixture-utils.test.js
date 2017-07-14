@@ -1,21 +1,21 @@
 /* eslint-env jest */
 
 import {
-    loadFixturesIntoTable,
-    deleteFixturesFromTable
+    loadFixtures,
+    deleteFixtures
 } from '../fixture-utils'
 import fetchQuery from '../fetch-graphql'
 
 beforeEach(async () => {
-  await loadFixturesIntoTable('Users.json', 'Users')
-  await loadFixturesIntoTable('Widgets.json', 'Widgets')
-  await loadFixturesIntoTable('UserWidgets.json', 'UserWidgets')
+  await loadFixtures('users')
+  await loadFixtures('widgets')
+  await loadFixtures('userWidgets')
 })
 
 afterEach(async () => {
-  await deleteFixturesFromTable('Users.json', 'Users', 'id')
-  await deleteFixturesFromTable('Widgets.json', 'Widgets', 'id')
-  await deleteFixturesFromTable('UserWidgets.json', 'UserWidgets', 'userId', 'widgetId')
+  await deleteFixtures('users')
+  await deleteFixtures('widgets')
+  await deleteFixtures('userWidgets')
 })
 
 describe('Fixture utils', () => {
@@ -30,7 +30,7 @@ describe('Fixture utils', () => {
         }
       }
     `
-    await deleteFixturesFromTable('Users.json', 'Users', 'id')
+    await deleteFixtures('users')
 
     // User should not exist.
     const responseOne = await fetchQuery(query, {
@@ -39,14 +39,14 @@ describe('Fixture utils', () => {
     expect(responseOne.data.user).toBeNull()
 
     // Load user fixtures. User should exist.
-    await loadFixturesIntoTable('Users.json', 'Users')
+    await loadFixtures('users')
     const responseTwo = await fetchQuery(query, {
       userId: `${userId}`
     })
     expect(responseTwo.data.user.username).toBe('susan')
 
     // Delete fixtures. User should not exist again.
-    await deleteFixturesFromTable('Users.json', 'Users', 'id')
+    await deleteFixtures('users')
     const responseThree = await fetchQuery(query, {
       userId: `${userId}`
     })
@@ -90,7 +90,7 @@ describe('Fixture utils', () => {
         type
       }
     `
-    await deleteFixturesFromTable('UserWidgets.json', 'UserWidgets', 'userId', 'widgetId')
+    await deleteFixtures('userWidgets')
 
     // UserWidget should not exist.
     const responseOne = await fetchQuery(query, {
@@ -99,14 +99,14 @@ describe('Fixture utils', () => {
     expect(responseOne.data.user.widgets.edges.length).toBe(0)
 
     // Load UserWidget fixtures.
-    await loadFixturesIntoTable('UserWidgets.json', 'UserWidgets')
+    await loadFixtures('userWidgets')
     const responseTwo = await fetchQuery(query, {
       userId: `${userId}`
     })
     expect(responseTwo.data.user.widgets.edges.length).toBe(1)
 
     // Delete fixtures. User should not exist again.
-    await deleteFixturesFromTable('UserWidgets.json', 'UserWidgets', 'userId', 'widgetId')
+    await deleteFixtures('userWidgets')
     const responseThree = await fetchQuery(query, {
       userId: `${userId}`
     })
