@@ -146,6 +146,12 @@ function resendConfirmation (email, onSuccess, onFailure) {
   })
 }
 
+function getUserIdToken () {
+  const cognitoUser = userPool.getCurrentUser()
+  console.log(cognitoUser)
+  return cognitoUser.getIdToken().getJwtToken()
+}
+
 function getCurrentUserForDev (getUserSub) {
   getUserSub({
     sub: process.env.DEV_AUTHENTICATED_USER
@@ -226,13 +232,14 @@ function confirmPassword (email, verificationCode, newPassword, onSuccess, onFai
 }
 
 export {
-login,
-signup,
-confirmRegistration,
-resendConfirmation,
-getCurrentUser,
-logoutUser,
-checkUserExist,
+  login,
+  signup,
+  confirmRegistration,
+  resendConfirmation,
+  getCurrentUser,
+  getUserIdToken,
+  logoutUser,
+  checkUserExist,
   getOrCreate,
   forgotPassword,
   confirmPassword

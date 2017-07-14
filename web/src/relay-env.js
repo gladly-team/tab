@@ -5,6 +5,7 @@ const {
   RecordSource,
   Store
 } = require('relay-runtime')
+const getUserIdToken = require('./js/utils/cognito-auth').getUserIdToken
 
 // Define a function that fetches the results of an operation (query/mutation/etc)
 // and returns its results as a Promise:
@@ -14,12 +15,20 @@ function fetchQuery (
   cacheConfig,
   uploadables
 ) {
+  const headers = {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  }
+
+  // Add Authorization header if user has a token.
+  const userIdToken = getUserIdToken()
+  if (userIdToken) {
+    headers['Authorization'] = userIdToken
+  }
+
   return fetch(process.env.GRAPHQL_ENDPOINT, {
     method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }, // Add authentication and other headers here
+    headers: headers,
     body: JSON.stringify({
       query: operation.text, // GraphQL text from input
       variables
