@@ -25,14 +25,18 @@ export const loadItemsIntoTable = async (items, tableName) => {
   return Promise.all(promises)
 }
 
-export const deleteItemsFromTable = async (items, tableName, keyName) => {
+export const deleteItemsFromTable = async (items, tableName, hashKeyName, rangeKeyName) => {
   const promises = []
   items.forEach(function (item) {
+    const keyValues = {
+      [hashKeyName]: item[hashKeyName]
+    }
+    if (rangeKeyName) {
+      keyValues[rangeKeyName] = item[rangeKeyName]
+    }
     const params = {
       TableName: tableName,
-      Key: {
-        [keyName]: item[keyName]
-      }
+      Key: keyValues
     }
 
     promises.push(docClient.delete(params).promise()
@@ -58,7 +62,7 @@ export const loadFixturesIntoTable = async (fileName, tableName) => {
   return loadItemsIntoTable(items, tableName)
 }
 
-export const deleteFixturesFromTable = async (fileName, tableName, keyName) => {
+export const deleteFixturesFromTable = async (fileName, tableName, hashKeyName, rangeKeyName = null) => {
   const items = getItemsFromJsonFile(fileName)
-  return deleteItemsFromTable(items, tableName, keyName)
+  return deleteItemsFromTable(items, tableName, hashKeyName, rangeKeyName)
 }

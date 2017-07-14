@@ -1,0 +1,16 @@
+[
+  {
+    "userId": "123abc45-12ab-12ab-12ab-123abc456def",
+    "widgetId": "asdfghjk-asdf-asdf-asdf-asdfghjklzxc",
+    "enabled": true,
+    "visible": true,
+    "data": {
+      "bookmarks": [
+        {
+          "name": "Google",
+          "link": "https://www.google.com/" 
+        }
+      ]
+    }
+  }
+]
