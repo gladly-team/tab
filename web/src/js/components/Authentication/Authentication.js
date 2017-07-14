@@ -1,22 +1,21 @@
 import React from 'react'
-import EmailForm from './EmailForm'
-import LoginForm from './LoginForm'
+import SignUp from './SignUp'
+import SignIn from './SignIn'
 import { getCurrentUser, login } from '../../utils/cognito-auth'
 import { goToDashboard } from 'navigation/navigation'
 import SlideFromRightAnimation from 'general/SlideFromRightAnimation'
 import SlideFromLeftAnimation from 'general/SlideFromLeftAnimation'
-
 import { getUserCredentials } from '../../utils/tfac-mgr'
-
 import appTheme from 'theme/default'
+import FlatButton from 'material-ui/FlatButton'
+import logoHeader from 'assets/logos/tfc-title-white.png'
 
 class Authentication extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      userId: null,
-      email: null,
-      login: false
+      view: 'signIn',
+      enter: true
     }
   }
 
@@ -43,60 +42,87 @@ class Authentication extends React.Component {
       })
   }
 
-  onEmailSet (email) {
+  navigateTo (view) {
     this.setState({
-      email: email,
-      login: true
+      view: this.state.view,
+      enter: false
     })
-  }
-
-  onLoginBack () {
-    this.setState({
-      login: false
-    })
+    setTimeout(() => {
+      this.setState({
+        view: view,
+        enter: true
+      })
+    }, 500)
   }
 
   render () {
-    var backgroundColor = appTheme.palette.primary1Color
-    var currentState = (
-      <EmailForm
-        onResponse={this.onEmailSet.bind(this)} />)
-
-    if (this.state.email && !this.state.login) {
-      backgroundColor = '#7C4DFF'
+    var backgroundColor = '#7C4DFF'
+    var goToViewName = 'REGISTER'
+    var goToView = 'signUp'
+    var currentState
+    if (this.state.view === 'signIn') {
+      goToViewName = 'REGISTER'
+      goToView = 'signUp'
       currentState = (
         <SlideFromLeftAnimation
           enterAnimationTimeout={0}
-          enter>
-          <EmailForm
-            email={this.state.email}
-            onResponse={this.onEmailSet.bind(this)} />
+          leaveAnimationTimeout={0}
+          enter={this.state.enter}>
+          <SignIn />
         </SlideFromLeftAnimation>)
     }
 
-    if (this.state.email && this.state.login) {
-      backgroundColor = appTheme.palette.primary1Color
-
+    if (this.state.view === 'signUp') {
+      goToViewName = 'LOGIN'
+      goToView = 'signIn'
       currentState = (
         <SlideFromRightAnimation
           enterAnimationTimeout={0}
-          enter>
-          <LoginForm
-            onBack={this.onLoginBack.bind(this)}
-            email={this.state.email} />
+          leaveAnimationTimeout={0}
+          enter={this.state.enter}>
+          <SignUp />
         </SlideFromRightAnimation>)
     }
 
     const root = {
       height: '100%',
       width: '100%',
-      backgroundColor: backgroundColor
+      backgroundColor: backgroundColor,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      flexDirection: 'column'
+    }
+
+    const header = {
+      position: 'absolute',
+      top: 100
+    }
+
+    const main = {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center'
+    }
+
+    const navigation = {
+      position: 'absolute',
+      top: 10,
+      right: 10,
+      color: appTheme.palette.alternateTextColor
     }
 
     return (
       <div
         style={root}>
-        {currentState}
+        <img style={header} src={logoHeader} />
+        <FlatButton
+          style={navigation}
+          label={goToViewName}
+          onClick={this.navigateTo.bind(this, goToView)} />
+        <div style={main}>
+          {currentState}
+        </div>
       </div>
     )
   }

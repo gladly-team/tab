@@ -16,6 +16,11 @@ const referralParams = {
 // 'utm_content'
 // 'tfac_id'
 
+function validateUsername (username) {
+  var re = /^[a-zA-Z0-9]+$/
+  return re.test(username)
+}
+
 function validateEmail (email) {
   var re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
   return re.test(email)
@@ -133,5 +138,6 @@ export {
  getReferralData,
  setReferralData,
  commaFormatted,
- currencyFormatted
+ currencyFormatted,
+ validateUsername
 }
