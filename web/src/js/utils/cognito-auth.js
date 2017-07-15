@@ -146,10 +146,21 @@ function resendConfirmation (email, onSuccess, onFailure) {
   })
 }
 
-function getUserIdToken () {
-  const cognitoUser = userPool.getCurrentUser()
-  console.log(cognitoUser)
-  return cognitoUser.getIdToken().getJwtToken()
+const getUserIdToken = () => {
+  return new Promise((resolve, reject) => {
+    const cognitoUser = userPool.getCurrentUser()
+    if (cognitoUser != null) {
+      cognitoUser.getSession((err, session) => {
+        if (err) {
+          resolve(null)
+        }
+        const idToken = session.getIdToken().getJwtToken()
+        resolve(idToken)
+      })
+    } else {
+      resolve(null)
+    }
+  })
 }
 
 function getCurrentUserForDev (getUserSub) {

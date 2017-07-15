@@ -5,36 +5,38 @@ const {
   RecordSource,
   Store
 } = require('relay-runtime')
-const getUserIdToken = require('./js/utils/cognito-auth').getUserIdToken
+const cognitoAuth = require('./js/utils/cognito-auth')
 
-// Define a function that fetches the results of an operation (query/mutation/etc)
-// and returns its results as a Promise:
+// Fetches the results of an operation (query/mutation/etc)
+// and return its results as a Promise.
 function fetchQuery (
   operation,
   variables,
   cacheConfig,
   uploadables
 ) {
-  const headers = {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json'
-  }
+  return cognitoAuth.getUserIdToken().then((userIdToken) => {
+    // Add Authorization header if user has a token.
+    const headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+    if (userIdToken) {
+      headers['Authorization'] = userIdToken
+    }
 
-  // Add Authorization header if user has a token.
-  const userIdToken = getUserIdToken()
-  if (userIdToken) {
-    headers['Authorization'] = userIdToken
-  }
-
-  return fetch(process.env.GRAPHQL_ENDPOINT, {
-    method: 'POST',
-    headers: headers,
-    body: JSON.stringify({
-      query: operation.text, // GraphQL text from input
-      variables
+    return fetch(process.env.GRAPHQL_ENDPOINT, {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify({
+        query: operation.text, // GraphQL text from input
+        variables
+      })
+    }).then(response => {
+      return response.json()
     })
-  }).then(response => {
-    return response.json()
+  }).catch((err) => {
+    console.log(err)
   })
 }
 
