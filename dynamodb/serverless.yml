@@ -25,6 +25,18 @@ resources:
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
+          - AttributeName: username
+            AttributeType: S
+        GlobalSecondaryIndexes:
+          - IndexName: UsersByUsername
+            KeySchema:
+              - AttributeName: username
+                KeyType: HASH
+            Projection:
+              - ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
