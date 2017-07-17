@@ -96,3 +96,20 @@ export const createUserAndLogIn = async (email, username, password) => {
   await createUser(email, username, password)
   return logIn(username, password)
 }
+
+function randomString (length) {
+  const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  var result = ''
+  for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)]
+  return result
+}
+
+export const getMockUserInfo = () => {
+  const random = randomString(6)
+  const username = `automatedtest+${random}`
+  return {
+    username: username,
+    email: `${username}@gladly.io`,
+    password: 'BadPassword123'
+  }
+}
