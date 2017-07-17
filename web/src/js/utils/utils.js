@@ -4,7 +4,7 @@ import localStorageMgr from './localstorage-mgr'
 
 const referralParams = {
   REFERRING_USER: {
-    urlKey: 'r',
+    urlKey: 'u',
     key: 'referringUser'
   }
 }
