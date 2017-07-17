@@ -1,4 +1,5 @@
 
+import { find } from 'lodash/collection'
 import config from '../../config'
 
 const AWS = require('aws-sdk')
@@ -11,17 +12,6 @@ AWS.config.update({
 })
 const cognitoIDP = new AWS.CognitoIdentityServiceProvider()
 
-export const listUsers = async () => {
-  const params = {
-    UserPoolId: config.COGNITO_USERPOOLID,
-    AttributesToGet: [
-      'email'
-    ],
-    Limit: 10
-  }
-  return cognitoIDP.listUsers(params).promise()
-}
-
 export const getUser = async (username) => {
   const params = {
     UserPoolId: config.COGNITO_USERPOOLID,
@@ -30,11 +20,11 @@ export const getUser = async (username) => {
   return cognitoIDP.adminGetUser(params)
     .promise()
     .catch((err) => {
-      throw new Error('Could not get user.', err)
+      console.log('Could not get user.\n', err)
     })
 }
 
-export const createUser = async (email, username, password) => {
+const createUser = async (email, username, password) => {
   const params = {
     UserPoolId: config.COGNITO_USERPOOLID,
     Username: username,
@@ -49,11 +39,11 @@ export const createUser = async (email, username, password) => {
   return cognitoIDP.adminCreateUser(params)
     .promise()
     .catch((err) => {
-      throw new Error('Could not create user.', err)
+      console.log('Could not create user.\n', err)
     })
 }
 
-export const logIn = async (username, password) => {
+const logIn = async (username, password) => {
   // Admin auth. See:
   // https://docs.aws.amazon.com/cognito/latest/developerguide/amazon-cognito-user-pools-authentication-flow.html#amazon-cognito-user-pools-admin-authentication-flow
   const initiateAuthParams = {
@@ -69,7 +59,7 @@ export const logIn = async (username, password) => {
     .adminInitiateAuth(initiateAuthParams)
     .promise()
     .catch((err) => {
-      throw new Error('Could not initiate auth.', err)
+      console.log('Could not initiate auth.\n', err)
     })
   const userIdNonAlias = authInitResponse.ChallengeParameters.USER_ID_FOR_SRP
   const session = authInitResponse.Session
@@ -88,13 +78,31 @@ export const logIn = async (username, password) => {
   return cognitoIDP.adminRespondToAuthChallenge(params)
     .promise()
     .catch((err) => {
-      throw new Error('Could not authenticate user.', err)
+      console.log('Could not authenticate user.\n', err)
     })
 }
 
+/**
+ * Create a new user in AWS Cognito, log the user in, and
+ *   return an object with user information.
+ * @param {string} email - the user email to use in Cognito
+ * @param {string} username - the username to use in Cognito
+ * @param {string} username - the password to use in Cognito
+ * @return {object}
+ */
 export const createUserAndLogIn = async (email, username, password) => {
   await createUser(email, username, password)
-  return logIn(username, password)
+  const authResponse = await logIn(username, password)
+  const idToken = authResponse.AuthenticationResult.IdToken
+  const cognitoUser = await getUser(username)
+  const userId = find(cognitoUser.UserAttributes,
+    (obj) => obj.Name === 'sub').Value
+  return {
+    username: username,
+    email: email,
+    userId: userId,
+    idToken: idToken
+  }
 }
 
 function randomString (length) {
@@ -112,4 +120,16 @@ export const getMockUserInfo = () => {
     email: `${username}@gladly.io`,
     password: 'BadPassword123'
   }
+}
+
+/**
+ * Create a new user in AWS Cognito, log the user in, and
+ *   return an object with user information.
+ * @return {object}
+ */
+export const getNewAuthedUser = async () => {
+  const mockUser = getMockUserInfo()
+  const userInfo = await createUserAndLogIn(
+    mockUser.email, mockUser.username, mockUser.password)
+  return userInfo
 }

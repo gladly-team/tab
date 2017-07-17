@@ -57,32 +57,73 @@ const deleteItemsFromTable = async (items, tableName, hashKeyName, rangeKeyName)
   return Promise.all(promises)
 }
 
-const getItemsFromJsonFile = function (fileName) {
+/**
+ * Load fixture files into JSON, with string replacement.
+ * @param {string} fileName - The name of the fixtures file.
+ * @param {arr<object>} strReplacements - Strings to replace
+ *   in the fixtures before using the fixtures. Objects should
+ *   have both 'before' and 'after' keys.
+ * @return {arr} The items loaded from `fileName` after
+ *   string replacement.
+ */
+const getItemsFromJsonFile = function (fileName, strReplacements = []) {
   const filePath = path.join(__dirname, '../fixtures/', fileName)
-  const items = JSON.parse(fs.readFileSync(filePath), 'utf8')
+  const fileStr = fs.readFileSync(filePath, 'utf8')
+
+  // Replace a user ID in the fixtures if needed.
+  var fileStrFinal = fileStr
+  strReplacements.forEach((item) => {
+    if (item.before && item.after) {
+      fileStrFinal = fileStr.replace(item.before, item.after)
+    }
+  })
+  const items = JSON.parse(fileStrFinal, 'utf8')
   return items
 }
 
-const loadFixturesIntoTable = async (fileName, tableName) => {
-  const items = getItemsFromJsonFile(fileName)
+const loadFixturesIntoTable = async (fileName, tableName, strReplacements) => {
+  const items = getItemsFromJsonFile(fileName, strReplacements)
   return loadItemsIntoTable(items, tableName)
 }
 
-const deleteFixturesFromTable = async (fileName, tableName, hashKeyName, rangeKeyName = null) => {
-  const items = getItemsFromJsonFile(fileName)
+const deleteFixturesFromTable = async (fileName, tableName, hashKeyName,
+  strReplacements, rangeKeyName = null) => {
+  const items = getItemsFromJsonFile(fileName, strReplacements)
   return deleteItemsFromTable(items, tableName, hashKeyName, rangeKeyName)
 }
 
-export const loadFixtures = async (tableNameRef) => {
+/**
+ * Load fixtures for a table into the database. Before loading,
+ *   do a string replacement for any string pairs provided in
+ *   the `strReplacements` array.
+ * @param {string} tableNameRef - The reference name of the table.
+ * @param {arr<object>} strReplacements - Strings to replace
+ *   in the fixtures before using the fixtures. Objects should
+ *   have both 'before' and 'after' keys.
+ * @return {Promise<arr>}  A promise that resolves into an array
+ *   of objects from the fixtures file.
+ */
+export const loadFixtures = async (tableNameRef, strReplacements) => {
   const tableName = tableNames[tableNameRef]
   const fixtureFileName = tableFixtureFileNames[tableNameRef]
-  return loadFixturesIntoTable(fixtureFileName, tableName)
+  return loadFixturesIntoTable(fixtureFileName, tableName, strReplacements)
 }
 
-export const deleteFixtures = async (tableNameRef) => {
+/**
+ * Delete fixture items from the database. Before deleting,
+ *   do a string replacement for any string pairs provided in
+ *   the `strReplacements` array.
+ * @param {string} tableNameRef - The reference name of the table.
+ * @param {arr<object>} strReplacements - Strings to replace
+ *   in the fixtures before using the fixtures. Objects should
+ *   have both 'before' and 'after' keys.
+ * @return {Promise}
+ */
+export const deleteFixtures = async (tableNameRef, strReplacements) => {
   const tableName = tableNames[tableNameRef]
   const fixtureFileName = tableFixtureFileNames[tableNameRef]
   const hashKeyName = tableKeys[tableNameRef]['hash']
   const rangeKeyName = tableKeys[tableNameRef]['range']
-  return deleteFixturesFromTable(fixtureFileName, tableName, hashKeyName, rangeKeyName)
+  return deleteFixturesFromTable(fixtureFileName, tableName, hashKeyName,
+      strReplacements, rangeKeyName)
 }

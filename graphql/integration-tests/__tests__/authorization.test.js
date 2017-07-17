@@ -5,44 +5,69 @@ import {
   deleteFixtures
 } from '../utils/fixture-utils'
 import {
-  createUserAndLogIn,
-  getMockUserInfo
+  getNewAuthedUser
 } from '../utils/auth-utils'
 import fetchQuery from '../utils/fetch-graphql'
 
-beforeEach(async () => {
-  await loadFixtures('users')
-})
+describe('GraphQL with authorized user', () => {
+  var cognitoUserId = null
+  var cognitoUserIdToken = null
+  const origUserId = 'xyz789vw-yz89-yz80-yz80-xyz789tuv456'
 
-afterEach(async () => {
-  await deleteFixtures('users')
-})
+  beforeAll(async () => {
+    // Create a Cognito user.
+    const userInfo = await getNewAuthedUser()
+    cognitoUserId = userInfo.userId
+    cognitoUserIdToken = userInfo.idToken
+  })
 
-describe('GraphQL authorization', () => {
+  afterAll(async () => {
+    // TODO
+    // Delete the Cognito user.
+  })
+
+  beforeEach(async () => {
+    // Load fixtures, replacing one of the hardcoded user IDs
+    // with the Cognito user's ID.
+    await loadFixtures('users', [
+      { before: origUserId, after: cognitoUserId }
+    ])
+  })
+
+  afterEach(async () => {
+    await deleteFixtures('users', [
+      { before: origUserId, after: cognitoUserId }
+    ])
+  })
+
   test('it fetches the user when authorized', async () => {
-    // Get a valid Cognito id token.
-    const userInfo = getMockUserInfo()
-    const authResponse = await createUserAndLogIn(
-      userInfo.email, userInfo.username, userInfo.password)
-    const idToken = authResponse.AuthenticationResult.IdToken
-
-    // TODO: need to load valid fixtures with Cognito user ID.
     const response = await fetchQuery(`
       query UserViewQuery(
         $userId: String!
       ) {
         user(userId: $userId) {
+          userId
           username
         }
       }`,
       {
-        userId: 'xyz789vw-yz89-yz80-yz80-xyz789tuv456'
+        userId: cognitoUserId
       },
-      idToken
+      cognitoUserIdToken
     )
-    console.log(response)
-    expect(response.message).not.toBe('Unauthorized')
+    expect(response.data.user.userId).toBe(cognitoUserId)
     expect(response.data.user.username).toBe('susan')
+    expect(response.message).not.toBe('Unauthorized')
+  })
+})
+
+describe('GraphQL with unauthorized user', () => {
+  beforeEach(async () => {
+    await loadFixtures('users')
+  })
+
+  afterEach(async () => {
+    await deleteFixtures('users')
   })
 
   test('it fails without an Authorization header', async () => {
@@ -59,6 +84,24 @@ describe('GraphQL authorization', () => {
       }
     )
     expect(response.message).toBe('Unauthorized')
-    expect(response.data).toBeNull()
+    expect(response.data).toBeUndefined()
+  })
+
+  test('it fails with a false user ID token', async () => {
+    const response = await fetchQuery(`
+      query UserViewQuery(
+        $userId: String!
+      ) {
+        user(userId: $userId) {
+          username
+        }
+      }`,
+      {
+        userId: 'xyz789vw-yz89-yz80-yz80-xyz789tuv456'
+      },
+      'falsetoken123falsetoken123falsetoken123falsetoken123'
+    )
+    expect(response.message).toBe('Unauthorized')
+    expect(response.data).toBeUndefined()
   })
 })
