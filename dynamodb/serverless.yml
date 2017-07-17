@@ -30,10 +30,10 @@ resources:
         GlobalSecondaryIndexes:
           - IndexName: UsersByUsername
             KeySchema:
-              - AttributeName: username
-                KeyType: HASH
+            - AttributeName: username
+              KeyType: HASH
             Projection:
-              - ProjectionType: ALL
+              ProjectionType: ALL
             ProvisionedThroughput:
               ReadCapacityUnits: 1
               WriteCapacityUnits: 1
