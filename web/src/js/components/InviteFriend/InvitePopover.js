@@ -20,7 +20,7 @@ class InvitePopover extends React.Component {
   }
 
   getReferralUrl () {
-    return 'http://tab.gladly.io/?r=' + this.props.username
+    return 'http://tab.gladly.io/?u=' + this.props.username
   }
 
   onTextFieldClicked () {
