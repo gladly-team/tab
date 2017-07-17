@@ -13,35 +13,76 @@ function randomString (length) {
   return result
 }
 
+var setUsername = (Async((driver, username) => {
+  const usernameInputId = 'signup-username-input-id'
+  Await(driverUtils(driver).waitForElementVisibleByCustomSelector(By.id(usernameInputId)))
+  Await(driverUtils(driver).setValue(By.id(usernameInputId), username))
+}))
+
 var setUserEmail = (Async((driver, email) => {
-  const emailInputId = 'login-email-input-id'
-  const confirmEmailBtnId = 'confirm-email-btn-id'
+  const emailInputId = 'signup-email-input-id'
   Await(driverUtils(driver).waitForElementVisibleByCustomSelector(By.id(emailInputId)))
   Await(driverUtils(driver).setValue(By.id(emailInputId), email))
-  Await(driverUtils(driver).click(By.id(confirmEmailBtnId)))
 }))
 
 var setUserPassword = (Async((driver, password) => {
-  const passwordConfirmationContainerId = 'password-form-container-test-id'
-  const passwordInputId = 'login-password-input-id'
-  const confirmPasswordBtnId = 'confirm-password-btn-id'
-  Await(driverUtils(driver).waitForElementVisible(passwordConfirmationContainerId))
+  const passwordInputId = 'signup-password-input-id'
   Await(driverUtils(driver).waitForElementVisibleByCustomSelector(By.id(passwordInputId)))
   Await(driverUtils(driver).setValue(By.id(passwordInputId), password))
-  Await(driverUtils(driver).click(By.id(confirmPasswordBtnId)))
 }))
 
-var createUser = (Async((driver, email, password) => {
+var createUser = (Async((driver, username, email, password) => {
+  const goToSignUpBtnId = 'toggle-auth-views-btn-id'
+  const signUpId = 'register-form-container-test-id'
+  const registerActionBtnId = 'register-action-btn-id'
   const dashboardId = 'app-dashboard-id'
+
+  Await(driverUtils(driver).waitForElementVisibleByCustomSelector(By.id(goToSignUpBtnId)))
+  Await(driverUtils(driver).click(By.id(goToSignUpBtnId)))
+  Await(driverUtils(driver).waitForElementVisible(signUpId))
+
+  Await(setUsername(driver, username))
   Await(setUserEmail(driver, email))
   Await(setUserPassword(driver, password))
+
+  Await(driverUtils(driver).waitForElementVisibleByCustomSelector(By.id(registerActionBtnId)))
+  Await(driverUtils(driver).click(By.id(registerActionBtnId)))
+
+  Await(driverUtils(driver).waitForElementVisible(dashboardId))
+}))
+
+var setUsernameForLogin = (Async((driver, username) => {
+  const loginUsernameInput = 'login-username-input-id'
+  Await(driverUtils(driver).waitForElementVisibleByCustomSelector(By.id(loginUsernameInput)))
+  Await(driverUtils(driver).setValue(By.id(loginUsernameInput), username))
+}))
+
+var setUserPasswordForLogin = (Async((driver, password) => {
+  const loginPasswordInput = 'login-password-input-id'
+  Await(driverUtils(driver).waitForElementVisibleByCustomSelector(By.id(loginPasswordInput)))
+  Await(driverUtils(driver).setValue(By.id(loginPasswordInput), password))
+}))
+
+var login = (Async((driver, username, password) => {
+  const loginFormId = 'login-form-container-test-id'
+  const loginActionBtnId = 'login-action-btn-id'
+  const dashboardId = 'app-dashboard-id'
+
+  Await(driverUtils(driver).waitForElementVisible(loginFormId))
+
+  Await(setUsernameForLogin(driver, username))
+  Await(setUserPasswordForLogin(driver, password))
+
+  Await(driverUtils(driver).waitForElementVisibleByCustomSelector(By.id(loginActionBtnId)))
+  Await(driverUtils(driver).click(By.id(loginActionBtnId)))
+
   Await(driverUtils(driver).waitForElementVisible(dashboardId))
 }))
 
 var signOutUser = (Async((driver) => {
   const settingsViewId = 'app-settings-id'
   const signOutBtnId = 'app-signout-btn'
-  const emailInputId = 'login-email-input-id'
+  const loginFormContainerId = 'login-form-container-test-id'
 
   const settingsUrl = getAppBaseUrl() + '/tab/settings/'
 
@@ -49,7 +90,7 @@ var signOutUser = (Async((driver) => {
   Await(driverUtils(driver).waitForElementVisible(settingsViewId))
   Await(driverUtils(driver).waitForElementVisibleByCustomSelector(By.id(signOutBtnId)))
   Await(driverUtils(driver).click(By.id(signOutBtnId)))
-  Await(driverUtils(driver).waitForElementVisibleByCustomSelector(By.id(emailInputId)))
+  Await(driverUtils(driver).waitForElementVisible(loginFormContainerId))
 }))
 
 export {
@@ -57,5 +98,8 @@ export {
   setUserEmail,
   setUserPassword,
   createUser,
-  signOutUser
+  signOutUser,
+  login,
+  setUsernameForLogin,
+  setUserPasswordForLogin
 }

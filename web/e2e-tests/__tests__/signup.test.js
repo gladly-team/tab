@@ -6,10 +6,10 @@ import driverUtils from '../utils/driver-utils'
 import { getDriver, getAppBaseUrl } from '../utils/driver-mgr'
 import {
   randomString,
-  setUserEmail,
-  setUserPassword,
   createUser,
-  signOutUser
+  signOutUser,
+  setUsernameForLogin,
+  setUserPasswordForLogin
 } from '../utils/test-utils'
 
 let driver
@@ -23,8 +23,9 @@ describe('Sign Up Tests', function () {
   it('should create a new user and sign out the user', Async(() => {
     driver = getDriver('Sign Up: should create a new user and sign out the user')
     Await(driverUtils(driver).navigateTo(getAppBaseUrl()))
-    const newUserEmail = randomString(6) + '@tfac.com'
-    Await(createUser(driver, newUserEmail, 'NewUserPassword1'))
+    const username = randomString(6)
+    const email = username + '@tfac.com'
+    Await(createUser(driver, username, email, 'NewUserPassword1'))
     Await(signOutUser(driver))
   }), 90e3)
 
@@ -33,17 +34,20 @@ describe('Sign Up Tests', function () {
     Await(driverUtils(driver).navigateTo(getAppBaseUrl()))
 
     // Create a new user
-    const userEmail = randomString(6) + '@tfac.com'
+    const username = randomString(6)
+    const userEmail = username + '@tfac.com'
     const userPassword = 'NewUserPassword1'
-    Await(createUser(driver, userEmail, userPassword))
+    Await(createUser(driver, username, userEmail, userPassword))
     Await(signOutUser(driver))
 
     // Try signing in as that user with the wrong password
     Await(driverUtils(driver).navigateTo(getAppBaseUrl()))
     const wrongPassword = userPassword + 'Bad'
-    Await(setUserEmail(driver, userEmail))
-    Await(setUserPassword(driver, wrongPassword))
-    const signUpErrorSnackBarId = 'signup-error-snackbar'
-    Await(driverUtils(driver).waitForElementVisible(signUpErrorSnackBarId))
+
+    Await(setUsernameForLogin(driver, username))
+    Await(setUserPasswordForLogin(driver, wrongPassword))
+
+    const loginErrorSnackBarId = 'login-error-snackbar'
+    Await(driverUtils(driver).waitForElementVisible(loginErrorSnackBarId))
   }), 90e3)
 })

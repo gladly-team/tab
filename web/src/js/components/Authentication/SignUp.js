@@ -168,7 +168,7 @@ class SignUp extends React.Component {
 
     return (
       <div
-        data-test-id={'login-form-container-test-id'}
+        data-test-id={'register-form-container-test-id'}
         style={main}>
         <div
           style={container}>

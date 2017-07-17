@@ -117,6 +117,7 @@ class Authentication extends React.Component {
         style={root}>
         <img style={header} src={logoHeader} />
         <FlatButton
+          id={'toggle-auth-views-btn-id'}
           style={navigation}
           label={goToViewName}
           onClick={this.navigateTo.bind(this, goToView)} />
