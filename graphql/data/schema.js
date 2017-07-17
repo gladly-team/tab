@@ -695,6 +695,7 @@ const createNewUserMutation = mutationWithClientMutationId({
   name: 'CreateNewUser',
   inputFields: {
     userId: { type: new GraphQLNonNull(GraphQLString) },
+    username: { type: new GraphQLNonNull(GraphQLString) },
     email: { type: new GraphQLNonNull(GraphQLString) },
     referralData: { type: ReferralDataInput }
   },
@@ -704,9 +705,10 @@ const createNewUserMutation = mutationWithClientMutationId({
       resolve: user => user
     }
   },
-  mutateAndGetPayload: ({userId, email, referralData}) => {
+  mutateAndGetPayload: ({userId, username, email, referralData}) => {
     const user = new User(userId)
     user.email = email
+    user.username = username
     return createUser(user, referralData)
   }
 })

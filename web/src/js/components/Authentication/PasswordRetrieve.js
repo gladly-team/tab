@@ -1,14 +1,18 @@
 import React from 'react'
 import CodeField from 'general/CodeField'
+import TextField from 'material-ui/TextField'
 import PasswordField from 'general/PasswordField'
-import EmailField from 'general/EmailField'
 import { forgotPassword, confirmPassword, login } from '../../utils/cognito-auth'
-import { goToDashboard } from 'navigation/navigation'
+import { goToDashboard, goToLogin } from 'navigation/navigation'
+import FlatButton from 'material-ui/FlatButton'
 import Snackbar from 'material-ui/Snackbar'
-
+import AuthActionButtom from 'general/AuthActionButtom'
+import logoHeader from 'assets/logos/tfc-title-white.png'
 import {
   indigo500
 } from 'material-ui/styles/colors'
+
+import appTheme from 'theme/default'
 
 class PasswordRetrieve extends React.Component {
   constructor (props) {
@@ -20,16 +24,21 @@ class PasswordRetrieve extends React.Component {
     this.state = {
       email: null,
       responseNotify: false,
-      notificationMsg: ''
+      notificationMsg: '',
+      requesting: false
     }
   }
 
   _setEmail (e) {
     if (e.key === 'Enter') {
-      if (this.email.validate()) {
-        const email = this.email.getValue()
-        this.sendPasswordRecoveryRequest(email)
-      }
+      this.setEmail()
+    }
+  }
+
+  setEmail () {
+    const email = this.email.input.value.trim()
+    if (email && email.length > 0) {
+      this.sendPasswordRecoveryRequest(email)
     }
   }
 
@@ -54,11 +63,15 @@ class PasswordRetrieve extends React.Component {
 
   _confirmPasswordHandler (e) {
     if (e.key === 'Enter') {
-      if (this.dataIsValid()) {
-        const code = this.code.getValue()
-        const password = this.password.getValue()
-        this.confirmPasswordRequest(code, password)
-      }
+      this.confirmPassword()
+    }
+  }
+
+  confirmPassword () {
+    if (this.dataIsValid()) {
+      const code = this.code.getValue()
+      const password = this.password.getValue()
+      this.confirmPasswordRequest(code, password)
     }
   }
 
@@ -92,6 +105,10 @@ class PasswordRetrieve extends React.Component {
     })
   }
 
+  goToLogin () {
+    goToLogin()
+  }
+
   render () {
     const main = {
       backgroundColor: indigo500,
@@ -111,36 +128,90 @@ class PasswordRetrieve extends React.Component {
       color: '#FFF'
     }
 
+    const underlineStyle = {
+      borderColor: appTheme.palette.borderColor
+    }
+
+    const underlineFocusStyle = {
+      borderColor: appTheme.palette.alternateTextColor
+    }
+
     var email
     var code
     var password
+    var action
     if (!this.state.email) {
-      email = (<EmailField
+      action = {
+        id: 'retrieve-password-set-username-btn',
+        label: 'SEND CODE',
+        onClicked: this.setEmail.bind(this)
+      }
+      email = (<TextField
+        id={'retrieve-password-username-input'}
         ref={(input) => { this.email = input }}
         onKeyPress={this._setEmail.bind(this)}
-        floatingLabelText='Email'
+        floatingLabelText='Username or email'
         floatingLabelStyle={floatingLabelStyle}
-        inputStyle={inputStyle} />)
+        inputStyle={inputStyle}
+        underlineStyle={underlineStyle}
+        underlineFocusStyle={underlineFocusStyle} />)
     } else {
+      action = {
+        id: 'retrieve-password-reset-btn',
+        label: 'RESET',
+        onClicked: this.confirmPassword.bind(this)
+      }
       code = (<CodeField
         ref={(input) => { this.code = input }}
         onKeyPress={this._confirmPasswordHandler.bind(this)}
         floatingLabelText='Enter your code'
         floatingLabelStyle={floatingLabelStyle}
-        inputStyle={inputStyle} />)
+        inputStyle={inputStyle}
+        underlineStyle={underlineStyle}
+        underlineFocusStyle={underlineFocusStyle} />)
       password = (<PasswordField
+        inputId={'retrieve-password-pass-input'}
         ref={(input) => { this.password = input }}
         onKeyPress={this._confirmPasswordHandler.bind(this)}
         floatingLabelText='Password'
         floatingLabelStyle={floatingLabelStyle}
-        inputStyle={inputStyle} />)
+        inputStyle={inputStyle}
+        underlineStyle={underlineStyle}
+        underlineFocusStyle={underlineFocusStyle} />)
+    }
+
+    const navigation = {
+      position: 'absolute',
+      top: 10,
+      right: 10,
+      color: appTheme.palette.alternateTextColor
+    }
+
+    const header = {
+      position: 'absolute',
+      top: 100
+    }
+
+    const actionBtn = {
+      marginTop: 40
     }
 
     return (
       <div style={main}>
+        <img style={header} src={logoHeader} />
         {email}
         {code}
         {password}
+        <AuthActionButtom
+          containerStyle={actionBtn}
+          btnId={action.id}
+          label={action.label}
+          loading={this.state.requesting}
+          onClicked={action.onClicked} />
+        <FlatButton
+          style={navigation}
+          label={'BACK TO LOGIN'}
+          onClick={this.goToLogin.bind(this)} />
         <Snackbar
           open={this.state.responseNotify}
           message={this.state.notificationMsg}

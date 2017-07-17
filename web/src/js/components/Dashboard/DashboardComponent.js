@@ -65,7 +65,7 @@ class Dashboard extends React.Component {
     const topRightItems = {
       main: {
         position: 'absolute',
-        top: 20,
+        top: 0,
         right: 0,
         display: 'flex',
         zIndex: 2147483647
@@ -74,6 +74,7 @@ class Dashboard extends React.Component {
         padding: 5
       },
       rightContainer: {
+        marginLeft: 5,
         display: 'flex',
         flexDirection: 'column'
       }

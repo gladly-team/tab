@@ -55,9 +55,6 @@ describe('ReferralData class', function () {
     const database = setup()
     const userId = '45bbefbf-63d1-4d36-931e-212fbe2bc3d9'
     const referringUserId = 'fb5082cc-151a-4a9a-9289-06906670fd4e'
-    const referralData = {
-      referringUser: referringUserId
-    }
 
     database.pushDatabaseOperation(
       new DatabaseOperation(OperationType.PUT, (params) => {
@@ -68,7 +65,7 @@ describe('ReferralData class', function () {
       })
     )
 
-    return logReferralData(userId, referralData)
+    return logReferralData(userId, referringUserId)
                 .then(refDataLog => { return refDataLog })
   })
 })

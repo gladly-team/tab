@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 
 import WidgetSharedSpace from 'general/WidgetSharedSpace'
+import EmptyWidgetMsg from 'general/EmptyWidgetMsg'
 import {List} from 'general/List'
 
 import Note from './Note'
@@ -109,6 +110,13 @@ class NotesWidget extends React.Component {
       marginTop: 27
     }
 
+    var nodataMsg
+    if (!this.state.notes.length) {
+      nodataMsg = (
+        <EmptyWidgetMsg
+          widgetName={'Notes'} />)
+    }
+
     return (<WidgetSharedSpace
       containerStyle={sharedSpaceStyle}>
       <div style={mainContainer}>
@@ -117,6 +125,7 @@ class NotesWidget extends React.Component {
           addNote={this.addNewNote.bind(this)} />
         <List
           containerStyle={notesContainer}>
+          {nodataMsg}
           {this.state.notes.map((note, index) => {
             return (
               <Note

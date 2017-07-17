@@ -28,13 +28,13 @@ class Widgets extends React.Component {
 
     const widgetsContainer = {
       position: 'absolute',
-      top: 20,
+      top: 5,
       display: 'flex',
       justifyContent: 'flex-start'
     }
 
     const separator = {
-      width: 20
+      width: 5
     }
 
     return (

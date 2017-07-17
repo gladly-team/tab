@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { getReferralData } from 'web-utils'
+import { getReferralData, validateUsername } from 'web-utils'
 import { goToDashboard, goToLogin } from 'navigation/navigation'
 
 import FadeInAnimation from 'general/FadeInAnimation'
@@ -17,7 +17,7 @@ import CreateNewUserMutation from 'mutations/CreateNewUserMutation'
 
 import FlatButton from 'material-ui/FlatButton'
 import Snackbar from 'material-ui/Snackbar'
-
+import TextField from 'material-ui/TextField'
 import appTheme from 'theme/default'
 
 class LoginForm extends React.Component {
@@ -43,16 +43,22 @@ class LoginForm extends React.Component {
     }
   }
 
+  validateUsername () {
+    const username = this.username.input.value.trim()
+    return validateUsername(username)
+  }
+
   handleSubmit () {
-    if (this.password.validate()) {
+    if (this.password.validate() && this.validateUsername()) {
       const password = this.password.getValue()
+      const username = this.username.input.value.trim()
 
       this.setState({
         loading: true,
         loadingMsg: 'Checking provided credentials...'
       })
 
-      getOrCreate(this.props.email, password,
+      getOrCreate(username, this.props.email, password,
           (response, created, confirmed) => {
             if (this.state.createOnPasswordConfirm) {
               this.createNewUser()
@@ -186,7 +192,8 @@ class LoginForm extends React.Component {
     const container = {
       display: 'flex',
       justifyContent: 'center',
-      alignItems: 'center'
+      alignItems: 'center',
+      flexDirection: 'column'
     }
 
     const floatingLabelStyle = {
@@ -223,6 +230,14 @@ class LoginForm extends React.Component {
 
         <div
           style={container}>
+          <TextField
+            id={'login-username-input-id'}
+            ref={(input) => { this.username = input }}
+            onKeyPress={this._handleKeyPress.bind(this)}
+            floatingLabelText='Username'
+            floatingLabelStyle={floatingLabelStyle}
+            underlineStyle={underlineStyle}
+            underlineFocusStyle={underlineFocusStyle} />
           <PasswordField
             inputId={'login-password-input-id'}
             ref={(input) => { this.password = input }}
@@ -232,8 +247,7 @@ class LoginForm extends React.Component {
             underlineStyle={underlineStyle}
             underlineFocusStyle={underlineFocusStyle}
             type={'password'}
-            inputStyle={inputStyle}
-          />
+            inputStyle={inputStyle} />
           <CircleButton
             buttonId={'confirm-password-btn-id'}
             size={40}

@@ -43,11 +43,10 @@ class ReferralData extends BaseModel {
 /**
  * Add a new referral data log to the DB.
  * @param {string} userId - The referred user id.
- * @param {object} referralData - The referral data.
+ * @param {string} referringUser - The referring user id.
  * @return {Promise<Object>}  A promise that resolve into a referral data log.
  */
-function logReferralData (userId, referralData) {
-  const referringUser = referralData.referringUser
+function logReferralData (userId, referringUser) {
   const referralObj = new ReferralData(userId, referringUser)
   return ReferralData.add(referralObj)
             .catch(err => {

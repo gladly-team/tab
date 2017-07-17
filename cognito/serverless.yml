@@ -28,6 +28,8 @@ resources:
         UserPoolName: tab-${opt:stage, self:provider.stage}
         AutoVerifiedAttributes:
           - email
+        AliasAttributes:
+          - email
         MfaConfiguration: "OFF"
         Schema:
           - Name: email
@@ -49,6 +51,10 @@ resources:
         GenerateSecret: false
         UserPoolId: 
           Ref: CognitoUserPoolTabUserPool
+        # Used in tests to create and manage users:
+        # https://docs.aws.amazon.com/cognito/latest/developerguide/amazon-cognito-user-pools-authentication-flow.html#amazon-cognito-user-pools-admin-authentication-flow
+        ExplicitAuthFlows:
+          - ADMIN_NO_SRP_AUTH
 
 
 
