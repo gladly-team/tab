@@ -24,6 +24,18 @@ export const getUser = async (username) => {
     })
 }
 
+export const deleteUser = async (username) => {
+  const params = {
+    UserPoolId: config.COGNITO_USERPOOLID,
+    Username: username
+  }
+  return cognitoIDP.adminDeleteUser(params)
+    .promise()
+    .catch((err) => {
+      console.log('Could not get user.\n', err)
+    })
+}
+
 const createUser = async (email, username, password) => {
   const params = {
     UserPoolId: config.COGNITO_USERPOOLID,

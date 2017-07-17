@@ -5,11 +5,13 @@ import {
   deleteFixtures
 } from '../utils/fixture-utils'
 import {
+  deleteUser,
   getNewAuthedUser
 } from '../utils/auth-utils'
 import fetchQuery from '../utils/fetch-graphql'
 
 describe('GraphQL with authorized user', () => {
+  var cognitoUsername = null
   var cognitoUserId = null
   var cognitoUserIdToken = null
   const origUserId = 'xyz789vw-yz89-yz80-yz80-xyz789tuv456'
@@ -19,11 +21,12 @@ describe('GraphQL with authorized user', () => {
     const userInfo = await getNewAuthedUser()
     cognitoUserId = userInfo.userId
     cognitoUserIdToken = userInfo.idToken
+    cognitoUsername = userInfo.username
   })
 
   afterAll(async () => {
-    // TODO
     // Delete the Cognito user.
+    await deleteUser(cognitoUsername)
   })
 
   beforeEach(async () => {
