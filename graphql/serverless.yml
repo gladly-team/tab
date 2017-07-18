@@ -31,7 +31,7 @@ provider:
         - "dynamodb:Query"
         - "dynamodb:Scan"
         - "dynamodb:UpdateItem"
-      Resource: "*"
+      Resource: "${cf:dynamodb-${self:provider.stage}}"
 
 custom:
   stageDefault: dev
