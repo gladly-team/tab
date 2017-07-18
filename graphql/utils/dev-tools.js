@@ -14,12 +14,14 @@ logger.error = function (msg, error) {
 
 const DBLogger = {
   action: (action, params) => {
-    if (config.LOGGING_ENABLED) { return }
-    console.log(`Received action: ${action} with params: `, params)
+    if (config.DEVELOPMENT_LOGGING_ENABLED) {
+      console.log(`Received action: ${action} with params: `, params)
+    }
   },
   response: (action, data) => {
-    if (config.LOGGING_ENABLED) { return }
-    console.log(`Response from action: ${action}: `, data)
+    if (config.DEVELOPMENT_LOGGING_ENABLED) {
+      console.log(`Response from action: ${action}: `, data)
+    }
   }
 }
 
