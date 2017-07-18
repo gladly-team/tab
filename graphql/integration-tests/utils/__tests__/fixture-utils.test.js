@@ -4,23 +4,58 @@ import {
     loadFixtures,
     deleteFixtures
 } from '../fixture-utils'
+import {
+  deleteUser,
+  getNewAuthedUser
+} from '../auth-utils'
 import fetchQuery from '../fetch-graphql'
 
+var cognitoUsername = null
+var cognitoUserId = null
+var cognitoUserIdToken = null
+const fixtureUserId = '123abc45-12ab-12ab-12ab-123abc456def'
+
+beforeAll(async () => {
+  // Create a Cognito user.
+  const userInfo = await getNewAuthedUser()
+  cognitoUserId = userInfo.userId
+  cognitoUserIdToken = userInfo.idToken
+  cognitoUsername = userInfo.username
+})
+
+afterAll(async () => {
+  // Delete the Cognito user.
+  await deleteUser(cognitoUsername)
+})
+
 beforeEach(async () => {
-  await loadFixtures('users')
-  await loadFixtures('widgets')
-  await loadFixtures('userWidgets')
+  // Load fixtures, replacing one of the hardcoded user IDs
+  // with the Cognito user's ID.
+  await loadFixtures('users', [
+    { before: fixtureUserId, after: cognitoUserId }
+  ])
+  await loadFixtures('widgets', [
+    { before: fixtureUserId, after: cognitoUserId }
+  ])
+  await loadFixtures('userWidgets', [
+    { before: fixtureUserId, after: cognitoUserId }
+  ])
 })
 
 afterEach(async () => {
-  await deleteFixtures('users')
-  await deleteFixtures('widgets')
-  await deleteFixtures('userWidgets')
+  await deleteFixtures('users', [
+    { before: fixtureUserId, after: cognitoUserId }
+  ])
+  await deleteFixtures('widgets', [
+    { before: fixtureUserId, after: cognitoUserId }
+  ])
+  await deleteFixtures('userWidgets', [
+    { before: fixtureUserId, after: cognitoUserId }
+  ])
 })
 
 describe('Fixture utils', () => {
   test('creates and deletes items as expected', async () => {
-    const userId = 'xyz789vw-yz89-yz80-yz80-xyz789tuv456'
     const query = `
       query UserViewQuery(
         $userId: String!
@@ -30,32 +65,36 @@ describe('Fixture utils', () => {
         }
       }
     `
-    await deleteFixtures('users')
+    await deleteFixtures('users', [
+      { before: fixtureUserId, after: cognitoUserId }
+    ])
 
     // User should not exist.
     const responseOne = await fetchQuery(query, {
-      userId: `${userId}`
-    })
+      userId: cognitoUserId
+    }, cognitoUserIdToken)
     expect(responseOne.data.user).toBeNull()
 
     // Load user fixtures. User should exist.
-    await loadFixtures('users')
+    await loadFixtures('users', [
+      { before: fixtureUserId, after: cognitoUserId }
+    ])
     const responseTwo = await fetchQuery(query, {
-      userId: `${userId}`
-    })
-    expect(responseTwo.data.user.username).toBe('susan')
+      userId: cognitoUserId
+    }, cognitoUserIdToken)
+    expect(responseTwo.data.user.username).toBe('kevin')
 
     // Delete fixtures. User should not exist again.
-    await deleteFixtures('users')
+    await deleteFixtures('users', [
+      { before: fixtureUserId, after: cognitoUserId }
+    ])
     const responseThree = await fetchQuery(query, {
-      userId: `${userId}`
-    })
+      userId: cognitoUserId
+    }, cognitoUserIdToken)
     expect(responseThree.data.user).toBeNull()
   })
 
   test('works for tables with both a hash and range key', async () => {
-    const userId = '123abc45-12ab-12ab-12ab-123abc456def'
-    // const widgetId = 'asdfghjk-asdf-asdf-asdf-asdfghjklzxc'
     const query = `
       query WidgetsViewQuery(
         $userId: String!
@@ -90,26 +129,32 @@ describe('Fixture utils', () => {
         type
       }
     `
-    await deleteFixtures('userWidgets')
+    await deleteFixtures('userWidgets', [
+      { before: fixtureUserId, after: cognitoUserId }
+    ])
 
     // UserWidget should not exist.
     const responseOne = await fetchQuery(query, {
-      userId: `${userId}`
-    })
+      userId: cognitoUserId
+    }, cognitoUserIdToken)
     expect(responseOne.data.user.widgets.edges.length).toBe(0)
 
     // Load UserWidget fixtures.
-    await loadFixtures('userWidgets')
+    await loadFixtures('userWidgets', [
+      { before: fixtureUserId, after: cognitoUserId }
+    ])
     const responseTwo = await fetchQuery(query, {
-      userId: `${userId}`
-    })
+      userId: cognitoUserId
+    }, cognitoUserIdToken)
     expect(responseTwo.data.user.widgets.edges.length).toBe(1)
 
     // Delete fixtures. User should not exist again.
-    await deleteFixtures('userWidgets')
+    await deleteFixtures('userWidgets', [
+      { before: fixtureUserId, after: cognitoUserId }
+    ])
     const responseThree = await fetchQuery(query, {
-      userId: `${userId}`
-    })
+      userId: cognitoUserId
+    }, cognitoUserIdToken)
     expect(responseThree.data.user.widgets.edges.length).toBe(0)
   })
 })
