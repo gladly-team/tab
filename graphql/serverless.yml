@@ -21,30 +21,13 @@ provider:
   # See rules based on Cognito user ID:
   #   https://stackoverflow.com/a/25888309
   iamRoleStatements:
-    # FIXME: testing broad permissions, remove
-    - Effect: "Allow"
-      Action:
-        - "dynamodb:BatchGetItem"
-        - "dynamodb:BatchWriteItem"
-        - "dynamodb:DeleteItem"
-        - "dynamodb:DescribeReservedCapacity"
-        - "dynamodb:DescribeReservedCapacityOfferings"
-        - "dynamodb:DescribeTable"
-        - "dynamodb:DescribeTimeToLive"
-        - "dynamodb:GetItem"
-        - "dynamodb:ListTables"
-        - "dynamodb:ListTagsOfResource"
-        - "dynamodb:PutItem"
-        - "dynamodb:Query"
-        - "dynamodb:Scan"
-        - "dynamodb:UpdateItem"
-      Resource: "*"
     # Charities table
     - Effect: "Allow"
       Action:
         - "dynamodb:BatchGetItem"
         - "dynamodb:GetItem"
         - "dynamodb:Query"
+        - "dynamodb:Scan"
       Resource: "${self:custom.dbTableArnBase}Charities-${self:provider.stage}"
     # Widgets table
     - Effect: "Allow"
@@ -52,6 +35,7 @@ provider:
         - "dynamodb:BatchGetItem"
         - "dynamodb:GetItem"
         - "dynamodb:Query"
+        - "dynamodb:Scan"
       Resource: "${self:custom.dbTableArnBase}Widgets-${self:provider.stage}"
     # Users table
     - Effect: "Allow"
