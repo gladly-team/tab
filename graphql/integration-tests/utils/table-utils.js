@@ -40,10 +40,10 @@ export const tableKeys = {
 
 export const tableFixtureFileNames = {
   users: 'Users.json',
-  userLevels: '',
-  charities: '',
-  vcDonationLog: '',
-  backgroundImages: '',
+  userLevels: 'UserLevels.json',
+  charities: 'CharityData.json',
+  vcDonationLog: 'VcDonationLog.json',
+  backgroundImages: 'BackgroundImages.json',
   widgets: 'Widgets.json',
   userWidgets: 'UserWidgets.json',
   referralDataLog: ''
