@@ -60,9 +60,6 @@ class SlideFromLeftAnimation extends React.Component {
   animateOut () {
     const self = this
 
-    self.setState({
-      show: false
-    })
     setTimeout(function () {
       self.setState({
         setOut: true
@@ -72,6 +69,11 @@ class SlideFromLeftAnimation extends React.Component {
           setOut: false,
           out: true
         })
+        setTimeout(function () {
+          self.setState({
+            show: false
+          })
+        }, 100)
       }, 100)
     }, this.props.leaveAnimationTimeout)
   }
@@ -115,10 +117,8 @@ class SlideFromLeftAnimation extends React.Component {
 
     const bubbleStyle = {
       backgroundColor: 'transparent',
-      position: 'absolute',
+      position: 'relative',
       left: 0,
-      width: '100%',
-      height: '100%',
       borderRadius: 0
     }
 

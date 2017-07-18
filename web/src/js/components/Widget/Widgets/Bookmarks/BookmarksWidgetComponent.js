@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import WidgetSharedSpace from 'general/WidgetSharedSpace'
+import EmptyWidgetMsg from 'general/EmptyWidgetMsg'
 import BookmarkChip from './BookmarkChip'
 import AddBookmarkForm from './AddBookmarkForm'
 
@@ -83,6 +84,13 @@ class BookmarksWidget extends React.Component {
       marginTop: 27
     }
 
+    var nodataMsg
+    if (!bookmarks.length) {
+      nodataMsg = (
+        <EmptyWidgetMsg
+          widgetName={'Bookmarks'} />)
+    }
+
     return (<WidgetSharedSpace
       containerStyle={sharedSpaceStyle}>
       <div style={bookmarksContainer}>
@@ -91,17 +99,18 @@ class BookmarksWidget extends React.Component {
           onEditModeClicked={this.onToggleEditMode.bind(this)} />
         <div style={container}>
           <div style={wrapper}>
+            {nodataMsg}
             {
-                          bookmarks.map((bookmark, index) => {
-                            return (<BookmarkChip
-                              key={index}
-                              index={index}
-                              editMode={this.state.editMode}
-                              bookmark={bookmark}
-                              removeChip={this.removeBookmark.bind(this, index)} />
-                            )
-                          })
-                        }
+              bookmarks.map((bookmark, index) => {
+                return (<BookmarkChip
+                  key={index}
+                  index={index}
+                  editMode={this.state.editMode}
+                  bookmark={bookmark}
+                  removeChip={this.removeBookmark.bind(this, index)} />
+                )
+              })
+            }
           </div>
         </div>
       </div>

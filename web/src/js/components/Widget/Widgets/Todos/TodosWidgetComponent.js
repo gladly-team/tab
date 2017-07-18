@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import WidgetSharedSpace from 'general/WidgetSharedSpace'
+import EmptyWidgetMsg from 'general/EmptyWidgetMsg'
 import {List} from 'general/List'
 import UpdateWidgetDataMutation from 'mutations/UpdateWidgetDataMutation'
 import Todo from './Todo'
@@ -145,6 +146,13 @@ class TodosWidget extends React.Component {
           </Subheader>)
     }
 
+    var nodataMsg
+    if (!this.state.todos.length && !this.state.completed.length) {
+      nodataMsg = (
+        <EmptyWidgetMsg
+          widgetName={'Todos'} />)
+    }
+
     return (<WidgetSharedSpace
       containerStyle={sharedSpaceStyle}>
       <div style={mainContainer}>
@@ -152,6 +160,7 @@ class TodosWidget extends React.Component {
           addTodo={this.addNewTodo.bind(this)} />
         <List
           containerStyle={todosContainer}>
+          {nodataMsg}
           {this.state.todos.map((todo, index) => {
             return (
               <Todo

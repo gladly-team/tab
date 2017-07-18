@@ -43,15 +43,15 @@ function checkUserExist (email, onSuccess, onFailure) {
 
 // onSuccess(response, created, confirmed)
 // onFailure(err)
-function getOrCreate (email, password, onSuccess, onFailure) {
+function getOrCreate (username, email, password, onSuccess, onFailure) {
   login(
-    email,
+    username || email,
     password,
     (response) => onSuccess(response, false, true),
     (err) => {
       if (err.statusCode === 400) {
         if (err.code === 'UserNotFoundException') {
-          signup(email, password, (res) => onSuccess(res, true, res.userConfirmed), onFailure)
+          signup(username, email, password, (res) => onSuccess(res, true, res.userConfirmed), onFailure)
         } else if (err.code === 'NotAuthorizedException') {
           onFailure(err)
         } else if (err.code === 'UserNotConfirmedException') {
@@ -61,16 +61,16 @@ function getOrCreate (email, password, onSuccess, onFailure) {
     })
 }
 
-function login (email, password, onSuccessCallback, onFailureCallback) {
+function login (username, password, onSuccessCallback, onFailureCallback) {
   var authenticationData = {
-    Email: email,
+    Username: username,
     Password: password
   }
 
   var authenticationDetails = new AuthenticationDetails(authenticationData)
 
   var userData = {
-    Username: email,
+    Username: username,
     Pool: userPool
   }
 
@@ -94,7 +94,7 @@ function login (email, password, onSuccessCallback, onFailureCallback) {
   })
 }
 
-function signup (email, password, onSuccessCallback, onFailureCallback) {
+function signup (username, email, password, onSuccessCallback, onFailureCallback) {
   const attributeList = [
     new CognitoUserAttribute({
       Name: 'email',
@@ -102,19 +102,18 @@ function signup (email, password, onSuccessCallback, onFailureCallback) {
     })
   ]
 
-  userPool.signUp(email, password, attributeList, null, (err, result) => {
+  userPool.signUp(username, password, attributeList, null, (err, result) => {
     if (err) {
       onFailureCallback(err)
       return
     }
-    console.log('signup', result)
     onSuccessCallback(result)
   })
 }
 
-function confirmRegistration (code, email, onSuccess, onFailure) {
+function confirmRegistration (code, username, onSuccess, onFailure) {
   var userData = {
-    Username: email,
+    Username: username,
     Pool: userPool
   }
 
@@ -129,9 +128,9 @@ function confirmRegistration (code, email, onSuccess, onFailure) {
   })
 }
 
-function resendConfirmation (email, onSuccess, onFailure) {
+function resendConfirmation (username, onSuccess, onFailure) {
   var userData = {
-    Username: email,
+    Username: username,
     Pool: userPool
   }
 
@@ -216,9 +215,9 @@ function logoutUser (userLogoutCallback) {
   }
 }
 
-function forgotPassword (email, onSuccess, onFailure) {
+function forgotPassword (username, onSuccess, onFailure) {
   var userData = {
-    Username: email,
+    Username: username,
     Pool: userPool
   }
 
@@ -229,9 +228,9 @@ function forgotPassword (email, onSuccess, onFailure) {
   })
 }
 
-function confirmPassword (email, verificationCode, newPassword, onSuccess, onFailure) {
+function confirmPassword (username, verificationCode, newPassword, onSuccess, onFailure) {
   var userData = {
-    Username: email,
+    Username: username,
     Pool: userPool
   }
 

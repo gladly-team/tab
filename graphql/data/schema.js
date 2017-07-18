@@ -76,6 +76,12 @@ import {
   getBackgroundImages
 } from '../database/backgroundImages/backgroundImage'
 
+import {
+  Globals,
+  getMoneyRaised,
+  getDollarsPerDayRate
+} from '../database/globals/globals'
+
 const staticRoot = config.S3_ENDPOINT
 
 class App {
@@ -331,6 +337,18 @@ const appType = new GraphQLObjectType({
   description: 'Global app fields',
   fields: () => ({
     id: globalIdField('App'),
+    moneyRaised: {
+      type: GraphQLFloat,
+      resolve: () => {
+        return getMoneyRaised()
+      }
+    },
+    dollarsPerDayRate: {
+      type: GraphQLFloat,
+      resolve: () => {
+        return getDollarsPerDayRate()
+      }
+    },
     widgets: {
       type: widgetConnection,
       description: 'All the widgets',
@@ -677,6 +695,7 @@ const createNewUserMutation = mutationWithClientMutationId({
   name: 'CreateNewUser',
   inputFields: {
     userId: { type: new GraphQLNonNull(GraphQLString) },
+    username: { type: new GraphQLNonNull(GraphQLString) },
     email: { type: new GraphQLNonNull(GraphQLString) },
     referralData: { type: ReferralDataInput }
   },
@@ -686,9 +705,10 @@ const createNewUserMutation = mutationWithClientMutationId({
       resolve: user => user
     }
   },
-  mutateAndGetPayload: ({userId, email, referralData}) => {
+  mutateAndGetPayload: ({userId, username, email, referralData}) => {
     const user = new User(userId)
     user.email = email
+    user.username = username
     return createUser(user, referralData)
   }
 })

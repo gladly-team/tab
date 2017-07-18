@@ -36,13 +36,13 @@ class InviteFriend extends React.Component {
 
   render () {
     const { user } = this.props
-    const userId = user ? user.userId : ''
+    const username = user ? user.username : ''
 
     return (
       <div>
         <IconButton
           tooltip='Invite Friend'
-          tooltipPosition='top-center'
+          tooltipPosition='top-left'
           onTouchTap={this.handleTouchTap.bind(this)}>
           <FontIcon
             color={grey300}
@@ -53,7 +53,7 @@ class InviteFriend extends React.Component {
         <InvitePopover
           open={this.state.open}
           anchorEl={this.state.anchorEl}
-          userId={userId}
+          username={username}
           onRequestClose={this.handleInvitePopoverRequestClose.bind(this)} />
       </div>
     )

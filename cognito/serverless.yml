@@ -28,6 +28,8 @@ resources:
         UserPoolName: tab-${opt:stage, self:provider.stage}
         AutoVerifiedAttributes:
           - email
+        AliasAttributes:
+          - email
         MfaConfiguration: "OFF"
         Schema:
           - Name: email

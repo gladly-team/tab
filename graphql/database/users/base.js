@@ -1,6 +1,6 @@
 import BaseModel from '../base/model'
 import tablesNames from '../tables'
-import { logReferralData, getReferringUserId } from '../referrals/referralData'
+import { logReferralData } from '../referrals/referralData'
 import { getBackgroundImage, getRandomImage } from '../backgroundImages/backgroundImage'
 import { logger } from '../../utils/dev-tools'
 import { rewardReferringUser } from './rewardReferringUser'
@@ -84,8 +84,10 @@ User.BACKGROUND_OPTION_PHOTO = 'photo'
 var createUser = Async(function (user, referralData) {
   Await(User.add(user))
   if (referralData) {
-    Await(logReferralData(user.id, referralData))
-    Await(rewardReferringUser(getReferringUserId(referralData)))
+    const referringUserUsername = referralData.referringUser
+    const referringUser = Await(getUserByUsername(referringUserUsername))
+    Await(logReferralData(user.id, referringUser.id))
+    Await(rewardReferringUser(referringUser.id))
   }
   return user
 })
@@ -100,6 +102,35 @@ function getUser (id) {
             .then(user => user)
             .catch(err => {
               logger.error('Error while getting the user.', err)
+            })
+}
+
+/**
+ * Fetch the user by username.
+ * @param {string} username - The user's username.
+ * @return {Promise<User>}  A promise that resolve into a User instance.
+ */
+function getUserByUsername (username) {
+  var params = {
+    IndexName: 'UsersByUsername',
+    KeyConditionExpression: '#username = :username',
+    ExpressionAttributeNames: {
+      '#username': 'username'
+    },
+    ExpressionAttributeValues: {
+      ':username': username
+    }
+  }
+
+  return User.query(params)
+            .then(users => {
+              if (users.length) {
+                return users[0]
+              }
+              return null
+            })
+            .catch(err => {
+              logger.error('Error while getting the user by username.', err)
             })
 }
 
@@ -243,6 +274,7 @@ var setUserActiveWidget = Async(function (userId, widgetId) {
 export {
   User,
   getUser,
+  getUserByUsername,
   setUserBackgroundImage,
   setUserBackgroundColor,
   setUserBackgroundFromCustomUrl,

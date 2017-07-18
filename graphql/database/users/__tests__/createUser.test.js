@@ -15,10 +15,7 @@ jest.mock('../../referrals/referralData', () => {
   return {
     logReferralData: jest.fn((userId, data) => {
       return Promise.resolve(true)
-    }),
-    getReferringUserId: (referralData) => {
-      return referralData.referringUser
-    }
+    })
   }
 })
 
@@ -84,7 +81,19 @@ describe('Create new user tests', function () {
   it('should call to log the referral data', () => {
     const database = setup()
     const userId = '45bbefbf-63d1-4d36-931e-212fbe2bc3d9'
+    const username = 'testuser'
     const userEmail = 'testuser@gladly.io'
+
+    const userData = new User(userId)
+    userData.email = userEmail
+    userData.username = username
+
+    const referringUser = new User('referring-user-id')
+    referringUser.username = 'referring-user-username'
+
+    const referralData = {
+      referringUser: referringUser.username
+    }
 
     database.pushDatabaseOperation(
             new DatabaseOperation(OperationType.PUT, (params) => {
@@ -92,10 +101,14 @@ describe('Create new user tests', function () {
             })
         )
 
-    const userData = new User(userId)
-    userData.email = userEmail
-
-    const referralData = 'referral-data'
+    // Get referring user by username operation
+    database.pushDatabaseOperation(
+            new DatabaseOperation(OperationType.QUERY, (params) => {
+              expect(params.ExpressionAttributeValues[':username'])
+                .toBe(referringUser.username)
+              return { Items: [referringUser] }
+            })
+        )
 
     return createUser(userData, referralData)
         .then(user => {
@@ -106,14 +119,24 @@ describe('Create new user tests', function () {
                   .calls[logReferralData.mock.calls.length - 1]
 
           expect(referralLogMock[0]).toBe(userId)
-          expect(referralLogMock[1]).toBe(referralData)
+          expect(referralLogMock[1]).toBe(referringUser.id)
         })
   })
 
   it('should call to reward the referring user', () => {
     const database = setup()
-    const userId = 'referred-user-id'
-    const userEmail = 'testuser@gladly.io'
+
+    const referredUser = new User('referred-user-id')
+    referredUser.email = 'testuser@gladly.io'
+    referredUser.username = 'testuser'
+
+    const referringUser = new User('referring-user-id')
+    referringUser.email = 'referringuser@gladly.io'
+    referringUser.username = 'referringuser'
+
+    const referralData = {
+      referringUser: referringUser.username
+    }
 
     database.pushDatabaseOperation(
             new DatabaseOperation(OperationType.PUT, (params) => {
@@ -121,15 +144,15 @@ describe('Create new user tests', function () {
             })
         )
 
-    const userData = new User(userId)
-    userData.email = userEmail
+    database.pushDatabaseOperation(
+            new DatabaseOperation(OperationType.QUERY, (params) => {
+              expect(params.ExpressionAttributeValues[':username'])
+                .toBe(referringUser.username)
+              return { Items: [referringUser] }
+            })
+        )
 
-    const referringUser = 'referring-user-id'
-    const referralData = {
-      referringUser: referringUser
-    }
-
-    return createUser(userData, referralData)
+    return createUser(referredUser, referralData)
         .then(user => {
           const rewardReferringUserCalls = rewardReferringUser.mock.calls.length
           expect(rewardReferringUserCalls).toBe(1)
@@ -137,7 +160,7 @@ describe('Create new user tests', function () {
           const rewardReferringUserMock = rewardReferringUser.mock
                   .calls[rewardReferringUser.mock.calls.length - 1]
 
-          expect(rewardReferringUserMock[0]).toBe(referringUser)
+          expect(rewardReferringUserMock[0]).toBe(referringUser.id)
         })
   })
 })

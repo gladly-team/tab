@@ -102,9 +102,9 @@ alphanum-sort@^1.0.1, alphanum-sort@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/alphanum-sort/-/alphanum-sort-1.0.2.tgz#97a1119649b211ad33691d9f9f486a8ec9fbe0a3"
 
-amazon-cognito-identity-js@^1.16.0:
-  version "1.18.0"
-  resolved "https://registry.yarnpkg.com/amazon-cognito-identity-js/-/amazon-cognito-identity-js-1.18.0.tgz#15db42c64f038b7d009b3c35627fb5674f25ccd8"
+amazon-cognito-identity-js@^1.19.0:
+  version "1.19.0"
+  resolved "https://registry.yarnpkg.com/amazon-cognito-identity-js/-/amazon-cognito-identity-js-1.19.0.tgz#c4f7a8b7bfeeb023d9621f4af34073dc6279025d"
   dependencies:
     aws-sdk "^2.6.0"
 
@@ -370,12 +370,27 @@ autoprefixer@^7.1.0:
     postcss "^6.0.1"
     postcss-value-parser "^3.2.3"
 
-aws-sdk@^2.52.0, aws-sdk@^2.6.0, aws-sdk@^2.7.13:
+aws-sdk@^2.6.0, aws-sdk@^2.7.13:
   version "2.58.0"
   resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.58.0.tgz#7ea8c3aa59e97a87c570dbe12d0042082ac1debf"
   dependencies:
     buffer "5.0.6"
     crypto-browserify "1.0.9"
+    jmespath "0.15.0"
+    querystring "0.2.0"
+    sax "1.2.1"
+    url "0.10.3"
+    uuid "3.0.1"
+    xml2js "0.4.17"
+    xmlbuilder "4.2.1"
+
+aws-sdk@^2.84.0:
+  version "2.84.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.84.0.tgz#c87bb05bc43bea681c115503f73a7e784c9bfeb6"
+  dependencies:
+    buffer "4.9.1"
+    crypto-browserify "1.0.9"
+    events "^1.1.1"
     jmespath "0.15.0"
     querystring "0.2.0"
     sax "1.2.1"
@@ -1419,6 +1434,14 @@ buffer-xor@^1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/buffer-xor/-/buffer-xor-1.0.3.tgz#26e61ed1422fb70dd42e6e36729ed51d855fe8d9"
 
+buffer@4.9.1, buffer@^4.3.0, buffer@^4.9.0:
+  version "4.9.1"
+  resolved "https://registry.yarnpkg.com/buffer/-/buffer-4.9.1.tgz#6d1bb601b07a4efced97094132093027c95bc298"
+  dependencies:
+    base64-js "^1.0.2"
+    ieee754 "^1.1.4"
+    isarray "^1.0.0"
+
 buffer@5.0.6:
   version "5.0.6"
   resolved "https://registry.yarnpkg.com/buffer/-/buffer-5.0.6.tgz#2ea669f7eec0b6eda05b08f8b5ff661b28573588"
@@ -1431,14 +1454,6 @@ buffer@^3.0.1:
   resolved "https://registry.yarnpkg.com/buffer/-/buffer-3.6.0.tgz#a72c936f77b96bf52f5f7e7b467180628551defb"
   dependencies:
     base64-js "0.0.8"
-    ieee754 "^1.1.4"
-    isarray "^1.0.0"
-
-buffer@^4.3.0, buffer@^4.9.0:
-  version "4.9.1"
-  resolved "https://registry.yarnpkg.com/buffer/-/buffer-4.9.1.tgz#6d1bb601b07a4efced97094132093027c95bc298"
-  dependencies:
-    base64-js "^1.0.2"
     ieee754 "^1.1.4"
     isarray "^1.0.0"
 
@@ -2958,7 +2973,7 @@ eventemitter3@1.x.x:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-1.2.0.tgz#1c86991d816ad1e504750e73874224ecf3bec508"
 
-events@^1.0.0:
+events@^1.0.0, events@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/events/-/events-1.1.1.tgz#9ebdb7635ad099c70dcc4c2a1f5004288e8bd924"
 

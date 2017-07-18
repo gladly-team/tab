@@ -5,8 +5,8 @@ class WidgetSharedSpace extends React.Component {
   render () {
     const main = {
       position: 'absolute',
-      top: 70,
-      left: 20,
+      top: 50,
+      left: 5,
       backgroundColor: 'transparent',
       width: 300,
       height: '80vh',

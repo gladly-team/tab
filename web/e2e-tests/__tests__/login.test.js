@@ -6,10 +6,9 @@ import driverUtils from '../utils/driver-utils'
 import { getDriver, getAppBaseUrl } from '../utils/driver-mgr'
 import {
   randomString,
-  setUserEmail,
-  setUserPassword,
   createUser,
-  signOutUser
+  signOutUser,
+  login
 } from '../utils/test-utils'
 
 let driver
@@ -25,16 +24,24 @@ describe('Login Tests', function () {
     Await(driverUtils(driver).navigateTo(getAppBaseUrl()))
 
     // Create a new user
-    const userEmail = randomString(6) + '@tfac.com'
+    const username = randomString(6)
+    const userEmail = username + '@tfac.com'
     const userPassword = 'NewUserPassword1'
-    Await(createUser(driver, userEmail, userPassword))
+    Await(createUser(driver, username, userEmail, userPassword))
     Await(signOutUser(driver))
 
-    // Log in as that user
+    // Log in as that user with username
     Await(driverUtils(driver).navigateTo(getAppBaseUrl()))
-    Await(setUserEmail(driver, userEmail))
-    Await(setUserPassword(driver, userPassword))
+    Await(login(driver, username, userPassword))
+
     const dashboardId = 'app-dashboard-id'
+    Await(driverUtils(driver).waitForElementVisible(dashboardId))
+    Await(signOutUser(driver))
+
+    // Log in as that user with email
+    Await(driverUtils(driver).navigateTo(getAppBaseUrl()))
+    Await(login(driver, userEmail, userPassword))
+
     Await(driverUtils(driver).waitForElementVisible(dashboardId))
     Await(signOutUser(driver))
   }), 90e3)
