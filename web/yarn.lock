@@ -370,21 +370,7 @@ autoprefixer@^7.1.0:
     postcss "^6.0.1"
     postcss-value-parser "^3.2.3"
 
-aws-sdk@^2.6.0, aws-sdk@^2.7.13:
-  version "2.58.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.58.0.tgz#7ea8c3aa59e97a87c570dbe12d0042082ac1debf"
-  dependencies:
-    buffer "5.0.6"
-    crypto-browserify "1.0.9"
-    jmespath "0.15.0"
-    querystring "0.2.0"
-    sax "1.2.1"
-    url "0.10.3"
-    uuid "3.0.1"
-    xml2js "0.4.17"
-    xmlbuilder "4.2.1"
-
-aws-sdk@^2.84.0:
+aws-sdk@^2.6.0, aws-sdk@^2.7.13, aws-sdk@^2.84.0:
   version "2.84.0"
   resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.84.0.tgz#c87bb05bc43bea681c115503f73a7e784c9bfeb6"
   dependencies:
@@ -1441,13 +1427,6 @@ buffer@4.9.1, buffer@^4.3.0, buffer@^4.9.0:
     base64-js "^1.0.2"
     ieee754 "^1.1.4"
     isarray "^1.0.0"
-
-buffer@5.0.6:
-  version "5.0.6"
-  resolved "https://registry.yarnpkg.com/buffer/-/buffer-5.0.6.tgz#2ea669f7eec0b6eda05b08f8b5ff661b28573588"
-  dependencies:
-    base64-js "^1.0.2"
-    ieee754 "^1.1.4"
 
 buffer@^3.0.1:
   version "3.6.0"
