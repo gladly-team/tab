@@ -70,7 +70,8 @@ const getItemsFromJsonFile = function (fileName, strReplacements = []) {
   const filePath = path.join(__dirname, '../fixtures/', fileName)
   const fileStr = fs.readFileSync(filePath, 'utf8')
 
-  // Replace a user ID in the fixtures if needed.
+  // If needed, replace any strings in the fixtures before loading
+  // them (e.g. replace a hardcoded user ID with a real user ID).
   var fileStrFinal = fileStr
   strReplacements.forEach((item) => {
     if (item.before && item.after) {
