@@ -2,6 +2,10 @@
 service: graphql
 frameworkVersion: ">=1.14.0 <2.0.0"
 
+custom:
+  stageDefault: dev
+  dbTableArnBase: arn:aws:dynamodb:${env:AWS_REGION}:${env:AWS_ACCOUNT_ID}:table/
+
 provider:
   name: aws
   runtime: nodejs6.10
@@ -31,10 +35,12 @@ provider:
         - "dynamodb:Query"
         - "dynamodb:Scan"
         - "dynamodb:UpdateItem"
-      Resource: "${cf:dynamodb-${self:provider.stage}}"
-
-custom:
-  stageDefault: dev
+      Resource: "*"
+    # Users table
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:Scan"
+      Resource: "${self:custom.dbTableArnBase}Users-${self:provider.stage}"
 
 plugins:
   # Include only the required node modules.

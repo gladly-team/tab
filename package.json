@@ -23,7 +23,7 @@
     "test": "npm-run-all -s parent:test graphql:test lambda:test web:test dynamodb:test",
     "test:integration": "npm-run-all -s graphql:test:integration web:test:integration",
     "ci:deploy": "babel-node ./scripts/deploy.js",
-    "ci:deployservices": "npm-run-all -s graphql:deploy lambda:deploy web:deploy dynamodb:deploy s3:deploy cognito:deploy",
+    "ci:deployservices": "npm-run-all -s dynamodb:deploy graphql:deploy lambda:deploy s3:deploy cognito:deploy web:deploy",
     "ci:test": "babel-node ./scripts/runTests.js",
     "ci:test:integration": "babel-node ./scripts/runEndToEndTests.js",
     "parent:install": "yarn install",

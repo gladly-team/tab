@@ -12,6 +12,7 @@ env:
   ########## Test stage ##########
   - TEST_NODE_ENV=production
   - TEST_AWS_REGION=us-west-2
+  - TEST_AWS_ACCOUNT_ID=167811431063
   # AWS Cognito
   - TEST_COGNITO_REGION=us-west-2
   - TEST_COGNITO_IDENTITYPOOLID=arn:aws:cognito-idp:us-west-2:167811431063:userpool/us-west-2_r5AVxbLTi
@@ -41,6 +42,7 @@ env:
   ########## Dev stage ##########
   - DEV_NODE_ENV=production
   - DEV_AWS_REGION=us-west-2
+  - DEV_AWS_ACCOUNT_ID=167811431063
   # AWS Cognito
   - DEV_COGNITO_REGION=us-west-2
   - DEV_COGNITO_IDENTITYPOOLID=arn:aws:cognito-idp:us-west-2:167811431063:userpool/us-west-2_zu5kEM34P
