@@ -55,10 +55,10 @@ class Charity extends BaseModel {
  */
 function getCharity (id) {
   return Charity.get(id)
-            .then(charity => charity)
-            .catch(err => {
-              logger.error('Error while getting the charity.', err)
-            })
+    .then(charity => charity)
+    .catch(err => {
+      logger.error('Error while getting the charity.', err)
+    })
 }
 
 /**
@@ -68,10 +68,10 @@ function getCharity (id) {
  */
 function getCharities () {
   return Charity.getAll()
-            .then(charities => charities)
-            .catch(err => {
-              logger.error('Error while fetching the charities.', err)
-            })
+    .then(charities => charities)
+    .catch(err => {
+      logger.error('Error while fetching the charities.', err)
+    })
 }
 
 export {
