@@ -14,7 +14,7 @@ describe('GraphQL with authorized user', () => {
   var cognitoUsername = null
   var cognitoUserId = null
   var cognitoUserIdToken = null
-  const origUserId = 'xyz789vw-yz89-yz80-yz80-xyz789tuv456'
+  const origUserId = 'gqltest1-yz89-yz80-yz80-xyz789tuv456'
 
   beforeAll(async () => {
     // Create a Cognito user.
@@ -83,7 +83,7 @@ describe('GraphQL with unauthorized user', () => {
         }
       }`,
       {
-        userId: 'xyz789vw-yz89-yz80-yz80-xyz789tuv456'
+        userId: 'gqltest1-yz89-yz80-yz80-xyz789tuv456'
       }
     )
     expect(response.message).toBe('Unauthorized')
@@ -100,7 +100,7 @@ describe('GraphQL with unauthorized user', () => {
         }
       }`,
       {
-        userId: 'xyz789vw-yz89-yz80-yz80-xyz789tuv456'
+        userId: 'gqltest1-yz89-yz80-yz80-xyz789tuv456'
       },
       'falsetoken123falsetoken123falsetoken123falsetoken123'
     )

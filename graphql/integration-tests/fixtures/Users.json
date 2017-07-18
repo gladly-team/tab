@@ -1,6 +1,6 @@
 [
   {
-    "id": "123abc45-12ab-12ab-12ab-123abc456def",
+    "id": "gqltest1-12ab-12ab-12ab-123abc456def",
     "username": "kevin",
     "email": "foo@bar.com",
     "vcCurrent": 10,
@@ -9,7 +9,7 @@
     "heartsUntilNextLevel": 5
   },
   {
-    "id": "xyz789vw-yz89-yz80-yz80-xyz789tuv456",
+    "id": "gqltest1-yz89-yz80-yz80-xyz789tuv456",
     "username": "susan",
     "email": "susan@example.com",
     "vcCurrent": 200,

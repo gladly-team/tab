@@ -13,7 +13,7 @@ import fetchQuery from '../fetch-graphql'
 var cognitoUsername = null
 var cognitoUserId = null
 var cognitoUserIdToken = null
-const fixtureUserId = '123abc45-12ab-12ab-12ab-123abc456def'
+const fixtureUserId = 'gqltest1-12ab-12ab-12ab-123abc456def'
 
 beforeAll(async () => {
   // Create a Cognito user.
