@@ -1,6 +1,8 @@
 import uuid from 'uuid/v4'
 import database from '../database'
+import { listToString } from '../utils'
 import { NotImplementedException } from '../../utils/exceptions'
+import moment from 'moment'
 
 /*
  * Class representing a BaseModel.
@@ -15,6 +17,8 @@ class BaseModel {
      */
   constructor (id) {
     this.id = id || uuid()
+    this.updated = ''
+    this.created = ''
   }
 
   /**
@@ -123,9 +127,15 @@ class BaseModel {
      * @return {Promise} A promise that resolve into the db response.
      */
   static add (item, args = {}) {
+    const finalItem = Object.assign({},
+      item, {
+        updated: moment.utc().format(),
+        created: moment.utc().format()
+      })
+
     var params = Object.assign({}, {
       TableName: this.getTableName(),
-      Item: item
+      Item: finalItem
     }, args)
 
     return database.put(params).then(data => {
@@ -140,13 +150,21 @@ class BaseModel {
      * @return {Promise<BaseModel>} A promise that resolve
      * into an instance of the child class.
      */
-  static update (id, args = {}) {
+  static update (id, config, args = {}) {
     const key = this.getKey(id)
+
+    if (args.hasOwnProperty('UpdateExpression')) {
+      throw new Error(`You included an invalid param <UpdateExpression> into the args.
+        Use config to define the update expression for the update method.`)
+    }
+
+    const finalArgs = this.updateArgsBuilder(args)
 
     var params = {
       TableName: this.getTableName(),
       Key: key,
-      ...args
+      UpdateExpression: this.updateExpressionBuilder(config),
+      ...finalArgs
     }
 
     const self = this
@@ -176,11 +194,116 @@ class BaseModel {
   }
 
   /**
+   * Adds to the update operation args the updated attribute to
+   * the attribute definition. The updated attribute is then use
+   * by the updateExpressionBuilder to set the updated datetime
+   * for an item.
+   * @param {Object} The update expresion args.
+   * @return {Object} The update expresion args with the update attribute.
+  */
+  static updateArgsBuilder (args) {
+    const updatedExpressionAttributeNames = {
+      '#updated': 'updated',
+      '#created': 'created'
+    }
+
+    const updatedExpressionAttributeValues = {
+      ':updated': moment.utc().format(),
+      ':created': moment.utc().format()
+    }
+
+    if (!args.hasOwnProperty('ExpressionAttributeNames')) {
+      args['ExpressionAttributeNames'] = {}
+    }
+
+    if (!args.hasOwnProperty('ExpressionAttributeValues')) {
+      args['ExpressionAttributeValues'] = {}
+    }
+
+    args['ExpressionAttributeNames'] = Object.assign({},
+      args['ExpressionAttributeNames'], updatedExpressionAttributeNames)
+
+    args['ExpressionAttributeValues'] = Object.assign({},
+      args['ExpressionAttributeValues'], updatedExpressionAttributeValues)
+
+    return args
+  }
+
+  /**
+   * Gets an object where the keys are the update expresion operations
+   * set|add|remove|delete and the values of each expression in a list and
+   * output the update expresion string.
+   * Check docs at http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateItem.html#DDB-UpdateItem-request-UpdateExpression
+   * @param {Object} The update expresion configuration.
+   * @return {String} The update expresion string to use in update.
+  */
+  static updateExpressionBuilder (config) {
+    if (!config) { throw new Error('Empty update expression config received.') }
+
+    var setOp = ''
+    var addOp = ''
+    var removeOp = ''
+    var deleteOp = ''
+
+    for (var key in config) {
+      var fieldName = key.toLowerCase()
+      switch (fieldName) {
+        case 'set':
+          if (setOp) {
+            throw new Error(`Invalid Update expression config received. 
+              Duplicated declaration of operation set. Check your config.`)
+          }
+
+          setOp += 'SET ' + listToString(config[key], ',')
+          break
+        case 'add':
+          if (addOp) {
+            throw new Error(`Invalid Update expression config received. 
+              Duplicated declaration of operation set. Check your config.`)
+          }
+
+          addOp += 'ADD ' + listToString(config[key], ',')
+          break
+        case 'remove':
+          if (removeOp) {
+            throw new Error(`Invalid Update expression config received. 
+              Duplicated declaration of operation set. Check your config.`)
+          }
+
+          removeOp += 'REMOVE ' + listToString(config[key], ',')
+          break
+        case 'delete':
+          if (deleteOp) {
+            throw new Error(`Invalid Update expression config received. 
+              Duplicated declaration of operation set. Check your config.`)
+          }
+
+          deleteOp += 'DELETE ' + listToString(config[key], ',')
+          break
+        default:
+          throw new Error(`Invalid Update expression config received. 
+            Expected set|add|remove|delete and got ` + key)
+      }
+    }
+
+    // Add the last time updated to the expression.
+    if (setOp === '') { setOp += 'SET ' } else { setOp += ',' }
+    setOp += '#updated = :updated,#created = if_not_exists(#created, :created)'
+
+    var result = [setOp]
+    if (addOp !== '') { result.push(addOp) }
+    if (removeOp !== '') { result.push(removeOp) }
+    if (deleteOp !== '') { result.push(deleteOp) }
+
+    return listToString(result, ' ')
+  }
+
+  /**
    * Converts from a database object or
    * list of objects to a child class object.
    * @param {Object || Object[]} The database object or list of objects.
-     * @return {BaseModel | BaseModel[]} the child class object or list.
-     */
+   * @return {BaseModel | BaseModel[]} the child class object or list.
+  */
   static deserialize (obj) {
     const self = this
     const deserializeObj = (obj) => {
@@ -205,6 +328,11 @@ class BaseModel {
           instance[field] = obj[field] || instance[field]
         }
       }
+
+      // Add created and updated.
+      instance.updated = obj.hasOwnProperty('updated') ? obj['updated'] : ''
+      instance.created = obj.hasOwnProperty('created') ? obj['created'] : ''
+
       return instance
     }
 
