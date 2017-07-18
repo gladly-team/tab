@@ -60,10 +60,10 @@ class Widget extends BaseModel {
  */
 function getWidget (id) {
   return Widget.get(id)
-            .then(widget => widget)
-            .catch(err => {
-              logger.error('Error while getting the widget.', err)
-            })
+    .then(widget => widget)
+    .catch(err => {
+      logger.error('Error while getting the widget.', err)
+    })
 }
 
 /**
@@ -85,10 +85,10 @@ function getWidgets () {
   }
 
   return Widget.getAll(params)
-            .then(widgets => widgets)
-            .catch(err => {
-              logger.error('Error while fetching the widgets.', err)
-            })
+    .then(widgets => widgets)
+    .catch(err => {
+      logger.error('Error while fetching the widgets.', err)
+    })
 }
 
 export {

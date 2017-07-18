@@ -1,6 +1,6 @@
 /** @module database */
 
-import { DBLogger } from '../utils/dev-tools'
+import { DBLogger, logger } from '../utils/dev-tools'
 import config from '../config'
 
 var AWS = require('aws-sdk')
@@ -24,10 +24,13 @@ var database = {}
 database.put = function (params) {
   DBLogger.action('put', params)
   return dynamoDb.put(params).promise()
-            .then(data => {
-              DBLogger.response('put', data)
-              return data
-            })
+    .then(data => {
+      DBLogger.response('put', data)
+      return data
+    })
+    .catch(err => {
+      logger.error(err)
+    })
 }
 
 /**
@@ -39,10 +42,13 @@ database.put = function (params) {
 database.get = function (params) {
   DBLogger.action('get', params)
   return dynamoDb.get(params).promise()
-            .then(data => {
-              DBLogger.response('get', data)
-              return data
-            })
+    .then(data => {
+      DBLogger.response('get', data)
+      return data
+    })
+    .catch(err => {
+      logger.error(err)
+    })
 }
 
 /**
@@ -54,10 +60,13 @@ database.get = function (params) {
 database.batchGet = function (params) {
   DBLogger.action('batchGet', params)
   return dynamoDb.batchGet(params).promise()
-            .then(data => {
-              DBLogger.response('get', data)
-              return data
-            })
+    .then(data => {
+      DBLogger.response('get', data)
+      return data
+    })
+    .catch(err => {
+      logger.error(err)
+    })
 }
 
 /**
@@ -69,10 +78,13 @@ database.batchGet = function (params) {
 database.query = function (params) {
   DBLogger.action('query', params)
   return dynamoDb.query(params).promise()
-            .then(data => {
-              DBLogger.response('query', data)
-              return data
-            })
+    .then(data => {
+      DBLogger.response('query', data)
+      return data
+    })
+    .catch(err => {
+      logger.error(err)
+    })
 }
 
 /**
@@ -84,10 +96,13 @@ database.query = function (params) {
 database.scan = function (params) {
   DBLogger.action('scan', params)
   return dynamoDb.scan(params).promise()
-            .then(data => {
-              DBLogger.response('scan', data)
-              return data
-            })
+    .then(data => {
+      DBLogger.response('scan', data)
+      return data
+    })
+    .catch(err => {
+      logger.error(err)
+    })
 }
 
 /**
@@ -99,10 +114,13 @@ database.scan = function (params) {
 database.update = function (params) {
   DBLogger.action('update', params)
   return dynamoDb.update(params).promise()
-  .then(data => {
-    DBLogger.response('update', data)
-    return data
-  })
+    .then(data => {
+      DBLogger.response('update', data)
+      return data
+    })
+    .catch(err => {
+      logger.error(err)
+    })
 }
 
 /** Dynamo DB wrapper. */

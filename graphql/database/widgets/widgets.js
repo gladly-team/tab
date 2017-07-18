@@ -68,7 +68,9 @@ var getUserWidgets = Async(function (userId, enabled) {
     indexMapper[widgetId] = index
   }
 
-  if (!keys.length) { return [] }
+  if (!keys || keys.length === 0) {
+    return []
+  }
 
   var widgets = Await(Widget.getBatch(keys))
   Widget.sorted(widgets)
@@ -153,10 +155,10 @@ var updateUserWidgetConfig = Async(function (userId, widgetId, config) {
  */
 var getAllWidgets = Async(function () {
   const widgets = Await(getWidgets())
-  for (var i = 0; i < widgets.length; i++) {
+  widgets.forEach((widget, i) => {
     widgets[i].widgetId = widgets[i].id
     widgets[i].settings = JSON.stringify(widgets[i].settings)
-  }
+  })
   Widget.sorted(widgets)
   return widgets
 })
