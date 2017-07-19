@@ -21,78 +21,62 @@ provider:
   # See rules based on Cognito user ID:
   #   https://stackoverflow.com/a/25888309
   iamRoleStatements:
+    # Charities table
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:BatchGetItem"
+        - "dynamodb:GetItem"
+        - "dynamodb:Query"
+        - "dynamodb:Scan"
+      Resource: "${self:custom.dbTableArnBase}Charities-${self:provider.stage}"
+    # Widgets table
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:BatchGetItem"
+        - "dynamodb:GetItem"
+        - "dynamodb:Query"
+        - "dynamodb:Scan"
+      Resource: "${self:custom.dbTableArnBase}Widgets-${self:provider.stage}"
+    # Users table
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:GetItem"
+        - "dynamodb:PutItem"
+        - "dynamodb:Query"
+        - "dynamodb:UpdateItem"
+      Resource: "${self:custom.dbTableArnBase}Users-${self:provider.stage}"
+    # UserLevels table
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:BatchGetItem"
+        - "dynamodb:GetItem"
+        - "dynamodb:Query"
+      Resource: "${self:custom.dbTableArnBase}UserLevels-${self:provider.stage}"
+    # VcDonationLog table
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:PutItem"
+      Resource: "${self:custom.dbTableArnBase}VcDonationLog-${self:provider.stage}"
+    # BackgroundImages table
+    - Effect: "Allow"
+      Action:
+        # FIXME: testing permissions failure
+        - "dynamodb:PutItem"
+        # - "dynamodb:BatchGetItem"
+        # - "dynamodb:GetItem"
+        # - "dynamodb:Query"
+      Resource: "${self:custom.dbTableArnBase}BackgroundImages-${self:provider.stage}"
+    # UserWidgets table
     - Effect: "Allow"
       Action:
         - "dynamodb:BatchGetItem"
         - "dynamodb:BatchWriteItem"
-        - "dynamodb:DeleteItem"
-        - "dynamodb:DescribeReservedCapacity"
-        - "dynamodb:DescribeReservedCapacityOfferings"
-        - "dynamodb:DescribeTable"
-        - "dynamodb:DescribeTimeToLive"
         - "dynamodb:GetItem"
-        - "dynamodb:ListTables"
-        - "dynamodb:ListTagsOfResource"
         - "dynamodb:PutItem"
         - "dynamodb:Query"
         - "dynamodb:Scan"
         - "dynamodb:UpdateItem"
-      Resource: "*"
-    # # Charities table
-    # - Effect: "Allow"
-    #   Action:
-    #     - "dynamodb:BatchGetItem"
-    #     - "dynamodb:GetItem"
-    #     - "dynamodb:Query"
-    #     - "dynamodb:Scan"
-    #   Resource: "${self:custom.dbTableArnBase}Charities-${self:provider.stage}"
-    # # Widgets table
-    # - Effect: "Allow"
-    #   Action:
-    #     - "dynamodb:BatchGetItem"
-    #     - "dynamodb:GetItem"
-    #     - "dynamodb:Query"
-    #     - "dynamodb:Scan"
-    #   Resource: "${self:custom.dbTableArnBase}Widgets-${self:provider.stage}"
-    # # Users table
-    # - Effect: "Allow"
-    #   Action:
-    #     - "dynamodb:GetItem"
-    #     - "dynamodb:PutItem"
-    #     - "dynamodb:Query"
-    #     - "dynamodb:UpdateItem"
-    #   Resource: "${self:custom.dbTableArnBase}Users-${self:provider.stage}"
-    # # UserLevels table
-    # - Effect: "Allow"
-    #   Action:
-    #     - "dynamodb:BatchGetItem"
-    #     - "dynamodb:GetItem"
-    #     - "dynamodb:Query"
-    #   Resource: "${self:custom.dbTableArnBase}UserLevels-${self:provider.stage}"
-    # # VcDonationLog table
-    # - Effect: "Allow"
-    #   Action:
-    #     - "dynamodb:PutItem"
-    #   Resource: "${self:custom.dbTableArnBase}VcDonationLog-${self:provider.stage}"
-    # # BackgroundImages table
-    # - Effect: "Allow"
-    #   Action:
-    #     # FIXME: testing permissions failure
-    #     - "dynamodb:PutItem"
-    #     # - "dynamodb:BatchGetItem"
-    #     # - "dynamodb:GetItem"
-    #     # - "dynamodb:Query"
-    #   Resource: "${self:custom.dbTableArnBase}BackgroundImages-${self:provider.stage}"
-    # # UserWidgets table
-    # - Effect: "Allow"
-    #   Action:
-    #     - "dynamodb:BatchGetItem"
-    #     - "dynamodb:BatchWriteItem"
-    #     - "dynamodb:GetItem"
-    #     - "dynamodb:PutItem"
-    #     - "dynamodb:Query"
-    #     - "dynamodb:UpdateItem"
-    #   Resource: "${self:custom.dbTableArnBase}UserWidgets-${self:provider.stage}"
+      Resource: "${self:custom.dbTableArnBase}UserWidgets-${self:provider.stage}"
 
 plugins:
   # Include only the required node modules.
