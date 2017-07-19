@@ -7,8 +7,8 @@ const awsRegion = config.AWS_REGION || 'us-west-2'
 AWS.config.update({
   region: awsRegion,
   endpoint: `cognito-idp.${awsRegion}.amazonaws.com`,
-  accessKeyId: config.AWS_ACCESS_KEY_ID || 'fakeKey123',
-  secretAccessKey: config.AWS_SECRET_ACCESS_KEY || 'fakeSecretKey123'
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID || 'fakeKey123',
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || 'fakeSecretKey123'
 })
 const cognitoIDP = new AWS.CognitoIdentityServiceProvider()
 
