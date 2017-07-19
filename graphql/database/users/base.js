@@ -25,6 +25,7 @@ class User extends BaseModel {
     this.vcCurrent = 0
     this.vcAllTime = 0
     this.level = 1
+    this.lastTabTimestamp = null
 
     // This value needs to match the hearts requiered for lv2 in DB.
     this.heartsUntilNextLevel = 5
@@ -66,7 +67,8 @@ class User extends BaseModel {
       'backgroundOption',
       'customImage',
       'backgroundColor',
-      'activeWidget'
+      'activeWidget',
+      'lastTabTimestamp'
     ]
   }
 }
@@ -152,8 +154,13 @@ var _setUserBackgroundImage = Async(function (userId, image, mode) {
     mode = User.BACKGROUND_OPTION_PHOTO
   }
 
-  var updateExpression = `SET #backgroundImage = :backgroundImage,
-    #backgroundOption = :backgroundOption`
+  var updateExpression = {
+    set: [
+      '#backgroundImage = :backgroundImage',
+      '#backgroundOption = :backgroundOption'
+    ]
+  }
+
   var expressionAttributeNames = {
     '#backgroundImage': 'backgroundImage',
     '#backgroundOption': 'backgroundOption'
@@ -164,13 +171,12 @@ var _setUserBackgroundImage = Async(function (userId, image, mode) {
   }
 
   var params = {
-    UpdateExpression: updateExpression,
     ExpressionAttributeNames: expressionAttributeNames,
     ExpressionAttributeValues: expressionAttributeValues,
     ReturnValues: 'ALL_NEW'
   }
 
-  const user = Await(User.update(userId, params))
+  const user = Await(User.update(userId, updateExpression, params))
   return user
 })
 
@@ -181,8 +187,13 @@ var _setUserBackgroundImage = Async(function (userId, image, mode) {
  * @return {Promise<User>}  A promise that resolve into a User instance.
  */
 var setUserBackgroundColor = Async(function (userId, color) {
-  var updateExpression = `SET #backgroundColor = :backgroundColor,
-    #backgroundOption = :backgroundOption`
+  var updateExpression = {
+    set: [
+      '#backgroundColor = :backgroundColor',
+      '#backgroundOption = :backgroundOption'
+    ]
+  }
+
   var expressionAttributeNames = {
     '#backgroundColor': 'backgroundColor',
     '#backgroundOption': 'backgroundOption'
@@ -193,13 +204,12 @@ var setUserBackgroundColor = Async(function (userId, color) {
   }
 
   var params = {
-    UpdateExpression: updateExpression,
     ExpressionAttributeNames: expressionAttributeNames,
     ExpressionAttributeValues: expressionAttributeValues,
     ReturnValues: 'ALL_NEW'
   }
 
-  const user = Await(User.update(userId, params))
+  const user = Await(User.update(userId, updateExpression, params))
   return user
 })
 
@@ -210,8 +220,13 @@ var setUserBackgroundColor = Async(function (userId, color) {
  * @return {Promise<User>}  A promise that resolve into a User instance.
  */
 var setUserBackgroundFromCustomUrl = Async(function (userId, imageUrl) {
-  var updateExpression = `SET #customImage = :customImage,
-    #backgroundOption = :backgroundOption`
+  var updateExpression = {
+    set: [
+      '#customImage = :customImage',
+      '#backgroundOption = :backgroundOption'
+    ]
+  }
+
   var expressionAttributeNames = {
     '#customImage': 'customImage',
     '#backgroundOption': 'backgroundOption'
@@ -222,13 +237,12 @@ var setUserBackgroundFromCustomUrl = Async(function (userId, imageUrl) {
   }
 
   var params = {
-    UpdateExpression: updateExpression,
     ExpressionAttributeNames: expressionAttributeNames,
     ExpressionAttributeValues: expressionAttributeValues,
     ReturnValues: 'ALL_NEW'
   }
 
-  const user = Await(User.update(userId, params))
+  const user = Await(User.update(userId, updateExpression, params))
   return user
 })
 
@@ -252,7 +266,10 @@ var setUserBackgroundDaily = Async(function (userId) {
  * @return {Promise<User>}  A promise that resolve into a User instance.
  */
 var setUserActiveWidget = Async(function (userId, widgetId) {
-  var updateExpression = `SET #activeWidget = :activeWidget`
+  var updateExpression = {
+    set: [ '#activeWidget = :activeWidget' ]
+  }
+
   var expressionAttributeNames = {
     '#activeWidget': 'activeWidget'
   }
@@ -261,13 +278,12 @@ var setUserActiveWidget = Async(function (userId, widgetId) {
   }
 
   var params = {
-    UpdateExpression: updateExpression,
     ExpressionAttributeNames: expressionAttributeNames,
     ExpressionAttributeValues: expressionAttributeValues,
     ReturnValues: 'ALL_NEW'
   }
 
-  const user = Await(User.update(userId, params))
+  const user = Await(User.update(userId, updateExpression, params))
   return user
 })
 

@@ -153,7 +153,10 @@ function getUserWidgetsByEnabledState (userId, enabled) {
  * Widget.
  */
 var updateWidgetData = Async(function (userId, widgetId, data) {
-  var updateExpression = `SET #data = :data`
+  var updateExpression = {
+    set: ['#data = :data']
+  }
+
   var expressionAttributeNames = {
     '#data': 'data'
   }
@@ -162,7 +165,6 @@ var updateWidgetData = Async(function (userId, widgetId, data) {
   }
 
   var params = {
-    UpdateExpression: updateExpression,
     ExpressionAttributeNames: expressionAttributeNames,
     ExpressionAttributeValues: expressionAttributeValues,
     ReturnValues: 'ALL_NEW'
@@ -173,7 +175,7 @@ var updateWidgetData = Async(function (userId, widgetId, data) {
     widgetId: widgetId
   }
 
-  return Await(UserWidget.update(key, params))
+  return Await(UserWidget.update(key, updateExpression, params))
 })
 
 /**
@@ -185,7 +187,9 @@ var updateWidgetData = Async(function (userId, widgetId, data) {
  * Widget.
  */
 var updateWidgetConfig = Async(function (userId, widgetId, config) {
-  var updateExpression = `SET #config = :config`
+  var updateExpression = {
+    set: ['#config = :config']
+  }
   var expressionAttributeNames = {
     '#config': 'config'
   }
@@ -194,7 +198,6 @@ var updateWidgetConfig = Async(function (userId, widgetId, config) {
   }
 
   var params = {
-    UpdateExpression: updateExpression,
     ExpressionAttributeNames: expressionAttributeNames,
     ExpressionAttributeValues: expressionAttributeValues,
     ReturnValues: 'ALL_NEW'
@@ -205,7 +208,7 @@ var updateWidgetConfig = Async(function (userId, widgetId, config) {
     widgetId: widgetId
   }
 
-  return Await(UserWidget.update(key, params))
+  return Await(UserWidget.update(key, updateExpression, params))
 })
 
 /**
@@ -217,7 +220,10 @@ var updateWidgetConfig = Async(function (userId, widgetId, config) {
  * widget.
  */
 var updateWidgetVisibility = Async(function (userId, widgetId, visible) {
-  var updateExpression = `SET #visible = :visible`
+  var updateExpression = {
+    set: ['#visible = :visible']
+  }
+
   var expressionAttributeNames = {
     '#visible': 'visible'
   }
@@ -226,7 +232,6 @@ var updateWidgetVisibility = Async(function (userId, widgetId, visible) {
   }
 
   var params = {
-    UpdateExpression: updateExpression,
     ExpressionAttributeNames: expressionAttributeNames,
     ExpressionAttributeValues: expressionAttributeValues,
     ReturnValues: 'ALL_NEW'
@@ -237,7 +242,7 @@ var updateWidgetVisibility = Async(function (userId, widgetId, visible) {
     widgetId: widgetId
   }
 
-  return Await(UserWidget.update(key, params))
+  return Await(UserWidget.update(key, updateExpression, params))
 })
 
 /**
@@ -249,7 +254,9 @@ var updateWidgetVisibility = Async(function (userId, widgetId, visible) {
  * widget.
  */
 var updateWidgetEnabled = Async(function (userId, widgetId, enabled) {
-  var updateExpression = `SET #enabled = :enabled`
+  var updateExpression = {
+    set: ['#enabled = :enabled']
+  }
   var expressionAttributeNames = {
     '#enabled': 'enabled'
   }
@@ -258,7 +265,6 @@ var updateWidgetEnabled = Async(function (userId, widgetId, enabled) {
   }
 
   var params = {
-    UpdateExpression: updateExpression,
     ExpressionAttributeNames: expressionAttributeNames,
     ExpressionAttributeValues: expressionAttributeValues,
     ReturnValues: 'ALL_NEW'
@@ -269,7 +275,7 @@ var updateWidgetEnabled = Async(function (userId, widgetId, enabled) {
     widgetId: widgetId
   }
 
-  return Await(UserWidget.update(key, params))
+  return Await(UserWidget.update(key, updateExpression, params))
 })
 
 export {

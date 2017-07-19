@@ -6,7 +6,9 @@
     "vcCurrent": 0,
     "vcAllTime": 0,
     "level": 1,
-    "heartsUntilNextLevel": 5
+    "heartsUntilNextLevel": 5,
+    "created": "2017-07-18T20:45:53Z",
+    "updated": "2017-07-18T20:45:53Z"
   },
   {
     "id": "25cde869-7523-4605-81a6-3029651f2e10",
@@ -14,7 +16,9 @@
     "email": "asp2insp@tfac.com",
     "vcCurrent": 50,
     "vcAllTime": 100,
-    "heartsUntilNextLevel": 200
+    "heartsUntilNextLevel": 200,
+    "created": "2017-07-18T20:45:53Z",
+    "updated": "2017-07-18T20:45:53Z"
   },
   {
     "id": "82718869-afea-4f49-9138-0b4e46df7dbf",
@@ -22,6 +26,8 @@
     "email": "sandra@tfac.com",
     "vcCurrent": 400,
     "vcAllTime": 550,
-    "heartsUntilNextLevel": 700
+    "heartsUntilNextLevel": 700,
+    "created": "2017-07-18T20:45:53Z",
+    "updated": "2017-07-18T20:45:53Z"
   }
 ]

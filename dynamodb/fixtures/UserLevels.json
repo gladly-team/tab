@@ -1,22 +1,32 @@
 [
   {
     "id": 2,
-    "hearts": 5
+    "hearts": 5,
+    "created": "2017-07-18T20:45:53Z",
+    "updated": "2017-07-18T20:45:53Z"
   },
   {
     "id": 3,
-    "hearts": 20
+    "hearts": 20,
+    "created": "2017-07-18T20:45:53Z",
+    "updated": "2017-07-18T20:45:53Z"
   },
   {
     "id": 4,
-    "hearts": 30
+    "hearts": 30,
+    "created": "2017-07-18T20:45:53Z",
+    "updated": "2017-07-18T20:45:53Z"
   },
   {
     "id": 5,
-    "hearts": 40
+    "hearts": 40,
+    "created": "2017-07-18T20:45:53Z",
+    "updated": "2017-07-18T20:45:53Z"
   },
   {
     "id": 6,
-    "hearts": 1000
+    "hearts": 1000,
+    "created": "2017-07-18T20:45:53Z",
+    "updated": "2017-07-18T20:45:53Z"
   }
 ]

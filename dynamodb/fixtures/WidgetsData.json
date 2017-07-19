@@ -4,7 +4,9 @@
     "position": 1,
     "icon": null,
     "name": "Bookmarks",
-    "type": "bookmarks"
+    "type": "bookmarks",
+    "created": "2017-07-18T20:45:53Z",
+    "updated": "2017-07-18T20:45:53Z"
   },
   {
     "id": "ab58d2da-550b-414f-895a-7bcb2cbc9d62",
@@ -20,7 +22,9 @@
         "choices": ["Google", "Bing", "Ecosia"],
         "defaultValue": "Google"
       }
-    ]
+    ],
+    "created": "2017-07-18T20:45:53Z",
+    "updated": "2017-07-18T20:45:53Z"
   },
   {
     "id": "426ccc79-d192-4435-91bd-5fda9b6f7c08",
@@ -35,20 +39,26 @@
         "display": "Use 24 hours format",
         "defaultValue": false
       }
-    ]
+    ],
+    "created": "2017-07-18T20:45:53Z",
+    "updated": "2017-07-18T20:45:53Z"
   },
   {
     "id": "4162cc79-d192-4435-91bd-5fda9b6f7c08",
     "position": 2,
     "icon": null,
     "name": "Notes",
-    "type": "notes"
+    "type": "notes",
+    "created": "2017-07-18T20:45:53Z",
+    "updated": "2017-07-18T20:45:53Z"
   },
   {
     "id": "a458d2da-550b-414f-895a-7bcb2cbc9d62",
     "position": 3,
     "icon": null,
     "name": "Todos",
-    "type": "todos"
+    "type": "todos",
+    "created": "2017-07-18T20:45:53Z",
+    "updated": "2017-07-18T20:45:53Z"
   }
 ]
