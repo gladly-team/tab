@@ -51,7 +51,7 @@ import {
 import {
   User,
   getUser,
-  updateUserVc,
+  incrementVcBy1,
   setUserBackgroundImage,
   setUserBackgroundColor,
   setUserBackgroundFromCustomUrl,
@@ -394,7 +394,7 @@ const updateVcMutation = mutationWithClientMutationId({
   },
   mutateAndGetPayload: ({userId}) => {
     const { type, id } = fromGlobalId(userId)
-    return updateUserVc(id, 1)
+    return incrementVcBy1(id)
   }
 })
 

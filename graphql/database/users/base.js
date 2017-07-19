@@ -25,6 +25,7 @@ class User extends BaseModel {
     this.vcCurrent = 0
     this.vcAllTime = 0
     this.level = 1
+    this.lastTabTimestamp = null
 
     // This value needs to match the hearts requiered for lv2 in DB.
     this.heartsUntilNextLevel = 5
@@ -66,7 +67,8 @@ class User extends BaseModel {
       'backgroundOption',
       'customImage',
       'backgroundColor',
-      'activeWidget'
+      'activeWidget',
+      'lastTabTimestamp'
     ]
   }
 }

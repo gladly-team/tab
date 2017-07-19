@@ -9,5 +9,5 @@ export {
   createUser
 } from './base'
 
-export { updateUserVc } from './updateUserVc'
+export { updateUserVc, incrementVcBy1 } from './updateUserVc'
 export { rewardReferringUser } from './rewardReferringUser'

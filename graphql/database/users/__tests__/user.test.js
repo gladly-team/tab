@@ -31,7 +31,8 @@ describe('User tests', function () {
       'backgroundOption',
       'customImage',
       'backgroundColor',
-      'activeWidget'
+      'activeWidget',
+      'lastTabTimestamp'
     ]
 
     expect(User.getFields().length).toBe(expected.length)
