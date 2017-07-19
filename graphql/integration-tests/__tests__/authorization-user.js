@@ -102,7 +102,7 @@ describe('User table queries', () => {
     `
     const response = await fetchQuery(query, {
       userId: 'gqltest1-yz89-yz80-yz80-xyz789tuv456' // another user
-    })
+    }, cognitoUserIdToken)
     expect(response.message).toBe('Unauthorized')
     expect(response.data).toBeUndefined()
   }, 60e3)
