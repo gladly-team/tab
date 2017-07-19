@@ -48,6 +48,9 @@ provider:
       Resource:
         - "${self:custom.dbTableArnBase}Users-${self:provider.stage}"
         - "${self:custom.dbTableArnBase}Users-${self:provider.stage}/index/*"
+      Condition:
+        ForAllValues:StringEquals:
+          dynamodb:LeadingKeys": "${cognito-identity.amazonaws.com:sub}"
     # UserLevels table
     - Effect: "Allow"
       Action:

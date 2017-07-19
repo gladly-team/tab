@@ -86,4 +86,24 @@ describe('User table queries', () => {
     expect(response.message).toBe('Unauthorized')
     expect(response.data).toBeUndefined()
   }, 60e3)
+
+  it('does not allow a user to fetch another user', async () => {
+    const query = `
+      query UserViewQuery(
+        $userId: String!) {
+          user(userId: $userId) {
+            userId
+            username
+            vcCurrent
+            vcAllTime
+            email
+          }
+      }
+    `
+    const response = await fetchQuery(query, {
+      userId: 'gqltest1-yz89-yz80-yz80-xyz789tuv456' // another user
+    })
+    expect(response.message).toBe('Unauthorized')
+    expect(response.data).toBeUndefined()
+  }, 60e3)
 })
