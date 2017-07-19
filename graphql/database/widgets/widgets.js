@@ -81,8 +81,7 @@ var getUserWidgets = Async(function (userId, enabled) {
     widgetId = widgets[i].id
     userWidget = userWidgets[indexMapper[widgetId]]
 
-    result.push(
-          getFullWidget(userWidget, widgets[i]))
+    result.push(getFullWidget(userWidget, widgets[i]))
   }
   return result
 })

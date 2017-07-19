@@ -77,12 +77,12 @@ function getUserWidget (userId, widgetId) {
   }
 
   return UserWidget.get(key, {})
-            .then(widget => {
-              return widget
-            })
-            .catch(err => {
-              logger.error('Error while getting the widget.', err)
-            })
+    .then(widget => {
+      return widget
+    })
+    .catch(err => {
+      logger.error('Error while getting the widget.', err)
+    })
 }
 
 /**
@@ -104,10 +104,10 @@ function getUserWidgets (userId) {
   }
 
   return UserWidget.query(params)
-            .then(widgets => widgets)
-            .catch(err => {
-              logger.error('Error while getting the widgets.', err)
-            })
+    .then(widgets => widgets)
+    .catch(err => {
+      logger.error('Error while getting the widgets.', err)
+    })
 }
 
 /**
@@ -130,18 +130,18 @@ function getUserWidgetsByEnabledState (userId, enabled) {
   }
 
   return UserWidget.query(params)
-            .then(widgets => {
-              const result = []
-              for (var index in widgets) {
-                if (widgets[index].enabled === enabled) {
-                  result.push(widgets[index])
-                }
-              }
-              return result
-            })
-            .catch(err => {
-              logger.error('Error while getting the widgets.', err)
-            })
+    .then(widgets => {
+      const result = []
+      for (var index in widgets) {
+        if (widgets[index].enabled === enabled) {
+          result.push(widgets[index])
+        }
+      }
+      return result
+    })
+    .catch(err => {
+      logger.error('Error while getting the widgets.', err)
+    })
 }
 
 /**
