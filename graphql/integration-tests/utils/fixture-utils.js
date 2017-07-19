@@ -22,6 +22,7 @@ const loadItemsIntoTable = async (items, tableName) => {
     promises.push(docClient.put(params).promise()
       .then(response => {
         console.log(`PutItem succeeded: ${JSON.stringify(item)}`)
+        console.log(`Response: ${JSON.stringify(response)}`)
       })
       .catch(err => {
         console.error(`Unable to add item ${JSON.stringify(item)}. Error JSON: ${JSON.stringify(err, null, 2)}`)
