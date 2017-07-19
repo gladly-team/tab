@@ -8,14 +8,17 @@ custom:
   # AWS doesn't yet provide an easy way to get a DynamoDB table ARN:
   # https://forums.aws.amazon.com/thread.jspa?threadID=100847
   # https://serverless.com/framework/docs/providers/aws/guide/variables#reference-cloudformation-outputs
-  dbTableArnBase: arn:aws:dynamodb:${env:AWS_REGION}:${env:AWS_ACCOUNT_ID}:table/
+  dbTableArnBase: arn:aws:dynamodb:${{env:AWS_REGION}}:${{env:AWS_ACCOUNT_ID}}:table/
 
 provider:
   name: aws
   runtime: nodejs6.10
   region: us-west-2
   profile: tab-sls
-  stage: ${env:SLS_STAGE, self:custom.stageDefault}
+  variableSyntax: "\\${{([ :a-zA-Z0-9._,\\-\\/\\(\\)]+?)}}"
+  # To avoid conflicts with CloudFormation variable syntax.
+  # https://serverless.com/framework/docs/providers/aws/guide/variables/#using-custom-variable-syntax
+  stage: ${{env:SLS_STAGE, self:custom.stageDefault}}
   # Rules for fine-grained DynamoDB access:
   #   https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/specifying-conditions.html
   #   https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/using-identity-based-policies.html
@@ -29,7 +32,7 @@ provider:
         - "dynamodb:GetItem"
         - "dynamodb:Query"
         - "dynamodb:Scan"
-      Resource: "${self:custom.dbTableArnBase}Charities-${self:provider.stage}"
+      Resource: "${{self:custom.dbTableArnBase}}Charities-${{self:provider.stage}}"
     # Widgets table
     - Effect: "Allow"
       Action:
@@ -37,7 +40,7 @@ provider:
         - "dynamodb:GetItem"
         - "dynamodb:Query"
         - "dynamodb:Scan"
-      Resource: "${self:custom.dbTableArnBase}Widgets-${self:provider.stage}"
+      Resource: "${{self:custom.dbTableArnBase}}Widgets-${{self:provider.stage}}"
     # Users table
     - Effect: "Allow"
       Action:
@@ -46,23 +49,24 @@ provider:
         - "dynamodb:Query"
         - "dynamodb:UpdateItem"
       Resource:
-        - "${self:custom.dbTableArnBase}Users-${self:provider.stage}"
-        - "${self:custom.dbTableArnBase}Users-${self:provider.stage}/index/*"
+        - "${{self:custom.dbTableArnBase}}Users-${{self:provider.stage}}"
+        - "${{self:custom.dbTableArnBase}}Users-${{self:provider.stage}}/index/*"
       Condition:
         ForAllValues:StringEquals:
-          dynamodb:LeadingKeys": "${cognito-identity.amazonaws.com:sub}"
+          dynamodb:LeadingKeys":
+            - "${cognito-identity.amazonaws.com:sub}"
     # UserLevels table
     - Effect: "Allow"
       Action:
         - "dynamodb:BatchGetItem"
         - "dynamodb:GetItem"
         - "dynamodb:Query"
-      Resource: "${self:custom.dbTableArnBase}UserLevels-${self:provider.stage}"
+      Resource: "${{self:custom.dbTableArnBase}}UserLevels-${{self:provider.stage}}"
     # VcDonationLog table
     - Effect: "Allow"
       Action:
         - "dynamodb:PutItem"
-      Resource: "${self:custom.dbTableArnBase}VcDonationLog-${self:provider.stage}"
+      Resource: "${{self:custom.dbTableArnBase}}VcDonationLog-${{self:provider.stage}}"
     # BackgroundImages table
     - Effect: "Allow"
       Action:
@@ -71,7 +75,7 @@ provider:
         # - "dynamodb:BatchGetItem"
         # - "dynamodb:GetItem"
         # - "dynamodb:Query"
-      Resource: "${self:custom.dbTableArnBase}BackgroundImages-${self:provider.stage}"
+      Resource: "${{self:custom.dbTableArnBase}}BackgroundImages-${{self:provider.stage}}"
     # UserWidgets table
     - Effect: "Allow"
       Action:
@@ -82,8 +86,8 @@ provider:
         - "dynamodb:Query"
         - "dynamodb:UpdateItem"
       Resource:
-        - "${self:custom.dbTableArnBase}UserWidgets-${self:provider.stage}"
-        - "${self:custom.dbTableArnBase}UserWidgets-${self:provider.stage}/index/*"
+        - "${{self:custom.dbTableArnBase}}UserWidgets-${{self:provider.stage}}"
+        - "${{self:custom.dbTableArnBase}}UserWidgets-${{self:provider.stage}}/index/*"
 
 plugins:
   # Include only the required node modules.
@@ -107,5 +111,5 @@ functions:
           cors: true
           # Require user to be authenticated with AWS Cognito.
           authorizer:
-            name: tab_auth_${self:provider.stage}
-            arn: ${env:COGNITO_IDENTITYPOOLID}
+            name: tab_auth_${{self:provider.stage}}
+            arn: ${{env:COGNITO_IDENTITYPOOLID}}
