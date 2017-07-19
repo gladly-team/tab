@@ -54,7 +54,9 @@ provider:
         - "dynamodb:PutItem"
         - "dynamodb:Query"
         - "dynamodb:UpdateItem"
-      Resource: "${self:custom.dbTableArnBase}Users-${self:provider.stage}"
+      Resource:
+        - "${self:custom.dbTableArnBase}Users-${self:provider.stage}"
+        - "${self:custom.dbTableArnBase}Users-${self:provider.stage}/index/*"
     # UserLevels table
     - Effect: "Allow"
       Action:
@@ -93,7 +95,9 @@ provider:
         - "dynamodb:Query"
         - "dynamodb:Scan"
         - "dynamodb:UpdateItem"
-      Resource: "${self:custom.dbTableArnBase}UserWidgets-${self:provider.stage}"
+      Resource:
+        - "${self:custom.dbTableArnBase}UserWidgets-${self:provider.stage}"
+        - "${self:custom.dbTableArnBase}UserWidgets-${self:provider.stage}/index/*"
 
 plugins:
   # Include only the required node modules.
