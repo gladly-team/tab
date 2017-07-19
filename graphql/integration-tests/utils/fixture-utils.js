@@ -11,6 +11,9 @@ import {
 import AWS from './aws-client-dynamodb'
 const docClient = new AWS.DynamoDB.DocumentClient()
 
+// Consider simplifying fixtures by using factories, e.g.:
+// https://github.com/aexmachina/factory-girl
+
 const loadItemsIntoTable = async (items, tableName) => {
   const params = {
     RequestItems: {
