@@ -9,6 +9,7 @@ provider:
   profile: tab-sls
   stage: ${env:SLS_STAGE, self:custom.stageDefault}
   iamRoleStatements:
+    # TODO: more restrictive, per-user permissions
     - Effect: "Allow"
       Action:
         - "dynamodb:BatchGetItem"
