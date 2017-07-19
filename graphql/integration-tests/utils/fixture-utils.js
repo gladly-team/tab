@@ -8,7 +8,7 @@ import {
   tableFixtureFileNames
 } from './table-utils'
 
-import AWS from './aws-client'
+import AWS from './aws-client-dynamodb'
 const docClient = new AWS.DynamoDB.DocumentClient()
 
 const loadItemsIntoTable = async (items, tableName) => {
