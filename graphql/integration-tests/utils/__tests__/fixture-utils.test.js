@@ -146,12 +146,9 @@ describe('Fixture utils', () => {
     await loadFixtures('userWidgets', [
       { before: fixtureUserId, after: cognitoUserId }
     ])
-    console.log('cognito user ID', cognitoUserId)
     const responseTwo = await fetchQuery(query, {
       userId: cognitoUserId
     }, cognitoUserIdToken)
-    console.log('responseTwo', responseTwo)
-    console.log('responseTwo widgets', responseTwo.data.user.widgets)
     expect(responseTwo.data.user.widgets.edges.length).toBe(1)
 
     // Delete fixtures. User should not exist again.
