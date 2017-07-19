@@ -84,6 +84,6 @@ describe('User table queries', () => {
       userId: cognitoUserId
     })
     expect(response.message).toBe('Unauthorized')
-    expect(response.data.user).toBeNull()
+    expect(response.data).toBeUndefined()
   }, 60e3)
 })
