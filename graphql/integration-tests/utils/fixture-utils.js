@@ -21,13 +21,11 @@ const loadItemsIntoTable = async (items, tableName) => {
 
     promises.push(docClient.put(params).promise()
       .then(response => {
-        console.log(response)
         // console.log(`PutItem succeeded: ${JSON.stringify(item)}`)
-        // console.log(`Response: ${JSON.stringify(response)}`)
       })
       .catch(err => {
         console.log(err)
-        // console.error(`Unable to add item ${JSON.stringify(item)}. Error JSON: ${JSON.stringify(err, null, 2)}`)
+        console.error(`Unable to add item ${JSON.stringify(item)}. Error JSON: ${JSON.stringify(err, null, 2)}`)
       })
     )
   })
@@ -50,12 +48,10 @@ const deleteItemsFromTable = async (items, tableName, hashKeyName, rangeKeyName)
 
     promises.push(docClient.delete(params).promise()
       .then(response => {
-        console.log(response)
-        // console.log(`DeleteItem succeeded: ${JSON.stringify(item)}`)
+        console.log(`DeleteItem succeeded: ${JSON.stringify(item)}`)
       })
       .catch(err => {
-        console.log(err)
-        // console.error(`Unable to delete item ${JSON.stringify(item)}. Error JSON: ${JSON.stringify(err, null, 2)}`)
+        console.error(`Unable to delete item ${JSON.stringify(item)}. Error JSON: ${JSON.stringify(err, null, 2)}`)
       })
     )
   })

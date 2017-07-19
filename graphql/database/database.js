@@ -7,9 +7,7 @@ var AWS = require('aws-sdk')
 
 AWS.config.update({
   region: config.AWS_REGION,
-  endpoint: config.DYNAMODB_ENDPOINT,
-  accessKeyId: config.AWS_ACCESS_KEY_ID,
-  secretAccessKey: config.AWS_SECRET_ACCESS_KEY
+  endpoint: config.DYNAMODB_ENDPOINT
 })
 
 var dynamoDb = new AWS.DynamoDB.DocumentClient()

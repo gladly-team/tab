@@ -132,15 +132,15 @@ describe('Fixture utils', () => {
         type
       }
     `
-    // await deleteFixtures('userWidgets', [
-    //   { before: fixtureUserId, after: cognitoUserId }
-    // ])
+    await deleteFixtures('userWidgets', [
+      { before: fixtureUserId, after: cognitoUserId }
+    ])
 
-    // // UserWidget should not exist.
-    // const responseOne = await fetchQuery(query, {
-    //   userId: cognitoUserId
-    // }, cognitoUserIdToken)
-    // expect(responseOne.data.user.widgets.edges.length).toBe(0)
+    // UserWidget should not exist.
+    const responseOne = await fetchQuery(query, {
+      userId: cognitoUserId
+    }, cognitoUserIdToken)
+    expect(responseOne.data.user.widgets.edges.length).toBe(0)
 
     // Load UserWidget fixtures.
     await loadFixtures('userWidgets', [
