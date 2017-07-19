@@ -12,50 +12,52 @@ import AWS from './aws-client'
 const docClient = new AWS.DynamoDB.DocumentClient()
 
 const loadItemsIntoTable = async (items, tableName) => {
-  const promises = []
-  items.forEach(function (item) {
-    const params = {
-      TableName: tableName,
-      Item: item
+  const params = {
+    RequestItems: {
+      [tableName]: items.map((item) => {
+        return {
+          PutRequest: {
+            Item: item
+          }
+        }
+      })
     }
-
-    promises.push(docClient.put(params).promise()
+  }
+  return docClient.batchWrite(params).promise()
       .then(response => {
-        // console.log(`PutItem succeeded: ${JSON.stringify(item)}`)
+        // console.log(`BatchWrite succeeded: ${JSON.stringify(items)}`)
       })
       .catch(err => {
-        console.log(err)
-        console.error(`Unable to add item ${JSON.stringify(item)}. Error JSON: ${JSON.stringify(err, null, 2)}`)
+        console.error(`Unable to batch write items. Error: ${err}`)
       })
-    )
-  })
-  return Promise.all(promises)
 }
 
 const deleteItemsFromTable = async (items, tableName, hashKeyName, rangeKeyName) => {
-  const promises = []
-  items.forEach(function (item) {
-    const keyValues = {
-      [hashKeyName]: item[hashKeyName]
+  const params = {
+    RequestItems: {
+      [tableName]: items.map((item) => {
+        // Construct the key values.
+        const keyValues = {
+          [hashKeyName]: item[hashKeyName]
+        }
+        if (rangeKeyName) {
+          keyValues[rangeKeyName] = item[rangeKeyName]
+        }
+        return {
+          DeleteRequest: {
+            Key: keyValues
+          }
+        }
+      })
     }
-    if (rangeKeyName) {
-      keyValues[rangeKeyName] = item[rangeKeyName]
-    }
-    const params = {
-      TableName: tableName,
-      Key: keyValues
-    }
-
-    promises.push(docClient.delete(params).promise()
+  }
+  return docClient.batchWrite(params).promise()
       .then(response => {
-        // console.log(`DeleteItem succeeded: ${JSON.stringify(item)}`)
+        // console.log(`BatchWrite delete succeeded: ${JSON.stringify(items)}`)
       })
       .catch(err => {
-        console.error(`Unable to delete item ${JSON.stringify(item)}. Error JSON: ${JSON.stringify(err, null, 2)}`)
+        console.error(`Unable to batch delete items. Error: ${err}`)
       })
-    )
-  })
-  return Promise.all(promises)
 }
 
 /**
