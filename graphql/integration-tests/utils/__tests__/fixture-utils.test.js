@@ -1,4 +1,5 @@
 /* eslint-env jest */
+/* global jasmine */
 
 import {
     loadFixtures,
@@ -9,6 +10,8 @@ import {
   getNewAuthedUser
 } from '../auth-utils'
 import fetchQuery from '../fetch-graphql'
+
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 180e3
 
 var cognitoUsername = null
 var cognitoUserId = null
@@ -92,7 +95,7 @@ describe('Fixture utils', () => {
       userId: cognitoUserId
     }, cognitoUserIdToken)
     expect(responseThree.data.user).toBeNull()
-  })
+  }, 60e3)
 
   test('works for tables with both a hash and range key', async () => {
     const query = `
@@ -146,7 +149,8 @@ describe('Fixture utils', () => {
     const responseTwo = await fetchQuery(query, {
       userId: cognitoUserId
     }, cognitoUserIdToken)
-    console.log(responseTwo)
+    console.log('responseTwo', responseTwo)
+    console.log('responseTwo widgets', responseTwo.data.user.widgets)
     expect(responseTwo.data.user.widgets.edges.length).toBe(1)
 
     // Delete fixtures. User should not exist again.
@@ -157,5 +161,5 @@ describe('Fixture utils', () => {
       userId: cognitoUserId
     }, cognitoUserIdToken)
     expect(responseThree.data.user.widgets.edges.length).toBe(0)
-  })
+  }, 60e3)
 })
