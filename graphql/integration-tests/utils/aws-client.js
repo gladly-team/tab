@@ -12,8 +12,8 @@ if (!config.DYNAMODB_ENDPOINT) {
 AWS.config.update({
   region: config.AWS_REGION || 'us-west-2',
   endpoint: dynamoDBEndpoint,
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID || 'fakeKey123',
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || 'fakeSecretKey123'
+  accessKeyId: config.AWS_ACCESS_KEY_ID || 'fakeKey123',
+  secretAccessKey: config.AWS_SECRET_ACCESS_KEY || 'fakeSecretKey123'
 })
 
 module.exports = AWS

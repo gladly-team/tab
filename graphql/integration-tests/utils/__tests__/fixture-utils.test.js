@@ -142,10 +142,10 @@ describe('Fixture utils', () => {
     // }, cognitoUserIdToken)
     // expect(responseOne.data.user.widgets.edges.length).toBe(0)
 
-    // // Load UserWidget fixtures.
-    // await loadFixtures('userWidgets', [
-    //   { before: fixtureUserId, after: cognitoUserId }
-    // ])
+    // Load UserWidget fixtures.
+    await loadFixtures('userWidgets', [
+      { before: fixtureUserId, after: cognitoUserId }
+    ])
     console.log('cognito user ID', cognitoUserId)
     const responseTwo = await fetchQuery(query, {
       userId: cognitoUserId
