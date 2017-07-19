@@ -48,7 +48,7 @@ const deleteItemsFromTable = async (items, tableName, hashKeyName, rangeKeyName)
 
     promises.push(docClient.delete(params).promise()
       .then(response => {
-        console.log(`DeleteItem succeeded: ${JSON.stringify(item)}`)
+        // console.log(`DeleteItem succeeded: ${JSON.stringify(item)}`)
       })
       .catch(err => {
         console.error(`Unable to delete item ${JSON.stringify(item)}. Error JSON: ${JSON.stringify(err, null, 2)}`)
