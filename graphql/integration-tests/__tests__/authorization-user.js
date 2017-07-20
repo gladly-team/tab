@@ -83,8 +83,8 @@ describe('User table queries', () => {
     const response = await fetchQuery(query, {
       userId: cognitoUserId
     })
-    expect(response.message).toBe('Unauthorized')
     expect(response.data).toBeUndefined()
+    expect(response.message).toBe('Unauthorized')
   }, 60e3)
 
   it('does not allow a user to fetch another user', async () => {
@@ -103,7 +103,9 @@ describe('User table queries', () => {
     const response = await fetchQuery(query, {
       userId: 'gqltest1-yz89-yz80-yz80-xyz789tuv456' // another user
     }, cognitoUserIdToken)
-    expect(response.message).toBe('Unauthorized')
+    console.log('Wrong user fetch:')
+    console.log(JSON.stringify(response, null, 2))
     expect(response.data).toBeUndefined()
+    expect(response.message).toBe('Unauthorized')
   }, 60e3)
 })
