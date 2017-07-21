@@ -13,7 +13,7 @@ const createResponse = function (statusCode, body) {
   }
 }
 
-export const handler = function (event) {
+export const handler = function (event, context) {
   var body
   try {
     body = JSON.parse(event.body)
@@ -21,12 +21,16 @@ export const handler = function (event) {
     return Promise.resolve(createResponse(500, e))
   }
 
+  console.log('----- Cognito Authorizer claims -----')
+  console.log('sub', context.authorizer.claims['sub'])
+  console.log('email_verified', context.authorizer.claims['email_verified'])
+  console.log('cognito:username', context.authorizer.claims['cognito:username'])
   return graphql(Schema, body.query, null, {}, body.variables)
     .then(data => createResponse(200, data))
     .catch(err => createResponse(500, err))
 }
 
 export const serverlessHandler = function (event, context, callback) {
-  handler(event)
+  handler(event, context)
     .then(response => callback(null, response))
 }
