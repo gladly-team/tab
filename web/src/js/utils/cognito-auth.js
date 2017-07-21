@@ -150,6 +150,8 @@ function resendConfirmation (username, onSuccess, onFailure) {
 
 const getUserIdToken = () => {
   return new Promise((resolve, reject) => {
+    // Cognito handles ID token refreshing:
+    // https://github.com/aws/amazon-cognito-identity-js/issues/245#issuecomment-271345763
     const cognitoUser = userPool.getCurrentUser()
     if (cognitoUser != null) {
       cognitoUser.getSession((err, session) => {
