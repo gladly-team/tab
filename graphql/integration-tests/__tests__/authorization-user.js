@@ -108,4 +108,24 @@ describe('User table queries', () => {
     expect(response.data).toBeUndefined()
     expect(response.message).toBe('Unauthorized')
   }, 60e3)
+
+  // // TODO
+  // it('allows new user creation', async () => {
+  //   const query = `
+  //   `
+  //   const response = await fetchQuery(query, {
+  //     userId: cognitoUserId
+  //   }, cognitoUserIdToken)
+  //   //
+  // }, 60e3)
+
+  // // TODO
+  // it('does not allow new user creation with a different sub than Cognito', async () => {
+  //   const query = `
+  //   `
+  //   const response = await fetchQuery(query, {
+  //     userId: cognitoUserId
+  //   })
+  //   //
+  // }, 60e3)
 })
