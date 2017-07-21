@@ -29,6 +29,19 @@ let graphQLServer
 //     "isBase64Encoded": "A boolean flag to indicate if the applicable request payload is Base64-encode"
 // }
 function generateLambdaEventObj (req) {
+  // TODO: send from client & decode, or make dynamic
+  const authorizationClaims = {
+    sub: '45bbefbf-63d1-4d36-931e-212fbe2bc3d9',
+    aud: 'xyzxyzxyzxyzxyzxyzxyzxyzxyz',
+    email_verified: 'true',
+    token_use: 'id',
+    auth_time: '1500670764',
+    iss: 'https://cognito-idp.us-west-2.amazonaws.com/us-west-2_abcdefgh',
+    'cognito:username': 'myUserName',
+    exp: 'Fri Jul 21 21:59:24 UTC 2017',
+    iat: 'Fri Jul 21 20:59:24 UTC 2017',
+    email: 'foo@bar.com'
+  }
   return {
     resource: '',
     path: req.baseUrl,
@@ -37,7 +50,33 @@ function generateLambdaEventObj (req) {
     queryStringParameters: req.query,
     pathParameters: {},
     stageVariables: {},
-    requestContext: {},
+    requestContext: {
+      path: req.baseUrl,
+      accountId: '123456789',
+      resourceId: 'abcdef',
+      stage: 'dev',
+      authorizer: {
+        claims: authorizationClaims
+      },
+      requestId: 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee',
+      identity: {
+        cognitoIdentityPoolId: null,
+        accountId: null,
+        cognitoIdentityId: null,
+        caller: null,
+        apiKey: '',
+        sourceIp: '123.4.567.890',
+        accessKey: null,
+        cognitoAuthenticationType: null,
+        cognitoAuthenticationProvider: null,
+        userArn: null,
+        userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.86 Safari/537.36',
+        user: null
+      },
+      resourcePath: '/graphql',
+      httpMethod: req.method,
+      apiId: 'abcdefghij'
+    },
     body: JSON.stringify(req.body),
     isBase64Encoded: false
   }
