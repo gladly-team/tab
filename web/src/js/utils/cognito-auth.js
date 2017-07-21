@@ -92,6 +92,9 @@ function login (username, password, onSuccessCallback, onFailureCallback) {
       onFailureCallback(err)
     }
   })
+  // If we want to integrate with Cognito Identity, we should
+  // refresh credentials here (`AWS.config.credentials.refresh`).
+  // https://github.com/aws/amazon-cognito-identity-js/issues/445#issuecomment-310452516
 }
 
 function signup (username, email, password, onSuccessCallback, onFailureCallback) {

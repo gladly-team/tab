@@ -110,6 +110,8 @@ functions:
           method: post
           cors: true
           # Require user to be authenticated with AWS Cognito.
+          # https://serverless.com/framework/docs/providers/aws/events/apigateway#http-endpoints-with-custom-authorizers
+          # https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-integrate-with-cognito.html#apigateway-enable-cognito-user-pool
           authorizer:
             name: tab_auth_${{self:provider.stage}}
             arn: ${{env:COGNITO_IDENTITYPOOLID}}
