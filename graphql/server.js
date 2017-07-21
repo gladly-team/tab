@@ -1,21 +1,15 @@
 import chokidar from 'chokidar'
 import cors from 'cors'
 import express from 'express'
-import raven from 'raven'
-import PrettyError from 'pretty-error'
 import bodyParser from 'body-parser'
 import graphQLHTTP from 'express-graphql'
 import {clean} from 'require-clean'
 import {exec} from 'child_process'
 
 import config from './config'
-// import { handler } from './handler'
+import { handler } from './handler'
 
 const GRAPHQL_PORT = config.GRAPHQL_PORT
-
-const pe = new PrettyError()
-pe.skipNodeFiles()
-pe.skipPackage('express', 'graphql')
 
 let graphQLServer
 
@@ -34,148 +28,50 @@ let graphQLServer
 //     "body": "A JSON string of the request payload."
 //     "isBase64Encoded": "A boolean flag to indicate if the applicable request payload is Base64-encode"
 // }
-
-// function generateLambdaEventObj (req) {
-//   return {
-//     resource: '',
-//     path: req.baseUrl,
-//     httpMethod: req.method,
-//     headers: req.headers,
-//     queryStringParameters: req.query,
-//     pathParameters: {},
-//     stageVariables: {},
-//     requestContext: {},
-//     body: JSON.stringify(req.body),
-//     isBase64Encoded: false
-//   }
-// }
-
-function getGraphQLMiddlewareWithSentryLogging () {
-  // Must configure Raven before doing anything else with it
-  raven.config(config.SENTRY_DSN).install()
-
-  clean('./data/schema')
-  const {Schema} = require('./data/schema')
-
-  const graphQLMiddleware = graphQLHTTP(req => ({
-    graphiql: true,
-    pretty: true,
-    schema: Schema,
-    formatError: (error) => {
-      if (error.path || error.name !== 'GraphQLError') {
-        console.error(pe.render(error))
-        raven.captureException(error,
-            raven.parsers.parseRequest(req, {
-              tags: { graphql: 'exec_error' },
-              extra: {
-                source: error.source && error.source.body,
-                positions: error.positions,
-                path: error.path
-              }
-            })
-          )
-      } else {
-        console.error(pe.render(error.message))
-        raven.captureMessage(`GraphQLWrongQuery: ${error.message}`,
-            raven.parsers.parseRequest(req, {
-              tags: { graphql: 'wrong_query' },
-              extra: {
-                source: error.source && error.source.body,
-                positions: error.positions
-              }
-            })
-          )
-      }
-      return {
-        message: error.message,
-        stack: process.env.NODE_ENV === 'development' ? error.stack.split('\n') : null
-      }
-    },
-    context: {
-      userId: req.userId,
-      userEmail: req.userEmail,
-      admin: req.admin,
-      getUserPromise: req.getUserPromise ? req.getUserPromise.bind(req) : null,
-      getAdminPromise: req.getAdminPromise ? req.getAdminPromise.bind(req) : null,
-      ip: req.ip || (req.connection || {}).remoteAddress
-    }
-  }))
-
-  return graphQLMiddleware
-}
-
-function getGraphQLMiddleware () {
-  clean('./data/schema')
-  const {Schema} = require('./data/schema')
-
-  const graphQLMiddleware = graphQLHTTP(req => ({
-    graphiql: true,
-    pretty: true,
-    schema: Schema,
-    formatError: (error) => {
-      if (error.path || error.name !== 'GraphQLError') {
-        console.error(pe.render(error))
-      } else {
-        console.error(pe.render(error.message))
-      }
-      return {
-        message: error.message,
-        stack: process.env.NODE_ENV === 'development' ? error.stack.split('\n') : null
-      }
-    },
-    context: {
-      userId: req.userId,
-      userEmail: req.userEmail,
-      admin: req.admin,
-      getUserPromise: req.getUserPromise ? req.getUserPromise.bind(req) : null,
-      getAdminPromise: req.getAdminPromise ? req.getAdminPromise.bind(req) : null,
-      ip: req.ip || (req.connection || {}).remoteAddress
-    }
-  }))
-
-  return graphQLMiddleware
+function generateLambdaEventObj (req) {
+  return {
+    resource: '',
+    path: req.baseUrl,
+    httpMethod: req.method,
+    headers: req.headers,
+    queryStringParameters: req.query,
+    pathParameters: {},
+    stageVariables: {},
+    requestContext: {},
+    body: JSON.stringify(req.body),
+    isBase64Encoded: false
+  }
 }
 
 function startGraphQLServer (callback) {
-  const graphQLApp = express()
+  clean('./data/schema')
+  const { Schema } = require('./data/schema')
 
+  const graphQLApp = express()
   graphQLApp.use(cors())
   graphQLApp.use(bodyParser.json())
   graphQLApp.use(bodyParser.urlencoded({ extended: true }))
 
-  if (config.USE_SENTRY) {
-    // The request handler must be the first middleware on the app
-    graphQLApp.use(raven.requestHandler())
-    graphQLApp.use('/', getGraphQLMiddlewareWithSentryLogging())
+  // Use express-graphql in development if desired.
+  // Otherwise, just use our plain Lambda handler.
+  if (config.NODE_ENV === 'development' && config.ENABLE_GRAPHIQL) {
+    graphQLApp.use('/', graphQLHTTP({
+      graphiql: true,
+      pretty: true,
+      schema: Schema,
+      // TODO: standardize with context passed via handler
+      context: {}
+    }))
   } else {
-    graphQLApp.use('/', getGraphQLMiddleware())
+    graphQLApp.post('/', (req, res) => {
+      const event = generateLambdaEventObj(req)
+      handler(event)
+        // Use only the body (the rest is for use within an AWS Lambda context)
+        .then(response => res.send(response.body))
+    })
   }
 
-  // if (config.NODE_ENV === 'development' && config.ENABLE_GRAPHIQL) {
-  //   graphQLApp.use('/', getGraphQLMiddleware())
-  // } else {
-  //   graphQLApp.post('/', (req, res) => {
-  //     const event = generateLambdaEventObj(req)
-  //     handler(event)
-  //       // Use only the body (the rest is for use within an AWS Lambda context)
-  //       .then(response => res.send(response.body))
-  //   })
-  // }
-
-  // Error handling
-  graphQLApp.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
-    console.log(pe.render(err)) // eslint-disable-line no-console
-    res.status(err.status || 500)
-    res.setHeader('Content-Type', 'text/plain')
-    res.send(err.stack)
-  })
-
-  graphQLServer = graphQLApp.listen(GRAPHQL_PORT, (err) => {
-    if (err) {
-      console.log(pe.render(err)) // eslint-disable-line no-console
-      return err
-    }
-
+  graphQLServer = graphQLApp.listen(GRAPHQL_PORT, () => {
     console.log(
       `GraphQL server is now running on http://localhost:${GRAPHQL_PORT}`
     )

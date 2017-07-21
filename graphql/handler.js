@@ -13,6 +13,7 @@ const createResponse = function (statusCode, body) {
   }
 }
 
+// TODO: set up logging via Sentry.
 export const handler = function (event) {
   var body
   try {
@@ -27,11 +28,13 @@ export const handler = function (event) {
   console.log('email_verified', claims['email_verified'])
   console.log('cognito:username', claims['cognito:username'])
 
+  // TODO: make sure email is verified and ID exists,
+  // else return error.
   const context = {
     user: {
       id: claims['sub'],
       username: claims['cognito:username'],
-      emailVerified: claims['email_verified']
+      emailVerified: claims['email_verified'] === true
     }
   }
   console.log('context', context)
