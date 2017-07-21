@@ -20,13 +20,22 @@ export const handler = function (event) {
   } catch (e) {
     return Promise.resolve(createResponse(500, e))
   }
+  const claims = event.requestContext.authorizer.claims
 
   console.log('----- Cognito Authorizer claims -----')
-  console.log(JSON.stringify(event.requestContext, null, 2))
-  console.log('sub', event.requestContext.authorizer['sub'])
-  console.log('email_verified', event.requestContext.authorizer['email_verified'])
-  console.log('cognito:username', event.requestContext.authorizer['cognito:username'])
-  return graphql(Schema, body.query, null, {}, body.variables)
+  console.log('sub', claims['sub'])
+  console.log('email_verified', claims['email_verified'])
+  console.log('cognito:username', claims['cognito:username'])
+
+  const context = {
+    user: {
+      id: claims['sub'],
+      username: claims['cognito:username'],
+      emailVerified: claims['email_verified']
+    }
+  }
+  console.log('context', context)
+  return graphql(Schema, body.query, null, context, body.variables)
     .then(data => createResponse(200, data))
     .catch(err => createResponse(500, err))
 }
