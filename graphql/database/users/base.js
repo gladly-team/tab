@@ -101,10 +101,10 @@ var createUser = Async(function (user, referralData) {
  */
 function getUser (id) {
   return User.get(id)
-            .then(user => user)
-            .catch(err => {
-              logger.error('Error while getting the user.', err)
-            })
+    .then(user => user)
+    .catch(err => {
+      logger.error('Error while getting the user.', err)
+    })
 }
 
 /**
@@ -125,15 +125,15 @@ function getUserByUsername (username) {
   }
 
   return User.query(params)
-            .then(users => {
-              if (users.length) {
-                return users[0]
-              }
-              return null
-            })
-            .catch(err => {
-              logger.error('Error while getting the user by username.', err)
-            })
+    .then(users => {
+      if (users.length) {
+        return users[0]
+      }
+      return null
+    })
+    .catch(err => {
+      logger.error('Error while getting the user by username.', err)
+    })
 }
 
 /**

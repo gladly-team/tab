@@ -13,11 +13,11 @@ import moment from 'moment'
  */
 class BaseModel {
   /**
-     * Create a BaseModel instance.
-     * You will never have to call this directly but from a child class constructor.
-     * If no id is provided it will generate a new one for the resulting instance.
-     * @param {Object} id - The instance id in the database.
-     */
+   * Create a BaseModel instance.
+   * You will never have to call this directly but from a child class constructor.
+   * If no id is provided it will generate a new one for the resulting instance.
+   * @param {Object} id - The instance id in the database.
+   */
   constructor (id) {
     this.id = id || uuid()
     this.updated = ''
@@ -25,12 +25,12 @@ class BaseModel {
   }
 
   /**
-     * Gets the key object from data. By default assume that data
-     * is a primitive type and that the KeyName for this type is id.
-     * Override in the child class to get a different behavior.
-     * @param {Object} data
-     * @return {Object} Key for this type.
-     */
+   * Gets the key object from data. By default assume that data
+   * is a primitive type and that the KeyName for this type is id.
+   * Override in the child class to get a different behavior.
+   * @param {Object} data
+   * @return {Object} Key for this type.
+   */
   static getKey (data) {
     return {
       id: data
@@ -38,12 +38,12 @@ class BaseModel {
   }
 
   /**
-     * Get the object with the respective id from the database.
-     * @param {Object} id
-     * @param {Object} [args={}] optional query parameters.
-     * @return {Promise<BaseModel>} A promise that resolve into an
-     * object from the child class.
-     */
+   * Get the object with the respective id from the database.
+   * @param {Object} id
+   * @param {Object} [args={}] optional query parameters.
+   * @return {Promise<BaseModel>} A promise that resolve into an
+   * object from the child class.
+   */
   static get (id, args = {}) {
     const key = this.getKey(id)
 
@@ -59,12 +59,12 @@ class BaseModel {
   }
 
   /**
-     * Get the object with the respective id from the database.
-     * @param {Object} id
-     * @param {Object} [args={}] optional query parameters.
-     * @return {Promise<BaseModel>} A promise that resolve into an
-     * object from the child class.
-     */
+   * Get the object with the respective id from the database.
+   * @param {Object} id
+   * @param {Object} [args={}] optional query parameters.
+   * @return {Promise<BaseModel>} A promise that resolve into an
+   * object from the child class.
+   */
   static getAll (args = {}) {
     var params = Object.assign({}, {
       TableName: this.getTableName()
@@ -77,12 +77,12 @@ class BaseModel {
   }
 
   /**
-     * Get a batch of objects with the specified ids.
-     * @param {Object[]} keys The keys to fetch from the database
-     * @param {Object} [args={}] optional query parameters.
-     * @return {Promise<BaseModel[]>} A promise that resolve
-     * into an array of objects from the child class.
-     */
+   * Get a batch of objects with the specified ids.
+   * @param {Object[]} keys The keys to fetch from the database
+   * @param {Object} [args={}] optional query parameters.
+   * @return {Promise<BaseModel[]>} A promise that resolve
+   * into an array of objects from the child class.
+   */
   static getBatch (keys, args = {}) {
     var params = {}
     params['RequestItems'] = {}
@@ -102,11 +102,11 @@ class BaseModel {
   }
 
   /**
-     * Query the database with the given arguments.
-     * @param {Object} args optional query parameters.
-     * @return {Promise<BaseModel[]>} A promise that resolve
-     * into an array of objects from the child class.
-     */
+   * Query the database with the given arguments.
+   * @param {Object} args optional query parameters.
+   * @return {Promise<BaseModel[]>} A promise that resolve
+   * into an array of objects from the child class.
+   */
   static query (args = {}) {
     var params = Object.assign({}, {
       TableName: this.getTableName()
@@ -124,11 +124,11 @@ class BaseModel {
   }
 
   /**
-     * Add the given item to the child class table.
-     * @param {Object} item optional query parameters.
-     * @param {Object} args={} query parameters.
-     * @return {Promise} A promise that resolve into the db response.
-     */
+   * Add the given item to the child class table.
+   * @param {Object} item optional query parameters.
+   * @param {Object} args={} query parameters.
+   * @return {Promise} A promise that resolve into the db response.
+   */
   static add (item, args = {}) {
     const finalItem = Object.assign({},
       item, {
@@ -147,12 +147,12 @@ class BaseModel {
   }
 
   /**
-     * Update the item with the specified Id from the child class table.
-     * @param {Object} id the item id to update.
-     * @param {Object} args={} query parameters.
-     * @return {Promise<BaseModel>} A promise that resolve
-     * into an instance of the child class.
-     */
+   * Update the item with the specified Id from the child class table.
+   * @param {Object} id the item id to update.
+   * @param {Object} args={} query parameters.
+   * @return {Promise<BaseModel>} A promise that resolve
+   * into an instance of the child class.
+   */
   static update (id, config, args = {}) {
     const key = this.getKey(id)
 
@@ -180,8 +180,8 @@ class BaseModel {
   /**
    * Gets the child class table name in the database.
    * You are requiered to override this function on the child class.
-     * @return {string} The name of the child class table in the database.
-     */
+   * @return {string} The name of the child class table in the database.
+   */
   static getTableName () {
     throw new NotImplementedException()
   }
@@ -190,8 +190,8 @@ class BaseModel {
    * Gets the list of fields that map to the table attributes of the
    * child class.
    * You are requiered to override this function on the child class.
-     * @return {string[]} The list of field names.
-     */
+   * @return {string[]} The list of field names.
+   */
   static getFields () {
     throw new NotImplementedException()
   }

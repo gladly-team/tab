@@ -49,10 +49,10 @@ class BackgroundImage extends BaseModel {
  */
 function getBackgroundImage (id) {
   return BackgroundImage.get(id)
-            .then(image => image)
-            .catch(err => {
-              logger.error('Error while getting the background image.', err)
-            })
+    .then(image => image)
+    .catch(err => {
+      logger.error('Error while getting the background image.', err)
+    })
 }
 
 /**
@@ -70,10 +70,10 @@ function getBackgroundImages () {
     }
   }
   return BackgroundImage.getAll(params)
-            .then(bkgImages => bkgImages)
-            .catch(err => {
-              logger.error('Error while fetching the background images.', err)
-            })
+    .then(bkgImages => bkgImages)
+    .catch(err => {
+      logger.error('Error while fetching the background images.', err)
+    })
 }
 
 /**
