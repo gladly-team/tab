@@ -1,5 +1,6 @@
 'use strict'
 
+import { get } from 'lodash/object'
 import { graphql } from 'graphql'
 import { Schema } from './data/schema'
 
@@ -21,23 +22,23 @@ export const handler = function (event) {
   } catch (e) {
     return Promise.resolve(createResponse(500, e))
   }
-  const claims = event.requestContext.authorizer.claims
 
-  console.log('----- Cognito Authorizer claims -----')
-  console.log('sub', claims['sub'])
-  console.log('email_verified', claims['email_verified'])
-  console.log('cognito:username', claims['cognito:username'])
-
-  // TODO: make sure email is verified and ID exists,
-  // else return error.
+  // TODO: move to own modules.
+  // Get user authorization.
+  const claims = get(event, 'requestContext.authorizer.claims', {})
+  const userId = claims['sub']
+  const username = claims['cognito:username']
+  const emailVerified = claims['email_verified'] === 'true'
+  if (!userId || !emailVerified) {
+    return Promise.resolve(createResponse(401, 'Request not authorized.'))
+  }
   const context = {
     user: {
-      id: claims['sub'],
-      username: claims['cognito:username'],
-      emailVerified: claims['email_verified'] === true
+      id: userId,
+      username: username,
+      emailVerified: emailVerified
     }
   }
-  console.log('context', context)
   return graphql(Schema, body.query, null, context, body.variables)
     .then(data => createResponse(200, data))
     .catch(err => createResponse(500, err))

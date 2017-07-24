@@ -731,7 +731,11 @@ const queryType = new GraphQLObjectType({
       args: {
         userId: { type: new GraphQLNonNull(GraphQLString) }
       },
-      resolve: (_, args) => getUser(args.userId)
+      resolve: (_, args, context) => {
+        // TODO: use context in authorization
+        // console.log('Context:', context)
+        return getUser(args.userId)
+      }
     }
   })
 })

@@ -15,6 +15,7 @@ function fetchQuery (
   cacheConfig,
   uploadables
 ) {
+  // TODO: mock user token here on dev
   return cognitoAuth.getUserIdToken().then((userIdToken) => {
     // Add Authorization header if user has a token.
     const headers = {
@@ -33,6 +34,7 @@ function fetchQuery (
         variables
       })
     }).then(response => {
+      // TODO: check for 401 / non-200 responses
       return response.json()
     })
   }).catch((err) => {
