@@ -76,7 +76,6 @@ describe('Fixture utils', () => {
     const responseOne = await fetchQuery(query, {
       userId: cognitoUserId
     }, cognitoUserIdToken)
-    console.log('fixture-utils responseOne', responseOne)
     expect(responseOne.data.user).toBeNull()
 
     // Load user fixtures. User should exist.
