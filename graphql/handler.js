@@ -30,6 +30,7 @@ export const handler = function (event) {
   const username = claims['cognito:username']
   const emailVerified = claims['email_verified'] === 'true'
   if (!userId || !emailVerified) {
+    console.log(userId, emailVerified)
     return Promise.resolve(createResponse(401, 'Request not authorized.'))
   }
   const context = {
