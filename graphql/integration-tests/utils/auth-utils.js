@@ -40,10 +40,16 @@ const createUser = async (email, username, password) => {
   const params = {
     UserPoolId: config.COGNITO_USERPOOLID,
     Username: username,
-    UserAttributes: [{
-      Name: 'email',
-      Value: email
-    }],
+    UserAttributes: [
+      {
+        Name: 'email',
+        Value: email
+      },
+      {
+        Name: 'email_verified',
+        Value: 'True'
+      }
+    ],
     DesiredDeliveryMediums: [],
     MessageAction: 'SUPPRESS',
     TemporaryPassword: password
@@ -94,14 +100,6 @@ const logIn = async (username, password) => {
     })
 }
 
-const verifyUser = async (username) => {
-  var params = {
-    UserPoolId: config.COGNITO_USERPOOLID,
-    Username: username
-  }
-  return cognitoIDP.adminConfirmSignUp(params).promise()
-}
-
 /**
  * Create a new user in AWS Cognito, log the user in, and
  *   return an object with user information.
@@ -117,7 +115,6 @@ export const createUserAndLogIn = async (email, username, password) => {
   const cognitoUser = await getUser(username)
   const userId = find(cognitoUser.UserAttributes,
     (obj) => obj.Name === 'sub').Value
-  await verifyUser(username)
   return {
     username: username,
     email: email,
