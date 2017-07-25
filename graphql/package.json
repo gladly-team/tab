@@ -6,8 +6,10 @@
   "dependencies": {
     "asyncawait": "^1.0.6",
     "cors": "^2.8.1",
+    "dynogels": "^8.0.1",
     "graphql": "^0.9.1",
     "graphql-relay": "^0.5.1",
+    "joi": "^10.6.0",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
     "pretty-error": "^2.1.1",

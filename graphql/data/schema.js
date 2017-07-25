@@ -60,11 +60,7 @@ import {
   createUser
 } from '../database/users/user'
 
-import {
-  Charity,
-  getCharity,
-  getCharities
-} from '../database/charities/charity'
+import CharityModel from '../database/charities/CharityModel'
 
 import {
   donateVc
@@ -109,7 +105,7 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     } else if (type === 'Widget') {
       return getWidget(id)
     } else if (type === 'Charity') {
-      return getCharity(id)
+      return CharityModel.getCharity(id)
     } else if (type === 'BackgroundImage') {
       return getBackgroundImage(id)
     }
@@ -122,7 +118,8 @@ const { nodeInterface, nodeField } = nodeDefinitions(
       return userType
     } else if (obj instanceof Widget) {
       return widgetType
-    } else if (obj instanceof Charity) {
+    // FIXME: need to resolve to instance of child class
+    } else if (obj instanceof CharityModel) {
       return charityType
     } else if (obj instanceof BackgroundImage) {
       return backgroundImageType
@@ -359,7 +356,7 @@ const appType = new GraphQLObjectType({
       type: charityConnection,
       description: 'All the charities',
       args: connectionArgs,
-      resolve: (_, args) => connectionFromPromisedArray(getCharities(), args)
+      resolve: (_, args) => connectionFromPromisedArray(CharityModel.getCharities(), args)
     },
     backgroundImages: {
       type: backgroundImageConnection,
