@@ -7,18 +7,22 @@ jest.mock('../../database')
 
 describe('CharityModel', () => {
   it('implements the name property', () => {
-    expect(Charity.name).not.toBeNull()
+    expect(Charity.name).toBeDefined()
   })
 
   it('implements the hashKey property', () => {
-    expect(Charity.hashKey).not.toBeNull()
+    expect(Charity.hashKey).toBeDefined()
   })
 
   it('implements the tableName property', () => {
     expect(Charity.tableName).toBe(tableNames['charities'])
   })
 
-  // TODO: test creation with ID
+  it('auto creates an id', async () => {
+    const charity = await Charity.create({ name: 'something' })
+    expect(charity.id).toBeDefined()
+    expect(charity.name).toEqual('something')
+  })
+
   // TODO: test getting charities
-  // it('auto creates an id', () => {
 })

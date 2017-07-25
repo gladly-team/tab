@@ -59,6 +59,21 @@ class BaseModel {
     })
   }
 
+  static create (...args) {
+    console.log(`Creating item in ${this.tableName} with args ${JSON.stringify(...args, null, 2)}`)
+    const self = this
+    return new Promise((resolve, reject) => {
+      this.dynogelsModel.create(...args, (err, obj) => {
+        if (err) {
+          console.log(err)
+          reject(err)
+        } else {
+          resolve(self.deserialize(obj))
+        }
+      })
+    })
+  }
+
   // FIXME: need to resolve to instance of child class
   /**
    * Return a modified object or list of object from the
