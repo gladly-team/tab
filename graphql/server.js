@@ -7,7 +7,6 @@ import {clean} from 'require-clean'
 import {exec} from 'child_process'
 
 import config from './config'
-import { handler } from './handler'
 
 const GRAPHQL_PORT = config.GRAPHQL_PORT
 
@@ -84,7 +83,9 @@ function generateLambdaEventObj (req) {
 
 function startGraphQLServer (callback) {
   clean('./data/schema')
+  clean('./handler')
   const { Schema } = require('./data/schema')
+  const { handler } = require('./handler')
 
   const graphQLApp = express()
   graphQLApp.use(cors())
