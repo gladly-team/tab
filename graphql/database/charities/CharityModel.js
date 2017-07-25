@@ -2,7 +2,7 @@
 import Joi from 'joi'
 
 import BaseModel from '../base/BaseModel'
-import tablesNames from '../tables'
+import tableNames from '../tables'
 import { logger } from '../../utils/dev-tools'
 
 /*
@@ -19,7 +19,7 @@ class Charity extends BaseModel {
   }
 
   static get tableName () {
-    return tablesNames.charities
+    return tableNames.charities
   }
 
   static get schema () {
