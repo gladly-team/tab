@@ -1,5 +1,7 @@
 /* eslint-env jest */
 
+import uuid from 'uuid/v4'
+
 import tableNames from '../../tables'
 import Charity from '../CharityModel'
 
@@ -22,6 +24,15 @@ describe('CharityModel', () => {
     const charity = await Charity.create({ name: 'something' })
     expect(charity.id).toBeDefined()
     expect(charity.name).toEqual('something')
+  })
+
+  it('create with existing id', async () => {
+    const someId = uuid()
+    const charity = await Charity.create({
+      id: someId,
+      name: 'something'
+    })
+    expect(charity.id).toBe(someId)
   })
 
   // TODO: test getting charities
