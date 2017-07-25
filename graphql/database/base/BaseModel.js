@@ -1,11 +1,8 @@
 
 import dynogels from 'dynogels'
-import config from '../../config'
+import dbClient from '../databaseClient'
 
-dynogels.AWS.config.update({
-  region: config.AWS_REGION,
-  endpoint: config.DYNAMODB_ENDPOINT
-})
+dynogels.documentClient(dbClient)
 
 class BaseModel {
   constructor (id) {
