@@ -5,11 +5,11 @@ import { DatabaseOperation, setMockDBResponse } from '../../test-utils'
 
 jest.mock('../../databaseClient')
 
-afterEach(() => {
-  jest.resetAllMocks()
-})
+describe('BaseModel queries', () => {
+  afterEach(() => {
+    jest.resetAllMocks()
+  })
 
-describe('BaseModel', () => {
   it('correctly fetches with `getAll` method', async () => {
     const dbQueryMock = setMockDBResponse(
       DatabaseOperation.GET_ALL,
@@ -48,4 +48,41 @@ describe('BaseModel', () => {
   })
 
   // TODO: `get` with a range key
+})
+
+describe('BaseModel required properties', () => {
+  afterEach(() => {
+    jest.resetModules()
+  })
+
+  it('fails if "hashKey" property is not set', () => {
+    const TestModel = require('../test-utils/ExampleModel').default
+    delete TestModel.hashKey
+    expect(() => {
+      TestModel.register()
+    }).toThrow()
+  })
+
+  it('fails if "tableName" property is not set', () => {
+    const TestModel = require('../test-utils/ExampleModel').default
+    delete TestModel.tableName
+    expect(() => {
+      TestModel.register()
+    }).toThrow()
+  })
+
+  it('fails if "schema" property is not set', () => {
+    const TestModel = require('../test-utils/ExampleModel').default
+    delete TestModel.schema
+    expect(() => {
+      TestModel.register()
+    }).toThrow()
+  })
+
+  it('succeeds normally', () => {
+    const TestModel = require('../test-utils/ExampleModel').default
+    expect(() => {
+      TestModel.register()
+    }).not.toThrow()
+  })
 })

@@ -1,10 +1,43 @@
 
 import dynogels from 'dynogels'
+import { NotImplementedException } from '../../utils/exceptions'
 import dbClient from '../databaseClient'
 
 dynogels.documentClient(dbClient)
 
 class BaseModel {
+  /**
+   * The name of the database table.
+   * You are required to override this function on the child class.
+   * @return {string} The name of the database table.
+   */
+  static get tableName () {
+    throw new NotImplementedException()
+  }
+
+  /**
+   * The name of the hashKey for the DynamoDB table.
+   * You are required to override this function on the child class.
+   * @return {string} The name of the hashKey for the DynamoDB table.
+   */
+  static get hashKey () {
+    throw new NotImplementedException()
+  }
+
+  /**
+   * The table schema, used in dynogels.
+   * You are required to override this function on the child class.
+   * @return {object} The table schema.
+   */
+  static get schema () {
+    throw new NotImplementedException()
+  }
+
+  /**
+   * Register the model with dynogels. This must be called prior to
+   * using any methods that query the database.
+   * @return {undefined}
+   */
   static register () {
     console.log(`Registering model ${this.name} to table ${this.tableName}.`)
     this.dynogelsModel = dynogels.define(this.name, {
@@ -70,8 +103,9 @@ class BaseModel {
   /**
    * Return a modified object or list of object from the
    * database item or items.
-   * @param {Object || Object[]} The database object or list of objects.
-   * @return {Object | Object[]}
+   * @param {Object || Object[]} obj - The database object or list of objects.
+   * @return {Object | Object[]} An instance of `this`, with the attributes
+   *   of `obj` and possibly some additional default attributes.
   */
   static deserialize (obj) {
     // TODO: use default values for missing fields
