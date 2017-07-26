@@ -12,7 +12,7 @@ class ExtendableError extends Error {
 
 class NotImplementedException extends ExtendableError {
   constructor () {
-    super('Not implemented.')
+    super('Required method is not implmented.')
   }
 }
 
