@@ -1,3 +1,6 @@
+
+// TODO: delete this file after migrating models
+
 class DatabaseOperation {
   constructor (operation, resolver) {
     this.operation = operation
