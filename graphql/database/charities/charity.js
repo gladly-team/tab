@@ -1,3 +1,4 @@
+// TODO: delete this file
 import BaseModel from '../base/model'
 import tablesNames from '../tables'
 import { logger } from '../../utils/dev-tools'

@@ -40,7 +40,6 @@ class Charity extends BaseModel {
     // }
   }
 
-  // TODO: write tests
   static getCharity (id) {
     console.log('getCharity', id)
     return Charity.get(id)
@@ -50,7 +49,7 @@ class Charity extends BaseModel {
       })
   }
 
-  // TODO: write tests
+  // TODO: can just rely on getAll method
   static getCharities () {
     return Charity.getAll()
       .then(charities => charities)
