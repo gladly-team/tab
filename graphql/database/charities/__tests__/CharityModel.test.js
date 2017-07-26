@@ -5,7 +5,6 @@ import uuid from 'uuid/v4'
 import tableNames from '../../tables'
 import Charity from '../CharityModel'
 import { DatabaseOperation, setMockDBResponse } from '../../test-utils'
-import charitiesFixtures from '../../__mocks__/fixtures/charities'
 
 jest.mock('../../databaseClient')
 
@@ -44,23 +43,5 @@ describe('CharityModel', () => {
     expect(DBParam['Item']['name']).toEqual('my-charity-name')
     expect(DBParam['Item']['id']).toEqual(someId)
     expect(charity.id).toBe(someId)
-  })
-
-  it('correctly fetches all charities', async () => {
-    const dbQueryMock = setMockDBResponse(
-      DatabaseOperation.GET_ALL,
-      {
-        Items: charitiesFixtures
-      }
-    )
-    const expectedDBParams = {
-      TableName: Charity.tableName
-    }
-    const response = await Charity.getAll()
-    expect(dbQueryMock.mock.calls[0][0]).toEqual(expectedDBParams)
-    expect(response.length).toBe(charitiesFixtures.length)
-    for (var index in response) {
-      expect(response[index].id).toBe(charitiesFixtures[index].id)
-    }
   })
 })

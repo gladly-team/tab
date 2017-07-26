@@ -106,7 +106,7 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     } else if (type === 'Widget') {
       return getWidget(id)
     } else if (type === 'Charity') {
-      return CharityModel.getCharity(id)
+      return CharityModel.get(id)
     } else if (type === 'BackgroundImage') {
       return getBackgroundImage(id)
     }
@@ -356,7 +356,7 @@ const appType = new GraphQLObjectType({
       type: charityConnection,
       description: 'All the charities',
       args: connectionArgs,
-      resolve: (_, args) => connectionFromPromisedArray(CharityModel.getCharities(), args)
+      resolve: (_, args) => connectionFromPromisedArray(CharityModel.getAll(), args)
     },
     backgroundImages: {
       type: backgroundImageConnection,

@@ -4,7 +4,6 @@ import Joi from 'joi'
 
 import BaseModel from '../base/BaseModel'
 import tableNames from '../tables'
-import { logger } from '../../utils/dev-tools'
 
 /*
  * Represents a Charity.
@@ -38,24 +37,6 @@ class Charity extends BaseModel {
     //   description: '',
     //   impact: ''
     // }
-  }
-
-  static getCharity (id) {
-    console.log('getCharity', id)
-    return Charity.get(id)
-      .then(charity => charity)
-      .catch(err => {
-        logger.error('Error while getting the charity.', err)
-      })
-  }
-
-  // TODO: can just rely on getAll method
-  static getCharities () {
-    return Charity.getAll()
-      .then(charities => charities)
-      .catch(err => {
-        logger.error('Error while fetching the charities.', err)
-      })
   }
 }
 
