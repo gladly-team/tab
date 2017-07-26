@@ -5,10 +5,6 @@ import dbClient from '../databaseClient'
 dynogels.documentClient(dbClient)
 
 class BaseModel {
-  constructor (id) {
-    this.dynogelsModel = null
-  }
-
   static register () {
     console.log(`Registering model ${this.name} to table ${this.tableName}.`)
     this.dynogelsModel = dynogels.define(this.name, {
@@ -71,7 +67,6 @@ class BaseModel {
     })
   }
 
-  // FIXME: need to resolve to instance of child class
   /**
    * Return a modified object or list of object from the
    * database item or items.
@@ -81,22 +76,26 @@ class BaseModel {
   static deserialize (obj) {
     // TODO: use default values for missing fields
     const deserializeObj = (obj) => {
-      const deserializedObj = {}
+      // Create an instance of the model class so that we can use
+      // the class type in `nodeDefinitions` in schema.
+      const Cls = this
+      const newItem = new Cls()
       for (var attr in obj.attrs) {
-        deserializedObj[attr] = obj.attrs[attr]
+        newItem[attr] = obj.attrs[attr]
       }
-      return deserializedObj
+      return newItem
     }
 
+    var result
     if (obj instanceof Array) {
-      const result = []
+      result = []
       for (var index in obj) {
         result.push(deserializeObj(obj[index]))
       }
-      return result
+    } else {
+      result = deserializeObj(obj)
     }
-
-    return deserializeObj(obj)
+    return result
   }
 }
 

@@ -95,6 +95,7 @@ class App {
  * The first method defines the way we resolve an ID to its object.
  * The second defines the way we resolve an object to its GraphQL type.
  */
+// https://stackoverflow.com/a/33411416
 const { nodeInterface, nodeField } = nodeDefinitions(
   (globalId) => {
     const { type, id } = fromGlobalId(globalId)
@@ -118,7 +119,6 @@ const { nodeInterface, nodeField } = nodeDefinitions(
       return userType
     } else if (obj instanceof Widget) {
       return widgetType
-    // FIXME: need to resolve to instance of child class
     } else if (obj instanceof CharityModel) {
       return charityType
     } else if (obj instanceof BackgroundImage) {
