@@ -36,7 +36,7 @@ function startGraphQLServer (callback) {
     }))
   } else {
     graphQLApp.post('/', (req, res) => {
-      const event = generateLambdaEventObj(req)
+      const event = generateLambdaEventObjFromRequest(req)
       handler(event)
         // Use only the body (the rest is for use within an AWS Lambda context)
         .then(response => res.send(response.body))
