@@ -5,7 +5,7 @@ import { DatabaseOperation, setMockDBResponse } from '../../test-utils'
 
 jest.mock('../../databaseClient')
 
-describe('BaseModel queries', () => {
+describe('BaseModel methods', () => {
   afterEach(() => {
     jest.resetAllMocks()
   })
@@ -47,7 +47,14 @@ describe('BaseModel queries', () => {
     expect(response).toEqual(itemToGet)
   })
 
+  it('deserializes to the correct instance type', () => {
+    const item = fixturesA[0]
+    const deserializedItem = ExampleModel.deserialize(item)
+    expect(deserializedItem instanceof ExampleModel).toBe(true)
+  })
+
   // TODO: `get` with a range key
+  // TODO: deserialization with default fields
 })
 
 describe('BaseModel required properties', () => {
