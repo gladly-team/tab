@@ -1,6 +1,9 @@
 /* eslint-disable no-unused-vars, no-use-before-define */
 
 import config from '../config'
+import {
+  CHARITY
+} from '../database/constants'
 
 import {
   GraphQLBoolean,
@@ -105,7 +108,7 @@ const { nodeInterface, nodeField } = nodeDefinitions(
       return getUser(id)
     } else if (type === 'Widget') {
       return getWidget(id)
-    } else if (type === 'Charity') {
+    } else if (type === CHARITY) {
       return CharityModel.get(id)
     } else if (type === 'BackgroundImage') {
       return getBackgroundImage(id)
@@ -289,10 +292,10 @@ const widgetType = new GraphQLObjectType({
 })
 
 const charityType = new GraphQLObjectType({
-  name: 'Charity',
+  name: CHARITY,
   description: 'A charitable charity',
   fields: () => ({
-    id: globalIdField('Charity'),
+    id: globalIdField(CHARITY),
     name: {
       type: GraphQLString,
       description: 'the charity name'
@@ -372,7 +375,7 @@ const appType = new GraphQLObjectType({
  * Define your own connection types here
  */
 const { connectionType: widgetConnection, edgeType: widgetEdge } = connectionDefinitions({ name: 'Widget', nodeType: widgetType })
-const { connectionType: charityConnection, edgeType: charityEdge } = connectionDefinitions({ name: 'Charity', nodeType: charityType })
+const { connectionType: charityConnection, edgeType: charityEdge } = connectionDefinitions({ name: CHARITY, nodeType: charityType })
 const { connectionType: backgroundImageConnection, edgeType: backgroundImageEdge } = connectionDefinitions({ name: 'BackgroundImage', nodeType: backgroundImageType })
 
 /**

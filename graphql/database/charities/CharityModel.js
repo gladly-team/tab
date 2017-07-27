@@ -4,6 +4,7 @@ import Joi from 'joi'
 
 import BaseModel from '../base/BaseModel'
 import tableNames from '../tables'
+import { CHARITY } from '../constants'
 
 /*
  * Represents a Charity.
@@ -11,7 +12,7 @@ import tableNames from '../tables'
  */
 class Charity extends BaseModel {
   static get name () {
-    return 'Charity'
+    return CHARITY
   }
 
   static get hashKey () {
