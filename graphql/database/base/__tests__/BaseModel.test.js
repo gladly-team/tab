@@ -159,10 +159,10 @@ describe('BaseModel authorization', () => {
     })
   })
 
-  it('all are authorized if permissions return true', () => {
+  it('authorizes all operations if each returns true', () => {
     const TestModel = require('../test-utils/ExampleModel').default
     const newPermissions = validOperations.reduce((result, item) => {
-      result[item] = function () { return true }
+      result[item] = () => true
       return result
     }, {})
     Object.defineProperty(TestModel, 'permissions', {
@@ -194,6 +194,46 @@ describe('BaseModel authorization', () => {
     otherOperations.forEach((operation) => {
       const isAuthorized = TestModel.isQueryAuthorized(user, operation,
         'fake-hash-key', 'fake-range-key')
+      expect(isAuthorized).toBe(false)
+    })
+  })
+
+  it('does not authorize if the user is not defined', () => {
+    const TestModel = require('../test-utils/ExampleModel').default
+
+    // Make the model permissions to allow operations.
+    const newPermissions = validOperations.reduce((result, item) => {
+      result[item] = () => true
+      return result
+    }, {})
+    Object.defineProperty(TestModel, 'permissions', {
+      get: () => newPermissions
+    })
+
+    // All operations should fail without a user.
+    validOperations.forEach((operation) => {
+      const isAuthorized = TestModel.isQueryAuthorized(null, operation,
+        'fake-hash-key', 'fake-range-key')
+      expect(isAuthorized).toBe(false)
+    })
+  })
+
+  it('does not authorize if the user is not an object', () => {
+    const TestModel = require('../test-utils/ExampleModel').default
+
+    // Make the model permissions to allow operations.
+    const newPermissions = validOperations.reduce((result, item) => {
+      result[item] = () => true
+      return result
+    }, {})
+    Object.defineProperty(TestModel, 'permissions', {
+      get: () => newPermissions
+    })
+
+    // All operations should fail without a user.
+    validOperations.forEach((operation) => {
+      const isAuthorized = TestModel.isQueryAuthorized(
+        'bad-user-value', operation, 'fake-hash-key', 'fake-range-key')
       expect(isAuthorized).toBe(false)
     })
   })

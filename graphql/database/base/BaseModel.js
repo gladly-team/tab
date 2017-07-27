@@ -168,6 +168,11 @@ class BaseModel {
    * @return {boolean} Whether the user is authorized.
    */
   static isQueryAuthorized (user, operation, hashKeyValue, rangeKeyValue) {
+    // If the user is null or not an object, reject.
+    if (!user || typeof user !== 'object') {
+      return false
+    }
+
     const validOperations = [
       'get',
       'getAll',
