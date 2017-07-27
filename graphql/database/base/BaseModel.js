@@ -7,6 +7,15 @@ dynogels.documentClient(dbClient)
 
 class BaseModel {
   /**
+   * The name of the model.
+   * You are required to override this function on the child class.
+   * @return {string} The name of the model.
+   */
+  static get name () {
+    throw new NotImplementedException()
+  }
+
+  /**
    * The name of the database table.
    * You are required to override this function on the child class.
    * @return {string} The name of the database table.

@@ -55,6 +55,14 @@ describe('BaseModel required properties', () => {
     jest.resetModules()
   })
 
+  it('fails if "name" property is not set', () => {
+    const TestModel = require('../test-utils/ExampleModel').default
+    delete TestModel.name
+    expect(() => {
+      TestModel.register()
+    }).toThrow()
+  })
+
   it('fails if "hashKey" property is not set', () => {
     const TestModel = require('../test-utils/ExampleModel').default
     delete TestModel.hashKey
