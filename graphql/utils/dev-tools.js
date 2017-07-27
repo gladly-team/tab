@@ -1,5 +1,10 @@
 
 import config from '../config'
+import {
+  createGraphQLContext,
+  getUserClaimsFromLambdaEvent,
+  isUserAuthorized
+} from './authorization-helpers'
 
 export const logger = {}
 
@@ -94,4 +99,15 @@ export const generateLambdaEventObjFromRequest = (req) => {
     body: JSON.stringify(req.body),
     isBase64Encoded: false
   }
+}
+
+// An analogue to the AWS Lamda handler (../handler.handler)
+// but used with graphQLHTTP.
+export const getGraphQLContextFromRequest = (req) => {
+  const event = generateLambdaEventObjFromRequest(req)
+  const claims = getUserClaimsFromLambdaEvent(event)
+  if (!isUserAuthorized(claims)) {
+    console.warn('User is not authorized.')
+  }
+  return createGraphQLContext(claims)
 }

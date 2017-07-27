@@ -7,7 +7,6 @@ import {clean} from 'require-clean'
 import {exec} from 'child_process'
 
 import config from './config'
-import { generateLambdaEventObjFromRequest } from './utils/dev-tools'
 
 const GRAPHQL_PORT = config.GRAPHQL_PORT
 
@@ -16,8 +15,13 @@ let graphQLServer
 function startGraphQLServer (callback) {
   clean('./data/schema')
   clean('./handler')
+  clean('./utils/dev-tools')
   const { Schema } = require('./data/schema')
   const { handler } = require('./handler')
+  const {
+    generateLambdaEventObjFromRequest,
+    getGraphQLContextFromRequest
+  } = require('./utils/dev-tools')
 
   const graphQLApp = express()
   graphQLApp.use(cors())
@@ -27,12 +31,16 @@ function startGraphQLServer (callback) {
   // Use express-graphql in development if desired.
   // Otherwise, just use our plain Lambda handler.
   if (config.NODE_ENV === 'development' && config.ENABLE_GRAPHIQL) {
-    graphQLApp.use('/', graphQLHTTP({
-      graphiql: true,
-      pretty: true,
-      schema: Schema,
-      // TODO: standardize with context passed via handler
-      context: {}
+    console.log('GraphiQL is enabled.')
+    // https://github.com/graphql/express-graphql#options
+    graphQLApp.use('/', graphQLHTTP((req) => {
+      const context = getGraphQLContextFromRequest(req)
+      return {
+        graphiql: true,
+        pretty: true,
+        schema: Schema,
+        context: context
+      }
     }))
   } else {
     graphQLApp.post('/', (req, res) => {
@@ -73,6 +81,7 @@ function startServer (callback) {
 
 // Watch for DB or schema changes.
 const watcher = chokidar.watch([
+  './server.js',
   './data/{schema}.js',
   './database/*.js',
   './database/*/*.js'])
