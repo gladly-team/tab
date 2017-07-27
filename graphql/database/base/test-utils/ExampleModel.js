@@ -23,6 +23,15 @@ class ExampleModel extends BaseModel {
       name: Joi.string()
     }
   }
+
+  static get permissions () {
+    return {
+      get: (user, hashKeyValue, rangeKeyValue) => false,
+      getAll: () => false,
+      update: (user, hashKeyValue, rangeKeyValue) => false,
+      create: (user, hashKeyValue) => false
+    }
+  }
 }
 
 ExampleModel.register()

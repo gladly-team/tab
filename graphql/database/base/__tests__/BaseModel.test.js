@@ -1,5 +1,6 @@
 /* eslint-env jest */
 
+import { filter } from 'lodash/collection'
 import ExampleModel, { fixturesA } from '../test-utils/ExampleModel'
 import { DatabaseOperation, setMockDBResponse } from '../../test-utils'
 
@@ -99,5 +100,101 @@ describe('BaseModel required properties', () => {
     expect(() => {
       TestModel.register()
     }).not.toThrow()
+  })
+})
+
+describe('BaseModel authorization', () => {
+  afterEach(() => {
+    jest.resetModules()
+  })
+
+  const user = {
+    id: '45bbefbf-63d1-4d36-931e-212fbe2bc3d9',
+    username: 'MyName',
+    emailVerified: true
+  }
+
+  const validOperations = [
+    'get',
+    'getAll',
+    'update',
+    'create'
+  ]
+
+  it('does not authorize if permissions are not set', () => {
+    const TestModel = require('../test-utils/ExampleModel').default
+    delete TestModel.permissions
+    validOperations.forEach((operation) => {
+      const isAuthorized = TestModel.isQueryAuthorized(user, operation,
+        'fake-hash-key', 'fake-range-key')
+      expect(isAuthorized).toBe(false)
+    })
+  })
+
+  it('does not authorize if operation properties are not set', () => {
+    const TestModel = require('../test-utils/ExampleModel').default
+    Object.defineProperty(TestModel, 'permissions', {
+      get: () => { return {} }
+    })
+    validOperations.forEach((operation) => {
+      const isAuthorized = TestModel.isQueryAuthorized(user, operation,
+        'fake-hash-key', 'fake-range-key')
+      expect(isAuthorized).toBe(false)
+    })
+  })
+
+  it('does not authorize if operation properties are not functions', () => {
+    const TestModel = require('../test-utils/ExampleModel').default
+    const newPermissions = validOperations.reduce((result, item) => {
+      result[item] = 'hi'
+      return result
+    }, {})
+    Object.defineProperty(TestModel, 'permissions', {
+      get: () => newPermissions
+    })
+    validOperations.forEach((operation) => {
+      const isAuthorized = TestModel.isQueryAuthorized(user, operation,
+        'fake-hash-key', 'fake-range-key')
+      expect(isAuthorized).toBe(false)
+    })
+  })
+
+  it('all are authorized if permissions return true', () => {
+    const TestModel = require('../test-utils/ExampleModel').default
+    const newPermissions = validOperations.reduce((result, item) => {
+      result[item] = function () { return true }
+      return result
+    }, {})
+    Object.defineProperty(TestModel, 'permissions', {
+      get: () => newPermissions
+    })
+    validOperations.forEach((operation) => {
+      const isAuthorized = TestModel.isQueryAuthorized(user, operation,
+        'fake-hash-key', 'fake-range-key')
+      expect(isAuthorized).toBe(true)
+    })
+  })
+
+  it('one permission is authorized but others are not', () => {
+    const TestModel = require('../test-utils/ExampleModel').default
+    const newPermissions = {
+      update: () => true
+    }
+    Object.defineProperty(TestModel, 'permissions', {
+      get: () => newPermissions
+    })
+
+    // Update operation should be authorized.
+    const isUpdateAuthorized = TestModel.isQueryAuthorized(
+      user, 'update', 'fake-hash-key', 'fake-range-key')
+    expect(isUpdateAuthorized).toBe(true)
+
+    // All other operations should not be authorized.
+    const otherOperations = filter(validOperations, (item) => item !== 'update')
+    otherOperations.forEach((operation) => {
+      const isAuthorized = TestModel.isQueryAuthorized(user, operation,
+        'fake-hash-key', 'fake-range-key')
+      expect(isAuthorized).toBe(false)
+    })
   })
 })

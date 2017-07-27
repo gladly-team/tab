@@ -43,6 +43,23 @@ class BaseModel {
   }
 
   /**
+   * The permissions object, used to check authorization for database
+   * operations. By default, no operations are authorized.
+   * @return {object} The permissions object, with a key for each
+   *   operation name. Each property value is a function that receives
+   *   a user object, item hashKey, and item rangeKey, and must return
+   *   a boolean for whether the query is authorized.
+   */
+  static get permissions () {
+    return {
+      get: (user, hashKeyValue, rangeKeyValue) => false,
+      getAll: () => false,
+      update: (user, hashKeyValue, rangeKeyValue) => false,
+      create: (user, hashKeyValue) => false
+    }
+  }
+
+  /**
    * Register the model with dynogels. This must be called prior to
    * using any methods that query the database.
    * @return {undefined}
@@ -139,6 +156,44 @@ class BaseModel {
       result = deserializeObj(obj)
     }
     return result
+  }
+
+  /**
+   * Determine whether the user is authorized to make a particular
+   * database query.
+   * @param {obj} user - The user object passed as context
+   * @param {string} operation - The operation type (e.g. "get" or "update")
+   * @param {string} hashKeyValue - The value of the item hashKey in the query
+   * @param {string} rangeKeyValue - The value of the item rangeKey in the query
+   * @return {boolean} Whether the user is authorized.
+   */
+  static isQueryAuthorized (user, operation, hashKeyValue, rangeKeyValue) {
+    const validOperations = [
+      'get',
+      'getAll',
+      'update',
+      'create'
+    ]
+    if (validOperations.indexOf(operation) === -1) {
+      return false
+    }
+
+    // Get the permissions from the model class. If no permissions are
+    // defined, do not allow any access.
+    const permissions = this.permissions
+    if (!permissions) {
+      return false
+    }
+
+    // Get the authorizer function from the model class for this operation.
+    // If the function does not exist, do not allow any access.
+    const authorizerFunction = permissions[operation]
+    if (!authorizerFunction || !(typeof authorizerFunction === 'function')) {
+      return false
+    }
+
+    // If the authorizer function returns `true`, the query is authorized.
+    return authorizerFunction(user, hashKeyValue, rangeKeyValue) === true
   }
 }
 
