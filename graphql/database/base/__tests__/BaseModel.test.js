@@ -148,7 +148,7 @@ describe('BaseModel queries', () => {
         Attributes: {}
       }
     )
-    const createdItem = await ExampleModel.create(user, itemToCreate.id, itemToCreate)
+    const createdItem = await ExampleModel.create(user, itemToCreate)
 
     // Verify form of DB params.
     const dbParams = dbQueryMock.mock.calls[0][0]
@@ -169,7 +169,7 @@ describe('BaseModel queries', () => {
       create: () => false
     })
     const itemToCreate = fixturesA[0]
-    return expect(ExampleModel.create(user, itemToCreate.id, itemToCreate))
+    return expect(ExampleModel.create(user, itemToCreate))
       .rejects.toEqual(new UnauthorizedQueryException())
   })
 
@@ -310,7 +310,7 @@ describe('BaseModel calls to `isQueryAuthorized`', () => {
     TestModel.isQueryAuthorized = authorizationCheck
 
     const hashKeyVal = 'yx5082cc-151a-4a9a-9289-06906670fd4e'
-    await TestModel.create(user, hashKeyVal, {name: 'thing'}).catch(() => {}) // Ignore any authorization errors
+    await TestModel.create(user, {id: hashKeyVal, name: 'thing'}).catch(() => {}) // Ignore any authorization errors
     expect(authorizationCheck).toBeCalledWith(user, 'create', hashKeyVal)
   })
 

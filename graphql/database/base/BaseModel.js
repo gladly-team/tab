@@ -137,16 +137,16 @@ class BaseModel {
     })
   }
 
-  static create (user, hashKey, args) {
-    // console.log(`Creating item in ${this.tableName} with args ${JSON.stringify(...args, null, 2)}`)
+  static create (user, item) {
+    // console.log(`Creating item in ${this.tableName}: ${JSON.stringify(item, null, 2)}`)
     const self = this
-    const hashKeyObj = { [this.hashKey]: hashKey }
+    const hashKey = item[this.hashKey]
     return new Promise((resolve, reject) => {
       if (!this.isQueryAuthorized(user, 'create', hashKey)) {
         reject(new UnauthorizedQueryException())
         return
       }
-      this.dynogelsModel.create({...hashKeyObj, ...args}, (err, data) => {
+      this.dynogelsModel.create(item, (err, data) => {
         if (err) {
           console.log(err)
           reject(err)
