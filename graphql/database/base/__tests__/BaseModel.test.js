@@ -172,6 +172,58 @@ describe('BaseModel queries', () => {
       .rejects.toEqual(new UnauthorizedQueryException())
   })
 
+  it('correctly updates item', async () => {
+    setModelPermissions(ExampleModel, {
+      update: () => true
+    })
+
+    // Set mock response from DB client.
+    const itemToUpdate = fixturesA[0]
+    const dbQueryMock = setMockDBResponse(
+      DatabaseOperation.UPDATE,
+      {
+        Attributes: itemToUpdate
+      }
+    )
+    const updatedItem = await ExampleModel.update(user, itemToUpdate)
+
+    // Verify form of DB params.
+    // {
+    //   TableName: 'ExamplesTable',
+    //   Key: { id: 'ab5082cc-151a-4a9a-9289-06906670fd4e' },
+    //   ReturnValues: 'ALL_NEW',
+    //   ExpressionAttributeValues: { ':name': 'Thing A', ':updated': '2017-07-28T21:11:12.215Z' },
+    //   ExpressionAttributeNames: { '#name': 'name', '#updated': 'updated' },
+    //   UpdateExpression: 'SET #name = :name, #updated = :updated'
+    // }
+    const dbParams = dbQueryMock.mock.calls[0][0]
+    expect(dbParams.TableName).toEqual(ExampleModel.tableName)
+    expect(dbParams.Key.id).toEqual(itemToUpdate.id)
+    expect(dbParams.ReturnValues).toEqual('ALL_NEW')
+    expect(dbParams.ExpressionAttributeValues[':name']).toBe(itemToUpdate.name)
+    expect(dbParams.ExpressionAttributeValues[':updated']).toBeDefined()
+    expect(dbParams.UpdateExpression).toBe('SET #name = :name, #updated = :updated')
+
+    // Verify form of returned object.
+    expect(updatedItem.id).toEqual(itemToUpdate.id)
+    expect(updatedItem.age).toEqual(itemToUpdate.age)
+    // The "created" field is not set for an updated item. Fix this?
+    // expect(updatedItem.created).toBeDefined()
+    expect(updatedItem.updated).toBeDefined()
+  })
+
+  // TODO: test update with range key
+
+  it('fails with unauthorized `update`', async () => {
+    expect.assertions(1)
+    setModelPermissions(ExampleModel, {
+      update: () => false
+    })
+    const itemToUpdate = fixturesA[0]
+    return expect(ExampleModel.update(user, itemToUpdate))
+      .rejects.toEqual(new UnauthorizedQueryException())
+  })
+
   // TODO: deserialization with default fields
 })
 

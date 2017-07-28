@@ -154,15 +154,17 @@ class BaseModel {
     })
   }
 
-  // TODO: support rangeKey
-  static update (user, hashKey, rangeKey, args) {
-    console.log(`Creating item in ${this.tableName} with args ${JSON.stringify(...args, null, 2)}`)
+  static update (user, item) {
+    // console.log(`Updating item in ${this.tableName}: ${JSON.stringify(item, null, 2)}`)
     const self = this
+    const hashKey = item[this.hashKey]
+    const rangeKey = item[this.rangeKey]
     return new Promise((resolve, reject) => {
-      if (!this.isQueryAuthorized(user, 'update')) {
+      // TODO: test this receives expected params
+      if (!this.isQueryAuthorized(user, 'update', hashKey, rangeKey)) {
         reject(new UnauthorizedQueryException())
       }
-      this.dynogelsModel.create({hashKey, rangeKey, ...args}, (err, obj) => {
+      this.dynogelsModel.update(item, { ReturnValues: 'ALL_NEW' }, (err, obj) => {
         if (err) {
           console.log(err)
           reject(err)
