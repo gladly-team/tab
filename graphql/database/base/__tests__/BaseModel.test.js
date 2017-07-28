@@ -162,6 +162,16 @@ describe('BaseModel queries', () => {
     expect(createdItem.created).toBeDefined()
   })
 
+  it('fails with unauthorized `create`', async () => {
+    expect.assertions(1)
+    setModelPermissions(ExampleModel, {
+      create: () => false
+    })
+    const itemToCreate = fixturesA[0]
+    return expect(ExampleModel.create(user, itemToCreate.id, itemToCreate))
+      .rejects.toEqual(new UnauthorizedQueryException())
+  })
+
   // TODO: deserialization with default fields
 })
 
