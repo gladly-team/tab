@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import uuid from 'uuid/v4'
+// import uuid from 'uuid/v4'
 
 import tableNames from '../../tables'
 import Charity from '../CharityModel'
