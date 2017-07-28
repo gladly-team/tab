@@ -138,11 +138,12 @@ class BaseModel {
   static create (user, hashKey, args) {
     console.log(`Creating item in ${this.tableName} with args ${JSON.stringify(...args, null, 2)}`)
     const self = this
+    const hashKeyObj = {[this.hashKey]: hashKey}
     return new Promise((resolve, reject) => {
       if (!this.isQueryAuthorized(user, 'create')) {
         reject(new UnauthorizedQueryException())
       }
-      this.dynogelsModel.create({hashKey, ...args}, (err, obj) => {
+      this.dynogelsModel.create({...hashKeyObj, ...args}, (err, obj) => {
         if (err) {
           console.log(err)
           reject(err)

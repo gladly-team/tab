@@ -134,6 +134,34 @@ describe('BaseModel queries', () => {
     expect(deserializedItem instanceof ExampleModel).toBe(true)
   })
 
+  it('correctly creates item', async () => {
+    setModelPermissions(ExampleModel, {
+      create: () => true
+    })
+
+    // Set mock response from DB client.
+    const itemToCreate = fixturesA[0]
+    const dbQueryMock = setMockDBResponse(
+      DatabaseOperation.CREATE,
+      {
+        Item: itemToCreate
+      }
+    )
+    const createdItem = await ExampleModel.create(user, itemToCreate.id, itemToCreate)
+
+    // Verify form of DB params.
+    const dbParams = dbQueryMock.mock.calls[0][0]
+    expect(dbParams.TableName).toEqual(ExampleModel.tableName)
+    expect(dbParams.Item.id).toEqual(itemToCreate.id)
+    expect(dbParams.Item.age).toEqual(itemToCreate.age)
+    expect(dbParams.Item.created).toBeDefined()
+
+    // Verify form of created object.
+    expect(createdItem.id).toEqual(itemToCreate.id)
+    expect(createdItem.age).toEqual(itemToCreate.age)
+    expect(createdItem.created).toBeDefined()
+  })
+
   // TODO: deserialization with default fields
 })
 
