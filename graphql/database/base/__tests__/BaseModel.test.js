@@ -7,6 +7,9 @@ import {
   setMockDBResponse,
   setModelPermissions
 } from '../../test-utils'
+import {
+  UnauthorizedQueryException
+} from '../../../utils/exceptions'
 
 jest.mock('../../databaseClient')
 
@@ -54,6 +57,15 @@ describe('BaseModel methods', () => {
     }
   })
 
+  it('fails with unauthorized `getAll`', async () => {
+    expect.assertions(1)
+    setModelPermissions(ExampleModel, {
+      getAll: () => false
+    })
+    return expect(ExampleModel.getAll(user))
+      .rejects.toEqual(new UnauthorizedQueryException())
+  })
+
   it('correctly fetches with `get` method for a model with no range key', async () => {
     setModelPermissions(ExampleModel, {
       get: () => true
@@ -76,6 +88,16 @@ describe('BaseModel methods', () => {
     const response = await ExampleModel.get(user, itemToGet.id)
     expect(dbQueryMock.mock.calls[0][0]).toEqual(expectedDBParams)
     expect(response).toEqual(itemToGet)
+  })
+
+  it('fails with unauthorized `get`', async () => {
+    expect.assertions(1)
+    setModelPermissions(ExampleModel, {
+      get: () => false
+    })
+    const itemToGet = fixturesA[0]
+    return expect(ExampleModel.get(user, itemToGet.id))
+      .rejects.toEqual(new UnauthorizedQueryException())
   })
 
   it('deserializes to the correct instance type', () => {
