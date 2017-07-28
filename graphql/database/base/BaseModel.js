@@ -81,7 +81,10 @@ class BaseModel {
   }
 
   // TODO: support rangeKey
-  static get (hashKey, rangeKey, options) {
+  static get (user, hashKey, rangeKey, options) {
+    if (!this.permissions.get(user, hashKey, rangeKey)) {
+      return Promise.reject(new Error(`${user} is not allowed get access on ${this.name}`))
+    }
     console.log(`Getting obj with hashKey ${hashKey} from table ${this.tableName}.`)
     const self = this
     return new Promise((resolve, reject) => {
@@ -96,7 +99,10 @@ class BaseModel {
     })
   }
 
-  static getAll () {
+  static getAll (user) {
+    if (!this.permissions.getAll(user)) {
+      return Promise.reject(new Error(`${user} is not allowed getAll access on ${this.name}`))
+    }
     console.log(`Getting all objs in table ${this.tableName}.`)
     const self = this
     return new Promise((resolve, reject) => {
@@ -111,11 +117,32 @@ class BaseModel {
     })
   }
 
-  static create (...args) {
+  static create (user, hashKey, args) {
+    if (!this.permissions.create(user, hashKey)) {
+      return Promise.reject(new Error(`${user} is not allowed create access on ${this.name}`))
+    }
     console.log(`Creating item in ${this.tableName} with args ${JSON.stringify(...args, null, 2)}`)
     const self = this
     return new Promise((resolve, reject) => {
-      this.dynogelsModel.create(...args, (err, obj) => {
+      this.dynogelsModel.create({hashKey, ...args}, (err, obj) => {
+        if (err) {
+          console.log(err)
+          reject(err)
+        } else {
+          resolve(self.deserialize(obj))
+        }
+      })
+    })
+  }
+
+  static update (user, hashKey, rangeKey, args) {
+    if (!this.permissions.update(user, hashKey, rangeKey)) {
+      return Promise.reject(new Error(`${user} is not allowed update access on ${this.name}`))
+    }
+    console.log(`Creating item in ${this.tableName} with args ${JSON.stringify(...args, null, 2)}`)
+    const self = this
+    return new Promise((resolve, reject) => {
+      this.dynogelsModel.create({hashKey, rangeKey, ...args}, (err, obj) => {
         if (err) {
           console.log(err)
           reject(err)
