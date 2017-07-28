@@ -43,3 +43,15 @@ export const setMockDBResponse = function (operation, returnVal = null) {
   })
   return databaseClient[operation]
 }
+
+/**
+ * Set the `permissions` getter value for a model class.
+ * @param {Object} modelClass - The model class (extended from BaseModel)
+ * @param {Object} permissions - The permissions object
+ * @return {null}
+ */
+export const setModelPermissions = function (modelClass, permissions) {
+  Object.defineProperty(modelClass, 'permissions', {
+    get: () => permissions
+  })
+}

@@ -2,7 +2,11 @@
 
 import { filter } from 'lodash/collection'
 import ExampleModel, { fixturesA } from '../test-utils/ExampleModel'
-import { DatabaseOperation, setMockDBResponse } from '../../test-utils'
+import {
+  DatabaseOperation,
+  setMockDBResponse,
+  setModelPermissions
+} from '../../test-utils'
 
 jest.mock('../../databaseClient')
 
@@ -19,22 +23,17 @@ describe('BaseModel methods', () => {
     // For some reason, jest.resetModules is failing with
     // ExampleModel (even when using CommonJS requires), so just
     // reset permissions manually.
-    Object.defineProperty(ExampleModel, 'permissions', {
-      get: () => ({
-        get: () => false,
-        getAll: () => false,
-        update: () => false,
-        create: () => false
-      })
+    setModelPermissions(ExampleModel, {
+      get: () => false,
+      getAll: () => false,
+      update: () => false,
+      create: () => false
     })
   })
 
   it('correctly fetches with `getAll` method', async () => {
-    // Set model permissions.
-    Object.defineProperty(ExampleModel, 'permissions', {
-      get: () => ({
-        getAll: () => true
-      })
+    setModelPermissions(ExampleModel, {
+      getAll: () => true
     })
 
     // Set mock response from DB client.
@@ -56,11 +55,8 @@ describe('BaseModel methods', () => {
   })
 
   it('correctly fetches with `get` method for a model with no range key', async () => {
-    // Set model permissions.
-    Object.defineProperty(ExampleModel, 'permissions', {
-      get: () => ({
-        get: () => true
-      })
+    setModelPermissions(ExampleModel, {
+      get: () => true
     })
 
     // Set mock response from DB client.
@@ -161,9 +157,7 @@ describe('BaseModel authorization', () => {
 
   it('does not authorize if operation properties are not set', () => {
     const TestModel = require('../test-utils/ExampleModel').default
-    Object.defineProperty(TestModel, 'permissions', {
-      get: () => { return {} }
-    })
+    setModelPermissions(TestModel, {})
     validOperations.forEach((operation) => {
       const isAuthorized = TestModel.isQueryAuthorized(user, operation,
         'fake-hash-key', 'fake-range-key')
@@ -177,9 +171,7 @@ describe('BaseModel authorization', () => {
       result[item] = 'hi'
       return result
     }, {})
-    Object.defineProperty(TestModel, 'permissions', {
-      get: () => newPermissions
-    })
+    setModelPermissions(TestModel, newPermissions)
     validOperations.forEach((operation) => {
       const isAuthorized = TestModel.isQueryAuthorized(user, operation,
         'fake-hash-key', 'fake-range-key')
@@ -193,9 +185,7 @@ describe('BaseModel authorization', () => {
       result[item] = () => true
       return result
     }, {})
-    Object.defineProperty(TestModel, 'permissions', {
-      get: () => newPermissions
-    })
+    setModelPermissions(TestModel, newPermissions)
     validOperations.forEach((operation) => {
       const isAuthorized = TestModel.isQueryAuthorized(user, operation,
         'fake-hash-key', 'fake-range-key')
@@ -205,11 +195,8 @@ describe('BaseModel authorization', () => {
 
   it('one permission is authorized but others are not', () => {
     const TestModel = require('../test-utils/ExampleModel').default
-    const newPermissions = {
+    setModelPermissions(TestModel, {
       update: () => true
-    }
-    Object.defineProperty(TestModel, 'permissions', {
-      get: () => newPermissions
     })
 
     // Update operation should be authorized.
@@ -234,9 +221,7 @@ describe('BaseModel authorization', () => {
       result[item] = () => true
       return result
     }, {})
-    Object.defineProperty(TestModel, 'permissions', {
-      get: () => newPermissions
-    })
+    setModelPermissions(TestModel, newPermissions)
 
     // All operations should fail without a user.
     validOperations.forEach((operation) => {
@@ -254,9 +239,7 @@ describe('BaseModel authorization', () => {
       result[item] = () => true
       return result
     }, {})
-    Object.defineProperty(TestModel, 'permissions', {
-      get: () => newPermissions
-    })
+    setModelPermissions(TestModel, newPermissions)
 
     // All operations should fail without a user.
     validOperations.forEach((operation) => {
