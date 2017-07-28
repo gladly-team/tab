@@ -76,7 +76,7 @@ class BaseModel {
    * @return {undefined}
    */
   static register () {
-    console.log(`Registering model ${this.name} to table ${this.tableName}.`)
+    // console.log(`Registering model ${this.name} to table ${this.tableName}.`)
     const options = {
       hashKey: this.hashKey,
       tableName: this.tableName,
@@ -101,7 +101,7 @@ class BaseModel {
     if (rangeKey) {
       keys.push(rangeKey)
     }
-    console.log(`Getting obj with hashKey ${hashKey} from table ${this.tableName}.`)
+    // console.log(`Getting obj with hashKey ${hashKey} from table ${this.tableName}.`)
     return new Promise((resolve, reject) => {
       if (!this.isQueryAuthorized(user, 'get')) {
         reject(new UnauthorizedQueryException())
@@ -118,7 +118,7 @@ class BaseModel {
   }
 
   static getAll (user) {
-    console.log(`Getting all objs in table ${this.tableName}.`)
+    // console.log(`Getting all objs in table ${this.tableName}.`)
     const self = this
     return new Promise((resolve, reject) => {
         if (!this.isQueryAuthorized(user, 'getAll')) {
@@ -136,7 +136,7 @@ class BaseModel {
   }
 
   static create (user, hashKey, args) {
-    console.log(`Creating item in ${this.tableName} with args ${JSON.stringify(...args, null, 2)}`)
+    // console.log(`Creating item in ${this.tableName} with args ${JSON.stringify(...args, null, 2)}`)
     const self = this
     const hashKeyObj = {[this.hashKey]: hashKey}
     return new Promise((resolve, reject) => {
