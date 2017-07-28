@@ -2,6 +2,9 @@
 
 import { filter } from 'lodash/collection'
 import ExampleModel, { fixturesA } from '../test-utils/ExampleModel'
+import ExampleModelRangeKey, {
+  fixturesRangeKeyA
+} from '../test-utils/ExampleModelRangeKey'
 import {
   DatabaseOperation,
   setMockDBResponse,
@@ -19,7 +22,7 @@ const user = {
   emailVerified: true
 }
 
-describe('BaseModel methods', () => {
+describe('BaseModel queries', () => {
   afterEach(() => {
     jest.clearAllMocks()
 
@@ -90,6 +93,31 @@ describe('BaseModel methods', () => {
     expect(response).toEqual(itemToGet)
   })
 
+  it('correctly uses `get` method for a model with a range key', async () => {
+    setModelPermissions(ExampleModelRangeKey, {
+      get: () => true
+    })
+
+    // Set mock response from DB client.
+    const itemToGet = fixturesRangeKeyA[0]
+    const dbQueryMock = setMockDBResponse(
+      DatabaseOperation.GET,
+      {
+        Item: itemToGet
+      }
+    )
+    const expectedDBParams = {
+      TableName: ExampleModelRangeKey.tableName,
+      Key: {
+        id: itemToGet.id,
+        age: itemToGet.age
+      }
+    }
+    const response = await ExampleModelRangeKey.get(user, itemToGet.id, itemToGet.age)
+    expect(dbQueryMock.mock.calls[0][0]).toEqual(expectedDBParams)
+    expect(response).toEqual(itemToGet)
+  })
+
   it('fails with unauthorized `get`', async () => {
     expect.assertions(1)
     setModelPermissions(ExampleModel, {
@@ -106,7 +134,6 @@ describe('BaseModel methods', () => {
     expect(deserializedItem instanceof ExampleModel).toBe(true)
   })
 
-  // TODO: `get` with a range key
   // TODO: deserialization with default fields
 })
 
@@ -155,7 +182,7 @@ describe('BaseModel required properties', () => {
   })
 })
 
-describe('BaseModel authorization', () => {
+describe('BaseModel `isQueryAuthorized` method', () => {
   afterEach(() => {
     jest.resetModules()
   })

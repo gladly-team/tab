@@ -37,6 +37,14 @@ class BaseModel {
   }
 
   /**
+   * The name of the range key (if it exists) for the DynamoDB table.
+   * @return {string} The name of the hashKey for the DynamoDB table.
+   */
+  static get rangeKey () {
+    return null
+  }
+
+  /**
    * The table schema, used in dynogels.
    * You are required to override this function on the child class.
    * @return {object} The table schema.
@@ -69,7 +77,7 @@ class BaseModel {
    */
   static register () {
     console.log(`Registering model ${this.name} to table ${this.tableName}.`)
-    this.dynogelsModel = dynogels.define(this.name, {
+    const options = {
       hashKey: this.hashKey,
       tableName: this.tableName,
 
@@ -80,7 +88,11 @@ class BaseModel {
       updatedAt: 'updated',
 
       schema: this.schema
-    })
+    }
+    if (this.rangeKey) {
+      options['rangeKey'] = this.rangeKey
+    }
+    this.dynogelsModel = dynogels.define(this.name, options)
   }
 
   static get (user, hashKey, rangeKey, options) {
