@@ -77,7 +77,7 @@ describe('BaseModel methods', () => {
         id: itemToGet.id
       }
     }
-    const response = await ExampleModel.get(itemToGet.id)
+    const response = await ExampleModel.get(user, itemToGet.id)
     expect(dbQueryMock.mock.calls[0][0]).toEqual(expectedDBParams)
     expect(response).toEqual(itemToGet)
   })

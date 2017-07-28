@@ -84,9 +84,6 @@ class BaseModel {
   }
 
   static get (user, hashKey, rangeKey, options) {
-    if (!this.permissions.get(user, hashKey, rangeKey)) {
-      return Promise.reject(new Error(`${user} is not allowed get access on ${this.name}`))
-    }
     const self = this
     let keys = [hashKey]
     if (rangeKey) {
@@ -94,6 +91,9 @@ class BaseModel {
     }
     console.log(`Getting obj with hashKey ${hashKey} from table ${this.tableName}.`)
     return new Promise((resolve, reject) => {
+      if (!this.isQueryAuthorized(user, 'get')) {
+        reject(new UnauthorizedQueryException())
+      }
       this.dynogelsModel.get(...keys, (err, obj) => {
         if (err) {
           console.log(err)
@@ -124,12 +124,12 @@ class BaseModel {
   }
 
   static create (user, hashKey, args) {
-    if (!this.permissions.create(user, hashKey)) {
-      return Promise.reject(new Error(`${user} is not allowed create access on ${this.name}`))
-    }
     console.log(`Creating item in ${this.tableName} with args ${JSON.stringify(...args, null, 2)}`)
     const self = this
     return new Promise((resolve, reject) => {
+      if (!this.isQueryAuthorized(user, 'create')) {
+        reject(new UnauthorizedQueryException())
+      }
       this.dynogelsModel.create({hashKey, ...args}, (err, obj) => {
         if (err) {
           console.log(err)
@@ -143,12 +143,12 @@ class BaseModel {
 
   // TODO: support rangeKey
   static update (user, hashKey, rangeKey, args) {
-    if (!this.permissions.update(user, hashKey, rangeKey)) {
-      return Promise.reject(new Error(`${user} is not allowed update access on ${this.name}`))
-    }
     console.log(`Creating item in ${this.tableName} with args ${JSON.stringify(...args, null, 2)}`)
     const self = this
     return new Promise((resolve, reject) => {
+      if (!this.isQueryAuthorized(user, 'update')) {
+        reject(new UnauthorizedQueryException())
+      }
       this.dynogelsModel.create({hashKey, rangeKey, ...args}, (err, obj) => {
         if (err) {
           console.log(err)
