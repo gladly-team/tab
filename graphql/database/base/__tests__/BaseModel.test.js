@@ -273,6 +273,64 @@ describe('BaseModel required properties', () => {
   })
 })
 
+describe('BaseModel calls to `isQueryAuthorized`', () => {
+  afterEach(() => {
+    jest.resetModules()
+  })
+
+  it('passes correct params to `getAll` authorization check', async () => {
+    // Set a mock `isQueryAuthorized` method
+    const TestModel = require('../test-utils/ExampleModel').default
+    const authorizationCheck = jest.fn(() => false)
+    TestModel.isQueryAuthorized = authorizationCheck
+
+    await TestModel.getAll(user)
+      .catch(() => {}) // Ignore any authorization errors
+    expect(authorizationCheck).toBeCalledWith(user, 'getAll')
+  })
+
+  it('passes correct params to `get` authorization check', async () => {
+    // Set a mock `isQueryAuthorized` method
+    const TestModelRangeKey = require('../test-utils/ExampleModelRangeKey').default
+    const authorizationCheck = jest.fn(() => false)
+    TestModelRangeKey.isQueryAuthorized = authorizationCheck
+
+    const hashKeyVal = 'cb5082cc-151a-4a9a-9289-06906670fd4e'
+    const rangeKeyVal = '45'
+    await TestModelRangeKey.get(user, hashKeyVal, rangeKeyVal)
+      .catch(() => {}) // Ignore any authorization errors
+    expect(authorizationCheck).toBeCalledWith(user, 'get',
+      hashKeyVal, rangeKeyVal)
+  })
+
+  it('passes correct params to `create` authorization check', async () => {
+    // Set a mock `isQueryAuthorized` method
+    const TestModel = require('../test-utils/ExampleModel').default
+    const authorizationCheck = jest.fn(() => false)
+    TestModel.isQueryAuthorized = authorizationCheck
+
+    const hashKeyVal = 'yx5082cc-151a-4a9a-9289-06906670fd4e'
+    await TestModel.create(user, hashKeyVal, {name: 'thing'}).catch(() => {}) // Ignore any authorization errors
+    expect(authorizationCheck).toBeCalledWith(user, 'create', hashKeyVal)
+  })
+
+  it('passes correct params to `update` authorization check', async () => {
+    // Set a mock `isQueryAuthorized` method
+    const TestModelRangeKey = require('../test-utils/ExampleModelRangeKey').default
+    const authorizationCheck = jest.fn(() => false)
+    TestModelRangeKey.isQueryAuthorized = authorizationCheck
+
+    const hashKeyVal = 'xy5082cc-151a-4a9a-9289-06906670fd4e'
+    const rangeKeyVal = '30'
+    await TestModelRangeKey.update(user, {
+      [TestModelRangeKey.hashKey]: hashKeyVal,
+      [TestModelRangeKey.rangeKey]: rangeKeyVal
+    }).catch(() => {}) // Ignore any authorization errors
+    expect(authorizationCheck).toBeCalledWith(user, 'update',
+      hashKeyVal, rangeKeyVal)
+  })
+})
+
 describe('BaseModel `isQueryAuthorized` method', () => {
   afterEach(() => {
     jest.resetModules()

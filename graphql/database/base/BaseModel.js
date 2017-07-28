@@ -103,8 +103,9 @@ class BaseModel {
     }
     // console.log(`Getting obj with hashKey ${hashKey} from table ${this.tableName}.`)
     return new Promise((resolve, reject) => {
-      if (!this.isQueryAuthorized(user, 'get')) {
+      if (!this.isQueryAuthorized(user, 'get', hashKey, rangeKey)) {
         reject(new UnauthorizedQueryException())
+        return
       }
       this.dynogelsModel.get(...keys, (err, data) => {
         if (err) {
@@ -121,9 +122,10 @@ class BaseModel {
     // console.log(`Getting all objs in table ${this.tableName}.`)
     const self = this
     return new Promise((resolve, reject) => {
-        if (!this.isQueryAuthorized(user, 'getAll')) {
-          reject(new UnauthorizedQueryException())
-        }
+      if (!this.isQueryAuthorized(user, 'getAll')) {
+        reject(new UnauthorizedQueryException())
+        return
+      }
       this.dynogelsModel.scan().exec((err, data) => {
         if (err) {
           console.log(err)
@@ -138,10 +140,11 @@ class BaseModel {
   static create (user, hashKey, args) {
     // console.log(`Creating item in ${this.tableName} with args ${JSON.stringify(...args, null, 2)}`)
     const self = this
-    const hashKeyObj = {[this.hashKey]: hashKey}
+    const hashKeyObj = { [this.hashKey]: hashKey }
     return new Promise((resolve, reject) => {
-      if (!this.isQueryAuthorized(user, 'create')) {
+      if (!this.isQueryAuthorized(user, 'create', hashKey)) {
         reject(new UnauthorizedQueryException())
+        return
       }
       this.dynogelsModel.create({...hashKeyObj, ...args}, (err, data) => {
         if (err) {
@@ -160,9 +163,9 @@ class BaseModel {
     const hashKey = item[this.hashKey]
     const rangeKey = item[this.rangeKey]
     return new Promise((resolve, reject) => {
-      // TODO: test this receives expected params
       if (!this.isQueryAuthorized(user, 'update', hashKey, rangeKey)) {
         reject(new UnauthorizedQueryException())
+        return
       }
       this.dynogelsModel.update(item, { ReturnValues: 'ALL_NEW' }, (err, data) => {
         if (err) {
