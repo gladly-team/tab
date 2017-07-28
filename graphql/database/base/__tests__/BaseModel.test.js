@@ -144,7 +144,8 @@ describe('BaseModel queries', () => {
     const dbQueryMock = setMockDBResponse(
       DatabaseOperation.CREATE,
       {
-        Item: itemToCreate
+        // https://docs.aws.amazon.com/cli/latest/reference/dynamodb/put-item.html#output
+        Attributes: {}
       }
     )
     const createdItem = await ExampleModel.create(user, itemToCreate.id, itemToCreate)
