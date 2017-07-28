@@ -106,12 +106,12 @@ class BaseModel {
       if (!this.isQueryAuthorized(user, 'get')) {
         reject(new UnauthorizedQueryException())
       }
-      this.dynogelsModel.get(...keys, (err, obj) => {
+      this.dynogelsModel.get(...keys, (err, data) => {
         if (err) {
           console.log(err)
           reject(err)
         } else {
-          resolve(self.deserialize(obj))
+          resolve(self.deserialize(data))
         }
       })
     })
@@ -121,15 +121,15 @@ class BaseModel {
     console.log(`Getting all objs in table ${this.tableName}.`)
     const self = this
     return new Promise((resolve, reject) => {
-      this.dynogelsModel.scan().exec((err, objs) => {
         if (!this.isQueryAuthorized(user, 'getAll')) {
           reject(new UnauthorizedQueryException())
         }
+      this.dynogelsModel.scan().exec((err, data) => {
         if (err) {
           console.log(err)
           reject(err)
         } else {
-          resolve(self.deserialize(objs.Items))
+          resolve(self.deserialize(data.Items))
         }
       })
     })
@@ -143,12 +143,12 @@ class BaseModel {
       if (!this.isQueryAuthorized(user, 'create')) {
         reject(new UnauthorizedQueryException())
       }
-      this.dynogelsModel.create({...hashKeyObj, ...args}, (err, obj) => {
+      this.dynogelsModel.create({...hashKeyObj, ...args}, (err, data) => {
         if (err) {
           console.log(err)
           reject(err)
         } else {
-          resolve(self.deserialize(obj))
+          resolve(self.deserialize(data))
         }
       })
     })
@@ -164,12 +164,12 @@ class BaseModel {
       if (!this.isQueryAuthorized(user, 'update', hashKey, rangeKey)) {
         reject(new UnauthorizedQueryException())
       }
-      this.dynogelsModel.update(item, { ReturnValues: 'ALL_NEW' }, (err, obj) => {
+      this.dynogelsModel.update(item, { ReturnValues: 'ALL_NEW' }, (err, data) => {
         if (err) {
           console.log(err)
           reject(err)
         } else {
-          resolve(self.deserialize(obj))
+          resolve(self.deserialize(data))
         }
       })
     })
@@ -182,7 +182,7 @@ class BaseModel {
    * @return {Object | Object[]} An instance of `this`, with the attributes
    *   of `obj` and possibly some additional default attributes.
   */
-  static deserialize (obj) {
+  static deserialize (data) {
     // TODO: use default values for missing fields
     const deserializeObj = (obj) => {
       // Create an instance of the model class so that we can use
@@ -196,13 +196,13 @@ class BaseModel {
     }
 
     var result
-    if (obj instanceof Array) {
+    if (data instanceof Array) {
       result = []
-      for (var index in obj) {
-        result.push(deserializeObj(obj[index]))
+      for (var index in data) {
+        result.push(deserializeObj(data[index]))
       }
     } else {
-      result = deserializeObj(obj)
+      result = deserializeObj(data)
     }
     return result
   }
