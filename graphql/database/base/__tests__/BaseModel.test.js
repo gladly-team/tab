@@ -207,13 +207,42 @@ describe('BaseModel queries', () => {
 
     // Verify form of returned object.
     expect(updatedItem.id).toEqual(itemToUpdate.id)
-    expect(updatedItem.age).toEqual(itemToUpdate.age)
     // The "created" field is not set for an updated item. Fix this?
     // expect(updatedItem.created).toBeDefined()
     expect(updatedItem.updated).toBeDefined()
   })
 
-  // TODO: test update with range key
+  it('correctly updates item with a range key', async () => {
+    setModelPermissions(ExampleModelRangeKey, {
+      update: () => true
+    })
+
+    // Set mock response from DB client.
+    const itemToUpdate = fixturesRangeKeyA[0]
+    const dbQueryMock = setMockDBResponse(
+      DatabaseOperation.UPDATE,
+      {
+        Attributes: itemToUpdate
+      }
+    )
+    const updatedItem = await ExampleModelRangeKey.update(user, itemToUpdate)
+
+    // Verify form of DB params.
+    const dbParams = dbQueryMock.mock.calls[0][0]
+    expect(dbParams.TableName).toEqual(ExampleModelRangeKey.tableName)
+    expect(dbParams.Key.id).toEqual(itemToUpdate.id)
+    expect(dbParams.Key.age).toBeDefined()
+    expect(dbParams.Key.age).toEqual(itemToUpdate.age)
+    expect(dbParams.ExpressionAttributeValues[':name']).toBe(itemToUpdate.name)
+    expect(dbParams.ExpressionAttributeValues[':updated']).toBeDefined()
+    expect(dbParams.UpdateExpression).toBe('SET #name = :name, #updated = :updated')
+
+    // Verify form of returned object.
+    expect(updatedItem.id).toEqual(itemToUpdate.id)
+    expect(updatedItem.age).toBeDefined()
+    expect(updatedItem.age).toEqual(itemToUpdate.age)
+    expect(updatedItem.updated).toBeDefined()
+  })
 
   it('fails with unauthorized `update`', async () => {
     expect.assertions(1)
