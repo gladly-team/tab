@@ -80,15 +80,18 @@ class BaseModel {
     })
   }
 
-  // TODO: support rangeKey
   static get (user, hashKey, rangeKey, options) {
     if (!this.permissions.get(user, hashKey, rangeKey)) {
       return Promise.reject(new Error(`${user} is not allowed get access on ${this.name}`))
     }
-    console.log(`Getting obj with hashKey ${hashKey} from table ${this.tableName}.`)
     const self = this
+    let keys = [hashKey]
+    if (rangeKey) {
+      keys.push(rangeKey)
+    }
+    console.log(`Getting obj with hashKey ${hashKey} from table ${this.tableName}.`)
     return new Promise((resolve, reject) => {
-      this.dynogelsModel.get(hashKey, (err, obj) => {
+      this.dynogelsModel.get(...keys, (err, obj) => {
         if (err) {
           console.log(err)
           reject(err)
@@ -135,6 +138,7 @@ class BaseModel {
     })
   }
 
+  // TODO: support rangeKey
   static update (user, hashKey, rangeKey, args) {
     if (!this.permissions.update(user, hashKey, rangeKey)) {
       return Promise.reject(new Error(`${user} is not allowed update access on ${this.name}`))
