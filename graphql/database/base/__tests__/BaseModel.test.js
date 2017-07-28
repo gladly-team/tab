@@ -1,10 +1,10 @@
 /* eslint-env jest */
 
 import { filter } from 'lodash/collection'
-import ExampleModel, { fixturesA } from '../test-utils/ExampleModel'
-import ExampleModelRangeKey, {
-  fixturesRangeKeyA
-} from '../test-utils/ExampleModelRangeKey'
+import { clean } from 'require-clean'
+
+import { fixturesA } from '../test-utils/ExampleModel'
+import { fixturesRangeKeyA } from '../test-utils/ExampleModelRangeKey'
 import {
   DatabaseOperation,
   setMockDBResponse,
@@ -13,6 +13,9 @@ import {
 import {
   UnauthorizedQueryException
 } from '../../../utils/exceptions'
+
+var ExampleModel = require('../test-utils/ExampleModel').default
+var ExampleModelRangeKey = require('../test-utils/ExampleModelRangeKey').default
 
 jest.mock('../../databaseClient')
 
@@ -28,13 +31,9 @@ describe('BaseModel queries', () => {
 
     // For some reason, jest.resetModules is failing with
     // ExampleModel (even when using CommonJS requires), so just
-    // reset permissions manually.
-    setModelPermissions(ExampleModel, {
-      get: () => false,
-      getAll: () => false,
-      update: () => false,
-      create: () => false
-    })
+    // clean the requires manually.
+    clean('../test-utils/ExampleModel')
+    clean('../test-utils/ExampleModelRangeKey')
   })
 
   it('correctly fetches with `getAll` method', async () => {
