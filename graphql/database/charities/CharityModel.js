@@ -39,6 +39,13 @@ class Charity extends BaseModel {
     //   impact: ''
     // }
   }
+
+  static get permissions () {
+    return {
+      get: () => true,
+      getAll: () => true
+    }
+  }
 }
 
 Charity.register()

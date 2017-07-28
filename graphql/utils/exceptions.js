@@ -16,6 +16,12 @@ class NotImplementedException extends ExtendableError {
   }
 }
 
+class UnauthorizedQueryException extends ExtendableError {
+  constructor () {
+    super('Query not authorized.')
+  }
+}
+
 class UserReachedMaxLevelException extends ExtendableError {
   constructor () {
     super('There are no more levels user at max level.')
@@ -43,6 +49,7 @@ class OperationMissmatchException extends MockDatabaseException {
 
 export {
   NotImplementedException,
+  UnauthorizedQueryException,
   UserReachedMaxLevelException,
   EmptyOperationStackException,
   OperationMissmatchException

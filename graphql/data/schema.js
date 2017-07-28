@@ -359,7 +359,7 @@ const appType = new GraphQLObjectType({
       type: charityConnection,
       description: 'All the charities',
       args: connectionArgs,
-      resolve: (_, args) => connectionFromPromisedArray(CharityModel.getAll(), args)
+      resolve: (_, args, context) => connectionFromPromisedArray(CharityModel.getAll(context.user), args)
     },
     backgroundImages: {
       type: backgroundImageConnection,

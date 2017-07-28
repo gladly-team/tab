@@ -6,12 +6,38 @@ import { DatabaseOperation, setMockDBResponse } from '../../test-utils'
 
 jest.mock('../../databaseClient')
 
+const user = {
+  id: '45bbefbf-63d1-4d36-931e-212fbe2bc3d9',
+  username: 'MyName',
+  emailVerified: true
+}
+
 describe('BaseModel methods', () => {
   afterEach(() => {
-    jest.resetAllMocks()
+    jest.clearAllMocks()
+
+    // For some reason, jest.resetModules is failing with
+    // ExampleModel (even when using CommonJS requires), so just
+    // reset permissions manually.
+    Object.defineProperty(ExampleModel, 'permissions', {
+      get: () => ({
+        get: () => false,
+        getAll: () => false,
+        update: () => false,
+        create: () => false
+      })
+    })
   })
 
   it('correctly fetches with `getAll` method', async () => {
+    // Set model permissions.
+    Object.defineProperty(ExampleModel, 'permissions', {
+      get: () => ({
+        getAll: () => true
+      })
+    })
+
+    // Set mock response from DB client.
     const dbQueryMock = setMockDBResponse(
       DatabaseOperation.GET_ALL,
       {
@@ -21,7 +47,7 @@ describe('BaseModel methods', () => {
     const expectedDBParams = {
       TableName: ExampleModel.tableName
     }
-    const response = await ExampleModel.getAll()
+    const response = await ExampleModel.getAll(user)
     expect(dbQueryMock.mock.calls[0][0]).toEqual(expectedDBParams)
     expect(response.length).toBe(fixturesA.length)
     for (var index in response) {
@@ -30,6 +56,14 @@ describe('BaseModel methods', () => {
   })
 
   it('correctly fetches with `get` method for a model with no range key', async () => {
+    // Set model permissions.
+    Object.defineProperty(ExampleModel, 'permissions', {
+      get: () => ({
+        get: () => true
+      })
+    })
+
+    // Set mock response from DB client.
     const itemToGet = fixturesA[0]
     const dbQueryMock = setMockDBResponse(
       DatabaseOperation.GET,
@@ -107,12 +141,6 @@ describe('BaseModel authorization', () => {
   afterEach(() => {
     jest.resetModules()
   })
-
-  const user = {
-    id: '45bbefbf-63d1-4d36-931e-212fbe2bc3d9',
-    username: 'MyName',
-    emailVerified: true
-  }
 
   const validOperations = [
     'get',

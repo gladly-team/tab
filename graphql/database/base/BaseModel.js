@@ -1,6 +1,9 @@
 
 import dynogels from 'dynogels'
-import { NotImplementedException } from '../../utils/exceptions'
+import {
+  NotImplementedException,
+  UnauthorizedQueryException
+} from '../../utils/exceptions'
 import dbClient from '../databaseClient'
 
 dynogels.documentClient(dbClient)
@@ -103,13 +106,13 @@ class BaseModel {
   }
 
   static getAll (user) {
-    if (!this.permissions.getAll(user)) {
-      return Promise.reject(new Error(`${user} is not allowed getAll access on ${this.name}`))
-    }
     console.log(`Getting all objs in table ${this.tableName}.`)
     const self = this
     return new Promise((resolve, reject) => {
       this.dynogelsModel.scan().exec((err, objs) => {
+        if (!this.isQueryAuthorized(user, 'getAll')) {
+          reject(new UnauthorizedQueryException())
+        }
         if (err) {
           console.log(err)
           reject(err)
