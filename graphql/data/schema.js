@@ -100,7 +100,7 @@ class App {
  */
 // https://stackoverflow.com/a/33411416
 const { nodeInterface, nodeField } = nodeDefinitions(
-  (globalId) => {
+  (globalId, context) => {
     const { type, id } = fromGlobalId(globalId)
     if (type === 'App') {
       return App.getApp(id)
@@ -109,7 +109,7 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     } else if (type === 'Widget') {
       return getWidget(id)
     } else if (type === CHARITY) {
-      return CharityModel.get(id)
+      return CharityModel.get(context.user, id)
     } else if (type === 'BackgroundImage') {
       return getBackgroundImage(id)
     }
