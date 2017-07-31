@@ -51,6 +51,8 @@ import {
   deleteBookmark
 } from '../database/widgets/widgetTypes/bookmarkWidget'
 
+import UserModel from '../database/users/UserModel'
+
 import {
   User,
   getUser,
@@ -105,7 +107,7 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     if (type === 'App') {
       return App.getApp(id)
     } else if (type === 'User') {
-      return getUser(id)
+      return UserModel.get(context.user, id)
     } else if (type === 'Widget') {
       return getWidget(id)
     } else if (type === CHARITY) {
@@ -731,11 +733,7 @@ const queryType = new GraphQLObjectType({
       args: {
         userId: { type: new GraphQLNonNull(GraphQLString) }
       },
-      resolve: (_, args, context) => {
-        // TODO: use context in authorization
-        // console.log('Context:', context)
-        return getUser(args.userId)
-      }
+      resolve: (_, args, context) => UserModel.get(context.user, args.userId)
     }
   })
 })
