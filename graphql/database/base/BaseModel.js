@@ -178,6 +178,8 @@ class BaseModel {
           console.log(err)
           reject(err)
         } else {
+          console.log('CREATED ITEM', data)
+          console.log('CREATED DATA', data)
           resolve(self.deserialize(data))
         }
       })
