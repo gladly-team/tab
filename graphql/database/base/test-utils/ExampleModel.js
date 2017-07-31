@@ -16,9 +16,16 @@ class ExampleModel extends BaseModel {
   }
 
   static get schema () {
+    const self = this
     return {
       id: types.uuid(),
-      name: types.string()
+      name: types.string().default(self.fieldDefaults.name)
+    }
+  }
+
+  static get fieldDefaults () {
+    return {
+      name: 'Default Name'
     }
   }
 

@@ -9,6 +9,25 @@ import dbClient from '../databaseClient'
 dynogels.documentClient(dbClient)
 
 class BaseModel {
+  constructor (obj) {
+    if (!obj || typeof obj !== 'object') {
+      return
+    }
+    const fieldNames = [].concat(Object.keys(this.constructor.schema),
+      ['created', 'updated'])
+    fieldNames.forEach((fieldName) => {
+      // Set properties for each field on the model.
+      // Set the value to the value passed in `obj` if one exists.
+      // If not passed a value in `obj`, use the defualt value
+      // defined in the `fieldDefaults` method, if it exists.
+      if (obj[fieldName]) {
+        this[fieldName] = obj[fieldName]
+      } else if (this.constructor.fieldDefaults[fieldName]) {
+        this[fieldName] = this.constructor.fieldDefaults[fieldName]
+      }
+    })
+  }
+
   /**
    * The name of the model.
    * You are required to override this function on the child class.
@@ -51,6 +70,14 @@ class BaseModel {
    */
   static get schema () {
     throw new NotImplementedException()
+  }
+
+  /**
+   * Default values for the fields in schema.
+   * @return {object} A map of default values
+   */
+  static get fieldDefaults () {
+    return {}
   }
 
   /**
@@ -186,16 +213,11 @@ class BaseModel {
    *   of `obj` and possibly some additional default attributes.
   */
   static deserialize (data) {
-    // TODO: use default values for missing fields
     const deserializeObj = (obj) => {
       // Create an instance of the model class so that we can use
       // the class type in `nodeDefinitions` in schema.
       const Cls = this
-      const newItem = new Cls()
-      for (var attr in obj.attrs) {
-        newItem[attr] = obj.attrs[attr]
-      }
-      return newItem
+      return new Cls(obj.attrs)
     }
 
     var result

@@ -128,12 +128,6 @@ describe('BaseModel queries', () => {
       .rejects.toEqual(new UnauthorizedQueryException())
   })
 
-  it('deserializes to the correct instance type', () => {
-    const item = fixturesA[0]
-    const deserializedItem = ExampleModel.deserialize(item)
-    expect(deserializedItem instanceof ExampleModel).toBe(true)
-  })
-
   it('correctly creates item', async () => {
     setModelPermissions(ExampleModel, {
       create: () => true
@@ -154,12 +148,38 @@ describe('BaseModel queries', () => {
     const dbParams = dbQueryMock.mock.calls[0][0]
     expect(dbParams.TableName).toEqual(ExampleModel.tableName)
     expect(dbParams.Item.id).toEqual(itemToCreate.id)
-    expect(dbParams.Item.age).toEqual(itemToCreate.age)
     expect(dbParams.Item.created).toBeDefined()
 
     // Verify form of created object.
     expect(createdItem.id).toEqual(itemToCreate.id)
-    expect(createdItem.age).toEqual(itemToCreate.age)
+    expect(createdItem.created).toBeDefined()
+  })
+
+  it('correctly creates item with default fields', async () => {
+    setModelPermissions(ExampleModel, {
+      create: () => true
+    })
+
+    // Set mock response from DB client.
+    const itemToCreate = {}
+    const dbQueryMock = setMockDBResponse(
+      DatabaseOperation.CREATE,
+      {
+        Attributes: {}
+      }
+    )
+    const createdItem = await ExampleModel.create(user, itemToCreate)
+
+    // Verify form of DB params.
+    const dbParams = dbQueryMock.mock.calls[0][0]
+    expect(dbParams.TableName).toEqual(ExampleModel.tableName)
+    expect(dbParams.Item.id).toBeDefined()
+    expect(dbParams.Item.name).toEqual(ExampleModel.fieldDefaults.name)
+    expect(dbParams.Item.created).toBeDefined()
+
+    // Verify form of created object.
+    expect(createdItem.id).toBeDefined()
+    expect(createdItem.name).toEqual(ExampleModel.fieldDefaults.name)
     expect(createdItem.created).toBeDefined()
   })
 
@@ -253,8 +273,39 @@ describe('BaseModel queries', () => {
     return expect(ExampleModel.update(user, itemToUpdate))
       .rejects.toEqual(new UnauthorizedQueryException())
   })
+})
 
-  // TODO: deserialization with default fields
+describe('BaseModel deserialization', () => {
+  it('deserializes to the correct instance type', () => {
+    const item = {
+      attrs: fixturesA[0]
+    }
+    const deserializedItem = ExampleModel.deserialize(item)
+    expect(deserializedItem instanceof ExampleModel).toBe(true)
+  })
+
+  it('deserializes correctly', () => {
+    const item = {
+      attrs: {
+        id: 'yy5082cc-151a-4a9a-9289-06906670fd4e',
+        name: 'Jim Bond'
+      }
+    }
+    const deserializedItem = ExampleModel.deserialize(item)
+    expect(deserializedItem.id).toBe('yy5082cc-151a-4a9a-9289-06906670fd4e')
+    expect(deserializedItem.name).toBe('Jim Bond')
+  })
+
+  it('deserializes to include default values', () => {
+    const item = {
+      attrs: {
+        id: 'zb5082cc-151a-4a9a-9289-06906670fd4e'
+      }
+    }
+    const deserializedItem = ExampleModel.deserialize(item)
+    expect(deserializedItem.id).toBe('zb5082cc-151a-4a9a-9289-06906670fd4e')
+    expect(deserializedItem.name).toBe(ExampleModel.fieldDefaults.name)
+  })
 })
 
 describe('BaseModel required properties', () => {
@@ -420,7 +471,7 @@ describe('BaseModel `isQueryAuthorized` method', () => {
     })
   })
 
-  it('one permission is authorized but others are not', () => {
+  it('works if one permission is authorized but others are not', () => {
     const TestModel = require('../test-utils/ExampleModel').default
     setModelPermissions(TestModel, {
       update: () => true
