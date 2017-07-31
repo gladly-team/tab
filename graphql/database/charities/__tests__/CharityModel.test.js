@@ -25,8 +25,6 @@ describe('CharityModel', () => {
     expect(Charity.tableName).toBe(tableNames['charities'])
   })
 
-  // TODO: test permissions
-
   // TODO: use these in other models where `create` is useful.
   // it('auto creates an id', async () => {
   //   setMockDBResponse(DatabaseOperation.CREATE)
