@@ -44,3 +44,9 @@ export const createGraphQLContext = (userClaims) => {
     }
   }
 }
+
+export const permissionAuthorizers = {
+  userIdMatchesHashKey: (user, hashKey, _) => {
+    return user.id === hashKey
+  }
+}

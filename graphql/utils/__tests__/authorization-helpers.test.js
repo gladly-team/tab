@@ -3,10 +3,11 @@
 import {
   createGraphQLContext,
   getUserClaimsFromLambdaEvent,
-  isUserAuthorized
+  isUserAuthorized,
+  permissionAuthorizers
 } from '../authorization-helpers'
 
-describe('authorization.js', () => {
+describe('authorization-helpers', () => {
   it('correctly gets user claims from AWS Lambda event obj', () => {
     const claims = {
       sub: 'abcdef',
@@ -73,5 +74,25 @@ describe('authorization.js', () => {
       email_verified: 'true'
     }
     expect(isUserAuthorized(userClaims)).toBe(true)
+  })
+})
+
+describe('permission authorizer functions', () => {
+  const user = {
+    id: '45bbefbf-63d1-4d36-931e-212fbe2bc3d9',
+    username: 'MyName',
+    emailVerified: true
+  }
+
+  test('userIdMatchesHashKey works if user ID matches hash key', () => {
+    expect(permissionAuthorizers.userIdMatchesHashKey(
+      user, '45bbefbf-63d1-4d36-931e-212fbe2bc3d9')
+    ).toBe(true)
+  })
+
+  test('userIdMatchesHashKey fails if user ID does not match hash key', () => {
+    expect(permissionAuthorizers.userIdMatchesHashKey(
+      user, '95bbefbf-63d1-4d36-931e-212fbe2bc3d9')
+    ).toBe(false)
   })
 })
