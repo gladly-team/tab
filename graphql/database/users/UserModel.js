@@ -8,6 +8,7 @@ import {
   USER,
   USER_BACKGROUND_OPTION_PHOTO
 } from '../constants'
+import { permissionAuthorizers } from '../../utils/authorization-helpers'
 
 /*
  * Represents a Charity.
@@ -64,8 +65,10 @@ class User extends BaseModel {
 
   static get permissions () {
     return {
-      get: () => true,
-      getAll: () => true
+      get: permissionAuthorizers.userIdMatchesHashKey,
+      getAll: () => false,
+      update: permissionAuthorizers.userIdMatchesHashKey,
+      create: permissionAuthorizers.userIdMatchesHashKey
     }
   }
 }
