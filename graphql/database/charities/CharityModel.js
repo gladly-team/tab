@@ -24,18 +24,14 @@ class Charity extends BaseModel {
   static get schema () {
     return {
       id: types.uuid(),
-      name: types.string()
+      name: types.string(),
+      category: types.string(),
+      logo: types.string(),
+      image: types.string(),
+      website: types.string().uri(),
+      description: types.string(),
+      impact: types.string()
     }
-    // TODO
-    // return {
-    //   name: '',
-    //   category: '',
-    //   logo: '',
-    //   image: '',
-    //   website: '',
-    //   description: '',
-    //   impact: ''
-    // }
   }
 
   static get permissions () {
