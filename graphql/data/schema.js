@@ -55,7 +55,6 @@ import UserModel from '../database/users/UserModel'
 
 import {
   User,
-  getUser,
   incrementVcBy1,
   setUserBackgroundImage,
   setUserBackgroundColor,
