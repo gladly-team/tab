@@ -26,7 +26,7 @@ function setup () {
 }
 
 describe('ReferralData class', function () {
-  it('user update vc', () => {
+  it('user update vc', async () => {
     const database = setup()
 
     database.pushDatabaseOperation(
@@ -42,17 +42,15 @@ describe('ReferralData class', function () {
       })
     )
 
-    return updateUserVc('45bbefbf-63d1-4d36-931e-212fbe2bc3d9', 15)
-      .then(data => {
-        expect(data).not.toBe(null)
-        expect(data.id).toBe('45bbefbf-63d1-4d36-931e-212fbe2bc3d9')
-        expect(data.vcCurrent).toBe(50)
-        expect(data.vcAllTime).toBe(190)
-        expect(data.heartsUntilNextLevel).toBe(10)
-      })
+    const data = await updateUserVc('45bbefbf-63d1-4d36-931e-212fbe2bc3d9', 15)
+    expect(data).not.toBe(null)
+    expect(data.id).toBe('45bbefbf-63d1-4d36-931e-212fbe2bc3d9')
+    expect(data.vcCurrent).toBe(50)
+    expect(data.vcAllTime).toBe(190)
+    expect(data.heartsUntilNextLevel).toBe(10)
   })
 
-  it('user level up', () => {
+  it('user level up', async () => {
     const database = setup()
 
     const userAfterVcUpdated = new DatabaseOperation(OperationType.UPDATE, (params) => {
@@ -85,14 +83,12 @@ describe('ReferralData class', function () {
     database.pushDatabaseOperation(userAfterVcUpdated)
     database.pushDatabaseOperation(userUpdatedAfterLevelUpResolved)
 
-    return updateUserVc('45bbefbf-63d1-4d36-931e-212fbe2bc3d9', 1)
-      .then(data => {
-        expect(data).not.toBe(null)
-        expect(data.id).toBe('45bbefbf-63d1-4d36-931e-212fbe2bc3d9')
-      })
+    const data = await updateUserVc('45bbefbf-63d1-4d36-931e-212fbe2bc3d9', 1)
+    expect(data).not.toBe(null)
+    expect(data.id).toBe('45bbefbf-63d1-4d36-931e-212fbe2bc3d9')
   })
 
-  it('Should increment vc by 1', () => {
+  it('Should increment vc by 1', async () => {
     const database = setup()
 
     database.pushDatabaseOperation(
@@ -122,17 +118,15 @@ describe('ReferralData class', function () {
       })
     )
 
-    return incrementVcBy1('45bbefbf-63d1-4d36-931e-212fbe2bc3d9')
-      .then(data => {
-        expect(data).not.toBe(null)
-        expect(data.id).toBe('45bbefbf-63d1-4d36-931e-212fbe2bc3d9')
-        expect(data.vcCurrent).toBe(50)
-        expect(data.vcAllTime).toBe(190)
-        expect(data.heartsUntilNextLevel).toBe(10)
-      })
+    const data = await incrementVcBy1('45bbefbf-63d1-4d36-931e-212fbe2bc3d9')
+    expect(data).not.toBe(null)
+    expect(data.id).toBe('45bbefbf-63d1-4d36-931e-212fbe2bc3d9')
+    expect(data.vcCurrent).toBe(50)
+    expect(data.vcAllTime).toBe(190)
+    expect(data.heartsUntilNextLevel).toBe(10)
   })
 
-  it('Should not increment vc by 1 if last updated was less than 2 seconds ago', () => {
+  it('Should not increment vc by 1 if last updated was less than 2 seconds ago', async () => {
     const database = setup()
 
     database.pushDatabaseOperation(
@@ -151,15 +145,13 @@ describe('ReferralData class', function () {
     // How do we know this incrementVcBy1 is not calling to updateUserVc?
     // If this were happening we would get an exception from the database
     // since an update operation that wasn't being expected was invoked.
-    return incrementVcBy1('45bbefbf-63d1-4d36-931e-212fbe2bc3d9')
-      .then(data => {
-        expect(data).not.toBe(null)
-        expect(data.id).toBe('45bbefbf-63d1-4d36-931e-212fbe2bc3d9')
-        expect(data.vcCurrent).toBe(100)
-      })
+    const data = await incrementVcBy1('45bbefbf-63d1-4d36-931e-212fbe2bc3d9')
+    expect(data).not.toBe(null)
+    expect(data.id).toBe('45bbefbf-63d1-4d36-931e-212fbe2bc3d9')
+    expect(data.vcCurrent).toBe(100)
   })
 
-  it('Should increment vc by 1 if last updated was more than 2 seconds ago', () => {
+  it('Should increment vc by 1 if last updated was more than 2 seconds ago', async () => {
     const database = setup()
 
     database.pushDatabaseOperation(
@@ -194,11 +186,9 @@ describe('ReferralData class', function () {
       })
     )
 
-    return incrementVcBy1('45bbefbf-63d1-4d36-931e-212fbe2bc3d9')
-      .then(data => {
-        expect(data).not.toBe(null)
-        expect(data.id).toBe('45bbefbf-63d1-4d36-931e-212fbe2bc3d9')
-        expect(data.vcCurrent).toBe(100)
-      })
+    const data = await incrementVcBy1('45bbefbf-63d1-4d36-931e-212fbe2bc3d9')
+    expect(data).not.toBe(null)
+    expect(data.id).toBe('45bbefbf-63d1-4d36-931e-212fbe2bc3d9')
+    expect(data.vcCurrent).toBe(100)
   })
 })
