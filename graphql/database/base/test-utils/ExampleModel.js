@@ -1,7 +1,5 @@
 
-import dynogels from 'dynogels'
-import Joi from 'joi'
-
+import types from '../../fieldTypes'
 import BaseModel from '../BaseModel'
 
 class ExampleModel extends BaseModel {
@@ -19,8 +17,8 @@ class ExampleModel extends BaseModel {
 
   static get schema () {
     return {
-      id: dynogels.types.uuid(),
-      name: Joi.string()
+      id: types.uuid(),
+      name: types.string()
     }
   }
 

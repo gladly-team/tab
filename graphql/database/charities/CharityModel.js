@@ -1,8 +1,6 @@
 
-import dynogels from 'dynogels'
-import Joi from 'joi'
-
 import BaseModel from '../base/BaseModel'
+import types from '../fieldTypes'
 import tableNames from '../tables'
 import { CHARITY } from '../constants'
 
@@ -25,8 +23,8 @@ class Charity extends BaseModel {
 
   static get schema () {
     return {
-      id: dynogels.types.uuid(),
-      name: Joi.string()
+      id: types.uuid(),
+      name: types.string()
     }
     // TODO
     // return {
