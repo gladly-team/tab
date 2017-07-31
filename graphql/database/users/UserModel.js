@@ -30,6 +30,7 @@ class User extends BaseModel {
     const self = this
     return {
       id: types.uuid(),
+      email: types.string().email(),
       username: types.string().required(),
       vcCurrent: types.number().integer().default(self.fieldDefaults.vcCurrent),
       vcAllTime: types.number().integer().default(self.fieldDefaults.vcAllTime),
