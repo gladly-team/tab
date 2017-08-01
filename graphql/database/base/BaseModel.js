@@ -139,6 +139,7 @@ class BaseModel {
           console.log(err)
           reject(err)
         } else {
+          console.log('FETCHED DATA', data)
           resolve(self.deserialize(data))
         }
       })
@@ -178,8 +179,6 @@ class BaseModel {
           console.log(err)
           reject(err)
         } else {
-          console.log('CREATED ITEM', data)
-          console.log('CREATED DATA', data)
           resolve(self.deserialize(data))
         }
       })
@@ -215,11 +214,16 @@ class BaseModel {
    *   of `obj` and possibly some additional default attributes.
   */
   static deserialize (data) {
-    const deserializeObj = (obj) => {
+    const deserializeObj = (item) => {
+      // Item may be null.
+      if (!item) {
+        return null
+      }
+
       // Create an instance of the model class so that we can use
       // the class type in `nodeDefinitions` in schema.
       const Cls = this
-      return new Cls(obj.attrs)
+      return new Cls(item.attrs)
     }
 
     var result
