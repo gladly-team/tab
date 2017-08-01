@@ -122,7 +122,7 @@ class BaseModel {
     this.dynogelsModel = dynogels.define(this.name, options)
   }
 
-  static get (user, hashKey, rangeKey, options) {
+  static async get (user, hashKey, rangeKey, options) {
     const self = this
     let keys = [hashKey]
     if (rangeKey) {
@@ -140,7 +140,7 @@ class BaseModel {
       })
   }
 
-  static getAll (user) {
+  static async getAll (user) {
     // console.log(`Getting all objs in table ${this.tableName}.`)
     const self = this
     if (!this.isQueryAuthorized(user, 'getAll')) {
@@ -170,11 +170,11 @@ class BaseModel {
     // `exec` function so we can deserialize the response.
     // Execute the query by calling `.execute()`.
     const queryObj = this.dynogelsModel.query(hashKey)
-    queryObj.execute = () => this._execAsync(queryObj)
+    queryObj.execute = async () => this._execAsync(queryObj)
     return queryObj
   }
 
-  static _execAsync (queryObj) {
+  static async _execAsync (queryObj) {
     const self = this
     return queryObj.execAsync()
       .then(data => self.deserialize(data.Items))
@@ -184,7 +184,7 @@ class BaseModel {
       })
   }
 
-  static create (user, item) {
+  static async create (user, item) {
     // console.log(`Creating item in ${this.tableName}: ${JSON.stringify(item, null, 2)}`)
     const self = this
     const hashKey = item[this.hashKey]
@@ -199,7 +199,7 @@ class BaseModel {
       })
   }
 
-  static update (user, item) {
+  static async update (user, item) {
     // console.log(`Updating item in ${this.tableName}: ${JSON.stringify(item, null, 2)}`)
     const self = this
     const hashKey = item[this.hashKey]
