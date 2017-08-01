@@ -290,6 +290,80 @@ describe('BaseModel queries', () => {
     return expect(ExampleModel.update(user, itemToUpdate))
       .rejects.toEqual(new UnauthorizedQueryException())
   })
+
+  it('correctly uses `query` method', async () => {
+    setModelPermissions(ExampleModelRangeKey, {
+      get: () => true
+    })
+
+    // Set mock response from DB client.
+    const itemsToGet = fixturesRangeKeyA
+    const dbQueryMock = setMockDBResponse(
+      DatabaseOperation.QUERY,
+      {
+        Items: itemsToGet
+      }
+    )
+    const response = await ExampleModelRangeKey
+      .query(user, itemsToGet[0].id)
+      .execute()
+
+    // Verify DB params.
+    const dbParams = dbQueryMock.mock.calls[0][0]
+    expect(dbParams.TableName).toEqual(ExampleModelRangeKey.tableName)
+    expect(dbParams.ExpressionAttributeValues).toEqual({
+      ':id': itemsToGet[0].id
+    })
+    expect(dbParams.KeyConditionExpression).toEqual('(#id = :id)')
+
+    // Verify response.
+    expect(response).toEqual(itemsToGet)
+  })
+
+  it('correctly uses `query` method with filters', async () => {
+    setModelPermissions(ExampleModelRangeKey, {
+      get: () => true
+    })
+
+    // Set mock response from DB client.
+    const itemsToGet = fixturesRangeKeyA
+    const dbQueryMock = setMockDBResponse(
+      DatabaseOperation.QUERY,
+      {
+        Items: itemsToGet
+      }
+    )
+    const response = await ExampleModelRangeKey
+      .query(user, itemsToGet[0].id)
+      .where('age').gt(30)
+      .execute()
+
+    // Verify DB params.
+    const dbParams = dbQueryMock.mock.calls[0][0]
+    expect(dbParams.TableName).toEqual(ExampleModelRangeKey.tableName)
+    expect(dbParams.ExpressionAttributeValues).toEqual({
+      ':id': itemsToGet[0].id,
+      ':age': 30
+    })
+    expect(dbParams.KeyConditionExpression).toEqual(
+      '(#age > :age) AND (#id = :id)')
+
+    // Verify response.
+    expect(response).toEqual(itemsToGet)
+  })
+
+  it('fails with unauthorized `query`', async () => {
+    expect.assertions(1)
+    setModelPermissions(ExampleModelRangeKey, {
+      get: () => false
+    })
+    const itemsToGet = fixturesRangeKeyA
+    return expect(
+      ExampleModelRangeKey
+        .query(user, itemsToGet[0].id)
+        .execute()
+      ).rejects.toEqual(new UnauthorizedQueryException())
+  })
 })
 
 describe('BaseModel deserialization', () => {

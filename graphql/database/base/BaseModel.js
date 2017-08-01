@@ -154,6 +154,36 @@ class BaseModel {
       })
   }
 
+  static query (user, hashKey) {
+    // console.log(`Querying hashKey ${hashKey} on table ${this.tableName}.`)
+    if (!this.isQueryAuthorized(user, 'get')) {
+      // Raise the permissions error on query execution.
+      const queryObj = this.dynogelsModel.query(hashKey)
+      const execErr = () => Promise.reject(new UnauthorizedQueryException())
+      queryObj.execute = execErr
+      queryObj.exec = execErr
+      queryObj.execAsync = execErr
+      return queryObj
+    }
+
+    // Return a dynogels chainable query, but use our own
+    // `exec` function so we can deserialize the response.
+    // Execute the query by calling `.execute()`.
+    const queryObj = this.dynogelsModel.query(hashKey)
+    queryObj.execute = () => this._execAsync(queryObj)
+    return queryObj
+  }
+
+  static _execAsync (queryObj) {
+    const self = this
+    return queryObj.execAsync()
+      .then(data => self.deserialize(data.Items))
+      .catch(err => {
+        console.log(err)
+        return err
+      })
+  }
+
   static create (user, item) {
     // console.log(`Creating item in ${this.tableName}: ${JSON.stringify(item, null, 2)}`)
     const self = this
