@@ -139,7 +139,6 @@ class BaseModel {
           console.log(err)
           reject(err)
         } else {
-          console.log('FETCHED DATA', data)
           resolve(self.deserialize(data))
         }
       })
