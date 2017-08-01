@@ -100,7 +100,7 @@ describe('BaseModel queries', () => {
 
     // Set mock response from DB client.
     const itemToGet = fixturesA[0]
-    const dbQueryMock = setMockDBResponse(
+    setMockDBResponse(
       DatabaseOperation.GET,
       {
         Item: null
