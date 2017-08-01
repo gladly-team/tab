@@ -93,6 +93,23 @@ describe('BaseModel queries', () => {
     expect(response).toEqual(itemToGet)
   })
 
+  it('correctly handles a `get` that returns no item', async () => {
+    setModelPermissions(ExampleModel, {
+      get: () => true
+    })
+
+    // Set mock response from DB client.
+    const itemToGet = fixturesA[0]
+    const dbQueryMock = setMockDBResponse(
+      DatabaseOperation.GET,
+      {
+        Item: null
+      }
+    )
+    const response = await ExampleModel.get(user, itemToGet.id)
+    expect(response).toEqual(null)
+  })
+
   it('correctly uses `get` method for a model with a range key', async () => {
     setModelPermissions(ExampleModelRangeKey, {
       get: () => true
