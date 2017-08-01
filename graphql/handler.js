@@ -8,6 +8,11 @@ import {
   isUserAuthorized
 } from './utils/authorization-helpers'
 
+// For async/await support.
+if (!global._babelPolyfill) {
+  require('babel-polyfill')
+}
+
 const createResponse = function (statusCode, body) {
   return {
     statusCode: statusCode,
