@@ -55,3 +55,27 @@ export const setModelPermissions = function (modelClass, permissions) {
     get: () => permissions
   })
 }
+
+/**
+ * Overwrite the class methods that interact with the database
+ * with mock functions.
+ * @param {Object} modelClass - The model class (extended from BaseModel)
+ */
+export const mockQueryMethods = function (modelClass) {
+  const methodsToMock = ['get', 'getAll', 'create', 'update', 'query']
+  methodsToMock.forEach((methodName) => {
+    modelClass[methodName] = jest.fn(() => Promise.resolve({'foo': 'bar'}))
+  })
+}
+
+/**
+ * Get a mock user object (as passed from GraphQL context).
+ * @return {Object} The mock user.
+ */
+export const getMockUserObj = function () {
+  return {
+    id: '45bbefbf-63d1-4d36-931e-212fbe2bc3d9',
+    username: 'MyName',
+    emailVerified: true
+  }
+}
