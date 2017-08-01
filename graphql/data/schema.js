@@ -56,7 +56,6 @@ import UserModel from '../database/users/UserModel'
 import {
   User,
   incrementVcBy1,
-  setUserBackgroundImage,
   setUserBackgroundColor,
   setUserBackgroundFromCustomUrl,
   setUserBackgroundDaily,
@@ -437,10 +436,11 @@ const setUserBkgImageMutation = mutationWithClientMutationId({
       resolve: user => user
     }
   },
-  mutateAndGetPayload: ({userId, imageId}) => {
+  mutateAndGetPayload: ({ userId, imageId }, context) => {
     const userGlobalObj = fromGlobalId(userId)
     const bckImageGlobalObj = fromGlobalId(imageId)
-    return setUserBackgroundImage(userGlobalObj.id, bckImageGlobalObj.id)
+    return UserModel.setBackgroundImage(
+      context.user, userGlobalObj.id, bckImageGlobalObj.id)
   }
 })
 

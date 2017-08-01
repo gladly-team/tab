@@ -9,6 +9,7 @@ import {
   USER_BACKGROUND_OPTION_PHOTO
 } from '../constants'
 import { permissionAuthorizers } from '../../utils/authorization-helpers'
+import { getBackgroundImage } from '../backgroundImages/backgroundImage'
 
 /*
  * Represents a Charity.
@@ -37,7 +38,7 @@ class User extends BaseModel {
       vcAllTime: types.number().integer().default(self.fieldDefaults.vcAllTime),
       level: types.number().integer().default(self.fieldDefaults.level),
       heartsUntilNextLevel: types.number().integer(),
-      backgroundImage: types.string().default(self.fieldDefaults.backgroundImage),
+      backgroundImage: types.object().default(self.fieldDefaults.backgroundImage),
       backgroundOption: types.string().default(self.fieldDefaults.backgroundOption),
       customImage: types.string(),
       activeWidget: types.string(),
@@ -70,6 +71,27 @@ class User extends BaseModel {
       update: permissionAuthorizers.userIdMatchesHashKey,
       create: permissionAuthorizers.userIdMatchesHashKey
     }
+  }
+
+  /**
+   * Set user's background image.
+   * @param {object} user - The user.
+   * @param {string} userId - The user id.
+   * @param {string} imageId - The image id.
+   * @return {Promise<User>}  A promise that resolve into a User instance.
+   */
+  static async setBackgroundImage (user, userId, imageId, mode) {
+    const image = await getBackgroundImage(imageId)
+    image.timestamp = moment.utc().format()
+    if (!mode) {
+      mode = USER_BACKGROUND_OPTION_PHOTO
+    }
+    const userInstance = await this.update(user, {
+      id: userId,
+      backgroundImage: image,
+      backgroundOption: mode
+    })
+    return userInstance
   }
 }
 
