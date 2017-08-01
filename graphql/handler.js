@@ -1,5 +1,6 @@
 'use strict'
 
+import 'babel-polyfill' // For async/await support.
 import { graphql } from 'graphql'
 import { Schema } from './data/schema'
 import {
@@ -7,11 +8,6 @@ import {
   getUserClaimsFromLambdaEvent,
   isUserAuthorized
 } from './utils/authorization-helpers'
-
-// For async/await support.
-if (!global._babelPolyfill) {
-  require('babel-polyfill')
-}
 
 const createResponse = function (statusCode, body) {
   return {
