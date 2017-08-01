@@ -1,5 +1,5 @@
 
-import dynogels from 'dynogels'
+import dynogels from './dynogels-promisified'
 import {
   NotImplementedException,
   UnauthorizedQueryException
@@ -129,59 +129,44 @@ class BaseModel {
       keys.push(rangeKey)
     }
     // console.log(`Getting obj with hashKey ${hashKey} from table ${this.tableName}.`)
-    return new Promise((resolve, reject) => {
-      if (!this.isQueryAuthorized(user, 'get', hashKey, rangeKey)) {
-        reject(new UnauthorizedQueryException())
-        return
-      }
-      this.dynogelsModel.get(...keys, (err, data) => {
-        if (err) {
-          console.log(err)
-          reject(err)
-        } else {
-          resolve(self.deserialize(data))
-        }
+    if (!this.isQueryAuthorized(user, 'get', hashKey, rangeKey)) {
+      return Promise.reject(new UnauthorizedQueryException())
+    }
+    return this.dynogelsModel.getAsync(...keys)
+      .then(data => self.deserialize(data))
+      .catch(err => {
+        console.log(err)
+        return err
       })
-    })
   }
 
   static getAll (user) {
     // console.log(`Getting all objs in table ${this.tableName}.`)
     const self = this
-    return new Promise((resolve, reject) => {
-      if (!this.isQueryAuthorized(user, 'getAll')) {
-        reject(new UnauthorizedQueryException())
-        return
-      }
-      this.dynogelsModel.scan().exec((err, data) => {
-        if (err) {
-          console.log(err)
-          reject(err)
-        } else {
-          resolve(self.deserialize(data.Items))
-        }
+    if (!this.isQueryAuthorized(user, 'getAll')) {
+      return Promise.reject(new UnauthorizedQueryException())
+    }
+    return this.dynogelsModel.scan().execAsync()
+      .then(data => self.deserialize(data.Items))
+      .catch(err => {
+        console.log(err)
+        return err
       })
-    })
   }
 
   static create (user, item) {
     // console.log(`Creating item in ${this.tableName}: ${JSON.stringify(item, null, 2)}`)
     const self = this
     const hashKey = item[this.hashKey]
-    return new Promise((resolve, reject) => {
-      if (!this.isQueryAuthorized(user, 'create', hashKey)) {
-        reject(new UnauthorizedQueryException())
-        return
-      }
-      this.dynogelsModel.create(item, (err, data) => {
-        if (err) {
-          console.log(err)
-          reject(err)
-        } else {
-          resolve(self.deserialize(data))
-        }
+    if (!this.isQueryAuthorized(user, 'create', hashKey)) {
+      return Promise.reject(new UnauthorizedQueryException())
+    }
+    return this.dynogelsModel.createAsync(item)
+      .then(data => self.deserialize(data))
+      .catch(err => {
+        console.log(err)
+        return err
       })
-    })
   }
 
   static update (user, item) {
@@ -189,20 +174,15 @@ class BaseModel {
     const self = this
     const hashKey = item[this.hashKey]
     const rangeKey = item[this.rangeKey]
-    return new Promise((resolve, reject) => {
-      if (!this.isQueryAuthorized(user, 'update', hashKey, rangeKey)) {
-        reject(new UnauthorizedQueryException())
-        return
-      }
-      this.dynogelsModel.update(item, { ReturnValues: 'ALL_NEW' }, (err, data) => {
-        if (err) {
-          console.log(err)
-          reject(err)
-        } else {
-          resolve(self.deserialize(data))
-        }
+    if (!this.isQueryAuthorized(user, 'update', hashKey, rangeKey)) {
+      return Promise.reject(new UnauthorizedQueryException())
+    }
+    return this.dynogelsModel.updateAsync(item, { ReturnValues: 'ALL_NEW' })
+      .then(data => self.deserialize(data))
+      .catch(err => {
+        console.log(err)
+        return err
       })
-    })
   }
 
   /**
