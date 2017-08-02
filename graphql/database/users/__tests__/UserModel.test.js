@@ -19,13 +19,77 @@ describe('UserModel', () => {
     expect(User.tableName).toBe(tableNames['users'])
   })
 
-  it('has the correct permissions', () => {
+  it('has the correct get permission', () => {
     expect(User.permissions.get).toBe(
-      permissionAuthorizers.userIdMatchesHashKey)
+      permissionAuthorizers.usernameOrUserIdMatchesHashKey)
+  })
+
+  it('has the correct update permission', () => {
     expect(User.permissions.update).toBe(
-      permissionAuthorizers.userIdMatchesHashKey)
-    expect(User.permissions.create).toBe(
-      permissionAuthorizers.userIdMatchesHashKey)
+      permissionAuthorizers.usernameOrUserIdMatchesHashKey)
+  })
+
+  it('has the correct getAll permission', () => {
     expect(User.permissions.getAll()).toBe(false)
+  })
+
+  it('allows create when user info matches item to create', () => {
+    const userContext = {
+      id: 'abc',
+      email: 'foo@bar.com',
+      username: 'myName'
+    }
+    const item = {
+      id: 'abc',
+      email: 'foo@bar.com',
+      username: 'myName'
+    }
+    expect(User.permissions.create(userContext, null, null, item))
+      .toBe(true)
+  })
+
+  it('does not allow create when user ID is different', () => {
+    const userContext = {
+      id: 'abcd',
+      email: 'foo@bar.com',
+      username: 'myName'
+    }
+    const item = {
+      id: 'abc',
+      email: 'foo@bar.com',
+      username: 'myName'
+    }
+    expect(User.permissions.create(userContext, null, null, item))
+      .toBe(false)
+  })
+
+  it('does not allow create when user ID is different', () => {
+    const userContext = {
+      id: 'abc',
+      email: 'foo@bar.com',
+      username: 'myName'
+    }
+    const item = {
+      id: 'abc',
+      email: 'foo+hi@bar.com',
+      username: 'myName'
+    }
+    expect(User.permissions.create(userContext, null, null, item))
+      .toBe(false)
+  })
+
+  it('does not allow create when username is different', () => {
+    const userContext = {
+      id: 'abcd',
+      email: 'foo@bar.com',
+      username: 'myName'
+    }
+    const item = {
+      id: 'abc',
+      email: 'foo@bar.com',
+      username: 'myOtherName'
+    }
+    expect(User.permissions.create(userContext, null, null, item))
+      .toBe(false)
   })
 })

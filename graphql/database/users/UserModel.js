@@ -40,7 +40,7 @@ class User extends BaseModel {
     const self = this
     return {
       id: types.uuid(),
-      email: types.string().email(),
+      email: types.string().email().required(),
       username: types.string().required(),
       vcCurrent: types.number().integer().default(self.fieldDefaults.vcCurrent),
       vcAllTime: types.number().integer().default(self.fieldDefaults.vcAllTime),
@@ -77,7 +77,15 @@ class User extends BaseModel {
       get: permissionAuthorizers.usernameOrUserIdMatchesHashKey,
       getAll: () => false,
       update: permissionAuthorizers.usernameOrUserIdMatchesHashKey,
-      create: permissionAuthorizers.usernameOrUserIdMatchesHashKey
+      // To create a new user, the created item must have the same
+      // email, username, and user ID as the authorized user.
+      create: (userContext, hashKey, rangeKey, item) => {
+        return (
+          userContext.id === item.id &&
+          userContext.email === item.email &&
+          userContext.username === item.username
+        )
+      }
     }
   }
 
