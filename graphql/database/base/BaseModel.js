@@ -211,7 +211,7 @@ class BaseModel {
     // console.log(`Creating item in ${this.tableName}: ${JSON.stringify(item, null, 2)}`)
     const self = this
     const hashKey = item[this.hashKey]
-    if (!this.isQueryAuthorized(user, 'create', hashKey)) {
+    if (!this.isQueryAuthorized(user, 'create', hashKey, null, item)) {
       return Promise.reject(new UnauthorizedQueryException())
     }
     return this.dynogelsModel.createAsync(item)
@@ -227,7 +227,7 @@ class BaseModel {
     const self = this
     const hashKey = item[this.hashKey]
     const rangeKey = item[this.rangeKey]
-    if (!this.isQueryAuthorized(user, 'update', hashKey, rangeKey)) {
+    if (!this.isQueryAuthorized(user, 'update', hashKey, rangeKey, item)) {
       return Promise.reject(new UnauthorizedQueryException())
     }
     return this.dynogelsModel.updateAsync(item, { ReturnValues: 'ALL_NEW' })
@@ -277,9 +277,11 @@ class BaseModel {
    * @param {string} operation - The operation type (e.g. "get" or "update")
    * @param {string} hashKeyValue - The value of the item hashKey in the query
    * @param {string} rangeKeyValue - The value of the item rangeKey in the query
+   * @param {object} item - An object of attributes to be updated or created
    * @return {boolean} Whether the user is authorized.
    */
-  static isQueryAuthorized (user, operation, hashKeyValue, rangeKeyValue) {
+  static isQueryAuthorized (user, operation, hashKeyValue = null,
+    rangeKeyValue = null, item = null) {
     // If the user is null or not an object, reject.
     if (!user || typeof user !== 'object') {
       return false

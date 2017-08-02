@@ -164,8 +164,13 @@ describe('BaseModel calls to `isQueryAuthorized`', () => {
     TestModel.isQueryAuthorized = authorizationCheck
 
     const hashKeyVal = 'yx5082cc-151a-4a9a-9289-06906670fd4e'
-    await TestModel.create(user, {id: hashKeyVal, name: 'thing'}).catch(() => {}) // Ignore any authorization errors
-    expect(authorizationCheck).toBeCalledWith(user, 'create', hashKeyVal)
+    const item = {
+      id: hashKeyVal,
+      name: 'thing'
+    }
+    await TestModel.create(user, item)
+      .catch(() => {}) // Ignore any authorization errors
+    expect(authorizationCheck).toBeCalledWith(user, 'create', hashKeyVal, null, item)
   })
 
   it('passes correct params to `update` authorization check', async () => {
@@ -176,11 +181,13 @@ describe('BaseModel calls to `isQueryAuthorized`', () => {
 
     const hashKeyVal = 'xy5082cc-151a-4a9a-9289-06906670fd4e'
     const rangeKeyVal = '30'
-    await TestModelRangeKey.update(user, {
+    const item = {
       [TestModelRangeKey.hashKey]: hashKeyVal,
       [TestModelRangeKey.rangeKey]: rangeKeyVal
-    }).catch(() => {}) // Ignore any authorization errors
+    }
+    await TestModelRangeKey.update(user, item)
+    .catch(() => {}) // Ignore any authorization errors
     expect(authorizationCheck).toBeCalledWith(user, 'update',
-      hashKeyVal, rangeKeyVal)
+      hashKeyVal, rangeKeyVal, item)
   })
 })
