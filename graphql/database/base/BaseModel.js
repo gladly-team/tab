@@ -179,7 +179,7 @@ class BaseModel {
 
   static query (user, hashKey) {
     // console.log(`Querying hashKey ${hashKey} on table ${this.tableName}.`)
-    if (!this.isQueryAuthorized(user, 'get')) {
+    if (!this.isQueryAuthorized(user, 'get', hashKey)) {
       // Raise the permissions error on query execution.
       const queryObj = this.dynogelsModel.query(hashKey)
       const execErr = () => Promise.reject(new UnauthorizedQueryException())
