@@ -95,4 +95,30 @@ describe('permission authorizer functions', () => {
       user, '95bbefbf-63d1-4d36-931e-212fbe2bc3d9')
     ).toBe(false)
   })
+
+  test('usernameMatchesHashKey works if username matches hash key', () => {
+    expect(permissionAuthorizers.usernameMatchesHashKey(
+      user, 'MyName')
+    ).toBe(true)
+  })
+
+  test('usernameMatchesHashKey fails if username does not match hash key', () => {
+    expect(permissionAuthorizers.usernameMatchesHashKey(
+      user, 'NotMyName')
+    ).toBe(false)
+  })
+
+  test('usernameOrUserIdMatchesHashKey works as expected', () => {
+    expect(permissionAuthorizers.usernameOrUserIdMatchesHashKey(
+      user, 'abcdef')
+    ).toBe(false)
+
+    expect(permissionAuthorizers.usernameOrUserIdMatchesHashKey(
+      user, 'MyName')
+    ).toBe(true)
+
+    expect(permissionAuthorizers.usernameOrUserIdMatchesHashKey(
+      user, '45bbefbf-63d1-4d36-931e-212fbe2bc3d9')
+    ).toBe(true)
+  })
 })
