@@ -83,30 +83,30 @@ class User extends BaseModel {
 
   /**
    * Fetch the user by username.
-   * @param {object} user - The user authorizer object.
+   * @param {object} userContext - The user authorizer object.
    * @param {string} username - The user's username.
    * @return {Promise<User>}  A promise that resolve into a User instance.
    */
-  static async getUserByUsername (user, username) {
-    return this.query(user, username)
+  static async getUserByUsername (userContext, username) {
+    return this.query(userContext, username)
       .usingIndex('UsersByUsername')
       .execute()
   }
 
   /**
    * Set user's background image.
-   * @param {object} user - The user authorizer object.
+   * @param {object} userContext - The user authorizer object.
    * @param {string} userId - The user id.
    * @param {string} imageId - The image id.
    * @return {Promise<User>}  A promise that resolve into a User instance.
    */
-  static async setBackgroundImage (user, userId, imageId, mode) {
+  static async setBackgroundImage (userContext, userId, imageId, mode) {
     const image = await getBackgroundImage(imageId)
     image.timestamp = moment.utc().format()
     if (!mode) {
       mode = USER_BACKGROUND_OPTION_PHOTO
     }
-    const userInstance = await this.update(user, {
+    const userInstance = await this.update(userContext, {
       id: userId,
       backgroundImage: image,
       backgroundOption: mode
