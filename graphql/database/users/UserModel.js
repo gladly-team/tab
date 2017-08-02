@@ -88,7 +88,7 @@ class User extends BaseModel {
    * @return {Promise<User>}  A promise that resolve into a User instance.
    */
   static async getUserByUsername (user, username) {
-    return await this.query(user, username)
+    return this.query(user, username)
       .usingIndex('UsersByUsername')
       .execute()
   }
