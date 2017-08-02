@@ -24,6 +24,14 @@ class User extends BaseModel {
     return 'id'
   }
 
+  static get indexes () {
+    return [{
+      hashKey: 'username',
+      name: 'UsersByUsername',
+      type: 'global'
+    }]
+  }
+
   static get tableName () {
     return tableNames.users
   }
@@ -66,16 +74,28 @@ class User extends BaseModel {
 
   static get permissions () {
     return {
-      get: permissionAuthorizers.userIdMatchesHashKey,
+      get: permissionAuthorizers.usernameOrUserIdMatchesHashKey,
       getAll: () => false,
-      update: permissionAuthorizers.userIdMatchesHashKey,
-      create: permissionAuthorizers.userIdMatchesHashKey
+      update: permissionAuthorizers.usernameOrUserIdMatchesHashKey,
+      create: permissionAuthorizers.usernameOrUserIdMatchesHashKey
     }
   }
 
   /**
+   * Fetch the user by username.
+   * @param {object} user - The user authorizer object.
+   * @param {string} username - The user's username.
+   * @return {Promise<User>}  A promise that resolve into a User instance.
+   */
+  static async getUserByUsername (user, username) {
+    return await this.query(user, username)
+      .usingIndex('UsersByUsername')
+      .execute()
+  }
+
+  /**
    * Set user's background image.
-   * @param {object} user - The user.
+   * @param {object} user - The user authorizer object.
    * @param {string} userId - The user id.
    * @param {string} imageId - The image id.
    * @return {Promise<User>}  A promise that resolve into a User instance.
