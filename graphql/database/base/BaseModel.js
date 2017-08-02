@@ -64,6 +64,22 @@ class BaseModel {
   }
 
   /**
+   * Any secondary indexes on the model.
+   * See:
+   *   https://github.com/clarkie/dynogels#global-indexes
+   *   https://github.com/clarkie/dynogels#local-secondary-indexes
+   * @return {object} The name of the hashKey for the DynamoDB table.
+   * @return {array<object>} indexes<index> - A list of index objects.
+   * @return {string} index.hashKey - The hash key.
+   * @return {string} index.rangeKey - The range key.
+   * @return {string} index.name - The name of the index.
+   * @return {string} index.type - Either "global" or "local".
+   */
+  static get indexes () {
+    return null
+  }
+
+  /**
    * The table schema, used in dynogels.
    * You are required to override this function on the child class.
    * @return {object} The table schema.
@@ -119,6 +135,13 @@ class BaseModel {
     if (this.rangeKey) {
       options['rangeKey'] = this.rangeKey
     }
+
+    // Add any secondary indexes.
+    // https://github.com/clarkie/dynogels#global-indexes
+    if (this.indexes) {
+      options.indexes = this.indexes
+    }
+
     this.dynogelsModel = dynogels.define(this.name, options)
   }
 

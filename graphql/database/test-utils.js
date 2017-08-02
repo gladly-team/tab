@@ -57,6 +57,20 @@ export const setModelPermissions = function (modelClass, permissions) {
 }
 
 /**
+ * Set a getter value for a model class.
+ * @param {Object} modelClass - The model class (extended from BaseModel)
+ * @param {string} fieldName - The name of the field
+ * @param {*} val - The value the getter should return
+ * @return {null}
+ */
+export const setModelGetterField = function (modelClass, fieldName, val) {
+  Object.defineProperty(modelClass, fieldName, {
+    get: () => val,
+    configurable: true
+  })
+}
+
+/**
  * Overwrite the class methods that interact with the database
  * with mock functions.
  * @param {Object} modelClass - The model class (extended from BaseModel)
