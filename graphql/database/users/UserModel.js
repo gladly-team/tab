@@ -10,6 +10,8 @@ import {
 } from '../constants'
 import { permissionAuthorizers } from '../../utils/authorization-helpers'
 import { getBackgroundImage } from '../backgroundImages/backgroundImage'
+import { logReferralData } from '../referrals/referralData'
+import { rewardReferringUser } from './rewardReferringUser'
 
 /*
  * Represents a Charity.
@@ -93,7 +95,7 @@ class User extends BaseModel {
    * Fetch the user by username.
    * @param {object} userContext - The user authorizer object.
    * @param {string} username - The user's username.
-   * @return {Promise<User>}  A promise that resolve into a User instance.
+   * @return {Promise<User>}  A promise that resolves into a User instance.
    */
   static async getUserByUsername (userContext, username) {
     return this.query(userContext, username)
@@ -102,11 +104,38 @@ class User extends BaseModel {
   }
 
   /**
+   * Creates a new user.
+   * @param {object} userContext - The user authorizer object.
+   * @param {object} user - The user info.
+   * @param {object} referralData - Referral data.
+   * @return {Promise<User>}  A promise that resolves into a User instance.
+   */
+  static async createUser (userContext, userId, username,
+      email, referralData) {
+    const userInfo = {
+      id: userId,
+      username: username,
+      email: email
+    }
+    const createdUser = await User.create(userContext, userInfo)
+      .catch((err) => err)
+    if (referralData) {
+      const referringUserUsername = referralData.referringUser
+      const referringUser = await this.getUserByUsername(referringUserUsername)
+      if (referringUser) {
+        await logReferralData(userInfo.id, referringUser.id)
+        await rewardReferringUser(referringUser.id)
+      }
+    }
+    return createdUser
+  }
+
+  /**
    * Set user's background image.
    * @param {object} userContext - The user authorizer object.
    * @param {string} userId - The user id.
    * @param {string} imageId - The image id.
-   * @return {Promise<User>}  A promise that resolve into a User instance.
+   * @return {Promise<User>}  A promise that resolves into a User instance.
    */
   static async setBackgroundImage (userContext, userId, imageId, mode) {
     const image = await getBackgroundImage(imageId)

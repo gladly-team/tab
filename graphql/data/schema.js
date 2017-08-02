@@ -59,8 +59,7 @@ import {
   setUserBackgroundColor,
   setUserBackgroundFromCustomUrl,
   setUserBackgroundDaily,
-  setUserActiveWidget,
-  createUser
+  setUserActiveWidget
 } from '../database/users/user'
 
 import CharityModel from '../database/charities/CharityModel'
@@ -706,11 +705,9 @@ const createNewUserMutation = mutationWithClientMutationId({
       resolve: user => user
     }
   },
-  mutateAndGetPayload: ({userId, username, email, referralData}) => {
-    const user = new User(userId)
-    user.email = email
-    user.username = username
-    return createUser(user, referralData)
+  mutateAndGetPayload: ({userId, username, email, referralData}, context) => {
+    return UserModel.createUser(context.user, userId, username,
+      email, referralData)
   }
 })
 
