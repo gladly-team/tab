@@ -1,12 +1,12 @@
 export {
   User,
-  getUser,
-  setUserBackgroundImage,
-  setUserBackgroundColor,
+  // getUser,
+  // setUserBackgroundImage,
+  // setUserBackgroundColor,
   setUserBackgroundFromCustomUrl,
   setUserBackgroundDaily,
-  setUserActiveWidget,
-  createUser
+  setUserActiveWidget
+  // createUser
 } from './base'
 
 export { updateUserVc, incrementVcBy1 } from './updateUserVc'

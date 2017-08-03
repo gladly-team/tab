@@ -6,6 +6,7 @@ import types from '../fieldTypes'
 import tableNames from '../tables'
 import {
   USER,
+  USER_BACKGROUND_OPTION_COLOR,
   USER_BACKGROUND_OPTION_PHOTO
 } from '../constants'
 import { permissionAuthorizers } from '../../utils/authorization-helpers'
@@ -50,6 +51,7 @@ class User extends BaseModel {
       heartsUntilNextLevel: types.number().integer(),
       backgroundImage: types.object().default(self.fieldDefaults.backgroundImage),
       backgroundOption: types.string().default(self.fieldDefaults.backgroundOption),
+      backgroundColor: types.string(),
       customImage: types.string(),
       activeWidget: types.string(),
       lastTabTimestamp: types.date().iso()
@@ -147,6 +149,22 @@ class User extends BaseModel {
       id: userId,
       backgroundImage: image,
       backgroundOption: mode
+    })
+    return userInstance
+  }
+
+  /**
+   * Set user's background color.
+   * @param {object} userContext - The user authorizer object.
+   * @param {string} userId - The user id.
+   * @param {string} color - The background color.
+   * @return {Promise<User>}  A promise that resolves into a User instance.
+   */
+  static async setBackgroundColor (userContext, userId, color) {
+    const userInstance = await this.update(userContext, {
+      id: userId,
+      backgroundColor: color,
+      backgroundOption: USER_BACKGROUND_OPTION_COLOR
     })
     return userInstance
   }

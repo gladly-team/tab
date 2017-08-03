@@ -56,7 +56,6 @@ import UserModel from '../database/users/UserModel'
 import {
   User,
   incrementVcBy1,
-  setUserBackgroundColor,
   setUserBackgroundFromCustomUrl,
   setUserBackgroundDaily,
   setUserActiveWidget
@@ -458,9 +457,9 @@ const setUserBkgColorMutation = mutationWithClientMutationId({
       resolve: user => user
     }
   },
-  mutateAndGetPayload: ({userId, color}) => {
+  mutateAndGetPayload: ({userId, color}, context) => {
     const userGlobalObj = fromGlobalId(userId)
-    return setUserBackgroundColor(userGlobalObj.id, color)
+    return UserModel.setBackgroundColor(context.user, userGlobalObj.id, color)
   }
 })
 
