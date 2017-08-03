@@ -1,11 +1,11 @@
 export {
-  User,
+  User
   // getUser,
   // setUserBackgroundImage,
   // setUserBackgroundColor,
   // setUserBackgroundFromCustomUrl,
   // setUserBackgroundDaily,
-  setUserActiveWidget
+  // setUserActiveWidget
   // createUser
 } from './base'
 
