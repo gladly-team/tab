@@ -8,10 +8,14 @@ import {
   USER,
   USER_BACKGROUND_OPTION_COLOR,
   USER_BACKGROUND_OPTION_CUSTOM,
+  USER_BACKGROUND_OPTION_DAILY,
   USER_BACKGROUND_OPTION_PHOTO
 } from '../constants'
 import { permissionAuthorizers } from '../../utils/authorization-helpers'
-import { getBackgroundImage } from '../backgroundImages/backgroundImage'
+import {
+  getBackgroundImage,
+  getRandomImage
+} from '../backgroundImages/backgroundImage'
 import { logReferralData } from '../referrals/referralData'
 import { rewardReferringUser } from './rewardReferringUser'
 
@@ -182,6 +186,23 @@ class User extends BaseModel {
       id: userId,
       backgroundColor: color,
       backgroundOption: USER_BACKGROUND_OPTION_COLOR
+    })
+    return userInstance
+  }
+
+  /**
+   * Set user's background image to change daily.
+   * @param {object} userContext - The user authorizer object.
+   * @param {string} userId - The user id.
+   * @return {Promise<User>}  A promise that resolves into a User instance.
+   */
+  static async setBackgroundImageDaily (userContext, userId) {
+    const image = await getRandomImage()
+    image.timestamp = moment.utc().format()
+    const userInstance = await this.update(userContext, {
+      id: userId,
+      backgroundImage: image,
+      backgroundOption: USER_BACKGROUND_OPTION_DAILY
     })
     return userInstance
   }

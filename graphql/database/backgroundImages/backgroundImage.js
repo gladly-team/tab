@@ -48,6 +48,7 @@ class BackgroundImage extends BaseModel {
  * into a BackgroundImage instance.
  */
 function getBackgroundImage (id) {
+  // TODO: probably get new daily background image here if it's expired.
   return BackgroundImage.get(id)
     .then(image => image)
     .catch(err => {
@@ -62,11 +63,13 @@ function getBackgroundImage (id) {
  */
 function getBackgroundImages () {
   var params = {
-    ProjectionExpression: '#id, #name, #fileName',
+    ProjectionExpression: '#id, #name, #fileName, #created, #updated',
     ExpressionAttributeNames: {
       '#id': 'id',
       '#name': 'name',
-      '#fileName': 'fileName'
+      '#fileName': 'fileName',
+      '#created': 'created',
+      '#updated': 'updated'
     }
   }
   return BackgroundImage.getAll(params)

@@ -15,7 +15,6 @@ logger.log = function (msg) {
 
 logger.error = function (msg, error) {
   console.error(msg, error)
-  console.error(error.stack)
 }
 
 // TODO: disable in test/prod

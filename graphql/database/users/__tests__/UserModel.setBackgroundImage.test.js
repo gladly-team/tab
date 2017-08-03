@@ -1,6 +1,7 @@
 /* eslint-env jest */
 
 import UserModel from '../UserModel'
+import { getBackgroundImage } from '../../backgroundImages/backgroundImage'
 import {
   USER_BACKGROUND_OPTION_PHOTO,
   USER_BACKGROUND_OPTION_CUSTOM
@@ -10,18 +11,7 @@ import {
   mockQueryMethods
 } from '../../test-utils'
 
-// Return a mock background image.
-const mockImage = {
-  id: 'fb5082cc-151a-4a9a-9289-06906670fd4e',
-  updated: '2017-07-18T20:45:53Z',
-  created: '2017-07-18T20:45:53Z',
-  name: 'Mountain Lake',
-  fileName: 'lake.jpg',
-  timestamp: '2017-08-01T21:35:48Z'
-}
-jest.mock('../../backgroundImages/backgroundImage', () => ({
-  getBackgroundImage: () => mockImage
-}))
+jest.mock('../../backgroundImages/backgroundImage')
 
 const user = getMockUserObj()
 mockQueryMethods(UserModel)
@@ -35,6 +25,7 @@ describe('setBackgroundImage', () => {
     const userId = user.id
     const imageId = 'abc-123'
     const mode = USER_BACKGROUND_OPTION_PHOTO
+    const mockImage = await getBackgroundImage(imageId)
     await UserModel.setBackgroundImage(user, userId, imageId, mode)
     expect(UserModel.update).toHaveBeenCalledWith(user, {
       id: userId,
@@ -47,6 +38,7 @@ describe('setBackgroundImage', () => {
     const userId = user.id
     const imageId = 'abc-123'
     const mode = null
+    const mockImage = await getBackgroundImage(imageId)
     await UserModel.setBackgroundImage(user, userId, imageId, mode)
     expect(UserModel.update).toHaveBeenCalledWith(user, {
       id: userId,
@@ -59,6 +51,7 @@ describe('setBackgroundImage', () => {
     const userId = user.id
     const imageId = 'abc-123'
     const mode = USER_BACKGROUND_OPTION_CUSTOM
+    const mockImage = await getBackgroundImage(imageId)
     await UserModel.setBackgroundImage(user, userId, imageId, mode)
     expect(UserModel.update).toHaveBeenCalledWith(user, {
       id: userId,

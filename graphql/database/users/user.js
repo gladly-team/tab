@@ -4,7 +4,7 @@ export {
   // setUserBackgroundImage,
   // setUserBackgroundColor,
   // setUserBackgroundFromCustomUrl,
-  setUserBackgroundDaily,
+  // setUserBackgroundDaily,
   setUserActiveWidget
   // createUser
 } from './base'
