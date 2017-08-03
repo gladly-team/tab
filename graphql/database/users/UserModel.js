@@ -7,6 +7,7 @@ import tableNames from '../tables'
 import {
   USER,
   USER_BACKGROUND_OPTION_COLOR,
+  USER_BACKGROUND_OPTION_CUSTOM,
   USER_BACKGROUND_OPTION_PHOTO
 } from '../constants'
 import { permissionAuthorizers } from '../../utils/authorization-helpers'
@@ -149,6 +150,22 @@ class User extends BaseModel {
       id: userId,
       backgroundImage: image,
       backgroundOption: mode
+    })
+    return userInstance
+  }
+
+  /**
+   * Set user's background image from a custom image URL.
+   * @param {object} userContext - The user authorizer object.
+   * @param {string} userId - The user id.
+   * @param {string} imageUrl - The url for the image to use as background.
+   * @return {Promise<User>}  A promise that resolves into a User instance.
+   */
+  static async setBackgroundImageFromCustomURL (userContext, userId, imageURL) {
+    const userInstance = await this.update(userContext, {
+      id: userId,
+      customImage: imageURL,
+      backgroundOption: USER_BACKGROUND_OPTION_CUSTOM
     })
     return userInstance
   }

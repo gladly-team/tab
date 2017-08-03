@@ -56,7 +56,6 @@ import UserModel from '../database/users/UserModel'
 import {
   User,
   incrementVcBy1,
-  setUserBackgroundFromCustomUrl,
   setUserBackgroundDaily,
   setUserActiveWidget
 } from '../database/users/user'
@@ -478,9 +477,10 @@ const setUserBkgCustomImageMutation = mutationWithClientMutationId({
       resolve: user => user
     }
   },
-  mutateAndGetPayload: ({userId, image}) => {
+  mutateAndGetPayload: ({userId, image}, context) => {
     const userGlobalObj = fromGlobalId(userId)
-    return setUserBackgroundFromCustomUrl(userGlobalObj.id, image)
+    return UserModel.setBackgroundImageFromCustomURL(
+      context.user, userGlobalObj.id, image)
   }
 })
 

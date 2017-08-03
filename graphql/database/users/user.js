@@ -3,7 +3,7 @@ export {
   // getUser,
   // setUserBackgroundImage,
   // setUserBackgroundColor,
-  setUserBackgroundFromCustomUrl,
+  // setUserBackgroundFromCustomUrl,
   setUserBackgroundDaily,
   setUserActiveWidget
   // createUser
