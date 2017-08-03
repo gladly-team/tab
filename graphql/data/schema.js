@@ -54,7 +54,6 @@ import {
 import UserModel from '../database/users/UserModel'
 
 import {
-  User,
   incrementVcBy1
 } from '../database/users/user'
 
@@ -113,7 +112,7 @@ const { nodeInterface, nodeField } = nodeDefinitions(
   (obj) => {
     if (obj instanceof App) {
       return appType
-    } else if (obj instanceof User) {
+    } else if (obj instanceof UserModel) {
       return userType
     } else if (obj instanceof Widget) {
       return widgetType
