@@ -1,7 +1,8 @@
 'use strict'
 
 // Note: after deleting this function, we can remove
-// joi and uuid from dependencies.
+// the following packages from dependencies:
+// joi, uuid, dynogels, bluebird
 
 import UserModel from 'database/users/UserModel'
 import {
