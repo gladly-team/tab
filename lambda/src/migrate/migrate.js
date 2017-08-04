@@ -32,8 +32,8 @@ import tfacMgr from './tfac'
  */
 const setUserProfile = Async((userProfile) => {
   try {
-    const user = new UserModel(userProfile.id)
-
+    const user = {}
+    user.id = userProfile.id
     user.username = userProfile.username
     user.email = userProfile.email
     user.vcCurrent = userProfile.vcCurrent
