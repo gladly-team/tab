@@ -404,10 +404,10 @@ const donateVcMutation = mutationWithClientMutationId({
       resolve: user => user
     }
   },
-  mutateAndGetPayload: ({userId, charityId, vc}) => {
+  mutateAndGetPayload: ({userId, charityId, vc}, context) => {
     const userGlobalObj = fromGlobalId(userId)
     const charityGlobalObj = fromGlobalId(charityId)
-    return donateVc(userGlobalObj.id, charityGlobalObj.id, vc)
+    return donateVc(context.user, userGlobalObj.id, charityGlobalObj.id, vc)
   }
 })
 

@@ -1,9 +1,12 @@
 'use strict'
 
+import UserModel from 'database/users/UserModel'
 import {
-  User,
-  createUser
-} from 'database/users/user'
+  USER_BACKGROUND_OPTION_COLOR,
+  USER_BACKGROUND_OPTION_CUSTOM,
+  USER_BACKGROUND_OPTION_DAILY,
+  USER_BACKGROUND_OPTION_PHOTO
+} from 'database/constants'
 
 import {
   getBackgroundImages
@@ -29,7 +32,7 @@ import tfacMgr from './tfac'
  */
 const setUserProfile = Async((userProfile) => {
   try {
-    const user = new User(userProfile.id)
+    const user = new UserModel(userProfile.id)
 
     user.username = userProfile.username
     user.email = userProfile.email
@@ -38,16 +41,16 @@ const setUserProfile = Async((userProfile) => {
     user.level = userProfile.level
     user.heartsUntilNextLevel = userProfile.heartsUntilNextLevel
 
-    user.backgroundOption = User.BACKGROUND_OPTION_PHOTO
+    user.backgroundOption = USER_BACKGROUND_OPTION_PHOTO
     switch (userProfile.backgroundOption) {
-      case User.BACKGROUND_OPTION_CUSTOM:
-        user.backgroundOption = User.BACKGROUND_OPTION_CUSTOM
+      case USER_BACKGROUND_OPTION_CUSTOM:
+        user.backgroundOption = USER_BACKGROUND_OPTION_CUSTOM
         break
-      case User.BACKGROUND_OPTION_COLOR:
-        user.backgroundOption = User.BACKGROUND_OPTION_COLOR
+      case USER_BACKGROUND_OPTION_COLOR:
+        user.backgroundOption = USER_BACKGROUND_OPTION_COLOR
         break
-      case User.BACKGROUND_OPTION_DAILY:
-        user.backgroundOption = User.BACKGROUND_OPTION_DAILY
+      case USER_BACKGROUND_OPTION_DAILY:
+        user.backgroundOption = USER_BACKGROUND_OPTION_DAILY
         break
       default:
         break
@@ -78,7 +81,7 @@ const setUserProfile = Async((userProfile) => {
     user.customImage = userProfile.customImage || null
     user.backgroundColor = userProfile.backgroundColor || null
 
-    Await(createUser(user))
+    Await(UserModel.createUser(user))
 
     return true
   } catch (err) {

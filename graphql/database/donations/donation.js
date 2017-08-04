@@ -1,11 +1,12 @@
-import { updateUserVc } from '../users/user'
+import UserModel from '../users/UserModel'
 import { addVcDonationLog } from './vcDonationLog'
 
 import Async from 'asyncawait/async'
 import Await from 'asyncawait/await'
 
-const donateVc = Async(function (userId, charityId, vc) {
-  const user = Await(updateUserVc(userId, -vc))
+// TODO: test
+const donateVc = Async(function (userContext, userId, charityId, vc) {
+  const user = Await(UserModel.addVc(userContext, userId, -vc))
   Promise.resolve(addVcDonationLog(userId, charityId, vc))
   return user
 })

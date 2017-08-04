@@ -1,4 +1,5 @@
 /* global jest describe it expect */
+
 import tfacMgr from '../tfac'
 jest.mock('../tfac')
 
@@ -8,19 +9,13 @@ class mockUser {
   }
 }
 
-mockUser.BACKGROUND_OPTION_DAILY = 'daily'
-mockUser.BACKGROUND_OPTION_CUSTOM = 'custom'
-mockUser.BACKGROUND_OPTION_COLOR = 'color'
-mockUser.BACKGROUND_OPTION_PHOTO = 'photo'
-
 var mockCreateUser = jest.fn((user) => {
   return Promise.resolve(true)
 })
 
-jest.mock('database/users/user', () => {
+jest.mock('database/users/UserModel', () => {
   return {
-    createUser: mockCreateUser,
-    User: mockUser
+    createUser: mockCreateUser
   }
 })
 
