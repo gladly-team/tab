@@ -7,6 +7,11 @@ import {
   getPermissionsOverride
 } from '../../utils/authorization-helpers'
 
+/**
+ * Reward a referring user by increasing their VC.
+ * @param {string} referringUserId - The ID of the referring user.
+ * @return {Promise<User>}  A promise that resolves into a User instance.
+ */
 const rewardReferringUser = async (referringUserId) => {
   const permissionsOverride = getPermissionsOverride()
   await UserModel.addVc(permissionsOverride, referringUserId,
