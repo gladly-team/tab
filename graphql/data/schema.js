@@ -52,6 +52,7 @@ import {
 } from '../database/widgets/widgetTypes/bookmarkWidget'
 
 import UserModel from '../database/users/UserModel'
+import incrementVc from '../database/users/incrementVc'
 
 import CharityModel from '../database/charities/CharityModel'
 
@@ -384,7 +385,7 @@ const updateVcMutation = mutationWithClientMutationId({
   },
   mutateAndGetPayload: ({userId}, context) => {
     const { type, id } = fromGlobalId(userId)
-    return UserModel.incrementVc(context.user, id)
+    return incrementVc(context.user, id)
   }
 })
 

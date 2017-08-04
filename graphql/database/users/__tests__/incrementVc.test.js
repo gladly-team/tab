@@ -1,12 +1,11 @@
 /* eslint-env jest */
 
 import UserModel from '../UserModel'
+import incrementVc from '../incrementVc'
 import {
   getMockUserObj,
   mockQueryMethods
 } from '../../test-utils'
-
-jest.mock('../../backgroundImages/backgroundImage')
 
 const user = getMockUserObj()
 mockQueryMethods(UserModel)
@@ -31,7 +30,7 @@ describe('incrementVc', () => {
       })
     })
 
-    await UserModel.incrementVc(user, userId)
+    await incrementVc(user, userId)
     expect(UserModel.update).toHaveBeenCalledWith(user, {
       id: userId,
       vcCurrent: {$add: 1},
@@ -50,7 +49,7 @@ describe('incrementVc', () => {
         lastTabTimestamp: '2017-06-22T01:13:27Z'
       })
     })
-    await UserModel.incrementVc(user, userId)
+    await incrementVc(user, userId)
     expect(UserModel.update).not.toHaveBeenCalled()
   })
 })

@@ -247,30 +247,6 @@ class User extends BaseModel {
     return user
   }
 
-  /**
-   * Increments the user vc by 1 only. Implements fraud protection by
-   * only allowing the increment if too little time has passed since
-   * the previous VC increment.
-   * @param {object} userContext - The user authorizer object.
-   * @param {string} id - The user id.
-   * @return {Promise<User>}  A promise that resolves into a User instance.
-   */
-  static async incrementVc (userContext, userId) {
-    const COOLDOWN_SECONDS = 2
-    var user = await this.get(userContext, userId)
-    const now = moment.utc()
-    var lastTabTimestamp = (
-      user.lastTabTimestamp
-      ? moment.utc(user.lastTabTimestamp)
-      : null
-    )
-    if (!lastTabTimestamp ||
-      now.diff(lastTabTimestamp, 'seconds') > COOLDOWN_SECONDS) {
-      user = await this.addVc(userContext, userId, 1)
-    }
-    return user
-  }
-
   static async rewardReferringUser (referringUserId) {
     const permissionsOverride = getPermissionsOverride()
     await this.addVc(permissionsOverride, referringUserId,
