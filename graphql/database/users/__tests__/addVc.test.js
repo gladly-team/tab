@@ -1,6 +1,7 @@
 /* eslint-env jest */
 
 import UserModel from '../UserModel'
+import addVc from '../addVc'
 import {
   getMockUserObj,
   mockQueryMethods
@@ -22,7 +23,7 @@ describe('addVc', () => {
   it('works as expected', async () => {
     const userId = user.id
     const vcToAdd = 12
-    await UserModel.addVc(user, userId, vcToAdd)
+    await addVc(user, userId, vcToAdd)
     expect(UserModel.update).toHaveBeenCalledWith(user, {
       id: userId,
       vcCurrent: {$add: vcToAdd},

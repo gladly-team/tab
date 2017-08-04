@@ -1,6 +1,7 @@
 
 import moment from 'moment'
 import UserModel from './UserModel'
+import addVc from './addVc'
 
 /**
  * Increments the user vc by 1 only. Implements fraud protection by
@@ -21,7 +22,7 @@ const incrementVc = async (userContext, userId) => {
   )
   if (!lastTabTimestamp ||
     now.diff(lastTabTimestamp, 'seconds') > COOLDOWN_SECONDS) {
-    user = await UserModel.addVc(userContext, userId, 1)
+    user = await addVc(userContext, userId, 1)
   }
   return user
 }
