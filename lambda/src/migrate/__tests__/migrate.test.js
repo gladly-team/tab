@@ -3,12 +3,6 @@
 import tfacMgr from '../tfac'
 jest.mock('../tfac')
 
-class mockUser {
-  constructor (id) {
-    this.id = id
-  }
-}
-
 var mockCreateUser = jest.fn((user) => {
   return Promise.resolve(true)
 })
