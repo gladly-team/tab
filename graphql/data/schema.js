@@ -53,6 +53,7 @@ import {
 
 import UserModel from '../database/users/UserModel'
 import incrementVc from '../database/users/incrementVc'
+import setActiveWidget from '../database/users/setActiveWidget'
 
 import CharityModel from '../database/charities/CharityModel'
 
@@ -515,7 +516,7 @@ const setUserActiveWidgetMutation = mutationWithClientMutationId({
   },
   mutateAndGetPayload: ({userId, widgetId}, context) => {
     const userGlobalObj = fromGlobalId(userId)
-    return UserModel.setActiveWidget(context.user, userGlobalObj.id, widgetId)
+    return setActiveWidget(context.user, userGlobalObj.id, widgetId)
   }
 })
 

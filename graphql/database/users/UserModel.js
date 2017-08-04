@@ -209,21 +209,6 @@ class User extends BaseModel {
     })
     return userInstance
   }
-
-  /**
-   * Set the user's active widget.
-   * @param {object} userContext - The user authorizer object.
-   * @param {string} userId - The user id.
-   * @param {string} widgetId - The widget Id.
-   * @return {Promise<User>}  A promise that resolves into a User instance.
-   */
-  static async setActiveWidget (userContext, userId, widgetId) {
-    const userInstance = await this.update(userContext, {
-      id: userId,
-      activeWidget: widgetId
-    })
-    return userInstance
-  }
 }
 
 User.register()
