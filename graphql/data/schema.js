@@ -54,6 +54,7 @@ import {
 import UserModel from '../database/users/UserModel'
 import incrementVc from '../database/users/incrementVc'
 import setActiveWidget from '../database/users/setActiveWidget'
+import setBackgroundImageDaily from '../database/users/setBackgroundImageDaily'
 
 import CharityModel from '../database/charities/CharityModel'
 
@@ -495,7 +496,7 @@ const setUserBkgDailyImageMutation = mutationWithClientMutationId({
   },
   mutateAndGetPayload: ({userId}, context) => {
     const userGlobalObj = fromGlobalId(userId)
-    return UserModel.setBackgroundImageDaily(context.user, userGlobalObj.id)
+    return setBackgroundImageDaily(context.user, userGlobalObj.id)
   }
 })
 

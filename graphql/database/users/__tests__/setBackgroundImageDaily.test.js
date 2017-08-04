@@ -1,6 +1,7 @@
 /* eslint-env jest */
 
 import UserModel from '../UserModel'
+import setBackgroundImageDaily from '../setBackgroundImageDaily'
 import { getRandomImage } from '../../backgroundImages/backgroundImage'
 import {
   USER_BACKGROUND_OPTION_DAILY
@@ -18,7 +19,7 @@ mockQueryMethods(UserModel)
 describe('setBackgroundImageDaily', () => {
   it('works as expected', async () => {
     const userId = user.id
-    await UserModel.setBackgroundImageDaily(user, userId)
+    await setBackgroundImageDaily(user, userId)
     const mockImage = await getRandomImage()
     expect(UserModel.update).toHaveBeenCalledWith(user, {
       id: userId,
