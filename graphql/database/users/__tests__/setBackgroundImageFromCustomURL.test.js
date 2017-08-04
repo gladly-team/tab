@@ -1,6 +1,7 @@
 /* eslint-env jest */
 
 import UserModel from '../UserModel'
+import setBackgroundImageFromCustomURL from '../setBackgroundImageFromCustomURL'
 import {
   USER_BACKGROUND_OPTION_CUSTOM
 } from '../../constants'
@@ -12,14 +13,10 @@ import {
 const user = getMockUserObj()
 mockQueryMethods(UserModel)
 
-beforeEach(() => {
-  jest.clearAllMocks()
-})
-
 describe('setBackgroundImageFromCustomURL', () => {
   it('works as expected', async () => {
     const imgUrl = 'https://imgur.com/fake-image/'
-    await UserModel.setBackgroundImageFromCustomURL(user, user.id, imgUrl)
+    await setBackgroundImageFromCustomURL(user, user.id, imgUrl)
     expect(UserModel.update).toHaveBeenCalledWith(user, {
       id: user.id,
       customImage: imgUrl,
