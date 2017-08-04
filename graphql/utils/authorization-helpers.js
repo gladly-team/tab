@@ -58,3 +58,19 @@ permissionAuthorizers.usernameOrUserIdMatchesHashKey = (user, hashKey) => {
     permissionAuthorizers.usernameMatchesHashKey(user, hashKey)
   )
 }
+
+// Use this to override model query permissions checks.
+// We must use this *only* in logic that's protected from
+// manipulation from the client side; e.g., we might use
+// it to reward a referring user after a new user signs up
+// because one cannot easily fake a new user creation.
+const validOverrides = ['PLACEHOLDER']
+
+export const getPermissionsOverride = () => {
+  // TODO: make less error-prone
+  return validOverrides[0]
+}
+
+export const isValidPermissionsOverride = (override) => {
+  return validOverrides.indexOf(override) !== -1
+}

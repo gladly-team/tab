@@ -4,7 +4,9 @@ import {
   createGraphQLContext,
   getUserClaimsFromLambdaEvent,
   isUserAuthorized,
-  permissionAuthorizers
+  permissionAuthorizers,
+  getPermissionsOverride,
+  isValidPermissionsOverride
 } from '../authorization-helpers'
 
 describe('authorization-helpers', () => {
@@ -120,5 +122,21 @@ describe('permission authorizer functions', () => {
     expect(permissionAuthorizers.usernameOrUserIdMatchesHashKey(
       user, '45bbefbf-63d1-4d36-931e-212fbe2bc3d9')
     ).toBe(true)
+  })
+})
+
+describe('permission overrides', () => {
+  test('checker returns true when the override is valid', () => {
+    const override = getPermissionsOverride()
+    expect(isValidPermissionsOverride(override)).toBe(true)
+  })
+
+  test('checker returns false when the override is invalid', () => {
+    const override = 'WRONG-OVERRIDE'
+    expect(isValidPermissionsOverride(override)).toBe(false)
+  })
+
+  test('getPermissionsOverride returns expected value', () => {
+    expect(getPermissionsOverride()).toBe('PLACEHOLDER')
   })
 })

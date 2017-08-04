@@ -7,15 +7,14 @@ import {
 } from '../../test-utils'
 
 import { logReferralData } from '../../referrals/referralData'
-import { rewardReferringUser } from '../rewardReferringUser'
 jest.mock('../../referrals/referralData')
-jest.mock('../rewardReferringUser')
 
 mockQueryMethods(UserModel)
 const userContext = getMockUserObj()
 
-beforeAll(() => {
+beforeEach(() => {
   UserModel.getUserByUsername = jest.fn()
+  UserModel.rewardReferringUser = jest.fn()
 })
 
 afterEach(() => {
@@ -35,7 +34,7 @@ describe('createUser', () => {
     expect(UserModel.create)
       .toHaveBeenCalledWith(userContext, user)
     expect(logReferralData).not.toHaveBeenCalled()
-    expect(rewardReferringUser).not.toHaveBeenCalled()
+    expect(UserModel.rewardReferringUser).not.toHaveBeenCalled()
   })
 
   it('logs referral data and rewards referring user', async () => {
@@ -61,7 +60,7 @@ describe('createUser', () => {
       .toHaveBeenCalledWith(userContext, user)
     expect(logReferralData)
       .toHaveBeenCalledWith(thisUserId, referringUserId)
-    expect(rewardReferringUser)
+    expect(UserModel.rewardReferringUser)
       .toHaveBeenCalledWith(referringUserId)
   })
 
@@ -84,6 +83,6 @@ describe('createUser', () => {
     expect(UserModel.create)
       .toHaveBeenCalledWith(userContext, user)
     expect(logReferralData).not.toHaveBeenCalled()
-    expect(rewardReferringUser).not.toHaveBeenCalled()
+    expect(UserModel.rewardReferringUser).not.toHaveBeenCalled()
   })
 })

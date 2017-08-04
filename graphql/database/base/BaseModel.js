@@ -5,6 +5,7 @@ import {
   UnauthorizedQueryException
 } from '../../utils/exceptions'
 import dbClient from '../databaseClient'
+import { isValidPermissionsOverride } from '../../utils/authorization-helpers'
 
 dynogels.documentClient(dbClient)
 
@@ -282,6 +283,12 @@ class BaseModel {
    */
   static isQueryAuthorized (user, operation, hashKeyValue = null,
     rangeKeyValue = null, item = null) {
+    // Check if the DB call has an authorization override
+    // that ignores the user-level permissions.
+    if (isValidPermissionsOverride(user)) {
+      return true
+    }
+
     // If the user is null or not an object, reject.
     if (!user || typeof user !== 'object') {
       return false

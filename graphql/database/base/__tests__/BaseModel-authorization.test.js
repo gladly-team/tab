@@ -11,7 +11,15 @@ jest.mock('../../databaseClient')
 const user = getMockUserObj()
 
 describe('BaseModel `isQueryAuthorized` method', () => {
-  afterEach(() => {
+  beforeEach(() => {
+    // Mock a valid permissions override.
+    jest.mock('../../../utils/authorization-helpers', () => {
+      return {
+        isValidPermissionsOverride: jest.fn((override) => {
+          return override === 'working-override'
+        })
+      }
+    })
     jest.resetModules()
   })
 
@@ -93,7 +101,7 @@ describe('BaseModel `isQueryAuthorized` method', () => {
   it('does not authorize if the user is not defined', () => {
     const TestModel = require('../test-utils/ExampleModel').default
 
-    // Make the model permissions to allow operations.
+    // Make the model permissions allow operations.
     const newPermissions = validOperations.reduce((result, item) => {
       result[item] = () => true
       return result
@@ -111,7 +119,7 @@ describe('BaseModel `isQueryAuthorized` method', () => {
   it('does not authorize if the user is not an object', () => {
     const TestModel = require('../test-utils/ExampleModel').default
 
-    // Make the model permissions to allow operations.
+    // Make the model permissions allow operations.
     const newPermissions = validOperations.reduce((result, item) => {
       result[item] = () => true
       return result
@@ -123,6 +131,23 @@ describe('BaseModel `isQueryAuthorized` method', () => {
       const isAuthorized = TestModel.isQueryAuthorized(
         'bad-user-value', operation, 'fake-hash-key', 'fake-range-key')
       expect(isAuthorized).toBe(false)
+    })
+  })
+
+  it('authorizes with a valid permissions override', () => {
+    const TestModel = require('../test-utils/ExampleModel').default
+
+    // Make the model disallow all operations.
+    const newPermissions = validOperations.reduce((result, item) => {
+      result[item] = () => false
+      return result
+    }, {})
+    setModelPermissions(TestModel, newPermissions)
+
+    validOperations.forEach((operation) => {
+      const isAuthorized = TestModel.isQueryAuthorized(
+        'working-override', operation, 'fake-hash-key', 'fake-range-key')
+      expect(isAuthorized).toBe(true)
     })
   })
 })
