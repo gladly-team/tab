@@ -53,10 +53,6 @@ import {
 
 import UserModel from '../database/users/UserModel'
 
-import {
-  incrementVcBy1
-} from '../database/users/user'
-
 import CharityModel from '../database/charities/CharityModel'
 
 import {
@@ -386,9 +382,9 @@ const updateVcMutation = mutationWithClientMutationId({
       resolve: user => user
     }
   },
-  mutateAndGetPayload: ({userId}) => {
+  mutateAndGetPayload: ({userId}, context) => {
     const { type, id } = fromGlobalId(userId)
-    return incrementVcBy1(id)
+    return UserModel.incrementVc(context.user, id)
   }
 })
 
