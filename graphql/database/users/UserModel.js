@@ -9,11 +9,9 @@ import {
   USER_BACKGROUND_OPTION_COLOR,
   USER_BACKGROUND_OPTION_CUSTOM,
   USER_BACKGROUND_OPTION_DAILY,
-  USER_BACKGROUND_OPTION_PHOTO,
-  USER_REFERRAL_VC_REWARD
+  USER_BACKGROUND_OPTION_PHOTO
 } from '../constants'
 import {
-  getPermissionsOverride,
   permissionAuthorizers
 } from '../../utils/authorization-helpers'
 import {
@@ -21,6 +19,7 @@ import {
   getRandomImage
 } from '../backgroundImages/backgroundImage'
 import { logReferralData } from '../referrals/referralData'
+import rewardReferringUser from './rewardReferringUser'
 
 /*
  * Represents a Charity.
@@ -135,7 +134,7 @@ class User extends BaseModel {
       if (referringUser) {
         // FIXME: make this override permissions.
         await logReferralData(userInfo.id, referringUser.id)
-        await this.rewardReferringUser(referringUser.id)
+        await rewardReferringUser(referringUser.id)
       }
     }
     return createdUser
@@ -245,12 +244,6 @@ class User extends BaseModel {
     })
     // TODO: check if user gained a level.
     return user
-  }
-
-  static async rewardReferringUser (referringUserId) {
-    const permissionsOverride = getPermissionsOverride()
-    await this.addVc(permissionsOverride, referringUserId,
-      USER_REFERRAL_VC_REWARD)
   }
 }
 
