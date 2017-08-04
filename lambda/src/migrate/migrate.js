@@ -1,5 +1,8 @@
 'use strict'
 
+// Note: after deleting this function, we can remove
+// joi and uuid from dependencies.
+
 import UserModel from 'database/users/UserModel'
 import {
   USER_BACKGROUND_OPTION_COLOR,
