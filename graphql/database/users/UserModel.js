@@ -6,7 +6,6 @@ import types from '../fieldTypes'
 import tableNames from '../tables'
 import {
   USER,
-  USER_BACKGROUND_OPTION_COLOR,
   USER_BACKGROUND_OPTION_CUSTOM,
   USER_BACKGROUND_OPTION_PHOTO
 } from '../constants'
@@ -171,22 +170,6 @@ class User extends BaseModel {
       id: userId,
       customImage: imageURL,
       backgroundOption: USER_BACKGROUND_OPTION_CUSTOM
-    })
-    return userInstance
-  }
-
-  /**
-   * Set user's background color.
-   * @param {object} userContext - The user authorizer object.
-   * @param {string} userId - The user id.
-   * @param {string} color - The background color.
-   * @return {Promise<User>}  A promise that resolves into a User instance.
-   */
-  static async setBackgroundColor (userContext, userId, color) {
-    const userInstance = await this.update(userContext, {
-      id: userId,
-      backgroundColor: color,
-      backgroundOption: USER_BACKGROUND_OPTION_COLOR
     })
     return userInstance
   }
