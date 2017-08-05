@@ -2,6 +2,7 @@
 import UserModel from './UserModel'
 import { logReferralData } from '../referrals/referralData'
 import rewardReferringUser from './rewardReferringUser'
+import getUserByUsername from './getUserByUsername'
 
 /**
  * Creates a new user.
@@ -21,7 +22,8 @@ const createUser = async (userContext, userId, username,
     .catch((err) => err)
   if (referralData) {
     const referringUserUsername = referralData.referringUser
-    const referringUser = await UserModel.getUserByUsername(referringUserUsername)
+    const referringUser = await getUserByUsername(userContext,
+      referringUserUsername)
     if (referringUser) {
       // FIXME: make this override permissions.
       await logReferralData(userInfo.id, referringUser.id)

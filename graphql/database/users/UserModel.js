@@ -13,7 +13,6 @@ import {
 } from '../../utils/authorization-helpers'
 
 /*
- * Represents a Charity.
  * @extends BaseModel
  */
 class User extends BaseModel {
@@ -89,18 +88,6 @@ class User extends BaseModel {
         )
       }
     }
-  }
-
-  /**
-   * Fetch the user by username.
-   * @param {object} userContext - The user authorizer object.
-   * @param {string} username - The user's username.
-   * @return {Promise<User>}  A promise that resolves into a User instance.
-   */
-  static async getUserByUsername (userContext, username) {
-    return this.query(userContext, username)
-      .usingIndex('UsersByUsername')
-      .execute()
   }
 }
 

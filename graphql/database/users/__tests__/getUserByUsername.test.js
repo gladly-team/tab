@@ -1,6 +1,7 @@
 /* eslint-env jest */
 
 import UserModel from '../UserModel'
+import getUserByUsername from '../getUserByUsername'
 import {
   getMockUserObj,
   mockQueryMethods
@@ -16,7 +17,7 @@ afterEach(() => {
 describe('getUserByUsername', () => {
   it('works as expected', async () => {
     const username = 'jonsnow'
-    await UserModel.getUserByUsername(user, username)
+    await getUserByUsername(user, username)
     expect(UserModel.query)
       .toHaveBeenCalledWith(user, username)
     expect(UserModel.query().usingIndex)

@@ -1,27 +1,20 @@
 /* eslint-env jest */
 
 import UserModel from '../UserModel'
-import createUser from '../createUser'
 import {
   getMockUserObj,
   mockQueryMethods
 } from '../../test-utils'
 
-import { logReferralData } from '../../referrals/referralData'
-import rewardReferringUser from '../rewardReferringUser'
-
 jest.mock('../../referrals/referralData')
 jest.mock('../rewardReferringUser')
+jest.mock('../getUserByUsername')
 
 mockQueryMethods(UserModel)
 const userContext = getMockUserObj()
 
-beforeEach(() => {
-  UserModel.getUserByUsername = jest.fn()
-})
-
 afterEach(() => {
-  jest.clearAllMocks()
+  jest.resetModules()
 })
 
 describe('createUser', () => {
@@ -32,6 +25,11 @@ describe('createUser', () => {
       email: 'foo@bar.com'
     }
     const referralData = null
+
+    const createUser = require('../createUser').default
+    const logReferralData = require('../../referrals/referralData').logReferralData
+    const rewardReferringUser = require('../rewardReferringUser').default
+
     await createUser(userContext, user.id,
       user.username, user.email, referralData)
     expect(UserModel.create)
@@ -53,9 +51,15 @@ describe('createUser', () => {
 
     // Mock fetching the referring user.
     const referringUserId = 'ppooiiuu-151a-4a9a-9289-06906670fd4e'
-    UserModel.getUserByUsername = jest.fn(() => ({
-      id: referringUserId
-    }))
+    jest.mock('../getUserByUsername', () => {
+      return () => ({
+        id: 'ppooiiuu-151a-4a9a-9289-06906670fd4e'
+      })
+    })
+
+    const createUser = require('../createUser').default
+    const logReferralData = require('../../referrals/referralData').logReferralData
+    const rewardReferringUser = require('../rewardReferringUser').default
 
     await createUser(userContext, user.id,
       user.username, user.email, referralData)
@@ -79,7 +83,13 @@ describe('createUser', () => {
     }
 
     // Mock fetching the referring user.
-    UserModel.getUserByUsername = jest.fn(() => null)
+    jest.mock('../getUserByUsername', () => {
+      return () => null
+    })
+
+    const createUser = require('../createUser').default
+    const logReferralData = require('../../referrals/referralData').logReferralData
+    const rewardReferringUser = require('../rewardReferringUser').default
 
     await createUser(userContext, user.id,
       user.username, user.email, referralData)
