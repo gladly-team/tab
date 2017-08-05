@@ -11,8 +11,6 @@ import {
 import {
   permissionAuthorizers
 } from '../../utils/authorization-helpers'
-import { logReferralData } from '../referrals/referralData'
-import rewardReferringUser from './rewardReferringUser'
 
 /*
  * Represents a Charity.
@@ -103,34 +101,6 @@ class User extends BaseModel {
     return this.query(userContext, username)
       .usingIndex('UsersByUsername')
       .execute()
-  }
-
-  /**
-   * Creates a new user.
-   * @param {object} userContext - The user authorizer object.
-   * @param {object} user - The user info.
-   * @param {object} referralData - Referral data.
-   * @return {Promise<User>}  A promise that resolves into a User instance.
-   */
-  static async createUser (userContext, userId, username,
-      email, referralData) {
-    const userInfo = {
-      id: userId,
-      username: username,
-      email: email
-    }
-    const createdUser = await User.create(userContext, userInfo)
-      .catch((err) => err)
-    if (referralData) {
-      const referringUserUsername = referralData.referringUser
-      const referringUser = await this.getUserByUsername(referringUserUsername)
-      if (referringUser) {
-        // FIXME: make this override permissions.
-        await logReferralData(userInfo.id, referringUser.id)
-        await rewardReferringUser(referringUser.id)
-      }
-    }
-    return createdUser
   }
 }
 

@@ -52,6 +52,7 @@ import {
 } from '../database/widgets/widgetTypes/bookmarkWidget'
 
 import UserModel from '../database/users/UserModel'
+import createUser from '../database/users/createUser'
 import incrementVc from '../database/users/incrementVc'
 import setActiveWidget from '../database/users/setActiveWidget'
 import setBackgroundImage from '../database/users/setBackgroundImage'
@@ -704,7 +705,7 @@ const createNewUserMutation = mutationWithClientMutationId({
     }
   },
   mutateAndGetPayload: ({userId, username, email, referralData}, context) => {
-    return UserModel.createUser(context.user, userId, username,
+    return createUser(context.user, userId, username,
       email, referralData)
   }
 })

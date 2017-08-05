@@ -1,6 +1,7 @@
 /* eslint-env jest */
 
 import UserModel from '../UserModel'
+import createUser from '../createUser'
 import {
   getMockUserObj,
   mockQueryMethods
@@ -31,7 +32,7 @@ describe('createUser', () => {
       email: 'foo@bar.com'
     }
     const referralData = null
-    await UserModel.createUser(userContext, user.id,
+    await createUser(userContext, user.id,
       user.username, user.email, referralData)
     expect(UserModel.create)
       .toHaveBeenCalledWith(userContext, user)
@@ -56,7 +57,7 @@ describe('createUser', () => {
       id: referringUserId
     }))
 
-    await UserModel.createUser(userContext, user.id,
+    await createUser(userContext, user.id,
       user.username, user.email, referralData)
     expect(UserModel.create)
       .toHaveBeenCalledWith(userContext, user)
@@ -80,7 +81,7 @@ describe('createUser', () => {
     // Mock fetching the referring user.
     UserModel.getUserByUsername = jest.fn(() => null)
 
-    await UserModel.createUser(userContext, user.id,
+    await createUser(userContext, user.id,
       user.username, user.email, referralData)
     expect(UserModel.create)
       .toHaveBeenCalledWith(userContext, user)
