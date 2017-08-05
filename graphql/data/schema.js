@@ -54,6 +54,8 @@ import {
 import UserModel from '../database/users/UserModel'
 import incrementVc from '../database/users/incrementVc'
 import setActiveWidget from '../database/users/setActiveWidget'
+import setBackgroundImage from '../database/users/setBackgroundImage'
+import setBackgroundImageFromCustomURL from '../database/users/setBackgroundImageFromCustomURL'
 import setBackgroundColor from '../database/users/setBackgroundColor'
 import setBackgroundImageDaily from '../database/users/setBackgroundImageDaily'
 
@@ -433,7 +435,7 @@ const setUserBkgImageMutation = mutationWithClientMutationId({
   mutateAndGetPayload: ({ userId, imageId }, context) => {
     const userGlobalObj = fromGlobalId(userId)
     const bckImageGlobalObj = fromGlobalId(imageId)
-    return UserModel.setBackgroundImage(
+    return setBackgroundImage(
       context.user, userGlobalObj.id, bckImageGlobalObj.id)
   }
 })
@@ -476,7 +478,7 @@ const setUserBkgCustomImageMutation = mutationWithClientMutationId({
   },
   mutateAndGetPayload: ({userId, image}, context) => {
     const userGlobalObj = fromGlobalId(userId)
-    return UserModel.setBackgroundImageFromCustomURL(
+    return setBackgroundImageFromCustomURL(
       context.user, userGlobalObj.id, image)
   }
 })

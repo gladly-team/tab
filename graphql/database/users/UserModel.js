@@ -11,9 +11,6 @@ import {
 import {
   permissionAuthorizers
 } from '../../utils/authorization-helpers'
-import {
-  getBackgroundImage
-} from '../backgroundImages/backgroundImage'
 import { logReferralData } from '../referrals/referralData'
 import rewardReferringUser from './rewardReferringUser'
 
@@ -134,27 +131,6 @@ class User extends BaseModel {
       }
     }
     return createdUser
-  }
-
-  /**
-   * Set user's background image.
-   * @param {object} userContext - The user authorizer object.
-   * @param {string} userId - The user id.
-   * @param {string} imageId - The image id.
-   * @return {Promise<User>}  A promise that resolves into a User instance.
-   */
-  static async setBackgroundImage (userContext, userId, imageId, mode) {
-    const image = await getBackgroundImage(imageId)
-    image.timestamp = moment.utc().format()
-    if (!mode) {
-      mode = USER_BACKGROUND_OPTION_PHOTO
-    }
-    const userInstance = await this.update(userContext, {
-      id: userId,
-      backgroundImage: image,
-      backgroundOption: mode
-    })
-    return userInstance
   }
 }
 

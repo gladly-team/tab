@@ -1,6 +1,7 @@
 /* eslint-env jest */
 
 import UserModel from '../UserModel'
+import setBackgroundImage from '../setBackgroundImage'
 import { getBackgroundImage } from '../../backgroundImages/backgroundImage'
 import {
   USER_BACKGROUND_OPTION_PHOTO,
@@ -26,7 +27,7 @@ describe('setBackgroundImage', () => {
     const imageId = 'abc-123'
     const mode = USER_BACKGROUND_OPTION_PHOTO
     const mockImage = await getBackgroundImage(imageId)
-    await UserModel.setBackgroundImage(user, userId, imageId, mode)
+    await setBackgroundImage(user, userId, imageId, mode)
     expect(UserModel.update).toHaveBeenCalledWith(user, {
       id: userId,
       backgroundImage: mockImage,
@@ -39,7 +40,7 @@ describe('setBackgroundImage', () => {
     const imageId = 'abc-123'
     const mode = null
     const mockImage = await getBackgroundImage(imageId)
-    await UserModel.setBackgroundImage(user, userId, imageId, mode)
+    await setBackgroundImage(user, userId, imageId, mode)
     expect(UserModel.update).toHaveBeenCalledWith(user, {
       id: userId,
       backgroundImage: mockImage,
@@ -52,7 +53,7 @@ describe('setBackgroundImage', () => {
     const imageId = 'abc-123'
     const mode = USER_BACKGROUND_OPTION_CUSTOM
     const mockImage = await getBackgroundImage(imageId)
-    await UserModel.setBackgroundImage(user, userId, imageId, mode)
+    await setBackgroundImage(user, userId, imageId, mode)
     expect(UserModel.update).toHaveBeenCalledWith(user, {
       id: userId,
       backgroundImage: mockImage,
