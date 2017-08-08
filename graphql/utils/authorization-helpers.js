@@ -35,11 +35,13 @@ export const isUserAuthorized = (userClaims) => {
 export const createGraphQLContext = (userClaims) => {
   const userId = userClaims['sub']
   const username = userClaims['cognito:username']
+  const email = userClaims['email']
   const emailVerified = userClaims['email_verified'] === 'true'
   return {
     user: {
       id: userId,
       username: username,
+      email: email,
       emailVerified: emailVerified
     }
   }

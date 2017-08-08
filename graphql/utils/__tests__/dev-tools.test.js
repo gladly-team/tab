@@ -12,6 +12,7 @@ describe('dev-tools', () => {
     const expectedContext = {
       user: {
         id: '45bbefbf-63d1-4d36-931e-212fbe2bc3d9',
+        email: 'somebody@example.com',
         emailVerified: true,
         username: 'myUserName'
       }

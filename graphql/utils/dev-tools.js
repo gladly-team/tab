@@ -58,7 +58,7 @@ export const generateLambdaEventObjFromRequest = (req) => {
     'cognito:username': 'myUserName',
     exp: 'Fri Jul 21 21:59:24 UTC 2017',
     iat: 'Fri Jul 21 20:59:24 UTC 2017',
-    email: 'foo@bar.com'
+    email: 'somebody@example.com'
   }
   return {
     resource: '',
