@@ -102,15 +102,15 @@ class BaseModel {
    * operations. By default, no operations are authorized.
    * @return {object} The permissions object, with a key for each
    *   operation name. Each property value is a function that receives
-   *   a user object, item hashKey, and item rangeKey, and must return
+   *   a userContext object, item hashKey, and item rangeKey, and must return
    *   a boolean for whether the query is authorized.
    */
   static get permissions () {
     return {
-      get: (user, hashKeyValue, rangeKeyValue) => false,
+      get: (userContext, hashKeyValue, rangeKeyValue) => false,
       getAll: () => false,
-      update: (user, hashKeyValue, rangeKeyValue) => false,
-      create: (user, hashKeyValue) => false
+      update: (userContext, hashKeyValue, rangeKeyValue) => false,
+      create: (userContext, hashKeyValue) => false
     }
   }
 
@@ -146,14 +146,14 @@ class BaseModel {
     this.dynogelsModel = dynogels.define(this.name, options)
   }
 
-  static async get (user, hashKey, rangeKey, options) {
+  static async get (userContext, hashKey, rangeKey, options) {
     const self = this
     let keys = [hashKey]
     if (rangeKey) {
       keys.push(rangeKey)
     }
     // console.log(`Getting obj with hashKey ${hashKey} from table ${this.tableName}.`)
-    if (!this.isQueryAuthorized(user, 'get', hashKey, rangeKey)) {
+    if (!this.isQueryAuthorized(userContext, 'get', hashKey, rangeKey)) {
       return Promise.reject(new UnauthorizedQueryException())
     }
     return this.dynogelsModel.getAsync(...keys)
@@ -164,10 +164,10 @@ class BaseModel {
       })
   }
 
-  static async getAll (user) {
+  static async getAll (userContext) {
     // console.log(`Getting all objs in table ${this.tableName}.`)
     const self = this
-    if (!this.isQueryAuthorized(user, 'getAll')) {
+    if (!this.isQueryAuthorized(userContext, 'getAll')) {
       return Promise.reject(new UnauthorizedQueryException())
     }
     return this.dynogelsModel.scan().execAsync()
@@ -178,9 +178,9 @@ class BaseModel {
       })
   }
 
-  static query (user, hashKey) {
+  static query (userContext, hashKey) {
     // console.log(`Querying hashKey ${hashKey} on table ${this.tableName}.`)
-    if (!this.isQueryAuthorized(user, 'get', hashKey)) {
+    if (!this.isQueryAuthorized(userContext, 'get', hashKey)) {
       // Raise the permissions error on query execution.
       const queryObj = this.dynogelsModel.query(hashKey)
       const execErr = () => Promise.reject(new UnauthorizedQueryException())
@@ -208,11 +208,11 @@ class BaseModel {
       })
   }
 
-  static async create (user, item) {
+  static async create (userContext, item) {
     // console.log(`Creating item in ${this.tableName}: ${JSON.stringify(item, null, 2)}`)
     const self = this
     const hashKey = item[this.hashKey]
-    if (!this.isQueryAuthorized(user, 'create', hashKey, null, item)) {
+    if (!this.isQueryAuthorized(userContext, 'create', hashKey, null, item)) {
       return Promise.reject(new UnauthorizedQueryException())
     }
     return this.dynogelsModel.createAsync(item)
@@ -223,12 +223,12 @@ class BaseModel {
       })
   }
 
-  static async update (user, item) {
+  static async update (userContext, item) {
     // console.log(`Updating item in ${this.tableName}: ${JSON.stringify(item, null, 2)}`)
     const self = this
     const hashKey = item[this.hashKey]
     const rangeKey = item[this.rangeKey]
-    if (!this.isQueryAuthorized(user, 'update', hashKey, rangeKey, item)) {
+    if (!this.isQueryAuthorized(userContext, 'update', hashKey, rangeKey, item)) {
       return Promise.reject(new UnauthorizedQueryException())
     }
     return this.dynogelsModel.updateAsync(item, { ReturnValues: 'ALL_NEW' })
@@ -272,25 +272,25 @@ class BaseModel {
   }
 
   /**
-   * Determine whether the user is authorized to make a particular
+   * Determine whether the userContext is authorized to make a particular
    * database query.
-   * @param {obj} user - The user object passed as context
+   * @param {obj} userContext - The user object passed as context
    * @param {string} operation - The operation type (e.g. "get" or "update")
    * @param {string} hashKeyValue - The value of the item hashKey in the query
    * @param {string} rangeKeyValue - The value of the item rangeKey in the query
    * @param {object} item - An object of attributes to be updated or created
-   * @return {boolean} Whether the user is authorized.
+   * @return {boolean} Whether the userContext is authorized.
    */
-  static isQueryAuthorized (user, operation, hashKeyValue = null,
+  static isQueryAuthorized (userContext, operation, hashKeyValue = null,
     rangeKeyValue = null, item = null) {
     // Check if the DB call has an authorization override
     // that ignores the user-level permissions.
-    if (isValidPermissionsOverride(user)) {
+    if (isValidPermissionsOverride(userContext)) {
       return true
     }
 
-    // If the user is null or not an object, reject.
-    if (!user || typeof user !== 'object') {
+    // If the userContext is null or not an object, reject.
+    if (!userContext || typeof userContext !== 'object') {
       return false
     }
 
@@ -321,7 +321,7 @@ class BaseModel {
     // If the authorizer function returns `true`, the query is authorized.
     var isAuthorized = false
     try {
-      isAuthorized = authorizerFunction(user, hashKeyValue, rangeKeyValue, item) === true
+      isAuthorized = authorizerFunction(userContext, hashKeyValue, rangeKeyValue, item) === true
     } catch (err) {
       isAuthorized = false
       console.log(err)
