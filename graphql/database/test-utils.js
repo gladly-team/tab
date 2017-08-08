@@ -105,3 +105,23 @@ export const getMockUserObj = function () {
     emailVerified: true
   }
 }
+
+/**
+ * Set the global `Date` to always return the same date.
+ */
+export const mockDate = {}
+mockDate.constantDate = new Date('2017-08-10T06:59:46')
+mockDate.on = () => {
+  mockDate._origDate = Date
+
+  /* eslint no-global-assign:off */
+  Date = class extends Date {
+    constructor (arg) {
+      super()
+      return mockDate.constantDate
+    }
+  }
+}
+mockDate.off = () => {
+  Date = mockDate._origDate || Date
+}

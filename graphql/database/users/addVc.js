@@ -17,7 +17,9 @@ const addVc = async (userContext, userId, vc = 0) => {
     vcCurrent: {$add: vc},
     vcAllTime: {$add: vc},
     heartsUntilNextLevel: {$add: -vc},
+    // TODO: switch all to toISOString()
     lastTabTimestamp: moment.utc().format()
+    // lastTabTimestamp: moment.utc().toISOString()
   })
   // TODO: check if user gained a level.
   return user

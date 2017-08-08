@@ -1,9 +1,12 @@
 /* eslint-env jest */
 
+import moment from 'moment'
+
 import UserModel from '../UserModel'
 import addVc from '../addVc'
 import {
-  getMockUserObj
+  getMockUserObj,
+  mockDate
 } from '../../test-utils'
 
 const user = getMockUserObj()
@@ -13,27 +16,28 @@ const user = getMockUserObj()
 // lets us catch query validation failures in tests.
 jest.mock('../../databaseClient')
 
+beforeAll(() => {
+  mockDate.on()
+})
+
+afterAll(() => {
+  mockDate.off()
+})
+
 describe('addVc', () => {
-  // const mockTimestampVal = '2017-06-22T01:13:28Z'
-
-  beforeAll(() => {
-    // Mock Date for consistent timestamp.
-    Date.now = jest.fn(() => 1498094008000)
-  })
-
   it('works as expected', async () => {
     const updateMethod = jest.spyOn(UserModel, 'update')
     const userId = user.id
     const vcToAdd = 12
     await addVc(user, userId, vcToAdd)
-    expect(updateMethod).toHaveBeenCalled()
-    // FIXME: need consisted date for 'updated' field
-    // expect(updateMethod).toHaveBeenCalledWith(user, {
-    //   id: userId,
-    //   vcCurrent: {$add: vcToAdd},
-    //   vcAllTime: {$add: vcToAdd},
-    //   heartsUntilNextLevel: {$add: -vcToAdd},
-    //   lastTabTimestamp: mockTimestampVal
-    // })
+    expect(updateMethod).toHaveBeenCalledWith(user, {
+      id: userId,
+      vcCurrent: {$add: vcToAdd},
+      vcAllTime: {$add: vcToAdd},
+      heartsUntilNextLevel: {$add: -vcToAdd},
+      // lastTabTimestamp: moment.utc().toISOString(),
+      lastTabTimestamp: moment.utc().format(),
+      updated: moment.utc().toISOString()
+    })
   })
 })

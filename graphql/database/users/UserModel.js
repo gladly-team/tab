@@ -51,7 +51,7 @@ class User extends BaseModel {
       backgroundColor: types.string(),
       customImage: types.string(),
       activeWidget: types.string(),
-      lastTabTimestamp: types.date().iso()
+      lastTabTimestamp: types.string().isoDate()
     }
   }
 
