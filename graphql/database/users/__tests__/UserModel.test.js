@@ -92,4 +92,26 @@ describe('UserModel', () => {
     expect(User.permissions.create(userContext, null, null, item))
       .toBe(false)
   })
+
+  it('does not allow create when the user context is not provided', () => {
+    const userContext = null
+    const item = {
+      id: 'abc',
+      email: 'foo@bar.com',
+      username: 'myOtherName'
+    }
+    expect(User.permissions.create(userContext, null, null, item))
+      .toBe(false)
+  })
+
+  it('does not allow create when the item is not provided', () => {
+    const userContext = {
+      id: 'abcd',
+      email: 'foo@bar.com',
+      username: 'myName'
+    }
+    const item = null
+    expect(User.permissions.create(userContext, null, null, item))
+      .toBe(false)
+  })
 })

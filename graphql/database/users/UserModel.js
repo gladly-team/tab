@@ -81,6 +81,9 @@ class User extends BaseModel {
       // To create a new user, the created item must have the same
       // email, username, and user ID as the authorized user.
       create: (userContext, hashKey, rangeKey, item) => {
+        if (!userContext || !item) {
+          return false
+        }
         return (
           userContext.id === item.id &&
           userContext.email === item.email &&
