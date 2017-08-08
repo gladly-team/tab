@@ -31,19 +31,72 @@ const mockDocClient = () => {
     service: mockDynamoDB()
   })
 
-  const operations = [
-    'batchGet',
-    'batchWrite',
-    'put',
-    'get',
-    'delete',
-    'update',
-    'scan',
-    'query'
-  ]
+  // Mock data returns for each operation.
 
-  operations.forEach(op => {
-    client[op] = jest.fn()
+  client.batchGet = jest.fn((params, callback) => {
+    callback(null, {
+      Items: [
+        {
+          foo: 'bar'
+        },
+        {
+          'foo': 'baz'
+        }
+      ]
+    })
+  })
+  client.batchWrite = jest.fn((params, callback) => {
+    callback(null, {
+      Attributes: {}
+    })
+  })
+  client.put = jest.fn((params, callback) => {
+    callback(null, {
+      Attributes: {}
+    })
+  })
+  client.get = jest.fn((params, callback) => {
+    callback(null, {
+      Item: {
+        foo: 'bar'
+      }
+    })
+  })
+  client.delete = jest.fn((params, callback) => {
+    callback(null, {
+      Attributes: {}
+    })
+  })
+  client.update = jest.fn((params, callback) => {
+    callback(null, {
+      Item: {
+        foo: 'bar'
+      }
+    })
+  })
+  client.scan = jest.fn((params, callback) => {
+    callback(null, {
+      Items: [
+        {
+          foo: 'bar'
+        },
+        {
+          'foo': 'baz'
+        }
+      ]
+    })
+  })
+  client.query = jest.fn((params, callback) => {
+    callback(null, {
+      Items: [
+        {
+          foo: 'bar'
+        },
+        {
+          'foo': 'baz'
+        }
+      ]
+    })
   })
 
   client.service.scan = jest.fn()
