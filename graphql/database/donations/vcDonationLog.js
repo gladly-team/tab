@@ -59,7 +59,7 @@ function addVcDonationLog (userId, charityId, vcDonated) {
   const vcDontationLog = new VcDonationLog(userId)
   vcDontationLog.charityId = charityId
   vcDontationLog.vcDonated = vcDonated
-  vcDontationLog.timestamp = moment.utc().format()
+  vcDontationLog.timestamp = moment.utc().toISOString()
   return VcDonationLog.add(vcDontationLog)
             .catch(err => {
               logger.error('Error while adding a new donation log.', err)

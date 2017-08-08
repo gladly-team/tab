@@ -17,7 +17,7 @@ import {
  */
 const setBackgroundImage = async (userContext, userId, imageId, mode) => {
   const image = await getBackgroundImage(imageId)
-  image.timestamp = moment.utc().format()
+  image.timestamp = moment.utc().toISOString()
   if (!mode) {
     mode = USER_BACKGROUND_OPTION_PHOTO
   }

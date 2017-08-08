@@ -4,20 +4,28 @@ import UserModel from '../UserModel'
 import incrementVc from '../incrementVc'
 import {
   getMockUserObj,
+  mockDate,
   mockQueryMethods
 } from '../../test-utils'
 
 const user = getMockUserObj()
 mockQueryMethods(UserModel)
 
-describe('incrementVc', () => {
-  const mockTimestampVal = '2017-06-22T01:13:28Z'
+const mockCurrentTime = '2017-06-22T01:13:28.000Z'
 
+beforeAll(() => {
+  mockDate.on(mockCurrentTime, {
+    mockCurrentTimeOnly: true
+  })
+})
+
+afterAll(() => {
+  mockDate.off()
+})
+
+describe('incrementVc', () => {
   beforeEach(() => {
     jest.resetAllMocks()
-
-    // Mock Date for consistent timestamp.
-    Date.now = jest.fn(() => 1498094008000)
   })
 
   it('increments the VC', async () => {
@@ -26,7 +34,7 @@ describe('incrementVc', () => {
     // Mock fetching the user.
     UserModel.get = jest.fn(() => {
       return Promise.resolve({
-        lastTabTimestamp: '2017-06-22T01:13:25Z'
+        lastTabTimestamp: '2017-06-22T01:13:25.000Z'
       })
     })
 
@@ -36,7 +44,7 @@ describe('incrementVc', () => {
       vcCurrent: {$add: 1},
       vcAllTime: {$add: 1},
       heartsUntilNextLevel: {$add: -1},
-      lastTabTimestamp: mockTimestampVal
+      lastTabTimestamp: mockCurrentTime
     })
   })
 
@@ -46,7 +54,7 @@ describe('incrementVc', () => {
     // Mock fetching the user.
     UserModel.get = jest.fn(() => {
       return Promise.resolve({
-        lastTabTimestamp: '2017-06-22T01:13:27Z'
+        lastTabTimestamp: '2017-06-22T01:13:27.000Z'
       })
     })
     await incrementVc(user, userId)

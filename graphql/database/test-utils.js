@@ -110,18 +110,39 @@ export const getMockUserObj = function () {
  * Set the global `Date` to always return the same date.
  */
 export const mockDate = {}
-mockDate.constantDate = new Date('2017-08-10T06:59:46')
-mockDate.on = () => {
-  mockDate._origDate = Date
+mockDate.defaultDate = new Date('2017-05-19T06:59:46')
 
-  /* eslint no-global-assign:off */
-  Date = class extends Date {
-    constructor (arg) {
-      super()
-      return mockDate.constantDate
-    }
+/**
+ * Set the global `Date` to always return the same date.
+ * @param {string} dateStr - The date strting to use in the Date constructor.
+ * @param {Object} options - Options for mockDate
+ * @param {boolean} options.mockCurrentTimeOnly - If true, only return the
+ *   mocked date for Date.now(), but not for other Date instances.
+ */
+mockDate.on = (dateStr = null, options = {}) => {
+  if (!mockDate._origDate) {
+    mockDate._origDate = Date
+  }
+
+  const constantDate = dateStr ? new Date(dateStr) : mockDate.defaultDate
+  const mockCurrentTimeOnly = (
+    !!options.mockCurrentTimeOnly
+  )
+
+  global.Date = Date
+  if (mockCurrentTimeOnly) {
+    global.Date.now = () => constantDate
+  } else {
+    global.Date = () => constantDate
+    global.Date.now = () => constantDate
+    global.Date.UTC = () => constantDate
+    global.Date.parse = () => constantDate
   }
 }
+
+/**
+ * Reset the global `Date` to the native Date object.
+ */
 mockDate.off = () => {
-  Date = mockDate._origDate || Date
+  global.Date = mockDate._origDate || Date
 }

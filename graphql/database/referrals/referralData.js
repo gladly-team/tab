@@ -17,7 +17,7 @@ class ReferralData extends BaseModel {
   constructor (userId, referringUser) {
     super(userId)
     this.referringUser = referringUser
-    this.timestamp = moment.utc().format()
+    this.timestamp = moment.utc().toISOString()
   }
 
   /**

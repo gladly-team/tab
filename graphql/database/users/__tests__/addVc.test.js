@@ -36,7 +36,7 @@ describe('addVc', () => {
       vcAllTime: {$add: vcToAdd},
       heartsUntilNextLevel: {$add: -vcToAdd},
       // lastTabTimestamp: moment.utc().toISOString(),
-      lastTabTimestamp: moment.utc().format(),
+      lastTabTimestamp: moment.utc().toISOString(),
       updated: moment.utc().toISOString()
     })
   })

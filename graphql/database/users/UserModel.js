@@ -67,7 +67,7 @@ class User extends BaseModel {
         id: 'fb5082cc-151a-4a9a-9289-06906670fd4e',
         name: 'Mountain Lake',
         fileName: 'lake.jpg',
-        timestamp: moment.utc().format()
+        timestamp: moment.utc().toISOString()
       },
       backgroundOption: USER_BACKGROUND_OPTION_PHOTO
     }

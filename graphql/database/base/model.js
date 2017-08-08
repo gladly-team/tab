@@ -133,8 +133,8 @@ class BaseModel {
   static add (item, args = {}) {
     const finalItem = Object.assign({},
       item, {
-        updated: moment.utc().format(),
-        created: moment.utc().format()
+        updated: moment.utc().toISOString(),
+        created: moment.utc().toISOString()
       })
 
     var params = Object.assign({}, {
@@ -212,8 +212,8 @@ class BaseModel {
     }
 
     const updatedExpressionAttributeValues = {
-      ':updated': moment.utc().format(),
-      ':created': moment.utc().format()
+      ':updated': moment.utc().toISOString(),
+      ':created': moment.utc().toISOString()
     }
 
     if (!args.hasOwnProperty('ExpressionAttributeNames')) {
