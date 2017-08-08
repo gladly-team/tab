@@ -319,7 +319,14 @@ class BaseModel {
     }
 
     // If the authorizer function returns `true`, the query is authorized.
-    return authorizerFunction(user, hashKeyValue, rangeKeyValue) === true
+    var isAuthorized = false
+    try {
+      isAuthorized = authorizerFunction(user, hashKeyValue, rangeKeyValue, item) === true
+    } catch (err) {
+      isAuthorized = false
+      console.log(err)
+    }
+    return isAuthorized
   }
 }
 
