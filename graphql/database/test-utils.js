@@ -1,5 +1,6 @@
 /* eslint-env jest */
 
+import moment from 'moment'
 import databaseClient from './databaseClient'
 
 export const DatabaseOperation = {
@@ -147,4 +148,17 @@ mockDate.on = (dateStr = null, options = {}) => {
  */
 mockDate.off = () => {
   global.Date = mockDate._origDate || Date
+}
+
+/**
+ * Clone an object, adding 'created' and 'updated' ISO timestamp fields.
+ * @param {Object} item - A database item.
+ * @return {Object} The item with 'created' and 'updated' fields.
+ */
+export const addTimestampFieldsToItem = (item) => {
+  const now = mockDate.defaultDate.toISOString()
+  return Object.assign({}, item, {
+    created: now,
+    updated: now
+  })
 }

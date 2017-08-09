@@ -4,6 +4,7 @@ import moment from 'moment'
 import { clone } from 'lodash/lang'
 
 import {
+  addTimestampFieldsToItem,
   DatabaseOperation,
   getMockUserObj,
   mockDate,
@@ -49,10 +50,7 @@ describe('createUser', () => {
     await createUser(userContext, userToCreate.id,
       userToCreate.username, userToCreate.email, referralData)
 
-    const expectedCreateItem = Object.assign({}, userToCreate, {
-      created: moment.utc().toISOString(),
-      updated: moment.utc().toISOString()
-    })
+    const expectedCreateItem = addTimestampFieldsToItem(userToCreate)
     expect(createMethod)
       .toHaveBeenCalledWith(userContext, expectedCreateItem)
     expect(logReferralData).not.toHaveBeenCalled()
@@ -82,10 +80,7 @@ describe('createUser', () => {
     await createUser(userContext, userToCreate.id,
       userToCreate.username, userToCreate.email, referralData)
 
-    const expectedCreateItem = Object.assign({}, userToCreate, {
-      created: moment.utc().toISOString(),
-      updated: moment.utc().toISOString()
-    })
+    const expectedCreateItem = addTimestampFieldsToItem(userToCreate)
     expect(createMethod)
       .toHaveBeenCalledWith(userContext, expectedCreateItem)
     expect(logReferralData)
@@ -114,10 +109,7 @@ describe('createUser', () => {
     await createUser(userContext, userToCreate.id,
       userToCreate.username, userToCreate.email, referralData)
 
-    const expectedCreateItem = Object.assign({}, userToCreate, {
-      created: moment.utc().toISOString(),
-      updated: moment.utc().toISOString()
-    })
+    const expectedCreateItem = addTimestampFieldsToItem(userToCreate)
     expect(createMethod)
       .toHaveBeenCalledWith(userContext, expectedCreateItem)
     expect(logReferralData).not.toHaveBeenCalled()
@@ -136,10 +128,7 @@ describe('createUser', () => {
         Attributes: {}
       }
     )
-    const expectedUser = Object.assign({}, new UserModel(userToCreate), {
-      created: moment.utc().toISOString(),
-      updated: moment.utc().toISOString()
-    })
+    const expectedUser = addTimestampFieldsToItem(new UserModel(userToCreate))
     const expectedParams = {
       Item: expectedUser,
       TableName: UserModel.tableName
