@@ -142,7 +142,7 @@ describe('createUser', () => {
     })
     const expectedParams = {
       Item: expectedUser,
-      TableName: 'Users'
+      TableName: UserModel.tableName
     }
     const createdItem = await createUser(userContext, userToCreate.id,
       userToCreate.username, userToCreate.email, referralData)
