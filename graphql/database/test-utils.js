@@ -34,14 +34,15 @@ const availableOperations = [
  * @return {function} An instance of `jest.fn`, a mock function
  */
 export const setMockDBResponse = function (operation, returnVal = null) {
+  jest.mock('./databaseClient')
   if (availableOperations.indexOf(operation) === -1) {
     const dbOps = Object.keys(DatabaseOperation).join(', ')
     throw new Error(`Mock database operation must be one of: ${dbOps}`)
   }
-  databaseClient[operation] = jest.fn((params, callback) => {
-    callback(null, returnVal)
-  })
   return databaseClient[operation]
+    .mockImplementation((params, callback) => {
+      callback(null, returnVal)
+    })
 }
 
 /**
