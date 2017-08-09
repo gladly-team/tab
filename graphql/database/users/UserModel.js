@@ -45,7 +45,8 @@ class User extends BaseModel {
       vcCurrent: types.number().integer().default(self.fieldDefaults.vcCurrent),
       vcAllTime: types.number().integer().default(self.fieldDefaults.vcAllTime),
       level: types.number().integer().default(self.fieldDefaults.level),
-      heartsUntilNextLevel: types.number().integer(),
+      heartsUntilNextLevel: types.number().integer()
+        .default(self.fieldDefaults.heartsUntilNextLevel),
       backgroundImage: types.object().default(self.fieldDefaults.backgroundImage),
       backgroundOption: types.string().default(self.fieldDefaults.backgroundOption),
       backgroundColor: types.string(),

@@ -24,14 +24,11 @@ class BaseModel {
       // Set properties for each field on the model.
       // Set the value to the value passed in `obj` if one exists.
       // If not passed a value in `obj`, use the default value
-      // defined in the `fieldDefaults` method, if it exists;
-      // otherwise, set the property to null.
+      // defined in the `fieldDefaults` method, if it exists.
       if (has(obj, fieldName)) {
         this[fieldName] = obj[fieldName]
       } else if (has(this.constructor.fieldDefaults, fieldName)) {
         this[fieldName] = this.constructor.fieldDefaults[fieldName]
-      } else {
-        this[fieldName] = null
       }
     })
   }
