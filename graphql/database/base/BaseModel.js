@@ -1,7 +1,9 @@
 
+import moment from 'moment'
 import { has } from 'lodash/object'
 
 import dynogels from './dynogels-promisified'
+import types from '../fieldTypes'
 import {
   NotImplementedException,
   UnauthorizedQueryException
@@ -126,17 +128,22 @@ class BaseModel {
    */
   static register () {
     // console.log(`Registering model ${this.name} to table ${this.tableName}.`)
+
+    // Add two ISO timestamps, 'created' and 'updated', to
+    // the item's fields.
+    const schema = Object.assign(this.schema, {
+      created: types.string().isoDate(),
+      updated: types.string().isoDate()
+    })
+
     const options = {
       hashKey: this.hashKey,
       tableName: this.tableName,
 
-      // Add two timestamps, `created` and `updated`, to
-      // the item's fields.
-      timestamps: true,
-      createdAt: 'created',
-      updatedAt: 'updated',
+      // Handle timestamps ourselves, not through dynogels.
+      timestamps: false,
 
-      schema: this.schema
+      schema: schema
     }
     if (this.rangeKey) {
       options['rangeKey'] = this.rangeKey
@@ -217,6 +224,11 @@ class BaseModel {
     // console.log(`Creating item in ${this.tableName}: ${JSON.stringify(item, null, 2)}`)
     const self = this
     const hashKey = item[this.hashKey]
+
+    // Add 'created' and 'updated' fields.
+    item.created = moment.utc().toISOString()
+    item.updated = moment.utc().toISOString()
+
     if (!this.isQueryAuthorized(userContext, 'create', hashKey, null, item)) {
       return Promise.reject(new UnauthorizedQueryException())
     }
@@ -233,6 +245,10 @@ class BaseModel {
     const self = this
     const hashKey = item[this.hashKey]
     const rangeKey = item[this.rangeKey]
+
+    // Update 'updated' field.
+    item.updated = moment.utc().toISOString()
+
     if (!this.isQueryAuthorized(userContext, 'update', hashKey, rangeKey, item)) {
       return Promise.reject(new UnauthorizedQueryException())
     }

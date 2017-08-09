@@ -1,12 +1,21 @@
 /* eslint-env jest */
 
 import dynogels from '../dynogels-promisified'
+import types from '../../fieldTypes'
 import {
   setModelGetterField
 } from '../../test-utils'
 
 jest.mock('../dynogels-promisified')
 jest.mock('../../databaseClient')
+
+// Add additional fields to the schema.
+const constructSchema = function (schema) {
+  return Object.assign(schema, {
+    created: types.string().isoDate(),
+    updated: types.string().isoDate()
+  })
+}
 
 describe('BaseModel registering with Dynogels', () => {
   afterEach(() => {
@@ -27,10 +36,8 @@ describe('BaseModel registering with Dynogels', () => {
       {
         hashKey: 'id',
         tableName: TestModel.tableName,
-        timestamps: true,
-        createdAt: 'created',
-        updatedAt: 'updated',
-        schema: schema
+        timestamps: false,
+        schema: constructSchema(schema)
       }
     )
   })
@@ -48,10 +55,8 @@ describe('BaseModel registering with Dynogels', () => {
         hashKey: 'id',
         rangeKey: 'someOtherField',
         tableName: TestModel.tableName,
-        timestamps: true,
-        createdAt: 'created',
-        updatedAt: 'updated',
-        schema: schema
+        timestamps: false,
+        schema: constructSchema(schema)
       }
     )
   })
@@ -67,6 +72,7 @@ describe('BaseModel registering with Dynogels', () => {
         z: 'abc'
       }
     }
+    const expectedSchema = constructSchema(schema)
     setModelGetterField(TestModel, 'schema', schema)
     TestModel.register()
     expect(dynogels.define).toHaveBeenLastCalledWith(
@@ -74,10 +80,8 @@ describe('BaseModel registering with Dynogels', () => {
       {
         hashKey: 'id',
         tableName: TestModel.tableName,
-        timestamps: true,
-        createdAt: 'created',
-        updatedAt: 'updated',
-        schema: schema
+        timestamps: false,
+        schema: expectedSchema
       }
     )
   })
@@ -101,10 +105,8 @@ describe('BaseModel registering with Dynogels', () => {
         hashKey: 'id',
         tableName: TestModel.tableName,
         indexes: indexes,
-        timestamps: true,
-        createdAt: 'created',
-        updatedAt: 'updated',
-        schema: schema
+        timestamps: false,
+        schema: constructSchema(schema)
       }
     )
   })

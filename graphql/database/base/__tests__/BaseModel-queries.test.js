@@ -1,5 +1,7 @@
 /* eslint-env jest */
 
+import moment from 'moment'
+
 import ExampleModel, { fixturesA } from '../test-utils/ExampleModel'
 import ExampleModelRangeKey, {
   fixturesRangeKeyA
@@ -7,6 +9,7 @@ import ExampleModelRangeKey, {
 import {
   DatabaseOperation,
   getMockUserObj,
+  mockDate,
   setMockDBResponse,
   setModelPermissions
 } from '../../test-utils'
@@ -18,8 +21,23 @@ jest.mock('../../databaseClient')
 
 const user = getMockUserObj()
 
+function removeCreatedAndUpdatedFields (item) {
+  const newItem = Object.assign({}, item)
+  delete newItem.created
+  delete newItem.updated
+  return newItem
+}
+
+beforeAll(() => {
+  mockDate.on()
+})
+
+afterAll(() => {
+  mockDate.off()
+})
+
 afterEach(() => {
-  jest.clearAllMocks()
+  jest.resetAllMocks()
 
   // For some reason, jest.resetModules is failing with
   // ExampleModel (even when using CommonJS requires), so just
@@ -71,7 +89,7 @@ describe('BaseModel queries', () => {
     })
 
     // Set mock response from DB client.
-    const itemToGet = fixturesA[0]
+    const itemToGet = Object.assign({}, fixturesA[0])
     const dbQueryMock = setMockDBResponse(
       DatabaseOperation.GET,
       {
@@ -95,7 +113,7 @@ describe('BaseModel queries', () => {
     })
 
     // Set mock response from DB client.
-    const itemToGet = fixturesA[0]
+    const itemToGet = Object.assign({}, fixturesA[0])
     setMockDBResponse(
       DatabaseOperation.GET,
       {
@@ -112,7 +130,7 @@ describe('BaseModel queries', () => {
     })
 
     // Set mock response from DB client.
-    const itemToGet = fixturesRangeKeyA[0]
+    const itemToGet = Object.assign({}, fixturesRangeKeyA[0])
     const dbQueryMock = setMockDBResponse(
       DatabaseOperation.GET,
       {
@@ -136,7 +154,7 @@ describe('BaseModel queries', () => {
     setModelPermissions(ExampleModel, {
       get: () => false
     })
-    const itemToGet = fixturesA[0]
+    const itemToGet = Object.assign({}, fixturesA[0])
     return expect(ExampleModel.get(user, itemToGet.id))
       .rejects.toEqual(new UnauthorizedQueryException())
   })
@@ -147,7 +165,7 @@ describe('BaseModel queries', () => {
     })
 
     // Set mock response from DB client.
-    const itemToCreate = fixturesA[0]
+    const item = Object.assign({}, fixturesA[0])
     const dbQueryMock = setMockDBResponse(
       DatabaseOperation.CREATE,
       {
@@ -155,17 +173,23 @@ describe('BaseModel queries', () => {
         Attributes: {}
       }
     )
+
+    // 'created' and 'updated' field should be automatically update.
+    const itemToCreate = removeCreatedAndUpdatedFields(item)
     const createdItem = await ExampleModel.create(user, itemToCreate)
 
     // Verify form of DB params.
     const dbParams = dbQueryMock.mock.calls[0][0]
     expect(dbParams.TableName).toEqual(ExampleModel.tableName)
-    expect(dbParams.Item.id).toEqual(itemToCreate.id)
-    expect(dbParams.Item.created).toBeDefined()
+    expect(dbParams.Item.id).toEqual(item.id)
+    // It should set the 'created' and 'updated' fields.
+    expect(dbParams.Item.created).toBe(moment.utc().toISOString())
+    expect(dbParams.Item.updated).toBe(moment.utc().toISOString())
 
     // Verify form of created object.
-    expect(createdItem.id).toEqual(itemToCreate.id)
-    expect(createdItem.created).toBeDefined()
+    expect(createdItem.id).toEqual(item.id)
+    expect(createdItem.created).toBe(moment.utc().toISOString())
+    expect(createdItem.updated).toBe(moment.utc().toISOString())
   })
 
   it('correctly creates item with default fields', async () => {
@@ -188,12 +212,14 @@ describe('BaseModel queries', () => {
     expect(dbParams.TableName).toEqual(ExampleModel.tableName)
     expect(dbParams.Item.id).toBeDefined()
     expect(dbParams.Item.name).toEqual(ExampleModel.fieldDefaults.name)
-    expect(dbParams.Item.created).toBeDefined()
+    // It should set the 'created' and 'updated' fields.
+    expect(dbParams.Item.created).toBe(moment.utc().toISOString())
+    expect(dbParams.Item.updated).toBe(moment.utc().toISOString())
 
     // Verify form of created object.
     expect(createdItem.id).toBeDefined()
-    expect(createdItem.name).toEqual(ExampleModel.fieldDefaults.name)
-    expect(createdItem.created).toBeDefined()
+    expect(createdItem.created).toBe(moment.utc().toISOString())
+    expect(createdItem.updated).toBe(moment.utc().toISOString())
   })
 
   it('fails with unauthorized `create`', async () => {
@@ -201,7 +227,7 @@ describe('BaseModel queries', () => {
     setModelPermissions(ExampleModel, {
       create: () => false
     })
-    const itemToCreate = fixturesA[0]
+    const itemToCreate = Object.assign({}, fixturesA[0])
     return expect(ExampleModel.create(user, itemToCreate))
       .rejects.toEqual(new UnauthorizedQueryException())
   })
@@ -212,13 +238,19 @@ describe('BaseModel queries', () => {
     })
 
     // Set mock response from DB client.
-    const itemToUpdate = fixturesA[0]
+    const item = Object.assign({}, fixturesA[0])
+    const expectedReturn = Object.assign({}, item, {
+      updated: moment.utc().toISOString()
+    })
     const dbQueryMock = setMockDBResponse(
       DatabaseOperation.UPDATE,
       {
-        Attributes: itemToUpdate
+        Attributes: expectedReturn
       }
     )
+
+    // 'updated' field should be automatically update.
+    const itemToUpdate = removeCreatedAndUpdatedFields(item)
     const updatedItem = await ExampleModel.update(user, itemToUpdate)
 
     // Verify form of DB params.
@@ -232,17 +264,16 @@ describe('BaseModel queries', () => {
     // }
     const dbParams = dbQueryMock.mock.calls[0][0]
     expect(dbParams.TableName).toEqual(ExampleModel.tableName)
-    expect(dbParams.Key.id).toEqual(itemToUpdate.id)
+    expect(dbParams.Key.id).toEqual(item.id)
     expect(dbParams.ReturnValues).toEqual('ALL_NEW')
-    expect(dbParams.ExpressionAttributeValues[':name']).toBe(itemToUpdate.name)
-    expect(dbParams.ExpressionAttributeValues[':updated']).toBeDefined()
+    expect(dbParams.ExpressionAttributeValues[':name']).toBe(item.name)
+    // It should set the 'updated' field.
+    expect(dbParams.ExpressionAttributeValues[':updated'])
+      .toBe(moment.utc().toISOString())
     expect(dbParams.UpdateExpression).toBe('SET #name = :name, #updated = :updated')
 
-    // Verify form of returned object.
-    expect(updatedItem.id).toEqual(itemToUpdate.id)
-    // The "created" field is not set for an updated item. Fix this?
-    // expect(updatedItem.created).toBeDefined()
-    expect(updatedItem.updated).toBeDefined()
+    // Verify returned object.
+    expect(updatedItem).toEqual(expectedReturn)
   })
 
   it('correctly updates item with a range key', async () => {
@@ -251,30 +282,34 @@ describe('BaseModel queries', () => {
     })
 
     // Set mock response from DB client.
-    const itemToUpdate = fixturesRangeKeyA[0]
+    const item = Object.assign({}, fixturesRangeKeyA[0])
+    const expectedReturn = Object.assign({}, item, {
+      updated: moment.utc().toISOString()
+    })
     const dbQueryMock = setMockDBResponse(
       DatabaseOperation.UPDATE,
       {
-        Attributes: itemToUpdate
+        Attributes: expectedReturn
       }
     )
+
+    const itemToUpdate = removeCreatedAndUpdatedFields(item)
     const updatedItem = await ExampleModelRangeKey.update(user, itemToUpdate)
 
     // Verify form of DB params.
     const dbParams = dbQueryMock.mock.calls[0][0]
     expect(dbParams.TableName).toEqual(ExampleModelRangeKey.tableName)
-    expect(dbParams.Key.id).toEqual(itemToUpdate.id)
+    expect(dbParams.Key.id).toEqual(item.id)
     expect(dbParams.Key.age).toBeDefined()
-    expect(dbParams.Key.age).toEqual(itemToUpdate.age)
-    expect(dbParams.ExpressionAttributeValues[':name']).toBe(itemToUpdate.name)
-    expect(dbParams.ExpressionAttributeValues[':updated']).toBeDefined()
+    expect(dbParams.Key.age).toEqual(item.age)
+    expect(dbParams.ExpressionAttributeValues[':name']).toBe(item.name)
+    // It should set the 'updated' field.
+    expect(dbParams.ExpressionAttributeValues[':updated'])
+      .toBe(moment.utc().toISOString())
     expect(dbParams.UpdateExpression).toBe('SET #name = :name, #updated = :updated')
 
-    // Verify form of returned object.
-    expect(updatedItem.id).toEqual(itemToUpdate.id)
-    expect(updatedItem.age).toBeDefined()
-    expect(updatedItem.age).toEqual(itemToUpdate.age)
-    expect(updatedItem.updated).toBeDefined()
+    // Verify returned object.
+    expect(updatedItem).toEqual(expectedReturn)
   })
 
   it('fails with unauthorized `update`', async () => {
@@ -282,7 +317,7 @@ describe('BaseModel queries', () => {
     setModelPermissions(ExampleModel, {
       update: () => false
     })
-    const itemToUpdate = fixturesA[0]
+    const itemToUpdate = Object.assign({}, fixturesA[0])
     return expect(ExampleModel.update(user, itemToUpdate))
       .rejects.toEqual(new UnauthorizedQueryException())
   })
