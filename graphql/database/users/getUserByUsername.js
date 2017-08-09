@@ -11,6 +11,13 @@ const getUserByUsername = async (userContext, username) => {
   return UserModel.query(userContext, username)
     .usingIndex('UsersByUsername')
     .execute()
+    .then((result) => {
+      if (result.length > 0) {
+        return result[0]
+      } else {
+        return null
+      }
+    })
 }
 
 export default getUserByUsername
