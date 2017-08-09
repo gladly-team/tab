@@ -7,6 +7,7 @@ import ExampleModelRangeKey, {
   fixturesRangeKeyA
 } from '../test-utils/ExampleModelRangeKey'
 import {
+  addTimestampFieldsToItem,
   DatabaseOperation,
   getMockUserObj,
   mockDate,
@@ -174,22 +175,27 @@ describe('BaseModel queries', () => {
       }
     )
 
-    // 'created' and 'updated' field should be automatically update.
+    // 'created' and 'updated' field should be automatically added.
     const itemToCreate = removeCreatedAndUpdatedFields(item)
     const createdItem = await ExampleModel.create(user, itemToCreate)
 
-    // Verify form of DB params.
+    // Verify DB params.
     const dbParams = dbQueryMock.mock.calls[0][0]
-    expect(dbParams.TableName).toEqual(ExampleModel.tableName)
-    expect(dbParams.Item.id).toEqual(item.id)
-    // It should set the 'created' and 'updated' fields.
-    expect(dbParams.Item.created).toBe(moment.utc().toISOString())
-    expect(dbParams.Item.updated).toBe(moment.utc().toISOString())
+    expect(dbParams).toEqual(
+      {
+        Item: {
+          created: moment.utc().toISOString(),
+          id: item.id,
+          name: item.name,
+          updated: moment.utc().toISOString()
+        },
+        TableName: ExampleModel.tableName
+      }
+    )
 
-    // Verify form of created object.
-    expect(createdItem.id).toEqual(item.id)
-    expect(createdItem.created).toBe(moment.utc().toISOString())
-    expect(createdItem.updated).toBe(moment.utc().toISOString())
+    // Verify returned object.
+    const expectedReturn = addTimestampFieldsToItem(item)
+    expect(createdItem).toEqual(expectedReturn)
   })
 
   it('correctly creates item with default fields', async () => {
@@ -207,19 +213,25 @@ describe('BaseModel queries', () => {
     )
     const createdItem = await ExampleModel.create(user, itemToCreate)
 
-    // Verify form of DB params.
+    // Verify DB params.
     const dbParams = dbQueryMock.mock.calls[0][0]
-    expect(dbParams.TableName).toEqual(ExampleModel.tableName)
-    expect(dbParams.Item.id).toBeDefined()
-    expect(dbParams.Item.name).toEqual(ExampleModel.fieldDefaults.name)
-    // It should set the 'created' and 'updated' fields.
-    expect(dbParams.Item.created).toBe(moment.utc().toISOString())
-    expect(dbParams.Item.updated).toBe(moment.utc().toISOString())
+    expect(dbParams).toEqual({
+      Item: {
+        created: moment.utc().toISOString(),
+        id: createdItem.id, // non-deterministic
+        name: ExampleModel.fieldDefaults.name,
+        updated: moment.utc().toISOString()
+      },
+      TableName: ExampleModel.tableName
+    })
 
-    // Verify form of created object.
-    expect(createdItem.id).toBeDefined()
-    expect(createdItem.created).toBe(moment.utc().toISOString())
-    expect(createdItem.updated).toBe(moment.utc().toISOString())
+    // Verify returned object.
+    expect(createdItem).toEqual({
+      created: moment.utc().toISOString(),
+      id: createdItem.id, // non-deterministic
+      name: ExampleModel.fieldDefaults.name,
+      updated: moment.utc().toISOString()
+    })
   })
 
   it('fails with unauthorized `create`', async () => {
@@ -249,28 +261,28 @@ describe('BaseModel queries', () => {
       }
     )
 
-    // 'updated' field should be automatically update.
+    // 'updated' field should be automatically updated.
     const itemToUpdate = removeCreatedAndUpdatedFields(item)
     const updatedItem = await ExampleModel.update(user, itemToUpdate)
 
-    // Verify form of DB params.
-    // {
-    //   TableName: 'ExamplesTable',
-    //   Key: { id: 'ab5082cc-151a-4a9a-9289-06906670fd4e' },
-    //   ReturnValues: 'ALL_NEW',
-    //   ExpressionAttributeValues: { ':name': 'Thing A', ':updated': '2017-07-28T21:11:12.215Z' },
-    //   ExpressionAttributeNames: { '#name': 'name', '#updated': 'updated' },
-    //   UpdateExpression: 'SET #name = :name, #updated = :updated'
-    // }
+    // Verify DB params.
     const dbParams = dbQueryMock.mock.calls[0][0]
-    expect(dbParams.TableName).toEqual(ExampleModel.tableName)
-    expect(dbParams.Key.id).toEqual(item.id)
-    expect(dbParams.ReturnValues).toEqual('ALL_NEW')
-    expect(dbParams.ExpressionAttributeValues[':name']).toBe(item.name)
-    // It should set the 'updated' field.
-    expect(dbParams.ExpressionAttributeValues[':updated'])
-      .toBe(moment.utc().toISOString())
-    expect(dbParams.UpdateExpression).toBe('SET #name = :name, #updated = :updated')
+    expect(dbParams).toEqual({
+      TableName: ExampleModel.tableName,
+      Key: {
+        id: item.id
+      },
+      ReturnValues: 'ALL_NEW',
+      ExpressionAttributeValues: {
+        ':name': item.name,
+        ':updated': moment.utc().toISOString()
+      },
+      ExpressionAttributeNames: {
+        '#name': 'name',
+        '#updated': 'updated'
+      },
+      UpdateExpression: 'SET #name = :name, #updated = :updated'
+    })
 
     // Verify returned object.
     expect(updatedItem).toEqual(expectedReturn)
@@ -296,17 +308,25 @@ describe('BaseModel queries', () => {
     const itemToUpdate = removeCreatedAndUpdatedFields(item)
     const updatedItem = await ExampleModelRangeKey.update(user, itemToUpdate)
 
-    // Verify form of DB params.
+    // Verify  DB params.
     const dbParams = dbQueryMock.mock.calls[0][0]
-    expect(dbParams.TableName).toEqual(ExampleModelRangeKey.tableName)
-    expect(dbParams.Key.id).toEqual(item.id)
-    expect(dbParams.Key.age).toBeDefined()
-    expect(dbParams.Key.age).toEqual(item.age)
-    expect(dbParams.ExpressionAttributeValues[':name']).toBe(item.name)
-    // It should set the 'updated' field.
-    expect(dbParams.ExpressionAttributeValues[':updated'])
-      .toBe(moment.utc().toISOString())
-    expect(dbParams.UpdateExpression).toBe('SET #name = :name, #updated = :updated')
+    expect(dbParams).toEqual({
+      ExpressionAttributeNames: {
+        '#name': 'name',
+        '#updated': 'updated'
+      },
+      ExpressionAttributeValues: {
+        ':name': item.name,
+        ':updated': moment.utc().toISOString()
+      },
+      Key: {
+        age: item.age,
+        id: item.id
+      },
+      ReturnValues: 'ALL_NEW',
+      TableName: ExampleModelRangeKey.tableName,
+      UpdateExpression: 'SET #name = :name, #updated = :updated'
+    })
 
     // Verify returned object.
     expect(updatedItem).toEqual(expectedReturn)
@@ -328,7 +348,7 @@ describe('BaseModel queries', () => {
     })
 
     // Set mock response from DB client.
-    const itemsToGet = fixturesRangeKeyA
+    const itemsToGet = [fixturesRangeKeyA[0]]
     const dbQueryMock = setMockDBResponse(
       DatabaseOperation.QUERY,
       {
@@ -341,11 +361,16 @@ describe('BaseModel queries', () => {
 
     // Verify DB params.
     const dbParams = dbQueryMock.mock.calls[0][0]
-    expect(dbParams.TableName).toEqual(ExampleModelRangeKey.tableName)
-    expect(dbParams.ExpressionAttributeValues).toEqual({
-      ':id': itemsToGet[0].id
+    expect(dbParams).toEqual({
+      ExpressionAttributeNames: {
+        '#id': 'id'
+      },
+      ExpressionAttributeValues: {
+        ':id': itemsToGet[0].id
+      },
+      KeyConditionExpression: '(#id = :id)',
+      TableName: ExampleModelRangeKey.tableName
     })
-    expect(dbParams.KeyConditionExpression).toEqual('(#id = :id)')
 
     // Verify response.
     expect(response).toEqual(itemsToGet)
@@ -357,7 +382,7 @@ describe('BaseModel queries', () => {
     })
 
     // Set mock response from DB client.
-    const itemsToGet = fixturesRangeKeyA
+    const itemsToGet = [fixturesRangeKeyA[0]]
     const dbQueryMock = setMockDBResponse(
       DatabaseOperation.QUERY,
       {
@@ -371,13 +396,18 @@ describe('BaseModel queries', () => {
 
     // Verify DB params.
     const dbParams = dbQueryMock.mock.calls[0][0]
-    expect(dbParams.TableName).toEqual(ExampleModelRangeKey.tableName)
-    expect(dbParams.ExpressionAttributeValues).toEqual({
-      ':id': itemsToGet[0].id,
-      ':age': 30
+    expect(dbParams).toEqual({
+      ExpressionAttributeNames: {
+        '#age': 'age',
+        '#id': 'id'
+      },
+      ExpressionAttributeValues: {
+        ':age': 30,
+        ':id': itemsToGet[0].id
+      },
+      KeyConditionExpression: '(#age > :age) AND (#id = :id)',
+      TableName: ExampleModelRangeKey.tableName
     })
-    expect(dbParams.KeyConditionExpression).toEqual(
-      '(#age > :age) AND (#id = :id)')
 
     // Verify response.
     expect(response).toEqual(itemsToGet)
