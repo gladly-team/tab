@@ -62,7 +62,7 @@ describe('getUserByUsername', () => {
       },
       IndexName: 'UsersByUsername',
       KeyConditionExpression: '(#username = :username)',
-      TableName: 'Users'
+      TableName: UserModel.tableName
     })
     expect(fetchedUser).toEqual(itemToReturn)
   })
