@@ -1,6 +1,5 @@
 /* eslint-env jest */
 
-import moment from 'moment'
 import { clone } from 'lodash/lang'
 
 import {
