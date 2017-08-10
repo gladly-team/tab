@@ -41,7 +41,7 @@ export const setMockDBResponse = function (operation, returnVal = null) {
     throw new Error(`Mock database operation must be one of: ${dbOps}`)
   }
   return databaseClient[operation]
-    .mockImplementation((params, callback) => {
+    .mockImplementationOnce((params, callback) => {
       callback(null, returnVal)
     })
 }
