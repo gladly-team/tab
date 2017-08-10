@@ -1,6 +1,7 @@
 
 import moment from 'moment'
 import { has } from 'lodash/object'
+import { isObject } from 'lodash/lang'
 
 import dynogels from './dynogels-promisified'
 import types from '../fieldTypes'
@@ -166,6 +167,36 @@ class BaseModel {
       return Promise.reject(new UnauthorizedQueryException())
     }
     return this.dynogelsModel.getAsync(...keys)
+      .then(data => self.deserialize(data))
+      .catch(err => {
+        console.log(err)
+        return err
+      })
+  }
+
+  // `keys` can be an array of hashKey strings or an array of objects
+  // containing hashKeys and rangeKeys
+  static async getBatch (userContext, keys) {
+    const self = this
+    // console.log(`Getting multiple objs with keys ${keys} from table ${this.tableName}.`)
+    var authorizationError = false
+    keys.forEach((key) => {
+      var hashKey
+      var rangeKey
+      if (isObject(key)) {
+        hashKey = key[self.hashKey]
+        rangeKey = key[self.rangeKey]
+      } else {
+        hashKey = key
+      }
+      if (!this.isQueryAuthorized(userContext, 'get', hashKey, rangeKey)) {
+        authorizationError = true
+      }
+    })
+    if (authorizationError) {
+      return Promise.reject(new UnauthorizedQueryException())
+    }
+    return this.dynogelsModel.getItemsAsync(keys)
       .then(data => self.deserialize(data))
       .catch(err => {
         console.log(err)

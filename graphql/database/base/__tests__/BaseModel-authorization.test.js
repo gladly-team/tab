@@ -182,6 +182,46 @@ describe('BaseModel calls to `isQueryAuthorized`', () => {
       hashKeyVal, rangeKeyVal)
   })
 
+  it('passes correct params to `getBatch` authorization check', async () => {
+    // Set a mock `isQueryAuthorized` method
+    const TestModel = require('../test-utils/ExampleModel').default
+    const authorizationCheck = jest.fn(() => false)
+    TestModel.isQueryAuthorized = authorizationCheck
+
+    const keys = [
+      'cb5082cc-151a-4a9a-9289-06906670fd4e',
+      'yx5082cc-151a-4a9a-9289-06906670fd4e'
+    ]
+    await TestModel.getBatch(user, keys)
+      .catch(() => {}) // Ignore any authorization errors
+    expect(authorizationCheck.mock.calls[0]).toEqual([user, 'get', keys[0], undefined])
+    expect(authorizationCheck.mock.calls[1]).toEqual([user, 'get', keys[1], undefined])
+  })
+
+  it('passes correct params to `getBatch` authorization check with range key', async () => {
+    // Set a mock `isQueryAuthorized` method
+    const TestModelRangeKey = require('../test-utils/ExampleModelRangeKey').default
+    const authorizationCheck = jest.fn(() => false)
+    TestModelRangeKey.isQueryAuthorized = authorizationCheck
+
+    const keys = [
+      {
+        id: 'cb5082cc-151a-4a9a-9289-06906670fd4e',
+        age: 30
+      },
+      {
+        id: 'yx5082cc-151a-4a9a-9289-06906670fd4e',
+        age: 45
+      }
+    ]
+    await TestModelRangeKey.getBatch(user, keys)
+      .catch(() => {}) // Ignore any authorization errors
+    expect(authorizationCheck.mock.calls[0]).toEqual(
+      [user, 'get', keys[0].id, keys[0].age])
+    expect(authorizationCheck.mock.calls[1]).toEqual(
+      [user, 'get', keys[1].id, keys[1].age])
+  })
+
   it('passes correct params to `create` authorization check', async () => {
     // Set a mock `isQueryAuthorized` method
     const TestModel = require('../test-utils/ExampleModel').default

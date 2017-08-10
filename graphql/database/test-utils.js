@@ -14,7 +14,9 @@ export const DatabaseOperation = {
   QUERY: 'query',
   // Aliases
   CREATE: 'put',
-  GET_ALL: 'scan'
+  GET_ALL: 'scan',
+  GET_BATCH: 'batchGet',
+  GET_ITEMS: 'batchGet'
 }
 
 const availableOperations = [

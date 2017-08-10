@@ -160,6 +160,97 @@ describe('BaseModel queries', () => {
       .rejects.toEqual(new UnauthorizedQueryException())
   })
 
+  it('correctly fetches with `getBatch` method', async () => {
+    setModelPermissions(ExampleModel, {
+      get: () => true
+    })
+    const itemsToGet = [
+      fixturesA[0],
+      fixturesA[1]
+    ]
+    const keys = [itemsToGet[0].id, itemsToGet[1].id]
+
+    // Set mock response from DB client.
+    const dbQueryMock = setMockDBResponse(
+      DatabaseOperation.GET_BATCH,
+      {
+        Responses: {
+          [ExampleModel.tableName]: itemsToGet
+        }
+      }
+    )
+    const expectedDBParams = {
+      RequestItems: {
+        [ExampleModel.tableName]: {
+          Keys: [
+            {
+              id: itemsToGet[0].id
+            },
+            {
+              id: itemsToGet[1].id
+            }
+          ]
+        }
+      }
+    }
+    const response = await ExampleModel.getBatch(user, keys)
+    expect(dbQueryMock.mock.calls[0][0]).toEqual(expectedDBParams)
+    expect(response).toEqual(itemsToGet)
+  })
+
+  it('correctly fetches with `getBatch` method with range keys', async () => {
+    setModelPermissions(ExampleModelRangeKey, {
+      get: () => true
+    })
+    const itemsToGet = [
+      fixturesRangeKeyA[0],
+      fixturesRangeKeyA[1]
+    ]
+    const keys = [
+      {
+        id: fixturesRangeKeyA[0].id,
+        age: fixturesRangeKeyA[0].age
+      },
+      {
+        id: fixturesRangeKeyA[1].id,
+        age: fixturesRangeKeyA[1].age
+      }
+    ]
+
+    // Set mock response from DB client.
+    const dbQueryMock = setMockDBResponse(
+      DatabaseOperation.GET_BATCH,
+      {
+        Responses: {
+          [ExampleModelRangeKey.tableName]: itemsToGet
+        }
+      }
+    )
+    const expectedDBParams = {
+      RequestItems: {
+        [ExampleModelRangeKey.tableName]: {
+          Keys: keys
+        }
+      }
+    }
+    const response = await ExampleModelRangeKey.getBatch(user, keys)
+    expect(dbQueryMock.mock.calls[0][0]).toEqual(expectedDBParams)
+    expect(response).toEqual(itemsToGet)
+  })
+
+  it('fails with unauthorized `getBatch`', async () => {
+    expect.assertions(1)
+    const itemsToGet = [
+      fixturesA[0],
+      fixturesA[1]
+    ]
+    setModelPermissions(ExampleModel, {
+      get: () => false
+    })
+    return expect(ExampleModel.getBatch(user, [itemsToGet[0].id, itemsToGet[1].id]))
+      .rejects.toEqual(new UnauthorizedQueryException())
+  })
+
   it('correctly creates item', async () => {
     setModelPermissions(ExampleModel, {
       create: () => true
