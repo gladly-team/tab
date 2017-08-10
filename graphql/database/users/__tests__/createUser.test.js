@@ -2,6 +2,11 @@
 
 import { clone } from 'lodash/lang'
 
+import UserModel from '../UserModel'
+import createUser from '../createUser'
+import { logReferralData } from '../../referrals/referralData'
+import getUserByUsername from '../getUserByUsername'
+import rewardReferringUser from '../rewardReferringUser'
 import {
   addTimestampFieldsToItem,
   DatabaseOperation,
@@ -10,11 +15,11 @@ import {
   setMockDBResponse
 } from '../../test-utils'
 
+jest.mock('../../databaseClient')
+
 jest.mock('../../referrals/referralData')
 jest.mock('../rewardReferringUser')
 jest.mock('../getUserByUsername')
-
-jest.mock('../../databaseClient')
 
 const userContext = getMockUserContext()
 const userInfo = {
@@ -32,16 +37,11 @@ afterAll(() => {
 })
 
 afterEach(() => {
-  jest.resetModules()
+  jest.clearAllMocks()
 })
 
 describe('createUser', () => {
   it('works as expected without referralData', async () => {
-    const UserModel = require('../UserModel').default
-    const createUser = require('../createUser').default
-    const logReferralData = require('../../referrals/referralData').logReferralData
-    const rewardReferringUser = require('../rewardReferringUser').default
-
     const createMethod = jest.spyOn(UserModel, 'create')
     const referralData = null
     const userToCreate = clone(userInfo)
@@ -57,11 +57,6 @@ describe('createUser', () => {
   })
 
   it('logs referral data and rewards referring user', async () => {
-    const UserModel = require('../UserModel').default
-    const createUser = require('../createUser').default
-    const logReferralData = require('../../referrals/referralData').logReferralData
-    const rewardReferringUser = require('../rewardReferringUser').default
-
     const createMethod = jest.spyOn(UserModel, 'create')
     const userToCreate = clone(userInfo)
     const referralData = {
@@ -70,10 +65,10 @@ describe('createUser', () => {
 
     // Mock fetching the referring user.
     const referringUserId = 'ppooiiuu-151a-4a9a-9289-06906670fd4e'
-    jest.mock('../getUserByUsername', () => {
-      return () => ({
-        id: 'ppooiiuu-151a-4a9a-9289-06906670fd4e'
-      })
+    getUserByUsername.mockImplementationOnce(() => {
+      return {
+        id: referringUserId
+      }
     })
 
     await createUser(userContext, userToCreate.id,
@@ -89,11 +84,6 @@ describe('createUser', () => {
   })
 
   it('works when referring user does not exist', async () => {
-    const UserModel = require('../UserModel').default
-    const createUser = require('../createUser').default
-    const logReferralData = require('../../referrals/referralData').logReferralData
-    const rewardReferringUser = require('../rewardReferringUser').default
-
     const createMethod = jest.spyOn(UserModel, 'create')
     const userToCreate = clone(userInfo)
     const referralData = {
@@ -101,8 +91,8 @@ describe('createUser', () => {
     }
 
     // Mock fetching the referring user.
-    jest.mock('../getUserByUsername', () => {
-      return () => null
+    getUserByUsername.mockImplementationOnce(() => {
+      return null
     })
 
     await createUser(userContext, userToCreate.id,
@@ -116,9 +106,6 @@ describe('createUser', () => {
   })
 
   it('calls the database as expected', async () => {
-    const UserModel = require('../UserModel').default
-    const createUser = require('../createUser').default
-
     const userToCreate = clone(userInfo)
     const referralData = null
     const dbQueryMock = setMockDBResponse(
