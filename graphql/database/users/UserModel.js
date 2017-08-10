@@ -76,9 +76,9 @@ class User extends BaseModel {
 
   static get permissions () {
     return {
-      get: permissionAuthorizers.usernameOrUserIdMatchesHashKey,
+      get: permissionAuthorizers.userIdMatchesHashKey,
       getAll: () => false,
-      update: permissionAuthorizers.usernameOrUserIdMatchesHashKey,
+      update: permissionAuthorizers.userIdMatchesHashKey,
       // To create a new user, the created item must have the same
       // email, username, and user ID as the authorized user.
       create: (userContext, hashKey, rangeKey, item) => {
@@ -90,6 +90,12 @@ class User extends BaseModel {
           userContext.email === item.email &&
           userContext.username === item.username
         )
+      },
+      indexPermissions: {
+        // Separate permissions for secondary index.
+        UsersByUsername: {
+          get: permissionAuthorizers.usernameMatchesHashKey
+        }
       }
     }
   }

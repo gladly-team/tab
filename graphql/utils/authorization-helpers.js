@@ -54,12 +54,6 @@ permissionAuthorizers.userIdMatchesHashKey = (user, hashKey, _) => {
 permissionAuthorizers.usernameMatchesHashKey = (user, hashKey) => {
   return user.username === hashKey
 }
-permissionAuthorizers.usernameOrUserIdMatchesHashKey = (user, hashKey) => {
-  return (
-    permissionAuthorizers.userIdMatchesHashKey(user, hashKey) ||
-    permissionAuthorizers.usernameMatchesHashKey(user, hashKey)
-  )
-}
 
 // Use this to override model query permissions checks.
 // We must use this *only* in logic that's protected from

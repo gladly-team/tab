@@ -109,20 +109,6 @@ describe('permission authorizer functions', () => {
       user, 'NotMyName')
     ).toBe(false)
   })
-
-  test('usernameOrUserIdMatchesHashKey works as expected', () => {
-    expect(permissionAuthorizers.usernameOrUserIdMatchesHashKey(
-      user, 'abcdef')
-    ).toBe(false)
-
-    expect(permissionAuthorizers.usernameOrUserIdMatchesHashKey(
-      user, 'MyName')
-    ).toBe(true)
-
-    expect(permissionAuthorizers.usernameOrUserIdMatchesHashKey(
-      user, '45bbefbf-63d1-4d36-931e-212fbe2bc3d9')
-    ).toBe(true)
-  })
 })
 
 describe('permission overrides', () => {

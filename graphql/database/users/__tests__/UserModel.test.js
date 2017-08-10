@@ -21,16 +21,24 @@ describe('UserModel', () => {
 
   it('has the correct get permission', () => {
     expect(User.permissions.get).toBe(
-      permissionAuthorizers.usernameOrUserIdMatchesHashKey)
+      permissionAuthorizers.userIdMatchesHashKey)
   })
 
   it('has the correct update permission', () => {
     expect(User.permissions.update).toBe(
-      permissionAuthorizers.usernameOrUserIdMatchesHashKey)
+      permissionAuthorizers.userIdMatchesHashKey)
   })
 
   it('has the correct getAll permission', () => {
     expect(User.permissions.getAll()).toBe(false)
+  })
+
+  it('has the correct UsersByUsername secondary index permissions', () => {
+    expect(User.permissions.indexPermissions).toEqual({
+      UsersByUsername: {
+        get: permissionAuthorizers.usernameMatchesHashKey
+      }
+    })
   })
 
   it('allows create when user info matches item to create', () => {

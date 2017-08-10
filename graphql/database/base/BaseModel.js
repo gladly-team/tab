@@ -1,6 +1,6 @@
 
 import moment from 'moment'
-import { has } from 'lodash/object'
+import { get, has } from 'lodash/object'
 import { isObject } from 'lodash/lang'
 
 import dynogels from './dynogels-promisified'
@@ -106,16 +106,22 @@ class BaseModel {
    * The permissions object, used to check authorization for database
    * operations. By default, no operations are authorized.
    * @return {object} The permissions object, with a key for each
-   *   operation name. Each property value is a function that receives
-   *   a userContext object, item hashKey, and item rangeKey, and must return
-   *   a boolean for whether the query is authorized.
+   *   operation name. Each property value is a function that receives:
+   *    - a userContext object
+   *    - item hashKey (if getting a specific item)
+   *    - item rangeKey (if one exists)
+   *    - item object (if creating or updating an item)
+   *   The authorizer function returns a boolean for whether the query is authorized.
+   *   Secondary indexes must be authorized separately in `indexPermissions`,
+   *   with a property key set to the name of the secondary index.
    */
   static get permissions () {
     return {
       get: (userContext, hashKeyValue, rangeKeyValue) => false,
-      getAll: () => false,
-      update: (userContext, hashKeyValue, rangeKeyValue) => false,
-      create: (userContext, hashKeyValue) => false
+      getAll: (userContext) => false,
+      update: (userContext, hashKeyValue, rangeKeyValue, item) => false,
+      create: (userContext, hashKeyValue, rangeKeyValue, item) => false,
+      indexPermissions: {}
     }
   }
 
@@ -184,8 +190,8 @@ class BaseModel {
       var hashKey
       var rangeKey
       if (isObject(key)) {
-        hashKey = key[self.hashKey]
-        rangeKey = key[self.rangeKey]
+        hashKey = get(key, [self.hashKey], null)
+        rangeKey = get(key, [self.rangeKey], null)
       } else {
         hashKey = key
       }
@@ -220,26 +226,27 @@ class BaseModel {
 
   static query (userContext, hashKey) {
     // console.log(`Querying hashKey ${hashKey} on table ${this.tableName}.`)
-    if (!this.isQueryAuthorized(userContext, 'get', hashKey)) {
-      // Raise the permissions error on query execution.
-      const queryObj = this.dynogelsModel.query(hashKey)
-      const execErr = () => Promise.reject(new UnauthorizedQueryException())
-      queryObj.execute = execErr
-      queryObj.exec = execErr
-      queryObj.execAsync = execErr
-      return queryObj
-    }
 
     // Return a dynogels chainable query, but use our own
     // `exec` function so we can deserialize the response.
     // Execute the query by calling `.execute()`.
     const queryObj = this.dynogelsModel.query(hashKey)
-    queryObj.execute = async () => this._execAsync(queryObj)
+    queryObj.execute = async () => this._execAsync(userContext, hashKey, queryObj)
     return queryObj
   }
 
-  static async _execAsync (queryObj) {
+  static async _execAsync (userContext, hashKey, queryObj) {
     const self = this
+
+    // See if this query is happening on an index.
+    var indexName = null
+    if (has(queryObj, 'request.IndexName')) {
+      indexName = queryObj.request.IndexName
+    }
+    if (!this.isQueryAuthorized(userContext, 'get', hashKey, null, null, indexName)) {
+      return Promise.reject(new UnauthorizedQueryException())
+    }
+
     return queryObj.execAsync()
       .then(data => self.deserialize(data.Items))
       .catch(err => {
@@ -328,10 +335,12 @@ class BaseModel {
    * @param {string} hashKeyValue - The value of the item hashKey in the query
    * @param {string} rangeKeyValue - The value of the item rangeKey in the query
    * @param {object} item - An object of attributes to be updated or created
+   * @param {string} indexName - The name of the secondary index, if querying
+   *   a secondary index.
    * @return {boolean} Whether the userContext is authorized.
    */
   static isQueryAuthorized (userContext, operation, hashKeyValue = null,
-    rangeKeyValue = null, item = null) {
+    rangeKeyValue = null, item = null, indexName = null) {
     // Check if the DB call has an authorization override
     // that ignores the user-level permissions.
     if (isValidPermissionsOverride(userContext)) {
@@ -362,7 +371,14 @@ class BaseModel {
 
     // Get the authorizer function from the model class for this operation.
     // If the function does not exist, do not allow any access.
-    const authorizerFunction = permissions[operation]
+    // If this operation is happening on a secondary index, get the authorizer
+    // function for that index.
+    var authorizerFunction
+    if (indexName) {
+      authorizerFunction = get(permissions, ['indexPermissions', indexName, operation])
+    } else {
+      authorizerFunction = get(permissions, [operation])
+    }
     if (!authorizerFunction || !(typeof authorizerFunction === 'function')) {
       return false
     }
@@ -370,7 +386,8 @@ class BaseModel {
     // If the authorizer function returns `true`, the query is authorized.
     var isAuthorized = false
     try {
-      isAuthorized = authorizerFunction(userContext, hashKeyValue, rangeKeyValue, item) === true
+      isAuthorized = (authorizerFunction(userContext, hashKeyValue,
+        rangeKeyValue, item, indexName)) === true
     } catch (err) {
       isAuthorized = false
       console.log(err)

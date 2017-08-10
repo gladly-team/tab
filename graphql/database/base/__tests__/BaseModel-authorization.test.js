@@ -150,6 +150,52 @@ describe('BaseModel `isQueryAuthorized` method', () => {
       expect(isAuthorized).toBe(true)
     })
   })
+
+  it('does not allow a query on a secondary index if that index is not in permissions', () => {
+    const TestModel = require('../test-utils/ExampleModel').default
+    setModelPermissions(TestModel, {
+      get: () => true
+    })
+
+    // Update operation should be authorized.
+    const isUpdateAuthorized = TestModel.isQueryAuthorized(
+      user, 'get', 'fake-hash-key', null, null, 'MySecondaryIndex')
+    expect(isUpdateAuthorized).toBe(false)
+  })
+
+  it('does not allow a query on a secondary index if that index is not named in permissions', () => {
+    const TestModel = require('../test-utils/ExampleModel').default
+    setModelPermissions(TestModel, {
+      get: () => true,
+      indexPermissions: {
+        'AnotherIndexName': {
+          get: () => true
+        }
+      }
+    })
+
+    // Update operation should be authorized.
+    const isUpdateAuthorized = TestModel.isQueryAuthorized(
+      user, 'get', 'fake-hash-key', null, null, 'MySecondaryIndex')
+    expect(isUpdateAuthorized).toBe(false)
+  })
+
+  it('allows a query on a secondary index if that index is given permissions', () => {
+    const TestModel = require('../test-utils/ExampleModel').default
+    setModelPermissions(TestModel, {
+      get: () => true,
+      indexPermissions: {
+        'MySecondaryIndex': {
+          get: () => true
+        }
+      }
+    })
+
+    // Update operation should be authorized.
+    const isUpdateAuthorized = TestModel.isQueryAuthorized(
+      user, 'get', 'fake-hash-key', null, null, 'MySecondaryIndex')
+    expect(isUpdateAuthorized).toBe(true)
+  })
 })
 
 describe('BaseModel calls to `isQueryAuthorized`', () => {
@@ -206,8 +252,7 @@ describe('BaseModel calls to `isQueryAuthorized`', () => {
 
     const keys = [
       {
-        id: 'cb5082cc-151a-4a9a-9289-06906670fd4e',
-        age: 30
+        id: 'cb5082cc-151a-4a9a-9289-06906670fd4e'
       },
       {
         id: 'yx5082cc-151a-4a9a-9289-06906670fd4e',
@@ -217,7 +262,7 @@ describe('BaseModel calls to `isQueryAuthorized`', () => {
     await TestModelRangeKey.getBatch(user, keys)
       .catch(() => {}) // Ignore any authorization errors
     expect(authorizationCheck.mock.calls[0]).toEqual(
-      [user, 'get', keys[0].id, keys[0].age])
+      [user, 'get', keys[0].id, null])
     expect(authorizationCheck.mock.calls[1]).toEqual(
       [user, 'get', keys[1].id, keys[1].age])
   })
@@ -254,5 +299,41 @@ describe('BaseModel calls to `isQueryAuthorized`', () => {
     .catch(() => {}) // Ignore any authorization errors
     expect(authorizationCheck).toBeCalledWith(user, 'update',
       hashKeyVal, rangeKeyVal, item)
+  })
+
+  it('passes correct params to `query` authorization check', async () => {
+    // Set a mock `isQueryAuthorized` method
+    const TestModel = require('../test-utils/ExampleModel').default
+    const authorizationCheck = jest.fn(() => false)
+    TestModel.isQueryAuthorized = authorizationCheck
+
+    const hashKeyVal = 'xy5082cc-151a-4a9a-9289-06906670fd4e'
+
+    // A mock version of a query created by dynogels.
+    const mockQueryObj = {}
+    await TestModel._execAsync(user, hashKeyVal, mockQueryObj)
+    .catch(() => {}) // Ignore any authorization errors
+    expect(authorizationCheck).toBeCalledWith(user, 'get',
+      hashKeyVal, null, null, null)
+  })
+
+  it('passes correct params to `query` authorization check when querying a secondary index', async () => {
+    // Set a mock `isQueryAuthorized` method
+    const TestModel = require('../test-utils/ExampleModel').default
+    const authorizationCheck = jest.fn(() => false)
+    TestModel.isQueryAuthorized = authorizationCheck
+
+    const hashKeyVal = 'xy5082cc-151a-4a9a-9289-06906670fd4e'
+
+    // A mock version of a query created by dynogels on a secondary index.
+    const mockQueryObj = {
+      request: {
+        IndexName: 'SomeSecondaryIndex'
+      }
+    }
+    await TestModel._execAsync(user, hashKeyVal, mockQueryObj)
+    .catch(() => {}) // Ignore any authorization errors
+    expect(authorizationCheck).toBeCalledWith(user, 'get',
+      hashKeyVal, null, null, 'SomeSecondaryIndex')
   })
 })
