@@ -73,30 +73,6 @@ export const setModelGetterField = function (modelClass, fieldName, val) {
 }
 
 /**
- * Overwrite the class methods that interact with the database
- * with mock functions.
- * @param {Object} modelClass - The model class (extended from BaseModel)
- */
-export const mockQueryMethods = function (modelClass) {
-  const methodsToMock = [
-    'get',
-    'getAll',
-    'create',
-    'update',
-    // Do not mock query, which returns a chainable object.
-    // Instead, mock our method that executes the query.
-    '_execAsync'
-  ]
-  methodsToMock.forEach((methodName) => {
-    modelClass[methodName] = jest.fn(() => Promise.resolve({'foo': 'bar'}))
-  })
-
-  // Mock the chainable query method.
-  const mockQuery = require('./base/__mocks__/UserModel.query')
-  modelClass.query = mockQuery
-}
-
-/**
  * Get a mock user object (as passed from GraphQL context).
  * @return {Object} The mock user.
  */
