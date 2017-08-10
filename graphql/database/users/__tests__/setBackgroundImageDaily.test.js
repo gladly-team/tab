@@ -1,5 +1,6 @@
 /* eslint-env jest */
 
+import moment from 'moment'
 import UserModel from '../UserModel'
 import setBackgroundImageDaily from '../setBackgroundImageDaily'
 import { getRandomImage } from '../../backgroundImages/backgroundImage'
@@ -7,24 +8,50 @@ import {
   USER_BACKGROUND_OPTION_DAILY
 } from '../../constants'
 import {
+  DatabaseOperation,
   getMockUserContext,
-  mockQueryMethods
+  getMockUserInstance,
+  mockDate,
+  setMockDBResponse
 } from '../../test-utils'
 
+jest.mock('../../databaseClient')
 jest.mock('../../backgroundImages/backgroundImage')
+const userContext = getMockUserContext()
 
-const user = getMockUserContext()
-mockQueryMethods(UserModel)
+beforeAll(() => {
+  mockDate.on()
+})
+
+afterAll(() => {
+  mockDate.off()
+})
 
 describe('setBackgroundImageDaily', () => {
   it('works as expected', async () => {
-    const userId = user.id
-    await setBackgroundImageDaily(user, userId)
+    const updateQuery = jest.spyOn(UserModel, 'update')
+    const userId = userContext.id
+    await setBackgroundImageDaily(userContext, userId)
     const mockImage = await getRandomImage()
-    expect(UserModel.update).toHaveBeenCalledWith(user, {
+    expect(updateQuery).toHaveBeenCalledWith(userContext, {
       id: userId,
       backgroundImage: mockImage,
-      backgroundOption: USER_BACKGROUND_OPTION_DAILY
+      backgroundOption: USER_BACKGROUND_OPTION_DAILY,
+      updated: moment.utc().toISOString()
     })
+  })
+
+  it('calls the database as expected', async () => {
+    const userId = userContext.id
+    const expectedReturnedUser = getMockUserInstance()
+    const dbUpdateMock = setMockDBResponse(
+      DatabaseOperation.UPDATE,
+      {
+        Attributes: expectedReturnedUser
+      }
+    )
+    const returnedUser = await setBackgroundImageDaily(userContext, userId)
+    expect(dbUpdateMock).toHaveBeenCalled()
+    expect(returnedUser).toEqual(expectedReturnedUser)
   })
 })
