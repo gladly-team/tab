@@ -2,15 +2,23 @@
 
 import UserModel from '../UserModel'
 import incrementVc from '../incrementVc'
+import addVc from '../addVc'
 import {
+  DatabaseOperation,
   getMockUserObj,
   mockDate,
-  mockQueryMethods
+  setMockDBResponse
 } from '../../test-utils'
 
-const user = getMockUserObj()
-mockQueryMethods(UserModel)
+jest.mock('../../databaseClient')
+jest.mock('../addVc')
 
+const userContext = getMockUserObj()
+const userInfo = {
+  id: userContext.id,
+  username: userContext.username,
+  email: userContext.email
+}
 const mockCurrentTime = '2017-06-22T01:13:28.000Z'
 
 beforeAll(() => {
@@ -25,39 +33,44 @@ afterAll(() => {
 
 describe('incrementVc', () => {
   beforeEach(() => {
-    jest.resetAllMocks()
+    jest.clearAllMocks()
   })
 
   it('increments the VC', async () => {
-    const userId = user.id
+    const userId = userContext.id
 
     // Mock fetching the user.
-    UserModel.get = jest.fn(() => {
-      return Promise.resolve({
-        lastTabTimestamp: '2017-06-22T01:13:25.000Z'
-      })
+    const mockUser = Object.assign({}, new UserModel(userInfo), {
+      lastTabTimestamp: '2017-06-22T01:13:25.000Z'
     })
+    setMockDBResponse(
+      DatabaseOperation.GET,
+      {
+        Item: mockUser
+      }
+    )
 
-    await incrementVc(user, userId)
-    expect(UserModel.update).toHaveBeenCalledWith(user, {
-      id: userId,
-      vcCurrent: {$add: 1},
-      vcAllTime: {$add: 1},
-      heartsUntilNextLevel: {$add: -1},
-      lastTabTimestamp: mockCurrentTime
-    })
+    const returnedUser = await incrementVc(userContext, userId)
+    expect(addVc).toHaveBeenCalled()
+    expect(returnedUser).not.toBeNull()
   })
 
   it('does not increment if was recently incremented', async () => {
-    const userId = user.id
+    const userId = userContext.id
 
     // Mock fetching the user.
-    UserModel.get = jest.fn(() => {
-      return Promise.resolve({
-        lastTabTimestamp: '2017-06-22T01:13:27.000Z'
-      })
+    const mockUser = Object.assign({}, new UserModel(userInfo), {
+      lastTabTimestamp: '2017-06-22T01:13:26.000Z'
     })
-    await incrementVc(user, userId)
-    expect(UserModel.update).not.toHaveBeenCalled()
+    setMockDBResponse(
+      DatabaseOperation.GET,
+      {
+        Item: mockUser
+      }
+    )
+
+    const returnedUser = await incrementVc(userContext, userId)
+    expect(addVc).not.toHaveBeenCalled()
+    expect(returnedUser).not.toBeNull()
   })
 })
