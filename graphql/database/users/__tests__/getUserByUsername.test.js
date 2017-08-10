@@ -3,7 +3,6 @@
 import UserModel from '../UserModel'
 import getUserByUsername from '../getUserByUsername'
 import {
-  addTimestampFieldsToItem,
   DatabaseOperation,
   getMockUserContext,
   getMockUserInstance,

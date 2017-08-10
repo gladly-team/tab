@@ -46,12 +46,6 @@ describe('addVc', () => {
   it('calls the database as expected', async () => {
     const userId = userContext.id
     const vcToAdd = 12
-
-    const userInfo = {
-      id: userContext.id,
-      username: userContext.username,
-      email: userContext.email
-    }
     const expectedReturnedUser = getMockUserInstance()
     const dbUpdateMock = setMockDBResponse(
       DatabaseOperation.UPDATE,
