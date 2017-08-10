@@ -6,12 +6,12 @@ import UserModel from '../UserModel'
 import addVc from '../addVc'
 import {
   DatabaseOperation,
-  getMockUserObj,
+  getMockUserContext,
   mockDate,
   setMockDBResponse
 } from '../../test-utils'
 
-const userContext = getMockUserObj()
+const userContext = getMockUserContext()
 
 // Mock the database client. This allows us to test
 // the DB operation with an unmocked ORM, which

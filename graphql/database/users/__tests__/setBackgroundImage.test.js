@@ -8,13 +8,13 @@ import {
   USER_BACKGROUND_OPTION_CUSTOM
 } from '../../constants'
 import {
-  getMockUserObj,
+  getMockUserContext,
   mockQueryMethods
 } from '../../test-utils'
 
 jest.mock('../../backgroundImages/backgroundImage')
 
-const user = getMockUserObj()
+const user = getMockUserContext()
 mockQueryMethods(UserModel)
 
 beforeEach(() => {

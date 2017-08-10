@@ -2,13 +2,13 @@
 
 import { filter } from 'lodash/collection'
 import {
-  getMockUserObj,
+  getMockUserContext,
   setModelPermissions
 } from '../../test-utils'
 
 jest.mock('../../databaseClient')
 
-const user = getMockUserObj()
+const user = getMockUserContext()
 
 describe('BaseModel `isQueryAuthorized` method', () => {
   beforeEach(() => {

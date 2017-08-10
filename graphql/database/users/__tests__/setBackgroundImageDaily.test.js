@@ -7,13 +7,13 @@ import {
   USER_BACKGROUND_OPTION_DAILY
 } from '../../constants'
 import {
-  getMockUserObj,
+  getMockUserContext,
   mockQueryMethods
 } from '../../test-utils'
 
 jest.mock('../../backgroundImages/backgroundImage')
 
-const user = getMockUserObj()
+const user = getMockUserContext()
 mockQueryMethods(UserModel)
 
 describe('setBackgroundImageDaily', () => {

@@ -5,7 +5,7 @@ import { clone } from 'lodash/lang'
 import {
   addTimestampFieldsToItem,
   DatabaseOperation,
-  getMockUserObj,
+  getMockUserContext,
   mockDate,
   setMockDBResponse
 } from '../../test-utils'
@@ -16,7 +16,7 @@ jest.mock('../getUserByUsername')
 
 jest.mock('../../databaseClient')
 
-const userContext = getMockUserObj()
+const userContext = getMockUserContext()
 const userInfo = {
   id: userContext.id,
   username: userContext.username,

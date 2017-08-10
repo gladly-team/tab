@@ -5,14 +5,14 @@ import UserModel from '../UserModel'
 import setActiveWidget from '../setActiveWidget'
 import {
   DatabaseOperation,
-  getMockUserObj,
+  getMockUserContext,
   mockDate,
   setMockDBResponse
 } from '../../test-utils'
 
 jest.mock('../../databaseClient')
 
-const userContext = getMockUserObj()
+const userContext = getMockUserContext()
 
 beforeAll(() => {
   mockDate.on()

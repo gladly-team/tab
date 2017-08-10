@@ -5,13 +5,13 @@ import getUserByUsername from '../getUserByUsername'
 import {
   addTimestampFieldsToItem,
   DatabaseOperation,
-  getMockUserObj,
+  getMockUserContext,
   setMockDBResponse
 } from '../../test-utils'
 
 jest.mock('../../databaseClient')
 
-const userContext = getMockUserObj()
+const userContext = getMockUserContext()
 
 afterEach(() => {
   jest.clearAllMocks()

@@ -5,7 +5,7 @@ import incrementVc from '../incrementVc'
 import addVc from '../addVc'
 import {
   DatabaseOperation,
-  getMockUserObj,
+  getMockUserContext,
   mockDate,
   setMockDBResponse
 } from '../../test-utils'
@@ -13,7 +13,7 @@ import {
 jest.mock('../../databaseClient')
 jest.mock('../addVc')
 
-const userContext = getMockUserObj()
+const userContext = getMockUserContext()
 const userInfo = {
   id: userContext.id,
   username: userContext.username,

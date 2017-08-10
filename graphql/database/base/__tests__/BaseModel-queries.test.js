@@ -9,7 +9,7 @@ import ExampleModelRangeKey, {
 import {
   addTimestampFieldsToItem,
   DatabaseOperation,
-  getMockUserObj,
+  getMockUserContext,
   mockDate,
   setMockDBResponse,
   setModelPermissions
@@ -20,7 +20,7 @@ import {
 
 jest.mock('../../databaseClient')
 
-const user = getMockUserObj()
+const user = getMockUserContext()
 
 function removeCreatedAndUpdatedFields (item) {
   const newItem = Object.assign({}, item)
