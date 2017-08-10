@@ -7,8 +7,11 @@ import {
   USER_BACKGROUND_OPTION_COLOR
 } from '../../constants'
 import {
+  DatabaseOperation,
   getMockUserContext,
-  mockDate
+  getMockUserInstance,
+  mockDate,
+  setMockDBResponse
 } from '../../test-utils'
 
 jest.mock('../../databaseClient')
@@ -33,5 +36,20 @@ describe('setBackgroundColor', () => {
       backgroundOption: USER_BACKGROUND_OPTION_COLOR,
       updated: moment.utc().toISOString()
     })
+  })
+
+  it('calls the database as expected', async () => {
+    const userId = userContext.id
+    const color = '#FFF'
+    const expectedReturnedUser = getMockUserInstance()
+    const dbUpdateMock = setMockDBResponse(
+      DatabaseOperation.UPDATE,
+      {
+        Attributes: expectedReturnedUser
+      }
+    )
+    const returnedUser = await setBackgroundColor(userContext, userId, color)
+    expect(dbUpdateMock).toHaveBeenCalled()
+    expect(returnedUser).toEqual(expectedReturnedUser)
   })
 })
