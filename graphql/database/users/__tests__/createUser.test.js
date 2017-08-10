@@ -1,7 +1,5 @@
 /* eslint-env jest */
 
-import { clone } from 'lodash/lang'
-
 import UserModel from '../UserModel'
 import createUser from '../createUser'
 import { logReferralData } from '../../referrals/referralData'
@@ -11,6 +9,8 @@ import {
   addTimestampFieldsToItem,
   DatabaseOperation,
   getMockUserContext,
+  getMockUserInfo,
+  getMockUserInstance,
   mockDate,
   setMockDBResponse
 } from '../../test-utils'
@@ -22,11 +22,6 @@ jest.mock('../rewardReferringUser')
 jest.mock('../getUserByUsername')
 
 const userContext = getMockUserContext()
-const userInfo = {
-  id: userContext.id,
-  username: userContext.username,
-  email: userContext.email
-}
 
 beforeAll(() => {
   mockDate.on()
@@ -43,13 +38,12 @@ afterEach(() => {
 describe('createUser', () => {
   it('works as expected without referralData', async () => {
     const createMethod = jest.spyOn(UserModel, 'create')
+    const userInfo = getMockUserInfo()
     const referralData = null
-    const userToCreate = clone(userInfo)
+    await createUser(userContext, userInfo.id,
+      userInfo.username, userInfo.email, referralData)
 
-    await createUser(userContext, userToCreate.id,
-      userToCreate.username, userToCreate.email, referralData)
-
-    const expectedCreateItem = addTimestampFieldsToItem(userToCreate)
+    const expectedCreateItem = addTimestampFieldsToItem(userInfo)
     expect(createMethod)
       .toHaveBeenCalledWith(userContext, expectedCreateItem)
     expect(logReferralData).not.toHaveBeenCalled()
@@ -58,7 +52,7 @@ describe('createUser', () => {
 
   it('logs referral data and rewards referring user', async () => {
     const createMethod = jest.spyOn(UserModel, 'create')
-    const userToCreate = clone(userInfo)
+    const userInfo = getMockUserInfo()
     const referralData = {
       referringUser: 'FriendOfMine'
     }
@@ -71,21 +65,21 @@ describe('createUser', () => {
       }
     })
 
-    await createUser(userContext, userToCreate.id,
-      userToCreate.username, userToCreate.email, referralData)
+    await createUser(userContext, userInfo.id,
+      userInfo.username, userInfo.email, referralData)
 
-    const expectedCreateItem = addTimestampFieldsToItem(userToCreate)
+    const expectedCreateItem = addTimestampFieldsToItem(userInfo)
     expect(createMethod)
       .toHaveBeenCalledWith(userContext, expectedCreateItem)
     expect(logReferralData)
-      .toHaveBeenCalledWith(userToCreate.id, referringUserId)
+      .toHaveBeenCalledWith(userInfo.id, referringUserId)
     expect(rewardReferringUser)
       .toHaveBeenCalledWith(referringUserId)
   })
 
   it('works when referring user does not exist', async () => {
     const createMethod = jest.spyOn(UserModel, 'create')
-    const userToCreate = clone(userInfo)
+    const userInfo = getMockUserInfo()
     const referralData = {
       referringUser: 'FriendOfMine'
     }
@@ -95,10 +89,10 @@ describe('createUser', () => {
       return null
     })
 
-    await createUser(userContext, userToCreate.id,
-      userToCreate.username, userToCreate.email, referralData)
+    await createUser(userContext, userInfo.id,
+      userInfo.username, userInfo.email, referralData)
 
-    const expectedCreateItem = addTimestampFieldsToItem(userToCreate)
+    const expectedCreateItem = addTimestampFieldsToItem(userInfo)
     expect(createMethod)
       .toHaveBeenCalledWith(userContext, expectedCreateItem)
     expect(logReferralData).not.toHaveBeenCalled()
@@ -106,7 +100,7 @@ describe('createUser', () => {
   })
 
   it('calls the database as expected', async () => {
-    const userToCreate = clone(userInfo)
+    const userInfo = getMockUserInfo()
     const referralData = null
     const dbQueryMock = setMockDBResponse(
       DatabaseOperation.CREATE,
@@ -114,13 +108,13 @@ describe('createUser', () => {
         Attributes: {}
       }
     )
-    const expectedUser = addTimestampFieldsToItem(new UserModel(userToCreate))
+    const expectedUser = getMockUserInstance(userInfo)
     const expectedParams = {
       Item: expectedUser,
       TableName: UserModel.tableName
     }
-    const createdItem = await createUser(userContext, userToCreate.id,
-      userToCreate.username, userToCreate.email, referralData)
+    const createdItem = await createUser(userContext, userInfo.id,
+      userInfo.username, userInfo.email, referralData)
     const dbParams = dbQueryMock.mock.calls[0][0]
     expect(dbParams).toEqual(expectedParams)
     expect(createdItem).toEqual(expectedUser)

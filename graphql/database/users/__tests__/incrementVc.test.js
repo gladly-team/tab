@@ -1,11 +1,11 @@
 /* eslint-env jest */
 
-import UserModel from '../UserModel'
 import incrementVc from '../incrementVc'
 import addVc from '../addVc'
 import {
   DatabaseOperation,
   getMockUserContext,
+  getMockUserInstance,
   mockDate,
   setMockDBResponse
 } from '../../test-utils'
@@ -14,11 +14,6 @@ jest.mock('../../databaseClient')
 jest.mock('../addVc')
 
 const userContext = getMockUserContext()
-const userInfo = {
-  id: userContext.id,
-  username: userContext.username,
-  email: userContext.email
-}
 const mockCurrentTime = '2017-06-22T01:13:28.000Z'
 
 beforeAll(() => {
@@ -40,7 +35,7 @@ describe('incrementVc', () => {
     const userId = userContext.id
 
     // Mock fetching the user.
-    const mockUser = Object.assign({}, new UserModel(userInfo), {
+    const mockUser = getMockUserInstance({
       lastTabTimestamp: '2017-06-22T01:13:25.000Z'
     })
     setMockDBResponse(
@@ -59,7 +54,7 @@ describe('incrementVc', () => {
     const userId = userContext.id
 
     // Mock fetching the user.
-    const mockUser = Object.assign({}, new UserModel(userInfo), {
+    const mockUser = getMockUserInstance({
       lastTabTimestamp: '2017-06-22T01:13:26.000Z'
     })
     setMockDBResponse(

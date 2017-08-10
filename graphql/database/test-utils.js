@@ -1,6 +1,7 @@
 /* eslint-env jest */
 
 import databaseClient from './databaseClient'
+import UserModel from './users/UserModel'
 
 export const DatabaseOperation = {
   BATCH_GET: 'batchGet',
@@ -106,6 +107,32 @@ export const getMockUserContext = function () {
     email: 'foo@bar.com',
     emailVerified: true
   }
+}
+
+/**
+ * Get a mock user info.
+ * @return {Object} The mock user info object.
+ */
+export const getMockUserInfo = function () {
+  return {
+    id: '45bbefbf-63d1-4d36-931e-212fbe2bc3d9',
+    username: 'MyName',
+    email: 'foo@bar.com'
+  }
+}
+
+/**
+ * Get a mock User instance.
+ * @param {Object} attributes - Attributes to override when getting the mock user.
+ * @return {Object} The mock user.
+ */
+export const getMockUserInstance = function (attributes) {
+  const defaultUserInfo = getMockUserInfo()
+  const now = mockDate.defaultDate.toISOString()
+  return new UserModel(Object.assign({}, defaultUserInfo, attributes, {
+    created: now,
+    updated: now
+  }))
 }
 
 /**

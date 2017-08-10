@@ -6,6 +6,7 @@ import setActiveWidget from '../setActiveWidget'
 import {
   DatabaseOperation,
   getMockUserContext,
+  getMockUserInstance,
   mockDate,
   setMockDBResponse
 } from '../../test-utils'
@@ -40,16 +41,8 @@ describe('setActiveWidget', () => {
 
   it('calls the database', async () => {
     const widgetId = 'abcdefgh-12ab-12ab-12ab-123abc456def'
+    const expectedReturnedUser = getMockUserInstance()
 
-    const userInfo = {
-      id: userContext.id,
-      username: userContext.username,
-      email: userContext.email
-    }
-    const mockUser = Object.assign({}, new UserModel(userInfo))
-    const expectedReturnedUser = Object.assign({}, mockUser, {
-      updated: moment.utc().toISOString()
-    })
     const dbUpdateMock = setMockDBResponse(
       DatabaseOperation.UPDATE,
       {

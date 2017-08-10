@@ -6,6 +6,7 @@ import {
   addTimestampFieldsToItem,
   DatabaseOperation,
   getMockUserContext,
+  getMockUserInstance,
   setMockDBResponse
 } from '../../test-utils'
 
@@ -36,13 +37,12 @@ describe('getUserByUsername', () => {
     const userContextAuthorized = Object.assign({}, userContext, {
       username: username
     })
-    const userInfo = {
+
+    const itemToReturn = getMockUserInstance({
       id: userContextAuthorized.id,
       username: userContextAuthorized.username,
       email: userContextAuthorized.email
-    }
-
-    const itemToReturn = addTimestampFieldsToItem(new UserModel(userInfo))
+    })
     const dbQueryMock = setMockDBResponse(
       DatabaseOperation.QUERY,
       {

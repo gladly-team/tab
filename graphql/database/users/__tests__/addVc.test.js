@@ -7,6 +7,7 @@ import addVc from '../addVc'
 import {
   DatabaseOperation,
   getMockUserContext,
+  getMockUserInstance,
   mockDate,
   setMockDBResponse
 } from '../../test-utils'
@@ -51,10 +52,7 @@ describe('addVc', () => {
       username: userContext.username,
       email: userContext.email
     }
-    const mockUser = Object.assign({}, new UserModel(userInfo))
-    const expectedReturnedUser = Object.assign({}, mockUser, {
-      updated: moment.utc().toISOString()
-    })
+    const expectedReturnedUser = getMockUserInstance()
     const dbUpdateMock = setMockDBResponse(
       DatabaseOperation.UPDATE,
       {
