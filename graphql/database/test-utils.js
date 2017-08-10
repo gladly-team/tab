@@ -104,7 +104,7 @@ export const getMockUserInfo = function () {
  */
 export const getMockUserInstance = function (attributes) {
   const defaultUserInfo = getMockUserInfo()
-  const now = mockDate.defaultDate.toISOString()
+  const now = mockDate.defaultDateISO
   return new UserModel(Object.assign({}, defaultUserInfo, attributes, {
     created: now,
     updated: now
@@ -115,7 +115,7 @@ export const getMockUserInstance = function (attributes) {
  * Set the global `Date` to always return the same date.
  */
 export const mockDate = {}
-mockDate.defaultDate = new Date('2017-05-19T06:59:46')
+mockDate.defaultDateISO = '2017-05-19T13:59:46.000Z'
 
 /**
  * Set the global `Date` to always return the same date.
@@ -129,7 +129,7 @@ mockDate.on = (dateStr = null, options = {}) => {
     mockDate._origDate = Date
   }
 
-  const constantDate = dateStr ? new Date(dateStr) : mockDate.defaultDate
+  const constantDate = dateStr ? new Date(dateStr) : new Date(mockDate.defaultDateISO)
   const mockCurrentTimeOnly = (
     !!options.mockCurrentTimeOnly
   )
@@ -158,7 +158,7 @@ mockDate.off = () => {
  * @return {Object} The item with 'created' and 'updated' fields.
  */
 export const addTimestampFieldsToItem = (item) => {
-  const now = mockDate.defaultDate.toISOString()
+  const now = mockDate.defaultDateISO
   return Object.assign({}, item, {
     created: now,
     updated: now

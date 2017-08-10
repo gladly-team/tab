@@ -5,7 +5,8 @@ import UserModel from '../users/UserModel'
 import {
   getMockUserContext,
   getMockUserInfo,
-  getMockUserInstance
+  getMockUserInstance,
+  mockDate
 } from '../test-utils'
 
 describe('test-utils', () => {
@@ -28,8 +29,8 @@ describe('test-utils', () => {
 
   test('getMockUserInstance returns expected object', () => {
     const expectedUser = new UserModel(getMockUserInfo())
-    expectedUser.created = '2017-05-19T13:59:46.000Z'
-    expectedUser.updated = '2017-05-19T13:59:46.000Z'
+    expectedUser.created = mockDate.defaultDateISO
+    expectedUser.updated = mockDate.defaultDateISO
     expect(getMockUserInstance()).toEqual(expectedUser)
   })
 
@@ -37,8 +38,8 @@ describe('test-utils', () => {
     const expectedUser = new UserModel(getMockUserInfo())
     expectedUser.username = 'Bob'
     expectedUser.heartsUntilNextLevel = 12
-    expectedUser.created = '2017-05-19T13:59:46.000Z'
-    expectedUser.updated = '2017-05-19T13:59:46.000Z'
+    expectedUser.created = mockDate.defaultDateISO
+    expectedUser.updated = mockDate.defaultDateISO
     expect(getMockUserInstance({ username: 'Bob', heartsUntilNextLevel: 12 }))
       .toEqual(expectedUser)
   })
