@@ -1,11 +1,11 @@
 
-import UserModel from './UserModel'
 import {
   USER_REFERRAL_VC_REWARD
 } from '../constants'
 import {
   getPermissionsOverride
 } from '../../utils/authorization-helpers'
+import addVc from './addVc'
 
 /**
  * Reward a referring user by increasing their VC.
@@ -14,7 +14,7 @@ import {
  */
 const rewardReferringUser = async (referringUserId) => {
   const permissionsOverride = getPermissionsOverride()
-  await UserModel.addVc(permissionsOverride, referringUserId,
+  await addVc(permissionsOverride, referringUserId,
     USER_REFERRAL_VC_REWARD)
 }
 

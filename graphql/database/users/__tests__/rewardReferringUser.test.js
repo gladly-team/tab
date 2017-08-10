@@ -2,11 +2,10 @@
 
 import UserModel from '../UserModel'
 import rewardReferringUser from '../rewardReferringUser'
-import {
-  mockQueryMethods
-} from '../../test-utils'
+import addVc from '../addVc'
 
-mockQueryMethods(UserModel)
+jest.mock('../../databaseClient')
+jest.mock('../addVc')
 
 // Mock addVc method
 UserModel.addVc = jest.fn()
@@ -16,7 +15,7 @@ describe('rewardReferringUser', () => {
     const referringUserId = 'some-id-123'
     const overrideVal = 'PLACEHOLDER'
     await rewardReferringUser(referringUserId)
-    expect(UserModel.addVc).toHaveBeenCalledWith(overrideVal,
+    expect(addVc).toHaveBeenCalledWith(overrideVal,
       referringUserId, 350)
   })
 })
