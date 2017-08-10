@@ -2,6 +2,7 @@
 import { sortBy } from 'lodash/collection'
 
 import BaseWidgetModel from './widget/BaseWidgetModel'
+import getFullWidget from './getFullWidget'
 import {
   getUserWidgets as getAllUserWidgets,
   getUserWidgetsByEnabledState,
@@ -10,27 +11,6 @@ import {
   updateWidgetEnabled,
   updateWidgetConfig
 } from './userWidget/userWidget'
-
-/**
-  * Merge the user widget with the widget data to create an object
-  * with all the widget information.
-  * @param {Object<UserWidget>} userWidget
-  * @param {Object<UserWidget>} widget
-  * @return {Object<UserWidget>}  Returns an instance of UserWidget
-  * with all the widget information.
-  */
-function getFullWidget (userWidget, widget) {
-  return Object.assign({},
-    userWidget,
-    widget,
-    {
-      id: userWidget.widgetId,
-      data: JSON.stringify(userWidget.data),
-      config: JSON.stringify(userWidget.config),
-      settings: JSON.stringify(widget.settings)
-    }
-  )
-}
 
 /**
  * Fetch the widgets for a user. The result includes the widget data
