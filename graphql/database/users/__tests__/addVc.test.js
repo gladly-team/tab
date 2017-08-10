@@ -5,11 +5,13 @@ import moment from 'moment'
 import UserModel from '../UserModel'
 import addVc from '../addVc'
 import {
+  DatabaseOperation,
   getMockUserObj,
-  mockDate
+  mockDate,
+  setMockDBResponse
 } from '../../test-utils'
 
-const user = getMockUserObj()
+const userContext = getMockUserObj()
 
 // Mock the database client. This allows us to test
 // the DB operation with an unmocked ORM, which
@@ -25,12 +27,12 @@ afterAll(() => {
 })
 
 describe('addVc', () => {
-  it('works as expected', async () => {
+  it('calls the update method as expected', async () => {
     const updateMethod = jest.spyOn(UserModel, 'update')
-    const userId = user.id
+    const userId = userContext.id
     const vcToAdd = 12
-    await addVc(user, userId, vcToAdd)
-    expect(updateMethod).toHaveBeenCalledWith(user, {
+    await addVc(userContext, userId, vcToAdd)
+    expect(updateMethod).toHaveBeenCalledWith(userContext, {
       id: userId,
       vcCurrent: {$add: vcToAdd},
       vcAllTime: {$add: vcToAdd},
@@ -38,5 +40,29 @@ describe('addVc', () => {
       lastTabTimestamp: moment.utc().toISOString(),
       updated: moment.utc().toISOString()
     })
+  })
+
+  it('calls the database as expected', async () => {
+    const userId = userContext.id
+    const vcToAdd = 12
+
+    const userInfo = {
+      id: userContext.id,
+      username: userContext.username,
+      email: userContext.email
+    }
+    const mockUser = Object.assign({}, new UserModel(userInfo))
+    const expectedReturnedUser = Object.assign({}, mockUser, {
+      updated: moment.utc().toISOString()
+    })
+    const dbUpdateMock = setMockDBResponse(
+      DatabaseOperation.UPDATE,
+      {
+        Attributes: expectedReturnedUser
+      }
+    )
+    const returnedUser = await addVc(userContext, userId, vcToAdd)
+    expect(dbUpdateMock).toHaveBeenCalled()
+    expect(returnedUser).toEqual(expectedReturnedUser)
   })
 })
