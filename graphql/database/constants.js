@@ -2,6 +2,7 @@
 // Model names
 export const CHARITY = 'Charity'
 export const USER = 'User'
+export const BASE_WIDGET = 'BaseWidget'
 
 // Model field values
 export const USER_BACKGROUND_OPTION_DAILY = 'daily'

@@ -225,7 +225,8 @@ const userType = new GraphQLObjectType({
         ...connectionArgs,
         enabled: { type: GraphQLBoolean }
       },
-      resolve: (user, args) => connectionFromPromisedArray(getUserWidgets(user.id, args.enabled), args)
+      resolve: (user, args, context) => connectionFromPromisedArray(
+        getUserWidgets(context.user, user.id, args.enabled), args)
     },
     activeWidget: {
       type: GraphQLString,
@@ -350,7 +351,8 @@ const appType = new GraphQLObjectType({
       type: widgetConnection,
       description: 'All the widgets',
       args: connectionArgs,
-      resolve: (_, args) => connectionFromPromisedArray(getAllWidgets(), args)
+      resolve: (_, args, context) => connectionFromPromisedArray(
+        getAllWidgets(context.user), args)
     },
     charities: {
       type: charityConnection,
@@ -598,10 +600,10 @@ const updateWidgetDataMutation = mutationWithClientMutationId({
       }
     }
   },
-  mutateAndGetPayload: ({userId, widgetId, data}) => {
+  mutateAndGetPayload: ({userId, widgetId, data}, context) => {
     const userGlobalObj = fromGlobalId(userId)
     const widgetGlobalObj = fromGlobalId(widgetId)
-    return updateUserWidgetData(userGlobalObj.id, widgetGlobalObj.id, data)
+    return updateUserWidgetData(context.user, userGlobalObj.id, widgetGlobalObj.id, data)
   }
 })
 
@@ -623,10 +625,10 @@ const updateWidgetVisibilityMutation = mutationWithClientMutationId({
       }
     }
   },
-  mutateAndGetPayload: ({userId, widgetId, visible}) => {
+  mutateAndGetPayload: ({userId, widgetId, visible}, context) => {
     const userGlobalObj = fromGlobalId(userId)
     const widgetGlobalObj = fromGlobalId(widgetId)
-    return updateUserWidgetVisibility(userGlobalObj.id, widgetGlobalObj.id, visible)
+    return updateUserWidgetVisibility(context.user, userGlobalObj.id, widgetGlobalObj.id, visible)
   }
 })
 
@@ -648,10 +650,10 @@ const updateWidgetEnabledMutation = mutationWithClientMutationId({
       }
     }
   },
-  mutateAndGetPayload: ({userId, widgetId, enabled}) => {
+  mutateAndGetPayload: ({userId, widgetId, enabled}, context) => {
     const userGlobalObj = fromGlobalId(userId)
     const widgetGlobalObj = fromGlobalId(widgetId)
-    return updateUserWidgetEnabled(userGlobalObj.id, widgetGlobalObj.id, enabled)
+    return updateUserWidgetEnabled(context.user, userGlobalObj.id, widgetGlobalObj.id, enabled)
   }
 })
 
@@ -673,10 +675,10 @@ const updateWidgetConfigMutation = mutationWithClientMutationId({
       }
     }
   },
-  mutateAndGetPayload: ({userId, widgetId, config}) => {
+  mutateAndGetPayload: ({userId, widgetId, config}, context) => {
     const userGlobalObj = fromGlobalId(userId)
     const widgetGlobalObj = fromGlobalId(widgetId)
-    return updateUserWidgetConfig(userGlobalObj.id, widgetGlobalObj.id, config)
+    return updateUserWidgetConfig(context.user, userGlobalObj.id, widgetGlobalObj.id, config)
   }
 })
 

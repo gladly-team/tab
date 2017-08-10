@@ -1,12 +1,7 @@
-import Async from 'asyncawait/async'
-import Await from 'asyncawait/await'
 
-import {
-  Widget,
-  getWidget,
-  getWidgets
-} from './widget/baseWidget'
+import { sortBy } from 'lodash/collection'
 
+import BaseWidgetModel from './widget/BaseWidgetModel'
 import {
   getUserWidgets as getAllUserWidgets,
   getUserWidgetsByEnabledState,
@@ -46,12 +41,12 @@ function getFullWidget (userWidget, widget) {
  * the user data on the widget information.
  */
 
-var getUserWidgets = Async(function (userId, enabled) {
+const getUserWidgets = async (userContext, userId, enabled) => {
   var userWidgets
   if (typeof enabled !== 'undefined') {
-    userWidgets = Await(getUserWidgetsByEnabledState(userId, enabled))
+    userWidgets = await getUserWidgetsByEnabledState(userId, enabled)
   } else {
-    userWidgets = Await(getAllUserWidgets(userId))
+    userWidgets = await getAllUserWidgets(userId)
   }
 
   const keys = []
@@ -60,31 +55,29 @@ var getUserWidgets = Async(function (userId, enabled) {
   var widgetId
   for (var index in userWidgets) {
     widgetId = userWidgets[index].widgetId
-
     keys.push({
       id: widgetId
     })
-
     indexMapper[widgetId] = index
   }
-
   if (!keys || keys.length === 0) {
     return []
   }
 
-  var widgets = Await(Widget.getBatch(keys))
-  Widget.sorted(widgets)
+  const widgets = await BaseWidgetModel.getBatch(userContext, keys)
+  const sortedWidgets = sortBy(widgets, (obj) => obj.position)
 
   const result = []
   var userWidget
-  for (var i in widgets) {
-    widgetId = widgets[i].id
-    userWidget = userWidgets[indexMapper[widgetId]]
-
-    result.push(getFullWidget(userWidget, widgets[i]))
+  for (var i in sortedWidgets) {
+    widgetId = sortedWidgets[i].id
+    if (indexMapper[widgetId]) {
+      userWidget = userWidgets[indexMapper[widgetId]]
+      result.push(getFullWidget(userWidget, widgets[i]))
+    }
   }
   return result
-})
+}
 
 /**
  * Update widget data.
@@ -94,12 +87,12 @@ var getUserWidgets = Async(function (userId, enabled) {
  * @return {Promise<Widget>}  Returns a promise that resolves into a
  * Widget.
  */
-var updateUserWidgetData = Async(function (userId, widgetId, data) {
+const updateUserWidgetData = async (userContext, userId, widgetId, data) => {
   const parsedData = JSON.parse(data)
-  const widget = Await(getWidget(widgetId))
-  const userWidget = Await(updateWidgetData(userId, widgetId, parsedData))
+  const widget = await BaseWidgetModel.get(userContext, widgetId)
+  const userWidget = await updateWidgetData(userId, widgetId, parsedData)
   return getFullWidget(userWidget, widget)
-})
+}
 
 /**
  * Update widget visible state.
@@ -109,11 +102,11 @@ var updateUserWidgetData = Async(function (userId, widgetId, data) {
  * @return {Promise<Widget>}  Returns a promise that resolves into a
  * widget.
  */
-var updateUserWidgetVisibility = Async(function (userId, widgetId, visible) {
-  const widget = Await(getWidget(widgetId))
-  const userWidget = Await(updateWidgetVisibility(userId, widgetId, visible))
+const updateUserWidgetVisibility = async (userContext, userId, widgetId, visible) => {
+  const widget = await BaseWidgetModel.get(userContext, widgetId)
+  const userWidget = await updateWidgetVisibility(userId, widgetId, visible)
   return getFullWidget(userWidget, widget)
-})
+}
 
 /**
  * Update widget enabled state.
@@ -123,11 +116,11 @@ var updateUserWidgetVisibility = Async(function (userId, widgetId, visible) {
  * @return {Promise<Widget>}  Returns a promise that resolves into a
  * widget.
  */
-var updateUserWidgetEnabled = Async(function (userId, widgetId, enabled) {
-  const widget = Await(getWidget(widgetId))
-  const userWidget = Await(updateWidgetEnabled(userId, widgetId, enabled))
+const updateUserWidgetEnabled = async (userContext, userId, widgetId, enabled) => {
+  const widget = await BaseWidgetModel.get(userContext, widgetId)
+  const userWidget = await updateWidgetEnabled(userId, widgetId, enabled)
   return getFullWidget(userWidget, widget)
-})
+}
 
 /**
  * Update widget config.
@@ -137,12 +130,12 @@ var updateUserWidgetEnabled = Async(function (userId, widgetId, enabled) {
  * @return {Promise<Widget>}  Returns a promise that resolves into a
  * Widget.
  */
-var updateUserWidgetConfig = Async(function (userId, widgetId, config) {
+const updateUserWidgetConfig = async (userContext, userId, widgetId, config) => {
   const parsedConfig = JSON.parse(config)
-  const widget = Await(getWidget(widgetId))
-  const userWidget = Await(updateWidgetConfig(userId, widgetId, parsedConfig))
+  const widget = await BaseWidgetModel.get(userContext, widgetId)
+  const userWidget = await updateWidgetConfig(userId, widgetId, parsedConfig)
   return getFullWidget(userWidget, widget)
-})
+}
 
 /**
  * Get all widgets.
@@ -152,15 +145,15 @@ var updateUserWidgetConfig = Async(function (userId, widgetId, config) {
  * @return {Promise<Widget>}  Returns a promise that resolves into a
  * Widget.
  */
-var getAllWidgets = Async(function () {
-  const widgets = Await(getWidgets())
+const getAllWidgets = async (userContext) => {
+  const widgets = await BaseWidgetModel.getAll(userContext)
   widgets.forEach((widget, i) => {
     widgets[i].widgetId = widgets[i].id
     widgets[i].settings = JSON.stringify(widgets[i].settings)
   })
-  Widget.sorted(widgets)
-  return widgets
-})
+  const sortedWidgets = sortBy(widgets, (obj) => obj.position)
+  return sortedWidgets
+}
 
 export {
   getUserWidgets,
