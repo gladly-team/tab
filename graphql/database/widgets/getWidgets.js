@@ -11,7 +11,7 @@ import getUserWidgetsByEnabledState from './userWidget/getUserWidgetsByEnabledSt
  * The user-widget data field gets serialized into a string.
  * @param {object} userContext - The user authorizer object.
  * @param {string} userId - The user id.
- * @return {Object[]}  Returns a list of object that with the widget and
+ * @return {Promise<Widget[]>}  Returns a list of object that with the widget and
  * the user data on the widget information.
  */
 const getWidgets = async (userContext, userId, enabled = false) => {

@@ -1,6 +1,4 @@
 
-import { sortBy } from 'lodash/collection'
-
 import BaseWidgetModel from './baseWidget/BaseWidgetModel'
 import buildFullWidget from './buildFullWidget'
 import updateWidgetData from './userWidget/updateWidgetData'
@@ -70,26 +68,9 @@ const updateUserWidgetConfig = async (userContext, userId, widgetId, config) => 
   return buildFullWidget(userWidget, widget)
 }
 
-/**
- * Get all widgets.
- * @param {object} userContext - The user authorizer object.
- * @return {Promise<Array<Widget>>}  Returns a promise that resolves into
- * an array of Widgets.
- */
-const getAllWidgets = async (userContext) => {
-  const widgets = await BaseWidgetModel.getAll(userContext)
-  widgets.forEach((widget, i) => {
-    widgets[i].widgetId = widgets[i].id
-    widgets[i].settings = JSON.stringify(widgets[i].settings)
-  })
-  const sortedWidgets = sortBy(widgets, (obj) => obj.position)
-  return sortedWidgets
-}
-
 export {
   updateUserWidgetData,
   updateUserWidgetVisibility,
   updateUserWidgetEnabled,
-  updateUserWidgetConfig,
-  getAllWidgets
+  updateUserWidgetConfig
 }

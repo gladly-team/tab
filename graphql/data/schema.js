@@ -36,12 +36,12 @@ import {
 import Widget from '../database/widgets/Widget'
 import getWidget from '../database/widgets/getWidget'
 import getWidgets from '../database/widgets/getWidgets'
+import getAllBaseWidgets from '../database/widgets/baseWidget/getAllBaseWidgets'
 import {
   updateUserWidgetData,
   updateUserWidgetVisibility,
   updateUserWidgetEnabled,
-  updateUserWidgetConfig,
-  getAllWidgets
+  updateUserWidgetConfig
 } from '../database/widgets/widgets'
 
 import {
@@ -351,7 +351,7 @@ const appType = new GraphQLObjectType({
       description: 'All the widgets',
       args: connectionArgs,
       resolve: (_, args, context) => connectionFromPromisedArray(
-        getAllWidgets(context.user), args)
+        getAllBaseWidgets(context.user), args)
     },
     charities: {
       type: charityConnection,
