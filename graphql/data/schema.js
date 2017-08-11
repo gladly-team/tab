@@ -36,8 +36,8 @@ import {
   getWidget
 } from '../database/widgets/widget/baseWidget'
 
+import getUserWidgets from '../database/widgets/getUserWidgets'
 import {
-  getUserWidgets,
   updateUserWidgetData,
   updateUserWidgetVisibility,
   updateUserWidgetEnabled,

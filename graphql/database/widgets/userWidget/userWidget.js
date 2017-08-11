@@ -111,40 +111,6 @@ function getUserWidgets (userId) {
 }
 
 /**
- * Fetch the widgets for a user by enabled state.
- * @param {string} userId - The user id.
- * @param {boolean} enabled - Wether to fetch all enabled or disabled widgets.
- * @return {Promise<UserWidget[]>}  Returns a promise that resolves into a
- * list of user widgets.
- */
-function getUserWidgetsByEnabledState (userId, enabled) {
-  var params = {
-    IndexName: 'Widgets',
-    KeyConditionExpression: '#userId = :userId',
-    ExpressionAttributeNames: {
-      '#userId': 'userId'
-    },
-    ExpressionAttributeValues: {
-      ':userId': userId
-    }
-  }
-
-  return UserWidget.query(params)
-    .then(widgets => {
-      const result = []
-      for (var index in widgets) {
-        if (widgets[index].enabled === enabled) {
-          result.push(widgets[index])
-        }
-      }
-      return result
-    })
-    .catch(err => {
-      logger.error('Error while getting the widgets.', err)
-    })
-}
-
-/**
  * Update widget data.
  * @param {string} userId - The user id.
  * @param {string} widgetId - The widget id.
@@ -282,7 +248,6 @@ export {
   UserWidget,
   getUserWidgets,
   getUserWidget,
-  getUserWidgetsByEnabledState,
   updateWidgetData,
   updateWidgetVisibility,
   updateWidgetEnabled,

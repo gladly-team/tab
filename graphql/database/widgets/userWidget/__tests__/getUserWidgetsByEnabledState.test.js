@@ -1,49 +1,92 @@
 /* eslint-env jest */
 
-import mockDatabase from '../../../__mocks__/database'
-import { DatabaseOperation, OperationType } from '../../../../utils/test-utils'
-import { getUserWidgetsByEnabledState } from '../userWidget'
+import getUserWidgetsByEnabledState from '../getUserWidgetsByEnabledState'
+import UserWidgetModel from '../UserWidgetModel'
+import {
+  DatabaseOperation,
+  getMockUserContext,
+  getMockUserInfo,
+  setMockDBResponse
+} from '../../../test-utils'
 
-jest.mock('../../../database', () => {
-  return mockDatabase
+jest.mock('../../../databaseClient')
+const userContext = getMockUserContext()
+
+afterEach(() => {
+  jest.clearAllMocks()
 })
 
-function setup () {
-  mockDatabase.init()
-  return mockDatabase
-}
+describe('getUserWidgetsByEnabledState', () => {
+  it('gets only enabled widgets', async () => {
+    const userInfo = getMockUserInfo()
 
-test('fetch enabled user widgets ', () => {
-  const database = setup()
+    // Set mock query responses.
+    const userWidgetsToGet = [
+      new UserWidgetModel({
+        userId: userInfo.id,
+        widgetId: 'abc',
+        enabled: true
+      }),
+      new UserWidgetModel({
+        userId: userInfo.id,
+        widgetId: 'def',
+        enabled: false
+      }),
+      new UserWidgetModel({
+        userId: userInfo.id,
+        widgetId: 'ghi',
+        enabled: true
+      })
+    ]
+    setMockDBResponse(
+      DatabaseOperation.QUERY,
+      {
+        Items: userWidgetsToGet
+      }
+    )
+    const userWidgetQueryMethod = jest.spyOn(UserWidgetModel, 'query')
+    const userWidgets = await getUserWidgetsByEnabledState(userContext, userInfo.id, true)
+    expect(userWidgetQueryMethod).toHaveBeenCalledWith(userContext, userInfo.id)
 
-  const userId = '45bbefbf-63d1-4d36-931e-212fbe2bc3d9'
-  const enabled = true
+    // Should exclude the widgets that aren't enabled.
+    expect(userWidgets).toEqual([
+      userWidgetsToGet[0],
+      userWidgetsToGet[2]
+    ])
+  })
 
-  const userWidgets = [
-    {
-      userId: userId,
-      widgetId: '1e0465b2-f1f1-42e2-9a27-94f4099f67bd',
-      enabled: false,
-      data: { bookmarks: [] }
-    },
-    {
-      userId: userId,
-      widgetId: '7db4b390-02bb-4958-b4bc-a5ba66939579',
-      enabled: true,
-      data: { clockFormat: 12 }
-    }
-  ]
+  it('gets only non-enabled widgets', async () => {
+    const userInfo = getMockUserInfo()
 
-  database.pushDatabaseOperation(
-    new DatabaseOperation(OperationType.QUERY, (params) => {
-      return { Items: userWidgets }
-    })
-  )
+    // Set mock query responses.
+    const userWidgetsToGet = [
+      new UserWidgetModel({
+        userId: userInfo.id,
+        widgetId: 'abc',
+        enabled: true
+      }),
+      new UserWidgetModel({
+        userId: userInfo.id,
+        widgetId: 'def',
+        enabled: false
+      }),
+      new UserWidgetModel({
+        userId: userInfo.id,
+        widgetId: 'ghi',
+        enabled: true
+      })
+    ]
+    setMockDBResponse(
+      DatabaseOperation.QUERY,
+      {
+        Items: userWidgetsToGet
+      }
+    )
+    const userWidgetQueryMethod = jest.spyOn(UserWidgetModel, 'query')
+    const userWidgets = await getUserWidgetsByEnabledState(userContext, userInfo.id, false)
+    expect(userWidgetQueryMethod).toHaveBeenCalledWith(userContext, userInfo.id)
 
-  return getUserWidgetsByEnabledState(userId, enabled)
-    .then(response => {
-      expect(response).not.toBe(null)
-      expect(response instanceof Array).toBe(true)
-      expect(response.length).toBe(1)
-    })
+    // Should exclude enabled widgets.
+    expect(userWidgets).toEqual([userWidgetsToGet[1]])
+  })
 })
