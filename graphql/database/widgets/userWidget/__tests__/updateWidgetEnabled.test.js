@@ -1,49 +1,60 @@
 /* eslint-env jest */
 
-import mockDatabase from '../../../__mocks__/database'
-import { DatabaseOperation, OperationType } from '../../../../utils/test-utils'
-import { updateWidgetEnabled } from '../userWidget'
+import moment from 'moment'
+import updateWidgetEnabled from '../updateWidgetEnabled'
+import UserWidgetModel from '../UserWidgetModel'
+import {
+  DatabaseOperation,
+  getMockUserContext,
+  getMockUserInfo,
+  mockDate,
+  setMockDBResponse
+} from '../../../test-utils'
 
-jest.mock('../../../database', () => {
-  return mockDatabase
+jest.mock('../../../databaseClient')
+const userContext = getMockUserContext()
+
+beforeAll(() => {
+  mockDate.on()
 })
 
-function setup () {
-  mockDatabase.init()
-  return mockDatabase
-}
+afterAll(() => {
+  mockDate.off()
+})
 
-test('update user widget enabled', () => {
-  const database = setup()
+afterEach(() => {
+  jest.clearAllMocks()
+})
 
-  const userId = 'some-user-id'
-  const widgetId = 'some-widget-id'
-  const enabled = true
-
-  database.pushDatabaseOperation(
-    new DatabaseOperation(OperationType.UPDATE, (params) => {
-      const receivedState = params.ExpressionAttributeValues[':enabled']
-      expect(receivedState).toBe(enabled)
-
-      const receivedKey = params.Key
-      expect(receivedKey.userId).toBe(userId)
-      expect(receivedKey.widgetId).toBe(widgetId)
-
-      return {
-        Attributes: {
-          userId: userId,
-          widgetId: widgetId,
-          enabled: enabled
-        }
+describe('updateWidgetEnabled', () => {
+  it('works as expected', async () => {
+    const userInfo = getMockUserInfo()
+    const userWidget = new UserWidgetModel({
+      userId: userInfo.id,
+      widgetId: 'ab5082cc-151a-4a9a-9289-06906670fd4e',
+      enabled: true
+    })
+    const expectedWidget = Object.assign({}, userWidget, {
+      enabled: false,
+      updated: moment.utc().toISOString()
+    })
+    setMockDBResponse(
+      DatabaseOperation.UPDATE,
+      {
+        Attributes: expectedWidget
       }
-    })
-  )
+    )
 
-  return updateWidgetEnabled(userId, widgetId, enabled)
-    .then(userWidget => {
-      expect(userWidget).not.toBe(null)
-      expect(userWidget.userId).toBe(userId)
-      expect(userWidget.widgetId).toBe(widgetId)
-      expect(userWidget.enabled).toBe(enabled)
-    })
+    const userWidgetUpdateMethod = jest.spyOn(UserWidgetModel, 'update')
+    const updatedWidget = await updateWidgetEnabled(userContext, userInfo.id,
+      userWidget.widgetId, false)
+    expect(userWidgetUpdateMethod)
+      .toHaveBeenCalledWith(userContext, {
+        userId: userInfo.id,
+        widgetId: userWidget.widgetId,
+        updated: moment.utc().toISOString(),
+        enabled: false
+      })
+    expect(updatedWidget).toEqual(expectedWidget)
+  })
 })
