@@ -6,8 +6,7 @@ import EmptyWidgetMsg from 'general/EmptyWidgetMsg'
 import BookmarkChip from './BookmarkChip'
 import AddBookmarkForm from './AddBookmarkForm'
 
-import AddBookmarkMutation from 'mutations/AddBookmarkMutation'
-import RemoveBookmarkMutation from 'mutations/RemoveBookmarkMutation'
+import UpdateWidgetDataMutation from 'mutations/UpdateWidgetDataMutation'
 
 import Snackbar from 'material-ui/Snackbar'
 
@@ -15,37 +14,55 @@ class BookmarksWidget extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      editMode: false
+      editMode: false,
+      bookmarks: []
     }
   }
 
-  componentWillUnmount () {
+  componentDidMount () {
+    const { widget } = this.props
+    const data = JSON.parse(widget.data)
+    const bookmarks = data.bookmarks || []
+    this.setState({
+      bookmarks: bookmarks
+    })
   }
 
   getFavicon (link) {
     return 'https://www.google.com/s2/favicons?domain_url=' + encodeURI(link)
   }
 
-  addBookmark (name, link) {
-    const { widget } = this.props
-    AddBookmarkMutation.commit(
+  updateWidget (bookmarks) {
+    const widgetData = {
+      bookmarks: bookmarks
+    }
+    const data = JSON.stringify(widgetData)
+    UpdateWidgetDataMutation.commit(
       this.props.relay.environment,
       this.props.user,
-      widget,
-      name,
-      link
+      this.props.widget,
+      data
     )
   }
 
-  removeBookmark (position) {
-    const { widget } = this.props
+  addBookmark (name, link) {
+    const newBookmark = {
+      name: name,
+      link: link
+    }
+    this.state.bookmarks.splice(0, 0, newBookmark)
+    this.updateWidget(this.state.bookmarks)
+    this.setState({
+      bookmarks: this.state.bookmarks
+    })
+  }
 
-    RemoveBookmarkMutation.commit(
-      this.props.relay.environment,
-      this.props.user,
-      widget,
-      position
-    )
+  removeBookmark (index) {
+    this.state.bookmarks.splice(index, 1)
+    this.updateWidget(this.state.bookmarks)
+    this.setState({
+      bookmarks: this.state.bookmarks
+    })
   }
 
   onToggleEditMode () {
@@ -55,10 +72,7 @@ class BookmarksWidget extends React.Component {
   }
 
   render () {
-    const { widget } = this.props
-
-    const data = JSON.parse(widget.data)
-    const bookmarks = data.bookmarks || []
+    const bookmarks = this.state.bookmarks || []
 
     const sharedSpaceStyle = {
       overflowX: 'visible',

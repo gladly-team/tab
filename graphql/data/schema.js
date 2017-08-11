@@ -44,12 +44,6 @@ import {
   updateWidgetConfig
 } from '../database/widgets/updateWidget'
 
-import {
-  updateBookmarkPosition,
-  addBookmark,
-  deleteBookmark
-} from '../database/widgets/widgetTypes/bookmarkWidget'
-
 import UserModel from '../database/users/UserModel'
 import createUser from '../database/users/createUser'
 import incrementVc from '../database/users/incrementVc'
@@ -527,61 +521,6 @@ const setUserActiveWidgetMutation = mutationWithClientMutationId({
 })
 
 /**
- * Add a new bookmark.
- */
-const addBookmarkMutation = mutationWithClientMutationId({
-  name: 'AddBookmark',
-  inputFields: {
-    userId: { type: new GraphQLNonNull(GraphQLString) },
-    widgetId: { type: new GraphQLNonNull(GraphQLString) },
-    name: { type: new GraphQLNonNull(GraphQLString) },
-    link: { type: new GraphQLNonNull(GraphQLString) }
-  },
-  outputFields: {
-    widget: {
-      type: widgetType,
-      resolve: (userWidget) => {
-        userWidget.id = userWidget.widgetId
-        userWidget.data = JSON.stringify(userWidget.data)
-        return userWidget
-      }
-    }
-  },
-  mutateAndGetPayload: ({userId, widgetId, name, link}) => {
-    const userGlobalObj = fromGlobalId(userId)
-    const widgetGlobalObj = fromGlobalId(widgetId)
-    return addBookmark(userGlobalObj.id, widgetGlobalObj.id, name, link)
-  }
-})
-
-/**
- * Remove a bookmark.
- */
-const removeBookmarkMutation = mutationWithClientMutationId({
-  name: 'RemoveBookmark',
-  inputFields: {
-    userId: { type: new GraphQLNonNull(GraphQLString) },
-    widgetId: { type: new GraphQLNonNull(GraphQLString) },
-    position: { type: new GraphQLNonNull(GraphQLInt) }
-  },
-  outputFields: {
-    widget: {
-      type: widgetType,
-      resolve: (userWidget) => {
-        userWidget.id = userWidget.widgetId
-        userWidget.data = JSON.stringify(userWidget.data)
-        return userWidget
-      }
-    }
-  },
-  mutateAndGetPayload: ({userId, widgetId, position}) => {
-    const userGlobalObj = fromGlobalId(userId)
-    const widgetGlobalObj = fromGlobalId(widgetId)
-    return deleteBookmark(userGlobalObj.id, widgetGlobalObj.id, position)
-  }
-})
-
-/**
  * Update widget data.
  */
 const updateWidgetDataMutation = mutationWithClientMutationId({
@@ -754,8 +693,6 @@ const mutationType = new GraphQLObjectType({
     updateWidgetEnabled: updateWidgetEnabledMutation,
     updateWidgetConfig: updateWidgetConfigMutation,
 
-    addBookmark: addBookmarkMutation,
-    removeBookmark: removeBookmarkMutation,
     setUserActiveWidget: setUserActiveWidgetMutation,
 
     createNewUser: createNewUserMutation
