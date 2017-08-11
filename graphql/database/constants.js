@@ -6,6 +6,7 @@ export const WIDGET = 'Widget'
 export const BASE_WIDGET = 'BaseWidget'
 export const USER_WIDGET = 'UserWidget'
 export const VC_DONATION = 'VcDonation'
+export const USER_LEVEL = 'UserLevel'
 
 // Model field values
 export const USER_BACKGROUND_OPTION_DAILY = 'daily'
