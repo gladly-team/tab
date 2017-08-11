@@ -5,8 +5,8 @@ import BaseWidgetModel from './widget/BaseWidgetModel'
 import getFullWidget from './getFullWidget'
 import updateWidgetData from './userWidget/updateWidgetData'
 import updateWidgetConfig from './userWidget/updateWidgetConfig'
+import updateWidgetVisibility from './userWidget/updateWidgetVisibility'
 import {
-  updateWidgetVisibility,
   updateWidgetEnabled
 } from './userWidget/userWidget'
 
@@ -35,7 +35,7 @@ const updateUserWidgetData = async (userContext, userId, widgetId, data) => {
  */
 const updateUserWidgetVisibility = async (userContext, userId, widgetId, visible) => {
   const widget = await BaseWidgetModel.get(userContext, widgetId)
-  const userWidget = await updateWidgetVisibility(userId, widgetId, visible)
+  const userWidget = await updateWidgetVisibility(userContext, userId, widgetId, visible)
   return getFullWidget(userWidget, widget)
 }
 
