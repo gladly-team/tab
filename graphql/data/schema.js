@@ -2,7 +2,9 @@
 
 import config from '../config'
 import {
-  CHARITY
+  WIDGET,
+  CHARITY,
+  USER
 } from '../database/constants'
 
 import {
@@ -31,11 +33,8 @@ import {
   offsetToCursor
 } from 'graphql-relay'
 
-import {
-  Widget,
-  getWidget
-} from '../database/widgets/widget/baseWidget'
-
+import Widget from '../database/widgets/Widget'
+import getWidget from '../database/widgets/getWidget'
 import getUserWidgets from '../database/widgets/getUserWidgets'
 import {
   updateUserWidgetData,
@@ -101,10 +100,10 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     const { type, id } = fromGlobalId(globalId)
     if (type === 'App') {
       return App.getApp(id)
-    } else if (type === 'User') {
+    } else if (type === USER) {
       return UserModel.get(context.user, id)
-    } else if (type === 'Widget') {
-      return getWidget(id)
+    } else if (type === WIDGET) {
+      return getWidget(context.user, id)
     } else if (type === CHARITY) {
       return CharityModel.get(context.user, id)
     } else if (type === 'BackgroundImage') {

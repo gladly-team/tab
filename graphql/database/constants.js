@@ -2,6 +2,7 @@
 // Model names
 export const CHARITY = 'Charity'
 export const USER = 'User'
+export const WIDGET = 'Widget'
 export const BASE_WIDGET = 'BaseWidget'
 export const USER_WIDGET = 'UserWidget'
 

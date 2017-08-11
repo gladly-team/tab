@@ -1,4 +1,6 @@
 
+import Widget from './Widget'
+
 /**
   * Merge the user widget with the widget data to create an object
   * with all the widget information.
@@ -7,9 +9,9 @@
   * @return {Object<UserWidget>}  Returns an instance of UserWidget
   * with all the widget information.
   */
-
 const getFullWidget = (userWidget, widget) => {
-  return Object.assign({},
+  return Object.assign(
+    new Widget(),
     userWidget,
     widget,
     {

@@ -1,6 +1,7 @@
 /* eslint-env jest */
 
 import getFullWidget from '../getFullWidget'
+import Widget from '../Widget'
 import BaseWidgetModel from '../widget/BaseWidgetModel'
 import UserWidgetModel from '../userWidget/UserWidgetModel'
 
@@ -34,5 +35,6 @@ describe('getFullWidget', () => {
       enabled: true,
       visible: false
     })
+    expect(fullWidget instanceof Widget).toBe(true)
   })
 })
