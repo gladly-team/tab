@@ -111,39 +111,6 @@ function getUserWidgets (userId) {
 }
 
 /**
- * Update widget config.
- * @param {string} userId - The user id.
- * @param {string} widgetId - The widget id.
- * @param {Object} config - The new widget config.
- * @return {Promise<Widget>}  Returns a promise that resolves into a
- * Widget.
- */
-var updateWidgetConfig = Async(function (userId, widgetId, config) {
-  var updateExpression = {
-    set: ['#config = :config']
-  }
-  var expressionAttributeNames = {
-    '#config': 'config'
-  }
-  var expressionAttributeValues = {
-    ':config': config
-  }
-
-  var params = {
-    ExpressionAttributeNames: expressionAttributeNames,
-    ExpressionAttributeValues: expressionAttributeValues,
-    ReturnValues: 'ALL_NEW'
-  }
-
-  const key = {
-    userId: userId,
-    widgetId: widgetId
-  }
-
-  return Await(UserWidget.update(key, updateExpression, params))
-})
-
-/**
  * Update widget visible state.
  * @param {string} userId - The user id.
  * @param {string} widgetId - The widget id.
@@ -215,6 +182,5 @@ export {
   getUserWidgets,
   getUserWidget,
   updateWidgetVisibility,
-  updateWidgetEnabled,
-  updateWidgetConfig
+  updateWidgetEnabled
 }
