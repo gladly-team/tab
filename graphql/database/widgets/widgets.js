@@ -3,8 +3,8 @@ import { sortBy } from 'lodash/collection'
 
 import BaseWidgetModel from './widget/BaseWidgetModel'
 import getFullWidget from './getFullWidget'
+import updateWidgetData from './userWidget/updateWidgetData'
 import {
-  updateWidgetData,
   updateWidgetVisibility,
   updateWidgetEnabled,
   updateWidgetConfig
@@ -21,7 +21,7 @@ import {
 const updateUserWidgetData = async (userContext, userId, widgetId, data) => {
   const parsedData = JSON.parse(data)
   const widget = await BaseWidgetModel.get(userContext, widgetId)
-  const userWidget = await updateWidgetData(userId, widgetId, parsedData)
+  const userWidget = await updateWidgetData(userContext, userId, widgetId, parsedData)
   return getFullWidget(userWidget, widget)
 }
 

@@ -111,40 +111,6 @@ function getUserWidgets (userId) {
 }
 
 /**
- * Update widget data.
- * @param {string} userId - The user id.
- * @param {string} widgetId - The widget id.
- * @param {Object} data - The new widget data.
- * @return {Promise<Widget>}  Returns a promise that resolves into a
- * Widget.
- */
-var updateWidgetData = Async(function (userId, widgetId, data) {
-  var updateExpression = {
-    set: ['#data = :data']
-  }
-
-  var expressionAttributeNames = {
-    '#data': 'data'
-  }
-  var expressionAttributeValues = {
-    ':data': data
-  }
-
-  var params = {
-    ExpressionAttributeNames: expressionAttributeNames,
-    ExpressionAttributeValues: expressionAttributeValues,
-    ReturnValues: 'ALL_NEW'
-  }
-
-  const key = {
-    userId: userId,
-    widgetId: widgetId
-  }
-
-  return Await(UserWidget.update(key, updateExpression, params))
-})
-
-/**
  * Update widget config.
  * @param {string} userId - The user id.
  * @param {string} widgetId - The widget id.
@@ -248,7 +214,6 @@ export {
   UserWidget,
   getUserWidgets,
   getUserWidget,
-  updateWidgetData,
   updateWidgetVisibility,
   updateWidgetEnabled,
   updateWidgetConfig

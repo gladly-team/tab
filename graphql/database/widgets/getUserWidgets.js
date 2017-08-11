@@ -9,6 +9,7 @@ import getUserWidgetsByEnabledState from './userWidget/getUserWidgetsByEnabledSt
  * Fetch the widgets for a user. The result includes the widget data
  * as well as the user-widget related data.
  * The user-widget data field gets serialized into a string.
+ * @param {object} userContext - The user authorizer object.
  * @param {string} userId - The user id.
  * @return {Object[]}  Returns a list of object that with the widget and
  * the user data on the widget information.
