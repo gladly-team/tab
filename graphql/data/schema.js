@@ -55,9 +55,7 @@ import setBackgroundImageDaily from '../database/users/setBackgroundImageDaily'
 
 import CharityModel from '../database/charities/CharityModel'
 
-import {
-  donateVc
-} from '../database/donations/donation'
+import donateVc from '../database/donations/donateVc'
 
 import {
   BackgroundImage,
