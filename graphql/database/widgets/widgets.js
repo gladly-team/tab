@@ -1,8 +1,8 @@
 
 import { sortBy } from 'lodash/collection'
 
-import BaseWidgetModel from './widget/BaseWidgetModel'
-import getFullWidget from './getFullWidget'
+import BaseWidgetModel from './baseWidget/BaseWidgetModel'
+import buildFullWidget from './buildFullWidget'
 import updateWidgetData from './userWidget/updateWidgetData'
 import updateWidgetConfig from './userWidget/updateWidgetConfig'
 import updateWidgetEnabled from './userWidget/updateWidgetEnabled'
@@ -21,7 +21,7 @@ const updateUserWidgetData = async (userContext, userId, widgetId, data) => {
   const parsedData = JSON.parse(data)
   const widget = await BaseWidgetModel.get(userContext, widgetId)
   const userWidget = await updateWidgetData(userContext, userId, widgetId, parsedData)
-  return getFullWidget(userWidget, widget)
+  return buildFullWidget(userWidget, widget)
 }
 
 /**
@@ -36,7 +36,7 @@ const updateUserWidgetData = async (userContext, userId, widgetId, data) => {
 const updateUserWidgetVisibility = async (userContext, userId, widgetId, visible) => {
   const widget = await BaseWidgetModel.get(userContext, widgetId)
   const userWidget = await updateWidgetVisibility(userContext, userId, widgetId, visible)
-  return getFullWidget(userWidget, widget)
+  return buildFullWidget(userWidget, widget)
 }
 
 /**
@@ -51,7 +51,7 @@ const updateUserWidgetVisibility = async (userContext, userId, widgetId, visible
 const updateUserWidgetEnabled = async (userContext, userId, widgetId, enabled) => {
   const widget = await BaseWidgetModel.get(userContext, widgetId)
   const userWidget = await updateWidgetEnabled(userContext, userId, widgetId, enabled)
-  return getFullWidget(userWidget, widget)
+  return buildFullWidget(userWidget, widget)
 }
 
 /**
@@ -67,7 +67,7 @@ const updateUserWidgetConfig = async (userContext, userId, widgetId, config) => 
   const parsedConfig = JSON.parse(config)
   const widget = await BaseWidgetModel.get(userContext, widgetId)
   const userWidget = await updateWidgetConfig(userContext, userId, widgetId, parsedConfig)
-  return getFullWidget(userWidget, widget)
+  return buildFullWidget(userWidget, widget)
 }
 
 /**

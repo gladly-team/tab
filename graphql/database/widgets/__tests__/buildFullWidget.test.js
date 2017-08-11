@@ -1,11 +1,11 @@
 /* eslint-env jest */
 
-import getFullWidget from '../getFullWidget'
+import buildFullWidget from '../buildFullWidget'
 import Widget from '../Widget'
-import BaseWidgetModel from '../widget/BaseWidgetModel'
+import BaseWidgetModel from '../baseWidget/BaseWidgetModel'
 import UserWidgetModel from '../userWidget/UserWidgetModel'
 
-describe('getFullWidget', () => {
+describe('buildFullWidget', () => {
   it('works as expected', () => {
     const baseWidget = new BaseWidgetModel({
       id: 'ab5082cc-151a-4a9a-9289-06906670fd4e',
@@ -20,7 +20,7 @@ describe('getFullWidget', () => {
       },
       enabled: true
     })
-    const fullWidget = getFullWidget(userWidget, baseWidget)
+    const fullWidget = buildFullWidget(userWidget, baseWidget)
     expect(fullWidget).toEqual({
       id: 'ab5082cc-151a-4a9a-9289-06906670fd4e',
       widgetId: 'ab5082cc-151a-4a9a-9289-06906670fd4e',

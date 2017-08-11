@@ -1,15 +1,15 @@
 /* eslint-env jest */
 
 import getWidget from '../getWidget'
-import BaseWidgetModel from '../widget/BaseWidgetModel'
+import BaseWidgetModel from '../baseWidget/BaseWidgetModel'
 import UserWidgetModel from '../userWidget/UserWidgetModel'
-import getFullWidget from '../getFullWidget'
+import buildFullWidget from '../buildFullWidget'
 import {
   getMockUserContext
 } from '../../test-utils'
 
 jest.mock('../../databaseClient')
-jest.mock('../getFullWidget')
+jest.mock('../buildFullWidget')
 const userContext = getMockUserContext()
 
 describe('getWidget', () => {
@@ -38,12 +38,12 @@ describe('getWidget', () => {
         return userWidget
       })
     const mockFullWidget = { 'a': 'fake-widget' }
-    getFullWidget.mockImplementationOnce(() => mockFullWidget)
+    buildFullWidget.mockImplementationOnce(() => mockFullWidget)
 
     const fetchedWidget = await getWidget(userContext, userId, widgetId)
     expect(getUserWidgetSpy).toHaveBeenCalledWith(userContext, userId, widgetId)
     expect(getBaseWidgetSpy).toHaveBeenCalledWith(userContext, widgetId)
-    expect(getFullWidget).toHaveBeenCalledWith(userWidget, baseWidget)
+    expect(buildFullWidget).toHaveBeenCalledWith(userWidget, baseWidget)
     expect(fetchedWidget).toEqual(mockFullWidget)
   })
 })

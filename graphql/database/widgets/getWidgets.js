@@ -1,8 +1,8 @@
 
 import { find, sortBy } from 'lodash/collection'
-import BaseWidgetModel from './widget/BaseWidgetModel'
+import BaseWidgetModel from './baseWidget/BaseWidgetModel'
 import UserWidgetModel from './userWidget/UserWidgetModel'
-import getFullWidget from './getFullWidget'
+import buildFullWidget from './buildFullWidget'
 import getUserWidgetsByEnabledState from './userWidget/getUserWidgetsByEnabledState'
 
 /**
@@ -14,7 +14,7 @@ import getUserWidgetsByEnabledState from './userWidget/getUserWidgetsByEnabledSt
  * @return {Object[]}  Returns a list of object that with the widget and
  * the user data on the widget information.
  */
-const getUserWidgets = async (userContext, userId, enabled = false) => {
+const getWidgets = async (userContext, userId, enabled = false) => {
   // Get user widgets.
   var userWidgets
   if (enabled) {
@@ -43,7 +43,7 @@ const getUserWidgets = async (userContext, userId, enabled = false) => {
     const baseWidget = find(baseWidgets, (baseWidget) => {
       return baseWidget.id === userWidget.widgetId
     })
-    mergedWidgets.push(getFullWidget(userWidget, baseWidget))
+    mergedWidgets.push(buildFullWidget(userWidget, baseWidget))
   })
 
   // Sort widgets.
@@ -51,4 +51,4 @@ const getUserWidgets = async (userContext, userId, enabled = false) => {
   return sortedWidgets
 }
 
-export default getUserWidgets
+export default getWidgets

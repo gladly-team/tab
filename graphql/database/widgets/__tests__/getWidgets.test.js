@@ -1,9 +1,9 @@
 /* eslint-env jest */
 
-import getUserWidgets from '../getUserWidgets'
-import getFullWidget from '../getFullWidget'
+import getWidgets from '../getWidgets'
+import buildFullWidget from '../buildFullWidget'
 import getUserWidgetsByEnabledState from '../userWidget/getUserWidgetsByEnabledState'
-import BaseWidgetModel from '../widget/BaseWidgetModel'
+import BaseWidgetModel from '../baseWidget/BaseWidgetModel'
 import UserWidgetModel from '../userWidget/UserWidgetModel'
 import {
   getMockUserContext,
@@ -18,7 +18,7 @@ afterEach(() => {
   jest.clearAllMocks()
 })
 
-describe('getUserWidgets', () => {
+describe('getWidgets', () => {
   it('gets all widgets', async () => {
     const userInfo = getMockUserInfo()
 
@@ -54,13 +54,13 @@ describe('getUserWidgets', () => {
         return baseWidgetsToGet
       })
 
-    const userWidgets = await getUserWidgets(userContext, userInfo.id)
+    const userWidgets = await getWidgets(userContext, userInfo.id)
     expect(userWidgetQueryMethod).toHaveBeenCalledWith(userContext, userInfo.id)
     expect(baseWidgetGetBatchMethod).toHaveBeenCalledWith(userContext, [
       { id: 'abc' }, { id: 'def' }])
     const sortedFullWidgets = [
-      getFullWidget(userWidgetsToGet[1], baseWidgetsToGet[1]),
-      getFullWidget(userWidgetsToGet[0], baseWidgetsToGet[0])
+      buildFullWidget(userWidgetsToGet[1], baseWidgetsToGet[1]),
+      buildFullWidget(userWidgetsToGet[0], baseWidgetsToGet[0])
     ]
     expect(userWidgets).toEqual(sortedFullWidgets)
   })
@@ -100,15 +100,15 @@ describe('getUserWidgets', () => {
         return userWidgetsToGet
       })
 
-    const userWidgets = await getUserWidgets(userContext, userInfo.id, true)
+    const userWidgets = await getWidgets(userContext, userInfo.id, true)
     expect(userWidgetQueryMethod).not.toHaveBeenCalled()
     expect(getUserWidgetsByEnabledState)
       .toHaveBeenCalledWith(userContext, userInfo.id, true)
     expect(baseWidgetGetBatchMethod).toHaveBeenCalledWith(userContext, [
       { id: 'abc' }, { id: 'def' }])
     const sortedFullWidgets = [
-      getFullWidget(userWidgetsToGet[1], baseWidgetsToGet[1]),
-      getFullWidget(userWidgetsToGet[0], baseWidgetsToGet[0])
+      buildFullWidget(userWidgetsToGet[1], baseWidgetsToGet[1]),
+      buildFullWidget(userWidgetsToGet[0], baseWidgetsToGet[0])
     ]
     expect(userWidgets).toEqual(sortedFullWidgets)
   })
