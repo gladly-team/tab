@@ -5,13 +5,12 @@ import BaseWidgetModel from './widget/BaseWidgetModel'
 import getFullWidget from './getFullWidget'
 import updateWidgetData from './userWidget/updateWidgetData'
 import updateWidgetConfig from './userWidget/updateWidgetConfig'
+import updateWidgetEnabled from './userWidget/updateWidgetEnabled'
 import updateWidgetVisibility from './userWidget/updateWidgetVisibility'
-import {
-  updateWidgetEnabled
-} from './userWidget/userWidget'
 
 /**
  * Update widget data.
+ * @param {object} userContext - The user authorizer object.
  * @param {string} userId - The user id.
  * @param {string} widgetId - The widget id.
  * @param {Object} data - The new widget data.
@@ -27,6 +26,7 @@ const updateUserWidgetData = async (userContext, userId, widgetId, data) => {
 
 /**
  * Update widget visible state.
+ * @param {object} userContext - The user authorizer object.
  * @param {string} userId - The user id.
  * @param {string} widgetId - The widget id.
  * @param {boolean} visible - The new visible state.
@@ -41,6 +41,7 @@ const updateUserWidgetVisibility = async (userContext, userId, widgetId, visible
 
 /**
  * Update widget enabled state.
+ * @param {object} userContext - The user authorizer object.
  * @param {string} userId - The user id.
  * @param {string} widgetId - The widget id.
  * @param {boolean} enabled - The new enabled state.
@@ -49,12 +50,13 @@ const updateUserWidgetVisibility = async (userContext, userId, widgetId, visible
  */
 const updateUserWidgetEnabled = async (userContext, userId, widgetId, enabled) => {
   const widget = await BaseWidgetModel.get(userContext, widgetId)
-  const userWidget = await updateWidgetEnabled(userId, widgetId, enabled)
+  const userWidget = await updateWidgetEnabled(userContext, userId, widgetId, enabled)
   return getFullWidget(userWidget, widget)
 }
 
 /**
  * Update widget config.
+ * @param {object} userContext - The user authorizer object.
  * @param {string} userId - The user id.
  * @param {string} widgetId - The widget id.
  * @param {Object} config - The new widget config.
@@ -70,11 +72,9 @@ const updateUserWidgetConfig = async (userContext, userId, widgetId, config) => 
 
 /**
  * Get all widgets.
- * @param {string} userId - The user id.
- * @param {string} widgetId - The widget id.
- * @param {Object} config - The new widget config.
- * @return {Promise<Widget>}  Returns a promise that resolves into a
- * Widget.
+ * @param {object} userContext - The user authorizer object.
+ * @return {Promise<Array<Widget>>}  Returns a promise that resolves into
+ * an array of Widgets.
  */
 const getAllWidgets = async (userContext) => {
   const widgets = await BaseWidgetModel.getAll(userContext)
