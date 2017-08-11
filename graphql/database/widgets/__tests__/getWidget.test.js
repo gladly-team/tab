@@ -3,13 +3,13 @@
 import getWidget from '../getWidget'
 import BaseWidgetModel from '../baseWidget/BaseWidgetModel'
 import UserWidgetModel from '../userWidget/UserWidgetModel'
-import buildFullWidget from '../buildFullWidget'
+import constructFullWidget from '../constructFullWidget'
 import {
   getMockUserContext
 } from '../../test-utils'
 
 jest.mock('../../databaseClient')
-jest.mock('../buildFullWidget')
+jest.mock('../constructFullWidget')
 const userContext = getMockUserContext()
 
 describe('getWidget', () => {
@@ -38,12 +38,12 @@ describe('getWidget', () => {
         return userWidget
       })
     const mockFullWidget = { 'a': 'fake-widget' }
-    buildFullWidget.mockImplementationOnce(() => mockFullWidget)
+    constructFullWidget.mockImplementationOnce(() => mockFullWidget)
 
     const fetchedWidget = await getWidget(userContext, userId, widgetId)
     expect(getUserWidgetSpy).toHaveBeenCalledWith(userContext, userId, widgetId)
     expect(getBaseWidgetSpy).toHaveBeenCalledWith(userContext, widgetId)
-    expect(buildFullWidget).toHaveBeenCalledWith(userWidget, baseWidget)
+    expect(constructFullWidget).toHaveBeenCalledWith(userWidget, baseWidget)
     expect(fetchedWidget).toEqual(mockFullWidget)
   })
 })

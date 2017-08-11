@@ -1,6 +1,6 @@
 
 import BaseWidgetModel from './baseWidget/BaseWidgetModel'
-import buildFullWidget from './buildFullWidget'
+import constructFullWidget from './constructFullWidget'
 import updateWidgetData from './userWidget/updateWidgetData'
 import updateWidgetConfig from './userWidget/updateWidgetConfig'
 import updateWidgetEnabled from './userWidget/updateWidgetEnabled'
@@ -19,7 +19,7 @@ const updateUserWidgetData = async (userContext, userId, widgetId, data) => {
   const parsedData = JSON.parse(data)
   const widget = await BaseWidgetModel.get(userContext, widgetId)
   const userWidget = await updateWidgetData(userContext, userId, widgetId, parsedData)
-  return buildFullWidget(userWidget, widget)
+  return constructFullWidget(userWidget, widget)
 }
 
 /**
@@ -34,7 +34,7 @@ const updateUserWidgetData = async (userContext, userId, widgetId, data) => {
 const updateUserWidgetVisibility = async (userContext, userId, widgetId, visible) => {
   const widget = await BaseWidgetModel.get(userContext, widgetId)
   const userWidget = await updateWidgetVisibility(userContext, userId, widgetId, visible)
-  return buildFullWidget(userWidget, widget)
+  return constructFullWidget(userWidget, widget)
 }
 
 /**
@@ -49,7 +49,7 @@ const updateUserWidgetVisibility = async (userContext, userId, widgetId, visible
 const updateUserWidgetEnabled = async (userContext, userId, widgetId, enabled) => {
   const widget = await BaseWidgetModel.get(userContext, widgetId)
   const userWidget = await updateWidgetEnabled(userContext, userId, widgetId, enabled)
-  return buildFullWidget(userWidget, widget)
+  return constructFullWidget(userWidget, widget)
 }
 
 /**
@@ -65,7 +65,7 @@ const updateUserWidgetConfig = async (userContext, userId, widgetId, config) => 
   const parsedConfig = JSON.parse(config)
   const widget = await BaseWidgetModel.get(userContext, widgetId)
   const userWidget = await updateWidgetConfig(userContext, userId, widgetId, parsedConfig)
-  return buildFullWidget(userWidget, widget)
+  return constructFullWidget(userWidget, widget)
 }
 
 export {

@@ -1,7 +1,7 @@
 
 import BaseWidgetModel from './baseWidget/BaseWidgetModel'
 import UserWidgetModel from './userWidget/UserWidgetModel'
-import buildFullWidget from './buildFullWidget'
+import constructFullWidget from './constructFullWidget'
 
 /**
  * Get a widget.
@@ -14,7 +14,7 @@ import buildFullWidget from './buildFullWidget'
 const getWidget = async (userContext, userId, widgetId) => {
   const userWidget = await UserWidgetModel.get(userContext, userId, widgetId)
   const baseWidget = await BaseWidgetModel.get(userContext, widgetId)
-  return buildFullWidget(userWidget, baseWidget)
+  return constructFullWidget(userWidget, baseWidget)
 }
 
 export default getWidget

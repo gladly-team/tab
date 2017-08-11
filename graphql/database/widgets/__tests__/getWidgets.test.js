@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
 import getWidgets from '../getWidgets'
-import buildFullWidget from '../buildFullWidget'
+import constructFullWidget from '../constructFullWidget'
 import getUserWidgetsByEnabledState from '../userWidget/getUserWidgetsByEnabledState'
 import BaseWidgetModel from '../baseWidget/BaseWidgetModel'
 import UserWidgetModel from '../userWidget/UserWidgetModel'
@@ -59,8 +59,8 @@ describe('getWidgets', () => {
     expect(baseWidgetGetBatchMethod).toHaveBeenCalledWith(userContext, [
       { id: 'abc' }, { id: 'def' }])
     const sortedFullWidgets = [
-      buildFullWidget(userWidgetsToGet[1], baseWidgetsToGet[1]),
-      buildFullWidget(userWidgetsToGet[0], baseWidgetsToGet[0])
+      constructFullWidget(userWidgetsToGet[1], baseWidgetsToGet[1]),
+      constructFullWidget(userWidgetsToGet[0], baseWidgetsToGet[0])
     ]
     expect(userWidgets).toEqual(sortedFullWidgets)
   })
@@ -107,8 +107,8 @@ describe('getWidgets', () => {
     expect(baseWidgetGetBatchMethod).toHaveBeenCalledWith(userContext, [
       { id: 'abc' }, { id: 'def' }])
     const sortedFullWidgets = [
-      buildFullWidget(userWidgetsToGet[1], baseWidgetsToGet[1]),
-      buildFullWidget(userWidgetsToGet[0], baseWidgetsToGet[0])
+      constructFullWidget(userWidgetsToGet[1], baseWidgetsToGet[1]),
+      constructFullWidget(userWidgetsToGet[0], baseWidgetsToGet[0])
     ]
     expect(userWidgets).toEqual(sortedFullWidgets)
   })

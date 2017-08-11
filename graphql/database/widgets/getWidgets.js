@@ -2,7 +2,7 @@
 import { find, sortBy } from 'lodash/collection'
 import BaseWidgetModel from './baseWidget/BaseWidgetModel'
 import UserWidgetModel from './userWidget/UserWidgetModel'
-import buildFullWidget from './buildFullWidget'
+import constructFullWidget from './constructFullWidget'
 import getUserWidgetsByEnabledState from './userWidget/getUserWidgetsByEnabledState'
 
 /**
@@ -43,7 +43,7 @@ const getWidgets = async (userContext, userId, enabled = false) => {
     const baseWidget = find(baseWidgets, (baseWidget) => {
       return baseWidget.id === userWidget.widgetId
     })
-    mergedWidgets.push(buildFullWidget(userWidget, baseWidget))
+    mergedWidgets.push(constructFullWidget(userWidget, baseWidget))
   })
 
   // Sort widgets.
