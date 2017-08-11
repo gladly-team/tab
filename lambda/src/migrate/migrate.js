@@ -16,10 +16,8 @@ import {
   getBackgroundImages
 } from 'database/backgroundImages/backgroundImage'
 
-import {
-  updateWidgetEnabled,
-  updateWidgetData
-} from 'database/widgets/userWidget/userWidget'
+import updateUserWidgetData from 'database/widgets/userWidget/updateUserWidgetData'
+import updateUserWidgetEnabled from 'database/widgets/userWidget/updateUserWidgetEnabled'
 
 import Async from 'asyncawait/async'
 import Await from 'asyncawait/await'
@@ -107,8 +105,8 @@ const setBookmarksData = Async((userId, bookmarks) => {
 
     const bookmarkWidgetId = '4162cc79-d192-4435-91bd-5fda9b6f7c08'
 
-    Await(updateWidgetEnabled(userId, bookmarkWidgetId, true))
-    Await(updateWidgetData(
+    Await(updateUserWidgetEnabled(userId, bookmarkWidgetId, true))
+    Await(updateUserWidgetData(
         userId,
         bookmarkWidgetId,
         { bookmarks: bookmarks }))
@@ -148,8 +146,8 @@ const setNotesData = Async((userId, notes) => {
       })
     }
 
-    Await(updateWidgetEnabled(userId, notesWidgetId, true))
-    Await(updateWidgetData(
+    Await(updateUserWidgetEnabled(userId, notesWidgetId, true))
+    Await(updateUserWidgetData(
         userId,
         notesWidgetId,
         { notes: data }))

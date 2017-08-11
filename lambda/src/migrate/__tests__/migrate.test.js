@@ -40,12 +40,8 @@ var mockUpdateWidgetData = jest.fn((userId, widgetId, data) => {
   return Promise.resolve(true)
 })
 
-jest.mock('database/widgets/userWidget/userWidget', () => {
-  return {
-    updateWidgetEnabled: mockUpdateWidgetEnabled,
-    updateWidgetData: mockUpdateWidgetData
-  }
-})
+jest.mock('database/widgets/userWidget/updateUserWidgetEnabled', () => mockUpdateWidgetEnabled)
+jest.mock('database/widgets/userWidget/updateUserWidgetData', () => mockUpdateWidgetData)
 
 const migrate = require('../migrate')
 
