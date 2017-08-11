@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
 import moment from 'moment'
-import updateWidgetConfig from '../updateWidgetConfig'
+import updateUserWidgetVisibility from '../updateUserWidgetVisibility'
 import UserWidgetModel from '../UserWidgetModel'
 import {
   DatabaseOperation,
@@ -26,20 +26,17 @@ afterEach(() => {
   jest.clearAllMocks()
 })
 
-describe('updateWidgetConfig', () => {
+describe('updateUserWidgetVisibility', () => {
   it('works as expected', async () => {
     const userInfo = getMockUserInfo()
     const userWidget = new UserWidgetModel({
       userId: userInfo.id,
       widgetId: 'ab5082cc-151a-4a9a-9289-06906670fd4e',
       enabled: true,
-      config: {
-        foo: 'bar'
-      }
+      visible: true
     })
-    const newConfig = { foo: 'boop' }
     const expectedWidget = Object.assign({}, userWidget, {
-      config: newConfig,
+      visible: false,
       updated: moment.utc().toISOString()
     })
     setMockDBResponse(
@@ -50,14 +47,14 @@ describe('updateWidgetConfig', () => {
     )
 
     const userWidgetUpdateMethod = jest.spyOn(UserWidgetModel, 'update')
-    const updatedWidget = await updateWidgetConfig(userContext, userInfo.id,
-      userWidget.widgetId, newConfig)
+    const updatedWidget = await updateUserWidgetVisibility(userContext, userInfo.id,
+      userWidget.widgetId, false)
     expect(userWidgetUpdateMethod)
       .toHaveBeenCalledWith(userContext, {
         userId: userInfo.id,
         widgetId: userWidget.widgetId,
         updated: moment.utc().toISOString(),
-        config: newConfig
+        visible: false
       })
     expect(updatedWidget).toEqual(expectedWidget)
   })

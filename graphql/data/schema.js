@@ -38,11 +38,11 @@ import getWidget from '../database/widgets/getWidget'
 import getWidgets from '../database/widgets/getWidgets'
 import getAllBaseWidgets from '../database/widgets/baseWidget/getAllBaseWidgets'
 import {
-  updateUserWidgetData,
-  updateUserWidgetVisibility,
-  updateUserWidgetEnabled,
-  updateUserWidgetConfig
-} from '../database/widgets/widgets'
+  updateWidgetData,
+  updateWidgetVisibility,
+  updateWidgetEnabled,
+  updateWidgetConfig
+} from '../database/widgets/updateWidget'
 
 import {
   updateBookmarkPosition,
@@ -602,7 +602,7 @@ const updateWidgetDataMutation = mutationWithClientMutationId({
   mutateAndGetPayload: ({userId, widgetId, data}, context) => {
     const userGlobalObj = fromGlobalId(userId)
     const widgetGlobalObj = fromGlobalId(widgetId)
-    return updateUserWidgetData(context.user, userGlobalObj.id, widgetGlobalObj.id, data)
+    return updateWidgetData(context.user, userGlobalObj.id, widgetGlobalObj.id, data)
   }
 })
 
@@ -627,7 +627,7 @@ const updateWidgetVisibilityMutation = mutationWithClientMutationId({
   mutateAndGetPayload: ({userId, widgetId, visible}, context) => {
     const userGlobalObj = fromGlobalId(userId)
     const widgetGlobalObj = fromGlobalId(widgetId)
-    return updateUserWidgetVisibility(context.user, userGlobalObj.id, widgetGlobalObj.id, visible)
+    return updateWidgetVisibility(context.user, userGlobalObj.id, widgetGlobalObj.id, visible)
   }
 })
 
@@ -652,7 +652,7 @@ const updateWidgetEnabledMutation = mutationWithClientMutationId({
   mutateAndGetPayload: ({userId, widgetId, enabled}, context) => {
     const userGlobalObj = fromGlobalId(userId)
     const widgetGlobalObj = fromGlobalId(widgetId)
-    return updateUserWidgetEnabled(context.user, userGlobalObj.id, widgetGlobalObj.id, enabled)
+    return updateWidgetEnabled(context.user, userGlobalObj.id, widgetGlobalObj.id, enabled)
   }
 })
 
@@ -677,7 +677,7 @@ const updateWidgetConfigMutation = mutationWithClientMutationId({
   mutateAndGetPayload: ({userId, widgetId, config}, context) => {
     const userGlobalObj = fromGlobalId(userId)
     const widgetGlobalObj = fromGlobalId(widgetId)
-    return updateUserWidgetConfig(context.user, userGlobalObj.id, widgetGlobalObj.id, config)
+    return updateWidgetConfig(context.user, userGlobalObj.id, widgetGlobalObj.id, config)
   }
 })
 

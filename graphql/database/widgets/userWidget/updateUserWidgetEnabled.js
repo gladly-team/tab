@@ -10,12 +10,10 @@ import UserWidgetModel from './UserWidgetModel'
  * @return {Promise<Widget>}  Returns a promise that resolves into a
  * Widget.
  */
-const updateWidgetEnabled = async (userContext, userId, widgetId, enabled) => {
+export default async (userContext, userId, widgetId, enabled) => {
   return UserWidgetModel.update(userContext, {
     userId: userId,
     widgetId: widgetId,
     enabled: enabled
   })
 }
-
-export default updateWidgetEnabled

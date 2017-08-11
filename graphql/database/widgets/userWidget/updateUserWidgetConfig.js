@@ -6,16 +6,14 @@ import UserWidgetModel from './UserWidgetModel'
   * @param {object} userContext - The user authorizer object.
  * @param {string} userId - The user id.
  * @param {string} widgetId - The widget id.
- * @param {Object} data - The new widget data.
+ * @param {Object} config - The new widget config.
  * @return {Promise<Widget>}  Returns a promise that resolves into a
  * Widget.
  */
-const updateWidgetData = async (userContext, userId, widgetId, data) => {
+export default async (userContext, userId, widgetId, config) => {
   return UserWidgetModel.update(userContext, {
     userId: userId,
     widgetId: widgetId,
-    data: data
+    config: config
   })
 }
-
-export default updateWidgetData

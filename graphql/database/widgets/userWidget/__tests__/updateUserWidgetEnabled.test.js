@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
 import moment from 'moment'
-import updateWidgetEnabled from '../updateWidgetEnabled'
+import updateUserWidgetEnabled from '../updateUserWidgetEnabled'
 import UserWidgetModel from '../UserWidgetModel'
 import {
   DatabaseOperation,
@@ -26,7 +26,7 @@ afterEach(() => {
   jest.clearAllMocks()
 })
 
-describe('updateWidgetEnabled', () => {
+describe('updateUserWidgetEnabled', () => {
   it('works as expected', async () => {
     const userInfo = getMockUserInfo()
     const userWidget = new UserWidgetModel({
@@ -46,7 +46,7 @@ describe('updateWidgetEnabled', () => {
     )
 
     const userWidgetUpdateMethod = jest.spyOn(UserWidgetModel, 'update')
-    const updatedWidget = await updateWidgetEnabled(userContext, userInfo.id,
+    const updatedWidget = await updateUserWidgetEnabled(userContext, userInfo.id,
       userWidget.widgetId, false)
     expect(userWidgetUpdateMethod)
       .toHaveBeenCalledWith(userContext, {
