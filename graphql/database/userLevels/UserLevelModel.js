@@ -22,7 +22,8 @@ class UserLevel extends BaseModel {
 
   static get schema () {
     return {
-      id: types.uuid(),
+      id: types.number().integer(),
+      // The number of Hearts required to reach this level.
       hearts: types.number().integer()
     }
   }

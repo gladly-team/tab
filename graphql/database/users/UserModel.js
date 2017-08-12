@@ -60,10 +60,9 @@ class User extends BaseModel {
     return {
       vcCurrent: 0,
       vcAllTime: 0,
-      level: 1,
-      // This value needs to match the hearts required for level 2
-      // in the database.
-      heartsUntilNextLevel: 5,
+      level: 0,
+      // On the first Heart gained, immediately level up to Level 1.
+      heartsUntilNextLevel: 0,
       backgroundImage: {
         id: 'fb5082cc-151a-4a9a-9289-06906670fd4e',
         name: 'Mountain Lake',

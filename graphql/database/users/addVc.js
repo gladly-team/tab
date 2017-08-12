@@ -23,15 +23,14 @@ const addVc = async (userContext, userId, vc = 0) => {
 
   // Check if user gained a level.
   if (user.heartsUntilNextLevel < 1) {
-    const newLevel = await getNextLevelFor(userContext,
+    const nextLevel = await getNextLevelFor(userContext,
       user.level, user.vcAllTime)
-
-    if (newLevel) {
+    if (nextLevel) {
       // Set the user's new level and related fields.
       user = await UserModel.update(userContext, {
         id: userId,
-        level: newLevel.id,
-        heartsUntilNextLevel: (newLevel.hearts - user.vcAllTime)
+        level: nextLevel.id - 1, // current level is one fewer than next level
+        heartsUntilNextLevel: (nextLevel.hearts - user.vcAllTime)
       })
     }
   }

@@ -45,6 +45,7 @@ describe('addVc', () => {
       getMockUserInstance(),
       {
         id: userId,
+        vcAllTime: 46,
         heartsUntilNextLevel: 4
       })
     const updateMethod = jest.spyOn(UserModel, 'update')
@@ -95,7 +96,7 @@ describe('addVc', () => {
 
     getNextLevelFor.mockImplementationOnce(() => {
       return new UserLevelModel({
-        id: 4,
+        id: 5,
         hearts: 50
       })
     })
@@ -119,7 +120,7 @@ describe('addVc', () => {
     // Mock getting next level.
     getNextLevelFor.mockImplementationOnce(() => {
       return new UserLevelModel({
-        id: 4,
+        id: 5,
         hearts: 50
       })
     })
@@ -130,6 +131,7 @@ describe('addVc', () => {
       getMockUserInstance(),
       {
         id: userId,
+        vcAllTime: 46,
         heartsUntilNextLevel: 4
       }
     )
@@ -151,7 +153,7 @@ describe('addVc', () => {
     // Mock getting next level.
     getNextLevelFor.mockImplementationOnce(() => {
       return new UserLevelModel({
-        id: 4,
+        id: 5,
         hearts: 50
       })
     })
@@ -162,6 +164,7 @@ describe('addVc', () => {
       getMockUserInstance(),
       {
         id: userId,
+        vcAllTime: 30,
         level: 3,
         heartsUntilNextLevel: 0
       }
