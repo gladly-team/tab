@@ -3,7 +3,7 @@
 import moment from 'moment'
 import UserModel from '../UserModel'
 import setBackgroundImageDaily from '../setBackgroundImageDaily'
-import { getRandomImage } from '../../backgroundImages/backgroundImage'
+import getRandomBackgroundImage from '../../backgroundImages/getRandomBackgroundImage'
 import {
   USER_BACKGROUND_OPTION_DAILY
 } from '../../constants'
@@ -16,7 +16,7 @@ import {
 } from '../../test-utils'
 
 jest.mock('../../databaseClient')
-jest.mock('../../backgroundImages/backgroundImage')
+jest.mock('../../backgroundImages/getRandomBackgroundImage')
 const userContext = getMockUserContext()
 
 beforeAll(() => {
@@ -32,7 +32,7 @@ describe('setBackgroundImageDaily', () => {
     const updateQuery = jest.spyOn(UserModel, 'update')
     const userId = userContext.id
     await setBackgroundImageDaily(userContext, userId)
-    const mockImage = await getRandomImage()
+    const mockImage = await getRandomBackgroundImage(userContext)
     expect(updateQuery).toHaveBeenCalledWith(userContext, {
       id: userId,
       backgroundImage: mockImage,
