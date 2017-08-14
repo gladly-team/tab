@@ -4,7 +4,8 @@ import config from '../config'
 import {
   WIDGET,
   CHARITY,
-  USER
+  USER,
+  BACKGROUND_IMAGE
 } from '../database/constants'
 
 import {
@@ -57,11 +58,7 @@ import CharityModel from '../database/charities/CharityModel'
 
 import donateVc from '../database/donations/donateVc'
 
-import {
-  BackgroundImage,
-  getBackgroundImage,
-  getBackgroundImages
-} from '../database/backgroundImages/backgroundImage'
+import BackgroundImageModel from '../database/backgroundImages/BackgroundImageModel'
 
 import {
   Globals,
@@ -98,8 +95,8 @@ const { nodeInterface, nodeField } = nodeDefinitions(
       return getWidget(context.user, id)
     } else if (type === CHARITY) {
       return CharityModel.get(context.user, id)
-    } else if (type === 'BackgroundImage') {
-      return getBackgroundImage(id)
+    } else if (type === BACKGROUND_IMAGE) {
+      return BackgroundImageModel.get(context.user, id)
     }
     return null
   },
@@ -112,7 +109,7 @@ const { nodeInterface, nodeField } = nodeDefinitions(
       return widgetType
     } else if (obj instanceof CharityModel) {
       return charityType
-    } else if (obj instanceof BackgroundImage) {
+    } else if (obj instanceof BackgroundImageModel) {
       return backgroundImageType
     }
     return null
@@ -355,7 +352,7 @@ const appType = new GraphQLObjectType({
       type: backgroundImageConnection,
       description: 'All the background Images',
       args: connectionArgs,
-      resolve: (_, args) => connectionFromPromisedArray(getBackgroundImages(), args)
+      resolve: (_, args, context) => connectionFromPromisedArray(BackgroundImageModel.getAll(context.user), args)
     }
   }),
   interfaces: [nodeInterface]
