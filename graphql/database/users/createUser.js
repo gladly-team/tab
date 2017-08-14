@@ -25,7 +25,6 @@ const createUser = async (userContext, userId, username,
     const referringUser = await getUserByUsername(userContext,
       referringUserUsername)
     if (referringUser) {
-      // FIXME: make this override permissions.
       await logReferralData(userInfo.id, referringUser.id)
       await rewardReferringUser(referringUser.id)
     }
