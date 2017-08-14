@@ -2,7 +2,7 @@
 
 import UserModel from '../UserModel'
 import createUser from '../createUser'
-import { logReferralData } from '../../referrals/referralData'
+import logReferralData from '../../referrals/logReferralData'
 import getUserByUsername from '../getUserByUsername'
 import rewardReferringUser from '../rewardReferringUser'
 import {
@@ -17,7 +17,7 @@ import {
 
 jest.mock('../../databaseClient')
 
-jest.mock('../../referrals/referralData')
+jest.mock('../../referrals/logReferralData')
 jest.mock('../rewardReferringUser')
 jest.mock('../getUserByUsername')
 

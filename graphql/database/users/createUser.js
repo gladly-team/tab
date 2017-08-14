@@ -1,6 +1,6 @@
 
 import UserModel from './UserModel'
-import { logReferralData } from '../referrals/referralData'
+import logReferralData from '../referrals/logReferralData'
 import rewardReferringUser from './rewardReferringUser'
 import getUserByUsername from './getUserByUsername'
 
