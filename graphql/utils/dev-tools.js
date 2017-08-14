@@ -17,7 +17,6 @@ logger.error = function (msg, error) {
   console.error(msg, error)
 }
 
-// TODO: disable in test/prod
 export const DBLogger = {
   action: (action, params) => {
     if (config.DEVELOPMENT_LOGGING_ENABLED) {
