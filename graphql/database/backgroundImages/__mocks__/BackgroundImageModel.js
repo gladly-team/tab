@@ -18,12 +18,7 @@ const mockImages = [
   }
 ]
 
-const getBackgroundImage = jest.fn(() => mockImages[0])
-const getBackgroundImages = jest.fn(() => mockImages)
-const getRandomImage = jest.fn(() => mockImages[1])
-
-export {
-  getBackgroundImage,
-  getBackgroundImages,
-  getRandomImage
+export default {
+  get: jest.fn(() => mockImages[1]),
+  getAll: jest.fn(() => mockImages)
 }

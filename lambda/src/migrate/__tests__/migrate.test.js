@@ -7,30 +7,13 @@ var mockCreateUser = jest.fn((user) => {
   return Promise.resolve(true)
 })
 
+// FIXME
 jest.mock('database/users/UserModel', () => {
   return {
     createUser: mockCreateUser
   }
 })
-
-jest.mock('database/backgroundImages/backgroundImage', () => {
-  return {
-    getBackgroundImages: jest.fn((user) => {
-      return Promise.resolve([
-        {
-          id: 'fb5082cc-151a-4a9a-9289-06906670fd4e',
-          name: 'Mountain Lake',
-          fileName: 'lake.jpg'
-        },
-        {
-          id: '90bfe202-54a9-4eea-9003-5e91572387dd',
-          name: 'Puppy Eyes',
-          fileName: 'puppy.jpg'
-        }
-      ])
-    })
-  }
-})
+jest.mock('database/backgroundImages/BackgroundImageModel')
 
 var mockUpdateWidgetEnabled = jest.fn((userId, widgetId, enabled) => {
   return Promise.resolve(true)

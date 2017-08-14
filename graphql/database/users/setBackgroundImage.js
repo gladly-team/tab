@@ -4,9 +4,7 @@ import UserModel from './UserModel'
 import {
   USER_BACKGROUND_OPTION_PHOTO
 } from '../constants'
-import {
-  getBackgroundImage
-} from '../backgroundImages/backgroundImage'
+import BackgroundImageModel from '../backgroundImages/BackgroundImageModel'
 
 /**
  * Set user's background image.
@@ -16,7 +14,7 @@ import {
  * @return {Promise<User>}  A promise that resolves into a User instance.
  */
 const setBackgroundImage = async (userContext, userId, imageId, mode) => {
-  const image = await getBackgroundImage(imageId)
+  const image = await BackgroundImageModel.get(userContext, imageId)
   image.timestamp = moment.utc().toISOString()
   if (!mode) {
     mode = USER_BACKGROUND_OPTION_PHOTO

@@ -3,7 +3,7 @@
 import moment from 'moment'
 import UserModel from '../UserModel'
 import setBackgroundImage from '../setBackgroundImage'
-import { getBackgroundImage } from '../../backgroundImages/backgroundImage'
+import BackgroundImageModel from '../../backgroundImages/BackgroundImageModel'
 import {
   USER_BACKGROUND_OPTION_PHOTO,
   USER_BACKGROUND_OPTION_CUSTOM
@@ -17,7 +17,7 @@ import {
 } from '../../test-utils'
 
 jest.mock('../../databaseClient')
-jest.mock('../../backgroundImages/backgroundImage')
+jest.mock('../../backgroundImages/BackgroundImageModel')
 const userContext = getMockUserContext()
 
 beforeAll(() => {
@@ -38,7 +38,7 @@ describe('setBackgroundImage', () => {
     const userId = userContext.id
     const imageId = 'abc-123'
     const mode = USER_BACKGROUND_OPTION_PHOTO
-    const mockImage = await getBackgroundImage(imageId)
+    const mockImage = await BackgroundImageModel.get(userContext, imageId)
     await setBackgroundImage(userContext, userId, imageId, mode)
     expect(updateQuery).toHaveBeenCalledWith(userContext, {
       id: userId,
@@ -53,7 +53,7 @@ describe('setBackgroundImage', () => {
     const userId = userContext.id
     const imageId = 'abc-123'
     const mode = null
-    const mockImage = await getBackgroundImage(imageId)
+    const mockImage = await BackgroundImageModel.get(userContext, imageId)
     await setBackgroundImage(userContext, userId, imageId, mode)
     expect(updateQuery).toHaveBeenCalledWith(userContext, {
       id: userId,
@@ -68,7 +68,7 @@ describe('setBackgroundImage', () => {
     const userId = userContext.id
     const imageId = 'abc-123'
     const mode = USER_BACKGROUND_OPTION_CUSTOM
-    const mockImage = await getBackgroundImage(imageId)
+    const mockImage = await BackgroundImageModel.get(userContext, imageId)
     await setBackgroundImage(userContext, userId, imageId, mode)
     expect(updateQuery).toHaveBeenCalledWith(userContext, {
       id: userId,

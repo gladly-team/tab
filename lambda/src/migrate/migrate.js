@@ -12,9 +12,7 @@ import {
   USER_BACKGROUND_OPTION_PHOTO
 } from 'database/constants'
 
-import {
-  getBackgroundImages
-} from 'database/backgroundImages/backgroundImage'
+import BackgroundImageModel from 'database/backgroundImages/BackgroundImageModel'
 
 import updateUserWidgetData from 'database/widgets/userWidget/updateUserWidgetData'
 import updateUserWidgetEnabled from 'database/widgets/userWidget/updateUserWidgetEnabled'
@@ -58,7 +56,8 @@ const setUserProfile = Async((userProfile) => {
         break
     }
 
-    const bkgImages = Await(getBackgroundImages())
+    // FIXME: requires userContext to work.
+    const bkgImages = Await(BackgroundImageModel.getAll())
 
     user.backgroundImage = {
       id: 'fb5082cc-151a-4a9a-9289-06906670fd4e',
