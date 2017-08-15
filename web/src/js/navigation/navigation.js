@@ -5,7 +5,7 @@ function goTo (route) {
 }
 
 function goToLogin () {
-  goTo('/auth/login/')
+  goTo('/tab/auth/login/')
 }
 
 function goToSettings () {
@@ -21,7 +21,7 @@ function goToDashboard () {
 }
 
 function goToRetrievePassword () {
-  goTo('/auth/recovery')
+  goTo('/tab/auth/recovery')
 }
 
 export {
