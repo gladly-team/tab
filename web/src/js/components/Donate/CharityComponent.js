@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import DonateVcMutation from 'mutations/DonateVcMutation'
-import { goTo } from 'navigation/navigation'
+import { goToHome } from 'navigation/navigation'
 
 import {GridList, GridTile} from 'material-ui/GridList'
 
@@ -94,7 +94,7 @@ class Charity extends React.Component {
   }
 
   goToHome () {
-    goTo('/')
+    goToHome()
   }
 
   render () {

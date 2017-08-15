@@ -4,12 +4,20 @@ function goTo (route) {
   browserHistory.push(route)
 }
 
+function goToHome () {
+  goTo('/tab/')
+}
+
 function goToLogin () {
   goTo('/tab/auth/login/')
 }
 
 function goToSettings () {
   goTo('/tab/settings/')
+}
+
+function goToSettingsSection (section) {
+  goTo(`/tab/settings/${section}`)
 }
 
 function goToDonate () {
@@ -21,14 +29,15 @@ function goToDashboard () {
 }
 
 function goToRetrievePassword () {
-  goTo('/tab/auth/recovery')
+  goTo('/tab/auth/recovery/')
 }
 
 export {
-   goTo,
-   goToLogin,
-   goToSettings,
-   goToDonate,
-   goToDashboard,
-   goToRetrievePassword
+  goToHome,
+  goToLogin,
+  goToSettings,
+  goToSettingsSection,
+  goToDonate,
+  goToDashboard,
+  goToRetrievePassword
 }

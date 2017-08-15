@@ -3,7 +3,11 @@ import PropTypes from 'prop-types'
 
 import FadeInAnimation from 'general/FadeInAnimation'
 
-import { goTo, goToDashboard } from 'navigation/navigation'
+import {
+  goToDashboard,
+  goToLogin,
+  goToSettingsSection
+} from 'navigation/navigation'
 import AppBar from 'material-ui/AppBar'
 import FontIcon from 'material-ui/FontIcon'
 import MenuItem from 'material-ui/MenuItem'
@@ -41,8 +45,7 @@ class Settings extends React.Component {
     this.setState({
       selection: selection
     })
-
-    goTo('/tab/settings/' + selection)
+    goToSettingsSection(selection)
   }
 
   goToHome () {
@@ -52,13 +55,9 @@ class Settings extends React.Component {
   logout () {
     logoutUser((loggedOut) => {
       if (loggedOut) {
-        this.goToLogin()
+        goToLogin()
       }
     })
-  }
-
-  goToLogin () {
-    goTo('/auth')
   }
 
   render () {

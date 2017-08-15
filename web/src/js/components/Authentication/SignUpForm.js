@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import TextField from 'material-ui/TextField'
 import ConfirmationForm from './ConfirmationForm'
 import { signup, login } from '../../utils/cognito-auth'
-import { goTo } from 'navigation/navigation'
+import { goToDashboard } from 'navigation/navigation'
 
 import {
   blue500
@@ -49,15 +49,11 @@ class SignUpForm extends React.Component {
   onConfirmed () {
     if (this.state.password) {
       login(this.props.email, this.state.password, (res) => {
-        this.goToCreateNewUser()
+        goToDashboard()
       }, (err) => {
         console.error(err)
       })
     }
-  }
-
-  goToCreateNewUser () {
-    goTo('/new-user')
   }
 
   render () {
