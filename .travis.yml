@@ -150,8 +150,8 @@ deploy:
   - provider: script
     script: yarn run ci:deploy prod
     # TODO: master only after setup
-    all_branches: true
-    # on:
-    #   branch: master
+    on:
+      all_branches: true
+      # branch: master
     skip_cleanup: true
 cache: yarn
