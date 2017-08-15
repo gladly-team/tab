@@ -4,9 +4,7 @@ import {
   createGraphQLContext,
   getUserClaimsFromLambdaEvent,
   isUserAuthorized,
-  permissionAuthorizers,
-  getPermissionsOverride,
-  isValidPermissionsOverride
+  permissionAuthorizers
 } from '../authorization-helpers'
 
 describe('authorization-helpers', () => {
