@@ -72,10 +72,9 @@ env:
   - PROD_AWS_ACCOUNT_ID=167811431063
   # AWS Cognito
   - PROD_COGNITO_REGION=us-west-2
-  # FIXME: update
-  - PROD_COGNITO_IDENTITYPOOLID=arn:aws:cognito-idp:us-west-2:167811431063:userpool/us-west-2_zu5kEM34P
-  - PROD_COGNITO_USERPOOLID=us-west-2_zu5kEM34P
-  - PROD_COGNITO_CLIENTID=32lj6balg8t2d1209sb50t1m8b
+  - PROD_COGNITO_IDENTITYPOOLID=arn:aws:cognito-idp:us-west-2:167811431063:userpool/us-west-2_VdpaaoTpR
+  - PROD_COGNITO_USERPOOLID=us-west-2_VdpaaoTpR
+  - PROD_COGNITO_CLIENTID=7n2os99obf201gk6qi8nca6bp5
   - PROD_MOCK_DEV_AUTHENTICATION=false
   # Web app
   - PROD_PUBLIC_PATH=http://prod-tab2017.gladly.io/
