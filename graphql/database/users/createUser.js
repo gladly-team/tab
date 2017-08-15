@@ -25,7 +25,7 @@ const createUser = async (userContext, userId, username,
     const referringUser = await getUserByUsername(userContext,
       referringUserUsername)
     if (referringUser) {
-      await logReferralData(userInfo.id, referringUser.id)
+      await logReferralData(userContext, userInfo.id, referringUser.id)
       await rewardReferringUser(referringUser.id)
     }
   }

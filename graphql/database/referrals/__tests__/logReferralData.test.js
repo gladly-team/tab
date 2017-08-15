@@ -40,10 +40,9 @@ describe('logReferralData', () => {
       .mockImplementationOnce(() => {
         return mockReferralLog
       })
-    const overrideVal = 'PLACEHOLDER'
 
-    await logReferralData(userId, referringUserId)
-    expect(createMethod).toHaveBeenCalledWith(overrideVal, {
+    await logReferralData(userContext, userId, referringUserId)
+    expect(createMethod).toHaveBeenCalledWith(userContext, {
       userId: userId,
       referringUser: referringUserId
     })
@@ -64,7 +63,7 @@ describe('logReferralData', () => {
         Attributes: {}
       }
     )
-    const returnedReferralData = await logReferralData(userId, referringUserId)
+    const returnedReferralData = await logReferralData(userContext, userId, referringUserId)
     expect(dbCreateMock).toHaveBeenCalled()
     expect(returnedReferralData).toEqual(expectedReturnedLog)
   })

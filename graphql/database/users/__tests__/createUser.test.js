@@ -72,7 +72,7 @@ describe('createUser', () => {
     expect(createMethod)
       .toHaveBeenCalledWith(userContext, expectedCreateItem)
     expect(logReferralData)
-      .toHaveBeenCalledWith(userInfo.id, referringUserId)
+      .toHaveBeenCalledWith(userContext, userInfo.id, referringUserId)
     expect(rewardReferringUser)
       .toHaveBeenCalledWith(referringUserId)
   })
