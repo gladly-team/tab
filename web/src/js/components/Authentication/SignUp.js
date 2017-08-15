@@ -43,6 +43,7 @@ class SignUp extends React.Component {
   handleSubmit () {
     if (this.state.registeringUser) { return }
 
+    // TODO: show validation errors
     if (this.password.validate() &&
         this.validateUsername() &&
         this.email.validate()) {

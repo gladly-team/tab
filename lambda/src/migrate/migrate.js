@@ -1,18 +1,21 @@
 'use strict'
 
-import {
-  User,
-  createUser
-} from 'database/users/user'
+// Note: after deleting this function, we can remove
+// the following packages from dependencies:
+// joi, uuid, dynogels, bluebird
 
+import UserModel from 'database/users/UserModel'
 import {
-  getBackgroundImages
-} from 'database/backgroundImages/backgroundImage'
+  USER_BACKGROUND_OPTION_COLOR,
+  USER_BACKGROUND_OPTION_CUSTOM,
+  USER_BACKGROUND_OPTION_DAILY,
+  USER_BACKGROUND_OPTION_PHOTO
+} from 'database/constants'
 
-import {
-  updateWidgetEnabled,
-  updateWidgetData
-} from 'database/widgets/userWidget/userWidget'
+import BackgroundImageModel from 'database/backgroundImages/BackgroundImageModel'
+
+import updateUserWidgetData from 'database/widgets/userWidget/updateUserWidgetData'
+import updateUserWidgetEnabled from 'database/widgets/userWidget/updateUserWidgetEnabled'
 
 import Async from 'asyncawait/async'
 import Await from 'asyncawait/await'
@@ -29,8 +32,8 @@ import tfacMgr from './tfac'
  */
 const setUserProfile = Async((userProfile) => {
   try {
-    const user = new User(userProfile.id)
-
+    const user = {}
+    user.id = userProfile.id
     user.username = userProfile.username
     user.email = userProfile.email
     user.vcCurrent = userProfile.vcCurrent
@@ -38,22 +41,23 @@ const setUserProfile = Async((userProfile) => {
     user.level = userProfile.level
     user.heartsUntilNextLevel = userProfile.heartsUntilNextLevel
 
-    user.backgroundOption = User.BACKGROUND_OPTION_PHOTO
+    user.backgroundOption = USER_BACKGROUND_OPTION_PHOTO
     switch (userProfile.backgroundOption) {
-      case User.BACKGROUND_OPTION_CUSTOM:
-        user.backgroundOption = User.BACKGROUND_OPTION_CUSTOM
+      case USER_BACKGROUND_OPTION_CUSTOM:
+        user.backgroundOption = USER_BACKGROUND_OPTION_CUSTOM
         break
-      case User.BACKGROUND_OPTION_COLOR:
-        user.backgroundOption = User.BACKGROUND_OPTION_COLOR
+      case USER_BACKGROUND_OPTION_COLOR:
+        user.backgroundOption = USER_BACKGROUND_OPTION_COLOR
         break
-      case User.BACKGROUND_OPTION_DAILY:
-        user.backgroundOption = User.BACKGROUND_OPTION_DAILY
+      case USER_BACKGROUND_OPTION_DAILY:
+        user.backgroundOption = USER_BACKGROUND_OPTION_DAILY
         break
       default:
         break
     }
 
-    const bkgImages = Await(getBackgroundImages())
+    // FIXME: requires userContext to work.
+    const bkgImages = Await(BackgroundImageModel.getAll())
 
     user.backgroundImage = {
       id: 'fb5082cc-151a-4a9a-9289-06906670fd4e',
@@ -78,7 +82,7 @@ const setUserProfile = Async((userProfile) => {
     user.customImage = userProfile.customImage || null
     user.backgroundColor = userProfile.backgroundColor || null
 
-    Await(createUser(user))
+    Await(UserModel.createUser(user))
 
     return true
   } catch (err) {
@@ -100,8 +104,8 @@ const setBookmarksData = Async((userId, bookmarks) => {
 
     const bookmarkWidgetId = '4162cc79-d192-4435-91bd-5fda9b6f7c08'
 
-    Await(updateWidgetEnabled(userId, bookmarkWidgetId, true))
-    Await(updateWidgetData(
+    Await(updateUserWidgetEnabled(userId, bookmarkWidgetId, true))
+    Await(updateUserWidgetData(
         userId,
         bookmarkWidgetId,
         { bookmarks: bookmarks }))
@@ -141,8 +145,8 @@ const setNotesData = Async((userId, notes) => {
       })
     }
 
-    Await(updateWidgetEnabled(userId, notesWidgetId, true))
-    Await(updateWidgetData(
+    Await(updateUserWidgetEnabled(userId, notesWidgetId, true))
+    Await(updateUserWidgetData(
         userId,
         notesWidgetId,
         { notes: data }))

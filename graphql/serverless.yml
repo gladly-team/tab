@@ -63,11 +63,9 @@ provider:
     # BackgroundImages table
     - Effect: "Allow"
       Action:
-        # FIXME: testing permissions failure
-        - "dynamodb:PutItem"
-        # - "dynamodb:BatchGetItem"
-        # - "dynamodb:GetItem"
-        # - "dynamodb:Query"
+        - "dynamodb:BatchGetItem"
+        - "dynamodb:GetItem"
+        - "dynamodb:Query"
       Resource: "${self:custom.dbTableArnBase}BackgroundImages-${self:provider.stage}"
     # UserWidgets table
     - Effect: "Allow"

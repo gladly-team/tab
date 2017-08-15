@@ -7,9 +7,13 @@
     "amazon-cognito-identity-js": "^1.18.0",
     "asyncawait": "^1.0.6",
     "aws-sdk": "^2.52.0",
+    "bluebird": "^3.5.0",
+    "dynogels": "^8.0.1",
+    "joi": "^10.6.0",
     "moment": "^2.18.1",
     "request": "^2.81.0",
-    "request-promise": "^4.2.1"
+    "request-promise": "^4.2.1",
+    "uuid": "^3.1.0"
   },
   "devDependencies": {
     "babel-cli": "^6.23.0",

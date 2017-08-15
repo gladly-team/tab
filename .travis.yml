@@ -24,6 +24,7 @@ env:
   - TEST_ADS_ENABLED=false
   # GraphQL
   - TEST_TABLE_NAME_APPENDIX="-test"
+  - TEST_DEVELOPMENT_LOGGING_ENABLED=0
   # Endpoints
   - TEST_GRAPHQL_ENDPOINT=https://lspir87lia.execute-api.us-west-2.amazonaws.com/test/graphql
   - TEST_DYNAMODB_ENDPOINT=dynamodb.us-west-2.amazonaws.com
@@ -54,6 +55,7 @@ env:
   - DEV_ADS_ENABLED=true
   # GraphQL
   - DEV_TABLE_NAME_APPENDIX="-dev"
+  - TEST_DEVELOPMENT_LOGGING_ENABLED=0
   # Endpoints
   - DEV_GRAPHQL_ENDPOINT=https://53a9uos12e.execute-api.us-west-2.amazonaws.com/dev/graphql
   - DEV_DYNAMODB_ENDPOINT=dynamodb.us-west-2.amazonaws.com
