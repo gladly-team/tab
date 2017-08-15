@@ -55,7 +55,7 @@ env:
   - DEV_ADS_ENABLED=true
   # GraphQL
   - DEV_TABLE_NAME_APPENDIX="-dev"
-  - TEST_DEVELOPMENT_LOGGING_ENABLED=0
+  - DEV_DEVELOPMENT_LOGGING_ENABLED=0
   # Endpoints
   - DEV_GRAPHQL_ENDPOINT=https://53a9uos12e.execute-api.us-west-2.amazonaws.com/dev/graphql
   - DEV_DYNAMODB_ENDPOINT=dynamodb.us-west-2.amazonaws.com
@@ -66,7 +66,31 @@ env:
   # Secrets
   - secure: wuGQ2fZE1nsNPmEuK3EO1/tFPAa7e5o5TjgRJTMofuRQhjGWyuE9E0WaxDBv/AT9v9gGC3I9CdKlDwigZcXBS9BVP6zdUvYSstVU+5dcHdDDaXC77Q3LmqirKUa6px2wF685Eulb+HmGVK7LPXOOC0fbUDeyNZwqOGD6HbgC0zZLHr8QUvcT3H6Y4indW+BWjI9fPQJU0pqO3uOy9VFbUpFlqIsJ1x+oWq+uTZ/5H/NYmqWtIqM/mXmINwgBB2Va7xiffzAP1UkR1fEWlB2sWyBDaID2g7Rz0Kk5zSzeZXCgTPPA96/IjTKs0Ci8zVuCbR6aU34SmToTjUjTE08S1FHg9p5IsvyAbzmXhuiUlZwTpoEoQEIwHETJt8y4pAreLcnBPXCQtYCKKqfeLpD6bCLoKkdzZolakPkGvdRLWEWk4lwB313fCtb9Ht51yl3kXsLqRElyQQDQ4QC9mV6aRxMTT6nmn+GuWAsNuw3toMTkyxXsVWxFiKfXxmEkPE3cq3xVQtjQJdpv0J5KqbfP9y/nzSh6iTNEVVYkOo1nfNVrAli6SqG/6Jcfpc2lqX0l2PCxyILzpeb0H+STxxblJTFY2vunTpENLQ0wpSEzBD+BuQZ3gDPEZl2MND0ciGzB133ZiIyR6E3O/rZOthNeaf7P1NuLcemB8D40fg7z1aE=
   - secure: RoCiVjVN5DITMGjzh5tErnLSqora04G6JD9A0fsbM3gz+zgNFc7bikroVeMl3h3JTyv9ac25dvTCqDO+mo2ceYKeJwEi0FUYFFDccZ0M2bZ1+lQxjftvsRA1dr3R9Lely3RYS6ij5XcDeXXEghwf8JKnbHLdhGde4kNNorXi5b9EnTUSAefE1dmbRHvIykkEnC3LAIJ6T3+aj0LYsTECXHS5d85a/hFvfcMlVx8aaIcuhSrdUyzFxVJAKMYjEdDw5OLZ+Lk7R/yzekRYKUFWDPswnXp3s9CJvYf4PsuHiqviTvg0tyyqO+7KX2uXFUNqiNeCKgqulQVgo7xhjnZhEJEIrhm8lAecKURQDcK2q+qIUK0GcOQ9kmZYPXtgo13WJG2sQavDStxXbbkh8kb/AByJp0NMRE/1kgSu80Sh/E0wE8lK94u5S3ofWZEDtMKnt7pZo8+FwtXPi5+gbOo37EjC/fglCNsTP6Gllr0GmgkOmrNfOMH5IftkhZ+L4r61TsbflM9rrifLkjx5D/BiIP9H3kc86SWpq2ALeeCBK0mZ+wpyvXYWEHTPHmyI2LzriP1qa8aPlDp5Rjw/L1rJZikkLUPZHg+TTIDETQlXAbhW+E8CxB0De3jNE7psaR7FUGY/ueSvMW+Z4xpAdlBRTkbJHDTf3KAdWsmB79IP1JI=
-  ########## TODO: production stage ##########
+  ########## Production stage ##########
+  - PROD_NODE_ENV=production
+  - PROD_AWS_REGION=us-west-2
+  - PROD_AWS_ACCOUNT_ID=167811431063
+  # AWS Cognito
+  - PROD_COGNITO_REGION=us-west-2
+  # FIXME: update
+  - PROD_COGNITO_IDENTITYPOOLID=arn:aws:cognito-idp:us-west-2:167811431063:userpool/us-west-2_zu5kEM34P
+  - PROD_COGNITO_USERPOOLID=us-west-2_zu5kEM34P
+  - PROD_COGNITO_CLIENTID=32lj6balg8t2d1209sb50t1m8b
+  - PROD_MOCK_DEV_AUTHENTICATION=false
+  # Web app
+  - PROD_PUBLIC_PATH=http://prod-tab2017.gladly.io/
+  - PROD_ADS_ENABLED=true
+  # GraphQL
+  - PROD_TABLE_NAME_APPENDIX="-prod"
+  - PROD_DEVELOPMENT_LOGGING_ENABLED=0
+  # Endpoints
+  - PROD_GRAPHQL_ENDPOINT=https://53a9uos12e.execute-api.us-west-2.amazonaws.com/prod/graphql
+  - PROD_DYNAMODB_ENDPOINT=dynamodb.us-west-2.amazonaws.com
+  - PROD_S3_ENDPOINT=https://s3-us-west-2.amazonaws.com/prod-tab2017-media.gladly.io
+  # Deployment
+  - PROD_WEB_S3_BUCKET_NAME=prod-tab2017.gladly.io
+  - PROD_MEDIA_S3_BUCKET_NAME=prod-tab2017-media.gladly.io
+  # Secrets
   - secure: aHjjaEjCNXRimME1tROAfN/iFbyg9W8Uu+/sQT8gEC0vCsqblFK4/eI9wga0eljO6nhOS68MUTdaFQhBDrRQCum5v3y9tLxBI+XQP1vauXPtFJToh6QeB4bCu0w2dNBzcCXcwew0YP66D7UAMQQx0o9t1UshFSUdVxRvv7s4A9ro1vahD9dZuPy+MJJQPYILmq/svioWi2MgfLQSLWIzck7VCFLgEPwgBati6o/lMIoMiUuUmNQDS68ceUtR2sqWpzj1UiIf0S4YzuzpLKL7YzhsdB7MOvI0nJ9SB5Z/S2E+pHKIVUqS0RjCCzQR+XdoTM/dgrLizjBwt2aKx6ElFzXU2XMimv/50l6I0utnZboT+oR9XrZ65j0gq0zYQWrixJ+aQbbnodJGUAK3ab4+mQG0i+/BA+lTreCmFHLIVglSm55pTIaCT6fDZCKPMqIaf4uZ4XiMDtbW4LUeT4MzRO9b0GtEjdKFeAaBihkv/m8sneHfqWurpNIKBdXEb8G21+dIaxPKxWC6fjDfX0Rhv476d7r+kJYLi4YScRhkBBHQ1BpOj4Fi6XU6gK6+C6sEf4Q//w3xXCHNNDS2ynWgtGTESabSY0Xg8ge6p+KmQCMi6yc8u6fGiFwf5JCgefLKSV7KpICEsEoN8F/tkxUVrVIB084V1iMkvw0z86GMAEc=
   - secure: li6wI7k7TEUJ15KT9vzZEjcJq1nVcGO9gwSXv9vRbktfpztTaRrORc5N5T4/SeHHlURDMr5PxhwB6lYuXIeRhWIh/j48La01HOoMPzhz8qTzK+HaakN/Ebzyx1/mJb28A4JZqpiHiaRWKZopCj5OMGTnZlBUAHFC9dDfgbTXyatn02SwRrAy7tMs0IdmsKnDXGB8zV2LvpxL6b0XenwwZQJ4oI5whWAut9PGhfnB1IWjDlE7TlYC43mEqVHFaHZsEoOf68utVLA6iMHzLja0Lh4SIIDDk0qo99yxt8+EXhiI7WQ4vhPcL42m2/E8QQbiPmRHkrjtSyhN46qAJdzdbju+1krgslruHBXFO9X4qZ4KhGYUl1xzW9KbYbhI0i5mbH5lmaDXf1T9eyLdmeluHee0xO/VkP4WwYQyAQm0T/2C0xAqR59t9aevQpX0ALVUh5eKoVkTVo1TT30b2YBtOkoqdleWMOsguifkV8kTvvCpope8hMRPUzOPJWk1qoPqXoKLhh9Q5PboaQgGpHGEXQ/3RhTra+qkKWDxLPVvfF0Lj4zjOsNkAZTEBn+018BAMl36pU3KYeb6d924n/5bqraTg0rxJk951Kx++YLuRRjuZX1B0JbXOtqjLJQEO+to57vda1pW1fUt18Cc1MWFy87yJUtAxojvcMs1acffxP4=
 addons:
@@ -115,10 +139,18 @@ script:
   - yarn run ci:test:integration
 # TODO: master branch deploy to prod; other logic for test/dev
 deploy:
-  provider: script
-  script: yarn run ci:deploy dev
-  on:
-    branch: master
-  # don't reset working directory after script step
-  skip_cleanup: true
+  # Dev stage deploy
+  - provider: script
+    script: yarn run ci:deploy dev
+    on:
+      branch: master
+    # don't reset working directory after script step
+    skip_cleanup: true
+  # Prod stage deploy
+  - provider: script
+    script: yarn run ci:deploy prod
+    # TODO: master only after setup
+    # on:
+    #   branch: master
+    skip_cleanup: true
 cache: yarn
