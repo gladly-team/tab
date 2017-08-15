@@ -16,6 +16,7 @@ const referralParams = {
 // 'utm_content'
 // 'tfac_id'
 
+// TODO: validate min and max length
 function validateUsername (username) {
   var re = /^[a-zA-Z0-9]+$/
   return re.test(username)

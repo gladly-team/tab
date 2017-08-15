@@ -1,7 +1,13 @@
 'use strict'
 
+import 'babel-polyfill' // For async/await support.
 import { graphql } from 'graphql'
 import { Schema } from './data/schema'
+import {
+  createGraphQLContext,
+  getUserClaimsFromLambdaEvent,
+  isUserAuthorized
+} from './utils/authorization-helpers'
 
 const createResponse = function (statusCode, body) {
   return {
@@ -13,6 +19,7 @@ const createResponse = function (statusCode, body) {
   }
 }
 
+// TODO: set up logging via Sentry.
 export const handler = function (event) {
   var body
   try {
@@ -21,7 +28,13 @@ export const handler = function (event) {
     return Promise.resolve(createResponse(500, e))
   }
 
-  return graphql(Schema, body.query, null, {}, body.variables)
+  // Check user authorization.
+  const claims = getUserClaimsFromLambdaEvent(event)
+  if (!isUserAuthorized(claims)) {
+    return Promise.resolve(createResponse(401, 'Request not authorized.'))
+  }
+  const context = createGraphQLContext(claims)
+  return graphql(Schema, body.query, null, context, body.variables)
     .then(data => createResponse(200, data))
     .catch(err => createResponse(500, err))
 }

@@ -18,7 +18,7 @@ resources:
     usersTable:  
       Type: AWS::DynamoDB::Table
       Properties:  
-        TableName: Users-${opt:stage, self:provider.stage}
+        TableName: Users-${self:provider.stage}
         KeySchema:
           - AttributeName: id
             KeyType: HASH
@@ -44,7 +44,7 @@ resources:
     charitiesTable:  
       Type: AWS::DynamoDB::Table
       Properties:  
-        TableName: Charities-${opt:stage, self:provider.stage}
+        TableName: Charities-${self:provider.stage}
         KeySchema:
           - AttributeName: id
             KeyType: HASH
@@ -58,7 +58,7 @@ resources:
     widgetsTable:  
       Type: AWS::DynamoDB::Table
       Properties:  
-        TableName: Widgets-${opt:stage, self:provider.stage}
+        TableName: Widgets-${self:provider.stage}
         KeySchema:
           - AttributeName: id
             KeyType: HASH
@@ -72,7 +72,7 @@ resources:
     userLevelsTable:  
       Type: AWS::DynamoDB::Table
       Properties:  
-        TableName: UserLevels-${opt:stage, self:provider.stage}
+        TableName: UserLevels-${self:provider.stage}
         KeySchema:
           - AttributeName: id
             KeyType: HASH
@@ -86,7 +86,7 @@ resources:
     vcDonationLogTable:  
       Type: AWS::DynamoDB::Table
       Properties:  
-        TableName: VcDonationLog-${opt:stage, self:provider.stage}
+        TableName: VcDonationLog-${self:provider.stage}
         KeySchema:
           - AttributeName: id
             KeyType: HASH
@@ -104,7 +104,7 @@ resources:
     backgroundImagesTable:  
       Type: AWS::DynamoDB::Table
       Properties:  
-        TableName: BackgroundImages-${opt:stage, self:provider.stage}
+        TableName: BackgroundImages-${self:provider.stage}
         KeySchema:
           - AttributeName: id
             KeyType: HASH
@@ -118,7 +118,7 @@ resources:
     userWidgetsTable:  
       Type: AWS::DynamoDB::Table
       Properties:  
-        TableName: UserWidgets-${opt:stage, self:provider.stage}
+        TableName: UserWidgets-${self:provider.stage}
         KeySchema:
           - AttributeName: userId
             KeyType: HASH

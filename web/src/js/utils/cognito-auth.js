@@ -92,6 +92,9 @@ function login (username, password, onSuccessCallback, onFailureCallback) {
       onFailureCallback(err)
     }
   })
+  // If we want to integrate with Cognito Identity, we should
+  // refresh credentials here (`AWS.config.credentials.refresh`).
+  // https://github.com/aws/amazon-cognito-identity-js/issues/445#issuecomment-310452516
 }
 
 function signup (username, email, password, onSuccessCallback, onFailureCallback) {
@@ -142,6 +145,25 @@ function resendConfirmation (username, onSuccess, onFailure) {
       return
     }
     onSuccess(result)
+  })
+}
+
+const getUserIdToken = () => {
+  return new Promise((resolve, reject) => {
+    // Cognito handles ID token refreshing:
+    // https://github.com/aws/amazon-cognito-identity-js/issues/245#issuecomment-271345763
+    const cognitoUser = userPool.getCurrentUser()
+    if (cognitoUser != null) {
+      cognitoUser.getSession((err, session) => {
+        if (err) {
+          resolve(null)
+        }
+        const idToken = session.getIdToken().getJwtToken()
+        resolve(idToken)
+      })
+    } else {
+      resolve(null)
+    }
   })
 }
 
@@ -225,13 +247,14 @@ function confirmPassword (username, verificationCode, newPassword, onSuccess, on
 }
 
 export {
-login,
-signup,
-confirmRegistration,
-resendConfirmation,
-getCurrentUser,
-logoutUser,
-checkUserExist,
+  login,
+  signup,
+  confirmRegistration,
+  resendConfirmation,
+  getCurrentUser,
+  getUserIdToken,
+  logoutUser,
+  checkUserExist,
   getOrCreate,
   forgotPassword,
   confirmPassword

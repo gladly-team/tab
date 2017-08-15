@@ -12,6 +12,7 @@ env:
   ########## Test stage ##########
   - TEST_NODE_ENV=production
   - TEST_AWS_REGION=us-west-2
+  - TEST_AWS_ACCOUNT_ID=167811431063
   # AWS Cognito
   - TEST_COGNITO_REGION=us-west-2
   - TEST_COGNITO_IDENTITYPOOLID=arn:aws:cognito-idp:us-west-2:167811431063:userpool/us-west-2_r5AVxbLTi
@@ -23,6 +24,7 @@ env:
   - TEST_ADS_ENABLED=false
   # GraphQL
   - TEST_TABLE_NAME_APPENDIX="-test"
+  - TEST_DEVELOPMENT_LOGGING_ENABLED=0
   # Endpoints
   - TEST_GRAPHQL_ENDPOINT=https://lspir87lia.execute-api.us-west-2.amazonaws.com/test/graphql
   - TEST_DYNAMODB_ENDPOINT=dynamodb.us-west-2.amazonaws.com
@@ -41,6 +43,7 @@ env:
   ########## Dev stage ##########
   - DEV_NODE_ENV=production
   - DEV_AWS_REGION=us-west-2
+  - DEV_AWS_ACCOUNT_ID=167811431063
   # AWS Cognito
   - DEV_COGNITO_REGION=us-west-2
   - DEV_COGNITO_IDENTITYPOOLID=arn:aws:cognito-idp:us-west-2:167811431063:userpool/us-west-2_zu5kEM34P
@@ -52,6 +55,7 @@ env:
   - DEV_ADS_ENABLED=true
   # GraphQL
   - DEV_TABLE_NAME_APPENDIX="-dev"
+  - TEST_DEVELOPMENT_LOGGING_ENABLED=0
   # Endpoints
   - DEV_GRAPHQL_ENDPOINT=https://53a9uos12e.execute-api.us-west-2.amazonaws.com/dev/graphql
   - DEV_DYNAMODB_ENDPOINT=dynamodb.us-west-2.amazonaws.com
@@ -108,7 +112,7 @@ script:
   # TODO: handle PR restrictions. See:
   # https://docs.travis-ci.com/user/pull-requests#Pull-Requests-and-Security-Restrictions
   - yarn run ci:deploy test
-  - yarn run ci:test-e2e
+  - yarn run ci:test:integration
 # TODO: master branch deploy to prod; other logic for test/dev
 deploy:
   provider: script

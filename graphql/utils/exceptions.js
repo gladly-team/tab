@@ -12,7 +12,13 @@ class ExtendableError extends Error {
 
 class NotImplementedException extends ExtendableError {
   constructor () {
-    super('Not implemented.')
+    super('Required method is not implmented.')
+  }
+}
+
+class UnauthorizedQueryException extends ExtendableError {
+  constructor () {
+    super('Query not authorized.')
   }
 }
 
@@ -43,6 +49,7 @@ class OperationMissmatchException extends MockDatabaseException {
 
 export {
   NotImplementedException,
+  UnauthorizedQueryException,
   UserReachedMaxLevelException,
   EmptyOperationStackException,
   OperationMissmatchException

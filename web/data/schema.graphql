@@ -1,16 +1,3 @@
-input AddBookmarkInput {
-  userId: String!
-  widgetId: String!
-  name: String!
-  link: String!
-  clientMutationId: String
-}
-
-type AddBookmarkPayload {
-  widget: Widget
-  clientMutationId: String
-}
-
 # Global app fields
 type App implements Node {
   # The ID of an object
@@ -149,8 +136,6 @@ type Mutation {
   updateWidgetVisibility(input: UpdateWidgetVisibilityInput!): UpdateWidgetVisibilityPayload
   updateWidgetEnabled(input: UpdateWidgetEnabledInput!): UpdateWidgetEnabledPayload
   updateWidgetConfig(input: UpdateWidgetConfigInput!): UpdateWidgetConfigPayload
-  addBookmark(input: AddBookmarkInput!): AddBookmarkPayload
-  removeBookmark(input: RemoveBookmarkInput!): RemoveBookmarkPayload
   setUserActiveWidget(input: SetUserActiveWidgetInput!): SetUserActiveWidgetPayload
   createNewUser(input: CreateNewUserInput!): CreateNewUserPayload
 }
@@ -188,18 +173,6 @@ type Query {
 
 input ReferralData {
   referringUser: String!
-}
-
-input RemoveBookmarkInput {
-  userId: String!
-  widgetId: String!
-  position: Int!
-  clientMutationId: String
-}
-
-type RemoveBookmarkPayload {
-  widget: Widget
-  clientMutationId: String
 }
 
 input SetUserActiveWidgetInput {

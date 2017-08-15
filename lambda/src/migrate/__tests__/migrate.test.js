@@ -1,47 +1,19 @@
 /* global jest describe it expect */
+
 import tfacMgr from '../tfac'
 jest.mock('../tfac')
-
-class mockUser {
-  constructor (id) {
-    this.id = id
-  }
-}
-
-mockUser.BACKGROUND_OPTION_DAILY = 'daily'
-mockUser.BACKGROUND_OPTION_CUSTOM = 'custom'
-mockUser.BACKGROUND_OPTION_COLOR = 'color'
-mockUser.BACKGROUND_OPTION_PHOTO = 'photo'
 
 var mockCreateUser = jest.fn((user) => {
   return Promise.resolve(true)
 })
 
-jest.mock('database/users/user', () => {
+// FIXME
+jest.mock('database/users/UserModel', () => {
   return {
-    createUser: mockCreateUser,
-    User: mockUser
+    createUser: mockCreateUser
   }
 })
-
-jest.mock('database/backgroundImages/backgroundImage', () => {
-  return {
-    getBackgroundImages: jest.fn((user) => {
-      return Promise.resolve([
-        {
-          id: 'fb5082cc-151a-4a9a-9289-06906670fd4e',
-          name: 'Mountain Lake',
-          fileName: 'lake.jpg'
-        },
-        {
-          id: '90bfe202-54a9-4eea-9003-5e91572387dd',
-          name: 'Puppy Eyes',
-          fileName: 'puppy.jpg'
-        }
-      ])
-    })
-  }
-})
+jest.mock('database/backgroundImages/BackgroundImageModel')
 
 var mockUpdateWidgetEnabled = jest.fn((userId, widgetId, enabled) => {
   return Promise.resolve(true)
@@ -51,12 +23,8 @@ var mockUpdateWidgetData = jest.fn((userId, widgetId, data) => {
   return Promise.resolve(true)
 })
 
-jest.mock('database/widgets/userWidget/userWidget', () => {
-  return {
-    updateWidgetEnabled: mockUpdateWidgetEnabled,
-    updateWidgetData: mockUpdateWidgetData
-  }
-})
+jest.mock('database/widgets/userWidget/updateUserWidgetEnabled', () => mockUpdateWidgetEnabled)
+jest.mock('database/widgets/userWidget/updateUserWidgetData', () => mockUpdateWidgetData)
 
 const migrate = require('../migrate')
 
@@ -76,6 +44,7 @@ describe('Migrate Data Tests', function () {
       })
   })
 
+  // FIXME: these tests don't wait for promise resolution.
   it('creates the user profile correctly', () => {
     const createUserCalls = mockCreateUser.mock.calls.length
 
@@ -95,7 +64,7 @@ describe('Migrate Data Tests', function () {
               expect(user.heartsUntilNextLevel).toBe(userProfile.heartsUntilNextLevel)
               expect(user.backgroundColor).toBe(userProfile.backgroundColor)
               expect(user.customImage).toBe(userProfile.customImage)
-              expect(user.backgroundOption).toBe(mockUser.BACKGROUND_OPTION_PHOTO)
+              expect(user.backgroundOption).toBe('photo')
 
               expect(user.backgroundImage.id).toBe('90bfe202-54a9-4eea-9003-5e91572387dd')
               expect(user.backgroundImage.name).toBe('Puppy Eyes')

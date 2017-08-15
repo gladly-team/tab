@@ -1,55 +1,69 @@
 /* eslint-env jest */
 
-import mockDatabase from '../../__mocks__/database'
-import { DatabaseOperation, OperationType } from '../../../utils/test-utils'
+import VCDonationModel from '../VCDonationModel'
+import donateVc from '../donateVc'
+import addVc from '../../users/addVc'
+import {
+  DatabaseOperation,
+  getMockUserContext,
+  getMockUserInstance,
+  mockDate,
+  setMockDBResponse
+} from '../../test-utils'
 
-import users from '../../__mocks__/fixtures/users'
-import tablesNames from '../../tables'
-import { donateVc } from '../donation'
+jest.mock('../../databaseClient')
+jest.mock('../../users/addVc')
 
-jest.mock('../../database', () => {
-  return mockDatabase
+const userContext = getMockUserContext()
+
+beforeAll(() => {
+  mockDate.on()
 })
 
-function setup () {
-  mockDatabase.init()
-  return mockDatabase
-}
+afterAll(() => {
+  mockDate.off()
+})
 
-test('donate vc to charity', () => {
-  const userId = '45bbefbf-63d1-4d36-931e-212fbe2bc3d9'
-  const charityId = 'fb5082cc-151a-4a9a-9289-06906670fd4e'
-  const vcDonated = 20
+afterEach(() => {
+  jest.clearAllMocks()
+})
 
-  const database = setup()
+describe('donateVc', () => {
+  it('subtracts the donated VC from the user', async () => {
+    const userId = userContext.id
+    const charityId = 'bb5082cc-151a-4a9a-9289-06906670fd4e'
+    const vcToDonate = 14
+    jest.spyOn(VCDonationModel, 'create')
+      .mockImplementation(() => {
+        return {}
+      })
+    await donateVc(userContext, userId, charityId, vcToDonate)
+    expect(addVc).toHaveBeenCalledWith(userContext, userId, -14)
+  })
 
-  database.pushDatabaseOperation(
-    new DatabaseOperation(OperationType.UPDATE, (params) => {
-      expect(params.TableName).toBe(tablesNames.users)
-      expect(params.Key.id).toBe(userId)
-      expect(params.ExpressionAttributeValues[':val']).toBe(-vcDonated)
-      return { Attributes: users[0] }
-    })
+  it('calls the database as expected', async () => {
+    const userId = userContext.id
+    const charityId = 'bb5082cc-151a-4a9a-9289-06906670fd4e'
+    const vcToDonate = 16
+
+    const vcDonationCreateMethod = jest.spyOn(VCDonationModel, 'create')
+    setMockDBResponse(
+      DatabaseOperation.CREATE,
+      {
+        Attributes: {}
+      }
     )
-
-  database.pushDatabaseOperation(
-    new DatabaseOperation(OperationType.PUT, (params) => {
-      expect(params.TableName).toBe(tablesNames.vcDonationLog)
-      expect(params.Item.id).toBe(userId)
-      expect(params.Item.charityId).toBe(charityId)
-      expect(params.Item.vcDonated).toBe(vcDonated)
-      expect(params.Item.timestamp).not.toBe(null)
-      expect(params.Item.timestamp).not.toBe('')
-      return {}
+    const expectedReturnedUser = getMockUserInstance()
+    addVc.mockImplementationOnce(() => {
+      return expectedReturnedUser
     })
-    )
 
-  return donateVc(userId, charityId, vcDonated)
-    .then(response => {
-      expect(response).not.toBe(null)
-        // For some reason this line fails. No idea since from
-        // the console we can check that response is of type User
-        // expect(response instanceof User).toBe(true);
-      expect(response.id).toBe(userId)
+    const returnedUser = await donateVc(userContext, userId, charityId, vcToDonate)
+    expect(vcDonationCreateMethod).toHaveBeenCalledWith(userContext, {
+      userId: userId,
+      charityId: charityId,
+      vcDonated: vcToDonate
     })
+    expect(returnedUser).toEqual(expectedReturnedUser)
+  })
 })

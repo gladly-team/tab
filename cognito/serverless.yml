@@ -49,14 +49,12 @@ resources:
       Properties:
         ClientName: tab-${opt:stage, self:provider.stage}-client
         GenerateSecret: false
+        # The time limit, in days, after which the refresh token
+        # is no longer valid.
+        RefreshTokenValidity: 3650
         UserPoolId: 
           Ref: CognitoUserPoolTabUserPool
         # Used in tests to create and manage users:
         # https://docs.aws.amazon.com/cognito/latest/developerguide/amazon-cognito-user-pools-authentication-flow.html#amazon-cognito-user-pools-admin-authentication-flow
         ExplicitAuthFlows:
           - ADMIN_NO_SRP_AUTH
-
-
-
-
-

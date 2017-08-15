@@ -1,0 +1,16 @@
+[
+  {
+    "userId": "gqltest1-12ab-12ab-12ab-123abc456def",
+    "widgetId": "gqltest1-asdf-asdf-asdf-asdfghjklzxc",
+    "enabled": true,
+    "visible": true,
+    "data": {
+      "bookmarks": [
+        {
+          "name": "Google",
+          "link": "https://www.google.com/" 
+        }
+      ]
+    }
+  }
+]

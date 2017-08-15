@@ -1,38 +1,22 @@
 /* eslint-env jest */
 
-import { rewardReferringUser } from '../rewardReferringUser'
-import { updateUserVc } from '../updateUserVc'
+import UserModel from '../UserModel'
+import rewardReferringUser from '../rewardReferringUser'
+import addVc from '../addVc'
 
-jest.mock('../../database')
+jest.mock('../../databaseClient')
+jest.mock('../addVc')
 
-jest.mock('../updateUserVc', () => {
-  return {
-    updateUserVc: jest.fn((userId, rewardVc) => {
-      return Promise.resolve(true)
-    })
-  }
-})
+// Mock addVc method
+UserModel.addVc = jest.fn()
 
-function setup () {
-  jest.resetAllMocks()
-}
-
-describe('Reward Referring User tests', function () {
-  it('should call to update the user vc', () => {
-    setup()
-    const referringUser = 'referring-user-id'
-    const rewardVc = 350
-
-    return rewardReferringUser(referringUser, rewardVc)
-        .then(user => {
-          const updateUserVcCalls = updateUserVc.mock.calls.length
-          expect(updateUserVcCalls).toBe(1)
-
-          const updateUserVcMock = updateUserVc.mock
-                  .calls[updateUserVc.mock.calls.length - 1]
-
-          expect(updateUserVcMock[0]).toBe(referringUser)
-          expect(updateUserVcMock[1]).toBe(rewardVc)
-        })
+describe('rewardReferringUser', () => {
+  it('works as expected', async () => {
+    const referringUserId = 'some-id-123'
+    await rewardReferringUser(referringUserId)
+    const addVcCallParams = addVc.mock.calls[0]
+    expect(addVcCallParams[0]).toMatch(/REWARD_REFERRER_OVERRIDE_CONFIRMED_[0-9]{5}$/)
+    expect(addVcCallParams[1]).toBe(referringUserId)
+    expect(addVcCallParams[2]).toBe(350)
   })
 })

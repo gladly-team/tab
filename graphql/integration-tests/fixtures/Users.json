@@ -1,0 +1,20 @@
+[
+  {
+    "id": "gqltest1-12ab-12ab-12ab-123abc456def",
+    "username": "kevin",
+    "email": "foo@bar.com",
+    "vcCurrent": 10,
+    "vcAllTime": 10,
+    "level": 1,
+    "heartsUntilNextLevel": 5
+  },
+  {
+    "id": "gqltest1-yz89-yz80-yz80-xyz789tuv456",
+    "username": "susan",
+    "email": "susan@example.com",
+    "vcCurrent": 200,
+    "vcAllTime": 450,
+    "level": 4,
+    "heartsUntilNextLevel": 50
+  }
+]
