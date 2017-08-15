@@ -121,10 +121,10 @@ const { nodeInterface, nodeField } = nodeDefinitions(
  */
 
 const backgroundImageType = new GraphQLObjectType({
-  name: 'BackgroundImage',
+  name: BACKGROUND_IMAGE,
   description: 'A background image',
   fields: () => ({
-    id: globalIdField('BackgroundImage'),
+    id: globalIdField(BACKGROUND_IMAGE),
     name: {
       type: GraphQLString,
       description: 'the background image name'
@@ -169,10 +169,10 @@ const imageType = new GraphQLObjectType({
 })
 
 const userType = new GraphQLObjectType({
-  name: 'User',
+  name: USER,
   description: 'A person who uses our app',
   fields: () => ({
-    id: globalIdField('User'),
+    id: globalIdField(USER),
     userId: {
       type: GraphQLString,
       description: 'Users\'s username',
@@ -237,10 +237,10 @@ const userType = new GraphQLObjectType({
 })
 
 const widgetType = new GraphQLObjectType({
-  name: 'Widget',
+  name: WIDGET,
   description: 'App widget',
   fields: () => ({
-    id: globalIdField('Widget'),
+    id: globalIdField(WIDGET),
     name: {
       type: GraphQLString,
       description: 'Widget display name'
@@ -361,9 +361,9 @@ const appType = new GraphQLObjectType({
 /**
  * Define your own connection types here
  */
-const { connectionType: widgetConnection, edgeType: widgetEdge } = connectionDefinitions({ name: 'Widget', nodeType: widgetType })
+const { connectionType: widgetConnection, edgeType: widgetEdge } = connectionDefinitions({ name: WIDGET, nodeType: widgetType })
 const { connectionType: charityConnection, edgeType: charityEdge } = connectionDefinitions({ name: CHARITY, nodeType: charityType })
-const { connectionType: backgroundImageConnection, edgeType: backgroundImageEdge } = connectionDefinitions({ name: 'BackgroundImage', nodeType: backgroundImageType })
+const { connectionType: backgroundImageConnection, edgeType: backgroundImageEdge } = connectionDefinitions({ name: BACKGROUND_IMAGE, nodeType: backgroundImageType })
 
 /**
  * Updated the user vc.
