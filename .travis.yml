@@ -142,7 +142,9 @@ deploy:
   - provider: script
     script: yarn run ci:deploy dev
     on:
-      branch: master
+      # TODO: revert to master branch only
+      all_branches: true
+      # branch: master
     # don't reset working directory after script step
     skip_cleanup: true
   # Prod stage deploy
