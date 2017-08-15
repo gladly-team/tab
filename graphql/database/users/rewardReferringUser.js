@@ -3,9 +3,11 @@ import {
   USER_REFERRAL_VC_REWARD
 } from '../constants'
 import {
-  getPermissionsOverride
-} from '../../utils/authorization-helpers'
+  getPermissionsOverride,
+  REWARD_REFERRER_OVERRIDE
+} from '../../utils/permissions-overrides'
 import addVc from './addVc'
+const override = getPermissionsOverride(REWARD_REFERRER_OVERRIDE)
 
 /**
  * Reward a referring user by increasing their VC.
@@ -13,8 +15,7 @@ import addVc from './addVc'
  * @return {Promise<User>}  A promise that resolves into a User instance.
  */
 const rewardReferringUser = async (referringUserId) => {
-  const permissionsOverride = getPermissionsOverride()
-  await addVc(permissionsOverride, referringUserId,
+  await addVc(override, referringUserId,
     USER_REFERRAL_VC_REWARD)
 }
 

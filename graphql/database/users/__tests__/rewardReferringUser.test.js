@@ -13,9 +13,10 @@ UserModel.addVc = jest.fn()
 describe('rewardReferringUser', () => {
   it('works as expected', async () => {
     const referringUserId = 'some-id-123'
-    const overrideVal = 'PLACEHOLDER'
     await rewardReferringUser(referringUserId)
-    expect(addVc).toHaveBeenCalledWith(overrideVal,
-      referringUserId, 350)
+    const addVcCallParams = addVc.mock.calls[0]
+    expect(addVcCallParams[0]).toMatch(/REWARD_REFERRER_OVERRIDE_CONFIRMED_[0-9]{5}$/)
+    expect(addVcCallParams[1]).toBe(referringUserId)
+    expect(addVcCallParams[2]).toBe(350)
   })
 })
