@@ -10,7 +10,7 @@ import {
   UnauthorizedQueryException
 } from '../../utils/exceptions'
 import dbClient from '../databaseClient'
-import { isValidPermissionsOverride } from '../../utils/authorization-helpers'
+import { isValidPermissionsOverride } from '../../utils/permissions-overrides'
 
 dynogels.documentClient(dbClient)
 

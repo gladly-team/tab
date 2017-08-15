@@ -13,7 +13,7 @@ const user = getMockUserContext()
 describe('BaseModel `isQueryAuthorized` method', () => {
   beforeEach(() => {
     // Mock a valid permissions override.
-    jest.mock('../../../utils/authorization-helpers', () => {
+    jest.mock('../../../utils/permissions-overrides', () => {
       return {
         isValidPermissionsOverride: jest.fn((override) => {
           return override === 'working-override'

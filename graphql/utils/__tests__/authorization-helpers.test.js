@@ -110,19 +110,3 @@ describe('permission authorizer functions', () => {
     ).toBe(false)
   })
 })
-
-describe('permission overrides', () => {
-  test('checker returns true when the override is valid', () => {
-    const override = getPermissionsOverride()
-    expect(isValidPermissionsOverride(override)).toBe(true)
-  })
-
-  test('checker returns false when the override is invalid', () => {
-    const override = 'WRONG-OVERRIDE'
-    expect(isValidPermissionsOverride(override)).toBe(false)
-  })
-
-  test('getPermissionsOverride returns expected value', () => {
-    expect(getPermissionsOverride()).toBe('PLACEHOLDER')
-  })
-})
