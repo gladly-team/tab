@@ -87,28 +87,27 @@ describe('User table queries', () => {
     expect(response.message).toBe('Unauthorized')
   }, 60e3)
 
-  // TODO: reenable when implemented.
-  // it('does not allow a user to fetch another user', async () => {
-  //   const query = `
-  //     query UserViewQuery(
-  //       $userId: String!) {
-  //         user(userId: $userId) {
-  //           userId
-  //           username
-  //           vcCurrent
-  //           vcAllTime
-  //           email
-  //         }
-  //     }
-  //   `
-  //   const response = await fetchQuery(query, {
-  //     userId: 'gqltest1-yz89-yz80-yz80-xyz789tuv456' // another user
-  //   }, cognitoUserIdToken)
-  //   console.log('Wrong user fetch:')
-  //   console.log(JSON.stringify(response, null, 2))
-  //   expect(response.data).toBeUndefined()
-  //   expect(response.message).toBe('Unauthorized')
-  // }, 60e3)
+  it('does not allow a user to fetch another user', async () => {
+    const query = `
+      query UserViewQuery(
+        $userId: String!) {
+          user(userId: $userId) {
+            userId
+            username
+            vcCurrent
+            vcAllTime
+            email
+          }
+      }
+    `
+    const response = await fetchQuery(query, {
+      userId: 'gqltest1-yz89-yz80-yz80-xyz789tuv456' // another user
+    }, cognitoUserIdToken)
+    console.log('Wrong user fetch:')
+    console.log(JSON.stringify(response, null, 2))
+    expect(response.data).toBeUndefined()
+    expect(response.message).toBe('Query not authorized.')
+  }, 60e3)
 
   // // TODO
   // it('allows new user creation', async () => {
