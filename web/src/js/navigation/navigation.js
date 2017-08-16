@@ -17,7 +17,7 @@ function goToSettings () {
 }
 
 function goToSettingsSection (section) {
-  goTo(`/tab/settings/${section}`)
+  goTo(`/tab/settings/${section}/`)
 }
 
 function goToDonate () {
