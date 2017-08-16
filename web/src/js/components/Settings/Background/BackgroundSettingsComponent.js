@@ -22,9 +22,8 @@ class BackgroundSettings extends React.Component {
     }
   }
 
-  componentDidMount () {
+  componentWillMount () {
     const { user } = this.props
-
     this.setState({
       selected: user.backgroundOption || this.defaultSelection
     })

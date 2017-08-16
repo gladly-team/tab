@@ -26,7 +26,7 @@ class Settings extends React.Component {
     }
   }
 
-  componentDidMount () {
+  componentWillMount () {
     this.setState({
       selection: this.getRouteName()
     })
