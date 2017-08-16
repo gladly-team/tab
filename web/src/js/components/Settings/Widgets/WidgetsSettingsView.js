@@ -4,7 +4,7 @@ import React from 'react'
 import {QueryRenderer} from 'react-relay/compat'
 import environment from '../../../../relay-env'
 
-import WidgetsSettigns from './WidgetsSettingsContainer'
+import WidgetsSettings from './WidgetsSettingsContainer'
 
 import FullScreenProgress from 'general/FullScreenProgress'
 import AuthUserComponent from 'general/AuthUserComponent'
@@ -33,7 +33,7 @@ class WidgetsSettingsView extends React.Component {
 
             if (props) {
               return (
-                <WidgetsSettigns
+                <WidgetsSettings
                   app={props.app}
                   user={props.user} />
               )

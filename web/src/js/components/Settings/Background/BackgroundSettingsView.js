@@ -4,7 +4,7 @@ import React from 'react'
 import {QueryRenderer} from 'react-relay/compat'
 import environment from '../../../../relay-env'
 
-import BackgroundSettigns from './BackgroundSettingsContainer'
+import BackgroundSettings from './BackgroundSettingsContainer'
 
 import FullScreenProgress from 'general/FullScreenProgress'
 import AuthUserComponent from 'general/AuthUserComponent'
@@ -33,7 +33,7 @@ class BackgroundSettingsView extends React.Component {
 
             if (props) {
               return (
-                <BackgroundSettigns
+                <BackgroundSettings
                   app={props.app}
                   user={props.user} />
               )
