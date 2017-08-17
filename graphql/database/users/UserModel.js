@@ -64,10 +64,10 @@ class User extends BaseModel {
       // On the first Heart gained, immediately level up to Level 1.
       heartsUntilNextLevel: 0,
       backgroundImage: {
-        id: 'fb5082cc-151a-4a9a-9289-06906670fd4e',
-        name: 'Mountain Lake',
-        image: 'lake.jpg',
-        thumbnail: 'lake.jpg',
+        id: '49fcb132-9b6b-431b-bda8-50455e215be7',
+        name: 'Into the Blue',
+        image: '661651039af4454abb852927b3a5b8f9.jpg',
+        thumbnail: '4c44e725d97e4a5fb4fb6e95ee7d05cb.jpg',
         timestamp: moment.utc().toISOString
       },
       backgroundOption: USER_BACKGROUND_OPTION_PHOTO
