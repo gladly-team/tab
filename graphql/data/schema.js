@@ -66,8 +66,6 @@ import {
   getDollarsPerDayRate
 } from '../database/globals/globals'
 
-const staticRoot = config.S3_ENDPOINT
-
 class App {
   constructor (id) {
     this.id = id
@@ -135,9 +133,7 @@ const backgroundImageType = new GraphQLObjectType({
     },
     url: {
       type: GraphQLString,
-      resolve: (image) => {
-        return staticRoot + '/' + image.fileName
-      }
+      resolve: (image) => image.fileName
     }
   }),
   interfaces: [nodeInterface]
@@ -161,9 +157,7 @@ const imageType = new GraphQLObjectType({
     },
     url: {
       type: GraphQLString,
-      resolve: (image) => {
-        return staticRoot + '/' + image.fileName
-      }
+      resolve: (image) => image.fileName
     }
   })
 })
@@ -304,15 +298,11 @@ const charityType = new GraphQLObjectType({
     },
     logo: {
       type: GraphQLString,
-      resolve: (charity) => {
-        return staticRoot + '/charities/charity-logos/' + charity.logo
-      }
+      description: 'the charity logo image URI'
     },
     image: {
       type: GraphQLString,
-      resolve: (charity) => {
-        return staticRoot + '/charities/charity-post-donation-images/' + charity.image
-      }
+      description: 'the charity post-donation image URI'
     }
   }),
   interfaces: [nodeInterface]

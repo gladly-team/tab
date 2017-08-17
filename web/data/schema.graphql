@@ -65,7 +65,11 @@ type Charity implements Node {
 
   # the charity impact message
   impact: String
+
+  # the charity logo image URI
   logo: String
+
+  # the charity post-donation image URI
   image: String
 }
 

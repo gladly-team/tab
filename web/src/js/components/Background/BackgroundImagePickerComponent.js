@@ -74,8 +74,10 @@ class BackgroundImagePicker extends React.Component {
           cellHeight={170}
           style={gridList}>
           {app.backgroundImages.edges.map((edge) => {
-            const checked = this.state.selectedImage &&
-                this.state.selectedImage.url === edge.node.url
+            const checked = (
+              this.state.selectedImage &&
+              this.state.selectedImage.id === edge.node.id
+            )
 
             return (
               <GridTile

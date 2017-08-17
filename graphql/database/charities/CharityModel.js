@@ -3,6 +3,9 @@ import BaseModel from '../base/BaseModel'
 import types from '../fieldTypes'
 import tableNames from '../tables'
 import { CHARITY } from '../constants'
+import config from '../../config'
+
+const mediaRoot = config.S3_ENDPOINT
 
 /*
  * Represents a Charity.
@@ -38,6 +41,17 @@ class Charity extends BaseModel {
     return {
       get: () => true,
       getAll: () => true
+    }
+  }
+
+  static get fieldDeserializers () {
+    return {
+      logo: (fileName) => {
+        return `${mediaRoot}/img/charities/charity-logos/${fileName}`
+      },
+      image: (fileName) => {
+        return `${mediaRoot}/img/charities/charity-post-donation-images/${fileName}`
+      }
     }
   }
 }
