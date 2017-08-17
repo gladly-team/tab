@@ -83,7 +83,7 @@ env:
   - PROD_TABLE_NAME_APPENDIX="-prod"
   - PROD_DEVELOPMENT_LOGGING_ENABLED=0
   # Endpoints
-  - PROD_GRAPHQL_ENDPOINT=https://53a9uos12e.execute-api.us-west-2.amazonaws.com/prod/graphql
+  - PROD_GRAPHQL_ENDPOINT=https://qy89x5t2i9.execute-api.us-west-2.amazonaws.com/prod/graphql
   - PROD_DYNAMODB_ENDPOINT=dynamodb.us-west-2.amazonaws.com
   - PROD_S3_ENDPOINT=https://s3-us-west-2.amazonaws.com/prod-tab2017-media.gladly.io
   # Deployment
