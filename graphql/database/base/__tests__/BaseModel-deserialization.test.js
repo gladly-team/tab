@@ -1,6 +1,9 @@
 /* eslint-env jest */
 
 import ExampleModel, { fixturesA } from '../test-utils/ExampleModel'
+import {
+  setModelGetterField
+} from '../../test-utils'
 
 jest.mock('../../databaseClient')
 
@@ -34,5 +37,24 @@ describe('BaseModel deserialization', () => {
     const deserializedItem = ExampleModel.deserialize(item)
     expect(deserializedItem.id).toBe('zb5082cc-151a-4a9a-9289-06906670fd4e')
     expect(deserializedItem.name).toBe(ExampleModel.fieldDefaults.name)
+  })
+
+  it('uses custom deserializers when they exist', () => {
+    setModelGetterField(ExampleModel, 'fieldDeserializers', {
+      name: (val) => `My name is ${val}`
+    })
+    const item = {
+      attrs: {
+        id: 'zb5082cc-151a-4a9a-9289-06906670fd4e',
+        name: 'Sherlock Holmes'
+      }
+    }
+    const deserializedItem = ExampleModel.deserialize(item)
+
+    // Reset field for other tests.
+    setModelGetterField(ExampleModel, 'fieldDeserializers', {})
+
+    expect(deserializedItem.id).toBe('zb5082cc-151a-4a9a-9289-06906670fd4e')
+    expect(deserializedItem.name).toBe('My name is Sherlock Holmes')
   })
 })

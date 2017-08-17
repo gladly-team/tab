@@ -1,7 +1,7 @@
 
 import moment from 'moment'
 import { get, has } from 'lodash/object'
-import { isObject } from 'lodash/lang'
+import { isObject, isFunction } from 'lodash/lang'
 
 import dynogels from './dynogels-promisified'
 import types from '../fieldTypes'
@@ -21,13 +21,24 @@ class BaseModel {
     }
     const fieldNames = [].concat(Object.keys(this.constructor.schema),
       ['created', 'updated'])
+    const customDeserializers = this.constructor.fieldDeserializers
     fieldNames.forEach((fieldName) => {
       // Set properties for each field on the model.
-      // Set the value to the value passed in `obj` if one exists.
-      // If not passed a value in `obj`, use the default value
-      // defined in the `fieldDefaults` method, if it exists.
+      // If `obj[fieldName]` exists:
+      //  * Use a custom deserializer if it exists for that field; else:
+      //  * Use the value of `obj[fieldName]`
+      // If `obj[fieldName]` does not exist:
+      //  * Use the default value if it exists for that field.
+      // Else, do not set the property.
       if (has(obj, fieldName)) {
-        this[fieldName] = obj[fieldName]
+        // console.log(customDeserializers)
+        // console.log(get(customDeserializers, fieldName, false))
+        if (isFunction(get(customDeserializers, fieldName, false))) {
+          let deserializeFunc = customDeserializers[fieldName]
+          this[fieldName] = deserializeFunc(obj[fieldName])
+        } else {
+          this[fieldName] = obj[fieldName]
+        }
       } else if (has(this.constructor.fieldDefaults, fieldName)) {
         this[fieldName] = this.constructor.fieldDefaults[fieldName]
       }
@@ -96,9 +107,18 @@ class BaseModel {
 
   /**
    * Default values for the fields in schema.
-   * @return {object} A map of default values
+   * @return {object} A map of default values, keyed by field name
    */
   static get fieldDefaults () {
+    return {}
+  }
+
+  /**
+   * Custom deserializers for field values.
+   * @return {object} A map of deserizer functions, keyed by field name.
+   *   Each function receives the field value and must return a value.
+   */
+  static get fieldDeserializers () {
     return {}
   }
 
