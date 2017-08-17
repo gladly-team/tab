@@ -1,5 +1,7 @@
 // Execute from parent directory using
 // `yarn run manage-fixtures [cmd]`.
+// For cloud execution, set env vars DYNAMODB_ENDPOINT
+// and AWS access keys.
 
 import path from 'path'
 import {
