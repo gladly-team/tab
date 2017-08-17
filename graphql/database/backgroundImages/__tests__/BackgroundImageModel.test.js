@@ -41,12 +41,14 @@ describe('BackgroundImageModel', () => {
     const item = Object.assign({}, new BackgroundImageModel({
       id: 'bb5082cc-151a-4a9a-9289-06906670fd4e',
       name: 'Cool Photo',
-      fileName: 'cool.png'
+      image: 'cool.png',
+      thumbnail: 'cool-thumb.png'
     }))
     expect(item).toEqual({
       id: 'bb5082cc-151a-4a9a-9289-06906670fd4e',
       name: 'Cool Photo',
-      fileName: `${mediaRoot}/img/backgrounds/cool.png`
+      image: `${mediaRoot}/img/backgrounds/cool.png`,
+      thumbnail: `${mediaRoot}/img/background-thumbnails/cool-thumb.png`
     })
   })
 })

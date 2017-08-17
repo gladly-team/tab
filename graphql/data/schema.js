@@ -127,13 +127,13 @@ const backgroundImageType = new GraphQLObjectType({
       type: GraphQLString,
       description: 'the background image name'
     },
-    fileName: {
+    image: {
       type: GraphQLString,
-      description: 'The image file name'
+      description: 'The image file URI'
     },
-    url: {
+    thumbnail: {
       type: GraphQLString,
-      resolve: (image) => image.fileName
+      description: 'The image thumbnail file URI'
     }
   }),
   interfaces: [nodeInterface]
@@ -151,13 +151,13 @@ const imageType = new GraphQLObjectType({
       type: GraphQLString,
       description: 'The image name'
     },
-    fileName: {
+    image: {
       type: GraphQLString,
-      description: 'The image file name'
+      description: 'The image file URI'
     },
-    url: {
+    thumbnail: {
       type: GraphQLString,
-      resolve: (image) => image.fileName
+      description: 'The image thumbnail file URI'
     }
   })
 })

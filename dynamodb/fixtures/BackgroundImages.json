@@ -2,49 +2,56 @@
   {
     "id": "fb5082cc-151a-4a9a-9289-06906670fd4e",
     "name": "Mountain Lake",
-    "fileName": "lake.jpg",
+    "image": "lake.jpg",
+    "thumbnail": "lake.jpg",
     "created": "2017-07-18T20:45:53Z",
     "updated": "2017-07-18T20:45:53Z"
   },
   {
     "id": "90bfe202-54a9-4eea-9003-5e91572387dd",
     "name": "Puppy Eyes",
-    "fileName": "puppy.jpg",
+    "image": "puppy.jpg",
+    "thumbnail": "puppy.jpg",
     "created": "2017-07-18T20:45:53Z",
     "updated": "2017-07-18T20:45:53Z"
   },
   {
     "id": "3caf69b6-9803-4495-9a5c-5ae0316bf367",
     "name": "Cup of Joe",
-    "fileName": "cup.jpg",
+    "image": "cup.jpg",
+    "thumbnail": "cup.jpg",
     "created": "2017-07-18T20:45:53Z",
     "updated": "2017-07-18T20:45:53Z"
   },
   {
     "id": "a9f5ed54-6246-46ae-af0a-d58685e93ea5",
     "name": "Invoker",
-    "fileName": "invoker.jpg",
+    "image": "invoker.jpg",
+    "thumbnail": "invoker.jpg",
     "created": "2017-07-18T20:45:53Z",
     "updated": "2017-07-18T20:45:53Z"
   },
   {
     "id": "74f24001-61dd-4080-81ac-9455f1df5ee8",
     "name": "Slark",
-    "fileName": "slark.jpg",
+    "image": "slark.jpg",
+    "thumbnail": "slark.jpg",
     "created": "2017-07-18T20:45:53Z",
     "updated": "2017-07-18T20:45:53Z"
   },
   {
     "id": "e9175123-f763-446d-b99f-df4ef4ffd18e",
     "name": "Dota2",
-    "fileName": "dota2.jpg",
+    "image": "dota2.jpg",
+    "thumbnail": "dota2.jpg",
     "created": "2017-07-18T20:45:53Z",
     "updated": "2017-07-18T20:45:53Z"
   },
   {
     "id": "eac49a7c-c933-4618-8ddc-a7a1ee0e0abf",
     "name": "Shadow Fiend",
-    "fileName": "shadowfiend.jpg",
+    "image": "shadowfiend.jpg",
+    "thumbnail": "shadowfiend.jpg",
     "created": "2017-07-18T20:45:53Z",
     "updated": "2017-07-18T20:45:53Z"
   }

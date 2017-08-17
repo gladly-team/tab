@@ -27,7 +27,8 @@ class BackgroundImage extends BaseModel {
     return {
       id: types.uuid(),
       name: types.string(),
-      fileName: types.string()
+      image: types.string(),
+      thumbnail: types.string()
     }
   }
 
@@ -40,9 +41,12 @@ class BackgroundImage extends BaseModel {
 
   static get fieldDeserializers () {
     return {
-      fileName: (fileName) => {
-        // Add the media path to the filename.
-        return `${mediaRoot}/img/backgrounds/${fileName}`
+      image: (image) => {
+        // Add the media path to the image.
+        return `${mediaRoot}/img/backgrounds/${image}`
+      },
+      thumbnail: (thumbnail) => {
+        return `${mediaRoot}/img/background-thumbnails/${thumbnail}`
       }
     }
   }

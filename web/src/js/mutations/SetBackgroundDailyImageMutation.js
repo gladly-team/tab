@@ -11,7 +11,8 @@ const mutation = graphql`
         backgroundImage {
           id
           name
-          url
+          image
+          thumbnail
         }
       }
     }

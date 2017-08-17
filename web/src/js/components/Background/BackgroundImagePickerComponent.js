@@ -23,7 +23,7 @@ class BackgroundImagePicker extends React.Component {
       var image
       for (var index in app.backgroundImages.edges) {
         var bkgImage = app.backgroundImages.edges[index].node
-        if (selectedImage.url === bkgImage.url) {
+        if (selectedImage.image === bkgImage.image) {
           image = bkgImage
           break
         }
@@ -81,7 +81,7 @@ class BackgroundImagePicker extends React.Component {
 
             return (
               <GridTile
-                key={edge.node.url}
+                key={edge.node.id}
                 title={edge.node.name}
                 subtitle={<span>by <b>{'Gladly'}</b></span>}
                 actionIcon={
@@ -91,7 +91,7 @@ class BackgroundImagePicker extends React.Component {
                       className={checked ? 'fa fa-check-circle' : 'fa fa-circle-o'}
                       color='white' />
                   </IconButton>}>
-                <img src={edge.node.url} />
+                <img src={edge.node.image} />
               </GridTile>)
           })}
         </GridList>
