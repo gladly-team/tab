@@ -26,6 +26,7 @@ describe('BaseModel deserialization', () => {
     const deserializedItem = ExampleModel.deserialize(item)
     expect(deserializedItem.id).toBe('yy5082cc-151a-4a9a-9289-06906670fd4e')
     expect(deserializedItem.name).toBe('Jim Bond')
+    expect(deserializedItem.thing).toBeUndefined()
   })
 
   it('deserializes to include default values', () => {
@@ -41,7 +42,7 @@ describe('BaseModel deserialization', () => {
 
   it('uses custom deserializers when they exist', () => {
     setModelGetterField(ExampleModel, 'fieldDeserializers', {
-      name: (val) => `My name is ${val}`
+      name: (val, obj) => `My name is ${val} with ID ${obj.id}`
     })
     const item = {
       attrs: {
@@ -55,6 +56,44 @@ describe('BaseModel deserialization', () => {
     setModelGetterField(ExampleModel, 'fieldDeserializers', {})
 
     expect(deserializedItem.id).toBe('zb5082cc-151a-4a9a-9289-06906670fd4e')
-    expect(deserializedItem.name).toBe('My name is Sherlock Holmes')
+    expect(deserializedItem.name).toBe('My name is Sherlock Holmes with ID zb5082cc-151a-4a9a-9289-06906670fd4e')
+  })
+
+  it('falls back on default value if a custom deserializer returns null', () => {
+    setModelGetterField(ExampleModel, 'fieldDeserializers', {
+      name: (val, obj) => null
+    })
+    const item = {
+      attrs: {
+        id: 'zb5082cc-151a-4a9a-9289-06906670fd4e',
+        name: 'Jon Snow'
+      }
+    }
+    const deserializedItem = ExampleModel.deserialize(item)
+
+    // Reset field for other tests.
+    setModelGetterField(ExampleModel, 'fieldDeserializers', {})
+
+    expect(deserializedItem.id).toBe('zb5082cc-151a-4a9a-9289-06906670fd4e')
+    expect(deserializedItem.name).toBe('Default Name')
+  })
+
+  it('calls custom serializers even if the field is not defined', () => {
+    setModelGetterField(ExampleModel, 'fieldDeserializers', {
+      thing: (val, obj) => 'boop!'
+    })
+    const item = {
+      attrs: {
+        id: 'zb5082cc-151a-4a9a-9289-06906670fd4e',
+        name: 'Dr. Who'
+      }
+    }
+    const deserializedItem = ExampleModel.deserialize(item)
+
+    // Reset field for other tests.
+    setModelGetterField(ExampleModel, 'fieldDeserializers', {})
+
+    expect(deserializedItem.id).toBe('zb5082cc-151a-4a9a-9289-06906670fd4e')
+    expect(deserializedItem.thing).toBe('boop!')
   })
 })

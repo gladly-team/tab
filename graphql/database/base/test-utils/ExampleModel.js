@@ -19,7 +19,8 @@ class ExampleModel extends BaseModel {
     const self = this
     return {
       id: types.uuid(),
-      name: types.string().default(self.fieldDefaults.name)
+      name: types.string().default(self.fieldDefaults.name),
+      thing: types.string().forbidden()
     }
   }
 

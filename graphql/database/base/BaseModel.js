@@ -1,7 +1,7 @@
 
 import moment from 'moment'
 import { get, has } from 'lodash/object'
-import { isObject, isFunction } from 'lodash/lang'
+import { isObject, isFunction, isNil } from 'lodash/lang'
 
 import dynogels from './dynogels-promisified'
 import types from '../fieldTypes'
@@ -22,25 +22,27 @@ class BaseModel {
     const fieldNames = [].concat(Object.keys(this.constructor.schema),
       ['created', 'updated'])
     const customDeserializers = this.constructor.fieldDeserializers
+    const fieldDefaults = this.constructor.fieldDefaults
     fieldNames.forEach((fieldName) => {
       // Set properties for each field on the model.
-      // If `obj[fieldName]` exists:
-      //  * Use a custom deserializer if it exists for that field; else:
-      //  * Use the value of `obj[fieldName]`
-      // If `obj[fieldName]` does not exist:
-      //  * Use the default value if it exists for that field.
-      // Else, do not set the property.
-      if (has(obj, fieldName)) {
-        // console.log(customDeserializers)
-        // console.log(get(customDeserializers, fieldName, false))
-        if (isFunction(get(customDeserializers, fieldName, false))) {
-          let deserializeFunc = customDeserializers[fieldName]
-          this[fieldName] = deserializeFunc(obj[fieldName])
-        } else {
-          this[fieldName] = obj[fieldName]
+      // * If a custom deserializer exists for that field, use it. If the returned
+      //   value is null or undefined, use the field's default value if it exists.
+      // * Else, if `obj[fieldName]` exists, use the value of `obj[fieldName]`.
+      // * Else, if `obj[fieldName]` does not exist, use the default value
+      //   if it exists for that field.
+      // * Else, do not set the property.
+      if (isFunction(get(customDeserializers, fieldName, false))) {
+        let deserializeFunc = customDeserializers[fieldName]
+        const deserializedVal = deserializeFunc(obj[fieldName], obj)
+        if (!isNil(deserializedVal)) {
+          this[fieldName] = deserializedVal
+        } else if (has(fieldDefaults, fieldName)) {
+          this[fieldName] = fieldDefaults[fieldName]
         }
-      } else if (has(this.constructor.fieldDefaults, fieldName)) {
-        this[fieldName] = this.constructor.fieldDefaults[fieldName]
+      } else if (has(obj, fieldName)) {
+        this[fieldName] = obj[fieldName]
+      } else if (has(fieldDefaults, fieldName)) {
+        this[fieldName] = fieldDefaults[fieldName]
       }
     })
   }
@@ -116,7 +118,11 @@ class BaseModel {
   /**
    * Custom deserializers for field values.
    * @return {object} A map of deserizer functions, keyed by field name.
-   *   Each function receives the field value and must return a value.
+   *   Each function receives the field value and object and returns a value.
+   *   The field deserializer will be called regardless of whether the field
+   *   exists in the item, and it will trump any existing field value or default
+   *   field value. If the fieldDeserializer returns undefined or null, we will
+   *   use the field's default value if it exists.
    */
   static get fieldDeserializers () {
     return {}
