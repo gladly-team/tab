@@ -14,11 +14,21 @@ const docClient = new AWS.DynamoDB.DocumentClient()
 // Consider simplifying fixtures by using factories, e.g.:
 // https://github.com/aexmachina/factory-girl
 
+// To throttle large batches of data.
+const SLEEP_MS_BETWEEN_QUERY_BATCHES = 100
+function sleep (ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
 const loadItemsIntoTable = async (items, tableName) => {
   const BATCH_MAX_ITEMS = 25
   var itemsToLoad = items
   if (items.length > BATCH_MAX_ITEMS) {
     await loadItemsIntoTable(items.slice(BATCH_MAX_ITEMS - 1), tableName)
+    console.log(`Items loaded: ${items.length}`)
+    if (SLEEP_MS_BETWEEN_QUERY_BATCHES > 0) {
+      await sleep(SLEEP_MS_BETWEEN_QUERY_BATCHES)
+    }
     itemsToLoad = items.slice(0, BATCH_MAX_ITEMS - 1)
   }
   const params = {
@@ -47,6 +57,9 @@ const deleteItemsFromTable = async (items, tableName, hashKeyName, rangeKeyName)
   if (items.length > BATCH_MAX_ITEMS) {
     await deleteItemsFromTable(items.slice(BATCH_MAX_ITEMS - 1),
       tableName, hashKeyName, rangeKeyName)
+    if (SLEEP_MS_BETWEEN_QUERY_BATCHES > 0) {
+      await sleep(SLEEP_MS_BETWEEN_QUERY_BATCHES)
+    }
     itemsToDelete = items.slice(0, BATCH_MAX_ITEMS - 1)
   }
   const params = {
