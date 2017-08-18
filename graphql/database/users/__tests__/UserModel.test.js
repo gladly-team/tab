@@ -1,10 +1,25 @@
 /* eslint-env jest */
 
+import moment from 'moment'
 import tableNames from '../../tables'
 import { permissionAuthorizers } from '../../../utils/authorization-helpers'
 import User from '../UserModel'
+import config from '../../../config'
+import {
+  mockDate
+} from '../../test-utils'
+
+const mediaRoot = config.S3_ENDPOINT
 
 jest.mock('../../databaseClient')
+
+beforeAll(() => {
+  mockDate.on()
+})
+
+afterAll(() => {
+  mockDate.off()
+})
 
 describe('UserModel', () => {
   it('implements the name property', () => {
@@ -121,5 +136,29 @@ describe('UserModel', () => {
     const item = null
     expect(User.permissions.create(userContext, null, null, item))
       .toBe(false)
+  })
+
+  it('constructs as expected', () => {
+    const item = Object.assign({}, new User({
+      id: 'bb5082cc-151a-4a9a-9289-06906670fd4e',
+      email: 'foo@bar.com',
+      username: 'Foo Bar'
+    }))
+    expect(item).toEqual({
+      id: 'bb5082cc-151a-4a9a-9289-06906670fd4e',
+      email: 'foo@bar.com',
+      username: 'Foo Bar',
+      vcCurrent: 0,
+      vcAllTime: 0,
+      level: 0,
+      heartsUntilNextLevel: 0,
+      backgroundImage: {
+        id: '49fcb132-9b6b-431b-bda8-50455e215be7',
+        image: '661651039af4454abb852927b3a5b8f9.jpg',
+        imageURL: `${mediaRoot}/img/backgrounds/661651039af4454abb852927b3a5b8f9.jpg`,
+        timestamp: moment.utc().toISOString()
+      },
+      backgroundOption: 'photo'
+    })
   })
 })

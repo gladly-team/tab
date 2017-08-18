@@ -11,9 +11,7 @@ export default createFragmentContainer(BackgroundImagePicker, {
       id
       backgroundImage {
         id
-        name
-        image
-        thumbnail
+        imageURL
       }
     }
   `,
@@ -24,8 +22,8 @@ export default createFragmentContainer(BackgroundImagePicker, {
           node {
             id
             name
-            image
-            thumbnail
+            imageURL
+            thumbnailURL
           }
         }
       }

@@ -23,11 +23,17 @@ type BackgroundImage implements Node {
   # the background image name
   name: String
 
-  # The image file URI
+  # The image filename
   image: String
 
-  # The image thumbnail file URI
+  # The image file URL
+  imageURL: String
+
+  # The image thumbnail filename
   thumbnail: String
+
+  # The image thumbnail URL
+  thumbnailURL: String
 }
 
 # A connection to a list of items.
@@ -123,14 +129,8 @@ type Image {
   # The image id
   id: String
 
-  # The image name
-  name: String
-
-  # The image file URI
-  image: String
-
-  # The image thumbnail file URI
-  thumbnail: String
+  # The image file URL
+  imageURL: String
 }
 
 type Mutation {

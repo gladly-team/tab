@@ -57,7 +57,7 @@ class UserBackgroundImage extends React.Component {
       })
     } else {
       backgroundImage = Object.assign({}, defaultStyle, {
-        backgroundImage: 'url(' + user.backgroundImage.image + ')'
+        backgroundImage: 'url(' + user.backgroundImage.imageURL + ')'
       })
     }
 

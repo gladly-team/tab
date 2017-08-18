@@ -25,24 +25,29 @@ class BaseModel {
     const fieldDefaults = this.constructor.fieldDefaults
     fieldNames.forEach((fieldName) => {
       // Set properties for each field on the model.
-      // * If a custom deserializer exists for that field, use it. If the returned
-      //   value is null or undefined, use the field's default value if it exists.
-      // * Else, if `obj[fieldName]` exists, use the value of `obj[fieldName]`.
-      // * Else, if `obj[fieldName]` does not exist, use the default value
-      //   if it exists for that field.
-      // * Else, do not set the property.
+      // * If `obj[fieldName]` exists, use the value of `obj[fieldName]`.
+      // * Else, if `obj[fieldName]` does not exist, use the default value of
+      //   the field if one exists.
+      // * If a custom deserializer exists for that field, call it.
+      // * If the final value is null or undefined, do not set
+      //   the property.
+      var val = null
+      if (has(obj, fieldName)) {
+        val = obj[fieldName]
+      } else if (has(fieldDefaults, fieldName)) {
+        var fieldDefault = fieldDefaults[fieldName]
+        if (isFunction(fieldDefault)) {
+          val = fieldDefault()
+        } else {
+          val = fieldDefault
+        }
+      }
       if (isFunction(get(customDeserializers, fieldName, false))) {
         let deserializeFunc = customDeserializers[fieldName]
-        const deserializedVal = deserializeFunc(obj[fieldName], obj)
-        if (!isNil(deserializedVal)) {
-          this[fieldName] = deserializedVal
-        } else if (has(fieldDefaults, fieldName)) {
-          this[fieldName] = fieldDefaults[fieldName]
-        }
-      } else if (has(obj, fieldName)) {
-        this[fieldName] = obj[fieldName]
-      } else if (has(fieldDefaults, fieldName)) {
-        this[fieldName] = fieldDefaults[fieldName]
+        val = deserializeFunc(val, obj)
+      }
+      if (!isNil(val)) {
+        this[fieldName] = val
       }
     })
   }
@@ -109,7 +114,9 @@ class BaseModel {
 
   /**
    * Default values for the fields in schema.
-   * @return {object} A map of default values, keyed by field name
+   * @return {object} A map of default values, keyed by field name.
+   *   If a field's default value is a function, it will be called to
+   *   generate the value.
    */
   static get fieldDefaults () {
     return {}
@@ -119,10 +126,10 @@ class BaseModel {
    * Custom deserializers for field values.
    * @return {object} A map of deserizer functions, keyed by field name.
    *   Each function receives the field value and object and returns a value.
-   *   The field deserializer will be called regardless of whether the field
-   *   exists in the item, and it will trump any existing field value or default
-   *   field value. If the fieldDeserializer returns undefined or null, we will
-   *   use the field's default value if it exists.
+   *   The field deserializer will be called with the existing field value
+   *   if one exists, falling back to calling with the field default value
+   *   if one exists. If the fieldDeserializer returns undefined or null,
+   *   we will not set the property.
    */
   static get fieldDeserializers () {
     return {}

@@ -47,8 +47,10 @@ describe('BackgroundImageModel', () => {
     expect(item).toEqual({
       id: 'bb5082cc-151a-4a9a-9289-06906670fd4e',
       name: 'Cool Photo',
-      image: `${mediaRoot}/img/backgrounds/cool.png`,
-      thumbnail: `${mediaRoot}/img/background-thumbnails/cool-thumb.png`
+      image: 'cool.png',
+      thumbnail: 'cool-thumb.png',
+      imageURL: `${mediaRoot}/img/backgrounds/cool.png`,
+      thumbnailURL: `${mediaRoot}/img/background-thumbnails/cool-thumb.png`
     })
   })
 })

@@ -59,7 +59,25 @@ describe('BaseModel deserialization', () => {
     expect(deserializedItem.name).toBe('My name is Sherlock Holmes with ID zb5082cc-151a-4a9a-9289-06906670fd4e')
   })
 
-  it('falls back on default value if a custom deserializer returns null', () => {
+  it('passes a field default to the custom serializer if the field does not exist', () => {
+    setModelGetterField(ExampleModel, 'fieldDeserializers', {
+      name: (val, obj) => `My name is ${val}`
+    })
+    const item = {
+      attrs: {
+        id: 'zb5082cc-151a-4a9a-9289-06906670fd4e'
+      }
+    }
+    const deserializedItem = ExampleModel.deserialize(item)
+
+    // Reset field for other tests.
+    setModelGetterField(ExampleModel, 'fieldDeserializers', {})
+
+    expect(deserializedItem.id).toBe('zb5082cc-151a-4a9a-9289-06906670fd4e')
+    expect(deserializedItem.name).toBe('My name is Default Name')
+  })
+
+  it('does not set the property if a custom deserializer returns null', () => {
     setModelGetterField(ExampleModel, 'fieldDeserializers', {
       name: (val, obj) => null
     })
@@ -75,7 +93,7 @@ describe('BaseModel deserialization', () => {
     setModelGetterField(ExampleModel, 'fieldDeserializers', {})
 
     expect(deserializedItem.id).toBe('zb5082cc-151a-4a9a-9289-06906670fd4e')
-    expect(deserializedItem.name).toBe('Default Name')
+    expect(deserializedItem.name).toBeUndefined()
   })
 
   it('calls custom serializers even if the field is not defined', () => {

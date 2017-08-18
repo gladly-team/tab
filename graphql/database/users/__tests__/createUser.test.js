@@ -1,5 +1,7 @@
 /* eslint-env jest */
 
+import { cloneDeep } from 'lodash/lang'
+
 import UserModel from '../UserModel'
 import createUser from '../createUser'
 import logReferralData from '../../referrals/logReferralData'
@@ -109,8 +111,10 @@ describe('createUser', () => {
       }
     )
     const expectedUser = getMockUserInstance(userInfo)
+    const expectedParamsUser = cloneDeep(expectedUser)
+    delete expectedParamsUser.backgroundImage.imageURL
     const expectedParams = {
-      Item: expectedUser,
+      Item: expectedParamsUser,
       TableName: UserModel.tableName
     }
     const createdItem = await createUser(userContext, userInfo.id,

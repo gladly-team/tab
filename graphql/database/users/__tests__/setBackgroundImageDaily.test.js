@@ -35,7 +35,11 @@ describe('setBackgroundImageDaily', () => {
     const mockImage = await getRandomBackgroundImage(userContext)
     expect(updateQuery).toHaveBeenCalledWith(userContext, {
       id: userId,
-      backgroundImage: mockImage,
+      backgroundImage: {
+        id: mockImage.id,
+        image: mockImage.image,
+        timestamp: moment.utc().toISOString()
+      },
       backgroundOption: USER_BACKGROUND_OPTION_DAILY,
       updated: moment.utc().toISOString()
     })

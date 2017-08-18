@@ -36,13 +36,17 @@ describe('setBackgroundImage', () => {
   it('works as expected', async () => {
     const updateQuery = jest.spyOn(UserModel, 'update')
     const userId = userContext.id
-    const imageId = 'abc-123'
+    const imageId = 'fb5082cc-151a-4a9a-9289-06906670fd4e'
     const mode = USER_BACKGROUND_OPTION_PHOTO
     const mockImage = await BackgroundImageModel.get(userContext, imageId)
     await setBackgroundImage(userContext, userId, imageId, mode)
     expect(updateQuery).toHaveBeenCalledWith(userContext, {
       id: userId,
-      backgroundImage: mockImage,
+      backgroundImage: {
+        id: mockImage.id,
+        image: mockImage.image,
+        timestamp: moment.utc().toISOString()
+      },
       backgroundOption: USER_BACKGROUND_OPTION_PHOTO,
       updated: moment.utc().toISOString()
     })
@@ -51,13 +55,17 @@ describe('setBackgroundImage', () => {
   it('defaults to photo mode if no mode is provided', async () => {
     const updateQuery = jest.spyOn(UserModel, 'update')
     const userId = userContext.id
-    const imageId = 'abc-123'
+    const imageId = 'fb5082cc-151a-4a9a-9289-06906670fd4e'
     const mode = null
     const mockImage = await BackgroundImageModel.get(userContext, imageId)
     await setBackgroundImage(userContext, userId, imageId, mode)
     expect(updateQuery).toHaveBeenCalledWith(userContext, {
       id: userId,
-      backgroundImage: mockImage,
+      backgroundImage: {
+        id: mockImage.id,
+        image: mockImage.image,
+        timestamp: moment.utc().toISOString()
+      },
       backgroundOption: USER_BACKGROUND_OPTION_PHOTO,
       updated: moment.utc().toISOString()
     })
@@ -66,13 +74,17 @@ describe('setBackgroundImage', () => {
   it('uses another mode if provided', async () => {
     const updateQuery = jest.spyOn(UserModel, 'update')
     const userId = userContext.id
-    const imageId = 'abc-123'
+    const imageId = 'fb5082cc-151a-4a9a-9289-06906670fd4e'
     const mode = USER_BACKGROUND_OPTION_CUSTOM
     const mockImage = await BackgroundImageModel.get(userContext, imageId)
     await setBackgroundImage(userContext, userId, imageId, mode)
     expect(updateQuery).toHaveBeenCalledWith(userContext, {
       id: userId,
-      backgroundImage: mockImage,
+      backgroundImage: {
+        id: mockImage.id,
+        image: mockImage.image,
+        timestamp: moment.utc().toISOString()
+      },
       backgroundOption: USER_BACKGROUND_OPTION_CUSTOM,
       updated: moment.utc().toISOString()
     })

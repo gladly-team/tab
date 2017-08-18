@@ -9,6 +9,14 @@ import {
   mockDate
 } from '../test-utils'
 
+beforeAll(() => {
+  mockDate.on()
+})
+
+afterAll(() => {
+  mockDate.off()
+})
+
 describe('test-utils', () => {
   test('getMockUserContext returns expected object', () => {
     expect(getMockUserContext()).toEqual({

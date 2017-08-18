@@ -14,10 +14,13 @@ import {
  */
 const setBackgroundImageDaily = async (userContext, userId) => {
   const image = await getRandomBackgroundImage(userContext)
-  image.timestamp = moment.utc().toISOString()
   const userInstance = await UserModel.update(userContext, {
     id: userId,
-    backgroundImage: image,
+    backgroundImage: {
+      id: image.id,
+      image: image.image,
+      timestamp: moment.utc().toISOString()
+    },
     backgroundOption: USER_BACKGROUND_OPTION_DAILY
   })
   return userInstance
