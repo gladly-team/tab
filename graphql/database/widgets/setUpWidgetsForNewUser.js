@@ -39,9 +39,9 @@ const widgetConfigurations = [
  *   when complete
  */
 export default async (userContext, userId) => {
-  widgetConfigurations.forEach(async (widgetConfig) => {
+  await Promise.all(widgetConfigurations.map(async (widgetConfig) => {
     await updateWidgetEnabled(userContext, userId, widgetConfig.id,
       widgetConfig.enabled)
-  })
+  }))
   return true
 }
