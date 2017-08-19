@@ -3,9 +3,10 @@ import UserModel from './UserModel'
 import logReferralData from '../referrals/logReferralData'
 import rewardReferringUser from './rewardReferringUser'
 import getUserByUsername from './getUserByUsername'
+import setUpWidgetsForNewUser from '../widgets/setUpWidgetsForNewUser'
 
 /**
- * Creates a new user.
+ * Creates a new user and performs other setup actions.
  * @param {object} userContext - The user authorizer object.
  * @param {object} user - The user info.
  * @param {object} referralData - Referral data.
@@ -20,6 +21,11 @@ const createUser = async (userContext, userId, username,
   }
   const createdUser = await UserModel.create(userContext, userInfo)
     .catch((err) => err)
+
+  // Set up default widgets.
+  await setUpWidgetsForNewUser(userContext, userId)
+
+  // Log referral data and reward referrer.
   if (referralData) {
     const referringUserUsername = referralData.referringUser
     const referringUser = await getUserByUsername(userContext,
