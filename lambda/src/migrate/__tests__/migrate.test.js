@@ -104,7 +104,8 @@ describe('Migrate Data Tests', function () {
             .then((userProfile) => {
               expect(userId).toBe(userProfile.id)
             })
-        expect(bookmarkWidgetId).toBe('4162cc79-d192-4435-91bd-5fda9b6f7c08')
+        // FIXME
+        expect(bookmarkWidgetId).toBe('notecb66-c544-465c-96e9-20646060d8d2')
         expect(enabled).toBe(true)
 
         expect(widgetData).not.toBe(null)
@@ -153,7 +154,8 @@ describe('Migrate Data Tests', function () {
             .then((userProfile) => {
               expect(userId).toBe(userProfile.id)
             })
-        expect(notesWidgetId).toBe('4262cc79-d192-4435-91bd-5fda9b6f7c08')
+        // FIXME
+        expect(notesWidgetId).toBe('book7d35-639b-49d4-a822-116cc7e5c2e2')
         expect(enabled).toBe(true)
 
         expect(widgetData).not.toBe(null)

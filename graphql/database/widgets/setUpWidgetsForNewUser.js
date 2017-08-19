@@ -6,27 +6,27 @@ import {
 const widgetConfigurations = [
   // Bookmarks
   {
-    id: '4262cc79-d192-4435-91bd-5fda9b6f7c08',
+    id: 'book7d35-639b-49d4-a822-116cc7e5c2e2',
     enabled: true
   },
   // Notes
   {
-    id: '4162cc79-d192-4435-91bd-5fda9b6f7c08',
+    id: 'notecb66-c544-465c-96e9-20646060d8d2',
     enabled: true
   },
   // Search
   {
-    id: 'ab58d2da-550b-414f-895a-7bcb2cbc9d62',
+    id: 'search0f-36c8-45d8-a91c-e5b6051b0d6d',
     enabled: true
   }
   // // To-dos
   // {
-  //   id: 'a458d2da-550b-414f-895a-7bcb2cbc9d62',
+  //   id: '2dold2da-550b-414f-895a-7bcb2cbc9d62',
   //   enabled: false
   // },
   // // Clock
   // {
-  //   id: '426ccc79-d192-4435-91bd-5fda9b6f7c08',
+  //   id: 'clock49d-e16b-4635-93c5-02451bba62e6',
   //   enabled: false
   // }
 ]

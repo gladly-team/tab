@@ -17,9 +17,9 @@ describe('setUpWidgetsForNewUser', () => {
   it('calls expected functions', async () => {
     const returnedVal = await setUpWidgetsForNewUser(userContext, userId)
     expect(updateWidgetEnabled.mock.calls).toEqual([
-      [userContext, userId, '4262cc79-d192-4435-91bd-5fda9b6f7c08', true],
-      [userContext, userId, '4162cc79-d192-4435-91bd-5fda9b6f7c08', true],
-      [userContext, userId, 'ab58d2da-550b-414f-895a-7bcb2cbc9d62', true]
+      [userContext, userId, 'book7d35-639b-49d4-a822-116cc7e5c2e2', true],
+      [userContext, userId, 'notecb66-c544-465c-96e9-20646060d8d2', true],
+      [userContext, userId, 'search0f-36c8-45d8-a91c-e5b6051b0d6d', true]
     ])
     expect(returnedVal).toBe(true)
   })

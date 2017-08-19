@@ -102,7 +102,7 @@ const setBookmarksData = Async((userId, bookmarks) => {
   try {
     if (!bookmarks || !bookmarks.length) { return true }
 
-    const bookmarkWidgetId = '4162cc79-d192-4435-91bd-5fda9b6f7c08'
+    const bookmarkWidgetId = 'notecb66-c544-465c-96e9-20646060d8d2'
 
     Await(updateUserWidgetEnabled(userId, bookmarkWidgetId, true))
     Await(updateUserWidgetData(
@@ -134,7 +134,7 @@ const setNotesData = Async((userId, notes) => {
   try {
     if (!notes || !notes.length) { return true }
 
-    const notesWidgetId = '4262cc79-d192-4435-91bd-5fda9b6f7c08'
+    const notesWidgetId = 'book7d35-639b-49d4-a822-116cc7e5c2e2'
 
     const data = []
     for (var index in notes) {
