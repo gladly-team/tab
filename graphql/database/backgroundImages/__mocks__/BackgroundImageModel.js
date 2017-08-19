@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-const mockImages = [
+export const mockImages = [
   {
     id: 'fb5082cc-151a-4a9a-9289-06906670fd4e',
     updated: '2017-07-18T20:45:53Z',
