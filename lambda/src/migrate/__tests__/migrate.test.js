@@ -105,7 +105,7 @@ describe('Migrate Data Tests', function () {
               expect(userId).toBe(userProfile.id)
             })
         // FIXME
-        expect(bookmarkWidgetId).toBe('notecb66-c544-465c-96e9-20646060d8d2')
+        expect(bookmarkWidgetId).toBe('63859963-f691-42f6-bc80-ac83eddc4104')
         expect(enabled).toBe(true)
 
         expect(widgetData).not.toBe(null)
@@ -155,7 +155,7 @@ describe('Migrate Data Tests', function () {
               expect(userId).toBe(userProfile.id)
             })
         // FIXME
-        expect(notesWidgetId).toBe('book7d35-639b-49d4-a822-116cc7e5c2e2')
+        expect(notesWidgetId).toBe('a8cfd733-639b-49d4-a822-116cc7e5c2e2')
         expect(enabled).toBe(true)
 
         expect(widgetData).not.toBe(null)
