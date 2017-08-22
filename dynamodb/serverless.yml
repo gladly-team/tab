@@ -18,7 +18,7 @@ custom:
   stageDefault: dev
   # https://github.com/sbstjn/serverless-dynamodb-autoscaling
   capacities:
-    - table: Users-${self:provider.stage}
+    - table: usersTable
       index:
         - UsersByUsername
       read:
