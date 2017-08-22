@@ -16,7 +16,8 @@ const tables = {
   vcDonationLog: 'VcDonationLog',
   backgroundImages: 'BackgroundImages',
   widgets: 'Widgets',
-  userWidgets: 'UserWidgets'
+  userWidgets: 'UserWidgets',
+  referralDataLog: 'ReferralDataLog'
 }
 
 export default mapValues(tables, (name) => `${name}${tableNameAppendix}`)

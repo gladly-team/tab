@@ -83,6 +83,15 @@ custom:
         minimum: 1
         maximum: 1000
         usage: 0.60
+    - table: referralDataLogTable
+      read:
+        minimum: 1
+        maximum: 1000
+        usage: 0.75
+      write:
+        minimum: 1
+        maximum: 1000
+        usage: 0.60
 
 resources:
   Resources:
@@ -211,6 +220,20 @@ resources:
             ProvisionedThroughput:
               ReadCapacityUnits: 1
               WriteCapacityUnits: 1
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+    referralDataLogTable:  
+      Type: AWS::DynamoDB::Table
+      Properties:  
+        TableName: ReferralDataLog-${self:provider.stage}
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
