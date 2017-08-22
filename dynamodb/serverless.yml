@@ -9,8 +9,26 @@ provider:
   profile: tab-sls
   stage: ${env:SLS_STAGE, self:custom.stageDefault}
 
+plugins:
+  # https://github.com/sbstjn/serverless-dynamodb-autoscaling
+  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-table.html#cfn-dynamodb-table-examples-application-autoscaling
+  - serverless-dynamodb-autoscaling
+
 custom:
   stageDefault: dev
+  # https://github.com/sbstjn/serverless-dynamodb-autoscaling
+  capacities:
+    - table: Users-${self:provider.stage}
+      index:
+        - UsersByUsername
+      read:
+        minimum: 1
+        maximum: 1000
+        usage: 0.75
+      write:
+        minimum: 1
+        maximum: 1000
+        usage: 0.60
 
 resources:
   Resources:
