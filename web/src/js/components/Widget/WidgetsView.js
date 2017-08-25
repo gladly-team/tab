@@ -23,9 +23,12 @@ class WidgetsView extends React.Component {
           `}
           render={({error, props}) => {
             if (error) {
-              console.error(error)
+              // TODO: display visual error message.
+              console.log('We had an error getting your widgets :(')
+              console.error(error, error.source)
+              console.error(error.source)
+              return null
             }
-
             if (props) {
               return (
                 <Widgets user={props.user} />
