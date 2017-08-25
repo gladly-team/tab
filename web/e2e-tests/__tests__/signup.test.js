@@ -17,7 +17,7 @@ afterEach(() => {
   return driver.quit()
 })
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 240e3
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 180e3
 
 describe('Sign Up Tests', function () {
   it('should create a new user and sign out the user', Async(() => {
@@ -27,7 +27,7 @@ describe('Sign Up Tests', function () {
     const email = username + '@tfac.com'
     Await(createUser(driver, username, email, 'NewUserPassword1'))
     Await(signOutUser(driver))
-  }), 120e3)
+  }), 90e3)
 
   it('should not create a user if email already registered', Async(() => {
     driver = getDriver('Sign Up: should not create a user if email already registered')
@@ -49,5 +49,5 @@ describe('Sign Up Tests', function () {
 
     const loginErrorSnackBarId = 'login-error-snackbar'
     Await(driverUtils(driver).waitForElementVisible(loginErrorSnackBarId))
-  }), 120e3)
+  }), 90e3)
 })
