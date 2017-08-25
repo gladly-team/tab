@@ -35,16 +35,17 @@ function fetchQuery (
       })
     }).then(response => {
       return response.json()
-        // .then((responseJSON) => {
-        //   // Temporary fix to force passing errors on to the
-        //   // QueryRenderer.
-        //   // https://github.com/facebook/relay/issues/1913
-        //   if (responseJSON.errors && responseJSON.errors.length > 0) {
-        //     responseJSON.data = null
-        //     return responseJSON
-        //   }
-        //   return responseJSON
-        // })
+        .then((responseJSON) => {
+          // Temporary fix to force passing errors on to the
+          // QueryRenderer.
+          // https://github.com/facebook/relay/issues/1913
+          if (responseJSON.errors && responseJSON.errors.length > 0) {
+            console.log('relay-env errors', responseJSON.errors)
+            responseJSON.data = null
+            return responseJSON
+          }
+          return responseJSON
+        })
     })
   }).catch((err) => {
     console.log(err)
