@@ -22,6 +22,10 @@ class VcUserView extends React.Component {
           `}
           render={({error, props}) => {
             if (error) {
+              // TODO: display visual error message.
+              console.log('We had a problem getting your Hearts and level count :(')
+              console.error(error, error.source)
+              console.error(error.source)
               return null
             }
             if (props) {

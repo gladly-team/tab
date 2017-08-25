@@ -27,8 +27,11 @@ class BackgroundSettingsView extends React.Component {
           `}
           render={({error, props}) => {
             if (error) {
-              console.error(error)
-              return
+              // TODO: display visual error message.
+              console.log('We had a problem loading the background settings :(')
+              console.error(error, error.source)
+              console.error(error.source)
+              return null
             }
 
             if (props) {

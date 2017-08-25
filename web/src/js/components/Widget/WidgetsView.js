@@ -24,7 +24,7 @@ class WidgetsView extends React.Component {
           render={({error, props}) => {
             if (error) {
               // TODO: display visual error message.
-              console.log('We had an error getting your widgets :(')
+              console.log('We had a problem getting your widgets :(')
               console.error(error, error.source)
               console.error(error.source)
               return null

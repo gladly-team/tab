@@ -22,8 +22,11 @@ class InviteFriendView extends React.Component {
           `}
           render={({error, props}) => {
             if (error) {
-              console.error(error)
-              return
+              // TODO: display visual error message.
+              console.log('We had a problem getting your invite link :(')
+              console.error(error, error.source)
+              console.error(error.source)
+              return null
             }
 
             return (
