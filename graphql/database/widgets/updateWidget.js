@@ -47,9 +47,13 @@ export const updateWidgetVisibility = async (userContext, userId, widgetId, visi
  * widget.
  */
 export const updateWidgetEnabled = async (userContext, userId, widgetId, enabled) => {
-  const widget = await BaseWidgetModel.get(userContext, widgetId)
-  const userWidget = await updateUserWidgetEnabled(userContext, userId, widgetId, enabled)
-  return constructFullWidget(userWidget, widget)
+  try {
+    const widget = await BaseWidgetModel.get(userContext, widgetId)
+    const userWidget = await updateUserWidgetEnabled(userContext, userId, widgetId, enabled)
+    return constructFullWidget(userWidget, widget)
+  } catch (err) {
+    throw err
+  }
 }
 
 /**

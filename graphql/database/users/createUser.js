@@ -23,7 +23,11 @@ const createUser = async (userContext, userId, username,
     .catch((err) => err)
 
   // Set up default widgets.
-  await setUpWidgetsForNewUser(userContext, userId)
+  try {
+    await setUpWidgetsForNewUser(userContext, userId)
+  } catch (err) {
+    throw err
+  }
 
   // Log referral data and reward referrer.
   if (referralData) {

@@ -39,9 +39,16 @@ const widgetConfigurations = [
  *   when complete
  */
 export default async (userContext, userId) => {
-  await Promise.all(widgetConfigurations.map(async (widgetConfig) => {
-    await updateWidgetEnabled(userContext, userId, widgetConfig.id,
-      widgetConfig.enabled)
+  return Promise.all(widgetConfigurations.map(async (widgetConfig) => {
+    try {
+      await updateWidgetEnabled(userContext, userId, widgetConfig.id,
+        widgetConfig.enabled)
+    } catch (err) {
+      throw err
+    }
   }))
-  return true
+    .then(data => true)
+    .catch(err => {
+      throw err
+    })
 }
