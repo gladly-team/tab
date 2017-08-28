@@ -3,6 +3,7 @@ import {
   updateWidgetEnabled
 } from './updateWidget'
 
+// TODO: update test widgets table!
 const widgetConfigurations = [
   // Bookmarks
   {
@@ -49,6 +50,7 @@ export default async (userContext, userId) => {
   }))
     .then(data => true)
     .catch(err => {
+      console.log('setUpWidgetsForNewUser', err)
       throw err
     })
 }

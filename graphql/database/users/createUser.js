@@ -23,9 +23,11 @@ const createUser = async (userContext, userId, username,
     .catch((err) => err)
 
   // Set up default widgets.
+  console.log('About to set up default widgets.')
   try {
     await setUpWidgetsForNewUser(userContext, userId)
   } catch (err) {
+    console.log('createUser', err)
     throw err
   }
 

@@ -52,6 +52,7 @@ export const updateWidgetEnabled = async (userContext, userId, widgetId, enabled
     const userWidget = await updateUserWidgetEnabled(userContext, userId, widgetId, enabled)
     return constructFullWidget(userWidget, widget)
   } catch (err) {
+    console.log('updateWidgetEnabled', err)
     throw err
   }
 }

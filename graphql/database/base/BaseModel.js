@@ -213,6 +213,7 @@ class BaseModel {
         return self.deserialize(data)
       })
       .catch(err => {
+        console.log('BaseModel get:', err)
         throw err
       })
   }
