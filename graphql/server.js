@@ -7,6 +7,7 @@ import {clean} from 'require-clean'
 import {exec} from 'child_process'
 
 import config from './config'
+import { handleError } from './utils/error-logging'
 
 const GRAPHQL_PORT = config.GRAPHQL_PORT
 
@@ -33,15 +34,18 @@ function startGraphQLServer (callback) {
   if (config.NODE_ENV === 'development' && config.ENABLE_GRAPHIQL) {
     console.log('GraphiQL is enabled.')
     // https://github.com/graphql/express-graphql#options
-    graphQLApp.use('/', graphQLHTTP((req) => {
-      const context = getGraphQLContextFromRequest(req)
-      return {
-        graphiql: true,
-        pretty: true,
-        schema: Schema,
-        context: context
-      }
-    }))
+    graphQLApp.use('/',
+      graphQLHTTP((req) => {
+        const context = getGraphQLContextFromRequest(req)
+        return {
+          graphiql: true,
+          pretty: true,
+          schema: Schema,
+          context: context,
+          formatError: handleError
+        }
+      })
+    )
   } else {
     graphQLApp.post('/', (req, res) => {
       const event = generateLambdaEventObjFromRequest(req)
