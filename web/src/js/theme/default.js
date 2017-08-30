@@ -8,26 +8,34 @@ import {
 import {fade} from 'material-ui/utils/colorManipulator'
 import spacing from 'material-ui/styles/spacing'
 
-const darkPrimaryColor = '#512DA8'
-const defaultPrimaryColor = '#673AB7'
-const lightPrimaryColor = '#D1C4E9'
-const textPrimaryColor = '#FFFFFF'
-const accentColor = '#7C4DFF'
-const primaryTextColor = '#212121'
+// Logo color: #9d4ba3
+// Color tool:
+// https://material.io/color/#!/?view.left=0&view.right=0&primary.color=9d4ba3&secondary.color=FFEE58&secondary.text.color=757575
+const primaryColor = '#9d4ba3'
+const primaryColorDark = '#6c1b74'
+const primaryColorLight = '#d07ad5'
+const textOnPrimaryColor = '#FFFFFF'
+
+// const secondaryColor = '#ffee58'
+// const secondaryColorDark = '#c9bc1f'
+// const secondaryColorLight = '#ffff8b'
+// const textOnSecondaryColor = '#616161'
+
+const textColor = '#212121'
 const dividerColor = '#BDBDBD'
 
 export default {
   spacing: spacing,
   fontFamily: '"Helvetica Neue", "Calibri Light", Roboto, sans-serif',
   palette: {
-    primary1Color: defaultPrimaryColor,
-    primary2Color: darkPrimaryColor,
-    primary3Color: lightPrimaryColor,
-    accent1Color: accentColor,
-    accent2Color: lightPrimaryColor,
-    accent3Color: lightPrimaryColor,
-    textColor: primaryTextColor,
-    alternateTextColor: textPrimaryColor,
+    primary1Color: primaryColor,
+    primary2Color: primaryColorDark,
+    primary3Color: primaryColorLight,
+    accent1Color: primaryColorLight,
+    accent2Color: primaryColorLight,
+    accent3Color: primaryColorLight,
+    textColor: textColor,
+    alternateTextColor: textOnPrimaryColor,
     canvasColor: white,
     borderColor: dividerColor,
     disabledColor: fade(darkBlack, 0.3),
@@ -36,14 +44,14 @@ export default {
     shadowColor: fullBlack
   },
   fontIcon: {
-    color: textPrimaryColor,
-    hoverColor: textPrimaryColor
+    color: textColor,
+    hoverColor: textColor
   },
   chip: {
-    deleteIconColor: textPrimaryColor
+    deleteIconColor: textColor
   },
   textField: {
     underlineColor: dividerColor,
-    underlineFocusStyle: textPrimaryColor
+    underlineFocusStyle: textColor
   }
 }
