@@ -26,4 +26,15 @@ logger.fatal = (msg) => {
   console.error(msg)
 }
 
+/*
+ * Log the error, adding the error ID to the error message.
+ * @param {object} err - The error.
+ * @param {string} errId - The error ID
+ * @return {null}
+ */
+export const logErrorWithId = (err, errId) => {
+  err.message = `${err.message}: Error ID ${errId}`
+  logger.error(err)
+}
+
 export default logger

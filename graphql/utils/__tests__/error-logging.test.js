@@ -5,13 +5,9 @@ import {
   handleError,
   formatError
 } from '../error-logging'
-import logger from '../logger'
+import { logErrorWithId } from '../logger'
 
-jest.mock('../logger', () => {
-  return {
-    error: jest.fn()
-  }
-})
+jest.mock('../logger')
 
 class MockErr extends Error {
   constructor (message, locations, path) {
@@ -42,12 +38,13 @@ describe('error-logging', () => {
     expect(returnedErr.message).toContain('Internal Error: ')
   })
 
-  it('handleError logs the error', () => {
+  it('handleError logs the error with the ID', () => {
     const mockErr = getMockErr()
     handleError(mockErr)
-    expect(logger.error).toHaveBeenCalled()
-    const loggedErr = logger.error.mock.calls[0][0]
-    expect(loggedErr.message).toContain('My bad error: Error ID ')
+    expect(logErrorWithId).toHaveBeenCalled()
+    const args = logErrorWithId.mock.calls[0]
+    expect(args[0]).toEqual(mockErr)
+    expect(args[1]).toBeDefined()
   })
 
   it('formatError returns the expected format', () => {

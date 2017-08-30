@@ -1,6 +1,6 @@
 
 import uuid from 'uuid'
-import logger from './logger'
+import logger, { logErrorWithId } from './logger'
 
 /*
  * Wrap a function and log all exceptions, then re-throw the
@@ -46,14 +46,9 @@ export const handleError = (graphQLError) => {
   // Inspired by graphql-errors package:
   // https://github.com/kadirahq/graphql-errors/blob/master/lib/index.js#L29
   const errId = uuid.v4()
-
-  // Log the error.
-  const errToLog = new Error(graphQLError.message)
-  errToLog.message = `${graphQLError.message}: Error ID ${errId}`
-  logger.error(errToLog)
+  logErrorWithId(graphQLError, errId)
 
   // Format and return the error.
-  const errToReturn = new Error(graphQLError.message)
-  errToReturn.message = `Internal Error: ${errId}`
-  return formatError(errToReturn)
+  graphQLError.message = `Internal Error: ${errId}`
+  return formatError(graphQLError)
 }
