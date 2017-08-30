@@ -9,13 +9,17 @@ import BaseWidgetModel from './BaseWidgetModel'
  * an array of Widgets.
  */
 const getAllBaseWidgets = async (userContext) => {
-  const widgets = await BaseWidgetModel.getAll(userContext)
-  widgets.forEach((widget, i) => {
-    widgets[i].widgetId = widgets[i].id
-    widgets[i].settings = JSON.stringify(widgets[i].settings)
-  })
-  const sortedWidgets = sortBy(widgets, (obj) => obj.position)
-  return sortedWidgets
+  try {
+    const widgets = await BaseWidgetModel.getAll(userContext)
+    widgets.forEach((widget, i) => {
+      widgets[i].widgetId = widgets[i].id
+      widgets[i].settings = JSON.stringify(widgets[i].settings)
+    })
+    const sortedWidgets = sortBy(widgets, (obj) => obj.position)
+    return sortedWidgets
+  } catch (e) {
+    throw e
+  }
 }
 
 export default getAllBaseWidgets

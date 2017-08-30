@@ -13,28 +13,32 @@ import getNextLevelFor from '../userLevels/getNextLevelFor'
  * @return {Promise<User>}  A promise that resolves into a User instance.
  */
 const addVc = async (userContext, userId, vc = 0) => {
-  var user = await UserModel.update(userContext, {
-    id: userId,
-    vcCurrent: {$add: vc},
-    vcAllTime: {$add: vc},
-    heartsUntilNextLevel: {$add: -vc},
-    lastTabTimestamp: moment.utc().toISOString()
-  })
+  try {
+    var user = await UserModel.update(userContext, {
+      id: userId,
+      vcCurrent: {$add: vc},
+      vcAllTime: {$add: vc},
+      heartsUntilNextLevel: {$add: -vc},
+      lastTabTimestamp: moment.utc().toISOString()
+    })
 
-  // Check if user gained a level.
-  if (user.heartsUntilNextLevel < 1) {
-    const nextLevel = await getNextLevelFor(userContext,
-      user.level, user.vcAllTime)
-    if (nextLevel) {
-      // Set the user's new level and related fields.
-      user = await UserModel.update(userContext, {
-        id: userId,
-        level: nextLevel.id - 1, // current level is one fewer than next level
-        heartsUntilNextLevel: (nextLevel.hearts - user.vcAllTime)
-      })
+    // Check if user gained a level.
+    if (user.heartsUntilNextLevel < 1) {
+      const nextLevel = await getNextLevelFor(userContext,
+        user.level, user.vcAllTime)
+      if (nextLevel) {
+        // Set the user's new level and related fields.
+        user = await UserModel.update(userContext, {
+          id: userId,
+          level: nextLevel.id - 1, // current level is one fewer than next level
+          heartsUntilNextLevel: (nextLevel.hearts - user.vcAllTime)
+        })
+      }
     }
+    return user
+  } catch (e) {
+    throw e
   }
-  return user
 }
 
 export default addVc

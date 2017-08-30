@@ -8,6 +8,10 @@ import BackgroundImageModel from './BackgroundImageModel'
  * into a BackgroundImage instance.
  */
 export default async (userContext) => {
-  const images = await BackgroundImageModel.getAll(userContext)
-  return sample(images)
+  try {
+    const images = await BackgroundImageModel.getAll(userContext)
+    return sample(images)
+  } catch (e) {
+    throw e
+  }
 }

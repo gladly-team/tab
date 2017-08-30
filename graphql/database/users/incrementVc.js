@@ -13,16 +13,20 @@ import addVc from './addVc'
  */
 const incrementVc = async (userContext, userId) => {
   const COOLDOWN_SECONDS = 2
-  var user = await UserModel.get(userContext, userId)
-  const now = moment.utc()
-  var lastTabTimestamp = (
-    user.lastTabTimestamp
-    ? moment.utc(user.lastTabTimestamp)
-    : null
-  )
-  if (!lastTabTimestamp ||
-    now.diff(lastTabTimestamp, 'seconds') > COOLDOWN_SECONDS) {
-    user = await addVc(userContext, userId, 1)
+  try {
+    var user = await UserModel.get(userContext, userId)
+    const now = moment.utc()
+    var lastTabTimestamp = (
+      user.lastTabTimestamp
+      ? moment.utc(user.lastTabTimestamp)
+      : null
+    )
+    if (!lastTabTimestamp ||
+      now.diff(lastTabTimestamp, 'seconds') > COOLDOWN_SECONDS) {
+      user = await addVc(userContext, userId, 1)
+    }
+  } catch (e) {
+    throw e
   }
   return user
 }

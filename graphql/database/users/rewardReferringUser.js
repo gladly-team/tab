@@ -15,8 +15,12 @@ const override = getPermissionsOverride(REWARD_REFERRER_OVERRIDE)
  * @return {Promise<User>}  A promise that resolves into a User instance.
  */
 const rewardReferringUser = async (referringUserId) => {
-  await addVc(override, referringUserId,
-    USER_REFERRAL_VC_REWARD)
+  try {
+    await addVc(override, referringUserId,
+      USER_REFERRAL_VC_REWARD)
+  } catch (e) {
+    throw e
+  }
 }
 
 export default rewardReferringUser

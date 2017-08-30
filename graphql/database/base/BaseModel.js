@@ -213,7 +213,6 @@ class BaseModel {
         return self.deserialize(data)
       })
       .catch(err => {
-        console.log('BaseModel get:', err)
         throw err
       })
   }
@@ -243,8 +242,7 @@ class BaseModel {
     return this.dynogelsModel.getItemsAsync(keys)
       .then(data => self.deserialize(data))
       .catch(err => {
-        console.log(err)
-        return err
+        throw err
       })
   }
 
@@ -257,8 +255,7 @@ class BaseModel {
     return this.dynogelsModel.scan().execAsync()
       .then(data => self.deserialize(data.Items))
       .catch(err => {
-        console.log(err)
-        return err
+        throw err
       })
   }
 
@@ -288,8 +285,7 @@ class BaseModel {
     return queryObj.execAsync()
       .then(data => self.deserialize(data.Items))
       .catch(err => {
-        console.log(err)
-        return err
+        throw err
       })
   }
 
@@ -308,7 +304,6 @@ class BaseModel {
     return this.dynogelsModel.createAsync(item)
       .then(data => self.deserialize(data))
       .catch(err => {
-        console.log(err)
         return err
       })
   }
@@ -328,8 +323,7 @@ class BaseModel {
     return this.dynogelsModel.updateAsync(item, { ReturnValues: 'ALL_NEW' })
       .then(data => self.deserialize(data))
       .catch(err => {
-        console.log(err)
-        return err
+        throw err
       })
   }
 
