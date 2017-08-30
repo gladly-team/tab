@@ -1,4 +1,5 @@
 
+import uuid from 'uuid'
 import logger from './logger'
 
 /*
@@ -19,27 +20,12 @@ export const logExceptionsWrapper = (func) => {
 }
 
 /*
- * Log GraphQL errors.
- * @param {object} graphQLError - The GraphQL error.
- * @return {null}
- */
-const logError = (graphQLError) => {
-  // TODO: set up logging via Sentry.
-  logger.log('Inside logError!')
-  logger.error(graphQLError)
-}
-
-/*
  * Format GraphQL error before sending to the client.
  * Spec: https://github.com/graphql/graphql-js/blob/master/src/error/formatError.js#L19
  * @param {object} graphQLError - The GraphQL error.
  * @return {object} The error to send to the client.
  */
 export const formatError = (graphQLError) => {
-  // TODO: return obfuscated message to prevent leakage of
-  //   sensitive info.
-  // See graphql-errors package:
-  // https://github.com/kadirahq/graphql-errors/blob/master/lib/index.js#L29
   return {
     message: graphQLError.message,
     locations: graphQLError.locations,
@@ -55,6 +41,19 @@ export const formatError = (graphQLError) => {
  * @return {object} The error to send to the client (optionally formatted).
  */
 export const handleError = (graphQLError) => {
-  logError(graphQLError)
-  return formatError(graphQLError)
+  // Return masked error messages to the client side to
+  // prevent leakage of any sensitive info.
+  // Inspired by graphql-errors package:
+  // https://github.com/kadirahq/graphql-errors/blob/master/lib/index.js#L29
+  const errId = uuid.v4()
+
+  // Log the error.
+  const errToLog = new Error(graphQLError.message)
+  errToLog.message = `${graphQLError.message}: Error ID ${errId}`
+  logger.error(errToLog)
+
+  // Format and return the error.
+  const errToReturn = new Error(graphQLError.message)
+  errToReturn.message = `Internal Error: ${errId}`
+  return formatError(errToReturn)
 }

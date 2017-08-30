@@ -1,4 +1,5 @@
 
+// TODO: set up logging via Sentry.
 const logger = {}
 
 logger.log = (msg) => {
