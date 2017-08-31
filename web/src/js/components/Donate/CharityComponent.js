@@ -79,18 +79,22 @@ class Charity extends React.Component {
     this.setState({donateSlider: value})
   }
 
+  heartsDonationError () {
+    this.props.showError('Oops, we could not donate your Hearts just now :(')
+  }
+
   donateHearts () {
     if (this.state.donateSlider <= 0) { return }
-
     const { charity, user } = this.props
+    const self = this
     DonateVcMutation.commit(
       this.props.relay.environment,
       user,
       charity.id,
-      this.state.donateSlider
+      this.state.donateSlider,
+      self.thanksDialogShow.bind(this),
+      self.heartsDonationError.bind(this)
     )
-
-    this.thanksDialogShow()
   }
 
   goToHome () {
@@ -261,7 +265,9 @@ class Charity extends React.Component {
 }
 
 Charity.propTypes = {
-  charity: PropTypes.object.isRequired
+  charity: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
+  showError: PropTypes.func.isRequired
 }
 
 export default Charity
