@@ -48,6 +48,9 @@ export const handleError = (graphQLError) => {
   const errId = uuid.v4()
   logErrorWithId(graphQLError, errId)
 
+  // TODO: probably want to return different message
+  // for some error types (e.g. UnauthorizedQueryException)
+
   // Format and return the error.
   graphQLError.message = `Internal Error: ${errId}`
   return formatError(graphQLError)

@@ -104,7 +104,7 @@ describe('User table queries', () => {
       userId: 'gqltest1-yz89-yz80-yz80-xyz789tuv456' // another user
     }, cognitoUserIdToken)
     expect(response.data.user).toBeNull()
-    expect(response.errors[0].message).toBe('Query not authorized.')
+    expect(response.errors[0].message).toContain('Internal Error: ')
   }, 60e3)
 
   // // TODO
