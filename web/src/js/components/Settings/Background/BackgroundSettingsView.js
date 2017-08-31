@@ -8,6 +8,7 @@ import BackgroundSettings from './BackgroundSettingsContainer'
 
 import FullScreenProgress from 'general/FullScreenProgress'
 import AuthUserComponent from 'general/AuthUserComponent'
+import ErrorMessage from 'general/ErrorMessage'
 
 class BackgroundSettingsView extends React.Component {
   render () {
@@ -27,11 +28,9 @@ class BackgroundSettingsView extends React.Component {
           `}
           render={({error, props}) => {
             if (error) {
-              // TODO: display visual error message.
-              console.log('We had a problem loading the background settings :(')
               console.error(error, error.source)
-              console.error(error.source)
-              return null
+              const errMsg = 'We had a problem loading the background settings :('
+              return <ErrorMessage message={errMsg} />
             }
 
             if (props) {

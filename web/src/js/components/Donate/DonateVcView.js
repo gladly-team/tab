@@ -6,6 +6,7 @@ import environment from '../../../relay-env'
 
 import FullScreenProgress from 'general/FullScreenProgress'
 import AuthUserComponent from 'general/AuthUserComponent'
+import ErrorMessage from 'general/ErrorMessage'
 
 import DonateVc from './DonateVcContainer'
 
@@ -27,11 +28,9 @@ class DonateVcView extends React.Component {
           `}
           render={({error, props}) => {
             if (error) {
-              // TODO: display visual error message.
-              console.log('We had a problem loading the Hearts donation page :(')
               console.error(error, error.source)
-              console.error(error.source)
-              return null
+              const errMsg = 'We had a problem loading the Hearts donation page :('
+              return <ErrorMessage message={errMsg} />
             }
 
             if (props) {
