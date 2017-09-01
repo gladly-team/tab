@@ -10,6 +10,7 @@ class ErrorMessage extends React.Component {
     return (
       <Snackbar
         contentStyle={{textAlign: 'center'}}
+        {...this.props}
         data-test-id={'error-message'}
         message={message}
         open
@@ -25,6 +26,7 @@ ErrorMessage.propTypes = {
 }
 
 ErrorMessage.defaultProps = {
+  message: null,
   style: {}
 }
 

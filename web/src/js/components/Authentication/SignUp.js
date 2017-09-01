@@ -1,18 +1,23 @@
 import React from 'react'
-import { getReferralData, validateUsername } from 'web-utils'
+import { getReferralData } from 'web-utils'
 import { goToDashboard, goToLogin } from 'navigation/navigation'
 
 import environment from '../../../relay-env'
 
 import EmailField from 'general/EmailField'
 import AuthActionButtom from 'general/AuthActionButtom'
+import UsernameField from 'general/UsernameField'
 import PasswordField from 'general/PasswordField'
-import { signup, login, getCurrentUser } from '../../utils/cognito-auth'
+import ErrorMessage from 'general/ErrorMessage'
+import {
+  signup,
+  login,
+  getCurrentUser,
+  getMessageFromSignUpError
+} from '../../utils/cognito-auth'
 
 import CreateNewUserMutation from 'mutations/CreateNewUserMutation'
 
-import Snackbar from 'material-ui/Snackbar'
-import TextField from 'material-ui/TextField'
 import appTheme from 'theme/default'
 
 class SignUp extends React.Component {
@@ -21,9 +26,9 @@ class SignUp extends React.Component {
     this.password = null
 
     this.state = {
-      alertOpen: false,
-      alertMsg: '',
-      registeringUser: false
+      errorMessage: '',
+      registeringUser: false,
+      usernameDuplicate: false
     }
   }
 
@@ -35,20 +40,15 @@ class SignUp extends React.Component {
     }
   }
 
-  validateUsername () {
-    const username = this.username.input.value.trim()
-    return validateUsername(username)
-  }
-
   handleSubmit () {
     if (this.state.registeringUser) { return }
 
     // TODO: show validation errors
     if (this.password.validate() &&
-        this.validateUsername() &&
+        this.username.validate() &&
         this.email.validate()) {
       const password = this.password.getValue()
-      const username = this.username.input.value.trim()
+      const username = this.username.getValue()
       const email = this.email.getValue()
       this.registerUser(username, email, password)
     }
@@ -56,9 +56,10 @@ class SignUp extends React.Component {
 
   registerUser (username, email, password) {
     this.setState({
-      registeringUser: true
+      registeringUser: true,
+      usernameDuplicate: false
     })
-
+    const self = this
     signup(username, email, password,
       (response) => {
         this.logUserIn(username, password,
@@ -66,12 +67,25 @@ class SignUp extends React.Component {
             this.createNewUser(username, email)
           },
           (err) => {
-            this.showAlert(err.message)
+            console.error(err)
+            // TODO: filter and customize message
+            this.showError(err.message)
             this.registrationCompleted()
           })
       },
       (err) => {
-        this.showAlert(err.message)
+        if (err.code === 'UsernameExistsException') {
+          self.setState({
+            usernameDuplicate: true
+          })
+        } else {
+          self.setState({
+            usernameDuplicate: false
+          })
+        }
+        console.error(err)
+        const errorMessage = getMessageFromSignUpError(err)
+        this.showError(errorMessage)
         this.registrationCompleted()
       })
   }
@@ -111,24 +125,20 @@ class SignUp extends React.Component {
         },
         (err) => {
           self.registrationCompleted()
-          self.showAlert(err.message)
+          self.showError(err.message)
         }
       )
     })
   }
 
-  handleAlertRequestClose () {
+  showError (msg) {
     this.setState({
-      alertOpen: false,
-      alertMsg: ''
+      errorMessage: msg
     })
   }
 
-  showAlert (msg) {
-    this.setState({
-      alertOpen: true,
-      alertMsg: msg
-    })
+  clearError () {
+    this.showError(null)
   }
 
   render () {
@@ -173,15 +183,16 @@ class SignUp extends React.Component {
         style={main}>
         <div
           style={container}>
-          <TextField
-            id={'signup-username-input-id'}
+          <UsernameField
+            inputId={'signup-username-input-id'}
             ref={(input) => { this.username = input }}
             onKeyPress={this._handleKeyPress.bind(this)}
             floatingLabelText='Username'
             floatingLabelStyle={floatingLabelStyle}
             underlineStyle={underlineStyle}
             underlineFocusStyle={underlineFocusStyle}
-            inputStyle={inputStyle} />
+            inputStyle={inputStyle}
+            usernameDuplicate={this.state.usernameDuplicate} />
           <EmailField
             inputId={'signup-email-input-id'}
             ref={(input) => { this.email = input }}
@@ -211,14 +222,11 @@ class SignUp extends React.Component {
               onClicked={this.handleSubmit.bind(this)} />
           </div>
         </div>
-        <Snackbar
-          contentStyle={{textAlign: 'center'}}
-          data-test-id={'signup-error-snackbar'}
-          open={this.state.alertOpen}
-          message={this.state.alertMsg}
-          autoHideDuration={3000}
-          onRequestClose={this.handleAlertRequestClose.bind(this)}
-        />
+        { this.state.errorMessage
+          ? (<ErrorMessage
+            message={this.state.errorMessage}
+            onRequestClose={this.clearError.bind(this)} />)
+          : null }
       </div>
     )
   }
