@@ -30,6 +30,12 @@ class NotesWidget extends React.Component {
     })
   }
 
+  onSaveSuccess () {}
+
+  onSaveError () {
+    this.props.showError('Oops, we are having trouble saving your widgets right now :(')
+  }
+
   updateWidget (notes) {
     const widgetData = {
       notes: notes
@@ -41,7 +47,9 @@ class NotesWidget extends React.Component {
       this.props.relay.environment,
       this.props.user,
       this.props.widget,
-      data
+      data,
+      this.onSaveSuccess.bind(this),
+      this.onSaveError.bind(this)
     )
   }
 
@@ -145,7 +153,8 @@ class NotesWidget extends React.Component {
 NotesWidget.propTypes = {
   widget: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired,
-  widgetVisibilityChanged: PropTypes.func.isRequired
+  widgetVisibilityChanged: PropTypes.func.isRequired,
+  showError: PropTypes.func.isRequired
 }
 
 export default NotesWidget

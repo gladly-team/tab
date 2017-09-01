@@ -11,6 +11,7 @@ import Ad from '../Ad/Ad'
 import { goToSettings, goToDonate } from 'navigation/navigation'
 
 import FadeInAnimation from 'general/FadeInAnimation'
+import ErrorMessage from 'general/ErrorMessage'
 
 import IconButton from 'material-ui/IconButton'
 import FontIcon from 'material-ui/FontIcon'
@@ -25,7 +26,8 @@ class Dashboard extends React.Component {
 
     this.state = {
       bkgSelectorOpened: false,
-      donateDialogOpened: false
+      donateDialogOpened: false,
+      errorMessage: null
     }
   }
 
@@ -46,6 +48,12 @@ class Dashboard extends React.Component {
   changeDonateDialogState (state) {
     this.setState({
       donateDialogOpened: state
+    })
+  }
+
+  showError (msg) {
+    this.setState({
+      errorMessage: msg
     })
   }
 
@@ -79,6 +87,8 @@ class Dashboard extends React.Component {
         flexDirection: 'column'
       }
     }
+
+    const errorMessage = this.state.errorMessage
 
     return (
       <FadeInAnimation>
@@ -116,7 +126,7 @@ class Dashboard extends React.Component {
               </div>
             </div>
           </div>
-          <WidgetsView />
+          <WidgetsView showError={this.showError.bind(this)} />
           <Ad
             adId='div-gpt-ad-1464385742501-0'
             adSlotId='/43865596/HBTR'
@@ -139,6 +149,9 @@ class Dashboard extends React.Component {
               right: 320,
               display: 'block'
             }} />
+          { errorMessage
+            ? <ErrorMessage message={errorMessage} />
+            : null }
         </div>
       </FadeInAnimation>
     )

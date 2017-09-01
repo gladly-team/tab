@@ -32,6 +32,12 @@ class BookmarksWidget extends React.Component {
     return 'https://www.google.com/s2/favicons?domain_url=' + encodeURI(link)
   }
 
+  onSaveSuccess () {}
+
+  onSaveError () {
+    this.props.showError('Oops, we are having trouble saving your widgets right now :(')
+  }
+
   updateWidget (bookmarks) {
     const widgetData = {
       bookmarks: bookmarks
@@ -41,7 +47,9 @@ class BookmarksWidget extends React.Component {
       this.props.relay.environment,
       this.props.user,
       this.props.widget,
-      data
+      data,
+      this.onSaveSuccess.bind(this),
+      this.onSaveError.bind(this)
     )
   }
 
@@ -138,7 +146,8 @@ class BookmarksWidget extends React.Component {
 BookmarksWidget.propTypes = {
   widget: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired,
-  widgetVisibilityChanged: PropTypes.func.isRequired
+  widgetVisibilityChanged: PropTypes.func.isRequired,
+  showError: PropTypes.func.isRequired
 }
 
 export default BookmarksWidget

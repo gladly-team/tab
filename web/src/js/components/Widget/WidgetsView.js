@@ -29,8 +29,9 @@ class WidgetsView extends React.Component {
               return <ErrorMessage message={errMsg} />
             }
             if (props) {
+              const showError = this.props.showError
               return (
-                <Widgets user={props.user} />
+                <Widgets user={props.user} showError={showError} />
               )
             } else {
               return null

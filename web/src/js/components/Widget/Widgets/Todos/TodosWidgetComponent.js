@@ -91,6 +91,12 @@ class TodosWidget extends React.Component {
     return JSON.stringify(data)
   }
 
+  onSaveSuccess () {}
+
+  onSaveError () {
+    this.props.showError('Oops, we are having trouble saving your widgets right now :(')
+  }
+
   updateWidget () {
     const data = this.getWidgetData()
 
@@ -98,7 +104,9 @@ class TodosWidget extends React.Component {
       this.props.relay.environment,
       this.props.user,
       this.props.widget,
-      data
+      data,
+      this.onSaveSuccess.bind(this),
+      this.onSaveError.bind(this)
     )
   }
 
@@ -193,7 +201,8 @@ class TodosWidget extends React.Component {
 TodosWidget.propTypes = {
   widget: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired,
-  widgetVisibilityChanged: PropTypes.func.isRequired
+  widgetVisibilityChanged: PropTypes.func.isRequired,
+  showError: PropTypes.func.isRequired
 }
 
 export default TodosWidget
