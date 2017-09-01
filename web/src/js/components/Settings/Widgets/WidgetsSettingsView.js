@@ -34,10 +34,12 @@ class WidgetsSettingsView extends React.Component {
             }
 
             if (props) {
+              const showError = this.props.showError
               return (
                 <WidgetsSettings
                   app={props.app}
-                  user={props.user} />
+                  user={props.user}
+                  showError={showError} />
               )
             } else {
               return (<FullScreenProgress />)

@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import FadeInAnimation from 'general/FadeInAnimation'
+import ErrorMessage from 'general/ErrorMessage'
 
 import {
   goToDashboard,
@@ -22,7 +23,8 @@ class Settings extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      selection: 'widgets'
+      selection: 'widgets',
+      errorMessage: null
     }
   }
 
@@ -57,6 +59,12 @@ class Settings extends React.Component {
       if (loggedOut) {
         goToLogin()
       }
+    })
+  }
+
+  showError (msg) {
+    this.setState({
+      errorMessage: msg
     })
   }
 
@@ -104,6 +112,9 @@ class Settings extends React.Component {
           className='fa fa-sign-out' />} />
     )
 
+    const showError = this.showError
+    const errorMessage = this.state.errorMessage
+
     return (
       <FadeInAnimation>
         <div
@@ -132,8 +143,16 @@ class Settings extends React.Component {
             </div>
           </Drawer>
           <div style={container}>
-            {this.props.children}
+            {React.Children.map(
+              this.props.children,
+              (child) => React.cloneElement(child, {
+                showError: showError.bind(this)
+              })
+            )}
           </div>
+          { errorMessage
+            ? <ErrorMessage message={errorMessage} />
+            : null }
         </div>
       </FadeInAnimation>
     )

@@ -33,7 +33,7 @@ class WidgetsSettings extends React.Component {
   }
 
   render () {
-    const { user, app } = this.props
+    const { user, app, showError } = this.props
 
     const container = {
       marginLeft: 256,
@@ -60,7 +60,8 @@ class WidgetsSettings extends React.Component {
                 key={index}
                 user={user}
                 appWidget={edge.node}
-                widget={self.state.userWidgets[edge.node.name]} />)
+                widget={self.state.userWidgets[edge.node.name]}
+                showError={showError} />)
             })}
           </List>
         </div>
@@ -71,7 +72,8 @@ class WidgetsSettings extends React.Component {
 
 WidgetsSettings.propTypes = {
   user: PropTypes.object.isRequired,
-  app: PropTypes.object.isRequired
+  app: PropTypes.object.isRequired,
+  showError: PropTypes.func.isRequired
 }
 
 export default WidgetsSettings

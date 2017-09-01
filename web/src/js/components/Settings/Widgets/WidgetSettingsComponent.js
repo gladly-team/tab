@@ -49,6 +49,12 @@ class WidgetSettings extends React.Component {
     return settings
   }
 
+  onSettingsSave () {}
+
+  onSaveError () {
+    this.props.showError('Oops, we are having trouble saving your settings right now :(')
+  }
+
   onWidgetEnableChange (event, checked) {
     // Call mutation to update widget enabled status.
     const { appWidget, user } = this.props
@@ -56,7 +62,9 @@ class WidgetSettings extends React.Component {
       this.props.relay.environment,
       user,
       appWidget,
-      checked
+      checked,
+      this.onSettingsSave.bind(this),
+      this.onSaveError.bind(this)
     )
   }
 
@@ -76,13 +84,14 @@ class WidgetSettings extends React.Component {
       this.props.relay.environment,
       user,
       appWidget,
-      strConfig
+      strConfig,
+      this.onSettingsSave.bind(this),
+      this.onSaveError.bind(this)
     )
   }
 
   render () {
     const { appWidget, widget } = this.props
-
     const enabled = widget && widget.enabled
     const settings = this.state.settings || []
 
@@ -138,7 +147,8 @@ class WidgetSettings extends React.Component {
 WidgetSettings.propTypes = {
   widget: PropTypes.object,
   appWidget: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired
+  user: PropTypes.object.isRequired,
+  showError: PropTypes.func.isRequired
 }
 
 export default WidgetSettings
