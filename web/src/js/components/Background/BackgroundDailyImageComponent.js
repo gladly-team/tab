@@ -7,9 +7,17 @@ class BackgroundDailyImage extends React.Component {
     if (this.props.updateOnMount) {
       SetBackgroundDailyImageMutation.commit(
         this.props.relay.environment,
-        this.props.user
+        this.props.user,
+        this.onSaveSuccess.bind(this),
+        this.onSaveError.bind(this)
       )
     }
+  }
+
+  onSaveSuccess () {}
+
+  onSaveError () {
+    this.props.showError('Oops, we are having trouble saving your settings right now :(')
   }
 
   render () {
@@ -23,7 +31,8 @@ BackgroundDailyImage.propTypes = {
 }
 
 BackgroundDailyImage.defaultProps = {
-  updateOnMount: false
+  updateOnMount: false,
+  showError: PropTypes.func.isRequired
 }
 
 export default BackgroundDailyImage

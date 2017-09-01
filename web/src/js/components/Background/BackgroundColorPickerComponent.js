@@ -23,6 +23,12 @@ class BackgroundColorPicker extends React.Component {
     this.onColorChanged({hex: selectedColor})
   }
 
+  onSaveSuccess () {}
+
+  onSaveError () {
+    this.props.showError('Oops, we are having trouble saving your settings right now :(')
+  }
+
   onColorChanged (color) {
     this.setState({
       selectedColor: color.hex
@@ -31,7 +37,9 @@ class BackgroundColorPicker extends React.Component {
     SetBackgroundColorMutation.commit(
       this.props.relay.environment,
       this.props.user,
-      color.hex
+      color.hex,
+      this.onSaveSuccess.bind(this),
+      this.onSaveError.bind(this)
     )
   }
 
@@ -90,7 +98,8 @@ class BackgroundColorPicker extends React.Component {
 }
 
 BackgroundColorPicker.propTypes = {
-  user: PropTypes.object.isRequired
+  user: PropTypes.object.isRequired,
+  showError: PropTypes.func.isRequired
 }
 
 export default BackgroundColorPicker

@@ -16,7 +16,7 @@ class BackgroundImagePicker extends React.Component {
     }
   }
 
-  componentDidMount () {
+  componentWillMount () {
     const { app, user } = this.props
     const selectedImage = user.backgroundImage
     if (selectedImage) {
@@ -32,6 +32,12 @@ class BackgroundImagePicker extends React.Component {
     }
   }
 
+  onSaveSuccess () {}
+
+  onSaveError () {
+    this.props.showError('Oops, we are having trouble saving your settings right now :(')
+  }
+
   onImageSelected (image) {
     this.setState({
       selectedImage: image
@@ -40,7 +46,9 @@ class BackgroundImagePicker extends React.Component {
     SetBackgroundImageMutation.commit(
       this.props.relay.environment,
       this.props.user,
-      image
+      image,
+      this.onSaveSuccess.bind(this),
+      this.onSaveError.bind(this)
     )
   }
 
@@ -102,7 +110,8 @@ class BackgroundImagePicker extends React.Component {
 
 BackgroundImagePicker.propTypes = {
   app: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired
+  user: PropTypes.object.isRequired,
+  showError: PropTypes.func.isRequired
 }
 
 export default BackgroundImagePicker

@@ -38,7 +38,7 @@ class BackgroundSettings extends React.Component {
   }
 
   render () {
-    const { app, user } = this.props
+    const { app, user, showError } = this.props
     if (!this.state.selected) { return null }
 
     const main = {
@@ -69,18 +69,26 @@ class BackgroundSettings extends React.Component {
     switch (this.state.selected) {
       case 'daily':
         dividerCmp = null
-        selectedOption = (<BackgroundDailyImage
-          user={user}
-          updateOnMount={user.backgroundOption !== 'daily'} />)
+        selectedOption = (
+          <BackgroundDailyImage
+            user={user}
+            updateOnMount={user.backgroundOption !== 'daily'}
+            showError={showError} />
+          )
         break
       case 'custom':
-        selectedOption = (<BackgroundCustomImagePicker user={user} />)
+        selectedOption = (
+          <BackgroundCustomImagePicker user={user} showError={showError} />)
         break
       case 'color':
-        selectedOption = (<BackgroundColorPicker user={user} />)
+        selectedOption = (
+          <BackgroundColorPicker user={user} showError={showError} />)
         break
       case 'photo':
-        selectedOption = (<BackgroundImagePicker app={app} user={user} />)
+        selectedOption = (
+          <BackgroundImagePicker
+            app={app} user={user} showError={showError} />
+        )
         break
       default:
         break
@@ -132,7 +140,8 @@ class BackgroundSettings extends React.Component {
 
 BackgroundSettings.propTypes = {
   app: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired
+  user: PropTypes.object.isRequired,
+  showError: PropTypes.func.isRequired
 }
 
 export default BackgroundSettings
