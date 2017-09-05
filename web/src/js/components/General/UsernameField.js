@@ -45,7 +45,11 @@ class UsernameField extends React.Component {
       const username = this.username.input.value.trim()
       const isValid = validateUsername(username)
       if (!isValid) {
-        this.setErrorMessage('Username is invalid.')
+        if (username.length < 2) {
+          this.setErrorMessage('Must be at least two characters.')
+        } else {
+          this.setErrorMessage('Username is invalid.')
+        }
       } else {
         this.setErrorMessage(null)
       }
