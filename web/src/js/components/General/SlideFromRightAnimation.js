@@ -15,6 +15,8 @@ class SlideFromRightAnimation extends React.Component {
       setOut: false,
       out: false
     }
+
+    this.timeouts = []
   }
 
   componentDidMount () {
@@ -29,53 +31,61 @@ class SlideFromRightAnimation extends React.Component {
     }
   }
 
+  componentWillUnmount () {
+    this.clearTimeouts()
+  }
+
+  clearTimeouts () {
+    this.timeouts.forEach(clearTimeout)
+  }
+
   animateIn () {
     const self = this
 
-    setTimeout(function () {
-            // Set enter state. Starts bubble in animation.
+    this.timeouts.push(setTimeout(function () {
+      // Set enter state. Starts bubble in animation.
       self.setState({
         enter: true
       })
 
-            // Set timer to prepare the element to finish the animation.
-      setTimeout(function () {
-                // Prepares the element to render the children components after
-                // the bubbleIn animation it's over.
+      // Set timer to prepare the element to finish the animation.
+      this.timeouts.push(setTimeout(function () {
+          // Prepares the element to render the children components after
+          // the bubbleIn animation it's over.
         self.setState({
           set: true,
           enter: false
         })
 
-                // Set the timer to show the children components.
-        setTimeout(function () {
+          // Set the timer to show the children components.
+        this.timeouts.push(setTimeout(function () {
           self.setState({
             show: true
           })
-        }, 100)
-      }, self.props.enterAnimationTimeout)
-    }, 0)
+        }, 100))
+      }, self.props.enterAnimationTimeout))
+    }, 0))
   }
 
   animateOut () {
     const self = this
 
-    setTimeout(function () {
+    this.timeouts.push(setTimeout(function () {
       self.setState({
         setOut: true
       })
-      setTimeout(function () {
+      this.timeouts.push(setTimeout(function () {
         self.setState({
           setOut: false,
           out: true
         })
-        setTimeout(function () {
+        this.timeouts.push(setTimeout(function () {
           self.setState({
             show: false
           })
-        }, 100)
-      }, 100)
-    }, this.props.leaveAnimationTimeout)
+        }, 100))
+      }, 100))
+    }, this.props.leaveAnimationTimeout))
   }
 
   render () {
