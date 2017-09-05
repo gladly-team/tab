@@ -39,6 +39,7 @@ resources:
             Mutable: false
             Required: true
           - Name: username
+            AttributeDataType: String
             StringAttributeConstraints:
               MinLength : '2'
               MaxLength : '32'
