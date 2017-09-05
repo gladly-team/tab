@@ -41,7 +41,7 @@ resources:
           - Name: username
             StringAttributeConstraints:
               MinLength : '2'
-              MaxLength : '32',
+              MaxLength : '32'
         Policies:
           PasswordPolicy:
             MinimumLength: 8

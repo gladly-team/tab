@@ -33,7 +33,7 @@ class SignIn extends React.Component {
     const usernameValid = this.username.validate()
     if (passwordValid && usernameValid) {
       const password = this.password.getValue()
-      const username = this.username.input.value.trim()
+      const username = this.username.getValue()
       this.logUserIn(username, password,
         () => {
           goToDashboard()
