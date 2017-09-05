@@ -1,5 +1,6 @@
 /* eslint no-useless-escape: 0 */
 
+import XRegExp from 'xregexp'
 import localStorageMgr from './localstorage-mgr'
 
 const referralParams = {
@@ -16,9 +17,12 @@ const referralParams = {
 // 'utm_content'
 // 'tfac_id'
 
-// TODO: validate min and max length
 function validateUsername (username) {
-  var re = /^[a-zA-Z0-9]+$/
+  if (username.length < 2) {
+    return false
+  }
+  // https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_SignUp.html#CognitoUserPools-SignUp-request-Username
+  var re = XRegExp('^[\\p{L}\\p{M}\\p{S}\\p{N}\\p{P}]+$')
   return re.test(username)
 }
 
