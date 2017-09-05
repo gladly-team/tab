@@ -47,7 +47,7 @@ describe('Sign Up Tests', function () {
     Await(setUsernameForLogin(driver, username))
     Await(setUserPasswordForLogin(driver, wrongPassword))
 
-    const loginErrorSnackBarId = 'login-error-snackbar'
+    const loginErrorSnackBarId = 'error-message'
     Await(driverUtils(driver).waitForElementVisible(loginErrorSnackBarId))
   }), 90e3)
 })
