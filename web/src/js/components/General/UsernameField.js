@@ -75,7 +75,11 @@ class UsernameField extends React.Component {
 
 UsernameField.propTypes = {
   inputId: PropTypes.string.isRequired,
-  usernameDuplicate: PropTypes.bool.isRequired
+  usernameDuplicate: PropTypes.bool
+}
+
+UsernameField.defaultProps = {
+  usernameDuplicate: false
 }
 
 export default UsernameField

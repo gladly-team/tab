@@ -4,10 +4,10 @@ import {
   goToRetrievePassword
 } from 'navigation/navigation'
 import AuthActionButtom from 'general/AuthActionButtom'
+import UsernameField from 'general/UsernameField'
 import PasswordField from 'general/PasswordField'
 import { login } from '../../utils/cognito-auth'
 import Snackbar from 'material-ui/Snackbar'
-import TextField from 'material-ui/TextField'
 import appTheme from 'theme/default'
 
 class SignIn extends React.Component {
@@ -28,17 +28,12 @@ class SignIn extends React.Component {
     }
   }
 
-  validateUsername () {
-    const username = this.username.input.value.trim()
-    return username && username.length > 0
-  }
-
   handleSubmit () {
-    if (this.password.validate() &&
-        this.validateUsername()) {
+    const passwordValid = this.password.validate()
+    const usernameValid = this.username.validate()
+    if (passwordValid && usernameValid) {
       const password = this.password.getValue()
       const username = this.username.input.value.trim()
-
       this.logUserIn(username, password,
         () => {
           goToDashboard()
@@ -139,8 +134,8 @@ class SignIn extends React.Component {
         style={main}>
         <div
           style={container}>
-          <TextField
-            id={'login-username-input-id'}
+          <UsernameField
+            inputId={'login-username-input-id'}
             ref={(input) => { this.username = input }}
             onKeyPress={this._handleKeyPress.bind(this)}
             floatingLabelText='Username or email'
