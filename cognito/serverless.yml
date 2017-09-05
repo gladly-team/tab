@@ -22,6 +22,7 @@ functions:
 
 resources:
   Resources:
+    # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpool.html
     CognitoUserPoolTabUserPool:
       Type: "AWS::Cognito::UserPool"
       Properties:
@@ -31,11 +32,16 @@ resources:
         AliasAttributes:
           - email
         MfaConfiguration: "OFF"
+        # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cognito-userpool-schemaattribute.html#cfn-cognito-userpool-schemaattribute-stringattributeconstraints
         Schema:
           - Name: email
             AttributeDataType: String
             Mutable: false
             Required: true
+          - Name: username
+            StringAttributeConstraints:
+              MinLength : '2'
+              MaxLength : '32',
         Policies:
           PasswordPolicy:
             MinimumLength: 8
