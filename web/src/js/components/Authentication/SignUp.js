@@ -67,9 +67,8 @@ class SignUp extends React.Component {
             this.createNewUser(username, email)
           },
           (err) => {
-            console.error(err)
-            // TODO: filter and customize message
-            this.showError(err.message)
+            console.error('error at registerUser:', err)
+            self.showError("Oops, we're having trouble signing you up right now :(")
             this.registrationCompleted()
           })
       },
@@ -124,8 +123,9 @@ class SignUp extends React.Component {
           goToDashboard()
         },
         (err) => {
+          console.error('error at createNewUser:', err)
           self.registrationCompleted()
-          self.showError(err.message)
+          self.showError("Oops, we're having trouble signing you up right now :(")
         }
       )
     })
