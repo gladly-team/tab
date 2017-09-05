@@ -271,5 +271,6 @@ export {
   checkUserExist,
   getOrCreate,
   forgotPassword,
-  confirmPassword
+  confirmPassword,
+  getMessageFromSignUpError
 }
