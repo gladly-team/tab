@@ -57,6 +57,10 @@ class Dashboard extends React.Component {
     })
   }
 
+  clearError () {
+    this.showError(null)
+  }
+
   render () {
     const content = {
       position: 'absolute',
@@ -150,7 +154,8 @@ class Dashboard extends React.Component {
               display: 'block'
             }} />
           { errorMessage
-            ? <ErrorMessage message={errorMessage} />
+            ? <ErrorMessage message={errorMessage}
+              onRequestClose={this.clearError.bind(this)} />
             : null }
         </div>
       </FadeInAnimation>

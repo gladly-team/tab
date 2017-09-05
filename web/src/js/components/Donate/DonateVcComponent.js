@@ -27,6 +27,10 @@ class DonateVc extends React.Component {
     })
   }
 
+  clearError () {
+    this.showError(null)
+  }
+
   render () {
     const { user, app } = this.props
     if (user.vcCurrent < 1) {
@@ -50,7 +54,8 @@ class DonateVc extends React.Component {
           />
           <Charities app={app} user={user} showError={this.showError.bind(this)} />
           { errorMessage
-            ? <ErrorMessage message={errorMessage} />
+            ? <ErrorMessage message={errorMessage}
+              onRequestClose={this.clearError.bind(this)} />
             : null }
         </div>
       </FadeInAnimation>

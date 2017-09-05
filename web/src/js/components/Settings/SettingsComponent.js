@@ -68,6 +68,10 @@ class Settings extends React.Component {
     })
   }
 
+  clearError () {
+    this.showError(null)
+  }
+
   render () {
     const settings = {
       backgroundColor: '#F2F2F2',
@@ -151,7 +155,8 @@ class Settings extends React.Component {
             )}
           </div>
           { errorMessage
-            ? <ErrorMessage message={errorMessage} />
+            ? <ErrorMessage message={errorMessage}
+              onRequestClose={this.clearError.bind(this)} />
             : null }
         </div>
       </FadeInAnimation>
