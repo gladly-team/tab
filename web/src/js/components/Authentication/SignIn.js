@@ -169,7 +169,6 @@ class SignIn extends React.Component {
 
         </div>
         <Snackbar
-          data-test-id={'login-error-snackbar'}
           open={this.state.alertOpen}
           message={this.state.alertMsg}
           autoHideDuration={3000}
