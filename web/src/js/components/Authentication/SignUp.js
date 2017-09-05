@@ -43,10 +43,11 @@ class SignUp extends React.Component {
   handleSubmit () {
     if (this.state.registeringUser) { return }
 
-    // TODO: show validation errors
-    if (this.password.validate() &&
-        this.username.validate() &&
-        this.email.validate()) {
+    // Show all validation errors.
+    const passwordValid = this.password.validate()
+    const usernameValid = this.username.validate()
+    const emailValid = this.email.validate()
+    if (passwordValid && usernameValid && emailValid) {
       const password = this.password.getValue()
       const username = this.username.getValue()
       const email = this.email.getValue()
