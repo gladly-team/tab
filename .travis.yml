@@ -17,7 +17,7 @@ env:
   - TEST_COGNITO_REGION=us-west-2
   - TEST_COGNITO_IDENTITYPOOLID=arn:aws:cognito-idp:us-west-2:167811431063:userpool/us-west-2_CtxIyCf3s
   - TEST_COGNITO_USERPOOLID=us-west-2_CtxIyCf3s
-  - TEST_COGNITO_CLIENTID=395rlm7rtmdtak99s5pelq8d1s
+  - TEST_COGNITO_CLIENTID=u1vckhq1ba7oarrhu8ksvn9r7
   - TEST_MOCK_DEV_AUTHENTICATION=false
   # Web app
   - TEST_PUBLIC_PATH=http://test-tab2017.gladly.io/
