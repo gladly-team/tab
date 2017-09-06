@@ -1,34 +1,9 @@
 
-import config from '../config'
 import {
   createGraphQLContext,
   getUserClaimsFromLambdaEvent,
   isUserAuthorized
 } from './authorization-helpers'
-
-export const logger = {}
-
-// TODO: break out, use Sentry
-logger.log = function (msg) {
-  console.log(msg)
-}
-
-logger.error = function (msg, error) {
-  console.error(msg, error)
-}
-
-export const DBLogger = {
-  action: (action, params) => {
-    if (config.DEVELOPMENT_LOGGING_ENABLED) {
-      console.log(`Received action: ${action} with params: `, params)
-    }
-  },
-  response: (action, data) => {
-    if (config.DEVELOPMENT_LOGGING_ENABLED) {
-      console.log(`Response from action: ${action}: `, data)
-    }
-  }
-}
 
 // Approximate an AWS Lambda event object from the request.
 // https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-set-up-simple-proxy.html#api-gateway-simple-proxy-for-lambda-input-format

@@ -11,6 +11,7 @@ import {
 } from '../../utils/exceptions'
 import dbClient from '../databaseClient'
 import { isValidPermissionsOverride } from '../../utils/permissions-overrides'
+import logger from '../../utils/logger'
 
 dynogels.documentClient(dbClient)
 
@@ -164,7 +165,7 @@ class BaseModel {
    * @return {undefined}
    */
   static register () {
-    // console.log(`Registering model ${this.name} to table ${this.tableName}.`)
+    // logger.debug(`Registering model ${this.name} to table ${this.tableName}.`)
 
     // Add two ISO timestamps, 'created' and 'updated', to
     // the item's fields.
@@ -201,7 +202,7 @@ class BaseModel {
     if (rangeKey) {
       keys.push(rangeKey)
     }
-    // console.log(`Getting obj with hashKey ${hashKey} from table ${this.tableName}.`)
+    // logger.debug(`Getting obj with hashKey ${hashKey} from table ${this.tableName}.`)
     if (!this.isQueryAuthorized(userContext, 'get', hashKey, rangeKey)) {
       return Promise.reject(new UnauthorizedQueryException())
     }
@@ -221,7 +222,7 @@ class BaseModel {
   // containing hashKeys and rangeKeys
   static async getBatch (userContext, keys) {
     const self = this
-    // console.log(`Getting multiple objs with keys ${keys} from table ${this.tableName}.`)
+    // logger.debug(`Getting multiple objs with keys ${JSON.stringify(keys)} from table ${this.tableName}.`)
     var authorizationError = false
     keys.forEach((key) => {
       var hashKey
@@ -247,7 +248,7 @@ class BaseModel {
   }
 
   static async getAll (userContext) {
-    // console.log(`Getting all objs in table ${this.tableName}.`)
+    // logger.debug(`Getting all objs in table ${this.tableName}.`)
     const self = this
     if (!this.isQueryAuthorized(userContext, 'getAll')) {
       return Promise.reject(new UnauthorizedQueryException())
@@ -260,7 +261,7 @@ class BaseModel {
   }
 
   static query (userContext, hashKey) {
-    // console.log(`Querying hashKey ${hashKey} on table ${this.tableName}.`)
+    // logger.debug(`Querying hashKey ${hashKey} on table ${this.tableName}.`)
 
     // Return a dynogels chainable query, but use our own
     // `exec` function so we can deserialize the response.
@@ -290,7 +291,7 @@ class BaseModel {
   }
 
   static async create (userContext, item) {
-    // console.log(`Creating item in ${this.tableName}: ${JSON.stringify(item, null, 2)}`)
+    // logger.debug(`Creating item in ${this.tableName}: ${JSON.stringify(item, null, 2)}`)
     const self = this
     const hashKey = item[this.hashKey]
 
@@ -309,7 +310,7 @@ class BaseModel {
   }
 
   static async update (userContext, item) {
-    // console.log(`Updating item in ${this.tableName}: ${JSON.stringify(item, null, 2)}`)
+    // logger.debug(`Updating item in ${this.tableName}: ${JSON.stringify(item, null, 2)}`)
     const self = this
     const hashKey = item[this.hashKey]
     const rangeKey = item[this.rangeKey]
@@ -422,7 +423,7 @@ class BaseModel {
         rangeKeyValue, item, indexName)) === true
     } catch (err) {
       isAuthorized = false
-      console.log(err)
+      logger.error(err)
     }
     return isAuthorized
   }

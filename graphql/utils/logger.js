@@ -1,29 +1,53 @@
 
+import config from '../config'
+
+const logLevels = {}
+logLevels.LOG = 'log'
+logLevels.DEBUG = 'debug'
+logLevels.INFO = 'info'
+logLevels.WARN = 'warn'
+logLevels.ERROR = 'error'
+logLevels.FATAL = 'fatal'
+const logLevelsOrder = [
+  logLevels.DEBUG,
+  logLevels.LOG,
+  logLevels.INFO,
+  logLevels.WARN,
+  logLevels.ERROR,
+  logLevels.FATAL
+]
+
+const LOG_LEVEL = (
+  logLevels[config.LOG_LEVEL]
+  ? logLevels[config.LOG_LEVEL]
+  : 'debug'
+)
+
 // TODO: set up logging via Sentry.
 const logger = {}
 
 logger.log = (msg) => {
-  console.log(msg)
+  log(msg, logLevels.LOG)
 }
 
 logger.debug = (msg) => {
-  console.debug(msg)
+  log(msg, logLevels.DEBUG)
 }
 
 logger.info = (msg) => {
-  console.info(msg)
+  log(msg, logLevels.INFO)
 }
 
 logger.warn = (msg) => {
-  console.warn(msg)
+  log(msg, logLevels.WARN)
 }
 
 logger.error = (msg) => {
-  console.error(msg)
+  log(msg, logLevels.ERROR)
 }
 
 logger.fatal = (msg) => {
-  console.error(msg)
+  log(msg, logLevels.FATAL)
 }
 
 /*
@@ -35,6 +59,18 @@ logger.fatal = (msg) => {
 export const logErrorWithId = (err, errId) => {
   err.message = `${err.message}: Error ID ${errId}`
   logger.error(err)
+}
+
+export const shouldLog = (logLevel, globalLogLevel) => {
+  return (
+    logLevelsOrder.indexOf(logLevel) >=
+    logLevelsOrder.indexOf(globalLogLevel)
+  )
+}
+
+const log = (msg, logLevel) => {
+  if (!shouldLog(logLevel, LOG_LEVEL)) { return }
+  console.log(msg)
 }
 
 export default logger

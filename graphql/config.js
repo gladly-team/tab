@@ -13,7 +13,7 @@ module.exports = {
   COGNITO_CLIENTID: process.env.COGNITO_CLIENTID,
   S3_ENDPOINT: process.env.S3_ENDPOINT,
   GRAPHQL_PORT: process.env.GRAPHQL_PORT,
-  DEVELOPMENT_LOGGING_ENABLED: process.env.DEVELOPMENT_LOGGING_ENABLED === '1',
+  LOG_LEVEL: process.env.LOG_LEVEL || 'debug',
   ENABLE_GRAPHIQL: process.env.ENABLE_GRAPHIQL === '1',
   TABLE_NAME_APPENDIX: process.env.TABLE_NAME_APPENDIX,
   SENTRY_DSN: process.env.SENTRY_DSN,

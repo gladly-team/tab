@@ -3,6 +3,8 @@ var mkdirp = require('mkdirp')
 const path = require('path')
 const config = require('../config')
 
+const logger = require('../utils/logger').default
+
 const configPath = path.join(__dirname, '../build/config.js')
 const content = 'module.exports = ' + JSON.stringify(config) + ';'
 
@@ -17,9 +19,9 @@ function writeFile (filePath, contents, cb) {
 
 writeFile(configPath, content, function (err) {
   if (err) {
-    console.log(err)
+    logger.error(err)
     process.exit(1)
   } else {
-    console.log('build/config.js file generated')
+    logger.info('build/config.js file generated')
   }
 })

@@ -7,6 +7,7 @@ import {
   tableKeys,
   tableFixtureFileNames
 } from './table-utils'
+import logger from '../../utils/logger'
 
 import AWS from './aws-client-dynamodb'
 const docClient = new AWS.DynamoDB.DocumentClient()
@@ -25,7 +26,7 @@ const loadItemsIntoTable = async (items, tableName) => {
   var itemsToLoad = items
   if (items.length > BATCH_MAX_ITEMS) {
     await loadItemsIntoTable(items.slice(BATCH_MAX_ITEMS - 1), tableName)
-    console.log(`Items loaded: ${items.length}`)
+    logger.info(`Items loaded: ${items.length}`)
     if (SLEEP_MS_BETWEEN_QUERY_BATCHES > 0) {
       await sleep(SLEEP_MS_BETWEEN_QUERY_BATCHES)
     }
@@ -44,10 +45,10 @@ const loadItemsIntoTable = async (items, tableName) => {
   }
   return docClient.batchWrite(params).promise()
       .then(response => {
-        // console.log(`BatchWrite succeeded: ${JSON.stringify(items)}`)
+        logger.debug(`BatchWrite succeeded: ${JSON.stringify(items)}`)
       })
       .catch(err => {
-        console.error(`Unable to batch write items. Error: ${err}`)
+        logger.error(`Unable to batch write items. Error: ${err}`)
       })
 }
 
@@ -82,10 +83,10 @@ const deleteItemsFromTable = async (items, tableName, hashKeyName, rangeKeyName)
   }
   return docClient.batchWrite(params).promise()
       .then(response => {
-        // console.log(`BatchWrite delete succeeded: ${JSON.stringify(items)}`)
+        logger.debug(`BatchWrite delete succeeded: ${JSON.stringify(items)}`)
       })
       .catch(err => {
-        console.error(`Unable to batch delete items. Error: ${err}`)
+        logger.error(`Unable to batch delete items. Error: ${err}`)
       })
 }
 

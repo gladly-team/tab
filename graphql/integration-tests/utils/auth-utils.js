@@ -1,6 +1,7 @@
 
 import { find } from 'lodash/collection'
 import config from '../../config'
+import logger from '../../utils/logger'
 
 const AWS = require('aws-sdk')
 const awsRegion = config.AWS_REGION || 'us-west-2'
@@ -20,7 +21,7 @@ export const getUser = async (username) => {
   return cognitoIDP.adminGetUser(params)
     .promise()
     .catch((err) => {
-      console.error('Could not get user.\n', err)
+      logger.error('Could not get user.\n', err)
     })
 }
 
@@ -32,7 +33,7 @@ export const deleteUser = async (username) => {
   return cognitoIDP.adminDeleteUser(params)
     .promise()
     .catch((err) => {
-      console.error('Could not get user.\n', err)
+      logger.error('Could not get user.\n', err)
     })
 }
 
@@ -57,7 +58,7 @@ const createUser = async (email, username, password) => {
   return cognitoIDP.adminCreateUser(params)
     .promise()
     .catch((err) => {
-      console.error('Could not create user.\n', err)
+      logger.error('Could not create user.\n', err)
     })
 }
 
@@ -77,7 +78,7 @@ const logIn = async (username, password) => {
     .adminInitiateAuth(initiateAuthParams)
     .promise()
     .catch((err) => {
-      console.error('Could not initiate auth.\n', err)
+      logger.error('Could not initiate auth.\n', err)
     })
   const userIdNonAlias = authInitResponse.ChallengeParameters.USER_ID_FOR_SRP
   const session = authInitResponse.Session
@@ -96,7 +97,7 @@ const logIn = async (username, password) => {
   return cognitoIDP.adminRespondToAuthChallenge(params)
     .promise()
     .catch((err) => {
-      console.error('Could not authenticate user.\n', err)
+      logger.error('Could not authenticate user.\n', err)
     })
 }
 
