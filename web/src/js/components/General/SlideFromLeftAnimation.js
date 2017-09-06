@@ -49,7 +49,7 @@ class SlideFromLeftAnimation extends React.Component {
       })
 
       // Set timer to prepare the element to finish the animation.
-      this.timeouts.push(setTimeout(function () {
+      self.timeouts.push(setTimeout(function () {
           // Prepares the element to render the children components after
           // the bubbleIn animation it's over.
         self.setState({
@@ -58,7 +58,7 @@ class SlideFromLeftAnimation extends React.Component {
         })
 
         // Set the timer to show the children components.
-        this.timeouts.push(setTimeout(function () {
+        self.timeouts.push(setTimeout(function () {
           self.setState({
             show: true
           })
