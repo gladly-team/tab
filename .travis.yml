@@ -15,8 +15,8 @@ env:
   - TEST_AWS_ACCOUNT_ID=167811431063
   # AWS Cognito
   - TEST_COGNITO_REGION=us-west-2
-  - TEST_COGNITO_IDENTITYPOOLID=arn:aws:cognito-idp:us-west-2:167811431063:userpool/us-west-2_r5AVxbLTi
-  - TEST_COGNITO_USERPOOLID=us-west-2_r5AVxbLTi
+  - TEST_COGNITO_IDENTITYPOOLID=arn:aws:cognito-idp:us-west-2:167811431063:userpool/us-west-2_CtxIyCf3s
+  - TEST_COGNITO_USERPOOLID=us-west-2_CtxIyCf3s
   - TEST_COGNITO_CLIENTID=395rlm7rtmdtak99s5pelq8d1s
   - TEST_MOCK_DEV_AUTHENTICATION=false
   # Web app
