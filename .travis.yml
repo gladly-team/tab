@@ -11,6 +11,7 @@ env:
   - LOG_TEST_COVERAGE=true
   ########## Test stage ##########
   - TEST_NODE_ENV=production
+  - TEST_STAGE=test
   - TEST_AWS_REGION=us-west-2
   - TEST_AWS_ACCOUNT_ID=167811431063
   - TEST_LOG_LEVEL=warn
@@ -43,6 +44,7 @@ env:
   - secure: YM/qYdVY0vUEXkE8HnrP1ihOwnPDqP5mgYL1HcNNLinJ2Jkno1EeGzXFghzckCr87mfJsjgboPw8Xqj9+K5snOkHYZdW5fHQEwxWMWBWtMrhX96j8rN1B48W5qPIa5N+UfLjvGsxjwn3RwMvnZBYS6YZ1Oxzi/PT9sAHACdNgcWMYhASi5WtkD26qZ2mm0VgOSY3xtlPCoKa8GfPXg5c/mdn/LYM6MOT72QWA0xjnIc/YGYWwxLT5cCcFyfY4a9tVl33topZmAyt8uhLL0b+EaYDR+ND9xTaLZQxaW0ftZaQD60rt7ARUKKfTb+tfmB8gekZl/Zjlymw9G6QN+D6zDTmv8RwDW/izHK1galWjmMGeIel8ueNcLkgVhxnIDF7J4hr/d4zaHtl8fq37BnG5Ns/+8LfHQVe5UuX+ODmj4lAxbWqE+dXFCiLmw4t3mgPRGsgGd64G/+mDsZ0RCweP8USLAYfwsk5OlYQocJSMIFyU1///+ykE1RnI+HAV4QqsTnrfM1ZlocJOajlDt3x4s4MVD1TXug8FOodWzVRtIYN/4Bi6m224T1+slZwC1KGbbZKnEgSUQYRTkPPQFjTqE6okkr/5kwTFwOPdBT8QlA56iySfu0CUICOCCy0T4pP/mi83WbL7QSpLUYnVfBdysvv6au+dzn1smsE1M89ppo=
   ########## Dev stage ##########
   - DEV_NODE_ENV=production
+  - DEV_STAGE=dev
   - DEV_AWS_REGION=us-west-2
   - DEV_AWS_ACCOUNT_ID=167811431063
   - DEV_LOG_LEVEL=error
@@ -70,6 +72,7 @@ env:
   - secure: RoCiVjVN5DITMGjzh5tErnLSqora04G6JD9A0fsbM3gz+zgNFc7bikroVeMl3h3JTyv9ac25dvTCqDO+mo2ceYKeJwEi0FUYFFDccZ0M2bZ1+lQxjftvsRA1dr3R9Lely3RYS6ij5XcDeXXEghwf8JKnbHLdhGde4kNNorXi5b9EnTUSAefE1dmbRHvIykkEnC3LAIJ6T3+aj0LYsTECXHS5d85a/hFvfcMlVx8aaIcuhSrdUyzFxVJAKMYjEdDw5OLZ+Lk7R/yzekRYKUFWDPswnXp3s9CJvYf4PsuHiqviTvg0tyyqO+7KX2uXFUNqiNeCKgqulQVgo7xhjnZhEJEIrhm8lAecKURQDcK2q+qIUK0GcOQ9kmZYPXtgo13WJG2sQavDStxXbbkh8kb/AByJp0NMRE/1kgSu80Sh/E0wE8lK94u5S3ofWZEDtMKnt7pZo8+FwtXPi5+gbOo37EjC/fglCNsTP6Gllr0GmgkOmrNfOMH5IftkhZ+L4r61TsbflM9rrifLkjx5D/BiIP9H3kc86SWpq2ALeeCBK0mZ+wpyvXYWEHTPHmyI2LzriP1qa8aPlDp5Rjw/L1rJZikkLUPZHg+TTIDETQlXAbhW+E8CxB0De3jNE7psaR7FUGY/ueSvMW+Z4xpAdlBRTkbJHDTf3KAdWsmB79IP1JI=
   ########## Production stage ##########
   - PROD_NODE_ENV=production
+  - PROD_STAGE=production
   - PROD_AWS_REGION=us-west-2
   - PROD_AWS_ACCOUNT_ID=167811431063
   - PROD_LOG_LEVEL=error
