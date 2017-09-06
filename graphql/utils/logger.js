@@ -17,11 +17,6 @@ const logLevelsOrder = [
   logLevels.FATAL
 ]
 
-const LOG_LEVEL = (
-  logLevels[config.LOG_LEVEL]
-  ? logLevels[config.LOG_LEVEL]
-  : 'debug'
-)
 
 // TODO: set up logging via Sentry.
 const logger = {}
@@ -69,7 +64,7 @@ export const shouldLog = (logLevel, globalLogLevel) => {
 }
 
 const log = (msg, logLevel) => {
-  if (!shouldLog(logLevel, LOG_LEVEL)) { return }
+  if (!shouldLog(logLevel, config.LOG_LEVEL)) { return }
   console.log(msg)
 }
 
