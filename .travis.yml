@@ -13,6 +13,7 @@ env:
   - TEST_NODE_ENV=production
   - TEST_AWS_REGION=us-west-2
   - TEST_AWS_ACCOUNT_ID=167811431063
+  - TEST_LOG_LEVEL=warn
   # AWS Cognito
   - TEST_COGNITO_REGION=us-west-2
   - TEST_COGNITO_IDENTITYPOOLID=arn:aws:cognito-idp:us-west-2:167811431063:userpool/us-west-2_CtxIyCf3s
@@ -44,6 +45,7 @@ env:
   - DEV_NODE_ENV=production
   - DEV_AWS_REGION=us-west-2
   - DEV_AWS_ACCOUNT_ID=167811431063
+  - TEST_LOG_LEVEL=error
   # AWS Cognito
   - DEV_COGNITO_REGION=us-west-2
   - DEV_COGNITO_IDENTITYPOOLID=arn:aws:cognito-idp:us-west-2:167811431063:userpool/us-west-2_zu5kEM34P
@@ -70,6 +72,7 @@ env:
   - PROD_NODE_ENV=production
   - PROD_AWS_REGION=us-west-2
   - PROD_AWS_ACCOUNT_ID=167811431063
+  - PROD_LOG_LEVEL=error
   # AWS Cognito
   - PROD_COGNITO_REGION=us-west-2
   - PROD_COGNITO_IDENTITYPOOLID=arn:aws:cognito-idp:us-west-2:167811431063:userpool/us-west-2_VdpaaoTpR

@@ -11,6 +11,7 @@ export const envVars = [
   { name: 'NODE_ENV' },
   { name: 'AWS_REGION' },
   { name: 'AWS_ACCOUNT_ID' },
+  { name: 'LOG_LEVEL' },
   // AWS Cognito
   { name: 'COGNITO_REGION' },
   { name: 'COGNITO_IDENTITYPOOLID' },
