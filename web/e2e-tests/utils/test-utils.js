@@ -65,18 +65,20 @@ var setUserPasswordForLogin = (Async((driver, password) => {
 
 var login = (Async((driver, username, password) => {
   const loginFormId = 'login-form-container-test-id'
-  const loginActionBtnId = 'login-action-btn-id'
   const dashboardId = 'app-dashboard-id'
 
   Await(driverUtils(driver).waitForElementVisible(loginFormId))
 
   Await(setUsernameForLogin(driver, username))
   Await(setUserPasswordForLogin(driver, password))
+  Await(clickLoginButton(driver))
+  Await(driverUtils(driver).waitForElementVisible(dashboardId))
+}))
 
+var clickLoginButton = (Async((driver) => {
+  const loginActionBtnId = 'login-action-btn-id'
   Await(driverUtils(driver).waitForElementVisibleByCustomSelector(By.id(loginActionBtnId)))
   Await(driverUtils(driver).click(By.id(loginActionBtnId)))
-
-  Await(driverUtils(driver).waitForElementVisible(dashboardId))
 }))
 
 var signOutUser = (Async((driver) => {
@@ -101,5 +103,6 @@ export {
   signOutUser,
   login,
   setUsernameForLogin,
-  setUserPasswordForLogin
+  setUserPasswordForLogin,
+  clickLoginButton
 }

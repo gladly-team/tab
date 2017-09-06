@@ -10,7 +10,8 @@ import {
   signOutUser,
   login,
   setUsernameForLogin,
-  setUserPasswordForLogin
+  setUserPasswordForLogin,
+  clickLoginButton
 } from '../utils/test-utils'
 
 let driver
@@ -65,6 +66,7 @@ describe('Login Tests', function () {
 
     Await(setUsernameForLogin(driver, username))
     Await(setUserPasswordForLogin(driver, wrongPassword))
+    clickLoginButton(driver)
 
     const loginErrorSnackBarId = 'error-message'
     Await(driverUtils(driver).waitForElementVisible(loginErrorSnackBarId))
