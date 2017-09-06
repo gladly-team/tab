@@ -4,10 +4,10 @@ import {
   goToRetrievePassword
 } from 'navigation/navigation'
 import AuthActionButtom from 'general/AuthActionButtom'
+import ErrorMessage from 'general/ErrorMessage'
 import UsernameField from 'general/UsernameField'
 import PasswordField from 'general/PasswordField'
 import { login } from '../../utils/cognito-auth'
-import Snackbar from 'material-ui/Snackbar'
 import appTheme from 'theme/default'
 
 class SignIn extends React.Component {
@@ -16,9 +16,8 @@ class SignIn extends React.Component {
     this.password = null
 
     this.state = {
-      alertOpen: false,
-      alertMsg: '',
-      loggingUser: false
+      loggingUser: false,
+      errorMessage: null
     }
   }
 
@@ -39,7 +38,7 @@ class SignIn extends React.Component {
           goToDashboard()
         },
         (err) => {
-          this.showAlert(err.message)
+          this.showError(err.message)
         })
     }
   }
@@ -62,18 +61,14 @@ class SignIn extends React.Component {
     })
   }
 
-  handleAlertRequestClose () {
+  showError (msg) {
     this.setState({
-      alertOpen: false,
-      alertMsg: ''
+      errorMessage: msg
     })
   }
 
-  showAlert (msg) {
-    this.setState({
-      alertOpen: true,
-      alertMsg: msg
-    })
+  clearError () {
+    this.showError(null)
   }
 
   retrievePassword () {
@@ -168,12 +163,11 @@ class SignIn extends React.Component {
           </div>
 
         </div>
-        <Snackbar
-          open={this.state.alertOpen}
-          message={this.state.alertMsg}
-          autoHideDuration={3000}
-          onRequestClose={this.handleAlertRequestClose.bind(this)}
-        />
+        { this.state.errorMessage
+          ? (<ErrorMessage
+            message={this.state.errorMessage}
+            onRequestClose={this.clearError.bind(this)} />)
+          : null }
       </div>
     )
   }

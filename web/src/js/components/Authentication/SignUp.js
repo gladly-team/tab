@@ -26,9 +26,9 @@ class SignUp extends React.Component {
     this.password = null
 
     this.state = {
-      errorMessage: '',
       registeringUser: false,
-      usernameDuplicate: false
+      usernameDuplicate: false,
+      errorMessage: null
     }
   }
 
