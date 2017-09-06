@@ -17,7 +17,6 @@ const logLevelsOrder = [
   logLevels.FATAL
 ]
 
-
 // TODO: set up logging via Sentry.
 const logger = {}
 
