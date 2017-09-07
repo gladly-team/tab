@@ -1,4 +1,6 @@
 
+import { isError } from 'lodash/lang'
+import Sentry, { sentryContextWrapper } from './sentry-logger'
 import config from '../config'
 
 const logLevels = {}
@@ -17,7 +19,23 @@ const logLevelsOrder = [
   logLevels.FATAL
 ]
 
-// TODO: set up logging via Sentry.
+/*
+ * A wrapper for loggers to use to set additional context for logs.
+ * This wraps and invokes the provided function.
+ * @param {object} userContext - The user authorizer object.
+ * @param {function} func - The function to wrap.
+ */
+export const loggerContextWrapper = (userContext, func) => {
+  switch (config.LOGGER) {
+    case 'console':
+      return func()
+    case 'sentry':
+      return sentryContextWrapper(userContext, func)
+    default:
+      return func()
+  }
+}
+
 const logger = {}
 
 logger.log = (msg) => {
@@ -64,7 +82,49 @@ export const shouldLog = (logLevel, globalLogLevel) => {
 
 const log = (msg, logLevel) => {
   if (!shouldLog(logLevel, config.LOG_LEVEL)) { return }
-  console.log(msg)
+  switch (config.LOGGER) {
+    case 'console':
+      switch (logLevel) {
+        case logLevels.DEBUG:
+          console.debug(msg)
+          break
+        case logLevels.LOG:
+          console.log(msg)
+          break
+        case logLevels.INFO:
+          console.info(msg)
+          break
+        case logLevels.WARN:
+          console.warn(msg)
+          break
+        case logLevels.ERROR:
+          console.error(msg)
+          break
+        case logLevels.FATAL:
+          console.error(msg)
+          break
+      }
+      break
+    case 'sentry':
+      // Sentry expects 'warning', not 'warn'/
+      const level = (
+        logLevel === logLevels.WARN
+        ? 'warning'
+        : logLevel
+      )
+      if (isError(msg)) {
+        Sentry.captureException(msg, {
+          level: level
+        })
+      } else {
+        Sentry.captureMessage(msg, {
+          level: level
+        })
+      }
+      break
+    default:
+      break
+  }
 }
 
 export default logger

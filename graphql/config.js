@@ -15,8 +15,10 @@ module.exports = {
   S3_ENDPOINT: process.env.S3_ENDPOINT,
   GRAPHQL_PORT: process.env.GRAPHQL_PORT,
   LOG_LEVEL: process.env.LOG_LEVEL || 'debug',
+  LOGGER: process.env.LOGGER || 'console',
   ENABLE_GRAPHIQL: process.env.ENABLE_GRAPHIQL === '1',
   TABLE_NAME_APPENDIX: process.env.TABLE_NAME_APPENDIX,
-  SENTRY_DSN: process.env.SENTRY_DSN,
-  USE_SENTRY: process.env.USE_SENTRY === '1'
+  SENTRY_PUBLIC_KEY: process.env.SENTRY_PUBLIC_KEY,
+  SENTRY_PRIVATE_KEY: process.env.SENTRY_PRIVATE_KEY,
+  SENTRY_PROJECT_ID: process.env.SENTRY_PROJECT_ID
 }
