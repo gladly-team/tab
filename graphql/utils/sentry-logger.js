@@ -10,14 +10,15 @@ const Sentry = new Raven.Client()
  * @param {object} userContext - The user authorizer object.
  * @param {function} func - The function to wrap.
  */
-export const sentryContextWrapper = (userContext, func) => {
+export const sentryContextWrapper = (userContext, lambdaEvent, func) => {
   return Sentry.context(() => {
-    Sentry.setContext({
+    Sentry.mergeContext({
       user: {
         id: userContext.id,
         username: userContext.username,
         email: userContext.email
-      }
+      },
+      req: lambdaEvent
     })
     return func()
   })

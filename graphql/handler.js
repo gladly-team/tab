@@ -9,7 +9,9 @@ import {
   isUserAuthorized
 } from './utils/authorization-helpers'
 import { handleError } from './utils/error-logging'
-import logger, { loggerContextWrapper } from './utils/logger'
+import logger, {
+  loggerContextWrapper
+} from './utils/logger'
 
 const createResponse = function (statusCode, body) {
   return {
@@ -36,9 +38,10 @@ export const handler = function (event) {
   }
   const context = createGraphQLContext(claims)
 
-  // Add context to any logs (e.g. the user).
+  // Add context to any logs (e.g. the user and request data).
   return loggerContextWrapper(
     context.user,
+    event,
     () => {
       return graphql(Schema, body.query, null, context, body.variables)
         .then(data => {
