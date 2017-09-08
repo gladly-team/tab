@@ -36,14 +36,14 @@ export const generateLambdaEventObjFromRequest = (req) => {
   }
   return {
     resource: '',
-    path: req.baseUrl,
+    path: req.url,
     httpMethod: req.method,
     headers: req.headers,
     queryStringParameters: req.query,
     pathParameters: {},
     stageVariables: {},
     requestContext: {
-      path: req.baseUrl,
+      path: req.url,
       accountId: '123456789',
       resourceId: 'abcdef',
       stage: 'dev',

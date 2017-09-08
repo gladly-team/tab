@@ -3,7 +3,6 @@ import {
   updateWidgetEnabled
 } from './updateWidget'
 
-// TODO: update test widgets table!
 const widgetConfigurations = [
   // Bookmarks
   {

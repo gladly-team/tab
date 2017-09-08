@@ -57,7 +57,8 @@ describe('logger', () => {
     })
     const loggerContextWrapper = require('../logger').loggerContextWrapper
     const testFunc = jest.fn(() => 'hi')
-    const response = loggerContextWrapper({}, testFunc)
+    const fakeLambdaEvent = { foo: 'bar' }
+    const response = loggerContextWrapper({}, fakeLambdaEvent, testFunc)
     expect(testFunc).toHaveBeenCalled()
     expect(response).toBe('hi')
   })
@@ -81,13 +82,15 @@ describe('logger', () => {
       email: 'bob@example.com',
       extraneous: 'blah'
     }
-    const response = loggerContextWrapper(userContext, testFunc)
-    expect(Sentry.setContext).toHaveBeenCalledWith({
+    const fakeLambdaEvent = { foo: 'bar' }
+    const response = loggerContextWrapper(userContext, fakeLambdaEvent, testFunc)
+    expect(Sentry.mergeContext).toHaveBeenCalledWith({
       user: {
         id: 'abc-123',
         username: 'Bob',
         email: 'bob@example.com'
-      }
+      },
+      req: fakeLambdaEvent
     })
     expect(response).toBe('hi')
   })

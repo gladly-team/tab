@@ -14,7 +14,7 @@ env:
   - TEST_STAGE=test
   - TEST_AWS_REGION=us-west-2
   - TEST_AWS_ACCOUNT_ID=167811431063
-  - TEST_LOG_LEVEL=warn
+  - TEST_LOG_LEVEL=fatal # Don't log errors during testing. Some errors are expected.
   # AWS Cognito
   - TEST_COGNITO_REGION=us-west-2
   - TEST_COGNITO_IDENTITYPOOLID=arn:aws:cognito-idp:us-west-2:167811431063:userpool/us-west-2_CtxIyCf3s

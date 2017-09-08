@@ -25,12 +25,12 @@ const logLevelsOrder = [
  * @param {object} userContext - The user authorizer object.
  * @param {function} func - The function to wrap.
  */
-export const loggerContextWrapper = (userContext, func) => {
+export const loggerContextWrapper = (userContext, lambdaEvent, func) => {
   switch (config.LOGGER) {
     case 'console':
       return func()
     case 'sentry':
-      return sentryContextWrapper(userContext, func)
+      return sentryContextWrapper(userContext, lambdaEvent, func)
     default:
       return func()
   }
