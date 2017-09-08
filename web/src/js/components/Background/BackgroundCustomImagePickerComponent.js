@@ -40,11 +40,19 @@ class BackgroundCustomeImagePicker extends React.Component {
     }
   }
 
+  onSaveSuccess () {}
+
+  onSaveError () {
+    this.props.showError('Oops, we are having trouble saving your settings right now :(')
+  }
+
   updateUserCustomImg (imgUrl) {
     SetBackgroundCustomImageMutation.commit(
       this.props.relay.environment,
       this.props.user,
-      imgUrl
+      imgUrl,
+      this.onSaveSuccess.bind(this),
+      this.onSaveError.bind(this)
     )
   }
 
@@ -61,8 +69,9 @@ class BackgroundCustomeImagePicker extends React.Component {
       this.updateUserCustomImg(this.state.image)
     }
   }
-// http://cdn.wallpapersafari.com/66/6/leY
+
   onErrorLoadingImg () {
+    this.props.showError('Could not load that image.')
     this.setState({
       image: null
     })
@@ -138,7 +147,8 @@ class BackgroundCustomeImagePicker extends React.Component {
 }
 
 BackgroundCustomeImagePicker.propTypes = {
-  user: PropTypes.object.isRequired
+  user: PropTypes.object.isRequired,
+  showError: PropTypes.func.isRequired
 }
 
 export default BackgroundCustomeImagePicker

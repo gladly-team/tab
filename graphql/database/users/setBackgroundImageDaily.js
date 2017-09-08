@@ -13,14 +13,21 @@ import {
  * @return {Promise<User>}  A promise that resolves into a User instance.
  */
 const setBackgroundImageDaily = async (userContext, userId) => {
-  const image = await getRandomBackgroundImage(userContext)
-  image.timestamp = moment.utc().toISOString()
-  const userInstance = await UserModel.update(userContext, {
-    id: userId,
-    backgroundImage: image,
-    backgroundOption: USER_BACKGROUND_OPTION_DAILY
-  })
-  return userInstance
+  try {
+    const image = await getRandomBackgroundImage(userContext)
+    const userInstance = await UserModel.update(userContext, {
+      id: userId,
+      backgroundImage: {
+        id: image.id,
+        image: image.image,
+        timestamp: moment.utc().toISOString()
+      },
+      backgroundOption: USER_BACKGROUND_OPTION_DAILY
+    })
+    return userInstance
+  } catch (e) {
+    throw e
+  }
 }
 
 export default setBackgroundImageDaily

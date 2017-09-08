@@ -9,8 +9,89 @@ provider:
   profile: tab-sls
   stage: ${env:SLS_STAGE, self:custom.stageDefault}
 
+plugins:
+  # https://github.com/sbstjn/serverless-dynamodb-autoscaling
+  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-table.html#cfn-dynamodb-table-examples-application-autoscaling
+  - serverless-dynamodb-autoscaling
+
 custom:
   stageDefault: dev
+  # https://github.com/sbstjn/serverless-dynamodb-autoscaling
+  capacities:
+    - table: usersTable
+      index:
+        - UsersByUsername
+      read:
+        minimum: 1
+        maximum: 1000
+        usage: 0.75
+      write:
+        minimum: 1
+        maximum: 1000
+        usage: 0.60
+    - table: charitiesTable
+      read:
+        minimum: 1
+        maximum: 1000
+        usage: 0.75
+      write:
+        minimum: 1
+        maximum: 1000
+        usage: 0.60
+    - table: widgetsTable
+      read:
+        minimum: 1
+        maximum: 1000
+        usage: 0.75
+      write:
+        minimum: 1
+        maximum: 1000
+        usage: 0.60
+    - table: userLevelsTable
+      read:
+        minimum: 1
+        maximum: 1000
+        usage: 0.75
+      write:
+        minimum: 1
+        maximum: 1000
+        usage: 0.60
+    - table: vcDonationLogTable
+      read:
+        minimum: 1
+        maximum: 1000
+        usage: 0.75
+      write:
+        minimum: 1
+        maximum: 1000
+        usage: 0.60
+    - table: backgroundImagesTable
+      read:
+        minimum: 1
+        maximum: 1000
+        usage: 0.75
+      write:
+        minimum: 1
+        maximum: 1000
+        usage: 0.60
+    - table: userWidgetsTable
+      read:
+        minimum: 1
+        maximum: 1000
+        usage: 0.75
+      write:
+        minimum: 1
+        maximum: 1000
+        usage: 0.60
+    - table: referralDataLogTable
+      read:
+        minimum: 1
+        maximum: 1000
+        usage: 0.75
+      write:
+        minimum: 1
+        maximum: 1000
+        usage: 0.60
 
 resources:
   Resources:
@@ -139,6 +220,20 @@ resources:
             ProvisionedThroughput:
               ReadCapacityUnits: 1
               WriteCapacityUnits: 1
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+    referralDataLogTable:  
+      Type: AWS::DynamoDB::Table
+      Properties:  
+        TableName: ReferralDataLog-${self:provider.stage}
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1

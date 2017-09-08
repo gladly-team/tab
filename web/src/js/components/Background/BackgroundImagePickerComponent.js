@@ -16,20 +16,26 @@ class BackgroundImagePicker extends React.Component {
     }
   }
 
-  componentDidMount () {
+  componentWillMount () {
     const { app, user } = this.props
     const selectedImage = user.backgroundImage
     if (selectedImage) {
       var image
       for (var index in app.backgroundImages.edges) {
         var bkgImage = app.backgroundImages.edges[index].node
-        if (selectedImage.url === bkgImage.url) {
+        if (selectedImage.imageURL === bkgImage.imageURL) {
           image = bkgImage
           break
         }
       }
       this.onImageSelected(image)
     }
+  }
+
+  onSaveSuccess () {}
+
+  onSaveError () {
+    this.props.showError('Oops, we are having trouble saving your settings right now :(')
   }
 
   onImageSelected (image) {
@@ -40,7 +46,9 @@ class BackgroundImagePicker extends React.Component {
     SetBackgroundImageMutation.commit(
       this.props.relay.environment,
       this.props.user,
-      image
+      image,
+      this.onSaveSuccess.bind(this),
+      this.onSaveError.bind(this)
     )
   }
 
@@ -74,12 +82,14 @@ class BackgroundImagePicker extends React.Component {
           cellHeight={170}
           style={gridList}>
           {app.backgroundImages.edges.map((edge) => {
-            const checked = this.state.selectedImage &&
-                this.state.selectedImage.url === edge.node.url
+            const checked = (
+              this.state.selectedImage &&
+              this.state.selectedImage.id === edge.node.id
+            )
 
             return (
               <GridTile
-                key={edge.node.url}
+                key={edge.node.id}
                 title={edge.node.name}
                 subtitle={<span>by <b>{'Gladly'}</b></span>}
                 actionIcon={
@@ -89,7 +99,7 @@ class BackgroundImagePicker extends React.Component {
                       className={checked ? 'fa fa-check-circle' : 'fa fa-circle-o'}
                       color='white' />
                   </IconButton>}>
-                <img src={edge.node.url} />
+                <img src={edge.node.imageURL} />
               </GridTile>)
           })}
         </GridList>
@@ -100,7 +110,8 @@ class BackgroundImagePicker extends React.Component {
 
 BackgroundImagePicker.propTypes = {
   app: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired
+  user: PropTypes.object.isRequired,
+  showError: PropTypes.func.isRequired
 }
 
 export default BackgroundImagePicker

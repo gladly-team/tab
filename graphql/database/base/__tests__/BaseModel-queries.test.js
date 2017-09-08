@@ -121,8 +121,8 @@ describe('BaseModel queries', () => {
         Item: null
       }
     )
-    const response = await ExampleModel.get(user, itemToGet.id)
-    expect(response).toEqual(null)
+    const promise = ExampleModel.get(user, itemToGet.id)
+    await expect(promise).rejects.toBeDefined()
   })
 
   it('correctly uses `get` method for a model with a range key', async () => {

@@ -4,10 +4,11 @@ import React from 'react'
 import {QueryRenderer} from 'react-relay/compat'
 import environment from '../../../../relay-env'
 
-import WidgetsSettigns from './WidgetsSettingsContainer'
+import WidgetsSettings from './WidgetsSettingsContainer'
 
 import FullScreenProgress from 'general/FullScreenProgress'
 import AuthUserComponent from 'general/AuthUserComponent'
+import ErrorMessage from 'general/ErrorMessage'
 
 class WidgetsSettingsView extends React.Component {
   render () {
@@ -27,15 +28,18 @@ class WidgetsSettingsView extends React.Component {
           `}
           render={({error, props}) => {
             if (error) {
-              console.error(error)
-              return
+              console.error(error, error.source)
+              const errMsg = 'We had a problem loading the widget settings :('
+              return <ErrorMessage message={errMsg} />
             }
 
             if (props) {
+              const showError = this.props.showError
               return (
-                <WidgetsSettigns
+                <WidgetsSettings
                   app={props.app}
-                  user={props.user} />
+                  user={props.user}
+                  showError={showError} />
               )
             } else {
               return (<FullScreenProgress />)

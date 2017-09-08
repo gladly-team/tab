@@ -2,15 +2,17 @@
 // Used to assign stage-specific env vars in our CI setup
 // to the env var names used in app code.
 // For example, in the "dev" stage, we assign the value of
-// process.envDEV_WEB_HOST to process.env.WEB_HOST.
+// process.env.DEV_WEB_HOST to process.env.WEB_HOST.
 
 // All env vars we want to pick up from the CI environment.
 // Set key "optional: true" if the env var does not need
 // to be set in all environments.
 export const envVars = [
   { name: 'NODE_ENV' },
+  { name: 'STAGE' },
   { name: 'AWS_REGION' },
   { name: 'AWS_ACCOUNT_ID' },
+  { name: 'LOG_LEVEL' },
   // AWS Cognito
   { name: 'COGNITO_REGION' },
   { name: 'COGNITO_IDENTITYPOOLID' },
@@ -25,6 +27,10 @@ export const envVars = [
   // GraphQL
   { name: 'TABLE_NAME_APPENDIX' },
   { name: 'GRAPHQL_PORT', optional: true },
+  { name: 'LOGGER' },
+  { name: 'SENTRY_PUBLIC_KEY' },
+  { name: 'SENTRY_PROJECT_ID' },
+  { name: 'SENTRY_PRIVATE_KEY' },
   // Endpoints
   { name: 'GRAPHQL_ENDPOINT' },
   { name: 'DYNAMODB_ENDPOINT' },
@@ -39,7 +45,7 @@ export const envVars = [
   { name: 'SELENIUM_DRIVER_TYPE', optional: true },
   { name: 'SELENIUM_HOST', optional: true },
   { name: 'BROWSERSTACK_USER', optional: true },
-  {name: 'BROWSERSTACK_KEY', optional: true}
+  { name: 'BROWSERSTACK_KEY', optional: true }
 ]
 
 // Expect one argument, the stage name.

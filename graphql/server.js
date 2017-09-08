@@ -7,6 +7,8 @@ import {clean} from 'require-clean'
 import {exec} from 'child_process'
 
 import config from './config'
+import { handleError } from './utils/error-logging'
+import logger from './utils/logger'
 
 const GRAPHQL_PORT = config.GRAPHQL_PORT
 
@@ -31,17 +33,20 @@ function startGraphQLServer (callback) {
   // Use express-graphql in development if desired.
   // Otherwise, just use our plain Lambda handler.
   if (config.NODE_ENV === 'development' && config.ENABLE_GRAPHIQL) {
-    console.log('GraphiQL is enabled.')
+    logger.info('GraphiQL is enabled.')
     // https://github.com/graphql/express-graphql#options
-    graphQLApp.use('/', graphQLHTTP((req) => {
-      const context = getGraphQLContextFromRequest(req)
-      return {
-        graphiql: true,
-        pretty: true,
-        schema: Schema,
-        context: context
-      }
-    }))
+    graphQLApp.use('/',
+      graphQLHTTP((req) => {
+        const context = getGraphQLContextFromRequest(req)
+        return {
+          graphiql: true,
+          pretty: true,
+          schema: Schema,
+          context: context,
+          formatError: handleError
+        }
+      })
+    )
   } else {
     graphQLApp.post('/', (req, res) => {
       const event = generateLambdaEventObjFromRequest(req)
@@ -52,7 +57,7 @@ function startGraphQLServer (callback) {
   }
 
   graphQLServer = graphQLApp.listen(GRAPHQL_PORT, () => {
-    console.log(
+    logger.info(
       `GraphQL server is now running on http://localhost:${GRAPHQL_PORT}`
     )
     if (callback) {
@@ -69,7 +74,7 @@ function startServer (callback) {
 
   // Compile the schema
   exec('yarn run update-schema', (error, stdout) => {
-    console.log(stdout)
+    logger.info(stdout)
     function handleTaskDone () {
       if (callback) {
         callback(new Error(error))
@@ -87,9 +92,9 @@ const watcher = chokidar.watch([
   './database/*/*.js'])
 
 watcher.on('change', path => {
-  console.log(`\`${path}\` changed. Restarting.`)
+  logger.info(`\`${path}\` changed. Restarting.`)
   startServer(() =>
-    console.log('GraphQL server schema updated.')
+    logger.info('GraphQL server schema updated.')
   )
 })
 

@@ -8,7 +8,10 @@ import {
   randomString,
   createUser,
   signOutUser,
-  login
+  login,
+  setUsernameForLogin,
+  setUserPasswordForLogin,
+  clickLoginButton
 } from '../utils/test-utils'
 
 let driver
@@ -44,5 +47,28 @@ describe('Login Tests', function () {
 
     Await(driverUtils(driver).waitForElementVisible(dashboardId))
     Await(signOutUser(driver))
+  }), 90e3)
+
+  it('does not allow logins with the wrong password', Async(() => {
+    driver = getDriver('Login: does not allow logins with the wrong password')
+    Await(driverUtils(driver).navigateTo(getAppBaseUrl()))
+
+    // Create a new user
+    const username = randomString(6)
+    const userEmail = username + '@tfac.com'
+    const userPassword = 'NewUserPassword1'
+    Await(createUser(driver, username, userEmail, userPassword))
+    Await(signOutUser(driver))
+
+    // Try signing in as that user with the wrong password
+    Await(driverUtils(driver).navigateTo(getAppBaseUrl()))
+    const wrongPassword = userPassword + 'Bad'
+
+    Await(setUsernameForLogin(driver, username))
+    Await(setUserPasswordForLogin(driver, wrongPassword))
+    clickLoginButton(driver)
+
+    const loginErrorSnackBarId = 'error-message'
+    Await(driverUtils(driver).waitForElementVisible(loginErrorSnackBarId))
   }), 90e3)
 })

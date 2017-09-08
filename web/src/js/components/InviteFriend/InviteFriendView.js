@@ -6,6 +6,7 @@ import environment from '../../../relay-env'
 
 import AuthUserComponent from 'general/AuthUserComponent'
 import InviteFriend from './InviteFriendContainer'
+import ErrorMessage from 'general/ErrorMessage'
 
 class InviteFriendView extends React.Component {
   render () {
@@ -22,8 +23,9 @@ class InviteFriendView extends React.Component {
           `}
           render={({error, props}) => {
             if (error) {
-              console.error(error)
-              return
+              console.error(error, error.source)
+              const errMsg = 'We had a problem getting your invite link :('
+              return <ErrorMessage message={errMsg} />
             }
 
             return (

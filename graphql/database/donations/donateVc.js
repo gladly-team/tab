@@ -13,11 +13,15 @@ import addVc from '../users/addVc'
  * @return {Promise<User>}  A promise that resolves into a User instance.
  */
 export default async (userContext, userId, charityId, vc) => {
-  const user = await addVc(userContext, userId, -vc)
-  await VCDonationModel.create(userContext, {
-    userId: userId,
-    charityId: charityId,
-    vcDonated: vc
-  })
-  return user
+  try {
+    const user = await addVc(userContext, userId, -vc)
+    await VCDonationModel.create(userContext, {
+      userId: userId,
+      charityId: charityId,
+      vcDonated: vc
+    })
+    return user
+  } catch (e) {
+    throw e
+  }
 }

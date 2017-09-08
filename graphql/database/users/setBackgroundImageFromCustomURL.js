@@ -12,12 +12,16 @@ import {
  * @return {Promise<User>}  A promise that resolves into a User instance.
  */
 const setBackgroundImageFromCustomURL = async (userContext, userId, imageURL) => {
-  const userInstance = await UserModel.update(userContext, {
-    id: userId,
-    customImage: imageURL,
-    backgroundOption: USER_BACKGROUND_OPTION_CUSTOM
-  })
-  return userInstance
+  try {
+    const userInstance = await UserModel.update(userContext, {
+      id: userId,
+      customImage: imageURL,
+      backgroundOption: USER_BACKGROUND_OPTION_CUSTOM
+    })
+    return userInstance
+  } catch (e) {
+    throw e
+  }
 }
 
 export default setBackgroundImageFromCustomURL

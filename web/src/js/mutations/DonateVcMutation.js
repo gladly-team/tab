@@ -13,16 +13,18 @@ const mutation = graphql`
   }
 `
 
-function commit (environment, user, charityId, vc) {
+function commit (environment, user, charityId, vc,
+  onCompleted = () => {}, onError = () => {}) {
   const userId = user.id
-
   return commitMutation(
     environment,
     {
       mutation,
       variables: {
         input: { userId, charityId, vc }
-      }
+      },
+      onCompleted,
+      onError
     }
   )
 }

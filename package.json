@@ -20,6 +20,7 @@
     "build": "yarn run all:install & docker-compose build",
     "start": "npm-run-all -p docker:start s3:start web:graphqlschema:monitor web:start graphql:start lambda:start",
     "stop": "docker-compose stop",
+    "manage-fixtures": "babel-node ./scripts/manage-fixtures.js",
     "test": "npm-run-all -s parent:test graphql:test lambda:test web:test dynamodb:test",
     "test:integration": "npm-run-all -s graphql:test:integration web:test:integration",
     "ci:deploy": "babel-node ./scripts/deploy.js",

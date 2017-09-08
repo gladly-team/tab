@@ -4,10 +4,10 @@ import {
   goToRetrievePassword
 } from 'navigation/navigation'
 import AuthActionButtom from 'general/AuthActionButtom'
+import ErrorMessage from 'general/ErrorMessage'
+import UsernameField from 'general/UsernameField'
 import PasswordField from 'general/PasswordField'
 import { login } from '../../utils/cognito-auth'
-import Snackbar from 'material-ui/Snackbar'
-import TextField from 'material-ui/TextField'
 import appTheme from 'theme/default'
 
 class SignIn extends React.Component {
@@ -16,9 +16,8 @@ class SignIn extends React.Component {
     this.password = null
 
     this.state = {
-      alertOpen: false,
-      alertMsg: '',
-      loggingUser: false
+      loggingUser: false,
+      errorMessage: null
     }
   }
 
@@ -28,23 +27,18 @@ class SignIn extends React.Component {
     }
   }
 
-  validateUsername () {
-    const username = this.username.input.value.trim()
-    return username && username.length > 0
-  }
-
   handleSubmit () {
-    if (this.password.validate() &&
-        this.validateUsername()) {
+    const passwordValid = this.password.validate()
+    const usernameValid = this.username.validate()
+    if (passwordValid && usernameValid) {
       const password = this.password.getValue()
-      const username = this.username.input.value.trim()
-
+      const username = this.username.getValue()
       this.logUserIn(username, password,
         () => {
           goToDashboard()
         },
         (err) => {
-          this.showAlert(err.message)
+          this.showError(err.message)
         })
     }
   }
@@ -67,18 +61,14 @@ class SignIn extends React.Component {
     })
   }
 
-  handleAlertRequestClose () {
+  showError (msg) {
     this.setState({
-      alertOpen: false,
-      alertMsg: ''
+      errorMessage: msg
     })
   }
 
-  showAlert (msg) {
-    this.setState({
-      alertOpen: true,
-      alertMsg: msg
-    })
+  clearError () {
+    this.showError(null)
   }
 
   retrievePassword () {
@@ -139,8 +129,8 @@ class SignIn extends React.Component {
         style={main}>
         <div
           style={container}>
-          <TextField
-            id={'login-username-input-id'}
+          <UsernameField
+            inputId={'login-username-input-id'}
             ref={(input) => { this.username = input }}
             onKeyPress={this._handleKeyPress.bind(this)}
             floatingLabelText='Username or email'
@@ -173,13 +163,11 @@ class SignIn extends React.Component {
           </div>
 
         </div>
-        <Snackbar
-          data-test-id={'login-error-snackbar'}
-          open={this.state.alertOpen}
-          message={this.state.alertMsg}
-          autoHideDuration={3000}
-          onRequestClose={this.handleAlertRequestClose.bind(this)}
-        />
+        { this.state.errorMessage
+          ? (<ErrorMessage
+            message={this.state.errorMessage}
+            onRequestClose={this.clearError.bind(this)} />)
+          : null }
       </div>
     )
   }

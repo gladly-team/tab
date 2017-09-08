@@ -246,6 +246,20 @@ function confirmPassword (username, verificationCode, newPassword, onSuccess, on
   })
 }
 
+// https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_SignUp.html
+function getMessageFromSignUpError (err) {
+  switch (err.code) {
+    case 'UsernameExistsException':
+      return 'This username is taken.'
+    case 'UserLambdaValidationException':
+      return 'Please choose another username.'
+    case 'InvalidPasswordException':
+      return 'Password must be at least 8 characters long. '
+    default:
+      return "We're having a problem creating your account :("
+  }
+}
+
 export {
   login,
   signup,
@@ -257,5 +271,6 @@ export {
   checkUserExist,
   getOrCreate,
   forgotPassword,
-  confirmPassword
+  confirmPassword,
+  getMessageFromSignUpError
 }

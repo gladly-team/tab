@@ -1,5 +1,6 @@
 /* eslint no-useless-escape: 0 */
 
+import XRegExp from 'xregexp'
 import localStorageMgr from './localstorage-mgr'
 
 const referralParams = {
@@ -16,12 +17,28 @@ const referralParams = {
 // 'utm_content'
 // 'tfac_id'
 
-// TODO: validate min and max length
+// TODO: clean up validation and maybe move the functions
+// into their respective components.
+
+/**
+ * Determine if a username string is valid.
+ * @param {string} username - The username
+ * @return {boolean} Whether the username is valid.
+ */
 function validateUsername (username) {
-  var re = /^[a-zA-Z0-9]+$/
+  if (username.length < 2) {
+    return false
+  }
+  // https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_SignUp.html#CognitoUserPools-SignUp-request-Username
+  var re = XRegExp('^[\\p{L}\\p{M}\\p{S}\\p{N}\\p{P}]+$')
   return re.test(username)
 }
 
+/**
+ * Determine if a email string is valid.
+ * @param {string} email - The email
+ * @return {boolean} Whether the email is valid.
+ */
 function validateEmail (email) {
   var re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
   return re.test(email)
@@ -31,6 +48,27 @@ function validateCode (code) {
   return (new RegExp('^\\d+$')).test(code)
 }
 
+/**
+ * Determine if a password is valid.
+ * @param {string} password - The password
+ * @param {object} config - The requirements for the password
+ * @param {boolean} config.lowercase - Whether the password must contain a
+ *   lowercase letter.
+ * @param {boolean} config.uppercase - Whether the password must contain a
+ *   uppercase letter.
+ * @param {boolean} config.number - Whether the password must contain a
+ *   number.
+ * @param {boolean} config.special - Whether the password must contain a
+ *   special character.
+ * @param {boolean} config.minSize - The minimum password length.
+ * @returns {object} validation - Information on the password validity
+ * @returns {boolean} validation.valid - Whether the passwrod is valid.
+ * @returns {boolean} config.lowercase - Whether this field fails validation.
+ * @returns {boolean} config.uppercase - Whether this field fails validation.
+ * @returns {boolean} config.number - Whether this field fails validation.
+ * @returns {boolean} config.special - Whether this field fails validation.
+ * @returns {boolean} config.minSize - Whether this field fails validation.
+*/
 function validatePassword (password, config) {
   var regex = {
     lowercase: '^(?=.*[a-z])',

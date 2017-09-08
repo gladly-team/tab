@@ -10,15 +10,15 @@ const mutation = graphql`
         backgroundOption
         backgroundImage {
           id
-          name
-          url
+          imageURL
         }
       }
     }
   }
 `
 
-function commit (environment, user, image) {
+function commit (environment, user, image,
+  onCompleted = () => {}, onError = () => {}) {
   const userId = user.id
   const imageId = image.id
 
@@ -28,7 +28,9 @@ function commit (environment, user, image) {
       mutation,
       variables: {
         input: { userId, imageId }
-      }
+      },
+      onCompleted,
+      onError
     }
   )
 }

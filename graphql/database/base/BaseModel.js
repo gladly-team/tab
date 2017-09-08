@@ -1,7 +1,7 @@
 
 import moment from 'moment'
 import { get, has } from 'lodash/object'
-import { isObject } from 'lodash/lang'
+import { isObject, isFunction, isNil } from 'lodash/lang'
 
 import dynogels from './dynogels-promisified'
 import types from '../fieldTypes'
@@ -11,6 +11,7 @@ import {
 } from '../../utils/exceptions'
 import dbClient from '../databaseClient'
 import { isValidPermissionsOverride } from '../../utils/permissions-overrides'
+import logger from '../../utils/logger'
 
 dynogels.documentClient(dbClient)
 
@@ -21,15 +22,33 @@ class BaseModel {
     }
     const fieldNames = [].concat(Object.keys(this.constructor.schema),
       ['created', 'updated'])
+    const customDeserializers = this.constructor.fieldDeserializers
+    const fieldDefaults = this.constructor.fieldDefaults
     fieldNames.forEach((fieldName) => {
       // Set properties for each field on the model.
-      // Set the value to the value passed in `obj` if one exists.
-      // If not passed a value in `obj`, use the default value
-      // defined in the `fieldDefaults` method, if it exists.
+      // * If `obj[fieldName]` exists, use the value of `obj[fieldName]`.
+      // * Else, if `obj[fieldName]` does not exist, use the default value of
+      //   the field if one exists.
+      // * If a custom deserializer exists for that field, call it.
+      // * If the final value is null or undefined, do not set
+      //   the property.
+      var val = null
       if (has(obj, fieldName)) {
-        this[fieldName] = obj[fieldName]
-      } else if (has(this.constructor.fieldDefaults, fieldName)) {
-        this[fieldName] = this.constructor.fieldDefaults[fieldName]
+        val = obj[fieldName]
+      } else if (has(fieldDefaults, fieldName)) {
+        var fieldDefault = fieldDefaults[fieldName]
+        if (isFunction(fieldDefault)) {
+          val = fieldDefault()
+        } else {
+          val = fieldDefault
+        }
+      }
+      if (isFunction(get(customDeserializers, fieldName, false))) {
+        let deserializeFunc = customDeserializers[fieldName]
+        val = deserializeFunc(val, obj)
+      }
+      if (!isNil(val)) {
+        this[fieldName] = val
       }
     })
   }
@@ -96,9 +115,24 @@ class BaseModel {
 
   /**
    * Default values for the fields in schema.
-   * @return {object} A map of default values
+   * @return {object} A map of default values, keyed by field name.
+   *   If a field's default value is a function, it will be called to
+   *   generate the value.
    */
   static get fieldDefaults () {
+    return {}
+  }
+
+  /**
+   * Custom deserializers for field values.
+   * @return {object} A map of deserizer functions, keyed by field name.
+   *   Each function receives the field value and object and returns a value.
+   *   The field deserializer will be called with the existing field value
+   *   if one exists, falling back to calling with the field default value
+   *   if one exists. If the fieldDeserializer returns undefined or null,
+   *   we will not set the property.
+   */
+  static get fieldDeserializers () {
     return {}
   }
 
@@ -131,7 +165,7 @@ class BaseModel {
    * @return {undefined}
    */
   static register () {
-    // console.log(`Registering model ${this.name} to table ${this.tableName}.`)
+    // logger.debug(`Registering model ${this.name} to table ${this.tableName}.`)
 
     // Add two ISO timestamps, 'created' and 'updated', to
     // the item's fields.
@@ -168,15 +202,19 @@ class BaseModel {
     if (rangeKey) {
       keys.push(rangeKey)
     }
-    // console.log(`Getting obj with hashKey ${hashKey} from table ${this.tableName}.`)
+    // logger.debug(`Getting obj with hashKey ${hashKey} from table ${this.tableName}.`)
     if (!this.isQueryAuthorized(userContext, 'get', hashKey, rangeKey)) {
       return Promise.reject(new UnauthorizedQueryException())
     }
     return this.dynogelsModel.getAsync(...keys)
-      .then(data => self.deserialize(data))
+      .then(data => {
+        if (isNil(data)) {
+          throw new Error(`Could not get item with hash key ${hashKey}.`)
+        }
+        return self.deserialize(data)
+      })
       .catch(err => {
-        console.log(err)
-        return err
+        throw err
       })
   }
 
@@ -184,7 +222,7 @@ class BaseModel {
   // containing hashKeys and rangeKeys
   static async getBatch (userContext, keys) {
     const self = this
-    // console.log(`Getting multiple objs with keys ${keys} from table ${this.tableName}.`)
+    // logger.debug(`Getting multiple objs with keys ${JSON.stringify(keys)} from table ${this.tableName}.`)
     var authorizationError = false
     keys.forEach((key) => {
       var hashKey
@@ -205,13 +243,12 @@ class BaseModel {
     return this.dynogelsModel.getItemsAsync(keys)
       .then(data => self.deserialize(data))
       .catch(err => {
-        console.log(err)
-        return err
+        throw err
       })
   }
 
   static async getAll (userContext) {
-    // console.log(`Getting all objs in table ${this.tableName}.`)
+    // logger.debug(`Getting all objs in table ${this.tableName}.`)
     const self = this
     if (!this.isQueryAuthorized(userContext, 'getAll')) {
       return Promise.reject(new UnauthorizedQueryException())
@@ -219,13 +256,12 @@ class BaseModel {
     return this.dynogelsModel.scan().execAsync()
       .then(data => self.deserialize(data.Items))
       .catch(err => {
-        console.log(err)
-        return err
+        throw err
       })
   }
 
   static query (userContext, hashKey) {
-    // console.log(`Querying hashKey ${hashKey} on table ${this.tableName}.`)
+    // logger.debug(`Querying hashKey ${hashKey} on table ${this.tableName}.`)
 
     // Return a dynogels chainable query, but use our own
     // `exec` function so we can deserialize the response.
@@ -250,13 +286,12 @@ class BaseModel {
     return queryObj.execAsync()
       .then(data => self.deserialize(data.Items))
       .catch(err => {
-        console.log(err)
-        return err
+        throw err
       })
   }
 
   static async create (userContext, item) {
-    // console.log(`Creating item in ${this.tableName}: ${JSON.stringify(item, null, 2)}`)
+    // logger.debug(`Creating item in ${this.tableName}: ${JSON.stringify(item, null, 2)}`)
     const self = this
     const hashKey = item[this.hashKey]
 
@@ -270,13 +305,12 @@ class BaseModel {
     return this.dynogelsModel.createAsync(item)
       .then(data => self.deserialize(data))
       .catch(err => {
-        console.log(err)
         return err
       })
   }
 
   static async update (userContext, item) {
-    // console.log(`Updating item in ${this.tableName}: ${JSON.stringify(item, null, 2)}`)
+    // logger.debug(`Updating item in ${this.tableName}: ${JSON.stringify(item, null, 2)}`)
     const self = this
     const hashKey = item[this.hashKey]
     const rangeKey = item[this.rangeKey]
@@ -290,8 +324,7 @@ class BaseModel {
     return this.dynogelsModel.updateAsync(item, { ReturnValues: 'ALL_NEW' })
       .then(data => self.deserialize(data))
       .catch(err => {
-        console.log(err)
-        return err
+        throw err
       })
   }
 
@@ -390,7 +423,7 @@ class BaseModel {
         rangeKeyValue, item, indexName)) === true
     } catch (err) {
       isAuthorized = false
-      console.log(err)
+      logger.error(err)
     }
     return isAuthorized
   }

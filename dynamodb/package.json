@@ -18,6 +18,7 @@
     "lodash": "^4.17.4",
     "npm-run-all": "^4.0.2",
     "serverless": "^1.14.0",
+    "serverless-dynamodb-autoscaling": "^0.6.1",
     "standard": "^10.0.2"
   },
   "scripts": {

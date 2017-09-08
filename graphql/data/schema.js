@@ -66,8 +66,6 @@ import {
   getDollarsPerDayRate
 } from '../database/globals/globals'
 
-const staticRoot = config.S3_ENDPOINT
-
 class App {
   constructor (id) {
     this.id = id
@@ -129,15 +127,21 @@ const backgroundImageType = new GraphQLObjectType({
       type: GraphQLString,
       description: 'the background image name'
     },
-    fileName: {
+    image: {
       type: GraphQLString,
-      description: 'The image file name'
+      description: 'The image filename'
     },
-    url: {
+    imageURL: {
       type: GraphQLString,
-      resolve: (image) => {
-        return staticRoot + '/' + image.fileName
-      }
+      description: 'The image file URL'
+    },
+    thumbnail: {
+      type: GraphQLString,
+      description: 'The image thumbnail filename'
+    },
+    thumbnailURL: {
+      type: GraphQLString,
+      description: 'The image thumbnail URL'
     }
   }),
   interfaces: [nodeInterface]
@@ -151,19 +155,9 @@ const imageType = new GraphQLObjectType({
       type: GraphQLString,
       description: 'The image id'
     },
-    name: {
+    imageURL: {
       type: GraphQLString,
-      description: 'The image name'
-    },
-    fileName: {
-      type: GraphQLString,
-      description: 'The image file name'
-    },
-    url: {
-      type: GraphQLString,
-      resolve: (image) => {
-        return staticRoot + '/' + image.fileName
-      }
+      description: 'The image file URL'
     }
   })
 })
@@ -304,15 +298,11 @@ const charityType = new GraphQLObjectType({
     },
     logo: {
       type: GraphQLString,
-      resolve: (charity) => {
-        return staticRoot + '/charities/charity-logos/' + charity.logo
-      }
+      description: 'the charity logo image URI'
     },
     image: {
       type: GraphQLString,
-      resolve: (charity) => {
-        return staticRoot + '/charities/charity-post-donation-images/' + charity.image
-      }
+      description: 'the charity post-donation image URI'
     }
   }),
   interfaces: [nodeInterface]

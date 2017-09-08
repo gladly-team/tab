@@ -13,7 +13,8 @@ const mutation = graphql`
   }
 `
 
-function commit (environment, user, widget) {
+function commit (environment, user, widget,
+  onCompleted = () => {}, onError = () => {}) {
   const userId = user.id
   const widgetId = widget.id
 
@@ -23,7 +24,9 @@ function commit (environment, user, widget) {
       mutation,
       variables: {
         input: { userId, widgetId }
-      }
+      },
+      onCompleted,
+      onError
     }
   )
 }

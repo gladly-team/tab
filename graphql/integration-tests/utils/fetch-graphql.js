@@ -1,5 +1,6 @@
 
 import fetch from 'node-fetch'
+import logger from '../../utils/logger'
 
 const graphQLEndpoint = process.env.GRAPHQL_ENDPOINT || 'http://localhost:8080'
 
@@ -23,7 +24,7 @@ function fetchQuery (graphQLQueryStr, variablesObj, userIdToken) {
   }).then(response => {
     return response.json()
   }).catch((err) => {
-    console.log(err)
+    logger.error(err)
   })
 }
 

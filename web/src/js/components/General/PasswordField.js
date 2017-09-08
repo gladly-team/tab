@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import TextField from 'material-ui/TextField'
 
-import {validatePassword} from 'web-utils'
+import { validatePassword } from 'web-utils'
 
 class PasswordField extends React.Component {
   constructor (props) {
@@ -14,9 +14,9 @@ class PasswordField extends React.Component {
     }
 
     this.config = {
-      lowercase: true,
-      uppercase: true,
-      numeric: true,
+      lowercase: false,
+      uppercase: false,
+      numeric: false,
       special: false,
       minSize: 8
     }
@@ -26,7 +26,7 @@ class PasswordField extends React.Component {
       uppercase: 'At least one uppercase letter.',
       numeric: 'At least one number.',
       special: 'At least one special character.',
-      minSize: 'Should be at least ' + this.config.minSize + ' characters long.'
+      minSize: `Should be at least ${this.config.minSize} characters long.`
     }
   }
 

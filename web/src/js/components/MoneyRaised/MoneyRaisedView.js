@@ -4,6 +4,7 @@ import React from 'react'
 import {QueryRenderer} from 'react-relay/compat'
 import environment from '../../../relay-env'
 
+import ErrorMessage from 'general/ErrorMessage'
 import MoneyRaised from './MoneyRaisedContainer'
 
 class MoneyRaisedView extends React.Component {
@@ -20,8 +21,9 @@ class MoneyRaisedView extends React.Component {
           `}
         render={({error, props}) => {
           if (error) {
-            console.error(error)
-            return
+            console.error(error, error.source)
+            const errMsg = 'We had a problem getting the amount of money raised :('
+            return <ErrorMessage message={errMsg} />
           }
           const data = (props && props.app) || null
           return (<MoneyRaised

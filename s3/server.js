@@ -1,6 +1,6 @@
-var express = require('express');
-var app = express();
+var express = require('express')
+var app = express()
 
-app.use(express.static('static'));
+app.use(express.static('media'))
 
-app.listen(9000);
+app.listen(9000)

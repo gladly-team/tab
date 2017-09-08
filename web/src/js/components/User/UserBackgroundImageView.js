@@ -5,6 +5,7 @@ import {QueryRenderer} from 'react-relay/compat'
 import environment from '../../../relay-env'
 import AuthUserComponent from 'general/AuthUserComponent'
 
+import ErrorMessage from 'general/ErrorMessage'
 import UserBackgroundImage from './UserBackgroundImageContainer'
 
 class UserBackgroundImageView extends React.Component {
@@ -22,7 +23,9 @@ class UserBackgroundImageView extends React.Component {
           `}
           render={({error, props}) => {
             if (error) {
-              return null
+              console.error(error, error.source)
+              const errMsg = 'We had a problem getting your background image :('
+              return <ErrorMessage message={errMsg} />
             }
             var user = (props && props.user) ? props.user : null
             return (

@@ -8,19 +8,16 @@ import {GridList} from 'material-ui/GridList'
 
 class Charities extends React.Component {
   render () {
-    const { app, user } = this.props
-
+    const { app, user, showError } = this.props
     const container = {
       width: '100%',
       backgroundColor: '#F2F2F2'
     }
-
     const gridList = {
       width: '100%',
       margin: 'auto',
       overflowY: 'auto'
     }
-
     return (
       <FadeInAnimation>
         <div
@@ -36,7 +33,8 @@ class Charities extends React.Component {
                 <Charity
                   key={edge.node.id}
                   charity={edge.node}
-                  user={user} />)
+                  user={user}
+                  showError={showError} />)
             })}
           </GridList>
         </div>
@@ -46,7 +44,9 @@ class Charities extends React.Component {
 }
 
 Charities.propTypes = {
-  app: PropTypes.object.isRequired
+  app: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
+  showError: PropTypes.func.isRequired
 }
 
 export default Charities

@@ -57,7 +57,8 @@ class Widgets extends React.Component {
                 <Widget
                   key={index}
                   user={user}
-                  widget={edge.node} />
+                  widget={edge.node}
+                  showError={this.props.showError} />
               )
             }
           })}
@@ -69,7 +70,8 @@ class Widgets extends React.Component {
               <Widget
                 key={index}
                 user={user}
-                widget={edge.node} />
+                widget={edge.node}
+                showError={this.props.showError} />
             )
           }
         })}
@@ -79,7 +81,8 @@ class Widgets extends React.Component {
 }
 
 Widgets.propTypes = {
-  user: PropTypes.object.isRequired
+  user: PropTypes.object.isRequired,
+  showError: PropTypes.func.isRequired
 }
 
 export default Widgets

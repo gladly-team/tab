@@ -134,12 +134,10 @@
   {
     "TableName": "ReferralDataLog",
     "KeySchema": [       
-      { "AttributeName": "id", "KeyType": "HASH"},
-      { "AttributeName": "timestamp", "KeyType": "RANGE"}
+      { "AttributeName": "id", "KeyType": "HASH"}
     ],
     "AttributeDefinitions": [       
-      { "AttributeName": "id", "AttributeType": "S" },
-      { "AttributeName": "timestamp", "AttributeType": "S" }
+      { "AttributeName": "id", "AttributeType": "S" }
     ],
     "ProvisionedThroughput": {       
       "ReadCapacityUnits": 1, 

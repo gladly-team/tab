@@ -1,10 +1,13 @@
 /* eslint-env jest */
 
+import { cloneDeep } from 'lodash/lang'
+
 import UserModel from '../UserModel'
 import createUser from '../createUser'
 import logReferralData from '../../referrals/logReferralData'
 import getUserByUsername from '../getUserByUsername'
 import rewardReferringUser from '../rewardReferringUser'
+import setUpWidgetsForNewUser from '../../widgets/setUpWidgetsForNewUser'
 import {
   addTimestampFieldsToItem,
   DatabaseOperation,
@@ -20,6 +23,7 @@ jest.mock('../../databaseClient')
 jest.mock('../../referrals/logReferralData')
 jest.mock('../rewardReferringUser')
 jest.mock('../getUserByUsername')
+jest.mock('../../widgets/setUpWidgetsForNewUser')
 
 const userContext = getMockUserContext()
 
@@ -48,6 +52,15 @@ describe('createUser', () => {
       .toHaveBeenCalledWith(userContext, expectedCreateItem)
     expect(logReferralData).not.toHaveBeenCalled()
     expect(rewardReferringUser).not.toHaveBeenCalled()
+  })
+
+  it('calls to set up initial widgets', async () => {
+    const userInfo = getMockUserInfo()
+    const referralData = null
+    await createUser(userContext, userInfo.id,
+      userInfo.username, userInfo.email, referralData)
+    expect(setUpWidgetsForNewUser)
+      .toHaveBeenCalledWith(userContext, userInfo.id)
   })
 
   it('logs referral data and rewards referring user', async () => {
@@ -109,8 +122,10 @@ describe('createUser', () => {
       }
     )
     const expectedUser = getMockUserInstance(userInfo)
+    const expectedParamsUser = cloneDeep(expectedUser)
+    delete expectedParamsUser.backgroundImage.imageURL
     const expectedParams = {
-      Item: expectedUser,
+      Item: expectedParamsUser,
       TableName: UserModel.tableName
     }
     const createdItem = await createUser(userContext, userInfo.id,

@@ -7,6 +7,7 @@ import environment from '../../../relay-env'
 import FullScreenProgress from 'general/FullScreenProgress'
 import AuthUserComponent from 'general/AuthUserComponent'
 
+import ErrorMessage from 'general/ErrorMessage'
 import Settings from './SettingsContainer'
 
 class SettingsView extends React.Component {
@@ -24,8 +25,9 @@ class SettingsView extends React.Component {
           `}
           render={({error, props}) => {
             if (error) {
-              console.error(error)
-              return
+              console.error(error, error.source)
+              const errMsg = 'We had a problem loading the settings page :('
+              return <ErrorMessage message={errMsg} />
             }
 
             if (props) {

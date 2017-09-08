@@ -9,11 +9,15 @@ import UserModel from './UserModel'
  * @return {Promise<User>}  A promise that resolves into a User instance.
  */
 const setActiveWidget = async (userContext, userId, widgetId) => {
-  const userInstance = await UserModel.update(userContext, {
-    id: userId,
-    activeWidget: widgetId
-  })
-  return userInstance
+  try {
+    const userInstance = await UserModel.update(userContext, {
+      id: userId,
+      activeWidget: widgetId
+    })
+    return userInstance
+  } catch (e) {
+    throw e
+  }
 }
 
 export default setActiveWidget

@@ -23,9 +23,17 @@ type BackgroundImage implements Node {
   # the background image name
   name: String
 
-  # The image file name
-  fileName: String
-  url: String
+  # The image filename
+  image: String
+
+  # The image file URL
+  imageURL: String
+
+  # The image thumbnail filename
+  thumbnail: String
+
+  # The image thumbnail URL
+  thumbnailURL: String
 }
 
 # A connection to a list of items.
@@ -65,7 +73,11 @@ type Charity implements Node {
 
   # the charity impact message
   impact: String
+
+  # the charity logo image URI
   logo: String
+
+  # the charity post-donation image URI
   image: String
 }
 
@@ -117,12 +129,8 @@ type Image {
   # The image id
   id: String
 
-  # The image name
-  name: String
-
-  # The image file name
-  fileName: String
-  url: String
+  # The image file URL
+  imageURL: String
 }
 
 type Mutation {

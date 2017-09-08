@@ -2,8 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import FadeInAnimation from 'general/FadeInAnimation'
+import ErrorMessage from 'general/ErrorMessage'
 
-import { goTo, goToDashboard } from 'navigation/navigation'
+import {
+  goToDashboard,
+  goToLogin,
+  goToSettingsSection
+} from 'navigation/navigation'
 import AppBar from 'material-ui/AppBar'
 import FontIcon from 'material-ui/FontIcon'
 import MenuItem from 'material-ui/MenuItem'
@@ -18,11 +23,12 @@ class Settings extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      selection: 'widgets'
+      selection: 'widgets',
+      errorMessage: null
     }
   }
 
-  componentDidMount () {
+  componentWillMount () {
     this.setState({
       selection: this.getRouteName()
     })
@@ -41,8 +47,7 @@ class Settings extends React.Component {
     this.setState({
       selection: selection
     })
-
-    goTo('/tab/settings/' + selection)
+    goToSettingsSection(selection)
   }
 
   goToHome () {
@@ -52,13 +57,19 @@ class Settings extends React.Component {
   logout () {
     logoutUser((loggedOut) => {
       if (loggedOut) {
-        this.goToLogin()
+        goToLogin()
       }
     })
   }
 
-  goToLogin () {
-    goTo('/auth')
+  showError (msg) {
+    this.setState({
+      errorMessage: msg
+    })
+  }
+
+  clearError () {
+    this.showError(null)
   }
 
   render () {
@@ -105,6 +116,9 @@ class Settings extends React.Component {
           className='fa fa-sign-out' />} />
     )
 
+    const showError = this.showError
+    const errorMessage = this.state.errorMessage
+
     return (
       <FadeInAnimation>
         <div
@@ -133,8 +147,17 @@ class Settings extends React.Component {
             </div>
           </Drawer>
           <div style={container}>
-            {this.props.children}
+            {React.Children.map(
+              this.props.children,
+              (child) => React.cloneElement(child, {
+                showError: showError.bind(this)
+              })
+            )}
           </div>
+          { errorMessage
+            ? <ErrorMessage message={errorMessage}
+              onRequestClose={this.clearError.bind(this)} />
+            : null }
         </div>
       </FadeInAnimation>
     )

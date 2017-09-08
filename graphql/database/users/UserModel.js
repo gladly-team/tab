@@ -1,5 +1,6 @@
 
 import moment from 'moment'
+import { has } from 'lodash/object'
 
 import BaseModel from '../base/BaseModel'
 import types from '../fieldTypes'
@@ -11,6 +12,9 @@ import {
 import {
   permissionAuthorizers
 } from '../../utils/authorization-helpers'
+import config from '../../config'
+
+const mediaRoot = config.S3_ENDPOINT
 
 /*
  * @extends BaseModel
@@ -47,7 +51,14 @@ class User extends BaseModel {
       level: types.number().integer().default(self.fieldDefaults.level),
       heartsUntilNextLevel: types.number().integer()
         .default(self.fieldDefaults.heartsUntilNextLevel),
-      backgroundImage: types.object().default(self.fieldDefaults.backgroundImage),
+      backgroundImage: types.object(
+        {
+          id: types.uuid(),
+          image: types.string(),
+          imageURL: types.string().forbidden(), // only set in deserializer
+          timestamp: types.string().isoDate()
+        })
+        .default(self.fieldDefaults.backgroundImage, 'Default background image.'),
       backgroundOption: types.string().default(self.fieldDefaults.backgroundOption),
       backgroundColor: types.string(),
       customImage: types.string(),
@@ -63,13 +74,27 @@ class User extends BaseModel {
       level: 0,
       // On the first Heart gained, immediately level up to Level 1.
       heartsUntilNextLevel: 0,
-      backgroundImage: {
-        id: 'fb5082cc-151a-4a9a-9289-06906670fd4e',
-        name: 'Mountain Lake',
-        fileName: 'lake.jpg',
-        timestamp: moment.utc().toISOString
-      },
+      backgroundImage: () => ({
+        id: '49fcb132-9b6b-431b-bda8-50455e215be7',
+        image: '661651039af4454abb852927b3a5b8f9.jpg',
+        timestamp: moment.utc().toISOString()
+      }),
       backgroundOption: USER_BACKGROUND_OPTION_PHOTO
+    }
+  }
+
+  static get fieldDeserializers () {
+    return {
+      backgroundImage: (backgroundImage, userObj) => {
+        const finalObj = (
+          has(backgroundImage, 'image')
+          ? Object.assign({}, backgroundImage, {
+            imageURL: `${mediaRoot}/img/backgrounds/${backgroundImage.image}`
+          })
+          : null
+        )
+        return finalObj
+      }
     }
   }
 

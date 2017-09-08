@@ -5,6 +5,7 @@ import {QueryRenderer} from 'react-relay/compat'
 import environment from '../../../relay-env'
 import AuthUserComponent from 'general/AuthUserComponent'
 
+import ErrorMessage from 'general/ErrorMessage'
 import VcUserContainer from './VcUserContainer'
 
 class VcUserView extends React.Component {
@@ -22,7 +23,9 @@ class VcUserView extends React.Component {
           `}
           render={({error, props}) => {
             if (error) {
-              return null
+              console.error(error, error.source)
+              const errMsg = 'We had a problem getting your Hearts and level count :('
+              return <ErrorMessage message={errMsg} />
             }
             if (props) {
               return (

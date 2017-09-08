@@ -13,8 +13,7 @@ export default createFragmentContainer(UserBackgroundImage, {
       backgroundColor
       backgroundImage {
         id
-        name
-        url
+        imageURL
       }
     }
   `

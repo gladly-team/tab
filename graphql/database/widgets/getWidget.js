@@ -12,9 +12,13 @@ import constructFullWidget from './constructFullWidget'
  * an array of Widgets.
  */
 const getWidget = async (userContext, userId, widgetId) => {
-  const userWidget = await UserWidgetModel.get(userContext, userId, widgetId)
-  const baseWidget = await BaseWidgetModel.get(userContext, widgetId)
-  return constructFullWidget(userWidget, baseWidget)
+  try {
+    const userWidget = await UserWidgetModel.get(userContext, userId, widgetId)
+    const baseWidget = await BaseWidgetModel.get(userContext, widgetId)
+    return constructFullWidget(userWidget, baseWidget)
+  } catch (e) {
+    throw e
+  }
 }
 
 export default getWidget

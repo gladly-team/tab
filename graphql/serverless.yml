@@ -54,6 +54,7 @@ provider:
         - "dynamodb:BatchGetItem"
         - "dynamodb:GetItem"
         - "dynamodb:Query"
+        - "dynamodb:Scan"
       Resource: "${self:custom.dbTableArnBase}UserLevels-${self:provider.stage}"
     # VcDonationLog table
     - Effect: "Allow"
@@ -66,6 +67,7 @@ provider:
         - "dynamodb:BatchGetItem"
         - "dynamodb:GetItem"
         - "dynamodb:Query"
+        - "dynamodb:Scan"
       Resource: "${self:custom.dbTableArnBase}BackgroundImages-${self:provider.stage}"
     # UserWidgets table
     - Effect: "Allow"

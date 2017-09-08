@@ -8,6 +8,8 @@ import {
   getUserClaimsFromLambdaEvent,
   isUserAuthorized
 } from './utils/authorization-helpers'
+import { handleError } from './utils/error-logging'
+import logger, { loggerContextWrapper } from './utils/logger'
 
 const createResponse = function (statusCode, body) {
   return {
@@ -19,7 +21,6 @@ const createResponse = function (statusCode, body) {
   }
 }
 
-// TODO: set up logging via Sentry.
 export const handler = function (event) {
   var body
   try {
@@ -34,9 +35,30 @@ export const handler = function (event) {
     return Promise.resolve(createResponse(401, 'Request not authorized.'))
   }
   const context = createGraphQLContext(claims)
-  return graphql(Schema, body.query, null, context, body.variables)
-    .then(data => createResponse(200, data))
-    .catch(err => createResponse(500, err))
+
+  // Add context to any logs (e.g. the user).
+  return loggerContextWrapper(
+    context.user,
+    () => {
+      return graphql(Schema, body.query, null, context, body.variables)
+        .then(data => {
+          // Check if the GraphQL response contains any errors, and
+          // if it does, handle them.
+          // See how express-graphql handles this:
+          // https://github.com/graphql/express-graphql/blob/master/src/index.js#L301
+          // If graphql-js gets a logger, we can move logging there:
+          // https://github.com/graphql/graphql-js/issues/284
+          if (data && data.errors) {
+            data.errors = data.errors.map(err => handleError(err))
+          }
+          return createResponse(200, data)
+        })
+        .catch(err => {
+          logger.error(err)
+          return createResponse(500, 'Internal Error')
+        })
+    }
+  )
 }
 
 export const serverlessHandler = function (event, context, callback) {

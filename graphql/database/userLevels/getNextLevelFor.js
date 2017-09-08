@@ -18,7 +18,13 @@ const getNextLevelFor = async (userContext, level, vcAllTime) => {
     {id: level + 4},
     {id: level + 5}
   ]
-  const levels = await UserLevelModel.getBatch(userContext, keys)
+
+  var levels
+  try {
+    levels = await UserLevelModel.getBatch(userContext, keys)
+  } catch (e) {
+    throw e
+  }
 
   // We've run out of levels.
   if (!levels || !levels.length) {

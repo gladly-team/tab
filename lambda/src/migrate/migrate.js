@@ -2,7 +2,7 @@
 
 // Note: after deleting this function, we can remove
 // the following packages from dependencies:
-// joi, uuid, dynogels, bluebird
+// joi, uuid, dynogels, bluebird, raven
 
 import UserModel from 'database/users/UserModel'
 import {
@@ -102,7 +102,7 @@ const setBookmarksData = Async((userId, bookmarks) => {
   try {
     if (!bookmarks || !bookmarks.length) { return true }
 
-    const bookmarkWidgetId = '4162cc79-d192-4435-91bd-5fda9b6f7c08'
+    const bookmarkWidgetId = '63859963-f691-42f6-bc80-ac83eddc4104'
 
     Await(updateUserWidgetEnabled(userId, bookmarkWidgetId, true))
     Await(updateUserWidgetData(
@@ -134,7 +134,7 @@ const setNotesData = Async((userId, notes) => {
   try {
     if (!notes || !notes.length) { return true }
 
-    const notesWidgetId = '4262cc79-d192-4435-91bd-5fda9b6f7c08'
+    const notesWidgetId = 'a8cfd733-639b-49d4-a822-116cc7e5c2e2'
 
     const data = []
     for (var index in notes) {

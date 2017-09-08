@@ -28,7 +28,8 @@ class Widget extends React.Component {
         return (<BookmarksWidget
           widget={widget}
           user={user}
-          widgetVisibilityChanged={this.widgetVisibilityChanged.bind(this)} />)
+          widgetVisibilityChanged={this.widgetVisibilityChanged.bind(this)}
+          showError={this.props.showError} />)
       case 'search':
         return (<SearchWidget
           widget={widget}
@@ -43,13 +44,15 @@ class Widget extends React.Component {
         return (<NotesWidget
           widget={widget}
           user={user}
-          widgetVisibilityChanged={this.widgetVisibilityChanged.bind(this)} />)
+          widgetVisibilityChanged={this.widgetVisibilityChanged.bind(this)}
+          showError={this.props.showError} />)
 
       case 'todos':
         return (<TodosWidget
           widget={widget}
           user={user}
-          widgetVisibilityChanged={this.widgetVisibilityChanged.bind(this)} />)
+          widgetVisibilityChanged={this.widgetVisibilityChanged.bind(this)}
+          showError={this.props.showError} />)
       default:
         return null
     }
@@ -58,7 +61,8 @@ class Widget extends React.Component {
 
 Widget.propTypes = {
   widget: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired
+  user: PropTypes.object.isRequired,
+  showError: PropTypes.func.isRequired
 }
 
 export default Widget
