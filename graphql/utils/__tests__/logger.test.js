@@ -84,7 +84,7 @@ describe('logger', () => {
     }
     const fakeLambdaEvent = { foo: 'bar' }
     const response = loggerContextWrapper(userContext, fakeLambdaEvent, testFunc)
-    expect(Sentry.setContext).toHaveBeenCalledWith({
+    expect(Sentry.mergeContext).toHaveBeenCalledWith({
       user: {
         id: 'abc-123',
         username: 'Bob',
