@@ -155,7 +155,7 @@ script:
 deploy:
   # Dev stage deploy
   - provider: script
-    script: yarn run ci:deploy dev
+    script: travis_wait yarn run ci:deploy dev
     on:
       # TODO: revert to master branch only
       all_branches: true
@@ -164,7 +164,7 @@ deploy:
     skip_cleanup: true
   # Prod stage deploy
   - provider: script
-    script: yarn run ci:deploy prod
+    script: travis_wait yarn run ci:deploy prod
     # TODO: master only after setup
     on:
       all_branches: true
