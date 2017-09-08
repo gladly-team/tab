@@ -149,13 +149,15 @@ script:
   - yarn run ci:test
   # TODO: handle PR restrictions. See:
   # https://docs.travis-ci.com/user/pull-requests#Pull-Requests-and-Security-Restrictions
-  - travis_wait yarn run ci:deploy test
+  - yarn run ci:deploy test
   - yarn run ci:test:integration
 # TODO: master branch deploy to prod; other logic for test/dev
+# Note: travis_wait doesn't work well in deploy:
+#   https://github.com/travis-ci/travis-ci/issues/7961
 deploy:
   # Dev stage deploy
   - provider: script
-    script: travis_wait yarn run ci:deploy dev
+    script: yarn run ci:deploy dev
     on:
       # TODO: revert to master branch only
       all_branches: true
@@ -164,7 +166,7 @@ deploy:
     skip_cleanup: true
   # Prod stage deploy
   - provider: script
-    script: travis_wait yarn run ci:deploy prod
+    script: yarn run ci:deploy prod
     # TODO: master only after setup
     on:
       all_branches: true
