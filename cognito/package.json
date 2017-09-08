@@ -14,7 +14,7 @@
     "babel-preset-stage-0": "^6.22.0"
   },
   "scripts": {
-    "deploy": "yarn run build && serverless deploy",
+    "deploy": "yarn run build && serverless deploy -v",
     "build": "rm -rf ./build && npm run build:compile",
     "build:compile": "babel --out-dir='build' --ignore='build,coverage,__mocks__,__tests__,node_modules' ./src/"
   },

@@ -33,7 +33,7 @@
     "test:watch": "jest --watch",
     "lint": "standard",
     "lint:fix": "standard --fix",
-    "deploy": "serverless deploy"
+    "deploy": "serverless deploy -v"
   },
   "repository": {
     "type": "git",

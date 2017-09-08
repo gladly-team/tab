@@ -152,6 +152,8 @@ script:
   - yarn run ci:deploy test
   - yarn run ci:test:integration
 # TODO: master branch deploy to prod; other logic for test/dev
+# Note: travis_wait doesn't work well in deploy:
+#   https://github.com/travis-ci/travis-ci/issues/7961
 deploy:
   # Dev stage deploy
   - provider: script

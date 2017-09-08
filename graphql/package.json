@@ -54,7 +54,7 @@
     "build": "rm -rf ./build && yarn run build:compile",
     "build:compile": "cross-env NODE_ENV=production babel --out-dir='build' --ignore='build,coverage,__mocks__,__tests__,integration-tests,node_modules,server.js' ./ && yarn run build:config",
     "build:config": "NODE_ENV=production node -r dotenv-extended/config ./scripts/generateConfig.js",
-    "deploy": "yarn run build && serverless deploy",
+    "deploy": "yarn run build && serverless deploy -v",
     "update-schema": "babel-node ./scripts/updateSchema.js",
     "test": "npm-run-all -s test:lint test:run test:codecov",
     "test:run": "jest --testPathIgnorePatterns=integration-tests --coverage",
