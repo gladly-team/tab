@@ -149,7 +149,7 @@ script:
   - yarn run ci:test
   # TODO: handle PR restrictions. See:
   # https://docs.travis-ci.com/user/pull-requests#Pull-Requests-and-Security-Restrictions
-  - yarn run ci:deploy test
+  - travis_wait yarn run ci:deploy test
   - yarn run ci:test:integration
 # TODO: master branch deploy to prod; other logic for test/dev
 deploy:
