@@ -27,6 +27,7 @@ export const envVars = [
   // GraphQL
   { name: 'TABLE_NAME_APPENDIX' },
   { name: 'GRAPHQL_PORT', optional: true },
+  { name: 'LOGGER' },
   { name: 'SENTRY_PUBLIC_KEY' },
   { name: 'SENTRY_PROJECT_ID' },
   { name: 'SENTRY_PRIVATE_KEY' },
