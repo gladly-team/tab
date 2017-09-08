@@ -2,7 +2,7 @@
 
 // Note: after deleting this function, we can remove
 // the following packages from dependencies:
-// joi, uuid, dynogels, bluebird
+// joi, uuid, dynogels, bluebird, raven
 
 import UserModel from 'database/users/UserModel'
 import {
