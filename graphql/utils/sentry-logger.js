@@ -12,7 +12,7 @@ const Sentry = new Raven.Client()
  */
 export const sentryContextWrapper = (userContext, lambdaEvent, func) => {
   return Sentry.context(() => {
-    Sentry.mergeContext({
+    Sentry.setContext({
       user: {
         id: userContext.id,
         username: userContext.username,
