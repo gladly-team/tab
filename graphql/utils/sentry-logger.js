@@ -21,6 +21,9 @@ export const sentryContextWrapper = (userContext, lambdaEvent, func) => {
         foo: 'bar'
       }
     })
+    console.log('===== sentryContextWrapper =====',
+      JSON.stringify(Raven.getContext(), null, 2),
+      userContext)
     return func()
   })
 }
