@@ -3,6 +3,8 @@ import {
   updateWidgetEnabled
 } from './updateWidget'
 
+const Promise = require('bluebird')
+
 const widgetConfigurations = [
   // Bookmarks
   {
