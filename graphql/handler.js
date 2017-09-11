@@ -13,7 +13,7 @@ import logger, {
   loggerContextWrapper
 } from './utils/logger'
 
-const Promise = require('bluebird')
+global.Promise = require('bluebird')
 
 const createResponse = function (statusCode, body) {
   return {
