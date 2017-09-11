@@ -16,7 +16,10 @@ export const sentryContextWrapper = (userContext, lambdaEvent, func) => {
         username: userContext.username,
         email: userContext.email
       },
-      req: lambdaEvent
+      req: lambdaEvent,
+      extra: {
+        foo: 'bar'
+      }
     })
     return func()
   })
@@ -46,7 +49,7 @@ const getSentryDSN = () => {
 const sentryDSN = getSentryDSN()
 Raven.config(sentryDSN, {
   captureUnhandledRejections: true,
-  autoBreadcrumbs: true,
+  autoBreadcrumbs: false,
   environment: config.STAGE
 }).install()
 
