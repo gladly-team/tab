@@ -90,10 +90,7 @@ describe('logger', () => {
         username: 'Bob',
         email: 'bob@example.com'
       },
-      req: fakeLambdaEvent,
-      extra: {
-        foo: 'bar'
-      }
+      req: fakeLambdaEvent
     })
     expect(response).toBe('hi')
   })

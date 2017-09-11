@@ -16,10 +16,7 @@ export const sentryContextWrapper = (userContext, lambdaEvent, func) => {
         username: userContext.username,
         email: userContext.email
       },
-      req: lambdaEvent,
-      extra: {
-        foo: 'bar'
-      }
+      req: lambdaEvent
     })
     return func()
   })
