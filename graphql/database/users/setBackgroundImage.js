@@ -28,9 +28,7 @@ const setBackgroundImage = async (userContext, userId, imageId, mode) => {
       },
       backgroundOption: mode
     })
-    console.log(userInstance)
-    throw new Error('Background image is broken!')
-    // return userInstance
+    return userInstance
   } catch (e) {
     throw e
   }
