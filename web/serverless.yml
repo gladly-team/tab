@@ -82,10 +82,10 @@ resources:
           CacheBehaviors:
             # Do not cache HTML for a long time.
             - PathPattern: '*.html'
-              # Maybe consider short HTML caching (say, 10 mins) for small
-              # page speed gains.
-              MinTTL: 0
-              MaxTTL: 0
+              # Short HTML caching for some spage speed gains and
+              # reduced request volume to S3 origin.
+              MinTTL: 60
+              MaxTTL: 60
               AllowedMethods:
                 - HEAD
                 - GET
@@ -96,7 +96,7 @@ resources:
                 Cookies:
                   Forward: none
               # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html
-              Compress: false # TODO: enable
+              Compress: true
               # Switch this to "redirect-to-https" after migrating to HTTPS only.
               ViewerProtocolPolicy: allow-all
             # Cache (non-HTML) static files for a long time.
@@ -112,7 +112,7 @@ resources:
                 QueryString: false
                 Cookies:
                   Forward: none
-              Compress: false # TODO: enable
+              Compress: true
               # Switch this to "redirect-to-https" after migrating to HTTPS only.
               ViewerProtocolPolicy: allow-all
           DefaultCacheBehavior:
