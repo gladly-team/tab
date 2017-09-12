@@ -167,9 +167,7 @@ deploy:
   # Prod stage deploy
   - provider: script
     script: yarn run ci:deploy prod
-    # TODO: master only after setup
     on:
-      all_branches: true
-      # branch: master
+      branch: master
     skip_cleanup: true
 cache: yarn
