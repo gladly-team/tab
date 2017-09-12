@@ -17,7 +17,8 @@ custom:
   stageDefault: dev
   s3Bucket: ${env:WEB_S3_BUCKET_NAME}
   webAppName: Tab2017
-  domainNameAlias: tab.gladly.io
+  cloudfrontDomainAlias: ${env:CLOUDFRONT_DOMAIN_ALIAS}
+  SSLCertificateARN: ${env:SSL_CERTIFICATE_ARN}
 
 resources:
   Resources:
@@ -49,6 +50,7 @@ resources:
     WebAppCloudFrontDistribution:
       Type: AWS::CloudFront::Distribution
       Properties:
+        # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distributionconfig.html
         DistributionConfig:
           Origins:
             - DomainName: ${self:custom.s3Bucket}.s3.amazonaws.com
@@ -63,6 +65,8 @@ resources:
                 OriginProtocolPolicy: http-only
           Enabled: true
           DefaultRootObject: index.html
+          Aliases:
+            - ${self:custom.cloudfrontDomainAlias}
           # Always return the single page app and let it handle routing.
           CustomErrorResponses:
             - ErrorCode: 404
@@ -125,8 +129,10 @@ resources:
             # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-defaultcachebehavior.html#cfn-cloudfront-defaultcachebehavior-viewerprotocolpolicy
             ViewerProtocolPolicy: allow-all
           # The certificate to use when viewers use HTTPS to request objects.
+          # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distributionconfig-viewercertificate.html
           ViewerCertificate:
-            CloudFrontDefaultCertificate: true
+            AcmCertificateArn: ${self:custom.SSLCertificateARN}
+            SslSupportMethod: sni-only
   
   # In order to print out the hosted domain via `serverless info`,
   # we need to define the DomainName output for CloudFormation

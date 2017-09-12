@@ -22,6 +22,7 @@ export const envVars = [
   // Web app
   { name: 'PUBLIC_PATH' },
   { name: 'STATIC_FILES_ENDPOINT' },
+  { name: 'CLOUDFRONT_DOMAIN_ALIAS' },
   { name: 'ADS_ENABLED' },
   { name: 'WEB_HOST', optional: true },
   { name: 'WEB_PORT', optional: true },

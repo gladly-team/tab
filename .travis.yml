@@ -9,6 +9,7 @@ env:
   - CXX=g++-5
   - SLS_DEBUG=true
   - LOG_TEST_COVERAGE=true
+  - SSL_CERTIFICATE_ARN=arn:aws:acm:us-east-1:167811431063:certificate/fb405a2a-68c1-4fa3-a1d6-d10f3dd19e59
   ########## Test stage ##########
   - TEST_NODE_ENV=production
   - TEST_STAGE=test
@@ -24,6 +25,7 @@ env:
   # Web app
   - TEST_PUBLIC_PATH=http://test-tab2017.gladly.io/
   - TEST_STATIC_FILES_ENDPOINT=https://d3792fnaedwf9j.cloudfront.net
+  - TEST_CLOUDFRONT_DOMAIN_ALIAS=test-tab2017.gladly.io
   - TEST_ADS_ENABLED=false
   # GraphQL
   - TEST_TABLE_NAME_APPENDIX="-test"
@@ -61,6 +63,7 @@ env:
   # Web app
   - DEV_PUBLIC_PATH=http://dev-tab2017.gladly.io/
   - DEV_STATIC_FILES_ENDPOINT=https://d2ienu53qrix0k.cloudfront.net
+  - TEST_CLOUDFRONT_DOMAIN_ALIAS=dev-tab2017.gladly.io
   - DEV_ADS_ENABLED=true
   # GraphQL
   - DEV_TABLE_NAME_APPENDIX="-dev"
@@ -93,6 +96,7 @@ env:
   # Web app
   - PROD_PUBLIC_PATH=http://prod-tab2017.gladly.io/
   - PROD_STATIC_FILES_ENDPOINT=https://d2dsqma4win6dv.cloudfront.net
+  - PROD_CLOUDFRONT_DOMAIN_ALIAS=prod-tab2017.gladly.io
   - PROD_ADS_ENABLED=true
   # GraphQL
   - PROD_TABLE_NAME_APPENDIX="-prod"
