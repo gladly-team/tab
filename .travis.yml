@@ -63,7 +63,7 @@ env:
   # Web app
   - DEV_PUBLIC_PATH=http://dev-tab2017.gladly.io/
   - DEV_STATIC_FILES_ENDPOINT=https://d2ienu53qrix0k.cloudfront.net
-  - TEST_CLOUDFRONT_DOMAIN_ALIAS=dev-tab2017.gladly.io
+  - DEV_CLOUDFRONT_DOMAIN_ALIAS=dev-tab2017.gladly.io
   - DEV_ADS_ENABLED=true
   # GraphQL
   - DEV_TABLE_NAME_APPENDIX="-dev"
