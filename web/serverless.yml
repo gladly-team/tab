@@ -9,10 +9,6 @@ provider:
   profile: tab-sls
   stage: ${env:SLS_STAGE, self:custom.stageDefault}
 
-plugins:
-  # TODO: potentially remove if not needed?
-  - serverless-single-page-app-plugin
-
 custom:
   stageDefault: dev
   s3Bucket: ${env:WEB_S3_BUCKET_NAME}
