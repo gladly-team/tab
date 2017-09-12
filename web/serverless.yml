@@ -19,6 +19,8 @@ custom:
   webAppName: Tab2017
   cloudfrontDomainAlias: ${env:CLOUDFRONT_DOMAIN_ALIAS}
   SSLCertificateARN: ${env:SSL_CERTIFICATE_ARN}
+  # How long Cloudfront should cache HTML at edges.
+  CloudfrontHTMLCachingSeconds: 60
 
 resources:
   Resources:
@@ -72,6 +74,12 @@ resources:
             - ErrorCode: 404
               ResponseCode: 200
               ResponsePagePath: /index.html
+              # We always return our HTML page for 404 errors, and most
+              # pageviews are 404 errors because of the single-page app.
+              # This is effectively how long we keep the HTML page in
+              # edge caches.
+              # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HTTPStatusCodes.html
+              ErrorCachingMinTTL: ${self:custom.CloudfrontHTMLCachingSeconds}
           # How CloudFront determines cache behavior:
           #   https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html#ExpirationDownloadDist
           # CloudFront guide to CacheBehavior:
@@ -84,8 +92,8 @@ resources:
             - PathPattern: '*.html'
               # Short HTML caching for some spage speed gains and
               # reduced request volume to S3 origin.
-              MinTTL: 60
-              MaxTTL: 60
+              MinTTL: ${self:custom.CloudfrontHTMLCachingSeconds}
+              MaxTTL: ${self:custom.CloudfrontHTMLCachingSeconds}
               AllowedMethods:
                 - HEAD
                 - GET
