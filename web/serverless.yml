@@ -68,6 +68,49 @@ resources:
             - ErrorCode: 404
               ResponseCode: 200
               ResponsePagePath: /index.html
+          # How CloudFront determines cache behavior:
+          #   https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html#ExpirationDownloadDist
+          # CloudFront guide to CacheBehavior:
+          #   https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-cachebehavior.html
+          # Note that this is primarily specifying how Cloudfront edges should
+          # cache files. For browser caching, we must still set Cache-Control headers
+          # on the origin server (S3).
+          CacheBehavior:
+            # Do not cache HTML for a long time.
+            - PathPattern: '*.html'
+              # Maybe consider short HTML caching (say, 10 mins) for small
+              # page speed gains.
+              MinTTL: 0
+              MaxTTL: 0
+              AllowedMethods:
+                - HEAD
+                - GET
+                - OPTIONS
+              TargetOriginId: ${self:custom.webAppName}
+              ForwardedValues:
+                QueryString: false
+                Cookies:
+                  Forward: none
+              # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html
+              Compress: false # TODO: enable
+              # Switch this to "redirect-to-https" after migrating to HTTPS only.
+              ViewerProtocolPolicy: allow-all
+            # Cache (non-HTML) static files for a long time.
+            - PathPattern: '*'
+              MinTTL: 31536000 # one year
+              MaxTTL: 63072000 # two years
+              AllowedMethods:
+                - HEAD
+                - GET
+                - OPTIONS
+              TargetOriginId: ${self:custom.webAppName}
+              ForwardedValues:
+                QueryString: false
+                Cookies:
+                  Forward: none
+              Compress: false # TODO: enable
+              # Switch this to "redirect-to-https" after migrating to HTTPS only.
+              ViewerProtocolPolicy: allow-all
           DefaultCacheBehavior:
             AllowedMethods:
               - HEAD
