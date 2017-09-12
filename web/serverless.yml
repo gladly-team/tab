@@ -70,7 +70,9 @@ resources:
               ResponsePagePath: /index.html
           DefaultCacheBehavior:
             AllowedMethods:
+              - HEAD
               - GET
+              - OPTIONS
             TargetOriginId: ${self:custom.webAppName}
             ForwardedValues:
               QueryString: false
