@@ -4,7 +4,7 @@ import tableNames from '../../tables'
 import Charity from '../CharityModel'
 import config from '../../../config'
 
-const mediaRoot = config.S3_ENDPOINT
+const mediaRoot = config.MEDIA_ENDPOINT
 
 jest.mock('../../databaseClient')
 

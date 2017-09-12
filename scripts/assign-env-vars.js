@@ -34,7 +34,7 @@ export const envVars = [
   // Endpoints
   { name: 'GRAPHQL_ENDPOINT' },
   { name: 'DYNAMODB_ENDPOINT' },
-  { name: 'S3_ENDPOINT' },
+  { name: 'MEDIA_ENDPOINT' },
   // Deployment
   { name: 'WEB_S3_BUCKET_NAME' },
   { name: 'MEDIA_S3_BUCKET_NAME' },

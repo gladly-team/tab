@@ -9,7 +9,7 @@ import {
   mockDate
 } from '../../test-utils'
 
-const mediaRoot = config.S3_ENDPOINT
+const mediaRoot = config.MEDIA_ENDPOINT
 
 jest.mock('../../databaseClient')
 
