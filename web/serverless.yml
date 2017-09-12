@@ -75,7 +75,7 @@ resources:
           # Note that this is primarily specifying how Cloudfront edges should
           # cache files. For browser caching, we must still set Cache-Control headers
           # on the origin server (S3).
-          CacheBehavior:
+          CacheBehaviors:
             # Do not cache HTML for a long time.
             - PathPattern: '*.html'
               # Maybe consider short HTML caching (say, 10 mins) for small
