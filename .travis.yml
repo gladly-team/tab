@@ -22,7 +22,7 @@ env:
   - TEST_COGNITO_CLIENTID=u1vckhq1ba7oarrhu8ksvn9r7
   - TEST_MOCK_DEV_AUTHENTICATION=false
   # Web app
-  - TEST_PUBLIC_PATH=https://test-tab2017.gladly.io/
+  - TEST_PUBLIC_PATH=http://test-tab2017.gladly.io/
   - TEST_ADS_ENABLED=false
   # GraphQL
   - TEST_TABLE_NAME_APPENDIX="-test"
@@ -58,7 +58,7 @@ env:
   - DEV_COGNITO_CLIENTID=32lj6balg8t2d1209sb50t1m8b
   - DEV_MOCK_DEV_AUTHENTICATION=false
   # Web app
-  - DEV_PUBLIC_PATH=https://dev-tab2017.gladly.io/
+  - DEV_PUBLIC_PATH=http://dev-tab2017.gladly.io/
   - DEV_ADS_ENABLED=true
   # GraphQL
   - DEV_TABLE_NAME_APPENDIX="-dev"
@@ -89,7 +89,7 @@ env:
   - PROD_COGNITO_CLIENTID=7n2os99obf201gk6qi8nca6bp5
   - PROD_MOCK_DEV_AUTHENTICATION=false
   # Web app
-  - PROD_PUBLIC_PATH=https://prod-tab2017.gladly.io/
+  - PROD_PUBLIC_PATH=http://prod-tab2017.gladly.io/
   - PROD_ADS_ENABLED=true
   # GraphQL
   - PROD_TABLE_NAME_APPENDIX="-prod"
