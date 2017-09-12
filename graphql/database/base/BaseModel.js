@@ -13,6 +13,8 @@ import dbClient from '../databaseClient'
 import { isValidPermissionsOverride } from '../../utils/permissions-overrides'
 import logger from '../../utils/logger'
 
+const Promise = require('bluebird')
+
 dynogels.documentClient(dbClient)
 
 class BaseModel {

@@ -1,5 +1,7 @@
 /* eslint-env jest */
 
+const Promise = require('bluebird')
+
 const addVc = jest.fn(() => Promise.resolve({
   id: 'abc-123',
   vcCurrent: 4,

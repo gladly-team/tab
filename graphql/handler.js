@@ -13,6 +13,12 @@ import logger, {
   loggerContextWrapper
 } from './utils/logger'
 
+// Note: we need to use Bluebird until at least Node 8. Using
+// native promises breaks Sentry/Raven context:
+// https://github.com/getsentry/raven-node/issues/265
+global.Promise = require('bluebird')
+const Promise = require('bluebird')
+
 const createResponse = function (statusCode, body) {
   return {
     statusCode: statusCode,

@@ -106,7 +106,7 @@ const log = (msg, logLevel) => {
       }
       break
     case 'sentry':
-      // Sentry expects 'warning', not 'warn'/
+      // Sentry expects 'warning', not 'warn'
       const level = (
         logLevel === logLevels.WARN
         ? 'warning'

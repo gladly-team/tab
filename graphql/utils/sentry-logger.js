@@ -2,8 +2,6 @@
 import Raven from 'raven'
 import config from '../config'
 
-const Sentry = new Raven.Client()
-
 /*
  * A wrapper for loggers to use to set additional context for logs.
  * This wraps and invokes the provided function.
@@ -11,8 +9,8 @@ const Sentry = new Raven.Client()
  * @param {function} func - The function to wrap.
  */
 export const sentryContextWrapper = (userContext, lambdaEvent, func) => {
-  return Sentry.context(() => {
-    Sentry.mergeContext({
+  return Raven.context(() => {
+    Raven.setContext({
       user: {
         id: userContext.id,
         username: userContext.username,
@@ -46,10 +44,10 @@ const getSentryDSN = () => {
 // Configure the Sentry logger instance.
 // https://docs.sentry.io/clients/node/config/
 const sentryDSN = getSentryDSN()
-Sentry.config(sentryDSN, {
+Raven.config(sentryDSN, {
   captureUnhandledRejections: true,
-  autoBreadcrumbs: true,
+  autoBreadcrumbs: false,
   environment: config.STAGE
 }).install()
 
-export default Sentry
+export default Raven
