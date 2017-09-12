@@ -23,6 +23,7 @@ env:
   - TEST_MOCK_DEV_AUTHENTICATION=false
   # Web app
   - TEST_PUBLIC_PATH=http://test-tab2017.gladly.io/
+  - TEST_STATIC_FILES_ENDPOINT=https://d3792fnaedwf9j.cloudfront.net
   - TEST_ADS_ENABLED=false
   # GraphQL
   - TEST_TABLE_NAME_APPENDIX="-test"
@@ -59,6 +60,7 @@ env:
   - DEV_MOCK_DEV_AUTHENTICATION=false
   # Web app
   - DEV_PUBLIC_PATH=http://dev-tab2017.gladly.io/
+  - DEV_STATIC_FILES_ENDPOINT=https://d2ienu53qrix0k.cloudfront.net
   - DEV_ADS_ENABLED=true
   # GraphQL
   - DEV_TABLE_NAME_APPENDIX="-dev"
@@ -90,6 +92,7 @@ env:
   - PROD_MOCK_DEV_AUTHENTICATION=false
   # Web app
   - PROD_PUBLIC_PATH=http://prod-tab2017.gladly.io/
+  - PROD_STATIC_FILES_ENDPOINT=https://d2dsqma4win6dv.cloudfront.net
   - PROD_ADS_ENABLED=true
   # GraphQL
   - PROD_TABLE_NAME_APPENDIX="-prod"

@@ -21,6 +21,7 @@ export const envVars = [
   { name: 'MOCK_DEV_AUTHENTICATION' },
   // Web app
   { name: 'PUBLIC_PATH' },
+  { name: 'STATIC_FILES_ENDPOINT' },
   { name: 'ADS_ENABLED' },
   { name: 'WEB_HOST', optional: true },
   { name: 'WEB_PORT', optional: true },
