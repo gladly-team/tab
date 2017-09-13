@@ -148,7 +148,12 @@ function resendConfirmation (username, onSuccess, onFailure) {
   })
 }
 
+var userIdToken = null
+
 const getUserIdToken = () => {
+  if (userIdToken) {
+    return Promise.resolve(userIdToken)
+  }
   return new Promise((resolve, reject) => {
     // Cognito handles ID token refreshing:
     // https://github.com/aws/amazon-cognito-identity-js/issues/245#issuecomment-271345763
@@ -159,6 +164,7 @@ const getUserIdToken = () => {
           resolve(null)
         }
         const idToken = session.getIdToken().getJwtToken()
+        userIdToken = idToken
         resolve(idToken)
       })
     } else {
