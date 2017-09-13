@@ -5,7 +5,7 @@ import tableNames from '../tables'
 import { CHARITY } from '../constants'
 import config from '../../config'
 
-const mediaRoot = config.S3_ENDPOINT
+const mediaRoot = config.MEDIA_ENDPOINT
 
 /*
  * Represents a Charity.

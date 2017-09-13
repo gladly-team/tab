@@ -9,19 +9,18 @@ provider:
   profile: tab-sls
   stage: ${env:SLS_STAGE, self:custom.stageDefault}
 
-plugins:
-  - serverless-single-page-app-plugin
-
 custom:
   stageDefault: dev
   s3Bucket: ${env:WEB_S3_BUCKET_NAME}
   webAppName: Tab2017
-  domainNameAlias: tab.gladly.io
+  cloudfrontDomainAlias: ${env:CLOUDFRONT_DOMAIN_ALIAS}
+  SSLCertificateARN: ${env:SSL_CERTIFICATE_ARN}
+  # How long Cloudfront should cache HTML at edges.
+  CloudfrontHTMLCachingSeconds: 60
 
 resources:
   Resources:
 
-    # S3 Bucket
     TabS3Bucket:
       Type: AWS::S3::Bucket
       Properties:
@@ -31,7 +30,6 @@ resources:
           IndexDocument: index.html
           ErrorDocument: index.html
 
-    # Specifying the policies to make sure all files inside the Bucket are available to CloudFront
     TabS3BucketPolicy:
       Type: AWS::S3::BucketPolicy
       Properties:
@@ -46,62 +44,102 @@ resources:
                 - s3:GetObject
               Resource: arn:aws:s3:::${self:custom.s3Bucket}/*
 
-    # TODO: enable Cloudfront later.
-    # Specifying the CloudFront Distribution to serve the app
+    # Serve the app through Cloudfront.
     WebAppCloudFrontDistribution:
       Type: AWS::CloudFront::Distribution
       Properties:
+        # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distributionconfig.html
         DistributionConfig:
           Origins:
             - DomainName: ${self:custom.s3Bucket}.s3.amazonaws.com
-              # An identifier for the origin which must be unique within the distribution
+              # An identifier for the origin. This must be unique within the distribution.
               Id: ${self:custom.webAppName}
               CustomOriginConfig:
                 HTTPPort: 80
                 HTTPSPort: 443
-                OriginProtocolPolicy: https-only
-              ## In case you want to restrict the bucket access use S3OriginConfig and remove CustomOriginConfig
-              # S3OriginConfig:
-              #   OriginAccessIdentity: origin-access-identity/cloudfront/E127EXAMPLE51Z
-          Enabled: 'true'
-          ## Uncomment the following section in case you are using a custom domain
-          # Aliases:
-          # - ${self:custom.domainNameAlias}
+                # HTTP only is required for S3 buckets that are configured as
+                # website endpoints:
+                # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesOriginProtocolPolicy 
+                OriginProtocolPolicy: http-only
+          Enabled: true
           DefaultRootObject: index.html
-          ## Since the Single Page App is taking care of the routing we need to make sure ever path is served with index.html
-          ## The only exception are files that actually exist e.h. app.js, reset.css
+          Aliases:
+            - ${self:custom.cloudfrontDomainAlias}
+          # Always return the single page app and let it handle routing.
           CustomErrorResponses:
             - ErrorCode: 404
               ResponseCode: 200
               ResponsePagePath: /index.html
+              # We always return our HTML page for 404 errors, and most
+              # pageviews are 404 errors because of the single-page app.
+              # This is effectively how long we keep the HTML page in
+              # edge caches.
+              # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HTTPStatusCodes.html
+              ErrorCachingMinTTL: ${self:custom.CloudfrontHTMLCachingSeconds}
+          # How CloudFront determines cache behavior:
+          #   https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html#ExpirationDownloadDist
+          # CloudFront guide to CacheBehavior:
+          #   https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-cachebehavior.html
+          # Note that this is primarily specifying how Cloudfront edges should
+          # cache files. For browser caching, we must still set Cache-Control headers
+          # on the origin server (S3).
+          CacheBehaviors:
+            # Do not cache HTML for a long time.
+            - PathPattern: '*.html'
+              # Short HTML caching for some spage speed gains and
+              # reduced request volume to S3 origin.
+              MinTTL: ${self:custom.CloudfrontHTMLCachingSeconds}
+              MaxTTL: ${self:custom.CloudfrontHTMLCachingSeconds}
+              AllowedMethods:
+                - HEAD
+                - GET
+                - OPTIONS
+              TargetOriginId: ${self:custom.webAppName}
+              ForwardedValues:
+                QueryString: false
+                Cookies:
+                  Forward: none
+              # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html
+              Compress: true
+              # Switch this to "redirect-to-https" after migrating to HTTPS only.
+              ViewerProtocolPolicy: allow-all
+            # Cache (non-HTML) static files for a long time.
+            - PathPattern: '*'
+              MinTTL: 31536000 # one year
+              MaxTTL: 63072000 # two years
+              AllowedMethods:
+                - HEAD
+                - GET
+                - OPTIONS
+              TargetOriginId: ${self:custom.webAppName}
+              ForwardedValues:
+                QueryString: false
+                Cookies:
+                  Forward: none
+              Compress: true
+              # Switch this to "redirect-to-https" after migrating to HTTPS only.
+              ViewerProtocolPolicy: allow-all
           DefaultCacheBehavior:
             AllowedMethods:
-              - DELETE
-              - GET
               - HEAD
+              - GET
               - OPTIONS
-              - PATCH
-              - POST
-              - PUT
-            # The origin id defined above
             TargetOriginId: ${self:custom.webAppName}
-            ##Defining if and how the QueryString and Cookies are forwarded to the origin, which in this case is S3
             ForwardedValues:
-              QueryString: 'false'
+              QueryString: false
               Cookies:
                 Forward: none
-            # The protocol that users can use to access the files in the origin. To allow HTTP use `allow-all`
-            ViewerProtocolPolicy: redirect-to-https
-          ## The certificate to use when viewers use HTTPS to request objects.
+            # The protocol that users can use to access the files in the origin.
+            # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-defaultcachebehavior.html#cfn-cloudfront-defaultcachebehavior-viewerprotocolpolicy
+            ViewerProtocolPolicy: allow-all
+          # The certificate to use when viewers use HTTPS to request objects.
+          # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distributionconfig-viewercertificate.html
           ViewerCertificate:
-            CloudFrontDefaultCertificate: 'true'
-          ## Uncomment the following section in case you want to enable logging for CloudFront requests
-          # Logging:
-          #   IncludeCookies: 'false'
-          #   Bucket: mylogs.s3.amazonaws.com
-          #   Prefix: myprefix
+            AcmCertificateArn: ${self:custom.SSLCertificateARN}
+            SslSupportMethod: sni-only
   
-  # In order to print out the hosted domain via `serverless info` we need to define the DomainName output for CloudFormation
+  # In order to print out the hosted domain via `serverless info`,
+  # we need to define the DomainName output for CloudFormation
   Outputs:
     WebAppCloudFrontDistributionOutput:
       Value: ${self:custom.s3Bucket}.s3.amazonaws.com

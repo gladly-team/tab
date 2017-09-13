@@ -60,8 +60,8 @@ module.exports = {
     // We don't currently advertise code splitting but Webpack supports it.
     filename: 'static/js/[name].[chunkhash:8].js',
     chunkFilename: 'static/js/[name].[chunkhash:8].js',
-    // We inferred the "public path" (such as / or /my-project) from homepage.
-    publicPath: publicPath
+    // Static files are served from a different URL.
+    publicPath: `${process.env.STATIC_FILES_ENDPOINT}/`
   },
   resolve: {
     // This allows you to set a fallback for where Webpack should look for modules.

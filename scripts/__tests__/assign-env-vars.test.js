@@ -107,8 +107,8 @@ describe('assign-env-vars script', () => {
       process.env[`${envStageName}_${envVarName}`] = 'abc'
     })
 
-    // Expects that S3_ENDPOINT is a required env var.
-    delete process.env.DEV_S3_ENDPOINT
+    // Expects that MEDIA_ENDPOINT is a required env var.
+    delete process.env.DEV_MEDIA_ENDPOINT
 
     expect(() => {
       assignEnvVars(envStageName)
@@ -118,8 +118,8 @@ describe('assign-env-vars script', () => {
   it('optionally does not fail if a required env var is not set', () => {
     const envStageName = 'DEV'
 
-    // Expects that S3_ENDPOINT is a required env var.
-    delete process.env.DEV_S3_ENDPOINT
+    // Expects that MEDIA_ENDPOINT is a required env var.
+    delete process.env.DEV_MEDIA_ENDPOINT
     assignEnvVars(envStageName, false)
   })
 
@@ -158,10 +158,10 @@ describe('assign-env-vars script', () => {
 
   it('does not set an undefined env variable value as "undefined" string', () => {
     const envStageName = 'DEV'
-    delete process.env.S3_ENDPOINT
-    delete process.env.DEV_S3_ENDPOINT
+    delete process.env.MEDIA_ENDPOINT
+    delete process.env.DEV_MEDIA_ENDPOINT
     assignEnvVars(envStageName, false)
-    expect(process.env.S3_ENDPOINT).not.toBeDefined()
+    expect(process.env.MEDIA_ENDPOINT).not.toBeDefined()
   })
 
   it('does not fail if all env vars are set', () => {

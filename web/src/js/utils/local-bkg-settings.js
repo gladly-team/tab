@@ -14,6 +14,7 @@ function getValue (value) {
   return value
 }
 
+// TODO: write tests.
 const localBkgStorageMgr = {}
 
 localBkgStorageMgr.getLocalBkgSettings = function () {
@@ -39,7 +40,7 @@ localBkgStorageMgr.setLocalBkgSettings = function (user) {
     localStorageMgr.setItem(localKeys.BACKGROUND_OPTION, user.backgroundOption)
     localStorageMgr.setItem(localKeys.CUSTOM_IMAGE, user.customImage)
     localStorageMgr.setItem(localKeys.BACKGROUND_COLOR, user.backgroundColor)
-    localStorageMgr.setItem(localKeys.BACKGROUND_IMAGE_URL, user.backgroundImage.url)
+    localStorageMgr.setItem(localKeys.BACKGROUND_IMAGE_URL, user.backgroundImage.imageURL)
   } catch (e) {
     console.log('Error while setting the local bkg settings.', e)
   }
@@ -52,7 +53,7 @@ localBkgStorageMgr.shouldUpdateLocalBkgSettings = function (user) {
     shouldUpdate = currentSettings.backgroundOption !== user.backgroundOption ||
              currentSettings.customImage !== user.customImage ||
              currentSettings.backgroundColor !== user.backgroundColor ||
-             currentSettings.backgroundImage.url !== user.backgroundImage.url
+             currentSettings.backgroundImage.imageURL !== user.backgroundImage.imageURL
   } catch (e) {
     console.log('Error while checking if should update local bkg settings', e)
   }

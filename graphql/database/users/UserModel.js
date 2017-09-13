@@ -14,7 +14,7 @@ import {
 } from '../../utils/authorization-helpers'
 import config from '../../config'
 
-const mediaRoot = config.S3_ENDPOINT
+const mediaRoot = config.MEDIA_ENDPOINT
 
 /*
  * @extends BaseModel

@@ -12,7 +12,7 @@ module.exports = {
   DYNAMODB_ENDPOINT: process.env.DYNAMODB_ENDPOINT,
   COGNITO_USERPOOLID: process.env.COGNITO_USERPOOLID,
   COGNITO_CLIENTID: process.env.COGNITO_CLIENTID,
-  S3_ENDPOINT: process.env.S3_ENDPOINT,
+  MEDIA_ENDPOINT: process.env.MEDIA_ENDPOINT,
   GRAPHQL_PORT: process.env.GRAPHQL_PORT,
   LOG_LEVEL: process.env.LOG_LEVEL || 'debug',
   LOGGER: process.env.LOGGER || 'console',

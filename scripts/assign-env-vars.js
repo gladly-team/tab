@@ -21,6 +21,8 @@ export const envVars = [
   { name: 'MOCK_DEV_AUTHENTICATION' },
   // Web app
   { name: 'PUBLIC_PATH' },
+  { name: 'STATIC_FILES_ENDPOINT' },
+  { name: 'CLOUDFRONT_DOMAIN_ALIAS' },
   { name: 'ADS_ENABLED' },
   { name: 'WEB_HOST', optional: true },
   { name: 'WEB_PORT', optional: true },
@@ -34,7 +36,7 @@ export const envVars = [
   // Endpoints
   { name: 'GRAPHQL_ENDPOINT' },
   { name: 'DYNAMODB_ENDPOINT' },
-  { name: 'S3_ENDPOINT' },
+  { name: 'MEDIA_ENDPOINT' },
   // Deployment
   { name: 'WEB_S3_BUCKET_NAME' },
   { name: 'MEDIA_S3_BUCKET_NAME' },

@@ -9,6 +9,7 @@ env:
   - CXX=g++-5
   - SLS_DEBUG=true
   - LOG_TEST_COVERAGE=true
+  - SSL_CERTIFICATE_ARN=arn:aws:acm:us-east-1:167811431063:certificate/fb405a2a-68c1-4fa3-a1d6-d10f3dd19e59
   ########## Test stage ##########
   - TEST_NODE_ENV=production
   - TEST_STAGE=test
@@ -22,7 +23,10 @@ env:
   - TEST_COGNITO_CLIENTID=u1vckhq1ba7oarrhu8ksvn9r7
   - TEST_MOCK_DEV_AUTHENTICATION=false
   # Web app
-  - TEST_PUBLIC_PATH=http://test-tab2017.gladly.io/
+  - TEST_PUBLIC_PATH=https://test-tab2017.gladly.io/
+  # - TEST_STATIC_FILES_ENDPOINT=https://d3792fnaedwf9j.cloudfront.net
+  - TEST_STATIC_FILES_ENDPOINT=//test-tab2017.gladly.io
+  - TEST_CLOUDFRONT_DOMAIN_ALIAS=test-tab2017.gladly.io
   - TEST_ADS_ENABLED=false
   # GraphQL
   - TEST_TABLE_NAME_APPENDIX="-test"
@@ -32,13 +36,13 @@ env:
   # Endpoints
   - TEST_GRAPHQL_ENDPOINT=https://lspir87lia.execute-api.us-west-2.amazonaws.com/test/graphql
   - TEST_DYNAMODB_ENDPOINT=dynamodb.us-west-2.amazonaws.com
-  - TEST_S3_ENDPOINT=https://s3-us-west-2.amazonaws.com/test-tab2017-media.gladly.io
+  - TEST_MEDIA_ENDPOINT=https://s3-us-west-2.amazonaws.com/test-tab2017-media.gladly.io
   # Deployment
   - TEST_WEB_S3_BUCKET_NAME=test-tab2017.gladly.io
   - TEST_MEDIA_S3_BUCKET_NAME=test-tab2017-media.gladly.io
   # Selenium
   - TEST_SELENIUM_DRIVER_TYPE=remote
-  - TEST_SELENIUM_HOST=http://test-tab2017.gladly.io
+  - TEST_SELENIUM_HOST=https://test-tab2017.gladly.io
   - TEST_BROWSERSTACK_USER=kevinjennison1
   # Secrets: AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY, BROWSERSTACK_KEY, SENTRY_PRIVATE_KEY
   - secure: GqAz4Hh4EqMwm6xi5EiEQgZFPiJG1mn1QNXB5gxDTiBD8vpXLszY0GVEZEj9/64gIXpSonSVpZIIgHCBSldd4cgI/A9y1hg0D/Oxx70neFqQQhhFDVgpckmOdhKQSTWZDn+N/lcfzJdPUzQ+re5UuCjb3UCTjyl5z1EwI4hMhGZitML9BuH2iEvT4Vf/cwd079jRF94qZYU35NFP0ySygSjxoiPTNEfMdFdtZMtd+0zucKC3ijtvqeLqbN+KJijmbkxEOaFz0xnlvjgSPLYd7omSPDXmN3G2KuTeOLcY6nBCUOhbX90MCQkv8VvpWrd3pHURT1Hcnb0aW7jZCGP2Tqopkoe4iIGuVzUTH8z8McRK5Oa3ku7ynovRo5kkxAsao4NuLbcC3frAeITTxn9jk4HiyiuX9KU5antL2pK01pGDpWk2sYW7z7ANxkkDLO1TDz5gE1gwVkO3Eaj8+WhP2/sj+u9qRZ8A6ZfyWC+rVjsWiMqWZRz0PvRBc7j4jQ8RVPzOfjA/MQ+Dm2p061atv0/1CeNdqNzo92P2Z2WB7x2CcURSDXy/fVHuZfXz1VWDlYd9mIjTZDD+20cUrlIIcDFoTgQfZsickybKgaDPH4NcLnoP2jZURWvIVd4qIV6DQUp8UU2jn1G9JML7hudRe7n1iA1XeO1MkH9qM3vEvk4=
@@ -58,7 +62,10 @@ env:
   - DEV_COGNITO_CLIENTID=32lj6balg8t2d1209sb50t1m8b
   - DEV_MOCK_DEV_AUTHENTICATION=false
   # Web app
-  - DEV_PUBLIC_PATH=http://dev-tab2017.gladly.io/
+  - DEV_PUBLIC_PATH=https://dev-tab2017.gladly.io/
+  # - DEV_STATIC_FILES_ENDPOINT=https://d2ienu53qrix0k.cloudfront.net
+  - DEV_STATIC_FILES_ENDPOINT=//dev-tab2017.gladly.io
+  - DEV_CLOUDFRONT_DOMAIN_ALIAS=dev-tab2017.gladly.io
   - DEV_ADS_ENABLED=true
   # GraphQL
   - DEV_TABLE_NAME_APPENDIX="-dev"
@@ -68,7 +75,7 @@ env:
   # Endpoints
   - DEV_GRAPHQL_ENDPOINT=https://53a9uos12e.execute-api.us-west-2.amazonaws.com/dev/graphql
   - DEV_DYNAMODB_ENDPOINT=dynamodb.us-west-2.amazonaws.com
-  - DEV_S3_ENDPOINT=https://s3-us-west-2.amazonaws.com/dev-tab2017-media.gladly.io
+  - DEV_MEDIA_ENDPOINT=https://s3-us-west-2.amazonaws.com/dev-tab2017-media.gladly.io
   # Deployment
   - DEV_WEB_S3_BUCKET_NAME=dev-tab2017.gladly.io
   - DEV_MEDIA_S3_BUCKET_NAME=dev-tab2017-media.gladly.io
@@ -89,7 +96,10 @@ env:
   - PROD_COGNITO_CLIENTID=7n2os99obf201gk6qi8nca6bp5
   - PROD_MOCK_DEV_AUTHENTICATION=false
   # Web app
-  - PROD_PUBLIC_PATH=http://prod-tab2017.gladly.io/
+  - PROD_PUBLIC_PATH=https://prod-tab2017.gladly.io/
+  # - PROD_STATIC_FILES_ENDPOINT=https://d2dsqma4win6dv.cloudfront.net
+  - PROD_STATIC_FILES_ENDPOINT=//prod-tab2017.gladly.io
+  - PROD_CLOUDFRONT_DOMAIN_ALIAS=prod-tab2017.gladly.io
   - PROD_ADS_ENABLED=true
   # GraphQL
   - PROD_TABLE_NAME_APPENDIX="-prod"
@@ -99,7 +109,7 @@ env:
   # Endpoints
   - PROD_GRAPHQL_ENDPOINT=https://qy89x5t2i9.execute-api.us-west-2.amazonaws.com/prod/graphql
   - PROD_DYNAMODB_ENDPOINT=dynamodb.us-west-2.amazonaws.com
-  - PROD_S3_ENDPOINT=https://s3-us-west-2.amazonaws.com/prod-tab2017-media.gladly.io
+  - PROD_MEDIA_ENDPOINT=https://s3-us-west-2.amazonaws.com/prod-tab2017-media.gladly.io
   # Deployment
   - PROD_WEB_S3_BUCKET_NAME=prod-tab2017.gladly.io
   - PROD_MEDIA_S3_BUCKET_NAME=prod-tab2017-media.gladly.io
@@ -167,9 +177,7 @@ deploy:
   # Prod stage deploy
   - provider: script
     script: yarn run ci:deploy prod
-    # TODO: master only after setup
     on:
-      all_branches: true
-      # branch: master
+      branch: master
     skip_cleanup: true
 cache: yarn
