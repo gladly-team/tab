@@ -243,7 +243,7 @@ const userInfo = {
       this._fetchInProgress = true
       fetchCurrentUser((fetchedUser) => {
         self._currUser = fetchedUser
-        this._fetchInProgress = false
+        self._fetchInProgress = false
         self._callAllCallbacks()
       })
     }
@@ -291,6 +291,7 @@ function logoutUser (userLogoutCallback) {
 
     // Clear the user from memory.
     userInfo.clearUser()
+    userIdToken = null
 
     userLogoutCallback(true)
   } else {
