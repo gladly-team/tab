@@ -148,6 +148,7 @@ function resendConfirmation (username, onSuccess, onFailure) {
   })
 }
 
+// Keep the user ID token in memory to speed up requests.
 var userIdToken = null
 
 const getUserIdToken = () => {
@@ -172,6 +173,9 @@ const getUserIdToken = () => {
     }
   })
 }
+
+// Prefetch the user ID token to speed up future requests.
+getUserIdToken()
 
 function getCurrentUserForDev (getUserSub) {
   getUserSub({
