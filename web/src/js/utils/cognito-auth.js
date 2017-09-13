@@ -10,6 +10,9 @@ import {
   CognitoUserAttribute
 } from 'amazon-cognito-identity-js'
 
+// TODO: clean up this file. Use promises, add tests,
+// possibly have a non-Cognito-specific interface.
+
 const appConfig = {
   region: process.env.COGNITO_REGION,
   IdentityPoolId: process.env.COGNITO_IDENTITYPOOLID,
@@ -183,14 +186,8 @@ function getCurrentUserForDev (getUserSub) {
   })
 }
 
-function getCurrentUser (callback) {
-  // Mock the user authentication on development.
-  // TODO: check for `IS_DEVELOPMENT` once we have a staging auth service
-  if (MOCK_DEV_AUTHENTICATION) {
-    getCurrentUserForDev(callback)
-    return
-  }
-
+// Call Cognito to get the user.
+function fetchCurrentUser (callback) {
   var cognitoUser = userPool.getCurrentUser()
 
   if (cognitoUser != null) {
@@ -200,7 +197,7 @@ function getCurrentUser (callback) {
         return
       }
 
-        // NOTE: getSession must be called to authenticate user before calling getUserAttributes
+      // NOTE: getSession must be called to authenticate user before calling getUserAttributes
       cognitoUser.getUserAttributes(function (err, attributes) {
         if (err) {
           callback(null)
@@ -220,10 +217,81 @@ function getCurrentUser (callback) {
   }
 }
 
+// Keep the user in memory and don't duplicate
+// requests to get the user.
+// We may eventually want to have something like
+// Redux handle this for us.
+const userInfo = {
+  _currUser: null,
+  _fetchInProgress: false,
+  _callbacks: [],
+
+  getUser (callback) {
+    // Return the user if we already fetched it.
+    if (this._currUser) {
+      callback(this._currUser)
+      return
+    }
+
+    const self = this
+
+    // Don't fetch again while a user fetch is already
+    // in progress. Instead, save the callback to call
+    // once the user is fetched.
+    this._callbacks.push(callback)
+    if (!this._fetchInProgress) {
+      this._fetchInProgress = true
+      fetchCurrentUser((fetchedUser) => {
+        self._currUser = fetchedUser
+        this._fetchInProgress = false
+        self._callAllCallbacks()
+      })
+    }
+  },
+
+  clearUser () {
+    this._currUser = null
+  },
+
+  _callAllCallbacks  () {
+    const user = this._currUser
+    this._callbacks.forEach((callback) => {
+      if (typeof callback === 'function') {
+        callback(user)
+      }
+    })
+
+    // Clear callbacks.
+    this._callbacks = []
+  }
+}
+
+// Return the current user. Get the user from memory if it exists.
+// If the user does not exist in memory, fetch the user from Cognito.
+// However, if a fetch is currently in progress, wait for it to complete
+// so we don't duplicate requests.
+function getCurrentUser (callback) {
+  // Mock the user authentication on development.
+  // TODO: check for `IS_DEVELOPMENT` once we have a staging auth service
+  if (MOCK_DEV_AUTHENTICATION) {
+    getCurrentUserForDev(callback)
+    return
+  }
+
+  userInfo.getUser(callback)
+}
+
+// Prefetch the current user to speed up page load.
+getCurrentUser()
+
 function logoutUser (userLogoutCallback) {
   var cognitoUser = userPool.getCurrentUser()
   if (cognitoUser != null) {
     cognitoUser.signOut()
+
+    // Clear the user from memory.
+    userInfo.clearUser()
+
     userLogoutCallback(true)
   } else {
     userLogoutCallback(false)
