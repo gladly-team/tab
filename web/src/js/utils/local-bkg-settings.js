@@ -14,7 +14,6 @@ function getValue (value) {
   return value
 }
 
-// TODO: write tests.
 const localBkgStorageMgr = {}
 
 localBkgStorageMgr.getLocalBkgSettings = function () {
