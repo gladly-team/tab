@@ -80,7 +80,7 @@ class MoneyRaised extends React.Component {
       color: 'white',
       fontSize: '1.7em',
       fontWeight: 'normal',
-      fontFamily: "'Helvetica Neue', Roboto, 'Segoe UI', Calibri, sans-serif"
+      fontFamily: "'Helvetica Neue', Calibri, sans-serif"
     }
 
     const moneyRaised = this.state.amountDonated
