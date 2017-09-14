@@ -213,6 +213,10 @@ module.exports = {
         return context && context.indexOf('node_modules') >= 0
       }
     }),
+    // Helps understand what's getting included in our final bundle.
+    // With this enabled, build the web app and view report.html in
+    // the build directory.
+    // https://github.com/th0r/webpack-bundle-analyzer
     new BundleAnalyzerPlugin({
       // set to 'static' for analysis or 'disabled' for none
       analyzerMode: 'disabled'
