@@ -18,7 +18,7 @@ class UserDisplay extends React.Component {
       fontSize: '1em',
       fontWeight: 'bold',
       margin: 0,
-      fontFamily: "'Helvetica Neue', Roboto, 'Segoe UI', Calibri, sans-serif",
+      fontFamily: "'Helvetica Neue', Calibri, sans-serif",
       padding: 12,
       cursor: 'pointer'
     }

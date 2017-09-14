@@ -26,7 +26,7 @@ const dividerColor = '#BDBDBD'
 
 export default {
   spacing: spacing,
-  fontFamily: '"Helvetica Neue", "Calibri Light", Roboto, sans-serif',
+  fontFamily: '"Helvetica Neue", "Calibri Light", sans-serif',
   palette: {
     primary1Color: primaryColor,
     primary2Color: primaryColorDark,
