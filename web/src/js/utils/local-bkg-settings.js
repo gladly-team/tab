@@ -14,7 +14,6 @@ function getValue (value) {
   return value
 }
 
-// TODO: write tests.
 const localBkgStorageMgr = {}
 
 localBkgStorageMgr.getLocalBkgSettings = function () {
@@ -25,7 +24,7 @@ localBkgStorageMgr.getLocalBkgSettings = function () {
       customImage: getValue(localStorageMgr.getItem(localKeys.CUSTOM_IMAGE)),
       backgroundColor: getValue(localStorageMgr.getItem(localKeys.BACKGROUND_COLOR)),
       backgroundImage: {
-        url: getValue(localStorageMgr.getItem(localKeys.BACKGROUND_IMAGE_URL))
+        imageURL: getValue(localStorageMgr.getItem(localKeys.BACKGROUND_IMAGE_URL))
       }
     }
   } catch (e) {
