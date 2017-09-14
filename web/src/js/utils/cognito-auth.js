@@ -282,7 +282,7 @@ function getCurrentUser (callback) {
 }
 
 // Prefetch the current user to speed up page load.
-getCurrentUser()
+getCurrentUser(() => {})
 
 function logoutUser (userLogoutCallback) {
   var cognitoUser = userPool.getCurrentUser()
