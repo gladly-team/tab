@@ -119,8 +119,13 @@ resources:
               MinTTL: 0
               MaxTTL: 0
               AllowedMethods:
+                - HEAD
+                - DELETE
                 - POST
+                - GET
                 - OPTIONS
+                - PUT
+                - PATCH
               TargetOriginId: ${self:custom.graphQLAppName}
               ForwardedValues:
                 Headers:
