@@ -21,6 +21,7 @@ export const envVars = [
   { name: 'MOCK_DEV_AUTHENTICATION' },
   // Web app
   { name: 'PUBLIC_PATH' },
+  { name: 'GRAPHQL_ENDPOINT' },
   { name: 'STATIC_FILES_ENDPOINT' },
   { name: 'CLOUDFRONT_DOMAIN_ALIAS' },
   { name: 'ADS_ENABLED' },
@@ -34,7 +35,7 @@ export const envVars = [
   { name: 'SENTRY_PROJECT_ID' },
   { name: 'SENTRY_PRIVATE_KEY' },
   // Endpoints
-  { name: 'GRAPHQL_ENDPOINT' },
+  { name: 'GRAPHQL_PROXY_ENDPOINT' },
   { name: 'DYNAMODB_ENDPOINT' },
   { name: 'MEDIA_ENDPOINT' },
   // Deployment
