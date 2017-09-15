@@ -24,6 +24,7 @@ env:
   - TEST_MOCK_DEV_AUTHENTICATION=false
   # Web app
   - TEST_PUBLIC_PATH=https://test-tab2017.gladly.io/
+  - TEST_GRAPHQL_ENDPOINT=//test-tab2017.gladly.io/graphql/
   # - TEST_STATIC_FILES_ENDPOINT=https://d3792fnaedwf9j.cloudfront.net
   - TEST_STATIC_FILES_ENDPOINT=//test-tab2017.gladly.io
   - TEST_CLOUDFRONT_DOMAIN_ALIAS=test-tab2017.gladly.io
@@ -34,7 +35,7 @@ env:
   - TEST_SENTRY_PUBLIC_KEY=55d60901ba254432814cd9015d100959
   - TEST_SENTRY_PROJECT_ID=184604
   # Endpoints
-  - TEST_GRAPHQL_ENDPOINT=https://lspir87lia.execute-api.us-west-2.amazonaws.com/test/graphql
+  - TEST_GRAPHQL_PROXY_ENDPOINT=https://lspir87lia.execute-api.us-west-2.amazonaws.com/test/graphql
   - TEST_DYNAMODB_ENDPOINT=dynamodb.us-west-2.amazonaws.com
   - TEST_MEDIA_ENDPOINT=https://s3-us-west-2.amazonaws.com/test-tab2017-media.gladly.io
   # Deployment
@@ -63,6 +64,7 @@ env:
   - DEV_MOCK_DEV_AUTHENTICATION=false
   # Web app
   - DEV_PUBLIC_PATH=https://dev-tab2017.gladly.io/
+  - DEV_GRAPHQL_ENDPOINT=//dev-tab2017.gladly.io/graphql/
   # - DEV_STATIC_FILES_ENDPOINT=https://d2ienu53qrix0k.cloudfront.net
   - DEV_STATIC_FILES_ENDPOINT=//dev-tab2017.gladly.io
   - DEV_CLOUDFRONT_DOMAIN_ALIAS=dev-tab2017.gladly.io
@@ -73,7 +75,7 @@ env:
   - DEV_SENTRY_PUBLIC_KEY=55d60901ba254432814cd9015d100959
   - DEV_SENTRY_PROJECT_ID=184604
   # Endpoints
-  - DEV_GRAPHQL_ENDPOINT=https://53a9uos12e.execute-api.us-west-2.amazonaws.com/dev/graphql
+  - DEV_GRAPHQL_PROXY_ENDPOINT=https://53a9uos12e.execute-api.us-west-2.amazonaws.com/dev/graphql
   - DEV_DYNAMODB_ENDPOINT=dynamodb.us-west-2.amazonaws.com
   - DEV_MEDIA_ENDPOINT=https://s3-us-west-2.amazonaws.com/dev-tab2017-media.gladly.io
   # Deployment
@@ -97,6 +99,7 @@ env:
   - PROD_MOCK_DEV_AUTHENTICATION=false
   # Web app
   - PROD_PUBLIC_PATH=https://prod-tab2017.gladly.io/
+  - PROD_GRAPHQL_ENDPOINT=//prod-tab2017.gladly.io/graphql/
   # - PROD_STATIC_FILES_ENDPOINT=https://d2dsqma4win6dv.cloudfront.net
   - PROD_STATIC_FILES_ENDPOINT=//prod-tab2017.gladly.io
   - PROD_CLOUDFRONT_DOMAIN_ALIAS=prod-tab2017.gladly.io
@@ -107,7 +110,7 @@ env:
   - PROD_SENTRY_PUBLIC_KEY=55d60901ba254432814cd9015d100959
   - PROD_SENTRY_PROJECT_ID=184604
   # Endpoints
-  - PROD_GRAPHQL_ENDPOINT=https://qy89x5t2i9.execute-api.us-west-2.amazonaws.com/prod/graphql
+  - PROD_GRAPHQL_PROXY_ENDPOINT=https://qy89x5t2i9.execute-api.us-west-2.amazonaws.com/prod/graphql
   - PROD_DYNAMODB_ENDPOINT=dynamodb.us-west-2.amazonaws.com
   - PROD_MEDIA_ENDPOINT=https://s3-us-west-2.amazonaws.com/prod-tab2017-media.gladly.io
   # Deployment

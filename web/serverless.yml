@@ -12,7 +12,9 @@ provider:
 custom:
   stageDefault: dev
   s3Bucket: ${env:WEB_S3_BUCKET_NAME}
+  graphQLEndpoint: ${env:GRAPHQL_PROXY_ENDPOINT}
   webAppName: Tab2017
+  graphQLAppName: TabGraphQL
   cloudfrontDomainAlias: ${env:CLOUDFRONT_DOMAIN_ALIAS}
   SSLCertificateARN: ${env:SSL_CERTIFICATE_ARN}
   # How long Cloudfront should cache HTML at edges.
@@ -61,6 +63,13 @@ resources:
                 # website endpoints:
                 # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesOriginProtocolPolicy 
                 OriginProtocolPolicy: http-only
+          Origins:
+            - DomainName: ${self:custom.graphQLEndpoint}
+              Id: ${self:custom.graphQLAppName}
+              CustomOriginConfig:
+                HTTPPort: 80
+                HTTPSPort: 443
+                OriginProtocolPolicy: match-viewer
           Enabled: true
           DefaultRootObject: index.html
           Aliases:
@@ -102,6 +111,20 @@ resources:
               # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html
               Compress: true
               # Switch this to "redirect-to-https" after migrating to HTTPS only.
+              ViewerProtocolPolicy: allow-all
+            - PathPattern: 'graphql/*'
+              MinTTL: 0
+              MaxTTL: 0
+              AllowedMethods:
+                - POST
+                - OPTIONS
+              TargetOriginId: ${self:custom.graphQLAppName}
+              ForwardedValues:
+                Headers:
+                  - '*'
+                QueryString: false
+                Cookies:
+                  Forward: none
               ViewerProtocolPolicy: allow-all
             # Cache (non-HTML) static files for a long time.
             - PathPattern: '*'
