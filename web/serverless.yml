@@ -53,6 +53,7 @@ resources:
         # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distributionconfig.html
         DistributionConfig:
           Origins:
+            # Web S3 bucket.
             - DomainName: ${self:custom.s3Bucket}.s3.amazonaws.com
               # An identifier for the origin. This must be unique within the distribution.
               Id: ${self:custom.webAppName}
@@ -63,7 +64,7 @@ resources:
                 # website endpoints:
                 # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesOriginProtocolPolicy 
                 OriginProtocolPolicy: http-only
-          Origins:
+            # GraphQL service.
             - DomainName: ${self:custom.graphQLEndpoint}
               Id: ${self:custom.graphQLAppName}
               CustomOriginConfig:
