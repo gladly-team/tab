@@ -12,7 +12,8 @@ provider:
 custom:
   stageDefault: dev
   s3Bucket: ${env:WEB_S3_BUCKET_NAME}
-  graphQLEndpoint: ${env:GRAPHQL_PROXY_ENDPOINT}
+  graphQLProxyDomain: ${env:GRAPHQL_PROXY_DOMAIN}
+  graphQLProxyPath: ${env:GRAPHQL_PROXY_Path}
   webAppName: Tab2017
   graphQLAppName: TabGraphQL
   cloudfrontDomainAlias: ${env:CLOUDFRONT_DOMAIN_ALIAS}
@@ -65,7 +66,8 @@ resources:
                 # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesOriginProtocolPolicy 
                 OriginProtocolPolicy: http-only
             # GraphQL service.
-            - DomainName: ${self:custom.graphQLEndpoint}
+            - DomainName: ${self:custom.graphQLProxyDomain}
+              OriginPath: ${self:custom.graphQLProxyPath}
               Id: ${self:custom.graphQLAppName}
               CustomOriginConfig:
                 HTTPPort: 80

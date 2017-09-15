@@ -35,7 +35,8 @@ env:
   - TEST_SENTRY_PUBLIC_KEY=55d60901ba254432814cd9015d100959
   - TEST_SENTRY_PROJECT_ID=184604
   # Endpoints
-  - TEST_GRAPHQL_PROXY_ENDPOINT=https://lspir87lia.execute-api.us-west-2.amazonaws.com/test/graphql
+  - TEST_GRAPHQL_PROXY_DOMAIN=lspir87lia.execute-api.us-west-2.amazonaws.com
+  - TEST_GRAPHQL_PROXY_PATH=/test/graphql
   - TEST_DYNAMODB_ENDPOINT=dynamodb.us-west-2.amazonaws.com
   - TEST_MEDIA_ENDPOINT=https://s3-us-west-2.amazonaws.com/test-tab2017-media.gladly.io
   # Deployment
@@ -75,7 +76,8 @@ env:
   - DEV_SENTRY_PUBLIC_KEY=55d60901ba254432814cd9015d100959
   - DEV_SENTRY_PROJECT_ID=184604
   # Endpoints
-  - DEV_GRAPHQL_PROXY_ENDPOINT=https://53a9uos12e.execute-api.us-west-2.amazonaws.com/dev/graphql
+  - DEV_GRAPHQL_PROXY_DOMAIN=53a9uos12e.execute-api.us-west-2.amazonaws.com
+  - DEV_GRAPHQL_PROXY_PATH=/dev/graphql
   - DEV_DYNAMODB_ENDPOINT=dynamodb.us-west-2.amazonaws.com
   - DEV_MEDIA_ENDPOINT=https://s3-us-west-2.amazonaws.com/dev-tab2017-media.gladly.io
   # Deployment
@@ -110,7 +112,8 @@ env:
   - PROD_SENTRY_PUBLIC_KEY=55d60901ba254432814cd9015d100959
   - PROD_SENTRY_PROJECT_ID=184604
   # Endpoints
-  - PROD_GRAPHQL_PROXY_ENDPOINT=https://qy89x5t2i9.execute-api.us-west-2.amazonaws.com/prod/graphql
+  - PROD_GRAPHQL_PROXY_DOMAIN=qy89x5t2i9.execute-api.us-west-2.amazonaws.com
+  - PROD_GRAPHQL_PROXY_PATH=/prod/graphql
   - PROD_DYNAMODB_ENDPOINT=dynamodb.us-west-2.amazonaws.com
   - PROD_MEDIA_ENDPOINT=https://s3-us-west-2.amazonaws.com/prod-tab2017-media.gladly.io
   # Deployment

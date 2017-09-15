@@ -35,7 +35,8 @@ export const envVars = [
   { name: 'SENTRY_PROJECT_ID' },
   { name: 'SENTRY_PRIVATE_KEY' },
   // Endpoints
-  { name: 'GRAPHQL_PROXY_ENDPOINT' },
+  { name: 'GRAPHQL_PROXY_DOMAIN' },
+  { name: 'GRAPHQL_PROXY_PATH' },
   { name: 'DYNAMODB_ENDPOINT' },
   { name: 'MEDIA_ENDPOINT' },
   // Deployment
