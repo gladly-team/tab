@@ -247,7 +247,15 @@ function runDevServer (host, port, protocol) {
     },
     // Enable HTTPS if the HTTPS environment variable is set to 'true'
     https: protocol === 'https',
-    host: host
+    host: host,
+    // https://webpack.github.io/docs/webpack-dev-server.html#proxy
+    proxy: {
+      '/graphql': {
+        target: process.env.GRAPHQL_ENDPOINT,
+        secure: false,
+        pathRewrite: {'^/graphql': ''}
+      }
+    }
   })
 
   // Our custom middleware proxies requests to /index.html or a remote API.

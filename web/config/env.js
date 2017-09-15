@@ -7,6 +7,7 @@ var includes = require('lodash/includes')
 var envVars = [
   'WEB_HOST',
   'WEB_PORT',
+  'GRAPHQL_PROXY',
   'GRAPHQL_ENDPOINT',
   'COGNITO_REGION',
   'COGNITO_IDENTITYPOOLID',
