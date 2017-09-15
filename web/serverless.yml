@@ -13,7 +13,7 @@ custom:
   stageDefault: dev
   s3Bucket: ${env:WEB_S3_BUCKET_NAME}
   graphQLProxyDomain: ${env:GRAPHQL_PROXY_DOMAIN}
-  graphQLProxyPath: ${env:GRAPHQL_PROXY_Path}
+  graphQLProxyPath: ${env:GRAPHQL_PROXY_PATH}
   webAppName: Tab2017
   graphQLAppName: TabGraphQL
   cloudfrontDomainAlias: ${env:CLOUDFRONT_DOMAIN_ALIAS}
