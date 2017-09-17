@@ -136,7 +136,6 @@ resources:
                   - Content-Type
                   - Content-Length
                   - Authorization
-                  - x-amz-date
                   - Date
                 QueryString: false
                 Cookies:
