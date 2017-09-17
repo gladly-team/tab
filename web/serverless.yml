@@ -129,14 +129,19 @@ resources:
                 - PATCH
               TargetOriginId: ${self:custom.graphQLAppName}
               ForwardedValues:
+                # Cannot use '*', as that sends the Host header:
+                # https://stackoverflow.com/a/32825414 
                 Headers:
                   - Accept
                   - Content-Type
+                  - Content-Length
                   - Authorization
+                  - x-amz-date
+                  - Date
                 QueryString: false
                 Cookies:
                   Forward: none
-              ViewerProtocolPolicy: redirect-to-https
+              ViewerProtocolPolicy: allow-all
             # Cache (non-HTML) static files for a long time.
             - PathPattern: '*'
               MinTTL: 31536000 # one year
