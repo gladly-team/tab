@@ -2,7 +2,11 @@
 import fetch from 'node-fetch'
 import logger from '../../utils/logger'
 
-const graphQLEndpoint = process.env.GRAPHQL_ENDPOINT || 'http://localhost:8080'
+const graphQLEndpoint = (
+  process.env.GRAPHQL_ENDPOINT
+  ? `https://${process.env.GRAPHQL_ENDPOINT}`
+  : 'localhost:8080'
+)
 
 function fetchQuery (graphQLQueryStr, variablesObj, userIdToken) {
   // Add Authorization header if user has a token.
