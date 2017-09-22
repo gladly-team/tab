@@ -132,11 +132,7 @@ resources:
                 # Cannot use '*', as that sends the Host header:
                 # https://stackoverflow.com/a/32825414 
                 Headers:
-                  - Accept
-                  - Content-Type
-                  - Content-Length
                   - Authorization
-                  - Date
                 QueryString: false
                 Cookies:
                   Forward: none
