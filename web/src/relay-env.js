@@ -26,7 +26,7 @@ function fetchQuery (
       headers['Authorization'] = userIdToken
     }
 
-    return fetch(process.env.GRAPHQL_ENDPOINT, {
+    return fetch(`//${process.env.GRAPHQL_ENDPOINT}`, {
       method: 'POST',
       headers: headers,
       body: JSON.stringify({

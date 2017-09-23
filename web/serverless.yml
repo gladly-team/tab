@@ -12,7 +12,10 @@ provider:
 custom:
   stageDefault: dev
   s3Bucket: ${env:WEB_S3_BUCKET_NAME}
+  graphQLProxyDomain: ${env:GRAPHQL_PROXY_DOMAIN}
+  graphQLProxyPath: ${env:GRAPHQL_PROXY_PATH}
   webAppName: Tab2017
+  graphQLAppName: TabGraphQL
   cloudfrontDomainAlias: ${env:CLOUDFRONT_DOMAIN_ALIAS}
   SSLCertificateARN: ${env:SSL_CERTIFICATE_ARN}
   # How long Cloudfront should cache HTML at edges.
@@ -51,6 +54,7 @@ resources:
         # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distributionconfig.html
         DistributionConfig:
           Origins:
+            # Web S3 bucket.
             - DomainName: ${self:custom.s3Bucket}.s3.amazonaws.com
               # An identifier for the origin. This must be unique within the distribution.
               Id: ${self:custom.webAppName}
@@ -61,6 +65,14 @@ resources:
                 # website endpoints:
                 # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesOriginProtocolPolicy 
                 OriginProtocolPolicy: http-only
+            # GraphQL service.
+            - DomainName: ${self:custom.graphQLProxyDomain}
+              OriginPath: ${self:custom.graphQLProxyPath}
+              Id: ${self:custom.graphQLAppName}
+              CustomOriginConfig:
+                HTTPPort: 80
+                HTTPSPort: 443
+                OriginProtocolPolicy: https-only
           Enabled: true
           DefaultRootObject: index.html
           Aliases:
@@ -102,6 +114,28 @@ resources:
               # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html
               Compress: true
               # Switch this to "redirect-to-https" after migrating to HTTPS only.
+              ViewerProtocolPolicy: allow-all
+            - PathPattern: 'graphql*'
+              MinTTL: 0
+              MaxTTL: 0
+              DefaultTTL: 0
+              AllowedMethods:
+                - HEAD
+                - DELETE
+                - POST
+                - GET
+                - OPTIONS
+                - PUT
+                - PATCH
+              TargetOriginId: ${self:custom.graphQLAppName}
+              ForwardedValues:
+                # Cannot use '*', as that sends the Host header:
+                # https://stackoverflow.com/a/32825414 
+                Headers:
+                  - Authorization
+                QueryString: false
+                Cookies:
+                  Forward: none
               ViewerProtocolPolicy: allow-all
             # Cache (non-HTML) static files for a long time.
             - PathPattern: '*'
