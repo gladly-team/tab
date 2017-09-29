@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/href-no-hash */
 import React from 'react'
 import PropTypes from 'prop-types'
-import VcUser from '../User/VcUserView'
+import VcUser from '../User/VcUserContainer'
 import MoneyRaised from '../MoneyRaised/MoneyRaisedContainer'
 import UserBackgroundImage from '../User/UserBackgroundImageContainer'
 import WidgetsContainer from '../Widget/WidgetsContainer'
@@ -106,7 +106,7 @@ class Dashboard extends React.Component {
             <div style={topRightItems.main}>
               <div style={topRightItems.leftContainer}>
                 <MoneyRaised app={app} />
-                <VcUser />
+                <VcUser user={user} />
               </div>
               <div style={topRightItems.rightContainer}>
                 <IconButton
