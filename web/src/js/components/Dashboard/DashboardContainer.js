@@ -6,6 +6,11 @@ import {
 import Dashboard from './DashboardComponent'
 
 export default createFragmentContainer(Dashboard, {
+  app: graphql`
+    fragment DashboardContainer_app on App {
+      ...MoneyRaisedContainer_app
+    }
+  `,
   user: graphql`
     fragment DashboardContainer_user on User {
       id

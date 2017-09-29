@@ -19,6 +19,9 @@ class DashboardView extends React.Component {
           environment={environment}
           query={graphql`
             query DashboardViewQuery($userId: String!) {
+              app {
+                ...DashboardContainer_app
+              }
               user(userId: $userId) {
                 ...DashboardContainer_user
               }
@@ -33,7 +36,7 @@ class DashboardView extends React.Component {
             // TODO: render component before data returns.
             if (props) {
               return (
-                <DashboardContainer user={props.user} />
+                <DashboardContainer app={props.app} user={props.user} />
               )
             } else {
               return null

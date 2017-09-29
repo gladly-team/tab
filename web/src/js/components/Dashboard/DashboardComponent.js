@@ -2,7 +2,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import VcUser from '../User/VcUserView'
-import MoneyRaised from '../MoneyRaised/MoneyRaisedView'
+import MoneyRaised from '../MoneyRaised/MoneyRaisedContainer'
 import UserBackgroundImage from '../User/UserBackgroundImageView'
 import WidgetsContainer from '../Widget/WidgetsContainer'
 import InviteFriend from '../InviteFriend/InviteFriendView'
@@ -62,7 +62,7 @@ class Dashboard extends React.Component {
   }
 
   render () {
-    const { user } = this.props
+    const { app, user } = this.props
 
     const content = {
       position: 'absolute',
@@ -105,7 +105,7 @@ class Dashboard extends React.Component {
           <div style={content}>
             <div style={topRightItems.main}>
               <div style={topRightItems.leftContainer}>
-                <MoneyRaised />
+                <MoneyRaised app={app} />
                 <VcUser />
               </div>
               <div style={topRightItems.rightContainer}>
@@ -166,6 +166,7 @@ class Dashboard extends React.Component {
 }
 
 Dashboard.propTypes = {
+  app: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired
 }
 
