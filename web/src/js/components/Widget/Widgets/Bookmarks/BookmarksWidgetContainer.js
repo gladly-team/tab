@@ -13,7 +13,6 @@ export default createFragmentContainer(BookmarksWidget, {
       enabled
       visible
       data
-      icon
       type
     }
   `,

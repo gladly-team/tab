@@ -21,6 +21,8 @@ class BookmarksWidget extends React.Component {
 
   componentDidMount () {
     const { widget } = this.props
+
+    // TODO: have the server send obj, not string.
     const data = JSON.parse(widget.data)
     const bookmarks = data.bookmarks || []
     this.setState({
@@ -144,9 +146,17 @@ class BookmarksWidget extends React.Component {
 }
 
 BookmarksWidget.propTypes = {
-  widget: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired,
-  widgetVisibilityChanged: PropTypes.func.isRequired,
+  widget: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    enabled: PropTypes.bool.isRequired,
+    visible: PropTypes.bool.isRequired,
+    data: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired
+  }).isRequired,
+  user: PropTypes.shape({
+    id: PropTypes.string.isRequired
+  }).isRequired,
   showError: PropTypes.func.isRequired
 }
 

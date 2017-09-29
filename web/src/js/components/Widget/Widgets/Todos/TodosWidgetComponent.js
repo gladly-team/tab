@@ -199,9 +199,17 @@ class TodosWidget extends React.Component {
 }
 
 TodosWidget.propTypes = {
-  widget: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired,
-  widgetVisibilityChanged: PropTypes.func.isRequired,
+  widget: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    enabled: PropTypes.bool.isRequired,
+    visible: PropTypes.bool.isRequired,
+    data: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired
+  }).isRequired,
+  user: PropTypes.shape({
+    id: PropTypes.string.isRequired
+  }).isRequired,
   showError: PropTypes.func.isRequired
 }
 

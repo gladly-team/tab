@@ -14,7 +14,6 @@ export default createFragmentContainer(SearchWidget, {
       data
       config
       settings
-      icon
       type
     }
   `,

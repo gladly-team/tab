@@ -13,7 +13,6 @@ export default createFragmentContainer(TodosWidget, {
       enabled
       visible
       data
-      icon
       type
     }
   `,
