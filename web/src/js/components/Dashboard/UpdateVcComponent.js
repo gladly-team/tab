@@ -16,7 +16,9 @@ class UpdateVcComponent extends React.Component {
 }
 
 UpdateVcComponent.propTypes = {
-  user: PropTypes.object.isRequired
+  user: PropTypes.shape({
+    id: PropTypes.string.isRequired
+  }).isRequired
 }
 
 export default UpdateVcComponent

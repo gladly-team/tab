@@ -27,11 +27,10 @@ class VcUser extends Component {
 }
 
 VcUser.propTypes = {
-  user: PropTypes.object.isRequired
-}
-
-VcUser.defaultProps = {
-
+  user: PropTypes.shape({
+    vcCurrent: PropTypes.number.isRequired,
+    level: PropTypes.number.isRequired
+  }).isRequired
 }
 
 export default VcUser

@@ -103,7 +103,10 @@ class MoneyRaised extends React.Component {
 }
 
 MoneyRaised.propTypes = {
-  app: PropTypes.object.isRequired
+  app: PropTypes.shape({
+    moneyRaised: PropTypes.number.isRequired,
+    dollarsPerDayRate: PropTypes.number.isRequired
+  }).isRequired
 }
 
 export default MoneyRaised

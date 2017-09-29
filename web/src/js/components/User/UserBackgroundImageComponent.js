@@ -1,14 +1,20 @@
 /* eslint-disable jsx-a11y/href-no-hash */
 import React from 'react'
 import PropTypes from 'prop-types'
-import localBkgStorageMgr from 'utils/local-bkg-settings'
+// import localBkgStorageMgr from 'utils/local-bkg-settings'
 
 class UserBackgroundImage extends React.Component {
   constructor (props) {
     super(props)
+
     this.state = {
-      user: localBkgStorageMgr.getLocalBkgSettings()
+      user: this.props.user
     }
+
+    // FIXME
+    // this.state = {
+    //   user: localBkgStorageMgr.getLocalBkgSettings()
+    // }
   }
 
   componentWillReceiveProps (nextProps) {
@@ -18,11 +24,12 @@ class UserBackgroundImage extends React.Component {
       })
     }
 
-    if (nextProps.user) {
-      if (localBkgStorageMgr.shouldUpdateLocalBkgSettings(nextProps.user)) {
-        localBkgStorageMgr.setLocalBkgSettings(nextProps.user)
-      }
-    }
+    // FIXME
+    // if (nextProps.user) {
+    //   if (localBkgStorageMgr.shouldUpdateLocalBkgSettings(nextProps.user)) {
+    //     localBkgStorageMgr.setLocalBkgSettings(nextProps.user)
+    //   }
+    // }
   }
 
   render () {
@@ -68,7 +75,14 @@ class UserBackgroundImage extends React.Component {
 }
 
 UserBackgroundImage.propTypes = {
-  user: PropTypes.object.isRequired
+  user: PropTypes.shape({
+    backgroundOption: PropTypes.string.isRequired,
+    customImage: PropTypes.string,
+    backgroundColor: PropTypes.string,
+    backgroundImage: PropTypes.shape({
+      imageURL: PropTypes.string.isRequired
+    })
+  }).isRequired
 }
 
 export default UserBackgroundImage
