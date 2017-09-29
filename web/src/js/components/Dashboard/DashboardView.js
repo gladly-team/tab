@@ -8,8 +8,6 @@ import AuthUserComponent from 'general/AuthUserComponent'
 import ErrorMessage from 'general/ErrorMessage'
 
 import DashboardContainer from './DashboardContainer'
-// import Dashboard from './DashboardComponent'
-// import WidgetsContainer from '../Widget/WidgetsContainer'
 
 class DashboardView extends React.Component {
   render () {
