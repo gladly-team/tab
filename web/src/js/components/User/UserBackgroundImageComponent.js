@@ -68,7 +68,7 @@ class UserBackgroundImage extends React.Component {
 }
 
 UserBackgroundImage.propTypes = {
-  user: PropTypes.object
+  user: PropTypes.object.isRequired
 }
 
 export default UserBackgroundImage

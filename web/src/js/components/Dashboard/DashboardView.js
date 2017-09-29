@@ -35,6 +35,7 @@ class DashboardView extends React.Component {
             }
             // TODO: render component before data returns.
             if (props) {
+              // TODO: more precise props.
               return (
                 <DashboardContainer app={props.app} user={props.user} />
               )

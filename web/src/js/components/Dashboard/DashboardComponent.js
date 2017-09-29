@@ -3,7 +3,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import VcUser from '../User/VcUserView'
 import MoneyRaised from '../MoneyRaised/MoneyRaisedContainer'
-import UserBackgroundImage from '../User/UserBackgroundImageView'
+import UserBackgroundImage from '../User/UserBackgroundImageContainer'
 import WidgetsContainer from '../Widget/WidgetsContainer'
 import InviteFriend from '../InviteFriend/InviteFriendView'
 import Ad from '../Ad/Ad'
@@ -101,7 +101,7 @@ class Dashboard extends React.Component {
         <div
           data-test-id={'app-dashboard-id'}
           key={'dashboard-key'}>
-          <UserBackgroundImage />
+          <UserBackgroundImage user={user} />
           <div style={content}>
             <div style={topRightItems.main}>
               <div style={topRightItems.leftContainer}>
