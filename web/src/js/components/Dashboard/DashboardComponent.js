@@ -7,6 +7,7 @@ import UserBackgroundImage from '../User/UserBackgroundImageContainer'
 import WidgetsContainer from '../Widget/WidgetsContainer'
 import InviteFriend from '../InviteFriend/InviteFriendContainer'
 import Ad from '../Ad/Ad'
+import UpdateVc from './UpdateVcContainer'
 
 import { goToSettings, goToDonate } from 'navigation/navigation'
 
@@ -155,6 +156,7 @@ class Dashboard extends React.Component {
               right: 320,
               display: 'block'
             }} />
+          <UpdateVc user={user} />
           { errorMessage
             ? <ErrorMessage message={errorMessage}
               onRequestClose={this.clearError.bind(this)} />

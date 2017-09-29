@@ -8,10 +8,6 @@ const mutation = graphql`
     updateVc(input: $input) {
       user {
         id
-        vcCurrent 
-        vcAllTime
-        heartsUntilNextLevel
-        level
       }
     }
   }

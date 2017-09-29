@@ -2,7 +2,7 @@ import React from 'react'
 import UpdateVcMutation from 'mutations/UpdateVcMutation'
 import PropTypes from 'prop-types'
 
-class App extends React.Component {
+class UpdateVcComponent extends React.Component {
   componentDidMount () {
     UpdateVcMutation.commit(
       this.props.relay.environment,
@@ -15,8 +15,8 @@ class App extends React.Component {
   }
 }
 
-App.propTypes = {
+UpdateVcComponent.propTypes = {
   user: PropTypes.object.isRequired
 }
 
-export default App
+export default UpdateVcComponent
