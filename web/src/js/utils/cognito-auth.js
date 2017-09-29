@@ -151,13 +151,8 @@ function resendConfirmation (username, onSuccess, onFailure) {
   })
 }
 
-// Keep the user ID token in memory to speed up requests.
-var userIdToken = null
-
+// Tokens last an hour.
 const getUserIdToken = () => {
-  if (userIdToken) {
-    return Promise.resolve(userIdToken)
-  }
   return new Promise((resolve, reject) => {
     // Cognito handles ID token refreshing:
     // https://github.com/aws/amazon-cognito-identity-js/issues/245#issuecomment-271345763
@@ -168,7 +163,6 @@ const getUserIdToken = () => {
           resolve(null)
         }
         const idToken = session.getIdToken().getJwtToken()
-        userIdToken = idToken
         resolve(idToken)
       })
     } else {
@@ -176,9 +170,6 @@ const getUserIdToken = () => {
     }
   })
 }
-
-// Prefetch the user ID token to speed up future requests.
-getUserIdToken()
 
 function getCurrentUserForDev (getUserSub) {
   getUserSub({
@@ -291,7 +282,6 @@ function logoutUser (userLogoutCallback) {
 
     // Clear the user from memory.
     userInfo.clearUser()
-    userIdToken = null
 
     userLogoutCallback(true)
   } else {
