@@ -17,6 +17,7 @@ export default createFragmentContainer(Dashboard, {
       ...WidgetsContainer_user
       ...UserBackgroundImageContainer_user
       ...VcUserContainer_user
+      ...InviteFriendContainer_user
     }
   `
 })

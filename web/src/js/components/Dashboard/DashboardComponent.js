@@ -5,7 +5,7 @@ import VcUser from '../User/VcUserContainer'
 import MoneyRaised from '../MoneyRaised/MoneyRaisedContainer'
 import UserBackgroundImage from '../User/UserBackgroundImageContainer'
 import WidgetsContainer from '../Widget/WidgetsContainer'
-import InviteFriend from '../InviteFriend/InviteFriendView'
+import InviteFriend from '../InviteFriend/InviteFriendContainer'
 import Ad from '../Ad/Ad'
 
 import { goToSettings, goToDonate } from 'navigation/navigation'
@@ -128,7 +128,7 @@ class Dashboard extends React.Component {
                     hoverColor={'#FFF'}
                     className='fa fa-heart fa-lg' />
                 </IconButton>
-                <InviteFriend />
+                <InviteFriend user={user} />
               </div>
             </div>
           </div>
