@@ -103,7 +103,7 @@ class MoneyRaised extends React.Component {
 }
 
 MoneyRaised.propTypes = {
-  app: PropTypes.object
+  app: PropTypes.object.isRequired
 }
 
 export default MoneyRaised

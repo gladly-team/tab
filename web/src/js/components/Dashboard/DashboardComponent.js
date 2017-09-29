@@ -1,13 +1,14 @@
 /* eslint-disable jsx-a11y/href-no-hash */
 import React from 'react'
-import VcUser from '../User/VcUserView'
-import MoneyRaised from '../MoneyRaised/MoneyRaisedView'
-import UserBackgroundImage from '../User/UserBackgroundImageView'
-import WidgetsView from '../Widget/WidgetsView'
-import InviteFriend from '../InviteFriend/InviteFriendView'
+import PropTypes from 'prop-types'
+import VcUser from '../User/VcUserContainer'
+import MoneyRaised from '../MoneyRaised/MoneyRaisedContainer'
+import UserBackgroundImage from '../User/UserBackgroundImageContainer'
+import WidgetsContainer from '../Widget/WidgetsContainer'
+import InviteFriend from '../InviteFriend/InviteFriendContainer'
 import Ad from '../Ad/Ad'
+import UpdateVc from './UpdateVcContainer'
 
-// import { FormattedMessage } from 'react-intl'
 import { goToSettings, goToDonate } from 'navigation/navigation'
 
 import FadeInAnimation from 'general/FadeInAnimation'
@@ -62,6 +63,8 @@ class Dashboard extends React.Component {
   }
 
   render () {
+    const { app, user } = this.props
+
     const content = {
       position: 'absolute',
       top: 0,
@@ -99,12 +102,12 @@ class Dashboard extends React.Component {
         <div
           data-test-id={'app-dashboard-id'}
           key={'dashboard-key'}>
-          <UserBackgroundImage />
+          <UserBackgroundImage user={user} />
           <div style={content}>
             <div style={topRightItems.main}>
               <div style={topRightItems.leftContainer}>
-                <MoneyRaised />
-                <VcUser />
+                <MoneyRaised app={app} />
+                <VcUser user={user} />
               </div>
               <div style={topRightItems.rightContainer}>
                 <IconButton
@@ -126,11 +129,11 @@ class Dashboard extends React.Component {
                     hoverColor={'#FFF'}
                     className='fa fa-heart fa-lg' />
                 </IconButton>
-                <InviteFriend />
+                <InviteFriend user={user} />
               </div>
             </div>
           </div>
-          <WidgetsView showError={this.showError.bind(this)} />
+          <WidgetsContainer user={user} showError={this.showError.bind(this)} />
           <Ad
             adId='div-gpt-ad-1464385742501-0'
             adSlotId='/43865596/HBTR'
@@ -153,6 +156,7 @@ class Dashboard extends React.Component {
               right: 320,
               display: 'block'
             }} />
+          <UpdateVc user={user} />
           { errorMessage
             ? <ErrorMessage message={errorMessage}
               onRequestClose={this.clearError.bind(this)} />
@@ -163,10 +167,9 @@ class Dashboard extends React.Component {
   }
 }
 
-// <h1>
-//   <FormattedMessage
-//     id={'app.quote'}
-//     defaultMessage={'“Surf the web, save the world.”'} />
-// </h1>
+Dashboard.propTypes = {
+  app: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired
+}
 
 export default Dashboard

@@ -221,6 +221,13 @@ const userInfo = {
   _callbacks: [],
 
   getUser (callback) {
+    // Mock the user authentication on development.
+    // TODO: check for `IS_DEVELOPMENT` once we have a staging auth service
+    if (MOCK_DEV_AUTHENTICATION) {
+      getCurrentUserForDev(callback)
+      return
+    }
+
     // Return the user if we already fetched it.
     if (this._currUser) {
       callback(this._currUser)
@@ -265,13 +272,6 @@ const userInfo = {
 // However, if a fetch is currently in progress, wait for it to complete
 // so we don't duplicate requests.
 function getCurrentUser (callback) {
-  // Mock the user authentication on development.
-  // TODO: check for `IS_DEVELOPMENT` once we have a staging auth service
-  if (MOCK_DEV_AUTHENTICATION) {
-    getCurrentUserForDev(callback)
-    return
-  }
-
   userInfo.getUser(callback)
 }
 
