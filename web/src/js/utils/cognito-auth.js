@@ -10,6 +10,9 @@ import {
   CognitoUserAttribute
 } from 'amazon-cognito-identity-js'
 
+import localStorageMgr from './localstorage-mgr'
+import { STORAGE_KEY_USER_ID } from '../constants'
+
 // TODO: clean up this file. Use promises, add tests,
 // possibly have a non-Cognito-specific interface.
 
@@ -272,8 +275,24 @@ function getCurrentUser (callback) {
   userInfo.getUser(callback)
 }
 
-// Prefetch the current user to speed up page load.
-getCurrentUser(() => {})
+function getCurrentUserId (callback) {
+  // Try to get ther user ID from local storage.
+  // If it does not exist, get it from Cognito.
+  const userId = localStorageMgr.getItem(STORAGE_KEY_USER_ID)
+
+  if (userId) {
+    callback(userId)
+  } else {
+    userInfo.getUser((user) => {
+      if (!user || !user.sub) {
+        callback(null)
+      } else {
+        callback(user.sub)
+        localStorageMgr.setItem(STORAGE_KEY_USER_ID, user.sub)
+      }
+    })
+  }
+}
 
 function logoutUser (userLogoutCallback) {
   var cognitoUser = userPool.getCurrentUser()
@@ -281,6 +300,7 @@ function logoutUser (userLogoutCallback) {
     cognitoUser.signOut()
 
     // Clear the user from memory.
+    localStorageMgr.removeItem(STORAGE_KEY_USER_ID)
     userInfo.clearUser()
 
     userLogoutCallback(true)
@@ -335,6 +355,7 @@ export {
   confirmRegistration,
   resendConfirmation,
   getCurrentUser,
+  getCurrentUserId,
   getUserIdToken,
   logoutUser,
   checkUserExist,
