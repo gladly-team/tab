@@ -4,7 +4,7 @@ import { IndexRoute, IndexRedirect, Route, Redirect } from 'react-router'
 import BaseContainer from 'general/BaseContainer'
 
 import App from '../components/App/App'
-import Dashboard from '../components/Dashboard/DashboardComponent'
+import DashboardView from '../components/Dashboard/DashboardView'
 
 import Authentication from '../components/Authentication/Authentication'
 import PasswordRetrieve from '../components/Authentication/PasswordRetrieve'
@@ -17,7 +17,7 @@ import WidgetsSettingsView from '../components/Settings/Widgets/WidgetsSettingsV
 export default (
   <Route path='/' component={BaseContainer}>
     <Route path='tab' component={App}>
-      <IndexRoute component={Dashboard} />
+      <IndexRoute component={DashboardView} />
       <Route path='donate' component={DonateVcView} />
       <Route path='settings' component={SettingsView}>
         <IndexRoute component={WidgetsSettingsView} />

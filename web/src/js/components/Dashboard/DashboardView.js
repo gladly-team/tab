@@ -7,31 +7,33 @@ import environment from '../../../relay-env'
 import AuthUserComponent from 'general/AuthUserComponent'
 import ErrorMessage from 'general/ErrorMessage'
 
-import Widgets from './WidgetsContainer'
+import DashboardContainer from './DashboardContainer'
+// import Dashboard from './DashboardComponent'
+// import WidgetsContainer from '../Widget/WidgetsContainer'
 
-class WidgetsView extends React.Component {
+class DashboardView extends React.Component {
   render () {
     return (
       <AuthUserComponent>
         <QueryRenderer
           environment={environment}
           query={graphql`
-            query WidgetsViewQuery($userId: String!) {
+            query DashboardViewQuery($userId: String!) {
               user(userId: $userId) {
-                ...WidgetsContainer_user
+                ...DashboardContainer_user
               }
             }
           `}
           render={({error, props}) => {
             if (error) {
               console.error(error, error.source)
-              const errMsg = 'We had a problem getting your widgets :('
+              const errMsg = 'We had a problem loading your dashboard :('
               return <ErrorMessage message={errMsg} />
             }
+            // TODO: render component before data returns.
             if (props) {
-              const showError = this.props.showError
               return (
-                <Widgets user={props.user} showError={showError} />
+                <DashboardContainer user={props.user} />
               )
             } else {
               return null
@@ -42,4 +44,4 @@ class WidgetsView extends React.Component {
   }
 }
 
-export default WidgetsView
+export default DashboardView

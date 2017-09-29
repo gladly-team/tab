@@ -1,13 +1,13 @@
 /* eslint-disable jsx-a11y/href-no-hash */
 import React from 'react'
+import PropTypes from 'prop-types'
 import VcUser from '../User/VcUserView'
 import MoneyRaised from '../MoneyRaised/MoneyRaisedView'
 import UserBackgroundImage from '../User/UserBackgroundImageView'
-import WidgetsView from '../Widget/WidgetsView'
+import WidgetsContainer from '../Widget/WidgetsContainer'
 import InviteFriend from '../InviteFriend/InviteFriendView'
 import Ad from '../Ad/Ad'
 
-// import { FormattedMessage } from 'react-intl'
 import { goToSettings, goToDonate } from 'navigation/navigation'
 
 import FadeInAnimation from 'general/FadeInAnimation'
@@ -62,6 +62,8 @@ class Dashboard extends React.Component {
   }
 
   render () {
+    const { user } = this.props
+
     const content = {
       position: 'absolute',
       top: 0,
@@ -130,7 +132,7 @@ class Dashboard extends React.Component {
               </div>
             </div>
           </div>
-          <WidgetsView showError={this.showError.bind(this)} />
+          <WidgetsContainer user={user} showError={this.showError.bind(this)} />
           <Ad
             adId='div-gpt-ad-1464385742501-0'
             adSlotId='/43865596/HBTR'
@@ -163,10 +165,8 @@ class Dashboard extends React.Component {
   }
 }
 
-// <h1>
-//   <FormattedMessage
-//     id={'app.quote'}
-//     defaultMessage={'“Surf the web, save the world.”'} />
-// </h1>
+Dashboard.propTypes = {
+  user: PropTypes.object.isRequired
+}
 
 export default Dashboard
