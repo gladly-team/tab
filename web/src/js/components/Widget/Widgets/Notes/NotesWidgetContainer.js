@@ -13,7 +13,6 @@ export default createFragmentContainer(NotesWidget, {
       enabled
       visible
       data
-      icon
       type
     }
   `,

@@ -14,8 +14,18 @@ class SearchWidget extends React.Component {
 }
 
 SearchWidget.propTypes = {
-  widget: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired
+  widget: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    enabled: PropTypes.bool.isRequired,
+    data: PropTypes.string.isRequired,
+    config: PropTypes.string.isRequired,
+    settings: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired
+  }).isRequired,
+  user: PropTypes.shape({
+    id: PropTypes.string.isRequired
+  }).isRequired
 }
 
 export default SearchWidget

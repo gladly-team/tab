@@ -81,7 +81,13 @@ class Widgets extends React.Component {
 }
 
 Widgets.propTypes = {
-  user: PropTypes.object.isRequired,
+  user: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    widgets: PropTypes.shape({
+      edges: PropTypes.array.isRequired
+    }).isRequired,
+    activeWidget: PropTypes.string
+  }).isRequired,
   showError: PropTypes.func.isRequired
 }
 

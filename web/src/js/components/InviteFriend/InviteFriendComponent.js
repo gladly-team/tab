@@ -61,7 +61,9 @@ class InviteFriend extends React.Component {
 }
 
 InviteFriend.propTypes = {
-  user: PropTypes.object.isRequired
+  user: PropTypes.shape({
+    username: PropTypes.string.isRequired
+  }).isRequired
 }
 
 export default InviteFriend
