@@ -134,7 +134,7 @@ UserBackgroundImage.propTypes = {
     backgroundImage: PropTypes.shape({
       imageURL: PropTypes.string.isRequired
     })
-  }).isRequired
+  }).isRequired // TODO: make not required
 }
 
 export default UserBackgroundImage

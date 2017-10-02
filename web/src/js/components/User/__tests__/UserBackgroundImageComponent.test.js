@@ -153,6 +153,37 @@ describe('User background image component', function () {
       .hasBackgroundChanged(propsA, propsD)).toBe(true)
   })
 
+  it('handles null user prop when determining if props changed', function () {
+    const user = {
+      backgroundOption: 'color',
+      customImage: 'https://example.com/some-custom-photo.png',
+      backgroundColor: '#FF0000',
+      backgroundImage: {
+        imageURL: 'https://example.com/pic.png'
+      }
+    }
+    const wrapper = shallow(
+      <UserBackgroundImageComponent user={user} />
+    )
+
+    const propsA = {
+      user: {
+        backgroundOption: 'photo',
+        customImage: 'https://example.com/some-custom-photo.png',
+        backgroundColor: '#FF0000',
+        backgroundImage: {
+          imageURL: 'https://example.com/pic.png'
+        }
+      }
+    }
+    expect(wrapper.instance()
+      .hasBackgroundChanged({}, {})).toBe(false)
+    expect(wrapper.instance()
+      .hasBackgroundChanged(propsA, {})).toBe(true)
+    expect(wrapper.instance()
+      .hasBackgroundChanged({}, propsA)).toBe(true)
+  })
+
   it('calls to save background settings to storage on mount', function () {
     const user = {
       backgroundOption: 'photo',
