@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/href-no-hash */
 import React from 'react'
 import PropTypes from 'prop-types'
+import { get } from 'lodash/object'
 import {
   USER_BACKGROUND_OPTION_CUSTOM,
   USER_BACKGROUND_OPTION_COLOR,
@@ -29,40 +30,33 @@ class UserBackgroundImage extends React.Component {
   }
 
   componentWillMount () {
+    // TODO: check for changes here versus state.
     this.updateBackgroundSettings(this.props)
   }
 
   // TODO: test
   componentWillReceiveProps (nextProps) {
-    // TODO: check for changes here versus state.
     if (this.hasBackgroundChanged(this.props, nextProps)) {
       this.updateBackgroundSettings(nextProps)
     }
   }
 
   hasBackgroundChanged (oldProps, newProps) {
-    const oldUser = oldProps.user
-    const newUser = newProps.user
-    if (!oldUser && !newUser) {
-      return false
-    } else if (!oldUser && newUser) {
-      return true
-    } else if (oldUser && !newUser) {
-      return true
-    }
+    const oldUser = get(oldProps, ['user'], {})
+    const newUser = get(newProps, ['user'], {})
     return (
-      oldUser.backgroundOption !== newUser.backgroundOption ||
-      oldUser.customImage !== newUser.customImage ||
-      oldUser.backgroundColor !== newUser.backgroundColor ||
-      oldUser.backgroundImage.imageURL !== newUser.backgroundImage.imageURL
+      get(oldUser, ['backgroundOption']) !== get(newUser, ['backgroundOption']) ||
+      get(oldUser, ['customImage']) !== get(newUser, ['customImage']) ||
+      get(oldUser, ['backgroundColor']) !== get(newUser, ['backgroundColor']) ||
+      get(oldUser, ['backgroundImage', 'imageURL']) !== get(newUser, ['backgroundImage', 'imageURL'])
     )
   }
 
   updateBackgroundSettings (props) {
-    let backgroundOption = props.user.backgroundOption
-    let customImage = props.user.customImage
-    let backgroundColor = props.user.backgroundColor
-    let backgroundImageURL = props.user.backgroundImage.imageURL
+    let backgroundOption = get(props, ['user', 'backgroundOption'])
+    let customImage = get(props, ['user', 'customImage'])
+    let backgroundColor = get(props, ['user', 'backgroundColor'])
+    let backgroundImageURL = get(props, ['user', 'backgroundImage', 'imageURL'])
     this.setState({
       backgroundOption: backgroundOption,
       customImage: customImage,
