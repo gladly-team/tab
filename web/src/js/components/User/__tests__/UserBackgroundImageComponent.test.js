@@ -7,6 +7,10 @@ import UserBackgroundImageComponent from '../UserBackgroundImageComponent'
 
 jest.mock('utils/local-bkg-settings')
 
+beforeEach(() => {
+  jest.clearAllMocks()
+})
+
 describe('User background image component', function () {
   it('renders with a photo background', function () {
     const user = {
@@ -147,5 +151,20 @@ describe('User background image component', function () {
       .hasBackgroundChanged(propsA, propsC)).toBe(true)
     expect(wrapper.instance()
       .hasBackgroundChanged(propsA, propsD)).toBe(true)
+  })
+
+  it('calls to save background settings to storage on mount', function () {
+    const user = {
+      backgroundOption: 'photo',
+      customImage: null,
+      backgroundColor: '#FF0000',
+      backgroundImage: {
+        imageURL: 'https://example.com/pic.png'
+      }
+    }
+    shallow(<UserBackgroundImageComponent user={user} />)
+    const setBackgroundSettings = require('utils/local-bkg-settings')
+      .setBackgroundSettings
+    expect(setBackgroundSettings).toHaveBeenCalledTimes(1)
   })
 })

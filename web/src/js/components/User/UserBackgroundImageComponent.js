@@ -69,8 +69,6 @@ class UserBackgroundImage extends React.Component {
       backgroundColor: backgroundColor,
       backgroundImageURL: backgroundImageURL
     })
-
-    // TODO: test
     setBackgroundSettings(backgroundOption,
       customImage, backgroundColor, backgroundImageURL)
   }
