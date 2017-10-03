@@ -2,7 +2,7 @@
 
 import 'utils/jsdom-shims'
 import React from 'react'
-import { shallow } from 'enzyme'
+import { mount, shallow } from 'enzyme'
 
 jest.mock('utils/local-bkg-settings')
 
@@ -266,5 +266,71 @@ describe('User background image component', function () {
     const setBackgroundSettings = require('utils/local-bkg-settings')
       .setBackgroundSettings
     expect(setBackgroundSettings).not.toHaveBeenCalled()
+  })
+
+  it('saves the background settings on prop update (when the settings are different)', function () {
+    const user = {
+      backgroundOption: 'photo',
+      customImage: 'https://example.com/some-custom-photo.png',
+      backgroundColor: '#FF0000',
+      backgroundImage: {
+        imageURL: 'https://example.com/pic.png'
+      }
+    }
+    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
+    const wrapper = mount(
+      <UserBackgroundImageComponent user={user} />
+    )
+
+    const setBackgroundSettings = require('utils/local-bkg-settings')
+      .setBackgroundSettings
+    // It saved background settings on mount. Clear that call.
+    setBackgroundSettings.mockClear()
+
+    // With an update to props, it should call to save settings.
+    const userUpdate = {
+      backgroundOption: 'color', // different
+      customImage: 'https://example.com/some-custom-photo.png',
+      backgroundColor: '#FF0000',
+      backgroundImage: {
+        imageURL: 'https://example.com/pic.png'
+      }
+    }
+    wrapper.setProps({ user: userUpdate }, () => {
+      expect(setBackgroundSettings).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  it('does not save the background settings on prop update (when the settings are the same)', function () {
+    const user = {
+      backgroundOption: 'photo',
+      customImage: 'https://example.com/some-custom-photo.png',
+      backgroundColor: '#FF0000',
+      backgroundImage: {
+        imageURL: 'https://example.com/pic.png'
+      }
+    }
+    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
+    const wrapper = mount(
+      <UserBackgroundImageComponent user={user} />
+    )
+
+    const setBackgroundSettings = require('utils/local-bkg-settings')
+      .setBackgroundSettings
+    // It saved background settings on mount. Clear that call.
+    setBackgroundSettings.mockClear()
+
+    // With an update to props, it should call to save settings.
+    const userUpdate = {
+      backgroundOption: 'photo',
+      customImage: 'https://example.com/some-custom-photo.png',
+      backgroundColor: '#FF0000',
+      backgroundImage: {
+        imageURL: 'https://example.com/pic.png'
+      }
+    }
+    wrapper.setProps({ user: userUpdate }, () => {
+      expect(setBackgroundSettings).not.toHaveBeenCalled()
+    })
   })
 })

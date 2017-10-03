@@ -38,9 +38,9 @@ class UserBackgroundImage extends React.Component {
     }
   }
 
-  // TODO: test
   componentWillReceiveProps (nextProps) {
-    if (this.hasBackgroundChanged(this.props, nextProps)) {
+    if (this.arePropsReady(nextProps) &&
+      this.hasBackgroundChanged(this.props, nextProps)) {
       this.updateBackgroundSettings(nextProps)
     }
   }
@@ -156,7 +156,7 @@ UserBackgroundImage.propTypes = {
     backgroundImage: PropTypes.shape({
       imageURL: PropTypes.string.isRequired
     })
-  }).isRequired // TODO: make not required
+  })
 }
 
 export default UserBackgroundImage
