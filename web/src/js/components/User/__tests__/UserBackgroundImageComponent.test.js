@@ -3,12 +3,12 @@
 import 'utils/jsdom-shims'
 import React from 'react'
 import { shallow } from 'enzyme'
-import UserBackgroundImageComponent from '../UserBackgroundImageComponent'
 
 jest.mock('utils/local-bkg-settings')
 
 beforeEach(() => {
   jest.clearAllMocks()
+  jest.resetModules()
 })
 
 describe('User background image component', function () {
@@ -21,6 +21,7 @@ describe('User background image component', function () {
         imageURL: 'https://example.com/pic.png'
       }
     }
+    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
     const wrapper = shallow(
       <UserBackgroundImageComponent user={user} />
     )
@@ -37,6 +38,7 @@ describe('User background image component', function () {
         imageURL: 'https://example.com/something.png'
       }
     }
+    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
     const wrapper = shallow(
       <UserBackgroundImageComponent user={user} />
     )
@@ -53,6 +55,7 @@ describe('User background image component', function () {
         imageURL: 'https://example.com/pic.png'
       }
     }
+    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
     const wrapper = shallow(
       <UserBackgroundImageComponent user={user} />
     )
@@ -69,6 +72,7 @@ describe('User background image component', function () {
         imageURL: 'https://example.com/pic.png'
       }
     }
+    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
     const wrapper = shallow(
       <UserBackgroundImageComponent user={user} />
     )
@@ -86,6 +90,7 @@ describe('User background image component', function () {
         imageURL: 'https://example.com/pic.png'
       }
     }
+    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
     const wrapper = shallow(
       <UserBackgroundImageComponent user={user} />
     )
@@ -162,6 +167,7 @@ describe('User background image component', function () {
         imageURL: 'https://example.com/pic.png'
       }
     }
+    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
     const wrapper = shallow(
       <UserBackgroundImageComponent user={user} />
     )
@@ -184,7 +190,18 @@ describe('User background image component', function () {
       .hasBackgroundChanged({}, propsA)).toBe(true)
   })
 
-  it('calls to save background settings to storage on mount', function () {
+  it('saves background settings to storage on mount (when the settings differ)', function () {
+    // Mock the settings in local storage.
+    jest.mock('utils/local-bkg-settings', () => {
+      return {
+        getUserBackgroundOption: jest.fn(() => 'color'), // Different
+        getUserBackgroundCustomImage: jest.fn(() => null),
+        getUserBackgroundColor: jest.fn(() => '#FFF'),
+        getUserBackgroundImageURL: jest.fn(() => 'https://example.com/pic.png'),
+        setBackgroundSettings: jest.fn()
+      }
+    })
+
     const user = {
       backgroundOption: 'photo',
       customImage: null,
@@ -193,9 +210,37 @@ describe('User background image component', function () {
         imageURL: 'https://example.com/pic.png'
       }
     }
+    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
     shallow(<UserBackgroundImageComponent user={user} />)
     const setBackgroundSettings = require('utils/local-bkg-settings')
       .setBackgroundSettings
     expect(setBackgroundSettings).toHaveBeenCalledTimes(1)
+  })
+
+  it('does not save background settings to storage on mount (when the settings are the same)', function () {
+    // Mock the settings in local storage.
+    jest.mock('utils/local-bkg-settings', () => {
+      return {
+        getUserBackgroundOption: jest.fn(() => 'photo'),
+        getUserBackgroundCustomImage: jest.fn(() => null),
+        getUserBackgroundColor: jest.fn(() => '#FF0000'),
+        getUserBackgroundImageURL: jest.fn(() => 'https://example.com/pic.png'),
+        setBackgroundSettings: jest.fn()
+      }
+    })
+
+    const user = {
+      backgroundOption: 'photo',
+      customImage: null,
+      backgroundColor: '#FF0000',
+      backgroundImage: {
+        imageURL: 'https://example.com/pic.png'
+      }
+    }
+    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
+    shallow(<UserBackgroundImageComponent user={user} />)
+    const setBackgroundSettings = require('utils/local-bkg-settings')
+      .setBackgroundSettings
+    expect(setBackgroundSettings).not.toHaveBeenCalled()
   })
 })

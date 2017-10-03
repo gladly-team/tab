@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/href-no-hash */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { get } from 'lodash/object'
+import { get, has } from 'lodash/object'
 import {
   USER_BACKGROUND_OPTION_CUSTOM,
   USER_BACKGROUND_OPTION_COLOR,
@@ -30,8 +30,13 @@ class UserBackgroundImage extends React.Component {
   }
 
   componentWillMount () {
-    // TODO: check for changes here versus state.
-    this.updateBackgroundSettings(this.props)
+    // If the props contain valid settings for the background,
+    // and they are different from what's already in state,
+    // update the background settings values.
+    if (this.arePropsReady(this.props) &&
+      this.arePropsDifferentFromState(this.props)) {
+      this.updateBackgroundSettings(this.props)
+    }
   }
 
   // TODO: test
@@ -41,6 +46,30 @@ class UserBackgroundImage extends React.Component {
     }
   }
 
+  // Determine if the props have the values we need to render
+  // the background.
+  arePropsReady (props) {
+    return (
+      has(props, ['user', 'backgroundOption']) &&
+      has(props, ['user', 'customImage']) &&
+      has(props, ['user', 'backgroundColor']) &&
+      has(props, ['user', 'backgroundImage', 'imageURL'])
+    )
+  }
+
+  // Determine if the props hold background settings that are
+  // different from the background settings currently in state.
+  arePropsDifferentFromState (props) {
+    return (
+      get(props, ['user', 'backgroundOption']) !== this.state.backgroundOption ||
+      get(props, ['user', 'customImage']) !== this.state.customImage ||
+      get(props, ['user', 'backgroundColor']) !== this.state.backgroundColor ||
+      get(props, ['user', 'backgroundImage', 'imageURL']) !== this.state.backgroundImageURL
+    )
+  }
+
+  // Determine if background settings are different in the new props
+  // versus the old props.
   hasBackgroundChanged (oldProps, newProps) {
     const oldUser = get(oldProps, ['user'], {})
     const newUser = get(newProps, ['user'], {})
