@@ -27,6 +27,11 @@ describe('User background image component', function () {
     )
     const wrapperStyle = wrapper.get(0).props.style
     expect(wrapperStyle.backgroundImage).toBe('url(https://example.com/pic.png)')
+
+    // Image should not appear until it's loaded.
+    expect(wrapperStyle.opacity).toBe(0)
+    wrapper.instance().onImgLoad() // mock img onload
+    expect(wrapper.get(0).props.style.opacity).toBe(1)
   })
 
   it('renders with a daily photo background', function () {
@@ -44,6 +49,11 @@ describe('User background image component', function () {
     )
     const wrapperStyle = wrapper.get(0).props.style
     expect(wrapperStyle.backgroundImage).toBe('url(https://example.com/something.png)')
+
+    // Image should not appear until it's loaded.
+    expect(wrapperStyle.opacity).toBe(0)
+    wrapper.instance().onImgLoad() // mock img onload
+    expect(wrapper.get(0).props.style.opacity).toBe(1)
   })
 
   it('renders with a custom photo background', function () {
@@ -61,6 +71,11 @@ describe('User background image component', function () {
     )
     const wrapperStyle = wrapper.get(0).props.style
     expect(wrapperStyle.backgroundImage).toBe('url(https://example.com/some-custom-photo.png)')
+
+    // Image should not appear until it's loaded.
+    expect(wrapperStyle.opacity).toBe(0)
+    wrapper.instance().onImgLoad() // mock img onload
+    expect(wrapper.get(0).props.style.opacity).toBe(1)
   })
 
   it('renders with a color background', function () {
@@ -79,6 +94,9 @@ describe('User background image component', function () {
     const wrapperStyle = wrapper.get(0).props.style
     expect(wrapperStyle.backgroundColor).toBe('#FF0000')
     expect(wrapperStyle.backgroundImage).not.toBeDefined()
+
+    // Color background should appear immediately.
+    expect(wrapperStyle.opacity).toBe(1)
   })
 
   it('renders the default background if the color is missing', function () {
@@ -292,12 +310,11 @@ describe('User background image component', function () {
     const user = null
     const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
     const wrapper = shallow(<UserBackgroundImageComponent user={user} />)
-    expect(wrapper.state()).toEqual({
-      backgroundOption: 'color',
-      customImage: null,
-      backgroundColor: '#FFF',
-      backgroundImageURL: 'https://example.com/pic.png'
-    })
+    const state = wrapper.state()
+    expect(state.backgroundOption).toEqual('color')
+    expect(state.customImage).toEqual(null)
+    expect(state.backgroundColor).toEqual('#FFF')
+    expect(state.backgroundImageURL).toEqual('https://example.com/pic.png')
   })
 
   it('saves background settings to storage on mount (when the settings differ)', function () {

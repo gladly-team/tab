@@ -20,8 +20,13 @@ class UserBackgroundImage extends React.Component {
   constructor (props) {
     super(props)
 
+    const backgroundOption = getUserBackgroundOption()
     this.state = {
-      backgroundOption: getUserBackgroundOption(),
+      // Only show the background when any image has
+      // fully loaded. Show a color background immediately.
+      show: (backgroundOption === USER_BACKGROUND_OPTION_COLOR),
+      imgLoaded: false,
+      backgroundOption: backgroundOption,
       customImage: getUserBackgroundCustomImage(),
       backgroundColor: getUserBackgroundColor(),
       backgroundImageURL: getUserBackgroundImageURL()
@@ -85,7 +90,13 @@ class UserBackgroundImage extends React.Component {
     let customImage = get(props, ['user', 'customImage'])
     let backgroundColor = get(props, ['user', 'backgroundColor'])
     let backgroundImageURL = get(props, ['user', 'backgroundImage', 'imageURL'])
+
+    // Keep showing the background if we already are, or
+    // show it immediately if the background is a color.
+    let show = this.state.show || (backgroundOption === USER_BACKGROUND_OPTION_COLOR)
+
     this.setState({
+      show: show,
       backgroundOption: backgroundOption,
       customImage: customImage,
       backgroundColor: backgroundColor,
@@ -95,10 +106,17 @@ class UserBackgroundImage extends React.Component {
       customImage, backgroundColor, backgroundImageURL)
   }
 
+  onImgLoad (e) {
+    this.setState({
+      imgLoaded: true,
+      show: true
+    })
+  }
+
   render () {
     const defaultStyle = {
       boxShadow: 'rgba(0, 0, 0, 0.5) 0px 0px 120px inset',
-      opacity: 1,
+      opacity: this.state.show ? 1 : 0,
       backgroundRepeat: 'no-repeat',
       backgroundPosition: 'center',
       backgroundAttachment: 'fixed',
@@ -122,12 +140,16 @@ class UserBackgroundImage extends React.Component {
       backgroundColor: '#4a90e2'
     }
     const backgroundOption = this.state.backgroundOption
+    var isImgBackground = false
+    var imgUrl = null
     switch (backgroundOption) {
       case USER_BACKGROUND_OPTION_CUSTOM:
         if (this.state.customImage) {
           backgroundStyle = {
             backgroundImage: 'url(' + this.state.customImage + ')'
           }
+          isImgBackground = true
+          imgUrl = this.state.customImage
         } else {
           backgroundStyle = styleOnError
         }
@@ -146,6 +168,8 @@ class UserBackgroundImage extends React.Component {
           backgroundStyle = {
             backgroundImage: 'url(' + this.state.backgroundImageURL + ')'
           }
+          isImgBackground = true
+          imgUrl = this.state.backgroundImageURL
         } else {
           backgroundStyle = styleOnError
         }
@@ -155,6 +179,8 @@ class UserBackgroundImage extends React.Component {
           backgroundStyle = {
             backgroundImage: 'url(' + this.state.backgroundImageURL + ')'
           }
+          isImgBackground = true
+          imgUrl = this.state.backgroundImageURL
         } else {
           backgroundStyle = styleOnError
         }
@@ -163,11 +189,38 @@ class UserBackgroundImage extends React.Component {
         backgroundStyle = {
           background: 'none'
         }
+        isImgBackground = false
         break
     }
     const finalBackgroundStyle = Object.assign({}, defaultStyle, backgroundStyle)
+
+    const tintElemStyle = {
+      position: 'absolute',
+      top: 0,
+      bottom: 0,
+      right: 0,
+      left: 0,
+      width: '100vw',
+      height: '100vh',
+      zIndex: 'auto',
+      // Needs to match shading in extension new tab page.
+      // TODO: probably less tint if using a color background.
+      backgroundColor: 'rgba(0,0,0,.2)'
+    }
+
+    // For image backgrounds, we use an img element to "preload"
+    // the image before displaying the background.
     return (
-      <div style={finalBackgroundStyle} />
+      <div style={finalBackgroundStyle}>
+        { (isImgBackground && !this.state.imgLoaded)
+          ? <img
+            style={{display: 'none'}}
+            src={imgUrl}
+            onLoad={this.onImgLoad.bind(this)} />
+          : null
+        }
+        <div style={tintElemStyle} />
+      </div>
     )
   }
 }

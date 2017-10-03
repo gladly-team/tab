@@ -74,9 +74,7 @@ class Dashboard extends React.Component {
       left: 0,
       width: '100vw',
       height: '100vh',
-      zIndex: 'auto',
-      // Needs to match shading in extension new tab page.
-      backgroundColor: 'rgba(0,0,0,.2)'
+      zIndex: 'auto'
     }
 
     const topRightItems = {
