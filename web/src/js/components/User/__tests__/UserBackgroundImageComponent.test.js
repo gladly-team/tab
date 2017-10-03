@@ -190,6 +190,30 @@ describe('User background image component', function () {
       .hasBackgroundChanged({}, propsA)).toBe(true)
   })
 
+  it('sets state on mount using local storage values', function () {
+    // Mock the settings in local storage.
+    jest.mock('utils/local-bkg-settings', () => {
+      return {
+        getUserBackgroundOption: jest.fn(() => 'color'), // Different
+        getUserBackgroundCustomImage: jest.fn(() => null),
+        getUserBackgroundColor: jest.fn(() => '#FFF'),
+        getUserBackgroundImageURL: jest.fn(() => 'https://example.com/pic.png'),
+        setBackgroundSettings: jest.fn()
+      }
+    })
+
+    // As if we have not yet fetched the user from the server.
+    const user = null
+    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
+    const wrapper = shallow(<UserBackgroundImageComponent user={user} />)
+    expect(wrapper.state()).toEqual({
+      backgroundOption: 'color',
+      customImage: null,
+      backgroundColor: '#FFF',
+      backgroundImageURL: 'https://example.com/pic.png'
+    })
+  })
+
   it('saves background settings to storage on mount (when the settings differ)', function () {
     // Mock the settings in local storage.
     jest.mock('utils/local-bkg-settings', () => {

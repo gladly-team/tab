@@ -21,7 +21,6 @@ class UserBackgroundImage extends React.Component {
     super(props)
 
     this.state = {
-      // TODO: test
       backgroundOption: getUserBackgroundOption(),
       customImage: getUserBackgroundCustomImage(),
       backgroundColor: getUserBackgroundColor(),
