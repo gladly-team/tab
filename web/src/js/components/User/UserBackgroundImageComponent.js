@@ -117,6 +117,7 @@ class UserBackgroundImage extends React.Component {
     const defaultStyle = {
       boxShadow: 'rgba(0, 0, 0, 0.5) 0px 0px 120px inset',
       opacity: this.state.show ? 1 : 0,
+      transition: 'opacity 0.5s ease-in',
       backgroundRepeat: 'no-repeat',
       backgroundPosition: 'center',
       backgroundAttachment: 'fixed',
