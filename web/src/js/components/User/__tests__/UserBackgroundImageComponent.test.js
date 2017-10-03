@@ -185,6 +185,46 @@ describe('User background image component', function () {
     expect(wrapperStyle.backgroundImage).not.toBeDefined()
   })
 
+  it('falls back to default background on image load error', function () {
+    const user = {
+      backgroundOption: 'custom',
+      customImage: 'https://example.com/some-custom-photo.png',
+      backgroundColor: '#FF0000',
+      backgroundImage: {
+        imageURL: 'https://example.com/pic.png'
+      }
+    }
+    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
+    const wrapper = shallow(
+      <UserBackgroundImageComponent user={user} />
+    )
+    const styleOnError = {
+      backgroundColor: '#4a90e2'
+    }
+    wrapper.instance().onImgError()
+    const wrapperStyle = wrapper.get(0).props.style
+    expect(wrapperStyle.backgroundColor).toBe(styleOnError.backgroundColor)
+    expect(wrapperStyle.backgroundImage).not.toBeDefined()
+  })
+
+  it('calls to show an error message on image load error', function () {
+    const user = {
+      backgroundOption: 'custom',
+      customImage: 'https://example.com/some-custom-photo.png',
+      backgroundColor: '#FF0000',
+      backgroundImage: {
+        imageURL: 'https://example.com/pic.png'
+      }
+    }
+    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
+    const showErrorHandler = jest.fn()
+    const wrapper = shallow(
+      <UserBackgroundImageComponent user={user} showError={showErrorHandler} />
+    )
+    wrapper.instance().onImgError()
+    expect(showErrorHandler).toHaveBeenCalledWith('We could not load your background image.')
+  })
+
   it('correctly determines whether background props change', function () {
     const user = {
       backgroundOption: 'color',

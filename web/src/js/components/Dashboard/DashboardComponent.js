@@ -102,7 +102,7 @@ class Dashboard extends React.Component {
         <div
           data-test-id={'app-dashboard-id'}
           key={'dashboard-key'}>
-          <UserBackgroundImage user={user} />
+          <UserBackgroundImage user={user} showError={this.showError.bind(this)} />
           <div style={content}>
             <div style={topRightItems.main}>
               <div style={topRightItems.leftContainer}>

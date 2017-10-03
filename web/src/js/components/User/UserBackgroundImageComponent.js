@@ -26,6 +26,7 @@ class UserBackgroundImage extends React.Component {
       // fully loaded. Show a color background immediately.
       show: (backgroundOption === USER_BACKGROUND_OPTION_COLOR),
       imgLoaded: false,
+      imgError: false,
       backgroundOption: backgroundOption,
       customImage: getUserBackgroundCustomImage(),
       backgroundColor: getUserBackgroundColor(),
@@ -113,6 +114,14 @@ class UserBackgroundImage extends React.Component {
     })
   }
 
+  onImgError (e) {
+    this.setState({
+      imgError: true,
+      show: true
+    })
+    this.props.showError('We could not load your background image.')
+  }
+
   render () {
     const defaultStyle = {
       boxShadow: 'rgba(0, 0, 0, 0.5) 0px 0px 120px inset',
@@ -193,6 +202,11 @@ class UserBackgroundImage extends React.Component {
         isImgBackground = false
         break
     }
+
+    if (this.state.imgError) {
+      backgroundStyle = styleOnError
+    }
+
     const finalBackgroundStyle = Object.assign({}, defaultStyle, backgroundStyle)
 
     const tintElemStyle = {
@@ -217,7 +231,8 @@ class UserBackgroundImage extends React.Component {
           ? <img
             style={{display: 'none'}}
             src={imgUrl}
-            onLoad={this.onImgLoad.bind(this)} />
+            onLoad={this.onImgLoad.bind(this)}
+            onError={this.onImgError.bind(this)} />
           : null
         }
         <div style={tintElemStyle} />
@@ -234,7 +249,12 @@ UserBackgroundImage.propTypes = {
     backgroundImage: PropTypes.shape({
       imageURL: PropTypes.string
     })
-  })
+  }),
+  showError: PropTypes.func
+}
+
+UserBackgroundImage.defaultProps = {
+  showError: () => {}
 }
 
 export default UserBackgroundImage
