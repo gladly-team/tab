@@ -476,4 +476,44 @@ describe('User background image component', function () {
       expect(setBackgroundSettings).not.toHaveBeenCalled()
     })
   })
+
+  it('sets the expected tint overlay for a photo background', function () {
+    const user = {
+      backgroundOption: 'photo',
+      customImage: 'https://example.com/some-custom-photo.png',
+      backgroundColor: '#FF0000',
+      backgroundImage: {
+        imageURL: 'https://example.com/pic.png'
+      }
+    }
+    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
+    const wrapper = mount(
+      <UserBackgroundImageComponent user={user} />
+    )
+
+    const tintElem = wrapper
+      .find('[data-test-id="background-tint-overlay"]').first()
+    const tintColor = tintElem.props().style.backgroundColor
+    expect(tintColor).toBe('rgba(0, 0, 0, 0.2)')
+  })
+
+  it('sets the expected tint overlay for a color background', function () {
+    const user = {
+      backgroundOption: 'color',
+      customImage: 'https://example.com/some-custom-photo.png',
+      backgroundColor: '#FF0000',
+      backgroundImage: {
+        imageURL: 'https://example.com/pic.png'
+      }
+    }
+    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
+    const wrapper = mount(
+      <UserBackgroundImageComponent user={user} />
+    )
+
+    const tintElem = wrapper
+      .find('[data-test-id="background-tint-overlay"]').first()
+    const tintColor = tintElem.props().style.backgroundColor
+    expect(tintColor).toBe('rgba(0, 0, 0, 0.03)')
+  })
 })

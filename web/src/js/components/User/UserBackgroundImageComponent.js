@@ -209,6 +209,7 @@ class UserBackgroundImage extends React.Component {
 
     const finalBackgroundStyle = Object.assign({}, defaultStyle, backgroundStyle)
 
+    const tintOpacity = isImgBackground ? 0.2 : 0.03
     const tintElemStyle = {
       position: 'absolute',
       top: 0,
@@ -219,8 +220,7 @@ class UserBackgroundImage extends React.Component {
       height: '100vh',
       zIndex: 'auto',
       // Needs to match shading in extension new tab page.
-      // TODO: probably less tint if using a color background.
-      backgroundColor: 'rgba(0,0,0,.2)'
+      backgroundColor: `rgba(0, 0, 0, ${tintOpacity})`
     }
 
     // For image backgrounds, we use an img element to "preload"
@@ -235,7 +235,7 @@ class UserBackgroundImage extends React.Component {
             onError={this.onImgError.bind(this)} />
           : null
         }
-        <div style={tintElemStyle} />
+        <div data-test-id={'background-tint-overlay'} style={tintElemStyle} />
       </div>
     )
   }
