@@ -159,8 +159,10 @@ class UserBackgroundImage extends React.Component {
           backgroundStyle = styleOnError
         }
         break
-      // TODO: test for no info (white background)
       default:
+        backgroundStyle = {
+          background: 'none'
+        }
         break
     }
     const finalBackgroundStyle = Object.assign({}, defaultStyle, backgroundStyle)

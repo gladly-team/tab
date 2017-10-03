@@ -144,6 +144,29 @@ describe('User background image component', function () {
     expect(wrapperStyle.backgroundImage).not.toBeDefined()
   })
 
+  it('renders the fallback background if the background option is not set', function () {
+    // Mock the settings in local storage.
+    jest.mock('utils/local-bkg-settings', () => {
+      return {
+        getUserBackgroundOption: jest.fn(() => null),
+        getUserBackgroundCustomImage: jest.fn(() => null),
+        getUserBackgroundColor: jest.fn(() => null),
+        getUserBackgroundImageURL: jest.fn(() => null),
+        setBackgroundSettings: jest.fn()
+      }
+    })
+    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
+    const wrapper = shallow(
+      <UserBackgroundImageComponent user={null} />
+    )
+    const fallbackStyle = {
+      background: 'none'
+    }
+    const wrapperStyle = wrapper.get(0).props.style
+    expect(wrapperStyle.background).toBe(fallbackStyle.background)
+    expect(wrapperStyle.backgroundImage).not.toBeDefined()
+  })
+
   it('correctly determines whether background props change', function () {
     const user = {
       backgroundOption: 'color',
