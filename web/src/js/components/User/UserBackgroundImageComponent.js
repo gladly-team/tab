@@ -116,28 +116,50 @@ class UserBackgroundImage extends React.Component {
     }
 
     var backgroundStyle = {}
+
+    // What we use if a property is missing.
+    const styleOnError = {
+      backgroundColor: '#4a90e2'
+    }
     const backgroundOption = this.state.backgroundOption
     switch (backgroundOption) {
       case USER_BACKGROUND_OPTION_CUSTOM:
-        backgroundStyle = {
-          backgroundImage: 'url(' + this.state.customImage + ')'
+        if (this.state.customImage) {
+          backgroundStyle = {
+            backgroundImage: 'url(' + this.state.customImage + ')'
+          }
+        } else {
+          backgroundStyle = styleOnError
         }
         break
       case USER_BACKGROUND_OPTION_COLOR:
-        backgroundStyle = {
-          backgroundColor: this.state.backgroundColor
+        if (this.state.backgroundColor) {
+          backgroundStyle = {
+            backgroundColor: this.state.backgroundColor
+          }
+        } else {
+          backgroundStyle = styleOnError
         }
         break
       case USER_BACKGROUND_OPTION_PHOTO:
-        backgroundStyle = {
-          backgroundImage: 'url(' + this.state.backgroundImageURL + ')'
+        if (this.state.backgroundImageURL) {
+          backgroundStyle = {
+            backgroundImage: 'url(' + this.state.backgroundImageURL + ')'
+          }
+        } else {
+          backgroundStyle = styleOnError
         }
         break
       case USER_BACKGROUND_OPTION_DAILY:
-        backgroundStyle = {
-          backgroundImage: 'url(' + this.state.backgroundImageURL + ')'
+        if (this.state.backgroundImageURL) {
+          backgroundStyle = {
+            backgroundImage: 'url(' + this.state.backgroundImageURL + ')'
+          }
+        } else {
+          backgroundStyle = styleOnError
         }
         break
+      // TODO: test for no info (white background)
       default:
         break
     }
@@ -154,7 +176,7 @@ UserBackgroundImage.propTypes = {
     customImage: PropTypes.string,
     backgroundColor: PropTypes.string,
     backgroundImage: PropTypes.shape({
-      imageURL: PropTypes.string.isRequired
+      imageURL: PropTypes.string
     })
   })
 }

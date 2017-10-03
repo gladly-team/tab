@@ -81,6 +81,69 @@ describe('User background image component', function () {
     expect(wrapperStyle.backgroundImage).not.toBeDefined()
   })
 
+  it('renders the default background if the color is missing', function () {
+    const user = {
+      backgroundOption: 'color',
+      customImage: 'https://example.com/some-custom-photo.png',
+      backgroundColor: null,
+      backgroundImage: {
+        imageURL: 'https://example.com/pic.png'
+      }
+    }
+    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
+    const wrapper = shallow(
+      <UserBackgroundImageComponent user={user} />
+    )
+    const styleOnError = {
+      backgroundColor: '#4a90e2'
+    }
+    const wrapperStyle = wrapper.get(0).props.style
+    expect(wrapperStyle.backgroundColor).toBe(styleOnError.backgroundColor)
+    expect(wrapperStyle.backgroundImage).not.toBeDefined()
+  })
+
+  it('renders the default background if the photo URL is missing', function () {
+    const user = {
+      backgroundOption: 'photo',
+      customImage: 'https://example.com/some-custom-photo.png',
+      backgroundColor: '#FFFFFF',
+      backgroundImage: {
+        imageURL: undefined
+      }
+    }
+    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
+    const wrapper = shallow(
+      <UserBackgroundImageComponent user={user} />
+    )
+    const styleOnError = {
+      backgroundColor: '#4a90e2'
+    }
+    const wrapperStyle = wrapper.get(0).props.style
+    expect(wrapperStyle.backgroundColor).toBe(styleOnError.backgroundColor)
+    expect(wrapperStyle.backgroundImage).not.toBeDefined()
+  })
+
+  it('renders the default background if the custom photo URL is missing', function () {
+    const user = {
+      backgroundOption: 'custom',
+      customImage: null,
+      backgroundColor: '#FFFFFF',
+      backgroundImage: {
+        imageURL: 'https://example.com/pic.png'
+      }
+    }
+    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
+    const wrapper = shallow(
+      <UserBackgroundImageComponent user={user} />
+    )
+    const styleOnError = {
+      backgroundColor: '#4a90e2'
+    }
+    const wrapperStyle = wrapper.get(0).props.style
+    expect(wrapperStyle.backgroundColor).toBe(styleOnError.backgroundColor)
+    expect(wrapperStyle.backgroundImage).not.toBeDefined()
+  })
+
   it('correctly determines whether background props change', function () {
     const user = {
       backgroundOption: 'color',
