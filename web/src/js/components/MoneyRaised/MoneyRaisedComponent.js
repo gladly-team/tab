@@ -106,7 +106,7 @@ MoneyRaised.propTypes = {
   app: PropTypes.shape({
     moneyRaised: PropTypes.number.isRequired,
     dollarsPerDayRate: PropTypes.number.isRequired
-  }).isRequired
+  })
 }
 
 export default MoneyRaised

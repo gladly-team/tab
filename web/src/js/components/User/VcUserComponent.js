@@ -4,6 +4,9 @@ import PropTypes from 'prop-types'
 class VcUser extends Component {
   render () {
     const { user } = this.props
+    if (!user) {
+      return null
+    }
 
     const progressContainer = {
       display: 'flex',
@@ -30,7 +33,7 @@ VcUser.propTypes = {
   user: PropTypes.shape({
     vcCurrent: PropTypes.number.isRequired,
     level: PropTypes.number.isRequired
-  }).isRequired
+  })
 }
 
 export default VcUser

@@ -25,6 +25,9 @@ class Widgets extends React.Component {
 
   render () {
     const { user } = this.props
+    if (!user) {
+      return null
+    }
 
     const widgetsContainer = {
       position: 'absolute',
@@ -87,7 +90,7 @@ Widgets.propTypes = {
       edges: PropTypes.array.isRequired
     }).isRequired,
     activeWidget: PropTypes.string
-  }).isRequired,
+  }),
   showError: PropTypes.func.isRequired
 }
 

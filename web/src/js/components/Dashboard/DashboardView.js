@@ -31,14 +31,14 @@ class DashboardView extends React.Component {
               const errMsg = 'We had a problem loading your dashboard :('
               return <ErrorMessage message={errMsg} />
             }
-            // TODO: render component before data returns.
-            if (props) {
-              return (
-                <DashboardContainer app={props.app} user={props.user} />
-              )
-            } else {
-              return null
+            if (!props) {
+              props = {}
             }
+            const app = props.app || null
+            const user = props.user || null
+            return (
+              <DashboardContainer app={app} user={user} />
+            )
           }} />
       </AuthUserComponent>
     )

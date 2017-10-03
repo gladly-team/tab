@@ -63,6 +63,7 @@ class Dashboard extends React.Component {
   }
 
   render () {
+    // Props will be null on first render.
     const { app, user } = this.props
 
     const content = {
@@ -157,7 +158,7 @@ class Dashboard extends React.Component {
               right: 320,
               display: 'block'
             }} />
-          <UpdateVc user={user} />
+          { user ? <UpdateVc user={user} /> : null }
           { errorMessage
             ? <ErrorMessage message={errorMessage}
               onRequestClose={this.clearError.bind(this)} />
@@ -169,8 +170,8 @@ class Dashboard extends React.Component {
 }
 
 Dashboard.propTypes = {
-  app: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired
+  app: PropTypes.object,
+  user: PropTypes.object
 }
 
 export default Dashboard
