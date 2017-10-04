@@ -11,6 +11,7 @@ import UpdateVc from './UpdateVcContainer'
 
 import { goToSettings, goToDonate } from 'navigation/navigation'
 
+import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
 import ErrorMessage from 'general/ErrorMessage'
 
 import IconButton from 'material-ui/IconButton'
@@ -82,7 +83,7 @@ class Dashboard extends React.Component {
         top: 0,
         right: 0,
         display: 'flex',
-        zIndex: 2147483647
+        zIndex: 200
       },
       leftContainer: {
         padding: 5
@@ -101,36 +102,40 @@ class Dashboard extends React.Component {
         data-test-id={'app-dashboard-id'}
         key={'dashboard-key'}>
         <UserBackgroundImage user={user} showError={this.showError.bind(this)} />
-        <div style={content}>
-          <div style={topRightItems.main}>
-            <div style={topRightItems.leftContainer}>
-              <MoneyRaised app={app} />
-              <VcUser user={user} />
+        { user
+          ? <FadeInDashboardAnimation>
+            <div style={content}>
+              <div style={topRightItems.main}>
+                <div style={topRightItems.leftContainer}>
+                  <MoneyRaised app={app} />
+                  <VcUser user={user} />
+                </div>
+                <div style={topRightItems.rightContainer}>
+                  <IconButton
+                    tooltip='Settings'
+                    tooltipPosition='bottom-left'
+                    onClick={this._goToSettings.bind(this)}>
+                    <FontIcon
+                      color={grey300}
+                      hoverColor={'#FFF'}
+                      className='fa fa-cog fa-lg' />
+                  </IconButton>
+                  <IconButton
+                    tooltip='Donate'
+                    tooltipPosition='top-left'
+                    onClick={this._goToDonate.bind(this)}>
+                    <FontIcon
+                      color={grey300}
+                      hoverColor={'#FFF'}
+                      className='fa fa-heart fa-lg' />
+                  </IconButton>
+                  <InviteFriend user={user} />
+                </div>
+              </div>
             </div>
-            <div style={topRightItems.rightContainer}>
-              <IconButton
-                tooltip='Settings'
-                tooltipPosition='bottom-left'
-                onClick={this._goToSettings.bind(this)}>
-                <FontIcon
-                  color={grey300}
-                  hoverColor={'#FFF'}
-                  className='fa fa-cog fa-lg' />
-              </IconButton>
-
-              <IconButton
-                tooltip='Donate'
-                tooltipPosition='top-left'
-                onClick={this._goToDonate.bind(this)}>
-                <FontIcon
-                  color={grey300}
-                  hoverColor={'#FFF'}
-                  className='fa fa-heart fa-lg' />
-              </IconButton>
-              <InviteFriend user={user} />
-            </div>
-          </div>
-        </div>
+          </FadeInDashboardAnimation>
+          : null
+        }
         <WidgetsContainer user={user} showError={this.showError.bind(this)} />
         <Ad
           adId='div-gpt-ad-1464385742501-0'

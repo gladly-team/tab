@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 // import { CSSTransitionGroup } from 'react-transition-group'
 
-class RandomAppearAnimation extends React.Component {
+class FadeInDashboardAnimation extends React.Component {
   constructor (props) {
     super(props)
 
@@ -58,12 +58,12 @@ class RandomAppearAnimation extends React.Component {
   }
 }
 
-RandomAppearAnimation.propTypes = {
+FadeInDashboardAnimation.propTypes = {
   children: PropTypes.object.isRequired
 }
 
-RandomAppearAnimation.defaultProps = {
+FadeInDashboardAnimation.defaultProps = {
   delayRange: 300
 }
 
-export default RandomAppearAnimation
+export default FadeInDashboardAnimation

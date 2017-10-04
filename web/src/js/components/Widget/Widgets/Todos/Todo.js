@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import RandomAppearAnimation from 'general/RandomAppearAnimation'
+import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
 
 import Checkbox from 'material-ui/Checkbox'
 import DeleteIcon from 'material-ui/svg-icons/navigation/cancel'
@@ -101,7 +101,7 @@ class Todo extends React.Component {
           ? deleteIcon.hoverColor : deleteIcon.color
 
     return (
-      <RandomAppearAnimation
+      <FadeInDashboardAnimation
         delayRange={300}>
         <div
           style={styles.container}
@@ -117,7 +117,7 @@ class Todo extends React.Component {
             style={deleteIcon}
             onClick={this.removeTodo.bind(this)} />
         </div>
-      </RandomAppearAnimation>
+      </FadeInDashboardAnimation>
     )
   }
 }

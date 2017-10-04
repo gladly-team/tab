@@ -75,7 +75,7 @@ body {
 
 .fade-dashboard-enter.fade-dashboard-enter-active {
   opacity: 1;
-  transition: opacity 500ms ease-in;
+  transition: opacity 600ms ease-in;
 }
 
 .fade-dashboard-leave {
@@ -84,7 +84,7 @@ body {
 
 .fade-dashboard-leave.fade-dashboard-leave-active {
   opacity: 0.01;
-  transition: opacity 500ms ease-in;
+  transition: opacity 600ms ease-in;
 }
 
 .fade-dashboard-appear {
@@ -93,8 +93,8 @@ body {
 
 .fade-dashboard-appear.fade-dashboard-appear-active {
   opacity: 1;
-  transition: opacity 0.5s ease-in;
-  -webkit-transition: opacity 0.5s ease-in;
-  -ms-transition: opacity 0.5s ease-in;
-  -moz-transition: opacity 0.5s ease-in;
+  transition: opacity 0.6s ease-in;
+  -webkit-transition: opacity 0.6s ease-in;
+  -ms-transition: opacity 0.6s ease-in;
+  -moz-transition: opacity 0.6s ease-in;
 }

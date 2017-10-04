@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import RandomAppearAnimation from 'general/RandomAppearAnimation'
+import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
 import Chip from 'material-ui/Chip'
 
 class BookmarkChip extends React.Component {
@@ -77,10 +77,10 @@ class BookmarkChip extends React.Component {
       </Chip>)
 
     return (
-      <RandomAppearAnimation
+      <FadeInDashboardAnimation
         delayRange={300}>
         {bookmarkChip}
-      </RandomAppearAnimation>)
+      </FadeInDashboardAnimation>)
   }
 }
 

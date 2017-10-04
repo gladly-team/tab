@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import FadeInAnimation from 'general/FadeInAnimation'
+import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
 
 import Chip from 'material-ui/Chip'
 import AddCircle from 'material-ui/svg-icons/content/add-circle'
@@ -47,7 +47,7 @@ class NotesHeader extends React.Component {
                   ? chip.addIcon.hoverColor : chip.addIcon.color
 
     return (
-      <FadeInAnimation>
+      <FadeInDashboardAnimation>
         <Chip
           key={'node-header-key'}
           backgroundColor={chip.backgroundColor}
@@ -63,7 +63,7 @@ class NotesHeader extends React.Component {
                 onMouseLeave={this.onAddBtnMouseMove.bind(this, false)} />
             </div>
         </Chip>
-      </FadeInAnimation>
+      </FadeInDashboardAnimation>
     )
   }
 }

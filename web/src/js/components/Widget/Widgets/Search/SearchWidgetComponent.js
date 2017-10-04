@@ -1,14 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
 // import DefaultSearch from './DefaultSearch';
 import CenteredSearch from './CenteredSearch'
 
 class SearchWidget extends React.Component {
   render () {
     return (
-      <CenteredSearch
-        widget={this.props.widget}
-        user={this.props.user} />
+      <FadeInDashboardAnimation>
+        <CenteredSearch
+          widget={this.props.widget}
+          user={this.props.user} />
+      </FadeInDashboardAnimation>
     )
   }
 }

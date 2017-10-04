@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 
+import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
+
 import { getWidgetConfig } from '../../../../utils/widgets-utils'
 
 import appTheme from 'theme/default'
@@ -79,10 +81,12 @@ class ClockWidget extends React.Component {
     }
 
     return (
-      <div style={clockContainer}>
-        <h1 style={timeStyle}>{this.state.time}</h1>
-        <h2 style={dateStyle}>{this.state.date}</h2>
-      </div>
+      <FadeInDashboardAnimation>
+        <div style={clockContainer}>
+          <h1 style={timeStyle}>{this.state.time}</h1>
+          <h2 style={dateStyle}>{this.state.date}</h2>
+        </div>
+      </FadeInDashboardAnimation>
     )
   }
 }
