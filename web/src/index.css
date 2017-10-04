@@ -68,3 +68,33 @@ body {
   -ms-transition: opacity .3s ease-in;
   -moz-transition: opacity .3s ease-in;
 }
+
+.fade-dashboard-enter {
+  opacity: 0.01;
+}
+
+.fade-dashboard-enter.fade-dashboard-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.fade-dashboard-leave {
+  opacity: 1;
+}
+
+.fade-dashboard-leave.fade-dashboard-leave-active {
+  opacity: 0.01;
+  transition: opacity 500ms ease-in;
+}
+
+.fade-dashboard-appear {
+  opacity: 0.01;
+}
+
+.fade-dashboard-appear.fade-dashboard-appear-active {
+  opacity: 1;
+  transition: opacity 0.5s ease-in;
+  -webkit-transition: opacity 0.5s ease-in;
+  -ms-transition: opacity 0.5s ease-in;
+  -moz-transition: opacity 0.5s ease-in;
+}
