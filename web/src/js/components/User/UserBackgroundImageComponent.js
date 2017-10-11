@@ -46,7 +46,7 @@ class UserBackgroundImage extends React.Component {
 
   componentWillReceiveProps (nextProps) {
     if (this.arePropsReady(nextProps) &&
-      this.hasBackgroundChanged(this.props, nextProps)) {
+      this.arePropsDifferentFromState(nextProps)) {
       this.updateBackgroundSettings(nextProps)
     }
   }
@@ -70,19 +70,6 @@ class UserBackgroundImage extends React.Component {
       get(props, ['user', 'customImage']) !== this.state.customImage ||
       get(props, ['user', 'backgroundColor']) !== this.state.backgroundColor ||
       get(props, ['user', 'backgroundImage', 'imageURL']) !== this.state.backgroundImageURL
-    )
-  }
-
-  // Determine if background settings are different in the new props
-  // versus the old props.
-  hasBackgroundChanged (oldProps, newProps) {
-    const oldUser = get(oldProps, ['user'], {})
-    const newUser = get(newProps, ['user'], {})
-    return (
-      get(oldUser, ['backgroundOption']) !== get(newUser, ['backgroundOption']) ||
-      get(oldUser, ['customImage']) !== get(newUser, ['customImage']) ||
-      get(oldUser, ['backgroundColor']) !== get(newUser, ['backgroundColor']) ||
-      get(oldUser, ['backgroundImage', 'imageURL']) !== get(newUser, ['backgroundImage', 'imageURL'])
     )
   }
 

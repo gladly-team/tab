@@ -225,113 +225,79 @@ describe('User background image component', function () {
     expect(showErrorHandler).toHaveBeenCalledWith('We could not load your background image.')
   })
 
-  it('correctly determines whether background props change', function () {
-    const user = {
-      backgroundOption: 'color',
-      customImage: 'https://example.com/some-custom-photo.png',
-      backgroundColor: '#FF0000',
-      backgroundImage: {
-        imageURL: 'https://example.com/pic.png'
-      }
-    }
+  it('correctly determines whether background props are different from state', function () {
     const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
     const wrapper = shallow(
-      <UserBackgroundImageComponent user={user} />
+      <UserBackgroundImageComponent user={null} />
     )
+    var state
+    var props
 
-    const propsA = {
-      user: {
-        backgroundOption: 'photo',
-        customImage: 'https://example.com/some-custom-photo.png',
-        backgroundColor: '#FF0000',
-        backgroundImage: {
-          imageURL: 'https://example.com/pic.png'
-        }
-      }
+    // Fake state.
+    var stateBackgroundOption = 'color'
+    var stateCustomImage = 'https://example.com/some-custom-photo.png'
+    var stateBackgroundColor = '#FF0000'
+    var stateCustomImageURL = 'https://example.com/pic.png'
+    state = {
+      backgroundOption: stateBackgroundOption,
+      customImage: stateCustomImage,
+      backgroundColor: stateBackgroundColor,
+      backgroundImageURL: stateCustomImageURL
     }
-    const propsB = {
-      user: {
-        backgroundOption: 'color',
-        customImage: 'https://example.com/some-custom-photo.png',
-        backgroundColor: '#FF0000',
-        backgroundImage: {
-          imageURL: 'https://example.com/pic.png'
-        }
-      }
-    }
-    const propsC = {
-      user: {
-        backgroundOption: 'photo',
-        customImage: 'https://example.com/some-custom-photo.png',
-        backgroundColor: '#FF0000',
-        backgroundImage: {
-          imageURL: 'https://example.com/a-new-photo.png'
-        }
-      }
-    }
-    const propsD = {
-      user: {
-        backgroundOption: 'photo',
-        customImage: 'https://example.com/some-custom-photo.png',
-        backgroundColor: '#CDCDCD',
-        backgroundImage: {
-          imageURL: 'https://example.com/pic.png'
-        }
-      }
-    }
-    const propsAExtraneousChange = {
-      user: {
-        backgroundOption: 'photo',
-        customImage: 'https://example.com/some-custom-photo.png',
-        backgroundColor: '#FF0000',
-        backgroundImage: {
-          imageURL: 'https://example.com/pic.png'
-        },
-        someOtherProp: 'foo'
-      }
-    }
-    expect(wrapper.instance()
-      .hasBackgroundChanged(propsA, propsA)).toBe(false)
-    expect(wrapper.instance()
-      .hasBackgroundChanged(propsA, propsAExtraneousChange)).toBe(false)
-    expect(wrapper.instance()
-      .hasBackgroundChanged(propsA, propsB)).toBe(true)
-    expect(wrapper.instance()
-      .hasBackgroundChanged(propsA, propsC)).toBe(true)
-    expect(wrapper.instance()
-      .hasBackgroundChanged(propsA, propsD)).toBe(true)
-  })
 
-  it('handles null user prop when determining if props changed', function () {
-    const user = {
-      backgroundOption: 'color',
-      customImage: 'https://example.com/some-custom-photo.png',
-      backgroundColor: '#FF0000',
-      backgroundImage: {
-        imageURL: 'https://example.com/pic.png'
+    // Fake props.
+    var propsBackgroundOption = stateBackgroundOption
+    var propsCustomImage = stateCustomImage
+    var propsBackgroundColor = stateBackgroundColor
+    var propsCustomImageURL = stateCustomImageURL
+    props = {
+      user: {
+        backgroundOption: propsBackgroundOption,
+        customImage: propsCustomImage,
+        backgroundColor: propsBackgroundColor,
+        backgroundImage: {
+          imageURL: propsCustomImageURL
+        }
       }
     }
-    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
-    const wrapper = shallow(
-      <UserBackgroundImageComponent user={user} />
-    )
 
-    const propsA = {
+    wrapper.setState(state)
+
+    // State and props should be identical at this point.
+    expect(wrapper.instance()
+      .arePropsDifferentFromState(props))
+      .toBe(false)
+
+    propsCustomImageURL = 'https://example.com/something-else.png'
+    props = {
       user: {
-        backgroundOption: 'photo',
-        customImage: 'https://example.com/some-custom-photo.png',
-        backgroundColor: '#FF0000',
+        backgroundOption: propsBackgroundOption,
+        customImage: propsCustomImage,
+        backgroundColor: propsBackgroundColor,
         backgroundImage: {
-          imageURL: 'https://example.com/pic.png'
+          imageURL: propsCustomImageURL
         }
       }
     }
     expect(wrapper.instance()
-      .hasBackgroundChanged({}, {})).toBe(false)
+      .arePropsDifferentFromState(props))
+      .toBe(true)
+
+    propsCustomImageURL = stateCustomImageURL
+    propsBackgroundOption = 'photo'
+    props = {
+      user: {
+        backgroundOption: propsBackgroundOption,
+        customImage: propsCustomImage,
+        backgroundColor: propsBackgroundColor,
+        backgroundImage: {
+          imageURL: propsCustomImageURL
+        }
+      }
+    }
     expect(wrapper.instance()
-      .hasBackgroundChanged(propsA, {})).toBe(true)
-    expect(wrapper.instance()
-      .hasBackgroundChanged({}, propsA)).toBe(true)
+      .arePropsDifferentFromState(props))
+      .toBe(true)
   })
 
   it('sets state on mount using local storage values', function () {
