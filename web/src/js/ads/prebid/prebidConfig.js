@@ -6,7 +6,7 @@ import { getPrebidPbjs } from './getPrebidPbjs'
 export default function () {
   // Prebid config section START
   // Make sure this is inserted before your GPT tag.
-  const prebidTimeoutMs = 1200
+  const prebidTimeoutMs = 800
 
   const adUnits = [{
     code: 'div-gpt-ad-1464385742501-0',
