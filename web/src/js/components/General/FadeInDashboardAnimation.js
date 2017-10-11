@@ -2,23 +2,23 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { CSSTransitionGroup } from 'react-transition-group'
 
-class FadeInAnimation extends React.Component {
+class FadeInDashboardAnimation extends React.Component {
   render () {
     return (
       <CSSTransitionGroup
-        transitionName='fade'
+        transitionName='fade-dashboard'
         transitionAppear
-        transitionAppearTimeout={300}
-        transitionEnterTimeout={300}
-        transitionLeaveTimeout={300}>
+        transitionAppearTimeout={800}
+        transitionEnterTimeout={800}
+        transitionLeaveTimeout={800}>
         {this.props.children}
       </CSSTransitionGroup>
     )
   }
 }
 
-FadeInAnimation.propTypes = {
+FadeInDashboardAnimation.propTypes = {
   children: PropTypes.object.isRequired
 }
 
-export default FadeInAnimation
+export default FadeInDashboardAnimation

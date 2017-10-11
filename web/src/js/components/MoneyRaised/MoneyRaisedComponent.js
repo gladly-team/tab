@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { commaFormatted, currencyFormatted } from 'utils/utils'
+import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
 import MoneyRaisedPopover from './MoneyRaisedPopover'
 
 class MoneyRaised extends React.Component {
@@ -87,17 +88,19 @@ class MoneyRaised extends React.Component {
     var amountDonated = '$' + commaFormatted(currencyFormatted(moneyRaised))
 
     return (
-      <div
-        onMouseEnter={this.handleTouchTap.bind(this)}
-        onMouseLeave={this.handlePopoverRequestClose.bind(this)}
-        style={container}>
-        <span
-          style={text}>{amountDonated}</span>
-        <MoneyRaisedPopover
-          open={this.state.open}
-          anchorEl={this.state.anchorEl}
-          onRequestClose={this.handlePopoverRequestClose.bind(this)} />
-      </div>
+      <FadeInDashboardAnimation>
+        <div
+          onMouseEnter={this.handleTouchTap.bind(this)}
+          onMouseLeave={this.handlePopoverRequestClose.bind(this)}
+          style={container}>
+          <span
+            style={text}>{amountDonated}</span>
+          <MoneyRaisedPopover
+            open={this.state.open}
+            anchorEl={this.state.anchorEl}
+            onRequestClose={this.handlePopoverRequestClose.bind(this)} />
+        </div>
+      </FadeInDashboardAnimation>
     )
   }
 }
@@ -106,7 +109,7 @@ MoneyRaised.propTypes = {
   app: PropTypes.shape({
     moneyRaised: PropTypes.number.isRequired,
     dollarsPerDayRate: PropTypes.number.isRequired
-  }).isRequired
+  })
 }
 
 export default MoneyRaised

@@ -36,6 +36,9 @@ class InviteFriend extends React.Component {
 
   render () {
     const { user } = this.props
+    if (!user) {
+      return null
+    }
     const username = user ? user.username : ''
 
     return (
@@ -63,7 +66,7 @@ class InviteFriend extends React.Component {
 InviteFriend.propTypes = {
   user: PropTypes.shape({
     username: PropTypes.string.isRequired
-  }).isRequired
+  })
 }
 
 export default InviteFriend

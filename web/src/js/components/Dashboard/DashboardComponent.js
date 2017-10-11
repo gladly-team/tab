@@ -11,7 +11,7 @@ import UpdateVc from './UpdateVcContainer'
 
 import { goToSettings, goToDonate } from 'navigation/navigation'
 
-import FadeInAnimation from 'general/FadeInAnimation'
+import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
 import ErrorMessage from 'general/ErrorMessage'
 
 import IconButton from 'material-ui/IconButton'
@@ -63,6 +63,7 @@ class Dashboard extends React.Component {
   }
 
   render () {
+    // Props will be null on first render.
     const { app, user } = this.props
 
     const content = {
@@ -73,8 +74,7 @@ class Dashboard extends React.Component {
       left: 0,
       width: '100vw',
       height: '100vh',
-      zIndex: 'auto',
-      backgroundColor: 'rgba(0,0,0,.2)'
+      zIndex: 'auto'
     }
 
     const topRightItems = {
@@ -83,7 +83,7 @@ class Dashboard extends React.Component {
         top: 0,
         right: 0,
         display: 'flex',
-        zIndex: 2147483647
+        zIndex: 200
       },
       leftContainer: {
         padding: 5
@@ -98,78 +98,80 @@ class Dashboard extends React.Component {
     const errorMessage = this.state.errorMessage
 
     return (
-      <FadeInAnimation>
-        <div
-          data-test-id={'app-dashboard-id'}
-          key={'dashboard-key'}>
-          <UserBackgroundImage user={user} />
-          <div style={content}>
-            <div style={topRightItems.main}>
-              <div style={topRightItems.leftContainer}>
-                <MoneyRaised app={app} />
-                <VcUser user={user} />
-              </div>
-              <div style={topRightItems.rightContainer}>
-                <IconButton
-                  tooltip='Settings'
-                  tooltipPosition='bottom-left'
-                  onClick={this._goToSettings.bind(this)}>
-                  <FontIcon
-                    color={grey300}
-                    hoverColor={'#FFF'}
-                    className='fa fa-cog fa-lg' />
-                </IconButton>
-
-                <IconButton
-                  tooltip='Donate'
-                  tooltipPosition='top-left'
-                  onClick={this._goToDonate.bind(this)}>
-                  <FontIcon
-                    color={grey300}
-                    hoverColor={'#FFF'}
-                    className='fa fa-heart fa-lg' />
-                </IconButton>
-                <InviteFriend user={user} />
+      <div
+        data-test-id={'app-dashboard-id'}
+        key={'dashboard-key'}>
+        <UserBackgroundImage user={user} showError={this.showError.bind(this)} />
+        { user
+          ? <FadeInDashboardAnimation>
+            <div style={content}>
+              <div style={topRightItems.main}>
+                <div style={topRightItems.leftContainer}>
+                  <MoneyRaised app={app} />
+                  <VcUser user={user} />
+                </div>
+                <div style={topRightItems.rightContainer}>
+                  <IconButton
+                    tooltip='Settings'
+                    tooltipPosition='bottom-left'
+                    onClick={this._goToSettings.bind(this)}>
+                    <FontIcon
+                      color={grey300}
+                      hoverColor={'#FFF'}
+                      className='fa fa-cog fa-lg' />
+                  </IconButton>
+                  <IconButton
+                    tooltip='Donate'
+                    tooltipPosition='top-left'
+                    onClick={this._goToDonate.bind(this)}>
+                    <FontIcon
+                      color={grey300}
+                      hoverColor={'#FFF'}
+                      className='fa fa-heart fa-lg' />
+                  </IconButton>
+                  <InviteFriend user={user} />
+                </div>
               </div>
             </div>
-          </div>
-          <WidgetsContainer user={user} showError={this.showError.bind(this)} />
-          <Ad
-            adId='div-gpt-ad-1464385742501-0'
-            adSlotId='/43865596/HBTR'
-            width={300}
-            height={250}
-            style={{
-              position: 'absolute',
-              bottom: 10,
-              right: 10,
-              display: 'block'
-            }} />
-          <Ad
-            adId='div-gpt-ad-1464385677836-0'
-            adSlotId='/43865596/HBTL'
-            width={728}
-            height={90}
-            style={{
-              position: 'absolute',
-              bottom: 10,
-              right: 320,
-              display: 'block'
-            }} />
-          <UpdateVc user={user} />
-          { errorMessage
-            ? <ErrorMessage message={errorMessage}
-              onRequestClose={this.clearError.bind(this)} />
-            : null }
-        </div>
-      </FadeInAnimation>
+          </FadeInDashboardAnimation>
+          : null
+        }
+        <WidgetsContainer user={user} showError={this.showError.bind(this)} />
+        <Ad
+          adId='div-gpt-ad-1464385742501-0'
+          adSlotId='/43865596/HBTR'
+          width={300}
+          height={250}
+          style={{
+            position: 'absolute',
+            bottom: 10,
+            right: 10,
+            display: 'block'
+          }} />
+        <Ad
+          adId='div-gpt-ad-1464385677836-0'
+          adSlotId='/43865596/HBTL'
+          width={728}
+          height={90}
+          style={{
+            position: 'absolute',
+            bottom: 10,
+            right: 320,
+            display: 'block'
+          }} />
+        { user ? <UpdateVc user={user} /> : null }
+        { errorMessage
+          ? <ErrorMessage message={errorMessage}
+            onRequestClose={this.clearError.bind(this)} />
+          : null }
+      </div>
     )
   }
 }
 
 Dashboard.propTypes = {
-  app: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired
+  app: PropTypes.object,
+  user: PropTypes.object
 }
 
 export default Dashboard

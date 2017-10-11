@@ -4,143 +4,80 @@ beforeEach(() => {
   jest.resetModules()
 })
 
+const mockSetItem = jest.fn()
+jest.mock('../localstorage-mgr', () => {
+  return {
+    getItem: (key) => {
+      switch (key) {
+        case 'tab.user.background.option':
+          return 'photo'
+        case 'tab.user.background.color':
+          return '#FF0000'
+        case 'tab.user.background.imageURL':
+          return 'https://static.example.com/my-img.png'
+        case 'tab.user.background.customImage':
+          return 'https://static.foo.com/some-img.png'
+        default:
+          return undefined
+      }
+    },
+    setItem: mockSetItem
+  }
+})
+
 describe('localBkgStorageMgr', () => {
-  it('loads the expected object', () => {
-    jest.mock('../localstorage-mgr', () => {
-      return {
-        getItem: (key) => {
-          switch (key) {
-            case 'background-option':
-              return 'photo'
-            case 'background-color':
-              return '#FF0000'
-            case 'background-image-url':
-              return 'https://static.example.com/my-img.png'
-            case 'custom-image':
-              return 'https://static.foo.com/some-img.png'
-            default:
-              return undefined
-          }
-        }
-      }
-    })
-    const localBkgStorageMgr = require('../local-bkg-settings').default
-    expect(localBkgStorageMgr.getLocalBkgSettings()).toEqual({
-      backgroundColor: '#FF0000',
-      backgroundImage: {
-        imageURL: 'https://static.example.com/my-img.png'
-      },
-      backgroundOption: 'photo',
-      customImage: 'https://static.foo.com/some-img.png'
-    })
+  it('loads the background option', () => {
+    const getUserBackgroundOption = require('../local-bkg-settings')
+      .getUserBackgroundOption
+    expect(getUserBackgroundOption()).toEqual('photo')
   })
 
-  it('catches errors', () => {
-    jest.spyOn(console, 'log')
-      .mockImplementationOnce(() => {})
-    jest.mock('../localstorage-mgr', () => {
-      return {
-        getItem: (key) => {
-          throw new Error('Oops.')
-        }
-      }
-    })
-    const localBkgStorageMgr = require('../local-bkg-settings').default
-    localBkgStorageMgr.getLocalBkgSettings()
+  it('loads the background color', () => {
+    const getUserBackgroundColor = require('../local-bkg-settings')
+      .getUserBackgroundColor
+    expect(getUserBackgroundColor()).toEqual('#FF0000')
   })
 
-  it('does not updates local storages as expected', () => {
-    const user = {
-      backgroundColor: '#FF0000',
-      backgroundImage: {
-        // This has changed.
-        imageURL: 'https://static.example.com/a-new-image-yay.png'
-      },
-      backgroundOption: 'photo',
-      customImage: 'https://static.foo.com/some-img.png'
-    }
-
-    jest.mock('../localstorage-mgr', () => {
-      return {
-        getItem: (key) => {
-          switch (key) {
-            case 'background-option':
-              return 'photo'
-            case 'background-color':
-              return '#FF0000'
-            case 'background-image-url':
-              return 'https://static.example.com/my-img.png'
-              // return 'https://static.example.com/a-new-image-yay.png' // wrong
-            case 'custom-image':
-              return 'https://static.foo.com/some-img.png'
-            default:
-              return undefined
-          }
-        }
-      }
-    })
-    const localBkgStorageMgr = require('../local-bkg-settings').default
-    expect(localBkgStorageMgr
-      .shouldUpdateLocalBkgSettings(user)).toBe(true)
+  it('loads the background image URL', () => {
+    const getUserBackgroundImageURL = require('../local-bkg-settings')
+      .getUserBackgroundImageURL
+    expect(getUserBackgroundImageURL())
+      .toEqual('https://static.example.com/my-img.png')
   })
 
-  it('does not update local storage unnecessarily', () => {
-    const user = {
-      backgroundColor: '#FF0000',
-      backgroundImage: {
-        imageURL: 'https://static.example.com/my-img.png'
-      },
-      backgroundOption: 'photo',
-      customImage: 'https://static.foo.com/some-img.png'
-    }
-
-    jest.mock('../localstorage-mgr', () => {
-      return {
-        getItem: (key) => {
-          switch (key) {
-            case 'background-option':
-              return 'photo'
-            case 'background-color':
-              return '#FF0000'
-            case 'background-image-url':
-              return 'https://static.example.com/my-img.png'
-            case 'custom-image':
-              return 'https://static.foo.com/some-img.png'
-            default:
-              return undefined
-          }
-        }
-      }
-    })
-    const localBkgStorageMgr = require('../local-bkg-settings').default
-    expect(localBkgStorageMgr
-      .shouldUpdateLocalBkgSettings(user)).toBe(false)
+  it('loads the background custom image', () => {
+    const getUserBackgroundCustomImage = require('../local-bkg-settings')
+      .getUserBackgroundCustomImage
+    expect(getUserBackgroundCustomImage())
+      .toEqual('https://static.foo.com/some-img.png')
   })
 
   it('writes to local storage as expected', () => {
-    const user = {
-      backgroundColor: '#FF0000',
-      backgroundImage: {
-        imageURL: 'https://static.example.com/my-img.png'
-      },
-      backgroundOption: 'photo',
-      customImage: 'https://static.foo.com/some-img.png'
-    }
+    const setBackgroundSettings = require('../local-bkg-settings').setBackgroundSettings
+    setBackgroundSettings('color', 'https://static.foo.com/blep.png',
+      '#000000', 'https://static.example.com/my-img.png')
 
-    const mockSetItem = jest.fn()
-    jest.mock('../localstorage-mgr', () => {
-      return {
-        setItem: mockSetItem
-      }
+    expect(mockSetItem.mock.calls).toEqual([
+      ['tab.user.background.option', 'color'],
+      ['tab.user.background.customImage', 'https://static.foo.com/blep.png'],
+      ['tab.user.background.color', '#000000'],
+      ['tab.user.background.imageURL', 'https://static.example.com/my-img.png']
+    ])
+  })
+
+  it('messages the extension parent frame when saving new settings', () => {
+    jest.mock('../extension-messenger')
+    const postBackgroundSettings = require('../extension-messenger').postBackgroundSettings
+
+    const setBackgroundSettings = require('../local-bkg-settings').setBackgroundSettings
+    setBackgroundSettings('color', 'https://static.foo.com/blep.png',
+      '#000000', 'https://static.example.com/my-img.png')
+
+    expect(postBackgroundSettings).toHaveBeenCalledWith({
+      backgroundOption: 'color',
+      customImage: 'https://static.foo.com/blep.png',
+      backgroundColor: '#000000',
+      imageURL: 'https://static.example.com/my-img.png'
     })
-    const localBkgStorageMgr = require('../local-bkg-settings').default
-    localBkgStorageMgr.setLocalBkgSettings(user)
-    expect(mockSetItem).toHaveBeenCalledWith('background-image-url',
-      'https://static.example.com/my-img.png')
-    expect(mockSetItem).toHaveBeenCalledWith('background-color',
-     '#FF0000')
-    expect(mockSetItem).toHaveBeenCalledWith('custom-image',
-      'https://static.foo.com/some-img.png')
-    expect(mockSetItem).toHaveBeenCalledWith('background-option', 'photo')
   })
 })

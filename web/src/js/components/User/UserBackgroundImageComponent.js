@@ -1,42 +1,119 @@
 /* eslint-disable jsx-a11y/href-no-hash */
 import React from 'react'
 import PropTypes from 'prop-types'
-// import localBkgStorageMgr from 'utils/local-bkg-settings'
+import { get, has } from 'lodash/object'
+import {
+  USER_BACKGROUND_OPTION_CUSTOM,
+  USER_BACKGROUND_OPTION_COLOR,
+  USER_BACKGROUND_OPTION_PHOTO,
+  USER_BACKGROUND_OPTION_DAILY
+} from '../../constants'
+import {
+  getUserBackgroundOption,
+  getUserBackgroundCustomImage,
+  getUserBackgroundColor,
+  getUserBackgroundImageURL,
+  setBackgroundSettings
+} from 'utils/local-bkg-settings'
 
 class UserBackgroundImage extends React.Component {
   constructor (props) {
     super(props)
 
+    const backgroundOption = getUserBackgroundOption()
     this.state = {
-      user: this.props.user
+      // Only show the background when any image has
+      // fully loaded. Show a color background immediately.
+      show: (backgroundOption === USER_BACKGROUND_OPTION_COLOR),
+      imgLoaded: false,
+      imgError: false,
+      backgroundOption: backgroundOption,
+      customImage: getUserBackgroundCustomImage(),
+      backgroundColor: getUserBackgroundColor(),
+      backgroundImageURL: getUserBackgroundImageURL()
     }
+  }
 
-    // FIXME
-    // this.state = {
-    //   user: localBkgStorageMgr.getLocalBkgSettings()
-    // }
+  componentWillMount () {
+    // If the props contain valid settings for the background,
+    // and they are different from what's already in state,
+    // update the background settings values.
+    if (this.arePropsReady(this.props) &&
+      this.arePropsDifferentFromState(this.props)) {
+      this.updateBackgroundSettings(this.props)
+    }
   }
 
   componentWillReceiveProps (nextProps) {
-    if (!this.props.user && nextProps.user) {
-      this.setState({
-        user: nextProps.user
-      })
+    if (this.arePropsReady(nextProps) &&
+      this.arePropsDifferentFromState(nextProps)) {
+      this.updateBackgroundSettings(nextProps)
     }
+  }
 
-    // FIXME
-    // if (nextProps.user) {
-    //   if (localBkgStorageMgr.shouldUpdateLocalBkgSettings(nextProps.user)) {
-    //     localBkgStorageMgr.setLocalBkgSettings(nextProps.user)
-    //   }
-    // }
+  // Determine if the props have the values we need to render
+  // the background.
+  arePropsReady (props) {
+    return (
+      has(props, ['user', 'backgroundOption']) &&
+      has(props, ['user', 'customImage']) &&
+      has(props, ['user', 'backgroundColor']) &&
+      has(props, ['user', 'backgroundImage', 'imageURL'])
+    )
+  }
+
+  // Determine if the props hold background settings that are
+  // different from the background settings currently in state.
+  arePropsDifferentFromState (props) {
+    return (
+      get(props, ['user', 'backgroundOption']) !== this.state.backgroundOption ||
+      get(props, ['user', 'customImage']) !== this.state.customImage ||
+      get(props, ['user', 'backgroundColor']) !== this.state.backgroundColor ||
+      get(props, ['user', 'backgroundImage', 'imageURL']) !== this.state.backgroundImageURL
+    )
+  }
+
+  updateBackgroundSettings (props) {
+    let backgroundOption = get(props, ['user', 'backgroundOption'])
+    let customImage = get(props, ['user', 'customImage'])
+    let backgroundColor = get(props, ['user', 'backgroundColor'])
+    let backgroundImageURL = get(props, ['user', 'backgroundImage', 'imageURL'])
+
+    // Keep showing the background if we already are, or
+    // show it immediately if the background is a color.
+    let show = this.state.show || (backgroundOption === USER_BACKGROUND_OPTION_COLOR)
+
+    this.setState({
+      show: show,
+      backgroundOption: backgroundOption,
+      customImage: customImage,
+      backgroundColor: backgroundColor,
+      backgroundImageURL: backgroundImageURL
+    })
+    setBackgroundSettings(backgroundOption,
+      customImage, backgroundColor, backgroundImageURL)
+  }
+
+  onImgLoad (e) {
+    this.setState({
+      imgLoaded: true,
+      show: true
+    })
+  }
+
+  onImgError (e) {
+    this.setState({
+      imgError: true,
+      show: true
+    })
+    this.props.showError('We could not load your background image.')
   }
 
   render () {
-    const user = this.state.user
-
     const defaultStyle = {
-      opacity: 1,
+      boxShadow: 'rgba(0, 0, 0, 0.5) 0px 0px 120px inset',
+      opacity: this.state.show ? 1 : 0,
+      transition: 'opacity 0.5s ease-in',
       backgroundRepeat: 'no-repeat',
       backgroundPosition: 'center',
       backgroundAttachment: 'fixed',
@@ -53,23 +130,100 @@ class UserBackgroundImage extends React.Component {
       zIndex: 'auto'
     }
 
-    var backgroundImage
-    if (user.backgroundOption === 'custom') {
-      backgroundImage = Object.assign({}, defaultStyle, {
-        backgroundImage: 'url(' + user.customImage + ')'
-      })
-    } else if (user.backgroundOption === 'color') {
-      backgroundImage = Object.assign({}, defaultStyle, {
-        backgroundColor: user.backgroundColor
-      })
-    } else {
-      backgroundImage = Object.assign({}, defaultStyle, {
-        backgroundImage: 'url(' + user.backgroundImage.imageURL + ')'
-      })
+    var backgroundStyle = {}
+
+    // What we use if a property is missing.
+    const styleOnError = {
+      backgroundColor: '#4a90e2'
+    }
+    const backgroundOption = this.state.backgroundOption
+    var isImgBackground = false
+    var imgUrl = null
+    switch (backgroundOption) {
+      case USER_BACKGROUND_OPTION_CUSTOM:
+        if (this.state.customImage) {
+          backgroundStyle = {
+            backgroundImage: 'url(' + this.state.customImage + ')'
+          }
+          isImgBackground = true
+          imgUrl = this.state.customImage
+        } else {
+          backgroundStyle = styleOnError
+        }
+        break
+      case USER_BACKGROUND_OPTION_COLOR:
+        if (this.state.backgroundColor) {
+          backgroundStyle = {
+            backgroundColor: this.state.backgroundColor
+          }
+        } else {
+          backgroundStyle = styleOnError
+        }
+        break
+      case USER_BACKGROUND_OPTION_PHOTO:
+        if (this.state.backgroundImageURL) {
+          backgroundStyle = {
+            backgroundImage: 'url(' + this.state.backgroundImageURL + ')'
+          }
+          isImgBackground = true
+          imgUrl = this.state.backgroundImageURL
+        } else {
+          backgroundStyle = styleOnError
+        }
+        break
+      case USER_BACKGROUND_OPTION_DAILY:
+        if (this.state.backgroundImageURL) {
+          backgroundStyle = {
+            backgroundImage: 'url(' + this.state.backgroundImageURL + ')'
+          }
+          isImgBackground = true
+          imgUrl = this.state.backgroundImageURL
+        } else {
+          backgroundStyle = styleOnError
+        }
+        break
+      default:
+        backgroundStyle = {
+          background: 'none'
+        }
+        isImgBackground = false
+        break
     }
 
+    if (this.state.imgError) {
+      backgroundStyle = styleOnError
+    }
+
+    const finalBackgroundStyle = Object.assign({}, defaultStyle, backgroundStyle)
+
+    const tintOpacity = isImgBackground ? 0.2 : 0.03
+    const tintElemStyle = {
+      position: 'absolute',
+      top: 0,
+      bottom: 0,
+      right: 0,
+      left: 0,
+      width: '100vw',
+      height: '100vh',
+      zIndex: 'auto',
+      // Needs to match shading in extension new tab page.
+      backgroundColor: `rgba(0, 0, 0, ${tintOpacity})`
+    }
+
+    // For image backgrounds, we use an img element to "preload"
+    // the image before displaying the background.
     return (
-      <div style={backgroundImage} />
+      <div style={finalBackgroundStyle}>
+        { (isImgBackground && !this.state.imgLoaded)
+          ? <img
+            style={{display: 'none'}}
+            src={imgUrl}
+            onLoad={this.onImgLoad.bind(this)}
+            onError={this.onImgError.bind(this)} />
+          : null
+        }
+        <div data-test-id={'background-tint-overlay'} style={tintElemStyle} />
+      </div>
     )
   }
 }
@@ -80,9 +234,14 @@ UserBackgroundImage.propTypes = {
     customImage: PropTypes.string,
     backgroundColor: PropTypes.string,
     backgroundImage: PropTypes.shape({
-      imageURL: PropTypes.string.isRequired
+      imageURL: PropTypes.string
     })
-  }).isRequired
+  }),
+  showError: PropTypes.func
+}
+
+UserBackgroundImage.defaultProps = {
+  showError: () => {}
 }
 
 export default UserBackgroundImage

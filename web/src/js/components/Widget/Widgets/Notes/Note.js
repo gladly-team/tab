@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 
-import RandomAppearAnimation from 'general/RandomAppearAnimation'
+import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
 
 import DeleteIcon from 'material-ui/svg-icons/navigation/cancel'
 import Chip from 'material-ui/Chip'
@@ -98,7 +98,7 @@ class Note extends React.Component {
     var noteDate = this.getNoteDate()
 
     return (
-      <RandomAppearAnimation
+      <FadeInDashboardAnimation
         delayRange={300}>
         <div
           key={'note_' + this.props.index}
@@ -128,7 +128,7 @@ class Note extends React.Component {
               underlineShow={false} />
           </div>
         </div>
-      </RandomAppearAnimation>
+      </FadeInDashboardAnimation>
     )
   }
 }

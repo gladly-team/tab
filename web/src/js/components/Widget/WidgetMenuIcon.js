@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import FadeInAnimation from 'general/FadeInAnimation'
+import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
 
 import IconButton from 'material-ui/IconButton'
 import FontIcon from 'material-ui/FontIcon'
@@ -46,17 +46,19 @@ class WidgetMenuIcon extends React.Component {
     const finalIconStyle = Object.assign({}, style.container, activeStyle)
 
     return (
-      <FadeInAnimation>
-        <IconButton
-          style={finalIconStyle}
-          key={this.props.iconClassName + 'animation-key'}
-          onClick={this.onWidgetIconClicked.bind(this)}>
-          <FontIcon
-            color={grey300}
-            hoverColor={'#FFF'}
-            className={this.props.iconClassName} />
-        </IconButton>
-      </FadeInAnimation>
+      <FadeInDashboardAnimation>
+        <span>
+          <IconButton
+            style={finalIconStyle}
+            key={this.props.iconClassName + 'animation-key'}
+            onClick={this.onWidgetIconClicked.bind(this)}>
+            <FontIcon
+              color={grey300}
+              hoverColor={'#FFF'}
+              className={this.props.iconClassName} />
+          </IconButton>
+        </span>
+      </FadeInDashboardAnimation>
     )
   }
 }
