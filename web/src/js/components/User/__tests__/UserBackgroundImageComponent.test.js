@@ -178,11 +178,12 @@ describe('User background image component', function () {
       <UserBackgroundImageComponent user={null} />
     )
     const fallbackStyle = {
-      background: 'none'
+      backgroundImage: 'none',
+      backgroundColor: 'transparent'
     }
     const wrapperStyle = wrapper.get(0).props.style
     expect(wrapperStyle.background).toBe(fallbackStyle.background)
-    expect(wrapperStyle.backgroundImage).not.toBeDefined()
+    expect(wrapperStyle.backgroundImage).toBe('none')
   })
 
   it('falls back to default background on image load error', function () {

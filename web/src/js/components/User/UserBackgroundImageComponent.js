@@ -184,7 +184,8 @@ class UserBackgroundImage extends React.Component {
         break
       default:
         backgroundStyle = {
-          background: 'none'
+          backgroundImage: 'none',
+          backgroundColor: 'transparent'
         }
         isImgBackground = false
         break
