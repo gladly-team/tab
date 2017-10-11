@@ -29,6 +29,8 @@ env:
   - TEST_STATIC_FILES_ENDPOINT=//test-tab2017.gladly.io
   - TEST_CLOUDFRONT_DOMAIN_ALIAS=test-tab2017.gladly.io
   - TEST_ADS_ENABLED=false
+  # Media
+  - TEST_CLOUDFRONT_MEDIA_DOMAIN_ALIAS=test-tab2017-media.gladly.io
   # GraphQL
   - TEST_TABLE_NAME_APPENDIX="-test"
   - TEST_LOGGER=sentry
@@ -70,6 +72,8 @@ env:
   - DEV_STATIC_FILES_ENDPOINT=//dev-tab2017.gladly.io
   - DEV_CLOUDFRONT_DOMAIN_ALIAS=dev-tab2017.gladly.io
   - DEV_ADS_ENABLED=true
+  # Media
+  - DEV_CLOUDFRONT_MEDIA_DOMAIN_ALIAS=dev-tab2017-media.gladly.io
   # GraphQL
   - DEV_TABLE_NAME_APPENDIX="-dev"
   - DEV_LOGGER=sentry
@@ -106,6 +110,8 @@ env:
   - PROD_STATIC_FILES_ENDPOINT=//prod-tab2017.gladly.io
   - PROD_CLOUDFRONT_DOMAIN_ALIAS=prod-tab2017.gladly.io
   - PROD_ADS_ENABLED=true
+  # Media
+  - PROD_CLOUDFRONT_MEDIA_DOMAIN_ALIAS=prod-tab2017-media.gladly.io
   # GraphQL
   - PROD_TABLE_NAME_APPENDIX="-prod"
   - PROD_LOGGER=sentry
