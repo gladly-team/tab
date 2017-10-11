@@ -37,7 +37,9 @@ class CenteredSearch extends React.Component {
     const engine = this.state.config.engine || 'Google'
     const searchApi = this.getSearchApi(engine)
     const searchTerm = this.searchInput.input.value
-    window.open(searchApi + searchTerm, '_self')
+
+    // The page might be iframed, so opening in _top is critical.
+    window.open(searchApi + searchTerm, '_top')
 
     this.searchInput.input.value = ''
   }
