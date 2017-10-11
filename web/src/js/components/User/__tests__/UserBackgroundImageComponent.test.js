@@ -170,7 +170,8 @@ describe('User background image component', function () {
         getUserBackgroundCustomImage: jest.fn(() => null),
         getUserBackgroundColor: jest.fn(() => null),
         getUserBackgroundImageURL: jest.fn(() => null),
-        setBackgroundSettings: jest.fn()
+        setBackgroundSettings: jest.fn(),
+        setExtensionBackgroundSettings: jest.fn()
       }
     })
     const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
@@ -178,11 +179,12 @@ describe('User background image component', function () {
       <UserBackgroundImageComponent user={null} />
     )
     const fallbackStyle = {
-      background: 'none'
+      backgroundImage: 'none',
+      backgroundColor: 'transparent'
     }
     const wrapperStyle = wrapper.get(0).props.style
     expect(wrapperStyle.background).toBe(fallbackStyle.background)
-    expect(wrapperStyle.backgroundImage).not.toBeDefined()
+    expect(wrapperStyle.backgroundImage).toBe('none')
   })
 
   it('falls back to default background on image load error', function () {
@@ -308,7 +310,8 @@ describe('User background image component', function () {
         getUserBackgroundCustomImage: jest.fn(() => null),
         getUserBackgroundColor: jest.fn(() => '#FFF'),
         getUserBackgroundImageURL: jest.fn(() => 'https://example.com/pic.png'),
-        setBackgroundSettings: jest.fn()
+        setBackgroundSettings: jest.fn(),
+        setExtensionBackgroundSettings: jest.fn()
       }
     })
 
@@ -331,7 +334,8 @@ describe('User background image component', function () {
         getUserBackgroundCustomImage: jest.fn(() => null),
         getUserBackgroundColor: jest.fn(() => '#FFF'),
         getUserBackgroundImageURL: jest.fn(() => 'https://example.com/pic.png'),
-        setBackgroundSettings: jest.fn()
+        setBackgroundSettings: jest.fn(),
+        setExtensionBackgroundSettings: jest.fn()
       }
     })
 
@@ -358,7 +362,8 @@ describe('User background image component', function () {
         getUserBackgroundCustomImage: jest.fn(() => null),
         getUserBackgroundColor: jest.fn(() => '#FF0000'),
         getUserBackgroundImageURL: jest.fn(() => 'https://example.com/pic.png'),
-        setBackgroundSettings: jest.fn()
+        setBackgroundSettings: jest.fn(),
+        setExtensionBackgroundSettings: jest.fn()
       }
     })
 
@@ -441,6 +446,50 @@ describe('User background image component', function () {
     wrapper.setProps({ user: userUpdate }, () => {
       expect(setBackgroundSettings).not.toHaveBeenCalled()
     })
+  })
+
+  it('messages the parent frame on mount when there are settings in local storage', function () {
+    // Mock the settings in local storage.
+    jest.mock('utils/local-bkg-settings', () => {
+      return {
+        getUserBackgroundOption: jest.fn(() => 'photo'),
+        getUserBackgroundCustomImage: jest.fn(() => 'https://example.com/some-custom-photo.png'),
+        getUserBackgroundColor: jest.fn(() => '#FF0000'),
+        getUserBackgroundImageURL: jest.fn(() => 'https://example.com/pic.png'),
+        setBackgroundSettings: jest.fn(),
+        setExtensionBackgroundSettings: jest.fn()
+      }
+    })
+    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
+    mount(
+      <UserBackgroundImageComponent user={null} />
+    )
+
+    const setExtensionBackgroundSettings = require('utils/local-bkg-settings')
+      .setExtensionBackgroundSettings
+    expect(setExtensionBackgroundSettings).toHaveBeenCalledTimes(1)
+  })
+
+  it('does not message the parent frame on mount when there are not settings in local storage', function () {
+    // Mock the settings in local storage.
+    jest.mock('utils/local-bkg-settings', () => {
+      return {
+        getUserBackgroundOption: jest.fn(() => null),
+        getUserBackgroundCustomImage: jest.fn(() => null),
+        getUserBackgroundColor: jest.fn(() => null),
+        getUserBackgroundImageURL: jest.fn(() => null),
+        setBackgroundSettings: jest.fn(),
+        setExtensionBackgroundSettings: jest.fn()
+      }
+    })
+    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
+    mount(
+      <UserBackgroundImageComponent user={null} />
+    )
+
+    const setExtensionBackgroundSettings = require('utils/local-bkg-settings')
+      .setExtensionBackgroundSettings
+    expect(setExtensionBackgroundSettings).not.toHaveBeenCalled()
   })
 
   it('sets the expected tint overlay for a photo background', function () {
