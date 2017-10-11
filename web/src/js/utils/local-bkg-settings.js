@@ -15,8 +15,14 @@ export const setBackgroundSettings = function (backgroundOption,
   localStorageMgr.setItem(STORAGE_BACKGROUND_COLOR, backgroundColor)
   localStorageMgr.setItem(STORAGE_BACKGROUND_IMAGE_URL, imageURL)
 
-  // Call to extension new tab page (parent frame) to update
-  // its background settings.
+  setExtensionBackgroundSettings(backgroundOption,
+    customImage, backgroundColor, imageURL)
+}
+
+// Call to extension new tab page (parent frame) to update
+// its background settings.
+export const setExtensionBackgroundSettings = function (backgroundOption,
+    customImage, backgroundColor, imageURL) {
   postBackgroundSettings({
     backgroundOption: backgroundOption,
     customImage: customImage,

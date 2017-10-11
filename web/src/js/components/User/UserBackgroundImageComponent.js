@@ -2,6 +2,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { get, has } from 'lodash/object'
+import { isNil } from 'lodash/lang'
 import {
   USER_BACKGROUND_OPTION_CUSTOM,
   USER_BACKGROUND_OPTION_COLOR,
@@ -13,9 +14,24 @@ import {
   getUserBackgroundCustomImage,
   getUserBackgroundColor,
   getUserBackgroundImageURL,
-  setBackgroundSettings
+  setBackgroundSettings,
+  setExtensionBackgroundSettings
 } from 'utils/local-bkg-settings'
 
+/*
+ * We want to load the background as quickly as possible,
+ * so this component interacts with local storage and the
+ * parent frame (the browser extension's local new tab page).
+ * On mount, it tries to load background settings from
+ * local storage; if settings exist in local storage, it posts
+ * a message to the parent frame to make sure the background
+ * settings used by the extension new tab page are up to date.
+ * When the user data returns from the server, if the user's
+ * background settings are different from those in local
+ * storage, it updates the component state and messages the parent
+ * frame. If the user's settings from the server are identical,
+ * it should not update state or message the parent frame.
+*/
 class UserBackgroundImage extends React.Component {
   constructor (props) {
     super(props)
@@ -44,11 +60,31 @@ class UserBackgroundImage extends React.Component {
     }
   }
 
+  componentDidMount () {
+    // If there's background settings in local storage,
+    // call the parent frame to update the extension's
+    // background settings.
+    if (this.stateHasBackgroundSettings()) {
+      setExtensionBackgroundSettings(
+        this.state.backgroundOption,
+        this.state.customImage,
+        this.state.backgroundColor,
+        this.state.backgroundImageURL)
+    }
+  }
+
   componentWillReceiveProps (nextProps) {
+    // Only update state and saved background settings if the
+    // props contain different values.
     if (this.arePropsReady(nextProps) &&
       this.arePropsDifferentFromState(nextProps)) {
       this.updateBackgroundSettings(nextProps)
     }
+  }
+
+  // Determine if the state has values to render the background.
+  stateHasBackgroundSettings (props) {
+    return !isNil(this.state.backgroundOption)
   }
 
   // Determine if the props have the values we need to render
