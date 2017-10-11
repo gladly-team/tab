@@ -64,4 +64,20 @@ describe('localBkgStorageMgr', () => {
       ['tab.user.background.imageURL', 'https://static.example.com/my-img.png']
     ])
   })
+
+  it('messages the extension parent frame when saving new settings', () => {
+    jest.mock('../extension-messenger')
+    const postBackgroundSettings = require('../extension-messenger').postBackgroundSettings
+
+    const setBackgroundSettings = require('../local-bkg-settings').setBackgroundSettings
+    setBackgroundSettings('color', 'https://static.foo.com/blep.png',
+      '#000000', 'https://static.example.com/my-img.png')
+
+    expect(postBackgroundSettings).toHaveBeenCalledWith({
+      backgroundOption: 'color',
+      customImage: 'https://static.foo.com/blep.png',
+      backgroundColor: '#000000',
+      imageURL: 'https://static.example.com/my-img.png'
+    })
+  })
 })

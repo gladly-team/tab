@@ -5,6 +5,7 @@ import {
   STORAGE_BACKGROUND_COLOR,
   STORAGE_BACKGROUND_IMAGE_URL
 } from '../constants'
+import { postBackgroundSettings } from './extension-messenger'
 import localStorageMgr from './localstorage-mgr'
 
 export const setBackgroundSettings = function (backgroundOption,
@@ -14,7 +15,14 @@ export const setBackgroundSettings = function (backgroundOption,
   localStorageMgr.setItem(STORAGE_BACKGROUND_COLOR, backgroundColor)
   localStorageMgr.setItem(STORAGE_BACKGROUND_IMAGE_URL, imageURL)
 
-  // TODO: call to parent frame to update its localStorage.
+  // Call to extension new tab page (parent frame) to update
+  // its background settings.
+  postBackgroundSettings({
+    backgroundOption: backgroundOption,
+    customImage: customImage,
+    backgroundColor: backgroundColor,
+    imageURL: imageURL
+  })
 }
 
 export const getUserBackgroundOption = function () {
