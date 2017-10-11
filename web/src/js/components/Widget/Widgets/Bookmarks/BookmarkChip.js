@@ -19,7 +19,8 @@ class BookmarkChip extends React.Component {
       return
     }
 
-    window.open(link, '_self')
+    // The page might be iframed, so opening in _top is critical.
+    window.open(link, '_top')
     this.setState({
       open: false
     })

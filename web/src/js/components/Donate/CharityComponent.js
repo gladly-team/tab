@@ -43,7 +43,9 @@ class Charity extends React.Component {
 
   openCharityWebsite () {
     const { charity } = this.props
-    window.open(charity.website)
+
+    // The page might be iframed, so opening in _top is critical.
+    window.open(charity.website, '_top')
   }
 
   handleOpen (event) {

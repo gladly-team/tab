@@ -43,7 +43,9 @@ class DefaultSearch extends React.Component {
 
     const searchApi = this.getSearchApi(engine)
     const searchTerm = this.searchInput.input.value
-    window.open(searchApi + searchTerm, '_self')
+
+    // The page might be iframed, so opening in _top is critical.
+    window.open(searchApi + searchTerm, '_top')
 
     this.searchInput.input.value = ''
   }
