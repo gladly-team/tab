@@ -67,6 +67,7 @@ resources:
             - ${self:custom.cloudfrontMediaDomainAlias}
           DefaultCacheBehavior:
             # Cache media files for a long time.
+            DefaultTTL: 31536000 # one year
             MinTTL: 31536000 # one year
             MaxTTL: 63072000 # two years
             AllowedMethods:
