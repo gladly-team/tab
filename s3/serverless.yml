@@ -65,6 +65,11 @@ resources:
           Enabled: true
           Aliases:
             - ${self:custom.cloudfrontMediaDomainAlias}
+          # Note: this is only for Cloudfront caching, not browser caching. 
+          # For browser caching, we must still set Cache-Control headers
+          # on the origin server (S3). This isn't yet automated for media
+          # uploads; we set Cache-Control manually via the AWS CLI:
+          # https://stackoverflow.com/a/29280730/1332513
           DefaultCacheBehavior:
             # Cache media files for a long time.
             DefaultTTL: 31536000 # one year
