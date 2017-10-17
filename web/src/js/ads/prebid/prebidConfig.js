@@ -8,6 +8,8 @@ export default function () {
   // Make sure this is inserted before your GPT tag.
   const prebidTimeoutMs = 800
 
+  // Note: brealtime is automatically aliased by the
+  // AppNexus bid adapter.
   const adUnits = [{
     code: 'div-gpt-ad-1464385742501-0',
     sizes: [[300, 250]],
@@ -103,8 +105,6 @@ export default function () {
   const pbjs = getPrebidPbjs()
 
   pbjs.que.push(() => {
-    pbjs.aliasBidder('appnexus', 'brealtime')
-
     pbjs.enableAnalytics({
       provider: 'roxot',
       options: {
