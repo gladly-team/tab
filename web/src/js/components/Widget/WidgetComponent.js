@@ -25,6 +25,7 @@ class Widget extends React.Component {
           widget={widget}
           user={user}
           showError={this.props.showError} />)
+
       case WIDGET_TYPE_SEARCH:
         return (<SearchWidget
           widget={widget}

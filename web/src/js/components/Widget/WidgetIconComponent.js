@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import {
   WIDGET_TYPE_BOOKMARKS,
   WIDGET_TYPE_NOTES,
+  WIDGET_TYPE_SEARCH,
   WIDGET_TYPE_TODOS
 } from '../../constants'
 
@@ -32,12 +33,20 @@ class WidgetIcon extends React.Component {
           onWidgetIconClicked={this.onWidgetIconClicked.bind(this)}
           iconClassName={'fa fa-sticky-note-o'} />)
 
+      case WIDGET_TYPE_SEARCH:
+        return (<WidgetMenuIcon
+          widget={widget}
+          active
+          onWidgetIconClicked={this.onWidgetIconClicked.bind(this)}
+          iconClassName={'fa fa-search'} />)
+
       case WIDGET_TYPE_TODOS:
         return (<WidgetMenuIcon
           widget={widget}
           active={this.props.active}
           onWidgetIconClicked={this.onWidgetIconClicked.bind(this)}
           iconClassName={'fa fa-list-ul'} />)
+
       default:
         return null
     }

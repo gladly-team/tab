@@ -1,15 +1,19 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { getWidgetConfig } from '../../../../utils/widgets-utils'
-
+import {
+  grey300
+} from 'material-ui/styles/colors'
+import FontIcon from 'material-ui/FontIcon'
 import TextField from 'material-ui/TextField'
 import appTheme from 'theme/default'
+import { getWidgetConfig } from '../../../../utils/widgets-utils'
 
 class CenteredSearch extends React.Component {
   constructor (props) {
     super(props)
 
     this.state = {
+      hover: false,
       focused: false,
       config: {}
     }
@@ -44,6 +48,16 @@ class CenteredSearch extends React.Component {
     this.searchInput.input.value = ''
   }
 
+  onSearchHover (hover) {
+    this.setState({
+      hover: hover
+    })
+  }
+
+  onSearchClick () {
+    this.searchInput.focus()
+  }
+
   onInputFocusChanged (focused) {
     this.setState({
       focused: focused
@@ -64,56 +78,72 @@ class CenteredSearch extends React.Component {
   }
 
   render () {
-    const engine = this.state.config.engine || ''
+    const searchContainerStyle = {
+      display: 'flex',
+      alignItems: 'center',
+      position: 'relative',
+      zIndex: 1,
+      marginLeft: 16,
+      height: 58,
+      paddingTop: 3
+    }
 
-    const searchContainer = {
-      // position: 'absolute',
-      // top: 0,
-      // left: 0,
-      // width: '100vw',
-      // height: '100%',
-      // display: 'flex',
-      // alignItems: 'center',
-      // justifyContent: 'center',
+    const iconStyle = {
+      marginRight: 14
     }
 
     const underlineStyle = {
-      borderColor: appTheme.palette.borderColor
+      borderColor: appTheme.palette.borderColor,
+      opacity: (
+        this.state.hover || this.state.focused
+        ? 100
+        : 0
+      ),
+      transition: 'opacity 150ms ease-in'
     }
 
     const underlineFocusStyle = {
       borderColor: '#FFF'
     }
 
+    const inputContainerStyle = {
+      width: 220
+    }
+
     const inputStyle = {
-      textAlign: 'center',
+      textAlign: 'left',
       color: '#FFF',
-      fontSize: 22,
+      fontSize: 18,
+      fontWeight: 'normal',
       fontFamily: appTheme.fontFamily
     }
 
-    const errorStyle = {
-      color: '#FFF'
-    }
-
-    var engineText
-    if (this.state.focused) {
-      engineText = engine
-    }
-
     return (
-      <div style={searchContainer}>
-        <TextField
-          id={'tab-search-id'}
-          onFocus={this.onInputFocusChanged.bind(this, true)}
-          onBlur={this.onInputFocusChanged.bind(this, false)}
-          ref={(input) => { this.searchInput = input }}
-          onKeyPress={this._handleKeyPress.bind(this)}
-          inputStyle={inputStyle}
-          underlineStyle={underlineStyle}
-          underlineFocusStyle={underlineFocusStyle}
-          errorText={engineText}
-          errorStyle={errorStyle} />
+      <div style={searchContainerStyle}>
+        <span
+          onClick={this.onSearchClick.bind(this)}
+          onMouseEnter={this.onSearchHover.bind(this, true)}
+          onMouseLeave={this.onSearchHover.bind(this, false)}>
+          <FontIcon
+            color={
+              (this.state.hover || this.state.focused)
+              ? '#FFF'
+              : grey300
+            }
+            hoverColor={'#FFF'}
+            className={'fa fa-search'}
+            style={iconStyle} />
+          <TextField
+            id={'tab-search-id'}
+            onFocus={this.onInputFocusChanged.bind(this, true)}
+            onBlur={this.onInputFocusChanged.bind(this, false)}
+            ref={(input) => { this.searchInput = input }}
+            onKeyPress={this._handleKeyPress.bind(this)}
+            style={inputContainerStyle}
+            inputStyle={inputStyle}
+            underlineStyle={underlineStyle}
+            underlineFocusStyle={underlineFocusStyle} />
+        </span>
       </div>)
   }
 }

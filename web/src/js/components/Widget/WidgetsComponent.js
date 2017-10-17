@@ -48,18 +48,27 @@ class Widgets extends React.Component {
         <div style={widgetsContainer}>
           <div style={separator} />
           {user.widgets.edges.map((edge, index) => {
-            return (<WidgetIcon
-              key={index}
-              widget={edge.node}
-              active={user.activeWidget && edge.node.id === user.activeWidget}
-              onWidgetIconClicked={this.onWidgetIconClicked.bind(this)} />)
+            if (edge.node.type === WIDGET_TYPE_SEARCH) {
+              return (
+                <Widget
+                  key={index}
+                  user={user}
+                  widget={edge.node}
+                  showError={this.props.showError} />
+              )
+            } else {
+              return (<WidgetIcon
+                key={index}
+                widget={edge.node}
+                active={user.activeWidget && edge.node.id === user.activeWidget}
+                onWidgetIconClicked={this.onWidgetIconClicked.bind(this)} />)
+            }
           })}
         </div>
         <CenteredWidgetsContainer>
           {user.widgets.edges.map((edge, index) => {
             if (
-                edge.node.type === WIDGET_TYPE_CLOCK ||
-                edge.node.type === WIDGET_TYPE_SEARCH
+                edge.node.type === WIDGET_TYPE_CLOCK
               ) {
               return (
                 <Widget
