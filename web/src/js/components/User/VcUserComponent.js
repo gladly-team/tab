@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
+import appTheme from 'theme/default'
 
 class VcUser extends Component {
   render () {
@@ -19,7 +20,7 @@ class VcUser extends Component {
       textAlign: 'center',
       fontSize: '1em',
       fontWeight: 'normal',
-      fontFamily: "'Comic Sans MS', cursive, sans-serif"
+      fontFamily: appTheme.fontFamily
     }
 
     return (

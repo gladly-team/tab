@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { commaFormatted, currencyFormatted } from 'utils/utils'
 import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
 import MoneyRaisedPopover from './MoneyRaisedPopover'
+import appTheme from 'theme/default'
 
 class MoneyRaised extends React.Component {
   constructor (props) {
@@ -81,7 +82,7 @@ class MoneyRaised extends React.Component {
       color: 'white',
       fontSize: '1.7em',
       fontWeight: 'normal',
-      fontFamily: "'Helvetica Neue', Calibri, sans-serif"
+      fontFamily: appTheme.fontFamily
     }
 
     const moneyRaised = this.state.amountDonated

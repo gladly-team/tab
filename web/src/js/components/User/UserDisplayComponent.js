@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import appTheme from 'theme/default'
 
 import { FormattedMessage } from 'react-intl'
 
@@ -18,7 +19,7 @@ class UserDisplay extends React.Component {
       fontSize: '1em',
       fontWeight: 'bold',
       margin: 0,
-      fontFamily: "'Helvetica Neue', Calibri, sans-serif",
+      fontFamily: appTheme.fontFamily,
       padding: 12,
       cursor: 'pointer'
     }
