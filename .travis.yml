@@ -29,6 +29,8 @@ env:
   - TEST_STATIC_FILES_ENDPOINT=//test-tab2017.gladly.io
   - TEST_CLOUDFRONT_DOMAIN_ALIAS=test-tab2017.gladly.io
   - TEST_ADS_ENABLED=false
+  # Media
+  - TEST_CLOUDFRONT_MEDIA_DOMAIN_ALIAS=test-tab2017-media.gladly.io
   # GraphQL
   - TEST_TABLE_NAME_APPENDIX="-test"
   - TEST_LOGGER=sentry
@@ -38,7 +40,7 @@ env:
   - TEST_GRAPHQL_PROXY_DOMAIN=lspir87lia.execute-api.us-west-2.amazonaws.com
   - TEST_GRAPHQL_PROXY_PATH=/test
   - TEST_DYNAMODB_ENDPOINT=dynamodb.us-west-2.amazonaws.com
-  - TEST_MEDIA_ENDPOINT=https://s3-us-west-2.amazonaws.com/test-tab2017-media.gladly.io
+  - TEST_MEDIA_ENDPOINT=https://test-tab2017-media.gladly.io
   # Deployment
   - TEST_WEB_S3_BUCKET_NAME=test-tab2017.gladly.io
   - TEST_MEDIA_S3_BUCKET_NAME=test-tab2017-media.gladly.io
@@ -70,6 +72,8 @@ env:
   - DEV_STATIC_FILES_ENDPOINT=//dev-tab2017.gladly.io
   - DEV_CLOUDFRONT_DOMAIN_ALIAS=dev-tab2017.gladly.io
   - DEV_ADS_ENABLED=true
+  # Media
+  - DEV_CLOUDFRONT_MEDIA_DOMAIN_ALIAS=dev-tab2017-media.gladly.io
   # GraphQL
   - DEV_TABLE_NAME_APPENDIX="-dev"
   - DEV_LOGGER=sentry
@@ -79,7 +83,7 @@ env:
   - DEV_GRAPHQL_PROXY_DOMAIN=53a9uos12e.execute-api.us-west-2.amazonaws.com
   - DEV_GRAPHQL_PROXY_PATH=/dev
   - DEV_DYNAMODB_ENDPOINT=dynamodb.us-west-2.amazonaws.com
-  - DEV_MEDIA_ENDPOINT=https://s3-us-west-2.amazonaws.com/dev-tab2017-media.gladly.io
+  - DEV_MEDIA_ENDPOINT=https://dev-tab2017-media.gladly.io
   # Deployment
   - DEV_WEB_S3_BUCKET_NAME=dev-tab2017.gladly.io
   - DEV_MEDIA_S3_BUCKET_NAME=dev-tab2017-media.gladly.io
@@ -106,6 +110,8 @@ env:
   - PROD_STATIC_FILES_ENDPOINT=//prod-tab2017.gladly.io
   - PROD_CLOUDFRONT_DOMAIN_ALIAS=prod-tab2017.gladly.io
   - PROD_ADS_ENABLED=true
+  # Media
+  - PROD_CLOUDFRONT_MEDIA_DOMAIN_ALIAS=prod-tab2017-media.gladly.io
   # GraphQL
   - PROD_TABLE_NAME_APPENDIX="-prod"
   - PROD_LOGGER=sentry
@@ -115,7 +121,7 @@ env:
   - PROD_GRAPHQL_PROXY_DOMAIN=qy89x5t2i9.execute-api.us-west-2.amazonaws.com
   - PROD_GRAPHQL_PROXY_PATH=/prod
   - PROD_DYNAMODB_ENDPOINT=dynamodb.us-west-2.amazonaws.com
-  - PROD_MEDIA_ENDPOINT=https://s3-us-west-2.amazonaws.com/prod-tab2017-media.gladly.io
+  - PROD_MEDIA_ENDPOINT=https://prod-tab2017-media.gladly.io
   # Deployment
   - PROD_WEB_S3_BUCKET_NAME=prod-tab2017.gladly.io
   - PROD_MEDIA_S3_BUCKET_NAME=prod-tab2017-media.gladly.io

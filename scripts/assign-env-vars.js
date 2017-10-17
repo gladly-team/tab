@@ -27,6 +27,8 @@ export const envVars = [
   { name: 'ADS_ENABLED' },
   { name: 'WEB_HOST', optional: true },
   { name: 'WEB_PORT', optional: true },
+  // Media
+  { name: 'CLOUDFRONT_MEDIA_DOMAIN_ALIAS' },
   // GraphQL
   { name: 'TABLE_NAME_APPENDIX' },
   { name: 'GRAPHQL_PORT', optional: true },

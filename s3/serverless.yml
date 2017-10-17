@@ -12,6 +12,9 @@ provider:
 custom:
   stageDefault: dev
   s3Bucket: ${env:MEDIA_S3_BUCKET_NAME}
+  cloudfrontMediaName: TabMedia
+  cloudfrontMediaDomainAlias: ${env:CLOUDFRONT_MEDIA_DOMAIN_ALIAS}
+  SSLCertificateARN: ${env:SSL_CERTIFICATE_ARN}
 
 resources:
   Resources:
@@ -40,3 +43,52 @@ resources:
               Action:
                 - s3:GetObject
               Resource: arn:aws:s3:::${self:custom.s3Bucket}/*
+
+    # Serve media through Cloudfront.
+    WebAppCloudFrontDistribution:
+      Type: AWS::CloudFront::Distribution
+      Properties:
+        # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distributionconfig.html
+        DistributionConfig:
+          Origins:
+            # Media S3 bucket.
+            - DomainName: ${self:custom.s3Bucket}.s3.amazonaws.com
+              # An identifier for the origin. This must be unique within the distribution.
+              Id: ${self:custom.cloudfrontMediaName}
+              CustomOriginConfig:
+                HTTPPort: 80
+                HTTPSPort: 443
+                # HTTP only is required for S3 buckets that are configured as
+                # website endpoints:
+                # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesOriginProtocolPolicy 
+                OriginProtocolPolicy: http-only
+          Enabled: true
+          Aliases:
+            - ${self:custom.cloudfrontMediaDomainAlias}
+          # Note: this is only for Cloudfront caching, not browser caching. 
+          # For browser caching, we must still set Cache-Control headers
+          # on the origin server (S3). This isn't yet automated for media
+          # uploads; we set Cache-Control manually via the AWS CLI:
+          # https://stackoverflow.com/a/29280730/1332513
+          DefaultCacheBehavior:
+            # Cache media files for a long time.
+            DefaultTTL: 31536000 # one year
+            MinTTL: 31536000 # one year
+            MaxTTL: 63072000 # two years
+            AllowedMethods:
+              - HEAD
+              - GET
+              - OPTIONS
+            TargetOriginId: ${self:custom.cloudfrontMediaName}
+            ForwardedValues:
+              QueryString: false
+              Cookies:
+                Forward: none
+            # The protocol that users can use to access the files in the origin.
+            # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-defaultcachebehavior.html#cfn-cloudfront-defaultcachebehavior-viewerprotocolpolicy
+            ViewerProtocolPolicy: allow-all
+          # The certificate to use when viewers use HTTPS to request objects.
+          # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distributionconfig-viewercertificate.html
+          ViewerCertificate:
+            AcmCertificateArn: ${self:custom.SSLCertificateARN}
+            SslSupportMethod: sni-only
