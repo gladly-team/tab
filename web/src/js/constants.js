@@ -1,4 +1,10 @@
 
+export const WIDGET_TYPE_BOOKMARKS = 'bookmarks'
+export const WIDGET_TYPE_CLOCK = 'clock'
+export const WIDGET_TYPE_NOTES = 'notes'
+export const WIDGET_TYPE_SEARCH = 'search'
+export const WIDGET_TYPE_TODOS = 'todos'
+
 export const USER_BACKGROUND_OPTION_CUSTOM = 'custom'
 export const USER_BACKGROUND_OPTION_COLOR = 'color'
 export const USER_BACKGROUND_OPTION_PHOTO = 'photo'

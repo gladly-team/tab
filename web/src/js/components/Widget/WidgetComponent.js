@@ -1,7 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-// Widget Types.
+import {
+  WIDGET_TYPE_BOOKMARKS,
+  WIDGET_TYPE_CLOCK,
+  WIDGET_TYPE_NOTES,
+  WIDGET_TYPE_SEARCH,
+  WIDGET_TYPE_TODOS
+} from '../../constants'
+
 import BookmarksWidget from './Widgets/Bookmarks/BookmarksWidgetContainer'
 import SearchWidget from './Widgets/Search/SearchWidgetContainer'
 import ClockWidget from './Widgets/Clock/ClockWidgetContainer'
@@ -13,28 +20,28 @@ class Widget extends React.Component {
     const { widget, user } = this.props
 
     switch (widget.type) {
-      case 'bookmarks':
+      case WIDGET_TYPE_BOOKMARKS:
         return (<BookmarksWidget
           widget={widget}
           user={user}
           showError={this.props.showError} />)
-      case 'search':
+      case WIDGET_TYPE_SEARCH:
         return (<SearchWidget
           widget={widget}
           user={user} />)
 
-      case 'clock':
+      case WIDGET_TYPE_CLOCK:
         return (<ClockWidget
           widget={widget}
           user={user} />)
 
-      case 'notes':
+      case WIDGET_TYPE_NOTES:
         return (<NotesWidget
           widget={widget}
           user={user}
           showError={this.props.showError} />)
 
-      case 'todos':
+      case WIDGET_TYPE_TODOS:
         return (<TodosWidget
           widget={widget}
           user={user}

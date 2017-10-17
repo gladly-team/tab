@@ -2,7 +2,10 @@ import React from 'react'
 import WidgetIcon from './WidgetIconContainer'
 import Widget from './WidgetContainer'
 import PropTypes from 'prop-types'
-
+import {
+  WIDGET_TYPE_CLOCK,
+  WIDGET_TYPE_SEARCH
+} from '../../constants'
 import CenteredWidgetsContainer from 'general/CenteredWidgetsContainer'
 import SetUserActiveWidgetMutation from 'mutations/SetUserActiveWidgetMutation'
 
@@ -54,8 +57,10 @@ class Widgets extends React.Component {
         </div>
         <CenteredWidgetsContainer>
           {user.widgets.edges.map((edge, index) => {
-            if (edge.node.type === 'clock' ||
-                  edge.node.type === 'search') {
+            if (
+                edge.node.type === WIDGET_TYPE_CLOCK ||
+                edge.node.type === WIDGET_TYPE_SEARCH
+              ) {
               return (
                 <Widget
                   key={index}

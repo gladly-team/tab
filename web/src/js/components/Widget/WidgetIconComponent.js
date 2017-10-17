@@ -1,7 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-// Widget Types.
+import {
+  WIDGET_TYPE_BOOKMARKS,
+  WIDGET_TYPE_NOTES,
+  WIDGET_TYPE_TODOS
+} from '../../constants'
+
 import WidgetMenuIcon from './WidgetMenuIcon'
 
 class WidgetIcon extends React.Component {
@@ -13,21 +18,21 @@ class WidgetIcon extends React.Component {
     const { widget } = this.props
 
     switch (widget.type) {
-      case 'bookmarks':
+      case WIDGET_TYPE_BOOKMARKS:
         return (<WidgetMenuIcon
           widget={widget}
           active={this.props.active}
           onWidgetIconClicked={this.onWidgetIconClicked.bind(this)}
           iconClassName={'fa fa-bookmark-o'} />)
 
-      case 'notes':
+      case WIDGET_TYPE_NOTES:
         return (<WidgetMenuIcon
           widget={widget}
           active={this.props.active}
           onWidgetIconClicked={this.onWidgetIconClicked.bind(this)}
           iconClassName={'fa fa-sticky-note-o'} />)
 
-      case 'todos':
+      case WIDGET_TYPE_TODOS:
         return (<WidgetMenuIcon
           widget={widget}
           active={this.props.active}
