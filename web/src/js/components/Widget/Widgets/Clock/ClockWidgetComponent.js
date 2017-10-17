@@ -45,12 +45,12 @@ class ClockWidget extends React.Component {
 
   setDateTime (config) {
     const format24 = config.format24
-    var date = moment().format('ddd, MMMM D')
+    var date = moment().format('dddd, MMMM D')
     var time
     if (format24) {
       time = moment().format('k:mm')
     } else {
-      time = moment().format('h:mm a')
+      time = moment().format('h:mm')
     }
 
     this.setState({
@@ -61,20 +61,23 @@ class ClockWidget extends React.Component {
 
   render () {
     const clockContainer = {
-      marginTop: 20,
-      pointerEvents: 'none'
+      marginBottom: 130,
+      pointerEvents: 'none',
+      userSelect: 'none'
     }
 
     const timeStyle = {
       color: '#FFF',
-      fontSize: '3em',
-      fontWeight: 'normal',
+      fontSize: 140,
+      fontWeight: 'bold',
       margin: 0,
+      lineHeight: '90%',
       fontFamily: appTheme.fontFamily
     }
 
     const dateStyle = {
       color: '#FFF',
+      fontSize: 28,
       margin: 0,
       fontWeight: 'normal',
       fontFamily: appTheme.fontFamily

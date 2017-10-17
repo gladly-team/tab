@@ -3,6 +3,9 @@ import React from 'react'
 class CenteredWidgetsContainer extends React.Component {
   render () {
     const root = {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
       textAlign: 'center',
       position: 'absolute',
       top: 0,
