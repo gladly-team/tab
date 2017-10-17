@@ -103,9 +103,10 @@ export default function () {
   const pbjs = getPrebidPbjs()
 
   pbjs.que.push(() => {
-    // Randomize the order in which bidders are called to
-    // level the playing field.
-    pbjs.setBidderSequence('random')
+    // TODO: move to setConfig:
+    // http://prebid.org/dev-docs/publisher-api-reference.html#module_pbjs.setConfig
+
+    pbjs.aliasBidder('appnexus', 'brealtime')
 
     pbjs.enableAnalytics({
       provider: 'roxot',
