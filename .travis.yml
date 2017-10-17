@@ -190,6 +190,7 @@ deploy:
   - provider: script
     script: yarn run ci:deploy prod
     on:
-      branch: master
+      all_branches: true
+      # branch: master
     skip_cleanup: true
 cache: yarn
