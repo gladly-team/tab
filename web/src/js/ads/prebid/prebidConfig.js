@@ -103,9 +103,6 @@ export default function () {
   const pbjs = getPrebidPbjs()
 
   pbjs.que.push(() => {
-    // TODO: move to setConfig:
-    // http://prebid.org/dev-docs/publisher-api-reference.html#module_pbjs.setConfig
-
     pbjs.aliasBidder('appnexus', 'brealtime')
 
     pbjs.enableAnalytics({
