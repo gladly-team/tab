@@ -1,7 +1,9 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
-import appTheme from 'theme/default'
+import appTheme, {
+  dashboardIconInactiveColor
+} from 'theme/default'
 
 class VcUser extends Component {
   render () {
@@ -16,7 +18,7 @@ class VcUser extends Component {
     }
 
     const textStyle = {
-      color: 'white',
+      color: dashboardIconInactiveColor,
       textAlign: 'center',
       fontSize: 14,
       fontWeight: 'normal',

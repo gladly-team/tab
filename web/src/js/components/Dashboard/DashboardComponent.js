@@ -18,8 +18,9 @@ import IconButton from 'material-ui/IconButton'
 import FontIcon from 'material-ui/FontIcon'
 
 import {
-  grey300
-} from 'material-ui/styles/colors'
+  dashboardIconInactiveColor,
+  dashboardIconActiveColor
+} from 'theme/default'
 
 class Dashboard extends React.Component {
   constructor (props) {
@@ -130,8 +131,8 @@ class Dashboard extends React.Component {
                     tooltipPosition='bottom-left'
                     onClick={this._goToSettings.bind(this)}>
                     <FontIcon
-                      color={grey300}
-                      hoverColor={'#FFF'}
+                      color={dashboardIconInactiveColor}
+                      hoverColor={dashboardIconActiveColor}
                       className='fa fa-cog fa-lg' />
                   </IconButton>
                   <IconButton
@@ -141,8 +142,8 @@ class Dashboard extends React.Component {
                     tooltipPosition='top-left'
                     onClick={this._goToDonate.bind(this)}>
                     <FontIcon
-                      color={grey300}
-                      hoverColor={'#FFF'}
+                      color={dashboardIconInactiveColor}
+                      hoverColor={dashboardIconActiveColor}
                       className='fa fa-heart fa-lg' />
                   </IconButton>
                   <InviteFriend

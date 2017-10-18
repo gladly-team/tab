@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {
-  grey300
-} from 'material-ui/styles/colors'
 import FontIcon from 'material-ui/FontIcon'
 import TextField from 'material-ui/TextField'
-import appTheme from 'theme/default'
+import appTheme, {
+  dashboardIconInactiveColor,
+  dashboardIconActiveColor
+} from 'theme/default'
 import { getWidgetConfig } from '../../../../utils/widgets-utils'
 
 class CenteredSearch extends React.Component {
@@ -103,7 +103,7 @@ class CenteredSearch extends React.Component {
     }
 
     const underlineFocusStyle = {
-      borderColor: '#FFF'
+      borderColor: dashboardIconActiveColor
     }
 
     const inputContainerStyle = {
@@ -112,7 +112,7 @@ class CenteredSearch extends React.Component {
 
     const inputStyle = {
       textAlign: 'left',
-      color: '#FFF',
+      color: dashboardIconActiveColor,
       fontSize: 18,
       fontWeight: 'normal',
       fontFamily: appTheme.fontFamily
@@ -127,10 +127,10 @@ class CenteredSearch extends React.Component {
           <FontIcon
             color={
               (this.state.hover || this.state.focused)
-              ? '#FFF'
-              : grey300
+              ? dashboardIconActiveColor
+              : dashboardIconInactiveColor
             }
-            hoverColor={'#FFF'}
+            hoverColor={dashboardIconActiveColor}
             className={'fa fa-search'}
             style={iconStyle} />
           <TextField

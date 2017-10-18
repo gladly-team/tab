@@ -6,8 +6,9 @@ import IconButton from 'material-ui/IconButton'
 import FontIcon from 'material-ui/FontIcon'
 
 import {
-  grey300
-} from 'material-ui/styles/colors'
+  dashboardIconInactiveColor,
+  dashboardIconActiveColor
+} from 'theme/default'
 
 class InviteFriend extends React.Component {
   constructor (props) {
@@ -50,8 +51,8 @@ class InviteFriend extends React.Component {
           iconStyle={this.props.iconStyle}
           onTouchTap={this.handleTouchTap.bind(this)}>
           <FontIcon
-            color={grey300}
-            hoverColor={'#FFF'}
+            color={dashboardIconInactiveColor}
+            hoverColor={dashboardIconActiveColor}
             className='fa fa-users fa-lg' />
         </IconButton>
 

@@ -6,11 +6,10 @@ import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
 import IconButton from 'material-ui/IconButton'
 import FontIcon from 'material-ui/FontIcon'
 
-import {
-  grey300
-} from 'material-ui/styles/colors'
-
-import appTheme from 'theme/default'
+import appTheme, {
+  dashboardIconInactiveColor,
+  dashboardIconActiveColor
+} from 'theme/default'
 
 class WidgetMenuIcon extends React.Component {
   onWidgetIconClicked () {
@@ -27,9 +26,6 @@ class WidgetMenuIcon extends React.Component {
         margin: 5,
         width: 44,
         height: 44
-      },
-      icon: {
-        fontSize: 22
       }
     }
 
@@ -50,17 +46,24 @@ class WidgetMenuIcon extends React.Component {
 
     const iconButtonStyle = Object.assign({}, style.container, activeStyle)
 
+    const iconStyle = {
+      fontSize: 22
+    }
+    if (this.props.active) {
+      iconStyle.color = dashboardIconActiveColor
+    }
+
     return (
       <FadeInDashboardAnimation>
         <span>
           <IconButton
             style={iconButtonStyle}
-            iconStyle={style.icon}
+            iconStyle={iconStyle}
             key={this.props.iconClassName + 'animation-key'}
             onClick={this.onWidgetIconClicked.bind(this)}>
             <FontIcon
-              color={grey300}
-              hoverColor={'#FFF'}
+              color={dashboardIconInactiveColor}
+              hoverColor={dashboardIconActiveColor}
               className={this.props.iconClassName} />
           </IconButton>
         </span>

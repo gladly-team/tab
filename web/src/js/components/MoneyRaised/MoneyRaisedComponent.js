@@ -3,7 +3,10 @@ import PropTypes from 'prop-types'
 import { commaFormatted, currencyFormatted } from 'utils/utils'
 import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
 import MoneyRaisedPopover from './MoneyRaisedPopover'
-import appTheme from 'theme/default'
+
+import appTheme, {
+  dashboardIconInactiveColor
+} from 'theme/default'
 
 class MoneyRaised extends React.Component {
   constructor (props) {
@@ -81,7 +84,7 @@ class MoneyRaised extends React.Component {
     }
 
     const text = {
-      color: 'white',
+      color: dashboardIconInactiveColor,
       fontSize: 24,
       fontFamily: appTheme.fontFamily,
       fontWeight: 'normal'
