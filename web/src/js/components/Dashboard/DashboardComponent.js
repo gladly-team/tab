@@ -77,21 +77,33 @@ class Dashboard extends React.Component {
       zIndex: 'auto'
     }
 
-    const topRightItems = {
+    const topRightStyle = {
       main: {
         position: 'absolute',
-        top: 0,
+        top: 16,
         right: 0,
-        display: 'flex',
+        display: 'block',
         zIndex: 200
       },
-      leftContainer: {
-        padding: 5
+      statsContainer: {
+        padding: 0,
+        marginRight: 18
       },
-      rightContainer: {
+      buttonsContainer: {
+        marginTop: 8,
+        marginRight: 10,
         marginLeft: 5,
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        alignItems: 'flex-end'
+      },
+      iconButton: {
+        padding: 0,
+        width: 32,
+        height: 32
+      },
+      icon: {
+        fontSize: 20
       }
     }
 
@@ -105,13 +117,15 @@ class Dashboard extends React.Component {
         { user
           ? <FadeInDashboardAnimation>
             <div style={content}>
-              <div style={topRightItems.main}>
-                <div style={topRightItems.leftContainer}>
+              <div style={topRightStyle.main}>
+                <div style={topRightStyle.statsContainer}>
                   <MoneyRaised app={app} />
                   <VcUser user={user} />
                 </div>
-                <div style={topRightItems.rightContainer}>
+                <div style={topRightStyle.buttonsContainer}>
                   <IconButton
+                    style={topRightStyle.iconButton}
+                    iconStyle={topRightStyle.icon}
                     tooltip='Settings'
                     tooltipPosition='bottom-left'
                     onClick={this._goToSettings.bind(this)}>
@@ -121,6 +135,8 @@ class Dashboard extends React.Component {
                       className='fa fa-cog fa-lg' />
                   </IconButton>
                   <IconButton
+                    style={topRightStyle.iconButton}
+                    iconStyle={topRightStyle.icon}
                     tooltip='Donate'
                     tooltipPosition='top-left'
                     onClick={this._goToDonate.bind(this)}>
@@ -129,7 +145,10 @@ class Dashboard extends React.Component {
                       hoverColor={'#FFF'}
                       className='fa fa-heart fa-lg' />
                   </IconButton>
-                  <InviteFriend user={user} />
+                  <InviteFriend
+                    style={topRightStyle.iconButton}
+                    iconStyle={topRightStyle.icon}
+                    user={user} />
                 </div>
               </div>
             </div>

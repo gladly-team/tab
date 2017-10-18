@@ -85,7 +85,7 @@ class CenteredSearch extends React.Component {
       zIndex: 1,
       marginLeft: 16,
       height: 58,
-      paddingTop: 3
+      paddingTop: 1
     }
 
     const iconStyle = {

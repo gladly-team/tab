@@ -75,14 +75,16 @@ class MoneyRaised extends React.Component {
     if (!this.props.app) { return null }
 
     const container = {
-      textAlign: 'center'
+      textAlign: 'center',
+      userSelect: 'none',
+      cursor: 'default'
     }
 
     const text = {
       color: 'white',
-      fontSize: '1.7em',
-      fontWeight: 'normal',
-      fontFamily: appTheme.fontFamily
+      fontSize: 24,
+      fontFamily: appTheme.fontFamily,
+      fontWeight: 'normal'
     }
 
     const moneyRaised = this.state.amountDonated

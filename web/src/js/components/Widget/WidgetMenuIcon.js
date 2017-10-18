@@ -24,7 +24,12 @@ class WidgetMenuIcon extends React.Component {
         background: 'transparent',
         padding: 0,
         borderRadius: '100%',
-        margin: 5
+        margin: 5,
+        width: 44,
+        height: 44
+      },
+      icon: {
+        fontSize: 22
       }
     }
 
@@ -38,18 +43,19 @@ class WidgetMenuIcon extends React.Component {
         // borderBottomStyle: 'solid',
         background: appTheme.palette.primary1Color,
         boxShadow: 'rgba(0, 0, 0, 0.3) 0px 19px 60px, rgba(0, 0, 0, 0.22) 0px 15px 20px',
-        transform: 'scale(1.2)',
+        transform: 'scale(1.14)',
         WebkitBoxShadow: 'rgba(0, 0, 0, 0.3) 0px 19px 60px, rgba(0, 0, 0, 0.22) 0px 15px 20px'
       }
     }
 
-    const finalIconStyle = Object.assign({}, style.container, activeStyle)
+    const iconButtonStyle = Object.assign({}, style.container, activeStyle)
 
     return (
       <FadeInDashboardAnimation>
         <span>
           <IconButton
-            style={finalIconStyle}
+            style={iconButtonStyle}
+            iconStyle={style.icon}
             key={this.props.iconClassName + 'animation-key'}
             onClick={this.onWidgetIconClicked.bind(this)}>
             <FontIcon

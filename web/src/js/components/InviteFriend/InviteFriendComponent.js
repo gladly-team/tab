@@ -46,6 +46,8 @@ class InviteFriend extends React.Component {
         <IconButton
           tooltip='Invite Friend'
           tooltipPosition='top-left'
+          style={this.props.style}
+          iconStyle={this.props.iconStyle}
           onTouchTap={this.handleTouchTap.bind(this)}>
           <FontIcon
             color={grey300}
@@ -66,7 +68,14 @@ class InviteFriend extends React.Component {
 InviteFriend.propTypes = {
   user: PropTypes.shape({
     username: PropTypes.string.isRequired
-  })
+  }),
+  style: PropTypes.object,
+  iconStyle: PropTypes.object
+}
+
+InviteFriend.defaultProps = {
+  style: {},
+  iconStyle: {}
 }
 
 export default InviteFriend

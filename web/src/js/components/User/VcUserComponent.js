@@ -15,18 +15,25 @@ class VcUser extends Component {
       justifyContent: 'flex-end'
     }
 
-    const text = {
+    const textStyle = {
       color: 'white',
       textAlign: 'center',
-      fontSize: '1em',
+      fontSize: 14,
       fontWeight: 'normal',
-      fontFamily: appTheme.fontFamily
+      fontFamily: appTheme.fontFamily,
+      userSelect: 'none',
+      cursor: 'default'
     }
+    const heartsStyle = Object.assign({}, textStyle, {
+      marginRight: 14
+    })
+    const levelStyle = Object.assign({}, textStyle)
 
     return (
       <FadeInDashboardAnimation>
         <div style={progressContainer}>
-          <div style={text}>{user.vcCurrent} <i className='fa fa-heart-o' /> Level {user.level}</div>
+          <div style={heartsStyle}>{user.vcCurrent} <i className='fa fa-heart' /></div>
+          <div style={levelStyle}>Level {user.level}</div>
         </div>
       </FadeInDashboardAnimation>
     )
