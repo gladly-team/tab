@@ -78,34 +78,32 @@ class Dashboard extends React.Component {
       zIndex: 'auto'
     }
 
-    const topRightStyle = {
-      main: {
-        position: 'absolute',
-        top: 16,
-        right: 0,
-        display: 'block',
-        zIndex: 200
-      },
-      statsContainer: {
-        padding: 0,
-        marginRight: 18
-      },
-      buttonsContainer: {
-        marginTop: 8,
-        marginRight: 10,
-        marginLeft: 5,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'flex-end'
-      },
-      iconButton: {
-        padding: 0,
-        width: 32,
-        height: 32
-      },
-      icon: {
-        fontSize: 20
-      }
+    const topRightContainerStyle = {
+      position: 'absolute',
+      top: 16,
+      right: 0,
+      display: 'block',
+      zIndex: 200
+    }
+    const buttonsContainerStyle = {
+      marginTop: 8,
+      marginRight: 10,
+      marginLeft: 5,
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'flex-end'
+    }
+    const iconButtonStyle = {
+      padding: 0,
+      width: 32,
+      height: 32
+    }
+    const iconStyle = {
+      fontSize: 20
+    }
+    const statsContainerStyle = {
+      padding: 0,
+      marginRight: 18
     }
 
     const errorMessage = this.state.errorMessage
@@ -118,15 +116,15 @@ class Dashboard extends React.Component {
         { user
           ? <FadeInDashboardAnimation>
             <div style={content}>
-              <div style={topRightStyle.main}>
-                <div style={topRightStyle.statsContainer}>
+              <div style={topRightContainerStyle}>
+                <div style={statsContainerStyle}>
                   <MoneyRaised app={app} />
                   <VcUser user={user} />
                 </div>
-                <div style={topRightStyle.buttonsContainer}>
+                <div style={buttonsContainerStyle}>
                   <IconButton
-                    style={topRightStyle.iconButton}
-                    iconStyle={topRightStyle.icon}
+                    style={iconButtonStyle}
+                    iconStyle={iconStyle}
                     tooltip='Settings'
                     tooltipPosition='bottom-left'
                     onClick={this._goToSettings.bind(this)}>
@@ -136,8 +134,8 @@ class Dashboard extends React.Component {
                       className='fa fa-cog fa-lg' />
                   </IconButton>
                   <IconButton
-                    style={topRightStyle.iconButton}
-                    iconStyle={topRightStyle.icon}
+                    style={iconButtonStyle}
+                    iconStyle={iconStyle}
                     tooltip='Donate'
                     tooltipPosition='top-left'
                     onClick={this._goToDonate.bind(this)}>
@@ -147,8 +145,8 @@ class Dashboard extends React.Component {
                       className='fa fa-heart fa-lg' />
                   </IconButton>
                   <InviteFriend
-                    style={topRightStyle.iconButton}
-                    iconStyle={topRightStyle.icon}
+                    style={iconButtonStyle}
+                    iconStyle={iconStyle}
                     user={user} />
                 </div>
               </div>
