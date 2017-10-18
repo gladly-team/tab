@@ -86,7 +86,7 @@ class Dashboard extends React.Component {
       zIndex: 200
     }
     const buttonsContainerStyle = {
-      marginTop: 8,
+      marginTop: 0,
       marginRight: 10,
       marginLeft: 5,
       display: 'flex',
@@ -95,15 +95,16 @@ class Dashboard extends React.Component {
     }
     const iconButtonStyle = {
       padding: 0,
-      width: 32,
-      height: 32
+      width: 30,
+      height: 30
     }
     const iconStyle = {
       fontSize: 20
     }
     const statsContainerStyle = {
-      padding: 0,
-      marginRight: 18
+      marginTop: 18,
+      display: 'flex',
+      justifyContent: 'center'
     }
 
     const errorMessage = this.state.errorMessage
@@ -116,11 +117,13 @@ class Dashboard extends React.Component {
         { user
           ? <FadeInDashboardAnimation>
             <div style={content}>
-              <div style={topRightContainerStyle}>
-                <div style={statsContainerStyle}>
+              <div style={statsContainerStyle}>
+                <span>
                   <MoneyRaised app={app} />
                   <VcUser user={user} />
-                </div>
+                </span>
+              </div>
+              <div style={topRightContainerStyle}>
                 <div style={buttonsContainerStyle}>
                   <IconButton
                     style={iconButtonStyle}

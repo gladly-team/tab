@@ -14,7 +14,7 @@ class VcUser extends Component {
 
     const progressContainer = {
       display: 'flex',
-      justifyContent: 'flex-end'
+      justifyContent: 'space-evenly'
     }
 
     const textStyle = {
@@ -27,7 +27,7 @@ class VcUser extends Component {
       cursor: 'default'
     }
     const heartsStyle = Object.assign({}, textStyle, {
-      marginRight: 14
+      marginRight: 0
     })
     const levelStyle = Object.assign({}, textStyle)
 

@@ -47,7 +47,7 @@ class WidgetMenuIcon extends React.Component {
     const iconButtonStyle = Object.assign({}, style.container, activeStyle)
 
     const iconStyle = {
-      fontSize: 22
+      fontSize: 20
     }
     if (this.props.active) {
       iconStyle.color = dashboardIconActiveColor

@@ -83,13 +83,13 @@ class CenteredSearch extends React.Component {
       alignItems: 'center',
       position: 'relative',
       zIndex: 1,
-      marginLeft: 16,
-      height: 58,
-      paddingTop: 1
+      marginLeft: 14,
+      height: 56
     }
 
     const iconStyle = {
-      marginRight: 14
+      marginRight: 14,
+      fontSize: 20
     }
 
     const underlineStyle = {
