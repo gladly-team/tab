@@ -11,7 +11,8 @@ class CenteredWidgetsContainer extends React.Component {
       top: 0,
       left: 0,
       width: '100vw',
-      height: '100%'
+      height: '100%',
+      pointerEvents: 'none'
     }
 
     return (
