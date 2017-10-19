@@ -3,16 +3,16 @@ import {
   graphql
 } from 'react-relay/compat'
 
-import VcUser from './VcUserComponent'
+import UserMenu from './UserMenuComponent'
 
-export default createFragmentContainer(VcUser, {
+export default createFragmentContainer(UserMenu, {
   user: graphql`
-    fragment VcUserContainer_user on User {
+    fragment UserMenuContainer_user on User {
       id
       vcCurrent
-      vcAllTime
       level
       heartsUntilNextLevel 
+
     }
   `
 })

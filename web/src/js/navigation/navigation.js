@@ -1,43 +1,41 @@
 import { browserHistory } from 'react-router'
 
-function goTo (route) {
+export const goTo = (route) => {
   browserHistory.push(route)
 }
 
-function goToHome () {
+export const goToHome = () => {
   goTo('/tab/')
 }
 
-function goToLogin () {
+export const goToLogin = () => {
   goTo('/tab/auth/login/')
 }
 
-function goToSettings () {
+export const goToSettings = () => {
   goTo('/tab/settings/')
 }
 
-function goToSettingsSection (section) {
+export const goToSettingsSection = (section) => {
   goTo(`/tab/settings/${section}/`)
 }
 
-function goToDonate () {
+export const goToDonate = () => {
   goTo('/tab/donate/')
 }
 
-function goToDashboard () {
+export const goToDashboard = () => {
   goTo('/tab/')
 }
 
-function goToRetrievePassword () {
+export const goToRetrievePassword = () => {
   goTo('/tab/auth/recovery/')
 }
 
-export {
-  goToHome,
-  goToLogin,
-  goToSettings,
-  goToSettingsSection,
-  goToDonate,
-  goToDashboard,
-  goToRetrievePassword
+export const goToStats = () => {
+  // TODO
+}
+
+export const goToInviteFriends = () => {
+  // TODO
 }
