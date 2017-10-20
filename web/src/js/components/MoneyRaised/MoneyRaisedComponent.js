@@ -90,7 +90,12 @@ class MoneyRaised extends React.Component {
       userSelect: 'none',
       cursor: 'default'
     }
-
+    const popoverStyle = {
+      width: 180
+    }
+    const buttonContainerStyle = {
+      textAlign: 'center'
+    }
     const textStyle = Object.assign({}, {
       color: (
         this.state.hover
@@ -116,18 +121,20 @@ class MoneyRaised extends React.Component {
         <span
           style={textStyle}>{amountDonated}</span>
         <DashboardPopover
-          style={{ width: 180 }}
+          style={popoverStyle}
           open={this.state.open}
           anchorEl={this.state.anchorEl}
           onRequestClose={this.handlePopoverRequestClose.bind(this)}>
           <div style={{ padding: 10, paddingTop: 0 }}>
             <p>This is how much money Tabbers have raised for charity.</p>
             <p>Recruit your friends to raise more!</p>
-            <RaisedButton
-              label='Invite Friends'
-              primary
-              onClick={goToInviteFriends}
-            />
+            <div style={buttonContainerStyle}>
+              <RaisedButton
+                label='Invite Friends'
+                primary
+                onClick={goToInviteFriends}
+              />
+            </div>
           </div>
         </DashboardPopover>
       </div>
