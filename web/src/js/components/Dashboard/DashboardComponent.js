@@ -78,7 +78,7 @@ class Dashboard extends React.Component {
                   hoverColor={dashboardIconActiveColor}
                   style={bulletPointStyle}
                   className={'fa fa-circle'} />
-                <UserMenu user={user} style={userMenuStyle} />
+                <UserMenu app={app} user={user} style={userMenuStyle} />
               </div>
             </FadeInDashboardAnimation>
             )

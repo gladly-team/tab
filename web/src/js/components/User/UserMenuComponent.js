@@ -74,10 +74,11 @@ class UserMenu extends React.Component {
   }
 
   render () {
-    const { user } = this.props
-    if (!user) {
+    const { app, user } = this.props
+    if (!user || !app) {
       return null
     }
+
     const userMenuStyle = {
       display: 'flex',
       alignItems: 'center'
@@ -248,6 +249,9 @@ class UserMenu extends React.Component {
 }
 
 UserMenu.propTypes = {
+  app: PropTypes.shape({
+    referralVcReward: PropTypes.number.isRequired
+  }),
   user: PropTypes.shape({
     vcCurrent: PropTypes.number.isRequired,
     level: PropTypes.number.isRequired,

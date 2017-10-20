@@ -4,6 +4,7 @@ type App implements Node {
   id: ID!
   moneyRaised: Float
   dollarsPerDayRate: Float
+  referralVcReward: Int
 
   # All the widgets
   widgets(after: String, first: Int, before: String, last: Int): WidgetConnection

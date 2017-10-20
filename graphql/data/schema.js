@@ -63,6 +63,7 @@ import BackgroundImageModel from '../database/backgroundImages/BackgroundImageMo
 import {
   Globals,
   getMoneyRaised,
+  getReferralVcReward,
   getDollarsPerDayRate
 } from '../database/globals/globals'
 
@@ -331,6 +332,12 @@ const appType = new GraphQLObjectType({
       type: GraphQLFloat,
       resolve: () => {
         return getDollarsPerDayRate()
+      }
+    },
+    referralVcReward: {
+      type: GraphQLInt,
+      resolve: () => {
+        return getReferralVcReward()
       }
     },
     widgets: {
