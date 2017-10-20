@@ -26,7 +26,7 @@ export default async (userContext, userId, charityId, vc) => {
     })
 
     // Add VC donated to the user's all time count.
-    addVcDonatedAllTime(userContext, userId, vc)
+    await addVcDonatedAllTime(userContext, userId, vc)
 
     return user
   } catch (e) {
