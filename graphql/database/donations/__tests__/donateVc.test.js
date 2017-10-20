@@ -3,6 +3,7 @@
 import VCDonationModel from '../VCDonationModel'
 import donateVc from '../donateVc'
 import addVc from '../../users/addVc'
+import addVcDonatedAllTime from '../../users/addVcDonatedAllTime'
 import {
   DatabaseOperation,
   getMockUserContext,
@@ -13,6 +14,7 @@ import {
 
 jest.mock('../../databaseClient')
 jest.mock('../../users/addVc')
+jest.mock('../../users/addVcDonatedAllTime')
 
 const userContext = getMockUserContext()
 
@@ -39,6 +41,14 @@ describe('donateVc', () => {
       })
     await donateVc(userContext, userId, charityId, vcToDonate)
     expect(addVc).toHaveBeenCalledWith(userContext, userId, -14)
+  })
+
+  it('adds the donated VC to the all time count for that user', async () => {
+    const userId = userContext.id
+    const charityId = 'bb5082cc-151a-4a9a-9289-06906670fd4e'
+    const vcToDonate = 14
+    await donateVc(userContext, userId, charityId, vcToDonate)
+    expect(addVcDonatedAllTime).toHaveBeenCalledWith(userContext, userId, 14)
   })
 
   it('calls the database as expected', async () => {

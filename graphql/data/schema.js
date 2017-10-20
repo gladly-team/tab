@@ -200,6 +200,10 @@ const userType = new GraphQLObjectType({
       type: GraphQLInt,
       description: 'Remaing hearts until next level.'
     },
+    vcDonatedAllTime: {
+      type: GraphQLInt,
+      description: 'User\'s total vc donated'
+    },
     widgets: {
       type: widgetConnection,
       description: 'User widgets',

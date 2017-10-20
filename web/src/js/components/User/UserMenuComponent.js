@@ -158,7 +158,7 @@ class UserMenu extends React.Component {
           <div style={{ padding: 10 }}>
             <p>Level {user.level}</p>
             <p>{user.heartsUntilNextLevel} Hearts until next level</p>
-            <p>10 Hearts Donated</p>
+            <p>{user.vcDonatedAllTime} Hearts Donated</p>
             <RaisedButton
               label='Donate Hearts'
               primary
@@ -206,7 +206,8 @@ UserMenu.propTypes = {
   user: PropTypes.shape({
     vcCurrent: PropTypes.number.isRequired,
     level: PropTypes.number.isRequired,
-    heartsUntilNextLevel: PropTypes.number.isRequired
+    heartsUntilNextLevel: PropTypes.number.isRequired,
+    vcDonatedAllTime: PropTypes.number.isRequired
   }),
   style: PropTypes.object
 }

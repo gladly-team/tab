@@ -1,6 +1,7 @@
 
 import VCDonationModel from './VCDonationModel'
 import addVc from '../users/addVc'
+import addVcDonatedAllTime from '../users/addVcDonatedAllTime'
 
 /**
  * Donate the user's virtal currency to the specified charity.
@@ -14,12 +15,19 @@ import addVc from '../users/addVc'
  */
 export default async (userContext, userId, charityId, vc) => {
   try {
+    // Subtract VC from the user.
     const user = await addVc(userContext, userId, -vc)
+
+    // Create the VC donation.
     await VCDonationModel.create(userContext, {
       userId: userId,
       charityId: charityId,
       vcDonated: vc
     })
+
+    // Add VC donated to the user's all time count.
+    addVcDonatedAllTime(userContext, userId, vc)
+
     return user
   } catch (e) {
     throw e

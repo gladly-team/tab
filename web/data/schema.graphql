@@ -324,6 +324,9 @@ type User implements Node {
   # Remaing hearts until next level.
   heartsUntilNextLevel: Int
 
+  # User's total vc donated
+  vcDonatedAllTime: Int
+
   # User widgets
   widgets(after: String, first: Int, before: String, last: Int, enabled: Boolean): WidgetConnection
 
