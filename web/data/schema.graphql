@@ -327,6 +327,9 @@ type User implements Node {
   # User's total vc donated
   vcDonatedAllTime: Int
 
+  # The number of users this user has recruited
+  numUsersRecruited: Int
+
   # User widgets
   widgets(after: String, first: Int, before: String, last: Int, enabled: Boolean): WidgetConnection
 

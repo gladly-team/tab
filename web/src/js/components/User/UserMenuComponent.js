@@ -164,7 +164,7 @@ class UserMenu extends React.Component {
               primary
               onClick={goToDonate}
             />
-            <p>0 Tabbers Recruited</p>
+            <p>{user.numUsersRecruited} Tabbers Recruited</p>
             <RaisedButton
               label='Invite Friends'
               primary

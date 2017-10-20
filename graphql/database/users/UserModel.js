@@ -52,6 +52,7 @@ class User extends BaseModel {
       heartsUntilNextLevel: types.number().integer()
         .default(self.fieldDefaults.heartsUntilNextLevel),
       vcDonatedAllTime: types.number().integer().default(self.fieldDefaults.vcDonatedAllTime),
+      numUsersRecruited: types.number().integer().default(self.fieldDefaults.numUsersRecruited),
       backgroundImage: types.object(
         {
           id: types.uuid(),
@@ -76,6 +77,7 @@ class User extends BaseModel {
       // On the first Heart gained, immediately level up to Level 1.
       heartsUntilNextLevel: 0,
       vcDonatedAllTime: 0,
+      numUsersRecruited: 0,
       backgroundImage: () => ({
         id: '49fcb132-9b6b-431b-bda8-50455e215be7',
         image: '661651039af4454abb852927b3a5b8f9.jpg',

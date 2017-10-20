@@ -204,6 +204,10 @@ const userType = new GraphQLObjectType({
       type: GraphQLInt,
       description: 'User\'s total vc donated'
     },
+    numUsersRecruited: {
+      type: GraphQLInt,
+      description: 'The number of users this user has recruited'
+    },
     widgets: {
       type: widgetConnection,
       description: 'User widgets',
