@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import DashboardPopover from '../Dashboard/DashboardPopover'
 import RaisedButton from 'material-ui/RaisedButton'
+import Divider from 'material-ui/Divider'
 import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
 import IconButton from 'material-ui/IconButton'
@@ -100,6 +101,12 @@ class UserMenu extends React.Component {
     const heartIconStyle = {
       marginLeft: 3
     }
+
+    // Hearts popover style
+    const heartsPopoverStyle = {
+      textAlign: 'center',
+      width: 210
+    }
     const heartsPopoverHeaderStyle = {
       width: '100%',
       padding: 8,
@@ -109,8 +116,35 @@ class UserMenu extends React.Component {
       textAlign: 'center',
       backgroundColor: appTheme.palette.primary1Color
     }
+    const heartsPopoverSectionStyle = {
+    }
+    const dividerStyle = {
+      marginTop: 16,
+      marginBottom: 12
+    }
+    const statTextStyle = {
+      fontSize: 14,
+      display: 'block',
+      marginTop: 4,
+      marginBottom: 4
+    }
+    const smallHeartIconStyle = {
+      marginLeft: 2
+    }
+    const statNumberStyle = {
+      fontSize: 24,
+      display: 'block'
+    }
+    const popoverButtonStyle = {
+      marginTop: 6,
+      marginBottom: 0
+    }
 
     // Menu style
+    const menuPopoverStyle = {
+      padding: 0,
+      width: 'auto'
+    }
     const menuIconButtonStyle = {
       padding: 0,
       width: 40,
@@ -135,7 +169,6 @@ class UserMenu extends React.Component {
     }
 
     // TODO: add level bar
-    // TODO: functional hearts donated and tabbers recruited stats
     return (
       <div
         style={userMenuStyle}>
@@ -151,25 +184,49 @@ class UserMenu extends React.Component {
           open={this.state.heartsPopoverOpen}
           anchorEl={this.state.heartsPopoverAnchorElem}
           onRequestClose={this.handleHeartsPopoverClose.bind(this)}
+          style={heartsPopoverStyle}
         >
           <div style={heartsPopoverHeaderStyle}>
             Your Stats
           </div>
           <div style={{ padding: 10 }}>
-            <p>Level {user.level}</p>
-            <p>{user.heartsUntilNextLevel} Hearts until next level</p>
-            <p>{user.vcDonatedAllTime} Hearts Donated</p>
-            <RaisedButton
-              label='Donate Hearts'
-              primary
-              onClick={goToDonate}
-            />
-            <p>{user.numUsersRecruited} Tabbers Recruited</p>
-            <RaisedButton
-              label='Invite Friends'
-              primary
-              onClick={goToInviteFriends}
-            />
+            <div style={heartsPopoverSectionStyle}>
+              <span style={statTextStyle}><span style={statNumberStyle}>Level {user.level}</span></span>
+              <div>
+                <span>{user.heartsUntilNextLevel}</span>
+                <i style={smallHeartIconStyle} className='fa fa-heart-o' /> until next level
+              </div>
+            </div>
+            <Divider style={dividerStyle} />
+            <div style={heartsPopoverSectionStyle}>
+              <span style={statTextStyle}>
+                <span style={statNumberStyle}>
+                  {user.vcDonatedAllTime}<i style={smallHeartIconStyle} className='fa fa-heart-o' />
+                </span> Donated
+              </span>
+              <div>
+                <RaisedButton
+                  label='Donate Hearts'
+                  style={popoverButtonStyle}
+                  primary
+                  onClick={goToDonate}
+                />
+              </div>
+            </div>
+            <Divider style={dividerStyle} />
+            <div style={heartsPopoverSectionStyle}>
+              <span style={statTextStyle}>
+                <span style={statNumberStyle}>{user.numUsersRecruited}</span> Tabbers Recruited
+              </span>
+              <div>
+                <RaisedButton
+                  label='Invite Friends'
+                  style={popoverButtonStyle}
+                  primary
+                  onClick={goToInviteFriends}
+                />
+              </div>
+            </div>
           </div>
         </DashboardPopover>
         <IconButton
@@ -182,7 +239,7 @@ class UserMenu extends React.Component {
           <MoreVertIcon />
         </IconButton>
         <DashboardPopover
-          style={{ padding: 0 }}
+          style={menuPopoverStyle}
           open={this.state.menuOpen}
           anchorEl={this.state.menuPopoverAnchorElem}
           onRequestClose={this.handleMenuPopoverClose.bind(this)}
