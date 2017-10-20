@@ -15,7 +15,8 @@ import {
 } from 'navigation/navigation'
 import appTheme, {
   dashboardIconActiveColor,
-  dashboardIconInactiveColor
+  dashboardIconInactiveColor,
+  dividerColor
 } from 'theme/default'
 
 class UserMenu extends React.Component {
@@ -132,6 +133,27 @@ class UserMenu extends React.Component {
       marginBottom: 0
     }
 
+    // Popover section on how to earn Hearts.
+    const rewardMethodContainerStyle = Object.assign({}, statTextStyle, {
+      display: 'flex',
+      textAlign: 'left',
+      color: dividerColor,
+      marginTop: 1,
+      marginBottom: 1
+    })
+    const rewardAmountsSectionStyle = Object.assign({}, heartsPopoverSectionStyle, {
+      paddingLeft: 12,
+      paddingRight: 12
+    })
+    const rewardTextStyle = {
+      textAlign: 'left',
+      flex: 6
+    }
+    const rewardValueStyle = {
+      flex: 3,
+      textAlign: 'right'
+    }
+
     // Menu style
     const menuPopoverStyle = {
       padding: 0,
@@ -209,12 +231,24 @@ class UserMenu extends React.Component {
               </span>
               <div>
                 <RaisedButton
-                  label='Invite Friends'
+                  label='Invite A Friend'
+                  labelPosition='before'
                   style={popoverButtonStyle}
                   primary
                   onClick={goToInviteFriends}
-                />
+               />
               </div>
+            </div>
+            <Divider style={dividerStyle} />
+            <div style={rewardAmountsSectionStyle}>
+              <span style={rewardMethodContainerStyle}>
+                <span style={rewardTextStyle}>Open a tab</span>
+                <span style={rewardValueStyle}>1<i style={smallHeartIconStyle} className='fa fa-heart-o' /></span>
+              </span>
+              <span style={rewardMethodContainerStyle}>
+                <span style={rewardTextStyle}>Recruit a friend</span>
+                <span style={rewardValueStyle}>{app.referralVcReward}<i style={smallHeartIconStyle} className='fa fa-heart-o' /></span>
+              </span>
             </div>
           </div>
         </DashboardPopover>

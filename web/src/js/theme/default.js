@@ -22,7 +22,7 @@ const textOnPrimaryColor = '#FFFFFF'
 // const textOnSecondaryColor = '#616161'
 
 const textColor = '#212121'
-const dividerColor = '#BDBDBD'
+export const dividerColor = '#BDBDBD'
 
 export default {
   spacing: spacing,
