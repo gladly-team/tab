@@ -107,15 +107,6 @@ class UserMenu extends React.Component {
       textAlign: 'center',
       width: 210
     }
-    const heartsPopoverHeaderStyle = {
-      width: '100%',
-      padding: 8,
-      boxSizing: 'border-box',
-      textTransform: 'uppercase',
-      fontWeight: 'bold',
-      textAlign: 'center',
-      backgroundColor: appTheme.palette.primary1Color
-    }
     const heartsPopoverSectionStyle = {
     }
     const dividerStyle = {
@@ -186,9 +177,6 @@ class UserMenu extends React.Component {
           onRequestClose={this.handleHeartsPopoverClose.bind(this)}
           style={heartsPopoverStyle}
         >
-          <div style={heartsPopoverHeaderStyle}>
-            Your Stats
-          </div>
           <div style={{ padding: 10 }}>
             <div style={heartsPopoverSectionStyle}>
               <span style={statTextStyle}><span style={statNumberStyle}>Level {user.level}</span></span>

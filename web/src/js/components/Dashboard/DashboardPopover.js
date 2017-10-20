@@ -18,6 +18,11 @@ class DashboardPopover extends React.Component {
       color: appTheme.palette.alternateTextColor,
       fontFamily: appTheme.fontFamily
     }, this.props.style)
+    const headerStyle = {
+      width: '100%',
+      height: 3,
+      backgroundColor: appTheme.palette.primary1Color
+    }
 
     return (
       <Popover
@@ -29,6 +34,7 @@ class DashboardPopover extends React.Component {
         style={style}
         useLayerForClickAway={false}
       >
+        <div style={headerStyle} />
         {this.props.children}
       </Popover>
     )
