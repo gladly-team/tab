@@ -4,10 +4,12 @@ import PropTypes from 'prop-types'
 
 class UpdateVcComponent extends React.Component {
   componentDidMount () {
-    UpdateVcMutation.commit(
-      this.props.relay.environment,
-      this.props.user
-    )
+    setTimeout(() => {
+      UpdateVcMutation.commit(
+        this.props.relay.environment,
+        this.props.user
+      )
+    }, 1000)
   }
 
   render () {
