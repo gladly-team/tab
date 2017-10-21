@@ -7,6 +7,9 @@ import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
 import IconButton from 'material-ui/IconButton'
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert'
+import SettingsIcon from 'material-ui/svg-icons/action/settings'
+import PersonAddIcon from 'material-ui/svg-icons/social/person-add'
+import ChartIcon from 'material-ui/svg-icons/editor/insert-chart'
 import {
   goToInviteFriends,
   goToDonate,
@@ -157,7 +160,7 @@ class UserMenu extends React.Component {
     // Menu style
     const menuPopoverStyle = {
       padding: 0,
-      width: 'auto'
+      width: 200
     }
     const menuIconButtonStyle = {
       padding: 0,
@@ -180,6 +183,21 @@ class UserMenu extends React.Component {
     const menuItemStyle = {
       fontSize: 14,
       color: appTheme.palette.alternateTextColor
+    }
+    const menuItemIconColor = '#FFFFFF'
+    const menuItemFontIconStyle = {
+      color: menuItemIconColor,
+      top: 2,
+      left: 6,
+      fontSize: 18,
+      height: 18,
+      width: 18
+    }
+    const menuItemSvgIconStyle = {
+      color: menuItemIconColor,
+      // top: 2,
+      height: 22,
+      width: 22
     }
 
     // TODO: add level bar
@@ -271,10 +289,26 @@ class UserMenu extends React.Component {
             style={menuStyle}
             menuItemStyle={menuItemStyle}
           >
-            <MenuItem primaryText='Settings' onClick={goToSettings} />
-            <MenuItem primaryText='Donate Hearts' onClick={goToDonate} />
-            <MenuItem primaryText='Invite Friends' onClick={goToInviteFriends} />
-            <MenuItem primaryText='Your Stats' onClick={goToStats} />
+            <MenuItem primaryText='Settings' onClick={goToSettings}
+              leftIcon={
+                <SettingsIcon color={menuItemIconColor} style={menuItemSvgIconStyle} />
+              }
+            />
+            <MenuItem primaryText='Donate Hearts' onClick={goToDonate}
+              leftIcon={
+                <i style={menuItemFontIconStyle} className='fa fa-heart' />
+              }
+            />
+            <MenuItem primaryText='Invite Friends' onClick={goToInviteFriends}
+              leftIcon={
+                <PersonAddIcon color={menuItemIconColor} style={menuItemSvgIconStyle} />
+              }
+            />
+            <MenuItem primaryText='Your Stats' onClick={goToStats}
+              leftIcon={
+                <ChartIcon color={menuItemIconColor} style={menuItemSvgIconStyle} />
+              }
+            />
           </Menu>
         </DashboardPopover>
       </div>
