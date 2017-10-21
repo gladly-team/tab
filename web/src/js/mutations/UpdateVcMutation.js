@@ -22,6 +22,12 @@ function commit (environment, user) {
       mutation,
       variables: {
         input: { userId }
+      },
+      updater: (store) => {
+        // Add 1 to the user's VC.
+        const rootField = store.getRootField('updateVc')
+        const user = rootField.getLinkedRecord('user')
+        user.setValue(user.getValue('vcCurrent') + 1, 'vcCurrent')
       }
     }
   )
