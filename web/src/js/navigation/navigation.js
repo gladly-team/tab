@@ -19,7 +19,7 @@ export const goToSettings = () => {
 }
 
 export const goToDonate = () => {
-  goTo('/tab/donate/')
+  goTo('/tab/profile/donate/')
 }
 
 export const goToDashboard = () => {
@@ -31,9 +31,9 @@ export const goToRetrievePassword = () => {
 }
 
 export const goToStats = () => {
-  // TODO
+  goTo('/tab/profile/stats/')
 }
 
 export const goToInviteFriends = () => {
-  // TODO
+  goTo('/tab/profile/invite/')
 }
