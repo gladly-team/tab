@@ -197,6 +197,7 @@ const userType = new GraphQLObjectType({
       type: GraphQLInt,
       description: 'User\'s vc'
     },
+    // TODO: change to heartsForNextLevel to be able to get progress
     heartsUntilNextLevel: {
       type: GraphQLInt,
       description: 'Remaing hearts until next level.'
