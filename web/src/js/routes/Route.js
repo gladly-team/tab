@@ -10,7 +10,7 @@ import Authentication from '../components/Authentication/Authentication'
 import PasswordRetrieve from '../components/Authentication/PasswordRetrieve'
 
 import DonateVcView from '../components/Donate/DonateVcView'
-import SettingsView from '../components/Settings/SettingsView'
+import SettingsComponent from '../components/Settings/SettingsComponent'
 import BackgroundSettingsView from '../components/Settings/Background/BackgroundSettingsView'
 import WidgetsSettingsView from '../components/Settings/Widgets/WidgetsSettingsView'
 
@@ -19,7 +19,7 @@ export default (
     <Route path='tab' component={App}>
       <IndexRoute component={DashboardView} />
       <Route path='donate' component={DonateVcView} />
-      <Route path='settings' component={SettingsView}>
+      <Route path='settings' component={SettingsComponent}>
         <IndexRoute component={WidgetsSettingsView} />
         <Route path='widgets' component={WidgetsSettingsView} />
         <Route path='background' component={BackgroundSettingsView} />

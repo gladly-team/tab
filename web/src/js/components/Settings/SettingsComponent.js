@@ -164,8 +164,4 @@ class Settings extends React.Component {
   }
 }
 
-Settings.propTypes = {
-  user: PropTypes.object.isRequired
-}
-
 export default Settings
