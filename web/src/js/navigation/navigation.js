@@ -18,10 +18,6 @@ export const goToSettings = () => {
   goTo('/tab/settings/widgets/')
 }
 
-export const goToSettingsSection = (section) => {
-  goTo(`/tab/settings/${section}/`)
-}
-
 export const goToDonate = () => {
   goTo('/tab/donate/')
 }
