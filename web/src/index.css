@@ -98,3 +98,9 @@ body {
   -ms-transition: opacity 0.8s ease-in;
   -moz-transition: opacity 0.8s ease-in;
 }
+
+/* Links */
+a.active {
+  font-weight: bold;
+}
+

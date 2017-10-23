@@ -1,53 +1,24 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-
 import FadeInAnimation from 'general/FadeInAnimation'
 import ErrorMessage from 'general/ErrorMessage'
-
 import {
   goToDashboard,
-  goToLogin,
-  goToSettingsSection
+  goToLogin
 } from 'navigation/navigation'
 import AppBar from 'material-ui/AppBar'
 import FontIcon from 'material-ui/FontIcon'
-import MenuItem from 'material-ui/MenuItem'
 import Drawer from 'material-ui/Drawer'
 import FlatButton from 'material-ui/FlatButton'
-
+import SettingsMenuItem from './SettingsMenuItem'
 import { logoutUser } from '../../utils/cognito-auth'
-
 import appTheme from 'theme/default'
 
 class Settings extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      selection: 'widgets',
       errorMessage: null
     }
-  }
-
-  componentWillMount () {
-    this.setState({
-      selection: this.getRouteName()
-    })
-  }
-
-  getRouteName () {
-    var currentPath = this.props.location.pathname
-    if (currentPath[currentPath.length - 1] === '/') {
-      currentPath = currentPath.slice(0, currentPath.length - 1)
-    }
-    var index = currentPath.lastIndexOf('/')
-    return currentPath.slice(index + 1)
-  }
-
-  openSettingsFor (selection) {
-    this.setState({
-      selection: selection
-    })
-    goToSettingsSection(selection)
   }
 
   goToHome () {
@@ -78,32 +49,17 @@ class Settings extends React.Component {
       width: '100%',
       height: '100%'
     }
-
     const container = {
       backgroundColor: '#F2F2F2',
       width: '100vw',
       display: 'flex',
       justifyContent: 'center'
     }
-
-    const defaultMenuItem = {
-    }
-
-    const widgets = Object.assign({}, defaultMenuItem, {
-      fontWeight: (this.state.selection === 'widgets' ||
-        this.state.selection === 'settings') ? 'bold' : 'normal'
-    })
-
-    const background = Object.assign({}, defaultMenuItem, {
-      fontWeight: (this.state.selection === 'background') ? 'bold' : 'normal'
-    })
-
     const logoutContainer = {
       position: 'absolute',
       bottom: 20,
       left: 60
     }
-
     const logoutBtn = (
       <FlatButton
         id={'app-signout-btn'}
@@ -134,14 +90,14 @@ class Settings extends React.Component {
               title='Settings'
               iconClassNameLeft='fa fa-arrow-left'
               onLeftIconButtonTouchTap={this.goToHome.bind(this)} />
-            <MenuItem
-              style={widgets}
-              onClick={this.openSettingsFor.bind(this, 'widgets')}>
-                  Widgets
-              </MenuItem>
-            <MenuItem
-              style={background}
-              onClick={this.openSettingsFor.bind(this, 'background')}>Background</MenuItem>
+            <SettingsMenuItem
+              to={'/tab/settings/widgets/'}>
+                Widgets
+            </SettingsMenuItem>
+            <SettingsMenuItem
+              to={'/tab/settings/background/'}>
+                Background
+            </SettingsMenuItem>
             <div style={logoutContainer}>
               {logoutBtn}
             </div>

@@ -1,5 +1,7 @@
 import { browserHistory } from 'react-router'
 
+// TODO: replace this with Link navigation via react-router.
+
 export const goTo = (route) => {
   browserHistory.push(route)
 }
@@ -13,7 +15,7 @@ export const goToLogin = () => {
 }
 
 export const goToSettings = () => {
-  goTo('/tab/settings/')
+  goTo('/tab/settings/widgets/')
 }
 
 export const goToSettingsSection = (section) => {
