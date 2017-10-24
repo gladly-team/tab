@@ -24,6 +24,7 @@ class ProfileStats extends React.Component {
             showExpandableButton={false} />
           <div style={cardBody}>
             Stats go here: user ID {user.id}
+            <div>User joined: {user.joined}</div>
           </div>
         </Card>
       </SettingsChildWrapper>
@@ -32,7 +33,10 @@ class ProfileStats extends React.Component {
 }
 
 ProfileStats.propTypes = {
-  user: PropTypes.object.isRequired
+  user: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    joined: PropTypes.string.isRequired
+  }).isRequired
 }
 
 export default ProfileStats

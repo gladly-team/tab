@@ -313,6 +313,9 @@ type User implements Node {
   # User's email
   email: String
 
+  # ISO datetime string of when the user joined
+  joined: String
+
   # User's current vc
   vcCurrent: Int
 

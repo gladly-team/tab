@@ -39,6 +39,7 @@ describe('test-utils', () => {
     const expectedUser = new UserModel(getMockUserInfo())
     expectedUser.created = mockDate.defaultDateISO
     expectedUser.updated = mockDate.defaultDateISO
+    expectedUser.joined = mockDate.defaultDateISO
     expect(getMockUserInstance()).toEqual(expectedUser)
   })
 
@@ -48,6 +49,7 @@ describe('test-utils', () => {
     expectedUser.heartsUntilNextLevel = 12
     expectedUser.created = mockDate.defaultDateISO
     expectedUser.updated = mockDate.defaultDateISO
+    expectedUser.joined = mockDate.defaultDateISO
     expect(getMockUserInstance({ username: 'Bob', heartsUntilNextLevel: 12 }))
       .toEqual(expectedUser)
   })

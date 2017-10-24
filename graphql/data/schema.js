@@ -185,6 +185,10 @@ const userType = new GraphQLObjectType({
       type: GraphQLString,
       description: 'User\'s email'
     },
+    joined: {
+      type: GraphQLString,
+      description: 'ISO datetime string of when the user joined'
+    },
     vcCurrent: {
       type: GraphQLInt,
       description: 'User\'s current vc'
