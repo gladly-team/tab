@@ -7,6 +7,8 @@ import {
 } from 'navigation/navigation'
 import AppBar from 'material-ui/AppBar'
 import Drawer from 'material-ui/Drawer'
+import IconButton from 'material-ui/IconButton'
+import CloseIcon from 'material-ui/svg-icons/navigation/close'
 
 class SettingsPage extends React.Component {
   constructor (props) {
@@ -47,9 +49,17 @@ class SettingsPage extends React.Component {
       bottom: 0,
       left: 0
     }
+    const closeButtonStyle = {
+      width: 54,
+      height: 54,
+      padding: 8
+    }
+    const closeButtonIconStyle = {
+      width: 28,
+      height: 28
+    }
     const showError = this.showError
     const errorMessage = this.state.errorMessage
-
     return (
       <FadeInAnimation>
         <div
@@ -58,13 +68,21 @@ class SettingsPage extends React.Component {
           style={containerStyle}>
           <AppBar
             title='Settings'
-            iconClassNameLeft='fa fa-arrow-left'
-            onLeftIconButtonTouchTap={this.goToHome.bind(this)} />
+            iconElementRight={
+              <IconButton
+                style={closeButtonStyle}
+                iconStyle={closeButtonIconStyle}
+              >
+                <CloseIcon />
+              </IconButton>
+            }
+            onClick={this.goToHome.bind(this)}
+          />
           <Drawer>
             <AppBar
               title={this.props.title}
-              iconClassNameLeft='fa fa-arrow-left'
-              onLeftIconButtonTouchTap={this.goToHome.bind(this)} />
+              showMenuIconButton={false}
+            />
             { this.props.menuItems }
             { this.props.menuItemBottom
               ? (
