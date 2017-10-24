@@ -1,8 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import WidgetSettings from './WidgetSettingsContainer'
-
-import FadeInAnimation from 'general/FadeInAnimation'
+import SettingsChildWrapper from '../SettingsChildWrapperComponent'
 
 import {List} from 'material-ui/List'
 import FullScreenProgress from 'general/FullScreenProgress'
@@ -35,12 +34,6 @@ class WidgetsSettings extends React.Component {
   render () {
     const { user, app, showError } = this.props
 
-    const container = {
-      marginLeft: 256,
-      marginRight: 'auto',
-      padding: 20
-    }
-
     // We need to wait for the
     // userWidgetsMap to be created before
     // mounting the WidgetSettings.
@@ -50,22 +43,18 @@ class WidgetsSettings extends React.Component {
 
     const self = this
     return (
-      <FadeInAnimation>
-        <div
-          key={'widgets-settings-container-key'}
-          style={container}>
-          <List>
-            {app.widgets.edges.map((edge, index) => {
-              return (<WidgetSettings
-                key={index}
-                user={user}
-                appWidget={edge.node}
-                widget={self.state.userWidgets[edge.node.name]}
-                showError={showError} />)
-            })}
-          </List>
-        </div>
-      </FadeInAnimation>
+      <SettingsChildWrapper>
+        <List style={{ paddingTop: 0 }} >
+          {app.widgets.edges.map((edge, index) => {
+            return (<WidgetSettings
+              key={index}
+              user={user}
+              appWidget={edge.node}
+              widget={self.state.userWidgets[edge.node.name]}
+              showError={showError} />)
+          })}
+        </List>
+      </SettingsChildWrapper>
     )
   }
 }
