@@ -8,6 +8,7 @@ import es from 'react-intl/locale-data/es'
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 
 // Our translated strings
 import localeData from './js/assets/locales/data.json'
@@ -30,6 +31,11 @@ const languageWithoutRegionCode = language.toLowerCase().split(/[_-]+/)[0]
 
 // Try full locale, try locale without region code, fallback to 'en'
 const messages = localeData[languageWithoutRegionCode] || localeData[language] || localeData.en
+
+// Needed for onTouchTap
+// http://stackoverflow.com/a/34015469/988941
+// Remove when updating material-ui to 0.19+
+injectTapEventPlugin()
 
 const Root = () => (
   <MuiThemeProvider muiTheme={muiTheme}>
