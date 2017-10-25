@@ -8,26 +8,22 @@ import addVc from './addVc'
  * in other words, whether enough time has passed since the
  * last opened tab.
  * @param {object} userContext - The user authorizer object.
- * @param {string} id - The user id.
- * @return {Promise<boolean>}  A promise that resolves into a boolean.
+ * @param {string} lastTabTimestampStr - The ISO string datetime of
+ *   when the user last opened a tab.
+ * @return {boolean}  Whether the tab is valid.
  */
-const isTabValid = async (userContext, userId) => {
+const isTabValid = (userContext, lastTabTimestampStr) => {
   const COOLDOWN_SECONDS = 2
-  try {
-    var user = await UserModel.get(userContext, userId)
-    const now = moment.utc()
-    var lastTabTimestamp = (
-      user.lastTabTimestamp
-      ? moment.utc(user.lastTabTimestamp)
-      : null
-    )
-    return (
-      !lastTabTimestamp ||
-      now.diff(lastTabTimestamp, 'seconds') > COOLDOWN_SECONDS
-    )
-  } catch (e) {
-    throw e
-  }
+  const now = moment.utc()
+  var lastTabTimestamp = (
+    lastTabTimestampStr
+    ? moment.utc(lastTabTimestampStr)
+    : null
+  )
+  return (
+    !lastTabTimestamp ||
+    now.diff(lastTabTimestamp, 'seconds') > COOLDOWN_SECONDS
+  )
 }
 
 /**
@@ -36,20 +32,49 @@ const isTabValid = async (userContext, userId) => {
  * This only increments the VC if the tab is "valid",
  * which prevents "fradulent" tab spamming.
  * @param {object} userContext - The user authorizer object.
- * @param {string} id - The user id.
+ * @param {string} userId - The user id.
  * @return {Promise<User>}  A promise that resolves into a User instance.
  */
 const logTab = async (userContext, userId) => {
   // Check if it's a valid tab before incrementing user VC or
   // the user's valid tab count.
-  var isValid
   try {
-    isValid = await isTabValid(userContext, userId)
+    var user = await UserModel.get(userContext, userId)
   } catch (e) {
     throw e
   }
+  const isValid = isTabValid(userContext, user.lastTabTimestamp)
 
-  var user
+  // Update the user's counter for max tabs in a day.
+  // If this is the user's first tab today, reset the counter
+  // for the user's "current day" tab count.
+  // If today is also the day of all time max tabs,
+  // update the max tabs day value.
+  const isFirstTabToday = (
+    moment(user.maxTabsDay.recentDay.date).utc().format('LL') !==
+    moment().utc().format('LL')
+  )
+  const todayTabCount = (
+    isFirstTabToday
+    ? 1
+    : user.maxTabsDay.recentDay.numTabs + 1
+  )
+  const isTodayMax = todayTabCount >= user.maxTabsDay.maxDay.numTabs
+  const maxTabsDayVal = {
+    maxDay: {
+      date: isTodayMax
+        ? moment.utc().toISOString()
+        : user.maxTabsDay.maxDay.date,
+      numTabs: isTodayMax
+        ? todayTabCount
+        : user.maxTabsDay.maxDay.numTabs
+    },
+    recentDay: {
+      date: moment.utc().toISOString(),
+      numTabs: todayTabCount
+    }
+  }
+
   try {
     if (isValid) {
       // Increment the user's tab count, valid tab count, and VC.
@@ -58,14 +83,16 @@ const logTab = async (userContext, userId) => {
         id: userId,
         tabs: {$add: 1},
         validTabs: {$add: 1},
-        lastTabTimestamp: moment.utc().toISOString()
+        lastTabTimestamp: moment.utc().toISOString(),
+        maxTabsDay: maxTabsDayVal
       })
     } else {
       // Only increment the user's tab count.
       user = await UserModel.update(userContext, {
         id: userId,
         tabs: {$add: 1},
-        lastTabTimestamp: moment.utc().toISOString()
+        lastTabTimestamp: moment.utc().toISOString(),
+        maxTabsDay: maxTabsDayVal
       })
     }
   } catch (e) {

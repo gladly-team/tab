@@ -152,6 +152,16 @@ describe('UserModel', () => {
       vcAllTime: 0,
       level: 0,
       tabs: 0,
+      maxTabsDay: {
+        maxDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 0
+        },
+        recentDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 0
+        }
+      },
       validTabs: 0,
       heartsUntilNextLevel: 0,
       vcDonatedAllTime: 0,

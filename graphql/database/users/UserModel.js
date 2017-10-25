@@ -52,10 +52,28 @@ class User extends BaseModel {
       level: types.number().integer().default(self.fieldDefaults.level),
       tabs: types.number().integer().default(self.fieldDefaults.tabs),
       validTabs: types.number().integer().default(self.fieldDefaults.tabs),
+      maxTabsDay: types.object({
+        // The count of tabs for the day on which the user opened
+        // the most tabs.
+        maxDay: types.object({
+          date: types.string().isoDate(),
+          numTabs: types.number().integer()
+        }),
+        // The count of tabs for the current (or most recent) day
+        // the user has opened a tab.
+        recentDay: types.object({
+          date: types.string().isoDate(),
+          numTabs: types.number().integer()
+        })
+      })
+        .default(self.fieldDefaults.maxTabsDay,
+          'Used to track the most tabs opened in a day'),
       heartsUntilNextLevel: types.number().integer()
         .default(self.fieldDefaults.heartsUntilNextLevel),
-      vcDonatedAllTime: types.number().integer().default(self.fieldDefaults.vcDonatedAllTime),
-      numUsersRecruited: types.number().integer().default(self.fieldDefaults.numUsersRecruited),
+      vcDonatedAllTime: types.number().integer()
+        .default(self.fieldDefaults.vcDonatedAllTime),
+      numUsersRecruited: types.number().integer()
+        .default(self.fieldDefaults.numUsersRecruited),
       backgroundImage: types.object(
         {
           id: types.uuid(),
@@ -79,6 +97,16 @@ class User extends BaseModel {
       level: 0,
       tabs: 0,
       validTabs: 0,
+      maxTabsDay: () => ({
+        maxDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 0
+        },
+        recentDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 0
+        }
+      }),
       // On the first Heart gained, immediately level up to Level 1.
       heartsUntilNextLevel: 0,
       vcDonatedAllTime: 0,

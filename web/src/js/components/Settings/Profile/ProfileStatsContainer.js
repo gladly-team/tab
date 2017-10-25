@@ -11,6 +11,10 @@ export default createFragmentContainer(ProfileStats, {
       id
       joined
       tabs
+      maxTabsDay {
+        date
+        numTabs
+      }
     }
   `
 })

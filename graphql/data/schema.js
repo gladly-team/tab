@@ -163,6 +163,21 @@ const imageType = new GraphQLObjectType({
   })
 })
 
+const maxTabsDayType = new GraphQLObjectType({
+  name: 'MaxTabsDay',
+  description: 'Info about the user\'s day of most opened tabs',
+  fields: () => ({
+    date: {
+      type: GraphQLString,
+      description: 'The day the most tabs were opened'
+    },
+    numTabs: {
+      type: GraphQLInt,
+      description: 'The number of tabs opened on that day'
+    }
+  })
+})
+
 const userType = new GraphQLObjectType({
   name: USER,
   description: 'A person who uses our app',
@@ -200,6 +215,11 @@ const userType = new GraphQLObjectType({
     tabs: {
       type: GraphQLInt,
       description: 'User\'s all time tab count'
+    },
+    maxTabsDay: {
+      type: maxTabsDayType,
+      description: 'Info about the user\'s day of most opened tabs',
+      resolve: (user, _) => user.maxTabsDay.maxDay
     },
     level: {
       type: GraphQLInt,

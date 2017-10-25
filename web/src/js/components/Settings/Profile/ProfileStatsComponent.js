@@ -26,6 +26,8 @@ class ProfileStats extends React.Component {
             Stats go here: user ID {user.id}
             <div>User joined: {user.joined}</div>
             <div>User tabs all time: {user.tabs}</div>
+            <div>Max tabs: {user.maxTabsDay.numTabs}</div>
+            <div>Max tabs day: {user.maxTabsDay.date}</div>
           </div>
         </Card>
       </SettingsChildWrapper>
@@ -37,7 +39,11 @@ ProfileStats.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.string.isRequired,
     joined: PropTypes.string.isRequired,
-    tabs: PropTypes.number.isRequired
+    tabs: PropTypes.number.isRequired,
+    maxTabsDay: PropTypes.shape({
+      date: PropTypes.string.isRequired,
+      numTabs: PropTypes.number.isRequired
+    })
   }).isRequired
 }
 
