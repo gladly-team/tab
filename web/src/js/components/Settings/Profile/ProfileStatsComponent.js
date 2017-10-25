@@ -1,35 +1,100 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {Card, CardHeader} from 'material-ui/Card'
+import moment from 'moment'
+import RaisedButton from 'material-ui/RaisedButton'
+import { GridList } from 'material-ui/GridList'
+import Stat from './StatComponent'
 import SettingsChildWrapper from '../SettingsChildWrapperComponent'
+import appTheme from 'theme/default'
+import {
+  goToInviteFriends,
+  goToDonate
+} from 'navigation/navigation'
 
 class ProfileStats extends React.Component {
   render () {
     const { user } = this.props
-    const containerStyle = {
-      padding: 10
+    const now = moment().utc()
+    const daysSinceJoined = now.diff(moment(user.joined), 'days')
+    const dayWord = daysSinceJoined === 1 ? 'day' : 'days'
+    const tabberWord = user.numUsersRecruited === 1 ? 'Tabber' : 'Tabbers'
+    const heartsWord = user.vcDonatedAllTime === 1 ? 'Heart' : 'Hearts'
+    const extraContentTextStyle = {
+      display: 'block',
+      color: appTheme.palette.disabledColor
     }
-    const cardBody = {
-      padding: 10
+    const gridPadding = 12
+    const secondRowStatStyle = {
+      height: 240,
+      paddingBottom: 50,
+      marginTop: 6
     }
-
     return (
       <SettingsChildWrapper>
-        <Card
-          style={containerStyle}>
-          <CardHeader
-            title={'Your Stats'}
-            subtitle={'Your Tabbing stats'}
-            actAsExpander={false}
-            showExpandableButton={false} />
-          <div style={cardBody}>
-            Stats go here: user ID {user.id}
-            <div>User joined: {user.joined}</div>
-            <div>User tabs all time: {user.tabs}</div>
-            <div>Max tabs: {user.maxTabsDay.numTabs}</div>
-            <div>Max tabs day: {user.maxTabsDay.date}</div>
-          </div>
-        </Card>
+        <GridList
+          cols={4}
+          padding={gridPadding}
+          cellHeight={'auto'}
+        >
+          <Stat
+            stat={daysSinceJoined}
+            statText={`${dayWord} as a Tabber`}
+          />
+          <Stat
+            stat={user.tabs}
+            statText={'tabs all time'}
+          />
+          <Stat
+            stat={user.maxTabsDay.numTabs}
+            statText={'max tabs in one day'}
+            extraContent={
+              <span style={extraContentTextStyle}>
+                on {moment(user.maxTabsDay.date).format('LL')}
+              </span>
+            }
+          />
+          <Stat
+            stat={user.level}
+            statText={'your level'}
+            extraContent={
+              <span style={extraContentTextStyle}>
+                {user.heartsUntilNextLevel}<i style={{ marginLeft: 2 }} className='fa fa-heart-o' /> until next level
+              </span>
+            }
+          />
+        </GridList>
+        <GridList
+          cols={2}
+          padding={gridPadding}
+          cellHeight={'auto'}
+        >
+          <Stat
+            stat={user.numUsersRecruited}
+            statText={`${tabberWord} recruited`}
+            style={secondRowStatStyle}
+            extraContent={
+              <RaisedButton
+                label='Invite Friends'
+                style={{ marginTop: 14 }}
+                primary
+                onClick={goToInviteFriends}
+              />
+            }
+          />
+          <Stat
+            stat={user.vcDonatedAllTime}
+            statText={`${heartsWord} donated`}
+            style={secondRowStatStyle}
+            extraContent={
+              <RaisedButton
+                label='Donate Hearts'
+                style={{ marginTop: 14 }}
+                primary
+                onClick={goToDonate}
+              />
+            }
+          />
+        </GridList>
       </SettingsChildWrapper>
     )
   }
@@ -38,12 +103,16 @@ class ProfileStats extends React.Component {
 ProfileStats.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.string.isRequired,
+    heartsUntilNextLevel: PropTypes.number.isRequired,
     joined: PropTypes.string.isRequired,
-    tabs: PropTypes.number.isRequired,
+    level: PropTypes.number.isRequired,
     maxTabsDay: PropTypes.shape({
       date: PropTypes.string.isRequired,
       numTabs: PropTypes.number.isRequired
-    })
+    }),
+    numUsersRecruited: PropTypes.number.isRequired,
+    tabs: PropTypes.number.isRequired,
+    vcDonatedAllTime: PropTypes.number.isRequired
   }).isRequired
 }
 

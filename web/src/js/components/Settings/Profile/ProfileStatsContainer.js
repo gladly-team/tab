@@ -9,12 +9,16 @@ export default createFragmentContainer(ProfileStats, {
   user: graphql`
     fragment ProfileStatsContainer_user on User {
       id
+      heartsUntilNextLevel
       joined
-      tabs
+      level
       maxTabsDay {
         date
         numTabs
       }
+      numUsersRecruited
+      tabs
+      vcDonatedAllTime
     }
   `
 })

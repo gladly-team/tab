@@ -82,6 +82,7 @@ class SettingsPage extends React.Component {
             <AppBar
               title={this.props.title}
               showMenuIconButton={false}
+              style={{ marginBottom: 8 }}
             />
             { this.props.menuItems }
             { this.props.menuItemBottom

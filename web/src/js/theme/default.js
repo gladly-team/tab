@@ -16,6 +16,8 @@ const primaryColorDark = '#6c1b74'
 const primaryColorLight = '#d07ad5'
 const textOnPrimaryColor = '#FFFFFF'
 
+export const alternateAccentColor = '#4a90e2'
+
 // const secondaryColor = '#ffee58'
 // const secondaryColorDark = '#c9bc1f'
 // const secondaryColorLight = '#ffff8b'
