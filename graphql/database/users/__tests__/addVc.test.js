@@ -1,7 +1,5 @@
 /* eslint-env jest */
 
-import moment from 'moment'
-
 import UserModel from '../UserModel'
 import addVc from '../addVc'
 import UserLevelModel from '../../userLevels/UserLevelModel'
