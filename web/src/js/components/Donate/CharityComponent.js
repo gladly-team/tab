@@ -191,13 +191,13 @@ class Charity extends React.Component {
       <FlatButton
         label='Stay'
         primary
-        onTouchTap={this.thanksDialogClose.bind(this)}
+        onClick={this.thanksDialogClose.bind(this)}
           />,
       <FlatButton
         label='Go Back Home'
         primary
         keyboardFocused
-        onTouchTap={this.goToHome.bind(this)}
+        onClick={this.goToHome.bind(this)}
           />
     ]
 

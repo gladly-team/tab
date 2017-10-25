@@ -19,10 +19,7 @@ class InviteFriend extends React.Component {
     }
   }
 
-  handleTouchTap (event) {
-    // This prevents ghost click.
-    event.preventDefault()
-
+  handleClick (event) {
     this.setState({
       open: true,
       anchorEl: event.currentTarget
@@ -49,7 +46,7 @@ class InviteFriend extends React.Component {
           tooltipPosition='top-left'
           style={this.props.style}
           iconStyle={this.props.iconStyle}
-          onTouchTap={this.handleTouchTap.bind(this)}>
+          onClick={this.handleClick.bind(this)}>
           <FontIcon
             color={dashboardIconInactiveColor}
             hoverColor={dashboardIconActiveColor}

@@ -50,7 +50,6 @@ class DonateVc extends React.Component {
           <AppBar
             title='Donate'
             iconClassNameLeft='fa fa-arrow-left'
-            onLeftIconButtonTouchTap={this.goToHome.bind(this)}
           />
           <Charities app={app} user={user} showError={this.showError.bind(this)} />
           { errorMessage

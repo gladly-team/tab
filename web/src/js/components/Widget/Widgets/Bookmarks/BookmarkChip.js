@@ -70,7 +70,6 @@ class BookmarkChip extends React.Component {
         labelColor={chip.labelColor}
         labelStyle={chip.labelStyle}
         style={chip.style}
-        onTouchTap={() => {}}
         onClick={this.openLink.bind(this, bookmark.link)}
         onMouseEnter={this.onDeleteBtnMouseMove.bind(this, true)}
         onMouseLeave={this.onDeleteBtnMouseMove.bind(this, false)}>
