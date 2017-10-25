@@ -151,6 +151,8 @@ describe('UserModel', () => {
       vcCurrent: 0,
       vcAllTime: 0,
       level: 0,
+      tabs: 0,
+      validTabs: 0,
       heartsUntilNextLevel: 0,
       vcDonatedAllTime: 0,
       numUsersRecruited: 0,

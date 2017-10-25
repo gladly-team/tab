@@ -316,11 +316,14 @@ type User implements Node {
   # ISO datetime string of when the user joined
   joined: String
 
-  # User's current vc
+  # User's current VC
   vcCurrent: Int
 
-  # User's vc of all time
+  # User's all time VC
   vcAllTime: Int
+
+  # User's all time tab count
+  tabs: Int
 
   # User's vc
   level: Int

@@ -1,5 +1,4 @@
 
-import moment from 'moment'
 import UserModel from './UserModel'
 import getNextLevelFor from '../userLevels/getNextLevelFor'
 
@@ -18,8 +17,7 @@ const addVc = async (userContext, userId, vc = 0) => {
       id: userId,
       vcCurrent: {$add: vc},
       vcAllTime: {$add: vc},
-      heartsUntilNextLevel: {$add: -vc},
-      lastTabTimestamp: moment.utc().toISOString()
+      heartsUntilNextLevel: {$add: -vc}
     })
 
     // Check if user gained a level.

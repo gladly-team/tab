@@ -58,8 +58,7 @@ describe('addVc', () => {
       id: userId,
       vcCurrent: {$add: vcToAdd},
       vcAllTime: {$add: vcToAdd},
-      heartsUntilNextLevel: {$add: -vcToAdd},
-      lastTabTimestamp: moment.utc().toISOString()
+      heartsUntilNextLevel: {$add: -vcToAdd}
     })
 
     // We should not call to get a new level because the

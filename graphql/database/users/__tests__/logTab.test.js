@@ -1,5 +1,7 @@
 /* eslint-env jest */
 
+import moment from 'moment'
+import UserModel from '../UserModel'
 import logTab from '../logTab'
 import addVc from '../addVc'
 import {
@@ -31,7 +33,7 @@ describe('logTab', () => {
     jest.clearAllMocks()
   })
 
-  it('increments the VC', async () => {
+  it('when a valid tab, it increments the VC and valid tab counts', async () => {
     const userId = userContext.id
 
     // Mock fetching the user.
@@ -44,13 +46,27 @@ describe('logTab', () => {
         Item: mockUser
       }
     )
+    const updateMethod = jest.spyOn(UserModel, 'update')
+      .mockImplementationOnce(() => {
+        return mockUser
+      })
 
     const returnedUser = await logTab(userContext, userId)
+
+    // VC should increment.
     expect(addVc).toHaveBeenCalled()
+
+    // It should update tabs and validTabs.
+    expect(updateMethod).toHaveBeenLastCalledWith(userContext, {
+      id: userId,
+      tabs: {$add: 1},
+      validTabs: {$add: 1},
+      lastTabTimestamp: moment.utc().toISOString()
+    })
     expect(returnedUser).not.toBeNull()
   })
 
-  it('does not increment VC if was recently incremented', async () => {
+  it('when an invalid tab, it does not increment VC or valid tab counts', async () => {
     const userId = userContext.id
 
     // Mock fetching the user.
@@ -63,9 +79,22 @@ describe('logTab', () => {
         Item: mockUser
       }
     )
+    const updateMethod = jest.spyOn(UserModel, 'update')
+      .mockImplementationOnce(() => {
+        return mockUser
+      })
 
     const returnedUser = await logTab(userContext, userId)
+
+    // VC should not increment.
     expect(addVc).not.toHaveBeenCalled()
+
+    // It should update tabs but not validTabs.
+    expect(updateMethod).toHaveBeenLastCalledWith(userContext, {
+      id: userId,
+      tabs: {$add: 1},
+      lastTabTimestamp: moment.utc().toISOString()
+    })
     expect(returnedUser).not.toBeNull()
   })
 })

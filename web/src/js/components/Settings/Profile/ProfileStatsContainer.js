@@ -10,6 +10,7 @@ export default createFragmentContainer(ProfileStats, {
     fragment ProfileStatsContainer_user on User {
       id
       joined
+      tabs
     }
   `
 })

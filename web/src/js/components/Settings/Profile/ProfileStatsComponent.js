@@ -25,6 +25,7 @@ class ProfileStats extends React.Component {
           <div style={cardBody}>
             Stats go here: user ID {user.id}
             <div>User joined: {user.joined}</div>
+            <div>User tabs all time: {user.tabs}</div>
           </div>
         </Card>
       </SettingsChildWrapper>
@@ -35,7 +36,8 @@ class ProfileStats extends React.Component {
 ProfileStats.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.string.isRequired,
-    joined: PropTypes.string.isRequired
+    joined: PropTypes.string.isRequired,
+    tabs: PropTypes.number.isRequired
   }).isRequired
 }
 

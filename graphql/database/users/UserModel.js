@@ -50,6 +50,8 @@ class User extends BaseModel {
       vcCurrent: types.number().integer().default(self.fieldDefaults.vcCurrent),
       vcAllTime: types.number().integer().default(self.fieldDefaults.vcAllTime),
       level: types.number().integer().default(self.fieldDefaults.level),
+      tabs: types.number().integer().default(self.fieldDefaults.tabs),
+      validTabs: types.number().integer().default(self.fieldDefaults.tabs),
       heartsUntilNextLevel: types.number().integer()
         .default(self.fieldDefaults.heartsUntilNextLevel),
       vcDonatedAllTime: types.number().integer().default(self.fieldDefaults.vcDonatedAllTime),
@@ -75,6 +77,8 @@ class User extends BaseModel {
       vcCurrent: 0,
       vcAllTime: 0,
       level: 0,
+      tabs: 0,
+      validTabs: 0,
       // On the first Heart gained, immediately level up to Level 1.
       heartsUntilNextLevel: 0,
       vcDonatedAllTime: 0,
