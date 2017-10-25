@@ -47,7 +47,7 @@ import {
 
 import UserModel from '../database/users/UserModel'
 import createUser from '../database/users/createUser'
-import incrementVc from '../database/users/incrementVc'
+import logTab from '../database/users/logTab'
 import setActiveWidget from '../database/users/setActiveWidget'
 import setBackgroundImage from '../database/users/setBackgroundImage'
 import setBackgroundImageFromCustomURL from '../database/users/setBackgroundImageFromCustomURL'
@@ -378,8 +378,8 @@ const { connectionType: backgroundImageConnection, edgeType: backgroundImageEdge
 /**
  * Updated the user vc.
  */
-const updateVcMutation = mutationWithClientMutationId({
-  name: 'UpdateVc',
+const logTabMutation = mutationWithClientMutationId({
+  name: 'LogTab',
   inputFields: {
     userId: { type: new GraphQLNonNull(GraphQLString) }
   },
@@ -391,7 +391,7 @@ const updateVcMutation = mutationWithClientMutationId({
   },
   mutateAndGetPayload: ({userId}, context) => {
     const { type, id } = fromGlobalId(userId)
-    return incrementVc(context.user, id)
+    return logTab(context.user, id)
   }
 })
 
@@ -685,7 +685,7 @@ const queryType = new GraphQLObjectType({
 const mutationType = new GraphQLObjectType({
   name: 'Mutation',
   fields: () => ({
-    updateVc: updateVcMutation,
+    logTab: logTabMutation,
     donateVc: donateVcMutation,
 
     setUserBkgImage: setUserBkgImageMutation,

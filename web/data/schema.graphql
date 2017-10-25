@@ -134,8 +134,18 @@ type Image {
   imageURL: String
 }
 
+input LogTabInput {
+  userId: String!
+  clientMutationId: String
+}
+
+type LogTabPayload {
+  user: User
+  clientMutationId: String
+}
+
 type Mutation {
-  updateVc(input: UpdateVcInput!): UpdateVcPayload
+  logTab(input: LogTabInput!): LogTabPayload
   donateVc(input: DonateVcInput!): DonateVcPayload
   setUserBkgImage(input: SetUserBkgImageInput!): SetUserBkgImagePayload
   setUserBkgColor(input: SetUserBkgColorInput!): SetUserBkgColorPayload
@@ -234,16 +244,6 @@ input SetUserBkgImageInput {
 }
 
 type SetUserBkgImagePayload {
-  user: User
-  clientMutationId: String
-}
-
-input UpdateVcInput {
-  userId: String!
-  clientMutationId: String
-}
-
-type UpdateVcPayload {
   user: User
   clientMutationId: String
 }

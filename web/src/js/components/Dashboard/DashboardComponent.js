@@ -6,7 +6,7 @@ import UserBackgroundImage from '../User/UserBackgroundImageContainer'
 import UserMenu from '../User/UserMenuContainer'
 import WidgetsContainer from '../Widget/WidgetsContainer'
 import Ad from '../Ad/Ad'
-import UpdateVc from './UpdateVcContainer'
+import LogTab from './LogTabContainer'
 import FontIcon from 'material-ui/FontIcon'
 import {
   dashboardIconInactiveColor,
@@ -107,7 +107,7 @@ class Dashboard extends React.Component {
             right: 320,
             display: 'block'
           }} />
-        { user ? <UpdateVc user={user} /> : null }
+        { user ? <LogTab user={user} /> : null }
         { errorMessage
           ? <ErrorMessage message={errorMessage}
             onRequestClose={this.clearError.bind(this)} />

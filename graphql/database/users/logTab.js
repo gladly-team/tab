@@ -4,14 +4,20 @@ import UserModel from './UserModel'
 import addVc from './addVc'
 
 /**
- * Increments the user vc by 1 only. Implements fraud protection by
- * only allowing the increment if too little time has passed since
- * the previous VC increment.
+ * Change the user's tab and VC stats accordingly.
+ * This checks if the tab is "valid" -- in other words, if
+ * enough time has passed since the last opened tab -- and only
+ * increments the VC if the tab is valid.
  * @param {object} userContext - The user authorizer object.
  * @param {string} id - The user id.
  * @return {Promise<User>}  A promise that resolves into a User instance.
  */
-const incrementVc = async (userContext, userId) => {
+const logTab = async (userContext, userId) => {
+  // TODO: log tab
+
+  // Check if it's a valid tab before incrementing user VC or
+  // the user's valid tab count.
+  // TODO: log valid tab
   const COOLDOWN_SECONDS = 2
   try {
     var user = await UserModel.get(userContext, userId)
@@ -31,4 +37,4 @@ const incrementVc = async (userContext, userId) => {
   return user
 }
 
-export default incrementVc
+export default logTab

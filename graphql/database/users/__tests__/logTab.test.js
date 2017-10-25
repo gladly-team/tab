@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import incrementVc from '../incrementVc'
+import logTab from '../logTab'
 import addVc from '../addVc'
 import {
   DatabaseOperation,
@@ -26,7 +26,7 @@ afterAll(() => {
   mockDate.off()
 })
 
-describe('incrementVc', () => {
+describe('logTab', () => {
   beforeEach(() => {
     jest.clearAllMocks()
   })
@@ -45,12 +45,12 @@ describe('incrementVc', () => {
       }
     )
 
-    const returnedUser = await incrementVc(userContext, userId)
+    const returnedUser = await logTab(userContext, userId)
     expect(addVc).toHaveBeenCalled()
     expect(returnedUser).not.toBeNull()
   })
 
-  it('does not increment if was recently incremented', async () => {
+  it('does not increment VC if was recently incremented', async () => {
     const userId = userContext.id
 
     // Mock fetching the user.
@@ -64,7 +64,7 @@ describe('incrementVc', () => {
       }
     )
 
-    const returnedUser = await incrementVc(userContext, userId)
+    const returnedUser = await logTab(userContext, userId)
     expect(addVc).not.toHaveBeenCalled()
     expect(returnedUser).not.toBeNull()
   })

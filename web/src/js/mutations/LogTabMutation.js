@@ -4,8 +4,8 @@ import {
 } from 'react-relay/compat'
 
 const mutation = graphql`
-  mutation UpdateVcMutation($input: UpdateVcInput!) {
-    updateVc(input: $input) {
+  mutation LogTabMutation($input: LogTabInput!) {
+    logTab(input: $input) {
       user {
         id
       }
@@ -25,7 +25,7 @@ function commit (environment, user) {
       },
       updater: (store) => {
         // Add 1 to the user's VC.
-        const rootField = store.getRootField('updateVc')
+        const rootField = store.getRootField('logTab')
         const user = rootField.getLinkedRecord('user')
         user.setValue(user.getValue('vcCurrent') + 1, 'vcCurrent')
       }
