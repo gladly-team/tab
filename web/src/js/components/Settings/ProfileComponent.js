@@ -2,6 +2,7 @@ import React from 'react'
 import {
   goToLogin
 } from 'navigation/navigation'
+import Divider from 'material-ui/Divider'
 import FontIcon from 'material-ui/FontIcon'
 import FlatButton from 'material-ui/FlatButton'
 import SettingsPageComponent from './SettingsPageComponent'
@@ -19,6 +20,10 @@ class Profile extends React.Component {
   }
 
   render () {
+    const dividerStyle = {
+      marginLeft: 14,
+      marginRight: 14
+    }
     const logoutButtonStyle = {
       color: appTheme.palette.accent1Color,
       bottom: 20,
@@ -42,6 +47,12 @@ class Profile extends React.Component {
             key={'invite'}
             to={'/tab/profile/invite/'}>
               Invite Friends
+          </SettingsMenuItem>,
+          <Divider style={dividerStyle} />,
+          <SettingsMenuItem
+            key={'settings'}
+            to={'/tab/settings/widgets/'}>
+              Settings
           </SettingsMenuItem>
         ]}
         menuItemBottom={

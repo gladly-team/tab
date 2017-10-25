@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import {
   goToLogin
 } from 'navigation/navigation'
+import Divider from 'material-ui/Divider'
 import FontIcon from 'material-ui/FontIcon'
 import FlatButton from 'material-ui/FlatButton'
 import SettingsPageComponent from './SettingsPageComponent'
@@ -20,6 +21,10 @@ class Settings extends React.Component {
   }
 
   render () {
+    const dividerStyle = {
+      marginLeft: 14,
+      marginRight: 14
+    }
     const logoutButtonStyle = {
       color: appTheme.palette.accent1Color,
       bottom: 20,
@@ -38,6 +43,12 @@ class Settings extends React.Component {
             key={'background'}
             to={'/tab/settings/background/'}>
               Background
+          </SettingsMenuItem>,
+          <Divider style={dividerStyle} />,
+          <SettingsMenuItem
+            key={'profile'}
+            to={'/tab/profile/stats/'}>
+              Your Profile
           </SettingsMenuItem>
         ]}
         menuItemBottom={
