@@ -72,11 +72,11 @@ class SettingsPage extends React.Component {
               <IconButton
                 style={closeButtonStyle}
                 iconStyle={closeButtonIconStyle}
+                onClick={this.goToHome.bind(this)}
               >
                 <CloseIcon />
               </IconButton>
             }
-            onClick={this.goToHome.bind(this)}
           />
           <Drawer>
             <AppBar
