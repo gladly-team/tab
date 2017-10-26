@@ -24,6 +24,7 @@ export const alternateAccentColor = '#4a90e2'
 // const textOnSecondaryColor = '#616161'
 
 const textColor = '#212121'
+export const lighterTextColor = 'rgba(33, 33, 33, 0.56)'
 export const dividerColor = '#BDBDBD'
 
 export default {
