@@ -1,37 +1,55 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {Card, CardHeader} from 'material-ui/Card'
+import Charity from '../../Donate/CharityContainer'
+import {GridList} from 'material-ui/GridList'
+// import {Card, CardHeader} from 'material-ui/Card'
 import SettingsChildWrapper from '../SettingsChildWrapperComponent'
 
 class ProfileDonateHearts extends React.Component {
   render () {
-    const { user } = this.props
+    const { app, user } = this.props
+    console.log(app)
     const containerStyle = {
-      padding: 10
+      // width: '100%',
+      // backgroundColor: '#F2F2F2'
     }
-    const cardBody = {
-      padding: 10
+    const gridListStyle = {
+      width: '100%',
+      margin: 'auto',
+      overflowY: 'auto'
     }
 
     return (
       <SettingsChildWrapper>
-        <Card
+        <div
+          key={'charities-container-key'}
           style={containerStyle}>
-          <CardHeader
-            title={'Donate Hearts'}
-            actAsExpander={false}
-            showExpandableButton={false} />
-          <div style={cardBody}>
-            Donate Hearts goes here: user ID {user.id}
-          </div>
-        </Card>
+          <GridList
+            cols={3}
+            padding={30}
+            style={gridListStyle}
+            cellHeight={'auto'}
+          >
+            {app.charities.edges.map((edge) => {
+              return (
+                <Charity
+                  key={edge.node.id}
+                  charity={edge.node}
+                  user={user}
+                  showError={this.props.showError}
+                  />)
+            })}
+          </GridList>
+        </div>
       </SettingsChildWrapper>
     )
   }
 }
 
 ProfileDonateHearts.propTypes = {
-  user: PropTypes.object.isRequired
+  app: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
+  showError: PropTypes.object.isRequired
 }
 
 export default ProfileDonateHearts

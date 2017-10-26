@@ -97,6 +97,7 @@ class SettingsPage extends React.Component {
           <div style={childContainerStyle}>
             {React.Children.map(
               this.props.children,
+              // TODO: use this in children
               (child) => React.cloneElement(child, {
                 showError: showError.bind(this)
               })

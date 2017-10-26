@@ -18,6 +18,9 @@ class ProfileDonateHeartsView extends React.Component {
           environment={environment}
           query={graphql`
             query ProfileDonateHeartsViewQuery($userId: String!) {
+              app {
+                ...ProfileDonateHeartsContainer_app
+              }
               user(userId: $userId) {
                 ...ProfileDonateHeartsContainer_user
               }
@@ -26,15 +29,15 @@ class ProfileDonateHeartsView extends React.Component {
           render={({error, props}) => {
             if (error) {
               console.error(error, error.source)
-              const errMsg = 'We had a problem loading your stats :('
+              const errMsg = 'We had a problem loading the Donate Hearts page.'
               return <ErrorMessage message={errMsg} />
             }
             if (props) {
-              const showError = this.props.showError
               return (
                 <ProfileDonateHearts
+                  app={props.app}
                   user={props.user}
-                  showError={showError} />
+                />
               )
             } else {
               return (<FullScreenProgress />)

@@ -9,7 +9,6 @@ import DashboardView from '../components/Dashboard/DashboardView'
 import Authentication from '../components/Authentication/Authentication'
 import PasswordRetrieve from '../components/Authentication/PasswordRetrieve'
 
-import DonateVcView from '../components/Donate/DonateVcView'
 import SettingsComponent from '../components/Settings/SettingsComponent'
 import BackgroundSettingsView from '../components/Settings/Background/BackgroundSettingsView'
 import WidgetsSettingsView from '../components/Settings/Widgets/WidgetsSettingsView'
@@ -22,7 +21,6 @@ export default (
   <Route path='/' component={BaseContainer}>
     <Route path='tab' component={App}>
       <IndexRoute component={DashboardView} />
-      <Route path='donate' component={DonateVcView} />
       <Route path='settings' component={SettingsComponent}>
         <IndexRoute component={WidgetsSettingsView} />
         <Route path='widgets' component={WidgetsSettingsView} />
