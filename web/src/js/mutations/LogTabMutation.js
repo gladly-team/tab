@@ -8,6 +8,10 @@ const mutation = graphql`
     logTab(input: $input) {
       user {
         id
+        heartsUntilNextLevel
+        level
+        tabs
+        vcCurrent
       }
     }
   }
@@ -22,12 +26,6 @@ function commit (environment, user) {
       mutation,
       variables: {
         input: { userId }
-      },
-      updater: (store) => {
-        // Add 1 to the user's VC.
-        const rootField = store.getRootField('logTab')
-        const user = rootField.getLinkedRecord('user')
-        user.setValue(user.getValue('vcCurrent') + 1, 'vcCurrent')
       }
     }
   )
