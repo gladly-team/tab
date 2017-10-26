@@ -33,7 +33,7 @@ class ProfileDonateHearts extends React.Component {
           style={containerStyle}>
           <Paper style={infoStyle}>
             <InfoOutlineIcon style={{ marginRight: 8, color: lighterTextColor }} />
-            <p>When you donate Hearts, you're telling us to distribute
+            <p>When you donate Hearts, you're telling us to give
              more of the money we raise to that charity.
             </p>
           </Paper>
