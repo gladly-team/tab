@@ -62,7 +62,7 @@ class ProfileDonateHearts extends React.Component {
 ProfileDonateHearts.propTypes = {
   app: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired,
-  showError: PropTypes.object.isRequired
+  showError: PropTypes.func.isRequired
 }
 
 export default ProfileDonateHearts

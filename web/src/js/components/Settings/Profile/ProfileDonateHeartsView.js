@@ -33,10 +33,12 @@ class ProfileDonateHeartsView extends React.Component {
               return <ErrorMessage message={errMsg} />
             }
             if (props) {
+              const showError = this.props.showError
               return (
                 <ProfileDonateHearts
                   app={props.app}
                   user={props.user}
+                  showError={showError}
                 />
               )
             } else {
