@@ -48,7 +48,7 @@ class Profile extends React.Component {
             to={'/tab/profile/invite/'}>
               Invite Friends
           </SettingsMenuItem>,
-          <Divider style={dividerStyle} />,
+          <Divider key={'divider'} style={dividerStyle} />,
           <SettingsMenuItem
             key={'settings'}
             to={'/tab/settings/widgets/'}>

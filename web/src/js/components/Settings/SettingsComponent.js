@@ -44,7 +44,7 @@ class Settings extends React.Component {
             to={'/tab/settings/background/'}>
               Background
           </SettingsMenuItem>,
-          <Divider style={dividerStyle} />,
+          <Divider key={'divider'} style={dividerStyle} />,
           <SettingsMenuItem
             key={'profile'}
             to={'/tab/profile/stats/'}>
