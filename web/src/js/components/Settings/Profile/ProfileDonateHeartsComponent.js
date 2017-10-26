@@ -10,8 +10,6 @@ class ProfileDonateHearts extends React.Component {
     const { app, user } = this.props
     console.log(app)
     const containerStyle = {
-      // width: '100%',
-      // backgroundColor: '#F2F2F2'
     }
     const gridListStyle = {
       width: '100%',
@@ -26,7 +24,7 @@ class ProfileDonateHearts extends React.Component {
           style={containerStyle}>
           <GridList
             cols={3}
-            padding={30}
+            padding={18}
             style={gridListStyle}
             cellHeight={'auto'}
           >

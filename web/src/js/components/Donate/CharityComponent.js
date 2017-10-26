@@ -1,13 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import DonateVcMutation from 'mutations/DonateVcMutation'
-import { goToHome } from 'navigation/navigation'
 
-import {GridList, GridTile} from 'material-ui/GridList'
+import { Paper } from 'material-ui'
 
 import {Card, CardActions, CardMedia, CardTitle, CardText} from 'material-ui/Card'
 import FlatButton from 'material-ui/FlatButton'
-
 import Dialog from 'material-ui/Dialog'
 import Popover from 'material-ui/Popover'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -20,8 +18,8 @@ class Charity extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      open: false,
-      donateSlider: 1,
+      amountToDonate: 1,
+      customAmountSliderOpen: false,
       thanksDialog: false
     }
   }
@@ -29,14 +27,14 @@ class Charity extends React.Component {
   componentDidMount () {
     const { user } = this.props
     this.setState({
-      donateSlider: user.vcCurrent
+      amountToDonate: user.vcCurrent
     })
   }
 
   componentWillReceiveProps (nextProps) {
     if (this.props.user.vcCurrent !== nextProps.user.vcCurrent) {
       this.setState({
-        donateSlider: nextProps.user.vcCurrent
+        amountToDonate: nextProps.user.vcCurrent
       })
     }
   }
@@ -44,25 +42,25 @@ class Charity extends React.Component {
   openCharityWebsite () {
     const { charity } = this.props
 
-    // The page might be iframed, so opening in _top is critical.
-    window.open(charity.website, '_top')
+    // The page might be iframed, so opening in _top or _blank is critical.
+    window.open(charity.website, '_blank')
   }
 
-  handleOpen (event) {
-    if (this.state.donateSlider <= 1) { return }
-      // This prevents ghost click.
-    event.preventDefault()
-
+  openCustomSlider (event) {
     this.setState({
-      open: true,
+      customAmountSliderOpen: true,
       anchorEl: event.currentTarget
     })
   }
 
-  handleClose () {
+  closeCustomSlider () {
     this.setState({
-      open: false
+      customAmountSliderOpen: false
     })
+  }
+
+  onCustomSliderValChange (event, value) {
+    this.setState({amountToDonate: value})
   }
 
   thanksDialogShow () {
@@ -77,198 +75,189 @@ class Charity extends React.Component {
     })
   }
 
-  handleDonateSlider (event, value) {
-    this.setState({donateSlider: value})
-  }
-
   heartsDonationError () {
     this.props.showError('Oops, we could not donate your Hearts just now :(')
   }
 
   donateHearts () {
-    if (this.state.donateSlider <= 0) { return }
+    if (this.state.amountToDonate <= 0) {
+      return
+    }
     const { charity, user } = this.props
     const self = this
     DonateVcMutation.commit(
       this.props.relay.environment,
       user,
       charity.id,
-      this.state.donateSlider,
+      this.state.amountToDonate,
       self.thanksDialogShow.bind(this),
       self.heartsDonationError.bind(this)
     )
   }
 
-  goToHome () {
-    goToHome()
-  }
-
   render () {
     const { charity, user } = this.props
 
-    const cardActions = {
+    const MIN_VC_FOR_CUSTOM_SLIDER = 2
+
+    const cardStyle = {
+    }
+    const titleAndTextContainerStyle = {
+      display: 'block',
+      minHeight: 120,
+      marginTop: 8
+    }
+    const cardTitleContainerStyle = {
+    }
+    const cardTitleStyle = {
+      lineHeight: '100%'
+    }
+    const cardTextStyle = {
+      paddingTop: 0,
+      paddingBottom: 0
+    }
+    const cardActionsStyle = {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      justifyContent: 'center'
+      paddingTop: 12,
+      paddingBottom: 24
     }
-
-    var customDonationLink
-    if (this.state.donateSlider > 1) {
-      const customDonationLinkStyle = {
-        fontSize: 11,
-        color: appTheme.palette.accent1Color,
-        cursor: 'pointer',
-        marginTop: 5
-      }
-
-      customDonationLink = (<span
-        style={customDonationLinkStyle}
-        onClick={this.handleOpen.bind(this)}>
-           Want to donate another quantity?
-      </span>)
+    const customDonationLinkStyle = {
+      display: user.vcCurrent > MIN_VC_FOR_CUSTOM_SLIDER ? 'block' : 'none',
+      fontSize: 11,
+      color: appTheme.palette.disabledColor,
+      cursor: 'pointer',
+      marginTop: 5
     }
-
-    const sliderContainer = {
+    const sliderContainerStyle = {
       textAlign: 'center',
       height: 'auto',
       width: 'auto',
       padding: 20
     }
-
     const sliderStyle = {
       margin: 0
     }
-
-    const subheader = {
+    const subheaderStyle = {
       padding: 0
     }
-
-    const logo = {
+    const charityLogoStyle = {
       cursor: 'pointer'
     }
-
     const charityImpactStyle = {
       marginTop: 0,
       paddingLeft: 20,
       paddingRight: 20
     }
-
-    const linkToCharity = {
+    const linkToCharityStyle = {
       color: '#2196F3',
       cursor: 'pointer'
     }
 
-    const cardTitle = {
-      style: {
-        height: 70
-      },
-      title: {
-        lineHeight: '100%'
-      }
-    }
-
-    const cardText = {
-      height: 70,
-      paddingTop: 0,
-      paddingBottom: 0
-    }
-
-    var slider
-    if (user.vcCurrent > 1) {
-      slider = (
-        <Slider
-          sliderStyle={sliderStyle}
-          min={1}
-          max={user.vcCurrent}
-          step={1}
-          defaultValue={1}
-          value={this.state.donateSlider}
-          onChange={this.handleDonateSlider.bind(this)} />)
-    }
-
-    const actions = [
-      <FlatButton
-        label='Stay'
-        primary
-        onClick={this.thanksDialogClose.bind(this)}
-          />,
-      <FlatButton
-        label='Go Back Home'
-        primary
-        keyboardFocused
-        onClick={this.goToHome.bind(this)}
-          />
-    ]
+    const heartsText = this.state.amountToDonate === 1 ? 'Heart' : 'Hearts'
 
     return (
-      <GridTile
-        key={charity.id}>
-        <Card>
+      <Paper>
+        <Card style={cardStyle} zDepth={1}>
           <CardMedia>
             <img
-              style={logo}
+              style={charityLogoStyle}
               src={charity.logo}
               onClick={this.openCharityWebsite.bind(this)} />
           </CardMedia>
-          <CardTitle
-            titleStyle={cardTitle.title}
-            style={cardTitle.style}
-            title={charity.name}
-            subtitle={charity.category} />
-          <CardText
-            style={cardText}>
-            {charity.description}
-          </CardText>
-          <CardActions style={cardActions}>
+          <span style={titleAndTextContainerStyle}>
+            <CardTitle
+              style={cardTitleContainerStyle}
+              titleStyle={cardTitleStyle}
+              title={charity.name}
+            />
+            <CardText
+              style={cardTextStyle}>
+              {charity.description}
+            </CardText>
+          </span>
+          <CardActions style={cardActionsStyle}>
             <RaisedButton
-              label={'Donate ' + this.state.donateSlider + ' Hearts'}
+              label={`Donate ${this.state.amountToDonate} ${heartsText}`}
               primary
-              disabled={this.state.donateSlider <= 0}
+              disabled={this.state.amountToDonate <= 0}
               onClick={this.donateHearts.bind(this)} />
-
-            {customDonationLink}
+            <span
+              style={customDonationLinkStyle}
+              onClick={this.openCustomSlider.bind(this)}>
+                 Or, donate a specific amount
+            </span>
           </CardActions>
         </Card>
         <Popover
-          open={this.state.open}
+          open={this.state.customAmountSliderOpen}
           anchorEl={this.state.anchorEl}
           anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
           targetOrigin={{horizontal: 'left', vertical: 'top'}}
-          onRequestClose={this.handleClose.bind(this)}>
-          <div style={sliderContainer}>
+          onRequestClose={this.closeCustomSlider.bind(this)}>
+          <div style={sliderContainerStyle}>
             <Subheader
-              style={subheader}>Use the slider to select the amount to donate</Subheader>
-            {slider}
+              style={subheaderStyle}>
+              Use the slider to select the amount to donate
+            </Subheader>
+            { user.vcCurrent > MIN_VC_FOR_CUSTOM_SLIDER
+              ? <Slider
+                sliderStyle={sliderStyle}
+                min={1}
+                max={user.vcCurrent}
+                step={1}
+                defaultValue={1}
+                value={this.state.amountToDonate}
+                onChange={this.onCustomSliderValChange.bind(this)}
+              />
+              : null
+          }
           </div>
         </Popover>
         <Dialog
           title='Thank you for donating your Hearts!'
           modal={false}
-          actions={actions}
+          actions={[
+            <FlatButton
+              label='Done'
+              primary
+              onClick={this.thanksDialogClose.bind(this)}
+            />
+          ]}
           open={this.state.thanksDialog}
           onRequestClose={this.thanksDialogClose.bind(this)}>
-          <GridList
-            cellHeight={280}>
-            <GridTile>
+          <Paper>
+            <span>
               <img src={charity.image} />
-            </GridTile>
-            <GridTile>
+            </span>
+            <span>
               <p style={charityImpactStyle}>Thanks for donating to <span
-                style={linkToCharity}
+                style={linkToCharityStyle}
                 onClick={this.openCharityWebsite.bind(this)}>{charity.name}</span></p>
               <p style={charityImpactStyle}>{charity.impact}</p>
-            </GridTile>
-          </GridList>
+            </span>
+          </Paper>
         </Dialog>
-      </GridTile>
+      </Paper>
     )
   }
 }
 
 Charity.propTypes = {
-  charity: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired,
+  charity: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    image: PropTypes.string.isRequired,
+    impact: PropTypes.string.isRequired,
+    logo: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    website: PropTypes.string.isRequired
+  }),
+  user: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    vcCurrent: PropTypes.number.isRequired
+  }),
   showError: PropTypes.func.isRequired
 }
 

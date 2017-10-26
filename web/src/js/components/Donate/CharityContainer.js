@@ -9,13 +9,12 @@ export default createFragmentContainer(Charity, {
   charity: graphql`
     fragment CharityContainer_charity on Charity {
       id
-      name
-      category
-      logo
-      image
-      website
       description
+      image
       impact
+      logo
+      name
+      website
     }
   `,
   user: graphql`
