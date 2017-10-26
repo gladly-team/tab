@@ -15,7 +15,7 @@ class Stat extends React.Component {
     const statStyle = {
       color: alternateAccentColor,
       display: 'block',
-      fontSize: 40,
+      fontSize: 50,
       textAlign: 'center'
     }
     const statTextStyle = {
