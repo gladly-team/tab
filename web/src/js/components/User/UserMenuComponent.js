@@ -6,6 +6,8 @@ import Divider from 'material-ui/Divider'
 import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
 import IconButton from 'material-ui/IconButton'
+import HeartIcon from 'material-ui/svg-icons/action/favorite'
+import HeartBorderIcon from 'material-ui/svg-icons/action/favorite-border'
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert'
 import SettingsIcon from 'material-ui/svg-icons/action/settings'
 import PersonAddIcon from 'material-ui/svg-icons/social/person-add'
@@ -101,11 +103,10 @@ class UserMenu extends React.Component {
       cursor: 'pointer'
     }, this.props.style)
     const heartsStyle = Object.assign({}, textStyle, {
-      marginRight: 0
+      marginRight: 0,
+      display: 'flex',
+      alignItems: 'center'
     })
-    const heartIconStyle = {
-      marginLeft: 3
-    }
 
     // Hearts popover style
     const heartsPopoverStyle = {
@@ -125,7 +126,8 @@ class UserMenu extends React.Component {
       marginBottom: 4
     }
     const smallHeartIconStyle = {
-      marginLeft: 2
+      height: 16,
+      marginLeft: -3
     }
     const statNumberStyle = {
       fontSize: 24,
@@ -185,17 +187,8 @@ class UserMenu extends React.Component {
       color: appTheme.palette.alternateTextColor
     }
     const menuItemIconColor = '#FFFFFF'
-    const menuItemFontIconStyle = {
-      color: menuItemIconColor,
-      top: 2,
-      left: 6,
-      fontSize: 18,
-      height: 18,
-      width: 18
-    }
     const menuItemSvgIconStyle = {
       color: menuItemIconColor,
-      // top: 2,
       height: 22,
       width: 22
     }
@@ -210,7 +203,12 @@ class UserMenu extends React.Component {
           onMouseLeave={this.onHeartsHover.bind(this, false)}
           onClick={this.onHeartsClick.bind(this)}
         >
-          {user.vcCurrent}<i style={heartIconStyle} className='fa fa-heart-o' />
+          <span>{user.vcCurrent}</span>
+          <HeartBorderIcon
+            style={{ marginLeft: 2, height: 24, width: 24, paddingBottom: 0 }}
+            color={dashboardIconInactiveColor}
+            hoverColor={dashboardIconActiveColor}
+          />
         </div>
         <DashboardPopover
           open={this.state.heartsPopoverOpen}
@@ -221,17 +219,30 @@ class UserMenu extends React.Component {
           <div style={{ padding: 10 }}>
             <div style={heartsPopoverSectionStyle}>
               <span style={statTextStyle}><span style={statNumberStyle}>Level {user.level}</span></span>
-              <div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <span>{user.heartsUntilNextLevel}</span>
-                <i style={smallHeartIconStyle} className='fa fa-heart-o' /> until next level
+                <HeartBorderIcon
+                  style={smallHeartIconStyle}
+                  color={dashboardIconActiveColor}
+                />
+                <span> until next level</span>
               </div>
             </div>
             <Divider style={dividerStyle} />
             <div style={heartsPopoverSectionStyle}>
               <span style={statTextStyle}>
-                <span style={statNumberStyle}>
-                  {user.vcDonatedAllTime}<i style={smallHeartIconStyle} className='fa fa-heart-o' />
-                </span> Donated
+                <span style={Object.assign({}, statNumberStyle, {
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                })}>
+                  <span>{user.vcDonatedAllTime}</span>
+                  <HeartBorderIcon
+                    style={{ marginLeft: 2, height: 24, width: 24, paddingBottom: 1 }}
+                    color={dashboardIconActiveColor}
+                  />
+                </span>
+                <span>Donated</span>
               </span>
               <div>
                 <RaisedButton
@@ -261,11 +272,23 @@ class UserMenu extends React.Component {
             <div style={rewardAmountsSectionStyle}>
               <span style={rewardMethodContainerStyle}>
                 <span style={rewardTextStyle}>Open a tab</span>
-                <span style={rewardValueStyle}>1<i style={smallHeartIconStyle} className='fa fa-heart-o' /></span>
+                <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <span style={rewardValueStyle}>1</span>
+                  <HeartBorderIcon
+                    style={Object.assign({}, smallHeartIconStyle, { marginRight: -4 })}
+                    color={dividerColor}
+                  />
+                </span>
               </span>
               <span style={rewardMethodContainerStyle}>
                 <span style={rewardTextStyle}>Recruit a friend</span>
-                <span style={rewardValueStyle}>{app.referralVcReward}<i style={smallHeartIconStyle} className='fa fa-heart-o' /></span>
+                <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <span style={rewardValueStyle}>{app.referralVcReward}</span>
+                  <HeartBorderIcon
+                    style={Object.assign({}, smallHeartIconStyle, { marginRight: -4 })}
+                    color={dividerColor}
+                  />
+                </span>
               </span>
             </div>
           </div>
@@ -296,7 +319,7 @@ class UserMenu extends React.Component {
             />
             <MenuItem primaryText='Donate Hearts' onClick={goToDonate}
               leftIcon={
-                <i style={menuItemFontIconStyle} className='fa fa-heart' />
+                <HeartIcon color={menuItemIconColor} style={menuItemSvgIconStyle} />
               }
             />
             <MenuItem primaryText='Invite Friends' onClick={goToInviteFriends}
