@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
 import IconButton from 'material-ui/IconButton'
 import BookmarkBorderIcon from 'material-ui/svg-icons/action/bookmark-border'
 // import ListIcon from 'material-ui/svg-icons/action/list'
@@ -99,14 +100,20 @@ class WidgetIcon extends React.Component {
       return null
     }
 
+    // Note: extra span wrapper needed for fade animation to
+    // work properly.
     return (
-      <IconButton
-        style={iconButtonStyle}
-        key={this.props.widget.type + 'animation-key'}
-        onClick={this.onWidgetIconClicked.bind(this)}
-      >
-        {icon}
-      </IconButton>
+      <FadeInDashboardAnimation>
+        <span>
+          <IconButton
+            style={iconButtonStyle}
+            key={this.props.widget.type + 'animation-key'}
+            onClick={this.onWidgetIconClicked.bind(this)}
+          >
+            {icon}
+          </IconButton>
+        </span>
+      </FadeInDashboardAnimation>
     )
   }
 }
