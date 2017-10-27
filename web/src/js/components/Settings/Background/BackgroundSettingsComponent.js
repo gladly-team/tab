@@ -9,6 +9,10 @@ import BackgroundImagePicker from '../../Background/BackgroundImagePickerContain
 import BackgroundColorPicker from '../../Background/BackgroundColorPickerContainer'
 import BackgroundCustomImagePicker from '../../Background/BackgroundCustomImagePickerContainer'
 import BackgroundDailyImage from '../../Background/BackgroundDailyImageContainer'
+import {
+  cardHeaderTitleStyle,
+  cardHeaderSubtitleStyle
+} from 'theme/default'
 
 class BackgroundSettings extends React.Component {
   constructor (props) {
@@ -44,11 +48,16 @@ class BackgroundSettings extends React.Component {
       padding: 10
     }
     const divider = {
-      marginTop: 10,
-      marginBottom: 10
+      marginTop: 24,
+      marginBottom: 8
     }
-    const radioBtn = {
-      marginBottom: 10
+    const radioBtnGroupStyle = {
+      marginLeft: 4,
+      width: 220
+    }
+    const radioBtnStyle = {
+      marginBottom: 6,
+      fontSize: 14
     }
     const cardBody = {
       padding: 10
@@ -90,30 +99,33 @@ class BackgroundSettings extends React.Component {
           style={optionContainer}>
           <CardHeader
             title={'Background'}
-            subtitle={'Set your background options'}
+            // subtitle={'Choose the background for your new tab page'}
+            titleStyle={cardHeaderTitleStyle}
+            subtitleStyle={cardHeaderSubtitleStyle}
             actAsExpander={false}
             showExpandableButton={false} />
           <div style={cardBody}>
             <RadioButtonGroup
+              style={radioBtnGroupStyle}
               onChange={this.onChange.bind(this)}
               name='photoModes'
               valueSelected={this.state.selected}>
               <RadioButton
-                style={radioBtn}
+                style={radioBtnStyle}
                 value='daily'
                 label='New photo daily' />
               <RadioButton
-                style={radioBtn}
+                style={radioBtnStyle}
+                value='photo'
+                label='Selected photo' />
+              <RadioButton
+                style={radioBtnStyle}
                 value='custom'
                 label='Custom photo' />
               <RadioButton
-                style={radioBtn}
+                style={radioBtnStyle}
                 value='color'
-                label='Use a color' />
-              <RadioButton
-                style={radioBtn}
-                value='photo'
-                label='Selected photo' />
+                label='Color' />
             </RadioButtonGroup>
             {dividerCmp}
             {selectedOption}

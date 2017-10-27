@@ -61,3 +61,14 @@ export default {
 
 export const dashboardIconInactiveColor = 'rgba(255, 255, 255, 0.8)'
 export const dashboardIconActiveColor = white
+
+// Custom card header styling
+
+export const cardHeaderTitleStyle = {
+  fontSize: 20,
+  fontWeight: 'normal'
+}
+export const cardHeaderSubtitleStyle = {
+  fontSize: 14,
+  fontWeight: 'normal'
+}

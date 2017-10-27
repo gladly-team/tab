@@ -7,6 +7,9 @@ import Paper from 'material-ui/Paper'
 import Subheader from 'material-ui/Subheader'
 import Divider from 'material-ui/Divider'
 import PropTypes from 'prop-types'
+import {
+  cardHeaderSubtitleStyle
+} from 'theme/default'
 
 class BackgroundColorPicker extends React.Component {
   constructor (props) {
@@ -67,9 +70,9 @@ class BackgroundColorPicker extends React.Component {
       backgroundColor: this.state.selectedColor
     }
 
-    const header = {
+    const header = Object.assign({}, cardHeaderSubtitleStyle, {
       paddingLeft: 0
-    }
+    })
 
     const divider = {
       marginBottom: 10
