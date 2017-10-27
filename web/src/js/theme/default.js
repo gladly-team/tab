@@ -26,6 +26,7 @@ export const alternateAccentColor = '#4a90e2'
 const textColor = '#212121'
 export const lighterTextColor = 'rgba(33, 33, 33, 0.56)'
 export const dividerColor = '#BDBDBD'
+const disabledColor = fade(darkBlack, 0.3)
 
 export default {
   spacing: spacing,
@@ -41,7 +42,7 @@ export default {
     alternateTextColor: textOnPrimaryColor,
     canvasColor: white,
     borderColor: dividerColor,
-    disabledColor: fade(darkBlack, 0.3),
+    disabledColor: disabledColor,
     pickerHeaderColor: cyan500,
     clockCircleColor: fade(darkBlack, 0.07),
     shadowColor: fullBlack
@@ -56,6 +57,13 @@ export default {
   textField: {
     underlineColor: dividerColor,
     underlineFocusStyle: textColor
+  },
+  toggle: {
+    thumbOffColor: '#f3d6f5',
+    trackOffColor: '#d4add6'
+    // Lighter
+    // thumbOffColor: '#fff4ff',
+    // trackOffColor: '#fae2fb'
   }
 }
 
