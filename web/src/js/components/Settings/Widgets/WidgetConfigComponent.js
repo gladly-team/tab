@@ -82,7 +82,8 @@ class ChoicesWidgetConfig extends React.Component {
     }
     const radioBtnStyle = {
       width: 'auto',
-      marginRight: 10
+      marginBottom: 6,
+      fontSize: 14
     }
 
     return (
