@@ -37,17 +37,19 @@ class BooleanWidgetConfig extends React.Component {
   render () {
     const { setting } = this.props
 
-    const toggleContainer = {
-      width: '90%',
-      margin: 'auto'
+    const toggleContainerStyle = {
+      width: '80%',
+      marginLeft: '5%',
+      marginRight: '5%'
     }
 
     return (
-      <div style={toggleContainer}>
+      <div style={toggleContainerStyle}>
         <Toggle
           label={setting.display}
           defaultToggled={setting.value}
-          onToggle={this.onToggle.bind(this)} />
+          onToggle={this.onToggle.bind(this)}
+        />
       </div>
     )
   }
