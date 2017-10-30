@@ -4,7 +4,7 @@ import {
   goToLogin
 } from 'navigation/navigation'
 import Divider from 'material-ui/Divider'
-import FontIcon from 'material-ui/FontIcon'
+import ExitToAppIcon from 'material-ui/svg-icons/action/exit-to-app'
 import FlatButton from 'material-ui/FlatButton'
 import SettingsPageComponent from './SettingsPageComponent'
 import SettingsMenuItem from './SettingsMenuItem'
@@ -58,9 +58,12 @@ class Settings extends React.Component {
             label='Sign Out'
             labelPosition='before'
             style={logoutButtonStyle}
-            icon={<FontIcon
-              color={appTheme.palette.accent1Color}
-              className='fa fa-sign-out' />} />
+            icon={
+              <ExitToAppIcon
+                color={appTheme.palette.accent1Color}
+              />
+            }
+          />
         }
       >
         {this.props.children}

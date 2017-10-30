@@ -62,9 +62,11 @@ class Profile extends React.Component {
             label='Sign Out'
             labelPosition='before'
             style={logoutButtonStyle}
-            icon={<ExitToAppIcon
-              color={appTheme.palette.accent1Color}
-            />}
+            icon={
+              <ExitToAppIcon
+                color={appTheme.palette.accent1Color}
+              />
+            }
           />
         }
       >
