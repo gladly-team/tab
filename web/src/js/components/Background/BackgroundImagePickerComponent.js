@@ -4,7 +4,8 @@ import SetBackgroundImageMutation from 'mutations/SetBackgroundImageMutation'
 
 import {GridList, GridTile} from 'material-ui/GridList'
 import IconButton from 'material-ui/IconButton'
-import FontIcon from 'material-ui/FontIcon'
+import CheckCircleIcon from 'material-ui/svg-icons/action/check-circle'
+import RadioButtonUncheckedIcon from 'material-ui/svg-icons/toggle/radio-button-unchecked'
 import Subheader from 'material-ui/Subheader'
 import {
   cardHeaderSubtitleStyle
@@ -91,9 +92,10 @@ class BackgroundImagePicker extends React.Component {
                 actionIcon={
                   <IconButton
                     onClick={this.onImageSelected.bind(this, edge.node)}>
-                    <FontIcon
-                      className={checked ? 'fa fa-check-circle' : 'fa fa-circle-o'}
-                      color='white' />
+                    {checked
+                      ? <CheckCircleIcon color={'white'} />
+                      : <RadioButtonUncheckedIcon color={'white'} />
+                    }
                   </IconButton>}>
                 <img src={edge.node.imageURL} />
               </GridTile>)
