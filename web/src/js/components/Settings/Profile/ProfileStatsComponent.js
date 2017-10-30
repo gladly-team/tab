@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 import RaisedButton from 'material-ui/RaisedButton'
 import { GridList } from 'material-ui/GridList'
+import HeartBorderIcon from 'material-ui/svg-icons/action/favorite-border'
 import Stat from './StatComponent'
 import SettingsChildWrapper from '../SettingsChildWrapperComponent'
 import appTheme from 'theme/default'
@@ -20,7 +21,9 @@ class ProfileStats extends React.Component {
     const tabberWord = user.numUsersRecruited === 1 ? 'Tabber' : 'Tabbers'
     const heartsWord = user.vcDonatedAllTime === 1 ? 'Heart' : 'Hearts'
     const extraContentTextStyle = {
-      display: 'block',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
       color: appTheme.palette.disabledColor
     }
     const gridPadding = 12
@@ -58,7 +61,12 @@ class ProfileStats extends React.Component {
             statText={'your level'}
             extraContent={
               <span style={extraContentTextStyle}>
-                {user.heartsUntilNextLevel}<i style={{ marginLeft: 2 }} className='fa fa-heart-o' /> until next level
+                <span>{user.heartsUntilNextLevel}</span>
+                <HeartBorderIcon
+                  style={{ marginLeft: 0, marginRight: 2, height: 16, width: 16, paddingBottom: 0 }}
+                  color={appTheme.palette.disabledColor}
+                  />
+                <span>until next level</span>
               </span>
             }
           />
