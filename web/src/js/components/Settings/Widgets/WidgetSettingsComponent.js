@@ -6,6 +6,7 @@ import {Card, CardHeader, CardText} from 'material-ui/Card'
 import {
   cardHeaderTitleStyle
 } from 'theme/default'
+import { getWidgetIconFromWidgetType } from '../../Widget/widget-utils'
 
 import UpdateWidgetEnabledMutation from 'mutations/UpdateWidgetEnabledMutation'
 import UpdateWidgetConfigMutation from 'mutations/UpdateWidgetConfigMutation'
@@ -136,11 +137,29 @@ class WidgetSettings extends React.Component {
       )
     }
 
+    const WidgetIcon = getWidgetIconFromWidgetType(appWidget.type)
+
     return (
       <Card style={cardStyle}>
         <CardHeader
           style={cardHeaderStyle}
-          title={appWidget.name}
+          title={
+            <span
+              style={{
+                display: 'flex',
+                alignItems: 'center'
+              }}
+            >
+              <WidgetIcon
+                style={{
+                  height: 18,
+                  width: 18,
+                  marginRight: 8
+                }}
+              />
+              {appWidget.name}
+            </span>
+          }
           titleStyle={cardTitleStyle}
           actAsExpander={false}
           showExpandableButton={false}>
@@ -156,9 +175,22 @@ class WidgetSettings extends React.Component {
 }
 
 WidgetSettings.propTypes = {
-  widget: PropTypes.object,
-  appWidget: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired,
+  widget: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    enabled: PropTypes.bool.isRequired,
+    config: PropTypes.string,
+    settings: PropTypes.string
+  }),
+  appWidget: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+    settings: PropTypes.string
+  }),
+  user: PropTypes.shape({
+    id: PropTypes.string.isRequired
+  }),
   showError: PropTypes.func.isRequired
 }
 
