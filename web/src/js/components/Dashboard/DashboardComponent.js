@@ -7,7 +7,7 @@ import UserMenu from '../User/UserMenuContainer'
 import WidgetsContainer from '../Widget/WidgetsContainer'
 import Ad from '../Ad/Ad'
 import LogTab from './LogTabContainer'
-import FontIcon from 'material-ui/FontIcon'
+import CircleIcon from 'material-ui/svg-icons/image/lens'
 import {
   dashboardIconInactiveColor,
   dashboardIconActiveColor
@@ -56,7 +56,8 @@ class Dashboard extends React.Component {
     const moneyRaisedStyle = Object.assign({}, menuTextStyle)
     const bulletPointStyle = {
       alignSelf: 'center',
-      fontSize: 5,
+      width: 5,
+      height: 5,
       marginTop: 2,
       marginLeft: 12,
       marginRight: 12
@@ -73,11 +74,11 @@ class Dashboard extends React.Component {
             <FadeInDashboardAnimation>
               <div style={menuStyle}>
                 <MoneyRaised app={app} style={moneyRaisedStyle} />
-                <FontIcon
+                <CircleIcon
                   color={dashboardIconInactiveColor}
                   hoverColor={dashboardIconActiveColor}
                   style={bulletPointStyle}
-                  className={'fa fa-circle'} />
+                />
                 <UserMenu app={app} user={user} style={userMenuStyle} />
               </div>
             </FadeInDashboardAnimation>
