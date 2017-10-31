@@ -10,7 +10,6 @@ import AuthActionButtom from 'general/AuthActionButtom'
 import AppBarWithLogo from '../Logo/AppBarWithLogo'
 
 import appTheme, {
-  primaryColor,
   alternateAccentColor
 } from 'theme/default'
 
@@ -193,7 +192,7 @@ class PasswordRetrieve extends React.Component {
           iconElementRight={
             <FlatButton
               style={{
-                color: primaryColor
+                color: alternateAccentColor
               }}
               label={'BACK TO LOGIN'}
               onClick={this.goToLogin.bind(this)} />
