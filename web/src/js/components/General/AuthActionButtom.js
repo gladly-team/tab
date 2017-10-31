@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import FlatButton from 'material-ui/FlatButton'
-import FontIcon from 'material-ui/FontIcon'
+import CircularProgress from 'material-ui/CircularProgress'
 import Forward from 'material-ui/svg-icons/content/forward'
 
 class AuthActionButtom extends React.Component {
@@ -12,27 +12,32 @@ class AuthActionButtom extends React.Component {
   }
 
   render () {
-    const iconStyles = {
-      color: '#FFF',
-      position: 'relative',
-      top: -3
-    }
-
-    const labelStyle = {
-      position: 'relative',
-      top: -3
-    }
-
-    const loginBtn = {
-      color: '#FFF',
-      border: '1px solid #FFF'
-    }
-
-    var loginIcon = (<Forward style={iconStyles} />)
+    var loginIcon = (
+      <Forward
+        style={{
+          marginTop: -3,
+          marginRight: 8,
+          width: 30
+        }}
+      />
+    )
     if (this.props.loading) {
-      loginIcon = (<FontIcon
-        className='fa fa-spinner fa-pulse fa-3x fa-fw'
-        style={iconStyles} />)
+      loginIcon = (
+        <CircularProgress
+          color={'#FFF'}
+          size={18}
+          style={{
+            width: 30,
+            height: 30,
+            marginTop: -3,
+            marginRight: 8
+          }}
+          innerStyle={{
+            width: 30,
+            height: 30
+          }}
+        />
+      )
     }
 
     return (
@@ -40,9 +45,17 @@ class AuthActionButtom extends React.Component {
         <FlatButton
           id={this.props.btnId}
           label={this.props.label}
-          style={loginBtn}
+          style={{
+            color: '#FFF',
+            border: '1px solid #FFF',
+            display: 'flex',
+            alignItems: 'center'
+          }}
           labelPosition='before'
-          labelStyle={labelStyle}
+          labelStyle={{
+            display: 'inline-block',
+            marginTop: -3
+          }}
           icon={loginIcon}
           onClick={this.onClicked.bind(this)} />
       </div>
