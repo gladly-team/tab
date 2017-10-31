@@ -145,7 +145,6 @@ class SignUp extends React.Component {
 
   render () {
     const main = {
-      backgroundColor: '#7C4DFF'
     }
 
     const container = {
@@ -183,8 +182,7 @@ class SignUp extends React.Component {
       <div
         data-test-id={'register-form-container-test-id'}
         style={main}>
-        <div
-          style={container}>
+        <div style={container}>
           <UsernameField
             inputId={'signup-username-input-id'}
             ref={(input) => { this.username = input }}
@@ -219,7 +217,7 @@ class SignUp extends React.Component {
           <div style={actions}>
             <AuthActionButtom
               btnId={'register-action-btn-id'}
-              label={'REGISTER'}
+              label={'SIGN UP'}
               loading={this.state.registeringUser}
               onClicked={this.handleSubmit.bind(this)} />
           </div>

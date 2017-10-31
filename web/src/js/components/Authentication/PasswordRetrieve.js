@@ -7,12 +7,12 @@ import { goToDashboard, goToLogin } from 'navigation/navigation'
 import FlatButton from 'material-ui/FlatButton'
 import Snackbar from 'material-ui/Snackbar'
 import AuthActionButtom from 'general/AuthActionButtom'
-import logoHeader from 'assets/logos/tfc-title-white.png'
-import {
-  indigo500
-} from 'material-ui/styles/colors'
+import AppBarWithLogo from '../Logo/AppBarWithLogo'
 
-import appTheme from 'theme/default'
+import appTheme, {
+  primaryColor,
+  alternateAccentColor
+} from 'theme/default'
 
 class PasswordRetrieve extends React.Component {
   constructor (props) {
@@ -110,28 +110,32 @@ class PasswordRetrieve extends React.Component {
   }
 
   render () {
-    const main = {
-      backgroundColor: indigo500,
-      height: '100%',
-      width: '100%',
+    const rootStyle = {
       display: 'flex',
       flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center'
+      justifyContent: 'flex-start',
+      alignItems: 'center',
+      height: '100%',
+      width: '100%',
+      backgroundColor: alternateAccentColor
     }
-
+    const mainStyle = {
+      marginTop: 60,
+      display: 'flex',
+      flex: 1,
+      flexDirection: 'column',
+      alignItems: 'flex-start',
+      justifyContent: 'flex-start'
+    }
     const floatingLabelStyle = {
       color: '#FFF'
     }
-
     const inputStyle = {
       color: '#FFF'
     }
-
     const underlineStyle = {
       borderColor: appTheme.palette.borderColor
     }
-
     const underlineFocusStyle = {
       borderColor: appTheme.palette.alternateTextColor
     }
@@ -150,7 +154,7 @@ class PasswordRetrieve extends React.Component {
         id={'retrieve-password-username-input'}
         ref={(input) => { this.email = input }}
         onKeyPress={this._setEmail.bind(this)}
-        floatingLabelText='Username or email'
+        floatingLabelText='Email'
         floatingLabelStyle={floatingLabelStyle}
         inputStyle={inputStyle}
         underlineStyle={underlineStyle}
@@ -158,13 +162,13 @@ class PasswordRetrieve extends React.Component {
     } else {
       action = {
         id: 'retrieve-password-reset-btn',
-        label: 'RESET',
+        label: 'RESET PASSWORD',
         onClicked: this.confirmPassword.bind(this)
       }
       code = (<CodeField
         ref={(input) => { this.code = input }}
         onKeyPress={this._confirmPasswordHandler.bind(this)}
-        floatingLabelText='Enter your code'
+        floatingLabelText='Confirmation code'
         floatingLabelStyle={floatingLabelStyle}
         inputStyle={inputStyle}
         underlineStyle={underlineStyle}
@@ -173,49 +177,49 @@ class PasswordRetrieve extends React.Component {
         inputId={'retrieve-password-pass-input'}
         ref={(input) => { this.password = input }}
         onKeyPress={this._confirmPasswordHandler.bind(this)}
-        floatingLabelText='Password'
+        floatingLabelText='New password'
         floatingLabelStyle={floatingLabelStyle}
         inputStyle={inputStyle}
         underlineStyle={underlineStyle}
         underlineFocusStyle={underlineFocusStyle} />)
     }
-
-    const navigation = {
-      position: 'absolute',
-      top: 10,
-      right: 10,
-      color: appTheme.palette.alternateTextColor
-    }
-
-    const header = {
-      position: 'absolute',
-      top: 100
-    }
-
     const actionBtn = {
-      marginTop: 40
+      marginTop: 20,
+      alignSelf: 'flex-end'
     }
-
     return (
-      <div style={main}>
-        <img style={header} src={logoHeader} />
-        {email}
-        {code}
-        {password}
-        <AuthActionButtom
-          containerStyle={actionBtn}
-          btnId={action.id}
-          label={action.label}
-          loading={this.state.requesting}
-          onClicked={action.onClicked} />
-        <FlatButton
-          style={navigation}
-          label={'BACK TO LOGIN'}
-          onClick={this.goToLogin.bind(this)} />
+      <div style={rootStyle}>
+        <AppBarWithLogo
+          iconElementRight={
+            <FlatButton
+              style={{
+                color: primaryColor
+              }}
+              label={'BACK TO LOGIN'}
+              onClick={this.goToLogin.bind(this)} />
+          }
+        />
+        <div style={mainStyle}>
+          <span style={{
+            color: appTheme.palette.alternateTextColor,
+            fontSize: 24
+          }}>
+            Reset Password
+          </span>
+          {email}
+          {code}
+          {password}
+          <AuthActionButtom
+            containerStyle={actionBtn}
+            btnId={action.id}
+            label={action.label}
+            loading={this.state.requesting}
+            onClicked={action.onClicked} />
+        </div>
         <Snackbar
           open={this.state.responseNotify}
           message={this.state.notificationMsg}
-          autoHideDuration={3000}
+          autoHideDuration={5000}
           onRequestClose={this.handleRequestClose.bind(this)} />
       </div>
     )

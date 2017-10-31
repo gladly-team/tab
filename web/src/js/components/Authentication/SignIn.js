@@ -8,7 +8,7 @@ import ErrorMessage from 'general/ErrorMessage'
 import UsernameField from 'general/UsernameField'
 import PasswordField from 'general/PasswordField'
 import { login } from '../../utils/cognito-auth'
-import appTheme from 'theme/default'
+import appTheme, { appBarLightColor } from 'theme/default'
 
 class SignIn extends React.Component {
   constructor (props) {
@@ -77,8 +77,6 @@ class SignIn extends React.Component {
 
   render () {
     const main = {
-      backgroundColor: '#7C4DFF'
-
     }
 
     const container = {
@@ -105,30 +103,29 @@ class SignIn extends React.Component {
     }
 
     const retrievePasswordContainer = {
-      textAlign: 'center',
+      alignSelf: 'flex-start',
       marginRight: 10
     }
 
     const retrievePasswordLink = {
-      color: '#FFF',
+      color: appBarLightColor,
       cursor: 'pointer',
       fontSize: 11
     }
 
     const actions = {
       display: 'flex',
-      justifyContent: 'flex-end',
+      justifyContent: 'space-between',
       alignItems: 'center',
       width: '100%',
-      marginTop: 20
+      marginTop: 8
     }
 
     return (
       <div
         data-test-id={'login-form-container-test-id'}
         style={main}>
-        <div
-          style={container}>
+        <div style={container}>
           <UsernameField
             inputId={'login-username-input-id'}
             ref={(input) => { this.username = input }}
@@ -157,7 +154,8 @@ class SignIn extends React.Component {
             </div>
             <AuthActionButtom
               btnId={'login-action-btn-id'}
-              label={'LOGIN'}
+              label={'LOG IN'}
+              containerStyle={{ marginTop: 24 }}
               loading={this.state.loggingUser}
               onClicked={this.handleSubmit.bind(this)} />
           </div>
