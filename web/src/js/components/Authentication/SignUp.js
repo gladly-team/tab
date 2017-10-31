@@ -91,6 +91,7 @@ class SignUp extends React.Component {
   }
 
   registrationCompleted () {
+    // TODO: show email confirmation page.
     this.setState({
       registeringUser: false
     })
