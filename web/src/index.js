@@ -7,8 +7,6 @@ import Root from './root'
 if (!global._babelPolyfill) {
   require('babel-polyfill')
 }
-
-require('font-awesome/css/font-awesome.css')
 require('./index.css')
 
 const rootNode = document.createElement('div')
