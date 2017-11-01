@@ -6,15 +6,35 @@ import Checkbox from 'material-ui/Checkbox'
 import DeleteIcon from 'material-ui/svg-icons/navigation/cancel'
 import CheckCircle from 'material-ui/svg-icons/action/check-circle'
 import SvgIcon from 'material-ui/SvgIcon'
-
-import appTheme from 'theme/default'
+import appTheme, {
+  widgetEditButtonInactive,
+  widgetEditButtonHover
+} from 'theme/default'
 
 class Todo extends React.Component {
   constructor (props) {
     super(props)
 
     this.state = {
-      hoveringDelete: false
+      showDeleteButton: false
+    }
+    this.hoverTimer = 0
+  }
+
+  onMouseHoverChange (isHovering) {
+    if (this.hoverTimer) {
+      clearTimeout(this.hoverTimer)
+    }
+    if (isHovering) {
+      this.noteChangedTimer = setTimeout(() => {
+        this.setState({
+          showDeleteButton: true
+        })
+      }, 500)
+    } else {
+      this.setState({
+        showDeleteButton: false
+      })
     }
   }
 
@@ -26,12 +46,6 @@ class Todo extends React.Component {
   onCompletedChange () {
     const { index, completed } = this.props
     this.props.onCompletedChange(index, !completed)
-  }
-
-  onDeleteBtnMouseMove (enter) {
-    this.setState({
-      hoveringDelete: enter
-    })
   }
 
   render () {
@@ -87,32 +101,34 @@ class Todo extends React.Component {
       completed ? styles.completed : styles.todo
     )
 
-    const deleteIcon = {
+    const otherTransitions = 'fill 0.15s ease-in'
+    const deleteIconStyle = {
       cursor: 'pointer',
       float: 'right',
-      margin: '5px 5px 0px 10px',
-      hoverColor: appTheme.fontIcon.color,
-      color: 'rgba(255,255,255,0)',
+      margin: '5px 5px 0px 0px',
+      opacity: this.state.showDeleteButton ? 1 : 0,
+      transition: this.state.showDeleteButton
+        ? `opacity 0.2s ease-in 0.5s, ${otherTransitions}`
+        : `opacity 0.1s ease-in, ${otherTransitions}`,
+      pointerEvents: this.state.showDeleteButton ? 'all' : 'none',
       display: 'inline-block'
     }
-
-    var deleteIconColor = (this.state.hoveringDelete)
-          ? deleteIcon.hoverColor : deleteIcon.color
 
     return (
       <WidgetPieceWrapper>
         <div
           style={styles.container}
-          onMouseEnter={this.onDeleteBtnMouseMove.bind(this, true)}
-          onMouseLeave={this.onDeleteBtnMouseMove.bind(this, false)}>
+          onMouseEnter={this.onMouseHoverChange.bind(this, true)}
+          onMouseLeave={this.onMouseHoverChange.bind(this, false)}>
           {checkBtn}
           <p
             style={todoTextStyle}>
             {todo.text}
           </p>
           <DeleteIcon
-            color={deleteIconColor}
-            style={deleteIcon}
+            color={widgetEditButtonInactive}
+            hoverColor={widgetEditButtonHover}
+            style={deleteIconStyle}
             onClick={this.removeTodo.bind(this)} />
         </div>
       </WidgetPieceWrapper>
