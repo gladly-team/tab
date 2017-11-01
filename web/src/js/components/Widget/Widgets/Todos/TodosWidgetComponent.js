@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-
+import FlatButton from 'material-ui/FlatButton'
 import WidgetSharedSpace from 'general/WidgetSharedSpace'
 import EmptyWidgetMsg from '../../EmptyWidgetMsg'
 import {List} from 'general/List'
@@ -74,6 +74,15 @@ class TodosWidget extends React.Component {
       completed: this.state.completed
     })
     this.updateWidget()
+  }
+
+  removeAllCompletedTodos () {
+    this.state.completed = []
+    this.setState({
+      completed: []
+    }, () => {
+      this.updateWidget()
+    })
   }
 
   removeTodo (index) {
@@ -174,12 +183,14 @@ class TodosWidget extends React.Component {
                   color: dashboardIconInactiveColor,
                   borderTop: `2px ${primaryColor} solid`,
                   borderBottom: `2px ${primaryColor} solid`,
-                  display: 'block',
                   lineHeight: '100%',
                   margin: 5,
                   width: 'auto',
                   padding: '6px 12px',
                   boxSizing: 'border-box',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
                   fontSize: 14,
                   fontFamily: appTheme.fontFamily,
                   backgroundColor: 'rgba(0,0,0,.3)'
@@ -187,6 +198,17 @@ class TodosWidget extends React.Component {
                 inset={false}
               >
                 Completed
+                <FlatButton
+                  style={{
+                    fontSize: 12,
+                    height: 24,
+                    lineHeight: '24px',
+                    color: dashboardIconInactiveColor
+                  }}
+                  onClick={this.removeAllCompletedTodos.bind(this)}
+                >
+                  CLEAR
+                </FlatButton>
               </Subheader>
             )
             : null
