@@ -7,10 +7,11 @@ import {List} from 'general/List'
 import UpdateWidgetDataMutation from 'mutations/UpdateWidgetDataMutation'
 import Todo from './Todo'
 import AddTodoForm from './AddTodoForm'
-
 import Subheader from 'material-ui/Subheader'
-
-import appTheme from 'theme/default'
+import appTheme, {
+  dashboardIconInactiveColor,
+  primaryColor
+} from 'theme/default'
 
 class TodosWidget extends React.Component {
   constructor (props) {
@@ -127,12 +128,6 @@ class TodosWidget extends React.Component {
       overflow: 'visible'
     }
 
-    const headerStyle = {
-      color: '#FFF',
-      fontSize: 14,
-      fontFamily: appTheme.fontFamily
-    }
-
     const todosContainer = {
       overflowY: 'scroll',
       overflowX: 'hidden',
@@ -143,15 +138,6 @@ class TodosWidget extends React.Component {
       display: 'flex',
       flexDirection: 'column',
       marginTop: 27
-    }
-
-    var completedHeader
-    if (this.state.completed.length) {
-      completedHeader = (
-        <Subheader
-          style={headerStyle}>
-              Completed
-          </Subheader>)
     }
 
     var nodataMsg
@@ -180,7 +166,31 @@ class TodosWidget extends React.Component {
                 remove={this.removeTodo.bind(this)} />
             )
           })}
-          {completedHeader}
+          {
+            this.state.completed.length
+            ? (
+              <Subheader
+                style={{
+                  color: dashboardIconInactiveColor,
+                  borderTop: `2px ${primaryColor} solid`,
+                  borderBottom: `2px ${primaryColor} solid`,
+                  display: 'block',
+                  lineHeight: '100%',
+                  margin: 5,
+                  width: 'auto',
+                  padding: '6px 12px',
+                  boxSizing: 'border-box',
+                  fontSize: 14,
+                  fontFamily: appTheme.fontFamily,
+                  backgroundColor: 'rgba(0,0,0,.3)'
+                }}
+                inset={false}
+              >
+                Completed
+              </Subheader>
+            )
+            : null
+          }
           {this.state.completed.map((todo, index) => {
             return (
               <Todo

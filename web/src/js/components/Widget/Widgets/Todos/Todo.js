@@ -7,6 +7,8 @@ import DeleteIcon from 'material-ui/svg-icons/navigation/cancel'
 import CheckCircle from 'material-ui/svg-icons/action/check-circle'
 import SvgIcon from 'material-ui/SvgIcon'
 import appTheme, {
+  dashboardIconActiveColor,
+  dashboardIconInactiveColor,
   widgetEditButtonInactive,
   widgetEditButtonHover
 } from 'theme/default'
@@ -76,7 +78,7 @@ class Todo extends React.Component {
         color: '#FFF'
       },
       completed: {
-        color: '#FFF',
+        color: dashboardIconInactiveColor,
         textDecoration: 'line-through'
       }
     }
@@ -126,6 +128,14 @@ class Todo extends React.Component {
             defaultChecked={completed}
             checkedIcon={checkedIcon}
             uncheckedIcon={uncheckedIcon}
+            iconStyle={{
+              fill: (
+                completed
+                ? dashboardIconInactiveColor
+                : dashboardIconActiveColor
+              ),
+              marginRight: 10
+            }}
           />
           <p
             style={todoTextStyle}>
