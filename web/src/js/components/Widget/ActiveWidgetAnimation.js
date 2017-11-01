@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { CSSTransitionGroup } from 'react-transition-group'
 
 class ActiveWidgetAnimation extends React.Component {
@@ -15,10 +14,6 @@ class ActiveWidgetAnimation extends React.Component {
       </CSSTransitionGroup>
     )
   }
-}
-
-ActiveWidgetAnimation.propTypes = {
-  children: PropTypes.object.isRequired
 }
 
 export default ActiveWidgetAnimation
