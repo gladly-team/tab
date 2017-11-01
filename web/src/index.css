@@ -4,6 +4,7 @@ body {
   font-family: sans-serif;
 }
 
+/* Begin zoom-opacity animation */ 
 .zoom-opacity-enter {
   opacity: 0.01;
 }
@@ -38,7 +39,9 @@ body {
   -ms-transform: scale(1); 
   -moz-transform: scale(1);
 }
+/* End zoom-opacity animation */ 
 
+/* Begin fade animation */ 
 .fade-enter {
   opacity: 0.01;
 }
@@ -68,11 +71,13 @@ body {
   -ms-transition: opacity .3s ease-in;
   -moz-transition: opacity .3s ease-in;
 }
+/* End fade animation */ 
 
 .fade-dashboard-enter {
   opacity: 0.01;
 }
 
+/* Begin fade-dashboard animation */ 
 .fade-dashboard-enter.fade-dashboard-enter-active {
   opacity: 1;
   transition: opacity 800ms ease-in;
@@ -98,6 +103,35 @@ body {
   -ms-transition: opacity 0.8s ease-in;
   -moz-transition: opacity 0.8s ease-in;
 }
+/* End fade-dashboard animation */ 
+
+/* Begin active-widget animation */ 
+.active-widget-enter.active-widget-enter-active {
+  opacity: 1;
+  transition: opacity 300ms ease-in;
+}
+
+.active-widget-leave {
+  opacity: 1;
+}
+
+.active-widget-leave.active-widget-leave-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
+}
+
+.active-widget-appear {
+  opacity: 0.01;
+}
+
+.active-widget-appear.active-widget-appear-active {
+  opacity: 1;
+  transition: opacity 0.3s ease-in;
+  -webkit-transition: opacity 0.3s ease-in;
+  -ms-transition: opacity 0.3s ease-in;
+  -moz-transition: opacity 0.3s ease-in;
+}
+/* End active-widget animation */ 
 
 /* Links */
 a.active {

@@ -9,6 +9,7 @@ import {
 } from '../../constants'
 import CenteredWidgetsContainer from 'general/CenteredWidgetsContainer'
 import SetUserActiveWidgetMutation from 'mutations/SetUserActiveWidgetMutation'
+import ActiveWidgetAnimation from './ActiveWidgetAnimation'
 
 class Widgets extends React.Component {
   onWidgetIconClicked (widget) {
@@ -82,18 +83,21 @@ class Widgets extends React.Component {
               }
             })}
           </CenteredWidgetsContainer>
-          {user.widgets.edges.map((edge, index) => {
-            if (user.activeWidget &&
-                edge.node.id === user.activeWidget) {
-              return (
-                <Widget
-                  key={index}
-                  user={user}
-                  widget={edge.node}
-                  showError={this.props.showError} />
-              )
-            }
-          })}
+          <ActiveWidgetAnimation>
+            {user.widgets.edges.map((edge, index) => {
+              if (user.activeWidget &&
+                  edge.node.id === user.activeWidget) {
+                return (
+                  <Widget
+                    key={index}
+                    user={user}
+                    widget={edge.node}
+                    showError={this.props.showError}
+                    />
+                )
+              }
+            })}
+          </ActiveWidgetAnimation>
         </span>
       </FadeInDashboardAnimation>
     )
