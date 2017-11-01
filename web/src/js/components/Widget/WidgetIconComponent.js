@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
 import IconButton from 'material-ui/IconButton'
 import BookmarkBorderIcon from 'material-ui/svg-icons/action/bookmark-border'
 // import ListIcon from 'material-ui/svg-icons/action/list'

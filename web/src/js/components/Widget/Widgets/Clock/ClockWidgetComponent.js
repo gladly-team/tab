@@ -2,10 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 
-import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
-
 import { getWidgetConfig } from '../../../../utils/widgets-utils'
-
 import appTheme from 'theme/default'
 
 class ClockWidget extends React.Component {
