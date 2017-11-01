@@ -32,7 +32,7 @@ class Note extends React.Component {
       clearTimeout(this.hoverTimer)
     }
     if (isHovering) {
-      this.noteChangedTimer = setTimeout(() => {
+      this.hoverTimer = setTimeout(() => {
         this.setState({
           showDeleteButton: true
         })

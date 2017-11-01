@@ -22,11 +22,12 @@ class Todo extends React.Component {
   }
 
   onMouseHoverChange (isHovering) {
+    console.log(this.hoverTimer, isHovering)
     if (this.hoverTimer) {
       clearTimeout(this.hoverTimer)
     }
     if (isHovering) {
-      this.noteChangedTimer = setTimeout(() => {
+      this.hoverTimer = setTimeout(() => {
         this.setState({
           showDeleteButton: true
         })
@@ -62,7 +63,7 @@ class Todo extends React.Component {
         paddingLeft: 5
       },
       defaultTodoText: {
-        width: '70%',
+        flex: 1,
         fontSize: 14,
         fontFamily: appTheme.fontFamily
       },
@@ -89,13 +90,6 @@ class Todo extends React.Component {
       </SvgIcon>
     )
 
-    const checkBtn = (<Checkbox
-      style={{width: 'auto'}}
-      onCheck={this.onCompletedChange.bind(this)}
-      defaultChecked={completed}
-      checkedIcon={checkedIcon}
-      uncheckedIcon={uncheckedIcon} />)
-
     const todoTextStyle = Object.assign({},
       styles.defaultTodoText,
       completed ? styles.completed : styles.todo
@@ -104,8 +98,7 @@ class Todo extends React.Component {
     const otherTransitions = 'fill 0.15s ease-in'
     const deleteIconStyle = {
       cursor: 'pointer',
-      float: 'right',
-      margin: '5px 5px 0px 0px',
+      margin: '0px 4px',
       opacity: this.state.showDeleteButton ? 1 : 0,
       transition: this.state.showDeleteButton
         ? `opacity 0.2s ease-in 0.5s, ${otherTransitions}`
@@ -120,7 +113,15 @@ class Todo extends React.Component {
           style={styles.container}
           onMouseEnter={this.onMouseHoverChange.bind(this, true)}
           onMouseLeave={this.onMouseHoverChange.bind(this, false)}>
-          {checkBtn}
+          <Checkbox
+            style={{
+              width: 'auto'
+            }}
+            onCheck={this.onCompletedChange.bind(this)}
+            defaultChecked={completed}
+            checkedIcon={checkedIcon}
+            uncheckedIcon={uncheckedIcon}
+          />
           <p
             style={todoTextStyle}>
             {todo.text}
