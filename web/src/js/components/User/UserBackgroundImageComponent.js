@@ -233,7 +233,7 @@ class UserBackgroundImage extends React.Component {
 
     const finalBackgroundStyle = Object.assign({}, defaultStyle, backgroundStyle)
 
-    const tintOpacity = isImgBackground ? 0.2 : 0.03
+    const tintOpacity = isImgBackground ? 0.15 : 0.03
     const tintElemStyle = {
       position: 'absolute',
       top: 0,
