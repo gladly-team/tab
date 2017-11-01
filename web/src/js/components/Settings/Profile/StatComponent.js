@@ -26,7 +26,8 @@ class Stat extends React.Component {
       display: 'block',
       marginTop: 4,
       height: 16,
-      alignSelf: 'center'
+      alignSelf: 'center',
+      textAlign: 'center'
     }
     return (
       <Paper style={containerStyle}>
