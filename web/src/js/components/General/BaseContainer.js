@@ -4,7 +4,10 @@ class BaseContainer extends React.Component {
   render () {
     const root = {
       width: '100vw',
-      height: '100vh'
+      height: '100vh',
+      margin: 0,
+      padding: 0,
+      border: 'none'
     }
 
     return (

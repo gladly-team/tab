@@ -44,6 +44,7 @@ class Dashboard extends React.Component {
 
     const menuStyle = {
       position: 'absolute',
+      zIndex: 1,
       top: 14,
       right: 16,
       display: 'flex',
@@ -66,6 +67,14 @@ class Dashboard extends React.Component {
 
     return (
       <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          right: 0,
+          bottom: 0,
+          left: 0,
+          overflow: 'hidden'
+        }}
         data-test-id={'app-dashboard-id'}
         key={'dashboard-key'}>
         <UserBackgroundImage user={user} showError={this.showError.bind(this)} />
