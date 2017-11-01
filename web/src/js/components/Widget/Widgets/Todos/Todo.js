@@ -21,8 +21,13 @@ class Todo extends React.Component {
     this.hoverTimer = 0
   }
 
+  componentWillUnmount () {
+    if (this.hoverTimer) {
+      clearTimeout(this.hoverTimer)
+    }
+  }
+
   onMouseHoverChange (isHovering) {
-    console.log(this.hoverTimer, isHovering)
     if (this.hoverTimer) {
       clearTimeout(this.hoverTimer)
     }

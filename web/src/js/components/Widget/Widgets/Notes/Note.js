@@ -23,6 +23,15 @@ class Note extends React.Component {
     this.hoverTimer = 0
   }
 
+  componentWillUnmount () {
+    if (this.hoverTimer) {
+      clearTimeout(this.hoverTimer)
+    }
+    if (this.noteChangedTimer) {
+      clearTimeout(this.noteChangedTimer)
+    }
+  }
+
   removeStickyNote () {
     this.props.removeStickyNote(this.props.index)
   }
