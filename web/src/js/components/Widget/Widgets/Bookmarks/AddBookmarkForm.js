@@ -8,19 +8,17 @@ import TextField from 'material-ui/TextField'
 import Chip from 'material-ui/Chip'
 import DeleteIcon from 'material-ui/svg-icons/navigation/cancel'
 import CheckCircle from 'material-ui/svg-icons/action/check-circle'
-import AddCircle from 'material-ui/svg-icons/content/add-circle'
-import ModeEdit from 'material-ui/svg-icons/editor/mode-edit'
-
-import appTheme from 'theme/default'
+import AddCircleIcon from 'material-ui/svg-icons/content/add-circle'
+import ModeEditIcon from 'material-ui/svg-icons/editor/mode-edit'
+import appTheme, {
+  widgetEditButtonInactive,
+  widgetEditButtonHover
+} from 'theme/default'
 
 class AddBookmarkForm extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      hoveringCancel: false,
-      hoveringCreate: false,
-      hoveringAdd: false,
-      hoveringEdit: false,
       show: false,
       animating: false,
       editMode: false
@@ -58,30 +56,6 @@ class AddBookmarkForm extends React.Component {
     this.closeForm()
   }
 
-  onCancelBtnMouseMove (enter) {
-    this.setState({
-      hoveringCancel: enter
-    })
-  }
-
-  onCreateBtnMouseMove (enter) {
-    this.setState({
-      hoveringCreate: enter
-    })
-  }
-
-  onAddBtnMouseMove (enter) {
-    this.setState({
-      hoveringAdd: enter
-    })
-  }
-
-  onEditBtnMouseMove (enter) {
-    this.setState({
-      hoveringEdit: enter
-    })
-  }
-
   closeForm () {
     this.setState({
       animating: true
@@ -90,10 +64,7 @@ class AddBookmarkForm extends React.Component {
     setTimeout(() => {
       this.setState({
         animating: false,
-        show: false,
-        hoveringCancel: false,
-        hoveringCreate: false,
-        hoveringAdd: false
+        show: false
       })
     }, 200)
   }
@@ -111,10 +82,7 @@ class AddBookmarkForm extends React.Component {
     setTimeout(() => {
       this.setState({
         animating: false,
-        show: true,
-        hoveringCancel: false,
-        hoveringCreate: false,
-        hoveringAdd: false
+        show: true
       })
     }, 200)
   }
@@ -153,12 +121,6 @@ class AddBookmarkForm extends React.Component {
         }
       }
 
-      var addIconColor = (this.state.hoveringAdd)
-                    ? chip.addIcon.hoverColor : chip.addIcon.color
-
-      var editIconColor = (this.state.hoveringEdit)
-                    ? chip.addIcon.hoverColor : chip.addIcon.color
-
       return (
         <WidgetPieceWrapper>
           <Chip
@@ -169,18 +131,18 @@ class AddBookmarkForm extends React.Component {
             style={chip.style}>
               Bookmarks
               <div style={{display: 'inline', marginLeft: 10}}>
-                <AddCircle
-                  color={addIconColor}
+                <AddCircleIcon
+                  color={widgetEditButtonInactive}
+                  hoverColor={widgetEditButtonHover}
                   style={chip.addIcon}
                   onClick={this.openForm.bind(this)}
-                  onMouseEnter={this.onAddBtnMouseMove.bind(this, true)}
-                  onMouseLeave={this.onAddBtnMouseMove.bind(this, false)} />
-                <ModeEdit
-                  color={editIconColor}
+                />
+                <ModeEditIcon
+                  color={widgetEditButtonInactive}
+                  hoverColor={widgetEditButtonHover}
                   style={chip.addIcon}
                   onClick={this.onEditModeClicked.bind(this)}
-                  onMouseEnter={this.onEditBtnMouseMove.bind(this, true)}
-                  onMouseLeave={this.onEditBtnMouseMove.bind(this, false)} />
+                />
               </div>
           </Chip>
         </WidgetPieceWrapper>
@@ -234,12 +196,6 @@ class AddBookmarkForm extends React.Component {
       display: 'inline-block'
     }
 
-    var cancelIconColor = (this.state.hoveringCancel)
-                    ? cancelIcon.hoverColor : cancelIcon.color
-
-    var createIconColor = (this.state.hoveringCreate)
-                    ? cancelIcon.hoverColor : cancelIcon.color
-
     return (
       <WidgetPieceWrapper>
         <div
@@ -247,17 +203,17 @@ class AddBookmarkForm extends React.Component {
           style={addBookmarkContainer}>
           <div style={actionContainer}>
             <DeleteIcon
-              color={cancelIconColor}
+              color={widgetEditButtonInactive}
+              hoverColor={widgetEditButtonHover}
               style={cancelIcon}
               onClick={this.closeForm.bind(this)}
-              onMouseEnter={this.onCancelBtnMouseMove.bind(this, true)}
-              onMouseLeave={this.onCancelBtnMouseMove.bind(this, false)} />
+            />
             <CheckCircle
-              color={createIconColor}
+              color={widgetEditButtonInactive}
+              hoverColor={widgetEditButtonHover}
               style={cancelIcon}
               onClick={this.create.bind(this)}
-              onMouseEnter={this.onCreateBtnMouseMove.bind(this, true)}
-              onMouseLeave={this.onCreateBtnMouseMove.bind(this, false)} />
+            />
           </div>
 
           <div style={formContainer}>
@@ -269,8 +225,8 @@ class AddBookmarkForm extends React.Component {
               inputStyle={textField.inputStyle}
               hintStyle={textField.hintStyle}
               underlineStyle={textField.underlineStyle}
-              underlineFocusStyle={textField.underlineFocusStyle} />
-
+              underlineFocusStyle={textField.underlineFocusStyle}
+            />
             <TextField
               ref={(input) => { this.bLink = input }}
               onKeyPress={this._handleKeyPress.bind(this)}
@@ -279,7 +235,8 @@ class AddBookmarkForm extends React.Component {
               inputStyle={textField.inputStyle}
               hintStyle={textField.hintStyle}
               underlineStyle={textField.underlineStyle}
-              underlineFocusStyle={textField.underlineFocusStyle} />
+              underlineFocusStyle={textField.underlineFocusStyle}
+            />
           </div>
         </div>
       </WidgetPieceWrapper>)

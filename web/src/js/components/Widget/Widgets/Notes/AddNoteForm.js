@@ -5,18 +5,17 @@ import WidgetPieceWrapper from '../../WidgetPieceWrapper'
 import TextField from 'material-ui/TextField'
 import Chip from 'material-ui/Chip'
 import DeleteIcon from 'material-ui/svg-icons/navigation/cancel'
-import CheckCircle from 'material-ui/svg-icons/action/check-circle'
-import AddCircle from 'material-ui/svg-icons/content/add-circle'
-
-import appTheme from 'theme/default'
+import CheckCircleIcon from 'material-ui/svg-icons/action/check-circle'
+import AddCircleIcon from 'material-ui/svg-icons/content/add-circle'
+import appTheme, {
+  widgetEditButtonInactive,
+  widgetEditButtonHover
+} from 'theme/default'
 
 class AddNoteForm extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      hoveringCancel: false,
-      hoveringCreate: false,
-      hoveringAdd: false,
       show: false,
       errorText: 'Use Shift + Enter to create a new line.',
       animating: false
@@ -43,24 +42,6 @@ class AddNoteForm extends React.Component {
     this.closeForm()
   }
 
-  onCancelBtnMouseMove (enter) {
-    this.setState({
-      hoveringCancel: enter
-    })
-  }
-
-  onCreateBtnMouseMove (enter) {
-    this.setState({
-      hoveringCreate: enter
-    })
-  }
-
-  onAddBtnMouseMove (enter) {
-    this.setState({
-      hoveringAdd: enter
-    })
-  }
-
   closeForm () {
     this.setState({
       animating: true
@@ -69,10 +50,7 @@ class AddNoteForm extends React.Component {
     setTimeout(() => {
       this.setState({
         animating: false,
-        show: false,
-        hoveringCancel: false,
-        hoveringCreate: false,
-        hoveringAdd: false
+        show: false
       })
     }, 200)
   }
@@ -86,10 +64,7 @@ class AddNoteForm extends React.Component {
       setTimeout(() => {
         this.setState({
           animating: false,
-          show: true,
-          hoveringCancel: false,
-          hoveringCreate: false,
-          hoveringAdd: false
+          show: true
         })
       }, 200)
     } else {
@@ -120,9 +95,6 @@ class AddNoteForm extends React.Component {
         }
       }
 
-      var addIconColor = (this.state.hoveringAdd)
-                    ? chip.addIcon.hoverColor : chip.addIcon.color
-
       return (
         <WidgetPieceWrapper>
           <Chip
@@ -132,12 +104,12 @@ class AddNoteForm extends React.Component {
             style={chip.style}>
               Notes
               <div style={{display: 'inline', marginLeft: 10}}>
-                <AddCircle
-                  color={addIconColor}
+                <AddCircleIcon
+                  color={widgetEditButtonInactive}
+                  hoverColor={widgetEditButtonHover}
                   style={chip.addIcon}
                   onClick={this.openForm.bind(this)}
-                  onMouseEnter={this.onAddBtnMouseMove.bind(this, true)}
-                  onMouseLeave={this.onAddBtnMouseMove.bind(this, false)} />
+                />
               </div>
           </Chip>
         </WidgetPieceWrapper>
@@ -192,12 +164,6 @@ class AddNoteForm extends React.Component {
       display: 'inline-block'
     }
 
-    var cancelIconColor = (this.state.hoveringCancel)
-                    ? cancelIcon.hoverColor : cancelIcon.color
-
-    var createIconColor = (this.state.hoveringCreate)
-                    ? cancelIcon.hoverColor : cancelIcon.color
-
     return (
       <WidgetPieceWrapper>
         <div
@@ -205,17 +171,17 @@ class AddNoteForm extends React.Component {
           style={addNoteContainer}>
           <div style={actionContainer}>
             <DeleteIcon
-              color={cancelIconColor}
+              color={widgetEditButtonInactive}
+              hoverColor={widgetEditButtonHover}
               style={cancelIcon}
               onClick={this.closeForm.bind(this)}
-              onMouseEnter={this.onCancelBtnMouseMove.bind(this, true)}
-              onMouseLeave={this.onCancelBtnMouseMove.bind(this, false)} />
-            <CheckCircle
-              color={createIconColor}
+            />
+            <CheckCircleIcon
+              color={widgetEditButtonInactive}
+              hoverColor={widgetEditButtonHover}
               style={cancelIcon}
               onClick={this.create.bind(this)}
-              onMouseEnter={this.onCreateBtnMouseMove.bind(this, true)}
-              onMouseLeave={this.onCreateBtnMouseMove.bind(this, false)} />
+            />
           </div>
 
           <div style={formContainer}>

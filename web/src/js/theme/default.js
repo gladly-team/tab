@@ -73,6 +73,10 @@ export const dashboardIconInactiveColor = 'rgba(255, 255, 255, 0.8)'
 export const dashboardIconActiveColor = white
 export const appBarLightColor = '#f2f2f2'
 
+// Widgets
+export const widgetEditButtonInactive = 'rgba(255,255,255,.3)'
+export const widgetEditButtonHover = white
+
 // Custom card header styling
 
 export const cardHeaderTitleStyle = {
