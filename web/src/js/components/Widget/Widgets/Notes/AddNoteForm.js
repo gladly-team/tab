@@ -1,8 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
-
+import WidgetPieceWrapper from '../../WidgetPieceWrapper'
 import TextField from 'material-ui/TextField'
 import Chip from 'material-ui/Chip'
 import DeleteIcon from 'material-ui/svg-icons/navigation/cancel'
@@ -125,7 +124,7 @@ class AddNoteForm extends React.Component {
                     ? chip.addIcon.hoverColor : chip.addIcon.color
 
       return (
-        <FadeInDashboardAnimation>
+        <WidgetPieceWrapper>
           <Chip
             key={'note-header-key'}
             backgroundColor={chip.backgroundColor}
@@ -141,7 +140,7 @@ class AddNoteForm extends React.Component {
                   onMouseLeave={this.onAddBtnMouseMove.bind(this, false)} />
               </div>
           </Chip>
-        </FadeInDashboardAnimation>
+        </WidgetPieceWrapper>
       )
     }
 
@@ -200,7 +199,7 @@ class AddNoteForm extends React.Component {
                     ? cancelIcon.hoverColor : cancelIcon.color
 
     return (
-      <FadeInDashboardAnimation>
+      <WidgetPieceWrapper>
         <div
           key={'add-note-form-key'}
           style={addNoteContainer}>
@@ -233,7 +232,7 @@ class AddNoteForm extends React.Component {
               errorText={this.state.errorText} />
           </div>
         </div>
-      </FadeInDashboardAnimation>)
+      </WidgetPieceWrapper>)
   }
 }
 

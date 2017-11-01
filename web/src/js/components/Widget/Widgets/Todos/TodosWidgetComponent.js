@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import WidgetSharedSpace from 'general/WidgetSharedSpace'
-import EmptyWidgetMsg from 'general/EmptyWidgetMsg'
+import EmptyWidgetMsg from '../../EmptyWidgetMsg'
 import {List} from 'general/List'
 import UpdateWidgetDataMutation from 'mutations/UpdateWidgetDataMutation'
 import Todo from './Todo'

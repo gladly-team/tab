@@ -1,8 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
-
+import WidgetPieceWrapper from '../../WidgetPieceWrapper'
 import Checkbox from 'material-ui/Checkbox'
 import DeleteIcon from 'material-ui/svg-icons/navigation/cancel'
 import CheckCircle from 'material-ui/svg-icons/action/check-circle'
@@ -101,8 +100,7 @@ class Todo extends React.Component {
           ? deleteIcon.hoverColor : deleteIcon.color
 
     return (
-      <FadeInDashboardAnimation
-        delayRange={300}>
+      <WidgetPieceWrapper>
         <div
           style={styles.container}
           onMouseEnter={this.onDeleteBtnMouseMove.bind(this, true)}
@@ -117,7 +115,7 @@ class Todo extends React.Component {
             style={deleteIcon}
             onClick={this.removeTodo.bind(this)} />
         </div>
-      </FadeInDashboardAnimation>
+      </WidgetPieceWrapper>
     )
   }
 }

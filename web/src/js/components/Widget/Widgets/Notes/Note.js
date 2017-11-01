@@ -2,8 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 
-import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
-
+import WidgetPieceWrapper from '../../WidgetPieceWrapper'
 import DeleteIcon from 'material-ui/svg-icons/navigation/cancel'
 import Chip from 'material-ui/Chip'
 import TextField from 'material-ui/TextField'
@@ -98,8 +97,7 @@ class Note extends React.Component {
     var noteDate = this.getNoteDate()
 
     return (
-      <FadeInDashboardAnimation
-        delayRange={300}>
+      <WidgetPieceWrapper>
         <div
           key={'note_' + this.props.index}
           style={defaultPaper}
@@ -128,7 +126,7 @@ class Note extends React.Component {
               underlineShow={false} />
           </div>
         </div>
-      </FadeInDashboardAnimation>
+      </WidgetPieceWrapper>
     )
   }
 }

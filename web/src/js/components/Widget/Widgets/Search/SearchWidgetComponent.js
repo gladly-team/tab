@@ -1,16 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
 import Search from './Search'
 
 class SearchWidget extends React.Component {
   render () {
     return (
-      <FadeInDashboardAnimation>
-        <Search
-          widget={this.props.widget}
-          user={this.props.user} />
-      </FadeInDashboardAnimation>
+      <Search
+        widget={this.props.widget}
+        user={this.props.user} />
     )
   }
 }

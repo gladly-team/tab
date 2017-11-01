@@ -84,12 +84,10 @@ class ClockWidget extends React.Component {
     }
 
     return (
-      <FadeInDashboardAnimation>
-        <div style={clockContainer}>
-          <h1 style={timeStyle}>{this.state.time}</h1>
-          <h2 style={dateStyle}>{this.state.date}</h2>
-        </div>
-      </FadeInDashboardAnimation>
+      <div style={clockContainer}>
+        <h1 style={timeStyle}>{this.state.time}</h1>
+        <h2 style={dateStyle}>{this.state.date}</h2>
+      </div>
     )
   }
 }

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 
 import WidgetSharedSpace from 'general/WidgetSharedSpace'
-import EmptyWidgetMsg from 'general/EmptyWidgetMsg'
+import EmptyWidgetMsg from '../../EmptyWidgetMsg'
 import {List} from 'general/List'
 
 import Note from './Note'

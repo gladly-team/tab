@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
+import WidgetPieceWrapper from './WidgetPieceWrapper'
 import Chip from 'material-ui/Chip'
 import AddCircle from 'material-ui/svg-icons/content/add-circle'
 
@@ -50,10 +50,10 @@ class EmptyWidgetMsg extends React.Component {
       </Chip>)
 
     return (
-      <FadeInDashboardAnimation
-        delayRange={300}>
+      <WidgetPieceWrapper>
         {msg}
-      </FadeInDashboardAnimation>)
+      </WidgetPieceWrapper>
+    )
   }
 }
 

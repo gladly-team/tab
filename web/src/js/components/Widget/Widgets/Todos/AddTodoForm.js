@@ -1,8 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
-
+import WidgetPieceWrapper from '../../WidgetPieceWrapper'
 import TextField from 'material-ui/TextField'
 import Chip from 'material-ui/Chip'
 import DeleteIcon from 'material-ui/svg-icons/navigation/cancel'
@@ -121,7 +120,7 @@ class AddTodoForm extends React.Component {
                     ? chip.addIcon.hoverColor : chip.addIcon.color
 
       return (
-        <FadeInDashboardAnimation>
+        <WidgetPieceWrapper>
           <Chip
             key={'todo-header-key'}
             backgroundColor={chip.backgroundColor}
@@ -137,7 +136,7 @@ class AddTodoForm extends React.Component {
                   onMouseLeave={this.onAddBtnMouseMove.bind(this, false)} />
               </div>
           </Chip>
-        </FadeInDashboardAnimation>
+        </WidgetPieceWrapper>
       )
     }
 
@@ -196,7 +195,7 @@ class AddTodoForm extends React.Component {
                     ? cancelIcon.hoverColor : cancelIcon.color
 
     return (
-      <FadeInDashboardAnimation>
+      <WidgetPieceWrapper>
         <div
           key={'add-todo-form-key'}
           style={addTodoContainer}>
@@ -229,7 +228,7 @@ class AddTodoForm extends React.Component {
               errorText={this.state.errorText} />
           </div>
         </div>
-      </FadeInDashboardAnimation>)
+      </WidgetPieceWrapper>)
   }
 }
 

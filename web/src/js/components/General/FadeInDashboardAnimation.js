@@ -7,7 +7,7 @@ class FadeInDashboardAnimation extends React.Component {
     return (
       <CSSTransitionGroup
         transitionName='fade-dashboard'
-        transitionAppear
+        transitionAppear={this.props.transitionAppear}
         transitionAppearTimeout={800}
         transitionEnterTimeout={800}
         transitionLeaveTimeout={800}>
@@ -18,7 +18,12 @@ class FadeInDashboardAnimation extends React.Component {
 }
 
 FadeInDashboardAnimation.propTypes = {
-  children: PropTypes.object.isRequired
+  children: PropTypes.object.isRequired,
+  transitionAppear: PropTypes.bool
+}
+
+FadeInDashboardAnimation.defaultProps = {
+  transitionAppear: true
 }
 
 export default FadeInDashboardAnimation

@@ -103,17 +103,15 @@ class WidgetIcon extends React.Component {
     // Note: extra span wrapper needed for fade animation to
     // work properly.
     return (
-      <FadeInDashboardAnimation>
-        <span>
-          <IconButton
-            style={iconButtonStyle}
-            key={this.props.widget.type + 'animation-key'}
-            onClick={this.onWidgetIconClicked.bind(this)}
-          >
-            {icon}
-          </IconButton>
-        </span>
-      </FadeInDashboardAnimation>
+      <span>
+        <IconButton
+          style={iconButtonStyle}
+          key={this.props.widget.type + 'animation-key'}
+          onClick={this.onWidgetIconClicked.bind(this)}
+        >
+          {icon}
+        </IconButton>
+      </span>
     )
   }
 }

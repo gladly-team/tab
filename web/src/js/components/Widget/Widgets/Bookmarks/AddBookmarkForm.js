@@ -3,8 +3,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
-
+import WidgetPieceWrapper from '../../WidgetPieceWrapper'
 import TextField from 'material-ui/TextField'
 import Chip from 'material-ui/Chip'
 import DeleteIcon from 'material-ui/svg-icons/navigation/cancel'
@@ -161,7 +160,7 @@ class AddBookmarkForm extends React.Component {
                     ? chip.addIcon.hoverColor : chip.addIcon.color
 
       return (
-        <FadeInDashboardAnimation>
+        <WidgetPieceWrapper>
           <Chip
             key={'bookmarks-header-key'}
             backgroundColor={chip.backgroundColor}
@@ -184,7 +183,7 @@ class AddBookmarkForm extends React.Component {
                   onMouseLeave={this.onEditBtnMouseMove.bind(this, false)} />
               </div>
           </Chip>
-        </FadeInDashboardAnimation>
+        </WidgetPieceWrapper>
       )
     }
 
@@ -242,7 +241,7 @@ class AddBookmarkForm extends React.Component {
                     ? cancelIcon.hoverColor : cancelIcon.color
 
     return (
-      <FadeInDashboardAnimation>
+      <WidgetPieceWrapper>
         <div
           key={'add-bookmark-form-key'}
           style={addBookmarkContainer}>
@@ -283,7 +282,7 @@ class AddBookmarkForm extends React.Component {
               underlineFocusStyle={textField.underlineFocusStyle} />
           </div>
         </div>
-      </FadeInDashboardAnimation>)
+      </WidgetPieceWrapper>)
   }
 }
 
