@@ -34,23 +34,21 @@ class TodosWidget extends React.Component {
   }
 
   completeTodo (index) {
-    const removed = this.state.todos.splice(index, 1)
-    this.state.completed.push(removed[0])
     this.setState({
-      completed: this.state.completed,
-      todos: this.state.todos
-    })
-    this.updateWidget()
+      todos: this.state.todos.filter((_, i) => {
+        return i !== index
+      }),
+      completed: [this.state.todos[index], ...this.state.completed]
+    }, this.updateWidget)
   }
 
   setNotCompleted (index) {
-    const removed = this.state.completed.splice(index, 1)
-    this.state.todos.push(removed[0])
     this.setState({
-      completed: this.state.completed,
-      todos: this.state.todos
-    })
-    this.updateWidget()
+      todos: [this.state.completed[index], ...this.state.todos],
+      completed: this.state.completed.filter((_, i) => {
+        return i !== index
+      })
+    }, this.updateWidget)
   }
 
   addNewTodo (text) {
@@ -60,37 +58,32 @@ class TodosWidget extends React.Component {
         id: this.randomString(6),
         text: content
       }
-      this.state.todos.splice(0, 0, newTodo)
       this.setState({
-        todos: this.state.todos
-      })
-      this.updateWidget()
+        todos: [...this.state.todos, newTodo]
+      }, this.updateWidget)
     }
   }
 
   removeCompletedTodo (index) {
-    this.state.completed.splice(index, 1)
     this.setState({
-      completed: this.state.completed
-    })
-    this.updateWidget()
+      completed: this.state.completed.filter((_, i) => {
+        return i !== index
+      })
+    }, this.updateWidget)
   }
 
   removeAllCompletedTodos () {
-    this.state.completed = []
     this.setState({
       completed: []
-    }, () => {
-      this.updateWidget()
-    })
+    }, this.updateWidget)
   }
 
   removeTodo (index) {
-    this.state.todos.splice(index, 1)
     this.setState({
-      todos: this.state.todos
-    })
-    this.updateWidget()
+      todos: this.state.todos.filter((_, i) => {
+        return i !== index
+      })
+    }, this.updateWidget)
   }
 
   getWidgetData () {
