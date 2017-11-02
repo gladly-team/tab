@@ -60,18 +60,20 @@ class BookmarksWidget extends React.Component {
       name: name,
       link: link
     }
-    this.state.bookmarks.splice(0, 0, newBookmark)
-    this.updateWidget(this.state.bookmarks)
     this.setState({
-      bookmarks: this.state.bookmarks
+      bookmarks: [...this.state.bookmarks, newBookmark]
+    }, () => {
+      this.updateWidget(this.state.bookmarks)
     })
   }
 
   removeBookmark (index) {
-    this.state.bookmarks.splice(index, 1)
-    this.updateWidget(this.state.bookmarks)
     this.setState({
-      bookmarks: this.state.bookmarks
+      bookmarks: this.state.bookmarks.filter((_, i) => {
+        return i !== index
+      })
+    }, () => {
+      this.updateWidget(this.state.bookmarks)
     })
   }
 
