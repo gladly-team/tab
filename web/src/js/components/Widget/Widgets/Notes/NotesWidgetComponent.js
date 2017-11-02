@@ -74,7 +74,7 @@ class NotesWidget extends React.Component {
         return i !== index
       })
     }, () => {
-      this.updateWidget(this.state.bookmarks)
+      this.updateWidget(this.state.notes)
     })
   }
 
