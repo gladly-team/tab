@@ -53,6 +53,10 @@ class Note extends React.Component {
     }
   }
 
+  onNoteClick () {
+    this.noteInput.focus()
+  }
+
   onNoteChanged (event, value) {
     if (this.noteChangedTimer) {
       clearTimeout(this.noteChangedTimer)
@@ -65,7 +69,7 @@ class Note extends React.Component {
   }
 
   getNoteDate () {
-    var noteDateFormat = 'MMM, DD'
+    var noteDateFormat = 'MMM D'
     var now = moment()
     var noteDate = moment(this.props.note.created)
     if (now.date() === noteDate.date()) {
@@ -110,7 +114,7 @@ class Note extends React.Component {
     }
     const textStyle = {
       fontSize: 14,
-      color: '#EEE',
+      color: '#FFF',
       fontFamily: appTheme.fontFamily
     }
 
@@ -121,6 +125,7 @@ class Note extends React.Component {
         <div
           key={'note_' + this.props.index}
           style={defaultPaper}
+          onClick={this.onNoteClick.bind(this)}
           onMouseEnter={this.onMouseHoverChange.bind(this, true)}
           onMouseLeave={this.onMouseHoverChange.bind(this, false)}
         >
@@ -142,10 +147,16 @@ class Note extends React.Component {
               id={'note-content-' + this.props.index}
               onChange={this.onNoteChanged.bind(this)}
               hintText='Your note here...'
+              hintStyle={{
+                fontSize: 14,
+                color: appTheme.textField.underlineColor
+              }}
               textareaStyle={textStyle}
               multiLine
               defaultValue={note.content ? note.content : ''}
-              underlineShow={false} />
+              underlineShow={false}
+              ref={(note) => { this.noteInput = note }}
+            />
           </div>
         </div>
       </WidgetPieceWrapper>

@@ -65,6 +65,9 @@ class NotesWidget extends React.Component {
       notes: [newNote, ...this.state.notes]
     }, () => {
       this.updateWidget(this.state.notes)
+
+      // Focus new note.
+      this.newestNote.noteInput.focus()
     })
   }
 
@@ -138,6 +141,11 @@ class NotesWidget extends React.Component {
               <Note
                 key={note.id}
                 index={index}
+                ref={(note) => {
+                  if (index === 0) {
+                    this.newestNote = note
+                  }
+                }}
                 removeStickyNote={this.removeStickyNote.bind(this)}
                 onNoteUpdated={this.updateStickyNote.bind(this)}
                 note={note} />
