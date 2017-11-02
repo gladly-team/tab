@@ -61,7 +61,7 @@ class BookmarksWidget extends React.Component {
       link: link
     }
     this.setState({
-      bookmarks: [...this.state.bookmarks, newBookmark]
+      bookmarks: [newBookmark, ...this.state.bookmarks]
     }, () => {
       this.updateWidget(this.state.bookmarks)
     })
