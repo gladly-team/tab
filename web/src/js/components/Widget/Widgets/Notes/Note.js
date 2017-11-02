@@ -144,7 +144,7 @@ class Note extends React.Component {
               hintText='Your note here...'
               textareaStyle={textStyle}
               multiLine
-              defaultValue={note.content}
+              defaultValue={note.content ? note.content : ''}
               underlineShow={false} />
           </div>
         </div>

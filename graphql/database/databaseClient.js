@@ -6,6 +6,10 @@ AWS.config.update({
   endpoint: config.DYNAMODB_ENDPOINT
 })
 
-const dbClient = new AWS.DynamoDB.DocumentClient()
+// https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html
+const dbClient = new AWS.DynamoDB.DocumentClient({
+  // allow empty string values by converting them to null
+  convertEmptyValues: true
+})
 
 export default dbClient

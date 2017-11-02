@@ -61,31 +61,30 @@ class NotesWidget extends React.Component {
       content: text,
       created: moment.utc().format()
     }
-
-    this.state.notes.splice(0, 0, newNote)
-    if (text && text.length) {
-      this.updateWidget(this.state.notes)
-    }
-
     this.setState({
-      notes: this.state.notes
+      notes: [newNote, ...this.state.notes]
+    }, () => {
+      this.updateWidget(this.state.notes)
     })
   }
 
   removeStickyNote (index) {
-    this.state.notes.splice(index, 1)
-    this.updateWidget(this.state.notes)
-
     this.setState({
-      notes: this.state.notes
+      notes: this.state.notes.filter((_, i) => {
+        return i !== index
+      })
+    }, () => {
+      this.updateWidget(this.state.bookmarks)
     })
   }
 
   updateStickyNote (content, index) {
-    this.state.notes[index].content = content
-    this.updateWidget(this.state.notes)
+    const notes = [...this.state.notes]
+    notes[index].content = content
     this.setState({
-      notes: this.state.notes
+      notes: notes
+    }, () => {
+      this.updateWidget(this.state.notes)
     })
   }
 
