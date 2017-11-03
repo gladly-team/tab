@@ -65,13 +65,12 @@ class AddTodoForm extends React.Component {
               ref={(input) => { this.btext = input }}
               multiLine
               onKeyPress={this._handleKeyPress.bind(this)}
-              hintText='Your todo here...'
+              hintText='What do you need to do?'
               textareaStyle={textField.inputStyle}
               hintStyle={textField.hintStyle}
               underlineStyle={textField.underlineStyle}
               underlineFocusStyle={textField.underlineFocusStyle}
               errorStyle={textField.errorStyle}
-              errorText={'Use Shift + Enter to create a new line.'}
             />
           </span>
         }

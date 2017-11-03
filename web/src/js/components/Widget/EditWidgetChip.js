@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import Measure from 'react-measure'
 import Paper from 'material-ui/Paper'
 import DeleteIcon from 'material-ui/svg-icons/navigation/cancel'
 import CheckCircleIcon from 'material-ui/svg-icons/action/check-circle'
@@ -16,7 +17,8 @@ class EditWidgetChip extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      expanded: false
+      expanded: false,
+      dimensions: {}
     }
   }
 
@@ -38,7 +40,7 @@ class EditWidgetChip extends React.Component {
     const content = this.state.expanded
       ? (
         <span
-          key={'hi'}
+          key={'widget-edit-chip-add-form'}
           style={{
             position: 'absolute',
             top: 0,
@@ -53,7 +55,7 @@ class EditWidgetChip extends React.Component {
       )
       : (
         <span
-          key={'hello'}
+          key={'widget-edit-chip-content'}
           style={{
             position: 'absolute',
             top: 0,
@@ -66,10 +68,40 @@ class EditWidgetChip extends React.Component {
         </span>
       )
 
+    // Measure the dimensions of the child content and add
+    // the dimensions to state. Then, we'll set the width
+    // and height of the parent container to fit the child
+    // content. We do this so we can animate the container
+    // expansion while still allowing dynamic child content.
+    const measuredContent = (
+      <Measure
+        bounds
+        onResize={(contentRect) => {
+          if (contentRect.bounds) {
+            this.setState({
+              dimensions: contentRect.bounds
+            })
+          }
+        }}
+      >
+        {({ measureRef }) => {
+          return (
+            <EditWidgetChipAnimation>
+              {React.cloneElement(content, {
+                ref: measureRef
+              })}
+            </EditWidgetChipAnimation>
+          )
+        }}
+      </Measure>
+    )
+
+    // Icons
     const iconContainerStyle = {
       display: 'flex',
       justifyContent: 'flex-end',
       position: 'absolute',
+      zIndex: 5,
       top: 4,
       right: 4
     }
@@ -124,29 +156,35 @@ class EditWidgetChip extends React.Component {
         </div>
       )
 
-    // TODO: need dynamic sizing.
-    // Use this?
-    // https://github.com/souporserious/react-measure
-    // Or this?
-    // https://www.npmjs.com/package/react-animate-height
-    const closedWidth = 95
-    const closedHeight = 32
+    // Sizing
+    const titleHeight = 32
+    const iconWidth = 30
     const expandedWidth = 290
-    const expandedHeight = 102
+    const width = (
+      this.state.expanded
+      ? expandedWidth
+      : (this.state.dimensions.width
+        ? this.state.dimensions.width + iconWidth
+        : 'auto'
+      )
+    )
+    const height = this.state.dimensions.height
+      ? this.state.dimensions.height
+      : 'auto'
 
     return (
       <span>
         <Paper
           zDepth={0}
           style={{
-            width: this.state.expanded ? expandedWidth : closedWidth,
-            height: this.state.expanded ? expandedHeight : closedHeight,
+            width: width,
+            height: height,
             position: 'relative',
             overflow: 'hidden',
             justifyContent: 'center',
             alignItems: 'space-between',
             fontSize: 14,
-            lineHeight: '32px',
+            lineHeight: `${titleHeight}px`,
             transition: `width ${animationDurationMs}ms ease-in-out, height ${animationDurationMs}ms ease-in-out`,
             margin: 5,
             background: appTheme.palette.primary1Color,
@@ -154,27 +192,12 @@ class EditWidgetChip extends React.Component {
             userSelect: 'none'
           }}
         >
-          <span
-            key={'thing'}
-            style={{
-              position: 'absolute',
-              width: '100%',
-              boxSizing: 'border-box',
-              height: 32,
-              display: 'inline-flex',
-              justifyContent: 'space-between',
-              alignItems: 'center'
-            }}
-          >
-            <EditWidgetChipAnimation>
-              {content}
-            </EditWidgetChipAnimation>
-          </span>
           <div
             style={{
               display: 'inline-flex',
               justifyContent: 'flex-end',
               position: 'absolute',
+              zIndex: 3,
               width: '100%',
               left: 0,
               top: 0,
@@ -185,6 +208,7 @@ class EditWidgetChip extends React.Component {
               {icons}
             </EditWidgetChipAnimation>
           </div>
+          {measuredContent}
         </Paper>
       </span>
     )
