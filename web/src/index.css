@@ -101,6 +101,26 @@ body {
 }
 /* End active-widget animation */ 
 
+/* Begin edit-widget-chip animation */ 
+.edit-widget-chip-enter {
+  opacity: 0.1;
+}
+
+.edit-widget-chip-enter.edit-widget-chip-enter-active {
+  opacity: 1;
+  transition: opacity 300ms ease-in;
+}
+
+.edit-widget-chip-leave {
+  opacity: 1;
+}
+
+.edit-widget-chip-leave.edit-widget-chip-leave-active {
+  opacity: 0.01;
+  transition: opacity 100ms ease-in;
+}
+/* End edit-widget-chip animation */ 
+
 /* Links */
 a.active {
   font-weight: bold;

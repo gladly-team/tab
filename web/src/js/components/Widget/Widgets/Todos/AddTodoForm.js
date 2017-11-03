@@ -1,27 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import WidgetPieceWrapper from '../../WidgetPieceWrapper'
+import EditWidgetChip from '../../EditWidgetChip'
 import TextField from 'material-ui/TextField'
-import Chip from 'material-ui/Chip'
-import DeleteIcon from 'material-ui/svg-icons/navigation/cancel'
-import CheckCircleIcon from 'material-ui/svg-icons/action/check-circle'
-import AddCircleIcon from 'material-ui/svg-icons/content/add-circle'
-import appTheme, {
-  widgetEditButtonInactive,
-  widgetEditButtonHover
-} from 'theme/default'
+import appTheme from 'theme/default'
 
 class AddTodoForm extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      show: false,
-      errorText: 'Use Shift + Enter to create a new line.',
-      animating: false
-    }
-  }
-
   _handleKeyPress (e) {
     if (e.key === 'Enter') {
       if (!e.shiftKey) {
@@ -42,97 +26,7 @@ class AddTodoForm extends React.Component {
     this.closeForm()
   }
 
-  closeForm () {
-    this.setState({
-      animating: true
-    })
-
-    setTimeout(() => {
-      this.setState({
-        animating: false,
-        show: false
-      })
-    }, 200)
-  }
-
-  openForm () {
-    this.setState({
-      animating: true
-    })
-
-    setTimeout(() => {
-      this.setState({
-        animating: false,
-        show: true
-      })
-    }, 200)
-  }
-
   render () {
-    if (this.state.animating) {
-      return (<div style={{height: 113}} />)
-    }
-
-    if (!this.state.show) {
-      const chip = {
-        style: {
-          margin: 5,
-          borderRadius: 3
-        },
-        backgroundColor: appTheme.palette.primary1Color,
-        labelColor: '#FFF',
-        addIcon: {
-          cursor: 'pointer',
-          float: 'right',
-          margin: '4px -4px 0px 4px',
-          hoverColor: appTheme.fontIcon.color,
-          color: 'rgba(255,255,255,.3)',
-          display: 'inline-block'
-        }
-      }
-
-      return (
-        <WidgetPieceWrapper>
-          <Chip
-            key={'todo-header-key'}
-            backgroundColor={chip.backgroundColor}
-            labelColor={chip.labelColor}
-            style={chip.style}>
-              Todos
-              <div style={{display: 'inline', marginLeft: 10}}>
-                <AddCircleIcon
-                  color={widgetEditButtonInactive}
-                  hoverColor={widgetEditButtonHover}
-                  style={chip.addIcon}
-                  onClick={this.openForm.bind(this)}
-                />
-              </div>
-          </Chip>
-        </WidgetPieceWrapper>
-      )
-    }
-
-    const addTodoContainer = {
-      display: 'flex',
-      flexDirection: 'column',
-      padding: 10,
-      backgroundColor: appTheme.palette.primary1Color,
-      borderRadius: 3,
-      margin: 5
-    }
-
-    const actionContainer = {
-      display: 'flex',
-      justifyContent: 'flex-end'
-    }
-
-    const formContainer = {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      paddingBottom: 10
-    }
-
     const textField = {
       underlineStyle: {
         borderColor: appTheme.textField.underlineColor
@@ -153,34 +47,20 @@ class AddTodoForm extends React.Component {
       }
     }
 
-    const cancelIcon = {
-      cursor: 'pointer',
-      hoverColor: appTheme.fontIcon.color,
-      color: 'rgba(255,255,255,.3)',
-      display: 'inline-block'
-    }
-
     return (
-      <WidgetPieceWrapper>
-        <div
-          key={'add-todo-form-key'}
-          style={addTodoContainer}>
-          <div style={actionContainer}>
-            <DeleteIcon
-              color={widgetEditButtonInactive}
-              hoverColor={widgetEditButtonHover}
-              style={cancelIcon}
-              onClick={this.closeForm.bind(this)}
-            />
-            <CheckCircleIcon
-              color={widgetEditButtonInactive}
-              hoverColor={widgetEditButtonHover}
-              style={cancelIcon}
-              onClick={this.create.bind(this)}
-            />
-          </div>
-
-          <div style={formContainer}>
+      <EditWidgetChip
+        widgetName={'Todos'}
+        onWidgetAddIconClick={this.create.bind(this)}
+        widgetAddFormElem={
+          <span
+            key={'widget-add-form-elem'}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              paddingBottom: 10
+            }}
+          >
             <TextField
               ref={(input) => { this.btext = input }}
               multiLine
@@ -191,10 +71,12 @@ class AddTodoForm extends React.Component {
               underlineStyle={textField.underlineStyle}
               underlineFocusStyle={textField.underlineFocusStyle}
               errorStyle={textField.errorStyle}
-              errorText={this.state.errorText} />
-          </div>
-        </div>
-      </WidgetPieceWrapper>)
+              errorText={'Use Shift + Enter to create a new line.'}
+            />
+          </span>
+        }
+       />
+    )
   }
 }
 
