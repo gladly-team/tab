@@ -4,43 +4,6 @@ body {
   font-family: sans-serif;
 }
 
-/* Begin zoom-opacity animation */ 
-.zoom-opacity-enter {
-  opacity: 0.01;
-}
-
-.zoom-opacity-enter.zoom-opacity-enter-active {
-  opacity: 1;
-  transition: opacity 300ms ease-in;
-}
-
-.zoom-opacity-leave {
-  opacity: 1;
-}
-
-.zoom-opacity-leave.zoom-opacity-leave-active {
-  opacity: 0.01;
-  transition: opacity 300ms ease-in;
-}
-
-.zoom-opacity-appear {
-  opacity: 0.01;
-  transform: scale(0.1);
-}
-
-.zoom-opacity-appear.zoom-opacity-appear-active {
-  opacity: 1;
-  transition: all .3s ease-in;
-  -webkit-transition: all .3s ease-in;
-  -ms-transition: all .3s ease-in;
-  -moz-transition: all .3s ease-in;
-  transform: scale(1);
-  -webkit-transform: scale(1); 
-  -ms-transform: scale(1); 
-  -moz-transform: scale(1);
-}
-/* End zoom-opacity animation */ 
-
 /* Begin fade animation */ 
 .fade-enter {
   opacity: 0.01;
@@ -106,9 +69,14 @@ body {
 /* End fade-dashboard animation */ 
 
 /* Begin active-widget animation */ 
+.active-widget-enter {
+  opacity: 0.01;
+  /* Delay some time before entering to give the exiting component time to leave */
+  transition: opacity 200ms ease-in 20ms;
+}
+
 .active-widget-enter.active-widget-enter-active {
   opacity: 1;
-  transition: opacity 300ms ease-in;
 }
 
 .active-widget-leave {
@@ -117,7 +85,7 @@ body {
 
 .active-widget-leave.active-widget-leave-active {
   opacity: 0.01;
-  transition: opacity 300ms ease-in;
+  transition: opacity 200ms ease-in;
 }
 
 .active-widget-appear {
@@ -126,10 +94,10 @@ body {
 
 .active-widget-appear.active-widget-appear-active {
   opacity: 1;
-  transition: opacity 0.3s ease-in;
-  -webkit-transition: opacity 0.3s ease-in;
-  -ms-transition: opacity 0.3s ease-in;
-  -moz-transition: opacity 0.3s ease-in;
+  transition: opacity 0.200s ease-in;
+  -webkit-transition: opacity 0.200s ease-in;
+  -ms-transition: opacity 0.200s ease-in;
+  -moz-transition: opacity 0.200s ease-in;
 }
 /* End active-widget animation */ 
 

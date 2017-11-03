@@ -3,13 +3,14 @@ import { CSSTransitionGroup } from 'react-transition-group'
 
 class ActiveWidgetAnimation extends React.Component {
   render () {
+    const animationDurationMs = 220
     return (
       <CSSTransitionGroup
-        transitionName='zoom-opacity'
+        transitionName='active-widget'
         transitionAppear={false}
-        transitionAppearTimeout={300}
-        transitionEnterTimeout={300}
-        transitionLeaveTimeout={300}>
+        transitionAppearTimeout={animationDurationMs}
+        transitionEnterTimeout={animationDurationMs}
+        transitionLeaveTimeout={animationDurationMs}>
         {this.props.children}
       </CSSTransitionGroup>
     )
