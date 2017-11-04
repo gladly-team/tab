@@ -90,7 +90,7 @@ class EditWidgetChip extends React.Component {
       position: 'absolute',
       zIndex: 5,
       top: 4,
-      right: 4
+      right: 8
     }
     const expandedIconStyle = {
       cursor: 'pointer',
@@ -148,7 +148,7 @@ class EditWidgetChip extends React.Component {
 
     // Sizing
     const titleHeight = 32
-    const iconWidth = 30
+    const iconWidth = 36
     const expandedWidth = 290
     const width = (
       this.props.open
