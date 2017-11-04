@@ -131,7 +131,6 @@ class NotesWidget extends React.Component {
       containerStyle={sharedSpaceStyle}>
       <div style={mainContainer}>
         <AddNoteForm
-          addForm={false}
           addNote={this.addNewNote.bind(this)} />
         <List
           containerStyle={notesContainer}>
