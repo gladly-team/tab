@@ -17,27 +17,14 @@ class EditWidgetChip extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      expanded: false,
       dimensions: {}
     }
-  }
-
-  closeForm () {
-    this.setState({
-      expanded: false
-    })
-  }
-
-  openForm () {
-    this.setState({
-      expanded: true
-    })
   }
 
   render () {
     const animationDurationMs = 140
 
-    const content = this.state.expanded
+    const content = this.props.open
       ? (
         <span
           key={'widget-edit-chip-add-form'}
@@ -50,7 +37,7 @@ class EditWidgetChip extends React.Component {
             boxSizing: 'border-box'
           }}
         >
-          {this.props.widgetAddFormElem}
+          {this.props.widgetAddItemForm}
         </span>
       )
       : (
@@ -111,7 +98,7 @@ class EditWidgetChip extends React.Component {
       color: 'rgba(255,255,255,.3)',
       display: 'inline-block'
     }
-    const icons = this.state.expanded
+    const icons = this.props.open
       ? (
         <div
           key={'icons-expanded'}
@@ -121,15 +108,16 @@ class EditWidgetChip extends React.Component {
             color={widgetEditButtonInactive}
             hoverColor={widgetEditButtonHover}
             style={expandedIconStyle}
-            onClick={this.closeForm.bind(this)}
+            onClick={() => {
+              this.props.onCancelAddItemClick()
+            }}
           />
           <CheckCircleIcon
             color={widgetEditButtonInactive}
             hoverColor={widgetEditButtonHover}
             style={expandedIconStyle}
             onClick={() => {
-              this.closeForm()
-              this.props.onWidgetAddIconClick()
+              this.props.onItemCreatedClick()
             }}
           />
         </div>
@@ -151,7 +139,9 @@ class EditWidgetChip extends React.Component {
               color: 'rgba(255,255,255,.3)',
               display: 'inline-block'
             }}
-            onClick={this.openForm.bind(this)}
+            onClick={() => {
+              this.props.onAddItemClick()
+            }}
           />
         </div>
       )
@@ -161,7 +151,7 @@ class EditWidgetChip extends React.Component {
     const iconWidth = 30
     const expandedWidth = 290
     const width = (
-      this.state.expanded
+      this.props.open
       ? expandedWidth
       : (this.state.dimensions.width
         ? this.state.dimensions.width + iconWidth
@@ -216,13 +206,25 @@ class EditWidgetChip extends React.Component {
 }
 
 EditWidgetChip.propTypes = {
+  open: PropTypes.bool,
   widgetName: PropTypes.string.isRequired,
-  onWidgetAddIconClick: PropTypes.func,
-  widgetAddFormElem: PropTypes.element
+  // The form to fill when adding a new widget item.
+  widgetAddItemForm: PropTypes.element,
+  // Called when clicking to add a new item.
+  onAddItemClick: PropTypes.func,
+  // Called when exiting the form without creating a
+  // new iem.
+  onCancelAddItemClick: PropTypes.func,
+  // Called when confirming creation from the
+  // `widgetAddItemForm` view.
+  onItemCreatedClick: PropTypes.func
 }
 
 EditWidgetChip.defaultProps = {
-  onWidgetAddIconClick: () => {}
+  open: false,
+  onAddItemClick: () => {},
+  onCancelAddItemClick: () => {},
+  onItemCreatedClick: () => {}
 }
 
 export default EditWidgetChip

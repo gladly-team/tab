@@ -6,6 +6,13 @@ import TextField from 'material-ui/TextField'
 import appTheme from 'theme/default'
 
 class AddTodoForm extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      open: false
+    }
+  }
+
   _handleKeyPress (e) {
     if (e.key === 'Enter') {
       if (!e.shiftKey) {
@@ -16,13 +23,24 @@ class AddTodoForm extends React.Component {
     }
   }
 
-  create () {
-    const text = this.btext.input.refs.input.value
+  openForm () {
+    this.setState({
+      open: true
+    })
+  }
 
+  closeForm () {
+    this.setState({
+      open: false
+    })
+  }
+
+  create () {
+    const text = this.todoTextField.input.refs.input.value
     if (!text) { return }
 
     this.props.addTodo(text)
-    this.btext.input.value = ''
+    this.todoTextField.input.value = ''
     this.closeForm()
   }
 
@@ -49,9 +67,12 @@ class AddTodoForm extends React.Component {
 
     return (
       <EditWidgetChip
+        open={this.state.open}
         widgetName={'Todos'}
-        onWidgetAddIconClick={this.create.bind(this)}
-        widgetAddFormElem={
+        onAddItemClick={this.openForm.bind(this)}
+        onCancelAddItemClick={this.closeForm.bind(this)}
+        onItemCreatedClick={this.create.bind(this)}
+        widgetAddItemForm={
           <span
             key={'widget-add-form-elem'}
             style={{
@@ -62,7 +83,7 @@ class AddTodoForm extends React.Component {
             }}
           >
             <TextField
-              ref={(input) => { this.btext = input }}
+              ref={(input) => { this.todoTextField = input }}
               multiLine
               onKeyPress={this._handleKeyPress.bind(this)}
               hintText='What do you need to do?'
