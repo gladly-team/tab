@@ -2,23 +2,31 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import WidgetPieceWrapper from '../../WidgetPieceWrapper'
-import Chip from 'material-ui/Chip'
+import Paper from 'material-ui/Paper'
+import DeleteIcon from 'material-ui/svg-icons/navigation/cancel'
+import {
+  widgetEditButtonInactive,
+  widgetEditButtonHover
+} from 'theme/default'
 
 class BookmarkChip extends React.Component {
   constructor (props) {
     super(props)
 
     this.state = {
-      hoveringDelete: false
+      isHovering: false,
+      showDeleteButton: false
     }
+    this.hoverTimer = 0
+  }
+
+  deleteBookmark (e) {
+    e.stopPropagation()
+    e.preventDefault()
+    this.props.deleteBookmark(this.props.index)
   }
 
   openLink (link) {
-    if (this.props.editMode) {
-      this.props.removeChip(this.props.index)
-      return
-    }
-
     // The page might be iframed, so opening in _top is critical.
     window.open(link, '_top')
     this.setState({
@@ -26,72 +34,90 @@ class BookmarkChip extends React.Component {
     })
   }
 
-  onDeleteBtnMouseMove (enter) {
+  onMouseHoverChange (isHovering) {
     this.setState({
-      hoveringDelete: enter
+      isHovering: isHovering
     })
+    if (this.hoverTimer) {
+      clearTimeout(this.hoverTimer)
+    }
+    if (isHovering) {
+      this.hoverTimer = setTimeout(() => {
+        this.setState({
+          showDeleteButton: true
+        })
+      }, 700)
+    } else {
+      this.setState({
+        showDeleteButton: false
+      })
+    }
   }
 
   render () {
     const {bookmark} = this.props
-
-    var deleteIconColor = (this.state.hoveringDelete)
-                    ? '#F44336' : 'rgba(244,67,54,.5)'
-
-    var chipBackgroundColor = 'rgba(0,0,0,.3)'
-    if (this.props.editMode) {
-      chipBackgroundColor = deleteIconColor
-    }
-
-    const chip = {
-      style: {
-        margin: 5,
-        minWidth: 100,
-        height: 50,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 3
-      },
-      labelStyle: {
-        width: '100%',
-        textAlign: 'center'
-      },
-      backgroundColor: chipBackgroundColor,
-      labelColor: '#FFF'
-    }
-
-    const bookmarkName = bookmark.name.length >= 25
-      ? bookmark.name.substring(0, 20) + '...' : bookmark.name
-
-    const bookmarkChip = (
-      <Chip
-        key={'bookmark_' + this.props.index}
-        backgroundColor={chip.backgroundColor}
-        labelColor={chip.labelColor}
-        labelStyle={chip.labelStyle}
-        style={chip.style}
-        onClick={this.openLink.bind(this, bookmark.link)}
-        onMouseEnter={this.onDeleteBtnMouseMove.bind(this, true)}
-        onMouseLeave={this.onDeleteBtnMouseMove.bind(this, false)}>
-        {bookmarkName}
-      </Chip>)
-
     return (
       <WidgetPieceWrapper>
-        {bookmarkChip}
-      </WidgetPieceWrapper>)
+        <Paper
+          zDepth={0}
+          style={{
+            position: 'relative',
+            display: 'flex',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            alignItems: 'center',
+            margin: 5,
+            minWidth: 90,
+            maxWidth: 150,
+            height: 50,
+            fontSize: 14,
+            padding: 10,
+            backgroundColor: this.state.isHovering
+              ? 'rgba(0, 0, 0, 0.33)'
+              : 'rgba(0, 0, 0, 0.30)',
+            color: '#FFF',
+            userSelect: 'none'
+          }}
+          onClick={this.openLink.bind(this, bookmark.link)}
+          onMouseEnter={this.onMouseHoverChange.bind(this, true)}
+          onMouseLeave={this.onMouseHoverChange.bind(this, false)}
+        >
+          <DeleteIcon
+            color={widgetEditButtonInactive}
+            hoverColor={widgetEditButtonHover}
+            style={{
+              position: 'absolute',
+              zIndex: 5,
+              top: 2,
+              right: 2,
+              opacity: this.state.showDeleteButton ? 1 : 0,
+              transition: this.state.showDeleteButton
+                ? 'opacity 0.2s ease-in 0.5s'
+                : 'opacity 0.1s ease-in',
+              pointerEvents: this.state.showDeleteButton ? 'all' : 'none'
+            }}
+            onClick={this.deleteBookmark.bind(this)}
+          />
+          <span style={{
+            color: '#FFF',
+            pointerEvents: 'none',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis'
+          }}
+          >
+            {bookmark.name}
+          </span>
+        </Paper>
+      </WidgetPieceWrapper>
+    )
   }
 }
 
 BookmarkChip.propTypes = {
   bookmark: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
-  removeChip: PropTypes.func.isRequired,
-  editMode: PropTypes.bool
-}
-
-BookmarkChip.defaultProps = {
-  editMode: false
+  deleteBookmark: PropTypes.func.isRequired
 }
 
 export default BookmarkChip

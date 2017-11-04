@@ -5,16 +5,12 @@ import WidgetSharedSpace from 'general/WidgetSharedSpace'
 import EmptyWidgetMsg from '../../EmptyWidgetMsg'
 import BookmarkChip from './BookmarkChip'
 import AddBookmarkForm from './AddBookmarkForm'
-
 import UpdateWidgetDataMutation from 'mutations/UpdateWidgetDataMutation'
-
-import Snackbar from 'material-ui/Snackbar'
 
 class BookmarksWidget extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      editMode: false,
       bookmarks: []
     }
   }
@@ -77,12 +73,6 @@ class BookmarksWidget extends React.Component {
     })
   }
 
-  onToggleEditMode () {
-    this.setState({
-      editMode: !this.state.editMode
-    })
-  }
-
   render () {
     const bookmarks = this.state.bookmarks || []
 
@@ -121,8 +111,7 @@ class BookmarksWidget extends React.Component {
       containerStyle={sharedSpaceStyle}>
       <div style={bookmarksContainer}>
         <AddBookmarkForm
-          addBookmark={this.addBookmark.bind(this)}
-          onEditModeClicked={this.onToggleEditMode.bind(this)} />
+          addBookmark={this.addBookmark.bind(this)} />
         <div style={container}>
           <div style={wrapper}>
             {nodataMsg}
@@ -131,18 +120,14 @@ class BookmarksWidget extends React.Component {
                 return (<BookmarkChip
                   key={index}
                   index={index}
-                  editMode={this.state.editMode}
                   bookmark={bookmark}
-                  removeChip={this.removeBookmark.bind(this, index)} />
+                  deleteBookmark={this.removeBookmark.bind(this, index)} />
                 )
               })
             }
           </div>
         </div>
       </div>
-      <Snackbar
-        open={this.state.editMode}
-        message='Click on a bookmark while in edit mode to delete it.' />
     </WidgetSharedSpace>)
   }
 }
