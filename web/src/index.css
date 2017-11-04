@@ -103,12 +103,12 @@ body {
 
 /* Begin edit-widget-chip animation */ 
 .edit-widget-chip-enter {
-  opacity: 0.1;
+  opacity: 0.01;
 }
 
 .edit-widget-chip-enter.edit-widget-chip-enter-active {
   opacity: 1;
-  transition: opacity 300ms ease-in;
+  transition: opacity 240ms ease-in 60ms;
 }
 
 .edit-widget-chip-leave {
