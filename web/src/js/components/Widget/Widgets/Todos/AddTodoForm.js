@@ -3,7 +3,9 @@ import PropTypes from 'prop-types'
 
 import EditWidgetChip from '../../EditWidgetChip'
 import TextField from 'material-ui/TextField'
-import appTheme from 'theme/default'
+import appTheme, {
+  widgetEditButtonHover
+} from 'theme/default'
 
 class AddTodoForm extends React.Component {
   constructor (props) {
@@ -26,6 +28,8 @@ class AddTodoForm extends React.Component {
   openForm () {
     this.setState({
       open: true
+    }, () => {
+      this.focusInput()
     })
   }
 
@@ -33,6 +37,10 @@ class AddTodoForm extends React.Component {
     this.setState({
       open: false
     })
+  }
+
+  focusInput () {
+    this.todoTextField.focus()
   }
 
   create () {
@@ -50,7 +58,7 @@ class AddTodoForm extends React.Component {
         borderColor: appTheme.textField.underlineColor
       },
       underlineFocusStyle: {
-        borderColor: appTheme.textField.underlineFocusStyle
+        borderColor: widgetEditButtonHover
       },
       hintStyle: {
         color: appTheme.textField.underlineColor,
