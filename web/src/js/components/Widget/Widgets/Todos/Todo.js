@@ -9,6 +9,7 @@ import SvgIcon from 'material-ui/SvgIcon'
 import appTheme, {
   dashboardIconActiveColor,
   dashboardIconInactiveColor,
+  dashboardTransparentBackground,
   widgetEditButtonInactive,
   widgetEditButtonHover
 } from 'theme/default'
@@ -64,7 +65,7 @@ class Todo extends React.Component {
         display: 'flex',
         alignItems: 'center',
         overflowWrap: 'break-word',
-        backgroundColor: 'rgba(0,0,0,.3)',
+        backgroundColor: dashboardTransparentBackground,
         borderRadius: 3,
         margin: '5px 5px',
         paddingLeft: 5

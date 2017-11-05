@@ -7,6 +7,7 @@ import DeleteIcon from 'material-ui/svg-icons/navigation/cancel'
 import Chip from 'material-ui/Chip'
 import TextField from 'material-ui/TextField'
 import appTheme, {
+  dashboardTransparentBackground,
   widgetEditButtonInactive,
   widgetEditButtonHover
 } from 'theme/default'
@@ -83,7 +84,7 @@ class Note extends React.Component {
 
     const defaultPaper = {
       margin: 5,
-      backgroundColor: 'rgba(0,0,0,.3)',
+      backgroundColor: dashboardTransparentBackground,
       borderRadius: 3,
       borderLeftStyle: 'solid',
       borderLeftColor: note.color,

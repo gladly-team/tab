@@ -5,6 +5,8 @@ import WidgetPieceWrapper from '../../WidgetPieceWrapper'
 import Paper from 'material-ui/Paper'
 import DeleteIcon from 'material-ui/svg-icons/navigation/cancel'
 import {
+  dashboardTransparentBackground,
+  dashboardTransparentBackgroundHover,
   widgetEditButtonInactive,
   widgetEditButtonHover
 } from 'theme/default'
@@ -73,8 +75,8 @@ class BookmarkChip extends React.Component {
             fontSize: 14,
             padding: 10,
             backgroundColor: this.state.isHovering
-              ? 'rgba(0, 0, 0, 0.33)'
-              : 'rgba(0, 0, 0, 0.30)',
+              ? dashboardTransparentBackgroundHover
+              : dashboardTransparentBackground,
             color: '#FFF',
             userSelect: 'none'
           }}

@@ -1,7 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Popover from 'material-ui/Popover/Popover'
-import appTheme from 'theme/default'
+import appTheme, {
+  dashboardTransparentBackground
+} from 'theme/default'
 
 class DashboardPopover extends React.Component {
   handleRequestClose () {
@@ -10,7 +12,7 @@ class DashboardPopover extends React.Component {
 
   render () {
     const style = Object.assign({}, {
-      backgroundColor: 'rgba(0, 0, 0, 0.3)',
+      backgroundColor: dashboardTransparentBackground,
       width: 220,
       padding: 0,
       paddingTop: 0,

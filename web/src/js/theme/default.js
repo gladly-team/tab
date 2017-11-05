@@ -73,6 +73,9 @@ export const dashboardIconInactiveColor = 'rgba(255, 255, 255, 0.8)'
 export const dashboardIconActiveColor = white
 export const appBarLightColor = '#f2f2f2'
 
+export const dashboardTransparentBackground = 'rgba(0, 0, 0, 0.36)'
+export const dashboardTransparentBackgroundHover = 'rgba(0, 0, 0, 0.39)'
+
 // Widgets
 export const widgetEditButtonInactive = 'rgba(255,255,255,.3)'
 export const widgetEditButtonHover = white
