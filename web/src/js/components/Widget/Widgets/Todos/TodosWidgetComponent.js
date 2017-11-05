@@ -131,7 +131,7 @@ class TodosWidget extends React.Component {
     }
 
     const todosContainer = {
-      overflowY: 'scroll',
+      overflowY: 'auto',
       overflowX: 'hidden',
       height: '60vh'
     }

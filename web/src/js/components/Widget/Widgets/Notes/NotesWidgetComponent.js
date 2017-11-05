@@ -109,7 +109,7 @@ class NotesWidget extends React.Component {
     }
 
     const notesContainer = {
-      overflowY: 'scroll',
+      overflowY: 'auto',
       overflowX: 'hidden',
       height: '60vh'
     }

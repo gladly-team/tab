@@ -89,7 +89,7 @@ class BookmarksWidget extends React.Component {
     }
 
     const container = {
-      overflowY: 'scroll',
+      overflowY: 'auto',
       overflowX: 'hidden',
       maxHeight: '60vh'
     }
