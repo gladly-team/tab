@@ -11,7 +11,7 @@ class WidgetSharedSpace extends React.Component {
       width: 300,
       height: '80vh',
       overflowX: 'hidden',
-      overflowY: 'scroll'
+      overflowY: 'auto'
     }
 
     return (
