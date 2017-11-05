@@ -161,8 +161,9 @@ class UserBackgroundImage extends React.Component {
       bottom: 0,
       right: 0,
       left: 0,
-      width: '100vw',
-      height: '100vh',
+      width: '100%',
+      height: '100%',
+      boxSizing: 'border-box',
       zIndex: 'auto'
     }
 
@@ -240,8 +241,9 @@ class UserBackgroundImage extends React.Component {
       bottom: 0,
       right: 0,
       left: 0,
-      width: '100vw',
-      height: '100vh',
+      width: '100%',
+      height: '100%',
+      boxSizing: 'border-box',
       zIndex: 'auto',
       // Needs to match shading in extension new tab page.
       backgroundColor: `rgba(0, 0, 0, ${tintOpacity})`

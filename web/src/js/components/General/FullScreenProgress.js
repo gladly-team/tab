@@ -25,6 +25,7 @@ FullScreenProgress.defaultProps = {
   containerStyle: {
     width: '100vw',
     height: '100vh',
+    boxSizing: 'border-box',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center'

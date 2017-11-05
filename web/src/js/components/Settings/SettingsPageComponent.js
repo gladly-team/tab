@@ -40,7 +40,8 @@ class SettingsPage extends React.Component {
     }
     const childContainerStyle = {
       backgroundColor: '#F2F2F2',
-      width: '100vw',
+      width: '100%',
+      boxSizing: 'border-box',
       display: 'flex',
       justifyContent: 'center'
     }
