@@ -160,9 +160,10 @@ class UserMenu extends React.Component {
     }
 
     // Menu style
+    const menuWidth = 200
     const menuPopoverStyle = {
       padding: 0,
-      width: 200
+      width: menuWidth
     }
     const menuIconButtonStyle = {
       padding: 0,
@@ -179,6 +180,8 @@ class UserMenu extends React.Component {
       fontSize: 22
     }
     const menuStyle = {
+      width: menuWidth,
+      overflowX: 'hidden',
       backgroundColor: 'transparent',
       fontFamily: appTheme.fontFamily
     }
@@ -309,6 +312,8 @@ class UserMenu extends React.Component {
           onRequestClose={this.handleMenuPopoverClose.bind(this)}
         >
           <Menu
+            width={menuWidth}
+            autoWidth={false}
             style={menuStyle}
             menuItemStyle={menuItemStyle}
           >
