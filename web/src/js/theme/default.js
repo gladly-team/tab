@@ -32,7 +32,7 @@ const disabledColor = fade(darkBlack, 0.3)
 // https://github.com/callemall/material-ui/blob/master/src/styles/getMuiTheme.js
 export default {
   spacing: spacing,
-  fontFamily: '"Helvetica Neue", "Calibri Light", sans-serif',
+  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
   palette: {
     primary1Color: primaryColor,
     primary2Color: primaryColorDark,
