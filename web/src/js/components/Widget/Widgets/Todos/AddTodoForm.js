@@ -11,7 +11,8 @@ class AddTodoForm extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      open: false
+      open: false,
+      textRequiredError: false
     }
   }
 
@@ -43,7 +44,16 @@ class AddTodoForm extends React.Component {
     this.todoTextField.focus()
   }
 
+  validateTodoText () {
+    const text = this.todoTextField.input.refs.input.value
+    this.setState({
+      textRequiredError: !text
+    })
+  }
+
   create () {
+    this.validateTodoText()
+
     const text = this.todoTextField.input.refs.input.value
     if (!text) { return }
 
@@ -67,9 +77,6 @@ class AddTodoForm extends React.Component {
       inputStyle: {
         color: '#FFF',
         fontSize: 14
-      },
-      errorStyle: {
-        color: appTheme.textField.underlineColor
       }
     }
 
@@ -87,7 +94,7 @@ class AddTodoForm extends React.Component {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              paddingBottom: 10
+              paddingBottom: 20
             }}
           >
             <TextField
@@ -99,7 +106,8 @@ class AddTodoForm extends React.Component {
               hintStyle={textField.hintStyle}
               underlineStyle={textField.underlineStyle}
               underlineFocusStyle={textField.underlineFocusStyle}
-              errorStyle={textField.errorStyle}
+              onChange={this.validateTodoText.bind(this)}
+              errorText={this.state.textRequiredError ? 'Enter a todo' : null}
             />
           </span>
         }

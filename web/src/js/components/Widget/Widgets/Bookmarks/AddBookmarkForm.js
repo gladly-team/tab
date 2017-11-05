@@ -13,7 +13,9 @@ class AddBookmarkForm extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      open: false
+      open: false,
+      nameRequiredError: false,
+      urlRequiredError: false
     }
   }
 
@@ -45,13 +47,27 @@ class AddBookmarkForm extends React.Component {
     this.bookmarkNameTextField.focus()
   }
 
-  checkUrl (url) {
-    const isUrl = (s) => {
+  onNameValChange () {
+    const name = this.bookmarkNameTextField.input.value
+    this.setState({
+      nameRequiredError: !name
+    })
+  }
+
+  onURLValChange () {
+    const url = this.bLink.input.value
+    this.setState({
+      urlRequiredError: !url
+    })
+  }
+
+  addProtocolToURLIfNeeded (url) {
+    const hasProtocol = (s) => {
       var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
       return regexp.test(s)
     }
 
-    if (!isUrl(url)) {
+    if (!hasProtocol(url)) {
       return 'http://' + url
     }
     return url
@@ -59,10 +75,21 @@ class AddBookmarkForm extends React.Component {
 
   create () {
     const name = this.bookmarkNameTextField.input.value
-    const link = this.checkUrl(this.bLink.input.value)
+    const url = this.bLink.input.value
 
-    if (!name || !link) { return }
+    if (!name) {
+      this.setState({
+        nameRequiredError: true
+      })
+    }
+    if (!url) {
+      this.setState({
+        urlRequiredError: true
+      })
+    }
+    if (!name || !url) { return }
 
+    const link = this.addProtocolToURLIfNeeded(this.bLink.input.value)
     this.props.addBookmark(name, link)
     this.bookmarkNameTextField.input.value = ''
     this.bLink.input.value = ''
@@ -85,9 +112,6 @@ class AddBookmarkForm extends React.Component {
       inputStyle: {
         color: '#FFF',
         fontSize: 14
-      },
-      errorStyle: {
-        color: appTheme.textField.underlineColor
       }
     }
 
@@ -105,7 +129,7 @@ class AddBookmarkForm extends React.Component {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              paddingBottom: 10
+              paddingBottom: 20
             }}
           >
             <TextField
@@ -117,16 +141,20 @@ class AddBookmarkForm extends React.Component {
               hintStyle={textField.hintStyle}
               underlineStyle={textField.underlineStyle}
               underlineFocusStyle={textField.underlineFocusStyle}
+              onChange={this.onNameValChange.bind(this)}
+              errorText={this.state.nameRequiredError ? 'Enter a name' : null}
             />
             <TextField
               ref={(input) => { this.bLink = input }}
               onKeyPress={this._handleKeyPress.bind(this)}
-              hintText='Ex: https://www.google.com'
+              hintText='Ex: google.com'
               style={textField.style}
               inputStyle={textField.inputStyle}
               hintStyle={textField.hintStyle}
               underlineStyle={textField.underlineStyle}
               underlineFocusStyle={textField.underlineFocusStyle}
+              onChange={this.onURLValChange.bind(this)}
+              errorText={this.state.urlRequiredError ? 'Enter a URL' : null}
             />
           </span>
         }
