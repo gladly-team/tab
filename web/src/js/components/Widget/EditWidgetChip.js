@@ -169,6 +169,7 @@ class EditWidgetChip extends React.Component {
           style={{
             width: width,
             height: height,
+            cursor: 'default',
             position: 'relative',
             overflow: 'hidden',
             justifyContent: 'center',
