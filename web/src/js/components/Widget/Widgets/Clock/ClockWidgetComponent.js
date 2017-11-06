@@ -58,7 +58,7 @@ class ClockWidget extends React.Component {
 
   render () {
     const clockContainer = {
-      marginBottom: 130,
+      marginBottom: 110,
       pointerEvents: 'none',
       userSelect: 'none'
     }
