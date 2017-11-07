@@ -2,8 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import WidgetSettings from './WidgetSettingsContainer'
 import SettingsChildWrapper from '../SettingsChildWrapperComponent'
-
-import {List} from 'material-ui/List'
 import FullScreenProgress from 'general/FullScreenProgress'
 
 class WidgetsSettings extends React.Component {
@@ -44,7 +42,7 @@ class WidgetsSettings extends React.Component {
     const self = this
     return (
       <SettingsChildWrapper>
-        <List style={{ paddingTop: 0 }} >
+        <div style={{ paddingTop: 0 }} >
           {app.widgets.edges.map((edge, index) => {
             return (<WidgetSettings
               key={index}
@@ -53,7 +51,7 @@ class WidgetsSettings extends React.Component {
               widget={self.state.userWidgets[edge.node.name]}
               showError={showError} />)
           })}
-        </List>
+        </div>
       </SettingsChildWrapper>
     )
   }

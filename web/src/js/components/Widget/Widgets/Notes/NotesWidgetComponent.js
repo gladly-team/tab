@@ -4,8 +4,7 @@ import moment from 'moment'
 
 import WidgetSharedSpace from 'general/WidgetSharedSpace'
 import EmptyWidgetMsg from '../../EmptyWidgetMsg'
-import {List} from 'general/List'
-
+import WidgetScrollSection from '../../WidgetScrollSection'
 import Note from './Note'
 import AddNoteForm from './AddNoteForm'
 import UpdateWidgetDataMutation from 'mutations/UpdateWidgetDataMutation'
@@ -108,12 +107,6 @@ class NotesWidget extends React.Component {
       overflow: 'visible'
     }
 
-    const notesContainer = {
-      overflowY: 'auto',
-      overflowX: 'hidden',
-      height: '60vh'
-    }
-
     const mainContainer = {
       display: 'flex',
       flexDirection: 'column',
@@ -132,8 +125,7 @@ class NotesWidget extends React.Component {
       <div style={mainContainer}>
         <AddNoteForm
           addNote={this.addNewNote.bind(this)} />
-        <List
-          containerStyle={notesContainer}>
+        <WidgetScrollSection>
           {nodataMsg}
           {this.state.notes.map((note, index) => {
             return (
@@ -150,7 +142,7 @@ class NotesWidget extends React.Component {
                 note={note} />
             )
           })}
-        </List>
+        </WidgetScrollSection>
       </div>
     </WidgetSharedSpace>)
   }

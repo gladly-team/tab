@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import WidgetSharedSpace from 'general/WidgetSharedSpace'
+import WidgetScrollSection from '../../WidgetScrollSection'
 import EmptyWidgetMsg from '../../EmptyWidgetMsg'
 import BookmarkChip from './BookmarkChip'
 import AddBookmarkForm from './AddBookmarkForm'
@@ -88,12 +89,6 @@ class BookmarksWidget extends React.Component {
       justifyContent: 'flex-start'
     }
 
-    const container = {
-      overflowY: 'auto',
-      overflowX: 'hidden',
-      maxHeight: '60vh'
-    }
-
     const bookmarksContainer = {
       display: 'flex',
       flexDirection: 'column',
@@ -112,7 +107,7 @@ class BookmarksWidget extends React.Component {
       <div style={bookmarksContainer}>
         <AddBookmarkForm
           addBookmark={this.addBookmark.bind(this)} />
-        <div style={container}>
+        <WidgetScrollSection>
           <div style={wrapper}>
             {nodataMsg}
             {
@@ -126,7 +121,7 @@ class BookmarksWidget extends React.Component {
               })
             }
           </div>
-        </div>
+        </WidgetScrollSection>
       </div>
     </WidgetSharedSpace>)
   }

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import FlatButton from 'material-ui/FlatButton'
 import WidgetSharedSpace from 'general/WidgetSharedSpace'
 import EmptyWidgetMsg from '../../EmptyWidgetMsg'
-import {List} from 'general/List'
+import WidgetScrollSection from '../../WidgetScrollSection'
 import UpdateWidgetDataMutation from 'mutations/UpdateWidgetDataMutation'
 import Todo from './Todo'
 import AddTodoForm from './AddTodoForm'
@@ -130,12 +130,6 @@ class TodosWidget extends React.Component {
       overflow: 'visible'
     }
 
-    const todosContainer = {
-      overflowY: 'auto',
-      overflowX: 'hidden',
-      height: '60vh'
-    }
-
     const mainContainer = {
       display: 'flex',
       flexDirection: 'column',
@@ -154,8 +148,7 @@ class TodosWidget extends React.Component {
       <div style={mainContainer}>
         <AddTodoForm
           addTodo={this.addNewTodo.bind(this)} />
-        <List
-          containerStyle={todosContainer}>
+        <WidgetScrollSection>
           {nodataMsg}
           {this.state.todos.map((todo, index) => {
             return (
@@ -217,7 +210,7 @@ class TodosWidget extends React.Component {
                 remove={this.removeCompletedTodo.bind(this)} />
             )
           })}
-        </List>
+        </WidgetScrollSection>
       </div>
     </WidgetSharedSpace>)
   }

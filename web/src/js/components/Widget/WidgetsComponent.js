@@ -36,6 +36,7 @@ class Widgets extends React.Component {
 
     const widgetsContainer = {
       position: 'absolute',
+      zIndex: 2,
       top: 5,
       display: 'flex',
       justifyContent: 'flex-start'
