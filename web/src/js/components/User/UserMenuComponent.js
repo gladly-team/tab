@@ -137,6 +137,9 @@ class UserMenu extends React.Component {
       marginTop: 6,
       marginBottom: 0
     }
+    const popoverButtonLabelStyle = {
+      fontSize: 13
+    }
 
     // Popover section on how to earn Hearts.
     const rewardMethodContainerStyle = Object.assign({}, statTextStyle, {
@@ -251,6 +254,7 @@ class UserMenu extends React.Component {
                 <RaisedButton
                   label='Donate Hearts'
                   style={popoverButtonStyle}
+                  labelStyle={popoverButtonLabelStyle}
                   primary
                   onClick={goToDonate}
                 />
@@ -266,6 +270,7 @@ class UserMenu extends React.Component {
                   label='Invite A Friend'
                   labelPosition='before'
                   style={popoverButtonStyle}
+                  labelStyle={popoverButtonLabelStyle}
                   primary
                   onClick={goToInviteFriends}
                />

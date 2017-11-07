@@ -27,6 +27,7 @@ const textColor = '#212121'
 export const lighterTextColor = 'rgba(33, 33, 33, 0.56)'
 export const dividerColor = '#BDBDBD'
 const disabledColor = fade(darkBlack, 0.3)
+export const buttonFontWeight = '600'
 
 // Override-able values here:
 // https://github.com/callemall/material-ui/blob/master/src/styles/getMuiTheme.js
@@ -55,6 +56,14 @@ export default {
   },
   chip: {
     deleteIconColor: textColor
+  },
+  flatButton: {
+    fontSize: 13,
+    fontWeight: buttonFontWeight
+  },
+  raisedButton: {
+    fontSize: 13,
+    fontWeight: buttonFontWeight
   },
   textField: {
     underlineColor: dividerColor,

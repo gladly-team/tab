@@ -9,6 +9,7 @@ import Todo from './Todo'
 import AddTodoForm from './AddTodoForm'
 import Subheader from 'material-ui/Subheader'
 import appTheme, {
+  buttonFontWeight,
   dashboardIconInactiveColor,
   primaryColor
 } from 'theme/default'
@@ -188,6 +189,7 @@ class TodosWidget extends React.Component {
                   style={{
                     fontSize: 12,
                     height: 24,
+                    fontWeight: buttonFontWeight,
                     lineHeight: '24px',
                     color: dashboardIconInactiveColor
                   }}

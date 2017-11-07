@@ -133,6 +133,9 @@ class MoneyRaised extends React.Component {
                 label='Invite Friends'
                 primary
                 onClick={goToInviteFriends}
+                labelStyle={{
+                  fontSize: 13
+                }}
               />
             </div>
           </div>
