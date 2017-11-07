@@ -5,7 +5,7 @@ import moment from 'moment'
 import WidgetPieceWrapper from '../../WidgetPieceWrapper'
 import DeleteIcon from 'material-ui/svg-icons/navigation/cancel'
 import Chip from 'material-ui/Chip'
-import TextField from 'material-ui/TextField'
+import TextField from 'material-ui-next/TextField'
 import appTheme, {
   dashboardTransparentBackground,
   widgetEditButtonInactive,
@@ -58,10 +58,11 @@ class Note extends React.Component {
     this.noteInput.focus()
   }
 
-  onNoteChanged (event, value) {
+  onNoteChanged (event) {
     if (this.noteChangedTimer) {
       clearTimeout(this.noteChangedTimer)
     }
+    const value = event.target.value
     this.noteChangedTimer = setTimeout(() => {
       if (this.props.onNoteUpdated) {
         this.props.onNoteUpdated(value, this.props.index)
@@ -113,12 +114,6 @@ class Note extends React.Component {
       pointerEvents: this.state.showDeleteButton ? 'all' : 'none',
       display: 'inline-block'
     }
-    const textStyle = {
-      fontSize: 14,
-      color: '#FFF',
-      fontFamily: appTheme.fontFamily
-    }
-
     var noteDate = this.getNoteDate()
 
     return (
@@ -146,17 +141,20 @@ class Note extends React.Component {
           <div style={noteContent}>
             <TextField
               id={'note-content-' + this.props.index}
-              onChange={this.onNoteChanged.bind(this)}
-              hintText='Your note here...'
-              hintStyle={{
-                fontSize: 14,
-                color: appTheme.textField.underlineColor
+              InputProps={{
+                disableUnderline: true,
+                style: {
+                  color: '#FFF',
+                  fontSize: 14,
+                  fontFamily: appTheme.fontFamily
+                }
               }}
-              textareaStyle={textStyle}
-              multiLine
+              multiline
+              fullWidth
+              placeholder={'Your note here...'}
               defaultValue={note.content ? note.content : ''}
-              underlineShow={false}
-              ref={(note) => { this.noteInput = note }}
+              onChange={this.onNoteChanged.bind(this)}
+              inputRef={(note) => { this.noteInput = note }}
             />
           </div>
         </div>
