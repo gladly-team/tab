@@ -57,7 +57,8 @@
     "http-proxy-middleware": "^0.17.4",
     "jest": "^20.0.1",
     "json-loader": "0.5.4",
-    "material-ui": "^0.18.1",
+    "material-ui": "^0.19.4",
+    "material-ui-next": "npm:material-ui@next",
     "moment": "^2.18.1",
     "nodemon": "^1.11.0",
     "normalize.css": "^7.0.0",
@@ -158,5 +159,8 @@
   "author": "Gladly Team",
   "bugs": {
     "url": "https://github.com/gladly-team/tab/issues"
+  },
+  "optionalDependencies": {
+    "material-ui-codemod": "^1.0.0-beta.11"
   }
 }
