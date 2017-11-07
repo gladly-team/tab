@@ -12,6 +12,23 @@ import appTheme, {
   widgetEditButtonHover
 } from 'theme/default'
 
+import { withStyles } from 'material-ui-next/styles'
+
+// Custom styling for placeholder text.
+const placeholder = {
+  color: appTheme.textField.underlineColor
+}
+
+// https://github.com/callemall/material-ui/blob/86dbd4986c6fdc1f32c088abb3b73d25974272e8/src/Input/Input.js#L117-L120
+const styles = theme => ({
+  textFieldInput: {
+    '&::-webkit-input-placeholder': placeholder,
+    '&::-moz-placeholder': placeholder,
+    '&:-ms-input-placeholder': placeholder,
+    '&::-ms-input-placeholder': placeholder
+  }
+})
+
 class Note extends React.Component {
   constructor (props) {
     super(props)
@@ -81,7 +98,7 @@ class Note extends React.Component {
   }
 
   render () {
-    const { note } = this.props
+    const { note, classes } = this.props
 
     const defaultPaper = {
       margin: 5,
@@ -147,6 +164,9 @@ class Note extends React.Component {
                   color: '#FFF',
                   fontSize: 14,
                   fontFamily: appTheme.fontFamily
+                },
+                classes: {
+                  input: classes.textFieldInput
                 }
               }}
               multiline
@@ -167,7 +187,8 @@ Note.propTypes = {
   index: PropTypes.number.isRequired,
   removeStickyNote: PropTypes.func.isRequired,
   note: PropTypes.object.isRequired,
-  onNoteUpdated: PropTypes.func
+  onNoteUpdated: PropTypes.func,
+  classes: PropTypes.object.isRequired
 }
 
-export default Note
+export default withStyles(styles)(Note)
