@@ -12,6 +12,7 @@ class Scrollable extends React.Component {
           margin: 0,
           height: 200
         }, this.props.style)}
+        {...this.props}
       >
         {this.props.children}
       </Scrollbars>
