@@ -159,5 +159,8 @@
   "author": "Gladly Team",
   "bugs": {
     "url": "https://github.com/gladly-team/tab/issues"
+  },
+  "optionalDependencies": {
+    "material-ui-codemod": "^1.0.0-beta.11"
   }
 }
