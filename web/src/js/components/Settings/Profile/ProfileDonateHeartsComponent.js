@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Charity from '../../Donate/CharityContainer'
 import { Paper } from 'material-ui'
-import {GridList} from 'material-ui/GridList'
 import SettingsChildWrapper from '../SettingsChildWrapperComponent'
 import InfoOutlineIcon from 'material-ui/svg-icons/action/info-outline'
 import { lighterTextColor } from 'theme/default'
@@ -12,11 +11,7 @@ class ProfileDonateHearts extends React.Component {
     const { app, user } = this.props
     const containerStyle = {
     }
-    const gridListStyle = {
-      width: '100%',
-      margin: 'auto',
-      overflowY: 'auto'
-    }
+    const spacingPx = 6
     return (
       <SettingsChildWrapper>
         <div
@@ -27,8 +22,9 @@ class ProfileDonateHearts extends React.Component {
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
-              marginLeft: 10,
-              marginRight: 10,
+              paddingLeft: 20,
+              paddingRight: 20,
+              marginBottom: 2 * spacingPx,
               color: lighterTextColor
             }}
           >
@@ -37,11 +33,12 @@ class ProfileDonateHearts extends React.Component {
              more of the money we raise to that charity.
             </p>
           </Paper>
-          <GridList
-            cols={3}
-            padding={18}
-            style={gridListStyle}
-            cellHeight={'auto'}
+          <span
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              margin: -spacingPx
+            }}
           >
             {app.charities.edges.map((edge) => {
               return (
@@ -50,9 +47,15 @@ class ProfileDonateHearts extends React.Component {
                   charity={edge.node}
                   user={user}
                   showError={this.props.showError}
-                  />)
+                  style={{
+                    flex: 1,
+                    flexBasis: '20%',
+                    margin: spacingPx
+                  }}
+                />
+              )
             })}
-          </GridList>
+          </span>
         </div>
       </SettingsChildWrapper>
     )

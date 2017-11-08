@@ -3,8 +3,6 @@ import PropTypes from 'prop-types'
 import DonateVcMutation from 'mutations/DonateVcMutation'
 
 import { Paper } from 'material-ui'
-
-import {Card, CardActions, CardMedia, CardTitle, CardText} from 'material-ui/Card'
 import RaisedButton from 'material-ui/RaisedButton'
 import Dialog from 'material-ui/Dialog'
 import Popover from 'material-ui/Popover'
@@ -95,56 +93,15 @@ class Charity extends React.Component {
   }
 
   render () {
-    const { charity, user } = this.props
+    const { charity, user, style } = this.props
 
     const MIN_VC_FOR_CUSTOM_SLIDER = 2
 
-    // Charity card style
-    const cardStyle = {
-    }
-    const titleAndTextContainerStyle = {
-      display: 'block',
-      minHeight: 120,
-      marginTop: 8
-    }
-    const cardTitleContainerStyle = {
-    }
-    const cardTitleStyle = {
-      lineHeight: '100%'
-    }
-    const cardTextStyle = {
-      paddingTop: 0,
-      paddingBottom: 0
-    }
-    const cardActionsStyle = {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      paddingTop: 12,
-      paddingBottom: 24
-    }
-    const customDonationLinkStyle = {
-      display: user.vcCurrent > MIN_VC_FOR_CUSTOM_SLIDER ? 'block' : 'none',
-      fontSize: 11,
-      color: appTheme.palette.disabledColor,
-      cursor: 'pointer',
-      marginTop: 5
-    }
-    const sliderContainerStyle = {
-      textAlign: 'center',
-      height: 'auto',
-      width: 'auto',
-      padding: 20
-    }
-    const sliderStyle = {
-      margin: 0
-    }
-    const subheaderStyle = {
-      padding: 0
-    }
-    const charityLogoStyle = {
-      cursor: 'pointer'
-    }
+    const containerStyle = Object.assign({}, {
+      minWidth: 250,
+      maxWidth: 360
+    }, style)
+
     const charityImpactStyle = {
       marginTop: 0,
       paddingLeft: 20,
@@ -195,52 +152,103 @@ class Charity extends React.Component {
     const heartsText = this.state.amountToDonate === 1 ? 'Heart' : 'Hearts'
 
     return (
-      <Paper>
-        <Card style={cardStyle} zDepth={1}>
-          <CardMedia>
+      <Paper style={containerStyle}>
+        <span
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            height: '100%'
+          }}
+        >
+          <span
+            style={{
+              padding: 0
+            }}
+          >
             <img
-              style={charityLogoStyle}
+              style={{
+                cursor: 'pointer',
+                maxWidth: '100%',
+                minWidth: '100%'
+              }}
               src={charity.logo}
               onClick={this.openCharityWebsite.bind(this)} />
-          </CardMedia>
-          <span style={titleAndTextContainerStyle}>
-            <CardTitle
-              style={cardTitleContainerStyle}
-              titleStyle={cardTitleStyle}
-              title={charity.name}
-            />
-            <CardText
-              style={cardTextStyle}>
-              {charity.description}
-            </CardText>
           </span>
-          <CardActions style={cardActionsStyle}>
+          <span
+            style={{
+              padding: 16,
+              fontSize: 22,
+              boxSizing: 'border-box',
+              display: 'block',
+              textAlign: 'center',
+              lineHeight: '100%'
+            }}
+          >
+            {charity.name}
+          </span>
+          <span
+            style={{
+              paddingLeft: 16,
+              paddingRight: 16,
+              fontSize: 14,
+              display: 'block'
+            }}
+          >
+            {charity.description}
+          </span>
+          <span
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              padding: 24
+            }}
+          >
             <RaisedButton
               label={`Donate ${this.state.amountToDonate} ${heartsText}`}
               primary
               disabled={this.state.amountToDonate <= 0}
               onClick={this.donateHearts.bind(this)} />
             <span
-              style={customDonationLinkStyle}
+              style={{
+                display: user.vcCurrent > MIN_VC_FOR_CUSTOM_SLIDER ? 'block' : 'none',
+                fontSize: 11,
+                color: appTheme.palette.disabledColor,
+                cursor: 'pointer',
+                marginTop: 5
+              }}
               onClick={this.openCustomSlider.bind(this)}>
                  Or, donate a specific amount
             </span>
-          </CardActions>
-        </Card>
+          </span>
+        </span>
         <Popover
           open={this.state.customAmountSliderOpen}
           anchorEl={this.state.anchorEl}
           anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
           targetOrigin={{horizontal: 'left', vertical: 'top'}}
           onRequestClose={this.closeCustomSlider.bind(this)}>
-          <div style={sliderContainerStyle}>
+          <div
+            style={{
+              textAlign: 'center',
+              height: 'auto',
+              width: 'auto',
+              padding: 20
+            }}
+          >
             <Subheader
-              style={subheaderStyle}>
+              style={{
+                padding: 0
+              }}
+            >
               Use the slider to select the amount to donate
             </Subheader>
             { user.vcCurrent > MIN_VC_FOR_CUSTOM_SLIDER
               ? <Slider
-                sliderStyle={sliderStyle}
+                sliderStyle={{
+                  margin: 0
+                }}
                 min={1}
                 max={user.vcCurrent}
                 step={1}
@@ -298,7 +306,12 @@ Charity.propTypes = {
     id: PropTypes.string.isRequired,
     vcCurrent: PropTypes.number.isRequired
   }),
-  showError: PropTypes.func.isRequired
+  showError: PropTypes.func.isRequired,
+  style: PropTypes.object
+}
+
+Charity.defaultProps = {
+  style: {}
 }
 
 export default Charity
