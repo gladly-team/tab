@@ -18,6 +18,9 @@ class ProfileInviteFriendView extends React.Component {
           environment={environment}
           query={graphql`
             query ProfileInviteFriendViewQuery($userId: String!) {
+              app {
+                ...ProfileInviteFriendContainer_app
+              }
               user(userId: $userId) {
                 ...ProfileInviteFriendContainer_user
               }
@@ -33,6 +36,7 @@ class ProfileInviteFriendView extends React.Component {
               const showError = this.props.showError
               return (
                 <ProfileInviteFriend
+                  app={props.app}
                   user={props.user}
                   showError={showError} />
               )

@@ -9,7 +9,7 @@ import { Paper } from 'material-ui'
 
 class ProfileInviteFriend extends React.Component {
   render () {
-    const { user } = this.props
+    const { app, user } = this.props
     const tabberWord = user.numUsersRecruited === 1 ? 'Tabber' : 'Tabbers'
     const spacingPx = 6
     const statStyle = {
@@ -43,7 +43,7 @@ class ProfileInviteFriend extends React.Component {
             style={statStyle}
           />
           <Stat
-            stat={350}
+            stat={app.referralVcReward}
             statText={'extra Hearts when you recruit a new friend'}
             style={statStyle}
           />
@@ -80,6 +80,9 @@ class ProfileInviteFriend extends React.Component {
 }
 
 ProfileInviteFriend.propTypes = {
+  app: PropTypes.shape({
+    referralVcReward: PropTypes.number.isRequired
+  }),
   user: PropTypes.shape({
     numUsersRecruited: PropTypes.number.isRequired,
     username: PropTypes.string.isRequired
