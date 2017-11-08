@@ -24,8 +24,7 @@ class ProfileInviteFriend extends React.Component {
           style={{
             display: 'flex',
             flexWrap: 'wrap',
-            marginLeft: -spacingPx,
-            marginTop: -spacingPx
+            margin: -spacingPx
           }}
         >
           <InviteFriend
