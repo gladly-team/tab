@@ -7,6 +7,7 @@ class Stat extends React.Component {
   render () {
     const containerStyle = Object.assign({}, {
       height: 180,
+      minWidth: 200,
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
@@ -20,7 +21,8 @@ class Stat extends React.Component {
     }
     const statTextStyle = {
       display: 'block',
-      textAlign: 'center'
+      textAlign: 'center',
+      maxWidth: '70%'
     }
     const extraContentStyle = {
       display: 'block',
@@ -31,7 +33,13 @@ class Stat extends React.Component {
     }
     return (
       <Paper style={containerStyle}>
-        <span>
+        <span
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center'
+          }}
+        >
           <span style={statStyle}>{this.props.stat}</span>
           <span style={statTextStyle}>{this.props.statText}</span>
         </span>
@@ -44,7 +52,10 @@ class Stat extends React.Component {
 }
 
 Stat.propTypes = {
-  stat: PropTypes.number.isRequired,
+  stat: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string
+  ]).isRequired,
   statText: PropTypes.string.isRequired,
   extraContent: PropTypes.element,
   style: PropTypes.object

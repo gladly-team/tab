@@ -17,21 +17,21 @@ class ProfileDonateHearts extends React.Component {
       margin: 'auto',
       overflowY: 'auto'
     }
-    const infoStyle = {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginLeft: 10,
-      marginRight: 10,
-      color: lighterTextColor
-    }
-
     return (
       <SettingsChildWrapper>
         <div
           key={'charities-container-key'}
           style={containerStyle}>
-          <Paper style={infoStyle}>
+          <Paper
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginLeft: 10,
+              marginRight: 10,
+              color: lighterTextColor
+            }}
+          >
             <InfoOutlineIcon style={{ marginRight: 8, color: lighterTextColor }} />
             <p>When you donate Hearts, you're telling us to give
              more of the money we raise to that charity.
