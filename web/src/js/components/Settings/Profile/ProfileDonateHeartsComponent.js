@@ -28,7 +28,14 @@ class ProfileDonateHearts extends React.Component {
               color: lighterTextColor
             }}
           >
-            <InfoOutlineIcon style={{ marginRight: 8, color: lighterTextColor }} />
+            <InfoOutlineIcon
+              style={{
+                marginRight: 8,
+                color: lighterTextColor,
+                minHeight: 24,
+                minWidth: 24
+              }}
+            />
             <p>When you donate Hearts, you're telling us to give
              more of the money we raise to that charity.
             </p>

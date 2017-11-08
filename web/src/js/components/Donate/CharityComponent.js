@@ -136,7 +136,8 @@ class Charity extends React.Component {
       maxWidth: '100%'
     }
     const thanksDialogImgStyle = {
-      height: 240
+      height: 240,
+      border: `4px solid ${appTheme.palette.primary1Color}`
     }
     const thanksDialogTextStyle = {
       display: 'block',
@@ -157,6 +158,7 @@ class Charity extends React.Component {
           style={{
             display: 'flex',
             flexDirection: 'column',
+            alignItems: 'center',
             justifyContent: 'space-between',
             height: '100%'
           }}
@@ -189,9 +191,11 @@ class Charity extends React.Component {
           </span>
           <span
             style={{
+              boxSizing: 'border-box',
               paddingLeft: 16,
               paddingRight: 16,
               fontSize: 14,
+              textAlign: 'center',
               display: 'block'
             }}
           >
@@ -228,7 +232,9 @@ class Charity extends React.Component {
           anchorEl={this.state.anchorEl}
           anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
           targetOrigin={{horizontal: 'left', vertical: 'top'}}
-          onRequestClose={this.closeCustomSlider.bind(this)}>
+          onRequestClose={this.closeCustomSlider.bind(this)}
+          useLayerForClickAway={false}
+        >
           <div
             style={{
               textAlign: 'center',
