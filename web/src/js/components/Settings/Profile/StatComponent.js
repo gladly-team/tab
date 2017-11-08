@@ -6,8 +6,8 @@ import { alternateAccentColor } from 'theme/default'
 class Stat extends React.Component {
   render () {
     const containerStyle = Object.assign({}, {
-      paddingTop: 40,
-      paddingBottom: 40,
+      paddingTop: 50,
+      paddingBottom: 50,
       minWidth: 200,
       display: 'flex',
       flexDirection: 'column',

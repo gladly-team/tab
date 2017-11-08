@@ -28,6 +28,7 @@ class ProfileStats extends React.Component {
     const spacingPx = 6
     const statStyle = {
       flex: 1,
+      flexBasis: '20%',
       margin: spacingPx
     }
     return (

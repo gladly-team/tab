@@ -12,6 +12,12 @@ class ProfileInviteFriend extends React.Component {
     const { user } = this.props
     const tabberWord = user.numUsersRecruited === 1 ? 'Tabber' : 'Tabbers'
     const spacingPx = 6
+    const statStyle = {
+      margin: spacingPx,
+      flex: 1,
+      paddingTop: 40,
+      paddingBottom: 40
+    }
     return (
       <SettingsChildWrapper>
         <span
@@ -34,18 +40,12 @@ class ProfileInviteFriend extends React.Component {
           <Stat
             stat={user.numUsersRecruited}
             statText={`${tabberWord} recruited`}
-            style={{
-              margin: spacingPx,
-              flex: 1
-            }}
+            style={statStyle}
           />
           <Stat
             stat={350}
             statText={'extra Hearts when you recruit a new friend'}
-            style={{
-              margin: spacingPx,
-              flex: 1
-            }}
+            style={statStyle}
           />
           <Paper
             style={{
@@ -53,9 +53,9 @@ class ProfileInviteFriend extends React.Component {
               justifyContent: 'center',
               alignItems: 'center',
               flex: 1,
-              flexBasis: '40%',
+              flexBasis: '50%',
               minWidth: 200,
-              padding: 10,
+              padding: 20,
               color: lighterTextColor,
               margin: spacingPx
             }}
