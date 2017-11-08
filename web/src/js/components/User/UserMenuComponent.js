@@ -161,8 +161,8 @@ class UserMenu extends React.Component {
       marginBottom: 1
     })
     const rewardAmountsSectionStyle = Object.assign({}, heartsPopoverSectionStyle, {
-      paddingLeft: 12,
-      paddingRight: 12
+      paddingLeft: 22,
+      paddingRight: 22
     })
     const rewardTextStyle = {
       textAlign: 'left',
@@ -233,7 +233,7 @@ class UserMenu extends React.Component {
           onRequestClose={this.handleHeartsPopoverClose.bind(this)}
           style={heartsPopoverStyle}
         >
-          <div style={{ padding: 10 }}>
+          <div style={{ paddingTop: 10, paddingBottom: 10 }}>
             <div style={heartsPopoverSectionStyle}>
               <span style={statTextStyle}><span style={statNumberStyle}>Level {user.level}</span></span>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
