@@ -45,6 +45,7 @@ class EditWidgetChip extends React.Component {
           key={'widget-edit-chip-content'}
           style={{
             position: 'absolute',
+            minHeight: 32,
             top: 0,
             left: 0,
             paddingLeft: 12,
