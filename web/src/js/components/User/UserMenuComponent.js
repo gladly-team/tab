@@ -318,6 +318,7 @@ class UserMenu extends React.Component {
           onMouseEnter={this.onMenuIconHover.bind(this, true)}
           onMouseLeave={this.onMenuIconHover.bind(this, false)}
           onClick={this.onMenuClick.bind(this)}
+          data-test-id={'app-menu-icon'}
         >
           <MoreVertIcon />
         </IconButton>
@@ -354,7 +355,10 @@ class UserMenu extends React.Component {
               }
             />
             <Divider style={{ marginBottom: 0, marginTop: 0 }} />
-            <MenuItem primaryText='Sign Out' onClick={this.logout.bind(this)}
+            <MenuItem
+              primaryText='Sign Out'
+              onClick={this.logout.bind(this)}
+              data-test-id={'app-menu-sign-out'}
               leftIcon={
                 <ExitToAppIcon color={menuItemIconColor} style={menuItemSvgIconStyle} />
               }
