@@ -69,7 +69,7 @@ class ProfileInviteFriend extends React.Component {
               }}
             />
             <p>
-              Thank you! Every new Tabber increases our charitable impact, and we
+              Thank you! Every new Tabber raises more money for charity, and we
               depend on people like you to get the word out.
             </p>
           </Paper>

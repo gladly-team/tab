@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Paper } from 'material-ui'
 import TextField from 'material-ui-next/TextField'
+import ShareIcon from 'material-ui/svg-icons/social/share'
 import { withStyles } from 'material-ui-next/styles'
 import { alternateAccentColor } from 'theme/default'
 
@@ -13,6 +14,9 @@ const styles = theme => ({
     '&:after': {
       backgroundColor: alternateAccentColor
     }
+  },
+  inputLabelFocused: {
+    color: alternateAccentColor
   }
 })
 
@@ -46,25 +50,21 @@ class InviteFriend extends React.Component {
             alignContent: 'middle',
             width: '100%',
             maxWidth: 300,
-            margin: 10,
+            marginTop: 30,
+            marginBottom: 30,
+            marginLeft: 8,
+            marginRight: 8,
             boxSizing: 'border-box'
           }}
         >
-          <span
-            style={{
-              fontWeight: '600',
-              marginTop: 4,
-              marginBottom: 4,
-              textAlign: 'center'
-            }}
-          >
-            Share this link:
-          </span>
           <TextField
             id={'refer-friend-input'}
             inputRef={(input) => { this.input = input }}
             onClick={this.onTextFieldClicked.bind(this)}
             value={referralUrl}
+            label={'Share this link'}
+            helperText={"and you'll get 350 Hearts for every person who joins!"}
+            startAdornment={<ShareIcon />}
             InputProps={{
               classes: {
                 inkbar: classes.inputInkbar
@@ -72,7 +72,12 @@ class InviteFriend extends React.Component {
             }}
             inputProps={{
               style: {
-                textAlign: 'center'
+                textAlign: 'left'
+              }
+            }}
+            InputLabelProps={{
+              FormControlClasses: {
+                focused: classes.inputLabelFocused
               }
             }}
           />
