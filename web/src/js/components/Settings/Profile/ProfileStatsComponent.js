@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import RaisedButton from 'material-ui/RaisedButton'
-import { GridList } from 'material-ui/GridList'
 import HeartBorderIcon from 'material-ui/svg-icons/action/favorite-border'
 import Stat from './StatComponent'
 import SettingsChildWrapper from '../SettingsChildWrapperComponent'
@@ -26,26 +25,30 @@ class ProfileStats extends React.Component {
       alignItems: 'center',
       color: appTheme.palette.disabledColor
     }
-    const gridPadding = 12
-    const secondRowStatStyle = {
-      height: 240,
-      paddingBottom: 50,
-      marginTop: 6
+    const spacingPx = 6
+    const statStyle = {
+      flex: 1,
+      margin: spacingPx
     }
     return (
       <SettingsChildWrapper>
-        <GridList
-          cols={4}
-          padding={gridPadding}
-          cellHeight={'auto'}
+        <span
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            marginLeft: -spacingPx,
+            marginTop: -spacingPx
+          }}
         >
           <Stat
             stat={daysSinceJoined}
             statText={`${dayWord} as a Tabber`}
+            style={statStyle}
           />
           <Stat
             stat={user.tabs}
             statText={'tabs all time'}
+            style={statStyle}
           />
           <Stat
             stat={user.maxTabsDay.numTabs}
@@ -55,6 +58,7 @@ class ProfileStats extends React.Component {
                 on {moment(user.maxTabsDay.date).format('LL')}
               </span>
             }
+            style={statStyle}
           />
           <Stat
             stat={user.level}
@@ -69,17 +73,12 @@ class ProfileStats extends React.Component {
                 <span>until next level</span>
               </span>
             }
+            style={statStyle}
           />
-        </GridList>
-        <GridList
-          cols={2}
-          padding={gridPadding}
-          cellHeight={'auto'}
-        >
           <Stat
             stat={user.numUsersRecruited}
             statText={`${tabberWord} recruited`}
-            style={secondRowStatStyle}
+            style={statStyle}
             extraContent={
               <RaisedButton
                 label='Invite Friends'
@@ -92,7 +91,7 @@ class ProfileStats extends React.Component {
           <Stat
             stat={user.vcDonatedAllTime}
             statText={`${heartsWord} donated`}
-            style={secondRowStatStyle}
+            style={statStyle}
             extraContent={
               <RaisedButton
                 label='Donate Hearts'
@@ -102,7 +101,7 @@ class ProfileStats extends React.Component {
               />
             }
           />
-        </GridList>
+        </span>
       </SettingsChildWrapper>
     )
   }
