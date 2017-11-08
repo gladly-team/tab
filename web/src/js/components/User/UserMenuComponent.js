@@ -12,12 +12,15 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert'
 import SettingsIcon from 'material-ui/svg-icons/action/settings'
 import PersonAddIcon from 'material-ui/svg-icons/social/person-add'
 import ChartIcon from 'material-ui/svg-icons/editor/insert-chart'
+import ExitToAppIcon from 'material-ui/svg-icons/action/exit-to-app'
 import {
   goToInviteFriends,
   goToDonate,
+  goToLogin,
   goToSettings,
   goToStats
 } from 'navigation/navigation'
+import { logoutUser } from '../../utils/cognito-auth'
 import appTheme, {
   dashboardIconActiveColor,
   dashboardIconInactiveColor,
@@ -33,6 +36,14 @@ class UserMenu extends React.Component {
       menuIconHover: false,
       menuOpen: false
     }
+  }
+
+  logout () {
+    logoutUser((loggedOut) => {
+      if (loggedOut) {
+        goToLogin()
+      }
+    })
   }
 
   onHeartsHover (hovering) {
@@ -340,6 +351,12 @@ class UserMenu extends React.Component {
             <MenuItem primaryText='Your Stats' onClick={goToStats}
               leftIcon={
                 <ChartIcon color={menuItemIconColor} style={menuItemSvgIconStyle} />
+              }
+            />
+            <Divider style={{ marginBottom: 0, marginTop: 0 }} />
+            <MenuItem primaryText='Sign Out' onClick={this.logout.bind(this)}
+              leftIcon={
+                <ExitToAppIcon color={menuItemIconColor} style={menuItemSvgIconStyle} />
               }
             />
           </Menu>

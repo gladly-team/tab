@@ -48,7 +48,8 @@ class SettingsPage extends React.Component {
     const menuItemBottomStyle = {
       position: 'absolute',
       bottom: 0,
-      left: 0
+      left: 0,
+      right: 0
     }
     const closeButtonStyle = {
       width: 54,

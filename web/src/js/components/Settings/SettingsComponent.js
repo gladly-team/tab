@@ -1,35 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {
-  goToLogin
-} from 'navigation/navigation'
 import Divider from 'material-ui/Divider'
-import ExitToAppIcon from 'material-ui/svg-icons/action/exit-to-app'
-import FlatButton from 'material-ui/FlatButton'
 import SettingsPageComponent from './SettingsPageComponent'
 import SettingsMenuItem from './SettingsMenuItem'
-import { logoutUser } from '../../utils/cognito-auth'
-import appTheme from 'theme/default'
 
 class Settings extends React.Component {
-  logout () {
-    logoutUser((loggedOut) => {
-      if (loggedOut) {
-        goToLogin()
-      }
-    })
-  }
-
   render () {
-    const dividerStyle = {
-      marginLeft: 14,
-      marginRight: 14
-    }
-    const logoutButtonStyle = {
-      color: appTheme.palette.accent1Color,
-      bottom: 20,
-      left: 60
-    }
     return (
       <SettingsPageComponent
         title={'Settings'}
@@ -44,27 +20,13 @@ class Settings extends React.Component {
             to={'/tab/settings/background/'}>
               Background
           </SettingsMenuItem>,
-          <Divider key={'divider'} style={dividerStyle} />,
+          <Divider key={'divider'} />,
           <SettingsMenuItem
             key={'profile'}
             to={'/tab/profile/stats/'}>
               Your Profile
           </SettingsMenuItem>
         ]}
-        menuItemBottom={
-          <FlatButton
-            id={'app-signout-btn'}
-            onClick={this.logout.bind(this)}
-            label='Sign Out'
-            labelPosition='before'
-            style={logoutButtonStyle}
-            icon={
-              <ExitToAppIcon
-                color={appTheme.palette.accent1Color}
-              />
-            }
-          />
-        }
       >
         {this.props.children}
       </SettingsPageComponent>
