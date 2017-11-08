@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Paper } from 'material-ui'
 import TextField from 'material-ui-next/TextField'
-import ShareIcon from 'material-ui/svg-icons/social/share'
 import { withStyles } from 'material-ui-next/styles'
 import { alternateAccentColor } from 'theme/default'
 
@@ -64,7 +63,6 @@ class InviteFriend extends React.Component {
             value={referralUrl}
             label={'Share this link'}
             helperText={"and you'll get 350 Hearts for every person who joins!"}
-            startAdornment={<ShareIcon />}
             InputProps={{
               classes: {
                 inkbar: classes.inputInkbar
