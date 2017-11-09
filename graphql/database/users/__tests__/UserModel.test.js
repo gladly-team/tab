@@ -151,7 +151,21 @@ describe('UserModel', () => {
       vcCurrent: 0,
       vcAllTime: 0,
       level: 0,
+      tabs: 0,
+      maxTabsDay: {
+        maxDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 0
+        },
+        recentDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 0
+        }
+      },
+      validTabs: 0,
       heartsUntilNextLevel: 0,
+      vcDonatedAllTime: 0,
+      numUsersRecruited: 0,
       backgroundImage: {
         id: '49fcb132-9b6b-431b-bda8-50455e215be7',
         image: '661651039af4454abb852927b3a5b8f9.jpg',

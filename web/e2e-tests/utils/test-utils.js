@@ -82,16 +82,16 @@ var clickLoginButton = (Async((driver) => {
 }))
 
 var signOutUser = (Async((driver) => {
-  const settingsViewId = 'app-settings-id'
-  const signOutBtnId = 'app-signout-btn'
+  const appMenuTestId = 'app-menu-icon'
+  const signOutButtonTestId = 'app-menu-sign-out'
   const loginFormContainerId = 'login-form-container-test-id'
 
-  const settingsUrl = getAppBaseUrl() + '/tab/settings/'
-
-  Await(driverUtils(driver).navigateTo(settingsUrl))
-  Await(driverUtils(driver).waitForElementVisible(settingsViewId))
-  Await(driverUtils(driver).waitForElementVisibleByCustomSelector(By.id(signOutBtnId)))
-  Await(driverUtils(driver).click(By.id(signOutBtnId)))
+  const dashboardUrl = getAppBaseUrl() + '/tab/'
+  Await(driverUtils(driver).navigateTo(dashboardUrl))
+  Await(driverUtils(driver).waitForElementVisible(appMenuTestId))
+  Await(driverUtils(driver).click(By.css(`[data-test-id='${appMenuTestId}']`)))
+  Await(driverUtils(driver).waitForElementVisible(signOutButtonTestId))
+  Await(driverUtils(driver).click(By.css(`[data-test-id='${signOutButtonTestId}']`)))
   Await(driverUtils(driver).waitForElementVisible(loginFormContainerId))
 }))
 

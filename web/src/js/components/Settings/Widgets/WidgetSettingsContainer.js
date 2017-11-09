@@ -23,7 +23,6 @@ export default createFragmentContainer(WidgetSettings, {
   appWidget: graphql`
     fragment WidgetSettingsContainer_appWidget on Widget {
       id
-      icon
       name
       type
       settings

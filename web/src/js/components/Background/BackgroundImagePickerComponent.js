@@ -4,9 +4,12 @@ import SetBackgroundImageMutation from 'mutations/SetBackgroundImageMutation'
 
 import {GridList, GridTile} from 'material-ui/GridList'
 import IconButton from 'material-ui/IconButton'
-import FontIcon from 'material-ui/FontIcon'
+import CheckCircleIcon from 'material-ui/svg-icons/action/check-circle'
+import RadioButtonUncheckedIcon from 'material-ui/svg-icons/toggle/radio-button-unchecked'
 import Subheader from 'material-ui/Subheader'
-import Divider from 'material-ui/Divider'
+import {
+  cardHeaderSubtitleStyle
+} from 'theme/default'
 
 class BackgroundImagePicker extends React.Component {
   constructor (props) {
@@ -65,18 +68,12 @@ class BackgroundImagePicker extends React.Component {
       overflowY: 'auto'
     }
 
-    const header = {
+    const header = Object.assign({}, cardHeaderSubtitleStyle, {
       paddingLeft: 0
-    }
-
-    const divider = {
-      marginBottom: 10
-    }
-
+    })
     return (
       <div style={root}>
         <Subheader style={header}>Select your photo</Subheader>
-        <Divider style={divider} />
         <GridList
           cols={3}
           cellHeight={170}
@@ -86,18 +83,19 @@ class BackgroundImagePicker extends React.Component {
               this.state.selectedImage &&
               this.state.selectedImage.id === edge.node.id
             )
-
             return (
               <GridTile
                 key={edge.node.id}
                 title={edge.node.name}
-                subtitle={<span>by <b>{'Gladly'}</b></span>}
+                style={{ cursor: 'pointer' }}
+                onClick={this.onImageSelected.bind(this, edge.node)}
                 actionIcon={
                   <IconButton
                     onClick={this.onImageSelected.bind(this, edge.node)}>
-                    <FontIcon
-                      className={checked ? 'fa fa-check-circle' : 'fa fa-circle-o'}
-                      color='white' />
+                    {checked
+                      ? <CheckCircleIcon color={'white'} />
+                      : <RadioButtonUncheckedIcon color={'white'} />
+                    }
                   </IconButton>}>
                 <img src={edge.node.imageURL} />
               </GridTile>)

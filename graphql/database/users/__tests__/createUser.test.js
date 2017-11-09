@@ -1,5 +1,6 @@
 /* eslint-env jest */
 
+import moment from 'moment'
 import { cloneDeep } from 'lodash/lang'
 
 import UserModel from '../UserModel'
@@ -39,6 +40,16 @@ afterEach(() => {
   jest.clearAllMocks()
 })
 
+function getExpectedCreateItemFromUserInfo (userInfo) {
+  return Object.assign(
+    {},
+    addTimestampFieldsToItem(userInfo),
+    {
+      joined: moment.utc().toISOString()
+    }
+  )
+}
+
 describe('createUser', () => {
   it('works as expected without referralData', async () => {
     const createMethod = jest.spyOn(UserModel, 'create')
@@ -47,7 +58,7 @@ describe('createUser', () => {
     await createUser(userContext, userInfo.id,
       userInfo.username, userInfo.email, referralData)
 
-    const expectedCreateItem = addTimestampFieldsToItem(userInfo)
+    const expectedCreateItem = getExpectedCreateItemFromUserInfo(userInfo)
     expect(createMethod)
       .toHaveBeenCalledWith(userContext, expectedCreateItem)
     expect(logReferralData).not.toHaveBeenCalled()
@@ -81,7 +92,7 @@ describe('createUser', () => {
     await createUser(userContext, userInfo.id,
       userInfo.username, userInfo.email, referralData)
 
-    const expectedCreateItem = addTimestampFieldsToItem(userInfo)
+    const expectedCreateItem = getExpectedCreateItemFromUserInfo(userInfo)
     expect(createMethod)
       .toHaveBeenCalledWith(userContext, expectedCreateItem)
     expect(logReferralData)
@@ -105,7 +116,7 @@ describe('createUser', () => {
     await createUser(userContext, userInfo.id,
       userInfo.username, userInfo.email, referralData)
 
-    const expectedCreateItem = addTimestampFieldsToItem(userInfo)
+    const expectedCreateItem = getExpectedCreateItemFromUserInfo(userInfo)
     expect(createMethod)
       .toHaveBeenCalledWith(userContext, expectedCreateItem)
     expect(logReferralData).not.toHaveBeenCalled()

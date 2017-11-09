@@ -1,16 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-
+import FlatButton from 'material-ui/FlatButton'
 import WidgetSharedSpace from 'general/WidgetSharedSpace'
-import EmptyWidgetMsg from 'general/EmptyWidgetMsg'
-import {List} from 'general/List'
+import EmptyWidgetMsg from '../../EmptyWidgetMsg'
+import WidgetScrollSection from '../../WidgetScrollSection'
 import UpdateWidgetDataMutation from 'mutations/UpdateWidgetDataMutation'
 import Todo from './Todo'
 import AddTodoForm from './AddTodoForm'
-
 import Subheader from 'material-ui/Subheader'
-
-import appTheme from 'theme/default'
+import appTheme, {
+  buttonFontWeight,
+  dashboardIconInactiveColor,
+  primaryColor
+} from 'theme/default'
 
 class TodosWidget extends React.Component {
   constructor (props) {
@@ -33,23 +35,21 @@ class TodosWidget extends React.Component {
   }
 
   completeTodo (index) {
-    const removed = this.state.todos.splice(index, 1)
-    this.state.completed.push(removed[0])
     this.setState({
-      completed: this.state.completed,
-      todos: this.state.todos
-    })
-    this.updateWidget()
+      todos: this.state.todos.filter((_, i) => {
+        return i !== index
+      }),
+      completed: [this.state.todos[index], ...this.state.completed]
+    }, this.updateWidget)
   }
 
   setNotCompleted (index) {
-    const removed = this.state.completed.splice(index, 1)
-    this.state.todos.push(removed[0])
     this.setState({
-      completed: this.state.completed,
-      todos: this.state.todos
-    })
-    this.updateWidget()
+      todos: [this.state.completed[index], ...this.state.todos],
+      completed: this.state.completed.filter((_, i) => {
+        return i !== index
+      })
+    }, this.updateWidget)
   }
 
   addNewTodo (text) {
@@ -59,28 +59,32 @@ class TodosWidget extends React.Component {
         id: this.randomString(6),
         text: content
       }
-      this.state.todos.splice(0, 0, newTodo)
       this.setState({
-        todos: this.state.todos
-      })
-      this.updateWidget()
+        todos: [...this.state.todos, newTodo]
+      }, this.updateWidget)
     }
   }
 
   removeCompletedTodo (index) {
-    this.state.completed.splice(index, 1)
     this.setState({
-      completed: this.state.completed
-    })
-    this.updateWidget()
+      completed: this.state.completed.filter((_, i) => {
+        return i !== index
+      })
+    }, this.updateWidget)
+  }
+
+  removeAllCompletedTodos () {
+    this.setState({
+      completed: []
+    }, this.updateWidget)
   }
 
   removeTodo (index) {
-    this.state.todos.splice(index, 1)
     this.setState({
-      todos: this.state.todos
-    })
-    this.updateWidget()
+      todos: this.state.todos.filter((_, i) => {
+        return i !== index
+      })
+    }, this.updateWidget)
   }
 
   getWidgetData () {
@@ -127,31 +131,10 @@ class TodosWidget extends React.Component {
       overflow: 'visible'
     }
 
-    const headerStyle = {
-      color: '#FFF',
-      fontSize: 14,
-      fontFamily: appTheme.fontFamily
-    }
-
-    const todosContainer = {
-      overflowY: 'scroll',
-      overflowX: 'hidden',
-      height: '60vh'
-    }
-
     const mainContainer = {
       display: 'flex',
       flexDirection: 'column',
       marginTop: 27
-    }
-
-    var completedHeader
-    if (this.state.completed.length) {
-      completedHeader = (
-        <Subheader
-          style={headerStyle}>
-              Completed
-          </Subheader>)
     }
 
     var nodataMsg
@@ -166,8 +149,7 @@ class TodosWidget extends React.Component {
       <div style={mainContainer}>
         <AddTodoForm
           addTodo={this.addNewTodo.bind(this)} />
-        <List
-          containerStyle={todosContainer}>
+        <WidgetScrollSection>
           {nodataMsg}
           {this.state.todos.map((todo, index) => {
             return (
@@ -180,7 +162,45 @@ class TodosWidget extends React.Component {
                 remove={this.removeTodo.bind(this)} />
             )
           })}
-          {completedHeader}
+          {
+            this.state.completed.length
+            ? (
+              <Subheader
+                style={{
+                  color: dashboardIconInactiveColor,
+                  borderTop: `2px ${primaryColor} solid`,
+                  borderBottom: `2px ${primaryColor} solid`,
+                  lineHeight: '100%',
+                  margin: 5,
+                  width: 'auto',
+                  padding: '6px 12px',
+                  boxSizing: 'border-box',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  fontSize: 14,
+                  fontFamily: appTheme.fontFamily,
+                  backgroundColor: 'rgba(0,0,0,.3)'
+                }}
+                inset={false}
+              >
+                Completed
+                <FlatButton
+                  style={{
+                    fontSize: 12,
+                    height: 24,
+                    fontWeight: buttonFontWeight,
+                    lineHeight: '24px',
+                    color: dashboardIconInactiveColor
+                  }}
+                  onClick={this.removeAllCompletedTodos.bind(this)}
+                >
+                  CLEAR
+                </FlatButton>
+              </Subheader>
+            )
+            : null
+          }
           {this.state.completed.map((todo, index) => {
             return (
               <Todo
@@ -192,7 +212,7 @@ class TodosWidget extends React.Component {
                 remove={this.removeCompletedTodo.bind(this)} />
             )
           })}
-        </List>
+        </WidgetScrollSection>
       </div>
     </WidgetSharedSpace>)
   }

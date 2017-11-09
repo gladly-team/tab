@@ -161,8 +161,9 @@ class UserBackgroundImage extends React.Component {
       bottom: 0,
       right: 0,
       left: 0,
-      width: '100vw',
-      height: '100vh',
+      width: '100%',
+      height: '100%',
+      boxSizing: 'border-box',
       zIndex: 'auto'
     }
 
@@ -233,15 +234,16 @@ class UserBackgroundImage extends React.Component {
 
     const finalBackgroundStyle = Object.assign({}, defaultStyle, backgroundStyle)
 
-    const tintOpacity = isImgBackground ? 0.2 : 0.03
+    const tintOpacity = isImgBackground ? 0.15 : 0.03
     const tintElemStyle = {
       position: 'absolute',
       top: 0,
       bottom: 0,
       right: 0,
       left: 0,
-      width: '100vw',
-      height: '100vh',
+      width: '100%',
+      height: '100%',
+      boxSizing: 'border-box',
       zIndex: 'auto',
       // Needs to match shading in extension new tab page.
       backgroundColor: `rgba(0, 0, 0, ${tintOpacity})`

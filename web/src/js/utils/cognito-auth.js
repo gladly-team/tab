@@ -298,15 +298,13 @@ function logoutUser (userLogoutCallback) {
   var cognitoUser = userPool.getCurrentUser()
   if (cognitoUser != null) {
     cognitoUser.signOut()
-
-    // Clear the user from memory.
-    localStorageMgr.removeItem(STORAGE_KEY_USER_ID)
-    userInfo.clearUser()
-
-    userLogoutCallback(true)
-  } else {
-    userLogoutCallback(false)
   }
+
+  // Clear the user from memory.
+  localStorageMgr.removeItem(STORAGE_KEY_USER_ID)
+  userInfo.clearUser()
+
+  userLogoutCallback(true)
 }
 
 function forgotPassword (username, onSuccess, onFailure) {

@@ -109,7 +109,8 @@ export const getMockUserInstance = function (attributes) {
   const now = mockDate.defaultDateISO
   return new UserModel(Object.assign({}, defaultUserInfo, attributes, {
     created: now,
-    updated: now
+    updated: now,
+    joined: now
   }))
 }
 

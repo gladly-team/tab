@@ -37,17 +37,19 @@ class BooleanWidgetConfig extends React.Component {
   render () {
     const { setting } = this.props
 
-    const toggleContainer = {
-      width: '90%',
-      margin: 'auto'
+    const toggleContainerStyle = {
+      width: '80%',
+      marginLeft: '5%',
+      marginRight: '5%'
     }
 
     return (
-      <div style={toggleContainer}>
+      <div style={toggleContainerStyle}>
         <Toggle
           label={setting.display}
           defaultToggled={setting.value}
-          onToggle={this.onToggle.bind(this)} />
+          onToggle={this.onToggle.bind(this)}
+        />
       </div>
     )
   }
@@ -62,49 +64,44 @@ class ChoicesWidgetConfig extends React.Component {
   render () {
     const { setting } = this.props
 
-    const choicesContainer = {
+    const choicesContainerStyle = {
       width: '90%',
       margin: 'auto',
       display: 'flex'
     }
-
-    const btnGroupContainer = {
-      width: '100%'
+    const settingDisplayStyle = {
+      flex: 5
     }
-
-    const btnGroup = {
+    const btnGroupStyle = {
       display: 'flex',
       width: 'auto',
-      float: 'right'
+      flex: 1,
+      flexDirection: 'column',
+      justifyContent: 'flex-end',
+      alignItems: 'flex-start'
     }
-
-    const radioBtn = {
+    const radioBtnStyle = {
       width: 'auto',
-      marginRight: 10
-    }
-
-    const settingDisplay = {
-      width: '100%'
+      marginBottom: 6,
+      fontSize: 14
     }
 
     return (
-      <div style={choicesContainer}>
-        <span style={settingDisplay}>{setting.display}</span>
-        <div style={btnGroupContainer}>
-          <RadioButtonGroup
-            onChange={this.onChange.bind(this)}
-            style={btnGroup}
-            name={setting.field + '-choices'}
-            defaultSelected={setting.value}>
-            {setting.choices.map((choice, index) => {
-              return (<RadioButton
-                key={index}
-                style={radioBtn}
-                value={choice}
-                label={choice} />)
-            })}
-          </RadioButtonGroup>
-        </div>
+      <div style={choicesContainerStyle}>
+        <span style={settingDisplayStyle}>{setting.display}</span>
+        <RadioButtonGroup
+          onChange={this.onChange.bind(this)}
+          style={btnGroupStyle}
+          name={setting.field + '-choices'}
+          defaultSelected={setting.value}>
+          {setting.choices.map((choice, index) => {
+            return (<RadioButton
+              key={index}
+              style={radioBtnStyle}
+              value={choice}
+              label={choice} />)
+          })}
+        </RadioButtonGroup>
       </div>
     )
   }

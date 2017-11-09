@@ -509,7 +509,7 @@ describe('User background image component', function () {
     const tintElem = wrapper
       .find('[data-test-id="background-tint-overlay"]').first()
     const tintColor = tintElem.props().style.backgroundColor
-    expect(tintColor).toBe('rgba(0, 0, 0, 0.2)')
+    expect(tintColor).toBe('rgba(0, 0, 0, 0.15)')
   })
 
   it('sets the expected tint overlay for a color background', function () {

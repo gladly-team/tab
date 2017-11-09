@@ -4,6 +4,7 @@ type App implements Node {
   id: ID!
   moneyRaised: Float
   dollarsPerDayRate: Float
+  referralVcReward: Int
 
   # All the widgets
   widgets(after: String, first: Int, before: String, last: Int): WidgetConnection
@@ -133,8 +134,27 @@ type Image {
   imageURL: String
 }
 
+input LogTabInput {
+  userId: String!
+  clientMutationId: String
+}
+
+type LogTabPayload {
+  user: User
+  clientMutationId: String
+}
+
+# Info about the user's day of most opened tabs
+type MaxTabsDay {
+  # The day the most tabs were opened
+  date: String
+
+  # The number of tabs opened on that day
+  numTabs: Int
+}
+
 type Mutation {
-  updateVc(input: UpdateVcInput!): UpdateVcPayload
+  logTab(input: LogTabInput!): LogTabPayload
   donateVc(input: DonateVcInput!): DonateVcPayload
   setUserBkgImage(input: SetUserBkgImageInput!): SetUserBkgImagePayload
   setUserBkgColor(input: SetUserBkgColorInput!): SetUserBkgColorPayload
@@ -237,16 +257,6 @@ type SetUserBkgImagePayload {
   clientMutationId: String
 }
 
-input UpdateVcInput {
-  userId: String!
-  clientMutationId: String
-}
-
-type UpdateVcPayload {
-  user: User
-  clientMutationId: String
-}
-
 input UpdateWidgetConfigInput {
   userId: String!
   widgetId: String!
@@ -312,17 +322,32 @@ type User implements Node {
   # User's email
   email: String
 
-  # User's current vc
+  # ISO datetime string of when the user joined
+  joined: String
+
+  # User's current VC
   vcCurrent: Int
 
-  # User's vc of all time
+  # User's all time VC
   vcAllTime: Int
+
+  # User's all time tab count
+  tabs: Int
+
+  # Info about the user's day of most opened tabs
+  maxTabsDay: MaxTabsDay
 
   # User's vc
   level: Int
 
   # Remaing hearts until next level.
   heartsUntilNextLevel: Int
+
+  # User's total vc donated
+  vcDonatedAllTime: Int
+
+  # The number of users this user has recruited
+  numUsersRecruited: Int
 
   # User widgets
   widgets(after: String, first: Int, before: String, last: Int, enabled: Boolean): WidgetConnection

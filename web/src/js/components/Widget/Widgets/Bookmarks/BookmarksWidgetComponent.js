@@ -2,19 +2,16 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import WidgetSharedSpace from 'general/WidgetSharedSpace'
-import EmptyWidgetMsg from 'general/EmptyWidgetMsg'
+import WidgetScrollSection from '../../WidgetScrollSection'
+import EmptyWidgetMsg from '../../EmptyWidgetMsg'
 import BookmarkChip from './BookmarkChip'
 import AddBookmarkForm from './AddBookmarkForm'
-
 import UpdateWidgetDataMutation from 'mutations/UpdateWidgetDataMutation'
-
-import Snackbar from 'material-ui/Snackbar'
 
 class BookmarksWidget extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      editMode: false,
       bookmarks: []
     }
   }
@@ -60,24 +57,20 @@ class BookmarksWidget extends React.Component {
       name: name,
       link: link
     }
-    this.state.bookmarks.splice(0, 0, newBookmark)
-    this.updateWidget(this.state.bookmarks)
     this.setState({
-      bookmarks: this.state.bookmarks
+      bookmarks: [newBookmark, ...this.state.bookmarks]
+    }, () => {
+      this.updateWidget(this.state.bookmarks)
     })
   }
 
   removeBookmark (index) {
-    this.state.bookmarks.splice(index, 1)
-    this.updateWidget(this.state.bookmarks)
     this.setState({
-      bookmarks: this.state.bookmarks
-    })
-  }
-
-  onToggleEditMode () {
-    this.setState({
-      editMode: !this.state.editMode
+      bookmarks: this.state.bookmarks.filter((_, i) => {
+        return i !== index
+      })
+    }, () => {
+      this.updateWidget(this.state.bookmarks)
     })
   }
 
@@ -94,12 +87,6 @@ class BookmarksWidget extends React.Component {
       display: 'flex',
       flexWrap: 'wrap',
       justifyContent: 'flex-start'
-    }
-
-    const container = {
-      overflowY: 'scroll',
-      overflowX: 'hidden',
-      maxHeight: '60vh'
     }
 
     const bookmarksContainer = {
@@ -119,9 +106,8 @@ class BookmarksWidget extends React.Component {
       containerStyle={sharedSpaceStyle}>
       <div style={bookmarksContainer}>
         <AddBookmarkForm
-          addBookmark={this.addBookmark.bind(this)}
-          onEditModeClicked={this.onToggleEditMode.bind(this)} />
-        <div style={container}>
+          addBookmark={this.addBookmark.bind(this)} />
+        <WidgetScrollSection>
           <div style={wrapper}>
             {nodataMsg}
             {
@@ -129,18 +115,14 @@ class BookmarksWidget extends React.Component {
                 return (<BookmarkChip
                   key={index}
                   index={index}
-                  editMode={this.state.editMode}
                   bookmark={bookmark}
-                  removeChip={this.removeBookmark.bind(this, index)} />
+                  deleteBookmark={this.removeBookmark.bind(this, index)} />
                 )
               })
             }
           </div>
-        </div>
+        </WidgetScrollSection>
       </div>
-      <Snackbar
-        open={this.state.editMode}
-        message='Click on a bookmark while in edit mode to delete it.' />
     </WidgetSharedSpace>)
   }
 }

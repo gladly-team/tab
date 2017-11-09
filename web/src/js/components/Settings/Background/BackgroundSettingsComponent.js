@@ -4,12 +4,15 @@ import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton'
 import Divider from 'material-ui/Divider'
 import {Card, CardHeader} from 'material-ui/Card'
 
-import FadeInAnimation from 'general/FadeInAnimation'
-
+import SettingsChildWrapper from '../SettingsChildWrapperComponent'
 import BackgroundImagePicker from '../../Background/BackgroundImagePickerContainer'
 import BackgroundColorPicker from '../../Background/BackgroundColorPickerContainer'
 import BackgroundCustomImagePicker from '../../Background/BackgroundCustomImagePickerContainer'
 import BackgroundDailyImage from '../../Background/BackgroundDailyImageContainer'
+import {
+  cardHeaderTitleStyle,
+  cardHeaderSubtitleStyle
+} from 'theme/default'
 
 class BackgroundSettings extends React.Component {
   constructor (props) {
@@ -41,25 +44,21 @@ class BackgroundSettings extends React.Component {
     const { app, user, showError } = this.props
     if (!this.state.selected) { return null }
 
-    const main = {
-      marginLeft: 256,
-      marginRight: 'auto',
-      padding: 20
-    }
-
     const optionContainer = {
       padding: 10
     }
-
     const divider = {
-      marginTop: 10,
-      marginBottom: 10
+      marginTop: 24,
+      marginBottom: 8
     }
-
-    const radioBtn = {
-      marginBottom: 10
+    const radioBtnGroupStyle = {
+      marginLeft: 4,
+      width: 220
     }
-
+    const radioBtnStyle = {
+      marginBottom: 6,
+      fontSize: 14
+    }
     const cardBody = {
       padding: 10
     }
@@ -95,45 +94,44 @@ class BackgroundSettings extends React.Component {
     }
 
     return (
-      <FadeInAnimation>
-        <div
-          key={'background-settings-container-key'}
-          style={main}>
-          <Card
-            style={optionContainer}>
-            <CardHeader
-              title={'Background'}
-              subtitle={'Set your background options'}
-              actAsExpander={false}
-              showExpandableButton={false} />
-            <div style={cardBody}>
-              <RadioButtonGroup
-                onChange={this.onChange.bind(this)}
-                name='photoModes'
-                valueSelected={this.state.selected}>
-                <RadioButton
-                  style={radioBtn}
-                  value='daily'
-                  label='New photo daily' />
-                <RadioButton
-                  style={radioBtn}
-                  value='custom'
-                  label='Custom photo' />
-                <RadioButton
-                  style={radioBtn}
-                  value='color'
-                  label='Use a color' />
-                <RadioButton
-                  style={radioBtn}
-                  value='photo'
-                  label='Selected photo' />
-              </RadioButtonGroup>
-              {dividerCmp}
-              {selectedOption}
-            </div>
-          </Card>
-        </div>
-      </FadeInAnimation>
+      <SettingsChildWrapper>
+        <Card
+          style={optionContainer}>
+          <CardHeader
+            title={'Background'}
+            // subtitle={'Choose the background for your new tab page'}
+            titleStyle={cardHeaderTitleStyle}
+            subtitleStyle={cardHeaderSubtitleStyle}
+            actAsExpander={false}
+            showExpandableButton={false} />
+          <div style={cardBody}>
+            <RadioButtonGroup
+              style={radioBtnGroupStyle}
+              onChange={this.onChange.bind(this)}
+              name='photoModes'
+              valueSelected={this.state.selected}>
+              <RadioButton
+                style={radioBtnStyle}
+                value='daily'
+                label='New photo daily' />
+              <RadioButton
+                style={radioBtnStyle}
+                value='photo'
+                label='Selected photo' />
+              <RadioButton
+                style={radioBtnStyle}
+                value='custom'
+                label='Custom photo' />
+              <RadioButton
+                style={radioBtnStyle}
+                value='color'
+                label='Color' />
+            </RadioButtonGroup>
+            {dividerCmp}
+            {selectedOption}
+          </div>
+        </Card>
+      </SettingsChildWrapper>
     )
   }
 }

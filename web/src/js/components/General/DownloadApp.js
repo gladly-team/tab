@@ -15,8 +15,9 @@ class DownloadApp extends React.Component {
 
   render () {
     const root = {
-      width: '100vw',
-      height: '100vh',
+      width: '100%',
+      height: '100%',
+      boxSizing: 'border-box',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center'

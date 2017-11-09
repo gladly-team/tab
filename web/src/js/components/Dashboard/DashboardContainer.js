@@ -9,6 +9,7 @@ export default createFragmentContainer(Dashboard, {
   app: graphql`
     fragment DashboardContainer_app on App {
       ...MoneyRaisedContainer_app
+      ...UserMenuContainer_app
     }
   `,
   user: graphql`
@@ -16,9 +17,8 @@ export default createFragmentContainer(Dashboard, {
       id
       ...WidgetsContainer_user
       ...UserBackgroundImageContainer_user
-      ...VcUserContainer_user
-      ...InviteFriendContainer_user
-      ...UpdateVcContainer_user
+      ...UserMenuContainer_user
+      ...LogTabContainer_user
     }
   `
 })

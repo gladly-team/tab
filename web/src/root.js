@@ -34,6 +34,7 @@ const messages = localeData[languageWithoutRegionCode] || localeData[language] |
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
+// Remove when updating material-ui to 0.19+
 injectTapEventPlugin()
 
 const Root = () => (

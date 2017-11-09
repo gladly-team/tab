@@ -3,6 +3,10 @@ import PropTypes from 'prop-types'
 import Toggle from 'material-ui/Toggle'
 import WidgetConfig from './WidgetConfigComponent'
 import {Card, CardHeader, CardText} from 'material-ui/Card'
+import {
+  cardHeaderTitleStyle
+} from 'theme/default'
+import { getWidgetIconFromWidgetType } from '../../Widget/widget-utils'
 
 import UpdateWidgetEnabledMutation from 'mutations/UpdateWidgetEnabledMutation'
 import UpdateWidgetConfigMutation from 'mutations/UpdateWidgetConfigMutation'
@@ -95,46 +99,72 @@ class WidgetSettings extends React.Component {
     const enabled = widget && widget.enabled
     const settings = this.state.settings || []
 
-    const settingsContainer = {
+    const cardStyle = {
+      marginBottom: 10
+    }
+    const enableToggleStyle = {
+      width: 'initial',
+      marginRight: 10
+    }
+    const cardHeaderStyle = {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between'
+    }
+    const cardTitleStyle = Object.assign({}, cardHeaderTitleStyle, {
+      fontSize: 16
+    })
+    const settingsContainerStyle = {
       display: 'flex',
       flexDirection: 'column'
     }
-
-    const card = {
-      marginBottom: 10
-    }
-
-    const enableToggle = {
-      width: 'initial',
-      float: 'right',
-      top: 10
-    }
-
     var settingsComponent
     if (settings && settings.length) {
       settingsComponent = (
         <CardText>
-          <div style={settingsContainer}>
+          <div style={settingsContainerStyle}>
             {settings.map((setting, index) => {
-              return (<WidgetConfig
-                key={index}
-                setting={setting}
-                onConfigUpdated={this.onWidgetConfigUpdated.bind(this)} />)
+              return (
+                <WidgetConfig
+                  key={index}
+                  setting={setting}
+                  onConfigUpdated={this.onWidgetConfigUpdated.bind(this)}
+                />
+              )
             })}
           </div>
         </CardText>
       )
     }
 
+    const WidgetIcon = getWidgetIconFromWidgetType(appWidget.type)
+
     return (
-      <Card style={card}>
+      <Card style={cardStyle}>
         <CardHeader
-          title={appWidget.name}
-          subtitle={appWidget.name}
+          style={cardHeaderStyle}
+          title={
+            <span
+              style={{
+                display: 'flex',
+                alignItems: 'center'
+              }}
+            >
+              <WidgetIcon
+                style={{
+                  height: 18,
+                  width: 18,
+                  marginRight: 8
+                }}
+              />
+              {appWidget.name}
+            </span>
+          }
+          titleStyle={cardTitleStyle}
           actAsExpander={false}
           showExpandableButton={false}>
           <Toggle
-            style={enableToggle}
+            style={enableToggleStyle}
             defaultToggled={enabled}
             onToggle={this.onWidgetEnableChange.bind(this)} />
         </CardHeader>
@@ -145,9 +175,22 @@ class WidgetSettings extends React.Component {
 }
 
 WidgetSettings.propTypes = {
-  widget: PropTypes.object,
-  appWidget: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired,
+  widget: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    enabled: PropTypes.bool.isRequired,
+    config: PropTypes.string,
+    settings: PropTypes.string
+  }),
+  appWidget: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+    settings: PropTypes.string
+  }),
+  user: PropTypes.shape({
+    id: PropTypes.string.isRequired
+  }),
   showError: PropTypes.func.isRequired
 }
 

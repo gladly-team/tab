@@ -2,9 +2,14 @@ import React from 'react'
 import WidgetIcon from './WidgetIconContainer'
 import Widget from './WidgetContainer'
 import PropTypes from 'prop-types'
-
+import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
+import {
+  WIDGET_TYPE_CLOCK,
+  WIDGET_TYPE_SEARCH
+} from '../../constants'
 import CenteredWidgetsContainer from 'general/CenteredWidgetsContainer'
 import SetUserActiveWidgetMutation from 'mutations/SetUserActiveWidgetMutation'
+import ActiveWidgetAnimation from './ActiveWidgetAnimation'
 
 class Widgets extends React.Component {
   onWidgetIconClicked (widget) {
@@ -31,6 +36,7 @@ class Widgets extends React.Component {
 
     const widgetsContainer = {
       position: 'absolute',
+      zIndex: 2,
       top: 5,
       display: 'flex',
       justifyContent: 'flex-start'
@@ -41,44 +47,60 @@ class Widgets extends React.Component {
     }
 
     return (
-      <div>
-        <div style={widgetsContainer}>
-          <div style={separator} />
-          {user.widgets.edges.map((edge, index) => {
-            return (<WidgetIcon
-              key={index}
-              widget={edge.node}
-              active={user.activeWidget && edge.node.id === user.activeWidget}
-              onWidgetIconClicked={this.onWidgetIconClicked.bind(this)} />)
-          })}
-        </div>
-        <CenteredWidgetsContainer>
-          {user.widgets.edges.map((edge, index) => {
-            if (edge.node.type === 'clock' ||
-                  edge.node.type === 'search') {
-              return (
-                <Widget
+      <FadeInDashboardAnimation>
+        <span>
+          <div style={widgetsContainer}>
+            <div style={separator} />
+            {user.widgets.edges.map((edge, index) => {
+              if (edge.node.type === WIDGET_TYPE_SEARCH) {
+                return (
+                  <Widget
+                    key={index}
+                    user={user}
+                    widget={edge.node}
+                    showError={this.props.showError} />
+                )
+              } else {
+                return (<WidgetIcon
                   key={index}
-                  user={user}
                   widget={edge.node}
-                  showError={this.props.showError} />
-              )
-            }
-          })}
-        </CenteredWidgetsContainer>
-        {user.widgets.edges.map((edge, index) => {
-          if (user.activeWidget &&
-                edge.node.id === user.activeWidget) {
-            return (
-              <Widget
-                key={index}
-                user={user}
-                widget={edge.node}
-                showError={this.props.showError} />
-            )
-          }
-        })}
-      </div>
+                  active={user.activeWidget && edge.node.id === user.activeWidget}
+                  onWidgetIconClicked={this.onWidgetIconClicked.bind(this)} />)
+              }
+            })}
+          </div>
+          <CenteredWidgetsContainer>
+            {user.widgets.edges.map((edge, index) => {
+              if (
+                edge.node.type === WIDGET_TYPE_CLOCK
+              ) {
+                return (
+                  <Widget
+                    key={index}
+                    user={user}
+                    widget={edge.node}
+                    showError={this.props.showError} />
+                )
+              }
+            })}
+          </CenteredWidgetsContainer>
+          <ActiveWidgetAnimation>
+            {user.widgets.edges.map((edge, index) => {
+              if (user.activeWidget &&
+                  edge.node.id === user.activeWidget) {
+                return (
+                  <Widget
+                    key={index}
+                    user={user}
+                    widget={edge.node}
+                    showError={this.props.showError}
+                    />
+                )
+              }
+            })}
+          </ActiveWidgetAnimation>
+        </span>
+      </FadeInDashboardAnimation>
     )
   }
 }

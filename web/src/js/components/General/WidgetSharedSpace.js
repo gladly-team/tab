@@ -5,13 +5,13 @@ class WidgetSharedSpace extends React.Component {
   render () {
     const main = {
       position: 'absolute',
-      top: 50,
+      zIndex: 1,
+      top: 40,
       left: 5,
       backgroundColor: 'transparent',
       width: 300,
-      height: '80vh',
       overflowX: 'hidden',
-      overflowY: 'scroll'
+      overflowY: 'hidden'
     }
 
     return (

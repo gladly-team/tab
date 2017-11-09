@@ -1,4 +1,5 @@
 
+import moment from 'moment'
 import UserModel from './UserModel'
 import logReferralData from '../referrals/logReferralData'
 import rewardReferringUser from './rewardReferringUser'
@@ -19,7 +20,8 @@ const createUser = async (userContext, userId, username,
   const userInfo = {
     id: userId,
     username: username,
-    email: email
+    email: email,
+    joined: moment.utc().toISOString()
   }
   try {
     var createdUser = await UserModel.create(userContext, userInfo)

@@ -2,10 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 
-import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
-
 import { getWidgetConfig } from '../../../../utils/widgets-utils'
-
 import appTheme from 'theme/default'
 
 class ClockWidget extends React.Component {
@@ -45,12 +42,12 @@ class ClockWidget extends React.Component {
 
   setDateTime (config) {
     const format24 = config.format24
-    var date = moment().format('ddd, MMMM D')
+    var date = moment().format('dddd, MMMM D')
     var time
     if (format24) {
       time = moment().format('k:mm')
     } else {
-      time = moment().format('h:mm a')
+      time = moment().format('h:mm')
     }
 
     this.setState({
@@ -61,32 +58,33 @@ class ClockWidget extends React.Component {
 
   render () {
     const clockContainer = {
-      marginTop: 20,
-      pointerEvents: 'none'
+      marginBottom: 110,
+      pointerEvents: 'none',
+      userSelect: 'none'
     }
 
     const timeStyle = {
       color: '#FFF',
-      fontSize: '3em',
-      fontWeight: 'normal',
+      fontSize: 140,
+      fontWeight: 'bold',
       margin: 0,
+      lineHeight: '90%',
       fontFamily: appTheme.fontFamily
     }
 
     const dateStyle = {
       color: '#FFF',
+      fontSize: 28,
       margin: 0,
       fontWeight: 'normal',
       fontFamily: appTheme.fontFamily
     }
 
     return (
-      <FadeInDashboardAnimation>
-        <div style={clockContainer}>
-          <h1 style={timeStyle}>{this.state.time}</h1>
-          <h2 style={dateStyle}>{this.state.date}</h2>
-        </div>
-      </FadeInDashboardAnimation>
+      <div style={clockContainer}>
+        <h1 style={timeStyle}>{this.state.time}</h1>
+        <h2 style={dateStyle}>{this.state.date}</h2>
+      </div>
     )
   }
 }

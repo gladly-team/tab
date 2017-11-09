@@ -1,5 +1,9 @@
 import moment from 'moment'
 
+import {
+  USER_REFERRAL_VC_REWARD
+} from '../constants'
+
 class Globals {
   constructor () {
     this.raised = 350447.62
@@ -33,8 +37,13 @@ function getDollarsPerDayRate () {
   return globals.dollarsPerDayRate
 }
 
+function getReferralVcReward () {
+  return USER_REFERRAL_VC_REWARD
+}
+
 export {
-    Globals,
-    getMoneyRaised,
-    getDollarsPerDayRate
+  Globals,
+  getMoneyRaised,
+  getDollarsPerDayRate,
+  getReferralVcReward
 }

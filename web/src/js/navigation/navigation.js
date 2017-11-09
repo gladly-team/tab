@@ -1,43 +1,39 @@
 import { browserHistory } from 'react-router'
 
-function goTo (route) {
+// TODO: replace this with Link navigation via react-router.
+
+export const goTo = (route) => {
   browserHistory.push(route)
 }
 
-function goToHome () {
+export const goToHome = () => {
   goTo('/tab/')
 }
 
-function goToLogin () {
+export const goToLogin = () => {
   goTo('/tab/auth/login/')
 }
 
-function goToSettings () {
-  goTo('/tab/settings/')
+export const goToSettings = () => {
+  goTo('/tab/settings/widgets/')
 }
 
-function goToSettingsSection (section) {
-  goTo(`/tab/settings/${section}/`)
+export const goToDonate = () => {
+  goTo('/tab/profile/donate/')
 }
 
-function goToDonate () {
-  goTo('/tab/donate/')
-}
-
-function goToDashboard () {
+export const goToDashboard = () => {
   goTo('/tab/')
 }
 
-function goToRetrievePassword () {
+export const goToRetrievePassword = () => {
   goTo('/tab/auth/recovery/')
 }
 
-export {
-  goToHome,
-  goToLogin,
-  goToSettings,
-  goToSettingsSection,
-  goToDonate,
-  goToDashboard,
-  goToRetrievePassword
+export const goToStats = () => {
+  goTo('/tab/profile/stats/')
+}
+
+export const goToInviteFriends = () => {
+  goTo('/tab/profile/invite/')
 }

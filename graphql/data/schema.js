@@ -47,7 +47,7 @@ import {
 
 import UserModel from '../database/users/UserModel'
 import createUser from '../database/users/createUser'
-import incrementVc from '../database/users/incrementVc'
+import logTab from '../database/users/logTab'
 import setActiveWidget from '../database/users/setActiveWidget'
 import setBackgroundImage from '../database/users/setBackgroundImage'
 import setBackgroundImageFromCustomURL from '../database/users/setBackgroundImageFromCustomURL'
@@ -63,6 +63,7 @@ import BackgroundImageModel from '../database/backgroundImages/BackgroundImageMo
 import {
   Globals,
   getMoneyRaised,
+  getReferralVcReward,
   getDollarsPerDayRate
 } from '../database/globals/globals'
 
@@ -162,6 +163,21 @@ const imageType = new GraphQLObjectType({
   })
 })
 
+const maxTabsDayType = new GraphQLObjectType({
+  name: 'MaxTabsDay',
+  description: 'Info about the user\'s day of most opened tabs',
+  fields: () => ({
+    date: {
+      type: GraphQLString,
+      description: 'The day the most tabs were opened'
+    },
+    numTabs: {
+      type: GraphQLInt,
+      description: 'The number of tabs opened on that day'
+    }
+  })
+})
+
 const userType = new GraphQLObjectType({
   name: USER,
   description: 'A person who uses our app',
@@ -184,21 +200,43 @@ const userType = new GraphQLObjectType({
       type: GraphQLString,
       description: 'User\'s email'
     },
+    joined: {
+      type: GraphQLString,
+      description: 'ISO datetime string of when the user joined'
+    },
     vcCurrent: {
       type: GraphQLInt,
-      description: 'User\'s current vc'
+      description: 'User\'s current VC'
     },
     vcAllTime: {
       type: GraphQLInt,
-      description: 'User\'s vc of all time'
+      description: 'User\'s all time VC'
+    },
+    tabs: {
+      type: GraphQLInt,
+      description: 'User\'s all time tab count'
+    },
+    maxTabsDay: {
+      type: maxTabsDayType,
+      description: 'Info about the user\'s day of most opened tabs',
+      resolve: (user, _) => user.maxTabsDay.maxDay
     },
     level: {
       type: GraphQLInt,
       description: 'User\'s vc'
     },
+    // TODO: change to heartsForNextLevel to be able to get progress
     heartsUntilNextLevel: {
       type: GraphQLInt,
       description: 'Remaing hearts until next level.'
+    },
+    vcDonatedAllTime: {
+      type: GraphQLInt,
+      description: 'User\'s total vc donated'
+    },
+    numUsersRecruited: {
+      type: GraphQLInt,
+      description: 'The number of users this user has recruited'
     },
     widgets: {
       type: widgetConnection,
@@ -325,6 +363,12 @@ const appType = new GraphQLObjectType({
         return getDollarsPerDayRate()
       }
     },
+    referralVcReward: {
+      type: GraphQLInt,
+      resolve: () => {
+        return getReferralVcReward()
+      }
+    },
     widgets: {
       type: widgetConnection,
       description: 'All the widgets',
@@ -358,8 +402,8 @@ const { connectionType: backgroundImageConnection, edgeType: backgroundImageEdge
 /**
  * Updated the user vc.
  */
-const updateVcMutation = mutationWithClientMutationId({
-  name: 'UpdateVc',
+const logTabMutation = mutationWithClientMutationId({
+  name: 'LogTab',
   inputFields: {
     userId: { type: new GraphQLNonNull(GraphQLString) }
   },
@@ -371,7 +415,7 @@ const updateVcMutation = mutationWithClientMutationId({
   },
   mutateAndGetPayload: ({userId}, context) => {
     const { type, id } = fromGlobalId(userId)
-    return incrementVc(context.user, id)
+    return logTab(context.user, id)
   }
 })
 
@@ -665,7 +709,7 @@ const queryType = new GraphQLObjectType({
 const mutationType = new GraphQLObjectType({
   name: 'Mutation',
   fields: () => ({
-    updateVc: updateVcMutation,
+    logTab: logTabMutation,
     donateVc: donateVcMutation,
 
     setUserBkgImage: setUserBkgImageMutation,

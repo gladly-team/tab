@@ -1,8 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { commaFormatted, currencyFormatted } from 'utils/utils'
-import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
-import MoneyRaisedPopover from './MoneyRaisedPopover'
+import DashboardPopover from '../Dashboard/DashboardPopover'
+import RaisedButton from 'material-ui/RaisedButton'
+import {
+  goToInviteFriends
+} from 'navigation/navigation'
+
+import appTheme, {
+  dashboardIconActiveColor,
+  dashboardIconInactiveColor
+} from 'theme/default'
 
 class MoneyRaised extends React.Component {
   constructor (props) {
@@ -10,6 +18,7 @@ class MoneyRaised extends React.Component {
     this.timer = 0
     this.state = {
       amountDonated: 0,
+      hovering: false,
       open: false
     }
   }
@@ -55,11 +64,15 @@ class MoneyRaised extends React.Component {
     clearInterval(this.timer)
   }
 
-  handleTouchTap (event) {
-    // This prevents ghost click.
-    event.preventDefault()
+  onHover (hovering) {
     this.setState({
-      open: true,
+      hover: hovering
+    })
+  }
+
+  onClick (event) {
+    this.setState({
+      open: !this.state.open,
       anchorEl: event.currentTarget
     })
   }
@@ -73,34 +86,61 @@ class MoneyRaised extends React.Component {
   render () {
     if (!this.props.app) { return null }
 
-    const container = {
+    const containerStyle = {
+      userSelect: 'none',
+      cursor: 'default'
+    }
+    const popoverStyle = {
+      width: 180
+    }
+    const buttonContainerStyle = {
       textAlign: 'center'
     }
-
-    const text = {
-      color: 'white',
-      fontSize: '1.7em',
-      fontWeight: 'normal',
-      fontFamily: "'Helvetica Neue', Calibri, sans-serif"
-    }
+    const textStyle = Object.assign({}, {
+      color: (
+        this.state.hover
+        ? dashboardIconActiveColor
+        : dashboardIconInactiveColor
+      ),
+      transition: 'color 300ms ease-in',
+      cursor: 'pointer',
+      fontSize: 18,
+      fontFamily: appTheme.fontFamily,
+      fontWeight: 'normal'
+    }, this.props.style)
 
     const moneyRaised = this.state.amountDonated
     var amountDonated = '$' + commaFormatted(currencyFormatted(moneyRaised))
 
     return (
-      <FadeInDashboardAnimation>
-        <div
-          onMouseEnter={this.handleTouchTap.bind(this)}
-          onMouseLeave={this.handlePopoverRequestClose.bind(this)}
-          style={container}>
-          <span
-            style={text}>{amountDonated}</span>
-          <MoneyRaisedPopover
-            open={this.state.open}
-            anchorEl={this.state.anchorEl}
-            onRequestClose={this.handlePopoverRequestClose.bind(this)} />
-        </div>
-      </FadeInDashboardAnimation>
+      <div
+        onClick={this.onClick.bind(this)}
+        onMouseEnter={this.onHover.bind(this, true)}
+        onMouseLeave={this.onHover.bind(this, false)}
+        style={containerStyle}>
+        <span
+          style={textStyle}>{amountDonated}</span>
+        <DashboardPopover
+          style={popoverStyle}
+          open={this.state.open}
+          anchorEl={this.state.anchorEl}
+          onRequestClose={this.handlePopoverRequestClose.bind(this)}>
+          <div style={{ padding: 10, paddingTop: 0 }}>
+            <p>This is how much money Tabbers have raised for charity.</p>
+            <p>Recruit your friends to raise more!</p>
+            <div style={buttonContainerStyle}>
+              <RaisedButton
+                label='Invite Friends'
+                primary
+                onClick={goToInviteFriends}
+                labelStyle={{
+                  fontSize: 13
+                }}
+              />
+            </div>
+          </div>
+        </DashboardPopover>
+      </div>
     )
   }
 }
@@ -109,7 +149,12 @@ MoneyRaised.propTypes = {
   app: PropTypes.shape({
     moneyRaised: PropTypes.number.isRequired,
     dollarsPerDayRate: PropTypes.number.isRequired
-  })
+  }),
+  style: PropTypes.object
+}
+
+MoneyRaised.defaultProps = {
+  style: {}
 }
 
 export default MoneyRaised

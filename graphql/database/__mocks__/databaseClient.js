@@ -28,7 +28,8 @@ const mockDynamoDB = () => {
 
 const mockDocClient = () => {
   const client = new AWS.DynamoDB.DocumentClient({
-    service: mockDynamoDB()
+    service: mockDynamoDB(),
+    convertEmptyValues: true
   })
 
   // Mock data returns for each operation.

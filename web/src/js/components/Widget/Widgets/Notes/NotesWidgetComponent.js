@@ -3,9 +3,8 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 
 import WidgetSharedSpace from 'general/WidgetSharedSpace'
-import EmptyWidgetMsg from 'general/EmptyWidgetMsg'
-import {List} from 'general/List'
-
+import EmptyWidgetMsg from '../../EmptyWidgetMsg'
+import WidgetScrollSection from '../../WidgetScrollSection'
 import Note from './Note'
 import AddNoteForm from './AddNoteForm'
 import UpdateWidgetDataMutation from 'mutations/UpdateWidgetDataMutation'
@@ -61,31 +60,33 @@ class NotesWidget extends React.Component {
       content: text,
       created: moment.utc().format()
     }
-
-    this.state.notes.splice(0, 0, newNote)
-    if (text && text.length) {
-      this.updateWidget(this.state.notes)
-    }
-
     this.setState({
-      notes: this.state.notes
+      notes: [newNote, ...this.state.notes]
+    }, () => {
+      this.updateWidget(this.state.notes)
+
+      // Focus new note.
+      this.newestNote.noteInput.focus()
     })
   }
 
   removeStickyNote (index) {
-    this.state.notes.splice(index, 1)
-    this.updateWidget(this.state.notes)
-
     this.setState({
-      notes: this.state.notes
+      notes: this.state.notes.filter((_, i) => {
+        return i !== index
+      })
+    }, () => {
+      this.updateWidget(this.state.notes)
     })
   }
 
   updateStickyNote (content, index) {
-    this.state.notes[index].content = content
-    this.updateWidget(this.state.notes)
+    const notes = [...this.state.notes]
+    notes[index].content = content
     this.setState({
-      notes: this.state.notes
+      notes: notes
+    }, () => {
+      this.updateWidget(this.state.notes)
     })
   }
 
@@ -106,12 +107,6 @@ class NotesWidget extends React.Component {
       overflow: 'visible'
     }
 
-    const notesContainer = {
-      overflowY: 'scroll',
-      overflowX: 'hidden',
-      height: '60vh'
-    }
-
     const mainContainer = {
       display: 'flex',
       flexDirection: 'column',
@@ -129,22 +124,25 @@ class NotesWidget extends React.Component {
       containerStyle={sharedSpaceStyle}>
       <div style={mainContainer}>
         <AddNoteForm
-          addForm={false}
           addNote={this.addNewNote.bind(this)} />
-        <List
-          containerStyle={notesContainer}>
+        <WidgetScrollSection>
           {nodataMsg}
           {this.state.notes.map((note, index) => {
             return (
               <Note
                 key={note.id}
                 index={index}
+                ref={(note) => {
+                  if (index === 0) {
+                    this.newestNote = note
+                  }
+                }}
                 removeStickyNote={this.removeStickyNote.bind(this)}
                 onNoteUpdated={this.updateStickyNote.bind(this)}
                 note={note} />
             )
           })}
-        </List>
+        </WidgetScrollSection>
       </div>
     </WidgetSharedSpace>)
   }

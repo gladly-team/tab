@@ -51,14 +51,14 @@
     "favicons-webpack-plugin": "0.0.7",
     "file-loader": "^0.11.1",
     "filesize": "^3.5.9",
-    "font-awesome": "^4.7.0",
     "fs-extra": "^3.0.1",
     "gzip-size": "3.0.0",
     "html-webpack-plugin": "^2.28.0",
     "http-proxy-middleware": "^0.17.4",
     "jest": "^20.0.1",
     "json-loader": "0.5.4",
-    "material-ui": "^0.18.1",
+    "material-ui": "^0.19.4",
+    "material-ui-next": "npm:material-ui@next",
     "moment": "^2.18.1",
     "nodemon": "^1.11.0",
     "normalize.css": "^7.0.0",
@@ -71,11 +71,13 @@
     "prop-types": "^15.5.10",
     "react": "^15.4.2",
     "react-color": "^2.11.7",
+    "react-custom-scrollbars": "^4.2.1",
     "react-dev-utils": "^0.5.2",
     "react-dom": "^15.4.2",
     "react-dropdown": "^1.2.0",
     "react-hot-loader": "3.0.0-beta.6",
     "react-intl": "^2.2.3",
+    "react-measure": "^2.0.2",
     "react-motion": "^0.5.0",
     "react-relay": "^1.0.0-rc.4",
     "react-router": "^3.0.0",
@@ -157,5 +159,8 @@
   "author": "Gladly Team",
   "bugs": {
     "url": "https://github.com/gladly-team/tab/issues"
+  },
+  "optionalDependencies": {
+    "material-ui-codemod": "^1.0.0-beta.11"
   }
 }

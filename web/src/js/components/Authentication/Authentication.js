@@ -6,9 +6,11 @@ import { goToDashboard } from 'navigation/navigation'
 import SlideFromRightAnimation from 'general/SlideFromRightAnimation'
 import SlideFromLeftAnimation from 'general/SlideFromLeftAnimation'
 import { getUserCredentials } from '../../utils/tfac-mgr'
-import appTheme from 'theme/default'
 import FlatButton from 'material-ui/FlatButton'
-import logoHeader from 'assets/logos/tfc-title-white.png'
+import AppBarWithLogo from '../Logo/AppBarWithLogo'
+import {
+  primaryColor
+} from 'theme/default'
 
 class Authentication extends React.Component {
   constructor (props) {
@@ -56,12 +58,11 @@ class Authentication extends React.Component {
   }
 
   render () {
-    var backgroundColor = '#7C4DFF'
-    var goToViewName = 'REGISTER'
+    var goToViewName = 'SIGN UP'
     var goToView = 'signUp'
     var currentState
     if (this.state.view === 'signIn') {
-      goToViewName = 'REGISTER'
+      goToViewName = 'SIGN UP'
       goToView = 'signUp'
       currentState = (
         <SlideFromLeftAnimation
@@ -69,11 +70,12 @@ class Authentication extends React.Component {
           leaveAnimationTimeout={0}
           enter={this.state.enter}>
           <SignIn />
-        </SlideFromLeftAnimation>)
+        </SlideFromLeftAnimation>
+      )
     }
 
     if (this.state.view === 'signUp') {
-      goToViewName = 'LOGIN'
+      goToViewName = 'LOG IN'
       goToView = 'signIn'
       currentState = (
         <SlideFromRightAnimation
@@ -81,50 +83,45 @@ class Authentication extends React.Component {
           leaveAnimationTimeout={0}
           enter={this.state.enter}>
           <SignUp />
-        </SlideFromRightAnimation>)
+        </SlideFromRightAnimation>
+      )
     }
 
-    const root = {
+    const rootStyle = {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'flex-start',
       height: '100%',
       width: '100%',
-      backgroundColor: backgroundColor,
+      backgroundColor: primaryColor
+    }
+    const contentStyle = {
       display: 'flex',
+      flex: 1,
+      alignSelf: 'stretch',
       justifyContent: 'center',
       alignItems: 'center',
-      flexDirection: 'column'
-    }
-
-    const header = {
-      position: 'absolute',
-      top: 100
-    }
-
-    const main = {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center'
-    }
-
-    const navigation = {
-      position: 'absolute',
-      top: 10,
-      right: 10,
-      color: appTheme.palette.alternateTextColor
+      paddingBottom: 100
     }
 
     return (
-      <div
-        style={root}>
-        <img style={header} src={logoHeader} />
-        <FlatButton
-          id={'toggle-auth-views-btn-id'}
-          style={navigation}
-          label={goToViewName}
-          onClick={this.navigateTo.bind(this, goToView)} />
-        <div style={main}>
+      <span style={rootStyle}>
+        <AppBarWithLogo
+          iconElementRight={
+            <FlatButton
+              id={'toggle-auth-views-btn-id'}
+              style={{
+                color: primaryColor
+              }}
+              label={goToViewName}
+              onClick={this.navigateTo.bind(this, goToView)}
+            />
+          }
+        />
+        <div style={contentStyle}>
           {currentState}
         </div>
-      </div>
+      </span>
     )
   }
 }

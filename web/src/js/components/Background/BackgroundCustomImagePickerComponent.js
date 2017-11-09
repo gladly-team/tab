@@ -6,7 +6,9 @@ import SetBackgroundCustomImageMutation from 'mutations/SetBackgroundCustomImage
 import Subheader from 'material-ui/Subheader'
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
-
+import {
+  cardHeaderSubtitleStyle
+} from 'theme/default'
 import brokenImage from 'assets/nopicture.jpg'
 
 class BackgroundCustomeImagePicker extends React.Component {
@@ -84,24 +86,26 @@ class BackgroundCustomeImagePicker extends React.Component {
       width: '100%',
       display: 'flex',
       flexWrap: 'wrap',
-      justifyContent: 'space-around'
+      justifyContent: 'flex-start'
     }
 
     const textInput = {
+      fontSize: 14,
       width: '100%'
     }
 
     const column1 = {
-      width: '50%'
+      flex: 1,
+      paddingRight: 30
     }
 
     const column2 = {
-      width: '40%'
+      flex: 1
     }
 
-    const header = {
+    const header = Object.assign({}, cardHeaderSubtitleStyle, {
       paddingLeft: 0
-    }
+    })
 
     const preview = {
       height: 'auto',
@@ -121,17 +125,17 @@ class BackgroundCustomeImagePicker extends React.Component {
       <div style={root}>
         <div
           style={column1}>
-          <Subheader style={header}>Paste your image source</Subheader>
+          <Subheader style={header}>Enter an image URL</Subheader>
           <TextField
             ref={(input) => { this.imgLink = input }}
             style={textInput}
             value={this.state.image || ''}
-            hintText='Paste here the url to your image'
+            hintText='Image URL'
             onChange={this.onChange.bind(this)} />
           <RaisedButton
             label='CLEAR'
             onClick={this.clear.bind(this)}
-            secondary
+            default
             style={clear} />
         </div>
         <div style={column2}>

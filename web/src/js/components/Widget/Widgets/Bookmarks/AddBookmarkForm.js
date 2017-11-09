@@ -3,217 +3,107 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
-
+import EditWidgetChip from '../../EditWidgetChip'
 import TextField from 'material-ui/TextField'
-import Chip from 'material-ui/Chip'
-import DeleteIcon from 'material-ui/svg-icons/navigation/cancel'
-import CheckCircle from 'material-ui/svg-icons/action/check-circle'
-import AddCircle from 'material-ui/svg-icons/content/add-circle'
-import ModeEdit from 'material-ui/svg-icons/editor/mode-edit'
-
-import appTheme from 'theme/default'
+import appTheme, {
+  widgetEditButtonHover
+} from 'theme/default'
 
 class AddBookmarkForm extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      hoveringCancel: false,
-      hoveringCreate: false,
-      hoveringAdd: false,
-      hoveringEdit: false,
-      show: false,
-      animating: false,
-      editMode: false
+      open: false,
+      nameRequiredError: false,
+      urlRequiredError: false
     }
   }
 
   _handleKeyPress (e) {
     if (e.key === 'Enter') {
-      this.create()
+      if (!e.shiftKey) {
+        e.stopPropagation()
+        e.preventDefault()
+        this.create()
+      }
     }
   }
 
-  checkUrl (url) {
-    const isUrl = (s) => {
+  openForm () {
+    this.setState({
+      open: true
+    }, () => {
+      this.focusInput()
+    })
+  }
+
+  closeForm () {
+    this.setState({
+      open: false
+    })
+  }
+
+  focusInput () {
+    this.bookmarkNameTextField.focus()
+  }
+
+  onNameValChange () {
+    const name = this.bookmarkNameTextField.input.value
+    this.setState({
+      nameRequiredError: !name
+    })
+  }
+
+  onURLValChange () {
+    const url = this.bLink.input.value
+    this.setState({
+      urlRequiredError: !url
+    })
+  }
+
+  addProtocolToURLIfNeeded (url) {
+    const hasProtocol = (s) => {
       var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
       return regexp.test(s)
     }
 
-    if (!isUrl(url)) {
+    if (!hasProtocol(url)) {
       return 'http://' + url
     }
     return url
   }
 
   create () {
-    const name = this.bName.input.value
-    const link = this.checkUrl(this.bLink.input.value)
+    const name = this.bookmarkNameTextField.input.value
+    const url = this.bLink.input.value
 
-    if (!name || !link) { return }
+    if (!name) {
+      this.setState({
+        nameRequiredError: true
+      })
+    }
+    if (!url) {
+      this.setState({
+        urlRequiredError: true
+      })
+    }
+    if (!name || !url) { return }
 
+    const link = this.addProtocolToURLIfNeeded(this.bLink.input.value)
     this.props.addBookmark(name, link)
-    this.bName.input.value = ''
+    this.bookmarkNameTextField.input.value = ''
     this.bLink.input.value = ''
 
     this.closeForm()
   }
 
-  onCancelBtnMouseMove (enter) {
-    this.setState({
-      hoveringCancel: enter
-    })
-  }
-
-  onCreateBtnMouseMove (enter) {
-    this.setState({
-      hoveringCreate: enter
-    })
-  }
-
-  onAddBtnMouseMove (enter) {
-    this.setState({
-      hoveringAdd: enter
-    })
-  }
-
-  onEditBtnMouseMove (enter) {
-    this.setState({
-      hoveringEdit: enter
-    })
-  }
-
-  closeForm () {
-    this.setState({
-      animating: true
-    })
-
-    setTimeout(() => {
-      this.setState({
-        animating: false,
-        show: false,
-        hoveringCancel: false,
-        hoveringCreate: false,
-        hoveringAdd: false
-      })
-    }, 200)
-  }
-
-  openForm () {
-    if (this.state.editMode) {
-      this.props.onEditModeClicked()
-    }
-
-    this.setState({
-      animating: true,
-      editMode: false
-    })
-
-    setTimeout(() => {
-      this.setState({
-        animating: false,
-        show: true,
-        hoveringCancel: false,
-        hoveringCreate: false,
-        hoveringAdd: false
-      })
-    }, 200)
-  }
-
-  onEditModeClicked () {
-    this.setState({
-      editMode: !this.state.editMode
-    })
-
-    this.props.onEditModeClicked()
-  }
-
   render () {
-    if (this.state.animating) {
-      return (<div style={{height: 125}} />)
-    }
-
-    if (!this.state.show) {
-      const chip = {
-        style: {
-          margin: 5,
-          borderRadius: 3
-        },
-        labelStyle: {
-          width: '100%'
-        },
-        backgroundColor: appTheme.palette.primary1Color,
-        labelColor: '#FFF',
-        addIcon: {
-          cursor: 'pointer',
-          float: 'right',
-          margin: '4px -4px 0px 4px',
-          hoverColor: appTheme.fontIcon.color,
-          color: 'rgba(255,255,255,.3)',
-          display: 'inline-block'
-        }
-      }
-
-      var addIconColor = (this.state.hoveringAdd)
-                    ? chip.addIcon.hoverColor : chip.addIcon.color
-
-      var editIconColor = (this.state.hoveringEdit)
-                    ? chip.addIcon.hoverColor : chip.addIcon.color
-
-      return (
-        <FadeInDashboardAnimation>
-          <Chip
-            key={'bookmarks-header-key'}
-            backgroundColor={chip.backgroundColor}
-            labelColor={chip.labelColor}
-            labelStyle={chip.labelStyle}
-            style={chip.style}>
-              Bookmarks
-              <div style={{display: 'inline', marginLeft: 10}}>
-                <AddCircle
-                  color={addIconColor}
-                  style={chip.addIcon}
-                  onClick={this.openForm.bind(this)}
-                  onMouseEnter={this.onAddBtnMouseMove.bind(this, true)}
-                  onMouseLeave={this.onAddBtnMouseMove.bind(this, false)} />
-                <ModeEdit
-                  color={editIconColor}
-                  style={chip.addIcon}
-                  onClick={this.onEditModeClicked.bind(this)}
-                  onMouseEnter={this.onEditBtnMouseMove.bind(this, true)}
-                  onMouseLeave={this.onEditBtnMouseMove.bind(this, false)} />
-              </div>
-          </Chip>
-        </FadeInDashboardAnimation>
-      )
-    }
-
-    const addBookmarkContainer = {
-      display: 'flex',
-      flexDirection: 'column',
-      padding: 10,
-      backgroundColor: appTheme.palette.primary1Color,
-      borderRadius: 3,
-      margin: 5
-    }
-
-    const actionContainer = {
-      display: 'flex',
-      justifyContent: 'flex-end'
-    }
-
-    const formContainer = {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center'
-    }
-
     const textField = {
       underlineStyle: {
         borderColor: appTheme.textField.underlineColor
       },
       underlineFocusStyle: {
-        borderColor: appTheme.textField.underlineFocusStyle
+        borderColor: widgetEditButtonHover
       },
       hintStyle: {
         color: appTheme.textField.underlineColor,
@@ -222,74 +112,59 @@ class AddBookmarkForm extends React.Component {
       inputStyle: {
         color: '#FFF',
         fontSize: 14
-      },
-      style: {
-        height: 35
       }
     }
 
-    const cancelIcon = {
-      cursor: 'pointer',
-      hoverColor: appTheme.fontIcon.color,
-      color: 'rgba(255,255,255,.3)',
-      display: 'inline-block'
-    }
-
-    var cancelIconColor = (this.state.hoveringCancel)
-                    ? cancelIcon.hoverColor : cancelIcon.color
-
-    var createIconColor = (this.state.hoveringCreate)
-                    ? cancelIcon.hoverColor : cancelIcon.color
-
     return (
-      <FadeInDashboardAnimation>
-        <div
-          key={'add-bookmark-form-key'}
-          style={addBookmarkContainer}>
-          <div style={actionContainer}>
-            <DeleteIcon
-              color={cancelIconColor}
-              style={cancelIcon}
-              onClick={this.closeForm.bind(this)}
-              onMouseEnter={this.onCancelBtnMouseMove.bind(this, true)}
-              onMouseLeave={this.onCancelBtnMouseMove.bind(this, false)} />
-            <CheckCircle
-              color={createIconColor}
-              style={cancelIcon}
-              onClick={this.create.bind(this)}
-              onMouseEnter={this.onCreateBtnMouseMove.bind(this, true)}
-              onMouseLeave={this.onCreateBtnMouseMove.bind(this, false)} />
-          </div>
-
-          <div style={formContainer}>
+      <EditWidgetChip
+        open={this.state.open}
+        widgetName={'Bookmarks'}
+        onAddItemClick={this.openForm.bind(this)}
+        onCancelAddItemClick={this.closeForm.bind(this)}
+        onItemCreatedClick={this.create.bind(this)}
+        widgetAddItemForm={
+          <span
+            key={'widget-add-form-elem'}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              paddingBottom: 20
+            }}
+          >
             <TextField
-              ref={(input) => { this.bName = input }}
+              ref={(input) => { this.bookmarkNameTextField = input }}
               onKeyPress={this._handleKeyPress.bind(this)}
               hintText='Ex: Google'
               style={textField.style}
               inputStyle={textField.inputStyle}
               hintStyle={textField.hintStyle}
               underlineStyle={textField.underlineStyle}
-              underlineFocusStyle={textField.underlineFocusStyle} />
-
+              underlineFocusStyle={textField.underlineFocusStyle}
+              onChange={this.onNameValChange.bind(this)}
+              errorText={this.state.nameRequiredError ? 'Enter a name' : null}
+            />
             <TextField
               ref={(input) => { this.bLink = input }}
               onKeyPress={this._handleKeyPress.bind(this)}
-              hintText='Ex: https://www.google.com/'
+              hintText='Ex: google.com'
               style={textField.style}
               inputStyle={textField.inputStyle}
               hintStyle={textField.hintStyle}
               underlineStyle={textField.underlineStyle}
-              underlineFocusStyle={textField.underlineFocusStyle} />
-          </div>
-        </div>
-      </FadeInDashboardAnimation>)
+              underlineFocusStyle={textField.underlineFocusStyle}
+              onChange={this.onURLValChange.bind(this)}
+              errorText={this.state.urlRequiredError ? 'Enter a URL' : null}
+            />
+          </span>
+        }
+       />
+    )
   }
 }
 
 AddBookmarkForm.propTypes = {
-  addBookmark: PropTypes.func.isRequired,
-  onEditModeClicked: PropTypes.func.isRequired
+  addBookmark: PropTypes.func.isRequired
 }
 
 AddBookmarkForm.defaultProps = {
