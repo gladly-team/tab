@@ -113,8 +113,7 @@ resources:
                   Forward: none
               # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html
               Compress: true
-              # Switch this to "redirect-to-https" after migrating to HTTPS only.
-              ViewerProtocolPolicy: allow-all
+              ViewerProtocolPolicy: redirect-to-https
             - PathPattern: 'graphql*'
               MinTTL: 0
               MaxTTL: 0
@@ -136,7 +135,7 @@ resources:
                 QueryString: false
                 Cookies:
                   Forward: none
-              ViewerProtocolPolicy: allow-all
+              ViewerProtocolPolicy: redirect-to-https
             # Cache (non-HTML) static files for a long time.
             - PathPattern: '*'
               MinTTL: 31536000 # one year
@@ -151,8 +150,7 @@ resources:
                 Cookies:
                   Forward: none
               Compress: true
-              # Switch this to "redirect-to-https" after migrating to HTTPS only.
-              ViewerProtocolPolicy: allow-all
+              ViewerProtocolPolicy: redirect-to-https
           DefaultCacheBehavior:
             AllowedMethods:
               - HEAD
@@ -165,7 +163,7 @@ resources:
                 Forward: none
             # The protocol that users can use to access the files in the origin.
             # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-defaultcachebehavior.html#cfn-cloudfront-defaultcachebehavior-viewerprotocolpolicy
-            ViewerProtocolPolicy: allow-all
+            ViewerProtocolPolicy: redirect-to-https
           # The certificate to use when viewers use HTTPS to request objects.
           # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distributionconfig-viewercertificate.html
           ViewerCertificate:
