@@ -19,8 +19,6 @@ provider:
   # Rules for fine-grained DynamoDB access:
   #   https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/specifying-conditions.html
   #   https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/using-identity-based-policies.html
-  # See rules based on Cognito user ID:
-  #   https://stackoverflow.com/a/25888309
   iamRoleStatements:
     # Charities table
     - Effect: "Allow"
@@ -102,7 +100,7 @@ functions:
           path: graphql/
           method: post
           cors: true
-          # Require user to be authenticated with AWS Cognito.
+          # Require user to be authenticated.
           # https://serverless.com/framework/docs/providers/aws/events/apigateway#http-endpoints-with-custom-authorizers
           # https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-integrate-with-cognito.html#apigateway-enable-cognito-user-pool
           authorizer:

@@ -18,6 +18,7 @@ export const getUserClaimsFromLambdaEvent = (lambdaEvent) => {
  * @return {boolean} Whether the user is authorized.
  */
 export const isUserAuthorized = (userClaims) => {
+  // FIXME
   const userId = userClaims['sub']
   const username = userClaims['cognito:username']
   const emailVerified = userClaims['email_verified'] === 'true'
@@ -33,6 +34,7 @@ export const isUserAuthorized = (userClaims) => {
  * @return {obj} The object of user claims.
  */
 export const createGraphQLContext = (userClaims) => {
+  // FIXME
   const userId = userClaims['sub']
   const username = userClaims['cognito:username']
   const email = userClaims['email']

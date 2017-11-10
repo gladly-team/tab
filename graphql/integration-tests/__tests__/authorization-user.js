@@ -13,35 +13,35 @@ import fetchQuery from '../utils/fetch-graphql'
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 180e3
 
-var cognitoUsername = null
-var cognitoUserId = null
-var cognitoUserIdToken = null
+var username = null
+var userId = null
+var userIdToken = null
 const fixtureUserId = 'gqltest1-12ab-12ab-12ab-123abc456def'
 
 beforeAll(async () => {
-  // Create a Cognito user.
+  // Create a authed user.
   const userInfo = await getNewAuthedUser()
-  cognitoUserId = userInfo.userId
-  cognitoUserIdToken = userInfo.idToken
-  cognitoUsername = userInfo.username
+  userId = userInfo.userId
+  userIdToken = userInfo.idToken
+  username = userInfo.username
 })
 
 afterAll(async () => {
-  // Delete the Cognito user.
-  await deleteUser(cognitoUsername)
+  // Delete the authed user.
+  await deleteUser(username)
 })
 
 beforeEach(async () => {
   // Load fixtures, replacing one of the hardcoded user IDs
-  // with the Cognito user's ID.
+  // with the authed user's ID.
   await loadFixtures('users', [
-    { before: fixtureUserId, after: cognitoUserId }
+    { before: fixtureUserId, after: userId }
   ])
 })
 
 afterEach(async () => {
   await deleteFixtures('users', [
-    { before: fixtureUserId, after: cognitoUserId }
+    { before: fixtureUserId, after: userId }
   ])
 })
 
@@ -60,9 +60,9 @@ describe('User table queries', () => {
       }
     `
     const response = await fetchQuery(query, {
-      userId: cognitoUserId
-    }, cognitoUserIdToken)
-    expect(response.data.user.userId).toBe(cognitoUserId)
+      userId: userId
+    }, userIdToken)
+    expect(response.data.user.userId).toBe(userId)
     expect(response.data.user.username).toBe('kevin')
     expect(response.data.user.email).toBe('foo@bar.com')
   }, 60e3)
@@ -81,7 +81,7 @@ describe('User table queries', () => {
       }
     `
     const response = await fetchQuery(query, {
-      userId: cognitoUserId
+      userId: userId
     })
     expect(response.data).toBeUndefined()
     expect(response.message).toBe('Unauthorized')
@@ -102,28 +102,16 @@ describe('User table queries', () => {
     `
     const response = await fetchQuery(query, {
       userId: 'gqltest1-yz89-yz80-yz80-xyz789tuv456' // another user
-    }, cognitoUserIdToken)
+    }, userIdToken)
     expect(response.data.user).toBeNull()
     expect(response.errors[0].message).toContain('Internal Error: ')
   }, 60e3)
 
   // // TODO
-  // it('allows new user creation', async () => {
-  //   const query = `
-  //   `
-  //   const response = await fetchQuery(query, {
-  //     userId: cognitoUserId
-  //   }, cognitoUserIdToken)
-  //   //
+  // it('allows new user creation', async () => {)
   // }, 60e3)
 
   // // TODO
-  // it('does not allow new user creation with a different sub than Cognito', async () => {
-  //   const query = `
-  //   `
-  //   const response = await fetchQuery(query, {
-  //     userId: cognitoUserId
-  //   })
-  //   //
+  // it('does not allow new user creation with a different user ID then then authed user ID', async () => {
   // }, 60e3)
 })

@@ -7,6 +7,7 @@ import {
   permissionAuthorizers
 } from '../authorization-helpers'
 
+// FIXME
 describe('authorization-helpers', () => {
   it('correctly gets user claims from AWS Lambda event obj', () => {
     const claims = {
