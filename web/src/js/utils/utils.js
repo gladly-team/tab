@@ -29,6 +29,7 @@ function validateUsername (username) {
   if (username.length < 2) {
     return false
   }
+  // Based on:
   // https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_SignUp.html#CognitoUserPools-SignUp-request-Username
   var re = XRegExp('^[\\p{L}\\p{M}\\p{S}\\p{N}\\p{P}]+$')
   return re.test(username)
