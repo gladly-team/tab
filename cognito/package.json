@@ -15,7 +15,8 @@
   },
   "scripts": {
     "deploy": "yarn run build && serverless deploy -v",
-    "build": "rm -rf ./build && npm run build:compile",
+    "build": "echo \"No Cognito scripts to build.\"",
+    "build:when-in-use": "rm -rf ./build && npm run build:compile",
     "build:compile": "babel --out-dir='build' --ignore='build,coverage,__mocks__,__tests__,node_modules' ./src/"
   },
   "author": "Gladly Team"

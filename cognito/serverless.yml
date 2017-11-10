@@ -1,3 +1,4 @@
+# TODO: delete service if switch to Firebase auth
 
 service: cognito
 frameworkVersion: ">=1.14.0 <2.0.0"
@@ -11,14 +12,6 @@ provider:
 
 custom:
   stageDefault: dev
-
-functions:
-  preSignUp:
-    handler: build/triggers/preSignUp.handler
-    events:
-      - cognitoUserPool:
-          pool: TabUserPool
-          trigger: PreSignUp
 
 resources:
   Resources:
