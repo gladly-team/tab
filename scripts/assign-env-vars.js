@@ -13,12 +13,6 @@ export const envVars = [
   { name: 'AWS_REGION' },
   { name: 'AWS_ACCOUNT_ID' },
   { name: 'LOG_LEVEL' },
-  // AWS Cognito
-  { name: 'COGNITO_REGION' },
-  { name: 'COGNITO_IDENTITYPOOLID' },
-  { name: 'COGNITO_USERPOOLID' },
-  { name: 'COGNITO_CLIENTID' },
-  { name: 'MOCK_DEV_AUTHENTICATION' },
   // Web app
   { name: 'PUBLIC_PATH' },
   { name: 'GRAPHQL_ENDPOINT' },

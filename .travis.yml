@@ -16,12 +16,6 @@ env:
   - TEST_AWS_REGION=us-west-2
   - TEST_AWS_ACCOUNT_ID=167811431063
   - TEST_LOG_LEVEL=fatal # Don't log errors during testing. Some errors are expected.
-  # AWS Cognito
-  - TEST_COGNITO_REGION=us-west-2
-  - TEST_COGNITO_IDENTITYPOOLID=arn:aws:cognito-idp:us-west-2:167811431063:userpool/us-west-2_CtxIyCf3s
-  - TEST_COGNITO_USERPOOLID=us-west-2_CtxIyCf3s
-  - TEST_COGNITO_CLIENTID=u1vckhq1ba7oarrhu8ksvn9r7
-  - TEST_MOCK_DEV_AUTHENTICATION=false
   # Web app
   - TEST_PUBLIC_PATH=https://test-tab2017.gladly.io/
   - TEST_GRAPHQL_ENDPOINT=test-tab2017.gladly.io/graphql/
@@ -59,12 +53,6 @@ env:
   - DEV_AWS_REGION=us-west-2
   - DEV_AWS_ACCOUNT_ID=167811431063
   - DEV_LOG_LEVEL=error
-  # AWS Cognito
-  - DEV_COGNITO_REGION=us-west-2
-  - DEV_COGNITO_IDENTITYPOOLID=arn:aws:cognito-idp:us-west-2:167811431063:userpool/us-west-2_zu5kEM34P
-  - DEV_COGNITO_USERPOOLID=us-west-2_zu5kEM34P
-  - DEV_COGNITO_CLIENTID=32lj6balg8t2d1209sb50t1m8b
-  - DEV_MOCK_DEV_AUTHENTICATION=false
   # Web app
   - DEV_PUBLIC_PATH=https://dev-tab2017.gladly.io/
   - DEV_GRAPHQL_ENDPOINT=dev-tab2017.gladly.io/graphql/
@@ -97,12 +85,6 @@ env:
   - PROD_AWS_REGION=us-west-2
   - PROD_AWS_ACCOUNT_ID=167811431063
   - PROD_LOG_LEVEL=error
-  # AWS Cognito
-  - PROD_COGNITO_REGION=us-west-2
-  - PROD_COGNITO_IDENTITYPOOLID=arn:aws:cognito-idp:us-west-2:167811431063:userpool/us-west-2_VdpaaoTpR
-  - PROD_COGNITO_USERPOOLID=us-west-2_VdpaaoTpR
-  - PROD_COGNITO_CLIENTID=7n2os99obf201gk6qi8nca6bp5
-  - PROD_MOCK_DEV_AUTHENTICATION=false
   # Web app
   - PROD_PUBLIC_PATH=https://prod-tab2017.gladly.io/
   - PROD_GRAPHQL_ENDPOINT=prod-tab2017.gladly.io/graphql/
