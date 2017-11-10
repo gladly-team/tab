@@ -15,7 +15,6 @@ class UsernameField extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    console.log(nextProps)
     if (nextProps.usernameDuplicate) {
       this.setErrorMessage('Username is already taken.')
     }
