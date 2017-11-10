@@ -100,6 +100,7 @@ functions:
           path: graphql/
           method: post
           cors: true
+          # FIXME: update to new auth service
           # Require user to be authenticated.
           # https://serverless.com/framework/docs/providers/aws/events/apigateway#http-endpoints-with-custom-authorizers
           # https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-integrate-with-cognito.html#apigateway-enable-cognito-user-pool
