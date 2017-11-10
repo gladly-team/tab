@@ -4,7 +4,6 @@
   "description": "Tab for a Cause.",
   "private": true,
   "dependencies": {
-    "amazon-cognito-identity-js": "^1.18.0",
     "asyncawait": "^1.0.6",
     "aws-sdk": "^2.52.0",
     "bluebird": "^3.5.0",
