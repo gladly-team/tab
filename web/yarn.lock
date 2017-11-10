@@ -3428,7 +3428,7 @@ find-up@^2.0.0, find-up@^2.1.0:
   dependencies:
     locate-path "^2.0.0"
 
-firebase@^4.6.2:
+firebase@^4.3.1, firebase@^4.6.2:
   version "4.6.2"
   resolved "https://registry.yarnpkg.com/firebase/-/firebase-4.6.2.tgz#d4d983d975b98ee27588b25791238a1a1e01a71d"
   dependencies:
@@ -3441,6 +3441,12 @@ firebase@^4.6.2:
     "@firebase/storage" "^0.1.2"
     dom-storage "^2.0.2"
     xmlhttprequest "^1.8.0"
+
+firebaseui@^2.3:
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/firebaseui/-/firebaseui-2.4.1.tgz#5e4a9a8a70921431eae01a9c8832a57e50c2911b"
+  dependencies:
+    firebase "^4.3.1"
 
 flat-cache@^1.2.1:
   version "1.2.2"
@@ -6929,6 +6935,13 @@ react-event-listener@^0.5.0, react-event-listener@^0.5.1:
     prop-types "^15.6.0"
     warning "^3.0.0"
 
+react-firebaseui@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/react-firebaseui/-/react-firebaseui-1.0.5.tgz#3df53b711ed116465d577cca54c791e39be03ff4"
+  dependencies:
+    firebaseui "^2.3"
+    react "^15"
+
 react-flow-types@0.2.0-beta.3:
   version "0.2.0-beta.3"
   resolved "https://registry.yarnpkg.com/react-flow-types/-/react-flow-types-0.2.0-beta.3.tgz#93e7e3c95a75a1a941de05b9d7287e3ca6871046"
@@ -7088,7 +7101,7 @@ react-transition-group@^2.2.1:
     prop-types "^15.5.8"
     warning "^3.0.0"
 
-react@^15.4.2, react@^15.5.4:
+react@^15, react@^15.4.2, react@^15.5.4:
   version "15.5.4"
   resolved "https://registry.yarnpkg.com/react/-/react-15.5.4.tgz#fa83eb01506ab237cdc1c8c3b1cea8de012bf047"
   dependencies:

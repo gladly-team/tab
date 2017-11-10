@@ -7,8 +7,6 @@ import App from '../components/App/App'
 import DashboardView from '../components/Dashboard/DashboardView'
 
 import Authentication from '../components/Authentication/Authentication'
-import PasswordRetrieve from '../components/Authentication/PasswordRetrieve'
-
 import SettingsComponent from '../components/Settings/SettingsComponent'
 import BackgroundSettingsView from '../components/Settings/Background/BackgroundSettingsView'
 import WidgetsSettingsView from '../components/Settings/Widgets/WidgetsSettingsView'
@@ -32,10 +30,8 @@ export default (
         <Route path='donate' component={ProfileDonateHearts} />
         <Route path='invite' component={ProfileInviteFriend} />
       </Route>
-      <Route path='auth' component={BaseContainer}>
+      <Route path='auth' component={Authentication}>
         <IndexRoute component={Authentication} />
-        <Route path='login' component={Authentication} />
-        <Route path='recovery' component={PasswordRetrieve} />
       </Route>
       <Redirect from='*' to='/tab/' />
     </Route>

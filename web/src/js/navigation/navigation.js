@@ -2,6 +2,8 @@ import { browserHistory } from 'react-router'
 
 // TODO: replace this with Link navigation via react-router.
 
+export const dashboardURL = '/tab/'
+
 export const goTo = (route) => {
   browserHistory.push(route)
 }
@@ -23,7 +25,7 @@ export const goToDonate = () => {
 }
 
 export const goToDashboard = () => {
-  goTo('/tab/')
+  goTo(dashboardURL)
 }
 
 export const goToRetrievePassword = () => {
