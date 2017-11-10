@@ -17,11 +17,11 @@ class AuthUserComponent extends React.Component {
 
   async getUser () {
     const user = await getCurrentUser()
-    if (!user || !user.uid) {
+    if (!user || !user.id) {
       goToLogin()
     } else {
       this.setState({
-        userId: user.uid
+        userId: user.id
       })
     }
   }
