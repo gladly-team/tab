@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { getCurrentUserId } from '../../utils/cognito-auth'
+import { getCurrentUser } from 'authentication/user'
 import { goToLogin } from 'navigation/navigation'
 
 class AuthUserComponent extends React.Component {
@@ -12,16 +12,18 @@ class AuthUserComponent extends React.Component {
   }
 
   componentWillMount () {
-    getCurrentUserId((userId) => {
-      if (!userId) {
-        goToLogin()
-        return
-      }
+    this.getUser()
+  }
 
+  async getUser () {
+    const user = await getCurrentUser()
+    if (!user || !user.uid) {
+      goToLogin()
+    } else {
       this.setState({
-        userId: userId
+        userId: user.uid
       })
-    })
+    }
   }
 
   render () {
