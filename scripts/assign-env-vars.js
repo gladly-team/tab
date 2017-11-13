@@ -14,6 +14,7 @@ export const envVars = [
   { name: 'AWS_ACCOUNT_ID' },
   { name: 'LOG_LEVEL' },
   // Web app
+  { name: 'WEBSITE_DOMAIN' },
   { name: 'PUBLIC_PATH' },
   { name: 'GRAPHQL_ENDPOINT' },
   { name: 'STATIC_FILES_ENDPOINT' },

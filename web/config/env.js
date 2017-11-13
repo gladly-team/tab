@@ -7,6 +7,8 @@ var includes = require('lodash/includes')
 var envVars = [
   'WEB_HOST',
   'WEB_PORT',
+  'WEBSITE_PROTOCOL',
+  'WEBSITE_DOMAIN',
   'FIREBASE_API_KEY',
   'FIREBASE_AUTH_DOMAIN',
   'FIREBASE_DATABASE_URL',

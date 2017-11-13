@@ -166,7 +166,6 @@ export const sendVerificationEmail = async () => {
 
     // Send the email.
     const emailSent = await sendFirebaseVerificationEmail(authUser)
-    console.log('Email finished sending.')
     return emailSent
   } catch (e) {
     console.error(e)

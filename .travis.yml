@@ -17,6 +17,7 @@ env:
   - TEST_AWS_ACCOUNT_ID=167811431063
   - TEST_LOG_LEVEL=fatal # Don't log errors during testing. Some errors are expected.
   # Web app
+  - TEST_WEBSITE_DOMAIN=test-tab2017.gladly.io # user-visible domain, used in app JS
   - TEST_PUBLIC_PATH=https://test-tab2017.gladly.io/
   - TEST_GRAPHQL_ENDPOINT=test-tab2017.gladly.io/graphql/
   - TEST_FIREBASE_API_KEY=AIzaSyDrGghKLnfOwwaSnPM0unRDXz_4YdorKU4
@@ -58,6 +59,7 @@ env:
   - DEV_AWS_ACCOUNT_ID=167811431063
   - DEV_LOG_LEVEL=error
   # Web app
+  - DEV_WEBSITE_DOMAIN=dev-tab2017.gladly.io  # user-visible domain, used in app JS
   - DEV_PUBLIC_PATH=https://dev-tab2017.gladly.io/
   - DEV_GRAPHQL_ENDPOINT=dev-tab2017.gladly.io/graphql/
   - DEV_FIREBASE_API_KEY=AIzaSyDrGghKLnfOwwaSnPM0unRDXz_4YdorKU4
@@ -94,6 +96,7 @@ env:
   - PROD_AWS_ACCOUNT_ID=167811431063
   - PROD_LOG_LEVEL=error
   # Web app
+  - PROD_WEBSITE_DOMAIN=tab.gladly.io # user-visible domain, used in app JS
   - PROD_PUBLIC_PATH=https://prod-tab2017.gladly.io/
   - PROD_GRAPHQL_ENDPOINT=prod-tab2017.gladly.io/graphql/
   - PROD_FIREBASE_API_KEY=AIzaSyDZKbk3DzJwA9nWLlpt6hjqhTm6WY-WOnk

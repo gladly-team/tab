@@ -2,8 +2,9 @@ import { browserHistory } from 'react-router'
 
 // TODO: replace this with Link navigation via react-router.
 
-// TODO: use env var, make all routes absolute by default
-const baseUrl = 'https://tab.gladly.io'
+// TODO: make all routes absolute by default
+const protocol = process.env.WEBSITE_PROTOCOL ? process.env.WEBSITE_PROTOCOL : 'https'
+const baseUrl = `${protocol}://${process.env.WEBSITE_DOMAIN}`
 
 export const goTo = (location) => {
   browserHistory.push(location)
@@ -14,7 +15,7 @@ export const replaceUrl = (location) => {
 }
 
 export const absoluteUrl = (path) => {
-  return `${baseUrl}{path}`
+  return `${baseUrl}${path}`
 }
 
 // ROUTES
