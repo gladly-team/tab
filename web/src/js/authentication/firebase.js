@@ -2,9 +2,9 @@
 import * as firebase from 'firebase'
 
 const config = {
-  apiKey: 'AIzaSyDZKbk3DzJwA9nWLlpt6hjqhTm6WY-WOnk',
-  authDomain: 'tab-for-a-cause.firebaseapp.com',
-  databaseURL: 'https://tab-for-a-cause.firebaseio.com',
-  messagingSenderId: '265155358643'
+  apiKey: process.env.FIREBASE_API_KEY,
+  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+  databaseURL: process.env.FIREBASE_DATABASE_URL,
+  projectId: process.env.FIREBASE_PROJECT_ID
 }
 firebase.initializeApp(config)
