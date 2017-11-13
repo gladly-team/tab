@@ -43,7 +43,7 @@ class User extends BaseModel {
   static get schema () {
     const self = this
     return {
-      id: types.uuid(),
+      id: types.string().required(),
       email: types.string().email().required(),
       username: types.string().required(),
       joined: types.string().isoDate().required(),

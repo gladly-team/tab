@@ -30,7 +30,7 @@ class UserWidget extends BaseModel {
   static get schema () {
     const self = this
     return {
-      userId: types.uuid(),
+      userId: types.string().required(),
       widgetId: types.uuid(),
       enabled: types.boolean()
         .default(self.fieldDefaults.enabled),
