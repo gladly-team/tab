@@ -1,7 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { getCurrentUser } from 'authentication/user'
-import { goToLogin } from 'navigation/navigation'
+import {
+  replaceUrl,
+  verifyEmailURL,
+  enterUsernameURL,
+  goToLogin
+} from 'navigation/navigation'
 
 class AuthUserComponent extends React.Component {
   constructor (props) {
@@ -12,13 +17,21 @@ class AuthUserComponent extends React.Component {
   }
 
   componentWillMount () {
-    this.getUser()
+    this.checkUserAuth()
   }
 
-  async getUser () {
+  async checkUserAuth () {
     const user = await getCurrentUser()
+    // User is not logged in.
     if (!user || !user.id) {
       goToLogin()
+    // User is logged in but their email is not verified.
+    } else if (!user.emailVerified) {
+      replaceUrl(verifyEmailURL)
+    // User is logged in but has not set a username.
+    } else if (!user.username) {
+      replaceUrl(enterUsernameURL)
+    // User is fully logged in.
     } else {
       this.setState({
         userId: user.id
