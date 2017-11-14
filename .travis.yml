@@ -30,11 +30,13 @@ env:
   - TEST_ADS_ENABLED=false
   # Media
   - TEST_CLOUDFRONT_MEDIA_DOMAIN_ALIAS=test-tab2017-media.gladly.io
-  # GraphQL
+  # GraphQL / Lambda
   - TEST_TABLE_NAME_APPENDIX="-test"
   - TEST_LOGGER=sentry
   - TEST_SENTRY_PUBLIC_KEY=55d60901ba254432814cd9015d100959
   - TEST_SENTRY_PROJECT_ID=184604
+  - TEST_FIREBASE_CLIENT_EMAIL=firebase-adminsdk-kuncd@dev-tab-for-a-cause.iam.gserviceaccount.com
+  - TEST_FIREBASE_PRIVATE_KEY=todo
   # Endpoints
   - TEST_GRAPHQL_PROXY_DOMAIN=lspir87lia.execute-api.us-west-2.amazonaws.com
   - TEST_GRAPHQL_PROXY_PATH=/test
@@ -72,11 +74,13 @@ env:
   - DEV_ADS_ENABLED=true
   # Media
   - DEV_CLOUDFRONT_MEDIA_DOMAIN_ALIAS=dev-tab2017-media.gladly.io
-  # GraphQL
+  # GraphQL / Lambda
   - DEV_TABLE_NAME_APPENDIX="-dev"
   - DEV_LOGGER=sentry
   - DEV_SENTRY_PUBLIC_KEY=55d60901ba254432814cd9015d100959
   - DEV_SENTRY_PROJECT_ID=184604
+  - DEV_FIREBASE_CLIENT_EMAIL=firebase-adminsdk-kuncd@dev-tab-for-a-cause.iam.gserviceaccount.com
+  - DEV_FIREBASE_PRIVATE_KEY=todo
   # Endpoints
   - DEV_GRAPHQL_PROXY_DOMAIN=53a9uos12e.execute-api.us-west-2.amazonaws.com
   - DEV_GRAPHQL_PROXY_PATH=/dev
@@ -109,11 +113,14 @@ env:
   - PROD_ADS_ENABLED=true
   # Media
   - PROD_CLOUDFRONT_MEDIA_DOMAIN_ALIAS=prod-tab2017-media.gladly.io
-  # GraphQL
+  # GraphQL / Lambda
   - PROD_TABLE_NAME_APPENDIX="-prod"
   - PROD_LOGGER=sentry
   - PROD_SENTRY_PUBLIC_KEY=55d60901ba254432814cd9015d100959
   - PROD_SENTRY_PROJECT_ID=184604
+  # TODO: update
+  - PROD_FIREBASE_CLIENT_EMAIL=firebase-adminsdk-kuncd@dev-tab-for-a-cause.iam.gserviceaccount.com
+  - PROD_FIREBASE_PRIVATE_KEY=todo
   # Endpoints
   - PROD_GRAPHQL_PROXY_DOMAIN=qy89x5t2i9.execute-api.us-west-2.amazonaws.com
   - PROD_GRAPHQL_PROXY_PATH=/prod

@@ -8,6 +8,7 @@
     "aws-sdk": "^2.52.0",
     "bluebird": "^3.5.0",
     "dynogels": "^8.0.1",
+    "firebase-admin": "^5.5.0",
     "joi": "^10.6.0",
     "moment": "^2.18.1",
     "raven": "^2.1.0",
@@ -33,7 +34,7 @@
     "lodash": "^4.17.4",
     "nodemon": "^1.11.0",
     "npm-run-all": "^4.0.2",
-    "serverless": "^1.14.0",
+    "serverless": "^1.24.1",
     "serverless-plugin-include-dependencies": "^2.1.2",
     "standard": "^10.0.2",
     "yamljs": "^0.2.8"

@@ -28,13 +28,15 @@ export const envVars = [
   { name: 'WEB_PORT', optional: true },
   // Media
   { name: 'CLOUDFRONT_MEDIA_DOMAIN_ALIAS' },
-  // GraphQL
+  // GraphQL / Lambda
   { name: 'TABLE_NAME_APPENDIX' },
   { name: 'GRAPHQL_PORT', optional: true },
   { name: 'LOGGER' },
   { name: 'SENTRY_PUBLIC_KEY' },
   { name: 'SENTRY_PROJECT_ID' },
   { name: 'SENTRY_PRIVATE_KEY' },
+  { name: 'FIREBASE_CLIENT_EMAIL' },
+  { name: 'FIREBASE_PRIVATE_KEY' },
   // Endpoints
   { name: 'GRAPHQL_PROXY_DOMAIN' },
   { name: 'GRAPHQL_PROXY_PATH' },

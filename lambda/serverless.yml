@@ -1,5 +1,7 @@
 
-service: lambda
+service:
+  name: lambda
+  awsKmsKeyArn: ${self:custom.awsKmsKeyArn} 
 frameworkVersion: ">=1.12.0 <2.0.0"
 
 provider:
@@ -9,27 +11,32 @@ provider:
   profile: tab-sls
   stage: ${env:SLS_STAGE, self:custom.stageDefault}
   iamRoleStatements:
-    # TODO: more restrictive, per-user permissions
-    - Effect: "Allow"
+    ## TODO: more precise permissions when needed
+    # - Effect: "Allow"
+    #   Action:
+    #     - "dynamodb:BatchGetItem"
+    #     - "dynamodb:BatchWriteItem"
+    #     - "dynamodb:DeleteItem"
+    #     - "dynamodb:DescribeReservedCapacity"
+    #     - "dynamodb:DescribeReservedCapacityOfferings"
+    #     - "dynamodb:DescribeTable"
+    #     - "dynamodb:DescribeTimeToLive"
+    #     - "dynamodb:GetItem"
+    #     - "dynamodb:ListTables"
+    #     - "dynamodb:ListTagsOfResource"
+    #     - "dynamodb:PutItem"
+    #     - "dynamodb:Query"
+    #     - "dynamodb:Scan"
+    #     - "dynamodb:UpdateItem"
+    #   Resource: "*"
+    - Effect: Allow
       Action:
-        - "dynamodb:BatchGetItem"
-        - "dynamodb:BatchWriteItem"
-        - "dynamodb:DeleteItem"
-        - "dynamodb:DescribeReservedCapacity"
-        - "dynamodb:DescribeReservedCapacityOfferings"
-        - "dynamodb:DescribeTable"
-        - "dynamodb:DescribeTimeToLive"
-        - "dynamodb:GetItem"
-        - "dynamodb:ListTables"
-        - "dynamodb:ListTagsOfResource"
-        - "dynamodb:PutItem"
-        - "dynamodb:Query"
-        - "dynamodb:Scan"
-        - "dynamodb:UpdateItem"
-      Resource: "*"
+        - KMS:Decrypt
+      Resource: ${self:custom.awsKmsKeyArn} 
 
 custom:
   stageDefault: dev
+  awsKmsKeyArn: arn:aws:kms:us-east-1:167811431063:key/b0bfe575-a58b-44ca-927a-55ab49b29316
 
 plugins:
   # Include only the required node modules.
@@ -56,3 +63,11 @@ functions:
           ## TODO: reenable before using sensitive lambdas
           # authorizer:
           #   name: authorizer_${opt:stage, self:provider.stage}
+
+  firebaseAuthorizer:
+    handler: build/firebase-authorizer/firebase-authorizer.serverlessHandler
+    environment:
+      FIREBASE_PROJECT_ID: ${env:FIREBASE_PROJECT_ID}
+      FIREBASE_DATABASE_URL: ${env:FIREBASE_DATABASE_URL}
+      FIREBASE_CLIENT_EMAIL: ${env:FIREBASE_CLIENT_EMAIL}
+      FIREBASE_PRIVATE_KEY: ${env:FIREBASE_PRIVATE_KEY}
