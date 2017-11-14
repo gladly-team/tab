@@ -35,7 +35,7 @@ provider:
 
 custom:
   stageDefault: dev
-  awsKmsKeyArn: arn:aws:kms:us-east-1:167811431063:key/b0bfe575-a58b-44ca-927a-55ab49b29316
+  awsKmsKeyArn: arn:aws:kms:us-west-2:167811431063:key/de8bda45-b6cd-421f-8f56-de56bfb9f97b
 
 plugins:
   # Include only the required node modules.
