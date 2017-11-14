@@ -20,7 +20,7 @@ afterAll(() => {
 describe('test-utils', () => {
   test('getMockUserContext returns expected object', () => {
     expect(getMockUserContext()).toEqual({
-      id: '45bbefbf-63d1-4d36-931e-212fbe2bc3d9',
+      id: 'abcdefghijklmno',
       username: 'MyName',
       email: 'foo@bar.com',
       emailVerified: true
@@ -29,7 +29,7 @@ describe('test-utils', () => {
 
   test('getMockUserInfo returns expected object', () => {
     expect(getMockUserInfo()).toEqual({
-      id: '45bbefbf-63d1-4d36-931e-212fbe2bc3d9',
+      id: 'abcdefghijklmno',
       username: 'MyName',
       email: 'foo@bar.com'
     })

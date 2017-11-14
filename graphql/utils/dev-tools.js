@@ -24,7 +24,7 @@ export const generateLambdaEventObjFromRequest = (req) => {
   // TODO: send from client & decode, or make dynamic
   // FIXME
   const authorizationClaims = {
-    sub: '45bbefbf-63d1-4d36-931e-212fbe2bc3d9',
+    sub: 'abcdefghijklmno',
     aud: 'xyzxyzxyzxyzxyzxyzxyzxyzxyz',
     email_verified: 'true',
     token_use: 'id',

@@ -80,14 +80,14 @@ describe('authorization-helpers', () => {
 
 describe('permission authorizer functions', () => {
   const user = {
-    id: '45bbefbf-63d1-4d36-931e-212fbe2bc3d9',
+    id: 'abcdefghijklmno',
     username: 'MyName',
     emailVerified: true
   }
 
   test('userIdMatchesHashKey works if user ID matches hash key', () => {
     expect(permissionAuthorizers.userIdMatchesHashKey(
-      user, '45bbefbf-63d1-4d36-931e-212fbe2bc3d9')
+      user, 'abcdefghijklmno')
     ).toBe(true)
   })
 

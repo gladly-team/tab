@@ -11,7 +11,7 @@ describe('dev-tools', () => {
     const minimalRequestObject = {}
     const expectedContext = {
       user: {
-        id: '45bbefbf-63d1-4d36-931e-212fbe2bc3d9',
+        id: 'abcdefghijklmno',
         email: 'somebody@example.com',
         emailVerified: true,
         username: 'myUserName'
