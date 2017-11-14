@@ -79,4 +79,4 @@ functions:
       #   https://github.com/awslabs/serverless-application-model/issues/48#issuecomment-269663554
       # Note on encrypting/decrypting with the AWS CLI:
       #   https://github.com/aws/aws-cli/issues/1043#issuecomment-65878875
-      FIREBASE_PRIVATE_KEY: ${file(./src/firebaseAuthorizer/variables.yml):${self:provider.stage}:FIREBASE_PRIVATE_KEY}
+      FIREBASE_PRIVATE_KEY: ${file(./src/firebase-authorizer/variables.yml):${self:provider.stage}:FIREBASE_PRIVATE_KEY}
