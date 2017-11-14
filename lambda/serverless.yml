@@ -69,4 +69,14 @@ functions:
       FIREBASE_PROJECT_ID: ${env:FIREBASE_PROJECT_ID}
       FIREBASE_DATABASE_URL: ${env:FIREBASE_DATABASE_URL}
       FIREBASE_CLIENT_EMAIL: ${env:FIREBASE_CLIENT_EMAIL}
-      FIREBASE_PRIVATE_KEY: ${env:FIREBASE_PRIVATE_KEY}
+      # Encrypted with AWS KMS for encryption during deploy.
+      #   https://docs.aws.amazon.com/lambda/latest/dg/env_variables.html
+      #   https://docs.aws.amazon.com/cli/latest/reference/kms/encrypt.html
+      # Unfortunately, "Cloudformation and SAM do not currently support encryption helpers that
+      #   Lambda console provides...  As of now the only way to achieve this (other than through console)
+      #   is to use client side encryption - use encrypted cipher text in your variables and then decrypt
+      #   them in the lambda function code."
+      #   https://github.com/awslabs/serverless-application-model/issues/48#issuecomment-269663554
+      # Note on encrypting/decrypting with the AWS CLI:
+      #   https://github.com/aws/aws-cli/issues/1043#issuecomment-65878875
+      FIREBASE_PRIVATE_KEY: ${file(./firebaseAuthorizer/variables.yml):${self:provider.stage}:FIREBASE_PRIVATE_KEY}

@@ -36,7 +36,6 @@ export const envVars = [
   { name: 'SENTRY_PROJECT_ID' },
   { name: 'SENTRY_PRIVATE_KEY' },
   { name: 'FIREBASE_CLIENT_EMAIL' },
-  { name: 'FIREBASE_PRIVATE_KEY' },
   // Endpoints
   { name: 'GRAPHQL_PROXY_DOMAIN' },
   { name: 'GRAPHQL_PROXY_PATH' },
