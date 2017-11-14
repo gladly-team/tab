@@ -23,7 +23,7 @@ function processEvent (event, context) {
         clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
         privateKey: decryptedFirebasePrivateKey
       }),
-      databaseURL: 'https://<DATABASE_NAME>.firebaseio.com'
+      databaseURL: process.env.FIREBASE_DATABASE_URL
     })
   } catch (e) {
     return createResponse(500, {
