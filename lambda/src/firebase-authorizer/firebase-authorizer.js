@@ -48,6 +48,7 @@ const generatePolicy = function (user, allow, resource) {
 }
 
 function checkUserAuthorization (event, context, callback) {
+  console.log('checkUserAuthorization decryptedFirebasePrivateKey', decryptedFirebasePrivateKey)
   const token = event.authorizationToken
   if (!token) {
     callback('Error: Invalid token')
@@ -87,6 +88,11 @@ function checkUserAuthorization (event, context, callback) {
 }
 
 const handler = (event, context, callback) => {
+  console.log('firebase-authorizer handler')
+  console.log('-------------------------------')
+  console.log('encryptedFirebasePrivateKey', encryptedFirebasePrivateKey)
+  console.log('-------------------------------')
+  console.log('decryptedFirebasePrivateKey', decryptedFirebasePrivateKey)
   // Decrypt secure environment variables.
   if (decryptedFirebasePrivateKey) {
     checkUserAuthorization(event, context)
