@@ -48,13 +48,9 @@ const generatePolicy = function (user, allow, resource) {
 }
 
 function checkUserAuthorization (event, context, callback) {
-  console.log('checkUserAuthorization decryptedFirebasePrivateKey with replacement')
   const token = event.authorizationToken
   if (!token) {
     callback('Error: Invalid token')
-  }
-  if (decryptedFirebasePrivateKey) {
-    console.log(decryptedFirebasePrivateKey.replace(/\\n/g, '\n'))
   }
   try {
     admin.initializeApp({
@@ -70,6 +66,9 @@ function checkUserAuthorization (event, context, callback) {
     // Validate the Firebase token.
     admin.auth().verifyIdToken(token)
       .then((decodedToken) => {
+        console.log('decodedToken')
+        console.log('-------------------------------')
+        console.log(decodedToken)
         const user = {
           uid: decodedToken.uid,
           email: decodedToken.email,
@@ -92,11 +91,6 @@ function checkUserAuthorization (event, context, callback) {
 }
 
 const handler = (event, context, callback) => {
-  console.log('firebase-authorizer handler')
-  console.log('-------------------------------')
-  console.log('encryptedFirebasePrivateKey', encryptedFirebasePrivateKey)
-  console.log('-------------------------------')
-  console.log('decryptedFirebasePrivateKey', decryptedFirebasePrivateKey)
   // Decrypt secure environment variables.
   if (decryptedFirebasePrivateKey) {
     checkUserAuthorization(event, context)
