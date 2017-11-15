@@ -48,7 +48,8 @@ const generatePolicy = function (user, allow, resource) {
 }
 
 function checkUserAuthorization (event, context, callback) {
-  console.log('checkUserAuthorization decryptedFirebasePrivateKey', decryptedFirebasePrivateKey)
+  console.log('checkUserAuthorization decryptedFirebasePrivateKey with replacement')
+  console.log(decryptedFirebasePrivateKey.replace(/\\n/g, '\n'))
   const token = event.authorizationToken
   if (!token) {
     callback('Error: Invalid token')
@@ -58,7 +59,8 @@ function checkUserAuthorization (event, context, callback) {
       credential: admin.credential.cert({
         projectId: process.env.FIREBASE_PROJECT_ID,
         clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-        privateKey: decryptedFirebasePrivateKey
+        // https://stackoverflow.com/a/41044630/1332513
+        privateKey: decryptedFirebasePrivateKey.replace(/\\n/g, '\n')
       }),
       databaseURL: process.env.FIREBASE_DATABASE_URL
     })
