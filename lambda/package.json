@@ -48,7 +48,7 @@
     "test:run": "jest --coverage",
     "test:codecov": "if-env LOG_TEST_COVERAGE=true && codecov || echo 'Skipping test coverage logging.'",
     "test:watch": "jest --watch",
-    "test:lint": "standard"
+    "test:lint": "standard --verbose"
   },
   "repository": {
     "type": "git",
