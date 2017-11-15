@@ -49,10 +49,12 @@ const generatePolicy = function (user, allow, resource) {
 
 function checkUserAuthorization (event, context, callback) {
   console.log('checkUserAuthorization decryptedFirebasePrivateKey with replacement')
-  console.log(decryptedFirebasePrivateKey.replace(/\\n/g, '\n'))
   const token = event.authorizationToken
   if (!token) {
     callback('Error: Invalid token')
+  }
+  if (decryptedFirebasePrivateKey) {
+    console.log(decryptedFirebasePrivateKey.replace(/\\n/g, '\n'))
   }
   try {
     admin.initializeApp({
