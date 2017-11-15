@@ -4,7 +4,7 @@ import * as admin from 'firebase-admin'
 import AWS from 'aws-sdk'
 
 const encryptedFirebasePrivateKey = process.env['FIREBASE_PRIVATE_KEY']
-let decryptedFirebasePrivateKey
+let decryptedFirebasePrivateKey = ''
 
 /*
  * Generate the AWS policy document to return from the authorizer.
