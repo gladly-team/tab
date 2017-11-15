@@ -13,9 +13,7 @@ let decryptedFirebasePrivateKey = ''
  * @param {object} user - The user object from the decoded token.
  * @param {string} user.uid - The user's ID
  * @param {string} user.email - The user's email
- * @param {string} user.username - The user's username
- * @param {boolean} user.isAnonymous - Whether the user is anonymous
- * @param {boolean} user.emailVerified - Whether the user has verified their email
+ * @param {boolean} user.email_verified - Whether the user has verified their email
  * @param {boolean} allow - Whether the user is allowed access.
  * @param {string} resource - The AWS resource ARN the user wants to access.
  * @returns {object} The AWS policy
@@ -38,7 +36,7 @@ const generatePolicy = function (user, allow, resource) {
       ? {
         id: user.uid,
         email: user.email,
-        emailVerified: user.emailVerified
+        email_verified: user.email_verified
       }
       : {}
     )
@@ -67,9 +65,9 @@ function checkUserAuthorization (event, context, callback) {
         const user = {
           uid: decodedToken.uid,
           email: decodedToken.email,
-          emailVerified: decodedToken.email_verified
+          email_verified: decodedToken.email_verified
         }
-        const valid = user.uid && user.emailVerified
+        const valid = user.uid && user.email_verified
 
         // Generate AWS authorization policy
         callback(null, generatePolicy(user, valid, event.methodArn))

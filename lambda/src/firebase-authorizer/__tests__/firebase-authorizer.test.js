@@ -48,17 +48,15 @@ test('authorization fails when token verification throws an error', (done) => {
 })
 
 test('authorization succeeds when a good token is provided', (done) => {
-  const userObj = {
+  const firebaseUser = {
     uid: 'magicat77',
     email: 'meow@hogwarts.com',
-    username: 'crookshanks',
-    isAnonymous: false,
-    emailVerified: true
+    email_verified: true
   }
 
   admin.auth.mockImplementation(() => ({
     verifyIdToken: jest.fn(() => {
-      return Promise.resolve(userObj)
+      return Promise.resolve(firebaseUser)
     })
   }))
   const checkUserAuthorization = require('../firebase-authorizer').checkUserAuthorization
@@ -69,7 +67,7 @@ test('authorization succeeds when a good token is provided', (done) => {
   const context = {}
   const callback = (_, data) => {
     expect(data).toEqual({
-      principalId: userObj.uid,
+      principalId: firebaseUser.uid,
       policyDocument: {
         Version: '2012-10-17',
         Statement: [
@@ -81,11 +79,9 @@ test('authorization succeeds when a good token is provided', (done) => {
         ]
       },
       context: {
-        id: userObj.uid,
-        email: userObj.email,
-        username: userObj.username,
-        isAnonymous: userObj.isAnonymous,
-        emailVerified: userObj.emailVerified
+        id: firebaseUser.uid,
+        email: firebaseUser.email,
+        email_verified: firebaseUser.email_verified
       }
     })
     done()
@@ -97,9 +93,7 @@ test('authorization succeeds when the user does not have an ID', (done) => {
   const userObj = {
     // missing uid
     email: 'meow@hogwarts.com',
-    username: 'crookshanks',
-    isAnonymous: false,
-    emailVerified: true
+    email_verified: true
   }
 
   admin.auth.mockImplementation(() => ({
