@@ -38,8 +38,6 @@ const generatePolicy = function (user, allow, resource) {
       ? {
         id: user.uid,
         email: user.email,
-        username: user.username,
-        isAnonymous: user.isAnonymous,
         emailVerified: user.emailVerified
       }
       : {}
@@ -66,15 +64,10 @@ function checkUserAuthorization (event, context, callback) {
     // Validate the Firebase token.
     admin.auth().verifyIdToken(token)
       .then((decodedToken) => {
-        console.log('decodedToken')
-        console.log('-------------------------------')
-        console.log(decodedToken)
         const user = {
           uid: decodedToken.uid,
           email: decodedToken.email,
-          username: decodedToken.username,
-          isAnonymous: decodedToken.isAnonymous,
-          emailVerified: decodedToken.emailVerified
+          emailVerified: decodedToken.email_verified
         }
         const valid = user.uid && user.emailVerified
 
