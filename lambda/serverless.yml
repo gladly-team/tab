@@ -35,6 +35,7 @@ provider:
 
 custom:
   stageDefault: dev
+  # TODO: env var
   awsKmsKeyArn: arn:aws:kms:us-west-2:167811431063:key/de8bda45-b6cd-421f-8f56-de56bfb9f97b
 
 plugins:

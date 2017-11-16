@@ -9,6 +9,8 @@ custom:
   # https://forums.aws.amazon.com/thread.jspa?threadID=100847
   # https://serverless.com/framework/docs/providers/aws/guide/variables#reference-cloudformation-outputs
   dbTableArnBase: arn:aws:dynamodb:${env:AWS_REGION}:${env:AWS_ACCOUNT_ID}:table/
+  customAuthorizerArn:
+    Fn::ImportValue: ${cf:lambda-${self:provider.stage}.FirebaseAuthorizerArn}
 
 provider:
   name: aws
@@ -103,6 +105,7 @@ functions:
           # https://serverless.com/framework/docs/providers/aws/events/apigateway#http-endpoints-with-custom-authorizers
           authorizer:
             # Reference the authorizer ARN exported from the "lambda" stack.
-            # https://github.com/serverless/serverless/pull/3575
-            arn:
-              Fn::ImportValue: ${cf:lambda-${self:provider.stage}.FirebaseAuthorizerArn}
+            #   https://github.com/serverless/serverless/pull/3575
+            # Bug with this behavior:
+            #   https://github.com/serverless/serverless/issues/3129
+            arn: ${self:custom.customAuthorizerArn}
