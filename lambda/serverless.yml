@@ -89,4 +89,4 @@ resources:
       Value:
         "Fn::GetAtt": [ firebaseAuthorizer, Arn ]
       Export:
-        Name: firebaseAuthorizerArn
+        Name: FirebaseAuthorizerArn

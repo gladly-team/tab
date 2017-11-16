@@ -105,4 +105,4 @@ functions:
             # Reference the authorizer ARN exported from the "lambda" stack.
             # https://github.com/serverless/serverless/pull/3575
             arn:
-              Fn::ImportValue: ${cf:lambda-${self:provider.stage}.firebaseAuthorizerArn}
+              Fn::ImportValue: ${cf:lambda-${self:provider.stage}.FirebaseAuthorizerArn}
