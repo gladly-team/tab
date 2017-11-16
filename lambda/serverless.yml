@@ -81,14 +81,3 @@ functions:
       # Note on encrypting/decrypting with the AWS CLI:
       #   https://github.com/aws/aws-cli/issues/1043#issuecomment-65878875
       FIREBASE_PRIVATE_KEY: ${file(./src/firebase-authorizer/variables.yml):${self:provider.stage}.FIREBASE_PRIVATE_KEY}
-
-resources:
-  # http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/outputs-section-structure.html
-  Outputs:
-    FirebaseAuthorizerArn:
-      Description: The ARN for the Firebase authorizer lambda
-      # https://serverless.com/framework/docs/providers/aws/guide/resources/
-      Value:
-        "Fn::GetAtt": [ FirebaseAuthorizerLambdaFunction, Arn ]
-      Export:
-        Name: FirebaseAuthorizerArn
