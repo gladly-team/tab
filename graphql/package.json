@@ -4,7 +4,6 @@
   "description": "GraphQL server for Tab for a Cause.",
   "private": true,
   "dependencies": {
-    "asyncawait": "^1.0.6",
     "bluebird": "^3.5.0",
     "cors": "^2.8.1",
     "dynogels": "^8.0.1",
