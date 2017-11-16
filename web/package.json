@@ -13,7 +13,7 @@
     "lodash": "^4.17.4",
     "npm-run-all": "^4.0.2",
     "react-test-renderer": "^15.5.4",
-    "relay-compiler": "^1.0.0-rc.4",
+    "relay-compiler": "^1.4.1",
     "standard": "^10.0.2",
     "webpack-bundle-analyzer": "^2.8.2"
   },
@@ -79,7 +79,7 @@
     "react-intl": "^2.2.3",
     "react-measure": "^2.0.2",
     "react-motion": "^0.5.0",
-    "react-relay": "^1.0.0-rc.4",
+    "react-relay": "^1.4.1",
     "react-router": "^3.0.0",
     "react-tap-event-plugin": "^2.0.1",
     "react-transform-catch-errors": "^1.0.2",
