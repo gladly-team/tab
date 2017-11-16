@@ -47,6 +47,3 @@ export const permissionAuthorizers = {}
 permissionAuthorizers.userIdMatchesHashKey = (user, hashKey, _) => {
   return user.id === hashKey
 }
-permissionAuthorizers.usernameMatchesHashKey = (user, hashKey) => {
-  return user.username === hashKey
-}

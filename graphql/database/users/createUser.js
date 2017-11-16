@@ -40,10 +40,10 @@ const createUser = async (userContext, userId, username,
   if (referralData) {
     const referringUserUsername = referralData.referringUser
     try {
-      // Referring user may not exist if referring username
-      // was manipulated.
       const referringUser = await getUserByUsername(userContext,
         referringUserUsername)
+      // Referring user may not exist if referring username
+      // was manipulated.
       if (referringUser) {
         try {
           await logReferralData(userContext, userInfo.id, referringUser.id)

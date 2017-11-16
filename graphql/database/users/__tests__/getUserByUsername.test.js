@@ -26,8 +26,9 @@ describe('getUserByUsername', () => {
     const query = jest.spyOn(UserModel, 'query')
     const queryExec = jest.spyOn(UserModel, '_execAsync')
     await getUserByUsername(userContextAuthorized, username)
-    expect(query)
-      .toHaveBeenCalledWith(userContextAuthorized, username)
+    const queryCalledParams = query.mock.calls[0]
+    expect(queryCalledParams[0]).toMatch(/GET_REFERRER_BY_USERNAME_OVERRIDE_CONFIRMED_[0-9]{5}$/)
+    expect(queryCalledParams[1]).toBe(username)
     expect(queryExec).toHaveBeenCalled()
   })
 

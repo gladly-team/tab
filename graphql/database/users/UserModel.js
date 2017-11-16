@@ -152,10 +152,15 @@ class User extends BaseModel {
         )
       },
       indexPermissions: {
-        // FIXME: new user context does not have username field
-        // Separate permissions for secondary index.
+        // The userContext does not include the user's username, so
+        // there's no clean way to verify item ownership based on username
+        // lookup prior to making the query. For now, require a permissions
+        // override to access this secondary index.
         UsersByUsername: {
-          get: permissionAuthorizers.usernameMatchesHashKey
+          get: () => false,
+          getAll: () => false,
+          update: () => false,
+          create: () => false
         }
       }
     }
