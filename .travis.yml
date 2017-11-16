@@ -141,23 +141,6 @@ before_install:
   # AWS CLI
   - pip install --user awscli
   - export PATH=$PATH:$HOME/.local/bin
-  # Install Watchman for relay-compiler. Remove when fixed:
-  # https://github.com/facebook/relay/issues/1644
-  - git clone https://github.com/facebook/watchman.git
-  - cd watchman
-  - git checkout v4.7.0  # the latest stable release
-  - ./autogen.sh
-  - ./configure
-  - make
-  - sudo make install
-  # https://facebook.github.io/watchman/docs/troubleshooting.html#poison-inotify-add-watch
-  - echo 999999 | sudo tee -a /proc/sys/fs/inotify/max_user_watches
-  - echo 999999 | sudo tee -a  /proc/sys/fs/inotify/max_queued_events
-  - echo 999999 | sudo tee  -a /proc/sys/fs/inotify/max_user_instances
-  - watchman watch-del-all
-  - watchman shutdown-server
-  - cd ../
-  # End Watchman install.
 install: yarn run all:install
 script:
   - yarn run ci:test
