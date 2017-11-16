@@ -1,3 +1,5 @@
+dist: trusty
+sudo: false
 language: node_js
 # Node 6 has a bug that affects some of our unit tests:
 # https://github.com/facebook/jest/issues/3152#issuecomment-287496730
@@ -131,11 +133,10 @@ env:
   - secure: li6wI7k7TEUJ15KT9vzZEjcJq1nVcGO9gwSXv9vRbktfpztTaRrORc5N5T4/SeHHlURDMr5PxhwB6lYuXIeRhWIh/j48La01HOoMPzhz8qTzK+HaakN/Ebzyx1/mJb28A4JZqpiHiaRWKZopCj5OMGTnZlBUAHFC9dDfgbTXyatn02SwRrAy7tMs0IdmsKnDXGB8zV2LvpxL6b0XenwwZQJ4oI5whWAut9PGhfnB1IWjDlE7TlYC43mEqVHFaHZsEoOf68utVLA6iMHzLja0Lh4SIIDDk0qo99yxt8+EXhiI7WQ4vhPcL42m2/E8QQbiPmRHkrjtSyhN46qAJdzdbju+1krgslruHBXFO9X4qZ4KhGYUl1xzW9KbYbhI0i5mbH5lmaDXf1T9eyLdmeluHee0xO/VkP4WwYQyAQm0T/2C0xAqR59t9aevQpX0ALVUh5eKoVkTVo1TT30b2YBtOkoqdleWMOsguifkV8kTvvCpope8hMRPUzOPJWk1qoPqXoKLhh9Q5PboaQgGpHGEXQ/3RhTra+qkKWDxLPVvfF0Lj4zjOsNkAZTEBn+018BAMl36pU3KYeb6d924n/5bqraTg0rxJk951Kx++YLuRRjuZX1B0JbXOtqjLJQEO+to57vda1pW1fUt18Cc1MWFy87yJUtAxojvcMs1acffxP4=
   - secure: qlZ0YAeyIPNqdc3mNYMuvzpsYidLk4fooBpbEGCyeU9l+9OPzrZDc6Cut5p9g8jk6pw6OuCGd+gdKhgoKh/XoW7S5u1EVfu6Ggmoy3jZJKfouKHVnRsrnFlUj1mnP9Q0qI6IZy8mXeEvJlQUtZ5j2VWt3LfH59iK8sALtkFpbQfmeFYV71AGjKlUFm1F68cKph3qPbbjGgGtrCbprLOHcpzLjEQLBhLl7zSgEE/eubwzeGHJKW1x1iCxrT8rn8ryBJZJRDOPPKZ/dX52VsJjHBxa/WZY0riocs5WYh5imQNGHt2sVrAdWuvXzGlPnDDKKGR3QMAxEUXPaT0Gq4VZz9/Xm6WgDdQRT01XFbztmZfSmQCnajpv2RfCdU0HLdZt0LN5mQGXP+Iekngk3AOJxw7yEfVgMN1xEU0NxGHrTqiXMcXQQDgybM2X7lLo/MiwViyNmKODzKJUoN5mDp5J3ORSGFymQ4y16eltkiWuZcynN2WIeEsKcM+OX8+savK/Rl7htWkdFh+AkBQHXXX8k3LdRDrS7IOPkAjtQQFmGoMMfPTkTyX395BUgpT8c1gvE9eiJC5OkVIyQ1ebNTx8HEcpAUwIRfR12icX6jC+eW+qhaaHW1MKSTCN9vl5o3Ug12RjfLlTFAvAs//XjJrOklyAdbikV8HU7AtHQF24ny4=
 before_install:
-  # Repo for Yarn
-  - sudo apt-key adv --fetch-keys http://dl.yarnpkg.com/debian/pubkey.gpg
-  - echo "deb http://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-  - sudo apt-get update -qq
-  - sudo apt-get install -y -qq yarn=0.22.0-1
+  # Install Yarn
+  # https://yarnpkg.com/en/docs/install-ci#travis-tab
+  - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.3.2
+  - export PATH=$HOME/.yarn/bin:$PATH
   # Gulp (used in Prebid.js build)
   - yarn global add gulp
   # AWS CLI
