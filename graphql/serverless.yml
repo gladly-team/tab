@@ -104,5 +104,6 @@ functions:
           # https://serverless.com/framework/docs/providers/aws/events/apigateway#http-endpoints-with-custom-authorizers
           authorizer:
             # Reference the authorizer ARN exported from the "lambda" stack.
+            # https://github.com/serverless/serverless/pull/3575
             arn:
-              Fn::ImportValue: ${cf:lambda-${self:provider.stage}.FirebaseAuthorizerArn}
+              Fn::ImportValue: ${cf:lambda-${self:provider.stage}.firebaseAuthorizerArn}
