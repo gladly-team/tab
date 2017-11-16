@@ -4,7 +4,6 @@
   "description": "Tab for a Cause.",
   "private": true,
   "dependencies": {
-    "asyncawait": "^1.0.6",
     "aws-sdk": "^2.52.0",
     "bluebird": "^3.5.0",
     "dynogels": "^8.0.1",
