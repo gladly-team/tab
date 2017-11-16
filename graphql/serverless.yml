@@ -9,8 +9,9 @@ custom:
   # https://forums.aws.amazon.com/thread.jspa?threadID=100847
   # https://serverless.com/framework/docs/providers/aws/guide/variables#reference-cloudformation-outputs
   dbTableArnBase: arn:aws:dynamodb:${env:AWS_REGION}:${env:AWS_ACCOUNT_ID}:table/
-  customAuthorizerArn:
-    Fn::ImportValue: ${cf:lambda-${self:provider.stage}.FirebaseAuthorizerArn}
+  # Ideally would reference the Cloudformation output directly, but this is
+  # buggy for the authorizer: https://github.com/serverless/serverless/issues/3129
+  customAuthorizerArn: arn:aws:lambda:${env:AWS_REGION}:${env:AWS_ACCOUNT_ID}:function:lambda-${self:provider.stage}-firebaseAuthorizer
 
 provider:
   name: aws
