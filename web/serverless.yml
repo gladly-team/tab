@@ -6,7 +6,6 @@ provider:
   name: aws
   runtime: nodejs6.10
   region: us-west-2
-  profile: tab-sls
   stage: ${env:SLS_STAGE, self:custom.stageDefault}
 
 custom:

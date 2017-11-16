@@ -7,7 +7,7 @@
     "express": "^4.14.1"
   },
   "devDependencies": {
-    "serverless": "^1.14.0"
+    "serverless": "^1.24.1"
   },
   "scripts": {
     "start": "node ./server.js",
