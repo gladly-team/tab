@@ -78,7 +78,6 @@ describe('logger', () => {
     const testFunc = jest.fn(() => 'hi')
     const userContext = {
       id: 'abc-123',
-      username: 'Bob',
       email: 'bob@example.com',
       extraneous: 'blah'
     }
@@ -87,7 +86,6 @@ describe('logger', () => {
     expect(Sentry.setContext).toHaveBeenCalledWith({
       user: {
         id: 'abc-123',
-        username: 'Bob',
         email: 'bob@example.com'
       },
       req: fakeLambdaEvent
