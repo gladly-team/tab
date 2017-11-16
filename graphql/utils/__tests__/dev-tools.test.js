@@ -13,8 +13,7 @@ describe('dev-tools', () => {
       user: {
         id: 'abcdefghijklmno',
         email: 'somebody@example.com',
-        emailVerified: true,
-        username: 'myUserName'
+        emailVerified: true
       }
     }
     const context = getGraphQLContextFromRequest(minimalRequestObject)

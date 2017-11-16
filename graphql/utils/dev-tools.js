@@ -22,18 +22,10 @@ import {
 // }
 export const generateLambdaEventObjFromRequest = (req) => {
   // TODO: send from client & decode, or make dynamic
-  // FIXME
-  const authorizationClaims = {
-    sub: 'abcdefghijklmno',
-    aud: 'xyzxyzxyzxyzxyzxyzxyzxyzxyz',
-    email_verified: 'true',
-    token_use: 'id',
-    auth_time: '1500670764',
-    iss: 'https://cognito-idp.us-west-2.amazonaws.com/us-west-2_abcdefgh',
-    'cognito:username': 'myUserName',
-    exp: 'Fri Jul 21 21:59:24 UTC 2017',
-    iat: 'Fri Jul 21 20:59:24 UTC 2017',
-    email: 'somebody@example.com'
+  const authorizerProperties = {
+    id: 'abcdefghijklmno',
+    email: 'somebody@example.com',
+    email_verified: 'true'
   }
   return {
     resource: '',
@@ -49,7 +41,7 @@ export const generateLambdaEventObjFromRequest = (req) => {
       resourceId: 'abcdef',
       stage: 'dev',
       authorizer: {
-        claims: authorizationClaims
+        ...authorizerProperties
       },
       requestId: 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee',
       identity: {

@@ -7,19 +7,16 @@ import {
   permissionAuthorizers
 } from '../authorization-helpers'
 
-// FIXME
 describe('authorization-helpers', () => {
   it('correctly gets user claims from AWS Lambda event obj', () => {
     const claims = {
-      sub: 'abcdef',
-      'cognito:username': 'my-name',
+      id: 'abc123',
+      email: 'foo@bar.com',
       email_verified: 'true'
     }
     const minimalLambdaEventObj = {
       requestContext: {
-        authorizer: {
-          claims: claims
-        }
+        authorizer: {...claims}
       }
     }
     const fetchedClaims = getUserClaimsFromLambdaEvent(minimalLambdaEventObj)
@@ -28,15 +25,15 @@ describe('authorization-helpers', () => {
 
   it('creates expected GraphQL context', () => {
     const userClaims = {
-      sub: 'abcdef',
-      'cognito:username': 'my-name',
+      id: 'abc123',
+      email: 'foo@bar.com',
       email_verified: 'true'
     }
     const expectedContext = {
       user: {
-        id: 'abcdef',
-        'username': 'my-name',
-        'emailVerified': true
+        id: 'abc123',
+        email: 'foo@bar.com',
+        emailVerified: true
       }
     }
     const context = createGraphQLContext(userClaims)
@@ -45,24 +42,16 @@ describe('authorization-helpers', () => {
 
   it('does not authorize a user who does not have a verified email', () => {
     const userClaims = {
-      sub: 'abcdef',
-      'cognito:username': 'my-name',
-      email_verified: 'false'
-    }
-    expect(isUserAuthorized(userClaims)).toBe(false)
-  })
-
-  it('does not authorize a user who does not have a username', () => {
-    const userClaims = {
-      sub: 'abcdef',
-      email_verified: 'true'
+      id: 'abc123',
+      email: 'foo@bar.com',
+      email_verified: false
     }
     expect(isUserAuthorized(userClaims)).toBe(false)
   })
 
   it('does not authorize a user who does not have an ID', () => {
     const userClaims = {
-      'cognito:username': 'my-name',
+      email: 'foo@bar.com',
       email_verified: 'true'
     }
     expect(isUserAuthorized(userClaims)).toBe(false)
@@ -70,8 +59,8 @@ describe('authorization-helpers', () => {
 
   it('authorizes a user who has appropriate claims', () => {
     const userClaims = {
-      sub: 'abcdef',
-      'cognito:username': 'my-name',
+      id: 'abc123',
+      email: 'foo@bar.com',
       email_verified: 'true'
     }
     expect(isUserAuthorized(userClaims)).toBe(true)
@@ -81,7 +70,7 @@ describe('authorization-helpers', () => {
 describe('permission authorizer functions', () => {
   const user = {
     id: 'abcdefghijklmno',
-    username: 'MyName',
+    email: 'abc@example.com',
     emailVerified: true
   }
 
