@@ -86,7 +86,8 @@ resources:
   Outputs:
     FirebaseAuthorizerArn:
       Description: The ARN for the Firebase authorizer lambda
+      # https://serverless.com/framework/docs/providers/aws/guide/resources/
       Value:
-        "Fn::GetAtt": [ firebaseAuthorizer, Arn ]
+        "Fn::GetAtt": [ firebaseAuthorizerLambdaFunction, Arn ]
       Export:
         Name: FirebaseAuthorizerArn
