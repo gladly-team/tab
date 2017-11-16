@@ -7,7 +7,9 @@ import { get } from 'lodash/object'
  * @return {obj} The object of user claims.
  */
 export const getUserClaimsFromLambdaEvent = (lambdaEvent) => {
-  return get(lambdaEvent, 'requestContext.authorizer.claims', {})
+  // With a custom authorizer, we access keys on requestContext.authorizer object.
+  // https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-mapping-template-reference.html#context-variable-reference
+  return get(lambdaEvent, 'requestContext.authorizer', {})
 }
 
 /**
@@ -18,11 +20,9 @@ export const getUserClaimsFromLambdaEvent = (lambdaEvent) => {
  * @return {boolean} Whether the user is authorized.
  */
 export const isUserAuthorized = (userClaims) => {
-  // FIXME
-  const userId = userClaims['sub']
-  const username = userClaims['cognito:username']
+  const userId = userClaims['id']
   const emailVerified = userClaims['email_verified'] === 'true'
-  if (!userId || !username || !emailVerified) {
+  if (!userId || !emailVerified) {
     return false
   }
   return true
@@ -34,17 +34,11 @@ export const isUserAuthorized = (userClaims) => {
  * @return {obj} The object of user claims.
  */
 export const createGraphQLContext = (userClaims) => {
-  // FIXME
-  const userId = userClaims['sub']
-  const username = userClaims['cognito:username']
-  const email = userClaims['email']
-  const emailVerified = userClaims['email_verified'] === 'true'
   return {
     user: {
-      id: userId,
-      username: username,
-      email: email,
-      emailVerified: emailVerified
+      id: userClaims['id'],
+      email: userClaims['email'],
+      emailVerified: userClaims['email_verified'] === 'true'
     }
   }
 }

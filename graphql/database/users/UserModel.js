@@ -141,18 +141,18 @@ class User extends BaseModel {
       getAll: () => false,
       update: permissionAuthorizers.userIdMatchesHashKey,
       // To create a new user, the created item must have the same
-      // email, username, and user ID as the authorized user.
+      // email and user ID as the authorized user.
       create: (userContext, hashKey, rangeKey, item) => {
         if (!userContext || !item) {
           return false
         }
         return (
           userContext.id === item.id &&
-          userContext.email === item.email &&
-          userContext.username === item.username
+          userContext.email === item.email
         )
       },
       indexPermissions: {
+        // FIXME: new user context does not have username field
         // Separate permissions for secondary index.
         UsersByUsername: {
           get: permissionAuthorizers.usernameMatchesHashKey
