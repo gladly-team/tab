@@ -3,6 +3,7 @@
 import XRegExp from 'xregexp'
 import localStorageMgr from './localstorage-mgr'
 
+// TODO: use prefixed localStorage key
 const referralParams = {
   REFERRING_USER: {
     urlKey: 'u',
