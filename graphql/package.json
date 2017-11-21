@@ -44,7 +44,7 @@
   },
   "jest": {
     "testPathIgnorePatterns": [
-      "<rootDir>[/\\\\](config)[/\\\\]"
+      "<rootDir>[/\\\\](build|config|node_modules)[/\\\\]"
     ],
     "testEnvironment": "node"
   },

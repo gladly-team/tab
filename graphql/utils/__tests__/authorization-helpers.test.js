@@ -40,13 +40,13 @@ describe('authorization-helpers', () => {
     expect(expectedContext).toEqual(context)
   })
 
-  it('does not authorize a user who does not have a verified email', () => {
+  it('does authorize a user who does not have a verified email', () => {
     const userClaims = {
       id: 'abc123',
       email: 'foo@bar.com',
       email_verified: false
     }
-    expect(isUserAuthorized(userClaims)).toBe(false)
+    expect(isUserAuthorized(userClaims)).toBe(true)
   })
 
   it('does not authorize a user who does not have an ID', () => {
