@@ -86,6 +86,9 @@ export const getCurrentUser = async () => {
 export const getUserToken = async () => {
   try {
     const authUser = await getCurrentFirebaseUser()
+    if (!authUser) {
+      return null
+    }
     const token = authUser.getIdToken()
     if (token) {
       return token
