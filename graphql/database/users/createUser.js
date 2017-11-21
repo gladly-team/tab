@@ -10,16 +10,15 @@ import logger from '../../utils/logger'
 /**
  * Creates a new user and performs other setup actions.
  * @param {object} userContext - The user authorizer object.
- * @param {object} user - The user info.
+ * @param {string} userId - The user's ID.
+ * @param {string} email - The user's email
  * @param {object} referralData - Referral data.
  * @return {Promise<User>}  A promise that resolves into a User instance.
  */
-const createUser = async (userContext, userId, username,
-    email, referralData) => {
+const createUser = async (userContext, userId, email, referralData) => {
   // Create the user.
   const userInfo = {
     id: userId,
-    username: username,
     email: email,
     joined: moment.utc().toISOString()
   }

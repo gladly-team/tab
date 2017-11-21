@@ -56,7 +56,7 @@ describe('createUser', () => {
     const userInfo = getMockUserInfo()
     const referralData = null
     await createUser(userContext, userInfo.id,
-      userInfo.username, userInfo.email, referralData)
+      userInfo.email, referralData)
 
     const expectedCreateItem = getExpectedCreateItemFromUserInfo(userInfo)
     expect(createMethod)
@@ -69,7 +69,7 @@ describe('createUser', () => {
     const userInfo = getMockUserInfo()
     const referralData = null
     await createUser(userContext, userInfo.id,
-      userInfo.username, userInfo.email, referralData)
+      userInfo.email, referralData)
     expect(setUpWidgetsForNewUser)
       .toHaveBeenCalledWith(userContext, userInfo.id)
   })
@@ -90,7 +90,7 @@ describe('createUser', () => {
     })
 
     await createUser(userContext, userInfo.id,
-      userInfo.username, userInfo.email, referralData)
+      userInfo.email, referralData)
 
     const expectedCreateItem = getExpectedCreateItemFromUserInfo(userInfo)
     expect(createMethod)
@@ -114,7 +114,7 @@ describe('createUser', () => {
     })
 
     await createUser(userContext, userInfo.id,
-      userInfo.username, userInfo.email, referralData)
+      userInfo.email, referralData)
 
     const expectedCreateItem = getExpectedCreateItemFromUserInfo(userInfo)
     expect(createMethod)
@@ -140,7 +140,7 @@ describe('createUser', () => {
       TableName: UserModel.tableName
     }
     const createdItem = await createUser(userContext, userInfo.id,
-      userInfo.username, userInfo.email, referralData)
+      userInfo.email, referralData)
     const dbParams = dbQueryMock.mock.calls[0][0]
     expect(dbParams).toEqual(expectedParams)
     expect(createdItem).toEqual(expectedUser)

@@ -94,7 +94,6 @@ export const getMockUserContext = function () {
 export const getMockUserInfo = function () {
   return {
     id: 'abcdefghijklmno',
-    username: 'MyName',
     email: 'foo@bar.com'
   }
 }

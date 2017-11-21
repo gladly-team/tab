@@ -45,7 +45,7 @@ class User extends BaseModel {
     return {
       id: types.string().required(),
       email: types.string().email().required(),
-      username: types.string().required(),
+      username: types.string(),
       joined: types.string().isoDate().required(),
       vcCurrent: types.number().integer().default(self.fieldDefaults.vcCurrent),
       vcAllTime: types.number().integer().default(self.fieldDefaults.vcAllTime),

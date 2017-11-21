@@ -30,7 +30,6 @@ describe('test-utils', () => {
   test('getMockUserInfo returns expected object', () => {
     expect(getMockUserInfo()).toEqual({
       id: 'abcdefghijklmno',
-      username: 'MyName',
       email: 'foo@bar.com'
     })
   })
