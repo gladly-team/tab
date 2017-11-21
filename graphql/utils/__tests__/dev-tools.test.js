@@ -4,7 +4,7 @@ jest.mock('jwt-decode', () => {
   return () => ({
     sub: 'abcdefghijklmno',
     email: 'somebody@example.com',
-    email_verified: true
+    email_verified: 'true'
   })
 })
 
@@ -20,7 +20,7 @@ describe('dev-tools', () => {
       user: {
         id: 'abcdefghijklmno',
         email: 'somebody@example.com',
-        emailVerified: true
+        emailVerified: 'true'
       }
     }
     const context = getGraphQLContextFromRequest(minimalRequestObject)

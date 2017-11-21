@@ -1,5 +1,6 @@
 
 import { get } from 'lodash/object'
+import { isNil } from 'lodash/lang'
 
 /**
  * Get the user claims object from an AWS Lambda event object.
@@ -21,11 +22,9 @@ export const getUserClaimsFromLambdaEvent = (lambdaEvent) => {
  */
 export const isUserAuthorized = (userClaims) => {
   const userId = userClaims['id']
-  const emailVerified = userClaims['email_verified'] === 'true'
-  if (!userId || !emailVerified) {
-    return false
-  }
-  return true
+  // Note: we don't check if the user's email is verified here because
+  // the user will make queries during authentication.
+  return !isNil(userId)
 }
 
 /**
