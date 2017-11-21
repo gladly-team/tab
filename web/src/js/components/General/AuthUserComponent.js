@@ -1,6 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { getCurrentUser } from 'authentication/user'
+import {
+  formatUser,
+  getCurrentUserListener
+} from 'authentication/user'
 import {
   replaceUrl,
   verifyEmailURL,
@@ -8,6 +11,11 @@ import {
   goToLogin
 } from 'navigation/navigation'
 
+// Get the authenticated user and, if the user is authenticated,
+// add the user's ID to the `variables` prop. By default, redirect
+// to the authentication view if the user is not authenticated.
+// TODO: change to a higher-order component:
+// https://reactjs.org/docs/higher-order-components.html
 class AuthUserComponent extends React.Component {
   constructor (props) {
     super(props)
@@ -16,12 +24,33 @@ class AuthUserComponent extends React.Component {
     }
   }
 
-  componentWillMount () {
-    this.checkUserAuth()
+  componentDidMount () {
+    getCurrentUserListener().onAuthStateChanged((user) => {
+      if (user) {
+        const formattedUser = formatUser(user)
+        this.checkUserAuth(formattedUser)
+      } else {
+        this.checkUserAuth(user)
+      }
+    })
   }
 
-  async checkUserAuth () {
-    const user = await getCurrentUser()
+  checkUserAuth (user) {
+    // If the user is authed, set the ID in state.
+    if (user && user.id) {
+      this.setState({
+        userId: user.id
+      })
+    }
+
+    // Stay on this page if it's okay to render children
+    // regardless on the user auth status.
+    if (this.props.allowUnauthedRender) {
+      return
+    }
+
+    // If the user is not fully logged in, redirect to the
+    // appropriate auth page.
     // User is not logged in.
     if (!user || !user.id) {
       goToLogin()
@@ -31,16 +60,11 @@ class AuthUserComponent extends React.Component {
     // User is logged in but has not set a username.
     } else if (!user.username) {
       replaceUrl(enterUsernameURL)
-    // User is fully logged in.
-    } else {
-      this.setState({
-        userId: user.id
-      })
     }
   }
 
   render () {
-    if (!this.state.userId) {
+    if (!this.state.userId && !this.props.allowUnauthedRender) {
       return null
     }
 
@@ -66,11 +90,15 @@ class AuthUserComponent extends React.Component {
 }
 
 AuthUserComponent.propTypes = {
-  variables: PropTypes.object
+  variables: PropTypes.object,
+  // Whether to render the children even if the user is not
+  // authenticated.
+  allowUnauthedRender: PropTypes.bool
 }
 
 AuthUserComponent.defaultProps = {
-  variables: {}
+  variables: {},
+  allowUnauthedRender: false
 }
 
 export default AuthUserComponent

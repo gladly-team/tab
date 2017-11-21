@@ -10,12 +10,20 @@ import {
 } from 'navigation/navigation'
 
 /**
- * Get the username. This relies on localStorage, not our user database,
+ * Get the username. This uses localStorage, not our user database,
  * so that we can rely on it during the sign up process.
  * @returns {string} The user's username
  */
 const getUsername = () => {
   return localStorageMgr.getItem(STORAGE_KEY_USERNAME)
+}
+
+/**
+ * Set the username in localStorage.
+ * @pararms {string} The user's username
+ */
+export const setUsernameInLocalStorage = (username) => {
+  return localStorageMgr.setItem(STORAGE_KEY_USERNAME, username)
 }
 
 /**
@@ -28,7 +36,7 @@ const getUsername = () => {
  * @returns {boolean} user.isAnonymous - Whether the user is anonymous
  * @returns {boolean} user.emailVerified - Whether the user has verified their email
  */
-const formatUser = (authUserObj) => {
+export const formatUser = (authUserObj) => {
   return {
     id: authUserObj.uid,
     email: authUserObj.email,
@@ -76,6 +84,14 @@ export const getCurrentUser = async () => {
   } catch (e) {
     throw e
   }
+}
+
+/**
+ * Get the raw Auth object, which is observable with `onAuthStateChanged`.
+ * @returns {object} a `firebase.auth` object
+ */
+export const getCurrentUserListener = () => {
+  return firebase.auth()
 }
 
 /**

@@ -656,8 +656,10 @@ const ReferralDataInput = new GraphQLInputObjectType({
   }
 })
 
+// FIXME: make idempotent
 /**
- * Create a new user.
+ * Create a new user. This must be idempotent, as the client
+ * might call it for existing users upon sign-in.
  */
 const createNewUserMutation = mutationWithClientMutationId({
   name: 'CreateNewUser',
