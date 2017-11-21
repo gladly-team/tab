@@ -4,6 +4,24 @@ import {
   getUserClaimsFromLambdaEvent,
   isUserAuthorized
 } from './authorization-helpers'
+import jwtDecode from 'jwt-decode'
+
+/**
+ * Take a user token, return an object of user claims in the same
+ * format that our authorizer returns from AWS Lambda.
+ * Important: this is insecure and for local development only.
+ * @param {string} authorizationToken - The user's ID token sent in the
+ *   Authorization header
+ * @return {obj} The object of user claims.
+ */
+function mockAuthorizer (authorizationToken) {
+  const parsedJwt = jwtDecode(authorizationToken)
+  return {
+    id: parsedJwt.sub,
+    email: parsedJwt.email,
+    email_verified: parsedJwt.email_verified.toString()
+  }
+}
 
 // Approximate an AWS Lambda event object from the request.
 // https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-set-up-simple-proxy.html#api-gateway-simple-proxy-for-lambda-input-format
@@ -21,12 +39,9 @@ import {
 //     "isBase64Encoded": "A boolean flag to indicate if the applicable request payload is Base64-encode"
 // }
 export const generateLambdaEventObjFromRequest = (req) => {
-  // TODO: send from client & decode, or make dynamic
-  const authorizerProperties = {
-    id: 'abcdefghijklmno',
-    email: 'somebody@example.com',
-    email_verified: 'true'
-  }
+  // Get the user claims from their token.
+  // Important: this is insecure and for local development only.
+  const authorizerProperties = mockAuthorizer(req.header('Authorization'))
   return {
     resource: '',
     path: req.url,
