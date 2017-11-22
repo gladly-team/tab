@@ -125,12 +125,12 @@ class Authentication extends React.Component {
               // TODO: show the user an error message if the email does not send
               goTo(verifyEmailURL)
             })
+        } else {
+          // Fetch the user from our database. This will update the `user`
+          // prop, which will let us navigate to the appropriate step in
+          // authentication.
+          this.props.fetchUser()
         }
-
-        // Fetch the user from our database. This will update the `user`
-        // prop, which will let us navigate to the appropriate step in
-        // authentication.
-        this.props.fetchUser()
       })
       .catch((err) => {
         console.error(err)
