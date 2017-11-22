@@ -8,7 +8,9 @@ import setUpWidgetsForNewUser from '../widgets/setUpWidgetsForNewUser'
 import logger from '../../utils/logger'
 
 /**
- * Creates a new user and performs other setup actions.
+ * Create a new user and performs other setup actions.
+ * This function must be idempotent, as the client may call it
+ * for existing users.
  * @param {object} userContext - The user authorizer object.
  * @param {string} userId - The user's ID.
  * @param {string} email - The user's email
@@ -23,9 +25,16 @@ const createUser = async (userContext, userId, email, referralData) => {
     joined: moment.utc().toISOString()
   }
   try {
-    var createdUser = await UserModel.create(userContext, userInfo)
+    var response = await UserModel.getOrCreate(userContext, userInfo)
   } catch (e) {
     throw e
+  }
+  const returnedUser = response.item
+
+  // If the user already existed, return it without doing other
+  // setup tasks.
+  if (!response.created) {
+    return returnedUser
   }
 
   // Set up default widgets.
@@ -60,7 +69,7 @@ const createUser = async (userContext, userId, email, referralData) => {
       }
     } catch (e) {}
   }
-  return createdUser
+  return returnedUser
 }
 
 export default createUser

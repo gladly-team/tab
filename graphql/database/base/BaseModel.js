@@ -292,7 +292,15 @@ class BaseModel {
       })
   }
 
-  static async create (userContext, item) {
+  /**
+   * Create a new item.
+   * @param {Object} userContext - The authed user context
+   * @param {Object} item - The item to create
+   * @param {boolean} overwrite - Whether to overwrite an existing item
+   *   if one exists with the same hash key
+   * @return {Object} item - The created item
+  */
+  static async create (userContext, item, overwrite = true) {
     // logger.debug(`Creating item in ${this.tableName}: ${JSON.stringify(item, null, 2)}`)
     const self = this
     const hashKey = item[this.hashKey]
@@ -304,10 +312,51 @@ class BaseModel {
     if (!this.isQueryAuthorized(userContext, 'create', hashKey, null, item)) {
       return Promise.reject(new UnauthorizedQueryException())
     }
-    return this.dynogelsModel.createAsync(item)
+    return this.dynogelsModel.createAsync(item, { overwrite: overwrite })
       .then(data => self.deserialize(data))
       .catch(err => {
-        return err
+        throw err
+      })
+  }
+
+  /**
+   * Create a new item, or fetch it if it already exists.
+   * @param {Object} userContext - The authed user context
+   * @param {Object} item - The item to create
+   * @return {Object} response
+   * @return {boolean} response.created - Whether the item did not
+   *   previously exist and was created
+   * @return {Object} response.item - The created item (or fetched item if it
+   *   already existed and `overwrite` is false)
+  */
+  static async getOrCreate (userContext, item) {
+    const self = this
+    return this.create(userContext, item, false)
+      .then(createdItem => {
+        return {
+          created: true,
+          item: createdItem
+        }
+      })
+      .catch(err => {
+        // Overwrite is false and the item already existed.
+        // Get the item and return it.
+        if (err.code === 'ConditionalCheckFailedException') {
+          const hashKey = item[self.hashKey]
+          return self.get(userContext, hashKey)
+            .then(fetchedItem => {
+              return {
+                created: false,
+                item: fetchedItem
+              }
+            })
+            .catch(err => {
+              throw err
+            })
+        } else {
+          // Unhandled error
+          throw err
+        }
       })
   }
 
