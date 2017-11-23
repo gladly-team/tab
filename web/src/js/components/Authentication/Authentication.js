@@ -133,6 +133,7 @@ class Authentication extends React.Component {
         }
       })
       .catch((err) => {
+        // TODO: show error message to the user
         console.error(err)
       })
   }

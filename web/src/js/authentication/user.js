@@ -180,6 +180,7 @@ export const sendVerificationEmail = async () => {
 
     // If there is no current user, we cannot send an email.
     if (!authUser) {
+      console.error('Could not send confirmation email: no authenticated user.')
       return false
     }
 
