@@ -25,14 +25,21 @@ class AuthUserComponent extends React.Component {
   }
 
   componentDidMount () {
-    getCurrentUserListener().onAuthStateChanged((user) => {
-      if (user) {
-        const formattedUser = formatUser(user)
-        this.checkUserAuth(formattedUser)
-      } else {
-        this.checkUserAuth(user)
-      }
-    })
+    this.authListener = getCurrentUserListener()
+      .onAuthStateChanged((user) => {
+        if (user) {
+          const formattedUser = formatUser(user)
+          this.checkUserAuth(formattedUser)
+        } else {
+          this.checkUserAuth(user)
+        }
+      })
+  }
+
+  componentWillUnmount () {
+    if (this.authListener && typeof this.authListener.unsubscribe === 'function') {
+      this.authListener.unsubscribe()
+    }
   }
 
   checkUserAuth (user) {
