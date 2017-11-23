@@ -1,16 +1,16 @@
 /* global graphql */
 
 import React from 'react'
-import PropTypes from 'prop-types'
 import {QueryRenderer} from 'react-relay/compat'
 import environment from '../../../relay-env'
-import AuthUserComponent from 'general/AuthUserComponent'
 import AuthenticationContainer from './AuthenticationContainer'
-import { isEqual } from 'lodash/lang'
+import {
+  getCurrentUser
+} from 'authentication/user'
 
 // Fetch the user from our database if the user is
 // authenticated.
-class AuthenticationViewQueryRenderer extends React.Component {
+class AuthenticationView extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -25,13 +25,6 @@ class AuthenticationViewQueryRenderer extends React.Component {
     this.fetchUser()
   }
 
-  componentWillReceiveProps (nextProps) {
-    const { variables } = nextProps
-    if (variables.userId && !isEqual(nextProps.variables, this.props.variables)) {
-      this.fetchUser(nextProps.variables.userId)
-    }
-  }
-
   // If we have an authed user with a user ID, fetch the
   // user from our database.
   // This will force Relay to refetch by modifying the
@@ -39,12 +32,12 @@ class AuthenticationViewQueryRenderer extends React.Component {
   // https://stackoverflow.com/a/44769425/1332513
   // Pass this to children to allow a forced refetch after
   // we create a new user in our database.
-  fetchUser (userIdOverride = null) {
-    const userId = userIdOverride || this.props.variables.userId
-    if (userId) {
+  async fetchUser () {
+    const user = getCurrentUser()
+    if (user.id) {
       this.setState({
         relayVariables: Object.assign({}, this.state.relayVariables, {
-          userId: userId,
+          userId: user.id,
           refetchCounter: this.state.relayVariables.refetchCounter + 1
         })
       })
@@ -83,26 +76,6 @@ class AuthenticationViewQueryRenderer extends React.Component {
             />
           )
         }} />
-    )
-  }
-}
-
-AuthenticationViewQueryRenderer.propTypes = {
-  variables: PropTypes.shape({
-    userId: PropTypes.string
-  })
-}
-
-AuthenticationViewQueryRenderer.defaultProps = {
-  variables: {}
-}
-
-class AuthenticationView extends React.Component {
-  render () {
-    return (
-      <AuthUserComponent allowUnauthedRender>
-        <AuthenticationViewQueryRenderer {...this.props} />
-      </AuthUserComponent>
     )
   }
 }
