@@ -33,8 +33,8 @@ class AuthenticationView extends React.Component {
   // Pass this to children to allow a forced refetch after
   // we create a new user in our database.
   async fetchUser () {
-    const user = getCurrentUser()
-    if (user.id) {
+    const user = await getCurrentUser()
+    if (user && user.id) {
       this.setState({
         relayVariables: Object.assign({}, this.state.relayVariables, {
           userId: user.id,
