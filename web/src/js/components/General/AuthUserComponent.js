@@ -25,7 +25,9 @@ class AuthUserComponent extends React.Component {
   }
 
   componentDidMount () {
-    this.authListener = getCurrentUserListener()
+    // Store unsubscribe function.
+    // https://firebase.google.com/docs/reference/js/firebase.auth.Auth#onAuthStateChanged
+    this.authListenerUnsubscribe = getCurrentUserListener()
       .onAuthStateChanged((user) => {
         if (user) {
           const formattedUser = formatUser(user)
@@ -37,8 +39,8 @@ class AuthUserComponent extends React.Component {
   }
 
   componentWillUnmount () {
-    if (this.authListener && typeof this.authListener.unsubscribe === 'function') {
-      this.authListener.unsubscribe()
+    if (typeof this.authListenerUnsubscribe === 'function') {
+      this.authListenerUnsubscribe()
     }
   }
 
