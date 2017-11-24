@@ -53,19 +53,21 @@ class UsernameField extends React.Component {
         this.setErrorMessage(null)
       }
       return isValid
+    } else {
+      this.setErrorMessage('Must be at least two characters.')
+      return false
     }
-    return false
   }
 
   render () {
     const props = Object.assign({}, this.props)
-    delete props['inputId']
     delete props['usernameDuplicate']
 
     return (
       <TextField
-        id={this.props.inputId}
+        id={'username-input'}
         ref={(input) => { this.username = input }}
+        floatingLabelText={<span>Username</span>}
         {...props}
         errorText={this.state.error} />
     )
@@ -73,7 +75,6 @@ class UsernameField extends React.Component {
 }
 
 UsernameField.propTypes = {
-  inputId: PropTypes.string.isRequired,
   usernameDuplicate: PropTypes.bool
 }
 
