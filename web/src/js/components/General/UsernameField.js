@@ -16,7 +16,9 @@ class UsernameField extends React.Component {
 
   componentWillReceiveProps (nextProps) {
     if (nextProps.usernameDuplicate) {
-      this.setErrorMessage('Username is already taken.')
+      this.setErrorMessage('Username is already taken. Please choose another.')
+    } else if (nextProps.otherError) {
+      this.setErrorMessage('There was an error saving your username. Please try again later.')
     }
   }
 
@@ -62,6 +64,7 @@ class UsernameField extends React.Component {
   render () {
     const props = Object.assign({}, this.props)
     delete props['usernameDuplicate']
+    delete props['otherError']
 
     return (
       <TextField
@@ -75,11 +78,13 @@ class UsernameField extends React.Component {
 }
 
 UsernameField.propTypes = {
-  usernameDuplicate: PropTypes.bool
+  usernameDuplicate: PropTypes.bool,
+  otherError: PropTypes.bool
 }
 
 UsernameField.defaultProps = {
-  usernameDuplicate: false
+  usernameDuplicate: false,
+  otherError: false
 }
 
 export default UsernameField

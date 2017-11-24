@@ -112,6 +112,15 @@ type CreateNewUserPayload {
   clientMutationId: String
 }
 
+# For expected errors, such as during form validation
+type CustomError {
+  # The error code
+  code: String
+
+  # The error message
+  message: String
+}
+
 input DonateVcInput {
   userId: String!
   charityId: String!
@@ -165,6 +174,7 @@ type Mutation {
   updateWidgetConfig(input: UpdateWidgetConfigInput!): UpdateWidgetConfigPayload
   setUserActiveWidget(input: SetUserActiveWidgetInput!): SetUserActiveWidgetPayload
   createNewUser(input: CreateNewUserInput!): CreateNewUserPayload
+  setUsername(input: SetUsernameInput!): SetUsernamePayload
 }
 
 # An object with an ID
@@ -253,6 +263,18 @@ input SetUserBkgImageInput {
 
 type SetUserBkgImagePayload {
   user: User
+  clientMutationId: String
+}
+
+input SetUsernameInput {
+  userId: String!
+  username: String!
+  clientMutationId: String
+}
+
+type SetUsernamePayload {
+  user: User
+  errors: [CustomError]
   clientMutationId: String
 }
 

@@ -47,6 +47,7 @@ import {
 
 import UserModel from '../database/users/UserModel'
 import createUser from '../database/users/createUser'
+import setUsername from '../database/users/setUsername'
 import logTab from '../database/users/logTab'
 import setActiveWidget from '../database/users/setActiveWidget'
 import setBackgroundImage from '../database/users/setBackgroundImage'
@@ -392,6 +393,21 @@ const appType = new GraphQLObjectType({
   interfaces: [nodeInterface]
 })
 
+const customErrorType = new GraphQLObjectType({
+  name: 'CustomError',
+  description: 'For expected errors, such as during form validation',
+  fields: () => ({
+    code: {
+      type: GraphQLString,
+      description: 'The error code'
+    },
+    message: {
+      type: GraphQLString,
+      description: 'The error message'
+    }
+  })
+})
+
 /**
  * Define your own connection types here
  */
@@ -656,7 +672,6 @@ const ReferralDataInput = new GraphQLInputObjectType({
   }
 })
 
-// FIXME: make idempotent
 /**
  * Create a new user. This must be idempotent, as the client
  * might call it for existing users upon sign-in.
@@ -676,6 +691,28 @@ const createNewUserMutation = mutationWithClientMutationId({
   },
   mutateAndGetPayload: ({userId, email, referralData}, context) => {
     return createUser(context.user, userId, email, referralData)
+  }
+})
+
+const setUsernameMutation = mutationWithClientMutationId({
+  name: 'SetUsername',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    username: { type: new GraphQLNonNull(GraphQLString) }
+  },
+  outputFields: {
+    user: {
+      type: userType,
+      resolve: data => data.user
+    },
+    errors: {
+      type: new GraphQLList(customErrorType),
+      resolve: data => data.errors
+    }
+  },
+  mutateAndGetPayload: ({userId, username}, context) => {
+    const userGlobalObj = fromGlobalId(userId)
+    return setUsername(context.user, userGlobalObj.id, username)
   }
 })
 
@@ -724,7 +761,8 @@ const mutationType = new GraphQLObjectType({
 
     setUserActiveWidget: setUserActiveWidgetMutation,
 
-    createNewUser: createNewUserMutation
+    createNewUser: createNewUserMutation,
+    setUsername: setUsernameMutation
   })
 })
 

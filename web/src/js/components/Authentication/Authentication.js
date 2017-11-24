@@ -193,7 +193,8 @@ class Authentication extends React.Component {
             {
               React.Children.map(this.props.children,
                 (child) => React.cloneElement(child, {
-                  onSignInSuccess: this.onSignInSuccess.bind(this)
+                  onSignInSuccess: this.onSignInSuccess.bind(this),
+                  user: this.props.user
                 })
               )
             }
@@ -210,6 +211,7 @@ Authentication.propTypes = {
   }),
   // User fetched from our database (not the auth service user).
   user: PropTypes.shape({
+    id: PropTypes.string,
     username: PropTypes.string
   }),
   fetchUser: PropTypes.func.isRequired
