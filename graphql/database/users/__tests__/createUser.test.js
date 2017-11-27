@@ -152,7 +152,6 @@ describe('createUser when user does not exist', () => {
   })
 })
 
-// TODO
 describe('createUser when user already exists (should be idempotent)', () => {
   it('does not call to set up initial widgets', async () => {
     // Mock that the user already exists.
