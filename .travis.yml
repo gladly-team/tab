@@ -118,8 +118,7 @@ env:
   - PROD_LOGGER=sentry
   - PROD_SENTRY_PUBLIC_KEY=55d60901ba254432814cd9015d100959
   - PROD_SENTRY_PROJECT_ID=184604
-  # TODO: update
-  - PROD_FIREBASE_CLIENT_EMAIL=firebase-adminsdk-kuncd@dev-tab-for-a-cause.iam.gserviceaccount.com
+  - PROD_FIREBASE_CLIENT_EMAIL=firebase-adminsdk-mg6w3@tab-for-a-cause.iam.gserviceaccount.com
   # Endpoints
   - PROD_GRAPHQL_PROXY_DOMAIN=qy89x5t2i9.execute-api.us-west-2.amazonaws.com
   - PROD_GRAPHQL_PROXY_PATH=/prod
