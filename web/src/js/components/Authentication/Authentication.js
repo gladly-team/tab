@@ -44,8 +44,22 @@ import { isEqual } from 'lodash/lang'
 //  * we're making the username mandatory but can't rely on a field
 //    from the authentication user token to store this info
 class Authentication extends React.Component {
-  componentWillMount () {
-    this.navigateToAuthStep()
+  constructor (props) {
+    super(props)
+    this.state = {
+      loadChildren: false
+    }
+  }
+
+  async componentWillMount () {
+    await this.navigateToAuthStep()
+
+  // Don't render any children until after checking the user's
+  // authed state. Otherwise, immediate unmounting of
+  // FirebaseAuthenticationUI can cause errors.
+    this.setState({
+      loadChildren: true
+    })
   }
 
   componentWillReceiveProps (nextProps) {
@@ -159,9 +173,6 @@ class Authentication extends React.Component {
     })
   }
 
-  // TODO: don't render any children until AFTER checking
-  // the user's authed state. Otherwise, immediate unmounting of
-  // FirebaseAuthenticationUI can throw errors.
   render () {
     return (
       <span
@@ -190,13 +201,14 @@ class Authentication extends React.Component {
               marginBottom: 20
             }}
           >
-            {
-              React.Children.map(this.props.children,
+            { this.state.loadChildren
+              ? React.Children.map(this.props.children,
                 (child) => React.cloneElement(child, {
                   onSignInSuccess: this.onSignInSuccess.bind(this),
                   user: this.props.user
                 })
               )
+              : null
             }
           </span>
         </span>
