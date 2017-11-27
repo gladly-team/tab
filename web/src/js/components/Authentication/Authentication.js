@@ -52,14 +52,26 @@ class Authentication extends React.Component {
   }
 
   async componentWillMount () {
+    this.mounted = true
     await this.navigateToAuthStep()
 
-  // Don't render any children until after checking the user's
-  // authed state. Otherwise, immediate unmounting of
-  // FirebaseAuthenticationUI can cause errors.
-    this.setState({
-      loadChildren: true
-    })
+    // Don't render any children until after checking the user's
+    // authed state. Otherwise, immediate unmounting of
+    // FirebaseAuthenticationUI can cause errors.
+    // We check `this.mounted` to make sure we don't set state after
+    // the component has unmounted. This is hacky; it would be
+    // better to cancel the async call on unmount or use a flux-like
+    // data flow. See:
+    // https://reactjs.org/blog/2015/12/16/ismounted-antipattern.html
+    if (this.mounted) {
+      this.setState({
+        loadChildren: true
+      })
+    }
+  }
+
+  componentWillUnmount () {
+    this.mounted = false
   }
 
   componentWillReceiveProps (nextProps) {
