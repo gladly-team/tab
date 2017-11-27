@@ -13,29 +13,29 @@ export const envVars = [
   { name: 'AWS_REGION' },
   { name: 'AWS_ACCOUNT_ID' },
   { name: 'LOG_LEVEL' },
-  // AWS Cognito
-  { name: 'COGNITO_REGION' },
-  { name: 'COGNITO_IDENTITYPOOLID' },
-  { name: 'COGNITO_USERPOOLID' },
-  { name: 'COGNITO_CLIENTID' },
-  { name: 'MOCK_DEV_AUTHENTICATION' },
   // Web app
+  { name: 'WEBSITE_DOMAIN' },
   { name: 'PUBLIC_PATH' },
   { name: 'GRAPHQL_ENDPOINT' },
   { name: 'STATIC_FILES_ENDPOINT' },
   { name: 'CLOUDFRONT_DOMAIN_ALIAS' },
   { name: 'ADS_ENABLED' },
+  { name: 'FIREBASE_API_KEY' },
+  { name: 'FIREBASE_AUTH_DOMAIN' },
+  { name: 'FIREBASE_DATABASE_URL' },
+  { name: 'FIREBASE_PROJECT_ID' },
   { name: 'WEB_HOST', optional: true },
   { name: 'WEB_PORT', optional: true },
   // Media
   { name: 'CLOUDFRONT_MEDIA_DOMAIN_ALIAS' },
-  // GraphQL
+  // GraphQL / Lambda
   { name: 'TABLE_NAME_APPENDIX' },
   { name: 'GRAPHQL_PORT', optional: true },
   { name: 'LOGGER' },
   { name: 'SENTRY_PUBLIC_KEY' },
   { name: 'SENTRY_PROJECT_ID' },
   { name: 'SENTRY_PRIVATE_KEY' },
+  { name: 'FIREBASE_CLIENT_EMAIL' },
   // Endpoints
   { name: 'GRAPHQL_PROXY_DOMAIN' },
   { name: 'GRAPHQL_PROXY_PATH' },

@@ -39,7 +39,7 @@ function generateLambdaEventObj (req) {
     queryStringParameters: req.query,
     pathParameters: {},
     stageVariables: {},
-    // User identity (e.g. Cognito) lives in context. See:
+    // User identity lives in context. See:
     // https://docs.aws.amazon.com/lambda/latest/dg/nodejs-prog-model-context.html
     requestContext: {},
     body: body,

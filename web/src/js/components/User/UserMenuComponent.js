@@ -20,7 +20,7 @@ import {
   goToSettings,
   goToStats
 } from 'navigation/navigation'
-import { logoutUser } from '../../utils/cognito-auth'
+import { logout } from 'authentication/user'
 import appTheme, {
   dashboardIconActiveColor,
   dashboardIconInactiveColor,
@@ -38,12 +38,16 @@ class UserMenu extends React.Component {
     }
   }
 
-  logout () {
-    logoutUser((loggedOut) => {
-      if (loggedOut) {
-        goToLogin()
-      }
-    })
+  async logout () {
+    var logoutSuccess = false
+    try {
+      logoutSuccess = await logout()
+    } catch (e) {
+      console.error(e)
+    }
+    if (logoutSuccess) {
+      goToLogin()
+    }
   }
 
   onHeartsHover (hovering) {

@@ -516,4 +516,122 @@ describe('BaseModel queries', () => {
         .execute()
       ).rejects.toEqual(new UnauthorizedQueryException())
   })
+
+  it('correctly calls `create` from `getOrCreate` method', async () => {
+    setModelPermissions(ExampleModel, {
+      create: () => true,
+      get: () => true
+    })
+
+    const itemToGetOrCreate = fixturesA[1]
+
+    const dbCreateQueryMock = setMockDBResponse(
+      DatabaseOperation.CREATE,
+      {
+        Attributes: {}
+      }
+    )
+    const response = await ExampleModel.getOrCreate(user, itemToGetOrCreate)
+    const createdItem = response.item
+
+    // Verify DB params.
+    const dbParams = dbCreateQueryMock.mock.calls[0][0]
+    expect(dbParams).toEqual({
+      ConditionExpression: '(#id <> :id)',
+      ExpressionAttributeNames: {'#id': 'id'},
+      ExpressionAttributeValues: {
+        ':id': createdItem.id
+      },
+      Item: {
+        created: moment.utc().toISOString(),
+        id: createdItem.id, // non-deterministic
+        name: itemToGetOrCreate.name,
+        updated: moment.utc().toISOString()
+      },
+      TableName: ExampleModel.tableName
+    })
+
+    // Verify returned object.
+    expect(createdItem).toEqual({
+      created: moment.utc().toISOString(),
+      id: createdItem.id, // non-deterministic
+      name: itemToGetOrCreate.name,
+      updated: moment.utc().toISOString()
+    })
+
+    expect(response.created).toBe(true)
+  })
+
+  it('fails with unauthorized `create` in `getOrCreate`', async () => {
+    expect.assertions(1)
+    const itemToGetOrCreate = fixturesA[1]
+    setModelPermissions(ExampleModel, {
+      create: () => false,
+      get: () => true
+    })
+    return expect(ExampleModel.getOrCreate(user, itemToGetOrCreate))
+      .rejects.toEqual(new UnauthorizedQueryException())
+  })
+
+  it('correctly calls `get` from `getOrCreate` method', async () => {
+    setModelPermissions(ExampleModel, {
+      create: () => true,
+      get: () => true
+    })
+
+    const itemToGetOrCreate = fixturesA[1]
+
+    // Mock that the item already exists.
+    setMockDBResponse(
+      DatabaseOperation.CREATE,
+      null,
+      { code: 'ConditionalCheckFailedException' } // simple mock error
+    )
+    const dbGetQueryMock = setMockDBResponse(
+      DatabaseOperation.GET,
+      {
+        Item: itemToGetOrCreate
+      }
+    )
+    const response = await ExampleModel.getOrCreate(user, itemToGetOrCreate)
+    const createdItem = response.item
+
+    // Verify DB params.
+    const dbParams = dbGetQueryMock.mock.calls[0][0]
+    expect(dbParams).toEqual({
+      TableName: ExampleModel.tableName,
+      Key: {
+        id: itemToGetOrCreate.id
+      }
+    })
+
+    // Verify returned object.
+    expect(createdItem).toEqual({
+      created: moment.utc().toISOString(),
+      id: createdItem.id, // non-deterministic
+      name: itemToGetOrCreate.name,
+      updated: moment.utc().toISOString()
+    })
+
+    expect(response.created).toBe(false)
+  })
+
+  it('fails with unauthorized `get` in `getOrCreate`', async () => {
+    expect.assertions(1)
+    setModelPermissions(ExampleModel, {
+      create: () => true,
+      get: () => false
+    })
+
+    const itemToGetOrCreate = fixturesA[1]
+
+    // Mock that the item already exists.
+    setMockDBResponse(
+      DatabaseOperation.CREATE,
+      null,
+      { code: 'ConditionalCheckFailedException' } // simple mock error
+    )
+    return expect(ExampleModel.getOrCreate(user, itemToGetOrCreate))
+      .rejects.toEqual(new UnauthorizedQueryException())
+  })
 })

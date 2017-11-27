@@ -33,10 +33,11 @@ const availableOperations = [
 /**
  * Set a mock return function for a call to the database client.
  * @param {string} operation - The database operation to override
- * @param {*} operation - The value to return from the database client call.
+ * @param {*} returnVal - The value to return from the database client call.
+ * @param {Object} error - An error value to return
  * @return {function} An instance of `jest.fn`, a mock function
  */
-export const setMockDBResponse = function (operation, returnVal = null) {
+export const setMockDBResponse = function (operation, returnVal = null, error = null) {
   jest.mock('./databaseClient')
   if (availableOperations.indexOf(operation) === -1) {
     const dbOps = Object.keys(DatabaseOperation).join(', ')
@@ -44,7 +45,7 @@ export const setMockDBResponse = function (operation, returnVal = null) {
   }
   return databaseClient[operation]
     .mockImplementationOnce((params, callback) => {
-      callback(null, returnVal)
+      callback(error, returnVal)
     })
 }
 
@@ -80,7 +81,7 @@ export const setModelGetterField = function (modelClass, fieldName, val) {
  */
 export const getMockUserContext = function () {
   return {
-    id: '45bbefbf-63d1-4d36-931e-212fbe2bc3d9',
+    id: 'abcdefghijklmno',
     username: 'MyName',
     email: 'foo@bar.com',
     emailVerified: true
@@ -93,8 +94,7 @@ export const getMockUserContext = function () {
  */
 export const getMockUserInfo = function () {
   return {
-    id: '45bbefbf-63d1-4d36-931e-212fbe2bc3d9',
-    username: 'MyName',
+    id: 'abcdefghijklmno',
     email: 'foo@bar.com'
   }
 }

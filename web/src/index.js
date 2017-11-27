@@ -1,12 +1,11 @@
+import 'babel-polyfill'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { AppContainer } from 'react-hot-loader'
 import Root from './root'
+// Init Firebase
+import 'authentication/firebase'
 
-// //https://github.com/stylelint/stylelint/issues/1316
-if (!global._babelPolyfill) {
-  require('babel-polyfill')
-}
 require('./index.css')
 
 const rootNode = document.createElement('div')

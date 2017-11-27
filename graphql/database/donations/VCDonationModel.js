@@ -26,7 +26,7 @@ class VCDonation extends BaseModel {
   static get schema () {
     const self = this
     return {
-      userId: types.uuid(),
+      userId: types.string().required(),
       charityId: types.uuid(),
       vcDonated: types.number().integer()
         .default(self.fieldDefaults.vcDonated)

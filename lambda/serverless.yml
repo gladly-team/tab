@@ -1,35 +1,42 @@
 
-service: lambda
+service:
+  name: lambda
+  awsKmsKeyArn: ${self:custom.awsKmsKeyArn} 
 frameworkVersion: ">=1.12.0 <2.0.0"
 
 provider:
   name: aws
   runtime: nodejs6.10
   region: us-west-2
-  profile: tab-sls
   stage: ${env:SLS_STAGE, self:custom.stageDefault}
   iamRoleStatements:
-    # TODO: more restrictive, per-user permissions
-    - Effect: "Allow"
+    ## TODO: more precise permissions when needed
+    # - Effect: "Allow"
+    #   Action:
+    #     - "dynamodb:BatchGetItem"
+    #     - "dynamodb:BatchWriteItem"
+    #     - "dynamodb:DeleteItem"
+    #     - "dynamodb:DescribeReservedCapacity"
+    #     - "dynamodb:DescribeReservedCapacityOfferings"
+    #     - "dynamodb:DescribeTable"
+    #     - "dynamodb:DescribeTimeToLive"
+    #     - "dynamodb:GetItem"
+    #     - "dynamodb:ListTables"
+    #     - "dynamodb:ListTagsOfResource"
+    #     - "dynamodb:PutItem"
+    #     - "dynamodb:Query"
+    #     - "dynamodb:Scan"
+    #     - "dynamodb:UpdateItem"
+    #   Resource: "*"
+    - Effect: Allow
       Action:
-        - "dynamodb:BatchGetItem"
-        - "dynamodb:BatchWriteItem"
-        - "dynamodb:DeleteItem"
-        - "dynamodb:DescribeReservedCapacity"
-        - "dynamodb:DescribeReservedCapacityOfferings"
-        - "dynamodb:DescribeTable"
-        - "dynamodb:DescribeTimeToLive"
-        - "dynamodb:GetItem"
-        - "dynamodb:ListTables"
-        - "dynamodb:ListTagsOfResource"
-        - "dynamodb:PutItem"
-        - "dynamodb:Query"
-        - "dynamodb:Scan"
-        - "dynamodb:UpdateItem"
-      Resource: "*"
+        - KMS:Decrypt
+      Resource: ${self:custom.awsKmsKeyArn} 
 
 custom:
   stageDefault: dev
+  # TODO: make KMS key an env var
+  awsKmsKeyArn: arn:aws:kms:us-west-2:167811431063:key/de8bda45-b6cd-421f-8f56-de56bfb9f97b
 
 plugins:
   # Include only the required node modules.
@@ -44,20 +51,6 @@ package:
     - build/**
 
 functions:
-  migrate:
-    handler: build/migrate/migrate.serverlessHandler
-    events:
-      - http:
-          path: migrate/
-          method: get
-          cors: true
-  migrate_auth:
-    handler: build/migrate_auth/migrate_auth.serverlessHandler
-    events:
-      - http:
-          path: migrate_auth/
-          method: get
-          cors: true
   hearts:
     handler: build/hearts/hearts.serverlessHandler
     events:
@@ -67,7 +60,26 @@ functions:
           cors: true
           # Authorizer docs:
           # https://serverless.com/framework/docs/providers/aws/events/apigateway/#http-endpoints-with-custom-authorizers
-          ## TODO: reenable later
+          ## TODO: reenable before using sensitive lambdas
           # authorizer:
           #   name: authorizer_${opt:stage, self:provider.stage}
-          #   arn:  arn:aws:cognito-idp:us-west-2:167811431063:userpool/us-west-2_9MWuEqLeW 
+
+  firebaseAuthorizer:
+    handler: build/firebase-authorizer/firebase-authorizer.serverlessHandler
+    environment:
+      FIREBASE_PROJECT_ID: ${env:FIREBASE_PROJECT_ID}
+      FIREBASE_DATABASE_URL: ${env:FIREBASE_DATABASE_URL}
+      FIREBASE_CLIENT_EMAIL: ${env:FIREBASE_CLIENT_EMAIL}
+      # Encrypted with AWS KMS for encryption during deploy.
+      #   https://docs.aws.amazon.com/lambda/latest/dg/env_variables.html
+      #   https://docs.aws.amazon.com/cli/latest/reference/kms/encrypt.html
+      # Unfortunately, "Cloudformation and SAM do not currently support encryption helpers that
+      #   Lambda console provides...  As of now the only way to achieve this (other than through console)
+      #   is to use client side encryption - use encrypted cipher text in your variables and then decrypt
+      #   them in the lambda function code."
+      #   https://github.com/awslabs/serverless-application-model/issues/48#issuecomment-269663554
+      # Note on encrypting/decrypting with the AWS CLI:
+      #   https://github.com/aws/aws-cli/issues/1043#issuecomment-65878875
+      # To encrypt:
+      #   `aws kms encrypt --key-id [kms-key-id] --plaintext [item]`
+      FIREBASE_PRIVATE_KEY: ${file(./src/firebase-authorizer/variables.yml):${self:provider.stage}.FIREBASE_PRIVATE_KEY}

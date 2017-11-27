@@ -1,29 +1,30 @@
 /* global fetch */
+import { getUserToken } from 'authentication/user'
 const {
   Environment,
   Network,
   RecordSource,
   Store
 } = require('relay-runtime')
-const cognitoAuth = require('./js/utils/cognito-auth')
 
 // Fetches the results of an operation (query/mutation/etc)
 // and return its results as a Promise.
-function fetchQuery (
+async function fetchQuery (
   operation,
   variables,
   cacheConfig,
   uploadables
 ) {
   // TODO: mock user token here on dev
-  return cognitoAuth.getUserIdToken().then((userIdToken) => {
+  try {
     // Add Authorization header if user has a token.
+    const userToken = await getUserToken()
     const headers = {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     }
-    if (userIdToken) {
-      headers['Authorization'] = userIdToken
+    if (userToken) {
+      headers['Authorization'] = userToken
     }
 
     return fetch(`//${process.env.GRAPHQL_ENDPOINT}`, {
@@ -47,9 +48,9 @@ function fetchQuery (
           return responseJSON
         })
     })
-  }).catch((err) => {
-    console.error(err)
-  })
+  } catch (e) {
+    console.error(e)
+  }
 }
 
 // Create a network layer from the fetch function

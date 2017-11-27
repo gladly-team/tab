@@ -1,5 +1,6 @@
 
 import { get } from 'lodash/object'
+import { isNil } from 'lodash/lang'
 
 /**
  * Get the user claims object from an AWS Lambda event object.
@@ -7,7 +8,9 @@ import { get } from 'lodash/object'
  * @return {obj} The object of user claims.
  */
 export const getUserClaimsFromLambdaEvent = (lambdaEvent) => {
-  return get(lambdaEvent, 'requestContext.authorizer.claims', {})
+  // With a custom authorizer, we access keys on requestContext.authorizer object.
+  // https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-mapping-template-reference.html#context-variable-reference
+  return get(lambdaEvent, 'requestContext.authorizer', {})
 }
 
 /**
@@ -18,13 +21,10 @@ export const getUserClaimsFromLambdaEvent = (lambdaEvent) => {
  * @return {boolean} Whether the user is authorized.
  */
 export const isUserAuthorized = (userClaims) => {
-  const userId = userClaims['sub']
-  const username = userClaims['cognito:username']
-  const emailVerified = userClaims['email_verified'] === 'true'
-  if (!userId || !username || !emailVerified) {
-    return false
-  }
-  return true
+  const userId = userClaims['id']
+  // Note: we don't check if the user's email is verified here because
+  // the user will make queries during authentication.
+  return !isNil(userId)
 }
 
 /**
@@ -33,16 +33,11 @@ export const isUserAuthorized = (userClaims) => {
  * @return {obj} The object of user claims.
  */
 export const createGraphQLContext = (userClaims) => {
-  const userId = userClaims['sub']
-  const username = userClaims['cognito:username']
-  const email = userClaims['email']
-  const emailVerified = userClaims['email_verified'] === 'true'
   return {
     user: {
-      id: userId,
-      username: username,
-      email: email,
-      emailVerified: emailVerified
+      id: userClaims['id'],
+      email: userClaims['email'],
+      emailVerified: userClaims['email_verified'] === 'true'
     }
   }
 }
@@ -50,7 +45,4 @@ export const createGraphQLContext = (userClaims) => {
 export const permissionAuthorizers = {}
 permissionAuthorizers.userIdMatchesHashKey = (user, hashKey, _) => {
   return user.id === hashKey
-}
-permissionAuthorizers.usernameMatchesHashKey = (user, hashKey) => {
-  return user.username === hashKey
 }

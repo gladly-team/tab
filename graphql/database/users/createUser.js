@@ -8,25 +8,33 @@ import setUpWidgetsForNewUser from '../widgets/setUpWidgetsForNewUser'
 import logger from '../../utils/logger'
 
 /**
- * Creates a new user and performs other setup actions.
+ * Create a new user and performs other setup actions.
+ * This function must be idempotent, as the client may call it
+ * for existing users.
  * @param {object} userContext - The user authorizer object.
- * @param {object} user - The user info.
+ * @param {string} userId - The user's ID.
+ * @param {string} email - The user's email
  * @param {object} referralData - Referral data.
  * @return {Promise<User>}  A promise that resolves into a User instance.
  */
-const createUser = async (userContext, userId, username,
-    email, referralData) => {
+const createUser = async (userContext, userId, email, referralData) => {
   // Create the user.
   const userInfo = {
     id: userId,
-    username: username,
     email: email,
     joined: moment.utc().toISOString()
   }
   try {
-    var createdUser = await UserModel.create(userContext, userInfo)
+    var response = await UserModel.getOrCreate(userContext, userInfo)
   } catch (e) {
     throw e
+  }
+  const returnedUser = response.item
+
+  // If the user already existed, return it without doing other
+  // setup tasks.
+  if (!response.created) {
+    return returnedUser
   }
 
   // Set up default widgets.
@@ -40,10 +48,10 @@ const createUser = async (userContext, userId, username,
   if (referralData) {
     const referringUserUsername = referralData.referringUser
     try {
-      // Referring user may not exist if referring username
-      // was manipulated.
       const referringUser = await getUserByUsername(userContext,
         referringUserUsername)
+      // Referring user may not exist if referring username
+      // was manipulated.
       if (referringUser) {
         try {
           await logReferralData(userContext, userInfo.id, referringUser.id)
@@ -61,7 +69,7 @@ const createUser = async (userContext, userId, username,
       }
     } catch (e) {}
   }
-  return createdUser
+  return returnedUser
 }
 
 export default createUser

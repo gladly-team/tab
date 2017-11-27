@@ -13,7 +13,6 @@ export const sentryContextWrapper = (userContext, lambdaEvent, func) => {
     Raven.setContext({
       user: {
         id: userContext.id,
-        username: userContext.username,
         email: userContext.email
       },
       req: lambdaEvent

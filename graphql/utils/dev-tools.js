@@ -4,6 +4,28 @@ import {
   getUserClaimsFromLambdaEvent,
   isUserAuthorized
 } from './authorization-helpers'
+import jwtDecode from 'jwt-decode'
+
+/**
+ * Take a user token, return an object of user claims in the same
+ * format that our authorizer returns from AWS Lambda.
+ * Important: this is insecure and for local development only.
+ * @param {string} authorizationToken - The user's ID token sent in the
+ *   Authorization header
+ * @return {obj} The object of user claims.
+ */
+function mockAuthorizer (authorizationToken) {
+  if (!authorizationToken) {
+    console.warn('Warning: dev user is missing an Authorization token.')
+    return {}
+  }
+  const parsedJwt = jwtDecode(authorizationToken)
+  return {
+    id: parsedJwt.sub,
+    email: parsedJwt.email,
+    email_verified: parsedJwt.email_verified.toString()
+  }
+}
 
 // Approximate an AWS Lambda event object from the request.
 // https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-set-up-simple-proxy.html#api-gateway-simple-proxy-for-lambda-input-format
@@ -21,19 +43,9 @@ import {
 //     "isBase64Encoded": "A boolean flag to indicate if the applicable request payload is Base64-encode"
 // }
 export const generateLambdaEventObjFromRequest = (req) => {
-  // TODO: send from client & decode, or make dynamic
-  const authorizationClaims = {
-    sub: '45bbefbf-63d1-4d36-931e-212fbe2bc3d9',
-    aud: 'xyzxyzxyzxyzxyzxyzxyzxyzxyz',
-    email_verified: 'true',
-    token_use: 'id',
-    auth_time: '1500670764',
-    iss: 'https://cognito-idp.us-west-2.amazonaws.com/us-west-2_abcdefgh',
-    'cognito:username': 'myUserName',
-    exp: 'Fri Jul 21 21:59:24 UTC 2017',
-    iat: 'Fri Jul 21 20:59:24 UTC 2017',
-    email: 'somebody@example.com'
-  }
+  // Get the user claims from their token.
+  // Important: this is insecure and for local development only.
+  const authorizerProperties = mockAuthorizer(req.header('Authorization'))
   return {
     resource: '',
     path: req.url,
@@ -48,7 +60,7 @@ export const generateLambdaEventObjFromRequest = (req) => {
       resourceId: 'abcdef',
       stage: 'dev',
       authorizer: {
-        claims: authorizationClaims
+        ...authorizerProperties
       },
       requestId: 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee',
       identity: {

@@ -43,9 +43,9 @@ class User extends BaseModel {
   static get schema () {
     const self = this
     return {
-      id: types.uuid(),
+      id: types.string().required(),
       email: types.string().email().required(),
-      username: types.string().required(),
+      username: types.string(),
       joined: types.string().isoDate().required(),
       vcCurrent: types.number().integer().default(self.fieldDefaults.vcCurrent),
       vcAllTime: types.number().integer().default(self.fieldDefaults.vcAllTime),
@@ -141,21 +141,26 @@ class User extends BaseModel {
       getAll: () => false,
       update: permissionAuthorizers.userIdMatchesHashKey,
       // To create a new user, the created item must have the same
-      // email, username, and user ID as the authorized user.
+      // email and user ID as the authorized user.
       create: (userContext, hashKey, rangeKey, item) => {
         if (!userContext || !item) {
           return false
         }
         return (
           userContext.id === item.id &&
-          userContext.email === item.email &&
-          userContext.username === item.username
+          userContext.email === item.email
         )
       },
       indexPermissions: {
-        // Separate permissions for secondary index.
+        // The userContext does not include the user's username, so
+        // there's no clean way to verify item ownership based on username
+        // lookup prior to making the query. For now, require a permissions
+        // override to access this secondary index.
         UsersByUsername: {
-          get: permissionAuthorizers.usernameMatchesHashKey
+          get: () => false,
+          getAll: () => false,
+          update: () => false,
+          create: () => false
         }
       }
     }

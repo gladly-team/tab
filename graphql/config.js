@@ -10,8 +10,6 @@ module.exports = {
   STAGE: process.env.STAGE,
   AWS_REGION: process.env.AWS_REGION,
   DYNAMODB_ENDPOINT: process.env.DYNAMODB_ENDPOINT,
-  COGNITO_USERPOOLID: process.env.COGNITO_USERPOOLID,
-  COGNITO_CLIENTID: process.env.COGNITO_CLIENTID,
   MEDIA_ENDPOINT: process.env.MEDIA_ENDPOINT,
   GRAPHQL_PORT: process.env.GRAPHQL_PORT,
   LOG_LEVEL: process.env.LOG_LEVEL || 'debug',

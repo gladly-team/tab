@@ -9,18 +9,18 @@ custom:
   # https://forums.aws.amazon.com/thread.jspa?threadID=100847
   # https://serverless.com/framework/docs/providers/aws/guide/variables#reference-cloudformation-outputs
   dbTableArnBase: arn:aws:dynamodb:${env:AWS_REGION}:${env:AWS_ACCOUNT_ID}:table/
+  # Ideally would reference the Cloudformation output directly, but this is
+  # buggy for the authorizer: https://github.com/serverless/serverless/issues/3129
+  customAuthorizerArn: arn:aws:lambda:${env:AWS_REGION}:${env:AWS_ACCOUNT_ID}:function:lambda-${self:provider.stage}-firebaseAuthorizer
 
 provider:
   name: aws
   runtime: nodejs6.10
   region: us-west-2
-  profile: tab-sls
   stage: ${env:SLS_STAGE, self:custom.stageDefault}
   # Rules for fine-grained DynamoDB access:
   #   https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/specifying-conditions.html
   #   https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/using-identity-based-policies.html
-  # See rules based on Cognito user ID:
-  #   https://stackoverflow.com/a/25888309
   iamRoleStatements:
     # Charities table
     - Effect: "Allow"
@@ -102,9 +102,11 @@ functions:
           path: graphql/
           method: post
           cors: true
-          # Require user to be authenticated with AWS Cognito.
+          # Require user to be authenticated.
           # https://serverless.com/framework/docs/providers/aws/events/apigateway#http-endpoints-with-custom-authorizers
-          # https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-integrate-with-cognito.html#apigateway-enable-cognito-user-pool
           authorizer:
-            name: tab_auth_${self:provider.stage}
-            arn: ${env:COGNITO_IDENTITYPOOLID}
+            # Reference the authorizer ARN exported from the "lambda" stack.
+            #   https://github.com/serverless/serverless/pull/3575
+            # Bug with this behavior:
+            #   https://github.com/serverless/serverless/issues/3129
+            arn: ${self:custom.customAuthorizerArn}

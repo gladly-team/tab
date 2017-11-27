@@ -50,16 +50,16 @@ function getExpectedCreateItemFromUserInfo (userInfo) {
   )
 }
 
-describe('createUser', () => {
+describe('createUser when user does not exist', () => {
   it('works as expected without referralData', async () => {
-    const createMethod = jest.spyOn(UserModel, 'create')
+    const getOrCreateMethod = jest.spyOn(UserModel, 'getOrCreate')
     const userInfo = getMockUserInfo()
     const referralData = null
     await createUser(userContext, userInfo.id,
-      userInfo.username, userInfo.email, referralData)
+      userInfo.email, referralData)
 
     const expectedCreateItem = getExpectedCreateItemFromUserInfo(userInfo)
-    expect(createMethod)
+    expect(getOrCreateMethod)
       .toHaveBeenCalledWith(userContext, expectedCreateItem)
     expect(logReferralData).not.toHaveBeenCalled()
     expect(rewardReferringUser).not.toHaveBeenCalled()
@@ -69,13 +69,13 @@ describe('createUser', () => {
     const userInfo = getMockUserInfo()
     const referralData = null
     await createUser(userContext, userInfo.id,
-      userInfo.username, userInfo.email, referralData)
+      userInfo.email, referralData)
     expect(setUpWidgetsForNewUser)
       .toHaveBeenCalledWith(userContext, userInfo.id)
   })
 
   it('logs referral data and rewards referring user', async () => {
-    const createMethod = jest.spyOn(UserModel, 'create')
+    const getOrCreateMethod = jest.spyOn(UserModel, 'getOrCreate')
     const userInfo = getMockUserInfo()
     const referralData = {
       referringUser: 'FriendOfMine'
@@ -90,10 +90,10 @@ describe('createUser', () => {
     })
 
     await createUser(userContext, userInfo.id,
-      userInfo.username, userInfo.email, referralData)
+      userInfo.email, referralData)
 
     const expectedCreateItem = getExpectedCreateItemFromUserInfo(userInfo)
-    expect(createMethod)
+    expect(getOrCreateMethod)
       .toHaveBeenCalledWith(userContext, expectedCreateItem)
     expect(logReferralData)
       .toHaveBeenCalledWith(userContext, userInfo.id, referringUserId)
@@ -102,7 +102,7 @@ describe('createUser', () => {
   })
 
   it('works when referring user does not exist', async () => {
-    const createMethod = jest.spyOn(UserModel, 'create')
+    const getOrCreateMethod = jest.spyOn(UserModel, 'getOrCreate')
     const userInfo = getMockUserInfo()
     const referralData = {
       referringUser: 'FriendOfMine'
@@ -114,10 +114,10 @@ describe('createUser', () => {
     })
 
     await createUser(userContext, userInfo.id,
-      userInfo.username, userInfo.email, referralData)
+      userInfo.email, referralData)
 
     const expectedCreateItem = getExpectedCreateItemFromUserInfo(userInfo)
-    expect(createMethod)
+    expect(getOrCreateMethod)
       .toHaveBeenCalledWith(userContext, expectedCreateItem)
     expect(logReferralData).not.toHaveBeenCalled()
     expect(rewardReferringUser).not.toHaveBeenCalled()
@@ -136,13 +136,88 @@ describe('createUser', () => {
     const expectedParamsUser = cloneDeep(expectedUser)
     delete expectedParamsUser.backgroundImage.imageURL
     const expectedParams = {
+      ConditionExpression: '(#id <> :id)',
+      ExpressionAttributeNames: {'#id': 'id'},
+      ExpressionAttributeValues: {
+        ':id': userInfo.id
+      },
       Item: expectedParamsUser,
       TableName: UserModel.tableName
     }
     const createdItem = await createUser(userContext, userInfo.id,
-      userInfo.username, userInfo.email, referralData)
+      userInfo.email, referralData)
     const dbParams = dbQueryMock.mock.calls[0][0]
     expect(dbParams).toEqual(expectedParams)
+    expect(createdItem).toEqual(expectedUser)
+  })
+})
+
+describe('createUser when user already exists (should be idempotent)', () => {
+  it('does not call to set up initial widgets', async () => {
+    // Mock that the user already exists.
+    setMockDBResponse(
+      DatabaseOperation.CREATE,
+      null,
+      { code: 'ConditionalCheckFailedException' } // simple mock error
+    )
+    const userInfo = getMockUserInfo()
+    const referralData = null
+    await createUser(userContext, userInfo.id,
+      userInfo.email, referralData)
+    expect(setUpWidgetsForNewUser)
+       .not.toHaveBeenCalled()
+  })
+
+  it('does not log referral data or reward referring user', async () => {
+    // Mock that the user already exists.
+    setMockDBResponse(
+      DatabaseOperation.CREATE,
+      null,
+      { code: 'ConditionalCheckFailedException' } // simple mock error
+    )
+    const userInfo = getMockUserInfo()
+    const referralData = {
+      referringUser: 'FriendOfMine'
+    }
+
+    // Mock fetching the referring user.
+    const referringUserId = 'ppooiiuu-151a-4a9a-9289-06906670fd4e'
+    getUserByUsername.mockImplementationOnce(() => {
+      return {
+        id: referringUserId
+      }
+    })
+
+    await createUser(userContext, userInfo.id,
+      userInfo.email, referralData)
+
+    expect(logReferralData)
+      .not.toHaveBeenCalled()
+    expect(rewardReferringUser)
+      .not.toHaveBeenCalled()
+  })
+
+  it('returns the existing user', async () => {
+    const userInfo = getMockUserInfo()
+    const referralData = null
+
+    // Mock that the user already exists.
+    setMockDBResponse(
+      DatabaseOperation.CREATE,
+      null,
+      { code: 'ConditionalCheckFailedException' } // simple mock error
+    )
+
+    // Mock the response for getting the user.
+    const expectedUser = getMockUserInstance(userInfo)
+    setMockDBResponse(
+      DatabaseOperation.GET,
+      {
+        Item: expectedUser
+      }
+    )
+    const createdItem = await createUser(userContext, userInfo.id,
+      userInfo.email, referralData)
     expect(createdItem).toEqual(expectedUser)
   })
 })

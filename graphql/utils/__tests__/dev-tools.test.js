@@ -1,20 +1,30 @@
 /* eslint-env jest */
 
-import {
-  getGraphQLContextFromRequest
-} from '../dev-tools'
+jest.mock('jwt-decode', () => {
+  return () => ({
+    sub: 'abcdefghijklmno',
+    email: 'somebody@example.com',
+    email_verified: 'true'
+  })
+})
 
 describe('dev-tools', () => {
   it('corrently forms GraphQL context from a request object', () => {
-    // Note: will have to update this when we remove hardcoded
-    // user claims.
-    const minimalRequestObject = {}
+    const getGraphQLContextFromRequest = require('../dev-tools').getGraphQLContextFromRequest
+    const minimalRequestObject = {
+      header: (headerName) => {
+        if (headerName === 'Authorization') {
+          return 'fake.token'
+        } else {
+          return null
+        }
+      }
+    }
     const expectedContext = {
       user: {
-        id: '45bbefbf-63d1-4d36-931e-212fbe2bc3d9',
+        id: 'abcdefghijklmno',
         email: 'somebody@example.com',
-        emailVerified: true,
-        username: 'myUserName'
+        emailVerified: true
       }
     }
     const context = getGraphQLContextFromRequest(minimalRequestObject)

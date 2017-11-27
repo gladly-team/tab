@@ -48,14 +48,6 @@ describe('UserModel', () => {
     expect(User.permissions.getAll()).toBe(false)
   })
 
-  it('has the correct UsersByUsername secondary index permissions', () => {
-    expect(User.permissions.indexPermissions).toEqual({
-      UsersByUsername: {
-        get: permissionAuthorizers.usernameMatchesHashKey
-      }
-    })
-  })
-
   it('allows create when user info matches item to create', () => {
     const userContext = {
       id: 'abc',

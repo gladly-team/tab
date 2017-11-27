@@ -4,6 +4,7 @@ import { random } from 'lodash/number'
 
 // The names of the different overrides.
 export const REWARD_REFERRER_OVERRIDE = 'REWARD_REFERRER_OVERRIDE'
+export const GET_REFERRER_BY_USERNAME_OVERRIDE = 'GET_REFERRER_BY_USERNAME_OVERRIDE'
 export const ADD_NUM_USERS_RECRUITED_OVERRIDE = 'ADD_NUM_USERS_RECRUITED_OVERRIDE'
 
 // Make it less likely for somebody to use the override
@@ -13,6 +14,7 @@ const validOverridesAppendix = `_CONFIRMED_${rand}`
 
 const validOverrides = {
   [REWARD_REFERRER_OVERRIDE]: `${REWARD_REFERRER_OVERRIDE}${validOverridesAppendix}`,
+  [GET_REFERRER_BY_USERNAME_OVERRIDE]: `${GET_REFERRER_BY_USERNAME_OVERRIDE}${validOverridesAppendix}`,
   [ADD_NUM_USERS_RECRUITED_OVERRIDE]: `${ADD_NUM_USERS_RECRUITED_OVERRIDE}${validOverridesAppendix}`
 }
 

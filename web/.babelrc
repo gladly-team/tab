@@ -19,6 +19,7 @@
         "web-utils": "./src/js/utils/utils",
         "utils": "./src/js/utils",
         "ads": "./src/js/ads",
+        "authentication": "./src/js/authentication",
         "theme": "./src/js/theme",
         "assets": "./src/js/assets"
       }

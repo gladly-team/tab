@@ -11,35 +11,35 @@ import {
 import fetchQuery from '../utils/fetch-graphql'
 
 describe('GraphQL with authorized user', () => {
-  var cognitoUsername = null
-  var cognitoUserId = null
-  var cognitoUserIdToken = null
+  var username = null
+  var userId = null
+  var userIdToken = null
   const origUserId = 'gqltest1-yz89-yz80-yz80-xyz789tuv456'
 
   beforeAll(async () => {
-    // Create a Cognito user.
+    // Create a authed user.
     const userInfo = await getNewAuthedUser()
-    cognitoUserId = userInfo.userId
-    cognitoUserIdToken = userInfo.idToken
-    cognitoUsername = userInfo.username
+    userId = userInfo.userId
+    userIdToken = userInfo.idToken
+    username = userInfo.username
   })
 
   afterAll(async () => {
-    // Delete the Cognito user.
-    await deleteUser(cognitoUsername)
+    // Delete the authed user.
+    await deleteUser(username)
   })
 
   beforeEach(async () => {
     // Load fixtures, replacing one of the hardcoded user IDs
-    // with the Cognito user's ID.
+    // with the authed user's ID.
     await loadFixtures('users', [
-      { before: origUserId, after: cognitoUserId }
+      { before: origUserId, after: userId }
     ])
   })
 
   afterEach(async () => {
     await deleteFixtures('users', [
-      { before: origUserId, after: cognitoUserId }
+      { before: origUserId, after: userId }
     ])
   })
 
@@ -54,11 +54,11 @@ describe('GraphQL with authorized user', () => {
         }
       }`,
       {
-        userId: cognitoUserId
+        userId: userId
       },
-      cognitoUserIdToken
+      userIdToken
     )
-    expect(response.data.user.userId).toBe(cognitoUserId)
+    expect(response.data.user.userId).toBe(userId)
     expect(response.data.user.username).toBe('susan')
     expect(response.message).not.toBe('Unauthorized')
   })
