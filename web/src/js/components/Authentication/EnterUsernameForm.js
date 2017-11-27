@@ -83,8 +83,7 @@ class EnterUsernameForm extends React.Component {
   }
 
   handleKeyPress (e) {
-    // TODO
-    // if (this.state.settingUsernameInProgress) { return }
+    if (this.state.savingUsernameInProgress) { return }
 
     if (e.key === 'Enter') {
       this.submit()
