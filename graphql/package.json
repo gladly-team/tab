@@ -34,6 +34,7 @@
     "express-graphql": "^0.6.6",
     "if-env": "^1.0.0",
     "jest": "^20.0.1",
+    "jwt-decode": "^2.2.0",
     "node-fetch": "^1.7.1",
     "npm-run-all": "^4.0.2",
     "require-clean": "^0.1.3",
