@@ -11,10 +11,14 @@ jest.mock('jwt-decode', () => {
 describe('dev-tools', () => {
   it('corrently forms GraphQL context from a request object', () => {
     const getGraphQLContextFromRequest = require('../dev-tools').getGraphQLContextFromRequest
-    // Note: will have to update this when we remove hardcoded
-    // user claims.
     const minimalRequestObject = {
-      header: () => {}
+      header: (headerName) => {
+        if (headerName === 'Authorization') {
+          return 'fake.token'
+        } else {
+          return null
+        }
+      }
     }
     const expectedContext = {
       user: {
