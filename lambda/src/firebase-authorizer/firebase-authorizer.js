@@ -71,7 +71,10 @@ function checkUserAuthorization (event, context, callback) {
           email: decodedToken.email,
           email_verified: decodedToken.email_verified
         }
-        const valid = user.uid && user.email_verified
+
+        // Conditions for authorization. We do not check for a valid
+        // email because we create the user before email validation.
+        const valid = !!user.uid
 
         // Generate AWS authorization policy
         callback(null, generatePolicy(user, valid, event.methodArn))
