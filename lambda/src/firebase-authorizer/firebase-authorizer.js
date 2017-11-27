@@ -49,15 +49,19 @@ function checkUserAuthorization (event, context, callback) {
     callback('Error: Invalid token')
   }
   try {
-    admin.initializeApp({
-      credential: admin.credential.cert({
-        projectId: process.env.FIREBASE_PROJECT_ID,
-        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-        // https://stackoverflow.com/a/41044630/1332513
-        privateKey: decryptedFirebasePrivateKey.replace(/\\n/g, '\n')
-      }),
-      databaseURL: process.env.FIREBASE_DATABASE_URL
-    })
+    // Only initialize the app if it hasn't already been initialized.
+    // https://groups.google.com/forum/#!topic/firebase-talk/aBonTOiQJWA
+    if (!admin.apps.length) {
+      admin.initializeApp({
+        credential: admin.credential.cert({
+          projectId: process.env.FIREBASE_PROJECT_ID,
+          clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+          // https://stackoverflow.com/a/41044630/1332513
+          privateKey: decryptedFirebasePrivateKey.replace(/\\n/g, '\n')
+        }),
+        databaseURL: process.env.FIREBASE_DATABASE_URL
+      })
+    }
 
     // Validate the Firebase token.
     admin.auth().verifyIdToken(token)
