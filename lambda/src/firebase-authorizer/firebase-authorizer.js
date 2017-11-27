@@ -84,7 +84,7 @@ function checkUserAuthorization (event, context, callback) {
 const handler = (event, context, callback) => {
   // Decrypt secure environment variables.
   if (decryptedFirebasePrivateKey) {
-    checkUserAuthorization(event, context)
+    checkUserAuthorization(event, context, callback)
   } else {
     // Decrypt code should run once and variables stored outside of the function
     // handler so that these are decrypted once per container
