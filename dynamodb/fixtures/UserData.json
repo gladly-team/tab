@@ -2,7 +2,7 @@
   {
     "id": "abcdefghijklmno",
     "username": "kevin",
-    "email": "kevin@tfac.com",
+    "email": "kevin@example.com",
     "vcCurrent": 0,
     "vcAllTime": 0,
     "level": 1,
@@ -14,7 +14,7 @@
   {
     "id": "pqrstuvwxyzabcd",
     "username": "asp2insp",
-    "email": "asp2insp@tfac.com",
+    "email": "asp2insp@example.com",
     "vcCurrent": 50,
     "vcAllTime": 100,
     "heartsUntilNextLevel": 200,

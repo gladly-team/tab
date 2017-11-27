@@ -15,6 +15,10 @@ import jwtDecode from 'jwt-decode'
  * @return {obj} The object of user claims.
  */
 function mockAuthorizer (authorizationToken) {
+  if (!authorizationToken) {
+    console.warn('Warning: dev user is missing an Authorization token.')
+    return {}
+  }
   const parsedJwt = jwtDecode(authorizationToken)
   return {
     id: parsedJwt.sub,

@@ -9,6 +9,12 @@ import {
   enterUsernameURL
 } from 'navigation/navigation'
 
+// Only for development.
+const shouldMockAuthentication = (
+  process.env.MOCK_DEV_AUTHENTICATION === 'true' &&
+  process.env.NODE_ENV === 'development'
+)
+
 /**
  * Get the username. This uses localStorage, not our user database,
  * so that we can rely on it during the sign up process.
@@ -51,6 +57,30 @@ export const formatUser = (authUserObj) => {
  * @returns {user} a Firebase User
  */
 const getCurrentFirebaseUser = async () => {
+  // For development only: optionally mock the user
+  // and user token.
+  if (shouldMockAuthentication) {
+    return new Promise((resolve, reject) => {
+      const userId = 'abcdefghijklmno'
+      const email = 'kevin@example.com'
+      const tokenPayload = {
+        sub: userId,
+        email: 'kevin@example.com',
+        email_verified: true
+      }
+      const jwt = require('jsonwebtoken')
+      const token = jwt.sign(tokenPayload, 'fakeSecret')
+      resolve({
+        uid: userId,
+        email: email,
+        isAnonymous: false,
+        emailVerified: true,
+        getIdToken: () => {
+          return token
+        }
+      })
+    })
+  }
   return new Promise((resolve, reject) => {
     try {
       // https://firebase.google.com/docs/auth/web/manage-users
@@ -91,6 +121,16 @@ export const getCurrentUser = async () => {
  * @returns {object} a `firebase.auth` object
  */
 export const getCurrentUserListener = () => {
+  // For development only: optionally mock a barebones
+  // version of the `firebase.auth` object.
+  if (shouldMockAuthentication) {
+    return {
+      onAuthStateChanged: (callback) => {
+        getCurrentFirebaseUser()
+          .then(user => callback(user))
+      }
+    }
+  }
   return firebase.auth()
 }
 

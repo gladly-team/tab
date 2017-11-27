@@ -10,6 +10,7 @@
     "dotenv-extended": "^2.0.0",
     "enzyme": "^2.8.2",
     "if-env": "^1.0.0",
+    "jsonwebtoken": "^8.1.0",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.4",
     "npm-run-all": "^4.0.2",
