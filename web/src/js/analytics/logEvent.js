@@ -60,7 +60,5 @@ export const emailVerified = () => {
 
 export const newTabView = () => {
   // No Google Analytics because of rate limiting.
-  // fbq pageview
-  fbq('track', 'PageView')
   fbq('track', 'ViewContent', {content_name: 'Newtab'})
 }
