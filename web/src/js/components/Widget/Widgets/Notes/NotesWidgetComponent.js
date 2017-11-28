@@ -132,7 +132,7 @@ class NotesWidget extends React.Component {
               <Note
                 key={note.id}
                 index={index}
-                ref={(note) => {
+                innerRef={(note) => {
                   if (index === 0) {
                     this.newestNote = note
                   }
