@@ -48,7 +48,7 @@ class WidgetsSettings extends React.Component {
               key={index}
               user={user}
               appWidget={edge.node}
-              widget={self.state.userWidgets[edge.node.name]}
+              widget={self.state.userWidgets[edge.node.name] || null}
               showError={showError} />)
           })}
         </div>
