@@ -42,7 +42,7 @@ export const getUrlParameters = () => {
   return vars
 }
 
-function setReferralData (urlParams) {
+export const setReferralData = (urlParams) => {
   for (var fieldKey in referralParams) {
     var field = referralParams[fieldKey]
     if (urlParams[field.urlKey]) {
