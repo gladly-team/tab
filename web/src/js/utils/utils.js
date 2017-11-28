@@ -1,6 +1,7 @@
 /* eslint no-useless-escape: 0 */
 
 import localStorageMgr from './localstorage-mgr'
+import XRegExp from 'xregexp'
 
 // TODO: use prefixed localStorage key
 const referralParams = {
@@ -10,6 +11,21 @@ const referralParams = {
   }
 }
 
+/**
+ * Determine if a username string is valid.
+ * @param {string} username - The username
+ * @return {boolean} Whether the username is valid.
+ */
+export const validateUsername = (username) => {
+  if (username.length < 2) {
+    return false
+  }
+  // Based on:
+  // https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_SignUp.html#CognitoUserPools-SignUp-request-Username
+  var re = XRegExp('^[\\p{L}\\p{M}\\p{S}\\p{N}\\p{P}]+$')
+  return re.test(username)
+}
+
 // 'utm_medium'
 // 'utm_source'
 // 'utm_campaign'
@@ -17,7 +33,7 @@ const referralParams = {
 // 'utm_content'
 // 'tfac_id'
 
-function getUrlParameters () {
+export const getUrlParameters = () => {
   var vars = {}
   window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,
     function (m, key, value) {
@@ -26,7 +42,7 @@ function getUrlParameters () {
   return vars
 }
 
-function setReferralData (urlParams) {
+export const setReferralData = (urlParams) => {
   for (var fieldKey in referralParams) {
     var field = referralParams[fieldKey]
     if (urlParams[field.urlKey]) {
@@ -35,7 +51,7 @@ function setReferralData (urlParams) {
   }
 }
 
-function getReferralData () {
+export const getReferralData = () => {
   var data = null
   for (var fieldKey in referralParams) {
     var field = referralParams[fieldKey]
@@ -50,7 +66,7 @@ function getReferralData () {
   return data
 }
 
-function commaFormatted (amount) {
+export const commaFormatted = (amount) => {
   var delimiter = ',' // replace comma if desired
   amount = amount.toString()
   var a = amount.split('.', 2)
@@ -74,7 +90,7 @@ function commaFormatted (amount) {
   return amount
 }
 
-function currencyFormatted (amount) {
+export const currencyFormatted = (amount) => {
   var i = parseFloat(amount)
   if (isNaN(i)) { i = 0.00 }
   var minus = ''
@@ -87,12 +103,4 @@ function currencyFormatted (amount) {
   if (s.indexOf('.') === (s.length - 2)) { s += '0' }
   s = minus + s
   return s
-}
-
-export {
- getUrlParameters,
- getReferralData,
- setReferralData,
- commaFormatted,
- currencyFormatted
 }
