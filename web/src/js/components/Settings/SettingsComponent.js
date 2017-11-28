@@ -3,8 +3,13 @@ import PropTypes from 'prop-types'
 import Divider from 'material-ui/Divider'
 import SettingsPageComponent from './SettingsPageComponent'
 import SettingsMenuItem from './SettingsMenuItem'
+import { pageview } from 'analytics/logEvent'
 
 class Settings extends React.Component {
+  componentDidMount () {
+    pageview()
+  }
+
   render () {
     return (
       <SettingsPageComponent

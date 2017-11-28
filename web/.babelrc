@@ -18,6 +18,7 @@
         "general": "./src/js/components/General",
         "web-utils": "./src/js/utils/utils",
         "utils": "./src/js/utils",
+        "analytics": "./src/js/analytics",
         "ads": "./src/js/ads",
         "authentication": "./src/js/authentication",
         "theme": "./src/js/theme",
