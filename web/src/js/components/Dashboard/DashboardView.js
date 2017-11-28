@@ -6,15 +6,10 @@ import environment from '../../../relay-env'
 
 import AuthUserComponent from 'general/AuthUserComponent'
 import ErrorMessage from 'general/ErrorMessage'
-import { pageview } from 'analytics/logEvent'
 
 import DashboardContainer from './DashboardContainer'
 
 class DashboardView extends React.Component {
-  componentDidMount () {
-    pageview()
-  }
-
   render () {
     return (
       <AuthUserComponent>

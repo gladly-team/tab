@@ -1,4 +1,5 @@
 import React from 'react'
+import withPageviewTracking from 'analytics/withPageviewTracking'
 
 class App extends React.Component {
   render () {
@@ -19,4 +20,4 @@ class App extends React.Component {
   }
 }
 
-export default App
+export default withPageviewTracking(App)
