@@ -82,15 +82,6 @@ custom:
         minimum: 1
         maximum: 1000
         usage: 0.60
-    - table: userTabsLogTable
-      read:
-        minimum: 1
-        maximum: 1000
-        usage: 0.75
-      write:
-        minimum: 1
-        maximum: 1000
-        usage: 0.60
     - table: referralDataLogTable
       read:
         minimum: 1
@@ -224,20 +215,6 @@ resources:
             ProvisionedThroughput:
               ReadCapacityUnits: 1
               WriteCapacityUnits: 1
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
-
-    userTabsLogTable:  
-      Type: AWS::DynamoDB::Table
-      Properties:  
-        TableName: UserTabsLog-${self:provider.stage}
-        KeySchema:
-          - AttributeName: userId
-            KeyType: HASH
-        AttributeDefinitions:
-          - AttributeName: userId
-            AttributeType: S
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1

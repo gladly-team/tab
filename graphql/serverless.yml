@@ -81,11 +81,6 @@ provider:
       Resource:
         - "${self:custom.dbTableArnBase}UserWidgets-${self:provider.stage}"
         - "${self:custom.dbTableArnBase}UserWidgets-${self:provider.stage}/index/*"
-    # UserTabsLog table
-    - Effect: "Allow"
-      Action:
-        - "dynamodb:PutItem"
-      Resource: "${self:custom.dbTableArnBase}UserTabsLog-${self:provider.stage}"
 
 plugins:
   # Include only the required node modules.
