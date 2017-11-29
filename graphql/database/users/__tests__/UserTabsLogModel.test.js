@@ -1,5 +1,6 @@
 /* eslint-env jest */
 
+import tableNames from '../../tables'
 import UserTabsLogModel from '../UserTabsLogModel'
 import {
   permissionAuthorizers
@@ -17,7 +18,7 @@ describe('UserTabsLogModel', () => {
   })
 
   it('implements the tableName property', () => {
-    expect(UserTabsLogModel.tableName).toBe('UserTabsLog')
+    expect(UserTabsLogModel.tableName).toBe(tableNames.userTabsLog)
   })
 
   it('has the correct get permission', () => {
