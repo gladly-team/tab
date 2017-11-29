@@ -1,5 +1,6 @@
 /* eslint-env jest */
 
+import moment from 'moment'
 import databaseClient from './databaseClient'
 import UserModel from './users/UserModel'
 
@@ -161,7 +162,7 @@ mockDate.off = () => {
  * @return {Object} The item with 'created' and 'updated' fields.
  */
 export const addTimestampFieldsToItem = (item) => {
-  const now = mockDate.defaultDateISO
+  const now = moment.utc().toISOString()
   return Object.assign({}, item, {
     created: now,
     updated: now

@@ -2,10 +2,12 @@
 
 import moment from 'moment'
 import UserModel from '../UserModel'
+import UserTabsLogModel from '../UserTabsLogModel'
 import logTab from '../logTab'
 import addVc from '../addVc'
 import {
   DatabaseOperation,
+  addTimestampFieldsToItem,
   getMockUserContext,
   getMockUserInstance,
   mockDate,
@@ -76,6 +78,32 @@ describe('logTab', () => {
     expect(returnedUser).not.toBeNull()
   })
 
+  test('when a valid tab, it logs the tab for analytics', async () => {
+    const userId = userContext.id
+
+    // Mock fetching the user.
+    const mockUser = getMockUserInstance({
+      lastTabTimestamp: '2017-06-22T01:13:25.000Z'
+    })
+    setMockDBResponse(
+      DatabaseOperation.GET,
+      {
+        Item: mockUser
+      }
+    )
+    const userTabsLogCreate = jest.spyOn(UserTabsLogModel, 'create')
+    await logTab(userContext, userId)
+
+    // It should create an item in UserTabsLog.
+    expect(userTabsLogCreate).toHaveBeenLastCalledWith(
+      userContext,
+      addTimestampFieldsToItem({
+        userId: userId,
+        timestamp: moment.utc().toISOString()
+      })
+    )
+  })
+
   test('when an invalid tab, it does not increment VC or valid tab counts', async () => {
     const userId = userContext.id
 
@@ -116,6 +144,26 @@ describe('logTab', () => {
       }
     })
     expect(returnedUser).not.toBeNull()
+  })
+
+  test('when an invalid tab, it does not log the tab for analytics', async () => {
+    const userId = userContext.id
+
+    // Mock fetching the user.
+    const mockUser = getMockUserInstance({
+      lastTabTimestamp: '2017-06-22T01:13:26.000Z'
+    })
+    setMockDBResponse(
+      DatabaseOperation.GET,
+      {
+        Item: mockUser
+      }
+    )
+    const userTabsLogCreate = jest.spyOn(UserTabsLogModel, 'create')
+    await logTab(userContext, userId)
+
+    // It should create an item in UserTabsLog.
+    expect(userTabsLogCreate).not.toHaveBeenCalled()
   })
 
   test('for the first tab logged today, it resets the date for today\'s tab counter', async () => {

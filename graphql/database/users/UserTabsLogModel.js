@@ -19,13 +19,18 @@ class userTabsLog extends BaseModel {
     return 'userId'
   }
 
+  static get rangeKey () {
+    return 'timestamp'
+  }
+
   static get tableName () {
     return tableNames.userTabsLog
   }
 
   static get schema () {
     return {
-      userId: types.string().required()
+      userId: types.string().required(),
+      timestamp: types.string().isoDate().required()
     }
   }
 
