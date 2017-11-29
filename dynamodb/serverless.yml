@@ -163,20 +163,6 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
 
-    vcDonationLogTable:  
-      Type: AWS::DynamoDB::Table
-      Properties:  
-        TableName: VcDonationLog-${self:provider.stage}
-        KeySchema:
-          - AttributeName: userId
-            KeyType: HASH
-        AttributeDefinitions:
-          - AttributeName: userId
-            AttributeType: S
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
-
     backgroundImagesTable:  
       Type: AWS::DynamoDB::Table
       Properties:  
