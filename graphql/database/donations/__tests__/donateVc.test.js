@@ -5,11 +5,9 @@ import donateVc from '../donateVc'
 import addVc from '../../users/addVc'
 import addVcDonatedAllTime from '../../users/addVcDonatedAllTime'
 import {
-  DatabaseOperation,
   getMockUserContext,
   getMockUserInstance,
-  mockDate,
-  setMockDBResponse
+  mockDate
 } from '../../test-utils'
 
 jest.mock('../../databaseClient')
