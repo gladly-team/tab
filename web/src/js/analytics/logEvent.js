@@ -2,8 +2,6 @@
 import fbq from './facebook-analytics'
 import GA from './google-analytics'
 
-// TODO: add events to sign-up flow
-
 // We automatically track most pageviews on location change.
 // See ./withPageviewTracking higher-order component.
 export const pageview = () => {
