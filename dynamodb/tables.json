@@ -73,12 +73,10 @@
   {
     "TableName": "VcDonationLog",
     "KeySchema": [       
-      { "AttributeName": "id", "KeyType": "HASH"},
-      { "AttributeName": "timestamp", "KeyType": "RANGE"}
+      { "AttributeName": "userId", "KeyType": "HASH"}
     ],
     "AttributeDefinitions": [       
-      { "AttributeName": "id", "AttributeType": "S" },
-      { "AttributeName": "timestamp", "AttributeType": "S" }
+      { "AttributeName": "userId", "AttributeType": "S" }
     ],
     "ProvisionedThroughput": {       
       "ReadCapacityUnits": 1, 

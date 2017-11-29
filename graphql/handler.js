@@ -59,6 +59,7 @@ export const handler = function (event) {
           // https://github.com/graphql/graphql-js/issues/284
           if (data && data.errors) {
             data.errors = data.errors.map(err => handleError(err))
+            return createResponse(500, data)
           }
           return createResponse(200, data)
         })

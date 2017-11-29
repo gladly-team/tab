@@ -5,11 +5,9 @@ import donateVc from '../donateVc'
 import addVc from '../../users/addVc'
 import addVcDonatedAllTime from '../../users/addVcDonatedAllTime'
 import {
-  DatabaseOperation,
   getMockUserContext,
   getMockUserInstance,
-  mockDate,
-  setMockDBResponse
+  mockDate
 } from '../../test-utils'
 
 jest.mock('../../databaseClient')
@@ -57,14 +55,13 @@ describe('donateVc', () => {
     const vcToDonate = 16
 
     const vcDonationCreateMethod = jest.spyOn(VCDonationModel, 'create')
-    setMockDBResponse(
-      DatabaseOperation.CREATE,
-      {
-        Attributes: {}
-      }
-    )
+
+    // Mock return values
     const expectedReturnedUser = getMockUserInstance()
     addVc.mockImplementationOnce(() => {
+      return expectedReturnedUser
+    })
+    addVcDonatedAllTime.mockImplementationOnce(() => {
       return expectedReturnedUser
     })
 
