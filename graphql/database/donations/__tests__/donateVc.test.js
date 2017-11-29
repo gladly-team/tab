@@ -57,14 +57,13 @@ describe('donateVc', () => {
     const vcToDonate = 16
 
     const vcDonationCreateMethod = jest.spyOn(VCDonationModel, 'create')
-    setMockDBResponse(
-      DatabaseOperation.CREATE,
-      {
-        Attributes: {}
-      }
-    )
+
+    // Mock return values
     const expectedReturnedUser = getMockUserInstance()
     addVc.mockImplementationOnce(() => {
+      return expectedReturnedUser
+    })
+    addVcDonatedAllTime.mockImplementationOnce(() => {
       return expectedReturnedUser
     })
 
