@@ -20,10 +20,13 @@ export const homepageView = () => {
   GA.pageview()
 }
 
-export const signupPageView = () => {
-  // GA and fbq pageviews
-  fbq('track', 'PageView')
-  GA.pageview()
+export const signupPageButtonClick = () => {
+  fbq('track', 'Lead', {content_name: 'SignupButtonClick'})
+
+  GA.event({
+    category: 'ButtonClick',
+    action: 'SignupButtonClick'
+  })
 }
 
 export const signupPageSocialButtonClick = () => {
@@ -52,11 +55,12 @@ export const accountCreated = () => {
   })
 }
 
-export const emailVerified = () => {
-  // GA and fbq pageviews
-  fbq('track', 'PageView')
-  GA.pageview()
-}
+// TODO: later
+// export const emailVerified = () => {
+//   // GA and fbq pageviews
+//   fbq('track', 'PageView')
+//   GA.pageview()
+// }
 
 export const newTabView = () => {
   // No Google Analytics because of rate limiting.

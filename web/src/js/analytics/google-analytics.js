@@ -3,9 +3,9 @@
 import ReactGA from 'react-ga'
 
 const DEBUG = true
-const debugLogger = (msg) => {
+const debugLogger = (...args) => {
   if (DEBUG) {
-    console.log(msg)
+    console.log(...args)
   }
 }
 
@@ -28,10 +28,10 @@ class ReactGAWrapper {
     }
   }
 
-  static event (...args) {
+  static event (gaEvent) {
     try {
-      debugLogger('Logging GA event with args:', args)
-      ReactGA.event(args)
+      debugLogger('Logging GA event:', JSON.stringify(gaEvent))
+      ReactGA.event(gaEvent)
     } catch (e) {
       console.error('Failed to track Google Analytics event.', e)
     }
