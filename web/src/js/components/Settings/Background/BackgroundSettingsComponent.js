@@ -112,10 +112,6 @@ class BackgroundSettings extends React.Component {
               valueSelected={this.state.selected}>
               <RadioButton
                 style={radioBtnStyle}
-                value='daily'
-                label='New photo daily' />
-              <RadioButton
-                style={radioBtnStyle}
                 value='photo'
                 label='Selected photo' />
               <RadioButton
