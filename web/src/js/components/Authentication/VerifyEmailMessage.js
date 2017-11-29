@@ -53,10 +53,12 @@ class VerifyEmailMessage extends React.Component {
         zDepth={1}
         style={{
           padding: 24,
+          maxWidth: 400,
           backgroundColor: '#FFF'
         }}
       >
-        <span>Please check your email to verify your account.</span>
+        <p>Please check your email to verify your account.</p>
+        <p>Note: it can take up to an hour for the email to arrive.</p>
         <span
           style={{
             display: 'flex',
