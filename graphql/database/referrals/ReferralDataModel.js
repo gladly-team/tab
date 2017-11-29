@@ -26,7 +26,8 @@ class ReferralData extends BaseModel {
   static get schema () {
     return {
       userId: types.string().required(),
-      referringUser: types.uuid()
+      referringUser: types.string(),
+      referringChannel: types.string()
     }
   }
 

@@ -1,13 +1,22 @@
 /* eslint no-useless-escape: 0 */
 
 import localStorageMgr from './localstorage-mgr'
+import {
+  STORAGE_REFERRAL_DATA_REFERRING_CHANNEL,
+  STORAGE_REFERRAL_DATA_REFERRING_USER
+} from '../constants'
 import XRegExp from 'xregexp'
 
-// TODO: use prefixed localStorage key
 const referralParams = {
   REFERRING_USER: {
-    urlKey: 'u',
-    key: 'referringUser'
+    urlParam: 'u',
+    key: 'referringUser',
+    storageKey: STORAGE_REFERRAL_DATA_REFERRING_USER
+  },
+  REFERRING_CHANNEL: {
+    urlParam: 'r',
+    key: 'referringChannel',
+    storageKey: STORAGE_REFERRAL_DATA_REFERRING_CHANNEL
   }
 }
 
@@ -45,8 +54,8 @@ export const getUrlParameters = () => {
 export const setReferralData = (urlParams) => {
   for (var fieldKey in referralParams) {
     var field = referralParams[fieldKey]
-    if (urlParams[field.urlKey]) {
-      localStorageMgr.setItem(field.key, urlParams[field.urlKey])
+    if (urlParams[field.urlParam]) {
+      localStorageMgr.setItem(field.storageKey, urlParams[field.urlParam])
     }
   }
 }
@@ -55,7 +64,7 @@ export const getReferralData = () => {
   var data = null
   for (var fieldKey in referralParams) {
     var field = referralParams[fieldKey]
-    var fieldData = localStorageMgr.getItem(field.key)
+    var fieldData = localStorageMgr.getItem(field.storageKey)
     if (fieldData) {
       if (!data) {
         data = {}
