@@ -168,14 +168,10 @@ resources:
       Properties:  
         TableName: VcDonationLog-${self:provider.stage}
         KeySchema:
-          - AttributeName: id
+          - AttributeName: userId
             KeyType: HASH
-          - AttributeName: timestamp
-            KeyType: RANGE
         AttributeDefinitions:
-          - AttributeName: id
-            AttributeType: S
-          - AttributeName: timestamp
+          - AttributeName: userId
             AttributeType: S
         ProvisionedThroughput:
           ReadCapacityUnits: 1
