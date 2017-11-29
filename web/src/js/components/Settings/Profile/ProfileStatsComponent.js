@@ -5,7 +5,11 @@ import RaisedButton from 'material-ui/RaisedButton'
 import HeartBorderIcon from 'material-ui/svg-icons/action/favorite-border'
 import Stat from './StatComponent'
 import SettingsChildWrapper from '../SettingsChildWrapperComponent'
-import appTheme from 'theme/default'
+import { Paper } from 'material-ui'
+import appTheme, {
+  lighterTextColor
+} from 'theme/default'
+import ChartIcon from 'material-ui/svg-icons/editor/insert-chart'
 import {
   goToInviteFriends,
   goToDonate
@@ -33,6 +37,30 @@ class ProfileStats extends React.Component {
     }
     return (
       <SettingsChildWrapper>
+        <Paper
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingLeft: 20,
+            paddingRight: 20,
+            marginBottom: 2 * spacingPx,
+            color: lighterTextColor
+          }}
+        >
+          <ChartIcon
+            style={{
+              marginRight: 8,
+              color: lighterTextColor,
+              minHeight: 24,
+              minWidth: 24
+            }}
+          />
+          <p>
+            <span style={{fontWeight: 500}}>Hi, {user.username}!</span>
+            <span> Here's all your great work Tabbing, by the numbers.</span>
+          </p>
+        </Paper>
         <span
           style={{
             display: 'flex',
@@ -110,6 +138,7 @@ class ProfileStats extends React.Component {
 ProfileStats.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.string.isRequired,
+    username: PropTypes.string.isRequired,
     heartsUntilNextLevel: PropTypes.number.isRequired,
     joined: PropTypes.string.isRequired,
     level: PropTypes.number.isRequired,

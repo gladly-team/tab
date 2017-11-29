@@ -9,6 +9,7 @@ export default createFragmentContainer(ProfileStats, {
   user: graphql`
     fragment ProfileStatsContainer_user on User {
       id
+      username
       heartsUntilNextLevel
       joined
       level
