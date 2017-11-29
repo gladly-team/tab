@@ -16,7 +16,7 @@ import addVcDonatedAllTime from '../users/addVcDonatedAllTime'
 export default async (userContext, userId, charityId, vc) => {
   try {
     // Subtract VC from the user.
-    const user = await addVc(userContext, userId, -vc)
+    await addVc(userContext, userId, -vc)
 
     // Create the VC donation.
     await VCDonationModel.create(userContext, {
@@ -26,7 +26,7 @@ export default async (userContext, userId, charityId, vc) => {
     })
 
     // Add VC donated to the user's all time count.
-    await addVcDonatedAllTime(userContext, userId, vc)
+    const user = await addVcDonatedAllTime(userContext, userId, vc)
 
     return user
   } catch (e) {
