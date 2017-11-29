@@ -2,7 +2,7 @@
 // https://github.com/react-ga/react-ga
 import ReactGA from 'react-ga'
 
-const DEBUG = true
+const DEBUG = false
 const debugLogger = (...args) => {
   if (DEBUG) {
     console.log(...args)

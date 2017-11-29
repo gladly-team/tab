@@ -1,5 +1,5 @@
 
-const DEBUG = true
+const DEBUG = false
 
 var fbq = window.fbq
 if (!fbq) {
