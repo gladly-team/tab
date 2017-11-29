@@ -21,6 +21,9 @@ import {
 import CreateNewUserMutation from 'mutations/CreateNewUserMutation'
 import { getReferralData } from 'web-utils'
 import { isEqual } from 'lodash/lang'
+import {
+  accountCreated
+} from 'analytics/logEvent'
 
 // Handle the authentication flow:
 //   check if current user is fully authenticated and redirect
@@ -140,6 +143,10 @@ class Authentication extends React.Component {
     // Create a new user in our database.
     this.createNewUser(currentUser.uid, currentUser.email)
       .then(() => {
+        // Log the sign-up to analytics. Note that this is logged
+        // for returning users (sign-ins) too.
+        accountCreated()
+
         // Check if the user has verified their email.
         // Note: later versions of firebaseui-web might support mandatory
         // email verification:
