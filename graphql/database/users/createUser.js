@@ -67,6 +67,7 @@ const createUser = async (userContext, userId, email, referralData) => {
         logger.error(new Error(`Could not log referrer data:
           user: ${userInfo.id},
           referring user: ${referringUser.id}.
+          ${e}
         `))
       }
 
