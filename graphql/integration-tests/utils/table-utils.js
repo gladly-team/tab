@@ -34,7 +34,7 @@ export const tableKeys = {
   },
   userTabsLog: {
     hash: 'id',
-    range: null
+    range: 'timestamp'
   },
   referralDataLog: {
     hash: 'id',
