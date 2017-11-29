@@ -9,7 +9,6 @@ const tableNameAppendix = (
 )
 
 const tables = {
-  features: 'Features',
   users: 'Users',
   userLevels: 'UserLevels',
   charities: 'Charities',
@@ -17,6 +16,7 @@ const tables = {
   backgroundImages: 'BackgroundImages',
   widgets: 'Widgets',
   userWidgets: 'UserWidgets',
+  userTabsLog: 'UserTabsLog',
   referralDataLog: 'ReferralDataLog'
 }
 

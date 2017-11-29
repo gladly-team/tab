@@ -1,6 +1,7 @@
 
 import moment from 'moment'
 import UserModel from './UserModel'
+import UserTabsLogModel from './UserTabsLogModel'
 import addVc from './addVc'
 
 /**
@@ -77,6 +78,7 @@ const logTab = async (userContext, userId) => {
 
   try {
     if (isValid) {
+      // TODO: parallelize the multiple awaits
       // Increment the user's tab count, valid tab count, and VC.
       user = await addVc(userContext, userId, 1)
       user = await UserModel.update(userContext, {
@@ -85,6 +87,12 @@ const logTab = async (userContext, userId) => {
         validTabs: {$add: 1},
         lastTabTimestamp: moment.utc().toISOString(),
         maxTabsDay: maxTabsDayVal
+      })
+
+      // Log the tab for analytics.
+      await UserTabsLogModel.create(userContext, {
+        userId: userId,
+        timestamp: moment.utc().toISOString()
       })
     } else {
       // Only increment the user's tab count.
