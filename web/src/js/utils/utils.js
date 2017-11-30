@@ -7,19 +7,6 @@ import {
 } from '../constants'
 import XRegExp from 'xregexp'
 
-const referralParams = {
-  REFERRING_USER: {
-    urlParam: 'u',
-    key: 'referringUser',
-    storageKey: STORAGE_REFERRAL_DATA_REFERRING_USER
-  },
-  REFERRING_CHANNEL: {
-    urlParam: 'r',
-    key: 'referringChannel',
-    storageKey: STORAGE_REFERRAL_DATA_REFERRING_CHANNEL
-  }
-}
-
 /**
  * Determine if a username string is valid.
  * @param {string} username - The username
@@ -51,29 +38,41 @@ export const getUrlParameters = () => {
   return vars
 }
 
-export const setReferralData = (urlParams) => {
-  for (var fieldKey in referralParams) {
-    var field = referralParams[fieldKey]
-    if (urlParams[field.urlParam]) {
-      localStorageMgr.setItem(field.storageKey, urlParams[field.urlParam])
-    }
+// Begin referral data helpers
+
+const referralParams = [
+  {
+    urlParam: 'u',
+    fieldName: 'referringUser',
+    storageKey: STORAGE_REFERRAL_DATA_REFERRING_USER
+  },
+  {
+    urlParam: 'r',
+    fieldName: 'referringChannel',
+    storageKey: STORAGE_REFERRAL_DATA_REFERRING_CHANNEL
   }
+]
+
+export const setReferralData = (urlParams) => {
+  referralParams.forEach((paramObj) => {
+    if (urlParams[paramObj.urlParam]) {
+      localStorageMgr.setItem(paramObj.storageKey, urlParams[paramObj.urlParam])
+    }
+  })
 }
 
 export const getReferralData = () => {
-  var data = null
-  for (var fieldKey in referralParams) {
-    var field = referralParams[fieldKey]
-    var fieldData = localStorageMgr.getItem(field.storageKey)
+  const data = {}
+  referralParams.forEach((paramObj) => {
+    var fieldData = localStorageMgr.getItem(paramObj.storageKey)
     if (fieldData) {
-      if (!data) {
-        data = {}
-      }
-      data[field.key] = fieldData
+      data[paramObj.fieldName] = fieldData
     }
-  }
+  })
   return data
 }
+
+// End referral data helpers
 
 export const commaFormatted = (amount) => {
   var delimiter = ',' // replace comma if desired
