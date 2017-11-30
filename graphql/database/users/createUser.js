@@ -1,4 +1,5 @@
 
+import { isEmpty } from 'lodash/lang'
 import moment from 'moment'
 import UserModel from './UserModel'
 import logReferralData from '../referrals/logReferralData'
@@ -45,7 +46,7 @@ const createUser = async (userContext, userId, email, referralData) => {
   }
 
   // Log referral data and reward referrer.
-  if (referralData) {
+  if (referralData && !isEmpty(referralData)) {
     const referringUserUsername = referralData.referringUser
     const referringChannelId = (
       referralData.referringChannel
