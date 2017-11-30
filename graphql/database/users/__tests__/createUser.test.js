@@ -96,7 +96,7 @@ describe('createUser when user does not exist', () => {
     expect(getOrCreateMethod)
       .toHaveBeenCalledWith(userContext, expectedCreateItem)
     expect(logReferralData)
-      .toHaveBeenCalledWith(userContext, userInfo.id, referringUserId)
+      .toHaveBeenCalledWith(userContext, userInfo.id, referringUserId, null)
     expect(rewardReferringUser)
       .toHaveBeenCalledWith(referringUserId)
   })
@@ -119,8 +119,26 @@ describe('createUser when user does not exist', () => {
     const expectedCreateItem = getExpectedCreateItemFromUserInfo(userInfo)
     expect(getOrCreateMethod)
       .toHaveBeenCalledWith(userContext, expectedCreateItem)
-    expect(logReferralData).not.toHaveBeenCalled()
+    expect(logReferralData)
+      .toHaveBeenCalledWith(userContext, userInfo.id, null, null)
     expect(rewardReferringUser).not.toHaveBeenCalled()
+  })
+
+  it('logs "referringChannel" referral data', async () => {
+    const userInfo = getMockUserInfo()
+    const referralData = {
+      referringChannel: '42'
+    }
+
+    // No referring user.
+    getUserByUsername.mockImplementationOnce(() => {
+      throw new Error('Could not get item!')
+    })
+
+    await createUser(userContext, userInfo.id,
+      userInfo.email, referralData)
+    expect(logReferralData)
+      .toHaveBeenCalledWith(userContext, userInfo.id, null, '42')
   })
 
   it('calls the database as expected', async () => {

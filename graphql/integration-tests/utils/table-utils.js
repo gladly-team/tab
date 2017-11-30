@@ -37,7 +37,7 @@ export const tableKeys = {
     range: 'timestamp'
   },
   referralDataLog: {
-    hash: 'id',
+    hash: 'userId',
     range: null
   }
 }

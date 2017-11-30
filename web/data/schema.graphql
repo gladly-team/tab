@@ -209,7 +209,8 @@ type Query {
 }
 
 input ReferralData {
-  referringUser: String!
+  referringUser: String
+  referringChannel: String
 }
 
 input SetUserActiveWidgetInput {

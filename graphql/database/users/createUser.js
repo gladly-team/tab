@@ -47,27 +47,41 @@ const createUser = async (userContext, userId, email, referralData) => {
   // Log referral data and reward referrer.
   if (referralData) {
     const referringUserUsername = referralData.referringUser
+    const referringChannelId = (
+      referralData.referringChannel
+      ? referralData.referringChannel
+      : null
+    )
+
+    // Referring user may not exist if referring username
+    // was manipulated.
+    var referringUser = null
     try {
-      const referringUser = await getUserByUsername(userContext,
+      referringUser = await getUserByUsername(userContext,
         referringUserUsername)
-      // Referring user may not exist if referring username
-      // was manipulated.
-      if (referringUser) {
-        try {
-          await logReferralData(userContext, userInfo.id, referringUser.id)
-        } catch (e) {
-          logger.error(new Error(`Could not log referrer data:
-            user: ${userInfo.id},
-            referring user: ${referringUser.id}.
-          `))
-        }
-        try {
-          await rewardReferringUser(referringUser.id)
-        } catch (e) {
-          logger.error(new Error(`Could not reward referring user with ID ${referringUser.id}.`))
-        }
-      }
     } catch (e) {}
+
+    const referringUserId = referringUser ? referringUser.id : null
+
+    // Log the referral data.
+    try {
+      await logReferralData(userContext, userInfo.id, referringUserId, referringChannelId)
+    } catch (e) {
+      logger.error(new Error(`Could not log referrer data:
+        user: ${userInfo.id},
+        referring user: ${referringUser.id}.
+        ${e}
+      `))
+    }
+
+    // Reward the referring user if one exists.
+    if (referringUser) {
+      try {
+        await rewardReferringUser(referringUser.id)
+      } catch (e) {
+        logger.error(new Error(`Could not reward referring user with ID ${referringUser.id}.`))
+      }
+    }
   }
   return returnedUser
 }
