@@ -26,8 +26,10 @@ class ReferralData extends BaseModel {
   static get schema () {
     return {
       userId: types.string().required(),
-      referringUser: types.string(),
-      referringChannel: types.string()
+      // Allow null values:
+      // https://github.com/hapijs/joi/issues/516#issuecomment-66849863
+      referringUser: types.string().allow(null),
+      referringChannel: types.string().allow(null)
     }
   }
 

@@ -668,8 +668,8 @@ const updateWidgetConfigMutation = mutationWithClientMutationId({
 const ReferralDataInput = new GraphQLInputObjectType({
   name: 'ReferralData',
   fields: {
-    referringUser: { type: new GraphQLNonNull(GraphQLString) },
-    referringChannel: { type: new GraphQLNonNull(GraphQLString) }
+    referringUser: { type: GraphQLString },
+    referringChannel: { type: GraphQLString }
   }
 })
 
