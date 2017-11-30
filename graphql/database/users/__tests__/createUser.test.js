@@ -132,7 +132,7 @@ describe('createUser when user does not exist', () => {
 
     // No referring user.
     getUserByUsername.mockImplementationOnce(() => {
-      return null
+      throw new Error('Could not get item!')
     })
 
     await createUser(userContext, userInfo.id,
