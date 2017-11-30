@@ -55,15 +55,6 @@ custom:
         minimum: 1
         maximum: 1000
         usage: 0.60
-    - table: vcDonationLogTable
-      read:
-        minimum: 1
-        maximum: 1000
-        usage: 0.75
-      write:
-        minimum: 1
-        maximum: 1000
-        usage: 0.60
     - table: backgroundImagesTable
       read:
         minimum: 1
@@ -168,20 +159,6 @@ resources:
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: N
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
-
-    vcDonationLogTable:  
-      Type: AWS::DynamoDB::Table
-      Properties:  
-        TableName: VcDonationLog-${self:provider.stage}
-        KeySchema:
-          - AttributeName: userId
-            KeyType: HASH
-        AttributeDefinitions:
-          - AttributeName: userId
-            AttributeType: S
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
