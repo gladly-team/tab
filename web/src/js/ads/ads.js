@@ -10,8 +10,8 @@ if (adsEnabled) {
   prebid()
   prebidConfig()
   googleTagManager()
-  googleAdSlotDefinitions()
   openxConfig()
+  googleAdSlotDefinitions()
 } else {
   // console.log('Ads are disabled. Not setting up DFP or Prebid.')
 }
