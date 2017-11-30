@@ -19,7 +19,6 @@ import logger from '../../utils/logger'
  * @return {Promise<User>}  A promise that resolves into a User instance.
  */
 const createUser = async (userContext, userId, email, referralData) => {
-  console.log('createUser begins', userId, email, referralData)
   // Create the user.
   const userInfo = {
     id: userId,
@@ -33,12 +32,9 @@ const createUser = async (userContext, userId, email, referralData) => {
   }
   const returnedUser = response.item
 
-  console.log('createUser: created user successfully')
-
   // If the user already existed, return it without doing other
   // setup tasks.
   if (!response.created) {
-    console.log('createUser: user alredy created, so returning.')
     return returnedUser
   }
 
@@ -49,12 +45,8 @@ const createUser = async (userContext, userId, email, referralData) => {
     throw e
   }
 
-  console.log('createUser: set up widgets successfully')
-
   // Log referral data and reward referrer.
   if (referralData && !isEmpty(referralData)) {
-    console.log('createUser: inside referralData block')
-
     const referringUserUsername = referralData.referringUser
     const referringChannelId = (
       referralData.referringChannel
@@ -62,28 +54,19 @@ const createUser = async (userContext, userId, email, referralData) => {
       : null
     )
 
-    console.log('createUser: referringUserUsername and referringChannelId', referringUserUsername, referringChannelId)
-
     // Referring user may not exist if referring username
     // was manipulated.
     var referringUserId = null
     try {
-      console.log('createUser: about to getUserByUsername')
       const referringUser = await getUserByUsername(userContext,
         referringUserUsername)
-      console.log('createUser: referring user:', referringUser)
       referringUserId = referringUser.id
-      console.log('createUser: referring user ID:', referringUserId)
-    } catch (e) {
-      console.error(e)
-    }
+    } catch (e) {}
 
     // Log the referral data.
     try {
-      console.log('createUser: about to log referal data')
       await logReferralData(userContext, userId, referringUserId, referringChannelId)
     } catch (e) {
-      console.error(e)
       logger.error(new Error(`Could not log referrer data:
         user: ${userInfo.id},
         referring user: ${referringUserId}.
@@ -100,7 +83,6 @@ const createUser = async (userContext, userId, email, referralData) => {
       }
     }
   }
-  console.log('createUser: finished')
   return returnedUser
 }
 
