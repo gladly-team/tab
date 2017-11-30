@@ -86,6 +86,11 @@ provider:
       Action:
         - "dynamodb:PutItem"
       Resource: "${self:custom.dbTableArnBase}UserTabsLog-${self:provider.stage}"
+    # ReferralDataLog table
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:PutItem"
+      Resource: "${self:custom.dbTableArnBase}ReferralDataLog-${self:provider.stage}"
 
 plugins:
   # Include only the required node modules.
