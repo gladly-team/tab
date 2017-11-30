@@ -79,7 +79,7 @@ const createUser = async (userContext, userId, email, referralData) => {
       try {
         await rewardReferringUser(referringUserId)
       } catch (e) {
-        logger.error(new Error(`Could not reward referring user with ID ${referringUser.id}.`))
+        logger.error(new Error(`Could not reward referring user with ID ${referringUserId}.`))
       }
     }
   }
