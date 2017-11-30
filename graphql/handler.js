@@ -9,7 +9,7 @@ import {
   isUserAuthorized
 } from './utils/authorization-helpers'
 import { handleError } from './utils/error-logging'
-import logger, {
+import {
   loggerContextWrapper
 } from './utils/logger'
 
