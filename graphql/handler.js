@@ -9,7 +9,7 @@ import {
   isUserAuthorized
 } from './utils/authorization-helpers'
 import { handleError } from './utils/error-logging'
-import logger, {
+import {
   loggerContextWrapper
 } from './utils/logger'
 
@@ -64,7 +64,7 @@ export const handler = function (event) {
           return createResponse(200, data)
         })
         .catch(err => {
-          logger.error(err)
+          handleError(err)
           return createResponse(500, 'Internal Error')
         })
     }

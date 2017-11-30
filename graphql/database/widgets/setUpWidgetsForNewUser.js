@@ -20,17 +20,17 @@ const widgetConfigurations = [
   {
     id: '4f254eca-36c8-45d8-a91c-e5b6051b0d6d',
     enabled: true
+  },
+  // Clock
+  {
+    id: '8b5e572b-7f44-45ea-965b-55e6a22ca190',
+    enabled: true
   }
   // // To-dos
   // {
   //   id: 'b7645e93-62d0-4293-83fc-c19d499eaefe',
   //   enabled: false
   // },
-  // // Clock
-  // {
-  //   id: '8b5e572b-7f44-45ea-965b-55e6a22ca190',
-  //   enabled: false
-  // }
 ]
 
 /**
@@ -51,6 +51,8 @@ export default async (userContext, userId) => {
   }))
     .then(data => true)
     .catch(err => {
+      console.error('setUpWidgetsForNewUser error')
+      console.error(err)
       throw err
     })
 }

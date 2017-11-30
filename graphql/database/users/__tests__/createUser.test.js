@@ -65,6 +65,20 @@ describe('createUser when user does not exist', () => {
     expect(rewardReferringUser).not.toHaveBeenCalled()
   })
 
+  it('works as expected with empty object referralData', async () => {
+    const getOrCreateMethod = jest.spyOn(UserModel, 'getOrCreate')
+    const userInfo = getMockUserInfo()
+    const referralData = {}
+    await createUser(userContext, userInfo.id,
+      userInfo.email, referralData)
+
+    const expectedCreateItem = getExpectedCreateItemFromUserInfo(userInfo)
+    expect(getOrCreateMethod)
+      .toHaveBeenCalledWith(userContext, expectedCreateItem)
+    expect(logReferralData).not.toHaveBeenCalled()
+    expect(rewardReferringUser).not.toHaveBeenCalled()
+  })
+
   it('calls to set up initial widgets', async () => {
     const userInfo = getMockUserInfo()
     const referralData = null
