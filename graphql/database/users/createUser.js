@@ -58,9 +58,11 @@ const createUser = async (userContext, userId, email, referralData) => {
     // was manipulated.
     var referringUserId = null
     try {
-      const referringUser = await getUserByUsername(userContext,
-        referringUserUsername)
-      referringUserId = referringUser.id
+      if (referringUserUsername) {
+        const referringUser = await getUserByUsername(userContext,
+          referringUserUsername)
+        referringUserId = referringUser.id
+      }
     } catch (e) {}
 
     // Log the referral data.
