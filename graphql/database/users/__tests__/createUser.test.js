@@ -138,6 +138,38 @@ describe('createUser when user does not exist', () => {
     expect(rewardReferringUser).not.toHaveBeenCalled()
   })
 
+  it('returns the user even if there is an error logging referral data', async () => {
+    // Hide expected error output
+    jest.spyOn(console, 'error')
+      .mockImplementationOnce(() => {})
+
+    const userInfo = getMockUserInfo()
+    const referralData = {
+      referringChannel: '42'
+    }
+
+    // Mock the response for getting the user.
+    const expectedUser = getMockUserInstance(userInfo)
+    setMockDBResponse(
+      DatabaseOperation.GET,
+      {
+        Item: expectedUser
+      }
+    )
+
+    // Some unexpected error in logging referral data.
+    logReferralData.mockImplementationOnce(() => {
+      throw new Error('Bad thing happened!')
+    })
+
+    await createUser(userContext, userInfo.id,
+      userInfo.email, referralData)
+
+    const createdItem = await createUser(userContext, userInfo.id,
+      userInfo.email, referralData)
+    expect(createdItem).toEqual(expectedUser)
+  })
+
   it('logs "referringChannel" referral data', async () => {
     const userInfo = getMockUserInfo()
     const referralData = {
@@ -146,7 +178,7 @@ describe('createUser when user does not exist', () => {
 
     // No referring user.
     getUserByUsername.mockImplementationOnce(() => {
-      throw new Error('Could not get item!')
+      return null
     })
 
     await createUser(userContext, userInfo.id,
