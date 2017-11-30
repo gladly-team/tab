@@ -17,6 +17,10 @@ describe('VCDonationModel', () => {
     expect(VCDonationModel.hashKey).toBe('userId')
   })
 
+  it('implements the rangeKey property', () => {
+    expect(VCDonationModel.rangeKey).toBe('timestamp')
+  })
+
   it('implements the tableName property', () => {
     expect(VCDonationModel.tableName).toBe(tableNames.vcDonationLog)
   })
