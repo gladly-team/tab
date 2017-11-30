@@ -1,5 +1,6 @@
 /* eslint-env jest */
 
+import moment from 'moment'
 import VCDonationModel from '../VCDonationModel'
 import donateVc from '../donateVc'
 import addVc from '../../users/addVc'
@@ -68,6 +69,7 @@ describe('donateVc', () => {
     const returnedUser = await donateVc(userContext, userId, charityId, vcToDonate)
     expect(vcDonationCreateMethod).toHaveBeenCalledWith(userContext, {
       userId: userId,
+      timestamp: moment.utc().toISOString(),
       charityId: charityId,
       vcDonated: vcToDonate
     })

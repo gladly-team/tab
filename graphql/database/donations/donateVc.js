@@ -1,4 +1,5 @@
 
+import moment from 'moment'
 import VCDonationModel from './VCDonationModel'
 import addVc from '../users/addVc'
 import addVcDonatedAllTime from '../users/addVcDonatedAllTime'
@@ -21,6 +22,7 @@ export default async (userContext, userId, charityId, vc) => {
     // Create the VC donation.
     await VCDonationModel.create(userContext, {
       userId: userId,
+      timestamp: moment.utc().toISOString(),
       charityId: charityId,
       vcDonated: vc
     })

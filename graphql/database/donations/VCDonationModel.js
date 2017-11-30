@@ -19,6 +19,10 @@ class VCDonation extends BaseModel {
     return 'userId'
   }
 
+  static get rangeKey () {
+    return 'timestamp'
+  }
+
   static get tableName () {
     return tableNames.vcDonationLog
   }
@@ -27,6 +31,7 @@ class VCDonation extends BaseModel {
     const self = this
     return {
       userId: types.string().required(),
+      timestamp: types.string().isoDate().required(),
       charityId: types.uuid(),
       vcDonated: types.number().integer()
         .default(self.fieldDefaults.vcDonated)

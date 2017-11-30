@@ -18,7 +18,7 @@ export const tableKeys = {
   },
   vcDonationLog: {
     hash: 'id',
-    range: null
+    range: 'timestamp'
   },
   backgroundImages: {
     hash: 'id',
