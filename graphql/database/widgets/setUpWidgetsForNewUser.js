@@ -51,6 +51,8 @@ export default async (userContext, userId) => {
   }))
     .then(data => true)
     .catch(err => {
+      console.error('setUpWidgetsForNewUser error')
+      console.error(err)
       throw err
     })
 }
