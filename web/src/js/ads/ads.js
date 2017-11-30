@@ -9,8 +9,8 @@ import openxConfig from './openx/openxConfig'
 if (adsEnabled) {
   prebid()
   prebidConfig()
-  googleTagManager()
   openxConfig()
+  googleTagManager()
   googleAdSlotDefinitions()
 } else {
   // console.log('Ads are disabled. Not setting up DFP or Prebid.')
