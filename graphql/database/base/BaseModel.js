@@ -255,7 +255,8 @@ class BaseModel {
     if (!this.isQueryAuthorized(userContext, 'getAll')) {
       return Promise.reject(new UnauthorizedQueryException())
     }
-    return this.dynogelsModel.scan().execAsync()
+    // https://github.com/clarkie/dynogels#scan
+    return this.dynogelsModel.scan().loadAll().execAsync()
       .then(data => self.deserialize(data.Items))
       .catch(err => {
         throw err

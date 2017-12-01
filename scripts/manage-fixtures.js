@@ -12,6 +12,9 @@ import {
 const args = process.argv.slice(2)
 const command = args[0]
 switch (command) {
+  // load [table-name] [file-path]
+  // e.g.:
+  // yarn run manage-fixtures load BackgroundImages-dev ./migration/fixtures-prod/BackgroundImages.json
   case 'load':
     const tableNameToLoad = args[1]
     const fixturesFileToLoad = args[2]
@@ -20,6 +23,9 @@ switch (command) {
     loadFixturesIntoTable(fixturesFilePathToLoad, tableNameToLoad)
       .then(() => {
         console.log('Finished loading fixtures.')
+      })
+      .catch((err) => {
+        console.error(err)
       })
     break
   case 'delete':
@@ -31,6 +37,9 @@ switch (command) {
     deleteFixturesFromTable(fixturesFilePathToDelete, tableNameToDelete, hashKeyNameToDelete)
       .then(() => {
         console.log('Finished deleting fixtures.')
+      })
+      .catch((err) => {
+        console.error(err)
       })
     break
   default:

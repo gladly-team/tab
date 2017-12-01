@@ -12,10 +12,6 @@ const allFixtures = [
     jsonFile: 'CharityData.json'
   },
   {
-    tableName: 'Features',
-    jsonFile: 'FeatureData.json'
-  },
-  {
     tableName: 'UserLevels',
     jsonFile: 'UserLevels.json'
   },

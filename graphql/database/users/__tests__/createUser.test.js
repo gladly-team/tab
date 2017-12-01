@@ -198,7 +198,11 @@ describe('createUser when user does not exist', () => {
     )
     const expectedUser = getMockUserInstance(userInfo)
     const expectedParamsUser = cloneDeep(expectedUser)
+
+    // Remove dynamic fields (won't be passed during creation)
     delete expectedParamsUser.backgroundImage.imageURL
+    delete expectedParamsUser.backgroundImage.thumbnailURL
+
     const expectedParams = {
       ConditionExpression: '(#id <> :id)',
       ExpressionAttributeNames: {'#id': 'id'},

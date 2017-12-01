@@ -149,21 +149,6 @@ const backgroundImageType = new GraphQLObjectType({
   interfaces: [nodeInterface]
 })
 
-const imageType = new GraphQLObjectType({
-  name: 'Image',
-  description: 'An image object',
-  fields: () => ({
-    id: {
-      type: GraphQLString,
-      description: 'The image id'
-    },
-    imageURL: {
-      type: GraphQLString,
-      description: 'The image file URL'
-    }
-  })
-})
-
 const maxTabsDayType = new GraphQLObjectType({
   name: 'MaxTabsDay',
   description: 'Info about the user\'s day of most opened tabs',
@@ -190,7 +175,7 @@ const userType = new GraphQLObjectType({
       resolve: (user, _) => user.id
     },
     backgroundImage: {
-      type: imageType,
+      type: backgroundImageType,
       description: 'Users\'s background image'
     },
     username: {

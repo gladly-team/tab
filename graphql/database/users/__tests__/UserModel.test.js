@@ -159,9 +159,11 @@ describe('UserModel', () => {
       vcDonatedAllTime: 0,
       numUsersRecruited: 0,
       backgroundImage: {
-        id: '49fcb132-9b6b-431b-bda8-50455e215be7',
-        image: '661651039af4454abb852927b3a5b8f9.jpg',
-        imageURL: `${mediaRoot}/img/backgrounds/661651039af4454abb852927b3a5b8f9.jpg`,
+        id: '9308b921-44c7-4b4e-845d-3b01fa73fa2b',
+        image: '94bbd29b17fe4fa3b45777281a392f21.jpg',
+        thumbnail: '5d4dfd0b34134879903f0480720bd746.jpg',
+        imageURL: `${mediaRoot}/img/backgrounds/94bbd29b17fe4fa3b45777281a392f21.jpg`,
+        thumbnailURL: `${mediaRoot}/img/background-thumbnails/5d4dfd0b34134879903f0480720bd746.jpg`,
         timestamp: moment.utc().toISOString()
       },
       backgroundOption: 'photo'

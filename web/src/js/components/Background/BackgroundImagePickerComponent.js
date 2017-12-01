@@ -42,6 +42,9 @@ class BackgroundImagePicker extends React.Component {
   }
 
   onImageSelected (image) {
+    if (!image || !image.id) {
+      return
+    }
     this.setState({
       selectedImage: image
     })
@@ -97,7 +100,7 @@ class BackgroundImagePicker extends React.Component {
                       : <RadioButtonUncheckedIcon color={'white'} />
                     }
                   </IconButton>}>
-                <img src={edge.node.imageURL} />
+                <img src={edge.node.thumbnailURL} />
               </GridTile>)
           })}
         </GridList>
@@ -107,8 +110,24 @@ class BackgroundImagePicker extends React.Component {
 }
 
 BackgroundImagePicker.propTypes = {
-  app: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired,
+  app: PropTypes.shape({
+    backgroundImages: PropTypes.shape({
+      edges: PropTypes.arrayOf(
+          PropTypes.shape({
+            id: PropTypes.string,
+            name: PropTypes.string,
+            imageURL: PropTypes.string,
+            thumbnailURL: PropTypes.string
+          })
+        ).isRequired
+    }).isRequired
+  }),
+  user: PropTypes.shape({
+    backgroundImage: PropTypes.shape({
+      id: PropTypes.string,
+      imageURL: PropTypes.string
+    }).isRequired
+  }),
   showError: PropTypes.func.isRequired
 }
 
