@@ -1,4 +1,8 @@
 
+// Implementation:
+// https://docs.openx.com/Content/publishers/bidder-standard-implementation.html
+// To verify:
+// https://docs.openx.com/Content/publishers/bidder-standard-self-check.html
 export default function () {
   window.OX_dfp_options = { prefetch: true }
   window.OX_dfp_ads = [

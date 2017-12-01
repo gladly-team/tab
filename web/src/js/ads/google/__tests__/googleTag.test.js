@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import { getGoogleTag } from '../googleTag'
+import { setUpGoogleTag } from '../googleTag'
 
 afterEach(() => {
   delete window.googletag
@@ -10,7 +10,7 @@ describe('googleTag', function () {
   it('sets window.googletag', () => {
     delete window.googletag
     expect(window.googletag).toBeUndefined()
-    getGoogleTag()
+    setUpGoogleTag()
     expect(window.googletag).not.toBeUndefined()
   })
 
@@ -24,7 +24,7 @@ describe('googleTag', function () {
     window.googletag = fakeExistingGoogleTag
 
     expect(window.googletag).toBe(fakeExistingGoogleTag)
-    const gTag = getGoogleTag()
+    const gTag = setUpGoogleTag()
     expect(window.googletag).toBe(fakeExistingGoogleTag)
     expect(gTag).toBe(fakeExistingGoogleTag)
   })

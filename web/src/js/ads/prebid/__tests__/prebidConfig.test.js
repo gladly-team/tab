@@ -1,12 +1,13 @@
 /* eslint-env jest */
 
 import prebidConfig from '../prebidConfig'
-import { getGoogleTag } from '../../google/googleTag'
+import { setUpGoogleTag } from '../../google/googleTag'
 import { getPrebidPbjs } from '../getPrebidPbjs'
 
 beforeEach(() => {
   delete window.googletag
   delete window.pbjs
+  setUpGoogleTag()
 })
 
 afterAll(() => {
@@ -20,7 +21,8 @@ describe('prebidConfig', function () {
   })
 
   it('pushes commands to googletag.cmd', () => {
-    const googletag = getGoogleTag()
+    const googletag = window.googletag || {}
+    googletag.cmd = googletag.cmd || []
     expect(googletag.cmd.length).toBe(0)
     prebidConfig()
     expect(googletag.cmd.length).toBeGreaterThan(0)

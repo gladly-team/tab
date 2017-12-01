@@ -1,9 +1,11 @@
 /* eslint-env jest */
 
+import { setUpGoogleTag } from '../googleTag'
 import googleDisplayAd from '../googleDisplayAd'
 
 beforeEach(() => {
   delete window.googletag
+  setUpGoogleTag()
 })
 
 afterAll(() => {
@@ -16,7 +18,6 @@ describe('googleDisplayAd', function () {
   })
 
   it('pushes commands to googletag.cmd', () => {
-    expect(window.googletag).toBeUndefined()
     googleDisplayAd('some-ad')
     expect(window.googletag.cmd.length).toBe(1)
     googleDisplayAd('another-ad')

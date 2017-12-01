@@ -1,5 +1,5 @@
 
-export const getGoogleTag = function () {
+export const setUpGoogleTag = function () {
   var googletag = window.googletag || {}
   // We're not running in global scope, so make sure to
   // assign to the window.

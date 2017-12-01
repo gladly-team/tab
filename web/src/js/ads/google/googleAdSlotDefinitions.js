@@ -1,8 +1,7 @@
 
-import { getGoogleTag } from './googleTag'
-
 export default function () {
-  var googletag = getGoogleTag()
+  const googletag = window.googletag || {}
+  googletag.cmd = googletag.cmd || []
 
   googletag.cmd.push(function () {
     googletag.defineSlot('/43865596/HBTL', [728, 90], 'div-gpt-ad-1464385677836-0').addService(googletag.pubads())
