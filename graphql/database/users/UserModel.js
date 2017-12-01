@@ -1,6 +1,5 @@
 
 import moment from 'moment'
-import { has } from 'lodash/object'
 
 import BaseModel from '../base/BaseModel'
 import types from '../fieldTypes'
@@ -76,9 +75,11 @@ class User extends BaseModel {
         .default(self.fieldDefaults.numUsersRecruited),
       backgroundImage: types.object(
         {
-          id: types.uuid(),
-          image: types.string(),
+          id: types.string().required(),
+          image: types.string().required(),
+          thumbnail: types.string().required(),
           imageURL: types.string().forbidden(), // only set in deserializer
+          thumbnailURL: types.string().forbidden(), // only set in deserializer
           timestamp: types.string().isoDate()
         })
         .default(self.fieldDefaults.backgroundImage, 'Default background image.'),
@@ -112,8 +113,9 @@ class User extends BaseModel {
       vcDonatedAllTime: 0,
       numUsersRecruited: 0,
       backgroundImage: () => ({
-        id: '49fcb132-9b6b-431b-bda8-50455e215be7',
-        image: '661651039af4454abb852927b3a5b8f9.jpg',
+        id: '9308b921-44c7-4b4e-845d-3b01fa73fa2b',
+        image: '94bbd29b17fe4fa3b45777281a392f21.jpg',
+        thumbnail: '5d4dfd0b34134879903f0480720bd746.jpg',
         timestamp: moment.utc().toISOString()
       }),
       backgroundOption: USER_BACKGROUND_OPTION_PHOTO
@@ -123,14 +125,10 @@ class User extends BaseModel {
   static get fieldDeserializers () {
     return {
       backgroundImage: (backgroundImage, userObj) => {
-        const finalObj = (
-          has(backgroundImage, 'image')
-          ? Object.assign({}, backgroundImage, {
-            imageURL: `${mediaRoot}/img/backgrounds/${backgroundImage.image}`
-          })
-          : null
-        )
-        return finalObj
+        return Object.assign({}, backgroundImage, {
+          imageURL: `${mediaRoot}/img/backgrounds/${backgroundImage.image}`,
+          thumbnailURL: `${mediaRoot}/img/background-thumbnails/${backgroundImage.thumbnail}`
+        })
       }
     }
   }

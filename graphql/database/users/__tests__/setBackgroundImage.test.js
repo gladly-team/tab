@@ -45,6 +45,7 @@ describe('setBackgroundImage', () => {
       backgroundImage: {
         id: mockImage.id,
         image: mockImage.image,
+        thumbnail: mockImage.thumbnail,
         timestamp: moment.utc().toISOString()
       },
       backgroundOption: USER_BACKGROUND_OPTION_PHOTO,
@@ -64,6 +65,7 @@ describe('setBackgroundImage', () => {
       backgroundImage: {
         id: mockImage.id,
         image: mockImage.image,
+        thumbnail: mockImage.thumbnail,
         timestamp: moment.utc().toISOString()
       },
       backgroundOption: USER_BACKGROUND_OPTION_PHOTO,
@@ -83,6 +85,7 @@ describe('setBackgroundImage', () => {
       backgroundImage: {
         id: mockImage.id,
         image: mockImage.image,
+        thumbnail: mockImage.thumbnail,
         timestamp: moment.utc().toISOString()
       },
       backgroundOption: USER_BACKGROUND_OPTION_CUSTOM,

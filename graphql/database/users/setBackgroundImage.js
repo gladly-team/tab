@@ -24,6 +24,7 @@ const setBackgroundImage = async (userContext, userId, imageId, mode) => {
       backgroundImage: {
         id: image.id,
         image: image.image,
+        thumbnail: image.thumbnail,
         timestamp: moment.utc().toISOString()
       },
       backgroundOption: mode

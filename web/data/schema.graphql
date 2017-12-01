@@ -133,15 +133,6 @@ type DonateVcPayload {
   clientMutationId: String
 }
 
-# An image object
-type Image {
-  # The image id
-  id: String
-
-  # The image file URL
-  imageURL: String
-}
-
 input LogTabInput {
   userId: String!
   clientMutationId: String
@@ -336,7 +327,7 @@ type User implements Node {
   userId: String
 
   # Users's background image
-  backgroundImage: Image
+  backgroundImage: BackgroundImage
 
   # Users's username
   username: String
