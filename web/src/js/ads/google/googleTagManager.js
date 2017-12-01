@@ -1,10 +1,8 @@
 
-import { getGoogleTag } from './googleTag'
-
 // Google Tag Manager
 export default function () {
-  // Make sure window.googletag is defined
-  getGoogleTag()
+  const googletag = window.googletag || {}
+  googletag.cmd = googletag.cmd || []
 
   // Create the Google tag script
   var gads = document.createElement('script')

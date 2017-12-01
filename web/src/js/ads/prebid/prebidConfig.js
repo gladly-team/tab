@@ -1,5 +1,4 @@
 
-import { getGoogleTag } from '../google/googleTag'
 import { getPrebidPbjs } from './getPrebidPbjs'
 
 // See: http://prebid.org/dev-docs/examples/basic-example.html
@@ -96,8 +95,8 @@ export default function () {
   }]
   // Prebid config section END
 
-  const googletag = getGoogleTag()
-
+  const googletag = window.googletag || {}
+  googletag.cmd = googletag.cmd || []
   googletag.cmd.push(() => {
     googletag.pubads().disableInitialLoad()
   })
