@@ -17,7 +17,7 @@ export default createFragmentContainer(BackgroundImagePicker, {
   `,
   app: graphql`
     fragment BackgroundImagePickerContainer_app on App {
-      backgroundImages(first: 20) {
+      backgroundImages(first: 50) {
         edges {
           node {
             id
