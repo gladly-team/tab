@@ -18,7 +18,8 @@ import {
 const fetchCurrentUserInfo = () => {
   const url = 'https://tab.gladly.io/api/migrate-auth/'
   return fetch(url, {
-    method: 'POST'
+    method: 'POST',
+    credentials: 'same-origin'
   }).then(response => {
     return response.json()
       .then((response) => {
