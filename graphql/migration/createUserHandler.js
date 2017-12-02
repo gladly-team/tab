@@ -1,6 +1,7 @@
 'use strict'
 
 import 'babel-polyfill' // For async/await support.
+import config from '../config'
 import { handleError } from '../utils/error-logging'
 import createUser from '../database/users/createUser'
 
@@ -37,12 +38,14 @@ export const handler = function (event) {
     return Promise.resolve(createResponse(500, e))
   }
 
-  // TODO: check admin authorization
+  // Check admin authorization
+  const headers = event.headers
+  if (!headers || headers['Authorization'] !== config.MIGRATION_ADMIN_KEY) {
+    return Promise.resolve(createResponse(403, 'Not authorized.'))
+  }
 
   const user = body.user
   return migrateUser(user)
-
-  // TODO: update user's "joined" timestamp
 }
 
 export const serverlessHandler = function (event, context, callback) {
