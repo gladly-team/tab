@@ -3,7 +3,14 @@
 import 'babel-polyfill' // For async/await support.
 import config from '../build/config'
 import { handleError } from '../utils/error-logging'
+import UserModel from '../database/users/UserModel'
 import createUser from '../database/users/createUser'
+
+import {
+  getPermissionsOverride,
+  MIGRATION_OVERRIDE
+} from '../utils/permissions-overrides'
+const migrationOverride = getPermissionsOverride(MIGRATION_OVERRIDE)
 
 // Note: we need to use Bluebird until at least Node 8. Using
 // native promises breaks Sentry/Raven context:
@@ -21,13 +28,40 @@ const createResponse = function (statusCode, body) {
   }
 }
 
-const migrateUser = async (user) => {
-  // Use getNextLevelFor to get user's remaining vc
+export const updateUserFields = async (user) => {
+  try {
+    const updatedUser = await UserModel.update(migrationOverride, {
+      id: user.id,
+      email: user.email,
+      username: user.username,
+      joined: user.joined,
+      vcCurrent: user.vcCurrent,
+      vcAllTime: user.vcAllTime,
+      level: user.level,
+      tabs: user.tabs,
+      validTabs: user.validTabs,
+      maxTabsDay: user.maxTabsDay,
+      heartsUntilNextLevel: user.heartsUntilNextLevel,
+      vcDonatedAllTime: user.vcDonatedAllTime,
+      numUsersRecruited: user.numUsersRecruited,
+      lastTabTimestamp: user.lastTabTimestamp
+    })
+    return updatedUser
+  } catch (e) {
+    throw e
+  }
+}
 
-  // TODO: create user with authorization override
-  await createUser('TODO')
+export const migrateUser = async (user) => {
+  // Create user
+  try {
+    await createUser(migrationOverride, user.id, user.email)
+  } catch (e) {
+    throw e
+  }
 
-  // TODO: update all user fields
+  // Update all user fields
+  return updateUserFields(user)
 }
 
 export const handler = function (event) {
@@ -46,13 +80,14 @@ export const handler = function (event) {
 
   const user = body.user
   return migrateUser(user)
+    .catch(response => createResponse(200, { status: 'success' }))
+    .catch(err => {
+      handleError(err)
+      return createResponse(500, err)
+    })
 }
 
 export const serverlessHandler = function (event, context, callback) {
   handler(event)
     .then(response => callback(null, response))
-    .catch(err => {
-      handleError(err)
-      return createResponse(500, 'Internal Error')
-    })
 }
