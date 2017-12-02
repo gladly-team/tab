@@ -1,7 +1,7 @@
 'use strict'
 
 import 'babel-polyfill' // For async/await support.
-import config from '../build/config'
+import config from '../config'
 import { handleError } from '../utils/error-logging'
 import UserModel from '../database/users/UserModel'
 import createUser from '../database/users/createUser'
