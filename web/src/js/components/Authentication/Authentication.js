@@ -10,6 +10,7 @@ import {
   sendVerificationEmail,
   setUsernameInLocalStorage
 } from 'authentication/user'
+import { attemptAutologin } from 'authentication/migration'
 import {
   goTo,
   replaceUrl,
@@ -56,6 +57,11 @@ class Authentication extends React.Component {
 
   async componentWillMount () {
     this.mounted = true
+
+    // TODO: remove after migration is complete.
+    // Try to autologin
+    attemptAutologin()
+
     await this.navigateToAuthStep()
 
     // Don't render any children until after checking the user's
