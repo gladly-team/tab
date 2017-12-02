@@ -1,7 +1,7 @@
 'use strict'
 
 import 'babel-polyfill' // For async/await support.
-import { handleError } from './utils/error-logging'
+import { handleError } from '../utils/error-logging'
 import createUser from '../database/users/createUser'
 
 // Note: we need to use Bluebird until at least Node 8. Using
