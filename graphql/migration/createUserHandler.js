@@ -74,7 +74,7 @@ export const handler = function (event) {
 
   // Check admin authorization
   const headers = event.headers
-  if (!headers || headers['Authorization'] !== config.MIGRATION_ADMIN_KEY) {
+  if (!headers || headers['Authorization'] !== config.SENTRY_PRIVATE_KEY) {
     return Promise.resolve(createResponse(403, 'Not authorized.'))
   }
 
