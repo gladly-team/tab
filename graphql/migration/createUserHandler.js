@@ -80,7 +80,7 @@ export const handler = function (event) {
 
   const user = body.user
   return migrateUser(user)
-    .catch(response => createResponse(200, { status: 'success' }))
+    .then(response => createResponse(200, { status: 'success' }))
     .catch(err => {
       handleError(err)
       return createResponse(500, err)
