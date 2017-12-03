@@ -69,6 +69,7 @@ export const handler = function (event) {
   try {
     body = JSON.parse(event.body)
   } catch (e) {
+    logger.error(e)
     return Promise.resolve(createResponse(500, e))
   }
 
