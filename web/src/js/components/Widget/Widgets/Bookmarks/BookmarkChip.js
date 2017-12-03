@@ -1,3 +1,5 @@
+/* eslint-disable no-useless-escape */
+
 import React from 'react'
 import PropTypes from 'prop-types'
 
@@ -28,9 +30,21 @@ class BookmarkChip extends React.Component {
     this.props.deleteBookmark(this.props.index)
   }
 
+  addProtocolToURLIfNeeded (url) {
+    const hasProtocol = (s) => {
+      var regexp = /(ftp|http|https|file):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
+      return regexp.test(s)
+    }
+
+    if (!hasProtocol(url)) {
+      return 'http://' + url
+    }
+    return url
+  }
+
   openLink (link) {
     // The page might be iframed, so opening in _top is critical.
-    window.open(link, '_top')
+    window.open(this.addProtocolToURLIfNeeded(link), '_top')
     this.setState({
       open: false
     })

@@ -129,3 +129,12 @@ functions:
           path: create-user-migration/
           method: post
           cors: true
+
+  # TODO: delete after migration
+  migrateUserWidgets:
+    handler: build/migration/migrateUserWidgets.serverlessHandler
+    events:
+      - http:
+          path: migrate-user-widgets/
+          method: post
+          cors: true
