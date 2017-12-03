@@ -7,6 +7,9 @@ export const REWARD_REFERRER_OVERRIDE = 'REWARD_REFERRER_OVERRIDE'
 export const GET_REFERRER_BY_USERNAME_OVERRIDE = 'GET_REFERRER_BY_USERNAME_OVERRIDE'
 export const ADD_NUM_USERS_RECRUITED_OVERRIDE = 'ADD_NUM_USERS_RECRUITED_OVERRIDE'
 
+// TODO: remove after migration
+export const MIGRATION_OVERRIDE = 'MIGRATION_OVERRIDE'
+
 // Make it less likely for somebody to use the override
 // string value directly.
 const rand = random(10000, 99999)
@@ -15,7 +18,8 @@ const validOverridesAppendix = `_CONFIRMED_${rand}`
 const validOverrides = {
   [REWARD_REFERRER_OVERRIDE]: `${REWARD_REFERRER_OVERRIDE}${validOverridesAppendix}`,
   [GET_REFERRER_BY_USERNAME_OVERRIDE]: `${GET_REFERRER_BY_USERNAME_OVERRIDE}${validOverridesAppendix}`,
-  [ADD_NUM_USERS_RECRUITED_OVERRIDE]: `${ADD_NUM_USERS_RECRUITED_OVERRIDE}${validOverridesAppendix}`
+  [ADD_NUM_USERS_RECRUITED_OVERRIDE]: `${ADD_NUM_USERS_RECRUITED_OVERRIDE}${validOverridesAppendix}`,
+  [MIGRATION_OVERRIDE]: `${MIGRATION_OVERRIDE}${validOverridesAppendix}`
 }
 
 /**

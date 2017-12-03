@@ -36,6 +36,7 @@ export const envVars = [
   { name: 'SENTRY_PROJECT_ID' },
   { name: 'SENTRY_PRIVATE_KEY' },
   { name: 'FIREBASE_CLIENT_EMAIL' },
+  { name: 'MIGRATION_ADMIN_KEY' }, // TODO: remove after migration
   // Endpoints
   { name: 'GRAPHQL_PROXY_DOMAIN' },
   { name: 'GRAPHQL_PROXY_PATH' },

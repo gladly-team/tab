@@ -18,7 +18,7 @@ import logger from '../../utils/logger'
  * @param {object} referralData - Referral data.
  * @return {Promise<User>}  A promise that resolves into a User instance.
  */
-const createUser = async (userContext, userId, email, referralData) => {
+const createUser = async (userContext, userId, email, referralData = null) => {
   // Create the user.
   const userInfo = {
     id: userId,
