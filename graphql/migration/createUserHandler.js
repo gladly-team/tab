@@ -65,9 +65,9 @@ export const migrateUser = async (user) => {
 }
 
 export const handler = function (event) {
-  var body
+  var user
   try {
-    body = JSON.parse(event.body)
+    user = JSON.parse(event.body)
   } catch (e) {
     logger.error(e)
     return Promise.resolve(createResponse(500, e))
@@ -79,7 +79,6 @@ export const handler = function (event) {
     return Promise.resolve(createResponse(403, 'Not authorized.'))
   }
 
-  const user = body.user
   return migrateUser(user)
     .then(response => createResponse(200, { status: 'success' }))
     .catch(err => {
