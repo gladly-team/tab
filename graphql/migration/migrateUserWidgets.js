@@ -1,6 +1,8 @@
 'use strict'
 
 import 'babel-polyfill' // For async/await support.
+import { filter } from 'lodash/collection'
+import moment from 'moment'
 import config from '../config'
 import logger from '../utils/logger'
 import updateUserWidgetData from '../database/widgets/userWidget/updateUserWidgetData'
@@ -26,6 +28,12 @@ const createResponse = function (statusCode, body) {
     body: JSON.stringify(body)
   }
 }
+
+const legacyBookmarkId = '26a72807b8124f34b17dcf03250b9fa4'
+const newBookmarkId = 'a8cfd733-639b-49d4-a822-116cc7e5c2e2'
+
+const legacyNotesId = 'd84447e23fee40b98982241513e3005b'
+const newNotesId = '63859963-f691-42f6-bc80-ac83eddc4104'
 
 // Legacy bookmark widget data structure
 /*
@@ -67,11 +75,28 @@ const createResponse = function (statusCode, body) {
 /*
 {
   bookmarks: [
-    link: 'example.com',
-    name: 'Some Example'
+    {
+      link: 'example.com',
+      name: 'Some Example'
+    }
   ]
 }
 */
+export const upgradeBookmarkData = (legacyBookmarks) => {
+  const newBookmarks = []
+  legacyBookmarks.forEach((legacyBookmark) => {
+    if (!legacyBookmark.data || !legacyBookmark.data.name || !legacyBookmark.data.url) {
+      return
+    }
+    newBookmarks.push({
+      link: legacyBookmark.data.url,
+      name: legacyBookmark.data.name
+    })
+  })
+  return {
+    bookmarks: newBookmarks
+  }
+}
 
 // Legacy note widget data structure
 /*
@@ -112,40 +137,50 @@ const createResponse = function (statusCode, body) {
     }
   ]
 */
+export const upgradeNotesData = (legacyNotes) => {
+  function randomString (length) {
+    const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    var result = ''
+    for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)]
+    return result
+  }
 
-export const getNewWidgetId = (legacyWidgetId) => {
-  // Bookmark
-  if (legacyWidgetId === '26a72807b8124f34b17dcf03250b9fa4') {
-    return 'a8cfd733-639b-49d4-a822-116cc7e5c2e2'
-  // Sticky note
-  } else if (legacyWidgetId === 'd84447e23fee40b98982241513e3005b') {
-    return '63859963-f691-42f6-bc80-ac83eddc4104'
-  // Oops
-  } else {
-    throw new Error('Not a valid legacy widget ID: ' + legacyWidgetId)
+  const newNotes = []
+  const noteColors = ['#A5D6A7', '#FFF59D', '#FFF', '#FF4081', '#2196F3', '#757575', '#FF3D00']
+  legacyNotes.forEach((legacyNote) => {
+    if (!legacyNote.data || !legacyNote.data.text) {
+      return
+    }
+    newNotes.push({
+      id: randomString(6),
+      color: noteColors[Math.floor(Math.random() * noteColors.length)],
+      created: moment(legacyNote.modified_at).toISOString(),
+      content: legacyNote.data.text
+    })
+  })
+  return {
+    notes: newNotes
   }
 }
 
-// Takes a legacy widget data object.
-// Returns a current data object.
-export const createDataFromLegacyWidgetData = (legacyData) => {
-  // TODO
-  return {}
-}
-
 export const migrateWidgets = async (userId, legacyWidgets) => {
-  return Promise.all(legacyWidgets.map(async (legacyWidget) => {
-    try {
-      // Reformat data.
-      const newWidgetId = getNewWidgetId(legacyWidget.widget_id)
-      const newWidgetData = createDataFromLegacyWidgetData(legacyWidget)
+  const legacyBookmarks = filter(legacyWidgets, (o) => {
+    return o.widget_id === legacyBookmarkId
+  })
+  const legacyNotes = filter(legacyWidgets, (o) => {
+    return o.widget_id === legacyNotesId
+  })
+  try {
+    // Transfer bookmarks
+    const newBookmarksData = upgradeBookmarkData(legacyBookmarks)
+    await updateUserWidgetData(migrationOverride, userId, newBookmarkId, newBookmarksData)
 
-      // Save widget.
-      await updateUserWidgetData(migrationOverride, userId, newWidgetId, newWidgetData)
-    } catch (err) {
-      throw err
-    }
-  }))
+    // Transfer notes
+    const newNotesData = upgradeNotesData(legacyNotes)
+    await updateUserWidgetData(migrationOverride, userId, newNotesId, newNotesData)
+  } catch (err) {
+    throw err
+  }
 }
 
 export const handler = function (event) {
