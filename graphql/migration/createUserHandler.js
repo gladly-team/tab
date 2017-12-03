@@ -2,7 +2,7 @@
 
 import 'babel-polyfill' // For async/await support.
 import config from '../config'
-import { handleError } from '../utils/error-logging'
+import logger from '../utils/logger'
 import UserModel from '../database/users/UserModel'
 import createUser from '../database/users/createUser'
 
@@ -82,7 +82,7 @@ export const handler = function (event) {
   return migrateUser(user)
     .then(response => createResponse(200, { status: 'success' }))
     .catch(err => {
-      handleError(err)
+      logger.error(err)
       return createResponse(500, err)
     })
 }
