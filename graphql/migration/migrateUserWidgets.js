@@ -6,6 +6,7 @@ import moment from 'moment'
 import config from '../config'
 import logger from '../utils/logger'
 import updateUserWidgetData from '../database/widgets/userWidget/updateUserWidgetData'
+import htmlToText from 'html-to-text'
 
 import {
   getPermissionsOverride,
@@ -155,7 +156,7 @@ export const upgradeNotesData = (legacyNotes) => {
       id: randomString(6),
       color: noteColors[Math.floor(Math.random() * noteColors.length)],
       created: moment(legacyNote.modified_at).toISOString(),
-      content: legacyNote.data.text
+      content: htmlToText.fromString(legacyNote.data.text)
     })
   })
   return {
