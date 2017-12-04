@@ -15,91 +15,205 @@ plugins:
 
 custom:
   stageDefault: dev
+  customCapacities:
+    # dev stage table capacities
+    dev: 
+      usersTable:
+        read:
+          minimum: 1
+          maximum: 1000
+          usage: 0.75
+        write:
+          minimum: 1
+          maximum: 1000
+          usage: 0.60
+      charitiesTable:
+        read:
+          minimum: 1
+          maximum: 1000
+          usage: 0.75
+        write:
+          minimum: 1
+          maximum: 1000
+          usage: 0.60
+      widgetsTable:
+        read:
+          minimum: 1
+          maximum: 1000
+          usage: 0.75
+        write:
+          minimum: 1
+          maximum: 1000
+          usage: 0.60
+      userLevelsTable:
+        read:
+          minimum: 1
+          maximum: 1000
+          usage: 0.75
+        write:
+          minimum: 1
+          maximum: 1000
+          usage: 0.60
+      vcDonationLogTable:
+        read:
+          minimum: 1
+          maximum: 1000
+          usage: 0.75
+        write:
+          minimum: 1
+          maximum: 1000
+          usage: 0.60
+      backgroundImagesTable:
+        read:
+          minimum: 1
+          maximum: 1000
+          usage: 0.75
+        write:
+          minimum: 1
+          maximum: 1000
+          usage: 0.60
+      userWidgetsTable:
+        read:
+          minimum: 1
+          maximum: 1000
+          usage: 0.75
+        write:
+          minimum: 1
+          maximum: 1000
+          usage: 0.60
+      userTabsLogTable:
+        read:
+          minimum: 1
+          maximum: 1000
+          usage: 0.75
+        write:
+          minimum: 1
+          maximum: 1000
+          usage: 0.60
+      referralDataLogTable:
+        read:
+          minimum: 1
+          maximum: 1000
+          usage: 0.75
+        write:
+          minimum: 1
+          maximum: 1000
+          usage: 0.60
+    # prod stage table capacities
+    prod: 
+      usersTable:
+        read:
+          minimum: 10
+          maximum: 25000
+          usage: 0.75
+        write:
+          minimum: 10
+          maximum: 25000
+          usage: 0.60
+      charitiesTable:
+        read:
+          minimum: 5
+          maximum: 25000
+          usage: 0.75
+        write:
+          minimum: 1
+          maximum: 25000
+          usage: 0.60
+      widgetsTable:
+        read:
+          minimum: 10
+          maximum: 25000
+          usage: 0.75
+        write:
+          minimum: 1
+          maximum: 25000
+          usage: 0.60
+      userLevelsTable:
+        read:
+          minimum: 5
+          maximum: 25000
+          usage: 0.75
+        write:
+          minimum: 1
+          maximum: 25000
+          usage: 0.60
+      vcDonationLogTable:
+        read:
+          minimum: 1
+          maximum: 25000
+          usage: 0.75
+        write:
+          minimum: 5
+          maximum: 25000
+          usage: 0.60
+      backgroundImagesTable:
+        read:
+          minimum: 5
+          maximum: 25000
+          usage: 0.75
+        write:
+          minimum: 1
+          maximum: 25000
+          usage: 0.60
+      userWidgetsTable:
+        read:
+          minimum: 10
+          maximum: 25000
+          usage: 0.75
+        write:
+          minimum: 10
+          maximum: 25000
+          usage: 0.60
+      userTabsLogTable:
+        read:
+          minimum: 1
+          maximum: 25000
+          usage: 0.75
+        write:
+          minimum: 10
+          maximum: 25000
+          usage: 0.60
+      referralDataLogTable:
+        read:
+          minimum: 1
+          maximum: 25000
+          usage: 0.75
+        write:
+          minimum: 10
+          maximum: 25000
+          usage: 0.60
+
   # https://github.com/sbstjn/serverless-dynamodb-autoscaling
   capacities:
     - table: usersTable
       index:
         - UsersByUsername
-      read:
-        minimum: 1
-        maximum: 1000
-        usage: 0.75
-      write:
-        minimum: 1
-        maximum: 1000
-        usage: 0.60
+      read: ${self:custom.customCapacities.${self:provider.stage}.usersTable.read}
+      write: ${self:custom.customCapacities.${self:provider.stage}.usersTable.write}
     - table: charitiesTable
-      read:
-        minimum: 1
-        maximum: 1000
-        usage: 0.75
-      write:
-        minimum: 1
-        maximum: 1000
-        usage: 0.60
+      read: ${self:custom.customCapacities.${self:provider.stage}.charitiesTable.read}
+      write: ${self:custom.customCapacities.${self:provider.stage}.charitiesTable.write}
     - table: widgetsTable
-      read:
-        minimum: 1
-        maximum: 1000
-        usage: 0.75
-      write:
-        minimum: 1
-        maximum: 1000
-        usage: 0.60
+      read: ${self:custom.customCapacities.${self:provider.stage}.widgetsTable.read}
+      write: ${self:custom.customCapacities.${self:provider.stage}.widgetsTable.write}
     - table: userLevelsTable
-      read:
-        minimum: 1
-        maximum: 1000
-        usage: 0.75
-      write:
-        minimum: 1
-        maximum: 1000
-        usage: 0.60
+      read: ${self:custom.customCapacities.${self:provider.stage}.userLevelsTable.read}
+      write: ${self:custom.customCapacities.${self:provider.stage}.userLevelsTable.write}
     - table: vcDonationLogTable
-      read:
-        minimum: 1
-        maximum: 1000
-        usage: 0.75
-      write:
-        minimum: 1
-        maximum: 1000
-        usage: 0.60
+      read: ${self:custom.customCapacities.${self:provider.stage}.vcDonationLogTable.read}
+      write: ${self:custom.customCapacities.${self:provider.stage}.vcDonationLogTable.write}
     - table: backgroundImagesTable
-      read:
-        minimum: 1
-        maximum: 1000
-        usage: 0.75
-      write:
-        minimum: 1
-        maximum: 1000
-        usage: 0.60
+      read: ${self:custom.customCapacities.${self:provider.stage}.backgroundImagesTable.read}
+      write: ${self:custom.customCapacities.${self:provider.stage}.backgroundImagesTable.write}
     - table: userWidgetsTable
-      read:
-        minimum: 1
-        maximum: 1000
-        usage: 0.75
-      write:
-        minimum: 1
-        maximum: 1000
-        usage: 0.60
+      read: ${self:custom.customCapacities.${self:provider.stage}.userWidgetsTable.read}
+      write: ${self:custom.customCapacities.${self:provider.stage}.userWidgetsTable.write}
     - table: userTabsLogTable
-      read:
-        minimum: 1
-        maximum: 1000
-        usage: 0.75
-      write:
-        minimum: 1
-        maximum: 1000
-        usage: 0.60
+      read: ${self:custom.customCapacities.${self:provider.stage}.userTabsLogTable.read}
+      write: ${self:custom.customCapacities.${self:provider.stage}.userTabsLogTable.write}
     - table: referralDataLogTable
-      read:
-        minimum: 1
-        maximum: 1000
-        usage: 0.75
-      write:
-        minimum: 1
-        maximum: 1000
-        usage: 0.60
+      read: ${self:custom.customCapacities.${self:provider.stage}.referralDataLogTable.read}
+      write: ${self:custom.customCapacities.${self:provider.stage}.referralDataLogTable.write}
 
 resources:
   Resources:
