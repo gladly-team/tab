@@ -9,11 +9,13 @@ import Ad from '../Ad/Ad'
 import LogTab from './LogTabContainer'
 import CircleIcon from 'material-ui/svg-icons/image/lens'
 import {
+  dashboardTransparentBackground,
   dashboardIconInactiveColor,
   dashboardIconActiveColor
 } from 'theme/default'
 import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
 import ErrorMessage from 'general/ErrorMessage'
+import { Paper } from 'material-ui'
 
 class Dashboard extends React.Component {
   constructor (props) {
@@ -95,6 +97,21 @@ class Dashboard extends React.Component {
           : null
         }
         <WidgetsContainer user={user} showError={this.showError.bind(this)} />
+        <Paper
+          style={{
+            position: 'absolute',
+            zIndex: 5,
+            width: 180,
+            bottom: 10,
+            left: 10,
+            background: dashboardTransparentBackground,
+            color: '#FFF',
+            padding: 8
+          }}
+        >
+          <span style={{ fontSize: 14 }}>Problems? Feedback?</span>
+          <p style={{ fontSize: 12 }}>Email us at contact@tabforacause.org and let us know you're using the new version (Tab 3.0).</p>
+        </Paper>
         <Ad
           adId='div-gpt-ad-1464385742501-0'
           adSlotId='/43865596/HBTR'
