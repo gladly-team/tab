@@ -48,7 +48,7 @@ const exampleBody = {
       movableBetweenPanes: 'true',
       deletable: 'true',
       pane: 0,
-      data: { color: '#FAFAD2', text: 'blah blah', textColor: 'black' },
+      data: { color: '#FAFAD2', text: '<div>blah blah<div><br/><br/><em>hi</em>', textColor: 'black' },
       widget_id: 'd84447e23fee40b98982241513e3005b',
       settings:
       [ { display_text: 'Text Color',
@@ -125,7 +125,7 @@ describe('createUserHandler migration', () => {
     expect(['#A5D6A7', '#FFF59D', '#FFF', '#FF4081', '#2196F3', '#757575', '#FF3D00'])
       .toContain(calls[1][3].notes[0].color)
 
-    expect(calls[1][3].notes[0].content).toBe('blah blah')
+    expect(calls[1][3].notes[0].content).toBe('blah blah\n\nhi')
     expect(calls[1][3].notes[0].created).toBe('2017-12-03T18:59:00.000Z')
     expect(calls[1][3].notes[0].id).not.toBeUndefined()
   })

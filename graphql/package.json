@@ -9,6 +9,7 @@
     "dynogels": "^8.0.1",
     "graphql": "^0.9.1",
     "graphql-relay": "^0.5.1",
+    "html-to-text": "^3.3.0",
     "joi": "^10.6.0",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
