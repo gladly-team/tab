@@ -107,6 +107,7 @@ package:
 functions:
   graphql:
     handler: build/handler.serverlessHandler
+    timeout: 10 # in seconds; default is 6
     events:
       - http:
           path: graphql/
@@ -124,6 +125,7 @@ functions:
   # TODO: delete after migration
   createUserMigration:
     handler: build/migration/createUserHandler.serverlessHandler
+    timeout: 20 # in seconds; default is 6
     events:
       - http:
           path: create-user-migration/
@@ -133,6 +135,7 @@ functions:
   # TODO: delete after migration
   migrateUserWidgets:
     handler: build/migration/migrateUserWidgets.serverlessHandler
+    timeout: 20 # in seconds; default is 6
     events:
       - http:
           path: migrate-user-widgets/
