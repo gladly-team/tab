@@ -242,6 +242,8 @@ custom:
         maximum: ${self:custom.customCapacities.${self:provider.stage}.backgroundImagesTable.write.maximum}
         usage: ${self:custom.customCapacities.${self:provider.stage}.backgroundImagesTable.write.usage}
     - table: userWidgetsTable
+      index:
+        - Widgets
       read:
         minimum: ${self:custom.customCapacities.${self:provider.stage}.userWidgetsTable.read.minimum}
         maximum: ${self:custom.customCapacities.${self:provider.stage}.userWidgetsTable.read.maximum}
