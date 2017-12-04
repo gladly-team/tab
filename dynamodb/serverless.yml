@@ -188,32 +188,86 @@ custom:
     - table: usersTable
       index:
         - UsersByUsername
-      read: ${self:custom.customCapacities.${self:provider.stage}.usersTable.read}
-      write: ${self:custom.customCapacities.${self:provider.stage}.usersTable.write}
+      read:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.usersTable.read.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.usersTable.read.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.usersTable.read.usage}
+      write:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.usersTable.write.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.usersTable.write.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.usersTable.write.usage}
     - table: charitiesTable
-      read: ${self:custom.customCapacities.${self:provider.stage}.charitiesTable.read}
-      write: ${self:custom.customCapacities.${self:provider.stage}.charitiesTable.write}
+      read:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.charitiesTable.read.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.charitiesTable.read.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.charitiesTable.read.usage}
+      write:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.charitiesTable.write.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.charitiesTable.write.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.charitiesTable.write.usage}
     - table: widgetsTable
-      read: ${self:custom.customCapacities.${self:provider.stage}.widgetsTable.read}
-      write: ${self:custom.customCapacities.${self:provider.stage}.widgetsTable.write}
+      read:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.widgetsTable.read.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.widgetsTable.read.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.widgetsTable.read.usage}
+      write:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.widgetsTable.write.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.widgetsTable.write.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.widgetsTable.write.usage}
     - table: userLevelsTable
-      read: ${self:custom.customCapacities.${self:provider.stage}.userLevelsTable.read}
-      write: ${self:custom.customCapacities.${self:provider.stage}.userLevelsTable.write}
+      read:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.userLevelsTable.read.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.userLevelsTable.read.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.userLevelsTable.read.usage}
+      write:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.userLevelsTable.write.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.userLevelsTable.write.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.userLevelsTable.write.usage}
     - table: vcDonationLogTable
-      read: ${self:custom.customCapacities.${self:provider.stage}.vcDonationLogTable.read}
-      write: ${self:custom.customCapacities.${self:provider.stage}.vcDonationLogTable.write}
+      read:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.vcDonationLogTable.read.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.vcDonationLogTable.read.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.vcDonationLogTable.read.usage}
+      write:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.vcDonationLogTable.write.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.vcDonationLogTable.write.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.vcDonationLogTable.write.usage}
     - table: backgroundImagesTable
-      read: ${self:custom.customCapacities.${self:provider.stage}.backgroundImagesTable.read}
-      write: ${self:custom.customCapacities.${self:provider.stage}.backgroundImagesTable.write}
+      read:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.backgroundImagesTable.read.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.backgroundImagesTable.read.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.backgroundImagesTable.read.usage}
+      write:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.backgroundImagesTable.write.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.backgroundImagesTable.write.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.backgroundImagesTable.write.usage}
     - table: userWidgetsTable
-      read: ${self:custom.customCapacities.${self:provider.stage}.userWidgetsTable.read}
-      write: ${self:custom.customCapacities.${self:provider.stage}.userWidgetsTable.write}
+      read:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.userWidgetsTable.read.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.userWidgetsTable.read.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.userWidgetsTable.read.usage}
+      write:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.userWidgetsTable.write.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.userWidgetsTable.write.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.userWidgetsTable.write.usage}
     - table: userTabsLogTable
-      read: ${self:custom.customCapacities.${self:provider.stage}.userTabsLogTable.read}
-      write: ${self:custom.customCapacities.${self:provider.stage}.userTabsLogTable.write}
+      read:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.userTabsLogTable.read.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.userTabsLogTable.read.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.userTabsLogTable.read.usage}
+      write:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.userTabsLogTable.write.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.userTabsLogTable.write.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.userTabsLogTable.write.usage}
     - table: referralDataLogTable
-      read: ${self:custom.customCapacities.${self:provider.stage}.referralDataLogTable.read}
-      write: ${self:custom.customCapacities.${self:provider.stage}.referralDataLogTable.write}
+      read:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.referralDataLogTable.read.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.referralDataLogTable.read.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.referralDataLogTable.read.usage}
+      write:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.referralDataLogTable.write.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.referralDataLogTable.write.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.referralDataLogTable.write.usage}
 
 resources:
   Resources:
