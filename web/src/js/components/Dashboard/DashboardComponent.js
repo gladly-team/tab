@@ -9,15 +9,13 @@ import Ad from '../Ad/Ad'
 import LogTab from './LogTabContainer'
 import CircleIcon from 'material-ui/svg-icons/image/lens'
 import {
+  dashboardTransparentBackground,
   dashboardIconInactiveColor,
   dashboardIconActiveColor
 } from 'theme/default'
 import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
 import ErrorMessage from 'general/ErrorMessage'
 import { Paper } from 'material-ui'
-import {
-  dashboardTransparentBackground
-} from 'theme/default'
 
 class Dashboard extends React.Component {
   constructor (props) {
