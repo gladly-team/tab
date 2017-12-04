@@ -103,11 +103,11 @@ custom:
     prod: 
       usersTable:
         read:
-          minimum: 10
+          minimum: 80
           maximum: 25000
           usage: 0.75
         write:
-          minimum: 10
+          minimum: 40
           maximum: 25000
           usage: 0.60
       charitiesTable:
@@ -157,11 +157,11 @@ custom:
           usage: 0.60
       userWidgetsTable:
         read:
-          minimum: 10
+          minimum: 90
           maximum: 25000
           usage: 0.75
         write:
-          minimum: 10
+          minimum: 50
           maximum: 25000
           usage: 0.60
       userTabsLogTable:
@@ -170,7 +170,7 @@ custom:
           maximum: 25000
           usage: 0.75
         write:
-          minimum: 10
+          minimum: 30
           maximum: 25000
           usage: 0.60
       referralDataLogTable:
