@@ -104,83 +104,83 @@ custom:
       usersTable:
         read:
           minimum: 80
-          maximum: 25000
+          maximum: 9001
           usage: 0.75
         write:
           minimum: 40
-          maximum: 25000
+          maximum: 9001
           usage: 0.60
       charitiesTable:
         read:
           minimum: 5
-          maximum: 25000
+          maximum: 9001
           usage: 0.75
         write:
           minimum: 1
-          maximum: 25000
+          maximum: 9001
           usage: 0.60
       widgetsTable:
         read:
           minimum: 10
-          maximum: 25000
+          maximum: 9001
           usage: 0.75
         write:
           minimum: 1
-          maximum: 25000
+          maximum: 9001
           usage: 0.60
       userLevelsTable:
         read:
           minimum: 5
-          maximum: 25000
+          maximum: 9001
           usage: 0.75
         write:
           minimum: 1
-          maximum: 25000
+          maximum: 9001
           usage: 0.60
       vcDonationLogTable:
         read:
           minimum: 1
-          maximum: 25000
+          maximum: 9001
           usage: 0.75
         write:
           minimum: 5
-          maximum: 25000
+          maximum: 9001
           usage: 0.60
       backgroundImagesTable:
         read:
           minimum: 5
-          maximum: 25000
+          maximum: 9001
           usage: 0.75
         write:
           minimum: 1
-          maximum: 25000
+          maximum: 9001
           usage: 0.60
       userWidgetsTable:
         read:
           minimum: 90
-          maximum: 25000
+          maximum: 9001
           usage: 0.75
         write:
           minimum: 50
-          maximum: 25000
+          maximum: 9001
           usage: 0.60
       userTabsLogTable:
         read:
           minimum: 1
-          maximum: 25000
+          maximum: 9001
           usage: 0.75
         write:
           minimum: 30
-          maximum: 25000
+          maximum: 9001
           usage: 0.60
       referralDataLogTable:
         read:
           minimum: 1
-          maximum: 25000
+          maximum: 9001
           usage: 0.75
         write:
           minimum: 10
-          maximum: 25000
+          maximum: 9001
           usage: 0.60
 
   # https://github.com/sbstjn/serverless-dynamodb-autoscaling
