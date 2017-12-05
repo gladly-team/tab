@@ -22,9 +22,25 @@ class Dashboard extends React.Component {
     super(props)
 
     this.state = {
-      bkgSelectorOpened: false,
-      donateDialogOpened: false,
+      showFeedbackMsg: false,
       errorMessage: null
+    }
+
+    this.feedbackMsgTimer = 0
+  }
+
+  componentDidMount () {
+    const self = this
+    this.feedbackMsgTimer = setTimeout(() => {
+      self.setState({
+        showFeedbackMsg: true
+      })
+    }, 4000)
+  }
+
+  componentWillUnmount () {
+    if (this.feedbackMsgTimer) {
+      clearTimeout(this.feedbackMsgTimer)
     }
   }
 
@@ -97,21 +113,40 @@ class Dashboard extends React.Component {
           : null
         }
         <WidgetsContainer user={user} showError={this.showError.bind(this)} />
-        <Paper
-          style={{
-            position: 'absolute',
-            zIndex: 5,
-            width: 180,
-            bottom: 10,
-            left: 10,
-            background: dashboardTransparentBackground,
-            color: '#FFF',
-            padding: 8
-          }}
-        >
-          <span style={{ fontSize: 14 }}>Problems? Feedback?</span>
-          <p style={{ fontSize: 12 }}>Email us at contact@tabforacause.org and let us know you're using the new version (Tab 3.0).</p>
-        </Paper>
+        { this.state.showFeedbackMsg
+          ? (
+            <FadeInDashboardAnimation>
+              <Paper
+                style={{
+                  position: 'absolute',
+                  zIndex: 5,
+                  width: 180,
+                  bottom: 10,
+                  left: 10,
+                  background: dashboardTransparentBackground,
+                  color: '#FFF',
+                  padding: 8
+                }}
+              >
+                <span style={{ fontSize: 14 }}>Feedback? Problems? </span>
+                <p style={{ fontSize: 12 }}>
+                  <a
+                    style={{
+                      color: '#FFF',
+                      textDecoration: 'underline'
+                    }}
+                    href='https://docs.google.com/forms/d/e/1FAIpQLSdOz0pcuRFdm7U24yArsiHOBDQqtit313PvIk805wkLCQ6N3g/viewform?usp=sf_link'
+                    target='_blank'
+                  >
+                    Take our survey!
+                  </a>
+                  <span> Or, email us at contact@tabforacause.org and let us know you're using the new version (Tab 3.0).</span>
+                </p>
+              </Paper>
+            </FadeInDashboardAnimation>
+            )
+          : null
+        }
         <Ad
           adId='div-gpt-ad-1464385742501-0'
           adSlotId='/43865596/HBTR'
