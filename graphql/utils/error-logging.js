@@ -1,6 +1,6 @@
 
-import uuid from 'uuid'
-import logger, { logErrorWithId } from './logger'
+// import uuid from 'uuid'
+import logger from './logger'
 
 /*
  * Wrap a function and log all exceptions, then re-throw the
@@ -41,17 +41,19 @@ export const formatError = (graphQLError) => {
  * @return {object} The error to send to the client (optionally formatted).
  */
 export const handleError = (graphQLError) => {
-  // Return masked error messages to the client side to
-  // prevent leakage of any sensitive info.
-  // Inspired by graphql-errors package:
-  // https://github.com/kadirahq/graphql-errors/blob/master/lib/index.js#L29
-  const errId = uuid.v4()
-  logErrorWithId(graphQLError, errId)
+  // FIXME: disabled because it's breaking some of the error messages.
+  // // Return masked error messages to the client side to
+  // // prevent leakage of any sensitive info.
+  // // Inspired by graphql-errors package:
+  // // https://github.com/kadirahq/graphql-errors/blob/master/lib/index.js#L29
+  // const errId = uuid.v4()
+  // logErrorWithId(graphQLError, errId)
+  logger.error(graphQLError)
 
   // TODO: probably want to return different message
   // for some error types (e.g. UnauthorizedQueryException)
 
-  // Format and return the error.
-  graphQLError.message = `Internal Error: ${errId}`
+  // // Format and return the error.
+  // graphQLError.message = `Internal Error: ${errId}`
   return formatError(graphQLError)
 }
