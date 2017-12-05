@@ -10,6 +10,7 @@ import HeartIcon from 'material-ui/svg-icons/action/favorite'
 import HeartBorderIcon from 'material-ui/svg-icons/action/favorite-border'
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert'
 import SettingsIcon from 'material-ui/svg-icons/action/settings'
+import HelpIcon from 'material-ui/svg-icons/action/help'
 import PersonAddIcon from 'material-ui/svg-icons/social/person-add'
 import ChartIcon from 'material-ui/svg-icons/editor/insert-chart'
 import ExitToAppIcon from 'material-ui/svg-icons/action/exit-to-app'
@@ -358,6 +359,24 @@ class UserMenu extends React.Component {
                 <ChartIcon color={menuItemIconColor} style={menuItemSvgIconStyle} />
               }
             />
+            <Divider style={{ marginBottom: 0, marginTop: 0 }} />
+            <a
+              href='https://gladly.zendesk.com/hc/en-us/categories/201939608-Tab-for-a-Cause'
+              target='_blank'
+              style={{
+                color: menuItemIconColor,
+                textDecoration: 'none'
+              }}
+            >
+              <MenuItem primaryText='Help' onClick={goToStats}
+                leftIcon={
+                  <HelpIcon color={menuItemIconColor} style={menuItemSvgIconStyle} />
+                }
+                style={{
+                  color: menuItemIconColor
+                }}
+              />
+            </a>
             <Divider style={{ marginBottom: 0, marginTop: 0 }} />
             <MenuItem
               primaryText='Sign Out'

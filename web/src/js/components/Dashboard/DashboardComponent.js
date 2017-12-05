@@ -120,7 +120,7 @@ class Dashboard extends React.Component {
                 style={{
                   position: 'absolute',
                   zIndex: 5,
-                  width: 180,
+                  width: 190,
                   bottom: 10,
                   left: 10,
                   background: dashboardTransparentBackground,
@@ -135,10 +135,10 @@ class Dashboard extends React.Component {
                       color: '#FFF',
                       textDecoration: 'underline'
                     }}
-                    href='https://docs.google.com/forms/d/e/1FAIpQLSdOz0pcuRFdm7U24yArsiHOBDQqtit313PvIk805wkLCQ6N3g/viewform?usp=sf_link'
+                    href='https://gladly.zendesk.com/hc/en-us/categories/201939608-Tab-for-a-Cause'
                     target='_blank'
                   >
-                    Take our survey!
+                    Check out the FAQs!
                   </a>
                   <span> Or, email us at contact@tabforacause.org and let us know you're using the new version (Tab 3.0).</span>
                 </p>
