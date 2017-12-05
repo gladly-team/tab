@@ -372,9 +372,7 @@ class UserMenu extends React.Component {
                 leftIcon={
                   <HelpIcon color={menuItemIconColor} style={menuItemSvgIconStyle} />
                 }
-                style={{
-                  color: menuItemIconColor
-                }}
+                style={menuItemStyle}
               />
             </a>
             <Divider style={{ marginBottom: 0, marginTop: 0 }} />
