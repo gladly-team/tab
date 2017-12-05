@@ -2,10 +2,10 @@
 
 // import { cloneDeep } from 'lodash/lang'
 import {
-  handleError,
+  // handleError,
   formatError
 } from '../error-logging'
-import { logErrorWithId } from '../logger'
+// import { logErrorWithId } from '../logger'
 
 jest.mock('../logger')
 
@@ -32,20 +32,20 @@ afterEach(() => {
 })
 
 describe('error-logging', () => {
-  it('handleError returns an error with a replaced message', () => {
-    const mockErr = getMockErr()
-    const returnedErr = handleError(mockErr)
-    expect(returnedErr.message).toContain('Internal Error: ')
-  })
+  // it('handleError returns an error with a replaced message', () => {
+  //   const mockErr = getMockErr()
+  //   const returnedErr = handleError(mockErr)
+  //   expect(returnedErr.message).toContain('Internal Error: ')
+  // })
 
-  it('handleError logs the error with the ID', () => {
-    const mockErr = getMockErr()
-    handleError(mockErr)
-    expect(logErrorWithId).toHaveBeenCalled()
-    const args = logErrorWithId.mock.calls[0]
-    expect(args[0]).toEqual(mockErr)
-    expect(args[1]).toBeDefined()
-  })
+  // it('handleError logs the error with the ID', () => {
+  //   const mockErr = getMockErr()
+  //   handleError(mockErr)
+  //   expect(logErrorWithId).toHaveBeenCalled()
+  //   const args = logErrorWithId.mock.calls[0]
+  //   expect(args[0]).toEqual(mockErr)
+  //   expect(args[1]).toBeDefined()
+  // })
 
   it('formatError returns the expected format', () => {
     const mockErr = getMockErr()
