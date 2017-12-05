@@ -45,7 +45,7 @@ class ClockWidget extends React.Component {
     var date = moment().format('dddd, MMMM D')
     var time
     if (format24) {
-      time = moment().format('k:mm')
+      time = moment().format('H:mm')
     } else {
       time = moment().format('h:mm')
     }
