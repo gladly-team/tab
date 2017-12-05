@@ -19,6 +19,9 @@ custom:
   SSLCertificateARN: ${env:SSL_CERTIFICATE_ARN}
   # How long Cloudfront should cache HTML at edges.
   CloudfrontHTMLCachingSeconds: 60
+  # TODO: env var
+  websiteOrigin: tabforacause-162639570.us-west-2.elb.amazonaws.com
+  websiteAppName: TabLandingPage
 
 resources:
   Resources:
@@ -72,6 +75,13 @@ resources:
                 HTTPPort: 80
                 HTTPSPort: 443
                 OriginProtocolPolicy: https-only
+            # Main website / landing page.
+            - DomainName: ${self:custom.websiteOrigin}
+              Id: ${self:custom.websiteAppName}
+              CustomOriginConfig:
+                HTTPPort: 80
+                HTTPSPort: 443
+                OriginProtocolPolicy: https-only
           Enabled: true
           DefaultRootObject: index.html
           Aliases:
@@ -95,8 +105,10 @@ resources:
           # cache files. For browser caching, we must still set Cache-Control headers
           # on the origin server (S3).
           CacheBehaviors:
-            # Do not cache HTML for a long time.
-            - PathPattern: '*.html'
+            # Do not cache app HTML for a long time.
+            # PathPattern docs:
+            #   https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesPathPattern
+            - PathPattern: 'tab/*.html'
               # Short HTML caching for some spage speed gains and
               # reduced request volume to S3 origin.
               MinTTL: ${self:custom.CloudfrontHTMLCachingSeconds}
@@ -113,6 +125,22 @@ resources:
               # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html
               Compress: true
               ViewerProtocolPolicy: redirect-to-https
+            # Cache app (non-HTML) static files for a long time.
+            - PathPattern: 'tab/*'
+              MinTTL: 31536000 # one year
+              MaxTTL: 63072000 # two years
+              AllowedMethods:
+                - HEAD
+                - GET
+                - OPTIONS
+              TargetOriginId: ${self:custom.webAppName}
+              ForwardedValues:
+                QueryString: false
+                Cookies:
+                  Forward: none
+              Compress: true
+              ViewerProtocolPolicy: redirect-to-https
+            # GraphQL
             - PathPattern: 'graphql*'
               MinTTL: 0
               MaxTTL: 0
@@ -135,19 +163,31 @@ resources:
                 Cookies:
                   Forward: none
               ViewerProtocolPolicy: redirect-to-https
-            # Cache (non-HTML) static files for a long time.
+            # Send all remaining traffic to our main website.
             - PathPattern: '*'
-              MinTTL: 31536000 # one year
-              MaxTTL: 63072000 # two years
+              # Note from the AWS console:
+              # "When you choose 'All' for 'Cache based on selected request headers',
+              #   CloudFront doesnt cache your objects. In that configuration, Minimum TTL
+              #   must be 0 seconds."
+              MinTTL: 0
+              MaxTTL: 0
               AllowedMethods:
                 - HEAD
+                - DELETE
+                - POST
                 - GET
                 - OPTIONS
-              TargetOriginId: ${self:custom.webAppName}
+                - PUT
+                - PATCH
+              TargetOriginId: ${self:custom.websiteAppName}
               ForwardedValues:
-                QueryString: false
+                # Forward all values to origin
+                QueryString: true
                 Cookies:
-                  Forward: none
+                  Forward: all
+                Headers:
+                  - "*"
+              # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html
               Compress: true
               ViewerProtocolPolicy: redirect-to-https
           DefaultCacheBehavior:
