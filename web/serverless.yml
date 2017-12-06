@@ -87,7 +87,6 @@ resources:
           # DefaultRootObject: index.html
           Aliases:
             - ${self:custom.cloudfrontDomainAlias}
-            - tab.gladly.io
           # Always return the single page app and let it handle routing.
           # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HTTPStatusCodes.html#HTTPStatusCodes-custom-error-pages
           CustomErrorResponses:
