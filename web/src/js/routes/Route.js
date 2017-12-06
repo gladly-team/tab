@@ -19,6 +19,7 @@ import ProfileDonateHearts from '../components/Settings/Profile/ProfileDonateHea
 import ProfileInviteFriend from '../components/Settings/Profile/ProfileInviteFriendView'
 
 export default (
+  // TODO: Show 404 page from IndexRedirect
   <Route path='/' component={BaseContainer}>
     <Route path='tab' component={App}>
       <IndexRoute component={DashboardView} />
