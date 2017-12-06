@@ -120,12 +120,12 @@ class Dashboard extends React.Component {
                 style={{
                   position: 'absolute',
                   zIndex: 5,
-                  width: 190,
+                  width: 170,
                   bottom: 10,
                   left: 10,
                   background: dashboardTransparentBackground,
                   color: '#FFF',
-                  padding: 8
+                  padding: 12
                 }}
               >
                 <span style={{ fontSize: 14 }}>Feedback? Problems? </span>
@@ -135,12 +135,19 @@ class Dashboard extends React.Component {
                       color: '#FFF',
                       textDecoration: 'underline'
                     }}
-                    href='https://gladly.zendesk.com/hc/en-us/categories/201939608-Tab-for-a-Cause'
+                    href='https://docs.google.com/forms/d/e/1FAIpQLSdOz0pcuRFdm7U24yArsiHOBDQqtit313PvIk805wkLCQ6N3g/viewform?usp=sf_link'
                     target='_blank'
                   >
-                    Check out the FAQs!
-                  </a>
-                  <span> Or, email us at contact@tabforacause.org and let us know you're using the new version (Tab 3.0).</span>
+                  Share your feedback
+                  </a> or <a
+                    style={{
+                      color: '#FFF',
+                      textDecoration: 'underline'
+                    }}
+                    href='https://gladly.zendesk.com/hc/en-us/categories/201939608-Tab-for-a-Cause'
+                    target='_blank'
+                  >visit our help page
+                  </a>!
                 </p>
               </Paper>
             </FadeInDashboardAnimation>
