@@ -20,7 +20,7 @@ custom:
   # How long Cloudfront should cache HTML at edges.
   CloudfrontHTMLCachingSeconds: 60
   # TODO: env var
-  websiteOrigin: tabforacause-162639570.us-west-2.elb.amazonaws.com
+  websiteOrigin: tab-website.gladly.io
   websiteAppName: TabLandingPage
 
 resources:
