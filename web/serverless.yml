@@ -127,7 +127,7 @@ resources:
               # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html
               Compress: true
               ViewerProtocolPolicy: redirect-to-https
-            # Cache app (non-HTML) static files for a long time.
+            # App (non-HTML) static files
             - PathPattern: 'tab/*'
               MinTTL: 31536000 # one year
               MaxTTL: 63072000 # two years
@@ -142,7 +142,7 @@ resources:
                   Forward: none
               Compress: true
               ViewerProtocolPolicy: redirect-to-https
-            # Handle the 404 CustomErrorResponse by showing our single page app.
+            # Handle the 404 CustomErrorResponse by showing our single page app
             - PathPattern: 'index.html'
               MinTTL: ${self:custom.CloudfrontHTMLCachingSeconds}
               MaxTTL: ${self:custom.CloudfrontHTMLCachingSeconds}
@@ -157,25 +157,10 @@ resources:
                   Forward: none
               Compress: true
               ViewerProtocolPolicy: redirect-to-https
-            # Static files path.
+            # Static files path
             - PathPattern: 'static/*'
               MinTTL: 31536000 # one year
               MaxTTL: 63072000 # two years
-              AllowedMethods:
-                - HEAD
-                - GET
-                - OPTIONS
-              TargetOriginId: ${self:custom.webAppName}
-              ForwardedValues:
-                QueryString: false
-                Cookies:
-                  Forward: none
-              Compress: true
-              ViewerProtocolPolicy: redirect-to-https
-            # Handle the 404 CustomErrorResponse by showing our single page app.
-            - PathPattern: 'index.html'
-              MinTTL: ${self:custom.CloudfrontHTMLCachingSeconds}
-              MaxTTL: ${self:custom.CloudfrontHTMLCachingSeconds}
               AllowedMethods:
                 - HEAD
                 - GET
@@ -210,7 +195,7 @@ resources:
                 Cookies:
                   Forward: none
               ViewerProtocolPolicy: redirect-to-https
-            # Send all remaining traffic to our main website.
+            # Send all remaining traffic to our main website
             - PathPattern: '*'
               # Note from the AWS console:
               # "When you choose 'All' for 'Cache based on selected request headers',
