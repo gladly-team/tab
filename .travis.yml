@@ -106,14 +106,14 @@ env:
   # Web app
   - PROD_WEBSITE_DOMAIN=tab.gladly.io # user-visible domain, used in app JS
   - PROD_PUBLIC_PATH=https://prod-tab2017.gladly.io/
-  - PROD_GRAPHQL_ENDPOINT=prod-tab2017.gladly.io/graphql/
+  - PROD_GRAPHQL_ENDPOINT=tab.gladly.io/graphql/
   - PROD_FIREBASE_API_KEY=AIzaSyDZKbk3DzJwA9nWLlpt6hjqhTm6WY-WOnk
   - PROD_FIREBASE_AUTH_DOMAIN=tab-for-a-cause.firebaseapp.com
   - PROD_FIREBASE_DATABASE_URL=https://tab-for-a-cause.firebaseio.com
   - PROD_FIREBASE_PROJECT_ID=tab-for-a-cause
   # - PROD_STATIC_FILES_ENDPOINT=https://d2dsqma4win6dv.cloudfront.net
-  - PROD_STATIC_FILES_ENDPOINT=//prod-tab2017.gladly.io
-  - PROD_CLOUDFRONT_DOMAIN_ALIAS=prod-tab2017.gladly.io
+  - PROD_STATIC_FILES_ENDPOINT=//tab.gladly.io
+  - PROD_CLOUDFRONT_DOMAIN_ALIAS=tab.gladly.io
   - PROD_ADS_ENABLED=true
   # Media
   - PROD_CLOUDFRONT_MEDIA_DOMAIN_ALIAS=prod-tab2017-media.gladly.io
