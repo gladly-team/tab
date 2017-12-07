@@ -44,6 +44,13 @@ export default function () {
         }
       },
       {
+        bidder: 'openx',
+        params: {
+          unit: '43865596',
+          delDomain: 'tabforacause-d.openx.net'
+        }
+      },
+      {
         bidder: 'brealtime',
         params: {
           placementId: '10955690'
@@ -83,6 +90,13 @@ export default function () {
         bidder: 'sovrn',
         params: {
           tagid: '438918'
+        }
+      },
+      {
+        bidder: 'openx',
+        params: {
+          unit: '43865596',
+          delDomain: 'tabforacause-d.openx.net'
         }
       },
       {

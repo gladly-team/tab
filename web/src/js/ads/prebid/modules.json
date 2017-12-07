@@ -1,6 +1,7 @@
 [
     "aolBidAdapter",
     "appnexusBidAdapter",
+    "openxBidAdapter",
     "pulsepointBidAdapter",
     "sonobiBidAdapter",
     "sovrnBidAdapter"
