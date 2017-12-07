@@ -3,16 +3,17 @@
 import moment from 'moment'
 import VCDonationModel from '../VCDonationModel'
 import donateVc from '../donateVc'
-import addVc from '../../users/addVc'
+import UserModel from '../../users/UserModel'
 import addVcDonatedAllTime from '../../users/addVcDonatedAllTime'
 import {
+  DatabaseOperation,
   getMockUserContext,
   getMockUserInstance,
-  mockDate
+  mockDate,
+  setMockDBResponse
 } from '../../test-utils'
 
 jest.mock('../../databaseClient')
-jest.mock('../../users/addVc')
 jest.mock('../../users/addVcDonatedAllTime')
 
 const userContext = getMockUserContext()
@@ -30,7 +31,7 @@ afterEach(() => {
 })
 
 describe('donateVc', () => {
-  it('subtracts the donated VC from the user', async () => {
+  it('calls the database to subtract the donated VC from the user', async () => {
     const userId = userContext.id
     const charityId = 'bb5082cc-151a-4a9a-9289-06906670fd4e'
     const vcToDonate = 14
@@ -38,8 +39,26 @@ describe('donateVc', () => {
       .mockImplementation(() => {
         return {}
       })
+    const updateMethod = jest.spyOn(UserModel, 'update')
+      .mockImplementationOnce(() => {
+        return getMockUserInstance()
+      })
     await donateVc(userContext, userId, charityId, vcToDonate)
-    expect(addVc).toHaveBeenCalledWith(userContext, userId, -14)
+    expect(updateMethod).toHaveBeenCalledWith(userContext,
+      {
+        id: userId,
+        vcCurrent: {$add: -vcToDonate}
+      },
+      {
+        ConditionExpression: '#vcCurrent >= :vcToDonate',
+        ExpressionAttributeNames: {
+          '#vcCurrent': 'vcCurrent'
+        },
+        ExpressionAttributeValues: {
+          ':vcToDonate': vcToDonate
+        }
+      }
+    )
   })
 
   it('adds the donated VC to the all time count for that user', async () => {
@@ -50,7 +69,7 @@ describe('donateVc', () => {
     expect(addVcDonatedAllTime).toHaveBeenCalledWith(userContext, userId, 14)
   })
 
-  it('calls the database as expected', async () => {
+  it('calls the database as expected to create the VcDonation item', async () => {
     const userId = userContext.id
     const charityId = 'bb5082cc-151a-4a9a-9289-06906670fd4e'
     const vcToDonate = 16
@@ -59,20 +78,44 @@ describe('donateVc', () => {
 
     // Mock return values
     const expectedReturnedUser = getMockUserInstance()
-    addVc.mockImplementationOnce(() => {
-      return expectedReturnedUser
+    jest.spyOn(UserModel, 'update')
+    .mockImplementationOnce(() => {
+      return getMockUserInstance()
     })
     addVcDonatedAllTime.mockImplementationOnce(() => {
       return expectedReturnedUser
     })
 
-    const returnedUser = await donateVc(userContext, userId, charityId, vcToDonate)
+    const returnVal = await donateVc(userContext, userId, charityId, vcToDonate)
     expect(vcDonationCreateMethod).toHaveBeenCalledWith(userContext, {
       userId: userId,
       timestamp: moment.utc().toISOString(),
       charityId: charityId,
       vcDonated: vcToDonate
     })
-    expect(returnedUser).toEqual(expectedReturnedUser)
+    expect(returnVal).toEqual({
+      user: expectedReturnedUser,
+      errors: null
+    })
+  })
+
+  it('returns an error if DynamoDB client throws ConditionalCheckFailedException', async () => {
+    const userId = userContext.id
+    const charityId = 'bb5082cc-151a-4a9a-9289-06906670fd4e'
+    const vcToDonate = 4000000
+
+    setMockDBResponse(
+      DatabaseOperation.UPDATE,
+      null,
+      { code: 'ConditionalCheckFailedException' } // simple mock error
+    )
+    const returnedVal = await donateVc(userContext, userId, charityId, vcToDonate)
+    expect(returnedVal).toEqual({
+      user: null,
+      errors: [{
+        code: 'VC_INSUFFICIENT_TO_DONATE',
+        message: `The user did not have the required ${vcToDonate} VC`
+      }]
+    })
   })
 })

@@ -130,6 +130,7 @@ input DonateVcInput {
 
 type DonateVcPayload {
   user: User
+  errors: [CustomError]
   clientMutationId: String
 }
 
