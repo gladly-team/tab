@@ -17,6 +17,7 @@ class Charity extends React.Component {
     this.state = {
       amountToDonate: 1,
       customAmountSliderOpen: false,
+      donateInProgress: false,
       thanksDialog: false
     }
   }
@@ -62,7 +63,8 @@ class Charity extends React.Component {
 
   thanksDialogShow () {
     this.setState({
-      thanksDialog: true
+      thanksDialog: true,
+      donateInProgress: false
     })
   }
 
@@ -74,12 +76,18 @@ class Charity extends React.Component {
 
   heartsDonationError () {
     this.props.showError('Oops, we could not donate your Hearts just now :(')
+    this.setState({
+      donateInProgress: false
+    })
   }
 
   donateHearts () {
-    if (this.state.amountToDonate <= 0) {
+    if (this.state.amountToDonate <= 0 || this.state.donateInProgress) {
       return
     }
+    this.setState({
+      donateInProgress: true
+    })
     const { charity, user } = this.props
     const self = this
     DonateVcMutation.commit(
@@ -212,7 +220,7 @@ class Charity extends React.Component {
             <RaisedButton
               label={`Donate ${this.state.amountToDonate} ${heartsText}`}
               primary
-              disabled={this.state.amountToDonate <= 0}
+              disabled={this.state.amountToDonate <= 0 || this.state.donateInProgress}
               onClick={this.donateHearts.bind(this)} />
             <span
               style={{
