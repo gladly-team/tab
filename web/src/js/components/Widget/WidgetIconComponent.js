@@ -38,11 +38,12 @@ class WidgetIcon extends React.Component {
     }
     var activeStyle = {}
     if (this.props.active) {
+      const boxShadow = 'rgba(0, 0, 0, 0.3) 0px 19px 60px, rgba(0, 0, 0, 0.16) 0px 8px 10px'
       activeStyle = {
         background: appTheme.palette.primary1Color,
-        boxShadow: 'rgba(0, 0, 0, 0.3) 0px 19px 60px, rgba(0, 0, 0, 0.22) 0px 15px 20px',
+        boxShadow: boxShadow,
         transform: 'scale(1.14)',
-        WebkitBoxShadow: 'rgba(0, 0, 0, 0.3) 0px 19px 60px, rgba(0, 0, 0, 0.22) 0px 15px 20px'
+        WebkitBoxShadow: boxShadow
       }
     }
     const iconButtonStyle = Object.assign({}, style.container, activeStyle)

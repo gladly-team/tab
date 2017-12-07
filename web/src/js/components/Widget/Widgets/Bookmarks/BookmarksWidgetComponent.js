@@ -7,6 +7,10 @@ import EmptyWidgetMsg from '../../EmptyWidgetMsg'
 import BookmarkChip from './BookmarkChip'
 import AddBookmarkForm from './AddBookmarkForm'
 import UpdateWidgetDataMutation from 'mutations/UpdateWidgetDataMutation'
+import Paper from 'material-ui/Paper'
+import {
+  alternateAccentColor
+} from 'theme/default'
 
 class BookmarksWidget extends React.Component {
   constructor (props) {
@@ -105,6 +109,35 @@ class BookmarksWidget extends React.Component {
     return (<WidgetSharedSpace
       containerStyle={sharedSpaceStyle}>
       <div style={bookmarksContainer}>
+        <Paper
+          zDepth={0}
+          style={{
+            width: 200,
+            cursor: 'default',
+            position: 'relative',
+            overflow: 'hidden',
+            justifyContent: 'center',
+            alignItems: 'space-between',
+            fontSize: 14,
+            margin: 5,
+            // background: appTheme.palette.primary1Color,
+            background: alternateAccentColor,
+            color: '#FFF',
+            padding: '12px 8px'
+          }}
+        >
+          <span>Improvements to bookmarks coming soon. </span>
+          <a
+            href='https://www.facebook.com/notes/tab-for-a-cause/the-new-version-of-tab-for-a-cause-is-live-heres-what-tabbers-are-saying-about-i/1653202238056190/'
+            target='_top'
+            style={{
+              color: '#FFF',
+              textDecoration: 'underline'
+            }}
+          >
+            Learn more
+          </a>
+        </Paper>
         <AddBookmarkForm
           addBookmark={this.addBookmark.bind(this)} />
         <WidgetScrollSection>
