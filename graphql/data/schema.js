@@ -433,7 +433,11 @@ const donateVcMutation = mutationWithClientMutationId({
   outputFields: {
     user: {
       type: userType,
-      resolve: user => user
+      resolve: data => data.user
+    },
+    errors: {
+      type: new GraphQLList(customErrorType),
+      resolve: data => data.errors
     }
   },
   mutateAndGetPayload: ({userId, charityId, vc}, context) => {

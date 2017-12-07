@@ -16,8 +16,18 @@ import jwtDecode from 'jwt-decode'
  */
 function mockAuthorizer (authorizationToken) {
   if (!authorizationToken) {
+    const defaultUserId = 'abcdefghijklmno'
+    const defaultEmail = 'kevin@example.com'
     console.warn('Warning: dev user is missing an Authorization token.')
-    return {}
+    console.warn(`Using default user with id "${defaultUserId}"" and email "${defaultEmail}".`)
+    // Default user. Helpful for GraphiQL until we support it with
+    // an Authorization header.
+    // See: https://github.com/graphql/graphiql/issues/59
+    return {
+      id: defaultUserId,
+      email: defaultEmail,
+      email_verified: true
+    }
   }
   const parsedJwt = jwtDecode(authorizationToken)
   return {

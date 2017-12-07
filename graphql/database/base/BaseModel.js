@@ -363,7 +363,16 @@ class BaseModel {
       })
   }
 
-  static async update (userContext, item) {
+  /**
+   * Update an item.
+   * @param {Object} userContext - The authed user context
+   * @param {Object} item - The item to create
+   * @param {(Object|null)} params - The update options, including conditional
+   *   update expressions. See:
+   *   http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html#Expressions.ConditionExpressions.SimpleComparisons
+   * @return {Object} item - The updated item
+  */
+  static async update (userContext, item, params = {}) {
     // logger.debug(`Updating item in ${this.tableName}: ${JSON.stringify(item, null, 2)}`)
     const self = this
     const hashKey = item[this.hashKey]
@@ -375,7 +384,8 @@ class BaseModel {
     if (!this.isQueryAuthorized(userContext, 'update', hashKey, rangeKey, item)) {
       return Promise.reject(new UnauthorizedQueryException())
     }
-    return this.dynogelsModel.updateAsync(item, { ReturnValues: 'ALL_NEW' })
+    const options = Object.assign({}, params, { ReturnValues: 'ALL_NEW' })
+    return this.dynogelsModel.updateAsync(item, options)
       .then(data => self.deserialize(data))
       .catch(err => {
         throw err
