@@ -423,6 +423,58 @@ describe('BaseModel queries', () => {
     expect(updatedItem).toEqual(expectedReturn)
   })
 
+  it('passes additional `update` params to the client', async () => {
+    setModelPermissions(ExampleModel, {
+      update: () => true
+    })
+
+    // Set mock response from DB client.
+    const item = Object.assign({}, fixturesA[0])
+    const expectedReturn = Object.assign({}, item, {
+      updated: moment.utc().toISOString()
+    })
+    const dbQueryMock = setMockDBResponse(
+      DatabaseOperation.UPDATE,
+      {
+        Attributes: expectedReturn
+      }
+    )
+
+    // 'updated' field should be automatically updated.
+    const itemToUpdate = removeCreatedAndUpdatedFields(item)
+
+    // Pass additional params (a conditional update expresssion)
+    const params = {}
+    params.ConditionExpression = '#name = :newName'
+    params.ExpressionAttributeNames = { '#name': 'name' }
+    params.ExpressionAttributeValues = {':newName': 'Bobert'}
+    const updatedItem = await ExampleModel.update(user, itemToUpdate, params)
+
+    // Verify DB params.
+    const dbParams = dbQueryMock.mock.calls[0][0]
+    expect(dbParams).toEqual({
+      TableName: ExampleModel.tableName,
+      Key: {
+        id: item.id
+      },
+      ReturnValues: 'ALL_NEW',
+      'ConditionExpression': '#name = :newName',
+      ExpressionAttributeValues: {
+        ':name': item.name,
+        ':newName': 'Bobert',
+        ':updated': moment.utc().toISOString()
+      },
+      ExpressionAttributeNames: {
+        '#name': 'name',
+        '#updated': 'updated'
+      },
+      UpdateExpression: 'SET #name = :name, #updated = :updated'
+    })
+
+    // Verify returned object.
+    expect(updatedItem).toEqual(expectedReturn)
+  })
+
   it('fails with unauthorized `update`', async () => {
     expect.assertions(1)
     setModelPermissions(ExampleModel, {
