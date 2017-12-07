@@ -8,7 +8,7 @@ import BookmarkChip from './BookmarkChip'
 import AddBookmarkForm from './AddBookmarkForm'
 import UpdateWidgetDataMutation from 'mutations/UpdateWidgetDataMutation'
 import Paper from 'material-ui/Paper'
-import appTheme, {
+import {
   alternateAccentColor
 } from 'theme/default'
 
