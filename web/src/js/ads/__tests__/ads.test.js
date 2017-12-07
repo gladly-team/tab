@@ -6,14 +6,12 @@ const mockPrebidConfig = jest.fn()
 const mockAmazonBidder = jest.fn()
 const mockGoogleTagManager = jest.fn()
 const mockGoogleAdSlotDefinitions = jest.fn()
-const mockOpenXconfig = jest.fn()
 jest.mock('../adsEnabledStatus', () => mockAdsEnabledStatus)
 jest.mock('../prebid/prebidModule', () => mockPrebidModule)
 jest.mock('../prebid/prebidConfig', () => mockPrebidConfig)
 jest.mock('../amazon/amazonBidder', () => mockAmazonBidder)
 jest.mock('../google/googleTagManager', () => mockGoogleTagManager)
 jest.mock('../google/googleAdSlotDefinitions', () => mockGoogleAdSlotDefinitions)
-jest.mock('../openx/openxConfig', () => mockOpenXconfig)
 
 beforeEach(() => {
   jest.resetModules()
@@ -28,7 +26,6 @@ describe('ads script', function () {
     expect(mockAmazonBidder).not.toHaveBeenCalled()
     expect(mockGoogleTagManager).not.toHaveBeenCalled()
     expect(mockGoogleAdSlotDefinitions).not.toHaveBeenCalled()
-    expect(mockOpenXconfig).not.toHaveBeenCalled()
   })
 
   it('calls ads scripts dependencies when ads are enabled', () => {
@@ -39,6 +36,5 @@ describe('ads script', function () {
     expect(mockAmazonBidder).toHaveBeenCalled()
     expect(mockGoogleTagManager).toHaveBeenCalled()
     expect(mockGoogleAdSlotDefinitions).toHaveBeenCalled()
-    expect(mockOpenXconfig).toHaveBeenCalled()
   })
 })
