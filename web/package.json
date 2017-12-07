@@ -65,7 +65,7 @@
     "object-assign": "^4.1.1",
     "path-exists": "^3.0.0",
     "postcss-loader": "^2.0.5",
-    "prebid.js": "^0.30.1",
+    "prebid.js": "0.34.1",
     "precss": "^1.4.0",
     "promise": "7.1.1",
     "prop-types": "^15.5.10",
