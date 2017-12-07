@@ -5,7 +5,7 @@ import { getPrebidPbjs } from './getPrebidPbjs'
 export default function () {
   // Prebid config section START
   // Make sure this is inserted before your GPT tag.
-  const prebidTimeoutMs = 800
+  const prebidTimeoutMs = 1000
 
   // Note: brealtime is automatically aliased by the
   // AppNexus bid adapter.

@@ -1,7 +1,7 @@
 /* globals apstag */
 
 // Should be the same as the value in prebidConfig
-const PREBID_TIMEOUT = 800
+const PREBID_TIMEOUT = 1000
 
 export default function () {
   (function (a9, a, p, s, t, A, g) {
