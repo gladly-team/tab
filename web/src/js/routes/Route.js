@@ -21,7 +21,7 @@ import ProfileInviteFriend from '../components/Settings/Profile/ProfileInviteFri
 export default (
   // TODO: Show 404 page from IndexRedirect
   <Route path='/' component={BaseContainer}>
-    <Route path='tab' component={App}>
+    <Route path='newtab' component={App}>
       <IndexRoute component={DashboardView} />
       <Route path='settings' component={SettingsComponent}>
         <IndexRoute component={WidgetsSettingsView} />
@@ -40,8 +40,8 @@ export default (
         <Route path='verify-email' component={VerifyEmailMessage} />
         <Route path='username' component={EnterUsernameForm} />
       </Route>
-      <Redirect from='*' to='/tab/' />
+      <Redirect from='*' to='/newtab/' />
     </Route>
-    <IndexRedirect from='*' to='/tab/' />
+    <IndexRedirect from='*' to='/newtab/' />
   </Route>
 )

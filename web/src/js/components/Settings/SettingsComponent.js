@@ -3,6 +3,11 @@ import PropTypes from 'prop-types'
 import Divider from 'material-ui/Divider'
 import SettingsPageComponent from './SettingsPageComponent'
 import SettingsMenuItem from './SettingsMenuItem'
+import {
+  backgroundSettingsURL,
+  statsURL,
+  widgetSettingsURL
+} from 'navigation/navigation'
 
 class Settings extends React.Component {
   render () {
@@ -12,18 +17,18 @@ class Settings extends React.Component {
         menuItems={[
           <SettingsMenuItem
             key={'widgets'}
-            to={'/tab/settings/widgets/'}>
+            to={widgetSettingsURL}>
               Widgets
           </SettingsMenuItem>,
           <SettingsMenuItem
             key={'background'}
-            to={'/tab/settings/background/'}>
+            to={backgroundSettingsURL}>
               Background
           </SettingsMenuItem>,
           <Divider key={'divider'} />,
           <SettingsMenuItem
             key={'profile'}
-            to={'/tab/profile/stats/'}>
+            to={statsURL}>
               Your Profile
           </SettingsMenuItem>
         ]}

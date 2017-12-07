@@ -20,23 +20,25 @@ export const absoluteUrl = (path) => {
 
 // ROUTES
 
-export const dashboardURL = '/tab/'
+export const dashboardURL = '/newtab/'
 
 // Auth routes
-export const loginURL = '/tab/auth/'
-export const verifyEmailURL = '/tab/auth/verify-email/'
-export const enterUsernameURL = '/tab/auth/username/'
+export const loginURL = '/newtab/auth/'
+export const verifyEmailURL = '/newtab/auth/verify-email/'
+export const enterUsernameURL = '/newtab/auth/username/'
 
 // Settings and profile
-export const settingsURL = '/tab/settings/widgets/'
-export const donateURL = '/tab/profile/donate/'
-export const statsURL = '/tab/profile/stats/'
-export const inviteFriendsURL = '/tab/profile/invite/'
+export const settingsURL = '/newtab/settings/widgets/'
+export const widgetSettingsURL = '/newtab/settings/widgets/'
+export const backgroundSettingsURL = '/newtab/settings/background/'
+export const donateURL = '/newtab/profile/donate/'
+export const statsURL = '/newtab/profile/stats/'
+export const inviteFriendsURL = '/newtab/profile/invite/'
 
 // CONVENIENCE FUNCTIONS
 
 export const goToHome = () => {
-  goTo('/tab/')
+  goTo('/newtab/')
 }
 
 export const goToLogin = () => {

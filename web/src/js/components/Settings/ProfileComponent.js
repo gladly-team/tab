@@ -2,6 +2,12 @@ import React from 'react'
 import Divider from 'material-ui/Divider'
 import SettingsPageComponent from './SettingsPageComponent'
 import SettingsMenuItem from './SettingsMenuItem'
+import {
+  donateURL,
+  inviteFriendsURL,
+  statsURL,
+  settingsURL
+} from 'navigation/navigation'
 
 class Profile extends React.Component {
   render () {
@@ -11,23 +17,23 @@ class Profile extends React.Component {
         menuItems={[
           <SettingsMenuItem
             key={'stats'}
-            to={'/tab/profile/stats/'}>
+            to={statsURL}>
               Your Stats
           </SettingsMenuItem>,
           <SettingsMenuItem
             key={'donate'}
-            to={'/tab/profile/donate/'}>
+            to={donateURL}>
               Donate Hearts
           </SettingsMenuItem>,
           <SettingsMenuItem
             key={'invite'}
-            to={'/tab/profile/invite/'}>
+            to={inviteFriendsURL}>
               Invite Friends
           </SettingsMenuItem>,
           <Divider key={'divider'} />,
           <SettingsMenuItem
             key={'settings'}
-            to={'/tab/settings/widgets/'}>
+            to={settingsURL}>
               Settings
           </SettingsMenuItem>
         ]}
