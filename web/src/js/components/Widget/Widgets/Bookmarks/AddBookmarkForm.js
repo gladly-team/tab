@@ -122,6 +122,9 @@ class AddBookmarkForm extends React.Component {
         onAddItemClick={this.openForm.bind(this)}
         onCancelAddItemClick={this.closeForm.bind(this)}
         onItemCreatedClick={this.create.bind(this)}
+        showEditOption
+        onEditModeToggle={this.props.onEditModeToggle}
+        editMode={this.props.editMode}
         widgetAddItemForm={
           <span
             key={'widget-add-form-elem'}
@@ -164,7 +167,9 @@ class AddBookmarkForm extends React.Component {
 }
 
 AddBookmarkForm.propTypes = {
-  addBookmark: PropTypes.func.isRequired
+  addBookmark: PropTypes.func.isRequired,
+  onEditModeToggle: PropTypes.func.isRequired,
+  editMode: PropTypes.bool.isRequired
 }
 
 AddBookmarkForm.defaultProps = {

@@ -4,6 +4,8 @@ import Measure from 'react-measure'
 import Paper from 'material-ui/Paper'
 import DeleteIcon from 'material-ui/svg-icons/navigation/cancel'
 import CheckCircleIcon from 'material-ui/svg-icons/action/check-circle'
+import LockClosedIcon from 'material-ui/svg-icons/action/lock-outline'
+import LockOpenIcon from 'material-ui/svg-icons/action/lock-open'
 import AddCircleIcon from 'material-ui/svg-icons/content/add-circle'
 import appTheme, {
   widgetEditButtonInactive,
@@ -93,11 +95,43 @@ class EditWidgetChip extends React.Component {
       top: 4,
       right: 8
     }
-    const expandedIconStyle = {
+
+    const iconBaseStyle = {
       cursor: 'pointer',
-      hoverColor: appTheme.fontIcon.color,
       color: 'rgba(255,255,255,.3)',
       display: 'inline-block'
+    }
+
+    var editIcon = null
+    if (this.props.showEditOption) {
+      if (this.props.editMode) {
+        editIcon = (
+          <LockOpenIcon
+            onClick={() => {
+              this.props.onEditModeToggle(false)
+            }}
+            hoverColor={widgetEditButtonHover}
+            style={Object.assign({}, iconBaseStyle, {
+              color: widgetEditButtonHover,
+              float: 'right',
+              marginLeft: 4
+            })}
+            />
+          )
+      } else {
+        editIcon = (
+          <LockClosedIcon
+            onClick={() => {
+              this.props.onEditModeToggle(true)
+            }}
+            hoverColor={widgetEditButtonHover}
+            style={Object.assign({}, iconBaseStyle, {
+              float: 'right',
+              marginLeft: 4
+            })}
+          />
+        )
+      }
     }
     const icons = this.props.open
       ? (
@@ -108,7 +142,7 @@ class EditWidgetChip extends React.Component {
           <DeleteIcon
             color={widgetEditButtonInactive}
             hoverColor={widgetEditButtonHover}
-            style={expandedIconStyle}
+            style={iconBaseStyle}
             onClick={() => {
               this.props.onCancelAddItemClick()
             }}
@@ -116,7 +150,7 @@ class EditWidgetChip extends React.Component {
           <CheckCircleIcon
             color={widgetEditButtonInactive}
             hoverColor={widgetEditButtonHover}
-            style={expandedIconStyle}
+            style={iconBaseStyle}
             onClick={() => {
               this.props.onItemCreatedClick()
             }}
@@ -128,18 +162,15 @@ class EditWidgetChip extends React.Component {
           key={'icons-closed'}
           style={iconContainerStyle}
         >
+          {editIcon}
           <AddCircleIcon
             key={'widget-add-icon'}
             color={widgetEditButtonInactive}
             hoverColor={widgetEditButtonHover}
-            style={{
-              cursor: 'pointer',
+            style={Object.assign({}, iconBaseStyle, {
               float: 'right',
-              marginLeft: 4,
-              hoverColor: appTheme.fontIcon.color,
-              color: 'rgba(255,255,255,.3)',
-              display: 'inline-block'
-            }}
+              marginLeft: 4
+            })}
             onClick={() => {
               this.props.onAddItemClick()
             }}
@@ -149,7 +180,7 @@ class EditWidgetChip extends React.Component {
 
     // Sizing
     const titleHeight = 32
-    const iconWidth = 36
+    const iconWidth = this.props.showEditOption ? 62 : 36
     const expandedWidth = 290
     const width = (
       this.props.open
@@ -212,6 +243,12 @@ EditWidgetChip.propTypes = {
   widgetName: PropTypes.string.isRequired,
   // The form to fill when adding a new widget item.
   widgetAddItemForm: PropTypes.element,
+  // Whether or not there's an "edit mode" button.
+  showEditOption: PropTypes.bool,
+  // Called when enabling/disabling edit mode.
+  onEditModeToggle: PropTypes.func,
+  // Whether we're currently in edit mode.
+  editMode: PropTypes.bool,
   // Called when clicking to add a new item.
   onAddItemClick: PropTypes.func,
   // Called when exiting the form without creating a
@@ -224,6 +261,9 @@ EditWidgetChip.propTypes = {
 
 EditWidgetChip.defaultProps = {
   open: false,
+  showEditOption: false,
+  onEditModeToggle: () => {},
+  editMode: false,
   onAddItemClick: () => {},
   onCancelAddItemClick: () => {},
   onItemCreatedClick: () => {}

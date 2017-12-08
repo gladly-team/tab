@@ -16,7 +16,8 @@ class BookmarksWidget extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      bookmarks: []
+      bookmarks: [],
+      editMode: false
     }
   }
 
@@ -75,6 +76,12 @@ class BookmarksWidget extends React.Component {
       })
     }, () => {
       this.updateWidget(this.state.bookmarks)
+    })
+  }
+
+  onEditModeToggle (editModeEnabled) {
+    this.setState({
+      editMode: editModeEnabled
     })
   }
 
@@ -139,17 +146,23 @@ class BookmarksWidget extends React.Component {
           </a>
         </Paper>
         <AddBookmarkForm
-          addBookmark={this.addBookmark.bind(this)} />
+          addBookmark={this.addBookmark.bind(this)}
+          editMode={this.state.editMode}
+          onEditModeToggle={this.onEditModeToggle.bind(this)}
+          />
         <WidgetScrollSection>
           <div style={wrapper}>
             {nodataMsg}
             {
               bookmarks.map((bookmark, index) => {
-                return (<BookmarkChip
-                  key={index}
-                  index={index}
-                  bookmark={bookmark}
-                  deleteBookmark={this.removeBookmark.bind(this, index)} />
+                return (
+                  <BookmarkChip
+                    key={index}
+                    index={index}
+                    bookmark={bookmark}
+                    deleteBookmark={this.removeBookmark.bind(this, index)}
+                    editMode={this.state.editMode}
+                  />
                 )
               })
             }

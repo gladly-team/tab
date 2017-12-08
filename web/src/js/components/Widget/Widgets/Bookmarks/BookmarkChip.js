@@ -16,12 +16,9 @@ import {
 class BookmarkChip extends React.Component {
   constructor (props) {
     super(props)
-
     this.state = {
-      isHovering: false,
-      showDeleteButton: false
+      isHovering: false
     }
-    this.hoverTimer = 0
   }
 
   deleteBookmark (e) {
@@ -50,26 +47,6 @@ class BookmarkChip extends React.Component {
     })
   }
 
-  onMouseHoverChange (isHovering) {
-    this.setState({
-      isHovering: isHovering
-    })
-    if (this.hoverTimer) {
-      clearTimeout(this.hoverTimer)
-    }
-    if (isHovering) {
-      this.hoverTimer = setTimeout(() => {
-        this.setState({
-          showDeleteButton: true
-        })
-      }, 700)
-    } else {
-      this.setState({
-        showDeleteButton: false
-      })
-    }
-  }
-
   render () {
     const {bookmark} = this.props
     return (
@@ -95,8 +72,6 @@ class BookmarkChip extends React.Component {
             userSelect: 'none'
           }}
           onClick={this.openLink.bind(this, bookmark.link)}
-          onMouseEnter={this.onMouseHoverChange.bind(this, true)}
-          onMouseLeave={this.onMouseHoverChange.bind(this, false)}
         >
           <DeleteIcon
             color={widgetEditButtonInactive}
@@ -106,11 +81,9 @@ class BookmarkChip extends React.Component {
               zIndex: 5,
               top: 2,
               right: 2,
-              opacity: this.state.showDeleteButton ? 1 : 0,
-              transition: this.state.showDeleteButton
-                ? 'opacity 0.2s ease-in 0.5s'
-                : 'opacity 0.1s ease-in',
-              pointerEvents: this.state.showDeleteButton ? 'all' : 'none'
+              opacity: this.props.editMode ? 1 : 0,
+              transition: 'opacity 0.1s ease-in',
+              pointerEvents: this.props.editMode ? 'all' : 'none'
             }}
             onClick={this.deleteBookmark.bind(this)}
           />
@@ -133,6 +106,8 @@ class BookmarkChip extends React.Component {
 BookmarkChip.propTypes = {
   bookmark: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
+  editMode: PropTypes.bool.isRequired,
+  // editBookmark: PropTypes.func.isRequired, // TODO
   deleteBookmark: PropTypes.func.isRequired
 }
 
