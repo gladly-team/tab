@@ -8,6 +8,7 @@ import googleAdSlotDefinitions from './google/googleAdSlotDefinitions'
 import amazonBidder from './amazon/amazonBidder'
 
 if (adsEnabled) {
+  window.adStartTime = Date.now()
   setUpGoogleTag()
   amazonBidder()
   prebid()

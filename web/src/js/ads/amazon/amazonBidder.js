@@ -29,6 +29,11 @@ export default function () {
       timeout: PREBID_TIMEOUT
     },
     function (bids) {
+      var timeDiff = null
+      if (window.adStartTime) {
+        timeDiff = Date.now() - window.adStartTime
+      }
+      console.log('Bids: Amazon TAM bids back. Milliseconds:', timeDiff)
       googletag.cmd.push(function () {
         // Set DFP targeting.
         apstag.setDisplayBids()
