@@ -9,9 +9,9 @@ import amazonBidder from './amazon/amazonBidder'
 
 if (adsEnabled) {
   setUpGoogleTag()
+  amazonBidder()
   prebid()
   prebidConfig()
-  amazonBidder()
   googleTagManager()
   googleAdSlotDefinitions()
 } else {
