@@ -130,7 +130,16 @@ export default function () {
     }
 
     pbjs.requestBids({
-      bidsBackHandler: sendAdserverRequest
+      // TODO: revert after debugging TAM
+      // bidsBackHandler: sendAdserverRequest
+      bidsBackHandler: () => {
+        var timeDiff = null
+        if (window.adStartTime) {
+          timeDiff = Date.now() - window.adStartTime
+        }
+        console.log('Bids: Prebid bids back. Milliseconds:', timeDiff)
+        sendAdserverRequest()
+      }
     })
   })
 
@@ -148,6 +157,11 @@ export default function () {
   }
 
   setTimeout(() => {
+    var timeDiff = null
+    if (window.adStartTime) {
+      timeDiff = Date.now() - window.adStartTime
+    }
+    console.log('Bids: Prebid timeout. Milliseconds:', timeDiff)
     sendAdserverRequest()
   }, prebidTimeoutMs)
 }
