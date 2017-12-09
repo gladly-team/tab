@@ -69,6 +69,17 @@ class BookmarksWidget extends React.Component {
     })
   }
 
+  editBookmark (index, name, link) {
+    const bookmarks = [...this.state.bookmarks]
+    bookmarks[index].name = name
+    bookmarks[index].link = link
+    this.setState({
+      bookmarks: bookmarks
+    }, () => {
+      this.updateWidget(this.state.bookmarks)
+    })
+  }
+
   removeBookmark (index) {
     this.setState({
       bookmarks: this.state.bookmarks.filter((_, i) => {
@@ -160,7 +171,8 @@ class BookmarksWidget extends React.Component {
                     key={index}
                     index={index}
                     bookmark={bookmark}
-                    deleteBookmark={this.removeBookmark.bind(this, index)}
+                    editBookmark={this.editBookmark.bind(this)}
+                    deleteBookmark={this.removeBookmark.bind(this)}
                     editMode={this.state.editMode}
                   />
                 )

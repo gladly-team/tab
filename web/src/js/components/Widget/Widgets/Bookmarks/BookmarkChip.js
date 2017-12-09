@@ -24,8 +24,10 @@ class BookmarkChip extends React.Component {
   }
 
   onDeleteBookmark () {
-    console.log('Deleting bookmark.')
-    // this.props.deleteBookmark(this.props.index)
+    this.props.deleteBookmark(this.props.index)
+    this.setState({
+      isEditing: false
+    })
   }
 
   addProtocolToURLIfNeeded (url) {
@@ -64,11 +66,8 @@ class BookmarkChip extends React.Component {
     })
   }
 
-  onEditSave () {
-    console.log('Saving bookmark edits.')
-    const newName = this.editBookmarkModal.bookmarkNameTextField.input.value
-    const newLink = this.editBookmarkModal.bookmarkLinkTextField.input.value
-    console.log(newName, newLink)
+  onEditSave (name, link) {
+    this.props.editBookmark(this.props.index, name, link)
     this.setState({
       isEditing: false
     })
@@ -142,7 +141,7 @@ BookmarkChip.propTypes = {
   bookmark: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
   editMode: PropTypes.bool.isRequired,
-  // editBookmark: PropTypes.func.isRequired, // TODO
+  editBookmark: PropTypes.func.isRequired,
   deleteBookmark: PropTypes.func.isRequired
 }
 

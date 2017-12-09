@@ -19,7 +19,7 @@ export default class DialogExampleModal extends React.Component {
       if (!e.shiftKey) {
         e.stopPropagation()
         e.preventDefault()
-        this.props.onEditSave()
+        this.save()
       }
     }
   }
@@ -32,10 +32,31 @@ export default class DialogExampleModal extends React.Component {
   }
 
   onURLValChange () {
-    const url = this.bLink.input.value
+    const url = this.bookmarkLinkTextField.input.value
     this.setState({
       urlRequiredError: !url
     })
+  }
+
+  save () {
+    const name = this.bookmarkNameTextField.input.value
+    const url = this.bookmarkLinkTextField.input.value
+
+    if (!name) {
+      this.setState({
+        nameRequiredError: true
+      })
+    }
+    if (!url) {
+      this.setState({
+        urlRequiredError: true
+      })
+    }
+    if (!name || !url) {
+      return
+    }
+
+    this.props.onEditSave(name, url)
   }
 
   render () {
@@ -72,7 +93,7 @@ export default class DialogExampleModal extends React.Component {
               style={{
                 margin: 2
               }}
-              onClick={this.props.onEditSave}
+              onClick={this.save.bind(this)}
             />
           </span>
         ]}
