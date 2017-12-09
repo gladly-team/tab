@@ -118,11 +118,7 @@ class BookmarkChip extends React.Component {
       }
     }
     return (
-      <span
-        style={{
-          order: this.state.order
-        }}
-      >
+      <span>
         <Paper
           zDepth={0}
           style={{
@@ -132,7 +128,7 @@ class BookmarkChip extends React.Component {
             cursor: 'pointer',
             alignItems: 'center',
             margin: 5,
-            minWidth: 90,
+            minWidth: 84,
             maxWidth: 150,
             height: 50,
             fontSize: 14,
