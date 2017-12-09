@@ -172,6 +172,7 @@ class EditWidgetChip extends React.Component {
               marginLeft: 4
             })}
             onClick={() => {
+              this.props.onEditModeToggle(false)
               this.props.onAddItemClick()
             }}
           />
