@@ -158,6 +158,7 @@ class BookmarksWidget extends React.Component {
         </Paper>
         <AddBookmarkForm
           addBookmark={this.addBookmark.bind(this)}
+          showEditButton={bookmarks.length > 0}
           editMode={this.state.editMode}
           onEditModeToggle={this.onEditModeToggle.bind(this)}
           />
