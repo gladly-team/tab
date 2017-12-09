@@ -17,7 +17,8 @@ class BookmarksWidget extends React.Component {
     }
   }
 
-  // This is a temporary solution. Should pass unique ID
+  // FIXME
+  // This is a temporary hack. Should pass unique ID
   // from the server.
   randomString (length) {
     const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -33,6 +34,7 @@ class BookmarksWidget extends React.Component {
     const data = JSON.parse(widget.data)
     const bookmarks = data.bookmarks || []
     bookmarks.forEach((bookmark) => {
+      if (bookmark.id) { return }
       bookmark.id = this.randomString(6)
     })
     this.setState({
@@ -67,6 +69,7 @@ class BookmarksWidget extends React.Component {
 
   addBookmark (name, link) {
     const newBookmark = {
+      id: this.randomString(6),
       name: name,
       link: link
     }
