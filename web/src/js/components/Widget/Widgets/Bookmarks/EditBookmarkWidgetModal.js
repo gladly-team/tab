@@ -127,6 +127,28 @@ export default class DialogExampleModal extends React.Component {
             onChange={this.onURLValChange.bind(this)}
             errorText={this.state.urlRequiredError ? 'Enter a URL' : null}
           />
+          <span
+            style={{
+              margin: 10
+            }}
+          >
+            <RaisedButton
+              label='MOVE UP'
+              default
+              style={{
+                margin: 2
+              }}
+              onClick={this.props.onReorderMoveUp}
+            />
+            <RaisedButton
+              label='MOVE DOWN'
+              default
+              style={{
+                margin: 2
+              }}
+              onClick={this.props.onReorderMoveDown}
+            />
+          </span>
         </span>
       </Dialog>
     )
@@ -138,6 +160,8 @@ DialogExampleModal.propTypes = {
   onEditCancel: PropTypes.func.isRequired,
   onEditSave: PropTypes.func.isRequired,
   onDeleteBookmark: PropTypes.func.isRequired,
+  onReorderMoveUp: PropTypes.func.isRequired,
+  onReorderMoveDown: PropTypes.func.isRequired,
   currentBookmarkName: PropTypes.string.isRequired,
   currentBookmarkLink: PropTypes.string.isRequired
 }

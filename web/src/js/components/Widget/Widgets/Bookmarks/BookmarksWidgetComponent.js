@@ -17,12 +17,24 @@ class BookmarksWidget extends React.Component {
     }
   }
 
+  // This is a temporary solution. Should pass unique ID
+  // from the server.
+  randomString (length) {
+    const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    var result = ''
+    for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)]
+    return result
+  }
+
   componentDidMount () {
     const { widget } = this.props
 
     // TODO: have the server send obj, not string.
     const data = JSON.parse(widget.data)
     const bookmarks = data.bookmarks || []
+    bookmarks.forEach((bookmark) => {
+      bookmark.id = this.randomString(6)
+    })
     this.setState({
       bookmarks: bookmarks
     })
@@ -92,6 +104,28 @@ class BookmarksWidget extends React.Component {
     })
   }
 
+  _moveItem (array, fromIndex, toIndex) {
+    array.splice(toIndex, 0, array.splice(fromIndex, 1)[0])
+  }
+
+  onReorderMoveUp (index, spotsToMove = 1) {
+    const newBookmarks = [...this.state.bookmarks]
+    const destinationIndex = index === 0 ? 0 : index - spotsToMove
+    this._moveItem(newBookmarks, index, destinationIndex)
+    this.setState({
+      bookmarks: newBookmarks
+    })
+  }
+
+  onReorderMoveDown (index, spotsToMove = 1) {
+    const newBookmarks = [...this.state.bookmarks]
+    const destinationIndex = index === (newBookmarks.length - 1) ? index : index + spotsToMove
+    this._moveItem(newBookmarks, index, destinationIndex)
+    this.setState({
+      bookmarks: newBookmarks
+    })
+  }
+
   render () {
     const bookmarks = this.state.bookmarks || []
 
@@ -136,12 +170,14 @@ class BookmarksWidget extends React.Component {
               bookmarks.map((bookmark, index) => {
                 return (
                   <BookmarkChip
-                    key={index}
+                    key={bookmark.id}
                     index={index}
                     bookmark={bookmark}
                     editBookmark={this.editBookmark.bind(this)}
                     deleteBookmark={this.removeBookmark.bind(this)}
                     editMode={this.state.editMode}
+                    onReorderMoveUp={this.onReorderMoveUp.bind(this)}
+                    onReorderMoveDown={this.onReorderMoveDown.bind(this)}
                   />
                 )
               })

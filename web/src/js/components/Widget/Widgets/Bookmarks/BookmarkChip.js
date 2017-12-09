@@ -2,8 +2,6 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-
-import WidgetPieceWrapper from '../../WidgetPieceWrapper'
 import Paper from 'material-ui/Paper'
 import EditIcon from 'material-ui/svg-icons/editor/mode-edit'
 import EditBookmarkWidgetModal from './EditBookmarkWidgetModal'
@@ -19,7 +17,8 @@ class BookmarkChip extends React.Component {
     super(props)
     this.state = {
       isHovering: false,
-      isEditing: false
+      isEditing: false,
+      startingIndex: this.props.index
     }
   }
 
@@ -53,7 +52,8 @@ class BookmarkChip extends React.Component {
   onClick (e) {
     if (this.props.editMode) {
       this.setState({
-        isEditing: true
+        isEditing: true,
+        startingIndex: this.props.index
       })
     } else {
       this.openLink(this.props.bookmark.link)
@@ -61,6 +61,12 @@ class BookmarkChip extends React.Component {
   }
 
   onEditCancel () {
+    // Revert position changes if needed
+    if (this.props.index > this.state.startingIndex) {
+      this.props.onReorderMoveUp(this.props.index, this.props.index - this.state.startingIndex)
+    } else if (this.props.index < this.state.startingIndex) {
+      this.props.onReorderMoveDown(this.props.index, this.state.startingIndex - this.props.index)
+    }
     this.setState({
       isEditing: false
     })
@@ -73,10 +79,22 @@ class BookmarkChip extends React.Component {
     })
   }
 
+  onReorderMoveUp () {
+    this.props.onReorderMoveUp(this.props.index)
+  }
+
+  onReorderMoveDown () {
+    this.props.onReorderMoveDown(this.props.index)
+  }
+
   render () {
     const {bookmark} = this.props
     return (
-      <WidgetPieceWrapper>
+      <span
+        style={{
+          order: this.state.order
+        }}
+      >
         <Paper
           zDepth={0}
           style={{
@@ -131,18 +149,27 @@ class BookmarkChip extends React.Component {
           onDeleteBookmark={this.onDeleteBookmark.bind(this)}
           currentBookmarkName={bookmark.name}
           currentBookmarkLink={bookmark.link}
+          onReorderMoveUp={this.onReorderMoveUp.bind(this)}
+          onReorderMoveDown={this.onReorderMoveDown.bind(this)}
           />
-      </WidgetPieceWrapper>
+      </span>
     )
   }
 }
 
 BookmarkChip.propTypes = {
-  bookmark: PropTypes.object.isRequired,
+  bookmark: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    link: PropTypes.string.isRequired,
+    color: PropTypes.string,
+    order: PropTypes.number
+  }).isRequired,
   index: PropTypes.number.isRequired,
   editMode: PropTypes.bool.isRequired,
   editBookmark: PropTypes.func.isRequired,
-  deleteBookmark: PropTypes.func.isRequired
+  deleteBookmark: PropTypes.func.isRequired,
+  onReorderMoveUp: PropTypes.func.isRequired,
+  onReorderMoveDown: PropTypes.func.isRequired
 }
 
 export default BookmarkChip
