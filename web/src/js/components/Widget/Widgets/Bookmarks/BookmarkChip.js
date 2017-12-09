@@ -17,7 +17,9 @@ class BookmarkChip extends React.Component {
     super(props)
     this.state = {
       isEditing: false,
-      startingIndex: this.props.index
+      startingIndex: this.props.index,
+      // Set while modifying the widget settings
+      temporaryColor: this.props.bookmark.color
     }
   }
 
@@ -66,13 +68,21 @@ class BookmarkChip extends React.Component {
     } else if (this.props.index < this.state.startingIndex) {
       this.props.onReorderMoveDown(this.props.index, this.state.startingIndex - this.props.index)
     }
+
+    // Revert color change
+    this.setTemporaryColor(null)
+
+    // Close modal
     this.setState({
       isEditing: false
     })
   }
 
-  onEditSave (name, link) {
-    this.props.editBookmark(this.props.index, name, link)
+  onEditSave (name, link, color = null) {
+    // Clear any temporary colors
+    this.setTemporaryColor(null)
+
+    this.props.editBookmark(this.props.index, name, link, color)
     this.setState({
       isEditing: false
     })
@@ -86,14 +96,23 @@ class BookmarkChip extends React.Component {
     this.props.onReorderMoveDown(this.props.index)
   }
 
+  setTemporaryColor (color) {
+    this.setState({
+      temporaryColor: color
+    })
+  }
+
   render () {
     const {bookmark} = this.props
 
     var bookmarkColor = dashboardTransparentBackground
-    if (bookmark.color) {
+    var bookmarkHex = '#000'
+    const colorOverride = this.state.temporaryColor || bookmark.color
+    if (colorOverride) {
       try {
         // May fail if the color is an invalid hex.
-        bookmarkColor = hexToRgbA(bookmark.color, 0.36)
+        bookmarkColor = hexToRgbA(colorOverride, 0.36)
+        bookmarkHex = colorOverride
       } catch (e) {
         console.error('Error converting bookmark color to RGBA.', e)
       }
@@ -156,8 +175,10 @@ class BookmarkChip extends React.Component {
           onDeleteBookmark={this.onDeleteBookmark.bind(this)}
           currentBookmarkName={bookmark.name}
           currentBookmarkLink={bookmark.link}
+          currentBookmarkColor={bookmarkHex}
           onReorderMoveUp={this.onReorderMoveUp.bind(this)}
           onReorderMoveDown={this.onReorderMoveDown.bind(this)}
+          setTemporaryColor={this.setTemporaryColor.bind(this)}
           />
       </span>
     )

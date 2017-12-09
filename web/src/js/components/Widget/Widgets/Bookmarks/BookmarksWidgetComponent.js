@@ -77,10 +77,13 @@ class BookmarksWidget extends React.Component {
     })
   }
 
-  editBookmark (index, name, link) {
+  editBookmark (index, name, link, color = null) {
     const bookmarks = [...this.state.bookmarks]
     bookmarks[index].name = name
     bookmarks[index].link = link
+    if (color) {
+      bookmarks[index].color = color
+    }
     this.setState({
       bookmarks: bookmarks
     }, () => {

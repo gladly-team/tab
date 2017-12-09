@@ -4,13 +4,15 @@ import Dialog from 'material-ui/Dialog'
 import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
+import { TwitterPicker } from 'react-color'
 
-export default class DialogExampleModal extends React.Component {
+export default class EditBookmarkWidgetModal extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
       nameRequiredError: false,
-      urlRequiredError: false
+      urlRequiredError: false,
+      colorPickerColor: null
     }
   }
 
@@ -38,9 +40,17 @@ export default class DialogExampleModal extends React.Component {
     })
   }
 
+  setColor (colorInfo) {
+    this.setState({
+      colorPickerColor: colorInfo.hex
+    })
+    this.props.setTemporaryColor(colorInfo.hex)
+  }
+
   save () {
     const name = this.bookmarkNameTextField.input.value
     const url = this.bookmarkLinkTextField.input.value
+    const color = this.state.colorPickerColor
 
     if (!name) {
       this.setState({
@@ -55,8 +65,7 @@ export default class DialogExampleModal extends React.Component {
     if (!name || !url) {
       return
     }
-
-    this.props.onEditSave(name, url)
+    this.props.onEditSave(name, url, color)
   }
 
   render () {
@@ -149,13 +158,24 @@ export default class DialogExampleModal extends React.Component {
               onClick={this.props.onReorderMoveDown}
             />
           </span>
+          <span
+            style={{
+              margin: 10
+            }}
+          >
+            <TwitterPicker
+              color={this.props.currentBookmarkColor}
+              onChangeComplete={this.setColor.bind(this)}
+              triangle={'hide'}
+              />
+          </span>
         </span>
       </Dialog>
     )
   }
 }
 
-DialogExampleModal.propTypes = {
+EditBookmarkWidgetModal.propTypes = {
   open: PropTypes.bool.isRequired,
   onEditCancel: PropTypes.func.isRequired,
   onEditSave: PropTypes.func.isRequired,
@@ -163,8 +183,9 @@ DialogExampleModal.propTypes = {
   onReorderMoveUp: PropTypes.func.isRequired,
   onReorderMoveDown: PropTypes.func.isRequired,
   currentBookmarkName: PropTypes.string.isRequired,
-  currentBookmarkLink: PropTypes.string.isRequired
+  currentBookmarkLink: PropTypes.string.isRequired,
+  currentBookmarkColor: PropTypes.string.isRequired
 }
 
-DialogExampleModal.defaultProps = {
+EditBookmarkWidgetModal.defaultProps = {
 }
