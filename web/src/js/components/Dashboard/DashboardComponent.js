@@ -9,38 +9,18 @@ import Ad from '../Ad/Ad'
 import LogTab from './LogTabContainer'
 import CircleIcon from 'material-ui/svg-icons/image/lens'
 import {
-  dashboardTransparentBackground,
   dashboardIconInactiveColor,
   dashboardIconActiveColor
 } from 'theme/default'
 import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
 import ErrorMessage from 'general/ErrorMessage'
-import { Paper } from 'material-ui'
 
 class Dashboard extends React.Component {
   constructor (props) {
     super(props)
 
     this.state = {
-      showFeedbackMsg: false,
       errorMessage: null
-    }
-
-    this.feedbackMsgTimer = 0
-  }
-
-  componentDidMount () {
-    const self = this
-    this.feedbackMsgTimer = setTimeout(() => {
-      self.setState({
-        showFeedbackMsg: true
-      })
-    }, 4000)
-  }
-
-  componentWillUnmount () {
-    if (this.feedbackMsgTimer) {
-      clearTimeout(this.feedbackMsgTimer)
     }
   }
 
@@ -113,47 +93,6 @@ class Dashboard extends React.Component {
           : null
         }
         <WidgetsContainer user={user} showError={this.showError.bind(this)} />
-        { this.state.showFeedbackMsg
-          ? (
-            <FadeInDashboardAnimation>
-              <Paper
-                style={{
-                  position: 'absolute',
-                  zIndex: 5,
-                  width: 170,
-                  bottom: 10,
-                  left: 10,
-                  background: dashboardTransparentBackground,
-                  color: '#FFF',
-                  padding: 12
-                }}
-              >
-                <span style={{ fontSize: 14 }}>Feedback? Problems? </span>
-                <p style={{ fontSize: 12 }}>
-                  <a
-                    style={{
-                      color: '#FFF',
-                      textDecoration: 'underline'
-                    }}
-                    href='https://docs.google.com/forms/d/e/1FAIpQLSdOz0pcuRFdm7U24yArsiHOBDQqtit313PvIk805wkLCQ6N3g/viewform?usp=sf_link'
-                    target='_blank'
-                  >
-                  Share your feedback
-                  </a> or <a
-                    style={{
-                      color: '#FFF',
-                      textDecoration: 'underline'
-                    }}
-                    href='https://gladly.zendesk.com/hc/en-us/categories/201939608-Tab-for-a-Cause'
-                    target='_blank'
-                  >visit our help page
-                  </a>!
-                </p>
-              </Paper>
-            </FadeInDashboardAnimation>
-            )
-          : null
-        }
         <Ad
           adId='div-gpt-ad-1464385742501-0'
           adSlotId='/43865596/HBTR'
