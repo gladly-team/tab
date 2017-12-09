@@ -69,6 +69,7 @@ export default class DialogExampleModal extends React.Component {
           justifyContent: 'space-between'
           // alignItems: 'flex-start'
         }}
+        autoScrollBodyContent
         actions={[
           <FlatButton
             label='DELETE'
