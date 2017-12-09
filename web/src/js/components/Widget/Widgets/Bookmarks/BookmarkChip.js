@@ -5,7 +5,8 @@ import PropTypes from 'prop-types'
 
 import WidgetPieceWrapper from '../../WidgetPieceWrapper'
 import Paper from 'material-ui/Paper'
-import DeleteIcon from 'material-ui/svg-icons/navigation/cancel'
+import EditIcon from 'material-ui/svg-icons/editor/mode-edit'
+import EditBookmarkWidgetModal from './EditBookmarkWidgetModal'
 import {
   dashboardTransparentBackground,
   dashboardTransparentBackgroundHover,
@@ -17,14 +18,14 @@ class BookmarkChip extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      isHovering: false
+      isHovering: false,
+      isEditing: false
     }
   }
 
-  deleteBookmark (e) {
-    e.stopPropagation()
-    e.preventDefault()
-    this.props.deleteBookmark(this.props.index)
+  onDeleteBookmark () {
+    console.log('Deleting bookmark.')
+    // this.props.deleteBookmark(this.props.index)
   }
 
   addProtocolToURLIfNeeded (url) {
@@ -44,6 +45,32 @@ class BookmarkChip extends React.Component {
     window.open(this.addProtocolToURLIfNeeded(link), '_top')
     this.setState({
       open: false
+    })
+  }
+
+  onClick (e) {
+    if (this.props.editMode) {
+      this.setState({
+        isEditing: true
+      })
+    } else {
+      this.openLink(this.props.bookmark.link)
+    }
+  }
+
+  onEditCancel () {
+    this.setState({
+      isEditing: false
+    })
+  }
+
+  onEditSave () {
+    console.log('Saving bookmark edits.')
+    const newName = this.editBookmarkModal.bookmarkNameTextField.input.value
+    const newLink = this.editBookmarkModal.bookmarkLinkTextField.input.value
+    console.log(newName, newLink)
+    this.setState({
+      isEditing: false
     })
   }
 
@@ -71,9 +98,9 @@ class BookmarkChip extends React.Component {
             color: '#FFF',
             userSelect: 'none'
           }}
-          onClick={this.openLink.bind(this, bookmark.link)}
+          onClick={this.onClick.bind(this)}
         >
-          <DeleteIcon
+          <EditIcon
             color={widgetEditButtonInactive}
             hoverColor={widgetEditButtonHover}
             style={{
@@ -85,7 +112,6 @@ class BookmarkChip extends React.Component {
               transition: 'opacity 0.1s ease-in',
               pointerEvents: this.props.editMode ? 'all' : 'none'
             }}
-            onClick={this.deleteBookmark.bind(this)}
           />
           <span style={{
             color: '#FFF',
@@ -98,6 +124,15 @@ class BookmarkChip extends React.Component {
             {bookmark.name}
           </span>
         </Paper>
+        <EditBookmarkWidgetModal
+          ref={(modal) => { this.editBookmarkModal = modal }}
+          open={this.state.isEditing}
+          onEditCancel={this.onEditCancel.bind(this)}
+          onEditSave={this.onEditSave.bind(this)}
+          onDeleteBookmark={this.onDeleteBookmark.bind(this)}
+          currentBookmarkName={bookmark.name}
+          currentBookmarkLink={bookmark.link}
+          />
       </WidgetPieceWrapper>
     )
   }
