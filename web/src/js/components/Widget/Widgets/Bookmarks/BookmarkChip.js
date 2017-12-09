@@ -7,16 +7,15 @@ import EditIcon from 'material-ui/svg-icons/editor/mode-edit'
 import EditBookmarkWidgetModal from './EditBookmarkWidgetModal'
 import {
   dashboardTransparentBackground,
-  dashboardTransparentBackgroundHover,
   widgetEditButtonInactive,
   widgetEditButtonHover
 } from 'theme/default'
+import hexToRgbA from 'hex-to-rgba'
 
 class BookmarkChip extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      isHovering: false,
       isEditing: false,
       startingIndex: this.props.index
     }
@@ -89,6 +88,16 @@ class BookmarkChip extends React.Component {
 
   render () {
     const {bookmark} = this.props
+
+    var bookmarkColor = dashboardTransparentBackground
+    if (bookmark.color) {
+      try {
+        // May fail if the color is an invalid hex.
+        bookmarkColor = hexToRgbA(bookmark.color, 0.36)
+      } catch (e) {
+        console.error('Error converting bookmark color to RGBA.', e)
+      }
+    }
     return (
       <span
         style={{
@@ -109,9 +118,7 @@ class BookmarkChip extends React.Component {
             height: 50,
             fontSize: 14,
             padding: 10,
-            backgroundColor: this.state.isHovering
-              ? dashboardTransparentBackgroundHover
-              : dashboardTransparentBackground,
+            backgroundColor: bookmarkColor,
             color: '#FFF',
             userSelect: 'none'
           }}
