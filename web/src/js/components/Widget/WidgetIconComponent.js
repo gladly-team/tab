@@ -5,7 +5,10 @@ import BookmarkBorderIcon from 'material-ui/svg-icons/action/bookmark-border'
 // import ListIcon from 'material-ui/svg-icons/action/list'
 import FormatListBulletedIcon from 'material-ui/svg-icons/editor/format-list-bulleted'
 // import NoteIcon from 'material-ui/svg-icons/av/note'
-import EditIcon from 'material-ui/svg-icons/editor/mode-edit'
+// import EditIcon from 'material-ui/svg-icons/editor/mode-edit'
+// import CropPortraitIcon from 'material-ui/svg-icons/image/crop-portrait'
+// import FolderOpenIcon from 'material-ui/svg-icons/file/folder-open'
+import ChatBubbleOutlineIcon from 'material-ui/svg-icons/communication/chat-bubble-outline'
 import SearchIcon from 'material-ui/svg-icons/action/search'
 import appTheme, {
   dashboardIconInactiveColor,
@@ -67,7 +70,7 @@ class WidgetIcon extends React.Component {
 
       case WIDGET_TYPE_NOTES:
         icon = (
-          <EditIcon
+          <ChatBubbleOutlineIcon
             color={iconColor}
             hoverColor={iconHoverColor}
           />
