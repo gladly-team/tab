@@ -122,7 +122,7 @@ class FirebaseAuthenticationUI extends React.Component {
     // https://github.com/firebase/firebaseui-web#example-with-all-parameters-used
     this.uiConfig = {
       // Either 'popup' or 'redirect'
-      signInFlow: 'redirect',
+      signInFlow: 'popup',
       // Redirect path after successful sign in, or a callbacks.signInSuccess function
       signInSuccessUrl: dashboardURL,
       // Auth providers
