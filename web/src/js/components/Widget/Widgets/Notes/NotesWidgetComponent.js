@@ -110,8 +110,7 @@ class NotesWidget extends React.Component {
     const mainContainer = {
       display: 'flex',
       flexDirection: 'column',
-      marginTop: 27,
-      marginRight: 20 // give this less space than bookmarks
+      marginTop: 27
     }
 
     var nodataMsg

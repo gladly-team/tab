@@ -9,7 +9,7 @@ class WidgetSharedSpace extends React.Component {
       top: 40,
       left: 5,
       backgroundColor: 'transparent',
-      width: 320,
+      width: 300,
       overflowX: 'hidden',
       overflowY: 'hidden'
     }
