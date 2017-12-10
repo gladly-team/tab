@@ -1,10 +1,8 @@
 
 import BookmarkBorderIcon from 'material-ui/svg-icons/action/bookmark-border'
 import ClockIcon from 'material-ui/svg-icons/action/schedule'
-// import ListIcon from 'material-ui/svg-icons/action/list'
 import FormatListBulletedIcon from 'material-ui/svg-icons/editor/format-list-bulleted'
-// import NoteIcon from 'material-ui/svg-icons/av/note'
-import EditIcon from 'material-ui/svg-icons/editor/mode-edit'
+import ChatBubbleOutlineIcon from 'material-ui/svg-icons/communication/chat-bubble-outline'
 import SearchIcon from 'material-ui/svg-icons/action/search'
 import GenericWidgetsIcon from 'material-ui/svg-icons/device/widgets'
 import {
@@ -27,7 +25,7 @@ export const getWidgetIconFromWidgetType = (widgetType) => {
       break
 
     case WIDGET_TYPE_NOTES:
-      icon = EditIcon
+      icon = ChatBubbleOutlineIcon
       break
 
     case WIDGET_TYPE_SEARCH:

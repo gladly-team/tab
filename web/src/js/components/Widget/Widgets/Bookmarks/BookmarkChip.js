@@ -2,32 +2,32 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-
-import WidgetPieceWrapper from '../../WidgetPieceWrapper'
 import Paper from 'material-ui/Paper'
-import DeleteIcon from 'material-ui/svg-icons/navigation/cancel'
+import EditIcon from 'material-ui/svg-icons/editor/mode-edit'
+import EditBookmarkWidgetModal from './EditBookmarkWidgetModal'
 import {
   dashboardTransparentBackground,
-  dashboardTransparentBackgroundHover,
   widgetEditButtonInactive,
   widgetEditButtonHover
 } from 'theme/default'
+import hexToRgbA from 'hex-to-rgba'
 
 class BookmarkChip extends React.Component {
   constructor (props) {
     super(props)
-
     this.state = {
-      isHovering: false,
-      showDeleteButton: false
+      isEditing: false,
+      startingIndex: this.props.index,
+      // Set while modifying the widget settings
+      temporaryColor: this.props.bookmark.color
     }
-    this.hoverTimer = 0
   }
 
-  deleteBookmark (e) {
-    e.stopPropagation()
-    e.preventDefault()
+  onDeleteBookmark () {
     this.props.deleteBookmark(this.props.index)
+    this.setState({
+      isEditing: false
+    })
   }
 
   addProtocolToURLIfNeeded (url) {
@@ -50,30 +50,75 @@ class BookmarkChip extends React.Component {
     })
   }
 
-  onMouseHoverChange (isHovering) {
-    this.setState({
-      isHovering: isHovering
-    })
-    if (this.hoverTimer) {
-      clearTimeout(this.hoverTimer)
-    }
-    if (isHovering) {
-      this.hoverTimer = setTimeout(() => {
-        this.setState({
-          showDeleteButton: true
-        })
-      }, 700)
-    } else {
+  onClick (e) {
+    if (this.props.editMode) {
       this.setState({
-        showDeleteButton: false
+        isEditing: true,
+        startingIndex: this.props.index
       })
+    } else {
+      this.openLink(this.props.bookmark.link)
     }
+  }
+
+  onEditCancel () {
+    // Revert position changes if needed
+    if (this.props.index > this.state.startingIndex) {
+      this.props.onReorderMoveUp(this.props.index, this.props.index - this.state.startingIndex)
+    } else if (this.props.index < this.state.startingIndex) {
+      this.props.onReorderMoveDown(this.props.index, this.state.startingIndex - this.props.index)
+    }
+
+    // Revert color change
+    this.setTemporaryColor(null)
+
+    // Close modal
+    this.setState({
+      isEditing: false
+    })
+  }
+
+  onEditSave (name, link, color = null) {
+    // Clear any temporary colors
+    this.setTemporaryColor(null)
+
+    this.props.editBookmark(this.props.index, name, link, color)
+    this.setState({
+      isEditing: false
+    })
+  }
+
+  onReorderMoveUp () {
+    this.props.onReorderMoveUp(this.props.index)
+  }
+
+  onReorderMoveDown () {
+    this.props.onReorderMoveDown(this.props.index)
+  }
+
+  setTemporaryColor (color) {
+    this.setState({
+      temporaryColor: color
+    })
   }
 
   render () {
     const {bookmark} = this.props
+
+    var bookmarkColor = dashboardTransparentBackground
+    var bookmarkHex = '#000'
+    const colorOverride = this.state.temporaryColor || bookmark.color
+    if (colorOverride) {
+      try {
+        // May fail if the color is an invalid hex.
+        bookmarkColor = hexToRgbA(colorOverride, 0.36)
+        bookmarkHex = colorOverride
+      } catch (e) {
+        console.error('Error converting bookmark color to RGBA.', e)
+      }
+    }
     return (
-      <WidgetPieceWrapper>
+      <span>
         <Paper
           zDepth={0}
           style={{
@@ -83,22 +128,18 @@ class BookmarkChip extends React.Component {
             cursor: 'pointer',
             alignItems: 'center',
             margin: 5,
-            minWidth: 90,
+            minWidth: 84,
             maxWidth: 150,
             height: 50,
             fontSize: 14,
             padding: 10,
-            backgroundColor: this.state.isHovering
-              ? dashboardTransparentBackgroundHover
-              : dashboardTransparentBackground,
+            backgroundColor: bookmarkColor,
             color: '#FFF',
             userSelect: 'none'
           }}
-          onClick={this.openLink.bind(this, bookmark.link)}
-          onMouseEnter={this.onMouseHoverChange.bind(this, true)}
-          onMouseLeave={this.onMouseHoverChange.bind(this, false)}
+          onClick={this.onClick.bind(this)}
         >
-          <DeleteIcon
+          <EditIcon
             color={widgetEditButtonInactive}
             hoverColor={widgetEditButtonHover}
             style={{
@@ -106,13 +147,10 @@ class BookmarkChip extends React.Component {
               zIndex: 5,
               top: 2,
               right: 2,
-              opacity: this.state.showDeleteButton ? 1 : 0,
-              transition: this.state.showDeleteButton
-                ? 'opacity 0.2s ease-in 0.5s'
-                : 'opacity 0.1s ease-in',
-              pointerEvents: this.state.showDeleteButton ? 'all' : 'none'
+              opacity: this.props.editMode ? 1 : 0,
+              transition: 'opacity 0.1s ease-in',
+              pointerEvents: this.props.editMode ? 'all' : 'none'
             }}
-            onClick={this.deleteBookmark.bind(this)}
           />
           <span style={{
             color: '#FFF',
@@ -125,15 +163,37 @@ class BookmarkChip extends React.Component {
             {bookmark.name}
           </span>
         </Paper>
-      </WidgetPieceWrapper>
+        <EditBookmarkWidgetModal
+          ref={(modal) => { this.editBookmarkModal = modal }}
+          open={this.state.isEditing}
+          onEditCancel={this.onEditCancel.bind(this)}
+          onEditSave={this.onEditSave.bind(this)}
+          onDeleteBookmark={this.onDeleteBookmark.bind(this)}
+          currentBookmarkName={bookmark.name}
+          currentBookmarkLink={bookmark.link}
+          currentBookmarkColor={bookmarkHex}
+          onReorderMoveUp={this.onReorderMoveUp.bind(this)}
+          onReorderMoveDown={this.onReorderMoveDown.bind(this)}
+          setTemporaryColor={this.setTemporaryColor.bind(this)}
+          />
+      </span>
     )
   }
 }
 
 BookmarkChip.propTypes = {
-  bookmark: PropTypes.object.isRequired,
+  bookmark: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    link: PropTypes.string.isRequired,
+    color: PropTypes.string,
+    order: PropTypes.number
+  }).isRequired,
   index: PropTypes.number.isRequired,
-  deleteBookmark: PropTypes.func.isRequired
+  editMode: PropTypes.bool.isRequired,
+  editBookmark: PropTypes.func.isRequired,
+  deleteBookmark: PropTypes.func.isRequired,
+  onReorderMoveUp: PropTypes.func.isRequired,
+  onReorderMoveDown: PropTypes.func.isRequired
 }
 
 export default BookmarkChip
