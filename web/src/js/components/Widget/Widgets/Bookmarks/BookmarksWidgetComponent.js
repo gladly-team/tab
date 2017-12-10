@@ -186,7 +186,7 @@ class BookmarksWidget extends React.Component {
           }}
         >
           <span>
-            <span>You can now reorder and color bookmarks! Click </span>
+            <span>Click </span>
             <span
               style={{
                 display: 'inline-block',
@@ -202,7 +202,7 @@ class BookmarksWidget extends React.Component {
                 }}
               />
             </span>
-            <span> below to enter edit mode.</span>
+            <span> below to enter edit mode, then click a bookmark to reorder and change colors.</span>
           </span>
         </Paper>
         <AddBookmarkForm
