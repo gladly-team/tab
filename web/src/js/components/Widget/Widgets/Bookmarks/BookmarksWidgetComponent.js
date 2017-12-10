@@ -7,6 +7,11 @@ import EmptyWidgetMsg from '../../EmptyWidgetMsg'
 import BookmarkChip from './BookmarkChip'
 import AddBookmarkForm from './AddBookmarkForm'
 import UpdateWidgetDataMutation from 'mutations/UpdateWidgetDataMutation'
+import Paper from 'material-ui/Paper'
+import LockClosedIcon from 'material-ui/svg-icons/action/lock-outline'
+import {
+  alternateAccentColor
+} from 'theme/default'
 
 class BookmarksWidget extends React.Component {
   constructor (props) {
@@ -163,6 +168,43 @@ class BookmarksWidget extends React.Component {
     return (<WidgetSharedSpace
       containerStyle={sharedSpaceStyle}>
       <div style={bookmarksContainer}>
+        <Paper
+          zDepth={0}
+          style={{
+            width: 300,
+            cursor: 'default',
+            position: 'relative',
+            overflow: 'hidden',
+            justifyContent: 'center',
+            alignItems: 'space-between',
+            fontSize: 14,
+            margin: 5,
+            // background: appTheme.palette.primary1Color,
+            background: alternateAccentColor,
+            color: '#FFF',
+            padding: '12px 8px'
+          }}
+        >
+          <span>
+            <span>You can now reorder and color bookmarks! Click </span>
+            <span
+              style={{
+                display: 'inline-block',
+                verticalAlign: 'text-bottom'
+              }}
+            >
+              <LockClosedIcon
+                color={'#FFF'}
+                style={{
+                  display: 'block',
+                  width: 16,
+                  height: 16
+                }}
+              />
+            </span>
+            <span> below to enter edit mode.</span>
+          </span>
+        </Paper>
         <AddBookmarkForm
           addBookmark={this.addBookmark.bind(this)}
           showEditButton={bookmarks.length > 0}
