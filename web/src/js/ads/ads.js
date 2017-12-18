@@ -5,12 +5,12 @@ import prebid from './prebid/prebidModule'
 import prebidConfig from './prebid/prebidConfig'
 import googleTagManager from './google/googleTagManager'
 import googleAdSlotDefinitions from './google/googleAdSlotDefinitions'
-import amazonBidder from './amazon/amazonBidder'
+// import amazonBidder from './amazon/amazonBidder'
 
 if (adsEnabled) {
   window.adStartTime = Date.now()
   setUpGoogleTag()
-  amazonBidder()
+  // amazonBidder()
   prebid()
   prebidConfig()
   googleTagManager()
