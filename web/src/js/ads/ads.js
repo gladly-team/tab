@@ -1,6 +1,6 @@
 
 import adsEnabled from './adsEnabledStatus'
-import { setUpGoogleTag } from './google/googleTag'
+// import { setUpGoogleTag } from './google/googleTag'
 import prebid from './prebid/prebidModule'
 import prebidConfig from './prebid/prebidConfig'
 import googleTagManager from './google/googleTagManager'
@@ -8,8 +8,7 @@ import googleAdSlotDefinitions from './google/googleAdSlotDefinitions'
 // import amazonBidder from './amazon/amazonBidder'
 
 if (adsEnabled) {
-  window.adStartTime = Date.now()
-  setUpGoogleTag()
+  // setUpGoogleTag()
   // amazonBidder()
   prebid()
   prebidConfig()
