@@ -2,6 +2,7 @@
     "aolBidAdapter",
     "appnexusBidAdapter",
     "openxBidAdapter",
+    "rhythmoneBidAdapter",
     "pulsepointBidAdapter",
     "sonobiBidAdapter",
     "sovrnBidAdapter"

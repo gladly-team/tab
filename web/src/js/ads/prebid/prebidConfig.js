@@ -55,6 +55,12 @@ export default function () {
         params: {
           placementId: '10955690'
         }
+      },
+      {
+        bidder: 'rhythmone',
+        params: {
+          placementId: '73423'
+        }
       }
     ]
   },
@@ -103,6 +109,12 @@ export default function () {
         bidder: 'brealtime',
         params: {
           placementId: '10955287'
+        }
+      },
+      {
+        bidder: 'rhythmone',
+        params: {
+          placementId: '73423'
         }
       }
     ]
