@@ -164,15 +164,17 @@ export default function () {
     }
 
     // BEGIN: profile and debug ad performance
-    var adPerfKey = 'adserverRequestSent'
-    var adPerfName = 'DFP request sent (via Prebid)'
-    var adPerfLogs = window.adPerfLogs || {}
-    var adPerfTime = window.performance.now()
-    adPerfLogs[adPerfKey] = {
-      time: adPerfTime,
-      name: adPerfName
+    if (window.performance && window.performance.now) {
+      var adPerfKey = 'adserverRequestSent'
+      var adPerfName = 'DFP request sent (via Prebid)'
+      var adPerfLogs = window.adPerfLogs || {}
+      var adPerfTime = window.performance.now()
+      adPerfLogs[adPerfKey] = {
+        time: adPerfTime,
+        name: adPerfName
+      }
+      console.log('Adperf: ' + adPerfName, adPerfTime)
     }
-    console.log('Adperf: ' + adPerfName, adPerfTime)
     // END: profile and debug ad performance
 
     pbjs.adserverRequestSent = true

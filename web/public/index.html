@@ -79,15 +79,17 @@ src="https://www.facebook.com/tr?id=1813501258922708&ev=PageView&noscript=1"
 
 <script>
   // BEGIN: profile and debug ad performance
-  var adPerfKey = 'htmlLoad'
-  var adPerfName = 'HTML load'
-  var adPerfLogs = window.adPerfLogs || {}
-  var adPerfTime = window.performance.now()
-  adPerfLogs[adPerfKey] = {
-    time: adPerfTime,
-    name: adPerfName
+  if (window.performance && window.performance.now) {
+    var adPerfKey = 'htmlLoad'
+    var adPerfName = 'HTML load'
+    var adPerfLogs = window.adPerfLogs || {}
+    var adPerfTime = window.performance.now()
+    adPerfLogs[adPerfKey] = {
+      time: adPerfTime,
+      name: adPerfName
+    }
+    console.log('Adperf: ' + adPerfName, adPerfTime)
   }
-  console.log('Adperf: ' + adPerfName, adPerfTime)
   // END: profile and debug ad performance
 </script>
 

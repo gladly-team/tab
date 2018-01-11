@@ -9,15 +9,17 @@ export default function () {
   })('apstag', window, document, 'script', '//c.amazon-adsystem.com/aax2/apstag.js')
 
   // BEGIN: profile and debug ad performance
-  var adPerfKey = 'amazonJsFetch'
-  var adPerfName = 'Amazon apstag fetch'
-  var adPerfLogs = window.adPerfLogs || {}
-  var adPerfTime = window.performance.now()
-  adPerfLogs[adPerfKey] = {
-    time: adPerfTime,
-    name: adPerfName
+  if (window.performance && window.performance.now) {
+    var adPerfKey = 'amazonJsFetch'
+    var adPerfName = 'Amazon apstag fetch'
+    var adPerfLogs = window.adPerfLogs || {}
+    var adPerfTime = window.performance.now()
+    adPerfLogs[adPerfKey] = {
+      time: adPerfTime,
+      name: adPerfName
+    }
+    console.log('Adperf: ' + adPerfName, adPerfTime)
   }
-  console.log('Adperf: ' + adPerfName, adPerfTime)
   // END: profile and debug ad performance
 
   apstag.init({
@@ -42,15 +44,17 @@ export default function () {
     },
     function (bids) {
       // BEGIN: profile and debug ad performance
-      var adPerfKey = 'amazonBidsReturned'
-      var adPerfName = 'Amazon bids returned'
-      var adPerfLogs = window.adPerfLogs || {}
-      var adPerfTime = window.performance.now()
-      adPerfLogs[adPerfKey] = {
-        time: adPerfTime,
-        name: adPerfName
+      if (window.performance && window.performance.now) {
+        var adPerfKey = 'amazonBidsReturned'
+        var adPerfName = 'Amazon bids returned'
+        var adPerfLogs = window.adPerfLogs || {}
+        var adPerfTime = window.performance.now()
+        adPerfLogs[adPerfKey] = {
+          time: adPerfTime,
+          name: adPerfName
+        }
+        console.log('Adperf: ' + adPerfName, adPerfTime)
       }
-      console.log('Adperf: ' + adPerfName, adPerfTime)
       // END: profile and debug ad performance
 
       googletag.cmd.push(function () {
