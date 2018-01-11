@@ -77,6 +77,20 @@ src="https://www.facebook.com/tr?id=1813501258922708&ev=PageView&noscript=1"
 /></noscript>
 <!-- End Facebook Pixel Code -->
 
+<script>
+  // BEGIN: profile and debug ad performance
+  var adPerfKey = 'htmlLoad'
+  var adPerfName = 'HTML load'
+  var adPerfLogs = window.adPerfLogs || {}
+  var adPerfTime = window.performance.now()
+  adPerfLogs[adPerfKey] = {
+    time: adPerfTime,
+    name: adPerfName
+  }
+  console.log('Adperf: ' + adPerfName, adPerfTime)
+  // END: profile and debug ad performance
+</script>
+
 <% for (var chunk in htmlWebpackPlugin.files.chunks) { %>
 <script src="<%= htmlWebpackPlugin.files.chunks[chunk].entry %>"></script>
 <% } %>
