@@ -171,6 +171,9 @@ src="https://www.facebook.com/tr?id=1813501258922708&ev=PageView&noscript=1"
       googletag.cmd.push(function () {
         // Set DFP targeting.
         apstag.setDisplayBids()
+
+        // Note: the ads refresh is handled by Prebid.
+        // googletag.pubads().refresh()
       })
     })
 </script>
@@ -181,6 +184,10 @@ src="https://www.facebook.com/tr?id=1813501258922708&ev=PageView&noscript=1"
   // Google Tag Manager
   var googletag = window.googletag || {}
   googletag.cmd = googletag.cmd || []
+  googletag.cmd.push(() => {
+    googletag.pubads().disableInitialLoad()
+  })
+
   var gads = document.createElement('script')
   gads.async = true
   gads.type = 'text/javascript'

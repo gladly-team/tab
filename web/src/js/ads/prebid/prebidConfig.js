@@ -123,6 +123,10 @@ export default function () {
 
   const googletag = window.googletag || {}
   googletag.cmd = googletag.cmd || []
+
+  // Also called prior to loading Amazon bidder.
+  // Leaving this here to prevent breakage in case we
+  // reorder bidder loading order.
   googletag.cmd.push(() => {
     googletag.pubads().disableInitialLoad()
   })
