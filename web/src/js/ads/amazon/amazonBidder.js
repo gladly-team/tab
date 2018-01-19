@@ -4,27 +4,8 @@
 const PREBID_TIMEOUT = 1000
 
 export default function () {
-  /* globals apstag */
-  function onApstagScriptLoad () {
-    // BEGIN: profile and debug ad performance
-    if (window.performance && window.performance.now) {
-      var adPerfKey = 'amazonJsLoaded'
-      var adPerfName = 'Amazon apstag loaded'
-      var adPerfLogs = window.adPerfLogs || {}
-      var adPerfTime = window.performance.now()
-      adPerfLogs[adPerfKey] = {
-        time: adPerfTime,
-        name: adPerfName
-      }
-      console.log('Adperf: ' + adPerfName, adPerfTime)
-    }
-    // END: profile and debug ad performance
-  }
-  /* eslint-disable */
-  (function (a9, a, p, s, t, A, g) {
-   if (a[a9]) return; function q (c, r) { a[a9]._Q.push([c, r]) }a[a9] = {init: function () { q('i', arguments) }, fetchBids: function () { q('f', arguments) }, setDisplayBids: function () {}, _Q: []}; A = p.createElement(s); A.async = !0; A.src = t; A.onload = onApstagScriptLoad; g = p.getElementsByTagName(s)[0]; g.parentNode.insertBefore(A, g)
-  })('apstag', window, document, 'script', '//c.amazon-adsystem.com/aax2/apstag.js')
-  /* eslint-enable */
+  // Run apstag JS
+  require('./apstag')
 
   // BEGIN: profile and debug ad performance
   if (window.performance && window.performance.now) {
