@@ -2,6 +2,7 @@
 import adsEnabled from './adsEnabledStatus'
 import prebid from './prebid/prebidModule'
 import prebidConfig from './prebid/prebidConfig'
+import amazonBidder from './amazon/amazonBidder'
 
 // BEGIN: profile and debug ad performance
 if (window.performance && window.performance.now) {
@@ -18,6 +19,7 @@ if (window.performance && window.performance.now) {
 // END: profile and debug ad performance
 
 if (adsEnabled) {
+  amazonBidder()
   prebid()
   prebidConfig()
 } else {
