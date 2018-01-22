@@ -148,58 +148,17 @@ export default function () {
     pbjs.requestBids({
       bidsBackHandler: sendAdserverRequest
     })
-
-    // BEGIN: profile and debug ad performance
-    var adPerfKey = 'prebidBidsRequested'
-    var adPerfName = 'Prebid bids requested'
-    var adPerfLogs = window.adPerfLogs || {}
-    var adPerfTime = window.performance.now()
-    adPerfLogs[adPerfKey] = {
-      time: adPerfTime,
-      name: adPerfName
-    }
-    console.log('Adperf: ' + adPerfName, adPerfTime)
-    // END: profile and debug ad performance
   })
 
   function sendAdserverRequest () {
     if (pbjs.adserverRequestSent) {
       return
     }
-
-    // BEGIN: profile and debug ad performance
-    if (window.performance && window.performance.now) {
-      var adPerfKey = 'adserverRequestSent'
-      var adPerfName = 'DFP request sent (via Prebid)'
-      var adPerfLogs = window.adPerfLogs || {}
-      var adPerfTime = window.performance.now()
-      adPerfLogs[adPerfKey] = {
-        time: adPerfTime,
-        name: adPerfName
-      }
-      console.log('Adperf: ' + adPerfName, adPerfTime)
-    }
-    // END: profile and debug ad performance
-
     pbjs.adserverRequestSent = true
     googletag.cmd.push(() => {
       pbjs.que.push(() => {
         pbjs.setTargetingForGPTAsync()
         googletag.pubads().refresh()
-
-        // BEGIN: profile and debug ad performance
-        if (window.performance && window.performance.now) {
-          var adPerfKey = 'adserverRequestActuallySent'
-          var adPerfName = 'DFP request sent (via Prebid), for real'
-          var adPerfLogs = window.adPerfLogs || {}
-          var adPerfTime = window.performance.now()
-          adPerfLogs[adPerfKey] = {
-            time: adPerfTime,
-            name: adPerfName
-          }
-          console.log('Adperf: ' + adPerfName, adPerfTime)
-        }
-        // END: profile and debug ad performance
       })
     })
   }
