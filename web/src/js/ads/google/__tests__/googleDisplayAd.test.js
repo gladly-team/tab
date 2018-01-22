@@ -1,11 +1,13 @@
 /* eslint-env jest */
 
-import { setUpGoogleTag } from '../googleTag'
 import googleDisplayAd from '../googleDisplayAd'
 
 beforeEach(() => {
   delete window.googletag
-  setUpGoogleTag()
+
+  // Set up googletag
+  window.googletag = {}
+  window.googletag.cmd = []
 })
 
 afterAll(() => {
