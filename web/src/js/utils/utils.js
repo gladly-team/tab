@@ -112,3 +112,15 @@ export const currencyFormatted = (amount) => {
   s = minus + s
   return s
 }
+
+/**
+ * Determine if the page is currently iframed.
+ * @return {boolean} Whether the page is in an iframe.
+ */
+export const isInIframe = () => {
+  try {
+    return window.self !== window.top
+  } catch (e) {
+    return true
+  }
+}
