@@ -10,6 +10,7 @@ import AuthenticationView from '../components/Authentication/AuthenticationView'
 import FirebaseAuthenticationUI from '../components/Authentication/FirebaseAuthenticationUI'
 import VerifyEmailMessage from '../components/Authentication/VerifyEmailMessage'
 import EnterUsernameForm from '../components/Authentication/EnterUsernameForm'
+import SignInIframeMessage from '../components/Authentication/SignInIframeMessage'
 import SettingsComponent from '../components/Settings/SettingsComponent'
 import BackgroundSettingsView from '../components/Settings/Background/BackgroundSettingsView'
 import WidgetsSettingsView from '../components/Settings/Widgets/WidgetsSettingsView'
@@ -39,6 +40,7 @@ export default (
         <Route path='action' component={FirebaseAuthenticationUI} />
         <Route path='verify-email' component={VerifyEmailMessage} />
         <Route path='username' component={EnterUsernameForm} />
+        <Route path='welcome' component={SignInIframeMessage} />
       </Route>
       <Redirect from='*' to='/newtab/' />
     </Route>
