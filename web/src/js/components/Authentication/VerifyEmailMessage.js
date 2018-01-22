@@ -2,8 +2,13 @@ import React from 'react'
 import { Paper } from 'material-ui'
 import RaisedButton from 'material-ui/RaisedButton'
 import {
+  logout,
   sendVerificationEmail
 } from 'authentication/user'
+import {
+  goTo,
+  loginURL
+} from 'navigation/navigation'
 
 class VerifyEmailMessage extends React.Component {
   constructor (props) {
@@ -35,6 +40,11 @@ class VerifyEmailMessage extends React.Component {
     }
   }
 
+  async restartAuthFlow () {
+    await logout()
+    goTo(loginURL)
+  }
+
   render () {
     var buttonLabel = 'RESEND EMAIL'
     var buttonDisabled = false
@@ -48,6 +58,9 @@ class VerifyEmailMessage extends React.Component {
       buttonLabel = 'ERROR SENDING EMAIL'
       buttonDisabled = true
     }
+
+    const cancelButtonLabel = 'CANCEL'
+
     return (
       <Paper
         zDepth={1}
@@ -58,7 +71,6 @@ class VerifyEmailMessage extends React.Component {
         }}
       >
         <p>Please check your email to verify your account.</p>
-        <p>Note: it can take up to an hour for the email to arrive.</p>
         <span
           style={{
             display: 'flex',
@@ -66,6 +78,14 @@ class VerifyEmailMessage extends React.Component {
             marginTop: 24
           }}
         >
+          <RaisedButton
+            label={cancelButtonLabel}
+            disabled={buttonDisabled}
+            onClick={this.restartAuthFlow.bind(this)}
+            style={{
+              marginRight: 8
+            }}
+           />
           <RaisedButton
             label={buttonLabel}
             primary
