@@ -13,6 +13,7 @@ import {
 import {
   goTo,
   authMessageURL,
+  missingEmailMessageURL,
   replaceUrl,
   verifyEmailURL,
   enterUsernameURL,
@@ -152,6 +153,16 @@ class Authentication extends React.Component {
    *   whether or not the email was sent successfully.
    */
   onSignInSuccess (currentUser, credential, redirectUrl) {
+    // Check that the user has an email address.
+    // An email address may be missing if the user signs in
+    // with a social provider that does not share their
+    // email address. In this case, ask the user to sign in
+    // via another method.
+    if (!currentUser.email) {
+      goTo(missingEmailMessageURL)
+      return
+    }
+
     // Create a new user in our database.
     this.createNewUser(currentUser.uid, currentUser.email)
       .then(() => {
