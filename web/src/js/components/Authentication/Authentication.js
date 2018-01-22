@@ -12,6 +12,7 @@ import {
 } from 'authentication/user'
 import {
   goTo,
+  authMessageURL,
   replaceUrl,
   verifyEmailURL,
   enterUsernameURL,
@@ -19,7 +20,10 @@ import {
   goToLogin
 } from 'navigation/navigation'
 import CreateNewUserMutation from 'mutations/CreateNewUserMutation'
-import { getReferralData } from 'web-utils'
+import {
+  getReferralData,
+  isInIframe
+} from 'web-utils'
 import { isEqual } from 'lodash/lang'
 import {
   accountCreated
@@ -103,7 +107,14 @@ class Authentication extends React.Component {
     const authTokenUser = await getCurrentUser()
     // If the user is not logged in, go to main authentication page.
     if (!authTokenUser) {
-      goToLogin()
+      // If the page is in an iframe (e.g. the user opened it via an iframed
+      // new tab), authentication may not work correctly. Show an intermediary
+      // page that will open a non-iframed auth page.
+      if (isInIframe()) {
+        goTo(authMessageURL)
+      } else {
+        goToLogin()
+      }
     // If the user's email is not verified, ask them to
     // check their email.
     } else if (!authTokenUser.emailVerified) {

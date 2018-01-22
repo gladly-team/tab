@@ -26,6 +26,7 @@ export const dashboardURL = '/newtab/'
 export const loginURL = '/newtab/auth/'
 export const verifyEmailURL = '/newtab/auth/verify-email/'
 export const enterUsernameURL = '/newtab/auth/username/'
+export const authMessageURL = '/newtab/auth/welcome/'
 
 // Settings and profile
 export const settingsURL = '/newtab/settings/widgets/'
