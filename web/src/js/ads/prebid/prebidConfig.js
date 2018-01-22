@@ -123,6 +123,10 @@ export default function () {
 
   const googletag = window.googletag || {}
   googletag.cmd = googletag.cmd || []
+
+  // Also called prior to loading Amazon bidder.
+  // Leaving this here to prevent breakage in case we
+  // reorder bidder loading order.
   googletag.cmd.push(() => {
     googletag.pubads().disableInitialLoad()
   })
@@ -142,16 +146,7 @@ export default function () {
     }
 
     pbjs.requestBids({
-      // TODO: revert after debugging TAM
-      // bidsBackHandler: sendAdserverRequest
-      bidsBackHandler: () => {
-        var timeDiff = null
-        if (window.adStartTime) {
-          timeDiff = Date.now() - window.adStartTime
-        }
-        console.log('Bids: Prebid bids back. Milliseconds:', timeDiff)
-        sendAdserverRequest()
-      }
+      bidsBackHandler: sendAdserverRequest
     })
   })
 
@@ -169,11 +164,6 @@ export default function () {
   }
 
   setTimeout(() => {
-    var timeDiff = null
-    if (window.adStartTime) {
-      timeDiff = Date.now() - window.adStartTime
-    }
-    console.log('Bids: Prebid timeout. Milliseconds:', timeDiff)
     sendAdserverRequest()
   }, prebidTimeoutMs)
 }

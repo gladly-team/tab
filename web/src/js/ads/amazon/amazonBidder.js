@@ -4,9 +4,8 @@
 const PREBID_TIMEOUT = 1000
 
 export default function () {
-  (function (a9, a, p, s, t, A, g) {
-    if (a[a9]) return; function q (c, r) { a[a9]._Q.push([c, r]) }a[a9] = {init: function () { q('i', arguments) }, fetchBids: function () { q('f', arguments) }, setDisplayBids: function () {}, _Q: []}; A = p.createElement(s); A.async = !0; A.src = t; g = p.getElementsByTagName(s)[0]; g.parentNode.insertBefore(A, g)
-  })('apstag', window, document, 'script', '//c.amazon-adsystem.com/aax2/apstag.js')
+  // Run apstag JS
+  require('./apstag')
 
   apstag.init({
     pubID: '3397',
@@ -29,14 +28,12 @@ export default function () {
       timeout: PREBID_TIMEOUT
     },
     function (bids) {
-      var timeDiff = null
-      if (window.adStartTime) {
-        timeDiff = Date.now() - window.adStartTime
-      }
-      console.log('Bids: Amazon TAM bids back. Milliseconds:', timeDiff)
       googletag.cmd.push(function () {
         // Set DFP targeting.
         apstag.setDisplayBids()
+
+        // Note: the ads refresh is handled by Prebid.
+        // googletag.pubads().refresh()
       })
     })
 }

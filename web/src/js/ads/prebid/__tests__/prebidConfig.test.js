@@ -1,13 +1,15 @@
 /* eslint-env jest */
 
 import prebidConfig from '../prebidConfig'
-import { setUpGoogleTag } from '../../google/googleTag'
 import { getPrebidPbjs } from '../getPrebidPbjs'
 
 beforeEach(() => {
   delete window.googletag
   delete window.pbjs
-  setUpGoogleTag()
+
+  // Set up googletag
+  window.googletag = {}
+  window.googletag.cmd = []
 })
 
 afterAll(() => {
