@@ -16,7 +16,7 @@ class MissingEmailMessage extends React.Component {
   }
 
   render () {
-    var buttonLabel = 'SIGN IN ANOTHER WAY'
+    var buttonLabel = 'SIGN IN USING ANOTHER METHOD'
     return (
       <Paper
         zDepth={1}
@@ -27,9 +27,9 @@ class MissingEmailMessage extends React.Component {
         }}
       >
         <h3>We couldn't sign you in</h3>
-        <p>This can happen when Facebook or Google don't have your email address on file,
+        <p>This can happen when Facebook or Google doesn't have your email address on file,
          which we use to create your account.
-         Please try signing in with an email and password.</p>
+         Please try signing in with another method, such as an email and password.</p>
 
         <span
           style={{
