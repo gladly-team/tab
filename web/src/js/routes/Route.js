@@ -11,6 +11,7 @@ import FirebaseAuthenticationUI from '../components/Authentication/FirebaseAuthe
 import VerifyEmailMessage from '../components/Authentication/VerifyEmailMessage'
 import EnterUsernameForm from '../components/Authentication/EnterUsernameForm'
 import SignInIframeMessage from '../components/Authentication/SignInIframeMessage'
+import MissingEmailMessage from '../components/Authentication/MissingEmailMessage'
 import SettingsComponent from '../components/Settings/SettingsComponent'
 import BackgroundSettingsView from '../components/Settings/Background/BackgroundSettingsView'
 import WidgetsSettingsView from '../components/Settings/Widgets/WidgetsSettingsView'
@@ -41,6 +42,7 @@ export default (
         <Route path='verify-email' component={VerifyEmailMessage} />
         <Route path='username' component={EnterUsernameForm} />
         <Route path='welcome' component={SignInIframeMessage} />
+        <Route path='missing-email' component={MissingEmailMessage} />
       </Route>
       <Redirect from='*' to='/newtab/' />
     </Route>

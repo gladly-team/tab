@@ -13,6 +13,7 @@ import {
 import {
   goTo,
   authMessageURL,
+  missingEmailMessageURL,
   replaceUrl,
   verifyEmailURL,
   enterUsernameURL,
@@ -105,6 +106,7 @@ class Authentication extends React.Component {
     // step in sign-up, or send them to the dashboard if
     // the sign-up is completed.
     const authTokenUser = await getCurrentUser()
+
     // If the user is not logged in, go to main authentication page.
     if (!authTokenUser) {
       // If the page is in an iframe (e.g. the user opened it via an iframed
@@ -115,6 +117,10 @@ class Authentication extends React.Component {
       } else {
         goToLogin()
       }
+    // If the user does not have an email address, show a message
+    // asking them to sign in with a different method.
+    } else if (!authTokenUser.email) {
+      goTo(missingEmailMessageURL)
     // If the user's email is not verified, ask them to
     // check their email.
     } else if (!authTokenUser.emailVerified) {
@@ -152,6 +158,16 @@ class Authentication extends React.Component {
    *   whether or not the email was sent successfully.
    */
   onSignInSuccess (currentUser, credential, redirectUrl) {
+    // Check that the user has an email address.
+    // An email address may be missing if the user signs in
+    // with a social provider that does not share their
+    // email address. In this case, ask the user to sign in
+    // via another method.
+    if (!currentUser.email) {
+      goTo(missingEmailMessageURL)
+      return
+    }
+
     // Create a new user in our database.
     this.createNewUser(currentUser.uid, currentUser.email)
       .then(() => {
