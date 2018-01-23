@@ -6,6 +6,7 @@ import {
 } from 'authentication/user'
 import {
   replaceUrl,
+  missingEmailMessageURL,
   verifyEmailURL,
   enterUsernameURL,
   goToLogin
@@ -63,6 +64,10 @@ class AuthUserComponent extends React.Component {
     // User is not logged in.
     if (!user || !user.id) {
       goToLogin()
+    // If the user does not have an email address, show a message
+    // asking them to sign in with a different method.
+    } else if (!user.email) {
+      replaceUrl(missingEmailMessageURL)
     // User is logged in but their email is not verified.
     } else if (!user.emailVerified) {
       replaceUrl(verifyEmailURL)
