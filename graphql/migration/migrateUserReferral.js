@@ -33,13 +33,13 @@ export const migrateReferralData = async (referralData) => {
     await ReferralDataModel.create(migrationOverride, {
       userId: referralData.user_id,
       created: referralData.created,
-      updated: referralData.updated,
+      updated: referralData.created,
       referringUser: referralData.referring_user,
       referringChannel: referralData.referring_channel
     })
   } catch (e) {
     logger.error(new Error(`Could not log referrer data:
-      referralData: ${referralData},
+      referralData: ${JSON.stringify(referralData)},
       ${e}
     `))
     throw e
