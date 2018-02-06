@@ -141,3 +141,13 @@ functions:
           path: migrate-user-widgets/
           method: post
           cors: true
+
+  # TODO: delete after migration
+  migrateUserReferral:
+    handler: build/migration/migrateUserReferral.serverlessHandler
+    timeout: 20 # in seconds; default is 6
+    events:
+      - http:
+          path: migrate-user-referral/
+          method: post
+          cors: true
