@@ -308,9 +308,13 @@ class BaseModel {
     const self = this
     const hashKey = item[this.hashKey]
 
-    // Add 'created' and 'updated' fields.
-    item.created = moment.utc().toISOString()
-    item.updated = moment.utc().toISOString()
+    // Add 'created' and 'updated' fields if they're not already set.
+    if (!item.created) {
+      item.created = moment.utc().toISOString()
+    }
+    if (!item.updated) {
+      item.updated = moment.utc().toISOString()
+    }
 
     if (!this.isQueryAuthorized(userContext, 'create', hashKey, null, item)) {
       return Promise.reject(new UnauthorizedQueryException())
@@ -378,8 +382,10 @@ class BaseModel {
     const hashKey = item[this.hashKey]
     const rangeKey = item[this.rangeKey]
 
-    // Update 'updated' field.
-    item.updated = moment.utc().toISOString()
+    // Update 'updated' field if it's not already set.
+    if (!item.updated) {
+      item.updated = moment.utc().toISOString()
+    }
 
     if (!this.isQueryAuthorized(userContext, 'update', hashKey, rangeKey, item)) {
       return Promise.reject(new UnauthorizedQueryException())

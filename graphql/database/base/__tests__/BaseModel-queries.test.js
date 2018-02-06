@@ -575,7 +575,7 @@ describe('BaseModel queries', () => {
       get: () => true
     })
 
-    const itemToGetOrCreate = fixturesA[1]
+    const itemToGetOrCreate = removeCreatedAndUpdatedFields(fixturesA[1])
 
     const dbCreateQueryMock = setMockDBResponse(
       DatabaseOperation.CREATE,
@@ -631,7 +631,7 @@ describe('BaseModel queries', () => {
       get: () => true
     })
 
-    const itemToGetOrCreate = fixturesA[1]
+    const itemToGetOrCreate = removeCreatedAndUpdatedFields(fixturesA[1])
 
     // Mock that the item already exists.
     setMockDBResponse(
@@ -685,5 +685,85 @@ describe('BaseModel queries', () => {
     )
     return expect(ExampleModel.getOrCreate(user, itemToGetOrCreate))
       .rejects.toEqual(new UnauthorizedQueryException())
+  })
+
+  it('allows overriding the "created" and "updated" timestamp fields during item creation', async () => {
+    setModelPermissions(ExampleModel, {
+      create: () => true
+    })
+
+    // Set mock response from DB client.
+    const dbQueryMock = setMockDBResponse(
+      DatabaseOperation.CREATE,
+      {
+        // https://docs.aws.amazon.com/cli/latest/reference/dynamodb/put-item.html#output
+        Attributes: {}
+      }
+    )
+
+    const item = Object.assign({}, fixturesA[0])
+    const itemToCreate = removeCreatedAndUpdatedFields(item)
+
+    // Add our overridden "created" and "updated" timestamps.
+    itemToCreate.created = '2017-12-24T07:00:00.001Z'
+    itemToCreate.updated = '2017-12-25T07:15:02.025Z'
+    await ExampleModel.create(user, itemToCreate)
+
+    // Verify DB params.
+    const dbParams = dbQueryMock.mock.calls[0][0]
+    expect(dbParams).toEqual(
+      {
+        Item: {
+          created: '2017-12-24T07:00:00.001Z',
+          id: item.id,
+          name: item.name,
+          updated: '2017-12-25T07:15:02.025Z'
+        },
+        TableName: ExampleModel.tableName
+      }
+    )
+  })
+
+  it('allows overriding the "updated" timestamp field during item updating', async () => {
+    setModelPermissions(ExampleModel, {
+      update: () => true
+    })
+
+    // Set mock response from DB client.
+    const item = Object.assign({}, fixturesA[0])
+    const expectedReturn = Object.assign({}, item, {
+      updated: moment.utc().toISOString()
+    })
+    const dbQueryMock = setMockDBResponse(
+      DatabaseOperation.UPDATE,
+      {
+        Attributes: expectedReturn
+      }
+    )
+
+    // Add our overridden updated" timestamp.
+    const itemToUpdate = removeCreatedAndUpdatedFields(item)
+    itemToUpdate.updated = '2017-12-25T07:15:02.025Z'
+
+    await ExampleModel.update(user, itemToUpdate)
+
+    // Verify DB params.
+    const dbParams = dbQueryMock.mock.calls[0][0]
+    expect(dbParams).toEqual({
+      TableName: ExampleModel.tableName,
+      Key: {
+        id: item.id
+      },
+      ReturnValues: 'ALL_NEW',
+      ExpressionAttributeValues: {
+        ':name': item.name,
+        ':updated': '2017-12-25T07:15:02.025Z'
+      },
+      ExpressionAttributeNames: {
+        '#name': 'name',
+        '#updated': 'updated'
+      },
+      UpdateExpression: 'SET #name = :name, #updated = :updated'
+    })
   })
 })
