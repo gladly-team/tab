@@ -83,7 +83,7 @@ class AddTodoForm extends React.Component {
     return (
       <EditWidgetChip
         open={this.state.open}
-        widgetName={'Todos'}
+        widgetName={'Tasks'}
         onAddItemClick={this.openForm.bind(this)}
         onCancelAddItemClick={this.closeForm.bind(this)}
         onItemCreatedClick={this.create.bind(this)}
