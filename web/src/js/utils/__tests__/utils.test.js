@@ -74,6 +74,29 @@ describe('getting referral data', () => {
   })
 })
 
+describe('number utils', () => {
+  it('comma-formats correctly', () => {
+    const commaFormatted = require('../utils').commaFormatted
+    expect(commaFormatted('460932.44')).toBe('460,932.44')
+    expect(commaFormatted('460932')).toBe('460,932')
+    expect(commaFormatted('123456789')).toBe('123,456,789')
+    expect(commaFormatted('21')).toBe('21')
+    expect(commaFormatted(460932.44)).toBe('460,932.44')
+    expect(commaFormatted(0)).toBe('0')
+  })
+
+  it('formats currency correctly', () => {
+    const currencyFormatted = require('../utils').currencyFormatted
+    expect(currencyFormatted('460932.44')).toBe('460932.44')
+    expect(currencyFormatted('460932')).toBe('460932.00')
+    expect(currencyFormatted('460932.1')).toBe('460932.10')
+    expect(currencyFormatted('460932.1534454239')).toBe('460932.15')
+    expect(currencyFormatted('460932.156')).toBe('460932.16')
+    expect(currencyFormatted(460932.44)).toBe('460932.44')
+    expect(currencyFormatted(0)).toBe('0.00')
+  })
+})
+
 describe('iframe utils', () => {
   it('detects when not in iframe', () => {
     const isInIframe = require('../utils').isInIframe

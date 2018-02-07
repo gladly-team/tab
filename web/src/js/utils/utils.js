@@ -38,7 +38,7 @@ export const getUrlParameters = () => {
   return vars
 }
 
-// Begin referral data helpers
+// BEGIN: referral data helpers
 
 const referralParams = [
   {
@@ -72,14 +72,20 @@ export const getReferralData = () => {
   return data
 }
 
-// End referral data helpers
+// END: referral data helpers
+
+// BEGIN: number helpers
 
 export const commaFormatted = (amount) => {
   var delimiter = ',' // replace comma if desired
   amount = amount.toString()
-  var a = amount.split('.', 2)
-  var d = a[1]
-  var i = parseInt(a[0])
+  var i = amount
+  var d = null
+  if (amount.indexOf('.') > -1) {
+    var a = amount.split('.', 2)
+    d = a[1]
+    i = parseInt(a[0])
+  }
   if (isNaN(i)) { return '' }
   var minus = ''
   if (i < 0) { minus = '-' }
@@ -112,6 +118,8 @@ export const currencyFormatted = (amount) => {
   s = minus + s
   return s
 }
+
+// END: number helpers
 
 /**
  * Determine if the page is currently iframed.
