@@ -396,9 +396,18 @@ const customErrorType = new GraphQLObjectType({
 /**
  * Define your own connection types here
  */
-const { connectionType: widgetConnection, edgeType: widgetEdge } = connectionDefinitions({ name: WIDGET, nodeType: widgetType })
-const { connectionType: charityConnection, edgeType: charityEdge } = connectionDefinitions({ name: CHARITY, nodeType: charityType })
-const { connectionType: backgroundImageConnection, edgeType: backgroundImageEdge } = connectionDefinitions({ name: BACKGROUND_IMAGE, nodeType: backgroundImageType })
+const { connectionType: widgetConnection, edgeType: widgetEdge } = connectionDefinitions({
+  name: WIDGET,
+  nodeType: widgetType
+})
+const { connectionType: charityConnection, edgeType: charityEdge } = connectionDefinitions({
+  name: CHARITY,
+  nodeType: charityType
+})
+const { connectionType: backgroundImageConnection, edgeType: backgroundImageEdge } = connectionDefinitions({
+  name: BACKGROUND_IMAGE,
+  nodeType: backgroundImageType
+})
 
 /**
  * Updated the user vc.
