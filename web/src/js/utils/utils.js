@@ -38,7 +38,7 @@ export const getUrlParameters = () => {
   return vars
 }
 
-// Begin referral data helpers
+// BEGIN: referral data helpers
 
 const referralParams = [
   {
@@ -72,14 +72,29 @@ export const getReferralData = () => {
   return data
 }
 
-// End referral data helpers
+// END: referral data helpers
 
+// BEGIN: number helpers
+
+/**
+ * Takes a number or numerical string and returns a string with commas
+ * between each pair of three non-fractional digits.
+ * @param {number|string} amount - A number or numerical string
+ * @return {string} The amount with commas where appropriate
+ */
 export const commaFormatted = (amount) => {
+  if (amount === undefined || amount === null) {
+    return '0'
+  }
   var delimiter = ',' // replace comma if desired
   amount = amount.toString()
-  var a = amount.split('.', 2)
-  var d = a[1]
-  var i = parseInt(a[0])
+  var i = amount
+  var d = null
+  if (amount.indexOf('.') > -1) {
+    var a = amount.split('.', 2)
+    d = a[1]
+    i = parseInt(a[0])
+  }
   if (isNaN(i)) { return '' }
   var minus = ''
   if (i < 0) { minus = '-' }
@@ -98,7 +113,15 @@ export const commaFormatted = (amount) => {
   return amount
 }
 
+/**
+ * Takes a number or numerical string and returns a string with two decimal places.
+ * @param {number|string} amount - A number or numerical string
+ * @return {string} The amount with exactly two decimal places (rounded or appended)
+ */
 export const currencyFormatted = (amount) => {
+  if (amount === undefined || amount === null) {
+    return '0.00'
+  }
   var i = parseFloat(amount)
   if (isNaN(i)) { i = 0.00 }
   var minus = ''
@@ -112,6 +135,29 @@ export const currencyFormatted = (amount) => {
   s = minus + s
   return s
 }
+
+/**
+ * Abbreviate a number to a string with a power suffix (e.g. 248345 to 248.3K)
+ * @param {number} num - A number
+ * @param {number} decimalPlaces - The maximum number of decimal places to show
+ * @return {string} The abbreviated number
+ */
+export const abbreviateNumber = (num, decimalPlaces = 1) => {
+  // From: https://stackoverflow.com/a/32638472/1332513
+  // Alternative, more flexible library if needed:
+  //   http://numeraljs.com/
+  if (num === undefined || num === null || num === 0) {
+    return '0'
+  }
+  decimalPlaces = (!decimalPlaces || decimalPlaces < 0) ? 0 : decimalPlaces
+  const b = (num).toPrecision(2).split('e')
+  const k = b.length === 1 ? 0 : Math.floor(Math.min(b[1].slice(1), 14) / 3)
+  const c = k < 1 ? num.toFixed(0 + decimalPlaces) : (num / Math.pow(10, k * 3)).toFixed(decimalPlaces)
+  const d = c < 0 ? c : Math.abs(c)
+  const e = d + ['', 'K', 'M', 'B', 'T'][k]
+  return e
+}
+// END: number helpers
 
 /**
  * Determine if the page is currently iframed.

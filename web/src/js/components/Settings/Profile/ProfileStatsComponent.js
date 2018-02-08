@@ -14,6 +14,7 @@ import {
   goToInviteFriends,
   goToDonate
 } from 'navigation/navigation'
+import { abbreviateNumber, commaFormatted } from 'utils/utils'
 
 class ProfileStats extends React.Component {
   render () {
@@ -69,17 +70,17 @@ class ProfileStats extends React.Component {
           }}
         >
           <Stat
-            stat={daysSinceJoined}
+            stat={commaFormatted(daysSinceJoined)}
             statText={`${dayWord} as a Tabber`}
             style={statStyle}
           />
           <Stat
-            stat={user.tabs}
+            stat={abbreviateNumber(user.tabs, 1)}
             statText={'tabs all time'}
             style={statStyle}
           />
           <Stat
-            stat={user.maxTabsDay.numTabs}
+            stat={commaFormatted(user.maxTabsDay.numTabs)}
             statText={'max tabs in one day'}
             extraContent={
               <span style={extraContentTextStyle}>
@@ -104,7 +105,7 @@ class ProfileStats extends React.Component {
             style={statStyle}
           />
           <Stat
-            stat={user.numUsersRecruited}
+            stat={commaFormatted(user.numUsersRecruited)}
             statText={`${tabberWord} recruited`}
             style={statStyle}
             extraContent={
@@ -117,7 +118,7 @@ class ProfileStats extends React.Component {
             }
           />
           <Stat
-            stat={user.vcDonatedAllTime}
+            stat={abbreviateNumber(user.vcDonatedAllTime, 1)}
             statText={`${heartsWord} donated`}
             style={statStyle}
             extraContent={
