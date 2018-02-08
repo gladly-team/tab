@@ -83,6 +83,9 @@ export const getReferralData = () => {
  * @return {string} The amount with commas where appropriate
  */
 export const commaFormatted = (amount) => {
+  if (amount === undefined || amount === null) {
+    return '0'
+  }
   var delimiter = ',' // replace comma if desired
   amount = amount.toString()
   var i = amount
@@ -116,6 +119,9 @@ export const commaFormatted = (amount) => {
  * @return {string} The amount with exactly two decimal places (rounded or appended)
  */
 export const currencyFormatted = (amount) => {
+  if (amount === undefined || amount === null) {
+    return '0.00'
+  }
   var i = parseFloat(amount)
   if (isNaN(i)) { i = 0.00 }
   var minus = ''
@@ -140,8 +146,9 @@ export const abbreviateNumber = (num, decimalPlaces = 1) => {
   // From: https://stackoverflow.com/a/32638472/1332513
   // Alternative, more flexible library if needed:
   //   http://numeraljs.com/
-  if (num === null) { return null }
-  if (num === 0) { return '0' }
+  if (num === undefined || num === null || num === 0) {
+    return '0'
+  }
   decimalPlaces = (!decimalPlaces || decimalPlaces < 0) ? 0 : decimalPlaces
   const b = (num).toPrecision(2).split('e')
   const k = b.length === 1 ? 0 : Math.floor(Math.min(b[1].slice(1), 14) / 3)

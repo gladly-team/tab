@@ -83,6 +83,10 @@ describe('number utils', () => {
     expect(commaFormatted('21')).toBe('21')
     expect(commaFormatted(460932.44)).toBe('460,932.44')
     expect(commaFormatted(0)).toBe('0')
+
+    // Handles bad values
+    expect(commaFormatted(undefined)).toBe('0')
+    expect(commaFormatted(null)).toBe('0')
   })
 
   it('formats currency correctly', () => {
@@ -94,6 +98,10 @@ describe('number utils', () => {
     expect(currencyFormatted('460932.156')).toBe('460932.16')
     expect(currencyFormatted(460932.44)).toBe('460932.44')
     expect(currencyFormatted(0)).toBe('0.00')
+
+    // Handles bad values
+    expect(currencyFormatted(undefined)).toBe('0.00')
+    expect(currencyFormatted(null)).toBe('0.00')
   })
 
   it('abbreviates numbers correctly', () => {
@@ -122,6 +130,10 @@ describe('number utils', () => {
     expect(abbreviateNumber(248052401, 2)).toBe('248.05M')
     expect(abbreviateNumber(4424852401)).toBe('4.4B')
     expect(abbreviateNumber(4424852401, 4)).toBe('4.4249B')
+
+    // Handles bad values
+    expect(abbreviateNumber(undefined)).toBe('0')
+    expect(abbreviateNumber(null)).toBe('0')
   })
 })
 
