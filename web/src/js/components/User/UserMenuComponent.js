@@ -27,6 +27,7 @@ import appTheme, {
   dashboardIconInactiveColor,
   dividerColor
 } from 'theme/default'
+import { commaFormatted } from 'utils/utils'
 
 class UserMenu extends React.Component {
   constructor (props) {
@@ -225,7 +226,7 @@ class UserMenu extends React.Component {
           onMouseLeave={this.onHeartsHover.bind(this, false)}
           onClick={this.onHeartsClick.bind(this)}
         >
-          <span>{user.vcCurrent}</span>
+          <span>{commaFormatted(user.vcCurrent)}</span>
           <HeartBorderIcon
             style={{ marginLeft: 2, height: 24, width: 24, paddingBottom: 0 }}
             color={dashboardIconInactiveColor}
