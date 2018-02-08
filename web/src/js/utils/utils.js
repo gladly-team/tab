@@ -76,6 +76,12 @@ export const getReferralData = () => {
 
 // BEGIN: number helpers
 
+/**
+ * Takes a number or numerical string and returns a string with commas
+ * between each pair of three non-fractional digits.
+ * @param {number|string} amount - A number or numerical string
+ * @return {string} The amount with commas where appropriate
+ */
 export const commaFormatted = (amount) => {
   var delimiter = ',' // replace comma if desired
   amount = amount.toString()
@@ -104,6 +110,11 @@ export const commaFormatted = (amount) => {
   return amount
 }
 
+/**
+ * Takes a number or numerical string and returns a string with two decimal places.
+ * @param {number|string} amount - A number or numerical string
+ * @return {string} The amount with exactly two decimal places (rounded or appended)
+ */
 export const currencyFormatted = (amount) => {
   var i = parseFloat(amount)
   if (isNaN(i)) { i = 0.00 }
