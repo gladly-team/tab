@@ -1,6 +1,5 @@
-/* eslint-disable no-unused-vars, no-use-before-define */
+/* eslint-disable no-use-before-define */
 
-import config from '../config'
 import {
   WIDGET,
   CHARITY,
@@ -11,7 +10,6 @@ import {
 import {
   GraphQLBoolean,
   GraphQLFloat,
-  GraphQLID,
   GraphQLInt,
   GraphQLList,
   GraphQLNonNull,
@@ -24,14 +22,11 @@ import {
 import {
   connectionArgs,
   connectionDefinitions,
-  connectionFromArray,
   fromGlobalId,
   globalIdField,
   mutationWithClientMutationId,
   nodeDefinitions,
-  cursorForObjectInConnection,
-  connectionFromPromisedArray,
-  offsetToCursor
+  connectionFromPromisedArray
 } from 'graphql-relay'
 
 import Widget from '../database/widgets/Widget'
@@ -62,7 +57,6 @@ import donateVc from '../database/donations/donateVc'
 import BackgroundImageModel from '../database/backgroundImages/BackgroundImageModel'
 
 import {
-  Globals,
   getMoneyRaised,
   getReferralVcReward,
   getDollarsPerDayRate
@@ -394,17 +388,18 @@ const customErrorType = new GraphQLObjectType({
 })
 
 /**
- * Define your own connection types here
+ * Define your own connection types here.
+ * `connectionDefinitions` returns a `connectionType` and its associated `edgeType`.
  */
-const { connectionType: widgetConnection, edgeType: widgetEdge } = connectionDefinitions({
+const { connectionType: widgetConnection } = connectionDefinitions({
   name: WIDGET,
   nodeType: widgetType
 })
-const { connectionType: charityConnection, edgeType: charityEdge } = connectionDefinitions({
+const { connectionType: charityConnection } = connectionDefinitions({
   name: CHARITY,
   nodeType: charityType
 })
-const { connectionType: backgroundImageConnection, edgeType: backgroundImageEdge } = connectionDefinitions({
+const { connectionType: backgroundImageConnection } = connectionDefinitions({
   name: BACKGROUND_IMAGE,
   nodeType: backgroundImageType
 })
@@ -424,7 +419,7 @@ const logTabMutation = mutationWithClientMutationId({
     }
   },
   mutateAndGetPayload: ({userId}, context) => {
-    const { type, id } = fromGlobalId(userId)
+    const { id } = fromGlobalId(userId)
     return logTab(context.user, id)
   }
 })
