@@ -2,7 +2,8 @@ import {
   WIDGET,
   CHARITY,
   USER,
-  BACKGROUND_IMAGE
+  BACKGROUND_IMAGE,
+  USER_RECRUITS
 } from '../database/constants'
 
 import {
@@ -54,6 +55,11 @@ import donateVc from '../database/donations/donateVc'
 
 import BackgroundImageModel from '../database/backgroundImages/BackgroundImageModel'
 
+import getRecruits, {
+  getTotalRecruitsCount,
+  getRecruitsActiveForAtLeastOneDay
+} from '../database/referrals/getRecruits'
+
 import {
   getMoneyRaised,
   getReferralVcReward,
@@ -90,6 +96,7 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     } else if (type === BACKGROUND_IMAGE) {
       return BackgroundImageModel.get(context.user, id)
     }
+    // TODO: UserRecruits
     return null
   },
   (obj) => {
@@ -214,6 +221,17 @@ const userType = new GraphQLObjectType({
       type: GraphQLInt,
       description: 'User\'s total vc donated'
     },
+    recruits: {
+      type: userRecruitsConnection,
+      description: 'People recruited by this user',
+      args: {
+        ...connectionArgs,
+        startTime: { type: GraphQLString },
+        endTime: { type: GraphQLString }
+      },
+      resolve: (user, args, context) => connectionFromPromisedArray(
+        getRecruits(context.user, user.id, args.startTime, args.endTime), args)
+    },
     numUsersRecruited: {
       type: GraphQLInt,
       description: 'The number of users this user has recruited'
@@ -244,6 +262,26 @@ const userType = new GraphQLObjectType({
       type: GraphQLString,
       description: 'User\'s background color'
     }
+  }),
+  interfaces: [nodeInterface]
+})
+
+const userRecruitsEdgeType = new GraphQLObjectType({
+  name: USER_RECRUITS,
+  description: 'Info about a user recruited by a referring user',
+  fields: () => ({
+    id: globalIdField(USER_RECRUITS),
+    recruitedAt: {
+      type: GraphQLString,
+      description: 'ISO datetime string of when the recruited user joined'
+    }
+    // Note: we won't expose this because it may be potentially sensitive for a referrer
+    // to know individual behavior of recruits.
+    // activeForAtLeastOneDay: {
+    //   type: GraphQLBoolean,
+    //   description: 'Whether or not the recruited user remained active for at least ' +
+    //     'one day after joining'
+    // }
   }),
   interfaces: [nodeInterface]
 })
@@ -390,6 +428,8 @@ const customErrorType = new GraphQLObjectType({
 /**
  * Define your own connection types here.
  * `connectionDefinitions` returns a `connectionType` and its associated `edgeType`.
+ * It can contain definitions for "edgeFields" and "connectionFields":
+ * https://github.com/graphql/graphql-relay-js/blob/373f2dab5fc6d4ac4cf6394aa94cbebd8cb64650/src/connection/connection.js#L62
  */
 const { connectionType: widgetConnection } = connectionDefinitions({
   name: WIDGET,
@@ -402,6 +442,22 @@ const { connectionType: charityConnection } = connectionDefinitions({
 const { connectionType: backgroundImageConnection } = connectionDefinitions({
   name: BACKGROUND_IMAGE,
   nodeType: backgroundImageType
+})
+const { connectionType: userRecruitsConnection } = connectionDefinitions({
+  name: USER_RECRUITS,
+  nodeType: userRecruitsEdgeType,
+  connectionFields: {
+    totalRecruits: {
+      type: GraphQLInt,
+      description: 'The count of users recruited (signed up)',
+      resolve: connection => getTotalRecruitsCount(connection.edges)
+    },
+    recruitsActiveForAtLeastOneDay: {
+      type: GraphQLInt,
+      description: 'The count of users recruited who remained active for one day or more',
+      resolve: connection => getRecruitsActiveForAtLeastOneDay(connection.edges)
+    }
+  }
 })
 
 /**

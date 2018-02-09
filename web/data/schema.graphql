@@ -360,6 +360,9 @@ type User implements Node {
   # User's total vc donated
   vcDonatedAllTime: Int
 
+  # People recruited by this user
+  recruits(after: String, first: Int, before: String, last: Int, startTime: String, endTime: String): UserRecruitsConnection
+
   # The number of users this user has recruited
   numUsersRecruited: Int
 
@@ -377,6 +380,39 @@ type User implements Node {
 
   # User's background color
   backgroundColor: String
+}
+
+# Info about a user recruited by a referring user
+type UserRecruits implements Node {
+  # The ID of an object
+  id: ID!
+
+  # ISO datetime string of when the recruited user joined
+  recruitedAt: String
+}
+
+# A connection to a list of items.
+type UserRecruitsConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [UserRecruitsEdge]
+
+  # The count of users recruited (signed up)
+  totalRecruits: Int
+
+  # The count of users recruited who remained active for one day or more
+  recruitsActiveForAtLeastOneDay: Int
+}
+
+# An edge in a connection.
+type UserRecruitsEdge {
+  # The item at the end of the edge
+  node: UserRecruits
+
+  # A cursor for use in pagination
+  cursor: String!
 }
 
 # App widget
