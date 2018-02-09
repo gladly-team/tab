@@ -51,5 +51,5 @@ export const tableFixtureFileNames = {
   widgets: 'Widgets.json',
   userWidgets: 'UserWidgets.json',
   userTabsLog: '',
-  referralDataLog: ''
+  referralDataLog: 'ReferralDataLog.json'
 }
