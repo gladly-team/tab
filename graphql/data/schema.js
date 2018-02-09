@@ -82,6 +82,8 @@ class App {
  * The second defines the way we resolve an object to its GraphQL type.
  */
 // https://stackoverflow.com/a/33411416
+// Note that it's NOT required for a type to use the Node interface:
+// https://github.com/facebook/relay/issues/1061#issuecomment-227857031
 const { nodeInterface, nodeField } = nodeDefinitions(
   (globalId, context) => {
     const { type, id } = fromGlobalId(globalId)
