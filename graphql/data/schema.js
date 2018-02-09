@@ -612,6 +612,10 @@ const setUserActiveWidgetMutation = mutationWithClientMutationId({
   },
   mutateAndGetPayload: ({userId, widgetId}, context) => {
     const userGlobalObj = fromGlobalId(userId)
+    // FIXME: widgetId should use `fromGlobalId` first. Note that
+    // the active widget ID in the database for existing users is
+    // currently using the global ID, so any change must be
+    // backwards-compatible.
     return setActiveWidget(context.user, userGlobalObj.id, widgetId)
   }
 })
