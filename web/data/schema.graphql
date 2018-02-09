@@ -383,7 +383,7 @@ type User implements Node {
 }
 
 # Info about a user recruited by a referring user
-type UserRecruits implements Node {
+type UserRecruits {
   # The ID of an object
   id: ID!
 

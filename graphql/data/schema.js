@@ -98,7 +98,6 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     } else if (type === BACKGROUND_IMAGE) {
       return BackgroundImageModel.get(context.user, id)
     }
-    // TODO: UserRecruits
     return null
   },
   (obj) => {
@@ -272,20 +271,22 @@ const userRecruitType = new GraphQLObjectType({
   name: USER_RECRUITS,
   description: 'Info about a user recruited by a referring user',
   fields: () => ({
-    id: globalIdField(USER_RECRUITS),
+    // Ideally, we should build the global ID using the composite value of
+    // "referringUser" and "userID", which is guaranteed to be unique and can
+    // resolve back to one object via the nodeInterface. However, for privacy
+    // concerns, we should then also encrypt the userID because we don't want
+    // a referrer to know all the IDs of their recruits. For simplicity, we'll
+    // just use a compound value of "referringUser" and "recruitedAt", which is
+    // almost certainly unique, and just not implement nodeInterface now.
+    // https://github.com/graphql/graphql-relay-js/blob/4fdadd3bbf3d5aaf66f1799be3e4eb010c115a4a/src/node/node.js#L138
+    id: globalIdField(USER_RECRUITS, (recruit) => `${recruit.referringUser}::${recruit.recruitedAt}`),
     recruitedAt: {
       type: GraphQLString,
       description: 'ISO datetime string of when the recruited user joined'
     }
-    // Note: we won't expose this because it may be potentially sensitive for a referrer
-    // to know individual behavior of recruits.
-    // activeForAtLeastOneDay: {
-    //   type: GraphQLBoolean,
-    //   description: 'Whether or not the recruited user remained active for at least ' +
-    //     'one day after joining'
-    // }
-  }),
-  interfaces: [nodeInterface]
+  })
+  // We haven't implemented nodeInterface here because a refetch is unlikely. See above.
+  // interfaces: [nodeInterface]
 })
 
 const widgetType = new GraphQLObjectType({
@@ -447,6 +448,10 @@ const { connectionType: backgroundImageConnection } = connectionDefinitions({
 })
 const { connectionType: userRecruitsConnection } = connectionDefinitions({
   name: USER_RECRUITS,
+  // Note: this could reasonably just be a userType instead, but creating a
+  // separate type gives us an extra layer of protection against accidentally
+  // leaking recruits' user data-- at least until our permissions system is
+  // more sophisticated.
   nodeType: userRecruitType,
   connectionFields: {
     totalRecruits: {
