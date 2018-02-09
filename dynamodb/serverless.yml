@@ -92,6 +92,7 @@ custom:
           usage: 0.60
       referralDataLogTable:
         read:
+          # TODO: increase before we fetch a user's referrals
           minimum: 1
           maximum: 1000
           usage: 0.75
@@ -430,6 +431,8 @@ resources:
         AttributeDefinitions:
           - AttributeName: userId
             AttributeType: S
+        # TODO: GlobalSecondaryIndexes for referringUser (hash key) and
+        #   created (sort key)
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
