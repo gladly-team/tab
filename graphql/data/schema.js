@@ -266,7 +266,7 @@ const userType = new GraphQLObjectType({
   interfaces: [nodeInterface]
 })
 
-const userRecruitsEdgeType = new GraphQLObjectType({
+const userRecruitType = new GraphQLObjectType({
   name: USER_RECRUITS,
   description: 'Info about a user recruited by a referring user',
   fields: () => ({
@@ -445,7 +445,7 @@ const { connectionType: backgroundImageConnection } = connectionDefinitions({
 })
 const { connectionType: userRecruitsConnection } = connectionDefinitions({
   name: USER_RECRUITS,
-  nodeType: userRecruitsEdgeType,
+  nodeType: userRecruitType,
   connectionFields: {
     totalRecruits: {
       type: GraphQLInt,
