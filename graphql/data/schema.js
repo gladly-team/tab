@@ -156,6 +156,8 @@ const maxTabsDayType = new GraphQLObjectType({
   })
 })
 
+// TODO: fetch only the fields we need:
+// https://github.com/graphql/graphql-js/issues/19#issuecomment-272857189
 const userType = new GraphQLObjectType({
   name: USER,
   description: 'A person who uses our app',
