@@ -1,30 +1,36 @@
 
 import { filter } from 'lodash/collection'
 
+import ReferralDataModel from './ReferralDataModel'
+
 /**
  * Get an array of a user's recruits.
  * @param {object} userContext - The user authorizer object.
- * @param {string} userId - The user id.
+ * @param {string} referringUserId - The user id of the referrer.
  * @return {Promise<Object[]>}  Returns a list of objects, each of
  *   which contains information about a recruited user.
  */
-const getRecruits = async (userContext, userId, startTime = null, endTime = null) => {
-  // TODO: implement
+export const getRecruits = async (userContext, referringUserId, startTime = null, endTime = null) => {
   // TODO: replace 'activeForAtLeastOneDay' with the more flexible 'lastActive'
-  return [
-    {
-      recruitedAt: '2017-05-19T13:59:46.000Z',
+  const referralLogs = await ReferralDataModel.query(userContext, referringUserId)
+    .usingIndex('ReferralsByReferrer')
+    .execute()
+
+  // TODO
+  // Batch-get times of last tab opened for recruits
+  // const recruitsLastActiveTimes = {}
+
+  const recruitData = []
+  referralLogs.forEach((referralLog) => {
+    // Do not include any sensitive user data about recruits, because
+    // this data is visible to the referrer.
+    recruitData.push({
+      recruitedAt: referralLog.created,
+      // TODO: look up from recruitsLastActiveTimes
       activeForAtLeastOneDay: true
-    },
-    {
-      recruitedAt: '2017-02-07T13:59:46.000Z',
-      activeForAtLeastOneDay: false
-    },
-    {
-      recruitedAt: '2017-02-07T17:69:46.000Z',
-      activeForAtLeastOneDay: false
-    }
-  ]
+    })
+  })
+  return recruitData
 }
 
 /**
