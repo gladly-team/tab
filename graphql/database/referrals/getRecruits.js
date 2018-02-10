@@ -3,6 +3,12 @@ import moment from 'moment'
 import { filter } from 'lodash/collection'
 
 import ReferralDataModel from './ReferralDataModel'
+import UserModel from '../users/UserModel'
+import {
+  getPermissionsOverride,
+  GET_RECRUITS_LAST_ACTIVE_OVERRIDE
+} from '../../utils/permissions-overrides'
+const getRecruitsOverride = getPermissionsOverride(GET_RECRUITS_LAST_ACTIVE_OVERRIDE)
 
 /**
  * Get an array of a user's recruits.
@@ -17,13 +23,27 @@ import ReferralDataModel from './ReferralDataModel'
  *   opened a tab.
  */
 export const getRecruits = async (userContext, referringUserId, startTime = null, endTime = null) => {
+  // TODO: support startTime and endTime constraints
   const referralLogs = await ReferralDataModel.query(userContext, referringUserId)
     .usingIndex('ReferralsByReferrer')
     .execute()
 
-  // TODO
-  // Batch-get times of last tab opened for recruits
-  // const recruitsLastActiveTimes = {}
+  // The user has no recruits
+  if (referralLogs.length === 0) {
+    return []
+  }
+
+  // Batch-get times of last tab opened for recruits of shape:
+  // [{ userId: 'timeOfLastTab' }]
+  const recruitsLastActiveTimes = await UserModel.getBatch(getRecruitsOverride,
+    referralLogs.map(recruit => recruit.userId) // array of recruits' user IDs
+  ).then((recruits) => {
+    let recruitsLastActiveMap = {}
+    recruits.forEach((user) => {
+      recruitsLastActiveMap[user.id] = user.lastTabTimestamp || null
+    })
+    return recruitsLastActiveMap
+  })
 
   const recruitData = []
   referralLogs.forEach((referralLog) => {
@@ -31,8 +51,7 @@ export const getRecruits = async (userContext, referringUserId, startTime = null
     // this data is visible to the referrer.
     recruitData.push({
       recruitedAt: referralLog.created,
-      // TODO: look up from recruitsLastActiveTimes
-      lastActive: '2017-08-22T07:40:01Z'
+      lastActive: recruitsLastActiveTimes[referralLog.userId] || null
     })
   })
   return recruitData

@@ -8,6 +8,7 @@ import {
 } from '../../test-utils'
 
 import ReferralDataModel from '../ReferralDataModel'
+import UserModel from '../../users/UserModel'
 
 jest.mock('../../databaseClient')
 const userContext = getMockUserContext()
@@ -31,12 +32,12 @@ describe('getRecruits', () => {
     expect(queryExec).toHaveBeenCalled()
   })
 
-  it('getRecruits (with no time filters) forms database queries and return value as expected', async () => {
+  it('getRecruits (with no time filters) forms database queries and returns expected value', async () => {
     const referringUserId = getMockUserInfo().id
     const getRecruits = require('../getRecruits').getRecruits
 
     // Mock ReferralDataModel query
-    const itemsToReturn = [
+    const referralDataLogsToReturn = [
       {
         userId: 'efghijklmnopqrs',
         referringUser: referringUserId,
@@ -50,18 +51,35 @@ describe('getRecruits', () => {
         updated: '2017-08-20T17:32:01Z'
       }
     ]
-    const dbQueryMock = setMockDBResponse(
+    const referralLogQueryMock = setMockDBResponse(
       DatabaseOperation.QUERY,
       {
-        Items: itemsToReturn
+        Items: referralDataLogsToReturn
       }
     )
 
-    // TODO:
     // Mock User query
+    const recruitedUsersToReturn = [
+      {
+        id: 'efghijklmnopqrs',
+        lastTabTimestamp: '2017-07-21T05:15:00Z' // >2 days after joining
+      },
+      {
+        id: 'pqrstuvwxyzabcd',
+        lastTabTimestamp: '2017-08-20T17:40:52Z' // <1 hour after joining
+      }
+    ]
+    setMockDBResponse(
+      DatabaseOperation.GET_BATCH,
+      {
+        Responses: {
+          [UserModel.tableName]: recruitedUsersToReturn
+        }
+      }
+    )
 
     const returnedVal = await getRecruits(userContext, referringUserId)
-    expect(dbQueryMock.mock.calls[0][0]).toEqual({
+    expect(referralLogQueryMock.mock.calls[0][0]).toEqual({
       ExpressionAttributeNames: {
         '#referringUser': 'referringUser'
       },
@@ -73,21 +91,124 @@ describe('getRecruits', () => {
       TableName: ReferralDataModel.tableName
     })
 
-    // TODO: update "lastActive" fields after mocking user query
     const expectedReturn = [
       {
         recruitedAt: '2017-07-19T03:05:12Z',
-        lastActive: '2017-08-22T07:40:01Z'
+        lastActive: '2017-07-21T05:15:00Z'
       },
       {
         recruitedAt: '2017-08-20T17:32:01Z',
-        lastActive: '2017-08-22T07:40:01Z'
+        lastActive: '2017-08-20T17:40:52Z'
+      }
+    ]
+    expect(returnedVal).toEqual(expectedReturn)
+  })
+
+  it('getRecruits (with missing lastTabTimestamp values) returns expected value', async () => {
+    const referringUserId = getMockUserInfo().id
+    const getRecruits = require('../getRecruits').getRecruits
+
+    // Mock ReferralDataModel query
+    const referralDataLogsToReturn = [
+      {
+        userId: 'efghijklmnopqrs',
+        referringUser: referringUserId,
+        created: '2017-07-19T03:05:12Z',
+        updated: '2017-07-19T03:05:12Z'
+      },
+      {
+        userId: 'pqrstuvwxyzabcd',
+        referringUser: referringUserId,
+        created: '2017-08-20T17:32:01Z',
+        updated: '2017-08-20T17:32:01Z'
+      },
+      {
+        userId: 'tuvwxyzabcdefgh',
+        referringUser: referringUserId,
+        created: '2017-07-23T01:18:11Z',
+        updated: '2017-07-23T01:18:11Z'
+      }
+    ]
+    setMockDBResponse(
+      DatabaseOperation.QUERY,
+      {
+        Items: referralDataLogsToReturn
+      }
+    )
+
+    // Mock User query
+    const recruitedUsersToReturn = [
+      {
+        id: 'efghijklmnopqrs',
+        lastTabTimestamp: null // no timestamp
+      },
+      {
+        id: 'pqrstuvwxyzabcd',
+        lastTabTimestamp: '2017-08-20T17:40:52Z' // valid
+      },
+      {
+        // missing lastTabTimestamp field
+        id: 'tuvwxyzabcdefgh'
+      }
+    ]
+    setMockDBResponse(
+      DatabaseOperation.GET_BATCH,
+      {
+        Responses: {
+          [UserModel.tableName]: recruitedUsersToReturn
+        }
+      }
+    )
+
+    const returnedVal = await getRecruits(userContext, referringUserId)
+
+    const expectedReturn = [
+      {
+        recruitedAt: '2017-07-19T03:05:12Z',
+        lastActive: null
+      },
+      {
+        recruitedAt: '2017-08-20T17:32:01Z',
+        lastActive: '2017-08-20T17:40:52Z'
+      },
+      {
+        recruitedAt: '2017-07-23T01:18:11Z',
+        lastActive: null
       }
     ]
     expect(returnedVal).toEqual(expectedReturn)
   })
 
   // TODO: test with time filters
+
+  it('getRecruits (with no recruits) returns expected value', async () => {
+    const referringUserId = getMockUserInfo().id
+    const getRecruits = require('../getRecruits').getRecruits
+
+    // Mock ReferralDataModel query
+    const referralDataLogsToReturn = []
+    setMockDBResponse(
+      DatabaseOperation.QUERY,
+      {
+        Items: referralDataLogsToReturn
+      }
+    )
+
+    // Mock User query
+    const recruitedUsersToReturn = []
+    const recruitedUsersQueryMock = setMockDBResponse(
+      DatabaseOperation.GET_BATCH,
+      {
+        Responses: {
+          [UserModel.tableName]: recruitedUsersToReturn
+        }
+      }
+    )
+
+    const returnedVal = await getRecruits(userContext, referringUserId)
+    expect(recruitedUsersQueryMock).not.toHaveBeenCalled()
+    expect(returnedVal).toEqual([])
+  })
 
   test('getTotalRecruitsCount works as expected', async () => {
     const getTotalRecruitsCount = require('../getRecruits').getTotalRecruitsCount
