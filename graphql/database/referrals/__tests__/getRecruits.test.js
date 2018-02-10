@@ -35,7 +35,7 @@ describe('getRecruits', () => {
     const referringUserId = getMockUserInfo().id
     const getRecruits = require('../getRecruits').getRecruits
 
-    // From ReferralDataModel query
+    // Mock ReferralDataModel query
     const itemsToReturn = [
       {
         userId: 'efghijklmnopqrs',
@@ -56,6 +56,10 @@ describe('getRecruits', () => {
         Items: itemsToReturn
       }
     )
+
+    // TODO:
+    // Mock User query
+
     const returnedVal = await getRecruits(userContext, referringUserId)
     expect(dbQueryMock.mock.calls[0][0]).toEqual({
       ExpressionAttributeNames: {
@@ -69,14 +73,15 @@ describe('getRecruits', () => {
       TableName: ReferralDataModel.tableName
     })
 
+    // TODO: update "lastActive" fields after mocking user query
     const expectedReturn = [
       {
         recruitedAt: '2017-07-19T03:05:12Z',
-        activeForAtLeastOneDay: true
+        lastActive: '2017-08-22T07:40:01Z'
       },
       {
         recruitedAt: '2017-08-20T17:32:01Z',
-        activeForAtLeastOneDay: true
+        lastActive: '2017-08-22T07:40:01Z'
       }
     ]
     expect(returnedVal).toEqual(expectedReturn)
@@ -91,21 +96,21 @@ describe('getRecruits', () => {
         cursor: 'abc',
         node: {
           recruitedAt: '2017-05-19T13:59:46.000Z',
-          activeForAtLeastOneDay: true
+          lastActive: '2017-12-19T08:23:40.532Z'
         }
       },
       {
         cursor: 'abc',
         node: {
           recruitedAt: '2017-02-07T13:59:46.000Z',
-          activeForAtLeastOneDay: false
+          lastActive: '2017-02-07T18:00:09.031Z'
         }
       },
       {
         cursor: 'abc',
         node: {
           recruitedAt: '2017-02-07T17:69:46.000Z',
-          activeForAtLeastOneDay: false
+          lastActive: null
         }
       }
     ]
@@ -116,14 +121,14 @@ describe('getRecruits', () => {
         cursor: 'abc',
         node: {
           recruitedAt: '2017-05-19T13:59:46.000Z',
-          activeForAtLeastOneDay: true
+          lastActive: '2017-12-19T08:23:40.532Z'
         }
       },
       {
         cursor: 'abc',
         node: {
           recruitedAt: '2017-02-07T13:59:46.000Z',
-          activeForAtLeastOneDay: true
+          lastActive: '2017-02-09T08:23:40.532Z'
         }
       }
     ]
@@ -143,21 +148,21 @@ describe('getRecruits', () => {
         cursor: 'abc',
         node: {
           recruitedAt: '2017-05-19T13:59:46.000Z',
-          activeForAtLeastOneDay: true
+          lastActive: '2017-12-19T08:23:40.532Z'
         }
       },
       {
         cursor: 'abc',
         node: {
           recruitedAt: '2017-02-07T13:59:46.000Z',
-          activeForAtLeastOneDay: false
+          lastActive: '2017-02-07T18:00:09.031Z'
         }
       },
       {
         cursor: 'abc',
         node: {
           recruitedAt: '2017-02-07T17:69:46.000Z',
-          activeForAtLeastOneDay: false
+          lastActive: null
         }
       }
     ]
@@ -168,14 +173,14 @@ describe('getRecruits', () => {
         cursor: 'abc',
         node: {
           recruitedAt: '2017-05-19T13:59:46.000Z',
-          activeForAtLeastOneDay: true
+          lastActive: '2017-12-19T08:23:40.532Z'
         }
       },
       {
         cursor: 'abc',
         node: {
           recruitedAt: '2017-02-07T13:59:46.000Z',
-          activeForAtLeastOneDay: true
+          lastActive: '2017-02-09T08:23:40.532Z'
         }
       }
     ]
@@ -185,5 +190,23 @@ describe('getRecruits', () => {
     expect(getRecruitsActiveForAtLeastOneDay(recruitsEdgesTestC)).toBe(0)
 
     expect(getRecruitsActiveForAtLeastOneDay(null)).toBe(0)
+
+    const recruitsEdgesTestD = [
+      {
+        cursor: 'abc',
+        node: {
+          recruitedAt: '2017-05-19T13:59:46.000Z',
+          lastActive: '2017-05-20T13:59:47.000Z'
+        }
+      },
+      {
+        cursor: 'abc',
+        node: {
+          recruitedAt: '2017-05-19T13:59:46.000Z',
+          lastActive: '2017-05-20T13:59:45.499Z'
+        }
+      }
+    ]
+    expect(getRecruitsActiveForAtLeastOneDay(recruitsEdgesTestD)).toBe(1)
   })
 })
