@@ -15,6 +15,8 @@ import {
 import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
 import ErrorMessage from 'general/ErrorMessage'
 
+const IS_CAMPAIGN_LIVE = true
+
 class Dashboard extends React.Component {
   constructor (props) {
     super(props)
@@ -92,7 +94,11 @@ class Dashboard extends React.Component {
             )
           : null
         }
-        <WidgetsContainer user={user} showError={this.showError.bind(this)} />
+        <WidgetsContainer
+          user={user}
+          isCampaignLive={IS_CAMPAIGN_LIVE}
+          showError={this.showError.bind(this)}
+          />
         <Ad
           adId='div-gpt-ad-1464385742501-0'
           adSlotId='/43865596/HBTR'
