@@ -32,7 +32,7 @@ describe('getRecruits', () => {
     expect(queryExec).toHaveBeenCalled()
   })
 
-  it('getRecruits (with no time filters) forms database queries and returns expected value', async () => {
+  test('getRecruits (with no time filters) forms database queries and returns expected value', async () => {
     const referringUserId = getMockUserInfo().id
     const getRecruits = require('../getRecruits').getRecruits
 
@@ -104,7 +104,7 @@ describe('getRecruits', () => {
     expect(returnedVal).toEqual(expectedReturn)
   })
 
-  it('getRecruits (with missing lastTabTimestamp values) returns expected value', async () => {
+  test('getRecruits (with missing lastTabTimestamp values) returns expected value', async () => {
     const referringUserId = getMockUserInfo().id
     const getRecruits = require('../getRecruits').getRecruits
 
@@ -181,7 +181,7 @@ describe('getRecruits', () => {
 
   // TODO: test with time filters
 
-  it('getRecruits (with no recruits) returns expected value', async () => {
+  test('getRecruits (with no recruits) returns expected value', async () => {
     const referringUserId = getMockUserInfo().id
     const getRecruits = require('../getRecruits').getRecruits
 
