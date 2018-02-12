@@ -2,6 +2,7 @@
 import moment from 'moment'
 import { filter } from 'lodash/collection'
 
+import { isValidISOString } from '../../utils/utils'
 import ReferralDataModel from './ReferralDataModel'
 import UserModel from '../users/UserModel'
 import {
@@ -14,19 +15,41 @@ const getRecruitsOverride = getPermissionsOverride(GET_RECRUITS_LAST_ACTIVE_OVER
  * Get an array of a user's recruits.
  * @param {object} userContext - The user authorizer object.
  * @param {string} referringUserId - The user id of the referrer.
+ * @param {string} startTime - An ISO string of the earliest referral datetime
+ *   to filter on
+ * @param {string} endTime - An ISO string of the latest referral datetime
+ *   to filter on
  * @return {Promise<Object[]>} recruits - A list of objects, each of
  *   which contains information about a recruited user.
- * @param {string} recruits.recruitedAt - The ISO timestamp of when
- *   the recruited user joined
- * @param {string|null} recruits.lastActive - The ISO timestamp of when
- *   the recruited user last opened a tab. If null, the user never
- *   opened a tab.
+ * @return {string} recruit.recruitedAt - The ISO timestamp of
+ *   when the recruited user joined
+ * @return {string|null} recruit.lastActive - The ISO timestamp of when
+ *   the recruited user last opened a tab
  */
 export const getRecruits = async (userContext, referringUserId, startTime = null, endTime = null) => {
-  // TODO: support startTime and endTime constraints
-  const referralLogs = await ReferralDataModel.query(userContext, referringUserId)
+  // Build the basic query
+  var refLogsQuery = ReferralDataModel.query(userContext, referringUserId)
     .usingIndex('ReferralsByReferrer')
-    .execute()
+
+  // Validate startTime and/or endTime, if provided
+  if (startTime && !isValidISOString(startTime)) {
+    throw new Error('Invalid `startTime` argument. It must be an ISO string.')
+  }
+  if (endTime && !isValidISOString(endTime)) {
+    throw new Error('Invalid `endTime` argument. It must be an ISO string.')
+  }
+
+  // Filter by startTime and/or endTime, if provided
+  if (startTime && endTime) {
+    refLogsQuery.where('created').between(startTime, endTime)
+  } else if (startTime) {
+    refLogsQuery.where('created').gte(startTime)
+  } else if (endTime) {
+    refLogsQuery.where('created').lte(endTime)
+  }
+
+  // Execute the final query
+  const referralLogs = await refLogsQuery.execute()
 
   // The user has no recruits
   if (referralLogs.length === 0) {

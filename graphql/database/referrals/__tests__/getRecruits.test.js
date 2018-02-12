@@ -32,6 +32,91 @@ describe('getRecruits', () => {
     expect(queryExec).toHaveBeenCalled()
   })
 
+  test('getRecruits (with startTime filter) forms ReferralDataLog database queries as expected', async () => {
+    const referringUserId = getMockUserInfo().id
+    const getRecruits = require('../getRecruits').getRecruits
+
+    // Mock ReferralDataModel query
+    const referralLogQueryMock = setMockDBResponse(
+      DatabaseOperation.QUERY,
+      {
+        Items: []
+      }
+    )
+    await getRecruits(userContext, referringUserId, '2017-07-19T03:05:12Z')
+
+    expect(referralLogQueryMock.mock.calls[0][0]).toEqual({
+      ExpressionAttributeNames: {
+        '#created': 'created',
+        '#referringUser': 'referringUser'
+      },
+      ExpressionAttributeValues: {
+        ':created': '2017-07-19T03:05:12Z',
+        ':referringUser': referringUserId
+      },
+      IndexName: 'ReferralsByReferrer',
+      KeyConditionExpression: '(#created >= :created) AND (#referringUser = :referringUser)',
+      TableName: ReferralDataModel.tableName
+    })
+  })
+
+  test('getRecruits (with endTime filter) forms ReferralDataLog database query as expected', async () => {
+    const referringUserId = getMockUserInfo().id
+    const getRecruits = require('../getRecruits').getRecruits
+
+    // Mock ReferralDataModel query
+    const referralLogQueryMock = setMockDBResponse(
+      DatabaseOperation.QUERY,
+      {
+        Items: []
+      }
+    )
+    await getRecruits(userContext, referringUserId, null, '2017-07-20T12:29:03Z')
+
+    expect(referralLogQueryMock.mock.calls[0][0]).toEqual({
+      ExpressionAttributeNames: {
+        '#created': 'created',
+        '#referringUser': 'referringUser'
+      },
+      ExpressionAttributeValues: {
+        ':created': '2017-07-20T12:29:03Z',
+        ':referringUser': referringUserId
+      },
+      IndexName: 'ReferralsByReferrer',
+      KeyConditionExpression: '(#created <= :created) AND (#referringUser = :referringUser)',
+      TableName: ReferralDataModel.tableName
+    })
+  })
+
+  test('getRecruits (with both startTime and endTime filter) forms ReferralDataLog database query as expected', async () => {
+    const referringUserId = getMockUserInfo().id
+    const getRecruits = require('../getRecruits').getRecruits
+
+    // Mock ReferralDataModel query
+    const referralLogQueryMock = setMockDBResponse(
+      DatabaseOperation.QUERY,
+      {
+        Items: []
+      }
+    )
+    await getRecruits(userContext, referringUserId, '2017-07-19T03:05:12Z', '2017-07-20T12:29:03Z')
+
+    expect(referralLogQueryMock.mock.calls[0][0]).toEqual({
+      ExpressionAttributeNames: {
+        '#created': 'created',
+        '#referringUser': 'referringUser'
+      },
+      ExpressionAttributeValues: {
+        ':created': '2017-07-19T03:05:12Z',
+        ':created_2': '2017-07-20T12:29:03Z',
+        ':referringUser': referringUserId
+      },
+      IndexName: 'ReferralsByReferrer',
+      KeyConditionExpression: '(#created BETWEEN :created AND :created_2) AND (#referringUser = :referringUser)',
+      TableName: ReferralDataModel.tableName
+    })
+  })
+
   test('getRecruits (with no time filters) forms database queries and returns expected value', async () => {
     const referringUserId = getMockUserInfo().id
     const getRecruits = require('../getRecruits').getRecruits
@@ -178,8 +263,6 @@ describe('getRecruits', () => {
     ]
     expect(returnedVal).toEqual(expectedReturn)
   })
-
-  // TODO: test with time filters
 
   test('getRecruits (with no recruits) returns expected value', async () => {
     const referringUserId = getMockUserInfo().id
