@@ -5,12 +5,11 @@ import {
 
 import StickerCampaign from './StickerCampaignComponent'
 
-// TODO: add campaign startTime and endTime filters for recruits
 export default createFragmentContainer(StickerCampaign, {
   user: graphql`
     fragment StickerCampaignContainer_user on User {
       username,
-      recruits {
+      recruits (first: 5000, startTime: "2018-02-13T21:00:00.000Z", endTime: "2018-02-22T20:00:00.000Z") {
         edges {
           node {
             recruitedAt

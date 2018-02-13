@@ -20,6 +20,8 @@ const styles = theme => ({
   }
 })
 
+// Note: also hardcoded in StickerCampaignContainer
+export const CAMPAIGN_START_TIME_ISO = '2018-02-13T21:00:00.000Z'
 export const CAMPAIGN_END_TIME_ISO = '2018-02-22T20:00:00.000Z'
 
 class StickerCampaign extends React.Component {
