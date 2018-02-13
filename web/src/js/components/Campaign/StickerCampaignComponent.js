@@ -2,6 +2,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
+import HeartIcon from 'material-ui/svg-icons/action/favorite'
+// import HeartBorderIcon from 'material-ui/svg-icons/action/favorite-border'
 import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui-next/TextField'
 import { withStyles } from 'material-ui-next/styles'
@@ -84,6 +86,15 @@ class StickerCampaign extends React.Component {
       textDecoration: 'none',
       color: alternateAccentColor
     }
+
+    // Heart icon style
+    const successHeartColor = 'red'
+    const incompleteHeartColor = 'grey'
+    const heartStyle = {
+      height: 42,
+      width: 42
+    }
+
     return (
       <div
         style={{
@@ -127,11 +138,41 @@ class StickerCampaign extends React.Component {
         </span>
         <div
           style={{
-            marginTop: 20,
+            marginTop: 8,
             marginBottom: 8,
             lineHeight: '120%'
           }}
         >
+          {
+            (user.recruits.recruitsActiveForAtLeastOneDay > 0)
+            ? (
+              <HeartIcon
+                color={successHeartColor}
+                style={heartStyle}
+              />
+            )
+            : (
+              <HeartIcon
+                color={incompleteHeartColor}
+                style={heartStyle}
+              />
+            )
+          }
+          {
+            (user.recruits.recruitsActiveForAtLeastOneDay > 1)
+            ? (
+              <HeartIcon
+                color={successHeartColor}
+                style={heartStyle}
+              />
+            )
+            : (
+              <HeartIcon
+                color={incompleteHeartColor}
+                style={heartStyle}
+              />
+            )
+          }
           <div
             style={{
               fontSize: 20,
