@@ -190,7 +190,6 @@ StickerCampaign.propTypes = {
   user: PropTypes.shape({
     username: PropTypes.string.isRequired,
     recruits: PropTypes.shape({
-      edges: PropTypes.array.isRequired,
       totalRecruits: PropTypes.number,
       recruitsActiveForAtLeastOneDay: PropTypes.number
     }).isRequired
