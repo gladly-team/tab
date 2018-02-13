@@ -285,12 +285,7 @@ StickerCampaign.propTypes = {
       recruitsActiveForAtLeastOneDay: PropTypes.number
     }).isRequired
   }),
-  isCampaignLive: PropTypes.bool,
   classes: PropTypes.object.isRequired
-}
-
-StickerCampaign.defautProps = {
-  isCampaignLive: false
 }
 
 export default withStyles(styles)(StickerCampaign)
