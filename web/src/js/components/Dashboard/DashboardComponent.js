@@ -16,6 +16,8 @@ import {
 import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
 import ErrorMessage from 'general/ErrorMessage'
 
+// TODO: get this from an env var
+// TODO: also make sure the user hasn't dismissed the campaign ('IS_CAMPAIGN_SHOWN')
 const IS_CAMPAIGN_LIVE = true
 
 class Dashboard extends React.Component {
