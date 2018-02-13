@@ -6,9 +6,12 @@ import {
   alternateAccentColor
 } from 'theme/default'
 
+import StickerCampaignContainer from './StickerCampaignContainer'
+
 class CampaignBase extends React.Component {
   render () {
-    if (!this.props.isCampaignLive) {
+    const { isCampaignLive, user } = this.props
+    if (!isCampaignLive) {
       return null
     }
     const rootStyle = {
@@ -42,6 +45,13 @@ class CampaignBase extends React.Component {
       backgroundColor: alternateAccentColor
     }
 
+    // Hardcoded for now; can remove after campaign ends
+    const currentCampaign = (
+      <StickerCampaignContainer
+        user={user}
+        />
+    )
+
     return (
       <div
         style={rootStyle}
@@ -52,7 +62,7 @@ class CampaignBase extends React.Component {
           style={campaignContainerStyle}
         >
           <div style={headerLineStyle} />
-          <div>TODO: campaign goes here</div>
+          {currentCampaign}
         </Paper>
       </div>
     )
