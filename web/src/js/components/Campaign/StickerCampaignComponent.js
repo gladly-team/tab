@@ -26,7 +26,7 @@ const styles = theme => ({
 
 // Note: also hardcoded in StickerCampaignContainer
 export const CAMPAIGN_START_TIME_ISO = '2018-02-13T23:00:00.000Z'
-export const CAMPAIGN_END_TIME_ISO = '2018-02-22T20:00:00.000Z'
+export const CAMPAIGN_END_TIME_ISO = '2018-02-23T20:00:00.000Z'
 
 class CountdownClock extends React.Component {
   constructor (props) {
