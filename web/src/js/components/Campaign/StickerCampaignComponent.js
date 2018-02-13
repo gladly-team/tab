@@ -24,7 +24,7 @@ const styles = theme => ({
 export const CAMPAIGN_START_TIME_ISO = '2018-02-13T21:00:00.000Z'
 export const CAMPAIGN_END_TIME_ISO = '2018-02-22T20:00:00.000Z'
 
-class StickerCampaign extends React.Component {
+class CountdownClock extends React.Component {
   constructor (props) {
     super(props)
 
@@ -59,6 +59,12 @@ class StickerCampaign extends React.Component {
     clearInterval(this.timeRemainingInterval)
   }
 
+  render () {
+    return <span>{this.state.countdownClock}</span>
+  }
+}
+
+class StickerCampaign extends React.Component {
   onTextFieldClicked () {
     this.input.select()
   }
@@ -178,7 +184,7 @@ class StickerCampaign extends React.Component {
               marginBottom: 4
             }}
           >
-            {this.state.countdownClock} remaining
+            <span><CountdownClock /> remaining</span>
           </span>
         </span>
       </div>
