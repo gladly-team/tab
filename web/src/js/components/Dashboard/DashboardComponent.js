@@ -5,6 +5,7 @@ import MoneyRaised from '../MoneyRaised/MoneyRaisedContainer'
 import UserBackgroundImage from '../User/UserBackgroundImageContainer'
 import UserMenu from '../User/UserMenuContainer'
 import WidgetsContainer from '../Widget/WidgetsContainer'
+import CampaignBase from '../Campaign/CampaignBase'
 import Ad from '../Ad/Ad'
 import LogTab from './LogTabContainer'
 import CircleIcon from 'material-ui/svg-icons/image/lens'
@@ -99,6 +100,16 @@ class Dashboard extends React.Component {
           isCampaignLive={IS_CAMPAIGN_LIVE}
           showError={this.showError.bind(this)}
           />
+        { user
+          ? (
+            <FadeInDashboardAnimation>
+              <CampaignBase
+                isCampaignLive={IS_CAMPAIGN_LIVE}
+                />
+            </FadeInDashboardAnimation>
+            )
+          : null
+        }
         <Ad
           adId='div-gpt-ad-1464385742501-0'
           adSlotId='/43865596/HBTR'
