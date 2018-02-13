@@ -89,8 +89,8 @@ class StickerCampaign extends React.Component {
     }
 
     // Heart icon style
-    const successHeartColor = 'red'
-    const incompleteHeartColor = 'grey'
+    const successHeartColor = appTheme.palette.primary1Color
+    const incompleteHeartColor = '#BBB'
     const heartStyle = {
       height: 42,
       width: 42
