@@ -1,6 +1,7 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
+import moment from 'moment'
 import TextField from 'material-ui-next/TextField'
 import { withStyles } from 'material-ui-next/styles'
 import appTheme, {
@@ -19,7 +20,43 @@ const styles = theme => ({
   }
 })
 
+export const CAMPAIGN_END_TIME_ISO = '2018-02-22T20:00:00.000Z'
+
 class StickerCampaign extends React.Component {
+  constructor (props) {
+    super(props)
+
+    this.state = {
+      countdownClock: this.getCountdownClockText()
+    }
+  }
+
+  getCountdownClockText () {
+    const campaignEndDatetime = moment(CAMPAIGN_END_TIME_ISO)
+    var timeRemaining = campaignEndDatetime.diff(moment.utc(), 'milliseconds')
+    if (timeRemaining < 0) {
+      timeRemaining = 0
+    }
+    const duration = moment.duration(timeRemaining, 'milliseconds')
+    return `${duration.days()}d ${duration.hours()}h
+      ${duration.minutes()}m ${duration.seconds()}s`
+  }
+
+  componentWillMount () {
+    const self = this
+
+    // Every second, update the countdown clock
+    this.timeRemainingInterval = setInterval(() => {
+      self.setState({
+        countdownClock: self.getCountdownClockText()
+      })
+    }, 1000)
+  }
+
+  componentWillUnmount () {
+    clearInterval(this.timeRemainingInterval)
+  }
+
   onTextFieldClicked () {
     this.input.select()
   }
@@ -139,7 +176,7 @@ class StickerCampaign extends React.Component {
               marginBottom: 4
             }}
           >
-            3d 12h 6m 44s remaining
+            {this.state.countdownClock} remaining
           </span>
         </span>
       </div>
