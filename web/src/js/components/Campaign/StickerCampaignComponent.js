@@ -2,6 +2,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
+import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui-next/TextField'
 import { withStyles } from 'material-ui-next/styles'
 import appTheme, {
@@ -149,31 +150,60 @@ class StickerCampaign extends React.Component {
               marginTop: 12,
               marginBottom: 12
             }}
-          >
-            <TextField
-              id={'refer-friend-input'}
-              inputRef={(input) => { this.input = input }}
-              onClick={this.onTextFieldClicked.bind(this)}
-              value={referralUrl}
-              label={'Send this to a few friends:'}
-              fullWidth
-              InputProps={{
-                classes: {
-                  inkbar: classes.inputInkbar
-                }
-              }}
-              inputProps={{
-                style: {
-                  fontSize: 14,
-                  textAlign: 'left'
-                }
-              }}
-              InputLabelProps={{
-                FormControlClasses: {
-                  focused: classes.inputLabelFocused
-                }
-              }}
-            />
+          > {
+            (user.recruits.recruitsActiveForAtLeastOneDay >= 2)
+            ? (
+              <span
+                data-test-id={'sticker-campaign-success'}
+              >
+                <span
+                  style={{
+                    fontSize: 14
+                  }}
+                >
+                  Congrats, you did it! (And thanks!) Tell us where we should send your prize:
+                </span>
+                <a href='https://docs.google.com/forms/d/e/1FAIpQLScVcV3EkYpkhqUG7hDGULUMJM_h57-3GnaRSg95p_UheP44dw/viewform' target='_blank'>
+                  <RaisedButton
+                    label='Claim Your Stickers'
+                    style={{
+                      display: 'block',
+                      marginTop: 8
+                    }}
+                    primary
+                  />
+                </a>
+              </span>
+            )
+            : (
+              <span data-test-id={'sticker-campaign-still-working'}>
+                <TextField
+                  id={'sticker-campaign-refer-friend-input'}
+                  inputRef={(input) => { this.input = input }}
+                  onClick={this.onTextFieldClicked.bind(this)}
+                  value={referralUrl}
+                  label={'Send this to a few friends:'}
+                  fullWidth
+                  InputProps={{
+                    classes: {
+                      inkbar: classes.inputInkbar
+                    }
+                  }}
+                  inputProps={{
+                    style: {
+                      fontSize: 14,
+                      textAlign: 'left'
+                    }
+                  }}
+                  InputLabelProps={{
+                    FormControlClasses: {
+                      focused: classes.inputLabelFocused
+                    }
+                  }}
+                />
+              </span>
+            )
+          }
           </span>
           <span
             style={{
