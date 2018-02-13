@@ -9,6 +9,7 @@ import StickerCampaign from './StickerCampaignComponent'
 export default createFragmentContainer(StickerCampaign, {
   user: graphql`
     fragment StickerCampaignContainer_user on User {
+      username,
       recruits {
         edges {
           node {

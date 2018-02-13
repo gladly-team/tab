@@ -29,10 +29,10 @@ class CampaignBase extends React.Component {
       pointerEvents: 'none'
     }
     const campaignContainerStyle = {
+      pointerEvents: 'all',
       width: 400,
-      height: 300,
       margin: 0,
-      marginBottom: 60,
+      marginBottom: 100,
       padding: 0,
       background: '#FFF',
       border: 'none'
