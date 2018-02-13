@@ -79,6 +79,10 @@ class StickerCampaign extends React.Component {
     const recruitsActiveForLessThanOneDay = (user.recruits.totalRecruits -
       user.recruits.recruitsActiveForAtLeastOneDay)
     const referralUrl = this.getReferralUrl()
+    const anchorStyle = {
+      textDecoration: 'none',
+      color: alternateAccentColor
+    }
     return (
       <div
         style={{
@@ -108,9 +112,10 @@ class StickerCampaign extends React.Component {
             marginBottom: 8
           }}
         >
-          Get 2 friends using Tab for a Cause for at least 1 day, and we'll send
-          you some laptop stickers. Be one of the top recruiters and have your
-          pick of Tab gear!
+          Get 2 friends using Tab for a Cause for at least 1 day,
+          and <a style={anchorStyle} href='https://business.facebook.com/notes/tab-for-a-cause/love-and-stickers-for-all/1718875268155553/' target='_blank'>
+          we'll send you some laptop stickers</a>. Be one of the top recruiters and
+          <a style={anchorStyle} href='https://shop.spreadshirt.com/tab-for-a-cause/' target='_blank'> have your pick of Tab gear!</a>
         </span>
         <div
           style={{
