@@ -90,6 +90,10 @@ provider:
     - Effect: "Allow"
       Action:
         - "dynamodb:PutItem"
+        - "dynamodb:BatchGetItem"
+        - "dynamodb:GetItem"
+        - "dynamodb:Query"
+        - "dynamodb:Scan"
       Resource: "${self:custom.dbTableArnBase}ReferralDataLog-${self:provider.stage}"
 
 plugins:
