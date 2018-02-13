@@ -122,7 +122,7 @@ Widgets.propTypes = {
   showError: PropTypes.func.isRequired
 }
 
-Widgets.defautProps = {
+Widgets.defaultProps = {
   isCampaignLive: false
 }
 

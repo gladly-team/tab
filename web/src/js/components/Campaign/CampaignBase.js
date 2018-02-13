@@ -76,7 +76,7 @@ CampaignBase.propTypes = {
   isCampaignLive: PropTypes.bool
 }
 
-CampaignBase.defautProps = {
+CampaignBase.defaultProps = {
   isCampaignLive: false
 }
 
