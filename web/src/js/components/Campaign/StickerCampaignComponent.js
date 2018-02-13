@@ -81,6 +81,7 @@ class StickerCampaign extends React.Component {
     const { user, classes } = this.props
     const recruitsActiveForLessThanOneDay = (user.recruits.totalRecruits -
       user.recruits.recruitsActiveForAtLeastOneDay)
+    const friendText = recruitsActiveForLessThanOneDay === 1 ? 'friend' : 'friends'
     const referralUrl = this.getReferralUrl()
     const anchorStyle = {
       textDecoration: 'none',
@@ -188,7 +189,7 @@ class StickerCampaign extends React.Component {
               color: lighterTextColor
             }}
           >
-            {recruitsActiveForLessThanOneDay} friends active for &lt;1 day
+            {recruitsActiveForLessThanOneDay} {friendText} active for &lt;1 day
           </div>
         </div>
         <span
