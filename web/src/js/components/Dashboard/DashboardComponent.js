@@ -5,7 +5,7 @@ import MoneyRaised from '../MoneyRaised/MoneyRaisedContainer'
 import UserBackgroundImage from '../User/UserBackgroundImageContainer'
 import UserMenu from '../User/UserMenuContainer'
 import WidgetsContainer from '../Widget/WidgetsContainer'
-import CampaignBase from '../Campaign/CampaignBase'
+import CampaignBaseContainer from '../Campaign/CampaignBaseContainer'
 import Ad from '../Ad/Ad'
 import LogTab from './LogTabContainer'
 import CircleIcon from 'material-ui/svg-icons/image/lens'
@@ -103,7 +103,8 @@ class Dashboard extends React.Component {
         { user
           ? (
             <FadeInDashboardAnimation>
-              <CampaignBase
+              <CampaignBaseContainer
+                user={user}
                 isCampaignLive={IS_CAMPAIGN_LIVE}
                 />
             </FadeInDashboardAnimation>

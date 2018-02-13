@@ -5,11 +5,16 @@ import {
   shallow
 } from 'enzyme'
 
+const mockUserData = {
+  id: 'user-abc-123'
+}
+
 describe('Campaign base component', function () {
   it('shows the campaign component when a campaign is live', function () {
     const CampaignBase = require('../CampaignBase').default
     const wrapper = shallow(
       <CampaignBase
+        user={mockUserData}
         isCampaignLive
         />
     )
@@ -20,6 +25,7 @@ describe('Campaign base component', function () {
     const CampaignBase = require('../CampaignBase').default
     const wrapper = shallow(
       <CampaignBase
+        user={mockUserData}
         isCampaignLive={false}
         />
     )

@@ -19,6 +19,7 @@ export default createFragmentContainer(Dashboard, {
       ...UserBackgroundImageContainer_user
       ...UserMenuContainer_user
       ...LogTabContainer_user
+      ...CampaignBaseContainer_user
     }
   `
 })

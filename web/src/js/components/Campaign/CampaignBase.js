@@ -60,6 +60,9 @@ class CampaignBase extends React.Component {
 }
 
 CampaignBase.propTypes = {
+  user: PropTypes.shape({
+    id: PropTypes.string.isRequired
+  }),
   isCampaignLive: PropTypes.bool
 }
 
