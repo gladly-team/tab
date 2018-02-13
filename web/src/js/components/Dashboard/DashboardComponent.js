@@ -16,10 +16,6 @@ import {
 import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
 import ErrorMessage from 'general/ErrorMessage'
 
-// TODO: get this from an env var
-// TODO: also make sure the user hasn't dismissed the campaign ('IS_CAMPAIGN_SHOWN')
-const IS_CAMPAIGN_LIVE = true
-
 class Dashboard extends React.Component {
   constructor (props) {
     super(props)
@@ -42,7 +38,6 @@ class Dashboard extends React.Component {
   render () {
     // Props will be null on first render.
     const { user, app } = this.props
-
     const errorMessage = this.state.errorMessage
 
     const menuStyle = {
@@ -67,6 +62,10 @@ class Dashboard extends React.Component {
       marginRight: 12
     }
     const userMenuStyle = Object.assign({}, menuTextStyle)
+
+    // Whether or not a campaign should show on the dashboard
+    // TODO: also make sure the user hasn't dismissed the campaign (`isCampaignShown` var)
+    const isGlobalCampaignLive = !!((app && app.isGlobalCampaignLive))
 
     return (
       <div
@@ -99,7 +98,7 @@ class Dashboard extends React.Component {
         }
         <WidgetsContainer
           user={user}
-          isCampaignLive={IS_CAMPAIGN_LIVE}
+          isCampaignLive={isGlobalCampaignLive}
           showError={this.showError.bind(this)}
           />
         { user
@@ -107,7 +106,7 @@ class Dashboard extends React.Component {
             <FadeInDashboardAnimation>
               <CampaignBaseContainer
                 user={user}
-                isCampaignLive={IS_CAMPAIGN_LIVE}
+                isCampaignLive={isGlobalCampaignLive}
                 />
             </FadeInDashboardAnimation>
             )
@@ -146,8 +145,18 @@ class Dashboard extends React.Component {
 }
 
 Dashboard.propTypes = {
-  app: PropTypes.object,
-  user: PropTypes.object
+  user: PropTypes.shape({
+    id: PropTypes.string.isRequired
+  }),
+  app: PropTypes.shape({
+    isGlobalCampaignLive: PropTypes.bool
+  })
+}
+
+Dashboard.defaultProps = {
+  app: {
+    isGlobalCampaignLive: false
+  }
 }
 
 export default Dashboard

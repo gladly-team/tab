@@ -63,7 +63,8 @@ import getRecruits, {
 import {
   getMoneyRaised,
   getReferralVcReward,
-  getDollarsPerDayRate
+  getDollarsPerDayRate,
+  isGlobalCampaignLive
 } from '../database/globals/globals'
 
 class App {
@@ -408,6 +409,12 @@ const appType = new GraphQLObjectType({
       description: 'All the background Images',
       args: connectionArgs,
       resolve: (_, args, context) => connectionFromPromisedArray(BackgroundImageModel.getAll(context.user), args)
+    },
+    isGlobalCampaignLive: {
+      type: GraphQLBoolean,
+      resolve: () => {
+        return isGlobalCampaignLive()
+      }
     }
   }),
   interfaces: [nodeInterface]

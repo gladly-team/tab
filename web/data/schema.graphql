@@ -14,6 +14,7 @@ type App implements Node {
 
   # All the background Images
   backgroundImages(after: String, first: Int, before: String, last: Int): BackgroundImageConnection
+  isGlobalCampaignLive: Boolean
 }
 
 # A background image

@@ -12,6 +12,10 @@ class Globals {
   }
 }
 
+function isGlobalCampaignLive () {
+  return process.env.IS_GLOBAL_CAMPAIGN_LIVE === 'true' || false
+}
+
 /**
  * Get an estimate of how much we've raised, using a combination of
  * the most recent manual entry and the estimated rate of money
@@ -45,5 +49,6 @@ export {
   Globals,
   getMoneyRaised,
   getDollarsPerDayRate,
-  getReferralVcReward
+  getReferralVcReward,
+  isGlobalCampaignLive
 }
