@@ -4,6 +4,7 @@ import React from 'react'
 import { shallow } from 'enzyme'
 
 const mockUserData = {
+  username: 'jbond',
   recruits: {
     edges: [
       {
