@@ -9,6 +9,7 @@ import appTheme, {
   alternateAccentColor,
   lighterTextColor
 } from 'theme/default'
+import Logo from '../Logo/Logo'
 
 const styles = theme => ({
   inputInkbar: {
@@ -96,13 +97,20 @@ class StickerCampaign extends React.Component {
       >
         <span
           style={{
-            display: 'block',
+            display: 'flex',
+            justifyContent: 'center',
             fontSize: 20,
             marginTop: 4,
             lineHeight: '140%'
           }}
         >
-          Spread the love, get some love!
+          <span style={{
+            display: 'flex',
+            alignItems: 'flex-end'
+          }}>
+            <Logo style={{ height: 30, marginRight: 8 }} />
+            <span>Spread the love, get some love!</span>
+          </span>
         </span>
         <span
           style={{
