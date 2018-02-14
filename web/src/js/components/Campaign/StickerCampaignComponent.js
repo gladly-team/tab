@@ -133,7 +133,7 @@ class StickerCampaign extends React.Component {
           }}
         >
           Get 2 friends using Tab for a Cause for at least 1 day,
-          and <a style={anchorStyle} href='https://business.facebook.com/notes/tab-for-a-cause/love-and-stickers-for-all/1718875268155553/' target='_blank'>
+          and <a style={anchorStyle} href='https://www.facebook.com/notes/tab-for-a-cause/love-and-stickers-for-all/1718875268155553/' target='_blank'>
           we'll send you some laptop stickers</a>. Be one of the top recruiters and
           <a style={anchorStyle} href='https://shop.spreadshirt.com/tab-for-a-cause/' target='_blank'> have your pick of Tab gear!</a>
         </span>
