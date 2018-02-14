@@ -94,7 +94,9 @@ provider:
         - "dynamodb:GetItem"
         - "dynamodb:Query"
         - "dynamodb:Scan"
-      Resource: "${self:custom.dbTableArnBase}ReferralDataLog-${self:provider.stage}"
+      Resource:
+        - "${self:custom.dbTableArnBase}ReferralDataLog-${self:provider.stage}"
+        - "${self:custom.dbTableArnBase}ReferralDataLog-${self:provider.stage}/index/*"
 
 plugins:
   # Include only the required node modules.
