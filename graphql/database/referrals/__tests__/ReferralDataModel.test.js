@@ -38,4 +38,16 @@ describe('ReferralDataModel', () => {
       permissionAuthorizers.userIdMatchesHashKey
     )
   })
+
+  it('has the correct indexPermissions permissions for ReferralsByReferrer', () => {
+    expect(ReferralDataModel.permissions.indexPermissions.ReferralsByReferrer.get).toBe(
+      permissionAuthorizers.userIdMatchesHashKey
+    )
+    expect(ReferralDataModel.permissions.indexPermissions.ReferralsByReferrer.getAll)
+      .toBeUndefined()
+    expect(ReferralDataModel.permissions.indexPermissions.ReferralsByReferrer.create)
+      .toBeUndefined()
+    expect(ReferralDataModel.permissions.indexPermissions.ReferralsByReferrer.update)
+      .toBeUndefined()
+  })
 })

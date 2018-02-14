@@ -30,6 +30,10 @@ const allFixtures = [
   {
     tableName: 'UserWidgets',
     jsonFile: 'UserWidgetsData.json'
+  },
+  {
+    tableName: 'ReferralDataLog',
+    jsonFile: 'ReferralDataLog.json'
   }
 ]
 

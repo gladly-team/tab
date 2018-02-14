@@ -8,6 +8,7 @@ import Dashboard from './DashboardComponent'
 export default createFragmentContainer(Dashboard, {
   app: graphql`
     fragment DashboardContainer_app on App {
+      isGlobalCampaignLive
       ...MoneyRaisedContainer_app
       ...UserMenuContainer_app
     }
@@ -19,6 +20,7 @@ export default createFragmentContainer(Dashboard, {
       ...UserBackgroundImageContainer_user
       ...UserMenuContainer_user
       ...LogTabContainer_user
+      ...CampaignBaseContainer_user
     }
   `
 })

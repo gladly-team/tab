@@ -29,7 +29,7 @@ class Widgets extends React.Component {
   }
 
   render () {
-    const { user } = this.props
+    const { user, isCampaignLive } = this.props
     if (!user) {
       return null
     }
@@ -69,21 +69,26 @@ class Widgets extends React.Component {
               }
             })}
           </div>
-          <CenteredWidgetsContainer>
-            {user.widgets.edges.map((edge, index) => {
-              if (
-                edge.node.type === WIDGET_TYPE_CLOCK
-              ) {
-                return (
-                  <Widget
-                    key={index}
-                    user={user}
-                    widget={edge.node}
-                    showError={this.props.showError} />
-                )
-              }
-            })}
-          </CenteredWidgetsContainer>
+          {
+            isCampaignLive
+            ? null
+            : <CenteredWidgetsContainer>
+              {user.widgets.edges.map((edge, index) => {
+                if (
+                  edge.node.type === WIDGET_TYPE_CLOCK
+                ) {
+                  return (
+                    <Widget
+                      key={index}
+                      user={user}
+                      widget={edge.node}
+                      data-test-id={'widget-clock'}
+                      showError={this.props.showError} />
+                  )
+                }
+              })}
+            </CenteredWidgetsContainer>
+          }
           <ActiveWidgetAnimation>
             {user.widgets.edges.map((edge, index) => {
               if (user.activeWidget &&
@@ -113,7 +118,12 @@ Widgets.propTypes = {
     }).isRequired,
     activeWidget: PropTypes.string
   }),
+  isCampaignLive: PropTypes.bool,
   showError: PropTypes.func.isRequired
+}
+
+Widgets.defaultProps = {
+  isCampaignLive: false
 }
 
 export default Widgets

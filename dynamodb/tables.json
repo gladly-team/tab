@@ -152,8 +152,32 @@
       { "AttributeName": "userId", "KeyType": "HASH"}
     ],
     "AttributeDefinitions": [       
-      { "AttributeName": "userId", "AttributeType": "S" }
+      { "AttributeName": "userId", "AttributeType": "S" },
+      { "AttributeName": "referringUser", "AttributeType": "S" },
+      { "AttributeName": "created", "AttributeType": "S" }
     ],
+    "GlobalSecondaryIndexes": [ 
+      { 
+         "IndexName": "ReferralsByReferrer",
+         "KeySchema": [ 
+            { 
+               "AttributeName": "referringUser",
+               "KeyType": "HASH"
+            },
+            {
+              "AttributeName": "created",
+              "KeyType": "RANGE"
+            }
+         ],
+         "Projection": {
+            "ProjectionType": "ALL"
+         },
+         "ProvisionedThroughput": { 
+            "ReadCapacityUnits": 1,
+            "WriteCapacityUnits": 1
+         }
+      }
+   ],
     "ProvisionedThroughput": {       
       "ReadCapacityUnits": 1, 
       "WriteCapacityUnits": 1

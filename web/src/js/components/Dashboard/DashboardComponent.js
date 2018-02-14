@@ -5,6 +5,7 @@ import MoneyRaised from '../MoneyRaised/MoneyRaisedContainer'
 import UserBackgroundImage from '../User/UserBackgroundImageContainer'
 import UserMenu from '../User/UserMenuContainer'
 import WidgetsContainer from '../Widget/WidgetsContainer'
+import CampaignBaseContainer from '../Campaign/CampaignBaseContainer'
 import Ad from '../Ad/Ad'
 import LogTab from './LogTabContainer'
 import CircleIcon from 'material-ui/svg-icons/image/lens'
@@ -37,7 +38,6 @@ class Dashboard extends React.Component {
   render () {
     // Props will be null on first render.
     const { user, app } = this.props
-
     const errorMessage = this.state.errorMessage
 
     const menuStyle = {
@@ -62,6 +62,10 @@ class Dashboard extends React.Component {
       marginRight: 12
     }
     const userMenuStyle = Object.assign({}, menuTextStyle)
+
+    // Whether or not a campaign should show on the dashboard
+    // TODO: also make sure the user hasn't dismissed the campaign (`isCampaignShown` var)
+    const isGlobalCampaignLive = !!((app && app.isGlobalCampaignLive))
 
     return (
       <div
@@ -92,7 +96,22 @@ class Dashboard extends React.Component {
             )
           : null
         }
-        <WidgetsContainer user={user} showError={this.showError.bind(this)} />
+        <WidgetsContainer
+          user={user}
+          isCampaignLive={isGlobalCampaignLive}
+          showError={this.showError.bind(this)}
+          />
+        { user
+          ? (
+            <FadeInDashboardAnimation>
+              <CampaignBaseContainer
+                user={user}
+                isCampaignLive={isGlobalCampaignLive}
+                />
+            </FadeInDashboardAnimation>
+            )
+          : null
+        }
         <Ad
           adId='div-gpt-ad-1464385742501-0'
           adSlotId='/43865596/HBTR'
@@ -126,8 +145,18 @@ class Dashboard extends React.Component {
 }
 
 Dashboard.propTypes = {
-  app: PropTypes.object,
-  user: PropTypes.object
+  user: PropTypes.shape({
+    id: PropTypes.string.isRequired
+  }),
+  app: PropTypes.shape({
+    isGlobalCampaignLive: PropTypes.bool
+  })
+}
+
+Dashboard.defaultProps = {
+  app: {
+    isGlobalCampaignLive: false
+  }
 }
 
 export default Dashboard

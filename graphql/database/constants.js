@@ -9,6 +9,7 @@ export const VC_DONATION = 'VcDonation'
 export const USER_TABS_LOG = 'UserTabsLog'
 export const USER_LEVEL = 'UserLevel'
 export const BACKGROUND_IMAGE = 'BackgroundImage'
+export const USER_RECRUITS = 'UserRecruits'
 export const REFERRAL_DATA = 'ReferralData'
 
 // Model field values

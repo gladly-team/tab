@@ -175,7 +175,7 @@ custom:
           usage: 0.60
       referralDataLogTable:
         read:
-          minimum: 1
+          minimum: 20
           maximum: 9001
           usage: 0.75
         write:
@@ -262,6 +262,8 @@ custom:
         maximum: ${self:custom.customCapacities.${self:provider.stage}.userTabsLogTable.write.maximum}
         usage: ${self:custom.customCapacities.${self:provider.stage}.userTabsLogTable.write.usage}
     - table: referralDataLogTable
+      index:
+        - ReferralsByReferrer
       read:
         minimum: ${self:custom.customCapacities.${self:provider.stage}.referralDataLogTable.read.minimum}
         maximum: ${self:custom.customCapacities.${self:provider.stage}.referralDataLogTable.read.maximum}
@@ -289,8 +291,8 @@ resources:
         GlobalSecondaryIndexes:
           - IndexName: UsersByUsername
             KeySchema:
-            - AttributeName: username
-              KeyType: HASH
+              - AttributeName: username
+                KeyType: HASH
             Projection:
               ProjectionType: ALL
             ProvisionedThroughput:
@@ -391,8 +393,8 @@ resources:
         GlobalSecondaryIndexes:
           - IndexName: Widgets
             KeySchema:
-            - AttributeName: userId
-              KeyType: HASH
+              - AttributeName: userId
+                KeyType: HASH
             Projection:
               ProjectionType: ALL
             ProvisionedThroughput:
@@ -430,6 +432,22 @@ resources:
         AttributeDefinitions:
           - AttributeName: userId
             AttributeType: S
+          - AttributeName: referringUser
+            AttributeType: S
+          - AttributeName: created
+            AttributeType: S
+        GlobalSecondaryIndexes:
+          - IndexName: ReferralsByReferrer
+            KeySchema:
+              - AttributeName: referringUser
+                KeyType: HASH
+              - AttributeName: created
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1

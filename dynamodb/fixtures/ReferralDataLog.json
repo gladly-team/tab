@@ -1,0 +1,23 @@
+[
+  {
+    "userId": "pqrstuvwxyzabcd",
+    "referringUser": "abcdefghijklmno",
+    "referringChannel": null,
+    "created": "2017-07-19T03:05:12Z",
+    "updated": "2017-07-19T03:05:12Z"
+  },
+  {
+    "userId": "efghijklmnopqrs",
+    "referringUser": "abcdefghijklmno",
+    "referringChannel": null,
+    "created": "2017-07-19T18:41:30Z",
+    "updated": "2017-07-19T18:41:30Z"
+  },
+  {
+    "userId": "tuvwxyzabcdefgh",
+    "referringUser": "abcdefghijklmno",
+    "referringChannel": null,
+    "created": "2017-07-23T01:18:11Z",
+    "updated": "2017-07-23T01:18:11Z"
+  }
+]

@@ -1,17 +1,14 @@
-/* eslint-disable no-unused-vars, no-use-before-define */
-
-import config from '../config'
 import {
   WIDGET,
   CHARITY,
   USER,
-  BACKGROUND_IMAGE
+  BACKGROUND_IMAGE,
+  USER_RECRUITS
 } from '../database/constants'
 
 import {
   GraphQLBoolean,
   GraphQLFloat,
-  GraphQLID,
   GraphQLInt,
   GraphQLList,
   GraphQLNonNull,
@@ -24,14 +21,11 @@ import {
 import {
   connectionArgs,
   connectionDefinitions,
-  connectionFromArray,
   fromGlobalId,
   globalIdField,
   mutationWithClientMutationId,
   nodeDefinitions,
-  cursorForObjectInConnection,
-  connectionFromPromisedArray,
-  offsetToCursor
+  connectionFromPromisedArray
 } from 'graphql-relay'
 
 import Widget from '../database/widgets/Widget'
@@ -61,11 +55,16 @@ import donateVc from '../database/donations/donateVc'
 
 import BackgroundImageModel from '../database/backgroundImages/BackgroundImageModel'
 
+import getRecruits, {
+  getTotalRecruitsCount,
+  getRecruitsActiveForAtLeastOneDay
+} from '../database/referrals/getRecruits'
+
 import {
-  Globals,
   getMoneyRaised,
   getReferralVcReward,
-  getDollarsPerDayRate
+  getDollarsPerDayRate,
+  isGlobalCampaignLive
 } from '../database/globals/globals'
 
 class App {
@@ -84,6 +83,8 @@ class App {
  * The second defines the way we resolve an object to its GraphQL type.
  */
 // https://stackoverflow.com/a/33411416
+// Note that it's NOT required for a type to use the Node interface:
+// https://github.com/facebook/relay/issues/1061#issuecomment-227857031
 const { nodeInterface, nodeField } = nodeDefinitions(
   (globalId, context) => {
     const { type, id } = fromGlobalId(globalId)
@@ -164,6 +165,8 @@ const maxTabsDayType = new GraphQLObjectType({
   })
 })
 
+// TODO: fetch only the fields we need:
+// https://github.com/graphql/graphql-js/issues/19#issuecomment-272857189
 const userType = new GraphQLObjectType({
   name: USER,
   description: 'A person who uses our app',
@@ -220,6 +223,17 @@ const userType = new GraphQLObjectType({
       type: GraphQLInt,
       description: 'User\'s total vc donated'
     },
+    recruits: {
+      type: userRecruitsConnection,
+      description: 'People recruited by this user',
+      args: {
+        ...connectionArgs,
+        startTime: { type: GraphQLString },
+        endTime: { type: GraphQLString }
+      },
+      resolve: (user, args, context) => connectionFromPromisedArray(
+        getRecruits(context.user, user.id, args.startTime, args.endTime), args)
+    },
     numUsersRecruited: {
       type: GraphQLInt,
       description: 'The number of users this user has recruited'
@@ -252,6 +266,28 @@ const userType = new GraphQLObjectType({
     }
   }),
   interfaces: [nodeInterface]
+})
+
+const userRecruitType = new GraphQLObjectType({
+  name: USER_RECRUITS,
+  description: 'Info about a user recruited by a referring user',
+  fields: () => ({
+    // Ideally, we should build the global ID using the composite value of
+    // "referringUser" and "userID", which is guaranteed to be unique and can
+    // resolve back to one object via the nodeInterface. However, for privacy
+    // concerns, we should then also encrypt the userID because we don't want
+    // a referrer to know all the IDs of their recruits. For simplicity, we'll
+    // just use a compound value of "referringUser" and "recruitedAt", which is
+    // almost certainly unique, and just not implement nodeInterface now.
+    // https://github.com/graphql/graphql-relay-js/blob/4fdadd3bbf3d5aaf66f1799be3e4eb010c115a4a/src/node/node.js#L138
+    id: globalIdField(USER_RECRUITS, (recruit) => `${recruit.referringUser}::${recruit.recruitedAt}`),
+    recruitedAt: {
+      type: GraphQLString,
+      description: 'ISO datetime string of when the recruited user joined'
+    }
+  })
+  // We haven't implemented nodeInterface here because a refetch is unlikely. See above.
+  // interfaces: [nodeInterface]
 })
 
 const widgetType = new GraphQLObjectType({
@@ -373,6 +409,12 @@ const appType = new GraphQLObjectType({
       description: 'All the background Images',
       args: connectionArgs,
       resolve: (_, args, context) => connectionFromPromisedArray(BackgroundImageModel.getAll(context.user), args)
+    },
+    isGlobalCampaignLive: {
+      type: GraphQLBoolean,
+      resolve: () => {
+        return isGlobalCampaignLive()
+      }
     }
   }),
   interfaces: [nodeInterface]
@@ -394,11 +436,43 @@ const customErrorType = new GraphQLObjectType({
 })
 
 /**
- * Define your own connection types here
+ * Define your own connection types here.
+ * `connectionDefinitions` returns a `connectionType` and its associated `edgeType`.
+ * It can contain definitions for "edgeFields" and "connectionFields":
+ * https://github.com/graphql/graphql-relay-js/blob/373f2dab5fc6d4ac4cf6394aa94cbebd8cb64650/src/connection/connection.js#L62
  */
-const { connectionType: widgetConnection, edgeType: widgetEdge } = connectionDefinitions({ name: WIDGET, nodeType: widgetType })
-const { connectionType: charityConnection, edgeType: charityEdge } = connectionDefinitions({ name: CHARITY, nodeType: charityType })
-const { connectionType: backgroundImageConnection, edgeType: backgroundImageEdge } = connectionDefinitions({ name: BACKGROUND_IMAGE, nodeType: backgroundImageType })
+const { connectionType: widgetConnection } = connectionDefinitions({
+  name: WIDGET,
+  nodeType: widgetType
+})
+const { connectionType: charityConnection } = connectionDefinitions({
+  name: CHARITY,
+  nodeType: charityType
+})
+const { connectionType: backgroundImageConnection } = connectionDefinitions({
+  name: BACKGROUND_IMAGE,
+  nodeType: backgroundImageType
+})
+const { connectionType: userRecruitsConnection } = connectionDefinitions({
+  name: USER_RECRUITS,
+  // Note: this could reasonably just be a userType instead, but creating a
+  // separate type gives us an extra layer of protection against accidentally
+  // leaking recruits' user data-- at least until our permissions system is
+  // more sophisticated.
+  nodeType: userRecruitType,
+  connectionFields: {
+    totalRecruits: {
+      type: GraphQLInt,
+      description: 'The count of users recruited (signed up)',
+      resolve: connection => getTotalRecruitsCount(connection.edges)
+    },
+    recruitsActiveForAtLeastOneDay: {
+      type: GraphQLInt,
+      description: 'The count of users recruited who remained active for one day or more',
+      resolve: connection => getRecruitsActiveForAtLeastOneDay(connection.edges)
+    }
+  }
+})
 
 /**
  * Updated the user vc.
@@ -415,7 +489,7 @@ const logTabMutation = mutationWithClientMutationId({
     }
   },
   mutateAndGetPayload: ({userId}, context) => {
-    const { type, id } = fromGlobalId(userId)
+    const { id } = fromGlobalId(userId)
     return logTab(context.user, id)
   }
 })
@@ -550,6 +624,10 @@ const setUserActiveWidgetMutation = mutationWithClientMutationId({
   },
   mutateAndGetPayload: ({userId, widgetId}, context) => {
     const userGlobalObj = fromGlobalId(userId)
+    // FIXME: widgetId should use `fromGlobalId` first. Note that
+    // the active widget ID in the database for existing users is
+    // currently using the global ID, so any change must be
+    // backwards-compatible.
     return setActiveWidget(context.user, userGlobalObj.id, widgetId)
   }
 })

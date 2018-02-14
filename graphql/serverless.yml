@@ -41,6 +41,7 @@ provider:
     # Users table
     - Effect: "Allow"
       Action:
+        - "dynamodb:BatchGetItem"
         - "dynamodb:GetItem"
         - "dynamodb:PutItem"
         - "dynamodb:Query"
@@ -90,7 +91,13 @@ provider:
     - Effect: "Allow"
       Action:
         - "dynamodb:PutItem"
-      Resource: "${self:custom.dbTableArnBase}ReferralDataLog-${self:provider.stage}"
+        - "dynamodb:BatchGetItem"
+        - "dynamodb:GetItem"
+        - "dynamodb:Query"
+        - "dynamodb:Scan"
+      Resource:
+        - "${self:custom.dbTableArnBase}ReferralDataLog-${self:provider.stage}"
+        - "${self:custom.dbTableArnBase}ReferralDataLog-${self:provider.stage}/index/*"
 
 plugins:
   # Include only the required node modules.

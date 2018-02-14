@@ -19,6 +19,15 @@ class ReferralData extends BaseModel {
     return 'userId'
   }
 
+  static get indexes () {
+    return [{
+      hashKey: 'referringUser',
+      rangeKey: 'created',
+      name: 'ReferralsByReferrer',
+      type: 'global'
+    }]
+  }
+
   static get tableName () {
     return tableNames.referralDataLog
   }
@@ -35,7 +44,14 @@ class ReferralData extends BaseModel {
 
   static get permissions () {
     return {
-      create: permissionAuthorizers.userIdMatchesHashKey
+      create: permissionAuthorizers.userIdMatchesHashKey,
+      indexPermissions: {
+        ReferralsByReferrer: {
+          // Note: we should avoid showing a user the user IDs (or other
+          // details) of their recruited users.
+          get: permissionAuthorizers.userIdMatchesHashKey
+        }
+      }
     }
   }
 }
