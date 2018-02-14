@@ -65,8 +65,7 @@ class Dashboard extends React.Component {
 
     // Whether or not a campaign should show on the dashboard
     // TODO: also make sure the user hasn't dismissed the campaign (`isCampaignShown` var)
-    // const isGlobalCampaignLive = !!((app && app.isGlobalCampaignLive))
-    const isGlobalCampaignLive = false
+    const isGlobalCampaignLive = !!((app && app.isGlobalCampaignLive))
 
     return (
       <div
