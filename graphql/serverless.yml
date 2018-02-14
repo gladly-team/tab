@@ -41,6 +41,7 @@ provider:
     # Users table
     - Effect: "Allow"
       Action:
+        - "dynamodb:BatchGetItem"
         - "dynamodb:GetItem"
         - "dynamodb:PutItem"
         - "dynamodb:Query"
