@@ -43,7 +43,7 @@ describe('Ad component', function () {
         width={300}
         height={250} />
     )
-    const elem = findDOMNode(wrapper.getNode())
+    const elem = findDOMNode(wrapper.instance())
     expect(elem.offsetWidth).toBe(300)
     expect(elem.offsetHeight).toBe(250)
   })
@@ -56,7 +56,7 @@ describe('Ad component', function () {
         width={432}
         height={99} />
     )
-    const elem = findDOMNode(wrapper.getNode())
+    const elem = findDOMNode(wrapper.instance())
     expect(elem.offsetWidth).toBe(432)
     expect(elem.offsetHeight).toBe(99)
   })
@@ -73,7 +73,7 @@ describe('Ad component', function () {
           color: 'green'
         }} />
     )
-    const elem = findDOMNode(wrapper.getNode())
+    const elem = findDOMNode(wrapper.instance())
     const elemStyle = window.getComputedStyle(elem)
     expect(elemStyle.display).toBe('inline')
     expect(elemStyle.color).toBe('green')
@@ -87,7 +87,7 @@ describe('Ad component', function () {
         width={300}
         height={250} />
     )
-    const elem = findDOMNode(wrapper.getNode())
+    const elem = findDOMNode(wrapper.instance())
     expect(elem.offsetWidth).toBe(300)
     wrapper.setProps({ width: 1000 }, () => {
       expect(elem.offsetWidth).toBe(300)
