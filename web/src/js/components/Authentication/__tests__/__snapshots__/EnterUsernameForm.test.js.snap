@@ -1,0 +1,56 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EnterUsernameForm tests matches expected snapshot 1`] = `
+<Paper
+  circle={false}
+  rounded={true}
+  style={
+    Object {
+      "backgroundColor": "#FFF",
+      "padding": 24,
+    }
+  }
+  transitionEnabled={true}
+  zDepth={1}
+>
+  <span
+    style={
+      Object {
+        "fontSize": 20,
+        "fontWeight": 500,
+      }
+    }
+  >
+    Choose a username
+  </span>
+  <UsernameField
+    onKeyPress={[Function]}
+    otherError={false}
+    style={
+      Object {
+        "display": "block",
+      }
+    }
+    usernameDuplicate={false}
+  />
+  <span
+    style={
+      Object {
+        "display": "flex",
+        "justifyContent": "flex-end",
+        "marginTop": 30,
+      }
+    }
+  >
+    <RaisedButton
+      disabled={false}
+      fullWidth={false}
+      label="NEXT"
+      labelPosition="after"
+      onClick={[Function]}
+      primary={true}
+      secondary={false}
+    />
+  </span>
+</Paper>
+`;
