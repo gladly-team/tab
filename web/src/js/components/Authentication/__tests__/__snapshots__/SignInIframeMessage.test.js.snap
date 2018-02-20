@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SignInIframeMessage tests matches expected snapshot 1`] = `
+<Paper
+  circle={false}
+  rounded={true}
+  style={
+    Object {
+      "backgroundColor": "#FFF",
+      "maxWidth": 400,
+      "padding": 24,
+    }
+  }
+  transitionEnabled={true}
+  zDepth={1}
+>
+  <h3>
+    Let's get started!
+  </h3>
+  <p>
+    Sign in to customize your new tab page and raise money for your favorite causes.
+  </p>
+  <span
+    style={
+      Object {
+        "display": "flex",
+        "justifyContent": "flex-end",
+        "marginTop": 24,
+      }
+    }
+  >
+    <RaisedButton
+      data-test-id="sign-in-iframe-message-button"
+      disabled={false}
+      fullWidth={false}
+      label="SIGN IN"
+      labelPosition="after"
+      onClick={[Function]}
+      primary={true}
+      secondary={false}
+    />
+  </span>
+</Paper>
+`;
