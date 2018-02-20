@@ -9,6 +9,10 @@ import displayAd from 'ads/displayAd'
 
 jest.mock('ads/displayAd')
 
+afterEach(() => {
+  jest.clearAllMocks()
+})
+
 describe('Ad component', function () {
   it('render a child with the provided ID', function () {
     const wrapper = shallow(
@@ -27,7 +31,8 @@ describe('Ad component', function () {
         adId='my-ad-123'
         adSlotId='def'
         width={300}
-        height={250} />
+        height={250} />,
+      { disableLifecycleMethods: true }
     )
     expect(displayAd).not.toHaveBeenCalled()
     wrapper.instance().componentDidMount()
