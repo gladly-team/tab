@@ -31,6 +31,7 @@ describe('User background image component', function () {
     // Image should not appear until it's loaded.
     expect(wrapperStyle.opacity).toBe(0)
     wrapper.instance().onImgLoad() // mock img onload
+    wrapper.update()
     expect(wrapper.get(0).props.style.opacity).toBe(1)
   })
 
@@ -53,6 +54,7 @@ describe('User background image component', function () {
     // Image should not appear until it's loaded.
     expect(wrapperStyle.opacity).toBe(0)
     wrapper.instance().onImgLoad() // mock img onload
+    wrapper.update()
     expect(wrapper.get(0).props.style.opacity).toBe(1)
   })
 
@@ -75,6 +77,7 @@ describe('User background image component', function () {
     // Image should not appear until it's loaded.
     expect(wrapperStyle.opacity).toBe(0)
     wrapper.instance().onImgLoad() // mock img onload
+    wrapper.update()
     expect(wrapper.get(0).props.style.opacity).toBe(1)
   })
 
@@ -204,6 +207,7 @@ describe('User background image component', function () {
       backgroundColor: '#4a90e2'
     }
     wrapper.instance().onImgError()
+    wrapper.update()
     const wrapperStyle = wrapper.get(0).props.style
     expect(wrapperStyle.backgroundColor).toBe(styleOnError.backgroundColor)
     expect(wrapperStyle.backgroundImage).not.toBeDefined()
@@ -224,6 +228,7 @@ describe('User background image component', function () {
       <UserBackgroundImageComponent user={user} showError={showErrorHandler} />
     )
     wrapper.instance().onImgError()
+    wrapper.update()
     expect(showErrorHandler).toHaveBeenCalledWith('We could not load your background image.')
   })
 
