@@ -7,7 +7,8 @@ import {
 } from 'enzyme'
 import toJson from 'enzyme-to-json'
 import {
-  logout
+  logout,
+  sendVerificationEmail
 } from 'authentication/user'
 import {
   goTo,
@@ -47,6 +48,28 @@ describe('VerifyEmailMessage tests', function () {
     setImmediate(() => {
       expect(logout).toHaveBeenCalled()
       expect(goTo).toHaveBeenCalledWith(loginURL)
+      done()
+    })
+  })
+
+  it('the "resend email" button calls to send a new verification email', done => {
+    const VerifyEmailMessage = require('../VerifyEmailMessage').default
+
+    // @material-ui-1-todo: remove MuiThemeProvider wrapper
+    const wrapper = mount(
+      <MuiThemeProvider>
+        <VerifyEmailMessage />
+      </MuiThemeProvider>
+    )
+
+    // @material-ui-1-todo: use specific selector
+    const button = wrapper
+      .find('[data-test-id="verify-email-message-button-container"] button')
+      .last()
+    button.simulate('click')
+
+    setImmediate(() => {
+      expect(sendVerificationEmail).toHaveBeenCalled()
       done()
     })
   })
