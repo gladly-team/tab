@@ -69,6 +69,7 @@ class UsernameField extends React.Component {
     return (
       <TextField
         id={'username-input'}
+        data-test-id={'username-field-text-input'}
         ref={(input) => { this.username = input }}
         floatingLabelText={<span>Username</span>}
         {...props}
