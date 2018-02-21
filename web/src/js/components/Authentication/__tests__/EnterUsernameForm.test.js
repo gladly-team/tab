@@ -46,7 +46,6 @@ describe('EnterUsernameForm tests', function () {
     // Enter a username
     // https://github.com/airbnb/enzyme/issues/76#issuecomment-259734821
     usernameTextField.instance().value = 'bobert'
-    wrapper.update()
 
     // TODO: put a data-test-id directly on the button component
     // after updating to Material UI 1.x. We need to do this in many tests.
@@ -66,8 +65,6 @@ describe('EnterUsernameForm tests', function () {
 
     // Enter a too-short username
     usernameTextField.instance().value = 'x'
-    wrapper.update()
-
     const button = wrapper.find('[data-test-id="enter-username-form-button-container"] button')
     button.simulate('click')
 
