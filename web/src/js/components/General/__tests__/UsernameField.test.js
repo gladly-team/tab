@@ -2,11 +2,9 @@
 
 import React from 'react'
 import {
-  mount,
   shallow
 } from 'enzyme'
 import toJson from 'enzyme-to-json'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 
 describe('UsernameField tests', function () {
   it('renders without error', function () {
