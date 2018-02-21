@@ -53,6 +53,26 @@ describe('EnterUsernameForm tests', function () {
     expect(SetUsernameMutation).toHaveBeenCalled()
   })
 
+  it('it does not call SetUsernameMutation when the username is invalid', function () {
+    const EnterUsernameForm = require('../EnterUsernameForm').default
+    const wrapper = mount(
+      <MuiThemeProvider>
+        <EnterUsernameForm user={mockUserData} />
+      </MuiThemeProvider>
+    )
+    const usernameTextField = wrapper.find('[data-test-id="enter-username-form-username-field"] input')
+
+    // Enter a too-short username
+    usernameTextField.instance().value = 'x'
+    wrapper.update()
+
+    const button = wrapper.find('[data-test-id="enter-username-form-button-container"] button')
+    button.simulate('click')
+
+    // We shouldn't call to save the username
+    expect(SetUsernameMutation).not.toHaveBeenCalled()
+  })
+
   it('matches expected snapshot', function () {
     const EnterUsernameForm = require('../EnterUsernameForm').default
     const wrapper = shallow(
