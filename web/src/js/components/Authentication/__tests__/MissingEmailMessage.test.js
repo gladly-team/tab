@@ -32,11 +32,15 @@ describe('MissingEmailMessage tests', function () {
 
   it('restarts auth flow when clicking button', done => {
     const MissingEmailMessage = require('../MissingEmailMessage').default
+
+    // @material-ui-1-todo: remove MuiThemeProvider wrapper
     const wrapper = mount(
       <MuiThemeProvider>
         <MissingEmailMessage />
       </MuiThemeProvider>
     )
+
+    // @material-ui-1-todo: use specific selector
     const button = wrapper.find('[data-test-id="missing-email-message-button-container"] button')
     button.simulate('click')
 

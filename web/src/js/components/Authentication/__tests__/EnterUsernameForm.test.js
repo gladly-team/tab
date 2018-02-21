@@ -36,6 +36,7 @@ describe('EnterUsernameForm tests', function () {
     // After updating to Material UI 1.x, we shouldn't have to wrap our tested
     // components in the MuiThemeProvider.
     // https://github.com/mui-org/material-ui/issues/5330#issuecomment-251843011
+    // @material-ui-1-todo: remove MuiThemeProvider wrapper
     const wrapper = mount(
       <MuiThemeProvider>
         <EnterUsernameForm user={mockUserData} />
@@ -49,6 +50,7 @@ describe('EnterUsernameForm tests', function () {
 
     // TODO: put a data-test-id directly on the button component
     // after updating to Material UI 1.x. We need to do this in many tests.
+    // @material-ui-1-todo: use specific selector
     const button = wrapper.find('[data-test-id="enter-username-form-button-container"] button')
     button.simulate('click')
     expect(SetUsernameMutation).toHaveBeenCalled()
@@ -56,11 +58,14 @@ describe('EnterUsernameForm tests', function () {
 
   it('it does not call SetUsernameMutation when the username is too short and instead shows an error message', function () {
     const EnterUsernameForm = require('../EnterUsernameForm').default
+
+    // @material-ui-1-todo: remove MuiThemeProvider wrapper
     const wrapper = mount(
       <MuiThemeProvider>
         <EnterUsernameForm user={mockUserData} />
       </MuiThemeProvider>
     )
+    // @material-ui-1-todo: use specific selector
     const usernameTextField = wrapper.find('[data-test-id="enter-username-form-username-field"] input')
 
     // Enter a too-short username
@@ -79,6 +84,8 @@ describe('EnterUsernameForm tests', function () {
 
   it('it shows an error message when the username is a duplicate', function () {
     const EnterUsernameForm = require('../EnterUsernameForm').default
+
+    // @material-ui-1-todo: remove MuiThemeProvider wrapper
     const wrapper = mount(
       <MuiThemeProvider>
         <EnterUsernameForm user={mockUserData} />
