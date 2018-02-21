@@ -37,6 +37,7 @@ class MissingEmailMessage extends React.Component {
             justifyContent: 'flex-end',
             marginTop: 24
           }}
+          data-test-id='missing-email-message-button-container'
         >
           <RaisedButton
             label={buttonLabel}

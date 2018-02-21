@@ -21,6 +21,7 @@ exports[`MissingEmailMessage tests matches expected snapshot 1`] = `
     This can happen when Facebook or Google doesn't have your email address on file, which we use to create your account. Please try signing in with another method, such as an email and password.
   </p>
   <span
+    data-test-id="missing-email-message-button-container"
     style={
       Object {
         "display": "flex",
