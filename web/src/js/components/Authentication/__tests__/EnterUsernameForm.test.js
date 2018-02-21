@@ -7,7 +7,9 @@ import {
 } from 'enzyme'
 import toJson from 'enzyme-to-json'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import SetUsernameMutation from 'mutations/SetUsernameMutation'
+import SetUsernameMutation, {
+  __runOnCompleted
+} from 'mutations/SetUsernameMutation'
 
 jest.mock('mutations/SetUsernameMutation')
 
@@ -75,6 +77,36 @@ describe('EnterUsernameForm tests', function () {
     // Compare to snapshot, which should have an error message state.
     // Probably better to find and test the actual error message component,
     // but this is okay for now.
+    expect(toJson(wrapper)).toMatchSnapshot()
+  })
+
+  it('it shows an error message when the username is a duplicate', function () {
+    const EnterUsernameForm = require('../EnterUsernameForm').default
+    const wrapper = mount(
+      <MuiThemeProvider>
+        <EnterUsernameForm user={mockUserData} />
+      </MuiThemeProvider>
+    )
+
+    // Enter a username
+    const usernameTextField = wrapper.find('[data-test-id="enter-username-form-username-field"] input')
+    usernameTextField.instance().value = 'Sunol'
+    const button = wrapper.find('[data-test-id="enter-username-form-button-container"] button')
+    button.simulate('click')
+
+    // Mock a response with a duplicate username error
+    __runOnCompleted({
+      setUsername: {
+        user: null,
+        errors: [{
+          code: 'USERNAME_DUPLICATE',
+          message: 'Username already exists'
+        }]
+      }
+    })
+    wrapper.update()
+
+    // Compare to snapshot, which should have an error message state
     expect(toJson(wrapper)).toMatchSnapshot()
   })
 
