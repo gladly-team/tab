@@ -24,6 +24,7 @@ exports[`EnterUsernameForm tests matches expected snapshot 1`] = `
     Choose a username
   </span>
   <UsernameField
+    data-test-id="enter-username-form-username-field"
     onKeyPress={[Function]}
     otherError={false}
     style={
@@ -34,6 +35,7 @@ exports[`EnterUsernameForm tests matches expected snapshot 1`] = `
     usernameDuplicate={false}
   />
   <span
+    data-test-id="enter-username-form-button-container"
     style={
       Object {
         "display": "flex",

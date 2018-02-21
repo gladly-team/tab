@@ -115,6 +115,7 @@ class EnterUsernameForm extends React.Component {
           style={{
             display: 'block'
           }}
+          data-test-id={'enter-username-form-username-field'}
           />
         <span
           style={{
@@ -122,6 +123,7 @@ class EnterUsernameForm extends React.Component {
             justifyContent: 'flex-end',
             marginTop: 30
           }}
+          data-test-id={'enter-username-form-button-container'}
         >
           <RaisedButton
             label={this.state.savingUsernameInProgress ? 'SAVING...' : 'NEXT'}
