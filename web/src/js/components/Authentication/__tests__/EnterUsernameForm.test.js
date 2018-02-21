@@ -53,7 +53,7 @@ describe('EnterUsernameForm tests', function () {
     expect(SetUsernameMutation).toHaveBeenCalled()
   })
 
-  it('it does not call SetUsernameMutation when the username is invalid', function () {
+  it('it does not call SetUsernameMutation when the username is too short and instead shows an error message', function () {
     const EnterUsernameForm = require('../EnterUsernameForm').default
     const wrapper = mount(
       <MuiThemeProvider>
@@ -71,6 +71,11 @@ describe('EnterUsernameForm tests', function () {
 
     // We shouldn't call to save the username
     expect(SetUsernameMutation).not.toHaveBeenCalled()
+
+    // Compare to snapshot, which should have an error message state.
+    // Probably better to find and test the actual error message component,
+    // but this is okay for now.
+    expect(toJson(wrapper)).toMatchSnapshot()
   })
 
   it('matches expected snapshot', function () {
