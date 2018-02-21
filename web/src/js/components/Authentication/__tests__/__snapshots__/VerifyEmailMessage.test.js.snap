@@ -18,6 +18,7 @@ exports[`VerifyEmailMessage tests matches expected snapshot 1`] = `
     Please check your email to verify your account.
   </p>
   <span
+    data-test-id="verify-email-message-button-container"
     style={
       Object {
         "display": "flex",

@@ -2,9 +2,21 @@
 
 import React from 'react'
 import {
+  mount,
   shallow
 } from 'enzyme'
 import toJson from 'enzyme-to-json'
+import {
+  logout
+} from 'authentication/user'
+import {
+  goTo,
+  loginURL
+} from 'navigation/navigation'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+
+jest.mock('authentication/user')
+jest.mock('navigation/navigation')
 
 describe('VerifyEmailMessage tests', function () {
   it('renders without error', function () {
@@ -12,6 +24,31 @@ describe('VerifyEmailMessage tests', function () {
     shallow(
       <VerifyEmailMessage />
     )
+  })
+
+  it('restarts the auth flow when clicking cancel button', done => {
+    const VerifyEmailMessage = require('../VerifyEmailMessage').default
+
+    // @material-ui-1-todo: remove MuiThemeProvider wrapper
+    const wrapper = mount(
+      <MuiThemeProvider>
+        <VerifyEmailMessage />
+      </MuiThemeProvider>
+    )
+
+    // @material-ui-1-todo: use specific selector
+    const button = wrapper
+      .find('[data-test-id="verify-email-message-button-container"] button')
+      .first()
+    button.simulate('click')
+
+    // Dealing with async methods triggered by `simulate`:
+    // https://stackoverflow.com/a/43855794/1332513
+    setImmediate(() => {
+      expect(logout).toHaveBeenCalled()
+      expect(goTo).toHaveBeenCalledWith(loginURL)
+      done()
+    })
   })
 
   it('matches expected snapshot', function () {
