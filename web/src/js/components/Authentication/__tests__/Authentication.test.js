@@ -8,7 +8,8 @@ import {
   goTo,
   goToDashboard,
   goToLogin,
-  authMessageURL
+  authMessageURL,
+  missingEmailMessageURL
 } from 'navigation/navigation'
 import {
   getCurrentUser
@@ -27,8 +28,8 @@ const mockLocationData = {
   pathname: '/newtab/auth/'
 }
 const mockUserData = {
-  id: 'abc123',
-  username: 'steve'
+  id: null,
+  username: null
 }
 const mockFetchUser = jest.fn()
 
@@ -173,5 +174,34 @@ describe('Authentication.js tests', function () {
     const component = wrapper.instance()
     await component.navigateToAuthStep()
     expect(goToLogin).toHaveBeenCalled()
+  })
+
+  it('goes to missing email screen if authed and there is no email address', async () => {
+    expect.assertions(1)
+    const Authentication = require('../Authentication').default
+
+    const mockUserDataProp = {
+      id: null,
+      username: null
+    }
+
+    getCurrentUser.mockReturnValueOnce({
+      id: 'abc123',
+      email: null,
+      username: null,
+      isAnonymous: false,
+      emailVerified: false
+    })
+
+    const wrapper = shallow(
+      <Authentication
+        location={mockLocationData}
+        user={mockUserDataProp}
+        fetchUser={jest.fn()}
+        />
+    )
+    const component = wrapper.instance()
+    await component.navigateToAuthStep()
+    expect(goTo).toHaveBeenCalledWith(missingEmailMessageURL)
   })
 })
