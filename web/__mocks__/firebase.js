@@ -4,4 +4,5 @@
 // call `jest.unmock('firebase')`
 
 const firebase = jest.genMockFromModule('firebase')
-export default firebase
+firebase.initializeApp = jest.fn()
+module.exports = firebase
