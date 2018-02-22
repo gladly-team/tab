@@ -296,4 +296,37 @@ describe('Authentication.js tests', function () {
     expect(setUsernameInLocalStorage).toHaveBeenCalledWith('fooismyname')
     expect(goToDashboard).toHaveBeenCalled()
   })
+
+  it('does not redirect at all if the URL is /auth/action/*', async () => {
+    expect.assertions(3)
+    const Authentication = require('../Authentication').default
+
+    const mockUserDataProp = {
+      id: null,
+      username: null
+    }
+
+    getCurrentUser.mockReturnValueOnce({
+      id: 'abc123',
+      email: 'foo@bar.com',
+      username: null,
+      isAnonymous: false,
+      emailVerified: false
+    })
+
+    const wrapper = shallow(
+      <Authentication
+        location={{
+          pathname: '/auth/action/verify/'
+        }}
+        user={mockUserDataProp}
+        fetchUser={jest.fn()}
+        />
+    )
+    const component = wrapper.instance()
+    await component.navigateToAuthStep()
+    expect(goTo).not.toHaveBeenCalled()
+    expect(replaceUrl).not.toHaveBeenCalled()
+    expect(goToDashboard).not.toHaveBeenCalled()
+  })
 })
