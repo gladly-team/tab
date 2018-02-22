@@ -10,6 +10,7 @@ import {
   goToDashboard,
   goToLogin,
   authMessageURL,
+  enterUsernameURL,
   missingEmailMessageURL,
   verifyEmailURL
 } from 'navigation/navigation'
@@ -234,5 +235,34 @@ describe('Authentication.js tests', function () {
     const component = wrapper.instance()
     await component.navigateToAuthStep()
     expect(replaceUrl).toHaveBeenCalledWith(verifyEmailURL)
+  })
+
+  it('goes to new username screen if authed and username is not set', async () => {
+    expect.assertions(1)
+    const Authentication = require('../Authentication').default
+
+    const mockUserDataProp = {
+      id: null,
+      username: null
+    }
+
+    getCurrentUser.mockReturnValueOnce({
+      id: 'abc123',
+      email: 'foo@bar.com',
+      username: null,
+      isAnonymous: false,
+      emailVerified: true
+    })
+
+    const wrapper = shallow(
+      <Authentication
+        location={mockLocationData}
+        user={mockUserDataProp}
+        fetchUser={jest.fn()}
+        />
+    )
+    const component = wrapper.instance()
+    await component.navigateToAuthStep()
+    expect(replaceUrl).toHaveBeenCalledWith(enterUsernameURL)
   })
 })
