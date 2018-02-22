@@ -15,7 +15,8 @@ import {
   verifyEmailURL
 } from 'navigation/navigation'
 import {
-  getCurrentUser
+  getCurrentUser,
+  setUsernameInLocalStorage
 } from 'authentication/user'
 import {
   isInIframe
@@ -264,5 +265,35 @@ describe('Authentication.js tests', function () {
     const component = wrapper.instance()
     await component.navigateToAuthStep()
     expect(replaceUrl).toHaveBeenCalledWith(enterUsernameURL)
+  })
+
+  it('goes to dashboard (and sets username in localStorage) if there is no local username but the account has a username', async () => {
+    expect.assertions(2)
+    const Authentication = require('../Authentication').default
+
+    const mockUserDataProp = {
+      id: 'abc123',
+      username: 'fooismyname'
+    }
+
+    getCurrentUser.mockReturnValueOnce({
+      id: 'abc123',
+      email: 'foo@bar.com',
+      username: null,
+      isAnonymous: false,
+      emailVerified: true
+    })
+
+    const wrapper = shallow(
+      <Authentication
+        location={mockLocationData}
+        user={mockUserDataProp}
+        fetchUser={jest.fn()}
+        />
+    )
+    const component = wrapper.instance()
+    await component.navigateToAuthStep()
+    expect(setUsernameInLocalStorage).toHaveBeenCalledWith('fooismyname')
+    expect(goToDashboard).toHaveBeenCalled()
   })
 })
