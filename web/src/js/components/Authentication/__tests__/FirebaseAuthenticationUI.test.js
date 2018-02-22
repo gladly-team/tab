@@ -5,14 +5,15 @@ import {
   shallow
 } from 'enzyme'
 
-// Initialize Firebase
-import 'authentication/firebase'
+// Init Firebase
+import { initializeFirebase } from 'authentication/firebaseConfig'
+initializeFirebase()
 
 jest.unmock('firebase') // use the real firebase module
 
 jest.mock('analytics/logEvent')
 jest.mock('authentication/user')
-jest.mock('authentication/firebase') // mock the Firebase app initialization
+jest.mock('authentication/firebaseConfig') // mock the Firebase app initialization
 jest.mock('navigation/navigation')
 
 describe('FirebaseAuthenticationUI tests', function () {
