@@ -17,7 +17,7 @@ jest.mock('authentication/firebaseConfig') // mock the Firebase app initializati
 jest.mock('navigation/navigation')
 
 describe('FirebaseAuthenticationUI tests', function () {
-  it('renders without error', function () {
+  it('renders without error', () => {
     const FirebaseAuthenticationUI = require('../FirebaseAuthenticationUI').default
     shallow(
       <FirebaseAuthenticationUI />
