@@ -6,10 +6,12 @@ import {
 } from 'enzyme'
 import {
   goTo,
+  replaceUrl,
   goToDashboard,
   goToLogin,
   authMessageURL,
-  missingEmailMessageURL
+  missingEmailMessageURL,
+  verifyEmailURL
 } from 'navigation/navigation'
 import {
   getCurrentUser
@@ -203,5 +205,34 @@ describe('Authentication.js tests', function () {
     const component = wrapper.instance()
     await component.navigateToAuthStep()
     expect(goTo).toHaveBeenCalledWith(missingEmailMessageURL)
+  })
+
+  it('goes to email verification screen if authed and email is unverified', async () => {
+    expect.assertions(1)
+    const Authentication = require('../Authentication').default
+
+    const mockUserDataProp = {
+      id: null,
+      username: null
+    }
+
+    getCurrentUser.mockReturnValueOnce({
+      id: 'abc123',
+      email: 'foo@bar.com',
+      username: null,
+      isAnonymous: false,
+      emailVerified: false
+    })
+
+    const wrapper = shallow(
+      <Authentication
+        location={mockLocationData}
+        user={mockUserDataProp}
+        fetchUser={jest.fn()}
+        />
+    )
+    const component = wrapper.instance()
+    await component.navigateToAuthStep()
+    expect(replaceUrl).toHaveBeenCalledWith(verifyEmailURL)
   })
 })
