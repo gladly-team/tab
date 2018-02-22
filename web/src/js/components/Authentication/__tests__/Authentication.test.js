@@ -360,4 +360,39 @@ describe('Authentication.js tests', function () {
     )
     expect(toJson(wrapper)).toMatchSnapshot()
   })
+
+  it('after sign-in, goes to missing email message screen if no email address', () => {
+    const Authentication = require('../Authentication').default
+
+    // Args for onSignInSuccess
+    const mockFirebaseUserInstance = {
+      displayName: '',
+      email: null, // note the missing email
+      emailVerified: false,
+      isAnonymous: false,
+      metadata: {},
+      phoneNumber: null,
+      photoURL: null,
+      providerData: {},
+      providerId: 'some-id',
+      refreshToken: 'xyzxyz',
+      uid: 'abc123'
+    }
+    const mockFirebaseCredential = {}
+    const mockFirebaseDefaultRedirectURL = ''
+
+    const wrapper = shallow(
+      <Authentication
+        location={mockLocationData}
+        user={mockUserData}
+        fetchUser={jest.fn()}
+        />
+    )
+    const component = wrapper.instance()
+
+    // Mock a call from FirebaseUI after user signs in
+    component.onSignInSuccess(mockFirebaseUserInstance,
+      mockFirebaseCredential, mockFirebaseDefaultRedirectURL)
+    expect(goTo).toHaveBeenCalledWith(missingEmailMessageURL)
+  })
 })
