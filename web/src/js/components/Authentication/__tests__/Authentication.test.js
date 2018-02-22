@@ -7,6 +7,7 @@ import {
 import {
   goTo,
   goToDashboard,
+  goToLogin,
   authMessageURL
 } from 'navigation/navigation'
 import {
@@ -146,5 +147,31 @@ describe('Authentication.js tests', function () {
     const component = wrapper.instance()
     await component.navigateToAuthStep()
     expect(goTo).toHaveBeenCalledWith(authMessageURL)
+  })
+
+  it('goes to login screen if unauthed and NOT within an iframe', async () => {
+    expect.assertions(1)
+    const Authentication = require('../Authentication').default
+
+    const mockUserDataProp = {
+      id: null,
+      username: null
+    }
+
+    // User is unauthed
+    getCurrentUser.mockReturnValueOnce(null)
+
+    // Inside an iframe
+    isInIframe.mockReturnValueOnce(false)
+    const wrapper = shallow(
+      <Authentication
+        location={mockLocationData}
+        user={mockUserDataProp}
+        fetchUser={jest.fn()}
+        />
+    )
+    const component = wrapper.instance()
+    await component.navigateToAuthStep()
+    expect(goToLogin).toHaveBeenCalled()
   })
 })
