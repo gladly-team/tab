@@ -70,6 +70,24 @@ describe('Authentication.js tests', function () {
     expect(component.navigateToAuthStep).toHaveBeenCalled()
   })
 
+  it('sets "loadChildren" state to true when mounting', async () => {
+    expect.assertions(1)
+    const Authentication = require('../Authentication').default
+    const wrapper = shallow(
+      <Authentication
+        location={mockLocationData}
+        user={mockUserData}
+        fetchUser={mockFetchUser}
+        />
+    )
+    const component = wrapper.instance()
+    component.navigateToAuthStep = jest.fn()
+
+    // Force the lifecycle method
+    await component.componentWillMount()
+    expect(wrapper.state().loadChildren).toBe(true)
+  })
+
   it('redirects to the app if the user is fully authenticated', async () => {
     expect.assertions(1)
     const Authentication = require('../Authentication').default
