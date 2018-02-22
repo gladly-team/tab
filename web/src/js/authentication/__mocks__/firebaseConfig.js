@@ -7,7 +7,10 @@ const config = {
   databaseURL: 'foo',
   projectId: 'xyz'
 }
-firebase.initializeApp(config)
+
+export const initializeFirebase = () => {
+  firebase.initializeApp(config)
+}
 
 // In Jest tests when mounting firebaseui-web, getting error:
 // "The current environment does not support the specified persistence type"
