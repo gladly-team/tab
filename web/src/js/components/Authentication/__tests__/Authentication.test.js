@@ -4,6 +4,7 @@ import React from 'react'
 import {
   shallow
 } from 'enzyme'
+import toJson from 'enzyme-to-json'
 import {
   goTo,
   replaceUrl,
@@ -346,5 +347,17 @@ describe('Authentication.js tests', function () {
     expect(goTo).not.toHaveBeenCalled()
     expect(replaceUrl).not.toHaveBeenCalled()
     expect(goToDashboard).not.toHaveBeenCalled()
+  })
+
+  it('renders as expected prior to navigating', () => {
+    const Authentication = require('../Authentication').default
+    const wrapper = shallow(
+      <Authentication
+        location={mockLocationData}
+        user={mockUserData}
+        fetchUser={mockFetchUser}
+        />
+    )
+    expect(toJson(wrapper)).toMatchSnapshot()
   })
 })
