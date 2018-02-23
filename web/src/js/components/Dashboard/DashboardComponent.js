@@ -8,6 +8,7 @@ import WidgetsContainer from '../Widget/WidgetsContainer'
 import CampaignBaseContainer from '../Campaign/CampaignBaseContainer'
 import Ad from '../Ad/Ad'
 import LogTab from './LogTabContainer'
+import LogAccountCreation from './LogAccountCreationContainer'
 import CircleIcon from 'material-ui/svg-icons/image/lens'
 import {
   dashboardIconInactiveColor,
@@ -135,6 +136,7 @@ class Dashboard extends React.Component {
             display: 'block'
           }} />
         { user ? <LogTab user={user} /> : null }
+        { user ? <LogAccountCreation user={user} /> : null }
         { errorMessage
           ? <ErrorMessage message={errorMessage}
             onRequestClose={this.clearError.bind(this)} />
