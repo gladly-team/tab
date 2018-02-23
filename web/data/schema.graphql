@@ -339,6 +339,7 @@ type User implements Node {
 
   # ISO datetime string of when the user joined
   joined: String
+  justCreated: Boolean
 
   # User's current VC
   vcCurrent: Int

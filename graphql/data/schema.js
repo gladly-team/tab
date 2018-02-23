@@ -193,6 +193,16 @@ const userType = new GraphQLObjectType({
       type: GraphQLString,
       description: 'ISO datetime string of when the user joined'
     },
+    justCreated: {
+      type: GraphQLBoolean,
+      description: 'Whether or not the user was created during this request;' /
+        'helpful for a "get or create" mutation',
+      resolve: (user, _) => {
+        // The user will only have the 'justCreated' field when it's a
+        // brand new user item
+        return !!user.justCreated
+      }
+    },
     vcCurrent: {
       type: GraphQLInt,
       description: 'User\'s current VC'
