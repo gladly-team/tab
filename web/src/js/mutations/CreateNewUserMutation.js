@@ -33,4 +33,4 @@ function commit (environment, userId, email, referralData, onCompleted, onError)
   )
 }
 
-export default {commit}
+export default commit

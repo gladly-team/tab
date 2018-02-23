@@ -204,7 +204,7 @@ class Authentication extends React.Component {
   createNewUser (userId, email) {
     const referralData = getReferralData()
     return new Promise((resolve, reject) => {
-      CreateNewUserMutation.commit(
+      CreateNewUserMutation(
         environment,
         userId,
         email,
