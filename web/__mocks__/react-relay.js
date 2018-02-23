@@ -1,6 +1,10 @@
-/* global jest */
+/* eslint-env jest */
 
-import relayTestUtils from 'relay-test-utils'
-const relay = jest.genMockFromModule('react-relay')
+const Relay = require.requireActual('react-relay')
 
-export default relayTestUtils.relayMock(relay)
+module.exports = {
+  QL: Relay.QL,
+  Mutation: Relay.Mutation,
+  Route: Relay.Route,
+  createContainer: component => component
+}

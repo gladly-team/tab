@@ -13,7 +13,15 @@ env:
   - LOG_TEST_COVERAGE=true
   - SSL_CERTIFICATE_ARN=arn:aws:acm:us-east-1:167811431063:certificate/fb405a2a-68c1-4fa3-a1d6-d10f3dd19e59
   ########## Test stage ##########
-  - TEST_NODE_ENV=production
+  # Note: Material UI creates different DOM between development
+  # and production Node environments, which breaks Jest snapshot tests.
+  # https://github.com/mui-org/material-ui/issues/4466#issuecomment-247424816
+  # https://github.com/mui-org/material-ui/blob/master/src/utils/callOnce.js#L6
+  # This is why we don't run tests in NODE_ENV=production.
+  # Material UI 1.x may fix this, at which point we can use the production
+  # environment for testing.
+  # @material-ui-1-todo
+  - TEST_NODE_ENV=test
   - TEST_STAGE=test
   - TEST_AWS_REGION=us-west-2
   - TEST_AWS_ACCOUNT_ID=167811431063

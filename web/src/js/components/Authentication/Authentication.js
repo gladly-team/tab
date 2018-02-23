@@ -169,7 +169,7 @@ class Authentication extends React.Component {
     }
 
     // Create a new user in our database.
-    this.createNewUser(currentUser.uid, currentUser.email)
+    return this.createNewUser(currentUser.uid, currentUser.email)
       .then(() => {
         // Log the sign-up to analytics. Note that this is logged
         // for returning users (sign-ins) too.
@@ -183,8 +183,11 @@ class Authentication extends React.Component {
           // Ask the user to verify their email.
           sendVerificationEmail()
             .then((emailSent) => {
-              // TODO: show the user an error message if the email does not send
               goTo(verifyEmailURL)
+            })
+            .catch((err) => {
+              // TODO: show error message to the user
+              console.error(err)
             })
         } else {
           // Fetch the user from our database. This will update the `user`
@@ -204,7 +207,7 @@ class Authentication extends React.Component {
   createNewUser (userId, email) {
     const referralData = getReferralData()
     return new Promise((resolve, reject) => {
-      CreateNewUserMutation.commit(
+      CreateNewUserMutation(
         environment,
         userId,
         email,

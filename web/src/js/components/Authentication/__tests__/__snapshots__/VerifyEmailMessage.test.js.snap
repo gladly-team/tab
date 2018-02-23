@@ -1,0 +1,55 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`VerifyEmailMessage tests matches expected snapshot 1`] = `
+<Paper
+  circle={false}
+  rounded={true}
+  style={
+    Object {
+      "backgroundColor": "#FFF",
+      "maxWidth": 400,
+      "padding": 24,
+    }
+  }
+  transitionEnabled={true}
+  zDepth={1}
+>
+  <p>
+    Please check your email to verify your account.
+  </p>
+  <span
+    data-test-id="verify-email-message-button-container"
+    style={
+      Object {
+        "display": "flex",
+        "justifyContent": "flex-end",
+        "marginTop": 24,
+      }
+    }
+  >
+    <RaisedButton
+      disabled={false}
+      fullWidth={false}
+      label="CANCEL"
+      labelPosition="after"
+      onClick={[Function]}
+      primary={false}
+      secondary={false}
+      style={
+        Object {
+          "marginRight": 8,
+        }
+      }
+    />
+    <RaisedButton
+      disabled={false}
+      fullWidth={false}
+      label="RESEND EMAIL"
+      labelPosition="after"
+      onClick={[Function]}
+      primary={true}
+      secondary={false}
+    />
+  </span>
+</Paper>
+`;

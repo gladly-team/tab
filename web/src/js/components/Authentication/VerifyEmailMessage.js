@@ -77,6 +77,7 @@ class VerifyEmailMessage extends React.Component {
             justifyContent: 'flex-end',
             marginTop: 24
           }}
+          data-test-id={'verify-email-message-button-container'}
         >
           <RaisedButton
             label={cancelButtonLabel}

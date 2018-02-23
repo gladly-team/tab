@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MissingEmailMessage tests matches expected snapshot 1`] = `
+<Paper
+  circle={false}
+  rounded={true}
+  style={
+    Object {
+      "backgroundColor": "#FFF",
+      "maxWidth": 400,
+      "padding": 24,
+    }
+  }
+  transitionEnabled={true}
+  zDepth={1}
+>
+  <h3>
+    We couldn't sign you in
+  </h3>
+  <p>
+    This can happen when Facebook or Google doesn't have your email address on file, which we use to create your account. Please try signing in with another method, such as an email and password.
+  </p>
+  <span
+    data-test-id="missing-email-message-button-container"
+    style={
+      Object {
+        "display": "flex",
+        "justifyContent": "flex-end",
+        "marginTop": 24,
+      }
+    }
+  >
+    <RaisedButton
+      disabled={false}
+      fullWidth={false}
+      label="SIGN IN USING ANOTHER METHOD"
+      labelPosition="after"
+      onClick={[Function]}
+      primary={true}
+      secondary={false}
+    />
+  </span>
+</Paper>
+`;

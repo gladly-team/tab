@@ -39,6 +39,7 @@ class SignInIframeMessage extends React.Component {
           }}
         >
           <RaisedButton
+            data-test-id={'sign-in-iframe-message-button'}
             label={buttonLabel}
             primary
             onClick={this.openAuthOutsideIframe.bind(this)}

@@ -7,4 +7,7 @@ const config = {
   databaseURL: process.env.FIREBASE_DATABASE_URL,
   projectId: process.env.FIREBASE_PROJECT_ID
 }
-firebase.initializeApp(config)
+
+export const initializeFirebase = () => {
+  firebase.initializeApp(config)
+}

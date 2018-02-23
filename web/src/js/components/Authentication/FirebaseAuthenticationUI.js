@@ -162,7 +162,10 @@ class FirebaseAuthenticationUI extends React.Component {
 
   render () {
     return (
-      <FirebaseAuth uiConfig={this.uiConfig} firebaseAuth={firebase.auth()} />
+      <FirebaseAuth
+        uiConfig={this.uiConfig}
+        firebaseAuth={firebase.auth()}
+      />
     )
   }
 }

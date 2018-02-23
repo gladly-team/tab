@@ -9,6 +9,10 @@ import displayAd from 'ads/displayAd'
 
 jest.mock('ads/displayAd')
 
+afterEach(() => {
+  jest.clearAllMocks()
+})
+
 describe('Ad component', function () {
   it('render a child with the provided ID', function () {
     const wrapper = shallow(
@@ -27,7 +31,8 @@ describe('Ad component', function () {
         adId='my-ad-123'
         adSlotId='def'
         width={300}
-        height={250} />
+        height={250} />,
+      { disableLifecycleMethods: true }
     )
     expect(displayAd).not.toHaveBeenCalled()
     wrapper.instance().componentDidMount()
@@ -43,7 +48,7 @@ describe('Ad component', function () {
         width={300}
         height={250} />
     )
-    const elem = findDOMNode(wrapper.getNode())
+    const elem = findDOMNode(wrapper.instance())
     expect(elem.offsetWidth).toBe(300)
     expect(elem.offsetHeight).toBe(250)
   })
@@ -56,7 +61,7 @@ describe('Ad component', function () {
         width={432}
         height={99} />
     )
-    const elem = findDOMNode(wrapper.getNode())
+    const elem = findDOMNode(wrapper.instance())
     expect(elem.offsetWidth).toBe(432)
     expect(elem.offsetHeight).toBe(99)
   })
@@ -73,7 +78,7 @@ describe('Ad component', function () {
           color: 'green'
         }} />
     )
-    const elem = findDOMNode(wrapper.getNode())
+    const elem = findDOMNode(wrapper.instance())
     const elemStyle = window.getComputedStyle(elem)
     expect(elemStyle.display).toBe('inline')
     expect(elemStyle.color).toBe('green')
@@ -87,7 +92,7 @@ describe('Ad component', function () {
         width={300}
         height={250} />
     )
-    const elem = findDOMNode(wrapper.getNode())
+    const elem = findDOMNode(wrapper.instance())
     expect(elem.offsetWidth).toBe(300)
     wrapper.setProps({ width: 1000 }, () => {
       expect(elem.offsetWidth).toBe(300)

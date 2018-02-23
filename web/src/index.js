@@ -3,8 +3,10 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { AppContainer } from 'react-hot-loader'
 import Root from './root'
+
 // Init Firebase
-import 'authentication/firebase'
+import { initializeFirebase } from 'authentication/firebaseConfig'
+initializeFirebase()
 
 require('./index.css')
 
