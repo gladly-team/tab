@@ -58,7 +58,7 @@
     "deploy": "yarn run build && serverless deploy -v",
     "update-schema": "babel-node ./scripts/updateSchema.js",
     "test": "npm-run-all -s test:lint test:run test:codecov",
-    "test:run": "jest --testPathIgnorePatterns=integration-tests --coverage",
+    "test:run": "jest --testPathIgnorePatterns=integration-tests --maxWorkers=2 --coverage",
     "test:integration": "echo \"Not running integration tests.\"",
     "test:integration:enable-when-fixed": "jest --testPathPattern=integration-tests --coverage",
     "test:codecov": "if-env LOG_TEST_COVERAGE=true && codecov || echo 'Skipping test coverage logging.'",
