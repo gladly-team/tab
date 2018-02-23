@@ -10,7 +10,6 @@ const mutation = graphql`
         id
         email
         username
-        justCreated
       }
     }
   }
