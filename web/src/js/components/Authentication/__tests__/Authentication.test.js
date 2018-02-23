@@ -21,6 +21,7 @@ import {
   sendVerificationEmail
 } from 'authentication/user'
 import {
+  getReferralData,
   isInIframe
 } from 'web-utils'
 import {
@@ -554,5 +555,32 @@ describe('Authentication.js tests', function () {
       mockFirebaseCredential, mockFirebaseDefaultRedirectURL)
 
     expect(mockFetchUser).toHaveBeenCalledTimes(1)
+  })
+
+  it('uses referral data when creating a new user', async () => {
+    expect.assertions(1)
+    const Authentication = require('../Authentication').default
+
+    const wrapper = shallow(
+      <Authentication
+        location={mockLocationData}
+        user={mockUserData}
+        fetchUser={mockFetchUser}
+        />
+    )
+    const component = wrapper.instance()
+    CreateNewUserMutation.mockImplementationOnce(
+      (environment, userId, email, referralData, onCompleted, onError) => {
+        onCompleted({})
+      }
+    )
+    getReferralData.mockImplementationOnce(() => ({
+      referringUser: 'asdf1234'
+    }))
+
+    await component.createNewUser('some-user-id', 'foo@bar.com')
+    expect(CreateNewUserMutation.mock.calls[0][3]).toEqual({
+      referringUser: 'asdf1234'
+    })
   })
 })
