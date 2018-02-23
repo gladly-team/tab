@@ -26,9 +26,6 @@ import {
   isInIframe
 } from 'web-utils'
 import { isEqual } from 'lodash/lang'
-import {
-  accountCreated
-} from 'analytics/logEvent'
 
 // Handle the authentication flow:
 //   check if current user is fully authenticated and redirect
@@ -171,12 +168,6 @@ class Authentication extends React.Component {
     // Get or create the user
     return this.createNewUser(currentUser.uid, currentUser.email)
       .then((createdOrFetchedUser) => {
-        // Log the sign-up to analytics, but only if the user
-        // was just created. Do not log for returning users.
-        if (createdOrFetchedUser.justCreated) {
-          accountCreated()
-        }
-
         // Check if the user has verified their email.
         // Note: later versions of firebaseui-web might support mandatory
         // email verification:
@@ -217,8 +208,6 @@ class Authentication extends React.Component {
    *   email argument
    * @returns {string|null} user.username - The user's username, if already
    *   set; or null, if not yet set
-   * @returns {boolean} user.justCreated - Whether the user item was created
-   *   in this request; false if the user already existed
    */
   createNewUser (userId, email) {
     const referralData = getReferralData()

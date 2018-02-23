@@ -24,12 +24,8 @@ import {
   getReferralData,
   isInIframe
 } from 'web-utils'
-import {
-  accountCreated
-} from 'analytics/logEvent'
 import CreateNewUserMutation from 'mutations/CreateNewUserMutation'
 
-jest.mock('analytics/logEvent')
 jest.mock('authentication/user')
 jest.mock('authentication/firebaseConfig') // mock the Firebase app initialization
 jest.mock('mutations/CreateNewUserMutation')
@@ -401,108 +397,6 @@ describe('Authentication.js tests', function () {
     component.onSignInSuccess(mockFirebaseUserInstance,
       mockFirebaseCredential, mockFirebaseDefaultRedirectURL)
     expect(goTo).toHaveBeenCalledWith(missingEmailMessageURL)
-  })
-
-  it('after sign-in and creating a brand new user, calls analytics "account created" event', async () => {
-    expect.assertions(1)
-    const Authentication = require('../Authentication').default
-
-    // Args for onSignInSuccess
-    const mockFirebaseUserInstance = {
-      displayName: '',
-      email: 'foo@bar.com',
-      emailVerified: true,
-      isAnonymous: false,
-      metadata: {},
-      phoneNumber: null,
-      photoURL: null,
-      providerData: {},
-      providerId: 'some-id',
-      refreshToken: 'xyzxyz',
-      uid: 'abc123'
-    }
-    const mockFirebaseCredential = {}
-    const mockFirebaseDefaultRedirectURL = ''
-
-    const wrapper = shallow(
-      <Authentication
-        location={mockLocationData}
-        user={mockUserData}
-        fetchUser={jest.fn()}
-        />
-    )
-    const component = wrapper.instance()
-
-    // Mock a response from new user creation
-    CreateNewUserMutation.mockImplementationOnce(
-      (environment, userId, email, referralData, onCompleted, onError) => {
-        onCompleted({
-          createNewUser: {
-            id: 'abc123',
-            email: 'foo@bar.com',
-            username: 'fooismyname',
-            justCreated: true
-          }
-        })
-      }
-    )
-
-    // Mock a call from FirebaseUI after user signs in
-    await component.onSignInSuccess(mockFirebaseUserInstance,
-      mockFirebaseCredential, mockFirebaseDefaultRedirectURL)
-
-    expect(accountCreated).toHaveBeenCalledTimes(1)
-  })
-
-  it('after sign-in for a *returning* user, we do *not* call the analytics "account created" event', async () => {
-    expect.assertions(1)
-    const Authentication = require('../Authentication').default
-
-    // Args for onSignInSuccess
-    const mockFirebaseUserInstance = {
-      displayName: '',
-      email: 'foo@bar.com',
-      emailVerified: true,
-      isAnonymous: false,
-      metadata: {},
-      phoneNumber: null,
-      photoURL: null,
-      providerData: {},
-      providerId: 'some-id',
-      refreshToken: 'xyzxyz',
-      uid: 'abc123'
-    }
-    const mockFirebaseCredential = {}
-    const mockFirebaseDefaultRedirectURL = ''
-
-    const wrapper = shallow(
-      <Authentication
-        location={mockLocationData}
-        user={mockUserData}
-        fetchUser={jest.fn()}
-        />
-    )
-    const component = wrapper.instance()
-
-    // Mock a response from new user creation
-    CreateNewUserMutation.mockImplementationOnce(
-      (environment, userId, email, referralData, onCompleted, onError) => {
-        onCompleted({
-          createNewUser: {
-            id: 'abc123',
-            email: 'foo@bar.com',
-            username: 'fooismyname',
-            justCreated: false // Note that the user already existed
-          }
-        })
-      }
-    )
-
-    // Mock a call from FirebaseUI after user signs in
-    await component.onSignInSuccess(mockFirebaseUserInstance,
-      mockFirebaseCredential, mockFirebaseDefaultRedirectURL)
-
-    expect(accountCreated).not.toHaveBeenCalled()
   })
 
   it('after sign-in, send email verification if email is not verified', async () => {
