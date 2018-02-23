@@ -85,6 +85,10 @@ const createUser = async (userContext, userId, email, referralData = null) => {
       }
     }
   }
+
+  // Add the 'justCreated' field so the client can know it's
+  // a brand new user
+  returnedUser.justCreated = true
   return returnedUser
 }
 

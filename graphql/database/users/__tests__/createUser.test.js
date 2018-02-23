@@ -167,6 +167,10 @@ describe('createUser when user does not exist', () => {
 
     const createdItem = await createUser(userContext, userInfo.id,
       userInfo.email, referralData)
+
+    // The user was just created, so set the 'justCreated' field to true
+    expectedUser.justCreated = true
+
     expect(createdItem).toEqual(expectedUser)
   })
 
@@ -216,6 +220,10 @@ describe('createUser when user does not exist', () => {
       userInfo.email, referralData)
     const dbParams = dbQueryMock.mock.calls[0][0]
     expect(dbParams).toEqual(expectedParams)
+
+    // The user was just created, so set the 'justCreated' field to true
+    expectedUser.justCreated = true
+
     expect(createdItem).toEqual(expectedUser)
   })
 })

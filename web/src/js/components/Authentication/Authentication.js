@@ -168,12 +168,14 @@ class Authentication extends React.Component {
       return
     }
 
-    // Create a new user in our database.
+    // Get or create the user
     return this.createNewUser(currentUser.uid, currentUser.email)
-      .then(() => {
-        // Log the sign-up to analytics. Note that this is logged
-        // for returning users (sign-ins) too.
-        accountCreated()
+      .then((createdOrFetchedUser) => {
+        // Log the sign-up to analytics, but only if the user
+        // was just created. Do not log for returning users.
+        if (createdOrFetchedUser.justCreated) {
+          accountCreated()
+        }
 
         // Check if the user has verified their email.
         // Note: later versions of firebaseui-web might support mandatory
@@ -202,8 +204,22 @@ class Authentication extends React.Component {
       })
   }
 
-  // Create a new user in our database. This is idempotent because
-  // it will be called when returning users sign in.
+  /**
+   * Create a new user in our database, or get the user if they already
+   * exist. This is idempotent and will be called when returning users sign in.
+   * @param {string} userId - The userId from Firebase
+   * @param {string} email - The user's email address from Firebase
+   * @returns {Promise<object>} user - A promise that resolves into an
+   *   object with a few requested fields
+   * @returns {string} user.id - The user's ID, the same value as the
+   *   userId argument
+   * @returns {string} user.email - The user's email, the same value as the
+   *   email argument
+   * @returns {string|null} user.username - The user's username, if already
+   *   set; or null, if not yet set
+   * @returns {boolean} user.justCreated - Whether the user item was created
+   *   in this request; false if the user already existed
+   */
   createNewUser (userId, email) {
     const referralData = getReferralData()
     return new Promise((resolve, reject) => {
@@ -213,7 +229,7 @@ class Authentication extends React.Component {
         email,
         referralData,
         (response) => {
-          resolve(true)
+          resolve(response.createNewUser)
         },
         (err) => {
           console.error('Error at createNewUser:', err)

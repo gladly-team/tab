@@ -46,6 +46,7 @@ class User extends BaseModel {
       email: types.string().email().required(),
       username: types.string(),
       joined: types.string().isoDate().required(),
+      justCreated: types.boolean().forbidden(), // only set in app code
       vcCurrent: types.number().integer().default(self.fieldDefaults.vcCurrent),
       vcAllTime: types.number().integer().default(self.fieldDefaults.vcAllTime),
       level: types.number().integer().default(self.fieldDefaults.level),
