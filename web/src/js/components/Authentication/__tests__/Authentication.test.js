@@ -504,4 +504,55 @@ describe('Authentication.js tests', function () {
     expect(sendVerificationEmail).toHaveBeenCalledTimes(1)
     expect(goTo).toHaveBeenCalledWith(verifyEmailURL)
   })
+
+  it('after sign-in, refetch the user', async () => {
+    expect.assertions(1)
+    const Authentication = require('../Authentication').default
+
+    // Args for onSignInSuccess
+    const mockFirebaseUserInstance = {
+      displayName: '',
+      email: 'foo@bar.com',
+      emailVerified: true,
+      isAnonymous: false,
+      metadata: {},
+      phoneNumber: null,
+      photoURL: null,
+      providerData: {},
+      providerId: 'some-id',
+      refreshToken: 'xyzxyz',
+      uid: 'abc123'
+    }
+    const mockFirebaseCredential = {}
+    const mockFirebaseDefaultRedirectURL = ''
+    const mockFetchUser = jest.fn()
+
+    const wrapper = shallow(
+      <Authentication
+        location={mockLocationData}
+        user={mockUserData}
+        fetchUser={mockFetchUser}
+        />
+    )
+    const component = wrapper.instance()
+
+    // Mock a response from new user creation
+    CreateNewUserMutation.mockImplementationOnce(
+      (environment, userId, email, referralData, onCompleted, onError) => {
+        onCompleted({
+          createNewUser: {
+            id: 'abc123',
+            email: 'foo@bar.com',
+            username: 'fooismyname'
+          }
+        })
+      }
+    )
+
+    // Mock a call from FirebaseUI after user signs in
+    await component.onSignInSuccess(mockFirebaseUserInstance,
+      mockFirebaseCredential, mockFirebaseDefaultRedirectURL)
+
+    expect(mockFetchUser).toHaveBeenCalledTimes(1)
+  })
 })
