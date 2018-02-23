@@ -403,7 +403,7 @@ describe('Authentication.js tests', function () {
     expect(goTo).toHaveBeenCalledWith(missingEmailMessageURL)
   })
 
-  it('after sign-in and creating a new user, calls analytics "account created" event', async () => {
+  it('after sign-in and creating a brand new user, calls analytics "account created" event', async () => {
     expect.assertions(1)
     const Authentication = require('../Authentication').default
 
@@ -440,7 +440,8 @@ describe('Authentication.js tests', function () {
           createNewUser: {
             id: 'abc123',
             email: 'foo@bar.com',
-            username: 'fooismyname'
+            username: 'fooismyname',
+            justCreated: true
           }
         })
       }
@@ -451,6 +452,57 @@ describe('Authentication.js tests', function () {
       mockFirebaseCredential, mockFirebaseDefaultRedirectURL)
 
     expect(accountCreated).toHaveBeenCalledTimes(1)
+  })
+
+  it('after sign-in for a *returning* user, we do *not* call the analytics "account created" event', async () => {
+    expect.assertions(1)
+    const Authentication = require('../Authentication').default
+
+    // Args for onSignInSuccess
+    const mockFirebaseUserInstance = {
+      displayName: '',
+      email: 'foo@bar.com',
+      emailVerified: true,
+      isAnonymous: false,
+      metadata: {},
+      phoneNumber: null,
+      photoURL: null,
+      providerData: {},
+      providerId: 'some-id',
+      refreshToken: 'xyzxyz',
+      uid: 'abc123'
+    }
+    const mockFirebaseCredential = {}
+    const mockFirebaseDefaultRedirectURL = ''
+
+    const wrapper = shallow(
+      <Authentication
+        location={mockLocationData}
+        user={mockUserData}
+        fetchUser={jest.fn()}
+        />
+    )
+    const component = wrapper.instance()
+
+    // Mock a response from new user creation
+    CreateNewUserMutation.mockImplementationOnce(
+      (environment, userId, email, referralData, onCompleted, onError) => {
+        onCompleted({
+          createNewUser: {
+            id: 'abc123',
+            email: 'foo@bar.com',
+            username: 'fooismyname',
+            justCreated: false // Note that the user already existed
+          }
+        })
+      }
+    )
+
+    // Mock a call from FirebaseUI after user signs in
+    await component.onSignInSuccess(mockFirebaseUserInstance,
+      mockFirebaseCredential, mockFirebaseDefaultRedirectURL)
+
+    expect(accountCreated).not.toHaveBeenCalled()
   })
 
   it('after sign-in, send email verification if email is not verified', async () => {
@@ -490,7 +542,8 @@ describe('Authentication.js tests', function () {
           createNewUser: {
             id: 'abc123',
             email: 'foo@bar.com',
-            username: 'fooismyname'
+            username: 'fooismyname',
+            justCreated: true
           }
         })
       }
@@ -544,7 +597,8 @@ describe('Authentication.js tests', function () {
           createNewUser: {
             id: 'abc123',
             email: 'foo@bar.com',
-            username: 'fooismyname'
+            username: 'fooismyname',
+            justCreated: true
           }
         })
       }
