@@ -17,7 +17,8 @@ import {
 } from 'navigation/navigation'
 import {
   getCurrentUser,
-  setUsernameInLocalStorage
+  setUsernameInLocalStorage,
+  sendVerificationEmail
 } from 'authentication/user'
 import {
   isInIframe
@@ -449,5 +450,58 @@ describe('Authentication.js tests', function () {
       mockFirebaseCredential, mockFirebaseDefaultRedirectURL)
 
     expect(accountCreated).toHaveBeenCalledTimes(1)
+  })
+
+  it('after sign-in, send email verification if email is not verified', async () => {
+    expect.assertions(2)
+    const Authentication = require('../Authentication').default
+
+    // Args for onSignInSuccess
+    const mockFirebaseUserInstance = {
+      displayName: '',
+      email: 'foo@bar.com',
+      emailVerified: false, // Note that email is unverified
+      isAnonymous: false,
+      metadata: {},
+      phoneNumber: null,
+      photoURL: null,
+      providerData: {},
+      providerId: 'some-id',
+      refreshToken: 'xyzxyz',
+      uid: 'abc123'
+    }
+    const mockFirebaseCredential = {}
+    const mockFirebaseDefaultRedirectURL = ''
+
+    const wrapper = shallow(
+      <Authentication
+        location={mockLocationData}
+        user={mockUserData}
+        fetchUser={jest.fn()}
+        />
+    )
+    const component = wrapper.instance()
+
+    // Mock a response from new user creation
+    CreateNewUserMutation.mockImplementationOnce(
+      (environment, userId, email, referralData, onCompleted, onError) => {
+        onCompleted({
+          createNewUser: {
+            id: 'abc123',
+            email: 'foo@bar.com',
+            username: 'fooismyname'
+          }
+        })
+      }
+    )
+
+    sendVerificationEmail.mockImplementationOnce(() => Promise.resolve(true))
+
+    // Mock a call from FirebaseUI after user signs in
+    await component.onSignInSuccess(mockFirebaseUserInstance,
+      mockFirebaseCredential, mockFirebaseDefaultRedirectURL)
+
+    expect(sendVerificationEmail).toHaveBeenCalledTimes(1)
+    expect(goTo).toHaveBeenCalledWith(verifyEmailURL)
   })
 })
