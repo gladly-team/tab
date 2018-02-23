@@ -52,7 +52,7 @@ class StickerCampaignThanks extends React.Component {
           }}
         >
           Thank you to all the Tabbers who got the word out this past week! A special congrats to
-          the <a style={anchorStyle} href='#' target='_blank'>
+          the <a style={anchorStyle} href='https://www.facebook.com/notes/tab-for-a-cause/tab-for-a-cause-sticker-challenge-roundup/1729753810401032/' target='_blank'>
           top 10 recruiters</a> :)
         </span>
         <span
