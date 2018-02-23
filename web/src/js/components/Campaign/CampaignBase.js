@@ -6,7 +6,7 @@ import {
   alternateAccentColor
 } from 'theme/default'
 
-import StickerCampaignContainer from './StickerCampaignContainer'
+import StickerCampaignThanksContainer from './StickerCampaignThanksContainer'
 
 class CampaignBase extends React.Component {
   render () {
@@ -47,7 +47,7 @@ class CampaignBase extends React.Component {
 
     // Hardcoded for now; can remove after campaign ends
     const currentCampaign = (
-      <StickerCampaignContainer
+      <StickerCampaignThanksContainer
         user={user}
         />
     )
