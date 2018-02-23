@@ -51,11 +51,9 @@ class StickerCampaignThanks extends React.Component {
             marginBottom: 8
           }}
         >
-          Thank you to all the Tabbers who got the word out this past week! A special thanks and congrats to
+          Thank you to all the Tabbers who got the word out this past week! A special congrats to
           the <a style={anchorStyle} href='https://www.facebook.com/notes/tab-for-a-cause/love-and-stickers-for-all/1718875268155553/' target='_blank'>
-          top 10 recruiters</a>. (And if you weren't able to recruit two friends this week but still
-          want a cute elephant in your life, feel free to check out
-          the <a style={anchorStyle} href='https://shop.spreadshirt.com/tab-for-a-cause/' target='_blank'>Tab for a Cause shop</a>.)
+          top 10 recruiters</a> :)
         </span>
         <span
           style={{
@@ -65,7 +63,8 @@ class StickerCampaignThanks extends React.Component {
             marginBottom: 8
           }}
         >
-          Thank you again – we rely on people like you to spread the word so we can make an even greater positive impact.
+          We rely on people like you to spread the word so we can make an even greater positive impact.
+          Here's to more goodwill in 2018!
         </span>
 
         <span
@@ -87,13 +86,6 @@ class StickerCampaignThanks extends React.Component {
               <span
                 data-test-id={'sticker-campaign-thanks-success'}
               >
-                <span
-                  style={{
-                    fontSize: 14
-                  }}
-                >
-                  Congrats, you did it! Tell us where we should send your prize:
-                </span>
                 <a href='https://docs.google.com/forms/d/e/1FAIpQLScVcV3EkYpkhqUG7hDGULUMJM_h57-3GnaRSg95p_UheP44dw/viewform' target='_blank'>
                   <RaisedButton
                     label='Claim Your Stickers'
