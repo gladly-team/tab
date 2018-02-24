@@ -11,8 +11,8 @@ export const pageview = () => {
 }
 
 export const homepageView = () => {
-  // Special event for Facebook.
   fbq('track', 'ViewContent', {content_name: 'Homepage'})
+  fbq('track', 'PageView')
 
   // GA pageview
   GA.pageview()
@@ -62,5 +62,6 @@ export const accountCreated = () => {
 
 export const newTabView = () => {
   // No Google Analytics because of rate limiting.
+  fbq('track', 'PageView')
   fbq('track', 'ViewContent', {content_name: 'Newtab'})
 }
