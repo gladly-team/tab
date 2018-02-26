@@ -50,7 +50,12 @@ class CampaignBase extends React.Component {
     const currentCampaign = null
 
     if (!currentCampaign) {
-      return null
+      return (
+        <span
+          style={{ display: 'none' }}
+          data-test-id={'campaign-root'}
+        />
+      )
     }
 
     return (
