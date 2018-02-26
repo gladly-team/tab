@@ -6,11 +6,12 @@ import {
   alternateAccentColor
 } from 'theme/default'
 
-import StickerCampaignThanksContainer from './StickerCampaignThanksContainer'
-
 class CampaignBase extends React.Component {
   render () {
-    const { isCampaignLive, user } = this.props
+    const {
+      isCampaignLive
+      // user
+    } = this.props
     if (!isCampaignLive) {
       return null
     }
@@ -45,12 +46,12 @@ class CampaignBase extends React.Component {
       backgroundColor: alternateAccentColor
     }
 
-    // Hardcoded for now; can remove after campaign ends
-    const currentCampaign = (
-      <StickerCampaignThanksContainer
-        user={user}
-        />
-    )
+    // Hardcode campaign component here when running one
+    const currentCampaign = null
+
+    if (!currentCampaign) {
+      return null
+    }
 
     return (
       <div

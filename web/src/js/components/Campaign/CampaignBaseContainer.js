@@ -5,14 +5,12 @@ import {
 
 import CampaignBase from './CampaignBase'
 
-// Hardcoded for now.
-// Remove campaign-specific data requirements after the
-// campaign is no longer live.
+// Hardcode campaign-specific data requirements here, and remove
+// after the campaign is no longer live.
 export default createFragmentContainer(CampaignBase, {
   user: graphql`
     fragment CampaignBaseContainer_user on User {
       id
-      ...StickerCampaignThanksContainer_user
     }
   `
 })
