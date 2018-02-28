@@ -6,9 +6,9 @@ import {
 
 class Globals {
   constructor () {
-    this.raised = 350447.62
-    this.raisedUpdateTime = moment('2017-03-20 12:40:11')
-    this.dollarsPerDayRate = 400.00
+    this.raised = 490100.00
+    this.raisedUpdateTime = moment('2018-02-28 16:00:00')
+    this.dollarsPerDayRate = 600.00
   }
 }
 
