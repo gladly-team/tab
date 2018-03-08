@@ -19,6 +19,7 @@ const logRevenue = async (userContext, userId, revenue) => {
   } catch (e) {
     throw e
   }
+  return { success: true }
 }
 
 export default logRevenue

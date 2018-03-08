@@ -43,6 +43,7 @@ import UserModel from '../database/users/UserModel'
 import createUser from '../database/users/createUser'
 import setUsername from '../database/users/setUsername'
 import logTab from '../database/users/logTab'
+import logRevenue from '../database/userRevenue/logRevenue'
 import setActiveWidget from '../database/users/setActiveWidget'
 import setBackgroundImage from '../database/users/setBackgroundImage'
 import setBackgroundImageFromCustomURL from '../database/users/setBackgroundImageFromCustomURL'
@@ -505,6 +506,26 @@ const logTabMutation = mutationWithClientMutationId({
 })
 
 /**
+ * Log earned revenue for a user
+ */
+const logUserRevenueMutation = mutationWithClientMutationId({
+  name: 'LogUserRevenue',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    revenue: { type: new GraphQLNonNull(GraphQLFloat) }
+  },
+  outputFields: {
+    success: {
+      type: new GraphQLNonNull(GraphQLBoolean)
+    }
+  },
+  mutateAndGetPayload: ({ userId, revenue }, context) => {
+    const { id } = fromGlobalId(userId)
+    return logRevenue(context.user, id, revenue)
+  }
+})
+
+/**
  * Donate to a charity.
  */
 const donateVcMutation = mutationWithClientMutationId({
@@ -825,6 +846,7 @@ const mutationType = new GraphQLObjectType({
   name: 'Mutation',
   fields: () => ({
     logTab: logTabMutation,
+    logUserRevenue: logUserRevenueMutation,
     donateVc: donateVcMutation,
 
     setUserBkgImage: setUserBkgImageMutation,
