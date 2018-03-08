@@ -31,7 +31,7 @@ class UserRevenue extends BaseModel {
     return {
       userId: types.string().required(),
       timestamp: types.string().isoDate().required(),
-      vcDonated: types.number()
+      revenue: types.number().required()
     }
   }
 
