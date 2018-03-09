@@ -17,7 +17,11 @@ export const tableKeys = {
     range: null
   },
   vcDonationLog: {
-    hash: 'id',
+    hash: 'userId',
+    range: 'timestamp'
+  },
+  userRevenueLog: {
+    hash: 'userId',
     range: 'timestamp'
   },
   backgroundImages: {
@@ -33,7 +37,7 @@ export const tableKeys = {
     range: 'widgetId'
   },
   userTabsLog: {
-    hash: 'id',
+    hash: 'userId',
     range: 'timestamp'
   },
   referralDataLog: {

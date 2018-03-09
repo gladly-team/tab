@@ -145,6 +145,17 @@ type LogTabPayload {
   clientMutationId: String
 }
 
+input LogUserRevenueInput {
+  userId: String!
+  revenue: Float!
+  clientMutationId: String
+}
+
+type LogUserRevenuePayload {
+  success: Boolean!
+  clientMutationId: String
+}
+
 # Info about the user's day of most opened tabs
 type MaxTabsDay {
   # The day the most tabs were opened
@@ -156,6 +167,7 @@ type MaxTabsDay {
 
 type Mutation {
   logTab(input: LogTabInput!): LogTabPayload
+  logUserRevenue(input: LogUserRevenueInput!): LogUserRevenuePayload
   donateVc(input: DonateVcInput!): DonateVcPayload
   setUserBkgImage(input: SetUserBkgImageInput!): SetUserBkgImagePayload
   setUserBkgColor(input: SetUserBkgColorInput!): SetUserBkgColorPayload

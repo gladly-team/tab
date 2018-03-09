@@ -61,6 +61,21 @@
 </script>
 <% } %>
 
+<!-- BEGIN: Tab for a Cause global -->
+<script type="text/javascript">
+  // Used for handling some communication between disparate parts
+  // of our app (e.g. ads events happening before app code loads).
+  (() => {
+    window.tabforacause = window.tabforacause || {
+      ads: {
+        slotsLoaded: {},
+        slotsAlreadyLoggedRevenue: {}
+      }
+    }
+  })()
+</script>
+<!-- END:Tab for a Cause global -->
+
 <!-- Facebook Pixel Code -->
 <!-- TODO: Facebook ID as env var -->
 <script>
