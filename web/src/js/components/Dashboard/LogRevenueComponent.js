@@ -17,7 +17,7 @@ class LogRevenueComponent extends React.Component {
         return
       }
       // Mark that we've logged revenue for this slot
-      window.tabforacause.ads.slotsAlreadyLoggedRevenue.slotId = true
+      window.tabforacause.ads.slotsAlreadyLoggedRevenue[slotId] = true
 
       // Get the slot's highest CPM bid from Prebid
       const pbjs = window.pbjs || {}
@@ -26,7 +26,6 @@ class LogRevenueComponent extends React.Component {
 
       // There might not be any bids
       if (!slotBids.length) {
-        console.log('No bids for slot ID:', slotId)
         return
       }
       const cpm = slotBids[0].cpm
@@ -36,7 +35,6 @@ class LogRevenueComponent extends React.Component {
       const roundedRevenue = Math.round(revenue * 10e14) / 10e14
 
       // Log the revenue
-      console.log('Logging revenue for slot ID:', slotId, 'Revenue:', roundedRevenue)
       LogUserRevenueMutation(this.props.relay.environment,
         this.props.user.id, roundedRevenue)
     } catch (e) {
@@ -90,7 +88,10 @@ class LogRevenueComponent extends React.Component {
 LogRevenueComponent.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.string.isRequired
-  }).isRequired
+  }).isRequired,
+  relay: PropTypes.shape({
+    environment: PropTypes.object.isRequired
+  })
 }
 
 export default LogRevenueComponent
