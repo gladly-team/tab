@@ -38,7 +38,7 @@ class LogRevenueComponent extends React.Component {
       // Log the revenue
       console.log('Logging revenue for slot ID:', slotId, 'Revenue:', roundedRevenue)
       LogUserRevenueMutation(this.props.relay.environment,
-        this.props.user, roundedRevenue)
+        this.props.user.id, roundedRevenue)
     } catch (e) {
       console.error('Could not log revenue for ad slot', e)
     }

@@ -11,9 +11,7 @@ const mutation = graphql`
   }
 `
 
-function commit (environment, user, revenue) {
-  const userId = user.id
-
+function commit (environment, userId, revenue) {
   return commitMutation(
     environment,
     {
