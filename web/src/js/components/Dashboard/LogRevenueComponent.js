@@ -1,5 +1,5 @@
 import React from 'react'
-// import LogTabMutation from 'mutations/LogTabMutation'
+import LogUserRevenueMutation from 'mutations/LogUserRevenueMutation'
 import PropTypes from 'prop-types'
 
 // Log revenue from ads
@@ -35,8 +35,10 @@ class LogRevenueComponent extends React.Component {
       // To avoid unnecessary precision, round to 14 decimal places
       const roundedRevenue = Math.round(revenue * 10e14) / 10e14
 
-      // TODO: LogRevenueMutation
+      // Log the revenue
       console.log('Logging revenue for slot ID:', slotId, 'Revenue:', roundedRevenue)
+      LogUserRevenueMutation(this.props.relay.environment,
+        this.props.user, roundedRevenue)
     } catch (e) {
       console.error('Could not log revenue for ad slot', e)
     }
