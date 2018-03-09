@@ -8,6 +8,7 @@ import WidgetsContainer from '../Widget/WidgetsContainer'
 import CampaignBaseContainer from '../Campaign/CampaignBaseContainer'
 import Ad from '../Ad/Ad'
 import LogTab from './LogTabContainer'
+import LogRevenue from './LogRevenueContainer'
 import LogAccountCreation from './LogAccountCreationContainer'
 import CircleIcon from 'material-ui/svg-icons/image/lens'
 import {
@@ -136,6 +137,7 @@ class Dashboard extends React.Component {
             display: 'block'
           }} />
         { user ? <LogTab user={user} /> : null }
+        { user ? <LogRevenue user={user} /> : null }
         { user ? <LogAccountCreation user={user} /> : null }
         { errorMessage
           ? <ErrorMessage message={errorMessage}
