@@ -16,10 +16,11 @@ beforeEach(() => {
   delete window.tabforacause
 
   // Mock googletag
+  const mockAddEventListener = jest.fn()
   window.googletag = {
     cmd: [],
     pubads: () => ({
-      addEventListener: jest.fn()
+      addEventListener: mockAddEventListener
     })
   }
 
@@ -172,6 +173,49 @@ describe('LogRevenueComponent', function () {
       0.000123456789012)
   })
 
-  // TODO
-  // after mount, logs revenue when GPT fires a "slot loaded" event
+  it('after mount, logs revenue when GPT fires a "slot loaded" event', () => {
+    // Mock a Prebid bid value for the slot
+    const mockRevenueValue = 2.31
+    window.pbjs.getHighestCpmBids.mockReturnValueOnce([{
+      cpm: mockRevenueValue
+      // ... other bid info exists here
+    }])
+
+    // Mock GPT's pubads addEventListener so we can fake an event
+    var passedEventCallback
+    window.googletag.pubads().addEventListener.mockImplementation((eventName, callback) => {
+      passedEventCallback = callback
+    })
+
+    const LogRevenueComponent = require('../LogRevenueComponent').default
+    const mockUserId = 'abcdefghijklmno'
+    const mockRelayEnvironment = {}
+    shallow(
+      <LogRevenueComponent
+        user={{
+          id: mockUserId
+        }}
+        relay={{ environment: mockRelayEnvironment }}
+        />
+    )
+
+    // Should not have logged anything yet
+    expect(LogUserRevenueMutation).not.toHaveBeenCalled()
+
+    // Run the queued googletag commands
+    window.googletag.cmd.forEach((cmd) => cmd())
+
+    // Fake the GPT event callback
+    // https://developers.google.com/doubleclick-gpt/reference#googletageventsslotonloadevent
+    const slotId = 'xyz-987'
+    passedEventCallback({
+      slot: {
+        getSlotElementId: () => slotId
+      }
+    })
+
+    // Should have logged revenue after the slot loaded
+    expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment,
+      mockUserId, 0.00231)
+  })
 })
