@@ -512,16 +512,17 @@ const logUserRevenueMutation = mutationWithClientMutationId({
   name: 'LogUserRevenue',
   inputFields: {
     userId: { type: new GraphQLNonNull(GraphQLString) },
-    revenue: { type: new GraphQLNonNull(GraphQLFloat) }
+    revenue: { type: new GraphQLNonNull(GraphQLFloat) },
+    dfpAdvertiserId: { type: GraphQLInt }
   },
   outputFields: {
     success: {
       type: new GraphQLNonNull(GraphQLBoolean)
     }
   },
-  mutateAndGetPayload: ({ userId, revenue }, context) => {
+  mutateAndGetPayload: ({ userId, revenue, dfpAdvertiserId }, context) => {
     const { id } = fromGlobalId(userId)
-    return logRevenue(context.user, id, revenue)
+    return logRevenue(context.user, id, revenue, dfpAdvertiserId)
   }
 })
 

@@ -148,6 +148,7 @@ type LogTabPayload {
 input LogUserRevenueInput {
   userId: String!
   revenue: Float!
+  dfpAdvertiserId: Int
   clientMutationId: String
 }
 
