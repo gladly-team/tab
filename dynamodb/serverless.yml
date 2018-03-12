@@ -63,15 +63,15 @@ custom:
           minimum: 1
           maximum: 1000
           usage: 0.60
-      userRevenueLogTable:
-        read:
-          minimum: 1
-          maximum: 1000
-          usage: 0.75
-        write:
-          minimum: 1
-          maximum: 1000
-          usage: 0.60
+      # userRevenueLogTable:
+      #   read:
+      #     minimum: 1
+      #     maximum: 1000
+      #     usage: 0.75
+      #   write:
+      #     minimum: 1
+      #     maximum: 1000
+      #     usage: 0.60
       backgroundImagesTable:
         read:
           minimum: 1
@@ -155,15 +155,15 @@ custom:
           minimum: 5
           maximum: 9001
           usage: 0.60
-      userRevenueLogTable:
-        read:
-          minimum: 1
-          maximum: 9001
-          usage: 0.75
-        write:
-          minimum: 1
-          maximum: 9001
-          usage: 0.60
+      # userRevenueLogTable:
+      #   read:
+      #     minimum: 1
+      #     maximum: 9001
+      #     usage: 0.75
+      #   write:
+      #     minimum: 1
+      #     maximum: 9001
+      #     usage: 0.60
       backgroundImagesTable:
         read:
           minimum: 5
@@ -250,15 +250,15 @@ custom:
         minimum: ${self:custom.customCapacities.${self:provider.stage}.vcDonationLogTable.write.minimum}
         maximum: ${self:custom.customCapacities.${self:provider.stage}.vcDonationLogTable.write.maximum}
         usage: ${self:custom.customCapacities.${self:provider.stage}.vcDonationLogTable.write.usage}
-    - table: userRevenueLogTable
-      read:
-        minimum: ${self:custom.customCapacities.${self:provider.stage}.userRevenueLogTable.read.minimum}
-        maximum: ${self:custom.customCapacities.${self:provider.stage}.userRevenueLogTable.read.maximum}
-        usage: ${self:custom.customCapacities.${self:provider.stage}.userRevenueLogTable.read.usage}
-      write:
-        minimum: ${self:custom.customCapacities.${self:provider.stage}.userRevenueLogTable.write.minimum}
-        maximum: ${self:custom.customCapacities.${self:provider.stage}.userRevenueLogTable.write.maximum}
-        usage: ${self:custom.customCapacities.${self:provider.stage}.userRevenueLogTable.write.usage}
+    # - table: userRevenueLogTable
+    #   read:
+    #     minimum: ${self:custom.customCapacities.${self:provider.stage}.userRevenueLogTable.read.minimum}
+    #     maximum: ${self:custom.customCapacities.${self:provider.stage}.userRevenueLogTable.read.maximum}
+    #     usage: ${self:custom.customCapacities.${self:provider.stage}.userRevenueLogTable.read.usage}
+    #   write:
+    #     minimum: ${self:custom.customCapacities.${self:provider.stage}.userRevenueLogTable.write.minimum}
+    #     maximum: ${self:custom.customCapacities.${self:provider.stage}.userRevenueLogTable.write.maximum}
+    #     usage: ${self:custom.customCapacities.${self:provider.stage}.userRevenueLogTable.write.usage}
     - table: backgroundImagesTable
       read:
         minimum: ${self:custom.customCapacities.${self:provider.stage}.backgroundImagesTable.read.minimum}
@@ -389,23 +389,23 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
 
-    userRevenueLogTable:  
-      Type: AWS::DynamoDB::Table
-      Properties:  
-        TableName: UserRevenueLog-${self:provider.stage}
-        KeySchema:
-          - AttributeName: userId
-            KeyType: HASH
-          - AttributeName: timestamp
-            KeyType: RANGE
-        AttributeDefinitions:
-          - AttributeName: userId
-            AttributeType: S
-          - AttributeName: timestamp
-            AttributeType: S
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
+    # userRevenueLogTable:  
+    #   Type: AWS::DynamoDB::Table
+    #   Properties:  
+    #     TableName: UserRevenueLog-${self:provider.stage}
+    #     KeySchema:
+    #       - AttributeName: userId
+    #         KeyType: HASH
+    #       - AttributeName: timestamp
+    #         KeyType: RANGE
+    #     AttributeDefinitions:
+    #       - AttributeName: userId
+    #         AttributeType: S
+    #       - AttributeName: timestamp
+    #         AttributeType: S
+    #     ProvisionedThroughput:
+    #       ReadCapacityUnits: 1
+    #       WriteCapacityUnits: 1
 
     backgroundImagesTable:  
       Type: AWS::DynamoDB::Table
