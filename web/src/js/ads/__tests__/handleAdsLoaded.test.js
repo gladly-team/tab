@@ -1,5 +1,7 @@
 /* eslint-env jest */
 
+import { mockGoogleTagSlotOnloadData } from 'utils/test-utils'
+
 beforeEach(() => {
   delete window.googletag
   delete window.tabforacause
@@ -47,31 +49,14 @@ describe('handleAdsLoaded', function () {
     window.googletag.cmd.forEach((cmd) => cmd())
 
     // Fake the event callback
-    // https://developers.google.com/doubleclick-gpt/reference#googletageventsslotonloadevent
-    const slotId = 'abc-123'
-    const mockSlotLoadEventData = {
-      // https://developers.google.com/doubleclick-gpt/reference#googletagslot
-      slot: {
-        getSlotElementId: () => slotId
-        // ... other methods here
-      },
-      advertiserId: 1234,
-      campaignId: 99887766,
-      creativeId: 111222333444555,
-      isEmpty: false,
-      lineItemId: 123456,
-      serviceName: 'something',
-      size: '728x90',
-      sourceAgnosticCreativeId: null,
-      sourceAgnosticLineItemId: null
-    }
+    const mockSlotLoadEventData = mockGoogleTagSlotOnloadData('xyx-123')
     passedEventCallback(mockSlotLoadEventData)
 
     // Check that we're using the expected GPT event
     expect(passedEventName).toEqual('slotOnload')
 
     // Make sure we've marked the slot as loaded
-    expect(window.tabforacause.ads.slotsLoaded[slotId]).toBe(true)
+    expect(window.tabforacause.ads.slotsLoaded['xyx-123']).toBe(true)
 
     // Make sure it works multiple times
     const otherSlotId = 'xyz-987'
