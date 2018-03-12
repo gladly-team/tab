@@ -28,6 +28,22 @@ describe('logRevenue', () => {
   test('calls DB to create item', async () => {
     const userId = userContext.id
     const userRevenueCreate = jest.spyOn(UserRevenueModel, 'create')
+    await logRevenue(userContext, userId, 0.0172, 2468)
+
+    expect(userRevenueCreate).toHaveBeenLastCalledWith(
+      userContext,
+      addTimestampFieldsToItem({
+        userId: userId,
+        timestamp: moment.utc().toISOString(),
+        revenue: 0.0172,
+        dfpAdvertiserId: 2468
+      })
+    )
+  })
+
+  test('dfpAdvertiserId is optional', async () => {
+    const userId = userContext.id
+    const userRevenueCreate = jest.spyOn(UserRevenueModel, 'create')
     await logRevenue(userContext, userId, 0.0172)
 
     expect(userRevenueCreate).toHaveBeenLastCalledWith(

@@ -1,5 +1,7 @@
 /* eslint-env jest */
 
+import { mockGoogleTagSlotRenderEndedData } from 'utils/test-utils'
+
 beforeEach(() => {
   delete window.googletag
   delete window.tabforacause
@@ -31,7 +33,7 @@ afterAll(() => {
 })
 
 describe('handleAdsLoaded', function () {
-  it('adds a slot ID to window.tabforacause\'s "loaded slots" object when GPT\'s "slotOnload" event is fired', () => {
+  it('adds a slot ID to window.tabforacause\'s "loaded slots" object when GPT\'s "slotRenderEnded" event is fired', () => {
     // Mock GPT's pubads addEventListener so we can fake an event
     var passedEventName
     var passedEventCallback
@@ -47,28 +49,21 @@ describe('handleAdsLoaded', function () {
     window.googletag.cmd.forEach((cmd) => cmd())
 
     // Fake the event callback
-    // https://developers.google.com/doubleclick-gpt/reference#googletageventsslotonloadevent
     const slotId = 'abc-123'
-    passedEventCallback({
-      slot: {
-        getSlotElementId: () => slotId
-      }
-    })
+    const mockSlotLoadEventData = mockGoogleTagSlotRenderEndedData(slotId)
+    passedEventCallback(mockSlotLoadEventData)
 
     // Check that we're using the expected GPT event
-    expect(passedEventName).toEqual('slotOnload')
+    expect(passedEventName).toEqual('slotRenderEnded')
 
     // Make sure we've marked the slot as loaded
-    expect(window.tabforacause.ads.slotsLoaded[slotId]).toBe(true)
+    expect(window.tabforacause.ads.slotsLoaded[slotId]).toBe(mockSlotLoadEventData)
 
     // Make sure it works multiple times
     const otherSlotId = 'xyz-987'
+    const otherMockSlotLoadEventData = mockGoogleTagSlotRenderEndedData(otherSlotId)
     expect(window.tabforacause.ads.slotsLoaded[otherSlotId]).toBeUndefined()
-    passedEventCallback({
-      slot: {
-        getSlotElementId: () => otherSlotId
-      }
-    })
-    expect(window.tabforacause.ads.slotsLoaded[otherSlotId]).toBe(true)
+    passedEventCallback(otherMockSlotLoadEventData)
+    expect(window.tabforacause.ads.slotsLoaded[otherSlotId]).toBe(otherMockSlotLoadEventData)
   })
 })

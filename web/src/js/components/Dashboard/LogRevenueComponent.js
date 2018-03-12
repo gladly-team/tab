@@ -9,8 +9,14 @@ class LogRevenueComponent extends React.Component {
     this.logRevenueForAlreadyLoadedAds()
   }
 
-  // Get the top bid for the slot from Prebid and log the revenue
-  logRevenueForSlotId (slotId) {
+  /**
+   * Get the top bid for the slot from Prebid and log the revenue.
+   * @param {string} slotId - The DFP slot ID to log
+   * @param {Object} event - The googletag "SlotRenderEnded" event object. See:
+   *  https://developers.google.com/doubleclick-gpt/reference#googletag.events.SlotRenderEndedEvent
+   * @return {null}
+   */
+  logRevenueForSlotId (slotId, event) {
     try {
       // If we have already logged revenue for this slot, don't log it again
       if (slotId in window.tabforacause.ads.slotsAlreadyLoggedRevenue) {
@@ -34,9 +40,18 @@ class LogRevenueComponent extends React.Component {
       // To avoid unnecessary precision, round to 14 decimal places
       const roundedRevenue = Math.round(revenue * 10e14) / 10e14
 
+      // Get the advertiser ID. It will be null if Google Adsense
+      // took the impression, so assume nulls are Adsense.
+      const GOOGLE_ADSENSE_ID = 99
+      const dfpAdvertiserId = (
+        event.advertiserId
+        ? event.advertiserId
+        : GOOGLE_ADSENSE_ID
+      )
+
       // Log the revenue
       LogUserRevenueMutation(this.props.relay.environment,
-        this.props.user.id, roundedRevenue)
+        this.props.user.id, roundedRevenue, dfpAdvertiserId)
     } catch (e) {
       console.error('Could not log revenue for ad slot', e)
     }
@@ -51,7 +66,8 @@ class LogRevenueComponent extends React.Component {
       if (Object.keys(slotsLoadedObj).length) {
         const self = this
         Object.keys(slotsLoadedObj).forEach((slotId) => {
-          self.logRevenueForSlotId(slotId)
+          // The property value is the "SlotRenderEnded" event object
+          self.logRevenueForSlotId(slotId, slotsLoadedObj[slotId])
         })
       }
     } catch (e) {
@@ -68,11 +84,11 @@ class LogRevenueComponent extends React.Component {
       // the ad creative loads:
       // https://developers.google.com/doubleclick-gpt/reference#googletageventsslotrenderendedevent
       // 'slotOnload' event is on creative load:
-      // https://developers.google.com/doubleclick-gpt/reference#googletageventsslotonloadevent
-      googletag.pubads().addEventListener('slotOnload', (event) => {
+      // https://developers.google.com/doubleclick-gpt/reference#googletag.events.SlotRenderEndedEvent
+      googletag.pubads().addEventListener('slotRenderEnded', (event) => {
         try {
           const slotId = event.slot.getSlotElementId()
-          this.logRevenueForSlotId(slotId)
+          this.logRevenueForSlotId(slotId, event)
         } catch (e) {
           console.error('Could not log revenue for ad slot', e)
         }

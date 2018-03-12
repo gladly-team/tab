@@ -7,8 +7,8 @@ export default function () {
     const googletag = window.googletag || {}
     googletag.cmd = googletag.cmd || []
 
-    const markSlotAsLoaded = (slotId) => {
-      window.tabforacause.ads.slotsLoaded[slotId] = true
+    const markSlotAsLoaded = (slotId, eventData) => {
+      window.tabforacause.ads.slotsLoaded[slotId] = eventData
     }
 
     googletag.cmd.push(() => {
@@ -16,11 +16,11 @@ export default function () {
       // the ad creative loads:
       // https://developers.google.com/doubleclick-gpt/reference#googletageventsslotrenderendedevent
       // 'slotOnload' event is on creative load:
-      // https://developers.google.com/doubleclick-gpt/reference#googletageventsslotonloadevent
-      googletag.pubads().addEventListener('slotOnload', (event) => {
+      // https://developers.google.com/doubleclick-gpt/reference#googletag.events.SlotRenderEndedEvent
+      googletag.pubads().addEventListener('slotRenderEnded', (event) => {
         try {
           const slotId = event.slot.getSlotElementId()
-          markSlotAsLoaded(slotId)
+          markSlotAsLoaded(slotId, event)
         } catch (e) {
           console.error('Could not mark ad slots as loaded', e)
         }

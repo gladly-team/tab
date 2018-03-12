@@ -31,7 +31,8 @@ class UserRevenue extends BaseModel {
     return {
       userId: types.string().required(),
       timestamp: types.string().isoDate().required(),
-      revenue: types.number().required()
+      revenue: types.number().required(),
+      dfpAdvertiserId: types.number().integer()
     }
   }
 
