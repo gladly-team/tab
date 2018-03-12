@@ -49,11 +49,23 @@ describe('handleAdsLoaded', function () {
     // Fake the event callback
     // https://developers.google.com/doubleclick-gpt/reference#googletageventsslotonloadevent
     const slotId = 'abc-123'
-    passedEventCallback({
+    const mockSlotLoadEventData = {
+      // https://developers.google.com/doubleclick-gpt/reference#googletagslot
       slot: {
         getSlotElementId: () => slotId
-      }
-    })
+        // ... other methods here
+      },
+      advertiserId: 1234,
+      campaignId: 99887766,
+      creativeId: 111222333444555,
+      isEmpty: false,
+      lineItemId: 123456,
+      serviceName: 'something',
+      size: '728x90',
+      sourceAgnosticCreativeId: null,
+      sourceAgnosticLineItemId: null
+    }
+    passedEventCallback(mockSlotLoadEventData)
 
     // Check that we're using the expected GPT event
     expect(passedEventName).toEqual('slotOnload')
