@@ -16,8 +16,8 @@ export default function () {
       // the ad creative loads:
       // https://developers.google.com/doubleclick-gpt/reference#googletageventsslotrenderendedevent
       // 'slotOnload' event is on creative load:
-      // https://developers.google.com/doubleclick-gpt/reference#googletageventsslotonloadevent
-      googletag.pubads().addEventListener('slotOnload', (event) => {
+      // https://developers.google.com/doubleclick-gpt/reference#googletag.events.SlotRenderEndedEvent
+      googletag.pubads().addEventListener('slotRenderEnded', (event) => {
         try {
           const slotId = event.slot.getSlotElementId()
           markSlotAsLoaded(slotId, event)

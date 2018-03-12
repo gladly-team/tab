@@ -23,13 +23,13 @@ export const enzymeFindAsync = async (rootComponent, selector, maxTimeMs = 4000,
 }
 
 /**
- * Create a mock object of the googletag 'SlotOnload'. See:
- * https://developers.google.com/doubleclick-gpt/reference#googletageventsslotonloadevent
+ * Create a mock object of the googletag 'SlotRenderEnded'. See:
+ * https://developers.google.com/doubleclick-gpt/reference#googletag.events.SlotRenderEndedEvent
  * @param {string} slotId - A custom slot ID to override the default
  * @param {Object} properties - Values to override the default properties in the mock
  * @return {Object} An instance of `jest.fn`, a mock function
  */
-export const mockGoogleTagSlotOnloadData = (slotId = 'abc-123', properties = {}) => {
+export const mockGoogleTagSlotRenderEndedData = (slotId = 'abc-123', properties = {}) => {
   return Object.assign({}, {
     // https://developers.google.com/doubleclick-gpt/reference#googletagslot
     slot: {

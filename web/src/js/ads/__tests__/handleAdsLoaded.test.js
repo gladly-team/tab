@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import { mockGoogleTagSlotOnloadData } from 'utils/test-utils'
+import { mockGoogleTagSlotRenderEndedData } from 'utils/test-utils'
 
 beforeEach(() => {
   delete window.googletag
@@ -33,7 +33,7 @@ afterAll(() => {
 })
 
 describe('handleAdsLoaded', function () {
-  it('adds a slot ID to window.tabforacause\'s "loaded slots" object when GPT\'s "slotOnload" event is fired', () => {
+  it('adds a slot ID to window.tabforacause\'s "loaded slots" object when GPT\'s "slotRenderEnded" event is fired', () => {
     // Mock GPT's pubads addEventListener so we can fake an event
     var passedEventName
     var passedEventCallback
@@ -50,18 +50,18 @@ describe('handleAdsLoaded', function () {
 
     // Fake the event callback
     const slotId = 'abc-123'
-    const mockSlotLoadEventData = mockGoogleTagSlotOnloadData(slotId)
+    const mockSlotLoadEventData = mockGoogleTagSlotRenderEndedData(slotId)
     passedEventCallback(mockSlotLoadEventData)
 
     // Check that we're using the expected GPT event
-    expect(passedEventName).toEqual('slotOnload')
+    expect(passedEventName).toEqual('slotRenderEnded')
 
     // Make sure we've marked the slot as loaded
     expect(window.tabforacause.ads.slotsLoaded[slotId]).toBe(mockSlotLoadEventData)
 
     // Make sure it works multiple times
     const otherSlotId = 'xyz-987'
-    const otherMockSlotLoadEventData = mockGoogleTagSlotOnloadData(otherSlotId)
+    const otherMockSlotLoadEventData = mockGoogleTagSlotRenderEndedData(otherSlotId)
     expect(window.tabforacause.ads.slotsLoaded[otherSlotId]).toBeUndefined()
     passedEventCallback(otherMockSlotLoadEventData)
     expect(window.tabforacause.ads.slotsLoaded[otherSlotId]).toBe(otherMockSlotLoadEventData)

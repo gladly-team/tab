@@ -12,8 +12,8 @@ class LogRevenueComponent extends React.Component {
   /**
    * Get the top bid for the slot from Prebid and log the revenue.
    * @param {string} slotId - The DFP slot ID to log
-   * @param {Object} event - The googletag "SlotOnload" event object. See:
-   *  https://developers.google.com/doubleclick-gpt/reference#googletageventsslotonloadevent
+   * @param {Object} event - The googletag "SlotRenderEnded" event object. See:
+   *  https://developers.google.com/doubleclick-gpt/reference#googletag.events.SlotRenderEndedEvent
    * @return {null}
    */
   logRevenueForSlotId (slotId, event) {
@@ -66,7 +66,7 @@ class LogRevenueComponent extends React.Component {
       if (Object.keys(slotsLoadedObj).length) {
         const self = this
         Object.keys(slotsLoadedObj).forEach((slotId) => {
-          // The property value is the "SlotOnload" event object
+          // The property value is the "SlotRenderEnded" event object
           self.logRevenueForSlotId(slotId, slotsLoadedObj[slotId])
         })
       }
@@ -84,8 +84,8 @@ class LogRevenueComponent extends React.Component {
       // the ad creative loads:
       // https://developers.google.com/doubleclick-gpt/reference#googletageventsslotrenderendedevent
       // 'slotOnload' event is on creative load:
-      // https://developers.google.com/doubleclick-gpt/reference#googletageventsslotonloadevent
-      googletag.pubads().addEventListener('slotOnload', (event) => {
+      // https://developers.google.com/doubleclick-gpt/reference#googletag.events.SlotRenderEndedEvent
+      googletag.pubads().addEventListener('slotRenderEnded', (event) => {
         try {
           const slotId = event.slot.getSlotElementId()
           this.logRevenueForSlotId(slotId, event)
