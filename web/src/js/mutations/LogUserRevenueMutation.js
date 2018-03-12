@@ -11,13 +11,13 @@ const mutation = graphql`
   }
 `
 
-function commit (environment, userId, revenue) {
+function commit (environment, userId, revenue, dfpAdvertiserId = null) {
   return commitMutation(
     environment,
     {
       mutation,
       variables: {
-        input: { userId, revenue }
+        input: { userId, revenue, dfpAdvertiserId }
       }
     }
   )
