@@ -49,23 +49,21 @@ describe('handleAdsLoaded', function () {
     window.googletag.cmd.forEach((cmd) => cmd())
 
     // Fake the event callback
-    const mockSlotLoadEventData = mockGoogleTagSlotOnloadData('xyx-123')
+    const slotId = 'abc-123'
+    const mockSlotLoadEventData = mockGoogleTagSlotOnloadData(slotId)
     passedEventCallback(mockSlotLoadEventData)
 
     // Check that we're using the expected GPT event
     expect(passedEventName).toEqual('slotOnload')
 
     // Make sure we've marked the slot as loaded
-    expect(window.tabforacause.ads.slotsLoaded['xyx-123']).toBe(true)
+    expect(window.tabforacause.ads.slotsLoaded[slotId]).toBe(mockSlotLoadEventData)
 
     // Make sure it works multiple times
     const otherSlotId = 'xyz-987'
+    const otherMockSlotLoadEventData = mockGoogleTagSlotOnloadData(otherSlotId)
     expect(window.tabforacause.ads.slotsLoaded[otherSlotId]).toBeUndefined()
-    passedEventCallback({
-      slot: {
-        getSlotElementId: () => otherSlotId
-      }
-    })
-    expect(window.tabforacause.ads.slotsLoaded[otherSlotId]).toBe(true)
+    passedEventCallback(otherMockSlotLoadEventData)
+    expect(window.tabforacause.ads.slotsLoaded[otherSlotId]).toBe(otherMockSlotLoadEventData)
   })
 })

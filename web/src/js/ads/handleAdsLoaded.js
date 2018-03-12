@@ -7,8 +7,8 @@ export default function () {
     const googletag = window.googletag || {}
     googletag.cmd = googletag.cmd || []
 
-    const markSlotAsLoaded = (slotId) => {
-      window.tabforacause.ads.slotsLoaded[slotId] = true
+    const markSlotAsLoaded = (slotId, eventData) => {
+      window.tabforacause.ads.slotsLoaded[slotId] = eventData
     }
 
     googletag.cmd.push(() => {
@@ -20,7 +20,7 @@ export default function () {
       googletag.pubads().addEventListener('slotOnload', (event) => {
         try {
           const slotId = event.slot.getSlotElementId()
-          markSlotAsLoaded(slotId)
+          markSlotAsLoaded(slotId, event)
         } catch (e) {
           console.error('Could not mark ad slots as loaded', e)
         }
