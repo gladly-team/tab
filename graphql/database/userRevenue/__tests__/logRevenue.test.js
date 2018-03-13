@@ -8,7 +8,9 @@ import {
   getMockUserContext,
   mockDate
 } from '../../test-utils'
+import decodeAmazonCPM from '../decodeAmazonCPM'
 
+jest.mock('../decodeAmazonCPM')
 jest.mock('../../databaseClient')
 
 const userContext = getMockUserContext()
@@ -54,5 +56,38 @@ describe('logRevenue', () => {
         revenue: 0.0172
       })
     )
+  })
+
+  test('it transforms an encoded Amazon CPM revenue object', async () => {
+    const userId = userContext.id
+    const userRevenueCreate = jest.spyOn(UserRevenueModel, 'create')
+    const revenueObj = {
+      type: 'AMAZON_CPM',
+      code: 'some-code'
+    }
+
+    // Mock decoding the Amazon code
+    decodeAmazonCPM.mockReturnValueOnce(8.50)
+
+    await logRevenue(userContext, userId, revenueObj)
+
+    expect(userRevenueCreate).toHaveBeenLastCalledWith(
+      userContext,
+      addTimestampFieldsToItem({
+        userId: userId,
+        timestamp: moment.utc().toISOString(),
+        revenue: 0.0085
+      })
+    )
+  })
+
+  test('it throws an error if a revenue object has an invalid transformation type', () => {
+    const userId = userContext.id
+    const revenueObj = {
+      type: 'NOT_A_VALID_TYPE_HERE',
+      code: 'some-code'
+    }
+    return expect(logRevenue(userContext, userId, revenueObj))
+      .rejects.toThrow()
   })
 })
