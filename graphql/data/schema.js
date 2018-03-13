@@ -513,7 +513,7 @@ const logUserRevenueMutation = mutationWithClientMutationId({
   inputFields: {
     userId: { type: new GraphQLNonNull(GraphQLString) },
     revenue: { type: new GraphQLNonNull(GraphQLFloat) },
-    dfpAdvertiserId: { type: GraphQLInt }
+    dfpAdvertiserId: { type: GraphQLString }
   },
   outputFields: {
     success: {

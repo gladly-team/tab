@@ -85,7 +85,8 @@ describe('LogRevenueComponent', function () {
         relay={{ environment: mockRelayEnvironment }}
         />
     )
-    expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment, mockUserId, 0.000172, 132435)
+    expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment, mockUserId,
+      0.000172, '132435')
 
     // It should mark this slot as logged
     expect(window.tabforacause.ads.slotsAlreadyLoggedRevenue[slotId]).toBe(true)
@@ -173,7 +174,7 @@ describe('LogRevenueComponent', function () {
     )
 
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment, mockUserId,
-      0.000123456789012, 9876543)
+      0.000123456789012, '9876543')
   })
 
   it('after mount, logs revenue when GPT fires a "slot loaded" event', () => {
@@ -216,7 +217,7 @@ describe('LogRevenueComponent', function () {
 
     // Should have logged revenue after the slot loaded
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment,
-      mockUserId, 0.00231, 159260)
+      mockUserId, 0.00231, '159260')
   })
 
   it('defaults to 99 (Google Adsense) DFP Advertiser ID when the advertiser ID does not exist', () => {
@@ -263,6 +264,6 @@ describe('LogRevenueComponent', function () {
 
     // Should have logged revenue after the slot loaded
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment,
-      mockUserId, 0.00231, 99)
+      mockUserId, 0.00231, '99')
   })
 })

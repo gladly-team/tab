@@ -42,10 +42,10 @@ class LogRevenueComponent extends React.Component {
 
       // Get the advertiser ID. It will be null if Google Adsense
       // took the impression, so assume nulls are Adsense.
-      const GOOGLE_ADSENSE_ID = 99
+      const GOOGLE_ADSENSE_ID = '99'
       const dfpAdvertiserId = (
         event.advertiserId
-        ? event.advertiserId
+        ? event.advertiserId.toString()
         : GOOGLE_ADSENSE_ID
       )
 
