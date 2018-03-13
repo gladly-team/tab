@@ -146,6 +146,10 @@ env:
   # MIGRATION_ADMIN_KEY
   - secure: ZN3gozo9m9CDszf8TwuXmUESt8m+vomEZTcaHhXd8qUGIQvXkWweuMmtWRosgBPGuKnu+GgmpSaK1af6TY3MUbiaaJuOj4kHZIqm4dGQCV+0Pioa6rv4CcOWxMCQd4LHcrXd2wVdtCGpSiyPHnwLvmCOxyiaajnvi1pkjJbn4yCfhAeMEHBLLHwJMoeEa8hpWuvMTsnon+K3FjBPnOkirxA0kfXg6UjOIqWLfXNlUBBAFwoRS5ufRvoh47JNwoB1ejeNH3zX/D2xFxw4C6+X2epqnvQaxpBlnPqZcGlWd0Lcf1GOAqubWS0XUlYII0RhispzT3fv9cVUJiyT93bkha+PB2IMiVnig30envHNIkTgqCmtIpBGymZ0e7w50B2Ms63K0aF/MlR3fmOhOzyzJycnUUquQaLH3Hf3ExIdz+jhVoSBbrgfIMcu0SCjKt/SReShqLBUX+9O4dfA0ZKdJY7MQ3RDypkA6xmMaMgpRIFoh1uKFqioo3gv/ehMB8Qepj/ZEVmM4F1d+pl2I4bR82nOdcboa58uFTLVxtnBFt1ccFIdwUHs78s+l/wDYz28CQS8+uCaoLtCS6RUYwGTXH24lJcKN94vNETGKiaHqxesbLUr5BKl7kZfrv0za5kxE4VXIV82RUf6XAudz17EJNFZzxaboXDUHIdN3vAjFfc=
 before_install:
+  # Decrypt amazon-cpm-codes.json
+  - openssl aes-256-cbc -K $encrypted_a337bde16f21_key -iv $encrypted_a337bde16f21_iv
+    -in amazon-cpm-codes.json.enc -out ./graphql/database/userRevenue/amazon-cpm-codes.json
+    -d
   # Install Yarn
   # https://yarnpkg.com/en/docs/install-ci#travis-tab
   - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.3.2
