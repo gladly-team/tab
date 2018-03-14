@@ -67,8 +67,8 @@ describe('logRevenue', () => {
   test('it throws an error if both "revenue" nor "encodedRevenue" are provided but "aggregationOperation" is not', () => {
     const userId = userContext.id
     const revenueObj = {
-      type: 'AMAZON_CPM',
-      code: 'some-code'
+      encodingType: 'AMAZON_CPM',
+      encodedValue: 'some-code'
     }
     return expect(logRevenue(userContext, userId, 0.23, null, revenueObj, undefined))
       .rejects.toThrow('Revenue logging requires an "aggregationOperation" value if both "revenue" and "encodedRevenue" values are provided')
@@ -78,8 +78,8 @@ describe('logRevenue', () => {
     const userId = userContext.id
     const userRevenueCreate = jest.spyOn(UserRevenueModel, 'create')
     const revenueObj = {
-      type: 'AMAZON_CPM',
-      code: 'some-code'
+      encodingType: 'AMAZON_CPM',
+      encodedValue: 'some-code'
     }
 
     // Mock decoding the Amazon code
@@ -100,18 +100,18 @@ describe('logRevenue', () => {
   test('it throws an error if a revenue object has an invalid transformation type', () => {
     const userId = userContext.id
     const revenueObj = {
-      type: 'NOT_A_VALID_TYPE_HERE',
-      code: 'some-code'
+      encodingType: 'NOT_A_VALID_TYPE_HERE',
+      encodedValue: 'some-code'
     }
     return expect(logRevenue(userContext, userId, null, null, revenueObj))
-      .rejects.toThrow('Invalid "type" field for revenue object transformation')
+      .rejects.toThrow('Invalid "encodingType" field for revenue object transformation')
   })
 
   test('it throws an error if an invalid "aggregationOperation" is provided', () => {
     const userId = userContext.id
     const revenueObj = {
-      type: 'AMAZON_CPM',
-      code: 'some-code'
+      encodingType: 'AMAZON_CPM',
+      encodedValue: 'some-code'
     }
 
     // Mock decoding the Amazon code
@@ -125,8 +125,8 @@ describe('logRevenue', () => {
     const userId = userContext.id
     const userRevenueCreate = jest.spyOn(UserRevenueModel, 'create')
     const revenueObj = {
-      type: 'AMAZON_CPM',
-      code: 'some-code'
+      encodingType: 'AMAZON_CPM',
+      encodedValue: 'some-code'
     }
 
     // Mock decoding the Amazon code

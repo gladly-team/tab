@@ -14,18 +14,18 @@ const AGGREGATION_MAX = 'MAX'
  * @param {object} revenueObj - The user authorizer object.
  * @param {string} revenueObj.encodingType - The name of the kind of object, which determines
  *   the logic we use to convert it into a number.
- * @param {string} revenueObj.encodingValue - The input value to use when decoding, which
+ * @param {string} revenueObj.encodedValue - The input value to use when decoding, which
  *   should resolve into a float.
  * @return {number} A float representing $USD amount of revenue
  */
 const decodeRevenueObj = (revenueObj) => {
   var revenueVal
-  switch (revenueObj.type) {
+  switch (revenueObj.encodingType) {
     case AMAZON_CPM_REVENUE_TYPE:
-      revenueVal = decodeAmazonCPM(revenueObj.code) / 1000
+      revenueVal = decodeAmazonCPM(revenueObj.encodedValue) / 1000
       break
     default:
-      throw new Error('Invalid "type" field for revenue object transformation')
+      throw new Error('Invalid "encodingType" field for revenue object transformation')
   }
   return revenueVal
 }

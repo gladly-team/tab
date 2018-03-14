@@ -521,7 +521,7 @@ const EncodedRevenueValueType = new GraphQLInputObjectType({
         name: 'EncodedRevenueValueTypeEnum',
         description: 'The type of transformation we should use to resolve the object into a revenue value',
         values: {
-          AMAZON_CPM: { value: 0 }
+          AMAZON_CPM: { value: 'AMAZON_CPM' }
         }
       }))
     },
@@ -551,7 +551,7 @@ const logUserRevenueMutation = mutationWithClientMutationId({
         description: 'The operation to use to resolve multiple values into a final revenue value. ' /
           'We currently only support "MAX".',
         values: {
-          MAX: { value: 0 }
+          MAX: { value: 'MAX' }
         }
       })
     },
