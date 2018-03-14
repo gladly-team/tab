@@ -174,11 +174,7 @@ script:
 deploy:
   # Dev stage deploy
   - provider: script
-    script: openssl aes-256-cbc -K $encrypted_a337bde16f21_key -iv $encrypted_a337bde16f21_iv
-        -in ./graphql/database/userRevenue/amazon-cpm-codes.json.enc
-        -out ./graphql/database/userRevenue/amazon-cpm-codes.json
-        -d &&
-      yarn run ci:deploy dev
+    script: yarn run ci:deploy dev
     on:
       # TODO: revert to master branch only
       all_branches: true
