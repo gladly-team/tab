@@ -152,7 +152,8 @@ before_install:
   - rm ./graphql/database/userRevenue/amazon-cpm-codes.json
   - ls ./graphql/database/userRevenue/
   - openssl aes-256-cbc -K $encrypted_a337bde16f21_key -iv $encrypted_a337bde16f21_iv
-    -in amazon-cpm-codes.json.enc -out ./graphql/database/userRevenue/amazon-cpm-codes.json
+    -in ./graphql/database/userRevenue/amazon-cpm-codes.json.enc
+    -out ./graphql/database/userRevenue/amazon-cpm-codes.json
     -d
   - ls ./graphql/database/userRevenue/
   # Install Yarn
@@ -182,7 +183,8 @@ deploy:
     script: ls ./graphql/database/userRevenue/ &&
       rm ./graphql/database/userRevenue/amazon-cpm-codes.json &&
       openssl aes-256-cbc -K $encrypted_a337bde16f21_key -iv $encrypted_a337bde16f21_iv
-        -in amazon-cpm-codes.json.enc -out ./graphql/database/userRevenue/amazon-cpm-codes.json
+        -in ./graphql/database/userRevenue/amazon-cpm-codes.json.enc
+        -out ./graphql/database/userRevenue/amazon-cpm-codes.json
         -d &&
       ls ./graphql/database/userRevenue/ &&
       yarn run ci:deploy dev
