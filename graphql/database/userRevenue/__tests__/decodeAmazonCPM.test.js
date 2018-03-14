@@ -1,5 +1,7 @@
 /* eslint-env jest */
 
+import logger from '../../../utils/logger'
+
 jest.mock('../amazon-cpm-codes.json', () => {
   return {
     'code-1': '0.01',
@@ -9,6 +11,14 @@ jest.mock('../amazon-cpm-codes.json', () => {
     'code-5': '7.1',
     'code-6': '20'
   }
+})
+jest.mock('../../../utils/logger')
+
+var nodeEnv = process.env.NODE_ENV
+
+afterEach(() => {
+  jest.clearAllMocks()
+  process.env.NODE_ENV = nodeEnv // Reset NODE_ENV after tests
 })
 
 describe('decodeAmazonCPM', () => {
@@ -22,10 +32,19 @@ describe('decodeAmazonCPM', () => {
     expect(decodeAmazonCPM('code-6')).toBe(20)
   })
 
-  it('throws an error when a CPM code is not valid', () => {
+  it('logs a warning when a CPM code is not valid', () => {
+    const decodeAmazonCPM = require('../decodeAmazonCPM').default
+    const revenueVal = decodeAmazonCPM('oopsWrongCode')
+    expect(logger.warn).toHaveBeenCalledWith('Invalid Amazon CPM code "oopsWrongCode"')
+    expect(revenueVal).toBe(0.0)
+  })
+
+  it('throws an error when a CPM code is not valid and NODE_ENV=production', () => {
+    process.env.NODE_ENV = 'production'
+    jest.resetModules()
     const decodeAmazonCPM = require('../decodeAmazonCPM').default
     expect(() => {
       decodeAmazonCPM('oopsWrongCode')
-    }).toThrow()
+    }).toThrow('Invalid Amazon CPM code "oopsWrongCode"')
   })
 })
