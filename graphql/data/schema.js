@@ -11,6 +11,7 @@ import {
   GraphQLFloat,
   GraphQLInt,
   GraphQLList,
+  GraphQLEnumType,
   GraphQLNonNull,
   GraphQLObjectType,
   GraphQLSchema,
@@ -508,11 +509,52 @@ const logTabMutation = mutationWithClientMutationId({
 /**
  * Log earned revenue for a user
  */
+
+/* BEGIN revenue logging */
+
+const EncodedRevenueValueType = new GraphQLInputObjectType({
+  name: 'EncodedRevenueValue',
+  description: 'An object representing a single revenue value',
+  fields: {
+    encodingType: {
+      type: new GraphQLNonNull(new GraphQLEnumType({
+        name: 'EncodedRevenueValueTypeEnum',
+        description: 'The type of transformation we should use to resolve the object into a revenue value',
+        values: {
+          AMAZON_CPM: { value: 0 }
+        }
+      }))
+    },
+    encodedValue: {
+      description: 'A string that we can decode to a revenue value (float) using the "encodingType" method',
+      type: new GraphQLNonNull(GraphQLString)
+    }
+  }
+})
+
 const logUserRevenueMutation = mutationWithClientMutationId({
   name: 'LogUserRevenue',
   inputFields: {
     userId: { type: new GraphQLNonNull(GraphQLString) },
-    revenue: { type: new GraphQLNonNull(GraphQLFloat) },
+    revenue: { type: GraphQLFloat },
+    // Separate fields because graphql-js doesn't yet allow GraphQLUnionType
+    // in input fields:
+    // https://github.com/graphql/graphql-js/issues/207
+    encodedRevenue: {
+      description: 'A revenue value encoded because it is not available on the client side',
+      type: EncodedRevenueValueType
+    },
+    // Required if both "revenue" and "encodedRevenue" fields are present.
+    aggregationOperation: {
+      type: new GraphQLEnumType({
+        name: 'LogUserRevenueAggregationOperationEnum',
+        description: 'The operation to use to resolve multiple values into a final revenue value. ' /
+          'We currently only support "MAX".',
+        values: {
+          MAX: { value: 0 }
+        }
+      })
+    },
     dfpAdvertiserId: { type: GraphQLString }
   },
   outputFields: {
@@ -520,9 +562,9 @@ const logUserRevenueMutation = mutationWithClientMutationId({
       type: new GraphQLNonNull(GraphQLBoolean)
     }
   },
-  mutateAndGetPayload: ({ userId, revenue, dfpAdvertiserId }, context) => {
+  mutateAndGetPayload: ({ userId, revenue, dfpAdvertiserId, encodedRevenue, aggregationOperation }, context) => {
     const { id } = fromGlobalId(userId)
-    return logRevenue(context.user, id, revenue, dfpAdvertiserId)
+    return logRevenue(context.user, id, revenue, dfpAdvertiserId, encodedRevenue, aggregationOperation)
   }
 })
 
