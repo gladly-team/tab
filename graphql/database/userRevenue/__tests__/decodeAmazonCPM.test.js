@@ -35,7 +35,7 @@ describe('decodeAmazonCPM', () => {
   it('logs a warning when a CPM code is not valid', () => {
     const decodeAmazonCPM = require('../decodeAmazonCPM').default
     const revenueVal = decodeAmazonCPM('oopsWrongCode')
-    expect(logger.warn).toHaveBeenCalledWith('Invalid Amazon CPM code "oopsWrongCode"')
+    expect(logger.warn).toHaveBeenCalledWith('Warning: Amazon CPM code "oopsWrongCode" is invalid. Resolving to a value of 0.0 in development.')
     expect(revenueVal).toBe(0.0)
   })
 
