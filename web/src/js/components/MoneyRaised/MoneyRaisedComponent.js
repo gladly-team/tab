@@ -136,7 +136,7 @@ class MoneyRaised extends React.Component {
         <Sparkle
           color={milestoneMoneyRaisedColor}
           count={18}
-          fadeOutSpeed={45}
+          fadeOutSpeed={40}
           overflowPx={14}
           flicker={false}
           />
