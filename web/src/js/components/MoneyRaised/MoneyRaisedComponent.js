@@ -84,15 +84,22 @@ class MoneyRaised extends React.Component {
     })
   }
 
+  // Returns boolean, whether we're drawing attention to the current
+  // amount raised
+  celebratingMilestone () {
+    const milestoneStart = 5e5
+    const milestoneEnd = 5.03e5
+    return (
+      this.state.amountDonated >= milestoneStart &&
+      this.state.amountDonated < milestoneEnd
+    )
+  }
+
   render () {
     if (!this.props.app) { return null }
 
-    // TODO: prop
-    const celebrateMilestone = true
+    const celebrateMilestone = this.celebratingMilestone()
     const milestoneMoneyRaisedColor = '#FFEBA2'
-    // const milestoneMoneyRaisedColor = '#FFE0B1'
-    // const milestoneMoneyRaisedColor = '#FFFF8B'
-    // const milestoneMoneyRaisedColor = '#FFF1AB'
 
     const containerStyle = {
       position: 'relative',
@@ -133,13 +140,17 @@ class MoneyRaised extends React.Component {
         style={containerStyle}>
         <span
           style={textStyle}>{amountDonated}</span>
-        <Sparkle
-          color={milestoneMoneyRaisedColor}
-          count={18}
-          fadeOutSpeed={40}
-          overflowPx={14}
-          flicker={false}
-          />
+        { celebrateMilestone ? (
+          <Sparkle
+            color={milestoneMoneyRaisedColor}
+            count={18}
+            fadeOutSpeed={40}
+            overflowPx={14}
+            flicker={false}
+            />
+          )
+          : null
+        }
         <DashboardPopover
           style={popoverStyle}
           open={this.state.open}
