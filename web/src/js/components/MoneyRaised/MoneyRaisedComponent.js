@@ -6,6 +6,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import {
   goToInviteFriends
 } from 'navigation/navigation'
+import Sparkle from 'react-sparkle'
 
 import appTheme, {
   dashboardIconActiveColor,
@@ -86,7 +87,15 @@ class MoneyRaised extends React.Component {
   render () {
     if (!this.props.app) { return null }
 
+    // TODO: prop
+    const celebrateMilestone = true
+    const milestoneMoneyRaisedColor = '#FFEBA2'
+    // const milestoneMoneyRaisedColor = '#FFE0B1'
+    // const milestoneMoneyRaisedColor = '#FFFF8B'
+    // const milestoneMoneyRaisedColor = '#FFF1AB'
+
     const containerStyle = {
+      position: 'relative',
       userSelect: 'none',
       cursor: 'default'
     }
@@ -98,9 +107,13 @@ class MoneyRaised extends React.Component {
     }
     const textStyle = Object.assign({}, {
       color: (
-        this.state.hover
-        ? dashboardIconActiveColor
-        : dashboardIconInactiveColor
+        celebrateMilestone
+        ? milestoneMoneyRaisedColor
+        : (
+          this.state.hover
+          ? dashboardIconActiveColor
+          : dashboardIconInactiveColor
+        )
       ),
       transition: 'color 300ms ease-in',
       cursor: 'pointer',
@@ -120,6 +133,13 @@ class MoneyRaised extends React.Component {
         style={containerStyle}>
         <span
           style={textStyle}>{amountDonated}</span>
+        <Sparkle
+          color={milestoneMoneyRaisedColor}
+          count={18}
+          fadeOutSpeed={45}
+          overflowPx={14}
+          flicker={false}
+          />
         <DashboardPopover
           style={popoverStyle}
           open={this.state.open}
