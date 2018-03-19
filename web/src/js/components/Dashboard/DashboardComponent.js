@@ -130,34 +130,36 @@ class Dashboard extends React.Component {
         {
           this.state.showFireworks ? (
             <span>
-              <span
-                style={{
-                  position: 'absolute',
-                  zIndex: 21,
-                  color: '#FFF',
-                  top: 14,
-                  left: 14,
-                  width: 240,
-                  fontSize: 18,
-                  lineHeight: '110%'
-                }}
-              >
-                <div>
-                  Tabbers, together we've raised over half a million dollars for charity. Congrats, and thank you!
-                </div>
-                <a
-                  href='https://facebook.com/notes/tab-for-a-cause/500000-raised-for-charity/1752143718162041/'
-                  target='_top'
+              <FadeInDashboardAnimation>
+                <span
+                  style={{
+                    position: 'absolute',
+                    zIndex: 21,
+                    color: '#FFF',
+                    top: 14,
+                    left: 14,
+                    width: 240,
+                    fontSize: 18,
+                    lineHeight: '110%'
+                  }}
                 >
-                  <RaisedButton
-                    label='Share This Milestone'
-                    style={{
-                      marginTop: 8
-                    }}
-                    primary
-                  />
-                </a>
-              </span>
+                  <div>
+                    Tabbers, together we've raised over half a million dollars for charity. Congrats, and thank you!
+                  </div>
+                  <a
+                    href='https://facebook.com/notes/tab-for-a-cause/500000-raised-for-charity/1752143718162041/'
+                    target='_top'
+                  >
+                    <RaisedButton
+                      label='Share This Milestone'
+                      style={{
+                        marginTop: 8
+                      }}
+                      primary
+                    />
+                  </a>
+                </span>
+              </FadeInDashboardAnimation>
               <Fireworks
                 width={window.innerWidth}
                 height={window.innerHeight}
