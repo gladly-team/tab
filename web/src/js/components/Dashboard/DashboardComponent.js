@@ -17,13 +17,17 @@ import {
 } from 'theme/default'
 import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
 import ErrorMessage from 'general/ErrorMessage'
+import Fireworks from 'lib/fireworks-react'
+import RaisedButton from 'material-ui/RaisedButton'
+import CloseIcon from 'material-ui/svg-icons/navigation/close'
 
 class Dashboard extends React.Component {
   constructor (props) {
     super(props)
 
     this.state = {
-      errorMessage: null
+      errorMessage: null,
+      showFireworks: false
     }
   }
 
@@ -35,6 +39,12 @@ class Dashboard extends React.Component {
 
   clearError () {
     this.showError(null)
+  }
+
+  launchFireworks (show) {
+    this.setState({
+      showFireworks: show
+    })
   }
 
   render () {
@@ -86,7 +96,11 @@ class Dashboard extends React.Component {
           ? (
             <FadeInDashboardAnimation>
               <div style={menuStyle}>
-                <MoneyRaised app={app} style={moneyRaisedStyle} />
+                <MoneyRaised
+                  app={app}
+                  style={moneyRaisedStyle}
+                  launchFireworks={this.launchFireworks.bind(this)}
+                  />
                 <CircleIcon
                   color={dashboardIconInactiveColor}
                   hoverColor={dashboardIconActiveColor}
@@ -112,6 +126,69 @@ class Dashboard extends React.Component {
                 />
             </FadeInDashboardAnimation>
             )
+          : null
+        }
+        {
+          this.state.showFireworks ? (
+            <span>
+              <FadeInDashboardAnimation>
+                <CloseIcon
+                  style={{
+                    position: 'absolute',
+                    top: 14,
+                    right: 14,
+                    zIndex: 22,
+                    height: 32,
+                    width: 32,
+                    color: '#FFF',
+                    cursor: 'pointer'
+                  }}
+                  onClick={() => { this.launchFireworks(false) }}
+                />
+              </FadeInDashboardAnimation>
+              <FadeInDashboardAnimation>
+                <span
+                  style={{
+                    position: 'absolute',
+                    zIndex: 21,
+                    color: '#FFF',
+                    top: 14,
+                    left: 14,
+                    width: 240,
+                    fontSize: 18,
+                    lineHeight: '110%'
+                  }}
+                >
+                  <div>
+                    Tabbers, together we've raised over half a million dollars for charity. Congrats, and thank you!
+                  </div>
+                  <a
+                    href='https://www.facebook.com/notes/tab-for-a-cause/500000-raised-for-charity/1752143718162041/'
+                    target='_top'
+                  >
+                    <RaisedButton
+                      label='Share This Milestone'
+                      style={{
+                        marginTop: 8
+                      }}
+                      primary
+                    />
+                  </a>
+                </span>
+              </FadeInDashboardAnimation>
+              <Fireworks
+                width={window.innerWidth}
+                height={window.innerHeight}
+                background={'rgba(0, 0, 0, 0.01)'}
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  zIndex: 20
+                }}
+              />
+            </span>
+          )
           : null
         }
         <Ad
