@@ -6,6 +6,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import {
   goToInviteFriends
 } from 'navigation/navigation'
+import Sparkle from 'react-sparkle'
 
 import appTheme, {
   dashboardIconActiveColor,
@@ -71,10 +72,14 @@ class MoneyRaised extends React.Component {
   }
 
   onClick (event) {
-    this.setState({
-      open: !this.state.open,
-      anchorEl: event.currentTarget
-    })
+    if (this.celebratingMilestone()) {
+      this.props.launchFireworks(true)
+    } else {
+      this.setState({
+        open: !this.state.open,
+        anchorEl: event.currentTarget
+      })
+    }
   }
 
   handlePopoverRequestClose () {
@@ -83,10 +88,25 @@ class MoneyRaised extends React.Component {
     })
   }
 
+  // Returns boolean, whether we're drawing attention to the current
+  // amount raised
+  celebratingMilestone () {
+    const milestoneStart = 5e5
+    const milestoneEnd = 5.03e5
+    return (
+      this.state.amountDonated >= milestoneStart &&
+      this.state.amountDonated < milestoneEnd
+    )
+  }
+
   render () {
     if (!this.props.app) { return null }
 
+    const celebrateMilestone = this.celebratingMilestone()
+    const milestoneMoneyRaisedColor = '#FFEBA2'
+
     const containerStyle = {
+      position: 'relative',
       userSelect: 'none',
       cursor: 'default'
     }
@@ -98,9 +118,13 @@ class MoneyRaised extends React.Component {
     }
     const textStyle = Object.assign({}, {
       color: (
-        this.state.hover
-        ? dashboardIconActiveColor
-        : dashboardIconInactiveColor
+        celebrateMilestone
+        ? milestoneMoneyRaisedColor
+        : (
+          this.state.hover
+          ? dashboardIconActiveColor
+          : dashboardIconInactiveColor
+        )
       ),
       transition: 'color 300ms ease-in',
       cursor: 'pointer',
@@ -120,6 +144,17 @@ class MoneyRaised extends React.Component {
         style={containerStyle}>
         <span
           style={textStyle}>{amountDonated}</span>
+        { celebrateMilestone ? (
+          <Sparkle
+            color={milestoneMoneyRaisedColor}
+            count={18}
+            fadeOutSpeed={40}
+            overflowPx={14}
+            flicker={false}
+            />
+          )
+          : null
+        }
         <DashboardPopover
           style={popoverStyle}
           open={this.state.open}
@@ -150,11 +185,13 @@ MoneyRaised.propTypes = {
     moneyRaised: PropTypes.number.isRequired,
     dollarsPerDayRate: PropTypes.number.isRequired
   }),
-  style: PropTypes.object
+  style: PropTypes.object,
+  launchFireworks: PropTypes.func
 }
 
 MoneyRaised.defaultProps = {
-  style: {}
+  style: {},
+  launchFireworks: () => {}
 }
 
 export default MoneyRaised
