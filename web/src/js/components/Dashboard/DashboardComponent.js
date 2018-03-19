@@ -25,7 +25,8 @@ class Dashboard extends React.Component {
     super(props)
 
     this.state = {
-      errorMessage: null
+      errorMessage: null,
+      showFireworks: false
     }
   }
 
@@ -37,6 +38,12 @@ class Dashboard extends React.Component {
 
   clearError () {
     this.showError(null)
+  }
+
+  launchFireworks (show) {
+    this.setState({
+      showFireworks: show
+    })
   }
 
   render () {
@@ -71,8 +78,6 @@ class Dashboard extends React.Component {
     // TODO: also make sure the user hasn't dismissed the campaign (`isCampaignShown` var)
     const isGlobalCampaignLive = !!((app && app.isGlobalCampaignLive))
 
-    const showFireworks = false
-
     return (
       <div
         style={{
@@ -90,7 +95,11 @@ class Dashboard extends React.Component {
           ? (
             <FadeInDashboardAnimation>
               <div style={menuStyle}>
-                <MoneyRaised app={app} style={moneyRaisedStyle} />
+                <MoneyRaised
+                  app={app}
+                  style={moneyRaisedStyle}
+                  launchFireworks={this.launchFireworks.bind(this)}
+                  />
                 <CircleIcon
                   color={dashboardIconInactiveColor}
                   hoverColor={dashboardIconActiveColor}
@@ -119,7 +128,7 @@ class Dashboard extends React.Component {
           : null
         }
         {
-          showFireworks ? (
+          this.state.showFireworks ? (
             <span>
               <span
                 style={{
