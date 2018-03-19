@@ -19,6 +19,7 @@ import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
 import ErrorMessage from 'general/ErrorMessage'
 import Fireworks from 'lib/fireworks-react'
 import RaisedButton from 'material-ui/RaisedButton'
+import CloseIcon from 'material-ui/svg-icons/navigation/close'
 
 class Dashboard extends React.Component {
   constructor (props) {
@@ -130,6 +131,21 @@ class Dashboard extends React.Component {
         {
           this.state.showFireworks ? (
             <span>
+              <FadeInDashboardAnimation>
+                <CloseIcon
+                  style={{
+                    position: 'absolute',
+                    top: 14,
+                    right: 14,
+                    zIndex: 22,
+                    height: 32,
+                    width: 32,
+                    color: '#FFF',
+                    cursor: 'pointer'
+                  }}
+                  onClick={() => { this.launchFireworks(false) }}
+                />
+              </FadeInDashboardAnimation>
               <FadeInDashboardAnimation>
                 <span
                   style={{
