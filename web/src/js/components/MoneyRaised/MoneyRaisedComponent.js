@@ -91,8 +91,7 @@ class MoneyRaised extends React.Component {
   // Returns boolean, whether we're drawing attention to the current
   // amount raised
   celebratingMilestone () {
-    // TODO: FIXME: make 5e5 before deploy!
-    const milestoneStart = 4e5
+    const milestoneStart = 5e5
     const milestoneEnd = 5.03e5
     return (
       this.state.amountDonated >= milestoneStart &&
