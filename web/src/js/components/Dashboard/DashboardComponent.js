@@ -163,7 +163,7 @@ class Dashboard extends React.Component {
                     Tabbers, together we've raised over half a million dollars for charity. Congrats, and thank you!
                   </div>
                   <a
-                    href='https://facebook.com/notes/tab-for-a-cause/500000-raised-for-charity/1752143718162041/'
+                    href='https://www.facebook.com/notes/tab-for-a-cause/500000-raised-for-charity/1752143718162041/'
                     target='_top'
                   >
                     <RaisedButton
