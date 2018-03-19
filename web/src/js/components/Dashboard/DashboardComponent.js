@@ -17,6 +17,7 @@ import {
 } from 'theme/default'
 import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
 import ErrorMessage from 'general/ErrorMessage'
+import Fireworks from 'lib/fireworks-react'
 
 class Dashboard extends React.Component {
   constructor (props) {
@@ -69,6 +70,8 @@ class Dashboard extends React.Component {
     // TODO: also make sure the user hasn't dismissed the campaign (`isCampaignShown` var)
     const isGlobalCampaignLive = !!((app && app.isGlobalCampaignLive))
 
+    const showFireworks = false
+
     return (
       <div
         style={{
@@ -112,6 +115,22 @@ class Dashboard extends React.Component {
                 />
             </FadeInDashboardAnimation>
             )
+          : null
+        }
+        {
+          showFireworks ? (
+            <Fireworks
+              width={window.innerWidth}
+              height={window.innerHeight}
+              background={'rgba(0, 0, 0, 0.01)'}
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                zIndex: 20
+              }}
+            />
+          )
           : null
         }
         <Ad
