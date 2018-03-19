@@ -18,6 +18,7 @@ import {
 import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
 import ErrorMessage from 'general/ErrorMessage'
 import Fireworks from 'lib/fireworks-react'
+import RaisedButton from 'material-ui/RaisedButton'
 
 class Dashboard extends React.Component {
   constructor (props) {
@@ -119,17 +120,47 @@ class Dashboard extends React.Component {
         }
         {
           showFireworks ? (
-            <Fireworks
-              width={window.innerWidth}
-              height={window.innerHeight}
-              background={'rgba(0, 0, 0, 0.01)'}
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                zIndex: 20
-              }}
-            />
+            <span>
+              <span
+                style={{
+                  position: 'absolute',
+                  zIndex: 21,
+                  color: '#FFF',
+                  top: 14,
+                  left: 14,
+                  width: 240,
+                  fontSize: 18,
+                  lineHeight: '110%'
+                }}
+              >
+                <div>
+                  Tabbers, together we've raised over half a million dollars for charity. Congrats, and thank you!
+                </div>
+                <a
+                  href='https://facebook.com/notes/tab-for-a-cause/500000-raised-for-charity/1752143718162041/'
+                  target='_top'
+                >
+                  <RaisedButton
+                    label='Share This Milestone'
+                    style={{
+                      marginTop: 8
+                    }}
+                    primary
+                  />
+                </a>
+              </span>
+              <Fireworks
+                width={window.innerWidth}
+                height={window.innerHeight}
+                background={'rgba(0, 0, 0, 0.01)'}
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  zIndex: 20
+                }}
+              />
+            </span>
           )
           : null
         }
