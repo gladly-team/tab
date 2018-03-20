@@ -13,7 +13,7 @@ class LogRevenueComponent extends React.Component {
    * Get the Prebid revenue for this slot
    * @param {string} slotId - The DFP slot ID
    * @return {number|null} revenue - The $USD revenue equal to the highest Prebid
-   *   bid for the slot divided by 1000, rounded; null if there were no bids
+   *   bid CPM for the slot, divided by 1000 and rounded; null if there were no bids
    */
   getPrebidRevenueForSlot (slotId) {
     // Get the slot's highest CPM bid from Prebid
