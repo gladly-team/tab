@@ -8,8 +8,8 @@ const amazonCPMCodes = require('./amazon-cpm-codes.json')
  * @return {number} The $USD value of the CPM
  */
 const decodeAmazonCPM = (amazonCPMCode) => {
-  const cpmVal = parseFloat(amazonCPMCodes[amazonCPMCode])
-  if (!cpmVal) {
+  const cpmStr = amazonCPMCodes[amazonCPMCode]
+  if (!cpmStr) {
     if (process.env.NODE_ENV === 'production') {
       throw new Error(`Invalid Amazon CPM code "${amazonCPMCode}"`)
     } else {
@@ -18,6 +18,10 @@ const decodeAmazonCPM = (amazonCPMCode) => {
       logger.warn(`Warning: Amazon CPM code "${amazonCPMCode}" is invalid. Resolving to a value of 0.0 in development.`)
       return 0.0
     }
+  }
+  const cpmVal = parseFloat(cpmStr)
+  if (isNaN(cpmVal)) {
+    throw new Error(`Amazon CPM code "${amazonCPMCode}" resolved to a non-numeric value`)
   }
   return cpmVal
 }

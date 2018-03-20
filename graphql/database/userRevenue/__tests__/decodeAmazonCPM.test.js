@@ -9,7 +9,8 @@ jest.mock('../amazon-cpm-codes.json', () => {
     'code-3': '0.03',
     'code-4': '0.50',
     'code-5': '7.1',
-    'code-6': '20'
+    'code-6': '20',
+    'some-code': 'abc' // invalid
   }
 })
 jest.mock('../../../utils/logger')
@@ -46,5 +47,12 @@ describe('decodeAmazonCPM', () => {
     expect(() => {
       decodeAmazonCPM('oopsWrongCode')
     }).toThrow('Invalid Amazon CPM code "oopsWrongCode"')
+  })
+
+  it('throws an error when a CPM string resolves to NaN', () => {
+    const decodeAmazonCPM = require('../decodeAmazonCPM').default
+    expect(() => {
+      decodeAmazonCPM('some-code')
+    }).toThrow('Amazon CPM code "some-code" resolved to a non-numeric value')
   })
 })
