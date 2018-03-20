@@ -10,6 +10,58 @@ class LogRevenueComponent extends React.Component {
   }
 
   /**
+   * Get the Prebid revenue for this slot
+   * @param {string} slotId - The DFP slot ID
+   * @return {number|null} revenue - The $USD revenue equal to the highest Prebid
+   *   bid for the slot divided by 1000, rounded; null if there were no bids
+   */
+  getPrebidRevenueForSlot (slotId) {
+    // Get the slot's highest CPM bid from Prebid
+    const pbjs = window.pbjs || {}
+    pbjs.que = pbjs.que || []
+    const slotBids = pbjs.getHighestCpmBids(slotId)
+
+    // There might not be any bids
+    if (!slotBids.length) {
+      return null
+    }
+
+    // Convert to real revenue
+    const cpm = slotBids[0].cpm
+    const revenue = cpm / 1000
+
+    // To avoid unnecessary precision, round to 14 decimal places
+    const roundedRevenue = Math.round(revenue * 10e14) / 10e14
+    return roundedRevenue
+  }
+
+  /**
+   * Get the Amazon bid for this slot
+   * @param {string} slotId - The DFP slot ID
+   * @return {Object|null} encodedAmazonRevenue - An EncodedRevenueValueType if there
+   *   is a bid for the slot, or null if there is no bid
+   * @return {string} encodedAmazonRevenue.encodingType - A constant, 'AMAZON_CPM',
+   *   which tells the backend how to decode the value
+   * @return {string} encodedAmazonRevenue.encodedValue - The Amazon revenue code
+   */
+  getEncodedAmazonRevenueForSlot (slotId) {
+    const amazonBids = window.tabforacause.ads.amazonBids
+    const amazonBidExists = (
+      amazonBids &&
+      amazonBids[slotId] &&
+      amazonBids[slotId]['amzniid'] &&
+      amazonBids[slotId]['amzniid'] !== '' // An empty string means no bid
+    )
+    if (!amazonBidExists) {
+      return null
+    }
+    return {
+      encodingType: 'AMAZON_CPM',
+      encodedValue: window.tabforacause.ads.amazonBids[slotId]['amzniid']
+    }
+  }
+
+  /**
    * Get the top bid for the slot from Prebid and log the revenue.
    * @param {string} slotId - The DFP slot ID to log
    * @param {Object} event - The googletag "SlotRenderEnded" event object. See:
@@ -25,20 +77,16 @@ class LogRevenueComponent extends React.Component {
       // Mark that we've logged revenue for this slot
       window.tabforacause.ads.slotsAlreadyLoggedRevenue[slotId] = true
 
-      // Get the slot's highest CPM bid from Prebid
-      const pbjs = window.pbjs || {}
-      pbjs.que = pbjs.que || []
-      const slotBids = pbjs.getHighestCpmBids(slotId)
+      // Get revenue from highest Prebid bid
+      const prebidRevenue = this.getPrebidRevenueForSlot(slotId)
 
-      // There might not be any bids
-      if (!slotBids.length) {
+      // Get the slot's bid from Amazon
+      const amazonEncodedBid = this.getEncodedAmazonRevenueForSlot(slotId)
+
+      // If no revenue, don't log anything
+      if (!prebidRevenue && !amazonEncodedBid) {
         return
       }
-      const cpm = slotBids[0].cpm
-      const revenue = cpm / 1000
-
-      // To avoid unnecessary precision, round to 14 decimal places
-      const roundedRevenue = Math.round(revenue * 10e14) / 10e14
 
       // Get the advertiser ID. It will be null if Google Adsense
       // took the impression, so assume nulls are Adsense.
@@ -50,8 +98,16 @@ class LogRevenueComponent extends React.Component {
       )
 
       // Log the revenue
-      LogUserRevenueMutation(this.props.relay.environment,
-        this.props.user.id, roundedRevenue, dfpAdvertiserId)
+      LogUserRevenueMutation(
+        this.props.relay.environment,
+        this.props.user.id,
+        prebidRevenue,
+        dfpAdvertiserId,
+        amazonEncodedBid,
+        // Only send aggregationOperation value if we have more than one
+        // revenue value
+        ((prebidRevenue && amazonEncodedBid) ? 'MAX' : null)
+      )
     } catch (e) {
       console.error('Could not log revenue for ad slot', e)
     }
