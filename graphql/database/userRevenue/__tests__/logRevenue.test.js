@@ -70,6 +70,10 @@ describe('logRevenue', () => {
       encodingType: 'AMAZON_CPM',
       encodedValue: 'some-code'
     }
+
+    // Mock decoding the Amazon code
+    decodeAmazonCPM.mockReturnValueOnce(8.50)
+
     return expect(logRevenue(userContext, userId, 0.23, null, revenueObj, undefined))
       .rejects.toThrow('Revenue logging requires an "aggregationOperation" value if both "revenue" and "encodedRevenue" values are provided')
   })
@@ -156,5 +160,35 @@ describe('logRevenue', () => {
         revenue: 0.0068
       })
     )
+  })
+
+  test('it throws an error if decoding throws an error', () => {
+    const userId = userContext.id
+    const revenueObj = {
+      encodingType: 'AMAZON_CPM',
+      encodedValue: 'some-code'
+    }
+
+    // Mock decoding the Amazon code
+    decodeAmazonCPM.mockImplementation(() => {
+      throw new Error('Big decoding problem!')
+    })
+
+    return expect(logRevenue(userContext, userId, null, null, revenueObj))
+      .rejects.toThrow('Big decoding problem!')
+  })
+
+  test('it throws an error if the decoded revenue object is null and there is no other revenue value', () => {
+    const userId = userContext.id
+    const revenueObj = {
+      encodingType: 'AMAZON_CPM',
+      encodedValue: 'some-code'
+    }
+
+    // Mock decoding the Amazon code
+    decodeAmazonCPM.mockReturnValueOnce(null)
+
+    return expect(logRevenue(userContext, userId, null, null, revenueObj))
+      .rejects.toThrow('Amazon revenue code "some-code" resolved to a nil value')
   })
 })

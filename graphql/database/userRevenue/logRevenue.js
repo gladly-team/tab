@@ -22,7 +22,11 @@ const decodeRevenueObj = (revenueObj) => {
   var revenueVal
   switch (revenueObj.encodingType) {
     case AMAZON_CPM_REVENUE_TYPE:
-      revenueVal = decodeAmazonCPM(revenueObj.encodedValue) / 1000
+      const decodedCPM = decodeAmazonCPM(revenueObj.encodedValue)
+      if (isNil(decodedCPM)) {
+        throw new Error(`Amazon revenue code "${revenueObj.encodedValue}" resolved to a nil value`)
+      }
+      revenueVal = decodedCPM / 1000
       break
     default:
       throw new Error('Invalid "encodingType" field for revenue object transformation')
@@ -73,8 +77,11 @@ const logRevenue = async (userContext, userId, revenue = null, dfpAdvertiserId =
   const decodedRevenue = isNil(encodedRevenue) ? null : decodeRevenueObj(encodedRevenue)
 
   var revenueToLog = null
+  // Received no valid revenue value
+  if (isNil(revenue) && isNil(decodedRevenue)) {
+    throw new Error('Revenue logging requires either "revenue" or "encodedRevenue" values')
   // Only received "revenue"
-  if (!isNil(revenue) && isNil(decodedRevenue)) {
+  } else if (!isNil(revenue) && isNil(decodedRevenue)) {
     revenueToLog = revenue
   // Only received "encodedRevenue"
   } else if (!isNil(decodedRevenue) && isNil(revenue)) {
@@ -85,9 +92,6 @@ const logRevenue = async (userContext, userId, revenue = null, dfpAdvertiserId =
       throw new Error('Revenue logging requires an "aggregationOperation" value if both "revenue" and "encodedRevenue" values are provided')
     }
     revenueToLog = aggregateRevenues([revenue, decodedRevenue], aggregationOperation)
-  // Received no valid revenue value
-  } else {
-    throw new Error('Revenue logging requires either "revenue" or "encodedRevenue" values')
   }
 
   try {
