@@ -1,6 +1,9 @@
 /* eslint-env jest */
 
-import { mockGoogleTagSlotRenderEndedData } from 'utils/test-utils'
+import {
+  getDefaultTabGlobal,
+  mockGoogleTagSlotRenderEndedData
+} from 'utils/test-utils'
 
 beforeEach(() => {
   delete window.googletag
@@ -16,12 +19,7 @@ beforeEach(() => {
   }
 
   // Mock tabforacause global
-  window.tabforacause = {
-    ads: {
-      slotsLoaded: {},
-      slotsAlreadyLoggedRevenue: {}
-    }
-  }
+  window.tabforacause = getDefaultTabGlobal()
 
   jest.clearAllMocks()
   jest.resetModules()

@@ -1,6 +1,7 @@
 /* eslint-env jest */
 
 import {
+  getDefaultTabGlobal,
   mockAmazonBidResponse
 } from 'utils/test-utils'
 
@@ -24,13 +25,7 @@ beforeEach(() => {
   window.apstag = require('apstag')
 
   // Mock tabforacause global
-  window.tabforacause = {
-    ads: {
-      amazonBids: {},
-      slotsLoaded: {},
-      slotsAlreadyLoggedRevenue: {}
-    }
-  }
+  window.tabforacause = getDefaultTabGlobal()
 
   jest.clearAllMocks()
   jest.resetModules()

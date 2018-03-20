@@ -5,7 +5,10 @@ import {
   shallow
 } from 'enzyme'
 import toJson from 'enzyme-to-json'
-import { mockGoogleTagSlotRenderEndedData } from 'utils/test-utils'
+import {
+  getDefaultTabGlobal,
+  mockGoogleTagSlotRenderEndedData
+} from 'utils/test-utils'
 
 import LogUserRevenueMutation from 'mutations/LogUserRevenueMutation'
 
@@ -31,12 +34,7 @@ beforeEach(() => {
   }
 
   // Mock tabforacause global
-  window.tabforacause = {
-    ads: {
-      slotsLoaded: {},
-      slotsAlreadyLoggedRevenue: {}
-    }
-  }
+  window.tabforacause = getDefaultTabGlobal()
 })
 
 afterEach(() => {

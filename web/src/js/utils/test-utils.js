@@ -65,3 +65,17 @@ export const mockAmazonBidResponse = (properties = {}) => {
   },
   properties)
 }
+
+/**
+ * Return the default starting value of `window.tabforacause`
+ * @return {Object}
+ */
+export const getDefaultTabGlobal = (properties = {}) => {
+  return {
+    ads: {
+      amazonBids: {},
+      slotsLoaded: {},
+      slotsAlreadyLoggedRevenue: {}
+    }
+  }
+}
