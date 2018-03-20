@@ -1,5 +1,9 @@
 /* eslint-env jest */
 
+import {
+  mockAmazonBidResponse
+} from 'utils/test-utils'
+
 jest.mock('../apstag')
 
 beforeEach(() => {
@@ -70,14 +74,9 @@ describe('amazonBidder', function () {
     amazonBidder()
 
     // Fake that apstag calls callback for returned bids
-    passedCallback([{
-      amznbid: '1',
-      amzniid: 'some-id',
-      amznp: '1',
-      amznsz: '0x0',
-      size: '0x0',
-      slotID: 'div-gpt-ad-123456789-0'
-    }])
+    passedCallback([
+      mockAmazonBidResponse()
+    ])
 
     // Run the queued googletag commands
     window.googletag.cmd.forEach((cmd) => cmd())
@@ -96,22 +95,14 @@ describe('amazonBidder', function () {
     amazonBidder()
 
     // Fake that apstag calls callback for returned bids
-    const someBid = {
-      amznbid: '1',
-      amzniid: 'some-other-id',
-      amznp: '1',
-      amznsz: '0x0',
-      size: '0x0',
-      slotID: 'div-gpt-ad-123456789-0'
-    }
-    const someOtherBid = {
-      amznbid: '1',
+    const someBid = mockAmazonBidResponse({
       amzniid: 'some-id',
-      amznp: '1',
-      amznsz: '0x0',
-      size: '0x0',
+      slotID: 'div-gpt-ad-123456789-0'
+    })
+    const someOtherBid = mockAmazonBidResponse({
+      amzniid: 'some-other-id',
       slotID: 'div-gpt-ad-24681357-0'
-    }
+    })
     passedCallback([someBid, someOtherBid])
 
     // Run the queued googletag commands

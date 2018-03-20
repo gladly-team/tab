@@ -27,7 +27,7 @@ export const enzymeFindAsync = async (rootComponent, selector, maxTimeMs = 4000,
  * https://developers.google.com/doubleclick-gpt/reference#googletag.events.SlotRenderEndedEvent
  * @param {string} slotId - A custom slot ID to override the default
  * @param {Object} properties - Values to override the default properties in the mock
- * @return {Object} An instance of `jest.fn`, a mock function
+ * @return {Object}
  */
 export const mockGoogleTagSlotRenderEndedData = (slotId = 'abc-123', properties = {}) => {
   return Object.assign({}, {
@@ -45,6 +45,23 @@ export const mockGoogleTagSlotRenderEndedData = (slotId = 'abc-123', properties 
     size: '728x90',
     sourceAgnosticCreativeId: null,
     sourceAgnosticLineItemId: null
+  },
+  properties)
+}
+
+/**
+ * Create a mock bid response from Amazon's apstag.
+ * @param {Object} properties - Values to override the default properties in the mock
+ * @return {Object}
+ */
+export const mockAmazonBidResponse = (properties = {}) => {
+  return Object.assign({}, {
+    amznbid: '1',
+    amzniid: 'some-id',
+    amznp: '1',
+    amznsz: '0x0',
+    size: '0x0',
+    slotID: 'div-gpt-ad-123456789-0'
   },
   properties)
 }
