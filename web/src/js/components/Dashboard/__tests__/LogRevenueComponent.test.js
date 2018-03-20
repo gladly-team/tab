@@ -17,6 +17,7 @@ jest.mock('mutations/LogUserRevenueMutation')
 beforeEach(() => {
   delete window.googletag
   delete window.pbjs
+  delete window.apstag
   delete window.tabforacause
 
   // Mock googletag
@@ -33,6 +34,9 @@ beforeEach(() => {
     getHighestCpmBids: jest.fn()
   }
 
+  // Mock apstag
+  window.apstag = require('apstag')
+
   // Mock tabforacause global
   window.tabforacause = getDefaultTabGlobal()
 })
@@ -44,6 +48,7 @@ afterEach(() => {
 afterAll(() => {
   delete window.googletag
   delete window.pbjs
+  delete window.apstag
   delete window.tabforacause
 })
 
@@ -71,6 +76,9 @@ describe('LogRevenueComponent', function () {
       cpm: mockRevenueValue
       // ... other bid info exists here
     }])
+
+    // Mock no Amazon bids
+    window.tabforacause.ads.amazonBids = {}
 
     const LogRevenueComponent = require('../LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
@@ -105,6 +113,9 @@ describe('LogRevenueComponent', function () {
       // ... other bid info exists here
     }])
 
+    // Mock no Amazon bids
+    window.tabforacause.ads.amazonBids = {}
+
     const LogRevenueComponent = require('../LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
     const mockRelayEnvironment = {}
@@ -130,6 +141,9 @@ describe('LogRevenueComponent', function () {
 
     // Mock no Prebid bids for the slot
     window.pbjs.getHighestCpmBids.mockReturnValueOnce([])
+
+    // Mock no Amazon bids
+    window.tabforacause.ads.amazonBids = {}
 
     const LogRevenueComponent = require('../LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
@@ -159,6 +173,9 @@ describe('LogRevenueComponent', function () {
       // ... other bid info exists here
     }])
 
+    // Mock no Amazon bids
+    window.tabforacause.ads.amazonBids = {}
+
     const LogRevenueComponent = require('../LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
     const mockRelayEnvironment = {}
@@ -182,6 +199,9 @@ describe('LogRevenueComponent', function () {
       cpm: mockRevenueValue
       // ... other bid info exists here
     }])
+
+    // Mock no Amazon bids
+    window.tabforacause.ads.amazonBids = {}
 
     // Mock GPT's pubads addEventListener so we can fake an event
     var passedEventCallback
@@ -225,6 +245,9 @@ describe('LogRevenueComponent', function () {
       cpm: mockRevenueValue
       // ... other bid info exists here
     }])
+
+    // Mock no Amazon bids
+    window.tabforacause.ads.amazonBids = {}
 
     // Mock GPT's pubads addEventListener so we can fake an event
     var passedEventCallback
