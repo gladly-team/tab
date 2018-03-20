@@ -90,9 +90,6 @@ const logRevenue = async (userContext, userId, revenue = null, dfpAdvertiserId =
     throw new Error('Revenue logging requires either "revenue" or "encodedRevenue" values')
   }
 
-  // If the revenue is an object, transform it into a number
-  // const revenueNum = isPlainObject(revenue) ? decodeRevenueObj(revenue) : revenue
-
   try {
     await UserRevenueModel.create(userContext, {
       userId: userId,
