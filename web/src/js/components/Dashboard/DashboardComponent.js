@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/href-no-hash */
 import React from 'react'
 import PropTypes from 'prop-types'
+import uuid from 'uuid/v4'
 import MoneyRaised from '../MoneyRaised/MoneyRaisedContainer'
 import UserBackgroundImage from '../User/UserBackgroundImageContainer'
 import UserMenu from '../User/UserMenuContainer'
@@ -27,8 +28,19 @@ class Dashboard extends React.Component {
 
     this.state = {
       errorMessage: null,
+      tabId: null,
       showFireworks: false
     }
+  }
+
+  componentWillMount () {
+    this.setTabId()
+  }
+
+  setTabId () {
+    this.setState({
+      tabId: uuid()
+    })
   }
 
   showError (msg) {
@@ -50,6 +62,7 @@ class Dashboard extends React.Component {
   render () {
     // Props will be null on first render.
     const { user, app } = this.props
+    const { tabId } = this.state
     const errorMessage = this.state.errorMessage
 
     const menuStyle = {
@@ -213,8 +226,8 @@ class Dashboard extends React.Component {
             right: 320,
             display: 'block'
           }} />
-        { user ? <LogTab user={user} /> : null }
-        { user ? <LogRevenue user={user} /> : null }
+        { user && tabId ? <LogTab user={user} tabId={tabId} /> : null }
+        { user && tabId ? <LogRevenue user={user} tabId={tabId} /> : null }
         { user ? <LogAccountCreation user={user} /> : null }
         { errorMessage
           ? <ErrorMessage message={errorMessage}

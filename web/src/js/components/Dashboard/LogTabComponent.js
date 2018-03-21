@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 
 class LogTabComponent extends React.Component {
   componentDidMount () {
+    console.log('tabId', this.props.tabId)
     // Delay so that:
     // * the user sees their VC increment
     // * ads are more likely to have loaded
@@ -24,7 +25,11 @@ class LogTabComponent extends React.Component {
 LogTabComponent.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.string.isRequired
-  }).isRequired
+  }).isRequired,
+  tabId: PropTypes.string.isRequired,
+  relay: PropTypes.shape({
+    environment: PropTypes.object.isRequired
+  })
 }
 
 export default LogTabComponent
