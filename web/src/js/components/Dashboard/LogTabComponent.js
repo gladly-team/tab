@@ -12,7 +12,8 @@ class LogTabComponent extends React.Component {
     setTimeout(() => {
       LogTabMutation.commit(
         this.props.relay.environment,
-        this.props.user
+        this.props.user.id,
+        this.props.tabId
       )
     }, LOG_TAB_DELAY)
   }
