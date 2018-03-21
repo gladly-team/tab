@@ -492,7 +492,8 @@ const { connectionType: userRecruitsConnection } = connectionDefinitions({
 const logTabMutation = mutationWithClientMutationId({
   name: 'LogTab',
   inputFields: {
-    userId: { type: new GraphQLNonNull(GraphQLString) }
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    tabId: { type: GraphQLString }
   },
   outputFields: {
     user: {
@@ -500,9 +501,9 @@ const logTabMutation = mutationWithClientMutationId({
       resolve: user => user
     }
   },
-  mutateAndGetPayload: ({userId}, context) => {
+  mutateAndGetPayload: ({ userId, tabId }, context) => {
     const { id } = fromGlobalId(userId)
-    return logTab(context.user, id)
+    return logTab(context.user, id, tabId)
   }
 })
 

@@ -1,6 +1,7 @@
 /* eslint-env jest */
 
 import moment from 'moment'
+import uuid from 'uuid/v4'
 import UserModel from '../UserModel'
 import UserTabsLogModel from '../UserTabsLogModel'
 import logTab from '../logTab'
@@ -100,6 +101,34 @@ describe('logTab', () => {
       addTimestampFieldsToItem({
         userId: userId,
         timestamp: moment.utc().toISOString()
+      })
+    )
+  })
+
+  test('it logs the tab ID when given', async () => {
+    const userId = userContext.id
+
+    // Mock fetching the user.
+    const mockUser = getMockUserInstance({
+      lastTabTimestamp: '2017-06-22T01:13:25.000Z'
+    })
+    setMockDBResponse(
+      DatabaseOperation.GET,
+      {
+        Item: mockUser
+      }
+    )
+    const userTabsLogCreate = jest.spyOn(UserTabsLogModel, 'create')
+    const tabId = uuid()
+    await logTab(userContext, userId, tabId)
+
+    // It should create an item in UserTabsLog.
+    expect(userTabsLogCreate).toHaveBeenLastCalledWith(
+      userContext,
+      addTimestampFieldsToItem({
+        userId: userId,
+        timestamp: moment.utc().toISOString(),
+        tabId: tabId
       })
     )
   })

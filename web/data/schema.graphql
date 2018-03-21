@@ -150,6 +150,7 @@ enum EncodedRevenueValueTypeEnum {
 
 input LogTabInput {
   userId: String!
+  tabId: String
   clientMutationId: String
 }
 

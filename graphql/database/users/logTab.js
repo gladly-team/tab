@@ -34,9 +34,10 @@ const isTabValid = (userContext, lastTabTimestampStr) => {
  * which prevents "fradulent" tab spamming.
  * @param {object} userContext - The user authorizer object.
  * @param {string} userId - The user id.
+ * @param {string} tabId - A UUID for this opened tab
  * @return {Promise<User>}  A promise that resolves into a User instance.
  */
-const logTab = async (userContext, userId) => {
+const logTab = async (userContext, userId, tabId = null) => {
   // Check if it's a valid tab before incrementing user VC or
   // the user's valid tab count.
   try {
@@ -92,7 +93,8 @@ const logTab = async (userContext, userId) => {
       // Log the tab for analytics.
       await UserTabsLogModel.create(userContext, {
         userId: userId,
-        timestamp: moment.utc().toISOString()
+        timestamp: moment.utc().toISOString(),
+        ...tabId && { tabId: tabId }
       })
     } else {
       // Only increment the user's tab count.
