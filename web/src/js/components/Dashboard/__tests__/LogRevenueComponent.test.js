@@ -60,6 +60,7 @@ describe('LogRevenueComponent', function () {
     const wrapper = shallow(
       <LogRevenueComponent
         user={{ id: 'abcdefghijklmno' }}
+        tabId={'abc-123'}
         relay={{ environment: {} }}
         />
     )
@@ -87,12 +88,14 @@ describe('LogRevenueComponent', function () {
 
     const LogRevenueComponent = require('../LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
+    const tabId = 'abc-123'
     const mockRelayEnvironment = {}
     shallow(
       <LogRevenueComponent
         user={{
           id: mockUserId
         }}
+        tabId={tabId}
         relay={{ environment: mockRelayEnvironment }}
         />
     )
@@ -125,12 +128,14 @@ describe('LogRevenueComponent', function () {
 
     const LogRevenueComponent = require('../LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
+    const tabId = 'abc-123'
     const mockRelayEnvironment = {}
     shallow(
       <LogRevenueComponent
         user={{
           id: mockUserId
         }}
+        tabId={tabId}
         relay={{ environment: mockRelayEnvironment }}
         />
     )
@@ -153,12 +158,14 @@ describe('LogRevenueComponent', function () {
 
     const LogRevenueComponent = require('../LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
+    const tabId = 'abc-123'
     const mockRelayEnvironment = {}
     shallow(
       <LogRevenueComponent
         user={{
           id: mockUserId
         }}
+        tabId={tabId}
         relay={{ environment: mockRelayEnvironment }}
         />
     )
@@ -186,12 +193,14 @@ describe('LogRevenueComponent', function () {
 
     const LogRevenueComponent = require('../LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
+    const tabId = 'abc-123'
     const mockRelayEnvironment = {}
     shallow(
       <LogRevenueComponent
         user={{
           id: mockUserId
         }}
+        tabId={tabId}
         relay={{ environment: mockRelayEnvironment }}
         />
     )
@@ -226,12 +235,14 @@ describe('LogRevenueComponent', function () {
 
     const LogRevenueComponent = require('../LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
+    const tabId = 'abc-123'
     const mockRelayEnvironment = {}
     shallow(
       <LogRevenueComponent
         user={{
           id: mockUserId
         }}
+        tabId={tabId}
         relay={{ environment: mockRelayEnvironment }}
         />
     )
@@ -283,12 +294,14 @@ describe('LogRevenueComponent', function () {
 
     const LogRevenueComponent = require('../LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
+    const tabId = 'abc-123'
     const mockRelayEnvironment = {}
     shallow(
       <LogRevenueComponent
         user={{
           id: mockUserId
         }}
+        tabId={tabId}
         relay={{ environment: mockRelayEnvironment }}
         />
     )
@@ -329,12 +342,14 @@ describe('LogRevenueComponent', function () {
 
     const LogRevenueComponent = require('../LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
+    const tabId = 'abc-123'
     const mockRelayEnvironment = {}
     shallow(
       <LogRevenueComponent
         user={{
           id: mockUserId
         }}
+        tabId={tabId}
         relay={{ environment: mockRelayEnvironment }}
         />
     )
@@ -367,12 +382,14 @@ describe('LogRevenueComponent', function () {
 
     const LogRevenueComponent = require('../LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
+    const tabId = 'abc-123'
     const mockRelayEnvironment = {}
     shallow(
       <LogRevenueComponent
         user={{
           id: mockUserId
         }}
+        tabId={tabId}
         relay={{ environment: mockRelayEnvironment }}
         />
     )
@@ -405,12 +422,14 @@ describe('LogRevenueComponent', function () {
 
     const LogRevenueComponent = require('../LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
+    const tabId = 'abc-123'
     const mockRelayEnvironment = {}
     shallow(
       <LogRevenueComponent
         user={{
           id: mockUserId
         }}
+        tabId={tabId}
         relay={{ environment: mockRelayEnvironment }}
         />
     )
@@ -442,12 +461,14 @@ describe('LogRevenueComponent', function () {
 
     const LogRevenueComponent = require('../LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
+    const tabId = 'abc-123'
     const mockRelayEnvironment = {}
     shallow(
       <LogRevenueComponent
         user={{
           id: mockUserId
         }}
+        tabId={tabId}
         relay={{ environment: mockRelayEnvironment }}
         />
     )
