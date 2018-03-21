@@ -8,7 +8,7 @@ import toJson from 'enzyme-to-json'
 import {
   getDefaultTabGlobal,
   mockAmazonBidResponse,
-  mockGoogleTagSlotOnloadData,
+  mockGoogleTagImpressionViewableData,
   mockGoogleTagSlotRenderEndedData
 } from 'utils/test-utils'
 
@@ -71,7 +71,9 @@ describe('LogRevenueComponent', function () {
     const slotId = 'my-slot-2468'
     window.tabforacause.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
       slotId, { advertiserId: 132435 })
-    window.tabforacause.ads.slotsLoaded[slotId] = true
+    // We use "slotsViewable" as the measure of ads already loaded
+    // window.tabforacause.ads.slotsLoaded[slotId] = true
+    window.tabforacause.ads.slotsViewable[slotId] = true
 
     // Mock a Prebid bid value for the slot
     const mockRevenueValue = 0.172
@@ -106,6 +108,7 @@ describe('LogRevenueComponent', function () {
     const slotId = 'abc-123'
     window.tabforacause.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(slotId)
     window.tabforacause.ads.slotsLoaded[slotId] = true
+    window.tabforacause.ads.slotsViewable[slotId] = true
 
     // Mark the ad slot as having already been logged
     window.tabforacause.ads.slotsAlreadyLoggedRevenue[slotId] = true
@@ -140,6 +143,7 @@ describe('LogRevenueComponent', function () {
     const slotId = 'abc-123'
     window.tabforacause.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(slotId)
     window.tabforacause.ads.slotsLoaded[slotId] = true
+    window.tabforacause.ads.slotsViewable[slotId] = true
 
     // Mock no Prebid bids for the slot
     window.pbjs.getHighestCpmBids.mockReturnValueOnce([])
@@ -168,6 +172,7 @@ describe('LogRevenueComponent', function () {
     window.tabforacause.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
       slotId, { advertiserId: 9876543 })
     window.tabforacause.ads.slotsLoaded[slotId] = true
+    window.tabforacause.ads.slotsViewable[slotId] = true
 
     // Mock a Prebid bid value for the slot
     const mockRevenueValue = 0.12345678901234567890
@@ -211,9 +216,12 @@ describe('LogRevenueComponent', function () {
     window.tabforacause.ads.amazonBids = {}
 
     // Mock GPT's pubads addEventListener so we can fake an event
-    var passedEventCallback
+    const googleEventListenerCalls = {}
     window.googletag.pubads().addEventListener.mockImplementation((eventName, callback) => {
-      passedEventCallback = callback
+      if (!googleEventListenerCalls[eventName]) {
+        googleEventListenerCalls[eventName] = []
+      }
+      googleEventListenerCalls[eventName].push([eventName, callback])
     })
 
     const LogRevenueComponent = require('../LogRevenueComponent').default
@@ -235,8 +243,8 @@ describe('LogRevenueComponent', function () {
     window.googletag.cmd.forEach((cmd) => cmd())
 
     // Fake the GPT event callback
-    // https://developers.google.com/doubleclick-gpt/reference#googletag.events.SlotRenderEndedEvent
-    passedEventCallback(mockGoogleTagSlotOnloadData(slotId))
+    const eventCallback = googleEventListenerCalls['impressionViewable'][0][1]
+    eventCallback(mockGoogleTagImpressionViewableData(slotId))
 
     // Should have logged revenue after the slot loaded
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment,
@@ -265,9 +273,12 @@ describe('LogRevenueComponent', function () {
     window.tabforacause.ads.amazonBids = {}
 
     // Mock GPT's pubads addEventListener so we can fake an event
-    var passedEventCallback
+    const googleEventListenerCalls = {}
     window.googletag.pubads().addEventListener.mockImplementation((eventName, callback) => {
-      passedEventCallback = callback
+      if (!googleEventListenerCalls[eventName]) {
+        googleEventListenerCalls[eventName] = []
+      }
+      googleEventListenerCalls[eventName].push([eventName, callback])
     })
 
     const LogRevenueComponent = require('../LogRevenueComponent').default
@@ -289,8 +300,8 @@ describe('LogRevenueComponent', function () {
     window.googletag.cmd.forEach((cmd) => cmd())
 
     // Fake the GPT event callback
-    // https://developers.google.com/doubleclick-gpt/reference#googletag.events.SlotRenderEndedEvent
-    passedEventCallback(mockGoogleTagSlotOnloadData(slotId))
+    const eventCallback = googleEventListenerCalls['impressionViewable'][0][1]
+    eventCallback(mockGoogleTagImpressionViewableData(slotId))
 
     // Should have logged revenue after the slot loaded
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment,
@@ -303,6 +314,7 @@ describe('LogRevenueComponent', function () {
     window.tabforacause.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
       slotId, { advertiserId: 132435 })
     window.tabforacause.ads.slotsLoaded[slotId] = true
+    window.tabforacause.ads.slotsViewable[slotId] = true
 
     // Mock no Prebid bids for the slot
     window.pbjs.getHighestCpmBids.mockReturnValueOnce([])
@@ -336,6 +348,7 @@ describe('LogRevenueComponent', function () {
     window.tabforacause.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
       slotId, { advertiserId: 132435 })
     window.tabforacause.ads.slotsLoaded[slotId] = true
+    window.tabforacause.ads.slotsViewable[slotId] = true
 
     // Mock a Prebid bid value for the slot
     const mockRevenueValue = 2.31
@@ -373,6 +386,7 @@ describe('LogRevenueComponent', function () {
     window.tabforacause.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
       slotId, { advertiserId: 132435 })
     window.tabforacause.ads.slotsLoaded[slotId] = true
+    window.tabforacause.ads.slotsViewable[slotId] = true
 
     // Mock a Prebid bid value for the slot
     const mockRevenueValue = 2.31
@@ -409,6 +423,7 @@ describe('LogRevenueComponent', function () {
     const slotId = 'my-slot-2468'
     window.tabforacause.ads.slotsRendered[slotId] = undefined // Missing slot data
     window.tabforacause.ads.slotsLoaded[slotId] = true
+    window.tabforacause.ads.slotsViewable[slotId] = true
 
     // Mock console.warn
     const mockConsoleWarn = jest.fn()
