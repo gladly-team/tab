@@ -8,6 +8,7 @@ import toJson from 'enzyme-to-json'
 import {
   getDefaultTabGlobal,
   mockAmazonBidResponse,
+  mockGoogleTagSlotOnloadData,
   mockGoogleTagSlotRenderEndedData
 } from 'utils/test-utils'
 
@@ -68,8 +69,9 @@ describe('LogRevenueComponent', function () {
   it('on mount, logs revenue for already-loaded slots', () => {
     // Mark an ad slot as loaded
     const slotId = 'my-slot-2468'
-    window.tabforacause.ads.slotsLoaded[slotId] = mockGoogleTagSlotRenderEndedData(
+    window.tabforacause.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
       slotId, { advertiserId: 132435 })
+    window.tabforacause.ads.slotsLoaded[slotId] = true
 
     // Mock a Prebid bid value for the slot
     const mockRevenueValue = 0.172
@@ -102,7 +104,8 @@ describe('LogRevenueComponent', function () {
   it('does not log revenue for slots that have already been logged', () => {
     // Mark an ad slot as loaded
     const slotId = 'abc-123'
-    window.tabforacause.ads.slotsLoaded[slotId] = mockGoogleTagSlotRenderEndedData(slotId)
+    window.tabforacause.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(slotId)
+    window.tabforacause.ads.slotsLoaded[slotId] = true
 
     // Mark the ad slot as having already been logged
     window.tabforacause.ads.slotsAlreadyLoggedRevenue[slotId] = true
@@ -135,10 +138,8 @@ describe('LogRevenueComponent', function () {
   it('does not throw an error or log revenue if there are not any bids for a slot', () => {
     // Mark an ad slot as loaded
     const slotId = 'abc-123'
+    window.tabforacause.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(slotId)
     window.tabforacause.ads.slotsLoaded[slotId] = true
-
-    // Mark the ad slot as having already been logged
-    window.tabforacause.ads.slotsLoaded[slotId] = mockGoogleTagSlotRenderEndedData(slotId)
 
     // Mock no Prebid bids for the slot
     window.pbjs.getHighestCpmBids.mockReturnValueOnce([])
@@ -164,8 +165,9 @@ describe('LogRevenueComponent', function () {
   it('rounds excessively long decimals in revenue value', () => {
     // Mark an ad slot as loaded
     const slotId = 'abc-123'
-    window.tabforacause.ads.slotsLoaded[slotId] = mockGoogleTagSlotRenderEndedData(
+    window.tabforacause.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
       slotId, { advertiserId: 9876543 })
+    window.tabforacause.ads.slotsLoaded[slotId] = true
 
     // Mock a Prebid bid value for the slot
     const mockRevenueValue = 0.12345678901234567890
@@ -194,6 +196,10 @@ describe('LogRevenueComponent', function () {
   })
 
   it('after mount, logs revenue when GPT fires a "slot loaded" event', () => {
+    const slotId = 'xyz-987'
+    window.tabforacause.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
+      slotId, { advertiserId: 159260 })
+
     // Mock a Prebid bid value for the slot
     const mockRevenueValue = 2.31
     window.pbjs.getHighestCpmBids.mockReturnValueOnce([{
@@ -230,9 +236,7 @@ describe('LogRevenueComponent', function () {
 
     // Fake the GPT event callback
     // https://developers.google.com/doubleclick-gpt/reference#googletag.events.SlotRenderEndedEvent
-    const slotId = 'xyz-987'
-    passedEventCallback(mockGoogleTagSlotRenderEndedData(
-      slotId, { advertiserId: 159260 }))
+    passedEventCallback(mockGoogleTagSlotOnloadData(slotId))
 
     // Should have logged revenue after the slot loaded
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment,
@@ -240,6 +244,16 @@ describe('LogRevenueComponent', function () {
   })
 
   it('defaults to 99 (Google Adsense) DFP Advertiser ID when the advertiser ID does not exist', () => {
+    const slotId = 'xyz-987'
+    window.tabforacause.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
+      slotId,
+      {
+        advertiserId: null,
+        campaignId: null,
+        creativeId: null
+      }
+    )
+
     // Mock a Prebid bid value for the slot
     const mockRevenueValue = 2.31
     window.pbjs.getHighestCpmBids.mockReturnValueOnce([{
@@ -276,13 +290,7 @@ describe('LogRevenueComponent', function () {
 
     // Fake the GPT event callback
     // https://developers.google.com/doubleclick-gpt/reference#googletag.events.SlotRenderEndedEvent
-    const slotId = 'xyz-987'
-    const mockSlotRenderEndedData = mockGoogleTagSlotRenderEndedData(slotId, {
-      advertiserId: null,
-      campaignId: null,
-      creativeId: null
-    })
-    passedEventCallback(mockSlotRenderEndedData)
+    passedEventCallback(mockGoogleTagSlotOnloadData(slotId))
 
     // Should have logged revenue after the slot loaded
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment,
@@ -292,8 +300,9 @@ describe('LogRevenueComponent', function () {
   it('logs Amazon revenue when there are no Prebid bids', () => {
     // Mark an ad slot as loaded
     const slotId = 'my-slot-2468'
-    window.tabforacause.ads.slotsLoaded[slotId] = mockGoogleTagSlotRenderEndedData(
+    window.tabforacause.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
       slotId, { advertiserId: 132435 })
+    window.tabforacause.ads.slotsLoaded[slotId] = true
 
     // Mock no Prebid bids for the slot
     window.pbjs.getHighestCpmBids.mockReturnValueOnce([])
@@ -324,8 +333,9 @@ describe('LogRevenueComponent', function () {
   it('logs Amazon revenue when there is also a Prebid bid', () => {
     // Mark an ad slot as loaded
     const slotId = 'my-slot-2468'
-    window.tabforacause.ads.slotsLoaded[slotId] = mockGoogleTagSlotRenderEndedData(
+    window.tabforacause.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
       slotId, { advertiserId: 132435 })
+    window.tabforacause.ads.slotsLoaded[slotId] = true
 
     // Mock a Prebid bid value for the slot
     const mockRevenueValue = 2.31
@@ -360,8 +370,9 @@ describe('LogRevenueComponent', function () {
   it('does not include Amazon revenue when the bid is empty', () => {
     // Mark an ad slot as loaded
     const slotId = 'my-slot-2468'
-    window.tabforacause.ads.slotsLoaded[slotId] = mockGoogleTagSlotRenderEndedData(
+    window.tabforacause.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
       slotId, { advertiserId: 132435 })
+    window.tabforacause.ads.slotsLoaded[slotId] = true
 
     // Mock a Prebid bid value for the slot
     const mockRevenueValue = 2.31
@@ -391,5 +402,41 @@ describe('LogRevenueComponent', function () {
     )
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment, mockUserId,
       0.00231, '132435', null, null)
+  })
+
+  it('logs a warning, but does not throw an error or log revenue, if slot data is missing', () => {
+    // Mark an ad slot as loaded
+    const slotId = 'my-slot-2468'
+    window.tabforacause.ads.slotsRendered[slotId] = undefined // Missing slot data
+    window.tabforacause.ads.slotsLoaded[slotId] = true
+
+    // Mock console.warn
+    const mockConsoleWarn = jest.fn()
+    jest.spyOn(console, 'warn')
+      .mockImplementationOnce(mockConsoleWarn)
+
+    // Mock a Prebid bid value for the slot
+    const mockRevenueValue = 0.172
+    window.pbjs.getHighestCpmBids.mockReturnValueOnce([{
+      cpm: mockRevenueValue
+      // ... other bid info exists here
+    }])
+
+    // Mock no Amazon bids
+    window.tabforacause.ads.amazonBids = {}
+
+    const LogRevenueComponent = require('../LogRevenueComponent').default
+    const mockUserId = 'abcdefghijklmno'
+    const mockRelayEnvironment = {}
+    shallow(
+      <LogRevenueComponent
+        user={{
+          id: mockUserId
+        }}
+        relay={{ environment: mockRelayEnvironment }}
+        />
+    )
+    expect(LogUserRevenueMutation).not.toHaveBeenCalled()
+    expect(mockConsoleWarn).toHaveBeenCalledWith('Could not find rendered slot data for slot "my-slot-2468"')
   })
 })
