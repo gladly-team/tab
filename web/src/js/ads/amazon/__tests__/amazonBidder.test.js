@@ -91,11 +91,11 @@ describe('amazonBidder', function () {
 
     // Fake that apstag calls callback for returned bids
     const someBid = mockAmazonBidResponse({
-      amzniid: 'some-id',
+      amznbid: 'some-id',
       slotID: 'div-gpt-ad-123456789-0'
     })
     const someOtherBid = mockAmazonBidResponse({
-      amzniid: 'some-other-id',
+      amznbid: 'some-other-id',
       slotID: 'div-gpt-ad-24681357-0'
     })
     passedCallback([someBid, someOtherBid])

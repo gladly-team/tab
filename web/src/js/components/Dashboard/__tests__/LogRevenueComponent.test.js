@@ -302,7 +302,7 @@ describe('LogRevenueComponent', function () {
     window.tabforacause.ads.amazonBids = {
       [slotId]: mockAmazonBidResponse({
         slotID: slotId,
-        amzniid: 'a-bid-code'
+        amznbid: 'a-bid-code'
       })
     }
 
@@ -338,7 +338,7 @@ describe('LogRevenueComponent', function () {
     window.tabforacause.ads.amazonBids = {
       [slotId]: mockAmazonBidResponse({
         slotID: slotId,
-        amzniid: 'a-bid-code'
+        amznbid: 'a-bid-code'
       })
     }
 
@@ -374,7 +374,7 @@ describe('LogRevenueComponent', function () {
     window.tabforacause.ads.amazonBids = {
       [slotId]: mockAmazonBidResponse({
         slotID: slotId,
-        amzniid: '' // empty bid
+        amznbid: '' // empty bid
       })
     }
 

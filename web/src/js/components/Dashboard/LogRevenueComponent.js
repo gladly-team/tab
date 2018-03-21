@@ -49,15 +49,15 @@ class LogRevenueComponent extends React.Component {
     const amazonBidExists = (
       amazonBids &&
       amazonBids[slotId] &&
-      amazonBids[slotId]['amzniid'] &&
-      amazonBids[slotId]['amzniid'] !== '' // An empty string means no bid
+      amazonBids[slotId]['amznbid'] &&
+      amazonBids[slotId]['amznbid'] !== '' // An empty string means no bid
     )
     if (!amazonBidExists) {
       return null
     }
     return {
       encodingType: 'AMAZON_CPM',
-      encodedValue: window.tabforacause.ads.amazonBids[slotId]['amzniid']
+      encodedValue: window.tabforacause.ads.amazonBids[slotId]['amznbid']
     }
   }
 
