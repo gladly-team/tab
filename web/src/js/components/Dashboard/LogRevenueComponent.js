@@ -158,10 +158,7 @@ class LogRevenueComponent extends React.Component {
     const googletag = window.googletag || {}
     googletag.cmd = googletag.cmd || []
     googletag.cmd.push(() => {
-      // TODO:
       // When a slot's becomes viewable, log its revenue
-
-      // When a slot's creative loads, log its revenue
       googletag.pubads().addEventListener('impressionViewable', (event) => {
         try {
           const slotId = event.slot.getSlotElementId()
