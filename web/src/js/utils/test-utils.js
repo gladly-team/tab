@@ -50,6 +50,25 @@ export const mockGoogleTagSlotRenderEndedData = (slotId = 'abc-123', properties 
 }
 
 /**
+ * Create a mock object of the googletag 'ImpressionViewable' event. See:
+ * https://developers.google.com/doubleclick-gpt/reference#googletageventsimpressionviewableevent
+ * @param {string} slotId - A custom slot ID to override the default
+ * @param {Object} properties - Values to override the default properties in the mock
+ * @return {Object}
+ */
+export const mockGoogleTagImpressionViewableData = (slotId = 'abc-123', properties = {}) => {
+  return Object.assign({}, {
+    // https://developers.google.com/doubleclick-gpt/reference#googletagslot
+    slot: {
+      getSlotElementId: () => slotId
+      // ... other methods here
+    },
+    serviceName: 'something'
+  },
+  properties)
+}
+
+/**
  * Create a mock object of the googletag 'SlotOnload' event. See:
  * https://developers.google.com/doubleclick-gpt/reference#googletageventsslotonloadevent
  * @param {string} slotId - A custom slot ID to override the default
@@ -103,8 +122,16 @@ export const getDefaultTabGlobal = (properties = {}) => {
       // Value: https://developers.google.com/doubleclick-gpt/reference#googletageventsslotrenderendedevent
       slotsRendered: {},
 
+      // Marking which slots have fired googletag's "impressionViewable" event.
+      // See:
+      // https://developers.google.com/doubleclick-gpt/reference#googletageventsimpressionviewableevent
+      // Key: slot ID
+      // Value: `true`
+      slotsViewable: {},
+
       // Marking which slots have fired googletag's "slotOnload" event;
-      // i.e., which slots have loaded creative.
+      // i.e., which slots have loaded creative. See:
+      // https://developers.google.com/doubleclick-gpt/reference#googletag.events.SlotRenderEndedEvent
       // Key: slot ID
       // Value: `true`
       slotsLoaded: {},
