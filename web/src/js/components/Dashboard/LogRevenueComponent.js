@@ -158,11 +158,8 @@ class LogRevenueComponent extends React.Component {
     const googletag = window.googletag || {}
     googletag.cmd = googletag.cmd || []
     googletag.cmd.push(() => {
-      // 'slotRenderEnded' event is at end of slot (iframe) render but before
-      // the ad creative loads:
-      // https://developers.google.com/doubleclick-gpt/reference#googletageventsslotrenderendedevent
-      // 'slotOnload' event is on creative load:
-      // https://developers.google.com/doubleclick-gpt/reference#googletageventsslotonloadevent
+      // TODO:
+      // When a slot's becomes viewable, log its revenue
 
       // When a slot's creative loads, log its revenue
       googletag.pubads().addEventListener('slotOnload', (event) => {
