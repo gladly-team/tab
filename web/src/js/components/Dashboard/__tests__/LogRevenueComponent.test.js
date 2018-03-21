@@ -5,7 +5,11 @@ import {
   shallow
 } from 'enzyme'
 import toJson from 'enzyme-to-json'
-import { mockGoogleTagSlotRenderEndedData } from 'utils/test-utils'
+import {
+  getDefaultTabGlobal,
+  mockAmazonBidResponse,
+  mockGoogleTagSlotRenderEndedData
+} from 'utils/test-utils'
 
 import LogUserRevenueMutation from 'mutations/LogUserRevenueMutation'
 
@@ -14,6 +18,7 @@ jest.mock('mutations/LogUserRevenueMutation')
 beforeEach(() => {
   delete window.googletag
   delete window.pbjs
+  delete window.apstag
   delete window.tabforacause
 
   // Mock googletag
@@ -30,13 +35,11 @@ beforeEach(() => {
     getHighestCpmBids: jest.fn()
   }
 
+  // Mock apstag
+  window.apstag = require('apstag')
+
   // Mock tabforacause global
-  window.tabforacause = {
-    ads: {
-      slotsLoaded: {},
-      slotsAlreadyLoggedRevenue: {}
-    }
-  }
+  window.tabforacause = getDefaultTabGlobal()
 })
 
 afterEach(() => {
@@ -46,6 +49,7 @@ afterEach(() => {
 afterAll(() => {
   delete window.googletag
   delete window.pbjs
+  delete window.apstag
   delete window.tabforacause
 })
 
@@ -74,6 +78,9 @@ describe('LogRevenueComponent', function () {
       // ... other bid info exists here
     }])
 
+    // Mock no Amazon bids
+    window.tabforacause.ads.amazonBids = {}
+
     const LogRevenueComponent = require('../LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
     const mockRelayEnvironment = {}
@@ -86,7 +93,7 @@ describe('LogRevenueComponent', function () {
         />
     )
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment, mockUserId,
-      0.000172, '132435')
+      0.000172, '132435', null, null)
 
     // It should mark this slot as logged
     expect(window.tabforacause.ads.slotsAlreadyLoggedRevenue[slotId]).toBe(true)
@@ -106,6 +113,9 @@ describe('LogRevenueComponent', function () {
       cpm: mockRevenueValue
       // ... other bid info exists here
     }])
+
+    // Mock no Amazon bids
+    window.tabforacause.ads.amazonBids = {}
 
     const LogRevenueComponent = require('../LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
@@ -132,6 +142,9 @@ describe('LogRevenueComponent', function () {
 
     // Mock no Prebid bids for the slot
     window.pbjs.getHighestCpmBids.mockReturnValueOnce([])
+
+    // Mock no Amazon bids
+    window.tabforacause.ads.amazonBids = {}
 
     const LogRevenueComponent = require('../LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
@@ -161,6 +174,9 @@ describe('LogRevenueComponent', function () {
       // ... other bid info exists here
     }])
 
+    // Mock no Amazon bids
+    window.tabforacause.ads.amazonBids = {}
+
     const LogRevenueComponent = require('../LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
     const mockRelayEnvironment = {}
@@ -174,7 +190,7 @@ describe('LogRevenueComponent', function () {
     )
 
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment, mockUserId,
-      0.000123456789012, '9876543')
+      0.000123456789012, '9876543', null, null)
   })
 
   it('after mount, logs revenue when GPT fires a "slot loaded" event', () => {
@@ -184,6 +200,9 @@ describe('LogRevenueComponent', function () {
       cpm: mockRevenueValue
       // ... other bid info exists here
     }])
+
+    // Mock no Amazon bids
+    window.tabforacause.ads.amazonBids = {}
 
     // Mock GPT's pubads addEventListener so we can fake an event
     var passedEventCallback
@@ -217,7 +236,7 @@ describe('LogRevenueComponent', function () {
 
     // Should have logged revenue after the slot loaded
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment,
-      mockUserId, 0.00231, '159260')
+      mockUserId, 0.00231, '159260', null, null)
   })
 
   it('defaults to 99 (Google Adsense) DFP Advertiser ID when the advertiser ID does not exist', () => {
@@ -227,6 +246,9 @@ describe('LogRevenueComponent', function () {
       cpm: mockRevenueValue
       // ... other bid info exists here
     }])
+
+    // Mock no Amazon bids
+    window.tabforacause.ads.amazonBids = {}
 
     // Mock GPT's pubads addEventListener so we can fake an event
     var passedEventCallback
@@ -264,6 +286,110 @@ describe('LogRevenueComponent', function () {
 
     // Should have logged revenue after the slot loaded
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment,
-      mockUserId, 0.00231, '99')
+      mockUserId, 0.00231, '99', null, null)
+  })
+
+  it('logs Amazon revenue when there are no Prebid bids', () => {
+    // Mark an ad slot as loaded
+    const slotId = 'my-slot-2468'
+    window.tabforacause.ads.slotsLoaded[slotId] = mockGoogleTagSlotRenderEndedData(
+      slotId, { advertiserId: 132435 })
+
+    // Mock no Prebid bids for the slot
+    window.pbjs.getHighestCpmBids.mockReturnValueOnce([])
+
+    // Mock an Amazon bid
+    window.tabforacause.ads.amazonBids = {
+      [slotId]: mockAmazonBidResponse({
+        slotID: slotId,
+        amznbid: 'a-bid-code'
+      })
+    }
+
+    const LogRevenueComponent = require('../LogRevenueComponent').default
+    const mockUserId = 'abcdefghijklmno'
+    const mockRelayEnvironment = {}
+    shallow(
+      <LogRevenueComponent
+        user={{
+          id: mockUserId
+        }}
+        relay={{ environment: mockRelayEnvironment }}
+        />
+    )
+    expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment, mockUserId,
+      null, '132435', { encodingType: 'AMAZON_CPM', encodedValue: 'a-bid-code' }, null)
+  })
+
+  it('logs Amazon revenue when there is also a Prebid bid', () => {
+    // Mark an ad slot as loaded
+    const slotId = 'my-slot-2468'
+    window.tabforacause.ads.slotsLoaded[slotId] = mockGoogleTagSlotRenderEndedData(
+      slotId, { advertiserId: 132435 })
+
+    // Mock a Prebid bid value for the slot
+    const mockRevenueValue = 2.31
+    window.pbjs.getHighestCpmBids.mockReturnValueOnce([{
+      cpm: mockRevenueValue
+      // ... other bid info exists here
+    }])
+
+    // Mock an Amazon bid
+    window.tabforacause.ads.amazonBids = {
+      [slotId]: mockAmazonBidResponse({
+        slotID: slotId,
+        amznbid: 'a-bid-code'
+      })
+    }
+
+    const LogRevenueComponent = require('../LogRevenueComponent').default
+    const mockUserId = 'abcdefghijklmno'
+    const mockRelayEnvironment = {}
+    shallow(
+      <LogRevenueComponent
+        user={{
+          id: mockUserId
+        }}
+        relay={{ environment: mockRelayEnvironment }}
+        />
+    )
+    expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment, mockUserId,
+      0.00231, '132435', { encodingType: 'AMAZON_CPM', encodedValue: 'a-bid-code' }, 'MAX')
+  })
+
+  it('does not include Amazon revenue when the bid is empty', () => {
+    // Mark an ad slot as loaded
+    const slotId = 'my-slot-2468'
+    window.tabforacause.ads.slotsLoaded[slotId] = mockGoogleTagSlotRenderEndedData(
+      slotId, { advertiserId: 132435 })
+
+    // Mock a Prebid bid value for the slot
+    const mockRevenueValue = 2.31
+    window.pbjs.getHighestCpmBids.mockReturnValueOnce([{
+      cpm: mockRevenueValue
+      // ... other bid info exists here
+    }])
+
+    // Mock an Amazon bid
+    window.tabforacause.ads.amazonBids = {
+      [slotId]: mockAmazonBidResponse({
+        slotID: slotId,
+        amznbid: '' // empty bid
+      })
+    }
+
+    const LogRevenueComponent = require('../LogRevenueComponent').default
+    const mockUserId = 'abcdefghijklmno'
+    const mockRelayEnvironment = {}
+    shallow(
+      <LogRevenueComponent
+        user={{
+          id: mockUserId
+        }}
+        relay={{ environment: mockRelayEnvironment }}
+        />
+    )
+    expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment, mockUserId,
+      0.00231, '132435', null, null)
   })
 })

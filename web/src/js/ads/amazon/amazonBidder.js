@@ -32,6 +32,25 @@ export default function () {
         // Set DFP targeting.
         apstag.setDisplayBids()
 
+        // Store Amazon bids. Bid object structure:
+        // {
+        //   amznbid: '1',
+        //   amzniid: 'some-id',
+        //   amznp: '1',
+        //   amznsz: '0x0',
+        //   size: '0x0',
+        //   slotID: 'div-gpt-ad-123456789-0'
+        // }
+        try {
+          if (bids && bids.length) {
+            bids.forEach((bid) => {
+              window.tabforacause.ads.amazonBids[bid.slotID] = bid
+            })
+          }
+        } catch (e) {
+          console.error('Could not store Amazon bids', e)
+        }
+
         // Note: the ads refresh is handled by Prebid.
         // googletag.pubads().refresh()
       })

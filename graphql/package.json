@@ -34,7 +34,7 @@
     "express": "^4.14.1",
     "express-graphql": "^0.6.6",
     "if-env": "^1.0.0",
-    "jest": "^20.0.1",
+    "jest": "^22.4.2",
     "jwt-decode": "^2.2.0",
     "node-fetch": "^1.7.1",
     "npm-run-all": "^4.0.2",
@@ -53,7 +53,7 @@
   "scripts": {
     "start": "babel-node ./server.js",
     "build": "rm -rf ./build && yarn run build:compile",
-    "build:compile": "cross-env NODE_ENV=production babel --out-dir='build' --ignore='build,coverage,__mocks__,__tests__,integration-tests,node_modules,server.js' ./ && yarn run build:config",
+    "build:compile": "cross-env NODE_ENV=production babel --out-dir='build' --ignore='build,coverage,__mocks__,__tests__,integration-tests,node_modules,server.js' ./ && cp ./database/userRevenue/amazon-cpm-codes.json ./build/database/userRevenue/amazon-cpm-codes.json && yarn run build:config",
     "build:config": "NODE_ENV=production node -r dotenv-extended/config ./scripts/generateConfig.js",
     "deploy": "yarn run build && serverless deploy -v",
     "update-schema": "babel-node ./scripts/updateSchema.js",

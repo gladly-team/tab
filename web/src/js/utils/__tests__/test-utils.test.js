@@ -41,4 +41,19 @@ describe('web test-utils', () => {
     expect(slotRenderEndedData).toHaveProperty('slot.getSlotElementId')
     expect(slotRenderEndedData.slot.getSlotElementId()).toBe('foobar')
   })
+
+  test('mockAmazonBidResponse returns expected mock', () => {
+    const mockAmazonBidResponse = require('../test-utils').mockAmazonBidResponse
+    const mockAmazonBid = mockAmazonBidResponse({
+      slotID: 'abx-xyz'
+    })
+    expect(mockAmazonBid).toEqual({
+      amznbid: '1',
+      amzniid: 'some-id',
+      amznp: '1',
+      amznsz: '0x0',
+      size: '0x0',
+      slotID: 'abx-xyz'
+    })
+  })
 })
