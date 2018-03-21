@@ -23,10 +23,12 @@ const decodeRevenueObj = (revenueObj) => {
   switch (revenueObj.encodingType) {
     case AMAZON_CPM_REVENUE_TYPE:
       const decodedCPM = decodeAmazonCPM(revenueObj.encodedValue)
+      console.log('logRevenueDebugging: decodeRevenueObj decodedCPM', decodedCPM)
       if (isNil(decodedCPM)) {
         throw new Error(`Amazon revenue code "${revenueObj.encodedValue}" resolved to a nil value`)
       }
       revenueVal = decodedCPM / 1000
+      console.log('logRevenueDebugging: decodeRevenueObj revenueVal', revenueVal)
       break
     default:
       throw new Error('Invalid "encodingType" field for revenue object transformation')
@@ -73,8 +75,12 @@ const aggregateRevenues = (revenues, aggregationOperation) => {
  */
 const logRevenue = async (userContext, userId, revenue = null, dfpAdvertiserId = null,
   encodedRevenue = null, aggregationOperation = null) => {
+  console.log('logRevenueDebugging: logRevenue args', revenue, dfpAdvertiserId, encodedRevenue, aggregationOperation)
+
   // Decode the encoded revenue, if needed
   const decodedRevenue = isNil(encodedRevenue) ? null : decodeRevenueObj(encodedRevenue)
+
+  console.log('logRevenueDebugging: decodedRevenue', decodedRevenue)
 
   var revenueToLog = null
   // Received no valid revenue value
