@@ -1,5 +1,6 @@
 
 import logger from '../../utils/logger'
+import config from '../../config'
 const amazonCPMCodes = require('./amazon-cpm-codes.json')
 
 /**
@@ -10,7 +11,7 @@ const amazonCPMCodes = require('./amazon-cpm-codes.json')
 const decodeAmazonCPM = (amazonCPMCode) => {
   const cpmStr = amazonCPMCodes[amazonCPMCode]
   if (!cpmStr) {
-    if (process.env.NODE_ENV === 'production') {
+    if (config.NODE_ENV === 'production') {
       throw new Error(`Invalid Amazon CPM code "${amazonCPMCode}"`)
     } else {
       // When not in production environment, we won't decode real Amazon
