@@ -8,7 +8,7 @@ import toJson from 'enzyme-to-json'
 import {
   getDefaultTabGlobal,
   mockAmazonBidResponse,
-  mockGoogleTagSlotOnloadData,
+  mockGoogleTagImpressionViewableData,
   mockGoogleTagSlotRenderEndedData
 } from 'utils/test-utils'
 
@@ -71,7 +71,8 @@ describe('LogRevenueComponent', function () {
     const slotId = 'my-slot-2468'
     window.tabforacause.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
       slotId, { advertiserId: 132435 })
-    window.tabforacause.ads.slotsLoaded[slotId] = true
+    // We use "slotsViewable" as the measure of ads already loaded
+    // window.tabforacause.ads.slotsLoaded[slotId] = true
     window.tabforacause.ads.slotsViewable[slotId] = true
 
     // Mock a Prebid bid value for the slot
@@ -242,8 +243,8 @@ describe('LogRevenueComponent', function () {
     window.googletag.cmd.forEach((cmd) => cmd())
 
     // Fake the GPT event callback
-    const slotOnloadCallback = googleEventListenerCalls['slotOnload'][0][1]
-    slotOnloadCallback(mockGoogleTagSlotOnloadData(slotId))
+    const eventCallback = googleEventListenerCalls['impressionViewable'][0][1]
+    eventCallback(mockGoogleTagImpressionViewableData(slotId))
 
     // Should have logged revenue after the slot loaded
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment,
@@ -299,8 +300,8 @@ describe('LogRevenueComponent', function () {
     window.googletag.cmd.forEach((cmd) => cmd())
 
     // Fake the GPT event callback
-    const slotOnloadCallback = googleEventListenerCalls['slotOnload'][0][1]
-    slotOnloadCallback(mockGoogleTagSlotOnloadData(slotId))
+    const eventCallback = googleEventListenerCalls['impressionViewable'][0][1]
+    eventCallback(mockGoogleTagImpressionViewableData(slotId))
 
     // Should have logged revenue after the slot loaded
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment,
