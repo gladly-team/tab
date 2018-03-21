@@ -49,8 +49,8 @@ class LogRevenueComponent extends React.Component {
     const amazonBidExists = (
       amazonBids &&
       amazonBids[slotId] &&
-      amazonBids[slotId]['amznbid'] &&
-      amazonBids[slotId]['amznbid'] !== '' // An empty string means no bid
+      amazonBids[slotId]['amznbid'] !== '' && // An empty string means no bid
+      amazonBids[slotId]['amzniid'] !== '' // An empty string means no bid
     )
     if (!amazonBidExists) {
       return null
