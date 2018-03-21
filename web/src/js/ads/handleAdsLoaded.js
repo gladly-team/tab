@@ -11,6 +11,10 @@ export default function () {
       window.tabforacause.ads.slotsRendered[slotId] = eventData
     }
 
+    const markSlotAsViewable = (slotId) => {
+      window.tabforacause.ads.slotsViewable[slotId] = true
+    }
+
     const markSlotAsLoaded = (slotId) => {
       window.tabforacause.ads.slotsLoaded[slotId] = true
     }
@@ -19,6 +23,9 @@ export default function () {
       // 'slotRenderEnded' event is at end of slot (iframe) render but before
       // the ad creative loads:
       // https://developers.google.com/doubleclick-gpt/reference#googletageventsslotrenderendedevent
+      // 'impressionViewable' event is when the ad is mostly within view
+      // for one second:
+      // https://developers.google.com/doubleclick-gpt/reference#googletageventsimpressionviewableevent
       // 'slotOnload' event is on creative load:
       // https://developers.google.com/doubleclick-gpt/reference#googletag.events.SlotRenderEndedEvent
 
@@ -32,11 +39,21 @@ export default function () {
         }
       })
 
+      // Keep track of which slots have become viewable
+      googletag.pubads().addEventListener('impressionViewable', (event) => {
+        try {
+          const slotId = event.slot.getSlotElementId()
+          markSlotAsViewable(slotId)
+        } catch (e) {
+          console.error('Could not mark ad slot as viewable', e)
+        }
+      })
+
       // Keep track of which slots have actually loaded creative
       googletag.pubads().addEventListener('slotOnload', (event) => {
         try {
           const slotId = event.slot.getSlotElementId()
-          markSlotAsLoaded(slotId, event)
+          markSlotAsLoaded(slotId)
         } catch (e) {
           console.error('Could not mark ad slot as loaded', e)
         }

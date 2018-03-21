@@ -141,7 +141,7 @@ class LogRevenueComponent extends React.Component {
   logRevenueForAlreadyLoadedAds () {
     try {
       // This may be set earlier by ads code (outside of core app code)
-      const slotsLoadedObj = window.tabforacause.ads.slotsLoaded
+      const slotsLoadedObj = window.tabforacause.ads.slotsViewable
       if (Object.keys(slotsLoadedObj).length) {
         const self = this
         Object.keys(slotsLoadedObj).forEach((slotId) => {
@@ -158,14 +158,8 @@ class LogRevenueComponent extends React.Component {
     const googletag = window.googletag || {}
     googletag.cmd = googletag.cmd || []
     googletag.cmd.push(() => {
-      // 'slotRenderEnded' event is at end of slot (iframe) render but before
-      // the ad creative loads:
-      // https://developers.google.com/doubleclick-gpt/reference#googletageventsslotrenderendedevent
-      // 'slotOnload' event is on creative load:
-      // https://developers.google.com/doubleclick-gpt/reference#googletageventsslotonloadevent
-
-      // When a slot's creative loads, log its revenue
-      googletag.pubads().addEventListener('slotOnload', (event) => {
+      // When a slot's becomes viewable, log its revenue
+      googletag.pubads().addEventListener('impressionViewable', (event) => {
         try {
           const slotId = event.slot.getSlotElementId()
           this.logRevenueForSlotId(slotId)
