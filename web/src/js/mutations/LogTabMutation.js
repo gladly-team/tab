@@ -29,4 +29,4 @@ function commit (environment, userId, tabId) {
   )
 }
 
-export default {commit}
+export default commit
