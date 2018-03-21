@@ -62,13 +62,29 @@ class LogRevenueComponent extends React.Component {
   }
 
   /**
-   * Get the top bid for the slot from Prebid and log the revenue.
+   * Gets the googletag "SlotRenderEnded" event object for a slot ID.
+   * The event data will be stored by ad code outside the core app code.
    * @param {string} slotId - The DFP slot ID to log
-   * @param {Object} event - The googletag "SlotRenderEnded" event object. See:
+   * @return {Object|null} The googletag "SlotRenderEnded" event object. See:
    *  https://developers.google.com/doubleclick-gpt/reference#googletag.events.SlotRenderEndedEvent
+   *  Returns null if we do not have any stored event data.
+   */
+  getSlotRenderEndedDataForSlotId (slotId) {
+    var slotRenderEndedData = null
+    try {
+      slotRenderEndedData = window.tabforacause.ads.slotsRendered[slotId]
+    } catch (e) {
+      console.error(e)
+    }
+    return slotRenderEndedData
+  }
+
+  /**
+   * Get the bid for the slot and log the revenue.
+   * @param {string} slotId - The DFP slot ID to log
    * @return {null}
    */
-  logRevenueForSlotId (slotId, event) {
+  logRevenueForSlotId (slotId) {
     try {
       // If we have already logged revenue for this slot, don't log it again
       if (slotId in window.tabforacause.ads.slotsAlreadyLoggedRevenue) {
@@ -76,6 +92,13 @@ class LogRevenueComponent extends React.Component {
       }
       // Mark that we've logged revenue for this slot
       window.tabforacause.ads.slotsAlreadyLoggedRevenue[slotId] = true
+
+      // Get data for the rendered slot
+      const slotRenderedData = this.getSlotRenderEndedDataForSlotId(slotId)
+      if (!slotRenderedData) {
+        console.warn(`Could not find rendered slot data for slot "${slotId}"`)
+        return
+      }
 
       // Get revenue from highest Prebid bid
       const prebidRevenue = this.getPrebidRevenueForSlot(slotId)
@@ -92,8 +115,8 @@ class LogRevenueComponent extends React.Component {
       // took the impression, so assume nulls are Adsense.
       const GOOGLE_ADSENSE_ID = '99'
       const dfpAdvertiserId = (
-        event.advertiserId
-        ? event.advertiserId.toString()
+        slotRenderedData.advertiserId
+        ? slotRenderedData.advertiserId.toString()
         : GOOGLE_ADSENSE_ID
       )
 
@@ -122,8 +145,7 @@ class LogRevenueComponent extends React.Component {
       if (Object.keys(slotsLoadedObj).length) {
         const self = this
         Object.keys(slotsLoadedObj).forEach((slotId) => {
-          // The property value is the "SlotRenderEnded" event object
-          self.logRevenueForSlotId(slotId, slotsLoadedObj[slotId])
+          self.logRevenueForSlotId(slotId)
         })
       }
     } catch (e) {
@@ -141,16 +163,15 @@ class LogRevenueComponent extends React.Component {
       // https://developers.google.com/doubleclick-gpt/reference#googletageventsslotrenderendedevent
       // 'slotOnload' event is on creative load:
       // https://developers.google.com/doubleclick-gpt/reference#googletageventsslotonloadevent
-      googletag.pubads().addEventListener('slotRenderEnded', (event) => {
+
+      // When a slot's creative loads, log its revenue
+      googletag.pubads().addEventListener('slotOnload', (event) => {
         try {
           const slotId = event.slot.getSlotElementId()
-          this.logRevenueForSlotId(slotId, event)
+          this.logRevenueForSlotId(slotId)
         } catch (e) {
           console.error('Could not log revenue for ad slot', e)
         }
-      })
-      googletag.pubads().addEventListener('slotOnload', (event) => {
-        // TODO
       })
     })
   }

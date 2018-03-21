@@ -23,7 +23,7 @@ export const enzymeFindAsync = async (rootComponent, selector, maxTimeMs = 4000,
 }
 
 /**
- * Create a mock object of the googletag 'SlotRenderEnded'. See:
+ * Create a mock object of the googletag 'SlotRenderEnded' event. See:
  * https://developers.google.com/doubleclick-gpt/reference#googletag.events.SlotRenderEndedEvent
  * @param {string} slotId - A custom slot ID to override the default
  * @param {Object} properties - Values to override the default properties in the mock
@@ -45,6 +45,25 @@ export const mockGoogleTagSlotRenderEndedData = (slotId = 'abc-123', properties 
     size: '728x90',
     sourceAgnosticCreativeId: null,
     sourceAgnosticLineItemId: null
+  },
+  properties)
+}
+
+/**
+ * Create a mock object of the googletag 'SlotOnload' event. See:
+ * https://developers.google.com/doubleclick-gpt/reference#googletageventsslotonloadevent
+ * @param {string} slotId - A custom slot ID to override the default
+ * @param {Object} properties - Values to override the default properties in the mock
+ * @return {Object}
+ */
+export const mockGoogleTagSlotOnloadData = (slotId = 'abc-123', properties = {}) => {
+  return Object.assign({}, {
+    // https://developers.google.com/doubleclick-gpt/reference#googletagslot
+    slot: {
+      getSlotElementId: () => slotId
+      // ... other methods here
+    },
+    serviceName: 'something'
   },
   properties)
 }
@@ -73,8 +92,26 @@ export const mockAmazonBidResponse = (properties = {}) => {
 export const getDefaultTabGlobal = (properties = {}) => {
   return {
     ads: {
+      // Bid objects returned from apstag
+      // Key: slot ID
+      // Value: bid object
       amazonBids: {},
+
+      // Objects from googletag's "slotRenderEnded" event. This event fires
+      // before the "slotOnload" event; i.e., before the actual creative loads.
+      // Key: slot ID
+      // Value: https://developers.google.com/doubleclick-gpt/reference#googletageventsslotrenderendedevent
+      slotsRendered: {},
+
+      // Marking which slots have fired googletag's "slotOnload" event;
+      // i.e., which slots have loaded creative.
+      // Key: slot ID
+      // Value: `true`
       slotsLoaded: {},
+
+      // Marking which slots have had their revenue logged.
+      // Key: slot ID
+      // Value: `true`
       slotsAlreadyLoggedRevenue: {}
     }
   }
