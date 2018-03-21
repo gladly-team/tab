@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 
 class LogTabComponent extends React.Component {
   componentDidMount () {
-    console.log('tabId', this.props.tabId)
     // Delay so that:
     // * the user sees their VC increment
     // * ads are more likely to have loaded
