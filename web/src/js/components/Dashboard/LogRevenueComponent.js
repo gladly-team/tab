@@ -140,14 +140,27 @@ class LogRevenueComponent extends React.Component {
       // the ad creative loads:
       // https://developers.google.com/doubleclick-gpt/reference#googletageventsslotrenderendedevent
       // 'slotOnload' event is on creative load:
-      // https://developers.google.com/doubleclick-gpt/reference#googletag.events.SlotRenderEndedEvent
+      // https://developers.google.com/doubleclick-gpt/reference#googletageventsslotonloadevent
       googletag.pubads().addEventListener('slotRenderEnded', (event) => {
+        console.log(`Revenue logging: slotRenderEnded for ${event.slot.getSlotElementId()}`)
+        window.performance.mark(`slotRenderEnded-${event.slot.getSlotElementId()}`)
         try {
           const slotId = event.slot.getSlotElementId()
           this.logRevenueForSlotId(slotId, event)
         } catch (e) {
           console.error('Could not log revenue for ad slot', e)
         }
+      })
+      googletag.pubads().addEventListener('slotOnload', (event) => {
+        console.log(`Revenue logging: slotOnload for ${event.slot.getSlotElementId()}`)
+        window.performance.mark(`slotOnload-${event.slot.getSlotElementId()}`)
+        window.performance.measure(
+          `slotRenderToOnload-${event.slot.getSlotElementId()}`,
+          `slotRenderEnded-${event.slot.getSlotElementId()}`,
+          `slotOnload-${event.slot.getSlotElementId()}`
+        )
+        console.log(`Revenue logging: time between slot render and load for ${event.slot.getSlotElementId()}: `,
+          window.performance.getEntriesByName(`slotRenderToOnload-${event.slot.getSlotElementId()}`)[0].duration)
       })
     })
   }
