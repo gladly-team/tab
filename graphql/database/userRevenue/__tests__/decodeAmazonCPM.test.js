@@ -33,20 +33,17 @@ describe('decodeAmazonCPM', () => {
     expect(decodeAmazonCPM('code-6')).toBe(20)
   })
 
-  it('logs a warning when a CPM code is not valid', () => {
+  it('returns a CPM value of 0.0 when a CPM code is not valid', () => {
+    process.env.NODE_ENV = 'development'
     const decodeAmazonCPM = require('../decodeAmazonCPM').default
     const revenueVal = decodeAmazonCPM('oopsWrongCode')
-    expect(logger.warn).toHaveBeenCalledWith('Warning: Amazon CPM code "oopsWrongCode" is invalid. Resolving to a value of 0.0 in development.')
     expect(revenueVal).toBe(0.0)
   })
 
-  it('throws an error when a CPM code is not valid and NODE_ENV=production', () => {
-    process.env.NODE_ENV = 'production'
-    jest.resetModules()
+  it('does not log a warning when a CPM code is not valid', () => {
     const decodeAmazonCPM = require('../decodeAmazonCPM').default
-    expect(() => {
-      decodeAmazonCPM('oopsWrongCode')
-    }).toThrow('Invalid Amazon CPM code "oopsWrongCode"')
+    decodeAmazonCPM('oopsWrongCode')
+    expect(logger.warn).not.toHaveBeenCalled()
   })
 
   it('throws an error when a CPM string resolves to NaN', () => {
