@@ -31,7 +31,7 @@ class userTabsLog extends BaseModel {
     return {
       userId: types.string().required(),
       timestamp: types.string().isoDate().required(),
-      tabId: types.string()
+      tabId: types.string().uuid()
     }
   }
 
