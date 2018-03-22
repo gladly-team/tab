@@ -30,7 +30,8 @@ class userTabsLog extends BaseModel {
   static get schema () {
     return {
       userId: types.string().required(),
-      timestamp: types.string().isoDate().required()
+      timestamp: types.string().isoDate().required(),
+      tabId: types.string().uuid()
     }
   }
 

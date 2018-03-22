@@ -492,7 +492,8 @@ const { connectionType: userRecruitsConnection } = connectionDefinitions({
 const logTabMutation = mutationWithClientMutationId({
   name: 'LogTab',
   inputFields: {
-    userId: { type: new GraphQLNonNull(GraphQLString) }
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    tabId: { type: GraphQLString }
   },
   outputFields: {
     user: {
@@ -500,9 +501,9 @@ const logTabMutation = mutationWithClientMutationId({
       resolve: user => user
     }
   },
-  mutateAndGetPayload: ({userId}, context) => {
+  mutateAndGetPayload: ({ userId, tabId }, context) => {
     const { id } = fromGlobalId(userId)
-    return logTab(context.user, id)
+    return logTab(context.user, id, tabId)
   }
 })
 
@@ -555,16 +556,28 @@ const logUserRevenueMutation = mutationWithClientMutationId({
         }
       })
     },
-    dfpAdvertiserId: { type: GraphQLString }
+    dfpAdvertiserId: { type: GraphQLString },
+    tabId: { type: GraphQLString }
   },
   outputFields: {
     success: {
       type: new GraphQLNonNull(GraphQLBoolean)
     }
   },
-  mutateAndGetPayload: ({ userId, revenue, dfpAdvertiserId, encodedRevenue, aggregationOperation }, context) => {
+  mutateAndGetPayload: (
+      {
+        userId,
+        revenue,
+        dfpAdvertiserId,
+        encodedRevenue,
+        aggregationOperation,
+        tabId
+      },
+      context
+    ) => {
     const { id } = fromGlobalId(userId)
-    return logRevenue(context.user, id, revenue, dfpAdvertiserId, encodedRevenue, aggregationOperation)
+    return logRevenue(context.user, id, revenue, dfpAdvertiserId, encodedRevenue,
+      aggregationOperation, tabId)
   }
 })
 

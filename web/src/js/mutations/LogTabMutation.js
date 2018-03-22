@@ -17,18 +17,16 @@ const mutation = graphql`
   }
 `
 
-function commit (environment, user) {
-  const userId = user.id
-
+function commit (environment, userId, tabId) {
   return commitMutation(
     environment,
     {
       mutation,
       variables: {
-        input: { userId }
+        input: { userId, tabId }
       }
     }
   )
 }
 
-export default {commit}
+export default commit

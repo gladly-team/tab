@@ -150,6 +150,7 @@ enum EncodedRevenueValueTypeEnum {
 
 input LogTabInput {
   userId: String!
+  tabId: String
   clientMutationId: String
 }
 
@@ -170,6 +171,7 @@ input LogUserRevenueInput {
   encodedRevenue: EncodedRevenueValue
   aggregationOperation: LogUserRevenueAggregationOperationEnum
   dfpAdvertiserId: String
+  tabId: String
   clientMutationId: String
 }
 

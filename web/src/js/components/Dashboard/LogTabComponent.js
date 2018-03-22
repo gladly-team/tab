@@ -9,9 +9,10 @@ class LogTabComponent extends React.Component {
     // * ads are more likely to have loaded
     const LOG_TAB_DELAY = 1000
     setTimeout(() => {
-      LogTabMutation.commit(
+      LogTabMutation(
         this.props.relay.environment,
-        this.props.user
+        this.props.user.id,
+        this.props.tabId
       )
     }, LOG_TAB_DELAY)
   }
@@ -24,7 +25,11 @@ class LogTabComponent extends React.Component {
 LogTabComponent.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.string.isRequired
-  }).isRequired
+  }).isRequired,
+  tabId: PropTypes.string.isRequired,
+  relay: PropTypes.shape({
+    environment: PropTypes.object.isRequired
+  })
 }
 
 export default LogTabComponent

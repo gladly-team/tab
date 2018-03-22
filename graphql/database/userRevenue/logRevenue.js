@@ -69,10 +69,11 @@ const aggregateRevenues = (revenues, aggregationOperation) => {
  * @param {string|null} aggregationOperation - What logic we should use to determine a final
  *   revenue value when more than one value is provided. Required if both "revenue" and
  *   "encodedRevenue" are provided.
+ * @param {string} tabId - A UUID for the tab on which revenue is created
  * @return {Object} If successful, a single key ("success") with value `true`
  */
 const logRevenue = async (userContext, userId, revenue = null, dfpAdvertiserId = null,
-  encodedRevenue = null, aggregationOperation = null) => {
+  encodedRevenue = null, aggregationOperation = null, tabId = null) => {
   // Decode the encoded revenue, if needed
   const decodedRevenue = isNil(encodedRevenue) ? null : decodeRevenueObj(encodedRevenue)
 
@@ -99,7 +100,8 @@ const logRevenue = async (userContext, userId, revenue = null, dfpAdvertiserId =
       userId: userId,
       timestamp: moment.utc().toISOString(),
       revenue: revenueToLog,
-      ...dfpAdvertiserId && { dfpAdvertiserId: dfpAdvertiserId }
+      ...dfpAdvertiserId && { dfpAdvertiserId: dfpAdvertiserId },
+      ...tabId && { tabId: tabId }
     })
   } catch (e) {
     throw e
