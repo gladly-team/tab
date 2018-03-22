@@ -8,7 +8,6 @@ import toJson from 'enzyme-to-json'
 import {
   getDefaultTabGlobal,
   mockAmazonBidResponse,
-  mockGoogleTagImpressionViewableData,
   mockGoogleTagSlotRenderEndedData
 } from 'utils/test-utils'
 
