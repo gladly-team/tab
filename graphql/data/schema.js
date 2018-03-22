@@ -564,9 +564,20 @@ const logUserRevenueMutation = mutationWithClientMutationId({
       type: new GraphQLNonNull(GraphQLBoolean)
     }
   },
-  mutateAndGetPayload: ({ userId, revenue, dfpAdvertiserId, encodedRevenue, aggregationOperation }, context) => {
+  mutateAndGetPayload: (
+      {
+        userId,
+        revenue,
+        dfpAdvertiserId,
+        encodedRevenue,
+        aggregationOperation,
+        tabId
+      },
+      context
+    ) => {
     const { id } = fromGlobalId(userId)
-    return logRevenue(context.user, id, revenue, dfpAdvertiserId, encodedRevenue, aggregationOperation)
+    return logRevenue(context.user, id, revenue, dfpAdvertiserId, encodedRevenue,
+      aggregationOperation, tabId)
   }
 })
 

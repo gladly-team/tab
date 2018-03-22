@@ -60,7 +60,7 @@ describe('LogRevenueComponent', function () {
     const wrapper = shallow(
       <LogRevenueComponent
         user={{ id: 'abcdefghijklmno' }}
-        tabId={'abc-123'}
+        tabId={'712dca1a-3705-480f-95ff-314be86a2936'}
         relay={{ environment: {} }}
         />
     )
@@ -88,7 +88,7 @@ describe('LogRevenueComponent', function () {
 
     const LogRevenueComponent = require('../LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
-    const tabId = 'abc-123'
+    const tabId = '712dca1a-3705-480f-95ff-314be86a2936'
     const mockRelayEnvironment = {}
     shallow(
       <LogRevenueComponent
@@ -100,7 +100,7 @@ describe('LogRevenueComponent', function () {
         />
     )
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment, mockUserId,
-      0.000172, '132435', null, null)
+      0.000172, '132435', null, null, tabId)
 
     // It should mark this slot as logged
     expect(window.tabforacause.ads.slotsAlreadyLoggedRevenue[slotId]).toBe(true)
@@ -128,7 +128,7 @@ describe('LogRevenueComponent', function () {
 
     const LogRevenueComponent = require('../LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
-    const tabId = 'abc-123'
+    const tabId = '712dca1a-3705-480f-95ff-314be86a2936'
     const mockRelayEnvironment = {}
     shallow(
       <LogRevenueComponent
@@ -158,7 +158,7 @@ describe('LogRevenueComponent', function () {
 
     const LogRevenueComponent = require('../LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
-    const tabId = 'abc-123'
+    const tabId = '712dca1a-3705-480f-95ff-314be86a2936'
     const mockRelayEnvironment = {}
     shallow(
       <LogRevenueComponent
@@ -193,7 +193,7 @@ describe('LogRevenueComponent', function () {
 
     const LogRevenueComponent = require('../LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
-    const tabId = 'abc-123'
+    const tabId = '712dca1a-3705-480f-95ff-314be86a2936'
     const mockRelayEnvironment = {}
     shallow(
       <LogRevenueComponent
@@ -206,7 +206,7 @@ describe('LogRevenueComponent', function () {
     )
 
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment, mockUserId,
-      0.000123456789012, '9876543', null, null)
+      0.000123456789012, '9876543', null, null, tabId)
   })
 
   it('after mount, logs revenue when GPT fires a "slot loaded" event', () => {
@@ -235,7 +235,7 @@ describe('LogRevenueComponent', function () {
 
     const LogRevenueComponent = require('../LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
-    const tabId = 'abc-123'
+    const tabId = '712dca1a-3705-480f-95ff-314be86a2936'
     const mockRelayEnvironment = {}
     shallow(
       <LogRevenueComponent
@@ -259,7 +259,7 @@ describe('LogRevenueComponent', function () {
 
     // Should have logged revenue after the slot loaded
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment,
-      mockUserId, 0.00231, '159260', null, null)
+      mockUserId, 0.00231, '159260', null, null, tabId)
   })
 
   it('defaults to 99 (Google Adsense) DFP Advertiser ID when the advertiser ID does not exist', () => {
@@ -294,7 +294,7 @@ describe('LogRevenueComponent', function () {
 
     const LogRevenueComponent = require('../LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
-    const tabId = 'abc-123'
+    const tabId = '712dca1a-3705-480f-95ff-314be86a2936'
     const mockRelayEnvironment = {}
     shallow(
       <LogRevenueComponent
@@ -318,7 +318,7 @@ describe('LogRevenueComponent', function () {
 
     // Should have logged revenue after the slot loaded
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment,
-      mockUserId, 0.00231, '99', null, null)
+      mockUserId, 0.00231, '99', null, null, tabId)
   })
 
   it('logs Amazon revenue when there are no Prebid bids', () => {
@@ -342,7 +342,7 @@ describe('LogRevenueComponent', function () {
 
     const LogRevenueComponent = require('../LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
-    const tabId = 'abc-123'
+    const tabId = '712dca1a-3705-480f-95ff-314be86a2936'
     const mockRelayEnvironment = {}
     shallow(
       <LogRevenueComponent
@@ -354,7 +354,8 @@ describe('LogRevenueComponent', function () {
         />
     )
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment, mockUserId,
-      null, '132435', { encodingType: 'AMAZON_CPM', encodedValue: 'a-bid-code' }, null)
+      null, '132435', { encodingType: 'AMAZON_CPM', encodedValue: 'a-bid-code' }, null,
+      tabId)
   })
 
   it('logs Amazon revenue when there is also a Prebid bid', () => {
@@ -382,7 +383,7 @@ describe('LogRevenueComponent', function () {
 
     const LogRevenueComponent = require('../LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
-    const tabId = 'abc-123'
+    const tabId = '712dca1a-3705-480f-95ff-314be86a2936'
     const mockRelayEnvironment = {}
     shallow(
       <LogRevenueComponent
@@ -394,7 +395,8 @@ describe('LogRevenueComponent', function () {
         />
     )
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment, mockUserId,
-      0.00231, '132435', { encodingType: 'AMAZON_CPM', encodedValue: 'a-bid-code' }, 'MAX')
+      0.00231, '132435', { encodingType: 'AMAZON_CPM', encodedValue: 'a-bid-code' }, 'MAX',
+      tabId)
   })
 
   it('does not include Amazon revenue when the bid is empty', () => {
@@ -422,7 +424,7 @@ describe('LogRevenueComponent', function () {
 
     const LogRevenueComponent = require('../LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
-    const tabId = 'abc-123'
+    const tabId = '712dca1a-3705-480f-95ff-314be86a2936'
     const mockRelayEnvironment = {}
     shallow(
       <LogRevenueComponent
@@ -434,7 +436,7 @@ describe('LogRevenueComponent', function () {
         />
     )
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment, mockUserId,
-      0.00231, '132435', null, null)
+      0.00231, '132435', null, null, tabId)
   })
 
   it('logs a warning, but does not throw an error or log revenue, if slot data is missing', () => {
@@ -461,7 +463,7 @@ describe('LogRevenueComponent', function () {
 
     const LogRevenueComponent = require('../LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
-    const tabId = 'abc-123'
+    const tabId = '712dca1a-3705-480f-95ff-314be86a2936'
     const mockRelayEnvironment = {}
     shallow(
       <LogRevenueComponent

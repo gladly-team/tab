@@ -129,7 +129,8 @@ class LogRevenueComponent extends React.Component {
         amazonEncodedBid,
         // Only send aggregationOperation value if we have more than one
         // revenue value
-        ((prebidRevenue && amazonEncodedBid) ? 'MAX' : null)
+        ((prebidRevenue && amazonEncodedBid) ? 'MAX' : null),
+        this.props.tabId
       )
     } catch (e) {
       console.error('Could not log revenue for ad slot', e)
