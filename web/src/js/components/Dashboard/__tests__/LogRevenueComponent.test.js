@@ -8,7 +8,6 @@ import toJson from 'enzyme-to-json'
 import {
   getDefaultTabGlobal,
   mockAmazonBidResponse,
-  mockGoogleTagImpressionViewableData,
   mockGoogleTagSlotRenderEndedData
 } from 'utils/test-utils'
 
@@ -200,10 +199,9 @@ describe('LogRevenueComponent', function () {
       0.000123456789012, '9876543', null, null)
   })
 
-  it('after mount, logs revenue when GPT fires a "slot loaded" event', () => {
+  it('after mount, logs revenue when GPT fires a "slot rendered" event', () => {
     const slotId = 'xyz-987'
-    window.tabforacause.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
-      slotId, { advertiserId: 159260 })
+    window.tabforacause.ads.slotsRendered = {}
 
     // Mock a Prebid bid value for the slot
     const mockRevenueValue = 2.31
@@ -243,8 +241,10 @@ describe('LogRevenueComponent', function () {
     window.googletag.cmd.forEach((cmd) => cmd())
 
     // Fake the GPT event callback
-    const eventCallback = googleEventListenerCalls['impressionViewable'][0][1]
-    eventCallback(mockGoogleTagImpressionViewableData(slotId))
+    const eventCallback = googleEventListenerCalls['slotRenderEnded'][0][1]
+    eventCallback(
+      mockGoogleTagSlotRenderEndedData(slotId, { advertiserId: 159260 })
+    )
 
     // Should have logged revenue after the slot loaded
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment,
@@ -253,14 +253,7 @@ describe('LogRevenueComponent', function () {
 
   it('defaults to 99 (Google Adsense) DFP Advertiser ID when the advertiser ID does not exist', () => {
     const slotId = 'xyz-987'
-    window.tabforacause.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
-      slotId,
-      {
-        advertiserId: null,
-        campaignId: null,
-        creativeId: null
-      }
-    )
+    window.tabforacause.ads.slotsRendered = {}
 
     // Mock a Prebid bid value for the slot
     const mockRevenueValue = 2.31
@@ -300,8 +293,17 @@ describe('LogRevenueComponent', function () {
     window.googletag.cmd.forEach((cmd) => cmd())
 
     // Fake the GPT event callback
-    const eventCallback = googleEventListenerCalls['impressionViewable'][0][1]
-    eventCallback(mockGoogleTagImpressionViewableData(slotId))
+    const eventCallback = googleEventListenerCalls['slotRenderEnded'][0][1]
+    eventCallback(
+      mockGoogleTagSlotRenderEndedData(
+        slotId,
+        {
+          advertiserId: null,
+          campaignId: null,
+          creativeId: null
+        }
+      )
+    )
 
     // Should have logged revenue after the slot loaded
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment,
