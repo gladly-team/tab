@@ -58,6 +58,24 @@ describe('logRevenue', () => {
     )
   })
 
+  test('includes "tabId" when provided', async () => {
+    const userId = userContext.id
+    const userRevenueCreate = jest.spyOn(UserRevenueModel, 'create')
+    const someTabId = '712dca1a-3705-480f-95ff-314be86a2936'
+    await logRevenue(userContext, userId, 0.0172, '2468', null, null, someTabId)
+
+    expect(userRevenueCreate).toHaveBeenLastCalledWith(
+      userContext,
+      addTimestampFieldsToItem({
+        userId: userId,
+        timestamp: moment.utc().toISOString(),
+        revenue: 0.0172,
+        dfpAdvertiserId: '2468',
+        tabId: someTabId
+      })
+    )
+  })
+
   test('it throws an error if neither "revenue" nor "encodedRevenue" is provided', () => {
     const userId = userContext.id
     return expect(logRevenue(userContext, userId))

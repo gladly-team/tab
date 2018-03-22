@@ -171,6 +171,7 @@ input LogUserRevenueInput {
   encodedRevenue: EncodedRevenueValue
   aggregationOperation: LogUserRevenueAggregationOperationEnum
   dfpAdvertiserId: String
+  tabId: String
   clientMutationId: String
 }
 

@@ -556,7 +556,8 @@ const logUserRevenueMutation = mutationWithClientMutationId({
         }
       })
     },
-    dfpAdvertiserId: { type: GraphQLString }
+    dfpAdvertiserId: { type: GraphQLString },
+    tabId: { type: GraphQLString }
   },
   outputFields: {
     success: {
