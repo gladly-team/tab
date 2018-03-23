@@ -239,8 +239,8 @@ module.exports = {
     new AutoDllPlugin({
       inject: false, // will inject the DLL bundle to index.html
       debug: true,
-      filename: '[name].[hash].js',
-      path: './build/vendor',
+      filename: 'vendor.[chunkhash:8].js',
+      path: './static/js',
       entry: {
         vendor: [
           './config/vendor.js'
