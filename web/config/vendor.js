@@ -1,3 +1,6 @@
+// Add the modules that we use in client JS.
+// These will be bundled into vendor.js, so that our vendor JS
+// filename hash will not change when we modify app code.
 require('firebase')
 require('hex-to-rgba')
 require('lodash')
