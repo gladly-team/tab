@@ -234,7 +234,7 @@ module.exports = {
     // https://github.com/th0r/webpack-bundle-analyzer
     new BundleAnalyzerPlugin({
       // set to 'static' for analysis or 'disabled' for none
-      analyzerMode: 'static',
+      analyzerMode: 'disabled',
       reportFilename: 'bundle-report-app.html'
     }),
     new AutoDllPlugin({
@@ -250,7 +250,7 @@ module.exports = {
       plugins: [
         new BundleAnalyzerPlugin({
           // set to 'static' for analysis or 'disabled' for none
-          analyzerMode: 'static',
+          analyzerMode: 'disabled',
           reportFilename: 'bundle-report-vendor.html'
         }),
         new webpack.optimize.UglifyJsPlugin({
