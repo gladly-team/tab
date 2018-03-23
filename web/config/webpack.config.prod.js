@@ -237,7 +237,7 @@ module.exports = {
       analyzerMode: 'disabled'
     }),
     new AutoDllPlugin({
-      inject: false, // will inject the DLL bundle to index.html
+      inject: true, // will inject the DLL bundle to index.html
       debug: true,
       filename: 'vendor.[chunkhash:8].js',
       path: './static/js',
