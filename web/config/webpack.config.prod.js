@@ -2,6 +2,7 @@
 
 var path = require('path')
 var webpack = require('webpack')
+var AutoDllPlugin = require('autodll-webpack-plugin')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var ManifestPlugin = require('webpack-manifest-plugin')
 var FaviconsWebpackPlugin = require('favicons-webpack-plugin')
@@ -177,24 +178,6 @@ module.exports = {
   //  ];
   // },
   plugins: [
-    // https://medium.com/@adamrackis/vendor-and-code-splitting-in-webpack-2-6376358f1923
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      filename: 'static/js/[name].[chunkhash:8].js',
-      minChunks (module, count) {
-        var context = module.context
-        return context && context.indexOf('node_modules') >= 0
-      }
-    }),
-    // Helps understand what's getting included in our final bundle.
-    // With this enabled, build the web app and view report.html in
-    // the build directory.
-    // https://github.com/th0r/webpack-bundle-analyzer
-    new BundleAnalyzerPlugin({
-      // set to 'static' for analysis or 'disabled' for none
-      analyzerMode: 'disabled'
-    }),
-
     // Makes some environment variables available in index.html.
     // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
     // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
@@ -204,22 +187,8 @@ module.exports = {
     // Generates an `index.html` file with the <script> injected.
     new HtmlWebpackPlugin({
       title: 'Tab for a Cause',
-      inject: false,
+      inject: true,
       template: paths.appHtml,
-      // https://github.com/jantimon/html-webpack-plugin/issues/481#issuecomment-262414169
-      chunks: ['vendor', 'ads', 'app'],
-      chunksSortMode: function (chunk1, chunk2) {
-        var orders = ['vendor', 'ads', 'app']
-        var order1 = orders.indexOf(chunk1.names[0])
-        var order2 = orders.indexOf(chunk2.names[0])
-        if (order1 > order2) {
-          return 1
-        } else if (order1 < order2) {
-          return -1
-        } else {
-          return 0
-        }
-      },
       minify: {
         removeComments: true,
         collapseWhitespace: true,
@@ -258,6 +227,44 @@ module.exports = {
     }),
     new ManifestPlugin({
       fileName: 'asset-manifest.json'
+    }),
+    // Helps understand what's getting included in our final bundle.
+    // With this enabled, build the web app and view report.html in
+    // the build directory.
+    // https://github.com/th0r/webpack-bundle-analyzer
+    new BundleAnalyzerPlugin({
+      // set to 'static' for analysis or 'disabled' for none
+      analyzerMode: 'disabled'
+    }),
+    new AutoDllPlugin({
+      inject: false, // will inject the DLL bundle to index.html
+      debug: true,
+      filename: '[name].[hash].js',
+      path: './build/vendor',
+      entry: {
+        vendor: [
+          './config/vendor.js'
+        ]
+      },
+      plugins: [
+        new BundleAnalyzerPlugin({
+          // set to 'static' for analysis or 'disabled' for none
+          analyzerMode: 'disabled'
+        }),
+        new webpack.optimize.UglifyJsPlugin({
+          compress: {
+            screw_ie8: true, // React doesn't support IE8
+            warnings: false
+          },
+          mangle: {
+            screw_ie8: true
+          },
+          output: {
+            comments: false,
+            screw_ie8: true
+          }
+        })
+      ]
     })
   ],
   // Some libraries import Node modules but don't use them in the browser.
