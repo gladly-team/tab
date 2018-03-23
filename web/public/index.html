@@ -123,10 +123,6 @@ src="https://www.facebook.com/tr?id=1813501258922708&ev=PageView&noscript=1"
 </script>
 <!-- END: Google Tag Manager and ad slot definitions -->
 
-<% for (var chunk in htmlWebpackPlugin.files.chunks) { %>
-<script src="<%= htmlWebpackPlugin.files.chunks[chunk].entry %>"></script>
-<% } %>
-
 <% if (htmlWebpackPlugin.options.devServer) { %>
 <script src="<%= htmlWebpackPlugin.options.devServer%>/webpack-dev-server.js"></script>
 <% } %>
