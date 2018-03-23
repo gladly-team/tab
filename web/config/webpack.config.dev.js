@@ -192,12 +192,13 @@ module.exports = {
   },
   plugins: [
     // Helps understand what's getting included in our final bundle.
-    // With this enabled, build the web app and view report.html in
+    // With this enabled, build the web app and view the report HTML in
     // the build directory.
     // https://github.com/th0r/webpack-bundle-analyzer
     new BundleAnalyzerPlugin({
       // set to 'static' for analysis or 'disabled' for none
-      analyzerMode: 'disabled'
+      analyzerMode: 'disabled',
+      reportFilename: 'bundle-report-app.html'
     }),
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.HotModuleReplacementPlugin(),
@@ -220,7 +221,8 @@ module.exports = {
       plugins: [
         new BundleAnalyzerPlugin({
           // set to 'static' for analysis or 'disabled' for none
-          analyzerMode: 'disabled'
+          analyzerMode: 'disabled',
+          reportFilename: 'bundle-report-vendor.html'
         })
       ]
     }),

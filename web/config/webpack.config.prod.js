@@ -229,12 +229,13 @@ module.exports = {
       fileName: 'asset-manifest.json'
     }),
     // Helps understand what's getting included in our final bundle.
-    // With this enabled, build the web app and view report.html in
+    // With this enabled, build the web app and view the report HTML in
     // the build directory.
     // https://github.com/th0r/webpack-bundle-analyzer
     new BundleAnalyzerPlugin({
       // set to 'static' for analysis or 'disabled' for none
-      analyzerMode: 'disabled'
+      analyzerMode: 'static',
+      reportFilename: 'bundle-report-app.html'
     }),
     new AutoDllPlugin({
       inject: true, // will inject the DLL bundle to index.html
@@ -249,7 +250,8 @@ module.exports = {
       plugins: [
         new BundleAnalyzerPlugin({
           // set to 'static' for analysis or 'disabled' for none
-          analyzerMode: 'disabled'
+          analyzerMode: 'static',
+          reportFilename: 'bundle-report-vendor.html'
         }),
         new webpack.optimize.UglifyJsPlugin({
           compress: {
