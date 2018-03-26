@@ -247,12 +247,20 @@ module.exports = {
           './config/vendor.js'
         ]
       },
+      // Should use the same build plutins as above
       plugins: [
         new BundleAnalyzerPlugin({
           // set to 'static' for analysis or 'disabled' for none
           analyzerMode: 'disabled',
           reportFilename: 'bundle-report-vendor.html'
         }),
+        // Makes some environment variables available to the JS code, for example:
+        // if (process.env.NODE_ENV === 'production') { ... }. See `./env.js`.
+        // It is absolutely essential that NODE_ENV was set to production here.
+        // Otherwise React will be compiled in the very slow development mode.
+        new webpack.DefinePlugin(env),
+        // This helps ensure the builds are consistent if source hasn't changed:
+        new webpack.optimize.OccurrenceOrderPlugin(),
         new webpack.optimize.UglifyJsPlugin({
           compress: {
             screw_ie8: true, // React doesn't support IE8
