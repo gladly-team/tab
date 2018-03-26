@@ -161,13 +161,18 @@ before_install:
   - pip install --user awscli
   - export PATH=$PATH:$HOME/.local/bin
 install: yarn run all:install
-script:
-  - yarn run ci:test
-  # TODO: handle PR restrictions. See:
-  # https://docs.travis-ci.com/user/pull-requests#Pull-Requests-and-Security-Restrictions
-  # TODO: reenable when we start using end-to-end-tests.
-  # - yarn run ci:deploy test
-  # - yarn run ci:test:integration
+# We want to fail fast if any script step fails, but TravisCI does not
+# yet support this, so run one long command:
+# https://github.com/travis-ci/travis-ci/issues/1066
+# Only deploy and run integration tests when not a PR
+# to handle TravisCI PR restrictions. See:
+# https://docs.travis-ci.com/user/pull-requests#Pull-Requests-and-Security-Restrictions
+script: >
+  yarn run ci:test &&
+  if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
+    yarn run ci:deploy test &&
+    yarn run ci:test:integration
+  fi
 # TODO: master branch deploy to prod; other logic for test/dev
 # Note: travis_wait doesn't work well in deploy:
 #   https://github.com/travis-ci/travis-ci/issues/7961
