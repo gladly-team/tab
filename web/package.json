@@ -116,7 +116,7 @@
     "test:integration": "npm-run-all -s test:lint test:integration:run test:codecov",
     "test:integration:run": "jest --testPathPattern=e2e-tests",
     "test:codecov": "if-env LOG_TEST_COVERAGE=true && codecov || echo 'Skipping test coverage logging.'",
-    "test:watch": "jest --env=jsdom --watch",
+    "test:watch": "jest --env=jsdom --testPathIgnorePatterns=e2e-tests --watch",
     "build:langs": "node scripts/translate.js",
     "test:lint": "standard",
     "lint:fix": "standard --fix",
