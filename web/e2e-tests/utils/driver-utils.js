@@ -1,31 +1,36 @@
+
 const webdriver = require('selenium-webdriver')
 const By = webdriver.By
 const until = webdriver.until
 
-module.exports = driver => ({
-  waitForElementVisibleByCustomSelector: function (selector) {
+export default (driver) => ({
+  waitForElementExistsByCustomSelector: (selector) => {
     return driver.wait(until.elementLocated(selector))
   },
-  waitForElementVisible: function (dataTestId) {
-    return driver.wait(
-        until.elementLocated(
-            By.css("[data-test-id='" + dataTestId + "']")
-            )
-        )
+
+  waitForElementExistsByTestId: (dataTestId) => {
+    return driver.wait(until.elementLocated(
+      By.css("[data-test-id='" + dataTestId + "']")
+    ))
   },
-  getText: function (selector) {
+
+  getText: (selector) => {
     return driver.findElement(selector).getText()
   },
-  getValue: function (selector) {
+
+  getValue: (selector) => {
     return driver.findElement(selector).getAttribute('value')
   },
-  setValue: function (selector, value) {
+
+  setValue: (selector, value) => {
     return driver.findElement(selector).sendKeys(value)
   },
-  click: function (selector) {
+
+  click: (selector) => {
     return driver.findElement(selector).click()
   },
-  navigateTo: function (url) {
+
+  navigateTo: (url) => {
     return driver.navigate().to(url)
   }
 })

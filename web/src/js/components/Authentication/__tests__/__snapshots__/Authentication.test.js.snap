@@ -2,6 +2,7 @@
 
 exports[`Authentication.js tests renders as expected prior to navigating 1`] = `
 <span
+  data-test-id="authentication-page"
   style={
     Object {
       "alignItems": "center",
