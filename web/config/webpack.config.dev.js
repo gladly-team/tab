@@ -211,7 +211,7 @@ module.exports = {
       // context: path.join(__dirname, '..'),
       inject: true, // will inject the DLL bundle to index.html
       debug: true,
-      filename: 'vendor.[chunkhash:8].js',
+      filename: 'vendor.js',
       path: './static/js',
       entry: {
         vendor: [
