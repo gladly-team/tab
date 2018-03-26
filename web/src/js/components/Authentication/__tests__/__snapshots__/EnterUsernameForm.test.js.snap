@@ -506,6 +506,7 @@ exports[`EnterUsernameForm tests it does not call SetUsernameMutation when the u
                       "opacity": 0.9,
                       "rippleBackgroundColor": "#616161",
                     },
+                    "userAgent": undefined,
                     "zIndex": Object {
                       "appBar": 1100,
                       "dialog": 1500,
@@ -992,6 +993,7 @@ exports[`EnterUsernameForm tests it does not call SetUsernameMutation when the u
                       "opacity": 0.9,
                       "rippleBackgroundColor": "#616161",
                     },
+                    "userAgent": undefined,
                     "zIndex": Object {
                       "appBar": 1100,
                       "dialog": 1500,
@@ -1762,6 +1764,7 @@ exports[`EnterUsernameForm tests it shows an error message when the username is 
                       "opacity": 0.9,
                       "rippleBackgroundColor": "#616161",
                     },
+                    "userAgent": undefined,
                     "zIndex": Object {
                       "appBar": 1100,
                       "dialog": 1500,
@@ -2248,6 +2251,7 @@ exports[`EnterUsernameForm tests it shows an error message when the username is 
                       "opacity": 0.9,
                       "rippleBackgroundColor": "#616161",
                     },
+                    "userAgent": undefined,
                     "zIndex": Object {
                       "appBar": 1100,
                       "dialog": 1500,
