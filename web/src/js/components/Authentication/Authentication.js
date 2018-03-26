@@ -231,6 +231,7 @@ class Authentication extends React.Component {
   render () {
     return (
       <span
+        data-test-id={'authentication-page'}
         style={{
           display: 'flex',
           flexDirection: 'column',

@@ -16,6 +16,8 @@ plugins:
 custom:
   stageDefault: dev
   customCapacities:
+    # test stage table capacities: use same as dev
+    test: ${self:custom.customCapacities.dev}
     # dev stage table capacities
     dev: 
       usersTable:
