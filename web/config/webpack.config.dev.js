@@ -1,7 +1,6 @@
 
 var path = require('path')
 var webpack = require('webpack')
-var AutoDllPlugin = require('autodll-webpack-plugin')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
@@ -21,8 +20,22 @@ var paths = require('./paths')
 const htmlTemplate = new HtmlWebpackPlugin({
   title: 'Tab for a Cause',
   template: paths.appHtml,
+  // https://github.com/jantimon/html-webpack-plugin/issues/481#issuecomment-262414169
+  chunks: ['vendor', 'ads', 'app'],
+  chunksSortMode: function (chunk1, chunk2) {
+    var orders = ['vendor', 'ads', 'app']
+    var order1 = orders.indexOf(chunk1.names[0])
+    var order2 = orders.indexOf(chunk2.names[0])
+    if (order1 > order2) {
+      return 1
+    } else if (order1 < order2) {
+      return -1
+    } else {
+      return 0
+    }
+  },
   mobile: true,
-  inject: true,
+  inject: false,
   tabAdsEnabled: process.env.ADS_ENABLED === 'true'
 })
 const favIcon = new FaviconsWebpackPlugin(paths.appLogo)
@@ -191,14 +204,22 @@ module.exports = {
     ]
   },
   plugins: [
+    // https://medium.com/@adamrackis/vendor-and-code-splitting-in-webpack-2-6376358f1923
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      filename: 'vendor.js',
+      minChunks (module, count) {
+        var context = module.context
+        return context && context.indexOf('node_modules') >= 0
+      }
+    }),
     // Helps understand what's getting included in our final bundle.
-    // With this enabled, build the web app and view the report HTML in
+    // With this enabled, build the web app and view report.html in
     // the build directory.
     // https://github.com/th0r/webpack-bundle-analyzer
     new BundleAnalyzerPlugin({
       // set to 'static' for analysis or 'disabled' for none
-      analyzerMode: 'disabled',
-      reportFilename: 'bundle-report-app.html'
+      analyzerMode: 'disabled'
     }),
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.HotModuleReplacementPlugin(),
@@ -207,25 +228,6 @@ module.exports = {
     // if (process.env.NODE_ENV === 'development') { ... }. See `./env.js`.
     new webpack.DefinePlugin(env),
     htmlTemplate,
-    new AutoDllPlugin({
-      // context: path.join(__dirname, '..'),
-      inject: true, // will inject the DLL bundle to index.html
-      debug: true,
-      filename: 'vendor.js',
-      path: './static/js',
-      entry: {
-        vendor: [
-          './config/vendor.js'
-        ]
-      },
-      plugins: [
-        new BundleAnalyzerPlugin({
-          // set to 'static' for analysis or 'disabled' for none
-          analyzerMode: 'disabled',
-          reportFilename: 'bundle-report-vendor.html'
-        })
-      ]
-    }),
     favIcon
   ],
   // Some libraries import Node modules but don't use them in the browser.
