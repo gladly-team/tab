@@ -4081,7 +4081,7 @@ find-up@^2.0.0, find-up@^2.1.0:
   dependencies:
     locate-path "^2.0.0"
 
-firebase@^4.10.0, firebase@^4.8.0:
+firebase@^4.8.0, firebase@~4.12.0:
   version "4.12.0"
   resolved "https://registry.yarnpkg.com/firebase/-/firebase-4.12.0.tgz#fdc7eaee1769b1ec72ae56fea56c120a13f54d76"
   dependencies:
@@ -8416,7 +8416,7 @@ react-event-listener@^0.5.0, react-event-listener@^0.5.1:
     prop-types "^15.6.0"
     warning "^3.0.0"
 
-react-firebaseui@^1.1.8:
+react-firebaseui@~1.1.9:
   version "1.1.9"
   resolved "https://registry.yarnpkg.com/react-firebaseui/-/react-firebaseui-1.1.9.tgz#02d9fcc0d0c3f6deeac117cda420099ddba371d9"
   dependencies:
