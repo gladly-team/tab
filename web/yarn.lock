@@ -2967,8 +2967,8 @@ dom-serializer@0, dom-serializer@~0.1.0:
     entities "~1.1.1"
 
 dom-storage@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/dom-storage/-/dom-storage-2.0.2.tgz#ed17cbf68abd10e0aef8182713e297c5e4b500b0"
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/dom-storage/-/dom-storage-2.1.0.tgz#00fb868bc9201357ea243c7bcfd3304c1e34ea39"
 
 dom-walk@^0.1.0:
   version "0.1.1"
@@ -4096,9 +4096,9 @@ firebase@^4.8.0, firebase@~4.12.0:
     dom-storage "^2.0.2"
     xmlhttprequest "^1.8.0"
 
-firebaseui@^2.4.0:
-  version "2.6.3"
-  resolved "https://registry.yarnpkg.com/firebaseui/-/firebaseui-2.6.3.tgz#d867eee7814ff7da50297b01f4ec23acb767d167"
+firebaseui@^2.7.0:
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/firebaseui/-/firebaseui-2.7.0.tgz#1797cd688f7148b72ca7fb24d0129ca18922b56d"
   dependencies:
     dialog-polyfill "^0.4.7"
     firebase "^4.8.0"
@@ -8416,11 +8416,11 @@ react-event-listener@^0.5.0, react-event-listener@^0.5.1:
     prop-types "^15.6.0"
     warning "^3.0.0"
 
-react-firebaseui@~1.1.9:
-  version "1.1.9"
-  resolved "https://registry.yarnpkg.com/react-firebaseui/-/react-firebaseui-1.1.9.tgz#02d9fcc0d0c3f6deeac117cda420099ddba371d9"
+react-firebaseui@~1.2.3:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/react-firebaseui/-/react-firebaseui-1.2.3.tgz#e800c402c8d18275a71ff8817712bc35bb0a2a91"
   dependencies:
-    firebaseui "^2.4.0"
+    firebaseui "^2.7.0"
     react "^15"
 
 react-flow-types@0.2.0-beta.3:
