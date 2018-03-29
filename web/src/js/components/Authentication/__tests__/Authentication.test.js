@@ -28,6 +28,7 @@ import CreateNewUserMutation from 'mutations/CreateNewUserMutation'
 
 jest.mock('authentication/user')
 jest.mock('authentication/firebaseConfig') // mock the Firebase app initialization
+jest.mock('authentication/firebaseIDBErrorManager')
 jest.mock('mutations/CreateNewUserMutation')
 jest.mock('navigation/navigation')
 jest.mock('web-utils')
@@ -57,7 +58,8 @@ describe('Authentication.js tests', function () {
     )
   })
 
-  it('calls the `navigateToAuthStep` method before mount', () => {
+  it('calls the `navigateToAuthStep` method before mount', async () => {
+    expect.assertions(1)
     const Authentication = require('../Authentication').default
     const wrapper = shallow(
       <Authentication
@@ -70,7 +72,7 @@ describe('Authentication.js tests', function () {
     component.navigateToAuthStep = jest.fn()
 
     // Force the lifecycle method
-    component.componentWillMount()
+    await component.componentWillMount()
     expect(component.navigateToAuthStep).toHaveBeenCalled()
   })
 

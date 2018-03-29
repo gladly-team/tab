@@ -26,6 +26,7 @@ import {
   isInIframe
 } from 'web-utils'
 import { isEqual } from 'lodash/lang'
+import { checkForFirebaseIDBError } from 'authentication/firebaseIDBErrorManager'
 
 // Handle the authentication flow:
 //   check if current user is fully authenticated and redirect
@@ -58,6 +59,8 @@ class Authentication extends React.Component {
 
   async componentWillMount () {
     this.mounted = true
+
+    await checkForFirebaseIDBError()
 
     await this.navigateToAuthStep()
 
