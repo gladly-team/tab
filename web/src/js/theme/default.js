@@ -23,7 +23,7 @@ export const alternateAccentColor = '#4a90e2'
 // const secondaryColorLight = '#ffff8b'
 // const textOnSecondaryColor = '#616161'
 
-const textColor = '#212121'
+export const textColor = '#212121'
 export const lighterTextColor = 'rgba(33, 33, 33, 0.56)'
 export const dividerColor = '#BDBDBD'
 const disabledColor = fade(darkBlack, 0.3)

@@ -35,5 +35,46 @@ exports[`Authentication.js tests renders as expected prior to navigating 1`] = `
       }
     />
   </span>
+  <Paper
+    circle={false}
+    rounded={true}
+    style={
+      Object {
+        "backgroundColor": "#f2f2f2",
+        "color": "#212121",
+        "margin": 20,
+        "padding": 10,
+        "textAlign": "center",
+      }
+    }
+    transitionEnabled={true}
+    zDepth={1}
+  >
+    Trouble signing in? Try 
+    <a
+      href="https://gladly.zendesk.com/hc/en-us/articles/360002317231-How-do-I-clear-my-cookies-and-site-data-for-Tab-for-a-Cause-"
+      style={
+        Object {
+          "color": "#4a90e2",
+        }
+      }
+      target="_top"
+    >
+      clearing your cookies
+    </a>
+     or 
+    <a
+      href="https://gladly.zendesk.com/hc/en-us/requests/new"
+      style={
+        Object {
+          "color": "#4a90e2",
+        }
+      }
+      target="_top"
+    >
+      send us a message
+    </a>
+     and we'll try to help.
+  </Paper>
 </span>
 `;
