@@ -14,7 +14,11 @@ const sentryDebug = process.env.WEB_SENTRY_DEBUG === 'true'
 try {
   Raven.config(sentryDSN, {
     environment: process.env.STAGE,
-    debug: sentryDebug
+    debug: sentryDebug,
+    autoBreadcrumbs: {
+      // https://github.com/getsentry/raven-js/issues/723
+      console: false
+    }
   }).install()
 } catch (e) {
   console.error(e)
