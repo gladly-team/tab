@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom'
 import { AppContainer } from 'react-hot-loader'
 import Root from './root'
 import { initializeFirebase } from 'authentication/firebaseConfig'
+import { getUsername } from 'authentication/user'
 
 // Start Sentry logger
 // https://docs.sentry.io/clients/javascript/config/
@@ -15,6 +16,19 @@ try {
     environment: process.env.STAGE,
     debug: sentryDebug
   }).install()
+} catch (e) {
+  console.error(e)
+}
+
+// Add context to Sentry logs
+// https://docs.sentry.io/clients/javascript/usage/#tracking-users
+try {
+  const username = getUsername()
+  if (username) {
+    Raven.setUserContext({
+      username: username
+    })
+  }
 } catch (e) {
   console.error(e)
 }

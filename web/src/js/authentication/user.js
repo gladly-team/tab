@@ -20,7 +20,7 @@ const shouldMockAuthentication = (
  * so that we can rely on it during the sign up process.
  * @returns {string} The user's username
  */
-const getUsername = () => {
+export const getUsername = () => {
   return localStorageMgr.getItem(STORAGE_KEY_USERNAME)
 }
 
