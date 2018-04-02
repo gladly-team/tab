@@ -34,6 +34,7 @@ env:
   - TEST_FIREBASE_AUTH_DOMAIN=dev-tab-for-a-cause.firebaseapp.com
   - TEST_FIREBASE_DATABASE_URL=https://dev-tab-for-a-cause.firebaseio.com
   - TEST_FIREBASE_PROJECT_ID=dev-tab-for-a-cause
+  - TEST_WEB_SENTRY_DSN=https://16a4b33290c44b89979957634c3ff3e3@sentry.io/1014205
   # - TEST_STATIC_FILES_ENDPOINT=https://d3792fnaedwf9j.cloudfront.net
   - TEST_STATIC_FILES_ENDPOINT=//test-tab2017.gladly.io
   - TEST_CLOUDFRONT_DOMAIN_ALIAS=test-tab2017.gladly.io
@@ -79,6 +80,7 @@ env:
   - DEV_FIREBASE_AUTH_DOMAIN=dev-tab-for-a-cause.firebaseapp.com
   - DEV_FIREBASE_DATABASE_URL=https://dev-tab-for-a-cause.firebaseio.com
   - DEV_FIREBASE_PROJECT_ID=dev-tab-for-a-cause
+  - DEV_WEB_SENTRY_DSN=https://16a4b33290c44b89979957634c3ff3e3@sentry.io/1014205
   # - DEV_STATIC_FILES_ENDPOINT=https://d2ienu53qrix0k.cloudfront.net
   - DEV_STATIC_FILES_ENDPOINT=//dev-tab2017.gladly.io
   - DEV_CLOUDFRONT_DOMAIN_ALIAS=dev-tab2017.gladly.io
@@ -119,6 +121,7 @@ env:
   - PROD_FIREBASE_AUTH_DOMAIN=tab-for-a-cause.firebaseapp.com
   - PROD_FIREBASE_DATABASE_URL=https://tab-for-a-cause.firebaseio.com
   - PROD_FIREBASE_PROJECT_ID=tab-for-a-cause
+  - PROD_WEB_SENTRY_DSN=https://16a4b33290c44b89979957634c3ff3e3@sentry.io/1014205
   # - PROD_STATIC_FILES_ENDPOINT=https://d2dsqma4win6dv.cloudfront.net
   - PROD_STATIC_FILES_ENDPOINT=//tab.gladly.io
   - PROD_CLOUDFRONT_DOMAIN_ALIAS=tab.gladly.io
