@@ -8,10 +8,16 @@ import { initializeFirebase } from 'authentication/firebaseConfig'
 
 // Start Sentry logger
 // https://docs.sentry.io/clients/javascript/config/
-Raven.config(process.env.WEB_SENTRY_DSN, {
-  environment: process.env.STAGE,
-  debug: process.env.WEB_SENTRY_DEBUG === 'true'
-}).install()
+const sentryDSN = process.env.WEB_SENTRY_DSN
+const sentryDebug = process.env.WEB_SENTRY_DEBUG === 'true'
+try {
+  Raven.config(sentryDSN, {
+    environment: process.env.STAGE,
+    debug: sentryDebug
+  }).install()
+} catch (e) {
+  console.error(e)
+}
 
 const initApp = () => {
   // Init Firebase
@@ -41,9 +47,14 @@ const initApp = () => {
   }
 }
 
-Raven.context(() => {
-  if (process.env.WEB_SENTRY_DEBUG === 'true') {
-    console.log(`Initialized Raven for Sentry DSN ${process.env.WEB_SENTRY_DSN}`)
-  }
+try {
+  Raven.context(() => {
+    if (sentryDebug) {
+      console.log(`Initialized Raven for Sentry DSN ${sentryDSN}`)
+    }
+    initApp()
+  })
+} catch (e) {
+  console.error(e)
   initApp()
-})
+}
