@@ -61,7 +61,8 @@ module.exports = {
     filename: 'static/js/[name].[chunkhash:8].js',
     chunkFilename: 'static/js/[name].[chunkhash:8].js',
     // Static files are served from a different URL.
-    publicPath: `${process.env.STATIC_FILES_ENDPOINT}/`
+    publicPath: `${process.env.STATIC_FILES_ENDPOINT}/`,
+    sourceMapFilename: '[file].map'
   },
   resolve: {
     // This allows you to set a fallback for where Webpack should look for modules.
@@ -254,7 +255,8 @@ module.exports = {
       output: {
         comments: false,
         screw_ie8: true
-      }
+      },
+      sourceMap: true
     }),
     new ManifestPlugin({
       fileName: 'asset-manifest.json'

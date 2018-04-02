@@ -81,7 +81,7 @@ var env = getClientEnvironment(publicUrl)
 module.exports = {
   // You may want 'eval' instead if you prefer to see the compiled output in DevTools.
   // See the discussion in https://github.com/facebookincubator/create-react-app/issues/343.
-  devtool: 'eval',
+  devtool: 'eval-source-map',
   // These are the "entry points" to our application.
   // This means they will be the "root" imports that are included in JS bundle.
   // The first two entry points enable "hot" CSS and auto-refreshes for JS.
@@ -97,7 +97,8 @@ module.exports = {
     // containing code from all our entry points, and the Webpack runtime.
     filename: '[name].js',
     // This is the URL that app is served from. We use "/" in development.
-    publicPath: publicPath
+    publicPath: publicPath,
+    sourceMapFilename: '[file].map'
   },
   resolve: {
     // modules: [
