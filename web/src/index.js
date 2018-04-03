@@ -73,6 +73,6 @@ try {
     initApp()
   })
 } catch (e) {
-  console.error(e)
+  console.error('Failed to wrap app in Raven.context', e)
   initApp()
 }
