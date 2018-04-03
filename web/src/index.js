@@ -17,7 +17,10 @@ try {
     debug: sentryDebug,
     autoBreadcrumbs: {
       // https://github.com/getsentry/raven-js/issues/723
-      console: false
+      // https://docs.sentry.io/clients/javascript/config/
+      xhr: false,
+      console: false,
+      dom: false
     }
   }).install()
 } catch (e) {
