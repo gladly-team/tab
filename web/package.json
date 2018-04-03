@@ -52,7 +52,7 @@
     "favicons-webpack-plugin": "0.0.7",
     "file-loader": "^0.11.1",
     "filesize": "^3.5.9",
-    "firebase": "github:kmjennison/firebase-js-sdk#4719836f8155018716314188c1af95050cafd29d",
+    "firebase": "github:kmjennison/firebase-js-sdk#d2e3b0f6e83bcade9ffe3a2436767e8560546b72",
     "fs-extra": "^3.0.1",
     "gzip-size": "3.0.0",
     "hex-to-rgba": "^1.0.0",

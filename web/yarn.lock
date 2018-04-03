@@ -4096,9 +4096,9 @@ firebase@^4.8.0:
     dom-storage "^2.0.2"
     xmlhttprequest "^1.8.0"
 
-"firebase@github:kmjennison/firebase-js-sdk#4719836f8155018716314188c1af95050cafd29d":
+"firebase@github:kmjennison/firebase-js-sdk#d2e3b0f6e83bcade9ffe3a2436767e8560546b72":
   version "0.1.0"
-  resolved "https://codeload.github.com/kmjennison/firebase-js-sdk/tar.gz/4719836f8155018716314188c1af95050cafd29d"
+  resolved "https://codeload.github.com/kmjennison/firebase-js-sdk/tar.gz/d2e3b0f6e83bcade9ffe3a2436767e8560546b72"
 
 firebaseui@^2.7.0:
   version "2.7.0"
