@@ -4081,7 +4081,7 @@ find-up@^2.0.0, find-up@^2.1.0:
   dependencies:
     locate-path "^2.0.0"
 
-firebase@^4.8.0, firebase@~4.12.1:
+firebase@^4.8.0:
   version "4.12.1"
   resolved "https://registry.yarnpkg.com/firebase/-/firebase-4.12.1.tgz#973776a6d74d5314a20d8413fe333412082fc919"
   dependencies:
@@ -4095,6 +4095,10 @@ firebase@^4.8.0, firebase@~4.12.1:
     "@firebase/storage" "0.1.8"
     dom-storage "^2.0.2"
     xmlhttprequest "^1.8.0"
+
+"firebase@github:kmjennison/firebase-js-sdk#4719836f8155018716314188c1af95050cafd29d":
+  version "0.1.0"
+  resolved "https://codeload.github.com/kmjennison/firebase-js-sdk/tar.gz/4719836f8155018716314188c1af95050cafd29d"
 
 firebaseui@^2.7.0:
   version "2.7.0"
