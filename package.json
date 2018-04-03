@@ -48,7 +48,7 @@
     "web:deploy": "cd ./web && yarn run deploy",
     "web:graphqlschema:monitor": "nodemon --watch graphql/data/schema.graphql --exec \"yarn run web:graphqlschema:update\" 2>&1 | node scripts/log-prefix.js [node] grey",
     "web:graphqlschema:update": "cp graphql/data/schema.graphql web/data/schema.graphql",
-    "web:install": "cd ./web && yarn install",
+    "web:install": "cd ./web && yarn install && yarn run firebase:build",
     "web:test": "cd ./web && yarn test",
     "web:test:integration": "cd ./web && yarn test:integration",
     "web:start": "cd ./web && yarn run start 2>&1 | node ../scripts/log-prefix.js [web] blue",
