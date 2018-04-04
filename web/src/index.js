@@ -11,17 +11,14 @@ import { getUsername } from 'authentication/user'
 // https://docs.sentry.io/clients/javascript/config/
 const sentryDSN = process.env.WEB_SENTRY_DSN
 const sentryDebug = process.env.WEB_SENTRY_DEBUG === 'true'
+const sentryEnableAutoBreadcrumbs = process.env.WEB_SENTRY_ENABLE_AUTO_BREADCRUMBS === 'true'
 try {
   Raven.config(sentryDSN, {
     environment: process.env.STAGE,
     debug: sentryDebug,
-    autoBreadcrumbs: {
-      // https://github.com/getsentry/raven-js/issues/723
-      // https://docs.sentry.io/clients/javascript/config/
-      xhr: false,
-      console: false,
-      dom: false
-    }
+    // https://github.com/getsentry/raven-js/issues/723
+    // https://docs.sentry.io/clients/javascript/config/
+    autoBreadcrumbs: sentryEnableAutoBreadcrumbs
   }).install()
 } catch (e) {
   console.error(e)
