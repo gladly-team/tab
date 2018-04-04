@@ -109,7 +109,7 @@
   },
   "scripts": {
     "start": "yarn run relay && nodemon --watch data/schema.graphql scripts/start.js & yarn run relay:watch",
-    "build": "yarn run firebase:build && yarn run relay && node scripts/build.js",
+    "build": "yarn run relay && node scripts/build.js",
     "firebase:build": "cd ./node_modules/firebase/ && yarn && yarn run prepare && echo \"module.exports = require('./packages/firebase/index.js')\" > index.js",
     "deploy": "npm-run-all -s build sls:deploy sls:s3sync",
     "relay": "relay-compiler --src ./src/ --schema ./data/schema.graphql",
