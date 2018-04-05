@@ -52,7 +52,7 @@
     "favicons-webpack-plugin": "0.0.7",
     "file-loader": "^0.11.1",
     "filesize": "^3.5.9",
-    "firebase": "github:kmjennison/firebase-js-sdk#d2e3b0f6e83bcade9ffe3a2436767e8560546b72",
+    "firebase": "~4.12.1",
     "fs-extra": "^3.0.1",
     "gzip-size": "3.0.0",
     "hex-to-rgba": "^1.0.0",
@@ -110,7 +110,6 @@
   "scripts": {
     "start": "yarn run relay && nodemon --watch data/schema.graphql scripts/start.js & yarn run relay:watch",
     "build": "yarn run relay && node scripts/build.js",
-    "firebase:build": "cd ./node_modules/firebase/ && yarn && yarn run prepare && echo \"module.exports = require('./packages/firebase/index.js')\" > index.js",
     "deploy": "npm-run-all -s build sls:deploy sls:s3sync",
     "relay": "relay-compiler --src ./src/ --schema ./data/schema.graphql",
     "relay:watch": "nodemon --watch src/ --watch data/schema.graphql --ignore **/__generated__/**/* --exec \"yarn run relay\"",
