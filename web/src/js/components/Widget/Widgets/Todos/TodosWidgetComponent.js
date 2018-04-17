@@ -164,42 +164,42 @@ class TodosWidget extends React.Component {
           })}
           {
             this.state.completed.length
-            ? (
-              <Subheader
-                style={{
-                  color: dashboardIconInactiveColor,
-                  borderTop: `2px ${primaryColor} solid`,
-                  borderBottom: `2px ${primaryColor} solid`,
-                  lineHeight: '100%',
-                  margin: 5,
-                  width: 'auto',
-                  padding: '6px 12px',
-                  boxSizing: 'border-box',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  fontSize: 14,
-                  fontFamily: appTheme.fontFamily,
-                  backgroundColor: 'rgba(0,0,0,.3)'
-                }}
-                inset={false}
-              >
-                Completed
-                <FlatButton
+              ? (
+                <Subheader
                   style={{
-                    fontSize: 12,
-                    height: 24,
-                    fontWeight: buttonFontWeight,
-                    lineHeight: '24px',
-                    color: dashboardIconInactiveColor
+                    color: dashboardIconInactiveColor,
+                    borderTop: `2px ${primaryColor} solid`,
+                    borderBottom: `2px ${primaryColor} solid`,
+                    lineHeight: '100%',
+                    margin: 5,
+                    width: 'auto',
+                    padding: '6px 12px',
+                    boxSizing: 'border-box',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    fontSize: 14,
+                    fontFamily: appTheme.fontFamily,
+                    backgroundColor: 'rgba(0,0,0,.3)'
                   }}
-                  onClick={this.removeAllCompletedTodos.bind(this)}
+                  inset={false}
                 >
+                Completed
+                  <FlatButton
+                    style={{
+                      fontSize: 12,
+                      height: 24,
+                      fontWeight: buttonFontWeight,
+                      lineHeight: '24px',
+                      color: dashboardIconInactiveColor
+                    }}
+                    onClick={this.removeAllCompletedTodos.bind(this)}
+                  >
                   CLEAR
-                </FlatButton>
-              </Subheader>
-            )
-            : null
+                  </FlatButton>
+                </Subheader>
+              )
+              : null
           }
           {this.state.completed.map((todo, index) => {
             return (

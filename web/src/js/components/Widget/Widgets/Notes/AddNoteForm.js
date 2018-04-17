@@ -12,7 +12,7 @@ class AddNoteForm extends React.Component {
       <EditWidgetChip
         widgetName={'Notes'}
         onAddItemClick={this.create.bind(this)}
-       />
+      />
     )
   }
 }

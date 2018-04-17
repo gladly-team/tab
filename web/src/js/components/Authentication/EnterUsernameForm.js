@@ -116,7 +116,7 @@ class EnterUsernameForm extends React.Component {
             display: 'block'
           }}
           data-test-id={'enter-username-form-username-field'}
-          />
+        />
         <span
           style={{
             display: 'flex',
@@ -130,7 +130,7 @@ class EnterUsernameForm extends React.Component {
             primary
             disabled={this.state.savingUsernameInProgress}
             onClick={this.submit.bind(this)}
-           />
+          />
         </span>
       </Paper>
     )

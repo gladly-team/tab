@@ -73,7 +73,7 @@ class BackgroundSettings extends React.Component {
             user={user}
             updateOnMount={user.backgroundOption !== 'daily'}
             showError={showError} />
-          )
+        )
         break
       case 'custom':
         selectedOption = (

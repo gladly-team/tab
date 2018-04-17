@@ -49,7 +49,7 @@ describe('Widgets component', function () {
       <WidgetsComponent
         user={userData}
         showError={mockShowError}
-        />
+      />
     )
   })
 
@@ -74,7 +74,7 @@ describe('Widgets component', function () {
         user={userData}
         isCampaignLive={false}
         showError={mockShowError}
-        />
+      />
     )
     expect(wrapper.find('[data-test-id="widget-clock"]').length).toBe(1)
   })
@@ -100,7 +100,7 @@ describe('Widgets component', function () {
         user={userData}
         isCampaignLive // campaign!
         showError={mockShowError}
-        />
+      />
     )
     expect(wrapper.find('[data-test-id="widget-clock"]').length).toBe(0)
   })

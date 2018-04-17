@@ -116,8 +116,8 @@ class EditWidgetChip extends React.Component {
               float: 'right',
               marginLeft: 4
             })}
-            />
-          )
+          />
+        )
       } else {
         editIcon = (
           <LockClosedIcon
@@ -185,11 +185,11 @@ class EditWidgetChip extends React.Component {
     const expandedWidth = 290
     const width = (
       this.props.open
-      ? expandedWidth
-      : (this.state.dimensions.width
-        ? this.state.dimensions.width + iconWidth
-        : 'auto'
-      )
+        ? expandedWidth
+        : (this.state.dimensions.width
+          ? this.state.dimensions.width + iconWidth
+          : 'auto'
+        )
     )
     const height = this.state.dimensions.height
       ? this.state.dimensions.height

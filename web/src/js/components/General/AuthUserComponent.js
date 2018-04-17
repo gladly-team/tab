@@ -88,11 +88,11 @@ class AuthUserComponent extends React.Component {
     }
 
     const childrenWithProps = React.Children.map(this.props.children,
-       (child) => React.cloneElement(child, {
-         variables: Object.assign({}, this.props.variables, {
-           userId: this.state.userId
-         })
-       })
+      (child) => React.cloneElement(child, {
+        variables: Object.assign({}, this.props.variables, {
+          userId: this.state.userId
+        })
+      })
     )
 
     return (

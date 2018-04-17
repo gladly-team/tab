@@ -24,7 +24,7 @@ describe('LogAccountCreation component', function () {
     shallow(
       <LogAccountCreationComponent
         user={mockUserData}
-        />
+      />
     )
     expect(accountCreated).toHaveBeenCalledTimes(1)
   })
@@ -37,7 +37,7 @@ describe('LogAccountCreation component', function () {
     shallow(
       <LogAccountCreationComponent
         user={mockUserData}
-        />
+      />
     )
     expect(accountCreated).not.toHaveBeenCalled()
   })

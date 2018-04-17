@@ -61,7 +61,7 @@ describe('LogRevenueComponent', function () {
         user={{ id: 'abcdefghijklmno' }}
         tabId={'712dca1a-3705-480f-95ff-314be86a2936'}
         relay={{ environment: {} }}
-        />
+      />
     )
     expect(toJson(wrapper)).toEqual('')
   })
@@ -96,7 +96,7 @@ describe('LogRevenueComponent', function () {
         }}
         tabId={tabId}
         relay={{ environment: mockRelayEnvironment }}
-        />
+      />
     )
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment, mockUserId,
       0.000172, '132435', null, null, tabId)
@@ -136,7 +136,7 @@ describe('LogRevenueComponent', function () {
         }}
         tabId={tabId}
         relay={{ environment: mockRelayEnvironment }}
-        />
+      />
     )
 
     expect(LogUserRevenueMutation).not.toHaveBeenCalled()
@@ -166,7 +166,7 @@ describe('LogRevenueComponent', function () {
         }}
         tabId={tabId}
         relay={{ environment: mockRelayEnvironment }}
-        />
+      />
     )
 
     expect(LogUserRevenueMutation).not.toHaveBeenCalled()
@@ -201,7 +201,7 @@ describe('LogRevenueComponent', function () {
         }}
         tabId={tabId}
         relay={{ environment: mockRelayEnvironment }}
-        />
+      />
     )
 
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment, mockUserId,
@@ -242,7 +242,7 @@ describe('LogRevenueComponent', function () {
         }}
         tabId={tabId}
         relay={{ environment: mockRelayEnvironment }}
-        />
+      />
     )
 
     // Should not have logged anything yet
@@ -296,7 +296,7 @@ describe('LogRevenueComponent', function () {
         }}
         tabId={tabId}
         relay={{ environment: mockRelayEnvironment }}
-        />
+      />
     )
 
     // Should not have logged anything yet
@@ -353,7 +353,7 @@ describe('LogRevenueComponent', function () {
         }}
         tabId={tabId}
         relay={{ environment: mockRelayEnvironment }}
-        />
+      />
     )
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment, mockUserId,
       null, '132435', { encodingType: 'AMAZON_CPM', encodedValue: 'a-bid-code' }, null,
@@ -394,7 +394,7 @@ describe('LogRevenueComponent', function () {
         }}
         tabId={tabId}
         relay={{ environment: mockRelayEnvironment }}
-        />
+      />
     )
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment, mockUserId,
       0.00231, '132435', { encodingType: 'AMAZON_CPM', encodedValue: 'a-bid-code' }, 'MAX',
@@ -435,7 +435,7 @@ describe('LogRevenueComponent', function () {
         }}
         tabId={tabId}
         relay={{ environment: mockRelayEnvironment }}
-        />
+      />
     )
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment, mockUserId,
       0.00231, '132435', null, null, tabId)
@@ -474,7 +474,7 @@ describe('LogRevenueComponent', function () {
         }}
         tabId={tabId}
         relay={{ environment: mockRelayEnvironment }}
-        />
+      />
     )
     expect(LogUserRevenueMutation).not.toHaveBeenCalled()
     expect(mockConsoleWarn).toHaveBeenCalledWith('Could not find rendered slot data for slot "my-slot-2468"')

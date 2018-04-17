@@ -43,7 +43,7 @@ class SignInIframeMessage extends React.Component {
             label={buttonLabel}
             primary
             onClick={this.openAuthOutsideIframe.bind(this)}
-           />
+          />
         </span>
       </Paper>
     )

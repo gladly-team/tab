@@ -132,8 +132,8 @@ class Todo extends React.Component {
             iconStyle={{
               fill: (
                 completed
-                ? dashboardIconInactiveColor
-                : dashboardIconActiveColor
+                  ? dashboardIconInactiveColor
+                  : dashboardIconActiveColor
               ),
               marginRight: 10
             }}

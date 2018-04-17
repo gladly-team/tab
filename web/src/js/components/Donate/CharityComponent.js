@@ -271,7 +271,7 @@ class Charity extends React.Component {
                 onChange={this.onCustomSliderValChange.bind(this)}
               />
               : null
-          }
+            }
           </div>
         </Popover>
         <Dialog

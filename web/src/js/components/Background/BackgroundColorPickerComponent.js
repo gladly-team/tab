@@ -89,7 +89,7 @@ class BackgroundColorPicker extends React.Component {
               color={this.state.selectedColor}
               disableAlpha
               onChangeComplete={this.onColorChanged.bind(this)}
-              />
+            />
           </div>
           <div style={previewContainer}>
             <Paper style={preview} />

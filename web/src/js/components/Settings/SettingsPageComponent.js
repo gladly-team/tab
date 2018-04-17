@@ -92,7 +92,7 @@ class SettingsPage extends React.Component {
                 <div style={menuItemBottomStyle}>
                   {this.props.menuItemBottom}
                 </div>
-                )
+              )
               : null
             }
           </Drawer>

@@ -46,7 +46,7 @@ class MoneyRaised extends React.Component {
     if (!app) { return }
 
     const secondsInDay = 864
-      // Recalculate based on time that elapsed since the base amount.
+    // Recalculate based on time that elapsed since the base amount.
     const moneyRaised = app.moneyRaised
     const dollarsPerDayRate = app.dollarsPerDayRate
     const secondsPerPenny = secondsInDay / (dollarsPerDayRate)
@@ -119,12 +119,12 @@ class MoneyRaised extends React.Component {
     const textStyle = Object.assign({}, {
       color: (
         celebrateMilestone
-        ? milestoneMoneyRaisedColor
-        : (
-          this.state.hover
-          ? dashboardIconActiveColor
-          : dashboardIconInactiveColor
-        )
+          ? milestoneMoneyRaisedColor
+          : (
+            this.state.hover
+              ? dashboardIconActiveColor
+              : dashboardIconInactiveColor
+          )
       ),
       transition: 'color 300ms ease-in',
       cursor: 'pointer',
@@ -151,8 +151,8 @@ class MoneyRaised extends React.Component {
             fadeOutSpeed={40}
             overflowPx={14}
             flicker={false}
-            />
-          )
+          />
+        )
           : null
         }
         <DashboardPopover

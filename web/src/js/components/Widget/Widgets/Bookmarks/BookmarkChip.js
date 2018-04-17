@@ -175,7 +175,7 @@ class BookmarkChip extends React.Component {
           onReorderMoveUp={this.onReorderMoveUp.bind(this)}
           onReorderMoveDown={this.onReorderMoveDown.bind(this)}
           setTemporaryColor={this.setTemporaryColor.bind(this)}
-          />
+        />
       </span>
     )
   }

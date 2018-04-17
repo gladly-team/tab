@@ -161,7 +161,7 @@ class AddBookmarkForm extends React.Component {
             />
           </span>
         }
-       />
+      />
     )
   }
 }

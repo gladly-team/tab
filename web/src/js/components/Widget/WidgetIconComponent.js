@@ -52,8 +52,8 @@ class WidgetIcon extends React.Component {
     const iconButtonStyle = Object.assign({}, style.container, activeStyle)
     const iconColor = (
       this.props.active
-      ? dashboardIconActiveColor
-      : dashboardIconInactiveColor
+        ? dashboardIconActiveColor
+        : dashboardIconInactiveColor
     )
     const iconHoverColor = dashboardIconActiveColor
 

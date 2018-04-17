@@ -98,7 +98,7 @@ class ProfileStats extends React.Component {
                 <HeartBorderIcon
                   style={{ marginLeft: 0, marginRight: 2, height: 16, width: 16, paddingBottom: 0 }}
                   color={appTheme.palette.disabledColor}
-                  />
+                />
                 <span>until next level</span>
               </span>
             }
