@@ -5,7 +5,7 @@ import prebidConfig from './prebid/prebidConfig'
 import amazonBidder from './amazon/amazonBidder'
 import handleAdsLoaded from './handleAdsLoaded'
 
-if (adsEnabled) {
+if (adsEnabled()) {
   handleAdsLoaded()
   amazonBidder()
   prebid()

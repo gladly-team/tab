@@ -1,2 +1,6 @@
 
-export default process.env.ADS_ENABLED === 'true'
+export default () => {
+  if (!(process.env.ADS_ENABLED === 'true')) {
+    return false
+  }
+}
