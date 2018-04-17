@@ -43,7 +43,7 @@ class MissingEmailMessage extends React.Component {
             label={buttonLabel}
             primary
             onClick={this.restartAuthFlow.bind(this)}
-           />
+          />
         </span>
       </Paper>
     )

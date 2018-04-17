@@ -81,25 +81,25 @@ class StickerCampaignThanks extends React.Component {
               marginBottom: 12
             }}
           > {
-            (user.recruits.recruitsActiveForAtLeastOneDay >= 2)
-            ? (
-              <span
-                data-test-id={'sticker-campaign-thanks-success'}
-              >
-                <a href='https://docs.google.com/forms/d/e/1FAIpQLScVcV3EkYpkhqUG7hDGULUMJM_h57-3GnaRSg95p_UheP44dw/viewform' target='_blank'>
-                  <RaisedButton
-                    label='Claim Your Stickers'
-                    style={{
-                      display: 'block',
-                      marginTop: 8
-                    }}
-                    primary
-                  />
-                </a>
-              </span>
-            )
-            : null
-          }
+              (user.recruits.recruitsActiveForAtLeastOneDay >= 2)
+                ? (
+                  <span
+                    data-test-id={'sticker-campaign-thanks-success'}
+                  >
+                    <a href='https://docs.google.com/forms/d/e/1FAIpQLScVcV3EkYpkhqUG7hDGULUMJM_h57-3GnaRSg95p_UheP44dw/viewform' target='_blank'>
+                      <RaisedButton
+                        label='Claim Your Stickers'
+                        style={{
+                          display: 'block',
+                          marginTop: 8
+                        }}
+                        primary
+                      />
+                    </a>
+                  </span>
+                )
+                : null
+            }
           </span>
         </span>
       </div>

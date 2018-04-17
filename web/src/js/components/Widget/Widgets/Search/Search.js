@@ -94,8 +94,8 @@ class Search extends React.Component {
       borderColor: appTheme.palette.borderColor,
       opacity: (
         this.state.hover || this.state.focused
-        ? 100
-        : 0
+          ? 100
+          : 0
       ),
       transition: 'opacity 150ms ease-in'
     }
@@ -122,8 +122,8 @@ class Search extends React.Component {
         <SearchIcon
           color={
             (this.state.hover || this.state.focused)
-            ? dashboardIconActiveColor
-            : dashboardIconInactiveColor
+              ? dashboardIconActiveColor
+              : dashboardIconInactiveColor
           }
           hoverColor={dashboardIconActiveColor}
           style={iconStyle}

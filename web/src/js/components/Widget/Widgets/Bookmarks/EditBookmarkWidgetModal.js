@@ -167,7 +167,7 @@ export default class EditBookmarkWidgetModal extends React.Component {
               color={this.props.currentBookmarkColor}
               onChangeComplete={this.setColor.bind(this)}
               triangle={'hide'}
-              />
+            />
           </span>
         </span>
       </Dialog>

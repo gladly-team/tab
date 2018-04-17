@@ -116,8 +116,8 @@ class LogRevenueComponent extends React.Component {
       const GOOGLE_ADSENSE_ID = '99'
       const dfpAdvertiserId = (
         slotRenderedData.advertiserId
-        ? slotRenderedData.advertiserId.toString()
-        : GOOGLE_ADSENSE_ID
+          ? slotRenderedData.advertiserId.toString()
+          : GOOGLE_ADSENSE_ID
       )
 
       // Log the revenue

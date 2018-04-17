@@ -193,8 +193,8 @@ class UserMenu extends React.Component {
     const menuIconStyle = {
       color: (
         this.state.menuIconHover
-        ? dashboardIconActiveColor
-        : dashboardIconInactiveColor
+          ? dashboardIconActiveColor
+          : dashboardIconInactiveColor
       ),
       transition: 'color 300ms ease-in',
       fontSize: 22
@@ -290,7 +290,7 @@ class UserMenu extends React.Component {
                   labelStyle={popoverButtonLabelStyle}
                   primary
                   onClick={goToInviteFriends}
-               />
+                />
               </div>
             </div>
             <Divider style={dividerStyle} />

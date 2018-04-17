@@ -113,7 +113,7 @@ class Dashboard extends React.Component {
                   app={app}
                   style={moneyRaisedStyle}
                   launchFireworks={this.launchFireworks.bind(this)}
-                  />
+                />
                 <CircleIcon
                   color={dashboardIconInactiveColor}
                   hoverColor={dashboardIconActiveColor}
@@ -122,23 +122,23 @@ class Dashboard extends React.Component {
                 <UserMenu app={app} user={user} style={userMenuStyle} />
               </div>
             </FadeInDashboardAnimation>
-            )
+          )
           : null
         }
         <WidgetsContainer
           user={user}
           isCampaignLive={isGlobalCampaignLive}
           showError={this.showError.bind(this)}
-          />
+        />
         { user
           ? (
             <FadeInDashboardAnimation>
               <CampaignBaseContainer
                 user={user}
                 isCampaignLive={isGlobalCampaignLive}
-                />
+              />
             </FadeInDashboardAnimation>
-            )
+          )
           : null
         }
         {
@@ -202,7 +202,7 @@ class Dashboard extends React.Component {
               />
             </span>
           )
-          : null
+            : null
         }
         <Ad
           adId='div-gpt-ad-1464385742501-0'

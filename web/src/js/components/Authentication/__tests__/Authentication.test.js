@@ -54,7 +54,7 @@ describe('Authentication.js tests', function () {
         location={mockLocationData}
         user={mockUserData}
         fetchUser={mockFetchUser}
-        />
+      />
     )
   })
 
@@ -66,7 +66,7 @@ describe('Authentication.js tests', function () {
         location={mockLocationData}
         user={mockUserData}
         fetchUser={mockFetchUser}
-        />
+      />
     )
     const component = wrapper.instance()
     component.navigateToAuthStep = jest.fn()
@@ -84,7 +84,7 @@ describe('Authentication.js tests', function () {
         location={mockLocationData}
         user={mockUserData}
         fetchUser={mockFetchUser}
-        />
+      />
     )
     const component = wrapper.instance()
     component.navigateToAuthStep = jest.fn()
@@ -116,7 +116,7 @@ describe('Authentication.js tests', function () {
         location={mockLocationData}
         user={mockUserDataProp}
         fetchUser={jest.fn()}
-        />
+      />
     )
     const component = wrapper.instance()
     await component.navigateToAuthStep()
@@ -145,7 +145,7 @@ describe('Authentication.js tests', function () {
         location={mockLocationData}
         user={mockUserDataProp}
         fetchUser={jest.fn()}
-        />
+      />
     )
     const component = wrapper.instance()
     await component.navigateToAuthStep()
@@ -171,7 +171,7 @@ describe('Authentication.js tests', function () {
         location={mockLocationData}
         user={mockUserDataProp}
         fetchUser={jest.fn()}
-        />
+      />
     )
     const component = wrapper.instance()
     await component.navigateToAuthStep()
@@ -197,7 +197,7 @@ describe('Authentication.js tests', function () {
         location={mockLocationData}
         user={mockUserDataProp}
         fetchUser={jest.fn()}
-        />
+      />
     )
     const component = wrapper.instance()
     await component.navigateToAuthStep()
@@ -226,7 +226,7 @@ describe('Authentication.js tests', function () {
         location={mockLocationData}
         user={mockUserDataProp}
         fetchUser={jest.fn()}
-        />
+      />
     )
     const component = wrapper.instance()
     await component.navigateToAuthStep()
@@ -255,7 +255,7 @@ describe('Authentication.js tests', function () {
         location={mockLocationData}
         user={mockUserDataProp}
         fetchUser={jest.fn()}
-        />
+      />
     )
     const component = wrapper.instance()
     await component.navigateToAuthStep()
@@ -284,7 +284,7 @@ describe('Authentication.js tests', function () {
         location={mockLocationData}
         user={mockUserDataProp}
         fetchUser={jest.fn()}
-        />
+      />
     )
     const component = wrapper.instance()
     await component.navigateToAuthStep()
@@ -313,7 +313,7 @@ describe('Authentication.js tests', function () {
         location={mockLocationData}
         user={mockUserDataProp}
         fetchUser={jest.fn()}
-        />
+      />
     )
     const component = wrapper.instance()
     await component.navigateToAuthStep()
@@ -345,7 +345,7 @@ describe('Authentication.js tests', function () {
         }}
         user={mockUserDataProp}
         fetchUser={jest.fn()}
-        />
+      />
     )
     const component = wrapper.instance()
     await component.navigateToAuthStep()
@@ -361,7 +361,7 @@ describe('Authentication.js tests', function () {
         location={mockLocationData}
         user={mockUserData}
         fetchUser={mockFetchUser}
-        />
+      />
     )
     expect(toJson(wrapper)).toMatchSnapshot()
   })
@@ -391,7 +391,7 @@ describe('Authentication.js tests', function () {
         location={mockLocationData}
         user={mockUserData}
         fetchUser={jest.fn()}
-        />
+      />
     )
     const component = wrapper.instance()
 
@@ -427,7 +427,7 @@ describe('Authentication.js tests', function () {
         location={mockLocationData}
         user={mockUserData}
         fetchUser={jest.fn()}
-        />
+      />
     )
     const component = wrapper.instance()
 
@@ -482,7 +482,7 @@ describe('Authentication.js tests', function () {
         location={mockLocationData}
         user={mockUserData}
         fetchUser={mockFetchUser}
-        />
+      />
     )
     const component = wrapper.instance()
 
@@ -516,7 +516,7 @@ describe('Authentication.js tests', function () {
         location={mockLocationData}
         user={mockUserData}
         fetchUser={mockFetchUser}
-        />
+      />
     )
     const component = wrapper.instance()
     CreateNewUserMutation.mockImplementationOnce(

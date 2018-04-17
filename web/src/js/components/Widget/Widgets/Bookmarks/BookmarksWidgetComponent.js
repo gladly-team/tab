@@ -168,7 +168,7 @@ class BookmarksWidget extends React.Component {
           showEditButton={bookmarks.length > 0}
           editMode={this.state.editMode}
           onEditModeToggle={this.onEditModeToggle.bind(this)}
-          />
+        />
         <WidgetScrollSection>
           <div style={wrapper}>
             {nodataMsg}

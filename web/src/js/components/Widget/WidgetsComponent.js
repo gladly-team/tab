@@ -71,23 +71,23 @@ class Widgets extends React.Component {
           </div>
           {
             isCampaignLive
-            ? null
-            : <CenteredWidgetsContainer>
-              {user.widgets.edges.map((edge, index) => {
-                if (
-                  edge.node.type === WIDGET_TYPE_CLOCK
-                ) {
-                  return (
-                    <Widget
-                      key={index}
-                      user={user}
-                      widget={edge.node}
-                      data-test-id={'widget-clock'}
-                      showError={this.props.showError} />
-                  )
-                }
-              })}
-            </CenteredWidgetsContainer>
+              ? null
+              : <CenteredWidgetsContainer>
+                {user.widgets.edges.map((edge, index) => {
+                  if (
+                    edge.node.type === WIDGET_TYPE_CLOCK
+                  ) {
+                    return (
+                      <Widget
+                        key={index}
+                        user={user}
+                        widget={edge.node}
+                        data-test-id={'widget-clock'}
+                        showError={this.props.showError} />
+                    )
+                  }
+                })}
+              </CenteredWidgetsContainer>
           }
           <ActiveWidgetAnimation>
             {user.widgets.edges.map((edge, index) => {
@@ -99,7 +99,7 @@ class Widgets extends React.Component {
                     user={user}
                     widget={edge.node}
                     showError={this.props.showError}
-                    />
+                  />
                 )
               }
             })}

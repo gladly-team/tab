@@ -22,7 +22,7 @@ describe('LogTabComponent', function () {
         user={{ id: 'abcdefghijklmno' }}
         tabId={'abc-123'}
         relay={{ environment: {} }}
-        />
+      />
     )
     expect(toJson(wrapper)).toEqual('')
   })
@@ -38,7 +38,7 @@ describe('LogTabComponent', function () {
         user={mockUserData}
         tabId={tabId}
         relay={{ environment: mockRelayEnvironment }}
-        />
+      />
     )
     jest.advanceTimersByTime(999)
     expect(LogTabMutation).not.toHaveBeenCalled()

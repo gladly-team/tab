@@ -113,13 +113,13 @@ BackgroundImagePicker.propTypes = {
   app: PropTypes.shape({
     backgroundImages: PropTypes.shape({
       edges: PropTypes.arrayOf(
-          PropTypes.shape({
-            id: PropTypes.string,
-            name: PropTypes.string,
-            imageURL: PropTypes.string,
-            thumbnailURL: PropTypes.string
-          })
-        ).isRequired
+        PropTypes.shape({
+          id: PropTypes.string,
+          name: PropTypes.string,
+          imageURL: PropTypes.string,
+          thumbnailURL: PropTypes.string
+        })
+      ).isRequired
     }).isRequired
   }),
   user: PropTypes.shape({

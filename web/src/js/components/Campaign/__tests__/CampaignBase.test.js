@@ -16,7 +16,7 @@ describe('Campaign base component', function () {
       <CampaignBase
         user={mockUserData}
         isCampaignLive
-        />
+      />
     )
     expect(wrapper.find('[data-test-id="campaign-root"]').length).toBe(1)
   })
@@ -27,7 +27,7 @@ describe('Campaign base component', function () {
       <CampaignBase
         user={mockUserData}
         isCampaignLive={false}
-        />
+      />
     )
     expect(wrapper.find('[data-test-id="campaign-root"]').length).toBe(0)
   })

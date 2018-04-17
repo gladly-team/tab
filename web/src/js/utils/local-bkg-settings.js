@@ -9,7 +9,7 @@ import { postBackgroundSettings } from './extension-messenger'
 import localStorageMgr from './localstorage-mgr'
 
 export const setBackgroundSettings = function (backgroundOption,
-    customImage, backgroundColor, imageURL) {
+  customImage, backgroundColor, imageURL) {
   localStorageMgr.setItem(STORAGE_BACKGROUND_OPTION, backgroundOption)
   localStorageMgr.setItem(STORAGE_BACKGROUND_CUSTOM_IMAGE, customImage)
   localStorageMgr.setItem(STORAGE_BACKGROUND_COLOR, backgroundColor)
@@ -22,7 +22,7 @@ export const setBackgroundSettings = function (backgroundOption,
 // Call to extension new tab page (parent frame) to update
 // its background settings.
 export const setExtensionBackgroundSettings = function (backgroundOption,
-    customImage, backgroundColor, imageURL) {
+  customImage, backgroundColor, imageURL) {
   postBackgroundSettings({
     backgroundOption: backgroundOption,
     customImage: customImage,

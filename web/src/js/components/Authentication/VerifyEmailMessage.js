@@ -86,13 +86,13 @@ class VerifyEmailMessage extends React.Component {
             style={{
               marginRight: 8
             }}
-           />
+          />
           <RaisedButton
             label={buttonLabel}
             primary
             disabled={buttonDisabled}
             onClick={this.resendEmailClick.bind(this)}
-           />
+          />
         </span>
       </Paper>
     )
