@@ -12,6 +12,7 @@ import {
   permissionAuthorizers
 } from '../../utils/authorization-helpers'
 import config from '../../config'
+import { getTodayTabCount } from './user-utils'
 
 const mediaRoot = config.MEDIA_ENDPOINT
 
@@ -51,6 +52,7 @@ class User extends BaseModel {
       vcAllTime: types.number().integer().default(self.fieldDefaults.vcAllTime),
       level: types.number().integer().default(self.fieldDefaults.level),
       tabs: types.number().integer().default(self.fieldDefaults.tabs),
+      tabsToday: types.number().integer().forbidden(), // only set in deserializer
       validTabs: types.number().integer().default(self.fieldDefaults.tabs),
       maxTabsDay: types.object({
         // The count of tabs for the day on which the user opened
@@ -125,6 +127,10 @@ class User extends BaseModel {
 
   static get fieldDeserializers () {
     return {
+      tabsToday: (tabsToday, userObj) => {
+        // Calculate tabsToday based on the maxTabsDay value
+        return getTodayTabCount(userObj)
+      },
       backgroundImage: (backgroundImage, userObj) => {
         return Object.assign({}, backgroundImage, {
           imageURL: `${mediaRoot}/img/backgrounds/${backgroundImage.image}`,

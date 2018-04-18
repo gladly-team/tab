@@ -45,6 +45,10 @@ const exampleUser = {
     maxDay: {
       date: '2017-11-18T20:39:15.088Z',
       numTabs: 11
+    },
+    recentDay: {
+      date: '2017-11-18T20:39:15.088Z',
+      numTabs: 11
     }
   },
   heartsUntilNextLevel: 12,

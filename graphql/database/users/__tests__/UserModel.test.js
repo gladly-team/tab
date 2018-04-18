@@ -144,6 +144,7 @@ describe('UserModel', () => {
       vcAllTime: 0,
       level: 0,
       tabs: 0,
+      tabsToday: 0,
       maxTabsDay: {
         maxDay: {
           date: moment.utc().toISOString(),
@@ -167,6 +168,28 @@ describe('UserModel', () => {
         timestamp: moment.utc().toISOString()
       },
       backgroundOption: 'photo'
+    })
+  })
+
+  it('constructs with the expected "tabsToday" value', () => {
+    const item = Object.assign({}, new User({
+      id: 'bb5082cc-151a-4a9a-9289-06906670fd4e',
+      email: 'foo@bar.com',
+      username: 'Foo Bar',
+      maxTabsDay: {
+        maxDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 300
+        },
+        recentDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 47
+        }
+      }
+    }))
+    expect(item).toMatchObject({
+      id: 'bb5082cc-151a-4a9a-9289-06906670fd4e',
+      tabsToday: 47
     })
   })
 })
