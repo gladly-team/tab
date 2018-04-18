@@ -28,6 +28,24 @@ const isTabValid = (userContext, lastTabTimestampStr) => {
 }
 
 /**
+ * Return the count of tabs opened today (UTC day).
+ * @param {object} user - The user object from our DB
+ * @return {number} The number of tabs opened today.
+ */
+const getTodayTabCount = (user) => {
+  const isFirstTabToday = (
+    moment(user.maxTabsDay.recentDay.date).utc().format('LL') !==
+    moment().utc().format('LL')
+  )
+  const todayTabCount = (
+    isFirstTabToday
+    ? 1
+    : user.maxTabsDay.recentDay.numTabs + 1
+  )
+  return todayTabCount
+}
+
+/**
  * Change the user's tab and VC stats accordingly when the
  * user opens a tab.
  * This only increments the VC if the tab is "valid",
@@ -52,15 +70,7 @@ const logTab = async (userContext, userId, tabId = null) => {
   // for the user's "current day" tab count.
   // If today is also the day of all time max tabs,
   // update the max tabs day value.
-  const isFirstTabToday = (
-    moment(user.maxTabsDay.recentDay.date).utc().format('LL') !==
-    moment().utc().format('LL')
-  )
-  const todayTabCount = (
-    isFirstTabToday
-    ? 1
-    : user.maxTabsDay.recentDay.numTabs + 1
-  )
+  const todayTabCount = getTodayTabCount(user)
   const isTodayMax = todayTabCount >= user.maxTabsDay.maxDay.numTabs
   const maxTabsDayVal = {
     maxDay: {
