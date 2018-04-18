@@ -11,7 +11,9 @@ export default {
     return mockStorage[key]
   }),
   setItem: jest.fn((key, val) => {
-    mockStorage[key] = val
+    if (val) {
+      mockStorage[key] = String(val)
+    }
   }),
   removeItem: jest.fn((key, val) => {
     delete (mockStorage[key])
