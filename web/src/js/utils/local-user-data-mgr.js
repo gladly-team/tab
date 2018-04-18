@@ -19,11 +19,11 @@ const getTabsOpenedTodayFromStorage = () => {
 }
 
 /**
- * Get the count of tabs opened today (UTC day) from localStorage. If no
- * value exists in storage, return zero.
- * @returns {number} The user's tab count
+ * Get whether the user has opened a tab today, according to the tab
+ * count in localStorage.
+ * @returns {boolean} Whether the user has opened a tab today
  */
-export const getTabsOpenedToday = function () {
+const hasUserOpenedTabToday = () => {
   // An ISO timestamp
   const tabCountDate = localStorageMgr.getItem(STORAGE_TABS_LAST_TAB_OPENED_DATE)
 
@@ -34,12 +34,53 @@ export const getTabsOpenedToday = function () {
 
   // If the current date is the same as the most recent date a
   // tab was opened, it is not the first tab today.
-  const isFirstTabToday = (
-    moment(tabCountDate).utc().format('LL') !==
+  const hasOpenedTabToday = (
+    moment(tabCountDate).utc().format('LL') ===
     moment().utc().format('LL')
   )
-  if (isFirstTabToday) {
+  return hasOpenedTabToday
+}
+
+/**
+ * Get the count of tabs opened today (UTC day) from localStorage. If no
+ * value exists in storage, return zero.
+ * @returns {number} The user's tab count
+ */
+export const getTabsOpenedToday = function () {
+  if (!hasUserOpenedTabToday()) {
     return 0
   }
   return getTabsOpenedTodayFromStorage()
+}
+
+/**
+ * Sets the localStorage value for the date of the last tab opened
+ * to an ISO timestamp of the current time.
+ * @returns {undefined}
+ */
+const setLastTabOpenedDateInLocalStorage = () => {
+  localStorageMgr.setItem(STORAGE_TABS_LAST_TAB_OPENED_DATE, moment.utc().toISOString())
+}
+
+/**
+ * Sets the localStorage value for today's tab count to one greater
+ * than its current value.
+ * @returns {undefined}
+ */
+const incrementTabsCountInLocalStorage = () => {
+  const currentTabCount = getTabsOpenedTodayFromStorage()
+  localStorageMgr.setItem(STORAGE_TABS_RECENT_DAY_COUNT, currentTabCount + 1)
+}
+
+/**
+ * Increment the count of tabs opened today (UTC day) in localStorage.
+ * If the most recent day of a tab opening is prior to today, reset
+ * the tab counter. If no values exist in localStorage, set them.
+ * @returns {undefined}
+ */
+export const incrementTabsOpenedToday = function () {
+  if (!hasUserOpenedTabToday()) {
+    setLastTabOpenedDateInLocalStorage()
+  }
+  incrementTabsCountInLocalStorage()
 }
