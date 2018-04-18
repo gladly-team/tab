@@ -7,8 +7,10 @@ import {
 import toJson from 'enzyme-to-json'
 
 import LogTabMutation from 'mutations/LogTabMutation'
+import { incrementTabsOpenedToday } from 'utils/local-user-data-mgr'
 
 jest.mock('mutations/LogTabMutation')
+jest.mock('utils/local-user-data-mgr')
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -45,5 +47,21 @@ describe('LogTabComponent', function () {
     jest.advanceTimersByTime(1)
     expect(LogTabMutation).toHaveBeenCalledWith(mockRelayEnvironment,
       mockUserData.id, tabId)
+  })
+
+  it('updates today\'s tab count in localStorage', () => {
+    const LogTabComponent = require('../LogTabComponent').default
+    const mockRelayEnvironment = {}
+    const mockUserData = { id: 'abcdefghijklmno' }
+    const tabId = 'abc-123'
+    jest.useFakeTimers()
+    shallow(
+      <LogTabComponent
+        user={mockUserData}
+        tabId={tabId}
+        relay={{ environment: mockRelayEnvironment }}
+      />
+    )
+    expect(incrementTabsOpenedToday).toHaveBeenCalled()
   })
 })
