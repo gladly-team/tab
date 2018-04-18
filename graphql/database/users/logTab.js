@@ -88,33 +88,27 @@ const logTab = async (userContext, userId, tabId = null) => {
   }
 
   try {
+    // TODO: parallelize the multiple awaits
     if (isValid) {
-      // TODO: parallelize the multiple awaits
-      // Increment the user's tab count, valid tab count, and VC.
+      // Only increment VC if we consider this a valid tab.
       user = await addVc(userContext, userId, 1)
-      user = await UserModel.update(userContext, {
-        id: userId,
-        tabs: {$add: 1},
-        validTabs: {$add: 1},
-        lastTabTimestamp: moment.utc().toISOString(),
-        maxTabsDay: maxTabsDayVal
-      })
-
-      // Log the tab for analytics.
-      await UserTabsLogModel.create(userContext, {
-        userId: userId,
-        timestamp: moment.utc().toISOString(),
-        ...tabId && { tabId: tabId }
-      })
-    } else {
-      // Only increment the user's tab count.
-      user = await UserModel.update(userContext, {
-        id: userId,
-        tabs: {$add: 1},
-        lastTabTimestamp: moment.utc().toISOString(),
-        maxTabsDay: maxTabsDayVal
-      })
     }
+
+    // Increment the user's tab count and (if a valid tab) valid tab count.
+    user = await UserModel.update(userContext, {
+      id: userId,
+      tabs: {$add: 1},
+      ...isValid && { validTabs: {$add: 1} },
+      lastTabTimestamp: moment.utc().toISOString(),
+      maxTabsDay: maxTabsDayVal
+    })
+
+    // Log the tab for analytics whether a valid tab or not.
+    await UserTabsLogModel.create(userContext, {
+      userId: userId,
+      timestamp: moment.utc().toISOString(),
+      ...tabId && { tabId: tabId }
+    })
   } catch (e) {
     throw e
   }
