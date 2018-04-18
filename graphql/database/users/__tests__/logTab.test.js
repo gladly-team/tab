@@ -115,6 +115,32 @@ describe('logTab', () => {
     )
   })
 
+  test('an invalid tab still logs the tab for analytics', async () => {
+    const userId = userContext.id
+
+    // Mock fetching the user.
+    const mockUser = getMockUserInstance({
+      lastTabTimestamp: '2017-06-22T01:13:28.000Z'
+    })
+    setMockDBResponse(
+      DatabaseOperation.GET,
+      {
+        Item: mockUser
+      }
+    )
+    const userTabsLogCreate = jest.spyOn(UserTabsLogModel, 'create')
+    await logTab(userContext, userId)
+
+    // It should create an item in UserTabsLog.
+    expect(userTabsLogCreate).toHaveBeenLastCalledWith(
+      userContext,
+      addTimestampFieldsToItem({
+        userId: userId,
+        timestamp: moment.utc().toISOString()
+      })
+    )
+  })
+
   test('it logs the tab ID when given', async () => {
     const userId = userContext.id
 
