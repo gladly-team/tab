@@ -1,27 +1,19 @@
 /* eslint-env jest */
 
-beforeEach(() => {
-  jest.resetModules()
+import localStorageMgr, {
+  __mockClear
+} from '../localstorage-mgr'
+
+jest.mock('../localstorage-mgr')
+
+afterEach(() => {
+  __mockClear()
 })
 
 describe('getting referral data', () => {
   it('works with all fields set', () => {
-    const mockSetItem = jest.fn()
-    jest.mock('../localstorage-mgr', () => {
-      return {
-        getItem: (key) => {
-          switch (key) {
-            case 'tab.referralData.referringUser':
-              return 'sandra'
-            case 'tab.referralData.referringChannel':
-              return '42'
-            default:
-              return undefined
-          }
-        },
-        setItem: mockSetItem
-      }
-    })
+    localStorageMgr.setItem('tab.referralData.referringUser', 'sandra')
+    localStorageMgr.setItem('tab.referralData.referringChannel', '42')
     const getReferralData = require('../utils').getReferralData
     expect(getReferralData()).toEqual({
       referringUser: 'sandra',
@@ -30,20 +22,8 @@ describe('getting referral data', () => {
   })
 
   it('works with only referring user', () => {
-    jest.mock('../localstorage-mgr', () => {
-      return {
-        getItem: (key) => {
-          switch (key) {
-            case 'tab.referralData.referringUser':
-              return 'bob'
-            case 'tab.referralData.referringChannel':
-              return undefined
-            default:
-              return undefined
-          }
-        }
-      }
-    })
+    localStorageMgr.setItem('tab.referralData.referringUser', 'bob')
+    localStorageMgr.setItem('tab.referralData.referringChannel', undefined)
     const getReferralData = require('../utils').getReferralData
     expect(getReferralData()).toEqual({
       referringUser: 'bob'
@@ -51,20 +31,8 @@ describe('getting referral data', () => {
   })
 
   it('works with only referring channel', () => {
-    jest.mock('../localstorage-mgr', () => {
-      return {
-        getItem: (key) => {
-          switch (key) {
-            case 'tab.referralData.referringUser':
-              return undefined
-            case 'tab.referralData.referringChannel':
-              return '33'
-            default:
-              return undefined
-          }
-        }
-      }
-    })
+    localStorageMgr.setItem('tab.referralData.referringUser', undefined)
+    localStorageMgr.setItem('tab.referralData.referringChannel', '33')
     const getReferralData = require('../utils').getReferralData
     expect(getReferralData()).toEqual({
       referringChannel: '33'

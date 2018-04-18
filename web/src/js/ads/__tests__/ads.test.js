@@ -1,28 +1,35 @@
 /* eslint-env jest */
 
-const mockAdsEnabledStatus = jest.fn()
-const mockPrebidModule = jest.fn()
-const mockPrebidConfig = jest.fn()
-jest.mock('../adsEnabledStatus', () => mockAdsEnabledStatus)
-jest.mock('../prebid/prebidModule', () => mockPrebidModule)
-jest.mock('../prebid/prebidConfig', () => mockPrebidConfig)
+jest.mock('../adsEnabledStatus')
+jest.mock('../prebid/prebidConfig')
+jest.mock('../prebid/prebidModule')
 
 beforeEach(() => {
   jest.resetModules()
 })
 
+afterEach(() => {
+  jest.clearAllMocks()
+})
+
 describe('ads script', function () {
   it('does not call ads scripts dependencies when ads are not enabled', () => {
-    jest.mock('../adsEnabledStatus', () => false)
+    const adsEnabledStatus = require('../adsEnabledStatus').default
+    adsEnabledStatus.mockReturnValue(false)
+    const prebidConfig = require('../prebid/prebidConfig').default
+    const prebidModule = require('../prebid/prebidModule').default
     require('../ads')
-    expect(mockPrebidModule).not.toHaveBeenCalled()
-    expect(mockPrebidConfig).not.toHaveBeenCalled()
+    expect(prebidConfig).not.toHaveBeenCalled()
+    expect(prebidModule).not.toHaveBeenCalled()
   })
 
   it('calls ads scripts dependencies when ads are enabled', () => {
-    jest.mock('../adsEnabledStatus', () => true)
+    const adsEnabledStatus = require('../adsEnabledStatus').default
+    adsEnabledStatus.mockReturnValue(true)
+    const prebidConfig = require('../prebid/prebidConfig').default
+    const prebidModule = require('../prebid/prebidModule').default
     require('../ads')
-    expect(mockPrebidModule).toHaveBeenCalled()
-    expect(mockPrebidConfig).toHaveBeenCalled()
+    expect(prebidConfig).toHaveBeenCalled()
+    expect(prebidModule).toHaveBeenCalled()
   })
 })

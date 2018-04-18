@@ -1,6 +1,7 @@
 import React from 'react'
 import LogTabMutation from 'mutations/LogTabMutation'
 import PropTypes from 'prop-types'
+import { incrementTabsOpenedToday } from 'utils/local-user-data-mgr'
 
 class LogTabComponent extends React.Component {
   componentDidMount () {
@@ -15,6 +16,12 @@ class LogTabComponent extends React.Component {
         this.props.tabId
       )
     }, LOG_TAB_DELAY)
+
+    // Update today's tab count in localStorage.
+    // This is useful when making rendering decisions before
+    // we fetch user data from the server (e.g., whether we
+    // should show ads or not).
+    incrementTabsOpenedToday()
   }
 
   render () {
