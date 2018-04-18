@@ -73,7 +73,7 @@ describe('local user data manager', () => {
     jest.clearAllMocks()
     const incrementTabsOpenedToday = require('../local-user-data-mgr').incrementTabsOpenedToday
     incrementTabsOpenedToday()
-    expect(localStorageMgr.setItem).toHaveBeenCalledWith('tab.user.lastTabDay.count', 15)
+    expect(localStorageMgr.setItem).toHaveBeenCalledWith('tab.user.lastTabDay.count', 1)
     expect(localStorageMgr.setItem).toHaveBeenCalledWith('tab.user.lastTabDay.date', moment.utc().toISOString())
   })
 
@@ -89,7 +89,7 @@ describe('local user data manager', () => {
     jest.clearAllMocks()
     const incrementTabsOpenedToday = require('../local-user-data-mgr').incrementTabsOpenedToday
     incrementTabsOpenedToday()
-    expect(localStorageMgr.setItem).toHaveBeenCalledWith('tab.user.lastTabDay.count', 7)
+    expect(localStorageMgr.setItem).toHaveBeenCalledWith('tab.user.lastTabDay.count', 1)
     expect(localStorageMgr.setItem).toHaveBeenCalledWith('tab.user.lastTabDay.date', moment.utc().toISOString())
   })
 

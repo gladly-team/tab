@@ -63,13 +63,13 @@ const setLastTabOpenedDateInLocalStorage = () => {
 }
 
 /**
- * Sets the localStorage value for today's tab count to one greater
- * than its current value.
+ * Sets the localStorage value for today's tab count to the value
+ * of `tabCount`.
+ * @param {number} tabCount - The number of tabs today
  * @returns {undefined}
  */
-const incrementTabsCountInLocalStorage = () => {
-  const currentTabCount = getTabsOpenedTodayFromStorage()
-  localStorageMgr.setItem(STORAGE_TABS_RECENT_DAY_COUNT, currentTabCount + 1)
+const setTabCountInLocalStorage = (tabCount) => {
+  localStorageMgr.setItem(STORAGE_TABS_RECENT_DAY_COUNT, tabCount)
 }
 
 /**
@@ -79,8 +79,13 @@ const incrementTabsCountInLocalStorage = () => {
  * @returns {undefined}
  */
 export const incrementTabsOpenedToday = function () {
-  if (!hasUserOpenedTabToday()) {
+  if (hasUserOpenedTabToday()) {
+    // Increment the tab count
+    const currentTabCount = getTabsOpenedTodayFromStorage()
+    setTabCountInLocalStorage(currentTabCount + 1)
+  } else {
+    // Reset the date and tab count
     setLastTabOpenedDateInLocalStorage()
+    setTabCountInLocalStorage(1)
   }
-  incrementTabsCountInLocalStorage()
 }
