@@ -3,6 +3,7 @@ import moment from 'moment'
 import UserModel from './UserModel'
 import UserTabsLogModel from './UserTabsLogModel'
 import addVc from './addVc'
+import { getTodayTabCount } from './user-utils'
 
 /**
  * Return whether a tab opened now is "valid" for this user;
@@ -43,24 +44,6 @@ const isTabValid = (tabsOpenedToday, lastTabTimestampStr) => {
 }
 
 /**
- * Return the count of tabs opened today (UTC day).
- * @param {object} user - The user object from our DB
- * @return {number} The number of tabs opened today.
- */
-const getTodayTabCount = (user) => {
-  const isFirstTabToday = (
-    moment(user.maxTabsDay.recentDay.date).utc().format('LL') !==
-    moment().utc().format('LL')
-  )
-  const todayTabCount = (
-    isFirstTabToday
-    ? 1
-    : user.maxTabsDay.recentDay.numTabs + 1
-  )
-  return todayTabCount
-}
-
-/**
  * Change the user's tab and VC stats accordingly when the
  * user opens a tab.
  * This only increments the VC if the tab is "valid",
@@ -78,7 +61,7 @@ const logTab = async (userContext, userId, tabId = null) => {
   } catch (e) {
     throw e
   }
-  const todayTabCount = getTodayTabCount(user)
+  const todayTabCount = getTodayTabCount(user) + 1
   const isValid = isTabValid(todayTabCount, user.lastTabTimestamp)
 
   // Update the user's counter for max tabs in a day.
