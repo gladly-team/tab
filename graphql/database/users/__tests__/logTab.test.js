@@ -41,7 +41,17 @@ describe('logTab', () => {
 
     // Mock fetching the user.
     const mockUser = getMockUserInstance({
-      lastTabTimestamp: '2017-06-22T01:13:25.000Z'
+      lastTabTimestamp: '2017-06-22T01:13:25.000Z',
+      maxTabsDay: {
+        maxDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 400
+        },
+        recentDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 148 // valid: below daily maximum
+        }
+      }
     })
     setMockDBResponse(
       DatabaseOperation.GET,
@@ -68,11 +78,11 @@ describe('logTab', () => {
       maxTabsDay: {
         maxDay: {
           date: moment.utc().toISOString(),
-          numTabs: 1
+          numTabs: 400
         },
         recentDay: {
           date: moment.utc().toISOString(),
-          numTabs: 1
+          numTabs: 149
         }
       }
     })
@@ -169,6 +179,58 @@ describe('logTab', () => {
         recentDay: {
           date: moment.utc().toISOString(),
           numTabs: 1
+        }
+      }
+    })
+    expect(returnedUser).not.toBeNull()
+  })
+
+  test('an invalid tab (because of exceeding daily tab maximum) does not increment VC or valid tab counts', async () => {
+    const userId = userContext.id
+
+    // Mock fetching the user.
+    const mockUser = getMockUserInstance({
+      lastTabTimestamp: '2017-06-22T01:13:25.000Z', // valid
+      maxTabsDay: {
+        maxDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 400
+        },
+        recentDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 150 // invalid: exceeds maximum
+        }
+      }
+    })
+    setMockDBResponse(
+      DatabaseOperation.GET,
+      {
+        Item: mockUser
+      }
+    )
+    const updateMethod = jest.spyOn(UserModel, 'update')
+      .mockImplementationOnce(() => {
+        return mockUser
+      })
+
+    const returnedUser = await logTab(userContext, userId)
+
+    // VC should not increment.
+    expect(addVc).not.toHaveBeenCalled()
+
+    // It should update tabs but not validTabs.
+    expect(updateMethod).toHaveBeenLastCalledWith(userContext, {
+      id: userId,
+      tabs: {$add: 1},
+      lastTabTimestamp: moment.utc().toISOString(),
+      maxTabsDay: {
+        maxDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 400
+        },
+        recentDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 151
         }
       }
     })

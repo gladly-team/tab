@@ -7,13 +7,15 @@ import addVc from './addVc'
 /**
  * Return whether a tab opened now is "valid" for this user;
  * in other words, whether enough time has passed since the
- * last opened tab.
- * @param {object} userContext - The user authorizer object.
+ * last opened tab and the user has not exceeded the maximum
+ * hearts from tabs in a day.
+ * @param {number} tabsOpenedToday - The count of tabs the user
+ * has opened today.
  * @param {string} lastTabTimestampStr - The ISO string datetime of
  *   when the user last opened a tab.
  * @return {boolean}  Whether the tab is valid.
  */
-const isTabValid = (userContext, lastTabTimestampStr) => {
+const isTabValid = (tabsOpenedToday, lastTabTimestampStr) => {
   const COOLDOWN_SECONDS = 2
   const now = moment.utc()
   var lastTabTimestamp = (
@@ -21,9 +23,22 @@ const isTabValid = (userContext, lastTabTimestampStr) => {
     ? moment.utc(lastTabTimestampStr)
     : null
   )
-  return (
+  const enoughTimeSinceLastTab = (
     !lastTabTimestamp ||
     now.diff(lastTabTimestamp, 'seconds') > COOLDOWN_SECONDS
+  )
+
+  // Note: we're basing this on tabs opened today, and not all
+  // previous tabs necessarily earned a heart. E.g., if a previous
+  // tabs was invalid for another reason, it would not earn a heart
+  // but would still count toward the 150 tab limit. That means
+  // a user might be limited to fewer than 150 hearts on some days.
+  const MAX_DAILY_HEARTS_FROM_TABS = 150
+  const belowDailyHeartsLimit = tabsOpenedToday < MAX_DAILY_HEARTS_FROM_TABS
+
+  return (
+    enoughTimeSinceLastTab &&
+    belowDailyHeartsLimit
   )
 }
 
@@ -63,14 +78,14 @@ const logTab = async (userContext, userId, tabId = null) => {
   } catch (e) {
     throw e
   }
-  const isValid = isTabValid(userContext, user.lastTabTimestamp)
+  const todayTabCount = getTodayTabCount(user)
+  const isValid = isTabValid(todayTabCount, user.lastTabTimestamp)
 
   // Update the user's counter for max tabs in a day.
   // If this is the user's first tab today, reset the counter
   // for the user's "current day" tab count.
   // If today is also the day of all time max tabs,
   // update the max tabs day value.
-  const todayTabCount = getTodayTabCount(user)
   const isTodayMax = todayTabCount >= user.maxTabsDay.maxDay.numTabs
   const maxTabsDayVal = {
     maxDay: {
