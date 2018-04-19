@@ -28,6 +28,7 @@ import appTheme, {
   dividerColor
 } from 'theme/default'
 import { commaFormatted } from 'utils/utils'
+import { MAX_DAILY_HEARTS_FROM_TABS } from '../../constants'
 
 class UserMenu extends React.Component {
   constructor (props) {
@@ -216,6 +217,11 @@ class UserMenu extends React.Component {
       width: 22
     }
 
+    // TODO
+    // Used to let the user know they aren't earning any more
+    // Hearts from tabs today.
+    // const reachedMaxDailyHearts = user.tabsToday >= MAX_DAILY_HEARTS_FROM_TABS
+
     // TODO: add level bar
     return (
       <div
@@ -400,7 +406,9 @@ UserMenu.propTypes = {
     vcCurrent: PropTypes.number.isRequired,
     level: PropTypes.number.isRequired,
     heartsUntilNextLevel: PropTypes.number.isRequired,
-    vcDonatedAllTime: PropTypes.number.isRequired
+    vcDonatedAllTime: PropTypes.number.isRequired,
+    numUsersRecruited: PropTypes.number.isRequired,
+    tabsToday: PropTypes.number.isRequired
   }),
   style: PropTypes.object
 }

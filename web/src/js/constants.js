@@ -1,4 +1,10 @@
 
+// Configuration
+
+export const MAX_DAILY_HEARTS_FROM_TABS = 150
+
+// Strings passed from server-side. Do not change.
+
 export const WIDGET_TYPE_BOOKMARKS = 'bookmarks'
 export const WIDGET_TYPE_CLOCK = 'clock'
 export const WIDGET_TYPE_NOTES = 'notes'
