@@ -13,6 +13,7 @@ import SettingsIcon from 'material-ui/svg-icons/action/settings'
 import HelpIcon from 'material-ui/svg-icons/action/help'
 import PersonAddIcon from 'material-ui/svg-icons/social/person-add'
 import ChartIcon from 'material-ui/svg-icons/editor/insert-chart'
+import CheckmarkIcon from 'material-ui/svg-icons/action/done'
 import ExitToAppIcon from 'material-ui/svg-icons/action/exit-to-app'
 import {
   goToInviteFriends,
@@ -217,10 +218,9 @@ class UserMenu extends React.Component {
       width: 22
     }
 
-    // TODO
     // Used to let the user know they aren't earning any more
     // Hearts from tabs today.
-    // const reachedMaxDailyHearts = user.tabsToday >= MAX_DAILY_HEARTS_FROM_TABS
+    const reachedMaxDailyHearts = user.tabsToday >= MAX_DAILY_HEARTS_FROM_TABS
 
     // TODO: add level bar
     return (
@@ -233,11 +233,23 @@ class UserMenu extends React.Component {
           onClick={this.onHeartsClick.bind(this)}
         >
           <span>{commaFormatted(user.vcCurrent)}</span>
-          <HeartBorderIcon
-            style={{ marginLeft: 2, height: 24, width: 24, paddingBottom: 0 }}
-            color={dashboardIconInactiveColor}
-            hoverColor={dashboardIconActiveColor}
-          />
+          <span style={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <HeartBorderIcon
+              style={{ marginLeft: 2, height: 24, width: 24, paddingBottom: 0 }}
+              color={dashboardIconInactiveColor}
+              hoverColor={dashboardIconActiveColor}
+            />
+            { reachedMaxDailyHearts
+              ? (
+                <CheckmarkIcon
+                  style={{ height: 16, width: 16, position: 'absolute', paddingLeft: 4, paddingBottom: 2 }}
+                  color={dashboardIconInactiveColor}
+                  hoverColor={dashboardIconActiveColor}
+                />
+              )
+              : null
+            }
+          </span>
         </div>
         <DashboardPopover
           open={this.state.heartsPopoverOpen}
