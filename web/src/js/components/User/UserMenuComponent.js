@@ -13,6 +13,7 @@ import SettingsIcon from 'material-ui/svg-icons/action/settings'
 import HelpIcon from 'material-ui/svg-icons/action/help'
 import PersonAddIcon from 'material-ui/svg-icons/social/person-add'
 import ChartIcon from 'material-ui/svg-icons/editor/insert-chart'
+import CheckmarkIcon from 'material-ui/svg-icons/action/done'
 import ExitToAppIcon from 'material-ui/svg-icons/action/exit-to-app'
 import {
   goToInviteFriends,
@@ -28,6 +29,7 @@ import appTheme, {
   dividerColor
 } from 'theme/default'
 import { commaFormatted } from 'utils/utils'
+import { MAX_DAILY_HEARTS_FROM_TABS } from '../../constants'
 
 class UserMenu extends React.Component {
   constructor (props) {
@@ -36,7 +38,11 @@ class UserMenu extends React.Component {
       heartsHover: false,
       heartsPopoverOpen: false,
       menuIconHover: false,
-      menuOpen: false
+      menuOpen: false,
+      // refs
+      heartsPopoverAnchorElem: null,
+      heartsHoverPopoverAnchorElem: null,
+      menuPopoverAnchorElem: null
     }
   }
 
@@ -52,9 +58,10 @@ class UserMenu extends React.Component {
     }
   }
 
-  onHeartsHover (hovering) {
+  onHeartsHover (hovering, event) {
     this.setState({
-      heartsHover: hovering
+      heartsHover: hovering,
+      heartsHoverPopoverAnchorElem: event.currentTarget
     })
   }
 
@@ -216,6 +223,10 @@ class UserMenu extends React.Component {
       width: 22
     }
 
+    // Used to let the user know they aren't earning any more
+    // Hearts from tabs today.
+    const reachedMaxDailyHearts = user.tabsToday >= MAX_DAILY_HEARTS_FROM_TABS
+
     // TODO: add level bar
     return (
       <div
@@ -227,11 +238,41 @@ class UserMenu extends React.Component {
           onClick={this.onHeartsClick.bind(this)}
         >
           <span>{commaFormatted(user.vcCurrent)}</span>
-          <HeartBorderIcon
-            style={{ marginLeft: 2, height: 24, width: 24, paddingBottom: 0 }}
-            color={dashboardIconInactiveColor}
-            hoverColor={dashboardIconActiveColor}
-          />
+          <span
+            style={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+            ref={(ref) => { this.heartIconContainer = ref }}
+          >
+            <HeartBorderIcon
+              style={{ marginLeft: 2, height: 24, width: 24, paddingBottom: 0 }}
+              color={dashboardIconInactiveColor}
+              hoverColor={dashboardIconActiveColor}
+            />
+            { reachedMaxDailyHearts
+              ? (
+                <CheckmarkIcon
+                  style={{ height: 16, width: 16, position: 'absolute', paddingLeft: 4, paddingBottom: 2 }}
+                  color={dashboardIconInactiveColor}
+                  hoverColor={dashboardIconActiveColor}
+                />
+              )
+              : null
+            }
+            { reachedMaxDailyHearts
+              ? (
+                <DashboardPopover
+                  open={this.state.heartsHover && !this.state.heartsPopoverOpen}
+                  anchorEl={this.state.heartsHoverPopoverAnchorElem}
+                  style={heartsPopoverStyle}
+                >
+                  <div style={{ padding: 10 }}>
+                    You've earned the maximum Hearts from opening tabs today! You'll
+                    be able to earn more Hearts in a few hours.
+                  </div>
+                </DashboardPopover>
+              )
+              : null
+            }
+          </span>
         </div>
         <DashboardPopover
           open={this.state.heartsPopoverOpen}
@@ -400,7 +441,9 @@ UserMenu.propTypes = {
     vcCurrent: PropTypes.number.isRequired,
     level: PropTypes.number.isRequired,
     heartsUntilNextLevel: PropTypes.number.isRequired,
-    vcDonatedAllTime: PropTypes.number.isRequired
+    vcDonatedAllTime: PropTypes.number.isRequired,
+    numUsersRecruited: PropTypes.number.isRequired,
+    tabsToday: PropTypes.number.isRequired
   }),
   style: PropTypes.object
 }

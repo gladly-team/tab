@@ -217,6 +217,10 @@ const userType = new GraphQLObjectType({
       type: GraphQLInt,
       description: 'User\'s all time tab count'
     },
+    tabsToday: {
+      type: GraphQLInt,
+      description: 'User\'s tab count for today'
+    },
     maxTabsDay: {
       type: maxTabsDayType,
       description: 'Info about the user\'s day of most opened tabs',

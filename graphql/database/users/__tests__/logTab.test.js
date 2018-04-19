@@ -41,7 +41,17 @@ describe('logTab', () => {
 
     // Mock fetching the user.
     const mockUser = getMockUserInstance({
-      lastTabTimestamp: '2017-06-22T01:13:25.000Z'
+      lastTabTimestamp: '2017-06-22T01:13:25.000Z',
+      maxTabsDay: {
+        maxDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 400
+        },
+        recentDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 148 // valid: below daily maximum
+        }
+      }
     })
     setMockDBResponse(
       DatabaseOperation.GET,
@@ -68,11 +78,11 @@ describe('logTab', () => {
       maxTabsDay: {
         maxDay: {
           date: moment.utc().toISOString(),
-          numTabs: 1
+          numTabs: 400
         },
         recentDay: {
           date: moment.utc().toISOString(),
-          numTabs: 1
+          numTabs: 149
         }
       }
     })
@@ -85,6 +95,32 @@ describe('logTab', () => {
     // Mock fetching the user.
     const mockUser = getMockUserInstance({
       lastTabTimestamp: '2017-06-22T01:13:25.000Z'
+    })
+    setMockDBResponse(
+      DatabaseOperation.GET,
+      {
+        Item: mockUser
+      }
+    )
+    const userTabsLogCreate = jest.spyOn(UserTabsLogModel, 'create')
+    await logTab(userContext, userId)
+
+    // It should create an item in UserTabsLog.
+    expect(userTabsLogCreate).toHaveBeenLastCalledWith(
+      userContext,
+      addTimestampFieldsToItem({
+        userId: userId,
+        timestamp: moment.utc().toISOString()
+      })
+    )
+  })
+
+  test('an invalid tab still logs the tab for analytics', async () => {
+    const userId = userContext.id
+
+    // Mock fetching the user.
+    const mockUser = getMockUserInstance({
+      lastTabTimestamp: '2017-06-22T01:13:28.000Z'
     })
     setMockDBResponse(
       DatabaseOperation.GET,
@@ -133,7 +169,7 @@ describe('logTab', () => {
     )
   })
 
-  test('when an invalid tab, it does not increment VC or valid tab counts', async () => {
+  test('an invalid tab (because of too-quickly-opened tabs) does not increment VC or valid tab counts', async () => {
     const userId = userContext.id
 
     // Mock fetching the user.
@@ -175,12 +211,22 @@ describe('logTab', () => {
     expect(returnedUser).not.toBeNull()
   })
 
-  test('when an invalid tab, it does not log the tab for analytics', async () => {
+  test('an invalid tab (because of exceeding daily tab maximum) does not increment VC or valid tab counts', async () => {
     const userId = userContext.id
 
     // Mock fetching the user.
     const mockUser = getMockUserInstance({
-      lastTabTimestamp: '2017-06-22T01:13:26.000Z'
+      lastTabTimestamp: '2017-06-22T01:13:25.000Z', // valid
+      maxTabsDay: {
+        maxDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 400
+        },
+        recentDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 150 // invalid: exceeds maximum
+        }
+      }
     })
     setMockDBResponse(
       DatabaseOperation.GET,
@@ -188,11 +234,33 @@ describe('logTab', () => {
         Item: mockUser
       }
     )
-    const userTabsLogCreate = jest.spyOn(UserTabsLogModel, 'create')
-    await logTab(userContext, userId)
+    const updateMethod = jest.spyOn(UserModel, 'update')
+      .mockImplementationOnce(() => {
+        return mockUser
+      })
 
-    // It should create an item in UserTabsLog.
-    expect(userTabsLogCreate).not.toHaveBeenCalled()
+    const returnedUser = await logTab(userContext, userId)
+
+    // VC should not increment.
+    expect(addVc).not.toHaveBeenCalled()
+
+    // It should update tabs but not validTabs.
+    expect(updateMethod).toHaveBeenLastCalledWith(userContext, {
+      id: userId,
+      tabs: {$add: 1},
+      lastTabTimestamp: moment.utc().toISOString(),
+      maxTabsDay: {
+        maxDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 400
+        },
+        recentDay: {
+          date: moment.utc().toISOString(),
+          numTabs: 151
+        }
+      }
+    })
+    expect(returnedUser).not.toBeNull()
   })
 
   test('for the first tab logged today, it resets the date for today\'s tab counter', async () => {

@@ -206,6 +206,7 @@ describe('createUser when user does not exist', () => {
     // Remove dynamic fields (won't be passed during creation)
     delete expectedParamsUser.backgroundImage.imageURL
     delete expectedParamsUser.backgroundImage.thumbnailURL
+    delete expectedParamsUser.tabsToday
 
     const expectedParams = {
       ConditionExpression: '(#id <> :id)',

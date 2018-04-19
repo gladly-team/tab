@@ -3,17 +3,20 @@ import moment from 'moment'
 import UserModel from './UserModel'
 import UserTabsLogModel from './UserTabsLogModel'
 import addVc from './addVc'
+import { getTodayTabCount } from './user-utils'
 
 /**
  * Return whether a tab opened now is "valid" for this user;
  * in other words, whether enough time has passed since the
- * last opened tab.
- * @param {object} userContext - The user authorizer object.
+ * last opened tab and the user has not exceeded the maximum
+ * hearts from tabs in a day.
+ * @param {number} tabsOpenedToday - The count of tabs the user
+ * has opened today.
  * @param {string} lastTabTimestampStr - The ISO string datetime of
  *   when the user last opened a tab.
  * @return {boolean}  Whether the tab is valid.
  */
-const isTabValid = (userContext, lastTabTimestampStr) => {
+const isTabValid = (tabsOpenedToday, lastTabTimestampStr) => {
   const COOLDOWN_SECONDS = 2
   const now = moment.utc()
   var lastTabTimestamp = (
@@ -21,9 +24,22 @@ const isTabValid = (userContext, lastTabTimestampStr) => {
     ? moment.utc(lastTabTimestampStr)
     : null
   )
-  return (
+  const enoughTimeSinceLastTab = (
     !lastTabTimestamp ||
     now.diff(lastTabTimestamp, 'seconds') > COOLDOWN_SECONDS
+  )
+
+  // Note: we're basing this on tabs opened today, and not all
+  // previous tabs necessarily earned a heart. E.g., if a previous
+  // tabs was invalid for another reason, it would not earn a heart
+  // but would still count toward the 150 tab limit. That means
+  // a user might be limited to fewer than 150 hearts on some days.
+  const MAX_DAILY_HEARTS_FROM_TABS = 150
+  const belowDailyHeartsLimit = tabsOpenedToday < MAX_DAILY_HEARTS_FROM_TABS
+
+  return (
+    enoughTimeSinceLastTab &&
+    belowDailyHeartsLimit
   )
 }
 
@@ -45,22 +61,14 @@ const logTab = async (userContext, userId, tabId = null) => {
   } catch (e) {
     throw e
   }
-  const isValid = isTabValid(userContext, user.lastTabTimestamp)
+  const todayTabCount = getTodayTabCount(user) + 1
+  const isValid = isTabValid(todayTabCount, user.lastTabTimestamp)
 
   // Update the user's counter for max tabs in a day.
   // If this is the user's first tab today, reset the counter
   // for the user's "current day" tab count.
   // If today is also the day of all time max tabs,
   // update the max tabs day value.
-  const isFirstTabToday = (
-    moment(user.maxTabsDay.recentDay.date).utc().format('LL') !==
-    moment().utc().format('LL')
-  )
-  const todayTabCount = (
-    isFirstTabToday
-    ? 1
-    : user.maxTabsDay.recentDay.numTabs + 1
-  )
   const isTodayMax = todayTabCount >= user.maxTabsDay.maxDay.numTabs
   const maxTabsDayVal = {
     maxDay: {
@@ -78,33 +86,27 @@ const logTab = async (userContext, userId, tabId = null) => {
   }
 
   try {
+    // TODO: parallelize the multiple awaits
     if (isValid) {
-      // TODO: parallelize the multiple awaits
-      // Increment the user's tab count, valid tab count, and VC.
+      // Only increment VC if we consider this a valid tab.
       user = await addVc(userContext, userId, 1)
-      user = await UserModel.update(userContext, {
-        id: userId,
-        tabs: {$add: 1},
-        validTabs: {$add: 1},
-        lastTabTimestamp: moment.utc().toISOString(),
-        maxTabsDay: maxTabsDayVal
-      })
-
-      // Log the tab for analytics.
-      await UserTabsLogModel.create(userContext, {
-        userId: userId,
-        timestamp: moment.utc().toISOString(),
-        ...tabId && { tabId: tabId }
-      })
-    } else {
-      // Only increment the user's tab count.
-      user = await UserModel.update(userContext, {
-        id: userId,
-        tabs: {$add: 1},
-        lastTabTimestamp: moment.utc().toISOString(),
-        maxTabsDay: maxTabsDayVal
-      })
     }
+
+    // Increment the user's tab count and (if a valid tab) valid tab count.
+    user = await UserModel.update(userContext, {
+      id: userId,
+      tabs: {$add: 1},
+      ...isValid && { validTabs: {$add: 1} },
+      lastTabTimestamp: moment.utc().toISOString(),
+      maxTabsDay: maxTabsDayVal
+    })
+
+    // Log the tab for analytics whether a valid tab or not.
+    await UserTabsLogModel.create(userContext, {
+      userId: userId,
+      timestamp: moment.utc().toISOString(),
+      ...tabId && { tabId: tabId }
+    })
   } catch (e) {
     throw e
   }

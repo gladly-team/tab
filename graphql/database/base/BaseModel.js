@@ -26,15 +26,15 @@ class BaseModel {
       ['created', 'updated'])
     const customDeserializers = this.constructor.fieldDeserializers
     const fieldDefaults = this.constructor.fieldDefaults
+
+    // Set properties for each field on the model.
+    // * If `obj[fieldName]` exists, use the value of `obj[fieldName]`.
+    // * Else, if `obj[fieldName]` does not exist, use the default value of
+    //   the field if one exists.
+    // * If both the value and default value are nil, do not set
+    //   the property.
     fieldNames.forEach((fieldName) => {
-      // Set properties for each field on the model.
-      // * If `obj[fieldName]` exists, use the value of `obj[fieldName]`.
-      // * Else, if `obj[fieldName]` does not exist, use the default value of
-      //   the field if one exists.
-      // * If a custom deserializer exists for that field, call it.
-      // * If the final value is null or undefined, do not set
-      //   the property.
-      var val = null
+      let val = null
       if (has(obj, fieldName)) {
         val = obj[fieldName]
       } else if (has(fieldDefaults, fieldName)) {
@@ -45,12 +45,27 @@ class BaseModel {
           val = fieldDefault
         }
       }
+      if (!isNil(val)) {
+        obj[fieldName] = val
+      }
+    })
+
+    // Call any custom deserializers on the fields.
+    // * If a custom deserializer exists for that field, call it.
+    // * If the returned value is null or undefined, do not set
+    //   the property.
+    const self = this
+    fieldNames.forEach((fieldName) => {
+      var val = null
+      if (has(obj, fieldName)) {
+        val = obj[fieldName]
+      }
       if (isFunction(get(customDeserializers, fieldName, false))) {
         let deserializeFunc = customDeserializers[fieldName]
         val = deserializeFunc(val, obj)
       }
       if (!isNil(val)) {
-        this[fieldName] = val
+        self[fieldName] = val
       }
     })
   }
