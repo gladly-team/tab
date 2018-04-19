@@ -386,6 +386,9 @@ type User implements Node {
   # User's all time tab count
   tabs: Int
 
+  # User's tab count for today
+  tabsToday: Int
+
   # Info about the user's day of most opened tabs
   maxTabsDay: MaxTabsDay
 
