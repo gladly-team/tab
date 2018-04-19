@@ -11,6 +11,7 @@ const mutation = graphql`
         heartsUntilNextLevel
         level
         tabs
+        tabsToday
         vcCurrent
       }
     }
