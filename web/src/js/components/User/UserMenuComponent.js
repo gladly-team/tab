@@ -38,7 +38,11 @@ class UserMenu extends React.Component {
       heartsHover: false,
       heartsPopoverOpen: false,
       menuIconHover: false,
-      menuOpen: false
+      menuOpen: false,
+      // refs
+      heartsPopoverAnchorElem: null,
+      heartsHoverPopoverAnchorElem: null,
+      menuPopoverAnchorElem: null
     }
   }
 
@@ -54,9 +58,10 @@ class UserMenu extends React.Component {
     }
   }
 
-  onHeartsHover (hovering) {
+  onHeartsHover (hovering, event) {
     this.setState({
-      heartsHover: hovering
+      heartsHover: hovering,
+      heartsHoverPopoverAnchorElem: event.currentTarget
     })
   }
 
@@ -233,7 +238,10 @@ class UserMenu extends React.Component {
           onClick={this.onHeartsClick.bind(this)}
         >
           <span>{commaFormatted(user.vcCurrent)}</span>
-          <span style={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <span
+            style={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+            ref={(ref) => { this.heartIconContainer = ref }}
+          >
             <HeartBorderIcon
               style={{ marginLeft: 2, height: 24, width: 24, paddingBottom: 0 }}
               color={dashboardIconInactiveColor}
@@ -246,6 +254,21 @@ class UserMenu extends React.Component {
                   color={dashboardIconInactiveColor}
                   hoverColor={dashboardIconActiveColor}
                 />
+              )
+              : null
+            }
+            { reachedMaxDailyHearts
+              ? (
+                <DashboardPopover
+                  open={this.state.heartsHover && !this.state.heartsPopoverOpen}
+                  anchorEl={this.state.heartsHoverPopoverAnchorElem}
+                  style={heartsPopoverStyle}
+                >
+                  <div style={{ padding: 10 }}>
+                    You've earned the maximum Hearts from opening tabs today! You'll
+                    be able to earn more Hearts in a few hours.
+                  </div>
+                </DashboardPopover>
               )
               : null
             }
