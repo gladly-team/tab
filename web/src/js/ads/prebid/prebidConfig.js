@@ -11,7 +11,13 @@ export default function () {
   // AppNexus bid adapter.
   const adUnits = [{
     code: 'div-gpt-ad-1464385742501-0',
-    sizes: [[300, 250]],
+    mediaTypes: {
+      banner: {
+        sizes: [
+          [300, 250]
+        ]
+      }
+    },
     bids: [
       {
         bidder: 'sonobi',
@@ -66,7 +72,13 @@ export default function () {
   },
   {
     code: 'div-gpt-ad-1464385677836-0',
-    sizes: [[728, 90]],
+    mediaTypes: {
+      banner: {
+        sizes: [
+          [728, 90]
+        ]
+      }
+    },
     bids: [
       {
         bidder: 'sonobi',
@@ -134,6 +146,15 @@ export default function () {
   const pbjs = getPrebidPbjs()
 
   pbjs.que.push(() => {
+    // http://prebid.org/dev-docs/publisher-api-reference.html#module_pbjs.setConfig
+    const protocol = process.env.WEBSITE_PROTOCOL ? process.env.WEBSITE_PROTOCOL : 'https'
+    const publisherDomain = `${protocol}://${process.env.WEBSITE_DOMAIN}`
+    pbjs.setConfig({
+      enableSendAllBids: false,
+      // bidderTimeout: 700 // default
+      publisherDomain: publisherDomain // Used for SafeFrame creative
+    })
+
     pbjs.addAdUnits(adUnits)
 
     pbjs.bidderSettings = {
