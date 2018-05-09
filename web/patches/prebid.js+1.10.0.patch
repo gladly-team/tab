@@ -1,0 +1,30 @@
+patch-package
+--- a/node_modules/prebid.js/src/utils.js
++++ b/node_modules/prebid.js/src/utils.js
+@@ -160,15 +160,17 @@ export function parseGPTSingleSizeArray(singleSize) {
+ };
+ 
+ exports.getTopWindowLocation = function() {
+-  if (exports.inIframe()) {
+-    let loc;
+-    try {
+-      loc = exports.getAncestorOrigins() || exports.getTopFrameReferrer();
+-    } catch (e) {
+-      logInfo('could not obtain top window location', e);
+-    }
+-    if (loc) return parse(loc, {'decodeSearchAsString': true});
+-  }
++  // Edited by Gladly. Adapters should use the location of the current
++  // frame, not the location of the new tab page.
++  // if (exports.inIframe()) {
++  //   let loc;
++  //   try {
++  //     loc = exports.getAncestorOrigins() || exports.getTopFrameReferrer();
++  //   } catch (e) {
++  //     logInfo('could not obtain top window location', e);
++  //   }
++  //   if (loc) return parse(loc, {'decodeSearchAsString': true});
++  // }
+   return exports.getWindowLocation();
+ }
+ 
