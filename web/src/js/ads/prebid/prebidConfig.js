@@ -149,10 +149,16 @@ export default function () {
     // http://prebid.org/dev-docs/publisher-api-reference.html#module_pbjs.setConfig
     const protocol = process.env.WEBSITE_PROTOCOL ? process.env.WEBSITE_PROTOCOL : 'https'
     const publisherDomain = `${protocol}://${process.env.WEBSITE_DOMAIN}`
+    const pagePath = window.location.pathname
     pbjs.setConfig({
       enableSendAllBids: false,
       // bidderTimeout: 700 // default
-      publisherDomain: publisherDomain // Used for SafeFrame creative
+      publisherDomain: publisherDomain, // Used for SafeFrame creative
+      // Overrides the page URL adapters should use. Otherwise, some adapters
+      // will use the current frame's URL while others use the top frame URL.
+      // Only some adapters use this setting as of May 2018.
+      // https://github.com/prebid/Prebid.js/issues/1882
+      pageUrl: `${publisherDomain}${pagePath}`
     })
 
     pbjs.addAdUnits(adUnits)
