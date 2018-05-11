@@ -1,7 +1,25 @@
 patch-package
+--- a/node_modules/prebid.js/modules/rhythmoneBidAdapter.js
++++ b/node_modules/prebid.js/modules/rhythmoneBidAdapter.js
+@@ -104,11 +104,9 @@ function RhythmOneBidAdapter() {
+     }
+ 
+     p('domain', attempt(function() {
+-      var d = w.document.location.ancestorOrigins;
+-      if (d && d.length > 0) {
+-        return d[d.length - 1];
+-      }
+-      return w.top.document.location.hostname; // try/catch is in the attempt function
++      // Edited by Gladly. Adapters should use the location of the current
++      // frame, not the location of the new tab page.
++      return w.document.location.hostname;
+     }, ''));
+     p('url', attempt(function() {
+       var l;
+deleted file mode 100644
 --- a/node_modules/prebid.js/src/utils.js
 +++ b/node_modules/prebid.js/src/utils.js
-@@ -160,15 +160,17 @@ export function parseGPTSingleSizeArray(singleSize) {
+@@ -160,15 +160,8 @@ export function parseGPTSingleSizeArray(singleSize) {
  };
  
  exports.getTopWindowLocation = function() {
@@ -16,15 +34,6 @@ patch-package
 -  }
 +  // Edited by Gladly. Adapters should use the location of the current
 +  // frame, not the location of the new tab page.
-+  // if (exports.inIframe()) {
-+  //   let loc;
-+  //   try {
-+  //     loc = exports.getAncestorOrigins() || exports.getTopFrameReferrer();
-+  //   } catch (e) {
-+  //     logInfo('could not obtain top window location', e);
-+  //   }
-+  //   if (loc) return parse(loc, {'decodeSearchAsString': true});
-+  // }
    return exports.getWindowLocation();
  }
  
