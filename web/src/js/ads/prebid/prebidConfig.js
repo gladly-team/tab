@@ -151,7 +151,6 @@ export default function () {
     const publisherDomain = `${protocol}://${process.env.WEBSITE_DOMAIN}`
     const pagePath = window.location.pathname
     pbjs.setConfig({
-      enableSendAllBids: false,
       // bidderTimeout: 700 // default
       publisherDomain: publisherDomain, // Used for SafeFrame creative
       // Overrides the page URL adapters should use. Otherwise, some adapters
