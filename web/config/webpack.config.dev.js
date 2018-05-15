@@ -87,7 +87,10 @@ module.exports = {
   // The first two entry points enable "hot" CSS and auto-refreshes for JS.
   entry: {
     app: appEntry,
-    ads: './src/js/ads/ads.js'
+    ads: [
+      require.resolve('./polyfills'),
+      './src/js/ads/ads.js'
+    ]
   },
   output: {
     // Next line is not used in dev but WebpackDevServer crashes without it:
