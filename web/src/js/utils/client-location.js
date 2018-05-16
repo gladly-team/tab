@@ -175,7 +175,6 @@ export const getCountry = async () => {
   return clientLocation.countryIsoCode
 }
 
-// TODO: configure and test
 /**
  * Return whether the client is in the European Union.
  * @return {Promise<Boolean>} Whether or not the client is in the EU
