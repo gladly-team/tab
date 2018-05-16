@@ -25,6 +25,7 @@ export const STORAGE_BACKGROUND_CUSTOM_IMAGE = 'tab.user.background.customImage'
 export const STORAGE_BACKGROUND_COLOR = 'tab.user.background.color'
 export const STORAGE_BACKGROUND_IMAGE_URL = 'tab.user.background.imageURL'
 export const STORAGE_LOCATION_COUNTRY_ISO_CODE = 'tab.clientLocation.countryIsoCode'
+export const STORAGE_LOCATION_IS_IN_EU = 'tab.clientLocation.isInEU'
 export const STORAGE_LOCATION_QUERY_TIME = 'tab.clientLocation.queryTime'
 
 // An ISO timestamp: the time of the first tab opened in the
