@@ -3,7 +3,7 @@
 // Should be the same as the value in prebidConfig
 const PREBID_TIMEOUT = 1000
 
-export default function () {
+export default function (isInEU) {
   // Run apstag JS
   require('./apstag')
 

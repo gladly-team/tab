@@ -2,7 +2,7 @@
 import { getPrebidPbjs } from './getPrebidPbjs'
 
 // See: http://prebid.org/dev-docs/examples/basic-example.html
-export default function () {
+export default function (isInEU) {
   // Prebid config section START
   // Make sure this is inserted before your GPT tag.
   const prebidTimeoutMs = 1000

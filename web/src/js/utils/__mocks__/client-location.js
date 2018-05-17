@@ -1,8 +1,8 @@
+/* eslint-env jest */
+// export const getCountry = () => Promise.resolve('US')
 
-export const getCountry = async () => {
-  return 'US'
-}
+// export const isInEuropeanUnion = () => Promise.resolve(false)
 
-export const isInEuropeanUnion = async () => {
-  return false
-}
+export const getCountry = jest.fn(async () => 'US')
+
+export const isInEuropeanUnion = jest.fn(async () => false)
