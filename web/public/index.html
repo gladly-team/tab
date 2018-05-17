@@ -100,6 +100,7 @@ src="https://www.facebook.com/tr?id=1813501258922708&ev=PageView&noscript=1"
 
 <!-- BEGIN: Google Tag Manager and ad slot definitions -->
 <script type="text/javascript">
+  /* eslint-disable */
   // Google Tag Manager
   var googletag = window.googletag || {}
   googletag.cmd = googletag.cmd || []
@@ -155,6 +156,86 @@ src="https://www.facebook.com/tr?id=1813501258922708&ev=PageView&noscript=1"
   })();
 </script>
 <!-- End PageFair -->
+
+<!-- BEGIN: Quantcast Choice. Consent Manager Tag -->
+<!-- https://www.quantcast.com/gdpr/quantcast-choice-self-serve/ -->
+<!-- https://quantcast.zendesk.com/hc/en-us/articles/360003814853-Technical-Implementation-Guide -->
+  <script type="text/javascript" async=true>
+    /* eslint-disable */
+    var __cmp = (function () {
+      return typeof (__cmp) == "function" ? __cmp : function (c) {
+        var b = arguments;
+        if (!b.length) {
+          return __cmp.a;
+        }
+        else if (c == '__cmp')
+          return false;
+        else {
+          if (typeof __cmp.a === 'undefined') {
+            __cmp.a = [];
+          }
+          __cmp.a.push([].slice.apply(b));
+        }
+      }
+    })();
+    var elem = document.createElement('script');
+    elem.src = "https://quantcast.mgr.consensu.org/cmp.js";
+    elem.async = true;
+    elem.type = "text/javascript";
+    var scpt = document.getElementsByTagName('script')[0];
+    scpt.parentNode.insertBefore(elem, scpt);
+
+    window.__cmp('init', {
+      'Language': 'en',
+      'Display UI': 'always', // 'inEU', 'always', 'never'
+      'Consent Scope': 'service',
+      'Publisher Name': 'Tab for a Cause',
+      'Publisher Logo': 'https://s3-us-west-2.amazonaws.com/prod-tab2017.gladly.io/static/media/logo.539ef9c6.svg',
+      'Publisher Purpose IDs': [],
+      'Min Days Between UI Displays': 30,
+      'Non-Consent Display Frequency': 30,
+      'Initial Screen Reject Button Text': 'I do not accept',
+      'Initial Screen Accept Button Text': 'I accept',
+      'Purpose Screen Header Title Text': 'Privacy settings',
+      'Purpose Screen Body Text': 'You can set your consent preferences and determine how you want your data to be used based on the purposes below. You may set your preferences for us independently from those of third-party partners. Each purpose has a description so that you know how we and partners use your data.',
+      'Vendor Screen Body Text': 'You can set consent preferences for each individual third-party company below. Expand each company list item to see what purposes they use data for to help make your choices. In some cases, companies may disclose that they use your data without asking for your consent, based on their legitimate interests. You can click on their privacy policies for more information and to opt out.',
+      'Vendor Screen Accept All Button Text': 'Accept all',
+      'Vendor Screen Reject All Button Text': 'Reject all',
+      // TODO: specify where to revisit this consent dialog in the settings page.
+      'Initial Screen Body Text': 'We and our partners use technology such as cookies on our site to personalise content and ads, provide social media features, and analyse our traffic. Click below to consent to the use of this technology across the web. You can change your mind and change your consent choices at any time by returning to this site.',
+      'Initial Screen Body Text Option': 1,
+    });
+  </script>
+<style>
+    .qc-cmp-button,
+    .qc-cmp-button.qc-cmp-secondary-button:hover {
+        background-color: #9d4ba3 !important;
+        border-color: #9d4ba3 !important;
+    }
+    .qc-cmp-button:hover,
+    .qc-cmp-button.qc-cmp-secondary-button {
+        background-color: transparent !important;
+        border-color: #9d4ba3 !important;
+    }
+    .qc-cmp-alt-action,
+    .qc-cmp-link {
+        color: #9d4ba3 !important;
+    }
+    .qc-cmp-button,
+    .qc-cmp-button.qc-cmp-secondary-button:hover {
+        color: #FFF !important;
+    }
+    .qc-cmp-button:hover,
+    .qc-cmp-button.qc-cmp-secondary-button {
+        color: #9d4ba3 !important;
+    }
+    .qc-cmp-small-toggle.qc-cmp-toggle-on,
+    .qc-cmp-toggle.qc-cmp-toggle-on {
+        background-color: #d07ad5 !important;
+        border-color: #d07ad5 !important;
+    }
+</style>
+<!-- END: Quantcast Choice. Consent Manager Tag -->
 
 <% } %>
 
