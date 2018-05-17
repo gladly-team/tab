@@ -1,4 +1,5 @@
 /* eslint-env jest */
+import { isNil } from 'lodash/lang'
 
 var mockStorage = {}
 
@@ -11,7 +12,7 @@ export default {
     return mockStorage[key]
   }),
   setItem: jest.fn((key, val) => {
-    if (val) {
+    if (!isNil(val)) {
       mockStorage[key] = String(val)
     }
   }),

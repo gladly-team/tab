@@ -50,7 +50,10 @@ module.exports = {
       require.resolve('./polyfills'),
       paths.appIndexJs
     ],
-    ads: './src/js/ads/ads.js'
+    ads: [
+      require.resolve('./polyfills'),
+      './src/js/ads/ads.js'
+    ]
   },
   output: {
     // The build folder.
