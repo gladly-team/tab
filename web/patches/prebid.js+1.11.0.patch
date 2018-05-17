@@ -16,10 +16,9 @@ patch-package
      }, ''));
      p('url', attempt(function() {
        var l;
-deleted file mode 100644
 --- a/node_modules/prebid.js/src/utils.js
 +++ b/node_modules/prebid.js/src/utils.js
-@@ -160,15 +160,8 @@ export function parseGPTSingleSizeArray(singleSize) {
+@@ -189,15 +189,8 @@ export function parseGPTSingleSizeArray(singleSize) {
  };
  
  exports.getTopWindowLocation = function() {
