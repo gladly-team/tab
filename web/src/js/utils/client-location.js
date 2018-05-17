@@ -73,13 +73,13 @@ const getLocationFromMaxMind = () => {
     return locationFetchPromise
   }
 
+  // Store the promise so subsequent requests can use it
+  // if this request is still in progress.
   locationFetchPromise = new Promise((resolve, reject) => {
     // https://dev.maxmind.com/geoip/geoip2/javascript/
-    // TODO: decide how to handle errors
     try {
       window.geoip2.country(
         (data) => {
-          // console.log('Success! Got data:', data)
           const isInEuropeanUnion = data.country.is_in_european_union === true
           resolve(new ClientLocation(
             data.country.iso_code,
@@ -155,7 +155,7 @@ const setLocationInLocalStorage = (location) => {
 /**
  * Return client's location. Try to get the location data from memory;
  * fall back to localStorage; then fall back to querying MaxMind for
- * new location data.
+ * new location data. Throw an error if we cannot determine location.
  * @return {Promise<ClientLocation>} The client's location
  */
 const getLocation = async () => {
@@ -167,7 +167,19 @@ const getLocation = async () => {
       location = locationLocalStorage
     // If location isn't in localStorage, query for it.
     } else {
-      location = await getLocationFromMaxMind()
+      // Throw an error if MaxMind cannot determine the location.
+      var maxMindLocation = null
+      try {
+        maxMindLocation = await getLocationFromMaxMind()
+      } catch (e) {
+        throw new Error('Could not determine location.')
+      }
+      if (!maxMindLocation) {
+        throw new Error('Could not determine location.')
+      }
+
+      // Save the location to localStorage and return it.
+      location = maxMindLocation
       setLocationInLocalStorage(location)
     }
   }
@@ -176,19 +188,29 @@ const getLocation = async () => {
 
 /**
  * Return the ISO 3166-1 country code of the country the client is in.
+ * Throw an error if we could not determine the country.
  * See ISO codes: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
  * @return {Promise<string>} The two-character ISO 3166-1 country code
  */
 export const getCountry = async () => {
-  const clientLocation = await getLocation()
-  return clientLocation.countryIsoCode
+  try {
+    const clientLocation = await getLocation()
+    return clientLocation.countryIsoCode
+  } catch (e) {
+    throw new Error('Could not determine client location country.')
+  }
 }
 
 /**
  * Return whether the client is in the European Union.
+ * Throw an error if we could not determine the country.
  * @return {Promise<Boolean>} Whether or not the client is in the EU
  */
 export const isInEuropeanUnion = async () => {
-  const clientLocation = await getLocation()
-  return clientLocation.isInEuropeanUnion
+  try {
+    const clientLocation = await getLocation()
+    return clientLocation.isInEuropeanUnion
+  } catch (e) {
+    throw new Error('Could not determine client location EU membership.')
+  }
 }

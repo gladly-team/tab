@@ -10,6 +10,7 @@ import {
 import { isNil } from 'lodash/lang'
 
 jest.mock('../localstorage-mgr')
+jest.mock('raven-js')
 
 const mockNow = '2018-05-15T10:30:00.000'
 
@@ -272,5 +273,73 @@ describe('client-location', () => {
     const isInEuropeanUnion = require('../client-location').isInEuropeanUnion
     const returnedVal = await isInEuropeanUnion()
     expect(returnedVal).toBe(true)
+  })
+
+  it('throws an error if MaxMind returns an error when trying to get country code', async () => {
+    expect.assertions(1)
+
+    // Suppress expected console error
+    jest.spyOn(console, 'error').mockImplementationOnce(() => {})
+
+    // Mock a MaxMind error
+    mockGeoIP.country.mockImplementationOnce((successCallback, failureCallback) => {
+      return failureCallback({ code: 'BAD_THING_HAPPENED' })
+    })
+
+    const getCountry = require('../client-location').getCountry
+    await expect(getCountry()).rejects.toThrow('Could not determine client location country')
+  })
+
+  it('throws an error if MaxMind returns an error when trying to get EU membership status', async () => {
+    expect.assertions(1)
+
+    // Suppress expected console error
+    jest.spyOn(console, 'error').mockImplementationOnce(() => {})
+
+    // Mock a MaxMind error
+    mockGeoIP.country.mockImplementationOnce((successCallback, failureCallback) => {
+      return failureCallback({ code: 'BAD_THING_HAPPENED' })
+    })
+
+    const isInEuropeanUnion = require('../client-location').isInEuropeanUnion
+    await expect(isInEuropeanUnion()).rejects.toThrow('Could not determine client location EU membership')
+  })
+
+  it('does not log an error for a typical MaxMind error', async () => {
+    expect.assertions(1)
+    const Raven = require('raven-js').default
+
+    // Suppress expected console error
+    jest.spyOn(console, 'error').mockImplementationOnce(() => {})
+
+    // Mock a MaxMind error
+    mockGeoIP.country.mockImplementationOnce((successCallback, failureCallback) => {
+      return failureCallback({ code: 'HTTP_TIMEOUT' })
+    })
+
+    const getCountry = require('../client-location').getCountry
+    try {
+      await getCountry()
+    } catch (e) {}
+    expect(Raven.captureException).not.toHaveBeenCalled()
+  })
+
+  it('does log an error for a problematic MaxMind error', async () => {
+    expect.assertions(1)
+    const Raven = require('raven-js').default
+
+    // Suppress expected console error
+    jest.spyOn(console, 'error').mockImplementationOnce(() => {})
+
+    // Mock a MaxMind error
+    mockGeoIP.country.mockImplementationOnce((successCallback, failureCallback) => {
+      return failureCallback({ code: 'OUT_OF_QUERIES' })
+    })
+
+    const getCountry = require('../client-location').getCountry
+    try {
+      await getCountry()
+    } catch (e) {}
+    expect(Raven.captureException).not.toHaveBeenCalled()
   })
 })
