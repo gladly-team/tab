@@ -1,3 +1,4 @@
+import Raven from 'raven-js'
 import moment from 'moment'
 import localStorageMgr from 'utils/localstorage-mgr'
 import {
@@ -91,6 +92,14 @@ const getLocationFromMaxMind = () => {
         }
       )
     } catch (e) {
+      // Log a subset of errors that we care about to Sentry.
+      if ([
+        'QUERY_FORBIDDEN',
+        'OUT_OF_QUERIES',
+        'PERMISSION_REQUIRED'
+      ].indexOf(e.code) > -1) {
+        Raven.captureException(e)
+      }
       reject(e)
     }
   })
