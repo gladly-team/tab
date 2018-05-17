@@ -6,7 +6,6 @@ import handleAdsLoaded from './handleAdsLoaded'
 import { isInEuropeanUnion } from 'utils/client-location'
 
 const loadAdCode = (isInEU) => {
-  console.log(`Loading ads. "In European Union" is ${isInEU}.`)
   if (adsEnabled()) {
     handleAdsLoaded()
     amazonBidder(isInEU)
