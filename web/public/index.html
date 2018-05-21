@@ -162,6 +162,10 @@ src="https://www.facebook.com/tr?id=1813501258922708&ev=PageView&noscript=1"
 <!-- https://quantcast.zendesk.com/hc/en-us/articles/360003814853-Technical-Implementation-Guide -->
   <script type="text/javascript" async=true>
     /* eslint-disable */
+    // IAB standard docs:
+    // https://github.com/InteractiveAdvertisingBureau/GDPR-Transparency-and-Consent-Framework/blob/master/CMP%20JS%20API%20v1.1%20Final.md#what-api-will-need-to-be-provided-by-the-cmp-
+    // Can redisplay the consent UI with:
+    // window.__cmp('displayConsentUi')
     var __cmp = (function () {
       return typeof (__cmp) == "function" ? __cmp : function (c) {
         var b = arguments;
@@ -187,7 +191,8 @@ src="https://www.facebook.com/tr?id=1813501258922708&ev=PageView&noscript=1"
 
     window.__cmp('init', {
       'Language': 'en',
-      'Display UI': 'always', // 'inEU', 'always', 'never'
+      'Display UI': 'inEU', // 'inEU', 'always', 'never'
+      // 'service' for consenting only for this domain; 'global' if consenting for all web
       'Consent Scope': 'service',
       'Publisher Name': 'Tab for a Cause',
       'Publisher Logo': 'https://s3-us-west-2.amazonaws.com/prod-tab2017.gladly.io/static/media/logo.539ef9c6.svg',
@@ -201,8 +206,7 @@ src="https://www.facebook.com/tr?id=1813501258922708&ev=PageView&noscript=1"
       'Vendor Screen Body Text': 'You can set consent preferences for each individual third-party company below. Expand each company list item to see what purposes they use data for to help make your choices. In some cases, companies may disclose that they use your data without asking for your consent, based on their legitimate interests. You can click on their privacy policies for more information and to opt out.',
       'Vendor Screen Accept All Button Text': 'Accept all',
       'Vendor Screen Reject All Button Text': 'Reject all',
-      // TODO: specify where to revisit this consent dialog in the settings page.
-      'Initial Screen Body Text': 'We and our partners use technology such as cookies on our site to personalise content and ads, provide social media features, and analyse our traffic. Click below to consent to the use of this technology across the web. You can change your mind and change your consent choices at any time by returning to this site.',
+      'Initial Screen Body Text': 'We and our partners use technology such as cookies on our site to personalise content and ads, provide social media features, and analyse our traffic. Click below to consent to the use of this technology on Tab for a Cause. You can change your mind at any time by visiting your settings.',
       'Initial Screen Body Text Option': 1,
     });
   </script>
