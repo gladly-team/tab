@@ -157,7 +157,13 @@ export default function (isInEU) {
       // will use the current frame's URL while others use the top frame URL.
       // Only some adapters use this setting as of May 2018.
       // https://github.com/prebid/Prebid.js/issues/1882
-      pageUrl: `${publisherDomain}${pagePath}`
+      pageUrl: `${publisherDomain}${pagePath}`,
+      // http://prebid.org/dev-docs/modules/consentManagement.html
+      consentManagement: {
+        cmpApi: 'iab',
+        timeout: 5000,
+        allowAuctionWithoutConsent: true
+      }
     })
 
     pbjs.addAdUnits(adUnits)
