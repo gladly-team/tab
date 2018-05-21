@@ -73,6 +73,9 @@
         slotsViewable: {},
         slotsLoaded: {},
         slotsAlreadyLoggedRevenue: {}
+      },
+      featureFlags: {
+        gdprConsent: false,
       }
     }
   })()
@@ -131,7 +134,9 @@ src="https://www.facebook.com/tr?id=1813501258922708&ev=PageView&noscript=1"
 <!-- BEGIN: Quantcast Choice. Consent Manager Tag -->
 <!-- https://www.quantcast.com/gdpr/quantcast-choice-self-serve/ -->
 <!-- https://quantcast.zendesk.com/hc/en-us/articles/360003814853-Technical-Implementation-Guide -->
-  <script type="text/javascript" async=true>
+<script type="text/javascript" async=true>
+  // featureFlag-gdprConsent
+  if (window.tabforacause.featureFlags.gdprConsent) {
     /* eslint-disable */
     // IAB standard docs:
     // https://github.com/InteractiveAdvertisingBureau/GDPR-Transparency-and-Consent-Framework/blob/master/CMP%20JS%20API%20v1.1%20Final.md#what-api-will-need-to-be-provided-by-the-cmp-
@@ -180,7 +185,8 @@ src="https://www.facebook.com/tr?id=1813501258922708&ev=PageView&noscript=1"
       'Initial Screen Body Text': 'We and our partners use technology such as cookies on our site to personalise content and ads, provide social media features, and analyse our traffic. Click below to consent to the use of this technology on Tab for a Cause. You can change your mind at any time by visiting your settings.',
       'Initial Screen Body Text Option': 1,
     });
-  </script>
+  }
+</script>
 <style>
     .qc-cmp-button,
     .qc-cmp-button.qc-cmp-secondary-button:hover {

@@ -140,6 +140,7 @@ export const getDefaultTabGlobal = (properties = {}) => {
       // Key: slot ID
       // Value: `true`
       slotsAlreadyLoggedRevenue: {}
-    }
+    },
+    featureFlags: {}
   }
 }

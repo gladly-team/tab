@@ -7,7 +7,8 @@ export default function (isInEU) {
   // Make sure this is inserted before your GPT tag.
   const auctionTimeoutMs = 1000
 
-  const requiresConsentManagement = isInEU
+  // featureFlag-gdprConsent
+  const requiresConsentManagement = isInEU && window.tabforacause.featureFlags.gdprConsent
 
   // Time to wait for the consent management platform (CMP)
   // to respond.
