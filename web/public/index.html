@@ -127,35 +127,6 @@ src="https://www.facebook.com/tr?id=1813501258922708&ev=PageView&noscript=1"
 </script>
 <!-- END: Google Tag Manager and ad slot definitions -->
 
-<% for (var chunk in htmlWebpackPlugin.files.chunks) { %>
-<script src="<%= htmlWebpackPlugin.files.chunks[chunk].entry %>"></script>
-<% } %>
-
-<% if (htmlWebpackPlugin.options.devServer) { %>
-<script src="<%= htmlWebpackPlugin.options.devServer%>/webpack-dev-server.js"></script>
-<% } %>
-
-<% if (htmlWebpackPlugin.options.tabAdsEnabled) { %>
-<!-- Begin PageFair -->
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
-<script type="text/javascript">
-  /* eslint-disable */
-  (function() {
-    try {
-      function async_load(script_url){
-        var protocol = ('https:' == document.location.protocol ? 'https://' : 'http://');
-        var s = document.createElement('script'); s.src = protocol + script_url;
-        var x = document.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x);
-      }
-      bm_website_code = '00B0E101417644EB';
-      jQuery(document).ready(function(){async_load('asset.pagefair.com/measure.min.js')});
-      jQuery(document).ready(function(){async_load('asset.pagefair.net/ads.min.js')});
-    } catch (e) {
-      console.error('Error with Pagefair:', e)
-    }
-  })();
-</script>
-<!-- End PageFair -->
 
 <!-- BEGIN: Quantcast Choice. Consent Manager Tag -->
 <!-- https://www.quantcast.com/gdpr/quantcast-choice-self-serve/ -->
@@ -240,6 +211,36 @@ src="https://www.facebook.com/tr?id=1813501258922708&ev=PageView&noscript=1"
     }
 </style>
 <!-- END: Quantcast Choice. Consent Manager Tag -->
+
+<% for (var chunk in htmlWebpackPlugin.files.chunks) { %>
+<script src="<%= htmlWebpackPlugin.files.chunks[chunk].entry %>"></script>
+<% } %>
+
+<% if (htmlWebpackPlugin.options.devServer) { %>
+<script src="<%= htmlWebpackPlugin.options.devServer%>/webpack-dev-server.js"></script>
+<% } %>
+
+<% if (htmlWebpackPlugin.options.tabAdsEnabled) { %>
+<!-- Begin PageFair -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+<script type="text/javascript">
+  /* eslint-disable */
+  (function() {
+    try {
+      function async_load(script_url){
+        var protocol = ('https:' == document.location.protocol ? 'https://' : 'http://');
+        var s = document.createElement('script'); s.src = protocol + script_url;
+        var x = document.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x);
+      }
+      bm_website_code = '00B0E101417644EB';
+      jQuery(document).ready(function(){async_load('asset.pagefair.com/measure.min.js')});
+      jQuery(document).ready(function(){async_load('asset.pagefair.net/ads.min.js')});
+    } catch (e) {
+      console.error('Error with Pagefair:', e)
+    }
+  })();
+</script>
+<!-- End PageFair -->
 
 <% } %>
 
