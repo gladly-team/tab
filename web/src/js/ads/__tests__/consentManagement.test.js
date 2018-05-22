@@ -52,14 +52,12 @@ describe('consentManagement', () => {
   it('calls the CMP as expected to get the consent string', async () => {
     // Mock the CMP callback for getting vendor consents
     window.__cmp.mockImplementation((command, version, callback) => {
-      if (command === 'getVendorConsents') {
+      if (command === 'getConsentData') {
         /* eslint-disable-next-line standard/no-callback-literal */
         callback({
+          consentData: 'abcdefghijklm', // consent string
           gdprApplies: true,
-          hasGlobalConsent: false,
-          metadata: 'abcdefghijklm', // consent string
-          purposeConsents: { 1: true, 2: false, 3: true },
-          vendorConsents: { 1: true, 2: false, 3: true }
+          hasGlobalConsent: false
         })
       }
     })

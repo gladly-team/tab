@@ -10,14 +10,12 @@ export const getConsentString = () => {
       if (!vendorConsents) {
         resolve(null)
       }
-      // FIXME: looks like the incorrect value.
-      // https://github.com/prebid/Prebid.js/issues/2591
-      resolve(vendorConsents.metadata)
+      resolve(vendorConsents.consentData)
     }
 
     // If the CMP throws any error, just return null.
     try {
-      window.__cmp('getVendorConsents', null, cmpSuccessCallback)
+      window.__cmp('getConsentData', null, cmpSuccessCallback)
     } catch (e) {
       console.error(e)
       resolve(null)
