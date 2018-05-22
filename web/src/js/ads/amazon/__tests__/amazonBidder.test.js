@@ -157,4 +157,56 @@ describe('amazonBidder', function () {
     await amazonBidder(true)
     expect(window.apstag.init.mock.calls[0][0]['gdpr']).toBeUndefined()
   })
+
+  it('times out and initializes Amazon when the CMP takes a long time to respond with consent', async () => {
+    expect.assertions(3)
+
+    // Mock that the CMP is very slow to respond
+    jest.useFakeTimers()
+    const getConsentString = require('../../consentManagement').getConsentString
+    getConsentString.mockImplementationOnce(() => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => { resolve('abc') }, 15e3)
+      })
+    })
+
+    const amazonBidder = require('../amazonBidder').default
+    amazonBidder(true)
+
+    // Some time has passed, but not enough to time out waiting
+    // for the CMP.
+    jest.advanceTimersByTime(1e3)
+
+    // Should still be waiting for the CMP
+    expect(window.apstag.init).not.toHaveBeenCalled()
+
+    // Enough time has passed to stop waiting for the CMP.
+    jest.advanceTimersByTime(6e3)
+
+    // Should have initialized Amazon.
+    expect(window.apstag.init.mock.calls[0][0]['gdpr']).toMatchObject({
+      enabled: true,
+      consent: null
+    })
+
+    jest.runAllTimers()
+    expect(window.apstag.init).toHaveBeenCalledTimes(1)
+  })
+
+  it('only initializes Amazon once when the CMP responds with consent', async () => {
+    expect.assertions(1)
+
+    // Mock that the CMP is very slow to respond
+    jest.useFakeTimers()
+    const getConsentString = require('../../consentManagement').getConsentString
+    getConsentString.mockImplementationOnce(() => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => { resolve('abc') }, 1e3)
+      })
+    })
+    const amazonBidder = require('../amazonBidder').default
+    amazonBidder(true)
+    jest.runAllTimers()
+    expect(window.apstag.init).toHaveBeenCalledTimes(1)
+  })
 })

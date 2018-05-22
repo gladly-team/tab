@@ -5,11 +5,10 @@ import { getConsentString } from '../consentManagement'
 // Should be the same as the value in prebidConfig.
 const PREBID_TIMEOUT = 1000
 
-// TODO
 // Time to wait for the consent management platform (CMP)
 // to respond.
-// var consentManagementTimeoutMs = 5000
-// var cmpTimer
+var consentManagementTimeoutMs = 5000
+var cmpTimer
 
 async function initApstag (requiresConsentManagement, consentString = null) {
   apstag.init({
@@ -80,12 +79,20 @@ export default async (isInEU) => {
   // If we need to get the consent string, do so before
   // initializing apstag.
   if (requiresConsentManagement) {
-    // TODO: CMP timeout
+    // If the CMP takes too long to respond, initialize apstag
+    // without the consent string.
+    cmpTimer = setTimeout(() => {
+      initApstag(true, null)
+    }, consentManagementTimeoutMs)
+
+    // Try to get the consent string from the CMP.
     try {
       const consentString = await getConsentString()
+      clearTimeout(cmpTimer)
       initApstag(true, consentString)
     } catch (e) {
       console.error(e)
+      clearTimeout(cmpTimer)
       initApstag(true, null)
     }
   } else {
