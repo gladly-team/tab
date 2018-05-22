@@ -8,7 +8,7 @@ export default function (isInEU) {
   const auctionTimeoutMs = 1000
 
   // featureFlag-gdprConsent
-  const requiresConsentManagement = isInEU && window.tabforacause.featureFlags.gdprConsent
+  const requiresConsentManagement = !!(isInEU && window.tabforacause.featureFlags.gdprConsent)
 
   // Time to wait for the consent management platform (CMP)
   // to respond.
