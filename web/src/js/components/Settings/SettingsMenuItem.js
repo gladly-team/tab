@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import MenuItem from 'material-ui/MenuItem'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemText from '@material-ui/core/ListItemText'
 import NavLink from 'general/NavLink'
 
 class SettingsMenuItem extends React.Component {
@@ -13,9 +14,9 @@ class SettingsMenuItem extends React.Component {
         to={this.props.to}
         style={{ textDecoration: 'none' }}
       >
-        <MenuItem style={menuItemStyle}>
-          {this.props.children}
-        </MenuItem>
+        <ListItem style={menuItemStyle}>
+          <ListItemText primary={this.props.children} />
+        </ListItem>
       </NavLink>
     )
   }

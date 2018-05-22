@@ -1,13 +1,21 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import FadeInAnimation from 'general/FadeInAnimation'
 import ErrorMessage from 'general/ErrorMessage'
 import {
-  goToDashboard
+  goToDashboard,
+  backgroundSettingsURL,
+  donateURL,
+  inviteFriendsURL,
+  statsURL,
+  widgetSettingsURL
 } from 'navigation/navigation'
-import AppBar from 'material-ui/AppBar'
-import Drawer from 'material-ui/Drawer'
-import IconButton from 'material-ui/IconButton'
+import AppBar from '@material-ui/core/AppBar'
+import Divider from '@material-ui/core/Divider'
+import IconButton from '@material-ui/core/IconButton'
+import List from '@material-ui/core/List'
+import SettingsMenuItem from './SettingsMenuItem'
+import Toolbar from '@material-ui/core/Toolbar'
+import Typography from '@material-ui/core/Typography'
 import CloseIcon from 'material-ui/svg-icons/navigation/close'
 
 class SettingsPage extends React.Component {
@@ -33,91 +41,99 @@ class SettingsPage extends React.Component {
   }
 
   render () {
-    const containerStyle = {
-      backgroundColor: '#F2F2F2',
-      width: '100%',
-      height: '100%'
-    }
-    const childContainerStyle = {
-      backgroundColor: '#F2F2F2',
-      width: '100%',
-      boxSizing: 'border-box',
-      display: 'flex',
-      justifyContent: 'center'
-    }
-    const menuItemBottomStyle = {
-      position: 'absolute',
-      bottom: 0,
-      left: 0,
-      right: 0
-    }
-    const closeButtonStyle = {
-      width: 54,
-      height: 54,
-      padding: 8
-    }
-    const closeButtonIconStyle = {
-      width: 28,
-      height: 28
-    }
     const showError = this.showError
     const errorMessage = this.state.errorMessage
+    const sidebarWidth = 250
     return (
-      <FadeInAnimation>
-        <div
-          data-test-id={'app-settings-id'}
-          key={'settings-view-key'}
-          style={containerStyle}>
-          <AppBar
-            title='Settings'
-            iconElementRight={
-              <IconButton
-                style={closeButtonStyle}
-                iconStyle={closeButtonIconStyle}
-                onClick={this.goToHome.bind(this)}
-              >
-                <CloseIcon />
-              </IconButton>
-            }
-          />
-          <Drawer>
-            <AppBar
-              title={this.props.title}
-              showMenuIconButton={false}
-              style={{ marginBottom: 8 }}
-            />
-            { this.props.menuItems }
-            { this.props.menuItemBottom
-              ? (
-                <div style={menuItemBottomStyle}>
-                  {this.props.menuItemBottom}
-                </div>
-              )
-              : null
-            }
-          </Drawer>
-          <div style={childContainerStyle}>
-            {React.Children.map(
-              this.props.children,
-              (child) => React.cloneElement(child, {
-                showError: showError.bind(this)
-              })
-            )}
-          </div>
-          { errorMessage
-            ? <ErrorMessage message={errorMessage}
-              onRequestClose={this.clearError.bind(this)} />
-            : null }
+      <div
+        data-test-id={'app-settings-id'}
+        key={'settings-view-key'}
+        style={{
+          backgroundColor: '#F2F2F2',
+          minWidth: '100vw',
+          minHeight: '100vh'
+        }}>
+        <AppBar
+          color={'primary'}
+          position={'sticky'}
+          iconElementRight={
+            <IconButton
+              style={{
+                width: 54,
+                height: 54,
+                padding: 8
+              }}
+              iconStyle={{
+                width: 28,
+                height: 28
+              }}
+              onClick={this.goToHome.bind(this)}
+            >
+              <CloseIcon />
+            </IconButton>
+          }
+        >
+          <Toolbar>
+            <Typography variant='title' color='inherit'>
+              {this.props.title}
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <div style={{ width: sidebarWidth, position: 'fixed' }}>
+          <List>
+            <SettingsMenuItem
+              key={'widgets'}
+              to={widgetSettingsURL}>
+                      Widgets
+            </SettingsMenuItem>
+            <SettingsMenuItem
+              key={'background'}
+              to={backgroundSettingsURL}>
+                      Background
+            </SettingsMenuItem>
+            <Divider />
+            <SettingsMenuItem
+              key={'stats'}
+              to={statsURL}>
+                    Your Stats
+            </SettingsMenuItem>
+            <SettingsMenuItem
+              key={'donate'}
+              to={donateURL}>
+                    Donate Hearts
+            </SettingsMenuItem>
+            <SettingsMenuItem
+              key={'invite'}
+              to={inviteFriendsURL}>
+                    Invite Friends
+            </SettingsMenuItem>
+            <Divider />
+          </List>
         </div>
-      </FadeInAnimation>
+        <div style={{
+          marginLeft: sidebarWidth,
+          boxSizing: 'border-box',
+          display: 'flex',
+          justifyContent: 'center'
+        }}>
+          {React.Children.map(
+            this.props.children,
+            (child) => React.cloneElement(child, {
+              showError: showError.bind(this)
+            })
+          )}
+        </div>
+        { errorMessage
+          ? <ErrorMessage message={errorMessage}
+            onRequestClose={this.clearError.bind(this)} />
+          : null }
+      </div>
     )
   }
 }
 
 SettingsPage.propTypes = {
-  title: PropTypes.string.isRequired,
-  menuItems: PropTypes.arrayOf(PropTypes.element).isRequired,
-  menuItemBottom: PropTypes.element
+  title: PropTypes.string.isRequired
 }
 
 export default SettingsPage

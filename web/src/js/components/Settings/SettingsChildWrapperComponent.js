@@ -4,8 +4,6 @@ import FadeInAnimation from 'general/FadeInAnimation'
 class SettingsChildWrapper extends React.Component {
   render () {
     const container = {
-      marginLeft: 256,
-      marginRight: 'auto',
       padding: 20
     }
     return (
