@@ -138,11 +138,6 @@ src="https://www.facebook.com/tr?id=1813501258922708&ev=PageView&noscript=1"
   // featureFlag-gdprConsent
   if (window.tabforacause.featureFlags.gdprConsent) {
     /* eslint-disable */
-
-    // FIXME: if we call window.__cmp outside of the EU when 'Display UI' is set
-    // to 'inEU' only, the CMP throws an error:
-    // Cannot read property 'status' of undefined at Object.checkUserIsInEU
-
     // IAB standard docs:
     // https://github.com/InteractiveAdvertisingBureau/GDPR-Transparency-and-Consent-Framework/blob/master/CMP%20JS%20API%20v1.1%20Final.md#what-api-will-need-to-be-provided-by-the-cmp-
     // Can redisplay the consent UI with:
