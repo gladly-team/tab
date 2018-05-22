@@ -6,11 +6,11 @@ import {
 } from 'utils/test-utils'
 
 jest.mock('../apstag')
+jest.mock('../../consentManagement')
 
 beforeEach(() => {
   delete window.googletag
   delete window.apstag
-  delete window.tabforacause
 
   // Mock googletag
   const mockAddEventListener = jest.fn()
@@ -26,9 +26,15 @@ beforeEach(() => {
 
   // Mock tabforacause global
   window.tabforacause = getDefaultTabGlobal()
+  // featureFlag-gdprConsent
+  window.tabforacause.featureFlags.gdprConsent = true
 
   jest.clearAllMocks()
   jest.resetModules()
+})
+
+afterEach(() => {
+  jest.clearAllMocks()
 })
 
 afterAll(() => {
@@ -79,7 +85,7 @@ describe('amazonBidder', function () {
     expect(window.apstag.setDisplayBids).toHaveBeenCalled()
   })
 
-  it('stores Amazon bids in tabforacause window variable', () => {
+  it('stores Amazon bids in tabforacause window variable', async () => {
     // Mock apstag's `fetchBids` so we can invoke the callback function
     var passedCallback
     window.apstag.fetchBids.mockImplementation((config, callback) => {
@@ -87,7 +93,7 @@ describe('amazonBidder', function () {
     })
 
     const amazonBidder = require('../amazonBidder').default
-    amazonBidder()
+    await amazonBidder()
 
     // Fake that apstag calls callback for returned bids
     const someBid = mockAmazonBidResponse({
@@ -107,5 +113,40 @@ describe('amazonBidder', function () {
       .toEqual(someBid)
     expect(window.tabforacause.ads.amazonBids['div-gpt-ad-24681357-0'])
       .toEqual(someOtherBid)
+  })
+
+  it('calls apstag.init with the expected publisher ID and ad server', async () => {
+    const amazonBidder = require('../amazonBidder').default
+    await amazonBidder()
+
+    expect(window.apstag.init.mock.calls[0][0]).toMatchObject({
+      pubID: '3397',
+      adServer: 'googletag'
+    })
+  })
+
+  it('does not include GDPR consent when not in the EU', async () => {
+    const amazonBidder = require('../amazonBidder').default
+    await amazonBidder(false)
+    expect(window.apstag.init.mock.calls[0][0]['gdpr']).toBeUndefined()
+  })
+
+  it('includes GDPR consent when in the EU', async () => {
+    const getConsentString = require('../../consentManagement').getConsentString
+    getConsentString.mockReturnValue(Promise.resolve('the-consent-string'))
+    const amazonBidder = require('../amazonBidder').default
+    await amazonBidder(true)
+    expect(window.apstag.init.mock.calls[0][0]['gdpr']).toMatchObject({
+      enabled: true,
+      consent: 'the-consent-string'
+    })
+  })
+
+  it('does not include GDPR consent when the feature flag is not enabled (even when in the EU)', async () => {
+    // featureFlag-gdprConsent
+    window.tabforacause.featureFlags.gdprConsent = false
+    const amazonBidder = require('../amazonBidder').default
+    await amazonBidder(true)
+    expect(window.apstag.init.mock.calls[0][0]['gdpr']).toBeUndefined()
   })
 })
