@@ -10,6 +10,8 @@ export const getConsentString = () => {
       if (!vendorConsents) {
         resolve(null)
       }
+      // FIXME: looks like the incorrect value.
+      // https://github.com/prebid/Prebid.js/issues/2591
       resolve(vendorConsents.metadata)
     }
 
