@@ -6,15 +6,12 @@ import NavLink from 'general/NavLink'
 
 class SettingsMenuItem extends React.Component {
   render () {
-    const menuItemStyle = Object.assign(
-      {},
-      this.props.style)
     return (
       <NavLink
         to={this.props.to}
         style={{ textDecoration: 'none' }}
       >
-        <ListItem style={menuItemStyle}>
+        <ListItem button>
           <ListItemText primary={this.props.children} />
         </ListItem>
       </NavLink>
@@ -23,12 +20,6 @@ class SettingsMenuItem extends React.Component {
 }
 
 SettingsMenuItem.propTypes = {
-  to: PropTypes.string.isRequired,
-  style: PropTypes.object
+  to: PropTypes.string.isRequired
 }
-
-SettingsMenuItem.defaultProps = {
-  style: {}
-}
-
 export default SettingsMenuItem
