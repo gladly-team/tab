@@ -5,8 +5,8 @@ import moment from 'moment'
 import HeartIcon from 'material-ui/svg-icons/action/favorite'
 // import HeartBorderIcon from 'material-ui/svg-icons/action/favorite-border'
 import RaisedButton from 'material-ui/RaisedButton'
-import TextField from 'material-ui-next/TextField'
-import { withStyles } from 'material-ui-next/styles'
+import TextField from '@material-ui/core/TextField'
+import { withStyles } from '@material-ui/core/styles'
 import appTheme, {
   alternateAccentColor,
   lighterTextColor

@@ -5,14 +5,14 @@ import moment from 'moment'
 import WidgetPieceWrapper from '../../WidgetPieceWrapper'
 import DeleteIcon from 'material-ui/svg-icons/navigation/cancel'
 import Chip from 'material-ui/Chip'
-import TextField from 'material-ui-next/TextField'
+import TextField from '@material-ui/core/TextField'
 import appTheme, {
   dashboardTransparentBackground,
   widgetEditButtonInactive,
   widgetEditButtonHover
 } from 'theme/default'
 
-import { withStyles } from 'material-ui-next/styles'
+import { withStyles } from '@material-ui/core/styles'
 
 // Custom styling for placeholder text.
 const placeholder = {
