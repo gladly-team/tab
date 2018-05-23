@@ -12,10 +12,9 @@ import VerifyEmailMessage from '../components/Authentication/VerifyEmailMessage'
 import EnterUsernameForm from '../components/Authentication/EnterUsernameForm'
 import SignInIframeMessage from '../components/Authentication/SignInIframeMessage'
 import MissingEmailMessage from '../components/Authentication/MissingEmailMessage'
-import SettingsComponent from '../components/Settings/SettingsComponent'
+import SettingsPageComponent from '../components/Settings/SettingsPageComponent'
 import BackgroundSettingsView from '../components/Settings/Background/BackgroundSettingsView'
 import WidgetsSettingsView from '../components/Settings/Widgets/WidgetsSettingsView'
-import Profile from '../components/Settings/ProfileComponent'
 import ProfileStatsView from '../components/Settings/Profile/ProfileStatsView'
 import ProfileDonateHearts from '../components/Settings/Profile/ProfileDonateHeartsView'
 import ProfileInviteFriend from '../components/Settings/Profile/ProfileInviteFriendView'
@@ -25,16 +24,18 @@ export default (
   <Route path='/' component={BaseContainer}>
     <Route path='newtab' component={App}>
       <IndexRoute component={DashboardView} />
-      <Route path='settings' component={SettingsComponent}>
-        <IndexRoute component={WidgetsSettingsView} />
-        <Route path='widgets' component={WidgetsSettingsView} />
-        <Route path='background' component={BackgroundSettingsView} />
-      </Route>
-      <Route path='profile' component={Profile}>
-        <IndexRoute component={ProfileStatsView} />
-        <Route path='stats' component={ProfileStatsView} />
-        <Route path='donate' component={ProfileDonateHearts} />
-        <Route path='invite' component={ProfileInviteFriend} />
+      <Route component={SettingsPageComponent}>
+        <Route path='settings'>
+          <IndexRoute component={WidgetsSettingsView} />
+          <Route path='widgets' component={WidgetsSettingsView} />
+          <Route path='background' component={BackgroundSettingsView} />
+        </Route>
+        <Route path='profile'>
+          <IndexRoute component={ProfileStatsView} />
+          <Route path='stats' component={ProfileStatsView} />
+          <Route path='donate' component={ProfileDonateHearts} />
+          <Route path='invite' component={ProfileInviteFriend} />
+        </Route>
       </Route>
       <Route path='auth' component={AuthenticationView}>
         <IndexRoute component={FirebaseAuthenticationUI} />

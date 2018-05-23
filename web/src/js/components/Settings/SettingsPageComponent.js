@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import ErrorMessage from 'general/ErrorMessage'
 import {
   goToDashboard,
@@ -9,7 +8,6 @@ import {
   statsURL,
   widgetSettingsURL
 } from 'navigation/navigation'
-import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Divider from '@material-ui/core/Divider'
 import IconButton from '@material-ui/core/IconButton'
@@ -17,14 +15,8 @@ import List from '@material-ui/core/List'
 import ListSubheader from '@material-ui/core/ListSubheader'
 import SettingsMenuItem from './SettingsMenuItem'
 import Toolbar from '@material-ui/core/Toolbar'
-import Typography from '@material-ui/core/Typography'
+import Logo from '../Logo/Logo'
 import CloseIcon from 'material-ui/svg-icons/navigation/close'
-
-const styles = theme => ({
-  flex: {
-    flex: 1
-  }
-})
 
 // TODO:
 // - active style for menu item
@@ -54,7 +46,6 @@ class SettingsPage extends React.Component {
   }
 
   render () {
-    const { classes } = this.props
     const showError = this.showError
     const errorMessage = this.state.errorMessage
     const sidebarWidth = 250
@@ -73,9 +64,9 @@ class SettingsPage extends React.Component {
           position={'sticky'}
         >
           <Toolbar>
-            <Typography variant='title' color='inherit' className={classes.flex}>
-              {this.props.title}
-            </Typography>
+            <div style={{ flex: 1 }}>
+              <Logo color={'white'} />
+            </div>
             <IconButton onClick={this.goToHome.bind(this)}>
               <CloseIcon
                 style={{
@@ -143,8 +134,6 @@ class SettingsPage extends React.Component {
 }
 
 SettingsPage.propTypes = {
-  classes: PropTypes.object.isRequired,
-  title: PropTypes.string.isRequired
 }
 
-export default withStyles(styles)(SettingsPage)
+export default SettingsPage
