@@ -26,6 +26,12 @@ const styles = theme => ({
   }
 })
 
+// TODO:
+// - active style for menu item
+// - hover style for menu item
+// - fix "invite friends" text box color
+// - subheader for sections? possibly remove title from top-left?
+// - add "Account" page with email address and username
 class SettingsPage extends React.Component {
   constructor (props) {
     super(props)
