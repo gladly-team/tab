@@ -101,6 +101,7 @@ class SettingsPage extends React.Component {
                       Background
             </SettingsMenuItem>
             <Divider />
+            <ListSubheader disableSticky>Your Profile</ListSubheader>
             <SettingsMenuItem
               key={'stats'}
               to={statsURL}>

@@ -1,8 +1,5 @@
 import { createMuiTheme } from '@material-ui/core/styles'
 
-// On white, equivalent to #ededed
-const lighterShadingColor = 'rgba(128, 128, 128, 0.14)'
-
 // Theme
 const primaryMainColor = '#9d4ba3'
 const primaryContrastTextColor = '#fff'
@@ -25,18 +22,19 @@ const theme = createMuiTheme({
     }
   },
   typography: {
+    fontSize: 14,
     fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif'
   },
   overrides: {
-    MuiButton: {
-      // Name of the styleSheet
+    MuiButtonBase: {
       root: {
-        fontWeight: '500'
+        color: primaryMainColor
       }
     },
-    MuiDivider: {
+    MuiListSubheader: {
       root: {
-        backgroundColor: lighterShadingColor
+        fontSize: 12,
+        textTransform: 'uppercase'
       }
     }
   }
