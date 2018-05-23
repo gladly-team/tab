@@ -9,14 +9,17 @@ import { alternateAccentColor } from 'theme/default'
 // material-ui 1.0.
 // https://github.com/callemall/material-ui/blob/v1-beta/src/Input/Input.js#L78
 const styles = theme => ({
-  inputInkbar: {
+  inputUnderline: {
     '&:after': {
-      backgroundColor: alternateAccentColor
+      borderColor: alternateAccentColor
     }
   },
-  inputLabelFocused: {
-    color: alternateAccentColor
-  }
+  formLabelRoot: {
+    '&$formLabelFocused': {
+      color: alternateAccentColor
+    }
+  },
+  formLabelFocused: {}
 })
 
 class InviteFriend extends React.Component {
@@ -65,17 +68,19 @@ class InviteFriend extends React.Component {
             helperText={"and you'll get 350 Hearts for every person who joins!"}
             InputProps={{
               classes: {
-                inkbar: classes.inputInkbar
+                underline: classes.inputUnderline
               }
             }}
+            /* eslint-disable-next-line react/jsx-no-duplicate-props */
             inputProps={{
               style: {
                 textAlign: 'left'
               }
             }}
             InputLabelProps={{
-              FormControlClasses: {
-                focused: classes.inputLabelFocused
+              FormLabelClasses: {
+                root: classes.formLabelRoot,
+                focused: classes.formLabelFocused
               }
             }}
           />
