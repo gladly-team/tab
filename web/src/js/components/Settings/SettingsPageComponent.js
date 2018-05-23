@@ -27,7 +27,6 @@ const styles = theme => ({
 })
 
 // TODO:
-// - active style for menu item
 // - add "Account" page with email address and username
 class SettingsPage extends React.Component {
   constructor (props) {
