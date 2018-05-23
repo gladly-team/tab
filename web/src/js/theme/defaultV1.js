@@ -28,7 +28,7 @@ const theme = createMuiTheme({
   overrides: {
     MuiButtonBase: {
       root: {
-        color: primaryMainColor
+        color: 'rgba(0, 0, 0, 0.87)'
       }
     },
     MuiListSubheader: {
