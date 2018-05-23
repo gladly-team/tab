@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import ErrorMessage from 'general/ErrorMessage'
 import {
   goToDashboard,
@@ -8,6 +9,7 @@ import {
   statsURL,
   widgetSettingsURL
 } from 'navigation/navigation'
+import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Divider from '@material-ui/core/Divider'
 import IconButton from '@material-ui/core/IconButton'
@@ -17,6 +19,12 @@ import SettingsMenuItem from './SettingsMenuItem'
 import Toolbar from '@material-ui/core/Toolbar'
 import Logo from '../Logo/Logo'
 import CloseIcon from 'material-ui/svg-icons/navigation/close'
+
+const styles = theme => ({
+  listSubheader: {
+    paddingLeft: 14
+  }
+})
 
 // TODO:
 // - active style for menu item
@@ -44,10 +52,11 @@ class SettingsPage extends React.Component {
   }
 
   render () {
+    const { classes } = this.props
     const showError = this.showError
     const errorMessage = this.state.errorMessage
-    const sidebarWidth = 250
-    const dividerLeftMargin = 10
+    const sidebarWidth = 240
+    const sidebarLeftMargin = 10
     return (
       <div
         data-test-id={'app-settings-id'}
@@ -78,8 +87,12 @@ class SettingsPage extends React.Component {
           </Toolbar>
         </AppBar>
         <div style={{ width: sidebarWidth, position: 'fixed' }}>
-          <List style={{ marginLeft: 0 }}>
-            <ListSubheader disableSticky>Settings</ListSubheader>
+          <List style={{ marginLeft: sidebarLeftMargin }}>
+            <ListSubheader
+              disableSticky
+              className={classes.listSubheader}>
+                Settings
+            </ListSubheader>
             <SettingsMenuItem
               key={'widgets'}
               to={widgetSettingsURL}>
@@ -90,8 +103,12 @@ class SettingsPage extends React.Component {
               to={backgroundSettingsURL}>
                       Background
             </SettingsMenuItem>
-            <Divider style={{ marginLeft: dividerLeftMargin }} />
-            <ListSubheader disableSticky>Your Profile</ListSubheader>
+            <Divider />
+            <ListSubheader
+              disableSticky
+              className={classes.listSubheader}>
+                Your Profile
+            </ListSubheader>
             <SettingsMenuItem
               key={'stats'}
               to={statsURL}>
@@ -107,7 +124,7 @@ class SettingsPage extends React.Component {
               to={inviteFriendsURL}>
                     Invite Friends
             </SettingsMenuItem>
-            <Divider style={{ marginLeft: dividerLeftMargin }} />
+            <Divider />
           </List>
         </div>
         <div style={{
@@ -133,6 +150,7 @@ class SettingsPage extends React.Component {
 }
 
 SettingsPage.propTypes = {
+  classes: PropTypes.object.isRequired
 }
 
-export default SettingsPage
+export default withStyles(styles)(SettingsPage)
