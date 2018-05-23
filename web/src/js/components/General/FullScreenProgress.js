@@ -24,7 +24,7 @@ FullScreenProgress.propTypes = {
 FullScreenProgress.defaultProps = {
   containerStyle: {
     width: '100%',
-    height: '100%',
+    height: '100vh',
     maxWidth: '100%',
     boxSizing: 'border-box',
     display: 'flex',
