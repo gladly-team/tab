@@ -9,14 +9,22 @@ import {
   statsURL,
   widgetSettingsURL
 } from 'navigation/navigation'
+import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Divider from '@material-ui/core/Divider'
 import IconButton from '@material-ui/core/IconButton'
 import List from '@material-ui/core/List'
+import ListSubheader from '@material-ui/core/ListSubheader'
 import SettingsMenuItem from './SettingsMenuItem'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import CloseIcon from 'material-ui/svg-icons/navigation/close'
+
+const styles = theme => ({
+  flex: {
+    flex: 1
+  }
+})
 
 class SettingsPage extends React.Component {
   constructor (props) {
@@ -41,6 +49,7 @@ class SettingsPage extends React.Component {
   }
 
   render () {
+    const { classes } = this.props
     const showError = this.showError
     const errorMessage = this.state.errorMessage
     const sidebarWidth = 250
@@ -49,6 +58,7 @@ class SettingsPage extends React.Component {
         data-test-id={'app-settings-id'}
         key={'settings-view-key'}
         style={{
+          color: '#fff',
           backgroundColor: '#F2F2F2',
           minWidth: '100vw',
           minHeight: '100vh'
@@ -56,31 +66,25 @@ class SettingsPage extends React.Component {
         <AppBar
           color={'primary'}
           position={'sticky'}
-          iconElementRight={
-            <IconButton
-              style={{
-                width: 54,
-                height: 54,
-                padding: 8
-              }}
-              iconStyle={{
-                width: 28,
-                height: 28
-              }}
-              onClick={this.goToHome.bind(this)}
-            >
-              <CloseIcon />
-            </IconButton>
-          }
         >
           <Toolbar>
-            <Typography variant='title' color='inherit'>
+            <Typography variant='title' color='inherit' className={classes.flex}>
               {this.props.title}
             </Typography>
+            <IconButton onClick={this.goToHome.bind(this)}>
+              <CloseIcon
+                style={{
+                  color: '#fff',
+                  width: 28,
+                  height: 28
+                }}
+              />
+            </IconButton>
           </Toolbar>
         </AppBar>
         <div style={{ width: sidebarWidth, position: 'fixed' }}>
           <List>
+            <ListSubheader disableSticky>Settings</ListSubheader>
             <SettingsMenuItem
               key={'widgets'}
               to={widgetSettingsURL}>
@@ -133,7 +137,8 @@ class SettingsPage extends React.Component {
 }
 
 SettingsPage.propTypes = {
+  classes: PropTypes.object.isRequired,
   title: PropTypes.string.isRequired
 }
 
-export default SettingsPage
+export default withStyles(styles)(SettingsPage)
