@@ -20,8 +20,6 @@ import CloseIcon from 'material-ui/svg-icons/navigation/close'
 
 // TODO:
 // - active style for menu item
-// - hover style for menu item
-// - subheader for sections? possibly remove title from top-left?
 // - add "Account" page with email address and username
 class SettingsPage extends React.Component {
   constructor (props) {
@@ -49,6 +47,7 @@ class SettingsPage extends React.Component {
     const showError = this.showError
     const errorMessage = this.state.errorMessage
     const sidebarWidth = 250
+    const dividerLeftMargin = 10
     return (
       <div
         data-test-id={'app-settings-id'}
@@ -79,7 +78,7 @@ class SettingsPage extends React.Component {
           </Toolbar>
         </AppBar>
         <div style={{ width: sidebarWidth, position: 'fixed' }}>
-          <List>
+          <List style={{ marginLeft: 0 }}>
             <ListSubheader disableSticky>Settings</ListSubheader>
             <SettingsMenuItem
               key={'widgets'}
@@ -91,7 +90,7 @@ class SettingsPage extends React.Component {
               to={backgroundSettingsURL}>
                       Background
             </SettingsMenuItem>
-            <Divider />
+            <Divider style={{ marginLeft: dividerLeftMargin }} />
             <ListSubheader disableSticky>Your Profile</ListSubheader>
             <SettingsMenuItem
               key={'stats'}
@@ -108,7 +107,7 @@ class SettingsPage extends React.Component {
               to={inviteFriendsURL}>
                     Invite Friends
             </SettingsMenuItem>
-            <Divider />
+            <Divider style={{ marginLeft: dividerLeftMargin }} />
           </List>
         </div>
         <div style={{
