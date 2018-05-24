@@ -4,9 +4,8 @@ import React from 'react'
 import {QueryRenderer} from 'react-relay/compat'
 import environment from '../../../../relay-env'
 
+import SettingsChildWrapper from '../SettingsChildWrapperComponent'
 import ProfileStats from './ProfileStatsContainer'
-
-import FullScreenProgress from 'general/FullScreenProgress'
 import AuthUserComponent from 'general/AuthUserComponent'
 import ErrorMessage from 'general/ErrorMessage'
 
@@ -29,16 +28,20 @@ class ProfileStatsView extends React.Component {
               const errMsg = 'We had a problem loading your stats :('
               return <ErrorMessage message={errMsg} />
             }
-            if (props) {
-              const showError = this.props.showError
-              return (
-                <ProfileStats
-                  user={props.user}
-                  showError={showError} />
-              )
-            } else {
-              return (<FullScreenProgress />)
-            }
+            const showError = this.props.showError
+            const dataLoaded = !!props
+            return (
+              <SettingsChildWrapper loaded={dataLoaded}>
+                { dataLoaded
+                  ? (
+                    <ProfileStats
+                      user={props.user}
+                      showError={showError} />
+                  )
+                  : null
+                }
+              </SettingsChildWrapper>
+            )
           }} />
       </AuthUserComponent>
     )

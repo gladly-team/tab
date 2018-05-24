@@ -4,7 +4,6 @@ import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton'
 import Divider from 'material-ui/Divider'
 import {Card, CardHeader} from 'material-ui/Card'
 
-import SettingsChildWrapper from '../SettingsChildWrapperComponent'
 import BackgroundImagePicker from '../../Background/BackgroundImagePickerContainer'
 import BackgroundColorPicker from '../../Background/BackgroundColorPickerContainer'
 import BackgroundCustomImagePicker from '../../Background/BackgroundCustomImagePickerContainer'
@@ -94,40 +93,38 @@ class BackgroundSettings extends React.Component {
     }
 
     return (
-      <SettingsChildWrapper>
-        <Card
-          style={optionContainer}>
-          <CardHeader
-            title={'Background'}
-            // subtitle={'Choose the background for your new tab page'}
-            titleStyle={cardHeaderTitleStyle}
-            subtitleStyle={cardHeaderSubtitleStyle}
-            actAsExpander={false}
-            showExpandableButton={false} />
-          <div style={cardBody}>
-            <RadioButtonGroup
-              style={radioBtnGroupStyle}
-              onChange={this.onChange.bind(this)}
-              name='photoModes'
-              valueSelected={this.state.selected}>
-              <RadioButton
-                style={radioBtnStyle}
-                value='photo'
-                label='Selected photo' />
-              <RadioButton
-                style={radioBtnStyle}
-                value='custom'
-                label='Custom photo' />
-              <RadioButton
-                style={radioBtnStyle}
-                value='color'
-                label='Color' />
-            </RadioButtonGroup>
-            {dividerCmp}
-            {selectedOption}
-          </div>
-        </Card>
-      </SettingsChildWrapper>
+      <Card
+        style={optionContainer}>
+        <CardHeader
+          title={'Background'}
+          // subtitle={'Choose the background for your new tab page'}
+          titleStyle={cardHeaderTitleStyle}
+          subtitleStyle={cardHeaderSubtitleStyle}
+          actAsExpander={false}
+          showExpandableButton={false} />
+        <div style={cardBody}>
+          <RadioButtonGroup
+            style={radioBtnGroupStyle}
+            onChange={this.onChange.bind(this)}
+            name='photoModes'
+            valueSelected={this.state.selected}>
+            <RadioButton
+              style={radioBtnStyle}
+              value='photo'
+              label='Selected photo' />
+            <RadioButton
+              style={radioBtnStyle}
+              value='custom'
+              label='Custom photo' />
+            <RadioButton
+              style={radioBtnStyle}
+              value='color'
+              label='Color' />
+          </RadioButtonGroup>
+          {dividerCmp}
+          {selectedOption}
+        </div>
+      </Card>
     )
   }
 }
