@@ -36,6 +36,7 @@ export const backgroundSettingsURL = '/newtab/settings/background/'
 export const donateURL = '/newtab/profile/donate/'
 export const statsURL = '/newtab/profile/stats/'
 export const inviteFriendsURL = '/newtab/profile/invite/'
+export const accountURL = '/newtab/account/'
 
 // CONVENIENCE FUNCTIONS
 

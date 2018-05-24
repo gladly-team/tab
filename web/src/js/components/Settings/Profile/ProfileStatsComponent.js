@@ -4,7 +4,6 @@ import moment from 'moment'
 import RaisedButton from 'material-ui/RaisedButton'
 import HeartBorderIcon from 'material-ui/svg-icons/action/favorite-border'
 import Stat from './StatComponent'
-import SettingsChildWrapper from '../SettingsChildWrapperComponent'
 import { Paper } from 'material-ui'
 import appTheme, {
   lighterTextColor
@@ -37,7 +36,7 @@ class ProfileStats extends React.Component {
       margin: spacingPx
     }
     return (
-      <SettingsChildWrapper>
+      <div>
         <Paper
           style={{
             display: 'flex',
@@ -131,7 +130,7 @@ class ProfileStats extends React.Component {
             }
           />
         </span>
-      </SettingsChildWrapper>
+      </div>
     )
   }
 }

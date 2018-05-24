@@ -4,9 +4,8 @@ import React from 'react'
 import {QueryRenderer} from 'react-relay/compat'
 import environment from '../../../../relay-env'
 
+import SettingsChildWrapper from '../SettingsChildWrapperComponent'
 import ProfileDonateHearts from './ProfileDonateHeartsContainer'
-
-import FullScreenProgress from 'general/FullScreenProgress'
 import AuthUserComponent from 'general/AuthUserComponent'
 import ErrorMessage from 'general/ErrorMessage'
 
@@ -32,18 +31,22 @@ class ProfileDonateHeartsView extends React.Component {
               const errMsg = 'We had a problem loading the Donate Hearts page.'
               return <ErrorMessage message={errMsg} />
             }
-            if (props) {
-              const showError = this.props.showError
-              return (
-                <ProfileDonateHearts
-                  app={props.app}
-                  user={props.user}
-                  showError={showError}
-                />
-              )
-            } else {
-              return (<FullScreenProgress />)
-            }
+            const showError = this.props.showError
+            const dataLoaded = !!props
+            return (
+              <SettingsChildWrapper loaded={dataLoaded}>
+                { dataLoaded
+                  ? (
+                    <ProfileDonateHearts
+                      app={props.app}
+                      user={props.user}
+                      showError={showError}
+                    />
+                  )
+                  : null
+                }
+              </SettingsChildWrapper>
+            )
           }} />
       </AuthUserComponent>
     )
