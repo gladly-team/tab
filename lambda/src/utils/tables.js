@@ -14,6 +14,7 @@ const tables = {
   charities: 'Charities',
   vcDonationLog: 'VcDonationLog',
   userRevenueLog: 'UserRevenueLog',
+  userDataConsentLog: 'UserDataConsentLog',
   backgroundImages: 'BackgroundImages',
   widgets: 'Widgets',
   userWidgets: 'UserWidgets',

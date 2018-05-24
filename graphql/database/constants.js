@@ -12,6 +12,7 @@ export const BACKGROUND_IMAGE = 'BackgroundImage'
 export const USER_RECRUITS = 'UserRecruits'
 export const REFERRAL_DATA = 'ReferralData'
 export const USER_REVENUE = 'UserRevenue'
+export const USER_DATA_CONSENT = 'UserDataConsent'
 
 // Model field values
 export const USER_BACKGROUND_OPTION_DAILY = 'daily'
