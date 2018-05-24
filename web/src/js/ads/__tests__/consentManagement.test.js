@@ -66,7 +66,7 @@ describe('consentManagement', () => {
     expect(consentString).toEqual('abcdefghijklm')
   })
 
-  it('returns null if the CMP throws an error', async () => {
+  it('returns null if the CMP throws an error while getting the consent string', async () => {
     window.__cmp.mockImplementation(() => {
       throw new Error('CMP made a mistake!')
     })
@@ -77,5 +77,11 @@ describe('consentManagement', () => {
     const getConsentString = require('../consentManagement').getConsentString
     const consentString = await getConsentString()
     expect(consentString).toBeNull()
+  })
+
+  it('returns null if the CMP throws an error while getting the consent string', () => {
+    const displayConsentUI = require('../consentManagement').displayConsentUI
+    displayConsentUI()
+    expect(window.__cmp).toHaveBeenCalledWith('displayConsentUi')
   })
 })

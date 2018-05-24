@@ -22,3 +22,11 @@ export const getConsentString = () => {
     }
   })
 }
+
+/**
+ * Call the CMP to display the consent UI.
+ * @return {undefined}
+ */
+export const displayConsentUI = () => {
+  window.__cmp('displayConsentUi')
+}
