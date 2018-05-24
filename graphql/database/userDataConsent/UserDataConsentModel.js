@@ -24,7 +24,7 @@ class UserDataConsent extends BaseModel {
   }
 
   static get tableName () {
-    return tableNames.UserDataConsentLog
+    return tableNames.userDataConsentLog
   }
 
   static get schema () {
