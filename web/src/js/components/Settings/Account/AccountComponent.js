@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button'
 import { isInEuropeanUnion } from 'utils/client-location'
 import { displayConsentUI } from 'ads/consentManagement'
 
-const AccountItem = (props) => (
+export const AccountItem = (props) => (
   <div style={{
     display: 'flex',
     alignItems: 'center',
@@ -32,7 +32,6 @@ AccountItem.propTypes = {
   actionButton: PropTypes.element
 }
 
-// TODO: test logic for displaying data privacy choices
 class Account extends React.Component {
   constructor (props) {
     super(props)
@@ -42,11 +41,15 @@ class Account extends React.Component {
   }
 
   async componentDidMount () {
-    const isInEU = await isInEuropeanUnion()
-    if (isInEU) {
-      this.setState({
-        showDataPrivacyOption: true
-      })
+    // See if we should show the data privacy choices option
+    // featureFlag-gdprConsent
+    if (window.tabforacause.featureFlags.gdprConsent) {
+      const isInEU = await isInEuropeanUnion()
+      if (isInEU) {
+        this.setState({
+          showDataPrivacyOption: true
+        })
+      }
     }
   }
 
