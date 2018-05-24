@@ -6,11 +6,35 @@
  */
 export const getConsentString = () => {
   return new Promise((resolve, reject) => {
-    function cmpSuccessCallback (vendorConsents) {
-      if (!vendorConsents) {
+    function cmpSuccessCallback (consentData) {
+      if (!consentData) {
         resolve(null)
       }
-      resolve(vendorConsents.consentData)
+      resolve(consentData.consentData)
+    }
+
+    // If the CMP throws any error, just return null.
+    try {
+      window.__cmp('getConsentData', null, cmpSuccessCallback)
+    } catch (e) {
+      console.error(e)
+      resolve(null)
+    }
+  })
+}
+
+/**
+ * Get whether the user has provided global consent for all uses.
+ * @return {Promise<boolean|null>} A promise that resolves into a
+ *   boolean, or null if there was an error getting the data
+ */
+export const hasGlobalConsent = () => {
+  return new Promise((resolve, reject) => {
+    function cmpSuccessCallback (consentData) {
+      if (!consentData) {
+        resolve(null)
+      }
+      resolve(consentData.hasGlobalConsent)
     }
 
     // If the CMP throws any error, just return null.
@@ -29,4 +53,14 @@ export const getConsentString = () => {
  */
 export const displayConsentUI = () => {
   window.__cmp('displayConsentUi')
+}
+
+/**
+ * Register a callback that will be triggered when a user
+ * makes a choice in the consent UI.
+ * @param {function} cb - The callback function
+ * @return {undefined}
+ */
+export const registerConsentCallback = (cb) => {
+  window.__cmp('setConsentUiCallback', cb)
 }

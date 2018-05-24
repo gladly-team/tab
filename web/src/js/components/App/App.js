@@ -1,7 +1,25 @@
 import React from 'react'
 import withPageviewTracking from 'analytics/withPageviewTracking'
+import {
+  getConsentString,
+  hasGlobalConsent,
+  registerConsentCallback
+} from 'ads/consentManagement'
 
 class App extends React.Component {
+  componentWillMount () {
+    registerConsentCallback(this.handleDataConsentDecision)
+  }
+
+  async handleDataConsentDecision () {
+    const consentString = await getConsentString()
+    const isGlobalConsent = await hasGlobalConsent()
+
+    // TODO
+    // Log the consent data
+    console.log('Data consent changed:', consentString, isGlobalConsent)
+  }
+
   render () {
     const root = {
       width: '100%',
