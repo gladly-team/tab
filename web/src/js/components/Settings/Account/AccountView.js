@@ -3,32 +3,28 @@
 import React from 'react'
 import {QueryRenderer} from 'react-relay/compat'
 import environment from '../../../../relay-env'
-
 import SettingsChildWrapper from '../SettingsChildWrapperComponent'
-import ProfileInviteFriend from './ProfileInviteFriendContainer'
+import Account from './AccountContainer'
 import AuthUserComponent from 'general/AuthUserComponent'
 import ErrorMessage from 'general/ErrorMessage'
 
-class ProfileInviteFriendView extends React.Component {
+class AccountView extends React.Component {
   render () {
     return (
       <AuthUserComponent>
         <QueryRenderer
           environment={environment}
           query={graphql`
-            query ProfileInviteFriendViewQuery($userId: String!) {
-              app {
-                ...ProfileInviteFriendContainer_app
-              }
+            query AccountViewQuery($userId: String!) {
               user(userId: $userId) {
-                ...ProfileInviteFriendContainer_user
+                ...AccountContainer_user
               }
             }
           `}
           render={({error, props}) => {
             if (error) {
               console.error(error, error.source)
-              const errMsg = 'We had a problem loading this page :('
+              const errMsg = 'We had a problem loading your account :('
               return <ErrorMessage message={errMsg} />
             }
             const showError = this.props.showError
@@ -37,8 +33,7 @@ class ProfileInviteFriendView extends React.Component {
               <SettingsChildWrapper loaded={dataLoaded}>
                 { dataLoaded
                   ? (
-                    <ProfileInviteFriend
-                      app={props.app}
+                    <Account
                       user={props.user}
                       showError={showError} />
                   )
@@ -52,4 +47,4 @@ class ProfileInviteFriendView extends React.Component {
   }
 }
 
-export default ProfileInviteFriendView
+export default AccountView

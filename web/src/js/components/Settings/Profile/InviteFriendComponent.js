@@ -1,22 +1,25 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Paper } from 'material-ui'
-import TextField from 'material-ui-next/TextField'
-import { withStyles } from 'material-ui-next/styles'
+import TextField from '@material-ui/core/TextField'
+import { withStyles } from '@material-ui/core/styles'
 import { alternateAccentColor } from 'theme/default'
 
 // Can replace this with a proper theme after fully migrating to
 // material-ui 1.0.
 // https://github.com/callemall/material-ui/blob/v1-beta/src/Input/Input.js#L78
 const styles = theme => ({
-  inputInkbar: {
+  inputUnderline: {
     '&:after': {
-      backgroundColor: alternateAccentColor
+      borderColor: alternateAccentColor
     }
   },
-  inputLabelFocused: {
-    color: alternateAccentColor
-  }
+  formLabelRoot: {
+    '&$formLabelFocused': {
+      color: alternateAccentColor
+    }
+  },
+  formLabelFocused: {}
 })
 
 class InviteFriend extends React.Component {
@@ -65,17 +68,19 @@ class InviteFriend extends React.Component {
             helperText={"and you'll get 350 Hearts for every person who joins!"}
             InputProps={{
               classes: {
-                inkbar: classes.inputInkbar
+                underline: classes.inputUnderline
               }
             }}
+            /* eslint-disable-next-line react/jsx-no-duplicate-props */
             inputProps={{
               style: {
                 textAlign: 'left'
               }
             }}
             InputLabelProps={{
-              FormControlClasses: {
-                focused: classes.inputLabelFocused
+              FormLabelClasses: {
+                root: classes.formLabelRoot,
+                focused: classes.formLabelFocused
               }
             }}
           />

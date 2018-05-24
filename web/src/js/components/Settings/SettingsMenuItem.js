@@ -1,33 +1,38 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import MenuItem from 'material-ui/MenuItem'
+import { withTheme } from '@material-ui/core/styles'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemText from '@material-ui/core/ListItemText'
 import NavLink from 'general/NavLink'
 
 class SettingsMenuItem extends React.Component {
   render () {
-    const menuItemStyle = Object.assign(
-      {},
-      this.props.style)
+    const { theme, to } = this.props
+    const isActive = this.context.router.isActive(to)
+    const listItemStyle = Object.assign({},
+      isActive ? {
+        background: theme.palette.action.hover
+      } : null
+    )
     return (
       <NavLink
         to={this.props.to}
         style={{ textDecoration: 'none' }}
       >
-        <MenuItem style={menuItemStyle}>
-          {this.props.children}
-        </MenuItem>
+        <ListItem style={listItemStyle} button>
+          <ListItemText primary={this.props.children} />
+        </ListItem>
       </NavLink>
     )
   }
 }
 
+SettingsMenuItem.contextTypes = {
+  router: PropTypes.object
+}
+
 SettingsMenuItem.propTypes = {
-  to: PropTypes.string.isRequired,
-  style: PropTypes.object
+  theme: PropTypes.object.isRequired,
+  to: PropTypes.string.isRequired
 }
-
-SettingsMenuItem.defaultProps = {
-  style: {}
-}
-
-export default SettingsMenuItem
+export default withTheme()(SettingsMenuItem)

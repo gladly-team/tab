@@ -6,18 +6,20 @@ import { IntlProvider, addLocaleData } from 'react-intl'
 import en from 'react-intl/locale-data/en'
 import es from 'react-intl/locale-data/es'
 
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
+import { MuiThemeProvider as V0MuiThemeProvider } from 'material-ui'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 
 // Our translated strings
 import localeData from './js/assets/locales/data.json'
 
-import defaultTheme from './js/theme/default'
+import defaultThemeLegacy from './js/theme/default'
+import defaultTheme from './js/theme/defaultV1'
+const legacyMuiTheme = getMuiTheme(defaultThemeLegacy)
+const muiTheme = createMuiTheme(defaultTheme)
 
 addLocaleData([...en, ...es])
-
-const muiTheme = getMuiTheme(defaultTheme)
 
 // Define user's language. Different browsers have the user locale defined
 // on different fields on the `navigator` object, so we make sure to account
@@ -37,13 +39,16 @@ const messages = localeData[languageWithoutRegionCode] || localeData[language] |
 // Remove when updating material-ui to 0.19+
 injectTapEventPlugin()
 
+// @material-ui-1-todo: remove legacy theme provider
 const Root = () => (
-  <MuiThemeProvider muiTheme={muiTheme}>
-    <IntlProvider locale={language} messages={messages}>
-      <Router
-        history={browserHistory}
-        routes={Routes} />
-    </IntlProvider>
+  <MuiThemeProvider theme={muiTheme}>
+    <V0MuiThemeProvider muiTheme={legacyMuiTheme}>
+      <IntlProvider locale={language} messages={messages}>
+        <Router
+          history={browserHistory}
+          routes={Routes} />
+      </IntlProvider>
+    </V0MuiThemeProvider>
   </MuiThemeProvider>
 )
 

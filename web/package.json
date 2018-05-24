@@ -24,6 +24,7 @@
     "webpack-bundle-analyzer": "^2.8.2"
   },
   "dependencies": {
+    "@material-ui/core": "^1.0.0",
     "autoprefixer": "^7.1.0",
     "aws-sdk": "^2.84.0",
     "babel-core": "^6.26.0",
@@ -65,7 +66,6 @@
     "jest": "^22.4.3",
     "json-loader": "0.5.4",
     "material-ui": "^0.19.4",
-    "material-ui-next": "npm:material-ui@next",
     "moment": "^2.18.1",
     "nodemon": "^1.11.0",
     "normalize.css": "^7.0.0",

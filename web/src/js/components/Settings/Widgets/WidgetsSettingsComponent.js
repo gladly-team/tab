@@ -1,8 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import WidgetSettings from './WidgetSettingsContainer'
-import SettingsChildWrapper from '../SettingsChildWrapperComponent'
-import FullScreenProgress from 'general/FullScreenProgress'
 
 class WidgetsSettings extends React.Component {
   constructor (props) {
@@ -36,23 +34,21 @@ class WidgetsSettings extends React.Component {
     // userWidgetsMap to be created before
     // mounting the WidgetSettings.
     if (!this.state.userWidgets) {
-      return (<FullScreenProgress />)
+      return null
     }
 
     const self = this
     return (
-      <SettingsChildWrapper>
-        <div style={{ paddingTop: 0 }} >
-          {app.widgets.edges.map((edge, index) => {
-            return (<WidgetSettings
-              key={index}
-              user={user}
-              appWidget={edge.node}
-              widget={self.state.userWidgets[edge.node.name] || null}
-              showError={showError} />)
-          })}
-        </div>
-      </SettingsChildWrapper>
+      <div style={{ paddingTop: 0 }} >
+        {app.widgets.edges.map((edge, index) => {
+          return (<WidgetSettings
+            key={index}
+            user={user}
+            appWidget={edge.node}
+            widget={self.state.userWidgets[edge.node.name] || null}
+            showError={showError} />)
+        })}
+      </div>
     )
   }
 }
