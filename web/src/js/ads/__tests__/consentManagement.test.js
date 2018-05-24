@@ -86,6 +86,8 @@ describe('consentManagement', () => {
   })
 
   it('calls the CMP as expected to get "hasGlobalConsent"', async () => {
+    expect.assertions(1)
+
     // Mock the CMP callback for getting consent data
     window.__cmp.mockImplementation((command, version, callback) => {
       if (command === 'getConsentData') {
@@ -103,6 +105,8 @@ describe('consentManagement', () => {
   })
 
   it('returns null if the CMP throws an error while getting "hasGlobalConsent"', async () => {
+    expect.assertions(1)
+
     window.__cmp.mockImplementation(() => {
       throw new Error('CMP made a mistake!')
     })
@@ -116,19 +120,31 @@ describe('consentManagement', () => {
   })
 
   it('registers a callback on __cmp.setConsentUiCallback', async () => {
+    expect.assertions(2)
+
     // Mock the CMP callback for getting consent data
     var storedCallback
-    window.__cmp.mockImplementation((command, callback) => {
+    window.__cmp.mockImplementation((command, callback, getConsentDataCallback) => {
       if (command === 'setConsentUiCallback') {
         storedCallback = callback
+      }
+      if (command === 'getConsentData') {
+        /* eslint-disable-next-line standard/no-callback-literal */
+        getConsentDataCallback({
+          consentData: 'abcdefghijklm',
+          gdprApplies: true,
+          hasGlobalConsent: false
+        })
       }
     })
     const registerConsentCallback = require('../consentManagement').registerConsentCallback
     const mockCallback = jest.fn()
-    registerConsentCallback(mockCallback)
+    await registerConsentCallback(mockCallback)
 
     // Call the stored callback
-    storedCallback()
+    await storedCallback()
+
     expect(mockCallback).toHaveBeenCalledTimes(1)
+    expect(mockCallback).toHaveBeenCalledWith('abcdefghijklm', false)
   })
 })

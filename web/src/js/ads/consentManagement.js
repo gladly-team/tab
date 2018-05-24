@@ -61,6 +61,16 @@ export const displayConsentUI = () => {
  * @param {function} cb - The callback function
  * @return {undefined}
  */
-export const registerConsentCallback = (cb) => {
-  window.__cmp('setConsentUiCallback', cb)
+export const registerConsentCallback = async (cb) => {
+  // Note: this callback appears to be buggy as of 5/24/2018
+  // and is called every time the CMP loads outside of the EU.
+  // We should verify that consent data exists before acting
+  // upon the callback.
+  window.__cmp('setConsentUiCallback', async () => {
+    const consentString = await getConsentString()
+    const isGlobalConsent = await hasGlobalConsent()
+    if (consentString) {
+      cb(consentString, isGlobalConsent)
+    }
+  })
 }
