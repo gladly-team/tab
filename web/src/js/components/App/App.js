@@ -1,5 +1,6 @@
 import React from 'react'
 import withPageviewTracking from 'analytics/withPageviewTracking'
+import { isInEuropeanUnion } from 'utils/client-location'
 import {
   getConsentString,
   hasGlobalConsent,
@@ -7,8 +8,11 @@ import {
 } from 'ads/consentManagement'
 
 class App extends React.Component {
-  componentWillMount () {
-    registerConsentCallback(this.handleDataConsentDecision)
+  async componentWillMount () {
+    const isEU = await isInEuropeanUnion()
+    if (isEU) {
+      registerConsentCallback(this.handleDataConsentDecision)
+    }
   }
 
   async handleDataConsentDecision () {
