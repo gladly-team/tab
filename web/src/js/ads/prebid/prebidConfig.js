@@ -5,7 +5,14 @@ import { getPrebidPbjs } from './getPrebidPbjs'
 export default function (isInEU) {
   // Prebid config section START
   // Make sure this is inserted before your GPT tag.
-  const prebidTimeoutMs = 1000
+  const auctionTimeoutMs = 1000
+
+  // featureFlag-gdprConsent
+  const requiresConsentManagement = !!(isInEU && window.tabforacause.featureFlags.gdprConsent)
+
+  // Time to wait for the consent management platform (CMP)
+  // to respond.
+  const consentManagementTimeoutMs = 5000
 
   // Note: brealtime is automatically aliased by the
   // AppNexus bid adapter.
@@ -157,7 +164,18 @@ export default function (isInEU) {
       // will use the current frame's URL while others use the top frame URL.
       // Only some adapters use this setting as of May 2018.
       // https://github.com/prebid/Prebid.js/issues/1882
-      pageUrl: `${publisherDomain}${pagePath}`
+      pageUrl: `${publisherDomain}${pagePath}`,
+      // GDPR consent. Only enable the consentManagement module here
+      // if consent is required, to avoid the unnecessary delay of calling
+      // the CMP.
+      // http://prebid.org/dev-docs/modules/consentManagement.html
+      ...(requiresConsentManagement && {
+        consentManagement: {
+          cmpApi: 'iab',
+          timeout: consentManagementTimeoutMs,
+          allowAuctionWithoutConsent: true
+        }
+      })
     })
 
     pbjs.addAdUnits(adUnits)
@@ -189,7 +207,13 @@ export default function (isInEU) {
     })
   }
 
-  setTimeout(() => {
-    sendAdserverRequest()
-  }, prebidTimeoutMs)
+  // If we need to wait for a CMP, don't have an auction timeout.
+  // Just rely on the Prebid consentManagement.timeout setting
+  // and the default bidder timeouts.
+  // https://github.com/prebid/Prebid.js/blob/master/integrationExamples/gpt/gdpr_hello_world.html
+  if (!requiresConsentManagement) {
+    setTimeout(() => {
+      sendAdserverRequest()
+    }, auctionTimeoutMs)
+  }
 }

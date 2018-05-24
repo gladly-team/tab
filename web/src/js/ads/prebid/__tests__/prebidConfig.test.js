@@ -2,10 +2,21 @@
 
 import prebidConfig from '../prebidConfig'
 import { getPrebidPbjs } from '../getPrebidPbjs'
+import { getDefaultTabGlobal } from 'utils/test-utils'
 
 beforeEach(() => {
-  delete window.googletag
-  delete window.pbjs
+  window.tabforacause = getDefaultTabGlobal()
+  window.tabforacause.featureFlags.gdprConsent = true
+
+  // Barebones mock of Prebid pbjs
+  window.pbjs = {
+    que: [],
+    setConfig: jest.fn(),
+    bidderSettings: {},
+    addAdUnits: jest.fn(),
+    requestBids: jest.fn(),
+    setTargetingForGPTAsync: jest.fn()
+  }
 
   // Set up googletag
   window.googletag = {}
@@ -35,5 +46,36 @@ describe('prebidConfig', function () {
     expect(pbjs.que.length).toBe(0)
     prebidConfig()
     expect(pbjs.que.length).toBeGreaterThan(0)
+  })
+
+  it('includes consentManagement setting when in EU', () => {
+    const pbjs = getPrebidPbjs()
+    prebidConfig(true)
+
+    // Run queued pbjs commands
+    pbjs.que.forEach((cmd) => cmd())
+
+    expect(pbjs.setConfig.mock.calls[0][0]['consentManagement']).not.toBeUndefined()
+  })
+
+  it('does not include consentManagement setting when not in EU', () => {
+    const pbjs = getPrebidPbjs()
+    prebidConfig(false)
+
+    // Run queued pbjs commands
+    pbjs.que.forEach((cmd) => cmd())
+
+    expect(pbjs.setConfig.mock.calls[0][0]['consentManagement']).toBeUndefined()
+  })
+
+  it('does not include consentManagement setting when feature flag is not enabled, even in EU', () => {
+    window.tabforacause.featureFlags.gdprConsent = false
+    const pbjs = getPrebidPbjs()
+    prebidConfig(false)
+
+    // Run queued pbjs commands
+    pbjs.que.forEach((cmd) => cmd())
+
+    expect(pbjs.setConfig.mock.calls[0][0]['consentManagement']).toBeUndefined()
   })
 })
