@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import ErrorMessage from 'general/ErrorMessage'
 import {
   goToDashboard,
+  accountURL,
   backgroundSettingsURL,
   donateURL,
   inviteFriendsURL,
@@ -124,6 +125,11 @@ class SettingsPage extends React.Component {
                     Invite Friends
             </SettingsMenuItem>
             <Divider />
+            <SettingsMenuItem
+              key={'account'}
+              to={accountURL}>
+                Account
+            </SettingsMenuItem>
           </List>
         </div>
         <div style={{

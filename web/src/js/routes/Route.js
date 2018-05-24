@@ -18,6 +18,7 @@ import WidgetsSettingsView from '../components/Settings/Widgets/WidgetsSettingsV
 import ProfileStatsView from '../components/Settings/Profile/ProfileStatsView'
 import ProfileDonateHearts from '../components/Settings/Profile/ProfileDonateHeartsView'
 import ProfileInviteFriend from '../components/Settings/Profile/ProfileInviteFriendView'
+import AccountView from '../components/Settings/Account/AccountView'
 
 export default (
   // TODO: Show 404 page from IndexRedirect
@@ -36,6 +37,7 @@ export default (
           <Route path='donate' component={ProfileDonateHearts} />
           <Route path='invite' component={ProfileInviteFriend} />
         </Route>
+        <Route path='account' component={AccountView} />
       </Route>
       <Route path='auth' component={AuthenticationView}>
         <IndexRoute component={FirebaseAuthenticationUI} />
