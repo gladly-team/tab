@@ -80,6 +80,7 @@ describe('logUserDataConsent', () => {
       addTimestampFieldsToItem({
         userId: userId,
         timestamp: moment.utc().toISOString(),
+        consentString: 'fake-consent-string',
         consentCreated: mockConsentData.created,
         consentLastUpdated: mockConsentData.lastUpdated,
         version: mockConsentData.version,
@@ -112,6 +113,7 @@ describe('logUserDataConsent', () => {
       addTimestampFieldsToItem({
         userId: userId,
         timestamp: moment.utc().toISOString(),
+        consentString: consentStr,
         consentCreated: '2018-05-24T04:50:35.700Z',
         consentLastUpdated: '2018-05-24T04:57:46.100Z',
         version: mockConsentData.version,

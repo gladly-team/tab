@@ -31,6 +31,7 @@ class UserDataConsent extends BaseModel {
     return {
       userId: types.string().required(),
       timestamp: types.string().isoDate().required(),
+      consentString: types.string().required(),
       consentCreated: types.string().isoDate().required(),
       consentLastUpdated: types.string().isoDate().required(),
       version: types.number(),

@@ -20,6 +20,7 @@ const logUserDataConsent = async (userContext, userId, consentStr, isGlobalConse
     await UserDataConsentModel.create(userContext, {
       userId: userId,
       timestamp: moment.utc().toISOString(),
+      consentString: consentStr,
       consentCreated: moment(ConsentData.created).toISOString(),
       consentLastUpdated: moment(ConsentData.lastUpdated).toISOString(),
       version: ConsentData.getVersion(),
