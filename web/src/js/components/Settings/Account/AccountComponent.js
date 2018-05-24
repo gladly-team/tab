@@ -1,37 +1,39 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Divider from 'material-ui/Divider'
-import { Card, CardHeader } from 'material-ui/Card'
-import {
-  cardHeaderTitleStyle,
-  cardHeaderSubtitleStyle
-} from 'theme/default'
+import Paper from '@material-ui/core/Paper'
+import Divider from '@material-ui/core/Divider'
+import Typography from '@material-ui/core/Typography'
+
+const AccountItem = (props) => (
+  <div style={{
+    display: 'flex',
+    alignItems: 'center',
+    padding: 20
+  }}
+  >
+    <Typography variant={'body2'} style={{ flex: 1 }}>{props.name}</Typography>
+    <Typography variant={'body1'} style={{ flex: 2 }}>{props.value}</Typography>
+  </div>
+)
+
+AccountItem.propTypes = {
+  name: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired
+}
 
 class Account extends React.Component {
   render () {
     const { user } = this.props
-    const dividerStyle = {
-      marginTop: 24,
-      marginBottom: 8
-    }
     return (
-      <Card
-        style={{ padding: 10 }}>
-        <CardHeader
-          title={'Account'}
-          titleStyle={cardHeaderTitleStyle}
-          subtitleStyle={cardHeaderSubtitleStyle}
-          actAsExpander={false}
-          showExpandableButton={false} />
-        <div
-          style={{
-            padding: 10
-          }}>
-          <div>{user.email}</div>
-          <Divider style={dividerStyle} />
-          <div>{user.username}</div>
-        </div>
-      </Card>
+      <Paper>
+        <Typography variant={'headline'} style={{ padding: 20 }}>
+          Account
+        </Typography>
+        <Divider />
+        <AccountItem name={'Username'} value={user.username} />
+        <Divider />
+        <AccountItem name={'Email'} value={user.email} />
+      </Paper>
     )
   }
 }
