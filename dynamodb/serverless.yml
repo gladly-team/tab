@@ -437,7 +437,7 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
 
-    userRevenueLogTable:  
+    userDataConsentLogTable:  
       Type: AWS::DynamoDB::Table
       Properties:  
         TableName: UserDataConsentLog-${self:provider.stage}
