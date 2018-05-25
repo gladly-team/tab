@@ -5,7 +5,6 @@ import amazonBidder from './amazon/amazonBidder'
 import handleAdsLoaded from './handleAdsLoaded'
 import { isInEuropeanUnion } from 'utils/client-location'
 import consentManagementInit from 'ads/consentManagementInit'
-import { isOnAuthPage } from 'utils/utils'
 
 const loadAdCode = (isInEU) => {
   if (adsEnabled()) {
@@ -18,12 +17,11 @@ const loadAdCode = (isInEU) => {
   }
 }
 
+// TODO: restrict to authed paths
 // Initialize consent management if we're not on the login or
 // sign-up pages. We ask for consent after the user has
 // authenticated so we can log consent with their user ID.
-if (!isOnAuthPage()) {
-  consentManagementInit()
-}
+consentManagementInit()
 
 // Determine if the user is in the EU, which may affect the
 // ads we show.

@@ -170,14 +170,3 @@ export const isInIframe = () => {
     return true
   }
 }
-
-/**
- * Determine if we are on an authentication page (so, not authed)
- * @return {boolean} Whether the page is in an iframe.
- */
-export const isOnAuthPage = () => {
-  if (window.location && window.location.pathname) {
-    return window.location.pathname.indexOf('/auth/') > -1
-  }
-  return false
-}
