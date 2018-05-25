@@ -135,6 +135,22 @@ src="https://www.facebook.com/tr?id=1813501258922708&ev=PageView&noscript=1"
 <!-- https://www.quantcast.com/gdpr/quantcast-choice-self-serve/ -->
 <!-- https://quantcast.zendesk.com/hc/en-us/articles/360003814853-Technical-Implementation-Guide -->
 <script type="text/javascript" async=true>
+  var __cmp = (function () {
+    return typeof (__cmp) == "function" ? __cmp : function (c) {
+      var b = arguments;
+      if (!b.length) {
+        return __cmp.a;
+      }
+      else if (c == '__cmp')
+        return false;
+      else {
+        if (typeof __cmp.a === 'undefined') {
+          __cmp.a = [];
+        }
+        __cmp.a.push([].slice.apply(b));
+      }
+    }
+  })();
   // featureFlag-gdprConsent
   if (window.tabforacause.featureFlags.gdprConsent) {
     /* eslint-disable */
@@ -142,22 +158,6 @@ src="https://www.facebook.com/tr?id=1813501258922708&ev=PageView&noscript=1"
     // https://github.com/InteractiveAdvertisingBureau/GDPR-Transparency-and-Consent-Framework/blob/master/CMP%20JS%20API%20v1.1%20Final.md#what-api-will-need-to-be-provided-by-the-cmp-
     // Can redisplay the consent UI with:
     // window.__cmp('displayConsentUi')
-    var __cmp = (function () {
-      return typeof (__cmp) == "function" ? __cmp : function (c) {
-        var b = arguments;
-        if (!b.length) {
-          return __cmp.a;
-        }
-        else if (c == '__cmp')
-          return false;
-        else {
-          if (typeof __cmp.a === 'undefined') {
-            __cmp.a = [];
-          }
-          __cmp.a.push([].slice.apply(b));
-        }
-      }
-    })();
     var elem = document.createElement('script');
     elem.src = "https://quantcast.mgr.consensu.org/cmp.js";
     elem.async = true;
