@@ -1,4 +1,10 @@
 
+import localStorageManager from 'utils/localstorage-mgr'
+import {
+  STORAGE_NEW_CONSENT_DATA_EXISTS,
+  STORAGE_CONSENT_DATA_LOG_IN_PROGRESS
+} from '../constants'
+
 /**
  * Get the vendor consent string from the consent management platform.
  * @return {Promise<string|null>} A promise that resolves into the
@@ -59,7 +65,7 @@ export const displayConsentUI = () => {
  * Register a callback that will be triggered when a user
  * makes a choice in the consent UI.
  * @param {function} cb - The callback function
- * @return {undefined}
+ * @return {Promise<undefined>}
  */
 export const registerConsentCallback = async (cb) => {
   // Note: this callback appears to be buggy as of 5/24/2018
@@ -73,4 +79,49 @@ export const registerConsentCallback = async (cb) => {
       cb(consentString, isGlobalConsent)
     }
   })
+}
+
+/**
+ * Save a flag in localStorage so that the app knows consent
+ * has changed and we need to log updated data to the server.
+ * We do this because consent updating may happen when the user
+ * is not authenticated. Do not save anything if a consent data
+ * is pending (currently in process).
+ * @return {undefined}
+ */
+export const saveConsentUpdateEventToLocalStorage = () => {
+  if (localStorageManager.getItem(STORAGE_CONSENT_DATA_LOG_IN_PROGRESS) !== 'true') {
+    localStorageManager.setItem(STORAGE_NEW_CONSENT_DATA_EXISTS, 'true')
+  }
+}
+
+/**
+ * Determine if we have pending (updated) consent data that we
+ * have not yet logged to the server.
+ * @return {boolean} Whether we need to log new consent data
+ */
+export const checkIfNewConsentNeedsToBeLogged = () => {
+  return (
+    localStorageManager.getItem(STORAGE_NEW_CONSENT_DATA_EXISTS) === 'true' &&
+    localStorageManager.getItem(STORAGE_CONSENT_DATA_LOG_IN_PROGRESS) !== 'true'
+  )
+}
+
+/**
+ * Mark that we are in process of logging the latest consent data
+ * to the server.
+ * @return {undefined}
+ */
+export const markConsentDataLogInProgress = () => {
+  localStorageManager.setItem(STORAGE_CONSENT_DATA_LOG_IN_PROGRESS, 'true')
+}
+
+/**
+ * Mark that we've successfully logged the latest consent data
+ * to the server.
+ * @return {undefined}
+ */
+export const markConsentDataAsLogged = () => {
+  localStorageManager.removeItem(STORAGE_NEW_CONSENT_DATA_EXISTS)
+  localStorageManager.removeItem(STORAGE_CONSENT_DATA_LOG_IN_PROGRESS)
 }

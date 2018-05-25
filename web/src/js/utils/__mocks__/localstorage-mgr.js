@@ -18,5 +18,8 @@ export default {
   }),
   removeItem: jest.fn((key, val) => {
     delete (mockStorage[key])
-  })
+  }),
+  clear: () => {
+    __mockClear()
+  }
 }
