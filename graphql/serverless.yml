@@ -92,6 +92,11 @@ provider:
       Action:
         - "dynamodb:PutItem"
       Resource: "${self:custom.dbTableArnBase}UserRevenueLog-${self:provider.stage}"
+    # UserDataConsentLog table
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:PutItem"
+      Resource: "${self:custom.dbTableArnBase}UserDataConsentLog-${self:provider.stage}"
     # ReferralDataLog table
     - Effect: "Allow"
       Action:
