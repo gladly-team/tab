@@ -5,7 +5,6 @@ jest.mock('../prebid/prebidConfig')
 jest.mock('../prebid/prebidModule')
 jest.mock('../amazon/amazonBidder')
 jest.mock('utils/client-location')
-jest.mock('../consentManagementInit')
 
 beforeEach(() => {
   jest.resetModules()
@@ -72,12 +71,5 @@ describe('ads script', function () {
     await require('../ads')
     expect(prebidConfig).toHaveBeenCalledWith(false)
     expect(amazonBidder).toHaveBeenCalledWith(false)
-  })
-
-  it('consentManagementInit is called', async () => {
-    expect.assertions(1)
-    const consentManagementInit = require('../consentManagementInit').default
-    await require('../ads')
-    expect(consentManagementInit).toHaveBeenCalled()
   })
 })
