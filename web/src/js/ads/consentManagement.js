@@ -1,8 +1,7 @@
 
 import localStorageManager from 'utils/localstorage-mgr'
 import {
-  STORAGE_NEW_CONSENT_DATA_EXISTS,
-  STORAGE_CONSENT_DATA_LOG_IN_PROGRESS
+  STORAGE_NEW_CONSENT_DATA_EXISTS
 } from '../constants'
 
 /**

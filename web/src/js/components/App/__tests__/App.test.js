@@ -76,7 +76,7 @@ describe('App', () => {
     expect(saveConsentUpdateEventToLocalStorage).not.toHaveBeenCalled()
 
     // Mock the CMP's callback for when consent data has changed
-    cmpCallback()
+    cmpCallback('some-consent-string', true)
     expect(saveConsentUpdateEventToLocalStorage).toHaveBeenCalledTimes(1)
   })
 })
