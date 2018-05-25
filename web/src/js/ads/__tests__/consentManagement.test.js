@@ -1,8 +1,7 @@
 /* eslint-env jest */
 
 import {
-  STORAGE_NEW_CONSENT_DATA_EXISTS,
-  STORAGE_CONSENT_DATA_LOG_IN_PROGRESS
+  STORAGE_NEW_CONSENT_DATA_EXISTS
 } from '../../constants'
 
 jest.mock('utils/localstorage-mgr')
@@ -157,23 +156,12 @@ describe('consentManagement', () => {
     expect(mockCallback).toHaveBeenCalledWith('abcdefghijklm', false)
   })
 
-  it('saves a "consent data updated" flag to localStorage if a log isn\'t in progress', () => {
+  it('saves a "consent data updated" flag to localStorage', () => {
     const localStorageManager = require('utils/localstorage-mgr').default
     const saveConsentUpdateEventToLocalStorage = require('../consentManagement')
       .saveConsentUpdateEventToLocalStorage
     saveConsentUpdateEventToLocalStorage()
     expect(localStorageManager.setItem).toHaveBeenCalledWith(STORAGE_NEW_CONSENT_DATA_EXISTS, 'true')
-  })
-
-  it('does not save a "consent data updated" flag to localStorage if a log is in progress', () => {
-    const localStorageManager = require('utils/localstorage-mgr').default
-    localStorageManager.setItem(STORAGE_CONSENT_DATA_LOG_IN_PROGRESS, 'true')
-    jest.clearAllMocks()
-
-    const saveConsentUpdateEventToLocalStorage = require('../consentManagement')
-      .saveConsentUpdateEventToLocalStorage
-    saveConsentUpdateEventToLocalStorage()
-    expect(localStorageManager.setItem).not.toHaveBeenCalled()
   })
 
   it('checking if new consent needs to be logged works as expected', () => {
@@ -182,25 +170,10 @@ describe('consentManagement', () => {
       .checkIfNewConsentNeedsToBeLogged
 
     localStorageManager.setItem(STORAGE_NEW_CONSENT_DATA_EXISTS, 'true')
-    localStorageManager.setItem(STORAGE_CONSENT_DATA_LOG_IN_PROGRESS, 'false')
     expect(checkIfNewConsentNeedsToBeLogged()).toBe(true)
 
-    localStorageManager.setItem(STORAGE_NEW_CONSENT_DATA_EXISTS, 'true')
-    localStorageManager.setItem(STORAGE_CONSENT_DATA_LOG_IN_PROGRESS, 'true')
-    expect(checkIfNewConsentNeedsToBeLogged()).toBe(false)
-
     localStorageManager.removeItem(STORAGE_NEW_CONSENT_DATA_EXISTS)
-    localStorageManager.removeItem(STORAGE_CONSENT_DATA_LOG_IN_PROGRESS)
     expect(checkIfNewConsentNeedsToBeLogged()).toBe(false)
-  })
-
-  it('marking consent data log in progress works as expected', () => {
-    const localStorageManager = require('utils/localstorage-mgr').default
-    const markConsentDataLogInProgress = require('../consentManagement')
-      .markConsentDataLogInProgress
-    markConsentDataLogInProgress()
-    expect(localStorageManager.setItem)
-      .toHaveBeenCalledWith(STORAGE_CONSENT_DATA_LOG_IN_PROGRESS, 'true')
   })
 
   it('marking consent data as logged works as expected', () => {
@@ -210,7 +183,5 @@ describe('consentManagement', () => {
     markConsentDataAsLogged()
     expect(localStorageManager.removeItem)
       .toHaveBeenCalledWith(STORAGE_NEW_CONSENT_DATA_EXISTS)
-    expect(localStorageManager.removeItem)
-      .toHaveBeenCalledWith(STORAGE_CONSENT_DATA_LOG_IN_PROGRESS)
   })
 })

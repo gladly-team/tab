@@ -41,4 +41,3 @@ export const STORAGE_REFERRAL_DATA_REFERRING_CHANNEL = 'tab.referralData.referri
 
 // Data privacy consent flags
 export const STORAGE_NEW_CONSENT_DATA_EXISTS = 'tab.consentData.newConsentDataExists'
-export const STORAGE_CONSENT_DATA_LOG_IN_PROGRESS = 'tab.consentData.logInProgress'

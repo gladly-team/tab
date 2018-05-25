@@ -90,30 +90,17 @@ export const registerConsentCallback = async (cb) => {
  * @return {undefined}
  */
 export const saveConsentUpdateEventToLocalStorage = () => {
-  if (localStorageManager.getItem(STORAGE_CONSENT_DATA_LOG_IN_PROGRESS) !== 'true') {
-    localStorageManager.setItem(STORAGE_NEW_CONSENT_DATA_EXISTS, 'true')
-  }
+  localStorageManager.setItem(STORAGE_NEW_CONSENT_DATA_EXISTS, 'true')
 }
 
 /**
  * Determine if we have pending (updated) consent data that we
- * have not yet logged to the server.
+ * have not yet logged to the server. We may log more than once per
+ * updated consent (e.g multiple opened tabs), but that's acceptable.
  * @return {boolean} Whether we need to log new consent data
  */
 export const checkIfNewConsentNeedsToBeLogged = () => {
-  return (
-    localStorageManager.getItem(STORAGE_NEW_CONSENT_DATA_EXISTS) === 'true' &&
-    localStorageManager.getItem(STORAGE_CONSENT_DATA_LOG_IN_PROGRESS) !== 'true'
-  )
-}
-
-/**
- * Mark that we are in process of logging the latest consent data
- * to the server.
- * @return {undefined}
- */
-export const markConsentDataLogInProgress = () => {
-  localStorageManager.setItem(STORAGE_CONSENT_DATA_LOG_IN_PROGRESS, 'true')
+  return localStorageManager.getItem(STORAGE_NEW_CONSENT_DATA_EXISTS) === 'true'
 }
 
 /**
@@ -123,5 +110,4 @@ export const markConsentDataLogInProgress = () => {
  */
 export const markConsentDataAsLogged = () => {
   localStorageManager.removeItem(STORAGE_NEW_CONSENT_DATA_EXISTS)
-  localStorageManager.removeItem(STORAGE_CONSENT_DATA_LOG_IN_PROGRESS)
 }
