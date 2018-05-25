@@ -1,5 +1,13 @@
 /* eslint-env jest */
 
-export const getConsentString = jest.fn(() => {
+const consentMgmt = jest.genMockFromModule('../consentManagement')
+
+consentMgmt.getConsentString = jest.fn(() => {
   return Promise.resolve('some-consent-string')
 })
+
+consentMgmt.hasGlobalConsent = jest.fn(() => {
+  return Promise.resolve(true)
+})
+
+module.exports = consentMgmt

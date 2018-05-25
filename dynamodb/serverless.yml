@@ -74,6 +74,15 @@ custom:
           minimum: 1
           maximum: 1000
           usage: 0.60
+      userDataConsentLogTable:
+        read:
+          minimum: 1
+          maximum: 1000
+          usage: 0.75
+        write:
+          minimum: 1
+          maximum: 1000
+          usage: 0.60
       backgroundImagesTable:
         read:
           minimum: 1
@@ -165,6 +174,15 @@ custom:
         write:
           # Fairly high capacity needed, because it's one write per ad
           minimum: 20
+          maximum: 9001
+          usage: 0.60
+      userDataConsentLogTable:
+        read:
+          minimum: 1
+          maximum: 9001
+          usage: 0.75
+        write:
+          minimum: 1
           maximum: 9001
           usage: 0.60
       backgroundImagesTable:
@@ -262,6 +280,15 @@ custom:
         minimum: ${self:custom.customCapacities.${self:provider.stage}.userRevenueLogTable.write.minimum}
         maximum: ${self:custom.customCapacities.${self:provider.stage}.userRevenueLogTable.write.maximum}
         usage: ${self:custom.customCapacities.${self:provider.stage}.userRevenueLogTable.write.usage}
+    - table: userDataConsentLogTable
+      read:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.userDataConsentLogTable.read.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.userDataConsentLogTable.read.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.userDataConsentLogTable.read.usage}
+      write:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.userDataConsentLogTable.write.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.userDataConsentLogTable.write.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.userDataConsentLogTable.write.usage}
     - table: backgroundImagesTable
       read:
         minimum: ${self:custom.customCapacities.${self:provider.stage}.backgroundImagesTable.read.minimum}
@@ -396,6 +423,24 @@ resources:
       Type: AWS::DynamoDB::Table
       Properties:  
         TableName: UserRevenueLog-${self:provider.stage}
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+          - AttributeName: timestamp
+            KeyType: RANGE
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: timestamp
+            AttributeType: S
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+    userDataConsentLogTable:  
+      Type: AWS::DynamoDB::Table
+      Properties:  
+        TableName: UserDataConsentLog-${self:provider.stage}
         KeySchema:
           - AttributeName: userId
             KeyType: HASH

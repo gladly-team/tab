@@ -38,3 +38,6 @@ export const STORAGE_TABS_RECENT_DAY_COUNT = 'tab.user.lastTabDay.count'
 
 export const STORAGE_REFERRAL_DATA_REFERRING_USER = 'tab.referralData.referringUser'
 export const STORAGE_REFERRAL_DATA_REFERRING_CHANNEL = 'tab.referralData.referringChannel'
+
+// Data privacy consent flags
+export const STORAGE_NEW_CONSENT_DATA_EXISTS = 'tab.consentData.newConsentDataExists'

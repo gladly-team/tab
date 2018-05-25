@@ -159,6 +159,18 @@ type LogTabPayload {
   clientMutationId: String
 }
 
+input LogUserDataConsentInput {
+  userId: String!
+  consentString: String!
+  isGlobalConsent: Boolean!
+  clientMutationId: String
+}
+
+type LogUserDataConsentPayload {
+  success: Boolean!
+  clientMutationId: String
+}
+
 enum LogUserRevenueAggregationOperationEnum {
   MAX
 }
@@ -192,6 +204,7 @@ type MaxTabsDay {
 type Mutation {
   logTab(input: LogTabInput!): LogTabPayload
   logUserRevenue(input: LogUserRevenueInput!): LogUserRevenuePayload
+  logUserDataConsent(input: LogUserDataConsentInput!): LogUserDataConsentPayload
   donateVc(input: DonateVcInput!): DonateVcPayload
   setUserBkgImage(input: SetUserBkgImageInput!): SetUserBkgImagePayload
   setUserBkgColor(input: SetUserBkgColorInput!): SetUserBkgColorPayload

@@ -10,6 +10,7 @@ import CampaignBaseContainer from '../Campaign/CampaignBaseContainer'
 import Ad from '../Ad/Ad'
 import LogTab from './LogTabContainer'
 import LogRevenue from './LogRevenueContainer'
+import LogConsentData from './LogConsentDataContainer'
 import LogAccountCreation from './LogAccountCreationContainer'
 import CircleIcon from 'material-ui/svg-icons/image/lens'
 import {
@@ -228,6 +229,7 @@ class Dashboard extends React.Component {
           }} />
         { user && tabId ? <LogTab user={user} tabId={tabId} /> : null }
         { user && tabId ? <LogRevenue user={user} tabId={tabId} /> : null }
+        { user ? <LogConsentData user={user} /> : null }
         { user ? <LogAccountCreation user={user} /> : null }
         { errorMessage
           ? <ErrorMessage message={errorMessage}

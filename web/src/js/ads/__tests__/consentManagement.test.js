@@ -1,5 +1,11 @@
 /* eslint-env jest */
 
+import {
+  STORAGE_NEW_CONSENT_DATA_EXISTS
+} from '../../constants'
+
+jest.mock('utils/localstorage-mgr')
+
 beforeEach(() => {
   // Mock CMP
   window.__cmp = jest.fn((command, version, callback) => {
@@ -42,6 +48,8 @@ beforeEach(() => {
 
 afterEach(() => {
   jest.clearAllMocks()
+  const localStorageManager = require('utils/localstorage-mgr').default
+  localStorageManager.clear()
 })
 
 afterAll(() => {
@@ -50,7 +58,7 @@ afterAll(() => {
 
 describe('consentManagement', () => {
   it('calls the CMP as expected to get the consent string', async () => {
-    // Mock the CMP callback for getting vendor consents
+    // Mock the CMP callback for getting consent data
     window.__cmp.mockImplementation((command, version, callback) => {
       if (command === 'getConsentData') {
         /* eslint-disable-next-line standard/no-callback-literal */
@@ -79,9 +87,101 @@ describe('consentManagement', () => {
     expect(consentString).toBeNull()
   })
 
-  it('returns null if the CMP throws an error while getting the consent string', () => {
+  it('calls to display CMP UI as expected', () => {
     const displayConsentUI = require('../consentManagement').displayConsentUI
     displayConsentUI()
     expect(window.__cmp).toHaveBeenCalledWith('displayConsentUi')
+  })
+
+  it('calls the CMP as expected to get "hasGlobalConsent"', async () => {
+    expect.assertions(1)
+
+    // Mock the CMP callback for getting consent data
+    window.__cmp.mockImplementation((command, version, callback) => {
+      if (command === 'getConsentData') {
+        /* eslint-disable-next-line standard/no-callback-literal */
+        callback({
+          consentData: 'abcdefghijklm', // consent string
+          gdprApplies: true,
+          hasGlobalConsent: false
+        })
+      }
+    })
+    const hasGlobalConsent = require('../consentManagement').hasGlobalConsent
+    const isGlobalConsent = await hasGlobalConsent()
+    expect(isGlobalConsent).toBe(false)
+  })
+
+  it('returns null if the CMP throws an error while getting "hasGlobalConsent"', async () => {
+    expect.assertions(1)
+
+    window.__cmp.mockImplementation(() => {
+      throw new Error('CMP made a mistake!')
+    })
+
+    // Mute expected console error
+    jest.spyOn(console, 'error').mockImplementationOnce(() => {})
+
+    const hasGlobalConsent = require('../consentManagement').hasGlobalConsent
+    const isGlobalConsent = await hasGlobalConsent()
+    expect(isGlobalConsent).toBeNull()
+  })
+
+  it('registers a callback on __cmp.setConsentUiCallback', async () => {
+    expect.assertions(2)
+
+    // Mock the CMP callback for getting consent data
+    var storedCallback
+    window.__cmp.mockImplementation((command, callback, getConsentDataCallback) => {
+      if (command === 'setConsentUiCallback') {
+        storedCallback = callback
+      }
+      if (command === 'getConsentData') {
+        /* eslint-disable-next-line standard/no-callback-literal */
+        getConsentDataCallback({
+          consentData: 'abcdefghijklm',
+          gdprApplies: true,
+          hasGlobalConsent: false
+        })
+      }
+    })
+    const registerConsentCallback = require('../consentManagement').registerConsentCallback
+    const mockCallback = jest.fn()
+    await registerConsentCallback(mockCallback)
+
+    // Call the stored callback
+    await storedCallback()
+
+    expect(mockCallback).toHaveBeenCalledTimes(1)
+    expect(mockCallback).toHaveBeenCalledWith('abcdefghijklm', false)
+  })
+
+  it('saves a "consent data updated" flag to localStorage', () => {
+    const localStorageManager = require('utils/localstorage-mgr').default
+    const saveConsentUpdateEventToLocalStorage = require('../consentManagement')
+      .saveConsentUpdateEventToLocalStorage
+    saveConsentUpdateEventToLocalStorage()
+    expect(localStorageManager.setItem).toHaveBeenCalledWith(STORAGE_NEW_CONSENT_DATA_EXISTS, 'true')
+  })
+
+  it('checking if new consent needs to be logged works as expected', () => {
+    const localStorageManager = require('utils/localstorage-mgr').default
+    const checkIfNewConsentNeedsToBeLogged = require('../consentManagement')
+      .checkIfNewConsentNeedsToBeLogged
+
+    localStorageManager.setItem(STORAGE_NEW_CONSENT_DATA_EXISTS, 'true')
+    expect(checkIfNewConsentNeedsToBeLogged()).toBe(true)
+
+    localStorageManager.removeItem(STORAGE_NEW_CONSENT_DATA_EXISTS)
+    expect(checkIfNewConsentNeedsToBeLogged()).toBe(false)
+  })
+
+  it('marking consent data as logged works as expected', () => {
+    const localStorageManager = require('utils/localstorage-mgr').default
+    const markConsentDataAsLogged = require('../consentManagement')
+      .markConsentDataAsLogged
+    markConsentDataAsLogged()
+    expect(localStorageManager.removeItem)
+      .toHaveBeenCalledWith(STORAGE_NEW_CONSENT_DATA_EXISTS)
   })
 })

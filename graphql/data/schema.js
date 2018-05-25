@@ -45,6 +45,7 @@ import createUser from '../database/users/createUser'
 import setUsername from '../database/users/setUsername'
 import logTab from '../database/users/logTab'
 import logRevenue from '../database/userRevenue/logRevenue'
+import logUserDataConsent from '../database/userDataConsent/logUserDataConsent'
 import setActiveWidget from '../database/users/setActiveWidget'
 import setBackgroundImage from '../database/users/setBackgroundImage'
 import setBackgroundImageFromCustomURL from '../database/users/setBackgroundImageFromCustomURL'
@@ -876,6 +877,27 @@ const setUsernameMutation = mutationWithClientMutationId({
 })
 
 /**
+ * Log a data consent action (e.g. for GDPR).
+ */
+const logUserDataConsentMutation = mutationWithClientMutationId({
+  name: 'LogUserDataConsent',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    consentString: { type: new GraphQLNonNull(GraphQLString) },
+    isGlobalConsent: { type: new GraphQLNonNull(GraphQLBoolean) }
+  },
+  outputFields: {
+    success: {
+      type: new GraphQLNonNull(GraphQLBoolean)
+    }
+  },
+  mutateAndGetPayload: ({ userId, consentString, isGlobalConsent }, context) => {
+    const { id } = fromGlobalId(userId)
+    return logUserDataConsent(context.user, id, consentString, isGlobalConsent)
+  }
+})
+
+/**
  * This is the type that will be the root of our query,
  * and the entry point into our schema.
  */
@@ -907,6 +929,7 @@ const mutationType = new GraphQLObjectType({
   fields: () => ({
     logTab: logTabMutation,
     logUserRevenue: logUserRevenueMutation,
+    logUserDataConsent: logUserDataConsentMutation,
     donateVc: donateVcMutation,
 
     setUserBkgImage: setUserBkgImageMutation,

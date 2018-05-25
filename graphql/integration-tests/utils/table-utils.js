@@ -24,6 +24,10 @@ export const tableKeys = {
     hash: 'userId',
     range: 'timestamp'
   },
+  userDataConsentLog: {
+    hash: 'userId',
+    range: 'timestamp'
+  },
   backgroundImages: {
     hash: 'id',
     range: null
@@ -51,6 +55,7 @@ export const tableFixtureFileNames = {
   userLevels: 'UserLevels.json',
   charities: 'CharityData.json',
   vcDonationLog: 'VcDonationLog.json',
+  userDataConsentLog: 'UserDataConsentLog',
   backgroundImages: 'BackgroundImages.json',
   widgets: 'Widgets.json',
   userWidgets: 'UserWidgets.json',
