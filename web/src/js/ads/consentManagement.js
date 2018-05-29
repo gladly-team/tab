@@ -67,11 +67,14 @@ export const displayConsentUI = () => {
  * @return {Promise<undefined>}
  */
 export const registerConsentCallback = async (cb) => {
-  // Note: this callback appears to be buggy as of 5/24/2018
-  // and is called every time the CMP loads outside of the EU.
-  // We should verify that consent data exists before acting
-  // upon the callback.
+  // Note: this callback appears to be buggy as of 5/29/2018.
+  // It's called every time the CMP loads, regardless of
+  // whether in the EU or not. We can't rely on it calling
+  // just once, nor can we rely on consent data existing.
+  // We reached out to Quantcast about this.
   window.__cmp('setConsentUiCallback', async () => {
+    // We should verify that consent data exists before acting
+    // upon the callback.
     const consentString = await getConsentString()
     const isGlobalConsent = await hasGlobalConsent()
     if (consentString) {
