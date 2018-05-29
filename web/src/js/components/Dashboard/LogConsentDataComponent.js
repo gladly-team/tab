@@ -7,15 +7,23 @@ import {
   getConsentString,
   hasGlobalConsent,
   markConsentDataAsLogged,
-  registerConsentCallback
+  registerConsentCallback,
+  unregisterConsentCallback
 } from 'ads/consentManagement'
 
 class LogConsentDataComponent extends React.Component {
+  constructor (props) {
+    super(props)
+    this.consentChangeCallback = null
+  }
+
+  // TODO: change to componentDidMount, which is only called on the client
   async componentWillMount () {
     // Register a callback for any new consent updates.
     const isEU = await isInEuropeanUnion()
     if (isEU) {
-      registerConsentCallback(this.handleDataConsentDecision.bind(this))
+      this.consentChangeCallback = this.logDataConsentDecision.bind(this)
+      registerConsentCallback(this.consentChangeCallback)
     }
 
     // Check localStorage to see if we have any new consent
@@ -28,30 +36,23 @@ class LogConsentDataComponent extends React.Component {
     }
   }
 
-  handleDataConsentDecision (consentString, isGlobalConsent) {
-    // Re-register the callback with Quantcast Choice so we can
-    // handle any other consent changes on this same page view.
-    // Quantcast Choice will not call this callback more than once.
-    // "To invoke the callback every time the UI is shown, this
-    // operation will need to be made before each time the UI is
-    // brought up with __cmp('displayConsentUi')."
-    // https://quantcast.zendesk.com/hc/en-us/articles/360003814853-Technical-Implementation-Guide
-    registerConsentCallback(this.handleDataConsentDecision.bind(this))
-
-    // If we're missing a consent string, don't log.
-    if (!consentString) {
-      return
+  componentWillUnmount () {
+    // Unregister the consent callback on unmount.
+    if (this.consentChangeCallback) {
+      unregisterConsentCallback(this.consentChangeCallback)
     }
-    this.logDataConsentDecision(consentString, isGlobalConsent)
   }
 
   logDataConsentDecision (consentString, isGlobalConsent) {
     const { relay, user } = this.props
+    // If we're missing a consent string, don't log.
+    if (!consentString) {
+      return
+    }
+
     const onCompleted = () => {
       markConsentDataAsLogged()
     }
-
-    // Mark that we're going to log the consent data and log it.
     LogUserDataConsentMutation(
       relay.environment,
       user.id,

@@ -60,29 +60,80 @@ export const displayConsentUI = () => {
   window.__cmp('displayConsentUi')
 }
 
+// Our own storage of consent callback functions. We manage
+// this ourselves because:
+// 1) Quantcast Choice does not have a method to unregister
+//   callbacks.
+// 2) Quantcast Choice will only call the callback once,
+//   so the handler would otherwise have to re-register the
+//   callback if it wants to continue to be called, which is
+//   not intuitive.
+const consentCallbacks = []
+var alreadyRegisteredCMPConsentCallback = false
+
 /**
- * Register a callback that will be triggered when a user
- * makes a choice in the consent UI. Quantcast Choice will
- * only call the callback once, so the handler must re-register
- * the callback if it wants to continue to be called.
- * @param {function} cb - The callback function
- * @return {Promise<undefined>}
+ * Make the CMP call all consent callbacks when the user
+ * changes their consent options.
  */
-export const registerConsentCallback = async (cb) => {
-  // Note: this callback appears to be buggy as of 5/29/2018.
-  // It's called every time the CMP loads, regardless of
-  // whether in the EU or not. We can't rely on it calling
-  // just once, nor can we rely on consent data existing.
-  // We reached out to Quantcast about this.
-  window.__cmp('setConsentUiCallback', async () => {
+const registerConsentChangeCallbacksWithCMP = async () => {
+  const callCallbacksAndReRegister = async () => {
     // We should verify that consent data exists before acting
     // upon the callback.
     const consentString = await getConsentString()
     const isGlobalConsent = await hasGlobalConsent()
     if (consentString) {
-      cb(consentString, isGlobalConsent)
+      consentCallbacks.forEach((callback) => {
+        callback(consentString, isGlobalConsent)
+      })
     }
-  })
+
+    // Re-register the callback with Quantcast Choice so we can
+    // handle any other consent changes on this same page view.
+    // Quantcast Choice will not call this callback more than once.
+    // "To invoke the callback every time the UI is shown, this
+    // operation will need to be made before each time the UI is
+    // brought up with __cmp('displayConsentUi')."
+    // https://quantcast.zendesk.com/hc/en-us/articles/360003814853-Technical-Implementation-Guide
+    registerConsentChangeCallbacksWithCMP()
+  }
+
+  // Note: this callback appears to be buggy as of 5/29/2018.
+  // It's called every time the CMP loads, regardless of
+  // whether in the EU or not. We can't rely on it calling
+  // just once, nor can we rely on consent data existing.
+  // We reached out to Quantcast about this.
+  window.__cmp('setConsentUiCallback', callCallbacksAndReRegister)
+}
+
+/**
+ * Register a callback that will be triggered when a user
+ * changes their consent options (closes the consent UI).
+ * @param {function} cb - The callback function
+ * @return {undefined}
+ */
+export const registerConsentCallback = (cb) => {
+  // If this is the first time we've registered a callback,
+  // make sure our CMP will call all callbacks when the
+  // consent data changes.
+  if (!alreadyRegisteredCMPConsentCallback) {
+    alreadyRegisteredCMPConsentCallback = true
+    registerConsentChangeCallbacksWithCMP()
+  }
+  consentCallbacks.push(cb)
+}
+
+/**
+ * Unregister a callback that was previously registered to
+ * to be called when triggered when a user changes their
+ * consent options.
+ * @param {function} cb - The callback function
+ * @return {undefined}
+ */
+export const unregisterConsentCallback = (cb) => {
+  const cbIndex = consentCallbacks.indexOf(cb)
+  if (cbIndex > -1) {
+    consentCallbacks.splice(cbIndex, 1)
+  }
 }
 
 /**

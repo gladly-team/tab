@@ -145,15 +145,8 @@ describe('LogConsentDataComponent', function () {
     expect(LogUserDataConsentMutation.mock.calls[0][2]).toEqual('this-is-my-string')
   })
 
-  it('re-registers the consent data callback when the callback is called', async () => {
+  it('unregisters its callback when unmounting', async () => {
     expect.assertions(2)
-
-    // Mock the callback registration so we can trigger it ourselves
-    var cmpCallback
-    const registerConsentCallback = require('ads/consentManagement').registerConsentCallback
-    registerConsentCallback.mockImplementation(cb => {
-      cmpCallback = cb
-    })
 
     // Mock that the client is in the EU
     const isInEuropeanUnion = require('utils/client-location').isInEuropeanUnion
@@ -168,13 +161,9 @@ describe('LogConsentDataComponent', function () {
     )
     await wrapper.instance().componentWillMount()
 
-    // The component should have registered a callback on mount.
-    expect(registerConsentCallback).toHaveBeenCalled()
-
-    // The component should register a new callback after the
-    // original callback is called.
-    jest.clearAllMocks()
-    await cmpCallback('some-consent-string', true)
-    expect(registerConsentCallback).toHaveBeenCalledTimes(1)
+    const unregisterConsentCallback = require('ads/consentManagement').unregisterConsentCallback
+    expect(unregisterConsentCallback).not.toHaveBeenCalled()
+    wrapper.unmount()
+    expect(unregisterConsentCallback).toHaveBeenCalled()
   })
 })
