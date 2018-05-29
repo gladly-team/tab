@@ -1,26 +1,33 @@
-patch-package
+diff --git a/node_modules/prebid.js/modules/rhythmoneBidAdapter.js b/node_modules/prebid.js/modules/rhythmoneBidAdapter.js
+index f16e797..c82be9a 100644
 --- a/node_modules/prebid.js/modules/rhythmoneBidAdapter.js
 +++ b/node_modules/prebid.js/modules/rhythmoneBidAdapter.js
-@@ -104,11 +104,9 @@ function RhythmOneBidAdapter() {
+@@ -107,12 +107,10 @@ function RhythmOneBidAdapter() {
+       return defaultValue;
      }
  
++    // Edited by Gladly. Adapters should use the location of the current
++    // frame, not the location of the new tab page.
      p('domain', attempt(function() {
 -      var d = w.document.location.ancestorOrigins;
 -      if (d && d.length > 0) {
 -        return d[d.length - 1];
 -      }
 -      return w.top.document.location.hostname; // try/catch is in the attempt function
-+      // Edited by Gladly. Adapters should use the location of the current
-+      // frame, not the location of the new tab page.
 +      return w.document.location.hostname;
      }, ''));
      p('url', attempt(function() {
        var l;
+diff --git a/node_modules/prebid.js/src/utils.js b/node_modules/prebid.js/src/utils.js
+index 2b93fc0..99b93ec 100644
 --- a/node_modules/prebid.js/src/utils.js
 +++ b/node_modules/prebid.js/src/utils.js
-@@ -189,15 +189,8 @@ export function parseGPTSingleSizeArray(singleSize) {
+@@ -188,16 +188,9 @@ export function parseGPTSingleSizeArray(singleSize) {
+   }
  };
  
++// Edited by Gladly. Adapters should use the location of the current
++// frame, not the location of the new tab page.
  exports.getTopWindowLocation = function() {
 -  if (exports.inIframe()) {
 -    let loc;
@@ -31,8 +38,6 @@ patch-package
 -    }
 -    if (loc) return parse(loc, {'decodeSearchAsString': true});
 -  }
-+  // Edited by Gladly. Adapters should use the location of the current
-+  // frame, not the location of the new tab page.
    return exports.getWindowLocation();
  }
  
