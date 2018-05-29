@@ -24,11 +24,11 @@ class LogConsentDataComponent extends React.Component {
     if (checkIfNewConsentNeedsToBeLogged()) {
       const consentString = await getConsentString()
       const isGlobalConsent = await hasGlobalConsent()
-      await this.handleDataConsentDecision(consentString, isGlobalConsent)
+      this.logDataConsentDecision(consentString, isGlobalConsent)
     }
   }
 
-  async handleDataConsentDecision (consentString, isGlobalConsent) {
+  handleDataConsentDecision (consentString, isGlobalConsent) {
     // Re-register the callback with Quantcast Choice so we can
     // handle any other consent changes on this same page view.
     // Quantcast Choice will not call this callback more than once.
@@ -42,7 +42,10 @@ class LogConsentDataComponent extends React.Component {
     if (!consentString) {
       return
     }
+    this.logDataConsentDecision(consentString, isGlobalConsent)
+  }
 
+  logDataConsentDecision (consentString, isGlobalConsent) {
     const { relay, user } = this.props
     const onCompleted = () => {
       markConsentDataAsLogged()
