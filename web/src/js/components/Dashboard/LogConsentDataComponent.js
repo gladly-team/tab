@@ -29,6 +29,15 @@ class LogConsentDataComponent extends React.Component {
   }
 
   async handleDataConsentDecision (consentString, isGlobalConsent) {
+    // Re-register the callback with Quantcast Choice so we can
+    // handle any other consent changes on this same page view.
+    // Quantcast Choice will not call this callback more than once.
+    // "To invoke the callback every time the UI is shown, this
+    // operation will need to be made before each time the UI is
+    // brought up with __cmp('displayConsentUi')."
+    // https://quantcast.zendesk.com/hc/en-us/articles/360003814853-Technical-Implementation-Guide
+    registerConsentCallback(this.handleDataConsentDecision.bind(this))
+
     // If we're missing a consent string, don't log.
     if (!consentString) {
       return

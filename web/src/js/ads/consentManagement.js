@@ -62,7 +62,9 @@ export const displayConsentUI = () => {
 
 /**
  * Register a callback that will be triggered when a user
- * makes a choice in the consent UI.
+ * makes a choice in the consent UI. Quantcast Choice will
+ * only call the callback once, so the handler must re-register
+ * the callback if it wants to continue to be called.
  * @param {function} cb - The callback function
  * @return {Promise<undefined>}
  */

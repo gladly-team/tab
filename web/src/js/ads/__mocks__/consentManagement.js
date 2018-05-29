@@ -10,4 +10,6 @@ consentMgmt.hasGlobalConsent = jest.fn(() => {
   return Promise.resolve(true)
 })
 
+consentMgmt.checkIfNewConsentNeedsToBeLogged = jest.fn(() => false)
+
 module.exports = consentMgmt
