@@ -25,6 +25,13 @@
       min-height: 100%;
       position: relative;
     }
+    /*
+      Some 3rd-party (e.g. Quantcast Choice) code creates iframes with
+      borders, which causes a flickering frame.
+     */
+    iframe {
+      border-width: 0px !important;
+    }
   </style>
 
   <!-- The new tab page may be displayed in an iframe, so open
