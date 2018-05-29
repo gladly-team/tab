@@ -42,14 +42,11 @@ class Account extends React.Component {
 
   async componentDidMount () {
     // See if we should show the data privacy choices option
-    // featureFlag-gdprConsent
-    if (window.tabforacause.featureFlags.gdprConsent) {
-      const isInEU = await isInEuropeanUnion()
-      if (isInEU) {
-        this.setState({
-          showDataPrivacyOption: true
-        })
-      }
+    const isInEU = await isInEuropeanUnion()
+    if (isInEU) {
+      this.setState({
+        showDataPrivacyOption: true
+      })
     }
   }
 

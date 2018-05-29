@@ -73,8 +73,7 @@ export default async (isInEU) => {
   // Run apstag JS
   require('./apstag')
 
-  // featureFlag-gdprConsent
-  const requiresConsentManagement = !!(isInEU && window.tabforacause.featureFlags.gdprConsent)
+  const requiresConsentManagement = !!isInEU
 
   // If we need to get the consent string, do so before
   // initializing apstag.
