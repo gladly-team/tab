@@ -6,7 +6,6 @@ import { getDefaultTabGlobal } from 'utils/test-utils'
 
 beforeEach(() => {
   window.tabforacause = getDefaultTabGlobal()
-  window.tabforacause.featureFlags.gdprConsent = true
 
   // Barebones mock of Prebid pbjs
   window.pbjs = {
@@ -59,17 +58,6 @@ describe('prebidConfig', function () {
   })
 
   it('does not include consentManagement setting when not in EU', () => {
-    const pbjs = getPrebidPbjs()
-    prebidConfig(false)
-
-    // Run queued pbjs commands
-    pbjs.que.forEach((cmd) => cmd())
-
-    expect(pbjs.setConfig.mock.calls[0][0]['consentManagement']).toBeUndefined()
-  })
-
-  it('does not include consentManagement setting when feature flag is not enabled, even in EU', () => {
-    window.tabforacause.featureFlags.gdprConsent = false
     const pbjs = getPrebidPbjs()
     prebidConfig(false)
 

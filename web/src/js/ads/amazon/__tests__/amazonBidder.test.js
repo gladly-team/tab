@@ -26,8 +26,6 @@ beforeEach(() => {
 
   // Mock tabforacause global
   window.tabforacause = getDefaultTabGlobal()
-  // featureFlag-gdprConsent
-  window.tabforacause.featureFlags.gdprConsent = true
 
   jest.clearAllMocks()
   jest.resetModules()
@@ -145,17 +143,6 @@ describe('amazonBidder', function () {
       enabled: true,
       consent: 'the-consent-string'
     })
-  })
-
-  it('does not include GDPR consent when the feature flag is not enabled (even when in the EU)', async () => {
-    expect.assertions(1)
-
-    // featureFlag-gdprConsent
-    window.tabforacause.featureFlags.gdprConsent = false
-
-    const amazonBidder = require('../amazonBidder').default
-    await amazonBidder(true)
-    expect(window.apstag.init.mock.calls[0][0]['gdpr']).toBeUndefined()
   })
 
   it('times out and initializes Amazon when the CMP takes a long time to respond with consent', async () => {
