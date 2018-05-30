@@ -3,14 +3,27 @@ import withPageviewTracking from 'analytics/withPageviewTracking'
 import { isInEuropeanUnion } from 'utils/client-location'
 import {
   registerConsentCallback,
-  saveConsentUpdateEventToLocalStorage
+  saveConsentUpdateEventToLocalStorage,
+  unregisterConsentCallback
 } from 'ads/consentManagement'
 
 class App extends React.Component {
-  async componentWillMount () {
+  constructor (props) {
+    super(props)
+    this.consentChangeCallback = null
+  }
+
+  async componentDidMount () {
     const isEU = await isInEuropeanUnion()
     if (isEU) {
-      registerConsentCallback(this.handleDataConsentDecision.bind(this))
+      this.consentChangeCallback = this.handleDataConsentDecision.bind(this)
+      registerConsentCallback(this.consentChangeCallback)
+    }
+  }
+
+  componentWillUnmount () {
+    if (this.consentChangeCallback) {
+      unregisterConsentCallback(this.consentChangeCallback)
     }
   }
 

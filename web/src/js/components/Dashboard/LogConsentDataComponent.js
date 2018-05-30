@@ -36,7 +36,6 @@ class LogConsentDataComponent extends React.Component {
   }
 
   componentWillUnmount () {
-    // Unregister the consent callback on unmount.
     if (this.consentChangeCallback) {
       unregisterConsentCallback(this.consentChangeCallback)
     }

@@ -30,7 +30,7 @@ describe('App', () => {
     const wrapper = shallow(
       <App />
     )
-    await wrapper.instance().componentWillMount()
+    await wrapper.instance().componentDidMount()
     wrapper.update()
     const registerConsentCallback = require('ads/consentManagement').registerConsentCallback
     expect(registerConsentCallback).toHaveBeenCalled()
@@ -45,7 +45,7 @@ describe('App', () => {
     const wrapper = shallow(
       <App />
     )
-    await wrapper.instance().componentWillMount()
+    await wrapper.instance().componentDidMount()
     wrapper.update()
     const registerConsentCallback = require('ads/consentManagement').registerConsentCallback
     expect(registerConsentCallback).not.toHaveBeenCalled()
@@ -69,7 +69,7 @@ describe('App', () => {
     const wrapper = shallow(
       <App />
     )
-    await wrapper.instance().componentWillMount()
+    await wrapper.instance().componentDidMount()
     wrapper.update()
 
     // We should not have done anything yet
