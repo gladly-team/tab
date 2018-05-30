@@ -79,4 +79,23 @@ describe('App', () => {
     cmpCallback('some-consent-string', true)
     expect(saveConsentUpdateEventToLocalStorage).toHaveBeenCalledTimes(1)
   })
+
+  it('unregisters its callback when unmounting', async () => {
+    expect.assertions(2)
+
+    // Mock that the client is in the EU
+    const isInEuropeanUnion = require('utils/client-location').isInEuropeanUnion
+    isInEuropeanUnion.mockResolvedValue(true)
+    const App = require('../App').default
+    const wrapper = shallow(
+      <App />
+    )
+    await wrapper.instance().componentDidMount()
+    wrapper.update()
+
+    const unregisterConsentCallback = require('ads/consentManagement').unregisterConsentCallback
+    expect(unregisterConsentCallback).not.toHaveBeenCalled()
+    wrapper.unmount()
+    expect(unregisterConsentCallback).toHaveBeenCalled()
+  })
 })
