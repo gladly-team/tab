@@ -40,7 +40,7 @@ describe('LogConsentDataComponent', function () {
         relay={{ environment: {} }}
       />
     )
-    await wrapper.instance().componentWillMount()
+    await wrapper.instance().componentDidMount()
     wrapper.update()
     const registerConsentCallback = require('ads/consentManagement').registerConsentCallback
     expect(registerConsentCallback).toHaveBeenCalled()
@@ -58,7 +58,7 @@ describe('LogConsentDataComponent', function () {
         relay={{ environment: {} }}
       />
     )
-    await wrapper.instance().componentWillMount()
+    await wrapper.instance().componentDidMount()
     wrapper.update()
     const registerConsentCallback = require('ads/consentManagement').registerConsentCallback
     expect(registerConsentCallback).not.toHaveBeenCalled()
@@ -85,7 +85,7 @@ describe('LogConsentDataComponent', function () {
         relay={{ environment: {} }}
       />
     )
-    await wrapper.instance().componentWillMount()
+    await wrapper.instance().componentDidMount()
     await cmpCallback('some-consent-string', true)
 
     // Check that it calls the mutation.
@@ -133,7 +133,7 @@ describe('LogConsentDataComponent', function () {
         relay={{ environment: {} }}
       />
     )
-    await wrapper.instance().componentWillMount()
+    await wrapper.instance().componentDidMount()
 
     // Flush all promises
     await new Promise(resolve => setImmediate(resolve))
@@ -159,7 +159,7 @@ describe('LogConsentDataComponent', function () {
         relay={{ environment: {} }}
       />
     )
-    await wrapper.instance().componentWillMount()
+    await wrapper.instance().componentDidMount()
 
     const unregisterConsentCallback = require('ads/consentManagement').unregisterConsentCallback
     expect(unregisterConsentCallback).not.toHaveBeenCalled()

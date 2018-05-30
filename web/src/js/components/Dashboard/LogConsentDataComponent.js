@@ -17,8 +17,7 @@ class LogConsentDataComponent extends React.Component {
     this.consentChangeCallback = null
   }
 
-  // TODO: change to componentDidMount, which is only called on the client
-  async componentWillMount () {
+  async componentDidMount () {
     // Register a callback for any new consent updates.
     const isEU = await isInEuropeanUnion()
     if (isEU) {
