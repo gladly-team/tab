@@ -24,6 +24,7 @@ class BackgroundSettings extends React.Component {
     }
   }
 
+  // TODO: move to constructor
   componentWillMount () {
     const { user } = this.props
     this.setState({

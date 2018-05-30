@@ -40,7 +40,7 @@ describe('LogConsentDataComponent', function () {
         relay={{ environment: {} }}
       />
     )
-    await wrapper.instance().componentWillMount()
+    await wrapper.instance().componentDidMount()
     wrapper.update()
     const registerConsentCallback = require('ads/consentManagement').registerConsentCallback
     expect(registerConsentCallback).toHaveBeenCalled()
@@ -58,7 +58,7 @@ describe('LogConsentDataComponent', function () {
         relay={{ environment: {} }}
       />
     )
-    await wrapper.instance().componentWillMount()
+    await wrapper.instance().componentDidMount()
     wrapper.update()
     const registerConsentCallback = require('ads/consentManagement').registerConsentCallback
     expect(registerConsentCallback).not.toHaveBeenCalled()
@@ -85,8 +85,8 @@ describe('LogConsentDataComponent', function () {
         relay={{ environment: {} }}
       />
     )
-    await wrapper.instance().componentWillMount()
-    cmpCallback('some-consent-string', true)
+    await wrapper.instance().componentDidMount()
+    await cmpCallback('some-consent-string', true)
 
     // Check that it calls the mutation.
     const LogUserDataConsentMutation = require('mutations/LogUserDataConsentMutation').default
@@ -133,7 +133,7 @@ describe('LogConsentDataComponent', function () {
         relay={{ environment: {} }}
       />
     )
-    await wrapper.instance().componentWillMount()
+    await wrapper.instance().componentDidMount()
 
     // Flush all promises
     await new Promise(resolve => setImmediate(resolve))
@@ -143,5 +143,27 @@ describe('LogConsentDataComponent', function () {
     expect(LogUserDataConsentMutation.mock.calls[0][0]).toEqual({})
     expect(LogUserDataConsentMutation.mock.calls[0][1]).toEqual('xyz123')
     expect(LogUserDataConsentMutation.mock.calls[0][2]).toEqual('this-is-my-string')
+  })
+
+  it('unregisters its callback when unmounting', async () => {
+    expect.assertions(2)
+
+    // Mock that the client is in the EU
+    const isInEuropeanUnion = require('utils/client-location').isInEuropeanUnion
+    isInEuropeanUnion.mockResolvedValue(true)
+
+    const LogConsentDataComponent = require('../LogConsentDataComponent').default
+    const wrapper = shallow(
+      <LogConsentDataComponent
+        user={{ id: 'abcdefghijklmno' }}
+        relay={{ environment: {} }}
+      />
+    )
+    await wrapper.instance().componentDidMount()
+
+    const unregisterConsentCallback = require('ads/consentManagement').unregisterConsentCallback
+    expect(unregisterConsentCallback).not.toHaveBeenCalled()
+    wrapper.unmount()
+    expect(unregisterConsentCallback).toHaveBeenCalled()
   })
 })

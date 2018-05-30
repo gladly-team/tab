@@ -7,15 +7,22 @@ import {
   getConsentString,
   hasGlobalConsent,
   markConsentDataAsLogged,
-  registerConsentCallback
+  registerConsentCallback,
+  unregisterConsentCallback
 } from 'ads/consentManagement'
 
 class LogConsentDataComponent extends React.Component {
-  async componentWillMount () {
+  constructor (props) {
+    super(props)
+    this.consentChangeCallback = null
+  }
+
+  async componentDidMount () {
     // Register a callback for any new consent updates.
     const isEU = await isInEuropeanUnion()
     if (isEU) {
-      registerConsentCallback(this.handleDataConsentDecision.bind(this))
+      this.consentChangeCallback = this.logDataConsentDecision.bind(this)
+      registerConsentCallback(this.consentChangeCallback)
     }
 
     // Check localStorage to see if we have any new consent
@@ -24,22 +31,26 @@ class LogConsentDataComponent extends React.Component {
     if (checkIfNewConsentNeedsToBeLogged()) {
       const consentString = await getConsentString()
       const isGlobalConsent = await hasGlobalConsent()
-      await this.handleDataConsentDecision(consentString, isGlobalConsent)
+      this.logDataConsentDecision(consentString, isGlobalConsent)
     }
   }
 
-  async handleDataConsentDecision (consentString, isGlobalConsent) {
+  componentWillUnmount () {
+    if (this.consentChangeCallback) {
+      unregisterConsentCallback(this.consentChangeCallback)
+    }
+  }
+
+  logDataConsentDecision (consentString, isGlobalConsent) {
+    const { relay, user } = this.props
     // If we're missing a consent string, don't log.
     if (!consentString) {
       return
     }
 
-    const { relay, user } = this.props
     const onCompleted = () => {
       markConsentDataAsLogged()
     }
-
-    // Mark that we're going to log the consent data and log it.
     LogUserDataConsentMutation(
       relay.environment,
       user.id,

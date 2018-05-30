@@ -50,6 +50,7 @@ class UserBackgroundImage extends React.Component {
     }
   }
 
+  // TODO: change to componentDidMount
   componentWillMount () {
     // If the props contain valid settings for the background,
     // and they are different from what's already in state,

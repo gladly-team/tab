@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import { isInEuropeanUnion } from 'utils/client-location'
 import { displayConsentUI } from 'ads/consentManagement'
+import LogConsentData from '../../Dashboard/LogConsentDataContainer'
 
 export const AccountItem = (props) => (
   <div style={{
@@ -81,6 +82,7 @@ class Account extends React.Component {
                   </Button>
                 }
               />
+              { user ? <LogConsentData user={user} /> : null }
             </span>
           )
           : null

@@ -60,6 +60,7 @@ class Authentication extends React.Component {
     }
   }
 
+  // TODO: change to componentDidMount
   async componentWillMount () {
     this.mounted = true
 

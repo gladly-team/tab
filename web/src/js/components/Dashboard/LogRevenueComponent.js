@@ -4,6 +4,9 @@ import PropTypes from 'prop-types'
 
 // Log revenue from ads
 class LogRevenueComponent extends React.Component {
+  // TODO: to avoid memory leak,
+  // - change to componentDidMount
+  // - unregister the pubads listener on unmount
   componentWillMount () {
     this.listenForSlotsLoadedEvent()
     this.logRevenueForAlreadyLoadedAds()

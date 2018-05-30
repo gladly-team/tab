@@ -34,6 +34,7 @@ class Dashboard extends React.Component {
     }
   }
 
+  // TODO: move to constructor
   componentWillMount () {
     this.setTabId()
   }

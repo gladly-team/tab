@@ -48,6 +48,7 @@ beforeEach(() => {
 
 afterEach(() => {
   jest.clearAllMocks()
+  jest.resetModules()
   const localStorageManager = require('utils/localstorage-mgr').default
   localStorageManager.clear()
 })
@@ -127,14 +128,14 @@ describe('consentManagement', () => {
     expect(isGlobalConsent).toBeNull()
   })
 
-  it('registers a callback on __cmp.setConsentUiCallback', async () => {
+  it('registers a callback as expected', async () => {
     expect.assertions(2)
 
     // Mock the CMP callback for getting consent data
-    var storedCallback
+    var mockCMPConsentChange
     window.__cmp.mockImplementation((command, callback, getConsentDataCallback) => {
       if (command === 'setConsentUiCallback') {
-        storedCallback = callback
+        mockCMPConsentChange = callback
       }
       if (command === 'getConsentData') {
         /* eslint-disable-next-line standard/no-callback-literal */
@@ -147,13 +148,96 @@ describe('consentManagement', () => {
     })
     const registerConsentCallback = require('../consentManagement').registerConsentCallback
     const mockCallback = jest.fn()
-    await registerConsentCallback(mockCallback)
+    registerConsentCallback(mockCallback)
 
-    // Call the stored callback
-    await storedCallback()
+    // Mock that the CMP calls its callback on consent change
+    await mockCMPConsentChange()
 
     expect(mockCallback).toHaveBeenCalledTimes(1)
     expect(mockCallback).toHaveBeenCalledWith('abcdefghijklm', false)
+  })
+
+  it('registers multiple callbacks as expected', async () => {
+    expect.assertions(3)
+
+    // Mock the CMP callback for getting consent data
+    var mockCMPConsentChange
+    window.__cmp.mockImplementation((command, callback, getConsentDataCallback) => {
+      if (command === 'setConsentUiCallback') {
+        mockCMPConsentChange = callback
+      }
+      if (command === 'getConsentData') {
+        /* eslint-disable-next-line standard/no-callback-literal */
+        getConsentDataCallback({
+          consentData: 'abcdefghijklm',
+          gdprApplies: true,
+          hasGlobalConsent: false
+        })
+      }
+    })
+    const registerConsentCallback = require('../consentManagement').registerConsentCallback
+    const mockCallbackA = jest.fn()
+    registerConsentCallback(mockCallbackA)
+    const mockCallbackB = jest.fn()
+    registerConsentCallback(mockCallbackB)
+    const mockCallbackC = jest.fn()
+    registerConsentCallback(mockCallbackC)
+
+    // Mock that the CMP calls its callback on consent change
+    await mockCMPConsentChange()
+
+    expect(mockCallbackA).toHaveBeenCalledTimes(1)
+    expect(mockCallbackB).toHaveBeenCalledTimes(1)
+    expect(mockCallbackC).toHaveBeenCalledTimes(1)
+  })
+
+  it('unregisters callbacks as expected', async () => {
+    expect.assertions(6)
+
+    // Mock the CMP callback for getting consent data
+    var mockCMPConsentChange
+    window.__cmp.mockImplementation((command, callback, getConsentDataCallback) => {
+      if (command === 'setConsentUiCallback') {
+        mockCMPConsentChange = callback
+      }
+      if (command === 'getConsentData') {
+        /* eslint-disable-next-line standard/no-callback-literal */
+        getConsentDataCallback({
+          consentData: 'abcdefghijklm',
+          gdprApplies: true,
+          hasGlobalConsent: false
+        })
+      }
+    })
+
+    // Register some callbacks.
+    const registerConsentCallback = require('../consentManagement').registerConsentCallback
+    const mockCallbackA = jest.fn()
+    registerConsentCallback(mockCallbackA)
+    const mockCallbackB = jest.fn()
+    registerConsentCallback(mockCallbackB)
+    const mockCallbackC = jest.fn()
+    registerConsentCallback(mockCallbackC)
+
+    // Mock that the CMP calls its callback on consent change
+    await mockCMPConsentChange()
+    expect(mockCallbackA).toHaveBeenCalledTimes(1)
+    expect(mockCallbackB).toHaveBeenCalledTimes(1)
+    expect(mockCallbackC).toHaveBeenCalledTimes(1)
+
+    // Unregister some callbacks.
+    const unregisterConsentCallback = require('../consentManagement').unregisterConsentCallback
+    unregisterConsentCallback(mockCallbackA)
+    unregisterConsentCallback(mockCallbackC)
+
+    // Mock that the CMP calls its callback on consent change
+    await mockCMPConsentChange()
+
+    // It should not have called the unregistered callbacks,
+    // but it should have still called the registered one.
+    expect(mockCallbackA).toHaveBeenCalledTimes(1)
+    expect(mockCallbackB).toHaveBeenCalledTimes(2)
+    expect(mockCallbackC).toHaveBeenCalledTimes(1)
   })
 
   it('saves a "consent data updated" flag to localStorage', () => {
