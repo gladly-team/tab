@@ -19,6 +19,8 @@ class BackgroundImagePicker extends React.Component {
     }
   }
 
+  // TODO: change to componentDidMount, or instead probably
+  // just put the logic in the constructor
   componentWillMount () {
     const { app, user } = this.props
     const selectedImage = user.backgroundImage

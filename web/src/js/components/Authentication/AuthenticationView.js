@@ -21,6 +21,7 @@ class AuthenticationView extends React.Component {
     }
   }
 
+  // TODO: change to componentDidMount
   componentWillMount () {
     this.fetchUser()
   }
