@@ -38,7 +38,7 @@ describe('ads script', function () {
   })
 
   it('passes whether the client is in the EU (when true) to ad modules', async () => {
-    expect.assertions(2)
+    expect.assertions(1)
 
     // Mock that the client is in the EU
     const isInEuropeanUnion = require('utils/client-location').isInEuropeanUnion
@@ -49,14 +49,12 @@ describe('ads script', function () {
     adsEnabledStatus.mockReturnValue(true)
 
     const prebidConfig = require('../prebid/prebidConfig').default
-    const amazonBidder = require('../amazon/amazonBidder').default
     await require('../ads')
     expect(prebidConfig).toHaveBeenCalledWith(true)
-    expect(amazonBidder).toHaveBeenCalledWith(true)
   })
 
   it('passes whether the client is in the EU (when false) to ads modules', async () => {
-    expect.assertions(2)
+    expect.assertions(1)
 
     // Mock that the client is not in the EU
     const isInEuropeanUnion = require('utils/client-location').isInEuropeanUnion
@@ -67,9 +65,7 @@ describe('ads script', function () {
     adsEnabledStatus.mockReturnValue(true)
 
     const prebidConfig = require('../prebid/prebidConfig').default
-    const amazonBidder = require('../amazon/amazonBidder').default
     await require('../ads')
     expect(prebidConfig).toHaveBeenCalledWith(false)
-    expect(amazonBidder).toHaveBeenCalledWith(false)
   })
 })
