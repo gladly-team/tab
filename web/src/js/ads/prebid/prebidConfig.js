@@ -27,13 +27,6 @@ export default function (isInEU) {
     },
     bids: [
       {
-        bidder: 'sonobi',
-        params: {
-          dom_id: 'div-gpt-ad-1464385742501-0',
-          ad_unit: '/43865596/HBTR'
-        }
-      },
-      {
         bidder: 'pulsepoint',
         params: {
           cf: '300X250',
@@ -87,13 +80,6 @@ export default function (isInEU) {
       }
     },
     bids: [
-      {
-        bidder: 'sonobi',
-        params: {
-          dom_id: 'div-gpt-ad-1464385677836-0',
-          ad_unit: '/43865596/HBTL'
-        }
-      },
       {
         bidder: 'pulsepoint',
         params: {
