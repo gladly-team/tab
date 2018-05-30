@@ -8,7 +8,7 @@ import { isInEuropeanUnion } from 'utils/client-location'
 const loadAdCode = (isInEU) => {
   if (adsEnabled()) {
     handleAdsLoaded()
-    amazonBidder(isInEU)
+    amazonBidder()
     prebid()
     prebidConfig(isInEU)
   } else {
