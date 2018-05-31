@@ -1,6 +1,6 @@
 
 import getGoogleTag from '../google/getGoogleTag'
-import { getPrebidPbjs } from './getPrebidPbjs'
+import getPrebidPbjs from './getPrebidPbjs'
 
 // See: http://prebid.org/dev-docs/examples/basic-example.html
 export default function (isInEU) {

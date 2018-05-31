@@ -2,7 +2,7 @@
 
 import prebidConfig from '../prebidConfig'
 import getGoogleTag from '../../google/getGoogleTag'
-import { getPrebidPbjs } from '../getPrebidPbjs'
+import getPrebidPbjs from '../getPrebidPbjs'
 import { getDefaultTabGlobal } from 'utils/test-utils'
 
 beforeEach(() => {

@@ -1,5 +1,5 @@
 
-export const getPrebidPbjs = function () {
+export default () => {
   const pbjs = window.pbjs || {}
   // We're not running in global scope, so make sure to
   // assign to the window.
