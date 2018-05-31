@@ -1,4 +1,5 @@
 
+import getGoogleTag from '../google/getGoogleTag'
 import { getPrebidPbjs } from './getPrebidPbjs'
 
 // See: http://prebid.org/dev-docs/examples/basic-example.html
@@ -126,8 +127,7 @@ export default function (isInEU) {
   }]
   // Prebid config section END
 
-  const googletag = window.googletag || {}
-  googletag.cmd = googletag.cmd || []
+  const googletag = getGoogleTag()
 
   // Also called prior to loading Amazon bidder.
   // Leaving this here to prevent breakage in case we

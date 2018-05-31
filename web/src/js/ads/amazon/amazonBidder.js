@@ -1,5 +1,7 @@
 /* globals apstag */
 
+import getGoogleTag from '../google/getGoogleTag'
+
 // Should be the same as the value in prebidConfig.
 const PREBID_TIMEOUT = 1000
 
@@ -16,8 +18,7 @@ function initApstag () {
       cmpTimeout: consentManagementTimeoutMs
     }
   })
-  const googletag = window.googletag || {}
-  googletag.cmd = googletag.cmd || []
+  const googletag = getGoogleTag()
   apstag.fetchBids(
     {
       slots: [
