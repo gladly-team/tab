@@ -41,6 +41,8 @@ function sendAdserverRequest () {
   }
   requestManager.adserverRequestSent = true
 
+  console.log('Ads debug: sending ad server request')
+
   // For revenue analytics.
   storeAmazonBids()
 
@@ -80,6 +82,7 @@ function bidderCompleted (bidder) {
   if (requestManager.adserverRequestSent === true) {
     return
   }
+  console.log('Ads debug: bidder completed:', bidder)
   requestManager.bidders[bidder] = true
   if (allBiddersBack()) {
     sendAdserverRequest()
