@@ -24,8 +24,6 @@ describe('getGoogleTag', function () {
     window.googletag = fakeExistingGoogletag
 
     const gTag = getGoogleTag()
-    expect(window.googletag).toBe(fakeExistingGoogletag)
-    expect(window.googletag).toBe(fakeExistingGoogletag)
     expect(gTag).toBe(fakeExistingGoogletag)
   })
 })

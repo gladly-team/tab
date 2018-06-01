@@ -2,25 +2,28 @@
 
 import prebidConfig from '../prebidConfig'
 import getGoogleTag from '../../google/getGoogleTag'
-import getPrebidPbjs from '../getPrebidPbjs'
+import getPrebidPbjs, {
+  __disableAutomaticBidResponses,
+  __runBidsBack
+} from '../getPrebidPbjs'
 import { getDefaultTabGlobal } from 'utils/test-utils'
+
+jest.mock('utils/client-location')
+jest.mock('../getPrebidPbjs')
 
 beforeEach(() => {
   window.tabforacause = getDefaultTabGlobal()
 
-  // Barebones mock of Prebid pbjs
-  window.pbjs = {
-    que: [],
-    setConfig: jest.fn(),
-    bidderSettings: {},
-    addAdUnits: jest.fn(),
-    requestBids: jest.fn(),
-    setTargetingForGPTAsync: jest.fn()
-  }
+  delete window.pbjs
+  window.pbjs = getPrebidPbjs()
 
   // Set up googletag
   delete window.googletag
   window.googletag = getGoogleTag()
+})
+
+afterEach(() => {
+  jest.clearAllMocks()
 })
 
 afterAll(() => {
@@ -29,40 +32,89 @@ afterAll(() => {
 })
 
 describe('prebidConfig', function () {
-  it('runs without error', () => {
-    prebidConfig()
+  it('runs without error', async () => {
+    expect.assertions(0)
+    await prebidConfig()
   })
 
-  it('pushes commands to googletag.cmd', () => {
-    const googletag = getGoogleTag()
-    expect(googletag.cmd.length).toBe(0)
-    prebidConfig()
-    expect(googletag.cmd.length).toBeGreaterThan(0)
-  })
+  it('sets the config', async () => {
+    expect.assertions(2)
 
-  it('pushes commands to pbjs.que', () => {
     const pbjs = getPrebidPbjs()
-    expect(pbjs.que.length).toBe(0)
-    prebidConfig()
-    expect(pbjs.que.length).toBeGreaterThan(0)
+    await prebidConfig()
+
+    const config = pbjs.setConfig.mock.calls[0][0]
+
+    expect(config['pageUrl']).toBeDefined()
+    expect(config['publisherDomain']).toBeDefined()
   })
 
-  it('includes consentManagement setting when in EU', () => {
-    const pbjs = getPrebidPbjs()
-    prebidConfig(true)
+  it('sets up ad units', async () => {
+    expect.assertions(3)
 
-    // Run queued pbjs commands
-    pbjs.que.forEach((cmd) => cmd())
+    const pbjs = getPrebidPbjs()
+    await prebidConfig()
+
+    const adUnitConfig = pbjs.addAdUnits.mock.calls[0][0]
+    expect(adUnitConfig[0]['code']).toBeDefined()
+    expect(adUnitConfig[0]['mediaTypes']).toBeDefined()
+    expect(adUnitConfig[0]['bids']).toBeDefined()
+  })
+
+  it('includes the consentManagement setting when in the EU', async () => {
+    expect.assertions(1)
+
+    // Mock that the client is in the EU
+    const isInEuropeanUnion = require('utils/client-location').isInEuropeanUnion
+    isInEuropeanUnion.mockResolvedValue(true)
+
+    const pbjs = getPrebidPbjs()
+    await prebidConfig()
 
     expect(pbjs.setConfig.mock.calls[0][0]['consentManagement']).not.toBeUndefined()
   })
 
-  it('does not include consentManagement setting when not in EU', () => {
-    const pbjs = getPrebidPbjs()
-    prebidConfig(false)
+  it('resolves immediately when we expect the mock to return bids immediately', async () => {
+    expect.assertions(1)
 
-    // Run queued pbjs commands
-    pbjs.que.forEach((cmd) => cmd())
+    const promise = prebidConfig()
+    promise.done = false
+    promise.then(() => { promise.done = true })
+
+    // Flush all promises
+    await new Promise(resolve => setImmediate(resolve))
+    expect(promise.done).toBe(true)
+  })
+
+  it('only resolves after the auction ends', async () => {
+    expect.assertions(2)
+    __disableAutomaticBidResponses()
+
+    const promise = prebidConfig()
+    promise.done = false
+    promise.then(() => { promise.done = true })
+
+    // Flush all promises
+    await new Promise(resolve => setImmediate(resolve))
+
+    expect(promise.done).toBe(false)
+    __runBidsBack()
+
+    // Flush all promises
+    await new Promise(resolve => setImmediate(resolve))
+
+    expect(promise.done).toBe(true)
+  })
+
+  it('does not include consentManagement setting when not in the EU', async () => {
+    expect.assertions(1)
+
+    // Mock that the client is not in the EU
+    const isInEuropeanUnion = require('utils/client-location').isInEuropeanUnion
+    isInEuropeanUnion.mockResolvedValue(false)
+
+    const pbjs = getPrebidPbjs()
+    await prebidConfig()
 
     expect(pbjs.setConfig.mock.calls[0][0]['consentManagement']).toBeUndefined()
   })

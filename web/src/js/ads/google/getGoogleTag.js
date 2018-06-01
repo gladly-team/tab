@@ -1,5 +1,5 @@
 
-export default function () {
+export default () => {
   const googletag = window.googletag || {}
   googletag.cmd = googletag.cmd || []
   // We're not running in global scope, so make sure to

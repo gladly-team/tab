@@ -25,7 +25,6 @@ describe('getPrebidPbjs', function () {
 
     expect(window.pbjs).toBe(fakeExistingPbjs)
     const pbVar = getPrebidPbjs()
-    expect(window.pbjs).toBe(fakeExistingPbjs)
     expect(pbVar).toBe(fakeExistingPbjs)
   })
 })

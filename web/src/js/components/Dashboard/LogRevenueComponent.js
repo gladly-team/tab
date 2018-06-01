@@ -2,6 +2,7 @@ import React from 'react'
 import LogUserRevenueMutation from 'mutations/LogUserRevenueMutation'
 import PropTypes from 'prop-types'
 import getGoogleTag from 'ads/google/getGoogleTag'
+import getPrebidPbjs from 'ads/prebid/getPrebidPbjs'
 
 // Log revenue from ads
 class LogRevenueComponent extends React.Component {
@@ -21,8 +22,7 @@ class LogRevenueComponent extends React.Component {
    */
   getPrebidRevenueForSlot (slotId) {
     // Get the slot's highest CPM bid from Prebid
-    const pbjs = window.pbjs || {}
-    pbjs.que = pbjs.que || []
+    const pbjs = getPrebidPbjs()
     const slotBids = pbjs.getHighestCpmBids(slotId)
 
     // There might not be any bids

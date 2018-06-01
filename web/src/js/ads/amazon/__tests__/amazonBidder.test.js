@@ -1,34 +1,29 @@
 /* eslint-env jest */
 
+import getAmazonTag, {
+  __disableAutomaticBidResponses,
+  __runBidsBack
+} from '../getAmazonTag'
+import getGoogleTag from '../../google/getGoogleTag'
 import {
-  getDefaultTabGlobal,
-  mockAmazonBidResponse
+  getDefaultTabGlobal
 } from 'utils/test-utils'
 
 jest.mock('../apstag')
+jest.mock('../getAmazonTag')
 jest.mock('../../consentManagement')
 
 beforeEach(() => {
-  delete window.googletag
-  delete window.apstag
-
-  // Mock googletag
-  const mockAddEventListener = jest.fn()
-  window.googletag = {
-    cmd: [],
-    pubads: () => ({
-      addEventListener: mockAddEventListener
-    })
-  }
-
   // Mock apstag
-  window.apstag = require('apstag')
+  delete window.apstag
+  window.apstag = getAmazonTag()
 
   // Mock tabforacause global
   window.tabforacause = getDefaultTabGlobal()
 
-  jest.clearAllMocks()
-  jest.resetModules()
+  // Set up googletag
+  delete window.googletag
+  window.googletag = getGoogleTag()
 })
 
 afterEach(() => {
@@ -42,12 +37,33 @@ afterAll(() => {
 })
 
 describe('amazonBidder', function () {
-  it('calls apstag.fetchBids', () => {
+  it('runs without error', async () => {
+    expect.assertions(0)
     const amazonBidder = require('../amazonBidder').default
-    amazonBidder()
+    await amazonBidder()
+  })
 
-    expect(window.apstag.fetchBids).toHaveBeenCalled()
-    expect(window.apstag.fetchBids.mock.calls[0][0]).toEqual({
+  it('calls apstag.init with the expected publisher ID and ad server', async () => {
+    expect.assertions(1)
+    const apstag = getAmazonTag()
+
+    const amazonBidder = require('../amazonBidder').default
+    await amazonBidder()
+
+    expect(apstag.init.mock.calls[0][0]).toMatchObject({
+      pubID: '3397',
+      adServer: 'googletag'
+    })
+  })
+
+  it('calls apstag.fetchBids', async () => {
+    const apstag = getAmazonTag()
+
+    const amazonBidder = require('../amazonBidder').default
+    await amazonBidder()
+
+    expect(apstag.fetchBids).toHaveBeenCalled()
+    expect(apstag.fetchBids.mock.calls[0][0]).toMatchObject({
       slots: [
         {
           slotID: 'div-gpt-ad-1464385742501-0',
@@ -58,71 +74,41 @@ describe('amazonBidder', function () {
           sizes: [[728, 90]]
         }
       ],
-      timeout: 1000
+      timeout: 700
     })
   })
 
-  it('calls apstag.setDisplayBids when bids return', () => {
-    // Mock apstag's `fetchBids` so we can invoke the callback function
-    var passedCallback
-    window.apstag.fetchBids.mockImplementation((config, callback) => {
-      passedCallback = callback
-    })
-
-    const amazonBidder = require('../amazonBidder').default
-    amazonBidder()
-
-    // Fake that apstag calls callback for returned bids
-    passedCallback([
-      mockAmazonBidResponse()
-    ])
-
-    // Run the queued googletag commands
-    window.googletag.cmd.forEach((cmd) => cmd())
-
-    expect(window.apstag.setDisplayBids).toHaveBeenCalled()
-  })
-
-  it('stores Amazon bids in tabforacause window variable', () => {
-    expect.assertions(2)
-
-    // Mock apstag's `fetchBids` so we can invoke the callback function
-    var passedCallback
-    window.apstag.fetchBids.mockImplementation((config, callback) => {
-      passedCallback = callback
-    })
-
-    const amazonBidder = require('../amazonBidder').default
-    amazonBidder()
-
-    // Fake that apstag calls callback for returned bids
-    const someBid = mockAmazonBidResponse({
-      amznbid: 'some-id',
-      slotID: 'div-gpt-ad-123456789-0'
-    })
-    const someOtherBid = mockAmazonBidResponse({
-      amznbid: 'some-other-id',
-      slotID: 'div-gpt-ad-24681357-0'
-    })
-    passedCallback([someBid, someOtherBid])
-
-    // Run the queued googletag commands
-    window.googletag.cmd.forEach((cmd) => cmd())
-
-    expect(window.tabforacause.ads.amazonBids['div-gpt-ad-123456789-0'])
-      .toEqual(someBid)
-    expect(window.tabforacause.ads.amazonBids['div-gpt-ad-24681357-0'])
-      .toEqual(someOtherBid)
-  })
-
-  it('calls apstag.init with the expected publisher ID and ad server', () => {
+  it('resolves immediately when we expect the mock to return bids immediately', async () => {
     expect.assertions(1)
-    const amazonBidder = require('../amazonBidder').default
-    amazonBidder()
 
-    expect(window.apstag.init.mock.calls[0][0]).toMatchObject({
-      pubID: '3397',
-      adServer: 'googletag'
-    })
+    const amazonBidder = require('../amazonBidder').default
+    const promise = amazonBidder()
+    promise.done = false
+    promise.then(() => { promise.done = true })
+
+    // Flush all promises
+    await new Promise(resolve => setImmediate(resolve))
+    expect(promise.done).toBe(true)
+  })
+
+  it('only resolves after the auction ends', async () => {
+    expect.assertions(2)
+    __disableAutomaticBidResponses()
+
+    const amazonBidder = require('../amazonBidder').default
+    const promise = amazonBidder()
+    promise.done = false
+    promise.then(() => { promise.done = true })
+
+    // Flush all promises
+    await new Promise(resolve => setImmediate(resolve))
+
+    expect(promise.done).toBe(false)
+    __runBidsBack()
+
+    // Flush all promises
+    await new Promise(resolve => setImmediate(resolve))
+
+    expect(promise.done).toBe(true)
   })
 })

@@ -10,10 +10,12 @@ import {
   mockAmazonBidResponse,
   mockGoogleTagSlotRenderEndedData
 } from 'utils/test-utils'
+import getAmazonTag from 'ads/amazon/getAmazonTag'
 
 import LogUserRevenueMutation from 'mutations/LogUserRevenueMutation'
 
 jest.mock('mutations/LogUserRevenueMutation')
+jest.mock('ads/amazon/getAmazonTag')
 
 beforeEach(() => {
   delete window.googletag
@@ -36,7 +38,8 @@ beforeEach(() => {
   }
 
   // Mock apstag
-  window.apstag = require('apstag')
+  delete window.apstag
+  window.apstag = getAmazonTag
 
   // Mock tabforacause global
   window.tabforacause = getDefaultTabGlobal()
