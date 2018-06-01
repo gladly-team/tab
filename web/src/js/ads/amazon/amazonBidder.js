@@ -79,7 +79,5 @@ function initApstag () {
 }
 
 export default () => {
-  // Run apstag JS
-  require('./apstag')
   return initApstag()
 }

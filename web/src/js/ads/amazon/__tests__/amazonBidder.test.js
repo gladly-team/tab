@@ -9,7 +9,6 @@ import {
   getDefaultTabGlobal
 } from 'utils/test-utils'
 
-jest.mock('../apstag')
 jest.mock('../getAmazonTag')
 jest.mock('../../consentManagement')
 
