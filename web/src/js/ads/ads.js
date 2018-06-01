@@ -78,11 +78,12 @@ function allBiddersBack () {
  * @return {undefined}
  */
 function bidderCompleted (bidder) {
+  console.log('Ads debug: bidder completed:', bidder)
+
   // Return if the request to the adserver was already sent.
   if (requestManager.adserverRequestSent === true) {
     return
   }
-  console.log('Ads debug: bidder completed:', bidder)
   requestManager.bidders[bidder] = true
   if (allBiddersBack()) {
     sendAdserverRequest()
