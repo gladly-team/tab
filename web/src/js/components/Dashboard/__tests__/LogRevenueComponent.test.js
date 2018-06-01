@@ -11,28 +11,24 @@ import {
   mockGoogleTagSlotRenderEndedData
 } from 'utils/test-utils'
 import getAmazonTag from 'ads/amazon/getAmazonTag'
-
+import getGoogleTag, {
+  __disableAutomaticCommandQueueExecution,
+  __runCommandQueue,
+  __runEventListenerCallbacks
+} from 'ads/google/getGoogleTag'
 import LogUserRevenueMutation from 'mutations/LogUserRevenueMutation'
 
 jest.mock('mutations/LogUserRevenueMutation')
 jest.mock('ads/amazon/getAmazonTag')
+jest.mock('ads/google/getGoogleTag')
 
 beforeEach(() => {
-  delete window.googletag
-  delete window.pbjs
-  delete window.apstag
-  delete window.tabforacause
-
   // Mock googletag
-  const mockAddEventListener = jest.fn()
-  window.googletag = {
-    cmd: [],
-    pubads: () => ({
-      addEventListener: mockAddEventListener
-    })
-  }
+  delete window.googletag
+  window.googletag = getGoogleTag()
 
   // Mock pbjs
+  delete window.pbjs
   window.pbjs = {
     getHighestCpmBids: jest.fn()
   }
@@ -42,6 +38,7 @@ beforeEach(() => {
   window.apstag = getAmazonTag
 
   // Mock tabforacause global
+  delete window.tabforacause
   window.tabforacause = getDefaultTabGlobal()
 })
 
@@ -225,14 +222,8 @@ describe('LogRevenueComponent', function () {
     // Mock no Amazon bids
     window.tabforacause.ads.amazonBids = {}
 
-    // Mock GPT's pubads addEventListener so we can fake an event
-    const googleEventListenerCalls = {}
-    window.googletag.pubads().addEventListener.mockImplementation((eventName, callback) => {
-      if (!googleEventListenerCalls[eventName]) {
-        googleEventListenerCalls[eventName] = []
-      }
-      googleEventListenerCalls[eventName].push([eventName, callback])
-    })
+    // We'll run the googletag command queue manually.
+    __disableAutomaticCommandQueueExecution()
 
     const LogRevenueComponent = require('../LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
@@ -252,13 +243,9 @@ describe('LogRevenueComponent', function () {
     expect(LogUserRevenueMutation).not.toHaveBeenCalled()
 
     // Run the queued googletag commands
-    window.googletag.cmd.forEach((cmd) => cmd())
-
-    // Fake the GPT event callback
-    const eventCallback = googleEventListenerCalls['slotRenderEnded'][0][1]
-    eventCallback(
-      mockGoogleTagSlotRenderEndedData(slotId, { advertiserId: 159260 })
-    )
+    __runCommandQueue()
+    __runEventListenerCallbacks('slotRenderEnded',
+      mockGoogleTagSlotRenderEndedData(slotId, { advertiserId: 159260 }))
 
     // Should have logged revenue after the slot loaded
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment,
@@ -279,14 +266,8 @@ describe('LogRevenueComponent', function () {
     // Mock no Amazon bids
     window.tabforacause.ads.amazonBids = {}
 
-    // Mock GPT's pubads addEventListener so we can fake an event
-    const googleEventListenerCalls = {}
-    window.googletag.pubads().addEventListener.mockImplementation((eventName, callback) => {
-      if (!googleEventListenerCalls[eventName]) {
-        googleEventListenerCalls[eventName] = []
-      }
-      googleEventListenerCalls[eventName].push([eventName, callback])
-    })
+    // We'll run the googletag command queue manually.
+    __disableAutomaticCommandQueueExecution()
 
     const LogRevenueComponent = require('../LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
@@ -306,11 +287,9 @@ describe('LogRevenueComponent', function () {
     expect(LogUserRevenueMutation).not.toHaveBeenCalled()
 
     // Run the queued googletag commands
-    window.googletag.cmd.forEach((cmd) => cmd())
+    __runCommandQueue()
 
-    // Fake the GPT event callback
-    const eventCallback = googleEventListenerCalls['slotRenderEnded'][0][1]
-    eventCallback(
+    __runEventListenerCallbacks('slotRenderEnded',
       mockGoogleTagSlotRenderEndedData(
         slotId,
         {
