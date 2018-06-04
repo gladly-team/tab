@@ -44,7 +44,9 @@ function sendAdserverRequest () {
   console.log('Ads debug: sending ad server request')
 
   // For revenue analytics.
-  storeAmazonBids()
+  if (requestManager.bidders[BIDDER_AMAZON]) {
+    storeAmazonBids()
+  }
 
   // Set targeting and make a request to DFP.
   const googletag = getGoogleTag()

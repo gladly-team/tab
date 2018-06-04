@@ -4,7 +4,7 @@ import getGoogleTag from './google/getGoogleTag'
 // Keep track of what ad slots have loaded. App code loads later and
 // therefore can miss the slot loading event. This gives the app code
 // a way to check if the slots already loaded or not.
-export default function () {
+export default () => {
   try {
     const googletag = getGoogleTag()
 

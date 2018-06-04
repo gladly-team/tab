@@ -8,7 +8,6 @@ import getGoogleTag, {
 import getAmazonTag from '../amazon/getAmazonTag'
 import getPrebidPbjs from '../prebid/getPrebidPbjs'
 import prebidConfig from '../prebid/prebidConfig'
-import amazonBidder from '../amazon/amazonBidder'
 
 jest.mock('../google/getGoogleTag')
 jest.mock('../amazon/getAmazonTag')
@@ -17,6 +16,7 @@ jest.mock('../prebid/prebidConfig')
 jest.mock('../prebid/prebidModule')
 jest.mock('../amazon/amazonBidder')
 jest.mock('utils/client-location')
+jest.mock('../handleAdsLoaded')
 jest.mock('../adsEnabledStatus')
 
 beforeAll(() => {
@@ -59,6 +59,7 @@ afterAll(() => {
 describe('ads script', () => {
   it('calls the expected bidders and ad server', async () => {
     expect.assertions(3)
+    const amazonBidder = require('../amazon/amazonBidder').default
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
 
@@ -74,6 +75,7 @@ describe('ads script', () => {
 
   it('does not call expected bidders or ad server when ads are not enabled', async () => {
     expect.assertions(3)
+    const amazonBidder = require('../amazon/amazonBidder').default
 
     // Disable ads.
     const adsEnabledStatus = require('../adsEnabledStatus').default
@@ -233,9 +235,46 @@ describe('ads script', () => {
     expect(googletagMockRefresh).toHaveBeenCalledTimes(1)
   })
 
-  // TODO: tests:
-  // calls to store Amazon bids on the window for analytics (if Amazon is included in the auction)
-  // does not call to store Amazon bids on the window for analytics (if Amazon is not included in the auction)
-  // calls handleAdsLoaded
-  // stores Amazon bids in the tabforacause window variable
+  it('calls to store Amazon bids on the window for analytics (if Amazon is included in the auction)', async () => {
+    expect.assertions(1)
+    const storeAmazonBids = require('../amazon/amazonBidder').storeAmazonBids
+
+    // Mock that Amazon responds quickly
+    const amazonBidder = require('../amazon/amazonBidder').default
+    amazonBidder.mockImplementationOnce(() => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => { resolve() }, 80)
+      })
+    })
+
+    require('../ads')
+    jest.advanceTimersByTime(100)
+    await new Promise(resolve => setImmediate(resolve))
+    expect(storeAmazonBids).toHaveBeenCalledTimes(1)
+  })
+
+  it('does not call to store Amazon bids on the window for analytics (if Amazon is not included in the auction)', async () => {
+    expect.assertions(1)
+    const storeAmazonBids = require('../amazon/amazonBidder').storeAmazonBids
+
+    // Mock that Amazon responds slowly
+    const amazonBidder = require('../amazon/amazonBidder').default
+    amazonBidder.mockImplementationOnce(() => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => { resolve() }, 15e3)
+      })
+    })
+
+    require('../ads')
+    jest.advanceTimersByTime(3e3)
+    await new Promise(resolve => setImmediate(resolve))
+    expect(storeAmazonBids).not.toHaveBeenCalled()
+  })
+
+  it('calls handleAdsLoaded', async () => {
+    expect.assertions(1)
+    const handleAdsLoaded = require('../handleAdsLoaded').default
+    require('../ads')
+    expect(handleAdsLoaded).toHaveBeenCalledTimes(1)
+  })
 })
