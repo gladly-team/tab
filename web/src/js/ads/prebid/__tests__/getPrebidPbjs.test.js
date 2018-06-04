@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import { getPrebidPbjs } from '../getPrebidPbjs'
+import getPrebidPbjs from '../getPrebidPbjs'
 
 afterEach(() => {
   delete window.pbjs
@@ -25,7 +25,6 @@ describe('getPrebidPbjs', function () {
 
     expect(window.pbjs).toBe(fakeExistingPbjs)
     const pbVar = getPrebidPbjs()
-    expect(window.pbjs).toBe(fakeExistingPbjs)
     expect(pbVar).toBe(fakeExistingPbjs)
   })
 })

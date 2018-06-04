@@ -1,6 +1,8 @@
 import React from 'react'
 import LogUserRevenueMutation from 'mutations/LogUserRevenueMutation'
 import PropTypes from 'prop-types'
+import getGoogleTag from 'ads/google/getGoogleTag'
+import getPrebidPbjs from 'ads/prebid/getPrebidPbjs'
 
 // Log revenue from ads
 class LogRevenueComponent extends React.Component {
@@ -20,8 +22,7 @@ class LogRevenueComponent extends React.Component {
    */
   getPrebidRevenueForSlot (slotId) {
     // Get the slot's highest CPM bid from Prebid
-    const pbjs = window.pbjs || {}
-    pbjs.que = pbjs.que || []
+    const pbjs = getPrebidPbjs()
     const slotBids = pbjs.getHighestCpmBids(slotId)
 
     // There might not be any bids
@@ -159,8 +160,7 @@ class LogRevenueComponent extends React.Component {
 
   // Listen for the Google ad load event
   listenForSlotsLoadedEvent () {
-    const googletag = window.googletag || {}
-    googletag.cmd = googletag.cmd || []
+    const googletag = getGoogleTag()
     googletag.cmd.push(() => {
       // When a slot renders (before creative loads), log its revenue
       googletag.pubads().addEventListener('slotRenderEnded', (event) => {

@@ -38,6 +38,7 @@ module.exports = {
   appLogo: resolveApp('src/js/assets/logos/logo32x32.png'),
   appPackageJson: resolveApp('package.json'),
   appSrc: resolveApp('src'),
+  prebidJs: resolveApp('src/js/ads/prebid/prebid.js'),
   yarnLockFile: resolveApp('yarn.lock'),
   testsSetup: resolveApp('src/setupTests.js'),
   appNodeModules: resolveApp('node_modules'),

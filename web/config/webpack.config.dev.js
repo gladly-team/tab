@@ -21,9 +21,9 @@ const htmlTemplate = new HtmlWebpackPlugin({
   title: 'Tab for a Cause',
   template: paths.appHtml,
   // https://github.com/jantimon/html-webpack-plugin/issues/481#issuecomment-262414169
-  chunks: ['vendor', 'ads', 'app'],
+  chunks: ['vendor', 'prebid', 'ads', 'app'],
   chunksSortMode: function (chunk1, chunk2) {
-    var orders = ['vendor', 'ads', 'app']
+    var orders = ['vendor', 'prebid', 'ads', 'app']
     var order1 = orders.indexOf(chunk1.names[0])
     var order2 = orders.indexOf(chunk2.names[0])
     if (order1 > order2) {
@@ -90,7 +90,8 @@ module.exports = {
     ads: [
       require.resolve('./polyfills'),
       './src/js/ads/ads.js'
-    ]
+    ],
+    prebid: paths.prebidJs
   },
   output: {
     // Next line is not used in dev but WebpackDevServer crashes without it:

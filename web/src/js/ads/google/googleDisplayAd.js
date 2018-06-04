@@ -1,7 +1,8 @@
 
+import getGoogleTag from './getGoogleTag'
+
 export default function (adId) {
-  const googletag = window.googletag || {}
-  googletag.cmd = googletag.cmd || []
+  const googletag = getGoogleTag()
   googletag.cmd.push(() => {
     googletag.display(adId)
   })
