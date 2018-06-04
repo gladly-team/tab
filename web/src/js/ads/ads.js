@@ -4,7 +4,6 @@ import getAmazonTag from './amazon/getAmazonTag'
 import getGoogleTag from './google/getGoogleTag'
 import getPrebidPbjs from './prebid/getPrebidPbjs'
 import handleAdsLoaded from './handleAdsLoaded'
-import prebid from './prebid/prebidModule'
 import prebidConfig from './prebid/prebidConfig'
 import {
   AUCTION_TIMEOUT
@@ -112,7 +111,6 @@ const loadAdCode = () => {
       })
 
     // Prebid
-    prebid()
     prebidConfig()
       .then(() => {
         bidderCompleted(BIDDER_PREBID)
