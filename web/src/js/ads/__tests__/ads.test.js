@@ -2,21 +2,39 @@
 import {
   getDefaultTabGlobal
 } from 'utils/test-utils'
-import getGoogleTag from '../google/getGoogleTag'
+import getGoogleTag, {
+  __setPubadsRefreshMock
+} from '../google/getGoogleTag'
 import getAmazonTag from '../amazon/getAmazonTag'
+import getPrebidPbjs from '../prebid/getPrebidPbjs'
+import prebidConfig from '../prebid/prebidConfig'
+import amazonBidder from '../amazon/amazonBidder'
 
 jest.mock('../google/getGoogleTag')
 jest.mock('../amazon/getAmazonTag')
-jest.mock('../adsEnabledStatus')
+jest.mock('../prebid/getPrebidPbjs')
 jest.mock('../prebid/prebidConfig')
 jest.mock('../prebid/prebidModule')
 jest.mock('../amazon/amazonBidder')
 jest.mock('utils/client-location')
+jest.mock('../adsEnabledStatus')
+
+beforeAll(() => {
+  jest.useFakeTimers()
+})
 
 beforeEach(() => {
+  // Enable ads by default.
+  const adsEnabledStatus = require('../adsEnabledStatus').default
+  adsEnabledStatus.mockReturnValue(true)
+
   // Mock apstag
   delete window.apstag
   window.apstag = getAmazonTag()
+
+  // Mock Prebid global
+  delete window.pbjs
+  window.pbjs = getPrebidPbjs()
 
   // Mock tabforacause global
   window.tabforacause = getDefaultTabGlobal()
@@ -24,23 +42,81 @@ beforeEach(() => {
   // Set up googletag
   delete window.googletag
   window.googletag = getGoogleTag()
-
-  jest.resetModules()
 })
 
 afterEach(() => {
   jest.clearAllMocks()
+  jest.resetModules()
 })
 
 afterAll(() => {
   delete window.googletag
   delete window.apstag
+  delete window.pbjs
   delete window.tabforacause
 })
 
-// TODO: tests
-describe('ads script', function () {
-  it('is a placeholder test', () => {
-    expect(true).toBe(true)
+describe('ads script', () => {
+  it('calls the expected bidders and ad server', async () => {
+    expect.assertions(3)
+    const googletagMockRefresh = jest.fn()
+    __setPubadsRefreshMock(googletagMockRefresh)
+
+    require('../ads')
+
+    // Flush all promises
+    await new Promise(resolve => setImmediate(resolve))
+
+    expect(amazonBidder).toHaveBeenCalledTimes(1)
+    expect(prebidConfig).toHaveBeenCalledTimes(1)
+    expect(googletagMockRefresh).toHaveBeenCalledTimes(1)
   })
+
+  it('does not call expected bidders or ad server when ads are not enabled', async () => {
+    expect.assertions(3)
+
+    // Disable ads.
+    const adsEnabledStatus = require('../adsEnabledStatus').default
+    adsEnabledStatus.mockReturnValue(false)
+
+    const googletagMockRefresh = jest.fn()
+    __setPubadsRefreshMock(googletagMockRefresh)
+
+    require('../ads')
+
+    // Flush all promises
+    await new Promise(resolve => setImmediate(resolve))
+
+    expect(amazonBidder).not.toHaveBeenCalled()
+    expect(prebidConfig).not.toHaveBeenCalled()
+    expect(googletagMockRefresh).not.toHaveBeenCalled()
+  })
+
+  it('sets ad server targeting before calling the ad server', async () => {
+    expect.assertions(3)
+    window.apstag.setDisplayBids = jest.fn()
+    window.pbjs.setTargetingForGPTAsync = jest.fn()
+    const googletagMockRefresh = jest.fn()
+    __setPubadsRefreshMock(googletagMockRefresh)
+
+    require('../ads')
+
+    // Flush all promises
+    await new Promise(resolve => setImmediate(resolve))
+
+    expect(window.pbjs.setTargetingForGPTAsync).toHaveBeenCalledTimes(1)
+    expect(window.pbjs.setTargetingForGPTAsync).toHaveBeenCalledTimes(1)
+    expect(googletagMockRefresh).toHaveBeenCalledTimes(1)
+  })
+
+  // TODO: tests:
+  // calls expected functions to set ad server targeting before calling ad server
+  // calls the ad server even when all bidders time out
+  // calls the ad server when one bidder times out
+  // calls the ad server immediately when all bidders respond before the timeout
+  // only calls the ad server once when all bidders respond before the timeout
+  // calls to store Amazon bids on the window for analytics (if Amazon is included in the auction)
+  // does not call to store Amazon bids on the window for analytics (if Amazon is not included in the auction)
+  // calls handleAdsLoaded
+  // stores Amazon bids in the tabforacause window variable
 })

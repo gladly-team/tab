@@ -11,6 +11,13 @@ export const __runCommandQueue = () => {
   window.googletag.cmd.forEach((cmd) => cmd())
 }
 
+var mockPubadsRefresh = jest.fn()
+
+// Set a mock function for googletag.pubads().refresh.
+export const __setPubadsRefreshMock = (mockFunction) => {
+  mockPubadsRefresh = mockFunction
+}
+
 // Mock an event fired.
 export const __runEventListenerCallbacks = (eventName, ...args) => {
   eventListenerStore[eventName].forEach((f) => f(...args))
@@ -30,7 +37,8 @@ export default () => {
           eventListenerStore[eventName] = []
         }
         eventListenerStore[eventName].push(callback)
-      }
+      },
+      refresh: mockPubadsRefresh
     })
 
   }
