@@ -40,8 +40,6 @@ function sendAdserverRequest () {
   }
   requestManager.adserverRequestSent = true
 
-  console.log('Ads debug: sending ad server request')
-
   // For revenue analytics.
   if (requestManager.bidders[BIDDER_AMAZON]) {
     storeAmazonBids()
@@ -79,8 +77,6 @@ function allBiddersBack () {
  * @return {undefined}
  */
 function bidderCompleted (bidder) {
-  console.log('Ads debug: bidder completed:', bidder)
-
   // Return if the request to the adserver was already sent.
   if (requestManager.adserverRequestSent === true) {
     return
@@ -97,8 +93,6 @@ function bidderCompleted (bidder) {
  */
 const loadAdCode = () => {
   if (adsEnabled()) {
-    console.log('Ads debug: ad load begun')
-
     // Track loaded ads for analytics
     handleAdsLoaded()
 
