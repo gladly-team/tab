@@ -94,14 +94,10 @@ describe('ads script', () => {
 
   it('sets ad server targeting before calling the ad server', async () => {
     expect.assertions(3)
-    window.apstag.setDisplayBids = jest.fn()
-    window.pbjs.setTargetingForGPTAsync = jest.fn()
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
 
     require('../ads')
-
-    // Flush all promises
     await new Promise(resolve => setImmediate(resolve))
 
     expect(window.pbjs.setTargetingForGPTAsync).toHaveBeenCalledTimes(1)
@@ -109,12 +105,135 @@ describe('ads script', () => {
     expect(googletagMockRefresh).toHaveBeenCalledTimes(1)
   })
 
+  it('calls the ad server even when all bidders time out', async () => {
+    expect.assertions(2)
+
+    // Mock that Prebid is very slow to respond
+    const prebidConfig = require('../prebid/prebidConfig').default
+    prebidConfig.mockImplementationOnce(() => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => { resolve() }, 15e3)
+      })
+    })
+
+    // Mock that Amazon is very slow to respond
+    const amazonBidder = require('../amazon/amazonBidder').default
+    amazonBidder.mockImplementationOnce(() => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => { resolve() }, 15e3)
+      })
+    })
+
+    const googletagMockRefresh = jest.fn()
+    __setPubadsRefreshMock(googletagMockRefresh)
+
+    require('../ads')
+    await new Promise(resolve => setImmediate(resolve))
+
+    expect(googletagMockRefresh).not.toHaveBeenCalled()
+
+    jest.advanceTimersByTime(3e3)
+    await new Promise(resolve => setImmediate(resolve))
+
+    expect(googletagMockRefresh).toHaveBeenCalledTimes(1)
+  })
+
+  it('calls the ad server when one bidder times out', async () => {
+    expect.assertions(2)
+
+    // Mock that Prebid is very slow to respond
+    const prebidConfig = require('../prebid/prebidConfig').default
+    prebidConfig.mockImplementationOnce(() => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => { resolve() }, 15e3)
+      })
+    })
+
+    // Mock that Amazon responds quickly
+    const amazonBidder = require('../amazon/amazonBidder').default
+    amazonBidder.mockImplementationOnce(() => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => { resolve() }, 80)
+      })
+    })
+
+    const googletagMockRefresh = jest.fn()
+    __setPubadsRefreshMock(googletagMockRefresh)
+
+    require('../ads')
+    await new Promise(resolve => setImmediate(resolve))
+
+    expect(googletagMockRefresh).not.toHaveBeenCalled()
+    jest.advanceTimersByTime(3e3)
+    await new Promise(resolve => setImmediate(resolve))
+
+    expect(googletagMockRefresh).toHaveBeenCalledTimes(1)
+  })
+
+  it('calls the ad server immediately when all bidders respond before the timeout', async () => {
+    expect.assertions(1)
+
+    // Mock that Prebid responds quickly
+    const prebidConfig = require('../prebid/prebidConfig').default
+    prebidConfig.mockImplementationOnce(() => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => { resolve() }, 40)
+      })
+    })
+
+    // Mock that Amazon responds quickly
+    const amazonBidder = require('../amazon/amazonBidder').default
+    amazonBidder.mockImplementationOnce(() => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => { resolve() }, 40)
+      })
+    })
+
+    const googletagMockRefresh = jest.fn()
+    __setPubadsRefreshMock(googletagMockRefresh)
+
+    require('../ads')
+    jest.advanceTimersByTime(41)
+    await new Promise(resolve => setImmediate(resolve))
+
+    expect(googletagMockRefresh).toHaveBeenCalledTimes(1)
+  })
+
+  it('only calls the ad server once when all bidders respond before the timeout', async () => {
+    expect.assertions(2)
+
+    // Mock that Prebid responds quickly
+    const prebidConfig = require('../prebid/prebidConfig').default
+    prebidConfig.mockImplementationOnce(() => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => { resolve() }, 40)
+      })
+    })
+
+    // Mock that Amazon responds quickly
+    const amazonBidder = require('../amazon/amazonBidder').default
+    amazonBidder.mockImplementationOnce(() => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => { resolve() }, 40)
+      })
+    })
+
+    const googletagMockRefresh = jest.fn()
+    __setPubadsRefreshMock(googletagMockRefresh)
+
+    require('../ads')
+    jest.advanceTimersByTime(41)
+    await new Promise(resolve => setImmediate(resolve))
+
+    expect(googletagMockRefresh).toHaveBeenCalledTimes(1)
+
+    jest.advanceTimersByTime(20e3)
+    await new Promise(resolve => setImmediate(resolve))
+
+    expect(googletagMockRefresh).toHaveBeenCalledTimes(1)
+  })
+
   // TODO: tests:
-  // calls expected functions to set ad server targeting before calling ad server
-  // calls the ad server even when all bidders time out
-  // calls the ad server when one bidder times out
-  // calls the ad server immediately when all bidders respond before the timeout
-  // only calls the ad server once when all bidders respond before the timeout
   // calls to store Amazon bids on the window for analytics (if Amazon is included in the auction)
   // does not call to store Amazon bids on the window for analytics (if Amazon is not included in the auction)
   // calls handleAdsLoaded
