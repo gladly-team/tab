@@ -6,7 +6,8 @@ import getAmazonTag, {
 } from '../getAmazonTag'
 import getGoogleTag from '../../google/getGoogleTag'
 import {
-  getDefaultTabGlobal
+  getDefaultTabGlobal,
+  mockAmazonBidResponse
 } from 'utils/test-utils'
 
 jest.mock('../getAmazonTag')
@@ -109,5 +110,44 @@ describe('amazonBidder', function () {
     await new Promise(resolve => setImmediate(resolve))
 
     expect(promise.done).toBe(true)
+  })
+
+  it('stores Amazon bids in tabforacause window variable', async () => {
+    expect.assertions(4)
+
+    // Mock apstag's `fetchBids` so we can invoke the callback function
+    var passedCallback
+    window.apstag.fetchBids.mockImplementation((config, callback) => {
+      passedCallback = callback
+    })
+
+    const amazonBidder = require('../amazonBidder').default
+    const storeAmazonBids = require('../amazonBidder').storeAmazonBids
+    amazonBidder()
+
+    // Fake that apstag calls callback for returned bids
+    const someBid = mockAmazonBidResponse({
+      amznbid: 'some-id',
+      slotID: 'div-gpt-ad-123456789-0'
+    })
+    const someOtherBid = mockAmazonBidResponse({
+      amznbid: 'some-other-id',
+      slotID: 'div-gpt-ad-24681357-0'
+    })
+    passedCallback([someBid, someOtherBid])
+
+    // Should not have stored the bids yet.
+    expect(window.tabforacause.ads.amazonBids['div-gpt-ad-123456789-0'])
+      .toBeUndefined()
+    expect(window.tabforacause.ads.amazonBids['div-gpt-ad-24681357-0'])
+      .toBeUndefined()
+
+    storeAmazonBids()
+
+    // Now should have stored the bids.
+    expect(window.tabforacause.ads.amazonBids['div-gpt-ad-123456789-0'])
+      .toEqual(someBid)
+    expect(window.tabforacause.ads.amazonBids['div-gpt-ad-24681357-0'])
+      .toEqual(someOtherBid)
   })
 })
