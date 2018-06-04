@@ -97,6 +97,8 @@ function bidderCompleted (bidder) {
  */
 const loadAdCode = () => {
   if (adsEnabled()) {
+    console.log('Ads debug: ad load begun')
+
     // Track loaded ads for analytics
     handleAdsLoaded()
 
