@@ -2,9 +2,11 @@
 
 import fbq from '../facebook-analytics'
 import GA from '../google-analytics'
+import { redditAccountCreationEvent } from '../reddit-analytics'
 
 jest.mock('../facebook-analytics')
 jest.mock('../google-analytics')
+jest.mock('../reddit-analytics')
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -70,6 +72,7 @@ describe('logEvent', () => {
       category: 'ButtonClick',
       action: 'AccountCreation'
     })
+    expect(redditAccountCreationEvent).toHaveBeenCalled()
   })
 
   test('new tab view event calls analytics as expected', () => {
