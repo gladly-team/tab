@@ -1,6 +1,7 @@
 
 import fbq from './facebook-analytics'
 import GA from './google-analytics'
+import { redditAccountCreationEvent } from './reddit-analytics'
 
 // We automatically track most pageviews on location change.
 // See ./withPageviewTracking higher-order component.
@@ -51,6 +52,7 @@ export const accountCreated = () => {
     category: 'ButtonClick',
     action: 'AccountCreation'
   })
+  redditAccountCreationEvent()
 }
 
 // TODO: later
