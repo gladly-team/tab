@@ -27,8 +27,6 @@ const styles = theme => ({
   }
 })
 
-// TODO:
-// - add "Account" page with email address and username
 class SettingsPage extends React.Component {
   constructor (props) {
     super(props)

@@ -4,6 +4,8 @@ import { Scrollbars } from 'react-custom-scrollbars'
 
 class Scrollable extends React.Component {
   render () {
+    // Must either set a height or set autoHeight=true.
+    // https://github.com/malte-wessel/react-custom-scrollbars
     return (
       <Scrollbars
         style={Object.assign({}, {
