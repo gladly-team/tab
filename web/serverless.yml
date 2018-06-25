@@ -75,7 +75,7 @@ resources:
                 HTTPPort: 80
                 HTTPSPort: 443
                 OriginProtocolPolicy: https-only
-            # Main website / landing page.
+            # Homepage / landing page.
             - DomainName: ${self:custom.websiteOrigin}
               Id: ${self:custom.websiteAppName}
               CustomOriginConfig:
@@ -143,7 +143,11 @@ resources:
                   Forward: none
               Compress: true
               ViewerProtocolPolicy: redirect-to-https
-            # Handle the 404 CustomErrorResponse by showing our single page app
+            # Handle the 404 CustomErrorResponse by showing our single page app.
+            # This is necessary because the S3 origin for most /newtab/* requests
+            # will return a 404, becuase it's a single-page app with  only one
+            # index.html page in S3.
+            # Note that this means we will never show the homepage's 404 page.
             - PathPattern: 'index.html'
               MinTTL: ${self:custom.CloudfrontHTMLCachingSeconds}
               MaxTTL: ${self:custom.CloudfrontHTMLCachingSeconds}
@@ -181,7 +185,7 @@ resources:
                 Cookies:
                   Forward: none
               ViewerProtocolPolicy: redirect-to-https
-            # Send all remaining traffic to our main website
+            # Send all remaining traffic to our homepage
             - PathPattern: '*'
               # Short HTML caching for some spage speed gains and
               # reduced request volume to S3 origin.
