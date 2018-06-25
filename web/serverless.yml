@@ -83,7 +83,7 @@ resources:
                 HTTPSPort: 443
                 OriginProtocolPolicy: http-only
           Enabled: true
-          Comment: ${self:custom.s3Bucket} new tab page and homepage
+          Comment: ${self:custom.stage} new tab page and homepage
           # No default root object; our website (landing page) app handles it.
           # DefaultRootObject: index.html
           Aliases:
