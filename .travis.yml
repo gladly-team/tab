@@ -37,8 +37,7 @@ env:
   - TEST_FIREBASE_PROJECT_ID=dev-tab-for-a-cause
   - TEST_WEB_SENTRY_DSN=https://16a4b33290c44b89979957634c3ff3e3@sentry.io/1014205
   - TEST_WEB_SENTRY_ENABLE_AUTO_BREADCRUMBS=true
-  # - TEST_STATIC_FILES_ENDPOINT=https://d3792fnaedwf9j.cloudfront.net
-  - TEST_STATIC_FILES_ENDPOINT=//test-tab2017.gladly.io
+  - TEST_STATIC_FILES_ENDPOINT=//test-tab2017.gladly.io/newtab
   - TEST_CLOUDFRONT_DOMAIN_ALIAS=test-tab2017.gladly.io
   - TEST_ADS_ENABLED=false
   # Media
@@ -56,6 +55,7 @@ env:
   - TEST_MEDIA_ENDPOINT=https://test-tab2017-media.gladly.io
   # Deployment
   - TEST_WEB_S3_BUCKET_NAME=test-tab2017.gladly.io
+  - TEST_WEB_S3_BUCKET_PATH=/newtab
   - TEST_MEDIA_S3_BUCKET_NAME=test-tab2017-media.gladly.io
   - TEST_WEB_LANDING_PAGE_DOMAIN=dev-tab-website.s3-website-us-west-2.amazonaws.com
   # Selenium
@@ -86,8 +86,7 @@ env:
   - DEV_FIREBASE_PROJECT_ID=dev-tab-for-a-cause
   - DEV_WEB_SENTRY_DSN=https://16a4b33290c44b89979957634c3ff3e3@sentry.io/1014205
   - DEV_WEB_SENTRY_ENABLE_AUTO_BREADCRUMBS=true
-  # - DEV_STATIC_FILES_ENDPOINT=https://d2ienu53qrix0k.cloudfront.net
-  - DEV_STATIC_FILES_ENDPOINT=//dev-tab2017.gladly.io
+  - DEV_STATIC_FILES_ENDPOINT=//dev-tab2017.gladly.io/newtab
   - DEV_CLOUDFRONT_DOMAIN_ALIAS=dev-tab2017.gladly.io
   - DEV_ADS_ENABLED=true
   # Media
@@ -105,6 +104,7 @@ env:
   - DEV_MEDIA_ENDPOINT=https://dev-tab2017-media.gladly.io
   # Deployment
   - DEV_WEB_S3_BUCKET_NAME=dev-tab2017.gladly.io
+  - DEV_WEB_S3_BUCKET_PATH=/newtab
   - DEV_MEDIA_S3_BUCKET_NAME=dev-tab2017-media.gladly.io
   - DEV_WEB_LANDING_PAGE_DOMAIN=dev-tab-website.s3-website-us-west-2.amazonaws.com
   # Secrets: AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY, SENTRY_PRIVATE_KEY
@@ -130,8 +130,7 @@ env:
   - PROD_FIREBASE_PROJECT_ID=tab-for-a-cause
   - PROD_WEB_SENTRY_DSN=https://16a4b33290c44b89979957634c3ff3e3@sentry.io/1014205
   - PROD_WEB_SENTRY_ENABLE_AUTO_BREADCRUMBS=true
-  # - PROD_STATIC_FILES_ENDPOINT=https://d2dsqma4win6dv.cloudfront.net
-  - PROD_STATIC_FILES_ENDPOINT=//tab.gladly.io
+  - PROD_STATIC_FILES_ENDPOINT=//tab.gladly.io/newtab
   - PROD_CLOUDFRONT_DOMAIN_ALIAS=tab.gladly.io
   - PROD_ADS_ENABLED=true
   # Media
@@ -149,6 +148,7 @@ env:
   - PROD_MEDIA_ENDPOINT=https://prod-tab2017-media.gladly.io
   # Deployment
   - PROD_WEB_S3_BUCKET_NAME=prod-tab2017.gladly.io
+  - DEV_WEB_S3_BUCKET_PATH=/newtab
   - PROD_MEDIA_S3_BUCKET_NAME=prod-tab2017-media.gladly.io
   - PROD_WEB_LANDING_PAGE_DOMAIN=dev-tab-website.s3-website-us-west-2.amazonaws.com
   # Secrets

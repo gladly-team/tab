@@ -48,6 +48,7 @@ export const envVars = [
   { name: 'MEDIA_ENDPOINT' },
   // Deployment
   { name: 'WEB_S3_BUCKET_NAME' },
+  { name: 'WEB_S3_BUCKET_PATH' },
   { name: 'MEDIA_S3_BUCKET_NAME' },
   { name: 'WEB_LANDING_PAGE_DOMAIN' },
   // Secrets
