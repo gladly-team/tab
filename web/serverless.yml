@@ -189,12 +189,8 @@ resources:
               MaxTTL: ${self:custom.CloudfrontHTMLCachingSeconds}
               AllowedMethods:
                 - HEAD
-                - DELETE
-                - POST
                 - GET
                 - OPTIONS
-                - PUT
-                - PATCH
               TargetOriginId: ${self:custom.websiteAppName}
               ForwardedValues:
                 QueryString: false
