@@ -49,6 +49,7 @@ export const envVars = [
   // Deployment
   { name: 'WEB_S3_BUCKET_NAME' },
   { name: 'MEDIA_S3_BUCKET_NAME' },
+  { name: 'WEB_LANDING_PAGE_DOMAIN' },
   // Secrets
   { name: 'AWS_ACCESS_KEY_ID' },
   { name: 'AWS_SECRET_ACCESS_KEY' },

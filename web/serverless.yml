@@ -19,8 +19,7 @@ custom:
   SSLCertificateARN: ${env:SSL_CERTIFICATE_ARN}
   # How long Cloudfront should cache HTML at edges.
   CloudfrontHTMLCachingSeconds: 60
-  # TODO: env var
-  websiteOrigin: tab-website.gladly.io
+  websiteOrigin: ${env:WEB_LANDING_PAGE_DOMAIN}
   websiteAppName: TabLandingPage
 
 resources:
