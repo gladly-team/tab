@@ -49,7 +49,7 @@ env:
   - TEST_SENTRY_PROJECT_ID=184604
   - TEST_FIREBASE_CLIENT_EMAIL=firebase-adminsdk-kuncd@dev-tab-for-a-cause.iam.gserviceaccount.com
   # Endpoints
-  - TEST_GRAPHQL_PROXY_DOMAIN=lspir87lia.execute-api.us-west-2.amazonaws.com
+  - TEST_GRAPHQL_PROXY_DOMAIN=i3beinjq52.execute-api.us-west-2.amazonaws.com
   - TEST_GRAPHQL_PROXY_PATH=/test
   - TEST_DYNAMODB_ENDPOINT=dynamodb.us-west-2.amazonaws.com
   - TEST_MEDIA_ENDPOINT=https://test-tab2017-media.gladly.io
