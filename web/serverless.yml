@@ -231,12 +231,10 @@ resources:
               ViewerProtocolPolicy: redirect-to-https
             # Send all remaining traffic to our main website
             - PathPattern: '*'
-              # Note from the AWS console:
-              # "When you choose 'All' for 'Cache based on selected request headers',
-              #   CloudFront doesnt cache your objects. In that configuration, Minimum TTL
-              #   must be 0 seconds."
-              MinTTL: 0
-              MaxTTL: 0
+              # Short HTML caching for some spage speed gains and
+              # reduced request volume to S3 origin.
+              MinTTL: ${self:custom.CloudfrontHTMLCachingSeconds}
+              MaxTTL: ${self:custom.CloudfrontHTMLCachingSeconds}
               AllowedMethods:
                 - HEAD
                 - DELETE
@@ -247,12 +245,9 @@ resources:
                 - PATCH
               TargetOriginId: ${self:custom.websiteAppName}
               ForwardedValues:
-                # Forward all values to origin
-                QueryString: true
+                QueryString: false
                 Cookies:
-                  Forward: all
-                Headers:
-                  - "*"
+                  Forward: none
               # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html
               Compress: true
               ViewerProtocolPolicy: redirect-to-https
