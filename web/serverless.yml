@@ -80,7 +80,7 @@ resources:
               CustomOriginConfig:
                 HTTPPort: 80
                 HTTPSPort: 443
-                OriginProtocolPolicy: https-only
+                OriginProtocolPolicy: http-only
           Enabled: true
           # No default root object; our website (landing page) app handles it.
           # DefaultRootObject: index.html
