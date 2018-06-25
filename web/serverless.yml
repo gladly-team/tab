@@ -158,21 +158,6 @@ resources:
                   Forward: none
               Compress: true
               ViewerProtocolPolicy: redirect-to-https
-            # Static files path
-            - PathPattern: 'static/*'
-              MinTTL: 31536000 # one year
-              MaxTTL: 63072000 # two years
-              AllowedMethods:
-                - HEAD
-                - GET
-                - OPTIONS
-              TargetOriginId: ${self:custom.webAppName}
-              ForwardedValues:
-                QueryString: false
-                Cookies:
-                  Forward: none
-              Compress: true
-              ViewerProtocolPolicy: redirect-to-https
             # GraphQL
             - PathPattern: 'graphql*'
               MinTTL: 0
