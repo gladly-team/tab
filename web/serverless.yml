@@ -10,6 +10,7 @@ provider:
 
 custom:
   stageDefault: dev
+  stage: ${env:SLS_STAGE, self:custom.stageDefault}
   s3Bucket: ${env:WEB_S3_BUCKET_NAME}
   graphQLProxyDomain: ${env:GRAPHQL_PROXY_DOMAIN}
   graphQLProxyPath: ${env:GRAPHQL_PROXY_PATH}
@@ -82,6 +83,7 @@ resources:
                 HTTPSPort: 443
                 OriginProtocolPolicy: http-only
           Enabled: true
+          Comment: ${self:custom.s3Bucket} new tab page and homepage
           # No default root object; our website (landing page) app handles it.
           # DefaultRootObject: index.html
           Aliases:
