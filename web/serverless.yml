@@ -111,41 +111,6 @@ resources:
             # Do not cache app HTML for a long time.
             # PathPattern docs:
             #   https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesPathPattern
-            - PathPattern: 'tab/*.html'
-              # Short HTML caching for some spage speed gains and
-              # reduced request volume to S3 origin.
-              MinTTL: ${self:custom.CloudfrontHTMLCachingSeconds}
-              MaxTTL: ${self:custom.CloudfrontHTMLCachingSeconds}
-              AllowedMethods:
-                - HEAD
-                - GET
-                - OPTIONS
-              TargetOriginId: ${self:custom.webAppName}
-              ForwardedValues:
-                QueryString: false
-                Cookies:
-                  Forward: none
-              # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html
-              Compress: true
-              ViewerProtocolPolicy: redirect-to-https
-            # App (non-HTML) static files
-            - PathPattern: 'tab/*'
-              MinTTL: 31536000 # one year
-              MaxTTL: 63072000 # two years
-              AllowedMethods:
-                - HEAD
-                - GET
-                - OPTIONS
-              TargetOriginId: ${self:custom.webAppName}
-              ForwardedValues:
-                QueryString: false
-                Cookies:
-                  Forward: none
-              Compress: true
-              ViewerProtocolPolicy: redirect-to-https
-            # Do not cache app HTML for a long time.
-            # PathPattern docs:
-            #   https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesPathPattern
             - PathPattern: 'newtab/*.html'
               # Short HTML caching for some spage speed gains and
               # reduced request volume to S3 origin.
