@@ -114,7 +114,7 @@
     "start": "yarn run relay && nodemon --watch data/schema.graphql scripts/start.js & yarn run relay:watch",
     "build": "yarn run relay && node scripts/build.js",
     "postinstall": "patch-package",
-    "deploy": "npm-run-all -s build sls:deploy sls:s3sync",
+    "deploy": "npm-run-all -s build sls:s3sync sls:deploy",
     "relay": "relay-compiler --src ./src/ --schema ./data/schema.graphql",
     "relay:watch": "nodemon --watch src/ --watch data/schema.graphql --ignore **/__generated__/**/* --exec \"yarn run relay\"",
     "test": "npm-run-all -s test:lint test:run test:codecov",
