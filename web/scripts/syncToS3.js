@@ -10,6 +10,7 @@ require('dotenv-extended').load({
 })
 
 const s3Bucket = process.env.WEB_S3_BUCKET_NAME
+const s3BucketPath = process.env.WEB_S3_BUCKET_PATH || ''
 
 // Sync *.html files.
 function syncHTML () {
@@ -17,7 +18,7 @@ function syncHTML () {
     's3',
     'sync',
     'build/',
-    `s3://${s3Bucket}/`,
+    `s3://${s3Bucket}${s3BucketPath}/`,
     '--exclude',
     '*',
     '--include',
@@ -48,7 +49,7 @@ function syncStaticFiles () {
     's3',
     'sync',
     'build/',
-    `s3://${s3Bucket}/`,
+    `s3://${s3Bucket}${s3BucketPath}/`,
     '--include',
     '*',
     '--exclude',

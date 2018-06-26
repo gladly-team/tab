@@ -10,6 +10,7 @@ provider:
 
 custom:
   stageDefault: dev
+  stage: ${env:SLS_STAGE, self:custom.stageDefault}
   s3Bucket: ${env:WEB_S3_BUCKET_NAME}
   graphQLProxyDomain: ${env:GRAPHQL_PROXY_DOMAIN}
   graphQLProxyPath: ${env:GRAPHQL_PROXY_PATH}
@@ -19,8 +20,7 @@ custom:
   SSLCertificateARN: ${env:SSL_CERTIFICATE_ARN}
   # How long Cloudfront should cache HTML at edges.
   CloudfrontHTMLCachingSeconds: 60
-  # TODO: env var
-  websiteOrigin: tab-website.gladly.io
+  websiteOrigin: ${env:WEB_LANDING_PAGE_DOMAIN}
   websiteAppName: TabLandingPage
 
 resources:
@@ -75,24 +75,29 @@ resources:
                 HTTPPort: 80
                 HTTPSPort: 443
                 OriginProtocolPolicy: https-only
-            # Main website / landing page.
+            # Homepage / landing page.
             - DomainName: ${self:custom.websiteOrigin}
               Id: ${self:custom.websiteAppName}
               CustomOriginConfig:
                 HTTPPort: 80
                 HTTPSPort: 443
-                OriginProtocolPolicy: https-only
+                OriginProtocolPolicy: http-only
           Enabled: true
+          Comment: ${self:custom.stage} new tab page and homepage
           # No default root object; our website (landing page) app handles it.
           # DefaultRootObject: index.html
           Aliases:
             - ${self:custom.cloudfrontDomainAlias}
-          # Always return the single page app and let it handle routing.
+          # Always show our single page app when there is a 404 error.
+          # This is necessary because the S3 origin for most /newtab/* requests
+          # will return a 404, becuase it's a single-page app with only a
+          # single root index.html file in S3.
+          # Note that this means we will never show the homepage's 404 page.
           # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HTTPStatusCodes.html#HTTPStatusCodes-custom-error-pages
           CustomErrorResponses:
             - ErrorCode: 404
               ResponseCode: 200
-              ResponsePagePath: /index.html
+              ResponsePagePath: /newtab/index.html
               # We always return our HTML page for 404 errors, and most
               # pageviews are 404 errors because of the single-page app.
               # This is effectively how long we keep the HTML page in
@@ -107,42 +112,8 @@ resources:
           # cache files. For browser caching, we must still set Cache-Control headers
           # on the origin server (S3).
           CacheBehaviors:
-            # Do not cache app HTML for a long time.
-            # PathPattern docs:
-            #   https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesPathPattern
-            - PathPattern: 'tab/*.html'
-              # Short HTML caching for some spage speed gains and
-              # reduced request volume to S3 origin.
-              MinTTL: ${self:custom.CloudfrontHTMLCachingSeconds}
-              MaxTTL: ${self:custom.CloudfrontHTMLCachingSeconds}
-              AllowedMethods:
-                - HEAD
-                - GET
-                - OPTIONS
-              TargetOriginId: ${self:custom.webAppName}
-              ForwardedValues:
-                QueryString: false
-                Cookies:
-                  Forward: none
-              # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html
-              Compress: true
-              ViewerProtocolPolicy: redirect-to-https
-            # App (non-HTML) static files
-            - PathPattern: 'tab/*'
-              MinTTL: 31536000 # one year
-              MaxTTL: 63072000 # two years
-              AllowedMethods:
-                - HEAD
-                - GET
-                - OPTIONS
-              TargetOriginId: ${self:custom.webAppName}
-              ForwardedValues:
-                QueryString: false
-                Cookies:
-                  Forward: none
-              Compress: true
-              ViewerProtocolPolicy: redirect-to-https
-            # Do not cache app HTML for a long time.
+            # New tab app HTML files. This origin also handle any 404
+            # errors, as configured in CustomErrorResponses.
             # PathPattern docs:
             #   https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesPathPattern
             - PathPattern: 'newtab/*.html'
@@ -162,38 +133,8 @@ resources:
               # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html
               Compress: true
               ViewerProtocolPolicy: redirect-to-https
-            # App (non-HTML) static files
+            # New tab app (non-HTML) static files
             - PathPattern: 'newtab/*'
-              MinTTL: 31536000 # one year
-              MaxTTL: 63072000 # two years
-              AllowedMethods:
-                - HEAD
-                - GET
-                - OPTIONS
-              TargetOriginId: ${self:custom.webAppName}
-              ForwardedValues:
-                QueryString: false
-                Cookies:
-                  Forward: none
-              Compress: true
-              ViewerProtocolPolicy: redirect-to-https
-            # Handle the 404 CustomErrorResponse by showing our single page app
-            - PathPattern: 'index.html'
-              MinTTL: ${self:custom.CloudfrontHTMLCachingSeconds}
-              MaxTTL: ${self:custom.CloudfrontHTMLCachingSeconds}
-              AllowedMethods:
-                - HEAD
-                - GET
-                - OPTIONS
-              TargetOriginId: ${self:custom.webAppName}
-              ForwardedValues:
-                QueryString: false
-                Cookies:
-                  Forward: none
-              Compress: true
-              ViewerProtocolPolicy: redirect-to-https
-            # Static files path
-            - PathPattern: 'static/*'
               MinTTL: 31536000 # one year
               MaxTTL: 63072000 # two years
               AllowedMethods:
@@ -230,30 +171,21 @@ resources:
                 Cookies:
                   Forward: none
               ViewerProtocolPolicy: redirect-to-https
-            # Send all remaining traffic to our main website
+            # Send all remaining traffic to our homepage
             - PathPattern: '*'
-              # Note from the AWS console:
-              # "When you choose 'All' for 'Cache based on selected request headers',
-              #   CloudFront doesnt cache your objects. In that configuration, Minimum TTL
-              #   must be 0 seconds."
-              MinTTL: 0
-              MaxTTL: 0
+              # Short HTML caching for some spage speed gains and
+              # reduced request volume to S3 origin.
+              MinTTL: ${self:custom.CloudfrontHTMLCachingSeconds}
+              MaxTTL: ${self:custom.CloudfrontHTMLCachingSeconds}
               AllowedMethods:
                 - HEAD
-                - DELETE
-                - POST
                 - GET
                 - OPTIONS
-                - PUT
-                - PATCH
               TargetOriginId: ${self:custom.websiteAppName}
               ForwardedValues:
-                # Forward all values to origin
-                QueryString: true
+                QueryString: false
                 Cookies:
-                  Forward: all
-                Headers:
-                  - "*"
+                  Forward: none
               # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html
               Compress: true
               ViewerProtocolPolicy: redirect-to-https
