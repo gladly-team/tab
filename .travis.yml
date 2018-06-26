@@ -148,7 +148,7 @@ env:
   - PROD_MEDIA_ENDPOINT=https://prod-tab2017-media.gladly.io
   # Deployment
   - PROD_WEB_S3_BUCKET_NAME=prod-tab2017.gladly.io
-  - DEV_WEB_S3_BUCKET_PATH=/newtab
+  - PROD_WEB_S3_BUCKET_PATH=/newtab
   - PROD_MEDIA_S3_BUCKET_NAME=prod-tab2017-media.gladly.io
   - PROD_WEB_LANDING_PAGE_DOMAIN=prod-tab-website.s3-website-us-west-2.amazonaws.com
   # Secrets
