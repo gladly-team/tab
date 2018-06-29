@@ -18,7 +18,7 @@ import {
 const tourSteps = [
   {
     target: '[data-tour-id="hearts"]',
-    content: "You'll earn a Heart with every tab you open. You can then donate your Hearts to your favorite charity to tell us where the money should go.",
+    content: "You'll earn a Heart with every tab you open. Donate your Hearts to your favorite charity to tell us where to give money.",
     placement: 'bottom',
     disableBeacon: true,
     disableOverlayClose: true
@@ -31,7 +31,7 @@ const tourSteps = [
   },
   {
     target: '[data-tour-id="widgets"]',
-    content: 'Add bookmarks, take notes, and more with widgets.',
+    content: 'With widgets, you can add bookmarks, take notes, and more!',
     placement: 'bottom',
     disableBeacon: true
   }
@@ -39,7 +39,7 @@ const tourSteps = [
 
 const CustomTooltip = (props) => {
   return (
-    <div style={{ width: 340 }}>
+    <div style={{ width: 300 }}>
       <Paper>
         <div style={{ padding: 20 }}>
           <Typography variant='body1'>{props.content}</Typography>
@@ -135,7 +135,7 @@ class NewUserTour extends React.Component {
     return (
       <span>
         <Dialog
-          title='Your tabs are now doing good!'
+          title='Your tabs are changing the world!'
           actionsContainerStyle={{
             display: 'flex',
             flexDirection: 'row',
@@ -155,7 +155,8 @@ class NewUserTour extends React.Component {
             maxWidth: 500
           }}
         >
-          <Typography variant='body1'>You're now raising money for charity with every tab you open. Hooray! (The money comes from showing ads in the corner of the page.)</Typography>
+          <p><Typography variant='body1'>Now, every tab you open raises money for charity. (The money comes from showing ads in the corner of the page.)</Typography></p>
+          <p><Typography variant='body1'>Just by surfing the web, you're feeding children, protecting the rainforest, and more.</Typography></p>
         </Dialog>
         <Joyride
           steps={tourSteps}
@@ -213,7 +214,7 @@ class NewUserTour extends React.Component {
             maxWidth: 500
           }}
         >
-          <Typography variant='body1'>Thanks for changing the world, one tab at a time. We're thrilled to have you!</Typography>
+          <Typography variant='body1'>Thanks for making the world a better place, one tab at a time. We're thrilled to have you!</Typography>
         </Dialog>
       </span>
     )
