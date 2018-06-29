@@ -33,18 +33,31 @@ class NewUserTour extends React.Component {
     super(props)
     this.state = {
       introModalOpen: true,
-      beginTour: false
+      beginTour: false,
+      introFinalModalOpen: false
     }
   }
 
-  // joyrideCallback (data) {
-  //   const { action, index, type } = data
-  // }
+  joyrideCallback (data) {
+    const { action, index } = data
+    const isTourFinished = action === 'next' && index >= tourSteps.length
+    if (isTourFinished) {
+      this.setState({
+        introFinalModalOpen: true
+      })
+    }
+  }
 
   introModalButtonClick () {
     this.setState({
       introModalOpen: false,
       beginTour: true
+    })
+  }
+
+  introFinalModalButtonClick () {
+    this.setState({
+      introFinalModalOpen: false
     })
   }
 
@@ -57,8 +70,7 @@ class NewUserTour extends React.Component {
           actionsContainerStyle={{
             display: 'flex',
             flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'flex-end'
+            justifyContent: 'flex-end'
           }}
           actions={[
             <Button onClick={this.introModalButtonClick.bind(this)} color='primary' type='raised'>Great!
@@ -76,7 +88,7 @@ class NewUserTour extends React.Component {
           steps={tourSteps}
           run={this.state.beginTour}
           continuous
-          // callback={this.joyrideCallback.bind(this)}
+          callback={this.joyrideCallback.bind(this)}
           styles={{
             zIndex: 4600
           }}
@@ -84,6 +96,25 @@ class NewUserTour extends React.Component {
             disableAnimation: true
           }}
         />
+        <Dialog
+          title='Thanks for Tabbing!'
+          actionsContainerStyle={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'flex-end'
+          }}
+          actions={[
+            <Button onClick={this.introFinalModalButtonClick.bind(this)} color='primary' type='raised'>Get Tabbing
+            </Button>
+          ]}
+          modal
+          open={this.state.introFinalModalOpen}
+          contentStyle={{
+            maxWidth: 500
+          }}
+        >
+          <p>Thanks for changing the world, one tab at a time. We're thrilled to have you!</p>
+        </Dialog>
       </span>
     )
   }
