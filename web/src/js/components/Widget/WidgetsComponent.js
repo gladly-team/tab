@@ -49,7 +49,7 @@ class Widgets extends React.Component {
     return (
       <FadeInDashboardAnimation>
         <span>
-          <div style={widgetsContainer}>
+          <div style={widgetsContainer} data-tour-id={'widgets'}>
             <div style={separator} />
             {user.widgets.edges.map((edge, index) => {
               if (edge.node.type === WIDGET_TYPE_SEARCH) {

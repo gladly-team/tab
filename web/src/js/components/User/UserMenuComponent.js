@@ -236,6 +236,7 @@ class UserMenu extends React.Component {
           onMouseEnter={this.onHeartsHover.bind(this, true)}
           onMouseLeave={this.onHeartsHover.bind(this, false)}
           onClick={this.onHeartsClick.bind(this)}
+          data-tour-id={'hearts'}
         >
           <span>{commaFormatted(user.vcCurrent)}</span>
           <span
@@ -366,6 +367,7 @@ class UserMenu extends React.Component {
           onMouseLeave={this.onMenuIconHover.bind(this, false)}
           onClick={this.onMenuClick.bind(this)}
           data-test-id={'app-menu-icon'}
+          data-tour-id={'settings-button'}
         >
           <MoreVertIcon />
         </IconButton>
