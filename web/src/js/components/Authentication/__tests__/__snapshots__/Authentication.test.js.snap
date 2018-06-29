@@ -6,7 +6,7 @@ exports[`Authentication.js tests renders as expected prior to navigating 1`] = `
   style={
     Object {
       "alignItems": "center",
-      "backgroundColor": "rgba(128, 128, 128, 0.04)",
+      "backgroundColor": "#FAFAFA",
       "display": "flex",
       "flexDirection": "column",
       "height": "100%",
