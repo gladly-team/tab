@@ -32,7 +32,6 @@ class ClockWidget extends React.Component {
     this.setState({
       config: configuration
     })
-
     this.setDateTime(configuration)
   }
 
@@ -45,7 +44,12 @@ class ClockWidget extends React.Component {
     var date = moment().format('dddd, MMMM D')
     var time
     if (format24) {
-      time = moment().format('H:mm')
+      // If it's midnight, show two leading zeros
+      if (moment().get('hour') === 0) {
+        time = moment().format('HH:mm')
+      } else {
+        time = moment().format('H:mm')
+      }
     } else {
       time = moment().format('h:mm')
     }
@@ -82,8 +86,8 @@ class ClockWidget extends React.Component {
 
     return (
       <div style={clockContainer}>
-        <h1 style={timeStyle}>{this.state.time}</h1>
-        <h2 style={dateStyle}>{this.state.date}</h2>
+        <h1 style={timeStyle} data-test-id={'clock-widget-time'}>{this.state.time}</h1>
+        <h2 style={dateStyle} data-test-id={'clock-widget-date'}>{this.state.date}</h2>
       </div>
     )
   }
