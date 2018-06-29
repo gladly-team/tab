@@ -1,13 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import environment from '../../../relay-env'
-import AppBarWithLogo from '../Logo/AppBarWithLogo'
-import {
-  appBarLightColor,
-  alternateAccentColor,
-  primaryColor,
-  textColor
-} from 'theme/default'
 import {
   getCurrentUser,
   sendVerificationEmail,
@@ -29,7 +22,7 @@ import {
   isInIframe
 } from 'web-utils'
 import { isEqual } from 'lodash/lang'
-import { Paper } from 'material-ui'
+import LogoWithText from '../Logo/LogoWithText'
 
 // Handle the authentication flow:
 //   check if current user is fully authenticated and redirect
@@ -243,13 +236,17 @@ class Authentication extends React.Component {
           alignItems: 'center',
           height: '100%',
           width: '100%',
-          backgroundColor: primaryColor
+          backgroundColor: 'rgba(128, 128, 128, 0.04)'
         }}
       >
-        <AppBarWithLogo />
+        {/* This is a similar style to the homepage */}
+        <div style={{ padding: '20px 40px', position: 'absolute', top: 0, left: 0 }}>
+          <LogoWithText style={{ height: 40 }} />
+        </div>
         <span
           style={{
             display: 'flex',
+            flexDirection: 'column',
             flex: 1,
             alignSelf: 'stretch',
             justifyContent: 'center',
@@ -258,8 +255,10 @@ class Authentication extends React.Component {
         >
           <span
             style={{
-              padding: 20,
-              marginBottom: 20
+              flex: 1,
+              display: 'flex',
+              alignItems: 'center',
+              padding: 20
             }}
           >
             { this.state.loadChildren
@@ -272,31 +271,19 @@ class Authentication extends React.Component {
               : null
             }
           </span>
-        </span>
-        <Paper
-          zDepth={1}
-          style={{
-            padding: 10,
-            backgroundColor: appBarLightColor,
-            margin: 20,
+          {/* Using style from homepage */}
+          <span style={{
+            color: 'rgba(33, 33, 33, 0.82)',
+            fontFamily: "'Helvetica Neue','Helvetica','Arial',sans-serif",
+            fontWeight: '500',
+            lineHeight: '1.1',
             textAlign: 'center',
-            color: textColor
-          }}
-        >
-          Trouble signing in? Try <a
-            href='https://gladly.zendesk.com/hc/en-us/articles/360002317231-How-do-I-clear-my-cookies-and-site-data-for-Tab-for-a-Cause-'
-            target='_top'
-            style={{
-              color: alternateAccentColor
-            }}
-          >clearing your cookies</a> or <a
-            href='https://gladly.zendesk.com/hc/en-us/requests/new'
-            target='_top'
-            style={{
-              color: alternateAccentColor
-            }}
-          >send us a message</a> and we'll try to help.
-        </Paper>
+            padding: 10
+          }}>
+            <h1>"One of the simplest ways to raise money"</h1>
+            <p style={{ color: '#838383', fontWeight: '400' }}>- USA Today</p>
+          </span>
+        </span>
       </span>
     )
   }

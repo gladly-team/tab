@@ -6,7 +6,7 @@ exports[`Authentication.js tests renders as expected prior to navigating 1`] = `
   style={
     Object {
       "alignItems": "center",
-      "backgroundColor": "#9d4ba3",
+      "backgroundColor": "rgba(128, 128, 128, 0.04)",
       "display": "flex",
       "flexDirection": "column",
       "height": "100%",
@@ -14,7 +14,24 @@ exports[`Authentication.js tests renders as expected prior to navigating 1`] = `
     }
   }
 >
-  <AppBarWithLogo />
+  <div
+    style={
+      Object {
+        "left": 0,
+        "padding": "20px 40px",
+        "position": "absolute",
+        "top": 0,
+      }
+    }
+  >
+    <LogoWithText
+      style={
+        Object {
+          "height": 40,
+        }
+      }
+    />
+  </div>
   <span
     style={
       Object {
@@ -22,6 +39,7 @@ exports[`Authentication.js tests renders as expected prior to navigating 1`] = `
         "alignSelf": "stretch",
         "display": "flex",
         "flex": 1,
+        "flexDirection": "column",
         "justifyContent": "center",
       }
     }
@@ -29,52 +47,39 @@ exports[`Authentication.js tests renders as expected prior to navigating 1`] = `
     <span
       style={
         Object {
-          "marginBottom": 20,
+          "alignItems": "center",
+          "display": "flex",
+          "flex": 1,
           "padding": 20,
         }
       }
     />
+    <span
+      style={
+        Object {
+          "color": "rgba(33, 33, 33, 0.82)",
+          "fontFamily": "'Helvetica Neue','Helvetica','Arial',sans-serif",
+          "fontWeight": "500",
+          "lineHeight": "1.1",
+          "padding": 10,
+          "textAlign": "center",
+        }
+      }
+    >
+      <h1>
+        "One of the simplest ways to raise money"
+      </h1>
+      <p
+        style={
+          Object {
+            "color": "#838383",
+            "fontWeight": "400",
+          }
+        }
+      >
+        - USA Today
+      </p>
+    </span>
   </span>
-  <Paper
-    circle={false}
-    rounded={true}
-    style={
-      Object {
-        "backgroundColor": "#f2f2f2",
-        "color": "#212121",
-        "margin": 20,
-        "padding": 10,
-        "textAlign": "center",
-      }
-    }
-    transitionEnabled={true}
-    zDepth={1}
-  >
-    Trouble signing in? Try 
-    <a
-      href="https://gladly.zendesk.com/hc/en-us/articles/360002317231-How-do-I-clear-my-cookies-and-site-data-for-Tab-for-a-Cause-"
-      style={
-        Object {
-          "color": "#4a90e2",
-        }
-      }
-      target="_top"
-    >
-      clearing your cookies
-    </a>
-     or 
-    <a
-      href="https://gladly.zendesk.com/hc/en-us/requests/new"
-      style={
-        Object {
-          "color": "#4a90e2",
-        }
-      }
-      target="_top"
-    >
-      send us a message
-    </a>
-     and we'll try to help.
-  </Paper>
 </span>
 `;
