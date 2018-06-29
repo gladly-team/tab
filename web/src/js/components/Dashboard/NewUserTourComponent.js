@@ -5,6 +5,11 @@ import Joyride from 'react-joyride'
 import Dialog from 'material-ui/Dialog'
 import Button from '@material-ui/core/Button'
 
+import {
+  primaryColor,
+  textColor
+} from 'theme/default'
+
 // Note that the target components must be mounted
 // before the tour begins.
 const tourSteps = [
@@ -12,7 +17,8 @@ const tourSteps = [
     target: '[data-tour-id="hearts"]',
     content: "You'll earn a Heart with every tab you open. You can then donate your Hearts to your favorite charity to tell us where the money should go.",
     placement: 'bottom',
-    disableBeacon: true
+    disableBeacon: true,
+    disableOverlayClose: true
   },
   {
     target: '[data-tour-id="settings-button"]',
@@ -88,9 +94,16 @@ class NewUserTour extends React.Component {
           steps={tourSteps}
           run={this.state.beginTour}
           continuous
+          disableOverlayClose
           callback={this.joyrideCallback.bind(this)}
           styles={{
-            zIndex: 4600
+            zIndex: 4600,
+            options: {
+              arrowColor: '#fff',
+              backgroundColor: '#fff',
+              primaryColor: primaryColor,
+              textColor: textColor
+            }
           }}
           floaterProps={{
             disableAnimation: true
