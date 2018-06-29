@@ -246,6 +246,7 @@ class Authentication extends React.Component {
         <span
           style={{
             display: 'flex',
+            flexDirection: 'column',
             flex: 1,
             alignSelf: 'stretch',
             justifyContent: 'center',
@@ -254,8 +255,10 @@ class Authentication extends React.Component {
         >
           <span
             style={{
-              padding: 20,
-              marginBottom: 20
+              flex: 1,
+              display: 'flex',
+              alignItems: 'center',
+              padding: 20
             }}
           >
             { this.state.loadChildren
@@ -267,6 +270,18 @@ class Authentication extends React.Component {
               )
               : null
             }
+          </span>
+          {/* Using style from homepage */}
+          <span style={{
+            color: 'rgba(33, 33, 33, 0.82)',
+            fontFamily: "'Helvetica Neue','Helvetica','Arial',sans-serif",
+            fontWeight: '500',
+            lineHeight: '1.1',
+            textAlign: 'center',
+            padding: 10
+          }}>
+            <h1>"One of the simplest ways to raise money"</h1>
+            <p style={{ color: '#838383', fontWeight: '400' }}>- USA Today</p>
           </span>
         </span>
       </span>
