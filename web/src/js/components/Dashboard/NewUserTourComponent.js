@@ -4,6 +4,7 @@ import Joyride from 'react-joyride'
 
 import Dialog from 'material-ui/Dialog'
 import Button from '@material-ui/core/Button'
+import Paper from '@material-ui/core/Paper'
 
 import {
   primaryColor,
@@ -40,6 +41,7 @@ class NewUserTour extends React.Component {
     this.state = {
       introModalOpen: true,
       beginTour: false,
+      stepIndex: 0,
       introFinalModalOpen: false
     }
   }
@@ -61,6 +63,27 @@ class NewUserTour extends React.Component {
     })
   }
 
+  goToPreviousStep () {
+    this.setState({
+      stepIndex: this.state.stepIndex - 1
+    })
+  }
+
+  goToNextStep () {
+    this.setState({
+      stepIndex: this.state.stepIndex + 1
+    })
+  }
+
+  getCurrentStepContent () {
+    const stepObj = tourSteps[this.state.stepIndex]
+    if (stepObj && stepObj.content) {
+      return stepObj.content
+    } else {
+      return null
+    }
+  }
+
   introFinalModalButtonClick () {
     this.setState({
       introFinalModalOpen: false
@@ -79,7 +102,11 @@ class NewUserTour extends React.Component {
             justifyContent: 'flex-end'
           }}
           actions={[
-            <Button onClick={this.introModalButtonClick.bind(this)} color='primary' type='raised'>Great!
+            <Button
+              onClick={this.introModalButtonClick.bind(this)}
+              color='primary'
+            >
+              Great!
             </Button>
           ]}
           modal
@@ -92,6 +119,7 @@ class NewUserTour extends React.Component {
         </Dialog>
         <Joyride
           steps={tourSteps}
+          stepIndex={this.state.stepIndex}
           run={this.state.beginTour}
           continuous
           disableOverlayClose
@@ -108,6 +136,33 @@ class NewUserTour extends React.Component {
           floaterProps={{
             disableAnimation: true
           }}
+          // We're choosing to control the component so it will match
+          // the app theme. But we can remove this and the "stepIndex"
+          // prop to let Joyride handle it.
+          tooltipComponent={
+            <div style={{ width: 340 }}>
+              <Paper style={{ padding: 20 }}>
+                <span>{this.getCurrentStepContent()}</span>
+                <span style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 10 }}>
+                  { (this.state.stepIndex > 0) ? (
+                    <Button
+                      onClick={this.goToPreviousStep.bind(this)}
+                      color='default'
+                    >
+                    Back
+                    </Button>
+                  ) : null
+                  }
+                  <Button
+                    onClick={this.goToNextStep.bind(this)}
+                    color='primary'
+                  >
+                Next
+                  </Button>
+                </span>
+              </Paper>
+            </div>
+          }
         />
         <Dialog
           title='Thanks for Tabbing!'
@@ -117,7 +172,11 @@ class NewUserTour extends React.Component {
             justifyContent: 'flex-end'
           }}
           actions={[
-            <Button onClick={this.introFinalModalButtonClick.bind(this)} color='primary' type='raised'>Get Tabbing
+            <Button
+              onClick={this.introFinalModalButtonClick.bind(this)}
+              color='primary'
+            >
+              Get Tabbing
             </Button>
           ]}
           modal
