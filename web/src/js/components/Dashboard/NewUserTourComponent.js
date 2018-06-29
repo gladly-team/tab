@@ -5,6 +5,7 @@ import Joyride from 'react-joyride'
 import Dialog from 'material-ui/Dialog'
 import Button from '@material-ui/core/Button'
 import Paper from '@material-ui/core/Paper'
+import Typography from '@material-ui/core/Typography'
 
 import {
   primaryColor,
@@ -40,7 +41,9 @@ const CustomTooltip = (props) => {
   return (
     <div style={{ width: 340 }}>
       <Paper>
-        <div style={{ padding: 20 }}>{props.content}</div>
+        <div style={{ padding: 20 }}>
+          <Typography variant='body1'>{props.content}</Typography>
+        </div>
         <span style={{ display: 'flex', justifyContent: 'flex-end', padding: 10 }}>
           { (props.stepIndex > 0) ? (
             <Button
@@ -152,7 +155,7 @@ class NewUserTour extends React.Component {
             maxWidth: 500
           }}
         >
-          <p>You're now raising money for charity with every tab you open. Hooray! (The money comes from showing ads in the corner of the page.)</p>
+          <Typography variant='body1'>You're now raising money for charity with every tab you open. Hooray! (The money comes from showing ads in the corner of the page.)</Typography>
         </Dialog>
         <Joyride
           steps={tourSteps}
@@ -210,7 +213,7 @@ class NewUserTour extends React.Component {
             maxWidth: 500
           }}
         >
-          <p>Thanks for changing the world, one tab at a time. We're thrilled to have you!</p>
+          <Typography variant='body1'>Thanks for changing the world, one tab at a time. We're thrilled to have you!</Typography>
         </Dialog>
       </span>
     )
