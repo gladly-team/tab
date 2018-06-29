@@ -39,9 +39,9 @@ const tourSteps = [
 const CustomTooltip = (props) => {
   return (
     <div style={{ width: 340 }}>
-      <Paper style={{ padding: 20 }}>
-        <span>{props.content}</span>
-        <span style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 10 }}>
+      <Paper>
+        <div style={{ padding: 20 }}>{props.content}</div>
+        <span style={{ display: 'flex', justifyContent: 'flex-end', padding: 10 }}>
           { (props.stepIndex > 0) ? (
             <Button
               onClick={props.goToPreviousStep}
@@ -167,7 +167,11 @@ class NewUserTour extends React.Component {
               arrowColor: '#fff',
               backgroundColor: '#fff',
               primaryColor: primaryColor,
-              textColor: textColor
+              textColor: textColor,
+              overlayColor: 'rgba(0, 0, 0, 0.56)'
+            },
+            overlay: {
+              cursor: 'default'
             }
           }}
           floaterProps={{
