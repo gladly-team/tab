@@ -6,6 +6,8 @@ import Dialog from 'material-ui/Dialog'
 import Button from '@material-ui/core/Button'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
+import EarthIcon from 'mdi-material-ui/Earth'
+import HeartIcon from 'material-ui/svg-icons/action/favorite'
 
 import {
   primaryColor,
@@ -25,13 +27,13 @@ const tourSteps = [
   },
   {
     target: '[data-tour-id="settings-button"]',
-    content: 'Change your background image, customize your tab, or donate Hearts in the settings menu.',
+    content: 'Visit your settings to change your background image, donate Hearts, and track your progress',
     placement: 'bottom',
     disableBeacon: true
   },
   {
     target: '[data-tour-id="widgets"]',
-    content: 'With widgets, you can add bookmarks, take notes, and more!',
+    content: 'Use widgets to add bookmarks, take notes, and more.',
     placement: 'bottom',
     disableBeacon: true
   }
@@ -146,7 +148,7 @@ class NewUserTour extends React.Component {
               onClick={this.introModalButtonClick.bind(this)}
               color='primary'
             >
-              Great!
+              Next
             </Button>
           ]}
           modal
@@ -155,8 +157,12 @@ class NewUserTour extends React.Component {
             maxWidth: 500
           }}
         >
-          <p><Typography variant='body1'>Now, every tab you open raises money for charity. (The money comes from showing ads in the corner of the page.)</Typography></p>
-          <p><Typography variant='body1'>Just by surfing the web, you're feeding children, protecting the rainforest, and more.</Typography></p>
+          <span style={{ display: 'flex', justifyContent: 'center' }}>
+            <EarthIcon style={{ color: primaryColor, width: 32, height: 32, margin: 10, marginTop: 0 }} />
+            <HeartIcon color={primaryColor} style={{ width: 32, height: 32, margin: 10, marginTop: 0 }} />
+          </span>
+          <Typography variant='body1' paragraph>Now, every tab you open raises money for charity. (The money comes from showing ads in the corner of the page.)</Typography>
+          <Typography variant='body1' paragraph>Just by surfing the web, you're feeding children, protecting the rainforest, and more.</Typography>
         </Dialog>
         <Joyride
           steps={tourSteps}
