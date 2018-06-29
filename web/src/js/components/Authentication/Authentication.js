@@ -1,11 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import environment from '../../../relay-env'
-import AppBarWithLogo from '../Logo/AppBarWithLogo'
 import {
   appBarLightColor,
   alternateAccentColor,
-  primaryColor,
   textColor
 } from 'theme/default'
 import {
@@ -30,6 +28,7 @@ import {
 } from 'web-utils'
 import { isEqual } from 'lodash/lang'
 import { Paper } from 'material-ui'
+import LogoWithText from '../Logo/LogoWithText'
 
 // Handle the authentication flow:
 //   check if current user is fully authenticated and redirect
@@ -243,10 +242,13 @@ class Authentication extends React.Component {
           alignItems: 'center',
           height: '100%',
           width: '100%',
-          backgroundColor: primaryColor
+          backgroundColor: 'rgba(128, 128, 128, 0.04)'
         }}
       >
-        <AppBarWithLogo />
+        {/* This is a similar style to the homepage */}
+        <div style={{ padding: '20px 40px', alignSelf: 'flex-start' }}>
+          <LogoWithText style={{ height: 40 }} />
+        </div>
         <span
           style={{
             display: 'flex',
@@ -273,6 +275,7 @@ class Authentication extends React.Component {
             }
           </span>
         </span>
+        {/*
         <Paper
           zDepth={1}
           style={{
@@ -297,6 +300,7 @@ class Authentication extends React.Component {
             }}
           >send us a message</a> and we'll try to help.
         </Paper>
+        */}
       </span>
     )
   }
