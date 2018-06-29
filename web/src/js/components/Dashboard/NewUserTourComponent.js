@@ -13,6 +13,7 @@ import {
 
 // Note that the target components must be mounted
 // before the tour begins.
+// https://github.com/gilbarbara/react-joyride/blob/master/docs/step.md
 const tourSteps = [
   {
     target: '[data-tour-id="hearts"]',
@@ -34,6 +35,42 @@ const tourSteps = [
     disableBeacon: true
   }
 ]
+
+const CustomTooltip = (props) => {
+  return (
+    <div style={{ width: 340 }}>
+      <Paper style={{ padding: 20 }}>
+        <span>{props.content}</span>
+        <span style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 10 }}>
+          { (props.stepIndex > 0) ? (
+            <Button
+              onClick={props.goToPreviousStep}
+              color='default'
+            >
+              Back
+            </Button>
+          ) : null
+          }
+          <Button
+            onClick={props.goToNextStep}
+            color='primary'
+          >
+            Next
+          </Button>
+        </span>
+      </Paper>
+    </div>
+  )
+}
+
+CustomTooltip.propTypes = {
+  content: PropTypes.string,
+  stepIndex: PropTypes.number.isRequired,
+  goToNextStep: PropTypes.func.isRequired,
+  goToPreviousStep: PropTypes.func.isRequired
+}
+
+CustomTooltip.defaultProps = {}
 
 class NewUserTour extends React.Component {
   constructor (props) {
@@ -140,28 +177,12 @@ class NewUserTour extends React.Component {
           // the app theme. But we can remove this and the "stepIndex"
           // prop to let Joyride handle it.
           tooltipComponent={
-            <div style={{ width: 340 }}>
-              <Paper style={{ padding: 20 }}>
-                <span>{this.getCurrentStepContent()}</span>
-                <span style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 10 }}>
-                  { (this.state.stepIndex > 0) ? (
-                    <Button
-                      onClick={this.goToPreviousStep.bind(this)}
-                      color='default'
-                    >
-                    Back
-                    </Button>
-                  ) : null
-                  }
-                  <Button
-                    onClick={this.goToNextStep.bind(this)}
-                    color='primary'
-                  >
-                Next
-                  </Button>
-                </span>
-              </Paper>
-            </div>
+            <CustomTooltip
+              content={this.getCurrentStepContent()}
+              stepIndex={this.state.stepIndex}
+              goToNextStep={this.goToNextStep.bind(this)}
+              goToPreviousStep={this.goToPreviousStep.bind(this)}
+            />
           }
         />
         <Dialog
