@@ -2,11 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import environment from '../../../relay-env'
 import {
-  appBarLightColor,
-  alternateAccentColor,
-  textColor
-} from 'theme/default'
-import {
   getCurrentUser,
   sendVerificationEmail,
   setUsernameInLocalStorage
@@ -27,7 +22,6 @@ import {
   isInIframe
 } from 'web-utils'
 import { isEqual } from 'lodash/lang'
-import { Paper } from 'material-ui'
 import LogoWithText from '../Logo/LogoWithText'
 
 // Handle the authentication flow:
@@ -246,7 +240,7 @@ class Authentication extends React.Component {
         }}
       >
         {/* This is a similar style to the homepage */}
-        <div style={{ padding: '20px 40px', alignSelf: 'flex-start' }}>
+        <div style={{ padding: '20px 40px', position: 'absolute', top: 0, left: 0 }}>
           <LogoWithText style={{ height: 40 }} />
         </div>
         <span
@@ -275,32 +269,6 @@ class Authentication extends React.Component {
             }
           </span>
         </span>
-        {/*
-        <Paper
-          zDepth={1}
-          style={{
-            padding: 10,
-            backgroundColor: appBarLightColor,
-            margin: 20,
-            textAlign: 'center',
-            color: textColor
-          }}
-        >
-          Trouble signing in? Try <a
-            href='https://gladly.zendesk.com/hc/en-us/articles/360002317231-How-do-I-clear-my-cookies-and-site-data-for-Tab-for-a-Cause-'
-            target='_top'
-            style={{
-              color: alternateAccentColor
-            }}
-          >clearing your cookies</a> or <a
-            href='https://gladly.zendesk.com/hc/en-us/requests/new'
-            target='_top'
-            style={{
-              color: alternateAccentColor
-            }}
-          >send us a message</a> and we'll try to help.
-        </Paper>
-        */}
       </span>
     )
   }
