@@ -236,7 +236,7 @@ class Authentication extends React.Component {
           alignItems: 'center',
           height: '100%',
           width: '100%',
-          backgroundColor: 'rgba(128, 128, 128, 0.04)'
+          backgroundColor: '#FAFAFA'
         }}
       >
         {/* This is a similar style to the homepage */}
