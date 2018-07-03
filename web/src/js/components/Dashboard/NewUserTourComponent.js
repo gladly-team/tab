@@ -8,6 +8,7 @@ import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import EarthIcon from 'mdi-material-ui/Earth'
 import HeartIcon from 'material-ui/svg-icons/action/favorite'
+import InviteFriendComponent from '../Settings/Profile/InviteFriendComponent'
 
 import {
   primaryColor,
@@ -27,7 +28,7 @@ const tourSteps = [
   },
   {
     target: '[data-tour-id="settings-button"]',
-    content: 'Visit your settings to change your background image, donate Hearts, and track your progress',
+    content: 'Visit your settings to change your background image, donate Hearts, and track your progress.',
     placement: 'bottom',
     disableBeacon: true
   },
@@ -200,7 +201,7 @@ class NewUserTour extends React.Component {
           }
         />
         <Dialog
-          title='Thanks for Tabbing!'
+          title="We're thrilled to have you!"
           actionsContainerStyle={{
             display: 'flex',
             flexDirection: 'row',
@@ -209,9 +210,9 @@ class NewUserTour extends React.Component {
           actions={[
             <Button
               onClick={this.introFinalModalButtonClick.bind(this)}
-              color='primary'
+              color='default'
             >
-              Get Tabbing
+              Skip for now
             </Button>
           ]}
           modal
@@ -220,7 +221,9 @@ class NewUserTour extends React.Component {
             maxWidth: 500
           }}
         >
-          <Typography variant='body1'>Thanks for making the world a better place, one tab at a time. We're thrilled to have you!</Typography>
+          <Typography variant='body1' paragraph>Thanks for making the world a better place, one tab at a time.</Typography>
+          <Typography variant='body1' paragraph>We can make a bigger impact together. Share Tab for a Cause with a few friends!</Typography>
+          <InviteFriendComponent />
         </Dialog>
       </span>
     )
