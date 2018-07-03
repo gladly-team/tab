@@ -24,6 +24,7 @@ export default createFragmentContainer(Dashboard, {
       ...LogConsentDataContainer_user
       ...LogAccountCreationContainer_user
       ...CampaignBaseContainer_user
+      ...NewUserTourContainer_user
     }
   `
 })

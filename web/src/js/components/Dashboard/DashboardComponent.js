@@ -22,7 +22,7 @@ import ErrorMessage from 'general/ErrorMessage'
 import Fireworks from 'lib/fireworks-react'
 import RaisedButton from 'material-ui/RaisedButton'
 import CloseIcon from 'material-ui/svg-icons/navigation/close'
-import NewUserTourComponent from './NewUserTourComponent'
+import NewUserTour from './NewUserTourContainer'
 
 class Dashboard extends React.Component {
   constructor (props) {
@@ -207,10 +207,7 @@ class Dashboard extends React.Component {
           )
             : null
         }
-        {/*
-        <NewUserTourComponent show={!!user} />
-        */}
-        { user ? <NewUserTourComponent /> : null }
+        { user ? <NewUserTour user={user} /> : null }
         <Ad
           adId='div-gpt-ad-1464385742501-0'
           adSlotId='/43865596/HBTR'

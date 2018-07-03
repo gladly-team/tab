@@ -8,7 +8,7 @@ import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import EarthIcon from 'mdi-material-ui/Earth'
 import HeartIcon from 'material-ui/svg-icons/action/favorite'
-import InviteFriendComponent from '../Settings/Profile/InviteFriendComponent'
+import InviteFriend from '../Settings/Profile/InviteFriendContainer'
 
 import {
   primaryColor,
@@ -135,6 +135,7 @@ class NewUserTour extends React.Component {
 
   render () {
     // const { show } = this.props
+    const { user } = this.props
     return (
       <span>
         <Dialog
@@ -223,7 +224,7 @@ class NewUserTour extends React.Component {
         >
           <Typography variant='body1' paragraph>Thanks for making the world a better place, one tab at a time.</Typography>
           <Typography variant='body1' paragraph>We can make a bigger impact together. Share Tab for a Cause with a few friends!</Typography>
-          <InviteFriendComponent />
+          <InviteFriend user={user} />
         </Dialog>
       </span>
     )
@@ -231,6 +232,8 @@ class NewUserTour extends React.Component {
 }
 
 NewUserTour.propTypes = {
+  user: PropTypes.shape({
+  }).isRequired,
   show: PropTypes.bool
 }
 
