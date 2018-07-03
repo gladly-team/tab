@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import InviteFriend from './InviteFriendComponent'
+import InviteFriend from './InviteFriendContainer'
 import Stat from './StatComponent'
 import { lighterTextColor } from 'theme/default'
 import HappyIcon from 'material-ui/svg-icons/social/mood'
@@ -51,7 +51,7 @@ class ProfileInviteFriend extends React.Component {
             }}
           >
             <InviteFriend
-              username={user.username}
+              user={user}
             />
           </span>
         </Paper>
@@ -101,8 +101,7 @@ ProfileInviteFriend.propTypes = {
     referralVcReward: PropTypes.number.isRequired
   }),
   user: PropTypes.shape({
-    numUsersRecruited: PropTypes.number.isRequired,
-    username: PropTypes.string.isRequired
+    numUsersRecruited: PropTypes.number.isRequired
   })
 }
 

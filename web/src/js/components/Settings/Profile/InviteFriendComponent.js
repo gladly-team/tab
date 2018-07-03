@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Paper } from 'material-ui'
 import TextField from '@material-ui/core/TextField'
 import { withStyles } from '@material-ui/core/styles'
 import { alternateAccentColor } from 'theme/default'
@@ -24,7 +23,7 @@ const styles = theme => ({
 
 class InviteFriend extends React.Component {
   getReferralUrl () {
-    return `https://tab.gladly.io/?u=${this.props.username}`
+    return `https://tab.gladly.io/?u=${this.props.user.username}`
   }
 
   onTextFieldClicked () {
@@ -66,7 +65,9 @@ class InviteFriend extends React.Component {
 }
 
 InviteFriend.propTypes = {
-  username: PropTypes.string.isRequired,
+  user: PropTypes.shape({
+    username: PropTypes.string.isRequired
+  }),
   classes: PropTypes.object.isRequired
 }
 
