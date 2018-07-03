@@ -59,6 +59,7 @@ class InviteFriend extends React.Component {
             focused: classes.formLabelFocused
           }
         }}
+        style={this.props.style}
       />
     )
   }
@@ -68,10 +69,12 @@ InviteFriend.propTypes = {
   user: PropTypes.shape({
     username: PropTypes.string.isRequired
   }),
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  style: PropTypes.object
 }
 
 InviteFriend.defaultProps = {
+  style: {}
 }
 
 export default withStyles(styles)(InviteFriend)

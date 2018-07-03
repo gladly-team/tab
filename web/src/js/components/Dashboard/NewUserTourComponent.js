@@ -222,9 +222,14 @@ class NewUserTour extends React.Component {
             maxWidth: 500
           }}
         >
-          <Typography variant='body1' paragraph>Thanks for making the world a better place, one tab at a time.</Typography>
-          <Typography variant='body1' paragraph>We can make a bigger impact together. Share Tab for a Cause with a few friends!</Typography>
-          <InviteFriend user={user} />
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column'
+          }}>
+            <Typography variant='body1' paragraph>Thanks for making the world a better place, one tab at a time.</Typography>
+            <Typography variant='body1' paragraph>We can make a bigger impact together. Share Tab for a Cause with a few friends!</Typography>
+            <InviteFriend style={{ alignSelf: 'center' }} user={user} />
+          </div>
         </Dialog>
       </span>
     )
