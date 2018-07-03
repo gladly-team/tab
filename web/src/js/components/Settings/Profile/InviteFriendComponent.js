@@ -34,70 +34,43 @@ class InviteFriend extends React.Component {
   render () {
     const { classes } = this.props
     const referralUrl = this.getReferralUrl()
-    const containerStyle = Object.assign({}, {
-      display: 'flex',
-      justifyContent: 'center',
-      alignContent: 'middle',
-      padding: 10,
-      minWidth: 180
-    }, this.props.style)
 
     return (
-      <Paper style={containerStyle}>
-        <span
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignContent: 'middle',
-            width: '100%',
-            maxWidth: 300,
-            marginTop: 30,
-            marginBottom: 30,
-            marginLeft: 8,
-            marginRight: 8,
-            boxSizing: 'border-box'
-          }}
-        >
-          <TextField
-            id={'refer-friend-input'}
-            inputRef={(input) => { this.input = input }}
-            onClick={this.onTextFieldClicked.bind(this)}
-            value={referralUrl}
-            label={'Share this link'}
-            helperText={"and you'll get 350 Hearts for every person who joins!"}
-            InputProps={{
-              classes: {
-                underline: classes.inputUnderline
-              }
-            }}
-            /* eslint-disable-next-line react/jsx-no-duplicate-props */
-            inputProps={{
-              style: {
-                textAlign: 'left'
-              }
-            }}
-            InputLabelProps={{
-              FormLabelClasses: {
-                root: classes.formLabelRoot,
-                focused: classes.formLabelFocused
-              }
-            }}
-          />
-        </span>
-      </Paper>
+      <TextField
+        id={'refer-friend-input'}
+        inputRef={(input) => { this.input = input }}
+        onClick={this.onTextFieldClicked.bind(this)}
+        value={referralUrl}
+        label={'Share this link'}
+        helperText={"and you'll get 350 Hearts for every person who joins!"}
+        InputProps={{
+          classes: {
+            underline: classes.inputUnderline
+          }
+        }}
+        /* eslint-disable-next-line react/jsx-no-duplicate-props */
+        inputProps={{
+          style: {
+            textAlign: 'left'
+          }
+        }}
+        InputLabelProps={{
+          FormLabelClasses: {
+            root: classes.formLabelRoot,
+            focused: classes.formLabelFocused
+          }
+        }}
+      />
     )
   }
 }
 
 InviteFriend.propTypes = {
   username: PropTypes.string.isRequired,
-  style: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired
 }
 
 InviteFriend.defaultProps = {
-  style: {}
 }
 
 export default withStyles(styles)(InviteFriend)
