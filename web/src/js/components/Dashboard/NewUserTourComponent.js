@@ -134,7 +134,6 @@ class NewUserTour extends React.Component {
   }
 
   render () {
-    // const { show } = this.props
     const { user } = this.props
     return (
       <span>
@@ -238,12 +237,10 @@ class NewUserTour extends React.Component {
 
 NewUserTour.propTypes = {
   user: PropTypes.shape({
-  }).isRequired,
-  show: PropTypes.bool
+  }).isRequired
 }
 
 NewUserTour.defaultProps = {
-  show: false
 }
 
 export default NewUserTour
