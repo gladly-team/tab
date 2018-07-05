@@ -15,6 +15,7 @@ import LogRevenue from '../LogRevenueContainer'
 import LogConsentData from '../LogConsentDataContainer'
 import LogAccountCreation from '../LogAccountCreationContainer'
 import ErrorMessage from 'general/ErrorMessage'
+import NewUserTour from '../NewUserTourContainer'
 
 jest.mock('analytics/logEvent')
 
@@ -115,6 +116,14 @@ describe('Dashboard component', () => {
     expect(wrapper.find(LogAccountCreation).length).toBe(1)
   })
 
+  it('renders NewUserTour component', () => {
+    const DashboardComponent = require('../DashboardComponent').default
+    const wrapper = shallow(
+      <DashboardComponent {...mockProps} />
+    )
+    expect(wrapper.find(NewUserTour).length).toBe(1)
+  })
+
   it('does not render MoneyRaised component until the "user" prop exists', () => {
     const DashboardComponent = require('../DashboardComponent').default
     const mockPropsWithoutUser = Object.assign({}, mockProps, { user: null })
@@ -176,6 +185,15 @@ describe('Dashboard component', () => {
       <DashboardComponent {...mockPropsWithoutUser} />
     )
     expect(wrapper.find(LogAccountCreation).length).toBe(0)
+  })
+
+  it('does not render NewUserTour component until the "user" prop exists', () => {
+    const DashboardComponent = require('../DashboardComponent').default
+    const mockPropsWithoutUser = Object.assign({}, mockProps, { user: null })
+    const wrapper = shallow(
+      <DashboardComponent {...mockPropsWithoutUser} />
+    )
+    expect(wrapper.find(NewUserTour).length).toBe(0)
   })
 
   it('does not render the ErrorMessage component when no error message is set', () => {
