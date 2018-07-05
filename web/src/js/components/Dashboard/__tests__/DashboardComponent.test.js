@@ -208,7 +208,7 @@ describe('Dashboard component', () => {
 
   it('passes true to childrens\' "isCampaignLive" props when the "isGlobalCampaignLive" prop is true', () => {
     const DashboardComponent = require('../DashboardComponent').default
-    const mockPropsWithoutCampaignLive = Object.assign({}, mockProps, { app: { isGlobalCampaignLive: true }})
+    const mockPropsWithoutCampaignLive = Object.assign({}, mockProps, { app: { isGlobalCampaignLive: true } })
     const wrapper = shallow(
       <DashboardComponent {...mockPropsWithoutCampaignLive} />
     )
