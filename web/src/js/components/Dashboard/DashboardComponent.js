@@ -30,20 +30,9 @@ class Dashboard extends React.Component {
 
     this.state = {
       errorMessage: null,
-      tabId: null,
+      tabId: uuid(),
       showFireworks: false
     }
-  }
-
-  // TODO: move to constructor
-  componentWillMount () {
-    this.setTabId()
-  }
-
-  setTabId () {
-    this.setState({
-      tabId: uuid()
-    })
   }
 
   showError (msg) {
