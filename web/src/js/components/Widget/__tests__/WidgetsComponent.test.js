@@ -104,4 +104,16 @@ describe('Widgets component', function () {
     )
     expect(wrapper.find('[data-test-id="widget-clock"]').length).toBe(0)
   })
+
+  it('contains an ID for the new user tour (to showcase widgets)', () => {
+    const WidgetsComponent = require('../WidgetsComponent').default
+    const wrapper = shallow(
+      <WidgetsComponent user={mockUserData} showError={mockShowError} />
+    )
+
+    // Important: other code relies on the data-tour-id to show the
+    // new user tour. Do not change it without updating it elsewhere.
+    expect(wrapper.find('[data-tour-id="widgets"]').length)
+      .toBe(1)
+  })
 })

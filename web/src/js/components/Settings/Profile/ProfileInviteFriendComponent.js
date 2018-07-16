@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import InviteFriend from './InviteFriendComponent'
+import InviteFriend from './InviteFriendContainer'
 import Stat from './StatComponent'
 import { lighterTextColor } from 'theme/default'
 import HappyIcon from 'material-ui/svg-icons/social/mood'
@@ -25,15 +25,36 @@ class ProfileInviteFriend extends React.Component {
           margin: -spacingPx
         }}
       >
-        <InviteFriend
-          username={user.username}
-          style={{
-            margin: spacingPx,
-            flex: 2,
-            flexBasis: '40%',
-            minWidth: 200
-          }}
-        />
+        <Paper style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignContent: 'middle',
+          padding: 10,
+          margin: spacingPx,
+          flex: 2,
+          flexBasis: '40%',
+          minWidth: 200
+        }}>
+          <span
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignContent: 'middle',
+              width: '100%',
+              maxWidth: 300,
+              marginTop: 30,
+              marginBottom: 30,
+              marginLeft: 8,
+              marginRight: 8,
+              boxSizing: 'border-box'
+            }}
+          >
+            <InviteFriend
+              user={user}
+            />
+          </span>
+        </Paper>
         <Stat
           stat={user.numUsersRecruited}
           statText={`${tabberWord} recruited`}
@@ -80,8 +101,7 @@ ProfileInviteFriend.propTypes = {
     referralVcReward: PropTypes.number.isRequired
   }),
   user: PropTypes.shape({
-    numUsersRecruited: PropTypes.number.isRequired,
-    username: PropTypes.string.isRequired
+    numUsersRecruited: PropTypes.number.isRequired
   })
 }
 

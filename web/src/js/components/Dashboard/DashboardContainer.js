@@ -16,6 +16,7 @@ export default createFragmentContainer(Dashboard, {
   user: graphql`
     fragment DashboardContainer_user on User {
       id
+      joined
       ...WidgetsContainer_user
       ...UserBackgroundImageContainer_user
       ...UserMenuContainer_user
@@ -24,6 +25,7 @@ export default createFragmentContainer(Dashboard, {
       ...LogConsentDataContainer_user
       ...LogAccountCreationContainer_user
       ...CampaignBaseContainer_user
+      ...NewUserTourContainer_user
     }
   `
 })

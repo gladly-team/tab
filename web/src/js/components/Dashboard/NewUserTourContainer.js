@@ -1,0 +1,18 @@
+import {
+  createFragmentContainer,
+  graphql
+} from 'react-relay/compat'
+
+import NewUserTour from './NewUserTourComponent'
+
+// If this needs to fetch substantially more data
+// than we currently do on the new tab page, we
+// may want to give it its own QueryRenderer so
+// that we don't fetch unneeded data on every tab.
+export default createFragmentContainer(NewUserTour, {
+  user: graphql`
+    fragment NewUserTourContainer_user on User {
+      ...InviteFriendContainer_user
+    }
+  `
+})

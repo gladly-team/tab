@@ -14,7 +14,7 @@ export default createFragmentContainer(ProfileInviteFriend, {
   user: graphql`
     fragment ProfileInviteFriendContainer_user on User {
       numUsersRecruited
-      username
+      ...InviteFriendContainer_user
     }
   `
 })
