@@ -6,7 +6,6 @@ import {
 } from 'enzyme'
 import { cloneDeep } from 'lodash/lang'
 import Joyride from 'react-joyride'
-import Button from '@material-ui/core/Button'
 import Dialog from 'material-ui/Dialog'
 import localStorageMgr from 'utils/localstorage-mgr'
 import { STORAGE_NEW_USER_HAS_COMPLETED_TOUR } from '../../../constants'
