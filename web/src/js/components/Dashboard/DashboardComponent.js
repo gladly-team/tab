@@ -2,6 +2,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import uuid from 'uuid/v4'
+import moment from 'moment'
 import MoneyRaised from '../MoneyRaised/MoneyRaisedContainer'
 import UserBackgroundImage from '../User/UserBackgroundImageContainer'
 import UserMenu from '../User/UserMenuContainer'
@@ -23,6 +24,8 @@ import Fireworks from 'lib/fireworks-react'
 import RaisedButton from 'material-ui/RaisedButton'
 import CloseIcon from 'material-ui/svg-icons/navigation/close'
 import NewUserTour from './NewUserTourContainer'
+import localStorageMgr from 'utils/localstorage-mgr'
+import { STORAGE_NEW_USER_HAS_COMPLETED_TOUR } from '../../constants'
 
 class Dashboard extends React.Component {
   constructor (props) {
@@ -31,7 +34,11 @@ class Dashboard extends React.Component {
     this.state = {
       errorMessage: null,
       tabId: uuid(),
-      showFireworks: false
+      showFireworks: false,
+      // This may be false if the user cleared their storage,
+      // which is why we only show the tour to recently-joined
+      // users.
+      userAlreadyViewedNewUserTour: localStorageMgr.getItem(STORAGE_NEW_USER_HAS_COMPLETED_TOUR) === 'true'
     }
   }
 
@@ -83,6 +90,14 @@ class Dashboard extends React.Component {
     // Whether or not a campaign should show on the dashboard
     // TODO: also make sure the user hasn't dismissed the campaign (`isCampaignShown` var)
     const isGlobalCampaignLive = !!((app && app.isGlobalCampaignLive))
+
+    // Show the tour if the user joined recently and localStorage
+    // does not have a flag marking the tour as already viewed.
+    const showNewUserTour = (
+      user &&
+      moment().utc().diff(moment(user.joined), 'hours') < 2 &&
+      !this.state.userAlreadyViewedNewUserTour
+    )
 
     return (
       <div
@@ -196,7 +211,7 @@ class Dashboard extends React.Component {
           )
             : null
         }
-        { user ? <NewUserTour user={user} /> : null }
+        { showNewUserTour ? <NewUserTour user={user} /> : null }
         <Ad
           adId='div-gpt-ad-1464385742501-0'
           adSlotId='/43865596/HBTR'
@@ -234,7 +249,8 @@ class Dashboard extends React.Component {
 
 Dashboard.propTypes = {
   user: PropTypes.shape({
-    id: PropTypes.string.isRequired
+    id: PropTypes.string.isRequired,
+    joined: PropTypes.string.isRequired
   }),
   app: PropTypes.shape({
     isGlobalCampaignLive: PropTypes.bool

@@ -9,6 +9,8 @@ import Typography from '@material-ui/core/Typography'
 import EarthIcon from 'mdi-material-ui/Earth'
 import HeartIcon from 'material-ui/svg-icons/action/favorite'
 import InviteFriend from '../Settings/Profile/InviteFriendContainer'
+import localStorageMgr from 'utils/localstorage-mgr'
+import { STORAGE_NEW_USER_HAS_COMPLETED_TOUR } from '../../constants'
 
 import {
   primaryColor,
@@ -96,6 +98,9 @@ class NewUserTour extends React.Component {
       this.setState({
         introFinalModalOpen: true
       })
+
+      // Mark that the user has viewed the tour
+      localStorageMgr.setItem(STORAGE_NEW_USER_HAS_COMPLETED_TOUR, 'true')
     }
   }
 

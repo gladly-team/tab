@@ -52,3 +52,8 @@ export const STORAGE_REFERRAL_DATA_REFERRING_CHANNEL = 'tab.referralData.referri
 // tab.consentData: values related to data privacy consent choices,
 //   like GDPR
 export const STORAGE_NEW_CONSENT_DATA_EXISTS = 'tab.consentData.newConsentDataExists'
+
+// tab.newUser: values related to the new user experience, such as
+//   data we need for unauthenticated users or temporary data we
+//   don't want to store server-side. Stored client-side only.
+export const STORAGE_NEW_USER_HAS_COMPLETED_TOUR = 'tab.newUser.hasCompletedTour'

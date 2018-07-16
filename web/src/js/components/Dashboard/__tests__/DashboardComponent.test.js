@@ -1,6 +1,9 @@
 /* eslint-env jest */
 
 import React from 'react'
+import MockDate from 'mockdate'
+import moment from 'moment'
+import { cloneDeep } from 'lodash/lang'
 import {
   shallow
 } from 'enzyme'
@@ -16,12 +19,30 @@ import LogConsentData from '../LogConsentDataContainer'
 import LogAccountCreation from '../LogAccountCreationContainer'
 import ErrorMessage from 'general/ErrorMessage'
 import NewUserTour from '../NewUserTourContainer'
+import localStorageMgr from 'utils/localstorage-mgr'
+import { STORAGE_NEW_USER_HAS_COMPLETED_TOUR } from '../../../constants'
 
 jest.mock('analytics/logEvent')
+jest.mock('utils/localstorage-mgr')
+
+const mockNow = '2018-05-15T10:30:00.000'
+
+beforeAll(() => {
+  MockDate.set(moment(mockNow))
+})
+
+afterEach(() => {
+  localStorageMgr.clear()
+})
+
+afterAll(() => {
+  MockDate.reset()
+})
 
 const mockProps = {
   user: {
-    id: 'abc-123'
+    id: 'abc-123',
+    joined: '2017-04-10T14:00:00.000'
   },
   app: {
     isGlobalCampaignLive: false
@@ -116,12 +137,52 @@ describe('Dashboard component', () => {
     expect(wrapper.find(LogAccountCreation).length).toBe(1)
   })
 
-  it('renders NewUserTour component', () => {
+  it('renders the NewUserTour component when the user recently joined and has not already viewed it', () => {
     const DashboardComponent = require('../DashboardComponent').default
+
+    // Mock that the user joined recently
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.joined = '2018-05-15T09:54:11.000'
+
+    // Mock that the user has not viewed the tour
+    localStorageMgr.removeItem(STORAGE_NEW_USER_HAS_COMPLETED_TOUR)
+
     const wrapper = shallow(
-      <DashboardComponent {...mockProps} />
+      <DashboardComponent {...modifiedProps} />
     )
     expect(wrapper.find(NewUserTour).length).toBe(1)
+  })
+
+  it('does not render the NewUserTour component when the user has already viewed it', () => {
+    const DashboardComponent = require('../DashboardComponent').default
+
+    // Mock that the user joined recently
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.joined = '2018-05-15T09:54:11.000'
+
+    // Mock that the user has already viewed the tour
+    localStorageMgr.setItem(STORAGE_NEW_USER_HAS_COMPLETED_TOUR, 'true')
+
+    const wrapper = shallow(
+      <DashboardComponent {...modifiedProps} />
+    )
+    expect(wrapper.find(NewUserTour).length).toBe(0)
+  })
+
+  it('does not renders the NewUserTour component when some time has passed since the user joined', () => {
+    const DashboardComponent = require('../DashboardComponent').default
+
+    // Mock that the user joined more than a few hours ago
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.joined = '2018-05-14T09:54:11.000'
+
+    // Mock that the user has not viewed the tour
+    localStorageMgr.removeItem(STORAGE_NEW_USER_HAS_COMPLETED_TOUR)
+
+    const wrapper = shallow(
+      <DashboardComponent {...modifiedProps} />
+    )
+    expect(wrapper.find(NewUserTour).length).toBe(0)
   })
 
   it('does not render MoneyRaised component until the "user" prop exists', () => {

@@ -4,10 +4,30 @@ import React from 'react'
 import {
   shallow
 } from 'enzyme'
+import { cloneDeep } from 'lodash/lang'
+import Joyride from 'react-joyride'
 import Dialog from 'material-ui/Dialog'
+import localStorageMgr from 'utils/localstorage-mgr'
+import { STORAGE_NEW_USER_HAS_COMPLETED_TOUR } from '../../../constants'
+
+jest.mock('utils/localstorage-mgr')
 
 const mockProps = {
   user: {}
+}
+
+const numberOfJoyrideTourSteps = 3
+const mockJoyrideCallbackData = {
+  action: 'next',
+  controlled: true,
+  index: 1, // current step in the tour
+  lifecycle: 'init',
+  size: 3,
+  status: 'running',
+  step: {
+    // step data here
+  },
+  type: 'step:before'
 }
 
 describe('New user tour component', () => {
@@ -36,5 +56,21 @@ describe('New user tour component', () => {
     const finalModal = wrapper.find(Dialog).last()
     expect(finalModal.prop('open')).toBe(false)
     expect(finalModal.prop('title')).toBe("We're thrilled to have you!")
+  })
+
+  it('calls localStorage to mark that the user has completed the tour', () => {
+    const NewUserTourComponent = require('../NewUserTourComponent').default
+    const wrapper = shallow(
+      <NewUserTourComponent {...mockProps} />
+    )
+    const joyrideComponent = wrapper.find(Joyride).first()
+    const joyrideCallbackFn = joyrideComponent.prop('callback')
+
+    // Mock that Joyride calls its callback to indicate the
+    // tour is complete.
+    const callbackData = cloneDeep(mockJoyrideCallbackData)
+    callbackData.index = numberOfJoyrideTourSteps
+    joyrideCallbackFn(callbackData)
+    expect(localStorageMgr.setItem).toHaveBeenCalledWith(STORAGE_NEW_USER_HAS_COMPLETED_TOUR, 'true')
   })
 })
