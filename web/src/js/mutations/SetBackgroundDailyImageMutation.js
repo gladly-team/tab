@@ -3,6 +3,7 @@ import {
   graphql
 } from 'react-relay/compat'
 
+//
 const mutation = graphql`
   mutation SetBackgroundDailyImageMutation($input: SetUserBkgDailyImageInput!) {
     setUserBkgDailyImage(input: $input) {

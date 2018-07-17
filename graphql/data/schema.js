@@ -682,6 +682,7 @@ const setUserBkgCustomImageMutation = mutationWithClientMutationId({
 /**
  * Set user background daily image.
  */
+//
 const setUserBkgDailyImageMutation = mutationWithClientMutationId({
   name: 'SetUserBkgDailyImage',
   inputFields: {

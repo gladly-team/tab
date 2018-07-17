@@ -7,6 +7,7 @@ import BackgroundImageModel from './BackgroundImageModel'
  * @return {Promise<BackgroundImage>}  A promise that resolve
  * into a BackgroundImage instance.
  */
+ //
 export default async (userContext) => {
   try {
     const images = await BackgroundImageModel.getAll(userContext)

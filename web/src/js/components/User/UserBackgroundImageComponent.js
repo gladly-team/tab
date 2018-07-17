@@ -209,6 +209,7 @@ class UserBackgroundImage extends React.Component {
           backgroundStyle = styleOnError
         }
         break
+      //
       case USER_BACKGROUND_OPTION_DAILY:
         if (this.state.backgroundImageURL) {
           backgroundStyle = {
