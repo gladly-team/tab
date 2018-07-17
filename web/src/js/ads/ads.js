@@ -92,38 +92,38 @@ function bidderCompleted (bidder) {
  * @return {undefined}
  */
 const loadAdCode = () => {
-  if (adsEnabled()) {
-    // Track loaded ads for analytics
-    handleAdsLoaded()
+  // Track loaded ads for analytics
+  handleAdsLoaded()
 
-    // Amazon
-    amazonBidder()
-      .then(() => {
-        bidderCompleted(BIDDER_AMAZON)
-      })
-      .catch((err) => {
-        console.error(err)
-        bidderCompleted(BIDDER_AMAZON)
-      })
+  // Amazon
+  amazonBidder()
+    .then(() => {
+      bidderCompleted(BIDDER_AMAZON)
+    })
+    .catch((err) => {
+      console.error(err)
+      bidderCompleted(BIDDER_AMAZON)
+    })
 
-    // Prebid
-    prebidConfig()
-      .then(() => {
-        bidderCompleted(BIDDER_PREBID)
-      })
-      .catch((err) => {
-        console.error(err)
-        bidderCompleted(BIDDER_PREBID)
-      })
-  } else {
-    // console.log('Ads are disabled. Not setting up DFP or Prebid.')
-  }
+  // Prebid
+  prebidConfig()
+    .then(() => {
+      bidderCompleted(BIDDER_PREBID)
+    })
+    .catch((err) => {
+      console.error(err)
+      bidderCompleted(BIDDER_PREBID)
+    })
 }
 
-// Call the ad server after some time to avoid too long
-// for bid responses.
-setTimeout(() => {
-  sendAdserverRequest()
-}, AUCTION_TIMEOUT)
+if (adsEnabled()) {
+  // Call the ad server after some time to avoid too long
+  // for bid responses.
+  setTimeout(() => {
+    sendAdserverRequest()
+  }, AUCTION_TIMEOUT)
 
-loadAdCode()
+  loadAdCode()
+} else {
+  // console.log('Ads are disabled. Not setting up DFP or Prebid.')
+}
