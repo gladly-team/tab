@@ -57,6 +57,10 @@ class BackgroundSettings extends React.Component {
 
     var selectedOption
     var dividerCmp = (<Divider style={divider} />)
+
+    // These components display below the radio buttons when
+    // an option is selected. They are responsible for
+    // calling a mutation to update the user's selection.
     switch (this.state.selected) {
       case 'daily':
         dividerCmp = null
