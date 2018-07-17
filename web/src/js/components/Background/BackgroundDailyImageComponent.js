@@ -3,12 +3,11 @@ import PropTypes from 'prop-types'
 import SetBackgroundDailyImageMutation from 'mutations/SetBackgroundDailyImageMutation'
 
 class BackgroundDailyImage extends React.Component {
-  //
   componentDidMount () {
     if (this.props.updateOnMount) {
-      SetBackgroundDailyImageMutation.commit(
+      SetBackgroundDailyImageMutation(
         this.props.relay.environment,
-        this.props.user,
+        this.props.user.id,
         this.onSaveSuccess.bind(this),
         this.onSaveError.bind(this)
       )
@@ -27,7 +26,9 @@ class BackgroundDailyImage extends React.Component {
 }
 
 BackgroundDailyImage.propTypes = {
-  user: PropTypes.object.isRequired,
+  user: PropTypes.shape({
+    id: PropTypes.string.isRequired
+  }),
   updateOnMount: PropTypes.bool
 }
 

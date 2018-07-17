@@ -3,6 +3,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { get, has } from 'lodash/object'
 import { isNil } from 'lodash/lang'
+import moment from 'moment'
 import {
   USER_BACKGROUND_OPTION_CUSTOM,
   USER_BACKGROUND_OPTION_COLOR,
@@ -17,6 +18,7 @@ import {
   setBackgroundSettings,
   setExtensionBackgroundSettings
 } from 'utils/local-bkg-settings'
+import SetBackgroundDailyImageMutation from 'mutations/SetBackgroundDailyImageMutation'
 
 /*
  * We want to load the background as quickly as possible,
@@ -50,18 +52,16 @@ class UserBackgroundImage extends React.Component {
     }
   }
 
-  // TODO: change to componentDidMount
-  componentWillMount () {
+  componentDidMount () {
     // If the props contain valid settings for the background,
     // and they are different from what's already in state,
     // update the background settings values.
     if (this.arePropsReady(this.props) &&
       this.arePropsDifferentFromState(this.props)) {
       this.updateBackgroundSettings(this.props)
+      this.getNewDailyImageIfNeeded(this.props)
     }
-  }
 
-  componentDidMount () {
     // If there's background settings in local storage,
     // call the parent frame to update the extension's
     // background settings.
@@ -80,6 +80,7 @@ class UserBackgroundImage extends React.Component {
     if (this.arePropsReady(nextProps) &&
       this.arePropsDifferentFromState(nextProps)) {
       this.updateBackgroundSettings(nextProps)
+      this.getNewDailyImageIfNeeded(nextProps)
     }
   }
 
@@ -95,7 +96,8 @@ class UserBackgroundImage extends React.Component {
       has(props, ['user', 'backgroundOption']) &&
       has(props, ['user', 'customImage']) &&
       has(props, ['user', 'backgroundColor']) &&
-      has(props, ['user', 'backgroundImage', 'imageURL'])
+      has(props, ['user', 'backgroundImage', 'imageURL']) &&
+      has(props, ['user', 'backgroundImage', 'timestamp'])
     )
   }
 
@@ -129,6 +131,26 @@ class UserBackgroundImage extends React.Component {
     })
     setBackgroundSettings(backgroundOption,
       customImage, backgroundColor, backgroundImageURL)
+  }
+
+  getNewDailyImageIfNeeded (props) {
+    if (props.user.backgroundOption !== USER_BACKGROUND_OPTION_DAILY) {
+      return
+    }
+
+    const shouldChangeBackgroundImg = (
+      // FIXME: daily
+      moment().utc().diff(
+        moment(props.user.backgroundImage.timestamp), 'seconds') > 10
+    )
+
+    // Fetch a new background image for today.
+    if (shouldChangeBackgroundImg) {
+      SetBackgroundDailyImageMutation(
+        props.relay.environment,
+        props.user.id
+      )
+    }
   }
 
   onImgLoad (e) {
@@ -271,14 +293,19 @@ class UserBackgroundImage extends React.Component {
 
 UserBackgroundImage.propTypes = {
   user: PropTypes.shape({
-    backgroundOption: PropTypes.string.isRequired,
+    id: PropTypes.string,
+    backgroundOption: PropTypes.string,
     customImage: PropTypes.string,
     backgroundColor: PropTypes.string,
     backgroundImage: PropTypes.shape({
-      imageURL: PropTypes.string
+      imageURL: PropTypes.string,
+      timestamp: PropTypes.string
     })
   }),
-  showError: PropTypes.func
+  showError: PropTypes.func,
+  relay: PropTypes.shape({
+    environment: PropTypes.object.isRequired
+  })
 }
 
 UserBackgroundImage.defaultProps = {

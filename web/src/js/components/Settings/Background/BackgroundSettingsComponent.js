@@ -20,16 +20,8 @@ class BackgroundSettings extends React.Component {
     this.defaultSelection = 'photo'
 
     this.state = {
-      selected: null
+      selected: props.user.backgroundOption || this.defaultSelection
     }
-  }
-
-  // TODO: move to constructor
-  componentWillMount () {
-    const { user } = this.props
-    this.setState({
-      selected: user.backgroundOption || this.defaultSelection
-    })
   }
 
   onChange (event, value) {
