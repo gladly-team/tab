@@ -19,6 +19,7 @@ import {
   setExtensionBackgroundSettings
 } from 'utils/local-bkg-settings'
 import SetBackgroundDailyImageMutation from 'mutations/SetBackgroundDailyImageMutation'
+import FadeBackgroundAnimation from '../Background/FadeBackgroundAnimation'
 
 /*
  * We want to load the background as quickly as possible,
@@ -37,15 +38,17 @@ import SetBackgroundDailyImageMutation from 'mutations/SetBackgroundDailyImageMu
 class UserBackgroundImage extends React.Component {
   constructor (props) {
     super(props)
-
-    const backgroundOption = getUserBackgroundOption()
     this.state = {
-      // Only show the background when any image has
-      // fully loaded. Show a color background immediately.
-      show: (backgroundOption === USER_BACKGROUND_OPTION_COLOR),
-      imgLoaded: false,
-      imgError: false,
-      backgroundOption: backgroundOption,
+      // The image we are currently showing (or fading in to show).
+      currentlyDisplayedImgURL: null,
+      // Whether the user's image has preloaded successfully.
+      nextImgPreloaded: false,
+      // Whether there was a problem preloading the user's image.
+      imgPreloadError: false,
+      // The user's background settings. They might not reflect what
+      // background is currently displayed because we want to fully
+      // preload images before displaying them.
+      backgroundOption: getUserBackgroundOption(),
       customImage: getUserBackgroundCustomImage(),
       backgroundColor: getUserBackgroundColor(),
       backgroundImageURL: getUserBackgroundImageURL()
@@ -117,13 +120,8 @@ class UserBackgroundImage extends React.Component {
     let customImage = get(props, ['user', 'customImage'])
     let backgroundColor = get(props, ['user', 'backgroundColor'])
     let backgroundImageURL = get(props, ['user', 'backgroundImage', 'imageURL'])
-
-    // Keep showing the background if we already are, or
-    // show it immediately if the background is a color.
-    let show = this.state.show || (backgroundOption === USER_BACKGROUND_OPTION_COLOR)
-
     this.setState({
-      show: show,
+      nextImgPreloaded: false, // reset because of new image
       backgroundOption: backgroundOption,
       customImage: customImage,
       backgroundColor: backgroundColor,
@@ -141,7 +139,7 @@ class UserBackgroundImage extends React.Component {
     const shouldChangeBackgroundImg = (
       // FIXME: daily
       moment().utc().diff(
-        moment(props.user.backgroundImage.timestamp), 'seconds') > 10
+        moment(props.user.backgroundImage.timestamp), 'seconds') > 2
     )
 
     // Fetch a new background image for today.
@@ -155,24 +153,48 @@ class UserBackgroundImage extends React.Component {
 
   onImgLoad (e) {
     this.setState({
-      imgLoaded: true,
-      show: true
+      nextImgPreloaded: true,
+      currentlyDisplayedImgURL: this.getImgURL()
     })
   }
 
   onImgError (e) {
     this.setState({
-      imgError: true,
-      show: true
+      imgPreloadError: true
     })
     this.props.showError('We could not load your background image.')
   }
 
-  render () {
+  /**
+   * Get the image URL if the user has an image background.
+   * @return {String|null} The image URL if one exists, or null
+   *   if the user does not have an image background.
+   */
+  getImgURL () {
+    const backgroundOption = this.state.backgroundOption
+    switch (backgroundOption) {
+      case USER_BACKGROUND_OPTION_CUSTOM:
+        return this.state.customImage
+      case USER_BACKGROUND_OPTION_PHOTO:
+        return this.state.backgroundImageURL
+      case USER_BACKGROUND_OPTION_DAILY:
+        return this.state.backgroundImageURL
+      default:
+        return null
+    }
+  }
+
+  isImgBackground () {
+    return [
+      USER_BACKGROUND_OPTION_CUSTOM,
+      USER_BACKGROUND_OPTION_DAILY,
+      USER_BACKGROUND_OPTION_PHOTO
+    ].indexOf(this.state.backgroundOption) > -1
+  }
+
+  getBackgroundStyle () {
     const defaultStyle = {
       boxShadow: 'rgba(0, 0, 0, 0.5) 0px 0px 120px inset',
-      opacity: this.state.show ? 1 : 0,
-      transition: 'opacity 0.5s ease-in',
       backgroundRepeat: 'no-repeat',
       backgroundPosition: 'center',
       backgroundAttachment: 'fixed',
@@ -197,16 +219,12 @@ class UserBackgroundImage extends React.Component {
       backgroundColor: '#4a90e2'
     }
     const backgroundOption = this.state.backgroundOption
-    var isImgBackground = false
-    var imgUrl = null
     switch (backgroundOption) {
       case USER_BACKGROUND_OPTION_CUSTOM:
         if (this.state.customImage) {
           backgroundStyle = {
             backgroundImage: 'url(' + this.state.customImage + ')'
           }
-          isImgBackground = true
-          imgUrl = this.state.customImage
         } else {
           backgroundStyle = styleOnError
         }
@@ -225,20 +243,15 @@ class UserBackgroundImage extends React.Component {
           backgroundStyle = {
             backgroundImage: 'url(' + this.state.backgroundImageURL + ')'
           }
-          isImgBackground = true
-          imgUrl = this.state.backgroundImageURL
         } else {
           backgroundStyle = styleOnError
         }
         break
-      //
       case USER_BACKGROUND_OPTION_DAILY:
         if (this.state.backgroundImageURL) {
           backgroundStyle = {
             backgroundImage: 'url(' + this.state.backgroundImageURL + ')'
           }
-          isImgBackground = true
-          imgUrl = this.state.backgroundImageURL
         } else {
           backgroundStyle = styleOnError
         }
@@ -248,44 +261,57 @@ class UserBackgroundImage extends React.Component {
           backgroundImage: 'none',
           backgroundColor: 'transparent'
         }
-        isImgBackground = false
         break
     }
-
-    if (this.state.imgError) {
+    if (this.state.imgPreloadError) {
       backgroundStyle = styleOnError
     }
+    return Object.assign({}, defaultStyle, backgroundStyle)
+  }
 
-    const finalBackgroundStyle = Object.assign({}, defaultStyle, backgroundStyle)
+  render () {
+    const backgroundStyle = this.getBackgroundStyle()
+    const isImgBackground = this.isImgBackground()
+    const imgUrl = this.getImgURL()
 
-    const tintOpacity = isImgBackground ? 0.15 : 0.03
-    const tintElemStyle = {
-      position: 'absolute',
-      top: 0,
-      bottom: 0,
-      right: 0,
-      left: 0,
-      width: '100%',
-      height: '100%',
-      boxSizing: 'border-box',
-      zIndex: 'auto',
-      // Needs to match shading in extension new tab page.
-      backgroundColor: `rgba(0, 0, 0, ${tintOpacity})`
-    }
+    // FIXME: React key should not be img URL (need keys for non-img backgrounds too)
+    // FIXME: first image can sometimes show before it's rendered; e.g. on a hard
+    //   refresh. Need to wait for img load before running animation.
+    // FIXME: image fade out delay does not work properly when changing background
+    //   settings from a photo to color. Replace with new image fade in delay?
 
     // For image backgrounds, we use an img element to "preload"
     // the image before displaying the background.
     return (
-      <div style={finalBackgroundStyle}>
-        { (isImgBackground && !this.state.imgLoaded)
+      <div>
+        <FadeBackgroundAnimation>
+          <div key={this.state.currentlyDisplayedImgURL} style={backgroundStyle}>
+            <div
+              data-test-id={'background-tint-overlay'}
+              style={{
+                position: 'absolute',
+                top: 0,
+                bottom: 0,
+                right: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                boxSizing: 'border-box',
+                zIndex: 'auto',
+                // Needs to match shading in extension new tab page.
+                backgroundColor: `rgba(0, 0, 0, ${isImgBackground ? 0.15 : 0.03})`
+              }} />
+          </div>
+        </FadeBackgroundAnimation>
+        { (isImgBackground && !this.state.nextImgPreloaded)
           ? <img
             style={{display: 'none'}}
             src={imgUrl}
+            alt={''}
             onLoad={this.onImgLoad.bind(this)}
             onError={this.onImgError.bind(this)} />
           : null
         }
-        <div data-test-id={'background-tint-overlay'} style={tintElemStyle} />
       </div>
     )
   }

@@ -61,12 +61,35 @@ body {
 
 .fade-dashboard-appear.fade-dashboard-appear-active {
   opacity: 1;
-  transition: opacity 0.8s ease-in;
-  -webkit-transition: opacity 0.8s ease-in;
-  -ms-transition: opacity 0.8s ease-in;
-  -moz-transition: opacity 0.8s ease-in;
+  transition: opacity 800ms ease-in;
 }
-/* End fade-dashboard animation */ 
+/* End fade-dashboard animation */
+
+/* Begin fade-background animation */ 
+.fade-background-enter.fade-background-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.fade-background-leave {
+  opacity: 1;
+}
+
+.fade-background-leave.fade-background-leave-active {
+  opacity: 0.01;
+  /* Delay some time to give the underlying image time to render */
+  transition: opacity 1000ms ease-in 2500ms;
+}
+
+.fade-background-appear {
+  opacity: 0.01;
+}
+
+.fade-background-appear.fade-background-appear-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+/* End fade-background animation */ 
 
 /* Begin active-widget animation */ 
 .active-widget-enter {
