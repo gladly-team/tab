@@ -30,14 +30,10 @@ describe('User background image component', function () {
     const wrapper = shallow(
       <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
     )
-    const wrapperStyle = wrapper.get(0).props.style
-    expect(wrapperStyle.backgroundImage).toBe('url(https://example.com/pic.png)')
-
-    // Image should not appear until it's loaded.
-    expect(wrapperStyle.opacity).toBe(0)
     wrapper.instance().onImgLoad() // mock img onload
     wrapper.update()
-    expect(wrapper.get(0).props.style.opacity).toBe(1)
+    const backgroundStyle = wrapper.find('[data-test-id="dashboard-background-img"]').prop('style')
+    expect(backgroundStyle.backgroundImage).toBe('url(https://example.com/pic.png)')
   })
 
   it('renders with a daily photo background', function () {
@@ -55,14 +51,10 @@ describe('User background image component', function () {
     const wrapper = shallow(
       <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
     )
-    const wrapperStyle = wrapper.get(0).props.style
-    expect(wrapperStyle.backgroundImage).toBe('url(https://example.com/something.png)')
-
-    // Image should not appear until it's loaded.
-    expect(wrapperStyle.opacity).toBe(0)
     wrapper.instance().onImgLoad() // mock img onload
     wrapper.update()
-    expect(wrapper.get(0).props.style.opacity).toBe(1)
+    const backgroundStyle = wrapper.find('[data-test-id="dashboard-background-img"]').prop('style')
+    expect(backgroundStyle.backgroundImage).toBe('url(https://example.com/something.png)')
   })
 
   it('renders with a custom photo background', function () {
@@ -80,14 +72,10 @@ describe('User background image component', function () {
     const wrapper = shallow(
       <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
     )
-    const wrapperStyle = wrapper.get(0).props.style
-    expect(wrapperStyle.backgroundImage).toBe('url(https://example.com/some-custom-photo.png)')
-
-    // Image should not appear until it's loaded.
-    expect(wrapperStyle.opacity).toBe(0)
     wrapper.instance().onImgLoad() // mock img onload
     wrapper.update()
-    expect(wrapper.get(0).props.style.opacity).toBe(1)
+    const backgroundStyle = wrapper.find('[data-test-id="dashboard-background-img"]').prop('style')
+    expect(backgroundStyle.backgroundImage).toBe('url(https://example.com/some-custom-photo.png)')
   })
 
   it('renders with a color background', function () {
@@ -105,12 +93,9 @@ describe('User background image component', function () {
     const wrapper = shallow(
       <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
     )
-    const wrapperStyle = wrapper.get(0).props.style
-    expect(wrapperStyle.backgroundColor).toBe('#FF0000')
-    expect(wrapperStyle.backgroundImage).not.toBeDefined()
-
-    // Color background should appear immediately.
-    expect(wrapperStyle.opacity).toBe(1)
+    const backgroundStyle = wrapper.find('[data-test-id="dashboard-background-img"]').prop('style')
+    expect(backgroundStyle.backgroundColor).toBe('#FF0000')
+    expect(backgroundStyle.backgroundImage).not.toBeDefined()
   })
 
   it('renders the default background if the color is missing', function () {
@@ -131,9 +116,9 @@ describe('User background image component', function () {
     const styleOnError = {
       backgroundColor: '#4a90e2'
     }
-    const wrapperStyle = wrapper.get(0).props.style
-    expect(wrapperStyle.backgroundColor).toBe(styleOnError.backgroundColor)
-    expect(wrapperStyle.backgroundImage).not.toBeDefined()
+    const backgroundStyle = wrapper.find('[data-test-id="dashboard-background-img"]').prop('style')
+    expect(backgroundStyle.backgroundColor).toBe(styleOnError.backgroundColor)
+    expect(backgroundStyle.backgroundImage).not.toBeDefined()
   })
 
   it('renders the default background if the photo URL is missing', function () {
@@ -154,9 +139,9 @@ describe('User background image component', function () {
     const styleOnError = {
       backgroundColor: '#4a90e2'
     }
-    const wrapperStyle = wrapper.get(0).props.style
-    expect(wrapperStyle.backgroundColor).toBe(styleOnError.backgroundColor)
-    expect(wrapperStyle.backgroundImage).not.toBeDefined()
+    const backgroundStyle = wrapper.find('[data-test-id="dashboard-background-img"]').prop('style')
+    expect(backgroundStyle.backgroundColor).toBe(styleOnError.backgroundColor)
+    expect(backgroundStyle.backgroundImage).not.toBeDefined()
   })
 
   it('renders the default background if the custom photo URL is missing', function () {
@@ -177,9 +162,9 @@ describe('User background image component', function () {
     const styleOnError = {
       backgroundColor: '#4a90e2'
     }
-    const wrapperStyle = wrapper.get(0).props.style
-    expect(wrapperStyle.backgroundColor).toBe(styleOnError.backgroundColor)
-    expect(wrapperStyle.backgroundImage).not.toBeDefined()
+    const backgroundStyle = wrapper.find('[data-test-id="dashboard-background-img"]').prop('style')
+    expect(backgroundStyle.backgroundColor).toBe(styleOnError.backgroundColor)
+    expect(backgroundStyle.backgroundImage).not.toBeDefined()
   })
 
   it('renders the fallback background if the background option is not set', function () {
@@ -202,9 +187,9 @@ describe('User background image component', function () {
       backgroundImage: 'none',
       backgroundColor: 'transparent'
     }
-    const wrapperStyle = wrapper.get(0).props.style
-    expect(wrapperStyle.background).toBe(fallbackStyle.background)
-    expect(wrapperStyle.backgroundImage).toBe('none')
+    const backgroundStyle = wrapper.find('[data-test-id="dashboard-background-img"]').prop('style')
+    expect(backgroundStyle.background).toBe(fallbackStyle.background)
+    expect(backgroundStyle.backgroundImage).toBe('none')
   })
 
   it('falls back to default background on image load error', function () {
@@ -227,9 +212,9 @@ describe('User background image component', function () {
     }
     wrapper.instance().onImgError()
     wrapper.update()
-    const wrapperStyle = wrapper.get(0).props.style
-    expect(wrapperStyle.backgroundColor).toBe(styleOnError.backgroundColor)
-    expect(wrapperStyle.backgroundImage).not.toBeDefined()
+    const backgroundStyle = wrapper.find('[data-test-id="dashboard-background-img"]').prop('style')
+    expect(backgroundStyle.backgroundColor).toBe(styleOnError.backgroundColor)
+    expect(backgroundStyle.backgroundImage).not.toBeDefined()
   })
 
   it('calls to show an error message on image load error', function () {
@@ -546,7 +531,8 @@ describe('User background image component', function () {
     const wrapper = mount(
       <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
     )
-
+    wrapper.instance().onImgLoad() // mock img onload
+    wrapper.update()
     const tintElem = wrapper
       .find('[data-test-id="background-tint-overlay"]').first()
     const tintColor = tintElem.props().style.backgroundColor
@@ -609,7 +595,7 @@ describe('User background image component', function () {
       backgroundColor: '#FF0000',
       backgroundImage: {
         imageURL: 'https://example.com/something.png',
-        timestamp: '2017-05-19T13:59:46.000Z'
+        timestamp: '2017-05-19T13:59:57.000Z'
       }
     }
     const SetBackgroundDailyImageMutation = require('mutations/SetBackgroundDailyImageMutation').default

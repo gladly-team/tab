@@ -200,7 +200,11 @@ class UserBackgroundImage extends React.Component {
     ].indexOf(this.state.backgroundOption) > -1
   }
 
-  getBackgroundStyle () {
+  render () {
+    const isImgBackground = this.isImgBackground()
+    const imgUrl = this.getImgURL()
+
+    // Construct the style for the background element.
     const defaultStyle = {
       boxShadow: 'rgba(0, 0, 0, 0.5) 0px 0px 120px inset',
       backgroundRepeat: 'no-repeat',
@@ -216,13 +220,8 @@ class UserBackgroundImage extends React.Component {
       left: 0,
       zIndex: 'auto'
     }
-
     var backgroundStyle = {}
-
-    // What we use if a property is missing.
-    const styleOnError = {
-      backgroundColor: '#4a90e2'
-    }
+    var invalidBackgroundSettings = false
     const backgroundOption = this.state.backgroundOption
     const currentlyDisplayedImgURL = this.state.currentlyDisplayedImgURL
     switch (backgroundOption) {
@@ -232,7 +231,7 @@ class UserBackgroundImage extends React.Component {
             backgroundImage: `url(${currentlyDisplayedImgURL})`
           }
         } else {
-          backgroundStyle = styleOnError
+          invalidBackgroundSettings = true
         }
         break
       case USER_BACKGROUND_OPTION_COLOR:
@@ -241,7 +240,7 @@ class UserBackgroundImage extends React.Component {
             backgroundColor: this.state.backgroundColor
           }
         } else {
-          backgroundStyle = styleOnError
+          invalidBackgroundSettings = true
         }
         break
       case USER_BACKGROUND_OPTION_PHOTO:
@@ -250,7 +249,7 @@ class UserBackgroundImage extends React.Component {
             backgroundImage: `url(${currentlyDisplayedImgURL})`
           }
         } else {
-          backgroundStyle = styleOnError
+          invalidBackgroundSettings = true
         }
         break
       case USER_BACKGROUND_OPTION_DAILY:
@@ -259,7 +258,7 @@ class UserBackgroundImage extends React.Component {
             backgroundImage: `url(${currentlyDisplayedImgURL})`
           }
         } else {
-          backgroundStyle = styleOnError
+          invalidBackgroundSettings = true
         }
         break
       default:
@@ -269,20 +268,14 @@ class UserBackgroundImage extends React.Component {
         }
         break
     }
-    if (this.state.imgPreloadError) {
-      backgroundStyle = styleOnError
+
+    // The fallback style if there's an error.
+    if (this.state.imgPreloadError || invalidBackgroundSettings) {
+      backgroundStyle = {
+        backgroundColor: '#4a90e2'
+      }
     }
-    return Object.assign({}, defaultStyle, backgroundStyle)
-  }
-
-  render () {
-    const backgroundStyle = this.getBackgroundStyle()
-    const isImgBackground = this.isImgBackground()
-    const imgUrl = this.getImgURL()
-
-    // FIXME: image fade out delay does not work properly when changing background
-    //   settings from a photo to color. We need to update the localStorage
-    // background settings on settings change.
+    const finalBackgroundStyle = Object.assign({}, defaultStyle, backgroundStyle)
 
     // React key for the background element
     var backgroundKey = ``
@@ -292,8 +285,17 @@ class UserBackgroundImage extends React.Component {
       backgroundKey = `color-${this.state.backgroundColor}`
     }
 
-    // Only initially show the background if the image has already loaded.
-    const showBackground = isImgBackground ? this.state.currentlyDisplayedImgURL !== null : true
+    // Only show image backgrounds if the image has already loaded.
+    // Immediately show color backgrounds and the fallback background for
+    // when images fail to load.
+    var showBackground
+    if (invalidBackgroundSettings || this.state.imgPreloadError) {
+      showBackground = true
+    } else if (isImgBackground && !this.state.currentlyDisplayedImgURL) {
+      showBackground = false
+    } else {
+      showBackground = true
+    }
 
     // For image backgrounds, we use an img element to "preload"
     // the image before displaying the background.
@@ -301,7 +303,7 @@ class UserBackgroundImage extends React.Component {
       <div>
         { showBackground ? (
           <FadeBackgroundAnimation>
-            <div key={backgroundKey} style={backgroundStyle}>
+            <div key={backgroundKey} style={finalBackgroundStyle} data-test-id={'dashboard-background-img'}>
               <div
                 data-test-id={'background-tint-overlay'}
                 style={{
