@@ -7,7 +7,6 @@ import {Card, CardHeader} from 'material-ui/Card'
 import BackgroundImagePicker from '../../Background/BackgroundImagePickerContainer'
 import BackgroundColorPicker from '../../Background/BackgroundColorPickerContainer'
 import BackgroundCustomImagePicker from '../../Background/BackgroundCustomImagePickerContainer'
-import BackgroundDailyImage from '../../Background/BackgroundDailyImageContainer'
 import {
   cardHeaderTitleStyle,
   cardHeaderSubtitleStyle
@@ -21,6 +20,10 @@ import {
   USER_BACKGROUND_OPTION_PHOTO,
   USER_BACKGROUND_OPTION_DAILY
 } from '../../../constants'
+import SetBackgroundImageMutation from 'mutations/SetBackgroundImageMutation'
+import SetBackgroundColorMutation from 'mutations/SetBackgroundColorMutation'
+import SetBackgroundCustomImageMutation from 'mutations/SetBackgroundCustomImageMutation'
+import SetBackgroundDailyImageMutation from 'mutations/SetBackgroundDailyImageMutation'
 
 class BackgroundSettings extends React.Component {
   constructor (props) {
@@ -33,25 +36,118 @@ class BackgroundSettings extends React.Component {
     }
   }
 
-  onChange (event, value) {
-    if (!value) { return }
-
+  onChange (event, backgroundOption) {
+    if (!backgroundOption) { return }
     this.setState({
-      selected: value
+      selected: backgroundOption
     })
-
-    this.updateLocalStorageBackgroundSettings(value)
+    this.updateLocalStorageBackgroundSettings(backgroundOption)
+    if (backgroundOption === USER_BACKGROUND_OPTION_DAILY) {
+      this.onDailyPhotoOptionSelected()
+    }
   }
 
-  updateLocalStorageBackgroundSettings (backgroundOption) {
-    // FIXME: this only updates background option locally, but we
-    // need to update the rest of the properties
+  /**
+   * Update localStorage and extension storage with the chosen background
+   * settings. If a value is not provided, we use the current value from
+   * props.
+   * @param {string} backgroundOption - The value of the user's background
+   *   option; one of 'custom', 'photo', 'daily', or 'color'
+   * @return {undefined}
+   */
+  updateLocalStorageBackgroundSettings (backgroundOption = null,
+    customImage = null, backgroundColor = null, backgroundImageURL = null) {
     setBackgroundSettings(
-      backgroundOption,
-      this.props.user.customImage,
-      this.props.user.backgroundColor,
-      this.props.user.backgroundImage.imageURL
+      backgroundOption || this.props.user.backgroundOption,
+      customImage || this.props.user.customImage,
+      backgroundColor || this.props.user.backgroundColor,
+      backgroundImageURL || this.props.user.backgroundImage.imageURL
     )
+  }
+
+  /**
+   * Handler for when the user selects a specific background image.
+   * Update database and localStorage.
+   * @param {Object} image - The image object
+   * @param {string} image.id - The image ID
+   * @param {string} image.name - The image's display name
+   * @param {string} image.imageURL - The image URL
+   * @param {string} image.thumbnailURL - The image's thumbnail URL
+   * @return {undefined}
+   */
+  onBackgroundImageSelection (image) {
+    SetBackgroundImageMutation.commit(
+      this.props.relay.environment,
+      this.props.user,
+      image,
+      this.onSaveSuccess.bind(this),
+      this.onSaveError.bind(this)
+    )
+    this.updateLocalStorageBackgroundSettings(
+      USER_BACKGROUND_OPTION_PHOTO, null, null, image.imageURL)
+  }
+
+  /**
+   * Handler for when the user selects a specific color. Update
+   * database and localStorage.
+   * @param {string} color - The color hex value
+   * @return {undefined}
+   */
+  onBackgroundColorSelection (color) {
+    SetBackgroundColorMutation.commit(
+      this.props.relay.environment,
+      this.props.user,
+      color,
+      this.onSaveSuccess.bind(this),
+      this.onSaveError.bind(this)
+    )
+    this.updateLocalStorageBackgroundSettings(
+      USER_BACKGROUND_OPTION_COLOR, null, color, null)
+  }
+
+  /**
+   * Handler for when the user selects a specific custom image.
+   * Update database and localStorage.
+   * @param {string} imgURL - The custom image's URL
+   * @return {undefined}
+   */
+  onCustomImageSelection (imgURL) {
+    SetBackgroundCustomImageMutation.commit(
+      this.props.relay.environment,
+      this.props.user,
+      imgURL,
+      this.onSaveSuccess.bind(this),
+      this.onSaveError.bind(this)
+    )
+    this.updateLocalStorageBackgroundSettings(
+      USER_BACKGROUND_OPTION_CUSTOM, imgURL, null, null)
+  }
+
+  /**
+   * Handler for when the user selects a new photo daily.
+   * Update database and localStorage.
+   * @return {undefined}
+   */
+  onDailyPhotoOptionSelected () {
+    SetBackgroundDailyImageMutation(
+      this.props.relay.environment,
+      this.props.user.id,
+      this.onSaveSuccess.bind(this),
+      this.onSaveError.bind(this)
+    )
+
+    // TODO: we should also update the image URL in localStorage
+    // when the new daily image returns. However, we need to make sure
+    // we don't overwrite the value if the user chooses a custom or
+    // selected photo before the server responds.
+    this.updateLocalStorageBackgroundSettings(
+      USER_BACKGROUND_OPTION_DAILY, null, null, null)
+  }
+
+  onSaveSuccess () {}
+
+  onSaveError () {
+    this.props.showError('Oops, we are having trouble saving your settings right now :(')
   }
 
   render () {
@@ -77,36 +173,40 @@ class BackgroundSettings extends React.Component {
       padding: 10
     }
 
-    var selectedOption
+    var backgroundPicker
     var dividerCmp = (<Divider style={divider} />)
 
     // These components display below the radio buttons when
-    // an option is selected. They are responsible for
-    // calling a mutation to update the user's selection.
-    // TODO: cleaner to move the data/mutation logic up to this
-    // component and just have children handle presentation.
+    // an option is selected.
     switch (this.state.selected) {
       case USER_BACKGROUND_OPTION_DAILY:
         dividerCmp = null
-        selectedOption = (
-          <BackgroundDailyImage
-            user={user}
-            updateOnMount={user.backgroundOption !== USER_BACKGROUND_OPTION_DAILY}
-            showError={showError} />
-        )
+        backgroundPicker = null
         break
       case USER_BACKGROUND_OPTION_CUSTOM:
-        selectedOption = (
-          <BackgroundCustomImagePicker user={user} showError={showError} />)
+        backgroundPicker = (
+          <BackgroundCustomImagePicker
+            user={user}
+            onCustomImageSelection={this.onCustomImageSelection.bind(this)}
+            showError={showError}
+          />
+        )
         break
       case USER_BACKGROUND_OPTION_COLOR:
-        selectedOption = (
-          <BackgroundColorPicker user={user} showError={showError} />)
+        backgroundPicker = (
+          <BackgroundColorPicker
+            user={user}
+            onBackgroundColorSelection={this.onBackgroundColorSelection.bind(this)}
+          />
+        )
         break
       case USER_BACKGROUND_OPTION_PHOTO:
-        selectedOption = (
+        backgroundPicker = (
           <BackgroundImagePicker
-            app={app} user={user} showError={showError} />
+            app={app}
+            user={user}
+            onBackgroundImageSelection={this.onBackgroundImageSelection.bind(this)}
+          />
         )
         break
       default:
@@ -118,7 +218,6 @@ class BackgroundSettings extends React.Component {
         style={optionContainer}>
         <CardHeader
           title={'Background'}
-          // subtitle={'Choose the background for your new tab page'}
           titleStyle={cardHeaderTitleStyle}
           subtitleStyle={cardHeaderSubtitleStyle}
           actAsExpander={false}
@@ -147,7 +246,7 @@ class BackgroundSettings extends React.Component {
               label='Color' />
           </RadioButtonGroup>
           {dividerCmp}
-          {selectedOption}
+          {backgroundPicker}
         </div>
       </Card>
     )
@@ -165,7 +264,10 @@ BackgroundSettings.propTypes = {
       imageURL: PropTypes.string
     })
   }),
-  showError: PropTypes.func.isRequired
+  showError: PropTypes.func.isRequired,
+  relay: PropTypes.shape({
+    environment: PropTypes.object.isRequired
+  })
 }
 
 export default BackgroundSettings
