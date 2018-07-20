@@ -115,6 +115,11 @@ class UserBackgroundImage extends React.Component {
     )
   }
 
+  // Make sure localStorage and the extension's storage are in sync with
+  // the user's latest background settings. We can't just rely on when the
+  // user changes their settings on this device, because the user might
+  // change their background on another device or we might otherwise update
+  // the values in the database.
   updateBackgroundSettings (props) {
     let backgroundOption = get(props, ['user', 'backgroundOption'])
     let customImage = get(props, ['user', 'customImage'])
@@ -276,7 +281,8 @@ class UserBackgroundImage extends React.Component {
     const imgUrl = this.getImgURL()
 
     // FIXME: image fade out delay does not work properly when changing background
-    //   settings from a photo to color. Replace with new image fade in delay?
+    //   settings from a photo to color. We need to update the localStorage
+    // background settings on settings change.
 
     // React key for the background element
     var backgroundKey = ``
