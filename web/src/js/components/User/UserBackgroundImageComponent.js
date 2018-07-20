@@ -275,7 +275,6 @@ class UserBackgroundImage extends React.Component {
     const isImgBackground = this.isImgBackground()
     const imgUrl = this.getImgURL()
 
-    // FIXME: vertical scroll on page causes clock movement
     // FIXME: image fade out delay does not work properly when changing background
     //   settings from a photo to color. Replace with new image fade in delay?
 
