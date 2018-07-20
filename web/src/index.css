@@ -149,3 +149,8 @@ a.active {
   font-weight: bold;
 }
 
+/* @material-ui-1-todo: remove this */
+.tooltip-root {
+  /* This positions the popover offscreen, which is then overridden (fixes flashing) */
+  left: -15000px;
+}
