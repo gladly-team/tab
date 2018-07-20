@@ -34,15 +34,16 @@ import { MAX_DAILY_HEARTS_FROM_TABS } from '../../constants'
 class UserMenu extends React.Component {
   constructor (props) {
     super(props)
+
+    // refs
+    this.heartsPopoverAnchorElem = null
+    this.menuPopoverAnchorElem = null
+
     this.state = {
       heartsHover: false,
       heartsPopoverOpen: false,
       menuIconHover: false,
-      menuOpen: false,
-      // refs
-      heartsPopoverAnchorElem: null,
-      heartsHoverPopoverAnchorElem: null,
-      menuPopoverAnchorElem: null
+      menuOpen: false
     }
   }
 
@@ -60,15 +61,13 @@ class UserMenu extends React.Component {
 
   onHeartsHover (hovering, event) {
     this.setState({
-      heartsHover: hovering,
-      heartsHoverPopoverAnchorElem: event.currentTarget
+      heartsHover: hovering
     })
   }
 
   onHeartsClick (event) {
     this.setState({
-      heartsPopoverOpen: !this.state.open,
-      heartsPopoverAnchorElem: event.currentTarget
+      heartsPopoverOpen: !this.state.open
     })
   }
 
@@ -80,8 +79,7 @@ class UserMenu extends React.Component {
 
   onMenuClick (event) {
     this.setState({
-      menuOpen: !this.state.open,
-      menuPopoverAnchorElem: event.currentTarget
+      menuOpen: !this.state.open
     })
   }
 
@@ -236,6 +234,7 @@ class UserMenu extends React.Component {
           onMouseEnter={this.onHeartsHover.bind(this, true)}
           onMouseLeave={this.onHeartsHover.bind(this, false)}
           onClick={this.onHeartsClick.bind(this)}
+          ref={elem => { this.heartsPopoverAnchorElem = elem }}
           data-tour-id={'hearts'}
         >
           <span>{commaFormatted(user.vcCurrent)}</span>
@@ -262,7 +261,7 @@ class UserMenu extends React.Component {
               ? (
                 <DashboardPopover
                   open={this.state.heartsHover && !this.state.heartsPopoverOpen}
-                  anchorEl={this.state.heartsHoverPopoverAnchorElem}
+                  anchorEl={this.heartsPopoverAnchorElem}
                   style={heartsPopoverStyle}
                 >
                   <div style={{ padding: 10 }}>
@@ -277,7 +276,7 @@ class UserMenu extends React.Component {
         </div>
         <DashboardPopover
           open={this.state.heartsPopoverOpen}
-          anchorEl={this.state.heartsPopoverAnchorElem}
+          anchorEl={this.heartsPopoverAnchorElem}
           onRequestClose={this.handleHeartsPopoverClose.bind(this)}
           style={heartsPopoverStyle}
         >
@@ -366,6 +365,7 @@ class UserMenu extends React.Component {
           onMouseEnter={this.onMenuIconHover.bind(this, true)}
           onMouseLeave={this.onMenuIconHover.bind(this, false)}
           onClick={this.onMenuClick.bind(this)}
+          ref={elem => { this.menuPopoverAnchorElem = elem }}
           data-test-id={'app-menu-icon'}
           data-tour-id={'settings-button'}
         >
@@ -374,7 +374,7 @@ class UserMenu extends React.Component {
         <DashboardPopover
           style={menuPopoverStyle}
           open={this.state.menuOpen}
-          anchorEl={this.state.menuPopoverAnchorElem}
+          anchorEl={this.menuPopoverAnchorElem}
           onRequestClose={this.handleMenuPopoverClose.bind(this)}
         >
           <Menu
