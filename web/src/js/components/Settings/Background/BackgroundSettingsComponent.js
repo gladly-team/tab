@@ -12,12 +12,21 @@ import {
   cardHeaderTitleStyle,
   cardHeaderSubtitleStyle
 } from 'theme/default'
+import {
+  setBackgroundSettings
+} from 'utils/local-bkg-settings'
+import {
+  USER_BACKGROUND_OPTION_CUSTOM,
+  USER_BACKGROUND_OPTION_COLOR,
+  USER_BACKGROUND_OPTION_PHOTO,
+  USER_BACKGROUND_OPTION_DAILY
+} from '../../../constants'
 
 class BackgroundSettings extends React.Component {
   constructor (props) {
     super(props)
 
-    this.defaultSelection = 'photo'
+    this.defaultSelection = USER_BACKGROUND_OPTION_PHOTO
 
     this.state = {
       selected: props.user.backgroundOption || this.defaultSelection
@@ -61,25 +70,27 @@ class BackgroundSettings extends React.Component {
     // These components display below the radio buttons when
     // an option is selected. They are responsible for
     // calling a mutation to update the user's selection.
+    // TODO: cleaner to move the data/mutation logic up to this
+    // component and just have children handle presentation.
     switch (this.state.selected) {
-      case 'daily':
+      case USER_BACKGROUND_OPTION_DAILY:
         dividerCmp = null
         selectedOption = (
           <BackgroundDailyImage
             user={user}
-            updateOnMount={user.backgroundOption !== 'daily'}
+            updateOnMount={user.backgroundOption !== USER_BACKGROUND_OPTION_DAILY}
             showError={showError} />
         )
         break
-      case 'custom':
+      case USER_BACKGROUND_OPTION_CUSTOM:
         selectedOption = (
           <BackgroundCustomImagePicker user={user} showError={showError} />)
         break
-      case 'color':
+      case USER_BACKGROUND_OPTION_COLOR:
         selectedOption = (
           <BackgroundColorPicker user={user} showError={showError} />)
         break
-      case 'photo':
+      case USER_BACKGROUND_OPTION_PHOTO:
         selectedOption = (
           <BackgroundImagePicker
             app={app} user={user} showError={showError} />
@@ -107,19 +118,19 @@ class BackgroundSettings extends React.Component {
             valueSelected={this.state.selected}>
             <RadioButton
               style={radioBtnStyle}
-              value='daily'
+              value={USER_BACKGROUND_OPTION_DAILY}
               label='New photo daily' />
             <RadioButton
               style={radioBtnStyle}
-              value='photo'
+              value={USER_BACKGROUND_OPTION_PHOTO}
               label='Selected photo' />
             <RadioButton
               style={radioBtnStyle}
-              value='custom'
+              value={USER_BACKGROUND_OPTION_CUSTOM}
               label='Custom photo' />
             <RadioButton
               style={radioBtnStyle}
-              value='color'
+              value={USER_BACKGROUND_OPTION_COLOR}
               label='Color' />
           </RadioButtonGroup>
           {dividerCmp}
