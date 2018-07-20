@@ -39,6 +39,19 @@ class BackgroundSettings extends React.Component {
     this.setState({
       selected: value
     })
+
+    this.updateLocalStorageBackgroundSettings(value)
+  }
+
+  updateLocalStorageBackgroundSettings (backgroundOption) {
+    // FIXME: this only updates background option locally, but we
+    // need to update the rest of the properties
+    setBackgroundSettings(
+      backgroundOption,
+      this.props.user.customImage,
+      this.props.user.backgroundColor,
+      this.props.user.backgroundImage.imageURL
+    )
   }
 
   render () {
@@ -143,7 +156,15 @@ class BackgroundSettings extends React.Component {
 
 BackgroundSettings.propTypes = {
   app: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired,
+  user: PropTypes.shape({
+    id: PropTypes.string,
+    backgroundOption: PropTypes.string,
+    customImage: PropTypes.string,
+    backgroundColor: PropTypes.string,
+    backgroundImage: PropTypes.shape({
+      imageURL: PropTypes.string
+    })
+  }),
   showError: PropTypes.func.isRequired
 }
 

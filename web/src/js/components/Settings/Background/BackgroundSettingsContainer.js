@@ -10,6 +10,11 @@ export default createFragmentContainer(BackgroundSettings, {
     fragment BackgroundSettingsContainer_user on User {
       id
       backgroundOption
+      customImage
+      backgroundColor
+      backgroundImage {
+        imageURL
+      }
       ...BackgroundImagePickerContainer_user
       ...BackgroundColorPickerContainer_user
       ...BackgroundCustomImagePickerContainer_user
