@@ -166,7 +166,10 @@ class UserBackgroundImage extends React.Component {
   }
 
   /**
-   * Get the image URL if the user has an image background.
+   * Get the image URL if the user has an image background. Note:
+   * this is the user's current setting but not necessarily the image
+   * we are currently displaying, because we'll wait to preload the
+   * image first.
    * @return {String|null} The image URL if one exists, or null
    *   if the user does not have an image background.
    */
@@ -219,11 +222,12 @@ class UserBackgroundImage extends React.Component {
       backgroundColor: '#4a90e2'
     }
     const backgroundOption = this.state.backgroundOption
+    const currentlyDisplayedImgURL = this.state.currentlyDisplayedImgURL
     switch (backgroundOption) {
       case USER_BACKGROUND_OPTION_CUSTOM:
         if (this.state.customImage) {
           backgroundStyle = {
-            backgroundImage: 'url(' + this.state.customImage + ')'
+            backgroundImage: `url(${currentlyDisplayedImgURL})`
           }
         } else {
           backgroundStyle = styleOnError
@@ -241,7 +245,7 @@ class UserBackgroundImage extends React.Component {
       case USER_BACKGROUND_OPTION_PHOTO:
         if (this.state.backgroundImageURL) {
           backgroundStyle = {
-            backgroundImage: 'url(' + this.state.backgroundImageURL + ')'
+            backgroundImage: `url(${currentlyDisplayedImgURL})`
           }
         } else {
           backgroundStyle = styleOnError
@@ -250,7 +254,7 @@ class UserBackgroundImage extends React.Component {
       case USER_BACKGROUND_OPTION_DAILY:
         if (this.state.backgroundImageURL) {
           backgroundStyle = {
-            backgroundImage: 'url(' + this.state.backgroundImageURL + ')'
+            backgroundImage: `url(${currentlyDisplayedImgURL})`
           }
         } else {
           backgroundStyle = styleOnError
@@ -274,35 +278,47 @@ class UserBackgroundImage extends React.Component {
     const isImgBackground = this.isImgBackground()
     const imgUrl = this.getImgURL()
 
-    // FIXME: React key should not be img URL (need keys for non-img backgrounds too)
-    // FIXME: first image can sometimes show before it's rendered; e.g. on a hard
-    //   refresh. Need to wait for img load before running animation.
+    // FIXME: vertical scroll on page causes clock movement
     // FIXME: image fade out delay does not work properly when changing background
     //   settings from a photo to color. Replace with new image fade in delay?
+
+    // React key for the background element
+    var backgroundKey = ``
+    if (isImgBackground) {
+      backgroundKey = `img-${this.state.currentlyDisplayedImgURL}`
+    } else {
+      backgroundKey = `color-${this.state.backgroundColor}`
+    }
+
+    // Only initially show the background if the image has already loaded.
+    const showBackground = isImgBackground ? this.state.currentlyDisplayedImgURL !== null : true
 
     // For image backgrounds, we use an img element to "preload"
     // the image before displaying the background.
     return (
       <div>
-        <FadeBackgroundAnimation>
-          <div key={this.state.currentlyDisplayedImgURL} style={backgroundStyle}>
-            <div
-              data-test-id={'background-tint-overlay'}
-              style={{
-                position: 'absolute',
-                top: 0,
-                bottom: 0,
-                right: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                boxSizing: 'border-box',
-                zIndex: 'auto',
-                // Needs to match shading in extension new tab page.
-                backgroundColor: `rgba(0, 0, 0, ${isImgBackground ? 0.15 : 0.03})`
-              }} />
-          </div>
-        </FadeBackgroundAnimation>
+        { showBackground ? (
+          <FadeBackgroundAnimation>
+            <div key={backgroundKey} style={backgroundStyle}>
+              <div
+                data-test-id={'background-tint-overlay'}
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  bottom: 0,
+                  right: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  boxSizing: 'border-box',
+                  zIndex: 'auto',
+                  // Needs to match shading in extension new tab page.
+                  backgroundColor: `rgba(0, 0, 0, ${isImgBackground ? 0.15 : 0.03})`
+                }} />
+            </div>
+          </FadeBackgroundAnimation>
+        ) : null
+        }
         { (isImgBackground && !this.state.nextImgPreloaded)
           ? <img
             style={{display: 'none'}}
