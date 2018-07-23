@@ -68,7 +68,7 @@ class UserBackgroundImage extends React.Component {
     // If there's background settings in local storage,
     // call the parent frame to update the extension's
     // background settings.
-    if (this.stateHasBackgroundSettings()) {
+    if (!isNil(this.state.backgroundOption)) {
       setExtensionBackgroundSettings(
         this.state.backgroundOption,
         this.state.customImage,
@@ -87,13 +87,10 @@ class UserBackgroundImage extends React.Component {
     }
   }
 
-  // Determine if the state has values to render the background.
-  stateHasBackgroundSettings (props) {
-    return !isNil(this.state.backgroundOption)
-  }
-
-  // Determine if the props have the values we need to render
-  // the background.
+  /**
+   * Determine if we have all data needed to render the background.
+   * @return {Boolean} Whether all necessary props are defined
+   */
   arePropsReady (props) {
     return (
       has(props, ['user', 'backgroundOption']) &&
@@ -104,8 +101,14 @@ class UserBackgroundImage extends React.Component {
     )
   }
 
-  // Determine if the props hold background settings that are
-  // different from the background settings currently in state.
+  /**
+   * Determine if the props hold background settings that are
+   * different from the background settings currently in this
+   * component's state.
+   * @param {Object} props - The component props, either `this.props`
+   *   or the next `this.props` from componentWillReceiveProps
+   * @return {Boolean} Whether prop values differ from state values
+   */
   arePropsDifferentFromState (props) {
     return (
       get(props, ['user', 'backgroundOption']) !== this.state.backgroundOption ||
@@ -115,11 +118,16 @@ class UserBackgroundImage extends React.Component {
     )
   }
 
-  // Make sure localStorage and the extension's storage are in sync with
-  // the user's latest background settings. We can't just rely on when the
-  // user changes their settings on this device, because the user might
-  // change their background on another device or we might otherwise update
-  // the values in the database.
+  /**
+   * Make sure localStorage and the extension's storage are in sync with
+   * the user's latest background settings. We can't just rely on when the
+   * user changes their settings on this device, because the user might
+   * change their background on another device or we might otherwise update
+   * the values in the database.
+   * @param {Object} props - The component props, either `this.props`
+   *   or the next `this.props` from componentWillReceiveProps
+   * @return {undefined}
+   */
   updateBackgroundSettings (props) {
     let backgroundOption = get(props, ['user', 'backgroundOption'])
     let customImage = get(props, ['user', 'customImage'])
@@ -136,6 +144,14 @@ class UserBackgroundImage extends React.Component {
       customImage, backgroundColor, backgroundImageURL)
   }
 
+  /**
+   * If the user's background settings are to show a new photo daily,
+   * determine if it's a new day and the photo needs to be updated.
+   * If so, fetch a new background photo.
+   * @param {Object} props - The component props, either `this.props`
+   *   or the next `this.props` from componentWillReceiveProps
+   * @return {undefined}
+   */
   getNewDailyImageIfNeeded (props) {
     if (props.user.backgroundOption !== USER_BACKGROUND_OPTION_DAILY) {
       return
@@ -156,14 +172,23 @@ class UserBackgroundImage extends React.Component {
     }
   }
 
-  onImgLoad (e) {
+  /**
+   * Handler for when the preloaded background image has loaded.
+   * @return {undefined}
+   */
+  onImgLoad () {
     this.setState({
       nextImgPreloaded: true,
       currentlyDisplayedImgURL: this.getImgURL()
     })
   }
 
-  onImgError (e) {
+  /**
+   * Handler for when the preloaded background image fails to
+   * load and throws an error.
+   * @return {undefined}
+   */
+  onImgError () {
     this.setState({
       imgPreloadError: true
     })
@@ -192,6 +217,12 @@ class UserBackgroundImage extends React.Component {
     }
   }
 
+  /**
+   * Return whether the user has a photo/image background (e.g.
+   * not a color background).
+   * @return {Boolean} Whether the user's background setting is
+   *   for a photo background.
+   */
   isImgBackground () {
     return [
       USER_BACKGROUND_OPTION_CUSTOM,
