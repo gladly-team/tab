@@ -28,6 +28,7 @@ class BackgroundCustomeImagePicker extends React.Component {
     }
   }
 
+  // TODO: could validate URI and have separate error message.
   isValid (value) {
     return true
   }
@@ -138,7 +139,9 @@ class BackgroundCustomeImagePicker extends React.Component {
 }
 
 BackgroundCustomeImagePicker.propTypes = {
-  user: PropTypes.object.isRequired,
+  user: PropTypes.shape({
+    customImage: PropTypes.string.isRequired
+  }),
   showError: PropTypes.func.isRequired,
   onCustomImageSelection: PropTypes.func.isRequired
 }
