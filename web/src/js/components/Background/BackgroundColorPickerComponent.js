@@ -86,7 +86,9 @@ class BackgroundColorPicker extends React.Component {
 }
 
 BackgroundColorPicker.propTypes = {
-  user: PropTypes.object.isRequired,
+  user: PropTypes.shape({
+    backgroundColor: PropTypes.string.isRequired
+  }),
   onBackgroundColorSelection: PropTypes.func.isRequired
 }
 
