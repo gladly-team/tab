@@ -658,4 +658,7 @@ describe('User background image component', function () {
     MockDate.reset()
     expect(SetBackgroundDailyImageMutation).not.toHaveBeenCalled()
   })
+
+  // TODO: test that re-rendering the component with new props
+  //   does not fire multiple calls to get a new daily photo
 })

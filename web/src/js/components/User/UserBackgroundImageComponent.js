@@ -157,6 +157,8 @@ class UserBackgroundImage extends React.Component {
       return
     }
 
+    // FIXME: make sure we don't send a request while one is
+    // outstanding.
     const shouldChangeBackgroundImg = (
       // FIXME: daily
       moment().utc().diff(
