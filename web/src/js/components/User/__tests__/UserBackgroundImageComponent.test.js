@@ -626,5 +626,32 @@ describe('User background image component', function () {
     expect(SetBackgroundDailyImageMutation).not.toHaveBeenCalled()
   })
 
+  // TODO: update to daily
+  it('does not make more than one request at a time to get a new daily photo', () => {
+    const user = {
+      id: 'abc-123',
+      backgroundOption: 'daily',
+      customImage: null,
+      backgroundColor: '#FF0000',
+      backgroundImage: {
+        imageURL: 'https://example.com/something.png',
+        timestamp: '2017-05-19T13:59:46.000Z' // yesterday relative to current time
+      }
+    }
+    const SetBackgroundDailyImageMutation = require('mutations/SetBackgroundDailyImageMutation').default
+    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
+    const wrapper = shallow(
+      <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
+    )
+
+    // We expect one request
+    expect(SetBackgroundDailyImageMutation).toHaveBeenCalledTimes(1)
+
+    // Force props to update, which should not trigger new requests.
+    wrapper.setProps({ user: Object.assign({}, user, { backgroundColor: '#CDCDCD' }) })
+    wrapper.setProps({ user: Object.assign({}, user, { backgroundColor: '#EFEFEF' }) })
+    expect(SetBackgroundDailyImageMutation).toHaveBeenCalledTimes(1)
+  })
+
   // TODO: more tests using localStorage data followed by prop updates
 })

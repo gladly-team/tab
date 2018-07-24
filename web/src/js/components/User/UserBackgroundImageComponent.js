@@ -44,6 +44,9 @@ class UserBackgroundImage extends React.Component {
       nextImgPreloaded: false,
       // Whether there was a problem preloading the user's image.
       imgPreloadError: false,
+      // Whether we are currently waiting on a response for a
+      // request to get a new daily background image.
+      currentlyFetchingNewBackgroundImage: false,
       // The user's background settings. They might not reflect what
       // background is currently displayed because we want to fully
       // preload images before displaying them.
@@ -154,19 +157,34 @@ class UserBackgroundImage extends React.Component {
       return
     }
 
-    // FIXME: make sure we don't send a request while one is
-    // outstanding.
     const shouldChangeBackgroundImg = (
+      !this.state.currentlyFetchingNewBackgroundImage &&
       // FIXME: daily
       moment().utc().diff(
         moment(lastTimeBackgroundImgChanged), 'seconds') > 2
     )
 
+    this.setState({
+      currentlyFetchingNewBackgroundImage: true
+    })
+
     // Fetch a new background image for today.
     if (shouldChangeBackgroundImg) {
       SetBackgroundDailyImageMutation(
         props.relay.environment,
-        props.user.id
+        props.user.id,
+        // When the request returns, unmark that a request
+        // is outstanding.
+        () => {
+          this.setState({
+            currentlyFetchingNewBackgroundImage: false
+          })
+        },
+        () => {
+          this.setState({
+            currentlyFetchingNewBackgroundImage: false
+          })
+        }
       )
     }
   }
