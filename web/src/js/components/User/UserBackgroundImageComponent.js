@@ -59,8 +59,10 @@ class UserBackgroundImage extends React.Component {
     // If the props contain valid settings for the background,
     // and they are different from what's already in state,
     // update the background settings values.
-    if (this.arePropsReady(this.props) &&
-      this.arePropsDifferentFromState(this.props)) {
+    if (
+      this.arePropsReady(this.props) &&
+      this.arePropsDifferentFromState(this.props)
+    ) {
       this.updateBackgroundSettings(this.props)
       this.getNewDailyImageIfNeeded(this.props)
     }
@@ -78,10 +80,13 @@ class UserBackgroundImage extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    // Only update state and saved background settings if the
-    // props contain different values.
-    if (this.arePropsReady(nextProps) &&
-      this.arePropsDifferentFromState(nextProps)) {
+    // Update the state, localStorage, and extension
+    // background settings if the new props differ from
+    // current state.
+    if (
+      this.arePropsReady(this.props) &&
+      this.arePropsDifferentFromState(nextProps)
+    ) {
       this.updateBackgroundSettings(nextProps)
       this.getNewDailyImageIfNeeded(nextProps)
     }
