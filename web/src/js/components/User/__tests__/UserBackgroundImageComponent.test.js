@@ -25,8 +25,15 @@ jest.mock('utils/local-bkg-settings', () => {
 })
 jest.mock('mutations/SetBackgroundDailyImageMutation')
 
+const mockNow = '2017-05-19T13:59:58.000Z'
+
+beforeEach(() => {
+  MockDate.set(moment(mockNow))
+})
+
 afterEach(() => {
   jest.clearAllMocks()
+  MockDate.reset()
 })
 
 describe('User background image component', function () {
@@ -514,18 +521,15 @@ describe('User background image component', function () {
     const SetBackgroundDailyImageMutation = require('mutations/SetBackgroundDailyImageMutation').default
 
     // Current time is the day after the background image last changed.
-    const mockNow = '2017-05-19T13:59:58.000Z'
-    MockDate.set(moment(mockNow))
     const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
     shallow(
       <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
     )
-    MockDate.reset()
     expect(SetBackgroundDailyImageMutation).toHaveBeenCalled()
   })
 
   // FIXME: update to use "daily" logic
-  it('fetches a new daily photo when the props update and background settings have not changed from localStorage', () => {
+  it('fetches a new daily photo even when the props update and background settings have not changed from localStorage', () => {
     // Mock the settings in local storage.
     const backgroundOption = 'daily'
     const customImage = null
@@ -539,8 +543,6 @@ describe('User background image component', function () {
     const SetBackgroundDailyImageMutation = require('mutations/SetBackgroundDailyImageMutation').default
 
     // Current time is the day after the background image last changed.
-    const mockNow = '2017-05-19T13:59:58.000Z'
-    MockDate.set(moment(mockNow))
     const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
     const wrapper = shallow(
       <UserBackgroundImageComponent user={null} relay={{ environment: {} }} />
@@ -555,12 +557,11 @@ describe('User background image component', function () {
       backgroundColor: backgroundColor,
       backgroundImage: {
         imageURL: backgroundImageURL,
-        timestamp: '2017-05-19T13:59:46.000Z'
+        timestamp: '2017-05-19T13:59:46.000Z' // yesterday relative to current time
       }
     }
     expect(SetBackgroundDailyImageMutation).not.toHaveBeenCalled()
     wrapper.setProps({ user: userUpdate })
-    MockDate.reset()
     expect(SetBackgroundDailyImageMutation).toHaveBeenCalled()
   })
 
@@ -573,19 +574,15 @@ describe('User background image component', function () {
       backgroundColor: '#FF0000',
       backgroundImage: {
         imageURL: 'https://example.com/something.png',
-        timestamp: '2017-05-19T13:59:57.000Z'
+        timestamp: '2017-05-19T13:59:57.000Z' // same day as current time
       }
     }
     const SetBackgroundDailyImageMutation = require('mutations/SetBackgroundDailyImageMutation').default
 
-    // Current time is the same day as when the background image last changed.
-    const mockNow = '2017-05-19T13:59:51.000Z'
-    MockDate.set(moment(mockNow))
     const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
     shallow(
       <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
     )
-    MockDate.reset()
     expect(SetBackgroundDailyImageMutation).not.toHaveBeenCalled()
   })
 
@@ -597,19 +594,15 @@ describe('User background image component', function () {
       backgroundColor: '#FF0000',
       backgroundImage: {
         imageURL: 'https://example.com/something.png',
-        timestamp: '2017-05-19T13:59:46.000Z'
+        timestamp: '2017-05-19T13:59:46.000Z' // yesterday relative to current time
       }
     }
     const SetBackgroundDailyImageMutation = require('mutations/SetBackgroundDailyImageMutation').default
 
-    // Current time is the same day as when the background image last changed.
-    const mockNow = '2018-07-02T18:00:00.000Z'
-    MockDate.set(moment(mockNow))
     const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
     shallow(
       <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
     )
-    MockDate.reset()
     expect(SetBackgroundDailyImageMutation).not.toHaveBeenCalled()
   })
 
@@ -621,19 +614,15 @@ describe('User background image component', function () {
       backgroundColor: '#FF0000',
       backgroundImage: {
         imageURL: 'https://example.com/something.png',
-        timestamp: '2017-05-19T13:59:46.000Z'
+        timestamp: '2017-05-19T13:59:46.000Z' // yesterday relative to current time
       }
     }
     const SetBackgroundDailyImageMutation = require('mutations/SetBackgroundDailyImageMutation').default
 
-    // Current time is the same day as when the background image last changed.
-    const mockNow = '2018-07-02T18:00:00.000Z'
-    MockDate.set(moment(mockNow))
     const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
     shallow(
       <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
     )
-    MockDate.reset()
     expect(SetBackgroundDailyImageMutation).not.toHaveBeenCalled()
   })
 
