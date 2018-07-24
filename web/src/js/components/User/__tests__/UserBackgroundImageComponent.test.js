@@ -5,13 +5,28 @@ import React from 'react'
 import moment from 'moment'
 import MockDate from 'mockdate'
 import { mount, shallow } from 'enzyme'
+import {
+  getUserBackgroundOption,
+  getUserBackgroundCustomImage,
+  getUserBackgroundColor,
+  getUserBackgroundImageURL,
+  setBackgroundSettings
+} from 'utils/local-bkg-settings'
 
-jest.mock('utils/local-bkg-settings')
+jest.mock('utils/local-bkg-settings', () => {
+  return {
+    getUserBackgroundOption: jest.fn(() => null),
+    getUserBackgroundCustomImage: jest.fn(() => null),
+    getUserBackgroundColor: jest.fn(() => null),
+    getUserBackgroundImageURL: jest.fn(() => null),
+    setBackgroundSettings: jest.fn(),
+    setExtensionBackgroundSettings: jest.fn()
+  }
+})
 jest.mock('mutations/SetBackgroundDailyImageMutation')
 
 afterEach(() => {
   jest.clearAllMocks()
-  jest.resetModules()
 })
 
 describe('User background image component', function () {
@@ -169,16 +184,11 @@ describe('User background image component', function () {
 
   it('renders the fallback background if the background option is not set', function () {
     // Mock the settings in local storage.
-    jest.mock('utils/local-bkg-settings', () => {
-      return {
-        getUserBackgroundOption: jest.fn(() => null),
-        getUserBackgroundCustomImage: jest.fn(() => null),
-        getUserBackgroundColor: jest.fn(() => null),
-        getUserBackgroundImageURL: jest.fn(() => null),
-        setBackgroundSettings: jest.fn(),
-        setExtensionBackgroundSettings: jest.fn()
-      }
-    })
+    getUserBackgroundOption.mockReturnValue(null)
+    getUserBackgroundCustomImage.mockReturnValue(null)
+    getUserBackgroundColor.mockReturnValue(null)
+    getUserBackgroundImageURL.mockReturnValue(null)
+
     const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
     const wrapper = shallow(
       <UserBackgroundImageComponent user={null} relay={{ environment: {} }} />
@@ -318,16 +328,10 @@ describe('User background image component', function () {
 
   it('sets state on mount using local storage values', function () {
     // Mock the settings in local storage.
-    jest.mock('utils/local-bkg-settings', () => {
-      return {
-        getUserBackgroundOption: jest.fn(() => 'color'), // Different
-        getUserBackgroundCustomImage: jest.fn(() => null),
-        getUserBackgroundColor: jest.fn(() => '#FFF'),
-        getUserBackgroundImageURL: jest.fn(() => 'https://example.com/pic.png'),
-        setBackgroundSettings: jest.fn(),
-        setExtensionBackgroundSettings: jest.fn()
-      }
-    })
+    getUserBackgroundOption.mockReturnValue('color') // Different
+    getUserBackgroundCustomImage.mockReturnValue(null)
+    getUserBackgroundColor.mockReturnValue('#FFF')
+    getUserBackgroundImageURL.mockReturnValue('https://example.com/pic.png')
 
     // As if we have not yet fetched the user from the server.
     const user = null
@@ -342,16 +346,10 @@ describe('User background image component', function () {
 
   it('saves background settings to storage on mount (when the settings differ)', function () {
     // Mock the settings in local storage.
-    jest.mock('utils/local-bkg-settings', () => {
-      return {
-        getUserBackgroundOption: jest.fn(() => 'color'), // Different
-        getUserBackgroundCustomImage: jest.fn(() => null),
-        getUserBackgroundColor: jest.fn(() => '#FFF'),
-        getUserBackgroundImageURL: jest.fn(() => 'https://example.com/pic.png'),
-        setBackgroundSettings: jest.fn(),
-        setExtensionBackgroundSettings: jest.fn()
-      }
-    })
+    getUserBackgroundOption.mockReturnValue('color') // Different
+    getUserBackgroundCustomImage.mockReturnValue(null)
+    getUserBackgroundColor.mockReturnValue('#FFF')
+    getUserBackgroundImageURL.mockReturnValue('https://example.com/pic.png')
 
     const user = {
       id: 'abc-123',
@@ -365,23 +363,15 @@ describe('User background image component', function () {
     }
     const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
     shallow(<UserBackgroundImageComponent user={user} relay={{ environment: {} }} />)
-    const setBackgroundSettings = require('utils/local-bkg-settings')
-      .setBackgroundSettings
     expect(setBackgroundSettings).toHaveBeenCalledTimes(1)
   })
 
   it('does not save background settings to storage on mount (when the settings are the same)', function () {
     // Mock the settings in local storage.
-    jest.mock('utils/local-bkg-settings', () => {
-      return {
-        getUserBackgroundOption: jest.fn(() => 'photo'),
-        getUserBackgroundCustomImage: jest.fn(() => null),
-        getUserBackgroundColor: jest.fn(() => '#FF0000'),
-        getUserBackgroundImageURL: jest.fn(() => 'https://example.com/pic.png'),
-        setBackgroundSettings: jest.fn(),
-        setExtensionBackgroundSettings: jest.fn()
-      }
-    })
+    getUserBackgroundOption.mockReturnValue('photo')
+    getUserBackgroundCustomImage.mockReturnValue(null)
+    getUserBackgroundColor.mockReturnValue('#FF0000')
+    getUserBackgroundImageURL.mockReturnValue('https://example.com/pic.png')
 
     const user = {
       id: 'abc-123',
@@ -395,8 +385,6 @@ describe('User background image component', function () {
     }
     const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
     shallow(<UserBackgroundImageComponent user={user} relay={{ environment: {} }} />)
-    const setBackgroundSettings = require('utils/local-bkg-settings')
-      .setBackgroundSettings
     expect(setBackgroundSettings).not.toHaveBeenCalled()
   })
 
@@ -416,8 +404,6 @@ describe('User background image component', function () {
       <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
     )
 
-    const setBackgroundSettings = require('utils/local-bkg-settings')
-      .setBackgroundSettings
     // It saved background settings on mount. Clear that call.
     setBackgroundSettings.mockClear()
 
@@ -431,9 +417,8 @@ describe('User background image component', function () {
         timestamp: '2017-05-19T13:59:46.000Z'
       }
     }
-    wrapper.setProps({ user: userUpdate }, () => {
-      expect(setBackgroundSettings).toHaveBeenCalledTimes(1)
-    })
+    wrapper.setProps({ user: userUpdate })
+    expect(setBackgroundSettings).toHaveBeenCalledTimes(1)
   })
 
   it('does not save the background settings on prop update (when the settings are the same)', function () {
@@ -452,8 +437,6 @@ describe('User background image component', function () {
       <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
     )
 
-    const setBackgroundSettings = require('utils/local-bkg-settings')
-      .setBackgroundSettings
     // It saved background settings on mount. Clear that call.
     setBackgroundSettings.mockClear()
 
@@ -467,9 +450,8 @@ describe('User background image component', function () {
         timestamp: '2017-05-19T13:59:46.000Z'
       }
     }
-    wrapper.setProps({ user: userUpdate }, () => {
-      expect(setBackgroundSettings).not.toHaveBeenCalled()
-    })
+    wrapper.setProps({ user: userUpdate })
+    expect(setBackgroundSettings).not.toHaveBeenCalled()
   })
 
   it('sets the expected tint overlay for a photo background', function () {
@@ -538,6 +520,46 @@ describe('User background image component', function () {
     shallow(
       <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
     )
+    MockDate.reset()
+    expect(SetBackgroundDailyImageMutation).toHaveBeenCalled()
+  })
+
+  // FIXME: update to use "daily" logic
+  it('fetches a new daily photo when the props update and background settings have not changed from localStorage', () => {
+    // Mock the settings in local storage.
+    const backgroundOption = 'daily'
+    const customImage = null
+    const backgroundColor = '#FF0000'
+    const backgroundImageURL = 'https://example.com/something.png'
+    getUserBackgroundOption.mockReturnValue(backgroundOption)
+    getUserBackgroundCustomImage.mockReturnValue(customImage)
+    getUserBackgroundColor.mockReturnValue(backgroundColor)
+    getUserBackgroundImageURL.mockReturnValue(backgroundImageURL)
+
+    const SetBackgroundDailyImageMutation = require('mutations/SetBackgroundDailyImageMutation').default
+
+    // Current time is the day after the background image last changed.
+    const mockNow = '2017-05-19T13:59:58.000Z'
+    MockDate.set(moment(mockNow))
+    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
+    const wrapper = shallow(
+      <UserBackgroundImageComponent user={null} relay={{ environment: {} }} />
+    )
+
+    // Important: these props are not different from the state that
+    // the component loaded from localStorage.
+    const userUpdate = {
+      id: 'abc-123',
+      backgroundOption: backgroundOption,
+      customImage: customImage,
+      backgroundColor: backgroundColor,
+      backgroundImage: {
+        imageURL: backgroundImageURL,
+        timestamp: '2017-05-19T13:59:46.000Z'
+      }
+    }
+    expect(SetBackgroundDailyImageMutation).not.toHaveBeenCalled()
+    wrapper.setProps({ user: userUpdate })
     MockDate.reset()
     expect(SetBackgroundDailyImageMutation).toHaveBeenCalled()
   })
@@ -615,6 +637,5 @@ describe('User background image component', function () {
     expect(SetBackgroundDailyImageMutation).not.toHaveBeenCalled()
   })
 
-  // TODO: test that re-rendering the component with new props
-  //   does not fire multiple calls to get a new daily photo
+  // TODO: more tests using localStorage data followed by prop updates
 })
