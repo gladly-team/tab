@@ -88,7 +88,8 @@ class UserBackgroundImage extends React.Component {
   }
 
   /**
-   * Determine if we have all data needed to render the background.
+   * Determine if all background data has returned from
+   * the server.
    * @return {Boolean} Whether all necessary props are defined
    */
   arePropsReady (props) {
@@ -119,8 +120,8 @@ class UserBackgroundImage extends React.Component {
   }
 
   /**
-   * Make sure localStorage and the extension's storage are in sync with
-   * the user's latest background settings. We can't just rely on when the
+   * Update component state and make sure localStorage and the extension's
+   * storage are in sync with the latest state. We can't just rely on when the
    * user changes their settings on this device, because the user might
    * change their background on another device or we might otherwise update
    * the values in the database.
@@ -140,6 +141,8 @@ class UserBackgroundImage extends React.Component {
       backgroundColor: backgroundColor,
       backgroundImageURL: backgroundImageURL
     })
+
+    // Update in localStorage and extension storage.
     setBackgroundSettings(backgroundOption,
       customImage, backgroundColor, backgroundImageURL)
   }
