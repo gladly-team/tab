@@ -394,7 +394,7 @@ describe('User background image component', function () {
       }
     }
     const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
-    shallow(<UserBackgroundImageComponent user={user} />)
+    shallow(<UserBackgroundImageComponent user={user} relay={{ environment: {} }} />)
     const setBackgroundSettings = require('utils/local-bkg-settings')
       .setBackgroundSettings
     expect(setBackgroundSettings).not.toHaveBeenCalled()
