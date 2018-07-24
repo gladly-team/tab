@@ -210,6 +210,14 @@ class BackgroundSettings extends React.Component {
         )
         break
       default:
+        // Fall back to selecting the photo option.
+        backgroundPicker = (
+          <BackgroundImagePicker
+            app={app}
+            user={user}
+            onBackgroundImageSelection={this.onBackgroundImageSelection.bind(this)}
+          />
+        )
         break
     }
 
