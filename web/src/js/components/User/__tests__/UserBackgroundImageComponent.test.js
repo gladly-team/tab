@@ -9,7 +9,7 @@ import { mount, shallow } from 'enzyme'
 jest.mock('utils/local-bkg-settings')
 jest.mock('mutations/SetBackgroundDailyImageMutation')
 
-beforeEach(() => {
+afterEach(() => {
   jest.clearAllMocks()
   jest.resetModules()
 })

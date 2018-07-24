@@ -149,11 +149,16 @@ class UserBackgroundImage extends React.Component {
    * determine if it's a new day and the photo needs to be updated.
    * If so, fetch a new background photo.
    * @param {Object} props - The component props, either `this.props`
-   *   or the next `this.props` from componentWillReceiveProps
+   *   or the next `this.props` from componentWillReceiveProps. We
+   *   can't assume that `props.use` will be defined.
    * @return {undefined}
    */
   getNewDailyImageIfNeeded (props) {
-    if (props.user.backgroundOption !== USER_BACKGROUND_OPTION_DAILY) {
+    if (get(props, ['user', 'backgroundOption']) !== USER_BACKGROUND_OPTION_DAILY) {
+      return
+    }
+    const lastTimeBackgroundImgChanged = get(props, ['user', 'backgroundImage', 'timestamp'])
+    if (isNil(lastTimeBackgroundImgChanged)) {
       return
     }
 
@@ -162,7 +167,7 @@ class UserBackgroundImage extends React.Component {
     const shouldChangeBackgroundImg = (
       // FIXME: daily
       moment().utc().diff(
-        moment(props.user.backgroundImage.timestamp), 'seconds') > 2
+        moment(lastTimeBackgroundImgChanged), 'seconds') > 2
     )
 
     // Fetch a new background image for today.
