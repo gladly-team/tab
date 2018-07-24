@@ -15,11 +15,23 @@ import {
   USER_BACKGROUND_OPTION_PHOTO,
   USER_BACKGROUND_OPTION_DAILY
 } from '../../../../constants'
+import {
+  setBackgroundSettings
+} from 'utils/local-bkg-settings'
+import SetBackgroundImageMutation from 'mutations/SetBackgroundImageMutation'
+import SetBackgroundColorMutation from 'mutations/SetBackgroundColorMutation'
+import SetBackgroundCustomImageMutation from 'mutations/SetBackgroundCustomImageMutation'
+import SetBackgroundDailyImageMutation from 'mutations/SetBackgroundDailyImageMutation'
 
 jest.mock('material-ui/RadioButton')
 jest.mock('../../../Background/BackgroundImagePickerContainer')
 jest.mock('../../../Background/BackgroundColorPickerContainer')
 jest.mock('../../../Background/BackgroundCustomImagePickerContainer')
+jest.mock('utils/local-bkg-settings')
+jest.mock('mutations/SetBackgroundImageMutation')
+jest.mock('mutations/SetBackgroundColorMutation')
+jest.mock('mutations/SetBackgroundCustomImageMutation')
+jest.mock('mutations/SetBackgroundDailyImageMutation')
 
 const mockShowError = jest.fn()
 const mockProps = {
@@ -136,5 +148,129 @@ describe('Background settings component', () => {
     expect(wrapper.find(BackgroundCustomImagePicker).length).toBe(0)
   })
 
-  // TODO: test mutations when children call to change settings
+  // TODO: test that it updates localStorage and extension background settings when selecting a new background option
+
+  it('saves settings when the user selects a new photo', () => {
+    const BackgroundSettings = require('../BackgroundSettingsComponent').default
+    const customMockProps = cloneDeep(mockProps)
+    customMockProps.user.backgroundOption = 'photo'
+    const wrapper = shallow(
+      <BackgroundSettings {...customMockProps} />
+    )
+
+    // Mock the callback from the child component.
+    const mockImg = {
+      id: 'some-image-id',
+      name: 'Some Image!',
+      imageURL: 'https://example.com/some/image.png',
+      thumbnailURL: 'https://example.com/some/thumbnail.png'
+    }
+    wrapper.find(BackgroundImagePicker)
+      .prop('onBackgroundImageSelection')(mockImg)
+
+    const mutationMockCall = SetBackgroundImageMutation.commit.mock.calls[0]
+    expect(mutationMockCall[2]).toEqual(mockImg)
+  })
+
+  it('calls to update localStorage when the user selects a new photo', () => {
+    const BackgroundSettings = require('../BackgroundSettingsComponent').default
+    const customMockProps = cloneDeep(mockProps)
+    customMockProps.user.backgroundOption = 'photo'
+    const wrapper = shallow(
+      <BackgroundSettings {...customMockProps} />
+    )
+
+    // Mock the callback from the child component.
+    const mockImg = {
+      id: 'some-image-id',
+      name: 'Some Image!',
+      imageURL: 'https://example.com/some/image.png',
+      thumbnailURL: 'https://example.com/some/thumbnail.png'
+    }
+    wrapper.find(BackgroundImagePicker)
+      .prop('onBackgroundImageSelection')(mockImg)
+
+    expect(setBackgroundSettings).toHaveBeenCalledWith(
+      USER_BACKGROUND_OPTION_PHOTO,
+      customMockProps.user.customImage,
+      customMockProps.user.backgroundColor,
+      mockImg.imageURL
+    )
+  })
+
+  it('saves settings when the user selects a new color', () => {
+    const BackgroundSettings = require('../BackgroundSettingsComponent').default
+    const customMockProps = cloneDeep(mockProps)
+    customMockProps.user.backgroundOption = 'color'
+    const wrapper = shallow(
+      <BackgroundSettings {...customMockProps} />
+    )
+
+    // Mock the callback from the child component.
+    const mockColor = '#EFEFEF'
+    wrapper.find(BackgroundColorPicker)
+      .prop('onBackgroundColorSelection')(mockColor)
+
+    const mutationMockCall = SetBackgroundColorMutation.commit.mock.calls[0]
+    expect(mutationMockCall[2]).toEqual(mockColor)
+  })
+
+  it('calls to update localStorage when the user selects a new color', () => {
+    const BackgroundSettings = require('../BackgroundSettingsComponent').default
+    const customMockProps = cloneDeep(mockProps)
+    customMockProps.user.backgroundOption = 'color'
+    const wrapper = shallow(
+      <BackgroundSettings {...customMockProps} />
+    )
+
+    // Mock the callback from the child component.
+    const mockColor = '#EFEFEF'
+    wrapper.find(BackgroundColorPicker)
+      .prop('onBackgroundColorSelection')(mockColor)
+
+    expect(setBackgroundSettings).toHaveBeenCalledWith(
+      USER_BACKGROUND_OPTION_COLOR,
+      customMockProps.user.customImage,
+      mockColor,
+      customMockProps.user.backgroundImage.imageURL
+    )
+  })
+
+  it('saves settings when the user selects a new custom photo', () => {
+    const BackgroundSettings = require('../BackgroundSettingsComponent').default
+    const customMockProps = cloneDeep(mockProps)
+    customMockProps.user.backgroundOption = 'custom'
+    const wrapper = shallow(
+      <BackgroundSettings {...customMockProps} />
+    )
+
+    // Mock the callback from the child component.
+    const mockCustomImgURL = 'https://example.com/my/custom/photo.png'
+    wrapper.find(BackgroundCustomImagePicker)
+      .prop('onCustomImageSelection')(mockCustomImgURL)
+
+    const mutationMockCall = SetBackgroundCustomImageMutation.commit.mock.calls[0]
+    expect(mutationMockCall[2]).toEqual(mockCustomImgURL)
+  })
+
+  it('calls to update localStorage when the user selects a new custom photo', () => {
+    const BackgroundSettings = require('../BackgroundSettingsComponent').default
+    const customMockProps = cloneDeep(mockProps)
+    customMockProps.user.backgroundOption = 'custom'
+    const wrapper = shallow(
+      <BackgroundSettings {...customMockProps} />
+    )
+
+    // Mock the callback from the child component.
+    const mockCustomImgURL = 'https://example.com/my/custom/photo.png'
+    wrapper.find(BackgroundCustomImagePicker)
+      .prop('onCustomImageSelection')(mockCustomImgURL)
+
+    expect(setBackgroundSettings).toHaveBeenCalledWith(
+      USER_BACKGROUND_OPTION_CUSTOM,
+      mockCustomImgURL,
+      customMockProps.user.backgroundColor,
+      customMockProps.user.backgroundImage.imageURL
+    )
+  })
 })
