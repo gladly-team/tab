@@ -20,7 +20,7 @@ afterEach(() => {
   jest.clearAllMocks()
 })
 
-describe('Background color picker component', () => {
+describe('Background custom image picker component', () => {
   it('renders without error', () => {
     const BackgroundCustomImagePicker = require('../BackgroundCustomImagePickerComponent').default
     shallow(
