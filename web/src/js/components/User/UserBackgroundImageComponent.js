@@ -15,8 +15,7 @@ import {
   getUserBackgroundCustomImage,
   getUserBackgroundColor,
   getUserBackgroundImageURL,
-  setBackgroundSettings,
-  setExtensionBackgroundSettings
+  setBackgroundSettings
 } from 'utils/local-bkg-settings'
 import SetBackgroundDailyImageMutation from 'mutations/SetBackgroundDailyImageMutation'
 import FadeBackgroundAnimation from '../Background/FadeBackgroundAnimation'
@@ -65,17 +64,6 @@ class UserBackgroundImage extends React.Component {
     ) {
       this.updateBackgroundSettings(this.props)
       this.getNewDailyImageIfNeeded(this.props)
-    }
-
-    // If there's background settings in local storage,
-    // call the parent frame to update the extension's
-    // background settings.
-    if (!isNil(this.state.backgroundOption)) {
-      setExtensionBackgroundSettings(
-        this.state.backgroundOption,
-        this.state.customImage,
-        this.state.backgroundColor,
-        this.state.backgroundImageURL)
     }
   }
 

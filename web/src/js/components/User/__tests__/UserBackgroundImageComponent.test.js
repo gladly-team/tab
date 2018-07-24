@@ -472,50 +472,6 @@ describe('User background image component', function () {
     })
   })
 
-  it('messages the parent frame on mount when there are settings in local storage', function () {
-    // Mock the settings in local storage.
-    jest.mock('utils/local-bkg-settings', () => {
-      return {
-        getUserBackgroundOption: jest.fn(() => 'photo'),
-        getUserBackgroundCustomImage: jest.fn(() => 'https://example.com/some-custom-photo.png'),
-        getUserBackgroundColor: jest.fn(() => '#FF0000'),
-        getUserBackgroundImageURL: jest.fn(() => 'https://example.com/pic.png'),
-        setBackgroundSettings: jest.fn(),
-        setExtensionBackgroundSettings: jest.fn()
-      }
-    })
-    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
-    mount(
-      <UserBackgroundImageComponent user={null} relay={{ environment: {} }} />
-    )
-
-    const setExtensionBackgroundSettings = require('utils/local-bkg-settings')
-      .setExtensionBackgroundSettings
-    expect(setExtensionBackgroundSettings).toHaveBeenCalledTimes(1)
-  })
-
-  it('does not message the parent frame on mount when there are not settings in local storage', function () {
-    // Mock the settings in local storage.
-    jest.mock('utils/local-bkg-settings', () => {
-      return {
-        getUserBackgroundOption: jest.fn(() => null),
-        getUserBackgroundCustomImage: jest.fn(() => null),
-        getUserBackgroundColor: jest.fn(() => null),
-        getUserBackgroundImageURL: jest.fn(() => null),
-        setBackgroundSettings: jest.fn(),
-        setExtensionBackgroundSettings: jest.fn()
-      }
-    })
-    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
-    mount(
-      <UserBackgroundImageComponent user={null} relay={{ environment: {} }} />
-    )
-
-    const setExtensionBackgroundSettings = require('utils/local-bkg-settings')
-      .setExtensionBackgroundSettings
-    expect(setExtensionBackgroundSettings).not.toHaveBeenCalled()
-  })
-
   it('sets the expected tint overlay for a photo background', function () {
     const user = {
       id: 'abc-123',
