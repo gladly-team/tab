@@ -36,8 +36,8 @@ afterEach(() => {
   MockDate.reset()
 })
 
-describe('User background image component', function () {
-  it('renders with a selected photo background', function () {
+describe('User background image component', () => {
+  it('renders with a selected photo background', () => {
     const user = {
       id: 'abc-123',
       backgroundOption: 'photo',
@@ -75,7 +75,7 @@ describe('User background image component', function () {
     expect(backgroundStyle.backgroundImage).toBe('url(https://example.com/pic.png)')
   })
 
-  it('renders with a daily photo background', function () {
+  it('renders with a daily photo background', () => {
     const user = {
       id: 'abc-123',
       backgroundOption: 'daily',
@@ -113,7 +113,7 @@ describe('User background image component', function () {
     expect(backgroundStyle.backgroundImage).toBe('url(https://example.com/something.png)')
   })
 
-  it('renders with a custom photo background', function () {
+  it('renders with a custom photo background', () => {
     const user = {
       id: 'abc-123',
       backgroundOption: 'custom',
@@ -151,7 +151,7 @@ describe('User background image component', function () {
     expect(backgroundStyle.backgroundImage).toBe('url(https://example.com/some-custom-photo.png)')
   })
 
-  it('renders with a color background', function () {
+  it('renders with a color background', () => {
     const user = {
       id: 'abc-123',
       backgroundOption: 'color',
@@ -253,7 +253,7 @@ describe('User background image component', function () {
     expect(newBackgroundStyle.backgroundImage).toBe('url(https://example.com/pic.png)')
   })
 
-  it('renders the default background if the color is missing', function () {
+  it('renders the default background if the color is missing', () => {
     const user = {
       id: 'abc-123',
       backgroundOption: 'color',
@@ -276,7 +276,7 @@ describe('User background image component', function () {
     expect(backgroundStyle.backgroundImage).not.toBeDefined()
   })
 
-  it('renders the default background if the photo URL is missing', function () {
+  it('renders the default background if the photo URL is missing', () => {
     const user = {
       id: 'abc-123',
       backgroundOption: 'photo',
@@ -299,7 +299,7 @@ describe('User background image component', function () {
     expect(backgroundStyle.backgroundImage).not.toBeDefined()
   })
 
-  it('renders the default background if the custom photo URL is missing', function () {
+  it('renders the default background if the custom photo URL is missing', () => {
     const user = {
       id: 'abc-123',
       backgroundOption: 'custom',
@@ -322,7 +322,7 @@ describe('User background image component', function () {
     expect(backgroundStyle.backgroundImage).not.toBeDefined()
   })
 
-  it('renders the fallback background if the background option is not set', function () {
+  it('renders the fallback background if the background option is not set', () => {
     // Mock the settings in local storage.
     getUserBackgroundOption.mockReturnValue(null)
     getUserBackgroundCustomImage.mockReturnValue(null)
@@ -342,7 +342,7 @@ describe('User background image component', function () {
     expect(backgroundStyle.backgroundImage).toBe('none')
   })
 
-  it('falls back to default background on image load error', function () {
+  it('falls back to default background on image load error', () => {
     const user = {
       id: 'abc-123',
       backgroundOption: 'custom',
@@ -367,7 +367,7 @@ describe('User background image component', function () {
     expect(backgroundStyle.backgroundImage).not.toBeDefined()
   })
 
-  it('calls to show an error message on image load error', function () {
+  it('calls to show an error message on image load error', () => {
     const user = {
       id: 'abc-123',
       backgroundOption: 'custom',
@@ -388,7 +388,7 @@ describe('User background image component', function () {
     expect(showErrorHandler).toHaveBeenCalledWith('We could not load your background image.')
   })
 
-  it('correctly determines whether background props are different from state', function () {
+  it('correctly determines whether background props are different from state', () => {
     const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
     const wrapper = shallow(
       <UserBackgroundImageComponent user={null} relay={{ environment: {} }} />
@@ -466,7 +466,7 @@ describe('User background image component', function () {
       .toBe(true)
   })
 
-  it('sets state on mount using local storage values', function () {
+  it('sets state on mount using local storage values', () => {
     // Mock the settings in local storage.
     getUserBackgroundOption.mockReturnValue('color') // Different
     getUserBackgroundCustomImage.mockReturnValue(null)
@@ -484,7 +484,7 @@ describe('User background image component', function () {
     expect(state.backgroundImageURL).toEqual('https://example.com/pic.png')
   })
 
-  it('saves background settings to storage on mount (when the settings differ)', function () {
+  it('saves background settings to storage on mount (when the settings differ)', () => {
     // Mock the settings in local storage.
     getUserBackgroundOption.mockReturnValue('color') // Different
     getUserBackgroundCustomImage.mockReturnValue(null)
@@ -506,7 +506,7 @@ describe('User background image component', function () {
     expect(setBackgroundSettings).toHaveBeenCalledTimes(1)
   })
 
-  it('does not save background settings to storage on mount (when the settings are the same)', function () {
+  it('does not save background settings to storage on mount (when the settings are the same)', () => {
     // Mock the settings in local storage.
     getUserBackgroundOption.mockReturnValue('photo')
     getUserBackgroundCustomImage.mockReturnValue(null)
@@ -528,7 +528,7 @@ describe('User background image component', function () {
     expect(setBackgroundSettings).not.toHaveBeenCalled()
   })
 
-  it('saves the background settings on prop update (when the settings are different)', function () {
+  it('saves the background settings on prop update (when the settings are different)', () => {
     const user = {
       id: 'abc-123',
       backgroundOption: 'photo',
@@ -561,7 +561,7 @@ describe('User background image component', function () {
     expect(setBackgroundSettings).toHaveBeenCalledTimes(1)
   })
 
-  it('does not save the background settings on prop update (when the settings are the same)', function () {
+  it('does not save the background settings on prop update (when the settings are the same)', () => {
     const user = {
       id: 'abc-123',
       backgroundOption: 'photo',
@@ -594,7 +594,7 @@ describe('User background image component', function () {
     expect(setBackgroundSettings).not.toHaveBeenCalled()
   })
 
-  it('sets the expected tint overlay for a photo background', function () {
+  it('sets the expected tint overlay for a photo background', () => {
     const user = {
       id: 'abc-123',
       backgroundOption: 'photo',
@@ -617,7 +617,7 @@ describe('User background image component', function () {
     expect(tintColor).toBe('rgba(0, 0, 0, 0.15)')
   })
 
-  it('sets the expected tint overlay for a color background', function () {
+  it('sets the expected tint overlay for a color background', () => {
     const user = {
       id: 'abc-123',
       backgroundOption: 'color',
