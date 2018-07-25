@@ -28,17 +28,12 @@ class BackgroundCustomeImagePicker extends React.Component {
     }
   }
 
-  // TODO: could validate URI and have separate error message.
-  isValid (value) {
-    return true
-  }
-
   onChange (event, newValue) {
-    if (this.isValid(newValue)) {
-      this.setState({
-        image: newValue
-      })
-    }
+    // May want to validate URI and have separate error message
+    // if it's invalid.
+    this.setState({
+      image: newValue
+    })
   }
 
   updateUserCustomImg (imgURL) {
