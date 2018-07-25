@@ -42,6 +42,11 @@ class BackgroundSettings extends React.Component {
       selected: backgroundOption
     })
     this.updateLocalStorageBackgroundSettings(backgroundOption)
+
+    // We expect each background selection component to call its
+    // data callbacks immediately on mount, which will save the
+    // user's selection. The daily photo option does not have a
+    // selection component, so we update the user's settings here.
     if (backgroundOption === USER_BACKGROUND_OPTION_DAILY) {
       this.onDailyPhotoOptionSelected()
     }
@@ -184,6 +189,7 @@ class BackgroundSettings extends React.Component {
         backgroundPicker = null
         break
       case USER_BACKGROUND_OPTION_CUSTOM:
+        // We expect this to call `onCustomImageSelection` on mount.
         backgroundPicker = (
           <BackgroundCustomImagePicker
             user={user}
@@ -193,6 +199,7 @@ class BackgroundSettings extends React.Component {
         )
         break
       case USER_BACKGROUND_OPTION_COLOR:
+        // We expect this to call `onBackgroundColorSelection` on mount.
         backgroundPicker = (
           <BackgroundColorPicker
             user={user}
@@ -201,6 +208,7 @@ class BackgroundSettings extends React.Component {
         )
         break
       case USER_BACKGROUND_OPTION_PHOTO:
+        // We expect this to call `onBackgroundImageSelection` on mount.
         backgroundPicker = (
           <BackgroundImagePicker
             app={app}

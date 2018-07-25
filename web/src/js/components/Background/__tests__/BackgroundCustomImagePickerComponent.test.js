@@ -28,6 +28,15 @@ describe('Background custom image picker component', () => {
     )
   })
 
+  it('calls onCustomImageSelection on mount', () => {
+    const BackgroundCustomImagePicker = require('../BackgroundCustomImagePickerComponent').default
+    shallow(
+      <BackgroundCustomImagePicker {...mockProps} />
+    )
+    expect(mockOnCustomImageSelection)
+      .toHaveBeenCalledWith(mockProps.user.customImage)
+  })
+
   it('calls onCustomImageSelection prop when the custom photo changes', () => {
     const BackgroundCustomImagePicker = require('../BackgroundCustomImagePickerComponent').default
     const wrapper = shallow(

@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import {GridList, GridTile} from 'material-ui/GridList'
+import { get } from 'lodash/object'
+import { GridList, GridTile } from 'material-ui/GridList'
 import IconButton from 'material-ui/IconButton'
 import CheckCircleIcon from 'material-ui/svg-icons/action/check-circle'
 import RadioButtonUncheckedIcon from 'material-ui/svg-icons/toggle/radio-button-unchecked'
@@ -25,9 +26,22 @@ class BackgroundImagePicker extends React.Component {
           break
         }
       }
+    } else {
+      // If the user's photo does not exist, select the first
+      // photo we display.
+      image = get(app, 'backgroundImages.edges[0].node') || null
     }
+
     this.state = {
       selectedImage: image || null
+    }
+  }
+
+  componentDidMount () {
+    // Call the image selection on mount so the parent component
+    // can save the background settings.
+    if (this.state.selectedImage) {
+      this.props.onBackgroundImageSelection(this.state.selectedImage)
     }
   }
 
@@ -108,8 +122,8 @@ BackgroundImagePicker.propTypes = {
   }),
   user: PropTypes.shape({
     backgroundImage: PropTypes.shape({
-      id: PropTypes.string,
-      imageURL: PropTypes.string
+      id: PropTypes.string.isRequired,
+      imageURL: PropTypes.string.isRequired
     }).isRequired
   }),
   onBackgroundImageSelection: PropTypes.func.isRequired

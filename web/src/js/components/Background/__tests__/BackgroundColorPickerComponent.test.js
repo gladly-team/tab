@@ -28,7 +28,15 @@ describe('Background color picker component', () => {
     )
   })
 
-  it('calls onBackgroundColorSelection prop when the color changes', () => {
+  it('calls onBackgroundColorSelection callback on mount', () => {
+    const BackgroundColorPicker = require('../BackgroundColorPickerComponent').default
+    shallow(
+      <BackgroundColorPicker {...mockProps} />
+    )
+    expect(mockOnBackgroundColorSelection).toHaveBeenCalledWith('#FF0000')
+  })
+
+  it('calls onBackgroundColorSelection callback when the color changes', () => {
     const BackgroundColorPicker = require('../BackgroundColorPickerComponent').default
     const wrapper = shallow(
       <BackgroundColorPicker {...mockProps} />

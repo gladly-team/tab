@@ -148,7 +148,39 @@ describe('Background settings component', () => {
     expect(wrapper.find(BackgroundCustomImagePicker).length).toBe(0)
   })
 
-  // TODO: test that it updates localStorage and extension background settings when selecting a new background option
+  it('it saves settings when the user selects the daily photo option', () => {
+    const BackgroundSettings = require('../BackgroundSettingsComponent').default
+    const customMockProps = cloneDeep(mockProps)
+    customMockProps.user.backgroundOption = 'photo'
+    const wrapper = shallow(
+      <BackgroundSettings {...mockProps} />
+    )
+
+    // Simulate clicking the daily photo option.
+    wrapper.find(RadioButtonGroup).prop('onChange')({}, USER_BACKGROUND_OPTION_DAILY)
+    wrapper.update()
+    expect(SetBackgroundDailyImageMutation).toHaveBeenCalled()
+  })
+
+  it('it updates localStorage when the user selects a new background option', () => {
+    const BackgroundSettings = require('../BackgroundSettingsComponent').default
+    const customMockProps = cloneDeep(mockProps)
+    customMockProps.user.backgroundOption = 'photo'
+    const wrapper = shallow(
+      <BackgroundSettings {...mockProps} />
+    )
+
+    // Simulate clicking the color background option.
+    wrapper.find(RadioButtonGroup).prop('onChange')({}, USER_BACKGROUND_OPTION_COLOR)
+    wrapper.update()
+
+    expect(setBackgroundSettings).toHaveBeenCalledWith(
+      USER_BACKGROUND_OPTION_COLOR,
+      customMockProps.user.customImage,
+      customMockProps.user.backgroundColor,
+      customMockProps.user.backgroundImage.imageURL
+    )
+  })
 
   it('saves settings when the user selects a new photo', () => {
     const BackgroundSettings = require('../BackgroundSettingsComponent').default

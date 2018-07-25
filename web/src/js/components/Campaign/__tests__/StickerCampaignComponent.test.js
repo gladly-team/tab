@@ -15,6 +15,7 @@ const mockUserData = {
   }
 }
 
+// @material-ui-1-todo: remove
 // For legacy Material-UI:
 // https://github.com/mui-org/material-ui/issues/4664#issuecomment-322032865
 const MuiShallowWithContext = node => shallow(node, {
