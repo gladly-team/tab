@@ -65,7 +65,11 @@ body {
 }
 /* End fade-dashboard animation */
 
-/* Begin fade-background animation */ 
+/* Begin fade-background animation */
+.fade-background-enter {
+  opacity: 0.01;
+}
+
 .fade-background-enter.fade-background-enter-active {
   opacity: 1;
   transition: opacity 500ms ease-in;
