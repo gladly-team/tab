@@ -40,8 +40,6 @@ class UserBackgroundImage extends React.Component {
     this.state = {
       // The image we are currently showing (or fading in to show).
       currentlyDisplayedImgURL: null,
-      // Whether the user's image has preloaded successfully.
-      nextImgPreloaded: false,
       // Whether there was a problem preloading the user's image.
       imgPreloadError: false,
       // Whether we are currently waiting on a response for a
@@ -127,7 +125,6 @@ class UserBackgroundImage extends React.Component {
     let backgroundColor = get(props, ['user', 'backgroundColor'])
     let backgroundImageURL = get(props, ['user', 'backgroundImage', 'imageURL'])
     this.setState({
-      nextImgPreloaded: false, // reset because of new image
       backgroundOption: backgroundOption,
       customImage: customImage,
       backgroundColor: backgroundColor,
@@ -195,7 +192,6 @@ class UserBackgroundImage extends React.Component {
    */
   onImgLoad () {
     this.setState({
-      nextImgPreloaded: true,
       currentlyDisplayedImgURL: this.getImgURL()
     })
   }
@@ -250,7 +246,7 @@ class UserBackgroundImage extends React.Component {
 
   render () {
     const isImgBackground = this.isImgBackground()
-    const imgUrl = this.getImgURL()
+    const newestImgURL = this.getImgURL()
 
     // Construct the style for the background element.
     const defaultStyle = {
@@ -368,10 +364,10 @@ class UserBackgroundImage extends React.Component {
           </FadeBackgroundAnimation>
         ) : null
         }
-        { (isImgBackground && !this.state.nextImgPreloaded)
+        { (isImgBackground)
           ? <img
-            style={{display: 'none'}}
-            src={imgUrl}
+            style={{ display: 'none' }}
+            src={newestImgURL}
             alt={''}
             onLoad={this.onImgLoad.bind(this)}
             onError={this.onImgError.bind(this)} />
