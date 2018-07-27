@@ -661,7 +661,7 @@ describe('User background image component', () => {
     expect(SetBackgroundDailyImageMutation).toHaveBeenCalled()
   })
 
-  it('fetches a new daily photo immediately at midnight(local time)', () => {
+  it('fetches a new daily photo immediately at midnight (local time)', () => {
     const user = {
       id: 'abc-123',
       backgroundOption: 'daily',

@@ -12,7 +12,6 @@ import {
  * @param {string} userId - The user id.
  * @return {Promise<User>}  A promise that resolves into a User instance.
  */
-//
 const setBackgroundImageDaily = async (userContext, userId) => {
   try {
     const image = await getRandomBackgroundImage(userContext)
