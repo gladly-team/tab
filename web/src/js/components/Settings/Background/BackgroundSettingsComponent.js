@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { get } from 'lodash/object'
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton'
 import Divider from 'material-ui/Divider'
 import {Card, CardHeader} from 'material-ui/Card'
@@ -137,14 +138,21 @@ class BackgroundSettings extends React.Component {
     SetBackgroundDailyImageMutation(
       this.props.relay.environment,
       this.props.user.id,
-      this.onSaveSuccess.bind(this),
+      data => {
+        // Update the image URL in localStorage when the new daily
+        // image returns. However, we need to make sure we don't
+        // overwrite the value if the user chooses a custom or
+        // selected photo before the server responds.
+        if (this.state.selected !== USER_BACKGROUND_OPTION_DAILY) {
+          return
+        }
+        const newImgURL = get(data, 'setUserBkgDailyImage.user.backgroundImage.imageURL')
+        this.updateLocalStorageBackgroundSettings(
+          USER_BACKGROUND_OPTION_DAILY, null, null, newImgURL)
+      },
       this.onSaveError.bind(this)
     )
 
-    // TODO: we should also update the image URL in localStorage
-    // when the new daily image returns. However, we need to make sure
-    // we don't overwrite the value if the user chooses a custom or
-    // selected photo before the server responds.
     this.updateLocalStorageBackgroundSettings(
       USER_BACKGROUND_OPTION_DAILY, null, null, null)
   }

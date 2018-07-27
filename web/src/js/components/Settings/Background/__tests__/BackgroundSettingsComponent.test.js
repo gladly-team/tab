@@ -21,7 +21,9 @@ import {
 import SetBackgroundImageMutation from 'mutations/SetBackgroundImageMutation'
 import SetBackgroundColorMutation from 'mutations/SetBackgroundColorMutation'
 import SetBackgroundCustomImageMutation from 'mutations/SetBackgroundCustomImageMutation'
-import SetBackgroundDailyImageMutation from 'mutations/SetBackgroundDailyImageMutation'
+import SetBackgroundDailyImageMutation, {
+  __runOnCompleted as __runOnCompletedDailyImageMutation
+} from 'mutations/SetBackgroundDailyImageMutation'
 
 jest.mock('material-ui/RadioButton')
 jest.mock('../../../Background/BackgroundImagePickerContainer')
@@ -160,6 +162,93 @@ describe('Background settings component', () => {
     wrapper.find(RadioButtonGroup).prop('onChange')({}, USER_BACKGROUND_OPTION_DAILY)
     wrapper.update()
     expect(SetBackgroundDailyImageMutation).toHaveBeenCalled()
+  })
+
+  it('it updates localStorage immediately when the user selects the daily photo option', () => {
+    const BackgroundSettings = require('../BackgroundSettingsComponent').default
+    const customMockProps = cloneDeep(mockProps)
+    customMockProps.user.backgroundOption = 'photo'
+    const wrapper = shallow(
+      <BackgroundSettings {...mockProps} />
+    )
+
+    // Simulate clicking the daily photo option.
+    wrapper.find(RadioButtonGroup).prop('onChange')({}, USER_BACKGROUND_OPTION_DAILY)
+    wrapper.update()
+    expect(setBackgroundSettings).toHaveBeenCalledWith(
+      USER_BACKGROUND_OPTION_DAILY,
+      customMockProps.user.customImage,
+      customMockProps.user.backgroundColor,
+      customMockProps.user.backgroundImage.imageURL
+    )
+  })
+
+  it('it updates localStorage when the new daily photo returns after choosing to the daily photo option', () => {
+    const BackgroundSettings = require('../BackgroundSettingsComponent').default
+    const customMockProps = cloneDeep(mockProps)
+    customMockProps.user.backgroundOption = 'photo'
+    const wrapper = shallow(
+      <BackgroundSettings {...mockProps} />
+    )
+
+    // Simulate clicking the daily photo option.
+    wrapper.find(RadioButtonGroup).prop('onChange')({}, USER_BACKGROUND_OPTION_DAILY)
+    wrapper.update()
+
+    setBackgroundSettings.mockClear()
+
+    // Mock that the SetBackgroundDailyImage mutation returns.
+    __runOnCompletedDailyImageMutation({
+      setUserBkgDailyImage: {
+        user: {
+          backgroundImage: {
+            id: 'some-image-id',
+            imageURL: 'https://example.com/some/brand-new-image.jpg',
+            timestamp: '2018-07-27T17:30:56.753Z'
+          }
+        }
+      }
+    })
+    expect(setBackgroundSettings).toHaveBeenCalledWith(
+      USER_BACKGROUND_OPTION_DAILY,
+      customMockProps.user.customImage,
+      customMockProps.user.backgroundColor,
+      'https://example.com/some/brand-new-image.jpg'
+    )
+  })
+
+  it('it does not update localStorage with the new daily photo if the user chooses another background option before the daily photo data returns', () => {
+    const BackgroundSettings = require('../BackgroundSettingsComponent').default
+    const customMockProps = cloneDeep(mockProps)
+    customMockProps.user.backgroundOption = 'photo'
+    const wrapper = shallow(
+      <BackgroundSettings {...mockProps} />
+    )
+
+    // Simulate clicking the daily photo option.
+    wrapper.find(RadioButtonGroup).prop('onChange')({}, USER_BACKGROUND_OPTION_DAILY)
+    wrapper.update()
+
+    // Simulate clicking the photo option.
+    wrapper.find(RadioButtonGroup).prop('onChange')({}, USER_BACKGROUND_OPTION_PHOTO)
+    wrapper.update()
+
+    setBackgroundSettings.mockClear()
+
+    // Mock that the SetBackgroundDailyImage mutation returns.
+    __runOnCompletedDailyImageMutation({
+      setUserBkgDailyImage: {
+        user: {
+          backgroundImage: {
+            id: 'some-image-id',
+            imageURL: 'https://example.com/some/brand-new-image.jpg',
+            timestamp: '2018-07-27T17:30:56.753Z'
+          }
+        }
+      }
+    })
+
+    expect(setBackgroundSettings).not.toHaveBeenCalled()
   })
 
   it('it updates localStorage when the user selects a new background option', () => {

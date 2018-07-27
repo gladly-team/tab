@@ -145,7 +145,7 @@ class UserBackgroundImage extends React.Component {
    * If so, fetch a new background photo.
    * @param {Object} props - The component props, either `this.props`
    *   or the next `this.props` from componentWillReceiveProps. We
-   *   can't assume that `props.use` will be defined.
+   *   can't assume that `props.user` will be defined.
    * @return {undefined}
    */
   getNewDailyImageIfNeeded (props) {
