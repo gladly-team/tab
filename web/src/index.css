@@ -72,7 +72,14 @@ body {
 
 .fade-background-enter.fade-background-enter-active {
   opacity: 1;
-  transition: opacity 500ms ease-in;
+  /*
+    Slight delay to minimize the possibility that a new
+    image will fade in while an existing image is still
+    fading. We should handle this in UserBackgroundImage
+    instead, but our version of react-transition-group
+    doesn't support callbacks.
+  */
+  transition: opacity 500ms ease-in 150ms;
 }
 
 .fade-background-leave {

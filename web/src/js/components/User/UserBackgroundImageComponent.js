@@ -343,6 +343,14 @@ class UserBackgroundImage extends React.Component {
 
     // For image backgrounds, we use an img element to "preload"
     // the image before displaying the background.
+    // Note: if the props return a different image URL than what's
+    // in localStorage, it's possible for the old and new images to
+    // fade in at the same time (which doesn't look good). We should
+    // handle this with a callback from the animated components
+    // when they're done animating to prevent two at the same time,
+    // but react-transition-group only supports this in v2. For now,
+    // we've slightly delayed the CSS "enter" transition for new
+    // images.
     return (
       <div>
         { showBackground ? (
