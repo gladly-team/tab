@@ -1,8 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import SetBackgroundCustomImageMutation from 'mutations/SetBackgroundCustomImageMutation'
-
 import Subheader from 'material-ui/Subheader'
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -30,32 +28,16 @@ class BackgroundCustomeImagePicker extends React.Component {
     }
   }
 
-  isValid (value) {
-    return true
-  }
-
   onChange (event, newValue) {
-    if (this.isValid(newValue)) {
-      this.setState({
-        image: newValue
-      })
-    }
+    // May want to validate URI and have separate error message
+    // if it's invalid.
+    this.setState({
+      image: newValue
+    })
   }
 
-  onSaveSuccess () {}
-
-  onSaveError () {
-    this.props.showError('Oops, we are having trouble saving your settings right now :(')
-  }
-
-  updateUserCustomImg (imgUrl) {
-    SetBackgroundCustomImageMutation.commit(
-      this.props.relay.environment,
-      this.props.user,
-      imgUrl,
-      this.onSaveSuccess.bind(this),
-      this.onSaveError.bind(this)
-    )
+  updateUserCustomImg (imgURL) {
+    this.props.onCustomImageSelection(imgURL)
   }
 
   clear () {
@@ -140,6 +122,7 @@ class BackgroundCustomeImagePicker extends React.Component {
         </div>
         <div style={column2}>
           <img
+            alt={'Preview of your custom background'}
             onLoad={this.onImgLoaded.bind(this)}
             onError={this.onErrorLoadingImg.bind(this)}
             style={preview}
@@ -151,8 +134,11 @@ class BackgroundCustomeImagePicker extends React.Component {
 }
 
 BackgroundCustomeImagePicker.propTypes = {
-  user: PropTypes.object.isRequired,
-  showError: PropTypes.func.isRequired
+  user: PropTypes.shape({
+    customImage: PropTypes.string.isRequired
+  }),
+  showError: PropTypes.func.isRequired,
+  onCustomImageSelection: PropTypes.func.isRequired
 }
 
 export default BackgroundCustomeImagePicker

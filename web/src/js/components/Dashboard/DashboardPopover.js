@@ -35,6 +35,10 @@ class DashboardPopover extends React.Component {
         targetOrigin={{horizontal: 'right', vertical: 'top'}}
         style={style}
         useLayerForClickAway={false}
+        // @material-ui-1-todo: remove this className and the CSS in index.css.
+        // This is a workaround for a bug in Popover positioning:
+        // https://github.com/mui-org/material-ui/issues/8040#issuecomment-351827522
+        className={'tooltip-root'}
       >
         <div style={headerStyle} />
         {this.props.children}

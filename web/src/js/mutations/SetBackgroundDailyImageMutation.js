@@ -11,16 +11,15 @@ const mutation = graphql`
         backgroundImage {
           id
           imageURL
+          timestamp
         }
       }
     }
   }
 `
 
-function commit (environment, user,
+function commit (environment, userId,
   onCompleted = () => {}, onError = () => {}) {
-  const userId = user.id
-
   return commitMutation(
     environment,
     {
@@ -34,4 +33,4 @@ function commit (environment, user,
   )
 }
 
-export default {commit}
+export default commit

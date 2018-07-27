@@ -148,6 +148,10 @@ const backgroundImageType = new GraphQLObjectType({
     thumbnailURL: {
       type: GraphQLString,
       description: 'The image thumbnail URL'
+    },
+    timestamp: {
+      type: GraphQLString,
+      description: 'ISO datetime string of when the background image was last set'
     }
   }),
   interfaces: [nodeInterface]

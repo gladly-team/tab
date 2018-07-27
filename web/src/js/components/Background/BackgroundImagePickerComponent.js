@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import SetBackgroundImageMutation from 'mutations/SetBackgroundImageMutation'
 
-import {GridList, GridTile} from 'material-ui/GridList'
+import { get } from 'lodash/object'
+import { GridList, GridTile } from 'material-ui/GridList'
 import IconButton from 'material-ui/IconButton'
 import CheckCircleIcon from 'material-ui/svg-icons/action/check-circle'
 import RadioButtonUncheckedIcon from 'material-ui/svg-icons/toggle/radio-button-unchecked'
@@ -14,15 +14,8 @@ import {
 class BackgroundImagePicker extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {
-      selectedImage: null
-    }
-  }
 
-  // TODO: change to componentDidMount, or instead probably
-  // just put the logic in the constructor
-  componentWillMount () {
-    const { app, user } = this.props
+    const { app, user } = props
     const selectedImage = user.backgroundImage
     if (selectedImage) {
       var image
@@ -33,14 +26,23 @@ class BackgroundImagePicker extends React.Component {
           break
         }
       }
-      this.onImageSelected(image)
+    } else {
+      // If the user's photo does not exist, select the first
+      // photo we display.
+      image = get(app, 'backgroundImages.edges[0].node') || null
+    }
+
+    this.state = {
+      selectedImage: image || null
     }
   }
 
-  onSaveSuccess () {}
-
-  onSaveError () {
-    this.props.showError('Oops, we are having trouble saving your settings right now :(')
+  componentDidMount () {
+    // Call the image selection on mount so the parent component
+    // can save the background settings.
+    if (this.state.selectedImage) {
+      this.props.onBackgroundImageSelection(this.state.selectedImage)
+    }
   }
 
   onImageSelected (image) {
@@ -51,13 +53,7 @@ class BackgroundImagePicker extends React.Component {
       selectedImage: image
     })
 
-    SetBackgroundImageMutation.commit(
-      this.props.relay.environment,
-      this.props.user,
-      image,
-      this.onSaveSuccess.bind(this),
-      this.onSaveError.bind(this)
-    )
+    this.props.onBackgroundImageSelection(image)
   }
 
   render () {
@@ -102,7 +98,7 @@ class BackgroundImagePicker extends React.Component {
                       : <RadioButtonUncheckedIcon color={'white'} />
                     }
                   </IconButton>}>
-                <img src={edge.node.thumbnailURL} />
+                <img alt={edge.node.name} src={edge.node.thumbnailURL} />
               </GridTile>)
           })}
         </GridList>
@@ -126,11 +122,11 @@ BackgroundImagePicker.propTypes = {
   }),
   user: PropTypes.shape({
     backgroundImage: PropTypes.shape({
-      id: PropTypes.string,
-      imageURL: PropTypes.string
+      id: PropTypes.string.isRequired,
+      imageURL: PropTypes.string.isRequired
     }).isRequired
   }),
-  showError: PropTypes.func.isRequired
+  onBackgroundImageSelection: PropTypes.func.isRequired
 }
 
 export default BackgroundImagePicker

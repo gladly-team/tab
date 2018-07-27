@@ -18,7 +18,7 @@ class FadeInDashboardAnimation extends React.Component {
 }
 
 FadeInDashboardAnimation.propTypes = {
-  children: PropTypes.object.isRequired,
+  children: PropTypes.element,
   transitionAppear: PropTypes.bool
 }
 

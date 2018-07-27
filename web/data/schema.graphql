@@ -36,6 +36,9 @@ type BackgroundImage implements Node {
 
   # The image thumbnail URL
   thumbnailURL: String
+
+  # ISO datetime string of when the background image was last set
+  timestamp: String
 }
 
 # A connection to a list of items.

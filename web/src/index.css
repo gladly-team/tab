@@ -61,12 +61,46 @@ body {
 
 .fade-dashboard-appear.fade-dashboard-appear-active {
   opacity: 1;
-  transition: opacity 0.8s ease-in;
-  -webkit-transition: opacity 0.8s ease-in;
-  -ms-transition: opacity 0.8s ease-in;
-  -moz-transition: opacity 0.8s ease-in;
+  transition: opacity 800ms ease-in;
 }
-/* End fade-dashboard animation */ 
+/* End fade-dashboard animation */
+
+/* Begin fade-background animation */
+.fade-background-enter {
+  opacity: 0.01;
+}
+
+.fade-background-enter.fade-background-enter-active {
+  opacity: 1;
+  /*
+    Slight delay to minimize the possibility that a new
+    image will fade in while an existing image is still
+    fading. We should handle this in UserBackgroundImage
+    instead, but our version of react-transition-group
+    doesn't support callbacks.
+  */
+  transition: opacity 500ms ease-in 150ms;
+}
+
+.fade-background-leave {
+  opacity: 1;
+}
+
+.fade-background-leave.fade-background-leave-active {
+  opacity: 0.01;
+  /* Delay some time to give the underlying image time to render */
+  transition: opacity 700ms ease-in 1500ms;
+}
+
+.fade-background-appear {
+  opacity: 0.01;
+}
+
+.fade-background-appear.fade-background-appear-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+/* End fade-background animation */ 
 
 /* Begin active-widget animation */ 
 .active-widget-enter {
@@ -126,3 +160,8 @@ a.active {
   font-weight: bold;
 }
 
+/* @material-ui-1-todo: remove this */
+.tooltip-root {
+  /* This positions the popover offscreen, which is then overridden (fixes flashing) */
+  left: -15000px;
+}

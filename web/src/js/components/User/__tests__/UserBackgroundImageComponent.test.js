@@ -2,240 +2,396 @@
 
 import 'utils/jsdom-shims'
 import React from 'react'
+import moment from 'moment'
+import MockDate from 'mockdate'
 import { mount, shallow } from 'enzyme'
+import {
+  getUserBackgroundOption,
+  getUserBackgroundCustomImage,
+  getUserBackgroundColor,
+  getUserBackgroundImageURL,
+  setBackgroundSettings
+} from 'utils/local-bkg-settings'
 
-jest.mock('utils/local-bkg-settings')
+jest.mock('utils/local-bkg-settings', () => {
+  return {
+    getUserBackgroundOption: jest.fn(() => null),
+    getUserBackgroundCustomImage: jest.fn(() => null),
+    getUserBackgroundColor: jest.fn(() => null),
+    getUserBackgroundImageURL: jest.fn(() => null),
+    setBackgroundSettings: jest.fn(),
+    setExtensionBackgroundSettings: jest.fn()
+  }
+})
+jest.mock('mutations/SetBackgroundDailyImageMutation')
+
+const mockNow = '2017-05-19T13:59:58.000Z'
 
 beforeEach(() => {
-  jest.clearAllMocks()
-  jest.resetModules()
+  MockDate.set(moment(mockNow))
 })
 
-describe('User background image component', function () {
-  it('renders with a photo background', function () {
+afterEach(() => {
+  jest.clearAllMocks()
+  MockDate.reset()
+})
+
+describe('User background image component', () => {
+  it('renders with a selected photo background', () => {
     const user = {
+      id: 'abc-123',
       backgroundOption: 'photo',
       customImage: null,
       backgroundColor: '#FF0000',
       backgroundImage: {
-        imageURL: 'https://example.com/pic.png'
+        imageURL: 'https://example.com/pic.png',
+        timestamp: '2017-05-19T13:59:46.000Z'
       }
     }
     const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
     const wrapper = shallow(
-      <UserBackgroundImageComponent user={user} />
+      <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
     )
-    const wrapperStyle = wrapper.get(0).props.style
-    expect(wrapperStyle.backgroundImage).toBe('url(https://example.com/pic.png)')
-
-    // Image should not appear until it's loaded.
-    expect(wrapperStyle.opacity).toBe(0)
     wrapper.instance().onImgLoad() // mock img onload
     wrapper.update()
-    expect(wrapper.get(0).props.style.opacity).toBe(1)
+    const backgroundStyle = wrapper.find('[data-test-id="dashboard-background-img"]').prop('style')
+    expect(backgroundStyle.backgroundImage).toBe('url(https://example.com/pic.png)')
   })
 
-  it('renders with a daily photo background', function () {
+  it('renders with a selected photo background (from localStorage only)', () => {
+    // Set background settings in localStorage.
+    getUserBackgroundOption.mockReturnValue('photo')
+    getUserBackgroundCustomImage.mockReturnValue(null)
+    getUserBackgroundColor.mockReturnValue('#FF0000')
+    getUserBackgroundImageURL.mockReturnValue('https://example.com/pic.png')
+
+    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
+    const wrapper = shallow(
+      <UserBackgroundImageComponent user={null} relay={{ environment: {} }} />
+    )
+    wrapper.instance().onImgLoad() // mock img onload
+    wrapper.update()
+    const backgroundStyle = wrapper.find('[data-test-id="dashboard-background-img"]').prop('style')
+    expect(backgroundStyle.backgroundImage).toBe('url(https://example.com/pic.png)')
+  })
+
+  it('renders with a daily photo background', () => {
     const user = {
+      id: 'abc-123',
       backgroundOption: 'daily',
       customImage: null,
       backgroundColor: '#FF0000',
       backgroundImage: {
-        imageURL: 'https://example.com/something.png'
+        imageURL: 'https://example.com/something.png',
+        timestamp: '2017-05-19T13:59:46.000Z'
       }
     }
     const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
     const wrapper = shallow(
-      <UserBackgroundImageComponent user={user} />
+      <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
     )
-    const wrapperStyle = wrapper.get(0).props.style
-    expect(wrapperStyle.backgroundImage).toBe('url(https://example.com/something.png)')
-
-    // Image should not appear until it's loaded.
-    expect(wrapperStyle.opacity).toBe(0)
     wrapper.instance().onImgLoad() // mock img onload
     wrapper.update()
-    expect(wrapper.get(0).props.style.opacity).toBe(1)
+    const backgroundStyle = wrapper.find('[data-test-id="dashboard-background-img"]').prop('style')
+    expect(backgroundStyle.backgroundImage).toBe('url(https://example.com/something.png)')
   })
 
-  it('renders with a custom photo background', function () {
+  it('renders with a daily photo background (from localStorage only)', () => {
+    // Set background settings in localStorage.
+    getUserBackgroundOption.mockReturnValue('daily')
+    getUserBackgroundCustomImage.mockReturnValue(null)
+    getUserBackgroundColor.mockReturnValue('#FF0000')
+    getUserBackgroundImageURL.mockReturnValue('https://example.com/something.png')
+
+    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
+    const wrapper = shallow(
+      <UserBackgroundImageComponent user={null} relay={{ environment: {} }} />
+    )
+    wrapper.instance().onImgLoad() // mock img onload
+    wrapper.update()
+    const backgroundStyle = wrapper.find('[data-test-id="dashboard-background-img"]').prop('style')
+    expect(backgroundStyle.backgroundImage).toBe('url(https://example.com/something.png)')
+  })
+
+  it('renders with a custom photo background', () => {
     const user = {
+      id: 'abc-123',
       backgroundOption: 'custom',
       customImage: 'https://example.com/some-custom-photo.png',
-      backgroundColor: '#FF0000',
+      backgroundColor: null,
       backgroundImage: {
-        imageURL: 'https://example.com/pic.png'
+        imageURL: 'https://example.com/pic.png',
+        timestamp: '2017-05-19T13:59:46.000Z'
       }
     }
     const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
     const wrapper = shallow(
-      <UserBackgroundImageComponent user={user} />
+      <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
     )
-    const wrapperStyle = wrapper.get(0).props.style
-    expect(wrapperStyle.backgroundImage).toBe('url(https://example.com/some-custom-photo.png)')
-
-    // Image should not appear until it's loaded.
-    expect(wrapperStyle.opacity).toBe(0)
     wrapper.instance().onImgLoad() // mock img onload
     wrapper.update()
-    expect(wrapper.get(0).props.style.opacity).toBe(1)
+    const backgroundStyle = wrapper.find('[data-test-id="dashboard-background-img"]').prop('style')
+    expect(backgroundStyle.backgroundImage).toBe('url(https://example.com/some-custom-photo.png)')
   })
 
-  it('renders with a color background', function () {
+  it('renders with a custom photo background (from localStorage only)', () => {
+    // Set background settings in localStorage.
+    getUserBackgroundOption.mockReturnValue('custom')
+    getUserBackgroundCustomImage.mockReturnValue('https://example.com/some-custom-photo.png')
+    getUserBackgroundColor.mockReturnValue(null)
+    getUserBackgroundImageURL.mockReturnValue('https://example.com/pic.png')
+
+    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
+    const wrapper = shallow(
+      <UserBackgroundImageComponent user={null} relay={{ environment: {} }} />
+    )
+    wrapper.instance().onImgLoad() // mock img onload
+    wrapper.update()
+    const backgroundStyle = wrapper.find('[data-test-id="dashboard-background-img"]').prop('style')
+    expect(backgroundStyle.backgroundImage).toBe('url(https://example.com/some-custom-photo.png)')
+  })
+
+  it('renders with a color background', () => {
     const user = {
+      id: 'abc-123',
       backgroundOption: 'color',
-      customImage: 'https://example.com/some-custom-photo.png',
+      customImage: null,
       backgroundColor: '#FF0000',
       backgroundImage: {
-        imageURL: 'https://example.com/pic.png'
+        imageURL: 'https://example.com/pic.png',
+        timestamp: '2017-05-19T13:59:46.000Z'
       }
     }
     const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
     const wrapper = shallow(
-      <UserBackgroundImageComponent user={user} />
+      <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
     )
-    const wrapperStyle = wrapper.get(0).props.style
-    expect(wrapperStyle.backgroundColor).toBe('#FF0000')
-    expect(wrapperStyle.backgroundImage).not.toBeDefined()
-
-    // Color background should appear immediately.
-    expect(wrapperStyle.opacity).toBe(1)
+    const backgroundStyle = wrapper.find('[data-test-id="dashboard-background-img"]').prop('style')
+    expect(backgroundStyle.backgroundColor).toBe('#FF0000')
+    expect(backgroundStyle.backgroundImage).not.toBeDefined()
   })
 
-  it('renders the default background if the color is missing', function () {
+  it('renders with a color background (from localStorage only)', () => {
+    // Set background settings in localStorage.
+    getUserBackgroundOption.mockReturnValue('color')
+    getUserBackgroundCustomImage.mockReturnValue(null)
+    getUserBackgroundColor.mockReturnValue('#FF0000')
+    getUserBackgroundImageURL.mockReturnValue('https://example.com/pic.png')
+
+    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
+    const wrapper = shallow(
+      <UserBackgroundImageComponent user={null} relay={{ environment: {} }} />
+    )
+    const backgroundStyle = wrapper.find('[data-test-id="dashboard-background-img"]').prop('style')
+    expect(backgroundStyle.backgroundColor).toBe('#FF0000')
+    expect(backgroundStyle.backgroundImage).not.toBeDefined()
+  })
+
+  it('updates the color background when the setting on the server differs from localStorage', () => {
+    // Set background settings in localStorage.
+    getUserBackgroundOption.mockReturnValue('color')
+    getUserBackgroundCustomImage.mockReturnValue(null)
+    getUserBackgroundColor.mockReturnValue('#FF0000')
+    getUserBackgroundImageURL.mockReturnValue('https://example.com/pic.png')
+
+    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
+    const wrapper = shallow(
+      <UserBackgroundImageComponent user={null} relay={{ environment: {} }} />
+    )
+    const backgroundStyle = wrapper.find('[data-test-id="dashboard-background-img"]').prop('style')
+    expect(backgroundStyle.backgroundColor).toBe('#FF0000')
+
+    const updatedUser = {
+      id: 'abc-123',
+      backgroundOption: 'color',
+      customImage: null,
+      backgroundColor: '#EFEFEF', // changed
+      backgroundImage: {
+        imageURL: 'https://example.com/pic.png',
+        timestamp: '2017-05-19T13:59:46.000Z'
+      }
+    }
+    wrapper.setProps({ user: updatedUser })
+
+    // The background should now be the new color.
+    const newBackgroundStyle = wrapper.find('[data-test-id="dashboard-background-img"]').prop('style')
+    expect(newBackgroundStyle.backgroundColor).toBe('#EFEFEF')
+  })
+
+  it('changes background types when the setting on the server differs from localStorage', () => {
+    // Set background settings in localStorage.
+    getUserBackgroundOption.mockReturnValue('color')
+    getUserBackgroundCustomImage.mockReturnValue(null)
+    getUserBackgroundColor.mockReturnValue('#FF0000')
+    getUserBackgroundImageURL.mockReturnValue('https://example.com/pic.png')
+
+    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
+    const wrapper = shallow(
+      <UserBackgroundImageComponent user={null} relay={{ environment: {} }} />
+    )
+    const backgroundStyle = wrapper.find('[data-test-id="dashboard-background-img"]').prop('style')
+    expect(backgroundStyle.backgroundColor).toBe('#FF0000')
+    expect(backgroundStyle.backgroundImage).not.toBeDefined()
+
+    const updatedUser = {
+      id: 'abc-123',
+      backgroundOption: 'photo', // changed
+      customImage: null,
+      backgroundColor: '#FF0000',
+      backgroundImage: {
+        imageURL: 'https://example.com/pic.png',
+        timestamp: '2017-05-19T13:59:46.000Z'
+      }
+    }
+    wrapper.setProps({ user: updatedUser })
+    wrapper.instance().onImgLoad() // mock img onload
+    wrapper.update()
+
+    // The background should now be a photo.
+    const newBackgroundStyle = wrapper.find('[data-test-id="dashboard-background-img"]').prop('style')
+    expect(newBackgroundStyle.backgroundColor).not.toBeDefined()
+    expect(newBackgroundStyle.backgroundImage).toBe('url(https://example.com/pic.png)')
+  })
+
+  it('renders the default background if the color is missing', () => {
     const user = {
+      id: 'abc-123',
       backgroundOption: 'color',
       customImage: 'https://example.com/some-custom-photo.png',
       backgroundColor: null,
       backgroundImage: {
-        imageURL: 'https://example.com/pic.png'
+        imageURL: 'https://example.com/pic.png',
+        timestamp: '2017-05-19T13:59:46.000Z'
       }
     }
     const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
     const wrapper = shallow(
-      <UserBackgroundImageComponent user={user} />
+      <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
     )
     const styleOnError = {
       backgroundColor: '#4a90e2'
     }
-    const wrapperStyle = wrapper.get(0).props.style
-    expect(wrapperStyle.backgroundColor).toBe(styleOnError.backgroundColor)
-    expect(wrapperStyle.backgroundImage).not.toBeDefined()
+    const backgroundStyle = wrapper.find('[data-test-id="dashboard-background-img"]').prop('style')
+    expect(backgroundStyle.backgroundColor).toBe(styleOnError.backgroundColor)
+    expect(backgroundStyle.backgroundImage).not.toBeDefined()
   })
 
-  it('renders the default background if the photo URL is missing', function () {
+  it('renders the default background if the photo URL is missing', () => {
     const user = {
+      id: 'abc-123',
       backgroundOption: 'photo',
       customImage: 'https://example.com/some-custom-photo.png',
       backgroundColor: '#FFFFFF',
       backgroundImage: {
-        imageURL: undefined
+        imageURL: undefined,
+        timestamp: '2017-05-19T13:59:46.000Z'
       }
     }
     const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
     const wrapper = shallow(
-      <UserBackgroundImageComponent user={user} />
+      <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
     )
     const styleOnError = {
       backgroundColor: '#4a90e2'
     }
-    const wrapperStyle = wrapper.get(0).props.style
-    expect(wrapperStyle.backgroundColor).toBe(styleOnError.backgroundColor)
-    expect(wrapperStyle.backgroundImage).not.toBeDefined()
+    const backgroundStyle = wrapper.find('[data-test-id="dashboard-background-img"]').prop('style')
+    expect(backgroundStyle.backgroundColor).toBe(styleOnError.backgroundColor)
+    expect(backgroundStyle.backgroundImage).not.toBeDefined()
   })
 
-  it('renders the default background if the custom photo URL is missing', function () {
+  it('renders the default background if the custom photo URL is missing', () => {
     const user = {
+      id: 'abc-123',
       backgroundOption: 'custom',
       customImage: null,
       backgroundColor: '#FFFFFF',
       backgroundImage: {
-        imageURL: 'https://example.com/pic.png'
+        imageURL: 'https://example.com/pic.png',
+        timestamp: '2017-05-19T13:59:46.000Z'
       }
     }
     const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
     const wrapper = shallow(
-      <UserBackgroundImageComponent user={user} />
+      <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
     )
     const styleOnError = {
       backgroundColor: '#4a90e2'
     }
-    const wrapperStyle = wrapper.get(0).props.style
-    expect(wrapperStyle.backgroundColor).toBe(styleOnError.backgroundColor)
-    expect(wrapperStyle.backgroundImage).not.toBeDefined()
+    const backgroundStyle = wrapper.find('[data-test-id="dashboard-background-img"]').prop('style')
+    expect(backgroundStyle.backgroundColor).toBe(styleOnError.backgroundColor)
+    expect(backgroundStyle.backgroundImage).not.toBeDefined()
   })
 
-  it('renders the fallback background if the background option is not set', function () {
+  it('renders the fallback background if the background option is not set', () => {
     // Mock the settings in local storage.
-    jest.mock('utils/local-bkg-settings', () => {
-      return {
-        getUserBackgroundOption: jest.fn(() => null),
-        getUserBackgroundCustomImage: jest.fn(() => null),
-        getUserBackgroundColor: jest.fn(() => null),
-        getUserBackgroundImageURL: jest.fn(() => null),
-        setBackgroundSettings: jest.fn(),
-        setExtensionBackgroundSettings: jest.fn()
-      }
-    })
+    getUserBackgroundOption.mockReturnValue(null)
+    getUserBackgroundCustomImage.mockReturnValue(null)
+    getUserBackgroundColor.mockReturnValue(null)
+    getUserBackgroundImageURL.mockReturnValue(null)
+
     const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
     const wrapper = shallow(
-      <UserBackgroundImageComponent user={null} />
+      <UserBackgroundImageComponent user={null} relay={{ environment: {} }} />
     )
     const fallbackStyle = {
       backgroundImage: 'none',
       backgroundColor: 'transparent'
     }
-    const wrapperStyle = wrapper.get(0).props.style
-    expect(wrapperStyle.background).toBe(fallbackStyle.background)
-    expect(wrapperStyle.backgroundImage).toBe('none')
+    const backgroundStyle = wrapper.find('[data-test-id="dashboard-background-img"]').prop('style')
+    expect(backgroundStyle.background).toBe(fallbackStyle.background)
+    expect(backgroundStyle.backgroundImage).toBe('none')
   })
 
-  it('falls back to default background on image load error', function () {
+  it('falls back to default background on image load error', () => {
     const user = {
+      id: 'abc-123',
       backgroundOption: 'custom',
       customImage: 'https://example.com/some-custom-photo.png',
       backgroundColor: '#FF0000',
       backgroundImage: {
-        imageURL: 'https://example.com/pic.png'
+        imageURL: 'https://example.com/pic.png',
+        timestamp: '2017-05-19T13:59:46.000Z'
       }
     }
     const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
     const wrapper = shallow(
-      <UserBackgroundImageComponent user={user} />
+      <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
     )
     const styleOnError = {
       backgroundColor: '#4a90e2'
     }
     wrapper.instance().onImgError()
     wrapper.update()
-    const wrapperStyle = wrapper.get(0).props.style
-    expect(wrapperStyle.backgroundColor).toBe(styleOnError.backgroundColor)
-    expect(wrapperStyle.backgroundImage).not.toBeDefined()
+    const backgroundStyle = wrapper.find('[data-test-id="dashboard-background-img"]').prop('style')
+    expect(backgroundStyle.backgroundColor).toBe(styleOnError.backgroundColor)
+    expect(backgroundStyle.backgroundImage).not.toBeDefined()
   })
 
-  it('calls to show an error message on image load error', function () {
+  it('calls to show an error message on image load error', () => {
     const user = {
+      id: 'abc-123',
       backgroundOption: 'custom',
       customImage: 'https://example.com/some-custom-photo.png',
       backgroundColor: '#FF0000',
       backgroundImage: {
-        imageURL: 'https://example.com/pic.png'
+        imageURL: 'https://example.com/pic.png',
+        timestamp: '2017-05-19T13:59:46.000Z'
       }
     }
     const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
     const showErrorHandler = jest.fn()
     const wrapper = shallow(
-      <UserBackgroundImageComponent user={user} showError={showErrorHandler} />
+      <UserBackgroundImageComponent user={user} showError={showErrorHandler} relay={{ environment: {} }} />
     )
     wrapper.instance().onImgError()
     wrapper.update()
     expect(showErrorHandler).toHaveBeenCalledWith('We could not load your background image.')
   })
 
-  it('correctly determines whether background props are different from state', function () {
+  it('correctly determines whether background props are different from state', () => {
     const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
     const wrapper = shallow(
-      <UserBackgroundImageComponent user={null} />
+      <UserBackgroundImageComponent user={null} relay={{ environment: {} }} />
     )
     var state
     var props
@@ -263,7 +419,8 @@ describe('User background image component', function () {
         customImage: propsCustomImage,
         backgroundColor: propsBackgroundColor,
         backgroundImage: {
-          imageURL: propsCustomImageURL
+          imageURL: propsCustomImageURL,
+          timestamp: '2017-05-19T13:59:46.000Z'
         }
       }
     }
@@ -282,7 +439,8 @@ describe('User background image component', function () {
         customImage: propsCustomImage,
         backgroundColor: propsBackgroundColor,
         backgroundImage: {
-          imageURL: propsCustomImageURL
+          imageURL: propsCustomImageURL,
+          timestamp: '2017-05-19T13:59:46.000Z'
         }
       }
     }
@@ -298,7 +456,8 @@ describe('User background image component', function () {
         customImage: propsCustomImage,
         backgroundColor: propsBackgroundColor,
         backgroundImage: {
-          imageURL: propsCustomImageURL
+          imageURL: propsCustomImageURL,
+          timestamp: '2017-05-19T13:59:46.000Z'
         }
       }
     }
@@ -307,18 +466,12 @@ describe('User background image component', function () {
       .toBe(true)
   })
 
-  it('sets state on mount using local storage values', function () {
+  it('sets state on mount using local storage values', () => {
     // Mock the settings in local storage.
-    jest.mock('utils/local-bkg-settings', () => {
-      return {
-        getUserBackgroundOption: jest.fn(() => 'color'), // Different
-        getUserBackgroundCustomImage: jest.fn(() => null),
-        getUserBackgroundColor: jest.fn(() => '#FFF'),
-        getUserBackgroundImageURL: jest.fn(() => 'https://example.com/pic.png'),
-        setBackgroundSettings: jest.fn(),
-        setExtensionBackgroundSettings: jest.fn()
-      }
-    })
+    getUserBackgroundOption.mockReturnValue('color') // Different
+    getUserBackgroundCustomImage.mockReturnValue(null)
+    getUserBackgroundColor.mockReturnValue('#FFF')
+    getUserBackgroundImageURL.mockReturnValue('https://example.com/pic.png')
 
     // As if we have not yet fetched the user from the server.
     const user = null
@@ -331,78 +484,66 @@ describe('User background image component', function () {
     expect(state.backgroundImageURL).toEqual('https://example.com/pic.png')
   })
 
-  it('saves background settings to storage on mount (when the settings differ)', function () {
+  it('saves background settings to storage on mount (when the settings differ)', () => {
     // Mock the settings in local storage.
-    jest.mock('utils/local-bkg-settings', () => {
-      return {
-        getUserBackgroundOption: jest.fn(() => 'color'), // Different
-        getUserBackgroundCustomImage: jest.fn(() => null),
-        getUserBackgroundColor: jest.fn(() => '#FFF'),
-        getUserBackgroundImageURL: jest.fn(() => 'https://example.com/pic.png'),
-        setBackgroundSettings: jest.fn(),
-        setExtensionBackgroundSettings: jest.fn()
-      }
-    })
+    getUserBackgroundOption.mockReturnValue('color') // Different
+    getUserBackgroundCustomImage.mockReturnValue(null)
+    getUserBackgroundColor.mockReturnValue('#FFF')
+    getUserBackgroundImageURL.mockReturnValue('https://example.com/pic.png')
 
     const user = {
+      id: 'abc-123',
       backgroundOption: 'photo',
       customImage: null,
       backgroundColor: '#FF0000',
       backgroundImage: {
-        imageURL: 'https://example.com/pic.png'
+        imageURL: 'https://example.com/pic.png',
+        timestamp: '2017-05-19T13:59:46.000Z'
       }
     }
     const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
-    shallow(<UserBackgroundImageComponent user={user} />)
-    const setBackgroundSettings = require('utils/local-bkg-settings')
-      .setBackgroundSettings
+    shallow(<UserBackgroundImageComponent user={user} relay={{ environment: {} }} />)
     expect(setBackgroundSettings).toHaveBeenCalledTimes(1)
   })
 
-  it('does not save background settings to storage on mount (when the settings are the same)', function () {
+  it('does not save background settings to storage on mount (when the settings are the same)', () => {
     // Mock the settings in local storage.
-    jest.mock('utils/local-bkg-settings', () => {
-      return {
-        getUserBackgroundOption: jest.fn(() => 'photo'),
-        getUserBackgroundCustomImage: jest.fn(() => null),
-        getUserBackgroundColor: jest.fn(() => '#FF0000'),
-        getUserBackgroundImageURL: jest.fn(() => 'https://example.com/pic.png'),
-        setBackgroundSettings: jest.fn(),
-        setExtensionBackgroundSettings: jest.fn()
-      }
-    })
+    getUserBackgroundOption.mockReturnValue('photo')
+    getUserBackgroundCustomImage.mockReturnValue(null)
+    getUserBackgroundColor.mockReturnValue('#FF0000')
+    getUserBackgroundImageURL.mockReturnValue('https://example.com/pic.png')
 
     const user = {
+      id: 'abc-123',
       backgroundOption: 'photo',
       customImage: null,
       backgroundColor: '#FF0000',
       backgroundImage: {
-        imageURL: 'https://example.com/pic.png'
+        imageURL: 'https://example.com/pic.png',
+        timestamp: '2017-05-19T13:59:46.000Z'
       }
     }
     const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
-    shallow(<UserBackgroundImageComponent user={user} />)
-    const setBackgroundSettings = require('utils/local-bkg-settings')
-      .setBackgroundSettings
+    shallow(<UserBackgroundImageComponent user={user} relay={{ environment: {} }} />)
     expect(setBackgroundSettings).not.toHaveBeenCalled()
   })
 
-  it('saves the background settings on prop update (when the settings are different)', function () {
+  it('saves the background settings on prop update (when the settings are different)', () => {
     const user = {
+      id: 'abc-123',
       backgroundOption: 'photo',
       customImage: 'https://example.com/some-custom-photo.png',
       backgroundColor: '#FF0000',
       backgroundImage: {
-        imageURL: 'https://example.com/pic.png'
+        imageURL: 'https://example.com/pic.png',
+        timestamp: '2017-05-19T13:59:46.000Z'
       }
     }
     const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
     const wrapper = mount(
-      <UserBackgroundImageComponent user={user} />
+      <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
     )
 
-    const setBackgroundSettings = require('utils/local-bkg-settings')
-      .setBackgroundSettings
     // It saved background settings on mount. Clear that call.
     setBackgroundSettings.mockClear()
 
@@ -412,30 +553,30 @@ describe('User background image component', function () {
       customImage: 'https://example.com/some-custom-photo.png',
       backgroundColor: '#FF0000',
       backgroundImage: {
-        imageURL: 'https://example.com/pic.png'
+        imageURL: 'https://example.com/pic.png',
+        timestamp: '2017-05-19T13:59:46.000Z'
       }
     }
-    wrapper.setProps({ user: userUpdate }, () => {
-      expect(setBackgroundSettings).toHaveBeenCalledTimes(1)
-    })
+    wrapper.setProps({ user: userUpdate })
+    expect(setBackgroundSettings).toHaveBeenCalledTimes(1)
   })
 
-  it('does not save the background settings on prop update (when the settings are the same)', function () {
+  it('does not save the background settings on prop update (when the settings are the same)', () => {
     const user = {
+      id: 'abc-123',
       backgroundOption: 'photo',
       customImage: 'https://example.com/some-custom-photo.png',
       backgroundColor: '#FF0000',
       backgroundImage: {
-        imageURL: 'https://example.com/pic.png'
+        imageURL: 'https://example.com/pic.png',
+        timestamp: '2017-05-19T13:59:46.000Z'
       }
     }
     const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
     const wrapper = mount(
-      <UserBackgroundImageComponent user={user} />
+      <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
     )
 
-    const setBackgroundSettings = require('utils/local-bkg-settings')
-      .setBackgroundSettings
     // It saved background settings on mount. Clear that call.
     setBackgroundSettings.mockClear()
 
@@ -445,95 +586,231 @@ describe('User background image component', function () {
       customImage: 'https://example.com/some-custom-photo.png',
       backgroundColor: '#FF0000',
       backgroundImage: {
-        imageURL: 'https://example.com/pic.png'
+        imageURL: 'https://example.com/pic.png',
+        timestamp: '2017-05-19T13:59:46.000Z'
       }
     }
-    wrapper.setProps({ user: userUpdate }, () => {
-      expect(setBackgroundSettings).not.toHaveBeenCalled()
-    })
+    wrapper.setProps({ user: userUpdate })
+    expect(setBackgroundSettings).not.toHaveBeenCalled()
   })
 
-  it('messages the parent frame on mount when there are settings in local storage', function () {
-    // Mock the settings in local storage.
-    jest.mock('utils/local-bkg-settings', () => {
-      return {
-        getUserBackgroundOption: jest.fn(() => 'photo'),
-        getUserBackgroundCustomImage: jest.fn(() => 'https://example.com/some-custom-photo.png'),
-        getUserBackgroundColor: jest.fn(() => '#FF0000'),
-        getUserBackgroundImageURL: jest.fn(() => 'https://example.com/pic.png'),
-        setBackgroundSettings: jest.fn(),
-        setExtensionBackgroundSettings: jest.fn()
-      }
-    })
-    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
-    mount(
-      <UserBackgroundImageComponent user={null} />
-    )
-
-    const setExtensionBackgroundSettings = require('utils/local-bkg-settings')
-      .setExtensionBackgroundSettings
-    expect(setExtensionBackgroundSettings).toHaveBeenCalledTimes(1)
-  })
-
-  it('does not message the parent frame on mount when there are not settings in local storage', function () {
-    // Mock the settings in local storage.
-    jest.mock('utils/local-bkg-settings', () => {
-      return {
-        getUserBackgroundOption: jest.fn(() => null),
-        getUserBackgroundCustomImage: jest.fn(() => null),
-        getUserBackgroundColor: jest.fn(() => null),
-        getUserBackgroundImageURL: jest.fn(() => null),
-        setBackgroundSettings: jest.fn(),
-        setExtensionBackgroundSettings: jest.fn()
-      }
-    })
-    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
-    mount(
-      <UserBackgroundImageComponent user={null} />
-    )
-
-    const setExtensionBackgroundSettings = require('utils/local-bkg-settings')
-      .setExtensionBackgroundSettings
-    expect(setExtensionBackgroundSettings).not.toHaveBeenCalled()
-  })
-
-  it('sets the expected tint overlay for a photo background', function () {
+  it('sets the expected tint overlay for a photo background', () => {
     const user = {
+      id: 'abc-123',
       backgroundOption: 'photo',
       customImage: 'https://example.com/some-custom-photo.png',
       backgroundColor: '#FF0000',
       backgroundImage: {
-        imageURL: 'https://example.com/pic.png'
+        imageURL: 'https://example.com/pic.png',
+        timestamp: '2017-05-19T13:59:46.000Z'
       }
     }
     const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
     const wrapper = mount(
-      <UserBackgroundImageComponent user={user} />
+      <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
     )
-
+    wrapper.instance().onImgLoad() // mock img onload
+    wrapper.update()
     const tintElem = wrapper
       .find('[data-test-id="background-tint-overlay"]').first()
     const tintColor = tintElem.props().style.backgroundColor
     expect(tintColor).toBe('rgba(0, 0, 0, 0.15)')
   })
 
-  it('sets the expected tint overlay for a color background', function () {
+  it('sets the expected tint overlay for a color background', () => {
     const user = {
+      id: 'abc-123',
       backgroundOption: 'color',
       customImage: 'https://example.com/some-custom-photo.png',
       backgroundColor: '#FF0000',
       backgroundImage: {
-        imageURL: 'https://example.com/pic.png'
+        imageURL: 'https://example.com/pic.png',
+        timestamp: '2017-05-19T13:59:46.000Z'
       }
     }
     const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
     const wrapper = mount(
-      <UserBackgroundImageComponent user={user} />
+      <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
     )
 
     const tintElem = wrapper
       .find('[data-test-id="background-tint-overlay"]').first()
     const tintColor = tintElem.props().style.backgroundColor
     expect(tintColor).toBe('rgba(0, 0, 0, 0.03)')
+  })
+
+  it('fetches a new daily photo when one was last fetched yesterday (local time)', () => {
+    const user = {
+      id: 'abc-123',
+      backgroundOption: 'daily',
+      customImage: null,
+      backgroundColor: '#FF0000',
+      backgroundImage: {
+        imageURL: 'https://example.com/something.png',
+        timestamp: '2017-05-18T19:01:03.000' // yesterday relative to current time; local time
+      }
+    }
+    MockDate.set(moment('2017-05-19T13:59:58.000')) // local time
+    const SetBackgroundDailyImageMutation = require('mutations/SetBackgroundDailyImageMutation').default
+
+    // Current time is the day after the background image last changed.
+    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
+    shallow(
+      <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
+    )
+    expect(SetBackgroundDailyImageMutation).toHaveBeenCalled()
+  })
+
+  it('fetches a new daily photo immediately at midnight (local time)', () => {
+    const user = {
+      id: 'abc-123',
+      backgroundOption: 'daily',
+      customImage: null,
+      backgroundColor: '#FF0000',
+      backgroundImage: {
+        imageURL: 'https://example.com/something.png',
+        timestamp: '2017-05-18T23:59:59.833' // < 2 seconds ago relative to current time; local time
+      }
+    }
+    MockDate.set(moment('2017-05-19T00:00:00.581')) // just after midnight local time
+    const SetBackgroundDailyImageMutation = require('mutations/SetBackgroundDailyImageMutation').default
+
+    // Current time is the day after the background image last changed.
+    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
+    shallow(
+      <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
+    )
+    expect(SetBackgroundDailyImageMutation).toHaveBeenCalled()
+  })
+
+  it('fetches a new daily photo even when the props update and background settings have not changed from localStorage', () => {
+    // Mock the settings in local storage.
+    const backgroundOption = 'daily'
+    const customImage = null
+    const backgroundColor = '#FF0000'
+    const backgroundImageURL = 'https://example.com/something.png'
+    getUserBackgroundOption.mockReturnValue(backgroundOption)
+    getUserBackgroundCustomImage.mockReturnValue(customImage)
+    getUserBackgroundColor.mockReturnValue(backgroundColor)
+    getUserBackgroundImageURL.mockReturnValue(backgroundImageURL)
+
+    MockDate.set(moment('2017-05-19T13:59:58.000')) // local time
+
+    const SetBackgroundDailyImageMutation = require('mutations/SetBackgroundDailyImageMutation').default
+
+    // Current time is the day after the background image last changed.
+    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
+    const wrapper = shallow(
+      <UserBackgroundImageComponent user={null} relay={{ environment: {} }} />
+    )
+
+    // Important: these props are not different from the state that
+    // the component loaded from localStorage.
+    const userUpdate = {
+      id: 'abc-123',
+      backgroundOption: backgroundOption,
+      customImage: customImage,
+      backgroundColor: backgroundColor,
+      backgroundImage: {
+        imageURL: backgroundImageURL,
+        timestamp: '2017-05-18T19:01:03.000' // yesterday relative to current time; local time
+      }
+    }
+    expect(SetBackgroundDailyImageMutation).not.toHaveBeenCalled()
+    wrapper.setProps({ user: userUpdate })
+    expect(SetBackgroundDailyImageMutation).toHaveBeenCalled()
+  })
+
+  it('does not fetch a new daily photo when one was already fetched today (local time)', () => {
+    const user = {
+      id: 'abc-123',
+      backgroundOption: 'daily',
+      customImage: null,
+      backgroundColor: '#FF0000',
+      backgroundImage: {
+        imageURL: 'https://example.com/something.png',
+        timestamp: '2017-05-19T02:28:40.000' // same day as current time; local time
+      }
+    }
+
+    MockDate.set(moment('2017-05-19T13:59:58.000')) // local time
+
+    const SetBackgroundDailyImageMutation = require('mutations/SetBackgroundDailyImageMutation').default
+    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
+    shallow(
+      <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
+    )
+    expect(SetBackgroundDailyImageMutation).not.toHaveBeenCalled()
+  })
+
+  it('does not fetch a new daily photo when the background option is a regular photo', () => {
+    const user = {
+      id: 'abc-123',
+      backgroundOption: 'photo',
+      customImage: null,
+      backgroundColor: '#FF0000',
+      backgroundImage: {
+        imageURL: 'https://example.com/something.png',
+        timestamp: '2017-05-18T19:01:03.000' // yesterday relative to current time; local time
+      }
+    }
+    MockDate.set(moment('2017-05-19T13:59:58.000')) // local time
+
+    const SetBackgroundDailyImageMutation = require('mutations/SetBackgroundDailyImageMutation').default
+    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
+    shallow(
+      <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
+    )
+    expect(SetBackgroundDailyImageMutation).not.toHaveBeenCalled()
+  })
+
+  it('does not fetch a new daily photo when the background option is a color', () => {
+    const user = {
+      id: 'abc-123',
+      backgroundOption: 'photo',
+      customImage: null,
+      backgroundColor: '#FF0000',
+      backgroundImage: {
+        imageURL: 'https://example.com/something.png',
+        timestamp: '2017-05-19T13:59:46.000' // yesterday relative to current time; local time
+      }
+    }
+
+    MockDate.set(moment('2017-05-19T13:59:58.000')) // local time
+
+    const SetBackgroundDailyImageMutation = require('mutations/SetBackgroundDailyImageMutation').default
+    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
+    shallow(
+      <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
+    )
+    expect(SetBackgroundDailyImageMutation).not.toHaveBeenCalled()
+  })
+
+  it('does not make more than one request at a time to get a new daily photo', () => {
+    const user = {
+      id: 'abc-123',
+      backgroundOption: 'daily',
+      customImage: null,
+      backgroundColor: '#FF0000',
+      backgroundImage: {
+        imageURL: 'https://example.com/something.png',
+        timestamp: '2017-05-18T19:01:03.000' // yesterday relative to current time; local time
+      }
+    }
+    MockDate.set(moment('2017-05-19T13:59:58.000')) // local time
+
+    const SetBackgroundDailyImageMutation = require('mutations/SetBackgroundDailyImageMutation').default
+    const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
+    const wrapper = shallow(
+      <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
+    )
+
+    // We expect one request
+    expect(SetBackgroundDailyImageMutation).toHaveBeenCalledTimes(1)
+
+    // Force props to update, which should not trigger new requests.
+    wrapper.setProps({ user: Object.assign({}, user, { backgroundColor: '#CDCDCD' }) })
+    wrapper.setProps({ user: Object.assign({}, user, { backgroundColor: '#EFEFEF' }) })
+    expect(SetBackgroundDailyImageMutation).toHaveBeenCalledTimes(1)
   })
 })

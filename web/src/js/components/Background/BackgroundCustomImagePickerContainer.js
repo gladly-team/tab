@@ -8,7 +8,6 @@ import BackgroundCustomImagePicker from './BackgroundCustomImagePickerComponent'
 export default createFragmentContainer(BackgroundCustomImagePicker, {
   user: graphql`
     fragment BackgroundCustomImagePickerContainer_user on User {
-      id
       customImage
     }
   `

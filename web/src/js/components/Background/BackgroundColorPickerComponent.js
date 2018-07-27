@@ -1,7 +1,5 @@
 import React from 'react'
 
-import SetBackgroundColorMutation from 'mutations/SetBackgroundColorMutation'
-
 import { SketchPicker } from 'react-color'
 import Paper from 'material-ui/Paper'
 import Subheader from 'material-ui/Subheader'
@@ -26,24 +24,11 @@ class BackgroundColorPicker extends React.Component {
     this.onColorChanged({hex: selectedColor})
   }
 
-  onSaveSuccess () {}
-
-  onSaveError () {
-    this.props.showError('Oops, we are having trouble saving your settings right now :(')
-  }
-
   onColorChanged (color) {
     this.setState({
       selectedColor: color.hex
     })
-
-    SetBackgroundColorMutation.commit(
-      this.props.relay.environment,
-      this.props.user,
-      color.hex,
-      this.onSaveSuccess.bind(this),
-      this.onSaveError.bind(this)
-    )
+    this.props.onBackgroundColorSelection(color.hex)
   }
 
   render () {
@@ -101,8 +86,10 @@ class BackgroundColorPicker extends React.Component {
 }
 
 BackgroundColorPicker.propTypes = {
-  user: PropTypes.object.isRequired,
-  showError: PropTypes.func.isRequired
+  user: PropTypes.shape({
+    backgroundColor: PropTypes.string.isRequired
+  }),
+  onBackgroundColorSelection: PropTypes.func.isRequired
 }
 
 export default BackgroundColorPicker
