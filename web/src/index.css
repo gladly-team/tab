@@ -89,7 +89,7 @@ body {
 .fade-background-leave.fade-background-leave-active {
   opacity: 0.01;
   /* Delay some time to give the underlying image time to render */
-  transition: opacity 1000ms ease-in 1500ms;
+  transition: opacity 700ms ease-in 1500ms;
 }
 
 .fade-background-appear {

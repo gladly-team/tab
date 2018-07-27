@@ -10,7 +10,7 @@ class FadeBackgroundAnimation extends React.Component {
         transitionAppear
         transitionAppearTimeout={500}
         transitionEnterTimeout={500}
-        transitionLeaveTimeout={2500}>
+        transitionLeaveTimeout={2200}>
         {this.props.children}
       </CSSTransitionGroup>
     )
