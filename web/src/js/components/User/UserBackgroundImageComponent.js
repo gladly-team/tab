@@ -156,9 +156,11 @@ class UserBackgroundImage extends React.Component {
 
     const shouldChangeBackgroundImg = (
       !this.state.currentlyFetchingNewBackgroundImage &&
-      // FIXME: daily
-      moment().utc().diff(
-        moment(lastTimeBackgroundImgChanged), 'seconds') > 2
+      // Check if today is a different day (in local time) than
+      // the last time the background image changed.
+      !(moment().local().startOf('day').isSame(
+        moment(lastTimeBackgroundImgChanged).local().startOf('day'))
+      )
     )
 
     this.setState({
