@@ -19,6 +19,7 @@ import ProfileStatsView from '../components/Settings/Profile/ProfileStatsView'
 import ProfileDonateHearts from '../components/Settings/Profile/ProfileDonateHeartsView'
 import ProfileInviteFriend from '../components/Settings/Profile/ProfileInviteFriendView'
 import AccountView from '../components/Settings/Account/AccountView'
+import FirstTabView from '../components/Dashboard/FirstTabView'
 
 export default (
   // TODO: Show 404 page from IndexRedirect
@@ -38,6 +39,9 @@ export default (
           <Route path='invite' component={ProfileInviteFriend} />
         </Route>
         <Route path='account' component={AccountView} />
+      </Route>
+      <Route path='first-tab'>
+        <IndexRoute component={FirstTabView} />
       </Route>
       <Route path='auth' component={AuthenticationView}>
         <IndexRoute component={FirebaseAuthenticationUI} />
