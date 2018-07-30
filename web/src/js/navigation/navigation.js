@@ -38,6 +38,11 @@ export const statsURL = '/newtab/profile/stats/'
 export const inviteFriendsURL = '/newtab/profile/invite/'
 export const accountURL = '/newtab/account/'
 
+// Homepage
+
+export const privacyPolicyURL = '/privacy/'
+export const termsOfServiceURL = '/terms/'
+
 // CONVENIENCE FUNCTIONS
 
 export const goToHome = () => {

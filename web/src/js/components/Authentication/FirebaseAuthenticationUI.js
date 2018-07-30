@@ -1,9 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import * as firebase from 'firebase'
+import firebase from 'firebase/app'
+import 'firebase/auth'
 import { FirebaseAuth } from 'react-firebaseui'
 import {
-  dashboardURL
+  absoluteUrl,
+  dashboardURL,
+  privacyPolicyURL,
+  termsOfServiceURL
 } from 'navigation/navigation'
 import {
   signupPageButtonClick,
@@ -143,11 +147,10 @@ class FirebaseAuthenticationUI extends React.Component {
         }
       ],
       callbacks: {
-        // Note: firebaseui-web 2.7.0 has new signInSuccessWithAuthResult:
-        // https://github.com/firebase/firebaseui-web#signinsuccesswithauthresultauthresult-redirecturl
-        // This includes info about whether the user is new or returning.
-        signInSuccess: (currentUser, credential, redirectUrl) => {
-          this.props.onSignInSuccess(currentUser, credential, redirectUrl)
+        signInSuccessWithAuthResult: (authResult, redirectUrl) => {
+          // Note: we can check if it's a new user with
+          // `authResult.additionalUserInfo.isNewUser`.
+          this.props.onSignInSuccess(authResult.user, authResult.credential, redirectUrl)
 
           // Do not automatically redirect to the signInSuccessUrl.
           return false
@@ -160,7 +163,10 @@ class FirebaseAuthenticationUI extends React.Component {
       // https://github.com/firebase/firebaseui-web#credential-helper
       // https://github.com/firebase/firebaseui-web/blob/bd710448caa34c4a47a2fd578d76be8506d392d8/javascript/widgets/config.js#L83
       credentialHelper: 'none',
-      tosUrl: 'https://tab.gladly.io/more/terms'
+      // Terms of service URL
+      tosUrl: absoluteUrl(termsOfServiceURL),
+      // Privacy policy URL
+      privacyPolicyUrl: absoluteUrl(privacyPolicyURL)
     }
   }
 
