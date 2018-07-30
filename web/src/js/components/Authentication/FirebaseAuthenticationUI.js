@@ -144,11 +144,10 @@ class FirebaseAuthenticationUI extends React.Component {
         }
       ],
       callbacks: {
-        // Note: firebaseui-web 2.7.0 has new signInSuccessWithAuthResult:
-        // https://github.com/firebase/firebaseui-web#signinsuccesswithauthresultauthresult-redirecturl
-        // This includes info about whether the user is new or returning.
-        signInSuccess: (currentUser, credential, redirectUrl) => {
-          this.props.onSignInSuccess(currentUser, credential, redirectUrl)
+        signInSuccessWithAuthResult: (authResult, redirectUrl) => {
+          // Note: we can check if it's a new user with
+          // `authResult.additionalUserInfo.isNewUser`.
+          this.props.onSignInSuccess(authResult.user, authResult.credential, redirectUrl)
 
           // Do not automatically redirect to the signInSuccessUrl.
           return false
