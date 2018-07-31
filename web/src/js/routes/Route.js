@@ -20,6 +20,7 @@ import ProfileDonateHearts from '../components/Settings/Profile/ProfileDonateHea
 import ProfileInviteFriend from '../components/Settings/Profile/ProfileInviteFriendView'
 import AccountView from '../components/Settings/Account/AccountView'
 import FirstTabView from '../components/Dashboard/FirstTabView'
+import PostUninstallView from '../components/Dashboard/PostUninstallView'
 
 export default (
   // TODO: Show 404 page from IndexRedirect
@@ -42,6 +43,9 @@ export default (
       </Route>
       <Route path='first-tab'>
         <IndexRoute component={FirstTabView} />
+      </Route>
+      <Route path='uninstalled'>
+        <IndexRoute component={PostUninstallView} />
       </Route>
       <Route path='auth' component={AuthenticationView}>
         <IndexRoute component={FirebaseAuthenticationUI} />

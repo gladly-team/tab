@@ -14,6 +14,10 @@ export const replaceUrl = (location) => {
   browserHistory.replace(location)
 }
 
+export const externalRedirect = (externalURL) => {
+  window.location = externalURL
+}
+
 export const absoluteUrl = (path) => {
   return `${baseUrl}${path}`
 }
@@ -42,6 +46,10 @@ export const accountURL = '/newtab/account/'
 
 export const privacyPolicyURL = '/privacy/'
 export const termsOfServiceURL = '/terms/'
+
+// External links
+
+export const postUninstallSurveyURL = 'https://goo.gl/forms/XUICFx9psTwCzEIE2'
 
 // CONVENIENCE FUNCTIONS
 
