@@ -32,8 +32,11 @@ function mockAuthorizer (authorizationToken) {
   const parsedJwt = jwtDecode(authorizationToken)
   return {
     id: parsedJwt.sub,
-    email: parsedJwt.email,
-    email_verified: parsedJwt.email_verified.toString()
+    // The email and emailVerified properties may not exist for
+    // anonymous users.
+    email: parsedJwt.email || null,
+    // The email_verified claim is a string.
+    emailVerified: parsedJwt.email_verified ? parsedJwt.email_verified.toString() : 'false'
   }
 }
 
