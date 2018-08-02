@@ -123,35 +123,6 @@ describe('Authentication.js tests', function () {
     expect(goToDashboard).toHaveBeenCalled()
   })
 
-  it('redirects to the app if the user is fully authenticated', async () => {
-    expect.assertions(1)
-    const Authentication = require('../Authentication').default
-
-    const mockUserDataProp = {
-      id: null,
-      username: null
-    }
-
-    // Mock the Firebase user
-    getCurrentUser.mockReturnValueOnce({
-      id: 'abc123',
-      email: 'foo@bar.com',
-      username: 'foo',
-      isAnonymous: false,
-      emailVerified: true
-    })
-    const wrapper = shallow(
-      <Authentication
-        location={mockLocationData}
-        user={mockUserDataProp}
-        fetchUser={jest.fn()}
-      />
-    )
-    const component = wrapper.instance()
-    await component.navigateToAuthStep()
-    expect(goToDashboard).toHaveBeenCalled()
-  })
-
   it('shows the sign-in message if unauthed and within an iframe', async () => {
     expect.assertions(1)
     const Authentication = require('../Authentication').default
