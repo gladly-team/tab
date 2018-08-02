@@ -93,21 +93,6 @@ describe('UserModel', () => {
       .toBe(false)
   })
 
-  it('does not allow create when username is different', () => {
-    const userContext = {
-      id: 'abcd',
-      email: 'foo@bar.com',
-      username: 'myName'
-    }
-    const item = {
-      id: 'abc',
-      email: 'foo@bar.com',
-      username: 'myOtherName'
-    }
-    expect(User.permissions.create(userContext, null, null, item))
-      .toBe(false)
-  })
-
   it('does not allow create when the user context is not provided', () => {
     const userContext = null
     const item = {
