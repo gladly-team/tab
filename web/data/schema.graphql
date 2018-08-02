@@ -106,7 +106,7 @@ type CharityEdge {
 
 input CreateNewUserInput {
   userId: String!
-  email: String!
+  email: String
   referralData: ReferralData
   clientMutationId: String
 }

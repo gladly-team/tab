@@ -14,11 +14,11 @@ import logger from '../../utils/logger'
  * for existing users.
  * @param {object} userContext - The user authorizer object.
  * @param {string} userId - The user's ID.
- * @param {string} email - The user's email
- * @param {object} referralData - Referral data.
+ * @param {string|null} email - The user's email
+ * @param {object|null} referralData - Referral data.
  * @return {Promise<User>}  A promise that resolves into a User instance.
  */
-const createUser = async (userContext, userId, email, referralData = null) => {
+const createUser = async (userContext, userId, email = null, referralData = null) => {
   // Create the user.
   const userInfo = {
     id: userId,

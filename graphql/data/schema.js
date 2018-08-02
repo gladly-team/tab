@@ -844,7 +844,7 @@ const createNewUserMutation = mutationWithClientMutationId({
   name: 'CreateNewUser',
   inputFields: {
     userId: { type: new GraphQLNonNull(GraphQLString) },
-    email: { type: new GraphQLNonNull(GraphQLString) },
+    email: { type: GraphQLString },
     referralData: { type: ReferralDataInput }
   },
   outputFields: {

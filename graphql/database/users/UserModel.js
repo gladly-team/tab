@@ -44,7 +44,7 @@ class User extends BaseModel {
     const self = this
     return {
       id: types.string().required(),
-      email: types.string().email().required(),
+      email: types.string().email().allow(null),
       username: types.string(),
       joined: types.string().isoDate().required(),
       justCreated: types.boolean().forbidden(), // only set in app code
@@ -153,7 +153,11 @@ class User extends BaseModel {
         }
         return (
           userContext.id === item.id &&
-          userContext.email === item.email
+          // If an email address exists in the user's token or
+          // in the item to create, only authorize an item creation
+          // if the emails match. However, allow null values for
+          // the email (for anonymous users).
+          ((item.email || userContext.email) ? userContext.email === item.email : true)
         )
       },
       indexPermissions: {

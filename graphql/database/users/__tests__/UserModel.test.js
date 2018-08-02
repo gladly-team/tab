@@ -52,7 +52,7 @@ describe('UserModel', () => {
     const userContext = {
       id: 'abc',
       email: 'foo@bar.com',
-      username: 'myName'
+      emailVerified: true
     }
     const item = {
       id: 'abc',
@@ -67,7 +67,7 @@ describe('UserModel', () => {
     const userContext = {
       id: 'abcd',
       email: 'foo@bar.com',
-      username: 'myName'
+      emailVerified: true
     }
     const item = {
       id: 'abc',
@@ -82,11 +82,69 @@ describe('UserModel', () => {
     const userContext = {
       id: 'abc',
       email: 'foo@bar.com',
-      username: 'myName'
+      emailVerified: true
     }
     const item = {
       id: 'abc',
       email: 'foo+hi@bar.com',
+      username: 'myName'
+    }
+    expect(User.permissions.create(userContext, null, null, item))
+      .toBe(false)
+  })
+
+  it('allows create when the user has a null email in both their token and the item to create', () => {
+    const userContext = {
+      id: 'abc',
+      email: null,
+      emailVerified: false
+    }
+    const item = {
+      id: 'abc',
+      email: null,
+      username: 'myName'
+    }
+    expect(User.permissions.create(userContext, null, null, item))
+      .toBe(true)
+  })
+
+  it('allows create when the user has an undefined email (in their token) and tries to create an item with a null email', () => {
+    const userContext = {
+      id: 'abc',
+      email: undefined,
+      emailVerified: false
+    }
+    const item = {
+      id: 'abc',
+      email: null,
+      username: 'myName'
+    }
+    expect(User.permissions.create(userContext, null, null, item))
+      .toBe(true)
+  })
+
+  it('allows create when the user does not have an email (in their token) or item', () => {
+    const userContext = {
+      id: 'abc'
+    }
+    const item = {
+      id: 'abc',
+      email: null,
+      username: 'myName'
+    }
+    expect(User.permissions.create(userContext, null, null, item))
+      .toBe(true)
+  })
+
+  it('does not allow create when the user\'s email exists in the token but not in the item', () => {
+    const userContext = {
+      id: 'abc',
+      email: 'foo@bar.com',
+      emailVerified: true
+    }
+    const item = {
+      id: 'abc',
+      email: null,
       username: 'myName'
     }
     expect(User.permissions.create(userContext, null, null, item))
@@ -108,7 +166,7 @@ describe('UserModel', () => {
     const userContext = {
       id: 'abcd',
       email: 'foo@bar.com',
-      username: 'myName'
+      emailVerified: true
     }
     const item = null
     expect(User.permissions.create(userContext, null, null, item))
