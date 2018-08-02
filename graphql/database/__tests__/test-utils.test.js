@@ -21,7 +21,6 @@ describe('test-utils', () => {
   test('getMockUserContext returns expected object', () => {
     expect(getMockUserContext()).toEqual({
       id: 'abcdefghijklmno',
-      username: 'MyName',
       email: 'foo@bar.com',
       emailVerified: true
     })
