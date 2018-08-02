@@ -59,6 +59,10 @@ class AuthUserComponent extends React.Component {
       return
     }
 
+    // TODO:
+    // Probably move this into shared code for both this
+    // component and the Authentication component.
+
     // If the user is not fully logged in, redirect to the
     // appropriate auth page.
     // User is not logged in.

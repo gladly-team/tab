@@ -102,6 +102,10 @@ class Authentication extends React.Component {
     // the sign-up is completed.
     const authTokenUser = await getCurrentUser()
 
+    // TODO
+    // If there is no Firebase user but the user is allowed to be
+    // anonymous, create the anonymous Firebase user.
+
     // If the user is not logged in, go to main authentication page.
     if (!authTokenUser) {
       // If the page is in an iframe (e.g. the user opened it via an iframed
