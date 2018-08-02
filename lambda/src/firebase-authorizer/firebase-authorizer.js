@@ -68,8 +68,8 @@ function checkUserAuthorization (event, context, callback) {
       .then((decodedToken) => {
         const user = {
           uid: decodedToken.uid,
-          email: decodedToken.email,
-          email_verified: decodedToken.email_verified
+          email: decodedToken.email || null,
+          email_verified: decodedToken.email_verified || false
         }
 
         // Conditions for authorization. We do not check for a valid
