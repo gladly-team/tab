@@ -78,7 +78,7 @@ describe('UserModel', () => {
       .toBe(false)
   })
 
-  it('does not allow create when user ID is different', () => {
+  it('does not allow create when the user\'s email is different', () => {
     const userContext = {
       id: 'abc',
       email: 'foo@bar.com',
