@@ -2,6 +2,7 @@
 
 import React from 'react'
 import {
+  mount,
   shallow
 } from 'enzyme'
 import {
@@ -158,8 +159,59 @@ describe('AuthUser tests', () => {
     expect(replaceUrl).toHaveBeenCalledWith(enterUsernameURL)
   })
 
-  // TODO: renders children only after the user is fully authed
-  // TODO: passes the userId variable to child components
+  it('renders children only if the user is fully authed', () => {
+    // Remove the user's username from localStorage.
+    localStorageMgr.removeItem(STORAGE_KEY_USERNAME)
+    __triggerAuthStateChange({
+      uid: null,
+      email: null,
+      username: null,
+      isAnonymous: false,
+      emailVerified: false
+    })
+
+    const MockChildComponent = jest.fn(() => null)
+
+    const AuthUser = require('../AuthUserComponent').default
+    mount(
+      <AuthUser {...mockProps}>
+        <MockChildComponent />
+      </AuthUser>
+    )
+
+    expect(MockChildComponent).not.toHaveBeenCalled()
+
+    // Set the user's username in localStorage.
+    localStorageMgr.setItem(STORAGE_KEY_USERNAME, 'SomeUsername')
+    __triggerAuthStateChange({
+      uid: 'abc123',
+      email: 'foo@bar.com',
+      username: 'foo',
+      isAnonymous: false,
+      emailVerified: true
+    })
+    expect(MockChildComponent).toHaveBeenCalled()
+  })
+
+  it('passes the userId variable to child components', () => {
+    const MockChildComponent = jest.fn(() => null)
+    const AuthUser = require('../AuthUserComponent').default
+    const wrapper = mount(
+      <AuthUser {...mockProps}>
+        <MockChildComponent />
+      </AuthUser>
+    )
+
+    __triggerAuthStateChange({
+      uid: 'abc123',
+      email: 'foo@bar.com',
+      username: 'foo',
+      isAnonymous: false,
+      emailVerified: true
+    })
+    wrapper.update()
+    expect(wrapper.find(MockChildComponent).prop('variables').userId).toBe('abc123')
+  })
 
   // TODO later:
   // - shows the sign-in message if unauthed and within an iframe
