@@ -10,9 +10,9 @@ import {
   goToDashboard,
   goToLogin,
   // authMessageURL,
-  // enterUsernameURL,
-  missingEmailMessageURL
-  // verifyEmailURL
+  enterUsernameURL,
+  missingEmailMessageURL,
+  verifyEmailURL
 } from 'navigation/navigation'
 import {
   __getAuthListenerCallbacks,
@@ -23,6 +23,7 @@ import localStorageMgr from 'utils/localstorage-mgr'
 import {
   STORAGE_KEY_USERNAME
 } from '../../../constants'
+import { cloneDeep } from 'lodash/lang'
 
 jest.mock('authentication/user')
 jest.mock('mutations/CreateNewUserMutation')
@@ -64,7 +65,6 @@ describe('AuthUser tests', () => {
 
   it('does not redirect if the user is fully authenticated', () => {
     const AuthUser = require('../AuthUserComponent').default
-
     shallow(<AuthUser {...mockProps} />)
 
     // Mock that our auth loads the user.
@@ -82,9 +82,33 @@ describe('AuthUser tests', () => {
     expect(goToLogin).not.toHaveBeenCalled()
   })
 
+  it('does not redirect an unauthed user if allowUnauthedRender is set', () => {
+    // Remove the user's username from localStorage.
+    localStorageMgr.removeItem(STORAGE_KEY_USERNAME)
+
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.allowUnauthedRender = true
+
+    const AuthUser = require('../AuthUserComponent').default
+    shallow(<AuthUser {...modifiedProps} />)
+
+    // Mock that our auth loads the user.
+    __triggerAuthStateChange({
+      uid: null,
+      email: null,
+      username: null,
+      isAnonymous: false,
+      emailVerified: false
+    })
+
+    expect(goToDashboard).not.toHaveBeenCalled()
+    expect(goTo).not.toHaveBeenCalled()
+    expect(replaceUrl).not.toHaveBeenCalled()
+    expect(goToLogin).not.toHaveBeenCalled()
+  })
+
   it('redirects to missing email screen if authed and there is no email address', () => {
     const AuthUser = require('../AuthUserComponent').default
-
     shallow(<AuthUser {...mockProps} />)
 
     // Mock that our auth loads the user.
@@ -99,13 +123,43 @@ describe('AuthUser tests', () => {
     expect(replaceUrl).toHaveBeenCalledWith(missingEmailMessageURL)
   })
 
-  // TODO: redirects to email verification screen if authed and email is unverified
-  // TODO: redirects to new username screen if authed and username is not set
-  // TODO: does not redirect if allowUnauthedRender is set
+  it('redirects to email verification screen if authed and email is unverified', () => {
+    const AuthUser = require('../AuthUserComponent').default
+    shallow(<AuthUser {...mockProps} />)
+
+    // Mock that our auth loads the user.
+    __triggerAuthStateChange({
+      uid: 'abc123',
+      email: 'somebody@example.com',
+      username: 'foo',
+      isAnonymous: false,
+      emailVerified: false
+    })
+
+    expect(replaceUrl).toHaveBeenCalledWith(verifyEmailURL)
+  })
+
+  it('redirects to new username screen if authed and username is not set', () => {
+    // Remove the user's username from localStorage.
+    localStorageMgr.removeItem(STORAGE_KEY_USERNAME)
+
+    const AuthUser = require('../AuthUserComponent').default
+    shallow(<AuthUser {...mockProps} />)
+
+    // Mock that our auth loads the user.
+    __triggerAuthStateChange({
+      uid: 'abc123',
+      email: 'somebody@example.com',
+      username: null,
+      isAnonymous: false,
+      emailVerified: true
+    })
+
+    expect(replaceUrl).toHaveBeenCalledWith(enterUsernameURL)
+  })
+
   // TODO: renders children only after the user is fully authed
   // TODO: passes the userId variable to child components
-  // TODO: redirects to email verification screen if authed and email is unverified
-  // TODO: redirects to email verification screen if authed and email is unverified
 
   // TODO later:
   // - shows the sign-in message if unauthed and within an iframe
