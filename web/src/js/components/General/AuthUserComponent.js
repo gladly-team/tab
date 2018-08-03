@@ -5,12 +5,8 @@ import {
   getCurrentUserListener
 } from 'authentication/user'
 import {
-  replaceUrl,
-  missingEmailMessageURL,
-  verifyEmailURL,
-  enterUsernameURL,
-  goToLogin
-} from 'navigation/navigation'
+  checkAuthStateAndRedirectIfNeeded
+} from 'authentication/helpers'
 
 // Get the authenticated user and, if the user is authenticated,
 // add the user's ID to the `variables` prop. By default, redirect
@@ -61,26 +57,9 @@ class AuthUserComponent extends React.Component {
       return
     }
 
-    // TODO:
-    // Probably move this into shared code for both this
-    // component and the Authentication component.
-
     // If the user is not fully logged in, redirect to the
     // appropriate auth page.
-    // User is not logged in.
-    if (!user || !user.id) {
-      goToLogin()
-    // If the user does not have an email address, show a message
-    // asking them to sign in with a different method.
-    } else if (!user.email) {
-      replaceUrl(missingEmailMessageURL)
-    // User is logged in but their email is not verified.
-    } else if (!user.emailVerified) {
-      replaceUrl(verifyEmailURL)
-    // User is logged in but has not set a username.
-    } else if (!user.username) {
-      replaceUrl(enterUsernameURL)
-    }
+    checkAuthStateAndRedirectIfNeeded(user)
   }
 
   render () {
