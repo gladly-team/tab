@@ -5,13 +5,29 @@ const firebaseApp = jest.genMockFromModule('firebase')
 // By default, return no user.
 var firebaseUser = null
 
-firebaseApp.auth = jest.fn(() => ({
-  onAuthStateChanged: jest.fn(callback => {
-    // Return the Firebase user.
-    callback(firebaseUser)
-  }),
-  signOut: jest.fn()
-}))
+const FirebaseAuthMock = () => {
+  return {
+    onAuthStateChanged: jest.fn(callback => {
+      // Return the Firebase user.
+      callback(firebaseUser)
+    }),
+    signOut: jest.fn()
+  }
+}
+
+FirebaseAuthMock.EmailAuthProvider = {
+  PROVIDER_ID: 'password'
+}
+
+FirebaseAuthMock.GoogleAuthProvider = {
+  PROVIDER_ID: 'google.com'
+}
+
+FirebaseAuthMock.FacebookAuthProvider = {
+  PROVIDER_ID: 'facebook.com'
+}
+
+firebaseApp.auth = FirebaseAuthMock
 
 firebaseApp.__setFirebaseUser = (user) => {
   firebaseUser = user
