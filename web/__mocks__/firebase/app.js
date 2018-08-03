@@ -16,20 +16,22 @@ var immediatelyReturnAuthUser = false
 // call them when changing the user state.
 var onAuthStateChangedCallbacks = []
 
-const FirebaseAuthMock = () => {
-  return {
-    onAuthStateChanged: jest.fn(callback => {
-      onAuthStateChangedCallbacks.push(callback)
+const authMock = {
+  onAuthStateChanged: jest.fn(callback => {
+    onAuthStateChangedCallbacks.push(callback)
 
-      // Return the Firebase user immediately if one
-      // was set with __setFirebaseUser. This makes
-      // async testing a little easier.
-      if (immediatelyReturnAuthUser) {
-        callback(firebaseUser)
-      }
-    }),
-    signOut: jest.fn()
-  }
+    // Return the Firebase user immediately if one
+    // was set with __setFirebaseUser. This makes
+    // async testing a little easier.
+    if (immediatelyReturnAuthUser) {
+      callback(firebaseUser)
+    }
+  }),
+  signOut: jest.fn(() => Promise.resolve())
+}
+
+const FirebaseAuthMock = () => {
+  return authMock
 }
 
 FirebaseAuthMock.EmailAuthProvider = {

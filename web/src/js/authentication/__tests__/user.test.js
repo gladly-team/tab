@@ -185,4 +185,21 @@ describe('authentication user module tests', () => {
     const token = await getUserToken()
     expect(token).toBeNull()
   })
+
+  test('logout calls Firebase\'s sign out method', async () => {
+    expect.assertions(1)
+    const firebase = require('firebase/app')
+    const logout = require('../user').logout
+    await logout()
+    expect(firebase.auth().signOut).toHaveBeenCalledTimes(1)
+  })
+
+  test('removes some localStorage items on logout', async () => {
+    expect.assertions(2)
+    const localStorageMgr = require('utils/localstorage-mgr').default
+    const logout = require('../user').logout
+    await logout()
+    expect(localStorageMgr.removeItem).toHaveBeenCalledWith('tab.user.username')
+    expect(localStorageMgr.removeItem).toHaveBeenCalledTimes(1)
+  })
 })
