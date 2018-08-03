@@ -45,7 +45,8 @@ describe('authentication user module tests', () => {
       uid: 'abc123',
       email: 'ostrichcoat@example.com',
       isAnonymous: false,
-      emailVerified: true
+      emailVerified: true,
+      getIdToken: jest.fn(() => 'fake-token-123')
     }
     expect(formatUser(firebaseUser)).toEqual({
       id: 'abc123',
@@ -68,7 +69,8 @@ describe('authentication user module tests', () => {
       uid: 'xyz987',
       email: 'foo@example.com',
       isAnonymous: false,
-      emailVerified: true
+      emailVerified: true,
+      getIdToken: jest.fn(() => 'fake-token-123')
     })
 
     const getCurrentUser = require('../user').getCurrentUser
@@ -118,11 +120,12 @@ describe('authentication user module tests', () => {
   test('getCurrentUserListener calls listeners with the Firebase user object when the auth state changes', done => {
     const getCurrentUserListener = require('../user').getCurrentUserListener
     getCurrentUserListener().onAuthStateChanged(currentUser => {
-      expect(currentUser).toEqual({
+      expect(currentUser).toMatchObject({
         uid: 'xyz987',
         email: 'foo@example.com',
         isAnonymous: false,
         emailVerified: true
+        // Will also have getIdToken method.
       })
       done()
     })
@@ -132,7 +135,8 @@ describe('authentication user module tests', () => {
       uid: 'xyz987',
       email: 'foo@example.com',
       isAnonymous: false,
-      emailVerified: true
+      emailVerified: true,
+      getIdToken: jest.fn(() => 'fake-token-123')
     })
   })
 
@@ -148,8 +152,37 @@ describe('authentication user module tests', () => {
         email: 'kevin@example.com',
         isAnonymous: false,
         emailVerified: true
+        // Will also have getIdToken method.
       })
       done()
     })
+  })
+
+  test('getUserToken returns a token when a user exists', async () => {
+    expect.assertions(1)
+
+    const __setFirebaseUser = require('firebase/app').__setFirebaseUser
+    __setFirebaseUser({
+      uid: 'xyz987',
+      email: 'foo@example.com',
+      isAnonymous: false,
+      emailVerified: true,
+      getIdToken: jest.fn(() => 'fake-token-123')
+    })
+
+    const getUserToken = require('../user').getUserToken
+    const token = await getUserToken()
+    expect(token).toEqual('fake-token-123')
+  })
+
+  test('getUserToken returns null when there is no user', async () => {
+    expect.assertions(1)
+
+    const __setFirebaseUser = require('firebase/app').__setFirebaseUser
+    __setFirebaseUser(null)
+
+    const getUserToken = require('../user').getUserToken
+    const token = await getUserToken()
+    expect(token).toBeNull()
   })
 })
