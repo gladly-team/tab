@@ -3,6 +3,11 @@
 import {
   STORAGE_KEY_USERNAME
 } from '../../constants'
+import {
+  absoluteUrl,
+  enterUsernameURL
+} from 'navigation/navigation'
+
 jest.mock('utils/localstorage-mgr')
 
 const storedMockDevAuthenticationEnvVar = process.env.MOCK_DEV_AUTHENTICATION
@@ -201,5 +206,73 @@ describe('authentication user module tests', () => {
     await logout()
     expect(localStorageMgr.removeItem).toHaveBeenCalledWith('tab.user.username')
     expect(localStorageMgr.removeItem).toHaveBeenCalledTimes(1)
+  })
+
+  test('sendVerificationEmail works as expected', async () => {
+    expect.assertions(3)
+    const mockSendEmailVerification = jest.fn(() => Promise.resolve())
+
+    // A user must exist to be able to send a verification email.
+    const __setFirebaseUser = require('firebase/app').__setFirebaseUser
+    __setFirebaseUser({
+      uid: 'xyz987',
+      email: 'foo@example.com',
+      isAnonymous: false,
+      emailVerified: true,
+      getIdToken: jest.fn(() => 'fake-token-123'),
+      sendEmailVerification: mockSendEmailVerification
+    })
+
+    const sendVerificationEmail = require('../user').sendVerificationEmail
+    const response = await sendVerificationEmail()
+    expect(mockSendEmailVerification).toHaveBeenCalledWith({
+      // Make sure post-verification page redirect is correct.
+      url: absoluteUrl(enterUsernameURL)
+    })
+    expect(mockSendEmailVerification).toHaveBeenCalledTimes(1)
+    expect(response).toBe(true)
+  })
+
+  test('sendVerificationEmail fails if no user exists', async () => {
+    expect.assertions(2)
+    const mockSendEmailVerification = jest.fn(() => Promise.resolve())
+
+    // Suppress expected error message.
+    jest.spyOn(console, 'error').mockImplementationOnce(() => {})
+
+    const __setFirebaseUser = require('firebase/app').__setFirebaseUser
+    __setFirebaseUser(null)
+
+    const sendVerificationEmail = require('../user').sendVerificationEmail
+    const response = await sendVerificationEmail()
+    expect(mockSendEmailVerification).not.toHaveBeenCalled()
+    expect(response).toBe(false)
+  })
+
+  test('sendVerificationEmail fails gracefully if Firebase throws an error when sending an email', async () => {
+    expect.assertions(1)
+
+    // Mock an error
+    const mockSendEmailVerification = jest.fn(() => {
+      throw new Error('Apocalyptic email failure!')
+    })
+
+    // Suppress expected error message.
+    jest.spyOn(console, 'error').mockImplementationOnce(() => {})
+
+    // A user must exist to be able to send a verification email.
+    const __setFirebaseUser = require('firebase/app').__setFirebaseUser
+    __setFirebaseUser({
+      uid: 'xyz987',
+      email: 'foo@example.com',
+      isAnonymous: false,
+      emailVerified: true,
+      getIdToken: jest.fn(() => 'fake-token-123'),
+      sendEmailVerification: mockSendEmailVerification
+    })
+
+    const sendVerificationEmail = require('../user').sendVerificationEmail
+    const response = await sendVerificationEmail()
+    expect(response).toBe(false)
   })
 })
