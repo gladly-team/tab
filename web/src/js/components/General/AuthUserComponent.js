@@ -30,6 +30,8 @@ class AuthUserComponent extends React.Component {
     // https://firebase.google.com/docs/reference/js/firebase.auth.Auth#onAuthStateChanged
     this.authListenerUnsubscribe = getCurrentUserListener()
       .onAuthStateChanged((user) => {
+        // TODO: roll the formatting functionality into the
+        // listener.
         if (user) {
           const formattedUser = formatUser(user)
           this.checkUserAuth(formattedUser)
