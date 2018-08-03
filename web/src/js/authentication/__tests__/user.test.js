@@ -85,10 +85,6 @@ describe('authentication user module tests', () => {
   test('getCurrentUser returns null when a user does not exist', async () => {
     expect.assertions(1)
 
-    // formatUser gets the username from localStorage.
-    const localStorageMgr = require('utils/localstorage-mgr').default
-    localStorageMgr.setItem(STORAGE_KEY_USERNAME, 'RGates')
-
     const __setFirebaseUser = require('firebase/app').__setFirebaseUser
     __setFirebaseUser(null)
 
@@ -116,6 +112,44 @@ describe('authentication user module tests', () => {
       username: 'SomeUsername',
       isAnonymous: false,
       emailVerified: true
+    })
+  })
+
+  test('getCurrentUserListener calls listeners with the Firebase user object when the auth state changes', done => {
+    const getCurrentUserListener = require('../user').getCurrentUserListener
+    getCurrentUserListener().onAuthStateChanged(currentUser => {
+      expect(currentUser).toEqual({
+        uid: 'xyz987',
+        email: 'foo@example.com',
+        isAnonymous: false,
+        emailVerified: true
+      })
+      done()
+    })
+
+    const __triggerAuthStateChange = require('firebase/app').__triggerAuthStateChange
+    __triggerAuthStateChange({
+      uid: 'xyz987',
+      email: 'foo@example.com',
+      isAnonymous: false,
+      emailVerified: true
+    })
+  })
+
+  test('getCurrentUserListener returns a mock user when using mock authentication in development', done => {
+    // Set development env vars.
+    process.env.MOCK_DEV_AUTHENTICATION = 'true'
+    process.env.NODE_ENV = 'development'
+
+    const getCurrentUserListener = require('../user').getCurrentUserListener
+    getCurrentUserListener().onAuthStateChanged(currentUser => {
+      expect(currentUser).toMatchObject({
+        uid: 'abcdefghijklmno',
+        email: 'kevin@example.com',
+        isAnonymous: false,
+        emailVerified: true
+      })
+      done()
     })
   })
 })
