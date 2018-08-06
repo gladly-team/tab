@@ -258,8 +258,4 @@ describe('AuthUser tests', () => {
     wrapper.update()
     expect(wrapper.find(MockChildComponent).prop('variables').userId).toBe('abc123')
   })
-
-  // TODO later:
-  // - shows the sign-in message if unauthed and within an iframe
-  // - goes to login screen if unauthed and NOT within an iframe
 })

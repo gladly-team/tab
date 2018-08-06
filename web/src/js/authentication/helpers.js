@@ -10,18 +10,29 @@ import {
 import {
   isInIframe
 } from 'web-utils'
+import {
+  setUsernameInLocalStorage
+} from 'authentication/user'
 
 /**
- * Based on the user object, determine if we need to redirect
- * to an authentication page to.
+ * Based on the user object state, determine if we need to redirect
+ * to an authentication page. If the user is not fully authenticated,
+ * redirect and return true. If teh user is fully authenticated, do
+ * not redirect and return false.
  * @param {object} user - The user object for the app.
  * @param {string} user.id - The user's ID
  * @param {string} user.email - The user's email
  * @param {string} user.username - The user's username
  * @param {boolean} user.isAnonymous - Whether the user is anonymous
  * @param {boolean} user.emailVerified - Whether the user has verified their email
+ * @param {string} fetchedUsername - The user's username from the server, which
+ *   may differ from the one in localStorage.
+ * @return {boolean} Whether we redirected; i.e., whether the user was not fully
+ *   authenticated.
  */
-export const checkAuthStateAndRedirectIfNeeded = user => {
+export const checkAuthStateAndRedirectIfNeeded = (user, fetchedUsername = null) => {
+  var redirected = true
+
   // If the user is not fully logged in, redirect to the
   // appropriate auth page.
   // User is not logged in.
@@ -43,6 +54,21 @@ export const checkAuthStateAndRedirectIfNeeded = user => {
     replaceUrl(verifyEmailURL)
   // User is logged in but has not set a username.
   } else if (!user.username) {
-    replaceUrl(enterUsernameURL)
+    // If the username isn't in localStorage, check if it
+    // exists on the user from the database.
+    // We use the user fetched from the database because
+    // the username property isn't present on our auth token
+    // user identity.
+    if (fetchedUsername) {
+      // The username exists; set it in localStorage and do not redirect
+      // to an auth page.
+      setUsernameInLocalStorage(fetchedUsername)
+      redirected = false
+    } else {
+      replaceUrl(enterUsernameURL)
+    }
+  } else {
+    redirected = false
   }
+  return redirected
 }

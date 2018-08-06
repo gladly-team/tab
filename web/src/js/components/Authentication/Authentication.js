@@ -3,23 +3,20 @@ import PropTypes from 'prop-types'
 import environment from '../../../relay-env'
 import {
   getCurrentUser,
-  sendVerificationEmail,
-  setUsernameInLocalStorage
+  sendVerificationEmail
 } from 'authentication/user'
 import {
+  checkAuthStateAndRedirectIfNeeded
+} from 'authentication/helpers'
+import {
   goTo,
-  authMessageURL,
   missingEmailMessageURL,
-  replaceUrl,
   verifyEmailURL,
-  enterUsernameURL,
-  goToDashboard,
-  goToLogin
+  goToDashboard
 } from 'navigation/navigation'
 import CreateNewUserMutation from 'mutations/CreateNewUserMutation'
 import {
-  getReferralData,
-  isInIframe
+  getReferralData
 } from 'web-utils'
 import { isEqual } from 'lodash/lang'
 import LogoWithText from '../Logo/LogoWithText'
@@ -105,42 +102,13 @@ class Authentication extends React.Component {
     // If there is no Firebase user but the user is allowed to be
     // anonymous, create the anonymous Firebase user.
 
-    // If the user is not logged in, go to main authentication page.
-    if (!authTokenUser) {
-      // If the page is in an iframe (e.g. the user opened it via an iframed
-      // new tab), authentication may not work correctly. Show an intermediary
-      // page that will open a non-iframed auth page.
-      if (isInIframe()) {
-        goTo(authMessageURL)
-      } else {
-        goToLogin()
-      }
-    // If the user does not have an email address, show a message
-    // asking them to sign in with a different method.
-    } else if (!authTokenUser.email) {
-      goTo(missingEmailMessageURL)
-    // If the user's email is not verified, ask them to
-    // check their email.
-    } else if (!authTokenUser.emailVerified) {
-      replaceUrl(verifyEmailURL)
-    // Check if the user has a username. If not,
-    // send the user to enter a username.
-    } else if (!authTokenUser.username) {
-      // If the username isn't in localStorage, check if it
-      // exists on the user from the database.
-      // We use the user fetched from the database because
-      // the username property isn't present on our auth token
-      // user identity.
-      if (this.props.user && this.props.user.username) {
-        // The username exists; set it in localStorage and continue
-        // to the app.
-        setUsernameInLocalStorage(this.props.user.username)
-        goToDashboard()
-      } else {
-        replaceUrl(enterUsernameURL)
-      }
-    // Go to the dashboard.
-    } else {
+    // Redirect to the appropriate authentication view if the
+    // user is not fully authenticated.
+    const usernameFromServer = this.props.user ? this.props.user.username : null
+    const redirected = checkAuthStateAndRedirectIfNeeded(authTokenUser, usernameFromServer)
+
+    // The user is fully authed, so go to the dashboard.
+    if (!redirected) {
       goToDashboard()
     }
   }

@@ -28,8 +28,9 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
       isAnonymous: false,
       emailVerified: true
     }
-    checkAuthStateAndRedirectIfNeeded(user)
+    const redirected = checkAuthStateAndRedirectIfNeeded(user)
 
+    expect(redirected).toBe(false)
     expect(goToDashboard).not.toHaveBeenCalled()
     expect(goTo).not.toHaveBeenCalled()
     expect(replaceUrl).not.toHaveBeenCalled()
@@ -46,8 +47,9 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
       isAnonymous: false,
       emailVerified: true
     }
-    checkAuthStateAndRedirectIfNeeded(user)
+    const redirected = checkAuthStateAndRedirectIfNeeded(user)
     expect(replaceUrl).toHaveBeenCalledWith(missingEmailMessageURL)
+    expect(redirected).toBe(true)
   })
 
   it('redirects to email verification screen if authed and email is unverified', () => {
@@ -60,8 +62,9 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
       isAnonymous: false,
       emailVerified: false
     }
-    checkAuthStateAndRedirectIfNeeded(user)
+    const redirected = checkAuthStateAndRedirectIfNeeded(user)
     expect(replaceUrl).toHaveBeenCalledWith(verifyEmailURL)
+    expect(redirected).toBe(true)
   })
 
   it('redirects to new username screen if authed and username is not set', () => {
@@ -74,7 +77,22 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
       isAnonymous: false,
       emailVerified: true
     }
-    checkAuthStateAndRedirectIfNeeded(user)
+    const redirected = checkAuthStateAndRedirectIfNeeded(user)
     expect(replaceUrl).toHaveBeenCalledWith(enterUsernameURL)
+    expect(redirected).toBe(true)
+  })
+
+  it('does not redirect to the new username screen if the username exists on the server', () => {
+    const checkAuthStateAndRedirectIfNeeded = require('../helpers')
+      .checkAuthStateAndRedirectIfNeeded
+    const user = {
+      id: 'abc123',
+      email: 'foo@bar.com',
+      username: null,
+      isAnonymous: false,
+      emailVerified: true
+    }
+    const redirected = checkAuthStateAndRedirectIfNeeded(user, 'SomeUsername')
+    expect(redirected).toBe(false)
   })
 })

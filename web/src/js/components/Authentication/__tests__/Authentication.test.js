@@ -201,7 +201,7 @@ describe('Authentication.js tests', function () {
     )
     const component = wrapper.instance()
     await component.navigateToAuthStep()
-    expect(goTo).toHaveBeenCalledWith(missingEmailMessageURL)
+    expect(replaceUrl).toHaveBeenCalledWith(missingEmailMessageURL)
   })
 
   it('goes to email verification screen if authed and email is unverified', async () => {
