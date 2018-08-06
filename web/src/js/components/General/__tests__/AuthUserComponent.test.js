@@ -10,7 +10,7 @@ import {
   replaceUrl,
   goToDashboard,
   goToLogin,
-  // authMessageURL,
+  authMessageURL,
   enterUsernameURL,
   missingEmailMessageURL,
   verifyEmailURL
@@ -25,11 +25,15 @@ import {
   STORAGE_KEY_USERNAME
 } from '../../../constants'
 import { cloneDeep } from 'lodash/lang'
+import {
+  isInIframe
+} from 'web-utils'
 
 jest.mock('authentication/user')
 jest.mock('mutations/CreateNewUserMutation')
 jest.mock('navigation/navigation')
 jest.mock('utils/localstorage-mgr')
+jest.mock('web-utils')
 
 beforeEach(() => {
   // Set the user's username in localStorage.
@@ -62,6 +66,48 @@ describe('AuthUser tests', () => {
     expect(__getAuthListenerCallbacks().length).toBe(1)
     wrapper.unmount()
     expect(__getAuthListenerCallbacks().length).toBe(0)
+  })
+
+  it('redirects to the sign-in view if the user is unauthed and NOT within an iframe', () => {
+    // Remove the user's username from localStorage.
+    localStorageMgr.removeItem(STORAGE_KEY_USERNAME)
+
+    // Mock that we're in an iframe.
+    isInIframe.mockReturnValue(false)
+
+    const AuthUser = require('../AuthUserComponent').default
+    shallow(<AuthUser {...mockProps} />)
+
+    // Mock that our auth loads the user.
+    __triggerAuthStateChange({
+      uid: null,
+      email: null,
+      username: null,
+      isAnonymous: false,
+      emailVerified: false
+    })
+    expect(goToLogin).toHaveBeenCalledTimes(1)
+  })
+
+  it('redirects to the sign-in message if the user is unauthed and within an iframe', () => {
+    // Remove the user's username from localStorage.
+    localStorageMgr.removeItem(STORAGE_KEY_USERNAME)
+
+    // Mock that we're in an iframe.
+    isInIframe.mockReturnValue(true)
+
+    const AuthUser = require('../AuthUserComponent').default
+    shallow(<AuthUser {...mockProps} />)
+
+    // Mock that our auth loads the user.
+    __triggerAuthStateChange({
+      uid: null,
+      email: null,
+      username: null,
+      isAnonymous: false,
+      emailVerified: false
+    })
+    expect(goTo).toHaveBeenCalledWith(authMessageURL)
   })
 
   it('does not redirect if the user is fully authenticated', () => {

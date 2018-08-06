@@ -1,10 +1,15 @@
 import {
+  goTo,
+  goToLogin,
   replaceUrl,
-  missingEmailMessageURL,
-  verifyEmailURL,
+  authMessageURL,
   enterUsernameURL,
-  goToLogin
+  missingEmailMessageURL,
+  verifyEmailURL
 } from 'navigation/navigation'
+import {
+  isInIframe
+} from 'web-utils'
 
 /**
  * Based on the user object, determine if we need to redirect
@@ -21,7 +26,14 @@ export const checkAuthStateAndRedirectIfNeeded = user => {
   // appropriate auth page.
   // User is not logged in.
   if (!user || !user.id) {
-    goToLogin()
+    // If the page is in an iframe (e.g. the user opened it via an iframed
+    // new tab), authentication may not work correctly. Show an intermediary
+    // page that will open a non-iframed auth page.
+    if (isInIframe()) {
+      goTo(authMessageURL)
+    } else {
+      goToLogin()
+    }
   // If the user does not have an email address, show a message
   // asking them to sign in with a different method.
   } else if (!user.email) {
