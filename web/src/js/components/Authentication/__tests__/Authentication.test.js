@@ -58,7 +58,7 @@ describe('Authentication.js tests', function () {
     )
   })
 
-  it('calls the `navigateToAuthStep` method before mount', async () => {
+  it('calls the `navigateToAuthStep` method on mount', async () => {
     expect.assertions(1)
     const Authentication = require('../Authentication').default
     const wrapper = shallow(
@@ -68,11 +68,11 @@ describe('Authentication.js tests', function () {
         fetchUser={mockFetchUser}
       />
     )
+
+    // Mock method and simulate mount.
     const component = wrapper.instance()
     component.navigateToAuthStep = jest.fn()
-
-    // Force the lifecycle method
-    await component.componentWillMount()
+    await component.componentDidMount()
     expect(component.navigateToAuthStep).toHaveBeenCalled()
   })
 
@@ -86,11 +86,11 @@ describe('Authentication.js tests', function () {
         fetchUser={mockFetchUser}
       />
     )
+
+    // Mock method and simulate mount.
     const component = wrapper.instance()
     component.navigateToAuthStep = jest.fn()
-
-    // Force the lifecycle method
-    await component.componentWillMount()
+    await component.componentDidMount()
     expect(wrapper.state().loadChildren).toBe(true)
   })
 
