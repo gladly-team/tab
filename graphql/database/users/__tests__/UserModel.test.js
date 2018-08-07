@@ -6,7 +6,10 @@ import { permissionAuthorizers } from '../../../utils/authorization-helpers'
 import User from '../UserModel'
 import config from '../../../config'
 import {
-  mockDate
+  DatabaseOperation,
+  mockDate,
+  getMockUserContext,
+  setMockDBResponse
 } from '../../test-utils'
 
 const mediaRoot = config.MEDIA_ENDPOINT
@@ -171,6 +174,41 @@ describe('UserModel', () => {
     const item = null
     expect(User.permissions.create(userContext, null, null, item))
       .toBe(false)
+  })
+
+  it('throws an error when a `get` returns no item', () => {
+    const userContext = getMockUserContext()
+    const mockItemId = userContext.id
+
+    // Set mock response from DB client.
+    setMockDBResponse(
+      DatabaseOperation.GET,
+      {
+        Item: null
+      }
+    )
+
+    return expect(User.get(userContext, mockItemId))
+      .rejects.toThrow('The database does not contain an item with these keys')
+  })
+
+  it('does not throw an error when a `get` returns an item', () => {
+    const userContext = getMockUserContext()
+    const mockItemId = userContext.id
+
+    // Set mock response from DB client.
+    setMockDBResponse(
+      DatabaseOperation.GET,
+      {
+        Item: {
+          // Actual item would have more properties
+          id: mockItemId
+        }
+      }
+    )
+
+    return expect(User.get(userContext, mockItemId))
+      .resolves.toBeDefined()
   })
 
   it('constructs as expected', () => {
