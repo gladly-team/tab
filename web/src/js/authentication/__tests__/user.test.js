@@ -275,4 +275,30 @@ describe('authentication user module tests', () => {
     const response = await sendVerificationEmail()
     expect(response).toBe(false)
   })
+
+  test('signInAnonymously works as expected', async () => {
+    expect.assertions(1)
+
+    // formatUser gets the username from localStorage.
+    const localStorageMgr = require('utils/localstorage-mgr').default
+    localStorageMgr.setItem(STORAGE_KEY_USERNAME, 'SomeUsername')
+
+    const __setFirebaseUser = require('firebase/app').__setFirebaseUser
+    __setFirebaseUser({
+      uid: 'xyz987',
+      email: null,
+      isAnonymous: true,
+      emailVerified: false,
+      getIdToken: jest.fn(() => 'fake-token-123')
+    })
+    const signInAnonymously = require('../user').signInAnonymously
+    const response = await signInAnonymously()
+    expect(response).toMatchObject({
+      id: 'xyz987',
+      email: null,
+      isAnonymous: true,
+      emailVerified: false,
+      username: 'SomeUsername'
+    })
+  })
 })

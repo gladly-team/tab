@@ -233,3 +233,24 @@ export const sendVerificationEmail = async () => {
     return false
   }
 }
+
+/**
+ * Sign in a user anonymously and return their user object.
+ * @returns {Promise<{user}>} A Promise resolving into the
+ *   user object.
+ */
+export const signInAnonymously = async () => {
+  return new Promise((resolve, reject) => {
+    // Should resolve into a non-null Firebase user credential.
+    // https://firebase.google.com/docs/reference/js/firebase.auth.Auth?authuser=0#signInAnonymously
+    firebase.auth().signInAnonymously()
+      .then(firebaseUserCredential => {
+        // Format the user object and return it.
+        const firebaseUser = firebaseUserCredential.user
+        const formattedUser = firebaseUser ? formatUser(firebaseUser) : null
+        resolve(formattedUser)
+      }).catch((error) => {
+        reject(error)
+      })
+  })
+}
