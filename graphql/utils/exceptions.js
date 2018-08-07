@@ -12,7 +12,7 @@ class ExtendableError extends Error {
 
 class NotImplementedException extends ExtendableError {
   constructor () {
-    super('Required method is not implmented.')
+    super('Required method is not implemented.')
   }
 }
 
@@ -24,7 +24,7 @@ class UnauthorizedQueryException extends ExtendableError {
 
 class UserReachedMaxLevelException extends ExtendableError {
   constructor () {
-    super('There are no more levels user at max level.')
+    super('There are no more levels. The user is at the max level.')
   }
 }
 
@@ -38,19 +38,11 @@ class EmptyOperationStackException extends MockDatabaseException {
   }
 }
 
-class OperationMissmatchException extends MockDatabaseException {
-  constructor (expectedOperation, receivedOperation) {
-    const message = `Expected <${expectedOperation}> operation but 
-              received <${receivedOperation}> operation instead.`
-
-    super(message)
-  }
-}
+//
 
 export {
   NotImplementedException,
   UnauthorizedQueryException,
   UserReachedMaxLevelException,
-  EmptyOperationStackException,
-  OperationMissmatchException
+  EmptyOperationStackException
 }
