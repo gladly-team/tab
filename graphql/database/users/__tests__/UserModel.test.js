@@ -11,6 +11,10 @@ import {
   getMockUserContext,
   setMockDBResponse
 } from '../../test-utils'
+import {
+  UnauthorizedQueryException,
+  UserDoesNotExistException
+} from '../../../utils/exceptions'
 
 const mediaRoot = config.MEDIA_ENDPOINT
 
@@ -176,7 +180,7 @@ describe('UserModel', () => {
       .toBe(false)
   })
 
-  it('throws an error when a `get` returns no item', () => {
+  it('throws an UserDoesNotExistException error when a `get` returns no item', () => {
     const userContext = getMockUserContext()
     const mockItemId = userContext.id
 
@@ -187,9 +191,16 @@ describe('UserModel', () => {
         Item: null
       }
     )
-
     return expect(User.get(userContext, mockItemId))
-      .rejects.toThrow('The database does not contain an item with these keys')
+      .rejects.toEqual(new UserDoesNotExistException())
+  })
+
+  it('throws an error when `get` throws an error other than "item does not exist"', () => {
+    const userContext = getMockUserContext()
+
+    // Use an unauthorized request to get its error.
+    return expect(User.get(userContext, 'unauthorized-user-id-here'))
+      .rejects.toEqual(new UnauthorizedQueryException())
   })
 
   it('does not throw an error when a `get` returns an item', () => {

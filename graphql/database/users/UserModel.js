@@ -13,6 +13,10 @@ import {
 } from '../../utils/authorization-helpers'
 import config from '../../config'
 import { getTodayTabCount } from './user-utils'
+import {
+  DATABASE_ITEM_DOES_NOT_EXIST,
+  UserDoesNotExistException
+} from '../../utils/exceptions'
 
 const mediaRoot = config.MEDIA_ENDPOINT
 
@@ -136,6 +140,21 @@ class User extends BaseModel {
           imageURL: `${mediaRoot}/img/backgrounds/${backgroundImage.image}`,
           thumbnailURL: `${mediaRoot}/img/background-thumbnails/${backgroundImage.thumbnail}`
         })
+      }
+    }
+  }
+
+  // Extend the `get` method to throw a unique error when
+  // an item does not exist.
+  static async get (...args) {
+    try {
+      const response = await super.get(...args)
+      return response
+    } catch (e) {
+      if (e.code === DATABASE_ITEM_DOES_NOT_EXIST) {
+        throw new UserDoesNotExistException()
+      } else {
+        throw e
       }
     }
   }
