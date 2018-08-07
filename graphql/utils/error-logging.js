@@ -1,6 +1,7 @@
 
 // import uuid from 'uuid'
 import logger from './logger'
+import { get } from 'lodash/object'
 
 /*
  * Wrap a function and log all exceptions, then re-throw the
@@ -29,7 +30,8 @@ export const formatError = (graphQLError) => {
   return {
     message: graphQLError.message,
     locations: graphQLError.locations,
-    path: graphQLError.path
+    path: graphQLError.path,
+    code: get(graphQLError, 'originalError.code', null)
   }
 }
 

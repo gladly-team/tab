@@ -1,30 +1,25 @@
 /* eslint-env jest */
 
-// import { cloneDeep } from 'lodash/lang'
 import {
-  // handleError,
+  handleError,
   formatError
 } from '../error-logging'
-// import { logErrorWithId } from '../logger'
+import {
+  UNAUTHORIZED_QUERY,
+  UnauthorizedQueryException
+} from '../exceptions'
+import logger from '../logger'
 
 jest.mock('../logger')
 
-class MockErr extends Error {
-  constructor (message, locations, path) {
-    super(message)
-    // this.name = this.constructor.name
-    this.message = message
-    this.locations = locations
-    this.path = path
+class MockGraphQLError extends Error {
+  constructor (originalError) {
+    super(originalError)
+    this.message = originalError.message
+    this.locations = [ { line: 14, column: 3 } ]
+    this.path = [ 'user', 'widgets' ]
+    this.originalError = originalError
   }
-}
-
-function getMockErr () {
-  return new MockErr(
-    'My bad error',
-    [ { line: 14, column: 3 } ],
-    [ 'user', 'widgets' ]
-  )
 }
 
 afterEach(() => {
@@ -32,30 +27,46 @@ afterEach(() => {
 })
 
 describe('error-logging', () => {
-  // it('handleError returns an error with a replaced message', () => {
-  //   const mockErr = getMockErr()
-  //   const returnedErr = handleError(mockErr)
-  //   expect(returnedErr.message).toContain('Internal Error: ')
-  // })
-
-  // it('handleError logs the error with the ID', () => {
-  //   const mockErr = getMockErr()
-  //   handleError(mockErr)
-  //   expect(logErrorWithId).toHaveBeenCalled()
-  //   const args = logErrorWithId.mock.calls[0]
-  //   expect(args[0]).toEqual(mockErr)
-  //   expect(args[1]).toBeDefined()
-  // })
-
-  it('formatError returns the expected format', () => {
-    const mockErr = getMockErr()
-    mockErr.message = 'Internal Error: abcdef'
+  test('formatError returns the expected format for a normal error', () => {
+    const mockGraphQLErr = new MockGraphQLError(new Error('Yikes!'))
     const expectedFormattedErr = {
-      message: mockErr.message,
-      locations: mockErr.locations,
-      path: mockErr.path
+      message: 'Yikes!',
+      locations: mockGraphQLErr.locations,
+      path: mockGraphQLErr.path,
+      code: null
     }
-    const formattedErr = formatError(mockErr)
+    const formattedErr = formatError(mockGraphQLErr)
     expect(formattedErr).toEqual(expectedFormattedErr)
+  })
+
+  test('formatError returns the expected format for a custom error with a code', () => {
+    const customErr = new UnauthorizedQueryException()
+    const mockGraphQLErr = new MockGraphQLError(customErr)
+    const expectedFormattedErr = {
+      message: 'Query not authorized.',
+      locations: mockGraphQLErr.locations,
+      path: mockGraphQLErr.path,
+      code: UNAUTHORIZED_QUERY
+    }
+    const formattedErr = formatError(mockGraphQLErr)
+    expect(formattedErr).toEqual(expectedFormattedErr)
+  })
+
+  test('handleError returns the expected format', () => {
+    const mockGraphQLErr = new MockGraphQLError(new Error('Yikes!'))
+    const expectedFormattedErr = {
+      message: 'Yikes!',
+      locations: mockGraphQLErr.locations,
+      path: mockGraphQLErr.path,
+      code: null
+    }
+    const formattedErr = handleError(mockGraphQLErr)
+    expect(formattedErr).toEqual(expectedFormattedErr)
+  })
+
+  test('handleError logs the error', () => {
+    const mockGraphQLErr = new MockGraphQLError(new Error('Yikes!'))
+    handleError(mockGraphQLErr)
+    expect(logger.error).toHaveBeenCalledWith(mockGraphQLErr)
   })
 })
