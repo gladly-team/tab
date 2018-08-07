@@ -44,6 +44,20 @@ const allowAnonymousUser = () => {
 export const checkAuthStateAndRedirectIfNeeded = (user, fetchedUsername = null) => {
   var redirected = true
 
+  // FIXME: need to handle a state where the user is authenticated
+  // but does not have a user on the server. This can happen if
+  // Firebase authentication succeeds but the request to our server
+  // fails (e.g., network error, or user navigates away).
+  // We may want to handle this in QueryRenderers:
+  // - In GraphQL, create a custom UserDoesNotExist error
+  // - UserModel extends BaseModel's `get` method; if the item
+  //   does not exist, throw UserDoesNotExist
+  // - In formatError, return error codes. Also filter out some
+  //   errors that we do not want to log because they're sometimes
+  //   expected, like UserDoesNotExist errors.
+  // - In QueryRenderers, if the error indicates that the user does
+  //   not exist, create the user and then re-query.
+
   // If the user is not fully logged in, redirect to the
   // appropriate auth page.
   // User is not logged in.
