@@ -10,35 +10,43 @@ class ExtendableError extends Error {
   }
 }
 
+export const METHOD_NOT_IMPLEMENTED = 'METHOD_NOT_IMPLEMENTED'
 class NotImplementedException extends ExtendableError {
   constructor () {
     super('Required method is not implemented.')
+    this.code = UNAUTHORIZED_QUERY
   }
 }
 
+export const UNAUTHORIZED_QUERY = 'UNAUTHORIZED_QUERY'
 class UnauthorizedQueryException extends ExtendableError {
   constructor () {
     super('Query not authorized.')
+    this.code = UNAUTHORIZED_QUERY
   }
 }
 
+export const USER_REACHED_MAX_LEVEL = 'USER_REACHED_MAX_LEVEL'
 class UserReachedMaxLevelException extends ExtendableError {
   constructor () {
     super('There are no more levels. The user is at the max level.')
+    this.code = USER_REACHED_MAX_LEVEL
   }
 }
 
-class MockDatabaseException extends ExtendableError {
+// For tests.
+class MockDatabaseException extends ExtendableError {}
 
-}
-
+export const OPERATION_STACK_IS_EMPTY = 'OPERATION_STACK_IS_EMPTY'
 class EmptyOperationStackException extends MockDatabaseException {
   constructor () {
     super('Operation stack is empty. Check if you set your expected data in the test.')
+    this.code = OPERATION_STACK_IS_EMPTY
   }
 }
 
-//
+// TODO:
+// USER_DOES_NOT_EXIST_ERROR
 
 export {
   NotImplementedException,
