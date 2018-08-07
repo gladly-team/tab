@@ -15,6 +15,17 @@ import {
 } from 'authentication/user'
 
 /**
+ * Return whether the current user is allowed to have an anonymous
+ * account.
+ * @return {boolean} Whether the current user is allowed to have an
+ *   anonymous account.
+ */
+const allowAnonymousUser = () => {
+  // TODO: determine by the status of feature flag / split-testing
+  return false
+}
+
+/**
  * Based on the user object state, determine if we need to redirect
  * to an authentication page. If the user is not fully authenticated,
  * redirect and return true. If teh user is fully authenticated, do
@@ -37,14 +48,26 @@ export const checkAuthStateAndRedirectIfNeeded = (user, fetchedUsername = null) 
   // appropriate auth page.
   // User is not logged in.
   if (!user || !user.id) {
-    // If the page is in an iframe (e.g. the user opened it via an iframed
-    // new tab), authentication may not work correctly. Show an intermediary
-    // page that will open a non-iframed auth page.
-    if (isInIframe()) {
-      goTo(authMessageURL)
+    if (allowAnonymousUser()) {
+      // TODO:
+      // Authenticate the user anonymously.
+      // Create a user in our database.
+      // TODO: add tests for this anonymous user logic.
     } else {
-      goToLogin()
+      // If the page is in an iframe (e.g. the user opened it via an iframed
+      // new tab), authentication may not work correctly. Show an intermediary
+      // page that will open a non-iframed auth page.
+      if (isInIframe()) {
+        goTo(authMessageURL)
+      } else {
+        goToLogin()
+      }
     }
+  // If the user has an anonymous account and is allowed to be
+  // anonymous, do nothing.
+  } else if (user.isAnonymous && allowAnonymousUser()) {
+    // TODO: add tests for this case
+    redirected = false
   // If the user does not have an email address, show a message
   // asking them to sign in with a different method.
   } else if (!user.email) {
