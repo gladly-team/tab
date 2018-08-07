@@ -34,6 +34,14 @@ class UserReachedMaxLevelException extends ExtendableError {
   }
 }
 
+export const USER_DOES_NOT_EXIST = 'USER_DOES_NOT_EXIST'
+class UserDoesNotExistException extends ExtendableError {
+  constructor () {
+    super('No user exists with this ID.')
+    this.code = USER_DOES_NOT_EXIST
+  }
+}
+
 // For tests.
 class MockDatabaseException extends ExtendableError {}
 
@@ -45,12 +53,10 @@ class EmptyOperationStackException extends MockDatabaseException {
   }
 }
 
-// TODO:
-// USER_DOES_NOT_EXIST_ERROR
-
 export {
   NotImplementedException,
   UnauthorizedQueryException,
   UserReachedMaxLevelException,
+  UserDoesNotExistException,
   EmptyOperationStackException
 }

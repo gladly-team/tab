@@ -6,7 +6,8 @@ import {
 } from '../error-logging'
 import {
   UNAUTHORIZED_QUERY,
-  UnauthorizedQueryException
+  UnauthorizedQueryException,
+  UserDoesNotExistException
 } from '../exceptions'
 import logger from '../logger'
 
@@ -64,9 +65,21 @@ describe('error-logging', () => {
     expect(formattedErr).toEqual(expectedFormattedErr)
   })
 
-  test('handleError logs the error', () => {
+  test('handleError logs a normal error', () => {
     const mockGraphQLErr = new MockGraphQLError(new Error('Yikes!'))
     handleError(mockGraphQLErr)
     expect(logger.error).toHaveBeenCalledWith(mockGraphQLErr)
+  })
+
+  test('handleError logs a custom error', () => {
+    const mockGraphQLErr = new MockGraphQLError(new UnauthorizedQueryException())
+    handleError(mockGraphQLErr)
+    expect(logger.error).toHaveBeenCalledWith(mockGraphQLErr)
+  })
+
+  test('handleError does not log an error that should not be logged', () => {
+    const mockGraphQLErr = new MockGraphQLError(new UserDoesNotExistException())
+    handleError(mockGraphQLErr)
+    expect(logger.error).not.toHaveBeenCalled()
   })
 })
