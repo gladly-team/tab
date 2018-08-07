@@ -26,6 +26,14 @@ class UnauthorizedQueryException extends ExtendableError {
   }
 }
 
+export const DATABASE_ITEM_DOES_NOT_EXIST = 'DATABASE_ITEM_DOES_NOT_EXIST'
+class DatabaseItemDoesNotExistException extends ExtendableError {
+  constructor () {
+    super('The database does not contain an item with these keys.')
+    this.code = DATABASE_ITEM_DOES_NOT_EXIST
+  }
+}
+
 export const USER_REACHED_MAX_LEVEL = 'USER_REACHED_MAX_LEVEL'
 class UserReachedMaxLevelException extends ExtendableError {
   constructor () {
@@ -56,6 +64,7 @@ class EmptyOperationStackException extends MockDatabaseException {
 export {
   NotImplementedException,
   UnauthorizedQueryException,
+  DatabaseItemDoesNotExistException,
   UserReachedMaxLevelException,
   UserDoesNotExistException,
   EmptyOperationStackException

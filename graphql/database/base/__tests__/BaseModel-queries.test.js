@@ -15,6 +15,7 @@ import {
   setModelPermissions
 } from '../../test-utils'
 import {
+  DatabaseItemDoesNotExistException,
   UnauthorizedQueryException
 } from '../../../utils/exceptions'
 
@@ -108,7 +109,7 @@ describe('BaseModel queries', () => {
     expect(response).toEqual(itemToGet)
   })
 
-  it('correctly handles a `get` that returns no item', async () => {
+  it('throws an error when a `get` returns no item', async () => {
     setModelPermissions(ExampleModel, {
       get: () => true
     })
@@ -121,8 +122,9 @@ describe('BaseModel queries', () => {
         Item: null
       }
     )
-    const promise = ExampleModel.get(user, itemToGet.id)
-    await expect(promise).rejects.toBeDefined()
+
+    return expect(ExampleModel.get(user, itemToGet.id))
+      .rejects.toEqual(new DatabaseItemDoesNotExistException())
   })
 
   it('correctly uses `get` method for a model with a range key', async () => {
