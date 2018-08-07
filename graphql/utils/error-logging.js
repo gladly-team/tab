@@ -1,5 +1,4 @@
 
-// import uuid from 'uuid'
 import logger from './logger'
 import { get } from 'lodash/object'
 
@@ -43,13 +42,6 @@ export const formatError = (graphQLError) => {
  * @return {object} The error to send to the client (optionally formatted).
  */
 export const handleError = (graphQLError) => {
-  // FIXME: disabled because it's breaking some of the error messages.
-  // // Return masked error messages to the client side to
-  // // prevent leakage of any sensitive info.
-  // // Inspired by graphql-errors package:
-  // // https://github.com/kadirahq/graphql-errors/blob/master/lib/index.js#L29
-  // const errId = uuid.v4()
-  // logErrorWithId(graphQLError, errId)
   logger.error(graphQLError)
 
   // TODO: probably want to return different message
