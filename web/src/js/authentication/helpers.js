@@ -8,11 +8,14 @@ import {
   verifyEmailURL
 } from 'navigation/navigation'
 import {
+  getReferralData,
   isInIframe
 } from 'web-utils'
 import {
   setUsernameInLocalStorage
 } from 'authentication/user'
+import environment from '../../relay-env'
+import CreateNewUserMutation from 'mutations/CreateNewUserMutation'
 
 /**
  * Return whether the current user is allowed to have an anonymous
@@ -108,4 +111,37 @@ export const checkAuthStateAndRedirectIfNeeded = (user, fetchedUsername = null) 
     redirected = false
   }
   return redirected
+}
+
+/**
+ * Create a new user in our database, or get the user if they already
+ * exist. This is idempotent and may be called when returning users sign in.
+ * @param {string} userId - The userId from Firebase
+ * @param {string|null} email - The user's email address from Firebase
+ * @returns {Promise<object>} user - A promise that resolves into an
+ *   object with a few requested fields
+ * @returns {string} user.id - The user's ID, the same value as the
+ *   userId argument
+ * @returns {string} user.email - The user's email, the same value as the
+ *   email argument
+ * @returns {string|null} user.username - The user's username, if already
+ *   set; or null, if not yet set
+ */
+export const createNewUser = (userId, email) => {
+  const referralData = getReferralData()
+  return new Promise((resolve, reject) => {
+    CreateNewUserMutation(
+      environment,
+      userId,
+      email,
+      referralData,
+      (response) => {
+        resolve(response.createNewUser)
+      },
+      (err) => {
+        console.error('Error at createNewUser:', err)
+        reject(new Error('Could not create new user', err))
+      }
+    )
+  })
 }

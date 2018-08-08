@@ -1,12 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import environment from '../../../relay-env'
 import {
   getCurrentUser,
   sendVerificationEmail
 } from 'authentication/user'
 import {
-  checkAuthStateAndRedirectIfNeeded
+  checkAuthStateAndRedirectIfNeeded,
+  createNewUser
 } from 'authentication/helpers'
 import {
   goTo,
@@ -14,10 +14,6 @@ import {
   verifyEmailURL,
   goToDashboard
 } from 'navigation/navigation'
-import CreateNewUserMutation from 'mutations/CreateNewUserMutation'
-import {
-  getReferralData
-} from 'web-utils'
 import { isEqual } from 'lodash/lang'
 import LogoWithText from '../Logo/LogoWithText'
 
@@ -135,7 +131,7 @@ class Authentication extends React.Component {
     }
 
     // Get or create the user
-    return this.createNewUser(currentUser.uid, currentUser.email)
+    return createNewUser(currentUser.uid, currentUser.email)
       .then((createdOrFetchedUser) => {
         // Check if the user has verified their email.
         // Note: later versions of firebaseui-web might support mandatory
@@ -162,39 +158,6 @@ class Authentication extends React.Component {
         // TODO: show error message to the user
         console.error(err)
       })
-  }
-
-  /**
-   * Create a new user in our database, or get the user if they already
-   * exist. This is idempotent and will be called when returning users sign in.
-   * @param {string} userId - The userId from Firebase
-   * @param {string} email - The user's email address from Firebase
-   * @returns {Promise<object>} user - A promise that resolves into an
-   *   object with a few requested fields
-   * @returns {string} user.id - The user's ID, the same value as the
-   *   userId argument
-   * @returns {string} user.email - The user's email, the same value as the
-   *   email argument
-   * @returns {string|null} user.username - The user's username, if already
-   *   set; or null, if not yet set
-   */
-  createNewUser (userId, email) {
-    const referralData = getReferralData()
-    return new Promise((resolve, reject) => {
-      CreateNewUserMutation(
-        environment,
-        userId,
-        email,
-        referralData,
-        (response) => {
-          resolve(response.createNewUser)
-        },
-        (err) => {
-          console.error('Error at createNewUser:', err)
-          reject(new Error('Could not create new user', err))
-        }
-      )
-    })
   }
 
   render () {
