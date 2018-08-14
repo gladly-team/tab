@@ -131,7 +131,7 @@ class Authentication extends React.Component {
     }
 
     // Get or create the user
-    return createNewUser(currentUser.uid, currentUser.email)
+    return createNewUser()
       .then((createdOrFetchedUser) => {
         // Check if the user has verified their email.
         // Note: later versions of firebaseui-web might support mandatory

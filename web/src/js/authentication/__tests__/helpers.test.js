@@ -12,12 +12,16 @@ import {
   getReferralData
 } from 'web-utils'
 import CreateNewUserMutation from 'mutations/CreateNewUserMutation'
+import {
+  getCurrentUser
+} from 'authentication/user'
 
 jest.mock('authentication/user')
 jest.mock('navigation/navigation')
 jest.mock('utils/localstorage-mgr')
 jest.mock('web-utils')
 jest.mock('mutations/CreateNewUserMutation')
+jest.mock('authentication/user')
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -106,8 +110,17 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
 describe('createNewUser tests', () => {
   it('returns the new user data', async () => {
     expect.assertions(1)
+
+    // Mock the authed user
+    getCurrentUser.mockResolvedValue({
+      id: 'abc123',
+      email: 'somebody@example.com',
+      username: null,
+      isAnonymous: false,
+      emailVerified: false
+    })
+
     getReferralData.mockImplementationOnce(() => null)
-    const createNewUser = require('../helpers').createNewUser
 
     // Mock a response from new user creation
     CreateNewUserMutation.mockImplementationOnce(
@@ -123,7 +136,8 @@ describe('createNewUser tests', () => {
       }
     )
 
-    const newUser = await createNewUser('abc123', 'somebody@example.com')
+    const createNewUser = require('../helpers').createNewUser
+    const newUser = await createNewUser()
 
     expect(newUser).toEqual({
       id: 'abc123',
@@ -138,7 +152,15 @@ describe('createNewUser tests', () => {
     getReferralData.mockImplementationOnce(() => ({
       referringUser: 'asdf1234'
     }))
-    const createNewUser = require('../helpers').createNewUser
+
+    // Mock the authed user
+    getCurrentUser.mockResolvedValue({
+      id: 'abc123',
+      email: 'somebody@example.com',
+      username: null,
+      isAnonymous: false,
+      emailVerified: false
+    })
 
     // Mock a response from new user creation
     CreateNewUserMutation.mockImplementationOnce(
@@ -154,6 +176,7 @@ describe('createNewUser tests', () => {
       }
     )
 
+    const createNewUser = require('../helpers').createNewUser
     await createNewUser('abc123', 'somebody@example.com')
 
     expect(CreateNewUserMutation.mock.calls[0][3]).toEqual({

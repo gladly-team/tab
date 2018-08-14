@@ -12,6 +12,7 @@ import {
   isInIframe
 } from 'web-utils'
 import {
+  getCurrentUser,
   setUsernameInLocalStorage
 } from 'authentication/user'
 import environment from '../../relay-env'
@@ -116,8 +117,6 @@ export const checkAuthStateAndRedirectIfNeeded = (user, fetchedUsername = null) 
 /**
  * Create a new user in our database, or get the user if they already
  * exist. This is idempotent and may be called when returning users sign in.
- * @param {string} userId - The userId from Firebase
- * @param {string|null} email - The user's email address from Firebase
  * @returns {Promise<object>} user - A promise that resolves into an
  *   object with a few requested fields
  * @returns {string} user.id - The user's ID, the same value as the
@@ -127,21 +126,36 @@ export const checkAuthStateAndRedirectIfNeeded = (user, fetchedUsername = null) 
  * @returns {string|null} user.username - The user's username, if already
  *   set; or null, if not yet set
  */
-export const createNewUser = (userId, email) => {
-  const referralData = getReferralData()
-  return new Promise((resolve, reject) => {
-    CreateNewUserMutation(
-      environment,
-      userId,
-      email,
-      referralData,
-      (response) => {
-        resolve(response.createNewUser)
-      },
-      (err) => {
-        console.error('Error at createNewUser:', err)
-        reject(new Error('Could not create new user', err))
+export const createNewUser = () => {
+  // Get the currently-authenticated user.
+  return getCurrentUser()
+    .then(user => {
+      // If there's no authenticated user, we can't create a new user.
+      if (!user || !user.id) {
+        throw new Error('Cannot create a new user. User is not authenticated.')
       }
-    )
-  })
+
+      // Get any referral data that exists.
+      const referralData = getReferralData()
+
+      return new Promise((resolve, reject) => {
+        CreateNewUserMutation(
+          environment,
+          user.id,
+          user.email,
+          referralData,
+          (response) => {
+            resolve(response.createNewUser)
+          },
+          (err) => {
+            console.error('Error at createNewUser:', err)
+            reject(new Error('Could not create new user', err))
+          }
+        )
+      })
+    })
+    .catch(e => {
+      console.log(e)
+      throw e
+    })
 }
