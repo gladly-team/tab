@@ -31,7 +31,7 @@ const requestManager = {
 /**
  * Add bidder targeting to googletag and send a request
  * to DFP to fetch ads.
- * @return {boolean}
+ * @return {undefined}
  */
 function sendAdserverRequest () {
   // Return if the request to the adserver was already sent.
@@ -117,8 +117,8 @@ const loadAdCode = () => {
 }
 
 if (adsEnabled()) {
-  // Call the ad server after some time to avoid too long
-  // for bid responses.
+  // Call the ad server after some time to avoid waiting
+  // too long for bid responses.
   setTimeout(() => {
     sendAdserverRequest()
   }, AUCTION_TIMEOUT)
