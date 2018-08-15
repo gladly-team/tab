@@ -6,7 +6,7 @@ import types from '../fieldTypes'
 import tableNames from '../tables'
 import {
   USER,
-  USER_BACKGROUND_OPTION_PHOTO
+  USER_BACKGROUND_OPTION_DAILY
 } from '../constants'
 import {
   permissionAuthorizers
@@ -121,7 +121,7 @@ class User extends BaseModel {
         thumbnail: '5d4dfd0b34134879903f0480720bd746.jpg',
         timestamp: moment.utc().toISOString()
       }),
-      backgroundOption: USER_BACKGROUND_OPTION_PHOTO
+      backgroundOption: USER_BACKGROUND_OPTION_DAILY
     }
   }
 

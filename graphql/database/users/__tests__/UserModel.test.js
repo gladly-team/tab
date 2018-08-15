@@ -167,7 +167,7 @@ describe('UserModel', () => {
         thumbnailURL: `${mediaRoot}/img/background-thumbnails/5d4dfd0b34134879903f0480720bd746.jpg`,
         timestamp: moment.utc().toISOString()
       },
-      backgroundOption: 'photo'
+      backgroundOption: 'daily'
     })
   })
 
