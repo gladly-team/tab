@@ -117,11 +117,11 @@ export const checkAuthStateAndRedirectIfNeeded = (user, fetchedUsername = null) 
 /**
  * Create a new user in our database, or get the user if they already
  * exist. This is idempotent and may be called when returning users sign in.
- * @returns {Promise<object>} user - A promise that resolves into an
- *   object with a few requested fields
+ * @returns {Promise<object>} user - A promise that resolves into a
+ *   user object
  * @returns {string} user.id - The user's ID, the same value as the
  *   userId argument
- * @returns {string} user.email - The user's email, the same value as the
+ * @returns {string|null} user.email - The user's email, the same value as the
  *   email argument
  * @returns {string|null} user.username - The user's username, if already
  *   set; or null, if not yet set
