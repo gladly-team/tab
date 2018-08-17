@@ -32,7 +32,7 @@ const allowAnonymousUser = () => {
 /**
  * Based on the user object state, determine if we need to redirect
  * to an authentication page. If the user is not fully authenticated,
- * redirect and return true. If teh user is fully authenticated, do
+ * redirect and return true. If the user is fully authenticated, do
  * not redirect and return false.
  * @param {object} user - The user object for the app.
  * @param {string} user.id - The user's ID
