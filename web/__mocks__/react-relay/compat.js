@@ -1,10 +1,7 @@
 /* eslint-env jest */
 import React from 'react'
 
-// A gist with mock for Relay Modern:
-// https://gist.github.com/robrichard/ad838e599d828a89978f54faaa2070a8
-
-const RelayMock = jest.genMockFromModule('react-relay')
+const RelayCompatMock = jest.genMockFromModule('react-relay/compat')
 
 /* Mock QueryRenderer functionality */
 
@@ -25,7 +22,7 @@ const MockComponent = props => {
 }
 MockComponent.displayName = 'QueryRenderer'
 
-RelayMock.QueryRenderer = MockComponent
+RelayCompatMock.QueryRenderer = MockComponent
 
 /**
  * Set the mock response value passed as an argument to the mock
@@ -41,8 +38,8 @@ RelayMock.QueryRenderer = MockComponent
  *   would retry the query.
  * @return {undefined}
  */
-RelayMock.QueryRenderer.__setQueryResponse = mockResponse => {
+RelayCompatMock.QueryRenderer.__setQueryResponse = mockResponse => {
   queryRendererResponse = mockResponse
 }
 
-module.exports = RelayMock
+module.exports = RelayCompatMock

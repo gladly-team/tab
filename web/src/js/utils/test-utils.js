@@ -1,4 +1,6 @@
 
+import React from 'react'
+
 // Like Enzyme's `find` method, but polling to wait for
 // elements to mount.
 export const enzymeFindAsync = async (rootComponent, selector, maxTimeMs = 4000, intervalMs = 50) => {
@@ -143,4 +145,29 @@ export const getDefaultTabGlobal = (properties = {}) => {
     },
     featureFlags: {}
   }
+}
+
+/**
+ * Create a mock React component for testing. The component will render
+ * any React.children.
+ * @param {String} componentName - The value of the component's displayName;
+ *   typically should be the name of the component class or file name.
+ * @param {Object|null} childProps - Any props that should be passed on to
+ *   all children. If provided, children will be cloned with these props.
+ * @return {function} The mock component
+ */
+export const createMockReactComponent = (componentName, childProps = null) => {
+  const MockComponent = props => {
+    const children = childProps ? (
+      React.Children.map(
+        props.children,
+        (child) => React.cloneElement(child, childProps)
+      )
+    ) : props.children
+    return (
+      <span>{children}</span>
+    )
+  }
+  MockComponent.displayName = componentName || 'MyMockComponent'
+  return MockComponent
 }

@@ -1,7 +1,7 @@
 /* global graphql */
 
 import React from 'react'
-import {QueryRenderer} from 'react-relay/compat'
+import { QueryRenderer } from 'react-relay/compat'
 import environment from '../../../relay-env'
 
 import AuthUserComponent from 'general/AuthUserComponent'
