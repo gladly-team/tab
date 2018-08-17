@@ -1,6 +1,9 @@
 
-// import uuid from 'uuid'
 import logger from './logger'
+import { get } from 'lodash/object'
+import {
+  USER_DOES_NOT_EXIST
+} from './exceptions'
 
 /*
  * Wrap a function and log all exceptions, then re-throw the
@@ -29,8 +32,23 @@ export const formatError = (graphQLError) => {
   return {
     message: graphQLError.message,
     locations: graphQLError.locations,
-    path: graphQLError.path
+    path: graphQLError.path,
+    code: get(graphQLError, 'originalError.code', null)
   }
+}
+
+/*
+ * Determine whether we should log an error. Some errors are
+ * fairly expected and shouldn't be logged.
+ * @param {object} graphQLError - The GraphQL error.
+ * @return {Boolean} Whether we should log the error.
+ */
+const shouldLogError = graphQLError => {
+  const errorCodesToSkipLogging = [
+    USER_DOES_NOT_EXIST
+  ]
+  const errCode = get(graphQLError, 'originalError.code')
+  return errorCodesToSkipLogging.indexOf(errCode) === -1
 }
 
 /*
@@ -41,14 +59,9 @@ export const formatError = (graphQLError) => {
  * @return {object} The error to send to the client (optionally formatted).
  */
 export const handleError = (graphQLError) => {
-  // FIXME: disabled because it's breaking some of the error messages.
-  // // Return masked error messages to the client side to
-  // // prevent leakage of any sensitive info.
-  // // Inspired by graphql-errors package:
-  // // https://github.com/kadirahq/graphql-errors/blob/master/lib/index.js#L29
-  // const errId = uuid.v4()
-  // logErrorWithId(graphQLError, errId)
-  logger.error(graphQLError)
+  if (shouldLogError(graphQLError)) {
+    logger.error(graphQLError)
+  }
 
   // TODO: probably want to return different message
   // for some error types (e.g. UnauthorizedQueryException)

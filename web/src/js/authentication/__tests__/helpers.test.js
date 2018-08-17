@@ -8,10 +8,20 @@ import {
   missingEmailMessageURL,
   verifyEmailURL
 } from 'navigation/navigation'
+import {
+  getReferralData
+} from 'web-utils'
+import CreateNewUserMutation from 'mutations/CreateNewUserMutation'
+import {
+  getCurrentUser
+} from 'authentication/user'
 
 jest.mock('authentication/user')
 jest.mock('navigation/navigation')
 jest.mock('utils/localstorage-mgr')
+jest.mock('web-utils')
+jest.mock('mutations/CreateNewUserMutation')
+jest.mock('authentication/user')
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -94,5 +104,83 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
     }
     const redirected = checkAuthStateAndRedirectIfNeeded(user, 'SomeUsername')
     expect(redirected).toBe(false)
+  })
+})
+
+describe('createNewUser tests', () => {
+  it('returns the new user data', async () => {
+    expect.assertions(1)
+
+    // Mock the authed user
+    getCurrentUser.mockResolvedValue({
+      id: 'abc123',
+      email: 'somebody@example.com',
+      username: null,
+      isAnonymous: false,
+      emailVerified: false
+    })
+
+    getReferralData.mockImplementationOnce(() => null)
+
+    // Mock a response from new user creation
+    CreateNewUserMutation.mockImplementationOnce(
+      (environment, userId, email, referralData, onCompleted, onError) => {
+        onCompleted({
+          createNewUser: {
+            id: 'abc123',
+            email: 'somebody@example.com',
+            username: null,
+            justCreated: true
+          }
+        })
+      }
+    )
+
+    const createNewUser = require('../helpers').createNewUser
+    const newUser = await createNewUser()
+
+    expect(newUser).toEqual({
+      id: 'abc123',
+      email: 'somebody@example.com',
+      username: null,
+      justCreated: true
+    })
+  })
+
+  it('uses referral data when creating a new user', async () => {
+    expect.assertions(1)
+    getReferralData.mockImplementationOnce(() => ({
+      referringUser: 'asdf1234'
+    }))
+
+    // Mock the authed user
+    getCurrentUser.mockResolvedValue({
+      id: 'abc123',
+      email: 'somebody@example.com',
+      username: null,
+      isAnonymous: false,
+      emailVerified: false
+    })
+
+    // Mock a response from new user creation
+    CreateNewUserMutation.mockImplementationOnce(
+      (environment, userId, email, referralData, onCompleted, onError) => {
+        onCompleted({
+          createNewUser: {
+            id: 'abc123',
+            email: 'somebody@example.com',
+            username: null,
+            justCreated: true
+          }
+        })
+      }
+    )
+
+    const createNewUser = require('../helpers').createNewUser
+    await createNewUser('abc123', 'somebody@example.com')
+
+    expect(CreateNewUserMutation.mock.calls[0][3]).toEqual({
+      referringUser: 'asdf1234'
+    })
   })
 })

@@ -8,11 +8,15 @@ import {
   verifyEmailURL
 } from 'navigation/navigation'
 import {
+  getReferralData,
   isInIframe
 } from 'web-utils'
 import {
+  getCurrentUser,
   setUsernameInLocalStorage
 } from 'authentication/user'
+import environment from '../../relay-env'
+import CreateNewUserMutation from 'mutations/CreateNewUserMutation'
 
 /**
  * Return whether the current user is allowed to have an anonymous
@@ -94,4 +98,50 @@ export const checkAuthStateAndRedirectIfNeeded = (user, fetchedUsername = null) 
     redirected = false
   }
   return redirected
+}
+
+/**
+ * Create a new user in our database, or get the user if they already
+ * exist. This is idempotent and may be called when returning users sign in.
+ * @returns {Promise<object>} user - A promise that resolves into a
+ *   user object
+ * @returns {string} user.id - The user's ID, the same value as the
+ *   userId argument
+ * @returns {string|null} user.email - The user's email, the same value as the
+ *   email argument
+ * @returns {string|null} user.username - The user's username, if already
+ *   set; or null, if not yet set
+ */
+export const createNewUser = () => {
+  // Get the currently-authenticated user.
+  return getCurrentUser()
+    .then(user => {
+      // If there's no authenticated user, we can't create a new user.
+      if (!user || !user.id) {
+        throw new Error('Cannot create a new user. User is not authenticated.')
+      }
+
+      // Get any referral data that exists.
+      const referralData = getReferralData()
+
+      return new Promise((resolve, reject) => {
+        CreateNewUserMutation(
+          environment,
+          user.id,
+          user.email,
+          referralData,
+          (response) => {
+            resolve(response.createNewUser)
+          },
+          (err) => {
+            console.error('Error at createNewUser:', err)
+            reject(new Error('Could not create new user', err))
+          }
+        )
+      })
+    })
+    .catch(e => {
+      console.log(e)
+      throw e
+    })
 }

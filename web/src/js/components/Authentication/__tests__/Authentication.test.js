@@ -103,8 +103,8 @@ describe('Authentication.js tests', function () {
       username: null
     }
 
-    // Mock the Firebase user
-    getCurrentUser.mockReturnValueOnce({
+    // Mock the authed user
+    getCurrentUser.mockResolvedValue({
       id: 'abc123',
       email: 'foo@bar.com',
       username: 'foo',
@@ -133,7 +133,7 @@ describe('Authentication.js tests', function () {
     }
 
     // User is unauthed
-    getCurrentUser.mockReturnValueOnce(null)
+    getCurrentUser.mockResolvedValue(null)
 
     // Inside an iframe
     isInIframe.mockReturnValueOnce(true)
@@ -159,7 +159,7 @@ describe('Authentication.js tests', function () {
     }
 
     // User is unauthed
-    getCurrentUser.mockReturnValueOnce(null)
+    getCurrentUser.mockResolvedValue(null)
 
     // Inside an iframe
     isInIframe.mockReturnValueOnce(false)
@@ -184,7 +184,7 @@ describe('Authentication.js tests', function () {
       username: null
     }
 
-    getCurrentUser.mockReturnValueOnce({
+    getCurrentUser.mockResolvedValue({
       id: 'abc123',
       email: null,
       username: null,
@@ -213,7 +213,7 @@ describe('Authentication.js tests', function () {
       username: null
     }
 
-    getCurrentUser.mockReturnValueOnce({
+    getCurrentUser.mockResolvedValue({
       id: 'abc123',
       email: 'foo@bar.com',
       username: null,
@@ -242,7 +242,7 @@ describe('Authentication.js tests', function () {
       username: null
     }
 
-    getCurrentUser.mockReturnValueOnce({
+    getCurrentUser.mockResolvedValue({
       id: 'abc123',
       email: 'foo@bar.com',
       username: null,
@@ -271,7 +271,7 @@ describe('Authentication.js tests', function () {
       username: 'fooismyname'
     }
 
-    getCurrentUser.mockReturnValueOnce({
+    getCurrentUser.mockResolvedValue({
       id: 'abc123',
       email: 'foo@bar.com',
       username: null,
@@ -301,7 +301,7 @@ describe('Authentication.js tests', function () {
       username: null
     }
 
-    getCurrentUser.mockReturnValueOnce({
+    getCurrentUser.mockResolvedValue({
       id: 'abc123',
       email: 'foo@bar.com',
       username: null,
@@ -374,7 +374,6 @@ describe('Authentication.js tests', function () {
 
   it('after sign-in, send email verification if email is not verified', async () => {
     expect.assertions(2)
-    const Authentication = require('../Authentication').default
 
     // Args for onSignInSuccess
     const mockFirebaseUserInstance = {
@@ -393,6 +392,32 @@ describe('Authentication.js tests', function () {
     const mockFirebaseCredential = {}
     const mockFirebaseDefaultRedirectURL = ''
 
+    // Mock the authed user
+    // getCurrentUser.mockResolvedValue({
+    getCurrentUser.mockResolvedValue({
+      id: 'abc123',
+      email: 'foo@bar.com',
+      username: null,
+      isAnonymous: false,
+      emailVerified: false // Note that email is unverified
+    })
+
+    // Mock a response from new user creation
+    CreateNewUserMutation.mockImplementationOnce(
+      (environment, userId, email, referralData, onCompleted, onError) => {
+        onCompleted({
+          createNewUser: {
+            id: 'abc123',
+            email: 'foo@bar.com',
+            username: null
+          }
+        })
+      }
+    )
+
+    sendVerificationEmail.mockImplementationOnce(() => Promise.resolve(true))
+
+    const Authentication = require('../Authentication').default
     const wrapper = shallow(
       <Authentication
         location={mockLocationData}
@@ -402,22 +427,6 @@ describe('Authentication.js tests', function () {
     )
     const component = wrapper.instance()
 
-    // Mock a response from new user creation
-    CreateNewUserMutation.mockImplementationOnce(
-      (environment, userId, email, referralData, onCompleted, onError) => {
-        onCompleted({
-          createNewUser: {
-            id: 'abc123',
-            email: 'foo@bar.com',
-            username: 'fooismyname',
-            justCreated: true
-          }
-        })
-      }
-    )
-
-    sendVerificationEmail.mockImplementationOnce(() => Promise.resolve(true))
-
     // Mock a call from FirebaseUI after user signs in
     await component.onSignInSuccess(mockFirebaseUserInstance,
       mockFirebaseCredential, mockFirebaseDefaultRedirectURL)
@@ -426,9 +435,8 @@ describe('Authentication.js tests', function () {
     expect(goTo).toHaveBeenCalledWith(verifyEmailURL)
   })
 
-  it('after sign-in, refetch the user', async () => {
+  it('refetches the user after sign-in', async () => {
     expect.assertions(1)
-    const Authentication = require('../Authentication').default
 
     // Args for onSignInSuccess
     const mockFirebaseUserInstance = {
@@ -448,6 +456,30 @@ describe('Authentication.js tests', function () {
     const mockFirebaseDefaultRedirectURL = ''
     const mockFetchUser = jest.fn()
 
+    // Mock a response from new user creation
+    CreateNewUserMutation.mockImplementationOnce(
+      (environment, userId, email, referralData, onCompleted, onError) => {
+        onCompleted({
+          createNewUser: {
+            id: 'abc123',
+            email: 'foo@bar.com',
+            username: null,
+            justCreated: true
+          }
+        })
+      }
+    )
+
+    // Mock the authed user
+    getCurrentUser.mockResolvedValue({
+      id: 'abc123',
+      email: 'foo@bar.com',
+      username: null,
+      isAnonymous: false,
+      emailVerified: true
+    })
+
+    const Authentication = require('../Authentication').default
     const wrapper = shallow(
       <Authentication
         location={mockLocationData}
@@ -456,6 +488,38 @@ describe('Authentication.js tests', function () {
       />
     )
     const component = wrapper.instance()
+
+    // Mock a call from FirebaseUI after user signs in
+    await component.onSignInSuccess(mockFirebaseUserInstance,
+      mockFirebaseCredential, mockFirebaseDefaultRedirectURL)
+
+    expect(mockFetchUser).toHaveBeenCalledTimes(1)
+  })
+
+  it('uses referral data when creating a new user', async () => {
+    expect.assertions(1)
+
+    getReferralData.mockImplementationOnce(() => ({
+      referringUser: 'asdf1234'
+    }))
+
+    // Args for onSignInSuccess
+    const mockFirebaseUserInstance = {
+      displayName: '',
+      email: 'foo@bar.com',
+      emailVerified: true,
+      isAnonymous: false,
+      metadata: {},
+      phoneNumber: null,
+      photoURL: null,
+      providerData: {},
+      providerId: 'some-id',
+      refreshToken: 'xyzxyz',
+      uid: 'abc123'
+    }
+    const mockFirebaseCredential = {}
+    const mockFirebaseDefaultRedirectURL = ''
+    const mockFetchUser = jest.fn()
 
     // Mock a response from new user creation
     CreateNewUserMutation.mockImplementationOnce(
@@ -471,17 +535,16 @@ describe('Authentication.js tests', function () {
       }
     )
 
-    // Mock a call from FirebaseUI after user signs in
-    await component.onSignInSuccess(mockFirebaseUserInstance,
-      mockFirebaseCredential, mockFirebaseDefaultRedirectURL)
+    // Mock the authed user
+    getCurrentUser.mockResolvedValue({
+      id: 'abc123',
+      email: 'foo@bar.com',
+      username: null,
+      isAnonymous: false,
+      emailVerified: true
+    })
 
-    expect(mockFetchUser).toHaveBeenCalledTimes(1)
-  })
-
-  it('uses referral data when creating a new user', async () => {
-    expect.assertions(1)
     const Authentication = require('../Authentication').default
-
     const wrapper = shallow(
       <Authentication
         location={mockLocationData}
@@ -490,16 +553,11 @@ describe('Authentication.js tests', function () {
       />
     )
     const component = wrapper.instance()
-    CreateNewUserMutation.mockImplementationOnce(
-      (environment, userId, email, referralData, onCompleted, onError) => {
-        onCompleted({})
-      }
-    )
-    getReferralData.mockImplementationOnce(() => ({
-      referringUser: 'asdf1234'
-    }))
 
-    await component.createNewUser('some-user-id', 'foo@bar.com')
+    // Mock a call from FirebaseUI after user signs in
+    await component.onSignInSuccess(mockFirebaseUserInstance,
+      mockFirebaseCredential, mockFirebaseDefaultRedirectURL)
+
     expect(CreateNewUserMutation.mock.calls[0][3]).toEqual({
       referringUser: 'asdf1234'
     })

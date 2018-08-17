@@ -6,6 +6,7 @@ import { isObject, isFunction, isNil } from 'lodash/lang'
 import dynogels from './dynogels-promisified'
 import types from '../fieldTypes'
 import {
+  DatabaseItemDoesNotExistException,
   NotImplementedException,
   UnauthorizedQueryException
 } from '../../utils/exceptions'
@@ -226,7 +227,7 @@ class BaseModel {
     return this.dynogelsModel.getAsync(...keys)
       .then(data => {
         if (isNil(data)) {
-          throw new Error(`Could not get item with hash key ${hashKey}.`)
+          throw new DatabaseItemDoesNotExistException()
         }
         return self.deserialize(data)
       })
