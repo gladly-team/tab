@@ -158,12 +158,15 @@ export const getDefaultTabGlobal = (properties = {}) => {
  */
 export const createMockReactComponent = (componentName, childProps = null) => {
   const MockComponent = props => {
-    const children = childProps ? (
-      React.Children.map(
-        props.children,
-        (child) => React.cloneElement(child, childProps)
-      )
-    ) : props.children
+    var children
+    if (props) {
+      children = childProps ? (
+        React.Children.map(
+          props.children,
+          (child) => React.cloneElement(child, childProps)
+        )
+      ) : props.children
+    }
     return (
       <span>{children}</span>
     )

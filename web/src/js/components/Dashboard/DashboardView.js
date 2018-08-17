@@ -34,7 +34,6 @@ class DashboardView extends React.Component {
             }
           `}
           render={({ error, props, retry }) => {
-            // TODO: add tests
             if (error) {
               // If any of the errors is because the user does not exist
               // on the server side, create the user and re-query if
