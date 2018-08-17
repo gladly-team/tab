@@ -1,10 +1,74 @@
 /* eslint-env jest */
 import React from 'react'
+import PropTypes from 'prop-types'
 
 // A gist with mock for Relay Modern:
 // https://gist.github.com/robrichard/ad838e599d828a89978f54faaa2070a8
 
 const RelayMock = jest.genMockFromModule('react-relay')
+
+/*
+  Mock createFragmentContainer, createRefetchContainer, and
+  createPaginationContainer functionality.
+*/
+
+const relayChildContextTypes = {
+  relay: PropTypes.object
+}
+
+const relayEnvironment = {
+  lookup: jest.fn()
+}
+
+const relayContext = {
+  relay: {
+    environment: relayEnvironment,
+    variables: {}
+  }
+}
+
+const relayFragmentProps = {
+  relay: {
+    environment: relayEnvironment
+  }
+}
+
+const relayRefetchProps = {
+  relay: {
+    environment: relayEnvironment,
+    refetch: jest.fn()
+  }
+}
+
+const relayPaginationProps = {
+  relay: {
+    environment: relayEnvironment,
+    hasMore: jest.fn(),
+    loadMore: jest.fn(),
+    isLoading: jest.fn()
+  }
+}
+
+function makeRelayWrapper (relayProps) {
+  return function (Comp) {
+    class HOC extends React.Component {
+      getChildContext () {
+        return relayContext
+      }
+
+      render () {
+        return <Comp {...this.props} {...relayProps} />
+      }
+    }
+
+    HOC.childContextTypes = relayChildContextTypes
+    return HOC
+  }
+}
+
+RelayMock.createFragmentContainer = makeRelayWrapper(relayFragmentProps)
+RelayMock.createRefetchContainer = makeRelayWrapper(relayRefetchProps)
+RelayMock.createPaginationContainer = makeRelayWrapper(relayPaginationProps)
 
 /* Mock QueryRenderer functionality */
 
