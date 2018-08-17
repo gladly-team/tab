@@ -14,7 +14,7 @@ export const METHOD_NOT_IMPLEMENTED = 'METHOD_NOT_IMPLEMENTED'
 class NotImplementedException extends ExtendableError {
   constructor () {
     super('Required method is not implemented.')
-    this.code = UNAUTHORIZED_QUERY
+    this.code = METHOD_NOT_IMPLEMENTED
   }
 }
 

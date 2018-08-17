@@ -217,7 +217,7 @@ describe('DashboardView', () => {
       retry: mockRetryFn
     })
 
-    // Failed to createa  new user.
+    // Failed to create a new user.
     createNewUser.mockRejectedValue(new Error('Failure'))
 
     mount(<DashboardView />)
