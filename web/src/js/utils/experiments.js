@@ -13,6 +13,23 @@ export const ANON_USER_GROUP_AUTH_REQUIRED = 'auth'
 export const ANON_USER_GROUP_UNAUTHED_ALLOWED = 'unauthed'
 
 /**
+ * Return the test group for the anonymous user authentication
+ * test from localStorage. If no test group is set, return the
+ * 'none' test group.
+ * @returns {String} One of the valid test group names.
+ */
+export const getAnonymousUserTestGroup = () => {
+  const item = localStorageMgr.getItem(STORAGE_EXPERIMENT_ANON_USER)
+  var testGroup = ANON_USER_GROUP_NO_GROUP
+  if (item === ANON_USER_GROUP_AUTH_REQUIRED ||
+    item === ANON_USER_GROUP_UNAUTHED_ALLOWED
+  ) {
+    testGroup = item
+  }
+  return testGroup
+}
+
+/**
  * Assigns the user to a test group for the anonymous user
  * authentication test and stores the test group in localStorage.
  * @returns {undefined}
