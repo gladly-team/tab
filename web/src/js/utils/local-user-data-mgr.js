@@ -2,6 +2,7 @@
 import moment from 'moment'
 import localStorageMgr from 'utils/localstorage-mgr'
 import {
+  STORAGE_APPROX_EXTENSION_INSTALL_TIME,
   STORAGE_TABS_RECENT_DAY_COUNT,
   STORAGE_TABS_LAST_TAB_OPENED_DATE
 } from '../constants'
@@ -88,4 +89,33 @@ export const incrementTabsOpenedToday = function () {
     setLastTabOpenedDateInLocalStorage()
     setTabCountInLocalStorage(1)
   }
+}
+
+/**
+ * Saves now as the approximate time the user installed the
+ * browser extension (saving to localStorage). This helps us
+ * distinguish truly new users from returning users who had
+ * cleared their local data: if it exists and is recent, we
+ * know the user is brand new.
+ * @returns {undefined}
+ */
+export const setBrowserExtensionInstallTime = () => {
+  localStorageMgr.setItem(STORAGE_APPROX_EXTENSION_INSTALL_TIME, moment.utc().toISOString())
+}
+
+/**
+ * Gets the approximate time the user installed the browser
+ * extension (from localStorage). The value may not exist;
+ * e.g. if a user cleared their local data.
+ * @returns {Date|null} The approximate datetime (in local
+ *   time) the user installed the Tab for a Cause browser
+ *   extension on this device.
+ */
+export const getBrowserExtensionInstallTime = () => {
+  const timeISOString = localStorageMgr.getItem(STORAGE_APPROX_EXTENSION_INSTALL_TIME)
+  const time = moment(timeISOString)
+  if (!timeISOString || !time.isValid()) {
+    return null
+  }
+  return time
 }

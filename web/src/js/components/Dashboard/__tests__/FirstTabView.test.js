@@ -6,8 +6,12 @@ import {
 } from 'enzyme'
 
 import { replaceUrl } from 'navigation/navigation'
+import {
+  setBrowserExtensionInstallTime
+} from 'utils/local-user-data-mgr'
 
 jest.mock('navigation/navigation')
+jest.mock('utils/local-user-data-mgr')
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -29,5 +33,13 @@ describe('FirstTabView', function () {
       <FirstTabView {...mockProps} />
     )
     expect(replaceUrl).toHaveBeenCalledWith('/newtab/')
+  })
+
+  it('calls to set the extension install time', () => {
+    const FirstTabView = require('../FirstTabView').default
+    shallow(
+      <FirstTabView {...mockProps} />
+    )
+    expect(setBrowserExtensionInstallTime).toHaveBeenCalledTimes(1)
   })
 })
