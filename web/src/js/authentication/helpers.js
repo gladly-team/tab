@@ -67,22 +67,29 @@ const allowAnonymousUser = () => {
  * @param {boolean} user.emailVerified - Whether the user has verified their email
  * @param {string} fetchedUsername - The user's username from the server, which
  *   may differ from the one in localStorage.
- * @return {boolean} Whether we redirected; i.e., whether the user was not fully
- *   authenticated.
+ * @return {Promise<boolean>} A Promise resolving into a Boolean, which
+ *   represents whether or not we redirected (e.g. true if the user was not fully
+ *   authenticated).
  */
-export const checkAuthStateAndRedirectIfNeeded = (user, fetchedUsername = null) => {
+export const checkAuthStateAndRedirectIfNeeded = async (user, fetchedUsername = null) => {
   var redirected = true
 
   // If the user is not fully logged in, redirect to the
   // appropriate auth page.
   // User is not logged in.
   if (!user || !user.id) {
+    // TODO:
+    // Authenticate the user anonymously.
+    // Create a user in our database.
+
+    // Determine if anonymous authentication is sufficient.
     if (allowAnonymousUser()) {
-      // TODO:
-      // Authenticate the user anonymously.
-      // Create a user in our database.
-      // TODO: add tests for this anonymous user logic.
+      // If the user is allowed to be anonymous, do not redirect.
+      redirected = false
+
+      // TODO: add tests for this case
     } else {
+      // The user is not allowed to be anonymous, so show the login screen.
       // If the page is in an iframe (e.g. the user opened it via an iframed
       // new tab), authentication may not work correctly. Show an intermediary
       // page that will open a non-iframed auth page.

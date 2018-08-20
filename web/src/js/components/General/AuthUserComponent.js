@@ -43,7 +43,7 @@ class AuthUserComponent extends React.Component {
     }
   }
 
-  checkUserAuth (user) {
+  async checkUserAuth (user) {
     // If the user is authed, set the ID in state.
     if (user && user.id) {
       this.setState({
@@ -59,7 +59,7 @@ class AuthUserComponent extends React.Component {
 
     // If the user is not fully logged in, redirect to the
     // appropriate auth page.
-    checkAuthStateAndRedirectIfNeeded(user)
+    await checkAuthStateAndRedirectIfNeeded(user)
   }
 
   render () {

@@ -28,7 +28,9 @@ afterEach(() => {
 })
 
 describe('checkAuthStateAndRedirectIfNeeded tests', () => {
-  it('does not redirect if the user is fully authenticated', () => {
+  it('does not redirect if the user is fully authenticated', async () => {
+    expect.assertions(5)
+
     const checkAuthStateAndRedirectIfNeeded = require('../helpers')
       .checkAuthStateAndRedirectIfNeeded
     const user = {
@@ -38,7 +40,7 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
       isAnonymous: false,
       emailVerified: true
     }
-    const redirected = checkAuthStateAndRedirectIfNeeded(user)
+    const redirected = await checkAuthStateAndRedirectIfNeeded(user)
 
     expect(redirected).toBe(false)
     expect(goToDashboard).not.toHaveBeenCalled()
@@ -47,7 +49,9 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
     expect(goToLogin).not.toHaveBeenCalled()
   })
 
-  it('redirects to missing email screen if authed and there is no email address', () => {
+  it('redirects to missing email screen if authed and there is no email address', async () => {
+    expect.assertions(2)
+
     const checkAuthStateAndRedirectIfNeeded = require('../helpers')
       .checkAuthStateAndRedirectIfNeeded
     const user = {
@@ -57,12 +61,14 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
       isAnonymous: false,
       emailVerified: true
     }
-    const redirected = checkAuthStateAndRedirectIfNeeded(user)
+    const redirected = await checkAuthStateAndRedirectIfNeeded(user)
     expect(replaceUrl).toHaveBeenCalledWith(missingEmailMessageURL)
     expect(redirected).toBe(true)
   })
 
-  it('redirects to email verification screen if authed and email is unverified', () => {
+  it('redirects to email verification screen if authed and email is unverified', async () => {
+    expect.assertions(2)
+
     const checkAuthStateAndRedirectIfNeeded = require('../helpers')
       .checkAuthStateAndRedirectIfNeeded
     const user = {
@@ -72,12 +78,14 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
       isAnonymous: false,
       emailVerified: false
     }
-    const redirected = checkAuthStateAndRedirectIfNeeded(user)
+    const redirected = await checkAuthStateAndRedirectIfNeeded(user)
     expect(replaceUrl).toHaveBeenCalledWith(verifyEmailURL)
     expect(redirected).toBe(true)
   })
 
-  it('redirects to new username screen if authed and username is not set', () => {
+  it('redirects to new username screen if authed and username is not set', async () => {
+    expect.assertions(2)
+
     const checkAuthStateAndRedirectIfNeeded = require('../helpers')
       .checkAuthStateAndRedirectIfNeeded
     const user = {
@@ -87,12 +95,14 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
       isAnonymous: false,
       emailVerified: true
     }
-    const redirected = checkAuthStateAndRedirectIfNeeded(user)
+    const redirected = await checkAuthStateAndRedirectIfNeeded(user)
     expect(replaceUrl).toHaveBeenCalledWith(enterUsernameURL)
     expect(redirected).toBe(true)
   })
 
-  it('does not redirect to the new username screen if the username exists on the server', () => {
+  it('does not redirect to the new username screen if the username exists on the server', async () => {
+    expect.assertions(1)
+
     const checkAuthStateAndRedirectIfNeeded = require('../helpers')
       .checkAuthStateAndRedirectIfNeeded
     const user = {
@@ -102,7 +112,7 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
       isAnonymous: false,
       emailVerified: true
     }
-    const redirected = checkAuthStateAndRedirectIfNeeded(user, 'SomeUsername')
+    const redirected = await checkAuthStateAndRedirectIfNeeded(user, 'SomeUsername')
     expect(redirected).toBe(false)
   })
 })

@@ -101,7 +101,7 @@ class Authentication extends React.Component {
     // Redirect to the appropriate authentication view if the
     // user is not fully authenticated.
     const usernameFromServer = this.props.user ? this.props.user.username : null
-    const redirected = checkAuthStateAndRedirectIfNeeded(authTokenUser, usernameFromServer)
+    const redirected = await checkAuthStateAndRedirectIfNeeded(authTokenUser, usernameFromServer)
 
     // The user is fully authed, so go to the dashboard.
     if (!redirected) {
