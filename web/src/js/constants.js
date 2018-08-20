@@ -59,6 +59,9 @@ export const STORAGE_NEW_CONSENT_DATA_EXISTS = 'tab.consentData.newConsentDataEx
 export const STORAGE_NEW_USER_HAS_COMPLETED_TOUR = 'tab.newUser.hasCompletedTour'
 export const STORAGE_APPROX_EXTENSION_INSTALL_TIME = 'tab.newUser.approxInstallTime'
 
+// tab.experiments: values related to split-testing features
+export const STORAGE_EXPERIMENT_ANON_USER = 'tab.experiments.anonUser'
+
 /**
   Error codes passed from server-side.
 **/

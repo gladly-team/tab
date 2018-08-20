@@ -6,6 +6,9 @@ import {
 import {
   setBrowserExtensionInstallTime
 } from 'utils/local-user-data-mgr'
+import {
+  assignUserToTestGroups
+} from 'utils/experiments'
 
 // The view the extensions open immediately after they're
 // added to the browser.
@@ -19,10 +22,8 @@ class FirstTabView extends React.Component {
     // had cleared their local data.
     setBrowserExtensionInstallTime()
 
-    // TODO
-    // Add the user to an anonymous user test group, if anonymous
-    // user testing is enabled.
-    // tab.experiments.anonUser to "unauthed" or "auth-only"
+    // Add the user to test groups for any active experiments.
+    assignUserToTestGroups()
 
     replaceUrl(dashboardURL)
   }
