@@ -107,8 +107,8 @@ export const setBrowserExtensionInstallTime = () => {
  * Gets the approximate time the user installed the browser
  * extension (from localStorage). The value may not exist;
  * e.g. if a user cleared their local data.
- * @returns {Date|null} The approximate datetime (in local
- *   time) the user installed the Tab for a Cause browser
+ * @returns {Object|null} The approximate local MomentJS
+ *   datetime the user installed the Tab for a Cause browser
  *   extension on this device.
  */
 export const getBrowserExtensionInstallTime = () => {

@@ -1,3 +1,4 @@
+import moment from 'moment'
 import {
   goTo,
   goToLogin,
@@ -17,6 +18,16 @@ import {
 } from 'authentication/user'
 import environment from '../../relay-env'
 import CreateNewUserMutation from 'mutations/CreateNewUserMutation'
+import {
+  ANON_USER_GROUP_UNAUTHED_ALLOWED,
+  getAnonymousUserTestGroup
+} from 'utils/experiments'
+import {
+  isAnonymousUserSignInEnabled
+} from 'utils/feature-flags'
+import {
+  getBrowserExtensionInstallTime
+} from 'utils/local-user-data-mgr'
 
 /**
  * Return whether the current user is allowed to have an anonymous
@@ -25,8 +36,22 @@ import CreateNewUserMutation from 'mutations/CreateNewUserMutation'
  *   anonymous account.
  */
 const allowAnonymousUser = () => {
-  // TODO: determine by the status of feature flag / split-testing
-  return false
+  const installTime = getBrowserExtensionInstallTime()
+  var userRecentlyJoined
+  if (installTime) {
+    userRecentlyJoined = moment().diff(installTime, 'days') < 2
+  } else {
+    userRecentlyJoined = false
+  }
+
+  // The user can have an anonymous account if the anonymous user
+  // feature is enabled, they're in the anonymous user test group,
+  // and they joined recently.
+  return (
+    isAnonymousUserSignInEnabled() &&
+    getAnonymousUserTestGroup() === ANON_USER_GROUP_UNAUTHED_ALLOWED &&
+    userRecentlyJoined
+  )
 }
 
 /**
