@@ -44,30 +44,24 @@ class AuthUserComponent extends React.Component {
   }
 
   async checkUserAuth (user) {
+    // If the user is not fully logged in, redirect to the
+    // appropriate auth page.
+    try {
+      var redirecting = await checkAuthStateAndRedirectIfNeeded(user)
+    } catch (e) {
+      throw e
+    }
+
     // If the user is authed, set the ID in state.
-    if (user && user.id) {
+    if (!redirecting && user && user.id) {
       this.setState({
         userId: user.id
       })
     }
-
-    // Stay on this page if it's okay to render children
-    // regardless on the user auth status.
-    if (this.props.allowUnauthedRender) {
-      return
-    }
-
-    // If the user is not fully logged in, redirect to the
-    // appropriate auth page.
-    try {
-      await checkAuthStateAndRedirectIfNeeded(user)
-    } catch (e) {
-      throw e
-    }
   }
 
   render () {
-    if (!this.state.userId && !this.props.allowUnauthedRender) {
+    if (!this.state.userId) {
       return null
     }
 
@@ -93,15 +87,11 @@ class AuthUserComponent extends React.Component {
 }
 
 AuthUserComponent.propTypes = {
-  variables: PropTypes.object,
-  // Whether to render the children even if the user is not
-  // authenticated.
-  allowUnauthedRender: PropTypes.bool
+  variables: PropTypes.object
 }
 
 AuthUserComponent.defaultProps = {
-  variables: {},
-  allowUnauthedRender: false
+  variables: {}
 }
 
 export default AuthUserComponent

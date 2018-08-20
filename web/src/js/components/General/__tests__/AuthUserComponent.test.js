@@ -46,8 +46,7 @@ afterEach(() => {
 })
 
 const mockProps = {
-  variables: {},
-  allowUnauthedRender: false
+  variables: {}
 }
 
 describe('AuthUser tests', () => {
@@ -121,31 +120,6 @@ describe('AuthUser tests', () => {
       username: 'foo',
       isAnonymous: false,
       emailVerified: true
-    })
-
-    expect(goToDashboard).not.toHaveBeenCalled()
-    expect(goTo).not.toHaveBeenCalled()
-    expect(replaceUrl).not.toHaveBeenCalled()
-    expect(goToLogin).not.toHaveBeenCalled()
-  })
-
-  it('does not redirect an unauthed user if allowUnauthedRender is set', () => {
-    // Remove the user's username from localStorage.
-    localStorageMgr.removeItem(STORAGE_KEY_USERNAME)
-
-    const modifiedProps = cloneDeep(mockProps)
-    modifiedProps.allowUnauthedRender = true
-
-    const AuthUser = require('../AuthUserComponent').default
-    shallow(<AuthUser {...modifiedProps} />)
-
-    // Mock that our auth loads the user.
-    __triggerAuthStateChange({
-      uid: null,
-      email: null,
-      username: null,
-      isAnonymous: false,
-      emailVerified: false
     })
 
     expect(goToDashboard).not.toHaveBeenCalled()
