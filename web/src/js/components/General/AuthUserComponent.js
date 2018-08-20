@@ -59,7 +59,11 @@ class AuthUserComponent extends React.Component {
 
     // If the user is not fully logged in, redirect to the
     // appropriate auth page.
-    await checkAuthStateAndRedirectIfNeeded(user)
+    try {
+      await checkAuthStateAndRedirectIfNeeded(user)
+    } catch (e) {
+      throw e
+    }
   }
 
   render () {
