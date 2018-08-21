@@ -24,7 +24,6 @@ import localStorageMgr from 'utils/localstorage-mgr'
 import {
   STORAGE_KEY_USERNAME
 } from '../../../constants'
-import { cloneDeep } from 'lodash/lang'
 import {
   isInIframe
 } from 'web-utils'
