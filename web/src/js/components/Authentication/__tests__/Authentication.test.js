@@ -1,6 +1,8 @@
 /* eslint-env jest */
 
 import React from 'react'
+import moment from 'moment'
+import MockDate from 'mockdate'
 import {
   shallow
 } from 'enzyme'
@@ -25,13 +27,25 @@ import {
   isInIframe
 } from 'web-utils'
 import CreateNewUserMutation from 'mutations/CreateNewUserMutation'
+import {
+  getAnonymousUserTestGroup
+} from 'utils/experiments'
+import {
+  isAnonymousUserSignInEnabled
+} from 'utils/feature-flags'
+import {
+  getBrowserExtensionInstallTime
+} from 'utils/local-user-data-mgr'
 
 jest.mock('authentication/user')
 jest.mock('authentication/firebaseConfig') // mock the Firebase app initialization
 jest.mock('authentication/firebaseIDBErrorManager')
-jest.mock('mutations/CreateNewUserMutation')
 jest.mock('navigation/navigation')
 jest.mock('web-utils')
+jest.mock('utils/experiments')
+jest.mock('utils/feature-flags')
+jest.mock('utils/local-user-data-mgr')
+jest.mock('mutations/CreateNewUserMutation')
 
 const mockLocationData = {
   pathname: '/newtab/auth/'
@@ -42,9 +56,33 @@ const mockUserData = {
 }
 const mockFetchUser = jest.fn()
 
+const mockNow = '2017-05-19T13:59:58.000Z'
+
+beforeEach(() => {
+  MockDate.set(moment(mockNow))
+})
+
 afterEach(() => {
   jest.clearAllMocks()
+  MockDate.reset()
 })
+
+// See authentication/helpers.js
+const setIfAnonymousUserIsAllowed = (allow) => {
+  // Set the mocked return values that will allow or
+  // or disallow the user to be anonymous.
+  if (allow) {
+    getBrowserExtensionInstallTime.mockReturnValue(
+      moment(mockNow).subtract(2, 'minutes'))
+    isAnonymousUserSignInEnabled.mockReturnValue(true)
+    getAnonymousUserTestGroup.mockReturnValue('unauthed')
+  } else {
+    getBrowserExtensionInstallTime.mockReturnValue(
+      moment(mockNow).subtract(23, 'days'))
+    isAnonymousUserSignInEnabled.mockReturnValue(false)
+    getAnonymousUserTestGroup.mockReturnValue('none')
+  }
+}
 
 describe('Authentication.js tests', function () {
   it('renders without error', () => {
@@ -94,9 +132,10 @@ describe('Authentication.js tests', function () {
     expect(wrapper.state().loadChildren).toBe(true)
   })
 
-  it('redirects to the app if the user is fully authenticated', async () => {
+  it('[no-anon-allowed] redirects to the app if the user is fully authenticated', async () => {
     expect.assertions(1)
     const Authentication = require('../Authentication').default
+    setIfAnonymousUserIsAllowed(false)
 
     const mockUserDataProp = {
       id: null,
@@ -123,9 +162,23 @@ describe('Authentication.js tests', function () {
     expect(goToDashboard).toHaveBeenCalled()
   })
 
-  it('shows the sign-in message if unauthed and within an iframe', async () => {
+  it('[no-anon-allowed] shows the sign-in message if unauthed and within an iframe', async () => {
     expect.assertions(1)
     const Authentication = require('../Authentication').default
+    setIfAnonymousUserIsAllowed(false)
+
+    // Mock a response from new user creation
+    CreateNewUserMutation.mockImplementation(
+      (environment, userId, email, referralData, onCompleted, onError) => {
+        onCompleted({
+          createNewUser: {
+            id: 'abc123',
+            email: null,
+            username: null
+          }
+        })
+      }
+    )
 
     const mockUserDataProp = {
       id: null,
@@ -136,7 +189,7 @@ describe('Authentication.js tests', function () {
     getCurrentUser.mockResolvedValue(null)
 
     // Inside an iframe
-    isInIframe.mockReturnValueOnce(true)
+    isInIframe.mockReturnValue(true)
     const wrapper = shallow(
       <Authentication
         location={mockLocationData}
@@ -149,9 +202,10 @@ describe('Authentication.js tests', function () {
     expect(goTo).toHaveBeenCalledWith(authMessageURL)
   })
 
-  it('goes to login screen if unauthed and NOT within an iframe', async () => {
+  it('[no-anon-allowed] goes to login screen if unauthed and NOT within an iframe', async () => {
     expect.assertions(1)
     const Authentication = require('../Authentication').default
+    setIfAnonymousUserIsAllowed(false)
 
     const mockUserDataProp = {
       id: null,
@@ -161,8 +215,8 @@ describe('Authentication.js tests', function () {
     // User is unauthed
     getCurrentUser.mockResolvedValue(null)
 
-    // Inside an iframe
-    isInIframe.mockReturnValueOnce(false)
+    // Not inside an iframe
+    isInIframe.mockReturnValue(false)
     const wrapper = shallow(
       <Authentication
         location={mockLocationData}
@@ -175,9 +229,76 @@ describe('Authentication.js tests', function () {
     expect(goToLogin).toHaveBeenCalled()
   })
 
-  it('goes to missing email screen if authed and there is no email address', async () => {
+  it('[no-anon-allowed] shows the sign-in message if an anonymous user and within an iframe', async () => {
     expect.assertions(1)
     const Authentication = require('../Authentication').default
+    setIfAnonymousUserIsAllowed(false)
+
+    const mockUserDataProp = {
+      id: 'abc123',
+      username: null
+    }
+
+    // User is anonymous
+    getCurrentUser.mockResolvedValue({
+      id: 'abc123',
+      email: null,
+      username: null,
+      isAnonymous: true,
+      emailVerified: false
+    })
+
+    // Inside an iframe
+    isInIframe.mockReturnValue(true)
+    const wrapper = shallow(
+      <Authentication
+        location={mockLocationData}
+        user={mockUserDataProp}
+        fetchUser={jest.fn()}
+      />
+    )
+    const component = wrapper.instance()
+    await component.navigateToAuthStep()
+    expect(goTo).toHaveBeenCalledWith(authMessageURL)
+  })
+
+  it('[no-anon-allowed] goes to login screen if an anonymous user and NOT within an iframe', async () => {
+    expect.assertions(1)
+    const Authentication = require('../Authentication').default
+    setIfAnonymousUserIsAllowed(false)
+
+    const mockUserDataProp = {
+      id: 'abc123',
+      username: null
+    }
+
+    // User is anonymous
+    getCurrentUser.mockResolvedValue({
+      id: 'abc123',
+      email: null,
+      username: null,
+      isAnonymous: true,
+      emailVerified: false
+    })
+
+    // Not inside an iframe
+    isInIframe.mockReturnValue(false)
+    const wrapper = shallow(
+      <Authentication
+        location={mockLocationData}
+        user={mockUserDataProp}
+        fetchUser={jest.fn()}
+      />
+    )
+    const component = wrapper.instance()
+    await component.navigateToAuthStep()
+    expect(goToLogin).toHaveBeenCalled()
+  })
+
+  it('[no-anon-allowed] goes to missing email screen if authed and there is no email address', async () => {
+    expect.assertions(1)
+    const Authentication = require('../Authentication').default
+    setIfAnonymousUserIsAllowed(false)
 
     const mockUserDataProp = {
       id: null,
@@ -204,9 +325,10 @@ describe('Authentication.js tests', function () {
     expect(replaceUrl).toHaveBeenCalledWith(missingEmailMessageURL)
   })
 
-  it('goes to email verification screen if authed and email is unverified', async () => {
+  it('[no-anon-allowed] goes to email verification screen if authed and email is unverified', async () => {
     expect.assertions(1)
     const Authentication = require('../Authentication').default
+    setIfAnonymousUserIsAllowed(false)
 
     const mockUserDataProp = {
       id: null,
@@ -233,9 +355,10 @@ describe('Authentication.js tests', function () {
     expect(replaceUrl).toHaveBeenCalledWith(verifyEmailURL)
   })
 
-  it('goes to new username screen if authed and username is not set', async () => {
+  it('[no-anon-allowed] goes to new username screen if authed and username is not set', async () => {
     expect.assertions(1)
     const Authentication = require('../Authentication').default
+    setIfAnonymousUserIsAllowed(false)
 
     const mockUserDataProp = {
       id: null,
@@ -262,9 +385,10 @@ describe('Authentication.js tests', function () {
     expect(replaceUrl).toHaveBeenCalledWith(enterUsernameURL)
   })
 
-  it('goes to dashboard (and sets username in localStorage) if there is no local username but the account has a username', async () => {
+  it('[no-anon-allowed] goes to dashboard (and sets username in localStorage) if there is no local username but the account has a username', async () => {
     expect.assertions(2)
     const Authentication = require('../Authentication').default
+    setIfAnonymousUserIsAllowed(false)
 
     const mockUserDataProp = {
       id: 'abc123',
@@ -289,6 +413,37 @@ describe('Authentication.js tests', function () {
     const component = wrapper.instance()
     await component.navigateToAuthStep()
     expect(setUsernameInLocalStorage).toHaveBeenCalledWith('fooismyname')
+    expect(goToDashboard).toHaveBeenCalled()
+  })
+
+  it('[anon] redirects to the app when user is allowed to be anonymous', async () => {
+    expect.assertions(1)
+    const Authentication = require('../Authentication').default
+    setIfAnonymousUserIsAllowed(true)
+
+    const mockUserDataProp = {
+      id: null,
+      username: null
+    }
+
+    // Mock the authed user
+    getCurrentUser.mockResolvedValue({
+      id: 'abc123',
+      email: null,
+      username: null,
+      isAnonymous: true,
+      emailVerified: false
+    })
+
+    const wrapper = shallow(
+      <Authentication
+        location={mockLocationData}
+        user={mockUserDataProp}
+        fetchUser={jest.fn()}
+      />
+    )
+    const component = wrapper.instance()
+    await component.navigateToAuthStep()
     expect(goToDashboard).toHaveBeenCalled()
   })
 
@@ -403,7 +558,7 @@ describe('Authentication.js tests', function () {
     })
 
     // Mock a response from new user creation
-    CreateNewUserMutation.mockImplementationOnce(
+    CreateNewUserMutation.mockImplementation(
       (environment, userId, email, referralData, onCompleted, onError) => {
         onCompleted({
           createNewUser: {
@@ -415,7 +570,7 @@ describe('Authentication.js tests', function () {
       }
     )
 
-    sendVerificationEmail.mockImplementationOnce(() => Promise.resolve(true))
+    sendVerificationEmail.mockImplementation(() => Promise.resolve(true))
 
     const Authentication = require('../Authentication').default
     const wrapper = shallow(
@@ -457,7 +612,7 @@ describe('Authentication.js tests', function () {
     const mockFetchUser = jest.fn()
 
     // Mock a response from new user creation
-    CreateNewUserMutation.mockImplementationOnce(
+    CreateNewUserMutation.mockImplementation(
       (environment, userId, email, referralData, onCompleted, onError) => {
         onCompleted({
           createNewUser: {
@@ -499,7 +654,7 @@ describe('Authentication.js tests', function () {
   it('uses referral data when creating a new user', async () => {
     expect.assertions(1)
 
-    getReferralData.mockImplementationOnce(() => ({
+    getReferralData.mockImplementation(() => ({
       referringUser: 'asdf1234'
     }))
 
@@ -522,7 +677,7 @@ describe('Authentication.js tests', function () {
     const mockFetchUser = jest.fn()
 
     // Mock a response from new user creation
-    CreateNewUserMutation.mockImplementationOnce(
+    CreateNewUserMutation.mockImplementation(
       (environment, userId, email, referralData, onCompleted, onError) => {
         onCompleted({
           createNewUser: {

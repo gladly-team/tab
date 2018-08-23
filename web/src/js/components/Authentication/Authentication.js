@@ -94,10 +94,6 @@ class Authentication extends React.Component {
     // the sign-up is completed.
     const authTokenUser = await getCurrentUser()
 
-    // TODO
-    // If there is no Firebase user but the user is allowed to be
-    // anonymous, create the anonymous Firebase user.
-
     // Redirect to the appropriate authentication view if the
     // user is not fully authenticated.
     const usernameFromServer = this.props.user ? this.props.user.username : null

@@ -14,7 +14,8 @@ import {
 } from 'web-utils'
 import {
   getCurrentUser,
-  setUsernameInLocalStorage
+  setUsernameInLocalStorage,
+  signInAnonymously
 } from 'authentication/user'
 import environment from '../../relay-env'
 import CreateNewUserMutation from 'mutations/CreateNewUserMutation'
@@ -55,6 +56,23 @@ const allowAnonymousUser = () => {
 }
 
 /**
+ * Redirect to the main login page if not in an iframe, or redirect
+ * to an intermediary page if in an iframe.
+ * @return {undefined}
+ */
+const goToMainLoginPage = () => {
+  // The user is not allowed to be anonymous, so show the login screen.
+  // If the page is in an iframe (e.g. the user opened it via an iframed
+  // new tab), authentication may not work correctly. Show an intermediary
+  // page that will open a non-iframed auth page.
+  if (isInIframe()) {
+    goTo(authMessageURL)
+  } else {
+    goToLogin()
+  }
+}
+
+/**
  * Based on the user object state, determine if we need to redirect
  * to an authentication page. If the user is not fully authenticated,
  * redirect and return true. If the user is fully authenticated, do
@@ -78,32 +96,36 @@ export const checkAuthStateAndRedirectIfNeeded = async (user, fetchedUsername = 
   // appropriate auth page.
   // User is not logged in.
   if (!user || !user.id) {
-    // TODO:
     // Authenticate the user anonymously.
+    try {
+      await signInAnonymously()
+    } catch (e) {
+      throw e
+    }
+
     // Create a user in our database.
+    try {
+      await createNewUser()
+    } catch (e) {
+      throw e
+    }
 
     // Determine if anonymous authentication is sufficient.
     if (allowAnonymousUser()) {
       // If the user is allowed to be anonymous, do not redirect.
       redirected = false
-
-      // TODO: add tests for this case
     } else {
-      // The user is not allowed to be anonymous, so show the login screen.
-      // If the page is in an iframe (e.g. the user opened it via an iframed
-      // new tab), authentication may not work correctly. Show an intermediary
-      // page that will open a non-iframed auth page.
-      if (isInIframe()) {
-        goTo(authMessageURL)
-      } else {
-        goToLogin()
-      }
+      goToMainLoginPage()
     }
   // If the user has an anonymous account and is allowed to be
-  // anonymous, do nothing.
-  } else if (user.isAnonymous && allowAnonymousUser()) {
-    // TODO: add tests for this case
-    redirected = false
+  // anonymous, do nothing. If they're anonymous but are not
+  // allowed to be anonymous, go to the login page.
+  } else if (user.isAnonymous) {
+    if (allowAnonymousUser()) {
+      redirected = false
+    } else {
+      goToMainLoginPage()
+    }
   // If the user does not have an email address, show a message
   // asking them to sign in with a different method.
   } else if (!user.email) {
@@ -173,7 +195,7 @@ export const createNewUser = () => {
       })
     })
     .catch(e => {
-      console.log(e)
+      console.error(e)
       throw e
     })
 }

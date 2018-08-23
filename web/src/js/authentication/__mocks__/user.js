@@ -24,6 +24,18 @@ authUserMock.getCurrentUserListener = jest.fn(() => ({
   }
 }))
 
+authUserMock.signInAnonymously = jest.fn(() => {
+  const mockAnonUserObj = {
+    id: 'abc123xyz789',
+    email: null,
+    username: null,
+    isAnonymous: true,
+    emailVerified: false
+  }
+  authUserMock.getCurrentUser.mockResolvedValue(mockAnonUserObj)
+  return Promise.resolve(mockAnonUserObj)
+})
+
 /**
  * Find the matching function in the `onAuthStateChangedCallbacks`
  * array and remove it.
