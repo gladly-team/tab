@@ -178,6 +178,9 @@ export const createNewUser = () => {
       // Get any referral data that exists.
       const referralData = getReferralData()
 
+      // TODO:
+      // Pass the user's experimentGroups { anonUser } value
+
       return new Promise((resolve, reject) => {
         CreateNewUserMutation(
           environment,

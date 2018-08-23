@@ -130,6 +130,8 @@ class Authentication extends React.Component {
       return
     }
 
+    // TODO: upgrade anonymous users and handle errors
+
     // Get or create the user
     return createNewUser()
       .then((createdOrFetchedUser) => {

@@ -55,6 +55,7 @@ class Account extends React.Component {
     displayConsentUI()
   }
 
+  // TODO: handle no username for anonymous users
   render () {
     const { user } = this.props
     return (
