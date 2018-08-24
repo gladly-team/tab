@@ -127,7 +127,7 @@ describe('AuthUser tests', () => {
     // Remove the user's username from localStorage.
     localStorageMgr.removeItem(STORAGE_KEY_USERNAME)
 
-    // Mock that we're in an iframe.
+    // Mock that we're not in an iframe.
     isInIframe.mockReturnValue(false)
 
     const AuthUser = require('../AuthUserComponent').default
@@ -171,6 +171,96 @@ describe('AuthUser tests', () => {
     expect(goTo).not.toHaveBeenCalled()
     expect(replaceUrl).not.toHaveBeenCalled()
     expect(goToLogin).not.toHaveBeenCalled()
+  })
+
+  it('redirects to the login screen if the user is anonymous but has been around long enough for us to ask them to sign in', async () => {
+    expect.assertions(1)
+
+    // This is longer than users are allowed to remain anonymous.
+    getBrowserExtensionInstallTime.mockReturnValue(
+      moment(mockNow).subtract(4, 'days'))
+
+    // Otherwise, anonymous users are allowed.
+    isAnonymousUserSignInEnabled.mockReturnValue(true)
+    getAnonymousUserTestGroup.mockReturnValue('unauthed')
+
+    // Mock a response from new user creation
+    CreateNewUserMutation.mockImplementation(
+      (environment, userId, email, referralData, onCompleted, onError) => {
+        onCompleted({
+          createNewUser: {
+            id: 'abc123',
+            email: null,
+            username: null
+          }
+        })
+      }
+    )
+
+    // Mock that we're not in an iframe.
+    isInIframe.mockReturnValue(false)
+
+    const AuthUser = require('../AuthUserComponent').default
+    shallow(<AuthUser {...mockProps} />)
+
+    // Mock that our auth loads the user.
+    __triggerAuthStateChange({
+      uid: null,
+      email: null,
+      username: null,
+      isAnonymous: false,
+      emailVerified: false
+    })
+
+    // Flush all promises
+    await new Promise(resolve => setImmediate(resolve))
+
+    expect(goToLogin).toHaveBeenCalledTimes(1)
+  })
+
+  it('redirects to the login screen if the user is anonymous but is not in the anonymous sign-up experimental group', async () => {
+    expect.assertions(1)
+
+    // The user is still be required to sign in.
+    getAnonymousUserTestGroup.mockReturnValue('auth')
+
+    // Otherwise, the user is allowed to be anonymous.
+    isAnonymousUserSignInEnabled.mockReturnValue(true)
+    getBrowserExtensionInstallTime.mockReturnValue(
+      moment(mockNow).subtract(2, 'minutes'))
+
+    // Mock a response from new user creation
+    CreateNewUserMutation.mockImplementation(
+      (environment, userId, email, referralData, onCompleted, onError) => {
+        onCompleted({
+          createNewUser: {
+            id: 'abc123',
+            email: null,
+            username: null
+          }
+        })
+      }
+    )
+
+    // Mock that we're not in an iframe.
+    isInIframe.mockReturnValue(false)
+
+    const AuthUser = require('../AuthUserComponent').default
+    shallow(<AuthUser {...mockProps} />)
+
+    // Mock that our auth loads the user.
+    __triggerAuthStateChange({
+      uid: null,
+      email: null,
+      username: null,
+      isAnonymous: false,
+      emailVerified: false
+    })
+
+    // Flush all promises
+    await new Promise(resolve => setImmediate(resolve))
+
+    expect(goToLogin).toHaveBeenCalledTimes(1)
   })
 
   it('[no-anon-allowed] redirects to the sign-in message if the user is unauthed and within an iframe', async () => {

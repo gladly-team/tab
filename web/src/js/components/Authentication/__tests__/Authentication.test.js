@@ -447,6 +447,74 @@ describe('Authentication.js tests', function () {
     expect(goToDashboard).toHaveBeenCalled()
   })
 
+  it('redirects to the login screen if the user is anonymous but has been around long enough for us to ask them to sign in', async () => {
+    expect.assertions(1)
+    const Authentication = require('../Authentication').default
+
+    // This is longer than users are allowed to remain anonymous.
+    getBrowserExtensionInstallTime.mockReturnValue(
+      moment(mockNow).subtract(4, 'days'))
+
+    // Otherwise, anonymous users are allowed.
+    isAnonymousUserSignInEnabled.mockReturnValue(true)
+    getAnonymousUserTestGroup.mockReturnValue('unauthed')
+
+    const mockUserDataProp = {
+      id: null,
+      username: null
+    }
+
+    // User is unauthed
+    getCurrentUser.mockResolvedValue(null)
+
+    // Not inside an iframe
+    isInIframe.mockReturnValue(false)
+    const wrapper = shallow(
+      <Authentication
+        location={mockLocationData}
+        user={mockUserDataProp}
+        fetchUser={jest.fn()}
+      />
+    )
+    const component = wrapper.instance()
+    await component.navigateToAuthStep()
+    expect(goToLogin).toHaveBeenCalled()
+  })
+
+  it('redirects to the login screen if the user is anonymous but is not in the anonymous sign-up experimental group', async () => {
+    expect.assertions(1)
+    const Authentication = require('../Authentication').default
+
+    // The user is still be required to sign in.
+    getAnonymousUserTestGroup.mockReturnValue('auth')
+
+    // Otherwise, the user is allowed to be anonymous.
+    isAnonymousUserSignInEnabled.mockReturnValue(true)
+    getBrowserExtensionInstallTime.mockReturnValue(
+      moment(mockNow).subtract(2, 'minutes'))
+
+    const mockUserDataProp = {
+      id: null,
+      username: null
+    }
+
+    // User is unauthed
+    getCurrentUser.mockResolvedValue(null)
+
+    // Not inside an iframe
+    isInIframe.mockReturnValue(false)
+    const wrapper = shallow(
+      <Authentication
+        location={mockLocationData}
+        user={mockUserDataProp}
+        fetchUser={jest.fn()}
+      />
+    )
+    const component = wrapper.instance()
+    await component.navigateToAuthStep()
+    expect(goToLogin).toHaveBeenCalled()
+  })
+
   it('does not redirect at all if the URL is /auth/action/*', async () => {
     expect.assertions(3)
     const Authentication = require('../Authentication').default
