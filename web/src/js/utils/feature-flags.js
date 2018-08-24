@@ -1,3 +1,6 @@
 
-// TODO: disable or use env var
-export const isAnonymousUserSignInEnabled = () => true
+export const isAnonymousUserSignInEnabled = () => {
+  return process.env.FEATURE_FLAG_ANON_USER_SIGN_IN
+    ? process.env.FEATURE_FLAG_ANON_USER_SIGN_IN === 'true'
+    : false
+}
