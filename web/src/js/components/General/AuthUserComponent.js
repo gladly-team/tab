@@ -25,6 +25,8 @@ class AuthUserComponent extends React.Component {
     // Store unsubscribe function.
     // https://firebase.google.com/docs/reference/js/firebase.auth.Auth#onAuthStateChanged
     this.authListenerUnsubscribe = getCurrentUserListener()
+      // Note: currently, this callback may be called when a user does not
+      // exist on the server side, and some requests may fail.
       .onAuthStateChanged((user) => {
         // TODO: roll the formatting functionality into the
         // listener.
