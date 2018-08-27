@@ -80,11 +80,25 @@ var queryRendererResponse = {
   retry: jest.fn()
 }
 
+// A queue of mock QueryRender response objects that will be
+// called once each before falling back to the set mock
+// `queryRendererResponse`.
+const queryRendererResponseQueue = []
+
 // The mock QueryRenderer component, which will call the
 // `render` prop on mount and render the response as child
 // elements.
 const MockComponent = props => {
-  const children = props.render ? props.render(queryRendererResponse) : null
+  var children = null
+  if (props.render) {
+    var response
+    if (queryRendererResponseQueue.length) {
+      response = queryRendererResponseQueue.shift()
+    } else {
+      response = queryRendererResponse
+    }
+    children = props.render(response)
+  }
   return <span>{children}</span>
 }
 MockComponent.displayName = 'QueryRenderer'
@@ -107,6 +121,24 @@ RelayMock.QueryRenderer = MockComponent
  */
 RelayMock.QueryRenderer.__setQueryResponse = mockResponse => {
   queryRendererResponse = mockResponse
+}
+
+/**
+ * Set the mock response value passed as an argument to the mock
+ * QueryRenderer's `render` function prop, which will be used only
+ * once.
+ * @param {Object} mockResponse
+ * @param {Object|null} mockResponse.error - Any errors returned from
+ *   the mock Relay query
+ * @param {Object|null} mockResponse.props - Any props returned from
+ *   the mock Relay query. These should match the form expected from
+ *   the QueryRenderer's `query` prop.
+ * @param {function} mockResponse.retry - A function that, if called,
+ *   would retry the query.
+ * @return {undefined}
+ */
+RelayMock.QueryRenderer.__setQueryResponseOnce = mockResponse => {
+  queryRendererResponseQueue.push(mockResponse)
 }
 
 module.exports = RelayMock

@@ -7,6 +7,10 @@ import AuthenticationContainer from './AuthenticationContainer'
 import {
   getCurrentUser
 } from 'authentication/user'
+import { createNewUser } from 'authentication/helpers'
+import {
+  ERROR_USER_DOES_NOT_EXIST
+} from '../../constants'
 
 // Fetch the user from our database if the user is
 // authenticated.
@@ -19,6 +23,7 @@ class AuthenticationView extends React.Component {
         refetchCounter: 0
       }
     }
+    this.createNewUserAttempts = 0
   }
 
   async componentDidMount () {
@@ -62,7 +67,27 @@ class AuthenticationView extends React.Component {
         variables={this.state.relayVariables}
         render={({ error, props }) => {
           if (error) {
-            console.error(error, error.source)
+            // If any of the errors is because the user does not exist
+            // on the server side, create the user and re-query if
+            // possible.
+            const userDoesNotExistError = error.source.errors
+              .some(err => err.code === ERROR_USER_DOES_NOT_EXIST)
+
+            // Limit the number of times we try to refetch a user after
+            // trying to create the user to prevent a loop in case of
+            // any bugs.
+            if (userDoesNotExistError && this.createNewUserAttempts < 3) {
+              this.createNewUserAttempts = this.createNewUserAttempts + 1
+              createNewUser()
+                .then(user => {
+                  this.fetchUser()
+                })
+                .catch(e => {
+                  throw e
+                })
+            } else {
+              console.error(error)
+            }
           }
           if (!props) {
             props = {}
