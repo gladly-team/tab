@@ -17,6 +17,7 @@ var immediatelyReturnAuthUser = false
 var onAuthStateChangedCallbacks = []
 
 const authMock = {
+  currentUser: firebaseUser,
   onAuthStateChanged: jest.fn(callback => {
     onAuthStateChangedCallbacks.push(callback)
 
@@ -38,7 +39,15 @@ const authMock = {
       additionalUserInfo: {}
     })
   }),
-  signOut: jest.fn(() => Promise.resolve())
+  signOut: jest.fn(() => Promise.resolve()),
+  signInAndRetrieveDataWithCredential: jest.fn(cred => {
+    // Should resolve into a non-null Firebase user credential.
+    return Promise.resolve({
+      credential: {},
+      user: firebaseUser,
+      additionalUserInfo: {}
+    })
+  })
 }
 
 const FirebaseAuthMock = () => {
