@@ -146,17 +146,54 @@ class FirebaseAuthenticationUI extends React.Component {
           requireDisplayName: false
         }
       ],
+      // Allow anonymous users to sign in.
+      autoUpgradeAnonymousUsers: true,
       callbacks: {
         signInSuccessWithAuthResult: (authResult, redirectUrl) => {
           // Note: we can check if it's a new user with
           // `authResult.additionalUserInfo.isNewUser`.
-          this.props.onSignInSuccess(authResult.user, authResult.credential, redirectUrl)
+          this.props.onSignInSuccess(authResult.user)
 
           // Do not automatically redirect to the signInSuccessUrl.
           return false
         },
         uiShown: () => {
           this.addButtonClickListeners()
+        },
+        // The signInFailure callback must be provided to handle merge conflicts which
+        // occur when an existing credential is linked to an anonymous user.
+        // https://firebase.google.com/docs/auth/web/firebaseui?authuser=0#handling_anonymous_user_upgrade_merge_conflicts
+        // https://github.com/firebase/firebaseui-web#handling-anonymous-user-upgrade-merge-conflicts
+        signInFailure: error => {
+          // For merge conflicts, the error.code will be
+          // 'firebaseui/anonymous-upgrade-merge-conflict'.
+          if (error.code !== 'firebaseui/anonymous-upgrade-merge-conflict') {
+            return Promise.resolve()
+          }
+
+          const anonymousUser = firebase.auth().currentUser
+
+          // The existing credential the user tried to sign in with.
+          var cred = error.credential
+
+          // TODO:
+          // Mark the anonymous user as merged in our database (a duplicate).
+
+          // Sign in as the existing user.
+          return firebase.auth().signInAndRetrieveDataWithCredential(cred)
+            .then(authResult => {
+              const authedUser = authResult.user
+
+              // Delete the anonymous user in Firebase.
+              return anonymousUser.delete()
+                .catch(e => {
+                  console.error(e)
+                })
+                .finally(() => {
+                  // Proceed with sign-in as usual.
+                  this.props.onSignInSuccess(authedUser)
+                })
+            })
         }
       },
       // Just using the constant rather than importing firebaseui

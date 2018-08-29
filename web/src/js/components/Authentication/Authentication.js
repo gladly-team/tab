@@ -114,12 +114,10 @@ class Authentication extends React.Component {
    * At this point, the user may or may not have a verified email
    * or a username.
    * @param {object} currentUser - A Firebase user instance
-   * @param {string} credential - firebase.auth.AuthCredential
-   * @param {string} redirectUrl - The default URL to redirect after sign-in.
    * @returns {Promise<boolean>}  A promise that resolves into a boolean,
    *   whether or not the email was sent successfully.
    */
-  onSignInSuccess (currentUser, credential, redirectUrl) {
+  onSignInSuccess (currentUser) {
     // Check that the user has an email address.
     // An email address may be missing if the user signs in
     // with a social provider that does not share their
