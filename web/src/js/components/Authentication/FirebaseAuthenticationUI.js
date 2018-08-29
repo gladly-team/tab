@@ -14,6 +14,7 @@ import {
   signupPageEmailButtonClick,
   signupPageSocialButtonClick
 } from 'analytics/logEvent'
+import logger from 'utils/logger'
 
 class FirebaseAuthenticationUI extends React.Component {
   constructor (props) {
@@ -187,12 +188,15 @@ class FirebaseAuthenticationUI extends React.Component {
               // Delete the anonymous user in Firebase.
               return anonymousUser.delete()
                 .catch(e => {
-                  console.error(e)
+                  logger.error(e)
                 })
                 .finally(() => {
                   // Proceed with sign-in as usual.
                   this.props.onSignInSuccess(authedUser)
                 })
+            })
+            .catch(e => {
+              logger.error(e)
             })
         }
       },
