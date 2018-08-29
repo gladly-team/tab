@@ -16,8 +16,8 @@ import {
 } from 'analytics/logEvent'
 
 class FirebaseAuthenticationUI extends React.Component {
-  // TODO: change to componentDidMount
-  componentWillMount () {
+  constructor (props) {
+    super(props)
     this.configureFirebaseUI()
   }
 
