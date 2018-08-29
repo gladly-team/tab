@@ -17,7 +17,9 @@ var immediatelyReturnAuthUser = false
 var onAuthStateChangedCallbacks = []
 
 const authMock = {
-  currentUser: firebaseUser,
+  get currentUser () {
+    return firebaseUser
+  },
   onAuthStateChanged: jest.fn(callback => {
     onAuthStateChangedCallbacks.push(callback)
 

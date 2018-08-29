@@ -169,6 +169,8 @@ class FirebaseAuthenticationUI extends React.Component {
           // For merge conflicts, the error.code will be
           // 'firebaseui/anonymous-upgrade-merge-conflict'.
           if (error.code !== 'firebaseui/anonymous-upgrade-merge-conflict') {
+            const user = firebase.auth().currentUser
+            this.props.onSignInSuccess(user)
             return Promise.resolve()
           }
 

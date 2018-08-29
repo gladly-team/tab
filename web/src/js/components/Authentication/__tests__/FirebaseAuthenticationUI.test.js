@@ -6,6 +6,10 @@ import {
 } from 'enzyme'
 import { map } from 'lodash/collection'
 import { FirebaseAuth } from 'react-firebaseui'
+import logger from 'utils/logger'
+import firebase, {
+  __setFirebaseUser
+} from 'firebase/app'
 
 // Init Firebase
 import { initializeFirebase } from 'authentication/firebaseConfig'
@@ -16,6 +20,8 @@ jest.mock('authentication/user')
 jest.mock('authentication/firebaseConfig') // mock the Firebase app initialization
 jest.mock('navigation/navigation')
 jest.mock('react-firebaseui')
+jest.mock('utils/logger')
+jest.mock('firebase/app')
 
 const onSignInSuccessMock = jest.fn()
 const mockProps = {
@@ -99,11 +105,151 @@ describe('FirebaseAuthenticationUI tests', function () {
     const signInSuccessWithAuthResult = uiConfig.callbacks.signInSuccessWithAuthResult
     const mockAuthResult = {
       user: {
-        id: 'abc-123'
+        uid: 'abc-123',
+        delete: jest.fn().mockImplementation(() => Promise.resolve())
       }
     }
     signInSuccessWithAuthResult(mockAuthResult)
     expect(onSignInSuccessMock).toHaveBeenCalledWith(mockAuthResult.user)
+  })
+
+  it('calls "onSignInSuccess" prop if FirebaseUI calls "signInFailure" with a non-merge-related error', async () => {
+    expect.assertions(1)
+
+    const FirebaseAuthenticationUI = require('../FirebaseAuthenticationUI').default
+    const wrapper = shallow(
+      <FirebaseAuthenticationUI {...mockProps} />
+    )
+    const uiConfig = wrapper.find(FirebaseAuth).prop('uiConfig')
+    const signInFailure = uiConfig.callbacks.signInFailure
+
+    const mockFirebaseUIErr = {
+      code: 'firebaseui/some-fake-error',
+      message: 'This is just a fake error.',
+      credential: {}
+    }
+
+    // Set the mock current Firebase user.
+    const mockUser = {
+      uid: 'abc-123',
+      delete: jest.fn().mockImplementation(() => Promise.resolve())
+    }
+    __setFirebaseUser(mockUser)
+    await signInFailure(mockFirebaseUIErr)
+    expect(onSignInSuccessMock).toHaveBeenCalledWith(mockUser)
+  })
+
+  it('calls "onSignInSuccess" prop after resolving a merge-related error when upgrading the anonymous user', async () => {
+    expect.assertions(1)
+
+    const FirebaseAuthenticationUI = require('../FirebaseAuthenticationUI').default
+    const wrapper = shallow(
+      <FirebaseAuthenticationUI {...mockProps} />
+    )
+    const uiConfig = wrapper.find(FirebaseAuth).prop('uiConfig')
+    const signInFailure = uiConfig.callbacks.signInFailure
+
+    const mockFirebaseUIErr = {
+      code: 'firebaseui/anonymous-upgrade-merge-conflict',
+      message: 'Merge problem.',
+      credential: {}
+    }
+
+    // Set the mock current Firebase user.
+    const mockUser = {
+      uid: 'abc-123',
+      delete: jest.fn().mockImplementation(() => Promise.resolve())
+    }
+    __setFirebaseUser(mockUser)
+    await signInFailure(mockFirebaseUIErr)
+    expect(onSignInSuccessMock).toHaveBeenCalledWith(mockUser)
+  })
+
+  it('deletes the anonymous Firebase user when resolving a merge-related error during anonymous user sign-in', async () => {
+    expect.assertions(1)
+
+    const FirebaseAuthenticationUI = require('../FirebaseAuthenticationUI').default
+    const wrapper = shallow(
+      <FirebaseAuthenticationUI {...mockProps} />
+    )
+    const uiConfig = wrapper.find(FirebaseAuth).prop('uiConfig')
+    const signInFailure = uiConfig.callbacks.signInFailure
+
+    const mockFirebaseUIErr = {
+      code: 'firebaseui/anonymous-upgrade-merge-conflict',
+      message: 'Merge problem.',
+      credential: {}
+    }
+
+    // Set the mock current Firebase user.
+    const mockDeleteUser = jest.fn().mockImplementation(() => Promise.resolve())
+    const mockUser = {
+      uid: 'abc-123',
+      delete: mockDeleteUser
+    }
+    __setFirebaseUser(mockUser)
+    await signInFailure(mockFirebaseUIErr)
+    expect(mockDeleteUser).toHaveBeenCalledTimes(1)
+  })
+
+  it('logs an error when signInAndRetrieveDataWithCredential fails when resolving a merge-related error during anonymous user sign-in', async () => {
+    expect.assertions(1)
+
+    const FirebaseAuthenticationUI = require('../FirebaseAuthenticationUI').default
+    const wrapper = shallow(
+      <FirebaseAuthenticationUI {...mockProps} />
+    )
+    const uiConfig = wrapper.find(FirebaseAuth).prop('uiConfig')
+    const signInFailure = uiConfig.callbacks.signInFailure
+
+    // Mock some unexpected Firebase sign-in error.
+    const unexpectedErr = new Error('Whoops!')
+    firebase.auth().signInAndRetrieveDataWithCredential
+      .mockRejectedValueOnce(unexpectedErr)
+
+    const mockFirebaseUIErr = {
+      code: 'firebaseui/anonymous-upgrade-merge-conflict',
+      message: 'Merge problem.',
+      credential: {}
+    }
+
+    // Set the mock current Firebase user.
+    const mockDeleteUser = jest.fn().mockImplementation(() => Promise.resolve())
+    const mockUser = {
+      uid: 'abc-123',
+      delete: mockDeleteUser
+    }
+    __setFirebaseUser(mockUser)
+    await signInFailure(mockFirebaseUIErr)
+    expect(logger.error).toHaveBeenCalledWith(unexpectedErr)
+  })
+
+  it('logs an error when deleting the anonymous Firebase user fails when resolving a merge-related error during anonymous user sign-in', async () => {
+    expect.assertions(1)
+
+    const FirebaseAuthenticationUI = require('../FirebaseAuthenticationUI').default
+    const wrapper = shallow(
+      <FirebaseAuthenticationUI {...mockProps} />
+    )
+    const uiConfig = wrapper.find(FirebaseAuth).prop('uiConfig')
+    const signInFailure = uiConfig.callbacks.signInFailure
+
+    const mockFirebaseUIErr = {
+      code: 'firebaseui/anonymous-upgrade-merge-conflict',
+      message: 'Merge problem.',
+      credential: {}
+    }
+
+    // Mock some unexpected Firebase error when deleting the anonymous user.
+    const unexpectedErr = new Error('Whoops!')
+    const mockDeleteUser = jest.fn().mockRejectedValueOnce(unexpectedErr)
+    const mockUser = {
+      uid: 'abc-123',
+      delete: mockDeleteUser
+    }
+    __setFirebaseUser(mockUser)
+    await signInFailure(mockFirebaseUIErr)
+    expect(logger.error).toHaveBeenCalledWith(unexpectedErr)
   })
 
 // Note: no clear way to mount react-firebaseui in a JSDOM environment.
