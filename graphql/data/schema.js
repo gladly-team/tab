@@ -520,8 +520,6 @@ const logTabMutation = mutationWithClientMutationId({
  * Log earned revenue for a user
  */
 
-/* BEGIN revenue logging */
-
 const EncodedRevenueValueType = new GraphQLInputObjectType({
   name: 'EncodedRevenueValue',
   description: 'An object representing a single revenue value',
@@ -879,6 +877,8 @@ const setUsernameMutation = mutationWithClientMutationId({
     return setUsername(context.user, userGlobalObj.id, username)
   }
 })
+
+// TODO: mergedIntoAnotherUserMutation
 
 /**
  * Log a data consent action (e.g. for GDPR).

@@ -19,6 +19,8 @@ import logger from '../../utils/logger'
  * @return {Promise<User>}  A promise that resolves into a User instance.
  */
 const createUser = async (userContext, userId, email = null, referralData = null) => {
+  // TODO: use email from user claims.
+
   // Create the user.
   const userInfo = {
     id: userId,
@@ -31,6 +33,9 @@ const createUser = async (userContext, userId, email = null, referralData = null
     throw e
   }
   const returnedUser = response.item
+
+  // TODO: if the user already exists but the current email is different,
+  //   update the email address and return the user.
 
   // If the user already existed, return it without doing other
   // setup tasks.

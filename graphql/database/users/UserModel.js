@@ -95,6 +95,7 @@ class User extends BaseModel {
       customImage: types.string(),
       activeWidget: types.string(),
       lastTabTimestamp: types.string().isoDate()
+      // TODO: mergedIntoAnotherUser
     }
   }
 
