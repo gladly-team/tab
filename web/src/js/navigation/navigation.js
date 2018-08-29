@@ -51,10 +51,12 @@ export const termsOfServiceURL = '/terms/'
 
 export const postUninstallSurveyURL = 'https://goo.gl/forms/XUICFx9psTwCzEIE2'
 
+// TODO: stop using these and replace the existing uses.
+//   They only cause additional complication during testing.
 // CONVENIENCE FUNCTIONS
 
 export const goToHome = () => {
-  goTo('/newtab/')
+  goTo(dashboardURL)
 }
 
 export const goToLogin = () => {
