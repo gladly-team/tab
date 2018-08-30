@@ -128,9 +128,10 @@ class Authentication extends React.Component {
       return
     }
 
-    // TODO: upgrade anonymous users and handle errors
-
-    // Get or create the user
+    // Get or create the user. Note that we expect to call this
+    // even for anonymous users who already have a user on the
+    // server-side, because that's when we add their email to
+    // their profile.
     return createNewUser()
       .then((createdOrFetchedUser) => {
         // Check if the user has verified their email.

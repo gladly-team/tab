@@ -336,4 +336,45 @@ describe('createUser when user already exists (should be idempotent)', () => {
       userInfo.email, referralData)
     expect(createdItem).toEqual(expectedUser)
   })
+
+  it('updates the existing user\'s email address if it is different from the user claims', async () => {
+    const userInfo = getMockUserInfo()
+    const referralData = null
+
+    // Mock that the user already exists.
+    setMockDBResponse(
+      DatabaseOperation.CREATE,
+      null,
+      { code: 'ConditionalCheckFailedException' } // simple mock error
+    )
+
+    // Set the email in the user context.
+    const newUserContext = cloneDeep(userContext)
+    newUserContext.email = 'myemail@example.com'
+
+    // Mock the response for getting the user.
+    const expectedUser = getMockUserInstance(userInfo)
+    expectedUser.email = 'someotheremail@example.com'
+    setMockDBResponse(
+      DatabaseOperation.GET,
+      {
+        Item: expectedUser
+      }
+    )
+
+    // Mock the response for updating the email address.
+    setMockDBResponse(
+      DatabaseOperation.UPDATE,
+      {
+        // Like original user but with modified email.
+        Attributes: Object.assign({},
+          expectedUser,
+          { email: newUserContext.email })
+      }
+    )
+
+    const createdItem = await createUser(newUserContext, userInfo.id,
+      userInfo.email, referralData)
+    expect(createdItem.email).toEqual('myemail@example.com')
+  })
 })

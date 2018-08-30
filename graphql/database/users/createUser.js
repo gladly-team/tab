@@ -35,10 +35,17 @@ const createUser = async (userContext, userId, email = null, referralData = null
   } catch (e) {
     throw e
   }
-  const returnedUser = response.item
+  var returnedUser = response.item
 
-  // TODO: if the user already exists but the current email is different,
-  //   update the email address and return the user.
+  // If the user's email differs from the one in the database,
+  // update it. This will happen when anonymous users sign in.
+  if (returnedUser.email !== userContext.email) {
+    // Update the email.
+    returnedUser = await UserModel.update(userContext, {
+      id: userId,
+      email: userContext.email
+    })
+  }
 
   // If the user already existed, return it without doing other
   // setup tasks.
