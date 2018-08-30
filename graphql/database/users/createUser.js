@@ -14,17 +14,20 @@ import logger from '../../utils/logger'
  * for existing users.
  * @param {object} userContext - The user authorizer object.
  * @param {string} userId - The user's ID.
- * @param {string|null} email - The user's email
+ * @param {string|null} email - The user's email (provided by the client, not
+ *   from user claims)
  * @param {object|null} referralData - Referral data.
  * @return {Promise<User>}  A promise that resolves into a User instance.
  */
 const createUser = async (userContext, userId, email = null, referralData = null) => {
-  // TODO: use email from user claims.
-
   // Create the user.
   const userInfo = {
     id: userId,
-    email: email,
+    // This email address is from the user claims so will be
+    // the same as the email address provided during authentication,
+    // but it isn't guaranteed to be verified (may not truly belong
+    // to the user).
+    email: userContext.email || null,
     joined: moment.utc().toISOString()
   }
   try {

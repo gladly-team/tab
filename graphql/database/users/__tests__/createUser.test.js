@@ -99,6 +99,25 @@ describe('createUser when user does not exist', () => {
       .toHaveBeenCalledWith(newUserContext, expectedCreateItem)
   })
 
+  it('uses the email address from the context (user claims), not the provided value', async () => {
+    const getOrCreateMethod = jest.spyOn(UserModel, 'getOrCreate')
+    const userInfo = getMockUserInfo()
+
+    // Remove the email info from the user context.
+    const newUserContext = cloneDeep(userContext)
+    newUserContext.email = 'someotheremail@example.com'
+
+    await createUser(newUserContext, userInfo.id, 'notthesame@example.com', null)
+
+    // The expected item to create will have no email.
+    const expectedCreateItem = getExpectedCreateItemFromUserInfo({
+      id: userInfo.id,
+      email: 'someotheremail@example.com'
+    })
+    expect(getOrCreateMethod)
+      .toHaveBeenCalledWith(newUserContext, expectedCreateItem)
+  })
+
   it('calls to set up initial widgets', async () => {
     const userInfo = getMockUserInfo()
     const referralData = null
