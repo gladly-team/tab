@@ -204,11 +204,22 @@ type MaxTabsDay {
   numTabs: Int
 }
 
+input MergeIntoExistingUserInput {
+  userId: String!
+  clientMutationId: String
+}
+
+type MergeIntoExistingUserPayload {
+  success: Boolean!
+  clientMutationId: String
+}
+
 type Mutation {
   logTab(input: LogTabInput!): LogTabPayload
   logUserRevenue(input: LogUserRevenueInput!): LogUserRevenuePayload
   logUserDataConsent(input: LogUserDataConsentInput!): LogUserDataConsentPayload
   donateVc(input: DonateVcInput!): DonateVcPayload
+  mergeIntoExistingUser(input: MergeIntoExistingUserInput!): MergeIntoExistingUserPayload
   setUserBkgImage(input: SetUserBkgImageInput!): SetUserBkgImagePayload
   setUserBkgColor(input: SetUserBkgColorInput!): SetUserBkgColorPayload
   setUserBkgCustomImage(input: SetUserBkgCustomImageInput!): SetUserBkgCustomImagePayload
@@ -437,6 +448,9 @@ type User implements Node {
 
   # User's background color
   backgroundColor: String
+
+  # Whether this user was created by an existing user and then merged into the existing user
+  mergedIntoExistingUser: Boolean
 }
 
 # Info about a user recruited by a referring user

@@ -46,6 +46,7 @@ import setUsername from '../database/users/setUsername'
 import logTab from '../database/users/logTab'
 import logRevenue from '../database/userRevenue/logRevenue'
 import logUserDataConsent from '../database/userDataConsent/logUserDataConsent'
+import mergeIntoExistingUser from '../database/users/mergeIntoExistingUser'
 import setActiveWidget from '../database/users/setActiveWidget'
 import setBackgroundImage from '../database/users/setBackgroundImage'
 import setBackgroundImageFromCustomURL from '../database/users/setBackgroundImageFromCustomURL'
@@ -284,6 +285,10 @@ const userType = new GraphQLObjectType({
     backgroundColor: {
       type: GraphQLString,
       description: 'User\'s background color'
+    },
+    mergedIntoExistingUser: {
+      type: GraphQLBoolean,
+      description: 'Whether this user was created by an existing user and then merged into the existing user'
     }
   }),
   interfaces: [nodeInterface]
@@ -841,6 +846,7 @@ const ReferralDataInput = new GraphQLInputObjectType({
 const createNewUserMutation = mutationWithClientMutationId({
   name: 'CreateNewUser',
   inputFields: {
+    // Note that this is the raw user ID (not the Relay global).
     userId: { type: new GraphQLNonNull(GraphQLString) },
     email: { type: GraphQLString },
     referralData: { type: ReferralDataInput }
@@ -878,7 +884,24 @@ const setUsernameMutation = mutationWithClientMutationId({
   }
 })
 
-// TODO: mergedIntoAnotherUserMutation
+/**
+ * Handle when a user is a duplicate account for an existing user.
+ */
+const mergeIntoExistingUserMutation = mutationWithClientMutationId({
+  name: 'MergeIntoExistingUser',
+  inputFields: {
+    // Note that this is the raw user ID (not the Relay global).
+    userId: { type: new GraphQLNonNull(GraphQLString) }
+  },
+  outputFields: {
+    success: {
+      type: new GraphQLNonNull(GraphQLBoolean)
+    }
+  },
+  mutateAndGetPayload: ({ userId }, context) => {
+    return mergeIntoExistingUser(context.user, userId)
+  }
+})
 
 /**
  * Log a data consent action (e.g. for GDPR).
@@ -935,6 +958,7 @@ const mutationType = new GraphQLObjectType({
     logUserRevenue: logUserRevenueMutation,
     logUserDataConsent: logUserDataConsentMutation,
     donateVc: donateVcMutation,
+    mergeIntoExistingUser: mergeIntoExistingUserMutation,
 
     setUserBkgImage: setUserBkgImageMutation,
     setUserBkgColor: setUserBkgColorMutation,

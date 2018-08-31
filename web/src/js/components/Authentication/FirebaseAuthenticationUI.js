@@ -15,6 +15,8 @@ import {
   signupPageSocialButtonClick
 } from 'analytics/logEvent'
 import logger from 'utils/logger'
+import environment from '../../../relay-env'
+import MergeIntoExistingUserMutation from 'mutations/MergeIntoExistingUserMutation'
 
 class FirebaseAuthenticationUI extends React.Component {
   constructor (props) {
@@ -179,11 +181,27 @@ class FirebaseAuthenticationUI extends React.Component {
           // The existing credential the user tried to sign in with.
           var cred = error.credential
 
-          // TODO:
-          // Mark the anonymous user as merged in our database (a duplicate).
-
-          // Sign in as the existing user.
-          return firebase.auth().signInAndRetrieveDataWithCredential(cred)
+          return new Promise((resolve, reject) => {
+            // Mark the anonymous user as merged in our database (a duplicate).
+            // Here, we could also merge the anonymous user's data with the
+            // existing user but we don't do that currently.
+            MergeIntoExistingUserMutation(environment, anonymousUser.uid,
+              // onCompleted
+              () => {
+                resolve()
+              },
+              // onError
+              err => {
+                // Log the error but don't throw (it's a non-critical error).
+                logger.error(err)
+                resolve()
+              }
+            )
+          })
+            .then(() => {
+              // Sign in as the existing user.
+              return firebase.auth().signInAndRetrieveDataWithCredential(cred)
+            })
             .then(authResult => {
               const authedUser = authResult.user
 

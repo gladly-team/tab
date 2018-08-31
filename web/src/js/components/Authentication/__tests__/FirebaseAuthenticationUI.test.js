@@ -10,6 +10,10 @@ import logger from 'utils/logger'
 import firebase, {
   __setFirebaseUser
 } from 'firebase/app'
+import MergeIntoExistingUserMutation, {
+  __setErrorResponse
+}
+  from 'mutations/MergeIntoExistingUserMutation'
 
 // Init Firebase
 import { initializeFirebase } from 'authentication/firebaseConfig'
@@ -22,6 +26,8 @@ jest.mock('navigation/navigation')
 jest.mock('react-firebaseui')
 jest.mock('utils/logger')
 jest.mock('firebase/app')
+jest.mock('mutations/MergeIntoExistingUserMutation')
+jest.mock('../../../../relay-env', () => { return {} })
 
 const onSignInSuccessMock = jest.fn()
 const mockProps = {
@@ -250,6 +256,96 @@ describe('FirebaseAuthenticationUI tests', function () {
     __setFirebaseUser(mockUser)
     await signInFailure(mockFirebaseUIErr)
     expect(logger.error).toHaveBeenCalledWith(unexpectedErr)
+  })
+
+  it('merges the anonymous user in our database with the existing user when resolving a merge-related error during anonymous user sign-in', async () => {
+    expect.assertions(1)
+
+    const FirebaseAuthenticationUI = require('../FirebaseAuthenticationUI').default
+    const wrapper = shallow(
+      <FirebaseAuthenticationUI {...mockProps} />
+    )
+    const uiConfig = wrapper.find(FirebaseAuth).prop('uiConfig')
+    const signInFailure = uiConfig.callbacks.signInFailure
+
+    const mockFirebaseUIErr = {
+      code: 'firebaseui/anonymous-upgrade-merge-conflict',
+      message: 'Merge problem.',
+      credential: {}
+    }
+
+    // Set the mock current Firebase user.
+    const mockDeleteUser = jest.fn().mockImplementation(() => Promise.resolve())
+    const mockUser = {
+      uid: 'abc-123',
+      delete: mockDeleteUser
+    }
+    __setFirebaseUser(mockUser)
+    await signInFailure(mockFirebaseUIErr)
+    expect(MergeIntoExistingUserMutation)
+      .toHaveBeenCalledWith({}, 'abc-123', expect.any(Function), expect.any(Function))
+  })
+
+  it('logs an error when it fails to merge the anonymous user in our database with the existing user', async () => {
+    expect.assertions(1)
+
+    const FirebaseAuthenticationUI = require('../FirebaseAuthenticationUI').default
+    const wrapper = shallow(
+      <FirebaseAuthenticationUI {...mockProps} />
+    )
+    const uiConfig = wrapper.find(FirebaseAuth).prop('uiConfig')
+    const signInFailure = uiConfig.callbacks.signInFailure
+
+    const mockFirebaseUIErr = {
+      code: 'firebaseui/anonymous-upgrade-merge-conflict',
+      message: 'Merge problem.',
+      credential: {}
+    }
+
+    // Mock a mutation error response.
+    __setErrorResponse(new Error('Merge problem.'))
+
+    // Set the mock current Firebase user.
+    const mockDeleteUser = jest.fn().mockImplementation(() => Promise.resolve())
+    const mockUser = {
+      uid: 'abc-123',
+      delete: mockDeleteUser
+    }
+    __setFirebaseUser(mockUser)
+    await signInFailure(mockFirebaseUIErr)
+    expect(logger.error)
+      .toHaveBeenCalledWith(new Error('Merge problem.'))
+  })
+
+  it('still calls the "onSignInSuccess" prop if it fails to merge the anonymous user in our database with the existing user', async () => {
+    expect.assertions(1)
+
+    const FirebaseAuthenticationUI = require('../FirebaseAuthenticationUI').default
+    const wrapper = shallow(
+      <FirebaseAuthenticationUI {...mockProps} />
+    )
+    const uiConfig = wrapper.find(FirebaseAuth).prop('uiConfig')
+    const signInFailure = uiConfig.callbacks.signInFailure
+
+    const mockFirebaseUIErr = {
+      code: 'firebaseui/anonymous-upgrade-merge-conflict',
+      message: 'Merge problem.',
+      credential: {}
+    }
+
+    // Mock a mutation error response.
+    __setErrorResponse(new Error('Merge problem.'))
+
+    // Set the mock current Firebase user.
+    const mockDeleteUser = jest.fn().mockImplementation(() => Promise.resolve())
+    const mockUser = {
+      uid: 'abc-123',
+      delete: mockDeleteUser
+    }
+    __setFirebaseUser(mockUser)
+    await signInFailure(mockFirebaseUIErr)
+    expect(onSignInSuccessMock)
+      .toHaveBeenCalledWith(mockUser)
   })
 
 // Note: no clear way to mount react-firebaseui in a JSDOM environment.
