@@ -23,6 +23,7 @@ const styles = theme => ({
 
 class InviteFriend extends React.Component {
   getReferralUrl () {
+    // TODO: handle no username for anonymous users
     return `https://tab.gladly.io/?u=${this.props.user.username}`
   }
 

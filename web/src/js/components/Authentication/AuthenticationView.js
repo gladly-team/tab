@@ -1,12 +1,16 @@
 /* global graphql */
 
 import React from 'react'
-import {QueryRenderer} from 'react-relay/compat'
+import { QueryRenderer } from 'react-relay/compat'
 import environment from '../../../relay-env'
 import AuthenticationContainer from './AuthenticationContainer'
 import {
   getCurrentUser
 } from 'authentication/user'
+import { createNewUser } from 'authentication/helpers'
+import {
+  ERROR_USER_DOES_NOT_EXIST
+} from '../../constants'
 
 // Fetch the user from our database if the user is
 // authenticated.
@@ -19,18 +23,18 @@ class AuthenticationView extends React.Component {
         refetchCounter: 0
       }
     }
+    this.createNewUserAttempts = 0
   }
 
-  // TODO: change to componentDidMount
-  componentWillMount () {
-    this.fetchUser()
+  async componentDidMount () {
+    await this.fetchUser()
   }
 
   // If we have an authed user with a user ID, fetch the
   // user from our database.
   // This will force Relay to refetch by modifying the
-  // variables object. See:
-  // https://stackoverflow.com/a/44769425/1332513
+  // variables object. We could also use the `retry`
+  // QueryRenderer function instead.
   // Pass this to children to allow a forced refetch after
   // we create a new user in our database.
   async fetchUser () {
@@ -61,9 +65,29 @@ class AuthenticationView extends React.Component {
         environment={environment}
         query={query}
         variables={this.state.relayVariables}
-        render={({error, props}) => {
+        render={({ error, props }) => {
           if (error) {
-            console.error(error, error.source)
+            // If any of the errors is because the user does not exist
+            // on the server side, create the user and re-query if
+            // possible.
+            const userDoesNotExistError = error.source.errors
+              .some(err => err.code === ERROR_USER_DOES_NOT_EXIST)
+
+            // Limit the number of times we try to refetch a user after
+            // trying to create the user to prevent a loop in case of
+            // any bugs.
+            if (userDoesNotExistError && this.createNewUserAttempts < 3) {
+              this.createNewUserAttempts = this.createNewUserAttempts + 1
+              createNewUser()
+                .then(user => {
+                  this.fetchUser()
+                })
+                .catch(e => {
+                  throw e
+                })
+            } else {
+              console.error(error)
+            }
           }
           if (!props) {
             props = {}

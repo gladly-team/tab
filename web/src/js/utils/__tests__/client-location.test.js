@@ -10,7 +10,7 @@ import {
 import { isNil } from 'lodash/lang'
 
 jest.mock('../localstorage-mgr')
-jest.mock('raven-js')
+jest.mock('utils/logger')
 
 const mockNow = '2018-05-15T10:30:00.000'
 
@@ -307,7 +307,7 @@ describe('client-location', () => {
 
   it('does not log an error for a typical MaxMind error', async () => {
     expect.assertions(1)
-    const Raven = require('raven-js').default
+    const logger = require('utils/logger').default
 
     // Suppress expected console error
     jest.spyOn(console, 'error').mockImplementationOnce(() => {})
@@ -321,12 +321,13 @@ describe('client-location', () => {
     try {
       await getCountry()
     } catch (e) {}
-    expect(Raven.captureException).not.toHaveBeenCalled()
+    expect(logger.error).not.toHaveBeenCalled()
   })
 
   it('does log an error for a problematic MaxMind error', async () => {
     expect.assertions(1)
-    const Raven = require('raven-js').default
+
+    const logger = require('utils/logger').default
 
     // Suppress expected console error
     jest.spyOn(console, 'error').mockImplementationOnce(() => {})
@@ -340,6 +341,6 @@ describe('client-location', () => {
     try {
       await getCountry()
     } catch (e) {}
-    expect(Raven.captureException).not.toHaveBeenCalled()
+    expect(logger.error).toHaveBeenCalled()
   })
 })

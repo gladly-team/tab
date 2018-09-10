@@ -79,6 +79,44 @@ describe('createUser when user does not exist', () => {
     expect(rewardReferringUser).not.toHaveBeenCalled()
   })
 
+  it('works as expected without an email address', async () => {
+    const getOrCreateMethod = jest.spyOn(UserModel, 'getOrCreate')
+    const userInfo = getMockUserInfo()
+
+    // Remove the email info from the user context.
+    const newUserContext = cloneDeep(userContext)
+    delete newUserContext.email
+    delete newUserContext.emailVerified
+
+    await createUser(newUserContext, userInfo.id, null, null)
+
+    // The expected item to create will have no email.
+    const expectedCreateItem = getExpectedCreateItemFromUserInfo({
+      id: userInfo.id,
+      email: null
+    })
+    expect(getOrCreateMethod)
+      .toHaveBeenCalledWith(newUserContext, expectedCreateItem)
+  })
+
+  it('uses the email address from the context (user claims), not the provided value', async () => {
+    const getOrCreateMethod = jest.spyOn(UserModel, 'getOrCreate')
+    const userInfo = getMockUserInfo()
+
+    // Remove the email info from the user context.
+    const newUserContext = cloneDeep(userContext)
+    newUserContext.email = 'someotheremail@example.com'
+
+    await createUser(newUserContext, userInfo.id, 'notthesame@example.com', null)
+
+    const expectedCreateItem = getExpectedCreateItemFromUserInfo({
+      id: userInfo.id,
+      email: 'someotheremail@example.com'
+    })
+    expect(getOrCreateMethod)
+      .toHaveBeenCalledWith(newUserContext, expectedCreateItem)
+  })
+
   it('calls to set up initial widgets', async () => {
     const userInfo = getMockUserInfo()
     const referralData = null
@@ -296,5 +334,46 @@ describe('createUser when user already exists (should be idempotent)', () => {
     const createdItem = await createUser(userContext, userInfo.id,
       userInfo.email, referralData)
     expect(createdItem).toEqual(expectedUser)
+  })
+
+  it('updates the existing user\'s email address if it is different from the user claims', async () => {
+    const userInfo = getMockUserInfo()
+    const referralData = null
+
+    // Mock that the user already exists.
+    setMockDBResponse(
+      DatabaseOperation.CREATE,
+      null,
+      { code: 'ConditionalCheckFailedException' } // simple mock error
+    )
+
+    // Set the email in the user context.
+    const newUserContext = cloneDeep(userContext)
+    newUserContext.email = 'myemail@example.com'
+
+    // Mock the response for getting the user.
+    const expectedUser = getMockUserInstance(userInfo)
+    expectedUser.email = 'someotheremail@example.com'
+    setMockDBResponse(
+      DatabaseOperation.GET,
+      {
+        Item: expectedUser
+      }
+    )
+
+    // Mock the response for updating the email address.
+    setMockDBResponse(
+      DatabaseOperation.UPDATE,
+      {
+        // Like original user but with modified email.
+        Attributes: Object.assign({},
+          expectedUser,
+          { email: newUserContext.email })
+      }
+    )
+
+    const createdItem = await createUser(newUserContext, userInfo.id,
+      userInfo.email, referralData)
+    expect(createdItem.email).toEqual('myemail@example.com')
   })
 })

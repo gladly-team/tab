@@ -101,4 +101,38 @@ describe('local user data manager', () => {
     expect(localStorageMgr.setItem).toHaveBeenCalledWith('tab.user.lastTabDay.count', 1)
     expect(localStorageMgr.setItem).not.toHaveBeenCalledWith('tab.user.lastTabDay.date', moment.utc().toISOString())
   })
+
+  // setBrowserExtensionInstallTime method
+  it('sets the extension install time timestamp in localStorage', () => {
+    const setBrowserExtensionInstallTime = require('../local-user-data-mgr').setBrowserExtensionInstallTime
+    setBrowserExtensionInstallTime()
+    expect(localStorageMgr.setItem)
+      .toHaveBeenCalledWith('tab.newUser.approxInstallTime', moment.utc().toISOString())
+  })
+
+  // getBrowserExtensionInstallTime
+  it('gets the extension install date from localStorage', () => {
+    const now = moment('2018-04-12T12:50:42.000')
+    localStorageMgr.setItem('tab.newUser.approxInstallTime', now.utc().toISOString())
+    const getBrowserExtensionInstallTime = require('../local-user-data-mgr').getBrowserExtensionInstallTime
+    const installTime = getBrowserExtensionInstallTime()
+    expect(installTime.isSame(now)).toBe(true)
+  })
+
+  it('returns null if the extension install date in localStorage is invalid', () => {
+    // Suppress expected MomentJS warning
+    jest.spyOn(console, 'warn').mockImplementationOnce(() => {})
+
+    localStorageMgr.setItem('tab.newUser.approxInstallTime', 'foo')
+    const getBrowserExtensionInstallTime = require('../local-user-data-mgr').getBrowserExtensionInstallTime
+    const installTime = getBrowserExtensionInstallTime()
+    expect(installTime).toBeNull()
+  })
+
+  it('returns null if the extension install date in localStorage does not exist', () => {
+    localStorageMgr.removeItem('tab.newUser.approxInstallTime')
+    const getBrowserExtensionInstallTime = require('../local-user-data-mgr').getBrowserExtensionInstallTime
+    const installTime = getBrowserExtensionInstallTime()
+    expect(installTime).toBeNull()
+  })
 })

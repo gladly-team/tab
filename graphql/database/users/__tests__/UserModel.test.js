@@ -6,8 +6,15 @@ import { permissionAuthorizers } from '../../../utils/authorization-helpers'
 import User from '../UserModel'
 import config from '../../../config'
 import {
-  mockDate
+  DatabaseOperation,
+  mockDate,
+  getMockUserContext,
+  setMockDBResponse
 } from '../../test-utils'
+import {
+  UnauthorizedQueryException,
+  UserDoesNotExistException
+} from '../../../utils/exceptions'
 
 const mediaRoot = config.MEDIA_ENDPOINT
 
@@ -48,11 +55,11 @@ describe('UserModel', () => {
     expect(User.permissions.getAll()).toBe(false)
   })
 
-  it('allows create when user info matches item to create', () => {
+  it('allows create when the user context matches the item to create', () => {
     const userContext = {
       id: 'abc',
       email: 'foo@bar.com',
-      username: 'myName'
+      emailVerified: true
     }
     const item = {
       id: 'abc',
@@ -67,7 +74,7 @@ describe('UserModel', () => {
     const userContext = {
       id: 'abcd',
       email: 'foo@bar.com',
-      username: 'myName'
+      emailVerified: true
     }
     const item = {
       id: 'abc',
@@ -78,11 +85,11 @@ describe('UserModel', () => {
       .toBe(false)
   })
 
-  it('does not allow create when user ID is different', () => {
+  it('does not allow create when the user\'s email is different', () => {
     const userContext = {
       id: 'abc',
       email: 'foo@bar.com',
-      username: 'myName'
+      emailVerified: true
     }
     const item = {
       id: 'abc',
@@ -93,16 +100,59 @@ describe('UserModel', () => {
       .toBe(false)
   })
 
-  it('does not allow create when username is different', () => {
+  it('allows create when the user has a null email in both their token and the item to create', () => {
     const userContext = {
-      id: 'abcd',
-      email: 'foo@bar.com',
-      username: 'myName'
+      id: 'abc',
+      email: null,
+      emailVerified: false
     }
     const item = {
       id: 'abc',
+      email: null,
+      username: 'myName'
+    }
+    expect(User.permissions.create(userContext, null, null, item))
+      .toBe(true)
+  })
+
+  it('allows create when the user has an undefined email (in their token) and tries to create an item with a null email', () => {
+    const userContext = {
+      id: 'abc',
+      email: undefined,
+      emailVerified: false
+    }
+    const item = {
+      id: 'abc',
+      email: null,
+      username: 'myName'
+    }
+    expect(User.permissions.create(userContext, null, null, item))
+      .toBe(true)
+  })
+
+  it('allows create when the user does not have an email in their token nor in the item to create', () => {
+    const userContext = {
+      id: 'abc'
+    }
+    const item = {
+      id: 'abc',
+      email: null,
+      username: 'myName'
+    }
+    expect(User.permissions.create(userContext, null, null, item))
+      .toBe(true)
+  })
+
+  it('does not allow create when the user\'s email exists in the token but not in the item', () => {
+    const userContext = {
+      id: 'abc',
       email: 'foo@bar.com',
-      username: 'myOtherName'
+      emailVerified: true
+    }
+    const item = {
+      id: 'abc',
+      email: null,
+      username: 'myName'
     }
     expect(User.permissions.create(userContext, null, null, item))
       .toBe(false)
@@ -123,11 +173,53 @@ describe('UserModel', () => {
     const userContext = {
       id: 'abcd',
       email: 'foo@bar.com',
-      username: 'myName'
+      emailVerified: true
     }
     const item = null
     expect(User.permissions.create(userContext, null, null, item))
       .toBe(false)
+  })
+
+  it('throws an UserDoesNotExistException error when a `get` returns no item', () => {
+    const userContext = getMockUserContext()
+    const mockItemId = userContext.id
+
+    // Set mock response from DB client.
+    setMockDBResponse(
+      DatabaseOperation.GET,
+      {
+        Item: null
+      }
+    )
+    return expect(User.get(userContext, mockItemId))
+      .rejects.toEqual(new UserDoesNotExistException())
+  })
+
+  it('throws an error when `get` throws an error other than "item does not exist"', () => {
+    const userContext = getMockUserContext()
+
+    // Use an unauthorized request to get its error.
+    return expect(User.get(userContext, 'unauthorized-user-id-here'))
+      .rejects.toEqual(new UnauthorizedQueryException())
+  })
+
+  it('does not throw an error when a `get` returns an item', () => {
+    const userContext = getMockUserContext()
+    const mockItemId = userContext.id
+
+    // Set mock response from DB client.
+    setMockDBResponse(
+      DatabaseOperation.GET,
+      {
+        Item: {
+          // Actual item would have more properties
+          id: mockItemId
+        }
+      }
+    )
+
+    return expect(User.get(userContext, mockItemId))
+      .resolves.toBeDefined()
   })
 
   it('constructs as expected', () => {

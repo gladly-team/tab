@@ -14,15 +14,20 @@ import logger from '../../utils/logger'
  * for existing users.
  * @param {object} userContext - The user authorizer object.
  * @param {string} userId - The user's ID.
- * @param {string} email - The user's email
- * @param {object} referralData - Referral data.
+ * @param {string|null} email - The user's email (provided by the client, not
+ *   from user claims)
+ * @param {object|null} referralData - Referral data.
  * @return {Promise<User>}  A promise that resolves into a User instance.
  */
-const createUser = async (userContext, userId, email, referralData = null) => {
+const createUser = async (userContext, userId, email = null, referralData = null) => {
   // Create the user.
   const userInfo = {
     id: userId,
-    email: email,
+    // This email address is from the user claims so will be
+    // the same as the email address provided during authentication,
+    // but it isn't guaranteed to be verified (may not truly belong
+    // to the user).
+    email: userContext.email || null,
     joined: moment.utc().toISOString()
   }
   try {
@@ -30,7 +35,17 @@ const createUser = async (userContext, userId, email, referralData = null) => {
   } catch (e) {
     throw e
   }
-  const returnedUser = response.item
+  var returnedUser = response.item
+
+  // If the user's email differs from the one in the database,
+  // update it. This will happen when anonymous users sign in.
+  if (returnedUser.email !== userContext.email) {
+    // Update the email.
+    returnedUser = await UserModel.update(userContext, {
+      id: userId,
+      email: userContext.email
+    })
+  }
 
   // If the user already existed, return it without doing other
   // setup tasks.

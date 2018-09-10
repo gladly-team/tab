@@ -13,6 +13,10 @@ import {
 } from '../../utils/authorization-helpers'
 import config from '../../config'
 import { getTodayTabCount } from './user-utils'
+import {
+  DATABASE_ITEM_DOES_NOT_EXIST,
+  UserDoesNotExistException
+} from '../../utils/exceptions'
 
 const mediaRoot = config.MEDIA_ENDPOINT
 
@@ -44,7 +48,7 @@ class User extends BaseModel {
     const self = this
     return {
       id: types.string().required(),
-      email: types.string().email().required(),
+      email: types.string().email().allow(null),
       username: types.string(),
       joined: types.string().isoDate().required(),
       justCreated: types.boolean().forbidden(), // only set in app code
@@ -90,7 +94,8 @@ class User extends BaseModel {
       backgroundColor: types.string(),
       customImage: types.string(),
       activeWidget: types.string(),
-      lastTabTimestamp: types.string().isoDate()
+      lastTabTimestamp: types.string().isoDate(),
+      mergedIntoExistingUser: types.boolean()
     }
   }
 
@@ -140,6 +145,21 @@ class User extends BaseModel {
     }
   }
 
+  // Extend the `get` method to throw a unique error when
+  // an item does not exist.
+  static async get (...args) {
+    try {
+      const response = await super.get(...args)
+      return response
+    } catch (e) {
+      if (e.code === DATABASE_ITEM_DOES_NOT_EXIST) {
+        throw new UserDoesNotExistException()
+      } else {
+        throw e
+      }
+    }
+  }
+
   static get permissions () {
     return {
       get: permissionAuthorizers.userIdMatchesHashKey,
@@ -153,7 +173,11 @@ class User extends BaseModel {
         }
         return (
           userContext.id === item.id &&
-          userContext.email === item.email
+          // If an email address exists in the user's token or
+          // in the item to create, only authorize an item creation
+          // if the emails match. However, allow null values for
+          // the email (for anonymous users).
+          ((item.email || userContext.email) ? userContext.email === item.email : true)
         )
       },
       indexPermissions: {

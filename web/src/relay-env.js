@@ -15,7 +15,6 @@ async function fetchQuery (
   cacheConfig,
   uploadables
 ) {
-  // TODO: mock user token here on dev
   try {
     // Add Authorization header if user has a token.
     const userToken = await getUserToken()

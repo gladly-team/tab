@@ -1,26 +1,19 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import environment from '../../../relay-env'
 import {
   getCurrentUser,
-  sendVerificationEmail,
-  setUsernameInLocalStorage
+  sendVerificationEmail
 } from 'authentication/user'
 import {
-  goTo,
-  authMessageURL,
-  missingEmailMessageURL,
-  replaceUrl,
-  verifyEmailURL,
-  enterUsernameURL,
-  goToDashboard,
-  goToLogin
-} from 'navigation/navigation'
-import CreateNewUserMutation from 'mutations/CreateNewUserMutation'
+  checkAuthStateAndRedirectIfNeeded,
+  createNewUser
+} from 'authentication/helpers'
 import {
-  getReferralData,
-  isInIframe
-} from 'web-utils'
+  goTo,
+  missingEmailMessageURL,
+  verifyEmailURL,
+  goToDashboard
+} from 'navigation/navigation'
 import { isEqual } from 'lodash/lang'
 import LogoWithText from '../Logo/LogoWithText'
 
@@ -53,8 +46,7 @@ class Authentication extends React.Component {
     }
   }
 
-  // TODO: change to componentDidMount
-  async componentWillMount () {
+  async componentDidMount () {
     this.mounted = true
 
     await this.navigateToAuthStep()
@@ -102,42 +94,17 @@ class Authentication extends React.Component {
     // the sign-up is completed.
     const authTokenUser = await getCurrentUser()
 
-    // If the user is not logged in, go to main authentication page.
-    if (!authTokenUser) {
-      // If the page is in an iframe (e.g. the user opened it via an iframed
-      // new tab), authentication may not work correctly. Show an intermediary
-      // page that will open a non-iframed auth page.
-      if (isInIframe()) {
-        goTo(authMessageURL)
-      } else {
-        goToLogin()
-      }
-    // If the user does not have an email address, show a message
-    // asking them to sign in with a different method.
-    } else if (!authTokenUser.email) {
-      goTo(missingEmailMessageURL)
-    // If the user's email is not verified, ask them to
-    // check their email.
-    } else if (!authTokenUser.emailVerified) {
-      replaceUrl(verifyEmailURL)
-    // Check if the user has a username. If not,
-    // send the user to enter a username.
-    } else if (!authTokenUser.username) {
-      // If the username isn't in localStorage, check if it
-      // exists on the user from the database.
-      // We use the user fetched from the database because
-      // the username property isn't present on our auth token
-      // user identity.
-      if (this.props.user && this.props.user.username) {
-        // The username exists; set it in localStorage and continue
-        // to the app.
-        setUsernameInLocalStorage(this.props.user.username)
-        goToDashboard()
-      } else {
-        replaceUrl(enterUsernameURL)
-      }
-    // Go to the dashboard.
-    } else {
+    // Redirect to the appropriate authentication view if the
+    // user is not fully authenticated.
+    const usernameFromServer = this.props.user ? this.props.user.username : null
+    try {
+      var redirected = await checkAuthStateAndRedirectIfNeeded(authTokenUser, usernameFromServer)
+    } catch (e) {
+      throw e
+    }
+
+    // The user is fully authed, so go to the dashboard.
+    if (!redirected) {
       goToDashboard()
     }
   }
@@ -147,12 +114,10 @@ class Authentication extends React.Component {
    * At this point, the user may or may not have a verified email
    * or a username.
    * @param {object} currentUser - A Firebase user instance
-   * @param {string} credential - firebase.auth.AuthCredential
-   * @param {string} redirectUrl - The default URL to redirect after sign-in.
    * @returns {Promise<boolean>}  A promise that resolves into a boolean,
    *   whether or not the email was sent successfully.
    */
-  onSignInSuccess (currentUser, credential, redirectUrl) {
+  onSignInSuccess (currentUser) {
     // Check that the user has an email address.
     // An email address may be missing if the user signs in
     // with a social provider that does not share their
@@ -163,8 +128,11 @@ class Authentication extends React.Component {
       return
     }
 
-    // Get or create the user
-    return this.createNewUser(currentUser.uid, currentUser.email)
+    // Get or create the user. Note that we expect to call this
+    // even for anonymous users who already have a user on the
+    // server-side, because that's when we add their email to
+    // their profile.
+    return createNewUser()
       .then((createdOrFetchedUser) => {
         // Check if the user has verified their email.
         // Note: later versions of firebaseui-web might support mandatory
@@ -191,39 +159,6 @@ class Authentication extends React.Component {
         // TODO: show error message to the user
         console.error(err)
       })
-  }
-
-  /**
-   * Create a new user in our database, or get the user if they already
-   * exist. This is idempotent and will be called when returning users sign in.
-   * @param {string} userId - The userId from Firebase
-   * @param {string} email - The user's email address from Firebase
-   * @returns {Promise<object>} user - A promise that resolves into an
-   *   object with a few requested fields
-   * @returns {string} user.id - The user's ID, the same value as the
-   *   userId argument
-   * @returns {string} user.email - The user's email, the same value as the
-   *   email argument
-   * @returns {string|null} user.username - The user's username, if already
-   *   set; or null, if not yet set
-   */
-  createNewUser (userId, email) {
-    const referralData = getReferralData()
-    return new Promise((resolve, reject) => {
-      CreateNewUserMutation(
-        environment,
-        userId,
-        email,
-        referralData,
-        (response) => {
-          resolve(response.createNewUser)
-        },
-        (err) => {
-          console.error('Error at createNewUser:', err)
-          reject(new Error('Could not create new user', err))
-        }
-      )
-    })
   }
 
   render () {

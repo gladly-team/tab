@@ -5,12 +5,8 @@ import {
   getCurrentUserListener
 } from 'authentication/user'
 import {
-  replaceUrl,
-  missingEmailMessageURL,
-  verifyEmailURL,
-  enterUsernameURL,
-  goToLogin
-} from 'navigation/navigation'
+  checkAuthStateAndRedirectIfNeeded
+} from 'authentication/helpers'
 
 // Get the authenticated user and, if the user is authenticated,
 // add the user's ID to the `variables` prop. By default, redirect
@@ -29,7 +25,11 @@ class AuthUserComponent extends React.Component {
     // Store unsubscribe function.
     // https://firebase.google.com/docs/reference/js/firebase.auth.Auth#onAuthStateChanged
     this.authListenerUnsubscribe = getCurrentUserListener()
+      // Note: currently, this callback may be called when a user does not
+      // exist on the server side, and some requests may fail.
       .onAuthStateChanged((user) => {
+        // TODO: roll the formatting functionality into the
+        // listener.
         if (user) {
           const formattedUser = formatUser(user)
           this.checkUserAuth(formattedUser)
@@ -45,40 +45,25 @@ class AuthUserComponent extends React.Component {
     }
   }
 
-  checkUserAuth (user) {
+  async checkUserAuth (user) {
+    // If the user is not fully logged in, redirect to the
+    // appropriate auth page.
+    try {
+      var redirecting = await checkAuthStateAndRedirectIfNeeded(user)
+    } catch (e) {
+      throw e
+    }
+
     // If the user is authed, set the ID in state.
-    if (user && user.id) {
+    if (!redirecting && user && user.id) {
       this.setState({
         userId: user.id
       })
     }
-
-    // Stay on this page if it's okay to render children
-    // regardless on the user auth status.
-    if (this.props.allowUnauthedRender) {
-      return
-    }
-
-    // If the user is not fully logged in, redirect to the
-    // appropriate auth page.
-    // User is not logged in.
-    if (!user || !user.id) {
-      goToLogin()
-    // If the user does not have an email address, show a message
-    // asking them to sign in with a different method.
-    } else if (!user.email) {
-      replaceUrl(missingEmailMessageURL)
-    // User is logged in but their email is not verified.
-    } else if (!user.emailVerified) {
-      replaceUrl(verifyEmailURL)
-    // User is logged in but has not set a username.
-    } else if (!user.username) {
-      replaceUrl(enterUsernameURL)
-    }
   }
 
   render () {
-    if (!this.state.userId && !this.props.allowUnauthedRender) {
+    if (!this.state.userId) {
       return null
     }
 
@@ -104,15 +89,11 @@ class AuthUserComponent extends React.Component {
 }
 
 AuthUserComponent.propTypes = {
-  variables: PropTypes.object,
-  // Whether to render the children even if the user is not
-  // authenticated.
-  allowUnauthedRender: PropTypes.bool
+  variables: PropTypes.object
 }
 
 AuthUserComponent.defaultProps = {
-  variables: {},
-  allowUnauthedRender: false
+  variables: {}
 }
 
 export default AuthUserComponent

@@ -83,7 +83,6 @@ export const setModelGetterField = function (modelClass, fieldName, val) {
 export const getMockUserContext = function () {
   return {
     id: 'abcdefghijklmno',
-    username: 'MyName',
     email: 'foo@bar.com',
     emailVerified: true
   }

@@ -36,8 +36,11 @@ export const createGraphQLContext = (userClaims) => {
   return {
     user: {
       id: userClaims['id'],
-      email: userClaims['email'],
-      emailVerified: userClaims['email_verified'] === 'true'
+      // The email and emailVerified properties may not exist for
+      // anonymous users.
+      email: userClaims['email'] || null,
+      // The email_verified claim is a string.
+      emailVerified: userClaims['email_verified'] ? userClaims['email_verified'] === 'true' : false
     }
   }
 }

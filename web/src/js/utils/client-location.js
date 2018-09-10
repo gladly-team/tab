@@ -1,4 +1,3 @@
-import Raven from 'raven-js'
 import moment from 'moment'
 import localStorageMgr from 'utils/localstorage-mgr'
 import {
@@ -7,6 +6,7 @@ import {
   STORAGE_LOCATION_QUERY_TIME
 } from '../constants'
 import { isNil } from 'lodash/lang'
+import logger from 'utils/logger'
 
 // Get the client location with a country-level granularity.
 // This expects that the MaxMind script already created the
@@ -26,6 +26,19 @@ function ClientLocation (countryIsoCode, isInEuropeanUnion, queryTime) {
 
   // An ISO string
   this.queryTime = queryTime
+}
+
+/**
+ * Whether a MaxMind error concerns us enough to log.
+ * @param {Object} err - The MaxMind error object
+ * @return {Boolean} Whether we should log the MaxMind error
+ */
+const shouldLogMaxMindError = err => {
+  return [
+    'QUERY_FORBIDDEN',
+    'OUT_OF_QUERIES',
+    'PERMISSION_REQUIRED'
+  ].indexOf(err.code) > -1
 }
 
 /**
@@ -86,21 +99,20 @@ const getLocationFromMaxMind = () => {
             isInEuropeanUnion,
             moment.utc().toISOString()))
         },
-        (error) => {
-          console.error(error)
-          reject(error)
+        err => {
+          // Log a subset of errors that we care about to Sentry.
+          if (shouldLogMaxMindError(err)) {
+            logger.error(err)
+          }
+          reject(err)
         }
       )
-    } catch (e) {
+    } catch (err) {
       // Log a subset of errors that we care about to Sentry.
-      if ([
-        'QUERY_FORBIDDEN',
-        'OUT_OF_QUERIES',
-        'PERMISSION_REQUIRED'
-      ].indexOf(e.code) > -1) {
-        Raven.captureException(e)
+      if (shouldLogMaxMindError(err)) {
+        logger.error(err)
       }
-      reject(e)
+      reject(err)
     }
   })
   return locationFetchPromise

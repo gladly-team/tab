@@ -14,10 +14,13 @@ import {
   signupPageEmailButtonClick,
   signupPageSocialButtonClick
 } from 'analytics/logEvent'
+import logger from 'utils/logger'
+import environment from '../../../relay-env'
+import MergeIntoExistingUserMutation from 'mutations/MergeIntoExistingUserMutation'
 
 class FirebaseAuthenticationUI extends React.Component {
-  // TODO: change to componentDidMount
-  componentWillMount () {
+  constructor (props) {
+    super(props)
     this.configureFirebaseUI()
   }
 
@@ -146,17 +149,75 @@ class FirebaseAuthenticationUI extends React.Component {
           requireDisplayName: false
         }
       ],
+      // Allow anonymous users to sign in.
+      autoUpgradeAnonymousUsers: true,
       callbacks: {
         signInSuccessWithAuthResult: (authResult, redirectUrl) => {
           // Note: we can check if it's a new user with
           // `authResult.additionalUserInfo.isNewUser`.
-          this.props.onSignInSuccess(authResult.user, authResult.credential, redirectUrl)
+          this.props.onSignInSuccess(authResult.user)
 
           // Do not automatically redirect to the signInSuccessUrl.
           return false
         },
         uiShown: () => {
           this.addButtonClickListeners()
+        },
+        // The signInFailure callback must be provided to handle merge conflicts which
+        // occur when an existing credential is linked to an anonymous user.
+        // https://firebase.google.com/docs/auth/web/firebaseui?authuser=0#handling_anonymous_user_upgrade_merge_conflicts
+        // https://github.com/firebase/firebaseui-web#handling-anonymous-user-upgrade-merge-conflicts
+        signInFailure: error => {
+          // For merge conflicts, the error.code will be
+          // 'firebaseui/anonymous-upgrade-merge-conflict'.
+          if (error.code !== 'firebaseui/anonymous-upgrade-merge-conflict') {
+            const user = firebase.auth().currentUser
+            this.props.onSignInSuccess(user)
+            return Promise.resolve()
+          }
+
+          const anonymousUser = firebase.auth().currentUser
+
+          // The existing credential the user tried to sign in with.
+          var cred = error.credential
+
+          return new Promise((resolve, reject) => {
+            // Mark the anonymous user as merged in our database (a duplicate).
+            // Here, we could also merge the anonymous user's data with the
+            // existing user but we don't do that currently.
+            MergeIntoExistingUserMutation(environment, anonymousUser.uid,
+              // onCompleted
+              () => {
+                resolve()
+              },
+              // onError
+              err => {
+                // Log the error but don't throw (it's a non-critical error).
+                logger.error(err)
+                resolve()
+              }
+            )
+          })
+            .then(() => {
+              // Sign in as the existing user.
+              return firebase.auth().signInAndRetrieveDataWithCredential(cred)
+            })
+            .then(authResult => {
+              const authedUser = authResult.user
+
+              // Delete the anonymous user in Firebase.
+              return anonymousUser.delete()
+                .catch(e => {
+                  logger.error(e)
+                })
+                .finally(() => {
+                  // Proceed with sign-in as usual.
+                  this.props.onSignInSuccess(authedUser)
+                })
+            })
+            .catch(e => {
+              logger.error(e)
+            })
         }
       },
       // Just using the constant rather than importing firebaseui

@@ -46,6 +46,7 @@ import setUsername from '../database/users/setUsername'
 import logTab from '../database/users/logTab'
 import logRevenue from '../database/userRevenue/logRevenue'
 import logUserDataConsent from '../database/userDataConsent/logUserDataConsent'
+import mergeIntoExistingUser from '../database/users/mergeIntoExistingUser'
 import setActiveWidget from '../database/users/setActiveWidget'
 import setBackgroundImage from '../database/users/setBackgroundImage'
 import setBackgroundImageFromCustomURL from '../database/users/setBackgroundImageFromCustomURL'
@@ -284,6 +285,10 @@ const userType = new GraphQLObjectType({
     backgroundColor: {
       type: GraphQLString,
       description: 'User\'s background color'
+    },
+    mergedIntoExistingUser: {
+      type: GraphQLBoolean,
+      description: 'Whether this user was created by an existing user and then merged into the existing user'
     }
   }),
   interfaces: [nodeInterface]
@@ -519,8 +524,6 @@ const logTabMutation = mutationWithClientMutationId({
 /**
  * Log earned revenue for a user
  */
-
-/* BEGIN revenue logging */
 
 const EncodedRevenueValueType = new GraphQLInputObjectType({
   name: 'EncodedRevenueValue',
@@ -843,8 +846,9 @@ const ReferralDataInput = new GraphQLInputObjectType({
 const createNewUserMutation = mutationWithClientMutationId({
   name: 'CreateNewUser',
   inputFields: {
+    // Note that this is the raw user ID (not the Relay global).
     userId: { type: new GraphQLNonNull(GraphQLString) },
-    email: { type: new GraphQLNonNull(GraphQLString) },
+    email: { type: GraphQLString },
     referralData: { type: ReferralDataInput }
   },
   outputFields: {
@@ -877,6 +881,25 @@ const setUsernameMutation = mutationWithClientMutationId({
   mutateAndGetPayload: ({userId, username}, context) => {
     const userGlobalObj = fromGlobalId(userId)
     return setUsername(context.user, userGlobalObj.id, username)
+  }
+})
+
+/**
+ * Handle when a user is a duplicate account for an existing user.
+ */
+const mergeIntoExistingUserMutation = mutationWithClientMutationId({
+  name: 'MergeIntoExistingUser',
+  inputFields: {
+    // Note that this is the raw user ID (not the Relay global).
+    userId: { type: new GraphQLNonNull(GraphQLString) }
+  },
+  outputFields: {
+    success: {
+      type: new GraphQLNonNull(GraphQLBoolean)
+    }
+  },
+  mutateAndGetPayload: ({ userId }, context) => {
+    return mergeIntoExistingUser(context.user, userId)
   }
 })
 
@@ -935,6 +958,7 @@ const mutationType = new GraphQLObjectType({
     logUserRevenue: logUserRevenueMutation,
     logUserDataConsent: logUserDataConsentMutation,
     donateVc: donateVcMutation,
+    mergeIntoExistingUser: mergeIntoExistingUserMutation,
 
     setUserBkgImage: setUserBkgImageMutation,
     setUserBkgColor: setUserBkgColorMutation,
