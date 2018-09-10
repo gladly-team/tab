@@ -109,7 +109,6 @@ describe('createUser when user does not exist', () => {
 
     await createUser(newUserContext, userInfo.id, 'notthesame@example.com', null)
 
-    // The expected item to create will have no email.
     const expectedCreateItem = getExpectedCreateItemFromUserInfo({
       id: userInfo.id,
       email: 'someotheremail@example.com'

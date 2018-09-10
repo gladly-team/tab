@@ -59,7 +59,7 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
       email: null,
       username: 'foo',
       isAnonymous: false,
-      emailVerified: true
+      emailVerified: false
     }
     const redirected = await checkAuthStateAndRedirectIfNeeded(user)
     expect(replaceUrl).toHaveBeenCalledWith(missingEmailMessageURL)

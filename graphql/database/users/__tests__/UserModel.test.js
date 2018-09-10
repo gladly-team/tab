@@ -55,7 +55,7 @@ describe('UserModel', () => {
     expect(User.permissions.getAll()).toBe(false)
   })
 
-  it('allows create when user info matches item to create', () => {
+  it('allows create when the user context matches the item to create', () => {
     const userContext = {
       id: 'abc',
       email: 'foo@bar.com',
@@ -130,7 +130,7 @@ describe('UserModel', () => {
       .toBe(true)
   })
 
-  it('allows create when the user does not have an email (in their token) or item', () => {
+  it('allows create when the user does not have an email in their token nor in the item to create', () => {
     const userContext = {
       id: 'abc'
     }

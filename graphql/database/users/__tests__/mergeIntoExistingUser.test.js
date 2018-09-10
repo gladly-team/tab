@@ -25,7 +25,7 @@ beforeEach(() => {
 })
 
 describe('mergeIntoExistingUser', () => {
-  it('works as expected when the username is not taken', async () => {
+  it('works as expected', async () => {
     const UserModel = require('../UserModel').default
     const updateQuery = jest.spyOn(UserModel, 'update')
 
