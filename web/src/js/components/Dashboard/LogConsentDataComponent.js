@@ -19,7 +19,12 @@ class LogConsentDataComponent extends React.Component {
 
   async componentDidMount () {
     // Register a callback for any new consent updates.
-    const isEU = await isInEuropeanUnion()
+    var isEU
+    try {
+      isEU = await isInEuropeanUnion()
+    } catch (e) {
+      isEU = false
+    }
     if (isEU) {
       this.consentChangeCallback = this.logDataConsentDecision.bind(this)
       registerConsentCallback(this.consentChangeCallback)
