@@ -43,7 +43,12 @@ class Account extends React.Component {
 
   async componentDidMount () {
     // See if we should show the data privacy choices option
-    const isInEU = await isInEuropeanUnion()
+    var isInEU
+    try {
+      isInEU = await isInEuropeanUnion()
+    } catch (e) {
+      isInEU = false
+    }
     if (isInEU) {
       this.setState({
         showDataPrivacyOption: true

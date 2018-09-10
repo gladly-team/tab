@@ -17,7 +17,12 @@ export default () => {
   return new Promise(async (resolve, reject) => {
     // Determine if the user is in the EU, which may affect the
     // ads we show.
-    const isInEU = await isInEuropeanUnion()
+    var isInEU
+    try {
+      isInEU = await isInEuropeanUnion()
+    } catch (e) {
+      isInEU = false
+    }
     const requiresConsentManagement = !!isInEU
 
     // Note: brealtime is automatically aliased by the

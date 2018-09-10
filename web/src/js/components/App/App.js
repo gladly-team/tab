@@ -14,7 +14,12 @@ class App extends React.Component {
   }
 
   async componentDidMount () {
-    const isEU = await isInEuropeanUnion()
+    var isEU
+    try {
+      isEU = await isInEuropeanUnion()
+    } catch (e) {
+      isEU = false
+    }
     if (isEU) {
       this.consentChangeCallback = this.handleDataConsentDecision.bind(this)
       registerConsentCallback(this.consentChangeCallback)
