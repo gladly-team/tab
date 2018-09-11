@@ -1,9 +1,11 @@
 
 import { isEmpty } from 'lodash/lang'
+import { get } from 'lodash/object'
 import moment from 'moment'
 import UserModel from './UserModel'
 import logReferralData from '../referrals/logReferralData'
 import rewardReferringUser from './rewardReferringUser'
+import logEmailVerified from './logEmailVerified'
 import getUserByUsername from './getUserByUsername'
 import setUpWidgetsForNewUser from '../widgets/setUpWidgetsForNewUser'
 import logger from '../../utils/logger'
@@ -20,7 +22,7 @@ import logger from '../../utils/logger'
  * @return {Promise<User>}  A promise that resolves into a User instance.
  */
 const createUser = async (userContext, userId, email = null, referralData = null) => {
-  // Create the user.
+  // Get or create the user.
   const userInfo = {
     id: userId,
     // This email address is from the user claims so will be
@@ -40,11 +42,18 @@ const createUser = async (userContext, userId, email = null, referralData = null
   // If the user's email differs from the one in the database,
   // update it. This will happen when anonymous users sign in.
   if (returnedUser.email !== userContext.email) {
-    // Update the email.
     returnedUser = await UserModel.update(userContext, {
       id: userId,
       email: userContext.email
     })
+  }
+
+  // If the user's email is verified but the user's emailVerified
+  // property is false, update it. This can happen when a
+  // previously-anonymous user signs in with a provider
+  // whose emails are auto-verified (such as Google).
+  if (userContext.emailVerified && !get(returnedUser, 'emailVerified')) {
+    returnedUser = await logEmailVerified(userContext, userId)
   }
 
   // If the user already existed, return it without doing other
@@ -52,6 +61,10 @@ const createUser = async (userContext, userId, email = null, referralData = null
   if (!response.created) {
     return returnedUser
   }
+
+  /**
+   * After this point, we handle setup for brand new users only.
+   **/
 
   // Set up default widgets.
   try {

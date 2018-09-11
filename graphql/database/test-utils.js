@@ -51,6 +51,16 @@ export const setMockDBResponse = function (operation, returnVal = null, error = 
 }
 
 /**
+ * Clear all mock implementations for database operations.
+ * @return {undefined}
+ */
+export const clearAllMockDBResponses = () => {
+  availableOperations.forEach(operation => {
+    databaseClient[operation].mockReset()
+  })
+}
+
+/**
  * Set the `permissions` getter value for a model class.
  * @param {Object} modelClass - The model class (extended from BaseModel)
  * @param {Object} permissions - The permissions object
