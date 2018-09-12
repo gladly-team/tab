@@ -136,17 +136,19 @@ export const getCurrentUserListener = () => {
 }
 
 /**
- * Get the user's token
+ * Get the user's token.
+ * @param {Boolean} forceRefresh - Whether to force Firebase to refresh
+ *   the token regardless of expiration status.
  * @returns {(string|null)} The token, if the user is authenticated;
  *   otherwise, null.
  */
-export const getUserToken = async () => {
+export const getUserToken = async (forceRefresh) => {
   try {
     const authUser = await getCurrentFirebaseUser()
     if (!authUser) {
       return null
     }
-    const token = authUser.getIdToken()
+    const token = authUser.getIdToken(forceRefresh)
     if (token) {
       return token
     } else {

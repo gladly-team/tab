@@ -13,6 +13,7 @@ import {
   isInIframe
 } from 'web-utils'
 import {
+  getUserToken,
   getCurrentUser,
   setUsernameInLocalStorage,
   signInAnonymously,
@@ -228,13 +229,23 @@ export const checkIfEmailVerified = () => {
           // The email is verified. Log the verification, stop polling,
           // and return true.
           if (user.emailVerified) {
-            LogEmailVerifiedMutation(environment, user.id, () => {},
-              // onError
-              err => {
-                logger.error(err)
-              }
-            )
-            resolve(true)
+            // Force-refetch the user ID token so it will have the
+            // correct latest value for email verification.
+            getUserToken(true)
+              .then(() => {
+                LogEmailVerifiedMutation(environment, user.id, () => {},
+                  // onError
+                  err => {
+                    logger.error(err)
+                  }
+                )
+                resolve(true)
+              })
+              .catch(e => {
+                logger.error(e)
+                reject(e)
+              })
+
           // The email is not yet verified. Wait some time, then try
           // to poll Firebase again to see if it's changed.
           } else {

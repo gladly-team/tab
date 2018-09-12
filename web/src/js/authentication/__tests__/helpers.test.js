@@ -14,10 +14,12 @@ import {
 import CreateNewUserMutation from 'mutations/CreateNewUserMutation'
 import LogEmailVerifiedMutation from 'mutations/LogEmailVerifiedMutation'
 import {
+  getUserToken,
   getCurrentUser,
   reloadUser
 } from 'authentication/user'
 import {
+  flushAllPromises,
   runAsyncTimerLoops
 } from 'utils/test-utils'
 import logger from 'utils/logger'
@@ -209,6 +211,10 @@ describe('checkIfEmailVerified tests', () => {
     jest.useFakeTimers()
   })
 
+  afterEach(() => {
+    jest.resetAllMocks()
+  })
+
   it('returns true if the email is already verified', async () => {
     expect.assertions(1)
 
@@ -220,6 +226,7 @@ describe('checkIfEmailVerified tests', () => {
       emailVerified: true
     })
     reloadUser.mockResolvedValue(undefined)
+    getUserToken.mockResolvedValue('some-token')
 
     const checkIfEmailVerified = require('../helpers').checkIfEmailVerified
     const isVerified = await checkIfEmailVerified()
@@ -237,6 +244,7 @@ describe('checkIfEmailVerified tests', () => {
       emailVerified: false
     })
     reloadUser.mockResolvedValue(undefined)
+    getUserToken.mockResolvedValue('some-token')
 
     const checkIfEmailVerified = require('../helpers').checkIfEmailVerified
     const promise = checkIfEmailVerified()
@@ -256,6 +264,7 @@ describe('checkIfEmailVerified tests', () => {
       emailVerified: false
     })
     reloadUser.mockResolvedValue(undefined)
+    getUserToken.mockResolvedValue('some-token')
 
     const checkIfEmailVerified = require('../helpers').checkIfEmailVerified
     const promise = checkIfEmailVerified()
@@ -291,6 +300,7 @@ describe('checkIfEmailVerified tests', () => {
         emailVerified: true
       })
     reloadUser.mockResolvedValue(undefined)
+    getUserToken.mockResolvedValue('some-token')
 
     const checkIfEmailVerified = require('../helpers').checkIfEmailVerified
     const promise = checkIfEmailVerified()
@@ -326,6 +336,7 @@ describe('checkIfEmailVerified tests', () => {
         emailVerified: true
       })
     reloadUser.mockResolvedValue(undefined)
+    getUserToken.mockResolvedValue('some-token')
 
     const checkIfEmailVerified = require('../helpers').checkIfEmailVerified
     const promise = checkIfEmailVerified()
@@ -345,11 +356,61 @@ describe('checkIfEmailVerified tests', () => {
       emailVerified: true
     })
     reloadUser.mockResolvedValue(undefined)
+    getUserToken.mockResolvedValue('some-token')
 
     const checkIfEmailVerified = require('../helpers').checkIfEmailVerified
     await checkIfEmailVerified()
     expect(LogEmailVerifiedMutation)
       .toHaveBeenCalledWith({}, 'abc123', expect.any(Function), expect.any(Function))
+  })
+
+  it('force-refreshes the user token before logging the email as verified', async () => {
+    expect.assertions(2)
+
+    getCurrentUser.mockResolvedValue({
+      id: 'abc123',
+      email: 'somebody@example.com',
+      username: null,
+      isAnonymous: false,
+      emailVerified: true
+    })
+    reloadUser.mockImplementation(undefined)
+
+    // Make getUserToken not resolve yet so we can confirm
+    // the LogEmailVerifiedMutation has not yet been called.
+    getUserToken.mockReturnValueOnce(new Promise(() => {}))
+
+    const checkIfEmailVerified = require('../helpers').checkIfEmailVerified
+    checkIfEmailVerified()
+    await flushAllPromises()
+    expect(getUserToken).toHaveBeenCalledWith(true)
+    expect(LogEmailVerifiedMutation).not.toHaveBeenCalled()
+  })
+
+  it('logs an error if refreshing the user token throws an error', async (done) => {
+    expect.assertions(2)
+
+    getCurrentUser.mockResolvedValue({
+      id: 'abc123',
+      email: 'somebody@example.com',
+      username: null,
+      isAnonymous: false,
+      emailVerified: true
+    })
+    reloadUser.mockImplementation(undefined)
+    const mockErr = new Error('Sigh.')
+    getUserToken.mockRejectedValue(mockErr)
+
+    const checkIfEmailVerified = require('../helpers').checkIfEmailVerified
+    checkIfEmailVerified()
+      // Ignore expected error
+      .catch(e => {})
+      .finally(() => {
+        expect(logger.error).toHaveBeenCalledTimes(1)
+        expect(logger.error).toHaveBeenCalledWith(mockErr)
+        done()
+      })
+    await flushAllPromises()
   })
 
   it('logs an error if reloading the Firebase user throws an error', async (done) => {
@@ -372,6 +433,7 @@ describe('checkIfEmailVerified tests', () => {
       })
     const mockErr = new Error('Whoops!')
     reloadUser.mockRejectedValue(new Error('Whoops!'))
+    getUserToken.mockResolvedValue('some-token')
 
     const checkIfEmailVerified = require('../helpers').checkIfEmailVerified
     checkIfEmailVerified()
@@ -392,6 +454,7 @@ describe('checkIfEmailVerified tests', () => {
     getCurrentUser
       .mockRejectedValue(mockErr)
     reloadUser.mockRejectedValue(undefined)
+    getUserToken.mockResolvedValue('some-token')
 
     const checkIfEmailVerified = require('../helpers').checkIfEmailVerified
     checkIfEmailVerified()

@@ -199,6 +199,42 @@ describe('authentication user module tests', () => {
     expect(firebase.auth().signOut).toHaveBeenCalledTimes(1)
   })
 
+  test('getUserToken forces a refetch when called with forceRefetch=true', async () => {
+    expect.assertions(1)
+
+    const __setFirebaseUser = require('firebase/app').__setFirebaseUser
+    const mockFirebaseGetIdToken = jest.fn()
+    __setFirebaseUser({
+      uid: 'xyz987',
+      email: 'foo@example.com',
+      isAnonymous: false,
+      emailVerified: true,
+      getIdToken: mockFirebaseGetIdToken
+    })
+
+    const getUserToken = require('../user').getUserToken
+    await getUserToken(true)
+    expect(mockFirebaseGetIdToken).toHaveBeenCalledWith(true)
+  })
+
+  test('getUserToken does not force a refetch by default', async () => {
+    expect.assertions(1)
+
+    const __setFirebaseUser = require('firebase/app').__setFirebaseUser
+    const mockFirebaseGetIdToken = jest.fn()
+    __setFirebaseUser({
+      uid: 'xyz987',
+      email: 'foo@example.com',
+      isAnonymous: false,
+      emailVerified: true,
+      getIdToken: mockFirebaseGetIdToken
+    })
+
+    const getUserToken = require('../user').getUserToken
+    await getUserToken()
+    expect(mockFirebaseGetIdToken).toHaveBeenCalledWith(undefined)
+  })
+
   test('removes some localStorage items on logout', async () => {
     expect.assertions(2)
     const localStorageMgr = require('utils/localstorage-mgr').default
