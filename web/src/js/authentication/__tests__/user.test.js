@@ -301,4 +301,43 @@ describe('authentication user module tests', () => {
       username: 'SomeUsername'
     })
   })
+
+  test('reloadUser works as expected when the user exists', async () => {
+    expect.assertions(1)
+
+    // formatUser gets the username from localStorage.
+    const localStorageMgr = require('utils/localstorage-mgr').default
+    localStorageMgr.setItem(STORAGE_KEY_USERNAME, 'Shorty')
+
+    const __setFirebaseUser = require('firebase/app').__setFirebaseUser
+    const mockReload = jest.fn()
+    __setFirebaseUser({
+      uid: 'xyz987',
+      email: 'foo@example.com',
+      isAnonymous: false,
+      emailVerified: true,
+      getIdToken: jest.fn(() => 'fake-token-123'),
+      reload: mockReload
+    })
+
+    const reloadUser = require('../user').reloadUser
+    await reloadUser()
+    expect(mockReload).toHaveBeenCalledTimes(1)
+  })
+
+  test('reloadUser does not error when the user does not exist', async () => {
+    expect.assertions(1)
+
+    // formatUser gets the username from localStorage.
+    const localStorageMgr = require('utils/localstorage-mgr').default
+    localStorageMgr.setItem(STORAGE_KEY_USERNAME, 'Shorty')
+
+    const __setFirebaseUser = require('firebase/app').__setFirebaseUser
+    const mockReload = jest.fn()
+    __setFirebaseUser(null)
+
+    const reloadUser = require('../user').reloadUser
+    await reloadUser()
+    expect(mockReload).not.toHaveBeenCalled()
+  })
 })

@@ -15,10 +15,12 @@ import {
 import {
   getCurrentUser,
   setUsernameInLocalStorage,
-  signInAnonymously
+  signInAnonymously,
+  reloadUser
 } from 'authentication/user'
 import environment from '../../relay-env'
 import CreateNewUserMutation from 'mutations/CreateNewUserMutation'
+import LogEmailVerifiedMutation from 'mutations/LogEmailVerifiedMutation'
 import {
   ANON_USER_GROUP_UNAUTHED_ALLOWED,
   getAnonymousUserTestGroup
@@ -29,6 +31,7 @@ import {
 import {
   getBrowserExtensionInstallTime
 } from 'utils/local-user-data-mgr'
+import logger from 'utils/logger'
 
 /**
  * Return whether the current user is allowed to have an anonymous
@@ -201,4 +204,60 @@ export const createNewUser = () => {
       console.error(e)
       throw e
     })
+}
+
+/**
+ * Poll the user to see if they verified their email address so that
+ * we can log it is verified. It would be better to user a cloud
+ * function for this, or at least an official callback from the
+ * Firebase SDK, but Firebase does not yet support one. See:
+ * https://stackoverflow.com/q/43503377
+ * @returns {Promise<Boolean>} Whether the user's email is verified.
+ */
+export const checkIfEmailVerified = () => {
+  return new Promise((resolve, reject) => {
+    var polledTimes = 0
+    const maxTimesToPoll = 10
+    const msWaitBetweenPolling = 50
+    function seeIfEmailVerified () {
+      if (polledTimes > maxTimesToPoll) {
+        return resolve(false)
+      }
+      getCurrentUser()
+        .then(user => {
+          // The email is verified. Log the verification, stop polling,
+          // and return true.
+          if (user.emailVerified) {
+            LogEmailVerifiedMutation(environment, user.id, () => {},
+              // onError
+              err => {
+                logger.error(err)
+              }
+            )
+            resolve(true)
+          // The email is not yet verified. Wait some time, then try
+          // to poll Firebase again to see if it's changed.
+          } else {
+            polledTimes += 1
+
+            // Reload the user and check again.
+            reloadUser()
+              .then(() => {
+                setTimeout(() => {
+                  seeIfEmailVerified()
+                }, msWaitBetweenPolling)
+              })
+              .catch(e => {
+                logger.error(e)
+                reject(e)
+              })
+          }
+        })
+        .catch(e => {
+          logger.error(e)
+          reject(e)
+        })
+    }
+    seeIfEmailVerified()
+  })
 }

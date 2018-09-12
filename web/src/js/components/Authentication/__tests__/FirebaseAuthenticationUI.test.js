@@ -12,14 +12,17 @@ import firebase, {
 } from 'firebase/app'
 import MergeIntoExistingUserMutation, {
   __setErrorResponse
-}
-  from 'mutations/MergeIntoExistingUserMutation'
+} from 'mutations/MergeIntoExistingUserMutation'
+import {
+  checkIfEmailVerified
+} from 'authentication/helpers'
 
 // Init Firebase
 import { initializeFirebase } from 'authentication/firebaseConfig'
 initializeFirebase()
 
 jest.mock('analytics/logEvent')
+jest.mock('authentication/helpers')
 jest.mock('authentication/user')
 jest.mock('authentication/firebaseConfig') // mock the Firebase app initialization
 jest.mock('navigation/navigation')
@@ -27,6 +30,7 @@ jest.mock('react-firebaseui')
 jest.mock('utils/logger')
 jest.mock('firebase/app')
 jest.mock('mutations/MergeIntoExistingUserMutation')
+jest.mock('mutations/LogEmailVerifiedMutation')
 jest.mock('../../../../relay-env', () => { return {} })
 
 const onSignInSuccessMock = jest.fn()
@@ -346,6 +350,16 @@ describe('FirebaseAuthenticationUI tests', function () {
     await signInFailure(mockFirebaseUIErr)
     expect(onSignInSuccessMock)
       .toHaveBeenCalledWith(mockUser)
+  })
+
+  it('calls checkIfEmailVerified on mount', () => {
+    expect.assertions(1)
+
+    const FirebaseAuthenticationUI = require('../FirebaseAuthenticationUI').default
+    shallow(
+      <FirebaseAuthenticationUI {...mockProps} />
+    )
+    expect(checkIfEmailVerified).toHaveBeenCalledTimes(1)
   })
 
 // Note: no clear way to mount react-firebaseui in a JSDOM environment.

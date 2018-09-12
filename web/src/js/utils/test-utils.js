@@ -1,3 +1,4 @@
+/* eslint-env jest */
 
 import React from 'react'
 
@@ -173,4 +174,27 @@ export const createMockReactComponent = (componentName, childProps = null) => {
   }
   MockComponent.displayName = componentName || 'MyMockComponent'
   return MockComponent
+}
+
+/**
+ * Flush the Promise resolution queue. See:
+ * https://github.com/facebook/jest/issues/2157
+ * @return {Promise<undefined>}
+ */
+export const flushAllPromises = async () => {
+  await new Promise(resolve => setImmediate(resolve))
+}
+
+/**
+ * Flush the Promise resolution queue, then all timers, and
+ * repeat the given number of times. This is useful for
+ * recursive async code that sets new timers.
+ * https://github.com/facebook/jest/issues/2157
+ * @return {Promise<undefined>}
+ */
+export const runAsyncTimerLoops = async (numLoops) => {
+  for (var i = 0; i < numLoops; i++) {
+    await flushAllPromises()
+    jest.runAllTimers()
+  }
 }

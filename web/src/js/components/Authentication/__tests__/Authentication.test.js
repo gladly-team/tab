@@ -37,6 +37,10 @@ import {
   getBrowserExtensionInstallTime
 } from 'utils/local-user-data-mgr'
 
+// Note: we don't mock authentication/helpers.js so that we
+// can have greater confidence in the full functionality of
+// this component. You may have to mock some modules that
+// are required in helpers.js.
 jest.mock('authentication/user')
 jest.mock('authentication/firebaseConfig') // mock the Firebase app initialization
 jest.mock('authentication/firebaseIDBErrorManager')
@@ -46,6 +50,7 @@ jest.mock('utils/experiments')
 jest.mock('utils/feature-flags')
 jest.mock('utils/local-user-data-mgr')
 jest.mock('mutations/CreateNewUserMutation')
+jest.mock('mutations/LogEmailVerifiedMutation')
 
 const mockLocationData = {
   pathname: '/newtab/auth/'

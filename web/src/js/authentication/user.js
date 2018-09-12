@@ -254,3 +254,20 @@ export const signInAnonymously = async () => {
       })
   })
 }
+
+/**
+ * Reload the Firebase user data from the server.
+ * @returns {Promise<undefined>}
+ */
+export const reloadUser = async () => {
+  var user
+  try {
+    user = await getCurrentFirebaseUser()
+  } catch (e) {
+    throw e
+  }
+  if (!user) {
+    return
+  }
+  await user.reload()
+}
