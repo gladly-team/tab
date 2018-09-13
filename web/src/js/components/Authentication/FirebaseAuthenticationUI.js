@@ -17,23 +17,11 @@ import {
 import logger from 'utils/logger'
 import environment from '../../../relay-env'
 import MergeIntoExistingUserMutation from 'mutations/MergeIntoExistingUserMutation'
-import {
-  checkIfEmailVerified
-} from 'authentication/helpers'
 
 class FirebaseAuthenticationUI extends React.Component {
   constructor (props) {
     super(props)
     this.configureFirebaseUI()
-  }
-
-  componentDidMount () {
-    // See if the user verified their email address so that we can
-    // log the verification. It would be better to user a cloud
-    // function for this, or at least an official callback from the
-    // Firebase SDK, but Firebase does not yet support one. See:
-    // https://stackoverflow.com/q/43503377
-    checkIfEmailVerified()
   }
 
   componentWillUnmount () {
@@ -245,16 +233,20 @@ class FirebaseAuthenticationUI extends React.Component {
 
   render () {
     return (
-      <FirebaseAuth
-        uiConfig={this.uiConfig}
-        firebaseAuth={firebase.auth()}
-      />
+      <span>
+        <FirebaseAuth
+          uiConfig={this.uiConfig}
+          firebaseAuth={firebase.auth()}
+        />
+        {this.props.children}
+      </span>
     )
   }
 }
 
 FirebaseAuthenticationUI.propTypes = {
-  onSignInSuccess: PropTypes.func.isRequired
+  onSignInSuccess: PropTypes.func.isRequired,
+  children: PropTypes.element
 }
 
 // https://github.com/facebook/react/issues/6653

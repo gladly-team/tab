@@ -13,9 +13,6 @@ import firebase, {
 import MergeIntoExistingUserMutation, {
   __setErrorResponse
 } from 'mutations/MergeIntoExistingUserMutation'
-import {
-  checkIfEmailVerified
-} from 'authentication/helpers'
 
 // Init Firebase
 import { initializeFirebase } from 'authentication/firebaseConfig'
@@ -350,16 +347,6 @@ describe('FirebaseAuthenticationUI tests', function () {
     await signInFailure(mockFirebaseUIErr)
     expect(onSignInSuccessMock)
       .toHaveBeenCalledWith(mockUser)
-  })
-
-  it('calls checkIfEmailVerified on mount', () => {
-    expect.assertions(1)
-
-    const FirebaseAuthenticationUI = require('../FirebaseAuthenticationUI').default
-    shallow(
-      <FirebaseAuthenticationUI {...mockProps} />
-    )
-    expect(checkIfEmailVerified).toHaveBeenCalledTimes(1)
   })
 
 // Note: no clear way to mount react-firebaseui in a JSDOM environment.
