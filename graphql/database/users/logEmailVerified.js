@@ -5,7 +5,8 @@ import UserModel from './UserModel'
  * Log that a user's email is verified, using the trustworthy
  * user context know that the email is truly verified. Then,
  * perform any other actions that occur when a user is
- * verified.
+ * verified. Important: this function must be idempotent,
+ * because it could be called multiple times.
  * @param {object} userContext - The user authorizer object.
  * @param {string} id - The user id.
  * @return {Promise<User>}  A promise that resolves into a User instance.
@@ -22,7 +23,8 @@ const logEmailVerified = async (userContext, userId) => {
   }
 
   // If the user's email is verified, reward their user
-  // referrer if one exists.
+  // referrer if one exists and the referrer has not already
+  // been rewarded.
   if (userContext.emailVerified) {
     // TODO
   }
