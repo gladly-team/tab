@@ -218,8 +218,8 @@ export const createNewUser = () => {
 export const checkIfEmailVerified = () => {
   return new Promise((resolve, reject) => {
     var polledTimes = 0
-    const maxTimesToPoll = 10
-    const msWaitBetweenPolling = 50
+    const maxTimesToPoll = 15
+    const msWaitBetweenPolling = 250
     function seeIfEmailVerified () {
       if (polledTimes > maxTimesToPoll) {
         return resolve(false)

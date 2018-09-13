@@ -248,12 +248,12 @@ describe('checkIfEmailVerified tests', () => {
 
     const checkIfEmailVerified = require('../helpers').checkIfEmailVerified
     const promise = checkIfEmailVerified()
-    await runAsyncTimerLoops(15)
+    await runAsyncTimerLoops(25)
     const isVerified = await promise
     expect(isVerified).toBe(false)
   })
 
-  it('reloads the Firebase user a maximum of 11 times', async () => {
+  it('reloads the Firebase user a maximum of 16 times', async () => {
     expect.assertions(1)
 
     getCurrentUser.mockResolvedValue({
@@ -268,9 +268,9 @@ describe('checkIfEmailVerified tests', () => {
 
     const checkIfEmailVerified = require('../helpers').checkIfEmailVerified
     const promise = checkIfEmailVerified()
-    await runAsyncTimerLoops(15)
+    await runAsyncTimerLoops(25)
     await promise
-    expect(reloadUser).toHaveBeenCalledTimes(11)
+    expect(reloadUser).toHaveBeenCalledTimes(16)
   })
 
   it('returns true if the email is verified after refetching the Firebase user a few times', async () => {
@@ -304,7 +304,7 @@ describe('checkIfEmailVerified tests', () => {
 
     const checkIfEmailVerified = require('../helpers').checkIfEmailVerified
     const promise = checkIfEmailVerified()
-    await runAsyncTimerLoops(15)
+    await runAsyncTimerLoops(25)
     const isVerified = await promise
     expect(isVerified).toBe(true)
   })
@@ -340,7 +340,7 @@ describe('checkIfEmailVerified tests', () => {
 
     const checkIfEmailVerified = require('../helpers').checkIfEmailVerified
     const promise = checkIfEmailVerified()
-    await runAsyncTimerLoops(15)
+    await runAsyncTimerLoops(25)
     await promise
     expect(reloadUser).toHaveBeenCalledTimes(2)
   })
@@ -444,7 +444,7 @@ describe('checkIfEmailVerified tests', () => {
         expect(logger.error).toHaveBeenCalledWith(mockErr)
         done()
       })
-    await runAsyncTimerLoops(15)
+    await runAsyncTimerLoops(25)
   })
 
   it('logs an error if getting the user throws an error', async (done) => {
@@ -465,6 +465,6 @@ describe('checkIfEmailVerified tests', () => {
         expect(logger.error).toHaveBeenCalledWith(mockErr)
         done()
       })
-    await runAsyncTimerLoops(15)
+    await runAsyncTimerLoops(25)
   })
 })
