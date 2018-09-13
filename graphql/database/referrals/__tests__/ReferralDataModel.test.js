@@ -22,7 +22,9 @@ describe('ReferralDataModel', () => {
   })
 
   it('has the correct get permission', () => {
-    expect(ReferralDataModel.permissions.get).toBeUndefined()
+    expect(ReferralDataModel.permissions.get).toBe(
+      permissionAuthorizers.userIdMatchesHashKey
+    )
   })
 
   it('has the correct getAll permission', () => {

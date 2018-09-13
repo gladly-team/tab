@@ -9,8 +9,11 @@ import {
   mockDate,
   setMockDBResponse
 } from '../../test-utils'
+import rewardReferringUser from '../rewardReferringUser'
 
 jest.mock('../../databaseClient')
+jest.mock('../rewardReferringUser')
+
 const userContext = getMockUserContext()
 
 beforeAll(() => {
@@ -27,6 +30,8 @@ beforeEach(() => {
 
 describe('logEmailVerified', () => {
   it('sets emailVerified=true when it is true', async () => {
+    expect.assertions(1)
+
     const UserModel = require('../UserModel').default
     const updateQuery = jest.spyOn(UserModel, 'update')
 
@@ -43,6 +48,8 @@ describe('logEmailVerified', () => {
   })
 
   it('sets emailVerified=false when it is false', async () => {
+    expect.assertions(1)
+
     const UserModel = require('../UserModel').default
     const updateQuery = jest.spyOn(UserModel, 'update')
 
@@ -59,6 +66,8 @@ describe('logEmailVerified', () => {
   })
 
   it('sets emailVerified=true with the default mock user context', async () => {
+    expect.assertions(1)
+
     const UserModel = require('../UserModel').default
     const updateQuery = jest.spyOn(UserModel, 'update')
 
@@ -72,6 +81,8 @@ describe('logEmailVerified', () => {
   })
 
   it('returns the user object', async () => {
+    expect.assertions(1)
+
     // Mock DB response.
     const expectedReturnedUser = Object.assign(
       {},
@@ -90,5 +101,28 @@ describe('logEmailVerified', () => {
     const logEmailVerified = require('../logEmailVerified').default
     const returnedUser = await logEmailVerified(userContext, userContext.id)
     expect(returnedUser).toEqual(expectedReturnedUser)
+  })
+
+  it('calls to reward the referring user when the email is verified', async () => {
+    expect.assertions(1)
+
+    const modifiedUserContext = cloneDeep(userContext)
+    modifiedUserContext.emailVerified = true
+
+    const logEmailVerified = require('../logEmailVerified').default
+    await logEmailVerified(modifiedUserContext, modifiedUserContext.id)
+    expect(rewardReferringUser)
+      .toHaveBeenCalledWith(modifiedUserContext, modifiedUserContext.id)
+  })
+
+  it('does not call to reward the referring user when the email is not verified', async () => {
+    expect.assertions(1)
+
+    const modifiedUserContext = cloneDeep(userContext)
+    modifiedUserContext.emailVerified = false
+
+    const logEmailVerified = require('../logEmailVerified').default
+    await logEmailVerified(modifiedUserContext, modifiedUserContext.id)
+    expect(rewardReferringUser).not.toHaveBeenCalled()
   })
 })

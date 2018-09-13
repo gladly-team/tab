@@ -4,7 +4,6 @@ import { get } from 'lodash/object'
 import moment from 'moment'
 import UserModel from './UserModel'
 import logReferralData from '../referrals/logReferralData'
-import rewardReferringUser from './rewardReferringUser'
 import logEmailVerified from './logEmailVerified'
 import getUserByUsername from './getUserByUsername'
 import setUpWidgetsForNewUser from '../widgets/setUpWidgetsForNewUser'
@@ -73,7 +72,7 @@ const createUser = async (userContext, userId, email = null, referralData = null
     throw e
   }
 
-  // Log referral data and reward referrer.
+  // Log referral data.
   if (referralData && !isEmpty(referralData)) {
     const referringUserUsername = referralData.referringUser
     const referringChannelId = (
@@ -102,15 +101,6 @@ const createUser = async (userContext, userId, email = null, referralData = null
         referring user: ${referringUserId}.
         ${e}
       `))
-    }
-
-    // Reward the referring user if one exists.
-    if (referringUserId) {
-      try {
-        await rewardReferringUser(referringUserId)
-      } catch (e) {
-        logger.error(new Error(`Could not reward referring user with ID ${referringUserId}.`))
-      }
     }
   }
 

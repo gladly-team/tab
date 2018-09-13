@@ -7,7 +7,6 @@ import UserModel from '../UserModel'
 import createUser from '../createUser'
 import logReferralData from '../../referrals/logReferralData'
 import getUserByUsername from '../getUserByUsername'
-import rewardReferringUser from '../rewardReferringUser'
 import setUpWidgetsForNewUser from '../../widgets/setUpWidgetsForNewUser'
 import {
   addTimestampFieldsToItem,
@@ -23,7 +22,6 @@ import {
 jest.mock('../../databaseClient')
 
 jest.mock('../../referrals/logReferralData')
-jest.mock('../rewardReferringUser')
 jest.mock('../logEmailVerified')
 jest.mock('../getUserByUsername')
 jest.mock('../../widgets/setUpWidgetsForNewUser')
@@ -55,7 +53,7 @@ function getExpectedCreateItemFromUserInfo (userInfo) {
 
 describe('createUser when user does not exist', () => {
   it('works as expected without referralData', async () => {
-    expect.assertions(3)
+    expect.assertions(2)
 
     // Mock database responses.
     const userInfo = getMockUserInfo()
@@ -79,11 +77,10 @@ describe('createUser when user does not exist', () => {
     expect(getOrCreateMethod)
       .toHaveBeenCalledWith(userContext, expectedCreateItem)
     expect(logReferralData).not.toHaveBeenCalled()
-    expect(rewardReferringUser).not.toHaveBeenCalled()
   })
 
   it('works as expected with empty object referralData', async () => {
-    expect.assertions(3)
+    expect.assertions(2)
 
     // Mock database responses.
     const userInfo = getMockUserInfo()
@@ -107,7 +104,6 @@ describe('createUser when user does not exist', () => {
     expect(getOrCreateMethod)
       .toHaveBeenCalledWith(userContext, expectedCreateItem)
     expect(logReferralData).not.toHaveBeenCalled()
-    expect(rewardReferringUser).not.toHaveBeenCalled()
   })
 
   it('works as expected without an email address', async () => {
@@ -194,8 +190,8 @@ describe('createUser when user does not exist', () => {
       .toHaveBeenCalledWith(userContext, userInfo.id)
   })
 
-  it('logs referral data and rewards referring user', async () => {
-    expect.assertions(3)
+  it('logs referral data', async () => {
+    expect.assertions(2)
 
     // Mock database responses.
     const userInfo = getMockUserInfo()
@@ -229,12 +225,10 @@ describe('createUser when user does not exist', () => {
       .toHaveBeenCalledWith(userContext, expectedCreateItem)
     expect(logReferralData)
       .toHaveBeenCalledWith(userContext, userInfo.id, referringUserId, null)
-    expect(rewardReferringUser)
-      .toHaveBeenCalledWith(referringUserId)
   })
 
   it('works when referring user does not exist', async () => {
-    expect.assertions(3)
+    expect.assertions(2)
 
     // Mock database responses.
     const userInfo = getMockUserInfo()
@@ -265,7 +259,6 @@ describe('createUser when user does not exist', () => {
       .toHaveBeenCalledWith(userContext, expectedCreateItem)
     expect(logReferralData)
       .toHaveBeenCalledWith(userContext, userInfo.id, null, null)
-    expect(rewardReferringUser).not.toHaveBeenCalled()
   })
 
   it('returns the user even if there is an error logging referral data', async () => {
@@ -416,8 +409,8 @@ describe('createUser when user already exists (should be idempotent)', () => {
        .not.toHaveBeenCalled()
   })
 
-  it('does not log referral data or reward referring user', async () => {
-    expect.assertions(2)
+  it('does not log referral data', async () => {
+    expect.assertions(1)
 
     // Mock that the user already exists.
     setMockDBResponse(
@@ -450,8 +443,6 @@ describe('createUser when user already exists (should be idempotent)', () => {
       userInfo.email, referralData)
 
     expect(logReferralData)
-      .not.toHaveBeenCalled()
-    expect(rewardReferringUser)
       .not.toHaveBeenCalled()
   })
 

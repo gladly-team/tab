@@ -1,5 +1,7 @@
 
 import UserModel from './UserModel'
+import rewardReferringUser from './rewardReferringUser'
+import logger from '../../utils/logger'
 
 /**
  * Log that a user's email is verified, using the trustworthy
@@ -22,11 +24,15 @@ const logEmailVerified = async (userContext, userId) => {
     throw e
   }
 
-  // If the user's email is verified, reward their user
-  // referrer if one exists and the referrer has not already
-  // been rewarded.
+  // If the user's email is verified, reward their
+  // referring user. `rewardReferringUser` is idempotent
+  // so it's okay that we might call it more than once.
   if (userContext.emailVerified) {
-    // TODO
+    try {
+      await rewardReferringUser(userContext, userId)
+    } catch (e) {
+      logger.error(new Error(`Could not reward referring user for user ID ${userId}.`))
+    }
   }
 
   return returnedUser

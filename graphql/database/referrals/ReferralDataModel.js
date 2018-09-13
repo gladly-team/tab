@@ -44,6 +44,7 @@ class ReferralData extends BaseModel {
 
   static get permissions () {
     return {
+      get: permissionAuthorizers.userIdMatchesHashKey,
       create: permissionAuthorizers.userIdMatchesHashKey,
       indexPermissions: {
         ReferralsByReferrer: {
