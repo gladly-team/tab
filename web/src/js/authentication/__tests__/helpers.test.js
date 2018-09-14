@@ -141,6 +141,7 @@ describe('createNewUser tests', () => {
       emailVerified: false
     })
 
+    getUserToken.mockResolvedValue('some-token')
     getReferralData.mockImplementationOnce(() => null)
 
     // Mock a response from new user creation
@@ -170,6 +171,7 @@ describe('createNewUser tests', () => {
 
   it('uses referral data when creating a new user', async () => {
     expect.assertions(1)
+    getUserToken.mockResolvedValue('some-token')
     getReferralData.mockImplementationOnce(() => ({
       referringUser: 'asdf1234'
     }))
@@ -203,6 +205,44 @@ describe('createNewUser tests', () => {
     expect(CreateNewUserMutation.mock.calls[0][3]).toEqual({
       referringUser: 'asdf1234'
     })
+  })
+
+  it('force-refreshes the user token before calling to create the user', async () => {
+    expect.assertions(2)
+
+    // Mock the authed user
+    getCurrentUser.mockResolvedValue({
+      id: 'abc123',
+      email: 'somebody@example.com',
+      username: null,
+      isAnonymous: false,
+      emailVerified: false
+    })
+
+    // Make getUserToken not resolve yet so we can confirm
+    // the LogEmailVerifiedMutation has not yet been called.
+    getUserToken.mockReturnValueOnce(new Promise(() => {}))
+    getReferralData.mockImplementationOnce(() => null)
+
+    // Mock a response from new user creation
+    CreateNewUserMutation.mockImplementationOnce(
+      (environment, userId, email, referralData, onCompleted, onError) => {
+        onCompleted({
+          createNewUser: {
+            id: 'abc123',
+            email: 'somebody@example.com',
+            username: null,
+            justCreated: true
+          }
+        })
+      }
+    )
+
+    const createNewUser = require('../helpers').createNewUser
+    createNewUser()
+    await flushAllPromises()
+    expect(getUserToken).toHaveBeenCalledWith(true)
+    expect(CreateNewUserMutation).not.toHaveBeenCalled()
   })
 })
 

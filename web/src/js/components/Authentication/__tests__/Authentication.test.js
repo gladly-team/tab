@@ -19,6 +19,7 @@ import {
 } from 'navigation/navigation'
 import {
   getCurrentUser,
+  getUserToken,
   setUsernameInLocalStorage,
   sendVerificationEmail
 } from 'authentication/user'
@@ -62,6 +63,10 @@ const mockUserData = {
 const mockFetchUser = jest.fn()
 
 const mockNow = '2017-05-19T13:59:58.000Z'
+
+beforeAll(() => {
+  getUserToken.mockResolvedValue('some-token')
+})
 
 beforeEach(() => {
   MockDate.set(moment(mockNow))

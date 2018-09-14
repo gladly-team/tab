@@ -179,27 +179,35 @@ export const createNewUser = () => {
         throw new Error('Cannot create a new user. User is not authenticated.')
       }
 
-      // Get any referral data that exists.
-      const referralData = getReferralData()
+      // Force-refetch the user ID token so it will have the
+      // correct latest value for email verification.
+      return getUserToken(true)
+        .then(() => {
+          // Get any referral data that exists.
+          const referralData = getReferralData()
 
-      // TODO:
-      // Pass the user's experimentGroups { anonUser } value
+          // TODO:
+          // Pass the user's experimentGroups { anonUser } value
 
-      return new Promise((resolve, reject) => {
-        CreateNewUserMutation(
-          environment,
-          user.id,
-          user.email,
-          referralData,
-          (response) => {
-            resolve(response.createNewUser)
-          },
-          (err) => {
-            console.error('Error at createNewUser:', err)
-            reject(new Error('Could not create new user', err))
-          }
-        )
-      })
+          return new Promise((resolve, reject) => {
+            CreateNewUserMutation(
+              environment,
+              user.id,
+              user.email,
+              referralData,
+              (response) => {
+                resolve(response.createNewUser)
+              },
+              (err) => {
+                console.error('Error at createNewUser:', err)
+                reject(new Error('Could not create new user', err))
+              }
+            )
+          })
+        })
+        .catch(e => {
+          logger.error(e)
+        })
     })
     .catch(e => {
       console.error(e)

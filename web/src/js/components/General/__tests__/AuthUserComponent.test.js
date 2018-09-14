@@ -18,6 +18,7 @@ import {
   verifyEmailURL
 } from 'navigation/navigation'
 import {
+  getUserToken,
   __getAuthListenerCallbacks,
   __unregisterAuthStateChangeListeners,
   __triggerAuthStateChange
@@ -55,6 +56,10 @@ jest.mock('utils/feature-flags')
 jest.mock('utils/local-user-data-mgr')
 
 const mockNow = '2017-05-19T13:59:58.000Z'
+
+beforeAll(() => {
+  getUserToken.mockResolvedValue('some-token')
+})
 
 beforeEach(() => {
   MockDate.set(moment(mockNow))
