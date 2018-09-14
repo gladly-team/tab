@@ -59,7 +59,7 @@ const rewardReferringUser = async (userContext, userId) => {
     // so we'll just ignore users who signed up before the feature
     // change. We can remove this if we backfill the "emailVerified"
     // value for all users.
-    const emailVerifyRewardChangeTime = moment('2018-09-14T17:00:00.000Z')
+    const emailVerifyRewardChangeTime = moment('2018-09-14T20:00:00.000Z')
     const userJoinedBeforeFeature = !referredUser.joined ||
       !moment(referredUser.joined).isValid() ||
       moment(referredUser.joined).isBefore(emailVerifyRewardChangeTime)
