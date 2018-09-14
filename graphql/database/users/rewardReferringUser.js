@@ -1,4 +1,5 @@
 
+import moment from 'moment'
 import ReferralDataModel from '../referrals/ReferralDataModel'
 import UserModel from './UserModel'
 import {
@@ -50,7 +51,20 @@ const rewardReferringUser = async (userContext, userId) => {
   // If the referring user has already been rewarded, return.
   try {
     const referredUser = await UserModel.get(userContext, userId)
-    if (referredUser.referrerRewarded) {
+
+    // Before we started logging email verification, we rewarded
+    // referrers when users signed up. Now, it's possible we will
+    // log email verification for existing users when they sign
+    // back in. We don't want to reward referrers more than once,
+    // so we'll just ignore users who signed up before the feature
+    // change. We can remove this if we backfill the "emailVerified"
+    // value for all users.
+    const emailVerifyRewardChangeTime = moment('2018-09-14T17:00:00.000Z')
+    const userJoinedBeforeFeature = !referredUser.joined ||
+      !moment(referredUser.joined).isValid() ||
+      moment(referredUser.joined).isBefore(emailVerifyRewardChangeTime)
+
+    if (referredUser.referrerRewarded || userJoinedBeforeFeature) {
       return false
     }
   } catch (e) {
