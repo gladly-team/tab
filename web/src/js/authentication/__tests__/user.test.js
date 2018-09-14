@@ -199,6 +199,42 @@ describe('authentication user module tests', () => {
     expect(firebase.auth().signOut).toHaveBeenCalledTimes(1)
   })
 
+  test('getUserToken forces a refetch when called with forceRefetch=true', async () => {
+    expect.assertions(1)
+
+    const __setFirebaseUser = require('firebase/app').__setFirebaseUser
+    const mockFirebaseGetIdToken = jest.fn()
+    __setFirebaseUser({
+      uid: 'xyz987',
+      email: 'foo@example.com',
+      isAnonymous: false,
+      emailVerified: true,
+      getIdToken: mockFirebaseGetIdToken
+    })
+
+    const getUserToken = require('../user').getUserToken
+    await getUserToken(true)
+    expect(mockFirebaseGetIdToken).toHaveBeenCalledWith(true)
+  })
+
+  test('getUserToken does not force a refetch by default', async () => {
+    expect.assertions(1)
+
+    const __setFirebaseUser = require('firebase/app').__setFirebaseUser
+    const mockFirebaseGetIdToken = jest.fn()
+    __setFirebaseUser({
+      uid: 'xyz987',
+      email: 'foo@example.com',
+      isAnonymous: false,
+      emailVerified: true,
+      getIdToken: mockFirebaseGetIdToken
+    })
+
+    const getUserToken = require('../user').getUserToken
+    await getUserToken()
+    expect(mockFirebaseGetIdToken).toHaveBeenCalledWith(undefined)
+  })
+
   test('removes some localStorage items on logout', async () => {
     expect.assertions(2)
     const localStorageMgr = require('utils/localstorage-mgr').default
@@ -300,5 +336,44 @@ describe('authentication user module tests', () => {
       emailVerified: false,
       username: 'SomeUsername'
     })
+  })
+
+  test('reloadUser works as expected when the user exists', async () => {
+    expect.assertions(1)
+
+    // formatUser gets the username from localStorage.
+    const localStorageMgr = require('utils/localstorage-mgr').default
+    localStorageMgr.setItem(STORAGE_KEY_USERNAME, 'Shorty')
+
+    const __setFirebaseUser = require('firebase/app').__setFirebaseUser
+    const mockReload = jest.fn()
+    __setFirebaseUser({
+      uid: 'xyz987',
+      email: 'foo@example.com',
+      isAnonymous: false,
+      emailVerified: true,
+      getIdToken: jest.fn(() => 'fake-token-123'),
+      reload: mockReload
+    })
+
+    const reloadUser = require('../user').reloadUser
+    await reloadUser()
+    expect(mockReload).toHaveBeenCalledTimes(1)
+  })
+
+  test('reloadUser does not error when the user does not exist', async () => {
+    expect.assertions(1)
+
+    // formatUser gets the username from localStorage.
+    const localStorageMgr = require('utils/localstorage-mgr').default
+    localStorageMgr.setItem(STORAGE_KEY_USERNAME, 'Shorty')
+
+    const __setFirebaseUser = require('firebase/app').__setFirebaseUser
+    const mockReload = jest.fn()
+    __setFirebaseUser(null)
+
+    const reloadUser = require('../user').reloadUser
+    await reloadUser()
+    expect(mockReload).not.toHaveBeenCalled()
   })
 })

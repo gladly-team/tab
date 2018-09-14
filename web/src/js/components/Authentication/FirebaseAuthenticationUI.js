@@ -233,16 +233,20 @@ class FirebaseAuthenticationUI extends React.Component {
 
   render () {
     return (
-      <FirebaseAuth
-        uiConfig={this.uiConfig}
-        firebaseAuth={firebase.auth()}
-      />
+      <span>
+        <FirebaseAuth
+          uiConfig={this.uiConfig}
+          firebaseAuth={firebase.auth()}
+        />
+        {this.props.children}
+      </span>
     )
   }
 }
 
 FirebaseAuthenticationUI.propTypes = {
-  onSignInSuccess: PropTypes.func.isRequired
+  onSignInSuccess: PropTypes.func.isRequired,
+  children: PropTypes.element
 }
 
 // https://github.com/facebook/react/issues/6653

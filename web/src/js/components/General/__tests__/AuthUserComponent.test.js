@@ -18,6 +18,7 @@ import {
   verifyEmailURL
 } from 'navigation/navigation'
 import {
+  getUserToken,
   __getAuthListenerCallbacks,
   __unregisterAuthStateChangeListeners,
   __triggerAuthStateChange
@@ -40,8 +41,13 @@ import {
   getBrowserExtensionInstallTime
 } from 'utils/local-user-data-mgr'
 
+// Note: we don't mock authentication/helpers.js so that we
+// can have greater confidence in the full functionality of
+// this component. You may have to mock some modules that
+// are required in helpers.js.
 jest.mock('authentication/user')
 jest.mock('mutations/CreateNewUserMutation')
+jest.mock('mutations/LogEmailVerifiedMutation')
 jest.mock('navigation/navigation')
 jest.mock('utils/localstorage-mgr')
 jest.mock('web-utils')
@@ -50,6 +56,10 @@ jest.mock('utils/feature-flags')
 jest.mock('utils/local-user-data-mgr')
 
 const mockNow = '2017-05-19T13:59:58.000Z'
+
+beforeAll(() => {
+  getUserToken.mockResolvedValue('some-token')
+})
 
 beforeEach(() => {
   MockDate.set(moment(mockNow))

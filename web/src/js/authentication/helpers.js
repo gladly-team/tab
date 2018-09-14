@@ -13,12 +13,15 @@ import {
   isInIframe
 } from 'web-utils'
 import {
+  getUserToken,
   getCurrentUser,
   setUsernameInLocalStorage,
-  signInAnonymously
+  signInAnonymously,
+  reloadUser
 } from 'authentication/user'
 import environment from '../../relay-env'
 import CreateNewUserMutation from 'mutations/CreateNewUserMutation'
+import LogEmailVerifiedMutation from 'mutations/LogEmailVerifiedMutation'
 import {
   ANON_USER_GROUP_UNAUTHED_ALLOWED,
   getAnonymousUserTestGroup
@@ -29,6 +32,7 @@ import {
 import {
   getBrowserExtensionInstallTime
 } from 'utils/local-user-data-mgr'
+import logger from 'utils/logger'
 
 /**
  * Return whether the current user is allowed to have an anonymous
@@ -175,30 +179,104 @@ export const createNewUser = () => {
         throw new Error('Cannot create a new user. User is not authenticated.')
       }
 
-      // Get any referral data that exists.
-      const referralData = getReferralData()
+      // Force-refetch the user ID token so it will have the
+      // correct latest value for email verification.
+      return getUserToken(true)
+        .then(() => {
+          // Get any referral data that exists.
+          const referralData = getReferralData()
 
-      // TODO:
-      // Pass the user's experimentGroups { anonUser } value
+          // TODO:
+          // Pass the user's experimentGroups { anonUser } value
 
-      return new Promise((resolve, reject) => {
-        CreateNewUserMutation(
-          environment,
-          user.id,
-          user.email,
-          referralData,
-          (response) => {
-            resolve(response.createNewUser)
-          },
-          (err) => {
-            console.error('Error at createNewUser:', err)
-            reject(new Error('Could not create new user', err))
-          }
-        )
-      })
+          return new Promise((resolve, reject) => {
+            CreateNewUserMutation(
+              environment,
+              user.id,
+              user.email,
+              referralData,
+              (response) => {
+                resolve(response.createNewUser)
+              },
+              (err) => {
+                console.error('Error at createNewUser:', err)
+                reject(new Error('Could not create new user', err))
+              }
+            )
+          })
+        })
+        .catch(e => {
+          logger.error(e)
+        })
     })
     .catch(e => {
       console.error(e)
       throw e
     })
+}
+
+/**
+ * Poll the user to see if they verified their email address so that
+ * we can log it is verified. It would be better to user a cloud
+ * function for this, or at least an official callback from the
+ * Firebase SDK, but Firebase does not yet support one. See:
+ * https://stackoverflow.com/q/43503377
+ * @returns {Promise<Boolean>} Whether the user's email is verified.
+ */
+export const checkIfEmailVerified = () => {
+  return new Promise((resolve, reject) => {
+    var polledTimes = 0
+    const maxTimesToPoll = 15
+    const msWaitBetweenPolling = 250
+    function seeIfEmailVerified () {
+      if (polledTimes > maxTimesToPoll) {
+        return resolve(false)
+      }
+      getCurrentUser()
+        .then(user => {
+          // The email is verified. Log the verification, stop polling,
+          // and return true.
+          if (user.emailVerified) {
+            // Force-refetch the user ID token so it will have the
+            // correct latest value for email verification.
+            getUserToken(true)
+              .then(() => {
+                LogEmailVerifiedMutation(environment, user.id, () => {},
+                  // onError
+                  err => {
+                    logger.error(err)
+                  }
+                )
+                resolve(true)
+              })
+              .catch(e => {
+                logger.error(e)
+                reject(e)
+              })
+
+          // The email is not yet verified. Wait some time, then try
+          // to poll Firebase again to see if it's changed.
+          } else {
+            polledTimes += 1
+
+            // Reload the user and check again.
+            reloadUser()
+              .then(() => {
+                setTimeout(() => {
+                  seeIfEmailVerified()
+                }, msWaitBetweenPolling)
+              })
+              .catch(e => {
+                logger.error(e)
+                reject(e)
+              })
+          }
+        })
+        .catch(e => {
+          logger.error(e)
+          reject(e)
+        })
+    }
+    seeIfEmailVerified()
+  })
 }

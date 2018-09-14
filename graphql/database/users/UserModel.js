@@ -95,7 +95,9 @@ class User extends BaseModel {
       customImage: types.string(),
       activeWidget: types.string(),
       lastTabTimestamp: types.string().isoDate(),
-      mergedIntoExistingUser: types.boolean()
+      mergedIntoExistingUser: types.boolean(),
+      emailVerified: types.boolean(),
+      referrerRewarded: types.boolean()
     }
   }
 

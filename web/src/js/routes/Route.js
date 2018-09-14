@@ -8,6 +8,7 @@ import DashboardView from '../components/Dashboard/DashboardView'
 
 import AuthenticationView from '../components/Authentication/AuthenticationView'
 import FirebaseAuthenticationUI from '../components/Authentication/FirebaseAuthenticationUI'
+import FirebaseAuthenticationUIAction from '../components/Authentication/FirebaseAuthenticationUIAction'
 import VerifyEmailMessage from '../components/Authentication/VerifyEmailMessage'
 import EnterUsernameForm from '../components/Authentication/EnterUsernameForm'
 import SignInIframeMessage from '../components/Authentication/SignInIframeMessage'
@@ -49,7 +50,9 @@ export default (
       </Route>
       <Route path='auth' component={AuthenticationView}>
         <IndexRoute component={FirebaseAuthenticationUI} />
-        <Route path='action' component={FirebaseAuthenticationUI} />
+        <Route path='action' component={FirebaseAuthenticationUI} >
+          <IndexRoute component={FirebaseAuthenticationUIAction} />
+        </Route>
         <Route path='verify-email' component={VerifyEmailMessage} />
         <Route path='username' component={EnterUsernameForm} />
         <Route path='welcome' component={SignInIframeMessage} />

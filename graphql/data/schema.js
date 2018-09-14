@@ -43,6 +43,7 @@ import {
 import UserModel from '../database/users/UserModel'
 import createUser from '../database/users/createUser'
 import setUsername from '../database/users/setUsername'
+import logEmailVerified from '../database/users/logEmailVerified'
 import logTab from '../database/users/logTab'
 import logRevenue from '../database/userRevenue/logRevenue'
 import logUserDataConsent from '../database/userDataConsent/logUserDataConsent'
@@ -904,6 +905,25 @@ const mergeIntoExistingUserMutation = mutationWithClientMutationId({
 })
 
 /**
+ * Log when a user verifies their email on the client side.
+ */
+const logEmailVerifiedMutation = mutationWithClientMutationId({
+  name: 'LogEmailVerifiedMutation',
+  inputFields: {
+    // Note that this is the raw user ID (not the Relay global).
+    userId: { type: new GraphQLNonNull(GraphQLString) }
+  },
+  outputFields: {
+    user: {
+      type: userType
+    }
+  },
+  mutateAndGetPayload: ({ userId }, context) => {
+    return logEmailVerified(context.user, userId)
+  }
+})
+
+/**
  * Log a data consent action (e.g. for GDPR).
  */
 const logUserDataConsentMutation = mutationWithClientMutationId({
@@ -959,6 +979,7 @@ const mutationType = new GraphQLObjectType({
     logUserDataConsent: logUserDataConsentMutation,
     donateVc: donateVcMutation,
     mergeIntoExistingUser: mergeIntoExistingUserMutation,
+    logEmailVerified: logEmailVerifiedMutation,
 
     setUserBkgImage: setUserBkgImageMutation,
     setUserBkgColor: setUserBkgColorMutation,

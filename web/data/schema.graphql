@@ -151,6 +151,16 @@ enum EncodedRevenueValueTypeEnum {
   AMAZON_CPM
 }
 
+input LogEmailVerifiedMutationInput {
+  userId: String!
+  clientMutationId: String
+}
+
+type LogEmailVerifiedMutationPayload {
+  user: User
+  clientMutationId: String
+}
+
 input LogTabInput {
   userId: String!
   tabId: String
@@ -220,6 +230,7 @@ type Mutation {
   logUserDataConsent(input: LogUserDataConsentInput!): LogUserDataConsentPayload
   donateVc(input: DonateVcInput!): DonateVcPayload
   mergeIntoExistingUser(input: MergeIntoExistingUserInput!): MergeIntoExistingUserPayload
+  logEmailVerified(input: LogEmailVerifiedMutationInput!): LogEmailVerifiedMutationPayload
   setUserBkgImage(input: SetUserBkgImageInput!): SetUserBkgImagePayload
   setUserBkgColor(input: SetUserBkgColorInput!): SetUserBkgColorPayload
   setUserBkgCustomImage(input: SetUserBkgCustomImageInput!): SetUserBkgCustomImagePayload
