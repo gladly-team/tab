@@ -5,7 +5,7 @@ import logger from '../../utils/logger'
 
 /**
  * Log that a user's email is verified, using the trustworthy
- * user context know that the email is truly verified. Then,
+ * user context to know that the email is truly verified. Then,
  * perform any other actions that occur when a user is
  * verified. Important: this function must be idempotent,
  * because it could be called multiple times.
