@@ -313,9 +313,6 @@ const userType = new GraphQLObjectType({
       type: GraphQLBoolean,
       description: 'Whether this user was created by an existing user and then merged into the existing user'
     }
-    // experimentGroups: {
-    //   type: ExperimentGroupsType,
-    // }
   }),
   interfaces: [nodeInterface]
 })

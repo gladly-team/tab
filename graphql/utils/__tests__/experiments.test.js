@@ -67,7 +67,7 @@ describe('experiments', () => {
     })
   })
 
-  test('returns all null experiment groups when nothing is provdied', () => {
+  test('returns all null experiment groups when nothing is provided', () => {
     const getValidatedExperimentGroups = require('../experiments')
       .getValidatedExperimentGroups
     const expGroups = getValidatedExperimentGroups()
