@@ -15,13 +15,13 @@ const mutation = graphql`
   }
 `
 
-function commit (environment, userId, email, referralData, onCompleted, onError) {
+function commit (environment, userId, email, referralData, experimentGroups, onCompleted, onError) {
   return commitMutation(
     environment,
     {
       mutation,
       variables: {
-        input: { userId, email, referralData }
+        input: { userId, email, referralData, experimentGroups }
       },
       onCompleted: (response) => {
         onCompleted(response)

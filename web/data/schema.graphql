@@ -108,6 +108,7 @@ input CreateNewUserInput {
   userId: String!
   email: String
   referralData: ReferralData
+  experimentGroups: ExperimentGroups
   clientMutationId: String
 }
 
@@ -149,6 +150,18 @@ input EncodedRevenueValue {
 # The type of transformation we should use to resolve the object into a revenue value
 enum EncodedRevenueValueTypeEnum {
   AMAZON_CPM
+}
+
+# The test of allowing anonymous user authentication
+enum ExperimentGroupAnonSignIn {
+  NONE
+  AUTHED_USER_ONLY
+  ANONYMOUS_ALLOWED
+}
+
+# The experimental groups to which the user is assigned
+input ExperimentGroups {
+  anonSignIn: ExperimentGroupAnonSignIn
 }
 
 input LogEmailVerifiedMutationInput {

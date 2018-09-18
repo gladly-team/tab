@@ -24,7 +24,8 @@ import CreateNewUserMutation from 'mutations/CreateNewUserMutation'
 import LogEmailVerifiedMutation from 'mutations/LogEmailVerifiedMutation'
 import {
   ANON_USER_GROUP_UNAUTHED_ALLOWED,
-  getAnonymousUserTestGroup
+  getAnonymousUserTestGroup,
+  getUserTestGroupsForMutation
 } from 'utils/experiments'
 import {
   isAnonymousUserSignInEnabled
@@ -186,8 +187,8 @@ export const createNewUser = () => {
           // Get any referral data that exists.
           const referralData = getReferralData()
 
-          // TODO:
-          // Pass the user's experimentGroups { anonUser } value
+          // Pass the user's assigned experiment groups.
+          const experimentGroups = getUserTestGroupsForMutation()
 
           return new Promise((resolve, reject) => {
             CreateNewUserMutation(
@@ -195,6 +196,7 @@ export const createNewUser = () => {
               user.id,
               user.email,
               referralData,
+              experimentGroups,
               (response) => {
                 resolve(response.createNewUser)
               },

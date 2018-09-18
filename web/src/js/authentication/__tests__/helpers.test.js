@@ -23,6 +23,9 @@ import {
   runAsyncTimerLoops
 } from 'utils/test-utils'
 import logger from 'utils/logger'
+import {
+  getUserTestGroupsForMutation
+} from 'utils/experiments'
 
 jest.mock('authentication/user')
 jest.mock('navigation/navigation')
@@ -33,6 +36,7 @@ jest.mock('mutations/LogEmailVerifiedMutation')
 jest.mock('authentication/user')
 jest.mock('../../../relay-env')
 jest.mock('utils/logger')
+jest.mock('utils/experiments')
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -129,6 +133,45 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
 })
 
 describe('createNewUser tests', () => {
+  it('calls CreateNewUserMutation as expected', async () => {
+    expect.assertions(1)
+    getUserToken.mockResolvedValue('some-token')
+    getReferralData.mockImplementationOnce(() => null)
+    getUserTestGroupsForMutation.mockReturnValueOnce({
+      anonSignIn: 'ANONYMOUS_ALLOWED'
+    })
+
+    // Mock the authed user
+    getCurrentUser.mockResolvedValue({
+      id: 'abc123',
+      email: 'somebody@example.com',
+      username: null,
+      isAnonymous: false,
+      emailVerified: false
+    })
+
+    // Mock a response from new user creation
+    CreateNewUserMutation.mockImplementationOnce(
+      (environment, userId, email, referralData, experimentGroups, onCompleted, onError) => {
+        onCompleted({
+          createNewUser: {
+            id: 'abc123',
+            email: 'somebody@example.com',
+            username: null,
+            justCreated: true
+          }
+        })
+      }
+    )
+
+    const createNewUser = require('../helpers').createNewUser
+    await createNewUser()
+
+    expect(CreateNewUserMutation)
+      .toHaveBeenCalledWith({}, 'abc123', 'somebody@example.com', null,
+        { anonSignIn: 'ANONYMOUS_ALLOWED' }, expect.any(Function), expect.any(Function))
+  })
+
   it('returns the new user data', async () => {
     expect.assertions(1)
 
@@ -146,7 +189,7 @@ describe('createNewUser tests', () => {
 
     // Mock a response from new user creation
     CreateNewUserMutation.mockImplementationOnce(
-      (environment, userId, email, referralData, onCompleted, onError) => {
+      (environment, userId, email, referralData, experimentGroups, onCompleted, onError) => {
         onCompleted({
           createNewUser: {
             id: 'abc123',
@@ -187,7 +230,7 @@ describe('createNewUser tests', () => {
 
     // Mock a response from new user creation
     CreateNewUserMutation.mockImplementationOnce(
-      (environment, userId, email, referralData, onCompleted, onError) => {
+      (environment, userId, email, referralData, experimentGroups, onCompleted, onError) => {
         onCompleted({
           createNewUser: {
             id: 'abc123',
@@ -200,11 +243,50 @@ describe('createNewUser tests', () => {
     )
 
     const createNewUser = require('../helpers').createNewUser
-    await createNewUser('abc123', 'somebody@example.com')
+    await createNewUser()
 
     expect(CreateNewUserMutation.mock.calls[0][3]).toEqual({
       referringUser: 'asdf1234'
     })
+  })
+
+  it('passes the assigned experiment groups when creating a new user', async () => {
+    expect.assertions(1)
+
+    const experimentGroups = {
+      anonSignIn: 'AUTHED_USER_ONLY'
+    }
+    getUserTestGroupsForMutation.mockReturnValueOnce(experimentGroups)
+    getUserToken.mockResolvedValue('some-token')
+    getReferralData.mockImplementationOnce(() => null)
+
+    // Mock the authed user
+    getCurrentUser.mockResolvedValue({
+      id: 'abc123',
+      email: 'somebody@example.com',
+      username: null,
+      isAnonymous: false,
+      emailVerified: false
+    })
+
+    // Mock a response from new user creation
+    CreateNewUserMutation.mockImplementationOnce(
+      (environment, userId, email, referralData, experimentGroups, onCompleted, onError) => {
+        onCompleted({
+          createNewUser: {
+            id: 'abc123',
+            email: 'somebody@example.com',
+            username: null,
+            justCreated: true
+          }
+        })
+      }
+    )
+
+    const createNewUser = require('../helpers').createNewUser
+    await createNewUser()
+
+    expect(CreateNewUserMutation.mock.calls[0][4]).toEqual(experimentGroups)
   })
 
   it('force-refreshes the user token before calling to create the user', async () => {
@@ -226,7 +308,7 @@ describe('createNewUser tests', () => {
 
     // Mock a response from new user creation
     CreateNewUserMutation.mockImplementationOnce(
-      (environment, userId, email, referralData, onCompleted, onError) => {
+      (environment, userId, email, referralData, experimentGroups, onCompleted, onError) => {
         onCompleted({
           createNewUser: {
             id: 'abc123',
