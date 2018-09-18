@@ -5,6 +5,7 @@ import moment from 'moment'
 import UserModel from './UserModel'
 import logReferralData from '../referrals/logReferralData'
 import logEmailVerified from './logEmailVerified'
+import logUserExperimentGroups from './logUserExperimentGroups'
 import getUserByUsername from './getUserByUsername'
 import setUpWidgetsForNewUser from '../widgets/setUpWidgetsForNewUser'
 import logger from '../../utils/logger'
@@ -18,9 +19,11 @@ import logger from '../../utils/logger'
  * @param {string|null} email - The user's email (provided by the client, not
  *   from user claims)
  * @param {object|null} referralData - Referral data.
+ * @param {object|null} experimentGroups - Any experimental test groups to
+ *   which the user has been assigned.
  * @return {Promise<User>}  A promise that resolves into a User instance.
  */
-const createUser = async (userContext, userId, email = null, referralData = null) => {
+const createUser = async (userContext, userId, email = null, referralData = null, experimentGroups = {}) => {
   // Get or create the user.
   const userInfo = {
     id: userId,
@@ -102,6 +105,13 @@ const createUser = async (userContext, userId, email = null, referralData = null
         ${e}
       `))
     }
+  }
+
+  // Log the experimental groups to which the user belongs.
+  try {
+    returnedUser = await logUserExperimentGroups(userContext, userId, experimentGroups)
+  } catch (e) {
+    throw e
   }
 
   // Add the 'justCreated' field so the client can know it's

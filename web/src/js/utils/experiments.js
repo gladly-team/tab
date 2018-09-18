@@ -59,3 +59,37 @@ const assignAnonymousUserTestGroup = () => {
 export const assignUserToTestGroups = () => {
   assignAnonymousUserTestGroup()
 }
+
+/**
+ * Converts the anonymous test group value to its corresponding
+ * string used by the server-side, compliant with our GraphQL
+ * schema.
+ * @param {String} testGroup - One of the constants representing
+ *   the user's test group for the anonymous user test.
+ * @returns {String} The string representing the test group,
+ *   compliant with our GraphQL schema.
+ */
+const anonymousTestGroupToSchemaValue = testGroup => {
+  // Corresponds to server-side enum.
+  const map = {
+    [ANON_USER_GROUP_NO_GROUP]: 'NONE',
+    [ANON_USER_GROUP_AUTH_REQUIRED]: 'AUTHED_USER_ONLY',
+    [ANON_USER_GROUP_UNAUTHED_ALLOWED]: 'ANONYMOUS_ALLOWED'
+  }
+  return map[testGroup]
+}
+
+/**
+ * Returns an object with a key for each active experiment. Each
+ * key's value is an integer representing the test group to which
+ * the user is assigned for that test. The object takes the shape
+ * of our GraphQL schema's ExperimentGroupsType.
+ * @returns {Object} The object of experiment group assignments
+ *   for the user, taking the shape of our GraphQL schema's
+ *   ExperimentGroupsType.
+ */
+export const getUserTestGroupsForMutation = () => {
+  return {
+    anonSignIn: anonymousTestGroupToSchemaValue(getAnonymousUserTestGroup())
+  }
+}

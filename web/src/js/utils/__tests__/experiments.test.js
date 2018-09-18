@@ -74,4 +74,22 @@ describe('experiments', () => {
     const testGroup = getAnonymousUserTestGroup()
     expect(testGroup).toBe('none')
   })
+
+  test('getUserTestGroupsForMutation returns the expected value for an assigned group', () => {
+    isAnonymousUserSignInEnabled.mockReturnValue(true)
+    localStorageMgr.setItem(STORAGE_EXPERIMENT_ANON_USER, 'unauthed')
+    const getUserTestGroupsForMutation = require('../experiments').getUserTestGroupsForMutation
+    expect(getUserTestGroupsForMutation()).toEqual({
+      anonSignIn: 'ANONYMOUS_ALLOWED'
+    })
+  })
+
+  test('getUserTestGroupsForMutation returns the expected value when the user is not assigned to a group', () => {
+    isAnonymousUserSignInEnabled.mockReturnValue(true)
+    localStorageMgr.removeItem(STORAGE_EXPERIMENT_ANON_USER)
+    const getUserTestGroupsForMutation = require('../experiments').getUserTestGroupsForMutation
+    expect(getUserTestGroupsForMutation()).toEqual({
+      anonSignIn: 'NONE'
+    })
+  })
 })

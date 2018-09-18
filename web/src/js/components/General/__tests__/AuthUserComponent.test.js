@@ -123,7 +123,7 @@ describe('AuthUser tests', () => {
 
     // Mock a response from new user creation
     CreateNewUserMutation.mockImplementation(
-      (environment, userId, email, referralData, onCompleted, onError) => {
+      (environment, userId, email, referralData, experimentGroups, onCompleted, onError) => {
         onCompleted({
           createNewUser: {
             id: 'abc123',
@@ -196,7 +196,7 @@ describe('AuthUser tests', () => {
 
     // Mock a response from new user creation
     CreateNewUserMutation.mockImplementation(
-      (environment, userId, email, referralData, onCompleted, onError) => {
+      (environment, userId, email, referralData, experimentGroups, onCompleted, onError) => {
         onCompleted({
           createNewUser: {
             id: 'abc123',
@@ -241,7 +241,7 @@ describe('AuthUser tests', () => {
 
     // Mock a response from new user creation
     CreateNewUserMutation.mockImplementation(
-      (environment, userId, email, referralData, onCompleted, onError) => {
+      (environment, userId, email, referralData, experimentGroups, onCompleted, onError) => {
         onCompleted({
           createNewUser: {
             id: 'abc123',
@@ -279,7 +279,7 @@ describe('AuthUser tests', () => {
 
     // Mock a response from new user creation
     CreateNewUserMutation.mockImplementation(
-      (environment, userId, email, referralData, onCompleted, onError) => {
+      (environment, userId, email, referralData, experimentGroups, onCompleted, onError) => {
         onCompleted({
           createNewUser: {
             id: 'abc123',
@@ -320,7 +320,7 @@ describe('AuthUser tests', () => {
 
     // Mock a response from new user creation
     CreateNewUserMutation.mockImplementation(
-      (environment, userId, email, referralData, onCompleted, onError) => {
+      (environment, userId, email, referralData, experimentGroups, onCompleted, onError) => {
         onCompleted({
           createNewUser: {
             id: 'abc123',
@@ -358,7 +358,7 @@ describe('AuthUser tests', () => {
 
     // Mock a response from new user creation
     CreateNewUserMutation.mockImplementation(
-      (environment, userId, email, referralData, onCompleted, onError) => {
+      (environment, userId, email, referralData, experimentGroups, onCompleted, onError) => {
         onCompleted({
           createNewUser: {
             id: 'abc123',
@@ -393,7 +393,7 @@ describe('AuthUser tests', () => {
 
     // Mock a response from new user creation
     CreateNewUserMutation.mockImplementation(
-      (environment, userId, email, referralData, onCompleted, onError) => {
+      (environment, userId, email, referralData, experimentGroups, onCompleted, onError) => {
         onCompleted({
           createNewUser: {
             id: 'abc123',
@@ -428,7 +428,7 @@ describe('AuthUser tests', () => {
 
     // Mock a response from new user creation
     CreateNewUserMutation.mockImplementation(
-      (environment, userId, email, referralData, onCompleted, onError) => {
+      (environment, userId, email, referralData, experimentGroups, onCompleted, onError) => {
         onCompleted({
           createNewUser: {
             id: 'abc123',
@@ -466,7 +466,7 @@ describe('AuthUser tests', () => {
 
     // Mock a response from new user creation
     CreateNewUserMutation.mockImplementation(
-      (environment, userId, email, referralData, onCompleted, onError) => {
+      (environment, userId, email, referralData, experimentGroups, onCompleted, onError) => {
         onCompleted({
           createNewUser: {
             id: 'abc123',
