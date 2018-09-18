@@ -97,7 +97,9 @@ class User extends BaseModel {
       lastTabTimestamp: types.string().isoDate(),
       mergedIntoExistingUser: types.boolean(),
       emailVerified: types.boolean(),
-      referrerRewarded: types.boolean()
+      referrerRewarded: types.boolean(),
+      // Group assignments for experiments / split-tests
+      testGroupAnonSignIn: types.number().integer().allow(null)
     }
   }
 

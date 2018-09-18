@@ -29,6 +29,10 @@ import {
   connectionFromPromisedArray
 } from 'graphql-relay'
 
+import {
+  experimentConfig
+} from '../utils/experiments'
+
 import Widget from '../database/widgets/Widget'
 import getWidget from '../database/widgets/getWidget'
 import getWidgets from '../database/widgets/getWidgets'
@@ -174,6 +178,24 @@ const maxTabsDayType = new GraphQLObjectType({
   })
 })
 
+const ExperimentGroupsType = new GraphQLInputObjectType({
+  name: 'ExperimentGroups',
+  description: 'The experimental groups to which the user is assigned',
+  fields: {
+    anonSignIn: {
+      type: new GraphQLEnumType({
+        name: 'ExperimentGroupAnonSignIn',
+        description: 'The test of allowing anonymous user authentication',
+        values: {
+          NONE: { value: experimentConfig.anonSignIn.NONE },
+          AUTHED_USER_ONLY: { value: experimentConfig.anonSignIn.AUTHED_USER_ONLY },
+          ANONYMOUS_ALLOWED: { value: experimentConfig.anonSignIn.ANONYMOUS_ALLOWED }
+        }
+      })
+    }
+  }
+})
+
 // TODO: fetch only the fields we need:
 // https://github.com/graphql/graphql-js/issues/19#issuecomment-272857189
 const userType = new GraphQLObjectType({
@@ -291,6 +313,9 @@ const userType = new GraphQLObjectType({
       type: GraphQLBoolean,
       description: 'Whether this user was created by an existing user and then merged into the existing user'
     }
+    // experimentGroups: {
+    //   type: ExperimentGroupsType,
+    // }
   }),
   interfaces: [nodeInterface]
 })
@@ -850,7 +875,8 @@ const createNewUserMutation = mutationWithClientMutationId({
     // Note that this is the raw user ID (not the Relay global).
     userId: { type: new GraphQLNonNull(GraphQLString) },
     email: { type: GraphQLString },
-    referralData: { type: ReferralDataInput }
+    referralData: { type: ReferralDataInput },
+    experimentGroups: { type: ExperimentGroupsType }
   },
   outputFields: {
     user: {
@@ -858,8 +884,8 @@ const createNewUserMutation = mutationWithClientMutationId({
       resolve: user => user
     }
   },
-  mutateAndGetPayload: ({userId, email, referralData}, context) => {
-    return createUser(context.user, userId, email, referralData)
+  mutateAndGetPayload: ({ userId, email, referralData, experimentGroups }, context) => {
+    return createUser(context.user, userId, email, referralData, experimentGroups)
   }
 })
 
