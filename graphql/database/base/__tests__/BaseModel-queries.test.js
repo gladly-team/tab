@@ -282,7 +282,14 @@ describe('BaseModel queries', () => {
           name: item.name,
           updated: moment.utc().toISOString()
         },
-        TableName: ExampleModel.tableName
+        TableName: ExampleModel.tableName,
+        ConditionExpression: '(#id <> :id)',
+        ExpressionAttributeNames: {
+          '#id': 'id'
+        },
+        ExpressionAttributeValues: {
+          ':id': item.id
+        }
       }
     )
 
@@ -315,7 +322,14 @@ describe('BaseModel queries', () => {
         name: ExampleModel.fieldDefaults.name,
         updated: moment.utc().toISOString()
       },
-      TableName: ExampleModel.tableName
+      TableName: ExampleModel.tableName,
+      ConditionExpression: '(#id <> :id)',
+      ExpressionAttributeNames: {
+        '#id': 'id'
+      },
+      ExpressionAttributeValues: {
+        ':id': createdItem.id
+      }
     })
 
     // Verify returned object.
@@ -721,7 +735,14 @@ describe('BaseModel queries', () => {
           name: item.name,
           updated: '2017-12-25T07:15:02.025Z'
         },
-        TableName: ExampleModel.tableName
+        TableName: ExampleModel.tableName,
+        ConditionExpression: '(#id <> :id)',
+        ExpressionAttributeNames: {
+          '#id': 'id'
+        },
+        ExpressionAttributeValues: {
+          ':id': item.id
+        }
       }
     )
   })

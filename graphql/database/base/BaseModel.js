@@ -319,7 +319,7 @@ class BaseModel {
    *   if one exists with the same hash key
    * @return {Object} item - The created item
   */
-  static async create (userContext, item, overwrite = true) {
+  static async create (userContext, item, overwrite = false) {
     // logger.debug(`Creating item in ${this.tableName}: ${JSON.stringify(item, null, 2)}`)
     const self = this
     const hashKey = item[this.hashKey]
