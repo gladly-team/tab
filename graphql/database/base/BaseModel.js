@@ -395,17 +395,22 @@ class BaseModel {
   static async update (userContext, item, params = {}) {
     // logger.debug(`Updating item in ${this.tableName}: ${JSON.stringify(item, null, 2)}`)
     const self = this
-    const hashKey = item[this.hashKey]
-    const rangeKey = item[this.rangeKey]
+    const hashKeyValue = item[this.hashKey]
+    const rangeKeyValue = item[this.rangeKey]
 
     // Update 'updated' field if it's not already set.
     if (!item.updated) {
       item.updated = moment.utc().toISOString()
     }
 
-    if (!this.isQueryAuthorized(userContext, 'update', hashKey, rangeKey, item)) {
+    if (!this.isQueryAuthorized(userContext, 'update', hashKeyValue, rangeKeyValue, item)) {
       return Promise.reject(new UnauthorizedQueryException())
     }
+
+    params.ConditionExpression = params.ConditionExpression
+      ? `${params.ConditionExpression} AND attribute_exists(${this.hashKey})`
+      : `attribute_exists(${this.hashKey})`
+
     const options = Object.assign({}, params, { ReturnValues: 'ALL_NEW' })
     return this.dynogelsModel.updateAsync(item, options)
       .then(data => self.deserialize(data))
