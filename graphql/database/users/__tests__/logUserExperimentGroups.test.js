@@ -50,6 +50,25 @@ describe('logUserExperimentGroups', () => {
     })
   })
 
+  it('sets the testGroupAnonSignIn value even when it is zero', async () => {
+    expect.assertions(1)
+
+    const UserModel = require('../UserModel').default
+    const updateQuery = jest.spyOn(UserModel, 'update')
+
+    const mockExperimentGroups = {
+      anonSignIn: 0
+    }
+    getValidatedExperimentGroups.mockReturnValueOnce(mockExperimentGroups)
+    const logUserExperimentGroups = require('../logUserExperimentGroups').default
+    await logUserExperimentGroups(userContext, userContext.id, mockExperimentGroups)
+    expect(updateQuery).toHaveBeenCalledWith(userContext, {
+      id: userContext.id,
+      testGroupAnonSignIn: 0,
+      updated: moment.utc().toISOString()
+    })
+  })
+
   it('does not update the item when no experiment groups are provided', async () => {
     expect.assertions(1)
 

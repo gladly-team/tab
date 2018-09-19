@@ -90,4 +90,17 @@ describe('experiments', () => {
     })
     expect(expGroups).toEqual({})
   })
+
+  test('works for anonSignIn "NONE" group', () => {
+    const getValidatedExperimentGroups = require('../experiments')
+      .getValidatedExperimentGroups
+    const expGroups = getValidatedExperimentGroups({
+      anonSignIn: 0
+    })
+    expect(expGroups).toEqual({
+      anonSignIn: 0,
+      fooTest: null,
+      anImportantTest: null
+    })
+  })
 })
