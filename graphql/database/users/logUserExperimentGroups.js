@@ -1,6 +1,6 @@
 
 import UserModel from './UserModel'
-import { isEmpty } from 'lodash/lang'
+import { isEmpty, isNil } from 'lodash/lang'
 import {
   getValidatedExperimentGroups
 } from '../../utils/experiments'
@@ -39,7 +39,7 @@ const logUserExperimentGroups = async (userContext, userId, experimentGroups = {
     {
       id: userId
     },
-    validatedGroups.anonSignIn ? {
+    !isNil(validatedGroups.anonSignIn) ? {
       testGroupAnonSignIn: validatedGroups.anonSignIn
     }
       : null
