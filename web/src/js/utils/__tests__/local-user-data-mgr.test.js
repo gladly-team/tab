@@ -1,12 +1,14 @@
 /* eslint-env jest */
 
 import moment from 'moment'
+import uuid from 'uuid/v4'
 import MockDate from 'mockdate'
 import localStorageMgr, {
   __mockClear
 } from '../localstorage-mgr'
 
 jest.mock('../localstorage-mgr')
+jest.mock('uuid/v4')
 
 const mockNow = '2018-04-12T10:30:00.000'
 
@@ -100,6 +102,33 @@ describe('local user data manager', () => {
     incrementTabsOpenedToday()
     expect(localStorageMgr.setItem).toHaveBeenCalledWith('tab.user.lastTabDay.count', 1)
     expect(localStorageMgr.setItem).not.toHaveBeenCalledWith('tab.user.lastTabDay.date', moment.utc().toISOString())
+  })
+
+  // setBrowserExtensionInstallId method
+  it('sets the extension install ID in localStorage', () => {
+    const mockUUID = '9359e548-1bd8-4bf1-9e10-09b5b6b4df34'
+    uuid.mockReturnValueOnce(mockUUID)
+    const setBrowserExtensionInstallId = require('../local-user-data-mgr').setBrowserExtensionInstallId
+    setBrowserExtensionInstallId()
+    expect(localStorageMgr.setItem)
+      .toHaveBeenCalledWith('tab.newUser.extensionInstallId', mockUUID)
+  })
+
+  // getBrowserExtensionInstallId
+  it('gets the extension install ID from localStorage', () => {
+    const mockUUID = '9359e548-1bd8-4bf1-9e10-09b5b6b4df34'
+    uuid.mockReturnValueOnce(mockUUID)
+    localStorageMgr.setItem('tab.newUser.extensionInstallId', mockUUID)
+    const getBrowserExtensionInstallId = require('../local-user-data-mgr').getBrowserExtensionInstallId
+    const installId = getBrowserExtensionInstallId()
+    expect(installId).toBe(mockUUID)
+  })
+
+  it('returns null if the extension ID in localStorage does not exist', () => {
+    localStorageMgr.removeItem('tab.newUser.extensionInstallId')
+    const getBrowserExtensionInstallId = require('../local-user-data-mgr').getBrowserExtensionInstallId
+    const installTime = getBrowserExtensionInstallId()
+    expect(installTime).toBeNull()
   })
 
   // setBrowserExtensionInstallTime method

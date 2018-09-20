@@ -4,6 +4,7 @@ import {
   replaceUrl
 } from 'navigation/navigation'
 import {
+  setBrowserExtensionInstallId,
   setBrowserExtensionInstallTime
 } from 'utils/local-user-data-mgr'
 import {
@@ -16,6 +17,9 @@ class FirstTabView extends React.Component {
   componentDidMount () {
     // Here, we can do anything we need to do before
     // going to the main dashboard.
+
+    // Set a unique install ID in local storage.
+    setBrowserExtensionInstallId()
 
     // Set this as the user's installed time, which helps us
     // distinguish truly new users from returning users who
