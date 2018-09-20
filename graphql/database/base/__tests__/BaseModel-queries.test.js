@@ -282,7 +282,14 @@ describe('BaseModel queries', () => {
           name: item.name,
           updated: moment.utc().toISOString()
         },
-        TableName: ExampleModel.tableName
+        TableName: ExampleModel.tableName,
+        ConditionExpression: '(#id <> :id)',
+        ExpressionAttributeNames: {
+          '#id': 'id'
+        },
+        ExpressionAttributeValues: {
+          ':id': item.id
+        }
       }
     )
 
@@ -315,7 +322,14 @@ describe('BaseModel queries', () => {
         name: ExampleModel.fieldDefaults.name,
         updated: moment.utc().toISOString()
       },
-      TableName: ExampleModel.tableName
+      TableName: ExampleModel.tableName,
+      ConditionExpression: '(#id <> :id)',
+      ExpressionAttributeNames: {
+        '#id': 'id'
+      },
+      ExpressionAttributeValues: {
+        ':id': createdItem.id
+      }
     })
 
     // Verify returned object.
@@ -374,7 +388,8 @@ describe('BaseModel queries', () => {
         '#name': 'name',
         '#updated': 'updated'
       },
-      UpdateExpression: 'SET #name = :name, #updated = :updated'
+      UpdateExpression: 'SET #name = :name, #updated = :updated',
+      ConditionExpression: 'attribute_exists(id)'
     })
 
     // Verify returned object.
@@ -418,7 +433,8 @@ describe('BaseModel queries', () => {
       },
       ReturnValues: 'ALL_NEW',
       TableName: ExampleModelRangeKey.tableName,
-      UpdateExpression: 'SET #name = :name, #updated = :updated'
+      UpdateExpression: 'SET #name = :name, #updated = :updated',
+      ConditionExpression: 'attribute_exists(id)'
     })
 
     // Verify returned object.
@@ -460,7 +476,7 @@ describe('BaseModel queries', () => {
         id: item.id
       },
       ReturnValues: 'ALL_NEW',
-      'ConditionExpression': '#name = :newName',
+      'ConditionExpression': '#name = :newName AND attribute_exists(id)',
       ExpressionAttributeValues: {
         ':name': item.name,
         ':newName': 'Bobert',
@@ -475,6 +491,62 @@ describe('BaseModel queries', () => {
 
     // Verify returned object.
     expect(updatedItem).toEqual(expectedReturn)
+  })
+
+  it('uses an attribute_exists condition expression during update to require that an item exists before it is updated', async () => {
+    setModelPermissions(ExampleModel, {
+      update: () => true
+    })
+
+    // Set mock response from DB client.
+    const item = Object.assign({}, fixturesA[0])
+    const expectedReturn = Object.assign({}, item, {
+      updated: moment.utc().toISOString()
+    })
+    const dbQueryMock = setMockDBResponse(
+      DatabaseOperation.UPDATE,
+      {
+        Attributes: expectedReturn
+      }
+    )
+
+    // 'updated' field should be automatically updated.
+    const itemToUpdate = removeCreatedAndUpdatedFields(item)
+    await ExampleModel.update(user, itemToUpdate)
+
+    const dbParams = dbQueryMock.mock.calls[0][0]
+    expect(dbParams.ConditionExpression).toEqual('attribute_exists(id)')
+  })
+
+  it('joins an attribute_exists condition expresssion with existing condition expressions during update to require that an item exists before it is updated', async () => {
+    setModelPermissions(ExampleModel, {
+      update: () => true
+    })
+
+    // Set mock response from DB client.
+    const item = Object.assign({}, fixturesA[0])
+    const expectedReturn = Object.assign({}, item, {
+      updated: moment.utc().toISOString()
+    })
+    const dbQueryMock = setMockDBResponse(
+      DatabaseOperation.UPDATE,
+      {
+        Attributes: expectedReturn
+      }
+    )
+
+    // 'updated' field should be automatically updated.
+    const itemToUpdate = removeCreatedAndUpdatedFields(item)
+
+    // Pass additional params (a conditional update expresssion)
+    const params = {}
+    params.ConditionExpression = '#name = :newName' //
+    params.ExpressionAttributeNames = { '#name': 'name' }
+    params.ExpressionAttributeValues = {':newName': 'Bobert'}
+    await ExampleModel.update(user, itemToUpdate, params)
+
+    const dbParams = dbQueryMock.mock.calls[0][0]
+    expect(dbParams.ConditionExpression).toEqual('#name = :newName AND attribute_exists(id)')
   })
 
   it('fails with unauthorized `update`', async () => {
@@ -721,7 +793,14 @@ describe('BaseModel queries', () => {
           name: item.name,
           updated: '2017-12-25T07:15:02.025Z'
         },
-        TableName: ExampleModel.tableName
+        TableName: ExampleModel.tableName,
+        ConditionExpression: '(#id <> :id)',
+        ExpressionAttributeNames: {
+          '#id': 'id'
+        },
+        ExpressionAttributeValues: {
+          ':id': item.id
+        }
       }
     )
   })
@@ -765,7 +844,8 @@ describe('BaseModel queries', () => {
         '#name': 'name',
         '#updated': 'updated'
       },
-      UpdateExpression: 'SET #name = :name, #updated = :updated'
+      UpdateExpression: 'SET #name = :name, #updated = :updated',
+      ConditionExpression: 'attribute_exists(id)'
     })
   })
 })

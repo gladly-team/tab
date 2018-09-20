@@ -1,7 +1,5 @@
 
-import {
-  updateWidgetEnabled
-} from './updateWidget'
+import UserWidgetModel from './userWidget/UserWidgetModel'
 
 const Promise = require('bluebird')
 
@@ -25,12 +23,12 @@ const widgetConfigurations = [
   {
     id: '8b5e572b-7f44-45ea-965b-55e6a22ca190',
     enabled: true
+  },
+  // To-dos
+  {
+    id: 'b7645e93-62d0-4293-83fc-c19d499eaefe',
+    enabled: false
   }
-  // // To-dos
-  // {
-  //   id: 'b7645e93-62d0-4293-83fc-c19d499eaefe',
-  //   enabled: false
-  // },
 ]
 
 /**
@@ -43,16 +41,17 @@ const widgetConfigurations = [
 export default async (userContext, userId) => {
   return Promise.all(widgetConfigurations.map(async (widgetConfig) => {
     try {
-      await updateWidgetEnabled(userContext, userId, widgetConfig.id,
-        widgetConfig.enabled)
+      await UserWidgetModel.create(userContext, {
+        userId: userId,
+        widgetId: widgetConfig.id,
+        enabled: widgetConfig.enabled
+      })
     } catch (err) {
       throw err
     }
   }))
     .then(data => true)
     .catch(err => {
-      console.error('setUpWidgetsForNewUser error')
-      console.error(err)
       throw err
     })
 }

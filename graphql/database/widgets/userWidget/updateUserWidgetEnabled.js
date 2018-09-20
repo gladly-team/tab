@@ -11,9 +11,30 @@ import UserWidgetModel from './UserWidgetModel'
  * Widget.
  */
 export default async (userContext, userId, widgetId, enabled) => {
-  return UserWidgetModel.update(userContext, {
-    userId: userId,
-    widgetId: widgetId,
-    enabled: enabled
-  })
+  var userWidget
+  try {
+    userWidget = await UserWidgetModel.update(userContext, {
+      userId: userId,
+      widgetId: widgetId,
+      enabled: enabled
+    })
+  } catch (e) {
+    // The item likely does not exist. This might happen when a
+    // user enables a widget they've never used.
+    // Try to create the widget.
+    if (e.code === 'ConditionalCheckFailedException') {
+      try {
+        userWidget = await UserWidgetModel.create(userContext, {
+          userId: userId,
+          widgetId: widgetId,
+          enabled: enabled
+        })
+      } catch (e) {
+        throw e
+      }
+    } else {
+      throw e
+    }
+  }
+  return userWidget
 }
