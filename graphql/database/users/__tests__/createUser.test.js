@@ -193,7 +193,7 @@ describe('createUser when user does not exist', () => {
     userContext.emailVerified = false
     logUserExperimentGroups.mockResolvedValueOnce(userReturnedFromCreate)
 
-    const extensionInstallId = 'some-id-here'
+    const extensionInstallId = '9359e548-1bd8-4bf1-9e10-09b5b6b4df34'
     const extensionInstallTimeApprox = '2018-08-18T01:12:59.187Z'
 
     await createUser(userContext, userInfo.id,
