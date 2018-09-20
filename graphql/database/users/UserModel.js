@@ -144,7 +144,8 @@ class User extends BaseModel {
         .description(`The datetime of the last time the user opened a tab`),
       mergedIntoExistingUser: types.boolean()
         .description(`This is true if this user was anonymous but then later signed
-          in as another existing user.`),
+          in as another existing user. This value is assigned on the client so is not
+          trustworthy`),
       emailVerified: types.boolean()
         .description(`Whether the user has verified their email with our auth service
           (Firebase). Our system of logging email verification here is flaky, so a
@@ -153,10 +154,16 @@ class User extends BaseModel {
       referrerRewarded: types.boolean()
         .description(`This is true if the user was referred by another user and we
           have credited the referring user for the recruit.`),
+      extensionInstallId: types.string().uuid()
+        .description(`The unique ID we create when the user installs the extension.
+          This value is assigned on the client so is not trustworthy.`),
+      extensionInstallTimeApprox: types.string().isoDate()
+        .description(`The approximate datetime the user installed the extension.
+          This value is assigned on the client so is not trustworthy.`),
       // Group assignments for experiments / split-tests
       testGroupAnonSignIn: types.number().integer().allow(null)
         .description(`Which group the user is in for the "anonymous user sign-in"
-          split-test.`)
+          split-test. This value is assigned on the client so is not trustworthy.`)
     }
   }
 

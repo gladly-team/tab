@@ -26,6 +26,10 @@ import logger from 'utils/logger'
 import {
   getUserTestGroupsForMutation
 } from 'utils/experiments'
+import {
+  getBrowserExtensionInstallId,
+  getBrowserExtensionInstallTime
+} from 'utils/local-user-data-mgr'
 
 jest.mock('authentication/user')
 jest.mock('navigation/navigation')
@@ -37,6 +41,7 @@ jest.mock('authentication/user')
 jest.mock('../../../relay-env')
 jest.mock('utils/logger')
 jest.mock('utils/experiments')
+jest.mock('utils/local-user-data-mgr')
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -137,6 +142,10 @@ describe('createNewUser tests', () => {
     expect.assertions(1)
     getUserToken.mockResolvedValue('some-token')
     getReferralData.mockImplementationOnce(() => null)
+    const mockUUID = '9359e548-1bd8-4bf1-9e10-09b5b6b4df34'
+    getBrowserExtensionInstallId.mockReturnValueOnce(mockUUID)
+    const mockExtensionInstallTime = '2018-08-18T01:12:59.187Z'
+    getBrowserExtensionInstallTime.mockReturnValueOnce(mockExtensionInstallTime)
     getUserTestGroupsForMutation.mockReturnValueOnce({
       anonSignIn: 'ANONYMOUS_ALLOWED'
     })
@@ -152,7 +161,8 @@ describe('createNewUser tests', () => {
 
     // Mock a response from new user creation
     CreateNewUserMutation.mockImplementationOnce(
-      (environment, userId, email, referralData, experimentGroups, onCompleted, onError) => {
+      (environment, userId, email, referralData, experimentGroups, installId,
+        installTime, onCompleted, onError) => {
         onCompleted({
           createNewUser: {
             id: 'abc123',
@@ -169,7 +179,8 @@ describe('createNewUser tests', () => {
 
     expect(CreateNewUserMutation)
       .toHaveBeenCalledWith({}, 'abc123', 'somebody@example.com', null,
-        { anonSignIn: 'ANONYMOUS_ALLOWED' }, expect.any(Function), expect.any(Function))
+        { anonSignIn: 'ANONYMOUS_ALLOWED' }, mockUUID, mockExtensionInstallTime,
+        expect.any(Function), expect.any(Function))
   })
 
   it('returns the new user data', async () => {
@@ -189,7 +200,8 @@ describe('createNewUser tests', () => {
 
     // Mock a response from new user creation
     CreateNewUserMutation.mockImplementationOnce(
-      (environment, userId, email, referralData, experimentGroups, onCompleted, onError) => {
+      (environment, userId, email, referralData, experimentGroups, installId,
+        installTime, onCompleted, onError) => {
         onCompleted({
           createNewUser: {
             id: 'abc123',
@@ -230,7 +242,8 @@ describe('createNewUser tests', () => {
 
     // Mock a response from new user creation
     CreateNewUserMutation.mockImplementationOnce(
-      (environment, userId, email, referralData, experimentGroups, onCompleted, onError) => {
+      (environment, userId, email, referralData, experimentGroups, installId,
+        installTime, onCompleted, onError) => {
         onCompleted({
           createNewUser: {
             id: 'abc123',
@@ -271,7 +284,8 @@ describe('createNewUser tests', () => {
 
     // Mock a response from new user creation
     CreateNewUserMutation.mockImplementationOnce(
-      (environment, userId, email, referralData, experimentGroups, onCompleted, onError) => {
+      (environment, userId, email, referralData, experimentGroups, installId,
+        installTime, onCompleted, onError) => {
         onCompleted({
           createNewUser: {
             id: 'abc123',
@@ -308,7 +322,8 @@ describe('createNewUser tests', () => {
 
     // Mock a response from new user creation
     CreateNewUserMutation.mockImplementationOnce(
-      (environment, userId, email, referralData, experimentGroups, onCompleted, onError) => {
+      (environment, userId, email, referralData, experimentGroups, installId,
+        installTime, onCompleted, onError) => {
         onCompleted({
           createNewUser: {
             id: 'abc123',

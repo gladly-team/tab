@@ -7,6 +7,7 @@ import {
 
 import { replaceUrl } from 'navigation/navigation'
 import {
+  setBrowserExtensionInstallId,
   setBrowserExtensionInstallTime
 } from 'utils/local-user-data-mgr'
 import {
@@ -39,7 +40,15 @@ describe('FirstTabView', function () {
     expect(replaceUrl).toHaveBeenCalledWith('/newtab/')
   })
 
-  it('calls to set the extension install time', () => {
+  it('calls to set the extension install ID in local storage', () => {
+    const FirstTabView = require('../FirstTabView').default
+    shallow(
+      <FirstTabView {...mockProps} />
+    )
+    expect(setBrowserExtensionInstallId).toHaveBeenCalledTimes(1)
+  })
+
+  it('calls to set the extension install time in local storage', () => {
     const FirstTabView = require('../FirstTabView').default
     shallow(
       <FirstTabView {...mockProps} />

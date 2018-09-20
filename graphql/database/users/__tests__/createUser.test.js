@@ -54,7 +54,7 @@ function getExpectedCreateItemFromUserInfo (userInfo) {
 }
 
 describe('createUser when user does not exist', () => {
-  it('works as expected without referralData', async () => {
+  it('works as expected with email address but without other optional arguments', async () => {
     expect.assertions(2)
 
     // Mock database responses.
@@ -169,6 +169,43 @@ describe('createUser when user does not exist', () => {
       id: userInfo.id,
       email: 'someotheremail@example.com'
     })
+    expect(getOrCreateMethod)
+      .toHaveBeenCalledWith(userContext, expectedCreateItem)
+  })
+
+  it('works as expected with extensionInstallId and extensionInstallTimeApprox', async () => {
+    expect.assertions(1)
+
+    // Mock database responses.
+    const userInfo = getMockUserInfo()
+    const userReturnedFromCreate = getMockUserInstance(Object.assign({}, userInfo))
+    setMockDBResponse(
+      DatabaseOperation.CREATE,
+      {
+        Attributes: userReturnedFromCreate
+      }
+    )
+
+    const getOrCreateMethod = jest.spyOn(UserModel, 'getOrCreate')
+    const referralData = null
+    const experimentGroups = null
+    const userContext = cloneDeep(defaultUserContext)
+    userContext.emailVerified = false
+    logUserExperimentGroups.mockResolvedValueOnce(userReturnedFromCreate)
+
+    const extensionInstallId = '9359e548-1bd8-4bf1-9e10-09b5b6b4df34'
+    const extensionInstallTimeApprox = '2018-08-18T01:12:59.187Z'
+
+    await createUser(userContext, userInfo.id,
+      userInfo.email, referralData, experimentGroups,
+      extensionInstallId, extensionInstallTimeApprox)
+
+    const expectedCreateItem = Object.assign(
+      getExpectedCreateItemFromUserInfo(userInfo),
+      {
+        extensionInstallId: extensionInstallId,
+        extensionInstallTimeApprox: extensionInstallTimeApprox
+      })
     expect(getOrCreateMethod)
       .toHaveBeenCalledWith(userContext, expectedCreateItem)
   })

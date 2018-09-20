@@ -57,6 +57,7 @@ export const STORAGE_NEW_CONSENT_DATA_EXISTS = 'tab.consentData.newConsentDataEx
 //   data we need for unauthenticated users or temporary data we
 //   don't want to store server-side. Stored client-side only.
 export const STORAGE_NEW_USER_HAS_COMPLETED_TOUR = 'tab.newUser.hasCompletedTour'
+export const STORAGE_EXTENSION_INSTALL_ID = 'tab.newUser.extensionInstallId'
 export const STORAGE_APPROX_EXTENSION_INSTALL_TIME = 'tab.newUser.approxInstallTime'
 
 // tab.experiments: values related to split-testing features

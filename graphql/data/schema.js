@@ -873,7 +873,9 @@ const createNewUserMutation = mutationWithClientMutationId({
     userId: { type: new GraphQLNonNull(GraphQLString) },
     email: { type: GraphQLString },
     referralData: { type: ReferralDataInput },
-    experimentGroups: { type: ExperimentGroupsType }
+    experimentGroups: { type: ExperimentGroupsType },
+    extensionInstallId: { type: GraphQLString },
+    extensionInstallTimeApprox: { type: GraphQLString }
   },
   outputFields: {
     user: {
@@ -881,8 +883,10 @@ const createNewUserMutation = mutationWithClientMutationId({
       resolve: user => user
     }
   },
-  mutateAndGetPayload: ({ userId, email, referralData, experimentGroups }, context) => {
-    return createUser(context.user, userId, email, referralData, experimentGroups)
+  mutateAndGetPayload: ({ userId, email, referralData, experimentGroups,
+    extensionInstallId, extensionInstallTimeApprox }, context) => {
+    return createUser(context.user, userId, email, referralData, experimentGroups,
+      extensionInstallId, extensionInstallTimeApprox)
   }
 })
 

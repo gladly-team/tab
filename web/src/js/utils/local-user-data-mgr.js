@@ -1,7 +1,9 @@
 
 import moment from 'moment'
+import uuid from 'uuid/v4'
 import localStorageMgr from 'utils/localstorage-mgr'
 import {
+  STORAGE_EXTENSION_INSTALL_ID,
   STORAGE_APPROX_EXTENSION_INSTALL_TIME,
   STORAGE_TABS_RECENT_DAY_COUNT,
   STORAGE_TABS_LAST_TAB_OPENED_DATE
@@ -89,6 +91,30 @@ export const incrementTabsOpenedToday = function () {
     setLastTabOpenedDateInLocalStorage()
     setTabCountInLocalStorage(1)
   }
+}
+
+/**
+ * Saves a UUID to localStorage as the "extension install ID",
+ * which may be helpful in determining if multiple anonymous
+ * users belong to the same user.
+ * @returns {undefined}
+ */
+export const setBrowserExtensionInstallId = () => {
+  localStorageMgr.setItem(STORAGE_EXTENSION_INSTALL_ID, uuid())
+}
+
+/**
+ * Gets the extension install ID from localStorage if it exists.
+ * extension (from localStorage).
+ * @returns {String|null} A UUID string, or null if it does not
+ *   exist.
+ */
+export const getBrowserExtensionInstallId = () => {
+  const installId = localStorageMgr.getItem(STORAGE_EXTENSION_INSTALL_ID)
+  if (!installId) {
+    return null
+  }
+  return installId
 }
 
 /**
