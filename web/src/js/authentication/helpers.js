@@ -31,6 +31,7 @@ import {
   isAnonymousUserSignInEnabled
 } from 'utils/feature-flags'
 import {
+  getBrowserExtensionInstallId,
   getBrowserExtensionInstallTime
 } from 'utils/local-user-data-mgr'
 import logger from 'utils/logger'
@@ -184,11 +185,11 @@ export const createNewUser = () => {
       // correct latest value for email verification.
       return getUserToken(true)
         .then(() => {
-          // Get any referral data that exists.
+          // Get additional data we want to log with creation.
           const referralData = getReferralData()
-
-          // Pass the user's assigned experiment groups.
           const experimentGroups = getUserTestGroupsForMutation()
+          const installId = getBrowserExtensionInstallId()
+          const installTime = getBrowserExtensionInstallTime()
 
           return new Promise((resolve, reject) => {
             CreateNewUserMutation(
@@ -197,6 +198,8 @@ export const createNewUser = () => {
               user.email,
               referralData,
               experimentGroups,
+              installId,
+              installTime,
               (response) => {
                 resolve(response.createNewUser)
               },

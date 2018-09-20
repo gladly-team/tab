@@ -179,7 +179,8 @@ describe('Authentication.js tests', function () {
 
     // Mock a response from new user creation
     CreateNewUserMutation.mockImplementation(
-      (environment, userId, email, referralData, experimentGroups, onCompleted, onError) => {
+      (environment, userId, email, referralData, experimentGroups, installId,
+        installTime, onCompleted, onError) => {
         onCompleted({
           createNewUser: {
             id: 'abc123',
@@ -637,7 +638,8 @@ describe('Authentication.js tests', function () {
 
     // Mock a response from new user creation
     CreateNewUserMutation.mockImplementation(
-      (environment, userId, email, referralData, experimentGroups, onCompleted, onError) => {
+      (environment, userId, email, referralData, experimentGroups, installId,
+        installTime, onCompleted, onError) => {
         onCompleted({
           createNewUser: {
             id: 'abc123',
@@ -691,7 +693,8 @@ describe('Authentication.js tests', function () {
 
     // Mock a response from new user creation
     CreateNewUserMutation.mockImplementation(
-      (environment, userId, email, referralData, experimentGroups, onCompleted, onError) => {
+      (environment, userId, email, referralData, experimentGroups, installId,
+        installTime, onCompleted, onError) => {
         onCompleted({
           createNewUser: {
             id: 'abc123',
@@ -756,7 +759,8 @@ describe('Authentication.js tests', function () {
 
     // Mock a response from new user creation
     CreateNewUserMutation.mockImplementation(
-      (environment, userId, email, referralData, experimentGroups, onCompleted, onError) => {
+      (environment, userId, email, referralData, experimentGroups, installId,
+        installTime, onCompleted, onError) => {
         onCompleted({
           createNewUser: {
             id: 'abc123',
