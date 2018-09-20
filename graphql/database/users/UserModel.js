@@ -47,17 +47,45 @@ class User extends BaseModel {
   static get schema () {
     const self = this
     return {
-      id: types.string().required(),
-      email: types.string().email().allow(null),
-      username: types.string(),
-      joined: types.string().isoDate().required(),
-      justCreated: types.boolean().forbidden(), // only set in app code
-      vcCurrent: types.number().integer().default(self.fieldDefaults.vcCurrent),
-      vcAllTime: types.number().integer().default(self.fieldDefaults.vcAllTime),
-      level: types.number().integer().default(self.fieldDefaults.level),
-      tabs: types.number().integer().default(self.fieldDefaults.tabs),
-      tabsToday: types.number().integer().forbidden(), // only set in deserializer
-      validTabs: types.number().integer().default(self.fieldDefaults.tabs),
+      id: types.string().required()
+        .description(`The unique user ID from our authentication service (Firebase)`),
+      email: types.string().email().allow(null)
+        .description(`The email used to authenticate. If "emailVerified" is not true, this
+          'value is unreliable. In addition, values are unreliable before we started  using
+          'the auth token to get the email (prior to 2018 September 15). Our authentication
+          'service (Firebase) is the source of truth for emails.`),
+      username: types.string()
+        .description(`Username provided by the user. Will be unique (caps-sensitive).`),
+      joined: types.string().isoDate().required()
+        .description(`The datetime the user first started using the app. This may differ
+          from "created", which is literally when the database item was created.`),
+      justCreated: types.boolean()
+        .forbidden() // only set in app code
+        .description(`In a getOrCreate operation, whether the user was created in that
+          operation.`),
+      vcCurrent: types.number().integer()
+        .default(self.fieldDefaults.vcCurrent)
+        .description(`The number of Hearts the user possesses.`),
+      vcAllTime: types.number().integer()
+        .default(self.fieldDefaults.vcAllTime)
+        .description(`The number of Hearts the user has earned all time, including both
+          Hearts from opening tabs and from recruiting friends.`),
+      level: types.number().integer()
+        .default(self.fieldDefaults.level)
+        .description(`The current level the user is on, relying on the UserLevel model.`),
+      tabs: types.number().integer()
+        .default(self.fieldDefaults.tabs)
+        .description(`The total number of tabs the user has opened since joining. There
+          may be a delay in logging the tab on the client side, so it will likely slightly
+          undercount.`),
+      tabsToday: types.number().integer()
+        .forbidden() // only set in deserializer
+        .description(`How many tabs the user has opened today (UTC day).`),
+      validTabs: types.number().integer()
+        .default(self.fieldDefaults.tabs)
+        .description(`The total number of tabs the user has opened since joining, filtering
+          tabs that we consider "fraudulent", such as tabs opened in quick succession and
+          too many tabs in a day.`),
       maxTabsDay: types.object({
         // The count of tabs for the day on which the user opened
         // the most tabs.
@@ -72,14 +100,23 @@ class User extends BaseModel {
           numTabs: types.number().integer()
         })
       })
-        .default(self.fieldDefaults.maxTabsDay,
-          'Used to track the most tabs opened in a day'),
+        .default(self.fieldDefaults.maxTabsDay, `Default is zero tabs for today.`)
+        .description(`A tracker of the day with the largest number of tabs opened.`),
       heartsUntilNextLevel: types.number().integer()
-        .default(self.fieldDefaults.heartsUntilNextLevel),
+        .default(self.fieldDefaults.heartsUntilNextLevel)
+        .description(`A countdown of Hearts until the user advances to the next level.
+          This relies on the Heart requirements from the UserLevel model.`),
       vcDonatedAllTime: types.number().integer()
-        .default(self.fieldDefaults.vcDonatedAllTime),
+        .default(self.fieldDefaults.vcDonatedAllTime)
+        .description(`The total number of Hearts the user has donated to charities since
+          joining.`),
       numUsersRecruited: types.number().integer()
-        .default(self.fieldDefaults.numUsersRecruited),
+        .default(self.fieldDefaults.numUsersRecruited)
+        .description(`The number of new users joined from this user's referral link. This
+          number may differ from the number of ReferralDataLog items that exist with this
+          user as the referring user. For example, we log referrals immediately but may
+          reward the referring user only after the referred user signs in and verifies
+          their email address.`),
       backgroundImage: types.object(
         {
           id: types.string().required(),
@@ -88,18 +125,38 @@ class User extends BaseModel {
           imageURL: types.string().forbidden(), // only set in deserializer
           thumbnailURL: types.string().forbidden(), // only set in deserializer
           timestamp: types.string().isoDate()
+            .description(`The datetime this photo was last selected/changed.`)
         })
-        .default(self.fieldDefaults.backgroundImage, 'Default background image.'),
-      backgroundOption: types.string().default(self.fieldDefaults.backgroundOption),
-      backgroundColor: types.string(),
-      customImage: types.string(),
-      activeWidget: types.string(),
-      lastTabTimestamp: types.string().isoDate(),
-      mergedIntoExistingUser: types.boolean(),
-      emailVerified: types.boolean(),
-      referrerRewarded: types.boolean(),
+        .default(self.fieldDefaults.backgroundImage, `Default background image.`)
+        .description(`The user's new tab page background photo.`),
+      backgroundOption: types.string()
+        .default(self.fieldDefaults.backgroundOption)
+        .description(`The type of new tab page background the user has selected.`),
+      backgroundColor: types.string()
+        .description(`The user's new tab page background color hex.`),
+      customImage: types.string()
+        .description(`A URL of the custom photo the user has as their new tab
+          background.`),
+      activeWidget: types.string()
+        .description(`The ID of the widget the user has visible on the new tab page.
+          Note: due to a bug, the ID is actually the Relay global ID.`),
+      lastTabTimestamp: types.string().isoDate()
+        .description(`The datetime of the last time the user opened a tab`),
+      mergedIntoExistingUser: types.boolean()
+        .description(`This is true if this user was anonymous but then later signed
+          in as another existing user.`),
+      emailVerified: types.boolean()
+        .description(`Whether the user has verified their email with our auth service
+          (Firebase). Our system of logging email verification here is flaky, so a
+          false or undefined value does not necessarily mean the user's email is
+          unverified. Firebase is the source of truth for this value.`),
+      referrerRewarded: types.boolean()
+        .description(`This is true if the user was referred by another user and we
+          have credited the referring user for the recruit.`),
       // Group assignments for experiments / split-tests
       testGroupAnonSignIn: types.number().integer().allow(null)
+        .description(`Which group the user is in for the "anonymous user sign-in"
+          split-test.`)
     }
   }
 
