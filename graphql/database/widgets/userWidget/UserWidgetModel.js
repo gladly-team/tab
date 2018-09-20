@@ -27,6 +27,8 @@ class UserWidget extends BaseModel {
     return tableNames.userWidgets
   }
 
+  // Note: due to a bug, the "created" timestamp field does not
+  // exist on UserWidget items created before 2018 Sept 21.
   static get schema () {
     const self = this
     return {
