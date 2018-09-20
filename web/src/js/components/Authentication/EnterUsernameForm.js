@@ -9,6 +9,9 @@ import {
   setUsernameInLocalStorage
 } from 'authentication/user'
 import {
+  checkIfEmailVerified
+} from 'authentication/helpers'
+import {
   goToDashboard
 } from 'navigation/navigation'
 
@@ -20,6 +23,19 @@ class EnterUsernameForm extends React.Component {
       otherError: false,
       savingUsernameInProgress: false
     }
+  }
+
+  componentDidMount () {
+    // See if the user verified their email address so that we can
+    // log the verification. It would be better to user a cloud
+    // function for this, or at least an official callback from the
+    // Firebase SDK, but Firebase does not yet support one. See:
+    // https://stackoverflow.com/q/43503377
+    // We also do this on the email verification screen, but it
+    // may fail if Firebase is slow to update, so we're adding it
+    // here to reduce the frequency that we fail to log the
+    // verification.
+    checkIfEmailVerified()
   }
 
   submit (e) {
