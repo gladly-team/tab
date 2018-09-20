@@ -109,6 +109,8 @@ input CreateNewUserInput {
   email: String
   referralData: ReferralData
   experimentGroups: ExperimentGroups
+  extensionInstallId: String
+  extensionInstallTimeApprox: String
   clientMutationId: String
 }
 

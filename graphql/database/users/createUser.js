@@ -1,5 +1,5 @@
 
-import { isEmpty } from 'lodash/lang'
+import { isEmpty, isNil } from 'lodash/lang'
 import { get } from 'lodash/object'
 import moment from 'moment'
 import UserModel from './UserModel'
@@ -23,17 +23,28 @@ import logger from '../../utils/logger'
  *   which the user has been assigned.
  * @return {Promise<User>}  A promise that resolves into a User instance.
  */
-const createUser = async (userContext, userId, email = null, referralData = null, experimentGroups = {}) => {
+const createUser = async (userContext, userId, email = null, referralData = null,
+  experimentGroups = {}, extensionInstallId = null, extensionInstallTimeApprox = null) => {
   // Get or create the user.
-  const userInfo = {
-    id: userId,
-    // This email address is from the user claims so will be
-    // the same as the email address provided during authentication,
-    // but it isn't guaranteed to be verified (may not truly belong
-    // to the user).
-    email: userContext.email || null,
-    joined: moment.utc().toISOString()
-  }
+  const userInfo = Object.assign(
+    {
+      id: userId,
+      // This email address is from the user claims so will be
+      // the same as the email address provided during authentication,
+      // but it isn't guaranteed to be verified (may not truly belong
+      // to the user).
+      email: userContext.email || null,
+      joined: moment.utc().toISOString()
+    },
+    !isNil(extensionInstallId) ? {
+      extensionInstallId: extensionInstallId
+    }
+      : null,
+    !isNil(extensionInstallTimeApprox) ? {
+      extensionInstallTimeApprox: extensionInstallTimeApprox
+    }
+      : null
+  )
   try {
     var response = await UserModel.getOrCreate(userContext, userInfo)
   } catch (e) {

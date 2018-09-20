@@ -154,6 +154,12 @@ class User extends BaseModel {
       referrerRewarded: types.boolean()
         .description(`This is true if the user was referred by another user and we
           have credited the referring user for the recruit.`),
+      extensionInstallId: types.string()
+        .description(`The unique ID we create when the user installs the extension.
+          This value is assigned on the client so is not trustworthy.`),
+      extensionInstallTimeApprox: types.string().isoDate()
+        .description(`The approximate datetime the user installed the extension.
+          This value is assigned on the client so is not trustworthy.`),
       // Group assignments for experiments / split-tests
       testGroupAnonSignIn: types.number().integer().allow(null)
         .description(`Which group the user is in for the "anonymous user sign-in"
