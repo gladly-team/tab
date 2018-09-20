@@ -10,8 +10,12 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import SetUsernameMutation, {
   __runOnCompleted
 } from 'mutations/SetUsernameMutation'
+import {
+  checkIfEmailVerified
+} from 'authentication/helpers'
 
 jest.mock('mutations/SetUsernameMutation')
+jest.mock('authentication/helpers')
 
 const mockUserData = {
   id: 'abc-123'
@@ -27,6 +31,16 @@ describe('EnterUsernameForm tests', function () {
     shallow(
       <EnterUsernameForm user={mockUserData} />
     )
+  })
+
+  it('calls checkIfEmailVerified on mount', async () => {
+    expect.assertions(1)
+
+    const EnterUsernameForm = require('../EnterUsernameForm').default
+    shallow(
+      <EnterUsernameForm {...mockUserData} />
+    )
+    expect(checkIfEmailVerified).toHaveBeenCalledTimes(1)
   })
 
   it('calls SetUsernameMutation when entering a username', function () {
