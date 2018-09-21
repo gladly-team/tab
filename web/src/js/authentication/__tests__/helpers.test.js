@@ -872,6 +872,20 @@ describe('checkIfEmailVerified tests', () => {
     expect(isVerified).toBe(false)
   })
 
+  it('returns false if the user is not authenticated', async () => {
+    expect.assertions(1)
+
+    getCurrentUser.mockResolvedValue(null)
+    reloadUser.mockResolvedValue(undefined)
+    getUserToken.mockResolvedValue('some-token')
+
+    const checkIfEmailVerified = require('../helpers').checkIfEmailVerified
+    const promise = checkIfEmailVerified()
+    await runAsyncTimerLoops(25)
+    const isVerified = await promise
+    expect(isVerified).toBe(false)
+  })
+
   it('reloads the Firebase user a maximum of 16 times', async () => {
     expect.assertions(1)
 
