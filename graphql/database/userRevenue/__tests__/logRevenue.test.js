@@ -306,4 +306,19 @@ describe('logRevenue', () => {
     await expect(logRevenue(userContext, userContext.id, 0.0172, '2468'))
       .rejects.toThrow()
   })
+
+  test('throws an error when the DB returns an unexpected error', async () => {
+    expect.assertions(1)
+
+    // Mock that the item already exists for the original and the
+    // retried "create" operations.
+    setMockDBResponse(
+      DatabaseOperation.CREATE,
+      null,
+      { code: 'BadExampleError' }
+    )
+
+    await expect(logRevenue(userContext, userContext.id, 0.0172, '2468'))
+      .rejects.toThrow()
+  })
 })
