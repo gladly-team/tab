@@ -274,7 +274,7 @@ export const checkIfEmailVerified = () => {
         .then(user => {
           // The email is verified. Log the verification, stop polling,
           // and return true.
-          if (user.emailVerified) {
+          if (user && user.emailVerified) {
             // Force-refetch the user ID token so it will have the
             // correct latest value for email verification.
             getUserToken(true)
