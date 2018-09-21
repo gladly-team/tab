@@ -17,7 +17,14 @@ try {
     debug: sentryDebug,
     // https://github.com/getsentry/raven-js/issues/723
     // https://docs.sentry.io/clients/javascript/config/
-    autoBreadcrumbs: sentryEnableAutoBreadcrumbs
+    autoBreadcrumbs: sentryEnableAutoBreadcrumbs,
+    whitelistUrls: [
+      'tab.gladly.io',
+      'prod-tab2017.gladly.io',
+      'prod-tab2017-media.gladly.io',
+      'dev-tab2017.gladly.io',
+      'dev-tab2017-media.gladly.io'
+    ]
   }).install()
 } catch (e) {
   console.error(e)
