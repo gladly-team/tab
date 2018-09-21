@@ -1,15 +1,19 @@
 /* eslint-env jest */
+import moment from 'moment'
+import MockDate from 'mockdate'
 import {
   goTo,
   replaceUrl,
   goToDashboard,
   goToLogin,
+  authMessageURL,
   enterUsernameURL,
   missingEmailMessageURL,
   verifyEmailURL
 } from 'navigation/navigation'
 import {
-  getReferralData
+  getReferralData,
+  isInIframe
 } from 'web-utils'
 import CreateNewUserMutation from 'mutations/CreateNewUserMutation'
 import LogEmailVerifiedMutation from 'mutations/LogEmailVerifiedMutation'
@@ -24,12 +28,16 @@ import {
 } from 'utils/test-utils'
 import logger from 'utils/logger'
 import {
+  getAnonymousUserTestGroup,
   getUserTestGroupsForMutation
 } from 'utils/experiments'
 import {
   getBrowserExtensionInstallId,
   getBrowserExtensionInstallTime
 } from 'utils/local-user-data-mgr'
+import {
+  isAnonymousUserSignInEnabled
+} from 'utils/feature-flags'
 
 jest.mock('authentication/user')
 jest.mock('navigation/navigation')
@@ -42,14 +50,43 @@ jest.mock('../../../relay-env')
 jest.mock('utils/logger')
 jest.mock('utils/experiments')
 jest.mock('utils/local-user-data-mgr')
+jest.mock('utils/feature-flags')
+
+const mockNow = '2017-05-19T13:59:58.000Z'
+
+const setIfAnonymousUserIsAllowed = (allow) => {
+  // Set the mocked return values that will allow or
+  // or disallow the user to be anonymous.
+  if (allow) {
+    getBrowserExtensionInstallTime.mockReturnValue(
+      moment(mockNow).subtract(2, 'minutes'))
+    isAnonymousUserSignInEnabled.mockReturnValue(true)
+    getAnonymousUserTestGroup.mockReturnValue('unauthed')
+  } else {
+    getBrowserExtensionInstallTime.mockReturnValue(
+      moment(mockNow).subtract(23, 'days'))
+    isAnonymousUserSignInEnabled.mockReturnValue(false)
+    getAnonymousUserTestGroup.mockReturnValue('none')
+  }
+}
+
+beforeAll(() => {
+  getUserToken.mockResolvedValue('some-token')
+})
+
+beforeEach(() => {
+  MockDate.set(moment(mockNow))
+})
 
 afterEach(() => {
   jest.clearAllMocks()
+  MockDate.reset()
 })
 
 describe('checkAuthStateAndRedirectIfNeeded tests', () => {
-  it('does not redirect if the user is fully authenticated', async () => {
+  it('[no-anon-allowed] does not redirect if the user is fully authenticated', async () => {
     expect.assertions(5)
+    setIfAnonymousUserIsAllowed(false)
 
     const checkAuthStateAndRedirectIfNeeded = require('../helpers')
       .checkAuthStateAndRedirectIfNeeded
@@ -69,8 +106,180 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
     expect(goToLogin).not.toHaveBeenCalled()
   })
 
-  it('redirects to missing email screen if authed and there is no email address', async () => {
+  it('[no-anon-allowed] redirects to the sign-in view if the user is unauthed and NOT within an iframe', async () => {
     expect.assertions(2)
+    setIfAnonymousUserIsAllowed(false)
+
+    const user = {
+      uid: null,
+      email: null,
+      username: null,
+      isAnonymous: false,
+      emailVerified: false
+    }
+
+    // Mock a response from new user creation
+    CreateNewUserMutation.mockImplementation(
+      (environment, userId, email, referralData, experimentGroups, installId,
+        installTime, onCompleted, onError) => {
+        onCompleted({
+          createNewUser: {
+            id: 'abc123',
+            email: null,
+            username: null
+          }
+        })
+      }
+    )
+
+    isInIframe.mockReturnValue(false)
+
+    const checkAuthStateAndRedirectIfNeeded = require('../helpers')
+      .checkAuthStateAndRedirectIfNeeded
+    const redirected = await checkAuthStateAndRedirectIfNeeded(user)
+
+    expect(goToLogin).toHaveBeenCalledTimes(1)
+    expect(redirected).toBe(true)
+  })
+
+  it('[anon] does not redirect when the user is anonymous and is allowed to be anonymous', async () => {
+    expect.assertions(5)
+    setIfAnonymousUserIsAllowed(true)
+
+    const user = {
+      id: 'abc123',
+      email: null,
+      username: null,
+      isAnonymous: true,
+      emailVerified: false
+    }
+
+    const checkAuthStateAndRedirectIfNeeded = require('../helpers')
+      .checkAuthStateAndRedirectIfNeeded
+    const redirected = await checkAuthStateAndRedirectIfNeeded(user)
+
+    expect(redirected).toBe(false)
+    expect(goToDashboard).not.toHaveBeenCalled()
+    expect(goTo).not.toHaveBeenCalled()
+    expect(replaceUrl).not.toHaveBeenCalled()
+    expect(goToLogin).not.toHaveBeenCalled()
+  })
+
+  it('redirects to the login screen if the user is anonymous but has been around long enough for us to ask them to sign in', async () => {
+    expect.assertions(1)
+
+    // This is longer than users are allowed to remain anonymous.
+    getBrowserExtensionInstallTime.mockReturnValue(
+      moment(mockNow).subtract(4, 'days'))
+
+    // Otherwise, anonymous users are allowed.
+    isAnonymousUserSignInEnabled.mockReturnValue(true)
+    getAnonymousUserTestGroup.mockReturnValue('unauthed')
+
+    isInIframe.mockReturnValue(false)
+
+    const user = {
+      id: 'abc123',
+      email: null,
+      username: null,
+      isAnonymous: true,
+      emailVerified: false
+    }
+
+    const checkAuthStateAndRedirectIfNeeded = require('../helpers')
+      .checkAuthStateAndRedirectIfNeeded
+    await checkAuthStateAndRedirectIfNeeded(user)
+
+    expect(goToLogin).toHaveBeenCalledTimes(1)
+  })
+
+  it('does not redirect to the login screen if the user is anonymous and has been around less than the time needed for us to ask them to sign in', async () => {
+    expect.assertions(1)
+
+    // This is less than the max time users are allowed to remain anonymous.
+    getBrowserExtensionInstallTime.mockReturnValue(
+      moment(mockNow).subtract(1, 'days'))
+
+    // Otherwise, anonymous users are allowed.
+    isAnonymousUserSignInEnabled.mockReturnValue(true)
+    getAnonymousUserTestGroup.mockReturnValue('unauthed')
+
+    isInIframe.mockReturnValue(false)
+
+    const user = {
+      id: 'abc123',
+      email: null,
+      username: null,
+      isAnonymous: true,
+      emailVerified: false
+    }
+
+    const checkAuthStateAndRedirectIfNeeded = require('../helpers')
+      .checkAuthStateAndRedirectIfNeeded
+    await checkAuthStateAndRedirectIfNeeded(user)
+
+    expect(goToLogin).not.toHaveBeenCalled()
+  })
+
+  it('redirects to the login screen if the user is anonymous but is not in the anonymous sign-up experimental group', async () => {
+    expect.assertions(1)
+
+    // The user is still be required to sign in.
+    getAnonymousUserTestGroup.mockReturnValue('auth')
+
+    // Otherwise, the user is allowed to be anonymous.
+    isAnonymousUserSignInEnabled.mockReturnValue(true)
+    getBrowserExtensionInstallTime.mockReturnValue(
+      moment(mockNow).subtract(2, 'minutes'))
+
+    isInIframe.mockReturnValue(false)
+
+    const user = {
+      id: 'abc123',
+      email: null,
+      username: null,
+      isAnonymous: true,
+      emailVerified: false
+    }
+
+    const checkAuthStateAndRedirectIfNeeded = require('../helpers')
+      .checkAuthStateAndRedirectIfNeeded
+    await checkAuthStateAndRedirectIfNeeded(user)
+
+    expect(goToLogin).toHaveBeenCalledTimes(1)
+  })
+
+  it('[no-anon-allowed] redirects to the sign-in message if the user is unauthed and within an iframe', async () => {
+    expect.assertions(1)
+
+    // The user is still be required to sign in.
+    getAnonymousUserTestGroup.mockReturnValue('auth')
+
+    // Otherwise, the user is allowed to be anonymous.
+    isAnonymousUserSignInEnabled.mockReturnValue(true)
+    getBrowserExtensionInstallTime.mockReturnValue(
+      moment(mockNow).subtract(2, 'minutes'))
+
+    isInIframe.mockReturnValue(true)
+
+    const user = {
+      id: null,
+      email: null,
+      username: null,
+      isAnonymous: false,
+      emailVerified: false
+    }
+
+    const checkAuthStateAndRedirectIfNeeded = require('../helpers')
+      .checkAuthStateAndRedirectIfNeeded
+    await checkAuthStateAndRedirectIfNeeded(user)
+
+    expect(goTo).toHaveBeenCalledWith(authMessageURL)
+  })
+
+  it('[no-anon-allowed] redirects to missing email screen if authed and there is no email address', async () => {
+    expect.assertions(2)
+    setIfAnonymousUserIsAllowed(false)
 
     const checkAuthStateAndRedirectIfNeeded = require('../helpers')
       .checkAuthStateAndRedirectIfNeeded
@@ -86,8 +295,9 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
     expect(redirected).toBe(true)
   })
 
-  it('redirects to email verification screen if authed and email is unverified', async () => {
+  it('[no-anon-allowed] redirects to email verification screen if authed and email is unverified', async () => {
     expect.assertions(2)
+    setIfAnonymousUserIsAllowed(false)
 
     const checkAuthStateAndRedirectIfNeeded = require('../helpers')
       .checkAuthStateAndRedirectIfNeeded
@@ -103,8 +313,9 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
     expect(redirected).toBe(true)
   })
 
-  it('redirects to new username screen if authed and username is not set', async () => {
+  it('[no-anon-allowed] redirects to new username screen if authed and username is not set', async () => {
     expect.assertions(2)
+    setIfAnonymousUserIsAllowed(false)
 
     const checkAuthStateAndRedirectIfNeeded = require('../helpers')
       .checkAuthStateAndRedirectIfNeeded
@@ -120,8 +331,9 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
     expect(redirected).toBe(true)
   })
 
-  it('does not redirect to the new username screen if the username exists on the server', async () => {
+  it('[no-anon-allowed] does not redirect to the new username screen if the username exists on the server', async () => {
     expect.assertions(1)
+    setIfAnonymousUserIsAllowed(false)
 
     const checkAuthStateAndRedirectIfNeeded = require('../helpers')
       .checkAuthStateAndRedirectIfNeeded
