@@ -18,12 +18,11 @@ try {
     // https://github.com/getsentry/raven-js/issues/723
     // https://docs.sentry.io/clients/javascript/config/
     autoBreadcrumbs: sentryEnableAutoBreadcrumbs,
+    // Only log errors that originate in our JS files.
     whitelistUrls: [
-      'tab.gladly.io',
-      'prod-tab2017.gladly.io',
-      'prod-tab2017-media.gladly.io',
-      'dev-tab2017.gladly.io',
-      'dev-tab2017-media.gladly.io'
+      /tab\.gladly\.io\/newtab\/static/,
+      /prod-tab2017\.gladly\.io\/newtab\/static/,
+      /dev-tab2017\.gladly\.io\/newtab\/static/
     ]
   }).install()
 } catch (e) {
