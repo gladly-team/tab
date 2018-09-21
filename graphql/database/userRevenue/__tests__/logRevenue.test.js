@@ -11,9 +11,11 @@ import {
   mockDate
 } from '../../test-utils'
 import decodeAmazonCPM from '../decodeAmazonCPM'
+import { random } from 'lodash/number'
 
 jest.mock('../decodeAmazonCPM')
 jest.mock('../../databaseClient')
+jest.mock('lodash/number')
 
 const userContext = getMockUserContext()
 const mockCurrentTime = '2017-06-22T01:13:28.000Z'
@@ -24,11 +26,25 @@ beforeAll(() => {
   })
 })
 
+afterEach(() => {
+  jest.clearAllMocks()
+})
+
 afterAll(() => {
   mockDate.off()
 })
 
 describe('logRevenue', () => {
+  test('returns object with success: true', async () => {
+    expect.assertions(1)
+
+    const userId = userContext.id
+    const returned = await logRevenue(userContext, userId, 0.0172, '2468')
+    expect(returned).toEqual({
+      success: true
+    })
+  })
+
   test('calls DB to create item with "revenue" argument', async () => {
     expect.assertions(1)
 
@@ -234,10 +250,53 @@ describe('logRevenue', () => {
       .rejects.toThrow('Amazon revenue code "some-code" resolved to a nil value')
   })
 
-  test('throws an error when a DB item already exists', async () => {
-    expect.assertions(1)
+  test('retries with a new timestamp when a DB item already exists', async () => {
+    expect.assertions(3)
+
+    const userRevenueCreate = jest.spyOn(UserRevenueModel, 'create')
 
     // Mock that the item already exists.
+    setMockDBResponse(
+      DatabaseOperation.CREATE,
+      null,
+      { code: 'ConditionalCheckFailedException' }
+    )
+
+    // Control the random millisecond selection.
+    random.mockReturnValueOnce(7)
+
+    await logRevenue(userContext, userContext.id, 0.0172, '2468')
+    expect(userRevenueCreate).toHaveBeenCalledTimes(2)
+    expect(userRevenueCreate).toHaveBeenCalledWith(
+      userContext,
+      addTimestampFieldsToItem({
+        userId: userContext.id,
+        timestamp: '2017-06-22T01:13:28.000Z',
+        revenue: 0.0172,
+        dfpAdvertiserId: '2468'
+      })
+    )
+    expect(userRevenueCreate).toHaveBeenLastCalledWith(
+      userContext,
+      addTimestampFieldsToItem({
+        userId: userContext.id,
+        timestamp: '2017-06-22T01:13:28.007Z', // Different time
+        revenue: 0.0172,
+        dfpAdvertiserId: '2468'
+      })
+    )
+  })
+
+  test('throws an error when a DB item already exists twice in a row', async () => {
+    expect.assertions(1)
+
+    // Mock that the item already exists for the original and the
+    // retried "create" operations.
+    setMockDBResponse(
+      DatabaseOperation.CREATE,
+      null,
+      { code: 'ConditionalCheckFailedException' }
+    )
     setMockDBResponse(
       DatabaseOperation.CREATE,
       null,

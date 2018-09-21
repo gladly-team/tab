@@ -1,8 +1,8 @@
 
 import moment from 'moment'
-import UserRevenueModel from './UserRevenueModel'
 import { isNil } from 'lodash/lang'
-
+import { random } from 'lodash/number'
+import UserRevenueModel from './UserRevenueModel'
 import decodeAmazonCPM from './decodeAmazonCPM'
 
 const AMAZON_CPM_REVENUE_TYPE = 'AMAZON_CPM'
@@ -55,6 +55,19 @@ const aggregateRevenues = (revenues, aggregationOperation) => {
 }
 
 /**
+ * Add a random number of milliseconds (between 1 and 20 ms) to an
+ * ISO string datetime.
+ * @param {String} ISODatetime - An ISO datetime string
+ * @return {String} An ISO datetime with the milliseconds up to
+ *   20ms greater than the provided ISODatetime.
+ */
+const addMillisecondsToISODatetime = (ISODatetime) => {
+  const msToAdd = random(1, 20)
+  return moment(ISODatetime)
+    .add(msToAdd, 'milliseconds').toISOString()
+}
+
+/**
  * Log revenue earned by a user.
  * @param {object} userContext - The user authorizer object.
  * @param {string} userId - The user id.
@@ -95,10 +108,11 @@ const logRevenue = async (userContext, userId, revenue = null, dfpAdvertiserId =
     revenueToLog = aggregateRevenues([revenue, decodedRevenue], aggregationOperation)
   }
 
-  function createRevenueLogItem () {
+  const ISOTimestamp = moment.utc().toISOString()
+  function createRevenueLogItem (createdISOTimestamp) {
     return UserRevenueModel.create(userContext, {
       userId: userId,
-      timestamp: moment.utc().toISOString(),
+      timestamp: createdISOTimestamp,
       revenue: revenueToLog,
       ...dfpAdvertiserId && { dfpAdvertiserId: dfpAdvertiserId },
       ...tabId && { tabId: tabId }
@@ -106,9 +120,24 @@ const logRevenue = async (userContext, userId, revenue = null, dfpAdvertiserId =
   }
 
   try {
-    await createRevenueLogItem()
+    await createRevenueLogItem(ISOTimestamp)
   } catch (e) {
-    throw e
+    // An item already exists with these keys.
+    // This happens when a user logs two revenue items at the exact
+    // same millisecond. We had assumed user ID (hash key) and timestamp
+    // (sort key) would be sufficiently unique, but that's not always true.
+    // https://github.com/gladly-team/tab/issues/330
+    if (e.code === 'ConditionalCheckFailedException') {
+      try {
+        // A messy but sufficient fix: modify the timestamp slightly.
+        const newISOTimestamp = addMillisecondsToISODatetime(ISOTimestamp)
+        await createRevenueLogItem(newISOTimestamp)
+      } catch (e) {
+        throw e
+      }
+    } else {
+      throw e
+    }
   }
   return { success: true }
 }
