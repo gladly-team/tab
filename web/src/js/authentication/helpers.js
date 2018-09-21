@@ -62,6 +62,26 @@ const allowAnonymousUser = () => {
 }
 
 /**
+ * Return whether we should create an anonymous account for this
+ * user: true only if the user installed the browser extension
+ * very recently.
+ * This is an attempt to reduce the noise of unnecessary user
+ * creations, which are likely caused by users whose browsers do
+ * not persist the user between tabs/sessions (e.g. incognito
+ * browsing).
+ * @return {boolean} Whether we should create an anonymous account
+ *   for this user.
+ */
+const shouldCreateAnonymousUser = () => {
+  const installTime = getBrowserExtensionInstallTime()
+  const secondsAfterInstallToAllowCreation = 30
+  return (
+    installTime &&
+    moment().diff(installTime, 'seconds') < secondsAfterInstallToAllowCreation
+  )
+}
+
+/**
  * Redirect to the main login page if not in an iframe, or redirect
  * to an intermediary page if in an iframe.
  * @return {undefined}
@@ -102,24 +122,32 @@ export const checkAuthStateAndRedirectIfNeeded = async (user, fetchedUsername = 
   // appropriate auth page.
   // User is not logged in.
   if (!user || !user.id) {
-    // Authenticate the user anonymously.
-    try {
-      await signInAnonymously()
-    } catch (e) {
-      throw e
-    }
+    // To reduce noise in user creation stats, only create an anonymous
+    // user if the user recently installed the browser extension.]
+    if (shouldCreateAnonymousUser()) {
+      // Authenticate the user anonymously.
+      try {
+        await signInAnonymously()
+      } catch (e) {
+        throw e
+      }
 
-    // Create a user in our database.
-    try {
-      await createNewUser()
-    } catch (e) {
-      throw e
-    }
+      // Create a user in our database.
+      try {
+        await createNewUser()
+      } catch (e) {
+        throw e
+      }
 
-    // Determine if anonymous authentication is sufficient.
-    if (allowAnonymousUser()) {
-      // If the user is allowed to be anonymous, do not redirect.
-      redirected = false
+      // Determine if anonymous authentication is sufficient.
+      if (allowAnonymousUser()) {
+        // If the user is allowed to be anonymous, do not redirect.
+        redirected = false
+      } else {
+        goToMainLoginPage()
+        redirected = true
+      }
+    // If not creating an anonymous user, go to the login page.
     } else {
       goToMainLoginPage()
       redirected = true
