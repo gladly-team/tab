@@ -122,6 +122,7 @@ export const checkAuthStateAndRedirectIfNeeded = async (user, fetchedUsername = 
       redirected = false
     } else {
       goToMainLoginPage()
+      redirected = true
     }
   // If the user has an anonymous account and is allowed to be
   // anonymous, do nothing. If they're anonymous but are not
@@ -131,14 +132,17 @@ export const checkAuthStateAndRedirectIfNeeded = async (user, fetchedUsername = 
       redirected = false
     } else {
       goToMainLoginPage()
+      redirected = true
     }
   // If the user does not have an email address, show a message
   // asking them to sign in with a different method.
   } else if (!user.email) {
     replaceUrl(missingEmailMessageURL)
+    redirected = true
   // User is logged in but their email is not verified.
   } else if (!user.emailVerified) {
     replaceUrl(verifyEmailURL)
+    redirected = true
   // User is logged in but has not set a username.
   } else if (!user.username) {
     // If the username isn't in localStorage, check if it
@@ -153,6 +157,7 @@ export const checkAuthStateAndRedirectIfNeeded = async (user, fetchedUsername = 
       redirected = false
     } else {
       replaceUrl(enterUsernameURL)
+      redirected = true
     }
   } else {
     redirected = false
