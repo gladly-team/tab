@@ -4,6 +4,8 @@ import moment from 'moment'
 import UserRevenueModel from '../UserRevenueModel'
 import logRevenue from '../logRevenue'
 import {
+  DatabaseOperation,
+  setMockDBResponse,
   addTimestampFieldsToItem,
   getMockUserContext,
   mockDate
@@ -28,6 +30,8 @@ afterAll(() => {
 
 describe('logRevenue', () => {
   test('calls DB to create item with "revenue" argument', async () => {
+    expect.assertions(1)
+
     const userId = userContext.id
     const userRevenueCreate = jest.spyOn(UserRevenueModel, 'create')
     await logRevenue(userContext, userId, 0.0172, '2468')
@@ -44,6 +48,8 @@ describe('logRevenue', () => {
   })
 
   test('dfpAdvertiserId is optional', async () => {
+    expect.assertions(1)
+
     const userId = userContext.id
     const userRevenueCreate = jest.spyOn(UserRevenueModel, 'create')
     await logRevenue(userContext, userId, 0.0172)
@@ -59,6 +65,8 @@ describe('logRevenue', () => {
   })
 
   test('includes "tabId" when provided', async () => {
+    expect.assertions(1)
+
     const userId = userContext.id
     const userRevenueCreate = jest.spyOn(UserRevenueModel, 'create')
     const someTabId = '712dca1a-3705-480f-95ff-314be86a2936'
@@ -77,12 +85,16 @@ describe('logRevenue', () => {
   })
 
   test('it throws an error if neither "revenue" nor "encodedRevenue" is provided', () => {
+    expect.assertions(1)
+
     const userId = userContext.id
     return expect(logRevenue(userContext, userId))
       .rejects.toThrow('Revenue logging requires either "revenue" or "encodedRevenue" values')
   })
 
   test('it throws an error if both "revenue" nor "encodedRevenue" are provided but "aggregationOperation" is not', () => {
+    expect.assertions(1)
+
     const userId = userContext.id
     const revenueObj = {
       encodingType: 'AMAZON_CPM',
@@ -97,6 +109,8 @@ describe('logRevenue', () => {
   })
 
   test('it decodes an encoded Amazon CPM revenue object', async () => {
+    expect.assertions(1)
+
     const userId = userContext.id
     const userRevenueCreate = jest.spyOn(UserRevenueModel, 'create')
     const revenueObj = {
@@ -120,6 +134,8 @@ describe('logRevenue', () => {
   })
 
   test('it throws an error if a revenue object has an invalid transformation type', () => {
+    expect.assertions(1)
+
     const userId = userContext.id
     const revenueObj = {
       encodingType: 'NOT_A_VALID_TYPE_HERE',
@@ -130,6 +146,8 @@ describe('logRevenue', () => {
   })
 
   test('it throws an error if an invalid "aggregationOperation" is provided', () => {
+    expect.assertions(1)
+
     const userId = userContext.id
     const revenueObj = {
       encodingType: 'AMAZON_CPM',
@@ -144,6 +162,8 @@ describe('logRevenue', () => {
   })
 
   test('it chooses the max revenue value when using "MAX" aggregationOperation', async () => {
+    expect.assertions(2)
+
     const userId = userContext.id
     const userRevenueCreate = jest.spyOn(UserRevenueModel, 'create')
     const revenueObj = {
@@ -181,6 +201,8 @@ describe('logRevenue', () => {
   })
 
   test('it throws an error if decoding throws an error', () => {
+    expect.assertions(1)
+
     const userId = userContext.id
     const revenueObj = {
       encodingType: 'AMAZON_CPM',
@@ -197,6 +219,8 @@ describe('logRevenue', () => {
   })
 
   test('it throws an error if the decoded revenue object is null and there is no other revenue value', () => {
+    expect.assertions(1)
+
     const userId = userContext.id
     const revenueObj = {
       encodingType: 'AMAZON_CPM',
@@ -208,5 +232,19 @@ describe('logRevenue', () => {
 
     return expect(logRevenue(userContext, userId, null, null, revenueObj))
       .rejects.toThrow('Amazon revenue code "some-code" resolved to a nil value')
+  })
+
+  test('throws an error when a DB item already exists', async () => {
+    expect.assertions(1)
+
+    // Mock that the item already exists.
+    setMockDBResponse(
+      DatabaseOperation.CREATE,
+      null,
+      { code: 'ConditionalCheckFailedException' }
+    )
+
+    await expect(logRevenue(userContext, userContext.id, 0.0172, '2468'))
+      .rejects.toThrow()
   })
 })

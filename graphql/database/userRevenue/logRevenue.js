@@ -95,14 +95,18 @@ const logRevenue = async (userContext, userId, revenue = null, dfpAdvertiserId =
     revenueToLog = aggregateRevenues([revenue, decodedRevenue], aggregationOperation)
   }
 
-  try {
-    await UserRevenueModel.create(userContext, {
+  function createRevenueLogItem () {
+    return UserRevenueModel.create(userContext, {
       userId: userId,
       timestamp: moment.utc().toISOString(),
       revenue: revenueToLog,
       ...dfpAdvertiserId && { dfpAdvertiserId: dfpAdvertiserId },
       ...tabId && { tabId: tabId }
     })
+  }
+
+  try {
+    await createRevenueLogItem()
   } catch (e) {
     throw e
   }
