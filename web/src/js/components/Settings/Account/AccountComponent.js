@@ -60,7 +60,6 @@ class Account extends React.Component {
     displayConsentUI()
   }
 
-  // TODO: handle no username for anonymous users
   render () {
     const { user } = this.props
     return (
@@ -69,9 +68,9 @@ class Account extends React.Component {
           Account
         </Typography>
         <Divider />
-        <AccountItem name={'Username'} value={user.username} />
+        <AccountItem name={'Username'} value={user.username ? user.username : 'Not signed in'} />
         <Divider />
-        <AccountItem name={'Email'} value={user.email} />
+        <AccountItem name={'Email'} value={user.email ? user.email : 'Not signed in'} />
         { this.state.showDataPrivacyOption
           ? (
             <span>
@@ -100,8 +99,8 @@ class Account extends React.Component {
 
 Account.propTypes = {
   user: PropTypes.shape({
-    email: PropTypes.string.isRequired,
-    username: PropTypes.string.isRequired
+    email: PropTypes.string,
+    username: PropTypes.string
   })
 }
 

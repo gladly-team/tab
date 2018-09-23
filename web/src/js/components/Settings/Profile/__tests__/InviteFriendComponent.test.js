@@ -1,6 +1,8 @@
 /* eslint-env jest */
 
 import React from 'react'
+import TextField from '@material-ui/core/TextField'
+import { cloneDeep } from 'lodash/lang'
 import {
   mount,
   shallow
@@ -31,6 +33,39 @@ describe('Invite friend component', () => {
       <InviteFriendComponent {...mockProps} />
     )
     const referralUrl = 'https://tab.gladly.io/?u=bob'
-    expect(wrapper.find('input').first().prop('value')).toBe(referralUrl)
+    expect(wrapper.find(TextField).first().prop('value')).toBe(referralUrl)
+  })
+
+  it('contains the correct description text', () => {
+    const InviteFriendComponent = require('../InviteFriendComponent').default
+    const wrapper = mount(
+      <InviteFriendComponent {...mockProps} />
+    )
+    expect(wrapper.find(TextField).first().prop('label')).toBe(`Share this link`)
+    expect(wrapper.find(TextField).first().prop('helperText')).toBe(
+      `and you'll get 350 Hearts for every person who joins!`)
+  })
+
+  it('contains the correct referral URL when there is no provided username', () => {
+    const InviteFriendComponent = require('../InviteFriendComponent').default
+    const newMockProps = cloneDeep(mockProps)
+    newMockProps.user.username = undefined
+    const wrapper = mount(
+      <InviteFriendComponent {...newMockProps} />
+    )
+    const referralUrl = 'https://tab.gladly.io'
+    expect(wrapper.find(TextField).first().prop('value')).toBe(referralUrl)
+  })
+
+  it('contains the correct description text  when there is no provided username', () => {
+    const InviteFriendComponent = require('../InviteFriendComponent').default
+    const newMockProps = cloneDeep(mockProps)
+    newMockProps.user.username = undefined
+    const wrapper = mount(
+      <InviteFriendComponent {...newMockProps} />
+    )
+    expect(wrapper.find(TextField).first().prop('label')).toBe(`Share this link`)
+    expect(wrapper.find(TextField).first().prop('helperText')).toBe(
+      `and have a bigger positive impact!`)
   })
 })

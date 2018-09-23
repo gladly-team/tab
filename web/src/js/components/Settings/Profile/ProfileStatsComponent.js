@@ -35,6 +35,7 @@ class ProfileStats extends React.Component {
       flexBasis: '20%',
       margin: spacingPx
     }
+    const greeting = user.username ? `Hi, ${user.username}!` : 'Hi!'
     return (
       <div>
         <Paper
@@ -57,7 +58,7 @@ class ProfileStats extends React.Component {
             }}
           />
           <p>
-            <span style={{fontWeight: 500}}>Hi, {user.username}!</span>
+            <span style={{fontWeight: 500}}>{greeting}</span>
             <span> Here's all your great work Tabbing, by the numbers.</span>
           </p>
         </Paper>
@@ -138,7 +139,7 @@ class ProfileStats extends React.Component {
 ProfileStats.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.string.isRequired,
-    username: PropTypes.string.isRequired,
+    username: PropTypes.string,
     heartsUntilNextLevel: PropTypes.number.isRequired,
     joined: PropTypes.string.isRequired,
     level: PropTypes.number.isRequired,

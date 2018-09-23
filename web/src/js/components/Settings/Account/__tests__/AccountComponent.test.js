@@ -2,8 +2,10 @@
 
 import React from 'react'
 import {
+  mount,
   shallow
 } from 'enzyme'
+import Typography from '@material-ui/core/Typography'
 jest.mock('utils/client-location')
 
 const getMockUserData = () => {
@@ -108,5 +110,51 @@ describe('Account component', () => {
 
     const LogConsentData = require('../../../Dashboard/LogConsentDataContainer').default
     expect(wrapper.find(LogConsentData).length > 0).toBe(false)
+  })
+
+  it('displays the username', () => {
+    const AccountComponent = require('../AccountComponent').default
+    const userData = getMockUserData()
+    const wrapper = mount(
+      <AccountComponent user={userData} />
+    )
+    const typographies = wrapper.find(Typography)
+    expect(typographies.at(1).text()).toBe('Username')
+    expect(typographies.at(2).text()).toBe('somebody123')
+  })
+
+  it('displays the email address', () => {
+    const AccountComponent = require('../AccountComponent').default
+    const userData = getMockUserData()
+    const wrapper = mount(
+      <AccountComponent user={userData} />
+    )
+    const typographies = wrapper.find(Typography)
+    expect(typographies.at(3).text()).toBe('Email')
+    expect(typographies.at(4).text()).toBe('somebody@example.com')
+  })
+
+  it('displays a placeholder when there is no username', () => {
+    const AccountComponent = require('../AccountComponent').default
+    const userData = getMockUserData()
+    delete userData.username
+    const wrapper = mount(
+      <AccountComponent user={userData} />
+    )
+    const typographies = wrapper.find(Typography)
+    expect(typographies.at(1).text()).toBe('Username')
+    expect(typographies.at(2).text()).toBe('Not signed in')
+  })
+
+  it('displays a placeholder when there is no email address', () => {
+    const AccountComponent = require('../AccountComponent').default
+    const userData = getMockUserData()
+    delete userData.email
+    const wrapper = mount(
+      <AccountComponent user={userData} />
+    )
+    const typographies = wrapper.find(Typography)
+    expect(typographies.at(3).text()).toBe('Email')
+    expect(typographies.at(4).text()).toBe('Not signed in')
   })
 })
