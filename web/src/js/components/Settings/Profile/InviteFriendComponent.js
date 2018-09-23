@@ -23,8 +23,11 @@ const styles = theme => ({
 
 class InviteFriend extends React.Component {
   getReferralUrl () {
-    // TODO: handle no username for anonymous users
-    return `https://tab.gladly.io/?u=${this.props.user.username}`
+    const baseURL = 'https://tab.gladly.io'
+    const referralUrl = this.props.user.username
+      ? `${baseURL}/?u=${this.props.user.username}`
+      : baseURL
+    return referralUrl
   }
 
   onTextFieldClicked () {
@@ -42,7 +45,10 @@ class InviteFriend extends React.Component {
         onClick={this.onTextFieldClicked.bind(this)}
         value={referralUrl}
         label={'Share this link'}
-        helperText={"and you'll get 350 Hearts for every person who joins!"}
+        helperText={this.props.user.username
+          ? `and you'll get 350 Hearts for every person who joins!`
+          : `and have a bigger positive impact!`
+        }
         InputProps={{
           classes: {
             underline: classes.inputUnderline
@@ -68,7 +74,7 @@ class InviteFriend extends React.Component {
 
 InviteFriend.propTypes = {
   user: PropTypes.shape({
-    username: PropTypes.string.isRequired
+    username: PropTypes.string
   }),
   classes: PropTypes.object.isRequired,
   style: PropTypes.object
