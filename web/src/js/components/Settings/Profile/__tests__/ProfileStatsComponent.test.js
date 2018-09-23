@@ -1,9 +1,13 @@
 /* eslint-env jest */
 
 import React from 'react'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import { cloneDeep } from 'lodash/lang'
 import {
+  mount,
   shallow
 } from 'enzyme'
+import Stat from '../StatComponent'
 
 const mockProps = {
   user: {
@@ -28,5 +32,36 @@ describe('Profile stats component', () => {
     shallow(
       <ProfileStatsComponent {...mockProps} />
     )
+  })
+
+  it('has the expected number of stats', () => {
+    const ProfileStatsComponent = require('../ProfileStatsComponent').default
+    const wrapper = shallow(
+      <ProfileStatsComponent {...mockProps} />
+    )
+    expect(wrapper.find(Stat).length).toBe(6)
+  })
+
+  it('contains the correct greeting when there is a username', () => {
+    const ProfileStatsComponent = require('../ProfileStatsComponent').default
+    // @material-ui-1-todo: remove MuiThemeProvider wrapper
+    const wrapper = mount(
+      <MuiThemeProvider>
+        <ProfileStatsComponent {...mockProps} />
+      </MuiThemeProvider>
+    )
+    expect(wrapper.find('p').first().find('span').first().text()).toBe('Hi, Bob!')
+  })
+
+  it('contains the correct greeting when there is no username', () => {
+    const ProfileStatsComponent = require('../ProfileStatsComponent').default
+    const newMockProps = cloneDeep(mockProps)
+    delete newMockProps.user.username
+    const wrapper = mount(
+      <MuiThemeProvider>
+        <ProfileStatsComponent {...newMockProps} />
+      </MuiThemeProvider>
+    )
+    expect(wrapper.find('p').first().find('span').first().text()).toBe('Hi!')
   })
 })
