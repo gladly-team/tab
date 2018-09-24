@@ -12,6 +12,7 @@ export const ANON_USER_GROUP_NO_GROUP = 'none'
 export const ANON_USER_GROUP_AUTH_REQUIRED = 'auth'
 export const ANON_USER_GROUP_UNAUTHED_ALLOWED = 'unauthed'
 
+// @experiment-anon-sign-in
 /**
  * Return the test group for the anonymous user authentication
  * test from localStorage. If no test group is set, return the
@@ -29,6 +30,7 @@ export const getAnonymousUserTestGroup = () => {
   return testGroup
 }
 
+// @experiment-anon-sign-in
 /**
  * Assigns the user to a test group for the anonymous user
  * authentication test and stores the test group in localStorage.
@@ -60,6 +62,7 @@ export const assignUserToTestGroups = () => {
   assignAnonymousUserTestGroup()
 }
 
+// @experiment-anon-sign-in
 /**
  * Converts the anonymous test group value to its corresponding
  * string used by the server-side, compliant with our GraphQL
