@@ -1,5 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import Paper from '@material-ui/core/Paper'
+import Typography from '@material-ui/core/Typography'
 import {
   getCurrentUser,
   sendVerificationEmail
@@ -19,6 +21,9 @@ import LogoWithText from '../Logo/LogoWithText'
 import {
   getUrlParameters
 } from 'utils/utils'
+import {
+  getBrowserExtensionInstallId
+} from 'utils/local-user-data-mgr'
 
 // Handle the authentication flow:
 //   check if current user is fully authenticated and redirect
@@ -45,7 +50,19 @@ class Authentication extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      loadChildren: false
+      loadChildren: false,
+      // TODO: clean up. This is a proxy; we should make a more
+      //   explicit check.
+      // Whether we are requiring the anonymous user to sign in.
+      // This will be true if the user isn't voluntarily signing in
+      // (i.e. when the URL parameter "noredirect" is not set) and
+      // when the user didn't simply log out (i.e. when the install
+      // ID is still in local storage).
+      isMandatoryAnonymousSignIn: (
+        !getUrlParameters()['noredirect'] &&
+        getBrowserExtensionInstallId()
+      ),
+      isUserAnonymous: false // Set after mount if true
     }
   }
 
@@ -53,6 +70,8 @@ class Authentication extends React.Component {
     this.mounted = true
 
     await this.navigateToAuthStep()
+
+    await this.determineAnonymousStatus()
 
     // Don't render any children until after checking the user's
     // authed state. Otherwise, immediate unmounting of
@@ -77,6 +96,24 @@ class Authentication extends React.Component {
     if (!isEqual(nextProps.user, this.props.user)) {
       this.navigateToAuthStep()
     }
+  }
+
+  /**
+   * Check if the user is anonymous and update state with the
+   * anonymous status.
+   * @return {Promise<undefined>} A Promise that resolves after
+   *   the state has been updated.
+   */
+  async determineAnonymousStatus () {
+    const currentUser = await getCurrentUser()
+    const isAnon = currentUser && currentUser.isAnonymous
+    return new Promise((resolve, reject) => {
+      this.setState({
+        isUserAnonymous: isAnon
+      }, () => {
+        resolve()
+      })
+    })
   }
 
   // Whether this is rendering an /auth/action/ page, which include
@@ -170,6 +207,8 @@ class Authentication extends React.Component {
   }
 
   render () {
+    const showRequiredSignInExplanation = this.state.isUserAnonymous &&
+      this.state.isMandatoryAnonymousSignIn
     return (
       <span
         data-test-id={'authentication-page'}
@@ -214,19 +253,56 @@ class Authentication extends React.Component {
               : null
             }
           </span>
-          {/* Using style from homepage */}
-          <span style={{
-            color: 'rgba(33, 33, 33, 0.82)',
-            fontFamily: "'Helvetica Neue','Helvetica','Arial',sans-serif",
-            fontWeight: '500',
-            lineHeight: '1.1',
-            textAlign: 'center',
-            padding: 10
-          }}>
-            <h1>"One of the simplest ways to raise money"</h1>
-            <p style={{ color: '#838383', fontWeight: '400' }}>- USA Today</p>
-          </span>
+          { showRequiredSignInExplanation
+            ? null : (
+              // Using same style as homepage
+              <span
+                data-test-id={'endorsement-quote'}
+                style={{
+                  color: 'rgba(33, 33, 33, 0.82)',
+                  fontFamily: "'Helvetica Neue','Helvetica','Arial',sans-serif",
+                  fontWeight: '500',
+                  lineHeight: '1.1',
+                  textAlign: 'center',
+                  padding: 10
+                }}
+              >
+                <h1>"One of the simplest ways to raise money"</h1>
+                <p style={{ color: '#838383', fontWeight: '400' }}>- USA Today</p>
+              </span>
+            )
+          }
         </span>
+        { (showRequiredSignInExplanation)
+          ? (
+            <div
+              data-test-id={'anon-sign-in-fyi'}
+              style={{
+                position: 'absolute',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                bottom: 24
+              }}
+            >
+              <Paper>
+                <div
+                  style={{
+                    padding: '14px 18px',
+                    maxWidth: 600
+                  }}
+                >
+                  <Typography variant={'body1'}>
+                    <Typography variant={'body2'}>Hey there!</Typography>
+                      We ask you to sign in after a while to make sure you don't lose access to
+                      your new tab data, like your notes, bookmarks, and Hearts. Signing in also lets
+                      you sync your tab between browsers – nice!
+                  </Typography>
+                </div>
+              </Paper>
+            </div>
+          )
+          : null
+        }
       </span>
     )
   }

@@ -104,7 +104,7 @@ class UserMenu extends React.Component {
   }
 
   render () {
-    const { app, user } = this.props
+    const { app, user, isUserAnonymous } = this.props
     if (!user || !app) {
       return null
     }
@@ -419,15 +419,22 @@ class UserMenu extends React.Component {
                 style={menuItemStyle}
               />
             </a>
-            <Divider style={{ marginBottom: 0, marginTop: 0 }} />
-            <MenuItem
-              primaryText='Sign Out'
-              onClick={this.logout.bind(this)}
-              data-test-id={'app-menu-sign-out'}
-              leftIcon={
-                <ExitToAppIcon color={menuItemIconColor} style={menuItemSvgIconStyle} />
-              }
-            />
+            { !isUserAnonymous
+              ? <Divider style={{ marginBottom: 0, marginTop: 0 }} />
+              : null
+            }
+            { !isUserAnonymous
+              ? (
+                <MenuItem
+                  primaryText='Sign Out'
+                  onClick={this.logout.bind(this)}
+                  data-test-id={'app-menu-sign-out'}
+                  leftIcon={
+                    <ExitToAppIcon color={menuItemIconColor} style={menuItemSvgIconStyle} />
+                  }
+                />
+              ) : null
+            }
           </Menu>
         </DashboardPopover>
       </div>
@@ -447,10 +454,12 @@ UserMenu.propTypes = {
     numUsersRecruited: PropTypes.number.isRequired,
     tabsToday: PropTypes.number.isRequired
   }),
+  isUserAnonymous: PropTypes.bool,
   style: PropTypes.object
 }
 
 UserMenu.defaultProps = {
+  isUserAnonymous: false,
   style: {}
 }
 

@@ -157,7 +157,12 @@ class Dashboard extends React.Component {
                   hoverColor={dashboardIconActiveColor}
                   style={bulletPointStyle}
                 />
-                <UserMenu app={app} user={user} style={userMenuStyle} />
+                <UserMenu
+                  app={app}
+                  user={user}
+                  style={userMenuStyle}
+                  isUserAnonymous={this.state.isUserAnonymous}
+                />
               </div>
             </FadeInDashboardAnimation>
           )
