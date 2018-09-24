@@ -420,18 +420,19 @@ class UserMenu extends React.Component {
               />
             </a>
             { !isUserAnonymous
+              ? <Divider style={{ marginBottom: 0, marginTop: 0 }} />
+              : null
+            }
+            { !isUserAnonymous
               ? (
-                <span>
-                  <Divider style={{ marginBottom: 0, marginTop: 0 }} />
-                  <MenuItem
-                    primaryText='Sign Out'
-                    onClick={this.logout.bind(this)}
-                    data-test-id={'app-menu-sign-out'}
-                    leftIcon={
-                      <ExitToAppIcon color={menuItemIconColor} style={menuItemSvgIconStyle} />
-                    }
-                  />
-                </span>
+                <MenuItem
+                  primaryText='Sign Out'
+                  onClick={this.logout.bind(this)}
+                  data-test-id={'app-menu-sign-out'}
+                  leftIcon={
+                    <ExitToAppIcon color={menuItemIconColor} style={menuItemSvgIconStyle} />
+                  }
+                />
               ) : null
             }
           </Menu>
