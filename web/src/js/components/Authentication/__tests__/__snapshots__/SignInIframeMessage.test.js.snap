@@ -7,6 +7,7 @@ exports[`SignInIframeMessage tests matches expected snapshot 1`] = `
   style={
     Object {
       "backgroundColor": "#FFF",
+      "marginBottom": 60,
       "maxWidth": 400,
       "padding": 24,
     }
@@ -14,12 +15,16 @@ exports[`SignInIframeMessage tests matches expected snapshot 1`] = `
   transitionEnabled={true}
   zDepth={1}
 >
-  <h3>
+  <WithStyles(Typography)
+    variant="title"
+  >
     Let's get started!
-  </h3>
-  <p>
+  </WithStyles(Typography)>
+  <WithStyles(Typography)
+    variant="body1"
+  >
     Sign in to customize your new tab page and raise money for your favorite causes.
-  </p>
+  </WithStyles(Typography)>
   <span
     style={
       Object {

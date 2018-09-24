@@ -16,8 +16,13 @@ export const goTo = (location, paramsObj = {}) => {
   })
 }
 
-export const replaceUrl = (location) => {
-  browserHistory.replace(location)
+export const replaceUrl = (location, paramsObj = {}) => {
+  browserHistory.replace({
+    pathname: location,
+    search: qs.stringify(paramsObj)
+      ? `?${qs.stringify(paramsObj)}`
+      : null
+  })
 }
 
 export const externalRedirect = (externalURL) => {

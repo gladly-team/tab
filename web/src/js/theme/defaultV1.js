@@ -23,7 +23,13 @@ const theme = createMuiTheme({
   },
   typography: {
     fontSize: 14,
-    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif'
+    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+    title: {
+      lineHeight: '1.7em'
+    },
+    subheading: {
+      lineHeight: '1.16667em'
+    }
   },
   overrides: {
     MuiButtonBase: {

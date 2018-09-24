@@ -5,9 +5,9 @@ import {
   goTo,
   replaceUrl,
   goToDashboard,
-  goToLogin,
   authMessageURL,
   enterUsernameURL,
+  loginURL,
   missingEmailMessageURL,
   verifyEmailURL
 } from 'navigation/navigation'
@@ -86,7 +86,7 @@ afterEach(() => {
 
 describe('checkAuthStateAndRedirectIfNeeded tests', () => {
   it('[no-anon-allowed] does not redirect if the user is fully authenticated', async () => {
-    expect.assertions(5)
+    expect.assertions(3)
     setIfAnonymousUserIsAllowed(false)
 
     const checkAuthStateAndRedirectIfNeeded = require('../helpers')
@@ -101,14 +101,12 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
     const redirected = await checkAuthStateAndRedirectIfNeeded(user)
 
     expect(redirected).toBe(false)
-    expect(goToDashboard).not.toHaveBeenCalled()
     expect(goTo).not.toHaveBeenCalled()
     expect(replaceUrl).not.toHaveBeenCalled()
-    expect(goToLogin).not.toHaveBeenCalled()
   })
 
   it('[anon] does not redirect when the user is anonymous and is allowed to be anonymous', async () => {
-    expect.assertions(5)
+    expect.assertions(4)
     setIfAnonymousUserIsAllowed(true)
 
     const user = {
@@ -127,7 +125,6 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
     expect(goToDashboard).not.toHaveBeenCalled()
     expect(goTo).not.toHaveBeenCalled()
     expect(replaceUrl).not.toHaveBeenCalled()
-    expect(goToLogin).not.toHaveBeenCalled()
   })
 
   it('[anon] does not create a new user when the user is unauthed and the user installed the extension not-too-recently', async () => {
@@ -278,7 +275,7 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
     const redirected = await checkAuthStateAndRedirectIfNeeded(user)
 
     expect(redirected).toBe(true)
-    expect(goToLogin).toHaveBeenCalledTimes(1)
+    expect(replaceUrl).toHaveBeenCalledWith(loginURL, {})
   })
 
   it('[anon] redirects when the user is unauthed and the user does not have an extension install time in local storage', async () => {
@@ -315,11 +312,11 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
     const redirected = await checkAuthStateAndRedirectIfNeeded(user)
 
     expect(redirected).toBe(true)
-    expect(goToLogin).toHaveBeenCalledTimes(1)
+    expect(replaceUrl).toHaveBeenCalledWith(loginURL, {})
   })
 
   it('[anon] does not redirect when the user is unauthed and the user installed very recently', async () => {
-    expect.assertions(5)
+    expect.assertions(4)
     setIfAnonymousUserIsAllowed(true)
 
     // The user installed just now
@@ -356,7 +353,6 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
     expect(goToDashboard).not.toHaveBeenCalled()
     expect(goTo).not.toHaveBeenCalled()
     expect(replaceUrl).not.toHaveBeenCalled()
-    expect(goToLogin).not.toHaveBeenCalled()
   })
 
   it('[no-anon-allowed] redirects to the sign-in view if the user is unauthed and NOT within an iframe', async () => {
@@ -391,7 +387,7 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
       .checkAuthStateAndRedirectIfNeeded
     const redirected = await checkAuthStateAndRedirectIfNeeded(user)
 
-    expect(goToLogin).toHaveBeenCalledTimes(1)
+    expect(replaceUrl).toHaveBeenCalledWith(loginURL, {})
     expect(redirected).toBe(true)
   })
 
@@ -420,7 +416,7 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
       .checkAuthStateAndRedirectIfNeeded
     await checkAuthStateAndRedirectIfNeeded(user)
 
-    expect(goTo).toHaveBeenCalledWith(authMessageURL)
+    expect(replaceUrl).toHaveBeenCalledWith(authMessageURL, {})
   })
 
   it('[no-anon-allowed] still creates an anonymous user before requiring sign-in', async () => {
@@ -488,7 +484,8 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
       .checkAuthStateAndRedirectIfNeeded
     await checkAuthStateAndRedirectIfNeeded(user)
 
-    expect(goToLogin).toHaveBeenCalledTimes(1)
+    expect(replaceUrl)
+      .toHaveBeenCalledWith(loginURL, { mandatory: 'true' }) // includes URL param
   })
 
   it('does not redirect to the login screen if the user is anonymous and has been around less than the time needed for us to ask them to sign in', async () => {
@@ -516,7 +513,7 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
       .checkAuthStateAndRedirectIfNeeded
     await checkAuthStateAndRedirectIfNeeded(user)
 
-    expect(goToLogin).not.toHaveBeenCalled()
+    expect(replaceUrl).not.toHaveBeenCalled()
   })
 
   it('redirects to the login screen if the user is anonymous but is not in the anonymous sign-up experimental group', async () => {
@@ -544,7 +541,7 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
       .checkAuthStateAndRedirectIfNeeded
     await checkAuthStateAndRedirectIfNeeded(user)
 
-    expect(goToLogin).toHaveBeenCalledTimes(1)
+    expect(replaceUrl).toHaveBeenCalledWith(loginURL, {})
   })
 
   it('[no-anon-allowed] redirects to missing email screen if authed and there is no email address', async () => {
