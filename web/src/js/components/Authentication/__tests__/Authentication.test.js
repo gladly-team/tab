@@ -22,10 +22,14 @@ import {
   getCurrentUser,
   sendVerificationEmail
 } from 'authentication/user'
+import {
+  getUrlParameters
+} from 'utils/utils'
 
 jest.mock('authentication/helpers')
 jest.mock('authentication/user')
 jest.mock('navigation/navigation')
+jest.mock('utils/utils')
 
 const mockLocationData = {
   pathname: '/newtab/auth/'
@@ -44,6 +48,7 @@ beforeEach(() => {
   // Reset an unauthed user as the default.
   checkAuthStateAndRedirectIfNeeded.mockResolvedValue(true)
   getCurrentUser.mockResolvedValue(null)
+  getUrlParameters.mockReturnValue({})
 })
 
 afterEach(() => {
@@ -121,6 +126,72 @@ describe('Authentication.js tests', function () {
       username: 'SomeUsername',
       isAnonymous: false,
       emailVerified: true
+    })
+
+    const Authentication = require('../Authentication').default
+    const wrapper = shallow(
+      <Authentication
+        location={mockLocationData}
+        user={mockUserData}
+        fetchUser={mockFetchUser}
+      />
+    )
+
+    // Wait for mount to complete.
+    const component = wrapper.instance()
+    await component.componentDidMount()
+
+    expect(goToDashboard).toHaveBeenCalled()
+  })
+
+  it('does not redirect to the app if the user is fully authenticated but the URL has the noredirect param', async () => {
+    expect.assertions(1)
+
+    // User is fully authed.
+    checkAuthStateAndRedirectIfNeeded.mockResolvedValue(false)
+    getCurrentUser.mockResolvedValue({
+      id: 'abc123',
+      email: 'foo@bar.com',
+      username: 'SomeUsername',
+      isAnonymous: false,
+      emailVerified: true
+    })
+
+    getUrlParameters.mockReturnValue({
+      noredirect: 'true'
+    })
+
+    const Authentication = require('../Authentication').default
+    const wrapper = shallow(
+      <Authentication
+        location={mockLocationData}
+        user={mockUserData}
+        fetchUser={mockFetchUser}
+      />
+    )
+
+    // Wait for mount to complete.
+    const component = wrapper.instance()
+    await component.componentDidMount()
+
+    expect(goToDashboard).not.toHaveBeenCalled()
+  })
+
+  it('redirect to the app if the user is fully authenticated but the URL has an invalid noredirect param', async () => {
+    expect.assertions(1)
+
+    // User is fully authed.
+    checkAuthStateAndRedirectIfNeeded.mockResolvedValue(false)
+    getCurrentUser.mockResolvedValue({
+      id: 'abc123',
+      email: 'foo@bar.com',
+      username: 'SomeUsername',
+      isAnonymous: false,
+      emailVerified: true
+    })
+
+    getUrlParameters.mockReturnValue({
+      noredirect: 'something'
     })
 
     const Authentication = require('../Authentication').default

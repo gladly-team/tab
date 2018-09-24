@@ -6,6 +6,7 @@ import {
   STORAGE_REFERRAL_DATA_REFERRING_USER
 } from '../constants'
 import XRegExp from 'xregexp'
+import qs from 'qs'
 
 /**
  * Determine if a username string is valid.
@@ -22,20 +23,8 @@ export const validateUsername = (username) => {
   return re.test(username)
 }
 
-// 'utm_medium'
-// 'utm_source'
-// 'utm_campaign'
-// 'utm_term'
-// 'utm_content'
-// 'tfac_id'
-
 export const getUrlParameters = () => {
-  var vars = {}
-  window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,
-    function (m, key, value) {
-      vars[key] = value
-    })
-  return vars
+  return qs.parse(window.location.search, { ignoreQueryPrefix: true })
 }
 
 // BEGIN: referral data helpers

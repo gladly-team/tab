@@ -1,4 +1,5 @@
 import { browserHistory } from 'react-router'
+import qs from 'qs'
 
 // TODO: replace this with Link navigation via react-router.
 
@@ -6,8 +7,13 @@ import { browserHistory } from 'react-router'
 const protocol = process.env.WEBSITE_PROTOCOL ? process.env.WEBSITE_PROTOCOL : 'https'
 const baseUrl = `${protocol}://${process.env.WEBSITE_DOMAIN}`
 
-export const goTo = (location) => {
-  browserHistory.push(location)
+export const goTo = (location, paramsObj = {}) => {
+  browserHistory.push({
+    pathname: location,
+    search: qs.stringify(paramsObj)
+      ? `?${qs.stringify(paramsObj)}`
+      : null
+  })
 }
 
 export const replaceUrl = (location) => {

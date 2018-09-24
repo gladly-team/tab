@@ -16,6 +16,9 @@ import {
 } from 'navigation/navigation'
 import { isEqual } from 'lodash/lang'
 import LogoWithText from '../Logo/LogoWithText'
+import {
+  getUrlParameters
+} from 'utils/utils'
 
 // Handle the authentication flow:
 //   check if current user is fully authenticated and redirect
@@ -103,8 +106,12 @@ class Authentication extends React.Component {
       throw e
     }
 
+    // When anonymous users choose to sign in, do not go back to the
+    // dashboard.
+    const stayOnAuthPage = getUrlParameters()['noredirect'] === 'true'
+
     // The user is fully authed, so go to the dashboard.
-    if (!redirected) {
+    if (!redirected && !stayOnAuthPage) {
       goToDashboard()
     }
   }

@@ -21,9 +21,17 @@ import ErrorMessage from 'general/ErrorMessage'
 import NewUserTour from '../NewUserTourContainer'
 import localStorageMgr from 'utils/localstorage-mgr'
 import { STORAGE_NEW_USER_HAS_COMPLETED_TOUR } from '../../../constants'
+import { getCurrentUser } from 'authentication/user'
+import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
+import {
+  goTo
+} from 'navigation/navigation'
 
 jest.mock('analytics/logEvent')
 jest.mock('utils/localstorage-mgr')
+jest.mock('authentication/user')
+jest.mock('navigation/navigation')
 
 const mockNow = '2018-05-15T10:30:00.000'
 
@@ -293,5 +301,114 @@ describe('Dashboard component', () => {
     )
     expect(wrapper.find(WidgetsContainer).prop('isCampaignLive')).toBe(true)
     expect(wrapper.find(CampaignBaseContainer).prop('isCampaignLive')).toBe(true)
+  })
+
+  it('displays the anonymous user sign-in prompt when the user is anonymous', async () => {
+    expect.assertions(1)
+
+    getCurrentUser.mockResolvedValueOnce({
+      id: 'some-id-here',
+      email: null,
+      username: null,
+      isAnonymous: true,
+      emailVerified: false
+    })
+
+    const DashboardComponent = require('../DashboardComponent').default
+    const wrapper = shallow(
+      <DashboardComponent {...mockProps} />
+    )
+
+    // Wait for the component to determine whether the
+    // user is anonymous.
+    await wrapper.instance().determineAnonymousStatus()
+    wrapper.update()
+    expect(
+      wrapper.find('[data-test-id="anon-sign-in-prompt-dashboard"]').length
+    ).toBe(1)
+  })
+
+  it('displays the correct text for the anonymous user sign-in prompt', async () => {
+    expect.assertions(1)
+
+    getCurrentUser.mockResolvedValueOnce({
+      id: 'some-id-here',
+      email: null,
+      username: null,
+      isAnonymous: true,
+      emailVerified: false
+    })
+
+    const DashboardComponent = require('../DashboardComponent').default
+    const wrapper = shallow(
+      <DashboardComponent {...mockProps} />
+    )
+
+    // Wait for the component to determine whether the
+    // user is anonymous.
+    await wrapper.instance().determineAnonymousStatus()
+    wrapper.update()
+
+    expect(
+      wrapper
+        .find('[data-test-id="anon-sign-in-prompt-dashboard"]')
+        .find(Typography)
+        .children()
+        .text()
+    ).toBe('Sign in to save your progress!')
+  })
+
+  it('the anonymous user sign-in button leads to the correct URL', async () => {
+    expect.assertions(1)
+
+    getCurrentUser.mockResolvedValueOnce({
+      id: 'some-id-here',
+      email: null,
+      username: null,
+      isAnonymous: true,
+      emailVerified: false
+    })
+
+    const DashboardComponent = require('../DashboardComponent').default
+    const wrapper = shallow(
+      <DashboardComponent {...mockProps} />
+    )
+
+    // Wait for the component to determine whether the
+    // user is anonymous.
+    await wrapper.instance().determineAnonymousStatus()
+    wrapper.update()
+
+    const button = wrapper
+      .find('[data-test-id="anon-sign-in-prompt-dashboard"]')
+      .find(Button)
+    button.simulate('click')
+    expect(goTo).toHaveBeenCalledWith('/newtab/auth/', { noredirect: 'true' })
+  })
+
+  it('does not display the anonymous user sign-in prompt when the user is not anonymous', async () => {
+    expect.assertions(1)
+
+    getCurrentUser.mockResolvedValueOnce({
+      id: 'some-id-here',
+      email: 'somebody@example.com',
+      username: 'IAmSomebody',
+      isAnonymous: false,
+      emailVerified: true
+    })
+
+    const DashboardComponent = require('../DashboardComponent').default
+    const wrapper = shallow(
+      <DashboardComponent {...mockProps} />
+    )
+
+    // Wait for the component to determine whether the
+    // user is anonymous.
+    await wrapper.instance().determineAnonymousStatus()
+    wrapper.update()
+
+    expect(
+      wrapper.find('[data-test-id="anon-sign-in-prompt-dashboard"]').length
+    ).toBe(0)
   })
 })

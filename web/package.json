@@ -77,6 +77,7 @@
     "precss": "^1.4.0",
     "promise": "7.1.1",
     "prop-types": "^15.5.10",
+    "qs": "^6.5.2",
     "raven-js": "^3.24.0",
     "react": "^15.4.2",
     "react-color": "^2.13.8",
