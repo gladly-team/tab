@@ -48,10 +48,8 @@ class Authentication extends React.Component {
     super(props)
     this.state = {
       loadChildren: false,
-      // FIXME: disabled for now because of bad logic.
       // Whether we are requiring the anonymous user to sign in.
-      isMandatoryAnonymousSignIn: false,
-      isUserAnonymous: false // Set after mount if true
+      isMandatoryAnonymousSignIn: getUrlParameters()['mandatory'] === 'true'
     }
   }
 
@@ -59,8 +57,6 @@ class Authentication extends React.Component {
     this.mounted = true
 
     await this.navigateToAuthStep()
-
-    await this.determineAnonymousStatus()
 
     // Don't render any children until after checking the user's
     // authed state. Otherwise, immediate unmounting of
@@ -85,24 +81,6 @@ class Authentication extends React.Component {
     if (!isEqual(nextProps.user, this.props.user)) {
       this.navigateToAuthStep()
     }
-  }
-
-  /**
-   * Check if the user is anonymous and update state with the
-   * anonymous status.
-   * @return {Promise<undefined>} A Promise that resolves after
-   *   the state has been updated.
-   */
-  async determineAnonymousStatus () {
-    const currentUser = await getCurrentUser()
-    const isAnon = currentUser && currentUser.isAnonymous
-    return new Promise((resolve, reject) => {
-      this.setState({
-        isUserAnonymous: isAnon
-      }, () => {
-        resolve()
-      })
-    })
   }
 
   // Whether this is rendering an /auth/action/ page, which include
@@ -196,8 +174,7 @@ class Authentication extends React.Component {
   }
 
   render () {
-    const showRequiredSignInExplanation = this.state.isUserAnonymous &&
-      this.state.isMandatoryAnonymousSignIn
+    const showRequiredSignInExplanation = this.state.isMandatoryAnonymousSignIn
     return (
       <span
         data-test-id={'authentication-page'}
@@ -242,8 +219,8 @@ class Authentication extends React.Component {
               : null
             }
           </span>
-          { showRequiredSignInExplanation
-            ? null : (
+          { !showRequiredSignInExplanation
+            ? (
               // Using same style as homepage
               <span
                 data-test-id={'endorsement-quote'}
@@ -260,9 +237,10 @@ class Authentication extends React.Component {
                 <p style={{ color: '#838383', fontWeight: '400' }}>- USA Today</p>
               </span>
             )
+            : null
           }
         </span>
-        { (showRequiredSignInExplanation)
+        { showRequiredSignInExplanation
           ? (
             <div
               data-test-id={'anon-sign-in-fyi'}
