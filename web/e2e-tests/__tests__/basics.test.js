@@ -9,7 +9,9 @@
 
 let driver
 afterEach(() => {
-  return driver.quit()
+  if (driver && driver.quit) {
+    return driver.quit()
+  }
 })
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 35e3
