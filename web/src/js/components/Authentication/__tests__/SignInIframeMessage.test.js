@@ -5,16 +5,22 @@ import {
   shallow
 } from 'enzyme'
 import toJson from 'enzyme-to-json'
+import Typography from '@material-ui/core/Typography'
+import {
+  getUrlParameters
+} from 'utils/utils'
 
-describe('SignInIframeMessage tests', function () {
-  it('renders without error', function () {
+jest.mock('utils/utils')
+
+describe('SignInIframeMessage tests', () => {
+  it('renders without error', () => {
     const SignInIframeMessage = require('../SignInIframeMessage').default
     shallow(
       <SignInIframeMessage />
     )
   })
 
-  it('redirects the page when clicking the sign-in button', function () {
+  it('redirects the page when clicking the sign-in button', () => {
     const SignInIframeMessage = require('../SignInIframeMessage').default
 
     // Mock window.open
@@ -30,7 +36,42 @@ describe('SignInIframeMessage tests', function () {
     expect(window.open).toHaveBeenCalled()
   })
 
-  it('matches expected snapshot', function () {
+  it('has the expected copy', () => {
+    const SignInIframeMessage = require('../SignInIframeMessage').default
+    const wrapper = shallow(
+      <SignInIframeMessage />
+    )
+    expect(
+      wrapper.find(Typography)
+        .first().children().text())
+      .toBe(`Let's get started!`)
+    expect(
+      wrapper.find(Typography)
+        .at(1).children().text())
+      .toBe(
+        `Sign in to customize your new tab page and raise money for your favorite causes.`)
+  })
+
+  it('shows the explanation copy when an anonymous user is now required to sign in', () => {
+    getUrlParameters.mockReturnValueOnce({
+      mandatory: 'true'
+    })
+    const SignInIframeMessage = require('../SignInIframeMessage').default
+    const wrapper = shallow(
+      <SignInIframeMessage />
+    )
+    expect(
+      wrapper.find(Typography)
+        .first().children().text())
+      .toBe(`Great job so far!`)
+    expect(
+      wrapper.find(Typography)
+        .at(1).children().text())
+      .toMatch(
+        `You've already made a positive impact! Let's keep this progress safe:`)
+  })
+
+  it('matches expected snapshot', () => {
     const SignInIframeMessage = require('../SignInIframeMessage').default
     const wrapper = shallow(
       <SignInIframeMessage />
