@@ -55,6 +55,7 @@ exports[`Authentication.js tests renders as expected prior to navigating 1`] = `
       }
     />
     <span
+      data-test-id="endorsement-quote"
       style={
         Object {
           "color": "rgba(33, 33, 33, 0.82)",
