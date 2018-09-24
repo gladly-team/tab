@@ -3,6 +3,7 @@ import { get } from 'lodash/object'
 
 // Experiments with valid experiment group values.
 const experimentConfig = {
+  // @experiment-anon-sign-in
   anonSignIn: {
     NONE: 0,
     AUTHED_USER_ONLY: 1,
