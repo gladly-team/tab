@@ -31,14 +31,20 @@ jest.mock('authentication/user')
 jest.mock('navigation/navigation')
 jest.mock('utils/utils')
 
-const mockLocationData = {
-  pathname: '/newtab/auth/'
-}
-const mockUserData = {
-  id: null,
-  username: null
-}
 const mockFetchUser = jest.fn()
+
+const MockProps = () => {
+  return {
+    location: {
+      pathname: '/newtab/auth/'
+    },
+    user: {
+      id: null,
+      username: null
+    },
+    fetchUser: mockFetchUser
+  }
+}
 
 const mockNow = '2017-05-19T13:59:58.000Z'
 
@@ -59,24 +65,90 @@ afterEach(() => {
 describe('Authentication.js tests', function () {
   it('renders without error', () => {
     const Authentication = require('../Authentication').default
+    const mockProps = MockProps()
     shallow(
-      <Authentication
-        location={mockLocationData}
-        user={mockUserData}
-        fetchUser={mockFetchUser}
-      />
+      <Authentication {...mockProps} />
     )
+  })
+
+  it('displays the endorsement quote', async () => {
+    expect.assertions(1)
+
+    const Authentication = require('../Authentication').default
+    const mockProps = MockProps()
+    const wrapper = shallow(
+      <Authentication {...mockProps} />
+    )
+
+    // Wait for mount to complete.
+    const component = wrapper.instance()
+    await component.componentDidMount()
+    wrapper.update()
+
+    expect(wrapper
+      .find('[data-test-id="endorsement-quote"]').length
+    ).toBe(1)
+  })
+
+  it('typically does not display the sign-in explanation', async () => {
+    expect.assertions(1)
+
+    const Authentication = require('../Authentication').default
+    const mockProps = MockProps()
+    const wrapper = shallow(
+      <Authentication {...mockProps} />
+    )
+
+    // Wait for mount to complete.
+    const component = wrapper.instance()
+    await component.componentDidMount()
+    wrapper.update()
+
+    expect(wrapper
+      .find('[data-test-id="anon-sign-in-fyi"]').length
+    ).toBe(0)
+  })
+
+  it('displays the sign-in explanation (and hides the quote) when it is a mandatory sign-in', async () => {
+    expect.assertions(2)
+
+    const Authentication = require('../Authentication').default
+    const mockProps = MockProps()
+
+    // Sign-in is mandatory when it's an anonymous user without a
+    // "noredirect" URL parameter.
+    getUrlParameters.mockReturnValue({})
+    getCurrentUser.mockResolvedValue({
+      id: 'abc123',
+      email: null,
+      username: null,
+      isAnonymous: true,
+      emailVerified: false
+    })
+
+    const wrapper = shallow(
+      <Authentication {...mockProps} />
+    )
+
+    // Wait for mount to complete.
+    const component = wrapper.instance()
+    await component.componentDidMount()
+    wrapper.update()
+
+    expect(wrapper
+      .find('[data-test-id="anon-sign-in-fyi"]').length
+    ).toBe(1)
+    expect(wrapper
+      .find('[data-test-id="endorsement-quote"]').length
+    ).toBe(0)
   })
 
   it('calls the `navigateToAuthStep` method on mount', async () => {
     expect.assertions(1)
     const Authentication = require('../Authentication').default
+    const mockProps = MockProps()
     const wrapper = shallow(
-      <Authentication
-        location={mockLocationData}
-        user={mockUserData}
-        fetchUser={mockFetchUser}
-      />
+      <Authentication {...mockProps} />
     )
 
     // Mock method and simulate mount.
@@ -100,12 +172,9 @@ describe('Authentication.js tests', function () {
     })
 
     const Authentication = require('../Authentication').default
+    const mockProps = MockProps()
     const wrapper = shallow(
-      <Authentication
-        location={mockLocationData}
-        user={mockUserData}
-        fetchUser={mockFetchUser}
-      />
+      <Authentication {...mockProps} />
     )
 
     // Mock method and simulate mount.
@@ -129,12 +198,9 @@ describe('Authentication.js tests', function () {
     })
 
     const Authentication = require('../Authentication').default
+    const mockProps = MockProps()
     const wrapper = shallow(
-      <Authentication
-        location={mockLocationData}
-        user={mockUserData}
-        fetchUser={mockFetchUser}
-      />
+      <Authentication {...mockProps} />
     )
 
     // Wait for mount to complete.
@@ -162,12 +228,9 @@ describe('Authentication.js tests', function () {
     })
 
     const Authentication = require('../Authentication').default
+    const mockProps = MockProps()
     const wrapper = shallow(
-      <Authentication
-        location={mockLocationData}
-        user={mockUserData}
-        fetchUser={mockFetchUser}
-      />
+      <Authentication {...mockProps} />
     )
 
     // Wait for mount to complete.
@@ -195,12 +258,9 @@ describe('Authentication.js tests', function () {
     })
 
     const Authentication = require('../Authentication').default
+    const mockProps = MockProps()
     const wrapper = shallow(
-      <Authentication
-        location={mockLocationData}
-        user={mockUserData}
-        fetchUser={mockFetchUser}
-      />
+      <Authentication {...mockProps} />
     )
 
     // Wait for mount to complete.
@@ -224,12 +284,9 @@ describe('Authentication.js tests', function () {
     })
 
     const Authentication = require('../Authentication').default
+    const mockProps = MockProps()
     const wrapper = shallow(
-      <Authentication
-        location={mockLocationData}
-        user={mockUserData}
-        fetchUser={mockFetchUser}
-      />
+      <Authentication {...mockProps} />
     )
 
     // Wait for mount to complete.
@@ -242,13 +299,11 @@ describe('Authentication.js tests', function () {
   it('does not redirect at all if the URL is /auth/action/*', async () => {
     expect.assertions(3)
     const Authentication = require('../Authentication').default
+    const mockProps = MockProps()
+    mockProps.location.pathname = '/auth/action/verify/'
 
     // User does not have a verified email but is on the email verification page.
     checkAuthStateAndRedirectIfNeeded.mockResolvedValue(false)
-    const mockUserDataProp = {
-      id: null,
-      username: null
-    }
     getCurrentUser.mockResolvedValue({
       id: 'abc123',
       email: 'foo@bar.com',
@@ -258,13 +313,7 @@ describe('Authentication.js tests', function () {
     })
 
     const wrapper = shallow(
-      <Authentication
-        location={{
-          pathname: '/auth/action/verify/'
-        }}
-        user={mockUserDataProp}
-        fetchUser={jest.fn()}
-      />
+      <Authentication {...mockProps} />
     )
     const component = wrapper.instance()
     await component.navigateToAuthStep()
@@ -275,18 +324,16 @@ describe('Authentication.js tests', function () {
 
   it('renders as expected prior to navigating', () => {
     const Authentication = require('../Authentication').default
+    const mockProps = MockProps()
     const wrapper = shallow(
-      <Authentication
-        location={mockLocationData}
-        user={mockUserData}
-        fetchUser={mockFetchUser}
-      />
+      <Authentication {...mockProps} />
     )
     expect(toJson(wrapper)).toMatchSnapshot()
   })
 
   it('after sign-in, goes to missing email message screen if no email address', () => {
     const Authentication = require('../Authentication').default
+    const mockProps = MockProps()
 
     // Args for onSignInSuccess
     const mockFirebaseUserInstance = {
@@ -306,11 +353,7 @@ describe('Authentication.js tests', function () {
     const mockFirebaseDefaultRedirectURL = ''
 
     const wrapper = shallow(
-      <Authentication
-        location={mockLocationData}
-        user={mockUserData}
-        fetchUser={jest.fn()}
-      />
+      <Authentication {...mockProps} />
     )
     const component = wrapper.instance()
 
@@ -356,12 +399,9 @@ describe('Authentication.js tests', function () {
     sendVerificationEmail.mockImplementation(() => Promise.resolve(true))
 
     const Authentication = require('../Authentication').default
+    const mockProps = MockProps()
     const wrapper = shallow(
-      <Authentication
-        location={mockLocationData}
-        user={mockUserData}
-        fetchUser={jest.fn()}
-      />
+      <Authentication {...mockProps} />
     )
     const component = wrapper.instance()
 
@@ -392,7 +432,6 @@ describe('Authentication.js tests', function () {
     }
     const mockFirebaseCredential = {}
     const mockFirebaseDefaultRedirectURL = ''
-    const mockFetchUser = jest.fn()
 
     getCurrentUser.mockResolvedValue({
       id: 'abc123',
@@ -409,12 +448,9 @@ describe('Authentication.js tests', function () {
     })
 
     const Authentication = require('../Authentication').default
+    const mockProps = MockProps()
     const wrapper = shallow(
-      <Authentication
-        location={mockLocationData}
-        user={mockUserData}
-        fetchUser={mockFetchUser}
-      />
+      <Authentication {...mockProps} />
     )
     const component = wrapper.instance()
 
