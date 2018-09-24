@@ -54,7 +54,8 @@ class SignInIframeMessage extends React.Component {
           showRequiredSignInExplanation
             ? <Typography variant={'body1'}>
               You've already made a positive impact! Let's keep this progress safe:
-              sign in to makes you don't lose your new tab page (even if you drop your computer
+              we ask you to sign in after a while so you don't lose access
+              to your notes, bookmarks, and Hearts (even if you drop your computer
               in a puddle).
             </Typography>
             : <Typography variant={'body1'}>
