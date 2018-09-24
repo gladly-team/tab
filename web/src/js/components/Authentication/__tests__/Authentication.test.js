@@ -25,11 +25,15 @@ import {
 import {
   getUrlParameters
 } from 'utils/utils'
+import {
+  getBrowserExtensionInstallId
+} from 'utils/local-user-data-mgr'
 
 jest.mock('authentication/helpers')
 jest.mock('authentication/user')
 jest.mock('navigation/navigation')
 jest.mock('utils/utils')
+jest.mock('utils/local-user-data-mgr')
 
 const mockFetchUser = jest.fn()
 
@@ -55,6 +59,7 @@ beforeEach(() => {
   checkAuthStateAndRedirectIfNeeded.mockResolvedValue(true)
   getCurrentUser.mockResolvedValue(null)
   getUrlParameters.mockReturnValue({})
+  getBrowserExtensionInstallId.mockReturnValue('some-install-id')
 })
 
 afterEach(() => {
@@ -116,7 +121,8 @@ describe('Authentication.js tests', function () {
     const mockProps = MockProps()
 
     // Sign-in is mandatory when it's an anonymous user without a
-    // "noredirect" URL parameter.
+    // "noredirect" URL parameter who still has an install ID in
+    // localStorage.
     getUrlParameters.mockReturnValue({})
     getCurrentUser.mockResolvedValue({
       id: 'abc123',
@@ -125,6 +131,7 @@ describe('Authentication.js tests', function () {
       isAnonymous: true,
       emailVerified: false
     })
+    getBrowserExtensionInstallId.mockReturnValue('some-install-id')
 
     const wrapper = shallow(
       <Authentication {...mockProps} />
@@ -140,6 +147,39 @@ describe('Authentication.js tests', function () {
     ).toBe(1)
     expect(wrapper
       .find('[data-test-id="endorsement-quote"]').length
+    ).toBe(0)
+  })
+
+  it('does not display the sign-in explanation when the install ID is not in local storage (indicating the user logged out)', async () => {
+    expect.assertions(1)
+
+    const Authentication = require('../Authentication').default
+    const mockProps = MockProps()
+
+    // Sign-in is mandatory when it's an anonymous user without a
+    // "noredirect" URL parameter who still has an install ID in
+    // localStorage.
+    getUrlParameters.mockReturnValue({})
+    getCurrentUser.mockResolvedValue({
+      id: 'abc123',
+      email: null,
+      username: null,
+      isAnonymous: true,
+      emailVerified: false
+    })
+    getBrowserExtensionInstallId.mockReturnValue(null)
+
+    const wrapper = shallow(
+      <Authentication {...mockProps} />
+    )
+
+    // Wait for mount to complete.
+    const component = wrapper.instance()
+    await component.componentDidMount()
+    wrapper.update()
+
+    expect(wrapper
+      .find('[data-test-id="anon-sign-in-fyi"]').length
     ).toBe(0)
   })
 

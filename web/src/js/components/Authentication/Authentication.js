@@ -21,6 +21,9 @@ import LogoWithText from '../Logo/LogoWithText'
 import {
   getUrlParameters
 } from 'utils/utils'
+import {
+  getBrowserExtensionInstallId
+} from 'utils/local-user-data-mgr'
 
 // Handle the authentication flow:
 //   check if current user is fully authenticated and redirect
@@ -48,8 +51,17 @@ class Authentication extends React.Component {
     super(props)
     this.state = {
       loadChildren: false,
+      // TODO: clean up. This is a proxy; we should make a more
+      //   explicit check.
       // Whether we are requiring the anonymous user to sign in.
-      isMandatoryAnonymousSignIn: getUrlParameters()['noredirect'] !== 'true',
+      // This will be true if the user isn't voluntarily signing in
+      // (i.e. when the URL parameter "noredirect" is not set) and
+      // when the user didn't simply log out (i.e. when the install
+      // ID is still in local storage).
+      isMandatoryAnonymousSignIn: (
+        !getUrlParameters()['noredirect'] &&
+        getBrowserExtensionInstallId()
+      ),
       isUserAnonymous: false // Set after mount if true
     }
   }
