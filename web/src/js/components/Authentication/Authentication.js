@@ -12,6 +12,7 @@ import {
 } from 'authentication/helpers'
 import {
   goTo,
+  authMessageURL,
   missingEmailMessageURL,
   verifyEmailURL,
   goToDashboard
@@ -174,7 +175,12 @@ class Authentication extends React.Component {
   }
 
   render () {
-    const showRequiredSignInExplanation = this.state.isMandatoryAnonymousSignIn
+    const showRequiredSignInExplanation = (
+      this.state.isMandatoryAnonymousSignIn &&
+      // Don't display the message on the iframe auth message page, because
+      // it will have its own message.
+      this.props.location.pathname.indexOf(authMessageURL) === -1
+    )
     return (
       <span
         data-test-id={'authentication-page'}

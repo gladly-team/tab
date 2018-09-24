@@ -119,6 +119,7 @@ describe('Authentication.js tests', function () {
 
     const Authentication = require('../Authentication').default
     const mockProps = MockProps()
+    mockProps.location.pathname = '/newtab/auth/'
 
     // Sign-in is mandatory when there is a "mandatory=true" URL param.
     getUrlParameters.mockReturnValue({
@@ -147,6 +148,42 @@ describe('Authentication.js tests', function () {
     expect(wrapper
       .find('[data-test-id="endorsement-quote"]').length
     ).toBe(0)
+  })
+
+  it('does not display the sign-in explanation when it is a mandatory sign-in but we\'re on the iframe message page', async () => {
+    expect.assertions(2)
+
+    const Authentication = require('../Authentication').default
+    const mockProps = MockProps()
+    mockProps.location.pathname = '/newtab/auth/welcome/'
+
+    // Sign-in is mandatory when there is a "mandatory=true" URL param.
+    getUrlParameters.mockReturnValue({
+      mandatory: 'true'
+    })
+    getCurrentUser.mockResolvedValue({
+      id: 'abc123',
+      email: null,
+      username: null,
+      isAnonymous: true,
+      emailVerified: false
+    })
+
+    const wrapper = shallow(
+      <Authentication {...mockProps} />
+    )
+
+    // Wait for mount to complete.
+    const component = wrapper.instance()
+    await component.componentDidMount()
+    wrapper.update()
+
+    expect(wrapper
+      .find('[data-test-id="anon-sign-in-fyi"]').length
+    ).toBe(0)
+    expect(wrapper
+      .find('[data-test-id="endorsement-quote"]').length
+    ).toBe(1)
   })
 
   it('calls the `navigateToAuthStep` method on mount', async () => {
