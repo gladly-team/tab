@@ -194,7 +194,7 @@ class Dashboard extends React.Component {
                         marginRight: 10
                       }}
                       onClick={() => {
-                        goTo(loginURL)
+                        goTo(loginURL, { noredirect: 'true' })
                       }}
                     >
                       Sign In

@@ -383,7 +383,7 @@ describe('Dashboard component', () => {
       .find('[data-test-id="anon-sign-in-prompt-dashboard"]')
       .find(Button)
     button.simulate('click')
-    expect(goTo).toHaveBeenCalledWith('/newtab/auth/')
+    expect(goTo).toHaveBeenCalledWith('/newtab/auth/', { noredirect: 'true' })
   })
 
   it('does not display the anonymous user sign-in prompt when the user is not anonymous', async () => {
