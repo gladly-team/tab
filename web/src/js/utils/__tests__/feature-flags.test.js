@@ -8,9 +8,10 @@ afterEach(() => {
 })
 
 describe('feature flags', () => {
-  test('isAnonymousUserSignInEnabled is false by default', () => {
+  test('isAnonymousUserSignInEnabled is false if the env var is "false"', () => {
     const isAnonymousUserSignInEnabled = require('../feature-flags')
       .isAnonymousUserSignInEnabled
+    process.env.FEATURE_FLAG_ANON_USER_SIGN_IN = 'false'
     expect(isAnonymousUserSignInEnabled()).toBe(false)
   })
 
