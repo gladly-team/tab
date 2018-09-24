@@ -95,93 +95,60 @@ describe('Authentication.js tests', function () {
     ).toBe(1)
   })
 
-  it('typically does not display the sign-in explanation', async () => {
-    expect.assertions(1)
+  // it('typically does not display the sign-in explanation', async () => {
+  //   expect.assertions(1)
 
-    const Authentication = require('../Authentication').default
-    const mockProps = MockProps()
-    const wrapper = shallow(
-      <Authentication {...mockProps} />
-    )
+  //   const Authentication = require('../Authentication').default
+  //   const mockProps = MockProps()
+  //   const wrapper = shallow(
+  //     <Authentication {...mockProps} />
+  //   )
 
-    // Wait for mount to complete.
-    const component = wrapper.instance()
-    await component.componentDidMount()
-    wrapper.update()
+  //   // Wait for mount to complete.
+  //   const component = wrapper.instance()
+  //   await component.componentDidMount()
+  //   wrapper.update()
 
-    expect(wrapper
-      .find('[data-test-id="anon-sign-in-fyi"]').length
-    ).toBe(0)
-  })
+  //   expect(wrapper
+  //     .find('[data-test-id="anon-sign-in-fyi"]').length
+  //   ).toBe(0)
+  // })
 
-  it('displays the sign-in explanation (and hides the quote) when it is a mandatory sign-in', async () => {
-    expect.assertions(2)
+  // it('displays the sign-in explanation (and hides the quote) when it is a mandatory sign-in', async () => {
+  //   expect.assertions(2)
 
-    const Authentication = require('../Authentication').default
-    const mockProps = MockProps()
+  //   const Authentication = require('../Authentication').default
+  //   const mockProps = MockProps()
 
-    // Sign-in is mandatory when it's an anonymous user without a
-    // "noredirect" URL parameter who still has an install ID in
-    // localStorage.
-    getUrlParameters.mockReturnValue({})
-    getCurrentUser.mockResolvedValue({
-      id: 'abc123',
-      email: null,
-      username: null,
-      isAnonymous: true,
-      emailVerified: false
-    })
-    getBrowserExtensionInstallId.mockReturnValue('some-install-id')
+  //   // Sign-in is mandatory when it's an anonymous user without a
+  //   // "noredirect" URL parameter who still has an install ID in
+  //   // localStorage.
+  //   getUrlParameters.mockReturnValue({})
+  //   getCurrentUser.mockResolvedValue({
+  //     id: 'abc123',
+  //     email: null,
+  //     username: null,
+  //     isAnonymous: true,
+  //     emailVerified: false
+  //   })
+  //   getBrowserExtensionInstallId.mockReturnValue('some-install-id')
 
-    const wrapper = shallow(
-      <Authentication {...mockProps} />
-    )
+  //   const wrapper = shallow(
+  //     <Authentication {...mockProps} />
+  //   )
 
-    // Wait for mount to complete.
-    const component = wrapper.instance()
-    await component.componentDidMount()
-    wrapper.update()
+  //   // Wait for mount to complete.
+  //   const component = wrapper.instance()
+  //   await component.componentDidMount()
+  //   wrapper.update()
 
-    expect(wrapper
-      .find('[data-test-id="anon-sign-in-fyi"]').length
-    ).toBe(1)
-    expect(wrapper
-      .find('[data-test-id="endorsement-quote"]').length
-    ).toBe(0)
-  })
-
-  it('does not display the sign-in explanation when the install ID is not in local storage (indicating the user logged out)', async () => {
-    expect.assertions(1)
-
-    const Authentication = require('../Authentication').default
-    const mockProps = MockProps()
-
-    // Sign-in is mandatory when it's an anonymous user without a
-    // "noredirect" URL parameter who still has an install ID in
-    // localStorage.
-    getUrlParameters.mockReturnValue({})
-    getCurrentUser.mockResolvedValue({
-      id: 'abc123',
-      email: null,
-      username: null,
-      isAnonymous: true,
-      emailVerified: false
-    })
-    getBrowserExtensionInstallId.mockReturnValue(null)
-
-    const wrapper = shallow(
-      <Authentication {...mockProps} />
-    )
-
-    // Wait for mount to complete.
-    const component = wrapper.instance()
-    await component.componentDidMount()
-    wrapper.update()
-
-    expect(wrapper
-      .find('[data-test-id="anon-sign-in-fyi"]').length
-    ).toBe(0)
-  })
+  //   expect(wrapper
+  //     .find('[data-test-id="anon-sign-in-fyi"]').length
+  //   ).toBe(1)
+  //   expect(wrapper
+  //     .find('[data-test-id="endorsement-quote"]').length
+  //   ).toBe(0)
+  // })
 
   it('calls the `navigateToAuthStep` method on mount', async () => {
     expect.assertions(1)
