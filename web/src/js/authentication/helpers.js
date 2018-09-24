@@ -1,10 +1,9 @@
 import moment from 'moment'
 import {
-  goTo,
-  goToLogin,
   replaceUrl,
   authMessageURL,
   enterUsernameURL,
+  loginURL,
   missingEmailMessageURL,
   verifyEmailURL
 } from 'navigation/navigation'
@@ -37,25 +36,33 @@ import {
 import logger from 'utils/logger'
 
 /**
+ * Return whether the current user has joined recently enough
+ * that, if they're an anonymous user, they are not yet required
+ * to sign in. In other words, whether the user joined recently.
+ * @return {boolean} Whether the current user is still within
+ *   the grace period where anonymous users do not need to sign
+ *   in
+ */
+const inAnonymousUserGracePeriod = () => {
+  const installTime = getBrowserExtensionInstallTime()
+  return !!installTime && moment().diff(installTime, 'days') < 2
+}
+
+/**
  * Return whether the current user is allowed to have an anonymous
  * account.
  * @return {boolean} Whether the current user is allowed to have an
  *   anonymous account.
  */
 const allowAnonymousUser = () => {
-  const installTime = getBrowserExtensionInstallTime()
-  var userRecentlyJoined
-  if (installTime) {
-    userRecentlyJoined = moment().diff(installTime, 'days') < 2
-  } else {
-    userRecentlyJoined = false
-  }
+  const userRecentlyJoined = inAnonymousUserGracePeriod()
 
   // The user can have an anonymous account if the anonymous user
   // feature is enabled, they're in the anonymous user test group,
   // and they joined recently.
   return (
     isAnonymousUserSignInEnabled() &&
+    // @experiment-anon-sign-in
     getAnonymousUserTestGroup() === ANON_USER_GROUP_UNAUTHED_ALLOWED &&
     userRecentlyJoined
   )
@@ -86,15 +93,15 @@ const shouldCreateAnonymousUser = () => {
  * to an intermediary page if in an iframe.
  * @return {undefined}
  */
-const goToMainLoginPage = () => {
+const goToMainLoginPage = (urlParamsObj = {}) => {
   // The user is not allowed to be anonymous, so show the login screen.
   // If the page is in an iframe (e.g. the user opened it via an iframed
   // new tab), authentication may not work correctly. Show an intermediary
   // page that will open a non-iframed auth page.
   if (isInIframe()) {
-    goTo(authMessageURL)
+    replaceUrl(authMessageURL, urlParamsObj)
   } else {
-    goToLogin()
+    replaceUrl(loginURL, urlParamsObj)
   }
 }
 
@@ -159,7 +166,9 @@ export const checkAuthStateAndRedirectIfNeeded = async (user, fetchedUsername = 
     if (allowAnonymousUser()) {
       redirected = false
     } else {
-      goToMainLoginPage()
+      // Include the "mandatory" URL parameter so we're able to
+      // show an explanation on the sign-in views.
+      goToMainLoginPage({ mandatory: 'true' })
       redirected = true
     }
   // If the user does not have an email address, show a message
