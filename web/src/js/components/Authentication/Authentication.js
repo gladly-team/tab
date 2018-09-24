@@ -282,7 +282,8 @@ class Authentication extends React.Component {
                   <Typography variant={'body1'}>
                     <Typography variant={'body2'}>Hey there!</Typography>
                       We ask you to sign in after a while to make sure you don't lose access to
-                      your new tab data. Signing in also lets you sync your tab between browsers – nice!
+                      your new tab data, like your notes, bookmarks, and Hearts. Signing in also lets
+                      you sync your tab between browsers – nice!
                   </Typography>
                 </div>
               </Paper>
