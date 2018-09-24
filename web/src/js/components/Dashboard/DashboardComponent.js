@@ -3,6 +3,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import uuid from 'uuid/v4'
 import moment from 'moment'
+import Paper from '@material-ui/core/Paper'
+import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
 import MoneyRaised from '../MoneyRaised/MoneyRaisedContainer'
 import UserBackgroundImage from '../User/UserBackgroundImageContainer'
 import UserMenu from '../User/UserMenuContainer'
@@ -24,8 +27,13 @@ import Fireworks from 'lib/fireworks-react'
 import RaisedButton from 'material-ui/RaisedButton'
 import CloseIcon from 'material-ui/svg-icons/navigation/close'
 import NewUserTour from './NewUserTourContainer'
+import { getCurrentUser } from 'authentication/user'
 import localStorageMgr from 'utils/localstorage-mgr'
 import { STORAGE_NEW_USER_HAS_COMPLETED_TOUR } from '../../constants'
+import {
+  goTo,
+  loginURL
+} from 'navigation/navigation'
 
 class Dashboard extends React.Component {
   constructor (props) {
@@ -35,11 +43,34 @@ class Dashboard extends React.Component {
       errorMessage: null,
       tabId: uuid(),
       showFireworks: false,
+      isUserAnonymous: false, // Set after mount if true
       // This may be false if the user cleared their storage,
       // which is why we only show the tour to recently-joined
       // users.
       userAlreadyViewedNewUserTour: localStorageMgr.getItem(STORAGE_NEW_USER_HAS_COMPLETED_TOUR) === 'true'
     }
+  }
+
+  componentDidMount () {
+    this.determineAnonymousStatus()
+  }
+
+  /**
+   * Check if the user is anonymous and update state with the
+   * anonymous status.
+   * @return {Promise<undefined>} A Promise that resolves after
+   *   the state has been updated.
+   */
+  async determineAnonymousStatus () {
+    const currentUser = await getCurrentUser()
+    const isAnon = currentUser && currentUser.isAnonymous
+    return new Promise((resolve, reject) => {
+      this.setState({
+        isUserAnonymous: isAnon
+      }, () => {
+        resolve()
+      })
+    })
   }
 
   showError (msg) {
@@ -127,6 +158,49 @@ class Dashboard extends React.Component {
                   style={bulletPointStyle}
                 />
                 <UserMenu app={app} user={user} style={userMenuStyle} />
+              </div>
+            </FadeInDashboardAnimation>
+          )
+          : null
+        }
+        { (this.state.isUserAnonymous && user)
+          ? (
+            <FadeInDashboardAnimation>
+              <div
+                data-test-id={'anon-sign-in-prompt-dashboard'}
+                style={{
+                  position: 'absolute',
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  top: 14
+                }}
+              >
+                <Paper>
+                  <div
+                    style={{
+                      padding: '6px 14px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      background: dashboardIconInactiveColor
+                    }}
+                  >
+                    <Typography variant={'body1'}>
+                      Sign in to save your progress!
+                    </Typography>
+                    <Button
+                      color={'primary'}
+                      style={{
+                        marginLeft: 10,
+                        marginRight: 10
+                      }}
+                      onClick={() => {
+                        goTo(loginURL)
+                      }}
+                    >
+                      Sign In
+                    </Button>
+                  </div>
+                </Paper>
               </div>
             </FadeInDashboardAnimation>
           )
