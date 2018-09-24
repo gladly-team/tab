@@ -3,7 +3,19 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 import localStorageMgr from 'utils/localstorage-mgr'
 import {
-  STORAGE_KEY_USERNAME
+  STORAGE_KEY_USERNAME,
+  STORAGE_TABS_LAST_TAB_OPENED_DATE,
+  STORAGE_TABS_RECENT_DAY_COUNT,
+  STORAGE_LOCATION_COUNTRY_ISO_CODE,
+  STORAGE_LOCATION_IS_IN_EU,
+  STORAGE_LOCATION_QUERY_TIME,
+  STORAGE_REFERRAL_DATA_REFERRING_USER,
+  STORAGE_REFERRAL_DATA_REFERRING_CHANNEL,
+  STORAGE_NEW_CONSENT_DATA_EXISTS,
+  STORAGE_NEW_USER_HAS_COMPLETED_TOUR,
+  STORAGE_EXTENSION_INSTALL_ID,
+  STORAGE_APPROX_EXTENSION_INSTALL_TIME,
+  STORAGE_EXPERIMENT_ANON_USER
 } from '../constants'
 import {
   absoluteUrl,
@@ -160,11 +172,24 @@ export const getUserToken = async (forceRefresh) => {
 }
 
 /**
- * Deletes any session-related localStorage items.
+ * Delete any sensitive localStorage items.
  * @returns {null}
  */
 const clearAuthLocalStorageItems = () => {
+  // Currently, removes everything except background settings.
   localStorageMgr.removeItem(STORAGE_KEY_USERNAME)
+  localStorageMgr.removeItem(STORAGE_TABS_LAST_TAB_OPENED_DATE)
+  localStorageMgr.removeItem(STORAGE_TABS_RECENT_DAY_COUNT)
+  localStorageMgr.removeItem(STORAGE_LOCATION_COUNTRY_ISO_CODE)
+  localStorageMgr.removeItem(STORAGE_LOCATION_IS_IN_EU)
+  localStorageMgr.removeItem(STORAGE_LOCATION_QUERY_TIME)
+  localStorageMgr.removeItem(STORAGE_REFERRAL_DATA_REFERRING_USER)
+  localStorageMgr.removeItem(STORAGE_REFERRAL_DATA_REFERRING_CHANNEL)
+  localStorageMgr.removeItem(STORAGE_NEW_CONSENT_DATA_EXISTS)
+  localStorageMgr.removeItem(STORAGE_NEW_USER_HAS_COMPLETED_TOUR)
+  localStorageMgr.removeItem(STORAGE_EXTENSION_INSTALL_ID)
+  localStorageMgr.removeItem(STORAGE_APPROX_EXTENSION_INSTALL_TIME)
+  localStorageMgr.removeItem(STORAGE_EXPERIMENT_ANON_USER)
 }
 
 /**
@@ -175,7 +200,7 @@ const clearAuthLocalStorageItems = () => {
 export const logout = async () => {
   return new Promise((resolve, reject) => {
     firebase.auth().signOut().then(() => {
-      // Delete any session-related localStorage items.
+      // Delete any sensitive localStorage items.
       clearAuthLocalStorageItems()
 
       // Sign-out successful.
