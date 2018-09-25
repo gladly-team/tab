@@ -37,7 +37,19 @@
   <!-- The new tab page may be displayed in an iframe, so open
     all links in the top frame. -->
   <base target="_top">
+
+  <!-- BEGIN: Google Global Site Tag (GST/gtag.js) -->
+  <!-- Global site tag (gtag.js) - AdWords: 1013744060 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-1013744060"></script>
+  <script>
+   window.dataLayer = window.dataLayer || [];
+   function gtag(){dataLayer.push(arguments);}
+   gtag('js', new Date());
+   gtag('config', 'AW-1013744060');
+  </script>
+  <!-- END: Google Global Site Tag (GST/gtag.js) -->
 </head>
+
 <body>
 <% if (htmlWebpackPlugin.options.unsupportedBrowser) { %>
 <style>.unsupported-browser { display: none; }</style>
@@ -106,7 +118,7 @@ src="https://www.facebook.com/tr?id=1813501258922708&ev=PageView&noscript=1"
 /></noscript>
 <!-- End Facebook Pixel Code -->
 
-<!-- BEGIN: Google Tag Manager and ad slot definitions -->
+<!-- BEGIN: Google Publisher Tag and ad slot definitions -->
 <script type="text/javascript">
   /* eslint-disable */
   // Google Tag Manager
@@ -133,8 +145,7 @@ src="https://www.facebook.com/tr?id=1813501258922708&ev=PageView&noscript=1"
     googletag.enableServices()
   })
 </script>
-<!-- END: Google Tag Manager and ad slot definitions -->
-
+<!-- END: Google Publisher Tag and ad slot definitions -->
 
 <!-- BEGIN: Quantcast Choice. Consent Manager Tag -->
 <!-- https://www.quantcast.com/gdpr/quantcast-choice-self-serve/ -->
