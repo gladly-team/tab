@@ -1,4 +1,3 @@
-
 service: tab-media
 frameworkVersion: ">=1.14.0 <2.0.0"
 
@@ -17,7 +16,6 @@ custom:
 
 resources:
   Resources:
-
     # S3 Bucket
     TabMediaBucket:
       Type: AWS::S3::Bucket
@@ -59,12 +57,12 @@ resources:
                 HTTPSPort: 443
                 # HTTP only is required for S3 buckets that are configured as
                 # website endpoints:
-                # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesOriginProtocolPolicy 
+                # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesOriginProtocolPolicy
                 OriginProtocolPolicy: http-only
           Enabled: true
           Aliases:
             - ${self:custom.cloudfrontMediaDomainAlias}
-          # Note: this is only for Cloudfront caching, not browser caching. 
+          # Note: this is only for Cloudfront caching, not browser caching.
           # For browser caching, we must still set Cache-Control headers
           # on the origin server (S3). This isn't yet automated for media
           # uploads; we set Cache-Control manually via the AWS CLI:

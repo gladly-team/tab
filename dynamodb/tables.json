@@ -1,215 +1,195 @@
 [
   {
     "TableName": "Users",
-    "KeySchema": [       
-      { "AttributeName": "id", "KeyType": "HASH"}
-    ],
-    "AttributeDefinitions": [       
+    "KeySchema": [{ "AttributeName": "id", "KeyType": "HASH" }],
+    "AttributeDefinitions": [
       { "AttributeName": "id", "AttributeType": "S" },
       { "AttributeName": "username", "AttributeType": "S" }
     ],
-    "GlobalSecondaryIndexes": [ 
-      { 
-         "IndexName": "UsersByUsername",
-         "KeySchema": [ 
-            { 
-               "AttributeName": "username",
-               "KeyType": "HASH"
-            }
-         ],
-         "Projection": {
-            "ProjectionType": "ALL"
-         },
-         "ProvisionedThroughput": { 
-            "ReadCapacityUnits": 1,
-            "WriteCapacityUnits": 1
-         }
+    "GlobalSecondaryIndexes": [
+      {
+        "IndexName": "UsersByUsername",
+        "KeySchema": [
+          {
+            "AttributeName": "username",
+            "KeyType": "HASH"
+          }
+        ],
+        "Projection": {
+          "ProjectionType": "ALL"
+        },
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 1,
+          "WriteCapacityUnits": 1
+        }
       }
-   ],
-    "ProvisionedThroughput": {       
-      "ReadCapacityUnits": 1, 
+    ],
+    "ProvisionedThroughput": {
+      "ReadCapacityUnits": 1,
       "WriteCapacityUnits": 1
     }
   },
   {
     "TableName": "Charities",
-    "KeySchema": [       
-      { "AttributeName": "id", "KeyType": "HASH"}
-    ],
-    "AttributeDefinitions": [       
-      { "AttributeName": "id", "AttributeType": "S" }
-    ],
-    "ProvisionedThroughput": {       
-      "ReadCapacityUnits": 1, 
+    "KeySchema": [{ "AttributeName": "id", "KeyType": "HASH" }],
+    "AttributeDefinitions": [{ "AttributeName": "id", "AttributeType": "S" }],
+    "ProvisionedThroughput": {
+      "ReadCapacityUnits": 1,
       "WriteCapacityUnits": 1
     }
   },
   {
     "TableName": "Widgets",
-    "KeySchema": [       
-      { "AttributeName": "id", "KeyType": "HASH"}
-    ],
-    "AttributeDefinitions": [       
-      { "AttributeName": "id", "AttributeType": "S" }
-    ],
-    "ProvisionedThroughput": {       
-      "ReadCapacityUnits": 1, 
+    "KeySchema": [{ "AttributeName": "id", "KeyType": "HASH" }],
+    "AttributeDefinitions": [{ "AttributeName": "id", "AttributeType": "S" }],
+    "ProvisionedThroughput": {
+      "ReadCapacityUnits": 1,
       "WriteCapacityUnits": 1
     }
   },
   {
     "TableName": "UserLevels",
-    "KeySchema": [       
-      { "AttributeName": "id", "KeyType": "HASH"}
-    ],
-    "AttributeDefinitions": [       
-      { "AttributeName": "id", "AttributeType": "N" }
-    ],
-    "ProvisionedThroughput": {       
-      "ReadCapacityUnits": 1, 
+    "KeySchema": [{ "AttributeName": "id", "KeyType": "HASH" }],
+    "AttributeDefinitions": [{ "AttributeName": "id", "AttributeType": "N" }],
+    "ProvisionedThroughput": {
+      "ReadCapacityUnits": 1,
       "WriteCapacityUnits": 1
     }
   },
   {
     "TableName": "VcDonationLog",
-    "KeySchema": [       
-      { "AttributeName": "userId", "KeyType": "HASH"},
-      { "AttributeName": "timestamp", "KeyType": "RANGE"}
+    "KeySchema": [
+      { "AttributeName": "userId", "KeyType": "HASH" },
+      { "AttributeName": "timestamp", "KeyType": "RANGE" }
     ],
-    "AttributeDefinitions": [       
+    "AttributeDefinitions": [
       { "AttributeName": "userId", "AttributeType": "S" },
       { "AttributeName": "timestamp", "AttributeType": "S" }
     ],
-    "ProvisionedThroughput": {       
-      "ReadCapacityUnits": 1, 
+    "ProvisionedThroughput": {
+      "ReadCapacityUnits": 1,
       "WriteCapacityUnits": 1
     }
   },
   {
     "TableName": "UserRevenueLog",
-    "KeySchema": [       
-      { "AttributeName": "userId", "KeyType": "HASH"},
-      { "AttributeName": "timestamp", "KeyType": "RANGE"}
+    "KeySchema": [
+      { "AttributeName": "userId", "KeyType": "HASH" },
+      { "AttributeName": "timestamp", "KeyType": "RANGE" }
     ],
-    "AttributeDefinitions": [       
+    "AttributeDefinitions": [
       { "AttributeName": "userId", "AttributeType": "S" },
       { "AttributeName": "timestamp", "AttributeType": "S" }
     ],
-    "ProvisionedThroughput": {       
-      "ReadCapacityUnits": 1, 
+    "ProvisionedThroughput": {
+      "ReadCapacityUnits": 1,
       "WriteCapacityUnits": 1
     }
   },
   {
     "TableName": "UserDataConsentLog",
-    "KeySchema": [       
-      { "AttributeName": "userId", "KeyType": "HASH"},
-      { "AttributeName": "timestamp", "KeyType": "RANGE"}
+    "KeySchema": [
+      { "AttributeName": "userId", "KeyType": "HASH" },
+      { "AttributeName": "timestamp", "KeyType": "RANGE" }
     ],
-    "AttributeDefinitions": [       
+    "AttributeDefinitions": [
       { "AttributeName": "userId", "AttributeType": "S" },
       { "AttributeName": "timestamp", "AttributeType": "S" }
     ],
-    "ProvisionedThroughput": {       
-      "ReadCapacityUnits": 1, 
+    "ProvisionedThroughput": {
+      "ReadCapacityUnits": 1,
       "WriteCapacityUnits": 1
     }
   },
   {
     "TableName": "BackgroundImages",
-    "KeySchema": [       
-      { "AttributeName": "id", "KeyType": "HASH"}
-    ],
-    "AttributeDefinitions": [       
-      { "AttributeName": "id", "AttributeType": "S" }
-    ],
-    "ProvisionedThroughput": {       
-      "ReadCapacityUnits": 1, 
+    "KeySchema": [{ "AttributeName": "id", "KeyType": "HASH" }],
+    "AttributeDefinitions": [{ "AttributeName": "id", "AttributeType": "S" }],
+    "ProvisionedThroughput": {
+      "ReadCapacityUnits": 1,
       "WriteCapacityUnits": 1
     }
   },
   {
     "TableName": "UserWidgets",
-    "KeySchema": [       
-      { "AttributeName": "userId", "KeyType": "HASH"},
-      { "AttributeName": "widgetId", "KeyType": "RANGE"}
+    "KeySchema": [
+      { "AttributeName": "userId", "KeyType": "HASH" },
+      { "AttributeName": "widgetId", "KeyType": "RANGE" }
     ],
-    "AttributeDefinitions": [       
+    "AttributeDefinitions": [
       { "AttributeName": "userId", "AttributeType": "S" },
       { "AttributeName": "widgetId", "AttributeType": "S" }
     ],
-    "GlobalSecondaryIndexes": [ 
-      { 
-         "IndexName": "Widgets",
-         "KeySchema": [ 
-            { 
-               "AttributeName": "userId",
-               "KeyType": "HASH"
-            }
-         ],
-         "Projection": {
-            "ProjectionType": "ALL"
-         },
-         "ProvisionedThroughput": { 
-            "ReadCapacityUnits": 1,
-            "WriteCapacityUnits": 1
-         }
+    "GlobalSecondaryIndexes": [
+      {
+        "IndexName": "Widgets",
+        "KeySchema": [
+          {
+            "AttributeName": "userId",
+            "KeyType": "HASH"
+          }
+        ],
+        "Projection": {
+          "ProjectionType": "ALL"
+        },
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 1,
+          "WriteCapacityUnits": 1
+        }
       }
-   ],
-    "ProvisionedThroughput": {       
-      "ReadCapacityUnits": 1, 
+    ],
+    "ProvisionedThroughput": {
+      "ReadCapacityUnits": 1,
       "WriteCapacityUnits": 1
     }
   },
   {
     "TableName": "UserTabsLog",
-    "KeySchema": [       
-      { "AttributeName": "userId", "KeyType": "HASH"},
-      { "AttributeName": "timestamp", "KeyType": "RANGE"}
+    "KeySchema": [
+      { "AttributeName": "userId", "KeyType": "HASH" },
+      { "AttributeName": "timestamp", "KeyType": "RANGE" }
     ],
-    "AttributeDefinitions": [       
+    "AttributeDefinitions": [
       { "AttributeName": "userId", "AttributeType": "S" },
       { "AttributeName": "timestamp", "AttributeType": "S" }
     ],
-    "ProvisionedThroughput": {       
-      "ReadCapacityUnits": 1, 
+    "ProvisionedThroughput": {
+      "ReadCapacityUnits": 1,
       "WriteCapacityUnits": 1
     }
   },
   {
     "TableName": "ReferralDataLog",
-    "KeySchema": [       
-      { "AttributeName": "userId", "KeyType": "HASH"}
-    ],
-    "AttributeDefinitions": [       
+    "KeySchema": [{ "AttributeName": "userId", "KeyType": "HASH" }],
+    "AttributeDefinitions": [
       { "AttributeName": "userId", "AttributeType": "S" },
       { "AttributeName": "referringUser", "AttributeType": "S" },
       { "AttributeName": "created", "AttributeType": "S" }
     ],
-    "GlobalSecondaryIndexes": [ 
-      { 
-         "IndexName": "ReferralsByReferrer",
-         "KeySchema": [ 
-            { 
-               "AttributeName": "referringUser",
-               "KeyType": "HASH"
-            },
-            {
-              "AttributeName": "created",
-              "KeyType": "RANGE"
-            }
-         ],
-         "Projection": {
-            "ProjectionType": "ALL"
-         },
-         "ProvisionedThroughput": { 
-            "ReadCapacityUnits": 1,
-            "WriteCapacityUnits": 1
-         }
+    "GlobalSecondaryIndexes": [
+      {
+        "IndexName": "ReferralsByReferrer",
+        "KeySchema": [
+          {
+            "AttributeName": "referringUser",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "created",
+            "KeyType": "RANGE"
+          }
+        ],
+        "Projection": {
+          "ProjectionType": "ALL"
+        },
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 1,
+          "WriteCapacityUnits": 1
+        }
       }
-   ],
-    "ProvisionedThroughput": {       
-      "ReadCapacityUnits": 1, 
+    ],
+    "ProvisionedThroughput": {
+      "ReadCapacityUnits": 1,
       "WriteCapacityUnits": 1
     }
   }

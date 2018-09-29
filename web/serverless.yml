@@ -1,5 +1,4 @@
-
-service: web 
+service: web
 frameworkVersion: ">=1.14.0 <2.0.0"
 
 provider:
@@ -25,7 +24,6 @@ custom:
 
 resources:
   Resources:
-
     TabS3Bucket:
       Type: AWS::S3::Bucket
       Properties:
@@ -65,7 +63,7 @@ resources:
                 HTTPSPort: 443
                 # HTTP only is required for S3 buckets that are configured as
                 # website endpoints:
-                # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesOriginProtocolPolicy 
+                # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesOriginProtocolPolicy
                 OriginProtocolPolicy: http-only
             # GraphQL service.
             - DomainName: ${self:custom.graphQLProxyDomain}
@@ -116,7 +114,7 @@ resources:
             # errors, as configured in CustomErrorResponses.
             # PathPattern docs:
             #   https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesPathPattern
-            - PathPattern: 'newtab/*.html'
+            - PathPattern: "newtab/*.html"
               # Short HTML caching for some spage speed gains and
               # reduced request volume to S3 origin.
               MinTTL: ${self:custom.CloudfrontHTMLCachingSeconds}
@@ -134,7 +132,7 @@ resources:
               Compress: true
               ViewerProtocolPolicy: redirect-to-https
             # New tab app (non-HTML) static files
-            - PathPattern: 'newtab/*'
+            - PathPattern: "newtab/*"
               MinTTL: 31536000 # one year
               MaxTTL: 63072000 # two years
               AllowedMethods:
@@ -149,7 +147,7 @@ resources:
               Compress: true
               ViewerProtocolPolicy: redirect-to-https
             # GraphQL
-            - PathPattern: 'graphql*'
+            - PathPattern: "graphql*"
               MinTTL: 0
               MaxTTL: 0
               DefaultTTL: 0
@@ -164,7 +162,7 @@ resources:
               TargetOriginId: ${self:custom.graphQLAppName}
               ForwardedValues:
                 # Cannot use '*', as that sends the Host header:
-                # https://stackoverflow.com/a/32825414 
+                # https://stackoverflow.com/a/32825414
                 Headers:
                   - Authorization
                 QueryString: false
@@ -172,7 +170,7 @@ resources:
                   Forward: none
               ViewerProtocolPolicy: redirect-to-https
             # Send all remaining traffic to our homepage
-            - PathPattern: '*'
+            - PathPattern: "*"
               # Short HTML caching for some spage speed gains and
               # reduced request volume to S3 origin.
               MinTTL: ${self:custom.CloudfrontHTMLCachingSeconds}
@@ -207,7 +205,7 @@ resources:
           ViewerCertificate:
             AcmCertificateArn: ${self:custom.SSLCertificateARN}
             SslSupportMethod: sni-only
-  
+
   # In order to print out the hosted domain via `serverless info`,
   # we need to define the DomainName output for CloudFormation
   Outputs:

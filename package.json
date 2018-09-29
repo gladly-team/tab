@@ -10,10 +10,12 @@
     "babel-jest": "^20.0.3",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
+    "husky": "1.0.1",
     "jest": "^20.0.4",
     "nodemon": "^1.11.0",
     "npm-run-all": "^4.0.2",
     "npmlog": "^4.1.0",
+    "prettier": "1.14.3",
     "standard": "^10.0.2"
   },
   "scripts": {
@@ -54,7 +56,13 @@
     "web:start": "cd ./web && yarn run start 2>&1 | node ../scripts/log-prefix.js [web] blue",
     "s3:deploy": "cd ./s3 && yarn run deploy",
     "s3:install": "cd ./s3 && yarn install",
-    "s3:start": "cd ./s3 && yarn run start | node ../scripts/log-prefix.js [s3] yellow"
+    "s3:start": "cd ./s3 && yarn run start | node ../scripts/log-prefix.js [s3] yellow",
+    "format": "prettier --write **/*.{js,md,json,yml}"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn format"
+    }
   },
   "jest": {
     "roots": [

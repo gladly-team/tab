@@ -1,4 +1,3 @@
-
 service: dynamodb
 frameworkVersion: ">=1.14.0 <2.0.0"
 
@@ -19,7 +18,7 @@ custom:
     # test stage table capacities: use same as dev
     test: ${self:custom.customCapacities.dev}
     # dev stage table capacities
-    dev: 
+    dev:
       usersTable:
         read:
           minimum: 1
@@ -120,7 +119,7 @@ custom:
           maximum: 1000
           usage: 0.60
     # prod stage table capacities
-    prod: 
+    prod:
       usersTable:
         read:
           minimum: 80
@@ -332,10 +331,9 @@ custom:
 
 resources:
   Resources:
-
-    usersTable:  
+    usersTable:
       Type: AWS::DynamoDB::Table
-      Properties:  
+      Properties:
         TableName: Users-${self:provider.stage}
         KeySchema:
           - AttributeName: id
@@ -359,9 +357,9 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
 
-    charitiesTable:  
+    charitiesTable:
       Type: AWS::DynamoDB::Table
-      Properties:  
+      Properties:
         TableName: Charities-${self:provider.stage}
         KeySchema:
           - AttributeName: id
@@ -373,9 +371,9 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
 
-    widgetsTable:  
+    widgetsTable:
       Type: AWS::DynamoDB::Table
-      Properties:  
+      Properties:
         TableName: Widgets-${self:provider.stage}
         KeySchema:
           - AttributeName: id
@@ -387,9 +385,9 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
 
-    userLevelsTable:  
+    userLevelsTable:
       Type: AWS::DynamoDB::Table
-      Properties:  
+      Properties:
         TableName: UserLevels-${self:provider.stage}
         KeySchema:
           - AttributeName: id
@@ -401,9 +399,9 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
 
-    vcDonationLogTable:  
+    vcDonationLogTable:
       Type: AWS::DynamoDB::Table
-      Properties:  
+      Properties:
         TableName: VcDonationLog-${self:provider.stage}
         KeySchema:
           - AttributeName: userId
@@ -419,9 +417,9 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
 
-    userRevenueLogTable:  
+    userRevenueLogTable:
       Type: AWS::DynamoDB::Table
-      Properties:  
+      Properties:
         TableName: UserRevenueLog-${self:provider.stage}
         KeySchema:
           - AttributeName: userId
@@ -437,9 +435,9 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
 
-    userDataConsentLogTable:  
+    userDataConsentLogTable:
       Type: AWS::DynamoDB::Table
-      Properties:  
+      Properties:
         TableName: UserDataConsentLog-${self:provider.stage}
         KeySchema:
           - AttributeName: userId
@@ -455,9 +453,9 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
 
-    backgroundImagesTable:  
+    backgroundImagesTable:
       Type: AWS::DynamoDB::Table
-      Properties:  
+      Properties:
         TableName: BackgroundImages-${self:provider.stage}
         KeySchema:
           - AttributeName: id
@@ -469,9 +467,9 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
 
-    userWidgetsTable:  
+    userWidgetsTable:
       Type: AWS::DynamoDB::Table
-      Properties:  
+      Properties:
         TableName: UserWidgets-${self:provider.stage}
         KeySchema:
           - AttributeName: userId
@@ -497,9 +495,9 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
 
-    userTabsLogTable:  
+    userTabsLogTable:
       Type: AWS::DynamoDB::Table
-      Properties:  
+      Properties:
         TableName: UserTabsLog-${self:provider.stage}
         KeySchema:
           - AttributeName: userId
@@ -515,9 +513,9 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
 
-    referralDataLogTable:  
+    referralDataLogTable:
       Type: AWS::DynamoDB::Table
-      Properties:  
+      Properties:
         TableName: ReferralDataLog-${self:provider.stage}
         KeySchema:
           - AttributeName: userId

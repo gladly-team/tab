@@ -1,12 +1,12 @@
 // Used to test in CI.
 
-import { spawn } from 'child_process'
-import assignEnvVars from './assign-env-vars'
+import { spawn } from "child_process"
+import assignEnvVars from "./assign-env-vars"
 
 // Set env vars.
-assignEnvVars('test')
+assignEnvVars("test")
 
-const tests = spawn('yarn', ['run', 'test:integration'], {stdio: 'inherit'})
+const tests = spawn("yarn", ["run", "test:integration"], { stdio: "inherit" })
 
 // Exit this process with the child process code.
-tests.on('exit', (code) => process.exit(code))
+tests.on("exit", code => process.exit(code))

@@ -1,18 +1,18 @@
 // Used to deploy from CI.
 
-import { spawn } from 'child_process'
-import assignEnvVars from './assign-env-vars'
-import { checkDeployValidity, getServerlessStageName } from './deployHelpers'
+import { spawn } from "child_process"
+import assignEnvVars from "./assign-env-vars"
+import { checkDeployValidity, getServerlessStageName } from "./deployHelpers"
 
 // Expect one argument, the stage name.
 const args = process.argv.slice(2)
-const stageName = args[0] ? args[0].toUpperCase() : ''
+const stageName = args[0] ? args[0].toUpperCase() : ""
 
 console.log(`Using deploy stage "${stageName}".`)
 checkDeployValidity(stageName, process.env.CI)
 
 // Set env vars for this stage.
-console.log('Assigning environment variables...')
+console.log("Assigning environment variables...")
 assignEnvVars(stageName)
 
 // Set env var to the Serverless stage name value.
@@ -21,8 +21,10 @@ const serverlessStage = getServerlessStageName(stageName)
 process.env.SLS_STAGE = serverlessStage
 console.log(`Set Serverless stage (SLS_STAGE) to "${serverlessStage}".`)
 
-console.log('Deploying...')
-const deploy = spawn('yarn', ['run', 'ci:deployservices'], {stdio: 'inherit'})
+console.log("Deploying...")
+const deploy = spawn("yarn", ["run", "ci:deployservices"], {
+  stdio: "inherit",
+})
 
 // Exit this process with the child process code.
-deploy.on('exit', (code) => process.exit(code))
+deploy.on("exit", code => process.exit(code))
