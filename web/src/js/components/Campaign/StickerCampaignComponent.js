@@ -48,8 +48,7 @@ class CountdownClock extends React.Component {
       ${duration.minutes()}m ${duration.seconds()}s`
   }
 
-  // TODO: change to componentDidMount
-  componentWillMount () {
+  componentDidMount () {
     const self = this
 
     // Every second, update the countdown clock

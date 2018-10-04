@@ -6,10 +6,8 @@ import getPrebidPbjs from 'ads/prebid/getPrebidPbjs'
 
 // Log revenue from ads
 class LogRevenueComponent extends React.Component {
-  // TODO: to avoid memory leak,
-  // - change to componentDidMount
-  // - unregister the pubads listener on unmount
-  componentWillMount () {
+  // TODO: to avoid memory leak, unregister the pubads listener on unmount
+  componentDidMount () {
     this.listenForSlotsLoadedEvent()
     this.logRevenueForAlreadyLoadedAds()
   }
