@@ -19,7 +19,7 @@
     "patch-package": "6.0.0-7",
     "postinstall-postinstall": "^1.0.0",
     "react-test-renderer": "^16.5.2",
-    "relay-compiler": "^1.4.1",
+    "relay-compiler": "^1.6.2",
     "standard": "^11.0.1",
     "webpack-bundle-analyzer": "^2.8.2"
   },
@@ -92,7 +92,7 @@
     "react-joyride": "^2.0.0-11",
     "react-measure": "^2.1.2",
     "react-motion": "^0.5.2",
-    "react-relay": "^1.4.1",
+    "react-relay": "^1.6.2",
     "react-router": "^3.0.0",
     "react-sparkle": "^1.0.4",
     "react-transform-catch-errors": "^1.0.2",
