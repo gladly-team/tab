@@ -16,7 +16,7 @@ class ActiveWidgetAnimation extends React.Component {
                 <CSSTransition
                   key={i}
                   classNames='active-widget'
-                  appear={false}
+                  appear
                   timeout={{
                     enter: animationDurationMs,
                     exit: animationDurationMs

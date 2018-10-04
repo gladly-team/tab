@@ -89,21 +89,23 @@ class Widgets extends React.Component {
                 })}
               </CenteredWidgetsContainer>
           }
-          <ActiveWidgetAnimation>
-            {user.widgets.edges.map((edge, index) => {
-              if (user.activeWidget &&
-                  edge.node.id === user.activeWidget) {
-                return (
-                  <Widget
-                    key={index}
-                    user={user}
-                    widget={edge.node}
-                    showError={this.props.showError}
-                  />
-                )
-              }
-            })}
-          </ActiveWidgetAnimation>
+          <FadeInDashboardAnimation>
+            <ActiveWidgetAnimation>
+              {user.widgets.edges.map((edge, index) => {
+                if (user.activeWidget &&
+                    edge.node.id === user.activeWidget) {
+                  return (
+                    <Widget
+                      key={index}
+                      user={user}
+                      widget={edge.node}
+                      showError={this.props.showError}
+                    />
+                  )
+                }
+              })}
+            </ActiveWidgetAnimation>
+          </FadeInDashboardAnimation>
         </span>
       </FadeInDashboardAnimation>
     )
