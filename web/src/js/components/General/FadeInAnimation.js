@@ -1,18 +1,33 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { CSSTransitionGroup } from 'react-transition-group'
+import {
+  CSSTransition,
+  TransitionGroup
+} from 'react-transition-group'
 
 class FadeInAnimation extends React.Component {
   render () {
     return (
-      <CSSTransitionGroup
-        transitionName='fade'
-        transitionAppear
-        transitionAppearTimeout={300}
-        transitionEnterTimeout={300}
-        transitionLeaveTimeout={300}>
-        {this.props.children}
-      </CSSTransitionGroup>
+      <TransitionGroup>
+        {
+          React.Children.map(this.props.children, (item, i) => {
+            return item
+              ? (
+                <CSSTransition
+                  key={i}
+                  classNames='fade'
+                  appear
+                  timeout={{
+                    enter: 300,
+                    exit: 300
+                  }}>
+                  {item}
+                </CSSTransition>
+              )
+              : null
+          })
+        }
+      </TransitionGroup>
     )
   }
 }

@@ -14,11 +14,11 @@ body {
   transition: opacity 300ms ease-in;
 }
 
-.fade-leave {
+.fade-exit {
   opacity: 1;
 }
 
-.fade-leave.fade-leave-active {
+.fade-exit.fade-exit-active {
   opacity: 0.01;
   transition: opacity 300ms ease-in;
 }
@@ -46,11 +46,11 @@ body {
   transition: opacity 800ms ease-in;
 }
 
-.fade-dashboard-leave {
+.fade-dashboard-exit {
   opacity: 1;
 }
 
-.fade-dashboard-leave.fade-dashboard-leave-active {
+.fade-dashboard-exit.fade-dashboard-exit-active {
   opacity: 0.01;
   transition: opacity 800ms ease-in;
 }
@@ -82,11 +82,11 @@ body {
   transition: opacity 500ms ease-in 150ms;
 }
 
-.fade-background-leave {
+.fade-background-exit {
   opacity: 1;
 }
 
-.fade-background-leave.fade-background-leave-active {
+.fade-background-exit.fade-background-exit-active {
   opacity: 0.01;
   /* Delay some time to give the underlying image time to render */
   transition: opacity 700ms ease-in 1500ms;
@@ -113,11 +113,11 @@ body {
   opacity: 1;
 }
 
-.active-widget-leave {
+.active-widget-exit {
   opacity: 1;
 }
 
-.active-widget-leave.active-widget-leave-active {
+.active-widget-exit.active-widget-exit-active {
   opacity: 0.01;
   transition: opacity 200ms ease-in;
 }
@@ -145,11 +145,11 @@ body {
   transition: opacity 240ms ease-in 60ms;
 }
 
-.edit-widget-chip-leave {
+.edit-widget-chip-exit {
   opacity: 1;
 }
 
-.edit-widget-chip-leave.edit-widget-chip-leave-active {
+.edit-widget-chip-exit.edit-widget-chip-exit-active {
   opacity: 0.01;
   transition: opacity 100ms ease-in;
 }

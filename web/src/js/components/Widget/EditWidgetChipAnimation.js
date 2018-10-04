@@ -1,17 +1,32 @@
 import React from 'react'
-import { CSSTransitionGroup } from 'react-transition-group'
+import {
+  CSSTransition,
+  TransitionGroup
+} from 'react-transition-group'
 
 class EditWidgetChipAnimation extends React.Component {
   render () {
     return (
-      <CSSTransitionGroup
-        transitionName='edit-widget-chip'
-        transitionAppear={false}
-        transitionEnterTimeout={300}
-        transitionLeaveTimeout={100}
-      >
-        {this.props.children}
-      </CSSTransitionGroup>
+      <TransitionGroup>
+        {
+          React.Children.map(this.props.children, (item, i) => {
+            return item
+              ? (
+                <CSSTransition
+                  key={i}
+                  classNames='edit-widget-chip'
+                  appear={false}
+                  timeout={{
+                    enter: 300,
+                    exit: 100
+                  }}>
+                  {item}
+                </CSSTransition>
+              )
+              : null
+          })
+        }
+      </TransitionGroup>
     )
   }
 }
