@@ -10,6 +10,36 @@ afterEach(() => {
   __mockClear()
 })
 
+describe('validating username', () => {
+  it('accepts alphanumeric usernames', () => {
+    const validateUsername = require('../utils').validateUsername
+    expect(validateUsername('blah')).toEqual(true)
+    expect(validateUsername('somebody123')).toEqual(true)
+  })
+
+  it('rejects usernames that are too short', () => {
+    const validateUsername = require('../utils').validateUsername
+    expect(validateUsername('')).toEqual(false)
+    expect(validateUsername('a')).toEqual(false)
+    expect(validateUsername('aa')).toEqual(true)
+  })
+
+  it('accepts common special characters', () => {
+    const validateUsername = require('../utils').validateUsername
+    expect(validateUsername('somebody_123')).toEqual(true)
+    expect(validateUsername('somebody-123')).toEqual(true)
+    expect(validateUsername('somebody$123')).toEqual(true)
+    expect(validateUsername('somebody*123')).toEqual(true)
+    expect(validateUsername('somebody!123')).toEqual(true)
+  })
+
+  it('rejects other special characters', () => {
+    const validateUsername = require('../utils').validateUsername
+    expect(validateUsername('©')).toEqual(false)
+    expect(validateUsername('💩')).toEqual(false)
+  })
+})
+
 describe('getting referral data', () => {
   it('works with all fields set', () => {
     localStorageMgr.setItem('tab.referralData.referringUser', 'sandra')
