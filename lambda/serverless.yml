@@ -51,19 +51,6 @@ package:
     - build/**
 
 functions:
-  hearts:
-    handler: build/hearts/hearts.serverlessHandler
-    events:
-      - http:
-          path: hearts/
-          method: get
-          cors: true
-          # Authorizer docs:
-          # https://serverless.com/framework/docs/providers/aws/events/apigateway/#http-endpoints-with-custom-authorizers
-          ## TODO: reenable before using sensitive lambdas
-          # authorizer:
-          #   name: authorizer_${opt:stage, self:provider.stage}
-
   firebaseAuthorizer:
     handler: build/firebase-authorizer/firebase-authorizer.serverlessHandler
     environment:

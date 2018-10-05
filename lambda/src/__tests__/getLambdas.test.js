@@ -1,14 +1,13 @@
 /* eslint-env jest */
 'use strict'
-
-// import YAML from 'yamljs'
-import hearts from '../hearts/hearts'
-import email from '../email/email'
 import { getLambdasFromServerlessConfig } from '../getLambdas'
 
+import example from '../example/example'
+import someService from '../someService/someService'
+
 jest.mock('yamljs')
-jest.mock('../email/email')
-jest.mock('../hearts/hearts')
+jest.mock('../someService/someService', () => ({}), {virtual: true})
+jest.mock('../example/example', () => ({}), {virtual: true})
 
 describe('test lambda function loading from Serverless YAML', () => {
   test('it creates correct lambda info from serverless.yml with no events', () => {
@@ -30,12 +29,12 @@ describe('test lambda function loading from Serverless YAML', () => {
         runtime: 'nodejs4.3'
       },
       functions: {
-        hearts: {
-          handler: 'hearts/hearts.serverlessHandler',
+        example: {
+          handler: 'example/example.serverlessHandler',
           events: [
             {
               http: {
-                path: 'hearts/',
+                path: 'example/',
                 method: 'get'
               }
             }
@@ -46,10 +45,10 @@ describe('test lambda function loading from Serverless YAML', () => {
 
     expect(lambdas).toEqual([
       {
-        name: 'hearts',
-        path: 'hearts/',
+        name: 'example',
+        path: 'example/',
         httpMethod: 'get',
-        handler: hearts.handler
+        handler: example.handler
       }
     ])
   })
@@ -62,29 +61,29 @@ describe('test lambda function loading from Serverless YAML', () => {
         runtime: 'nodejs4.3'
       },
       functions: {
-        hearts: {
-          handler: 'hearts/hearts.serverlessHandler',
+        example: {
+          handler: 'example/example.serverlessHandler',
           events: [
             {
               http: {
-                path: 'hearts/',
+                path: 'example/',
                 method: 'get'
               }
             },
             {
               http: {
-                path: 'hearts/',
+                path: 'example/',
                 method: 'post'
               }
             }
           ]
         },
-        email: {
-          handler: 'email/email.serverlessHandler',
+        someService: {
+          handler: 'someService/someService.serverlessHandler',
           events: [
             {
               http: {
-                path: 'sendemail/',
+                path: 'some-action/',
                 method: 'post'
               }
             }
@@ -95,22 +94,22 @@ describe('test lambda function loading from Serverless YAML', () => {
 
     expect(lambdas).toEqual([
       {
-        name: 'hearts',
-        path: 'hearts/',
+        name: 'example',
+        path: 'example/',
         httpMethod: 'get',
-        handler: hearts.handler
+        handler: example.handler
       },
       {
-        name: 'hearts',
-        path: 'hearts/',
+        name: 'example',
+        path: 'example/',
         httpMethod: 'post',
-        handler: hearts.handler
+        handler: example.handler
       },
       {
-        name: 'email',
-        path: 'sendemail/',
+        name: 'someService',
+        path: 'some-action/',
         httpMethod: 'post',
-        handler: email.handler
+        handler: someService.handler
       }
     ])
   })
@@ -123,32 +122,32 @@ describe('test lambda function loading from Serverless YAML', () => {
         runtime: 'nodejs4.3'
       },
       functions: {
-        hearts: {
-          handler: 'hearts/hearts.serverlessHandler',
+        example: {
+          handler: 'example/example.serverlessHandler',
           events: [
             {
               s3: 'some-s3-bucket'
             },
             {
               http: {
-                path: 'hearts/',
+                path: 'example/',
                 method: 'get'
               }
             },
             {
               http: {
-                path: 'hearts/',
+                path: 'example/',
                 method: 'post'
               }
             }
           ]
         },
-        email: {
-          handler: 'email/email.serverlessHandler',
+        someService: {
+          handler: 'someService/someService.serverlessHandler',
           events: [
             {
               http: {
-                path: 'sendemail/',
+                path: 'some-action/',
                 method: 'post'
               }
             },
@@ -162,22 +161,22 @@ describe('test lambda function loading from Serverless YAML', () => {
 
     expect(lambdas).toEqual([
       {
-        name: 'hearts',
-        path: 'hearts/',
+        name: 'example',
+        path: 'example/',
         httpMethod: 'get',
-        handler: hearts.handler
+        handler: example.handler
       },
       {
-        name: 'hearts',
-        path: 'hearts/',
+        name: 'example',
+        path: 'example/',
         httpMethod: 'post',
-        handler: hearts.handler
+        handler: example.handler
       },
       {
-        name: 'email',
-        path: 'sendemail/',
+        name: 'someService',
+        path: 'some-action/',
         httpMethod: 'post',
-        handler: email.handler
+        handler: someService.handler
       }
     ])
   })
