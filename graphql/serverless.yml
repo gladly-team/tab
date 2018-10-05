@@ -138,33 +138,3 @@ functions:
             # Bug with this behavior:
             #   https://github.com/serverless/serverless/issues/3129
             arn: ${self:custom.customAuthorizerArn}
-
-  # TODO: delete after migration
-  createUserMigration:
-    handler: build/migration/createUserHandler.serverlessHandler
-    timeout: 20 # in seconds; default is 6
-    events:
-      - http:
-          path: create-user-migration/
-          method: post
-          cors: true
-
-  # TODO: delete after migration
-  migrateUserWidgets:
-    handler: build/migration/migrateUserWidgets.serverlessHandler
-    timeout: 20 # in seconds; default is 6
-    events:
-      - http:
-          path: migrate-user-widgets/
-          method: post
-          cors: true
-
-  # TODO: delete after migration
-  migrateUserReferral:
-    handler: build/migration/migrateUserReferral.serverlessHandler
-    timeout: 20 # in seconds; default is 6
-    events:
-      - http:
-          path: migrate-user-referral/
-          method: post
-          cors: true
