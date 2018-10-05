@@ -5,15 +5,7 @@
   "private": true,
   "dependencies": {
     "aws-sdk": "^2.328.0",
-    "bluebird": "^3.5.2",
-    "dynogels": "^8.0.1",
-    "firebase-admin": "^5.5.0",
-    "joi": "^10.6.0",
-    "moment": "^2.22.2",
-    "raven": "^2.1.0",
-    "request": "^2.88.0",
-    "request-promise": "^4.2.2",
-    "uuid": "^3.3.2"
+    "firebase-admin": "^5.5.0"
   },
   "devDependencies": {
     "babel-cli": "^6.23.0",
