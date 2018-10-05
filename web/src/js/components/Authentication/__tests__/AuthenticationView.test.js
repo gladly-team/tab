@@ -8,7 +8,7 @@ import {
 import AuthenticationView from '../AuthenticationView'
 import {
   QueryRenderer
-} from 'react-relay/compat'
+} from 'react-relay'
 import AuthenticationContainer from '../AuthenticationContainer'
 import { createNewUser } from 'authentication/helpers'
 import {
@@ -18,7 +18,7 @@ import {
   getCurrentUser
 } from 'authentication/user'
 
-jest.mock('react-relay/compat')
+jest.mock('react-relay')
 jest.mock('../AuthenticationContainer')
 jest.mock('authentication/user')
 jest.mock('authentication/helpers')
