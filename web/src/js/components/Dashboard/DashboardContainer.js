@@ -1,7 +1,7 @@
 import {
   createFragmentContainer,
   graphql
-} from 'react-relay/compat'
+} from 'react-relay'
 
 import Dashboard from './DashboardComponent'
 

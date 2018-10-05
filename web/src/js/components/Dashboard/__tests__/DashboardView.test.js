@@ -9,7 +9,7 @@ import DashboardView from '../DashboardView'
 import AuthUserComponent from 'general/AuthUserComponent'
 import {
   QueryRenderer
-} from 'react-relay/compat'
+} from 'react-relay'
 import DashboardContainer from '../DashboardContainer'
 import ErrorMessage from 'general/ErrorMessage'
 import { createNewUser } from 'authentication/helpers'
@@ -24,7 +24,7 @@ import {
 jest.mock('general/AuthUserComponent')
 jest.mock('general/ErrorMessage')
 jest.mock('analytics/logEvent')
-jest.mock('react-relay/compat')
+jest.mock('react-relay')
 jest.mock('../DashboardContainer')
 jest.mock('authentication/helpers')
 jest.mock('navigation/navigation')

@@ -1,106 +1,106 @@
-# Global app fields
+"""Global app fields"""
 type App implements Node {
-  # The ID of an object
+  """The ID of an object"""
   id: ID!
   moneyRaised: Float
   dollarsPerDayRate: Float
   referralVcReward: Int
 
-  # All the widgets
+  """All the widgets"""
   widgets(after: String, first: Int, before: String, last: Int): WidgetConnection
 
-  # All the charities
+  """All the charities"""
   charities(after: String, first: Int, before: String, last: Int): CharityConnection
 
-  # All the background Images
+  """All the background Images"""
   backgroundImages(after: String, first: Int, before: String, last: Int): BackgroundImageConnection
   isGlobalCampaignLive: Boolean
 }
 
-# A background image
+"""A background image"""
 type BackgroundImage implements Node {
-  # The ID of an object
+  """The ID of an object"""
   id: ID!
 
-  # the background image name
+  """the background image name"""
   name: String
 
-  # The image filename
+  """The image filename"""
   image: String
 
-  # The image file URL
+  """The image file URL"""
   imageURL: String
 
-  # The image thumbnail filename
+  """The image thumbnail filename"""
   thumbnail: String
 
-  # The image thumbnail URL
+  """The image thumbnail URL"""
   thumbnailURL: String
 
-  # ISO datetime string of when the background image was last set
+  """ISO datetime string of when the background image was last set"""
   timestamp: String
 }
 
-# A connection to a list of items.
+"""A connection to a list of items."""
 type BackgroundImageConnection {
-  # Information to aid in pagination.
+  """Information to aid in pagination."""
   pageInfo: PageInfo!
 
-  # A list of edges.
+  """A list of edges."""
   edges: [BackgroundImageEdge]
 }
 
-# An edge in a connection.
+"""An edge in a connection."""
 type BackgroundImageEdge {
-  # The item at the end of the edge
+  """The item at the end of the edge"""
   node: BackgroundImage
 
-  # A cursor for use in pagination
+  """A cursor for use in pagination"""
   cursor: String!
 }
 
-# A charitable charity
+"""A charitable charity"""
 type Charity implements Node {
-  # The ID of an object
+  """The ID of an object"""
   id: ID!
 
-  # the charity name
+  """the charity name"""
   name: String
 
-  # the charity category
+  """the charity category"""
   category: String
 
-  # the charity website
+  """the charity website"""
   website: String
 
-  # the charity description
+  """the charity description"""
   description: String
 
-  # the charity impact message
+  """the charity impact message"""
   impact: String
 
-  # the charity logo image URI
+  """the charity logo image URI"""
   logo: String
 
-  # the charity post-donation image URI
+  """the charity post-donation image URI"""
   image: String
 }
 
-# A connection to a list of items.
+"""A connection to a list of items."""
 type CharityConnection {
-  # Information to aid in pagination.
+  """Information to aid in pagination."""
   pageInfo: PageInfo!
 
-  # A list of edges.
+  """A list of edges."""
   edges: [CharityEdge]
 }
 
-# An edge in a connection.
+"""An edge in a connection."""
 type CharityEdge {
-  # The item at the end of the edge
+  """The item at the end of the edge"""
   node: Charity
 
-  # A cursor for use in pagination
+  """A cursor for use in pagination"""
   cursor: String!
 }
 
@@ -119,12 +119,12 @@ type CreateNewUserPayload {
   clientMutationId: String
 }
 
-# For expected errors, such as during form validation
+"""For expected errors, such as during form validation"""
 type CustomError {
-  # The error code
+  """The error code"""
   code: String
 
-  # The error message
+  """The error message"""
   message: String
 }
 
@@ -141,27 +141,31 @@ type DonateVcPayload {
   clientMutationId: String
 }
 
-# An object representing a single revenue value
+"""An object representing a single revenue value"""
 input EncodedRevenueValue {
   encodingType: EncodedRevenueValueTypeEnum!
 
-  # A string that we can decode to a revenue value (float) using the "encodingType" method
+  """
+  A string that we can decode to a revenue value (float) using the "encodingType" method
+  """
   encodedValue: String!
 }
 
-# The type of transformation we should use to resolve the object into a revenue value
+"""
+The type of transformation we should use to resolve the object into a revenue value
+"""
 enum EncodedRevenueValueTypeEnum {
   AMAZON_CPM
 }
 
-# The test of allowing anonymous user authentication
+"""The test of allowing anonymous user authentication"""
 enum ExperimentGroupAnonSignIn {
   NONE
   AUTHED_USER_ONLY
   ANONYMOUS_ALLOWED
 }
 
-# The experimental groups to which the user is assigned
+"""The experimental groups to which the user is assigned"""
 input ExperimentGroups {
   anonSignIn: ExperimentGroupAnonSignIn
 }
@@ -207,7 +211,9 @@ input LogUserRevenueInput {
   userId: String!
   revenue: Float
 
-  # A revenue value encoded because it is not available on the client side
+  """
+  A revenue value encoded because it is not available on the client side
+  """
   encodedRevenue: EncodedRevenueValue
   aggregationOperation: LogUserRevenueAggregationOperationEnum
   dfpAdvertiserId: String
@@ -220,12 +226,12 @@ type LogUserRevenuePayload {
   clientMutationId: String
 }
 
-# Info about the user's day of most opened tabs
+"""Info about the user's day of most opened tabs"""
 type MaxTabsDay {
-  # The day the most tabs were opened
+  """The day the most tabs were opened"""
   date: String
 
-  # The number of tabs opened on that day
+  """The number of tabs opened on that day"""
   numTabs: Int
 }
 
@@ -259,31 +265,31 @@ type Mutation {
   setUsername(input: SetUsernameInput!): SetUsernamePayload
 }
 
-# An object with an ID
+"""An object with an ID"""
 interface Node {
-  # The id of the object.
+  """The id of the object."""
   id: ID!
 }
 
-# Information about pagination in a connection.
+"""Information about pagination in a connection."""
 type PageInfo {
-  # When paginating forwards, are there more items?
+  """When paginating forwards, are there more items?"""
   hasNextPage: Boolean!
 
-  # When paginating backwards, are there more items?
+  """When paginating backwards, are there more items?"""
   hasPreviousPage: Boolean!
 
-  # When paginating backwards, the cursor to continue.
+  """When paginating backwards, the cursor to continue."""
   startCursor: String
 
-  # When paginating forwards, the cursor to continue.
+  """When paginating forwards, the cursor to continue."""
   endCursor: String
 }
 
 type Query {
-  # Fetches an object given its ID
+  """Fetches an object given its ID"""
   node(
-    # The ID of an object
+    """The ID of an object"""
     id: ID!
   ): Node
   app: App
@@ -409,153 +415,155 @@ type UpdateWidgetVisibilityPayload {
   clientMutationId: String
 }
 
-# A person who uses our app
+"""A person who uses our app"""
 type User implements Node {
-  # The ID of an object
+  """The ID of an object"""
   id: ID!
 
-  # Users's username
+  """Users's username"""
   userId: String
 
-  # Users's background image
+  """Users's background image"""
   backgroundImage: BackgroundImage
 
-  # Users's username
+  """Users's username"""
   username: String
 
-  # User's email
+  """User's email"""
   email: String
 
-  # ISO datetime string of when the user joined
+  """ISO datetime string of when the user joined"""
   joined: String
   justCreated: Boolean
 
-  # User's current VC
+  """User's current VC"""
   vcCurrent: Int
 
-  # User's all time VC
+  """User's all time VC"""
   vcAllTime: Int
 
-  # User's all time tab count
+  """User's all time tab count"""
   tabs: Int
 
-  # User's tab count for today
+  """User's tab count for today"""
   tabsToday: Int
 
-  # Info about the user's day of most opened tabs
+  """Info about the user's day of most opened tabs"""
   maxTabsDay: MaxTabsDay
 
-  # User's vc
+  """User's vc"""
   level: Int
 
-  # Remaing hearts until next level.
+  """Remaing hearts until next level."""
   heartsUntilNextLevel: Int
 
-  # User's total vc donated
+  """User's total vc donated"""
   vcDonatedAllTime: Int
 
-  # People recruited by this user
+  """People recruited by this user"""
   recruits(after: String, first: Int, before: String, last: Int, startTime: String, endTime: String): UserRecruitsConnection
 
-  # The number of users this user has recruited
+  """The number of users this user has recruited"""
   numUsersRecruited: Int
 
-  # User widgets
+  """User widgets"""
   widgets(after: String, first: Int, before: String, last: Int, enabled: Boolean): WidgetConnection
 
-  # User's active widget id
+  """User's active widget id"""
   activeWidget: String
 
-  # User's background option
+  """User's background option"""
   backgroundOption: String
 
-  # User's background custom image
+  """User's background custom image"""
   customImage: String
 
-  # User's background color
+  """User's background color"""
   backgroundColor: String
 
-  # Whether this user was created by an existing user and then merged into the existing user
+  """
+  Whether this user was created by an existing user and then merged into the existing user
+  """
   mergedIntoExistingUser: Boolean
 }
 
-# Info about a user recruited by a referring user
+"""Info about a user recruited by a referring user"""
 type UserRecruits {
-  # The ID of an object
+  """The ID of an object"""
   id: ID!
 
-  # ISO datetime string of when the recruited user joined
+  """ISO datetime string of when the recruited user joined"""
   recruitedAt: String
 }
 
-# A connection to a list of items.
+"""A connection to a list of items."""
 type UserRecruitsConnection {
-  # Information to aid in pagination.
+  """Information to aid in pagination."""
   pageInfo: PageInfo!
 
-  # A list of edges.
+  """A list of edges."""
   edges: [UserRecruitsEdge]
 
-  # The count of users recruited (signed up)
+  """The count of users recruited (signed up)"""
   totalRecruits: Int
 
-  # The count of users recruited who remained active for one day or more
+  """The count of users recruited who remained active for one day or more"""
   recruitsActiveForAtLeastOneDay: Int
 }
 
-# An edge in a connection.
+"""An edge in a connection."""
 type UserRecruitsEdge {
-  # The item at the end of the edge
+  """The item at the end of the edge"""
   node: UserRecruits
 
-  # A cursor for use in pagination
+  """A cursor for use in pagination"""
   cursor: String!
 }
 
-# App widget
+"""App widget"""
 type Widget implements Node {
-  # The ID of an object
+  """The ID of an object"""
   id: ID!
 
-  # Widget display name
+  """Widget display name"""
   name: String
 
-  # Widget type
+  """Widget type"""
   type: String
 
-  # Widget icon
+  """Widget icon"""
   icon: String
 
-  # The Widget enabled state
+  """The Widget enabled state"""
   enabled: Boolean
 
-  # The Widget visible state
+  """The Widget visible state"""
   visible: Boolean
 
-  # Widget data.
+  """Widget data."""
   data: String
 
-  # Widget user specific configuration.
+  """Widget user specific configuration."""
   config: String
 
-  # Widget general configuration.
+  """Widget general configuration."""
   settings: String
 }
 
-# A connection to a list of items.
+"""A connection to a list of items."""
 type WidgetConnection {
-  # Information to aid in pagination.
+  """Information to aid in pagination."""
   pageInfo: PageInfo!
 
-  # A list of edges.
+  """A list of edges."""
   edges: [WidgetEdge]
 }
 
-# An edge in a connection.
+"""An edge in a connection."""
 type WidgetEdge {
-  # The item at the end of the edge
+  """The item at the end of the edge"""
   node: Widget
 
-  # A cursor for use in pagination
+  """A cursor for use in pagination"""
   cursor: String!
 }

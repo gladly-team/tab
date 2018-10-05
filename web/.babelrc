@@ -7,8 +7,8 @@
   ],
   "plugins": [
     ["relay", {
-      "compat": true, 
-      "schema": "data/schema.graphql"}],
+      "schema": "data/schema.graphql"
+    }],
     ["module-resolver", {
       "root": ["./"],
       "alias": {
