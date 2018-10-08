@@ -9,12 +9,12 @@ import toJson from 'enzyme-to-json'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import SetUsernameMutation, {
   __runOnCompleted
-} from 'mutations/SetUsernameMutation'
+} from 'js/mutations/SetUsernameMutation'
 import {
   checkIfEmailVerified
 } from 'authentication/helpers'
 
-jest.mock('mutations/SetUsernameMutation')
+jest.mock('js/mutations/SetUsernameMutation')
 jest.mock('authentication/helpers')
 
 const mockUserData = {

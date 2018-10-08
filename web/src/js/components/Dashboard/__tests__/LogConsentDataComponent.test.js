@@ -8,7 +8,7 @@ import toJson from 'enzyme-to-json'
 
 jest.mock('utils/client-location')
 jest.mock('ads/consentManagement')
-jest.mock('mutations/LogUserDataConsentMutation')
+jest.mock('js/mutations/LogUserDataConsentMutation')
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -89,7 +89,7 @@ describe('LogConsentDataComponent', function () {
     await cmpCallback('some-consent-string', true)
 
     // Check that it calls the mutation.
-    const LogUserDataConsentMutation = require('mutations/LogUserDataConsentMutation').default
+    const LogUserDataConsentMutation = require('js/mutations/LogUserDataConsentMutation').default
     expect(LogUserDataConsentMutation).toHaveBeenCalledTimes(1)
     expect(LogUserDataConsentMutation.mock.calls[0][0]).toEqual({})
     expect(LogUserDataConsentMutation.mock.calls[0][1]).toEqual('abcdefghijklmno')
@@ -102,14 +102,14 @@ describe('LogConsentDataComponent', function () {
     const markConsentDataAsLogged = require('ads/consentManagement')
       .markConsentDataAsLogged
     expect(markConsentDataAsLogged).not.toHaveBeenCalled()
-    const __runOnCompleted = require('mutations/LogUserDataConsentMutation').__runOnCompleted
+    const __runOnCompleted = require('js/mutations/LogUserDataConsentMutation').__runOnCompleted
     __runOnCompleted()
     expect(markConsentDataAsLogged).toHaveBeenCalled()
   })
 
   it('logs the consent data when localStorage says we have new consent data to log', async () => {
     expect.assertions(4)
-    const LogUserDataConsentMutation = require('mutations/LogUserDataConsentMutation').default
+    const LogUserDataConsentMutation = require('js/mutations/LogUserDataConsentMutation').default
 
     // Mock that localStorage says we need to log new consentData
     const checkIfNewConsentNeedsToBeLogged = require('ads/consentManagement')

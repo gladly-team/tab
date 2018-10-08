@@ -18,22 +18,22 @@ import {
 import {
   setBackgroundSettings
 } from 'utils/local-bkg-settings'
-import SetBackgroundImageMutation from 'mutations/SetBackgroundImageMutation'
-import SetBackgroundColorMutation from 'mutations/SetBackgroundColorMutation'
-import SetBackgroundCustomImageMutation from 'mutations/SetBackgroundCustomImageMutation'
+import SetBackgroundImageMutation from 'js/mutations/SetBackgroundImageMutation'
+import SetBackgroundColorMutation from 'js/mutations/SetBackgroundColorMutation'
+import SetBackgroundCustomImageMutation from 'js/mutations/SetBackgroundCustomImageMutation'
 import SetBackgroundDailyImageMutation, {
   __runOnCompleted as __runOnCompletedDailyImageMutation
-} from 'mutations/SetBackgroundDailyImageMutation'
+} from 'js/mutations/SetBackgroundDailyImageMutation'
 
 jest.mock('material-ui/RadioButton')
 jest.mock('../../../Background/BackgroundImagePickerContainer')
 jest.mock('../../../Background/BackgroundColorPickerContainer')
 jest.mock('../../../Background/BackgroundCustomImagePickerContainer')
 jest.mock('utils/local-bkg-settings')
-jest.mock('mutations/SetBackgroundImageMutation')
-jest.mock('mutations/SetBackgroundColorMutation')
-jest.mock('mutations/SetBackgroundCustomImageMutation')
-jest.mock('mutations/SetBackgroundDailyImageMutation')
+jest.mock('js/mutations/SetBackgroundImageMutation')
+jest.mock('js/mutations/SetBackgroundColorMutation')
+jest.mock('js/mutations/SetBackgroundCustomImageMutation')
+jest.mock('js/mutations/SetBackgroundDailyImageMutation')
 
 const mockShowError = jest.fn()
 const mockProps = {

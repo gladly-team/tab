@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import DonateVcMutation from 'mutations/DonateVcMutation'
+import DonateVcMutation from 'js/mutations/DonateVcMutation'
 
 import { Paper } from 'material-ui'
 import RaisedButton from 'material-ui/RaisedButton'

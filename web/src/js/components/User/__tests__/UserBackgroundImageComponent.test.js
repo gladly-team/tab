@@ -23,7 +23,7 @@ jest.mock('utils/local-bkg-settings', () => {
     setExtensionBackgroundSettings: jest.fn()
   }
 })
-jest.mock('mutations/SetBackgroundDailyImageMutation')
+jest.mock('js/mutations/SetBackgroundDailyImageMutation')
 
 const mockNow = '2017-05-19T13:59:58.000Z'
 
@@ -651,7 +651,7 @@ describe('User background image component', () => {
       }
     }
     MockDate.set(moment('2017-05-19T13:59:58.000')) // local time
-    const SetBackgroundDailyImageMutation = require('mutations/SetBackgroundDailyImageMutation').default
+    const SetBackgroundDailyImageMutation = require('js/mutations/SetBackgroundDailyImageMutation').default
 
     // Current time is the day after the background image last changed.
     const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
@@ -673,7 +673,7 @@ describe('User background image component', () => {
       }
     }
     MockDate.set(moment('2017-05-19T00:00:00.581')) // just after midnight local time
-    const SetBackgroundDailyImageMutation = require('mutations/SetBackgroundDailyImageMutation').default
+    const SetBackgroundDailyImageMutation = require('js/mutations/SetBackgroundDailyImageMutation').default
 
     // Current time is the day after the background image last changed.
     const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
@@ -696,7 +696,7 @@ describe('User background image component', () => {
 
     MockDate.set(moment('2017-05-19T13:59:58.000')) // local time
 
-    const SetBackgroundDailyImageMutation = require('mutations/SetBackgroundDailyImageMutation').default
+    const SetBackgroundDailyImageMutation = require('js/mutations/SetBackgroundDailyImageMutation').default
 
     // Current time is the day after the background image last changed.
     const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
@@ -735,7 +735,7 @@ describe('User background image component', () => {
 
     MockDate.set(moment('2017-05-19T13:59:58.000')) // local time
 
-    const SetBackgroundDailyImageMutation = require('mutations/SetBackgroundDailyImageMutation').default
+    const SetBackgroundDailyImageMutation = require('js/mutations/SetBackgroundDailyImageMutation').default
     const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
     shallow(
       <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
@@ -756,7 +756,7 @@ describe('User background image component', () => {
     }
     MockDate.set(moment('2017-05-19T13:59:58.000')) // local time
 
-    const SetBackgroundDailyImageMutation = require('mutations/SetBackgroundDailyImageMutation').default
+    const SetBackgroundDailyImageMutation = require('js/mutations/SetBackgroundDailyImageMutation').default
     const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
     shallow(
       <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
@@ -778,7 +778,7 @@ describe('User background image component', () => {
 
     MockDate.set(moment('2017-05-19T13:59:58.000')) // local time
 
-    const SetBackgroundDailyImageMutation = require('mutations/SetBackgroundDailyImageMutation').default
+    const SetBackgroundDailyImageMutation = require('js/mutations/SetBackgroundDailyImageMutation').default
     const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
     shallow(
       <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
@@ -799,7 +799,7 @@ describe('User background image component', () => {
     }
     MockDate.set(moment('2017-05-19T13:59:58.000')) // local time
 
-    const SetBackgroundDailyImageMutation = require('mutations/SetBackgroundDailyImageMutation').default
+    const SetBackgroundDailyImageMutation = require('js/mutations/SetBackgroundDailyImageMutation').default
     const UserBackgroundImageComponent = require('../UserBackgroundImageComponent').default
     const wrapper = shallow(
       <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />

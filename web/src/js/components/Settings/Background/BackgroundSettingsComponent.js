@@ -21,10 +21,10 @@ import {
   USER_BACKGROUND_OPTION_PHOTO,
   USER_BACKGROUND_OPTION_DAILY
 } from '../../../constants'
-import SetBackgroundImageMutation from 'mutations/SetBackgroundImageMutation'
-import SetBackgroundColorMutation from 'mutations/SetBackgroundColorMutation'
-import SetBackgroundCustomImageMutation from 'mutations/SetBackgroundCustomImageMutation'
-import SetBackgroundDailyImageMutation from 'mutations/SetBackgroundDailyImageMutation'
+import SetBackgroundImageMutation from 'js/mutations/SetBackgroundImageMutation'
+import SetBackgroundColorMutation from 'js/mutations/SetBackgroundColorMutation'
+import SetBackgroundCustomImageMutation from 'js/mutations/SetBackgroundCustomImageMutation'
+import SetBackgroundDailyImageMutation from 'js/mutations/SetBackgroundDailyImageMutation'
 
 class BackgroundSettings extends React.Component {
   constructor (props) {

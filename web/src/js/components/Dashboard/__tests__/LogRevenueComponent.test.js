@@ -16,9 +16,9 @@ import getGoogleTag, {
   __runCommandQueue,
   __runEventListenerCallbacks
 } from 'ads/google/getGoogleTag'
-import LogUserRevenueMutation from 'mutations/LogUserRevenueMutation'
+import LogUserRevenueMutation from 'js/mutations/LogUserRevenueMutation'
 
-jest.mock('mutations/LogUserRevenueMutation')
+jest.mock('js/mutations/LogUserRevenueMutation')
 jest.mock('ads/amazon/getAmazonTag')
 jest.mock('ads/google/getGoogleTag')
 

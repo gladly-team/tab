@@ -15,8 +15,8 @@ import {
   getReferralData,
   isInIframe
 } from 'web-utils'
-import CreateNewUserMutation from 'mutations/CreateNewUserMutation'
-import LogEmailVerifiedMutation from 'mutations/LogEmailVerifiedMutation'
+import CreateNewUserMutation from 'js/mutations/CreateNewUserMutation'
+import LogEmailVerifiedMutation from 'js/mutations/LogEmailVerifiedMutation'
 import {
   getUserToken,
   getCurrentUser,
@@ -44,8 +44,8 @@ jest.mock('authentication/user')
 jest.mock('js/navigation/navigation')
 jest.mock('utils/localstorage-mgr')
 jest.mock('web-utils')
-jest.mock('mutations/CreateNewUserMutation')
-jest.mock('mutations/LogEmailVerifiedMutation')
+jest.mock('js/mutations/CreateNewUserMutation')
+jest.mock('js/mutations/LogEmailVerifiedMutation')
 jest.mock('authentication/user')
 jest.mock('../../../relay-env')
 jest.mock('utils/logger')

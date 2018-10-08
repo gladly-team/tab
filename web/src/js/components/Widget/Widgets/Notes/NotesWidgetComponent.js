@@ -7,7 +7,7 @@ import EmptyWidgetMsg from '../../EmptyWidgetMsg'
 import WidgetScrollSection from '../../WidgetScrollSection'
 import Note from './Note'
 import AddNoteForm from './AddNoteForm'
-import UpdateWidgetDataMutation from 'mutations/UpdateWidgetDataMutation'
+import UpdateWidgetDataMutation from 'js/mutations/UpdateWidgetDataMutation'
 
 class NotesWidget extends React.Component {
   constructor (props) {

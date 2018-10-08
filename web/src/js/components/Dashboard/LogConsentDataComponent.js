@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import LogUserDataConsentMutation from 'mutations/LogUserDataConsentMutation'
+import LogUserDataConsentMutation from 'js/mutations/LogUserDataConsentMutation'
 import { isInEuropeanUnion } from 'utils/client-location'
 import {
   checkIfNewConsentNeedsToBeLogged,

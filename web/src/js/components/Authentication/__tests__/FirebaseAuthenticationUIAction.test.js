@@ -9,7 +9,7 @@ import {
 } from 'authentication/helpers'
 import toJson from 'enzyme-to-json'
 
-jest.mock('mutations/LogEmailVerifiedMutation')
+jest.mock('js/mutations/LogEmailVerifiedMutation')
 jest.mock('authentication/helpers')
 
 const mockProps = {}

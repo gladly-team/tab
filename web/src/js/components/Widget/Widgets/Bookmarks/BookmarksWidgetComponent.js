@@ -6,7 +6,7 @@ import WidgetScrollSection from '../../WidgetScrollSection'
 import EmptyWidgetMsg from '../../EmptyWidgetMsg'
 import BookmarkChip from './BookmarkChip'
 import AddBookmarkForm from './AddBookmarkForm'
-import UpdateWidgetDataMutation from 'mutations/UpdateWidgetDataMutation'
+import UpdateWidgetDataMutation from 'js/mutations/UpdateWidgetDataMutation'
 
 class BookmarksWidget extends React.Component {
   constructor (props) {

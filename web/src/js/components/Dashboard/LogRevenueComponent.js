@@ -1,5 +1,5 @@
 import React from 'react'
-import LogUserRevenueMutation from 'mutations/LogUserRevenueMutation'
+import LogUserRevenueMutation from 'js/mutations/LogUserRevenueMutation'
 import PropTypes from 'prop-types'
 import getGoogleTag from 'ads/google/getGoogleTag'
 import getPrebidPbjs from 'ads/prebid/getPrebidPbjs'

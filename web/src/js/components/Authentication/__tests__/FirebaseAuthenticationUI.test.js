@@ -12,7 +12,7 @@ import firebase, {
 } from 'firebase/app'
 import MergeIntoExistingUserMutation, {
   __setErrorResponse
-} from 'mutations/MergeIntoExistingUserMutation'
+} from 'js/mutations/MergeIntoExistingUserMutation'
 
 // Init Firebase
 import { initializeFirebase } from 'authentication/firebaseConfig'
@@ -26,8 +26,8 @@ jest.mock('js/navigation/navigation')
 jest.mock('react-firebaseui')
 jest.mock('utils/logger')
 jest.mock('firebase/app')
-jest.mock('mutations/MergeIntoExistingUserMutation')
-jest.mock('mutations/LogEmailVerifiedMutation')
+jest.mock('js/mutations/MergeIntoExistingUserMutation')
+jest.mock('js/mutations/LogEmailVerifiedMutation')
 jest.mock('../../../../relay-env', () => { return {} })
 
 const onSignInSuccessMock = jest.fn()

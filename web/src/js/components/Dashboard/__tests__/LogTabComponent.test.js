@@ -6,10 +6,10 @@ import {
 } from 'enzyme'
 import toJson from 'enzyme-to-json'
 
-import LogTabMutation from 'mutations/LogTabMutation'
+import LogTabMutation from 'js/mutations/LogTabMutation'
 import { incrementTabsOpenedToday } from 'utils/local-user-data-mgr'
 
-jest.mock('mutations/LogTabMutation')
+jest.mock('js/mutations/LogTabMutation')
 jest.mock('utils/local-user-data-mgr')
 
 afterEach(() => {

@@ -1,5 +1,5 @@
 import React from 'react'
-import LogTabMutation from 'mutations/LogTabMutation'
+import LogTabMutation from 'js/mutations/LogTabMutation'
 import PropTypes from 'prop-types'
 import { incrementTabsOpenedToday } from 'utils/local-user-data-mgr'
 

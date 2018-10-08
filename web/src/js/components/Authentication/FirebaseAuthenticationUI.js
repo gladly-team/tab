@@ -16,7 +16,7 @@ import {
 } from 'analytics/logEvent'
 import logger from 'utils/logger'
 import environment from '../../../relay-env'
-import MergeIntoExistingUserMutation from 'mutations/MergeIntoExistingUserMutation'
+import MergeIntoExistingUserMutation from 'js/mutations/MergeIntoExistingUserMutation'
 
 class FirebaseAuthenticationUI extends React.Component {
   constructor (props) {

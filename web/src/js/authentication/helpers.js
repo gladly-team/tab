@@ -19,8 +19,8 @@ import {
   reloadUser
 } from 'authentication/user'
 import environment from '../../relay-env'
-import CreateNewUserMutation from 'mutations/CreateNewUserMutation'
-import LogEmailVerifiedMutation from 'mutations/LogEmailVerifiedMutation'
+import CreateNewUserMutation from 'js/mutations/CreateNewUserMutation'
+import LogEmailVerifiedMutation from 'js/mutations/LogEmailVerifiedMutation'
 import {
   ANON_USER_GROUP_UNAUTHED_ALLOWED,
   getAnonymousUserTestGroup,

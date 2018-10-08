@@ -8,7 +8,7 @@ import {
   WIDGET_TYPE_SEARCH
 } from '../../constants'
 import CenteredWidgetsContainer from 'general/CenteredWidgetsContainer'
-import SetUserActiveWidgetMutation from 'mutations/SetUserActiveWidgetMutation'
+import SetUserActiveWidgetMutation from 'js/mutations/SetUserActiveWidgetMutation'
 import ActiveWidgetAnimation from './ActiveWidgetAnimation'
 
 class Widgets extends React.Component {

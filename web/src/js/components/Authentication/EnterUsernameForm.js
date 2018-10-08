@@ -4,7 +4,7 @@ import { Paper } from 'material-ui'
 import environment from '../../../relay-env'
 import UsernameField from 'general/UsernameField'
 import RaisedButton from 'material-ui/RaisedButton'
-import SetUsernameMutation from 'mutations/SetUsernameMutation'
+import SetUsernameMutation from 'js/mutations/SetUsernameMutation'
 import {
   setUsernameInLocalStorage
 } from 'authentication/user'

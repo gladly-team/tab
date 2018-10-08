@@ -8,8 +8,8 @@ import {
 } from 'theme/default'
 import { getWidgetIconFromWidgetType } from '../../Widget/widget-utils'
 
-import UpdateWidgetEnabledMutation from 'mutations/UpdateWidgetEnabledMutation'
-import UpdateWidgetConfigMutation from 'mutations/UpdateWidgetConfigMutation'
+import UpdateWidgetEnabledMutation from 'js/mutations/UpdateWidgetEnabledMutation'
+import UpdateWidgetConfigMutation from 'js/mutations/UpdateWidgetConfigMutation'
 
 class WidgetSettings extends React.Component {
   constructor (props) {
