@@ -7,7 +7,7 @@ import {
 import toJson from 'enzyme-to-json'
 
 jest.mock('js/utils/client-location')
-jest.mock('ads/consentManagement')
+jest.mock('js/ads/consentManagement')
 jest.mock('js/mutations/LogUserDataConsentMutation')
 
 afterEach(() => {
@@ -42,7 +42,7 @@ describe('LogConsentDataComponent', function () {
     )
     await wrapper.instance().componentDidMount()
     wrapper.update()
-    const registerConsentCallback = require('ads/consentManagement').registerConsentCallback
+    const registerConsentCallback = require('js/ads/consentManagement').registerConsentCallback
     expect(registerConsentCallback).toHaveBeenCalled()
   })
 
@@ -60,7 +60,7 @@ describe('LogConsentDataComponent', function () {
     )
     await wrapper.instance().componentDidMount()
     wrapper.update()
-    const registerConsentCallback = require('ads/consentManagement').registerConsentCallback
+    const registerConsentCallback = require('js/ads/consentManagement').registerConsentCallback
     expect(registerConsentCallback).not.toHaveBeenCalled()
   })
 
@@ -69,7 +69,7 @@ describe('LogConsentDataComponent', function () {
 
     // Mock the callback registration so we can trigger it ourselves
     var cmpCallback
-    const registerConsentCallback = require('ads/consentManagement').registerConsentCallback
+    const registerConsentCallback = require('js/ads/consentManagement').registerConsentCallback
     registerConsentCallback.mockImplementationOnce(cb => {
       cmpCallback = cb
     })
@@ -99,7 +99,7 @@ describe('LogConsentDataComponent', function () {
 
     // Call the success callback on the mutation to confirm it
     // marks the data as logged.
-    const markConsentDataAsLogged = require('ads/consentManagement')
+    const markConsentDataAsLogged = require('js/ads/consentManagement')
       .markConsentDataAsLogged
     expect(markConsentDataAsLogged).not.toHaveBeenCalled()
     const __runOnCompleted = require('js/mutations/LogUserDataConsentMutation').__runOnCompleted
@@ -112,14 +112,14 @@ describe('LogConsentDataComponent', function () {
     const LogUserDataConsentMutation = require('js/mutations/LogUserDataConsentMutation').default
 
     // Mock that localStorage says we need to log new consentData
-    const checkIfNewConsentNeedsToBeLogged = require('ads/consentManagement')
+    const checkIfNewConsentNeedsToBeLogged = require('js/ads/consentManagement')
       .checkIfNewConsentNeedsToBeLogged
     checkIfNewConsentNeedsToBeLogged.mockReturnValueOnce(true)
 
     // Mock CMP values
-    const getConsentString = require('ads/consentManagement').getConsentString
+    const getConsentString = require('js/ads/consentManagement').getConsentString
     getConsentString.mockResolvedValue('this-is-my-string')
-    const hasGlobalConsent = require('ads/consentManagement').hasGlobalConsent
+    const hasGlobalConsent = require('js/ads/consentManagement').hasGlobalConsent
     hasGlobalConsent.mockResolvedValue(true)
 
     // Mock that the client is in the EU
@@ -161,7 +161,7 @@ describe('LogConsentDataComponent', function () {
     )
     await wrapper.instance().componentDidMount()
 
-    const unregisterConsentCallback = require('ads/consentManagement').unregisterConsentCallback
+    const unregisterConsentCallback = require('js/ads/consentManagement').unregisterConsentCallback
     expect(unregisterConsentCallback).not.toHaveBeenCalled()
     wrapper.unmount()
     expect(unregisterConsentCallback).toHaveBeenCalled()

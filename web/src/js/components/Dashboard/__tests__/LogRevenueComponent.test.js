@@ -10,17 +10,17 @@ import {
   mockAmazonBidResponse,
   mockGoogleTagSlotRenderEndedData
 } from 'js/utils/test-utils'
-import getAmazonTag from 'ads/amazon/getAmazonTag'
+import getAmazonTag from 'js/ads/amazon/getAmazonTag'
 import getGoogleTag, {
   __disableAutomaticCommandQueueExecution,
   __runCommandQueue,
   __runEventListenerCallbacks
-} from 'ads/google/getGoogleTag'
+} from 'js/ads/google/getGoogleTag'
 import LogUserRevenueMutation from 'js/mutations/LogUserRevenueMutation'
 
 jest.mock('js/mutations/LogUserRevenueMutation')
-jest.mock('ads/amazon/getAmazonTag')
-jest.mock('ads/google/getGoogleTag')
+jest.mock('js/ads/amazon/getAmazonTag')
+jest.mock('js/ads/google/getGoogleTag')
 
 beforeEach(() => {
   // Mock googletag

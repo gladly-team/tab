@@ -9,7 +9,7 @@ import {
   markConsentDataAsLogged,
   registerConsentCallback,
   unregisterConsentCallback
-} from 'ads/consentManagement'
+} from 'js/ads/consentManagement'
 
 class LogConsentDataComponent extends React.Component {
   constructor (props) {

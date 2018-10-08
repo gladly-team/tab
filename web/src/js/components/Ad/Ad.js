@@ -1,7 +1,7 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import displayAd from 'ads/displayAd'
+import displayAd from 'js/ads/displayAd'
 
 // Suggestions on React component using DFP:
 // https://stackoverflow.com/q/25435066/1332513

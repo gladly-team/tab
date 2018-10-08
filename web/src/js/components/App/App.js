@@ -5,7 +5,7 @@ import {
   registerConsentCallback,
   saveConsentUpdateEventToLocalStorage,
   unregisterConsentCallback
-} from 'ads/consentManagement'
+} from 'js/ads/consentManagement'
 
 class App extends React.Component {
   constructor (props) {
