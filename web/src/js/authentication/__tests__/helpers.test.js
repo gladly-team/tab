@@ -14,7 +14,7 @@ import {
 import {
   getReferralData,
   isInIframe
-} from 'web-utils'
+} from 'js/utils/utils'
 import CreateNewUserMutation from 'js/mutations/CreateNewUserMutation'
 import LogEmailVerifiedMutation from 'js/mutations/LogEmailVerifiedMutation'
 import {
@@ -43,7 +43,7 @@ import {
 jest.mock('authentication/user')
 jest.mock('js/navigation/navigation')
 jest.mock('utils/localstorage-mgr')
-jest.mock('web-utils')
+jest.mock('js/utils/utils')
 jest.mock('js/mutations/CreateNewUserMutation')
 jest.mock('js/mutations/LogEmailVerifiedMutation')
 jest.mock('authentication/user')

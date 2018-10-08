@@ -10,7 +10,7 @@ import {
 import {
   getReferralData,
   isInIframe
-} from 'web-utils'
+} from 'js/utils/utils'
 import {
   getUserToken,
   getCurrentUser,
