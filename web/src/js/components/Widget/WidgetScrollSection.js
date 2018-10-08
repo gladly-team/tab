@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Scrollable from 'general/Scrollable'
+import Scrollable from 'js/components/General/Scrollable'
 
 const renderView = ({ style, ...props }) => {
   const viewStyle = {

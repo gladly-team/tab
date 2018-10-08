@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Paper } from 'material-ui'
 import environment from '../../../relay-env'
-import UsernameField from 'general/UsernameField'
+import UsernameField from 'js/components/General/UsernameField'
 import RaisedButton from 'material-ui/RaisedButton'
 import SetUsernameMutation from 'js/mutations/SetUsernameMutation'
 import {

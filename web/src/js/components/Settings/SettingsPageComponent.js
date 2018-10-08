@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import ErrorMessage from 'general/ErrorMessage'
+import ErrorMessage from 'js/components/General/ErrorMessage'
 import {
   goToDashboard,
   accountURL,

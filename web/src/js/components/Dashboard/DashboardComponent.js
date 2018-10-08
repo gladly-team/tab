@@ -21,8 +21,8 @@ import {
   dashboardIconInactiveColor,
   dashboardIconActiveColor
 } from 'theme/default'
-import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
-import ErrorMessage from 'general/ErrorMessage'
+import FadeInDashboardAnimation from 'js/components/General/FadeInDashboardAnimation'
+import ErrorMessage from 'js/components/General/ErrorMessage'
 import Fireworks from 'lib/fireworks-react'
 import RaisedButton from 'material-ui/RaisedButton'
 import CloseIcon from 'material-ui/svg-icons/navigation/close'

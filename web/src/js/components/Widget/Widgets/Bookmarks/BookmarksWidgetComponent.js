@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import WidgetSharedSpace from 'general/WidgetSharedSpace'
+import WidgetSharedSpace from 'js/components/General/WidgetSharedSpace'
 import WidgetScrollSection from '../../WidgetScrollSection'
 import EmptyWidgetMsg from '../../EmptyWidgetMsg'
 import BookmarkChip from './BookmarkChip'

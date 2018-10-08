@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 
-import WidgetSharedSpace from 'general/WidgetSharedSpace'
+import WidgetSharedSpace from 'js/components/General/WidgetSharedSpace'
 import EmptyWidgetMsg from '../../EmptyWidgetMsg'
 import WidgetScrollSection from '../../WidgetScrollSection'
 import Note from './Note'

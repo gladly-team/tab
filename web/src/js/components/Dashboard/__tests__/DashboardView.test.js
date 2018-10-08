@@ -6,12 +6,12 @@ import {
   shallow
 } from 'enzyme'
 import DashboardView from '../DashboardView'
-import AuthUserComponent from 'general/AuthUserComponent'
+import AuthUserComponent from 'js/components/General/AuthUserComponent'
 import {
   QueryRenderer
 } from 'react-relay'
 import DashboardContainer from '../DashboardContainer'
-import ErrorMessage from 'general/ErrorMessage'
+import ErrorMessage from 'js/components/General/ErrorMessage'
 import { createNewUser } from 'authentication/helpers'
 import {
   goTo,
@@ -21,8 +21,8 @@ import {
   ERROR_USER_DOES_NOT_EXIST
 } from '../../../constants'
 
-jest.mock('general/AuthUserComponent')
-jest.mock('general/ErrorMessage')
+jest.mock('js/components/General/AuthUserComponent')
+jest.mock('js/components/General/ErrorMessage')
 jest.mock('analytics/logEvent')
 jest.mock('react-relay')
 jest.mock('../DashboardContainer')

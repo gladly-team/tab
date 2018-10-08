@@ -6,8 +6,8 @@ import environment from '../../../../relay-env'
 
 import SettingsChildWrapper from '../SettingsChildWrapperComponent'
 import ProfileStats from './ProfileStatsContainer'
-import AuthUserComponent from 'general/AuthUserComponent'
-import ErrorMessage from 'general/ErrorMessage'
+import AuthUserComponent from 'js/components/General/AuthUserComponent'
+import ErrorMessage from 'js/components/General/ErrorMessage'
 
 class ProfileStatsView extends React.Component {
   render () {

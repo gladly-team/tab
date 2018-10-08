@@ -1,7 +1,7 @@
 import React from 'react'
 import { IndexRoute, IndexRedirect, Route, Redirect } from 'react-router'
 
-import BaseContainer from 'general/BaseContainer'
+import BaseContainer from 'js/components/General/BaseContainer'
 
 import App from '../components/App/App'
 import DashboardView from '../components/Dashboard/DashboardView'

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import FadeInAnimation from 'general/FadeInAnimation'
+import FadeInAnimation from 'js/components/General/FadeInAnimation'
 
 class SettingsChildWrapper extends React.Component {
   render () {

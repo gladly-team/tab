@@ -2,12 +2,12 @@ import React from 'react'
 import WidgetIcon from './WidgetIconContainer'
 import Widget from './WidgetContainer'
 import PropTypes from 'prop-types'
-import FadeInDashboardAnimation from 'general/FadeInDashboardAnimation'
+import FadeInDashboardAnimation from 'js/components/General/FadeInDashboardAnimation'
 import {
   WIDGET_TYPE_CLOCK,
   WIDGET_TYPE_SEARCH
 } from '../../constants'
-import CenteredWidgetsContainer from 'general/CenteredWidgetsContainer'
+import CenteredWidgetsContainer from 'js/components/General/CenteredWidgetsContainer'
 import SetUserActiveWidgetMutation from 'js/mutations/SetUserActiveWidgetMutation'
 import ActiveWidgetAnimation from './ActiveWidgetAnimation'
 

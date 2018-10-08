@@ -6,8 +6,8 @@ import environment from '../../../../relay-env'
 
 import SettingsChildWrapper from '../SettingsChildWrapperComponent'
 import WidgetsSettings from './WidgetsSettingsContainer'
-import AuthUserComponent from 'general/AuthUserComponent'
-import ErrorMessage from 'general/ErrorMessage'
+import AuthUserComponent from 'js/components/General/AuthUserComponent'
+import ErrorMessage from 'js/components/General/ErrorMessage'
 
 class WidgetsSettingsView extends React.Component {
   render () {
