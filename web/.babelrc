@@ -11,9 +11,7 @@
     }],
     ["module-resolver", {
       "root": ["./"],
-      "alias": {
-        "authentication": "./src/js/authentication"
-      }
+      "alias": {}
     }]
   ],
   "env": {

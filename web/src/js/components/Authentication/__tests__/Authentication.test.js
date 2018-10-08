@@ -10,7 +10,7 @@ import toJson from 'enzyme-to-json'
 import {
   createNewUser,
   checkAuthStateAndRedirectIfNeeded
-} from 'authentication/helpers'
+} from 'js/authentication/helpers'
 import {
   goTo,
   replaceUrl,
@@ -21,7 +21,7 @@ import {
 import {
   getCurrentUser,
   sendVerificationEmail
-} from 'authentication/user'
+} from 'js/authentication/user'
 import {
   getUrlParameters
 } from 'js/utils/utils'
@@ -29,8 +29,8 @@ import {
   getBrowserExtensionInstallId
 } from 'js/utils/local-user-data-mgr'
 
-jest.mock('authentication/helpers')
-jest.mock('authentication/user')
+jest.mock('js/authentication/helpers')
+jest.mock('js/authentication/user')
 jest.mock('js/navigation/navigation')
 jest.mock('js/utils/utils')
 jest.mock('js/utils/local-user-data-mgr')

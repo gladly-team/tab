@@ -3,7 +3,7 @@ import { Paper } from 'material-ui'
 import RaisedButton from 'material-ui/RaisedButton'
 import {
   logout
-} from 'authentication/user'
+} from 'js/authentication/user'
 import {
   goTo,
   loginURL

@@ -10,18 +10,18 @@ import {
   QueryRenderer
 } from 'react-relay'
 import AuthenticationContainer from '../AuthenticationContainer'
-import { createNewUser } from 'authentication/helpers'
+import { createNewUser } from 'js/authentication/helpers'
 import {
   ERROR_USER_DOES_NOT_EXIST
 } from '../../../constants'
 import {
   getCurrentUser
-} from 'authentication/user'
+} from 'js/authentication/user'
 
 jest.mock('react-relay')
 jest.mock('../AuthenticationContainer')
-jest.mock('authentication/user')
-jest.mock('authentication/helpers')
+jest.mock('js/authentication/user')
+jest.mock('js/authentication/helpers')
 
 afterEach(() => {
   jest.clearAllMocks()

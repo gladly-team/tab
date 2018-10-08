@@ -5,11 +5,11 @@ import Typography from '@material-ui/core/Typography'
 import {
   getCurrentUser,
   sendVerificationEmail
-} from 'authentication/user'
+} from 'js/authentication/user'
 import {
   checkAuthStateAndRedirectIfNeeded,
   createNewUser
-} from 'authentication/helpers'
+} from 'js/authentication/helpers'
 import {
   goTo,
   authMessageURL,

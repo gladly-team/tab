@@ -12,10 +12,10 @@ import SetUsernameMutation, {
 } from 'js/mutations/SetUsernameMutation'
 import {
   checkIfEmailVerified
-} from 'authentication/helpers'
+} from 'js/authentication/helpers'
 
 jest.mock('js/mutations/SetUsernameMutation')
-jest.mock('authentication/helpers')
+jest.mock('js/authentication/helpers')
 
 const mockUserData = {
   id: 'abc-123'

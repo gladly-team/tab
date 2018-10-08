@@ -1,5 +1,5 @@
 /* global fetch */
-import { getUserToken } from 'authentication/user'
+import { getUserToken } from 'js/authentication/user'
 const {
   Environment,
   Network,

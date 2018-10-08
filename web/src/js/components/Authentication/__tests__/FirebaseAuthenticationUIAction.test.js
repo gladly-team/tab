@@ -6,11 +6,11 @@ import {
 } from 'enzyme'
 import {
   checkIfEmailVerified
-} from 'authentication/helpers'
+} from 'js/authentication/helpers'
 import toJson from 'enzyme-to-json'
 
 jest.mock('js/mutations/LogEmailVerifiedMutation')
-jest.mock('authentication/helpers')
+jest.mock('js/authentication/helpers')
 
 const mockProps = {}
 

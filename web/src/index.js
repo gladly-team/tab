@@ -3,8 +3,8 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { AppContainer } from 'react-hot-loader'
 import Root from './root'
-import { initializeFirebase } from 'authentication/firebaseConfig'
-import { getUsername } from 'authentication/user'
+import { initializeFirebase } from 'js/authentication/firebaseConfig'
+import { getUsername } from 'js/authentication/user'
 
 // Start Sentry logger
 // https://docs.sentry.io/clients/javascript/config/

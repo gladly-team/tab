@@ -22,7 +22,7 @@ import {
   goToSettings,
   goToStats
 } from 'js/navigation/navigation'
-import { logout } from 'authentication/user'
+import { logout } from 'js/authentication/user'
 import appTheme, {
   dashboardIconActiveColor,
   dashboardIconInactiveColor,

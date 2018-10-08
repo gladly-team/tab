@@ -9,14 +9,14 @@ import toJson from 'enzyme-to-json'
 import {
   logout,
   sendVerificationEmail
-} from 'authentication/user'
+} from 'js/authentication/user'
 import {
   goTo,
   loginURL
 } from 'js/navigation/navigation'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 
-jest.mock('authentication/user')
+jest.mock('js/authentication/user')
 jest.mock('js/navigation/navigation')
 
 describe('VerifyEmailMessage tests', function () {

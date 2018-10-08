@@ -8,7 +8,7 @@ import AuthUserComponent from 'js/components/General/AuthUserComponent'
 import ErrorMessage from 'js/components/General/ErrorMessage'
 
 import DashboardContainer from './DashboardContainer'
-import { createNewUser } from 'authentication/helpers'
+import { createNewUser } from 'js/authentication/helpers'
 import {
   goTo,
   loginURL

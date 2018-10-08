@@ -9,13 +9,13 @@ import {
 } from 'enzyme'
 import {
   checkAuthStateAndRedirectIfNeeded
-} from 'authentication/helpers'
+} from 'js/authentication/helpers'
 import {
   getUserToken,
   __getAuthListenerCallbacks,
   __unregisterAuthStateChangeListeners,
   __triggerAuthStateChange
-} from 'authentication/user'
+} from 'js/authentication/user'
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import {
   STORAGE_KEY_USERNAME
@@ -24,8 +24,8 @@ import {
   flushAllPromises
 } from 'js/utils/test-utils'
 
-jest.mock('authentication/helpers')
-jest.mock('authentication/user')
+jest.mock('js/authentication/helpers')
+jest.mock('js/authentication/user')
 
 const mockNow = '2017-05-19T13:59:58.000Z'
 

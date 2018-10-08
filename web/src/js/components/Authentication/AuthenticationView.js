@@ -6,8 +6,8 @@ import environment from '../../../relay-env'
 import AuthenticationContainer from './AuthenticationContainer'
 import {
   getCurrentUser
-} from 'authentication/user'
-import { createNewUser } from 'authentication/helpers'
+} from 'js/authentication/user'
+import { createNewUser } from 'js/authentication/helpers'
 import {
   ERROR_USER_DOES_NOT_EXIST
 } from '../../constants'

@@ -4,7 +4,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import {
   logout,
   sendVerificationEmail
-} from 'authentication/user'
+} from 'js/authentication/user'
 import {
   goTo,
   loginURL

@@ -22,7 +22,7 @@ import {
   getCurrentUser,
   reloadUser,
   signInAnonymously
-} from 'authentication/user'
+} from 'js/authentication/user'
 import {
   flushAllPromises,
   runAsyncTimerLoops
@@ -40,13 +40,13 @@ import {
   isAnonymousUserSignInEnabled
 } from 'js/utils/feature-flags'
 
-jest.mock('authentication/user')
+jest.mock('js/authentication/user')
 jest.mock('js/navigation/navigation')
 jest.mock('js/utils/localstorage-mgr')
 jest.mock('js/utils/utils')
 jest.mock('js/mutations/CreateNewUserMutation')
 jest.mock('js/mutations/LogEmailVerifiedMutation')
-jest.mock('authentication/user')
+jest.mock('js/authentication/user')
 jest.mock('../../../relay-env')
 jest.mock('js/utils/logger')
 jest.mock('js/utils/experiments')

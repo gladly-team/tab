@@ -17,7 +17,7 @@ import {
   setUsernameInLocalStorage,
   signInAnonymously,
   reloadUser
-} from 'authentication/user'
+} from 'js/authentication/user'
 import environment from '../../relay-env'
 import CreateNewUserMutation from 'js/mutations/CreateNewUserMutation'
 import LogEmailVerifiedMutation from 'js/mutations/LogEmailVerifiedMutation'

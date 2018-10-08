@@ -12,7 +12,7 @@ import {
 } from 'react-relay'
 import DashboardContainer from '../DashboardContainer'
 import ErrorMessage from 'js/components/General/ErrorMessage'
-import { createNewUser } from 'authentication/helpers'
+import { createNewUser } from 'js/authentication/helpers'
 import {
   goTo,
   loginURL
@@ -26,7 +26,7 @@ jest.mock('js/components/General/ErrorMessage')
 jest.mock('js/analytics/logEvent')
 jest.mock('react-relay')
 jest.mock('../DashboardContainer')
-jest.mock('authentication/helpers')
+jest.mock('js/authentication/helpers')
 jest.mock('js/navigation/navigation')
 
 afterEach(() => {

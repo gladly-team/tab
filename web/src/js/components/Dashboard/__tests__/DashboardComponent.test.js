@@ -21,7 +21,7 @@ import ErrorMessage from 'js/components/General/ErrorMessage'
 import NewUserTour from '../NewUserTourContainer'
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import { STORAGE_NEW_USER_HAS_COMPLETED_TOUR } from '../../../constants'
-import { getCurrentUser } from 'authentication/user'
+import { getCurrentUser } from 'js/authentication/user'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import {
@@ -30,7 +30,7 @@ import {
 
 jest.mock('js/analytics/logEvent')
 jest.mock('js/utils/localstorage-mgr')
-jest.mock('authentication/user')
+jest.mock('js/authentication/user')
 jest.mock('js/navigation/navigation')
 
 const mockNow = '2018-05-15T10:30:00.000'

@@ -7,10 +7,10 @@ import RaisedButton from 'material-ui/RaisedButton'
 import SetUsernameMutation from 'js/mutations/SetUsernameMutation'
 import {
   setUsernameInLocalStorage
-} from 'authentication/user'
+} from 'js/authentication/user'
 import {
   checkIfEmailVerified
-} from 'authentication/helpers'
+} from 'js/authentication/helpers'
 import {
   goToDashboard
 } from 'js/navigation/navigation'
