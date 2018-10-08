@@ -23,7 +23,7 @@ import {
 } from 'theme/default'
 import FadeInDashboardAnimation from 'js/components/General/FadeInDashboardAnimation'
 import ErrorMessage from 'js/components/General/ErrorMessage'
-import Fireworks from 'lib/fireworks-react'
+import Fireworks from 'js/lib/fireworks-react'
 import RaisedButton from 'material-ui/RaisedButton'
 import CloseIcon from 'material-ui/svg-icons/navigation/close'
 import NewUserTour from 'js/components/Dashboard/NewUserTourContainer'

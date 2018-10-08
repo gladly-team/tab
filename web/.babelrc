@@ -12,7 +12,6 @@
     ["module-resolver", {
       "root": ["./"],
       "alias": {
-        "lib": "./lib",
         "utils": "./src/js/utils",
         "analytics": "./src/js/analytics",
         "ads": "./src/js/ads",
