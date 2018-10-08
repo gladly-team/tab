@@ -12,8 +12,7 @@
     ["module-resolver", {
       "root": ["./"],
       "alias": {
-        "authentication": "./src/js/authentication",
-        "assets": "./src/js/assets"
+        "authentication": "./src/js/authentication"
       }
     }]
   ],

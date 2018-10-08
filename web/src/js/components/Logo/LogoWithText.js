@@ -1,7 +1,7 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import logoWithText from 'assets/logos/logo-with-text.svg'
+import logoWithText from 'js/assets/logos/logo-with-text.svg'
 
 class LogoWithText extends React.Component {
   render () {
