@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import WidgetPieceWrapper from '../../WidgetPieceWrapper'
 import Chip from 'material-ui/Chip'
 import AddCircle from 'material-ui/svg-icons/content/add-circle'
-import appTheme from 'theme/default'
+import appTheme from 'js/theme/default'
 
 class NotesHeader extends React.Component {
   constructor (props) {

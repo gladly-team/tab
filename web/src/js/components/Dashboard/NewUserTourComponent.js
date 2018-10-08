@@ -15,7 +15,7 @@ import { STORAGE_NEW_USER_HAS_COMPLETED_TOUR } from '../../constants'
 import {
   primaryColor,
   textColor
-} from 'theme/default'
+} from 'js/theme/default'
 
 // Note that the target components must be mounted
 // before the tour begins.

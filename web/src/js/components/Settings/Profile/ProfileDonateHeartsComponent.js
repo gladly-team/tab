@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Charity from '../../Donate/CharityContainer'
 import { Paper } from 'material-ui'
 import InfoOutlineIcon from 'material-ui/svg-icons/action/info-outline'
-import { lighterTextColor } from 'theme/default'
+import { lighterTextColor } from 'js/theme/default'
 
 class ProfileDonateHearts extends React.Component {
   render () {

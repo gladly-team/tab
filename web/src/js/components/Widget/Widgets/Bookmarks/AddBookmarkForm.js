@@ -7,7 +7,7 @@ import EditWidgetChip from '../../EditWidgetChip'
 import TextField from 'material-ui/TextField'
 import appTheme, {
   widgetEditButtonHover
-} from 'theme/default'
+} from 'js/theme/default'
 
 class AddBookmarkForm extends React.Component {
   constructor (props) {

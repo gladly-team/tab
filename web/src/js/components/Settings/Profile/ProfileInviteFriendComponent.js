@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import InviteFriend from './InviteFriendContainer'
 import Stat from './StatComponent'
-import { lighterTextColor } from 'theme/default'
+import { lighterTextColor } from 'js/theme/default'
 import HappyIcon from 'material-ui/svg-icons/social/mood'
 import { Paper } from 'material-ui'
 

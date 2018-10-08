@@ -12,7 +12,7 @@ import appTheme, {
   buttonFontWeight,
   dashboardIconInactiveColor,
   primaryColor
-} from 'theme/default'
+} from 'js/theme/default'
 
 class TodosWidget extends React.Component {
   constructor (props) {

@@ -6,7 +6,7 @@ import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
 import {
   cardHeaderSubtitleStyle
-} from 'theme/default'
+} from 'js/theme/default'
 import brokenImage from 'assets/nopicture.jpg'
 
 class BackgroundCustomeImagePicker extends React.Component {

@@ -11,7 +11,7 @@ import BackgroundCustomImagePicker from '../../Background/BackgroundCustomImageP
 import {
   cardHeaderTitleStyle,
   cardHeaderSubtitleStyle
-} from 'theme/default'
+} from 'js/theme/default'
 import {
   setBackgroundSettings
 } from 'utils/local-bkg-settings'

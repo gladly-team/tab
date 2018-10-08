@@ -27,7 +27,7 @@ import appTheme, {
   dashboardIconActiveColor,
   dashboardIconInactiveColor,
   dividerColor
-} from 'theme/default'
+} from 'js/theme/default'
 import { commaFormatted } from 'utils/utils'
 import { MAX_DAILY_HEARTS_FROM_TABS } from '../../constants'
 

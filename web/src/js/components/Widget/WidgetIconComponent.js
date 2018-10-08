@@ -13,7 +13,7 @@ import SearchIcon from 'material-ui/svg-icons/action/search'
 import appTheme, {
   dashboardIconInactiveColor,
   dashboardIconActiveColor
-} from 'theme/default'
+} from 'js/theme/default'
 import {
   WIDGET_TYPE_BOOKMARKS,
   WIDGET_TYPE_NOTES,

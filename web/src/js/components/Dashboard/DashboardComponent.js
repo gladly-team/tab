@@ -20,7 +20,7 @@ import CircleIcon from 'material-ui/svg-icons/image/lens'
 import {
   dashboardIconInactiveColor,
   dashboardIconActiveColor
-} from 'theme/default'
+} from 'js/theme/default'
 import FadeInDashboardAnimation from 'js/components/General/FadeInDashboardAnimation'
 import ErrorMessage from 'js/components/General/ErrorMessage'
 import Fireworks from 'js/lib/fireworks-react'

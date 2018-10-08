@@ -5,7 +5,7 @@ import WidgetConfig from './WidgetConfigComponent'
 import {Card, CardHeader, CardText} from 'material-ui/Card'
 import {
   cardHeaderTitleStyle
-} from 'theme/default'
+} from 'js/theme/default'
 import { getWidgetIconFromWidgetType } from '../../Widget/widget-utils'
 
 import UpdateWidgetEnabledMutation from 'js/mutations/UpdateWidgetEnabledMutation'

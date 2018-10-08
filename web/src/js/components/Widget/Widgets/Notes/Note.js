@@ -10,7 +10,7 @@ import appTheme, {
   dashboardTransparentBackground,
   widgetEditButtonInactive,
   widgetEditButtonHover
-} from 'theme/default'
+} from 'js/theme/default'
 
 import { withStyles } from '@material-ui/core/styles'
 

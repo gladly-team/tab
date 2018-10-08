@@ -7,7 +7,7 @@ import Stat from './StatComponent'
 import { Paper } from 'material-ui'
 import appTheme, {
   lighterTextColor
-} from 'theme/default'
+} from 'js/theme/default'
 import ChartIcon from 'material-ui/svg-icons/editor/insert-chart'
 import {
   goToInviteFriends,

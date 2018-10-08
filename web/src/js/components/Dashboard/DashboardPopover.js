@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Popover from 'material-ui/Popover/Popover'
 import appTheme, {
   dashboardTransparentBackground
-} from 'theme/default'
+} from 'js/theme/default'
 
 class DashboardPopover extends React.Component {
   handleRequestClose () {

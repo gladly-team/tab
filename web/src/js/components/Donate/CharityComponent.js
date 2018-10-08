@@ -9,7 +9,7 @@ import Popover from 'material-ui/Popover'
 import Slider from 'material-ui/Slider'
 import Subheader from 'material-ui/Subheader'
 
-import appTheme from 'theme/default'
+import appTheme from 'js/theme/default'
 
 class Charity extends React.Component {
   constructor (props) {

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import {
   shallow
 } from 'enzyme'
-import appTheme from 'theme/default'
+import appTheme from 'js/theme/default'
 
 const mockUserData = {
   username: 'jbond',

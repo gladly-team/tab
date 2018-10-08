@@ -12,7 +12,7 @@ import appTheme, {
   dashboardTransparentBackground,
   widgetEditButtonInactive,
   widgetEditButtonHover
-} from 'theme/default'
+} from 'js/theme/default'
 
 class Todo extends React.Component {
   constructor (props) {

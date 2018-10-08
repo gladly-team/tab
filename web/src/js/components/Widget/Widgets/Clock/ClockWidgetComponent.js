@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 
 import { getWidgetConfig } from '../../../../utils/widgets-utils'
-import appTheme from 'theme/default'
+import appTheme from 'js/theme/default'
 
 class ClockWidget extends React.Component {
   constructor (props) {

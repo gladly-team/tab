@@ -11,7 +11,7 @@ import Sparkle from 'react-sparkle'
 import appTheme, {
   dashboardIconActiveColor,
   dashboardIconInactiveColor
-} from 'theme/default'
+} from 'js/theme/default'
 
 class MoneyRaised extends React.Component {
   constructor (props) {

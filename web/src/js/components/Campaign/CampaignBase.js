@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { Paper } from 'material-ui'
 import {
   alternateAccentColor
-} from 'theme/default'
+} from 'js/theme/default'
 
 class CampaignBase extends React.Component {
   render () {

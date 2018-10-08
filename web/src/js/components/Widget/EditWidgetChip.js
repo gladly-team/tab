@@ -10,7 +10,7 @@ import AddCircleIcon from 'material-ui/svg-icons/content/add-circle'
 import appTheme, {
   widgetEditButtonInactive,
   widgetEditButtonHover
-} from 'theme/default'
+} from 'js/theme/default'
 import EditWidgetChipAnimation from './EditWidgetChipAnimation'
 
 // Holds the widget name and any "add" or "edit"

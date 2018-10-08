@@ -5,7 +5,7 @@ import EditWidgetChip from '../../EditWidgetChip'
 import TextField from 'material-ui/TextField'
 import appTheme, {
   widgetEditButtonHover
-} from 'theme/default'
+} from 'js/theme/default'
 
 class AddTodoForm extends React.Component {
   constructor (props) {

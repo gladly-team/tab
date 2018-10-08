@@ -9,7 +9,7 @@ import {
   dashboardTransparentBackground,
   widgetEditButtonInactive,
   widgetEditButtonHover
-} from 'theme/default'
+} from 'js/theme/default'
 import hexToRgbA from 'hex-to-rgba'
 
 class BookmarkChip extends React.Component {

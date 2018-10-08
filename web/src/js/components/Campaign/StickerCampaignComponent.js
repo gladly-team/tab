@@ -10,7 +10,7 @@ import { withStyles } from '@material-ui/core/styles'
 import appTheme, {
   alternateAccentColor,
   lighterTextColor
-} from 'theme/default'
+} from 'js/theme/default'
 import Logo from '../Logo/Logo'
 
 const styles = theme => ({

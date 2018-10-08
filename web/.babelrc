@@ -16,7 +16,6 @@
         "analytics": "./src/js/analytics",
         "ads": "./src/js/ads",
         "authentication": "./src/js/authentication",
-        "theme": "./src/js/theme",
         "assets": "./src/js/assets"
       }
     }]
