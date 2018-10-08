@@ -17,7 +17,7 @@ import {
 } from '../../../../constants'
 import {
   setBackgroundSettings
-} from 'utils/local-bkg-settings'
+} from 'js/utils/local-bkg-settings'
 import SetBackgroundImageMutation from 'js/mutations/SetBackgroundImageMutation'
 import SetBackgroundColorMutation from 'js/mutations/SetBackgroundColorMutation'
 import SetBackgroundCustomImageMutation from 'js/mutations/SetBackgroundCustomImageMutation'
@@ -29,7 +29,7 @@ jest.mock('material-ui/RadioButton')
 jest.mock('../../../Background/BackgroundImagePickerContainer')
 jest.mock('../../../Background/BackgroundColorPickerContainer')
 jest.mock('../../../Background/BackgroundCustomImagePickerContainer')
-jest.mock('utils/local-bkg-settings')
+jest.mock('js/utils/local-bkg-settings')
 jest.mock('js/mutations/SetBackgroundImageMutation')
 jest.mock('js/mutations/SetBackgroundColorMutation')
 jest.mock('js/mutations/SetBackgroundCustomImageMutation')

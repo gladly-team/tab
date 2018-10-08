@@ -14,7 +14,7 @@ import {
 } from 'js/theme/default'
 import {
   setBackgroundSettings
-} from 'utils/local-bkg-settings'
+} from 'js/utils/local-bkg-settings'
 import {
   USER_BACKGROUND_OPTION_CUSTOM,
   USER_BACKGROUND_OPTION_COLOR,

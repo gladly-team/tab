@@ -19,7 +19,7 @@ import LogConsentData from '../LogConsentDataContainer'
 import LogAccountCreation from '../LogAccountCreationContainer'
 import ErrorMessage from 'js/components/General/ErrorMessage'
 import NewUserTour from '../NewUserTourContainer'
-import localStorageMgr from 'utils/localstorage-mgr'
+import localStorageMgr from 'js/utils/localstorage-mgr'
 import { STORAGE_NEW_USER_HAS_COMPLETED_TOUR } from '../../../constants'
 import { getCurrentUser } from 'authentication/user'
 import Typography from '@material-ui/core/Typography'
@@ -29,7 +29,7 @@ import {
 } from 'js/navigation/navigation'
 
 jest.mock('analytics/logEvent')
-jest.mock('utils/localstorage-mgr')
+jest.mock('js/utils/localstorage-mgr')
 jest.mock('authentication/user')
 jest.mock('js/navigation/navigation')
 

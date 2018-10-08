@@ -5,7 +5,7 @@ import {
   mockGoogleTagImpressionViewableData,
   mockGoogleTagSlotOnloadData,
   mockGoogleTagSlotRenderEndedData
-} from 'utils/test-utils'
+} from 'js/utils/test-utils'
 
 beforeEach(() => {
   delete window.googletag

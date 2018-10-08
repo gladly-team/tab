@@ -1,8 +1,8 @@
 
-import localStorageMgr from 'utils/localstorage-mgr'
+import localStorageMgr from 'js/utils/localstorage-mgr'
 import {
   isAnonymousUserSignInEnabled
-} from 'utils/feature-flags'
+} from 'js/utils/feature-flags'
 import {
   STORAGE_EXPERIMENT_ANON_USER
 } from '../constants'

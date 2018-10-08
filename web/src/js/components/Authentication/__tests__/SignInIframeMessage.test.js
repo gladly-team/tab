@@ -8,9 +8,9 @@ import toJson from 'enzyme-to-json'
 import Typography from '@material-ui/core/Typography'
 import {
   getUrlParameters
-} from 'utils/utils'
+} from 'js/utils/utils'
 
-jest.mock('utils/utils')
+jest.mock('js/utils/utils')
 
 describe('SignInIframeMessage tests', () => {
   it('renders without error', () => {

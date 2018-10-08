@@ -21,7 +21,7 @@ import { isEqual } from 'lodash/lang'
 import LogoWithText from '../Logo/LogoWithText'
 import {
   getUrlParameters
-} from 'utils/utils'
+} from 'js/utils/utils'
 
 // Handle the authentication flow:
 //   check if current user is fully authenticated and redirect

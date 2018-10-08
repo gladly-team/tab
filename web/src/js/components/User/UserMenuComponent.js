@@ -28,7 +28,7 @@ import appTheme, {
   dashboardIconInactiveColor,
   dividerColor
 } from 'js/theme/default'
-import { commaFormatted } from 'utils/utils'
+import { commaFormatted } from 'js/utils/utils'
 import { MAX_DAILY_HEARTS_FROM_TABS } from '../../constants'
 
 class UserMenu extends React.Component {

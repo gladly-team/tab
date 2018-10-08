@@ -1,6 +1,6 @@
 
 import getPrebidPbjs from './getPrebidPbjs'
-import { isInEuropeanUnion } from 'utils/client-location'
+import { isInEuropeanUnion } from 'js/utils/client-location'
 import {
   CONSENT_MANAGEMENT_TIMEOUT
 } from '../adSettings'

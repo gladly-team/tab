@@ -24,16 +24,16 @@ import {
 } from 'authentication/user'
 import {
   getUrlParameters
-} from 'utils/utils'
+} from 'js/utils/utils'
 import {
   getBrowserExtensionInstallId
-} from 'utils/local-user-data-mgr'
+} from 'js/utils/local-user-data-mgr'
 
 jest.mock('authentication/helpers')
 jest.mock('authentication/user')
 jest.mock('js/navigation/navigation')
-jest.mock('utils/utils')
-jest.mock('utils/local-user-data-mgr')
+jest.mock('js/utils/utils')
+jest.mock('js/utils/local-user-data-mgr')
 
 const mockFetchUser = jest.fn()
 

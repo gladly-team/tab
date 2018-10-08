@@ -9,7 +9,7 @@ import {
   getDefaultTabGlobal,
   mockAmazonBidResponse,
   mockGoogleTagSlotRenderEndedData
-} from 'utils/test-utils'
+} from 'js/utils/test-utils'
 import getAmazonTag from 'ads/amazon/getAmazonTag'
 import getGoogleTag, {
   __disableAutomaticCommandQueueExecution,

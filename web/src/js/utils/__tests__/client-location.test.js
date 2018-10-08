@@ -10,7 +10,7 @@ import {
 import { isNil } from 'lodash/lang'
 
 jest.mock('../localstorage-mgr')
-jest.mock('utils/logger')
+jest.mock('js/utils/logger')
 
 const mockNow = '2018-05-15T10:30:00.000'
 
@@ -307,7 +307,7 @@ describe('client-location', () => {
 
   it('does not log an error for a typical MaxMind error', async () => {
     expect.assertions(1)
-    const logger = require('utils/logger').default
+    const logger = require('js/utils/logger').default
 
     // Suppress expected console error
     jest.spyOn(console, 'error').mockImplementationOnce(() => {})
@@ -327,7 +327,7 @@ describe('client-location', () => {
   it('does log an error for a problematic MaxMind error', async () => {
     expect.assertions(1)
 
-    const logger = require('utils/logger').default
+    const logger = require('js/utils/logger').default
 
     // Suppress expected console error
     jest.spyOn(console, 'error').mockImplementationOnce(() => {})

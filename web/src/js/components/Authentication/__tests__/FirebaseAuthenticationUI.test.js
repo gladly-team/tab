@@ -6,7 +6,7 @@ import {
 } from 'enzyme'
 import { map } from 'lodash/collection'
 import { FirebaseAuth } from 'react-firebaseui'
-import logger from 'utils/logger'
+import logger from 'js/utils/logger'
 import firebase, {
   __setFirebaseUser
 } from 'firebase/app'
@@ -24,7 +24,7 @@ jest.mock('authentication/user')
 jest.mock('authentication/firebaseConfig') // mock the Firebase app initialization
 jest.mock('js/navigation/navigation')
 jest.mock('react-firebaseui')
-jest.mock('utils/logger')
+jest.mock('js/utils/logger')
 jest.mock('firebase/app')
 jest.mock('js/mutations/MergeIntoExistingUserMutation')
 jest.mock('js/mutations/LogEmailVerifiedMutation')

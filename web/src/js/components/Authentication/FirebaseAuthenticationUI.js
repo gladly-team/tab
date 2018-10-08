@@ -14,7 +14,7 @@ import {
   signupPageEmailButtonClick,
   signupPageSocialButtonClick
 } from 'analytics/logEvent'
-import logger from 'utils/logger'
+import logger from 'js/utils/logger'
 import environment from '../../../relay-env'
 import MergeIntoExistingUserMutation from 'js/mutations/MergeIntoExistingUserMutation'
 

@@ -7,10 +7,10 @@ import {
 import toJson from 'enzyme-to-json'
 
 import LogTabMutation from 'js/mutations/LogTabMutation'
-import { incrementTabsOpenedToday } from 'utils/local-user-data-mgr'
+import { incrementTabsOpenedToday } from 'js/utils/local-user-data-mgr'
 
 jest.mock('js/mutations/LogTabMutation')
-jest.mock('utils/local-user-data-mgr')
+jest.mock('js/utils/local-user-data-mgr')
 
 afterEach(() => {
   jest.clearAllMocks()

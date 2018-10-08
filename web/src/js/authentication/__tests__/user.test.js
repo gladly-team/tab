@@ -8,7 +8,7 @@ import {
   enterUsernameURL
 } from 'js/navigation/navigation'
 
-jest.mock('utils/localstorage-mgr')
+jest.mock('js/utils/localstorage-mgr')
 
 const storedMockDevAuthenticationEnvVar = process.env.MOCK_DEV_AUTHENTICATION
 const storedNodeEnvVar = process.env.NODE_ENV
@@ -16,7 +16,7 @@ const storedNodeEnvVar = process.env.NODE_ENV
 afterEach(() => {
   jest.clearAllMocks()
 
-  const localStorageMgr = require('utils/localstorage-mgr').default
+  const localStorageMgr = require('js/utils/localstorage-mgr').default
   localStorageMgr.clear()
 
   // Reset env vars and modules
@@ -27,7 +27,7 @@ afterEach(() => {
 
 describe('authentication user module tests', () => {
   test('getUsername fetches the username from localStorage', () => {
-    const localStorageMgr = require('utils/localstorage-mgr').default
+    const localStorageMgr = require('js/utils/localstorage-mgr').default
     localStorageMgr.setItem(STORAGE_KEY_USERNAME, 'BobMIII')
     const getUsername = require('../user').getUsername
     expect(getUsername()).toBe('BobMIII')
@@ -36,13 +36,13 @@ describe('authentication user module tests', () => {
   test('setUsernameInLocalStorage works as expected', () => {
     const setUsernameInLocalStorage = require('../user').setUsernameInLocalStorage
     setUsernameInLocalStorage('MichaelC')
-    const localStorageMgr = require('utils/localstorage-mgr').default
+    const localStorageMgr = require('js/utils/localstorage-mgr').default
     expect(localStorageMgr.getItem(STORAGE_KEY_USERNAME)).toBe('MichaelC')
   })
 
   test('formatUser works as expected', () => {
     // formatUser gets the username from localStorage.
-    const localStorageMgr = require('utils/localstorage-mgr').default
+    const localStorageMgr = require('js/utils/localstorage-mgr').default
     localStorageMgr.setItem(STORAGE_KEY_USERNAME, 'PaulM')
 
     const formatUser = require('../user').formatUser
@@ -66,7 +66,7 @@ describe('authentication user module tests', () => {
     expect.assertions(1)
 
     // formatUser gets the username from localStorage.
-    const localStorageMgr = require('utils/localstorage-mgr').default
+    const localStorageMgr = require('js/utils/localstorage-mgr').default
     localStorageMgr.setItem(STORAGE_KEY_USERNAME, 'RGates')
 
     const __setFirebaseUser = require('firebase/app').__setFirebaseUser
@@ -104,7 +104,7 @@ describe('authentication user module tests', () => {
     expect.assertions(1)
 
     // formatUser gets the username from localStorage.
-    const localStorageMgr = require('utils/localstorage-mgr').default
+    const localStorageMgr = require('js/utils/localstorage-mgr').default
     localStorageMgr.setItem(STORAGE_KEY_USERNAME, 'SomeUsername')
 
     // Set development env vars.
@@ -237,7 +237,7 @@ describe('authentication user module tests', () => {
 
   test('removes some localStorage items on logout', async () => {
     expect.assertions(14)
-    const localStorageMgr = require('utils/localstorage-mgr').default
+    const localStorageMgr = require('js/utils/localstorage-mgr').default
     const logout = require('../user').logout
     await logout()
     expect(localStorageMgr.removeItem)
@@ -341,7 +341,7 @@ describe('authentication user module tests', () => {
     expect.assertions(1)
 
     // formatUser gets the username from localStorage.
-    const localStorageMgr = require('utils/localstorage-mgr').default
+    const localStorageMgr = require('js/utils/localstorage-mgr').default
     localStorageMgr.setItem(STORAGE_KEY_USERNAME, 'SomeUsername')
 
     const __setFirebaseUser = require('firebase/app').__setFirebaseUser
@@ -367,7 +367,7 @@ describe('authentication user module tests', () => {
     expect.assertions(1)
 
     // formatUser gets the username from localStorage.
-    const localStorageMgr = require('utils/localstorage-mgr').default
+    const localStorageMgr = require('js/utils/localstorage-mgr').default
     localStorageMgr.setItem(STORAGE_KEY_USERNAME, 'Shorty')
 
     const __setFirebaseUser = require('firebase/app').__setFirebaseUser
@@ -390,7 +390,7 @@ describe('authentication user module tests', () => {
     expect.assertions(1)
 
     // formatUser gets the username from localStorage.
-    const localStorageMgr = require('utils/localstorage-mgr').default
+    const localStorageMgr = require('js/utils/localstorage-mgr').default
     localStorageMgr.setItem(STORAGE_KEY_USERNAME, 'Shorty')
 
     const __setFirebaseUser = require('firebase/app').__setFirebaseUser

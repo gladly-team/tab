@@ -1,7 +1,7 @@
 import React from 'react'
 import LogTabMutation from 'js/mutations/LogTabMutation'
 import PropTypes from 'prop-types'
-import { incrementTabsOpenedToday } from 'utils/local-user-data-mgr'
+import { incrementTabsOpenedToday } from 'js/utils/local-user-data-mgr'
 
 class LogTabComponent extends React.Component {
   componentDidMount () {

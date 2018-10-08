@@ -28,7 +28,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import CloseIcon from 'material-ui/svg-icons/navigation/close'
 import NewUserTour from 'js/components/Dashboard/NewUserTourContainer'
 import { getCurrentUser } from 'authentication/user'
-import localStorageMgr from 'utils/localstorage-mgr'
+import localStorageMgr from 'js/utils/localstorage-mgr'
 import { STORAGE_NEW_USER_HAS_COMPLETED_TOUR } from '../../constants'
 import {
   goTo,

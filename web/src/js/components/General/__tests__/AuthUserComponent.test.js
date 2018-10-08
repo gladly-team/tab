@@ -16,13 +16,13 @@ import {
   __unregisterAuthStateChangeListeners,
   __triggerAuthStateChange
 } from 'authentication/user'
-import localStorageMgr from 'utils/localstorage-mgr'
+import localStorageMgr from 'js/utils/localstorage-mgr'
 import {
   STORAGE_KEY_USERNAME
 } from '../../../constants'
 import {
   flushAllPromises
-} from 'utils/test-utils'
+} from 'js/utils/test-utils'
 
 jest.mock('authentication/helpers')
 jest.mock('authentication/user')

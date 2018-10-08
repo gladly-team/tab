@@ -1,8 +1,8 @@
 /* eslint-env jest */
 
-import { getTabsOpenedToday } from 'utils/local-user-data-mgr'
+import { getTabsOpenedToday } from 'js/utils/local-user-data-mgr'
 
-jest.mock('utils/local-user-data-mgr')
+jest.mock('js/utils/local-user-data-mgr')
 
 var adsEnabledEnv = process.env.ADS_ENABLED
 

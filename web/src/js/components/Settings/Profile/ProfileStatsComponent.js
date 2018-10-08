@@ -13,7 +13,7 @@ import {
   goToInviteFriends,
   goToDonate
 } from 'js/navigation/navigation'
-import { abbreviateNumber, commaFormatted } from 'utils/utils'
+import { abbreviateNumber, commaFormatted } from 'js/utils/utils'
 
 class ProfileStats extends React.Component {
   render () {

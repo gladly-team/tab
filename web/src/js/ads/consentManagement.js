@@ -1,5 +1,5 @@
 
-import localStorageManager from 'utils/localstorage-mgr'
+import localStorageManager from 'js/utils/localstorage-mgr'
 import {
   STORAGE_NEW_CONSENT_DATA_EXISTS
 } from '../constants'

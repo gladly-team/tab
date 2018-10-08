@@ -4,7 +4,7 @@ import {
   STORAGE_NEW_CONSENT_DATA_EXISTS
 } from '../../constants'
 
-jest.mock('utils/localstorage-mgr')
+jest.mock('js/utils/localstorage-mgr')
 
 beforeEach(() => {
   // Mock CMP
@@ -49,7 +49,7 @@ beforeEach(() => {
 afterEach(() => {
   jest.clearAllMocks()
   jest.resetModules()
-  const localStorageManager = require('utils/localstorage-mgr').default
+  const localStorageManager = require('js/utils/localstorage-mgr').default
   localStorageManager.clear()
 })
 
@@ -241,7 +241,7 @@ describe('consentManagement', () => {
   })
 
   it('saves a "consent data updated" flag to localStorage', () => {
-    const localStorageManager = require('utils/localstorage-mgr').default
+    const localStorageManager = require('js/utils/localstorage-mgr').default
     const saveConsentUpdateEventToLocalStorage = require('../consentManagement')
       .saveConsentUpdateEventToLocalStorage
     saveConsentUpdateEventToLocalStorage()
@@ -249,7 +249,7 @@ describe('consentManagement', () => {
   })
 
   it('checking if new consent needs to be logged works as expected', () => {
-    const localStorageManager = require('utils/localstorage-mgr').default
+    const localStorageManager = require('js/utils/localstorage-mgr').default
     const checkIfNewConsentNeedsToBeLogged = require('../consentManagement')
       .checkIfNewConsentNeedsToBeLogged
 
@@ -261,7 +261,7 @@ describe('consentManagement', () => {
   })
 
   it('marking consent data as logged works as expected', () => {
-    const localStorageManager = require('utils/localstorage-mgr').default
+    const localStorageManager = require('js/utils/localstorage-mgr').default
     const markConsentDataAsLogged = require('../consentManagement')
       .markConsentDataAsLogged
     markConsentDataAsLogged()

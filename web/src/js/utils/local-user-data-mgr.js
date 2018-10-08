@@ -1,7 +1,7 @@
 
 import moment from 'moment'
 import uuid from 'uuid/v4'
-import localStorageMgr from 'utils/localstorage-mgr'
+import localStorageMgr from 'js/utils/localstorage-mgr'
 import {
   STORAGE_EXTENSION_INSTALL_ID,
   STORAGE_APPROX_EXTENSION_INSTALL_TIME,

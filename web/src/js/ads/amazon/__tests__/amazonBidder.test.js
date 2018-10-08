@@ -8,7 +8,7 @@ import getGoogleTag from '../../google/getGoogleTag'
 import {
   getDefaultTabGlobal,
   mockAmazonBidResponse
-} from 'utils/test-utils'
+} from 'js/utils/test-utils'
 
 jest.mock('../getAmazonTag')
 jest.mock('../../consentManagement')

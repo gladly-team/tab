@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import 'utils/jsdom-shims'
+import 'js/utils/jsdom-shims'
 import React from 'react'
 import { findDOMNode } from 'react-dom'
 import { mount, shallow } from 'enzyme'

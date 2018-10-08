@@ -6,9 +6,9 @@ import getPrebidPbjs, {
   __disableAutomaticBidResponses,
   __runBidsBack
 } from '../getPrebidPbjs'
-import { getDefaultTabGlobal } from 'utils/test-utils'
+import { getDefaultTabGlobal } from 'js/utils/test-utils'
 
-jest.mock('utils/client-location')
+jest.mock('js/utils/client-location')
 jest.mock('../getPrebidPbjs')
 
 beforeEach(() => {
@@ -65,7 +65,7 @@ describe('prebidConfig', function () {
     expect.assertions(1)
 
     // Mock that the client is in the EU
-    const isInEuropeanUnion = require('utils/client-location').isInEuropeanUnion
+    const isInEuropeanUnion = require('js/utils/client-location').isInEuropeanUnion
     isInEuropeanUnion.mockResolvedValue(true)
 
     const pbjs = getPrebidPbjs()
@@ -110,7 +110,7 @@ describe('prebidConfig', function () {
     expect.assertions(1)
 
     // Mock that the client is not in the EU
-    const isInEuropeanUnion = require('utils/client-location').isInEuropeanUnion
+    const isInEuropeanUnion = require('js/utils/client-location').isInEuropeanUnion
     isInEuropeanUnion.mockResolvedValue(false)
 
     const pbjs = getPrebidPbjs()

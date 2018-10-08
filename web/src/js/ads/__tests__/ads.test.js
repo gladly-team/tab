@@ -1,7 +1,7 @@
 /* eslint-env jest */
 import {
   getDefaultTabGlobal
-} from 'utils/test-utils'
+} from 'js/utils/test-utils'
 import getGoogleTag, {
   __setPubadsRefreshMock
 } from '../google/getGoogleTag'
@@ -14,7 +14,7 @@ jest.mock('../amazon/getAmazonTag')
 jest.mock('../prebid/getPrebidPbjs')
 jest.mock('../prebid/prebidConfig')
 jest.mock('../amazon/amazonBidder')
-jest.mock('utils/client-location')
+jest.mock('js/utils/client-location')
 jest.mock('../handleAdsLoaded')
 jest.mock('../adsEnabledStatus')
 

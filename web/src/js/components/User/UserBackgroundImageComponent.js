@@ -16,7 +16,7 @@ import {
   getUserBackgroundColor,
   getUserBackgroundImageURL,
   setBackgroundSettings
-} from 'utils/local-bkg-settings'
+} from 'js/utils/local-bkg-settings'
 import SetBackgroundDailyImageMutation from 'js/mutations/SetBackgroundDailyImageMutation'
 import FadeBackgroundAnimation from '../Background/FadeBackgroundAnimation'
 

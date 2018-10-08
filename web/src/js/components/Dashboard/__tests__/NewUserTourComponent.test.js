@@ -7,10 +7,10 @@ import {
 import { cloneDeep } from 'lodash/lang'
 import Joyride from 'react-joyride'
 import Dialog from 'material-ui/Dialog'
-import localStorageMgr from 'utils/localstorage-mgr'
+import localStorageMgr from 'js/utils/localstorage-mgr'
 import { STORAGE_NEW_USER_HAS_COMPLETED_TOUR } from '../../../constants'
 
-jest.mock('utils/localstorage-mgr')
+jest.mock('js/utils/localstorage-mgr')
 
 const mockProps = {
   user: {}

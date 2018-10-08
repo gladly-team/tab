@@ -5,7 +5,7 @@ import {
   shallow
 } from 'enzyme'
 
-jest.mock('utils/client-location')
+jest.mock('js/utils/client-location')
 jest.mock('ads/consentManagement')
 jest.mock('analytics/withPageviewTracking', () => child => child)
 
@@ -23,7 +23,7 @@ describe('App', () => {
 
   it('registers callback with the CMP for data consent update (when in the EU)', async () => {
     // Mock that the client is in the EU
-    const isInEuropeanUnion = require('utils/client-location').isInEuropeanUnion
+    const isInEuropeanUnion = require('js/utils/client-location').isInEuropeanUnion
     isInEuropeanUnion.mockResolvedValue(true)
 
     const App = require('../App').default
@@ -38,7 +38,7 @@ describe('App', () => {
 
   it('does not register callback with the CMP for data consent update (when not in the EU)', async () => {
     // Mock that the client is not in the EU
-    const isInEuropeanUnion = require('utils/client-location').isInEuropeanUnion
+    const isInEuropeanUnion = require('js/utils/client-location').isInEuropeanUnion
     isInEuropeanUnion.mockResolvedValue(false)
 
     const App = require('../App').default
@@ -63,7 +63,7 @@ describe('App', () => {
       .saveConsentUpdateEventToLocalStorage
 
     // Mock that the client is in the EU
-    const isInEuropeanUnion = require('utils/client-location').isInEuropeanUnion
+    const isInEuropeanUnion = require('js/utils/client-location').isInEuropeanUnion
     isInEuropeanUnion.mockResolvedValue(true)
     const App = require('../App').default
     const wrapper = shallow(
@@ -84,7 +84,7 @@ describe('App', () => {
     expect.assertions(2)
 
     // Mock that the client is in the EU
-    const isInEuropeanUnion = require('utils/client-location').isInEuropeanUnion
+    const isInEuropeanUnion = require('js/utils/client-location').isInEuropeanUnion
     isInEuropeanUnion.mockResolvedValue(true)
     const App = require('../App').default
     const wrapper = shallow(

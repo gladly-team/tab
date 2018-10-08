@@ -6,7 +6,7 @@ import {
 } from 'enzyme'
 import toJson from 'enzyme-to-json'
 
-jest.mock('utils/client-location')
+jest.mock('js/utils/client-location')
 jest.mock('ads/consentManagement')
 jest.mock('js/mutations/LogUserDataConsentMutation')
 
@@ -30,7 +30,7 @@ describe('LogConsentDataComponent', function () {
     expect.assertions(1)
 
     // Mock that the client is in the EU
-    const isInEuropeanUnion = require('utils/client-location').isInEuropeanUnion
+    const isInEuropeanUnion = require('js/utils/client-location').isInEuropeanUnion
     isInEuropeanUnion.mockResolvedValue(true)
 
     const LogConsentDataComponent = require('../LogConsentDataComponent').default
@@ -48,7 +48,7 @@ describe('LogConsentDataComponent', function () {
 
   it('does not register callback with the CMP for data consent update (when not in the EU)', async () => {
     // Mock that the client is not in the EU
-    const isInEuropeanUnion = require('utils/client-location').isInEuropeanUnion
+    const isInEuropeanUnion = require('js/utils/client-location').isInEuropeanUnion
     isInEuropeanUnion.mockResolvedValue(false)
 
     const LogConsentDataComponent = require('../LogConsentDataComponent').default
@@ -75,7 +75,7 @@ describe('LogConsentDataComponent', function () {
     })
 
     // Mock that the client is in the EU
-    const isInEuropeanUnion = require('utils/client-location').isInEuropeanUnion
+    const isInEuropeanUnion = require('js/utils/client-location').isInEuropeanUnion
     isInEuropeanUnion.mockResolvedValue(true)
 
     const LogConsentDataComponent = require('../LogConsentDataComponent').default
@@ -123,7 +123,7 @@ describe('LogConsentDataComponent', function () {
     hasGlobalConsent.mockResolvedValue(true)
 
     // Mock that the client is in the EU
-    const isInEuropeanUnion = require('utils/client-location').isInEuropeanUnion
+    const isInEuropeanUnion = require('js/utils/client-location').isInEuropeanUnion
     isInEuropeanUnion.mockResolvedValue(true)
 
     const LogConsentDataComponent = require('../LogConsentDataComponent').default
@@ -149,7 +149,7 @@ describe('LogConsentDataComponent', function () {
     expect.assertions(2)
 
     // Mock that the client is in the EU
-    const isInEuropeanUnion = require('utils/client-location').isInEuropeanUnion
+    const isInEuropeanUnion = require('js/utils/client-location').isInEuropeanUnion
     isInEuropeanUnion.mockResolvedValue(true)
 
     const LogConsentDataComponent = require('../LogConsentDataComponent').default

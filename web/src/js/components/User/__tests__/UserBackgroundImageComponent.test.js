@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import 'utils/jsdom-shims'
+import 'js/utils/jsdom-shims'
 import React from 'react'
 import moment from 'moment'
 import MockDate from 'mockdate'
@@ -11,9 +11,9 @@ import {
   getUserBackgroundColor,
   getUserBackgroundImageURL,
   setBackgroundSettings
-} from 'utils/local-bkg-settings'
+} from 'js/utils/local-bkg-settings'
 
-jest.mock('utils/local-bkg-settings', () => {
+jest.mock('js/utils/local-bkg-settings', () => {
   return {
     getUserBackgroundOption: jest.fn(() => null),
     getUserBackgroundCustomImage: jest.fn(() => null),

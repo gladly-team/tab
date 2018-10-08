@@ -5,13 +5,13 @@ import localStorageMgr, {
 } from '../localstorage-mgr'
 import {
   isAnonymousUserSignInEnabled
-} from 'utils/feature-flags'
+} from 'js/utils/feature-flags'
 import {
   STORAGE_EXPERIMENT_ANON_USER
 } from '../../constants'
 
 jest.mock('../localstorage-mgr')
-jest.mock('utils/feature-flags')
+jest.mock('js/utils/feature-flags')
 afterEach(() => {
   __mockClear()
   jest.clearAllMocks()

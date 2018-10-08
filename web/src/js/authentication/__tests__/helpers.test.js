@@ -26,32 +26,32 @@ import {
 import {
   flushAllPromises,
   runAsyncTimerLoops
-} from 'utils/test-utils'
-import logger from 'utils/logger'
+} from 'js/utils/test-utils'
+import logger from 'js/utils/logger'
 import {
   getAnonymousUserTestGroup,
   getUserTestGroupsForMutation
-} from 'utils/experiments'
+} from 'js/utils/experiments'
 import {
   getBrowserExtensionInstallId,
   getBrowserExtensionInstallTime
-} from 'utils/local-user-data-mgr'
+} from 'js/utils/local-user-data-mgr'
 import {
   isAnonymousUserSignInEnabled
-} from 'utils/feature-flags'
+} from 'js/utils/feature-flags'
 
 jest.mock('authentication/user')
 jest.mock('js/navigation/navigation')
-jest.mock('utils/localstorage-mgr')
+jest.mock('js/utils/localstorage-mgr')
 jest.mock('js/utils/utils')
 jest.mock('js/mutations/CreateNewUserMutation')
 jest.mock('js/mutations/LogEmailVerifiedMutation')
 jest.mock('authentication/user')
 jest.mock('../../../relay-env')
-jest.mock('utils/logger')
-jest.mock('utils/experiments')
-jest.mock('utils/local-user-data-mgr')
-jest.mock('utils/feature-flags')
+jest.mock('js/utils/logger')
+jest.mock('js/utils/experiments')
+jest.mock('js/utils/local-user-data-mgr')
+jest.mock('js/utils/feature-flags')
 
 const mockNow = '2017-05-19T13:59:58.000Z'
 

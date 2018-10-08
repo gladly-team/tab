@@ -1,7 +1,7 @@
 
 import firebase from 'firebase/app'
 import 'firebase/auth'
-import localStorageMgr from 'utils/localstorage-mgr'
+import localStorageMgr from 'js/utils/localstorage-mgr'
 import {
   STORAGE_KEY_USERNAME,
   STORAGE_TABS_LAST_TAB_OPENED_DATE,

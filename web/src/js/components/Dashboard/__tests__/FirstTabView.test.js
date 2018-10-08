@@ -9,14 +9,14 @@ import { replaceUrl } from 'js/navigation/navigation'
 import {
   setBrowserExtensionInstallId,
   setBrowserExtensionInstallTime
-} from 'utils/local-user-data-mgr'
+} from 'js/utils/local-user-data-mgr'
 import {
   assignUserToTestGroups
-} from 'utils/experiments'
+} from 'js/utils/experiments'
 
 jest.mock('js/navigation/navigation')
-jest.mock('utils/local-user-data-mgr')
-jest.mock('utils/experiments')
+jest.mock('js/utils/local-user-data-mgr')
+jest.mock('js/utils/experiments')
 
 afterEach(() => {
   jest.clearAllMocks()
