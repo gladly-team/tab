@@ -13,7 +13,7 @@ import {
 } from 'authentication/helpers'
 import {
   goToDashboard
-} from 'navigation/navigation'
+} from 'js/navigation/navigation'
 
 class EnterUsernameForm extends React.Component {
   constructor (props) {

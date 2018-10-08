@@ -10,7 +10,7 @@ import {
   loginURL,
   missingEmailMessageURL,
   verifyEmailURL
-} from 'navigation/navigation'
+} from 'js/navigation/navigation'
 import {
   getReferralData,
   isInIframe
@@ -41,7 +41,7 @@ import {
 } from 'utils/feature-flags'
 
 jest.mock('authentication/user')
-jest.mock('navigation/navigation')
+jest.mock('js/navigation/navigation')
 jest.mock('utils/localstorage-mgr')
 jest.mock('web-utils')
 jest.mock('mutations/CreateNewUserMutation')

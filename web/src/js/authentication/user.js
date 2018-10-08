@@ -20,7 +20,7 @@ import {
 import {
   absoluteUrl,
   enterUsernameURL
-} from 'navigation/navigation'
+} from 'js/navigation/navigation'
 
 // Only for development.
 const shouldMockAuthentication = (

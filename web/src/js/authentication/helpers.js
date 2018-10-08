@@ -6,7 +6,7 @@ import {
   loginURL,
   missingEmailMessageURL,
   verifyEmailURL
-} from 'navigation/navigation'
+} from 'js/navigation/navigation'
 import {
   getReferralData,
   isInIframe

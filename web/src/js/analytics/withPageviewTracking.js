@@ -1,7 +1,7 @@
 
 import React from 'react'
 import { newTabView, pageview } from 'analytics/logEvent'
-import { dashboardURL } from 'navigation/navigation'
+import { dashboardURL } from 'js/navigation/navigation'
 
 // A higher-order component that logs a pageview analytics
 // event when the React Router location changes.

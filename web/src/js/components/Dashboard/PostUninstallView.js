@@ -2,7 +2,7 @@ import React from 'react'
 import {
   externalRedirect,
   postUninstallSurveyURL
-} from 'navigation/navigation'
+} from 'js/navigation/navigation'
 
 // The view the extensions open immediately after the
 // user uninstalls the extension.

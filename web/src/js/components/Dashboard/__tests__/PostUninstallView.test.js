@@ -5,9 +5,9 @@ import {
   shallow
 } from 'enzyme'
 
-import { externalRedirect } from 'navigation/navigation'
+import { externalRedirect } from 'js/navigation/navigation'
 
-jest.mock('navigation/navigation')
+jest.mock('js/navigation/navigation')
 
 afterEach(() => {
   jest.clearAllMocks()

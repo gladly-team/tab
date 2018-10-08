@@ -1,7 +1,7 @@
 import React from 'react'
 import RaisedButton from 'material-ui/RaisedButton'
 import {getUrlParameters, setReferralData} from 'web-utils'
-import { goToLogin } from 'navigation/navigation'
+import { goToLogin } from 'js/navigation/navigation'
 
 class DownloadApp extends React.Component {
   componentDidMount () {

@@ -8,7 +8,7 @@ import {
   dashboardURL,
   privacyPolicyURL,
   termsOfServiceURL
-} from 'navigation/navigation'
+} from 'js/navigation/navigation'
 import {
   signupPageButtonClick,
   signupPageEmailButtonClick,

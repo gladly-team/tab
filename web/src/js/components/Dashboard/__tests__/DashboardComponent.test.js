@@ -26,12 +26,12 @@ import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import {
   goTo
-} from 'navigation/navigation'
+} from 'js/navigation/navigation'
 
 jest.mock('analytics/logEvent')
 jest.mock('utils/localstorage-mgr')
 jest.mock('authentication/user')
-jest.mock('navigation/navigation')
+jest.mock('js/navigation/navigation')
 
 const mockNow = '2018-05-15T10:30:00.000'
 

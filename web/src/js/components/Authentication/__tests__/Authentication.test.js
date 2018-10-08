@@ -17,7 +17,7 @@ import {
   goToDashboard,
   missingEmailMessageURL,
   verifyEmailURL
-} from 'navigation/navigation'
+} from 'js/navigation/navigation'
 import {
   getCurrentUser,
   sendVerificationEmail
@@ -31,7 +31,7 @@ import {
 
 jest.mock('authentication/helpers')
 jest.mock('authentication/user')
-jest.mock('navigation/navigation')
+jest.mock('js/navigation/navigation')
 jest.mock('utils/utils')
 jest.mock('utils/local-user-data-mgr')
 

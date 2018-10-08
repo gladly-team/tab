@@ -16,7 +16,7 @@ import { createNewUser } from 'authentication/helpers'
 import {
   goTo,
   loginURL
-} from 'navigation/navigation'
+} from 'js/navigation/navigation'
 import {
   ERROR_USER_DOES_NOT_EXIST
 } from '../../../constants'
@@ -27,7 +27,7 @@ jest.mock('analytics/logEvent')
 jest.mock('react-relay')
 jest.mock('../DashboardContainer')
 jest.mock('authentication/helpers')
-jest.mock('navigation/navigation')
+jest.mock('js/navigation/navigation')
 
 afterEach(() => {
   jest.clearAllMocks()

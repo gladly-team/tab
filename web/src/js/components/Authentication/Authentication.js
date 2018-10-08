@@ -16,7 +16,7 @@ import {
   missingEmailMessageURL,
   verifyEmailURL,
   goToDashboard
-} from 'navigation/navigation'
+} from 'js/navigation/navigation'
 import { isEqual } from 'lodash/lang'
 import LogoWithText from '../Logo/LogoWithText'
 import {

@@ -12,7 +12,7 @@ import { createNewUser } from 'authentication/helpers'
 import {
   goTo,
   loginURL
-} from 'navigation/navigation'
+} from 'js/navigation/navigation'
 import {
   ERROR_USER_DOES_NOT_EXIST
 } from '../../constants'

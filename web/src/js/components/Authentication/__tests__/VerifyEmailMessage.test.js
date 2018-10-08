@@ -13,11 +13,11 @@ import {
 import {
   goTo,
   loginURL
-} from 'navigation/navigation'
+} from 'js/navigation/navigation'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 
 jest.mock('authentication/user')
-jest.mock('navigation/navigation')
+jest.mock('js/navigation/navigation')
 
 describe('VerifyEmailMessage tests', function () {
   it('renders without error', function () {

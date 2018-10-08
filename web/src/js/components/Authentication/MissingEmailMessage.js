@@ -7,7 +7,7 @@ import {
 import {
   goTo,
   loginURL
-} from 'navigation/navigation'
+} from 'js/navigation/navigation'
 
 class MissingEmailMessage extends React.Component {
   async restartAuthFlow () {

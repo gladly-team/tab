@@ -12,7 +12,7 @@ import ChartIcon from 'material-ui/svg-icons/editor/insert-chart'
 import {
   goToInviteFriends,
   goToDonate
-} from 'navigation/navigation'
+} from 'js/navigation/navigation'
 import { abbreviateNumber, commaFormatted } from 'utils/utils'
 
 class ProfileStats extends React.Component {

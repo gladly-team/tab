@@ -8,7 +8,7 @@ import {
 import {
   goTo,
   loginURL
-} from 'navigation/navigation'
+} from 'js/navigation/navigation'
 
 class VerifyEmailMessage extends React.Component {
   constructor (props) {

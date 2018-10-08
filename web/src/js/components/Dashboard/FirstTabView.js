@@ -2,7 +2,7 @@ import React from 'react'
 import {
   dashboardURL,
   replaceUrl
-} from 'navigation/navigation'
+} from 'js/navigation/navigation'
 import {
   setBrowserExtensionInstallId,
   setBrowserExtensionInstallTime

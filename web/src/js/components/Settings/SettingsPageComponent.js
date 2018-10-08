@@ -9,7 +9,7 @@ import {
   inviteFriendsURL,
   statsURL,
   widgetSettingsURL
-} from 'navigation/navigation'
+} from 'js/navigation/navigation'
 import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Divider from '@material-ui/core/Divider'

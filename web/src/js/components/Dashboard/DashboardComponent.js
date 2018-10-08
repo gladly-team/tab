@@ -33,7 +33,7 @@ import { STORAGE_NEW_USER_HAS_COMPLETED_TOUR } from '../../constants'
 import {
   goTo,
   loginURL
-} from 'navigation/navigation'
+} from 'js/navigation/navigation'
 
 class Dashboard extends React.Component {
   constructor (props) {

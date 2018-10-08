@@ -6,7 +6,7 @@ import {
 import {
   absoluteUrl,
   enterUsernameURL
-} from 'navigation/navigation'
+} from 'js/navigation/navigation'
 
 jest.mock('utils/localstorage-mgr')
 

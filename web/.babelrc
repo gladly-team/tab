@@ -12,9 +12,7 @@
     ["module-resolver", {
       "root": ["./"],
       "alias": {
-        "relay-test-utils": "utils/relay-test-utils",
         "mutations": "./src/js/mutations",
-        "navigation": "./src/js/navigation",
         "general": "./src/js/components/General",
         "web-utils": "./src/js/utils/utils",
         "lib": "./lib",

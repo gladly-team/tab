@@ -5,7 +5,7 @@ import {
   shallow
 } from 'enzyme'
 
-import { replaceUrl } from 'navigation/navigation'
+import { replaceUrl } from 'js/navigation/navigation'
 import {
   setBrowserExtensionInstallId,
   setBrowserExtensionInstallTime
@@ -14,7 +14,7 @@ import {
   assignUserToTestGroups
 } from 'utils/experiments'
 
-jest.mock('navigation/navigation')
+jest.mock('js/navigation/navigation')
 jest.mock('utils/local-user-data-mgr')
 jest.mock('utils/experiments')
 

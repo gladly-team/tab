@@ -5,7 +5,7 @@ import DashboardPopover from '../Dashboard/DashboardPopover'
 import RaisedButton from 'material-ui/RaisedButton'
 import {
   goToInviteFriends
-} from 'navigation/navigation'
+} from 'js/navigation/navigation'
 import Sparkle from 'react-sparkle'
 
 import appTheme, {

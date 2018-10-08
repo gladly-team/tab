@@ -21,7 +21,7 @@ import {
   goToLogin,
   goToSettings,
   goToStats
-} from 'navigation/navigation'
+} from 'js/navigation/navigation'
 import { logout } from 'authentication/user'
 import appTheme, {
   dashboardIconActiveColor,

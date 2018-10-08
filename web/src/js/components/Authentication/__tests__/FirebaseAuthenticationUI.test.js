@@ -22,7 +22,7 @@ jest.mock('analytics/logEvent')
 jest.mock('authentication/helpers')
 jest.mock('authentication/user')
 jest.mock('authentication/firebaseConfig') // mock the Firebase app initialization
-jest.mock('navigation/navigation')
+jest.mock('js/navigation/navigation')
 jest.mock('react-firebaseui')
 jest.mock('utils/logger')
 jest.mock('firebase/app')
