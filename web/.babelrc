@@ -8,10 +8,6 @@
   "plugins": [
     ["relay", {
       "schema": "data/schema.graphql"
-    }],
-    ["module-resolver", {
-      "root": ["./"],
-      "alias": {}
     }]
   ],
   "env": {
