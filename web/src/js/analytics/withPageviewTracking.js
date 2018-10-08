@@ -1,6 +1,6 @@
 
 import React from 'react'
-import { newTabView, pageview } from 'analytics/logEvent'
+import { newTabView, pageview } from 'js/analytics/logEvent'
 import { dashboardURL } from 'js/navigation/navigation'
 
 // A higher-order component that logs a pageview analytics

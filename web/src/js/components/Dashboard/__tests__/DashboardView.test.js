@@ -23,7 +23,7 @@ import {
 
 jest.mock('js/components/General/AuthUserComponent')
 jest.mock('js/components/General/ErrorMessage')
-jest.mock('analytics/logEvent')
+jest.mock('js/analytics/logEvent')
 jest.mock('react-relay')
 jest.mock('../DashboardContainer')
 jest.mock('authentication/helpers')

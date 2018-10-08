@@ -28,7 +28,7 @@ import {
   goTo
 } from 'js/navigation/navigation'
 
-jest.mock('analytics/logEvent')
+jest.mock('js/analytics/logEvent')
 jest.mock('js/utils/localstorage-mgr')
 jest.mock('authentication/user')
 jest.mock('js/navigation/navigation')

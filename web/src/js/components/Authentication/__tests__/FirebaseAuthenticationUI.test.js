@@ -18,7 +18,7 @@ import MergeIntoExistingUserMutation, {
 import { initializeFirebase } from 'authentication/firebaseConfig'
 initializeFirebase()
 
-jest.mock('analytics/logEvent')
+jest.mock('js/analytics/logEvent')
 jest.mock('authentication/helpers')
 jest.mock('authentication/user')
 jest.mock('authentication/firebaseConfig') // mock the Firebase app initialization

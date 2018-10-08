@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import {
   accountCreated
-} from 'analytics/logEvent'
+} from 'js/analytics/logEvent'
 
 class LogAccountCreation extends React.Component {
   componentDidMount () {

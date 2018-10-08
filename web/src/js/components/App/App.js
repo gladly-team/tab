@@ -1,5 +1,5 @@
 import React from 'react'
-import withPageviewTracking from 'analytics/withPageviewTracking'
+import withPageviewTracking from 'js/analytics/withPageviewTracking'
 import { isInEuropeanUnion } from 'js/utils/client-location'
 import {
   registerConsentCallback,

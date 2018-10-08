@@ -7,9 +7,9 @@ import {
 
 import {
   accountCreated
-} from 'analytics/logEvent'
+} from 'js/analytics/logEvent'
 
-jest.mock('analytics/logEvent')
+jest.mock('js/analytics/logEvent')
 
 afterEach(() => {
   jest.clearAllMocks()

@@ -7,7 +7,7 @@ import {
 
 jest.mock('js/utils/client-location')
 jest.mock('ads/consentManagement')
-jest.mock('analytics/withPageviewTracking', () => child => child)
+jest.mock('js/analytics/withPageviewTracking', () => child => child)
 
 beforeEach(() => {
   jest.clearAllMocks()
