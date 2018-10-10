@@ -64,7 +64,7 @@ const initApp = () => {
 
   // Hot Module Replacement API
   if (module.hot) {
-    module.hot.accept('./root', () => {
+    module.hot.accept('js/root', () => {
       render(Root)
     })
   }
