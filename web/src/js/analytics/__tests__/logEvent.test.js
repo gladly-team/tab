@@ -75,6 +75,22 @@ describe('logEvent', () => {
     expect(redditAccountCreationEvent).toHaveBeenCalled()
   })
 
+  test('a search event calls analytics as expected', async () => {
+    expect.assertions(3)
+
+    const searchExecuted = require('js/analytics/logEvent').searchExecuted
+    searchExecuted()
+
+    expect(fbq).not.toHaveBeenCalled()
+    expect(redditAccountCreationEvent).not.toHaveBeenCalled()
+    expect(GA.ga).toHaveBeenCalledWith('send', {
+      hitType: 'event',
+      eventCategory: 'Search',
+      eventAction: 'SearchExecuted',
+      hitCallback: expect.any(Function)
+    })
+  })
+
   test('new tab view event calls analytics as expected', () => {
     const newTabView = require('js/analytics/logEvent').newTabView
     newTabView()

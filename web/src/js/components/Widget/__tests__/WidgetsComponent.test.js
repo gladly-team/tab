@@ -6,6 +6,10 @@ import {
 } from 'enzyme'
 import { cloneDeep } from 'lodash/lang'
 
+jest.mock('js/analytics/logEvent')
+jest.mock('js/analytics/google-analytics')
+jest.mock('js/analytics/facebook-analytics')
+
 const mockUserData = {
   id: 'user-abc-123',
   activeWidget: 'fake-widget-id-bookmarks',

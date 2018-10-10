@@ -2,5 +2,6 @@
 
 module.exports = {
   pageview: jest.fn(),
-  event: jest.fn()
+  event: jest.fn(),
+  ga: jest.fn()
 }

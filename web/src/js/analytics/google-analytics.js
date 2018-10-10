@@ -36,6 +36,15 @@ class ReactGAWrapper {
       console.error('Failed to track Google Analytics event.', e)
     }
   }
+
+  static ga (gaAction, gaEvent) {
+    try {
+      debugLogger('Logging GA event:', gaAction, JSON.stringify(gaEvent))
+      ReactGA.ga(gaAction, gaEvent)
+    } catch (e) {
+      console.error('Failed to track Google Analytics event.', e)
+    }
+  }
 }
 
 export default ReactGAWrapper
