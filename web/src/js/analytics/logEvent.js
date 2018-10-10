@@ -55,6 +55,31 @@ export const accountCreated = () => {
   redditAccountCreationEvent()
 }
 
+export const searchExecuted = () => {
+  // Need to wait for events to fire before navigating
+  // away from the page.
+  // https://support.google.com/analytics/answer/1136920?hl=en
+  // https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference#hitCallback
+  return new Promise(resolve => {
+    // Using the original ga object because hitCallback isn't
+    // implemented in react-ga for events:
+    // https://github.com/react-ga/react-ga#reactgaga
+    GA.ga('send', {
+      hitType: 'event',
+      eventCategory: 'Search',
+      eventAction: 'SearchExecuted',
+      hitCallback: resolve
+    })
+
+    // In case GA fails to call the callback within a
+    // reasonable amount of time, continue so we don't
+    // interrupt the search.
+    setTimeout(() => {
+      resolve()
+    }, 200)
+  })
+}
+
 // TODO: later
 // export const emailVerified = () => {
 //   // GA and fbq pageviews

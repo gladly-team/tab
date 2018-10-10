@@ -7,6 +7,7 @@ import appTheme, {
   dashboardIconActiveColor
 } from 'js/theme/default'
 import { getWidgetConfig } from 'js/utils/widgets-utils'
+import { searchExecuted } from 'js/analytics/logEvent'
 
 class Search extends React.Component {
   constructor (props) {
@@ -31,21 +32,21 @@ class Search extends React.Component {
     })
   }
 
-  _handleKeyPress (e) {
+  handleKeyPress (e) {
     if (e.key === 'Enter') {
       this.executeSearch()
     }
   }
 
-  executeSearch () {
+  async executeSearch () {
+    await searchExecuted()
+
     const engine = this.state.config.engine || 'Google'
     const searchApi = this.getSearchApi(engine)
     const searchTerm = this.searchInput.input.value
 
     // The page might be iframed, so opening in _top is critical.
     window.open(searchApi + searchTerm, '_top')
-
-    this.searchInput.input.value = ''
   }
 
   onSearchHover (hover) {
@@ -133,7 +134,7 @@ class Search extends React.Component {
           onFocus={this.onInputFocusChanged.bind(this, true)}
           onBlur={this.onInputFocusChanged.bind(this, false)}
           ref={(input) => { this.searchInput = input }}
-          onKeyPress={this._handleKeyPress.bind(this)}
+          onKeyPress={this.handleKeyPress.bind(this)}
           style={inputContainerStyle}
           inputStyle={inputStyle}
           underlineStyle={underlineStyle}

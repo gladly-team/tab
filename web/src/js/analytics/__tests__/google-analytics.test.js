@@ -58,6 +58,21 @@ describe('google-analytics tests', () => {
     GA.event()
   })
 
+  test('does not throw error if ReactGA.ga throws an error', () => {
+    const ReactGA = require('react-ga').default
+    ReactGA.ga.mockImplementationOnce(() => {
+      throw new Error('GA problem!')
+    })
+
+    // Suppress an expected console error
+    jest.spyOn(global.console, 'error')
+      .mockImplementationOnce(() => {})
+
+    // This would throw an error if not handled appropriately
+    const GA = require('js/analytics/google-analytics').default
+    GA.ga()
+  })
+
   test('a pageview calls ReactGA as expected', () => {
     const ReactGA = require('react-ga').default
 
@@ -77,6 +92,23 @@ describe('google-analytics tests', () => {
 
     expect(ReactGA.event).toHaveBeenCalledWith({
       foo: 'bar'
+    })
+  })
+
+  test('it calls ReactGA.ga as expected', () => {
+    const ReactGA = require('react-ga').default
+
+    const GA = require('js/analytics/google-analytics').default
+    GA.ga('send', {
+      hitType: 'event',
+      eventCategory: 'Something',
+      eventAction: 'SomethingHappened'
+    })
+
+    expect(ReactGA.ga).toHaveBeenCalledWith('send', {
+      hitType: 'event',
+      eventCategory: 'Something',
+      eventAction: 'SomethingHappened'
     })
   })
 })
