@@ -1,6 +1,6 @@
 import React from 'react'
 import { browserHistory, Router } from 'react-router'
-import Routes from './js/routes/Route'
+import Routes from 'js/routes/Route'
 
 import { IntlProvider, addLocaleData } from 'react-intl'
 import en from 'react-intl/locale-data/en'
@@ -11,10 +11,10 @@ import { MuiThemeProvider as V0MuiThemeProvider } from 'material-ui'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 
 // Our translated strings
-import localeData from './js/assets/locales/data.json'
+import localeData from 'js/assets/locales/data.json'
 
-import defaultThemeLegacy from './js/theme/default'
-import defaultTheme from './js/theme/defaultV1'
+import defaultThemeLegacy from 'js/theme/default'
+import defaultTheme from 'js/theme/defaultV1'
 const legacyMuiTheme = getMuiTheme(defaultThemeLegacy)
 const muiTheme = createMuiTheme(defaultTheme)
 

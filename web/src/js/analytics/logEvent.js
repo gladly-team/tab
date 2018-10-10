@@ -1,7 +1,7 @@
 
-import fbq from './facebook-analytics'
-import GA from './google-analytics'
-import { redditAccountCreationEvent } from './reddit-analytics'
+import fbq from 'js/analytics/facebook-analytics'
+import GA from 'js/analytics/google-analytics'
+import { redditAccountCreationEvent } from 'js/analytics/reddit-analytics'
 
 // We automatically track most pageviews on location change.
 // See ./withPageviewTracking higher-order component.

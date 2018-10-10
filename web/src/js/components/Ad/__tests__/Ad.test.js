@@ -1,13 +1,13 @@
 /* eslint-env jest */
 
-import 'utils/jsdom-shims'
+import 'js/utils/jsdom-shims'
 import React from 'react'
 import { findDOMNode } from 'react-dom'
 import { mount, shallow } from 'enzyme'
-import Ad from '../Ad'
-import displayAd from 'ads/displayAd'
+import Ad from 'js/components/Ad/Ad'
+import displayAd from 'js/ads/displayAd'
 
-jest.mock('ads/displayAd')
+jest.mock('js/ads/displayAd')
 
 afterEach(() => {
   jest.clearAllMocks()

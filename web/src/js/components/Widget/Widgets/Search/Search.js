@@ -5,8 +5,8 @@ import TextField from 'material-ui/TextField'
 import appTheme, {
   dashboardIconInactiveColor,
   dashboardIconActiveColor
-} from 'theme/default'
-import { getWidgetConfig } from '../../../../utils/widgets-utils'
+} from 'js/theme/default'
+import { getWidgetConfig } from 'js/utils/widgets-utils'
 
 class Search extends React.Component {
   constructor (props) {

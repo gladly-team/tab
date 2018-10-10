@@ -1,19 +1,19 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Paper } from 'material-ui'
-import environment from '../../../relay-env'
-import UsernameField from 'general/UsernameField'
+import environment from 'js/relay-env'
+import UsernameField from 'js/components/General/UsernameField'
 import RaisedButton from 'material-ui/RaisedButton'
-import SetUsernameMutation from 'mutations/SetUsernameMutation'
+import SetUsernameMutation from 'js/mutations/SetUsernameMutation'
 import {
   setUsernameInLocalStorage
-} from 'authentication/user'
+} from 'js/authentication/user'
 import {
   checkIfEmailVerified
-} from 'authentication/helpers'
+} from 'js/authentication/helpers'
 import {
   goToDashboard
-} from 'navigation/navigation'
+} from 'js/navigation/navigation'
 
 class EnterUsernameForm extends React.Component {
   constructor (props) {

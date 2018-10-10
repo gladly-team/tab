@@ -5,10 +5,10 @@ import RaisedButton from 'material-ui/RaisedButton'
 import {
   absoluteUrl,
   loginURL
-} from 'navigation/navigation'
+} from 'js/navigation/navigation'
 import {
   getUrlParameters
-} from 'utils/utils'
+} from 'js/utils/utils'
 
 // This view primarily exists as an intermediary to open
 // the authentication page outside of an iframe, because

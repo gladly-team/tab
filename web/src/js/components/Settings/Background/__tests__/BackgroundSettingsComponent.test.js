@@ -6,34 +6,34 @@ import {
 } from 'enzyme'
 import { cloneDeep } from 'lodash/lang'
 import { RadioButtonGroup, RadioButton } from 'material-ui/RadioButton'
-import BackgroundImagePicker from '../../../Background/BackgroundImagePickerContainer'
-import BackgroundColorPicker from '../../../Background/BackgroundColorPickerContainer'
-import BackgroundCustomImagePicker from '../../../Background/BackgroundCustomImagePickerContainer'
+import BackgroundImagePicker from 'js/components/Background/BackgroundImagePickerContainer'
+import BackgroundColorPicker from 'js/components/Background/BackgroundColorPickerContainer'
+import BackgroundCustomImagePicker from 'js/components/Background/BackgroundCustomImagePickerContainer'
 import {
   USER_BACKGROUND_OPTION_CUSTOM,
   USER_BACKGROUND_OPTION_COLOR,
   USER_BACKGROUND_OPTION_PHOTO,
   USER_BACKGROUND_OPTION_DAILY
-} from '../../../../constants'
+} from 'js/constants'
 import {
   setBackgroundSettings
-} from 'utils/local-bkg-settings'
-import SetBackgroundImageMutation from 'mutations/SetBackgroundImageMutation'
-import SetBackgroundColorMutation from 'mutations/SetBackgroundColorMutation'
-import SetBackgroundCustomImageMutation from 'mutations/SetBackgroundCustomImageMutation'
+} from 'js/utils/local-bkg-settings'
+import SetBackgroundImageMutation from 'js/mutations/SetBackgroundImageMutation'
+import SetBackgroundColorMutation from 'js/mutations/SetBackgroundColorMutation'
+import SetBackgroundCustomImageMutation from 'js/mutations/SetBackgroundCustomImageMutation'
 import SetBackgroundDailyImageMutation, {
   __runOnCompleted as __runOnCompletedDailyImageMutation
-} from 'mutations/SetBackgroundDailyImageMutation'
+} from 'js/mutations/SetBackgroundDailyImageMutation'
 
 jest.mock('material-ui/RadioButton')
-jest.mock('../../../Background/BackgroundImagePickerContainer')
-jest.mock('../../../Background/BackgroundColorPickerContainer')
-jest.mock('../../../Background/BackgroundCustomImagePickerContainer')
-jest.mock('utils/local-bkg-settings')
-jest.mock('mutations/SetBackgroundImageMutation')
-jest.mock('mutations/SetBackgroundColorMutation')
-jest.mock('mutations/SetBackgroundCustomImageMutation')
-jest.mock('mutations/SetBackgroundDailyImageMutation')
+jest.mock('js/components/Background/BackgroundImagePickerContainer')
+jest.mock('js/components/Background/BackgroundColorPickerContainer')
+jest.mock('js/components/Background/BackgroundCustomImagePickerContainer')
+jest.mock('js/utils/local-bkg-settings')
+jest.mock('js/mutations/SetBackgroundImageMutation')
+jest.mock('js/mutations/SetBackgroundColorMutation')
+jest.mock('js/mutations/SetBackgroundCustomImageMutation')
+jest.mock('js/mutations/SetBackgroundDailyImageMutation')
 
 const mockShowError = jest.fn()
 const mockProps = {
@@ -59,14 +59,14 @@ afterEach(() => {
 
 describe('Background settings component', () => {
   it('renders without error', () => {
-    const BackgroundSettings = require('../BackgroundSettingsComponent').default
+    const BackgroundSettings = require('js/components/Settings/Background/BackgroundSettingsComponent').default
     shallow(
       <BackgroundSettings {...mockProps} />
     )
   })
 
   it('renders all of the expected background option radio buttons', () => {
-    const BackgroundSettings = require('../BackgroundSettingsComponent').default
+    const BackgroundSettings = require('js/components/Settings/Background/BackgroundSettingsComponent').default
     const wrapper = shallow(
       <BackgroundSettings {...mockProps} />
     )
@@ -88,7 +88,7 @@ describe('Background settings component', () => {
   })
 
   it('selects the correct background option depending on initial background settings option prop', () => {
-    const BackgroundSettings = require('../BackgroundSettingsComponent').default
+    const BackgroundSettings = require('js/components/Settings/Background/BackgroundSettingsComponent').default
     const customMockProps = cloneDeep(mockProps)
     customMockProps.user.backgroundOption = 'color'
     const wrapper = shallow(
@@ -103,7 +103,7 @@ describe('Background settings component', () => {
   })
 
   it('selects the photo option if the background option is null', () => {
-    const BackgroundSettings = require('../BackgroundSettingsComponent').default
+    const BackgroundSettings = require('js/components/Settings/Background/BackgroundSettingsComponent').default
     const customMockProps = cloneDeep(mockProps)
     customMockProps.user.backgroundOption = null
     const wrapper = shallow(
@@ -118,7 +118,7 @@ describe('Background settings component', () => {
   })
 
   it('selects the photo option if the background option is some unexpected value', () => {
-    const BackgroundSettings = require('../BackgroundSettingsComponent').default
+    const BackgroundSettings = require('js/components/Settings/Background/BackgroundSettingsComponent').default
     const customMockProps = cloneDeep(mockProps)
     customMockProps.user.backgroundOption = 'BAD-VALUE!'
     const wrapper = shallow(
@@ -133,7 +133,7 @@ describe('Background settings component', () => {
   })
 
   it('renders new selection components depending on which background option is selected', () => {
-    const BackgroundSettings = require('../BackgroundSettingsComponent').default
+    const BackgroundSettings = require('js/components/Settings/Background/BackgroundSettingsComponent').default
     const wrapper = shallow(
       <BackgroundSettings {...mockProps} />
     )
@@ -151,7 +151,7 @@ describe('Background settings component', () => {
   })
 
   it('it saves settings when the user selects the daily photo option', () => {
-    const BackgroundSettings = require('../BackgroundSettingsComponent').default
+    const BackgroundSettings = require('js/components/Settings/Background/BackgroundSettingsComponent').default
     const customMockProps = cloneDeep(mockProps)
     customMockProps.user.backgroundOption = 'photo'
     const wrapper = shallow(
@@ -165,7 +165,7 @@ describe('Background settings component', () => {
   })
 
   it('it updates localStorage immediately when the user selects the daily photo option', () => {
-    const BackgroundSettings = require('../BackgroundSettingsComponent').default
+    const BackgroundSettings = require('js/components/Settings/Background/BackgroundSettingsComponent').default
     const customMockProps = cloneDeep(mockProps)
     customMockProps.user.backgroundOption = 'photo'
     const wrapper = shallow(
@@ -184,7 +184,7 @@ describe('Background settings component', () => {
   })
 
   it('it updates localStorage when the new daily photo returns after choosing to the daily photo option', () => {
-    const BackgroundSettings = require('../BackgroundSettingsComponent').default
+    const BackgroundSettings = require('js/components/Settings/Background/BackgroundSettingsComponent').default
     const customMockProps = cloneDeep(mockProps)
     customMockProps.user.backgroundOption = 'photo'
     const wrapper = shallow(
@@ -218,7 +218,7 @@ describe('Background settings component', () => {
   })
 
   it('it does not update localStorage with the new daily photo if the user chooses another background option before the daily photo data returns', () => {
-    const BackgroundSettings = require('../BackgroundSettingsComponent').default
+    const BackgroundSettings = require('js/components/Settings/Background/BackgroundSettingsComponent').default
     const customMockProps = cloneDeep(mockProps)
     customMockProps.user.backgroundOption = 'photo'
     const wrapper = shallow(
@@ -252,7 +252,7 @@ describe('Background settings component', () => {
   })
 
   it('it updates localStorage when the user selects a new background option', () => {
-    const BackgroundSettings = require('../BackgroundSettingsComponent').default
+    const BackgroundSettings = require('js/components/Settings/Background/BackgroundSettingsComponent').default
     const customMockProps = cloneDeep(mockProps)
     customMockProps.user.backgroundOption = 'photo'
     const wrapper = shallow(
@@ -272,7 +272,7 @@ describe('Background settings component', () => {
   })
 
   it('saves settings when the user selects a new photo', () => {
-    const BackgroundSettings = require('../BackgroundSettingsComponent').default
+    const BackgroundSettings = require('js/components/Settings/Background/BackgroundSettingsComponent').default
     const customMockProps = cloneDeep(mockProps)
     customMockProps.user.backgroundOption = 'photo'
     const wrapper = shallow(
@@ -294,7 +294,7 @@ describe('Background settings component', () => {
   })
 
   it('calls to update localStorage when the user selects a new photo', () => {
-    const BackgroundSettings = require('../BackgroundSettingsComponent').default
+    const BackgroundSettings = require('js/components/Settings/Background/BackgroundSettingsComponent').default
     const customMockProps = cloneDeep(mockProps)
     customMockProps.user.backgroundOption = 'photo'
     const wrapper = shallow(
@@ -320,7 +320,7 @@ describe('Background settings component', () => {
   })
 
   it('saves settings when the user selects a new color', () => {
-    const BackgroundSettings = require('../BackgroundSettingsComponent').default
+    const BackgroundSettings = require('js/components/Settings/Background/BackgroundSettingsComponent').default
     const customMockProps = cloneDeep(mockProps)
     customMockProps.user.backgroundOption = 'color'
     const wrapper = shallow(
@@ -337,7 +337,7 @@ describe('Background settings component', () => {
   })
 
   it('calls to update localStorage when the user selects a new color', () => {
-    const BackgroundSettings = require('../BackgroundSettingsComponent').default
+    const BackgroundSettings = require('js/components/Settings/Background/BackgroundSettingsComponent').default
     const customMockProps = cloneDeep(mockProps)
     customMockProps.user.backgroundOption = 'color'
     const wrapper = shallow(
@@ -358,7 +358,7 @@ describe('Background settings component', () => {
   })
 
   it('saves settings when the user selects a new custom photo', () => {
-    const BackgroundSettings = require('../BackgroundSettingsComponent').default
+    const BackgroundSettings = require('js/components/Settings/Background/BackgroundSettingsComponent').default
     const customMockProps = cloneDeep(mockProps)
     customMockProps.user.backgroundOption = 'custom'
     const wrapper = shallow(
@@ -375,7 +375,7 @@ describe('Background settings component', () => {
   })
 
   it('calls to update localStorage when the user selects a new custom photo', () => {
-    const BackgroundSettings = require('../BackgroundSettingsComponent').default
+    const BackgroundSettings = require('js/components/Settings/Background/BackgroundSettingsComponent').default
     const customMockProps = cloneDeep(mockProps)
     customMockProps.user.backgroundOption = 'custom'
     const wrapper = shallow(

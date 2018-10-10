@@ -8,15 +8,15 @@ import {
   dashboardURL,
   privacyPolicyURL,
   termsOfServiceURL
-} from 'navigation/navigation'
+} from 'js/navigation/navigation'
 import {
   signupPageButtonClick,
   signupPageEmailButtonClick,
   signupPageSocialButtonClick
-} from 'analytics/logEvent'
-import logger from 'utils/logger'
-import environment from '../../../relay-env'
-import MergeIntoExistingUserMutation from 'mutations/MergeIntoExistingUserMutation'
+} from 'js/analytics/logEvent'
+import logger from 'js/utils/logger'
+import environment from 'js/relay-env'
+import MergeIntoExistingUserMutation from 'js/mutations/MergeIntoExistingUserMutation'
 
 class FirebaseAuthenticationUI extends React.Component {
   constructor (props) {

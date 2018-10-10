@@ -10,48 +10,48 @@ import {
   loginURL,
   missingEmailMessageURL,
   verifyEmailURL
-} from 'navigation/navigation'
+} from 'js/navigation/navigation'
 import {
   getReferralData,
   isInIframe
-} from 'web-utils'
-import CreateNewUserMutation from 'mutations/CreateNewUserMutation'
-import LogEmailVerifiedMutation from 'mutations/LogEmailVerifiedMutation'
+} from 'js/utils/utils'
+import CreateNewUserMutation from 'js/mutations/CreateNewUserMutation'
+import LogEmailVerifiedMutation from 'js/mutations/LogEmailVerifiedMutation'
 import {
   getUserToken,
   getCurrentUser,
   reloadUser,
   signInAnonymously
-} from 'authentication/user'
+} from 'js/authentication/user'
 import {
   flushAllPromises,
   runAsyncTimerLoops
-} from 'utils/test-utils'
-import logger from 'utils/logger'
+} from 'js/utils/test-utils'
+import logger from 'js/utils/logger'
 import {
   getAnonymousUserTestGroup,
   getUserTestGroupsForMutation
-} from 'utils/experiments'
+} from 'js/utils/experiments'
 import {
   getBrowserExtensionInstallId,
   getBrowserExtensionInstallTime
-} from 'utils/local-user-data-mgr'
+} from 'js/utils/local-user-data-mgr'
 import {
   isAnonymousUserSignInEnabled
-} from 'utils/feature-flags'
+} from 'js/utils/feature-flags'
 
-jest.mock('authentication/user')
-jest.mock('navigation/navigation')
-jest.mock('utils/localstorage-mgr')
-jest.mock('web-utils')
-jest.mock('mutations/CreateNewUserMutation')
-jest.mock('mutations/LogEmailVerifiedMutation')
-jest.mock('authentication/user')
-jest.mock('../../../relay-env')
-jest.mock('utils/logger')
-jest.mock('utils/experiments')
-jest.mock('utils/local-user-data-mgr')
-jest.mock('utils/feature-flags')
+jest.mock('js/authentication/user')
+jest.mock('js/navigation/navigation')
+jest.mock('js/utils/localstorage-mgr')
+jest.mock('js/utils/utils')
+jest.mock('js/mutations/CreateNewUserMutation')
+jest.mock('js/mutations/LogEmailVerifiedMutation')
+jest.mock('js/authentication/user')
+jest.mock('js/relay-env')
+jest.mock('js/utils/logger')
+jest.mock('js/utils/experiments')
+jest.mock('js/utils/local-user-data-mgr')
+jest.mock('js/utils/feature-flags')
 
 const mockNow = '2017-05-19T13:59:58.000Z'
 
@@ -89,7 +89,7 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
     expect.assertions(3)
     setIfAnonymousUserIsAllowed(false)
 
-    const checkAuthStateAndRedirectIfNeeded = require('../helpers')
+    const checkAuthStateAndRedirectIfNeeded = require('js/authentication/helpers')
       .checkAuthStateAndRedirectIfNeeded
     const user = {
       id: 'abc123',
@@ -117,7 +117,7 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
       emailVerified: false
     }
 
-    const checkAuthStateAndRedirectIfNeeded = require('../helpers')
+    const checkAuthStateAndRedirectIfNeeded = require('js/authentication/helpers')
       .checkAuthStateAndRedirectIfNeeded
     const redirected = await checkAuthStateAndRedirectIfNeeded(user)
 
@@ -157,7 +157,7 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
       }
     )
 
-    const checkAuthStateAndRedirectIfNeeded = require('../helpers')
+    const checkAuthStateAndRedirectIfNeeded = require('js/authentication/helpers')
       .checkAuthStateAndRedirectIfNeeded
     await checkAuthStateAndRedirectIfNeeded(user)
 
@@ -194,7 +194,7 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
       }
     )
 
-    const checkAuthStateAndRedirectIfNeeded = require('../helpers')
+    const checkAuthStateAndRedirectIfNeeded = require('js/authentication/helpers')
       .checkAuthStateAndRedirectIfNeeded
     await checkAuthStateAndRedirectIfNeeded(user)
 
@@ -232,7 +232,7 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
       }
     )
 
-    const checkAuthStateAndRedirectIfNeeded = require('../helpers')
+    const checkAuthStateAndRedirectIfNeeded = require('js/authentication/helpers')
       .checkAuthStateAndRedirectIfNeeded
     await checkAuthStateAndRedirectIfNeeded(user)
 
@@ -270,7 +270,7 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
       }
     )
 
-    const checkAuthStateAndRedirectIfNeeded = require('../helpers')
+    const checkAuthStateAndRedirectIfNeeded = require('js/authentication/helpers')
       .checkAuthStateAndRedirectIfNeeded
     const redirected = await checkAuthStateAndRedirectIfNeeded(user)
 
@@ -307,7 +307,7 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
       }
     )
 
-    const checkAuthStateAndRedirectIfNeeded = require('../helpers')
+    const checkAuthStateAndRedirectIfNeeded = require('js/authentication/helpers')
       .checkAuthStateAndRedirectIfNeeded
     const redirected = await checkAuthStateAndRedirectIfNeeded(user)
 
@@ -345,7 +345,7 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
       }
     )
 
-    const checkAuthStateAndRedirectIfNeeded = require('../helpers')
+    const checkAuthStateAndRedirectIfNeeded = require('js/authentication/helpers')
       .checkAuthStateAndRedirectIfNeeded
     const redirected = await checkAuthStateAndRedirectIfNeeded(user)
 
@@ -383,7 +383,7 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
 
     isInIframe.mockReturnValue(false)
 
-    const checkAuthStateAndRedirectIfNeeded = require('../helpers')
+    const checkAuthStateAndRedirectIfNeeded = require('js/authentication/helpers')
       .checkAuthStateAndRedirectIfNeeded
     const redirected = await checkAuthStateAndRedirectIfNeeded(user)
 
@@ -412,7 +412,7 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
       emailVerified: false
     }
 
-    const checkAuthStateAndRedirectIfNeeded = require('../helpers')
+    const checkAuthStateAndRedirectIfNeeded = require('js/authentication/helpers')
       .checkAuthStateAndRedirectIfNeeded
     await checkAuthStateAndRedirectIfNeeded(user)
 
@@ -451,7 +451,7 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
 
     isInIframe.mockReturnValue(false)
 
-    const checkAuthStateAndRedirectIfNeeded = require('../helpers')
+    const checkAuthStateAndRedirectIfNeeded = require('js/authentication/helpers')
       .checkAuthStateAndRedirectIfNeeded
     await checkAuthStateAndRedirectIfNeeded(user)
 
@@ -480,7 +480,7 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
       emailVerified: false
     }
 
-    const checkAuthStateAndRedirectIfNeeded = require('../helpers')
+    const checkAuthStateAndRedirectIfNeeded = require('js/authentication/helpers')
       .checkAuthStateAndRedirectIfNeeded
     await checkAuthStateAndRedirectIfNeeded(user)
 
@@ -509,7 +509,7 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
       emailVerified: false
     }
 
-    const checkAuthStateAndRedirectIfNeeded = require('../helpers')
+    const checkAuthStateAndRedirectIfNeeded = require('js/authentication/helpers')
       .checkAuthStateAndRedirectIfNeeded
     await checkAuthStateAndRedirectIfNeeded(user)
 
@@ -537,7 +537,7 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
       emailVerified: false
     }
 
-    const checkAuthStateAndRedirectIfNeeded = require('../helpers')
+    const checkAuthStateAndRedirectIfNeeded = require('js/authentication/helpers')
       .checkAuthStateAndRedirectIfNeeded
     await checkAuthStateAndRedirectIfNeeded(user)
 
@@ -548,7 +548,7 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
     expect.assertions(2)
     setIfAnonymousUserIsAllowed(false)
 
-    const checkAuthStateAndRedirectIfNeeded = require('../helpers')
+    const checkAuthStateAndRedirectIfNeeded = require('js/authentication/helpers')
       .checkAuthStateAndRedirectIfNeeded
     const user = {
       id: 'abc123',
@@ -566,7 +566,7 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
     expect.assertions(2)
     setIfAnonymousUserIsAllowed(false)
 
-    const checkAuthStateAndRedirectIfNeeded = require('../helpers')
+    const checkAuthStateAndRedirectIfNeeded = require('js/authentication/helpers')
       .checkAuthStateAndRedirectIfNeeded
     const user = {
       id: 'abc123',
@@ -584,7 +584,7 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
     expect.assertions(2)
     setIfAnonymousUserIsAllowed(false)
 
-    const checkAuthStateAndRedirectIfNeeded = require('../helpers')
+    const checkAuthStateAndRedirectIfNeeded = require('js/authentication/helpers')
       .checkAuthStateAndRedirectIfNeeded
     const user = {
       id: 'abc123',
@@ -602,7 +602,7 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
     expect.assertions(1)
     setIfAnonymousUserIsAllowed(false)
 
-    const checkAuthStateAndRedirectIfNeeded = require('../helpers')
+    const checkAuthStateAndRedirectIfNeeded = require('js/authentication/helpers')
       .checkAuthStateAndRedirectIfNeeded
     const user = {
       id: 'abc123',
@@ -653,7 +653,7 @@ describe('createNewUser tests', () => {
       }
     )
 
-    const createNewUser = require('../helpers').createNewUser
+    const createNewUser = require('js/authentication/helpers').createNewUser
     await createNewUser()
 
     expect(CreateNewUserMutation)
@@ -692,7 +692,7 @@ describe('createNewUser tests', () => {
       }
     )
 
-    const createNewUser = require('../helpers').createNewUser
+    const createNewUser = require('js/authentication/helpers').createNewUser
     const newUser = await createNewUser()
 
     expect(newUser).toEqual({
@@ -734,7 +734,7 @@ describe('createNewUser tests', () => {
       }
     )
 
-    const createNewUser = require('../helpers').createNewUser
+    const createNewUser = require('js/authentication/helpers').createNewUser
     await createNewUser()
 
     expect(CreateNewUserMutation.mock.calls[0][3]).toEqual({
@@ -776,7 +776,7 @@ describe('createNewUser tests', () => {
       }
     )
 
-    const createNewUser = require('../helpers').createNewUser
+    const createNewUser = require('js/authentication/helpers').createNewUser
     await createNewUser()
 
     expect(CreateNewUserMutation.mock.calls[0][4]).toEqual(experimentGroups)
@@ -814,7 +814,7 @@ describe('createNewUser tests', () => {
       }
     )
 
-    const createNewUser = require('../helpers').createNewUser
+    const createNewUser = require('js/authentication/helpers').createNewUser
     createNewUser()
     await flushAllPromises()
     expect(getUserToken).toHaveBeenCalledWith(true)
@@ -844,7 +844,7 @@ describe('checkIfEmailVerified tests', () => {
     reloadUser.mockResolvedValue(undefined)
     getUserToken.mockResolvedValue('some-token')
 
-    const checkIfEmailVerified = require('../helpers').checkIfEmailVerified
+    const checkIfEmailVerified = require('js/authentication/helpers').checkIfEmailVerified
     const isVerified = await checkIfEmailVerified()
     expect(isVerified).toBe(true)
   })
@@ -862,7 +862,7 @@ describe('checkIfEmailVerified tests', () => {
     reloadUser.mockResolvedValue(undefined)
     getUserToken.mockResolvedValue('some-token')
 
-    const checkIfEmailVerified = require('../helpers').checkIfEmailVerified
+    const checkIfEmailVerified = require('js/authentication/helpers').checkIfEmailVerified
     const promise = checkIfEmailVerified()
     await runAsyncTimerLoops(25)
     const isVerified = await promise
@@ -876,7 +876,7 @@ describe('checkIfEmailVerified tests', () => {
     reloadUser.mockResolvedValue(undefined)
     getUserToken.mockResolvedValue('some-token')
 
-    const checkIfEmailVerified = require('../helpers').checkIfEmailVerified
+    const checkIfEmailVerified = require('js/authentication/helpers').checkIfEmailVerified
     const promise = checkIfEmailVerified()
     await runAsyncTimerLoops(25)
     const isVerified = await promise
@@ -896,7 +896,7 @@ describe('checkIfEmailVerified tests', () => {
     reloadUser.mockResolvedValue(undefined)
     getUserToken.mockResolvedValue('some-token')
 
-    const checkIfEmailVerified = require('../helpers').checkIfEmailVerified
+    const checkIfEmailVerified = require('js/authentication/helpers').checkIfEmailVerified
     const promise = checkIfEmailVerified()
     await runAsyncTimerLoops(25)
     await promise
@@ -932,7 +932,7 @@ describe('checkIfEmailVerified tests', () => {
     reloadUser.mockResolvedValue(undefined)
     getUserToken.mockResolvedValue('some-token')
 
-    const checkIfEmailVerified = require('../helpers').checkIfEmailVerified
+    const checkIfEmailVerified = require('js/authentication/helpers').checkIfEmailVerified
     const promise = checkIfEmailVerified()
     await runAsyncTimerLoops(25)
     const isVerified = await promise
@@ -968,7 +968,7 @@ describe('checkIfEmailVerified tests', () => {
     reloadUser.mockResolvedValue(undefined)
     getUserToken.mockResolvedValue('some-token')
 
-    const checkIfEmailVerified = require('../helpers').checkIfEmailVerified
+    const checkIfEmailVerified = require('js/authentication/helpers').checkIfEmailVerified
     const promise = checkIfEmailVerified()
     await runAsyncTimerLoops(25)
     await promise
@@ -988,7 +988,7 @@ describe('checkIfEmailVerified tests', () => {
     reloadUser.mockResolvedValue(undefined)
     getUserToken.mockResolvedValue('some-token')
 
-    const checkIfEmailVerified = require('../helpers').checkIfEmailVerified
+    const checkIfEmailVerified = require('js/authentication/helpers').checkIfEmailVerified
     await checkIfEmailVerified()
     expect(LogEmailVerifiedMutation)
       .toHaveBeenCalledWith({}, 'abc123', expect.any(Function), expect.any(Function))
@@ -1010,7 +1010,7 @@ describe('checkIfEmailVerified tests', () => {
     // the LogEmailVerifiedMutation has not yet been called.
     getUserToken.mockReturnValueOnce(new Promise(() => {}))
 
-    const checkIfEmailVerified = require('../helpers').checkIfEmailVerified
+    const checkIfEmailVerified = require('js/authentication/helpers').checkIfEmailVerified
     checkIfEmailVerified()
     await flushAllPromises()
     expect(getUserToken).toHaveBeenCalledWith(true)
@@ -1031,7 +1031,7 @@ describe('checkIfEmailVerified tests', () => {
     const mockErr = new Error('Sigh.')
     getUserToken.mockRejectedValue(mockErr)
 
-    const checkIfEmailVerified = require('../helpers').checkIfEmailVerified
+    const checkIfEmailVerified = require('js/authentication/helpers').checkIfEmailVerified
     checkIfEmailVerified()
       // Ignore expected error
       .catch(e => {})
@@ -1065,7 +1065,7 @@ describe('checkIfEmailVerified tests', () => {
     reloadUser.mockRejectedValue(new Error('Whoops!'))
     getUserToken.mockResolvedValue('some-token')
 
-    const checkIfEmailVerified = require('../helpers').checkIfEmailVerified
+    const checkIfEmailVerified = require('js/authentication/helpers').checkIfEmailVerified
     checkIfEmailVerified()
       // Ignore expected error
       .catch(e => {})
@@ -1086,7 +1086,7 @@ describe('checkIfEmailVerified tests', () => {
     reloadUser.mockRejectedValue(undefined)
     getUserToken.mockResolvedValue('some-token')
 
-    const checkIfEmailVerified = require('../helpers').checkIfEmailVerified
+    const checkIfEmailVerified = require('js/authentication/helpers').checkIfEmailVerified
     checkIfEmailVerified()
       // Ignore expected error
       .catch(e => {})

@@ -3,7 +3,7 @@ import {
   graphql
 } from 'react-relay'
 
-import BackgroundImagePicker from './BackgroundImagePickerComponent'
+import BackgroundImagePicker from 'js/components/Background/BackgroundImagePickerComponent'
 
 export default createFragmentContainer(BackgroundImagePicker, {
   user: graphql`

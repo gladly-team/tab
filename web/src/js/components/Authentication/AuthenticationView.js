@@ -2,15 +2,15 @@
 
 import React from 'react'
 import { QueryRenderer } from 'react-relay'
-import environment from '../../../relay-env'
-import AuthenticationContainer from './AuthenticationContainer'
+import environment from 'js/relay-env'
+import AuthenticationContainer from 'js/components/Authentication/AuthenticationContainer'
 import {
   getCurrentUser
-} from 'authentication/user'
-import { createNewUser } from 'authentication/helpers'
+} from 'js/authentication/user'
+import { createNewUser } from 'js/authentication/helpers'
 import {
   ERROR_USER_DOES_NOT_EXIST
-} from '../../constants'
+} from 'js/constants'
 
 // Fetch the user from our database if the user is
 // authenticated.

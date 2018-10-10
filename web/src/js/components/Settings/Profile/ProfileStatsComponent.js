@@ -3,17 +3,17 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 import RaisedButton from 'material-ui/RaisedButton'
 import HeartBorderIcon from 'material-ui/svg-icons/action/favorite-border'
-import Stat from './StatComponent'
+import Stat from 'js/components/Settings/Profile/StatComponent'
 import { Paper } from 'material-ui'
 import appTheme, {
   lighterTextColor
-} from 'theme/default'
+} from 'js/theme/default'
 import ChartIcon from 'material-ui/svg-icons/editor/insert-chart'
 import {
   goToInviteFriends,
   goToDonate
-} from 'navigation/navigation'
-import { abbreviateNumber, commaFormatted } from 'utils/utils'
+} from 'js/navigation/navigation'
+import { abbreviateNumber, commaFormatted } from 'js/utils/utils'
 
 class ProfileStats extends React.Component {
   render () {

@@ -3,7 +3,7 @@ import {
   graphql
 } from 'react-relay'
 
-import InviteFriend from './InviteFriendComponent'
+import InviteFriend from 'js/components/Settings/Profile/InviteFriendComponent'
 
 export default createFragmentContainer(InviteFriend, {
   user: graphql`

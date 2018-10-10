@@ -4,8 +4,8 @@ import PropTypes from 'prop-types'
 import RaisedButton from 'material-ui/RaisedButton'
 import appTheme, {
   alternateAccentColor
-} from 'theme/default'
-import Logo from '../Logo/Logo'
+} from 'js/theme/default'
+import Logo from 'js/components/Logo/Logo'
 
 class StickerCampaignThanks extends React.Component {
   render () {

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import EditWidgetChip from '../../EditWidgetChip'
+import EditWidgetChip from 'js/components/Widget/EditWidgetChip'
 
 class AddNoteForm extends React.Component {
   create () {

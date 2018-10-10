@@ -3,7 +3,7 @@ import {
   graphql
 } from 'react-relay'
 
-import NewUserTour from './NewUserTourComponent'
+import NewUserTour from 'js/components/Dashboard/NewUserTourComponent'
 
 // If this needs to fetch substantially more data
 // than we currently do on the new tab page, we

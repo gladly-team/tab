@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import TextField from 'material-ui/TextField'
 
-import { validateUsername } from 'web-utils'
+import { validateUsername } from 'js/utils/utils'
 
 class UsernameField extends React.Component {
   constructor (props) {

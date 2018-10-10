@@ -3,7 +3,7 @@ import {
   graphql
 } from 'react-relay'
 
-import MoneyRaised from './MoneyRaisedComponent'
+import MoneyRaised from 'js/components/MoneyRaised/MoneyRaisedComponent'
 
 export default createFragmentContainer(MoneyRaised, {
   app: graphql`

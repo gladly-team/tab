@@ -4,9 +4,9 @@ import Paper from '@material-ui/core/Paper'
 import Divider from '@material-ui/core/Divider'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
-import { isInEuropeanUnion } from 'utils/client-location'
-import { displayConsentUI } from 'ads/consentManagement'
-import LogConsentData from '../../Dashboard/LogConsentDataContainer'
+import { isInEuropeanUnion } from 'js/utils/client-location'
+import { displayConsentUI } from 'js/ads/consentManagement'
+import LogConsentData from 'js/components/Dashboard/LogConsentDataContainer'
 
 export const AccountItem = (props) => (
   <div style={{

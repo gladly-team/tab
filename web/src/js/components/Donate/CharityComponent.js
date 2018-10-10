@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import DonateVcMutation from 'mutations/DonateVcMutation'
+import DonateVcMutation from 'js/mutations/DonateVcMutation'
 
 import { Paper } from 'material-ui'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -9,7 +9,7 @@ import Popover from 'material-ui/Popover'
 import Slider from 'material-ui/Slider'
 import Subheader from 'material-ui/Subheader'
 
-import appTheme from 'theme/default'
+import appTheme from 'js/theme/default'
 
 class Charity extends React.Component {
   constructor (props) {

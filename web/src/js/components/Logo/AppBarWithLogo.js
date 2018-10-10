@@ -1,10 +1,10 @@
 
 import React from 'react'
 import AppBar from 'material-ui/AppBar'
-import LogoWithText from '../Logo/LogoWithText'
+import LogoWithText from 'js/components/Logo/LogoWithText'
 import {
   appBarLightColor
-} from 'theme/default'
+} from 'js/theme/default'
 
 class AppBarWithLogo extends React.Component {
   render () {

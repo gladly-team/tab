@@ -1,8 +1,8 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import logoDefault from 'assets/logos/logo.svg'
-import logoWhite from 'assets/logos/logo-white.svg'
+import logoDefault from 'js/assets/logos/logo.svg'
+import logoWhite from 'js/assets/logos/logo-white.svg'
 
 class LogoWithText extends React.Component {
   render () {

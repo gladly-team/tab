@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import googleDisplayAd from '../googleDisplayAd'
+import googleDisplayAd from 'js/ads/google/googleDisplayAd'
 
 beforeEach(() => {
   delete window.googletag

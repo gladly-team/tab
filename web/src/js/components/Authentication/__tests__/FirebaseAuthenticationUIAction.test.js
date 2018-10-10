@@ -6,11 +6,11 @@ import {
 } from 'enzyme'
 import {
   checkIfEmailVerified
-} from 'authentication/helpers'
+} from 'js/authentication/helpers'
 import toJson from 'enzyme-to-json'
 
-jest.mock('mutations/LogEmailVerifiedMutation')
-jest.mock('authentication/helpers')
+jest.mock('js/mutations/LogEmailVerifiedMutation')
+jest.mock('js/authentication/helpers')
 
 const mockProps = {}
 
@@ -20,7 +20,7 @@ afterEach(() => {
 
 describe('FirebaseAuthenticationUIAction tests', function () {
   it('renders without error and does not have any DOM elements', () => {
-    const FirebaseAuthenticationUIAction = require('../FirebaseAuthenticationUIAction').default
+    const FirebaseAuthenticationUIAction = require('js/components/Authentication/FirebaseAuthenticationUIAction').default
     const wrapper = shallow(
       <FirebaseAuthenticationUIAction {...mockProps} />
     )
@@ -30,7 +30,7 @@ describe('FirebaseAuthenticationUIAction tests', function () {
   it('calls checkIfEmailVerified on mount', async () => {
     expect.assertions(1)
 
-    const FirebaseAuthenticationUIAction = require('../FirebaseAuthenticationUIAction').default
+    const FirebaseAuthenticationUIAction = require('js/components/Authentication/FirebaseAuthenticationUIAction').default
     shallow(
       <FirebaseAuthenticationUIAction {...mockProps} />
     )

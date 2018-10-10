@@ -21,14 +21,14 @@ const mockProps = {
 
 describe('Invite friend component', () => {
   it('renders without error', () => {
-    const InviteFriendComponent = require('../InviteFriendComponent').default
+    const InviteFriendComponent = require('js/components/Settings/Profile/InviteFriendComponent').default
     shallow(
       <InviteFriendComponent {...mockProps} />
     )
   })
 
   it('contains the correct referral URL', () => {
-    const InviteFriendComponent = require('../InviteFriendComponent').default
+    const InviteFriendComponent = require('js/components/Settings/Profile/InviteFriendComponent').default
     const wrapper = mount(
       <InviteFriendComponent {...mockProps} />
     )
@@ -37,7 +37,7 @@ describe('Invite friend component', () => {
   })
 
   it('contains the correct description text', () => {
-    const InviteFriendComponent = require('../InviteFriendComponent').default
+    const InviteFriendComponent = require('js/components/Settings/Profile/InviteFriendComponent').default
     const wrapper = mount(
       <InviteFriendComponent {...mockProps} />
     )
@@ -47,7 +47,7 @@ describe('Invite friend component', () => {
   })
 
   it('contains the correct referral URL when there is no provided username', () => {
-    const InviteFriendComponent = require('../InviteFriendComponent').default
+    const InviteFriendComponent = require('js/components/Settings/Profile/InviteFriendComponent').default
     const newMockProps = cloneDeep(mockProps)
     newMockProps.user.username = undefined
     const wrapper = mount(
@@ -58,7 +58,7 @@ describe('Invite friend component', () => {
   })
 
   it('contains the correct description text  when there is no provided username', () => {
-    const InviteFriendComponent = require('../InviteFriendComponent').default
+    const InviteFriendComponent = require('js/components/Settings/Profile/InviteFriendComponent').default
     const newMockProps = cloneDeep(mockProps)
     newMockProps.user.username = undefined
     const wrapper = mount(

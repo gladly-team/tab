@@ -8,15 +8,15 @@ import {
 import toJson from 'enzyme-to-json'
 import {
   logout
-} from 'authentication/user'
+} from 'js/authentication/user'
 import {
   goTo,
   loginURL
-} from 'navigation/navigation'
+} from 'js/navigation/navigation'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 
-jest.mock('authentication/user')
-jest.mock('navigation/navigation')
+jest.mock('js/authentication/user')
+jest.mock('js/navigation/navigation')
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -24,14 +24,14 @@ afterEach(() => {
 
 describe('MissingEmailMessage tests', function () {
   it('renders without error', function () {
-    const MissingEmailMessage = require('../MissingEmailMessage').default
+    const MissingEmailMessage = require('js/components/Authentication/MissingEmailMessage').default
     shallow(
       <MissingEmailMessage />
     )
   })
 
   it('restarts auth flow when clicking button', done => {
-    const MissingEmailMessage = require('../MissingEmailMessage').default
+    const MissingEmailMessage = require('js/components/Authentication/MissingEmailMessage').default
 
     // @material-ui-1-todo: remove MuiThemeProvider wrapper
     const wrapper = mount(
@@ -54,7 +54,7 @@ describe('MissingEmailMessage tests', function () {
   })
 
   it('matches expected snapshot', function () {
-    const MissingEmailMessage = require('../MissingEmailMessage').default
+    const MissingEmailMessage = require('js/components/Authentication/MissingEmailMessage').default
     const wrapper = shallow(
       <MissingEmailMessage />
     )

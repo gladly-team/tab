@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import getPrebidPbjs from '../getPrebidPbjs'
+import getPrebidPbjs from 'js/ads/prebid/getPrebidPbjs'
 
 afterEach(() => {
   delete window.pbjs

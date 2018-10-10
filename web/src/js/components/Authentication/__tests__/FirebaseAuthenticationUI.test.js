@@ -6,29 +6,29 @@ import {
 } from 'enzyme'
 import { map } from 'lodash/collection'
 import { FirebaseAuth } from 'react-firebaseui'
-import logger from 'utils/logger'
+import logger from 'js/utils/logger'
 import firebase, {
   __setFirebaseUser
 } from 'firebase/app'
 import MergeIntoExistingUserMutation, {
   __setErrorResponse
-} from 'mutations/MergeIntoExistingUserMutation'
+} from 'js/mutations/MergeIntoExistingUserMutation'
 
 // Init Firebase
-import { initializeFirebase } from 'authentication/firebaseConfig'
+import { initializeFirebase } from 'js/authentication/firebaseConfig'
 initializeFirebase()
 
-jest.mock('analytics/logEvent')
-jest.mock('authentication/helpers')
-jest.mock('authentication/user')
-jest.mock('authentication/firebaseConfig') // mock the Firebase app initialization
-jest.mock('navigation/navigation')
+jest.mock('js/analytics/logEvent')
+jest.mock('js/authentication/helpers')
+jest.mock('js/authentication/user')
+jest.mock('js/authentication/firebaseConfig') // mock the Firebase app initialization
+jest.mock('js/navigation/navigation')
 jest.mock('react-firebaseui')
-jest.mock('utils/logger')
+jest.mock('js/utils/logger')
 jest.mock('firebase/app')
-jest.mock('mutations/MergeIntoExistingUserMutation')
-jest.mock('mutations/LogEmailVerifiedMutation')
-jest.mock('../../../../relay-env', () => { return {} })
+jest.mock('js/mutations/MergeIntoExistingUserMutation')
+jest.mock('js/mutations/LogEmailVerifiedMutation')
+jest.mock('js/relay-env', () => { return {} })
 
 const onSignInSuccessMock = jest.fn()
 const mockProps = {
@@ -41,14 +41,14 @@ afterEach(() => {
 
 describe('FirebaseAuthenticationUI tests', function () {
   it('renders without error', () => {
-    const FirebaseAuthenticationUI = require('../FirebaseAuthenticationUI').default
+    const FirebaseAuthenticationUI = require('js/components/Authentication/FirebaseAuthenticationUI').default
     shallow(
       <FirebaseAuthenticationUI {...mockProps} />
     )
   })
 
   it('shows the expected Terms of Service URL', () => {
-    const FirebaseAuthenticationUI = require('../FirebaseAuthenticationUI').default
+    const FirebaseAuthenticationUI = require('js/components/Authentication/FirebaseAuthenticationUI').default
     const wrapper = shallow(
       <FirebaseAuthenticationUI {...mockProps} />
     )
@@ -57,7 +57,7 @@ describe('FirebaseAuthenticationUI tests', function () {
   })
 
   it('shows the expected Privacy Policy URL', () => {
-    const FirebaseAuthenticationUI = require('../FirebaseAuthenticationUI').default
+    const FirebaseAuthenticationUI = require('js/components/Authentication/FirebaseAuthenticationUI').default
     const wrapper = shallow(
       <FirebaseAuthenticationUI {...mockProps} />
     )
@@ -66,7 +66,7 @@ describe('FirebaseAuthenticationUI tests', function () {
   })
 
   it('redirects to the dashboard on sign in success', () => {
-    const FirebaseAuthenticationUI = require('../FirebaseAuthenticationUI').default
+    const FirebaseAuthenticationUI = require('js/components/Authentication/FirebaseAuthenticationUI').default
     const wrapper = shallow(
       <FirebaseAuthenticationUI {...mockProps} />
     )
@@ -75,7 +75,7 @@ describe('FirebaseAuthenticationUI tests', function () {
   })
 
   it('is set to auto-upgrade anonymous users when they sign in', () => {
-    const FirebaseAuthenticationUI = require('../FirebaseAuthenticationUI').default
+    const FirebaseAuthenticationUI = require('js/components/Authentication/FirebaseAuthenticationUI').default
     const wrapper = shallow(
       <FirebaseAuthenticationUI {...mockProps} />
     )
@@ -84,7 +84,7 @@ describe('FirebaseAuthenticationUI tests', function () {
   })
 
   it('does not use any credential helper', () => {
-    const FirebaseAuthenticationUI = require('../FirebaseAuthenticationUI').default
+    const FirebaseAuthenticationUI = require('js/components/Authentication/FirebaseAuthenticationUI').default
     const wrapper = shallow(
       <FirebaseAuthenticationUI {...mockProps} />
     )
@@ -93,7 +93,7 @@ describe('FirebaseAuthenticationUI tests', function () {
   })
 
   it('shows the expected sign-in providers', () => {
-    const FirebaseAuthenticationUI = require('../FirebaseAuthenticationUI').default
+    const FirebaseAuthenticationUI = require('js/components/Authentication/FirebaseAuthenticationUI').default
     const wrapper = shallow(
       <FirebaseAuthenticationUI {...mockProps} />
     )
@@ -104,7 +104,7 @@ describe('FirebaseAuthenticationUI tests', function () {
   })
 
   it('calls the "onSignInSuccess" prop when FirebaseUI calls "signInSuccessWithAuthResult"', () => {
-    const FirebaseAuthenticationUI = require('../FirebaseAuthenticationUI').default
+    const FirebaseAuthenticationUI = require('js/components/Authentication/FirebaseAuthenticationUI').default
     const wrapper = shallow(
       <FirebaseAuthenticationUI {...mockProps} />
     )
@@ -123,7 +123,7 @@ describe('FirebaseAuthenticationUI tests', function () {
   it('calls "onSignInSuccess" prop if FirebaseUI calls "signInFailure" with a non-merge-related error', async () => {
     expect.assertions(1)
 
-    const FirebaseAuthenticationUI = require('../FirebaseAuthenticationUI').default
+    const FirebaseAuthenticationUI = require('js/components/Authentication/FirebaseAuthenticationUI').default
     const wrapper = shallow(
       <FirebaseAuthenticationUI {...mockProps} />
     )
@@ -149,7 +149,7 @@ describe('FirebaseAuthenticationUI tests', function () {
   it('calls "onSignInSuccess" prop after resolving a merge-related error when upgrading the anonymous user', async () => {
     expect.assertions(1)
 
-    const FirebaseAuthenticationUI = require('../FirebaseAuthenticationUI').default
+    const FirebaseAuthenticationUI = require('js/components/Authentication/FirebaseAuthenticationUI').default
     const wrapper = shallow(
       <FirebaseAuthenticationUI {...mockProps} />
     )
@@ -175,7 +175,7 @@ describe('FirebaseAuthenticationUI tests', function () {
   it('deletes the anonymous Firebase user when resolving a merge-related error during anonymous user sign-in', async () => {
     expect.assertions(1)
 
-    const FirebaseAuthenticationUI = require('../FirebaseAuthenticationUI').default
+    const FirebaseAuthenticationUI = require('js/components/Authentication/FirebaseAuthenticationUI').default
     const wrapper = shallow(
       <FirebaseAuthenticationUI {...mockProps} />
     )
@@ -202,7 +202,7 @@ describe('FirebaseAuthenticationUI tests', function () {
   it('logs an error when signInAndRetrieveDataWithCredential fails when resolving a merge-related error during anonymous user sign-in', async () => {
     expect.assertions(1)
 
-    const FirebaseAuthenticationUI = require('../FirebaseAuthenticationUI').default
+    const FirebaseAuthenticationUI = require('js/components/Authentication/FirebaseAuthenticationUI').default
     const wrapper = shallow(
       <FirebaseAuthenticationUI {...mockProps} />
     )
@@ -234,7 +234,7 @@ describe('FirebaseAuthenticationUI tests', function () {
   it('logs an error when deleting the anonymous Firebase user fails when resolving a merge-related error during anonymous user sign-in', async () => {
     expect.assertions(1)
 
-    const FirebaseAuthenticationUI = require('../FirebaseAuthenticationUI').default
+    const FirebaseAuthenticationUI = require('js/components/Authentication/FirebaseAuthenticationUI').default
     const wrapper = shallow(
       <FirebaseAuthenticationUI {...mockProps} />
     )
@@ -262,7 +262,7 @@ describe('FirebaseAuthenticationUI tests', function () {
   it('merges the anonymous user in our database with the existing user when resolving a merge-related error during anonymous user sign-in', async () => {
     expect.assertions(1)
 
-    const FirebaseAuthenticationUI = require('../FirebaseAuthenticationUI').default
+    const FirebaseAuthenticationUI = require('js/components/Authentication/FirebaseAuthenticationUI').default
     const wrapper = shallow(
       <FirebaseAuthenticationUI {...mockProps} />
     )
@@ -290,7 +290,7 @@ describe('FirebaseAuthenticationUI tests', function () {
   it('logs an error when it fails to merge the anonymous user in our database with the existing user', async () => {
     expect.assertions(1)
 
-    const FirebaseAuthenticationUI = require('../FirebaseAuthenticationUI').default
+    const FirebaseAuthenticationUI = require('js/components/Authentication/FirebaseAuthenticationUI').default
     const wrapper = shallow(
       <FirebaseAuthenticationUI {...mockProps} />
     )
@@ -321,7 +321,7 @@ describe('FirebaseAuthenticationUI tests', function () {
   it('still calls the "onSignInSuccess" prop if it fails to merge the anonymous user in our database with the existing user', async () => {
     expect.assertions(1)
 
-    const FirebaseAuthenticationUI = require('../FirebaseAuthenticationUI').default
+    const FirebaseAuthenticationUI = require('js/components/Authentication/FirebaseAuthenticationUI').default
     const wrapper = shallow(
       <FirebaseAuthenticationUI {...mockProps} />
     )

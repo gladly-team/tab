@@ -22,14 +22,14 @@ afterEach(() => {
 
 describe('Background color picker component', () => {
   it('renders without error', () => {
-    const BackgroundColorPicker = require('../BackgroundColorPickerComponent').default
+    const BackgroundColorPicker = require('js/components/Background/BackgroundColorPickerComponent').default
     shallow(
       <BackgroundColorPicker {...mockProps} />
     )
   })
 
   it('calls onBackgroundColorSelection callback on mount', () => {
-    const BackgroundColorPicker = require('../BackgroundColorPickerComponent').default
+    const BackgroundColorPicker = require('js/components/Background/BackgroundColorPickerComponent').default
     shallow(
       <BackgroundColorPicker {...mockProps} />
     )
@@ -37,7 +37,7 @@ describe('Background color picker component', () => {
   })
 
   it('calls onBackgroundColorSelection callback when the color changes', () => {
-    const BackgroundColorPicker = require('../BackgroundColorPickerComponent').default
+    const BackgroundColorPicker = require('js/components/Background/BackgroundColorPickerComponent').default
     const wrapper = shallow(
       <BackgroundColorPicker {...mockProps} />
     )

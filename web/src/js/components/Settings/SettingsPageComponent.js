@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import ErrorMessage from 'general/ErrorMessage'
+import ErrorMessage from 'js/components/General/ErrorMessage'
 import {
   goToDashboard,
   accountURL,
@@ -9,16 +9,16 @@ import {
   inviteFriendsURL,
   statsURL,
   widgetSettingsURL
-} from 'navigation/navigation'
+} from 'js/navigation/navigation'
 import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Divider from '@material-ui/core/Divider'
 import IconButton from '@material-ui/core/IconButton'
 import List from '@material-ui/core/List'
 import ListSubheader from '@material-ui/core/ListSubheader'
-import SettingsMenuItem from './SettingsMenuItem'
+import SettingsMenuItem from 'js/components/Settings/SettingsMenuItem'
 import Toolbar from '@material-ui/core/Toolbar'
-import Logo from '../Logo/Logo'
+import Logo from 'js/components/Logo/Logo'
 import CloseIcon from 'material-ui/svg-icons/navigation/close'
 
 const styles = theme => ({

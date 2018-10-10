@@ -2,12 +2,12 @@
 
 import React from 'react'
 import {QueryRenderer} from 'react-relay'
-import environment from '../../../../relay-env'
+import environment from 'js/relay-env'
 
-import SettingsChildWrapper from '../SettingsChildWrapperComponent'
-import ProfileStats from './ProfileStatsContainer'
-import AuthUserComponent from 'general/AuthUserComponent'
-import ErrorMessage from 'general/ErrorMessage'
+import SettingsChildWrapper from 'js/components/Settings/SettingsChildWrapperComponent'
+import ProfileStats from 'js/components/Settings/Profile/ProfileStatsContainer'
+import AuthUserComponent from 'js/components/General/AuthUserComponent'
+import ErrorMessage from 'js/components/General/ErrorMessage'
 
 class ProfileStatsView extends React.Component {
   render () {

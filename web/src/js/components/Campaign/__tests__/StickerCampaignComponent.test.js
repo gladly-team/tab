@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import {
   shallow
 } from 'enzyme'
-import appTheme from 'theme/default'
+import appTheme from 'js/theme/default'
 
 const mockUserData = {
   username: 'jbond',
@@ -25,14 +25,14 @@ const MuiShallowWithContext = node => shallow(node, {
 
 describe('Sticker campaign component', function () {
   it('renders without error', function () {
-    const StickerCampaignComponent = require('../StickerCampaignComponent').default
+    const StickerCampaignComponent = require('js/components/Campaign/StickerCampaignComponent').default
     shallow(
       <StickerCampaignComponent user={mockUserData} />
     )
   })
 
   it('does not show the success button when there are fewer than 2 active recruits', function () {
-    const StickerCampaignComponent = require('../StickerCampaignComponent').default
+    const StickerCampaignComponent = require('js/components/Campaign/StickerCampaignComponent').default
     const userData = {
       username: 'jbond',
       recruits: {
@@ -48,7 +48,7 @@ describe('Sticker campaign component', function () {
   })
 
   it('shows the success button when there are at least 2 active recruits', function () {
-    const StickerCampaignComponent = require('../StickerCampaignComponent').default
+    const StickerCampaignComponent = require('js/components/Campaign/StickerCampaignComponent').default
     const userData = {
       username: 'jbond',
       recruits: {

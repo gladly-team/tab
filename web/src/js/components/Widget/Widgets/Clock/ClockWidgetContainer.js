@@ -3,7 +3,7 @@ import {
   graphql
 } from 'react-relay'
 
-import ClockWidget from './ClockWidgetComponent'
+import ClockWidget from 'js/components/Widget/Widgets/Clock/ClockWidgetComponent'
 
 export default createFragmentContainer(ClockWidget, {
   widget: graphql`

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import TextField from '@material-ui/core/TextField'
 import { withStyles } from '@material-ui/core/styles'
-import { alternateAccentColor } from 'theme/default'
+import { alternateAccentColor } from 'js/theme/default'
 
 // Can replace this with a proper theme after fully migrating to
 // material-ui 1.0.

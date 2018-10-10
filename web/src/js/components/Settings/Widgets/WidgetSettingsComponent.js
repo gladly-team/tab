@@ -1,15 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Toggle from 'material-ui/Toggle'
-import WidgetConfig from './WidgetConfigComponent'
+import WidgetConfig from 'js/components/Settings/Widgets/WidgetConfigComponent'
 import {Card, CardHeader, CardText} from 'material-ui/Card'
 import {
   cardHeaderTitleStyle
-} from 'theme/default'
-import { getWidgetIconFromWidgetType } from '../../Widget/widget-utils'
+} from 'js/theme/default'
+import { getWidgetIconFromWidgetType } from 'js/components/Widget/widget-utils'
 
-import UpdateWidgetEnabledMutation from 'mutations/UpdateWidgetEnabledMutation'
-import UpdateWidgetConfigMutation from 'mutations/UpdateWidgetConfigMutation'
+import UpdateWidgetEnabledMutation from 'js/mutations/UpdateWidgetEnabledMutation'
+import UpdateWidgetConfigMutation from 'js/mutations/UpdateWidgetConfigMutation'
 
 class WidgetSettings extends React.Component {
   constructor (props) {

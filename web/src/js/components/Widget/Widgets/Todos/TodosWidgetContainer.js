@@ -3,7 +3,7 @@ import {
   graphql
 } from 'react-relay'
 
-import TodosWidget from './TodosWidgetComponent'
+import TodosWidget from 'js/components/Widget/Widgets/Todos/TodosWidgetComponent'
 
 export default createFragmentContainer(TodosWidget, {
   widget: graphql`

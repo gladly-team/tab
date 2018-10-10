@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import getGoogleTag from '../getGoogleTag'
+import getGoogleTag from 'js/ads/google/getGoogleTag'
 
 afterEach(() => {
   delete window.googletag

@@ -3,7 +3,7 @@ import {
   graphql
 } from 'react-relay'
 
-import Dashboard from './DashboardComponent'
+import Dashboard from 'js/components/Dashboard/DashboardComponent'
 
 export default createFragmentContainer(Dashboard, {
   app: graphql`

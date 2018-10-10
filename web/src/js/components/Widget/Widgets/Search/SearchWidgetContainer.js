@@ -3,7 +3,7 @@ import {
   graphql
 } from 'react-relay'
 
-import SearchWidget from './SearchWidgetComponent'
+import SearchWidget from 'js/components/Widget/Widgets/Search/SearchWidgetComponent'
 
 export default createFragmentContainer(SearchWidget, {
   widget: graphql`

@@ -1,11 +1,11 @@
 import React from 'react'
-import withPageviewTracking from 'analytics/withPageviewTracking'
-import { isInEuropeanUnion } from 'utils/client-location'
+import withPageviewTracking from 'js/analytics/withPageviewTracking'
+import { isInEuropeanUnion } from 'js/utils/client-location'
 import {
   registerConsentCallback,
   saveConsentUpdateEventToLocalStorage,
   unregisterConsentCallback
-} from 'ads/consentManagement'
+} from 'js/ads/consentManagement'
 
 class App extends React.Component {
   constructor (props) {

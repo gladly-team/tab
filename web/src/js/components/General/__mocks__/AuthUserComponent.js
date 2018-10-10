@@ -2,7 +2,7 @@
 
 import {
   createMockReactComponent
-} from 'utils/test-utils'
+} from 'js/utils/test-utils'
 
 export default createMockReactComponent('AuthUserComponent', {
   variables: {

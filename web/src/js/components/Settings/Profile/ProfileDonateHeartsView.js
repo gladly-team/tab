@@ -2,12 +2,12 @@
 
 import React from 'react'
 import {QueryRenderer} from 'react-relay'
-import environment from '../../../../relay-env'
+import environment from 'js/relay-env'
 
-import SettingsChildWrapper from '../SettingsChildWrapperComponent'
-import ProfileDonateHearts from './ProfileDonateHeartsContainer'
-import AuthUserComponent from 'general/AuthUserComponent'
-import ErrorMessage from 'general/ErrorMessage'
+import SettingsChildWrapper from 'js/components/Settings/SettingsChildWrapperComponent'
+import ProfileDonateHearts from 'js/components/Settings/Profile/ProfileDonateHeartsContainer'
+import AuthUserComponent from 'js/components/General/AuthUserComponent'
+import ErrorMessage from 'js/components/General/ErrorMessage'
 
 class ProfileDonateHeartsView extends React.Component {
   render () {

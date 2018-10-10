@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import WidgetPieceWrapper from '../../WidgetPieceWrapper'
+import WidgetPieceWrapper from 'js/components/Widget/WidgetPieceWrapper'
 import Checkbox from 'material-ui/Checkbox'
 import DeleteIcon from 'material-ui/svg-icons/navigation/cancel'
 import CheckCircle from 'material-ui/svg-icons/action/check-circle'
@@ -12,7 +12,7 @@ import appTheme, {
   dashboardTransparentBackground,
   widgetEditButtonInactive,
   widgetEditButtonHover
-} from 'theme/default'
+} from 'js/theme/default'
 
 class Todo extends React.Component {
   constructor (props) {

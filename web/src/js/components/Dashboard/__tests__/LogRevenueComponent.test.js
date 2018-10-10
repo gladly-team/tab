@@ -9,18 +9,18 @@ import {
   getDefaultTabGlobal,
   mockAmazonBidResponse,
   mockGoogleTagSlotRenderEndedData
-} from 'utils/test-utils'
-import getAmazonTag from 'ads/amazon/getAmazonTag'
+} from 'js/utils/test-utils'
+import getAmazonTag from 'js/ads/amazon/getAmazonTag'
 import getGoogleTag, {
   __disableAutomaticCommandQueueExecution,
   __runCommandQueue,
   __runEventListenerCallbacks
-} from 'ads/google/getGoogleTag'
-import LogUserRevenueMutation from 'mutations/LogUserRevenueMutation'
+} from 'js/ads/google/getGoogleTag'
+import LogUserRevenueMutation from 'js/mutations/LogUserRevenueMutation'
 
-jest.mock('mutations/LogUserRevenueMutation')
-jest.mock('ads/amazon/getAmazonTag')
-jest.mock('ads/google/getGoogleTag')
+jest.mock('js/mutations/LogUserRevenueMutation')
+jest.mock('js/ads/amazon/getAmazonTag')
+jest.mock('js/ads/google/getGoogleTag')
 
 beforeEach(() => {
   // Mock googletag
@@ -55,7 +55,7 @@ afterAll(() => {
 
 describe('LogRevenueComponent', function () {
   it('renders without error and does not have any DOM elements', () => {
-    const LogRevenueComponent = require('../LogRevenueComponent').default
+    const LogRevenueComponent = require('js/components/Dashboard/LogRevenueComponent').default
     const wrapper = shallow(
       <LogRevenueComponent
         user={{ id: 'abcdefghijklmno' }}
@@ -85,7 +85,7 @@ describe('LogRevenueComponent', function () {
     // Mock no Amazon bids
     window.tabforacause.ads.amazonBids = {}
 
-    const LogRevenueComponent = require('../LogRevenueComponent').default
+    const LogRevenueComponent = require('js/components/Dashboard/LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
     const tabId = '712dca1a-3705-480f-95ff-314be86a2936'
     const mockRelayEnvironment = {}
@@ -125,7 +125,7 @@ describe('LogRevenueComponent', function () {
     // Mock no Amazon bids
     window.tabforacause.ads.amazonBids = {}
 
-    const LogRevenueComponent = require('../LogRevenueComponent').default
+    const LogRevenueComponent = require('js/components/Dashboard/LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
     const tabId = '712dca1a-3705-480f-95ff-314be86a2936'
     const mockRelayEnvironment = {}
@@ -155,7 +155,7 @@ describe('LogRevenueComponent', function () {
     // Mock no Amazon bids
     window.tabforacause.ads.amazonBids = {}
 
-    const LogRevenueComponent = require('../LogRevenueComponent').default
+    const LogRevenueComponent = require('js/components/Dashboard/LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
     const tabId = '712dca1a-3705-480f-95ff-314be86a2936'
     const mockRelayEnvironment = {}
@@ -190,7 +190,7 @@ describe('LogRevenueComponent', function () {
     // Mock no Amazon bids
     window.tabforacause.ads.amazonBids = {}
 
-    const LogRevenueComponent = require('../LogRevenueComponent').default
+    const LogRevenueComponent = require('js/components/Dashboard/LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
     const tabId = '712dca1a-3705-480f-95ff-314be86a2936'
     const mockRelayEnvironment = {}
@@ -225,7 +225,7 @@ describe('LogRevenueComponent', function () {
     // We'll run the googletag command queue manually.
     __disableAutomaticCommandQueueExecution()
 
-    const LogRevenueComponent = require('../LogRevenueComponent').default
+    const LogRevenueComponent = require('js/components/Dashboard/LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
     const tabId = '712dca1a-3705-480f-95ff-314be86a2936'
     const mockRelayEnvironment = {}
@@ -269,7 +269,7 @@ describe('LogRevenueComponent', function () {
     // We'll run the googletag command queue manually.
     __disableAutomaticCommandQueueExecution()
 
-    const LogRevenueComponent = require('../LogRevenueComponent').default
+    const LogRevenueComponent = require('js/components/Dashboard/LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
     const tabId = '712dca1a-3705-480f-95ff-314be86a2936'
     const mockRelayEnvironment = {}
@@ -324,7 +324,7 @@ describe('LogRevenueComponent', function () {
       })
     }
 
-    const LogRevenueComponent = require('../LogRevenueComponent').default
+    const LogRevenueComponent = require('js/components/Dashboard/LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
     const tabId = '712dca1a-3705-480f-95ff-314be86a2936'
     const mockRelayEnvironment = {}
@@ -365,7 +365,7 @@ describe('LogRevenueComponent', function () {
       })
     }
 
-    const LogRevenueComponent = require('../LogRevenueComponent').default
+    const LogRevenueComponent = require('js/components/Dashboard/LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
     const tabId = '712dca1a-3705-480f-95ff-314be86a2936'
     const mockRelayEnvironment = {}
@@ -406,7 +406,7 @@ describe('LogRevenueComponent', function () {
       })
     }
 
-    const LogRevenueComponent = require('../LogRevenueComponent').default
+    const LogRevenueComponent = require('js/components/Dashboard/LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
     const tabId = '712dca1a-3705-480f-95ff-314be86a2936'
     const mockRelayEnvironment = {}
@@ -445,7 +445,7 @@ describe('LogRevenueComponent', function () {
     // Mock no Amazon bids
     window.tabforacause.ads.amazonBids = {}
 
-    const LogRevenueComponent = require('../LogRevenueComponent').default
+    const LogRevenueComponent = require('js/components/Dashboard/LogRevenueComponent').default
     const mockUserId = 'abcdefghijklmno'
     const tabId = '712dca1a-3705-480f-95ff-314be86a2936'
     const mockRelayEnvironment = {}

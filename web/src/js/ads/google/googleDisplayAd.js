@@ -1,5 +1,5 @@
 
-import getGoogleTag from './getGoogleTag'
+import getGoogleTag from 'js/ads/google/getGoogleTag'
 
 export default function (adId) {
   const googletag = getGoogleTag()

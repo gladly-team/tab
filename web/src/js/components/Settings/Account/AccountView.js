@@ -2,11 +2,11 @@
 
 import React from 'react'
 import {QueryRenderer} from 'react-relay'
-import environment from '../../../../relay-env'
-import SettingsChildWrapper from '../SettingsChildWrapperComponent'
-import Account from './AccountContainer'
-import AuthUserComponent from 'general/AuthUserComponent'
-import ErrorMessage from 'general/ErrorMessage'
+import environment from 'js/relay-env'
+import SettingsChildWrapper from 'js/components/Settings/SettingsChildWrapperComponent'
+import Account from 'js/components/Settings/Account/AccountContainer'
+import AuthUserComponent from 'js/components/General/AuthUserComponent'
+import ErrorMessage from 'js/components/General/ErrorMessage'
 
 class AccountView extends React.Component {
   render () {

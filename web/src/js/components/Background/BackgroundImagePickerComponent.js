@@ -9,7 +9,7 @@ import RadioButtonUncheckedIcon from 'material-ui/svg-icons/toggle/radio-button-
 import Subheader from 'material-ui/Subheader'
 import {
   cardHeaderSubtitleStyle
-} from 'theme/default'
+} from 'js/theme/default'
 
 class BackgroundImagePicker extends React.Component {
   constructor (props) {

@@ -1,17 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { commaFormatted, currencyFormatted } from 'utils/utils'
-import DashboardPopover from '../Dashboard/DashboardPopover'
+import { commaFormatted, currencyFormatted } from 'js/utils/utils'
+import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 import RaisedButton from 'material-ui/RaisedButton'
 import {
   goToInviteFriends
-} from 'navigation/navigation'
+} from 'js/navigation/navigation'
 import Sparkle from 'react-sparkle'
 
 import appTheme, {
   dashboardIconActiveColor,
   dashboardIconInactiveColor
-} from 'theme/default'
+} from 'js/theme/default'
 
 class MoneyRaised extends React.Component {
   constructor (props) {

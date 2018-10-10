@@ -13,13 +13,13 @@ import SearchIcon from 'material-ui/svg-icons/action/search'
 import appTheme, {
   dashboardIconInactiveColor,
   dashboardIconActiveColor
-} from 'theme/default'
+} from 'js/theme/default'
 import {
   WIDGET_TYPE_BOOKMARKS,
   WIDGET_TYPE_NOTES,
   WIDGET_TYPE_SEARCH,
   WIDGET_TYPE_TODOS
-} from '../../constants'
+} from 'js/constants'
 
 class WidgetIcon extends React.Component {
   onWidgetIconClicked () {

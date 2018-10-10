@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import EditWidgetChip from '../../EditWidgetChip'
+import EditWidgetChip from 'js/components/Widget/EditWidgetChip'
 import TextField from 'material-ui/TextField'
 import appTheme, {
   widgetEditButtonHover
-} from 'theme/default'
+} from 'js/theme/default'
 
 class AddTodoForm extends React.Component {
   constructor (props) {

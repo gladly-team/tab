@@ -3,7 +3,7 @@ import {
   graphql
 } from 'react-relay'
 
-import NotesWidget from './NotesWidgetComponent'
+import NotesWidget from 'js/components/Widget/Widgets/Notes/NotesWidgetComponent'
 
 export default createFragmentContainer(NotesWidget, {
   widget: graphql`

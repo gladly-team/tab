@@ -4,11 +4,11 @@ import RaisedButton from 'material-ui/RaisedButton'
 import {
   logout,
   sendVerificationEmail
-} from 'authentication/user'
+} from 'js/authentication/user'
 import {
   goTo,
   loginURL
-} from 'navigation/navigation'
+} from 'js/navigation/navigation'
 
 class VerifyEmailMessage extends React.Component {
   constructor (props) {

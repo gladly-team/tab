@@ -5,26 +5,26 @@ import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton'
 import Divider from 'material-ui/Divider'
 import {Card, CardHeader} from 'material-ui/Card'
 
-import BackgroundImagePicker from '../../Background/BackgroundImagePickerContainer'
-import BackgroundColorPicker from '../../Background/BackgroundColorPickerContainer'
-import BackgroundCustomImagePicker from '../../Background/BackgroundCustomImagePickerContainer'
+import BackgroundImagePicker from 'js/components/Background/BackgroundImagePickerContainer'
+import BackgroundColorPicker from 'js/components/Background/BackgroundColorPickerContainer'
+import BackgroundCustomImagePicker from 'js/components/Background/BackgroundCustomImagePickerContainer'
 import {
   cardHeaderTitleStyle,
   cardHeaderSubtitleStyle
-} from 'theme/default'
+} from 'js/theme/default'
 import {
   setBackgroundSettings
-} from 'utils/local-bkg-settings'
+} from 'js/utils/local-bkg-settings'
 import {
   USER_BACKGROUND_OPTION_CUSTOM,
   USER_BACKGROUND_OPTION_COLOR,
   USER_BACKGROUND_OPTION_PHOTO,
   USER_BACKGROUND_OPTION_DAILY
-} from '../../../constants'
-import SetBackgroundImageMutation from 'mutations/SetBackgroundImageMutation'
-import SetBackgroundColorMutation from 'mutations/SetBackgroundColorMutation'
-import SetBackgroundCustomImageMutation from 'mutations/SetBackgroundCustomImageMutation'
-import SetBackgroundDailyImageMutation from 'mutations/SetBackgroundDailyImageMutation'
+} from 'js/constants'
+import SetBackgroundImageMutation from 'js/mutations/SetBackgroundImageMutation'
+import SetBackgroundColorMutation from 'js/mutations/SetBackgroundColorMutation'
+import SetBackgroundCustomImageMutation from 'js/mutations/SetBackgroundCustomImageMutation'
+import SetBackgroundDailyImageMutation from 'js/mutations/SetBackgroundDailyImageMutation'
 
 class BackgroundSettings extends React.Component {
   constructor (props) {

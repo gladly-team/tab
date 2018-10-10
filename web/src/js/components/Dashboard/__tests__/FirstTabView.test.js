@@ -5,18 +5,18 @@ import {
   shallow
 } from 'enzyme'
 
-import { replaceUrl } from 'navigation/navigation'
+import { replaceUrl } from 'js/navigation/navigation'
 import {
   setBrowserExtensionInstallId,
   setBrowserExtensionInstallTime
-} from 'utils/local-user-data-mgr'
+} from 'js/utils/local-user-data-mgr'
 import {
   assignUserToTestGroups
-} from 'utils/experiments'
+} from 'js/utils/experiments'
 
-jest.mock('navigation/navigation')
-jest.mock('utils/local-user-data-mgr')
-jest.mock('utils/experiments')
+jest.mock('js/navigation/navigation')
+jest.mock('js/utils/local-user-data-mgr')
+jest.mock('js/utils/experiments')
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -26,14 +26,14 @@ const mockProps = {}
 
 describe('FirstTabView', function () {
   it('renders without error', () => {
-    const FirstTabView = require('../FirstTabView').default
+    const FirstTabView = require('js/components/Dashboard/FirstTabView').default
     shallow(
       <FirstTabView {...mockProps} />
     )
   })
 
   it('redirects to the dashboard on mount', () => {
-    const FirstTabView = require('../FirstTabView').default
+    const FirstTabView = require('js/components/Dashboard/FirstTabView').default
     shallow(
       <FirstTabView {...mockProps} />
     )
@@ -41,7 +41,7 @@ describe('FirstTabView', function () {
   })
 
   it('calls to set the extension install ID in local storage', () => {
-    const FirstTabView = require('../FirstTabView').default
+    const FirstTabView = require('js/components/Dashboard/FirstTabView').default
     shallow(
       <FirstTabView {...mockProps} />
     )
@@ -49,7 +49,7 @@ describe('FirstTabView', function () {
   })
 
   it('calls to set the extension install time in local storage', () => {
-    const FirstTabView = require('../FirstTabView').default
+    const FirstTabView = require('js/components/Dashboard/FirstTabView').default
     shallow(
       <FirstTabView {...mockProps} />
     )
@@ -57,7 +57,7 @@ describe('FirstTabView', function () {
   })
 
   it('calls to set the user\'s test groups for any ongoing split-tests', () => {
-    const FirstTabView = require('../FirstTabView').default
+    const FirstTabView = require('js/components/Dashboard/FirstTabView').default
     shallow(
       <FirstTabView {...mockProps} />
     )

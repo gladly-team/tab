@@ -3,7 +3,7 @@ import {
   graphql
 } from 'react-relay'
 
-import BackgroundSettings from './BackgroundSettingsComponent'
+import BackgroundSettings from 'js/components/Settings/Background/BackgroundSettingsComponent'
 
 export default createFragmentContainer(BackgroundSettings, {
   user: graphql`

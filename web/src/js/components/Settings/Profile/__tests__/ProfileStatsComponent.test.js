@@ -7,7 +7,7 @@ import {
   mount,
   shallow
 } from 'enzyme'
-import Stat from '../StatComponent'
+import Stat from 'js/components/Settings/Profile/StatComponent'
 
 const mockProps = {
   user: {
@@ -28,14 +28,14 @@ const mockProps = {
 
 describe('Profile stats component', () => {
   it('renders without error', () => {
-    const ProfileStatsComponent = require('../ProfileStatsComponent').default
+    const ProfileStatsComponent = require('js/components/Settings/Profile/ProfileStatsComponent').default
     shallow(
       <ProfileStatsComponent {...mockProps} />
     )
   })
 
   it('has the expected number of stats', () => {
-    const ProfileStatsComponent = require('../ProfileStatsComponent').default
+    const ProfileStatsComponent = require('js/components/Settings/Profile/ProfileStatsComponent').default
     const wrapper = shallow(
       <ProfileStatsComponent {...mockProps} />
     )
@@ -43,7 +43,7 @@ describe('Profile stats component', () => {
   })
 
   it('contains the correct greeting when there is a username', () => {
-    const ProfileStatsComponent = require('../ProfileStatsComponent').default
+    const ProfileStatsComponent = require('js/components/Settings/Profile/ProfileStatsComponent').default
     // @material-ui-1-todo: remove MuiThemeProvider wrapper
     const wrapper = mount(
       <MuiThemeProvider>
@@ -54,7 +54,7 @@ describe('Profile stats component', () => {
   })
 
   it('contains the correct greeting when there is no username', () => {
-    const ProfileStatsComponent = require('../ProfileStatsComponent').default
+    const ProfileStatsComponent = require('js/components/Settings/Profile/ProfileStatsComponent').default
     const newMockProps = cloneDeep(mockProps)
     delete newMockProps.user.username
     const wrapper = mount(

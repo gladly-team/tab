@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import LogUserDataConsentMutation from 'mutations/LogUserDataConsentMutation'
-import { isInEuropeanUnion } from 'utils/client-location'
+import LogUserDataConsentMutation from 'js/mutations/LogUserDataConsentMutation'
+import { isInEuropeanUnion } from 'js/utils/client-location'
 import {
   checkIfNewConsentNeedsToBeLogged,
   getConsentString,
@@ -9,7 +9,7 @@ import {
   markConsentDataAsLogged,
   registerConsentCallback,
   unregisterConsentCallback
-} from 'ads/consentManagement'
+} from 'js/ads/consentManagement'
 
 class LogConsentDataComponent extends React.Component {
   constructor (props) {

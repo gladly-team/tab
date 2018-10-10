@@ -9,26 +9,26 @@ import toJson from 'enzyme-to-json'
 import {
   logout,
   sendVerificationEmail
-} from 'authentication/user'
+} from 'js/authentication/user'
 import {
   goTo,
   loginURL
-} from 'navigation/navigation'
+} from 'js/navigation/navigation'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 
-jest.mock('authentication/user')
-jest.mock('navigation/navigation')
+jest.mock('js/authentication/user')
+jest.mock('js/navigation/navigation')
 
 describe('VerifyEmailMessage tests', function () {
   it('renders without error', function () {
-    const VerifyEmailMessage = require('../VerifyEmailMessage').default
+    const VerifyEmailMessage = require('js/components/Authentication/VerifyEmailMessage').default
     shallow(
       <VerifyEmailMessage />
     )
   })
 
   it('restarts the auth flow when clicking cancel button', done => {
-    const VerifyEmailMessage = require('../VerifyEmailMessage').default
+    const VerifyEmailMessage = require('js/components/Authentication/VerifyEmailMessage').default
 
     // @material-ui-1-todo: remove MuiThemeProvider wrapper
     const wrapper = mount(
@@ -53,7 +53,7 @@ describe('VerifyEmailMessage tests', function () {
   })
 
   it('the "resend email" button calls to send a new verification email', done => {
-    const VerifyEmailMessage = require('../VerifyEmailMessage').default
+    const VerifyEmailMessage = require('js/components/Authentication/VerifyEmailMessage').default
 
     // @material-ui-1-todo: remove MuiThemeProvider wrapper
     const wrapper = mount(
@@ -75,7 +75,7 @@ describe('VerifyEmailMessage tests', function () {
   })
 
   it('matches expected snapshot', function () {
-    const VerifyEmailMessage = require('../VerifyEmailMessage').default
+    const VerifyEmailMessage = require('js/components/Authentication/VerifyEmailMessage').default
     const wrapper = shallow(
       <VerifyEmailMessage />
     )

@@ -1,7 +1,7 @@
 
-import adsEnabled from './adsEnabledStatus'
-import googleDisplayAd from './google/googleDisplayAd'
-import mockDisplayAd from './mockDisplayAd'
+import adsEnabled from 'js/ads/adsEnabledStatus'
+import googleDisplayAd from 'js/ads/google/googleDisplayAd'
+import mockDisplayAd from 'js/ads/mockDisplayAd'
 
 export default (adId) => {
   if (adsEnabled()) {

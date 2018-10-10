@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import mockDisplayAd from '../mockDisplayAd'
+import mockDisplayAd from 'js/ads/mockDisplayAd'
 
 jest.useFakeTimers()
 

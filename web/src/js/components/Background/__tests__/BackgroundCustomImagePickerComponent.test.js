@@ -22,14 +22,14 @@ afterEach(() => {
 
 describe('Background custom image picker component', () => {
   it('renders without error', () => {
-    const BackgroundCustomImagePicker = require('../BackgroundCustomImagePickerComponent').default
+    const BackgroundCustomImagePicker = require('js/components/Background/BackgroundCustomImagePickerComponent').default
     shallow(
       <BackgroundCustomImagePicker {...mockProps} />
     )
   })
 
   it('calls onCustomImageSelection on mount', () => {
-    const BackgroundCustomImagePicker = require('../BackgroundCustomImagePickerComponent').default
+    const BackgroundCustomImagePicker = require('js/components/Background/BackgroundCustomImagePickerComponent').default
     shallow(
       <BackgroundCustomImagePicker {...mockProps} />
     )
@@ -38,7 +38,7 @@ describe('Background custom image picker component', () => {
   })
 
   it('calls onCustomImageSelection prop when the custom photo changes', () => {
-    const BackgroundCustomImagePicker = require('../BackgroundCustomImagePickerComponent').default
+    const BackgroundCustomImagePicker = require('js/components/Background/BackgroundCustomImagePickerComponent').default
     const wrapper = shallow(
       <BackgroundCustomImagePicker {...mockProps} />
     )

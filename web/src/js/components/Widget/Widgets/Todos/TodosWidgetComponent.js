@@ -1,18 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import FlatButton from 'material-ui/FlatButton'
-import WidgetSharedSpace from 'general/WidgetSharedSpace'
-import EmptyWidgetMsg from '../../EmptyWidgetMsg'
-import WidgetScrollSection from '../../WidgetScrollSection'
-import UpdateWidgetDataMutation from 'mutations/UpdateWidgetDataMutation'
-import Todo from './Todo'
-import AddTodoForm from './AddTodoForm'
+import WidgetSharedSpace from 'js/components/General/WidgetSharedSpace'
+import EmptyWidgetMsg from 'js/components/Widget/EmptyWidgetMsg'
+import WidgetScrollSection from 'js/components/Widget/WidgetScrollSection'
+import UpdateWidgetDataMutation from 'js/mutations/UpdateWidgetDataMutation'
+import Todo from 'js/components/Widget/Widgets/Todos/Todo'
+import AddTodoForm from 'js/components/Widget/Widgets/Todos/AddTodoForm'
 import Subheader from 'material-ui/Subheader'
 import appTheme, {
   buttonFontWeight,
   dashboardIconInactiveColor,
   primaryColor
-} from 'theme/default'
+} from 'js/theme/default'
 
 class TodosWidget extends React.Component {
   constructor (props) {

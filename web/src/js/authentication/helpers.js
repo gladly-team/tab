@@ -6,34 +6,34 @@ import {
   loginURL,
   missingEmailMessageURL,
   verifyEmailURL
-} from 'navigation/navigation'
+} from 'js/navigation/navigation'
 import {
   getReferralData,
   isInIframe
-} from 'web-utils'
+} from 'js/utils/utils'
 import {
   getUserToken,
   getCurrentUser,
   setUsernameInLocalStorage,
   signInAnonymously,
   reloadUser
-} from 'authentication/user'
-import environment from '../../relay-env'
-import CreateNewUserMutation from 'mutations/CreateNewUserMutation'
-import LogEmailVerifiedMutation from 'mutations/LogEmailVerifiedMutation'
+} from 'js/authentication/user'
+import environment from 'js/relay-env'
+import CreateNewUserMutation from 'js/mutations/CreateNewUserMutation'
+import LogEmailVerifiedMutation from 'js/mutations/LogEmailVerifiedMutation'
 import {
   ANON_USER_GROUP_UNAUTHED_ALLOWED,
   getAnonymousUserTestGroup,
   getUserTestGroupsForMutation
-} from 'utils/experiments'
+} from 'js/utils/experiments'
 import {
   isAnonymousUserSignInEnabled
-} from 'utils/feature-flags'
+} from 'js/utils/feature-flags'
 import {
   getBrowserExtensionInstallId,
   getBrowserExtensionInstallTime
-} from 'utils/local-user-data-mgr'
-import logger from 'utils/logger'
+} from 'js/utils/local-user-data-mgr'
+import logger from 'js/utils/logger'
 
 /**
  * Return whether the current user is an anonymous user who was

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 
-import WidgetPieceWrapper from '../../WidgetPieceWrapper'
+import WidgetPieceWrapper from 'js/components/Widget/WidgetPieceWrapper'
 import DeleteIcon from 'material-ui/svg-icons/navigation/cancel'
 import Chip from 'material-ui/Chip'
 import TextField from '@material-ui/core/TextField'
@@ -10,7 +10,7 @@ import appTheme, {
   dashboardTransparentBackground,
   widgetEditButtonInactive,
   widgetEditButtonHover
-} from 'theme/default'
+} from 'js/theme/default'
 
 import { withStyles } from '@material-ui/core/styles'
 

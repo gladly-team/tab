@@ -5,9 +5,9 @@ import {
   shallow
 } from 'enzyme'
 
-import { externalRedirect } from 'navigation/navigation'
+import { externalRedirect } from 'js/navigation/navigation'
 
-jest.mock('navigation/navigation')
+jest.mock('js/navigation/navigation')
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -17,14 +17,14 @@ const mockProps = {}
 
 describe('PostUninstallView', function () {
   it('renders without error', () => {
-    const PostUninstallView = require('../PostUninstallView').default
+    const PostUninstallView = require('js/components/Dashboard/PostUninstallView').default
     shallow(
       <PostUninstallView {...mockProps} />
     )
   })
 
   it('redirects to the survey doc on mount', () => {
-    const PostUninstallView = require('../PostUninstallView').default
+    const PostUninstallView = require('js/components/Dashboard/PostUninstallView').default
     shallow(
       <PostUninstallView {...mockProps} />
     )

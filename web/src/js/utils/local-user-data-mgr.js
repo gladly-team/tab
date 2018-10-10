@@ -1,13 +1,13 @@
 
 import moment from 'moment'
 import uuid from 'uuid/v4'
-import localStorageMgr from 'utils/localstorage-mgr'
+import localStorageMgr from 'js/utils/localstorage-mgr'
 import {
   STORAGE_EXTENSION_INSTALL_ID,
   STORAGE_APPROX_EXTENSION_INSTALL_TIME,
   STORAGE_TABS_RECENT_DAY_COUNT,
   STORAGE_TABS_LAST_TAB_OPENED_DATE
-} from '../constants'
+} from 'js/constants'
 
 /**
  * Get the count of tabs opened today (UTC day) from localStorage. If no

@@ -5,7 +5,7 @@ import {
   mockGoogleTagImpressionViewableData,
   mockGoogleTagSlotOnloadData,
   mockGoogleTagSlotRenderEndedData
-} from 'utils/test-utils'
+} from 'js/utils/test-utils'
 
 beforeEach(() => {
   delete window.googletag
@@ -43,7 +43,7 @@ describe('handleAdsLoaded', function () {
       googleEventListenerCalls[eventName].push([eventName, callback])
     })
 
-    const handleAdsLoaded = require('../handleAdsLoaded').default
+    const handleAdsLoaded = require('js/ads/handleAdsLoaded').default
     handleAdsLoaded()
 
     // Run the queued googletag commands
@@ -79,7 +79,7 @@ describe('handleAdsLoaded', function () {
       googleEventListenerCalls[eventName].push([eventName, callback])
     })
 
-    const handleAdsLoaded = require('../handleAdsLoaded').default
+    const handleAdsLoaded = require('js/ads/handleAdsLoaded').default
     handleAdsLoaded()
 
     // Run the queued googletag commands
@@ -115,7 +115,7 @@ describe('handleAdsLoaded', function () {
       googleEventListenerCalls[eventName].push([eventName, callback])
     })
 
-    const handleAdsLoaded = require('../handleAdsLoaded').default
+    const handleAdsLoaded = require('js/ads/handleAdsLoaded').default
     handleAdsLoaded()
 
     // Run the queued googletag commands

@@ -7,13 +7,13 @@ import {
   WIDGET_TYPE_NOTES,
   WIDGET_TYPE_SEARCH,
   WIDGET_TYPE_TODOS
-} from '../../constants'
+} from 'js/constants'
 
-import BookmarksWidget from './Widgets/Bookmarks/BookmarksWidgetContainer'
-import SearchWidget from './Widgets/Search/SearchWidgetContainer'
-import ClockWidget from './Widgets/Clock/ClockWidgetContainer'
-import NotesWidget from './Widgets/Notes/NotesWidgetContainer'
-import TodosWidget from './Widgets/Todos/TodosWidgetContainer'
+import BookmarksWidget from 'js/components/Widget/Widgets/Bookmarks/BookmarksWidgetContainer'
+import SearchWidget from 'js/components/Widget/Widgets/Search/SearchWidgetContainer'
+import ClockWidget from 'js/components/Widget/Widgets/Clock/ClockWidgetContainer'
+import NotesWidget from 'js/components/Widget/Widgets/Notes/NotesWidgetContainer'
+import TodosWidget from 'js/components/Widget/Widgets/Todos/TodosWidgetContainer'
 
 class Widget extends React.Component {
   render () {

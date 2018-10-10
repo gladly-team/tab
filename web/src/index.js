@@ -2,9 +2,9 @@ import Raven from 'raven-js'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { AppContainer } from 'react-hot-loader'
-import Root from './root'
-import { initializeFirebase } from 'authentication/firebaseConfig'
-import { getUsername } from 'authentication/user'
+import Root from 'js/root'
+import { initializeFirebase } from 'js/authentication/firebaseConfig'
+import { getUsername } from 'js/authentication/user'
 
 // Start Sentry logger
 // https://docs.sentry.io/clients/javascript/config/
@@ -64,7 +64,7 @@ const initApp = () => {
 
   // Hot Module Replacement API
   if (module.hot) {
-    module.hot.accept('./root', () => {
+    module.hot.accept('js/root', () => {
       render(Root)
     })
   }

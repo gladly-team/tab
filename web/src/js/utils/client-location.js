@@ -1,12 +1,12 @@
 import moment from 'moment'
-import localStorageMgr from 'utils/localstorage-mgr'
+import localStorageMgr from 'js/utils/localstorage-mgr'
 import {
   STORAGE_LOCATION_COUNTRY_ISO_CODE,
   STORAGE_LOCATION_IS_IN_EU,
   STORAGE_LOCATION_QUERY_TIME
-} from '../constants'
+} from 'js/constants'
 import { isNil } from 'lodash/lang'
-import logger from 'utils/logger'
+import logger from 'js/utils/logger'
 
 // Get the client location with a country-level granularity.
 // This expects that the MaxMind script already created the

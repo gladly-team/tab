@@ -6,11 +6,11 @@ import {
 } from 'enzyme'
 import toJson from 'enzyme-to-json'
 
-import LogTabMutation from 'mutations/LogTabMutation'
-import { incrementTabsOpenedToday } from 'utils/local-user-data-mgr'
+import LogTabMutation from 'js/mutations/LogTabMutation'
+import { incrementTabsOpenedToday } from 'js/utils/local-user-data-mgr'
 
-jest.mock('mutations/LogTabMutation')
-jest.mock('utils/local-user-data-mgr')
+jest.mock('js/mutations/LogTabMutation')
+jest.mock('js/utils/local-user-data-mgr')
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -18,7 +18,7 @@ afterEach(() => {
 
 describe('LogTabComponent', function () {
   it('renders without error and does not have any DOM elements', () => {
-    const LogTabComponent = require('../LogTabComponent').default
+    const LogTabComponent = require('js/components/Dashboard/LogTabComponent').default
     const wrapper = shallow(
       <LogTabComponent
         user={{ id: 'abcdefghijklmno' }}
@@ -30,7 +30,7 @@ describe('LogTabComponent', function () {
   })
 
   it('logs the tab after a 1 second timeout', () => {
-    const LogTabComponent = require('../LogTabComponent').default
+    const LogTabComponent = require('js/components/Dashboard/LogTabComponent').default
     const mockRelayEnvironment = {}
     const mockUserData = { id: 'abcdefghijklmno' }
     const tabId = 'abc-123'
@@ -50,7 +50,7 @@ describe('LogTabComponent', function () {
   })
 
   it('updates today\'s tab count in localStorage', () => {
-    const LogTabComponent = require('../LogTabComponent').default
+    const LogTabComponent = require('js/components/Dashboard/LogTabComponent').default
     const mockRelayEnvironment = {}
     const mockUserData = { id: 'abcdefghijklmno' }
     const tabId = 'abc-123'

@@ -8,20 +8,20 @@ import toJson from 'enzyme-to-json'
 import Typography from '@material-ui/core/Typography'
 import {
   getUrlParameters
-} from 'utils/utils'
+} from 'js/utils/utils'
 
-jest.mock('utils/utils')
+jest.mock('js/utils/utils')
 
 describe('SignInIframeMessage tests', () => {
   it('renders without error', () => {
-    const SignInIframeMessage = require('../SignInIframeMessage').default
+    const SignInIframeMessage = require('js/components/Authentication/SignInIframeMessage').default
     shallow(
       <SignInIframeMessage />
     )
   })
 
   it('redirects the page when clicking the sign-in button', () => {
-    const SignInIframeMessage = require('../SignInIframeMessage').default
+    const SignInIframeMessage = require('js/components/Authentication/SignInIframeMessage').default
 
     // Mock window.open
     window.open = jest.fn()
@@ -37,7 +37,7 @@ describe('SignInIframeMessage tests', () => {
   })
 
   it('has the expected copy', () => {
-    const SignInIframeMessage = require('../SignInIframeMessage').default
+    const SignInIframeMessage = require('js/components/Authentication/SignInIframeMessage').default
     const wrapper = shallow(
       <SignInIframeMessage />
     )
@@ -56,7 +56,7 @@ describe('SignInIframeMessage tests', () => {
     getUrlParameters.mockReturnValueOnce({
       mandatory: 'true'
     })
-    const SignInIframeMessage = require('../SignInIframeMessage').default
+    const SignInIframeMessage = require('js/components/Authentication/SignInIframeMessage').default
     const wrapper = shallow(
       <SignInIframeMessage />
     )
@@ -72,7 +72,7 @@ describe('SignInIframeMessage tests', () => {
   })
 
   it('matches expected snapshot', () => {
-    const SignInIframeMessage = require('../SignInIframeMessage').default
+    const SignInIframeMessage = require('js/components/Authentication/SignInIframeMessage').default
     const wrapper = shallow(
       <SignInIframeMessage />
     )

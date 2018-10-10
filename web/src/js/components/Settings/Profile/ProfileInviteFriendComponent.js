@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import InviteFriend from './InviteFriendContainer'
-import Stat from './StatComponent'
-import { lighterTextColor } from 'theme/default'
+import InviteFriend from 'js/components/Settings/Profile/InviteFriendContainer'
+import Stat from 'js/components/Settings/Profile/StatComponent'
+import { lighterTextColor } from 'js/theme/default'
 import HappyIcon from 'material-ui/svg-icons/social/mood'
 import { Paper } from 'material-ui'
 

@@ -2,14 +2,14 @@ import React from 'react'
 import {
   dashboardURL,
   replaceUrl
-} from 'navigation/navigation'
+} from 'js/navigation/navigation'
 import {
   setBrowserExtensionInstallId,
   setBrowserExtensionInstallTime
-} from 'utils/local-user-data-mgr'
+} from 'js/utils/local-user-data-mgr'
 import {
   assignUserToTestGroups
-} from 'utils/experiments'
+} from 'js/utils/experiments'
 
 // The view the extensions open immediately after they're
 // added to the browser.

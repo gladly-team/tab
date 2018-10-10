@@ -1,7 +1,7 @@
 import React from 'react'
 import {
   checkIfEmailVerified
-} from 'authentication/helpers'
+} from 'js/authentication/helpers'
 
 class FirebaseAuthenticationUIAction extends React.Component {
   componentDidMount () {

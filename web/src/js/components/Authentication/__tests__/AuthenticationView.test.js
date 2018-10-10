@@ -5,23 +5,23 @@ import {
   mount,
   shallow
 } from 'enzyme'
-import AuthenticationView from '../AuthenticationView'
+import AuthenticationView from 'js/components/Authentication/AuthenticationView'
 import {
   QueryRenderer
 } from 'react-relay'
-import AuthenticationContainer from '../AuthenticationContainer'
-import { createNewUser } from 'authentication/helpers'
+import AuthenticationContainer from 'js/components/Authentication/AuthenticationContainer'
+import { createNewUser } from 'js/authentication/helpers'
 import {
   ERROR_USER_DOES_NOT_EXIST
-} from '../../../constants'
+} from 'js/constants'
 import {
   getCurrentUser
-} from 'authentication/user'
+} from 'js/authentication/user'
 
 jest.mock('react-relay')
-jest.mock('../AuthenticationContainer')
-jest.mock('authentication/user')
-jest.mock('authentication/helpers')
+jest.mock('js/components/Authentication/AuthenticationContainer')
+jest.mock('js/authentication/user')
+jest.mock('js/authentication/helpers')
 
 afterEach(() => {
   jest.clearAllMocks()

@@ -7,7 +7,7 @@ import Divider from 'material-ui/Divider'
 import PropTypes from 'prop-types'
 import {
   cardHeaderSubtitleStyle
-} from 'theme/default'
+} from 'js/theme/default'
 
 class BackgroundColorPicker extends React.Component {
   constructor (props) {

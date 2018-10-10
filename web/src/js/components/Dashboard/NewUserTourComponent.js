@@ -8,14 +8,14 @@ import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import EarthIcon from 'mdi-material-ui/Earth'
 import HeartIcon from 'material-ui/svg-icons/action/favorite'
-import InviteFriend from '../Settings/Profile/InviteFriendContainer'
-import localStorageMgr from 'utils/localstorage-mgr'
-import { STORAGE_NEW_USER_HAS_COMPLETED_TOUR } from '../../constants'
+import InviteFriend from 'js/components/Settings/Profile/InviteFriendContainer'
+import localStorageMgr from 'js/utils/localstorage-mgr'
+import { STORAGE_NEW_USER_HAS_COMPLETED_TOUR } from 'js/constants'
 
 import {
   primaryColor,
   textColor
-} from 'theme/default'
+} from 'js/theme/default'
 
 // Note that the target components must be mounted
 // before the tour begins.

@@ -5,23 +5,23 @@ import Typography from '@material-ui/core/Typography'
 import {
   getCurrentUser,
   sendVerificationEmail
-} from 'authentication/user'
+} from 'js/authentication/user'
 import {
   checkAuthStateAndRedirectIfNeeded,
   createNewUser
-} from 'authentication/helpers'
+} from 'js/authentication/helpers'
 import {
   goTo,
   authMessageURL,
   missingEmailMessageURL,
   verifyEmailURL,
   goToDashboard
-} from 'navigation/navigation'
+} from 'js/navigation/navigation'
 import { isEqual } from 'lodash/lang'
-import LogoWithText from '../Logo/LogoWithText'
+import LogoWithText from 'js/components/Logo/LogoWithText'
 import {
   getUrlParameters
-} from 'utils/utils'
+} from 'js/utils/utils'
 
 // Handle the authentication flow:
 //   check if current user is fully authenticated and redirect

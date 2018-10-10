@@ -2,20 +2,20 @@
 
 import React from 'react'
 import { QueryRenderer } from 'react-relay'
-import environment from '../../../relay-env'
+import environment from 'js/relay-env'
 
-import AuthUserComponent from 'general/AuthUserComponent'
-import ErrorMessage from 'general/ErrorMessage'
+import AuthUserComponent from 'js/components/General/AuthUserComponent'
+import ErrorMessage from 'js/components/General/ErrorMessage'
 
-import DashboardContainer from './DashboardContainer'
-import { createNewUser } from 'authentication/helpers'
+import DashboardContainer from 'js/components/Dashboard/DashboardContainer'
+import { createNewUser } from 'js/authentication/helpers'
 import {
   goTo,
   loginURL
-} from 'navigation/navigation'
+} from 'js/navigation/navigation'
 import {
   ERROR_USER_DOES_NOT_EXIST
-} from '../../constants'
+} from 'js/constants'
 
 class DashboardView extends React.Component {
   render () {

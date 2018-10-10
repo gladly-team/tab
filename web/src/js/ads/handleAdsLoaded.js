@@ -1,5 +1,5 @@
 
-import getGoogleTag from './google/getGoogleTag'
+import getGoogleTag from 'js/ads/google/getGoogleTag'
 
 // Keep track of what ad slots have loaded. App code loads later and
 // therefore can miss the slot loading event. This gives the app code

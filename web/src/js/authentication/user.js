@@ -1,7 +1,7 @@
 
 import firebase from 'firebase/app'
 import 'firebase/auth'
-import localStorageMgr from 'utils/localstorage-mgr'
+import localStorageMgr from 'js/utils/localstorage-mgr'
 import {
   STORAGE_KEY_USERNAME,
   STORAGE_TABS_LAST_TAB_OPENED_DATE,
@@ -16,11 +16,11 @@ import {
   STORAGE_EXTENSION_INSTALL_ID,
   STORAGE_APPROX_EXTENSION_INSTALL_TIME,
   STORAGE_EXPERIMENT_ANON_USER
-} from '../constants'
+} from 'js/constants'
 import {
   absoluteUrl,
   enterUsernameURL
-} from 'navigation/navigation'
+} from 'js/navigation/navigation'
 
 // Only for development.
 const shouldMockAuthentication = (

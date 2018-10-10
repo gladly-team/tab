@@ -11,7 +11,7 @@ import {
   WIDGET_TYPE_NOTES,
   WIDGET_TYPE_SEARCH,
   WIDGET_TYPE_TODOS
-} from '../../constants'
+} from 'js/constants'
 
 export const getWidgetIconFromWidgetType = (widgetType) => {
   var icon

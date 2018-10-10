@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 import {
   formatUser,
   getCurrentUserListener
-} from 'authentication/user'
+} from 'js/authentication/user'
 import {
   checkAuthStateAndRedirectIfNeeded
-} from 'authentication/helpers'
+} from 'js/authentication/helpers'
 
 // Get the authenticated user and, if the user is authenticated,
 // add the user's ID to the `variables` prop. By default, redirect
