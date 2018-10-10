@@ -64,7 +64,7 @@ export const anonymousUserMandatorySignIn = () => {
  */
 const inAnonymousUserGracePeriod = () => {
   const installTime = getBrowserExtensionInstallTime()
-  return !!installTime && moment().diff(installTime, 'days') < 2
+  return !!installTime && moment().diff(installTime, 'days') < 4
 }
 
 /**

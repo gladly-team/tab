@@ -464,7 +464,7 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
 
     // This is longer than users are allowed to remain anonymous.
     getBrowserExtensionInstallTime.mockReturnValue(
-      moment(mockNow).subtract(4, 'days'))
+      moment(mockNow).subtract(5, 'days'))
 
     // Otherwise, anonymous users are allowed.
     isAnonymousUserSignInEnabled.mockReturnValue(true)
@@ -493,7 +493,7 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
 
     // This is less than the max time users are allowed to remain anonymous.
     getBrowserExtensionInstallTime.mockReturnValue(
-      moment(mockNow).subtract(1, 'days'))
+      moment(mockNow).subtract(3, 'days'))
 
     // Otherwise, anonymous users are allowed.
     isAnonymousUserSignInEnabled.mockReturnValue(true)
