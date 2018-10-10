@@ -12,6 +12,7 @@ export const __runCommandQueue = () => {
 }
 
 var mockPubadsRefresh = jest.fn()
+const mockEnableSingleRequest = jest.fn()
 
 // Set a mock function for googletag.pubads().refresh.
 export const __setPubadsRefreshMock = (mockFunction) => {
@@ -38,9 +39,13 @@ export default () => {
         }
         eventListenerStore[eventName].push(callback)
       },
+      enableSingleRequest: mockEnableSingleRequest,
       refresh: mockPubadsRefresh
-    })
-
+    }),
+    defineSlot: jest.fn(() => ({
+      addService: jest.fn()
+    })),
+    enableServices: jest.fn()
   }
   return window.googletag
 }
