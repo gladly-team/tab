@@ -19,8 +19,7 @@ class Ad extends React.Component {
   render () {
     const adStyle = Object.assign(
       {},
-      this.props.style,
-      {width: this.props.width, height: this.props.height}
+      this.props.style
     )
     return (
       <div style={adStyle}>
@@ -33,8 +32,6 @@ class Ad extends React.Component {
 Ad.propTypes = {
   adId: PropTypes.string,
   adSlotId: PropTypes.string.isRequired,
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
   style: PropTypes.object
 }
 

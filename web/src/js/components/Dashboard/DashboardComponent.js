@@ -294,23 +294,23 @@ class Dashboard extends React.Component {
         <Ad
           adId='div-gpt-ad-1464385742501-0'
           adSlotId='/43865596/HBTR'
-          width={300}
-          height={250}
           style={{
             position: 'absolute',
             bottom: 10,
             right: 10,
+            minWidth: 300,
+            overflow: 'visible',
             display: 'block'
           }} />
         <Ad
           adId='div-gpt-ad-1464385677836-0'
           adSlotId='/43865596/HBTL'
-          width={728}
-          height={90}
           style={{
             position: 'absolute',
             bottom: 10,
             right: 320,
+            minWidth: 728,
+            overflow: 'visible',
             display: 'block'
           }} />
         { user && tabId ? <LogTab user={user} tabId={tabId} /> : null }
