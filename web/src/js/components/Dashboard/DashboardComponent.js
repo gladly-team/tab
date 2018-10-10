@@ -291,6 +291,11 @@ class Dashboard extends React.Component {
             : null
         }
         { showNewUserTour ? <NewUserTour user={user} /> : null }
+        {/*
+          For dynamic ad sizing, we may want to move ads into a parent
+          component that's absolutely positioned, then use flex positioning
+          for the ads themselves. This will avoid awkward gaps.
+        */}
         <Ad
           adId='div-gpt-ad-1464385742501-0'
           adSlotId='/43865596/HBTR'
@@ -301,7 +306,13 @@ class Dashboard extends React.Component {
             minWidth: 300,
             overflow: 'visible',
             display: 'block'
-          }} />
+          }}
+          adWrapperStyle={{
+            position: 'absolute',
+            bottom: 0,
+            right: 0
+          }}
+        />
         <Ad
           adId='div-gpt-ad-1464385677836-0'
           adSlotId='/43865596/HBTL'
@@ -312,7 +323,13 @@ class Dashboard extends React.Component {
             minWidth: 728,
             overflow: 'visible',
             display: 'block'
-          }} />
+          }}
+          adWrapperStyle={{
+            position: 'absolute',
+            bottom: 0,
+            right: 0
+          }}
+        />
         { user && tabId ? <LogTab user={user} tabId={tabId} /> : null }
         { user && tabId ? <LogRevenue user={user} tabId={tabId} /> : null }
         { user ? <LogConsentData user={user} /> : null }

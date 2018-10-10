@@ -18,12 +18,12 @@ class Ad extends React.Component {
 
   render () {
     const adStyle = Object.assign(
-      {},
-      this.props.style
-    )
+      {}, this.props.style)
+    const adContainerStyle = Object.assign(
+      {}, this.props.adWrapperStyle)
     return (
       <div style={adStyle}>
-        <div id={this.props.adId} />
+        <div id={this.props.adId} style={adContainerStyle} />
       </div>
     )
   }
@@ -32,11 +32,13 @@ class Ad extends React.Component {
 Ad.propTypes = {
   adId: PropTypes.string,
   adSlotId: PropTypes.string.isRequired,
-  style: PropTypes.object
+  style: PropTypes.object,
+  adWrapperStyle: PropTypes.object
 }
 
 Ad.defaultProps = {
-  style: {}
+  style: {},
+  adWrapperStyle: {}
 }
 
 export default Ad

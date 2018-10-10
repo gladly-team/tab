@@ -17,7 +17,8 @@ function getMockProps () {
   return {
     adId: 'abc123',
     adSlotId: 'def',
-    style: undefined
+    style: undefined,
+    adWrapperStyle: undefined
   }
 }
 
@@ -27,7 +28,7 @@ describe('Ad component', () => {
     const wrapper = shallow(
       <Ad {...mockProps} />
     )
-    expect(wrapper.contains(<div id='abc123' />)).toBe(true)
+    expect(wrapper.find('div#abc123').length).toBe(1)
   })
 
   it('calls to display ad on mount', () => {
