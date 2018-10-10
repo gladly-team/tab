@@ -18,7 +18,7 @@ import {
   signInAnonymously,
   reloadUser
 } from 'js/authentication/user'
-import environment from '../../relay-env'
+import environment from 'js/relay-env'
 import CreateNewUserMutation from 'js/mutations/CreateNewUserMutation'
 import LogEmailVerifiedMutation from 'js/mutations/LogEmailVerifiedMutation'
 import {

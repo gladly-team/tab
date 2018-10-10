@@ -21,14 +21,14 @@ jest.mock('js/navigation/navigation')
 
 describe('VerifyEmailMessage tests', function () {
   it('renders without error', function () {
-    const VerifyEmailMessage = require('../VerifyEmailMessage').default
+    const VerifyEmailMessage = require('js/components/Authentication/VerifyEmailMessage').default
     shallow(
       <VerifyEmailMessage />
     )
   })
 
   it('restarts the auth flow when clicking cancel button', done => {
-    const VerifyEmailMessage = require('../VerifyEmailMessage').default
+    const VerifyEmailMessage = require('js/components/Authentication/VerifyEmailMessage').default
 
     // @material-ui-1-todo: remove MuiThemeProvider wrapper
     const wrapper = mount(
@@ -53,7 +53,7 @@ describe('VerifyEmailMessage tests', function () {
   })
 
   it('the "resend email" button calls to send a new verification email', done => {
-    const VerifyEmailMessage = require('../VerifyEmailMessage').default
+    const VerifyEmailMessage = require('js/components/Authentication/VerifyEmailMessage').default
 
     // @material-ui-1-todo: remove MuiThemeProvider wrapper
     const wrapper = mount(
@@ -75,7 +75,7 @@ describe('VerifyEmailMessage tests', function () {
   })
 
   it('matches expected snapshot', function () {
-    const VerifyEmailMessage = require('../VerifyEmailMessage').default
+    const VerifyEmailMessage = require('js/components/Authentication/VerifyEmailMessage').default
     const wrapper = shallow(
       <VerifyEmailMessage />
     )

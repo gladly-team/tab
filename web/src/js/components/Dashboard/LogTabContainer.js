@@ -3,7 +3,7 @@ import {
   graphql
 } from 'react-relay'
 
-import LogTab from './LogTabComponent'
+import LogTab from 'js/components/Dashboard/LogTabComponent'
 
 export default createFragmentContainer(LogTab, {
   user: graphql`

@@ -3,7 +3,7 @@ import {
   graphql
 } from 'react-relay'
 
-import BookmarksWidget from './BookmarksWidgetComponent'
+import BookmarksWidget from 'js/components/Widget/Widgets/Bookmarks/BookmarksWidgetComponent'
 
 export default createFragmentContainer(BookmarksWidget, {
   widget: graphql`

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 import RaisedButton from 'material-ui/RaisedButton'
 import HeartBorderIcon from 'material-ui/svg-icons/action/favorite-border'
-import Stat from './StatComponent'
+import Stat from 'js/components/Settings/Profile/StatComponent'
 import { Paper } from 'material-ui'
 import appTheme, {
   lighterTextColor

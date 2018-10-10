@@ -42,14 +42,14 @@ const mockProps = {
 
 describe('Clock widget  component', () => {
   it('renders without error', () => {
-    const ClockWidgetComponent = require('../ClockWidgetComponent').default
+    const ClockWidgetComponent = require('js/components/Widget/Widgets/Clock/ClockWidgetComponent').default
     shallow(
       <ClockWidgetComponent {...mockProps} />
     )
   })
 
   it('shows the correct time', () => {
-    const ClockWidgetComponent = require('../ClockWidgetComponent').default
+    const ClockWidgetComponent = require('js/components/Widget/Widgets/Clock/ClockWidgetComponent').default
     const mockNow = '2018-05-15T14:31:43.130'
     MockDate.set(moment(mockNow))
     const wrapper = shallow(
@@ -59,7 +59,7 @@ describe('Clock widget  component', () => {
   })
 
   it('shows the correct date', () => {
-    const ClockWidgetComponent = require('../ClockWidgetComponent').default
+    const ClockWidgetComponent = require('js/components/Widget/Widgets/Clock/ClockWidgetComponent').default
     const mockNow = '2018-05-15T14:31:43.130'
     MockDate.set(moment(mockNow))
     const wrapper = shallow(
@@ -69,7 +69,7 @@ describe('Clock widget  component', () => {
   })
 
   it('shows the correct time in 24h format in the morning', () => {
-    const ClockWidgetComponent = require('../ClockWidgetComponent').default
+    const ClockWidgetComponent = require('js/components/Widget/Widgets/Clock/ClockWidgetComponent').default
     const props = Object.assign({}, mockProps)
     props.widget.config = JSON.stringify({
       format24: true
@@ -83,7 +83,7 @@ describe('Clock widget  component', () => {
   })
 
   it('shows the correct time in 24h format in the afternoon', () => {
-    const ClockWidgetComponent = require('../ClockWidgetComponent').default
+    const ClockWidgetComponent = require('js/components/Widget/Widgets/Clock/ClockWidgetComponent').default
     const props = Object.assign({}, mockProps)
     props.widget.config = JSON.stringify({
       format24: true
@@ -97,7 +97,7 @@ describe('Clock widget  component', () => {
   })
 
   it('midnight is correct in 24h format', () => {
-    const ClockWidgetComponent = require('../ClockWidgetComponent').default
+    const ClockWidgetComponent = require('js/components/Widget/Widgets/Clock/ClockWidgetComponent').default
     const props = Object.assign({}, mockProps)
     props.widget.config = JSON.stringify({
       format24: true

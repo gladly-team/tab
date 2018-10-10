@@ -2,7 +2,7 @@
 
 import {
   STORAGE_KEY_USERNAME
-} from '../../constants'
+} from 'js/constants'
 import {
   absoluteUrl,
   enterUsernameURL
@@ -29,12 +29,12 @@ describe('authentication user module tests', () => {
   test('getUsername fetches the username from localStorage', () => {
     const localStorageMgr = require('js/utils/localstorage-mgr').default
     localStorageMgr.setItem(STORAGE_KEY_USERNAME, 'BobMIII')
-    const getUsername = require('../user').getUsername
+    const getUsername = require('js/authentication/user').getUsername
     expect(getUsername()).toBe('BobMIII')
   })
 
   test('setUsernameInLocalStorage works as expected', () => {
-    const setUsernameInLocalStorage = require('../user').setUsernameInLocalStorage
+    const setUsernameInLocalStorage = require('js/authentication/user').setUsernameInLocalStorage
     setUsernameInLocalStorage('MichaelC')
     const localStorageMgr = require('js/utils/localstorage-mgr').default
     expect(localStorageMgr.getItem(STORAGE_KEY_USERNAME)).toBe('MichaelC')
@@ -45,7 +45,7 @@ describe('authentication user module tests', () => {
     const localStorageMgr = require('js/utils/localstorage-mgr').default
     localStorageMgr.setItem(STORAGE_KEY_USERNAME, 'PaulM')
 
-    const formatUser = require('../user').formatUser
+    const formatUser = require('js/authentication/user').formatUser
     const firebaseUser = {
       uid: 'abc123',
       email: 'ostrichcoat@example.com',
@@ -78,7 +78,7 @@ describe('authentication user module tests', () => {
       getIdToken: jest.fn(() => 'fake-token-123')
     })
 
-    const getCurrentUser = require('../user').getCurrentUser
+    const getCurrentUser = require('js/authentication/user').getCurrentUser
     const currentUser = await getCurrentUser()
     expect(currentUser).toEqual({
       id: 'xyz987',
@@ -95,7 +95,7 @@ describe('authentication user module tests', () => {
     const __setFirebaseUser = require('firebase/app').__setFirebaseUser
     __setFirebaseUser(null)
 
-    const getCurrentUser = require('../user').getCurrentUser
+    const getCurrentUser = require('js/authentication/user').getCurrentUser
     const currentUser = await getCurrentUser()
     expect(currentUser).toBeNull()
   })
@@ -111,7 +111,7 @@ describe('authentication user module tests', () => {
     process.env.MOCK_DEV_AUTHENTICATION = 'true'
     process.env.NODE_ENV = 'development'
 
-    const getCurrentUser = require('../user').getCurrentUser
+    const getCurrentUser = require('js/authentication/user').getCurrentUser
     const currentUser = await getCurrentUser()
     expect(currentUser).toEqual({
       id: 'abcdefghijklmno',
@@ -123,7 +123,7 @@ describe('authentication user module tests', () => {
   })
 
   test('getCurrentUserListener calls listeners with the Firebase user object when the auth state changes', done => {
-    const getCurrentUserListener = require('../user').getCurrentUserListener
+    const getCurrentUserListener = require('js/authentication/user').getCurrentUserListener
     getCurrentUserListener().onAuthStateChanged(currentUser => {
       expect(currentUser).toMatchObject({
         uid: 'xyz987',
@@ -150,7 +150,7 @@ describe('authentication user module tests', () => {
     process.env.MOCK_DEV_AUTHENTICATION = 'true'
     process.env.NODE_ENV = 'development'
 
-    const getCurrentUserListener = require('../user').getCurrentUserListener
+    const getCurrentUserListener = require('js/authentication/user').getCurrentUserListener
     getCurrentUserListener().onAuthStateChanged(currentUser => {
       expect(currentUser).toMatchObject({
         uid: 'abcdefghijklmno',
@@ -175,7 +175,7 @@ describe('authentication user module tests', () => {
       getIdToken: jest.fn(() => 'fake-token-123')
     })
 
-    const getUserToken = require('../user').getUserToken
+    const getUserToken = require('js/authentication/user').getUserToken
     const token = await getUserToken()
     expect(token).toEqual('fake-token-123')
   })
@@ -186,7 +186,7 @@ describe('authentication user module tests', () => {
     const __setFirebaseUser = require('firebase/app').__setFirebaseUser
     __setFirebaseUser(null)
 
-    const getUserToken = require('../user').getUserToken
+    const getUserToken = require('js/authentication/user').getUserToken
     const token = await getUserToken()
     expect(token).toBeNull()
   })
@@ -194,7 +194,7 @@ describe('authentication user module tests', () => {
   test('logout calls Firebase\'s sign out method', async () => {
     expect.assertions(1)
     const firebase = require('firebase/app')
-    const logout = require('../user').logout
+    const logout = require('js/authentication/user').logout
     await logout()
     expect(firebase.auth().signOut).toHaveBeenCalledTimes(1)
   })
@@ -212,7 +212,7 @@ describe('authentication user module tests', () => {
       getIdToken: mockFirebaseGetIdToken
     })
 
-    const getUserToken = require('../user').getUserToken
+    const getUserToken = require('js/authentication/user').getUserToken
     await getUserToken(true)
     expect(mockFirebaseGetIdToken).toHaveBeenCalledWith(true)
   })
@@ -230,7 +230,7 @@ describe('authentication user module tests', () => {
       getIdToken: mockFirebaseGetIdToken
     })
 
-    const getUserToken = require('../user').getUserToken
+    const getUserToken = require('js/authentication/user').getUserToken
     await getUserToken()
     expect(mockFirebaseGetIdToken).toHaveBeenCalledWith(undefined)
   })
@@ -238,7 +238,7 @@ describe('authentication user module tests', () => {
   test('removes some localStorage items on logout', async () => {
     expect.assertions(14)
     const localStorageMgr = require('js/utils/localstorage-mgr').default
-    const logout = require('../user').logout
+    const logout = require('js/authentication/user').logout
     await logout()
     expect(localStorageMgr.removeItem)
       .toHaveBeenCalledWith('tab.user.username')
@@ -284,7 +284,7 @@ describe('authentication user module tests', () => {
       sendEmailVerification: mockSendEmailVerification
     })
 
-    const sendVerificationEmail = require('../user').sendVerificationEmail
+    const sendVerificationEmail = require('js/authentication/user').sendVerificationEmail
     const response = await sendVerificationEmail()
     expect(mockSendEmailVerification).toHaveBeenCalledWith({
       // Make sure post-verification page redirect is correct.
@@ -304,7 +304,7 @@ describe('authentication user module tests', () => {
     const __setFirebaseUser = require('firebase/app').__setFirebaseUser
     __setFirebaseUser(null)
 
-    const sendVerificationEmail = require('../user').sendVerificationEmail
+    const sendVerificationEmail = require('js/authentication/user').sendVerificationEmail
     const response = await sendVerificationEmail()
     expect(mockSendEmailVerification).not.toHaveBeenCalled()
     expect(response).toBe(false)
@@ -332,7 +332,7 @@ describe('authentication user module tests', () => {
       sendEmailVerification: mockSendEmailVerification
     })
 
-    const sendVerificationEmail = require('../user').sendVerificationEmail
+    const sendVerificationEmail = require('js/authentication/user').sendVerificationEmail
     const response = await sendVerificationEmail()
     expect(response).toBe(false)
   })
@@ -352,7 +352,7 @@ describe('authentication user module tests', () => {
       emailVerified: false,
       getIdToken: jest.fn(() => 'fake-token-123')
     })
-    const signInAnonymously = require('../user').signInAnonymously
+    const signInAnonymously = require('js/authentication/user').signInAnonymously
     const response = await signInAnonymously()
     expect(response).toMatchObject({
       id: 'xyz987',
@@ -381,7 +381,7 @@ describe('authentication user module tests', () => {
       reload: mockReload
     })
 
-    const reloadUser = require('../user').reloadUser
+    const reloadUser = require('js/authentication/user').reloadUser
     await reloadUser()
     expect(mockReload).toHaveBeenCalledTimes(1)
   })
@@ -397,7 +397,7 @@ describe('authentication user module tests', () => {
     const mockReload = jest.fn()
     __setFirebaseUser(null)
 
-    const reloadUser = require('../user').reloadUser
+    const reloadUser = require('js/authentication/user').reloadUser
     await reloadUser()
     expect(mockReload).not.toHaveBeenCalled()
   })

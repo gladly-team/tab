@@ -4,7 +4,7 @@ import {
   STORAGE_LOCATION_COUNTRY_ISO_CODE,
   STORAGE_LOCATION_IS_IN_EU,
   STORAGE_LOCATION_QUERY_TIME
-} from '../constants'
+} from 'js/constants'
 import { isNil } from 'lodash/lang'
 import logger from 'js/utils/logger'
 

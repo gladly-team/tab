@@ -2,10 +2,10 @@
 
 import React from 'react'
 import {QueryRenderer} from 'react-relay'
-import environment from '../../../../relay-env'
+import environment from 'js/relay-env'
 
-import SettingsChildWrapper from '../SettingsChildWrapperComponent'
-import ProfileInviteFriend from './ProfileInviteFriendContainer'
+import SettingsChildWrapper from 'js/components/Settings/SettingsChildWrapperComponent'
+import ProfileInviteFriend from 'js/components/Settings/Profile/ProfileInviteFriendContainer'
 import AuthUserComponent from 'js/components/General/AuthUserComponent'
 import ErrorMessage from 'js/components/General/ErrorMessage'
 

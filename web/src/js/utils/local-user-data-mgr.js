@@ -7,7 +7,7 @@ import {
   STORAGE_APPROX_EXTENSION_INSTALL_TIME,
   STORAGE_TABS_RECENT_DAY_COUNT,
   STORAGE_TABS_LAST_TAB_OPENED_DATE
-} from '../constants'
+} from 'js/constants'
 
 /**
  * Get the count of tabs opened today (UTC day) from localStorage. If no

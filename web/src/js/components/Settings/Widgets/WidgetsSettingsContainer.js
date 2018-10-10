@@ -3,7 +3,7 @@ import {
   graphql
 } from 'react-relay'
 
-import WidgetsSettings from './WidgetsSettingsComponent'
+import WidgetsSettings from 'js/components/Settings/Widgets/WidgetsSettingsComponent'
 
 export default createFragmentContainer(WidgetsSettings, {
   user: graphql`

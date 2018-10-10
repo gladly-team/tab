@@ -16,7 +16,7 @@ afterEach(() => {
 
 describe('LogConsentDataComponent', function () {
   it('renders without error and does not have any DOM elements', () => {
-    const LogConsentDataComponent = require('../LogConsentDataComponent').default
+    const LogConsentDataComponent = require('js/components/Dashboard/LogConsentDataComponent').default
     const wrapper = shallow(
       <LogConsentDataComponent
         user={{ id: 'abcdefghijklmno' }}
@@ -33,7 +33,7 @@ describe('LogConsentDataComponent', function () {
     const isInEuropeanUnion = require('js/utils/client-location').isInEuropeanUnion
     isInEuropeanUnion.mockResolvedValue(true)
 
-    const LogConsentDataComponent = require('../LogConsentDataComponent').default
+    const LogConsentDataComponent = require('js/components/Dashboard/LogConsentDataComponent').default
     const wrapper = shallow(
       <LogConsentDataComponent
         user={{ id: 'abcdefghijklmno' }}
@@ -51,7 +51,7 @@ describe('LogConsentDataComponent', function () {
     const isInEuropeanUnion = require('js/utils/client-location').isInEuropeanUnion
     isInEuropeanUnion.mockResolvedValue(false)
 
-    const LogConsentDataComponent = require('../LogConsentDataComponent').default
+    const LogConsentDataComponent = require('js/components/Dashboard/LogConsentDataComponent').default
     const wrapper = shallow(
       <LogConsentDataComponent
         user={{ id: 'abcdefghijklmno' }}
@@ -78,7 +78,7 @@ describe('LogConsentDataComponent', function () {
     const isInEuropeanUnion = require('js/utils/client-location').isInEuropeanUnion
     isInEuropeanUnion.mockResolvedValue(true)
 
-    const LogConsentDataComponent = require('../LogConsentDataComponent').default
+    const LogConsentDataComponent = require('js/components/Dashboard/LogConsentDataComponent').default
     const wrapper = shallow(
       <LogConsentDataComponent
         user={{ id: 'abcdefghijklmno' }}
@@ -126,7 +126,7 @@ describe('LogConsentDataComponent', function () {
     const isInEuropeanUnion = require('js/utils/client-location').isInEuropeanUnion
     isInEuropeanUnion.mockResolvedValue(true)
 
-    const LogConsentDataComponent = require('../LogConsentDataComponent').default
+    const LogConsentDataComponent = require('js/components/Dashboard/LogConsentDataComponent').default
     const wrapper = shallow(
       <LogConsentDataComponent
         user={{ id: 'xyz123' }}
@@ -152,7 +152,7 @@ describe('LogConsentDataComponent', function () {
     const isInEuropeanUnion = require('js/utils/client-location').isInEuropeanUnion
     isInEuropeanUnion.mockResolvedValue(true)
 
-    const LogConsentDataComponent = require('../LogConsentDataComponent').default
+    const LogConsentDataComponent = require('js/components/Dashboard/LogConsentDataComponent').default
     const wrapper = shallow(
       <LogConsentDataComponent
         user={{ id: 'abcdefghijklmno' }}

@@ -1,10 +1,10 @@
 /* eslint no-useless-escape: 0 */
 
-import localStorageMgr from './localstorage-mgr'
+import localStorageMgr from 'js/utils/localstorage-mgr'
 import {
   STORAGE_REFERRAL_DATA_REFERRING_CHANNEL,
   STORAGE_REFERRAL_DATA_REFERRING_USER
-} from '../constants'
+} from 'js/constants'
 import XRegExp from 'xregexp'
 import qs from 'qs'
 

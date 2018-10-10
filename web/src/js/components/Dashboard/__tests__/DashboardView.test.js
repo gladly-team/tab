@@ -5,12 +5,12 @@ import {
   mount,
   shallow
 } from 'enzyme'
-import DashboardView from '../DashboardView'
+import DashboardView from 'js/components/Dashboard/DashboardView'
 import AuthUserComponent from 'js/components/General/AuthUserComponent'
 import {
   QueryRenderer
 } from 'react-relay'
-import DashboardContainer from '../DashboardContainer'
+import DashboardContainer from 'js/components/Dashboard/DashboardContainer'
 import ErrorMessage from 'js/components/General/ErrorMessage'
 import { createNewUser } from 'js/authentication/helpers'
 import {
@@ -19,13 +19,13 @@ import {
 } from 'js/navigation/navigation'
 import {
   ERROR_USER_DOES_NOT_EXIST
-} from '../../../constants'
+} from 'js/constants'
 
 jest.mock('js/components/General/AuthUserComponent')
 jest.mock('js/components/General/ErrorMessage')
 jest.mock('js/analytics/logEvent')
 jest.mock('react-relay')
-jest.mock('../DashboardContainer')
+jest.mock('js/components/Dashboard/DashboardContainer')
 jest.mock('js/authentication/helpers')
 jest.mock('js/navigation/navigation')
 

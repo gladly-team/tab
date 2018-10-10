@@ -3,7 +3,7 @@ import {
   graphql
 } from 'react-relay'
 
-import UserBackgroundImage from './UserBackgroundImageComponent'
+import UserBackgroundImage from 'js/components/User/UserBackgroundImageComponent'
 
 export default createFragmentContainer(UserBackgroundImage, {
   user: graphql`

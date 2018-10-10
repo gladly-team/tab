@@ -69,7 +69,7 @@ afterEach(() => {
 
 describe('Authentication.js tests', function () {
   it('renders without error', () => {
-    const Authentication = require('../Authentication').default
+    const Authentication = require('js/components/Authentication/Authentication').default
     const mockProps = MockProps()
     shallow(
       <Authentication {...mockProps} />
@@ -79,7 +79,7 @@ describe('Authentication.js tests', function () {
   it('displays the endorsement quote', async () => {
     expect.assertions(1)
 
-    const Authentication = require('../Authentication').default
+    const Authentication = require('js/components/Authentication/Authentication').default
     const mockProps = MockProps()
     const wrapper = shallow(
       <Authentication {...mockProps} />
@@ -98,7 +98,7 @@ describe('Authentication.js tests', function () {
   it('typically does not display the sign-in explanation', async () => {
     expect.assertions(1)
 
-    const Authentication = require('../Authentication').default
+    const Authentication = require('js/components/Authentication/Authentication').default
     const mockProps = MockProps()
     const wrapper = shallow(
       <Authentication {...mockProps} />
@@ -117,7 +117,7 @@ describe('Authentication.js tests', function () {
   it('displays the sign-in explanation (and hides the quote) when it is a mandatory sign-in', async () => {
     expect.assertions(2)
 
-    const Authentication = require('../Authentication').default
+    const Authentication = require('js/components/Authentication/Authentication').default
     const mockProps = MockProps()
     mockProps.location.pathname = '/newtab/auth/'
 
@@ -153,7 +153,7 @@ describe('Authentication.js tests', function () {
   it('does not display the sign-in explanation when it is a mandatory sign-in but we\'re on the iframe message page', async () => {
     expect.assertions(2)
 
-    const Authentication = require('../Authentication').default
+    const Authentication = require('js/components/Authentication/Authentication').default
     const mockProps = MockProps()
     mockProps.location.pathname = '/newtab/auth/welcome/'
 
@@ -188,7 +188,7 @@ describe('Authentication.js tests', function () {
 
   it('calls the `navigateToAuthStep` method on mount', async () => {
     expect.assertions(1)
-    const Authentication = require('../Authentication').default
+    const Authentication = require('js/components/Authentication/Authentication').default
     const mockProps = MockProps()
     const wrapper = shallow(
       <Authentication {...mockProps} />
@@ -214,7 +214,7 @@ describe('Authentication.js tests', function () {
       emailVerified: true
     })
 
-    const Authentication = require('../Authentication').default
+    const Authentication = require('js/components/Authentication/Authentication').default
     const mockProps = MockProps()
     const wrapper = shallow(
       <Authentication {...mockProps} />
@@ -240,7 +240,7 @@ describe('Authentication.js tests', function () {
       emailVerified: true
     })
 
-    const Authentication = require('../Authentication').default
+    const Authentication = require('js/components/Authentication/Authentication').default
     const mockProps = MockProps()
     const wrapper = shallow(
       <Authentication {...mockProps} />
@@ -270,7 +270,7 @@ describe('Authentication.js tests', function () {
       noredirect: 'true'
     })
 
-    const Authentication = require('../Authentication').default
+    const Authentication = require('js/components/Authentication/Authentication').default
     const mockProps = MockProps()
     const wrapper = shallow(
       <Authentication {...mockProps} />
@@ -300,7 +300,7 @@ describe('Authentication.js tests', function () {
       noredirect: 'something'
     })
 
-    const Authentication = require('../Authentication').default
+    const Authentication = require('js/components/Authentication/Authentication').default
     const mockProps = MockProps()
     const wrapper = shallow(
       <Authentication {...mockProps} />
@@ -326,7 +326,7 @@ describe('Authentication.js tests', function () {
       emailVerified: false
     })
 
-    const Authentication = require('../Authentication').default
+    const Authentication = require('js/components/Authentication/Authentication').default
     const mockProps = MockProps()
     const wrapper = shallow(
       <Authentication {...mockProps} />
@@ -341,7 +341,7 @@ describe('Authentication.js tests', function () {
 
   it('does not redirect at all if the URL is /auth/action/*', async () => {
     expect.assertions(3)
-    const Authentication = require('../Authentication').default
+    const Authentication = require('js/components/Authentication/Authentication').default
     const mockProps = MockProps()
     mockProps.location.pathname = '/auth/action/verify/'
 
@@ -366,7 +366,7 @@ describe('Authentication.js tests', function () {
   })
 
   it('renders as expected prior to navigating', () => {
-    const Authentication = require('../Authentication').default
+    const Authentication = require('js/components/Authentication/Authentication').default
     const mockProps = MockProps()
     const wrapper = shallow(
       <Authentication {...mockProps} />
@@ -375,7 +375,7 @@ describe('Authentication.js tests', function () {
   })
 
   it('after sign-in, goes to missing email message screen if no email address', () => {
-    const Authentication = require('../Authentication').default
+    const Authentication = require('js/components/Authentication/Authentication').default
     const mockProps = MockProps()
 
     // Args for onSignInSuccess
@@ -441,7 +441,7 @@ describe('Authentication.js tests', function () {
 
     sendVerificationEmail.mockImplementation(() => Promise.resolve(true))
 
-    const Authentication = require('../Authentication').default
+    const Authentication = require('js/components/Authentication/Authentication').default
     const mockProps = MockProps()
     const wrapper = shallow(
       <Authentication {...mockProps} />
@@ -490,7 +490,7 @@ describe('Authentication.js tests', function () {
       justCreated: true
     })
 
-    const Authentication = require('../Authentication').default
+    const Authentication = require('js/components/Authentication/Authentication').default
     const mockProps = MockProps()
     const wrapper = shallow(
       <Authentication {...mockProps} />

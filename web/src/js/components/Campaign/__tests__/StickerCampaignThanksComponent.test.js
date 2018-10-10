@@ -15,14 +15,14 @@ const mockUserData = {
 
 describe('Sticker campaign component', function () {
   it('renders without error', function () {
-    const StickerCampaignThanksComponent = require('../StickerCampaignThanksComponent').default
+    const StickerCampaignThanksComponent = require('js/components/Campaign/StickerCampaignThanksComponent').default
     shallow(
       <StickerCampaignThanksComponent user={mockUserData} />
     )
   })
 
   it('does not show the success button when there are fewer than 2 active recruits', function () {
-    const StickerCampaignThanksComponent = require('../StickerCampaignThanksComponent').default
+    const StickerCampaignThanksComponent = require('js/components/Campaign/StickerCampaignThanksComponent').default
     const userData = {
       username: 'jbond',
       recruits: {
@@ -37,7 +37,7 @@ describe('Sticker campaign component', function () {
   })
 
   it('shows the success button when there are at least 2 active recruits', function () {
-    const StickerCampaignThanksComponent = require('../StickerCampaignThanksComponent').default
+    const StickerCampaignThanksComponent = require('js/components/Campaign/StickerCampaignThanksComponent').default
     const userData = {
       username: 'jbond',
       recruits: {

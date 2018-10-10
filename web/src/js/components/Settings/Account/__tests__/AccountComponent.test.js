@@ -18,7 +18,7 @@ const getMockUserData = () => {
 
 describe('Account component', () => {
   it('renders without error', () => {
-    const AccountComponent = require('../AccountComponent').default
+    const AccountComponent = require('js/components/Settings/Account/AccountComponent').default
     const userData = getMockUserData()
     shallow(
       <AccountComponent user={userData} />
@@ -30,7 +30,7 @@ describe('Account component', () => {
     const isInEuropeanUnion = require('js/utils/client-location').isInEuropeanUnion
     isInEuropeanUnion.mockResolvedValue(true)
 
-    const AccountComponent = require('../AccountComponent').default
+    const AccountComponent = require('js/components/Settings/Account/AccountComponent').default
     const wrapper = shallow(
       <AccountComponent
         user={getMockUserData()}
@@ -40,7 +40,7 @@ describe('Account component', () => {
     wrapper.update()
 
     // Find the data privacy choices setting
-    const AccountItem = require('../AccountComponent').AccountItem
+    const AccountItem = require('js/components/Settings/Account/AccountComponent').AccountItem
     const accountItems = wrapper.find(AccountItem)
     var containsDataPrivacyOption = false
     accountItems.forEach(item => {
@@ -56,7 +56,7 @@ describe('Account component', () => {
     const isInEuropeanUnion = require('js/utils/client-location').isInEuropeanUnion
     isInEuropeanUnion.mockResolvedValue(false)
 
-    const AccountComponent = require('../AccountComponent').default
+    const AccountComponent = require('js/components/Settings/Account/AccountComponent').default
     const wrapper = shallow(
       <AccountComponent
         user={getMockUserData()}
@@ -66,7 +66,7 @@ describe('Account component', () => {
     wrapper.update()
 
     // Try to find the data privacy choices setting
-    const AccountItem = require('../AccountComponent').AccountItem
+    const AccountItem = require('js/components/Settings/Account/AccountComponent').AccountItem
     const accountItems = wrapper.find(AccountItem)
     var containsDataPrivacyOption = false
     accountItems.forEach(item => {
@@ -82,7 +82,7 @@ describe('Account component', () => {
     const isInEuropeanUnion = require('js/utils/client-location').isInEuropeanUnion
     isInEuropeanUnion.mockResolvedValue(true)
 
-    const AccountComponent = require('../AccountComponent').default
+    const AccountComponent = require('js/components/Settings/Account/AccountComponent').default
     const wrapper = shallow(
       <AccountComponent
         user={getMockUserData()}
@@ -91,7 +91,7 @@ describe('Account component', () => {
     await wrapper.instance().componentDidMount()
     wrapper.update()
 
-    const LogConsentData = require('../../../Dashboard/LogConsentDataContainer').default
+    const LogConsentData = require('js/components/Dashboard/LogConsentDataContainer').default
     expect(wrapper.find(LogConsentData).length > 0).toBe(true)
   })
 
@@ -99,7 +99,7 @@ describe('Account component', () => {
     const isInEuropeanUnion = require('js/utils/client-location').isInEuropeanUnion
     isInEuropeanUnion.mockResolvedValue(false)
 
-    const AccountComponent = require('../AccountComponent').default
+    const AccountComponent = require('js/components/Settings/Account/AccountComponent').default
     const wrapper = shallow(
       <AccountComponent
         user={getMockUserData()}
@@ -108,12 +108,12 @@ describe('Account component', () => {
     await wrapper.instance().componentDidMount()
     wrapper.update()
 
-    const LogConsentData = require('../../../Dashboard/LogConsentDataContainer').default
+    const LogConsentData = require('js/components/Dashboard/LogConsentDataContainer').default
     expect(wrapper.find(LogConsentData).length > 0).toBe(false)
   })
 
   it('displays the username', () => {
-    const AccountComponent = require('../AccountComponent').default
+    const AccountComponent = require('js/components/Settings/Account/AccountComponent').default
     const userData = getMockUserData()
     const wrapper = mount(
       <AccountComponent user={userData} />
@@ -124,7 +124,7 @@ describe('Account component', () => {
   })
 
   it('displays the email address', () => {
-    const AccountComponent = require('../AccountComponent').default
+    const AccountComponent = require('js/components/Settings/Account/AccountComponent').default
     const userData = getMockUserData()
     const wrapper = mount(
       <AccountComponent user={userData} />
@@ -135,7 +135,7 @@ describe('Account component', () => {
   })
 
   it('displays a placeholder when there is no username', () => {
-    const AccountComponent = require('../AccountComponent').default
+    const AccountComponent = require('js/components/Settings/Account/AccountComponent').default
     const userData = getMockUserData()
     delete userData.username
     const wrapper = mount(
@@ -147,7 +147,7 @@ describe('Account component', () => {
   })
 
   it('displays a placeholder when there is no email address', () => {
-    const AccountComponent = require('../AccountComponent').default
+    const AccountComponent = require('js/components/Settings/Account/AccountComponent').default
     const userData = getMockUserData()
     delete userData.email
     const wrapper = mount(

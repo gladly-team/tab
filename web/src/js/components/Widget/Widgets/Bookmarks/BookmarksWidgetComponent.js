@@ -2,10 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import WidgetSharedSpace from 'js/components/General/WidgetSharedSpace'
-import WidgetScrollSection from '../../WidgetScrollSection'
-import EmptyWidgetMsg from '../../EmptyWidgetMsg'
-import BookmarkChip from './BookmarkChip'
-import AddBookmarkForm from './AddBookmarkForm'
+import WidgetScrollSection from 'js/components/Widget/WidgetScrollSection'
+import EmptyWidgetMsg from 'js/components/Widget/EmptyWidgetMsg'
+import BookmarkChip from 'js/components/Widget/Widgets/Bookmarks/BookmarkChip'
+import AddBookmarkForm from 'js/components/Widget/Widgets/Bookmarks/AddBookmarkForm'
 import UpdateWidgetDataMutation from 'js/mutations/UpdateWidgetDataMutation'
 
 class BookmarksWidget extends React.Component {

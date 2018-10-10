@@ -11,7 +11,7 @@ import appTheme, {
   alternateAccentColor,
   lighterTextColor
 } from 'js/theme/default'
-import Logo from '../Logo/Logo'
+import Logo from 'js/components/Logo/Logo'
 
 const styles = theme => ({
   inputInkbar: {

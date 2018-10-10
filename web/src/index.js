@@ -2,7 +2,7 @@ import Raven from 'raven-js'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { AppContainer } from 'react-hot-loader'
-import Root from './root'
+import Root from 'js/root'
 import { initializeFirebase } from 'js/authentication/firebaseConfig'
 import { getUsername } from 'js/authentication/user'
 

@@ -1,9 +1,9 @@
 
-import getPrebidPbjs from './getPrebidPbjs'
+import getPrebidPbjs from 'js/ads/prebid/getPrebidPbjs'
 import { isInEuropeanUnion } from 'js/utils/client-location'
 import {
   CONSENT_MANAGEMENT_TIMEOUT
-} from '../adSettings'
+} from 'js/ads/adSettings'
 
 /**
  * Return a promise that resolves when the Prebid auction is

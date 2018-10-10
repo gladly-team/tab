@@ -8,7 +8,7 @@ import { cloneDeep } from 'lodash/lang'
 import Joyride from 'react-joyride'
 import Dialog from 'material-ui/Dialog'
 import localStorageMgr from 'js/utils/localstorage-mgr'
-import { STORAGE_NEW_USER_HAS_COMPLETED_TOUR } from '../../../constants'
+import { STORAGE_NEW_USER_HAS_COMPLETED_TOUR } from 'js/constants'
 
 jest.mock('js/utils/localstorage-mgr')
 
@@ -32,14 +32,14 @@ const mockJoyrideCallbackData = {
 
 describe('New user tour component', () => {
   it('renders without error', () => {
-    const NewUserTourComponent = require('../NewUserTourComponent').default
+    const NewUserTourComponent = require('js/components/Dashboard/NewUserTourComponent').default
     shallow(
       <NewUserTourComponent {...mockProps} />
     )
   })
 
   it('shows the intro dialog', () => {
-    const NewUserTourComponent = require('../NewUserTourComponent').default
+    const NewUserTourComponent = require('js/components/Dashboard/NewUserTourComponent').default
     const wrapper = shallow(
       <NewUserTourComponent {...mockProps} />
     )
@@ -49,7 +49,7 @@ describe('New user tour component', () => {
   })
 
   it('does not run the Joyride tour until clicking through the first modal', () => {
-    const NewUserTourComponent = require('../NewUserTourComponent').default
+    const NewUserTourComponent = require('js/components/Dashboard/NewUserTourComponent').default
     const wrapper = shallow(
       <NewUserTourComponent {...mockProps} />
     )
@@ -66,7 +66,7 @@ describe('New user tour component', () => {
   })
 
   it('does not initially show the final dialog', () => {
-    const NewUserTourComponent = require('../NewUserTourComponent').default
+    const NewUserTourComponent = require('js/components/Dashboard/NewUserTourComponent').default
     const wrapper = shallow(
       <NewUserTourComponent {...mockProps} />
     )
@@ -76,7 +76,7 @@ describe('New user tour component', () => {
   })
 
   it('calls localStorage to mark that the user has completed the tour', () => {
-    const NewUserTourComponent = require('../NewUserTourComponent').default
+    const NewUserTourComponent = require('js/components/Dashboard/NewUserTourComponent').default
     const wrapper = shallow(
       <NewUserTourComponent {...mockProps} />
     )

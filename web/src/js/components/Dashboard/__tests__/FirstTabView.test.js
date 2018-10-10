@@ -26,14 +26,14 @@ const mockProps = {}
 
 describe('FirstTabView', function () {
   it('renders without error', () => {
-    const FirstTabView = require('../FirstTabView').default
+    const FirstTabView = require('js/components/Dashboard/FirstTabView').default
     shallow(
       <FirstTabView {...mockProps} />
     )
   })
 
   it('redirects to the dashboard on mount', () => {
-    const FirstTabView = require('../FirstTabView').default
+    const FirstTabView = require('js/components/Dashboard/FirstTabView').default
     shallow(
       <FirstTabView {...mockProps} />
     )
@@ -41,7 +41,7 @@ describe('FirstTabView', function () {
   })
 
   it('calls to set the extension install ID in local storage', () => {
-    const FirstTabView = require('../FirstTabView').default
+    const FirstTabView = require('js/components/Dashboard/FirstTabView').default
     shallow(
       <FirstTabView {...mockProps} />
     )
@@ -49,7 +49,7 @@ describe('FirstTabView', function () {
   })
 
   it('calls to set the extension install time in local storage', () => {
-    const FirstTabView = require('../FirstTabView').default
+    const FirstTabView = require('js/components/Dashboard/FirstTabView').default
     shallow(
       <FirstTabView {...mockProps} />
     )
@@ -57,7 +57,7 @@ describe('FirstTabView', function () {
   })
 
   it('calls to set the user\'s test groups for any ongoing split-tests', () => {
-    const FirstTabView = require('../FirstTabView').default
+    const FirstTabView = require('js/components/Dashboard/FirstTabView').default
     shallow(
       <FirstTabView {...mockProps} />
     )

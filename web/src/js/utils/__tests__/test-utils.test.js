@@ -6,7 +6,7 @@ afterEach(() => {
 
 describe('web test-utils', () => {
   test('mockGoogleTagSlotRenderEndedData returns expected defaults', () => {
-    const mockGoogleTagSlotRenderEndedData = require('../test-utils').mockGoogleTagSlotRenderEndedData
+    const mockGoogleTagSlotRenderEndedData = require('js/utils/test-utils').mockGoogleTagSlotRenderEndedData
     const slotRenderEndedData = mockGoogleTagSlotRenderEndedData()
     expect(slotRenderEndedData).toMatchObject({
       advertiserId: 1234,
@@ -24,7 +24,7 @@ describe('web test-utils', () => {
   })
 
   test('mockGoogleTagSlotRenderEndedData allows overriding slot ID and properties', () => {
-    const mockGoogleTagSlotRenderEndedData = require('../test-utils').mockGoogleTagSlotRenderEndedData
+    const mockGoogleTagSlotRenderEndedData = require('js/utils/test-utils').mockGoogleTagSlotRenderEndedData
     const slotRenderEndedData = mockGoogleTagSlotRenderEndedData('foobar', {
       advertiserId: null,
       campaignId: 1357,
@@ -47,7 +47,7 @@ describe('web test-utils', () => {
   })
 
   test('mockAmazonBidResponse returns expected mock', () => {
-    const mockAmazonBidResponse = require('../test-utils').mockAmazonBidResponse
+    const mockAmazonBidResponse = require('js/utils/test-utils').mockAmazonBidResponse
     const mockAmazonBid = mockAmazonBidResponse({
       slotID: 'abx-xyz'
     })
@@ -64,7 +64,7 @@ describe('web test-utils', () => {
   test('flushAllPromises works as expected', async () => {
     expect.assertions(1)
 
-    const flushAllPromises = require('../test-utils').flushAllPromises
+    const flushAllPromises = require('js/utils/test-utils').flushAllPromises
 
     const anotherTestFunc = jest.fn()
     const testFunc = () => {
@@ -98,7 +98,7 @@ describe('web test-utils', () => {
     expect.assertions(1)
     jest.useFakeTimers()
 
-    const runAsyncTimerLoops = require('../test-utils').runAsyncTimerLoops
+    const runAsyncTimerLoops = require('js/utils/test-utils').runAsyncTimerLoops
 
     const anotherTestFunc = jest.fn()
     var counter = 0
@@ -151,7 +151,7 @@ describe('web test-utils', () => {
     expect.assertions(1)
     jest.useFakeTimers()
 
-    const flushAllPromises = require('../test-utils').flushAllPromises
+    const flushAllPromises = require('js/utils/test-utils').flushAllPromises
 
     const anotherTestFunc = jest.fn()
     var counter = 0

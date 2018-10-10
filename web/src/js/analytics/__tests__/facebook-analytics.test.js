@@ -14,7 +14,7 @@ afterEach(() => {
 
 describe('facebook-analytics tests', () => {
   test('calls FB analytics library as expected', () => {
-    const fbAnalytics = require('../facebook-analytics').default
+    const fbAnalytics = require('js/analytics/facebook-analytics').default
     fbAnalytics('some', 'event', {my: 'data'})
     expect(window.fbq).toHaveBeenCalledWith('some', 'event', {my: 'data'})
   })
@@ -23,7 +23,7 @@ describe('facebook-analytics tests', () => {
     window.fbq.mockImplementationOnce(() => {
       throw new Error('FB analytics oopsie')
     })
-    const fbAnalytics = require('../facebook-analytics').default
+    const fbAnalytics = require('js/analytics/facebook-analytics').default
 
     // Suppress an expected console error
     jest.spyOn(global.console, 'error')

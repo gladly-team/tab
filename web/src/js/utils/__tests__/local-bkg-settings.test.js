@@ -1,9 +1,9 @@
 /* eslint-env jest */
 
-import localStorageMgr from '../localstorage-mgr'
+import localStorageMgr from 'js/utils/localstorage-mgr'
 
-jest.mock('../extension-messenger')
-jest.mock('../localstorage-mgr')
+jest.mock('js/utils/extension-messenger')
+jest.mock('js/utils/localstorage-mgr')
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -17,7 +17,7 @@ describe('localBkgStorageMgr', () => {
     localStorageMgr.setItem('tab.user.background.imageURL', 'https://static.example.com/my-img.png')
     localStorageMgr.setItem('tab.user.background.customImage', 'https://static.foo.com/some-img.png')
 
-    const getUserBackgroundOption = require('../local-bkg-settings')
+    const getUserBackgroundOption = require('js/utils/local-bkg-settings')
       .getUserBackgroundOption
     expect(getUserBackgroundOption()).toEqual('photo')
   })
@@ -29,7 +29,7 @@ describe('localBkgStorageMgr', () => {
     localStorageMgr.setItem('tab.user.background.imageURL', 'https://static.example.com/my-img.png')
     localStorageMgr.setItem('tab.user.background.customImage', 'https://static.foo.com/some-img.png')
 
-    const getUserBackgroundColor = require('../local-bkg-settings')
+    const getUserBackgroundColor = require('js/utils/local-bkg-settings')
       .getUserBackgroundColor
     expect(getUserBackgroundColor()).toEqual('#FF0000')
   })
@@ -41,7 +41,7 @@ describe('localBkgStorageMgr', () => {
     localStorageMgr.setItem('tab.user.background.imageURL', 'https://static.example.com/my-img.png')
     localStorageMgr.setItem('tab.user.background.customImage', 'https://static.foo.com/some-img.png')
 
-    const getUserBackgroundImageURL = require('../local-bkg-settings')
+    const getUserBackgroundImageURL = require('js/utils/local-bkg-settings')
       .getUserBackgroundImageURL
     expect(getUserBackgroundImageURL())
       .toEqual('https://static.example.com/my-img.png')
@@ -54,14 +54,14 @@ describe('localBkgStorageMgr', () => {
     localStorageMgr.setItem('tab.user.background.imageURL', 'https://static.example.com/my-img.png')
     localStorageMgr.setItem('tab.user.background.customImage', 'https://static.foo.com/some-img.png')
 
-    const getUserBackgroundCustomImage = require('../local-bkg-settings')
+    const getUserBackgroundCustomImage = require('js/utils/local-bkg-settings')
       .getUserBackgroundCustomImage
     expect(getUserBackgroundCustomImage())
       .toEqual('https://static.foo.com/some-img.png')
   })
 
   it('writes to local storage as expected', () => {
-    const setBackgroundSettings = require('../local-bkg-settings').setBackgroundSettings
+    const setBackgroundSettings = require('js/utils/local-bkg-settings').setBackgroundSettings
     setBackgroundSettings('color', 'https://static.foo.com/blep.png',
       '#000000', 'https://static.example.com/my-img.png')
 
@@ -74,10 +74,10 @@ describe('localBkgStorageMgr', () => {
   })
 
   it('messages the extension parent frame when saving new settings', () => {
-    jest.mock('../extension-messenger')
-    const postBackgroundSettings = require('../extension-messenger').postBackgroundSettings
+    jest.mock('js/utils/extension-messenger')
+    const postBackgroundSettings = require('js/utils/extension-messenger').postBackgroundSettings
 
-    const setBackgroundSettings = require('../local-bkg-settings').setBackgroundSettings
+    const setBackgroundSettings = require('js/utils/local-bkg-settings').setBackgroundSettings
     setBackgroundSettings('color', 'https://static.foo.com/blep.png',
       '#000000', 'https://static.example.com/my-img.png')
 

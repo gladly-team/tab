@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import { isInEuropeanUnion } from 'js/utils/client-location'
 import { displayConsentUI } from 'js/ads/consentManagement'
-import LogConsentData from '../../Dashboard/LogConsentDataContainer'
+import LogConsentData from 'js/components/Dashboard/LogConsentDataContainer'
 
 export const AccountItem = (props) => (
   <div style={{

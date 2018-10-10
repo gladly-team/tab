@@ -9,7 +9,7 @@ import {
   USER_BACKGROUND_OPTION_COLOR,
   USER_BACKGROUND_OPTION_PHOTO,
   USER_BACKGROUND_OPTION_DAILY
-} from '../../constants'
+} from 'js/constants'
 import {
   getUserBackgroundOption,
   getUserBackgroundCustomImage,
@@ -18,7 +18,7 @@ import {
   setBackgroundSettings
 } from 'js/utils/local-bkg-settings'
 import SetBackgroundDailyImageMutation from 'js/mutations/SetBackgroundDailyImageMutation'
-import FadeBackgroundAnimation from '../Background/FadeBackgroundAnimation'
+import FadeBackgroundAnimation from 'js/components/Background/FadeBackgroundAnimation'
 
 /*
  * We want to load the background as quickly as possible,

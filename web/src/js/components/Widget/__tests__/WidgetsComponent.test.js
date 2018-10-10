@@ -43,7 +43,7 @@ const mockShowError = () => {}
 
 describe('Widgets component', function () {
   it('renders without error', function () {
-    const WidgetsComponent = require('../WidgetsComponent').default
+    const WidgetsComponent = require('js/components/Widget/WidgetsComponent').default
     const userData = cloneDeep(mockUserData)
     shallow(
       <WidgetsComponent
@@ -54,7 +54,7 @@ describe('Widgets component', function () {
   })
 
   it('shows the center widgets (i.e. clock) when no campaign is running', function () {
-    const WidgetsComponent = require('../WidgetsComponent').default
+    const WidgetsComponent = require('js/components/Widget/WidgetsComponent').default
     const userData = {
       id: 'user-abc-123',
       activeWidget: null,
@@ -80,7 +80,7 @@ describe('Widgets component', function () {
   })
 
   it('hides the center widgets (i.e. clock) when a campaign is running', function () {
-    const WidgetsComponent = require('../WidgetsComponent').default
+    const WidgetsComponent = require('js/components/Widget/WidgetsComponent').default
     const userData = {
       id: 'user-abc-123',
       activeWidget: null,
@@ -106,7 +106,7 @@ describe('Widgets component', function () {
   })
 
   it('contains an ID for the new user tour (to showcase widgets)', () => {
-    const WidgetsComponent = require('../WidgetsComponent').default
+    const WidgetsComponent = require('js/components/Widget/WidgetsComponent').default
     const wrapper = shallow(
       <WidgetsComponent user={mockUserData} showError={mockShowError} />
     )

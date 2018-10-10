@@ -1,9 +1,9 @@
 
-import getAmazonTag from './getAmazonTag'
+import getAmazonTag from 'js/ads/amazon/getAmazonTag'
 import {
   BIDDER_TIMEOUT,
   CONSENT_MANAGEMENT_TIMEOUT
-} from '../adSettings'
+} from 'js/ads/adSettings'
 
 // Save returned Amazon bids.
 var amazonBids

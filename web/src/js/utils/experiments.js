@@ -5,7 +5,7 @@ import {
 } from 'js/utils/feature-flags'
 import {
   STORAGE_EXPERIMENT_ANON_USER
-} from '../constants'
+} from 'js/constants'
 
 // Anonymous user sign-in test
 export const ANON_USER_GROUP_NO_GROUP = 'none'

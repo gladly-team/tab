@@ -7,20 +7,20 @@ import { cloneDeep } from 'lodash/lang'
 import {
   shallow
 } from 'enzyme'
-import MoneyRaised from '../../MoneyRaised/MoneyRaisedContainer'
-import UserBackgroundImage from '../../User/UserBackgroundImageContainer'
-import UserMenu from '../../User/UserMenuContainer'
-import WidgetsContainer from '../../Widget/WidgetsContainer'
-import CampaignBaseContainer from '../../Campaign/CampaignBaseContainer'
-import Ad from '../../Ad/Ad'
-import LogTab from '../LogTabContainer'
-import LogRevenue from '../LogRevenueContainer'
-import LogConsentData from '../LogConsentDataContainer'
-import LogAccountCreation from '../LogAccountCreationContainer'
+import MoneyRaised from 'js/components/MoneyRaised/MoneyRaisedContainer'
+import UserBackgroundImage from 'js/components/User/UserBackgroundImageContainer'
+import UserMenu from 'js/components/User/UserMenuContainer'
+import WidgetsContainer from 'js/components/Widget/WidgetsContainer'
+import CampaignBaseContainer from 'js/components/Campaign/CampaignBaseContainer'
+import Ad from 'js/components/Ad/Ad'
+import LogTab from 'js/components/Dashboard/LogTabContainer'
+import LogRevenue from 'js/components/Dashboard/LogRevenueContainer'
+import LogConsentData from 'js/components/Dashboard/LogConsentDataContainer'
+import LogAccountCreation from 'js/components/Dashboard/LogAccountCreationContainer'
 import ErrorMessage from 'js/components/General/ErrorMessage'
-import NewUserTour from '../NewUserTourContainer'
+import NewUserTour from 'js/components/Dashboard/NewUserTourContainer'
 import localStorageMgr from 'js/utils/localstorage-mgr'
-import { STORAGE_NEW_USER_HAS_COMPLETED_TOUR } from '../../../constants'
+import { STORAGE_NEW_USER_HAS_COMPLETED_TOUR } from 'js/constants'
 import { getCurrentUser } from 'js/authentication/user'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
@@ -59,14 +59,14 @@ const mockProps = {
 
 describe('Dashboard component', () => {
   it('renders without error', () => {
-    const DashboardComponent = require('../DashboardComponent').default
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
     shallow(
       <DashboardComponent {...mockProps} />
     )
   })
 
   it('renders MoneyRaised component', () => {
-    const DashboardComponent = require('../DashboardComponent').default
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
     const wrapper = shallow(
       <DashboardComponent {...mockProps} />
     )
@@ -74,7 +74,7 @@ describe('Dashboard component', () => {
   })
 
   it('renders UserBackgroundImage component', () => {
-    const DashboardComponent = require('../DashboardComponent').default
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
     const wrapper = shallow(
       <DashboardComponent {...mockProps} />
     )
@@ -82,7 +82,7 @@ describe('Dashboard component', () => {
   })
 
   it('renders UserMenu component', () => {
-    const DashboardComponent = require('../DashboardComponent').default
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
     const wrapper = shallow(
       <DashboardComponent {...mockProps} />
     )
@@ -90,7 +90,7 @@ describe('Dashboard component', () => {
   })
 
   it('renders WidgetsContainer component', () => {
-    const DashboardComponent = require('../DashboardComponent').default
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
     const wrapper = shallow(
       <DashboardComponent {...mockProps} />
     )
@@ -98,7 +98,7 @@ describe('Dashboard component', () => {
   })
 
   it('renders CampaignBaseContainer component', () => {
-    const DashboardComponent = require('../DashboardComponent').default
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
     const wrapper = shallow(
       <DashboardComponent {...mockProps} />
     )
@@ -106,7 +106,7 @@ describe('Dashboard component', () => {
   })
 
   it('renders Ad components', () => {
-    const DashboardComponent = require('../DashboardComponent').default
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
     const wrapper = shallow(
       <DashboardComponent {...mockProps} />
     )
@@ -114,7 +114,7 @@ describe('Dashboard component', () => {
   })
 
   it('renders LogTab component', () => {
-    const DashboardComponent = require('../DashboardComponent').default
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
     const wrapper = shallow(
       <DashboardComponent {...mockProps} />
     )
@@ -122,7 +122,7 @@ describe('Dashboard component', () => {
   })
 
   it('renders LogRevenue component', () => {
-    const DashboardComponent = require('../DashboardComponent').default
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
     const wrapper = shallow(
       <DashboardComponent {...mockProps} />
     )
@@ -130,7 +130,7 @@ describe('Dashboard component', () => {
   })
 
   it('renders LogConsentData component', () => {
-    const DashboardComponent = require('../DashboardComponent').default
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
     const wrapper = shallow(
       <DashboardComponent {...mockProps} />
     )
@@ -138,7 +138,7 @@ describe('Dashboard component', () => {
   })
 
   it('renders LogAccountCreation component', () => {
-    const DashboardComponent = require('../DashboardComponent').default
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
     const wrapper = shallow(
       <DashboardComponent {...mockProps} />
     )
@@ -146,7 +146,7 @@ describe('Dashboard component', () => {
   })
 
   it('renders the NewUserTour component when the user recently joined and has not already viewed it', () => {
-    const DashboardComponent = require('../DashboardComponent').default
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
 
     // Mock that the user joined recently
     const modifiedProps = cloneDeep(mockProps)
@@ -162,7 +162,7 @@ describe('Dashboard component', () => {
   })
 
   it('does not render the NewUserTour component when the user has already viewed it', () => {
-    const DashboardComponent = require('../DashboardComponent').default
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
 
     // Mock that the user joined recently
     const modifiedProps = cloneDeep(mockProps)
@@ -178,7 +178,7 @@ describe('Dashboard component', () => {
   })
 
   it('does not renders the NewUserTour component when some time has passed since the user joined', () => {
-    const DashboardComponent = require('../DashboardComponent').default
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
 
     // Mock that the user joined more than a few hours ago
     const modifiedProps = cloneDeep(mockProps)
@@ -194,7 +194,7 @@ describe('Dashboard component', () => {
   })
 
   it('does not render MoneyRaised component until the "user" prop exists', () => {
-    const DashboardComponent = require('../DashboardComponent').default
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
     const mockPropsWithoutUser = Object.assign({}, mockProps, { user: null })
     const wrapper = shallow(
       <DashboardComponent {...mockPropsWithoutUser} />
@@ -203,7 +203,7 @@ describe('Dashboard component', () => {
   })
 
   it('does not render UserMenu component until the "user" prop exists', () => {
-    const DashboardComponent = require('../DashboardComponent').default
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
     const mockPropsWithoutUser = Object.assign({}, mockProps, { user: null })
     const wrapper = shallow(
       <DashboardComponent {...mockPropsWithoutUser} />
@@ -212,7 +212,7 @@ describe('Dashboard component', () => {
   })
 
   it('does not render CampaignBaseContainer component until the "user" prop exists', () => {
-    const DashboardComponent = require('../DashboardComponent').default
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
     const mockPropsWithoutUser = Object.assign({}, mockProps, { user: null })
     const wrapper = shallow(
       <DashboardComponent {...mockPropsWithoutUser} />
@@ -221,7 +221,7 @@ describe('Dashboard component', () => {
   })
 
   it('does not render LogTab component until the "user" prop exists', () => {
-    const DashboardComponent = require('../DashboardComponent').default
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
     const mockPropsWithoutUser = Object.assign({}, mockProps, { user: null })
     const wrapper = shallow(
       <DashboardComponent {...mockPropsWithoutUser} />
@@ -230,7 +230,7 @@ describe('Dashboard component', () => {
   })
 
   it('does not render LogRevenue component until the "user" prop exists', () => {
-    const DashboardComponent = require('../DashboardComponent').default
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
     const mockPropsWithoutUser = Object.assign({}, mockProps, { user: null })
     const wrapper = shallow(
       <DashboardComponent {...mockPropsWithoutUser} />
@@ -239,7 +239,7 @@ describe('Dashboard component', () => {
   })
 
   it('does not render LogConsentData component until the "user" prop exists', () => {
-    const DashboardComponent = require('../DashboardComponent').default
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
     const mockPropsWithoutUser = Object.assign({}, mockProps, { user: null })
     const wrapper = shallow(
       <DashboardComponent {...mockPropsWithoutUser} />
@@ -248,7 +248,7 @@ describe('Dashboard component', () => {
   })
 
   it('does not render LogAccountCreation component until the "user" prop exists', () => {
-    const DashboardComponent = require('../DashboardComponent').default
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
     const mockPropsWithoutUser = Object.assign({}, mockProps, { user: null })
     const wrapper = shallow(
       <DashboardComponent {...mockPropsWithoutUser} />
@@ -257,7 +257,7 @@ describe('Dashboard component', () => {
   })
 
   it('does not render NewUserTour component until the "user" prop exists', () => {
-    const DashboardComponent = require('../DashboardComponent').default
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
     const mockPropsWithoutUser = Object.assign({}, mockProps, { user: null })
     const wrapper = shallow(
       <DashboardComponent {...mockPropsWithoutUser} />
@@ -266,7 +266,7 @@ describe('Dashboard component', () => {
   })
 
   it('does not render the ErrorMessage component when no error message is set', () => {
-    const DashboardComponent = require('../DashboardComponent').default
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
     const wrapper = shallow(
       <DashboardComponent {...mockProps} />
     )
@@ -274,7 +274,7 @@ describe('Dashboard component', () => {
   })
 
   it('renders the ErrorMessage component when WidgetsContainer calls its "showError" prop', () => {
-    const DashboardComponent = require('../DashboardComponent').default
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
     const wrapper = shallow(
       <DashboardComponent {...mockProps} />
     )
@@ -285,7 +285,7 @@ describe('Dashboard component', () => {
   })
 
   it('passes false to childrens\' "isCampaignLive" props when the "isGlobalCampaignLive" prop is false', () => {
-    const DashboardComponent = require('../DashboardComponent').default
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
     const wrapper = shallow(
       <DashboardComponent {...mockProps} />
     )
@@ -294,7 +294,7 @@ describe('Dashboard component', () => {
   })
 
   it('passes true to childrens\' "isCampaignLive" props when the "isGlobalCampaignLive" prop is true', () => {
-    const DashboardComponent = require('../DashboardComponent').default
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
     const mockPropsWithoutCampaignLive = Object.assign({}, mockProps, { app: { isGlobalCampaignLive: true } })
     const wrapper = shallow(
       <DashboardComponent {...mockPropsWithoutCampaignLive} />
@@ -314,7 +314,7 @@ describe('Dashboard component', () => {
       emailVerified: false
     })
 
-    const DashboardComponent = require('../DashboardComponent').default
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
     const wrapper = shallow(
       <DashboardComponent {...mockProps} />
     )
@@ -339,7 +339,7 @@ describe('Dashboard component', () => {
       emailVerified: false
     })
 
-    const DashboardComponent = require('../DashboardComponent').default
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
     const wrapper = shallow(
       <DashboardComponent {...mockProps} />
     )
@@ -369,7 +369,7 @@ describe('Dashboard component', () => {
       emailVerified: false
     })
 
-    const DashboardComponent = require('../DashboardComponent').default
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
     const wrapper = shallow(
       <DashboardComponent {...mockProps} />
     )
@@ -397,7 +397,7 @@ describe('Dashboard component', () => {
       emailVerified: true
     })
 
-    const DashboardComponent = require('../DashboardComponent').default
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
     const wrapper = shallow(
       <DashboardComponent {...mockProps} />
     )

@@ -16,9 +16,9 @@ import Divider from '@material-ui/core/Divider'
 import IconButton from '@material-ui/core/IconButton'
 import List from '@material-ui/core/List'
 import ListSubheader from '@material-ui/core/ListSubheader'
-import SettingsMenuItem from './SettingsMenuItem'
+import SettingsMenuItem from 'js/components/Settings/SettingsMenuItem'
 import Toolbar from '@material-ui/core/Toolbar'
-import Logo from '../Logo/Logo'
+import Logo from 'js/components/Logo/Logo'
 import CloseIcon from 'material-ui/svg-icons/navigation/close'
 
 const styles = theme => ({

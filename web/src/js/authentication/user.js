@@ -16,7 +16,7 @@ import {
   STORAGE_EXTENSION_INSTALL_ID,
   STORAGE_APPROX_EXTENSION_INSTALL_TIME,
   STORAGE_EXPERIMENT_ANON_USER
-} from '../constants'
+} from 'js/constants'
 import {
   absoluteUrl,
   enterUsernameURL

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { commaFormatted, currencyFormatted } from 'js/utils/utils'
-import DashboardPopover from '../Dashboard/DashboardPopover'
+import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 import RaisedButton from 'material-ui/RaisedButton'
 import {
   goToInviteFriends

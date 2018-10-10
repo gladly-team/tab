@@ -1,15 +1,15 @@
 /* eslint-env jest */
 
-import prebidConfig from '../prebidConfig'
-import getGoogleTag from '../../google/getGoogleTag'
+import prebidConfig from 'js/ads/prebid/prebidConfig'
+import getGoogleTag from 'js/ads/google/getGoogleTag'
 import getPrebidPbjs, {
   __disableAutomaticBidResponses,
   __runBidsBack
-} from '../getPrebidPbjs'
+} from 'js/ads/prebid/getPrebidPbjs'
 import { getDefaultTabGlobal } from 'js/utils/test-utils'
 
 jest.mock('js/utils/client-location')
-jest.mock('../getPrebidPbjs')
+jest.mock('js/ads/prebid/getPrebidPbjs')
 
 beforeEach(() => {
   window.tabforacause = getDefaultTabGlobal()

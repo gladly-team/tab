@@ -1,15 +1,15 @@
 import React from 'react'
-import WidgetIcon from './WidgetIconContainer'
-import Widget from './WidgetContainer'
+import WidgetIcon from 'js/components/Widget/WidgetIconContainer'
+import Widget from 'js/components/Widget/WidgetContainer'
 import PropTypes from 'prop-types'
 import FadeInDashboardAnimation from 'js/components/General/FadeInDashboardAnimation'
 import {
   WIDGET_TYPE_CLOCK,
   WIDGET_TYPE_SEARCH
-} from '../../constants'
+} from 'js/constants'
 import CenteredWidgetsContainer from 'js/components/General/CenteredWidgetsContainer'
 import SetUserActiveWidgetMutation from 'js/mutations/SetUserActiveWidgetMutation'
-import ActiveWidgetAnimation from './ActiveWidgetAnimation'
+import ActiveWidgetAnimation from 'js/components/Widget/ActiveWidgetAnimation'
 
 class Widgets extends React.Component {
   onWidgetIconClicked (widget) {

@@ -1,12 +1,12 @@
 /* eslint-env jest */
 
-import fbq from '../facebook-analytics'
-import GA from '../google-analytics'
-import { redditAccountCreationEvent } from '../reddit-analytics'
+import fbq from 'js/analytics/facebook-analytics'
+import GA from 'js/analytics/google-analytics'
+import { redditAccountCreationEvent } from 'js/analytics/reddit-analytics'
 
-jest.mock('../facebook-analytics')
-jest.mock('../google-analytics')
-jest.mock('../reddit-analytics')
+jest.mock('js/analytics/facebook-analytics')
+jest.mock('js/analytics/google-analytics')
+jest.mock('js/analytics/reddit-analytics')
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -14,7 +14,7 @@ afterEach(() => {
 
 describe('logEvent', () => {
   test('pageview event calls analytics as expected', () => {
-    const pageview = require('../logEvent').pageview
+    const pageview = require('js/analytics/logEvent').pageview
     pageview()
 
     expect(fbq).toHaveBeenCalledWith('track', 'PageView')
@@ -22,7 +22,7 @@ describe('logEvent', () => {
   })
 
   test('homepage view event calls analytics as expected', () => {
-    const homepageView = require('../logEvent').homepageView
+    const homepageView = require('js/analytics/logEvent').homepageView
     homepageView()
 
     expect(fbq).toHaveBeenCalledWith('track', 'ViewContent', {content_name: 'Homepage'})
@@ -31,7 +31,7 @@ describe('logEvent', () => {
   })
 
   test('signup page button click event calls analytics as expected', () => {
-    const signupPageButtonClick = require('../logEvent').signupPageButtonClick
+    const signupPageButtonClick = require('js/analytics/logEvent').signupPageButtonClick
     signupPageButtonClick()
 
     expect(fbq).toHaveBeenCalledWith('track', 'Lead', {content_name: 'SignupButtonClick'})
@@ -42,7 +42,7 @@ describe('logEvent', () => {
   })
 
   test('signup page social button click event calls analytics as expected', () => {
-    const signupPageSocialButtonClick = require('../logEvent').signupPageSocialButtonClick
+    const signupPageSocialButtonClick = require('js/analytics/logEvent').signupPageSocialButtonClick
     signupPageSocialButtonClick()
 
     expect(fbq).toHaveBeenCalledWith('track', 'Lead', {content_name: 'SocialSignupButtonClick'})
@@ -53,7 +53,7 @@ describe('logEvent', () => {
   })
 
   test('signup page email button click event calls analytics as expected', () => {
-    const signupPageEmailButtonClick = require('../logEvent').signupPageEmailButtonClick
+    const signupPageEmailButtonClick = require('js/analytics/logEvent').signupPageEmailButtonClick
     signupPageEmailButtonClick()
 
     expect(fbq).toHaveBeenCalledWith('track', 'Lead', {content_name: 'EmailSignupButtonClick'})
@@ -64,7 +64,7 @@ describe('logEvent', () => {
   })
 
   test('account created event calls analytics as expected', () => {
-    const accountCreated = require('../logEvent').accountCreated
+    const accountCreated = require('js/analytics/logEvent').accountCreated
     accountCreated()
 
     expect(fbq).toHaveBeenCalledWith('track', 'CompleteRegistration', {content_name: 'AccountCreated'})
@@ -76,7 +76,7 @@ describe('logEvent', () => {
   })
 
   test('new tab view event calls analytics as expected', () => {
-    const newTabView = require('../logEvent').newTabView
+    const newTabView = require('js/analytics/logEvent').newTabView
     newTabView()
 
     expect(fbq).toHaveBeenCalledWith('track', 'PageView')

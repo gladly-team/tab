@@ -3,7 +3,7 @@ import {
   graphql
 } from 'react-relay'
 
-import ProfileStats from './ProfileStatsComponent'
+import ProfileStats from 'js/components/Settings/Profile/ProfileStatsComponent'
 
 export default createFragmentContainer(ProfileStats, {
   user: graphql`

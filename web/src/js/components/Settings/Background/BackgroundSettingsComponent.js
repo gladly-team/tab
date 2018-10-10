@@ -5,9 +5,9 @@ import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton'
 import Divider from 'material-ui/Divider'
 import {Card, CardHeader} from 'material-ui/Card'
 
-import BackgroundImagePicker from '../../Background/BackgroundImagePickerContainer'
-import BackgroundColorPicker from '../../Background/BackgroundColorPickerContainer'
-import BackgroundCustomImagePicker from '../../Background/BackgroundCustomImagePickerContainer'
+import BackgroundImagePicker from 'js/components/Background/BackgroundImagePickerContainer'
+import BackgroundColorPicker from 'js/components/Background/BackgroundColorPickerContainer'
+import BackgroundCustomImagePicker from 'js/components/Background/BackgroundCustomImagePickerContainer'
 import {
   cardHeaderTitleStyle,
   cardHeaderSubtitleStyle
@@ -20,7 +20,7 @@ import {
   USER_BACKGROUND_OPTION_COLOR,
   USER_BACKGROUND_OPTION_PHOTO,
   USER_BACKGROUND_OPTION_DAILY
-} from '../../../constants'
+} from 'js/constants'
 import SetBackgroundImageMutation from 'js/mutations/SetBackgroundImageMutation'
 import SetBackgroundColorMutation from 'js/mutations/SetBackgroundColorMutation'
 import SetBackgroundCustomImageMutation from 'js/mutations/SetBackgroundCustomImageMutation'

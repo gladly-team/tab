@@ -17,7 +17,7 @@ afterEach(() => {
 
 describe('LogAccountCreation component', function () {
   it('logs the "account creation" analytics event when this is the user\'s first tab', function () {
-    const LogAccountCreationComponent = require('../LogAccountCreationComponent').default
+    const LogAccountCreationComponent = require('js/components/Dashboard/LogAccountCreationComponent').default
     const mockUserData = {
       tabs: 0
     }
@@ -30,7 +30,7 @@ describe('LogAccountCreation component', function () {
   })
 
   it('does not log the "account creation" analytics event when this is not the user\'s first tab', function () {
-    const LogAccountCreationComponent = require('../LogAccountCreationComponent').default
+    const LogAccountCreationComponent = require('js/components/Dashboard/LogAccountCreationComponent').default
     const mockUserData = {
       tabs: 1
     }

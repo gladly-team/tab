@@ -4,9 +4,9 @@ import {
   STORAGE_BACKGROUND_CUSTOM_IMAGE,
   STORAGE_BACKGROUND_COLOR,
   STORAGE_BACKGROUND_IMAGE_URL
-} from '../constants'
-import { postBackgroundSettings } from './extension-messenger'
-import localStorageMgr from './localstorage-mgr'
+} from 'js/constants'
+import { postBackgroundSettings } from 'js/utils/extension-messenger'
+import localStorageMgr from 'js/utils/localstorage-mgr'
 
 export const setBackgroundSettings = function (backgroundOption,
   customImage, backgroundColor, imageURL) {

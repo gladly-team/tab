@@ -10,7 +10,7 @@ afterEach(() => {
 describe('google-analytics tests', () => {
   test('initializes on module load', () => {
     const ReactGA = require('react-ga').default
-    require('../google-analytics').default // eslint-disable-line no-unused-expressions
+    require('js/analytics/google-analytics').default // eslint-disable-line no-unused-expressions
     expect(ReactGA.initialize).toHaveBeenCalledWith('UA-24159386-1')
   })
 
@@ -25,7 +25,7 @@ describe('google-analytics tests', () => {
       .mockImplementationOnce(() => {})
 
     // This would throw an error if not handled appropriately
-    require('../google-analytics').default // eslint-disable-line no-unused-expressions
+    require('js/analytics/google-analytics').default // eslint-disable-line no-unused-expressions
   })
 
   test('does not throw error if ReactGA.pageview throws an error', () => {
@@ -39,7 +39,7 @@ describe('google-analytics tests', () => {
       .mockImplementationOnce(() => {})
 
     // This would throw an error if not handled appropriately
-    const GA = require('../google-analytics').default
+    const GA = require('js/analytics/google-analytics').default
     GA.pageview()
   })
 
@@ -54,14 +54,14 @@ describe('google-analytics tests', () => {
       .mockImplementationOnce(() => {})
 
     // This would throw an error if not handled appropriately
-    const GA = require('../google-analytics').default
+    const GA = require('js/analytics/google-analytics').default
     GA.event()
   })
 
   test('a pageview calls ReactGA as expected', () => {
     const ReactGA = require('react-ga').default
 
-    const GA = require('../google-analytics').default
+    const GA = require('js/analytics/google-analytics').default
     GA.pageview()
 
     expect(ReactGA.pageview).toHaveBeenCalled()
@@ -70,7 +70,7 @@ describe('google-analytics tests', () => {
   test('an event calls ReactGA as expected', () => {
     const ReactGA = require('react-ga').default
 
-    const GA = require('../google-analytics').default
+    const GA = require('js/analytics/google-analytics').default
     GA.event({
       foo: 'bar'
     })

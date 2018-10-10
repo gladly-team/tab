@@ -15,7 +15,7 @@ import {
   signupPageSocialButtonClick
 } from 'js/analytics/logEvent'
 import logger from 'js/utils/logger'
-import environment from '../../../relay-env'
+import environment from 'js/relay-env'
 import MergeIntoExistingUserMutation from 'js/mutations/MergeIntoExistingUserMutation'
 
 class FirebaseAuthenticationUI extends React.Component {

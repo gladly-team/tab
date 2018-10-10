@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import WidgetSettings from './WidgetSettingsContainer'
+import WidgetSettings from 'js/components/Settings/Widgets/WidgetSettingsContainer'
 
 class WidgetsSettings extends React.Component {
   constructor (props) {

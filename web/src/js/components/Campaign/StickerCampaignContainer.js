@@ -3,7 +3,7 @@ import {
   graphql
 } from 'react-relay'
 
-import StickerCampaign from './StickerCampaignComponent'
+import StickerCampaign from 'js/components/Campaign/StickerCampaignComponent'
 
 export default createFragmentContainer(StickerCampaign, {
   user: graphql`

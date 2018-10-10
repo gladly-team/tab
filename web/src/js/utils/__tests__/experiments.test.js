@@ -2,15 +2,15 @@
 
 import localStorageMgr, {
   __mockClear
-} from '../localstorage-mgr'
+} from 'js/utils/localstorage-mgr'
 import {
   isAnonymousUserSignInEnabled
 } from 'js/utils/feature-flags'
 import {
   STORAGE_EXPERIMENT_ANON_USER
-} from '../../constants'
+} from 'js/constants'
 
-jest.mock('../localstorage-mgr')
+jest.mock('js/utils/localstorage-mgr')
 jest.mock('js/utils/feature-flags')
 afterEach(() => {
   __mockClear()
@@ -25,7 +25,7 @@ describe('experiments', () => {
     // Make sure any experiment-related features are enabled.
     isAnonymousUserSignInEnabled.mockReturnValue(true)
 
-    const assignUserToTestGroups = require('../experiments').assignUserToTestGroups
+    const assignUserToTestGroups = require('js/utils/experiments').assignUserToTestGroups
     assignUserToTestGroups()
     expect(localStorageMgr.setItem).toHaveBeenCalledWith('tab.experiments.anonUser', 'auth')
   })
@@ -34,7 +34,7 @@ describe('experiments', () => {
     // Anonymous user sign-in is not enabled.
     isAnonymousUserSignInEnabled.mockReturnValue(false)
 
-    const assignUserToTestGroups = require('../experiments').assignUserToTestGroups
+    const assignUserToTestGroups = require('js/utils/experiments').assignUserToTestGroups
     assignUserToTestGroups()
     expect(localStorageMgr.setItem).toHaveBeenCalledWith('tab.experiments.anonUser', 'none')
   })
@@ -46,7 +46,7 @@ describe('experiments', () => {
     // Set the test group in storage.
     localStorageMgr.setItem(STORAGE_EXPERIMENT_ANON_USER, 'unauthed')
 
-    const getAnonymousUserTestGroup = require('../experiments').getAnonymousUserTestGroup
+    const getAnonymousUserTestGroup = require('js/utils/experiments').getAnonymousUserTestGroup
     const testGroup = getAnonymousUserTestGroup()
     expect(testGroup).toBe('unauthed')
   })
@@ -58,7 +58,7 @@ describe('experiments', () => {
     // Set the test group in storage.
     localStorageMgr.removeItem(STORAGE_EXPERIMENT_ANON_USER)
 
-    const getAnonymousUserTestGroup = require('../experiments').getAnonymousUserTestGroup
+    const getAnonymousUserTestGroup = require('js/utils/experiments').getAnonymousUserTestGroup
     const testGroup = getAnonymousUserTestGroup()
     expect(testGroup).toBe('none')
   })
@@ -70,7 +70,7 @@ describe('experiments', () => {
     // Set an invalid test group in storage.
     localStorageMgr.setItem(STORAGE_EXPERIMENT_ANON_USER, 'blah')
 
-    const getAnonymousUserTestGroup = require('../experiments').getAnonymousUserTestGroup
+    const getAnonymousUserTestGroup = require('js/utils/experiments').getAnonymousUserTestGroup
     const testGroup = getAnonymousUserTestGroup()
     expect(testGroup).toBe('none')
   })
@@ -78,7 +78,7 @@ describe('experiments', () => {
   test('getUserTestGroupsForMutation returns the expected value for an assigned group', () => {
     isAnonymousUserSignInEnabled.mockReturnValue(true)
     localStorageMgr.setItem(STORAGE_EXPERIMENT_ANON_USER, 'unauthed')
-    const getUserTestGroupsForMutation = require('../experiments').getUserTestGroupsForMutation
+    const getUserTestGroupsForMutation = require('js/utils/experiments').getUserTestGroupsForMutation
     expect(getUserTestGroupsForMutation()).toEqual({
       anonSignIn: 'ANONYMOUS_ALLOWED'
     })
@@ -87,7 +87,7 @@ describe('experiments', () => {
   test('getUserTestGroupsForMutation returns the expected value when the user is not assigned to a group', () => {
     isAnonymousUserSignInEnabled.mockReturnValue(true)
     localStorageMgr.removeItem(STORAGE_EXPERIMENT_ANON_USER)
-    const getUserTestGroupsForMutation = require('../experiments').getUserTestGroupsForMutation
+    const getUserTestGroupsForMutation = require('js/utils/experiments').getUserTestGroupsForMutation
     expect(getUserTestGroupsForMutation()).toEqual({
       anonSignIn: 'NONE'
     })

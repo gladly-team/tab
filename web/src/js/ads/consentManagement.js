@@ -2,7 +2,7 @@
 import localStorageManager from 'js/utils/localstorage-mgr'
 import {
   STORAGE_NEW_CONSENT_DATA_EXISTS
-} from '../constants'
+} from 'js/constants'
 
 /**
  * Get the vendor consent string from the consent management platform.

@@ -18,7 +18,7 @@ import {
   goToDashboard
 } from 'js/navigation/navigation'
 import { isEqual } from 'lodash/lang'
-import LogoWithText from '../Logo/LogoWithText'
+import LogoWithText from 'js/components/Logo/LogoWithText'
 import {
   getUrlParameters
 } from 'js/utils/utils'

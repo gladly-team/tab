@@ -18,7 +18,7 @@ afterEach(() => {
 
 describe('LogTabComponent', function () {
   it('renders without error and does not have any DOM elements', () => {
-    const LogTabComponent = require('../LogTabComponent').default
+    const LogTabComponent = require('js/components/Dashboard/LogTabComponent').default
     const wrapper = shallow(
       <LogTabComponent
         user={{ id: 'abcdefghijklmno' }}
@@ -30,7 +30,7 @@ describe('LogTabComponent', function () {
   })
 
   it('logs the tab after a 1 second timeout', () => {
-    const LogTabComponent = require('../LogTabComponent').default
+    const LogTabComponent = require('js/components/Dashboard/LogTabComponent').default
     const mockRelayEnvironment = {}
     const mockUserData = { id: 'abcdefghijklmno' }
     const tabId = 'abc-123'
@@ -50,7 +50,7 @@ describe('LogTabComponent', function () {
   })
 
   it('updates today\'s tab count in localStorage', () => {
-    const LogTabComponent = require('../LogTabComponent').default
+    const LogTabComponent = require('js/components/Dashboard/LogTabComponent').default
     const mockRelayEnvironment = {}
     const mockUserData = { id: 'abcdefghijklmno' }
     const tabId = 'abc-123'

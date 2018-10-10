@@ -2,9 +2,9 @@
 
 import localStorageMgr, {
   __mockClear
-} from '../localstorage-mgr'
+} from 'js/utils/localstorage-mgr'
 
-jest.mock('../localstorage-mgr')
+jest.mock('js/utils/localstorage-mgr')
 
 afterEach(() => {
   __mockClear()
@@ -12,20 +12,20 @@ afterEach(() => {
 
 describe('validating username', () => {
   it('accepts alphanumeric usernames', () => {
-    const validateUsername = require('../utils').validateUsername
+    const validateUsername = require('js/utils/utils').validateUsername
     expect(validateUsername('blah')).toEqual(true)
     expect(validateUsername('somebody123')).toEqual(true)
   })
 
   it('rejects usernames that are too short', () => {
-    const validateUsername = require('../utils').validateUsername
+    const validateUsername = require('js/utils/utils').validateUsername
     expect(validateUsername('')).toEqual(false)
     expect(validateUsername('a')).toEqual(false)
     expect(validateUsername('aa')).toEqual(true)
   })
 
   it('accepts common special characters', () => {
-    const validateUsername = require('../utils').validateUsername
+    const validateUsername = require('js/utils/utils').validateUsername
     expect(validateUsername('somebody_123')).toEqual(true)
     expect(validateUsername('somebody-123')).toEqual(true)
     expect(validateUsername('somebody$123')).toEqual(true)
@@ -34,7 +34,7 @@ describe('validating username', () => {
   })
 
   it('rejects other special characters', () => {
-    const validateUsername = require('../utils').validateUsername
+    const validateUsername = require('js/utils/utils').validateUsername
     expect(validateUsername('©')).toEqual(false)
     expect(validateUsername('💩')).toEqual(false)
   })
@@ -44,7 +44,7 @@ describe('getting referral data', () => {
   it('works with all fields set', () => {
     localStorageMgr.setItem('tab.referralData.referringUser', 'sandra')
     localStorageMgr.setItem('tab.referralData.referringChannel', '42')
-    const getReferralData = require('../utils').getReferralData
+    const getReferralData = require('js/utils/utils').getReferralData
     expect(getReferralData()).toEqual({
       referringUser: 'sandra',
       referringChannel: '42'
@@ -54,7 +54,7 @@ describe('getting referral data', () => {
   it('works with only referring user', () => {
     localStorageMgr.setItem('tab.referralData.referringUser', 'bob')
     localStorageMgr.setItem('tab.referralData.referringChannel', undefined)
-    const getReferralData = require('../utils').getReferralData
+    const getReferralData = require('js/utils/utils').getReferralData
     expect(getReferralData()).toEqual({
       referringUser: 'bob'
     })
@@ -63,7 +63,7 @@ describe('getting referral data', () => {
   it('works with only referring channel', () => {
     localStorageMgr.setItem('tab.referralData.referringUser', undefined)
     localStorageMgr.setItem('tab.referralData.referringChannel', '33')
-    const getReferralData = require('../utils').getReferralData
+    const getReferralData = require('js/utils/utils').getReferralData
     expect(getReferralData()).toEqual({
       referringChannel: '33'
     })
@@ -72,7 +72,7 @@ describe('getting referral data', () => {
 
 describe('number utils', () => {
   it('comma-formats correctly', () => {
-    const commaFormatted = require('../utils').commaFormatted
+    const commaFormatted = require('js/utils/utils').commaFormatted
     expect(commaFormatted('460932.44')).toBe('460,932.44')
     expect(commaFormatted('460932')).toBe('460,932')
     expect(commaFormatted('123456789')).toBe('123,456,789')
@@ -86,7 +86,7 @@ describe('number utils', () => {
   })
 
   it('formats currency correctly', () => {
-    const currencyFormatted = require('../utils').currencyFormatted
+    const currencyFormatted = require('js/utils/utils').currencyFormatted
     expect(currencyFormatted('460932.44')).toBe('460932.44')
     expect(currencyFormatted('460932')).toBe('460932.00')
     expect(currencyFormatted('460932.1')).toBe('460932.10')
@@ -101,7 +101,7 @@ describe('number utils', () => {
   })
 
   it('abbreviates numbers correctly', () => {
-    const abbreviateNumber = require('../utils').abbreviateNumber
+    const abbreviateNumber = require('js/utils/utils').abbreviateNumber
 
     // Test ones, tens, hundreds
     expect(abbreviateNumber(0)).toBe('0')
@@ -135,7 +135,7 @@ describe('number utils', () => {
 
 describe('iframe utils', () => {
   it('detects when not in iframe', () => {
-    const isInIframe = require('../utils').isInIframe
+    const isInIframe = require('js/utils/utils').isInIframe
     expect(isInIframe()).toBe(false)
   })
 
@@ -144,7 +144,7 @@ describe('iframe utils', () => {
   // it('detects when in iframe', () => {
   //   // Fake that the top window is some other window
   //   jsdom.reconfigureWindow(window, { top: { some: 'other-window' } })
-  //   const isInIframe = require('../utils').isInIframe
+  //   const isInIframe = require('js/utils/utils').isInIframe
   //   expect(isInIframe()).toBe(true)
 
   //   // Reset the top window

@@ -27,7 +27,7 @@ afterEach(() => {
 
 describe('EnterUsernameForm tests', function () {
   it('renders without error', function () {
-    const EnterUsernameForm = require('../EnterUsernameForm').default
+    const EnterUsernameForm = require('js/components/Authentication/EnterUsernameForm').default
     shallow(
       <EnterUsernameForm user={mockUserData} />
     )
@@ -36,7 +36,7 @@ describe('EnterUsernameForm tests', function () {
   it('calls checkIfEmailVerified on mount', async () => {
     expect.assertions(1)
 
-    const EnterUsernameForm = require('../EnterUsernameForm').default
+    const EnterUsernameForm = require('js/components/Authentication/EnterUsernameForm').default
     shallow(
       <EnterUsernameForm {...mockUserData} />
     )
@@ -44,7 +44,7 @@ describe('EnterUsernameForm tests', function () {
   })
 
   it('calls SetUsernameMutation when entering a username', function () {
-    const EnterUsernameForm = require('../EnterUsernameForm').default
+    const EnterUsernameForm = require('js/components/Authentication/EnterUsernameForm').default
 
     // TODO:
     // After updating to Material UI 1.x, we shouldn't have to wrap our tested
@@ -71,7 +71,7 @@ describe('EnterUsernameForm tests', function () {
   })
 
   it('it does not call SetUsernameMutation when the username is too short and instead shows an error message', function () {
-    const EnterUsernameForm = require('../EnterUsernameForm').default
+    const EnterUsernameForm = require('js/components/Authentication/EnterUsernameForm').default
 
     // @material-ui-1-todo: remove MuiThemeProvider wrapper
     const wrapper = mount(
@@ -97,7 +97,7 @@ describe('EnterUsernameForm tests', function () {
   })
 
   it('it shows an error message when the username is a duplicate', function () {
-    const EnterUsernameForm = require('../EnterUsernameForm').default
+    const EnterUsernameForm = require('js/components/Authentication/EnterUsernameForm').default
 
     // @material-ui-1-todo: remove MuiThemeProvider wrapper
     const wrapper = mount(
@@ -129,7 +129,7 @@ describe('EnterUsernameForm tests', function () {
   })
 
   it('matches expected snapshot', function () {
-    const EnterUsernameForm = require('../EnterUsernameForm').default
+    const EnterUsernameForm = require('js/components/Authentication/EnterUsernameForm').default
     const wrapper = shallow(
       <EnterUsernameForm user={mockUserData} />
     )

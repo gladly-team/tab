@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import DashboardPopover from '../Dashboard/DashboardPopover'
+import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 import RaisedButton from 'material-ui/RaisedButton'
 import Divider from 'material-ui/Divider'
 import Menu from 'material-ui/Menu'
@@ -29,7 +29,7 @@ import appTheme, {
   dividerColor
 } from 'js/theme/default'
 import { commaFormatted } from 'js/utils/utils'
-import { MAX_DAILY_HEARTS_FROM_TABS } from '../../constants'
+import { MAX_DAILY_HEARTS_FROM_TABS } from 'js/constants'
 
 class UserMenu extends React.Component {
   constructor (props) {

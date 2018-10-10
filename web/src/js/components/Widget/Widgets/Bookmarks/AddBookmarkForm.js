@@ -3,7 +3,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import EditWidgetChip from '../../EditWidgetChip'
+import EditWidgetChip from 'js/components/Widget/EditWidgetChip'
 import TextField from 'material-ui/TextField'
 import appTheme, {
   widgetEditButtonHover

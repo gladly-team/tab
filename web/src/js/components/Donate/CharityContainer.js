@@ -3,7 +3,7 @@ import {
   graphql
 } from 'react-relay'
 
-import Charity from './CharityComponent'
+import Charity from 'js/components/Donate/CharityComponent'
 
 export default createFragmentContainer(Charity, {
   charity: graphql`

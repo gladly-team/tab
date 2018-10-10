@@ -52,14 +52,14 @@ afterEach(() => {
 
 describe('Background image picker component', () => {
   it('renders without error', () => {
-    const BackgroundImagePicker = require('../BackgroundImagePickerComponent').default
+    const BackgroundImagePicker = require('js/components/Background/BackgroundImagePickerComponent').default
     shallow(
       <BackgroundImagePicker {...mockProps} />
     )
   })
 
   it('calls onBackgroundImageSelection on mount', () => {
-    const BackgroundImagePicker = require('../BackgroundImagePickerComponent').default
+    const BackgroundImagePicker = require('js/components/Background/BackgroundImagePickerComponent').default
     shallow(
       <BackgroundImagePicker {...mockProps} />
     )
@@ -68,7 +68,7 @@ describe('Background image picker component', () => {
   })
 
   it('visually selects the current image', () => {
-    const BackgroundImagePicker = require('../BackgroundImagePickerComponent').default
+    const BackgroundImagePicker = require('js/components/Background/BackgroundImagePickerComponent').default
     const customMockProps = cloneDeep(mockProps)
     customMockProps.user.backgroundImage = {
       id: 'xyz123',
@@ -98,7 +98,7 @@ describe('Background image picker component', () => {
   })
 
   it('calls onBackgroundImageSelection prop when the selected image changes', () => {
-    const BackgroundImagePicker = require('../BackgroundImagePickerComponent').default
+    const BackgroundImagePicker = require('js/components/Background/BackgroundImagePickerComponent').default
     const wrapper = shallow(
       <BackgroundImagePicker {...mockProps} />
     )
@@ -113,7 +113,7 @@ describe('Background image picker component', () => {
   })
 
   it('automatically visually selects the first image if the user does not have an image defined', () => {
-    const BackgroundImagePicker = require('../BackgroundImagePickerComponent').default
+    const BackgroundImagePicker = require('js/components/Background/BackgroundImagePickerComponent').default
     const customMockProps = cloneDeep(mockProps)
     customMockProps.user.backgroundImage = null
 
@@ -134,7 +134,7 @@ describe('Background image picker component', () => {
   })
 
   it('uses the first image in onBackgroundImageSelection callback on mount if the user does not have an image defined', () => {
-    const BackgroundImagePicker = require('../BackgroundImagePickerComponent').default
+    const BackgroundImagePicker = require('js/components/Background/BackgroundImagePickerComponent').default
     const customMockProps = cloneDeep(mockProps)
     customMockProps.user.backgroundImage = null
 

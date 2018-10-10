@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
-jest.mock('../facebook-analytics')
-jest.mock('../google-analytics')
+jest.mock('js/analytics/facebook-analytics')
+jest.mock('js/analytics/google-analytics')
 
 const logEventMock = jest.genMockFromModule('../logEvent')
 module.exports = logEventMock

@@ -1,12 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Toggle from 'material-ui/Toggle'
-import WidgetConfig from './WidgetConfigComponent'
+import WidgetConfig from 'js/components/Settings/Widgets/WidgetConfigComponent'
 import {Card, CardHeader, CardText} from 'material-ui/Card'
 import {
   cardHeaderTitleStyle
 } from 'js/theme/default'
-import { getWidgetIconFromWidgetType } from '../../Widget/widget-utils'
+import { getWidgetIconFromWidgetType } from 'js/components/Widget/widget-utils'
 
 import UpdateWidgetEnabledMutation from 'js/mutations/UpdateWidgetEnabledMutation'
 import UpdateWidgetConfigMutation from 'js/mutations/UpdateWidgetConfigMutation'

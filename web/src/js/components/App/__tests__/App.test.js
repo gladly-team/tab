@@ -15,7 +15,7 @@ beforeEach(() => {
 
 describe('App', () => {
   it('renders without error', () => {
-    const App = require('../App').default
+    const App = require('js/components/App/App').default
     shallow(
       <App />
     )
@@ -26,7 +26,7 @@ describe('App', () => {
     const isInEuropeanUnion = require('js/utils/client-location').isInEuropeanUnion
     isInEuropeanUnion.mockResolvedValue(true)
 
-    const App = require('../App').default
+    const App = require('js/components/App/App').default
     const wrapper = shallow(
       <App />
     )
@@ -41,7 +41,7 @@ describe('App', () => {
     const isInEuropeanUnion = require('js/utils/client-location').isInEuropeanUnion
     isInEuropeanUnion.mockResolvedValue(false)
 
-    const App = require('../App').default
+    const App = require('js/components/App/App').default
     const wrapper = shallow(
       <App />
     )
@@ -65,7 +65,7 @@ describe('App', () => {
     // Mock that the client is in the EU
     const isInEuropeanUnion = require('js/utils/client-location').isInEuropeanUnion
     isInEuropeanUnion.mockResolvedValue(true)
-    const App = require('../App').default
+    const App = require('js/components/App/App').default
     const wrapper = shallow(
       <App />
     )
@@ -86,7 +86,7 @@ describe('App', () => {
     // Mock that the client is in the EU
     const isInEuropeanUnion = require('js/utils/client-location').isInEuropeanUnion
     isInEuropeanUnion.mockResolvedValue(true)
-    const App = require('../App').default
+    const App = require('js/components/App/App').default
     const wrapper = shallow(
       <App />
     )

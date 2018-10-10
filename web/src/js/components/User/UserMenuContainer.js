@@ -3,7 +3,7 @@ import {
   graphql
 } from 'react-relay'
 
-import UserMenu from './UserMenuComponent'
+import UserMenu from 'js/components/User/UserMenuComponent'
 
 export default createFragmentContainer(UserMenu, {
   app: graphql`

@@ -17,14 +17,14 @@ const mockProps = {}
 
 describe('PostUninstallView', function () {
   it('renders without error', () => {
-    const PostUninstallView = require('../PostUninstallView').default
+    const PostUninstallView = require('js/components/Dashboard/PostUninstallView').default
     shallow(
       <PostUninstallView {...mockProps} />
     )
   })
 
   it('redirects to the survey doc on mount', () => {
-    const PostUninstallView = require('../PostUninstallView').default
+    const PostUninstallView = require('js/components/Dashboard/PostUninstallView').default
     shallow(
       <PostUninstallView {...mockProps} />
     )

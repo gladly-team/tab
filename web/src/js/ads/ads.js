@@ -1,13 +1,13 @@
-import adsEnabled from './adsEnabledStatus'
-import amazonBidder, { storeAmazonBids } from './amazon/amazonBidder'
-import getAmazonTag from './amazon/getAmazonTag'
-import getGoogleTag from './google/getGoogleTag'
-import getPrebidPbjs from './prebid/getPrebidPbjs'
-import handleAdsLoaded from './handleAdsLoaded'
-import prebidConfig from './prebid/prebidConfig'
+import adsEnabled from 'js/ads/adsEnabledStatus'
+import amazonBidder, { storeAmazonBids } from 'js/ads/amazon/amazonBidder'
+import getAmazonTag from 'js/ads/amazon/getAmazonTag'
+import getGoogleTag from 'js/ads/google/getGoogleTag'
+import getPrebidPbjs from 'js/ads/prebid/getPrebidPbjs'
+import handleAdsLoaded from 'js/ads/handleAdsLoaded'
+import prebidConfig from 'js/ads/prebid/prebidConfig'
 import {
   AUCTION_TIMEOUT
-} from './adSettings'
+} from 'js/ads/adSettings'
 
 // Enabled bidders.
 const BIDDER_PREBID = 'prebid'

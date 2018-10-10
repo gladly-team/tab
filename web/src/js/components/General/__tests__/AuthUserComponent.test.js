@@ -19,7 +19,7 @@ import {
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import {
   STORAGE_KEY_USERNAME
-} from '../../../constants'
+} from 'js/constants'
 import {
   flushAllPromises
 } from 'js/utils/test-utils'
@@ -52,14 +52,14 @@ const mockProps = {
 
 describe('AuthUser tests', () => {
   it('renders without error', () => {
-    const AuthUser = require('../AuthUserComponent').default
+    const AuthUser = require('js/components/General/AuthUserComponent').default
     shallow(
       <AuthUser {...mockProps} />
     )
   })
 
   it('unregisters its auth listener on unmount', () => {
-    const AuthUser = require('../AuthUserComponent').default
+    const AuthUser = require('js/components/General/AuthUserComponent').default
     const wrapper = shallow(
       <AuthUser {...mockProps} />
     )
@@ -74,7 +74,7 @@ describe('AuthUser tests', () => {
     // Did not redirect because user is fully authed.
     checkAuthStateAndRedirectIfNeeded.mockResolvedValueOnce(false)
 
-    const AuthUser = require('../AuthUserComponent').default
+    const AuthUser = require('js/components/General/AuthUserComponent').default
     const MockChildComponent = jest.fn(() => null)
     mount(
       <AuthUser {...mockProps}>
@@ -98,7 +98,7 @@ describe('AuthUser tests', () => {
     // Mock redirect because the user is not fully authed.
     checkAuthStateAndRedirectIfNeeded.mockResolvedValueOnce(true)
 
-    const AuthUser = require('../AuthUserComponent').default
+    const AuthUser = require('js/components/General/AuthUserComponent').default
     const MockChildComponent = jest.fn(() => null)
     mount(
       <AuthUser {...mockProps}>
@@ -123,7 +123,7 @@ describe('AuthUser tests', () => {
     checkAuthStateAndRedirectIfNeeded.mockResolvedValueOnce(false)
 
     const MockChildComponent = jest.fn(() => null)
-    const AuthUser = require('../AuthUserComponent').default
+    const AuthUser = require('js/components/General/AuthUserComponent').default
     const wrapper = mount(
       <AuthUser {...mockProps}>
         <MockChildComponent />

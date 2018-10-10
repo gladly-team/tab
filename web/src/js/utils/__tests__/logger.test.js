@@ -16,7 +16,7 @@ describe('logger', () => {
       'warn',
       'error'
     ]
-    const logger = require('../logger').default
+    const logger = require('js/utils/logger').default
     loggerMethods.forEach(method => {
       expect(logger[method]).not.toBeUndefined()
     })
@@ -26,7 +26,7 @@ describe('logger', () => {
     // Suppress expected console message.
     jest.spyOn(console, 'error').mockImplementationOnce(jest.fn())
 
-    const logger = require('../logger').default
+    const logger = require('js/utils/logger').default
     const theErr = new Error('A big problem')
     logger.error(theErr)
     expect(Raven.captureException).toHaveBeenCalledWith(theErr, {
@@ -39,7 +39,7 @@ describe('logger', () => {
     // Suppress expected console message.
     jest.spyOn(console, 'log').mockImplementationOnce(jest.fn())
 
-    const logger = require('../logger').default
+    const logger = require('js/utils/logger').default
     const theMsg = 'A thing happened, FYI'
     logger.log(theMsg)
     expect(Raven.captureMessage).toHaveBeenCalledWith(theMsg, {
@@ -51,7 +51,7 @@ describe('logger', () => {
     // Suppress expected console message.
     jest.spyOn(console, 'debug').mockImplementationOnce(jest.fn())
 
-    const logger = require('../logger').default
+    const logger = require('js/utils/logger').default
     const theMsg = 'A thing happened, FYI'
     logger.debug(theMsg)
     expect(Raven.captureMessage).toHaveBeenCalledWith(theMsg, {
@@ -63,7 +63,7 @@ describe('logger', () => {
     // Suppress expected console message.
     jest.spyOn(console, 'info').mockImplementationOnce(jest.fn())
 
-    const logger = require('../logger').default
+    const logger = require('js/utils/logger').default
     const theMsg = 'A thing happened, FYI'
     logger.info(theMsg)
     expect(Raven.captureMessage).toHaveBeenCalledWith(theMsg, {
@@ -75,7 +75,7 @@ describe('logger', () => {
     // Suppress expected console message.
     jest.spyOn(console, 'warn').mockImplementationOnce(jest.fn())
 
-    const logger = require('../logger').default
+    const logger = require('js/utils/logger').default
     const theMsg = 'A thing happened, FYI'
     logger.warn(theMsg)
     expect(Raven.captureMessage).toHaveBeenCalledWith(theMsg, {
@@ -87,7 +87,7 @@ describe('logger', () => {
     // Suppress expected console message.
     jest.spyOn(console, 'error').mockImplementationOnce(jest.fn())
 
-    const logger = require('../logger').default
+    const logger = require('js/utils/logger').default
     const theMsg = 'A thing happened, FYI'
     logger.error(theMsg)
     expect(Raven.captureMessage).toHaveBeenCalledWith(theMsg, {
@@ -100,7 +100,7 @@ describe('logger', () => {
     // Suppress expected console message.
     jest.spyOn(console, 'log').mockImplementationOnce(jest.fn())
 
-    const logger = require('../logger').default
+    const logger = require('js/utils/logger').default
     const theMsg = 'A thing happened, FYI'
     logger.log(theMsg)
     expect(console.log).toHaveBeenCalledWith(theMsg)
@@ -110,7 +110,7 @@ describe('logger', () => {
     // Suppress expected console message.
     jest.spyOn(console, 'debug').mockImplementationOnce(jest.fn())
 
-    const logger = require('../logger').default
+    const logger = require('js/utils/logger').default
     const theMsg = 'A thing happened, FYI'
     logger.debug(theMsg)
     expect(console.debug).toHaveBeenCalledWith(theMsg)
@@ -120,7 +120,7 @@ describe('logger', () => {
     // Suppress expected console message.
     jest.spyOn(console, 'info').mockImplementationOnce(jest.fn())
 
-    const logger = require('../logger').default
+    const logger = require('js/utils/logger').default
     const theMsg = 'A thing happened, FYI'
     logger.info(theMsg)
     expect(console.info).toHaveBeenCalledWith(theMsg)
@@ -130,7 +130,7 @@ describe('logger', () => {
     // Suppress expected console message.
     jest.spyOn(console, 'warn').mockImplementationOnce(jest.fn())
 
-    const logger = require('../logger').default
+    const logger = require('js/utils/logger').default
     const theMsg = 'A thing happened, FYI'
     logger.warn(theMsg)
     expect(console.warn).toHaveBeenCalledWith(theMsg)
@@ -140,7 +140,7 @@ describe('logger', () => {
     // Suppress expected console message.
     jest.spyOn(console, 'error').mockImplementationOnce(jest.fn())
 
-    const logger = require('../logger').default
+    const logger = require('js/utils/logger').default
     const theMsg = 'A thing happened, FYI'
     logger.error(theMsg)
     expect(Raven.captureMessage).toHaveBeenCalledWith(theMsg, {

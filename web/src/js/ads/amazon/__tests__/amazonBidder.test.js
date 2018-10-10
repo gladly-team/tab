@@ -3,15 +3,15 @@
 import getAmazonTag, {
   __disableAutomaticBidResponses,
   __runBidsBack
-} from '../getAmazonTag'
-import getGoogleTag from '../../google/getGoogleTag'
+} from 'js/ads/amazon/getAmazonTag'
+import getGoogleTag from 'js/ads/google/getGoogleTag'
 import {
   getDefaultTabGlobal,
   mockAmazonBidResponse
 } from 'js/utils/test-utils'
 
-jest.mock('../getAmazonTag')
-jest.mock('../../consentManagement')
+jest.mock('js/ads/amazon/getAmazonTag')
+jest.mock('js/ads/consentManagement')
 
 beforeEach(() => {
   // Mock apstag
@@ -39,7 +39,7 @@ afterAll(() => {
 describe('amazonBidder', function () {
   it('runs without error', async () => {
     expect.assertions(0)
-    const amazonBidder = require('../amazonBidder').default
+    const amazonBidder = require('js/ads/amazon/amazonBidder').default
     await amazonBidder()
   })
 
@@ -47,7 +47,7 @@ describe('amazonBidder', function () {
     expect.assertions(1)
     const apstag = getAmazonTag()
 
-    const amazonBidder = require('../amazonBidder').default
+    const amazonBidder = require('js/ads/amazon/amazonBidder').default
     await amazonBidder()
 
     expect(apstag.init.mock.calls[0][0]).toMatchObject({
@@ -59,7 +59,7 @@ describe('amazonBidder', function () {
   it('calls apstag.fetchBids', async () => {
     const apstag = getAmazonTag()
 
-    const amazonBidder = require('../amazonBidder').default
+    const amazonBidder = require('js/ads/amazon/amazonBidder').default
     await amazonBidder()
 
     expect(apstag.fetchBids).toHaveBeenCalled()
@@ -81,7 +81,7 @@ describe('amazonBidder', function () {
   it('resolves immediately when we expect the mock to return bids immediately', async () => {
     expect.assertions(1)
 
-    const amazonBidder = require('../amazonBidder').default
+    const amazonBidder = require('js/ads/amazon/amazonBidder').default
     const promise = amazonBidder()
     promise.done = false
     promise.then(() => { promise.done = true })
@@ -95,7 +95,7 @@ describe('amazonBidder', function () {
     expect.assertions(2)
     __disableAutomaticBidResponses()
 
-    const amazonBidder = require('../amazonBidder').default
+    const amazonBidder = require('js/ads/amazon/amazonBidder').default
     const promise = amazonBidder()
     promise.done = false
     promise.then(() => { promise.done = true })
@@ -121,8 +121,8 @@ describe('amazonBidder', function () {
       passedCallback = callback
     })
 
-    const amazonBidder = require('../amazonBidder').default
-    const storeAmazonBids = require('../amazonBidder').storeAmazonBids
+    const amazonBidder = require('js/ads/amazon/amazonBidder').default
+    const storeAmazonBids = require('js/ads/amazon/amazonBidder').storeAmazonBids
     amazonBidder()
 
     // Fake that apstag calls callback for returned bids

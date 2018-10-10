@@ -11,7 +11,7 @@ const mockUserData = {
 
 describe('Campaign base component', function () {
   it('shows the campaign component when a campaign is live', function () {
-    const CampaignBase = require('../CampaignBase').default
+    const CampaignBase = require('js/components/Campaign/CampaignBase').default
     const wrapper = shallow(
       <CampaignBase
         user={mockUserData}
@@ -22,7 +22,7 @@ describe('Campaign base component', function () {
   })
 
   it('does not show the campaign component when a campaign is not live', function () {
-    const CampaignBase = require('../CampaignBase').default
+    const CampaignBase = require('js/components/Campaign/CampaignBase').default
     const wrapper = shallow(
       <CampaignBase
         user={mockUserData}

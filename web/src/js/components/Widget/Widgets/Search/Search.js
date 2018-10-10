@@ -6,7 +6,7 @@ import appTheme, {
   dashboardIconInactiveColor,
   dashboardIconActiveColor
 } from 'js/theme/default'
-import { getWidgetConfig } from '../../../../utils/widgets-utils'
+import { getWidgetConfig } from 'js/utils/widgets-utils'
 
 class Search extends React.Component {
   constructor (props) {

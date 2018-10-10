@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import WidgetPieceWrapper from '../../WidgetPieceWrapper'
+import WidgetPieceWrapper from 'js/components/Widget/WidgetPieceWrapper'
 import Chip from 'material-ui/Chip'
 import AddCircle from 'material-ui/svg-icons/content/add-circle'
 import appTheme from 'js/theme/default'

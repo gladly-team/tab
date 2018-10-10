@@ -3,7 +3,7 @@ import {
   graphql
 } from 'react-relay'
 
-import LogConsentData from './LogConsentDataComponent'
+import LogConsentData from 'js/components/Dashboard/LogConsentDataComponent'
 
 export default createFragmentContainer(LogConsentData, {
   user: graphql`

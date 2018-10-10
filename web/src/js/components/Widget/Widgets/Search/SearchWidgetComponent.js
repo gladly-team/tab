@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Search from './Search'
+import Search from 'js/components/Widget/Widgets/Search/Search'
 
 class SearchWidget extends React.Component {
   render () {

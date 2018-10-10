@@ -11,7 +11,7 @@ import appTheme, {
   widgetEditButtonInactive,
   widgetEditButtonHover
 } from 'js/theme/default'
-import EditWidgetChipAnimation from './EditWidgetChipAnimation'
+import EditWidgetChipAnimation from 'js/components/Widget/EditWidgetChipAnimation'
 
 // Holds the widget name and any "add" or "edit"
 // buttons and menus.

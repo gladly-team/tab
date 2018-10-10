@@ -5,7 +5,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import appTheme, {
   alternateAccentColor
 } from 'js/theme/default'
-import Logo from '../Logo/Logo'
+import Logo from 'js/components/Logo/Logo'
 
 class StickerCampaignThanks extends React.Component {
   render () {

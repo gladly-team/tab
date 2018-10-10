@@ -3,7 +3,7 @@ import {
   graphql
 } from 'react-relay'
 
-import LogAccountCreation from './LogAccountCreationComponent'
+import LogAccountCreation from 'js/components/Dashboard/LogAccountCreationComponent'
 
 export default createFragmentContainer(LogAccountCreation, {
   user: graphql`

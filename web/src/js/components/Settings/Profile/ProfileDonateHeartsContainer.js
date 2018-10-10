@@ -3,7 +3,7 @@ import {
   graphql
 } from 'react-relay'
 
-import ProfileDonateHearts from './ProfileDonateHeartsComponent'
+import ProfileDonateHearts from 'js/components/Settings/Profile/ProfileDonateHeartsComponent'
 
 export default createFragmentContainer(ProfileDonateHearts, {
   app: graphql`

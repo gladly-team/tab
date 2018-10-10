@@ -2,7 +2,7 @@
 
 import {
   STORAGE_NEW_CONSENT_DATA_EXISTS
-} from '../../constants'
+} from 'js/constants'
 
 jest.mock('js/utils/localstorage-mgr')
 
@@ -70,7 +70,7 @@ describe('consentManagement', () => {
         })
       }
     })
-    const getConsentString = require('../consentManagement').getConsentString
+    const getConsentString = require('js/ads/consentManagement').getConsentString
     const consentString = await getConsentString()
     expect(consentString).toEqual('abcdefghijklm')
   })
@@ -83,13 +83,13 @@ describe('consentManagement', () => {
     // Mute expected console error
     jest.spyOn(console, 'error').mockImplementationOnce(() => {})
 
-    const getConsentString = require('../consentManagement').getConsentString
+    const getConsentString = require('js/ads/consentManagement').getConsentString
     const consentString = await getConsentString()
     expect(consentString).toBeNull()
   })
 
   it('calls to display CMP UI as expected', () => {
-    const displayConsentUI = require('../consentManagement').displayConsentUI
+    const displayConsentUI = require('js/ads/consentManagement').displayConsentUI
     displayConsentUI()
     expect(window.__cmp).toHaveBeenCalledWith('displayConsentUi')
   })
@@ -108,7 +108,7 @@ describe('consentManagement', () => {
         })
       }
     })
-    const hasGlobalConsent = require('../consentManagement').hasGlobalConsent
+    const hasGlobalConsent = require('js/ads/consentManagement').hasGlobalConsent
     const isGlobalConsent = await hasGlobalConsent()
     expect(isGlobalConsent).toBe(false)
   })
@@ -123,7 +123,7 @@ describe('consentManagement', () => {
     // Mute expected console error
     jest.spyOn(console, 'error').mockImplementationOnce(() => {})
 
-    const hasGlobalConsent = require('../consentManagement').hasGlobalConsent
+    const hasGlobalConsent = require('js/ads/consentManagement').hasGlobalConsent
     const isGlobalConsent = await hasGlobalConsent()
     expect(isGlobalConsent).toBeNull()
   })
@@ -146,7 +146,7 @@ describe('consentManagement', () => {
         })
       }
     })
-    const registerConsentCallback = require('../consentManagement').registerConsentCallback
+    const registerConsentCallback = require('js/ads/consentManagement').registerConsentCallback
     const mockCallback = jest.fn()
     registerConsentCallback(mockCallback)
 
@@ -175,7 +175,7 @@ describe('consentManagement', () => {
         })
       }
     })
-    const registerConsentCallback = require('../consentManagement').registerConsentCallback
+    const registerConsentCallback = require('js/ads/consentManagement').registerConsentCallback
     const mockCallbackA = jest.fn()
     registerConsentCallback(mockCallbackA)
     const mockCallbackB = jest.fn()
@@ -211,7 +211,7 @@ describe('consentManagement', () => {
     })
 
     // Register some callbacks.
-    const registerConsentCallback = require('../consentManagement').registerConsentCallback
+    const registerConsentCallback = require('js/ads/consentManagement').registerConsentCallback
     const mockCallbackA = jest.fn()
     registerConsentCallback(mockCallbackA)
     const mockCallbackB = jest.fn()
@@ -226,7 +226,7 @@ describe('consentManagement', () => {
     expect(mockCallbackC).toHaveBeenCalledTimes(1)
 
     // Unregister some callbacks.
-    const unregisterConsentCallback = require('../consentManagement').unregisterConsentCallback
+    const unregisterConsentCallback = require('js/ads/consentManagement').unregisterConsentCallback
     unregisterConsentCallback(mockCallbackA)
     unregisterConsentCallback(mockCallbackC)
 
@@ -242,7 +242,7 @@ describe('consentManagement', () => {
 
   it('saves a "consent data updated" flag to localStorage', () => {
     const localStorageManager = require('js/utils/localstorage-mgr').default
-    const saveConsentUpdateEventToLocalStorage = require('../consentManagement')
+    const saveConsentUpdateEventToLocalStorage = require('js/ads/consentManagement')
       .saveConsentUpdateEventToLocalStorage
     saveConsentUpdateEventToLocalStorage()
     expect(localStorageManager.setItem).toHaveBeenCalledWith(STORAGE_NEW_CONSENT_DATA_EXISTS, 'true')
@@ -250,7 +250,7 @@ describe('consentManagement', () => {
 
   it('checking if new consent needs to be logged works as expected', () => {
     const localStorageManager = require('js/utils/localstorage-mgr').default
-    const checkIfNewConsentNeedsToBeLogged = require('../consentManagement')
+    const checkIfNewConsentNeedsToBeLogged = require('js/ads/consentManagement')
       .checkIfNewConsentNeedsToBeLogged
 
     localStorageManager.setItem(STORAGE_NEW_CONSENT_DATA_EXISTS, 'true')
@@ -262,7 +262,7 @@ describe('consentManagement', () => {
 
   it('marking consent data as logged works as expected', () => {
     const localStorageManager = require('js/utils/localstorage-mgr').default
-    const markConsentDataAsLogged = require('../consentManagement')
+    const markConsentDataAsLogged = require('js/ads/consentManagement')
       .markConsentDataAsLogged
     markConsentDataAsLogged()
     expect(localStorageManager.removeItem)

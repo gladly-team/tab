@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 
 import WidgetSharedSpace from 'js/components/General/WidgetSharedSpace'
-import EmptyWidgetMsg from '../../EmptyWidgetMsg'
-import WidgetScrollSection from '../../WidgetScrollSection'
-import Note from './Note'
-import AddNoteForm from './AddNoteForm'
+import EmptyWidgetMsg from 'js/components/Widget/EmptyWidgetMsg'
+import WidgetScrollSection from 'js/components/Widget/WidgetScrollSection'
+import Note from 'js/components/Widget/Widgets/Notes/Note'
+import AddNoteForm from 'js/components/Widget/Widgets/Notes/AddNoteForm'
 import UpdateWidgetDataMutation from 'js/mutations/UpdateWidgetDataMutation'
 
 class NotesWidget extends React.Component {

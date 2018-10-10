@@ -4,7 +4,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Paper from 'material-ui/Paper'
 import EditIcon from 'material-ui/svg-icons/editor/mode-edit'
-import EditBookmarkWidgetModal from './EditBookmarkWidgetModal'
+import EditBookmarkWidgetModal from 'js/components/Widget/Widgets/Bookmarks/EditBookmarkWidgetModal'
 import {
   dashboardTransparentBackground,
   widgetEditButtonInactive,
