@@ -28,4 +28,10 @@ describe('feature flags', () => {
     process.env.FEATURE_FLAG_ANON_USER_SIGN_IN = 'yes'
     expect(isAnonymousUserSignInEnabled()).toBe(false)
   })
+
+  test('isVariousAdSizesEnabled is false', () => {
+    const isVariousAdSizesEnabled = require('js/utils/feature-flags')
+      .isVariousAdSizesEnabled
+    expect(isVariousAdSizesEnabled()).toBe(false)
+  })
 })

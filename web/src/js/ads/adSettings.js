@@ -1,4 +1,8 @@
 
+import {
+  isVariousAdSizesEnabled
+} from 'js/utils/feature-flags'
+
 // Time to wait for the entire ad auction before
 // calling the ad server.
 export const AUCTION_TIMEOUT = 1000
@@ -30,7 +34,7 @@ export const HORIZONTAL_AD_SLOT_ID = 'div-gpt-ad-1464385742501-0'
  * @return {Array[Array]} An array of ad sizes
  */
 export const getVerticalAdSizes = () => {
-  return [
+  return isVariousAdSizesEnabled() ? [
     [300, 250],
     // Wider than we probably want to allow.
     // [336, 280],
@@ -48,6 +52,9 @@ export const getVerticalAdSizes = () => {
     [230, 33],
     [300, 600]
   ]
+    : [
+      [300, 250]
+    ]
 }
 
 /**
@@ -57,7 +64,7 @@ export const getVerticalAdSizes = () => {
  * @return {Array[Array]} An array of ad sizes
  */
 export const getHorizontalAdSizes = () => {
-  return [
+  return isVariousAdSizesEnabled() ? [
     [728, 90],
     [728, 210],
     [720, 300],
@@ -66,4 +73,7 @@ export const getHorizontalAdSizes = () => {
     // [550, 480],
     [468, 60]
   ]
+    : [
+      [728, 90]
+    ]
 }

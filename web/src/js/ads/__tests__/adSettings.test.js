@@ -1,5 +1,11 @@
 /* eslint-env jest */
 
+import {
+  isVariousAdSizesEnabled
+} from 'js/utils/feature-flags'
+
+jest.mock('js/utils/feature-flags')
+
 describe('ad settings', () => {
   test('ad IDs and ad slot IDs are as expected', () => {
     // Important: do not change these IDs without consulting the
@@ -16,7 +22,28 @@ describe('ad settings', () => {
     expect(HORIZONTAL_AD_SLOT_ID).toBe('div-gpt-ad-1464385742501-0')
   })
 
-  test('getVerticalAdSizes returns the expected ad sizes', () => {
+  test('getVerticalAdSizes returns the expected ad sizes when various ad sizes are disabled', () => {
+    isVariousAdSizesEnabled.mockReturnValueOnce(false)
+    const getVerticalAdSizes = require('js/ads/adSettings').getVerticalAdSizes
+    expect(getVerticalAdSizes()).toEqual(
+      [
+        [300, 250]
+      ]
+    )
+  })
+
+  test('getHorizontalAdSizes returns the expected ad sizes when various ad sizes are disabled', () => {
+    isVariousAdSizesEnabled.mockReturnValueOnce(false)
+    const getHorizontalAdSizes = require('js/ads/adSettings').getHorizontalAdSizes
+    expect(getHorizontalAdSizes()).toEqual(
+      [
+        [728, 90]
+      ]
+    )
+  })
+
+  test('getVerticalAdSizes returns the expected ad sizes when various ad sizes are enabled', () => {
+    isVariousAdSizesEnabled.mockReturnValueOnce(true)
     const getVerticalAdSizes = require('js/ads/adSettings').getVerticalAdSizes
     expect(getVerticalAdSizes()).toEqual(
       [
@@ -38,7 +65,8 @@ describe('ad settings', () => {
     )
   })
 
-  test('getHorizontalAdSizes returns the expected ad sizes', () => {
+  test('getHorizontalAdSizes returns the expected ad sizes when various ad sizes are enabled', () => {
+    isVariousAdSizesEnabled.mockReturnValueOnce(true)
     const getHorizontalAdSizes = require('js/ads/adSettings').getHorizontalAdSizes
     expect(getHorizontalAdSizes()).toEqual(
       [
