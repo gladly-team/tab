@@ -17,9 +17,9 @@ describe('ad settings', () => {
       HORIZONTAL_AD_SLOT_ID
     } = require('js/ads/adSettings')
     expect(VERTICAL_AD_ID).toBe('/43865596/HBTR')
-    expect(VERTICAL_AD_SLOT_ID).toBe('div-gpt-ad-1464385677836-0')
+    expect(VERTICAL_AD_SLOT_ID).toBe('div-gpt-ad-1464385742501-0')
     expect(HORIZONTAL_AD_ID).toBe('/43865596/HBTL')
-    expect(HORIZONTAL_AD_SLOT_ID).toBe('div-gpt-ad-1464385742501-0')
+    expect(HORIZONTAL_AD_SLOT_ID).toBe('div-gpt-ad-1464385677836-0')
   })
 
   test('getVerticalAdSizes returns the expected ad sizes when various ad sizes are disabled', () => {

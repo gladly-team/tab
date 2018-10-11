@@ -7,7 +7,6 @@ import getGoogleTag, {
 } from 'js/ads/google/getGoogleTag'
 import getAmazonTag from 'js/ads/amazon/getAmazonTag'
 import getPrebidPbjs from 'js/ads/prebid/getPrebidPbjs'
-import prebidConfig from 'js/ads/prebid/prebidConfig'
 
 jest.mock('js/ads/google/getGoogleTag')
 jest.mock('js/ads/amazon/getAmazonTag')
@@ -17,6 +16,7 @@ jest.mock('js/ads/amazon/amazonBidder')
 jest.mock('js/utils/client-location')
 jest.mock('js/ads/handleAdsLoaded')
 jest.mock('js/ads/adsEnabledStatus')
+jest.mock('js/ads/google/setUpGoogleAds')
 
 beforeAll(() => {
   jest.useFakeTimers()
@@ -56,9 +56,17 @@ afterAll(() => {
 })
 
 describe('ads script', () => {
+  it('sets up the Google ad slots', async () => {
+    expect.assertions(1)
+    const setUpGoogleAds = require('js/ads/google/setUpGoogleAds').default
+    require('js/ads/ads')
+    expect(setUpGoogleAds).toHaveBeenCalledTimes(1)
+  })
+
   it('calls the expected bidders and ad server', async () => {
     expect.assertions(3)
     const amazonBidder = require('js/ads/amazon/amazonBidder').default
+    const prebidConfig = require('js/ads/prebid/prebidConfig').default
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
 
@@ -75,6 +83,7 @@ describe('ads script', () => {
   it('does not call expected bidders or ad server when ads are not enabled', async () => {
     expect.assertions(3)
     const amazonBidder = require('js/ads/amazon/amazonBidder').default
+    const prebidConfig = require('js/ads/prebid/prebidConfig').default
 
     // Disable ads.
     const adsEnabledStatus = require('js/ads/adsEnabledStatus').default
