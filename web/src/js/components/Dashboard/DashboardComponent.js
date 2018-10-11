@@ -34,6 +34,12 @@ import {
   goTo,
   loginURL
 } from 'js/navigation/navigation'
+import {
+  VERTICAL_AD_ID,
+  VERTICAL_AD_SLOT_ID,
+  HORIZONTAL_AD_ID,
+  HORIZONTAL_AD_SLOT_ID
+} from 'js/ads/adSettings'
 
 class Dashboard extends React.Component {
   constructor (props) {
@@ -297,8 +303,8 @@ class Dashboard extends React.Component {
           for the ads themselves. This will avoid awkward gaps.
         */}
         <Ad
-          adId='div-gpt-ad-1464385742501-0'
-          adSlotId='/43865596/HBTR'
+          adId={VERTICAL_AD_ID}
+          adSlotId={VERTICAL_AD_SLOT_ID}
           style={{
             position: 'absolute',
             bottom: 10,
@@ -314,8 +320,8 @@ class Dashboard extends React.Component {
           }}
         />
         <Ad
-          adId='div-gpt-ad-1464385677836-0'
-          adSlotId='/43865596/HBTL'
+          adId={HORIZONTAL_AD_ID}
+          adSlotId={HORIZONTAL_AD_SLOT_ID}
           style={{
             position: 'absolute',
             bottom: 10,

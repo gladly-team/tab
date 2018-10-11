@@ -2,7 +2,13 @@
 import getPrebidPbjs from 'js/ads/prebid/getPrebidPbjs'
 import { isInEuropeanUnion } from 'js/utils/client-location'
 import {
-  CONSENT_MANAGEMENT_TIMEOUT
+  getVerticalAdSizes,
+  getHorizontalAdSizes,
+  CONSENT_MANAGEMENT_TIMEOUT,
+  VERTICAL_AD_ID,
+  VERTICAL_AD_SLOT_ID,
+  HORIZONTAL_AD_ID,
+  HORIZONTAL_AD_SLOT_ID
 } from 'js/ads/adSettings'
 
 /**
@@ -28,35 +34,18 @@ export default () => {
     // Note: brealtime is automatically aliased by the
     // AppNexus bid adapter.
     const adUnits = [{
-      code: 'div-gpt-ad-1464385742501-0',
+      code: VERTICAL_AD_SLOT_ID,
       mediaTypes: {
         banner: {
-          sizes: [
-            [300, 250],
-            // [336, 280],
-            [300, 250],
-            [250, 250],
-            [160, 600],
-            [120, 600],
-            [120, 240],
-            [240, 400],
-            [234, 60],
-            [180, 150],
-            [125, 125],
-            [120, 90],
-            [120, 60],
-            [120, 30],
-            [230, 33],
-            [300, 600]
-          ]
+          sizes: getVerticalAdSizes()
         }
       },
       bids: [
         {
           bidder: 'sonobi',
           params: {
-            dom_id: 'div-gpt-ad-1464385742501-0',
-            ad_unit: '/43865596/HBTR'
+            dom_id: VERTICAL_AD_SLOT_ID,
+            ad_unit: VERTICAL_AD_ID
           }
         },
         {
@@ -104,25 +93,18 @@ export default () => {
       ]
     },
     {
-      code: 'div-gpt-ad-1464385677836-0',
+      code: HORIZONTAL_AD_SLOT_ID,
       mediaTypes: {
         banner: {
-          sizes: [
-            [728, 90],
-            [728, 210],
-            [720, 300],
-            [500, 350],
-            [550, 480],
-            [468, 60]
-          ]
+          sizes: getHorizontalAdSizes()
         }
       },
       bids: [
         {
           bidder: 'sonobi',
           params: {
-            dom_id: 'div-gpt-ad-1464385677836-0',
-            ad_unit: '/43865596/HBTL'
+            dom_id: HORIZONTAL_AD_SLOT_ID,
+            ad_unit: HORIZONTAL_AD_ID
           }
         },
         {

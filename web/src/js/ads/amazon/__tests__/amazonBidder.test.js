@@ -10,8 +10,9 @@ import {
   mockAmazonBidResponse
 } from 'js/utils/test-utils'
 
-jest.mock('js/ads/amazon/getAmazonTag')
+jest.mock('js/ads/adSettings')
 jest.mock('js/ads/consentManagement')
+jest.mock('js/ads/amazon/getAmazonTag')
 
 beforeEach(() => {
   // Mock apstag
@@ -66,33 +67,47 @@ describe('amazonBidder', function () {
     expect(apstag.fetchBids.mock.calls[0][0]).toMatchObject({
       slots: [
         {
-          slotID: 'div-gpt-ad-1464385742501-0',
+          slotID: 'div-gpt-ad-1357913579-0',
           sizes: [
-            [300, 250],
+            [300, 250]
+          ]
+        },
+        {
+          slotID: 'div-gpt-ad-24682468-0',
+          sizes: [
+            [728, 90]
+          ]
+        }
+      ],
+      timeout: 700
+    })
+  })
+
+  it('uses ad sizes provided by the ads settings', async () => {
+    const apstag = getAmazonTag()
+    const {
+      getVerticalAdSizes,
+      getHorizontalAdSizes
+    } = require('js/ads/adSettings')
+    getVerticalAdSizes.mockReturnValueOnce([[250, 250], [300, 600]])
+    getHorizontalAdSizes.mockReturnValueOnce([[728, 90], [720, 300]])
+
+    const amazonBidder = require('js/ads/amazon/amazonBidder').default
+    await amazonBidder()
+    expect(apstag.fetchBids.mock.calls[0][0]).toMatchObject({
+      slots: [
+        {
+          slotID: 'div-gpt-ad-1357913579-0',
+          sizes: [
             [250, 250],
-            [160, 600],
-            [120, 600],
-            [120, 240],
-            [240, 400],
-            [234, 60],
-            [180, 150],
-            [125, 125],
-            [120, 90],
-            [120, 60],
-            [120, 30],
-            [230, 33],
             [300, 600]
           ]
         },
         {
-          slotID: 'div-gpt-ad-1464385677836-0',
+          slotID: 'div-gpt-ad-24682468-0',
           sizes: [
             [728, 90],
-            [728, 210],
-            [720, 300],
-            [500, 350],
-            [550, 480],
-            [468, 60]
+            [720, 300]
           ]
         }
       ],
