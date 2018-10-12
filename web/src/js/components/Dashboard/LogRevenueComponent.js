@@ -1,4 +1,5 @@
 import React from 'react'
+import { get } from 'lodash/object'
 import LogUserRevenueMutation from 'js/mutations/LogUserRevenueMutation'
 import PropTypes from 'prop-types'
 import getGoogleTag from 'js/ads/google/getGoogleTag'
@@ -49,18 +50,38 @@ class LogRevenueComponent extends React.Component {
   getEncodedAmazonRevenueForSlot (slotId) {
     const amazonBids = window.tabforacause.ads.amazonBids
     const amazonBidExists = (
-      amazonBids &&
-      amazonBids[slotId] &&
-      amazonBids[slotId]['amznbid'] !== '' && // An empty string means no bid
-      amazonBids[slotId]['amzniid'] !== '' // An empty string means no bid
+      // An empty string for either of these means no bid
+      get(amazonBids, [slotId, 'amznbid']) &&
+      get(amazonBids, [slotId, 'amzniid'])
     )
     if (!amazonBidExists) {
       return null
     }
+    const amazonAdSize = get(amazonBids, [slotId, 'size'])
+
     return {
       encodingType: 'AMAZON_CPM',
-      encodedValue: window.tabforacause.ads.amazonBids[slotId]['amznbid']
+      encodedValue: get(amazonBids, [slotId, 'amznbid']),
+      adSize: amazonAdSize
     }
+  }
+
+  /**
+   * Get the ad dimensions for the winning Prebid bid for this slot
+   * @param {string} slotId - The DFP slot ID
+   * @return {string|null} revenue - The ad dimensions in the form of
+   * 'WIDTHxHEIGHT'.
+   */
+  getPrebidAdSizeForSlot (slotId) {
+    // Get the slot's highest CPM bid from Prebid
+    const pbjs = getPrebidPbjs()
+    const slotBids = pbjs.getHighestCpmBids(slotId)
+
+    // There might not be any bids
+    if (!get(slotBids, 'length')) {
+      return null
+    }
+    return slotBids[0].size
   }
 
   /**
@@ -113,6 +134,8 @@ class LogRevenueComponent extends React.Component {
         return
       }
 
+      const adSize = this.getPrebidAdSizeForSlot(slotId)
+
       // Get the advertiser ID. It will be null if Google Adsense
       // took the impression, so assume nulls are Adsense.
       const GOOGLE_ADSENSE_ID = '99'
@@ -128,6 +151,7 @@ class LogRevenueComponent extends React.Component {
         this.props.user.id,
         prebidRevenue,
         dfpAdvertiserId,
+        adSize,
         amazonEncodedBid,
         // Only send aggregationOperation value if we have more than one
         // revenue value
