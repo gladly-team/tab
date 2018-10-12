@@ -40,6 +40,8 @@ beforeEach(() => {
   // Mock tabforacause global
   delete window.tabforacause
   window.tabforacause = getDefaultTabGlobal()
+
+  window.pbjs.getHighestCpmBids.mockReturnValue({})
 })
 
 afterEach(() => {
@@ -77,8 +79,9 @@ describe('LogRevenueComponent', function () {
 
     // Mock a Prebid bid value for the slot
     const mockRevenueValue = 0.172
-    window.pbjs.getHighestCpmBids.mockReturnValueOnce([{
-      cpm: mockRevenueValue
+    window.pbjs.getHighestCpmBids.mockReturnValue([{
+      cpm: mockRevenueValue,
+      size: '300x250'
       // ... other bid info exists here
     }])
 
@@ -99,7 +102,7 @@ describe('LogRevenueComponent', function () {
       />
     )
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment, mockUserId,
-      0.000172, '132435', null, null, tabId)
+      0.000172, '132435', '300x250', null, null, tabId)
 
     // It should mark this slot as logged
     expect(window.tabforacause.ads.slotsAlreadyLoggedRevenue[slotId]).toBe(true)
@@ -117,8 +120,9 @@ describe('LogRevenueComponent', function () {
 
     // Mock a Prebid bid value for the slot
     const mockRevenueValue = 0.172
-    window.pbjs.getHighestCpmBids.mockReturnValueOnce([{
-      cpm: mockRevenueValue
+    window.pbjs.getHighestCpmBids.mockReturnValue([{
+      cpm: mockRevenueValue,
+      size: '300x250'
       // ... other bid info exists here
     }])
 
@@ -150,7 +154,7 @@ describe('LogRevenueComponent', function () {
     window.tabforacause.ads.slotsViewable[slotId] = true
 
     // Mock no Prebid bids for the slot
-    window.pbjs.getHighestCpmBids.mockReturnValueOnce([])
+    window.pbjs.getHighestCpmBids.mockReturnValue([])
 
     // Mock no Amazon bids
     window.tabforacause.ads.amazonBids = {}
@@ -182,8 +186,9 @@ describe('LogRevenueComponent', function () {
 
     // Mock a Prebid bid value for the slot
     const mockRevenueValue = 0.12345678901234567890
-    window.pbjs.getHighestCpmBids.mockReturnValueOnce([{
-      cpm: mockRevenueValue
+    window.pbjs.getHighestCpmBids.mockReturnValue([{
+      cpm: mockRevenueValue,
+      size: '300x250'
       // ... other bid info exists here
     }])
 
@@ -205,7 +210,7 @@ describe('LogRevenueComponent', function () {
     )
 
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment, mockUserId,
-      0.000123456789012, '9876543', null, null, tabId)
+      0.000123456789012, '9876543', '300x250', null, null, tabId)
   })
 
   it('after mount, logs revenue when GPT fires a "slot rendered" event', () => {
@@ -214,8 +219,9 @@ describe('LogRevenueComponent', function () {
 
     // Mock a Prebid bid value for the slot
     const mockRevenueValue = 2.31
-    window.pbjs.getHighestCpmBids.mockReturnValueOnce([{
-      cpm: mockRevenueValue
+    window.pbjs.getHighestCpmBids.mockReturnValue([{
+      cpm: mockRevenueValue,
+      size: '300x250'
       // ... other bid info exists here
     }])
 
@@ -249,7 +255,7 @@ describe('LogRevenueComponent', function () {
 
     // Should have logged revenue after the slot loaded
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment,
-      mockUserId, 0.00231, '159260', null, null, tabId)
+      mockUserId, 0.00231, '159260', '300x250', null, null, tabId)
   })
 
   it('defaults to 99 (Google Adsense) DFP Advertiser ID when the advertiser ID does not exist', () => {
@@ -258,8 +264,9 @@ describe('LogRevenueComponent', function () {
 
     // Mock a Prebid bid value for the slot
     const mockRevenueValue = 2.31
-    window.pbjs.getHighestCpmBids.mockReturnValueOnce([{
-      cpm: mockRevenueValue
+    window.pbjs.getHighestCpmBids.mockReturnValue([{
+      cpm: mockRevenueValue,
+      size: '300x250'
       // ... other bid info exists here
     }])
 
@@ -302,7 +309,7 @@ describe('LogRevenueComponent', function () {
 
     // Should have logged revenue after the slot loaded
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment,
-      mockUserId, 0.00231, '99', null, null, tabId)
+      mockUserId, 0.00231, '99', '300x250', null, null, tabId)
   })
 
   it('logs Amazon revenue when there are no Prebid bids', () => {
@@ -314,13 +321,14 @@ describe('LogRevenueComponent', function () {
     window.tabforacause.ads.slotsViewable[slotId] = true
 
     // Mock no Prebid bids for the slot
-    window.pbjs.getHighestCpmBids.mockReturnValueOnce([])
+    window.pbjs.getHighestCpmBids.mockReturnValue([])
 
     // Mock an Amazon bid
     window.tabforacause.ads.amazonBids = {
       [slotId]: mockAmazonBidResponse({
         slotID: slotId,
-        amznbid: 'a-bid-code'
+        amznbid: 'a-bid-code',
+        size: '728x90'
       })
     }
 
@@ -338,8 +346,9 @@ describe('LogRevenueComponent', function () {
       />
     )
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment, mockUserId,
-      null, '132435', { encodingType: 'AMAZON_CPM', encodedValue: 'a-bid-code' }, null,
-      tabId)
+      null, '132435', null,
+      { encodingType: 'AMAZON_CPM', encodedValue: 'a-bid-code', adSize: '728x90' },
+      null, tabId)
   })
 
   it('logs Amazon revenue when there is also a Prebid bid', () => {
@@ -352,8 +361,9 @@ describe('LogRevenueComponent', function () {
 
     // Mock a Prebid bid value for the slot
     const mockRevenueValue = 2.31
-    window.pbjs.getHighestCpmBids.mockReturnValueOnce([{
-      cpm: mockRevenueValue
+    window.pbjs.getHighestCpmBids.mockReturnValue([{
+      cpm: mockRevenueValue,
+      size: '728x90'
       // ... other bid info exists here
     }])
 
@@ -361,7 +371,8 @@ describe('LogRevenueComponent', function () {
     window.tabforacause.ads.amazonBids = {
       [slotId]: mockAmazonBidResponse({
         slotID: slotId,
-        amznbid: 'a-bid-code'
+        amznbid: 'a-bid-code',
+        size: '728x90'
       })
     }
 
@@ -379,7 +390,7 @@ describe('LogRevenueComponent', function () {
       />
     )
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment, mockUserId,
-      0.00231, '132435', { encodingType: 'AMAZON_CPM', encodedValue: 'a-bid-code' }, 'MAX',
+      0.00231, '132435', '728x90', { encodingType: 'AMAZON_CPM', encodedValue: 'a-bid-code', adSize: '728x90' }, 'MAX',
       tabId)
   })
 
@@ -393,8 +404,9 @@ describe('LogRevenueComponent', function () {
 
     // Mock a Prebid bid value for the slot
     const mockRevenueValue = 2.31
-    window.pbjs.getHighestCpmBids.mockReturnValueOnce([{
-      cpm: mockRevenueValue
+    window.pbjs.getHighestCpmBids.mockReturnValue([{
+      cpm: mockRevenueValue,
+      size: '728x90'
       // ... other bid info exists here
     }])
 
@@ -420,7 +432,7 @@ describe('LogRevenueComponent', function () {
       />
     )
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment, mockUserId,
-      0.00231, '132435', null, null, tabId)
+      0.00231, '132435', '728x90', null, null, tabId)
   })
 
   it('logs a warning, but does not throw an error or log revenue, if slot data is missing', () => {
@@ -437,8 +449,9 @@ describe('LogRevenueComponent', function () {
 
     // Mock a Prebid bid value for the slot
     const mockRevenueValue = 0.172
-    window.pbjs.getHighestCpmBids.mockReturnValueOnce([{
-      cpm: mockRevenueValue
+    window.pbjs.getHighestCpmBids.mockReturnValue([{
+      cpm: mockRevenueValue,
+      size: '300x250'
       // ... other bid info exists here
     }])
 
@@ -460,5 +473,49 @@ describe('LogRevenueComponent', function () {
     )
     expect(LogUserRevenueMutation).not.toHaveBeenCalled()
     expect(mockConsoleWarn).toHaveBeenCalledWith('Could not find rendered slot data for slot "my-slot-2468"')
+  })
+
+  it('logs bids even if ad sizes are undefined for some reason', () => {
+    // Mark an ad slot as loaded
+    const slotId = 'my-slot-2468'
+    window.tabforacause.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
+      slotId, { advertiserId: 132435 })
+    window.tabforacause.ads.slotsLoaded[slotId] = true
+    window.tabforacause.ads.slotsViewable[slotId] = true
+
+    // Mock a Prebid bid value for the slot
+    const mockRevenueValue = 2.31
+    window.pbjs.getHighestCpmBids.mockReturnValue([{
+      cpm: mockRevenueValue,
+      size: undefined
+      // ... other bid info exists here
+    }])
+
+    // Mock an Amazon bid
+    window.tabforacause.ads.amazonBids = {
+      [slotId]: mockAmazonBidResponse({
+        slotID: slotId,
+        amznbid: 'a-bid-code',
+        size: undefined
+      })
+    }
+
+    const LogRevenueComponent = require('js/components/Dashboard/LogRevenueComponent').default
+    const mockUserId = 'abcdefghijklmno'
+    const tabId = '712dca1a-3705-480f-95ff-314be86a2936'
+    const mockRelayEnvironment = {}
+    shallow(
+      <LogRevenueComponent
+        user={{
+          id: mockUserId
+        }}
+        tabId={tabId}
+        relay={{ environment: mockRelayEnvironment }}
+      />
+    )
+    expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment, mockUserId,
+      0.00231, '132435', undefined,
+      { encodingType: 'AMAZON_CPM', encodedValue: 'a-bid-code', adSize: undefined },
+      'MAX', tabId)
   })
 })

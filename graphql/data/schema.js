@@ -564,7 +564,8 @@ const EncodedRevenueValueType = new GraphQLInputObjectType({
     encodedValue: {
       description: 'A string that we can decode to a revenue value (float) using the "encodingType" method',
       type: new GraphQLNonNull(GraphQLString)
-    }
+    },
+    adSize: { type: GraphQLString }
   }
 })
 
@@ -592,7 +593,8 @@ const logUserRevenueMutation = mutationWithClientMutationId({
       })
     },
     dfpAdvertiserId: { type: GraphQLString },
-    tabId: { type: GraphQLString }
+    tabId: { type: GraphQLString },
+    adSize: { type: GraphQLString }
   },
   outputFields: {
     success: {
@@ -606,13 +608,14 @@ const logUserRevenueMutation = mutationWithClientMutationId({
         dfpAdvertiserId,
         encodedRevenue,
         aggregationOperation,
-        tabId
+        tabId,
+        adSize
       },
       context
     ) => {
     const { id } = fromGlobalId(userId)
     return logRevenue(context.user, id, revenue, dfpAdvertiserId, encodedRevenue,
-      aggregationOperation, tabId)
+      aggregationOperation, tabId, adSize)
   }
 })
 

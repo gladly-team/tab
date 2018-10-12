@@ -149,6 +149,7 @@ input EncodedRevenueValue {
   A string that we can decode to a revenue value (float) using the "encodingType" method
   """
   encodedValue: String!
+  adSize: String
 }
 
 """
@@ -218,6 +219,7 @@ input LogUserRevenueInput {
   aggregationOperation: LogUserRevenueAggregationOperationEnum
   dfpAdvertiserId: String
   tabId: String
+  adSize: String
   clientMutationId: String
 }
 
