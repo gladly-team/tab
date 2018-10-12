@@ -29,9 +29,9 @@ describe('feature flags', () => {
     expect(isAnonymousUserSignInEnabled()).toBe(false)
   })
 
-  test('isVariousAdSizesEnabled is false', () => {
+  test('isVariousAdSizesEnabled is true', () => {
     const isVariousAdSizesEnabled = require('js/utils/feature-flags')
       .isVariousAdSizesEnabled
-    expect(isVariousAdSizesEnabled()).toBe(false)
+    expect(isVariousAdSizesEnabled()).toBe(true)
   })
 })
