@@ -2,6 +2,10 @@
 import {
   isVariousAdSizesEnabled
 } from 'js/utils/feature-flags'
+import {
+  getVariousAdSizesTestGroup,
+  VARIOUS_AD_SIZES_GROUP_VARIOUS
+} from 'js/utils/experiments'
 
 // Time to wait for the entire ad auction before
 // calling the ad server.
@@ -25,8 +29,6 @@ export const VERTICAL_AD_SLOT_DOM_ID = 'div-gpt-ad-1464385742501-0'
 export const HORIZONTAL_AD_UNIT_ID = '/43865596/HBTL'
 export const HORIZONTAL_AD_SLOT_DOM_ID = 'div-gpt-ad-1464385677836-0'
 
-// TODO: limit new ad sizes to a test group
-
 /**
  * Get an array of ad sizes (each an array with two numbers)
  * of the acceptable ad sizes to display for the veritcal
@@ -34,7 +36,11 @@ export const HORIZONTAL_AD_SLOT_DOM_ID = 'div-gpt-ad-1464385677836-0'
  * @return {Array[Array]} An array of ad sizes
  */
 export const getVerticalAdSizes = () => {
-  return isVariousAdSizesEnabled() ? [
+  const showVariousAdSizes = (
+    isVariousAdSizesEnabled() &&
+    getVariousAdSizesTestGroup() === VARIOUS_AD_SIZES_GROUP_VARIOUS
+  )
+  return showVariousAdSizes ? [
     [300, 250],
     // Wider than we probably want to allow.
     // [336, 280],
@@ -64,7 +70,11 @@ export const getVerticalAdSizes = () => {
  * @return {Array[Array]} An array of ad sizes
  */
 export const getHorizontalAdSizes = () => {
-  return isVariousAdSizesEnabled() ? [
+  const showVariousAdSizes = (
+    isVariousAdSizesEnabled() &&
+    getVariousAdSizesTestGroup() === VARIOUS_AD_SIZES_GROUP_VARIOUS
+  )
+  return showVariousAdSizes ? [
     [728, 90],
     [728, 210],
     [720, 300],
