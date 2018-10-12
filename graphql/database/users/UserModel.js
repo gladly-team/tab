@@ -163,6 +163,9 @@ class User extends BaseModel {
       // Group assignments for experiments / split-tests
       testGroupAnonSignIn: types.number().integer().allow(null)
         .description(`Which group the user is in for the "anonymous user sign-in"
+          split-test. This value is assigned on the client so is not trustworthy.`),
+      testGroupVariousAdSizes: types.number().integer().allow(null)
+        .description(`Which group the user is in for the "various ad sizes"
           split-test. This value is assigned on the client so is not trustworthy.`)
     }
   }

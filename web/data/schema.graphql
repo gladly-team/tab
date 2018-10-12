@@ -169,6 +169,14 @@ enum ExperimentGroupAnonSignIn {
 """The experimental groups to which the user is assigned"""
 input ExperimentGroups {
   anonSignIn: ExperimentGroupAnonSignIn
+  variousAdSizes: ExperimentGroupVariousAdSizes
+}
+
+"""The test of enabling many different ad sizes"""
+enum ExperimentGroupVariousAdSizes {
+  NONE
+  STANDARD
+  VARIOUS
 }
 
 input LogEmailVerifiedMutationInput {

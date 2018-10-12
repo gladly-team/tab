@@ -8,6 +8,12 @@ const experimentConfig = {
     NONE: 0,
     AUTHED_USER_ONLY: 1,
     ANONYMOUS_ALLOWED: 2
+  },
+  // @experiment-various-ad-sizes
+  variousAdSizes: {
+    NONE: 0,
+    STANDARD: 1,
+    VARIOUS: 2
   }
 }
 
