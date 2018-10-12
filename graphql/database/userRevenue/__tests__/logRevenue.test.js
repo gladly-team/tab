@@ -100,6 +100,27 @@ describe('logRevenue', () => {
     )
   })
 
+  test('includes "adSize" when provided', async () => {
+    expect.assertions(1)
+
+    const userId = userContext.id
+    const userRevenueCreate = jest.spyOn(UserRevenueModel, 'create')
+    const someTabId = '712dca1a-3705-480f-95ff-314be86a2936'
+    await logRevenue(userContext, userId, 0.0172, '2468', null, null, someTabId, '728x90')
+
+    expect(userRevenueCreate).toHaveBeenLastCalledWith(
+      userContext,
+      addTimestampFieldsToItem({
+        userId: userId,
+        timestamp: moment.utc().toISOString(),
+        revenue: 0.0172,
+        dfpAdvertiserId: '2468',
+        tabId: someTabId,
+        adSize: '728x90'
+      })
+    )
+  })
+
   test('it throws an error if neither "revenue" nor "encodedRevenue" is provided', () => {
     expect.assertions(1)
 
@@ -145,6 +166,33 @@ describe('logRevenue', () => {
         userId: userId,
         timestamp: moment.utc().toISOString(),
         revenue: 0.0085
+      })
+    )
+  })
+
+  test('it logs the ad size in the encoded Amazon CPM revenue object', async () => {
+    expect.assertions(1)
+
+    const userId = userContext.id
+    const userRevenueCreate = jest.spyOn(UserRevenueModel, 'create')
+    const revenueObj = {
+      encodingType: 'AMAZON_CPM',
+      encodedValue: 'some-code',
+      adSize: '300x250'
+    }
+
+    // Mock decoding the Amazon code
+    decodeAmazonCPM.mockReturnValueOnce(8.50)
+
+    await logRevenue(userContext, userId, null, null, revenueObj)
+
+    expect(userRevenueCreate).toHaveBeenLastCalledWith(
+      userContext,
+      addTimestampFieldsToItem({
+        userId: userId,
+        timestamp: moment.utc().toISOString(),
+        revenue: 0.0085,
+        adSize: '300x250'
       })
     )
   })
@@ -201,7 +249,7 @@ describe('logRevenue', () => {
       })
     )
 
-    // Redo with the a higher revenue value
+    // Redo with a lower encoded revenue value.
     decodeAmazonCPM.mockReturnValueOnce(4.10)
 
     await logRevenue(userContext, userId, 0.0068, null, revenueObj, 'MAX')
@@ -212,6 +260,53 @@ describe('logRevenue', () => {
         userId: userId,
         timestamp: moment.utc().toISOString(),
         revenue: 0.0068
+      })
+    )
+  })
+
+  test('it selects the correct ad size when using "MAX" aggregationOperation', async () => {
+    expect.assertions(2)
+    const someTabId = '712dca1a-3705-480f-95ff-314be86a2936'
+
+    const userId = userContext.id
+    const userRevenueCreate = jest.spyOn(UserRevenueModel, 'create')
+    const revenueObj = {
+      encodingType: 'AMAZON_CPM',
+      encodedValue: 'some-code',
+      adSize: '300x600'
+    }
+
+    // Mock decoding the Amazon code
+    decodeAmazonCPM.mockReturnValueOnce(8.50)
+
+    await logRevenue(userContext, userId, 0.0072, null, revenueObj, 'MAX',
+      someTabId, '728x90')
+
+    expect(userRevenueCreate).toHaveBeenLastCalledWith(
+      userContext,
+      addTimestampFieldsToItem({
+        userId: userId,
+        timestamp: moment.utc().toISOString(),
+        revenue: 0.0085,
+        tabId: someTabId,
+        adSize: '300x600' // The encoded revenue value was higher
+      })
+    )
+
+    // Redo with a lower encoded revenue value.
+    decodeAmazonCPM.mockReturnValueOnce(4.10)
+
+    await logRevenue(userContext, userId, 0.0068, null, revenueObj, 'MAX',
+      someTabId, '728x90')
+
+    expect(userRevenueCreate).toHaveBeenLastCalledWith(
+      userContext,
+      addTimestampFieldsToItem({
+        userId: userId,
+        timestamp: moment.utc().toISOString(),
+        revenue: 0.0068,
+        tabId: someTabId,
+        adSize: '728x90' // The non-encoded revenue value was higher
       })
     )
   })

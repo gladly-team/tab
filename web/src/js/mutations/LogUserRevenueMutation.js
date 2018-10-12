@@ -18,14 +18,14 @@ function commit (environment, userId, revenue = null, dfpAdvertiserId = null,
     {
       mutation,
       variables: {
-        // TODO: use adSize
         input: {
           userId,
           revenue,
           dfpAdvertiserId,
           encodedRevenue,
           aggregationOperation,
-          tabId
+          tabId,
+          adSize
         }
       }
     }

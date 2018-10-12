@@ -9,6 +9,19 @@ const AMAZON_CPM_REVENUE_TYPE = 'AMAZON_CPM'
 const AGGREGATION_MAX = 'MAX'
 
 /**
+ * Return an object representing one ad's revenue.
+ * @param {number|null} revenue - The $USD amount of revenue earned.
+ * @param {string|null} adSize - The ad dimensions, in form 'WIDTHxHEIGHT'
+ * @return {Object}
+ */
+const AdRevenue = (revenue, adSize) => {
+  return {
+    revenue: revenue || null,
+    adSize: adSize || null
+  }
+}
+
+/**
  * Convert an encoded revenue object into a float value by a method specified
  * by the revenue object's "encodingType" field.
  * @param {object} revenueObj - The user authorizer object.
@@ -16,10 +29,14 @@ const AGGREGATION_MAX = 'MAX'
  *   the logic we use to convert it into a number.
  * @param {string} revenueObj.encodedValue - The input value to use when decoding, which
  *   should resolve into a float.
- * @return {number} A float representing $USD amount of revenue
+ * @return {Object} An AdRevenue object
  */
 const decodeRevenueObj = (revenueObj) => {
+  if (!revenueObj) {
+    return AdRevenue()
+  }
   var revenueVal
+  var adSize
   switch (revenueObj.encodingType) {
     case AMAZON_CPM_REVENUE_TYPE:
       const decodedCPM = decodeAmazonCPM(revenueObj.encodedValue)
@@ -27,26 +44,29 @@ const decodeRevenueObj = (revenueObj) => {
         throw new Error(`Amazon revenue code "${revenueObj.encodedValue}" resolved to a nil value`)
       }
       revenueVal = decodedCPM / 1000
+      adSize = revenueObj.adSize
       break
     default:
       throw new Error('Invalid "encodingType" field for revenue object transformation')
   }
-  return revenueVal
+  return AdRevenue(revenueVal, adSize)
 }
 
 /**
  * Resolve an array of revenue float values down to a single float value by using
  * the specified aggregation logic.
- * @param {number[]} revenues - An array of one or more floats
+ * @param {AdRevenue[]} revenueObjs - An array of one or more AdRevenue objects
  * @param {string} aggregationOperation - The name of the method we should use to resolve
  *   the revenue values down to a single revenue value
- * @return {number} A float representing $USD amount of revenue
+ * @return {Object} An AdRevenue object
  */
-const aggregateRevenues = (revenues, aggregationOperation) => {
+const aggregateRevenues = (revenueObjs, aggregationOperation) => {
   var aggregatedRevenue
   switch (aggregationOperation) {
     case AGGREGATION_MAX:
-      aggregatedRevenue = revenues.reduce((a, b) => Math.max(a, b))
+      aggregatedRevenue = revenueObjs.reduce((a, b) => {
+        return a.revenue > b.revenue ? a : b
+      })
       break
     default:
       throw new Error(`Invalid "aggregationOperation" value. Must be one of: "${AGGREGATION_MAX}"`)
@@ -77,35 +97,38 @@ const addMillisecondsToISODatetime = (ISODatetime) => {
  *   May be null if the advertiser identifier is not available on the client.
  *   Note that we stringify the DFP ID number because some are greater than 32 bits,
  *   which is not supported by default in GraphQL spec.
- * @param {Object|null} encodedRevenue - An object that can be transformed into a revenue number.
- *   Required if no argument is provided for "revenue".
+ * @param {Object|null} encodedRevenue - An object that can be transformed into an AdRevenue
+ *   object. Required if no argument is provided for "revenue".
  * @param {string|null} aggregationOperation - What logic we should use to determine a final
  *   revenue value when more than one value is provided. Required if both "revenue" and
  *   "encodedRevenue" are provided.
  * @param {string} tabId - A UUID for the tab on which revenue is created
+ * @param {string} adSize - The ad dimensions, in form 'WIDTHxHEIGHT'
  * @return {Object} If successful, a single key ("success") with value `true`
  */
 const logRevenue = async (userContext, userId, revenue = null, dfpAdvertiserId = null,
-  encodedRevenue = null, aggregationOperation = null, tabId = null) => {
-  // Decode the encoded revenue, if needed
-  const decodedRevenue = isNil(encodedRevenue) ? null : decodeRevenueObj(encodedRevenue)
+  encodedRevenue = null, aggregationOperation = null, tabId = null, adSize = null) => {
+  const revenueObj = AdRevenue(revenue, adSize)
 
-  var revenueToLog = null
+  // Decode the encoded revenue, if needed
+  const decodedRevenueObj = decodeRevenueObj(encodedRevenue)
+
+  var revenueObjToLog = null
   // Received no valid revenue value
-  if (isNil(revenue) && isNil(decodedRevenue)) {
+  if (isNil(revenueObj.revenue) && isNil(decodedRevenueObj.revenue)) {
     throw new Error('Revenue logging requires either "revenue" or "encodedRevenue" values')
   // Only received "revenue"
-  } else if (!isNil(revenue) && isNil(decodedRevenue)) {
-    revenueToLog = revenue
+  } else if (!isNil(revenueObj.revenue) && isNil(decodedRevenueObj.revenue)) {
+    revenueObjToLog = revenueObj
   // Only received "encodedRevenue"
-  } else if (!isNil(decodedRevenue) && isNil(revenue)) {
-    revenueToLog = decodedRevenue
+  } else if (!isNil(decodedRevenueObj.revenue) && isNil(revenueObj.revenue)) {
+    revenueObjToLog = decodedRevenueObj
   // Received both "revenue" and "encodedRevenue"
-  } else if (!isNil(revenue) && !isNil(decodedRevenue)) {
+  } else if (!isNil(revenueObj.revenue) && !isNil(decodedRevenueObj.revenue)) {
     if (isNil(aggregationOperation)) {
       throw new Error('Revenue logging requires an "aggregationOperation" value if both "revenue" and "encodedRevenue" values are provided')
     }
-    revenueToLog = aggregateRevenues([revenue, decodedRevenue], aggregationOperation)
+    revenueObjToLog = aggregateRevenues([revenueObj, decodedRevenueObj], aggregationOperation)
   }
 
   const ISOTimestamp = moment.utc().toISOString()
@@ -113,9 +136,10 @@ const logRevenue = async (userContext, userId, revenue = null, dfpAdvertiserId =
     return UserRevenueModel.create(userContext, {
       userId: userId,
       timestamp: createdISOTimestamp,
-      revenue: revenueToLog,
+      revenue: revenueObjToLog.revenue,
       ...dfpAdvertiserId && { dfpAdvertiserId: dfpAdvertiserId },
-      ...tabId && { tabId: tabId }
+      ...tabId && { tabId: tabId },
+      ...revenueObjToLog.adSize && { adSize: revenueObjToLog.adSize }
     })
   }
 
