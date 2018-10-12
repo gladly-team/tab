@@ -7,9 +7,14 @@ import getPrebidPbjs, {
   __runBidsBack
 } from 'js/ads/prebid/getPrebidPbjs'
 import { getDefaultTabGlobal } from 'js/utils/test-utils'
+import {
+  getVerticalAdSizes,
+  getHorizontalAdSizes
+} from 'js/ads/adSettings'
 
-jest.mock('js/utils/client-location')
+jest.mock('js/ads/adSettings')
 jest.mock('js/ads/prebid/getPrebidPbjs')
+jest.mock('js/utils/client-location')
 
 beforeEach(() => {
   window.tabforacause = getDefaultTabGlobal()
@@ -59,6 +64,20 @@ describe('prebidConfig', function () {
     expect(adUnitConfig[0]['code']).toBeDefined()
     expect(adUnitConfig[0]['mediaTypes']).toBeDefined()
     expect(adUnitConfig[0]['bids']).toBeDefined()
+  })
+
+  it('uses ad sizes from the ad settings', async () => {
+    expect.assertions(2)
+    getVerticalAdSizes.mockReturnValueOnce([[250, 250], [300, 600]])
+    getHorizontalAdSizes.mockReturnValueOnce([[728, 90], [720, 300]])
+    const pbjs = getPrebidPbjs()
+    await prebidConfig()
+
+    const adUnitConfig = pbjs.addAdUnits.mock.calls[0][0]
+    expect(adUnitConfig[0]['mediaTypes']['banner']['sizes'])
+      .toEqual([[250, 250], [300, 600]])
+    expect(adUnitConfig[1]['mediaTypes']['banner']['sizes'])
+      .toEqual([[728, 90], [720, 300]])
   })
 
   it('includes the consentManagement setting when in the EU', async () => {

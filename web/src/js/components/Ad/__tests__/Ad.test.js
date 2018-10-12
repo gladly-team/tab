@@ -13,25 +13,28 @@ afterEach(() => {
   jest.clearAllMocks()
 })
 
-describe('Ad component', function () {
-  it('render a child with the provided ID', function () {
+function getMockProps () {
+  return {
+    adId: 'abc123',
+    style: undefined,
+    adWrapperStyle: undefined
+  }
+}
+
+describe('Ad component', () => {
+  it('render a child with the provided ID', () => {
+    const mockProps = getMockProps()
     const wrapper = shallow(
-      <Ad
-        adId='abc123'
-        adSlotId='def'
-        width={300}
-        height={250} />
+      <Ad {...mockProps} />
     )
-    expect(wrapper.contains(<div id='abc123' />)).toBe(true)
+    expect(wrapper.find('div#abc123').length).toBe(1)
   })
 
-  it('calls to display ad on mount', function () {
+  it('calls to display ad on mount', () => {
+    const mockProps = getMockProps()
+    mockProps.adId = 'my-ad-123'
     const wrapper = shallow(
-      <Ad
-        adId='my-ad-123'
-        adSlotId='def'
-        width={300}
-        height={250} />,
+      <Ad {...mockProps} />,
       { disableLifecycleMethods: true }
     )
     expect(displayAd).not.toHaveBeenCalled()
@@ -40,43 +43,14 @@ describe('Ad component', function () {
     expect(displayAd).toHaveBeenCalledWith('my-ad-123')
   })
 
-  it('renders width and height correctly', function () {
+  it('assigns styles', () => {
+    const mockProps = getMockProps()
+    mockProps.style = {
+      display: 'inline',
+      color: 'green'
+    }
     const wrapper = mount(
-      <Ad
-        adId='abc123'
-        adSlotId='def'
-        width={300}
-        height={250} />
-    )
-    const elem = findDOMNode(wrapper.instance())
-    expect(elem.offsetWidth).toBe(300)
-    expect(elem.offsetHeight).toBe(250)
-  })
-
-  it('renders width and height correctly again', function () {
-    const wrapper = mount(
-      <Ad
-        adId='abc123'
-        adSlotId='def'
-        width={432}
-        height={99} />
-    )
-    const elem = findDOMNode(wrapper.instance())
-    expect(elem.offsetWidth).toBe(432)
-    expect(elem.offsetHeight).toBe(99)
-  })
-
-  it('assigns styles', function () {
-    const wrapper = mount(
-      <Ad
-        adId='abc123'
-        adSlotId='def'
-        width={300}
-        height={250}
-        style={{
-          display: 'inline',
-          color: 'green'
-        }} />
+      <Ad {...mockProps} />
     )
     const elem = findDOMNode(wrapper.instance())
     const elemStyle = window.getComputedStyle(elem)
@@ -84,18 +58,19 @@ describe('Ad component', function () {
     expect(elemStyle.color).toBe('green')
   })
 
-  it('does not rerender after initial mount', function () {
+  it('does not rerender after initial mount', done => {
+    const mockProps = getMockProps()
+    mockProps.style = {
+      background: 'purple'
+    }
     const wrapper = mount(
-      <Ad
-        adId='abc123'
-        adSlotId='def'
-        width={300}
-        height={250} />
+      <Ad {...mockProps} />
     )
     const elem = findDOMNode(wrapper.instance())
-    expect(elem.offsetWidth).toBe(300)
-    wrapper.setProps({ width: 1000 }, () => {
-      expect(elem.offsetWidth).toBe(300)
+    wrapper.setProps({ style: { background: 'yellow' } }, () => {
+      const elemStyle = window.getComputedStyle(elem)
+      expect(elemStyle.background).toBe('purple')
+      done()
     })
   })
 })

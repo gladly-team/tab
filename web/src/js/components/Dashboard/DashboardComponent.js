@@ -34,6 +34,10 @@ import {
   goTo,
   loginURL
 } from 'js/navigation/navigation'
+import {
+  VERTICAL_AD_SLOT_DOM_ID,
+  HORIZONTAL_AD_SLOT_DOM_ID
+} from 'js/ads/adSettings'
 
 class Dashboard extends React.Component {
   constructor (props) {
@@ -291,28 +295,43 @@ class Dashboard extends React.Component {
             : null
         }
         { showNewUserTour ? <NewUserTour user={user} /> : null }
+        {/*
+          For dynamic ad sizing, we may want to move ads into a parent
+          component that's absolutely positioned, then use flex positioning
+          for the ads themselves. This will avoid awkward gaps.
+        */}
         <Ad
-          adId='div-gpt-ad-1464385742501-0'
-          adSlotId='/43865596/HBTR'
-          width={300}
-          height={250}
+          adId={VERTICAL_AD_SLOT_DOM_ID}
           style={{
             position: 'absolute',
             bottom: 10,
             right: 10,
+            minWidth: 300,
+            overflow: 'visible',
             display: 'block'
-          }} />
+          }}
+          adWrapperStyle={{
+            position: 'absolute',
+            bottom: 0,
+            right: 0
+          }}
+        />
         <Ad
-          adId='div-gpt-ad-1464385677836-0'
-          adSlotId='/43865596/HBTL'
-          width={728}
-          height={90}
+          adId={HORIZONTAL_AD_SLOT_DOM_ID}
           style={{
             position: 'absolute',
             bottom: 10,
             right: 320,
+            minWidth: 728,
+            overflow: 'visible',
             display: 'block'
-          }} />
+          }}
+          adWrapperStyle={{
+            position: 'absolute',
+            bottom: 0,
+            right: 0
+          }}
+        />
         { user && tabId ? <LogTab user={user} tabId={tabId} /> : null }
         { user && tabId ? <LogRevenue user={user} tabId={tabId} /> : null }
         { user ? <LogConsentData user={user} /> : null }

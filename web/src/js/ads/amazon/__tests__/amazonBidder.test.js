@@ -10,8 +10,9 @@ import {
   mockAmazonBidResponse
 } from 'js/utils/test-utils'
 
-jest.mock('js/ads/amazon/getAmazonTag')
+jest.mock('js/ads/adSettings')
 jest.mock('js/ads/consentManagement')
+jest.mock('js/ads/amazon/getAmazonTag')
 
 beforeEach(() => {
   // Mock apstag
@@ -66,12 +67,48 @@ describe('amazonBidder', function () {
     expect(apstag.fetchBids.mock.calls[0][0]).toMatchObject({
       slots: [
         {
-          slotID: 'div-gpt-ad-1464385742501-0',
-          sizes: [[300, 250]]
+          slotID: 'div-gpt-ad-1357913579-0',
+          sizes: [
+            [300, 250]
+          ]
         },
         {
-          slotID: 'div-gpt-ad-1464385677836-0',
-          sizes: [[728, 90]]
+          slotID: 'div-gpt-ad-24682468-0',
+          sizes: [
+            [728, 90]
+          ]
+        }
+      ],
+      timeout: 700
+    })
+  })
+
+  it('uses ad sizes provided by the ads settings', async () => {
+    const apstag = getAmazonTag()
+    const {
+      getVerticalAdSizes,
+      getHorizontalAdSizes
+    } = require('js/ads/adSettings')
+    getVerticalAdSizes.mockReturnValueOnce([[250, 250], [300, 600]])
+    getHorizontalAdSizes.mockReturnValueOnce([[728, 90], [720, 300]])
+
+    const amazonBidder = require('js/ads/amazon/amazonBidder').default
+    await amazonBidder()
+    expect(apstag.fetchBids.mock.calls[0][0]).toMatchObject({
+      slots: [
+        {
+          slotID: 'div-gpt-ad-1357913579-0',
+          sizes: [
+            [250, 250],
+            [300, 600]
+          ]
+        },
+        {
+          slotID: 'div-gpt-ad-24682468-0',
+          sizes: [
+            [728, 90],
+            [720, 300]
+          ]
         }
       ],
       timeout: 700

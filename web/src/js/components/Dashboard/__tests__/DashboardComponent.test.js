@@ -113,6 +113,19 @@ describe('Dashboard component', () => {
     expect(wrapper.find(Ad).length).toBe(2)
   })
 
+  it('the ads have expected IDs matched with their sizes', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
+    const wrapper = shallow(
+      <DashboardComponent {...mockProps} />
+    )
+    const rectangleAd = wrapper.find(Ad).at(0)
+    const leaderboardAd = wrapper.find(Ad).at(1)
+    expect(rectangleAd.prop('adId')).toBe('div-gpt-ad-1464385742501-0')
+    expect(rectangleAd.prop('style').minWidth).toBe(300)
+    expect(leaderboardAd.prop('adId')).toBe('div-gpt-ad-1464385677836-0')
+    expect(leaderboardAd.prop('style').minWidth).toBe(728)
+  })
+
   it('renders LogTab component', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
     const wrapper = shallow(

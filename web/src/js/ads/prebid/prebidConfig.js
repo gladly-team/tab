@@ -2,7 +2,13 @@
 import getPrebidPbjs from 'js/ads/prebid/getPrebidPbjs'
 import { isInEuropeanUnion } from 'js/utils/client-location'
 import {
-  CONSENT_MANAGEMENT_TIMEOUT
+  getVerticalAdSizes,
+  getHorizontalAdSizes,
+  CONSENT_MANAGEMENT_TIMEOUT,
+  VERTICAL_AD_UNIT_ID,
+  VERTICAL_AD_SLOT_DOM_ID,
+  HORIZONTAL_AD_UNIT_ID,
+  HORIZONTAL_AD_SLOT_DOM_ID
 } from 'js/ads/adSettings'
 
 /**
@@ -28,20 +34,18 @@ export default () => {
     // Note: brealtime is automatically aliased by the
     // AppNexus bid adapter.
     const adUnits = [{
-      code: 'div-gpt-ad-1464385742501-0',
+      code: VERTICAL_AD_SLOT_DOM_ID,
       mediaTypes: {
         banner: {
-          sizes: [
-            [300, 250]
-          ]
+          sizes: getVerticalAdSizes()
         }
       },
       bids: [
         {
           bidder: 'sonobi',
           params: {
-            dom_id: 'div-gpt-ad-1464385742501-0',
-            ad_unit: '/43865596/HBTR'
+            dom_id: VERTICAL_AD_SLOT_DOM_ID,
+            ad_unit: VERTICAL_AD_UNIT_ID
           }
         },
         {
@@ -89,20 +93,18 @@ export default () => {
       ]
     },
     {
-      code: 'div-gpt-ad-1464385677836-0',
+      code: HORIZONTAL_AD_SLOT_DOM_ID,
       mediaTypes: {
         banner: {
-          sizes: [
-            [728, 90]
-          ]
+          sizes: getHorizontalAdSizes()
         }
       },
       bids: [
         {
           bidder: 'sonobi',
           params: {
-            dom_id: 'div-gpt-ad-1464385677836-0',
-            ad_unit: '/43865596/HBTL'
+            dom_id: HORIZONTAL_AD_SLOT_DOM_ID,
+            ad_unit: HORIZONTAL_AD_UNIT_ID
           }
         },
         {

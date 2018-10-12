@@ -2,6 +2,7 @@ import adsEnabled from 'js/ads/adsEnabledStatus'
 import amazonBidder, { storeAmazonBids } from 'js/ads/amazon/amazonBidder'
 import getAmazonTag from 'js/ads/amazon/getAmazonTag'
 import getGoogleTag from 'js/ads/google/getGoogleTag'
+import setUpGoogleAds from 'js/ads/google/setUpGoogleAds'
 import getPrebidPbjs from 'js/ads/prebid/getPrebidPbjs'
 import handleAdsLoaded from 'js/ads/handleAdsLoaded'
 import prebidConfig from 'js/ads/prebid/prebidConfig'
@@ -117,6 +118,9 @@ const loadAdCode = () => {
 }
 
 if (adsEnabled()) {
+  // Define slots and enable ad services.
+  setUpGoogleAds()
+
   // Call the ad server after some time to avoid waiting
   // too long for bid responses.
   setTimeout(() => {

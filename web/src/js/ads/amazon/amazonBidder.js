@@ -1,8 +1,12 @@
 
 import getAmazonTag from 'js/ads/amazon/getAmazonTag'
 import {
+  getVerticalAdSizes,
+  getHorizontalAdSizes,
   BIDDER_TIMEOUT,
-  CONSENT_MANAGEMENT_TIMEOUT
+  CONSENT_MANAGEMENT_TIMEOUT,
+  VERTICAL_AD_SLOT_DOM_ID,
+  HORIZONTAL_AD_SLOT_DOM_ID
 } from 'js/ads/adSettings'
 
 // Save returned Amazon bids.
@@ -57,12 +61,12 @@ function initApstag () {
       {
         slots: [
           {
-            slotID: 'div-gpt-ad-1464385742501-0',
-            sizes: [[300, 250]]
+            slotID: VERTICAL_AD_SLOT_DOM_ID,
+            sizes: getVerticalAdSizes()
           },
           {
-            slotID: 'div-gpt-ad-1464385677836-0',
-            sizes: [[728, 90]]
+            slotID: HORIZONTAL_AD_SLOT_DOM_ID,
+            sizes: getHorizontalAdSizes()
           }
         ],
         timeout: BIDDER_TIMEOUT
