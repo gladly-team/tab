@@ -3,8 +3,14 @@
 import {
   isVariousAdSizesEnabled
 } from 'js/utils/feature-flags'
+import {
+  getVariousAdSizesTestGroup,
+  VARIOUS_AD_SIZES_GROUP_NO_GROUP,
+  VARIOUS_AD_SIZES_GROUP_VARIOUS
+} from 'js/utils/experiments'
 
 jest.mock('js/utils/feature-flags')
+jest.mock('js/utils/experiments')
 
 describe('ad settings', () => {
   test('ad IDs and ad slot IDs are as expected', () => {
@@ -23,7 +29,8 @@ describe('ad settings', () => {
   })
 
   test('getVerticalAdSizes returns the expected ad sizes when various ad sizes are disabled', () => {
-    isVariousAdSizesEnabled.mockReturnValueOnce(false)
+    isVariousAdSizesEnabled.mockReturnValue(false)
+    getVariousAdSizesTestGroup.mockReturnValue(VARIOUS_AD_SIZES_GROUP_NO_GROUP)
     const getVerticalAdSizes = require('js/ads/adSettings').getVerticalAdSizes
     expect(getVerticalAdSizes()).toEqual(
       [
@@ -33,7 +40,8 @@ describe('ad settings', () => {
   })
 
   test('getHorizontalAdSizes returns the expected ad sizes when various ad sizes are disabled', () => {
-    isVariousAdSizesEnabled.mockReturnValueOnce(false)
+    isVariousAdSizesEnabled.mockReturnValue(false)
+    getVariousAdSizesTestGroup.mockReturnValue(VARIOUS_AD_SIZES_GROUP_NO_GROUP)
     const getHorizontalAdSizes = require('js/ads/adSettings').getHorizontalAdSizes
     expect(getHorizontalAdSizes()).toEqual(
       [
@@ -43,7 +51,8 @@ describe('ad settings', () => {
   })
 
   test('getVerticalAdSizes returns the expected ad sizes when various ad sizes are enabled', () => {
-    isVariousAdSizesEnabled.mockReturnValueOnce(true)
+    isVariousAdSizesEnabled.mockReturnValue(true)
+    getVariousAdSizesTestGroup.mockReturnValue(VARIOUS_AD_SIZES_GROUP_VARIOUS)
     const getVerticalAdSizes = require('js/ads/adSettings').getVerticalAdSizes
     expect(getVerticalAdSizes()).toEqual(
       [
@@ -66,7 +75,8 @@ describe('ad settings', () => {
   })
 
   test('getHorizontalAdSizes returns the expected ad sizes when various ad sizes are enabled', () => {
-    isVariousAdSizesEnabled.mockReturnValueOnce(true)
+    isVariousAdSizesEnabled.mockReturnValue(true)
+    getVariousAdSizesTestGroup.mockReturnValue(VARIOUS_AD_SIZES_GROUP_VARIOUS)
     const getHorizontalAdSizes = require('js/ads/adSettings').getHorizontalAdSizes
     expect(getHorizontalAdSizes()).toEqual(
       [

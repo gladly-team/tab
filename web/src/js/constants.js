@@ -62,6 +62,7 @@ export const STORAGE_APPROX_EXTENSION_INSTALL_TIME = 'tab.newUser.approxInstallT
 
 // tab.experiments: values related to split-testing features
 export const STORAGE_EXPERIMENT_ANON_USER = 'tab.experiments.anonUser'
+export const STORAGE_EXPERIMENT_VARIOUS_AD_SIZES = 'tab.experiments.variousAdSizes'
 
 /**
   Error codes passed from server-side.

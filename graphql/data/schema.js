@@ -192,6 +192,17 @@ const ExperimentGroupsType = new GraphQLInputObjectType({
           ANONYMOUS_ALLOWED: { value: experimentConfig.anonSignIn.ANONYMOUS_ALLOWED }
         }
       })
+    },
+    variousAdSizes: {
+      type: new GraphQLEnumType({
+        name: 'ExperimentGroupVariousAdSizes',
+        description: 'The test of enabling many different ad sizes',
+        values: {
+          NONE: { value: experimentConfig.variousAdSizes.NONE },
+          STANDARD: { value: experimentConfig.variousAdSizes.STANDARD },
+          VARIOUS: { value: experimentConfig.variousAdSizes.VARIOUS }
+        }
+      })
     }
   }
 })
