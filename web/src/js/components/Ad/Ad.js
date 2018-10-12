@@ -31,7 +31,6 @@ class Ad extends React.Component {
 
 Ad.propTypes = {
   adId: PropTypes.string,
-  adSlotId: PropTypes.string.isRequired,
   style: PropTypes.object,
   adWrapperStyle: PropTypes.object
 }

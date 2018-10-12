@@ -11,15 +11,15 @@ describe('ad settings', () => {
     // Important: do not change these IDs without consulting the
     // ad ops team.
     const {
-      VERTICAL_AD_ID,
-      VERTICAL_AD_SLOT_ID,
-      HORIZONTAL_AD_ID,
-      HORIZONTAL_AD_SLOT_ID
+      VERTICAL_AD_UNIT_ID,
+      VERTICAL_AD_SLOT_DOM_ID,
+      HORIZONTAL_AD_UNIT_ID,
+      HORIZONTAL_AD_SLOT_DOM_ID
     } = require('js/ads/adSettings')
-    expect(VERTICAL_AD_ID).toBe('/43865596/HBTR')
-    expect(VERTICAL_AD_SLOT_ID).toBe('div-gpt-ad-1464385742501-0')
-    expect(HORIZONTAL_AD_ID).toBe('/43865596/HBTL')
-    expect(HORIZONTAL_AD_SLOT_ID).toBe('div-gpt-ad-1464385677836-0')
+    expect(VERTICAL_AD_UNIT_ID).toBe('/43865596/HBTR')
+    expect(VERTICAL_AD_SLOT_DOM_ID).toBe('div-gpt-ad-1464385742501-0')
+    expect(HORIZONTAL_AD_UNIT_ID).toBe('/43865596/HBTL')
+    expect(HORIZONTAL_AD_SLOT_DOM_ID).toBe('div-gpt-ad-1464385677836-0')
   })
 
   test('getVerticalAdSizes returns the expected ad sizes when various ad sizes are disabled', () => {

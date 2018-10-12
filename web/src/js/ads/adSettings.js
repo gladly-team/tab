@@ -17,13 +17,13 @@ export const BIDDER_TIMEOUT = 700
 // "Vertical ad" = the ad that's typically rectangular
 // or taller than it is wide. Historically, the right-side
 // rectangle ad.
-export const VERTICAL_AD_ID = '/43865596/HBTR'
-export const VERTICAL_AD_SLOT_ID = 'div-gpt-ad-1464385742501-0'
+export const VERTICAL_AD_UNIT_ID = '/43865596/HBTR'
+export const VERTICAL_AD_SLOT_DOM_ID = 'div-gpt-ad-1464385742501-0'
 
 // "Horizontal ad" = the ad that's typically wider than
 // it is tall. Historically, the bottom long leaderboard ad.
-export const HORIZONTAL_AD_ID = '/43865596/HBTL'
-export const HORIZONTAL_AD_SLOT_ID = 'div-gpt-ad-1464385677836-0'
+export const HORIZONTAL_AD_UNIT_ID = '/43865596/HBTL'
+export const HORIZONTAL_AD_SLOT_DOM_ID = 'div-gpt-ad-1464385677836-0'
 
 // TODO: limit new ad sizes to a test group
 

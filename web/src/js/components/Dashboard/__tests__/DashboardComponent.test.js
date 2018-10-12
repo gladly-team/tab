@@ -27,14 +27,7 @@ import Button from '@material-ui/core/Button'
 import {
   goTo
 } from 'js/navigation/navigation'
-import {
-  VERTICAL_AD_ID,
-  VERTICAL_AD_SLOT_ID,
-  HORIZONTAL_AD_ID,
-  HORIZONTAL_AD_SLOT_ID
-} from 'js/ads/adSettings'
 
-jest.mock('js/ads/adSettings')
 jest.mock('js/analytics/logEvent')
 jest.mock('js/utils/localstorage-mgr')
 jest.mock('js/authentication/user')
@@ -127,11 +120,9 @@ describe('Dashboard component', () => {
     )
     const rectangleAd = wrapper.find(Ad).at(0)
     const leaderboardAd = wrapper.find(Ad).at(1)
-    expect(rectangleAd.prop('adId')).toBe(VERTICAL_AD_ID)
-    expect(rectangleAd.prop('adSlotId')).toBe(VERTICAL_AD_SLOT_ID)
+    expect(rectangleAd.prop('adId')).toBe('div-gpt-ad-1464385742501-0')
     expect(rectangleAd.prop('style').minWidth).toBe(300)
-    expect(leaderboardAd.prop('adId')).toBe(HORIZONTAL_AD_ID)
-    expect(leaderboardAd.prop('adSlotId')).toBe(HORIZONTAL_AD_SLOT_ID)
+    expect(leaderboardAd.prop('adId')).toBe('div-gpt-ad-1464385677836-0')
     expect(leaderboardAd.prop('style').minWidth).toBe(728)
   })
 

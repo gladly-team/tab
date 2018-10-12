@@ -16,7 +16,6 @@ afterEach(() => {
 function getMockProps () {
   return {
     adId: 'abc123',
-    adSlotId: 'def',
     style: undefined,
     adWrapperStyle: undefined
   }

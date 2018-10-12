@@ -5,8 +5,8 @@ import {
   getHorizontalAdSizes,
   BIDDER_TIMEOUT,
   CONSENT_MANAGEMENT_TIMEOUT,
-  VERTICAL_AD_SLOT_ID,
-  HORIZONTAL_AD_SLOT_ID
+  VERTICAL_AD_SLOT_DOM_ID,
+  HORIZONTAL_AD_SLOT_DOM_ID
 } from 'js/ads/adSettings'
 
 // Save returned Amazon bids.
@@ -61,11 +61,11 @@ function initApstag () {
       {
         slots: [
           {
-            slotID: VERTICAL_AD_SLOT_ID,
+            slotID: VERTICAL_AD_SLOT_DOM_ID,
             sizes: getVerticalAdSizes()
           },
           {
-            slotID: HORIZONTAL_AD_SLOT_ID,
+            slotID: HORIZONTAL_AD_SLOT_DOM_ID,
             sizes: getHorizontalAdSizes()
           }
         ],

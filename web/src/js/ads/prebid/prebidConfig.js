@@ -5,10 +5,10 @@ import {
   getVerticalAdSizes,
   getHorizontalAdSizes,
   CONSENT_MANAGEMENT_TIMEOUT,
-  VERTICAL_AD_ID,
-  VERTICAL_AD_SLOT_ID,
-  HORIZONTAL_AD_ID,
-  HORIZONTAL_AD_SLOT_ID
+  VERTICAL_AD_UNIT_ID,
+  VERTICAL_AD_SLOT_DOM_ID,
+  HORIZONTAL_AD_UNIT_ID,
+  HORIZONTAL_AD_SLOT_DOM_ID
 } from 'js/ads/adSettings'
 
 /**
@@ -34,7 +34,7 @@ export default () => {
     // Note: brealtime is automatically aliased by the
     // AppNexus bid adapter.
     const adUnits = [{
-      code: VERTICAL_AD_SLOT_ID,
+      code: VERTICAL_AD_SLOT_DOM_ID,
       mediaTypes: {
         banner: {
           sizes: getVerticalAdSizes()
@@ -44,8 +44,8 @@ export default () => {
         {
           bidder: 'sonobi',
           params: {
-            dom_id: VERTICAL_AD_SLOT_ID,
-            ad_unit: VERTICAL_AD_ID
+            dom_id: VERTICAL_AD_SLOT_DOM_ID,
+            ad_unit: VERTICAL_AD_UNIT_ID
           }
         },
         {
@@ -93,7 +93,7 @@ export default () => {
       ]
     },
     {
-      code: HORIZONTAL_AD_SLOT_ID,
+      code: HORIZONTAL_AD_SLOT_DOM_ID,
       mediaTypes: {
         banner: {
           sizes: getHorizontalAdSizes()
@@ -103,8 +103,8 @@ export default () => {
         {
           bidder: 'sonobi',
           params: {
-            dom_id: HORIZONTAL_AD_SLOT_ID,
-            ad_unit: HORIZONTAL_AD_ID
+            dom_id: HORIZONTAL_AD_SLOT_DOM_ID,
+            ad_unit: HORIZONTAL_AD_UNIT_ID
           }
         },
         {
