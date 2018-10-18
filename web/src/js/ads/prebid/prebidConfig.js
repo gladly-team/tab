@@ -7,6 +7,7 @@ import {
   CONSENT_MANAGEMENT_TIMEOUT,
   VERTICAL_AD_UNIT_ID,
   VERTICAL_AD_SLOT_DOM_ID,
+  SECOND_VERTICAL_AD_SLOT_DOM_ID,
   HORIZONTAL_AD_UNIT_ID,
   HORIZONTAL_AD_SLOT_DOM_ID
 } from 'js/ads/adSettings'
@@ -56,15 +57,15 @@ export default () => {
             ct: '460982'
           }
         },
-        {
-          bidder: 'aol',
-          params: {
-            network: '10559.1',
-            placement: '4117692',
-            alias: 'desktop_newtab_300x250',
-            sizeId: '170'
-          }
-        },
+        // {
+        //   bidder: 'aol',
+        //   params: {
+        //     network: '10559.1',
+        //     placement: '4117692',
+        //     alias: 'desktop_newtab_300x250',
+        //     sizeId: '170'
+        //   }
+        // },
         {
           bidder: 'sovrn',
           params: {
@@ -82,6 +83,31 @@ export default () => {
           bidder: 'brealtime',
           params: {
             placementId: '10955690'
+          }
+        }
+        // {
+        //   bidder: 'rhythmone',
+        //   params: {
+        //     placementId: '73423'
+        //   }
+        // }
+      ]
+    },
+    {
+      code: SECOND_VERTICAL_AD_SLOT_DOM_ID,
+      mediaTypes: {
+        banner: {
+          sizes: getVerticalAdSizes()
+        }
+      },
+      bids: [
+        {
+          bidder: 'aol',
+          params: {
+            network: '10559.1',
+            placement: '4117692',
+            alias: 'desktop_newtab_300x250',
+            sizeId: '170'
           }
         },
         {

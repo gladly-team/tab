@@ -5,6 +5,8 @@ import {
   getHorizontalAdSizes,
   VERTICAL_AD_UNIT_ID,
   VERTICAL_AD_SLOT_DOM_ID,
+  SECOND_VERTICAL_AD_UNIT_ID,
+  SECOND_VERTICAL_AD_SLOT_DOM_ID,
   HORIZONTAL_AD_UNIT_ID,
   HORIZONTAL_AD_SLOT_DOM_ID
 } from 'js/ads/adSettings'
@@ -14,16 +16,27 @@ export default () => {
   const horizontalAdSizes = getHorizontalAdSizes()
   const verticalAdSizes = getVerticalAdSizes()
   googletag.cmd.push(function () {
+    // Leaderboard
     googletag.defineSlot(
       HORIZONTAL_AD_UNIT_ID,
       horizontalAdSizes,
       HORIZONTAL_AD_SLOT_DOM_ID
     ).addService(googletag.pubads())
+
+    // Rectangle #1
     googletag.defineSlot(
       VERTICAL_AD_UNIT_ID,
       verticalAdSizes,
       VERTICAL_AD_SLOT_DOM_ID
     ).addService(googletag.pubads())
+
+    // Rectangle #2
+    googletag.defineSlot(
+      SECOND_VERTICAL_AD_UNIT_ID,
+      verticalAdSizes,
+      SECOND_VERTICAL_AD_SLOT_DOM_ID
+    ).addService(googletag.pubads())
+
     googletag.pubads().enableSingleRequest()
     googletag.enableServices()
   })

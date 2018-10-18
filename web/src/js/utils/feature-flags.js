@@ -7,4 +7,4 @@ export const isAnonymousUserSignInEnabled = () => {
 }
 
 // @experiment-various-ad-sizes
-export const isVariousAdSizesEnabled = () => true
+export const isVariousAdSizesEnabled = () => false

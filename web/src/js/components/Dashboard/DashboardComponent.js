@@ -36,6 +36,7 @@ import {
 } from 'js/navigation/navigation'
 import {
   VERTICAL_AD_SLOT_DOM_ID,
+  SECOND_VERTICAL_AD_SLOT_DOM_ID,
   HORIZONTAL_AD_SLOT_DOM_ID
 } from 'js/ads/adSettings'
 
@@ -300,6 +301,22 @@ class Dashboard extends React.Component {
           component that's absolutely positioned, then use flex positioning
           for the ads themselves. This will avoid awkward gaps.
         */}
+        <Ad
+          adId={SECOND_VERTICAL_AD_SLOT_DOM_ID}
+          style={{
+            position: 'absolute',
+            bottom: 270,
+            right: 10,
+            minWidth: 300,
+            overflow: 'visible',
+            display: 'block'
+          }}
+          adWrapperStyle={{
+            position: 'absolute',
+            bottom: 0,
+            right: 0
+          }}
+        />
         <Ad
           adId={VERTICAL_AD_SLOT_DOM_ID}
           style={{
