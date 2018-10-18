@@ -110,7 +110,7 @@ describe('Dashboard component', () => {
     const wrapper = shallow(
       <DashboardComponent {...mockProps} />
     )
-    expect(wrapper.find(Ad).length).toBe(2)
+    expect(wrapper.find(Ad).length).toBe(3)
   })
 
   it('the ads have expected IDs matched with their sizes', () => {
@@ -118,10 +118,13 @@ describe('Dashboard component', () => {
     const wrapper = shallow(
       <DashboardComponent {...mockProps} />
     )
-    const rectangleAd = wrapper.find(Ad).at(0)
-    const leaderboardAd = wrapper.find(Ad).at(1)
+    const rectangleAdNumberTwo = wrapper.find(Ad).at(0)
+    const rectangleAd = wrapper.find(Ad).at(1)
+    const leaderboardAd = wrapper.find(Ad).at(2)
     expect(rectangleAd.prop('adId')).toBe('div-gpt-ad-1464385742501-0')
     expect(rectangleAd.prop('style').minWidth).toBe(300)
+    expect(rectangleAdNumberTwo.prop('adId')).toBe('div-gpt-ad-1539903223131-0')
+    expect(rectangleAdNumberTwo.prop('style').minWidth).toBe(300)
     expect(leaderboardAd.prop('adId')).toBe('div-gpt-ad-1464385677836-0')
     expect(leaderboardAd.prop('style').minWidth).toBe(728)
   })

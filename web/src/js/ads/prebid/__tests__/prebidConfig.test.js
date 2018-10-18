@@ -67,8 +67,10 @@ describe('prebidConfig', function () {
   })
 
   it('uses ad sizes from the ad settings', async () => {
-    expect.assertions(2)
-    getVerticalAdSizes.mockReturnValueOnce([[250, 250], [300, 600]])
+    expect.assertions(3)
+    getVerticalAdSizes
+      .mockReturnValueOnce([[250, 250], [300, 600]])
+      .mockReturnValueOnce([[300, 250]])
     getHorizontalAdSizes.mockReturnValueOnce([[728, 90], [720, 300]])
     const pbjs = getPrebidPbjs()
     await prebidConfig()
@@ -77,6 +79,8 @@ describe('prebidConfig', function () {
     expect(adUnitConfig[0]['mediaTypes']['banner']['sizes'])
       .toEqual([[250, 250], [300, 600]])
     expect(adUnitConfig[1]['mediaTypes']['banner']['sizes'])
+      .toEqual([[300, 250]])
+    expect(adUnitConfig[2]['mediaTypes']['banner']['sizes'])
       .toEqual([[728, 90], [720, 300]])
   })
 
