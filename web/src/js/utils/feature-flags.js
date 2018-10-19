@@ -8,3 +8,6 @@ export const isAnonymousUserSignInEnabled = () => {
 
 // @experiment-various-ad-sizes
 export const isVariousAdSizesEnabled = () => false
+
+// @experiment-third-ad
+export const isThirdAdEnabled = () => true

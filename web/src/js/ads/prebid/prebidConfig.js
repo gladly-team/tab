@@ -2,6 +2,7 @@
 import getPrebidPbjs from 'js/ads/prebid/getPrebidPbjs'
 import { isInEuropeanUnion } from 'js/utils/client-location'
 import {
+  getNumberOfAdsToShow,
   getVerticalAdSizes,
   getHorizontalAdSizes,
   CONSENT_MANAGEMENT_TIMEOUT,
@@ -11,6 +12,224 @@ import {
   HORIZONTAL_AD_UNIT_ID,
   HORIZONTAL_AD_SLOT_DOM_ID
 } from 'js/ads/adSettings'
+
+const getAdUnits = () => {
+  const numAdsToShow = getNumberOfAdsToShow()
+
+  // Leaderboard-style ad with all bidders
+  const horizontalAdUnit = {
+    code: HORIZONTAL_AD_SLOT_DOM_ID,
+    mediaTypes: {
+      banner: {
+        sizes: getHorizontalAdSizes()
+      }
+    },
+    bids: [
+      {
+        bidder: 'sonobi',
+        params: {
+          dom_id: HORIZONTAL_AD_SLOT_DOM_ID,
+          ad_unit: HORIZONTAL_AD_UNIT_ID
+        }
+      },
+      {
+        bidder: 'pulsepoint',
+        params: {
+          cf: '728X90',
+          cp: '560174',
+          ct: '460981'
+        }
+      },
+      {
+        bidder: 'aol',
+        params: {
+          network: '10559.1',
+          placement: '4117691',
+          alias: 'desktop_newtab_728x90',
+          sizeId: '225'
+        }
+      },
+      {
+        bidder: 'sovrn',
+        params: {
+          tagid: '438918'
+        }
+      },
+      {
+        bidder: 'openx',
+        params: {
+          unit: '538658529',
+          delDomain: 'tabforacause-d.openx.net'
+        }
+      },
+      {
+        bidder: 'brealtime',
+        params: {
+          placementId: '10955287'
+        }
+      },
+      {
+        bidder: 'rhythmone',
+        params: {
+          placementId: '73423'
+        }
+      }
+    ]
+  }
+
+  // Rectangle-style ad with all bidders
+  const verticalAdUnitForTwoAds = {
+    code: VERTICAL_AD_SLOT_DOM_ID,
+    mediaTypes: {
+      banner: {
+        sizes: getVerticalAdSizes()
+      }
+    },
+    bids: [
+      {
+        bidder: 'sonobi',
+        params: {
+          dom_id: VERTICAL_AD_SLOT_DOM_ID,
+          ad_unit: VERTICAL_AD_UNIT_ID
+        }
+      },
+      {
+        bidder: 'pulsepoint',
+        params: {
+          cf: '300X250',
+          cp: '560174',
+          ct: '460982'
+        }
+      },
+      {
+        bidder: 'aol',
+        params: {
+          network: '10559.1',
+          placement: '4117692',
+          alias: 'desktop_newtab_300x250',
+          sizeId: '170'
+        }
+      },
+      {
+        bidder: 'sovrn',
+        params: {
+          tagid: '438916'
+        }
+      },
+      {
+        bidder: 'openx',
+        params: {
+          unit: '538658529',
+          delDomain: 'tabforacause-d.openx.net'
+        }
+      },
+      {
+        bidder: 'brealtime',
+        params: {
+          placementId: '10955690'
+        }
+      },
+      {
+        bidder: 'rhythmone',
+        params: {
+          placementId: '73423'
+        }
+      }
+    ]
+  }
+
+  // Rectangle-style ad with some bidders for when
+  // we are showing three ads
+  const firstVerticalAdUnitForThreeAds = {
+    code: VERTICAL_AD_SLOT_DOM_ID,
+    mediaTypes: {
+      banner: {
+        sizes: getVerticalAdSizes()
+      }
+    },
+    bids: [
+      {
+        bidder: 'sonobi',
+        params: {
+          dom_id: VERTICAL_AD_SLOT_DOM_ID,
+          ad_unit: VERTICAL_AD_UNIT_ID
+        }
+      },
+      {
+        bidder: 'pulsepoint',
+        params: {
+          cf: '300X250',
+          cp: '560174',
+          ct: '460982'
+        }
+      },
+      {
+        bidder: 'sovrn',
+        params: {
+          tagid: '438916'
+        }
+      },
+      {
+        bidder: 'openx',
+        params: {
+          unit: '538658529',
+          delDomain: 'tabforacause-d.openx.net'
+        }
+      },
+      {
+        bidder: 'brealtime',
+        params: {
+          placementId: '10955690'
+        }
+      }
+    ]
+  }
+
+  // Second rectangle-style ad with some bidders for when
+  // we are showing three ads
+  const secondVerticalAdUnitForThreeAds = {
+    code: SECOND_VERTICAL_AD_SLOT_DOM_ID,
+    mediaTypes: {
+      banner: {
+        sizes: getVerticalAdSizes()
+      }
+    },
+    bids: [
+      {
+        bidder: 'aol',
+        params: {
+          network: '10559.1',
+          placement: '4117692',
+          alias: 'desktop_newtab_300x250',
+          sizeId: '170'
+        }
+      },
+      {
+        bidder: 'rhythmone',
+        params: {
+          placementId: '73423'
+        }
+      }
+    ]
+  }
+
+  if (!numAdsToShow) {
+    return []
+  } else if (numAdsToShow === 1) {
+    return [horizontalAdUnit]
+  } else if (numAdsToShow === 2) {
+    return [
+      horizontalAdUnit,
+      verticalAdUnitForTwoAds
+    ]
+  } else {
+    return [
+      horizontalAdUnit,
+      firstVerticalAdUnitForThreeAds,
+      secondVerticalAdUnitForThreeAds
+    ]
+  }
+}
 
 /**
  * Return a promise that resolves when the Prebid auction is
@@ -32,151 +251,7 @@ export default () => {
     }
     const requiresConsentManagement = !!isInEU
 
-    // Note: brealtime is automatically aliased by the
-    // AppNexus bid adapter.
-    const adUnits = [{
-      code: VERTICAL_AD_SLOT_DOM_ID,
-      mediaTypes: {
-        banner: {
-          sizes: getVerticalAdSizes()
-        }
-      },
-      bids: [
-        {
-          bidder: 'sonobi',
-          params: {
-            dom_id: VERTICAL_AD_SLOT_DOM_ID,
-            ad_unit: VERTICAL_AD_UNIT_ID
-          }
-        },
-        {
-          bidder: 'pulsepoint',
-          params: {
-            cf: '300X250',
-            cp: '560174',
-            ct: '460982'
-          }
-        },
-        // {
-        //   bidder: 'aol',
-        //   params: {
-        //     network: '10559.1',
-        //     placement: '4117692',
-        //     alias: 'desktop_newtab_300x250',
-        //     sizeId: '170'
-        //   }
-        // },
-        {
-          bidder: 'sovrn',
-          params: {
-            tagid: '438916'
-          }
-        },
-        {
-          bidder: 'openx',
-          params: {
-            unit: '538658529',
-            delDomain: 'tabforacause-d.openx.net'
-          }
-        },
-        {
-          bidder: 'brealtime',
-          params: {
-            placementId: '10955690'
-          }
-        }
-        // {
-        //   bidder: 'rhythmone',
-        //   params: {
-        //     placementId: '73423'
-        //   }
-        // }
-      ]
-    },
-    {
-      code: SECOND_VERTICAL_AD_SLOT_DOM_ID,
-      mediaTypes: {
-        banner: {
-          sizes: getVerticalAdSizes()
-        }
-      },
-      bids: [
-        {
-          bidder: 'aol',
-          params: {
-            network: '10559.1',
-            placement: '4117692',
-            alias: 'desktop_newtab_300x250',
-            sizeId: '170'
-          }
-        },
-        {
-          bidder: 'rhythmone',
-          params: {
-            placementId: '73423'
-          }
-        }
-      ]
-    },
-    {
-      code: HORIZONTAL_AD_SLOT_DOM_ID,
-      mediaTypes: {
-        banner: {
-          sizes: getHorizontalAdSizes()
-        }
-      },
-      bids: [
-        {
-          bidder: 'sonobi',
-          params: {
-            dom_id: HORIZONTAL_AD_SLOT_DOM_ID,
-            ad_unit: HORIZONTAL_AD_UNIT_ID
-          }
-        },
-        {
-          bidder: 'pulsepoint',
-          params: {
-            cf: '728X90',
-            cp: '560174',
-            ct: '460981'
-          }
-        },
-        {
-          bidder: 'aol',
-          params: {
-            network: '10559.1',
-            placement: '4117691',
-            alias: 'desktop_newtab_728x90',
-            sizeId: '225'
-          }
-        },
-        {
-          bidder: 'sovrn',
-          params: {
-            tagid: '438918'
-          }
-        },
-        {
-          bidder: 'openx',
-          params: {
-            unit: '538658529',
-            delDomain: 'tabforacause-d.openx.net'
-          }
-        },
-        {
-          bidder: 'brealtime',
-          params: {
-            placementId: '10955287'
-          }
-        },
-        {
-          bidder: 'rhythmone',
-          params: {
-            placementId: '73423'
-          }
-        }
-      ]
-    }]
+    const adUnits = getAdUnits()
 
     const pbjs = getPrebidPbjs()
 
@@ -208,6 +283,8 @@ export default () => {
 
       pbjs.addAdUnits(adUnits)
 
+      // Note: brealtime is automatically aliased by the
+      // AppNexus bid adapter.
       pbjs.bidderSettings = {
         aol: {
         // AOL sends gross CPM.

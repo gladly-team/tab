@@ -1,6 +1,7 @@
 
 import getAmazonTag from 'js/ads/amazon/getAmazonTag'
 import {
+  getNumberOfAdsToShow,
   getVerticalAdSizes,
   getHorizontalAdSizes,
   BIDDER_TIMEOUT,
@@ -48,7 +49,25 @@ export const storeAmazonBids = () => {
  *   bid requests return or time out.
  */
 function initApstag () {
+  const numAds = getNumberOfAdsToShow()
+  if (numAds < 1) {
+    return
+  }
   const apstag = getAmazonTag()
+
+  // Only get bids for the horizontal ad slot if only
+  // one ad is enabled.
+  const slots = [{
+    slotID: HORIZONTAL_AD_SLOT_DOM_ID,
+    sizes: getHorizontalAdSizes()
+  }]
+  if (numAds > 1) {
+    slots.push({
+      slotID: VERTICAL_AD_SLOT_DOM_ID,
+      sizes: getVerticalAdSizes()
+    })
+  }
+
   return new Promise((resolve, reject) => {
     apstag.init({
       pubID: '3397',
@@ -59,16 +78,7 @@ function initApstag () {
     })
     apstag.fetchBids(
       {
-        slots: [
-          {
-            slotID: VERTICAL_AD_SLOT_DOM_ID,
-            sizes: getVerticalAdSizes()
-          },
-          {
-            slotID: HORIZONTAL_AD_SLOT_DOM_ID,
-            sizes: getHorizontalAdSizes()
-          }
-        ],
+        slots: slots,
         timeout: BIDDER_TIMEOUT
       },
       function (bids) {

@@ -1,6 +1,7 @@
 /* eslint-env jest */
 
 import {
+  isThirdAdEnabled,
   isVariousAdSizesEnabled
 } from 'js/utils/feature-flags'
 import {
@@ -26,6 +27,20 @@ describe('ad settings', () => {
     expect(VERTICAL_AD_SLOT_DOM_ID).toBe('div-gpt-ad-1464385742501-0')
     expect(HORIZONTAL_AD_UNIT_ID).toBe('/43865596/HBTL')
     expect(HORIZONTAL_AD_SLOT_DOM_ID).toBe('div-gpt-ad-1464385677836-0')
+  })
+
+  test('getNumberOfAdsToShow returns 2 when the "3rd ad" feature is disabled', () => {
+    isThirdAdEnabled.mockReturnValue(false)
+    getVariousAdSizesTestGroup.mockReturnValue(VARIOUS_AD_SIZES_GROUP_NO_GROUP)
+    const getNumberOfAdsToShow = require('js/ads/adSettings').getNumberOfAdsToShow
+    expect(getNumberOfAdsToShow()).toEqual(2)
+  })
+
+  test('getNumberOfAdsToShow returns 3 when the "3rd ad" feature is enabled', () => {
+    isThirdAdEnabled.mockReturnValue(true)
+    getVariousAdSizesTestGroup.mockReturnValue(VARIOUS_AD_SIZES_GROUP_NO_GROUP)
+    const getNumberOfAdsToShow = require('js/ads/adSettings').getNumberOfAdsToShow
+    expect(getNumberOfAdsToShow()).toEqual(3)
   })
 
   test('getVerticalAdSizes returns the expected ad sizes when various ad sizes are disabled', () => {
