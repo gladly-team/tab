@@ -10,4 +10,4 @@ export const isAnonymousUserSignInEnabled = () => {
 export const isVariousAdSizesEnabled = () => false
 
 // @experiment-third-ad
-export const isThirdAdEnabled = () => true
+export const isThirdAdEnabled = () => false
