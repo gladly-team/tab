@@ -8,8 +8,12 @@ import getPrebidPbjs, {
 } from 'js/ads/prebid/getPrebidPbjs'
 import { getDefaultTabGlobal } from 'js/utils/test-utils'
 import {
+  getNumberOfAdsToShow,
   getVerticalAdSizes,
-  getHorizontalAdSizes
+  getHorizontalAdSizes,
+  VERTICAL_AD_SLOT_DOM_ID,
+  SECOND_VERTICAL_AD_SLOT_DOM_ID,
+  HORIZONTAL_AD_SLOT_DOM_ID
 } from 'js/ads/adSettings'
 
 jest.mock('js/ads/adSettings')
@@ -64,20 +68,6 @@ describe('prebidConfig', function () {
     expect(adUnitConfig[0]['code']).toBeDefined()
     expect(adUnitConfig[0]['mediaTypes']).toBeDefined()
     expect(adUnitConfig[0]['bids']).toBeDefined()
-  })
-
-  it('uses ad sizes from the ad settings', async () => {
-    expect.assertions(2)
-    getVerticalAdSizes.mockReturnValueOnce([[250, 250], [300, 600]])
-    getHorizontalAdSizes.mockReturnValueOnce([[728, 90], [720, 300]])
-    const pbjs = getPrebidPbjs()
-    await prebidConfig()
-
-    const adUnitConfig = pbjs.addAdUnits.mock.calls[0][0]
-    expect(adUnitConfig[0]['mediaTypes']['banner']['sizes'])
-      .toEqual([[250, 250], [300, 600]])
-    expect(adUnitConfig[1]['mediaTypes']['banner']['sizes'])
-      .toEqual([[728, 90], [720, 300]])
   })
 
   it('includes the consentManagement setting when in the EU', async () => {
@@ -136,5 +126,153 @@ describe('prebidConfig', function () {
     await prebidConfig()
 
     expect(pbjs.setConfig.mock.calls[0][0]['consentManagement']).toBeUndefined()
+  })
+
+  it('uses ad sizes from the ad settings', async () => {
+    expect.assertions(3)
+    getNumberOfAdsToShow.mockReturnValue(3)
+    getVerticalAdSizes.mockReturnValue([[250, 250]])
+    getHorizontalAdSizes.mockReturnValue([[728, 90]])
+    const pbjs = getPrebidPbjs()
+    await prebidConfig()
+
+    const adUnitConfig = pbjs.addAdUnits.mock.calls[0][0]
+    expect(adUnitConfig[0]['mediaTypes']['banner']['sizes'])
+      .toEqual([[728, 90]])
+    expect(adUnitConfig[1]['mediaTypes']['banner']['sizes'])
+      .toEqual([[250, 250]])
+    expect(adUnitConfig[2]['mediaTypes']['banner']['sizes'])
+      .toEqual([[250, 250]])
+  })
+
+  it('gets bids for only the horizontal ad when there is only one ad', async () => {
+    expect.assertions(2)
+    getNumberOfAdsToShow.mockReturnValueOnce(1)
+    const pbjs = getPrebidPbjs()
+    await prebidConfig()
+
+    const adUnitConfig = pbjs.addAdUnits.mock.calls[0][0]
+    expect(adUnitConfig.length).toBe(1)
+    expect(adUnitConfig[0]['code']).toBe(HORIZONTAL_AD_SLOT_DOM_ID)
+  })
+
+  it('gets bids for the horizontal ad and vertical ad when there are two ads', async () => {
+    expect.assertions(3)
+    getNumberOfAdsToShow.mockReturnValueOnce(2)
+    const pbjs = getPrebidPbjs()
+    await prebidConfig()
+
+    const adUnitConfig = pbjs.addAdUnits.mock.calls[0][0]
+    expect(adUnitConfig.length).toBe(2)
+    expect(adUnitConfig[0]['code']).toBe(HORIZONTAL_AD_SLOT_DOM_ID)
+    expect(adUnitConfig[1]['code']).toBe(VERTICAL_AD_SLOT_DOM_ID)
+  })
+
+  it('gets bids for the horizontal ad and two vertical ads when there are three ads', async () => {
+    expect.assertions(4)
+    getNumberOfAdsToShow.mockReturnValueOnce(3)
+    const pbjs = getPrebidPbjs()
+    await prebidConfig()
+
+    const adUnitConfig = pbjs.addAdUnits.mock.calls[0][0]
+    expect(adUnitConfig.length).toBe(3)
+    expect(adUnitConfig[0]['code']).toBe(HORIZONTAL_AD_SLOT_DOM_ID)
+    expect(adUnitConfig[1]['code']).toBe(VERTICAL_AD_SLOT_DOM_ID)
+    expect(adUnitConfig[2]['code']).toBe(SECOND_VERTICAL_AD_SLOT_DOM_ID)
+  })
+
+  it('when there is one ad, the list of bidders for the ad match what is expected', async () => {
+    expect.assertions(1)
+    getNumberOfAdsToShow.mockReturnValueOnce(1)
+    const pbjs = getPrebidPbjs()
+    await prebidConfig()
+    const adUnitConfig = pbjs.addAdUnits.mock.calls[0][0]
+    expect(
+      adUnitConfig[0]['bids'].every(bid => {
+        return [
+          'aol',
+          'brealtime',
+          'openx',
+          'pulsepoint',
+          'rhythmone',
+          'sonobi',
+          'sovrn'
+        ].indexOf(bid['bidder']) > -1
+      })
+    ).toBe(true)
+  })
+
+  it('when there are two ads, the list of bidders for each ad match what is expected', async () => {
+    expect.assertions(2)
+    getNumberOfAdsToShow.mockReturnValueOnce(2)
+    const pbjs = getPrebidPbjs()
+    await prebidConfig()
+    const adUnitConfig = pbjs.addAdUnits.mock.calls[0][0]
+    expect(
+      adUnitConfig[0]['bids'].every(bid => {
+        return [
+          'aol',
+          'brealtime',
+          'openx',
+          'pulsepoint',
+          'rhythmone',
+          'sonobi',
+          'sovrn'
+        ].indexOf(bid['bidder']) > -1
+      })
+    ).toBe(true)
+    expect(
+      adUnitConfig[1]['bids'].every(bid => {
+        return [
+          'aol',
+          'brealtime',
+          'openx',
+          'pulsepoint',
+          'rhythmone',
+          'sonobi',
+          'sovrn'
+        ].indexOf(bid['bidder']) > -1
+      })
+    ).toBe(true)
+  })
+
+  it('when there are three ads, the list of bidders for each ad match what is expected', async () => {
+    expect.assertions(3)
+    getNumberOfAdsToShow.mockReturnValueOnce(3)
+    const pbjs = getPrebidPbjs()
+    await prebidConfig()
+    const adUnitConfig = pbjs.addAdUnits.mock.calls[0][0]
+    expect(
+      adUnitConfig[0]['bids'].every(bid => {
+        return [
+          'aol',
+          'brealtime',
+          'openx',
+          'pulsepoint',
+          'rhythmone',
+          'sonobi',
+          'sovrn'
+        ].indexOf(bid['bidder']) > -1
+      })
+    ).toBe(true)
+    expect(
+      adUnitConfig[1]['bids'].every(bid => {
+        return [
+          'brealtime',
+          'sonobi',
+          'sovrn'
+        ].indexOf(bid['bidder']) > -1
+      })
+    ).toBe(true)
+    expect(
+      adUnitConfig[2]['bids'].every(bid => {
+        return [
+          'aol',
+          'rhythmone',
+          'openx',
+          'pulsepoint'
+        ].indexOf(bid['bidder']) > -1
+      })
+    ).toBe(true)
   })
 })

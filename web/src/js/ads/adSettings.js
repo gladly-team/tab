@@ -1,5 +1,6 @@
 
 import {
+  isThirdAdEnabled,
   isVariousAdSizesEnabled
 } from 'js/utils/feature-flags'
 import {
@@ -24,10 +25,22 @@ export const BIDDER_TIMEOUT = 700
 export const VERTICAL_AD_UNIT_ID = '/43865596/HBTR'
 export const VERTICAL_AD_SLOT_DOM_ID = 'div-gpt-ad-1464385742501-0'
 
+// "Second vertical ad" = the extra rectangle ad.
+export const SECOND_VERTICAL_AD_UNIT_ID = '/43865596/HBTR2'
+export const SECOND_VERTICAL_AD_SLOT_DOM_ID = 'div-gpt-ad-1539903223131-0'
+
 // "Horizontal ad" = the ad that's typically wider than
 // it is tall. Historically, the bottom long leaderboard ad.
 export const HORIZONTAL_AD_UNIT_ID = '/43865596/HBTL'
 export const HORIZONTAL_AD_SLOT_DOM_ID = 'div-gpt-ad-1464385677836-0'
+
+/**
+ * Get the number of banner ads to show on the new tab page.
+ * @return {Number} The number of ads
+ */
+export const getNumberOfAdsToShow = () => {
+  return isThirdAdEnabled() ? 3 : 2
+}
 
 /**
  * Get an array of ad sizes (each an array with two numbers)

@@ -35,7 +35,9 @@ import {
   loginURL
 } from 'js/navigation/navigation'
 import {
+  getNumberOfAdsToShow,
   VERTICAL_AD_SLOT_DOM_ID,
+  SECOND_VERTICAL_AD_SLOT_DOM_ID,
   HORIZONTAL_AD_SLOT_DOM_ID
 } from 'js/ads/adSettings'
 
@@ -51,7 +53,8 @@ class Dashboard extends React.Component {
       // This may be false if the user cleared their storage,
       // which is why we only show the tour to recently-joined
       // users.
-      userAlreadyViewedNewUserTour: localStorageMgr.getItem(STORAGE_NEW_USER_HAS_COMPLETED_TOUR) === 'true'
+      userAlreadyViewedNewUserTour: localStorageMgr.getItem(STORAGE_NEW_USER_HAS_COMPLETED_TOUR) === 'true',
+      numAdsToShow: getNumberOfAdsToShow()
     }
   }
 
@@ -300,38 +303,66 @@ class Dashboard extends React.Component {
           component that's absolutely positioned, then use flex positioning
           for the ads themselves. This will avoid awkward gaps.
         */}
-        <Ad
-          adId={VERTICAL_AD_SLOT_DOM_ID}
-          style={{
-            position: 'absolute',
-            bottom: 10,
-            right: 10,
-            minWidth: 300,
-            overflow: 'visible',
-            display: 'block'
-          }}
-          adWrapperStyle={{
-            position: 'absolute',
-            bottom: 0,
-            right: 0
-          }}
-        />
-        <Ad
-          adId={HORIZONTAL_AD_SLOT_DOM_ID}
-          style={{
-            position: 'absolute',
-            bottom: 10,
-            right: 320,
-            minWidth: 728,
-            overflow: 'visible',
-            display: 'block'
-          }}
-          adWrapperStyle={{
-            position: 'absolute',
-            bottom: 0,
-            right: 0
-          }}
-        />
+        {
+          this.state.numAdsToShow > 2
+            ? <Ad
+              adId={SECOND_VERTICAL_AD_SLOT_DOM_ID}
+              style={{
+                position: 'absolute',
+                bottom: 270,
+                right: 10,
+                minWidth: 300,
+                overflow: 'visible',
+                display: 'block'
+              }}
+              adWrapperStyle={{
+                position: 'absolute',
+                bottom: 0,
+                right: 0
+              }}
+            />
+            : null
+        }
+        {
+          this.state.numAdsToShow > 1
+            ? <Ad
+              adId={VERTICAL_AD_SLOT_DOM_ID}
+              style={{
+                position: 'absolute',
+                bottom: 10,
+                right: 10,
+                minWidth: 300,
+                overflow: 'visible',
+                display: 'block'
+              }}
+              adWrapperStyle={{
+                position: 'absolute',
+                bottom: 0,
+                right: 0
+              }}
+            />
+            : null
+        }
+        {
+          this.state.numAdsToShow > 0
+            ? <Ad
+              adId={HORIZONTAL_AD_SLOT_DOM_ID}
+              style={{
+                position: 'absolute',
+                bottom: 10,
+                right: 320,
+                minWidth: 728,
+                overflow: 'visible',
+                display: 'block'
+              }}
+              adWrapperStyle={{
+                position: 'absolute',
+                bottom: 0,
+                right: 0
+              }}
+            />
+            : null
+        }
         { user && tabId ? <LogTab user={user} tabId={tabId} /> : null }
         { user && tabId ? <LogRevenue user={user} tabId={tabId} /> : null }
         { user ? <LogConsentData user={user} /> : null }

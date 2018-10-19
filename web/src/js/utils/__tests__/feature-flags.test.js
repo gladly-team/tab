@@ -29,9 +29,15 @@ describe('feature flags', () => {
     expect(isAnonymousUserSignInEnabled()).toBe(false)
   })
 
-  test('isVariousAdSizesEnabled is true', () => {
+  test('isVariousAdSizesEnabled is false', () => {
     const isVariousAdSizesEnabled = require('js/utils/feature-flags')
       .isVariousAdSizesEnabled
-    expect(isVariousAdSizesEnabled()).toBe(true)
+    expect(isVariousAdSizesEnabled()).toBe(false)
+  })
+
+  test('isThirdAdEnabled is false', () => {
+    const isThirdAdEnabled = require('js/utils/feature-flags')
+      .isThirdAdEnabled
+    expect(isThirdAdEnabled()).toBe(false)
   })
 })
