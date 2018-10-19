@@ -259,8 +259,6 @@ describe('prebidConfig', function () {
       adUnitConfig[1]['bids'].every(bid => {
         return [
           'brealtime',
-          'openx',
-          'pulsepoint',
           'sonobi',
           'sovrn'
         ].indexOf(bid['bidder']) > -1
@@ -270,7 +268,9 @@ describe('prebidConfig', function () {
       adUnitConfig[2]['bids'].every(bid => {
         return [
           'aol',
-          'rhythmone'
+          'rhythmone',
+          'openx',
+          'pulsepoint'
         ].indexOf(bid['bidder']) > -1
       })
     ).toBe(true)

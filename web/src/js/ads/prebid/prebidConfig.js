@@ -156,30 +156,15 @@ const getAdUnits = () => {
         }
       },
       {
-        bidder: 'pulsepoint',
+        bidder: 'brealtime',
         params: {
-          cf: '300X250',
-          cp: '560174',
-          ct: '460982'
+          placementId: '10955690'
         }
       },
       {
         bidder: 'sovrn',
         params: {
           tagid: '438916'
-        }
-      },
-      {
-        bidder: 'openx',
-        params: {
-          unit: '538658529',
-          delDomain: 'tabforacause-d.openx.net'
-        }
-      },
-      {
-        bidder: 'brealtime',
-        params: {
-          placementId: '10955690'
         }
       }
     ]
@@ -208,6 +193,21 @@ const getAdUnits = () => {
         bidder: 'rhythmone',
         params: {
           placementId: '73423'
+        }
+      },
+      {
+        bidder: 'pulsepoint',
+        params: {
+          cf: '300X250',
+          cp: '560174',
+          ct: '460982'
+        }
+      },
+      {
+        bidder: 'openx',
+        params: {
+          unit: '538658529',
+          delDomain: 'tabforacause-d.openx.net'
         }
       }
     ]
