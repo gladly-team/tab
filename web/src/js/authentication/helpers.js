@@ -22,8 +22,6 @@ import environment from 'js/relay-env'
 import CreateNewUserMutation from 'js/mutations/CreateNewUserMutation'
 import LogEmailVerifiedMutation from 'js/mutations/LogEmailVerifiedMutation'
 import {
-  ANON_USER_GROUP_UNAUTHED_ALLOWED,
-  getAnonymousUserTestGroup,
   getUserTestGroupsForMutation
 } from 'js/utils/experiments'
 import {
@@ -48,8 +46,6 @@ export const anonymousUserMandatorySignIn = () => {
   // extension install time from localStorage and this will
   // return false.
   return (
-    // @experiment-anon-sign-in
-    getAnonymousUserTestGroup() === ANON_USER_GROUP_UNAUTHED_ALLOWED &&
     !inAnonymousUserGracePeriod()
   )
 }
@@ -81,8 +77,6 @@ const allowAnonymousUser = () => {
   // and they joined recently.
   return (
     isAnonymousUserSignInEnabled() &&
-    // @experiment-anon-sign-in
-    getAnonymousUserTestGroup() === ANON_USER_GROUP_UNAUTHED_ALLOWED &&
     userRecentlyJoined
   )
 }
