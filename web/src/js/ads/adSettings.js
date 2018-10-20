@@ -3,10 +3,6 @@ import {
   isThirdAdEnabled,
   isVariousAdSizesEnabled
 } from 'js/utils/feature-flags'
-import {
-  getVariousAdSizesTestGroup,
-  VARIOUS_AD_SIZES_GROUP_VARIOUS
-} from 'js/utils/experiments'
 
 // Time to wait for the entire ad auction before
 // calling the ad server.
@@ -50,8 +46,7 @@ export const getNumberOfAdsToShow = () => {
  */
 export const getVerticalAdSizes = () => {
   const showVariousAdSizes = (
-    isVariousAdSizesEnabled() &&
-    getVariousAdSizesTestGroup() === VARIOUS_AD_SIZES_GROUP_VARIOUS
+    isVariousAdSizesEnabled()
   )
   return showVariousAdSizes ? [
     [300, 250],
@@ -84,8 +79,7 @@ export const getVerticalAdSizes = () => {
  */
 export const getHorizontalAdSizes = () => {
   const showVariousAdSizes = (
-    isVariousAdSizesEnabled() &&
-    getVariousAdSizesTestGroup() === VARIOUS_AD_SIZES_GROUP_VARIOUS
+    isVariousAdSizesEnabled()
   )
   return showVariousAdSizes ? [
     [728, 90],

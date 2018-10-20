@@ -1,78 +1,11 @@
 
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import {
-  isAnonymousUserSignInEnabled,
-  isVariousAdSizesEnabled
+  isAnonymousUserSignInEnabled
 } from 'js/utils/feature-flags'
 import {
-  STORAGE_EXPERIMENT_ANON_USER,
-  STORAGE_EXPERIMENT_VARIOUS_AD_SIZES
+  STORAGE_EXPERIMENT_ANON_USER
 } from 'js/constants'
-
-// Various ad sizes test
-export const VARIOUS_AD_SIZES_GROUP_NO_GROUP = 'none'
-export const VARIOUS_AD_SIZES_GROUP_STANDARD = 'standard'
-export const VARIOUS_AD_SIZES_GROUP_VARIOUS = 'various'
-
-// @experiment-various-ad-sizes
-/**
- * Return the test group for the various ad sizes test from
- * localStorage. If no test group is set, return the 'none'
- * test group.
- * @returns {String} One of the valid test group names.
- */
-export const getVariousAdSizesTestGroup = () => {
-  const item = localStorageMgr.getItem(STORAGE_EXPERIMENT_VARIOUS_AD_SIZES)
-  var testGroup = VARIOUS_AD_SIZES_GROUP_NO_GROUP
-  if (item === VARIOUS_AD_SIZES_GROUP_STANDARD ||
-    item === VARIOUS_AD_SIZES_GROUP_VARIOUS
-  ) {
-    testGroup = item
-  }
-  return testGroup
-}
-
-// @experiment-various-ad-sizes
-/**
- * Assigns the user to a test group for the various ad sizes
- * test and stores the test group in localStorage.
- * @returns {undefined}
- */
-const assignVariousAdSizesTestGroup = () => {
-  const variousAdsEnabled = isVariousAdSizesEnabled()
-  const groups = [
-    VARIOUS_AD_SIZES_GROUP_STANDARD,
-    VARIOUS_AD_SIZES_GROUP_VARIOUS
-  ]
-  var testGroup = variousAdsEnabled
-    // Equal chance of control vs. experimental group
-    ? (
-      groups[Math.floor(Math.random() * groups.length)]
-    )
-    : VARIOUS_AD_SIZES_GROUP_NO_GROUP
-
-  // Store the group in localStorage.
-  localStorageMgr.setItem(STORAGE_EXPERIMENT_VARIOUS_AD_SIZES, testGroup)
-}
-
-// @experiment-various-ad-sizes
-/**
- * Converts the test group value to its corresponding string
- * used by the server-side, compliant with our GraphQL schema.
- * @param {String} testGroup - One of the constants representing
- *   the user's test group.
- * @returns {String} The string representing the test group,
- *   compliant with our GraphQL schema.
- */
-const variousAdSizesTestGroupToSchemaValue = testGroup => {
-  // Corresponds to server-side enum.
-  const map = {
-    [VARIOUS_AD_SIZES_GROUP_NO_GROUP]: 'NONE',
-    [VARIOUS_AD_SIZES_GROUP_STANDARD]: 'STANDARD',
-    [VARIOUS_AD_SIZES_GROUP_VARIOUS]: 'VARIOUS'
-  }
-  return map[testGroup]
-}
 
 // Anonymous user sign-in test
 export const ANON_USER_GROUP_NO_GROUP = 'none'
@@ -127,7 +60,6 @@ const assignAnonymousUserTestGroup = () => {
  */
 export const assignUserToTestGroups = () => {
   assignAnonymousUserTestGroup()
-  assignVariousAdSizesTestGroup()
 }
 
 // @experiment-anon-sign-in
@@ -161,7 +93,6 @@ const anonymousTestGroupToSchemaValue = testGroup => {
  */
 export const getUserTestGroupsForMutation = () => {
   return {
-    anonSignIn: anonymousTestGroupToSchemaValue(getAnonymousUserTestGroup()),
-    variousAdSizes: variousAdSizesTestGroupToSchemaValue(getVariousAdSizesTestGroup())
+    anonSignIn: anonymousTestGroupToSchemaValue(getAnonymousUserTestGroup())
   }
 }

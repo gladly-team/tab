@@ -4,14 +4,8 @@ import {
   isThirdAdEnabled,
   isVariousAdSizesEnabled
 } from 'js/utils/feature-flags'
-import {
-  getVariousAdSizesTestGroup,
-  VARIOUS_AD_SIZES_GROUP_NO_GROUP,
-  VARIOUS_AD_SIZES_GROUP_VARIOUS
-} from 'js/utils/experiments'
 
 jest.mock('js/utils/feature-flags')
-jest.mock('js/utils/experiments')
 
 describe('ad settings', () => {
   test('ad IDs and ad slot IDs are as expected', () => {
@@ -31,21 +25,18 @@ describe('ad settings', () => {
 
   test('getNumberOfAdsToShow returns 2 when the "3rd ad" feature is disabled', () => {
     isThirdAdEnabled.mockReturnValue(false)
-    getVariousAdSizesTestGroup.mockReturnValue(VARIOUS_AD_SIZES_GROUP_NO_GROUP)
     const getNumberOfAdsToShow = require('js/ads/adSettings').getNumberOfAdsToShow
     expect(getNumberOfAdsToShow()).toEqual(2)
   })
 
   test('getNumberOfAdsToShow returns 3 when the "3rd ad" feature is enabled', () => {
     isThirdAdEnabled.mockReturnValue(true)
-    getVariousAdSizesTestGroup.mockReturnValue(VARIOUS_AD_SIZES_GROUP_NO_GROUP)
     const getNumberOfAdsToShow = require('js/ads/adSettings').getNumberOfAdsToShow
     expect(getNumberOfAdsToShow()).toEqual(3)
   })
 
   test('getVerticalAdSizes returns the expected ad sizes when various ad sizes are disabled', () => {
     isVariousAdSizesEnabled.mockReturnValue(false)
-    getVariousAdSizesTestGroup.mockReturnValue(VARIOUS_AD_SIZES_GROUP_NO_GROUP)
     const getVerticalAdSizes = require('js/ads/adSettings').getVerticalAdSizes
     expect(getVerticalAdSizes()).toEqual(
       [
@@ -56,7 +47,6 @@ describe('ad settings', () => {
 
   test('getHorizontalAdSizes returns the expected ad sizes when various ad sizes are disabled', () => {
     isVariousAdSizesEnabled.mockReturnValue(false)
-    getVariousAdSizesTestGroup.mockReturnValue(VARIOUS_AD_SIZES_GROUP_NO_GROUP)
     const getHorizontalAdSizes = require('js/ads/adSettings').getHorizontalAdSizes
     expect(getHorizontalAdSizes()).toEqual(
       [
@@ -67,7 +57,6 @@ describe('ad settings', () => {
 
   test('getVerticalAdSizes returns the expected ad sizes when various ad sizes are enabled', () => {
     isVariousAdSizesEnabled.mockReturnValue(true)
-    getVariousAdSizesTestGroup.mockReturnValue(VARIOUS_AD_SIZES_GROUP_VARIOUS)
     const getVerticalAdSizes = require('js/ads/adSettings').getVerticalAdSizes
     expect(getVerticalAdSizes()).toEqual(
       [
@@ -91,7 +80,6 @@ describe('ad settings', () => {
 
   test('getHorizontalAdSizes returns the expected ad sizes when various ad sizes are enabled', () => {
     isVariousAdSizesEnabled.mockReturnValue(true)
-    getVariousAdSizesTestGroup.mockReturnValue(VARIOUS_AD_SIZES_GROUP_VARIOUS)
     const getHorizontalAdSizes = require('js/ads/adSettings').getHorizontalAdSizes
     expect(getHorizontalAdSizes()).toEqual(
       [
