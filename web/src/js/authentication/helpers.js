@@ -73,8 +73,7 @@ const allowAnonymousUser = () => {
   const userRecentlyJoined = inAnonymousUserGracePeriod()
 
   // The user can have an anonymous account if the anonymous user
-  // feature is enabled, they're in the anonymous user test group,
-  // and they joined recently.
+  // feature is enabled and they joined recently.
   return (
     isAnonymousUserSignInEnabled() &&
     userRecentlyJoined
