@@ -61,6 +61,9 @@ export const STORAGE_EXTENSION_INSTALL_ID = 'tab.newUser.extensionInstallId'
 export const STORAGE_APPROX_EXTENSION_INSTALL_TIME = 'tab.newUser.approxInstallTime'
 
 // tab.experiments: values related to split-testing features
+// We may assign other values to localStorage with the tab.experiments.*
+// prefix in experiments.js.
+export const STORAGE_EXPERIMENT_PREFIX = 'tab.experiments'
 export const STORAGE_EXPERIMENT_ANON_USER = 'tab.experiments.anonUser'
 export const STORAGE_EXPERIMENT_VARIOUS_AD_SIZES = 'tab.experiments.variousAdSizes'
 
