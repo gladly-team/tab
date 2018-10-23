@@ -214,6 +214,17 @@ const ExperimentGroupsType = new GraphQLInputObjectType({
           THREE_ADS: { value: experimentConfig.thirdAd.THREE_ADS }
         }
       })
+    },
+    oneAdForNewUsers: {
+      type: new GraphQLEnumType({
+        name: 'ExperimentGroupOneAdForNewUsers',
+        description: 'The test of showing only one ad to new users',
+        values: {
+          NONE: { value: experimentConfig.oneAdForNewUsers.NONE },
+          DEFAULT: { value: experimentConfig.oneAdForNewUsers.DEFAULT },
+          ONE_AD_AT_FIRST: { value: experimentConfig.oneAdForNewUsers.ONE_AD_AT_FIRST }
+        }
+      })
     }
   }
 })

@@ -169,7 +169,10 @@ class User extends BaseModel {
           split-test. This value is assigned on the client so is not trustworthy.`),
       testGroupThirdAd: types.number().integer().allow(null)
         .description(`Which group the user is in for the "three ads" split-test. 
-          This value is assigned on the client so is not trustworthy.`)
+          This value is assigned on the client so is not trustworthy.`),
+      testOneAdForNewUsers: types.number().integer().allow(null)
+        .description(`Which group the user is in for the "one ad for new users"
+          split-test. This value is assigned on the client so is not trustworthy.`)
     }
   }
 
