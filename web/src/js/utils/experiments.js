@@ -1,5 +1,9 @@
 
-import { filter, find, map } from 'lodash/collection'
+import {
+  filter,
+  find,
+  map
+} from 'lodash/collection'
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import {
   STORAGE_EXPERIMENT_PREFIX
@@ -100,7 +104,23 @@ const NoneExperimentGroup = createExperimentGroup({
 // The "name" value of the experiment must be the same as the
 // field name of the GraphQL ExperimentGroup field name for
 // this test.
-export const experiments = []
+export const experiments = [
+  createExperiment({
+    name: 'thirdAd',
+    active: false,
+    disabled: false,
+    groups: {
+      TWO_ADS: createExperimentGroup({
+        value: 'twoAds',
+        schemaValue: 'TWO_ADS'
+      }),
+      THREE_ADS: createExperimentGroup({
+        value: 'threeAds',
+        schemaValue: 'THREE_ADS'
+      })
+    }
+  })
+]
 
 // We do this to be able to modify the experiments
 // variable during testing while keeping it in this file.

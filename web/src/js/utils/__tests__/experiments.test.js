@@ -1,14 +1,17 @@
 /* eslint-env jest */
-
-import localStorageMgr, {
-  __mockClear
-} from 'js/utils/localstorage-mgr'
+import {
+  forEach,
+  sortBy
+} from 'lodash/collection'
+import { isPlainObject } from 'lodash/lang'
 
 jest.mock('js/utils/localstorage-mgr')
 jest.mock('js/utils/feature-flags')
 afterEach(() => {
+  const { __mockClear } = require('js/utils/localstorage-mgr')
   __mockClear()
   jest.clearAllMocks()
+  jest.resetModules()
 })
 /* Tests for the Experiment and ExperimentGroup objects */
 describe('Experiment and ExperimentGroup objects', () => {
@@ -39,6 +42,7 @@ describe('Experiment and ExperimentGroup objects', () => {
     const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
 
     // Mock that the user is assigned to an experiment group.
+    const localStorageMgr = require('js/utils/localstorage-mgr').default
     localStorageMgr.setItem('tab.experiments.fooTest', 'newThing')
 
     const experiment = createExperiment({
@@ -63,6 +67,7 @@ describe('Experiment and ExperimentGroup objects', () => {
     const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
 
     // Mock that the user is assigned to an experiment group.
+    const localStorageMgr = require('js/utils/localstorage-mgr').default
     localStorageMgr.setItem('tab.experiments.fooTest', 'newThing')
 
     const experiment = createExperiment({
@@ -87,6 +92,7 @@ describe('Experiment and ExperimentGroup objects', () => {
     const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
 
     // Invalid local storage value
+    const localStorageMgr = require('js/utils/localstorage-mgr').default
     localStorageMgr.setItem('tab.experiments.fooTest', 'not-a-valid-group')
 
     const experiment = createExperiment({
@@ -108,6 +114,7 @@ describe('Experiment and ExperimentGroup objects', () => {
   })
 
   test('does not assign the user to a test group when the experiment is inactive', () => {
+    const localStorageMgr = require('js/utils/localstorage-mgr').default
     const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
     const experiment = createExperiment({
       name: 'fooTest',
@@ -133,6 +140,7 @@ describe('Experiment and ExperimentGroup objects', () => {
   })
 
   test('saves a test group to local storage when assigning a test group', () => {
+    const localStorageMgr = require('js/utils/localstorage-mgr').default
     const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
     const experiment = createExperiment({
       name: 'fooTest',
@@ -159,6 +167,7 @@ describe('Experiment and ExperimentGroup objects', () => {
   })
 
   test('selects from all the test groups when assigning the user to a test group', () => {
+    const localStorageMgr = require('js/utils/localstorage-mgr').default
     const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
     const experiment = createExperiment({
       name: 'fooTest',
@@ -189,6 +198,7 @@ describe('Experiment and ExperimentGroup objects', () => {
   })
 
   test('assigns the "none" test group when there are no other groups', () => {
+    const localStorageMgr = require('js/utils/localstorage-mgr').default
     const { createExperiment } = require('js/utils/experiments')
     const experiment = createExperiment({
       name: 'fooTest',
@@ -214,6 +224,7 @@ describe('Main experiments functionality', () => {
     const experimentsExports = require('js/utils/experiments')
 
     // Mock that the user is assigned to an experiment group.
+    const localStorageMgr = require('js/utils/localstorage-mgr').default
     localStorageMgr.setItem('tab.experiments.fooTest', 'newThing')
 
     experimentsExports.experiments = [
@@ -256,6 +267,7 @@ describe('Main experiments functionality', () => {
     const experimentsExports = require('js/utils/experiments')
 
     // Mock that the user is assigned to an experiment group.
+    const localStorageMgr = require('js/utils/localstorage-mgr').default
     localStorageMgr.setItem('tab.experiments.fooTest', 'newThing')
 
     experimentsExports.experiments = [
@@ -298,6 +310,7 @@ describe('Main experiments functionality', () => {
     const experimentsExports = require('js/utils/experiments')
 
     // Mock that the user is assigned to an experiment group.
+    const localStorageMgr = require('js/utils/localstorage-mgr').default
     localStorageMgr.setItem('tab.experiments.fooTest', 'newThing')
 
     experimentsExports.experiments = [
@@ -417,6 +430,7 @@ describe('Main experiments functionality', () => {
   })
 
   test('assignUserToTestGroups assigns the user to all active tests but not inactive tests', () => {
+    const localStorageMgr = require('js/utils/localstorage-mgr').default
     const experimentsExports = require('js/utils/experiments')
     experimentsExports.experiments = [
       experimentsExports.createExperiment({
@@ -543,14 +557,25 @@ describe('Main experiments functionality', () => {
 
 /* Tests for actual experiments */
 describe('Actual experiments we are running or will run', () => {
-  test('assignUserToTestGroups saves the user\'s test groups to localStorage', () => {
-    // // Control for randomness.
-    // jest.spyOn(Math, 'random').mockReturnValue(0)
+  test('experiments match expected', () => {
+    const experiments = require('js/utils/experiments').experiments
+    expect(sortBy(experiments, o => o.name)).toMatchObject([
+      // Experiments ordered alphabetically by name
+      {
+        name: 'thirdAd',
+        active: false,
+        disabled: false
+      }
+    ])
+  })
 
-    const assignUserToTestGroups = require('js/utils/experiments').assignUserToTestGroups
-    assignUserToTestGroups()
-
-    // Placeholder while we do not have any active tests.
-    expect(true).toBe(true)
+  test('the experiments have valid groups object structure', () => {
+    const experiments = require('js/utils/experiments').experiments
+    experiments.forEach(exp => {
+      forEach(exp.groups, group => {
+        expect(isPlainObject(group)).toBe(true)
+        expect(Object.keys(group)).toEqual(['value', 'schemaValue'])
+      })
+    })
   })
 })
