@@ -10,10 +10,8 @@ afterEach(() => {
   __mockClear()
   jest.clearAllMocks()
 })
-
-describe('experiments', () => {
-  /* Tests for the Experiment and ExperimentGroup objects */
-
+/* Tests for the Experiment and ExperimentGroup objects */
+describe('Experiment and ExperimentGroup objects', () => {
   test('createExperiment returns an object with expected shape', () => {
     const createExperiment = require('js/utils/experiments').createExperiment
     const experiment = createExperiment({
@@ -208,9 +206,10 @@ describe('experiments', () => {
   })
 
   // TODO: test validation throws
+})
 
-  /* Test functionality for fake experiments */
-
+/* Test core functionality with fake experiments */
+describe('Main experiments functionality', () => {
   test('getUserExperimentGroup returns the expected value', () => {
     const experimentsExports = require('js/utils/experiments')
 
@@ -416,9 +415,10 @@ describe('experiments', () => {
         NONE: 'none'
       })
   })
+})
 
-  /* Tests for actual experiments */
-
+/* Tests for actual experiments */
+describe('Actual experiments we are running or will run', () => {
   test('assignUserToTestGroups saves the user\'s test groups to localStorage', () => {
     // // Control for randomness.
     // jest.spyOn(Math, 'random').mockReturnValue(0)
