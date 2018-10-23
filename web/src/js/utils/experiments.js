@@ -100,13 +100,16 @@ const NoneExperimentGroup = createExperimentGroup({
   schemaValue: 'NONE'
 })
 
+// Add experiment names here as constants.
+export const EXPERIMENT_THIRD_AD = 'thirdAd'
+
 // Add ExperimentGroup objects here to enable new experiments.
 // The "name" value of the experiment must be the same as the
 // field name of the GraphQL ExperimentGroup field name for
 // this test.
 export const experiments = [
   createExperiment({
-    name: 'thirdAd',
+    name: EXPERIMENT_THIRD_AD,
     active: false,
     disabled: false,
     groups: {
