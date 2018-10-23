@@ -56,7 +56,7 @@ describe('Experiment and ExperimentGroup objects', () => {
         })
       }
     })
-    expect(experiment.getTestGroup()).toEqual('none')
+    expect(experiment.getTestGroup().value).toEqual('none')
   })
 
   test('returns the experiment test group when the experiment is not disabled', () => {
@@ -80,7 +80,7 @@ describe('Experiment and ExperimentGroup objects', () => {
         })
       }
     })
-    expect(experiment.getTestGroup()).toEqual('newThing')
+    expect(experiment.getTestGroup().value).toEqual('newThing')
   })
 
   test('returns the "none" test group when the experiment value in local storage is invalid', () => {
@@ -104,7 +104,7 @@ describe('Experiment and ExperimentGroup objects', () => {
         })
       }
     })
-    expect(experiment.getTestGroup()).toEqual('none')
+    expect(experiment.getTestGroup().value).toEqual('none')
   })
 
   test('does not assign the user to a test group when the experiment is inactive', () => {
@@ -479,6 +479,65 @@ describe('Main experiments functionality', () => {
     expect(experimentsExports.getUserExperimentGroup('exampleTest')).toBe('hi')
     expect(experimentsExports.getUserExperimentGroup('someTest')).toBe('none')
     expect(experimentsExports.getUserExperimentGroup('fooTest')).toBe('sameOld')
+  })
+
+  test('getUserTestGroupsForMutation returns the expected values for all tests (even inactive tests)', () => {
+    const experimentsExports = require('js/utils/experiments')
+    experimentsExports.experiments = [
+      experimentsExports.createExperiment({
+        name: 'exampleTest',
+        active: true,
+        disabled: false,
+        groups: {
+          SOMETHING: experimentsExports.createExperimentGroup({
+            value: 'hi',
+            schemaValue: 'SOMETHING'
+          }),
+          ANOTHER_THING: experimentsExports.createExperimentGroup({
+            value: 'bye',
+            schemaValue: 'ANOTHER_THING'
+          })
+        }
+      }),
+      experimentsExports.createExperiment({
+        name: 'someTest',
+        active: false,
+        disabled: false,
+        groups: {
+          GROUP_A: experimentsExports.createExperimentGroup({
+            value: 'groupA',
+            schemaValue: 'THE_A_GROUP'
+          }),
+          GROUP_B: experimentsExports.createExperimentGroup({
+            value: 'groupB',
+            schemaValue: 'THE_B_GROUP'
+          })
+        }
+      }),
+      experimentsExports.createExperiment({
+        name: 'fooTest',
+        active: true,
+        disabled: false,
+        groups: {
+          MY_CONTROL_GROUP: experimentsExports.createExperimentGroup({
+            value: 'sameOld',
+            schemaValue: 'THE_CONTROL'
+          }),
+          FUN_EXPERIMENT: experimentsExports.createExperimentGroup({
+            value: 'newThing',
+            schemaValue: 'EXPERIMENT'
+          })
+        }
+      })
+    ]
+    jest.spyOn(Math, 'random').mockReturnValue(0)
+    experimentsExports.assignUserToTestGroups()
+    const userGroupsForMutation = experimentsExports.getUserTestGroupsForMutation()
+    expect(userGroupsForMutation).toEqual({
+      exampleTest: 'SOMETHING',
+      someTest: 'NONE',
+      fooTest: 'THE_CONTROL'
+    })
   })
 })
 

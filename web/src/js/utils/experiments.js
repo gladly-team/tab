@@ -1,5 +1,5 @@
 
-import { filter, find, map, some } from 'lodash/collection'
+import { filter, find, map } from 'lodash/collection'
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import {
   STORAGE_EXPERIMENT_PREFIX
@@ -50,22 +50,19 @@ export const createExperiment = ({ name, active = false, disabled = false, group
       const testGroup = groupValues[Math.floor(Math.random() * groupValues.length)]
       this.saveTestGroupToLocalStorage(testGroup)
     },
-    // Return the value of the user's assigned experiment group,
-    // or the NoneExperimentGroup value if the user is not assigned to one.
+    // Return the the user's assigned experiment group, or the
+    // NoneExperimentGroup if the user is not assigned to one.
     getTestGroup: function () {
       // If the test is disabled, return the "none" group value.
       if (this.disabled) {
-        return this.groups.NONE.value
+        return this.groups.NONE
       }
 
       // Get the user's group from localStorage. If it's not one of
       // the valid group values, return the "none" group value.
       const groupVal = localStorageMgr.getItem(this.localStorageKey)
-      const isValidGroup = some(this.groups, { value: groupVal })
-      if (!isValidGroup) {
-        return this.groups.NONE.value
-      }
-      return groupVal
+      const group = find(this.groups, { value: groupVal }) || this.groups.NONE
+      return group
     }
   }
 }
@@ -100,6 +97,9 @@ const NoneExperimentGroup = createExperimentGroup({
 })
 
 // Add ExperimentGroup objects here to enable new experiments.
+// The "name" value of the experiment must be the same as the
+// field name of the GraphQL ExperimentGroup field name for
+// this test.
 export const experiments = []
 
 // We do this to be able to modify the experiments
@@ -157,7 +157,7 @@ export const getUserExperimentGroup = experimentName => {
   if (!exp) {
     return NoneExperimentGroup.value
   }
-  return exp.getTestGroup()
+  return exp.getTestGroup().value
 }
 
 /**
@@ -175,7 +175,7 @@ export const assignUserToTestGroups = () => {
 
 /**
  * Returns an object with a key for each active experiment. Each
- * key's value is an integer representing the test group to which
+ * key's value is a string representing the test group to which
  * the user is assigned for that test. The object takes the shape
  * of our GraphQL schema's ExperimentGroupsType.
  * @returns {Object} The object of experiment group assignments
@@ -183,5 +183,10 @@ export const assignUserToTestGroups = () => {
  *   ExperimentGroupsType.
  */
 export const getUserTestGroupsForMutation = () => {
-  return {}
+  const exps = getExperiments()
+  const userGroupsSchema = exps.reduce((result, experiment) => {
+    result[experiment.name] = experiment.getTestGroup().schemaValue
+    return result
+  }, {})
+  return userGroupsSchema
 }
