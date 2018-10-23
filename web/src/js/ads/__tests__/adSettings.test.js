@@ -4,8 +4,12 @@ import {
   isThirdAdEnabled,
   isVariousAdSizesEnabled
 } from 'js/utils/feature-flags'
+import {
+  getUserExperimentGroup
+} from 'js/utils/experiments'
 
 jest.mock('js/utils/feature-flags')
+jest.mock('js/utils/experiments')
 
 describe('ad settings', () => {
   test('ad IDs and ad slot IDs are as expected', () => {
@@ -29,8 +33,16 @@ describe('ad settings', () => {
     expect(getNumberOfAdsToShow()).toEqual(2)
   })
 
-  test('getNumberOfAdsToShow returns 3 when the "3rd ad" feature is enabled', () => {
+  test('getNumberOfAdsToShow returns 2 when the "3rd ad" feature is enabled but the user is not in the "3 ad" test group', () => {
+    isThirdAdEnabled.mockReturnValue(false)
+    getUserExperimentGroup.mockReturnValue('twoAds')
+    const getNumberOfAdsToShow = require('js/ads/adSettings').getNumberOfAdsToShow
+    expect(getNumberOfAdsToShow()).toEqual(2)
+  })
+
+  test('getNumberOfAdsToShow returns 3 when the "3rd ad" feature is enabled and the user is in the "3 ad" test group', () => {
     isThirdAdEnabled.mockReturnValue(true)
+    getUserExperimentGroup.mockReturnValue('threeAds')
     const getNumberOfAdsToShow = require('js/ads/adSettings').getNumberOfAdsToShow
     expect(getNumberOfAdsToShow()).toEqual(3)
   })

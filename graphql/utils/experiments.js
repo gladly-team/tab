@@ -14,6 +14,12 @@ const experimentConfig = {
     NONE: 0,
     STANDARD: 1,
     VARIOUS: 2
+  },
+  // @experiment-third-ad
+  thirdAd: {
+    NONE: 0,
+    TWO_ADS: 1,
+    THREE_ADS: 2
   }
 }
 

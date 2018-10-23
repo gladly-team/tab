@@ -3,6 +3,11 @@ import {
   isThirdAdEnabled,
   isVariousAdSizesEnabled
 } from 'js/utils/feature-flags'
+import {
+  EXPERIMENT_THIRD_AD,
+  getExperimentGroups,
+  getUserExperimentGroup
+} from 'js/utils/experiments'
 
 // Time to wait for the entire ad auction before
 // calling the ad server.
@@ -35,7 +40,11 @@ export const HORIZONTAL_AD_SLOT_DOM_ID = 'div-gpt-ad-1464385677836-0'
  * @return {Number} The number of ads
  */
 export const getNumberOfAdsToShow = () => {
-  return isThirdAdEnabled() ? 3 : 2
+  const userInThreeAdTestGroup = (
+    getUserExperimentGroup(EXPERIMENT_THIRD_AD) ===
+    getExperimentGroups(EXPERIMENT_THIRD_AD).THREE_ADS
+  )
+  return (userInThreeAdTestGroup && isThirdAdEnabled()) ? 3 : 2
 }
 
 /**

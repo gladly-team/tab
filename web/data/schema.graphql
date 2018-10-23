@@ -170,6 +170,14 @@ enum ExperimentGroupAnonSignIn {
 input ExperimentGroups {
   anonSignIn: ExperimentGroupAnonSignIn
   variousAdSizes: ExperimentGroupVariousAdSizes
+  thirdAd: ExperimentGroupThirdAd
+}
+
+"""The test of enabling a third ad"""
+enum ExperimentGroupThirdAd {
+  NONE
+  TWO_ADS
+  THREE_ADS
 }
 
 """The test of enabling many different ad sizes"""
