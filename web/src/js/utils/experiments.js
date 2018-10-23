@@ -6,8 +6,6 @@ import {
 } from 'js/constants'
 
 const noneGroupKey = 'NONE'
-const noneGroupValue = 'none'
-const noneGroupSchemaValue = 'NONE'
 
 export const createExperiment = ({ name, active = false, disabled = false, groups }) => {
   if (!name) {
@@ -26,10 +24,7 @@ export const createExperiment = ({ name, active = false, disabled = false, group
     disabled,
     // The different experiment groups the user could be assigned to.
     groups: Object.assign({}, groups, {
-      [noneGroupKey]: createExperimentGroup({
-        value: noneGroupValue,
-        schemaValue: noneGroupSchemaValue
-      })
+      [noneGroupKey]: NoneExperimentGroup
     }),
     localStorageKey: `${STORAGE_EXPERIMENT_PREFIX}.${name}`,
     saveTestGroupToLocalStorage: function (testGroupValue) {
@@ -42,7 +37,7 @@ export const createExperiment = ({ name, active = false, disabled = false, group
       }
 
       // Filter out the "none" group.
-      const experimentGroups = filter(this.groups, groupObj => groupObj.value !== noneGroupValue)
+      const experimentGroups = filter(this.groups, groupObj => groupObj.value !== NoneExperimentGroup.value)
 
       // If there aren't any test groups, just save the "none" value.
       if (!experimentGroups.length) {
@@ -56,7 +51,7 @@ export const createExperiment = ({ name, active = false, disabled = false, group
       this.saveTestGroupToLocalStorage(testGroup)
     },
     // Return the value of the user's assigned experiment group,
-    // or 'none' if the user is not assigned to one.
+    // or the NoneExperimentGroup value if the user is not assigned to one.
     getTestGroup: function () {
       // If the test is disabled, return the "none" group value.
       if (this.disabled) {
@@ -97,6 +92,14 @@ export const createExperimentGroup = ({ value, schemaValue }) => {
   }
 }
 
+// The experiment group for when the user is not assigned to any
+// experiment group (e.g., not included in the experiment).
+const NoneExperimentGroup = createExperimentGroup({
+  value: 'none',
+  schemaValue: 'NONE'
+})
+
+// Add ExperimentGroup objects here to enable new experiments.
 export const experiments = []
 
 // We do this to be able to modify the experiments
@@ -105,9 +108,41 @@ export const experiments = []
 const getExperiments = () => exports.experiments
 
 /**
+ * Get the set of available group values for an experiment.
+ * If the experiment does not exist, this returns only the
+ * the NoneExperimentGroup.
+ * @returns {Object} A map of ExperimentGroup values, keyed
+ *   by their name.
+ */
+export const getExperimentGroups = experimentName => {
+  if (!experimentName) {
+    throw new Error('Must provide an experiment name.')
+  }
+  const exp = find(getExperiments(), { name: experimentName })
+
+  // If there's no experiment with this name, return only the
+  // NoneExperimentGroup.
+  if (!exp) {
+    return {
+      [noneGroupKey]: NoneExperimentGroup.value
+    }
+  }
+
+  // Return only the ExperimentGroup string value for ease
+  // of comparing user group membership.
+  const groups = exp.groups
+  const groupNames = Object.keys(groups)
+    .reduce((result, key) => {
+      result[key] = groups[key].value
+      return result
+    }, {})
+  return groupNames
+}
+
+/**
  * Get the user's assigned group value for an experiment.
  * If the experiment does not exist or is disabled, this
- * will return 'none'.
+ * will return the NoneExperimentGroup value.
  * @returns {String} The value of the user's group for this
  *   experiment.
  */
@@ -115,12 +150,12 @@ export const getUserExperimentGroup = experimentName => {
   if (!experimentName) {
     throw new Error('Must provide an experiment name.')
   }
-  const exps = getExperiments()
-  const exp = find(exps, { name: experimentName })
+  const exp = find(getExperiments(), { name: experimentName })
 
-  // If there's no experiment with this name, return 'none'.
+  // If there's no experiment with this name, return the
+  // NoneExperimentGroup value.
   if (!exp) {
-    return noneGroupValue
+    return NoneExperimentGroup.value
   }
   return exp.getTestGroup()
 }

@@ -344,6 +344,79 @@ describe('experiments', () => {
       .toBe('none')
   })
 
+  test('getExperimentGroups returns the expected values', () => {
+    const experimentsExports = require('js/utils/experiments')
+    experimentsExports.experiments = [
+      experimentsExports.createExperiment({
+        name: 'exampleTest',
+        active: true,
+        disabled: false,
+        groups: {
+          SOMETHING: experimentsExports.createExperimentGroup({
+            value: 'hi',
+            schemaValue: 'SOMETHING'
+          }),
+          ANOTHER_THING: experimentsExports.createExperimentGroup({
+            value: 'bye',
+            schemaValue: 'ANOTHER_THING'
+          })
+        }
+      }),
+      experimentsExports.createExperiment({
+        name: 'fooTest',
+        active: true,
+        disabled: true,
+        groups: {
+          MY_CONTROL_GROUP: experimentsExports.createExperimentGroup({
+            value: 'sameOld',
+            schemaValue: 'THE_CONTROL'
+          }),
+          FUN_EXPERIMENT: experimentsExports.createExperimentGroup({
+            value: 'newThing',
+            schemaValue: 'EXPERIMENT'
+          })
+        }
+      })
+    ]
+    expect(experimentsExports.getExperimentGroups('fooTest'))
+      .toEqual({
+        MY_CONTROL_GROUP: 'sameOld',
+        FUN_EXPERIMENT: 'newThing',
+        NONE: 'none'
+      })
+    expect(experimentsExports.getExperimentGroups('exampleTest'))
+      .toEqual({
+        SOMETHING: 'hi',
+        ANOTHER_THING: 'bye',
+        NONE: 'none'
+      })
+  })
+
+  test('getExperimentGroups returns only the "none" group when the experiment does not exist', () => {
+    const experimentsExports = require('js/utils/experiments')
+    experimentsExports.experiments = [
+      experimentsExports.createExperiment({
+        name: 'fooTest',
+        active: true,
+        disabled: true,
+        groups: {
+          MY_CONTROL_GROUP: experimentsExports.createExperimentGroup({
+            value: 'sameOld',
+            schemaValue: 'THE_CONTROL'
+          }),
+          FUN_EXPERIMENT: experimentsExports.createExperimentGroup({
+            value: 'newThing',
+            schemaValue: 'EXPERIMENT'
+          })
+        }
+      })
+    ]
+    expect(experimentsExports.getExperimentGroups('thisExperimentDoesNotExist'))
+      .toEqual({
+        NONE: 'none'
+      })
+  })
+
   /* Tests for actual experiments */
 
   test('assignUserToTestGroups saves the user\'s test groups to localStorage', () => {
