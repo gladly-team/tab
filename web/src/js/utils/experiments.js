@@ -108,6 +108,7 @@ export const EXPERIMENT_THIRD_AD = 'thirdAd'
 // field name of the GraphQL ExperimentGroup field name for
 // this test.
 export const experiments = [
+  // @experiment-third-ad
   createExperiment({
     name: EXPERIMENT_THIRD_AD,
     active: false,

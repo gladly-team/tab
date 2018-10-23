@@ -203,6 +203,17 @@ const ExperimentGroupsType = new GraphQLInputObjectType({
           VARIOUS: { value: experimentConfig.variousAdSizes.VARIOUS }
         }
       })
+    },
+    thirdAd: {
+      type: new GraphQLEnumType({
+        name: 'ExperimentGroupThirdAd',
+        description: 'The test of enabling a third ad',
+        values: {
+          NONE: { value: experimentConfig.thirdAd.NONE },
+          TWO_ADS: { value: experimentConfig.thirdAd.TWO_ADS },
+          THREE_ADS: { value: experimentConfig.thirdAd.THREE_ADS }
+        }
+      })
     }
   }
 })
