@@ -164,7 +164,14 @@ export const getUserExperimentGroup = experimentName => {
  * Assigns the user to test groups for all active tests.
  * @returns {undefined}
  */
-export const assignUserToTestGroups = () => {}
+export const assignUserToTestGroups = () => {
+  const exps = getExperiments()
+  exps.forEach(experiment => {
+    if (experiment.active) {
+      experiment.assignTestGroup()
+    }
+  })
+}
 
 /**
  * Returns an object with a key for each active experiment. Each

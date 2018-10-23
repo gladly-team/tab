@@ -415,6 +415,71 @@ describe('Main experiments functionality', () => {
         NONE: 'none'
       })
   })
+
+  test('assignUserToTestGroups assigns the user to all active tests but not inactive tests', () => {
+    const experimentsExports = require('js/utils/experiments')
+    experimentsExports.experiments = [
+      experimentsExports.createExperiment({
+        name: 'exampleTest',
+        active: true,
+        disabled: false,
+        groups: {
+          SOMETHING: experimentsExports.createExperimentGroup({
+            value: 'hi',
+            schemaValue: 'SOMETHING'
+          }),
+          ANOTHER_THING: experimentsExports.createExperimentGroup({
+            value: 'bye',
+            schemaValue: 'ANOTHER_THING'
+          })
+        }
+      }),
+      experimentsExports.createExperiment({
+        name: 'someTest',
+        active: false,
+        disabled: false,
+        groups: {
+          GROUP_A: experimentsExports.createExperimentGroup({
+            value: 'groupA',
+            schemaValue: 'THE_A_GROUP'
+          }),
+          GROUP_B: experimentsExports.createExperimentGroup({
+            value: 'groupB',
+            schemaValue: 'THE_B_GROUP'
+          })
+        }
+      }),
+      experimentsExports.createExperiment({
+        name: 'fooTest',
+        active: true,
+        disabled: false,
+        groups: {
+          MY_CONTROL_GROUP: experimentsExports.createExperimentGroup({
+            value: 'sameOld',
+            schemaValue: 'THE_CONTROL'
+          }),
+          FUN_EXPERIMENT: experimentsExports.createExperimentGroup({
+            value: 'newThing',
+            schemaValue: 'EXPERIMENT'
+          })
+        }
+      })
+    ]
+    jest.spyOn(Math, 'random').mockReturnValue(0)
+    experimentsExports.assignUserToTestGroups()
+
+    // Should store test group in localStorage.
+    expect(localStorageMgr.setItem).toHaveBeenCalledTimes(2)
+    expect(localStorageMgr.setItem)
+      .toHaveBeenCalledWith('tab.experiments.exampleTest', 'hi')
+    expect(localStorageMgr.setItem)
+      .toHaveBeenCalledWith('tab.experiments.fooTest', 'sameOld')
+
+    // Should return the assigned test groups.
+    expect(experimentsExports.getUserExperimentGroup('exampleTest')).toBe('hi')
+    expect(experimentsExports.getUserExperimentGroup('someTest')).toBe('none')
+    expect(experimentsExports.getUserExperimentGroup('fooTest')).toBe('sameOld')
+  })
 })
 
 /* Tests for actual experiments */
