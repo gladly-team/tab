@@ -38,6 +38,25 @@ describe('Experiment and ExperimentGroup objects', () => {
     })
   })
 
+  test('createExperiment throws if a name is not provided', () => {
+    const createExperiment = require('js/utils/experiments').createExperiment
+    expect(() => {
+      createExperiment({
+        active: true
+      })
+    }).toThrow()
+  })
+
+  test('createExperimentGroup throws if missing a required key', () => {
+    const { createExperimentGroup } = require('js/utils/experiments')
+    expect(() => {
+      createExperimentGroup({
+        // Missing "value" key
+        schemaValue: 'blah'
+      })
+    }).toThrow()
+  })
+
   test('returns the "none" test group when the experiment is disabled', () => {
     const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
 
@@ -214,8 +233,6 @@ describe('Experiment and ExperimentGroup objects', () => {
     expect(localStorageMgr.setItem)
       .toHaveBeenCalledWith('tab.experiments.fooTest', 'none')
   })
-
-  // TODO: test validation throws
 })
 
 /* Test core functionality with fake experiments */
