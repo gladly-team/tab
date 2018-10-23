@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { QueryRenderer } from 'react-relay'
+import { get } from 'lodash/object'
 import environment from 'js/relay-env'
 import AuthenticationContainer from 'js/components/Authentication/AuthenticationContainer'
 import {
@@ -66,7 +67,7 @@ class AuthenticationView extends React.Component {
         query={query}
         variables={this.state.relayVariables}
         render={({ error, props }) => {
-          if (error) {
+          if (error && get(error, 'source.errors')) {
             // If any of the errors is because the user does not exist
             // on the server side, create the user and re-query if
             // possible.

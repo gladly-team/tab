@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { QueryRenderer } from 'react-relay'
+import { get } from 'lodash/object'
 import environment from 'js/relay-env'
 
 import AuthUserComponent from 'js/components/General/AuthUserComponent'
@@ -34,7 +35,7 @@ class DashboardView extends React.Component {
             }
           `}
           render={({ error, props, retry }) => {
-            if (error) {
+            if (error && get(error, 'source.errors')) {
               // If any of the errors is because the user does not exist
               // on the server side, create the user and re-query if
               // possible. If it's not possible to create a new user,
