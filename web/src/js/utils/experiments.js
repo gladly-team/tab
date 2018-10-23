@@ -1,5 +1,5 @@
 
-import { filter, map, some } from 'lodash/collection'
+import { filter, find, map, some } from 'lodash/collection'
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import {
   STORAGE_EXPERIMENT_PREFIX
@@ -97,7 +97,33 @@ export const createExperimentGroup = ({ value, schemaValue }) => {
   }
 }
 
-// const experiments = []
+export const experiments = []
+
+// We do this to be able to modify the experiments
+// variable during testing while keeping it in this file.
+// https://github.com/facebook/jest/issues/936#issuecomment-214939935
+const getExperiments = () => exports.experiments
+
+/**
+ * Get the user's assigned group value for an experiment.
+ * If the experiment does not exist or is disabled, this
+ * will return 'none'.
+ * @returns {String} The value of the user's group for this
+ *   experiment.
+ */
+export const getUserExperimentGroup = experimentName => {
+  if (!experimentName) {
+    throw new Error('Must provide an experiment name.')
+  }
+  const exps = getExperiments()
+  const exp = find(exps, { name: experimentName })
+
+  // If there's no experiment with this name, return 'none'.
+  if (!exp) {
+    return noneGroupValue
+  }
+  return exp.getTestGroup()
+}
 
 /**
  * Assigns the user to test groups for all active tests.

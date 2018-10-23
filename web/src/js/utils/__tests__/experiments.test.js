@@ -64,7 +64,7 @@ describe('experiments', () => {
   test('returns the experiment test group when the experiment is not disabled', () => {
     const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
 
-    // Mock that the user is assigned to an experimental group.
+    // Mock that the user is assigned to an experiment group.
     localStorageMgr.setItem('tab.experiments.fooTest', 'newThing')
 
     const experiment = createExperiment({
@@ -207,7 +207,144 @@ describe('experiments', () => {
       .toHaveBeenCalledWith('tab.experiments.fooTest', 'none')
   })
 
-  /* Tests for active experiments */
+  // TODO: test validation throws
+
+  /* Test functionality for fake experiments */
+
+  test('getUserExperimentGroup returns the expected value', () => {
+    const experimentsExports = require('js/utils/experiments')
+
+    // Mock that the user is assigned to an experiment group.
+    localStorageMgr.setItem('tab.experiments.fooTest', 'newThing')
+
+    experimentsExports.experiments = [
+      experimentsExports.createExperiment({
+        name: 'exampleTest',
+        active: true,
+        disabled: false,
+        groups: {
+          SOMETHING: experimentsExports.createExperimentGroup({
+            value: 'hi',
+            schemaValue: 'SOMETHING'
+          }),
+          ANOTHER_THING: experimentsExports.createExperimentGroup({
+            value: 'bye',
+            schemaValue: 'ANOTHER_THING'
+          })
+        }
+      }),
+      experimentsExports.createExperiment({
+        name: 'fooTest',
+        active: true,
+        disabled: false,
+        groups: {
+          MY_CONTROL_GROUP: experimentsExports.createExperimentGroup({
+            value: 'sameOld',
+            schemaValue: 'THE_CONTROL'
+          }),
+          FUN_EXPERIMENT: experimentsExports.createExperimentGroup({
+            value: 'newThing',
+            schemaValue: 'EXPERIMENT'
+          })
+        }
+      })
+    ]
+    expect(experimentsExports.getUserExperimentGroup('fooTest'))
+      .toBe('newThing')
+  })
+
+  test('getUserExperimentGroup returns "none" when the experiment does not exist', () => {
+    const experimentsExports = require('js/utils/experiments')
+
+    // Mock that the user is assigned to an experiment group.
+    localStorageMgr.setItem('tab.experiments.fooTest', 'newThing')
+
+    experimentsExports.experiments = [
+      experimentsExports.createExperiment({
+        name: 'exampleTest',
+        active: true,
+        disabled: false,
+        groups: {
+          SOMETHING: experimentsExports.createExperimentGroup({
+            value: 'hi',
+            schemaValue: 'SOMETHING'
+          }),
+          ANOTHER_THING: experimentsExports.createExperimentGroup({
+            value: 'bye',
+            schemaValue: 'ANOTHER_THING'
+          })
+        }
+      }),
+      experimentsExports.createExperiment({
+        name: 'fooTest',
+        active: true,
+        disabled: false,
+        groups: {
+          MY_CONTROL_GROUP: experimentsExports.createExperimentGroup({
+            value: 'sameOld',
+            schemaValue: 'THE_CONTROL'
+          }),
+          FUN_EXPERIMENT: experimentsExports.createExperimentGroup({
+            value: 'newThing',
+            schemaValue: 'EXPERIMENT'
+          })
+        }
+      })
+    ]
+    expect(experimentsExports.getUserExperimentGroup('someNonexistentTest'))
+      .toBe('none')
+  })
+
+  test('getUserExperimentGroup returns "none" when the experiment is disabled', () => {
+    const experimentsExports = require('js/utils/experiments')
+
+    // Mock that the user is assigned to an experiment group.
+    localStorageMgr.setItem('tab.experiments.fooTest', 'newThing')
+
+    experimentsExports.experiments = [
+      experimentsExports.createExperiment({
+        name: 'exampleTest',
+        active: true,
+        disabled: false,
+        groups: {
+          SOMETHING: experimentsExports.createExperimentGroup({
+            value: 'hi',
+            schemaValue: 'SOMETHING'
+          }),
+          ANOTHER_THING: experimentsExports.createExperimentGroup({
+            value: 'bye',
+            schemaValue: 'ANOTHER_THING'
+          })
+        }
+      }),
+      experimentsExports.createExperiment({
+        name: 'fooTest',
+        active: true,
+        disabled: true,
+        groups: {
+          MY_CONTROL_GROUP: experimentsExports.createExperimentGroup({
+            value: 'sameOld',
+            schemaValue: 'THE_CONTROL'
+          }),
+          FUN_EXPERIMENT: experimentsExports.createExperimentGroup({
+            value: 'newThing',
+            schemaValue: 'EXPERIMENT'
+          })
+        }
+      })
+    ]
+    expect(experimentsExports.getUserExperimentGroup('fooTest'))
+      .toBe('none')
+  })
+
+  test('getUserExperimentGroup returns "none" when there are no experiments', () => {
+    const experimentsExports = require('js/utils/experiments')
+    experimentsExports.experiments = []
+    expect(experimentsExports.getUserExperimentGroup('anOldTestWeRemoved'))
+      .toBe('none')
+  })
+
+  /* Tests for actual experiments */
 
   test('assignUserToTestGroups saves the user\'s test groups to localStorage', () => {
     // // Control for randomness.
