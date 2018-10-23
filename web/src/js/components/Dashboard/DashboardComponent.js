@@ -298,71 +298,79 @@ class Dashboard extends React.Component {
             : null
         }
         { showNewUserTour ? <NewUserTour user={user} /> : null }
-        {/*
-          For dynamic ad sizing, we may want to move ads into a parent
-          component that's absolutely positioned, then use flex positioning
-          for the ads themselves. This will avoid awkward gaps.
-        */}
-        {
-          this.state.numAdsToShow > 2
-            ? <Ad
-              adId={SECOND_VERTICAL_AD_SLOT_DOM_ID}
-              style={{
-                position: 'absolute',
-                bottom: 270,
-                right: 10,
-                minWidth: 300,
-                overflow: 'visible',
-                display: 'block'
-              }}
-              adWrapperStyle={{
-                position: 'absolute',
-                bottom: 0,
-                right: 0
-              }}
-            />
-            : null
-        }
-        {
-          this.state.numAdsToShow > 1
-            ? <Ad
-              adId={VERTICAL_AD_SLOT_DOM_ID}
-              style={{
-                position: 'absolute',
-                bottom: 10,
-                right: 10,
-                minWidth: 300,
-                overflow: 'visible',
-                display: 'block'
-              }}
-              adWrapperStyle={{
-                position: 'absolute',
-                bottom: 0,
-                right: 0
-              }}
-            />
-            : null
-        }
-        {
-          this.state.numAdsToShow > 0
-            ? <Ad
-              adId={HORIZONTAL_AD_SLOT_DOM_ID}
-              style={{
-                position: 'absolute',
-                bottom: 10,
-                right: 320,
-                minWidth: 728,
-                overflow: 'visible',
-                display: 'block'
-              }}
-              adWrapperStyle={{
-                position: 'absolute',
-                bottom: 0,
-                right: 0
-              }}
-            />
-            : null
-        }
+        <div
+          style={{
+            position: 'absolute',
+            overflow: 'visible',
+            display: 'flex',
+            alignItems: 'flex-end',
+            flexDirection: 'row-reverse',
+            bottom: 10,
+            right: 10
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              overflow: 'visible'
+            }}
+          >
+            {
+              this.state.numAdsToShow > 2
+                ? <Ad
+                  adId={SECOND_VERTICAL_AD_SLOT_DOM_ID}
+                  style={{
+                    display: 'flex',
+                    minWidth: 300,
+                    overflow: 'visible'
+                  }}
+                  adWrapperStyle={{
+                    position: 'absolute',
+                    bottom: 0,
+                    right: 0
+                  }}
+                />
+                : null
+            }
+            {
+              this.state.numAdsToShow > 1
+                ? <Ad
+                  adId={VERTICAL_AD_SLOT_DOM_ID}
+                  style={{
+                    display: 'flex',
+                    minWidth: 300,
+                    overflow: 'visible',
+                    marginTop: 10
+                  }}
+                  adWrapperStyle={{
+                    position: 'absolute',
+                    bottom: 0,
+                    right: 0
+                  }}
+                />
+                : null
+            }
+          </div>
+          {
+            this.state.numAdsToShow > 0
+              ? <Ad
+                adId={HORIZONTAL_AD_SLOT_DOM_ID}
+                style={{
+                  display: 'flex',
+                  minWidth: 728,
+                  overflow: 'visible',
+                  marginRight: 10
+                }}
+                adWrapperStyle={{
+                  position: 'absolute',
+                  bottom: 0,
+                  right: 0
+                }}
+              />
+              : null
+          }
+        </div>
         { user && tabId ? <LogTab user={user} tabId={tabId} /> : null }
         { user && tabId ? <LogRevenue user={user} tabId={tabId} /> : null }
         { user ? <LogConsentData user={user} /> : null }
