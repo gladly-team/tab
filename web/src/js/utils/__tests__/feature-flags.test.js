@@ -13,9 +13,9 @@ describe('feature flags', () => {
     expect(isVariousAdSizesEnabled()).toBe(false)
   })
 
-  test('isThirdAdEnabled is false', () => {
+  test('isThirdAdEnabled is true', () => {
     const isThirdAdEnabled = require('js/utils/feature-flags')
       .isThirdAdEnabled
-    expect(isThirdAdEnabled()).toBe(false)
+    expect(isThirdAdEnabled()).toBe(true)
   })
 })
