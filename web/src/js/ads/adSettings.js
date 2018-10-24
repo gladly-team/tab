@@ -12,7 +12,8 @@ import {
   getUserExperimentGroup
 } from 'js/utils/experiments'
 import {
-  getBrowserExtensionInstallTime
+  getBrowserExtensionInstallTime,
+  hasUserDismissedAdExplanation
 } from 'js/utils/local-user-data-mgr'
 
 // Time to wait for the entire ad auction before
@@ -56,7 +57,11 @@ export const shouldShowAdExplanation = () => {
     getUserExperimentGroup(EXPERIMENT_AD_EXPLANATION) ===
     getExperimentGroups(EXPERIMENT_AD_EXPLANATION).SHOW_EXPLANATION
   )
-  return !!(joinedRecently && userInExperimentalGroup)
+  return !!(
+    joinedRecently &&
+    userInExperimentalGroup &&
+    !hasUserDismissedAdExplanation()
+  )
 }
 
 /**

@@ -164,4 +164,21 @@ describe('local user data manager', () => {
     const installTime = getBrowserExtensionInstallTime()
     expect(installTime).toBeNull()
   })
+
+  // setUserDismissedAdExplanation method
+  it('sets the extension install time timestamp in localStorage', () => {
+    const { setUserDismissedAdExplanation } = require('js/utils/local-user-data-mgr')
+    setUserDismissedAdExplanation()
+    expect(localStorageMgr.setItem)
+      .toHaveBeenCalledWith('tab.newUser.dismissedAdExplanation', 'true')
+  })
+
+  // hasUserDismissedAdExplanation
+  it('gets the extension install date from localStorage', () => {
+    localStorageMgr.setItem('tab.newUser.dismissedAdExplanation', 'true')
+    const { hasUserDismissedAdExplanation } = require('js/utils/local-user-data-mgr')
+    expect(hasUserDismissedAdExplanation()).toBe(true)
+    localStorageMgr.setItem('tab.newUser.dismissedAdExplanation', 'blah')
+    expect(hasUserDismissedAdExplanation()).toBe(false)
+  })
 })

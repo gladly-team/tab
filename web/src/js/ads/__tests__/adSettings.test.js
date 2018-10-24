@@ -13,7 +13,8 @@ import {
   getUserExperimentGroup
 } from 'js/utils/experiments'
 import {
-  getBrowserExtensionInstallTime
+  getBrowserExtensionInstallTime,
+  hasUserDismissedAdExplanation
 } from 'js/utils/local-user-data-mgr'
 
 jest.mock('js/utils/feature-flags')
@@ -265,6 +266,38 @@ describe('ad settings', () => {
     })
     const { shouldShowAdExplanation } = require('js/ads/adSettings')
     expect(shouldShowAdExplanation()).toEqual(true)
+  })
+
+  test('[ad-explanation] [recently-installed] [no-dismissed] shouldShowOneAd returns true', () => {
+    getBrowserExtensionInstallTime
+      .mockReturnValue(moment(mockNow).subtract(12, 'seconds'))
+    hasUserDismissedAdExplanation.mockReturnValue(false)
+    getUserExperimentGroup.mockImplementation(experimentName => {
+      switch (experimentName) {
+        case EXPERIMENT_AD_EXPLANATION:
+          return 'explanation'
+        default:
+          return 'none'
+      }
+    })
+    const { shouldShowAdExplanation } = require('js/ads/adSettings')
+    expect(shouldShowAdExplanation()).toEqual(true)
+  })
+
+  test('[ad-explanation] [recently-installed] [dismissed] shouldShowOneAd returns false', () => {
+    getBrowserExtensionInstallTime
+      .mockReturnValue(moment(mockNow).subtract(12, 'seconds'))
+    hasUserDismissedAdExplanation.mockReturnValue(true)
+    getUserExperimentGroup.mockImplementation(experimentName => {
+      switch (experimentName) {
+        case EXPERIMENT_AD_EXPLANATION:
+          return 'explanation'
+        default:
+          return 'none'
+      }
+    })
+    const { shouldShowAdExplanation } = require('js/ads/adSettings')
+    expect(shouldShowAdExplanation()).toEqual(false)
   })
 
   test('getVerticalAdSizes returns the expected ad sizes when various ad sizes are disabled', () => {

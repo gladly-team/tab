@@ -31,6 +31,9 @@ import CloseIcon from 'material-ui/svg-icons/navigation/close'
 import NewUserTour from 'js/components/Dashboard/NewUserTourContainer'
 import { getCurrentUser } from 'js/authentication/user'
 import localStorageMgr from 'js/utils/localstorage-mgr'
+import {
+  setUserDismissedAdExplanation
+} from 'js/utils/local-user-data-mgr'
 import { STORAGE_NEW_USER_HAS_COMPLETED_TOUR } from 'js/constants'
 import {
   goTo,
@@ -395,8 +398,10 @@ class Dashboard extends React.Component {
                                   marginRight: 10
                                 }}
                                 onClick={() => {
-                                  // TODO
-                                  console.log('TODO: log that the user saw this')
+                                  setUserDismissedAdExplanation()
+                                  this.setState({
+                                    showAdExplanation: false
+                                  })
                                 }}
                               >
                               Got it

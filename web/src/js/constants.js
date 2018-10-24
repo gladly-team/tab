@@ -59,6 +59,7 @@ export const STORAGE_NEW_CONSENT_DATA_EXISTS = 'tab.consentData.newConsentDataEx
 export const STORAGE_NEW_USER_HAS_COMPLETED_TOUR = 'tab.newUser.hasCompletedTour'
 export const STORAGE_EXTENSION_INSTALL_ID = 'tab.newUser.extensionInstallId'
 export const STORAGE_APPROX_EXTENSION_INSTALL_TIME = 'tab.newUser.approxInstallTime'
+export const STORAGE_DISMISSED_AD_EXPLANATION = 'tab.newUser.dismissedAdExplanation'
 
 // tab.experiments: values related to split-testing features
 // We may assign other values to localStorage with the tab.experiments.*
