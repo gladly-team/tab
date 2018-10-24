@@ -580,17 +580,17 @@ describe('Actual experiments we are running or will run', () => {
       // Experiments ordered alphabetically by name
       {
         name: 'adExplanation',
-        active: false,
+        active: true,
         disabled: false
       },
       {
         name: 'oneAdForNewUsers',
-        active: false,
+        active: true,
         disabled: false
       },
       {
         name: 'thirdAd',
-        active: false,
+        active: true,
         disabled: false
       }
     ])
