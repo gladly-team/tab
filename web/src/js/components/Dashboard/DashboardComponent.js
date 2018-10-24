@@ -343,11 +343,6 @@ class Dashboard extends React.Component {
                     overflow: 'visible',
                     marginTop: 10
                   }}
-                  adWrapperStyle={{
-                    position: 'absolute',
-                    bottom: 0,
-                    right: 0
-                  }}
                 />
                 : null
             }
@@ -361,11 +356,6 @@ class Dashboard extends React.Component {
                   minWidth: 728,
                   overflow: 'visible',
                   marginRight: 10
-                }}
-                adWrapperStyle={{
-                  position: 'absolute',
-                  bottom: 0,
-                  right: 0
                 }}
               />
               : null
