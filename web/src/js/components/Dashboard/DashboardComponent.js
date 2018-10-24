@@ -17,7 +17,9 @@ import LogRevenue from 'js/components/Dashboard/LogRevenueContainer'
 import LogConsentData from 'js/components/Dashboard/LogConsentDataContainer'
 import LogAccountCreation from 'js/components/Dashboard/LogAccountCreationContainer'
 import CircleIcon from 'material-ui/svg-icons/image/lens'
+import HeartIcon from 'material-ui/svg-icons/action/favorite'
 import {
+  primaryColor,
   dashboardIconInactiveColor,
   dashboardIconActiveColor
 } from 'js/theme/default'
@@ -54,7 +56,8 @@ class Dashboard extends React.Component {
       // which is why we only show the tour to recently-joined
       // users.
       userAlreadyViewedNewUserTour: localStorageMgr.getItem(STORAGE_NEW_USER_HAS_COMPLETED_TOUR) === 'true',
-      numAdsToShow: getNumberOfAdsToShow()
+      numAdsToShow: getNumberOfAdsToShow(),
+      showAdExplanation: true
     }
   }
 
@@ -354,21 +357,80 @@ class Dashboard extends React.Component {
           </div>
           {
             this.state.numAdsToShow > 0
-              ? <Ad
-                adId={HORIZONTAL_AD_SLOT_DOM_ID}
-                style={{
-                  display: 'flex',
-                  minWidth: 728,
-                  overflow: 'visible',
-                  marginRight: 10
-                }}
-                adWrapperStyle={{
-                  position: 'absolute',
-                  bottom: 0,
-                  right: 0
-                }}
-              />
-              : null
+              ? (
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    overflow: 'visible',
+                    marginRight: 10
+                  }}
+                >
+                  { (this.state.showAdExplanation && user)
+                    ? (
+                      <FadeInDashboardAnimation>
+                        <div
+                          data-test-id={'ad-explanation'}
+                          style={{
+                            display: 'inline-block',
+                            float: 'right'
+                          }}
+                        >
+                          <Paper>
+                            <div
+                              style={{
+                                display: 'flex',
+                                padding: '6px 14px',
+                                marginBottom: 10,
+                                alignItems: 'center',
+                                background: dashboardIconInactiveColor
+                              }}
+                            >
+                              <HeartIcon
+                                color={primaryColor}
+                                style={{
+                                  width: 24,
+                                  height: 24,
+                                  marginRight: 14
+                                }}
+                              />
+                              <Typography variant={'body1'}>
+                                Did you know? The ads here are raising money for charity.
+                              </Typography>
+                              <Button
+                                color={'primary'}
+                                style={{
+                                  marginLeft: 10,
+                                  marginRight: 10
+                                }}
+                                onClick={() => {
+                                  // TODO
+                                  console.log('TODO: log that the user saw this')
+                                }}
+                              >
+                              Got it
+                              </Button>
+                            </div>
+                          </Paper>
+                        </div>
+                      </FadeInDashboardAnimation>
+                    )
+                    : null
+                  }
+                  <Ad
+                    adId={HORIZONTAL_AD_SLOT_DOM_ID}
+                    style={{
+                      overflow: 'visible',
+                      minWidth: 728
+                    }}
+                    adWrapperStyle={{
+                      position: 'absolute',
+                      bottom: 0,
+                      right: 0
+                    }}
+                  />
+                </div>
+              ) : null
           }
         </div>
         { user && tabId ? <LogTab user={user} tabId={tabId} /> : null }
