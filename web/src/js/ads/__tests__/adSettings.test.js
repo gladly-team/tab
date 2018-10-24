@@ -154,6 +154,23 @@ describe('ad settings', () => {
     expect(getNumberOfAdsToShow()).toEqual(2)
   })
 
+  test('[no-three-ads] [one-ad] [unknown-recently-installed] shows 2 ads when the install time is missing', () => {
+    isThirdAdEnabled.mockReturnValue(true)
+    getBrowserExtensionInstallTime.mockReturnValue(null)
+    getUserExperimentGroup.mockImplementation(experimentName => {
+      switch (experimentName) {
+        case EXPERIMENT_THIRD_AD:
+          return 'twoAds'
+        case EXPERIMENT_ONE_AD_FOR_NEW_USERS:
+          return 'oneAd'
+        default:
+          return 'none'
+      }
+    })
+    const getNumberOfAdsToShow = require('js/ads/adSettings').getNumberOfAdsToShow
+    expect(getNumberOfAdsToShow()).toEqual(2)
+  })
+
   test('[three-ads] [one-ad] [no-recently-installed] shows 3 ads', () => {
     isThirdAdEnabled.mockReturnValue(true)
     getBrowserExtensionInstallTime
