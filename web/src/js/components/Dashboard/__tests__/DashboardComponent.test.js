@@ -29,16 +29,21 @@ import {
 } from 'js/navigation/navigation'
 import {
   getNumberOfAdsToShow,
+  shouldShowAdExplanation,
   VERTICAL_AD_SLOT_DOM_ID,
   SECOND_VERTICAL_AD_SLOT_DOM_ID,
   HORIZONTAL_AD_SLOT_DOM_ID
 } from 'js/ads/adSettings'
+import {
+  setUserDismissedAdExplanation
+} from 'js/utils/local-user-data-mgr'
 
 jest.mock('js/analytics/logEvent')
 jest.mock('js/utils/localstorage-mgr')
 jest.mock('js/authentication/user')
 jest.mock('js/navigation/navigation')
 jest.mock('js/ads/adSettings')
+jest.mock('js/utils/local-user-data-mgr')
 
 const mockNow = '2018-05-15T10:30:00.000'
 
@@ -473,6 +478,37 @@ describe('Dashboard component', () => {
 
     expect(
       wrapper.find('[data-test-id="anon-sign-in-prompt-dashboard"]').length
+    ).toBe(0)
+  })
+
+  it('the ad explanation disappears when clicking to dismiss it', () => {
+    shouldShowAdExplanation.mockReturnValue(true)
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
+    const wrapper = shallow(
+      <DashboardComponent {...mockProps} />
+    )
+    const button = wrapper
+      .find('[data-test-id="ad-explanation"]')
+      .find(Button)
+    button.simulate('click')
+    expect(setUserDismissedAdExplanation).toHaveBeenCalled()
+    expect(wrapper
+      .find('[data-test-id="ad-explanation"]')
+      .find(Button)
+      .length
+    ).toBe(0)
+  })
+
+  it('the ad explanation does not render when we should not show it', () => {
+    shouldShowAdExplanation.mockReturnValue(false)
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
+    const wrapper = shallow(
+      <DashboardComponent {...mockProps} />
+    )
+    expect(wrapper
+      .find('[data-test-id="ad-explanation"]')
+      .find(Button)
+      .length
     ).toBe(0)
   })
 })

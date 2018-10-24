@@ -5,13 +5,15 @@ import {
   isVariousAdSizesEnabled
 } from 'js/utils/feature-flags'
 import {
+  EXPERIMENT_AD_EXPLANATION,
   EXPERIMENT_THIRD_AD,
   EXPERIMENT_ONE_AD_FOR_NEW_USERS,
   getExperimentGroups,
   getUserExperimentGroup
 } from 'js/utils/experiments'
 import {
-  getBrowserExtensionInstallTime
+  getBrowserExtensionInstallTime,
+  hasUserDismissedAdExplanation
 } from 'js/utils/local-user-data-mgr'
 
 // Time to wait for the entire ad auction before
@@ -39,6 +41,28 @@ export const SECOND_VERTICAL_AD_SLOT_DOM_ID = 'div-gpt-ad-1539903223131-0'
 // it is tall. Historically, the bottom long leaderboard ad.
 export const HORIZONTAL_AD_UNIT_ID = '/43865596/HBTL'
 export const HORIZONTAL_AD_SLOT_DOM_ID = 'div-gpt-ad-1464385677836-0'
+
+/**
+ * Determine if we should show the explanation that the ads raise
+ * money for charity. We'll show it for users in the "ad explanation"
+ * experimental group for the first X hours after they join.
+ * @return {Boolean} Whether to show one ad.
+ */
+export const shouldShowAdExplanation = () => {
+  const hoursToShow = 4
+  const installTime = getBrowserExtensionInstallTime()
+  const joinedRecently = !!installTime &&
+    moment().diff(installTime, 'hours') < hoursToShow
+  const userInExperimentalGroup = (
+    getUserExperimentGroup(EXPERIMENT_AD_EXPLANATION) ===
+    getExperimentGroups(EXPERIMENT_AD_EXPLANATION).SHOW_EXPLANATION
+  )
+  return !!(
+    joinedRecently &&
+    userInExperimentalGroup &&
+    !hasUserDismissedAdExplanation()
+  )
+}
 
 /**
  * Determine if we should show only one ad. We'll show one ad for

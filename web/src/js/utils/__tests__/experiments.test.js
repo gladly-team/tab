@@ -579,6 +579,11 @@ describe('Actual experiments we are running or will run', () => {
     expect(sortBy(experiments, o => o.name)).toMatchObject([
       // Experiments ordered alphabetically by name
       {
+        name: 'adExplanation',
+        active: false,
+        disabled: false
+      },
+      {
         name: 'oneAdForNewUsers',
         active: false,
         disabled: false

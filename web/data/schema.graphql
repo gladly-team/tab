@@ -159,6 +159,13 @@ enum EncodedRevenueValueTypeEnum {
   AMAZON_CPM
 }
 
+"""The test of showing an explanation of why there are ads"""
+enum ExperimentGroupAdExplanation {
+  NONE
+  DEFAULT
+  SHOW_EXPLANATION
+}
+
 """The test of allowing anonymous user authentication"""
 enum ExperimentGroupAnonSignIn {
   NONE
@@ -179,6 +186,7 @@ input ExperimentGroups {
   variousAdSizes: ExperimentGroupVariousAdSizes
   thirdAd: ExperimentGroupThirdAd
   oneAdForNewUsers: ExperimentGroupOneAdForNewUsers
+  adExplanation: ExperimentGroupAdExplanation
 }
 
 """The test of enabling a third ad"""

@@ -54,6 +54,10 @@ const logUserExperimentGroups = async (userContext, userId, experimentGroups = {
     !isNil(validatedGroups.oneAdForNewUsers) ? {
       testOneAdForNewUsers: validatedGroups.oneAdForNewUsers
     }
+      : null,
+    !isNil(validatedGroups.adExplanation) ? {
+      testAdExplanation: validatedGroups.adExplanation
+    }
       : null
   )
   try {

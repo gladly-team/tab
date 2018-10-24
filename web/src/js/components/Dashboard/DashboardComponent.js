@@ -17,7 +17,9 @@ import LogRevenue from 'js/components/Dashboard/LogRevenueContainer'
 import LogConsentData from 'js/components/Dashboard/LogConsentDataContainer'
 import LogAccountCreation from 'js/components/Dashboard/LogAccountCreationContainer'
 import CircleIcon from 'material-ui/svg-icons/image/lens'
+import HeartIcon from 'material-ui/svg-icons/action/favorite'
 import {
+  primaryColor,
   dashboardIconInactiveColor,
   dashboardIconActiveColor
 } from 'js/theme/default'
@@ -29,6 +31,9 @@ import CloseIcon from 'material-ui/svg-icons/navigation/close'
 import NewUserTour from 'js/components/Dashboard/NewUserTourContainer'
 import { getCurrentUser } from 'js/authentication/user'
 import localStorageMgr from 'js/utils/localstorage-mgr'
+import {
+  setUserDismissedAdExplanation
+} from 'js/utils/local-user-data-mgr'
 import { STORAGE_NEW_USER_HAS_COMPLETED_TOUR } from 'js/constants'
 import {
   goTo,
@@ -36,6 +41,7 @@ import {
 } from 'js/navigation/navigation'
 import {
   getNumberOfAdsToShow,
+  shouldShowAdExplanation,
   VERTICAL_AD_SLOT_DOM_ID,
   SECOND_VERTICAL_AD_SLOT_DOM_ID,
   HORIZONTAL_AD_SLOT_DOM_ID
@@ -54,7 +60,8 @@ class Dashboard extends React.Component {
       // which is why we only show the tour to recently-joined
       // users.
       userAlreadyViewedNewUserTour: localStorageMgr.getItem(STORAGE_NEW_USER_HAS_COMPLETED_TOUR) === 'true',
-      numAdsToShow: getNumberOfAdsToShow()
+      numAdsToShow: getNumberOfAdsToShow(),
+      showAdExplanation: shouldShowAdExplanation()
     }
   }
 
@@ -325,11 +332,6 @@ class Dashboard extends React.Component {
                     minWidth: 300,
                     overflow: 'visible'
                   }}
-                  adWrapperStyle={{
-                    position: 'absolute',
-                    bottom: 0,
-                    right: 0
-                  }}
                 />
                 : null
             }
@@ -349,16 +351,77 @@ class Dashboard extends React.Component {
           </div>
           {
             this.state.numAdsToShow > 0
-              ? <Ad
-                adId={HORIZONTAL_AD_SLOT_DOM_ID}
-                style={{
-                  display: 'flex',
-                  minWidth: 728,
-                  overflow: 'visible',
-                  marginRight: 10
-                }}
-              />
-              : null
+              ? (
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    overflow: 'visible',
+                    marginRight: 10
+                  }}
+                >
+                  { (this.state.showAdExplanation && user)
+                    ? (
+                      <FadeInDashboardAnimation>
+                        <div
+                          data-test-id={'ad-explanation'}
+                          style={{
+                            display: 'inline-block',
+                            float: 'right'
+                          }}
+                        >
+                          <Paper>
+                            <div
+                              style={{
+                                display: 'flex',
+                                padding: '6px 14px',
+                                marginBottom: 10,
+                                alignItems: 'center',
+                                background: dashboardIconInactiveColor
+                              }}
+                            >
+                              <HeartIcon
+                                color={primaryColor}
+                                style={{
+                                  width: 24,
+                                  height: 24,
+                                  marginRight: 14
+                                }}
+                              />
+                              <Typography variant={'body1'}>
+                                Did you know? The ads here are raising money for charity.
+                              </Typography>
+                              <Button
+                                color={'primary'}
+                                style={{
+                                  marginLeft: 20,
+                                  marginRight: 10
+                                }}
+                                onClick={() => {
+                                  setUserDismissedAdExplanation()
+                                  this.setState({
+                                    showAdExplanation: false
+                                  })
+                                }}
+                              >
+                              Got it
+                              </Button>
+                            </div>
+                          </Paper>
+                        </div>
+                      </FadeInDashboardAnimation>
+                    )
+                    : null
+                  }
+                  <Ad
+                    adId={HORIZONTAL_AD_SLOT_DOM_ID}
+                    style={{
+                      overflow: 'visible',
+                      minWidth: 728
+                    }}
+                  />
+                </div>
+              ) : null
           }
         </div>
         { user && tabId ? <LogTab user={user} tabId={tabId} /> : null }

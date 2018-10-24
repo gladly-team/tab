@@ -3,6 +3,7 @@ import moment from 'moment'
 import uuid from 'uuid/v4'
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import {
+  STORAGE_DISMISSED_AD_EXPLANATION,
   STORAGE_EXTENSION_INSTALL_ID,
   STORAGE_APPROX_EXTENSION_INSTALL_TIME,
   STORAGE_TABS_RECENT_DAY_COUNT,
@@ -144,4 +145,21 @@ export const getBrowserExtensionInstallTime = () => {
     return null
   }
   return time
+}
+
+/**
+ * Marks that the user has dismissed the ad explanation.
+ * @returns {undefined}
+ */
+export const setUserDismissedAdExplanation = () => {
+  localStorageMgr.setItem(STORAGE_DISMISSED_AD_EXPLANATION, 'true')
+}
+
+/**
+ * Gets whether the user has dismissed the ad explanation.
+ * @returns {Boolean} Whether the user has dismissed the ad
+ *   explanation.
+ */
+export const hasUserDismissedAdExplanation = () => {
+  return localStorageMgr.getItem(STORAGE_DISMISSED_AD_EXPLANATION) === 'true'
 }
