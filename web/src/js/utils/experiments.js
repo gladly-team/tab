@@ -145,7 +145,7 @@ export const experiments = [
   // @experiment-ad-explanation
   createExperiment({
     name: EXPERIMENT_AD_EXPLANATION,
-    active: true,
+    active: false,
     disabled: false,
     groups: {
       DEFAULT: createExperimentGroup({

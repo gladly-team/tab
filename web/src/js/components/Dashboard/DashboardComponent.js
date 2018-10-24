@@ -38,6 +38,7 @@ import {
 } from 'js/navigation/navigation'
 import {
   getNumberOfAdsToShow,
+  shouldShowAdExplanation,
   VERTICAL_AD_SLOT_DOM_ID,
   SECOND_VERTICAL_AD_SLOT_DOM_ID,
   HORIZONTAL_AD_SLOT_DOM_ID
@@ -57,7 +58,7 @@ class Dashboard extends React.Component {
       // users.
       userAlreadyViewedNewUserTour: localStorageMgr.getItem(STORAGE_NEW_USER_HAS_COMPLETED_TOUR) === 'true',
       numAdsToShow: getNumberOfAdsToShow(),
-      showAdExplanation: true
+      showAdExplanation: shouldShowAdExplanation()
     }
   }
 
