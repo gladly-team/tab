@@ -166,11 +166,19 @@ enum ExperimentGroupAnonSignIn {
   ANONYMOUS_ALLOWED
 }
 
+"""The test of showing only one ad to new users"""
+enum ExperimentGroupOneAdForNewUsers {
+  NONE
+  DEFAULT
+  ONE_AD_AT_FIRST
+}
+
 """The experimental groups to which the user is assigned"""
 input ExperimentGroups {
   anonSignIn: ExperimentGroupAnonSignIn
   variousAdSizes: ExperimentGroupVariousAdSizes
   thirdAd: ExperimentGroupThirdAd
+  oneAdForNewUsers: ExperimentGroupOneAdForNewUsers
 }
 
 """The test of enabling a third ad"""

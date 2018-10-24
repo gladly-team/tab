@@ -20,6 +20,12 @@ const experimentConfig = {
     NONE: 0,
     TWO_ADS: 1,
     THREE_ADS: 2
+  },
+  // @experiment-one-ad-for-new-users
+  oneAdForNewUsers: {
+    NONE: 0,
+    DEFAULT: 1,
+    ONE_AD_AT_FIRST: 2
   }
 }
 

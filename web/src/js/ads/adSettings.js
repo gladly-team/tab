@@ -1,13 +1,18 @@
 
+import moment from 'moment'
 import {
   isThirdAdEnabled,
   isVariousAdSizesEnabled
 } from 'js/utils/feature-flags'
 import {
   EXPERIMENT_THIRD_AD,
+  EXPERIMENT_ONE_AD_FOR_NEW_USERS,
   getExperimentGroups,
   getUserExperimentGroup
 } from 'js/utils/experiments'
+import {
+  getBrowserExtensionInstallTime
+} from 'js/utils/local-user-data-mgr'
 
 // Time to wait for the entire ad auction before
 // calling the ad server.
@@ -36,15 +41,38 @@ export const HORIZONTAL_AD_UNIT_ID = '/43865596/HBTL'
 export const HORIZONTAL_AD_SLOT_DOM_ID = 'div-gpt-ad-1464385677836-0'
 
 /**
+ * Determine if we should show only one ad. We'll show one ad for
+ * users in the "one ad" test group for the first X hours after
+ * they join.
+ * @return {Boolean} Whether to show one ad.
+ */
+const shouldShowOneAd = () => {
+  const installTime = getBrowserExtensionInstallTime()
+  const joinedRecently = !!installTime && moment().diff(installTime, 'hours') < 24
+  const userInOneAdTestGroup = (
+    getUserExperimentGroup(EXPERIMENT_ONE_AD_FOR_NEW_USERS) ===
+    getExperimentGroups(EXPERIMENT_ONE_AD_FOR_NEW_USERS).ONE_AD_AT_FIRST
+  )
+  return !!(joinedRecently && userInOneAdTestGroup)
+}
+
+/**
  * Get the number of banner ads to show on the new tab page.
  * @return {Number} The number of ads
  */
 export const getNumberOfAdsToShow = () => {
+  const showOneAd = shouldShowOneAd()
   const userInThreeAdTestGroup = (
     getUserExperimentGroup(EXPERIMENT_THIRD_AD) ===
     getExperimentGroups(EXPERIMENT_THIRD_AD).THREE_ADS
   )
-  return (userInThreeAdTestGroup && isThirdAdEnabled()) ? 3 : 2
+  let numAds = 2
+  if (showOneAd) {
+    numAds = 1
+  } else if (userInThreeAdTestGroup && isThirdAdEnabled()) {
+    numAds = 3
+  }
+  return numAds
 }
 
 /**
