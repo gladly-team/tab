@@ -225,6 +225,17 @@ const ExperimentGroupsType = new GraphQLInputObjectType({
           ONE_AD_AT_FIRST: { value: experimentConfig.oneAdForNewUsers.ONE_AD_AT_FIRST }
         }
       })
+    },
+    adExplanation: {
+      type: new GraphQLEnumType({
+        name: 'ExperimentGroupAdExplanation',
+        description: 'The test of showing an explanation of why there are ads',
+        values: {
+          NONE: { value: experimentConfig.adExplanation.NONE },
+          DEFAULT: { value: experimentConfig.adExplanation.DEFAULT },
+          SHOW_EXPLANATION: { value: experimentConfig.adExplanation.SHOW_EXPLANATION }
+        }
+      })
     }
   }
 })

@@ -103,6 +103,7 @@ const NoneExperimentGroup = createExperimentGroup({
 // Add experiment names here as constants.
 export const EXPERIMENT_THIRD_AD = 'thirdAd'
 export const EXPERIMENT_ONE_AD_FOR_NEW_USERS = 'oneAdForNewUsers'
+export const EXPERIMENT_AD_EXPLANATION = 'adExplanation'
 
 // Add ExperimentGroup objects here to enable new experiments.
 // The "name" value of the experiment must be the same as the
@@ -138,6 +139,22 @@ export const experiments = [
       ONE_AD_AT_FIRST: createExperimentGroup({
         value: 'oneAd',
         schemaValue: 'ONE_AD_AT_FIRST'
+      })
+    }
+  }),
+  // @experiment-ad-explanation
+  createExperiment({
+    name: EXPERIMENT_AD_EXPLANATION,
+    active: true,
+    disabled: false,
+    groups: {
+      DEFAULT: createExperimentGroup({
+        value: 'default',
+        schemaValue: 'DEFAULT'
+      }),
+      SHOW_EXPLANATION: createExperimentGroup({
+        value: 'explanation',
+        schemaValue: 'SHOW_EXPLANATION'
       })
     }
   })

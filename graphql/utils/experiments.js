@@ -26,6 +26,12 @@ const experimentConfig = {
     NONE: 0,
     DEFAULT: 1,
     ONE_AD_AT_FIRST: 2
+  },
+  // @experiment-ad-explanation
+  adExplanation: {
+    NONE: 0,
+    DEFAULT: 1,
+    SHOW_EXPLANATION: 2
   }
 }
 
