@@ -113,7 +113,7 @@ export const experiments = [
   // @experiment-third-ad
   createExperiment({
     name: EXPERIMENT_THIRD_AD,
-    active: false,
+    active: true,
     disabled: false,
     groups: {
       TWO_ADS: createExperimentGroup({
@@ -129,7 +129,7 @@ export const experiments = [
   // @experiment-one-ad-for-new-users
   createExperiment({
     name: EXPERIMENT_ONE_AD_FOR_NEW_USERS,
-    active: false,
+    active: true,
     disabled: false,
     groups: {
       DEFAULT: createExperimentGroup({
@@ -145,7 +145,7 @@ export const experiments = [
   // @experiment-ad-explanation
   createExperiment({
     name: EXPERIMENT_AD_EXPLANATION,
-    active: false,
+    active: true,
     disabled: false,
     groups: {
       DEFAULT: createExperimentGroup({
