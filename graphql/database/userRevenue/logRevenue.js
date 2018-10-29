@@ -104,10 +104,12 @@ const addMillisecondsToISODatetime = (ISODatetime) => {
  *   "encodedRevenue" are provided.
  * @param {string} tabId - A UUID for the tab on which revenue is created
  * @param {string} adSize - The ad dimensions, in form 'WIDTHxHEIGHT'
+ * @param {string|null} adUnitCode - The DFP ID for the ad slot.
  * @return {Object} If successful, a single key ("success") with value `true`
  */
 const logRevenue = async (userContext, userId, revenue = null, dfpAdvertiserId = null,
-  encodedRevenue = null, aggregationOperation = null, tabId = null, adSize = null) => {
+  encodedRevenue = null, aggregationOperation = null, tabId = null, adSize = null,
+  adUnitCode = null) => {
   const revenueObj = AdRevenue(revenue, adSize)
 
   // Decode the encoded revenue, if needed
@@ -139,7 +141,8 @@ const logRevenue = async (userContext, userId, revenue = null, dfpAdvertiserId =
       revenue: revenueObjToLog.revenue,
       ...dfpAdvertiserId && { dfpAdvertiserId: dfpAdvertiserId },
       ...tabId && { tabId: tabId },
-      ...revenueObjToLog.adSize && { adSize: revenueObjToLog.adSize }
+      ...revenueObjToLog.adSize && { adSize: revenueObjToLog.adSize },
+      ...adUnitCode && { adUnitCode: adUnitCode }
     })
   }
 
