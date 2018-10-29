@@ -71,8 +71,9 @@ describe('LogRevenueComponent', function () {
   it('on mount, logs revenue for already-loaded slots', () => {
     // Mark an ad slot as loaded
     const slotId = 'my-slot-2468'
+    const adUnitCode = '/some/ad-unit/'
     window.tabforacause.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
-      slotId, { advertiserId: 132435 })
+      slotId, adUnitCode, { advertiserId: 132435 })
     // We use "slotsViewable" as the measure of ads already loaded
     // window.tabforacause.ads.slotsLoaded[slotId] = true
     window.tabforacause.ads.slotsViewable[slotId] = true
@@ -102,7 +103,7 @@ describe('LogRevenueComponent', function () {
       />
     )
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment, mockUserId,
-      0.000172, '132435', '300x250', null, null, tabId)
+      0.000172, '132435', '300x250', null, null, tabId, adUnitCode)
 
     // It should mark this slot as logged
     expect(window.tabforacause.ads.slotsAlreadyLoggedRevenue[slotId]).toBe(true)
@@ -179,8 +180,9 @@ describe('LogRevenueComponent', function () {
   it('rounds excessively long decimals in revenue value', () => {
     // Mark an ad slot as loaded
     const slotId = 'abc-123'
+    const adUnitCode = '/some/ad-unit/'
     window.tabforacause.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
-      slotId, { advertiserId: 9876543 })
+      slotId, adUnitCode, { advertiserId: 9876543 })
     window.tabforacause.ads.slotsLoaded[slotId] = true
     window.tabforacause.ads.slotsViewable[slotId] = true
 
@@ -210,11 +212,12 @@ describe('LogRevenueComponent', function () {
     )
 
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment, mockUserId,
-      0.000123456789012, '9876543', '300x250', null, null, tabId)
+      0.000123456789012, '9876543', '300x250', null, null, tabId, adUnitCode)
   })
 
   it('after mount, logs revenue when GPT fires a "slot rendered" event', () => {
     const slotId = 'xyz-987'
+    const adUnitCode = '/some/ad-unit/'
     window.tabforacause.ads.slotsRendered = {}
 
     // Mock a Prebid bid value for the slot
@@ -251,15 +254,16 @@ describe('LogRevenueComponent', function () {
     // Run the queued googletag commands
     __runCommandQueue()
     __runEventListenerCallbacks('slotRenderEnded',
-      mockGoogleTagSlotRenderEndedData(slotId, { advertiserId: 159260 }))
+      mockGoogleTagSlotRenderEndedData(slotId, adUnitCode, { advertiserId: 159260 }))
 
     // Should have logged revenue after the slot loaded
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment,
-      mockUserId, 0.00231, '159260', '300x250', null, null, tabId)
+      mockUserId, 0.00231, '159260', '300x250', null, null, tabId, adUnitCode)
   })
 
   it('defaults to 99 (Google Adsense) DFP Advertiser ID when the advertiser ID does not exist', () => {
     const slotId = 'xyz-987'
+    const adUnitCode = '/some/ad-unit/'
     window.tabforacause.ads.slotsRendered = {}
 
     // Mock a Prebid bid value for the slot
@@ -299,6 +303,7 @@ describe('LogRevenueComponent', function () {
     __runEventListenerCallbacks('slotRenderEnded',
       mockGoogleTagSlotRenderEndedData(
         slotId,
+        adUnitCode,
         {
           advertiserId: null,
           campaignId: null,
@@ -309,14 +314,15 @@ describe('LogRevenueComponent', function () {
 
     // Should have logged revenue after the slot loaded
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment,
-      mockUserId, 0.00231, '99', '300x250', null, null, tabId)
+      mockUserId, 0.00231, '99', '300x250', null, null, tabId, adUnitCode)
   })
 
   it('logs Amazon revenue when there are no Prebid bids', () => {
     // Mark an ad slot as loaded
     const slotId = 'my-slot-2468'
+    const adUnitCode = '/some/ad-unit/'
     window.tabforacause.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
-      slotId, { advertiserId: 132435 })
+      slotId, adUnitCode, { advertiserId: 132435 })
     window.tabforacause.ads.slotsLoaded[slotId] = true
     window.tabforacause.ads.slotsViewable[slotId] = true
 
@@ -348,14 +354,15 @@ describe('LogRevenueComponent', function () {
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment, mockUserId,
       null, '132435', null,
       { encodingType: 'AMAZON_CPM', encodedValue: 'a-bid-code', adSize: '728x90' },
-      null, tabId)
+      null, tabId, adUnitCode)
   })
 
   it('logs Amazon revenue when there is also a Prebid bid', () => {
     // Mark an ad slot as loaded
     const slotId = 'my-slot-2468'
+    const adUnitCode = '/some/ad-unit/'
     window.tabforacause.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
-      slotId, { advertiserId: 132435 })
+      slotId, adUnitCode, { advertiserId: 132435 })
     window.tabforacause.ads.slotsLoaded[slotId] = true
     window.tabforacause.ads.slotsViewable[slotId] = true
 
@@ -391,14 +398,15 @@ describe('LogRevenueComponent', function () {
     )
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment, mockUserId,
       0.00231, '132435', '728x90', { encodingType: 'AMAZON_CPM', encodedValue: 'a-bid-code', adSize: '728x90' }, 'MAX',
-      tabId)
+      tabId, adUnitCode)
   })
 
   it('does not include Amazon revenue when the bid is empty', () => {
     // Mark an ad slot as loaded
     const slotId = 'my-slot-2468'
+    const adUnitCode = '/some/ad-unit/'
     window.tabforacause.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
-      slotId, { advertiserId: 132435 })
+      slotId, adUnitCode, { advertiserId: 132435 })
     window.tabforacause.ads.slotsLoaded[slotId] = true
     window.tabforacause.ads.slotsViewable[slotId] = true
 
@@ -432,7 +440,7 @@ describe('LogRevenueComponent', function () {
       />
     )
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment, mockUserId,
-      0.00231, '132435', '728x90', null, null, tabId)
+      0.00231, '132435', '728x90', null, null, tabId, adUnitCode)
   })
 
   it('logs a warning, but does not throw an error or log revenue, if slot data is missing', () => {
@@ -478,8 +486,9 @@ describe('LogRevenueComponent', function () {
   it('logs bids even if ad sizes are undefined for some reason', () => {
     // Mark an ad slot as loaded
     const slotId = 'my-slot-2468'
+    const adUnitCode = '/some/ad-unit/'
     window.tabforacause.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
-      slotId, { advertiserId: 132435 })
+      slotId, adUnitCode, { advertiserId: 132435 })
     window.tabforacause.ads.slotsLoaded[slotId] = true
     window.tabforacause.ads.slotsViewable[slotId] = true
 
@@ -516,6 +525,6 @@ describe('LogRevenueComponent', function () {
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(mockRelayEnvironment, mockUserId,
       0.00231, '132435', undefined,
       { encodingType: 'AMAZON_CPM', encodedValue: 'a-bid-code', adSize: undefined },
-      'MAX', tabId)
+      'MAX', tabId, adUnitCode)
   })
 })

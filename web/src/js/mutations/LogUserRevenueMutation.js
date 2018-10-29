@@ -12,7 +12,8 @@ const mutation = graphql`
 `
 
 function commit (environment, userId, revenue = null, dfpAdvertiserId = null,
-  adSize = null, encodedRevenue = null, aggregationOperation = null, tabId = null) {
+  adSize = null, encodedRevenue = null, aggregationOperation = null, tabId = null,
+  adUnitCode = null) {
   return commitMutation(
     environment,
     {
@@ -25,7 +26,8 @@ function commit (environment, userId, revenue = null, dfpAdvertiserId = null,
           encodedRevenue,
           aggregationOperation,
           tabId,
-          adSize
+          adSize,
+          adUnitCode
         }
       }
     }

@@ -25,7 +25,7 @@ describe('web test-utils', () => {
 
   test('mockGoogleTagSlotRenderEndedData allows overriding slot ID and properties', () => {
     const mockGoogleTagSlotRenderEndedData = require('js/utils/test-utils').mockGoogleTagSlotRenderEndedData
-    const slotRenderEndedData = mockGoogleTagSlotRenderEndedData('foobar', {
+    const slotRenderEndedData = mockGoogleTagSlotRenderEndedData('foobar', '/some/ad-unit/', {
       advertiserId: null,
       campaignId: 1357,
       creativeId: 2468,

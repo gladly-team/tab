@@ -29,14 +29,17 @@ export const enzymeFindAsync = async (rootComponent, selector, maxTimeMs = 4000,
  * Create a mock object of the googletag 'SlotRenderEnded' event. See:
  * https://developers.google.com/doubleclick-gpt/reference#googletag.events.SlotRenderEndedEvent
  * @param {string} slotId - A custom slot ID to override the default
+ * @param {string} adUnitCode - A custom ad unit code to override the default
  * @param {Object} properties - Values to override the default properties in the mock
  * @return {Object}
  */
-export const mockGoogleTagSlotRenderEndedData = (slotId = 'abc-123', properties = {}) => {
+export const mockGoogleTagSlotRenderEndedData = (slotId = 'abc-123',
+  adUnitCode = '/123456/some-ad/', properties = {}) => {
   return Object.assign({}, {
     // https://developers.google.com/doubleclick-gpt/reference#googletagslot
     slot: {
-      getSlotElementId: () => slotId
+      getSlotElementId: () => slotId,
+      getAdUnitPath: () => adUnitCode
       // ... other methods here
     },
     advertiserId: 1234,

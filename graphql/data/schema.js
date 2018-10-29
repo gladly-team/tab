@@ -637,6 +637,7 @@ const logUserRevenueMutation = mutationWithClientMutationId({
       })
     },
     dfpAdvertiserId: { type: GraphQLString },
+    adUnitCode: { type: GraphQLString },
     tabId: { type: GraphQLString },
     adSize: { type: GraphQLString }
   },
@@ -646,20 +647,21 @@ const logUserRevenueMutation = mutationWithClientMutationId({
     }
   },
   mutateAndGetPayload: (
-      {
-        userId,
-        revenue,
-        dfpAdvertiserId,
-        encodedRevenue,
-        aggregationOperation,
-        tabId,
-        adSize
-      },
-      context
-    ) => {
+    {
+      userId,
+      revenue,
+      dfpAdvertiserId,
+      encodedRevenue,
+      aggregationOperation,
+      tabId,
+      adSize,
+      adUnitCode
+    },
+    context
+  ) => {
     const { id } = fromGlobalId(userId)
     return logRevenue(context.user, id, revenue, dfpAdvertiserId, encodedRevenue,
-      aggregationOperation, tabId, adSize)
+      aggregationOperation, tabId, adSize, adUnitCode)
   }
 })
 

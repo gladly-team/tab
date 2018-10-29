@@ -105,9 +105,10 @@ class LogRevenueComponent extends React.Component {
   /**
    * Get the bid for the slot and log the revenue.
    * @param {string} slotId - The DFP slot ID to log
+   * @param {string} adUnitCode - The DFP ad unit code
    * @return {null}
    */
-  logRevenueForSlotId (slotId) {
+  logRevenueForSlotId (slotId, adUnitCode) {
     try {
       // If we have already logged revenue for this slot, don't log it again
       if (slotId in window.tabforacause.ads.slotsAlreadyLoggedRevenue) {
@@ -156,7 +157,8 @@ class LogRevenueComponent extends React.Component {
         // Only send aggregationOperation value if we have more than one
         // revenue value
         ((prebidRevenue && amazonEncodedBid) ? 'MAX' : null),
-        this.props.tabId
+        this.props.tabId,
+        adUnitCode
       )
     } catch (e) {
       console.error('Could not log revenue for ad slot', e)
@@ -172,7 +174,9 @@ class LogRevenueComponent extends React.Component {
       if (Object.keys(slotsLoadedObj).length) {
         const self = this
         Object.keys(slotsLoadedObj).forEach((slotId) => {
-          self.logRevenueForSlotId(slotId)
+          const getAdUnitPathFunc = get(slotsLoadedObj, [slotId, 'slot', 'getAdUnitPath'])
+          const adUnitCode = getAdUnitPathFunc ? getAdUnitPathFunc() : null
+          self.logRevenueForSlotId(slotId, adUnitCode)
         })
       }
     } catch (e) {
@@ -188,10 +192,11 @@ class LogRevenueComponent extends React.Component {
       googletag.pubads().addEventListener('slotRenderEnded', (event) => {
         try {
           const slotId = event.slot.getSlotElementId()
+          const adUnitCode = event.slot.getAdUnitPath()
 
           // Store rendered slot data
           window.tabforacause.ads.slotsRendered[slotId] = event
-          this.logRevenueForSlotId(slotId)
+          this.logRevenueForSlotId(slotId, adUnitCode)
         } catch (e) {
           console.error('Could not log revenue for ad slot', e)
         }

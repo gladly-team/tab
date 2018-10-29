@@ -33,6 +33,7 @@ class UserRevenue extends BaseModel {
       timestamp: types.string().isoDate().required(),
       revenue: types.number().required(),
       dfpAdvertiserId: types.string(),
+      adUnitCode: types.string(),
       tabId: types.string().uuid(),
       adSize: types.string()
     }
