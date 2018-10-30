@@ -188,18 +188,16 @@ describe('prebidConfig', function () {
     await prebidConfig()
     const adUnitConfig = pbjs.addAdUnits.mock.calls[0][0]
     expect(
-      adUnitConfig[0]['bids'].every(bid => {
-        return [
-          'aol',
-          'brealtime',
-          'openx',
-          'pulsepoint',
-          'rhythmone',
-          'sonobi',
-          'sovrn'
-        ].indexOf(bid['bidder']) > -1
-      })
-    ).toBe(true)
+      adUnitConfig[0]['bids'].map(bid => bid.bidder).sort())
+      .toEqual([
+        'aol',
+        'brealtime',
+        'openx',
+        'pulsepoint',
+        'rhythmone',
+        'sonobi',
+        'sovrn'
+      ])
   })
 
   it('when there are two ads, the list of bidders for each ad match what is expected', async () => {
@@ -209,31 +207,27 @@ describe('prebidConfig', function () {
     await prebidConfig()
     const adUnitConfig = pbjs.addAdUnits.mock.calls[0][0]
     expect(
-      adUnitConfig[0]['bids'].every(bid => {
-        return [
-          'aol',
-          'brealtime',
-          'openx',
-          'pulsepoint',
-          'rhythmone',
-          'sonobi',
-          'sovrn'
-        ].indexOf(bid['bidder']) > -1
-      })
-    ).toBe(true)
+      adUnitConfig[0]['bids'].map(bid => bid.bidder).sort())
+      .toEqual([
+        'aol',
+        'brealtime',
+        'openx',
+        'pulsepoint',
+        'rhythmone',
+        'sonobi',
+        'sovrn'
+      ])
     expect(
-      adUnitConfig[1]['bids'].every(bid => {
-        return [
-          'aol',
-          'brealtime',
-          'openx',
-          'pulsepoint',
-          'rhythmone',
-          'sonobi',
-          'sovrn'
-        ].indexOf(bid['bidder']) > -1
-      })
-    ).toBe(true)
+      adUnitConfig[1]['bids'].map(bid => bid.bidder).sort())
+      .toEqual([
+        'aol',
+        'brealtime',
+        'openx',
+        'pulsepoint',
+        'rhythmone',
+        'sonobi',
+        'sovrn'
+      ])
   })
 
   it('when there are three ads, the list of bidders for each ad match what is expected', async () => {
@@ -242,37 +236,39 @@ describe('prebidConfig', function () {
     const pbjs = getPrebidPbjs()
     await prebidConfig()
     const adUnitConfig = pbjs.addAdUnits.mock.calls[0][0]
+
     expect(
-      adUnitConfig[0]['bids'].every(bid => {
-        return [
-          'aol',
-          'brealtime',
-          'openx',
-          'pulsepoint',
-          'rhythmone',
-          'sonobi',
-          'sovrn'
-        ].indexOf(bid['bidder']) > -1
-      })
-    ).toBe(true)
+      adUnitConfig[0]['bids'].map(bid => bid.bidder).sort())
+      .toEqual([
+        'aol',
+        'brealtime',
+        'openx',
+        'pulsepoint',
+        'rhythmone',
+        'sonobi',
+        'sovrn'
+      ])
     expect(
-      adUnitConfig[1]['bids'].every(bid => {
-        return [
-          'brealtime',
-          'sonobi',
-          'sovrn'
-        ].indexOf(bid['bidder']) > -1
-      })
-    ).toBe(true)
+      adUnitConfig[1]['bids'].map(bid => bid.bidder).sort())
+      .toEqual([
+        'aol',
+        'brealtime',
+        'openx',
+        'pulsepoint',
+        'rhythmone',
+        'sonobi',
+        'sovrn'
+      ])
     expect(
-      adUnitConfig[2]['bids'].every(bid => {
-        return [
-          'aol',
-          'rhythmone',
-          'openx',
-          'pulsepoint'
-        ].indexOf(bid['bidder']) > -1
-      })
-    ).toBe(true)
+      adUnitConfig[2]['bids'].map(bid => bid.bidder).sort())
+      .toEqual([
+        'aol',
+        // 'brealtime',
+        'openx',
+        'pulsepoint',
+        // 'rhythmone',
+        'sonobi',
+        'sovrn'
+      ])
   })
 })

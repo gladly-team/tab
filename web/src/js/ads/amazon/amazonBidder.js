@@ -7,6 +7,7 @@ import {
   BIDDER_TIMEOUT,
   CONSENT_MANAGEMENT_TIMEOUT,
   VERTICAL_AD_SLOT_DOM_ID,
+  SECOND_VERTICAL_AD_SLOT_DOM_ID,
   HORIZONTAL_AD_SLOT_DOM_ID
 } from 'js/ads/adSettings'
 
@@ -64,6 +65,12 @@ function initApstag () {
   if (numAds > 1) {
     slots.push({
       slotID: VERTICAL_AD_SLOT_DOM_ID,
+      sizes: getVerticalAdSizes()
+    })
+  }
+  if (numAds > 2) {
+    slots.push({
+      slotID: SECOND_VERTICAL_AD_SLOT_DOM_ID,
       sizes: getVerticalAdSizes()
     })
   }

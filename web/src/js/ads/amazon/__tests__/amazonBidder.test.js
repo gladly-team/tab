@@ -254,4 +254,40 @@ describe('amazonBidder', function () {
       ]
     })
   })
+
+  it('gets bids for the leaderboard and rectangle ads when three ads are enabled', async () => {
+    getNumberOfAdsToShow.mockReturnValue(3)
+    const apstag = getAmazonTag()
+    const {
+      getVerticalAdSizes,
+      getHorizontalAdSizes
+    } = require('js/ads/adSettings')
+    getVerticalAdSizes.mockReturnValue([[300, 250]])
+    getHorizontalAdSizes.mockReturnValue([[728, 90]])
+    const amazonBidder = require('js/ads/amazon/amazonBidder').default
+    await amazonBidder()
+    expect(apstag.fetchBids).toHaveBeenCalled()
+    expect(apstag.fetchBids.mock.calls[0][0]).toMatchObject({
+      slots: [
+        {
+          slotID: 'div-gpt-ad-24682468-0',
+          sizes: [
+            [728, 90]
+          ]
+        },
+        {
+          slotID: 'div-gpt-ad-1357913579-0',
+          sizes: [
+            [300, 250]
+          ]
+        },
+        {
+          slotID: 'div-gpt-ad-11235813-0',
+          sizes: [
+            [300, 250]
+          ]
+        }
+      ]
+    })
+  })
 })
