@@ -1,5 +1,12 @@
 /* eslint-env jest */
 
+const searchPageEnv = process.env.FEATURE_FLAG_SEARCH_PAGE_ENABLED
+
+afterEach(() => {
+  // Reset env vars after tests
+  process.env.FEATURE_FLAG_SEARCH_PAGE_ENABLED = searchPageEnv
+})
+
 describe('feature flags', () => {
   test('isAnonymousUserSignInEnabled is false', () => {
     const isAnonymousUserSignInEnabled = require('js/utils/feature-flags')
@@ -17,5 +24,19 @@ describe('feature flags', () => {
     const isThirdAdEnabled = require('js/utils/feature-flags')
       .isThirdAdEnabled
     expect(isThirdAdEnabled()).toBe(true)
+  })
+
+  test('isSearchPageEnabled is false if the env var is "false"', () => {
+    const isSearchPageEnabled = require('js/utils/feature-flags')
+      .isSearchPageEnabled
+    process.env.FEATURE_FLAG_SEARCH_PAGE_ENABLED = 'false'
+    expect(isSearchPageEnabled()).toBe(false)
+  })
+
+  test('isSearchPageEnabled is true if the env var is "true"', () => {
+    const isSearchPageEnabled = require('js/utils/feature-flags')
+      .isSearchPageEnabled
+    process.env.FEATURE_FLAG_SEARCH_PAGE_ENABLED = 'true'
+    expect(isSearchPageEnabled()).toBe(true)
   })
 })
