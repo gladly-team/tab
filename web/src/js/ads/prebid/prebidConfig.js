@@ -186,19 +186,19 @@ const getAdUnits = () => {
           unit: '538658529',
           delDomain: 'tabforacause-d.openx.net'
         }
-      }
+      },
       // {
       //   bidder: 'brealtime',
       //   params: {
       //     placementId: 'TODO'
       //   }
       // },
-      // {
-      //   bidder: 'rhythmone',
-      //   params: {
-      //     placementId: 'TODO'
-      //   }
-      // }
+      {
+        bidder: 'rhythmone',
+        params: {
+          placementId: '73423'
+        }
+      }
     ]
   }
 

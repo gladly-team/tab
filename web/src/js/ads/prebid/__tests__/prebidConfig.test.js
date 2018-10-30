@@ -266,7 +266,7 @@ describe('prebidConfig', function () {
         // 'brealtime',
         'openx',
         'pulsepoint',
-        // 'rhythmone',
+        'rhythmone',
         'sonobi',
         'sovrn'
       ])
