@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@material-ui/core": "^1.0.0",
+    "@material-ui/icons": "^3.0.1",
     "autoprefixer": "^7.1.0",
     "aws-sdk": "^2.328.0",
     "babel-core": "^6.26.0",

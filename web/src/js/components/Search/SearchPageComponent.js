@@ -2,6 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
+import IconButton from '@material-ui/core/IconButton'
+import InputAdornment from '@material-ui/core/InputAdornment'
+import Search from '@material-ui/icons/Search'
 import { isSearchPageEnabled } from 'js/utils/feature-flags'
 import {
   goTo,
@@ -50,6 +53,10 @@ class SearchPage extends React.Component {
     }
   }
 
+  executeSearch () {
+    console.log('TODO: make the search work')
+  }
+
   render () {
     const { classes } = this.props
     if (!this.state.searchFeatureEnabled) {
@@ -94,7 +101,17 @@ class SearchPage extends React.Component {
                 classes: {
                   root: classes.bootstrapRoot,
                   input: classes.bootstrapInput
-                }
+                },
+                endAdornment: (
+                  <InputAdornment position='end'>
+                    <IconButton
+                      aria-label='Search button'
+                      onClick={this.executeSearch}
+                    >
+                      <Search />
+                    </IconButton>
+                  </InputAdornment>
+                )
               }}
               InputLabelProps={{
                 shrink: true,
