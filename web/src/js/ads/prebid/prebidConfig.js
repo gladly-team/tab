@@ -8,6 +8,7 @@ import {
   CONSENT_MANAGEMENT_TIMEOUT,
   VERTICAL_AD_UNIT_ID,
   VERTICAL_AD_SLOT_DOM_ID,
+  SECOND_VERTICAL_AD_UNIT_ID,
   SECOND_VERTICAL_AD_SLOT_DOM_ID,
   HORIZONTAL_AD_UNIT_ID,
   HORIZONTAL_AD_SLOT_DOM_ID
@@ -45,7 +46,6 @@ const getAdUnits = () => {
         params: {
           network: '10559.1',
           placement: '4117691',
-          alias: 'desktop_newtab_728x90',
           sizeId: '225'
         }
       },
@@ -106,7 +106,6 @@ const getAdUnits = () => {
         params: {
           network: '10559.1',
           placement: '4117692',
-          alias: 'desktop_newtab_300x250',
           sizeId: '170'
         }
       },
@@ -140,35 +139,7 @@ const getAdUnits = () => {
 
   // Rectangle-style ad with some bidders for when
   // we are showing three ads
-  const firstVerticalAdUnitForThreeAds = {
-    code: VERTICAL_AD_SLOT_DOM_ID,
-    mediaTypes: {
-      banner: {
-        sizes: getVerticalAdSizes()
-      }
-    },
-    bids: [
-      {
-        bidder: 'sonobi',
-        params: {
-          dom_id: VERTICAL_AD_SLOT_DOM_ID,
-          ad_unit: VERTICAL_AD_UNIT_ID
-        }
-      },
-      {
-        bidder: 'brealtime',
-        params: {
-          placementId: '10955690'
-        }
-      },
-      {
-        bidder: 'sovrn',
-        params: {
-          tagid: '438916'
-        }
-      }
-    ]
-  }
+  const firstVerticalAdUnitForThreeAds = verticalAdUnitForTwoAds
 
   // Second rectangle-style ad with some bidders for when
   // we are showing three ads
@@ -181,18 +152,10 @@ const getAdUnits = () => {
     },
     bids: [
       {
-        bidder: 'aol',
+        bidder: 'sonobi',
         params: {
-          network: '10559.1',
-          placement: '4117692',
-          alias: 'desktop_newtab_300x250',
-          sizeId: '170'
-        }
-      },
-      {
-        bidder: 'rhythmone',
-        params: {
-          placementId: '73423'
+          dom_id: SECOND_VERTICAL_AD_SLOT_DOM_ID,
+          ad_unit: SECOND_VERTICAL_AD_UNIT_ID
         }
       },
       {
@@ -200,7 +163,21 @@ const getAdUnits = () => {
         params: {
           cf: '300X250',
           cp: '560174',
-          ct: '460982'
+          ct: '665497'
+        }
+      },
+      {
+        bidder: 'aol',
+        params: {
+          network: '10559.1',
+          placement: '4997858',
+          sizeId: '170'
+        }
+      },
+      {
+        bidder: 'sovrn',
+        params: {
+          tagid: '589343'
         }
       },
       {
@@ -208,6 +185,18 @@ const getAdUnits = () => {
         params: {
           unit: '538658529',
           delDomain: 'tabforacause-d.openx.net'
+        }
+      },
+      // {
+      //   bidder: 'brealtime',
+      //   params: {
+      //     placementId: 'TODO'
+      //   }
+      // },
+      {
+        bidder: 'rhythmone',
+        params: {
+          placementId: '73423'
         }
       }
     ]
