@@ -7683,6 +7683,13 @@ kind-of@^6.0.2:
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-6.0.2.tgz#01146b36a6218e64e58f3a8d66de5d7fc6f6d051"
   integrity sha512-s5kLOcnH0XqDO+FvuaLX8DDjZ18CGFk7VygH40QoKPUQhW4e2rvM0rwUq0t8IQDOwYSeLK01U90OjzBTme2QqA==
 
+klaw-sync@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/klaw-sync/-/klaw-sync-4.0.0.tgz#7785692ea1a320ac3dda7a6c0c22b33a30aa3b3f"
+  integrity sha512-go/5tXbgLkgwxQ2c2ewaMen6TpQtI9fTzzmTdlSGK8XxKcFSsJvn/Sgn75Vg+mOJwkKVPrqLw2Xq7x/zP1v7PQ==
+  dependencies:
+    graceful-fs "^4.1.11"
+
 klaw@^1.0.0:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/klaw/-/klaw-1.3.1.tgz#4088433b46b3b1ba259d78785d8e96f73ba02439"
@@ -9240,14 +9247,15 @@ pascalcase@^0.1.1:
   resolved "https://registry.yarnpkg.com/pascalcase/-/pascalcase-0.1.1.tgz#b363e55e8006ca6fe21784d2db22bd15d7917f14"
   integrity sha1-s2PlXoAGym/iF4TS2yK9FdeRfxQ=
 
-patch-package@6.0.0-7:
-  version "6.0.0-7"
-  resolved "https://registry.yarnpkg.com/patch-package/-/patch-package-6.0.0-7.tgz#247ffad67fed75420e5d0e2c2dba03437359f7f1"
-  integrity sha512-K/84abSItZkYFGOLN2dqnGxs942l3v6C6/QSMuN+h2ucK3FzVSlBg6V3BLxlsgEAfhmo4mZ8ctARai74WjtyAg==
+patch-package@6.0.0-11:
+  version "6.0.0-11"
+  resolved "https://registry.yarnpkg.com/patch-package/-/patch-package-6.0.0-11.tgz#671f8342f99adb0f000f127b4abea685c4cc4920"
+  integrity sha512-o8HI4FivArj34u9d9Av/qAQIcRE/iEU/U0ZsMuw2EmUq+6DqN4W4rHQ0n3Bw1xDcUFD9q4ZdgTITHDu80RoKvw==
   dependencies:
     chalk "^1.1.3"
     cross-spawn "^5.1.0"
     fs-extra "^4.0.1"
+    klaw-sync "^4.0.0"
     minimist "^1.2.0"
     rimraf "^2.6.2"
     slash "^1.0.0"
