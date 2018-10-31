@@ -11,6 +11,7 @@ import {
   dashboardURL
 } from 'js/navigation/navigation'
 import LogoWithText from 'js/components/Logo/LogoWithText'
+import { parseUrlSearchString } from 'js/utils/utils'
 
 const searchBoxBorderColor = '#ced4da'
 const searchBoxBorderColorFocused = '#bdbdbd'
@@ -46,14 +47,24 @@ class SearchPage extends React.Component {
     if (!this.state.searchFeatureEnabled) {
       goTo(dashboardURL)
     }
+    const { location } = this.props
+    const query = parseUrlSearchString(location.search).q
+    if (query) {
+      this.executeSearch(query)
+    }
   }
 
-  executeSearch () {
+  executeSearch (query) {
+    // console.log(`Searching for: ${query}`)
+  }
+
+  onSearch (e) {
     console.log('TODO: make the search work')
   }
 
   render () {
-    const { classes } = this.props
+    const { classes, location } = this.props
+    const query = parseUrlSearchString(location.search).q
     if (!this.state.searchFeatureEnabled) {
       return null
     }
@@ -91,6 +102,7 @@ class SearchPage extends React.Component {
             <Input
               id='search-input'
               type={'text'}
+              defaultValue={query}
               placeholder='Search to raise money for charity...'
               disableUnderline
               fullWidth
@@ -103,7 +115,7 @@ class SearchPage extends React.Component {
                 <InputAdornment position='end'>
                   <IconButton
                     aria-label='Search button'
-                    onClick={this.executeSearch}
+                    onClick={this.onSearch}
                   >
                     <SearchIcon style={{ color: searchBoxBorderColorFocused }} />
                   </IconButton>
@@ -119,6 +131,9 @@ class SearchPage extends React.Component {
 
 SearchPage.propTypes = {
   classes: PropTypes.object.isRequired,
+  location: PropTypes.shape({
+    search: PropTypes.string.isRequired
+  }),
   user: PropTypes.shape({
     id: PropTypes.string.isRequired
   }),

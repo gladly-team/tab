@@ -23,8 +23,20 @@ export const validateUsername = (username) => {
   return re.test(username)
 }
 
+// Note: in general, we should probably use react-router's
+// location object to get the search value.
 export const getUrlParameters = () => {
-  return qs.parse(window.location.search, { ignoreQueryPrefix: true })
+  return parseUrlSearchString(window.location.search)
+}
+
+/**
+ * Convert a string of URL parameters into an object.
+ * @param {String} searchString - The URL parameter string,
+ *   such as '?myParam=foo&another=bar'
+ * @return {Object} The parsed parameter data
+ */
+export const parseUrlSearchString = searchString => {
+  return qs.parse(searchString, { ignoreQueryPrefix: true })
 }
 
 // BEGIN: referral data helpers

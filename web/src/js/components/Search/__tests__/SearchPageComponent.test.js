@@ -10,6 +10,7 @@ import {
   goTo,
   dashboardURL
 } from 'js/navigation/navigation'
+import Input from '@material-ui/core/Input'
 
 jest.mock('js/utils/feature-flags')
 jest.mock('js/navigation/navigation')
@@ -18,7 +19,10 @@ const getMockProps = () => ({
   user: {
     id: 'some-user-id-here'
   },
-  app: {}
+  app: {},
+  location: {
+    search: ''
+  }
 })
 
 beforeEach(() => {
@@ -76,5 +80,16 @@ describe('Search page component', () => {
       <SearchPageComponent {...mockProps} />
     ).dive()
     expect(goTo).not.toHaveBeenCalled()
+  })
+
+  it('shows the search text in the box when loading a previous search', () => {
+    isSearchPageEnabled.mockReturnValue(true)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent').default
+    const mockProps = getMockProps()
+    mockProps.location.search = '?q=blahblah'
+    const wrapper = shallow(
+      <SearchPageComponent {...mockProps} />
+    ).dive()
+    expect(wrapper.find(Input).prop('defaultValue')).toBe('blahblah')
   })
 })

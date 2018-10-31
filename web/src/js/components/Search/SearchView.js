@@ -32,7 +32,11 @@ class SearchView extends React.Component {
             const app = props.app || null
             const user = props.user || null
             return (
-              <SearchContainer app={app} user={user} />
+              <SearchContainer
+                app={app}
+                user={user}
+                location={this.props.location}
+              />
             )
           }} />
       </AuthUserComponent>

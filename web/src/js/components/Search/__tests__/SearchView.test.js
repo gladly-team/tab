@@ -52,7 +52,7 @@ describe('SearchView', () => {
     })
   })
 
-  it('passes "app" and "user" props to the SearchContainer when they exist', () => {
+  it('passes "app", "user", "location" props to the SearchContainer when they exist', () => {
     const fakeProps = {
       app: {
         some: 'value'
@@ -69,10 +69,17 @@ describe('SearchView', () => {
     })
 
     const wrapper = mount(
-      <SearchView />
+      <SearchView
+        location={{
+          search: '?q=tacos'
+        }}
+      />
     )
     const searchPageContainer = wrapper.find(SearchContainer)
     expect(searchPageContainer.prop('app')).toEqual(fakeProps.app)
     expect(searchPageContainer.prop('user')).toEqual(fakeProps.user)
+    expect(searchPageContainer.prop('location')).toEqual({
+      search: '?q=tacos'
+    })
   })
 })
