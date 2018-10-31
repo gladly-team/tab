@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles'
 import Input from '@material-ui/core/Input'
 import IconButton from '@material-ui/core/IconButton'
 import InputAdornment from '@material-ui/core/InputAdornment'
-import Search from '@material-ui/icons/Search'
+import SearchIcon from '@material-ui/icons/Search'
 import { isSearchPageEnabled } from 'js/utils/feature-flags'
 import {
   goTo,
@@ -12,25 +12,25 @@ import {
 } from 'js/navigation/navigation'
 import LogoWithText from 'js/components/Logo/LogoWithText'
 
+const searchBoxBorderColor = '#ced4da'
+const searchBoxBorderColorFocused = '#bdbdbd'
+
 const styles = theme => ({
   inputRootStyle: {
     padding: 0,
-    'label + &': {
-      marginTop: theme.spacing.unit * 3
-    }
-  },
-  inputStyle: {
     borderRadius: 2,
     backgroundColor: theme.palette.common.white,
-    border: '1px solid #ced4da',
-    boxShadow: '0rem 0rem 0.02rem 0.02rem rgba(0, 0, 0, 0.1)',
+    border: `1px solid ${searchBoxBorderColor}`,
     fontSize: 16,
-    padding: '10px 12px',
-    transition: theme.transitions.create(['border-color', 'box-shadow']),
-    '&:focus': {
-      borderColor: '#bdbdbd',
-      boxShadow: '0rem 0.05rem 0.2rem 0.04rem rgba(0, 0, 0, 0.1)'
-    }
+    boxShadow: '0rem 0rem 0.02rem 0.02rem rgba(0, 0, 0, 0.1)',
+    transition: theme.transitions.create(['border-color', 'box-shadow'])
+  },
+  inputRootFocused: {
+    borderColor: searchBoxBorderColorFocused,
+    boxShadow: '0rem 0.05rem 0.2rem 0.05rem rgba(0, 0, 0, 0.1)'
+  },
+  inputStyle: {
+    padding: '10px 12px'
   }
 })
 
@@ -96,7 +96,8 @@ class SearchPage extends React.Component {
               fullWidth
               classes={{
                 root: classes.inputRootStyle,
-                input: classes.inputStyle
+                input: classes.inputStyle,
+                focused: classes.inputRootFocused
               }}
               endAdornment={
                 <InputAdornment position='end'>
@@ -104,7 +105,7 @@ class SearchPage extends React.Component {
                     aria-label='Search button'
                     onClick={this.executeSearch}
                   >
-                    <Search />
+                    <SearchIcon style={{ color: searchBoxBorderColorFocused }} />
                   </IconButton>
                 </InputAdornment>
               }
