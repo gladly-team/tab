@@ -70,12 +70,4 @@ describe('SignInIframeMessage tests', () => {
       .toMatch(
         `You've already made a positive impact! Let's keep this progress safe:`)
   })
-
-  it('matches expected snapshot', () => {
-    const SignInIframeMessage = require('js/components/Authentication/SignInIframeMessage').default
-    const wrapper = shallow(
-      <SignInIframeMessage />
-    )
-    expect(toJson(wrapper)).toMatchSnapshot()
-  })
 })
