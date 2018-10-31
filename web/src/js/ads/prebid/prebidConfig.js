@@ -62,6 +62,9 @@ const getAdUnits = () => {
           delDomain: 'tabforacause-d.openx.net'
         }
       },
+      // TODO: update to emx_digital
+      // EMX Digitial was formerly brealtime.
+      // http://prebid.org/dev-docs/bidders.html#emx_digital
       {
         bidder: 'brealtime',
         params: {
@@ -122,6 +125,7 @@ const getAdUnits = () => {
           delDomain: 'tabforacause-d.openx.net'
         }
       },
+      // TODO: update to emx_digital
       {
         bidder: 'brealtime',
         params: {
@@ -188,9 +192,9 @@ const getAdUnits = () => {
         }
       },
       // {
-      //   bidder: 'brealtime',
+      //   bidder: 'emx_digital',
       //   params: {
-      //     placementId: 'TODO'
+      //     tagid: 'TODO'
       //   }
       // },
       {
