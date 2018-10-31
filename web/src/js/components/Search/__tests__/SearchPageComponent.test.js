@@ -35,7 +35,7 @@ describe('Search page component', () => {
     const mockProps = getMockProps()
     shallow(
       <SearchPageComponent {...mockProps} />
-    )
+    ).dive()
   })
 
   it('renders no DOM elements when the search page feature is not enabled', () => {
@@ -44,7 +44,7 @@ describe('Search page component', () => {
     const mockProps = getMockProps()
     const wrapper = shallow(
       <SearchPageComponent {...mockProps} />
-    )
+    ).dive()
     expect(toJson(wrapper)).toEqual('')
   })
 
@@ -54,7 +54,7 @@ describe('Search page component', () => {
     const mockProps = getMockProps()
     shallow(
       <SearchPageComponent {...mockProps} />
-    )
+    ).dive()
     expect(goTo).toHaveBeenCalledWith(dashboardURL)
   })
 
@@ -64,7 +64,7 @@ describe('Search page component', () => {
     const mockProps = getMockProps()
     const wrapper = shallow(
       <SearchPageComponent {...mockProps} />
-    )
+    ).dive()
     expect(toJson(wrapper)).not.toEqual('')
   })
 
@@ -74,7 +74,7 @@ describe('Search page component', () => {
     const mockProps = getMockProps()
     shallow(
       <SearchPageComponent {...mockProps} />
-    )
+    ).dive()
     expect(goTo).not.toHaveBeenCalled()
   })
 })
