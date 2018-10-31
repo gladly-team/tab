@@ -15,6 +15,7 @@ custom:
   graphQLProxyDomain: ${env:GRAPHQL_PROXY_DOMAIN}
   graphQLProxyPath: ${env:GRAPHQL_PROXY_PATH}
   webAppName: Tab2017
+  searchAppName: Tab2017
   graphQLAppName: TabGraphQL
   cloudfrontDomainAlias: ${env:CLOUDFRONT_DOMAIN_ALIAS}
   SSLCertificateARN: ${env:SSL_CERTIFICATE_ARN}
@@ -112,7 +113,7 @@ resources:
           # cache files. For browser caching, we must still set Cache-Control headers
           # on the origin server (S3).
           CacheBehaviors:
-            # New tab app HTML files. This origin also handle any 404
+            # New tab app HTML files. This origin also handles any 404
             # errors, as configured in CustomErrorResponses.
             # PathPattern docs:
             #   https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesPathPattern
@@ -142,6 +143,38 @@ resources:
                 - GET
                 - OPTIONS
               TargetOriginId: ${self:custom.webAppName}
+              ForwardedValues:
+                QueryString: false
+                Cookies:
+                  Forward: none
+              Compress: true
+              ViewerProtocolPolicy: redirect-to-https
+            # Search app HTML files.
+            - PathPattern: 'search/*.html'
+              # Short HTML caching for some spage speed gains and
+              # reduced request volume to S3 origin.
+              MinTTL: ${self:custom.CloudfrontHTMLCachingSeconds}
+              MaxTTL: ${self:custom.CloudfrontHTMLCachingSeconds}
+              AllowedMethods:
+                - HEAD
+                - GET
+                - OPTIONS
+              TargetOriginId: ${self:custom.searchAppName}
+              ForwardedValues:
+                QueryString: false
+                Cookies:
+                  Forward: none
+              Compress: true
+              ViewerProtocolPolicy: redirect-to-https
+            # Search app (non-HTML) static files
+            - PathPattern: 'search/*'
+              MinTTL: 31536000 # one year
+              MaxTTL: 63072000 # two years
+              AllowedMethods:
+                - HEAD
+                - GET
+                - OPTIONS
+              TargetOriginId: ${self:custom.searchAppName}
               ForwardedValues:
                 QueryString: false
                 Cookies:

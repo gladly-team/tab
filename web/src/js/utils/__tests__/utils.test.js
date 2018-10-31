@@ -40,6 +40,18 @@ describe('validating username', () => {
   })
 })
 
+describe('URL query string utils', () => {
+  test('parseUrlSearchString parses URL parameters as expected', () => {
+    localStorageMgr.setItem('tab.referralData.referringUser', 'sandra')
+    localStorageMgr.setItem('tab.referralData.referringChannel', '42')
+    const parseUrlSearchString = require('js/utils/utils').parseUrlSearchString
+    expect(parseUrlSearchString('?myParam=foo&another=123')).toEqual({
+      myParam: 'foo',
+      another: '123'
+    })
+  })
+})
+
 describe('getting referral data', () => {
   it('works with all fields set', () => {
     localStorageMgr.setItem('tab.referralData.referringUser', 'sandra')

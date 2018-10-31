@@ -30,6 +30,7 @@ export const envVars = [
   { name: 'WEB_SENTRY_DSN' },
   { name: 'WEB_SENTRY_DEBUG', optional: true },
   { name: 'WEB_SENTRY_ENABLE_AUTO_BREADCRUMBS', optional: true },
+  { name: 'FEATURE_FLAG_SEARCH_PAGE_ENABLED', optional: true },
   // Media
   { name: 'CLOUDFRONT_MEDIA_DOMAIN_ALIAS' },
   // GraphQL / Lambda

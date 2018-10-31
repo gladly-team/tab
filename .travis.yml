@@ -40,6 +40,7 @@ env:
   - TEST_STATIC_FILES_ENDPOINT=//test-tab2017.gladly.io/newtab
   - TEST_CLOUDFRONT_DOMAIN_ALIAS=test-tab2017.gladly.io
   - TEST_ADS_ENABLED=false
+  - TEST_FEATURE_FLAG_SEARCH_PAGE_ENABLED=false
   # Media
   - TEST_CLOUDFRONT_MEDIA_DOMAIN_ALIAS=test-tab2017-media.gladly.io
   # GraphQL / Lambda
@@ -89,6 +90,7 @@ env:
   - DEV_STATIC_FILES_ENDPOINT=//dev-tab2017.gladly.io/newtab
   - DEV_CLOUDFRONT_DOMAIN_ALIAS=dev-tab2017.gladly.io
   - DEV_ADS_ENABLED=true
+  - DEV_FEATURE_FLAG_SEARCH_PAGE_ENABLED=true
   # Media
   - DEV_CLOUDFRONT_MEDIA_DOMAIN_ALIAS=dev-tab2017-media.gladly.io
   # GraphQL / Lambda
@@ -133,6 +135,7 @@ env:
   - PROD_STATIC_FILES_ENDPOINT=//tab.gladly.io/newtab
   - PROD_CLOUDFRONT_DOMAIN_ALIAS=tab.gladly.io
   - PROD_ADS_ENABLED=true
+  - PROD_FEATURE_FLAG_SEARCH_PAGE_ENABLED=false
   # Media
   - PROD_CLOUDFRONT_MEDIA_DOMAIN_ALIAS=prod-tab2017-media.gladly.io
   # GraphQL / Lambda

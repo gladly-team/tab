@@ -47,7 +47,7 @@ const CustomTooltip = (props) => {
     <div style={{ width: 300 }}>
       <Paper>
         <div style={{ padding: 20 }}>
-          <Typography variant='body1'>{props.content}</Typography>
+          <Typography variant={'body2'}>{props.content}</Typography>
         </div>
         <span style={{ display: 'flex', justifyContent: 'flex-end', padding: 10 }}>
           { (props.stepIndex > 0) ? (
@@ -167,8 +167,8 @@ class NewUserTour extends React.Component {
             <EarthIcon style={{ color: primaryColor, width: 32, height: 32, margin: 10, marginTop: 0 }} />
             <HeartIcon color={primaryColor} style={{ width: 32, height: 32, margin: 10, marginTop: 0 }} />
           </span>
-          <Typography variant='body1' paragraph>Now, every tab you open raises money for charity. (The money comes from showing ads in the corner of the page.)</Typography>
-          <Typography variant='body1' paragraph>Just by surfing the web, you're feeding children, protecting the rainforest, and more.</Typography>
+          <Typography variant={'body2'} paragraph>Now, every tab you open raises money for charity. (The money comes from showing ads in the corner of the page.)</Typography>
+          <Typography variant={'body2'} paragraph>Just by surfing the web, you're feeding children, protecting the rainforest, and more.</Typography>
         </Dialog>
         <Joyride
           steps={tourSteps}
@@ -230,8 +230,8 @@ class NewUserTour extends React.Component {
             display: 'flex',
             flexDirection: 'column'
           }}>
-            <Typography variant='body1' paragraph>Thanks for making the world a better place, one tab at a time.</Typography>
-            <Typography variant='body1' paragraph>We can make a bigger impact together. Share Tab for a Cause with a few friends!</Typography>
+            <Typography variant={'body2'} paragraph>Thanks for making the world a better place, one tab at a time.</Typography>
+            <Typography variant={'body2'} paragraph>We can make a bigger impact together. Share Tab for a Cause with a few friends!</Typography>
             <InviteFriend style={{ alignSelf: 'center' }} user={user} />
           </div>
         </Dialog>

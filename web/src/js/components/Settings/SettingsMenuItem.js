@@ -20,7 +20,12 @@ class SettingsMenuItem extends React.Component {
         style={{ textDecoration: 'none' }}
       >
         <ListItem style={listItemStyle} button>
-          <ListItemText primary={this.props.children} />
+          <ListItemText
+            primary={this.props.children}
+            primaryTypographyProps={{
+              variant: 'body2'
+            }}
+          />
         </ListItem>
       </NavLink>
     )

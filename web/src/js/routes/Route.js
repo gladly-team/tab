@@ -22,6 +22,7 @@ import ProfileInviteFriend from 'js/components/Settings/Profile/ProfileInviteFri
 import AccountView from 'js/components/Settings/Account/AccountView'
 import FirstTabView from 'js/components/Dashboard/FirstTabView'
 import PostUninstallView from 'js/components/Dashboard/PostUninstallView'
+import SearchView from 'js/components/Search/SearchView'
 
 export default (
   // TODO: Show 404 page from IndexRedirect
@@ -61,5 +62,6 @@ export default (
       <Redirect from='*' to='/newtab/' />
     </Route>
     <IndexRedirect from='*' to='/newtab/' />
+    <Route path='search' component={SearchView} />
   </Route>
 )

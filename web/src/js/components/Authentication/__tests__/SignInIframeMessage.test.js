@@ -4,7 +4,6 @@ import React from 'react'
 import {
   shallow
 } from 'enzyme'
-import toJson from 'enzyme-to-json'
 import Typography from '@material-ui/core/Typography'
 import {
   getUrlParameters
@@ -69,13 +68,5 @@ describe('SignInIframeMessage tests', () => {
         .at(1).children().text())
       .toMatch(
         `You've already made a positive impact! Let's keep this progress safe:`)
-  })
-
-  it('matches expected snapshot', () => {
-    const SignInIframeMessage = require('js/components/Authentication/SignInIframeMessage').default
-    const wrapper = shallow(
-      <SignInIframeMessage />
-    )
-    expect(toJson(wrapper)).toMatchSnapshot()
   })
 })
