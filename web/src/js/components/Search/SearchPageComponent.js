@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
-import TextField from '@material-ui/core/TextField'
+import Input from '@material-ui/core/Input'
 import IconButton from '@material-ui/core/IconButton'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import Search from '@material-ui/icons/Search'
@@ -13,14 +13,14 @@ import {
 import LogoWithText from 'js/components/Logo/LogoWithText'
 
 const styles = theme => ({
-  bootstrapRoot: {
+  inputRootStyle: {
     padding: 0,
     'label + &': {
       marginTop: theme.spacing.unit * 3
     }
   },
-  bootstrapInput: {
-    borderRadius: 3,
+  inputStyle: {
+    borderRadius: 2,
     backgroundColor: theme.palette.common.white,
     border: '1px solid #ced4da',
     boxShadow: '0rem 0rem 0.02rem 0.02rem rgba(0, 0, 0, 0.1)',
@@ -30,12 +30,7 @@ const styles = theme => ({
     '&:focus': {
       borderColor: '#bdbdbd',
       boxShadow: '0rem 0.05rem 0.2rem 0.04rem rgba(0, 0, 0, 0.1)'
-      // borderColor: theme.palette.primary.main,
-      // boxShadow: `0 0 0 0.2rem rgba(157, 75, 163, 0.25)`
     }
-  },
-  bootstrapFormLabel: {
-    fontSize: 18
   }
 })
 
@@ -93,30 +88,26 @@ class SearchPage extends React.Component {
               flex: 1
             }}
           >
-            <TextField
+            <Input
+              id='search-input'
+              type={'text'}
               placeholder='Search to raise money for charity...'
+              disableUnderline
               fullWidth
-              InputProps={{
-                disableUnderline: true,
-                classes: {
-                  root: classes.bootstrapRoot,
-                  input: classes.bootstrapInput
-                },
-                endAdornment: (
-                  <InputAdornment position='end'>
-                    <IconButton
-                      aria-label='Search button'
-                      onClick={this.executeSearch}
-                    >
-                      <Search />
-                    </IconButton>
-                  </InputAdornment>
-                )
+              classes={{
+                root: classes.inputRootStyle,
+                input: classes.inputStyle
               }}
-              InputLabelProps={{
-                shrink: true,
-                className: classes.bootstrapFormLabel
-              }}
+              endAdornment={
+                <InputAdornment position='end'>
+                  <IconButton
+                    aria-label='Search button'
+                    onClick={this.executeSearch}
+                  >
+                    <Search />
+                  </IconButton>
+                </InputAdornment>
+              }
             />
           </div>
         </div>
