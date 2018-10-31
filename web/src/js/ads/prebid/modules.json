@@ -2,6 +2,7 @@
     "consentManagement",
     "aolBidAdapter",
     "appnexusBidAdapter",
+    "emx_digitalBidAdapter",
     "openxBidAdapter",
     "rhythmoneBidAdapter",
     "pulsepointBidAdapter",
