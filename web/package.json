@@ -28,7 +28,7 @@
     "webpack-bundle-analyzer": "^2.8.2"
   },
   "dependencies": {
-    "@material-ui/core": "^1.0.0",
+    "@material-ui/core": "^3.3.2",
     "@material-ui/icons": "^3.0.1",
     "autoprefixer": "^7.1.0",
     "aws-sdk": "^2.328.0",

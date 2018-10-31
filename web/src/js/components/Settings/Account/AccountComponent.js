@@ -15,9 +15,19 @@ export const AccountItem = (props) => (
     padding: 20
   }}
   >
-    <Typography variant={'body2'} style={{ flex: 1 }}>{props.name}</Typography>
+    <Typography
+      variant={'body2'}
+      style={{ flex: 1, fontWeight: 'bold' }}
+    >
+      {props.name}
+    </Typography>
     { props.value
-      ? <Typography variant={'body1'} style={{ flex: 2 }}>{props.value}</Typography>
+      ? <Typography
+        variant={'body2'}
+        style={{ flex: 2 }}
+      >
+        {props.value}
+      </Typography>
       : null
     }
     { props.actionButton
@@ -64,7 +74,7 @@ class Account extends React.Component {
     const { user } = this.props
     return (
       <Paper>
-        <Typography variant={'headline'} style={{ padding: 20 }}>
+        <Typography variant={'h5'} style={{ padding: 20 }}>
           Account
         </Typography>
         <Divider />

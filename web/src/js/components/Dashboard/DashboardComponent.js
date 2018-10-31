@@ -203,7 +203,7 @@ class Dashboard extends React.Component {
                       background: dashboardIconInactiveColor
                     }}
                   >
-                    <Typography variant={'body1'}>
+                    <Typography variant={'body2'}>
                       Sign in to save your progress!
                     </Typography>
                     <Button
@@ -388,7 +388,7 @@ class Dashboard extends React.Component {
                                   marginRight: 14
                                 }}
                               />
-                              <Typography variant={'body1'}>
+                              <Typography variant={'body2'}>
                                 Did you know? The ads here are raising money for charity.
                               </Typography>
                               <Button

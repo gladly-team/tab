@@ -264,8 +264,8 @@ class Authentication extends React.Component {
                     maxWidth: 600
                   }}
                 >
-                  <Typography variant={'body2'}>Hey there!</Typography>
-                  <Typography variant={'body1'}>
+                  <Typography variant={'body2'} style={{ fontWeight: 'bold' }}>Hey there!</Typography>
+                  <Typography variant={'body2'}>
                       We ask you to sign in after a while so you don't lose
                       access to your notes, bookmarks, and Hearts (even if you drop your
                       computer in a puddle). Signing in also lets you sync your tab between

@@ -43,7 +43,7 @@ class SignInIframeMessage extends React.Component {
           marginBottom: 60
         }}
       >
-        <Typography variant={'title'}>
+        <Typography variant={'h6'}>
           {
             showRequiredSignInExplanation
               ? `Great job so far!`
@@ -52,13 +52,13 @@ class SignInIframeMessage extends React.Component {
         </Typography>
         {
           showRequiredSignInExplanation
-            ? <Typography variant={'body1'}>
+            ? <Typography variant={'body2'}>
               You've already made a positive impact! Let's keep this progress safe:
               we ask you to sign in after a while so you don't lose access
               to your notes, bookmarks, and Hearts (even if you drop your computer
               in a puddle).
             </Typography>
-            : <Typography variant={'body1'}>
+            : <Typography variant={'body2'}>
               Sign in to customize your new tab page and raise money for your favorite causes.
             </Typography>
         }
