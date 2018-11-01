@@ -124,7 +124,7 @@
     "deploy": "npm-run-all -s build sls:s3sync sls:deploy",
     "relay": "relay-compiler --src ./src/ --schema ./data/schema.graphql",
     "relay:watch": "nodemon --watch src/ --watch data/schema.graphql --ignore **/__generated__/**/* --exec \"yarn run relay\"",
-    "test": "cross-env NODE_PATH=src/ npm-run-all -s test:lint prebid:test-patches test:run test:codecov",
+    "test": "cross-env NODE_PATH=src/ npm-run-all -s test:lint test:run test:codecov",
     "test:run": "cross-env NODE_PATH=src/ jest --env=jsdom --testPathIgnorePatterns=e2e-tests --testPathIgnorePatterns=prebidPatches --maxWorkers=2 --coverage",
     "test:integration": "cross-env NODE_PATH=src/ jest --testPathPattern=e2e-tests",
     "test:codecov": "if-env LOG_TEST_COVERAGE=true && codecov || echo 'Skipping test coverage logging.'",
