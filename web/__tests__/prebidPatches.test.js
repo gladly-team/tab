@@ -33,11 +33,31 @@ jest.mock(getPrebidSrcPath('cpmBucketManager'))
 jest.mock(getPrebidSrcPath('utils'))
 
 const getMockWindow = () => {
-  const mockWindow = Object.create(new JSDOM())
-
-  // Create window object we'd expect in our iframed new tab page.
+  // Create the window object we'd expect in our iframed new tab page.
   // https://github.com/facebook/jest/issues/5124#issuecomment-415494099
-  mockWindow.location = Object.assign({}, mockWindow.location, {
+
+  // Create the parent window.
+  const parentWindow = Object.create(new JSDOM())
+  parentWindow.location = Object.assign({}, parentWindow.location, {
+    ancestorOrigins: [],
+    host: 'abcdefghijklmnopqrs',
+    hostname: 'abcdefghijklmnopqrs',
+    href: 'chrome-extension://abcdefghijklmnopqrs/iframe.html',
+    origin: 'chrome-extension://abcdefghijklmnopqrs',
+    pathname: '/iframe.html',
+    port: '',
+    protocol: 'chrome-extension',
+    search: ''
+  })
+  parentWindow.document = Object.assign({}, parentWindow.document, {
+    referrer: ''
+  })
+  parentWindow.parent = parentWindow
+  parentWindow.top = parentWindow
+
+  // Create the current window.
+  const currentWindow = Object.create(new JSDOM())
+  currentWindow.location = Object.assign({}, currentWindow.location, {
     ancestorOrigins: [
       'chrome-extension://abcdefghijklmnopqrs'
     ],
@@ -50,8 +70,35 @@ const getMockWindow = () => {
     protocol: 'https:',
     search: ''
   })
-  global.window = mockWindow
-  return mockWindow
+  currentWindow.document = Object.assign({}, currentWindow.document, {
+    referrer: ''
+  })
+
+  // Give the current window a parent. Make accesing location
+  // properties fail as we'd expect in a cross-origin environment.
+  const parentWindowCrossDomain = Object.assign({}, parentWindow, {
+    get location () {
+      function crossOriginError () {
+        throw new Error('Blocked a frame from accessing a cross-origin frame.')
+      }
+      return {
+        get ancestorOrigins () { return crossOriginError() },
+        get host () { return crossOriginError() },
+        get hostname () { return crossOriginError() },
+        get href () { return crossOriginError() },
+        get origin () { return crossOriginError() },
+        get pathname () { return crossOriginError() },
+        get port () { return crossOriginError() },
+        get protocol () { return crossOriginError() },
+        get search () { return crossOriginError() }
+      }
+    }
+  })
+  currentWindow.parent = parentWindowCrossDomain
+  currentWindow.top = parentWindowCrossDomain
+
+  global.window = currentWindow
+  return currentWindow
 }
 
 describe('Prebid.js patch test', () => {
@@ -59,15 +106,32 @@ describe('Prebid.js patch test', () => {
     const mockWindow = getMockWindow()
     const { getRefererInfo } = require(getPrebidSrcPath('refererDetection'))
 
-    // FIXME: our website domain should be the referer.
+    // Without our patch to Prebid, the referrer info would look like:
+    // {
+    //   numIframes: 1,
+    //   reachedTop: false,
+    //   referer: 'chrome-extension://abcdefghijklmnopqrs',
+    //   stack: [
+    //     'chrome-extension://abcdefghijklmnopqrs',
+    //     'https://tab.gladly.io/newtab/'
+    //   ]
+    // }
     expect(getRefererInfo(mockWindow)).toEqual({
       numIframes: 1,
       reachedTop: false,
       referer: 'chrome-extension://abcdefghijklmnopqrs',
       stack: [
         'chrome-extension://abcdefghijklmnopqrs',
-        null
+        'https://tab.gladly.io/newtab/'
       ]
     })
+
+    // FIXME: our website domain should be the referer.
+    // expect(getRefererInfo(mockWindow)).toEqual({
+    //   numIframes: 0,
+    //   reachedTop: true,
+    //   referer: 'https://tab.gladly.io/newtab/',
+    //   stack: ['https://tab.gladly.io/newtab/']
+    // })
   })
 })
