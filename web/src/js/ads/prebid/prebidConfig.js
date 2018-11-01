@@ -62,13 +62,12 @@ const getAdUnits = () => {
           delDomain: 'tabforacause-d.openx.net'
         }
       },
-      // TODO: update to emx_digital
-      // EMX Digitial was formerly brealtime.
+      // EMX Digital was formerly brealtime.
       // http://prebid.org/dev-docs/bidders.html#emx_digital
       {
-        bidder: 'brealtime',
+        bidder: 'emx_digital',
         params: {
-          placementId: '10955287'
+          tagId: '29672'
         }
       },
       {
@@ -125,11 +124,10 @@ const getAdUnits = () => {
           delDomain: 'tabforacause-d.openx.net'
         }
       },
-      // TODO: update to emx_digital
       {
-        bidder: 'brealtime',
+        bidder: 'emx_digital',
         params: {
-          placementId: '10955690'
+          tagId: '29673'
         }
       },
       {
@@ -275,9 +273,6 @@ export default () => {
       })
 
       pbjs.addAdUnits(adUnits)
-
-      // Note: brealtime is automatically aliased by the
-      // AppNexus bid adapter.
       pbjs.bidderSettings = {
         aol: {
         // AOL sends gross CPM.
