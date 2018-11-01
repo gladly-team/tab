@@ -29,9 +29,6 @@ const prebidSrcPath = `${prebidPath}/src`
 
 const getPrebidSrcPath = filepath => `${prebidSrcPath}/${filepath}`
 
-jest.mock(getPrebidSrcPath('cpmBucketManager'))
-jest.mock(getPrebidSrcPath('utils'))
-
 const getMockWindow = () => {
   // Create the window object we'd expect in our iframed new tab page.
   // https://github.com/facebook/jest/issues/5124#issuecomment-415494099
@@ -133,5 +130,34 @@ describe('Prebid.js patch test', () => {
     //   referer: 'https://tab.gladly.io/newtab/',
     //   stack: ['https://tab.gladly.io/newtab/']
     // })
+  })
+
+  // Note that this is deprecated in Prebid.
+  test('getTopWindowLocation returns expected value', () => {
+    getMockWindow()
+    const { getTopWindowLocation } = require(getPrebidSrcPath('utils'))
+    expect(getTopWindowLocation()).toMatchObject({
+      // Ideally should set ancestorOrigins to an empty array,
+      // but it hasn't caused problems. Leaving it as-is because
+      // the function is deprecated.
+      ancestorOrigins: [
+        'chrome-extension://abcdefghijklmnopqrs'
+      ],
+      host: 'tab.gladly.io',
+      hostname: 'tab.gladly.io',
+      href: 'https://tab.gladly.io/newtab/',
+      origin: 'https://tab.gladly.io',
+      pathname: '/newtab/',
+      port: '',
+      protocol: 'https:',
+      search: ''
+    })
+  })
+
+  // Note that this is deprecated in Prebid.
+  test('getAncestorOrigins returns expected value', () => {
+    getMockWindow()
+    const { getAncestorOrigins } = require(getPrebidSrcPath('utils'))
+    expect(getAncestorOrigins()).toBeUndefined()
   })
 })
