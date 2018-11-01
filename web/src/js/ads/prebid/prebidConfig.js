@@ -67,7 +67,7 @@ const getAdUnits = () => {
       {
         bidder: 'emx_digital',
         params: {
-          tagId: '29672'
+          tagid: '29672'
         }
       },
       {
@@ -127,7 +127,7 @@ const getAdUnits = () => {
       {
         bidder: 'emx_digital',
         params: {
-          tagId: '29673'
+          tagid: '29673'
         }
       },
       {
