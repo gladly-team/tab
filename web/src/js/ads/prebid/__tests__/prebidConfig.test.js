@@ -191,7 +191,7 @@ describe('prebidConfig', function () {
       adUnitConfig[0]['bids'].map(bid => bid.bidder).sort())
       .toEqual([
         'aol',
-        'brealtime',
+        'emx_digital',
         'openx',
         'pulsepoint',
         'rhythmone',
@@ -210,7 +210,7 @@ describe('prebidConfig', function () {
       adUnitConfig[0]['bids'].map(bid => bid.bidder).sort())
       .toEqual([
         'aol',
-        'brealtime',
+        'emx_digital',
         'openx',
         'pulsepoint',
         'rhythmone',
@@ -221,7 +221,7 @@ describe('prebidConfig', function () {
       adUnitConfig[1]['bids'].map(bid => bid.bidder).sort())
       .toEqual([
         'aol',
-        'brealtime',
+        'emx_digital',
         'openx',
         'pulsepoint',
         'rhythmone',
@@ -241,7 +241,7 @@ describe('prebidConfig', function () {
       adUnitConfig[0]['bids'].map(bid => bid.bidder).sort())
       .toEqual([
         'aol',
-        'brealtime',
+        'emx_digital',
         'openx',
         'pulsepoint',
         'rhythmone',
@@ -252,7 +252,7 @@ describe('prebidConfig', function () {
       adUnitConfig[1]['bids'].map(bid => bid.bidder).sort())
       .toEqual([
         'aol',
-        'brealtime',
+        'emx_digital',
         'openx',
         'pulsepoint',
         'rhythmone',
@@ -263,7 +263,7 @@ describe('prebidConfig', function () {
       adUnitConfig[2]['bids'].map(bid => bid.bidder).sort())
       .toEqual([
         'aol',
-        // 'brealtime',
+        // 'emx_digital',
         'openx',
         'pulsepoint',
         'rhythmone',
