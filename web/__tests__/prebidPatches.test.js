@@ -22,6 +22,8 @@
 // as described here:
 // https://jestjs.io/docs/en/tutorial-react-native#transformignorepatterns-customization
 
+import { JSDOM } from 'jsdom'
+
 const prebidPath = '../node_modules/prebid.js'
 const prebidSrcPath = `${prebidPath}/src`
 
@@ -30,11 +32,42 @@ const getPrebidSrcPath = filepath => `${prebidSrcPath}/${filepath}`
 jest.mock(getPrebidSrcPath('cpmBucketManager'))
 jest.mock(getPrebidSrcPath('utils'))
 
+const getMockWindow = () => {
+  const mockWindow = Object.create(new JSDOM())
+
+  // Create window object we'd expect in our iframed new tab page.
+  // https://github.com/facebook/jest/issues/5124#issuecomment-415494099
+  mockWindow.location = Object.assign({}, mockWindow.location, {
+    ancestorOrigins: [
+      'chrome-extension://abcdefghijklmnopqrs'
+    ],
+    host: 'tab.gladly.io',
+    hostname: 'tab.gladly.io',
+    href: 'https://tab.gladly.io/newtab/',
+    origin: 'https://tab.gladly.io',
+    pathname: '/newtab/',
+    port: '',
+    protocol: 'https:',
+    search: ''
+  })
+  global.window = mockWindow
+  return mockWindow
+}
+
 describe('Prebid.js patch test', () => {
   test('getRefererInfo returns expected values', () => {
+    const mockWindow = getMockWindow()
     const { getRefererInfo } = require(getPrebidSrcPath('refererDetection'))
 
-    // TODO
-    expect(getRefererInfo(window)).toMatchObject({})
+    // FIXME: our website domain should be the referer.
+    expect(getRefererInfo(mockWindow)).toEqual({
+      numIframes: 1,
+      reachedTop: false,
+      referer: 'chrome-extension://abcdefghijklmnopqrs',
+      stack: [
+        'chrome-extension://abcdefghijklmnopqrs',
+        null
+      ]
+    })
   })
 })

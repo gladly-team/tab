@@ -137,7 +137,7 @@
     "prebid:generate": "cd ./node_modules/prebid.js/ && ./node_modules/gulp/bin/gulp.js build  --modules \"../../src/js/ads/prebid/modules.json\"",
     "prebid:cp": "cp ./node_modules/prebid.js/build/dist/prebid.js ./src/js/ads/prebid/",
     "prebid:create-patches": "yarn patch-package prebid.js --include '^(src|modules)/'",
-    "prebid:test-patches": "cross-env NODE_PATH=node_modules/prebid.js/ jest --env=jsdom prebidPatches",
+    "prebid:test-patches": "cross-env NODE_PATH=node_modules/prebid.js/ jest prebidPatches",
     "sls:deploy": "serverless deploy -v",
     "sls:s3sync": "node scripts/syncToS3.js"
   },
