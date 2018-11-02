@@ -52,7 +52,7 @@ class SearchPage extends React.Component {
     }
   }
 
-  onSearch () {
+  search () {
     const newQuery = this.state.searchText
     modifyURLParams({
       q: newQuery
@@ -107,6 +107,11 @@ class SearchPage extends React.Component {
               type={'text'}
               defaultValue={query}
               onChange={this.onSearchTextChange.bind(this)}
+              onKeyPress={e => {
+                if (e.key === 'Enter') {
+                  this.search()
+                }
+              }}
               placeholder='Search to raise money for charity...'
               disableUnderline
               fullWidth
@@ -119,7 +124,7 @@ class SearchPage extends React.Component {
                 <InputAdornment position='end'>
                   <IconButton
                     aria-label='Search button'
-                    onClick={this.onSearch.bind(this)}
+                    onClick={this.search.bind(this)}
                   >
                     <SearchIcon style={{ color: searchBoxBorderColorFocused }} />
                   </IconButton>
