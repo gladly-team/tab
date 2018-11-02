@@ -1,4 +1,5 @@
 import { browserHistory } from 'react-router'
+import { getUrlParameters } from 'js/utils/utils'
 import qs from 'qs'
 
 // TODO: replace this with Link navigation via react-router.
@@ -21,6 +22,19 @@ export const replaceUrl = (location, paramsObj = {}) => {
     pathname: location,
     search: qs.stringify(paramsObj)
       ? `?${qs.stringify(paramsObj)}`
+      : null
+  })
+}
+
+export const modifyURLParams = (paramsObj = {}) => {
+  const newParamsObj = Object.assign({},
+    getUrlParameters(),
+    paramsObj
+  )
+  browserHistory.push({
+    pathname: window.location.pathname,
+    search: qs.stringify(newParamsObj)
+      ? `?${qs.stringify(newParamsObj)}`
       : null
   })
 }
