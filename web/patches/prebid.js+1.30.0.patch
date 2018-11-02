@@ -35,6 +35,39 @@ index f16e797..9b59f7b 100644
      }, ''));
      p('url', attempt(function() {
        var l;
+diff --git a/node_modules/prebid.js/src/refererDetection.js b/node_modules/prebid.js/src/refererDetection.js
+index bf2ef52..fd9151f 100644
+--- a/node_modules/prebid.js/src/refererDetection.js
++++ b/node_modules/prebid.js/src/refererDetection.js
+@@ -124,21 +124,13 @@ export function detectReferer(win) {
+    * @returns {refererInfo}
+    */
+   function refererInfo() {
+-    try {
+-      let levels = getLevels();
+-      let numIframes = levels.length - 1;
+-      let reachedTop = (levels[numIframes].location !== null ||
+-        (numIframes > 0 && levels[numIframes - 1].referrer !== null));
+-      let stackInfo = getPubUrlStack(levels);
+-
+-      return {
+-        referer: stackInfo.detectedRefererUrl,
+-        reachedTop,
+-        numIframes,
+-        stack: stackInfo.stack,
+-      };
+-    } catch (e) {
+-      // Ignore error
++    // Edited by Gladly. Adapters should use the location of the current
++    // frame, not the location of the new tab page.
++    return {
++      numIframes: 0,
++      reachedTop: true,
++      referer: win.location.href,
++      stack: [ win.location.href ]
+     }
+   }
+ 
 diff --git a/node_modules/prebid.js/src/utils.js b/node_modules/prebid.js/src/utils.js
 index 93b1948..3e042be 100644
 --- a/node_modules/prebid.js/src/utils.js

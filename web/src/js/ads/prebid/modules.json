@@ -1,7 +1,7 @@
 [
     "consentManagement",
     "aolBidAdapter",
-    "appnexusBidAdapter",
+    "appnexusBidAdapter", // TODO: remove
     "emx_digitalBidAdapter",
     "openxBidAdapter",
     "rhythmoneBidAdapter",
