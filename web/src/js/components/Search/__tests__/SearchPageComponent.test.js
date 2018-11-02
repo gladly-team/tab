@@ -131,4 +131,24 @@ describe('Search page component', () => {
       q: 'register to vote'
     })
   })
+
+  it('passes the query to the SearchResults component', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent').default
+    const mockProps = getMockProps()
+    mockProps.location.search = '?q=foo&another=thing'
+    const wrapper = shallow(
+      <SearchPageComponent {...mockProps} />
+    ).dive()
+    expect(wrapper.find(SearchResults).prop('query'))
+      .toEqual('foo')
+
+    // Update the search parameter.
+    wrapper.setProps(Object.assign({}, mockProps, {
+      location: {
+        search: '?q=something'
+      }
+    }))
+    expect(wrapper.find(SearchResults).prop('query'))
+      .toEqual('something')
+  })
 })
