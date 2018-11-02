@@ -57,12 +57,18 @@ const getFakeSearchResults = query => {
 }
 
 class SearchResults extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      results: getFakeSearchResults(this.props.query)
+    }
+  }
+
   render () {
     const { query } = this.props
     if (!query) {
       return null
     }
-    const fakeSearchResults = getFakeSearchResults(query)
     return (
       <div
         data-test-id='search-results-container'
@@ -74,7 +80,7 @@ class SearchResults extends React.Component {
         }}
       >
         {
-          fakeSearchResults.map((result, index) => (
+          this.state.results.map((result, index) => (
             <SearchTextResult
               key={`key-${index}`}
               result={{
