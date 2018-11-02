@@ -114,22 +114,11 @@ describe('Prebid.js patch test', () => {
     //   ]
     // }
     expect(getRefererInfo(mockWindow)).toEqual({
-      numIframes: 1,
-      reachedTop: false,
-      referer: 'chrome-extension://abcdefghijklmnopqrs',
-      stack: [
-        'chrome-extension://abcdefghijklmnopqrs',
-        'https://tab.gladly.io/newtab/'
-      ]
+      numIframes: 0,
+      reachedTop: true,
+      referer: 'https://tab.gladly.io/newtab/',
+      stack: ['https://tab.gladly.io/newtab/']
     })
-
-    // FIXME: our website domain should be the referer.
-    // expect(getRefererInfo(mockWindow)).toEqual({
-    //   numIframes: 0,
-    //   reachedTop: true,
-    //   referer: 'https://tab.gladly.io/newtab/',
-    //   stack: ['https://tab.gladly.io/newtab/']
-    // })
   })
 
   // Note that this is deprecated in Prebid.
