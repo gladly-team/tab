@@ -12,7 +12,7 @@ import {
 } from 'js/navigation/navigation'
 import LogoWithText from 'js/components/Logo/LogoWithText'
 import { parseUrlSearchString } from 'js/utils/utils'
-import SearchTextResult from 'js/components/Search/SearchTextResult'
+import SearchResults from 'js/components/Search/SearchResults'
 
 const searchBoxBorderColor = '#ced4da'
 const searchBoxBorderColorFocused = '#bdbdbd'
@@ -126,30 +126,7 @@ class SearchPage extends React.Component {
           </div>
         </div>
         <div>
-          <div
-            style={{
-              marginLeft: 170,
-              maxWidth: 600,
-              paddingTop: 20
-            }}
-          >
-            <SearchTextResult
-              result={{
-                title: 'You want tacos?',
-                linkURL: 'https://www.google.com/search?q=tasty%20tacos',
-                snippet: `I guess you want tacos? That's awesome. Yum yum yum! You should eat
-                  those tacos soon so you don't get hungry. Visit our site to find some good
-                  taco places! You'll be ...`
-              }}
-            />
-            <SearchTextResult
-              result={{
-                title: '"Tacos", the new hit single from Kesha',
-                linkURL: 'https://www.google.com/search?q=tacos%20kesha',
-                snippet: `This track will most likely change your life.`
-              }}
-            />
-          </div>
+          <SearchResults query={query} />
         </div>
       </div>
     )
