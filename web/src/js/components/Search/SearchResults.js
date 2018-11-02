@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { shuffle } from 'lodash/collection'
-import { camelCase, upperCase, lowerCase } from 'lodash/string'
+import { capitalize, camelCase, upperCase, lowerCase } from 'lodash/string'
 import SearchTextResult from 'js/components/Search/SearchTextResult'
 
 // Just for fun in development.
@@ -17,7 +17,7 @@ const getFakeSearchResults = query => {
         because we're trying to ...`
     },
     {
-      title: `"${query}", the new hit single from Kesha`,
+      title: `"${capitalize(query)}", the new hit single from Kesha`,
       linkURL: `https://www.google.com/search?q=kesha%20${encodedQuery}`,
       snippet: `This track will most likely change your life.`
     },
