@@ -4,6 +4,7 @@ import {
   find,
   map
 } from 'lodash/collection'
+import { isNil } from 'lodash/lang'
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import {
   STORAGE_EXPERIMENT_PREFIX
@@ -19,10 +20,11 @@ const noneGroupKey = 'NONE'
 // - be able to add a random % of active users to an experiment
 // - ideally, be able to change/increase the % of active users in an
 //   experiment over time
-// - make sure assigning an experiment group does not overwrite
+// x make sure assigning an experiment group does not overwrite
 //   existing group assignment
 
-export const createExperiment = ({ name, active = false, disabled = false, groups }) => {
+export const createExperiment = ({ name, active = false, disabled = false, groups,
+  filters = [], percentageOfUsersInExperiment = 0.0 }) => {
   if (!name) {
     throw new Error('An experiment must have a unique "name" value.')
   }
@@ -37,13 +39,28 @@ export const createExperiment = ({ name, active = false, disabled = false, group
     // another group. This should effectively disable the effects of the
     // experiment.
     disabled,
+    // TODO: make this functional
+    // The likelihood we'll incldue an active user in the experiment,
+    // *after* we filter them through the provided "filters".
+    // If this is 100, we will include all users (after filtering) in
+    // the experiment.
+    percentageOfUsersInExperiment: percentageOfUsersInExperiment,
+    // TODO: make this functional
+    // An array of functions to call to determine whether a user should
+    // be excluded from an experiment based on, e.g., the datetime they
+    // joined. Each function will receive a user object with keys:
+    //  joined {String}: the datetime the user joined
+    //  isNewUser {Boolean}: true if this is a brand new user
+    // If any filter function returns false, the user will not be
+    // included in the experiment.
+    filters: filters,
     // The different experiment groups the user could be assigned to.
     groups: Object.assign({}, groups, {
       [noneGroupKey]: NoneExperimentGroup
     }),
-    localStorageKey: `${STORAGE_EXPERIMENT_PREFIX}.${name}`,
-    saveTestGroupToLocalStorage: function (testGroupValue) {
-      localStorageMgr.setItem(this.localStorageKey, testGroupValue)
+    _localStorageKey: `${STORAGE_EXPERIMENT_PREFIX}.${name}`,
+    _saveTestGroupToLocalStorage: function (testGroupValue) {
+      localStorageMgr.setItem(this._localStorageKey, testGroupValue)
     },
     // Assign the user to an experiment group.
     assignTestGroup: function () {
@@ -51,19 +68,24 @@ export const createExperiment = ({ name, active = false, disabled = false, group
         return
       }
 
-      // Filter out the "none" group.
+      // If the user is already assigned to a group, don't assign a new one.
+      if (!isNil(localStorageMgr.getItem(this._localStorageKey))) {
+        return
+      }
+
+      // Exclude the "none" group.
       const experimentGroups = filter(this.groups, groupObj => groupObj.value !== NoneExperimentGroup.value)
 
       // If there aren't any test groups, just save the "none" value.
       if (!experimentGroups.length) {
-        this.saveTestGroupToLocalStorage(this.groups.NONE.value)
+        this._saveTestGroupToLocalStorage(this.groups.NONE.value)
       }
 
       // There's an equal chance of being assigned to any group,
       // excepting the "none" group.
       const groupValues = map(experimentGroups, groupObj => groupObj.value)
       const testGroup = groupValues[Math.floor(Math.random() * groupValues.length)]
-      this.saveTestGroupToLocalStorage(testGroup)
+      this._saveTestGroupToLocalStorage(testGroup)
     },
     // Return the the user's assigned experiment group, or the
     // NoneExperimentGroup if the user is not assigned to one.
@@ -75,7 +97,7 @@ export const createExperiment = ({ name, active = false, disabled = false, group
 
       // Get the user's group from localStorage. If it's not one of
       // the valid group values, return the "none" group value.
-      const groupVal = localStorageMgr.getItem(this.localStorageKey)
+      const groupVal = localStorageMgr.getItem(this._localStorageKey)
       const group = find(this.groups, { value: groupVal }) || this.groups.NONE
       return group
     }

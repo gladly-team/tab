@@ -30,9 +30,8 @@ describe('Experiment and ExperimentGroup objects', () => {
           schemaValue: 'NONE'
         }
       },
-      localStorageKey: 'tab.experiments.fooTest',
-
-      saveTestGroupToLocalStorage: expect.any(Function),
+      _localStorageKey: 'tab.experiments.fooTest',
+      _saveTestGroupToLocalStorage: expect.any(Function),
       assignTestGroup: expect.any(Function),
       getTestGroup: expect.any(Function)
     })
@@ -138,6 +137,37 @@ describe('Experiment and ExperimentGroup objects', () => {
     const experiment = createExperiment({
       name: 'fooTest',
       active: false,
+      disabled: false,
+      groups: {
+        MY_CONTROL_GROUP: createExperimentGroup({
+          value: 'sameOld',
+          schemaValue: 'THE_CONTROL'
+        }),
+        FUN_EXPERIMENT: createExperimentGroup({
+          value: 'newThing',
+          schemaValue: 'EXPERIMENT'
+        })
+      }
+    })
+
+    // Control for randomness.
+    jest.spyOn(Math, 'random').mockReturnValue(0)
+
+    experiment.assignTestGroup()
+    expect(localStorageMgr.setItem).not.toHaveBeenCalled()
+  })
+
+  test('does not assign the user to a test group if the user is already assigned a test group', () => {
+    const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
+
+    // Mock that the user is assigned to an experiment group.
+    const localStorageMgr = require('js/utils/localstorage-mgr').default
+    localStorageMgr.setItem('tab.experiments.fooTest', 'newThing')
+    localStorageMgr.setItem.mockClear()
+
+    const experiment = createExperiment({
+      name: 'fooTest',
+      active: true,
       disabled: false,
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
