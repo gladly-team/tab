@@ -17,14 +17,14 @@ const noneGroupKey = 'NONE'
 // - assign people to a group when they're not yet assigned,
 //   given some conditions (e.g. joined > 30 days ago)
 // - log the group assignment
-// - be able to add a random % of active users to an experiment
+// x be able to add a random % of active users to an experiment
 // - ideally, be able to change/increase the % of active users in an
 //   experiment over time
 // x make sure assigning an experiment group does not overwrite
 //   existing group assignment
 
 export const createExperiment = ({ name, active = false, disabled = false, groups,
-  filters = [], percentageOfUsersInExperiment = 0.0 }) => {
+  filters = [], percentageOfUsersInExperiment = 100.0 }) => {
   if (!name) {
     throw new Error('An experiment must have a unique "name" value.')
   }
@@ -39,7 +39,8 @@ export const createExperiment = ({ name, active = false, disabled = false, group
     // another group. This should effectively disable the effects of the
     // experiment.
     disabled,
-    // TODO: make this functional
+    // TODO: allow for increasing this after deploying it at a certain
+    //   level.
     // The likelihood we'll incldue an active user in the experiment,
     // *after* we filter them through the provided "filters".
     // If this is 100, we will include all users (after filtering) in
@@ -79,6 +80,13 @@ export const createExperiment = ({ name, active = false, disabled = false, group
       // If there aren't any test groups, just save the "none" value.
       if (!experimentGroups.length) {
         this._saveTestGroupToLocalStorage(this.groups.NONE.value)
+        return
+      }
+
+      // Only assign the experiment to a percentage of random users.
+      if ((100 * Math.random()) > this.percentageOfUsersInExperiment) {
+        this._saveTestGroupToLocalStorage(this.groups.NONE.value)
+        return
       }
 
       // There's an equal chance of being assigned to any group,

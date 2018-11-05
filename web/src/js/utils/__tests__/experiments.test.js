@@ -7,9 +7,23 @@ import { isPlainObject } from 'lodash/lang'
 
 jest.mock('js/utils/localstorage-mgr')
 jest.mock('js/utils/feature-flags')
+
+let mathRandomMock
+
+beforeEach(() => {
+  // Control for randomness in tests.
+  mathRandomMock = jest.spyOn(Math, 'random')
+    .mockReturnValue(0)
+})
+
 afterEach(() => {
+  // Clear mocked localstorage.
   const { __mockClear } = require('js/utils/localstorage-mgr')
   __mockClear()
+
+  // Clear any return values set in tests.
+  mathRandomMock.mockReset()
+
   jest.clearAllMocks()
   jest.resetModules()
 })
@@ -150,9 +164,6 @@ describe('Experiment and ExperimentGroup objects', () => {
       }
     })
 
-    // Control for randomness.
-    jest.spyOn(Math, 'random').mockReturnValue(0)
-
     experiment.assignTestGroup()
     expect(localStorageMgr.setItem).not.toHaveBeenCalled()
   })
@@ -181,9 +192,6 @@ describe('Experiment and ExperimentGroup objects', () => {
       }
     })
 
-    // Control for randomness.
-    jest.spyOn(Math, 'random').mockReturnValue(0)
-
     experiment.assignTestGroup()
     expect(localStorageMgr.setItem).not.toHaveBeenCalled()
   })
@@ -206,9 +214,6 @@ describe('Experiment and ExperimentGroup objects', () => {
         })
       }
     })
-
-    // Control for randomness.
-    jest.spyOn(Math, 'random').mockReturnValue(0)
 
     experiment.assignTestGroup()
     expect(localStorageMgr.setItem)
@@ -239,7 +244,7 @@ describe('Experiment and ExperimentGroup objects', () => {
     })
 
     // Control for randomness, picking the last group value.
-    jest.spyOn(Math, 'random').mockReturnValue(0.99)
+    mathRandomMock.mockReturnValue(0.99)
 
     experiment.assignTestGroup()
     expect(localStorageMgr.setItem)
@@ -256,12 +261,73 @@ describe('Experiment and ExperimentGroup objects', () => {
       groups: {}
     })
 
-    // Control for randomness.
-    jest.spyOn(Math, 'random').mockReturnValue(0)
-
     experiment.assignTestGroup()
     expect(localStorageMgr.setItem)
       .toHaveBeenCalledWith('tab.experiments.fooTest', 'none')
+  })
+
+  test('assigns the "none" test group when the user is not in the random percentage of users', () => {
+    const localStorageMgr = require('js/utils/localstorage-mgr').default
+    const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
+    const experiment = createExperiment({
+      name: 'fooTest',
+      active: true,
+      disabled: false,
+      percentageOfUsersInExperiment: 20,
+      groups: {
+        MY_CONTROL_GROUP: createExperimentGroup({
+          value: 'sameOld',
+          schemaValue: 'THE_CONTROL'
+        }),
+        FUN_EXPERIMENT: createExperimentGroup({
+          value: 'newThing',
+          schemaValue: 'EXPERIMENT'
+        }),
+        CRAZY_EXPERIMENT: createExperimentGroup({
+          value: 'crazyThing',
+          schemaValue: 'WOWOWOW'
+        })
+      }
+    })
+
+    mathRandomMock
+      .mockReturnValueOnce(0.21) // for determining % inclusion
+      .mockReturnValueOnce(0.99) // for determining experimental group
+    experiment.assignTestGroup()
+    expect(localStorageMgr.setItem)
+      .toHaveBeenCalledWith('tab.experiments.fooTest', 'none')
+  })
+
+  test('assigns an experiment group when the user is included in the random percentage of users', () => {
+    const localStorageMgr = require('js/utils/localstorage-mgr').default
+    const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
+    const experiment = createExperiment({
+      name: 'fooTest',
+      active: true,
+      disabled: false,
+      percentageOfUsersInExperiment: 20,
+      groups: {
+        MY_CONTROL_GROUP: createExperimentGroup({
+          value: 'sameOld',
+          schemaValue: 'THE_CONTROL'
+        }),
+        FUN_EXPERIMENT: createExperimentGroup({
+          value: 'newThing',
+          schemaValue: 'EXPERIMENT'
+        }),
+        CRAZY_EXPERIMENT: createExperimentGroup({
+          value: 'crazyThing',
+          schemaValue: 'WOWOWOW'
+        })
+      }
+    })
+
+    mathRandomMock
+      .mockReturnValueOnce(0.17) // for determining % inclusion
+      .mockReturnValueOnce(0.99) // for determining experimental group
+    experiment.assignTestGroup()
+    expect(localStorageMgr.setItem)
+      .toHaveBeenCalledWith('tab.experiments.fooTest', 'crazyThing')
   })
 })
 
@@ -526,7 +592,6 @@ describe('Main experiments functionality', () => {
         }
       })
     ]
-    jest.spyOn(Math, 'random').mockReturnValue(0)
     experimentsExports.assignUserToTestGroups()
 
     // Should store test group in localStorage.
@@ -591,7 +656,6 @@ describe('Main experiments functionality', () => {
         }
       })
     ]
-    jest.spyOn(Math, 'random').mockReturnValue(0)
     experimentsExports.assignUserToTestGroups()
     const userGroupsForMutation = experimentsExports.getUserTestGroupsForMutation()
     expect(userGroupsForMutation).toEqual({
