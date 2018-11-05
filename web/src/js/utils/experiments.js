@@ -5,7 +5,6 @@ import {
   map
 } from 'lodash/collection'
 import { isNil } from 'lodash/lang'
-import moment from 'moment'
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import {
   STORAGE_EXPERIMENT_PREFIX
