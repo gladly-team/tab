@@ -5,6 +5,7 @@ import {
   map
 } from 'lodash/collection'
 import { isNil } from 'lodash/lang'
+import moment from 'moment'
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import {
   STORAGE_EXPERIMENT_PREFIX
@@ -89,8 +90,16 @@ export const createExperiment = ({ name, active = false, disabled = false, group
     _hasBeenAssignedToGroup: function () {
       return !isNil(localStorageMgr.getItem(this._localStorageKey))
     },
-    // Assign the user to an experiment group.
-    assignTestGroup: function () {
+    /**
+     * Assign the user to an experiment group for this experiment.
+     * @param {Object} userInfo
+     * @param {String} userInfo.joined - The ISO string of when the
+     *   user joined.
+     * @param {Boolean} userInfo.isNewUser - Whether this user has just
+     *   signed up.
+     * @returns {undefined}
+     */
+    assignTestGroup: function (userInfo) {
       if (!this.active) {
         return
       }
@@ -98,6 +107,14 @@ export const createExperiment = ({ name, active = false, disabled = false, group
       // This is the value of `this.percentageOfUsersInExperiment` the last
       // time we assigned the user to a group in this experiment.
       const previousPercentage = this._getPercentageUsersFromLocalStorage()
+
+      // If the filters exclude this user, don't assign them to an experiment
+      // group.
+      if (!this.filters.every(function (filterFunc) {
+        return filterFunc.call(this, userInfo)
+      })) {
+        return
+      }
 
       // If the user is already assigned to a group, don't assign a new one,
       // unless: the user is in a "none" group and the percentage of users
@@ -313,13 +330,18 @@ export const getUserExperimentGroup = experimentName => {
 
 /**
  * Assigns the user to test groups for all active tests.
+ * @param {Object} userInfo
+ * @param {String} userInfo.joined - The ISO string of when the
+ *   user joined.
+ * @param {Boolean} userInfo.isNewUser - Whether this user has just
+ *   signed up.
  * @returns {undefined}
  */
-export const assignUserToTestGroups = () => {
+export const assignUserToTestGroups = userInfo => {
   const exps = getExperiments()
   exps.forEach(experiment => {
     if (experiment.active) {
-      experiment.assignTestGroup()
+      experiment.assignTestGroup(userInfo)
     }
   })
 }

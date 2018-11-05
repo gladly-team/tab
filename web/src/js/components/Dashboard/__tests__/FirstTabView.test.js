@@ -4,7 +4,8 @@ import React from 'react'
 import {
   shallow
 } from 'enzyme'
-
+import moment from 'moment'
+import MockDate from 'mockdate'
 import { replaceUrl } from 'js/navigation/navigation'
 import {
   setBrowserExtensionInstallId,
@@ -18,8 +19,15 @@ jest.mock('js/navigation/navigation')
 jest.mock('js/utils/local-user-data-mgr')
 jest.mock('js/utils/experiments')
 
+const mockNow = '2017-05-19T13:59:58.000Z'
+
+beforeEach(() => {
+  MockDate.set(moment(mockNow))
+})
+
 afterEach(() => {
   jest.clearAllMocks()
+  MockDate.reset()
 })
 
 const mockProps = {}
@@ -61,6 +69,9 @@ describe('FirstTabView', function () {
     shallow(
       <FirstTabView {...mockProps} />
     )
-    expect(assignUserToTestGroups).toHaveBeenCalledTimes(1)
+    expect(assignUserToTestGroups).toHaveBeenCalledWith({
+      joined: '2017-05-19T13:59:58.000Z',
+      isNewUser: true
+    })
   })
 })

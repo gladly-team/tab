@@ -1,4 +1,5 @@
 import React from 'react'
+import moment from 'moment'
 import {
   dashboardURL,
   replaceUrl
@@ -27,7 +28,10 @@ class FirstTabView extends React.Component {
     setBrowserExtensionInstallTime()
 
     // Add the user to test groups for any active experiments.
-    assignUserToTestGroups()
+    assignUserToTestGroups({
+      joined: moment.utc().toISOString(),
+      isNewUser: true
+    })
 
     replaceUrl(dashboardURL)
   }

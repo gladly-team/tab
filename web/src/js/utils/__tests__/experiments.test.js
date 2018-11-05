@@ -4,13 +4,24 @@ import {
   sortBy
 } from 'lodash/collection'
 import { isPlainObject } from 'lodash/lang'
+import moment from 'moment'
+import MockDate from 'mockdate'
 
 jest.mock('js/utils/localstorage-mgr')
 jest.mock('js/utils/feature-flags')
 
 let mathRandomMock
 
+const getMockUserInfo = () => ({
+  joined: '2017-05-19T13:59:58.000Z',
+  isNewUser: true
+})
+
+const mockNow = '2017-05-19T13:59:58.000Z'
+
 beforeEach(() => {
+  MockDate.set(moment(mockNow))
+
   // Control for randomness in tests.
   mathRandomMock = jest.spyOn(Math, 'random')
     .mockReturnValue(0)
@@ -26,6 +37,7 @@ afterEach(() => {
 
   jest.clearAllMocks()
   jest.resetModules()
+  MockDate.reset()
 })
 /* Tests for the Experiment and ExperimentGroup objects */
 describe('Experiment and ExperimentGroup objects', () => {
@@ -163,8 +175,8 @@ describe('Experiment and ExperimentGroup objects', () => {
         })
       }
     })
-
-    experiment.assignTestGroup()
+    const mockUserInfo = getMockUserInfo()
+    experiment.assignTestGroup(mockUserInfo)
     expect(localStorageMgr.setItem).not.toHaveBeenCalled()
   })
 
@@ -193,8 +205,8 @@ describe('Experiment and ExperimentGroup objects', () => {
         })
       }
     })
-
-    experiment.assignTestGroup()
+    const mockUserInfo = getMockUserInfo()
+    experiment.assignTestGroup(mockUserInfo)
     expect(localStorageMgr.setItem).not.toHaveBeenCalled()
   })
 
@@ -223,8 +235,8 @@ describe('Experiment and ExperimentGroup objects', () => {
         })
       }
     })
-
-    experiment.assignTestGroup()
+    const mockUserInfo = getMockUserInfo()
+    experiment.assignTestGroup(mockUserInfo)
     expect(localStorageMgr.setItem).not.toHaveBeenCalled()
   })
 
@@ -253,8 +265,8 @@ describe('Experiment and ExperimentGroup objects', () => {
         })
       }
     })
-
-    experiment.assignTestGroup()
+    const mockUserInfo = getMockUserInfo()
+    experiment.assignTestGroup(mockUserInfo)
     expect(localStorageMgr.setItem)
       .toHaveBeenCalledWith('tab.experiments.fooTest', 'sameOld')
   })
@@ -290,8 +302,8 @@ describe('Experiment and ExperimentGroup objects', () => {
       // greater than 25 = 40 - 15.
       .mockReturnValueOnce(0.26) // for determining % inclusion
       .mockReturnValueOnce(0.99) // for determining experimental group
-
-    experiment.assignTestGroup()
+    const mockUserInfo = getMockUserInfo()
+    experiment.assignTestGroup(mockUserInfo)
     expect(localStorageMgr.setItem)
       .toHaveBeenCalledWith('tab.experiments.fooTest', 'none')
   })
@@ -327,8 +339,8 @@ describe('Experiment and ExperimentGroup objects', () => {
       // less than 25 = 40 - 15.
       .mockReturnValueOnce(0.24) // for determining % inclusion
       .mockReturnValueOnce(0.99) // for determining experimental group
-
-    experiment.assignTestGroup()
+    const mockUserInfo = getMockUserInfo()
+    experiment.assignTestGroup(mockUserInfo)
     expect(localStorageMgr.setItem)
       .toHaveBeenCalledWith('tab.experiments.fooTest', 'newThing')
   })
@@ -362,8 +374,8 @@ describe('Experiment and ExperimentGroup objects', () => {
     mathRandomMock
       .mockReturnValueOnce(0.24) // for determining % inclusion
       .mockReturnValueOnce(0.99) // for determining experimental group
-
-    experiment.assignTestGroup()
+    const mockUserInfo = getMockUserInfo()
+    experiment.assignTestGroup(mockUserInfo)
     expect(localStorageMgr.setItem)
       .toHaveBeenCalledWith('tab.experiments.fooTest.percentageOfUsersLastAssigned', 40)
   })
@@ -386,8 +398,8 @@ describe('Experiment and ExperimentGroup objects', () => {
         })
       }
     })
-
-    experiment.assignTestGroup()
+    const mockUserInfo = getMockUserInfo()
+    experiment.assignTestGroup(mockUserInfo)
     expect(localStorageMgr.setItem)
       .toHaveBeenCalledWith('tab.experiments.fooTest', 'sameOld')
   })
@@ -410,8 +422,8 @@ describe('Experiment and ExperimentGroup objects', () => {
         })
       }
     })
-
-    experiment.assignTestGroup()
+    const mockUserInfo = getMockUserInfo()
+    experiment.assignTestGroup(mockUserInfo)
 
     // "percentageOfUsersLastAssigned" defaults to 100.
     expect(localStorageMgr.setItem)
@@ -443,8 +455,8 @@ describe('Experiment and ExperimentGroup objects', () => {
 
     // Control for randomness, picking the last group value.
     mathRandomMock.mockReturnValue(0.99)
-
-    experiment.assignTestGroup()
+    const mockUserInfo = getMockUserInfo()
+    experiment.assignTestGroup(mockUserInfo)
     expect(localStorageMgr.setItem)
       .toHaveBeenCalledWith('tab.experiments.fooTest', 'crazyThing')
   })
@@ -458,8 +470,8 @@ describe('Experiment and ExperimentGroup objects', () => {
       disabled: false,
       groups: {}
     })
-
-    experiment.assignTestGroup()
+    const mockUserInfo = getMockUserInfo()
+    experiment.assignTestGroup(mockUserInfo)
     expect(localStorageMgr.setItem)
       .toHaveBeenCalledWith('tab.experiments.fooTest', 'none')
   })
@@ -491,7 +503,8 @@ describe('Experiment and ExperimentGroup objects', () => {
     mathRandomMock
       .mockReturnValueOnce(0.21) // for determining % inclusion
       .mockReturnValueOnce(0.99) // for determining experimental group
-    experiment.assignTestGroup()
+    const mockUserInfo = getMockUserInfo()
+    experiment.assignTestGroup(mockUserInfo)
     expect(localStorageMgr.setItem)
       .toHaveBeenCalledWith('tab.experiments.fooTest', 'none')
   })
@@ -523,9 +536,122 @@ describe('Experiment and ExperimentGroup objects', () => {
     mathRandomMock
       .mockReturnValueOnce(0.17) // for determining % inclusion
       .mockReturnValueOnce(0.99) // for determining experimental group
-    experiment.assignTestGroup()
+    const mockUserInfo = getMockUserInfo()
+    experiment.assignTestGroup(mockUserInfo)
     expect(localStorageMgr.setItem)
       .toHaveBeenCalledWith('tab.experiments.fooTest', 'crazyThing')
+  })
+
+  test('does not assign an experiment group when the user should be filtered out of the experiment', () => {
+    const localStorageMgr = require('js/utils/localstorage-mgr').default
+    const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
+    const experiment = createExperiment({
+      name: 'fooTest',
+      active: true,
+      disabled: false,
+      filters: [
+        userInfo => true, // just a placeholder to test multiple filter functions
+        // We should exclude all new users from the experiment.
+        userInfo => {
+          return !userInfo.isNewUser
+        }
+      ],
+      groups: {
+        MY_CONTROL_GROUP: createExperimentGroup({
+          value: 'sameOld',
+          schemaValue: 'THE_CONTROL'
+        }),
+        FUN_EXPERIMENT: createExperimentGroup({
+          value: 'newThing',
+          schemaValue: 'EXPERIMENT'
+        }),
+        CRAZY_EXPERIMENT: createExperimentGroup({
+          value: 'crazyThing',
+          schemaValue: 'WOWOWOW'
+        })
+      }
+    })
+
+    const mockUserInfo = getMockUserInfo()
+    mockUserInfo.isNewUser = true
+    experiment.assignTestGroup(mockUserInfo)
+    expect(localStorageMgr.setItem).not.toHaveBeenCalled()
+  })
+
+  test('does not assign an experiment group when the user should be filtered out of the experiment (testing a "joined" filter)', () => {
+    const localStorageMgr = require('js/utils/localstorage-mgr').default
+    const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
+    const joinedAtLeastThirtyDaysAgo = userInfo => {
+      return moment().diff(moment(userInfo.joined), 'days') > 30
+    }
+    const experiment = createExperiment({
+      name: 'fooTest',
+      active: true,
+      disabled: false,
+      filters: [
+        joinedAtLeastThirtyDaysAgo
+      ],
+      groups: {
+        MY_CONTROL_GROUP: createExperimentGroup({
+          value: 'sameOld',
+          schemaValue: 'THE_CONTROL'
+        }),
+        FUN_EXPERIMENT: createExperimentGroup({
+          value: 'newThing',
+          schemaValue: 'EXPERIMENT'
+        }),
+        CRAZY_EXPERIMENT: createExperimentGroup({
+          value: 'crazyThing',
+          schemaValue: 'WOWOWOW'
+        })
+      }
+    })
+
+    const mockUserInfo = getMockUserInfo()
+    mockUserInfo.joined = '2017-05-17T13:59:58.000Z' // ~2 days ago, should be excluded
+    experiment.assignTestGroup(mockUserInfo)
+    expect(localStorageMgr.setItem).not.toHaveBeenCalled()
+
+    mockUserInfo.joined = '2017-03-17T13:59:58.000Z' // ~60 days ago, should be included
+    experiment.assignTestGroup(mockUserInfo)
+    expect(localStorageMgr.setItem)
+      .toHaveBeenCalledWith('tab.experiments.fooTest', 'sameOld')
+  })
+
+  test('assigns an experiment group when the user should not be filtered out of the experiment', () => {
+    const localStorageMgr = require('js/utils/localstorage-mgr').default
+    const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
+    const experiment = createExperiment({
+      name: 'fooTest',
+      active: true,
+      disabled: false,
+      filters: [
+        // We should exclude all new users from the experiment.
+        userInfo => {
+          return !userInfo.isNewUser
+        }
+      ],
+      groups: {
+        MY_CONTROL_GROUP: createExperimentGroup({
+          value: 'sameOld',
+          schemaValue: 'THE_CONTROL'
+        }),
+        FUN_EXPERIMENT: createExperimentGroup({
+          value: 'newThing',
+          schemaValue: 'EXPERIMENT'
+        }),
+        CRAZY_EXPERIMENT: createExperimentGroup({
+          value: 'crazyThing',
+          schemaValue: 'WOWOWOW'
+        })
+      }
+    })
+
+    const mockUserInfo = getMockUserInfo()
+    mockUserInfo.isNewUser = false // user should be included
+    experiment.assignTestGroup(mockUserInfo)
+    expect(localStorageMgr.setItem)
+      .toHaveBeenCalledWith('tab.experiments.fooTest', 'sameOld')
   })
 })
 
