@@ -39,8 +39,6 @@ export const createExperiment = ({ name, active = false, disabled = false, group
     // another group. This should effectively disable the effects of the
     // experiment.
     disabled,
-    // TODO: allow for increasing this after deploying it at a certain
-    //   level.
     // The likelihood we'll incldue an active user in the experiment,
     // *after* we filter them through the provided "filters".
     // If this is 100, we will include all users (after filtering) in
