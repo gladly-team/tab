@@ -11,6 +11,17 @@ import {
 
 const noneGroupKey = 'NONE'
 
+// Need to:
+// - enable/disable including active users, new users, or both
+// - assign people to a group when they're not yet assigned,
+//   given some conditions (e.g. joined > 30 days ago)
+// - log the group assignment
+// - be able to add a random % of active users to an experiment
+// - ideally, be able to change/increase the % of active users in an
+//   experiment over time
+// - make sure assigning an experiment group does not overwrite
+//   existing group assignment
+
 export const createExperiment = ({ name, active = false, disabled = false, groups }) => {
   if (!name) {
     throw new Error('An experiment must have a unique "name" value.')
