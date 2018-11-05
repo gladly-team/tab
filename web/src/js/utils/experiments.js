@@ -44,7 +44,6 @@ export const createExperiment = ({ name, active = false, disabled = false, group
     // If this is 100, we will include all users (after filtering) in
     // the experiment.
     percentageOfUsersInExperiment: percentageOfUsersInExperiment,
-    // TODO: make this functional
     // An array of functions to call to determine whether a user should
     // be excluded from an experiment based on, e.g., the datetime they
     // joined. Each function will receive a user object with keys:
