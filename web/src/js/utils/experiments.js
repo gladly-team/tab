@@ -18,7 +18,7 @@ const noneGroupKey = 'NONE'
 //   given some conditions (e.g. joined > 30 days ago)
 // - log the group assignment
 // x be able to add a random % of active users to an experiment
-// - ideally, be able to change/increase the % of active users in an
+// x ideally, be able to change/increase the % of active users in an
 //   experiment over time
 // x make sure assigning an experiment group does not overwrite
 //   existing group assignment
@@ -63,14 +63,55 @@ export const createExperiment = ({ name, active = false, disabled = false, group
     _saveTestGroupToLocalStorage: function (testGroupValue) {
       localStorageMgr.setItem(this._localStorageKey, testGroupValue)
     },
+    // This is to track changes/increases in % users included in a test.
+    _localStorageKeyForPercentage: `${STORAGE_EXPERIMENT_PREFIX}.${name}.percentageOfUsersLastAssigned`,
+    _savePercentageUsersToLocalStorage: function () {
+      localStorageMgr.setItem(this._localStorageKeyForPercentage,
+        this.percentageOfUsersInExperiment)
+    },
+    /**
+     * Get the value for the percentage of users included in this
+     * experiment the last time we assigned this user to a group.
+     * @returns {Number} A float equal to a previous value of
+     *   `this.percentageOfUsersInExperiment`; or, if we have never
+     *   tried to assign this user, return zero.
+     */
+    _getPercentageUsersFromLocalStorage: function () {
+      const percentage = parseFloat(
+        localStorageMgr.getItem(this._localStorageKeyForPercentage),
+        10)
+      return isNaN(percentage) ? 0.0 : percentage
+    },
+    /**
+     * Get whether the user has previously been assigned to a group
+     * for this experiment.
+     * @returns {Boolean} Whether the user has previously been
+     *   assigned to a group for this experiment.
+     */
+    _hasBeenAssignedToGroup: function () {
+      return !isNil(localStorageMgr.getItem(this._localStorageKey))
+    },
     // Assign the user to an experiment group.
     assignTestGroup: function () {
       if (!this.active) {
         return
       }
 
-      // If the user is already assigned to a group, don't assign a new one.
-      if (!isNil(localStorageMgr.getItem(this._localStorageKey))) {
+      // This is the value of `this.percentageOfUsersInExperiment` the last
+      // time we assigned the user to a group in this experiment.
+      const previousPercentage = this._getPercentageUsersFromLocalStorage()
+
+      // If the user is already assigned to a group, don't assign a new one,
+      // unless: the user is in a "none" group and the percentage of users
+      // to assign to this experiment has increased.
+      const currentGroup = this.getTestGroup()
+      if (
+        this._hasBeenAssignedToGroup() &&
+        !(
+          currentGroup.value === this.groups.NONE.value &&
+          this.percentageOfUsersInExperiment > previousPercentage
+        )
+      ) {
         return
       }
 
@@ -83,8 +124,17 @@ export const createExperiment = ({ name, active = false, disabled = false, group
         return
       }
 
+      // Calculate the % likelihood of assigning this user to a not-none
+      // experiment group. If we previously assigned this user but the
+      // % of users we're including in this experiment has increased,
+      // we should use the difference in the percentages, which should
+      // keep the value of `this.percentageOfUsersInExperiment` as a %
+      // of our active user base.
+      const likelihoodOfInclusion = (
+        this.percentageOfUsersInExperiment - previousPercentage)
+
       // Only assign the experiment to a percentage of random users.
-      if ((100 * Math.random()) > this.percentageOfUsersInExperiment) {
+      if ((100 * Math.random()) > likelihoodOfInclusion) {
         this._saveTestGroupToLocalStorage(this.groups.NONE.value)
         return
       }
@@ -94,6 +144,10 @@ export const createExperiment = ({ name, active = false, disabled = false, group
       const groupValues = map(experimentGroups, groupObj => groupObj.value)
       const testGroup = groupValues[Math.floor(Math.random() * groupValues.length)]
       this._saveTestGroupToLocalStorage(testGroup)
+
+      // Update storage with the current % of users who are included in the
+      // experiment.
+      this._savePercentageUsersToLocalStorage()
     },
     // Return the the user's assigned experiment group, or the
     // NoneExperimentGroup if the user is not assigned to one.

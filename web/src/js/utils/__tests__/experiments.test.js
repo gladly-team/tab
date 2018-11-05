@@ -168,18 +168,20 @@ describe('Experiment and ExperimentGroup objects', () => {
     expect(localStorageMgr.setItem).not.toHaveBeenCalled()
   })
 
-  test('does not assign the user to a test group if the user is already assigned a test group', () => {
+  test('does not assign the user to a test group if the user is in a "none" test group and we have not increased the scope of the experiment', () => {
     const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
 
     // Mock that the user is assigned to an experiment group.
     const localStorageMgr = require('js/utils/localstorage-mgr').default
-    localStorageMgr.setItem('tab.experiments.fooTest', 'newThing')
+    localStorageMgr.setItem('tab.experiments.fooTest', 'none')
+    localStorageMgr.setItem('tab.experiments.fooTest.percentageOfUsersLastAssigned', '15')
     localStorageMgr.setItem.mockClear()
 
     const experiment = createExperiment({
       name: 'fooTest',
       active: true,
       disabled: false,
+      percentageOfUsersInExperiment: 15, // this has not changed
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
@@ -194,6 +196,176 @@ describe('Experiment and ExperimentGroup objects', () => {
 
     experiment.assignTestGroup()
     expect(localStorageMgr.setItem).not.toHaveBeenCalled()
+  })
+
+  test('does not assign the user to a test group if the user is already assigned a non-"none" test group, even if we have increased the scope of the experiment', () => {
+    const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
+
+    // Mock that the user is assigned to an experiment group.
+    const localStorageMgr = require('js/utils/localstorage-mgr').default
+    localStorageMgr.setItem('tab.experiments.fooTest', 'newThing')
+    localStorageMgr.setItem('tab.experiments.fooTest.percentageOfUsersLastAssigned', '15')
+    localStorageMgr.setItem.mockClear()
+
+    const experiment = createExperiment({
+      name: 'fooTest',
+      active: true,
+      disabled: false,
+      percentageOfUsersInExperiment: 80, // this has increased
+      groups: {
+        MY_CONTROL_GROUP: createExperimentGroup({
+          value: 'sameOld',
+          schemaValue: 'THE_CONTROL'
+        }),
+        FUN_EXPERIMENT: createExperimentGroup({
+          value: 'newThing',
+          schemaValue: 'EXPERIMENT'
+        })
+      }
+    })
+
+    experiment.assignTestGroup()
+    expect(localStorageMgr.setItem).not.toHaveBeenCalled()
+  })
+
+  test('assigns the user to a test group if the user is in a "none" test group but we have increased the scope of the experiment', () => {
+    const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
+
+    // Mock that the user is assigned to an experiment group.
+    const localStorageMgr = require('js/utils/localstorage-mgr').default
+    localStorageMgr.setItem('tab.experiments.fooTest', 'none')
+    localStorageMgr.setItem('tab.experiments.fooTest.percentageOfUsersLastAssigned', '15')
+    localStorageMgr.setItem.mockClear()
+
+    const experiment = createExperiment({
+      name: 'fooTest',
+      active: true,
+      disabled: false,
+      percentageOfUsersInExperiment: 40, // this has increased
+      groups: {
+        MY_CONTROL_GROUP: createExperimentGroup({
+          value: 'sameOld',
+          schemaValue: 'THE_CONTROL'
+        }),
+        FUN_EXPERIMENT: createExperimentGroup({
+          value: 'newThing',
+          schemaValue: 'EXPERIMENT'
+        })
+      }
+    })
+
+    experiment.assignTestGroup()
+    expect(localStorageMgr.setItem)
+      .toHaveBeenCalledWith('tab.experiments.fooTest', 'sameOld')
+  })
+
+  test('when we have increased the % of users in the experiment, we use the difference in likelihoods when reassigning users who were previously in the "none" test group (and fail to include the user)', () => {
+    const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
+
+    // Mock that the user is assigned to an experiment group.
+    const localStorageMgr = require('js/utils/localstorage-mgr').default
+    localStorageMgr.setItem('tab.experiments.fooTest', 'none')
+    localStorageMgr.setItem('tab.experiments.fooTest.percentageOfUsersLastAssigned', '15')
+    localStorageMgr.setItem.mockClear()
+
+    const experiment = createExperiment({
+      name: 'fooTest',
+      active: true,
+      disabled: false,
+      percentageOfUsersInExperiment: 40, // this has increased
+      groups: {
+        MY_CONTROL_GROUP: createExperimentGroup({
+          value: 'sameOld',
+          schemaValue: 'THE_CONTROL'
+        }),
+        FUN_EXPERIMENT: createExperimentGroup({
+          value: 'newThing',
+          schemaValue: 'EXPERIMENT'
+        })
+      }
+    })
+
+    mathRandomMock
+      // The user should be again excluded from the test because this value is
+      // greater than 25 = 40 - 15.
+      .mockReturnValueOnce(0.26) // for determining % inclusion
+      .mockReturnValueOnce(0.99) // for determining experimental group
+
+    experiment.assignTestGroup()
+    expect(localStorageMgr.setItem)
+      .toHaveBeenCalledWith('tab.experiments.fooTest', 'none')
+  })
+
+  test('when we have increased the % of users in the experiment, we use the difference in likelihoods when reassigning users who were previously in the "none" test group (and succeed in including the user)', () => {
+    const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
+
+    // Mock that the user is assigned to an experiment group.
+    const localStorageMgr = require('js/utils/localstorage-mgr').default
+    localStorageMgr.setItem('tab.experiments.fooTest', 'none')
+    localStorageMgr.setItem('tab.experiments.fooTest.percentageOfUsersLastAssigned', '15')
+    localStorageMgr.setItem.mockClear()
+
+    const experiment = createExperiment({
+      name: 'fooTest',
+      active: true,
+      disabled: false,
+      percentageOfUsersInExperiment: 40, // this has increased
+      groups: {
+        MY_CONTROL_GROUP: createExperimentGroup({
+          value: 'sameOld',
+          schemaValue: 'THE_CONTROL'
+        }),
+        FUN_EXPERIMENT: createExperimentGroup({
+          value: 'newThing',
+          schemaValue: 'EXPERIMENT'
+        })
+      }
+    })
+
+    mathRandomMock
+      // The user should now be included in the test because this value is
+      // less than 25 = 40 - 15.
+      .mockReturnValueOnce(0.24) // for determining % inclusion
+      .mockReturnValueOnce(0.99) // for determining experimental group
+
+    experiment.assignTestGroup()
+    expect(localStorageMgr.setItem)
+      .toHaveBeenCalledWith('tab.experiments.fooTest', 'newThing')
+  })
+
+  test('when reassigning users who were previously in the "none" test group, we save the latest "percentageOfUsersInExperiment" to local storage', () => {
+    const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
+
+    // Mock that the user is assigned to an experiment group.
+    const localStorageMgr = require('js/utils/localstorage-mgr').default
+    localStorageMgr.setItem('tab.experiments.fooTest', 'none')
+    localStorageMgr.setItem('tab.experiments.fooTest.percentageOfUsersLastAssigned', '15')
+    localStorageMgr.setItem.mockClear()
+
+    const experiment = createExperiment({
+      name: 'fooTest',
+      active: true,
+      disabled: false,
+      percentageOfUsersInExperiment: 40, // this has increased
+      groups: {
+        MY_CONTROL_GROUP: createExperimentGroup({
+          value: 'sameOld',
+          schemaValue: 'THE_CONTROL'
+        }),
+        FUN_EXPERIMENT: createExperimentGroup({
+          value: 'newThing',
+          schemaValue: 'EXPERIMENT'
+        })
+      }
+    })
+
+    mathRandomMock
+      .mockReturnValueOnce(0.24) // for determining % inclusion
+      .mockReturnValueOnce(0.99) // for determining experimental group
+
+    experiment.assignTestGroup()
+    expect(localStorageMgr.setItem)
+      .toHaveBeenCalledWith('tab.experiments.fooTest.percentageOfUsersLastAssigned', 40)
   })
 
   test('saves a test group to local storage when assigning a test group', () => {
@@ -218,6 +390,32 @@ describe('Experiment and ExperimentGroup objects', () => {
     experiment.assignTestGroup()
     expect(localStorageMgr.setItem)
       .toHaveBeenCalledWith('tab.experiments.fooTest', 'sameOld')
+  })
+
+  test('saves "percentageOfUsersInExperiment" to local storage when assigning a test group', () => {
+    const localStorageMgr = require('js/utils/localstorage-mgr').default
+    const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
+    const experiment = createExperiment({
+      name: 'fooTest',
+      active: true,
+      disabled: false,
+      groups: {
+        MY_CONTROL_GROUP: createExperimentGroup({
+          value: 'sameOld',
+          schemaValue: 'THE_CONTROL'
+        }),
+        FUN_EXPERIMENT: createExperimentGroup({
+          value: 'newThing',
+          schemaValue: 'EXPERIMENT'
+        })
+      }
+    })
+
+    experiment.assignTestGroup()
+
+    // "percentageOfUsersLastAssigned" defaults to 100.
+    expect(localStorageMgr.setItem)
+      .toHaveBeenCalledWith('tab.experiments.fooTest.percentageOfUsersLastAssigned', 100)
   })
 
   test('selects from all the test groups when assigning the user to a test group', () => {
@@ -595,7 +793,6 @@ describe('Main experiments functionality', () => {
     experimentsExports.assignUserToTestGroups()
 
     // Should store test group in localStorage.
-    expect(localStorageMgr.setItem).toHaveBeenCalledTimes(2)
     expect(localStorageMgr.setItem)
       .toHaveBeenCalledWith('tab.experiments.exampleTest', 'hi')
     expect(localStorageMgr.setItem)
