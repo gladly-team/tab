@@ -8,10 +8,12 @@ import SearchIcon from '@material-ui/icons/Search'
 import { isSearchPageEnabled } from 'js/utils/feature-flags'
 import {
   goTo,
-  dashboardURL
+  dashboardURL,
+  modifyURLParams
 } from 'js/navigation/navigation'
 import LogoWithText from 'js/components/Logo/LogoWithText'
 import { parseUrlSearchString } from 'js/utils/utils'
+import SearchResults from 'js/components/Search/SearchResults'
 
 const searchBoxBorderColor = '#ced4da'
 const searchBoxBorderColorFocused = '#bdbdbd'
@@ -39,7 +41,8 @@ class SearchPage extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      searchFeatureEnabled: isSearchPageEnabled()
+      searchFeatureEnabled: isSearchPageEnabled(),
+      searchText: ''
     }
   }
 
@@ -47,19 +50,19 @@ class SearchPage extends React.Component {
     if (!this.state.searchFeatureEnabled) {
       goTo(dashboardURL)
     }
-    const { location } = this.props
-    const query = parseUrlSearchString(location.search).q
-    if (query) {
-      this.executeSearch(query)
-    }
   }
 
-  executeSearch (query) {
-    // console.log(`Searching for: ${query}`)
+  search () {
+    const newQuery = this.state.searchText
+    modifyURLParams({
+      q: newQuery
+    })
   }
 
-  onSearch (e) {
-    console.log('TODO: make the search work')
+  onSearchTextChange (e) {
+    this.setState({
+      searchText: e.target.value
+    })
   }
 
   render () {
@@ -103,6 +106,12 @@ class SearchPage extends React.Component {
               id='search-input'
               type={'text'}
               defaultValue={query}
+              onChange={this.onSearchTextChange.bind(this)}
+              onKeyPress={e => {
+                if (e.key === 'Enter') {
+                  this.search()
+                }
+              }}
               placeholder='Search to raise money for charity...'
               disableUnderline
               fullWidth
@@ -115,7 +124,7 @@ class SearchPage extends React.Component {
                 <InputAdornment position='end'>
                   <IconButton
                     aria-label='Search button'
-                    onClick={this.onSearch}
+                    onClick={this.search.bind(this)}
                   >
                     <SearchIcon style={{ color: searchBoxBorderColorFocused }} />
                   </IconButton>
@@ -123,6 +132,9 @@ class SearchPage extends React.Component {
               }
             />
           </div>
+        </div>
+        <div>
+          <SearchResults query={query} />
         </div>
       </div>
     )
