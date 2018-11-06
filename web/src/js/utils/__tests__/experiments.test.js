@@ -97,6 +97,7 @@ describe('Experiment and ExperimentGroup objects', () => {
       name: 'fooTest',
       active: true,
       disabled: true,
+      percentageOfExistingUsersInExperiment: 100,
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
@@ -122,6 +123,7 @@ describe('Experiment and ExperimentGroup objects', () => {
       name: 'fooTest',
       active: true,
       disabled: false,
+      percentageOfExistingUsersInExperiment: 100,
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
@@ -147,6 +149,7 @@ describe('Experiment and ExperimentGroup objects', () => {
       name: 'fooTest',
       active: true,
       disabled: false,
+      percentageOfExistingUsersInExperiment: 100,
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
@@ -168,6 +171,7 @@ describe('Experiment and ExperimentGroup objects', () => {
       name: 'fooTest',
       active: false,
       disabled: false,
+      percentageOfExistingUsersInExperiment: 100,
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
@@ -391,6 +395,7 @@ describe('Experiment and ExperimentGroup objects', () => {
       name: 'fooTest',
       active: true,
       disabled: false,
+      percentageOfExistingUsersInExperiment: 100,
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
@@ -415,6 +420,7 @@ describe('Experiment and ExperimentGroup objects', () => {
       name: 'fooTest',
       active: true,
       disabled: false,
+      percentageOfExistingUsersInExperiment: 100,
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
@@ -441,6 +447,7 @@ describe('Experiment and ExperimentGroup objects', () => {
       name: 'fooTest',
       active: true,
       disabled: false,
+      percentageOfExistingUsersInExperiment: 100,
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
@@ -470,6 +477,7 @@ describe('Experiment and ExperimentGroup objects', () => {
       name: 'fooTest',
       active: true,
       disabled: false,
+      percentageOfExistingUsersInExperiment: 100,
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
@@ -659,6 +667,7 @@ describe('Experiment and ExperimentGroup objects', () => {
           return !userInfo.isNewUser
         }
       ],
+      percentageOfExistingUsersInExperiment: 100,
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
@@ -694,6 +703,7 @@ describe('Experiment and ExperimentGroup objects', () => {
       filters: [
         joinedAtLeastThirtyDaysAgo
       ],
+      percentageOfExistingUsersInExperiment: 100,
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
@@ -734,6 +744,7 @@ describe('Experiment and ExperimentGroup objects', () => {
           return !userInfo.isNewUser
         }
       ],
+      percentageOfExistingUsersInExperiment: 100,
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
@@ -772,6 +783,7 @@ describe('Main experiments functionality', () => {
         name: 'exampleTest',
         active: true,
         disabled: false,
+        percentageOfExistingUsersInExperiment: 100,
         groups: {
           SOMETHING: experimentsExports.createExperimentGroup({
             value: 'hi',
@@ -787,6 +799,7 @@ describe('Main experiments functionality', () => {
         name: 'fooTest',
         active: true,
         disabled: false,
+        percentageOfExistingUsersInExperiment: 100,
         groups: {
           MY_CONTROL_GROUP: experimentsExports.createExperimentGroup({
             value: 'sameOld',
@@ -815,6 +828,7 @@ describe('Main experiments functionality', () => {
         name: 'exampleTest',
         active: true,
         disabled: false,
+        percentageOfExistingUsersInExperiment: 100,
         groups: {
           SOMETHING: experimentsExports.createExperimentGroup({
             value: 'hi',
@@ -830,6 +844,7 @@ describe('Main experiments functionality', () => {
         name: 'fooTest',
         active: true,
         disabled: false,
+        percentageOfExistingUsersInExperiment: 100,
         groups: {
           MY_CONTROL_GROUP: experimentsExports.createExperimentGroup({
             value: 'sameOld',
@@ -858,6 +873,7 @@ describe('Main experiments functionality', () => {
         name: 'exampleTest',
         active: true,
         disabled: false,
+        percentageOfExistingUsersInExperiment: 100,
         groups: {
           SOMETHING: experimentsExports.createExperimentGroup({
             value: 'hi',
@@ -873,6 +889,7 @@ describe('Main experiments functionality', () => {
         name: 'fooTest',
         active: true,
         disabled: true,
+        percentageOfExistingUsersInExperiment: 100,
         groups: {
           MY_CONTROL_GROUP: experimentsExports.createExperimentGroup({
             value: 'sameOld',
@@ -903,6 +920,7 @@ describe('Main experiments functionality', () => {
         name: 'exampleTest',
         active: true,
         disabled: false,
+        percentageOfExistingUsersInExperiment: 100,
         groups: {
           SOMETHING: experimentsExports.createExperimentGroup({
             value: 'hi',
@@ -918,6 +936,7 @@ describe('Main experiments functionality', () => {
         name: 'fooTest',
         active: true,
         disabled: true,
+        percentageOfExistingUsersInExperiment: 100,
         groups: {
           MY_CONTROL_GROUP: experimentsExports.createExperimentGroup({
             value: 'sameOld',
@@ -951,6 +970,7 @@ describe('Main experiments functionality', () => {
         name: 'fooTest',
         active: true,
         disabled: true,
+        percentageOfExistingUsersInExperiment: 100,
         groups: {
           MY_CONTROL_GROUP: experimentsExports.createExperimentGroup({
             value: 'sameOld',
@@ -977,6 +997,7 @@ describe('Main experiments functionality', () => {
         name: 'exampleTest',
         active: true,
         disabled: false,
+        percentageOfExistingUsersInExperiment: 100,
         groups: {
           SOMETHING: experimentsExports.createExperimentGroup({
             value: 'hi',
@@ -992,6 +1013,7 @@ describe('Main experiments functionality', () => {
         name: 'someTest',
         active: false,
         disabled: false,
+        percentageOfExistingUsersInExperiment: 100,
         groups: {
           GROUP_A: experimentsExports.createExperimentGroup({
             value: 'groupA',
@@ -1007,6 +1029,7 @@ describe('Main experiments functionality', () => {
         name: 'fooTest',
         active: true,
         disabled: false,
+        percentageOfExistingUsersInExperiment: 100,
         groups: {
           MY_CONTROL_GROUP: experimentsExports.createExperimentGroup({
             value: 'sameOld',
@@ -1041,6 +1064,7 @@ describe('Main experiments functionality', () => {
         name: 'exampleTest',
         active: true,
         disabled: false,
+        percentageOfExistingUsersInExperiment: 100,
         groups: {
           SOMETHING: experimentsExports.createExperimentGroup({
             value: 'hi',
@@ -1056,6 +1080,7 @@ describe('Main experiments functionality', () => {
         name: 'someTest',
         active: false,
         disabled: false,
+        percentageOfExistingUsersInExperiment: 100,
         groups: {
           GROUP_A: experimentsExports.createExperimentGroup({
             value: 'groupA',
@@ -1071,6 +1096,7 @@ describe('Main experiments functionality', () => {
         name: 'fooTest',
         active: true,
         disabled: false,
+        percentageOfExistingUsersInExperiment: 100,
         groups: {
           MY_CONTROL_GROUP: experimentsExports.createExperimentGroup({
             value: 'sameOld',

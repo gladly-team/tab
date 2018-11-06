@@ -19,7 +19,7 @@ import UpdateUserExperimentGroupsMutation from 'js/mutations/UpdateUserExperimen
 const noneGroupKey = 'NONE'
 
 export const createExperiment = ({ name, active = false, disabled = false, groups,
-  filters = [], percentageOfExistingUsersInExperiment = 100.0,
+  filters = [], percentageOfExistingUsersInExperiment = 0.0,
   percentageOfNewUsersInExperiment = 100.0 }) => {
   if (!name) {
     throw new Error('An experiment must have a unique "name" value.')
