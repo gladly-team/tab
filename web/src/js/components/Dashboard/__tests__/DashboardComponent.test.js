@@ -17,6 +17,7 @@ import LogTab from 'js/components/Dashboard/LogTabContainer'
 import LogRevenue from 'js/components/Dashboard/LogRevenueContainer'
 import LogConsentData from 'js/components/Dashboard/LogConsentDataContainer'
 import LogAccountCreation from 'js/components/Dashboard/LogAccountCreationContainer'
+import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
 import ErrorMessage from 'js/components/General/ErrorMessage'
 import NewUserTour from 'js/components/Dashboard/NewUserTourContainer'
 import localStorageMgr from 'js/utils/localstorage-mgr'
@@ -214,6 +215,14 @@ describe('Dashboard component', () => {
     expect(wrapper.find(LogAccountCreation).length).toBe(1)
   })
 
+  it('renders AssignExperimentGroups component', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
+    const wrapper = shallow(
+      <DashboardComponent {...mockProps} />
+    )
+    expect(wrapper.find(AssignExperimentGroups).length).toBe(1)
+  })
+
   it('renders the NewUserTour component when the user recently joined and has not already viewed it', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
 
@@ -323,6 +332,15 @@ describe('Dashboard component', () => {
       <DashboardComponent {...mockPropsWithoutUser} />
     )
     expect(wrapper.find(LogAccountCreation).length).toBe(0)
+  })
+
+  it('does not render AssignExperimentGroups component until the "user" prop exists', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
+    const mockPropsWithoutUser = Object.assign({}, mockProps, { user: null })
+    const wrapper = shallow(
+      <DashboardComponent {...mockPropsWithoutUser} />
+    )
+    expect(wrapper.find(AssignExperimentGroups).length).toBe(0)
   })
 
   it('does not render NewUserTour component until the "user" prop exists', () => {

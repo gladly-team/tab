@@ -16,6 +16,7 @@ import LogTab from 'js/components/Dashboard/LogTabContainer'
 import LogRevenue from 'js/components/Dashboard/LogRevenueContainer'
 import LogConsentData from 'js/components/Dashboard/LogConsentDataContainer'
 import LogAccountCreation from 'js/components/Dashboard/LogAccountCreationContainer'
+import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
 import CircleIcon from 'material-ui/svg-icons/image/lens'
 import HeartIcon from 'material-ui/svg-icons/action/favorite'
 import {
@@ -428,6 +429,7 @@ class Dashboard extends React.Component {
         { user && tabId ? <LogRevenue user={user} tabId={tabId} /> : null }
         { user ? <LogConsentData user={user} /> : null }
         { user ? <LogAccountCreation user={user} /> : null }
+        { user ? <AssignExperimentGroups user={user} /> : null }
         { errorMessage
           ? <ErrorMessage message={errorMessage}
             onRequestClose={this.clearError.bind(this)} />
