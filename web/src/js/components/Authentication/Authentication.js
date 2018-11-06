@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
+import { isEqual } from 'lodash/lang'
 import {
   getCurrentUser,
   sendVerificationEmail
@@ -17,11 +18,11 @@ import {
   verifyEmailURL,
   goToDashboard
 } from 'js/navigation/navigation'
-import { isEqual } from 'lodash/lang'
 import LogoWithText from 'js/components/Logo/LogoWithText'
 import {
   getUrlParameters
 } from 'js/utils/utils'
+import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
 
 // Handle the authentication flow:
 //   check if current user is fully authenticated and redirect
@@ -175,11 +176,12 @@ class Authentication extends React.Component {
   }
 
   render () {
+    const { user, location } = this.props
     const showRequiredSignInExplanation = (
       this.state.isMandatoryAnonymousSignIn &&
       // Don't display the message on the iframe auth message page, because
       // it will have its own message.
-      this.props.location.pathname.indexOf(authMessageURL) === -1
+      location.pathname.indexOf(authMessageURL) === -1
     )
     return (
       <span
@@ -219,7 +221,7 @@ class Authentication extends React.Component {
               ? React.Children.map(this.props.children,
                 (child) => React.cloneElement(child, {
                   onSignInSuccess: this.onSignInSuccess.bind(this),
-                  user: this.props.user
+                  user: user
                 })
               )
               : null
@@ -277,6 +279,12 @@ class Authentication extends React.Component {
           )
           : null
         }
+        {/*
+          If we don't assign experiment groups here because we redirect or the
+          user does not yet exist, that's okay. We'll try to assign the user to
+          experiments on the dashboard as well.
+        */}
+        { user ? <AssignExperimentGroups user={user} isNewUser /> : null }
       </span>
     )
   }

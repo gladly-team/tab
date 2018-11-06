@@ -1,17 +1,26 @@
 
 import {
   filter,
-  find,
-  map
+  find
 } from 'lodash/collection'
+import { isNil } from 'lodash/lang'
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import {
   STORAGE_EXPERIMENT_PREFIX
 } from 'js/constants'
+import {
+  excludeUsersWhoJoinedWithin,
+  includeIfAnyIsTrue,
+  onlyIncludeNewUsers
+} from 'js/utils/experimentFilters'
+import environment from 'js/relay-env'
+import UpdateUserExperimentGroupsMutation from 'js/mutations/UpdateUserExperimentGroupsMutation'
 
 const noneGroupKey = 'NONE'
 
-export const createExperiment = ({ name, active = false, disabled = false, groups }) => {
+export const createExperiment = ({ name, active = false, disabled = false, groups,
+  filters = [], percentageOfExistingUsersInExperiment = 0.0,
+  percentageOfNewUsersInExperiment = 100.0 }) => {
   if (!name) {
     throw new Error('An experiment must have a unique "name" value.')
   }
@@ -26,33 +35,167 @@ export const createExperiment = ({ name, active = false, disabled = false, group
     // another group. This should effectively disable the effects of the
     // experiment.
     disabled,
+    // The likelihood we'll include an active existing user in the experiment,
+    // *after* we filter them through the provided "filters".
+    // If this is 100, we will include all users (after filtering) in
+    // the experiment.
+    // Note: while we technically support increasing the % of active users in
+    // an experiment over time, we don't currently log when a user joins an
+    // experiment. This means adding new users to an ongoing experiment will
+    // likely distort historical analytics. To fix this, we should add a field
+    // with the time a user is assigned to each experiment.
+    percentageOfExistingUsersInExperiment: percentageOfExistingUsersInExperiment,
+    // The likelihood we'll include a new user in the experiment,
+    // *after* we filter them through the provided "filters".
+    // If this is 100, we will include all new users (after filtering)
+    // in the experiment.
+    percentageOfNewUsersInExperiment: percentageOfNewUsersInExperiment,
+    // An array of functions to call to determine whether a user should
+    // be excluded from an experiment based on, e.g., the datetime they
+    // joined. Each function will receive a user object with keys:
+    //  joined {String}: the datetime the user joined
+    //  isNewUser {Boolean}: true if this is a brand new user
+    // If any filter function returns false, the user will not be
+    // included in the experiment.
+    filters: filters,
     // The different experiment groups the user could be assigned to.
     groups: Object.assign({}, groups, {
       [noneGroupKey]: NoneExperimentGroup
     }),
-    localStorageKey: `${STORAGE_EXPERIMENT_PREFIX}.${name}`,
-    saveTestGroupToLocalStorage: function (testGroupValue) {
-      localStorageMgr.setItem(this.localStorageKey, testGroupValue)
+    _localStorageKey: `${STORAGE_EXPERIMENT_PREFIX}.${name}`,
+    _saveTestGroupToLocalStorage: function (testGroupValue) {
+      localStorageMgr.setItem(this._localStorageKey, testGroupValue)
     },
-    // Assign the user to an experiment group.
-    assignTestGroup: function () {
+    // This is to track changes/increases in % users included in a test.
+    _localStorageKeyForPercentage: `${STORAGE_EXPERIMENT_PREFIX}.${name}.percentageOfUsersLastAssigned`,
+    _savePercentageUsersToLocalStorage: function () {
+      localStorageMgr.setItem(this._localStorageKeyForPercentage,
+        this.percentageOfExistingUsersInExperiment)
+    },
+    /**
+     * Get the value for the percentage of users included in this
+     * experiment the last time we assigned this user to a group.
+     * @returns {Number} A float equal to a previous value of
+     *   `this.percentageOfExistingUsersInExperiment`; or, if we have never
+     *   tried to assign this user, return zero.
+     */
+    _getPercentageUsersFromLocalStorage: function () {
+      const percentage = parseFloat(
+        localStorageMgr.getItem(this._localStorageKeyForPercentage),
+        10)
+      return isNaN(percentage) ? 0.0 : percentage
+    },
+    /**
+     * Get whether the user has previously been assigned to a group
+     * for this experiment.
+     * @returns {Boolean} Whether the user has previously been
+     *   assigned to a group for this experiment.
+     */
+    _hasBeenAssignedToGroup: function () {
+      return !isNil(localStorageMgr.getItem(this._localStorageKey))
+    },
+    /**
+     * Save the assigned test group in local storage and to the
+     * server.
+     * @param {testGroup} The experiment group object.
+     * @param {userInfo} The object of user information passed to
+     *   assignTestGroup.
+     * @returns {undefined}
+     */
+    _saveTestGroup: function (testGroup, userInfo) {
+      this._saveTestGroupToLocalStorage(testGroup.value)
+
+      // Update storage with the current % of users who are included in the
+      // experiment.
+      this._savePercentageUsersToLocalStorage()
+
+      const experimentName = this.name
+      UpdateUserExperimentGroupsMutation(
+        environment,
+        {
+          userId: userInfo.id,
+          experimentGroups: {
+            [experimentName]: testGroup.schemaValue
+          }
+        }
+      )
+    },
+    /**
+     * Assign the user to an experiment group for this experiment.
+     * @param {Object} userInfo
+     * @param {String} userInfo.id - The user's ID
+     * @param {String} userInfo.joined - The ISO string of when the
+     *   user joined.
+     * @param {Boolean} userInfo.isNewUser - Whether this user has just
+     *   signed up.
+     * @returns {undefined}
+     */
+    assignTestGroup: function (userInfo) {
       if (!this.active) {
         return
       }
 
-      // Filter out the "none" group.
+      // This is the value of `this.percentageOfExistingUsersInExperiment`
+      // the last time we assigned the user to a group in this experiment.
+      const previousPercentage = this._getPercentageUsersFromLocalStorage()
+
+      // If the filters exclude this user, don't assign them to an experiment
+      // group.
+      if (!this.filters.every(function (filterFunc) {
+        return filterFunc.call(this, userInfo)
+      })) {
+        return
+      }
+
+      // If the user is already assigned to a group, don't assign a new one,
+      // unless: the user is in a "none" group and the percentage of users
+      // to assign to this experiment has increased.
+      const currentGroup = this.getTestGroup()
+      if (
+        this._hasBeenAssignedToGroup() &&
+        !(
+          currentGroup.value === this.groups.NONE.value &&
+          this.percentageOfExistingUsersInExperiment > previousPercentage
+        )
+      ) {
+        return
+      }
+
+      // Exclude the "none" group.
       const experimentGroups = filter(this.groups, groupObj => groupObj.value !== NoneExperimentGroup.value)
 
       // If there aren't any test groups, just save the "none" value.
       if (!experimentGroups.length) {
-        this.saveTestGroupToLocalStorage(this.groups.NONE.value)
+        this._saveTestGroup(this.groups.NONE, userInfo)
+        return
+      }
+
+      // Calculate the % likelihood of assigning this user to a not-none
+      // experiment group. If we previously assigned this user but the
+      // % of users we're including in this experiment has increased,
+      // we should use the difference in the percentages, which should
+      // keep the value of `this.percentageOfExistingUsersInExperiment`
+      // as a % of our active user base.
+      const likelihoodOfInclusion = (
+        userInfo.isNewUser
+          ? this.percentageOfNewUsersInExperiment
+          : (
+            100.0 *
+            (this.percentageOfExistingUsersInExperiment - previousPercentage) /
+            (100 - previousPercentage)
+          )
+      )
+
+      // Only assign the experiment to a percentage of random users.
+      if ((100 * Math.random()) > likelihoodOfInclusion) {
+        this._saveTestGroup(this.groups.NONE, userInfo)
+        return
       }
 
       // There's an equal chance of being assigned to any group,
       // excepting the "none" group.
-      const groupValues = map(experimentGroups, groupObj => groupObj.value)
-      const testGroup = groupValues[Math.floor(Math.random() * groupValues.length)]
-      this.saveTestGroupToLocalStorage(testGroup)
+      const group = experimentGroups[Math.floor(Math.random() * experimentGroups.length)]
+      this._saveTestGroup(group, userInfo)
     },
     // Return the the user's assigned experiment group, or the
     // NoneExperimentGroup if the user is not assigned to one.
@@ -64,7 +207,7 @@ export const createExperiment = ({ name, active = false, disabled = false, group
 
       // Get the user's group from localStorage. If it's not one of
       // the valid group values, return the "none" group value.
-      const groupVal = localStorageMgr.getItem(this.localStorageKey)
+      const groupVal = localStorageMgr.getItem(this._localStorageKey)
       const group = find(this.groups, { value: groupVal }) || this.groups.NONE
       return group
     }
@@ -115,6 +258,13 @@ export const experiments = [
     name: EXPERIMENT_THIRD_AD,
     active: true,
     disabled: false,
+    percentageOfExistingUsersInExperiment: 0,
+    filters: [
+      includeIfAnyIsTrue([
+        onlyIncludeNewUsers,
+        excludeUsersWhoJoinedWithin(30, 'days')
+      ])
+    ],
     groups: {
       TWO_ADS: createExperimentGroup({
         value: 'twoAds',
@@ -131,6 +281,9 @@ export const experiments = [
     name: EXPERIMENT_ONE_AD_FOR_NEW_USERS,
     active: true,
     disabled: false,
+    filters: [
+      onlyIncludeNewUsers
+    ],
     groups: {
       DEFAULT: createExperimentGroup({
         value: 'default',
@@ -147,6 +300,9 @@ export const experiments = [
     name: EXPERIMENT_AD_EXPLANATION,
     active: true,
     disabled: false,
+    filters: [
+      onlyIncludeNewUsers
+    ],
     groups: {
       DEFAULT: createExperimentGroup({
         value: 'default',
@@ -220,13 +376,19 @@ export const getUserExperimentGroup = experimentName => {
 
 /**
  * Assigns the user to test groups for all active tests.
+ * @param {Object} userInfo
+ * @param {String} userInfo.id - The user's ID
+ * @param {String} userInfo.joined - The ISO string of when the
+ *   user joined.
+ * @param {Boolean} userInfo.isNewUser - Whether this user has just
+ *   signed up.
  * @returns {undefined}
  */
-export const assignUserToTestGroups = () => {
+export const assignUserToTestGroups = userInfo => {
   const exps = getExperiments()
   exps.forEach(experiment => {
     if (experiment.active) {
-      experiment.assignTestGroup()
+      experiment.assignTestGroup(userInfo)
     }
   })
 }
