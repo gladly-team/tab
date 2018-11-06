@@ -39,6 +39,11 @@ export const createExperiment = ({ name, active = false, disabled = false, group
     // *after* we filter them through the provided "filters".
     // If this is 100, we will include all users (after filtering) in
     // the experiment.
+    // Note: while we technically support increasing the % of active users in
+    // an experiment over time, we don't currently log when a user joins an
+    // experiment. This means adding new users to an ongoing experiment will
+    // likely distort historical analytics. To fix this, we should add a field
+    // with the time a user is assigned to each experiment.
     percentageOfExistingUsersInExperiment: percentageOfExistingUsersInExperiment,
     // The likelihood we'll include a new user in the experiment,
     // *after* we filter them through the provided "filters".
