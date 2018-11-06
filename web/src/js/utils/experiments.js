@@ -156,7 +156,9 @@ export const createExperiment = ({ name, active = false, disabled = false, group
       // keep the value of `this.percentageOfExistingUsersInExperiment`
       // as a % of our active user base.
       const likelihoodOfInclusion = (
-        this.percentageOfExistingUsersInExperiment - previousPercentage)
+        userInfo.isNewUser
+          ? this.percentageOfNewUsersInExperiment
+          : this.percentageOfExistingUsersInExperiment - previousPercentage)
 
       // Only assign the experiment to a percentage of random users.
       if ((100 * Math.random()) > likelihoodOfInclusion) {
