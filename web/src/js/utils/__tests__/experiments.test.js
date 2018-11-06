@@ -9,10 +9,13 @@ import MockDate from 'mockdate'
 
 jest.mock('js/utils/localstorage-mgr')
 jest.mock('js/utils/feature-flags')
+jest.mock('js/relay-env', () => ({}))
+jest.mock('js/mutations/UpdateUserExperimentGroupsMutation')
 
 let mathRandomMock
 
 const getMockUserInfo = () => ({
+  id: 'some-user-id',
   joined: '2017-05-19T13:59:58.000Z',
   isNewUser: false
 })
@@ -429,6 +432,35 @@ describe('Experiment and ExperimentGroup objects', () => {
     // "percentageOfUsersLastAssigned" defaults to 100.
     expect(localStorageMgr.setItem)
       .toHaveBeenCalledWith('tab.experiments.fooTest.percentageOfUsersLastAssigned', 100)
+  })
+
+  test('saves the test group to the server when assigning a test group', () => {
+    const UpdateUserExperimentGroupsMutation = require('js/mutations/UpdateUserExperimentGroupsMutation').default
+    const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
+    const experiment = createExperiment({
+      name: 'fooTest',
+      active: true,
+      disabled: false,
+      groups: {
+        MY_CONTROL_GROUP: createExperimentGroup({
+          value: 'sameOld',
+          schemaValue: 'THE_CONTROL'
+        }),
+        FUN_EXPERIMENT: createExperimentGroup({
+          value: 'newThing',
+          schemaValue: 'EXPERIMENT'
+        })
+      }
+    })
+    const mockUserInfo = getMockUserInfo()
+    experiment.assignTestGroup(mockUserInfo)
+    expect(UpdateUserExperimentGroupsMutation)
+      .toHaveBeenCalledWith({}, {
+        userId: 'some-user-id',
+        experimentGroups: {
+          fooTest: 'THE_CONTROL'
+        }
+      })
   })
 
   test('selects from all the test groups when assigning the user to a test group', () => {

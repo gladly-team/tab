@@ -13,10 +13,10 @@ import {
   includeIfAnyIsTrue,
   onlyIncludeNewUsers
 } from 'js/utils/experimentFilters'
+import environment from 'js/relay-env'
+import UpdateUserExperimentGroupsMutation from 'js/mutations/UpdateUserExperimentGroupsMutation'
 
 const noneGroupKey = 'NONE'
-
-// TODO: log group assignments to the server
 
 export const createExperiment = ({ name, active = false, disabled = false, groups,
   filters = [], percentageOfExistingUsersInExperiment = 100.0,
@@ -92,21 +92,33 @@ export const createExperiment = ({ name, active = false, disabled = false, group
     /**
      * Save the assigned test group in local storage and to the
      * server.
-     * @returns {String} The value of the experiment group.
+     * @param {testGroup} The experiment group object.
+     * @param {userInfo} The object of user information passed to
+     *   assignTestGroup.
      * @returns {undefined}
      */
-    _saveTestGroup: function (testGroup) {
+    _saveTestGroup: function (testGroup, userInfo) {
       this._saveTestGroupToLocalStorage(testGroup.value)
 
       // Update storage with the current % of users who are included in the
       // experiment.
       this._savePercentageUsersToLocalStorage()
 
-      // TODO: save test group to server too
+      const experimentName = this.name
+      UpdateUserExperimentGroupsMutation(
+        environment,
+        {
+          userId: userInfo.id,
+          experimentGroups: {
+            [experimentName]: testGroup.schemaValue
+          }
+        }
+      )
     },
     /**
      * Assign the user to an experiment group for this experiment.
      * @param {Object} userInfo
+     * @param {String} userInfo.id - The user's ID
      * @param {String} userInfo.joined - The ISO string of when the
      *   user joined.
      * @param {Boolean} userInfo.isNewUser - Whether this user has just
@@ -149,7 +161,7 @@ export const createExperiment = ({ name, active = false, disabled = false, group
 
       // If there aren't any test groups, just save the "none" value.
       if (!experimentGroups.length) {
-        this._saveTestGroup(this.groups.NONE)
+        this._saveTestGroup(this.groups.NONE, userInfo)
         return
       }
 
@@ -171,14 +183,14 @@ export const createExperiment = ({ name, active = false, disabled = false, group
 
       // Only assign the experiment to a percentage of random users.
       if ((100 * Math.random()) > likelihoodOfInclusion) {
-        this._saveTestGroup(this.groups.NONE)
+        this._saveTestGroup(this.groups.NONE, userInfo)
         return
       }
 
       // There's an equal chance of being assigned to any group,
       // excepting the "none" group.
       const group = experimentGroups[Math.floor(Math.random() * experimentGroups.length)]
-      this._saveTestGroup(group)
+      this._saveTestGroup(group, userInfo)
     },
     // Return the the user's assigned experiment group, or the
     // NoneExperimentGroup if the user is not assigned to one.
@@ -360,6 +372,7 @@ export const getUserExperimentGroup = experimentName => {
 /**
  * Assigns the user to test groups for all active tests.
  * @param {Object} userInfo
+ * @param {String} userInfo.id - The user's ID
  * @param {String} userInfo.joined - The ISO string of when the
  *   user joined.
  * @param {Boolean} userInfo.isNewUser - Whether this user has just
