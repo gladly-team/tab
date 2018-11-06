@@ -258,7 +258,7 @@ export const experiments = [
     name: EXPERIMENT_THIRD_AD,
     active: true,
     disabled: false,
-    percentageOfExistingUsersInExperiment: 0,
+    percentageOfExistingUsersInExperiment: 40,
     filters: [
       includeIfAnyIsTrue([
         onlyIncludeNewUsers,
