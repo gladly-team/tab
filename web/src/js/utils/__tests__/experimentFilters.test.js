@@ -19,9 +19,9 @@ afterEach(() => {
 
 /* Tests for the Experiment and ExperimentGroup objects */
 describe('experiment filter', () => {
-  test('excludeUsersWhoJoinedRecently works as expected with the default "days" unit', () => {
-    const { excludeUsersWhoJoinedRecently } = require('js/utils/experimentFilters')
-    const excludeLastThirtyDays = excludeUsersWhoJoinedRecently(30)
+  test('excludeUsersWhoJoinedWithin works as expected with the default "days" unit', () => {
+    const { excludeUsersWhoJoinedWithin } = require('js/utils/experimentFilters')
+    const excludeLastThirtyDays = excludeUsersWhoJoinedWithin(30)
     const mockUserInfo = getMockUserInfo()
     mockUserInfo.joined = '2017-05-17T13:59:58.000Z' // ~2 days ago
     expect(excludeLastThirtyDays(mockUserInfo)).toBe(false)
@@ -29,9 +29,9 @@ describe('experiment filter', () => {
     expect(excludeLastThirtyDays(mockUserInfo)).toBe(true)
   })
 
-  test('excludeUsersWhoJoinedRecently works as expected with "seconds" unit', () => {
-    const { excludeUsersWhoJoinedRecently } = require('js/utils/experimentFilters')
-    const excludeLastTenSeconds = excludeUsersWhoJoinedRecently(10, 'seconds')
+  test('excludeUsersWhoJoinedWithin works as expected with "seconds" unit', () => {
+    const { excludeUsersWhoJoinedWithin } = require('js/utils/experimentFilters')
+    const excludeLastTenSeconds = excludeUsersWhoJoinedWithin(10, 'seconds')
     const mockUserInfo = getMockUserInfo()
     mockUserInfo.joined = '2017-05-19T13:59:56.000Z' // 2 seconds ago
     expect(excludeLastTenSeconds(mockUserInfo)).toBe(false)
@@ -74,10 +74,10 @@ describe('experiment filter', () => {
   test('includeIfAnyIsTrue works as expected with user info', () => {
     const {
       includeIfAnyIsTrue,
-      excludeUsersWhoJoinedRecently,
+      excludeUsersWhoJoinedWithin,
       onlyIncludeNewUsers
     } = require('js/utils/experimentFilters')
-    const excludeLastTenDays = excludeUsersWhoJoinedRecently(10, 'days')
+    const excludeLastTenDays = excludeUsersWhoJoinedWithin(10, 'days')
     const onlyNewUsersOrUsersWhoJoinedTenDaysAgo = [
       excludeLastTenDays,
       onlyIncludeNewUsers

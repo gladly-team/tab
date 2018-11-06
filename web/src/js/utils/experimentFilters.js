@@ -11,7 +11,7 @@ import moment from 'moment'
  *   signed up.
  * @returns {Function}
  */
-export const excludeUsersWhoJoinedRecently = (number, units = 'days') => {
+export const excludeUsersWhoJoinedWithin = (number, units = 'days') => {
   return userInfo => moment().diff(moment(userInfo.joined), units) > number
 }
 

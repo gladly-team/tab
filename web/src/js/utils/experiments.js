@@ -9,6 +9,11 @@ import localStorageMgr from 'js/utils/localstorage-mgr'
 import {
   STORAGE_EXPERIMENT_PREFIX
 } from 'js/constants'
+import {
+  excludeUsersWhoJoinedWithin,
+  includeIfAnyIsTrue,
+  onlyIncludeNewUsers
+} from 'js/utils/experimentFilters'
 
 const noneGroupKey = 'NONE'
 
@@ -223,6 +228,12 @@ export const experiments = [
     name: EXPERIMENT_THIRD_AD,
     active: true,
     disabled: false,
+    filters: [
+      includeIfAnyIsTrue([
+        onlyIncludeNewUsers,
+        excludeUsersWhoJoinedWithin(30, 'days')
+      ])
+    ],
     groups: {
       TWO_ADS: createExperimentGroup({
         value: 'twoAds',
@@ -239,6 +250,9 @@ export const experiments = [
     name: EXPERIMENT_ONE_AD_FOR_NEW_USERS,
     active: true,
     disabled: false,
+    filters: [
+      onlyIncludeNewUsers
+    ],
     groups: {
       DEFAULT: createExperimentGroup({
         value: 'default',
@@ -255,6 +269,9 @@ export const experiments = [
     name: EXPERIMENT_AD_EXPLANATION,
     active: true,
     disabled: false,
+    filters: [
+      onlyIncludeNewUsers
+    ],
     groups: {
       DEFAULT: createExperimentGroup({
         value: 'default',

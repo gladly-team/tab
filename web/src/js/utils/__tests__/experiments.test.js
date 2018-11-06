@@ -39,6 +39,7 @@ afterEach(() => {
   jest.resetModules()
   MockDate.reset()
 })
+
 /* Tests for the Experiment and ExperimentGroup objects */
 describe('Experiment and ExperimentGroup objects', () => {
   test('createExperiment returns an object with expected shape', () => {
