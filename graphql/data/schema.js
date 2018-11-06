@@ -57,6 +57,7 @@ import setBackgroundImage from '../database/users/setBackgroundImage'
 import setBackgroundImageFromCustomURL from '../database/users/setBackgroundImageFromCustomURL'
 import setBackgroundColor from '../database/users/setBackgroundColor'
 import setBackgroundImageDaily from '../database/users/setBackgroundImageDaily'
+import logUserExperimentGroups from '../database/users/logUserExperimentGroups'
 
 import CharityModel from '../database/charities/CharityModel'
 
@@ -939,6 +940,26 @@ const createNewUserMutation = mutationWithClientMutationId({
   }
 })
 
+/**
+ * Update one or more of a user's experiment groups.
+ */
+const updateUserExperimentGroupsMutation = mutationWithClientMutationId({
+  name: 'UpdateUserExperimentGroups',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    experimentGroups: { type: ExperimentGroupsType }
+  },
+  outputFields: {
+    success: {
+      type: new GraphQLNonNull(GraphQLBoolean)
+    }
+  },
+  mutateAndGetPayload: ({ userId, experimentGroups }, context) => {
+    const userGlobalObj = fromGlobalId(userId)
+    return logUserExperimentGroups(context.user, userGlobalObj.id, experimentGroups)
+  }
+})
+
 const setUsernameMutation = mutationWithClientMutationId({
   name: 'SetUsername',
   inputFields: {
@@ -1070,7 +1091,8 @@ const mutationType = new GraphQLObjectType({
     setUserActiveWidget: setUserActiveWidgetMutation,
 
     createNewUser: createNewUserMutation,
-    setUsername: setUsernameMutation
+    setUsername: setUsernameMutation,
+    updateUserExperimentGroups: updateUserExperimentGroupsMutation
   })
 })
 
