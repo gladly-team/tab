@@ -17,16 +17,7 @@ import {
 
 const noneGroupKey = 'NONE'
 
-// Need to:
-// x enable/disable including active users, new users, or both
-// x assign people to a group when they're not yet assigned,
-//   given some conditions (e.g. joined > 30 days ago)
-// - log the group assignment
-// x be able to add a random % of active users to an experiment
-// x ideally, be able to change/increase the % of active users in an
-//   experiment over time
-// x make sure assigning an experiment group does not overwrite
-//   existing group assignment
+// TODO: log group assignments to the server
 
 export const createExperiment = ({ name, active = false, disabled = false, groups,
   filters = [], percentageOfExistingUsersInExperiment = 100.0,
@@ -50,7 +41,6 @@ export const createExperiment = ({ name, active = false, disabled = false, group
     // If this is 100, we will include all users (after filtering) in
     // the experiment.
     percentageOfExistingUsersInExperiment: percentageOfExistingUsersInExperiment,
-    // TODO: make this work
     // The likelihood we'll include a new user in the experiment,
     // *after* we filter them through the provided "filters".
     // If this is 100, we will include all new users (after filtering)
