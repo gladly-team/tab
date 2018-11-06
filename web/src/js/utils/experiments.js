@@ -18,8 +18,8 @@ import {
 const noneGroupKey = 'NONE'
 
 // Need to:
-// - enable/disable including active users, new users, or both
-// - assign people to a group when they're not yet assigned,
+// x enable/disable including active users, new users, or both
+// x assign people to a group when they're not yet assigned,
 //   given some conditions (e.g. joined > 30 days ago)
 // - log the group assignment
 // x be able to add a random % of active users to an experiment
