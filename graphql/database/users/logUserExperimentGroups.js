@@ -1,4 +1,5 @@
 
+import moment from 'moment'
 import UserModel from './UserModel'
 import { isEmpty, isNil } from 'lodash/lang'
 import {
@@ -48,7 +49,8 @@ const logUserExperimentGroups = async (userContext, userId, experimentGroups = {
     }
       : null,
     !isNil(validatedGroups.thirdAd) ? {
-      testGroupThirdAd: validatedGroups.thirdAd
+      testGroupThirdAd: validatedGroups.thirdAd,
+      testGroupThirdAdJoinTime: moment.utc().toISOString()
     }
       : null,
     !isNil(validatedGroups.oneAdForNewUsers) ? {

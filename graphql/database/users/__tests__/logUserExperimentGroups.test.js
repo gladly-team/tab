@@ -88,6 +88,26 @@ describe('logUserExperimentGroups', () => {
     })
   })
 
+  it('sets the testGroupThirdAd and testGroupThirdAdJoinTime values when it is provided', async () => {
+    expect.assertions(1)
+
+    const UserModel = require('../UserModel').default
+    const updateQuery = jest.spyOn(UserModel, 'update')
+
+    const mockExperimentGroups = {
+      thirdAd: 1
+    }
+    getValidatedExperimentGroups.mockReturnValueOnce(mockExperimentGroups)
+    const logUserExperimentGroups = require('../logUserExperimentGroups').default
+    await logUserExperimentGroups(userContext, userContext.id, mockExperimentGroups)
+    expect(updateQuery).toHaveBeenCalledWith(userContext, {
+      id: userContext.id,
+      testGroupThirdAd: 1,
+      testGroupThirdAdJoinTime: moment.utc().toISOString(),
+      updated: moment.utc().toISOString()
+    })
+  })
+
   it('does not update the item when no experiment groups are provided', async () => {
     expect.assertions(1)
 

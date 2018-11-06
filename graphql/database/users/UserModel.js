@@ -170,6 +170,8 @@ class User extends BaseModel {
       testGroupThirdAd: types.number().integer().allow(null)
         .description(`Which group the user is in for the "three ads" split-test. 
           This value is assigned on the client so is not trustworthy.`),
+      testGroupThirdAdJoinTime: types.string().isoDate()
+        .description(`The datetime of when the user was assigned their experiment group.`),
       testOneAdForNewUsers: types.number().integer().allow(null)
         .description(`Which group the user is in for the "one ad for new users"
           split-test. This value is assigned on the client so is not trustworthy.`),
