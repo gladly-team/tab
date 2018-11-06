@@ -6,7 +6,9 @@ import {
 const mutation = graphql`
   mutation UpdateUserExperimentGroupsMutation($input: UpdateUserExperimentGroupsInput!) {
     updateUserExperimentGroups(input: $input) {
-      success
+      user {
+        id
+      }
     }
   }
 `

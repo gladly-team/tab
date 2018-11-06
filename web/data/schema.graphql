@@ -410,7 +410,7 @@ input UpdateUserExperimentGroupsInput {
 }
 
 type UpdateUserExperimentGroupsPayload {
-  success: Boolean!
+  user: User
   clientMutationId: String
 }
 

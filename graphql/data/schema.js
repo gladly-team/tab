@@ -950,8 +950,9 @@ const updateUserExperimentGroupsMutation = mutationWithClientMutationId({
     experimentGroups: { type: ExperimentGroupsType }
   },
   outputFields: {
-    success: {
-      type: new GraphQLNonNull(GraphQLBoolean)
+    user: {
+      type: userType,
+      resolve: user => user
     }
   },
   mutateAndGetPayload: ({ userId, experimentGroups }, context) => {
