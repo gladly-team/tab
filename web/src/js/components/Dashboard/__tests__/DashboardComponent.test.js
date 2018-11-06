@@ -220,7 +220,9 @@ describe('Dashboard component', () => {
     const wrapper = shallow(
       <DashboardComponent {...mockProps} />
     )
-    expect(wrapper.find(AssignExperimentGroups).length).toBe(1)
+    const comp = wrapper.find(AssignExperimentGroups)
+    expect(comp.length).toBe(1)
+    expect(comp.prop('isNewUser')).toBe(false)
   })
 
   it('renders the NewUserTour component when the user recently joined and has not already viewed it', () => {

@@ -1,5 +1,4 @@
 import React from 'react'
-import moment from 'moment'
 import {
   dashboardURL,
   replaceUrl
@@ -8,9 +7,6 @@ import {
   setBrowserExtensionInstallId,
   setBrowserExtensionInstallTime
 } from 'js/utils/local-user-data-mgr'
-import {
-  assignUserToTestGroups
-} from 'js/utils/experiments'
 
 // The view the extensions open immediately after they're
 // added to the browser.
@@ -26,12 +22,6 @@ class FirstTabView extends React.Component {
     // distinguish truly new users from returning users who
     // had cleared their local data.
     setBrowserExtensionInstallTime()
-
-    // Add the user to test groups for any active experiments.
-    assignUserToTestGroups({
-      joined: moment.utc().toISOString(),
-      isNewUser: true
-    })
 
     replaceUrl(dashboardURL)
   }

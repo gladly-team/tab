@@ -6,7 +6,6 @@ import MockDate from 'mockdate'
 import {
   shallow
 } from 'enzyme'
-import toJson from 'enzyme-to-json'
 import {
   createNewUser,
   checkAuthStateAndRedirectIfNeeded
@@ -28,12 +27,14 @@ import {
 import {
   getBrowserExtensionInstallId
 } from 'js/utils/local-user-data-mgr'
+import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
 
 jest.mock('js/authentication/helpers')
 jest.mock('js/authentication/user')
 jest.mock('js/navigation/navigation')
 jest.mock('js/utils/utils')
 jest.mock('js/utils/local-user-data-mgr')
+jest.mock('js/components/Dashboard/AssignExperimentGroupsContainer')
 
 const mockFetchUser = jest.fn()
 
@@ -365,15 +366,6 @@ describe('Authentication.js tests', function () {
     expect(goToDashboard).not.toHaveBeenCalled()
   })
 
-  it('renders as expected prior to navigating', () => {
-    const Authentication = require('js/components/Authentication/Authentication').default
-    const mockProps = MockProps()
-    const wrapper = shallow(
-      <Authentication {...mockProps} />
-    )
-    expect(toJson(wrapper)).toMatchSnapshot()
-  })
-
   it('after sign-in, goes to missing email message screen if no email address', () => {
     const Authentication = require('js/components/Authentication/Authentication').default
     const mockProps = MockProps()
@@ -502,5 +494,16 @@ describe('Authentication.js tests', function () {
       mockFirebaseCredential, mockFirebaseDefaultRedirectURL)
 
     expect(mockFetchUser).toHaveBeenCalledTimes(1)
+  })
+
+  it('renders AssignExperimentGroups component', () => {
+    const Authentication = require('js/components/Authentication/Authentication').default
+    const mockProps = MockProps()
+    const wrapper = shallow(
+      <Authentication {...mockProps} />
+    )
+    const comp = wrapper.find(AssignExperimentGroups)
+    expect(comp.length).toBe(1)
+    expect(comp.prop('isNewUser')).toBe(true)
   })
 })

@@ -11,13 +11,9 @@ import {
   setBrowserExtensionInstallId,
   setBrowserExtensionInstallTime
 } from 'js/utils/local-user-data-mgr'
-import {
-  assignUserToTestGroups
-} from 'js/utils/experiments'
 
 jest.mock('js/navigation/navigation')
 jest.mock('js/utils/local-user-data-mgr')
-jest.mock('js/utils/experiments')
 
 const mockNow = '2017-05-19T13:59:58.000Z'
 
@@ -62,16 +58,5 @@ describe('FirstTabView', function () {
       <FirstTabView {...mockProps} />
     )
     expect(setBrowserExtensionInstallTime).toHaveBeenCalledTimes(1)
-  })
-
-  it('calls to set the user\'s test groups for any ongoing split-tests', () => {
-    const FirstTabView = require('js/components/Dashboard/FirstTabView').default
-    shallow(
-      <FirstTabView {...mockProps} />
-    )
-    expect(assignUserToTestGroups).toHaveBeenCalledWith({
-      joined: '2017-05-19T13:59:58.000Z',
-      isNewUser: true
-    })
   })
 })
