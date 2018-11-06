@@ -300,8 +300,8 @@ describe('Experiment and ExperimentGroup objects', () => {
 
     mathRandomMock
       // The user should be again excluded from the test because this value is
-      // greater than 25 = 40 - 15.
-      .mockReturnValueOnce(0.26) // for determining % inclusion
+      // greater than ~29 = 100 * (40 - 15) / (100 - 15).
+      .mockReturnValueOnce(0.30) // for determining % inclusion
       .mockReturnValueOnce(0.99) // for determining experimental group
     const mockUserInfo = getMockUserInfo()
     experiment.assignTestGroup(mockUserInfo)
@@ -337,8 +337,8 @@ describe('Experiment and ExperimentGroup objects', () => {
 
     mathRandomMock
       // The user should now be included in the test because this value is
-      // less than 25 = 40 - 15.
-      .mockReturnValueOnce(0.24) // for determining % inclusion
+      // less than ~29 = 100 * (40 - 15) / (100 - 15).
+      .mockReturnValueOnce(0.28) // for determining % inclusion
       .mockReturnValueOnce(0.99) // for determining experimental group
     const mockUserInfo = getMockUserInfo()
     experiment.assignTestGroup(mockUserInfo)

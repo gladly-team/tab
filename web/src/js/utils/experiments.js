@@ -101,6 +101,21 @@ export const createExperiment = ({ name, active = false, disabled = false, group
       return !isNil(localStorageMgr.getItem(this._localStorageKey))
     },
     /**
+     * Save the assigned test group in local storage and to the
+     * server.
+     * @returns {String} The value of the experiment group.
+     * @returns {undefined}
+     */
+    _saveTestGroup: function (testGroupValue) {
+      this._saveTestGroupToLocalStorage(testGroupValue)
+
+      // Update storage with the current % of users who are included in the
+      // experiment.
+      this._savePercentageUsersToLocalStorage()
+
+      // TODO: save test group to server too
+    },
+    /**
      * Assign the user to an experiment group for this experiment.
      * @param {Object} userInfo
      * @param {String} userInfo.joined - The ISO string of when the
@@ -145,7 +160,7 @@ export const createExperiment = ({ name, active = false, disabled = false, group
 
       // If there aren't any test groups, just save the "none" value.
       if (!experimentGroups.length) {
-        this._saveTestGroupToLocalStorage(this.groups.NONE.value)
+        this._saveTestGroup(this.groups.NONE.value)
         return
       }
 
@@ -158,23 +173,24 @@ export const createExperiment = ({ name, active = false, disabled = false, group
       const likelihoodOfInclusion = (
         userInfo.isNewUser
           ? this.percentageOfNewUsersInExperiment
-          : this.percentageOfExistingUsersInExperiment - previousPercentage)
+          : (
+            100.0 *
+            (this.percentageOfExistingUsersInExperiment - previousPercentage) /
+            (100 - previousPercentage)
+          )
+      )
 
       // Only assign the experiment to a percentage of random users.
       if ((100 * Math.random()) > likelihoodOfInclusion) {
-        this._saveTestGroupToLocalStorage(this.groups.NONE.value)
+        this._saveTestGroup(this.groups.NONE.value)
         return
       }
 
       // There's an equal chance of being assigned to any group,
       // excepting the "none" group.
       const groupValues = map(experimentGroups, groupObj => groupObj.value)
-      const testGroup = groupValues[Math.floor(Math.random() * groupValues.length)]
-      this._saveTestGroupToLocalStorage(testGroup)
-
-      // Update storage with the current % of users who are included in the
-      // experiment.
-      this._savePercentageUsersToLocalStorage()
+      const testGroupValue = groupValues[Math.floor(Math.random() * groupValues.length)]
+      this._saveTestGroup(testGroupValue)
     },
     // Return the the user's assigned experiment group, or the
     // NoneExperimentGroup if the user is not assigned to one.
