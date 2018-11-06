@@ -29,7 +29,8 @@ const noneGroupKey = 'NONE'
 //   existing group assignment
 
 export const createExperiment = ({ name, active = false, disabled = false, groups,
-  filters = [], percentageOfUsersInExperiment = 100.0 }) => {
+  filters = [], percentageOfExistingUsersInExperiment = 100.0,
+  percentageOfNewUsersInExperiment = 100.0 }) => {
   if (!name) {
     throw new Error('An experiment must have a unique "name" value.')
   }
@@ -44,11 +45,17 @@ export const createExperiment = ({ name, active = false, disabled = false, group
     // another group. This should effectively disable the effects of the
     // experiment.
     disabled,
-    // The likelihood we'll incldue an active user in the experiment,
+    // The likelihood we'll include an active existing user in the experiment,
     // *after* we filter them through the provided "filters".
     // If this is 100, we will include all users (after filtering) in
     // the experiment.
-    percentageOfUsersInExperiment: percentageOfUsersInExperiment,
+    percentageOfExistingUsersInExperiment: percentageOfExistingUsersInExperiment,
+    // TODO: make this work
+    // The likelihood we'll include a new user in the experiment,
+    // *after* we filter them through the provided "filters".
+    // If this is 100, we will include all new users (after filtering)
+    // in the experiment.
+    percentageOfNewUsersInExperiment: percentageOfNewUsersInExperiment,
     // An array of functions to call to determine whether a user should
     // be excluded from an experiment based on, e.g., the datetime they
     // joined. Each function will receive a user object with keys:
@@ -69,13 +76,13 @@ export const createExperiment = ({ name, active = false, disabled = false, group
     _localStorageKeyForPercentage: `${STORAGE_EXPERIMENT_PREFIX}.${name}.percentageOfUsersLastAssigned`,
     _savePercentageUsersToLocalStorage: function () {
       localStorageMgr.setItem(this._localStorageKeyForPercentage,
-        this.percentageOfUsersInExperiment)
+        this.percentageOfExistingUsersInExperiment)
     },
     /**
      * Get the value for the percentage of users included in this
      * experiment the last time we assigned this user to a group.
      * @returns {Number} A float equal to a previous value of
-     *   `this.percentageOfUsersInExperiment`; or, if we have never
+     *   `this.percentageOfExistingUsersInExperiment`; or, if we have never
      *   tried to assign this user, return zero.
      */
     _getPercentageUsersFromLocalStorage: function () {
@@ -107,8 +114,8 @@ export const createExperiment = ({ name, active = false, disabled = false, group
         return
       }
 
-      // This is the value of `this.percentageOfUsersInExperiment` the last
-      // time we assigned the user to a group in this experiment.
+      // This is the value of `this.percentageOfExistingUsersInExperiment`
+      // the last time we assigned the user to a group in this experiment.
       const previousPercentage = this._getPercentageUsersFromLocalStorage()
 
       // If the filters exclude this user, don't assign them to an experiment
@@ -127,7 +134,7 @@ export const createExperiment = ({ name, active = false, disabled = false, group
         this._hasBeenAssignedToGroup() &&
         !(
           currentGroup.value === this.groups.NONE.value &&
-          this.percentageOfUsersInExperiment > previousPercentage
+          this.percentageOfExistingUsersInExperiment > previousPercentage
         )
       ) {
         return
@@ -146,10 +153,10 @@ export const createExperiment = ({ name, active = false, disabled = false, group
       // experiment group. If we previously assigned this user but the
       // % of users we're including in this experiment has increased,
       // we should use the difference in the percentages, which should
-      // keep the value of `this.percentageOfUsersInExperiment` as a %
-      // of our active user base.
+      // keep the value of `this.percentageOfExistingUsersInExperiment`
+      // as a % of our active user base.
       const likelihoodOfInclusion = (
-        this.percentageOfUsersInExperiment - previousPercentage)
+        this.percentageOfExistingUsersInExperiment - previousPercentage)
 
       // Only assign the experiment to a percentage of random users.
       if ((100 * Math.random()) > likelihoodOfInclusion) {

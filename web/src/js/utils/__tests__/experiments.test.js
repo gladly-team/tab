@@ -194,7 +194,7 @@ describe('Experiment and ExperimentGroup objects', () => {
       name: 'fooTest',
       active: true,
       disabled: false,
-      percentageOfUsersInExperiment: 15, // this has not changed
+      percentageOfExistingUsersInExperiment: 15, // this has not changed
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
@@ -224,7 +224,7 @@ describe('Experiment and ExperimentGroup objects', () => {
       name: 'fooTest',
       active: true,
       disabled: false,
-      percentageOfUsersInExperiment: 80, // this has increased
+      percentageOfExistingUsersInExperiment: 80, // this has increased
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
@@ -254,7 +254,7 @@ describe('Experiment and ExperimentGroup objects', () => {
       name: 'fooTest',
       active: true,
       disabled: false,
-      percentageOfUsersInExperiment: 40, // this has increased
+      percentageOfExistingUsersInExperiment: 40, // this has increased
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
@@ -285,7 +285,7 @@ describe('Experiment and ExperimentGroup objects', () => {
       name: 'fooTest',
       active: true,
       disabled: false,
-      percentageOfUsersInExperiment: 40, // this has increased
+      percentageOfExistingUsersInExperiment: 40, // this has increased
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
@@ -322,7 +322,7 @@ describe('Experiment and ExperimentGroup objects', () => {
       name: 'fooTest',
       active: true,
       disabled: false,
-      percentageOfUsersInExperiment: 40, // this has increased
+      percentageOfExistingUsersInExperiment: 40, // this has increased
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
@@ -346,7 +346,7 @@ describe('Experiment and ExperimentGroup objects', () => {
       .toHaveBeenCalledWith('tab.experiments.fooTest', 'newThing')
   })
 
-  test('when reassigning users who were previously in the "none" test group, we save the latest "percentageOfUsersInExperiment" to local storage', () => {
+  test('when reassigning users who were previously in the "none" test group, we save the latest "percentageOfExistingUsersInExperiment" to local storage', () => {
     const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
 
     // Mock that the user is assigned to an experiment group.
@@ -359,7 +359,7 @@ describe('Experiment and ExperimentGroup objects', () => {
       name: 'fooTest',
       active: true,
       disabled: false,
-      percentageOfUsersInExperiment: 40, // this has increased
+      percentageOfExistingUsersInExperiment: 40, // this has increased
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
@@ -405,7 +405,7 @@ describe('Experiment and ExperimentGroup objects', () => {
       .toHaveBeenCalledWith('tab.experiments.fooTest', 'sameOld')
   })
 
-  test('saves "percentageOfUsersInExperiment" to local storage when assigning a test group', () => {
+  test('saves "percentageOfExistingUsersInExperiment" to local storage when assigning a test group', () => {
     const localStorageMgr = require('js/utils/localstorage-mgr').default
     const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
     const experiment = createExperiment({
@@ -484,7 +484,7 @@ describe('Experiment and ExperimentGroup objects', () => {
       name: 'fooTest',
       active: true,
       disabled: false,
-      percentageOfUsersInExperiment: 20,
+      percentageOfExistingUsersInExperiment: 20,
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
@@ -517,7 +517,7 @@ describe('Experiment and ExperimentGroup objects', () => {
       name: 'fooTest',
       active: true,
       disabled: false,
-      percentageOfUsersInExperiment: 20,
+      percentageOfExistingUsersInExperiment: 20,
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
