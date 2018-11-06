@@ -11,8 +11,9 @@ class AssignExperimentGroups extends React.Component {
     // an experimeng (e.g. by having joined X days ago) or we
     // may have added new experiments.
     assignUserToTestGroups({
+      id: user.id,
       joined: user.joined,
-      isNewUser: false
+      isNewUser: this.props.isNewUser
     })
   }
 
@@ -23,8 +24,14 @@ class AssignExperimentGroups extends React.Component {
 
 AssignExperimentGroups.propTypes = {
   user: PropTypes.shape({
+    id: PropTypes.string.isRequired,
     joined: PropTypes.string.isRequired
-  }).isRequired
+  }).isRequired,
+  isNewUser: PropTypes.bool.isRequired
+}
+
+AssignExperimentGroups.defaultProps = {
+  isNewUser: false
 }
 
 export default AssignExperimentGroups

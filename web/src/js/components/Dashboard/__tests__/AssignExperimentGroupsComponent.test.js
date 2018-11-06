@@ -11,6 +11,7 @@ jest.mock('js/utils/experiments')
 
 const getMockProps = () => ({
   user: {
+    id: 'some-user-id',
     joined: '2017-05-19T13:59:58.000Z'
   }
 })
@@ -40,6 +41,7 @@ describe('AssignExperimentGroupsComponent', function () {
       />
     )
     expect(assignUserToTestGroups).toHaveBeenCalledWith({
+      id: 'some-user-id',
       joined: '2017-05-19T13:59:58.000Z',
       isNewUser: false
     })

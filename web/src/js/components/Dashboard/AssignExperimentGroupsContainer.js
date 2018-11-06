@@ -8,6 +8,7 @@ import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGrou
 export default createFragmentContainer(AssignExperimentGroups, {
   user: graphql`
     fragment AssignExperimentGroupsContainer_user on User {
+      id
       joined
     }
   `

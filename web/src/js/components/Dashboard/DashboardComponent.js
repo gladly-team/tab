@@ -429,7 +429,7 @@ class Dashboard extends React.Component {
         { user && tabId ? <LogRevenue user={user} tabId={tabId} /> : null }
         { user ? <LogConsentData user={user} /> : null }
         { user ? <LogAccountCreation user={user} /> : null }
-        { user ? <AssignExperimentGroups user={user} /> : null }
+        { user ? <AssignExperimentGroups user={user} isNewUser={false} /> : null }
         { errorMessage
           ? <ErrorMessage message={errorMessage}
             onRequestClose={this.clearError.bind(this)} />
