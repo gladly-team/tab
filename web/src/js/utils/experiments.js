@@ -243,9 +243,8 @@ export const experiments = [
     name: EXPERIMENT_THIRD_AD,
     active: true,
     disabled: false,
-    percentageOfExistingUsersInExperiment: 20,
+    percentageOfExistingUsersInExperiment: 0,
     filters: [
-      // TODO: change to only new users before deploy
       includeIfAnyIsTrue([
         onlyIncludeNewUsers,
         excludeUsersWhoJoinedWithin(30, 'days')
