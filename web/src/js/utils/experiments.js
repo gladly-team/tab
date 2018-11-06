@@ -1,8 +1,7 @@
 
 import {
   filter,
-  find,
-  map
+  find
 } from 'lodash/collection'
 import { isNil } from 'lodash/lang'
 import localStorageMgr from 'js/utils/localstorage-mgr'
@@ -96,8 +95,8 @@ export const createExperiment = ({ name, active = false, disabled = false, group
      * @returns {String} The value of the experiment group.
      * @returns {undefined}
      */
-    _saveTestGroup: function (testGroupValue) {
-      this._saveTestGroupToLocalStorage(testGroupValue)
+    _saveTestGroup: function (testGroup) {
+      this._saveTestGroupToLocalStorage(testGroup.value)
 
       // Update storage with the current % of users who are included in the
       // experiment.
@@ -150,7 +149,7 @@ export const createExperiment = ({ name, active = false, disabled = false, group
 
       // If there aren't any test groups, just save the "none" value.
       if (!experimentGroups.length) {
-        this._saveTestGroup(this.groups.NONE.value)
+        this._saveTestGroup(this.groups.NONE)
         return
       }
 
@@ -172,15 +171,14 @@ export const createExperiment = ({ name, active = false, disabled = false, group
 
       // Only assign the experiment to a percentage of random users.
       if ((100 * Math.random()) > likelihoodOfInclusion) {
-        this._saveTestGroup(this.groups.NONE.value)
+        this._saveTestGroup(this.groups.NONE)
         return
       }
 
       // There's an equal chance of being assigned to any group,
       // excepting the "none" group.
-      const groupValues = map(experimentGroups, groupObj => groupObj.value)
-      const testGroupValue = groupValues[Math.floor(Math.random() * groupValues.length)]
-      this._saveTestGroup(testGroupValue)
+      const group = experimentGroups[Math.floor(Math.random() * experimentGroups.length)]
+      this._saveTestGroup(group)
     },
     // Return the the user's assigned experiment group, or the
     // NoneExperimentGroup if the user is not assigned to one.
