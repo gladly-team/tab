@@ -8,6 +8,10 @@ jest.mock('js/analytics/facebook-analytics')
 jest.mock('js/analytics/google-analytics')
 jest.mock('js/analytics/reddit-analytics')
 
+beforeAll(() => {
+  window.gtag = jest.fn()
+})
+
 afterEach(() => {
   jest.clearAllMocks()
 })
@@ -73,6 +77,9 @@ describe('logEvent', () => {
       action: 'AccountCreation'
     })
     expect(redditAccountCreationEvent).toHaveBeenCalled()
+    expect(window.gtag).toHaveBeenCalledWith('event', 'conversion', {
+      'send_to': 'AW-1013744060/v2M_COqV6owBELyDsuMD'
+    })
   })
 
   test('a search event calls analytics as expected', async () => {

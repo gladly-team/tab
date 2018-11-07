@@ -53,6 +53,11 @@ export const accountCreated = () => {
     action: 'AccountCreation'
   })
   redditAccountCreationEvent()
+
+  // Google Ads conversion tracking.
+  window.gtag('event', 'conversion', {
+    'send_to': 'AW-1013744060/v2M_COqV6owBELyDsuMD'
+  })
 }
 
 export const searchExecuted = () => {
