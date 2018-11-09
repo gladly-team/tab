@@ -16,37 +16,6 @@ class CampaignBase extends React.Component {
     if (!isCampaignLive) {
       return null
     }
-    const rootStyle = {
-      zIndex: 2,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      textAlign: 'center',
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      width: '100%',
-      height: '100%',
-      boxSizing: 'border-box',
-      pointerEvents: 'none'
-    }
-    const campaignContainerStyle = {
-      pointerEvents: 'all',
-      width: 400,
-      margin: 0,
-      marginBottom: 100,
-      padding: 0,
-      background: '#FFF',
-      border: 'none'
-    }
-    const headerLineStyle = {
-      width: '100%',
-      height: 3,
-      borderTopLeftRadius: 2,
-      borderTopRightRadius: 2,
-      backgroundColor: alternateAccentColor
-    }
-
     // Hardcode campaign component here when running one
     const currentCampaign = (
       <StickerCampaign user={this.props.user} />
@@ -63,14 +32,42 @@ class CampaignBase extends React.Component {
 
     return (
       <div
-        style={rootStyle}
+        style={{
+          zIndex: 2,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          textAlign: 'center',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          boxSizing: 'border-box',
+          pointerEvents: 'none'
+        }}
         data-test-id={'campaign-root'}
       >
         <Paper
           zDepth={1}
-          style={campaignContainerStyle}
+          style={{
+            pointerEvents: 'all',
+            width: 400,
+            margin: 0,
+            marginBottom: 100,
+            padding: 0,
+            background: '#FFF',
+            border: 'none'
+          }}
         >
-          <div style={headerLineStyle} />
+          <div
+            style={{
+              width: '100%',
+              height: 3,
+              borderTopLeftRadius: 2,
+              borderTopRightRadius: 2,
+              backgroundColor: alternateAccentColor
+            }} />
           {currentCampaign}
         </Paper>
       </div>
