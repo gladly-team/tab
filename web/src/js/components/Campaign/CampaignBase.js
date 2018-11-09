@@ -1,7 +1,7 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Paper } from 'material-ui'
+import Paper from '@material-ui/core/Paper'
 import {
   alternateAccentColor
 } from 'js/theme/default'
@@ -49,7 +49,7 @@ class CampaignBase extends React.Component {
         data-test-id={'campaign-root'}
       >
         <Paper
-          zDepth={1}
+          elevation={1}
           style={{
             pointerEvents: 'all',
             width: 400,
