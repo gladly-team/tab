@@ -12,6 +12,7 @@ import appTheme, {
   lighterTextColor
 } from 'js/theme/default'
 import Logo from 'js/components/Logo/Logo'
+import CountdownClock from 'js/components/Campaign/CountdownClockComponent'
 
 const styles = theme => ({
   inputInkbar: {
@@ -27,46 +28,6 @@ const styles = theme => ({
 // Note: also hardcoded in StickerCampaignContainer
 export const CAMPAIGN_START_TIME_ISO = '2018-02-13T23:00:00.000Z'
 export const CAMPAIGN_END_TIME_ISO = '2018-02-23T20:00:00.000Z'
-
-class CountdownClock extends React.Component {
-  constructor (props) {
-    super(props)
-
-    this.state = {
-      countdownClock: this.getCountdownClockText()
-    }
-  }
-
-  getCountdownClockText () {
-    const campaignEndDatetime = moment(CAMPAIGN_END_TIME_ISO)
-    var timeRemaining = campaignEndDatetime.diff(moment.utc(), 'milliseconds')
-    if (timeRemaining < 0) {
-      timeRemaining = 0
-    }
-    const duration = moment.duration(timeRemaining, 'milliseconds')
-    return `${duration.days()}d ${duration.hours()}h
-      ${duration.minutes()}m ${duration.seconds()}s`
-  }
-
-  componentDidMount () {
-    const self = this
-
-    // Every second, update the countdown clock
-    this.timeRemainingInterval = setInterval(() => {
-      self.setState({
-        countdownClock: self.getCountdownClockText()
-      })
-    }, 1000)
-  }
-
-  componentWillUnmount () {
-    clearInterval(this.timeRemainingInterval)
-  }
-
-  render () {
-    return <span>{this.state.countdownClock}</span>
-  }
-}
 
 class StickerCampaign extends React.Component {
   onTextFieldClicked () {
@@ -269,7 +230,13 @@ class StickerCampaign extends React.Component {
               marginBottom: 4
             }}
           >
-            <span><CountdownClock /> remaining</span>
+            <span>
+              <CountdownClock
+                campaignStartDatetime={moment(CAMPAIGN_START_TIME_ISO)}
+                campaignEndDatetime={moment(CAMPAIGN_END_TIME_ISO)}
+              />{' '}
+              remaining
+            </span>
           </span>
         </span>
       </div>
