@@ -5,6 +5,7 @@ import { Paper } from 'material-ui'
 import {
   alternateAccentColor
 } from 'js/theme/default'
+import StickerCampaign from 'js/components/Campaign/StickerCampaignContainer'
 
 class CampaignBase extends React.Component {
   render () {
@@ -47,7 +48,9 @@ class CampaignBase extends React.Component {
     }
 
     // Hardcode campaign component here when running one
-    const currentCampaign = null
+    const currentCampaign = (
+      <StickerCampaign user={this.props.user} />
+    )
 
     if (!currentCampaign) {
       return (

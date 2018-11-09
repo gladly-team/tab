@@ -11,6 +11,7 @@ export default createFragmentContainer(CampaignBase, {
   user: graphql`
     fragment CampaignBaseContainer_user on User {
       id
+      ...StickerCampaignContainer_user
     }
   `
 })
