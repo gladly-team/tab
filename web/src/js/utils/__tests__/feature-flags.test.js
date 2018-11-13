@@ -20,12 +20,6 @@ describe('feature flags', () => {
     expect(isVariousAdSizesEnabled()).toBe(false)
   })
 
-  test('isThirdAdEnabled is true', () => {
-    const isThirdAdEnabled = require('js/utils/feature-flags')
-      .isThirdAdEnabled
-    expect(isThirdAdEnabled()).toBe(true)
-  })
-
   test('isSearchPageEnabled is false if the env var is "false"', () => {
     const isSearchPageEnabled = require('js/utils/feature-flags')
       .isSearchPageEnabled
