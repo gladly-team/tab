@@ -1,12 +1,10 @@
 
 import moment from 'moment'
 import {
-  isThirdAdEnabled,
   isVariousAdSizesEnabled
 } from 'js/utils/feature-flags'
 import {
   EXPERIMENT_AD_EXPLANATION,
-  EXPERIMENT_THIRD_AD,
   EXPERIMENT_ONE_AD_FOR_NEW_USERS,
   getExperimentGroups,
   getUserExperimentGroup
@@ -85,18 +83,7 @@ const shouldShowOneAd = () => {
  * @return {Number} The number of ads
  */
 export const getNumberOfAdsToShow = () => {
-  const showOneAd = shouldShowOneAd()
-  const userInThreeAdTestGroup = (
-    getUserExperimentGroup(EXPERIMENT_THIRD_AD) ===
-    getExperimentGroups(EXPERIMENT_THIRD_AD).THREE_ADS
-  )
-  let numAds = 2
-  if (showOneAd) {
-    numAds = 1
-  } else if (userInThreeAdTestGroup && isThirdAdEnabled()) {
-    numAds = 3
-  }
-  return numAds
+  return shouldShowOneAd() ? 1 : 3
 }
 
 /**

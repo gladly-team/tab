@@ -31,79 +31,40 @@ beforeEach(() => {
 })
 
 describe('logUserExperimentGroups', () => {
-  it('sets the testGroupAnonSignIn value when it is provided', async () => {
+  it('sets the testOneAdForNewUsers value when it is provided', async () => {
     expect.assertions(1)
 
     const UserModel = require('../UserModel').default
     const updateQuery = jest.spyOn(UserModel, 'update')
 
     const mockExperimentGroups = {
-      anonSignIn: 1
+      oneAdForNewUsers: 0
     }
     getValidatedExperimentGroups.mockReturnValueOnce(mockExperimentGroups)
     const logUserExperimentGroups = require('../logUserExperimentGroups').default
     await logUserExperimentGroups(userContext, userContext.id, mockExperimentGroups)
     expect(updateQuery).toHaveBeenCalledWith(userContext, {
       id: userContext.id,
-      testGroupAnonSignIn: 1,
+      testOneAdForNewUsers: 0,
       updated: moment.utc().toISOString()
     })
   })
 
-  it('sets the testGroupAnonSignIn value even when it is zero', async () => {
+  it('sets the testAdExplanation value when it is provided', async () => {
     expect.assertions(1)
 
     const UserModel = require('../UserModel').default
     const updateQuery = jest.spyOn(UserModel, 'update')
 
     const mockExperimentGroups = {
-      anonSignIn: 0
+      adExplanation: 1
     }
     getValidatedExperimentGroups.mockReturnValueOnce(mockExperimentGroups)
     const logUserExperimentGroups = require('../logUserExperimentGroups').default
     await logUserExperimentGroups(userContext, userContext.id, mockExperimentGroups)
     expect(updateQuery).toHaveBeenCalledWith(userContext, {
       id: userContext.id,
-      testGroupAnonSignIn: 0,
-      updated: moment.utc().toISOString()
-    })
-  })
-
-  it('sets the testGroupVariousAdSizes value when it is provided', async () => {
-    expect.assertions(1)
-
-    const UserModel = require('../UserModel').default
-    const updateQuery = jest.spyOn(UserModel, 'update')
-
-    const mockExperimentGroups = {
-      variousAdSizes: 1
-    }
-    getValidatedExperimentGroups.mockReturnValueOnce(mockExperimentGroups)
-    const logUserExperimentGroups = require('../logUserExperimentGroups').default
-    await logUserExperimentGroups(userContext, userContext.id, mockExperimentGroups)
-    expect(updateQuery).toHaveBeenCalledWith(userContext, {
-      id: userContext.id,
-      testGroupVariousAdSizes: 1,
-      updated: moment.utc().toISOString()
-    })
-  })
-
-  it('sets the testGroupThirdAd and testGroupThirdAdJoinTime values when it is provided', async () => {
-    expect.assertions(1)
-
-    const UserModel = require('../UserModel').default
-    const updateQuery = jest.spyOn(UserModel, 'update')
-
-    const mockExperimentGroups = {
-      thirdAd: 1
-    }
-    getValidatedExperimentGroups.mockReturnValueOnce(mockExperimentGroups)
-    const logUserExperimentGroups = require('../logUserExperimentGroups').default
-    await logUserExperimentGroups(userContext, userContext.id, mockExperimentGroups)
-    expect(updateQuery).toHaveBeenCalledWith(userContext, {
-      id: userContext.id,
-      testGroupThirdAd: 1,
-      testGroupThirdAdJoinTime: moment.utc().toISOString(),
+      testAdExplanation: 1,
       updated: moment.utc().toISOString()
     })
   })

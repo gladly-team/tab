@@ -1135,11 +1135,6 @@ describe('Actual experiments we are running or will run', () => {
         name: 'oneAdForNewUsers',
         active: true,
         disabled: false
-      },
-      {
-        name: 'thirdAd',
-        active: true,
-        disabled: false
       }
     ])
   })
