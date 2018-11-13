@@ -9,8 +9,6 @@ import {
   STORAGE_EXPERIMENT_PREFIX
 } from 'js/constants'
 import {
-  excludeUsersWhoJoinedWithin,
-  includeIfAnyIsTrue,
   onlyIncludeNewUsers
 } from 'js/utils/experimentFilters'
 import environment from 'js/relay-env'
@@ -251,29 +249,6 @@ export const EXPERIMENT_AD_EXPLANATION = 'adExplanation'
 // field name of the GraphQL ExperimentGroup field name for
 // this test.
 export const experiments = [
-  // @experiment-third-ad
-  createExperiment({
-    name: EXPERIMENT_THIRD_AD,
-    active: true,
-    disabled: false,
-    percentageOfExistingUsersInExperiment: 40,
-    filters: [
-      includeIfAnyIsTrue([
-        onlyIncludeNewUsers,
-        excludeUsersWhoJoinedWithin(30, 'days')
-      ])
-    ],
-    groups: {
-      TWO_ADS: createExperimentGroup({
-        value: 'twoAds',
-        schemaValue: 'TWO_ADS'
-      }),
-      THREE_ADS: createExperimentGroup({
-        value: 'threeAds',
-        schemaValue: 'THREE_ADS'
-      })
-    }
-  }),
   // @experiment-one-ad-for-new-users
   createExperiment({
     name: EXPERIMENT_ONE_AD_FOR_NEW_USERS,

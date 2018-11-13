@@ -3,12 +3,10 @@
 import moment from 'moment'
 import MockDate from 'mockdate'
 import {
-  isThirdAdEnabled,
   isVariousAdSizesEnabled
 } from 'js/utils/feature-flags'
 import {
   EXPERIMENT_AD_EXPLANATION,
-  EXPERIMENT_THIRD_AD,
   EXPERIMENT_ONE_AD_FOR_NEW_USERS,
   getUserExperimentGroup
 } from 'js/utils/experiments'
@@ -48,52 +46,12 @@ describe('ad settings', () => {
     expect(HORIZONTAL_AD_SLOT_DOM_ID).toBe('div-gpt-ad-1464385677836-0')
   })
 
-  // @experiment-third-ad
   // @experiment-one-ad-for-new-users
-  test('[three-ads] [no-one-ad] [recently-installed] shows 2 ads when the "3rd ad" feature is disabled', () => {
-    isThirdAdEnabled.mockReturnValue(false)
+  test('[no-one-ad] [recently-installed] shows 3 ads', () => {
     getBrowserExtensionInstallTime
       .mockReturnValue(moment(mockNow).subtract(23, 'hours'))
     getUserExperimentGroup.mockImplementation(experimentName => {
       switch (experimentName) {
-        case EXPERIMENT_THIRD_AD:
-          return 'threeAds'
-        case EXPERIMENT_ONE_AD_FOR_NEW_USERS:
-          return 'default'
-        default:
-          return 'none'
-      }
-    })
-    const getNumberOfAdsToShow = require('js/ads/adSettings').getNumberOfAdsToShow
-    expect(getNumberOfAdsToShow()).toEqual(2)
-  })
-
-  test('[no-three-ads] [no-one-ad] [recently-installed] shows 2 ads', () => {
-    isThirdAdEnabled.mockReturnValue(true)
-    getBrowserExtensionInstallTime
-      .mockReturnValue(moment(mockNow).subtract(23, 'hours'))
-    getUserExperimentGroup.mockImplementation(experimentName => {
-      switch (experimentName) {
-        case EXPERIMENT_THIRD_AD:
-          return 'twoAds'
-        case EXPERIMENT_ONE_AD_FOR_NEW_USERS:
-          return 'default'
-        default:
-          return 'none'
-      }
-    })
-    const getNumberOfAdsToShow = require('js/ads/adSettings').getNumberOfAdsToShow
-    expect(getNumberOfAdsToShow()).toEqual(2)
-  })
-
-  test('[three-ads] [no-one-ad] [recently-installed] shows 3 ads', () => {
-    isThirdAdEnabled.mockReturnValue(true)
-    getBrowserExtensionInstallTime
-      .mockReturnValue(moment(mockNow).subtract(23, 'hours'))
-    getUserExperimentGroup.mockImplementation(experimentName => {
-      switch (experimentName) {
-        case EXPERIMENT_THIRD_AD:
-          return 'threeAds'
         case EXPERIMENT_ONE_AD_FOR_NEW_USERS:
           return 'default'
         default:
@@ -104,14 +62,11 @@ describe('ad settings', () => {
     expect(getNumberOfAdsToShow()).toEqual(3)
   })
 
-  test('[no-three-ads] [one-ad] [recently-installed] shows 1 ad', () => {
-    isThirdAdEnabled.mockReturnValue(true)
+  test('[one-ad] [recently-installed] shows 1 ad', () => {
     getBrowserExtensionInstallTime
       .mockReturnValue(moment(mockNow).subtract(23, 'hours'))
     getUserExperimentGroup.mockImplementation(experimentName => {
       switch (experimentName) {
-        case EXPERIMENT_THIRD_AD:
-          return 'twoAds'
         case EXPERIMENT_ONE_AD_FOR_NEW_USERS:
           return 'oneAd'
         default:
@@ -122,67 +77,10 @@ describe('ad settings', () => {
     expect(getNumberOfAdsToShow()).toEqual(1)
   })
 
-  test('[three-ads] [one-ad] [recently-installed] shows 1 ad', () => {
-    isThirdAdEnabled.mockReturnValue(true)
-    getBrowserExtensionInstallTime
-      .mockReturnValue(moment(mockNow).subtract(23, 'hours'))
-    getUserExperimentGroup.mockImplementation(experimentName => {
-      switch (experimentName) {
-        case EXPERIMENT_THIRD_AD:
-          return 'threeAds'
-        case EXPERIMENT_ONE_AD_FOR_NEW_USERS:
-          return 'oneAd'
-        default:
-          return 'none'
-      }
-    })
-    const getNumberOfAdsToShow = require('js/ads/adSettings').getNumberOfAdsToShow
-    expect(getNumberOfAdsToShow()).toEqual(1)
-  })
-
-  test('[no-three-ads] [one-ad] [no-recently-installed] shows 2 ads', () => {
-    isThirdAdEnabled.mockReturnValue(true)
-    getBrowserExtensionInstallTime
-      .mockReturnValue(moment(mockNow).subtract(32, 'hours'))
-    getUserExperimentGroup.mockImplementation(experimentName => {
-      switch (experimentName) {
-        case EXPERIMENT_THIRD_AD:
-          return 'twoAds'
-        case EXPERIMENT_ONE_AD_FOR_NEW_USERS:
-          return 'oneAd'
-        default:
-          return 'none'
-      }
-    })
-    const getNumberOfAdsToShow = require('js/ads/adSettings').getNumberOfAdsToShow
-    expect(getNumberOfAdsToShow()).toEqual(2)
-  })
-
-  test('[no-three-ads] [one-ad] [unknown-recently-installed] shows 2 ads when the install time is missing', () => {
-    isThirdAdEnabled.mockReturnValue(true)
+  test('[one-ad] [unknown-recently-installed] shows 3 ads when the install time is missing', () => {
     getBrowserExtensionInstallTime.mockReturnValue(null)
     getUserExperimentGroup.mockImplementation(experimentName => {
       switch (experimentName) {
-        case EXPERIMENT_THIRD_AD:
-          return 'twoAds'
-        case EXPERIMENT_ONE_AD_FOR_NEW_USERS:
-          return 'oneAd'
-        default:
-          return 'none'
-      }
-    })
-    const getNumberOfAdsToShow = require('js/ads/adSettings').getNumberOfAdsToShow
-    expect(getNumberOfAdsToShow()).toEqual(2)
-  })
-
-  test('[three-ads] [one-ad] [no-recently-installed] shows 3 ads', () => {
-    isThirdAdEnabled.mockReturnValue(true)
-    getBrowserExtensionInstallTime
-      .mockReturnValue(moment(mockNow).subtract(32, 'hours'))
-    getUserExperimentGroup.mockImplementation(experimentName => {
-      switch (experimentName) {
-        case EXPERIMENT_THIRD_AD:
-          return 'threeAds'
         case EXPERIMENT_ONE_AD_FOR_NEW_USERS:
           return 'oneAd'
         default:
@@ -209,7 +107,7 @@ describe('ad settings', () => {
     expect(shouldShowAdExplanation()).toEqual(false)
   })
 
-  test('[no-ad-explanation] [recently-installed] shouldShowOneAd returns false', () => {
+  test('[no-ad-explanation] [recently-installed] shouldShowAdExplanation returns false', () => {
     getBrowserExtensionInstallTime
       .mockReturnValue(moment(mockNow).subtract(12, 'seconds'))
     getUserExperimentGroup.mockImplementation(experimentName => {
@@ -224,7 +122,7 @@ describe('ad settings', () => {
     expect(shouldShowAdExplanation()).toEqual(false)
   })
 
-  test('[ad-explanation] [no-recently-installed] shouldShowOneAd returns false', () => {
+  test('[ad-explanation] [no-recently-installed] shouldShowAdExplanation returns false', () => {
     getBrowserExtensionInstallTime
       .mockReturnValue(moment(mockNow).subtract(10, 'days'))
     getUserExperimentGroup.mockImplementation(experimentName => {
@@ -239,7 +137,7 @@ describe('ad settings', () => {
     expect(shouldShowAdExplanation()).toEqual(false)
   })
 
-  test('[ad-explanation] [unknown-recently-installed] shouldShowOneAd returns false', () => {
+  test('[ad-explanation] [unknown-recently-installed] shouldShowAdExplanation returns false', () => {
     getBrowserExtensionInstallTime.mockReturnValue(null)
     getUserExperimentGroup.mockImplementation(experimentName => {
       switch (experimentName) {
@@ -253,7 +151,7 @@ describe('ad settings', () => {
     expect(shouldShowAdExplanation()).toEqual(false)
   })
 
-  test('[ad-explanation] [recently-installed] shouldShowOneAd returns true', () => {
+  test('[ad-explanation] [recently-installed] shouldShowAdExplanation returns true', () => {
     getBrowserExtensionInstallTime
       .mockReturnValue(moment(mockNow).subtract(12, 'seconds'))
     getUserExperimentGroup.mockImplementation(experimentName => {
@@ -268,7 +166,7 @@ describe('ad settings', () => {
     expect(shouldShowAdExplanation()).toEqual(true)
   })
 
-  test('[ad-explanation] [recently-installed] [no-dismissed] shouldShowOneAd returns true', () => {
+  test('[ad-explanation] [recently-installed] [no-dismissed] shouldShowAdExplanation returns true', () => {
     getBrowserExtensionInstallTime
       .mockReturnValue(moment(mockNow).subtract(12, 'seconds'))
     hasUserDismissedAdExplanation.mockReturnValue(false)
@@ -284,7 +182,7 @@ describe('ad settings', () => {
     expect(shouldShowAdExplanation()).toEqual(true)
   })
 
-  test('[ad-explanation] [recently-installed] [dismissed] shouldShowOneAd returns false', () => {
+  test('[ad-explanation] [recently-installed] [dismissed] shouldShowAdExplanation returns false', () => {
     getBrowserExtensionInstallTime
       .mockReturnValue(moment(mockNow).subtract(12, 'seconds'))
     hasUserDismissedAdExplanation.mockReturnValue(true)
