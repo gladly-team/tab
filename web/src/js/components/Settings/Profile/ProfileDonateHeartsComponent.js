@@ -42,6 +42,7 @@ class ProfileDonateHearts extends React.Component {
           style={{
             display: 'flex',
             flexWrap: 'wrap',
+            justifyContent: 'center'
             margin: -spacingPx
           }}
         >
@@ -53,8 +54,6 @@ class ProfileDonateHearts extends React.Component {
                 user={user}
                 showError={this.props.showError}
                 style={{
-                  flex: 1,
-                  flexBasis: '20%',
                   margin: spacingPx
                 }}
               />
