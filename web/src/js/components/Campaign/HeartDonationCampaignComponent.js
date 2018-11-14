@@ -2,10 +2,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
+import Typography from '@material-ui/core/Typography'
 import Logo from 'js/components/Logo/Logo'
 import CountdownClock from 'js/components/Campaign/CountdownClockComponent'
-
-// TODO: use Typography
 
 class HeartDonationCampaign extends React.Component {
   render () {
@@ -40,10 +39,11 @@ class HeartDonationCampaign extends React.Component {
             alignItems: 'flex-end'
           }}>
             <Logo style={{ height: 30, marginRight: 8 }} />
-            <span>Lorem ipsum dolor sit amet!</span>
+            <Typography variant={'h6'}>Lorem ipsum dolor sit amet!</Typography>
           </span>
         </span>
-        <span
+        <Typography
+          variant={'body2'}
           style={{
             display: 'block',
             fontSize: 14,
@@ -52,8 +52,8 @@ class HeartDonationCampaign extends React.Component {
           }}
         >
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-        </span>
-        <div>Donate your {user.vcCurrent} Hearts!</div>
+        </Typography>
+        <Typography variant={'subtitle1'}>Donate your {user.vcCurrent} Hearts!</Typography>
         <div
           style={{
             marginTop: 8,
@@ -70,13 +70,13 @@ class HeartDonationCampaign extends React.Component {
               marginBottom: 4
             }}
           >
-            <span>
+            <Typography variant={'caption'}>
               <CountdownClock
                 campaignStartDatetime={campaignStartDatetime}
                 campaignEndDatetime={campaignEndDatetime}
               />{' '}
               remaining
-            </span>
+            </Typography>
           </span>
         </div>
       </div>
