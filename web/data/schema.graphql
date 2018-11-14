@@ -9,6 +9,9 @@ type App implements Node {
   """All the widgets"""
   widgets(after: String, first: Int, before: String, last: Int): WidgetConnection
 
+  """One of the charities"""
+  charity(charityId: String!): Charity
+
   """All the charities"""
   charities(after: String, first: Int, before: String, last: Int): CharityConnection
 
