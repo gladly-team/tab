@@ -1,10 +1,12 @@
 /* global graphql */
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import { QueryRenderer } from 'react-relay'
 import environment from 'js/relay-env'
 import moment from 'moment'
 import Paper from '@material-ui/core/Paper'
+import withUserId from 'js/components/General/withUserId'
 import {
   alternateAccentColor
 } from 'js/theme/default'
@@ -12,8 +14,7 @@ import HeartDonationCampaign from 'js/components/Campaign/HeartDonationCampaignC
 
 class CampaignBase extends React.Component {
   render () {
-    // TODO: get from props using HOC
-    const userId = 'abcdefghijklmno'
+    const { userId } = this.props
     return (
       <QueryRenderer
         environment={environment}
@@ -100,7 +101,9 @@ class CampaignBase extends React.Component {
   }
 }
 
-CampaignBase.propTypes = {}
+CampaignBase.propTypes = {
+  userId: PropTypes.string.isRequired
+}
 CampaignBase.defaultProps = {}
 
-export default CampaignBase
+export default withUserId(CampaignBase)
