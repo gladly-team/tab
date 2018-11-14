@@ -1,34 +1,20 @@
 /* eslint-env jest */
 
 import React from 'react'
+import { QueryRenderer } from 'react-relay'
 import {
   shallow
 } from 'enzyme'
 
-const mockUserData = {
-  id: 'user-abc-123'
-}
+const getMockProps = () => ({})
 
 describe('Campaign base component', function () {
-  it('shows the campaign component when a campaign is live', function () {
+  it('renders a QueryRenderer', function () {
     const CampaignBase = require('js/components/Campaign/CampaignBase').default
+    const mockProps = getMockProps()
     const wrapper = shallow(
-      <CampaignBase
-        user={mockUserData}
-        isCampaignLive
-      />
+      <CampaignBase {...mockProps} />
     )
-    expect(wrapper.find('[data-test-id="campaign-root"]').length).toBe(1)
-  })
-
-  it('does not show the campaign component when a campaign is not live', function () {
-    const CampaignBase = require('js/components/Campaign/CampaignBase').default
-    const wrapper = shallow(
-      <CampaignBase
-        user={mockUserData}
-        isCampaignLive={false}
-      />
-    )
-    expect(wrapper.find('[data-test-id="campaign-root"]').length).toBe(0)
+    expect(wrapper.find(QueryRenderer).length).toBe(1)
   })
 })

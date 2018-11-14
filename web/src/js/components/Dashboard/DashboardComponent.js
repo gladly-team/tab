@@ -10,7 +10,7 @@ import MoneyRaised from 'js/components/MoneyRaised/MoneyRaisedContainer'
 import UserBackgroundImage from 'js/components/User/UserBackgroundImageContainer'
 import UserMenu from 'js/components/User/UserMenuContainer'
 import WidgetsContainer from 'js/components/Widget/WidgetsContainer'
-import CampaignBaseContainer from 'js/components/Campaign/CampaignBaseContainer'
+import CampaignBase from 'js/components/Campaign/CampaignBase'
 import Ad from 'js/components/Ad/Ad'
 import LogTab from 'js/components/Dashboard/LogTabContainer'
 import LogRevenue from 'js/components/Dashboard/LogRevenueContainer'
@@ -231,13 +231,10 @@ class Dashboard extends React.Component {
           isCampaignLive={isGlobalCampaignLive}
           showError={this.showError.bind(this)}
         />
-        { user
+        { isGlobalCampaignLive
           ? (
             <FadeInDashboardAnimation>
-              <CampaignBaseContainer
-                user={user}
-                isCampaignLive={isGlobalCampaignLive}
-              />
+              <CampaignBase />
             </FadeInDashboardAnimation>
           )
           : null

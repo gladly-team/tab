@@ -11,7 +11,7 @@ import MoneyRaised from 'js/components/MoneyRaised/MoneyRaisedContainer'
 import UserBackgroundImage from 'js/components/User/UserBackgroundImageContainer'
 import UserMenu from 'js/components/User/UserMenuContainer'
 import WidgetsContainer from 'js/components/Widget/WidgetsContainer'
-import CampaignBaseContainer from 'js/components/Campaign/CampaignBaseContainer'
+import CampaignBase from 'js/components/Campaign/CampaignBase'
 import Ad from 'js/components/Ad/Ad'
 import LogTab from 'js/components/Dashboard/LogTabContainer'
 import LogRevenue from 'js/components/Dashboard/LogRevenueContainer'
@@ -110,12 +110,24 @@ describe('Dashboard component', () => {
     expect(wrapper.find(WidgetsContainer).length).toBe(1)
   })
 
-  it('renders CampaignBaseContainer component', () => {
+  it('renders CampaignBase component when the campaign is live', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.app.isGlobalCampaignLive = true
     const wrapper = shallow(
-      <DashboardComponent {...mockProps} />
+      <DashboardComponent {...modifiedProps} />
     )
-    expect(wrapper.find(CampaignBaseContainer).length).toBe(1)
+    expect(wrapper.find(CampaignBase).length).toBe(1)
+  })
+
+  it('does not render CampaignBase component when the campaign is not live', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.app.isGlobalCampaignLive = false
+    const wrapper = shallow(
+      <DashboardComponent {...modifiedProps} />
+    )
+    expect(wrapper.find(CampaignBase).length).toBe(0)
   })
 
   it('does not render any ad components when 0 ads are enabled', () => {
@@ -291,15 +303,6 @@ describe('Dashboard component', () => {
     expect(wrapper.find(UserMenu).length).toBe(0)
   })
 
-  it('does not render CampaignBaseContainer component until the "user" prop exists', () => {
-    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
-    const mockPropsWithoutUser = Object.assign({}, mockProps, { user: null })
-    const wrapper = shallow(
-      <DashboardComponent {...mockPropsWithoutUser} />
-    )
-    expect(wrapper.find(CampaignBaseContainer).length).toBe(0)
-  })
-
   it('does not render LogTab component until the "user" prop exists', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
     const mockPropsWithoutUser = Object.assign({}, mockProps, { user: null })
@@ -371,25 +374,6 @@ describe('Dashboard component', () => {
     wrapper.update()
     expect(wrapper.find(ErrorMessage).length).toBe(1)
     expect(wrapper.find(ErrorMessage).prop('message')).toBe('Big widget problem!')
-  })
-
-  it('passes false to childrens\' "isCampaignLive" props when the "isGlobalCampaignLive" prop is false', () => {
-    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
-    const wrapper = shallow(
-      <DashboardComponent {...mockProps} />
-    )
-    expect(wrapper.find(WidgetsContainer).prop('isCampaignLive')).toBe(false)
-    expect(wrapper.find(CampaignBaseContainer).prop('isCampaignLive')).toBe(false)
-  })
-
-  it('passes true to childrens\' "isCampaignLive" props when the "isGlobalCampaignLive" prop is true', () => {
-    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
-    const mockPropsWithoutCampaignLive = Object.assign({}, mockProps, { app: { isGlobalCampaignLive: true } })
-    const wrapper = shallow(
-      <DashboardComponent {...mockPropsWithoutCampaignLive} />
-    )
-    expect(wrapper.find(WidgetsContainer).prop('isCampaignLive')).toBe(true)
-    expect(wrapper.find(CampaignBaseContainer).prop('isCampaignLive')).toBe(true)
   })
 
   it('displays the anonymous user sign-in prompt when the user is anonymous', async () => {
