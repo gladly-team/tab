@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Paper } from 'material-ui'
+import Paper from '@material-ui/core/Paper'
+import Typography from '@material-ui/core/Typography'
 
 import DonateHeartsControls from 'js/components/Donate/DonateHeartsControlsContainer'
 import DonateVcMutation from 'js/mutations/DonateVcMutation'
@@ -97,13 +98,13 @@ class Charity extends React.Component {
   render () {
     const { charity, user, style, showError } = this.props
 
-    const containerStyle = Object.assign({}, {
-      minWidth: 250,
-      maxWidth: 360
-    }, style)
-
     return (
-      <Paper style={containerStyle}>
+      <Paper
+        style={Object.assign({}, {
+          minWidth: 250,
+          maxWidth: 360
+        }, style)}
+      >
         <span
           style={{
             display: 'flex',
@@ -128,30 +129,28 @@ class Charity extends React.Component {
               src={charity.logo}
               onClick={this.openCharityWebsite.bind(this)} />
           </span>
-          <span
+          <Typography
+            variant={'h5'}
             style={{
               padding: 16,
-              fontSize: 22,
-              boxSizing: 'border-box',
               display: 'block',
-              textAlign: 'center',
-              lineHeight: '100%'
+              textAlign: 'center'
             }}
           >
             {charity.name}
-          </span>
-          <span
+          </Typography>
+          <Typography
+            variant={'body2'}
             style={{
               boxSizing: 'border-box',
               paddingLeft: 16,
               paddingRight: 16,
-              fontSize: 14,
               textAlign: 'center',
               display: 'block'
             }}
           >
             {charity.description}
-          </span>
+          </Typography>
           <DonateHeartsControls
             charity={charity}
             user={user}
