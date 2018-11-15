@@ -10,7 +10,7 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Popover from '@material-ui/core/Popover'
-import Slider from 'material-ui/Slider'
+import Slider from '@material-ui/lab/Slider'
 import { withTheme } from '@material-ui/core/styles'
 
 class DonateHeartsControls extends React.Component {
@@ -179,13 +179,9 @@ class DonateHeartsControls extends React.Component {
             </span>
             { user.vcCurrent > MIN_VC_FOR_CUSTOM_SLIDER
               ? <Slider
-                sliderStyle={{
-                  margin: 0
-                }}
                 min={1}
                 max={user.vcCurrent}
                 step={1}
-                defaultValue={1}
                 value={this.state.amountToDonate}
                 onChange={this.onCustomSliderValChange.bind(this)}
               />
