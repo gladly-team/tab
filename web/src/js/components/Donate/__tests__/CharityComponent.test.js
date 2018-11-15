@@ -9,8 +9,6 @@ const getMockProps = () => ({
   charity: {
     id: 'some-charity-id',
     description: 'A global humanitarian organization committed to ending world hunger',
-    image: 'http://static.example.com/img/charities/charity-post-donation-images/acfusa.jpg',
-    impact: 'Your donation helps move us one step closer to ending world hunger.',
     logo: 'http://static.example.com/img/charities/charity-logos/acfusa-201804.png',
     name: 'Action Against Hunger',
     website: 'http://www.actionagainsthunger.org/'
