@@ -73,6 +73,9 @@ class Charity extends React.Component {
             charity={charity}
             user={user}
             showError={showError}
+            style={{
+              padding: 24
+            }}
           />
         </span>
       </Paper>

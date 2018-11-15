@@ -102,7 +102,7 @@ class DonateHeartsControls extends React.Component {
   }
 
   render () {
-    const { charity, user, theme } = this.props
+    const { charity, user, theme, style } = this.props
 
     const MIN_VC_FOR_CUSTOM_SLIDER = 2
     const heartsText = this.state.amountToDonate === 1 ? 'Heart' : 'Hearts'
@@ -110,12 +110,11 @@ class DonateHeartsControls extends React.Component {
     return (
       <span>
         <span
-          style={{
+          style={Object.assign({}, style, {
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'center',
-            padding: 24
-          }}
+            alignItems: 'center'
+          })}
         >
           <Button
             color={'primary'}
@@ -274,9 +273,12 @@ DonateHeartsControls.propTypes = {
     vcCurrent: PropTypes.number.isRequired
   }),
   showError: PropTypes.func.isRequired,
-  theme: PropTypes.object.isRequired
+  theme: PropTypes.object.isRequired,
+  style: PropTypes.object.isRequired
 }
 
-DonateHeartsControls.defaultProps = {}
+DonateHeartsControls.defaultProps = {
+  style: {}
+}
 
 export default withTheme()(DonateHeartsControls)
