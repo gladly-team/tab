@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 import DonateVcMutation from 'js/mutations/DonateVcMutation'
 
 import Button from '@material-ui/core/Button'
+import Typography from '@material-ui/core/Typography'
 import Dialog from 'material-ui/Dialog'
 import Popover from 'material-ui/Popover'
 import Slider from 'material-ui/Slider'
-import Subheader from 'material-ui/Subheader'
 
 import appTheme from 'js/theme/default'
 
@@ -175,7 +175,14 @@ class DonateHeartsControls extends React.Component {
               marginTop: 5
             }}
             onClick={this.openCustomSlider.bind(this)}>
-                 Or, donate a specific amount
+            <Typography
+              variant={'caption'}
+              style={{
+                color: appTheme.palette.disabledColor
+              }}
+            >
+                Or, donate a specific amount
+            </Typography>
           </span>
         </span>
         <Popover
@@ -188,19 +195,29 @@ class DonateHeartsControls extends React.Component {
         >
           <div
             style={{
-              textAlign: 'center',
+              width: 330,
               height: 'auto',
-              width: 'auto',
               padding: 20
             }}
           >
-            <Subheader
+            <span
               style={{
-                padding: 0
+                display: 'flex',
+                justifyContent: 'space-between',
+                marginBottom: 10
               }}
             >
-              Use the slider to select the amount to donate
-            </Subheader>
+              <Typography
+                variant={'body2'}
+              >
+                Fewer Hearts
+              </Typography>
+              <Typography
+                variant={'body2'}
+              >
+                More Hearts
+              </Typography>
+            </span>
             { user.vcCurrent > MIN_VC_FOR_CUSTOM_SLIDER
               ? <Slider
                 sliderStyle={{
