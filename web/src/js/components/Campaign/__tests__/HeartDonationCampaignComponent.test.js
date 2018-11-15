@@ -13,6 +13,7 @@ const getMockProps = () => ({
   user: {
     vcCurrent: 12
   },
+  campaignTitle: 'Some title here!',
   campaignStartDatetime: moment(),
   campaignEndDatetime: moment(),
   showError: jest.fn()
@@ -23,7 +24,9 @@ describe('Heart donation campaign component', () => {
     const HeartDonationCampaign = require('js/components/Campaign/HeartDonationCampaignComponent').default
     const mockProps = getMockProps()
     shallow(
-      <HeartDonationCampaign {...mockProps} />
+      <HeartDonationCampaign {...mockProps}>
+        <span>Some content</span>
+      </HeartDonationCampaign>
     )
   })
 })

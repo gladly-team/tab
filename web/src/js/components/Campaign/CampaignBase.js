@@ -6,6 +6,7 @@ import { QueryRenderer } from 'react-relay'
 import environment from 'js/relay-env'
 import moment from 'moment'
 import Paper from '@material-ui/core/Paper'
+import Typography from '@material-ui/core/Typography'
 import withUserId from 'js/components/General/withUserId'
 import {
   alternateAccentColor
@@ -50,11 +51,35 @@ class CampaignBase extends React.Component {
             <HeartDonationCampaign
               app={app}
               user={user}
+              campaignTitle={'An example title here'}
               campaignStartDatetime={moment(CAMPAIGN_START_TIME_ISO)}
               campaignEndDatetime={moment(CAMPAIGN_END_TIME_ISO)}
               showError={this.props.showError}
-            />
+            >
+              <div
+                style={{
+                  margin: '14px 4px 20px 4px'
+                }}
+              >
+                <Typography
+                  variant={'body2'}
+                  gutterBottom
+                >
+                Hey! Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                </Typography>
+                <Typography
+                  variant={'body2'}
+                  gutterBottom
+                >
+                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+                ex ea commodo consequat.
+                </Typography>
+              </div>
+            </HeartDonationCampaign>
           )
+
           return (
             <div
               style={{

@@ -8,7 +8,15 @@ import DonateHeartsControls from 'js/components/Donate/DonateHeartsControlsConta
 
 class HeartDonationCampaign extends React.Component {
   render () {
-    const { app, user, campaignStartDatetime, campaignEndDatetime, showError } = this.props
+    const {
+      app,
+      user,
+      campaignTitle,
+      children,
+      campaignStartDatetime,
+      campaignEndDatetime,
+      showError
+    } = this.props
 
     return (
       <div
@@ -26,18 +34,9 @@ class HeartDonationCampaign extends React.Component {
             marginTop: 4
           }}
         >
-          <Typography variant={'h6'}>Lorem ipsum dolor sit amet!</Typography>
+          <Typography variant={'h6'}>{campaignTitle}</Typography>
         </span>
-        <Typography
-          variant={'body2'}
-          style={{
-            display: 'block',
-            marginTop: 8,
-            marginBottom: 8
-          }}
-        >
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-        </Typography>
+        {children}
         <DonateHeartsControls
           charity={app.charity}
           user={user}
@@ -73,6 +72,11 @@ HeartDonationCampaign.propTypes = {
   }),
   campaignStartDatetime: PropTypes.instanceOf(moment),
   campaignEndDatetime: PropTypes.instanceOf(moment).isRequired,
+  campaignTitle: PropTypes.string.isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
+  ]).isRequired,
   showError: PropTypes.func.isRequired
 }
 
