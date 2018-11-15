@@ -9,10 +9,6 @@ import CountdownClock from 'js/components/Campaign/CountdownClockComponent'
 class HeartDonationCampaign extends React.Component {
   render () {
     const { user, campaignStartDatetime, campaignEndDatetime } = this.props
-    // const anchorStyle = {
-    //   textDecoration: 'none'
-    //   // color: alternateAccentColor
-    // }
 
     return (
       <div
@@ -21,8 +17,6 @@ class HeartDonationCampaign extends React.Component {
           paddingBottom: 8,
           paddingLeft: 12,
           paddingRight: 12
-          // fontFamily: appTheme.fontFamily,
-          // color: appTheme.textColor
         }}
       >
         <span
@@ -64,7 +58,6 @@ class HeartDonationCampaign extends React.Component {
           <span
             style={{
               fontSize: 12,
-              // color: lighterTextColor,
               textAlign: 'center',
               marginTop: 8,
               marginBottom: 4
