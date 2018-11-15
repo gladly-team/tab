@@ -60,6 +60,7 @@ import setBackgroundImageDaily from '../database/users/setBackgroundImageDaily'
 import logUserExperimentGroups from '../database/users/logUserExperimentGroups'
 
 import CharityModel from '../database/charities/CharityModel'
+import getCharities from '../database/charities/getCharities'
 
 import donateVc from '../database/donations/donateVc'
 
@@ -504,7 +505,8 @@ const appType = new GraphQLObjectType({
       type: charityConnection,
       description: 'All the charities',
       args: connectionArgs,
-      resolve: (_, args, context) => connectionFromPromisedArray(CharityModel.getAll(context.user), args)
+      resolve: (_, args, context) => connectionFromPromisedArray(
+        getCharities(context.user), args)
     },
     backgroundImages: {
       type: backgroundImageConnection,
