@@ -7,7 +7,6 @@ import Typography from '@material-ui/core/Typography'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
-import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Popover from '@material-ui/core/Popover'
 import Slider from '@material-ui/lab/Slider'
@@ -159,11 +158,11 @@ class DonateHeartsControls extends React.Component {
               padding: 20
             }}
           >
-            <span
+            <div
               style={{
                 display: 'flex',
                 justifyContent: 'space-between',
-                marginBottom: 10
+                marginBottom: 15
               }}
             >
               <Typography
@@ -176,7 +175,7 @@ class DonateHeartsControls extends React.Component {
               >
                 More Hearts
               </Typography>
-            </span>
+            </div>
             { user.vcCurrent > MIN_VC_FOR_CUSTOM_SLIDER
               ? <Slider
                 min={1}
@@ -217,7 +216,7 @@ class DonateHeartsControls extends React.Component {
                 src={charity.image}
               />
             </span>
-            <DialogContentText
+            <div
               style={{
                 padding: '14px 34px 0px 34px'
               }}
@@ -241,7 +240,7 @@ class DonateHeartsControls extends React.Component {
               >
                 {charity.impact}
               </Typography>
-            </DialogContentText>
+            </div>
           </DialogContent>
           <DialogActions
             style={{
