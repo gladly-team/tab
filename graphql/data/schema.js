@@ -492,6 +492,14 @@ const appType = new GraphQLObjectType({
       resolve: (_, args, context) => connectionFromPromisedArray(
         getAllBaseWidgets(context.user), args)
     },
+    charity: {
+      type: charityType,
+      description: 'One of the charities',
+      args: {
+        charityId: { type: new GraphQLNonNull(GraphQLString) }
+      },
+      resolve: (_, { charityId }, context) => CharityModel.get(context.user, charityId)
+    },
     charities: {
       type: charityConnection,
       description: 'All the charities',

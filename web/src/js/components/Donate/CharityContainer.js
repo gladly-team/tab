@@ -10,17 +10,17 @@ export default createFragmentContainer(Charity, {
     fragment CharityContainer_charity on Charity {
       id
       description
-      image
-      impact
       logo
       name
       website
+      ...DonateHeartsControlsContainer_charity
     }
   `,
   user: graphql`
     fragment CharityContainer_user on User {
       id
       vcCurrent
+      ...DonateHeartsControlsContainer_user
     }
   `
 })

@@ -25,12 +25,21 @@ const theme = createMuiTheme({
     useNextVariants: true,
     fontSize: 14,
     fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+    h5: {
+      lineHeight: '1.24'
+    },
     title: {
       lineHeight: '1.7em'
+    },
+    body2: {
+      lineHeight: '1.3'
     },
     subheading: {
       lineHeight: '1.16667em'
     }
+  },
+  shape: {
+    borderRadius: 2
   },
   overrides: {
     MuiButtonBase: {
