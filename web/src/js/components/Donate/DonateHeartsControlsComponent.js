@@ -149,7 +149,7 @@ class DonateHeartsControls extends React.Component {
           open={this.state.customAmountSliderOpen}
           anchorEl={this.state.anchorEl}
           anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
-          targetOrigin={{horizontal: 'left', vertical: 'top'}}
+          transformOrigin={{horizontal: 'left', vertical: 'top'}}
           onClose={this.closeCustomSlider.bind(this)}
         >
           <div
