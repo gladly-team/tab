@@ -25,6 +25,7 @@ class Charity extends BaseModel {
   }
 
   static get schema () {
+    const self = this
     return {
       id: types.uuid(),
       name: types.string(),
@@ -33,7 +34,15 @@ class Charity extends BaseModel {
       image: types.string(),
       website: types.string().uri(),
       description: types.string(),
-      impact: types.string()
+      impact: types.string(),
+      inactive: types.boolean()
+        .default(self.fieldDefaults.inactive)
+    }
+  }
+
+  static get fieldDefaults () {
+    return {
+      inactive: false
     }
   }
 
