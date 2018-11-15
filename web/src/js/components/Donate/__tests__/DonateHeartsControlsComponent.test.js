@@ -17,8 +17,7 @@ const getMockProps = () => ({
     id: 'abc123',
     vcCurrent: 23
   },
-  showError: jest.fn(),
-  style: {}
+  showError: jest.fn()
 })
 
 describe('DonateHeartsControls component', () => {

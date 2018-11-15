@@ -279,12 +279,9 @@ DonateHeartsControls.propTypes = {
     vcCurrent: PropTypes.number.isRequired
   }),
   showError: PropTypes.func.isRequired,
-  style: PropTypes.object,
   theme: PropTypes.object.isRequired
 }
 
-DonateHeartsControls.defaultProps = {
-  style: {}
-}
+DonateHeartsControls.defaultProps = {}
 
 export default withTheme()(DonateHeartsControls)
