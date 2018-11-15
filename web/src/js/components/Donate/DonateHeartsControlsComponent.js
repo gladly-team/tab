@@ -219,7 +219,7 @@ class DonateHeartsControls extends React.Component {
             </span>
             <DialogContentText
               style={{
-                padding: '14px 34px'
+                padding: '14px 34px 0px 34px'
               }}
             >
               <Typography
