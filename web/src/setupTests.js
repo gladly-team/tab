@@ -19,4 +19,6 @@ const localStorageMock = {
 global.localStorage = localStorageMock
 
 // https://material-ui.com/style/typography/#migration-to-typography-v2
-window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true
+if (window) {
+  window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true
+}
