@@ -9,7 +9,7 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import Popover from 'material-ui/Popover'
+import Popover from '@material-ui/core/Popover'
 import Slider from 'material-ui/Slider'
 
 import appTheme from 'js/theme/default'
@@ -151,8 +151,7 @@ class DonateHeartsControls extends React.Component {
           anchorEl={this.state.anchorEl}
           anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
           targetOrigin={{horizontal: 'left', vertical: 'top'}}
-          onRequestClose={this.closeCustomSlider.bind(this)}
-          useLayerForClickAway={false}
+          onClose={this.closeCustomSlider.bind(this)}
         >
           <div
             style={{
