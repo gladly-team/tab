@@ -5,10 +5,11 @@ import moment from 'moment'
 import Typography from '@material-ui/core/Typography'
 import Logo from 'js/components/Logo/Logo'
 import CountdownClock from 'js/components/Campaign/CountdownClockComponent'
+import DonateHeartsControls from 'js/components/Donate/DonateHeartsControlsContainer'
 
 class HeartDonationCampaign extends React.Component {
   render () {
-    const { user, campaignStartDatetime, campaignEndDatetime } = this.props
+    const { app, user, campaignStartDatetime, campaignEndDatetime, showError } = this.props
 
     return (
       <div
@@ -47,7 +48,11 @@ class HeartDonationCampaign extends React.Component {
         >
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
         </Typography>
-        <Typography variant={'subtitle1'}>Donate your {user.vcCurrent} Hearts!</Typography>
+        <DonateHeartsControls
+          charity={app.charity}
+          user={user}
+          showError={showError}
+        />
         <div
           style={{
             marginTop: 8,
@@ -80,15 +85,14 @@ class HeartDonationCampaign extends React.Component {
 HeartDonationCampaign.propTypes = {
   app: PropTypes.shape({
     charity: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired
-    })
+    }).isRequired
   }),
   user: PropTypes.shape({
     vcCurrent: PropTypes.number.isRequired
   }),
   campaignStartDatetime: PropTypes.instanceOf(moment),
-  campaignEndDatetime: PropTypes.instanceOf(moment).isRequired
+  campaignEndDatetime: PropTypes.instanceOf(moment).isRequired,
+  showError: PropTypes.func.isRequired
 }
 
 export default HeartDonationCampaign

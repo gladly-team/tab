@@ -7,11 +7,15 @@ import {
 } from 'enzyme'
 
 const getMockProps = () => ({
+  app: {
+    charity: {}
+  },
   user: {
     vcCurrent: 12
   },
   campaignStartDatetime: moment(),
-  campaignEndDatetime: moment()
+  campaignEndDatetime: moment(),
+  showError: jest.fn()
 })
 
 describe('Heart donation campaign component', () => {

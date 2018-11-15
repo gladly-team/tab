@@ -8,7 +8,9 @@ import {
 
 jest.mock('js/components/General/withUserId')
 
-const getMockProps = () => ({})
+const getMockProps = () => ({
+  showError: () => {}
+})
 
 describe('Campaign base component', () => {
   it('renders a QueryRenderer', () => {

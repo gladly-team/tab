@@ -234,7 +234,9 @@ class Dashboard extends React.Component {
         { isGlobalCampaignLive
           ? (
             <FadeInDashboardAnimation>
-              <CampaignBase />
+              <CampaignBase
+                showError={this.showError.bind(this)}
+              />
             </FadeInDashboardAnimation>
           )
           : null

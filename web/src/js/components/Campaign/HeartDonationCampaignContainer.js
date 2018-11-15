@@ -11,12 +11,14 @@ export default createFragmentContainer(HeartDonationCampaign, {
       charity(charityId: $charityId) {
         id
         name
+        ...DonateHeartsControlsContainer_charity
       }
     }
   `,
   user: graphql`
     fragment HeartDonationCampaignContainer_user on User {
       vcCurrent
+      ...DonateHeartsControlsContainer_user
     }
   `
 })

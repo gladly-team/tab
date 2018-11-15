@@ -52,6 +52,7 @@ class CampaignBase extends React.Component {
               user={user}
               campaignStartDatetime={moment(CAMPAIGN_START_TIME_ISO)}
               campaignEndDatetime={moment(CAMPAIGN_END_TIME_ISO)}
+              showError={this.props.showError}
             />
           )
           return (
@@ -102,8 +103,10 @@ class CampaignBase extends React.Component {
 }
 
 CampaignBase.propTypes = {
-  userId: PropTypes.string.isRequired
+  userId: PropTypes.string.isRequired,
+  showError: PropTypes.func.isRequired
 }
+
 CampaignBase.defaultProps = {}
 
 export default withUserId(CampaignBase)
