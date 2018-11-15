@@ -3,7 +3,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import Typography from '@material-ui/core/Typography'
-import Logo from 'js/components/Logo/Logo'
 import CountdownClock from 'js/components/Campaign/CountdownClockComponent'
 import DonateHeartsControls from 'js/components/Donate/DonateHeartsControlsContainer'
 
@@ -24,24 +23,15 @@ class HeartDonationCampaign extends React.Component {
           style={{
             display: 'flex',
             justifyContent: 'center',
-            fontSize: 20,
-            marginTop: 4,
-            lineHeight: '140%'
+            marginTop: 4
           }}
         >
-          <span style={{
-            display: 'flex',
-            alignItems: 'flex-end'
-          }}>
-            <Logo style={{ height: 30, marginRight: 8 }} />
-            <Typography variant={'h6'}>Lorem ipsum dolor sit amet!</Typography>
-          </span>
+          <Typography variant={'h6'}>Lorem ipsum dolor sit amet!</Typography>
         </span>
         <Typography
           variant={'body2'}
           style={{
             display: 'block',
-            fontSize: 14,
             marginTop: 8,
             marginBottom: 8
           }}
@@ -57,25 +47,16 @@ class HeartDonationCampaign extends React.Component {
           style={{
             marginTop: 8,
             marginBottom: 8,
-            lineHeight: '120%'
+            textAlign: 'center'
           }}
         >
-          <span
-            style={{
-              fontSize: 12,
-              textAlign: 'center',
-              marginTop: 8,
-              marginBottom: 4
-            }}
-          >
-            <Typography variant={'caption'}>
-              <CountdownClock
-                campaignStartDatetime={campaignStartDatetime}
-                campaignEndDatetime={campaignEndDatetime}
-              />{' '}
-              remaining
-            </Typography>
-          </span>
+          <Typography variant={'caption'}>
+            <CountdownClock
+              campaignStartDatetime={campaignStartDatetime}
+              campaignEndDatetime={campaignEndDatetime}
+            />{' '}
+            remaining
+          </Typography>
         </div>
       </div>
     )
