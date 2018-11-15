@@ -4,95 +4,13 @@ import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 
 import DonateHeartsControls from 'js/components/Donate/DonateHeartsControlsContainer'
-import DonateVcMutation from 'js/mutations/DonateVcMutation'
 
 class Charity extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      amountToDonate: 1,
-      customAmountSliderOpen: false,
-      donateInProgress: false,
-      thanksDialog: false
-    }
-  }
-
-  componentDidMount () {
-    const { user } = this.props
-    this.setState({
-      amountToDonate: user.vcCurrent
-    })
-  }
-
-  componentWillReceiveProps (nextProps) {
-    if (this.props.user.vcCurrent !== nextProps.user.vcCurrent) {
-      this.setState({
-        amountToDonate: nextProps.user.vcCurrent
-      })
-    }
-  }
-
   openCharityWebsite () {
     const { charity } = this.props
 
     // The page might be iframed, so opening in _top or _blank is critical.
     window.open(charity.website, '_blank')
-  }
-
-  openCustomSlider (event) {
-    this.setState({
-      customAmountSliderOpen: true,
-      anchorEl: event.currentTarget
-    })
-  }
-
-  closeCustomSlider () {
-    this.setState({
-      customAmountSliderOpen: false
-    })
-  }
-
-  onCustomSliderValChange (event, value) {
-    this.setState({amountToDonate: value})
-  }
-
-  thanksDialogShow () {
-    this.setState({
-      thanksDialog: true,
-      donateInProgress: false
-    })
-  }
-
-  thanksDialogClose () {
-    this.setState({
-      thanksDialog: false
-    })
-  }
-
-  heartsDonationError () {
-    this.props.showError('Oops, we could not donate your Hearts just now :(')
-    this.setState({
-      donateInProgress: false
-    })
-  }
-
-  donateHearts () {
-    if (this.state.amountToDonate <= 0 || this.state.donateInProgress) {
-      return
-    }
-    this.setState({
-      donateInProgress: true
-    })
-    const { charity, user } = this.props
-    const self = this
-    DonateVcMutation.commit(
-      this.props.relay.environment,
-      user,
-      charity.id,
-      this.state.amountToDonate,
-      self.thanksDialogShow.bind(this),
-      self.heartsDonationError.bind(this)
-    )
   }
 
   render () {
