@@ -11,8 +11,7 @@ import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Popover from '@material-ui/core/Popover'
 import Slider from 'material-ui/Slider'
-
-import appTheme from 'js/theme/default'
+import { withTheme } from '@material-ui/core/styles'
 
 class DonateHeartsControls extends React.Component {
   constructor (props) {
@@ -104,7 +103,7 @@ class DonateHeartsControls extends React.Component {
   }
 
   render () {
-    const { charity, user } = this.props
+    const { charity, user, theme } = this.props
 
     const MIN_VC_FOR_CUSTOM_SLIDER = 2
     const heartsText = this.state.amountToDonate === 1 ? 'Heart' : 'Hearts'
@@ -131,7 +130,7 @@ class DonateHeartsControls extends React.Component {
             style={{
               display: user.vcCurrent > MIN_VC_FOR_CUSTOM_SLIDER ? 'block' : 'none',
               fontSize: 11,
-              color: appTheme.palette.disabledColor,
+              color: theme.palette.text.disabled,
               cursor: 'pointer',
               marginTop: 5
             }}
@@ -139,7 +138,7 @@ class DonateHeartsControls extends React.Component {
             <Typography
               variant={'caption'}
               style={{
-                color: appTheme.palette.disabledColor
+                color: theme.palette.text.disabled
               }}
             >
                 Or, donate a specific amount
@@ -217,7 +216,7 @@ class DonateHeartsControls extends React.Component {
                 alt={`A demonstration of the work by ${charity.name}.`}
                 style={{
                   height: 240,
-                  border: `4px solid ${appTheme.palette.primary1Color}`
+                  border: `4px solid ${theme.palette.primary.main}`
                 }}
                 src={charity.image}
               />
@@ -234,7 +233,7 @@ class DonateHeartsControls extends React.Component {
                 Thanks for donating to{' '}
                 <span
                   style={{
-                    color: appTheme.palette.primary1Color,
+                    color: theme.palette.primary.main,
                     cursor: 'pointer'
                   }}
                   onClick={this.openCharityWebsite.bind(this)}>{charity.name}
@@ -280,11 +279,12 @@ DonateHeartsControls.propTypes = {
     vcCurrent: PropTypes.number.isRequired
   }),
   showError: PropTypes.func.isRequired,
-  style: PropTypes.object
+  style: PropTypes.object,
+  theme: PropTypes.object.isRequired
 }
 
 DonateHeartsControls.defaultProps = {
   style: {}
 }
 
-export default DonateHeartsControls
+export default withTheme()(DonateHeartsControls)
