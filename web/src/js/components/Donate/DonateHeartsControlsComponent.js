@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import DonateVcMutation from 'js/mutations/DonateVcMutation'
 
-import RaisedButton from 'material-ui/RaisedButton'
+import Button from '@material-ui/core/Button'
 import Dialog from 'material-ui/Dialog'
 import Popover from 'material-ui/Popover'
 import Slider from 'material-ui/Slider'
@@ -158,11 +158,14 @@ class DonateHeartsControls extends React.Component {
             padding: 24
           }}
         >
-          <RaisedButton
-            label={`Donate ${this.state.amountToDonate} ${heartsText}`}
-            primary
+          <Button
+            color={'primary'}
+            variant={'contained'}
             disabled={this.state.amountToDonate <= 0 || this.state.donateInProgress}
-            onClick={this.donateHearts.bind(this)} />
+            onClick={this.donateHearts.bind(this)}
+          >
+            Donate {this.state.amountToDonate} {heartsText}
+          </Button>
           <span
             style={{
               display: user.vcCurrent > MIN_VC_FOR_CUSTOM_SLIDER ? 'block' : 'none',
@@ -222,12 +225,14 @@ class DonateHeartsControls extends React.Component {
           titleStyle={thanksDialogTitleStyle}
           modal={false}
           actions={[
-            <RaisedButton
-              label='Done'
-              primary
+            <Button
+              color={'primary'}
+              variant={'contained'}
               style={{ marginRight: 10, marginBottom: 10 }}
               onClick={this.thanksDialogClose.bind(this)}
-            />
+            >
+              Done
+            </Button>
           ]}
           open={this.state.thanksDialog}
           onRequestClose={this.thanksDialogClose.bind(this)}>
