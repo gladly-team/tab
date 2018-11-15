@@ -4,7 +4,11 @@ import DonateVcMutation from 'js/mutations/DonateVcMutation'
 
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
-import Dialog from 'material-ui/Dialog'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogContentText from '@material-ui/core/DialogContentText'
+import DialogTitle from '@material-ui/core/DialogTitle'
 import Popover from 'material-ui/Popover'
 import Slider from 'material-ui/Slider'
 
@@ -103,49 +107,6 @@ class DonateHeartsControls extends React.Component {
     const { charity, user } = this.props
 
     const MIN_VC_FOR_CUSTOM_SLIDER = 2
-
-    // Post-donation dialog style
-    // https://github.com/callemall/material-ui/issues/1676#issuecomment-236621533
-    const dialogStyle = {
-      dialogRoot: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingTop: 0
-      },
-      dialogContent: {
-        position: 'relative',
-        width: '80vw',
-        transform: '',
-        marginBottom: 80
-      },
-      dialogBody: {
-        paddingBottom: 0
-      }
-    }
-    const thanksDialogTitleStyle = {
-      textAlign: 'center'
-    }
-    const thanksDialogImgContainerStyle = {
-      display: 'flex',
-      justifyContent: 'center',
-      maxWidth: '100%'
-    }
-    const thanksDialogImgStyle = {
-      height: 240,
-      border: `4px solid ${appTheme.palette.primary1Color}`
-    }
-    const thanksDialogTextStyle = {
-      display: 'block',
-      marginTop: 14,
-      paddingLeft: '10%',
-      paddingRight: '10%'
-    }
-    const linkToCharityStyle = {
-      color: appTheme.palette.primary1Color,
-      cursor: 'pointer'
-    }
-
     const heartsText = this.state.amountToDonate === 1 ? 'Heart' : 'Hearts'
 
     return (
@@ -235,54 +196,72 @@ class DonateHeartsControls extends React.Component {
           </div>
         </Popover>
         <Dialog
-          title='Thank you for donating your Hearts!'
-          contentStyle={dialogStyle.dialogContent}
-          bodyStyle={dialogStyle.dialogBody}
-          style={dialogStyle.dialogRoot}
-          titleStyle={thanksDialogTitleStyle}
-          modal={false}
-          actions={[
+          open={this.state.thanksDialog}
+          onClose={this.thanksDialogClose}
+        >
+          <DialogTitle
+            style={{
+              textAlign: 'center'
+            }}
+          >
+            Thank you for donating your Hearts!
+          </DialogTitle>
+          <DialogContent>
+            <span
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                maxWidth: '100%'
+              }}
+            >
+              <img
+                alt={`A demonstration of the work by ${charity.name}.`}
+                style={{
+                  height: 240,
+                  border: `4px solid ${appTheme.palette.primary1Color}`
+                }}
+                src={charity.image}
+              />
+            </span>
+            <DialogContentText
+              style={{
+                padding: '14px 34px'
+              }}
+            >
+              <Typography
+                variant={'body2'}
+                gutterBottom
+              >
+                Thanks for donating to{' '}
+                <span
+                  style={{
+                    color: appTheme.palette.primary1Color,
+                    cursor: 'pointer'
+                  }}
+                  onClick={this.openCharityWebsite.bind(this)}>{charity.name}
+                </span>!
+              </Typography>
+              <Typography
+                variant={'body2'}
+                gutterBottom
+              >
+                {charity.impact}
+              </Typography>
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions
+            style={{
+              margin: 10
+            }}
+          >
             <Button
               color={'primary'}
               variant={'contained'}
-              style={{ marginRight: 10, marginBottom: 10 }}
               onClick={this.thanksDialogClose.bind(this)}
             >
               Done
             </Button>
-          ]}
-          open={this.state.thanksDialog}
-          onRequestClose={this.thanksDialogClose.bind(this)}>
-          <span style={thanksDialogImgContainerStyle}>
-            <img
-              alt={`A demonstration of the work by ${charity.name}.`}
-              style={thanksDialogImgStyle}
-              src={charity.image}
-            />
-          </span>
-          <span style={thanksDialogTextStyle}>
-            <p
-              style={{
-                marginTop: 0,
-                paddingLeft: 20,
-                paddingRight: 20
-              }}
-            >
-              Thanks for donating to{' '}
-              <span
-                style={linkToCharityStyle}
-                onClick={this.openCharityWebsite.bind(this)}>{charity.name}</span>!
-            </p>
-            <p
-              style={{
-                marginTop: 0,
-                paddingLeft: 20,
-                paddingRight: 20
-              }}
-            >
-              {charity.impact}
-            </p>
-          </span>
+          </DialogActions>
         </Dialog>
       </span>
     )

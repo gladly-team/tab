@@ -38,6 +38,9 @@ const theme = createMuiTheme({
       lineHeight: '1.16667em'
     }
   },
+  shape: {
+    borderRadius: 2
+  },
   overrides: {
     MuiButtonBase: {
       root: {
