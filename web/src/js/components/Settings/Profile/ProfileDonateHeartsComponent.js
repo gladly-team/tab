@@ -42,7 +42,8 @@ class ProfileDonateHearts extends React.Component {
           style={{
             display: 'flex',
             flexWrap: 'wrap',
-            justifyContent: 'center'
+            justifyContent: 'center',
+            marginBottom: 34
           }}
         >
           {app.charities.edges.map((edge) => {
