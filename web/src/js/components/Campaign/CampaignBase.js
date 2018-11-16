@@ -53,7 +53,7 @@ class CampaignBase extends React.Component {
             <HeartDonationCampaign
               app={app}
               user={user}
-              campaignTitle={'This Giving Tuesday, Give Directly!'}
+              campaignTitle={'This Giving Tuesday, Give Directly'}
               campaignStartDatetime={moment(CAMPAIGN_START_TIME_ISO)}
               campaignEndDatetime={moment(CAMPAIGN_END_TIME_ISO)}
               showError={this.props.showError}
