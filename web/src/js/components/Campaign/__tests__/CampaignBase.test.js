@@ -18,7 +18,7 @@ describe('Campaign base component', () => {
     const mockProps = getMockProps()
     const wrapper = shallow(
       <CampaignBase {...mockProps} />
-    ).dive()
+    ).dive().dive()
     expect(wrapper.find(QueryRenderer).length).toBe(1)
   })
 })

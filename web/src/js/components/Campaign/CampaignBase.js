@@ -3,19 +3,21 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { QueryRenderer } from 'react-relay'
+import { withTheme } from '@material-ui/core/styles'
 import environment from 'js/relay-env'
 import moment from 'moment'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import withUserId from 'js/components/General/withUserId'
-import {
-  alternateAccentColor
-} from 'js/theme/default'
 import HeartDonationCampaign from 'js/components/Campaign/HeartDonationCampaignContainer'
 
 class CampaignBase extends React.Component {
   render () {
-    const { userId } = this.props
+    const { userId, theme } = this.props
+    const anchorStyle = {
+      color: theme.palette.primary.main,
+      textDecoration: 'none'
+    }
     return (
       <QueryRenderer
         environment={environment}
@@ -66,7 +68,7 @@ class CampaignBase extends React.Component {
                   gutterBottom
                 >
                   We’re very excited to introduce a new charity partner,{' '}
-                  <a href='https://www.givedirectly.org/' target='_blank' rel='noopener noreferrer'>GiveDirectly</a>!
+                  <a href='https://www.givedirectly.org/' target='_blank' rel='noopener noreferrer' style={anchorStyle}>GiveDirectly</a>!
                 </Typography>
                 <Typography
                   variant={'body2'}
@@ -75,10 +77,10 @@ class CampaignBase extends React.Component {
                   GiveDirectly offers a simple approach to addressing poverty: cut out{' '}
                   intermediaries and allow poor families to decide for themselves what they{' '}
                   need most. They consistently{' '}
-                  <a href='https://www.givedirectly.org/' target='_blank' rel='noopener noreferrer'>measure their impact</a>,{' '}
-                  <a href='https://www.givedirectly.org/research-at-give-directly' target='_blank' rel='noopener noreferrer'>show impressive results</a>,{' '}
+                  <a href='https://www.givedirectly.org/operating-model' target='_blank' rel='noopener noreferrer' style={anchorStyle}>measure their impact</a>,{' '}
+                  <a href='https://www.givedirectly.org/research-at-give-directly' target='_blank' rel='noopener noreferrer' style={anchorStyle}>show impressive results</a>,{' '}
                   and are one of only nine top-rated charities on{' '}
-                  <a href='https://www.givewell.org/charities/give-directly' target='_blank' rel='noopener noreferrer'>GiveWell</a>.
+                  <a href='https://www.givewell.org/charities/give-directly' target='_blank' rel='noopener noreferrer' style={anchorStyle}>GiveWell</a>.
                 </Typography>
                 <Typography
                   variant={'body2'}
@@ -125,7 +127,7 @@ class CampaignBase extends React.Component {
                     height: 3,
                     borderTopLeftRadius: 2,
                     borderTopRightRadius: 2,
-                    backgroundColor: alternateAccentColor
+                    backgroundColor: theme.palette.secondary.main
                   }} />
                 {currentCampaign}
               </Paper>
@@ -139,9 +141,10 @@ class CampaignBase extends React.Component {
 
 CampaignBase.propTypes = {
   userId: PropTypes.string.isRequired,
-  showError: PropTypes.func.isRequired
+  showError: PropTypes.func.isRequired,
+  theme: PropTypes.object.isRequired
 }
 
 CampaignBase.defaultProps = {}
 
-export default withUserId(CampaignBase)
+export default withTheme()(withUserId(CampaignBase))
