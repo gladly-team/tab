@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import DonateVcMutation from 'js/mutations/DonateVcMutation'
 
 import sanitizeHtml from 'sanitize-html'
+import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import Dialog from '@material-ui/core/Dialog'
@@ -11,7 +12,15 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Popover from '@material-ui/core/Popover'
 import Slider from '@material-ui/lab/Slider'
-import { withTheme } from '@material-ui/core/styles'
+
+const styles = theme => ({
+  charityImpactText: {
+    '& a': {
+      color: '#9d4ba3',
+      textDecoration: 'none'
+    }
+  }
+})
 
 class DonateHeartsControls extends React.Component {
   constructor (props) {
@@ -103,7 +112,7 @@ class DonateHeartsControls extends React.Component {
   }
 
   render () {
-    const { charity, user, theme, style } = this.props
+    const { charity, user, theme, style, classes } = this.props
 
     const MIN_VC_FOR_CUSTOM_SLIDER = 2
     const heartsText = this.state.amountToDonate === 1 ? 'Heart' : 'Hearts'
@@ -244,6 +253,7 @@ class DonateHeartsControls extends React.Component {
             >
               <span
                 style={theme.typography.body2}
+                className={classes.charityImpactText}
                 dangerouslySetInnerHTML={{__html: impactMessage}}
               />
             </div>
@@ -281,11 +291,12 @@ DonateHeartsControls.propTypes = {
   }),
   showError: PropTypes.func.isRequired,
   theme: PropTypes.object.isRequired,
-  style: PropTypes.object.isRequired
+  style: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 }
 
 DonateHeartsControls.defaultProps = {
   style: {}
 }
 
-export default withTheme()(DonateHeartsControls)
+export default withStyles(styles, { withTheme: true })(DonateHeartsControls)
