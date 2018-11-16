@@ -120,7 +120,7 @@ class DonateHeartsControls extends React.Component {
     const impactMessage = sanitizeHtml(charity.impact, {
       allowedTags: ['b', 'i', 'em', 'strong', 'a', 'p'],
       allowedAttributes: {
-        a: ['href', 'target']
+        a: ['href', 'target', 'rel']
       }
     })
 
