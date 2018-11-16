@@ -3,19 +3,21 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { QueryRenderer } from 'react-relay'
+import { withTheme } from '@material-ui/core/styles'
 import environment from 'js/relay-env'
 import moment from 'moment'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import withUserId from 'js/components/General/withUserId'
-import {
-  alternateAccentColor
-} from 'js/theme/default'
 import HeartDonationCampaign from 'js/components/Campaign/HeartDonationCampaignContainer'
 
 class CampaignBase extends React.Component {
   render () {
-    const { userId } = this.props
+    const { userId, theme } = this.props
+    const anchorStyle = {
+      color: theme.palette.primary.main,
+      textDecoration: 'none'
+    }
     return (
       <QueryRenderer
         environment={environment}
@@ -33,7 +35,7 @@ class CampaignBase extends React.Component {
           `}
         variables={{
           userId: userId,
-          charityId: 'fb5082cc-151a-4a9a-9289-06906670fd4e'
+          charityId: '77ee7208-62d7-41ad-a6e1-60f8d1dcfd9a'
         }}
         render={({ error, props, retry }) => {
           if (error) {
@@ -51,30 +53,41 @@ class CampaignBase extends React.Component {
             <HeartDonationCampaign
               app={app}
               user={user}
-              campaignTitle={'An example title here'}
+              campaignTitle={'This Giving Tuesday, Give Directly'}
               campaignStartDatetime={moment(CAMPAIGN_START_TIME_ISO)}
               campaignEndDatetime={moment(CAMPAIGN_END_TIME_ISO)}
               showError={this.props.showError}
             >
               <div
                 style={{
-                  margin: '14px 4px 20px 4px'
+                  margin: '14px 10px 20px',
+                  textAlign: 'left'
                 }}
               >
                 <Typography
                   variant={'body2'}
                   gutterBottom
                 >
-                Hey! Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                  We’re very excited to introduce a new charity partner,{' '}
+                  <a href='https://www.givedirectly.org/' target='_blank' rel='noopener noreferrer' style={anchorStyle}>GiveDirectly</a>!
                 </Typography>
                 <Typography
                   variant={'body2'}
                   gutterBottom
                 >
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                ex ea commodo consequat.
+                  GiveDirectly offers a simple approach to addressing poverty: cut out{' '}
+                  intermediaries and allow poor families to decide for themselves what they{' '}
+                  need most. They consistently{' '}
+                  <a href='https://www.givedirectly.org/operating-model' target='_blank' rel='noopener noreferrer' style={anchorStyle}>measure their impact</a>,{' '}
+                  <a href='https://www.givedirectly.org/research-at-give-directly' target='_blank' rel='noopener noreferrer' style={anchorStyle}>show impressive results</a>,{' '}
+                  and are one of only nine top-rated charities on{' '}
+                  <a href='https://www.givewell.org/charities/give-directly' target='_blank' rel='noopener noreferrer' style={anchorStyle}>GiveWell</a>.
+                </Typography>
+                <Typography
+                  variant={'body2'}
+                  gutterBottom
+                >
+                  Join us in welcoming GiveDirectly to Tab for a Cause with a cornucopia of Hearts!
                 </Typography>
               </div>
             </HeartDonationCampaign>
@@ -101,7 +114,7 @@ class CampaignBase extends React.Component {
                 elevation={1}
                 style={{
                   pointerEvents: 'all',
-                  width: 400,
+                  minWidth: 400,
                   margin: 0,
                   marginBottom: 100,
                   padding: 0,
@@ -115,7 +128,7 @@ class CampaignBase extends React.Component {
                     height: 3,
                     borderTopLeftRadius: 2,
                     borderTopRightRadius: 2,
-                    backgroundColor: alternateAccentColor
+                    backgroundColor: theme.palette.secondary.main
                   }} />
                 {currentCampaign}
               </Paper>
@@ -129,9 +142,10 @@ class CampaignBase extends React.Component {
 
 CampaignBase.propTypes = {
   userId: PropTypes.string.isRequired,
-  showError: PropTypes.func.isRequired
+  showError: PropTypes.func.isRequired,
+  theme: PropTypes.object.isRequired
 }
 
 CampaignBase.defaultProps = {}
 
-export default withUserId(CampaignBase)
+export default withTheme()(withUserId(CampaignBase))
