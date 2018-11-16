@@ -33,7 +33,7 @@ class CampaignBase extends React.Component {
           `}
         variables={{
           userId: userId,
-          charityId: 'fb5082cc-151a-4a9a-9289-06906670fd4e'
+          charityId: '77ee7208-62d7-41ad-a6e1-60f8d1dcfd9a'
         }}
         render={({ error, props, retry }) => {
           if (error) {
@@ -51,7 +51,7 @@ class CampaignBase extends React.Component {
             <HeartDonationCampaign
               app={app}
               user={user}
-              campaignTitle={'An example title here'}
+              campaignTitle={'This Giving Tuesday, Give Directly!'}
               campaignStartDatetime={moment(CAMPAIGN_START_TIME_ISO)}
               campaignEndDatetime={moment(CAMPAIGN_END_TIME_ISO)}
               showError={this.props.showError}
@@ -65,16 +65,26 @@ class CampaignBase extends React.Component {
                   variant={'body2'}
                   gutterBottom
                 >
-                Hey! Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                  We’re very excited to introduce a new charity partner,{' '}
+                  <a href='https://www.givedirectly.org/' target='_blank' rel='noopener noreferrer'>GiveDirectly</a>!
                 </Typography>
                 <Typography
                   variant={'body2'}
                   gutterBottom
                 >
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                ex ea commodo consequat.
+                  GiveDirectly offers a simple approach to addressing poverty: cut out{' '}
+                  intermediaries and allow poor families to decide for themselves what they{' '}
+                  need most. They consistently{' '}
+                  <a href='https://www.givedirectly.org/' target='_blank' rel='noopener noreferrer'>measure their impact</a>,{' '}
+                  <a href='https://www.givedirectly.org/research-at-give-directly' target='_blank' rel='noopener noreferrer'>show impressive results</a>,{' '}
+                  and are one of only nine top-rated charities on{' '}
+                  <a href='https://www.givewell.org/charities/give-directly' target='_blank' rel='noopener noreferrer'>GiveWell</a>.
+                </Typography>
+                <Typography
+                  variant={'body2'}
+                  gutterBottom
+                >
+                  Join us in welcoming GiveDirectly to Tab for a Cause with a cornucopia of Hearts!
                 </Typography>
               </div>
             </HeartDonationCampaign>
@@ -101,7 +111,7 @@ class CampaignBase extends React.Component {
                 elevation={1}
                 style={{
                   pointerEvents: 'all',
-                  width: 400,
+                  minWidth: 400,
                   margin: 0,
                   marginBottom: 100,
                   padding: 0,

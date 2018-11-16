@@ -21,6 +21,7 @@ class HeartDonationCampaign extends React.Component {
     return (
       <div
         style={{
+          width: 480,
           paddingTop: 8,
           paddingBottom: 8,
           paddingLeft: 12,
