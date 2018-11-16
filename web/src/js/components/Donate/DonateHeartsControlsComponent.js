@@ -189,7 +189,7 @@ class DonateHeartsControls extends React.Component {
         </Popover>
         <Dialog
           open={this.state.thanksDialog}
-          onClose={this.thanksDialogClose}
+          onClose={this.thanksDialogClose.bind(this)}
         >
           <DialogTitle
             style={{
