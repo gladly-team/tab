@@ -60,7 +60,8 @@ class CampaignBase extends React.Component {
             >
               <div
                 style={{
-                  margin: '14px 4px 20px 4px'
+                  margin: '14px 10px 20px',
+                  textAlign: 'left'
                 }}
               >
                 <Typography
