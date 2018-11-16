@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import DonateVcMutation from 'js/mutations/DonateVcMutation'
 
+import sanitizeHtml from 'sanitize-html'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import Dialog from '@material-ui/core/Dialog'
@@ -106,6 +107,13 @@ class DonateHeartsControls extends React.Component {
 
     const MIN_VC_FOR_CUSTOM_SLIDER = 2
     const heartsText = this.state.amountToDonate === 1 ? 'Heart' : 'Hearts'
+
+    const impactMessage = sanitizeHtml(charity.impact, {
+      allowedTags: ['b', 'i', 'em', 'strong', 'a', 'p'],
+      allowedAttributes: {
+        a: ['href', 'target']
+      }
+    })
 
     return (
       <span>
@@ -234,12 +242,10 @@ class DonateHeartsControls extends React.Component {
                 padding: '14px 34px 0px 34px'
               }}
             >
-              <Typography
-                variant={'body2'}
-                gutterBottom
-              >
-                {charity.impact}
-              </Typography>
+              <span
+                style={theme.typography.body2}
+                dangerouslySetInnerHTML={{__html: impactMessage}}
+              />
             </div>
           </DialogContent>
           <DialogActions
