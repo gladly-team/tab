@@ -191,12 +191,26 @@ class DonateHeartsControls extends React.Component {
           open={this.state.thanksDialog}
           onClose={this.thanksDialogClose.bind(this)}
         >
-          <DialogTitle
-            style={{
-              textAlign: 'center'
-            }}
-          >
-            Thank you for donating your Hearts!
+          <DialogTitle disableTypography>
+            <Typography
+              variant={'h5'}
+              style={{
+                lineHeight: 1.3,
+                textAlign: 'center'
+              }}
+            >
+              Thanks for supporting{' '}
+              <span
+                style={{
+                  color: theme.palette.primary.main,
+                  cursor: 'pointer',
+                  whiteSpace: 'nowrap'
+                }}
+                onClick={this.openCharityWebsite.bind(this)}
+              >
+                {charity.name}
+              </span>!
+            </Typography>
           </DialogTitle>
           <DialogContent>
             <span
@@ -220,19 +234,6 @@ class DonateHeartsControls extends React.Component {
                 padding: '14px 34px 0px 34px'
               }}
             >
-              <Typography
-                variant={'body2'}
-                gutterBottom
-              >
-                Thanks for donating to{' '}
-                <span
-                  style={{
-                    color: theme.palette.primary.main,
-                    cursor: 'pointer'
-                  }}
-                  onClick={this.openCharityWebsite.bind(this)}>{charity.name}
-                </span>!
-              </Typography>
               <Typography
                 variant={'body2'}
                 gutterBottom
