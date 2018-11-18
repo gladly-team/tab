@@ -2,6 +2,9 @@
 
 import tableNames from '../../tables'
 import VCDonationByCharityModel from '../VCDonationByCharityModel'
+import {
+  permissionAuthorizers
+} from '../../../utils/authorization-helpers'
 
 jest.mock('../../databaseClient')
 
@@ -23,7 +26,8 @@ describe('VCDonationByCharityModel', () => {
   })
 
   it('has the correct get permission', () => {
-    expect(VCDonationByCharityModel.permissions.get).toBeUndefined()
+    expect(VCDonationByCharityModel.permissions.get)
+      .toEqual(permissionAuthorizers.allowAll)
   })
 
   it('has the correct getAll permission', () => {

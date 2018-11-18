@@ -3,6 +3,9 @@ import BaseModel from '../base/BaseModel'
 import types from '../fieldTypes'
 import tableNames from '../tables'
 import { VC_DONATION_BY_CHARITY } from '../constants'
+import {
+  permissionAuthorizers
+} from '../../utils/authorization-helpers'
 
 /*
  * @extends BaseModel
@@ -44,7 +47,9 @@ class VCDonationByCharity extends BaseModel {
 
   static get permissions () {
     // This table should not be directly modified by users.
-    return {}
+    return {
+      get: permissionAuthorizers.allowAll
+    }
   }
 }
 
