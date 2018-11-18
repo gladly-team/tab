@@ -2,6 +2,7 @@
 
 import moment from 'moment'
 import VCDonationModel from '../VCDonationModel'
+import VCDonationByCharityModel from '../VCDonationByCharityModel'
 import donateVc from '../donateVc'
 import UserModel from '../../users/UserModel'
 import addVcDonatedAllTime from '../../users/addVcDonatedAllTime'
@@ -32,6 +33,8 @@ afterEach(() => {
 
 describe('donateVc', () => {
   it('calls the database to subtract the donated VC from the user', async () => {
+    expect.assertions(1)
+
     const userId = userContext.id
     const charityId = 'bb5082cc-151a-4a9a-9289-06906670fd4e'
     const vcToDonate = 14
@@ -62,6 +65,8 @@ describe('donateVc', () => {
   })
 
   it('adds the donated VC to the all time count for that user', async () => {
+    expect.assertions(1)
+
     const userId = userContext.id
     const charityId = 'bb5082cc-151a-4a9a-9289-06906670fd4e'
     const vcToDonate = 14
@@ -70,6 +75,8 @@ describe('donateVc', () => {
   })
 
   it('calls the database as expected to create the VcDonation item', async () => {
+    expect.assertions(2)
+
     const userId = userContext.id
     const charityId = 'bb5082cc-151a-4a9a-9289-06906670fd4e'
     const vcToDonate = 16
@@ -100,6 +107,8 @@ describe('donateVc', () => {
   })
 
   it('returns an error if DynamoDB client throws ConditionalCheckFailedException', async () => {
+    expect.assertions(1)
+
     const userId = userContext.id
     const charityId = 'bb5082cc-151a-4a9a-9289-06906670fd4e'
     const vcToDonate = 4000000
@@ -117,5 +126,110 @@ describe('donateVc', () => {
         message: `The user did not have the required ${vcToDonate} VC`
       }]
     })
+  })
+
+  it('updates the hourly VC donated to the charity', async () => {
+    expect.assertions(1)
+
+    const userId = userContext.id
+    const charityId = 'bb5082cc-151a-4a9a-9289-06906670fd4e'
+    const vcToDonate = 14
+    const vcByHourUpdateMethod = jest
+      .spyOn(VCDonationByCharityModel, 'update')
+      .mockImplementation(() => {
+        return {}
+      })
+    await donateVc(userContext, userId, charityId, vcToDonate)
+    expect(vcByHourUpdateMethod).toHaveBeenCalledWith(
+      expect.any(String), // the permissions override
+      {
+        charityId: charityId,
+        timestamp: '2017-05-19T13:00:00.000Z',
+        vcDonated: {$add: vcToDonate}
+      }
+    )
+  })
+
+  it('uses the permissions override to update the hourly VC donated to the charity', async () => {
+    expect.assertions(1)
+
+    const userId = userContext.id
+    const charityId = 'bb5082cc-151a-4a9a-9289-06906670fd4e'
+    const vcToDonate = 14
+    const vcByHourUpdateMethod = jest
+      .spyOn(VCDonationByCharityModel, 'update')
+      .mockImplementation(() => {
+        return {}
+      })
+    await donateVc(userContext, userId, charityId, vcToDonate)
+    expect(vcByHourUpdateMethod.mock.calls[0][0]).toMatch('ADD_VC_DONATED_BY_CHARITY_')
+  })
+
+  it('creates the hourly VC donated to the charity if it doesn\'t already exist', async () => {
+    expect.assertions(1)
+
+    const userId = userContext.id
+    const charityId = 'bb5082cc-151a-4a9a-9289-06906670fd4e'
+    const vcToDonate = 14
+
+    // The update fails because the item does not already exist.
+    jest.spyOn(VCDonationByCharityModel, 'update')
+      .mockImplementation(() => {
+        return Promise.reject({ code: 'ConditionalCheckFailedException' })
+      })
+
+    const vcByHourCreateMethod = jest
+      .spyOn(VCDonationByCharityModel, 'create')
+      .mockImplementation(() => {
+        return {}
+      })
+
+    await donateVc(userContext, userId, charityId, vcToDonate)
+    expect(vcByHourCreateMethod).toHaveBeenCalledWith(
+      expect.any(String), // the permissions override
+      {
+        charityId: charityId,
+        timestamp: '2017-05-19T13:00:00.000Z',
+        vcDonated: vcToDonate
+      }
+    )
+  })
+
+  it('throws an error is something goes wrong when updating the hourly VC donated to the charity', async () => {
+    expect.assertions(1)
+
+    const userId = userContext.id
+    const charityId = 'bb5082cc-151a-4a9a-9289-06906670fd4e'
+    const vcToDonate = 14
+
+    jest.spyOn(VCDonationByCharityModel, 'update')
+      .mockImplementation(() => {
+        return Promise.reject({ code: 'Whoops' })
+      })
+
+    await expect(donateVc(userContext, userId, charityId, vcToDonate))
+      .rejects.toThrow()
+  })
+
+  it('throws an error is something goes wrong when creating the hourly VC donated to the charity', async () => {
+    expect.assertions(1)
+
+    const userId = userContext.id
+    const charityId = 'bb5082cc-151a-4a9a-9289-06906670fd4e'
+    const vcToDonate = 14
+
+    // The update fails because the item does not already exist.
+    jest.spyOn(VCDonationByCharityModel, 'update')
+      .mockImplementation(() => {
+        return Promise.reject({ code: 'ConditionalCheckFailedException' })
+      })
+
+    jest.spyOn(VCDonationByCharityModel, 'create')
+      .mockImplementation(() => {
+        return Promise.reject({ code: 'Whoops' })
+      })
+
+    await expect(donateVc(userContext, userId, charityId, vcToDonate))
+      .rejects.toThrow()
   })
 })
