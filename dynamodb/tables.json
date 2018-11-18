@@ -86,6 +86,21 @@
     }
   },
   {
+    "TableName": "VcDonationByCharity",
+    "KeySchema": [       
+      { "AttributeName": "charityId", "KeyType": "HASH"},
+      { "AttributeName": "timestamp", "KeyType": "RANGE"}
+    ],
+    "AttributeDefinitions": [       
+      { "AttributeName": "charityId", "AttributeType": "S" },
+      { "AttributeName": "timestamp", "AttributeType": "S" }
+    ],
+    "ProvisionedThroughput": {       
+      "ReadCapacityUnits": 1, 
+      "WriteCapacityUnits": 1
+    }
+  },
+  {
     "TableName": "UserRevenueLog",
     "KeySchema": [       
       { "AttributeName": "userId", "KeyType": "HASH"},

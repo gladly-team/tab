@@ -62,6 +62,12 @@ provider:
       Action:
         - "dynamodb:PutItem"
       Resource: "${self:custom.dbTableArnBase}VcDonationLog-${self:provider.stage}"
+      # VcDonationByCharity table
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:PutItem"
+          - "dynamodb:Query"
+        Resource: "${self:custom.dbTableArnBase}VcDonationByCharity-${self:provider.stage}"
     # BackgroundImages table
     - Effect: "Allow"
       Action:
