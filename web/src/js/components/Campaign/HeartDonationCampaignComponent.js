@@ -43,9 +43,6 @@ class HeartDonationCampaign extends React.Component {
           user={user}
           showError={showError}
         />
-        <Typography>
-          {app.charity.vcReceived} Hearts donated so far
-        </Typography>
         <div
           style={{
             marginTop: 8,
