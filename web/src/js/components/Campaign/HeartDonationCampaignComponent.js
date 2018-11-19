@@ -43,6 +43,9 @@ class HeartDonationCampaign extends React.Component {
           user={user}
           showError={showError}
         />
+        <Typography>
+          {app.charity.vcReceived} Hearts donated so far
+        </Typography>
         <div
           style={{
             marginTop: 8,
@@ -66,6 +69,7 @@ class HeartDonationCampaign extends React.Component {
 HeartDonationCampaign.propTypes = {
   app: PropTypes.shape({
     charity: PropTypes.shape({
+      vcReceived: PropTypes.number.isRequired
     }).isRequired
   }),
   user: PropTypes.shape({
