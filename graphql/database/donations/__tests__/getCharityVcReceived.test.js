@@ -3,7 +3,6 @@
 import {
   DatabaseOperation,
   getMockUserContext,
-  getMockUserInfo,
   setMockDBResponse
 } from '../../test-utils'
 
@@ -69,7 +68,7 @@ describe('getCharityVcReceived', () => {
     const getCharityVcReceived = require('../getCharityVcReceived').default
 
     // Mock VCDonationByCharityModel query
-    const referralLogQueryMock = setMockDBResponse(
+    setMockDBResponse(
       DatabaseOperation.QUERY,
       {
         Items: []
@@ -87,7 +86,7 @@ describe('getCharityVcReceived', () => {
     const getCharityVcReceived = require('../getCharityVcReceived').default
 
     // Mock VCDonationByCharityModel query
-    const referralLogQueryMock = setMockDBResponse(
+    setMockDBResponse(
       DatabaseOperation.QUERY,
       {
         Items: [
