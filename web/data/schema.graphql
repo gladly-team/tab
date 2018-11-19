@@ -87,6 +87,9 @@ type Charity implements Node {
 
   """the charity post-donation image URI"""
   image: String
+
+  """The number of VC the charity has received in a given time period."""
+  vcReceived(startTime: String, endTime: String): Int
 }
 
 """A connection to a list of items."""
