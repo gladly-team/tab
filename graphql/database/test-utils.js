@@ -177,3 +177,14 @@ export const addTimestampFieldsToItem = (item) => {
     updated: now
   })
 }
+
+/**
+ * Mock a ConditionalCheckFailedException error from DynamoDB.
+ * @return {Object} An Error object with
+ *.  code == 'ConditionalCheckFailedException'
+ */
+export const ConditionalCheckFailedException = (item) => {
+  const err = new Error('Conditional check failed.')
+  err.code = 'ConditionalCheckFailedException'
+  return err
+}

@@ -7,6 +7,7 @@ import donateVc from '../donateVc'
 import UserModel from '../../users/UserModel'
 import addVcDonatedAllTime from '../../users/addVcDonatedAllTime'
 import {
+  ConditionalCheckFailedException,
   DatabaseOperation,
   getMockUserContext,
   getMockUserInstance,
@@ -116,7 +117,7 @@ describe('donateVc', () => {
     setMockDBResponse(
       DatabaseOperation.UPDATE,
       null,
-      { code: 'ConditionalCheckFailedException' } // simple mock error
+      new ConditionalCheckFailedException() // simple mock error
     )
     const returnedVal = await donateVc(userContext, userId, charityId, vcToDonate)
     expect(returnedVal).toEqual({
@@ -175,7 +176,7 @@ describe('donateVc', () => {
     // The update fails because the item does not already exist.
     jest.spyOn(VCDonationByCharityModel, 'update')
       .mockImplementation(() => {
-        return Promise.reject({ code: 'ConditionalCheckFailedException' })
+        return Promise.reject(new ConditionalCheckFailedException())
       })
 
     const vcByHourCreateMethod = jest
@@ -204,7 +205,7 @@ describe('donateVc', () => {
 
     jest.spyOn(VCDonationByCharityModel, 'update')
       .mockImplementation(() => {
-        return Promise.reject({ code: 'Whoops' })
+        return Promise.reject(new Error('Some other error.'))
       })
 
     await expect(donateVc(userContext, userId, charityId, vcToDonate))
@@ -221,12 +222,12 @@ describe('donateVc', () => {
     // The update fails because the item does not already exist.
     jest.spyOn(VCDonationByCharityModel, 'update')
       .mockImplementation(() => {
-        return Promise.reject({ code: 'ConditionalCheckFailedException' })
+        return Promise.reject(new ConditionalCheckFailedException())
       })
 
     jest.spyOn(VCDonationByCharityModel, 'create')
       .mockImplementation(() => {
-        return Promise.reject({ code: 'Whoops' })
+        return Promise.reject(new Error('Some other error.'))
       })
 
     await expect(donateVc(userContext, userId, charityId, vcToDonate))
