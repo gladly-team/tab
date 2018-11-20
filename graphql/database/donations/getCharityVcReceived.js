@@ -1,4 +1,5 @@
 
+import moment from 'moment'
 import { isValidISOString } from '../../utils/utils'
 import VCDonationByCharityModel from './VCDonationByCharityModel'
 
@@ -17,15 +18,21 @@ const getCharityVcReceived = async (userContext, charityId, startTime, endTime) 
     throw new Error('You must provide valid ISO strings for `startTime` and `endTime` arguments.')
   }
   try {
-    // TODO
     // Make sure the startTime and endTime are rounded to hours, which is
     // how the data's bucketed in the table. Round the startTime down to the
-    // beginning of this hour and round the endTime up to the beginning of
-    // the next hour.
+    // beginning of this hour; round the endTime to 1ms before the end of the
+    // hour (exclusive of the beginning of the hour).
+    const startTimeRoundedISO = moment(startTime)
+      .startOf('hour')
+      .toISOString()
+    const endTimeRoundedISO = moment(endTime)
+      .subtract(1, 'millisecond')
+      .endOf('hour')
+      .toISOString()
 
     const hourlyVcReceivedItems = await VCDonationByCharityModel
       .query(userContext, charityId)
-      .where('timestamp').between(startTime, endTime)
+      .where('timestamp').between(startTimeRoundedISO, endTimeRoundedISO)
       .execute()
     const totalVc = hourlyVcReceivedItems
       .reduce((acc, vcDonationItem) => acc + vcDonationItem.vcDonated, 0)
