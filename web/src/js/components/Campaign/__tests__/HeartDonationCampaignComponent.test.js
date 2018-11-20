@@ -8,7 +8,9 @@ import {
 
 const getMockProps = () => ({
   app: {
-    charity: {}
+    charity: {
+      vcReceived: 0
+    }
   },
   user: {
     vcCurrent: 12
