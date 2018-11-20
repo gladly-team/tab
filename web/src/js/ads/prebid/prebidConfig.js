@@ -259,6 +259,16 @@ export default () => {
         // Only some adapters use this setting as of May 2018.
         // https://github.com/prebid/Prebid.js/issues/1882
         pageUrl: `${publisherDomain}${pagePath}`,
+        userSync: {
+          filterSettings: {
+            // EMX Digital requested iframe syncing on 13 Nov 2018 due to
+            // poor ad performance.
+            iframe: {
+              bidders: 'emx_digital',
+              filter: 'include'
+            }
+          }
+        },
         // GDPR consent. Only enable the consentManagement module here
         // if consent is required, to avoid the unnecessary delay of calling
         // the CMP.
