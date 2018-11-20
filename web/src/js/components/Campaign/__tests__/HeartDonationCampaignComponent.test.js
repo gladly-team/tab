@@ -18,6 +18,7 @@ const getMockProps = () => ({
   campaignTitle: 'Some title here!',
   campaignStartDatetime: moment(),
   campaignEndDatetime: moment(),
+  heartsGoal: 100,
   showError: jest.fn()
 })
 
