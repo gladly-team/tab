@@ -10,6 +10,7 @@ export default createFragmentContainer(DonateHeartsControlsComponent, {
     fragment DonateHeartsControlsContainer_charity on Charity {
       id
       image
+      imageCaption
       impact
       name
       website
