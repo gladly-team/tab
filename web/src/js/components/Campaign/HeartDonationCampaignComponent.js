@@ -3,8 +3,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import Typography from '@material-ui/core/Typography'
+import LinearProgress from '@material-ui/core/LinearProgress'
 import CountdownClock from 'js/components/Campaign/CountdownClockComponent'
 import DonateHeartsControls from 'js/components/Donate/DonateHeartsControlsContainer'
+import { abbreviateNumber } from 'js/utils/utils'
 
 class HeartDonationCampaign extends React.Component {
   render () {
@@ -15,9 +17,12 @@ class HeartDonationCampaign extends React.Component {
       children,
       campaignStartDatetime,
       campaignEndDatetime,
+      heartsGoal,
       showError
     } = this.props
-
+    const heartsDonatedAbbreviated = abbreviateNumber(app.charity.vcReceived)
+    const heartsGoalAbbreviated = abbreviateNumber(heartsGoal)
+    const progress = 100 * app.charity.vcReceived / heartsGoal
     return (
       <div
         style={{
@@ -50,6 +55,28 @@ class HeartDonationCampaign extends React.Component {
             textAlign: 'center'
           }}
         >
+          <div
+            style={{
+              marginLeft: 10,
+              marginRight: 10
+            }}
+          >
+            <span
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between'
+              }}
+            >
+              <Typography variant={'caption'}>
+                {heartsDonatedAbbreviated} Hearts donated
+              </Typography>
+              <Typography variant={'caption'}>
+                Goal: {heartsGoalAbbreviated}
+              </Typography>
+            </span>
+            <LinearProgress variant='determinate' value={progress} />
+          </div>
           <Typography variant={'caption'}>
             <CountdownClock
               campaignStartDatetime={campaignStartDatetime}
@@ -75,6 +102,7 @@ HeartDonationCampaign.propTypes = {
   campaignStartDatetime: PropTypes.instanceOf(moment),
   campaignEndDatetime: PropTypes.instanceOf(moment).isRequired,
   campaignTitle: PropTypes.string.isRequired,
+  heartsGoal: PropTypes.number.isRequired,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node

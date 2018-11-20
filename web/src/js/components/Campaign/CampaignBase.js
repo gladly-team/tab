@@ -6,6 +6,7 @@ import { QueryRenderer } from 'react-relay'
 import { withTheme } from '@material-ui/core/styles'
 import environment from 'js/relay-env'
 import moment from 'moment'
+import FadeInDashboardAnimation from 'js/components/General/FadeInDashboardAnimation'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import withUserId from 'js/components/General/withUserId'
@@ -21,6 +22,7 @@ class CampaignBase extends React.Component {
     const CAMPAIGN_START_TIME_ISO = '2018-11-09T19:00:00.000Z' // For development
     // const CAMPAIGN_START_TIME_ISO = '2018-11-26T19:00:00.000Z'
     const CAMPAIGN_END_TIME_ISO = '2018-11-30T19:00:00.000Z'
+    const heartsGoal = 100 // For development
 
     return (
       <QueryRenderer
@@ -64,6 +66,7 @@ class CampaignBase extends React.Component {
               campaignTitle={'This Giving Tuesday, Give Directly'}
               campaignStartDatetime={moment(CAMPAIGN_START_TIME_ISO)}
               campaignEndDatetime={moment(CAMPAIGN_END_TIME_ISO)}
+              heartsGoal={heartsGoal}
               showError={this.props.showError}
             >
               <div
@@ -118,28 +121,30 @@ class CampaignBase extends React.Component {
                 pointerEvents: 'none'
               }}
             >
-              <Paper
-                elevation={1}
-                style={{
-                  pointerEvents: 'all',
-                  minWidth: 400,
-                  margin: 0,
-                  marginBottom: 100,
-                  padding: 0,
-                  background: '#FFF',
-                  border: 'none'
-                }}
-              >
-                <div
+              <FadeInDashboardAnimation>
+                <Paper
+                  elevation={1}
                   style={{
-                    width: '100%',
-                    height: 3,
-                    borderTopLeftRadius: 2,
-                    borderTopRightRadius: 2,
-                    backgroundColor: theme.palette.secondary.main
-                  }} />
-                {currentCampaign}
-              </Paper>
+                    pointerEvents: 'all',
+                    minWidth: 400,
+                    margin: 0,
+                    marginBottom: 100,
+                    padding: 0,
+                    background: '#FFF',
+                    border: 'none'
+                  }}
+                >
+                  <div
+                    style={{
+                      width: '100%',
+                      height: 3,
+                      borderTopLeftRadius: 2,
+                      borderTopRightRadius: 2,
+                      backgroundColor: theme.palette.secondary.main
+                    }} />
+                  {currentCampaign}
+                </Paper>
+              </FadeInDashboardAnimation>
             </div>
           )
         }}
