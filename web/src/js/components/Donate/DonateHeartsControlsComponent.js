@@ -72,23 +72,9 @@ class DonateHeartsControls extends React.Component {
     this.setState({amountToDonate: value})
   }
 
-  thanksDialogShow () {
-    this.setState({
-      thanksDialog: true,
-      donateInProgress: false
-    })
-  }
-
   thanksDialogClose () {
     this.setState({
       thanksDialog: false
-    })
-  }
-
-  heartsDonationError () {
-    this.props.showError('Oops, we could not donate your Hearts just now :(')
-    this.setState({
-      donateInProgress: false
     })
   }
 
@@ -101,14 +87,24 @@ class DonateHeartsControls extends React.Component {
     })
     const { charity, user } = this.props
     const self = this
-    DonateVcMutation.commit(
-      this.props.relay.environment,
-      user,
-      charity.id,
-      this.state.amountToDonate,
-      self.thanksDialogShow.bind(this),
-      self.heartsDonationError.bind(this)
-    )
+    DonateVcMutation(
+      {
+        userId: user.id,
+        charityId: charity.id,
+        vc: this.state.amountToDonate
+      })
+      .then(() => {
+        self.setState({
+          thanksDialog: true,
+          donateInProgress: false
+        })
+      })
+      .catch(() => {
+        self.props.showError('Oops, we could not donate your Hearts just now :(')
+        self.setState({
+          donateInProgress: false
+        })
+      })
   }
 
   render () {
