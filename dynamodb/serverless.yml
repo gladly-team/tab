@@ -65,6 +65,15 @@ custom:
           minimum: 1
           maximum: 1000
           usage: 0.60
+      vcDonationByCharityTable:
+        read:
+          minimum: 1
+          maximum: 1000
+          usage: 0.75
+        write:
+          minimum: 1
+          maximum: 1000
+          usage: 0.60
       userRevenueLogTable:
         read:
           minimum: 1
@@ -165,6 +174,15 @@ custom:
         write:
           minimum: 5
           maximum: 9001
+          usage: 0.60
+      vcDonationByCharityTable:
+        read:
+          minimum: 1
+          maximum: 1000
+          usage: 0.75
+        write:
+          minimum: 1
+          maximum: 1000
           usage: 0.60
       userRevenueLogTable:
         read:
@@ -271,6 +289,15 @@ custom:
         minimum: ${self:custom.customCapacities.${self:provider.stage}.vcDonationLogTable.write.minimum}
         maximum: ${self:custom.customCapacities.${self:provider.stage}.vcDonationLogTable.write.maximum}
         usage: ${self:custom.customCapacities.${self:provider.stage}.vcDonationLogTable.write.usage}
+    - table: vcDonationByCharityTable
+      read:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.vcDonationByCharityTable.read.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.vcDonationByCharityTable.read.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.vcDonationByCharityTable.read.usage}
+      write:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.vcDonationByCharityTable.write.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.vcDonationByCharityTable.write.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.vcDonationByCharityTable.write.usage}
     - table: userRevenueLogTable
       read:
         minimum: ${self:custom.customCapacities.${self:provider.stage}.userRevenueLogTable.read.minimum}
@@ -412,6 +439,24 @@ resources:
             KeyType: RANGE
         AttributeDefinitions:
           - AttributeName: userId
+            AttributeType: S
+          - AttributeName: timestamp
+            AttributeType: S
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+    vcDonationByCharityTable:  
+      Type: AWS::DynamoDB::Table
+      Properties:  
+        TableName: VcDonationByCharity-${self:provider.stage}
+        KeySchema:
+          - AttributeName: charityId
+            KeyType: HASH
+          - AttributeName: timestamp
+            KeyType: RANGE
+        AttributeDefinitions:
+          - AttributeName: charityId
             AttributeType: S
           - AttributeName: timestamp
             AttributeType: S

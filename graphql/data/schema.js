@@ -63,6 +63,7 @@ import CharityModel from '../database/charities/CharityModel'
 import getCharities from '../database/charities/getCharities'
 
 import donateVc from '../database/donations/donateVc'
+import getCharityVcReceived from '../database/donations/getCharityVcReceived'
 
 import BackgroundImageModel from '../database/backgroundImages/BackgroundImageModel'
 
@@ -458,6 +459,17 @@ const charityType = new GraphQLObjectType({
     image: {
       type: GraphQLString,
       description: 'the charity post-donation image URI'
+    },
+    vcReceived: {
+      type: GraphQLInt,
+      description: 'The number of VC the charity has received in a given time period.',
+      args: {
+        startTime: { type: GraphQLString },
+        endTime: { type: GraphQLString }
+      },
+      resolve: (charity, args, context) => {
+        return getCharityVcReceived(context.user, charity.id, args.startTime, args.endTime)
+      }
     }
   }),
   interfaces: [nodeInterface]

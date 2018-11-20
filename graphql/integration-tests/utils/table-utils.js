@@ -20,6 +20,10 @@ export const tableKeys = {
     hash: 'userId',
     range: 'timestamp'
   },
+  vcDonationByCharity: {
+    hash: 'charityId',
+    range: 'timestamp'
+  },
   userRevenueLog: {
     hash: 'userId',
     range: 'timestamp'

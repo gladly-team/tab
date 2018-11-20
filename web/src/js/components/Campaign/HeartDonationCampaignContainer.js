@@ -7,10 +7,17 @@ import HeartDonationCampaign from 'js/components/Campaign/HeartDonationCampaignC
 
 export default createFragmentContainer(HeartDonationCampaign, {
   app: graphql`
-    fragment HeartDonationCampaignContainer_app on App {
+    fragment HeartDonationCampaignContainer_app on App @argumentDefinitions(
+      startTime: { type: "String" },
+      endTime: { type: "String" },
+    ) {
       charity(charityId: $charityId) {
         id
         name
+        vcReceived (
+          startTime: $startTime,
+          endTime: $endTime
+        )
         ...DonateHeartsControlsContainer_charity
       }
     }

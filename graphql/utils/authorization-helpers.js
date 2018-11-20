@@ -50,3 +50,4 @@ export const permissionAuthorizers = {}
 permissionAuthorizers.userIdMatchesHashKey = (user, hashKey, _) => {
   return user.id === hashKey
 }
+permissionAuthorizers.allowAll = () => true

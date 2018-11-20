@@ -66,6 +66,7 @@ class HeartDonationCampaign extends React.Component {
 HeartDonationCampaign.propTypes = {
   app: PropTypes.shape({
     charity: PropTypes.shape({
+      vcReceived: PropTypes.number.isRequired
     }).isRequired
   }),
   user: PropTypes.shape({

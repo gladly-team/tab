@@ -18,15 +18,23 @@ class CampaignBase extends React.Component {
       color: theme.palette.primary.main,
       textDecoration: 'none'
     }
+    const CAMPAIGN_START_TIME_ISO = '2018-11-09T19:00:00.000Z' // For development
+    // const CAMPAIGN_START_TIME_ISO = '2018-11-26T19:00:00.000Z'
+    const CAMPAIGN_END_TIME_ISO = '2018-11-30T19:00:00.000Z'
+
     return (
       <QueryRenderer
         environment={environment}
         // Hardcode campaign-specific data requirements here, and remove
         // after the campaign is no longer live.
         query={graphql`
-            query CampaignBaseQuery($userId: String!, $charityId: String!) {
+            query CampaignBaseQuery($userId: String!, $charityId: String!,
+              $startTime: String!, $endTime: String!) {
               app {
-                ...HeartDonationCampaignContainer_app
+                ...HeartDonationCampaignContainer_app @arguments(
+                  startTime: $startTime,
+                  endTime: $endTime
+                )
               }
               user(userId: $userId) {
                 ...HeartDonationCampaignContainer_user
@@ -35,7 +43,9 @@ class CampaignBase extends React.Component {
           `}
         variables={{
           userId: userId,
-          charityId: '77ee7208-62d7-41ad-a6e1-60f8d1dcfd9a'
+          charityId: '77ee7208-62d7-41ad-a6e1-60f8d1dcfd9a',
+          startTime: CAMPAIGN_START_TIME_ISO,
+          endTime: CAMPAIGN_END_TIME_ISO
         }}
         render={({ error, props, retry }) => {
           if (error) {
@@ -47,8 +57,6 @@ class CampaignBase extends React.Component {
           const { app, user } = props
 
           // Hardcode campaign component here when running one.
-          const CAMPAIGN_START_TIME_ISO = '2018-11-09T23:00:00.000Z'
-          const CAMPAIGN_END_TIME_ISO = '2018-11-23T20:00:00.000Z'
           const currentCampaign = (
             <HeartDonationCampaign
               app={app}
