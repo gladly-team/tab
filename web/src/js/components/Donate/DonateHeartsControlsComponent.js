@@ -248,9 +248,24 @@ class DonateHeartsControls extends React.Component {
             </span>
             <div
               style={{
-                padding: '14px 34px 0px 34px'
+                paddingTop: charity.imageCaption ? 0 : 14,
+                paddingLeft: 34,
+                paddingRight: 34,
+                paddingBottom: 0
               }}
             >
+              { charity.imageCaption
+                ? <Typography
+                  variant={'caption'}
+                  style={{
+                    color: theme.palette.text.disabled,
+                    marginBottom: 4
+                  }}
+                >
+                  {charity.imageCaption}
+                </Typography>
+                : null
+              }
               <span
                 style={theme.typography.body2}
                 className={classes.charityImpactText}

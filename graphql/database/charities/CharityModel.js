@@ -32,6 +32,7 @@ class Charity extends BaseModel {
       category: types.string(),
       logo: types.string(),
       image: types.string(),
+      imageCaption: types.string(),
       website: types.string().uri(),
       description: types.string(),
       impact: types.string(),

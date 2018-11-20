@@ -460,6 +460,10 @@ const charityType = new GraphQLObjectType({
       type: GraphQLString,
       description: 'the charity post-donation image URI'
     },
+    imageCaption: {
+      type: GraphQLString,
+      description: 'An optional caption for the post-donation image'
+    },
     vcReceived: {
       type: GraphQLInt,
       description: 'The number of VC the charity has received in a given time period.',
