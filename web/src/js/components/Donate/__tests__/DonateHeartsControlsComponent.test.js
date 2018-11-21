@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography'
 import Popover from '@material-ui/core/Popover'
 import Dialog from '@material-ui/core/Dialog'
 import DonateVcMutation from 'js/mutations/DonateVcMutation'
+import Slider from '@material-ui/lab/Slider'
 
 jest.mock('js/mutations/DonateVcMutation')
 
@@ -134,6 +135,43 @@ describe('DonateHeartsControls component', () => {
       userId: 'abc123',
       charityId: 'some-charity-id',
       vc: 23
+    })
+  })
+
+  it('changes the displayed VC to donate when moving the custom slider', () => {
+    const DonateHeartsControlsComponent = require('js/components/Donate/DonateHeartsControlsComponent').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(
+      <DonateHeartsControlsComponent {...mockProps} />
+    ).dive()
+
+    expect(wrapper.find(Button).first().render().text())
+      .toBe('Donate 23 Hearts')
+
+    // Mock moving the slider.
+    wrapper.find(Slider).prop('onChange')({}, 8)
+    expect(wrapper.find(Button).first().render().text())
+      .toBe('Donate 8 Hearts')
+  })
+
+  it('donates the custom amount of VC when the amount is set with the slider', async () => {
+    expect.assertions(1)
+
+    const DonateHeartsControlsComponent = require('js/components/Donate/DonateHeartsControlsComponent').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(
+      <DonateHeartsControlsComponent {...mockProps} />
+    ).dive()
+
+    // Mock moving the slider.
+    wrapper.find(Slider).prop('onChange')({}, 14)
+
+    // Click to donate Hearts.
+    wrapper.find(Button).first().simulate('click')
+    expect(DonateVcMutation).toHaveBeenCalledWith({
+      userId: 'abc123',
+      charityId: 'some-charity-id',
+      vc: 14
     })
   })
 
