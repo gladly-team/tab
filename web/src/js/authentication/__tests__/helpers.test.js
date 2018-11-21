@@ -38,7 +38,9 @@ import {
 import {
   isAnonymousUserSignInEnabled
 } from 'js/utils/feature-flags'
+import environment from 'js/relay-env'
 
+jest.mock('js/relay-env')
 jest.mock('js/authentication/user')
 jest.mock('js/navigation/navigation')
 jest.mock('js/utils/localstorage-mgr')
@@ -621,7 +623,7 @@ describe('createNewUser tests', () => {
     await createNewUser()
 
     expect(CreateNewUserMutation)
-      .toHaveBeenCalledWith({}, 'abc123', 'somebody@example.com', null,
+      .toHaveBeenCalledWith(environment, 'abc123', 'somebody@example.com', null,
         { anonSignIn: 'ANONYMOUS_ALLOWED' }, mockUUID, mockExtensionInstallTime,
         expect.any(Function), expect.any(Function))
   })
@@ -955,7 +957,7 @@ describe('checkIfEmailVerified tests', () => {
     const checkIfEmailVerified = require('js/authentication/helpers').checkIfEmailVerified
     await checkIfEmailVerified()
     expect(LogEmailVerifiedMutation)
-      .toHaveBeenCalledWith({}, 'abc123', expect.any(Function), expect.any(Function))
+      .toHaveBeenCalledWith(environment, 'abc123', expect.any(Function), expect.any(Function))
   })
 
   it('force-refreshes the user token before logging the email as verified', async () => {
