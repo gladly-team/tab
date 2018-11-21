@@ -2,10 +2,17 @@
 
 import React from 'react'
 import {
+  mount,
   shallow
 } from 'enzyme'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
+import Dialog from '@material-ui/core/Dialog'
+import DonateVcMutation from 'js/mutations/DonateVcMutation'
+
+jest.mock('js/mutations/DonateVcMutation')
+
+const mockShowError = jest.fn()
 
 const getMockProps = () => ({
   charity: {
@@ -19,7 +26,11 @@ const getMockProps = () => ({
     id: 'abc123',
     vcCurrent: 23
   },
-  showError: jest.fn()
+  showError: mockShowError
+})
+
+afterEach(() => {
+  jest.clearAllMocks()
 })
 
 describe('DonateHeartsControls component', () => {
@@ -84,5 +95,55 @@ describe('DonateHeartsControls component', () => {
         })
         .length
     ).toBe(0)
+  })
+
+  it('calls to donate VC when the user clicks the button', async () => {
+    expect.assertions(1)
+
+    const DonateHeartsControlsComponent = require('js/components/Donate/DonateHeartsControlsComponent').default
+    const mockProps = getMockProps()
+    const wrapper = mount(
+      <DonateHeartsControlsComponent {...mockProps} />
+    )
+    wrapper.find(Button).simulate('click')
+    expect(DonateVcMutation).toHaveBeenCalledWith({
+      userId: 'abc123',
+      charityId: 'some-charity-id',
+      vc: 23
+    })
+  })
+
+  it('opens the post-donation dialog if VC donation succeeds', async () => {
+    expect.assertions(2)
+
+    const DonateHeartsControlsComponent = require('js/components/Donate/DonateHeartsControlsComponent').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(
+      <DonateHeartsControlsComponent {...mockProps} />
+    ).dive()
+
+    // First, make sure the dialog is not shown.
+    expect(wrapper.find(Dialog).first().prop('open'))
+      .toBe(false)
+
+    // Call the method directly so we can wait for the async.
+    await wrapper.instance().donateHearts()
+
+    expect(wrapper.find(Dialog).first().prop('open'))
+      .toBe(true)
+  })
+
+  it('shows an error if VC donation fails', async () => {
+    expect.assertions(1)
+
+    const DonateHeartsControlsComponent = require('js/components/Donate/DonateHeartsControlsComponent').default
+    DonateVcMutation.mockRejectedValueOnce(() => new Error('Yikes.'))
+    const mockProps = getMockProps()
+    const wrapper = shallow(
+      <DonateHeartsControlsComponent {...mockProps} />
+    ).dive()
+
+    await wrapper.instance().donateHearts()
+    expect(mockShowError).toHaveBeenCalledWith('Oops, we could not donate your Hearts just now :(')
   })
 })

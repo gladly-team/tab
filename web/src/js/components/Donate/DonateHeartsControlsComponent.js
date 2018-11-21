@@ -87,7 +87,7 @@ class DonateHeartsControls extends React.Component {
     })
     const { charity, user } = this.props
     const self = this
-    DonateVcMutation(
+    return DonateVcMutation(
       {
         userId: user.id,
         charityId: charity.id,
