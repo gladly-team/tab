@@ -31,4 +31,14 @@ describe('DonateVcMutation', () => {
       }
     )
   })
+
+  it('uses the expected mutation name', async () => {
+    expect.assertions(2)
+    const DonateVcMutation = require('../DonateVcMutation').default
+    const args = getMockInput()
+    DonateVcMutation(args, getMockAdditionalVars())
+    const mutationResponse = commitMutation.mock.calls[0][1].mutation()
+    expect(mutationResponse.name).toBe('DonateVcMutation')
+    expect(mutationResponse.operation.selections[0].name).toBe('donateVc')
+  })
 })
