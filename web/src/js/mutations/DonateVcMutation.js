@@ -2,6 +2,7 @@ import {
   graphql
 } from 'react-relay'
 import commitMutation from 'relay-commit-mutation-promise'
+import { isNil } from 'lodash/lang'
 import environment from 'js/relay-env'
 
 const mutation = graphql`
@@ -40,8 +41,16 @@ export default (input, otherVars = {}) => {
         const charityRecord = store.get(charityId)
         if (charityRecord) {
           const vcReceivedFieldName = 'vcReceived'
-          // TODO: update the plain "vcReceived" field too.
 
+          // Update the plain "vcReceived" field if it exists.
+          const currentVcReceived = charityRecord.getValue(vcReceivedFieldName)
+          if (!isNil(currentVcReceived)) {
+            charityRecord.setValue(
+              vc + currentVcReceived,
+              vcReceivedFieldName)
+          }
+
+          // Update the "vcReceived" field for a particular time period.
           // TODO: use optional arguments passed to the mutation.
           // TODO: check if the current time is between the start and
           // end time of the campaign.
@@ -49,16 +58,14 @@ export default (input, otherVars = {}) => {
             startTime: '2018-11-09T19:00:00.000Z',
             endTime: '2018-11-30T19:00:00.000Z'
           }
-
-          // TODO: don't set the value if the field value does not
-          // exist, because it won't be accurate.
-          const currentVcReceived = charityRecord
-            .getValue(vcReceivedFieldName, vcReceivedArgs) || 0
-          charityRecord.setValue(
-            vc + currentVcReceived,
-            vcReceivedFieldName,
-            vcReceivedArgs
-          )
+          const vcReceivedInTimePeriod = charityRecord
+            .getValue(vcReceivedFieldName, vcReceivedArgs)
+          if (!isNil(vcReceivedInTimePeriod)) {
+            charityRecord.setValue(
+              vc + vcReceivedInTimePeriod,
+              vcReceivedFieldName,
+              vcReceivedArgs)
+          }
         }
       }
     }

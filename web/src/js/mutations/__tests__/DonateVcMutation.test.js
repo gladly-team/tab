@@ -43,13 +43,51 @@ describe('DonateVcMutation', () => {
     const DonateVcMutation = require('../DonateVcMutation').default
     const args = getMockInput()
     args.vc = 33
-    await DonateVcMutation(args, getMockAdditionalVars())
+    await DonateVcMutation(args)
 
     // Return a mock Charity RecordProxy object with a value for
     // the "vcReceived" field.
     const mockCharityRecord = Relay.__getMockRecordProxy()
-    mockCharityRecord.getValue.mockReturnValueOnce(400)
-    environment.store.get.mockReturnValueOnce(mockCharityRecord)
+    mockCharityRecord.getValue.mockReturnValue(400)
+    environment.store.get.mockReturnValue(mockCharityRecord)
+
+    // Call the updater.
+    const mutationUpdater = commitMutation.mock.calls[0][1].updater
+    mutationUpdater(environment.store)
+    expect(mockCharityRecord.setValue)
+      .toHaveBeenCalledWith(433, 'vcReceived')
+  })
+
+  it('does not update the charity\'s "vcReceived" if the field is not already set', async () => {
+    expect.assertions(1)
+    const DonateVcMutation = require('../DonateVcMutation').default
+    const args = getMockInput()
+    args.vc = 33
+    await DonateVcMutation(args)
+
+    const mockCharityRecord = Relay.__getMockRecordProxy()
+    mockCharityRecord.getValue.mockReturnValue(undefined)
+    environment.store.get.mockReturnValue(mockCharityRecord)
+
+    // Call the updater.
+    const mutationUpdater = commitMutation.mock.calls[0][1].updater
+    mutationUpdater(environment.store)
+    expect(mockCharityRecord.setValue)
+      .not.toHaveBeenCalled()
+  })
+
+  it('updates the charity\'s "vcReceived", including time period args, after donating', async () => {
+    expect.assertions(1)
+    const DonateVcMutation = require('../DonateVcMutation').default
+    const args = getMockInput()
+    args.vc = 33
+    await DonateVcMutation(args)
+
+    // Return a mock Charity RecordProxy object with a value for
+    // the "vcReceived" field.
+    const mockCharityRecord = Relay.__getMockRecordProxy()
+    mockCharityRecord.getValue.mockReturnValue(400)
+    environment.store.get.mockReturnValue(mockCharityRecord)
 
     // Call the updater.
     const mutationUpdater = commitMutation.mock.calls[0][1].updater
@@ -59,5 +97,17 @@ describe('DonateVcMutation', () => {
         startTime: '2018-11-09T19:00:00.000Z',
         endTime: '2018-11-30T19:00:00.000Z'
       })
+  })
+
+  it('does nothing if the charity record is not in the store', async () => {
+    expect.assertions(0)
+    const DonateVcMutation = require('../DonateVcMutation').default
+    const args = getMockInput()
+    args.vc = 33
+    await DonateVcMutation(args)
+
+    environment.store.get.mockReturnValue(undefined)
+    const mutationUpdater = commitMutation.mock.calls[0][1].updater
+    mutationUpdater(environment.store)
   })
 })
