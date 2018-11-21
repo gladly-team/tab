@@ -14,6 +14,12 @@ import Popover from '@material-ui/core/Popover'
 import Slider from '@material-ui/lab/Slider'
 
 const styles = theme => ({
+  charityTitleLink: {
+    color: '#9d4ba3',
+    textDecoration: 'none',
+    cursor: 'pointer',
+    whiteSpace: 'nowrap'
+  },
   charityImpactText: {
     '& a': {
       color: '#9d4ba3',
@@ -48,13 +54,6 @@ class DonateHeartsControls extends React.Component {
     }
   }
 
-  openCharityWebsite () {
-    const { charity } = this.props
-
-    // The page might be iframed, so opening in _top or _blank is critical.
-    window.open(charity.website, '_blank')
-  }
-
   openCustomSlider (event) {
     this.setState({
       customAmountSliderOpen: true,
@@ -72,23 +71,9 @@ class DonateHeartsControls extends React.Component {
     this.setState({amountToDonate: value})
   }
 
-  thanksDialogShow () {
-    this.setState({
-      thanksDialog: true,
-      donateInProgress: false
-    })
-  }
-
   thanksDialogClose () {
     this.setState({
       thanksDialog: false
-    })
-  }
-
-  heartsDonationError () {
-    this.props.showError('Oops, we could not donate your Hearts just now :(')
-    this.setState({
-      donateInProgress: false
     })
   }
 
@@ -101,14 +86,24 @@ class DonateHeartsControls extends React.Component {
     })
     const { charity, user } = this.props
     const self = this
-    DonateVcMutation.commit(
-      this.props.relay.environment,
-      user,
-      charity.id,
-      this.state.amountToDonate,
-      self.thanksDialogShow.bind(this),
-      self.heartsDonationError.bind(this)
-    )
+    return DonateVcMutation(
+      {
+        userId: user.id,
+        charityId: charity.id,
+        vc: this.state.amountToDonate
+      })
+      .then(() => {
+        self.setState({
+          thanksDialog: true,
+          donateInProgress: false
+        })
+      })
+      .catch(() => {
+        self.props.showError('Oops, we could not donate your Hearts just now :(')
+        self.setState({
+          donateInProgress: false
+        })
+      })
   }
 
   render () {
@@ -141,24 +136,26 @@ class DonateHeartsControls extends React.Component {
           >
             Donate {this.state.amountToDonate} {heartsText}
           </Button>
-          <span
-            style={{
-              display: user.vcCurrent > MIN_VC_FOR_CUSTOM_SLIDER ? 'block' : 'none',
-              fontSize: 11,
-              color: theme.palette.text.disabled,
-              cursor: 'pointer',
-              marginTop: 5
-            }}
-            onClick={this.openCustomSlider.bind(this)}>
-            <Typography
-              variant={'caption'}
+          { user.vcCurrent > MIN_VC_FOR_CUSTOM_SLIDER
+            ? <span
               style={{
-                color: theme.palette.text.disabled
+                fontSize: 11,
+                color: theme.palette.text.disabled,
+                cursor: 'pointer',
+                marginTop: 5
               }}
-            >
-                Or, donate a specific amount
-            </Typography>
-          </span>
+              onClick={this.openCustomSlider.bind(this)}>
+              <Typography
+                variant={'caption'}
+                style={{
+                  color: theme.palette.text.disabled
+                }}
+              >
+                  Or, donate a specific amount
+              </Typography>
+            </span>
+            : null
+          }
         </span>
         <Popover
           open={this.state.customAmountSliderOpen}
@@ -192,16 +189,13 @@ class DonateHeartsControls extends React.Component {
                 More Hearts
               </Typography>
             </div>
-            { user.vcCurrent > MIN_VC_FOR_CUSTOM_SLIDER
-              ? <Slider
-                min={1}
-                max={user.vcCurrent}
-                step={1}
-                value={this.state.amountToDonate}
-                onChange={this.onCustomSliderValChange.bind(this)}
-              />
-              : null
-            }
+            <Slider
+              min={1}
+              max={user.vcCurrent}
+              step={1}
+              value={this.state.amountToDonate}
+              onChange={this.onCustomSliderValChange.bind(this)}
+            />
           </div>
         </Popover>
         <Dialog
@@ -217,16 +211,14 @@ class DonateHeartsControls extends React.Component {
               }}
             >
               Thanks for supporting{' '}
-              <span
-                style={{
-                  color: theme.palette.primary.main,
-                  cursor: 'pointer',
-                  whiteSpace: 'nowrap'
-                }}
-                onClick={this.openCharityWebsite.bind(this)}
+              <a
+                href={charity.website}
+                target='_blank'
+                rel='noopener noreferrer'
+                className={classes.charityTitleLink}
               >
                 {charity.name}
-              </span>!
+              </a>!
             </Typography>
           </DialogTitle>
           <DialogContent>
