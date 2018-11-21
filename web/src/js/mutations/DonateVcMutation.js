@@ -32,21 +32,26 @@ export default (input, otherVars = {}) => {
         }
       },
       updater: store => {
-        // If a "Heart donation" campaign is currenty live, add the
-        // user's donated VC to the total VC donated to the charity
-        // during the campaign.
-        // TODO: check if the current time is between the start and
-        // end time of the campaign.
+        // Update the charity's "vcReceived" field to include the
+        // VC this user just donated.
+        // There may also be a "vcReceived" field with startTime and
+        // endTime arguments-- such as when a "Heart donation" campaign
+        // live-- so update that field as well.
         const charityRecord = store.get(charityId)
         if (charityRecord) {
           const vcReceivedFieldName = 'vcReceived'
+          // TODO: update the plain "vcReceived" field too.
 
           // TODO: use optional arguments passed to the mutation.
-          // TODO: if no times provided, use an empty object.
+          // TODO: check if the current time is between the start and
+          // end time of the campaign.
           const vcReceivedArgs = {
             startTime: '2018-11-09T19:00:00.000Z',
             endTime: '2018-11-30T19:00:00.000Z'
           }
+
+          // TODO: don't set the value if the field value does not
+          // exist, because it won't be accurate.
           const currentVcReceived = charityRecord
             .getValue(vcReceivedFieldName, vcReceivedArgs) || 0
           charityRecord.setValue(
