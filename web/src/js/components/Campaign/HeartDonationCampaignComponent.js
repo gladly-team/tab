@@ -13,13 +13,15 @@ class HeartDonationCampaign extends React.Component {
     const {
       app,
       user,
-      campaignTitle,
+      campaign,
       children,
-      campaignStartDatetime,
-      campaignEndDatetime,
-      heartsGoal,
       showError
     } = this.props
+    const {
+      time,
+      title,
+      heartsGoal
+    } = campaign
     const heartsDonatedAbbreviated = abbreviateNumber(app.charity.vcReceived)
     const heartsGoalAbbreviated = abbreviateNumber(heartsGoal)
     const progress = 100 * app.charity.vcReceived / heartsGoal
@@ -40,7 +42,7 @@ class HeartDonationCampaign extends React.Component {
             marginTop: 4
           }}
         >
-          <Typography variant={'h6'}>{campaignTitle}</Typography>
+          <Typography variant={'h6'}>{title}</Typography>
         </span>
         {children}
         <DonateHeartsControls
@@ -79,8 +81,8 @@ class HeartDonationCampaign extends React.Component {
           </div>
           <Typography variant={'caption'}>
             <CountdownClock
-              campaignStartDatetime={campaignStartDatetime}
-              campaignEndDatetime={campaignEndDatetime}
+              campaignStartDatetime={time.start}
+              campaignEndDatetime={time.end}
             />{' '}
             remaining
           </Typography>
@@ -98,11 +100,15 @@ HeartDonationCampaign.propTypes = {
   }),
   user: PropTypes.shape({
     vcCurrent: PropTypes.number.isRequired
-  }),
-  campaignStartDatetime: PropTypes.instanceOf(moment),
-  campaignEndDatetime: PropTypes.instanceOf(moment).isRequired,
-  campaignTitle: PropTypes.string.isRequired,
-  heartsGoal: PropTypes.number.isRequired,
+  }).isRequired,
+  campaign: PropTypes.shape({
+    time: PropTypes.shape({
+      start: PropTypes.instanceOf(moment).isRequired,
+      end: PropTypes.instanceOf(moment).isRequired
+    }),
+    title: PropTypes.string.isRequired,
+    heartsGoal: PropTypes.number.isRequired
+  }).isRequired,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node
