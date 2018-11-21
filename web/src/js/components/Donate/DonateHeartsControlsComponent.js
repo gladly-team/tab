@@ -190,16 +190,13 @@ class DonateHeartsControls extends React.Component {
                 More Hearts
               </Typography>
             </div>
-            { user.vcCurrent > MIN_VC_FOR_CUSTOM_SLIDER
-              ? <Slider
-                min={1}
-                max={user.vcCurrent}
-                step={1}
-                value={this.state.amountToDonate}
-                onChange={this.onCustomSliderValChange.bind(this)}
-              />
-              : null
-            }
+            <Slider
+              min={1}
+              max={user.vcCurrent}
+              step={1}
+              value={this.state.amountToDonate}
+              onChange={this.onCustomSliderValChange.bind(this)}
+            />
           </div>
         </Popover>
         <Dialog

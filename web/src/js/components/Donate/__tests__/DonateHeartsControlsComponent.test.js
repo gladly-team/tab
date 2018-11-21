@@ -7,6 +7,7 @@ import {
 } from 'enzyme'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
+import Popover from '@material-ui/core/Popover'
 import Dialog from '@material-ui/core/Dialog'
 import DonateVcMutation from 'js/mutations/DonateVcMutation'
 
@@ -80,7 +81,7 @@ describe('DonateHeartsControls component', () => {
     ).toBe(1)
   })
 
-  it('shows an option to donate a specific number of Hearts if the user has 2 or fewer Hearts', () => {
+  it('does not show an option to donate a specific number of Hearts if the user has 2 or fewer Hearts', () => {
     const DonateHeartsControlsComponent = require('js/components/Donate/DonateHeartsControlsComponent').default
     const mockProps = getMockProps()
     mockProps.user.vcCurrent = 2
@@ -95,6 +96,29 @@ describe('DonateHeartsControls component', () => {
         })
         .length
     ).toBe(0)
+  })
+
+  it('shows the "custom number of Hearts" popover if the user clicks to donate a specific number', () => {
+    const DonateHeartsControlsComponent = require('js/components/Donate/DonateHeartsControlsComponent').default
+    const mockProps = getMockProps()
+    mockProps.user.vcCurrent = 3
+    const wrapper = shallow(
+      <DonateHeartsControlsComponent {...mockProps} />
+    ).dive()
+
+    // First, make sure the popover is not shown.
+    expect(wrapper.find(Popover).first().prop('open'))
+      .toBe(false)
+
+    const customHeartOption = wrapper
+      .find(Typography)
+      .filterWhere(n => {
+        return n.render().text() === 'Or, donate a specific amount'
+      })
+      .parent()
+    customHeartOption.simulate('click', { currentTarget: null })
+    expect(wrapper.find(Popover).first().prop('open'))
+      .toBe(true)
   })
 
   it('calls to donate VC when the user clicks the button', async () => {
