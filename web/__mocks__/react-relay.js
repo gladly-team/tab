@@ -141,4 +141,18 @@ RelayMock.QueryRenderer.__setQueryResponseOnce = mockResponse => {
   queryRendererResponseQueue.push(mockResponse)
 }
 
+// https://facebook.github.io/relay/docs/en/relay-store.html#recordproxy
+RelayMock.__getMockRecordProxy = () => ({
+  copyFieldsFrom: jest.fn(),
+  getDataID: jest.fn(),
+  getLinkedRecord: jest.fn(),
+  getLinkedRecords: jest.fn(),
+  getOrCreateLinkedRecord: jest.fn(),
+  getType: jest.fn(),
+  getValue: jest.fn(),
+  setLinkedRecord: jest.fn(),
+  setLinkedRecords: jest.fn(),
+  setValue: jest.fn()
+})
+
 module.exports = RelayMock
