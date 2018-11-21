@@ -14,6 +14,12 @@ import Popover from '@material-ui/core/Popover'
 import Slider from '@material-ui/lab/Slider'
 
 const styles = theme => ({
+  charityTitleLink: {
+    color: '#9d4ba3',
+    textDecoration: 'none',
+    cursor: 'pointer',
+    whiteSpace: 'nowrap'
+  },
   charityImpactText: {
     '& a': {
       color: '#9d4ba3',
@@ -46,13 +52,6 @@ class DonateHeartsControls extends React.Component {
         amountToDonate: nextProps.user.vcCurrent
       })
     }
-  }
-
-  openCharityWebsite () {
-    const { charity } = this.props
-
-    // The page might be iframed, so opening in _top or _blank is critical.
-    window.open(charity.website, '_blank')
   }
 
   openCustomSlider (event) {
@@ -212,16 +211,14 @@ class DonateHeartsControls extends React.Component {
               }}
             >
               Thanks for supporting{' '}
-              <span
-                style={{
-                  color: theme.palette.primary.main,
-                  cursor: 'pointer',
-                  whiteSpace: 'nowrap'
-                }}
-                onClick={this.openCharityWebsite.bind(this)}
+              <a
+                href={charity.website}
+                target='_blank'
+                rel='noopener noreferrer'
+                className={classes.charityTitleLink}
               >
                 {charity.name}
-              </span>!
+              </a>!
             </Typography>
           </DialogTitle>
           <DialogContent>

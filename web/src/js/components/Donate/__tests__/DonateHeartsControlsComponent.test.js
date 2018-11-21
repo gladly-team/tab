@@ -9,6 +9,9 @@ import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import Popover from '@material-ui/core/Popover'
 import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogTitle from '@material-ui/core/DialogTitle'
 import DonateVcMutation from 'js/mutations/DonateVcMutation'
 import Slider from '@material-ui/lab/Slider'
 
@@ -207,5 +210,122 @@ describe('DonateHeartsControls component', () => {
 
     await wrapper.instance().donateHearts()
     expect(mockShowError).toHaveBeenCalledWith('Oops, we could not donate your Hearts just now :(')
+  })
+
+  it('shows the correct title in the post-donation message', () => {
+    const DonateHeartsControlsComponent = require('js/components/Donate/DonateHeartsControlsComponent').default
+    const mockProps = getMockProps()
+    mockProps.charity.name = 'A Great Nonprofit'
+    const wrapper = shallow(
+      <DonateHeartsControlsComponent {...mockProps} />
+    ).dive()
+    expect(wrapper.find(DialogTitle).find(Typography).render().text())
+      .toBe('Thanks for supporting A Great Nonprofit!')
+  })
+
+  it('links to the nonprofit\'s website in the post-donation message title', () => {
+    const DonateHeartsControlsComponent = require('js/components/Donate/DonateHeartsControlsComponent').default
+    const mockProps = getMockProps()
+    mockProps.charity.website = 'http://example.com'
+    const wrapper = shallow(
+      <DonateHeartsControlsComponent {...mockProps} />
+    ).dive()
+    const anchor = wrapper.find(DialogTitle).find('a').first()
+    expect(anchor.prop('href')).toBe('http://example.com')
+    expect(anchor.prop('target')).toBe('_blank')
+    expect(anchor.prop('rel')).toBe('noopener noreferrer')
+  })
+
+  it('does not render the image caption in the post-donation message if none is provided', () => {
+    const DonateHeartsControlsComponent = require('js/components/Donate/DonateHeartsControlsComponent').default
+    const mockProps = getMockProps()
+    mockProps.charity.imageCaption = null
+    const wrapper = shallow(
+      <DonateHeartsControlsComponent {...mockProps} />
+    ).dive()
+    expect(
+      wrapper.find(DialogContent)
+        .find(Typography)
+        .filterWhere(n => {
+          return n.prop('variant') === 'caption'
+        })
+        .length
+    )
+      .toBe(0)
+  })
+
+  it('renders the image caption in the post-donation message if one is provided', () => {
+    const DonateHeartsControlsComponent = require('js/components/Donate/DonateHeartsControlsComponent').default
+    const mockProps = getMockProps()
+    mockProps.charity.imageCaption = 'There is a nice photo above this text.'
+    const wrapper = shallow(
+      <DonateHeartsControlsComponent {...mockProps} />
+    ).dive()
+    expect(
+      wrapper.find(DialogContent)
+        .find(Typography)
+        .filterWhere(n => {
+          return n.prop('variant') === 'caption' &&
+          n.render().text() === 'There is a nice photo above this text.'
+        })
+        .length
+    )
+      .toBe(1)
+  })
+
+  it('shows the image in the post-donation message', () => {
+    const DonateHeartsControlsComponent = require('js/components/Donate/DonateHeartsControlsComponent').default
+    const mockProps = getMockProps()
+    mockProps.charity.image = 'http://example.com/foo.png'
+    const wrapper = shallow(
+      <DonateHeartsControlsComponent {...mockProps} />
+    ).dive()
+    expect(wrapper.find(DialogContent).find('img').first().prop('src'))
+      .toBe('http://example.com/foo.png')
+  })
+
+  it('shows the correct (non-HTML) content in the post-donation message', () => {
+    const DonateHeartsControlsComponent = require('js/components/Donate/DonateHeartsControlsComponent').default
+    const mockProps = getMockProps()
+    mockProps.charity.impact = 'Your support is going to some good stuff.'
+    const wrapper = shallow(
+      <DonateHeartsControlsComponent {...mockProps} />
+    ).dive()
+    expect(wrapper.find(DialogContent).render().text())
+      .toBe('Your support is going to some good stuff.')
+  })
+
+  it('shows the correct sanitized HTML content in the post-donation message', () => {
+    const DonateHeartsControlsComponent = require('js/components/Donate/DonateHeartsControlsComponent').default
+    const mockProps = getMockProps()
+    mockProps.charity.impact = '<p>Your support is going to some <a data-thing="this attribute is not allowed" href="http://example.com" target="_blank" rel="noopener noreferrer">good stuff</a>.</p><script>var foo = "script tags are not allowed!"</script>'
+    const wrapper = shallow(
+      <DonateHeartsControlsComponent {...mockProps} />
+    ).dive()
+    expect(wrapper.find(DialogContent).find('span').last().render().html())
+      .toBe('<p>Your support is going to some <a href="http://example.com" target="_blank" rel="noopener noreferrer">good stuff</a>.</p>')
+  })
+
+  it('closes the post-donation message when clicking the "done" button', async () => {
+    expect.assertions(3)
+
+    const DonateHeartsControlsComponent = require('js/components/Donate/DonateHeartsControlsComponent').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(
+      <DonateHeartsControlsComponent {...mockProps} />
+    ).dive()
+
+    // First, open the post-donation message.
+    await wrapper.instance().donateHearts()
+    expect(wrapper.find(Dialog).first().prop('open'))
+      .toBe(true)
+
+    const doneButton = wrapper.find(DialogActions).find(Button).first()
+    expect(doneButton.render().text()).toBe('Done')
+
+    // Mock a button click.
+    doneButton.prop('onClick')()
+    expect(wrapper.find(Dialog).first().prop('open'))
+      .toBe(false)
   })
 })
