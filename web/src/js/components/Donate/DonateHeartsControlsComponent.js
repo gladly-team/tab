@@ -137,24 +137,26 @@ class DonateHeartsControls extends React.Component {
           >
             Donate {this.state.amountToDonate} {heartsText}
           </Button>
-          <span
-            style={{
-              display: user.vcCurrent > MIN_VC_FOR_CUSTOM_SLIDER ? 'block' : 'none',
-              fontSize: 11,
-              color: theme.palette.text.disabled,
-              cursor: 'pointer',
-              marginTop: 5
-            }}
-            onClick={this.openCustomSlider.bind(this)}>
-            <Typography
-              variant={'caption'}
+          { user.vcCurrent > MIN_VC_FOR_CUSTOM_SLIDER
+            ? <span
               style={{
-                color: theme.palette.text.disabled
+                fontSize: 11,
+                color: theme.palette.text.disabled,
+                cursor: 'pointer',
+                marginTop: 5
               }}
-            >
-                Or, donate a specific amount
-            </Typography>
-          </span>
+              onClick={this.openCustomSlider.bind(this)}>
+              <Typography
+                variant={'caption'}
+                style={{
+                  color: theme.palette.text.disabled
+                }}
+              >
+                  Or, donate a specific amount
+              </Typography>
+            </span>
+            : null
+          }
         </span>
         <Popover
           open={this.state.customAmountSliderOpen}
