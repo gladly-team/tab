@@ -76,12 +76,18 @@ describe('DonateVcMutation', () => {
       .not.toHaveBeenCalled()
   })
 
-  it('updates the charity\'s "vcReceived", including time period args, after donating', async () => {
+  it('updates the charity\'s "vcReceived" for a given time period after donating', async () => {
     expect.assertions(1)
     const DonateVcMutation = require('../DonateVcMutation').default
     const args = getMockInput()
     args.vc = 33
-    await DonateVcMutation(args)
+    const mockAdditionalVars = {
+      vcReceivedArgs: {
+        startTime: '2018-11-09T19:00:00.000Z',
+        endTime: '2018-11-30T19:00:00.000Z'
+      }
+    }
+    await DonateVcMutation(args, mockAdditionalVars)
 
     // Return a mock Charity RecordProxy object with a value for
     // the "vcReceived" field.

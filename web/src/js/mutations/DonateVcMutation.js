@@ -21,6 +21,7 @@ const mutation = graphql`
 // https://medium.com/entria/wrangling-the-client-store-with-the-relay-modern-updater-function-5c32149a71ac
 export default (input, otherVars = {}) => {
   const { userId, charityId, vc } = input
+  const { vcReceivedArgs = {} } = otherVars
   return commitMutation(
     environment,
     {
@@ -51,20 +52,21 @@ export default (input, otherVars = {}) => {
           }
 
           // Update the "vcReceived" field for a particular time period.
-          // TODO: use optional arguments passed to the mutation.
-          // TODO: check if the current time is between the start and
-          // end time of the campaign.
-          const vcReceivedArgs = {
-            startTime: '2018-11-09T19:00:00.000Z',
-            endTime: '2018-11-30T19:00:00.000Z'
-          }
-          const vcReceivedInTimePeriod = charityRecord
-            .getValue(vcReceivedFieldName, vcReceivedArgs)
-          if (!isNil(vcReceivedInTimePeriod)) {
-            charityRecord.setValue(
-              vc + vcReceivedInTimePeriod,
-              vcReceivedFieldName,
-              vcReceivedArgs)
+          if (vcReceivedArgs.startTime && vcReceivedArgs.endTime) {
+            // TODO: check if the current time is between the start and
+            // end time of the campaign.
+            const args = {
+              startTime: vcReceivedArgs.startTime,
+              endTime: vcReceivedArgs.endTime
+            }
+            const vcReceivedInTimePeriod = charityRecord
+              .getValue(vcReceivedFieldName, args)
+            if (!isNil(vcReceivedInTimePeriod)) {
+              charityRecord.setValue(
+                vc + vcReceivedInTimePeriod,
+                vcReceivedFieldName,
+                args)
+            }
           }
         }
       }
