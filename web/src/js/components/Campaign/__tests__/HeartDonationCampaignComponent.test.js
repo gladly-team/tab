@@ -62,15 +62,23 @@ describe('Heart donation campaign component', () => {
   it('passes the expected props to DonateHeartsControls', () => {
     const HeartDonationCampaign = require('js/components/Campaign/HeartDonationCampaignComponent').default
     const mockProps = getMockProps()
-    mockProps.campaign.title = 'Hello there!'
     const wrapper = shallow(
       <HeartDonationCampaign {...mockProps}>
         <span>Some content</span>
       </HeartDonationCampaign>
     )
     const donateControls = wrapper.find(DonateHeartsControls)
-    expect(donateControls.prop('charity')).toEqual(mockProps.app.charity)
-    expect(donateControls.prop('user')).toEqual(mockProps.user)
+    expect(donateControls.props()).toEqual({
+      user: mockProps.user,
+      charity: mockProps.app.charity,
+      heartDonationCampaign: {
+        time: {
+          start: mockProps.campaign.time.start,
+          end: mockProps.campaign.time.end
+        }
+      },
+      showError: expect.any(Function)
+    })
   })
 
   it('displays the Hearts donated so far', () => {

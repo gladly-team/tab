@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import DonateVcMutation from 'js/mutations/DonateVcMutation'
-
+import moment from 'moment'
 import sanitizeHtml from 'sanitize-html'
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
@@ -12,6 +11,7 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Popover from '@material-ui/core/Popover'
 import Slider from '@material-ui/lab/Slider'
+import DonateVcMutation from 'js/mutations/DonateVcMutation'
 
 const styles = theme => ({
   charityTitleLink: {
@@ -84,20 +84,29 @@ class DonateHeartsControls extends React.Component {
     this.setState({
       donateInProgress: true
     })
-    const { charity, user } = this.props
+    const { charity, user, heartDonationCampaign: { time = {} } = {} } = this.props
     const self = this
     return DonateVcMutation(
       {
         userId: user.id,
         charityId: charity.id,
         vc: this.state.amountToDonate
-      })
-      .then(() => {
-        self.setState({
-          thanksDialog: true,
-          donateInProgress: false
+      },
+      Object.assign({},
+        // Optionally provided so we know which Relay record to
+        // update to increase the total VC this charity has received.
+        (time.start && time.end) && {
+          vcReceivedArgs: {
+            startTime: moment(time.start).toISOString(),
+            endTime: moment(time.end).toISOString()
+          }
         })
+    ).then(() => {
+      self.setState({
+        thanksDialog: true,
+        donateInProgress: false
       })
+    })
       .catch(() => {
         self.props.showError('Oops, we could not donate your Hearts just now :(')
         self.setState({
@@ -295,6 +304,14 @@ DonateHeartsControls.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.string.isRequired,
     vcCurrent: PropTypes.number.isRequired
+  }),
+  // Provided so we know which Relay record to update
+  // to increase the Hearts donated to the campaign.
+  heartDonationCampaign: PropTypes.shape({
+    time: PropTypes.shape({
+      start: PropTypes.instanceOf(moment),
+      end: PropTypes.instanceOf(moment)
+    })
   }),
   showError: PropTypes.func.isRequired,
   theme: PropTypes.object.isRequired,

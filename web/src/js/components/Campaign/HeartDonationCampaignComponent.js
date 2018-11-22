@@ -48,6 +48,12 @@ class HeartDonationCampaign extends React.Component {
         <DonateHeartsControls
           charity={app.charity}
           user={user}
+          heartDonationCampaign={{
+            time: {
+              start: time.start,
+              end: time.end
+            }
+          }}
           showError={showError}
         />
         <div
