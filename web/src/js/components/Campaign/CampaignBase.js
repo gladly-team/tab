@@ -19,10 +19,9 @@ class CampaignBase extends React.Component {
       color: theme.palette.primary.main,
       textDecoration: 'none'
     }
-    const CAMPAIGN_START_TIME_ISO = '2018-11-09T19:00:00.000Z' // For development
-    // const CAMPAIGN_START_TIME_ISO = '2018-11-26T19:00:00.000Z'
-    const CAMPAIGN_END_TIME_ISO = '2018-11-30T19:00:00.000Z'
-    const heartsGoal = 100 // For development
+    const CAMPAIGN_START_TIME_ISO = '2018-11-26T16:00:00.000Z'
+    const CAMPAIGN_END_TIME_ISO = '2018-11-30T22:00:00.000Z'
+    const heartsGoal = 10e6
 
     return (
       <QueryRenderer
