@@ -2,6 +2,7 @@ import {
   graphql
 } from 'react-relay'
 import commitMutation from 'relay-commit-mutation-promise'
+import moment from 'moment'
 import { isNil } from 'lodash/lang'
 import environment from 'js/relay-env'
 
@@ -51,10 +52,14 @@ export default (input, otherVars = {}) => {
               vcReceivedFieldName)
           }
 
-          // Update the "vcReceived" field for a particular time period.
-          if (vcReceivedArgs.startTime && vcReceivedArgs.endTime) {
-            // TODO: check if the current time is between the start and
-            // end time of the campaign.
+          // Update the "vcReceived" field for a particular time period if
+          // the current time is within the time period.
+          if (
+            vcReceivedArgs.startTime &&
+            vcReceivedArgs.endTime &&
+            moment() > moment(vcReceivedArgs.startTime) &&
+            moment() < moment(vcReceivedArgs.endTime)
+          ) {
             const args = {
               startTime: vcReceivedArgs.startTime,
               endTime: vcReceivedArgs.endTime
