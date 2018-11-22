@@ -177,11 +177,11 @@ custom:
           usage: 0.60
       vcDonationByCharityTable:
         read:
-          minimum: 1
+          minimum: 100
           maximum: 1000
           usage: 0.75
         write:
-          minimum: 1
+          minimum: 20
           maximum: 1000
           usage: 0.60
       userRevenueLogTable:
