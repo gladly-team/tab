@@ -1,6 +1,7 @@
 /* eslint-env jest */
 
 import React from 'react'
+import moment from 'moment'
 import {
   mount,
   shallow
@@ -138,7 +139,36 @@ describe('DonateHeartsControls component', () => {
       userId: 'abc123',
       charityId: 'some-charity-id',
       vc: 23
-    })
+    }, {})
+  })
+
+  it('calls to donate VC with a start and end time when one is provided', async () => {
+    expect.assertions(1)
+
+    const DonateHeartsControlsComponent = require('js/components/Donate/DonateHeartsControlsComponent').default
+    const mockProps = getMockProps()
+    mockProps.heartDonationCampaign = {
+      time: {
+        start: moment('2019-01-02T10:30:00.000Z'),
+        end: moment('2019-01-18T14:00:00.000Z')
+      }
+    }
+    const wrapper = mount(
+      <DonateHeartsControlsComponent {...mockProps} />
+    )
+    wrapper.find(Button).simulate('click')
+    expect(DonateVcMutation).toHaveBeenCalledWith(
+      {
+        userId: 'abc123',
+        charityId: 'some-charity-id',
+        vc: 23
+      },
+      {
+        vcReceivedArgs: {
+          startTime: '2019-01-02T10:30:00.000Z',
+          endTime: '2019-01-18T14:00:00.000Z'
+        }
+      })
   })
 
   it('changes the displayed VC to donate when moving the custom slider', () => {
@@ -175,7 +205,7 @@ describe('DonateHeartsControls component', () => {
       userId: 'abc123',
       charityId: 'some-charity-id',
       vc: 14
-    })
+    }, {})
   })
 
   it('opens the post-donation dialog if VC donation succeeds', async () => {

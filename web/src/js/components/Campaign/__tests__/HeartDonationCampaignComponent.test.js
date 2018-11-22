@@ -18,10 +18,14 @@ const getMockProps = () => ({
   user: {
     vcCurrent: 12
   },
-  campaignTitle: 'Some title here!',
-  campaignStartDatetime: moment(),
-  campaignEndDatetime: moment(),
-  heartsGoal: 100,
+  campaign: {
+    time: {
+      start: moment(),
+      end: moment()
+    },
+    title: 'Some title here!',
+    heartsGoal: 100
+  },
   showError: jest.fn()
 })
 
@@ -39,7 +43,7 @@ describe('Heart donation campaign component', () => {
   it('displays the provided title', () => {
     const HeartDonationCampaign = require('js/components/Campaign/HeartDonationCampaignComponent').default
     const mockProps = getMockProps()
-    mockProps.campaignTitle = 'Hello there!'
+    mockProps.campaign.title = 'Hello there!'
     const wrapper = shallow(
       <HeartDonationCampaign {...mockProps}>
         <span>Some content</span>
@@ -58,15 +62,23 @@ describe('Heart donation campaign component', () => {
   it('passes the expected props to DonateHeartsControls', () => {
     const HeartDonationCampaign = require('js/components/Campaign/HeartDonationCampaignComponent').default
     const mockProps = getMockProps()
-    mockProps.campaignTitle = 'Hello there!'
     const wrapper = shallow(
       <HeartDonationCampaign {...mockProps}>
         <span>Some content</span>
       </HeartDonationCampaign>
     )
     const donateControls = wrapper.find(DonateHeartsControls)
-    expect(donateControls.prop('charity')).toEqual(mockProps.app.charity)
-    expect(donateControls.prop('user')).toEqual(mockProps.user)
+    expect(donateControls.props()).toEqual({
+      user: mockProps.user,
+      charity: mockProps.app.charity,
+      heartDonationCampaign: {
+        time: {
+          start: mockProps.campaign.time.start,
+          end: mockProps.campaign.time.end
+        }
+      },
+      showError: expect.any(Function)
+    })
   })
 
   it('displays the Hearts donated so far', () => {
@@ -91,7 +103,7 @@ describe('Heart donation campaign component', () => {
   it('displays the goal number of Hearts', () => {
     const HeartDonationCampaign = require('js/components/Campaign/HeartDonationCampaignComponent').default
     const mockProps = getMockProps()
-    mockProps.heartsGoal = 10e7
+    mockProps.campaign.heartsGoal = 10e7
     const wrapper = shallow(
       <HeartDonationCampaign {...mockProps}>
         <span>Some content</span>
@@ -110,7 +122,7 @@ describe('Heart donation campaign component', () => {
   it('sets the correct value on the progress bar', () => {
     const HeartDonationCampaign = require('js/components/Campaign/HeartDonationCampaignComponent').default
     const mockProps = getMockProps()
-    mockProps.heartsGoal = 10e5
+    mockProps.campaign.heartsGoal = 10e5
     mockProps.app.charity.vcReceived = 250000
     const wrapper = shallow(
       <HeartDonationCampaign {...mockProps}>
