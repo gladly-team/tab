@@ -154,10 +154,11 @@ class Dashboard extends React.Component {
           bottom: 0,
           left: 0,
           overflowY: 'hidden',
+          overflowX: 'auto',
           // Otherwise, campaigns can cover up bookmarks.
           minWidth: 1080
         }}
-        data-test-id={'app-dashboard-id'}
+        data-test-id={'app-dashboard'}
         key={'dashboard-key'}>
         <UserBackgroundImage user={user} showError={this.showError.bind(this)} />
         { user
