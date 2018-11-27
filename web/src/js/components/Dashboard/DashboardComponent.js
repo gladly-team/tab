@@ -111,8 +111,8 @@ class Dashboard extends React.Component {
     const errorMessage = this.state.errorMessage
 
     const menuStyle = {
-      position: 'absolute',
-      zIndex: 1,
+      position: 'fixed',
+      zIndex: 10,
       top: 14,
       right: 16,
       display: 'flex',
@@ -153,7 +153,9 @@ class Dashboard extends React.Component {
           right: 0,
           bottom: 0,
           left: 0,
-          overflow: 'hidden'
+          overflowY: 'hidden',
+          // Otherwise, campaigns can cover up bookmarks.
+          minWidth: 1080
         }}
         data-test-id={'app-dashboard-id'}
         key={'dashboard-key'}>
