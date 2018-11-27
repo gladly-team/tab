@@ -21,7 +21,7 @@ class CampaignBase extends React.Component {
     }
     const CAMPAIGN_START_TIME_ISO = '2018-11-26T16:00:00.000Z'
     const CAMPAIGN_END_TIME_ISO = '2018-11-30T22:00:00.000Z'
-    const heartsGoal = 10e6
+    const heartsGoal = 18e6
 
     return (
       <QueryRenderer
@@ -102,6 +102,13 @@ class CampaignBase extends React.Component {
                   gutterBottom
                 >
                   Join us in welcoming GiveDirectly to Tab for a Cause with a cornucopia of Hearts!
+                </Typography>
+                <Typography
+                  variant={'body2'}
+                  gutterBottom
+                >
+                  <span style={{ fontWeight: 'bold' }}>Update: </span>congrats, we passed our original{' '}
+                  goal of 10M Hearts! Let's see if we can hit 18M!
                 </Typography>
               </div>
             </HeartDonationCampaign>
