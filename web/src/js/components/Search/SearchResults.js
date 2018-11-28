@@ -31,13 +31,13 @@ class SearchResults extends React.Component {
       ypaAdSlotInfo: [
         {
           ypaAdSlotId: 'GY_Top_Center',
-          ypaAdDivId: 'ypaAdWrapper-GY_Top_Center',
+          ypaAdDivId: 'search-ads',
           ypaAdWidth: '600',
           ypaAdHeight: '891'
         },
         {
           ypaAdSlotId: 'GY_Algo',
-          ypaAdDivId: 'ypaAdWrapper-GY_Algo',
+          ypaAdDivId: 'search-results',
           ypaAdWidth: '600',
           ypaAdHeight: '827'
         }
@@ -80,11 +80,11 @@ class SearchResults extends React.Component {
           }}
         >
           <div
-            id='ypaAdWrapper-GY_Top_Center'
+            id='search-ads'
             className={classes.searchAdsContainer}
           />
           <div
-            id='ypaAdWrapper-GY_Algo'
+            id='search-results'
             className={classes.searchResultsContainer}
           />
         </div>
