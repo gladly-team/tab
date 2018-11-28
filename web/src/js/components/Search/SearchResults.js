@@ -16,6 +16,28 @@ const styles = theme => ({
   }
 })
 
+function fetchSearchResults (query = null) {
+  // TODO: style the search results
+  window.ypaAds.insertMultiAd({
+    ypaAdConfig: '00000129a',
+    ypaAdTypeTag: '',
+    ypaAdSlotInfo: [
+      {
+        ypaAdSlotId: 'GY_Top_Center',
+        ypaAdDivId: 'search-ads',
+        ypaAdWidth: '600',
+        ypaAdHeight: '891'
+      },
+      {
+        ypaAdSlotId: 'GY_Algo',
+        ypaAdDivId: 'search-results',
+        ypaAdWidth: '600',
+        ypaAdHeight: '827'
+      }
+    ]
+  })
+}
+
 class SearchResults extends React.Component {
   // TODO: fetch new search results when the query changes
   getSearchResults () {
@@ -23,26 +45,7 @@ class SearchResults extends React.Component {
       // TODO: show an error
       return
     }
-
-    // TODO: style the search results
-    window.ypaAds.insertMultiAd({
-      ypaAdConfig: '00000129a',
-      ypaAdTypeTag: '',
-      ypaAdSlotInfo: [
-        {
-          ypaAdSlotId: 'GY_Top_Center',
-          ypaAdDivId: 'search-ads',
-          ypaAdWidth: '600',
-          ypaAdHeight: '891'
-        },
-        {
-          ypaAdSlotId: 'GY_Algo',
-          ypaAdDivId: 'search-results',
-          ypaAdWidth: '600',
-          ypaAdHeight: '827'
-        }
-      ]
-    })
+    fetchSearchResults()
   }
 
   render () {
