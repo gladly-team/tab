@@ -19,9 +19,10 @@ class HeartDonationCampaign extends React.Component {
     } = this.props
     const {
       time,
-      title,
-      heartsGoal
+      heartsGoal,
+      endContent
     } = campaign
+    const hasCampaignEnded = moment().isAfter(time.end)
     const heartsDonatedAbbreviated = abbreviateNumber(app.charity.vcReceived)
     const heartsGoalAbbreviated = abbreviateNumber(heartsGoal)
     const progress = 100 * app.charity.vcReceived / heartsGoal
@@ -34,28 +35,27 @@ class HeartDonationCampaign extends React.Component {
           paddingLeft: 12,
           paddingRight: 12
         }}
-      >
-        <span
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            marginTop: 4
-          }}
-        >
-          <Typography variant={'h6'}>{title}</Typography>
-        </span>
-        {children}
-        <DonateHeartsControls
-          charity={app.charity}
-          user={user}
-          heartDonationCampaign={{
-            time: {
-              start: time.start,
-              end: time.end
-            }
-          }}
-          showError={showError}
-        />
+      > {
+          (hasCampaignEnded && endContent)
+            ? endContent
+            : children
+        }
+        {
+          hasCampaignEnded
+            ? null : (
+              <DonateHeartsControls
+                charity={app.charity}
+                user={user}
+                heartDonationCampaign={{
+                  time: {
+                    start: time.start,
+                    end: time.end
+                  }
+                }}
+                showError={showError}
+              />
+            )
+        }
         <div
           style={{
             marginTop: 8,
@@ -69,20 +69,31 @@ class HeartDonationCampaign extends React.Component {
               marginRight: 10
             }}
           >
-            <span
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'space-between'
-              }}
-            >
-              <Typography variant={'caption'}>
-                {heartsDonatedAbbreviated} Hearts donated
+            { hasCampaignEnded ? (
+              <Typography variant={'caption'} gutterBottom>
+                Great job! Together, we donated {heartsDonatedAbbreviated} Hearts of our{' '}
+                {heartsGoalAbbreviated} goal.
               </Typography>
-              <Typography variant={'caption'}>
-                Goal: {heartsGoalAbbreviated}
-              </Typography>
-            </span>
+            ) : null
+            }
+            { hasCampaignEnded
+              ? null : (
+                <span
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between'
+                  }}
+                >
+                  <Typography variant={'caption'}>
+                    {heartsDonatedAbbreviated} Hearts donated
+                  </Typography>
+                  <Typography variant={'caption'}>
+                    Goal: {heartsGoalAbbreviated}
+                  </Typography>
+                </span>
+              )
+            }
             <LinearProgress variant='determinate' value={progress} />
           </div>
           <Typography variant={'caption'}>
@@ -112,8 +123,11 @@ HeartDonationCampaign.propTypes = {
       start: PropTypes.instanceOf(moment).isRequired,
       end: PropTypes.instanceOf(moment).isRequired
     }),
-    title: PropTypes.string.isRequired,
-    heartsGoal: PropTypes.number.isRequired
+    heartsGoal: PropTypes.number.isRequired,
+    endContent: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.node),
+      PropTypes.node
+    ])
   }).isRequired,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
