@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { cloneDeep } from 'lodash/lang'
 import { Helmet } from 'react-helmet'
 import { withStyles } from '@material-ui/core/styles'
 
@@ -181,6 +182,44 @@ const templateStyles = {
 const fetchSearchResults = (query = null) => {
   // TODO: handle zero search results or other fetch errors
   // TODO: style the search results
+
+  const adOptions = {
+    // The ad start rank and the ad end rank in the list of
+    // search results.
+    AdRange: '1-4',
+    // Whether to show favicons near ads.
+    Favicon: false,
+    // Whether to show local ads.
+    LocalAds: true,
+    // Whether to use the "long ad title".
+    Lat: true,
+    // Whether to show "site links" in ads.
+    SiteLink: true,
+    // Whether to show merchant star ratings on ads.
+    MerchantRating: true,
+    // Whether to show images in ads.
+    ImageInAds: false,
+    // Whether to show "enhanced site links" in ads.
+    EnhancedSiteLink: true,
+    // Whether to show "smart annotations" in ads.
+    SmartAnnotations: false,
+    // Whether to show an "official site badge" next to ads
+    // with a verified site.
+    OfficialSiteBadge: true,
+    // Whether to show an option to call the businesses next
+    // to their ads.
+    CallExtension: true,
+    // Not in YPA documentation. Wheteher to show an
+    // advertiser-selected review quote.
+    ReviewExtension: false,
+    // Not in YPA documentation. Wheteher to show a number
+    // of keywords that look mostly unhelpful.
+    CalloutExtension: false
+  }
+
+  // Fetch search results.
+  // Note: YPA mutates objects we pass to it, so make sure to
+  // clone everything we pass.
   window.ypaAds.insertMultiAd({
     ypaPubParams: {
       query: query
@@ -208,70 +247,14 @@ const fetchSearchResults = (query = null) => {
         // ypaOnNoAd: foo,
         ypaSlotOptions: {
           AdOptions: {
-            Mobile: {
-              // The ad start rank and the ad end rank in the list of
-              // search results.
-              AdRange: '1-2',
-              // Whether to show favicons near ads.
-              Favicon: false,
-              // Whether to show local ads.
-              LocalAds: true,
-              // Whether to use the "long ad title".
-              Lat: true,
-              // Whether to show "site links" in ads.
-              SiteLink: true,
-              // Whether to show merchant star ratings on ads.
-              MerchantRating: true,
-              // Whether to show images in ads.
-              ImageInAds: false,
-              // Whether to show "enhanced site links" in ads.
-              EnhancedSiteLink: true,
-              // Whether to show "smart annotations" in ads.
-              SmartAnnotations: false,
-              // Whether to show an "official site badge" next to ads
-              // with a verified site.
-              OfficialSiteBadge: true,
-              // Whether to show an option to call the businesses next
-              // to their ads.
-              CallExtension: true
-            },
-            DeskTop: {
-              // The ad start rank and the ad end rank in the list of
-              // search results.
-              AdRange: '1-4',
-              // Whether to show favicons near ads.
-              Favicon: false,
-              // Whether to show local ads.
-              LocalAds: true,
-              // Whether to use the "long ad title".
-              Lat: true,
-              // Whether to show "site links" in ads.
-              SiteLink: true,
-              // Whether to show merchant star ratings on ads.
-              MerchantRating: true,
-              // Whether to show images in ads.
-              ImageInAds: false,
-              // Whether to show "enhanced site links" in ads.
-              EnhancedSiteLink: true,
-              // Whether to show "smart annotations" in ads.
-              SmartAnnotations: false,
-              // Whether to show an "official site badge" next to ads
-              // with a verified site.
-              OfficialSiteBadge: true,
-              // Whether to show an option to call the businesses next
-              // to their ads.
-              CallExtension: true,
-              // Not in YPA documentation. Wheteher to show an
-              // advertiser-selected review quote.
-              ReviewExtension: false,
-              // Not in YPA documentation. Wheteher to show a number
-              // of keywords that look mostly unhelpful.
-              CalloutExtension: false
-            }
+            Mobile: Object.assign({}, cloneDeep(adOptions), {
+              AdRange: '1-2'
+            }),
+            DeskTop: Object.assign({}, cloneDeep(adOptions))
           },
           TemplateOptions: {
-            Mobile: templateStyles,
-            DeskTop: templateStyles
+            Mobile: cloneDeep(templateStyles),
+            DeskTop: cloneDeep(templateStyles)
           }
         }
       },
