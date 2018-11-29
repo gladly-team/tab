@@ -92,4 +92,27 @@ describe('SearchResults component', () => {
     scriptOnloadHandler()
     expect(window.ypaAds.insertMultiAd).toHaveBeenCalledTimes(1)
   })
+
+  it('fetches search results when the search query prop changes', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'foo'
+    const wrapper = shallow(
+      <SearchResults {...mockProps} />
+    ).dive()
+    wrapper.setProps({
+      query: 'best coffee in alaska'
+    })
+    const fetchedQuery = window.ypaAds.insertMultiAd
+      .mock.calls[0][0]
+      .ypaPubParams.query
+    expect(fetchedQuery).toBe('best coffee in alaska')
+    wrapper.setProps({
+      query: 'pizza'
+    })
+    const newFetchedQuery = window.ypaAds.insertMultiAd
+      .mock.calls[1][0]
+      .ypaPubParams.query
+    expect(newFetchedQuery).toBe('pizza')
+  })
 })

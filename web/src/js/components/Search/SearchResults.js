@@ -17,8 +17,12 @@ const styles = theme => ({
 })
 
 function fetchSearchResults (query = null) {
+  // TODO: handle zero search results or other fetch errors
   // TODO: style the search results
   window.ypaAds.insertMultiAd({
+    ypaPubParams: {
+      query: query
+    },
     ypaAdConfig: '00000129a',
     ypaAdTypeTag: '',
     ypaAdSlotInfo: [
@@ -39,13 +43,23 @@ function fetchSearchResults (query = null) {
 }
 
 class SearchResults extends React.Component {
-  // TODO: fetch new search results when the query changes
   getSearchResults () {
     if (!window.ypaAds) {
+      console.error(`
+        Search provider Javascript not loaded.
+        Could not fetch search results.`
+      )
       // TODO: show an error
       return
     }
-    fetchSearchResults()
+    const { query } = this.props
+    fetchSearchResults(query)
+  }
+
+  componentDidUpdate (prevProps) {
+    if (this.props.query && this.props.query !== prevProps.query) {
+      this.getSearchResults()
+    }
   }
 
   render () {
