@@ -262,7 +262,16 @@ const fetchSearchResults = (query = null) => {
         ypaAdSlotId: 'GY_Algo',
         ypaAdDivId: 'search-results',
         ypaAdWidth: '600',
-        ypaAdHeight: '827'
+        ypaAdHeight: '827',
+        // TODO
+        // Callback function for when there are no search results.
+        // ypaOnNoAd: foo,
+        ypaSlotOptions: {
+          TemplateOptions: {
+            Mobile: cloneDeep(templateStyles),
+            DeskTop: cloneDeep(templateStyles)
+          }
+        }
       }
     ]
   })
