@@ -73,7 +73,7 @@ const fetchSearchResults = (query = null) => {
               // to their ads.
               CallExtension: true
             },
-            Desktop: {
+            DeskTop: {
               // The ad start rank and the ad end rank in the list of
               // search results.
               AdRange: '1-4',
