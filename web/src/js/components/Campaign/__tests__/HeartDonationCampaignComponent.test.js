@@ -23,7 +23,6 @@ const getMockProps = () => ({
       start: moment(),
       end: moment()
     },
-    title: 'Some title here!',
     heartsGoal: 100
   },
   showError: jest.fn()
@@ -40,10 +39,9 @@ describe('Heart donation campaign component', () => {
     )
   })
 
-  it('displays the provided title', () => {
+  it('displays the provided children', () => {
     const HeartDonationCampaign = require('js/components/Campaign/HeartDonationCampaignComponent').default
     const mockProps = getMockProps()
-    mockProps.campaign.title = 'Hello there!'
     const wrapper = shallow(
       <HeartDonationCampaign {...mockProps}>
         <span>Some content</span>
@@ -51,9 +49,9 @@ describe('Heart donation campaign component', () => {
     )
     expect(
       wrapper
-        .find(Typography)
+        .find('span')
         .filterWhere(n => {
-          return n.prop('variant') === 'h6' && n.render().text() === 'Hello there!'
+          return n.text() === 'Some content'
         })
         .length
     ).toBe(1)

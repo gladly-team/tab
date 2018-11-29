@@ -19,7 +19,6 @@ class HeartDonationCampaign extends React.Component {
     } = this.props
     const {
       time,
-      title,
       heartsGoal
     } = campaign
     const heartsDonatedAbbreviated = abbreviateNumber(app.charity.vcReceived)
@@ -35,15 +34,6 @@ class HeartDonationCampaign extends React.Component {
           paddingRight: 12
         }}
       >
-        <span
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            marginTop: 4
-          }}
-        >
-          <Typography variant={'h6'}>{title}</Typography>
-        </span>
         {children}
         <DonateHeartsControls
           charity={app.charity}
@@ -112,7 +102,6 @@ HeartDonationCampaign.propTypes = {
       start: PropTypes.instanceOf(moment).isRequired,
       end: PropTypes.instanceOf(moment).isRequired
     }),
-    title: PropTypes.string.isRequired,
     heartsGoal: PropTypes.number.isRequired
   }).isRequired,
   children: PropTypes.oneOfType([

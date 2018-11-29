@@ -63,7 +63,6 @@ class CampaignBase extends React.Component {
               app={app}
               user={user}
               campaign={{
-                title: 'This Giving Tuesday, Give Directly',
                 time: {
                   start: moment(CAMPAIGN_START_TIME_ISO),
                   end: moment(CAMPAIGN_END_TIME_ISO)
@@ -72,6 +71,17 @@ class CampaignBase extends React.Component {
               }}
               showError={this.props.showError}
             >
+              <span
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  marginTop: 4
+                }}
+              >
+                <Typography variant={'h6'}>
+                  This Giving Tuesday, Give Directly
+                </Typography>
+              </span>
               <div
                 style={{
                   margin: '14px 10px 20px',
