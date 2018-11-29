@@ -260,7 +260,13 @@ const fetchSearchResults = (query = null) => {
               OfficialSiteBadge: true,
               // Whether to show an option to call the businesses next
               // to their ads.
-              CallExtension: true
+              CallExtension: true,
+              // Not in YPA documentation. Wheteher to show an
+              // advertiser-selected review quote.
+              ReviewExtension: false,
+              // Not in YPA documentation. Wheteher to show a number
+              // of keywords that look mostly unhelpful.
+              CalloutExtension: false
             }
           },
           TemplateOptions: {
