@@ -100,6 +100,21 @@ const fetchSearchResults = (query = null) => {
               // to their ads.
               CallExtension: true
             }
+          },
+          TemplateOptions: {
+            Mobile: {},
+            DeskTop: {
+              AdUnit: {
+                backgroundColor: '#ABABAB',
+                borderColor: '#ABABAB',
+                lineSpacing: 15, // valid values: 8-25
+                adSpacing: 15, // valid values: 5-30
+                font: 'Verdana',
+                urlAboveDescription: true
+                // How many lines to show the ad on.
+                // adLayout: 3
+              }
+            }
           }
         }
       },
