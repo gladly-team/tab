@@ -8,7 +8,10 @@ const styles = theme => ({
   searchAdsContainer: {
     '& iframe': {
       width: '100%'
-    }
+    },
+    // To address the unnecessary bottom padding in the ads
+    // iframe.
+    marginBottom: -16
   },
   searchResultsContainer: {
     '& iframe': {
