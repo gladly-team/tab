@@ -17,6 +17,45 @@ const styles = theme => ({
 })
 
 const fetchSearchResults = (query = null) => {
+  const backgroundColor = '#fff'
+  // TODO: load Roboto font
+  const fontFamily = "'Roboto', arial, sans-serif"
+  const grey = '#aaa'
+  const resultStyle = {
+    adSpacing: 26,
+    lineSpacing: 18,
+    title: {
+      fontSize: 18,
+      color: '#1a0dab',
+      underline: false,
+      bold: false,
+      onHover: {
+        color: '#1a0dab',
+        underline: true
+      }
+    },
+    description: {
+      fontSize: 13,
+      color: '#505050',
+      underline: false,
+      bold: false,
+      onHover: {
+        color: '#505050',
+        underline: false
+      }
+    },
+    URL: {
+      fontSize: 13,
+      color: '#007526',
+      underline: false,
+      bold: false,
+      onHover: {
+        color: '#007526',
+        underline: false
+      }
+    }
+  }
+
   // TODO: handle zero search results or other fetch errors
   // TODO: style the search results
   window.ypaAds.insertMultiAd({
@@ -105,14 +144,124 @@ const fetchSearchResults = (query = null) => {
             Mobile: {},
             DeskTop: {
               AdUnit: {
-                backgroundColor: '#ABABAB',
-                borderColor: '#ABABAB',
-                lineSpacing: 15, // valid values: 8-25
-                adSpacing: 15, // valid values: 5-30
-                font: 'Verdana',
+                backgroundColor: backgroundColor,
+                borderColor: backgroundColor,
+                lineSpacing: resultStyle.lineSpacing, // valid values: 8-25
+                adSpacing: resultStyle.adSpacing, // valid values: 5-30
+                font: fontFamily,
                 urlAboveDescription: true
                 // How many lines to show the ad on.
-                // adLayout: 3
+                // adLayout: 3,
+                // Additional CSS to apply to YPA classes.
+                // cssLink: ''
+              },
+              // The "Ads" label.
+              AdUnitLabel: {
+                position: 'Top Right',
+                fontsize: 11, // valid values: 6-24
+                color: grey
+              },
+              Title: {
+                fontsize: resultStyle.title.fontSize,
+                color: resultStyle.title.color,
+                underline: resultStyle.title.underline,
+                bold: resultStyle.title.bold,
+                onHover: {
+                  color: resultStyle.title.onHover.color,
+                  underline: resultStyle.title.onHover.underline
+                }
+              },
+              Description: {
+                fontsize: resultStyle.description.fontSize,
+                color: resultStyle.description.color,
+                underline: resultStyle.description.underline,
+                bold: resultStyle.description.bold,
+                onHover: {
+                  color: resultStyle.description.onHover.color,
+                  underline: resultStyle.description.onHover.underline
+                }
+              },
+              URL: {
+                fontsize: resultStyle.URL.fontSize,
+                color: resultStyle.URL.color,
+                underline: resultStyle.URL.underline,
+                bold: resultStyle.URL.bold,
+                onHover: {
+                  color: resultStyle.URL.onHover.color,
+                  underline: resultStyle.URL.onHover.underline
+                }
+              },
+              LocalAds: {
+                fontsize: resultStyle.description.fontSize,
+                color: grey,
+                underline: resultStyle.description.underline,
+                bold: resultStyle.description.bold,
+                onHover: {
+                  color: resultStyle.description.onHover.color,
+                  underline: resultStyle.description.onHover.underline
+                }
+              },
+              MerchantRating: {
+                fontsize: resultStyle.description.fontSize,
+                color: grey,
+                underline: resultStyle.description.underline,
+                bold: resultStyle.description.bold,
+                onHover: {
+                  color: resultStyle.description.onHover.color,
+                  underline: resultStyle.description.onHover.underline
+                }
+              },
+              SiteLink: {
+                fontsize: resultStyle.description.fontSize,
+                color: resultStyle.title.color, // same as title
+                underline: resultStyle.description.underline,
+                bold: resultStyle.description.bold,
+                onHover: {
+                  // Same as title
+                  color: resultStyle.title.onHover.color,
+                  underline: resultStyle.title.onHover.underline
+                }
+              },
+              EnhancedSiteLink: {
+                fontsize: resultStyle.description.fontSize,
+                color: resultStyle.title.color, // same as title
+                underline: resultStyle.description.underline,
+                bold: resultStyle.description.bold,
+                onHover: {
+                  // Same as title
+                  color: resultStyle.title.onHover.color,
+                  underline: resultStyle.title.onHover.underline
+                }
+              },
+              SmartAnnotations: {
+                fontsize: resultStyle.description.fontSize,
+                color: grey,
+                underline: resultStyle.description.underline,
+                bold: resultStyle.description.bold,
+                onHover: {
+                  color: resultStyle.description.onHover.color,
+                  underline: resultStyle.description.onHover.underline
+                }
+              },
+              ImageInAds: {
+                align: 'right',
+                size: '50x50'
+              },
+              OfficialSiteBadge: {
+                fontsize: resultStyle.description.fontSize,
+                color: backgroundColor,
+                backgroundColor: grey
+              },
+              CallExtension: {
+                fontsize: resultStyle.description.fontSize,
+                color: resultStyle.title.color, // same as title
+                underline: resultStyle.description.underline,
+                bold: resultStyle.description.bold,
+                onHover: {
+                  // Same as title
+                  color: resultStyle.title.onHover.color,
+                  underline: resultStyle.title.onHover.underline
+                }
               }
             }
           }
