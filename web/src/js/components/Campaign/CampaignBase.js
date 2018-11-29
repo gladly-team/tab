@@ -63,15 +63,65 @@ class CampaignBase extends React.Component {
               app={app}
               user={user}
               campaign={{
-                title: 'This Giving Tuesday, Give Directly',
                 time: {
                   start: moment(CAMPAIGN_START_TIME_ISO),
                   end: moment(CAMPAIGN_END_TIME_ISO)
                 },
-                heartsGoal: heartsGoal
+                heartsGoal: heartsGoal,
+                endContent: (
+                  <div>
+                    <Typography
+                      variant={'h6'}
+                      style={{
+                        textAlign: 'center',
+                        marginTop: 4
+                      }}
+                    >
+                      Thank You for Giving Directly!
+                    </Typography>
+                    <div
+                      style={{
+                        margin: '14px 10px 20px',
+                        textAlign: 'left'
+                      }}
+                    >
+                      <Typography
+                        variant={'body2'}
+                        gutterBottom
+                      >
+                        Thanks for welcoming{' '}
+                        <a href='https://www.givedirectly.org/' target='_blank' rel='noopener noreferrer' style={anchorStyle}>GiveDirectly</a>{' '}
+                        to Tab for a Cause this week! Your tabs will put cash into the hands of people{' '}
+                        who need it most.
+                      </Typography>
+                      <Typography
+                        variant={'body2'}
+                        gutterBottom
+                      >
+                        <span style={{ fontWeight: 'bold' }}>Your tabs, more causes:</span>{' '}
+                        Each month in 2019, we'll be highlighting the work of different charities in a{' '}
+                        <a href='https://www.facebook.com/notes/tab-for-a-cause/introducing-monthly-charity-spotlight/2071986076177802/' target='_blank' rel='noopener noreferrer' style={anchorStyle}>
+                        "Charity Spotlight"</a>. You'll be able to donate Hearts to a wider variety of causes,{' '}
+                        and best of all, you'll get to vote for which new non-profits we{' '}
+                        should feature! Learn more and nominate your favorite charity{' '}
+                        <a href='https://www.facebook.com/notes/tab-for-a-cause/introducing-monthly-charity-spotlight/2071986076177802/' target='_blank' rel='noopener noreferrer' style={anchorStyle}>
+                        here</a>.
+                      </Typography>
+                    </div>
+                  </div>
+                )
               }}
               showError={this.props.showError}
             >
+              <Typography
+                variant={'h6'}
+                style={{
+                  textAlign: 'center',
+                  marginTop: 4
+                }}
+              >
+                This Giving Tuesday, Give Directly
+              </Typography>
               <div
                 style={{
                   margin: '14px 10px 20px',
