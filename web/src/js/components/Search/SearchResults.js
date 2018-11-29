@@ -71,7 +71,7 @@ const templateStyles = {
   },
   // The "Ads" label.
   AdUnitLabel: {
-    position: 'Top Right',
+    position: 'Top Left',
     fontsize: 11, // valid values: 6-24
     color: grey
   },
