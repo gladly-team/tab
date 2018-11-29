@@ -76,7 +76,7 @@ const fetchSearchResults = (query = null) => {
             Desktop: {
               // The ad start rank and the ad end rank in the list of
               // search results.
-              AdRange: '1-2',
+              AdRange: '1-4',
               // Whether to show favicons near ads.
               Favicon: false,
               // Whether to show local ads.
