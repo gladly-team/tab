@@ -4,6 +4,14 @@ import { cloneDeep } from 'lodash/lang'
 import { Helmet } from 'react-helmet'
 import { withStyles } from '@material-ui/core/styles'
 
+// Important: to modify some styles within the iframe, we
+// pass an external stylesheet URL to the YPA API below.
+// This file lives in web/public/. It does not get a hash
+// appended to its filename, so we should rename it when
+// it's modified. We should only add CSS to this external
+// stylesheet when absolutely necessary.
+const searchExternalCSSLink = 'https://tab.gladly.io/newtab/static/search-2018.29.11.16.35.css'
+
 const styles = theme => ({
   searchAdsContainer: {
     '& iframe': {
@@ -66,11 +74,11 @@ const templateStyles = {
     lineSpacing: resultStyle.lineSpacing, // valid values: 8-25
     adSpacing: resultStyle.adSpacing, // valid values: 5-30
     font: fontFamily,
-    urlAboveDescription: true
+    urlAboveDescription: true,
     // How many lines to show the ad on.
     // adLayout: 3,
-    // Additional CSS to apply to YPA classes.
-    // cssLink: ''
+    // Additional CSS to apply within the YPA iframe.
+    cssLink: searchExternalCSSLink
   },
   // The "Ads" label.
   AdUnitLabel: {
