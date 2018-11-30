@@ -29,7 +29,6 @@ const styles = theme => ({
 })
 
 const backgroundColor = '#fff'
-// TODO: load Roboto font
 const fontFamily = "'Roboto', arial, sans-serif"
 const grey = '#aaa'
 const resultStyle = {
@@ -332,6 +331,7 @@ class SearchResults extends React.Component {
           }
         >
           <script src='https://s.yimg.com/uv/dm/scripts/syndication.js' />
+          <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:300,400,500' />
         </Helmet>
         <div
           data-test-id='search-results-container'
