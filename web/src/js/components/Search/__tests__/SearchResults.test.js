@@ -5,8 +5,11 @@ import {
   shallow
 } from 'enzyme'
 import { Helmet } from 'react-helmet'
+import Typography from '@material-ui/core/Typography'
+import logger from 'js/utils/logger'
 
 jest.mock('react-helmet')
+jest.mock('js/utils/logger')
 
 const getMockProps = () => ({
   query: 'tacos',
@@ -44,6 +47,17 @@ describe('SearchResults component', () => {
   it('adds the search JS script to the head of the document', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
+    const wrapper = shallow(
+      <SearchResults {...mockProps} />
+    ).dive()
+    const script = wrapper.find(Helmet).find('script')
+    expect(script.prop('src')).toBe('https://s.yimg.com/uv/dm/scripts/syndication.js')
+  })
+
+  it('adds the search JS script to the head of the document even when there is no query', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    delete mockProps.query
     const wrapper = shallow(
       <SearchResults {...mockProps} />
     ).dive()
@@ -114,5 +128,132 @@ describe('SearchResults component', () => {
       .mock.calls[1][0]
       .ypaPubParams.query
     expect(newFetchedQuery).toBe('pizza')
+  })
+
+  it('does not fetch search results when the search query is an empty string on page load', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = ''
+    const wrapper = shallow(
+      <SearchResults {...mockProps} />
+    ).dive()
+    wrapper.instance().getSearchResults()
+    expect(window.ypaAds.insertMultiAd).not.toHaveBeenCalled()
+  })
+
+  it('shows "no results" when the search does not yield results', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'foo'
+    const wrapper = shallow(
+      <SearchResults {...mockProps} />
+    ).dive()
+    const query = 'this search will yield no results, sadly'
+    wrapper.setProps({
+      query: query
+    })
+    const onNoAdCallback = window.ypaAds.insertMultiAd
+      .mock.calls[0][0]
+      .ypaAdSlotInfo[1]
+      .ypaOnNoAd
+
+    // Mock no ad results.
+    onNoAdCallback({
+      NO_COVERAGE: 1
+    })
+
+    expect(
+      wrapper.find(Typography)
+        .filterWhere(n => n.render().text() === `No results found for ${query}`)
+        .length
+    ).toBe(1)
+  })
+
+  it('shows an error message and logs an error when the search errors with "URL_UNREGISTERED"', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'foo'
+    const wrapper = shallow(
+      <SearchResults {...mockProps} />
+    ).dive()
+    const query = 'cookies'
+    wrapper.setProps({
+      query: query
+    })
+    const onNoAdCallback = window.ypaAds.insertMultiAd
+      .mock.calls[0][0]
+      .ypaAdSlotInfo[1]
+      .ypaOnNoAd
+
+    // Mock no ad results.
+    onNoAdCallback({
+      URL_UNREGISTERED: 1
+    })
+
+    expect(
+      wrapper.find(Typography)
+        .filterWhere(n => n.render().text() === 'Unable to search at this time.')
+        .length
+    ).toBe(1)
+    expect(logger.error)
+      .toHaveBeenCalledWith(new Error('Domain is not registered with our search partner.'))
+  })
+
+  it('shows an error message and logs an error when there is some unexpected error', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'foo'
+    const wrapper = shallow(
+      <SearchResults {...mockProps} />
+    ).dive()
+    const query = 'ice cream'
+    wrapper.setProps({
+      query: query
+    })
+    const onNoAdCallback = window.ypaAds.insertMultiAd
+      .mock.calls[0][0]
+      .ypaAdSlotInfo[1]
+      .ypaOnNoAd
+
+    // Mock no ad results.
+    onNoAdCallback({
+      SOMETHING_WE_DID_NOT_SEE_COMING: 1
+    })
+
+    expect(
+      wrapper.find(Typography)
+        .filterWhere(n => n.render().text() === 'Unable to search at this time.')
+        .length
+    ).toBe(1)
+    expect(logger.error)
+      .toHaveBeenCalledWith(new Error('Unexpected search error:', {
+        SOMETHING_WE_DID_NOT_SEE_COMING: 1
+      }))
+  })
+
+  it('shows an error message and logs an error when the YPA JS throws', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'foo'
+    const wrapper = shallow(
+      <SearchResults {...mockProps} />
+    ).dive()
+    const query = 'apple pie'
+
+    // Mock some error and then search.
+    window.ypaAds.insertMultiAd.mockImplementationOnce(() => {
+      throw new Error('Oops.')
+    })
+    wrapper.setProps({
+      query: query
+    })
+
+    expect(
+      wrapper.find(Typography)
+        .filterWhere(n => n.render().text() === 'Unable to search at this time.')
+        .length
+    ).toBe(1)
+    expect(logger.error)
+      .toHaveBeenCalledWith(new Error('Oops.'))
   })
 })

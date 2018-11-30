@@ -132,6 +132,20 @@ describe('Search page component', () => {
     })
   })
 
+  it('does not update the "q" URL parameter if the search query is an empty string', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent').default
+    const mockProps = getMockProps()
+    mockProps.location.search = ''
+    const wrapper = mount(
+      <SearchPageComponent {...mockProps} />
+    )
+    const searchInput = wrapper.find(Input).first().find('input')
+    searchInput
+      .simulate('change', { target: { value: '' } })
+      .simulate('keypress', { key: 'Enter' })
+    expect(modifyURLParams).not.toHaveBeenCalled()
+  })
+
   it('passes the query to the SearchResults component', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent').default
     const mockProps = getMockProps()

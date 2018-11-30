@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import { cloneDeep } from 'lodash/lang'
 import { Helmet } from 'react-helmet'
 import { withStyles } from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
+import logger from 'js/utils/logger'
 
 // Important: to modify some styles within the iframe, we
 // pass an external stylesheet URL to the YPA API below.
@@ -10,7 +12,7 @@ import { withStyles } from '@material-ui/core/styles'
 // appended to its filename, so we should rename it when
 // it's modified. We should only add CSS to this external
 // stylesheet when absolutely necessary.
-const searchExternalCSSLink = 'https://tab.gladly.io/newtab/static/search-2018.29.11.16.35.css'
+const searchExternalCSSLink = 'https://tab.gladly.io/newtab/search-2018.29.11.16.35.css'
 
 const styles = theme => ({
   searchAdsContainer: {
@@ -189,10 +191,14 @@ const templateStyles = {
   }
 }
 
-const fetchSearchResults = (query = null) => {
-  // TODO: handle zero search results or other fetch errors
-  // TODO: style the search results
-
+/**
+ * Call the YPA API to display search results in their iframe.
+ * @param {String} query - The search query, unencoded.
+ * @param {Function} onNoResults - A callback function that will
+ *   be invoked if there are zero results for the search.
+ * @return {undefined}
+ */
+const fetchSearchResults = (query = null, onNoResults = () => {}) => {
   const adOptions = {
     // The ad start rank and the ad end rank in the list of
     // search results.
@@ -252,7 +258,6 @@ const fetchSearchResults = (query = null) => {
         ypaAdDivId: 'search-ads',
         ypaAdWidth: '600',
         ypaAdHeight: '891',
-        // TODO
         // Callback function for when there are no ads.
         // ypaOnNoAd: foo,
         ypaSlotOptions: {
@@ -273,9 +278,8 @@ const fetchSearchResults = (query = null) => {
         ypaAdDivId: 'search-results',
         ypaAdWidth: '600',
         ypaAdHeight: '827',
-        // TODO
         // Callback function for when there are no search results.
-        // ypaOnNoAd: foo,
+        ypaOnNoAd: onNoResults,
         ypaSlotOptions: {
           TemplateOptions: {
             Mobile: cloneDeep(templateStyles),
@@ -288,17 +292,62 @@ const fetchSearchResults = (query = null) => {
 }
 
 class SearchResults extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      noSearchResults: false,
+      unexpectedSearchError: false
+    }
+  }
+
   getSearchResults () {
     if (!window.ypaAds) {
       console.error(`
         Search provider Javascript not loaded.
         Could not fetch search results.`
       )
-      // TODO: show an error
+      this.setState({
+        unexpectedSearchError: true
+      })
       return
     }
     const { query } = this.props
-    fetchSearchResults(query)
+    if (!query) {
+      return
+    }
+
+    // Reset state of search results.
+    this.setState({
+      noSearchResults: false,
+      unexpectedSearchError: false
+    })
+
+    const self = this
+    try {
+      fetchSearchResults(query, (err) => {
+        if (err.NO_COVERAGE) {
+          // No results for this search.
+          self.setState({
+            noSearchResults: true
+          })
+        } else if (err.URL_UNREGISTERED) {
+          self.setState({
+            unexpectedSearchError: true
+          })
+          logger.error(new Error('Domain is not registered with our search partner.'))
+        } else {
+          self.setState({
+            unexpectedSearchError: true
+          })
+          logger.error(new Error('Unexpected search error:', err))
+        }
+      })
+    } catch (e) {
+      this.setState({
+        unexpectedSearchError: true
+      })
+      logger.error(e)
+    }
   }
 
   componentDidUpdate (prevProps) {
@@ -309,9 +358,6 @@ class SearchResults extends React.Component {
 
   render () {
     const { query, classes } = this.props
-    if (!query) {
-      return null
-    }
     return (
       <div>
         <Helmet
@@ -342,6 +388,20 @@ class SearchResults extends React.Component {
             paddingTop: 20
           }}
         >
+          { this.state.noSearchResults
+            ? (
+              <Typography variant={'body1'} gutterBottom>
+                No results found for <span style={{ fontWeight: 'bold' }}>{query}</span>
+              </Typography>
+            ) : null
+          }
+          { this.state.unexpectedSearchError
+            ? (
+              <Typography variant={'body1'} gutterBottom>
+                Unable to search at this time.
+              </Typography>
+            ) : null
+          }
           <div
             id='search-ads'
             className={classes.searchAdsContainer}
