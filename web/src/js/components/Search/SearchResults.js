@@ -357,9 +357,12 @@ class SearchResults extends React.Component {
   }
 
   render () {
-    const { query, classes } = this.props
+    const { query, classes, style } = this.props
     return (
-      <div>
+      <div
+        data-test-id='search-results-container'
+        style={Object.assign({}, style)}
+      >
         <Helmet
           onChangeClientState={(newState, addedTags) => {
             // Fetch search results after the external JS has loaded.
@@ -379,15 +382,7 @@ class SearchResults extends React.Component {
           <script src='https://s.yimg.com/uv/dm/scripts/syndication.js' />
           <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:300,400,500' />
         </Helmet>
-        <div
-          data-test-id='search-results-container'
-          style={{
-            background: 'none',
-            marginLeft: 170,
-            maxWidth: 600,
-            paddingTop: 20
-          }}
-        >
+        <div>
           { this.state.noSearchResults
             ? (
               <Typography variant={'body1'} gutterBottom>
@@ -418,9 +413,12 @@ class SearchResults extends React.Component {
 
 SearchResults.propTypes = {
   query: PropTypes.string,
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  style: PropTypes.object
 }
 
-SearchResults.defaultProps = {}
+SearchResults.defaultProps = {
+  style: {}
+}
 
 export default withStyles(styles)(SearchResults)

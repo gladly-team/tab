@@ -44,6 +44,21 @@ describe('SearchResults component', () => {
     expect(window.ypaAds.insertMultiAd).not.toHaveBeenCalled()
   })
 
+  it('applies style to the root element', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.style = {
+      background: '#FF0000'
+    }
+    const wrapper = shallow(
+      <SearchResults {...mockProps} />
+    ).dive()
+    expect(wrapper.find('div').first().prop('style'))
+      .toEqual({
+        background: '#FF0000'
+      })
+  })
+
   it('adds the search JS script to the head of the document', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
