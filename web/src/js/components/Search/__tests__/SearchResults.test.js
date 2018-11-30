@@ -54,6 +54,17 @@ describe('SearchResults component', () => {
     expect(script.prop('src')).toBe('https://s.yimg.com/uv/dm/scripts/syndication.js')
   })
 
+  it('adds the search JS script to the head of the document even when there is no query', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    delete mockProps.query
+    const wrapper = shallow(
+      <SearchResults {...mockProps} />
+    ).dive()
+    const script = wrapper.find(Helmet).find('script')
+    expect(script.prop('src')).toBe('https://s.yimg.com/uv/dm/scripts/syndication.js')
+  })
+
   it('adds an onload listener to fetch search results', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
@@ -117,6 +128,17 @@ describe('SearchResults component', () => {
       .mock.calls[1][0]
       .ypaPubParams.query
     expect(newFetchedQuery).toBe('pizza')
+  })
+
+  it('does not fetch search results when the search query is an empty string on page load', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = ''
+    const wrapper = shallow(
+      <SearchResults {...mockProps} />
+    ).dive()
+    wrapper.instance().getSearchResults()
+    expect(window.ypaAds.insertMultiAd).not.toHaveBeenCalled()
   })
 
   it('shows "no results" when the search does not yield results', () => {

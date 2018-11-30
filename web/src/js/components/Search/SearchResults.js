@@ -313,6 +313,9 @@ class SearchResults extends React.Component {
       return
     }
     const { query } = this.props
+    if (!query) {
+      return
+    }
 
     // Reset state of search results.
     this.setState({
@@ -356,10 +359,6 @@ class SearchResults extends React.Component {
 
   render () {
     const { query, classes } = this.props
-    // FIXME: load the search provider JS even when there is no query
-    if (!query) {
-      return null
-    }
     return (
       <div>
         <Helmet

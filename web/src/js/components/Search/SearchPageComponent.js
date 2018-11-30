@@ -53,6 +53,7 @@ class SearchPage extends React.Component {
   }
 
   search () {
+    // TODO: don't do this with an empty query
     const newQuery = this.state.searchText
     modifyURLParams({
       q: newQuery
