@@ -332,8 +332,11 @@ class SearchResults extends React.Component {
           self.setState({
             unexpectedSearchError: true
           })
-          throw new Error('Domain is not registered with our search partner.')
+          logger.error(new Error('Domain is not registered with our search partner.'))
         } else {
+          self.setState({
+            unexpectedSearchError: true
+          })
           logger.error(new Error('Unexpected search error:', err))
         }
       })
@@ -341,7 +344,7 @@ class SearchResults extends React.Component {
       this.setState({
         unexpectedSearchError: true
       })
-      throw new Error('Unexpected search error:', e)
+      logger.error(e)
     }
   }
 
@@ -353,6 +356,7 @@ class SearchResults extends React.Component {
 
   render () {
     const { query, classes } = this.props
+    // FIXME: load the search provider JS even when there is no query
     if (!query) {
       return null
     }
