@@ -5,6 +5,8 @@ import Input from '@material-ui/core/Input'
 import IconButton from '@material-ui/core/IconButton'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import SearchIcon from '@material-ui/icons/Search'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
 import { isSearchPageEnabled } from 'js/utils/feature-flags'
 import {
   goTo,
@@ -70,6 +72,7 @@ class SearchPage extends React.Component {
   render () {
     const { classes, location } = this.props
     const query = parseUrlSearchString(location.search).q
+    const searchResultsPaddingLeft = 170
     if (!this.state.searchFeatureEnabled) {
       return null
     }
@@ -85,58 +88,85 @@ class SearchPage extends React.Component {
         <div
           style={{
             backgroundColor: '#F2F2F2',
-            padding: 16,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-start'
+            borderBottom: '1px solid #e4e4e4'
           }}
         >
-          <LogoWithText
-            style={{
-              width: 100,
-              height: 36
-            }}
-          />
           <div
             style={{
-              maxWidth: 600,
-              marginLeft: 30,
-              flex: 1
+              padding: '20px 18px 6px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'flex-start'
             }}
           >
-            <Input
-              id='search-input'
-              type={'text'}
-              defaultValue={query}
-              onChange={this.onSearchTextChange.bind(this)}
-              onKeyPress={e => {
-                if (e.key === 'Enter') {
-                  this.search()
-                }
+            <LogoWithText
+              style={{
+                width: 100,
+                height: 36
               }}
-              placeholder='Search to raise money for charity...'
-              disableUnderline
-              fullWidth
-              classes={{
-                root: classes.inputRootStyle,
-                input: classes.inputStyle,
-                focused: classes.inputRootFocused
-              }}
-              endAdornment={
-                <InputAdornment position='end'>
-                  <IconButton
-                    aria-label='Search button'
-                    onClick={this.search.bind(this)}
-                  >
-                    <SearchIcon style={{ color: searchBoxBorderColorFocused }} />
-                  </IconButton>
-                </InputAdornment>
-              }
             />
+            <div
+              style={{
+                maxWidth: 600,
+                marginLeft: 30,
+                flex: 1
+              }}
+            >
+              <Input
+                id='search-input'
+                type={'text'}
+                defaultValue={query}
+                onChange={this.onSearchTextChange.bind(this)}
+                onKeyPress={e => {
+                  if (e.key === 'Enter') {
+                    this.search()
+                  }
+                }}
+                placeholder='Search to raise money for charity...'
+                disableUnderline
+                fullWidth
+                classes={{
+                  root: classes.inputRootStyle,
+                  input: classes.inputStyle,
+                  focused: classes.inputRootFocused
+                }}
+                endAdornment={
+                  <InputAdornment position='end'>
+                    <IconButton
+                      aria-label='Search button'
+                      onClick={this.search.bind(this)}
+                    >
+                      <SearchIcon style={{ color: searchBoxBorderColorFocused }} />
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+            </div>
           </div>
+          <Tabs
+            value={0}
+            indicatorColor={'secondary'}
+            style={{
+              marginLeft: searchResultsPaddingLeft + 7
+            }}
+          >
+            <Tab label='Web' />
+            <Tab label='Images' />
+            <Tab label='News' />
+            <Tab label='Video' />
+            <Tab label='Maps' />
+          </Tabs>
         </div>
         <div>
-          <SearchResults query={query} />
+          <SearchResults
+            query={query}
+            style={{
+              background: 'none',
+              marginLeft: searchResultsPaddingLeft,
+              maxWidth: 600,
+              paddingTop: 20
+            }}
+          />
         </div>
       </div>
     )

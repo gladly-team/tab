@@ -15,6 +15,8 @@ import {
   modifyURLParams
 } from 'js/navigation/navigation'
 import SearchResults from 'js/components/Search/SearchResults'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
 
 jest.mock('js/utils/feature-flags')
 jest.mock('js/navigation/navigation')
@@ -164,5 +166,23 @@ describe('Search page component', () => {
     }))
     expect(wrapper.find(SearchResults).prop('query'))
       .toEqual('something')
+  })
+
+  it('contains all the expected search category tabs', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(
+      <SearchPageComponent {...mockProps} />
+    ).dive()
+    const tabs = wrapper.find(Tabs)
+    const expectedTabs = ['Web', 'Images', 'News', 'Video', 'Maps']
+    expectedTabs.forEach(tabText => {
+      const tabExists = tabs.find(Tab)
+        .filterWhere(n => n.render().text() === tabText)
+        .length === 1
+      if (!tabExists) {
+        throw new Error(`Expected to render a search category tab "${tabText}".`)
+      }
+    })
   })
 })
