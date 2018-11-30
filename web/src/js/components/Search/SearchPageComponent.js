@@ -161,7 +161,7 @@ class SearchPage extends React.Component {
             value={0}
             indicatorColor={'secondary'}
             style={{
-              marginLeft: searchResultsPaddingLeft + 7
+              marginLeft: 149
             }}
             classes={{
               root: classes.tabsContainerRootStyle
