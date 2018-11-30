@@ -15,6 +15,8 @@ import {
   modifyURLParams
 } from 'js/navigation/navigation'
 import SearchResults from 'js/components/Search/SearchResults'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
 
 jest.mock('js/utils/feature-flags')
 jest.mock('js/navigation/navigation')
@@ -146,7 +148,7 @@ describe('Search page component', () => {
     expect(modifyURLParams).not.toHaveBeenCalled()
   })
 
-  it('passes the query to the SearchResults component', () => {
+  it('passes the decoded query to the SearchResults component', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent').default
     const mockProps = getMockProps()
     mockProps.location.search = '?q=foo&another=thing'
@@ -159,10 +161,148 @@ describe('Search page component', () => {
     // Update the search parameter.
     wrapper.setProps(Object.assign({}, mockProps, {
       location: {
-        search: '?q=something'
+        search: '?q=something%20here'
       }
     }))
     expect(wrapper.find(SearchResults).prop('query'))
-      .toEqual('something')
+      .toEqual('something here')
+  })
+
+  it('contains all the expected search category tabs', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(
+      <SearchPageComponent {...mockProps} />
+    ).dive()
+    const tabs = wrapper.find(Tabs)
+    const expectedTabs = ['Web', 'Images', 'News', 'Videos', 'Maps']
+    expectedTabs.forEach(tabText => {
+      const tabExists = tabs.find(Tab)
+        .filterWhere(n => n.render().text() === tabText)
+        .length === 1
+      if (!tabExists) {
+        throw new Error(`Expected to render a search category tab "${tabText}".`)
+      }
+    })
+  })
+
+  it('has the expected outbound link for the "Images" search category tab when there is a search query', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent').default
+    const mockProps = getMockProps()
+    mockProps.location.search = '?q=mini%20golf'
+    const wrapper = shallow(
+      <SearchPageComponent {...mockProps} />
+    ).dive()
+    const tab = wrapper
+      .find(Tabs)
+      .find(Tab)
+      .filterWhere(n => n.render().text() === 'Images')
+    expect(tab.prop('href'))
+      .toBe('https://www.google.com/search?q=mini%20golf&tbm=isch')
+  })
+
+  it('has the expected outbound link for the "Images" search category tab when there is no search query', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent').default
+    const mockProps = getMockProps()
+    mockProps.location.search = ''
+    const wrapper = shallow(
+      <SearchPageComponent {...mockProps} />
+    ).dive()
+    const tab = wrapper
+      .find(Tabs)
+      .find(Tab)
+      .filterWhere(n => n.render().text() === 'Images')
+    expect(tab.prop('href'))
+      .toBe('https://images.google.com')
+  })
+
+  it('has the expected outbound link for the "News" search category tab when there is a search query', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent').default
+    const mockProps = getMockProps()
+    mockProps.location.search = '?q=mini%20golf'
+    const wrapper = shallow(
+      <SearchPageComponent {...mockProps} />
+    ).dive()
+    const tab = wrapper
+      .find(Tabs)
+      .find(Tab)
+      .filterWhere(n => n.render().text() === 'News')
+    expect(tab.prop('href'))
+      .toBe('https://www.google.com/search?q=mini%20golf&tbm=nws')
+  })
+
+  it('has the expected outbound link for the "News" search category tab when there is no search query', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent').default
+    const mockProps = getMockProps()
+    mockProps.location.search = ''
+    const wrapper = shallow(
+      <SearchPageComponent {...mockProps} />
+    ).dive()
+    const tab = wrapper
+      .find(Tabs)
+      .find(Tab)
+      .filterWhere(n => n.render().text() === 'News')
+    expect(tab.prop('href'))
+      .toBe('https://www.google.com')
+  })
+
+  it('has the expected outbound link for the "Video" search category tab when there is a search query', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent').default
+    const mockProps = getMockProps()
+    mockProps.location.search = '?q=mini%20golf'
+    const wrapper = shallow(
+      <SearchPageComponent {...mockProps} />
+    ).dive()
+    const tab = wrapper
+      .find(Tabs)
+      .find(Tab)
+      .filterWhere(n => n.render().text() === 'Videos')
+    expect(tab.prop('href'))
+      .toBe('https://www.google.com/search?q=mini%20golf&tbm=vid')
+  })
+
+  it('has the expected outbound link for the "Video" search category tab when there is no search query', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent').default
+    const mockProps = getMockProps()
+    mockProps.location.search = ''
+    const wrapper = shallow(
+      <SearchPageComponent {...mockProps} />
+    ).dive()
+    const tab = wrapper
+      .find(Tabs)
+      .find(Tab)
+      .filterWhere(n => n.render().text() === 'Videos')
+    expect(tab.prop('href'))
+      .toBe('https://www.google.com')
+  })
+
+  it('has the expected outbound link for the "Maps" search category tab when there is a search query', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent').default
+    const mockProps = getMockProps()
+    mockProps.location.search = '?q=mini%20golf'
+    const wrapper = shallow(
+      <SearchPageComponent {...mockProps} />
+    ).dive()
+    const tab = wrapper
+      .find(Tabs)
+      .find(Tab)
+      .filterWhere(n => n.render().text() === 'Maps')
+    expect(tab.prop('href'))
+      .toBe('https://www.google.com/maps/?q=mini%20golf')
+  })
+
+  it('has the expected outbound link for the "Maps" search category tab when there is no search query', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent').default
+    const mockProps = getMockProps()
+    mockProps.location.search = ''
+    const wrapper = shallow(
+      <SearchPageComponent {...mockProps} />
+    ).dive()
+    const tab = wrapper
+      .find(Tabs)
+      .find(Tab)
+      .filterWhere(n => n.render().text() === 'Maps')
+    expect(tab.prop('href'))
+      .toBe('https://www.google.com/maps')
   })
 })
