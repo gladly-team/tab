@@ -36,6 +36,14 @@ const styles = theme => ({
   },
   inputStyle: {
     padding: '10px 12px'
+  },
+  tabsContainerRootStyle: {
+    minHeight: 0
+  },
+  tabRootStyle: {
+    color: '#505050', // Same as search result description
+    minHeight: 34,
+    minWidth: 10
   }
 })
 
@@ -155,8 +163,15 @@ class SearchPage extends React.Component {
             style={{
               marginLeft: searchResultsPaddingLeft + 7
             }}
+            classes={{
+              root: classes.tabsContainerRootStyle
+            }}
           >
-            <Tab label='Web' />
+            <Tab label='Web'
+              classes={{
+                root: classes.tabRootStyle
+              }}
+            />
             <Tab
               label='Images'
               target='_top'
@@ -165,6 +180,9 @@ class SearchPage extends React.Component {
                   ? `https://www.google.com/search?q=${queryEncoded}&tbm=isch`
                   : 'https://images.google.com'
               }
+              classes={{
+                root: classes.tabRootStyle
+              }}
             />
             <Tab
               label='News'
@@ -174,6 +192,9 @@ class SearchPage extends React.Component {
                   ? `https://www.google.com/search?q=${queryEncoded}&tbm=nws`
                   : 'https://www.google.com'
               }
+              classes={{
+                root: classes.tabRootStyle
+              }}
             />
             <Tab
               label='Video'
@@ -183,6 +204,9 @@ class SearchPage extends React.Component {
                   ? `https://www.google.com/search?q=${queryEncoded}&tbm=vid`
                   : 'https://www.google.com'
               }
+              classes={{
+                root: classes.tabRootStyle
+              }}
             />
             <Tab
               label='Maps'
@@ -192,6 +216,9 @@ class SearchPage extends React.Component {
                   ? `https://www.google.com/maps/?q=${queryEncoded}`
                   : 'https://www.google.com/maps'
               }
+              classes={{
+                root: classes.tabRootStyle
+              }}
             />
           </Tabs>
         </div>
