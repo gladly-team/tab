@@ -301,7 +301,6 @@ class SearchResults extends React.Component {
   }
 
   getSearchResults () {
-    // TODO: move this to `fetchSearchResults` and throw an error.
     if (!window.ypaAds) {
       console.error(`
         Search provider Javascript not loaded.
