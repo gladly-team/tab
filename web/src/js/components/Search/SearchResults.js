@@ -10,7 +10,7 @@ import { withStyles } from '@material-ui/core/styles'
 // appended to its filename, so we should rename it when
 // it's modified. We should only add CSS to this external
 // stylesheet when absolutely necessary.
-const searchExternalCSSLink = 'https://tab.gladly.io/newtab/static/search-2018.29.11.16.35.css'
+const searchExternalCSSLink = 'https://tab.gladly.io/newtab/search-2018.29.11.16.35.css'
 
 const styles = theme => ({
   searchAdsContainer: {
