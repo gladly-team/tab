@@ -240,7 +240,7 @@ const fetchSearchResults = (query = null) => {
     },
     ypaAdConfig: '00000129a',
     ypaAdTypeTag: '',
-    // TODO: GDPR
+    // For now, we'll just show non-personalized ads in the EU:
     // "When gdpr=0 or missing, Oath will perform an IP check on the user
     // to determine jurisdiction. If euconsent is empty, or if the IAB string
     // is missing, Oath will return non-personalized search ads and search web
