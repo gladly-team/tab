@@ -1,0 +1,12 @@
+/* Hide the arrow button on ads. */
+.ypaAdCtaButtonImageDiv {
+  display: none !important;
+}
+/* Hide the empty image div. */
+.ypaAdImageDiv {
+  display: none !important; 
+}
+/* Disable keyword bolding in results. */
+b {
+  font-weight: normal !important;
+}

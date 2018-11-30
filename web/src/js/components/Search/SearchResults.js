@@ -1,99 +1,366 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { shuffle } from 'lodash/collection'
-import { capitalize, camelCase, upperCase, lowerCase } from 'lodash/string'
-import SearchTextResult from 'js/components/Search/SearchTextResult'
+import { cloneDeep } from 'lodash/lang'
+import { Helmet } from 'react-helmet'
+import { withStyles } from '@material-ui/core/styles'
 
-// Just for fun in development.
-const getFakeSearchResults = query => {
-  const encodedQuery = encodeURIComponent(query)
-  const reversedQuery = query.split('').reverse().join('')
-  return shuffle([
-    {
-      title: `You want ${query}?`,
-      linkURL: `https://www.google.com/search?q=${encodedQuery}`,
-      snippet: `I guess you want ${query}? That's awesome. It's truly one of the best
-        things you could be searching for. I hope you find a search result you like,
-        because we're trying to ...`
+// Important: to modify some styles within the iframe, we
+// pass an external stylesheet URL to the YPA API below.
+// This file lives in web/public/. It does not get a hash
+// appended to its filename, so we should rename it when
+// it's modified. We should only add CSS to this external
+// stylesheet when absolutely necessary.
+const searchExternalCSSLink = 'https://tab.gladly.io/newtab/static/search-2018.29.11.16.35.css'
+
+const styles = theme => ({
+  searchAdsContainer: {
+    '& iframe': {
+      width: '100%'
     },
-    {
-      title: `"${capitalize(query)}", the new hit single from Kesha`,
-      linkURL: `https://www.google.com/search?q=kesha%20${encodedQuery}`,
-      snippet: `This track will most likely change your life.`
-    },
-    {
-      title: `How to say "${query}" in Latin`,
-      linkURL: `https://www.google.com/search?q=latin%20lessons`,
-      snippet: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-       eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-       veniam, quis nostrud exercitation ...`
-    },
-    {
-      title: `Tab for a Cause, the search result you're looking for`,
-      linkURL: `https://tab.gladly.io/`,
-      snippet: `Raise money for charity simply by surfing the web! It takes less
-        than 30 seconds to start having an impact.`
-    },
-    {
-      title: `${reversedQuery}: taking a different perspective`,
-      linkURL: `https://en.wikipedia.org/wiki/Mirror`,
-      snippet: `We'll help you look at ${query} from a different perspective.`
-    },
-    {
-      title: `House majority leader: Opponents support "unlimited ${query}"`,
-      linkURL: `https://www.nytimes.com/`,
-      snippet: `"Our friends across the aisle want every American to have
-        unlimited ${query}, regardless of the remarkable costs. We cannot keep
-        spending profligately like this."`
-    },
-    {
-      title: `${camelCase(query)} ${lowerCase(query)} ${lowerCase(query)}
-        ${upperCase(query)} ${query}`,
-      linkURL: `http://www.example.com/`,
-      snippet: `${camelCase(query)} ${upperCase(query)} ${query} ${query} ${upperCase(query)}
-        (plus tacos) ${lowerCase(query)}`
+    // To address the unnecessary bottom padding in the ads
+    // iframe.
+    marginBottom: -16
+  },
+  searchResultsContainer: {
+    '& iframe': {
+      width: '100%'
     }
-  ])
+  }
+})
+
+const backgroundColor = '#fff'
+const fontFamily = "'Roboto', arial, sans-serif"
+const grey = '#aaa'
+const resultStyle = {
+  adSpacing: 26,
+  lineSpacing: 18,
+  title: {
+    fontSize: 18,
+    color: '#1a0dab',
+    underline: false,
+    bold: false,
+    onHover: {
+      color: '#1a0dab',
+      underline: true
+    }
+  },
+  description: {
+    fontSize: 13,
+    color: '#505050',
+    underline: false,
+    bold: false,
+    onHover: {
+      color: '#505050',
+      underline: false
+    }
+  },
+  URL: {
+    fontSize: 13,
+    color: '#007526',
+    underline: false,
+    bold: false,
+    onHover: {
+      color: '#007526',
+      underline: false
+    }
+  }
 }
 
-class SearchResults extends React.PureComponent {
-  render () {
+const templateStyles = {
+  AdUnit: {
+    backgroundColor: backgroundColor,
+    borderColor: backgroundColor,
+    lineSpacing: resultStyle.lineSpacing, // valid values: 8-25
+    adSpacing: resultStyle.adSpacing, // valid values: 5-30
+    font: fontFamily,
+    urlAboveDescription: true,
+    // How many lines to show the ad on.
+    // adLayout: 3,
+    // Additional CSS to apply within the YPA iframe.
+    cssLink: searchExternalCSSLink
+  },
+  // The "Ads" label.
+  AdUnitLabel: {
+    position: 'Top Left',
+    fontsize: 11, // valid values: 6-24
+    color: grey
+  },
+  Title: {
+    fontsize: resultStyle.title.fontSize,
+    color: resultStyle.title.color,
+    underline: resultStyle.title.underline,
+    bold: resultStyle.title.bold,
+    onHover: {
+      color: resultStyle.title.onHover.color,
+      underline: resultStyle.title.onHover.underline
+    }
+  },
+  Description: {
+    fontsize: resultStyle.description.fontSize,
+    color: resultStyle.description.color,
+    underline: resultStyle.description.underline,
+    bold: resultStyle.description.bold,
+    onHover: {
+      color: resultStyle.description.onHover.color,
+      underline: resultStyle.description.onHover.underline
+    }
+  },
+  URL: {
+    fontsize: resultStyle.URL.fontSize,
+    color: resultStyle.URL.color,
+    underline: resultStyle.URL.underline,
+    bold: resultStyle.URL.bold,
+    onHover: {
+      color: resultStyle.URL.onHover.color,
+      underline: resultStyle.URL.onHover.underline
+    }
+  },
+  LocalAds: {
+    fontsize: resultStyle.description.fontSize,
+    color: grey,
+    underline: resultStyle.description.underline,
+    bold: resultStyle.description.bold,
+    onHover: {
+      color: resultStyle.description.onHover.color,
+      underline: resultStyle.description.onHover.underline
+    }
+  },
+  MerchantRating: {
+    fontsize: resultStyle.description.fontSize,
+    color: grey,
+    underline: resultStyle.description.underline,
+    bold: resultStyle.description.bold,
+    onHover: {
+      color: resultStyle.description.onHover.color,
+      underline: resultStyle.description.onHover.underline
+    }
+  },
+  SiteLink: {
+    fontsize: resultStyle.description.fontSize,
+    color: resultStyle.title.color, // same as title
+    underline: resultStyle.description.underline,
+    bold: resultStyle.description.bold,
+    onHover: {
+      // Same as title
+      color: resultStyle.title.onHover.color,
+      underline: resultStyle.title.onHover.underline
+    }
+  },
+  EnhancedSiteLink: {
+    fontsize: resultStyle.description.fontSize,
+    color: resultStyle.title.color, // same as title
+    underline: resultStyle.description.underline,
+    bold: resultStyle.description.bold,
+    onHover: {
+      // Same as title
+      color: resultStyle.title.onHover.color,
+      underline: resultStyle.title.onHover.underline
+    }
+  },
+  SmartAnnotations: {
+    fontsize: resultStyle.description.fontSize,
+    color: grey,
+    underline: resultStyle.description.underline,
+    bold: resultStyle.description.bold,
+    onHover: {
+      color: resultStyle.description.onHover.color,
+      underline: resultStyle.description.onHover.underline
+    }
+  },
+  ImageInAds: {
+    align: 'right',
+    size: '50x50'
+  },
+  OfficialSiteBadge: {
+    fontsize: resultStyle.description.fontSize,
+    color: backgroundColor,
+    backgroundColor: grey
+  },
+  CallExtension: {
+    fontsize: resultStyle.description.fontSize,
+    color: resultStyle.title.color, // same as title
+    underline: resultStyle.description.underline,
+    bold: resultStyle.description.bold,
+    onHover: {
+      // Same as title
+      color: resultStyle.title.onHover.color,
+      underline: resultStyle.title.onHover.underline
+    }
+  }
+}
+
+const fetchSearchResults = (query = null) => {
+  // TODO: handle zero search results or other fetch errors
+  // TODO: style the search results
+
+  const adOptions = {
+    // The ad start rank and the ad end rank in the list of
+    // search results.
+    AdRange: '1-4',
+    // Whether to show favicons near ads.
+    Favicon: false,
+    // Whether to show local ads.
+    LocalAds: true,
+    // Whether to use the "long ad title".
+    Lat: true,
+    // Whether to show "site links" in ads.
+    SiteLink: true,
+    // Whether to show merchant star ratings on ads.
+    MerchantRating: true,
+    // Whether to show images in ads.
+    ImageInAds: false,
+    // Whether to show "enhanced site links" in ads.
+    EnhancedSiteLink: true,
+    // Whether to show "smart annotations" in ads.
+    SmartAnnotations: false,
+    // Whether to show an "official site badge" next to ads
+    // with a verified site.
+    OfficialSiteBadge: true,
+    // Whether to show an option to call the businesses next
+    // to their ads.
+    CallExtension: true,
+    // Not in YPA documentation. Wheteher to show an
+    // advertiser-selected review quote.
+    ReviewExtension: false,
+    // Not in YPA documentation. Wheteher to show a number
+    // of keywords that look mostly unhelpful.
+    CalloutExtension: false
+  }
+
+  // Fetch search results.
+  // Note: YPA mutates objects we pass to it, so make sure to
+  // clone everything we pass.
+  window.ypaAds.insertMultiAd({
+    ypaPubParams: {
+      query: query
+    },
+    ypaAdTagOptions: {
+      adultFilter: false // false means do not allow adult ads
+    },
+    ypaAdConfig: '00000129a',
+    ypaAdTypeTag: '',
+    // For now, we'll just show non-personalized ads in the EU:
+    // "When gdpr=0 or missing, Oath will perform an IP check on the user
+    // to determine jurisdiction. If euconsent is empty, or if the IAB string
+    // is missing, Oath will return non-personalized search ads and search web
+    // results."
+    // gdpr: false
+    // euconsent: '',
+    ypaAdSlotInfo: [
+      {
+        ypaAdSlotId: 'GY_Top_Center',
+        ypaAdDivId: 'search-ads',
+        ypaAdWidth: '600',
+        ypaAdHeight: '891',
+        // TODO
+        // Callback function for when there are no ads.
+        // ypaOnNoAd: foo,
+        ypaSlotOptions: {
+          AdOptions: {
+            Mobile: Object.assign({}, cloneDeep(adOptions), {
+              AdRange: '1-2'
+            }),
+            DeskTop: Object.assign({}, cloneDeep(adOptions))
+          },
+          TemplateOptions: {
+            Mobile: cloneDeep(templateStyles),
+            DeskTop: cloneDeep(templateStyles)
+          }
+        }
+      },
+      {
+        ypaAdSlotId: 'GY_Algo',
+        ypaAdDivId: 'search-results',
+        ypaAdWidth: '600',
+        ypaAdHeight: '827',
+        // TODO
+        // Callback function for when there are no search results.
+        // ypaOnNoAd: foo,
+        ypaSlotOptions: {
+          TemplateOptions: {
+            Mobile: cloneDeep(templateStyles),
+            DeskTop: cloneDeep(templateStyles)
+          }
+        }
+      }
+    ]
+  })
+}
+
+class SearchResults extends React.Component {
+  getSearchResults () {
+    if (!window.ypaAds) {
+      console.error(`
+        Search provider Javascript not loaded.
+        Could not fetch search results.`
+      )
+      // TODO: show an error
+      return
+    }
     const { query } = this.props
+    fetchSearchResults(query)
+  }
+
+  componentDidUpdate (prevProps) {
+    if (this.props.query && this.props.query !== prevProps.query) {
+      this.getSearchResults()
+    }
+  }
+
+  render () {
+    const { query, classes } = this.props
     if (!query) {
       return null
     }
-    const results = getFakeSearchResults(this.props.query)
     return (
-      <div
-        data-test-id='search-results-container'
-        style={{
-          background: 'none',
-          marginLeft: 170,
-          maxWidth: 600,
-          paddingTop: 20
-        }}
-      >
-        {
-          results.map((result, index) => (
-            <SearchTextResult
-              key={`key-${index}`}
-              result={{
-                title: result.title,
-                linkURL: result.linkURL,
-                snippet: result.snippet
-              }}
-            />
-          ))
-        }
+      <div>
+        <Helmet
+          onChangeClientState={(newState, addedTags) => {
+            // Fetch search results after the external JS has loaded.
+            // https://github.com/nfl/react-helmet/issues/146#issuecomment-271552211
+            // This solution isn't great for page speed when we're not
+            // server-rendering this page.
+            const self = this
+            const { scriptTags } = addedTags
+            if (scriptTags && scriptTags.length) {
+              scriptTags[0].addEventListener('load', () => {
+                self.getSearchResults()
+              })
+            }
+          }
+          }
+        >
+          <script src='https://s.yimg.com/uv/dm/scripts/syndication.js' />
+          <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:300,400,500' />
+        </Helmet>
+        <div
+          data-test-id='search-results-container'
+          style={{
+            background: 'none',
+            marginLeft: 170,
+            maxWidth: 600,
+            paddingTop: 20
+          }}
+        >
+          <div
+            id='search-ads'
+            className={classes.searchAdsContainer}
+          />
+          <div
+            id='search-results'
+            className={classes.searchResultsContainer}
+          />
+        </div>
       </div>
     )
   }
 }
 
 SearchResults.propTypes = {
-  query: PropTypes.string
+  query: PropTypes.string,
+  classes: PropTypes.object.isRequired
 }
 
 SearchResults.defaultProps = {}
 
-export default SearchResults
+export default withStyles(styles)(SearchResults)

@@ -92,6 +92,7 @@
     "react-dropdown": "^1.6.2",
     "react-firebaseui": "^3.0.4",
     "react-ga": "^2.5.3",
+    "react-helmet": "^5.2.0",
     "react-hot-loader": "3.0.0-beta.6",
     "react-intl": "^2.7.0",
     "react-joyride": "^2.0.0-11",

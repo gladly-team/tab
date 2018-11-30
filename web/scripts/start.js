@@ -248,6 +248,11 @@ function runDevServer (host, port, protocol) {
     // Enable HTTPS if the HTTPS environment variable is set to 'true'
     https: protocol === 'https',
     host: host,
+    // To deal with "Invalid Host Header":
+    // https://github.com/facebook/create-react-app/issues/2271#issuecomment-302818385
+    // If we upgrade Webpack we can use "allowedHosts" instead, or
+    // this is fixed in create-react-app >1.0.2.
+    disableHostCheck: true,
     // https://webpack.github.io/docs/webpack-dev-server.html#proxy
     proxy: {
       '/graphql': {
