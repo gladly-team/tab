@@ -54,6 +54,11 @@ class SearchPage extends React.Component {
     }
   }
 
+  getSearchQueryDecoded () {
+    const { location } = this.props
+    return parseUrlSearchString(location.search).q
+  }
+
   search () {
     const newQuery = this.state.searchText
     if (newQuery) {
@@ -70,8 +75,9 @@ class SearchPage extends React.Component {
   }
 
   render () {
-    const { classes, location } = this.props
-    const query = parseUrlSearchString(location.search).q
+    const { classes } = this.props
+    const query = this.getSearchQueryDecoded()
+    const queryEncoded = query ? encodeURI(query) : ''
     const searchResultsPaddingLeft = 170
     if (!this.state.searchFeatureEnabled) {
       return null
@@ -151,10 +157,42 @@ class SearchPage extends React.Component {
             }}
           >
             <Tab label='Web' />
-            <Tab label='Images' />
-            <Tab label='News' />
-            <Tab label='Video' />
-            <Tab label='Maps' />
+            <Tab
+              label='Images'
+              target='_top'
+              href={
+                queryEncoded
+                  ? `https://www.google.com/search?q=${queryEncoded}&tbm=isch`
+                  : 'https://images.google.com'
+              }
+            />
+            <Tab
+              label='News'
+              target='_top'
+              href={
+                queryEncoded
+                  ? `https://www.google.com/search?q=${queryEncoded}&tbm=nws`
+                  : 'https://www.google.com'
+              }
+            />
+            <Tab
+              label='Video'
+              target='_top'
+              href={
+                queryEncoded
+                  ? `https://www.google.com/search?q=${queryEncoded}&tbm=vid`
+                  : 'https://www.google.com'
+              }
+            />
+            <Tab
+              label='Maps'
+              target='_top'
+              href={
+                queryEncoded
+                  ? `https://www.google.com/maps/?q=${queryEncoded}`
+                  : 'https://www.google.com/maps'
+              }
+            />
           </Tabs>
         </div>
         <div>

@@ -148,7 +148,7 @@ describe('Search page component', () => {
     expect(modifyURLParams).not.toHaveBeenCalled()
   })
 
-  it('passes the query to the SearchResults component', () => {
+  it('passes the decoded query to the SearchResults component', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent').default
     const mockProps = getMockProps()
     mockProps.location.search = '?q=foo&another=thing'
@@ -161,11 +161,11 @@ describe('Search page component', () => {
     // Update the search parameter.
     wrapper.setProps(Object.assign({}, mockProps, {
       location: {
-        search: '?q=something'
+        search: '?q=something%20here'
       }
     }))
     expect(wrapper.find(SearchResults).prop('query'))
-      .toEqual('something')
+      .toEqual('something here')
   })
 
   it('contains all the expected search category tabs', () => {
@@ -184,5 +184,125 @@ describe('Search page component', () => {
         throw new Error(`Expected to render a search category tab "${tabText}".`)
       }
     })
+  })
+
+  it('has the expected outbound link for the "Images" search category tab when there is a search query', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent').default
+    const mockProps = getMockProps()
+    mockProps.location.search = '?q=mini%20golf'
+    const wrapper = shallow(
+      <SearchPageComponent {...mockProps} />
+    ).dive()
+    const tab = wrapper
+      .find(Tabs)
+      .find(Tab)
+      .filterWhere(n => n.render().text() === 'Images')
+    expect(tab.prop('href'))
+      .toBe('https://www.google.com/search?q=mini%20golf&tbm=isch')
+  })
+
+  it('has the expected outbound link for the "Images" search category tab when there is no search query', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent').default
+    const mockProps = getMockProps()
+    mockProps.location.search = ''
+    const wrapper = shallow(
+      <SearchPageComponent {...mockProps} />
+    ).dive()
+    const tab = wrapper
+      .find(Tabs)
+      .find(Tab)
+      .filterWhere(n => n.render().text() === 'Images')
+    expect(tab.prop('href'))
+      .toBe('https://images.google.com')
+  })
+
+  it('has the expected outbound link for the "News" search category tab when there is a search query', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent').default
+    const mockProps = getMockProps()
+    mockProps.location.search = '?q=mini%20golf'
+    const wrapper = shallow(
+      <SearchPageComponent {...mockProps} />
+    ).dive()
+    const tab = wrapper
+      .find(Tabs)
+      .find(Tab)
+      .filterWhere(n => n.render().text() === 'News')
+    expect(tab.prop('href'))
+      .toBe('https://www.google.com/search?q=mini%20golf&tbm=nws')
+  })
+
+  it('has the expected outbound link for the "News" search category tab when there is no search query', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent').default
+    const mockProps = getMockProps()
+    mockProps.location.search = ''
+    const wrapper = shallow(
+      <SearchPageComponent {...mockProps} />
+    ).dive()
+    const tab = wrapper
+      .find(Tabs)
+      .find(Tab)
+      .filterWhere(n => n.render().text() === 'News')
+    expect(tab.prop('href'))
+      .toBe('https://www.google.com')
+  })
+
+  it('has the expected outbound link for the "Video" search category tab when there is a search query', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent').default
+    const mockProps = getMockProps()
+    mockProps.location.search = '?q=mini%20golf'
+    const wrapper = shallow(
+      <SearchPageComponent {...mockProps} />
+    ).dive()
+    const tab = wrapper
+      .find(Tabs)
+      .find(Tab)
+      .filterWhere(n => n.render().text() === 'Video')
+    expect(tab.prop('href'))
+      .toBe('https://www.google.com/search?q=mini%20golf&tbm=vid')
+  })
+
+  it('has the expected outbound link for the "Video" search category tab when there is no search query', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent').default
+    const mockProps = getMockProps()
+    mockProps.location.search = ''
+    const wrapper = shallow(
+      <SearchPageComponent {...mockProps} />
+    ).dive()
+    const tab = wrapper
+      .find(Tabs)
+      .find(Tab)
+      .filterWhere(n => n.render().text() === 'Video')
+    expect(tab.prop('href'))
+      .toBe('https://www.google.com')
+  })
+
+  it('has the expected outbound link for the "Maps" search category tab when there is a search query', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent').default
+    const mockProps = getMockProps()
+    mockProps.location.search = '?q=mini%20golf'
+    const wrapper = shallow(
+      <SearchPageComponent {...mockProps} />
+    ).dive()
+    const tab = wrapper
+      .find(Tabs)
+      .find(Tab)
+      .filterWhere(n => n.render().text() === 'Maps')
+    expect(tab.prop('href'))
+      .toBe('https://www.google.com/maps/?q=mini%20golf')
+  })
+
+  it('has the expected outbound link for the "Maps" search category tab when there is no search query', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent').default
+    const mockProps = getMockProps()
+    mockProps.location.search = ''
+    const wrapper = shallow(
+      <SearchPageComponent {...mockProps} />
+    ).dive()
+    const tab = wrapper
+      .find(Tabs)
+      .find(Tab)
+      .filterWhere(n => n.render().text() === 'Maps')
+    expect(tab.prop('href'))
+      .toBe('https://www.google.com/maps')
   })
 })
