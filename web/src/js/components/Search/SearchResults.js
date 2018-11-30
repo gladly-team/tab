@@ -191,8 +191,6 @@ const templateStyles = {
 
 const fetchSearchResults = (query = null) => {
   // TODO: handle zero search results or other fetch errors
-  // TODO: style the search results
-
   const adOptions = {
     // The ad start rank and the ad end rank in the list of
     // search results.
