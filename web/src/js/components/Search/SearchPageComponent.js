@@ -197,7 +197,7 @@ class SearchPage extends React.Component {
               }}
             />
             <Tab
-              label='Video'
+              label='Videos'
               target='_top'
               href={
                 queryEncoded

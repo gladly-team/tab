@@ -175,7 +175,7 @@ describe('Search page component', () => {
       <SearchPageComponent {...mockProps} />
     ).dive()
     const tabs = wrapper.find(Tabs)
-    const expectedTabs = ['Web', 'Images', 'News', 'Video', 'Maps']
+    const expectedTabs = ['Web', 'Images', 'News', 'Videos', 'Maps']
     expectedTabs.forEach(tabText => {
       const tabExists = tabs.find(Tab)
         .filterWhere(n => n.render().text() === tabText)
@@ -256,7 +256,7 @@ describe('Search page component', () => {
     const tab = wrapper
       .find(Tabs)
       .find(Tab)
-      .filterWhere(n => n.render().text() === 'Video')
+      .filterWhere(n => n.render().text() === 'Videos')
     expect(tab.prop('href'))
       .toBe('https://www.google.com/search?q=mini%20golf&tbm=vid')
   })
@@ -271,7 +271,7 @@ describe('Search page component', () => {
     const tab = wrapper
       .find(Tabs)
       .find(Tab)
-      .filterWhere(n => n.render().text() === 'Video')
+      .filterWhere(n => n.render().text() === 'Videos')
     expect(tab.prop('href'))
       .toBe('https://www.google.com')
   })
