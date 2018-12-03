@@ -1,6 +1,7 @@
 /* global graphql */
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import { QueryRenderer } from 'react-relay'
 import environment from 'js/relay-env'
 import SearchPageContainer from 'js/components/Search/SearchPageContainer'
@@ -77,7 +78,13 @@ class SearchView extends React.Component {
   }
 }
 
-// TODO: add PropTypes (location)
+SearchView.propTypes = {
+  location: PropTypes.shape({
+    search: PropTypes.string.isRequired
+  })
+}
+
+SearchView.defaultProps = {}
 
 export default withUserId({
   renderIfNoUser: true
