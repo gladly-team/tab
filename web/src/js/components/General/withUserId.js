@@ -8,12 +8,20 @@ function getDisplayName (WrappedComponent) {
   return WrappedComponent.displayName || WrappedComponent.name || 'Component'
 }
 
-function withUserId (WrappedComponent) {
+/**
+ * Adds a "userId" prop to a child component.
+ * @param {Object} options
+ * @param {Boolean} options.renderIfNoUser - If true, we will render the
+ *   children even if there is no user ID (the user is not signed in).
+ * @return {Function} A higher-order component.
+ */
+const withUserId = (options = {}) => WrappedComponent => {
   class CompWithUserId extends React.Component {
     constructor (props) {
       super(props)
       this.state = {
-        userId: null
+        userId: null,
+        authStateLoaded: false
       }
     }
 
@@ -22,6 +30,9 @@ function withUserId (WrappedComponent) {
       // https://firebase.google.com/docs/reference/js/firebase.auth.Auth#onAuthStateChanged
       this.authListenerUnsubscribe = getCurrentUserListener()
         .onAuthStateChanged((user) => {
+          this.setState({
+            authStateLoaded: true
+          })
           if (user && user.uid) {
             this.setState({
               userId: user.uid
@@ -37,7 +48,14 @@ function withUserId (WrappedComponent) {
     }
 
     render () {
-      if (!this.state.userId) {
+      const { renderIfNoUser } = options
+      // Return null if the user is not authenticated but the children require
+      // an authenticated user.
+      if (!this.state.userId && !renderIfNoUser) {
+        return null
+      }
+      // Don't render the children until we've retrieved the user.
+      if (!this.state.authStateLoaded) {
         return null
       }
       return <WrappedComponent userId={this.state.userId} {...this.props} />

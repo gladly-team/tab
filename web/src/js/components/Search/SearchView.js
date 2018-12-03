@@ -45,3 +45,4 @@ class SearchView extends React.Component {
 }
 
 export default SearchView
+export default withUserId()(SearchView)

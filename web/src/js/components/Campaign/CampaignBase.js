@@ -221,4 +221,4 @@ CampaignBase.propTypes = {
 
 CampaignBase.defaultProps = {}
 
-export default withTheme()(withUserId(CampaignBase))
+export default withTheme()(withUserId()(CampaignBase))
