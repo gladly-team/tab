@@ -3,46 +3,82 @@
 import React from 'react'
 import { QueryRenderer } from 'react-relay'
 import environment from 'js/relay-env'
-import AuthUserComponent from 'js/components/General/AuthUserComponent'
-import SearchContainer from 'js/components/Search/SearchContainer'
+import SearchPageContainer from 'js/components/Search/SearchPageContainer'
+import withUserId from 'js/components/General/withUserId'
 
-class SearchView extends React.Component {
-  render () {
+// Make a different query for anonymous users than for
+// authenticated users.
+const SearchViewQuery = props => {
+  const { userId, ...queryRendererProps } = props
+  if (userId) {
     return (
-      <AuthUserComponent>
-        <QueryRenderer
-          environment={environment}
-          query={graphql`
-            query SearchViewQuery($userId: String!) {
-              app {
-                ...SearchContainer_app
-              }
-              user(userId: $userId) {
-                ...SearchContainer_user
-              }
+      <QueryRenderer
+        query={graphql`
+          query SearchViewQuery($userId: String!) {
+            app {
+              ...SearchPageContainer_app
             }
-          `}
-          render={({ error, props }) => {
-            if (error) {
-              console.error(error)
+            user(userId: $userId) {
+              ...SearchPageContainer_user
             }
-            if (!props) {
-              props = {}
+          }
+        `}
+        variables={{
+          userId: userId
+        }}
+        {...queryRendererProps}
+      />
+    )
+  } else {
+    return (
+      <QueryRenderer
+        query={graphql`
+          query SearchViewAnonymousQuery {
+            app {
+              ...SearchPageContainer_app
             }
-            const app = props.app || null
-            const user = props.user || null
-            return (
-              <SearchContainer
-                app={app}
-                user={user}
-                location={this.props.location}
-              />
-            )
-          }} />
-      </AuthUserComponent>
+          }
+        `}
+        {...queryRendererProps}
+      />
     )
   }
 }
 
-export default SearchView
-export default withUserId()(SearchView)
+class SearchView extends React.Component {
+  render () {
+    const { userId } = this.props
+    return (
+      <SearchViewQuery
+        userId={userId}
+        environment={environment}
+        render={({ error, props }) => {
+          if (error) {
+            console.error(error)
+          }
+          if (!props) {
+            props = {}
+          }
+
+          // Require the app data but allow a null user prop.
+          if (!props.app) {
+            return null
+          }
+          const user = props.user || null
+          return (
+            <SearchPageContainer
+              app={props.app}
+              user={user}
+              location={this.props.location}
+            />
+          )
+        }} />
+    )
+  }
+}
+
+// TODO: add PropTypes (location)
+
+export default withUserId({
+  renderIfNoUser: true
+})(SearchView)

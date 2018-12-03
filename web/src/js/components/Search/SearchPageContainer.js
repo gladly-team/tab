@@ -7,12 +7,13 @@ import SearchPage from 'js/components/Search/SearchPageComponent'
 
 export default createFragmentContainer(SearchPage, {
   app: graphql`
-    fragment SearchContainer_app on App {
+    fragment SearchPageContainer_app on App {
+      moneyRaised
       ...MoneyRaisedContainer_app
     }
   `,
   user: graphql`
-    fragment SearchContainer_user on User {
+    fragment SearchPageContainer_user on User {
       id
     }
   `

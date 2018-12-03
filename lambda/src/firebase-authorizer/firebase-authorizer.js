@@ -43,6 +43,7 @@ const generatePolicy = function (user, allow, resource) {
   }
 }
 
+// TODO: allow non-authenticated requests.
 function checkUserAuthorization (event, context, callback) {
   const token = event.authorizationToken
   if (!token) {

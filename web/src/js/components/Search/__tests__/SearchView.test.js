@@ -5,51 +5,60 @@ import {
   mount,
   shallow
 } from 'enzyme'
-import SearchView from 'js/components/Search/SearchView'
-import SearchContainer from 'js/components/Search/SearchContainer'
-import AuthUserComponent from 'js/components/General/AuthUserComponent'
-import {
-  QueryRenderer
-} from 'react-relay'
 
 jest.mock('react-relay')
-jest.mock('js/components/General/AuthUserComponent')
+jest.mock('js/components/General/withUserId')
 jest.mock('js/analytics/logEvent')
 jest.mock('js/components/Search/SearchContainer')
 
+afterEach(() => {
+  jest.resetModules()
+})
+
 describe('SearchView', () => {
   it('renders without error', () => {
+    const SearchView = require('js/components/Search/SearchView').default
     shallow(
       <SearchView />
-    )
-  })
-
-  it('includes AuthUserComponent', () => {
-    const wrapper = shallow(
-      <SearchView />
-    )
-    expect(wrapper.find(AuthUserComponent).length).toBe(1)
-
-    // Make sure AuthUserComponent is the top-level component.
-    // We're not using Enzyme's .type() here because the
-    // component is mocked.
-    expect(wrapper.name()).toEqual('AuthUserComponent')
+    ).dive()
   })
 
   it('includes QueryRenderer', () => {
-    const wrapper = shallow(
-      <SearchView />
-    )
-    expect(wrapper.find(QueryRenderer).length).toBe(1)
-  })
-
-  it('QueryRenderer receives the "variables" prop', () => {
+    const SearchView = require('js/components/Search/SearchView').default
     const wrapper = mount(
       <SearchView />
     )
+    const { QueryRenderer } = require('react-relay')
+    expect(wrapper.find(QueryRenderer).length).toBe(1)
+  })
+
+  it('QueryRenderer has the "variables" prop when the user is authenticated', () => {
+    const withUserId = require('js/components/General/withUserId').default
+    withUserId.mockImplementation(options => ChildComponent => props => (
+      <ChildComponent userId={'abc123xyz456'} {...props} />
+    ))
+    const SearchView = require('js/components/Search/SearchView').default
+    const wrapper = mount(
+      <SearchView />
+    )
+    const { QueryRenderer } = require('react-relay')
     expect(wrapper.find(QueryRenderer).prop('variables')).toEqual({
-      userId: 'abc123xyz456' // default value in AuthUser mock
+      userId: 'abc123xyz456' // default value in withUserId mock
     })
+  })
+
+  it('QueryRenderer does not have the "variables" prop when the user is not authenticated', () => {
+    const withUserId = require('js/components/General/withUserId').default
+    withUserId.mockImplementation(options => ChildComponent => props => (
+      <ChildComponent userId={null} {...props} />
+    ))
+
+    const SearchView = require('js/components/Search/SearchView').default
+    const wrapper = mount(
+      <SearchView />
+    )
+    const { QueryRenderer } = require('react-relay')
+    expect(wrapper.find(QueryRenderer).prop('variables')).not.toBeDefined()
   })
 
   it('passes "app", "user", "location" props to the SearchContainer when they exist', () => {
@@ -62,12 +71,14 @@ describe('SearchView', () => {
         vc: 233
       }
     }
+    const { QueryRenderer } = require('react-relay')
     QueryRenderer.__setQueryResponse({
       error: null,
       props: fakeProps,
       retry: jest.fn()
     })
 
+    const SearchView = require('js/components/Search/SearchView').default
     const wrapper = mount(
       <SearchView
         location={{
@@ -75,6 +86,7 @@ describe('SearchView', () => {
         }}
       />
     )
+    const SearchContainer = require('js/components/Search/SearchContainer').default
     const searchPageContainer = wrapper.find(SearchContainer)
     expect(searchPageContainer.prop('app')).toEqual(fakeProps.app)
     expect(searchPageContainer.prop('user')).toEqual(fakeProps.user)
