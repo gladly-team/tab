@@ -5,8 +5,7 @@ import { graphql } from 'graphql'
 import { Schema } from './data/schema'
 import {
   createGraphQLContext,
-  getUserClaimsFromLambdaEvent,
-  isUserAuthorized
+  getUserClaimsFromLambdaEvent
 } from './utils/authorization-helpers'
 import { handleError } from './utils/error-logging'
 import {
@@ -39,9 +38,6 @@ export const handler = function (event) {
 
   // Check user authorization.
   const claims = getUserClaimsFromLambdaEvent(event)
-  if (!isUserAuthorized(claims)) {
-    return Promise.resolve(createResponse(401, 'Request not authorized.'))
-  }
   const context = createGraphQLContext(claims)
 
   // Add context to any logs (e.g. the user and request data).

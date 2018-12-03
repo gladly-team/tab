@@ -3,7 +3,6 @@
 import {
   createGraphQLContext,
   getUserClaimsFromLambdaEvent,
-  isUserAuthorized,
   permissionAuthorizers
 } from '../authorization-helpers'
 
@@ -38,32 +37,6 @@ describe('authorization-helpers', () => {
     }
     const context = createGraphQLContext(userClaims)
     expect(expectedContext).toEqual(context)
-  })
-
-  it('does authorize a user who does not have a verified email', () => {
-    const userClaims = {
-      id: 'abc123',
-      email: 'foo@bar.com',
-      email_verified: false
-    }
-    expect(isUserAuthorized(userClaims)).toBe(true)
-  })
-
-  it('does not authorize a user who does not have an ID', () => {
-    const userClaims = {
-      email: 'foo@bar.com',
-      email_verified: 'true'
-    }
-    expect(isUserAuthorized(userClaims)).toBe(false)
-  })
-
-  it('authorizes a user who has appropriate claims', () => {
-    const userClaims = {
-      id: 'abc123',
-      email: 'foo@bar.com',
-      email_verified: 'true'
-    }
-    expect(isUserAuthorized(userClaims)).toBe(true)
   })
 })
 

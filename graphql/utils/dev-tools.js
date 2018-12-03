@@ -1,8 +1,7 @@
 
 import {
   createGraphQLContext,
-  getUserClaimsFromLambdaEvent,
-  isUserAuthorized
+  getUserClaimsFromLambdaEvent
 } from './authorization-helpers'
 import jwtDecode from 'jwt-decode'
 
@@ -104,8 +103,5 @@ export const generateLambdaEventObjFromRequest = (req) => {
 export const getGraphQLContextFromRequest = (req) => {
   const event = generateLambdaEventObjFromRequest(req)
   const claims = getUserClaimsFromLambdaEvent(event)
-  if (!isUserAuthorized(claims)) {
-    console.warn('User is not authorized.')
-  }
   return createGraphQLContext(claims)
 }
