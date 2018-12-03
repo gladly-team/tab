@@ -43,49 +43,61 @@ const generatePolicy = function (user, allow, resource) {
   }
 }
 
-// TODO: allow non-authenticated requests.
 function checkUserAuthorization (event, context, callback) {
   const token = event.authorizationToken
+
+  // With no authorization token, allow access but do not
+  // provide any claims.
   if (!token) {
-    callback('Error: Invalid token')
-  }
-  try {
-    // Only initialize the app if it hasn't already been initialized.
-    // https://groups.google.com/forum/#!topic/firebase-talk/aBonTOiQJWA
-    if (!admin.apps.length) {
-      admin.initializeApp({
-        credential: admin.credential.cert({
-          projectId: process.env.FIREBASE_PROJECT_ID,
-          clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-          // https://stackoverflow.com/a/41044630/1332513
-          privateKey: decryptedFirebasePrivateKey.replace(/\\n/g, '\n')
-        }),
-        databaseURL: process.env.FIREBASE_DATABASE_URL
-      })
+    const user = {
+      uid: null,
+      email: null,
+      email_verified: false
     }
 
-    // Validate the Firebase token.
-    admin.auth().verifyIdToken(token)
-      .then((decodedToken) => {
-        const user = {
-          uid: decodedToken.uid,
-          email: decodedToken.email || null,
-          email_verified: decodedToken.email_verified || false
-        }
+    // Generate AWS authorization policy
+    callback(null, generatePolicy(user, true, event.methodArn))
+  }
+  // There is an authorization token, so validate it.
+  else {
+    try {
+      // Only initialize the app if it hasn't already been initialized.
+      // https://groups.google.com/forum/#!topic/firebase-talk/aBonTOiQJWA
+      if (!admin.apps.length) {
+        admin.initializeApp({
+          credential: admin.credential.cert({
+            projectId: process.env.FIREBASE_PROJECT_ID,
+            clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+            // https://stackoverflow.com/a/41044630/1332513
+            privateKey: decryptedFirebasePrivateKey.replace(/\\n/g, '\n')
+          }),
+          databaseURL: process.env.FIREBASE_DATABASE_URL
+        })
+      }
 
-        // Conditions for authorization. We do not check for a valid
-        // email because we create the user before email validation.
-        const valid = !!user.uid
+      // Validate the Firebase token.
+      admin.auth().verifyIdToken(token)
+        .then((decodedToken) => {
+          const user = {
+            uid: decodedToken.uid,
+            email: decodedToken.email || null,
+            email_verified: decodedToken.email_verified || false
+          }
 
-        // Generate AWS authorization policy
-        callback(null, generatePolicy(user, valid, event.methodArn))
-      }).catch((e) => {
-        console.error(e)
-        callback('Error: Invalid token')
-      })
-  } catch (e) {
-    console.error(e)
-    callback('Error: Invalid token')
+          // Conditions for authorization. We do not check for a valid
+          // email because we create the user before email validation.
+          const valid = !!user.uid
+
+          // Generate AWS authorization policy
+          callback(null, generatePolicy(user, valid, event.methodArn))
+        }).catch((e) => {
+          console.error(e)
+          callback('Error: Invalid token')
+        })
+    } catch (e) {
+      console.error(e)
+      callback('Error: Invalid token')
+    }
   }
 }
 

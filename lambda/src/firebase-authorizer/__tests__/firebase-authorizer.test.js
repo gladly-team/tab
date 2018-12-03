@@ -42,24 +42,6 @@ const mockDecodedTokenAnonymousUser = {
   uid: 'qwerty236810'
 }
 
-test('authorization fails when no token is provided', (done) => {
-  // Hide expected error.
-  jest.spyOn(console, 'error')
-    .mockImplementationOnce(() => {})
-
-  const checkUserAuthorization = require('../firebase-authorizer').checkUserAuthorization
-  const event = {
-    authorizationToken: null,
-    methodArn: 'arn:execute-api:blah:blah'
-  }
-  const context = {}
-  const callback = (err, _) => {
-    expect(err).toBe('Error: Invalid token')
-    done()
-  }
-  checkUserAuthorization(event, context, callback)
-})
-
 test('authorization fails when token verification throws an error', (done) => {
   // Hide expected error.
   jest.spyOn(console, 'error')
@@ -235,33 +217,34 @@ test('authorization allows access when the user is anonymous (token does not hav
   checkUserAuthorization(event, context, callback)
 })
 
-// test('authorization allows access with no claims when when no token is provided', (done) => {
-//   const checkUserAuthorization = require('../firebase-authorizer').checkUserAuthorization
-//   const event = {
-//     authorizationToken: null,
-//     methodArn: 'arn:execute-api:blah:blah'
-//   }
-//   const context = {}
-//   const callback = (_, data) => {
-//     expect(data).toEqual({
-//       principalId: decodedToken.uid,
-//       policyDocument: {
-//         Version: '2012-10-17',
-//         Statement: [
-//           {
-//             Action: 'execute-api:Invoke',
-//             Effect: 'Allow',
-//             Resource: 'arn:execute-api:blah:blah'
-//           }
-//         ]
-//       },
-//       context: {
-//         id: null,
-//         email: null,
-//         email_verified: false
-//       }
-//     })
-//     done()
-//   }
-//   checkUserAuthorization(event, context, callback)
-// })
+test('authorization allows access with no claims when when no token is provided', (done) => {
+  const checkUserAuthorization = require('../firebase-authorizer').checkUserAuthorization
+  const event = {
+    authorizationToken: null,
+    methodArn: 'arn:execute-api:blah:blah'
+  }
+  const context = {}
+  const callback = (err, data) => {
+    expect(err).toBeNull()
+    expect(data).toEqual({
+      principalId: null,
+      policyDocument: {
+        Version: '2012-10-17',
+        Statement: [
+          {
+            Action: 'execute-api:Invoke',
+            Effect: 'Allow',
+            Resource: 'arn:execute-api:blah:blah'
+          }
+        ]
+      },
+      context: {
+        id: null,
+        email: null,
+        email_verified: false
+      }
+    })
+    done()
+  }
+  checkUserAuthorization(event, context, callback)
+})
