@@ -57,9 +57,8 @@ function checkUserAuthorization (event, context, callback) {
 
     // Generate AWS authorization policy
     callback(null, generatePolicy(user, true, event.methodArn))
-  }
   // There is an authorization token, so validate it.
-  else {
+  } else {
     try {
       // Only initialize the app if it hasn't already been initialized.
       // https://groups.google.com/forum/#!topic/firebase-talk/aBonTOiQJWA
