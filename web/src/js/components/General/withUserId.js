@@ -30,14 +30,14 @@ const withUserId = (options = {}) => WrappedComponent => {
       // https://firebase.google.com/docs/reference/js/firebase.auth.Auth#onAuthStateChanged
       this.authListenerUnsubscribe = getCurrentUserListener()
         .onAuthStateChanged((user) => {
-          this.setState({
-            authStateLoaded: true
-          })
           if (user && user.uid) {
             this.setState({
               userId: user.uid
             })
           }
+          this.setState({
+            authStateLoaded: true
+          })
         })
     }
 
