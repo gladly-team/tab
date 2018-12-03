@@ -234,3 +234,34 @@ test('authorization allows access when the user is anonymous (token does not hav
   }
   checkUserAuthorization(event, context, callback)
 })
+
+// test('authorization allows access with no claims when when no token is provided', (done) => {
+//   const checkUserAuthorization = require('../firebase-authorizer').checkUserAuthorization
+//   const event = {
+//     authorizationToken: null,
+//     methodArn: 'arn:execute-api:blah:blah'
+//   }
+//   const context = {}
+//   const callback = (_, data) => {
+//     expect(data).toEqual({
+//       principalId: decodedToken.uid,
+//       policyDocument: {
+//         Version: '2012-10-17',
+//         Statement: [
+//           {
+//             Action: 'execute-api:Invoke',
+//             Effect: 'Allow',
+//             Resource: 'arn:execute-api:blah:blah'
+//           }
+//         ]
+//       },
+//       context: {
+//         id: null,
+//         email: null,
+//         email_verified: false
+//       }
+//     })
+//     done()
+//   }
+//   checkUserAuthorization(event, context, callback)
+// })
