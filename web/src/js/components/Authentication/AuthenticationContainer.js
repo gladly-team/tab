@@ -11,6 +11,7 @@ export default createFragmentContainer(Authentication, {
       id
       email
       username
+      ...AssignExperimentGroupsContainer_user
     }
   `
 })
