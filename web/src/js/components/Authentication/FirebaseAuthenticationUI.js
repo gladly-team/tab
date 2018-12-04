@@ -4,7 +4,6 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 import { FirebaseAuth } from 'react-firebaseui'
 import {
-  absoluteUrl,
   dashboardURL,
   privacyPolicyURL,
   termsOfServiceURL
@@ -225,9 +224,9 @@ class FirebaseAuthenticationUI extends React.Component {
       // https://github.com/firebase/firebaseui-web/blob/bd710448caa34c4a47a2fd578d76be8506d392d8/javascript/widgets/config.js#L83
       credentialHelper: 'none',
       // Terms of service URL
-      tosUrl: absoluteUrl(termsOfServiceURL),
+      tosUrl: termsOfServiceURL,
       // Privacy policy URL
-      privacyPolicyUrl: absoluteUrl(privacyPolicyURL)
+      privacyPolicyUrl: privacyPolicyURL
     }
   }
 

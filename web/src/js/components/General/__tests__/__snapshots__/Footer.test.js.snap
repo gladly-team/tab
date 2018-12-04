@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Footer matches expected snapshot 1`] = `
+<Footer
+  classes={
+    Object {
+      "footerLink": "Footer-footerLink-1",
+      "socialIcon": "Footer-socialIcon-2",
+    }
+  }
+  style={Object {}}
+/>
+`;

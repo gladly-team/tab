@@ -16,6 +16,7 @@ import {
 import LogoWithText from 'js/components/Logo/LogoWithText'
 import { parseUrlSearchString } from 'js/utils/utils'
 import SearchResults from 'js/components/Search/SearchResults'
+import Footer from 'js/components/General/Footer'
 
 const searchBoxBorderColor = '#ced4da'
 const searchBoxBorderColorFocused = '#bdbdbd'
@@ -100,7 +101,9 @@ class SearchPage extends React.Component {
         style={{
           backgroundColor: '#fff',
           minWidth: '100vw',
-          minHeight: '100vh'
+          minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column'
         }}
       >
         <div
@@ -231,13 +234,18 @@ class SearchPage extends React.Component {
           <SearchResults
             query={query}
             style={{
-              background: 'none',
               marginLeft: searchResultsPaddingLeft,
               maxWidth: 600,
-              paddingTop: 20
+              paddingTop: 20,
+              marginBottom: 40
             }}
           />
         </div>
+        <Footer
+          style={{
+            marginTop: 'auto'
+          }}
+        />
       </div>
     )
   }

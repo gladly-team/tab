@@ -54,7 +54,7 @@ describe('SearchResults component', () => {
       <SearchResults {...mockProps} />
     ).dive()
     expect(wrapper.find('div').first().prop('style'))
-      .toEqual({
+      .toMatchObject({
         background: '#FF0000'
       })
   })
@@ -182,6 +182,46 @@ describe('SearchResults component', () => {
         .filterWhere(n => n.render().text() === `No results found for ${query}`)
         .length
     ).toBe(1)
+  })
+
+  it('sets a min-height to the results container before fetching results', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(
+      <SearchResults {...mockProps} />
+    ).dive()
+    expect(
+      wrapper.get(0)
+        .props.style
+        .minHeight
+    ).toBe(1200)
+  })
+
+  it('removes the a min-height from the results container if there are no search results', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(
+      <SearchResults {...mockProps} />
+    ).dive()
+    const query = 'this search will yield no results, sadly'
+    wrapper.setProps({
+      query: query
+    })
+    const onNoAdCallback = window.ypaAds.insertMultiAd
+      .mock.calls[0][0]
+      .ypaAdSlotInfo[1]
+      .ypaOnNoAd
+
+    // Mock no ad results.
+    onNoAdCallback({
+      NO_COVERAGE: 1
+    })
+
+    expect(
+      wrapper.get(0)
+        .props.style
+        .minHeight
+    ).toBe(0)
   })
 
   it('shows an error message and logs an error when the search errors with "URL_UNREGISTERED"', () => {

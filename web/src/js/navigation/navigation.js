@@ -4,10 +4,6 @@ import qs from 'qs'
 
 // TODO: replace this with Link navigation via react-router.
 
-// TODO: make all routes absolute by default
-const protocol = process.env.WEBSITE_PROTOCOL ? process.env.WEBSITE_PROTOCOL : 'https'
-const baseUrl = `${protocol}://${process.env.WEBSITE_DOMAIN}`
-
 export const goTo = (location, paramsObj = {}) => {
   browserHistory.push({
     pathname: location,
@@ -44,6 +40,13 @@ export const externalRedirect = (externalURL) => {
 }
 
 export const absoluteUrl = (path) => {
+  // If the passed path is already an absolute URL,
+  // just return it.
+  if (path.startsWith('http://') || path.startsWith('https://')) {
+    return path
+  }
+  const protocol = process.env.WEBSITE_PROTOCOL ? process.env.WEBSITE_PROTOCOL : 'https'
+  const baseUrl = `${protocol}://${process.env.WEBSITE_DOMAIN}`
   return `${baseUrl}${path}`
 }
 
@@ -69,12 +72,28 @@ export const accountURL = '/newtab/account/'
 
 // Homepage
 
-export const privacyPolicyURL = '/privacy/'
-export const termsOfServiceURL = '/terms/'
+export const homeURL = absoluteUrl('/')
+export const privacyPolicyURL = absoluteUrl('/privacy/')
+export const termsOfServiceURL = absoluteUrl('/terms/')
+export const contactUsURL = absoluteUrl('/contact/')
+export const financialsURL = absoluteUrl('/financials/')
+export const teamURL = absoluteUrl('/team/')
+export const jobsURL = absoluteUrl('/jobs/')
+export const adblockerWhitelistingURL = absoluteUrl('/adblockers/')
 
 // External links
 
 export const postUninstallSurveyURL = 'https://goo.gl/forms/XUICFx9psTwCzEIE2'
+
+// Zendesk
+export const externalHelpURL =
+  'https://gladly.zendesk.com/hc/en-us/categories/201939608-Tab-for-a-Cause'
+export const externalContactUsURL =
+  'https://gladly.zendesk.com/hc/en-us/requests/new'
+
+// Social
+export const facebookPageURL = 'https://www.facebook.com/TabForACause'
+export const twitterPageURL = 'https://twitter.com/TabForACause'
 
 // TODO: stop using these and replace the existing uses.
 //   They only cause additional complication during testing.

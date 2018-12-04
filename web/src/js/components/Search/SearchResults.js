@@ -361,7 +361,12 @@ class SearchResults extends React.Component {
     return (
       <div
         data-test-id='search-results-container'
-        style={Object.assign({}, style)}
+        style={Object.assign({}, {
+          // Min height prevents visibly shifting content below,
+          // like the footer.
+          minHeight: this.state.noSearchResults ? 0 : 1200,
+          boxSizing: 'border-box'
+        }, style)}
       >
         <Helmet
           onChangeClientState={(newState, addedTags) => {

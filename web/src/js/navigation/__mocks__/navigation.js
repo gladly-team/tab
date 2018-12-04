@@ -1,5 +1,7 @@
 /* eslint-env jest */
 
+process.env.WEBSITE_PROTOCOL = 'https'
+process.env.WEBSITE_DOMAIN = 'tab-test-env.gladly.io'
 const navigationActual = require.requireActual('../navigation')
 
 const navigationMock = navigationActual
@@ -7,9 +9,6 @@ navigationMock.goTo = jest.fn()
 navigationMock.replaceUrl = jest.fn()
 navigationMock.modifyURLParams = jest.fn()
 navigationMock.externalRedirect = jest.fn()
-navigationMock.absoluteUrl = jest.fn(path => {
-  return `https://tab-test-env.gladly.io${path}`
-})
 navigationMock.goToHome = jest.fn(() => {
   navigationMock.goTo(navigationMock.dashboardURL)
 })
