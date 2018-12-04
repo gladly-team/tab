@@ -1,6 +1,7 @@
 import React from 'react'
-import Divider from 'material-ui/Divider'
 import PropTypes from 'prop-types'
+import { withStyles } from '@material-ui/core/styles'
+import Divider from '@material-ui/core/Divider'
 import FacebookBox from 'mdi-material-ui/FacebookBox'
 import Twitter from 'mdi-material-ui/Twitter'
 
@@ -17,7 +18,7 @@ import {
   termsOfServiceURL,
   twitterPageURL
 } from 'js/navigation/navigation'
-import Link from 'js/components/General/NavLink'
+import Link from 'js/components/General/Link'
 
 // Matches tab-homepage style.
 const fontFamily = '"Helvetica Neue", Helvetica, Arial, sans-serif'
@@ -25,20 +26,23 @@ const lightestShadingColor = 'rgba(128, 128, 128, 0.04)'
 const lighterTextColor = '#838383'
 const lightestTextColor = '#cecece'
 
+const styles = theme => ({
+  footerLink: {
+    textDecoration: 'none',
+    color: lightestTextColor,
+    fontSize: 12,
+    margin: 20,
+    '&:hover': {
+      color: lighterTextColor
+    }
+  }
+})
+
 const IconWrapper = props => <div>{props.children}</div>
 
 class Footer extends React.Component {
   render () {
-    const { style } = this.props
-    const footerLinkStyle = {
-      textDecoration: 'none',
-      color: lightestTextColor,
-      fontSize: 12,
-      margin: 20
-    }
-    const hoverLinkStyle = {
-      color: lighterTextColor
-    }
+    const { classes, style } = this.props
     const socialIconStyle = {
       color: lightestTextColor,
       width: 20,
@@ -90,57 +94,49 @@ class Footer extends React.Component {
             >
               <Link
                 to={externalHelpURL}
-                style={footerLinkStyle}
-                hoverStyle={hoverLinkStyle}
+                className={classes.footerLink}
               >
                 Help
               </Link>
               <Link
                 to={adblockerWhitelistingURL}
-                style={footerLinkStyle}
-                hoverStyle={hoverLinkStyle}
+                className={classes.footerLink}
               >
                 Adblockers
               </Link>
               <Link
                 to={financialsURL}
-                style={footerLinkStyle}
-                hoverStyle={hoverLinkStyle}
+                className={classes.footerLink}
               >
                 Financials
               </Link>
               <Link
                 to={termsOfServiceURL}
-                style={footerLinkStyle}
-                hoverStyle={hoverLinkStyle}
+                className={classes.footerLink}
               >
                 Terms
               </Link>
               <Link
                 to={privacyPolicyURL}
-                style={footerLinkStyle}
-                hoverStyle={hoverLinkStyle}
+                className={classes.footerLink}
               >
                 Privacy
               </Link>
               <Link
                 to={teamURL}
-                style={footerLinkStyle}
-                hoverStyle={hoverLinkStyle}
+                className={classes.footerLink}
               >
                 Team
               </Link>
               <Link
                 to={contactUsURL}
-                style={footerLinkStyle}
-                hoverStyle={hoverLinkStyle}
+                className={classes.footerLink}
               >
                 Contact
               </Link>
               <Link
                 to={jobsURL}
-                style={footerLinkStyle}
-                hoverStyle={hoverLinkStyle}
+                className={classes.footerLink}
               >
                 Jobs
               </Link>
@@ -172,11 +168,12 @@ class Footer extends React.Component {
 }
 
 Footer.propTypes = {
-  style: PropTypes.object
+  style: PropTypes.object,
+  classes: PropTypes.object.isRequired
 }
 
 Footer.defaultProps = {
   style: {}
 }
 
-export default Footer
+export default withStyles(styles)(Footer)
