@@ -4,10 +4,6 @@ import qs from 'qs'
 
 // TODO: replace this with Link navigation via react-router.
 
-// TODO: make all routes absolute by default
-const protocol = process.env.WEBSITE_PROTOCOL ? process.env.WEBSITE_PROTOCOL : 'https'
-const baseUrl = `${protocol}://${process.env.WEBSITE_DOMAIN}`
-
 export const goTo = (location, paramsObj = {}) => {
   browserHistory.push({
     pathname: location,
@@ -44,6 +40,13 @@ export const externalRedirect = (externalURL) => {
 }
 
 export const absoluteUrl = (path) => {
+  // If the passed path is already an absolute URL,
+  // just return it.
+  if (path.startsWith('http://') || path.startsWith('https://')) {
+    return path
+  }
+  const protocol = process.env.WEBSITE_PROTOCOL ? process.env.WEBSITE_PROTOCOL : 'https'
+  const baseUrl = `${protocol}://${process.env.WEBSITE_DOMAIN}`
   return `${baseUrl}${path}`
 }
 
