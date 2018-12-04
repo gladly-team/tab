@@ -71,10 +71,25 @@ export const accountURL = '/newtab/account/'
 
 export const privacyPolicyURL = '/privacy/'
 export const termsOfServiceURL = '/terms/'
+export const contactUsURL = '/contact/'
+export const financialsURL = '/financials/'
+export const teamURL = '/team/'
+export const jobsURL = '/jobs/'
+export const adblockerWhitelistingURL = '/adblockers/'
 
 // External links
 
 export const postUninstallSurveyURL = 'https://goo.gl/forms/XUICFx9psTwCzEIE2'
+
+// Zendesk
+export const externalHelpURL =
+  'https://gladly.zendesk.com/hc/en-us/categories/201939608-Tab-for-a-Cause'
+export const externalContactUsURL =
+  'https://gladly.zendesk.com/hc/en-us/requests/new'
+
+// Social
+export const facebookPageURL = 'https://www.facebook.com/TabForACause'
+export const twitterPageURL = 'https://twitter.com/TabForACause'
 
 // TODO: stop using these and replace the existing uses.
 //   They only cause additional complication during testing.

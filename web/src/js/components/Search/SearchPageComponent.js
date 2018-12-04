@@ -16,6 +16,7 @@ import {
 import LogoWithText from 'js/components/Logo/LogoWithText'
 import { parseUrlSearchString } from 'js/utils/utils'
 import SearchResults from 'js/components/Search/SearchResults'
+import Footer from 'js/components/General/Footer'
 
 const searchBoxBorderColor = '#ced4da'
 const searchBoxBorderColorFocused = '#bdbdbd'
@@ -238,6 +239,7 @@ class SearchPage extends React.Component {
             }}
           />
         </div>
+        <Footer />
       </div>
     )
   }
