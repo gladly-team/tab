@@ -12,6 +12,7 @@ import {
   externalHelpURL,
   facebookPageURL,
   financialsURL,
+  homeURL,
   jobsURL,
   privacyPolicyURL,
   teamURL,
@@ -79,7 +80,7 @@ class Footer extends React.Component {
               alignItems: 'center'
             }}
           >
-            <Link to='/'>
+            <Link to={homeURL}>
               <img src={logoGrey} style={{ height: 43 }} alt='Tab for a Cause logo in grey' />
             </Link>
             <div

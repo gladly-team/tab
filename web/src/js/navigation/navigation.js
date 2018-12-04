@@ -69,13 +69,14 @@ export const accountURL = '/newtab/account/'
 
 // Homepage
 
-export const privacyPolicyURL = '/privacy/'
-export const termsOfServiceURL = '/terms/'
-export const contactUsURL = '/contact/'
-export const financialsURL = '/financials/'
-export const teamURL = '/team/'
-export const jobsURL = '/jobs/'
-export const adblockerWhitelistingURL = '/adblockers/'
+export const homeURL = absoluteUrl('/')
+export const privacyPolicyURL = absoluteUrl('/privacy/')
+export const termsOfServiceURL = absoluteUrl('/terms/')
+export const contactUsURL = absoluteUrl('/contact/')
+export const financialsURL = absoluteUrl('/financials/')
+export const teamURL = absoluteUrl('/team/')
+export const jobsURL = absoluteUrl('/jobs/')
+export const adblockerWhitelistingURL = absoluteUrl('/adblockers/')
 
 // External links
 
