@@ -35,22 +35,20 @@ const styles = theme => ({
     '&:hover': {
       color: lighterTextColor
     }
+  },
+  socialIcon: {
+    color: lightestTextColor,
+    width: 20,
+    height: 20,
+    '&:hover': {
+      color: lighterTextColor
+    }
   }
 })
-
-const IconWrapper = props => <div>{props.children}</div>
 
 class Footer extends React.Component {
   render () {
     const { classes, style } = this.props
-    const socialIconStyle = {
-      color: lightestTextColor,
-      width: 20,
-      height: 20
-    }
-    const socialIconHoverStyle = {
-      color: lighterTextColor
-    }
     return (
       <div
         style={Object.assign(
@@ -144,21 +142,14 @@ class Footer extends React.Component {
           </div>
           <div style={{ display: 'flex', alignItems: 'center', paddingTop: 4 }}>
             <Link to={facebookPageURL} style={{ margin: 12 }}>
-              <IconWrapper
-                style={socialIconStyle}
-                hoverStyle={socialIconHoverStyle}
-              >
-                <FacebookBox />
-              </IconWrapper>
+              <FacebookBox
+                className={classes.socialIcon}
+              />
             </Link>
-
             <Link to={twitterPageURL} style={{ margin: 12 }}>
-              <IconWrapper
-                style={socialIconStyle}
-                hoverStyle={socialIconHoverStyle}
-              >
-                <Twitter />
-              </IconWrapper>
+              <Twitter
+                className={classes.socialIcon}
+              />
             </Link>
           </div>
         </div>
