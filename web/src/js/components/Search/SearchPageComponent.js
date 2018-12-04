@@ -23,19 +23,23 @@ const searchBoxBorderColorFocused = '#bdbdbd'
 const styles = theme => ({
   inputRootStyle: {
     padding: 0,
-    borderRadius: 2,
+    borderRadius: 28,
     backgroundColor: theme.palette.common.white,
     border: `1px solid ${searchBoxBorderColor}`,
     fontSize: 16,
     boxShadow: '0rem 0rem 0.02rem 0.02rem rgba(0, 0, 0, 0.1)',
-    transition: theme.transitions.create(['border-color', 'box-shadow'])
+    transition: theme.transitions.create(['border-color', 'box-shadow']),
+    '&:hover': {
+      borderColor: searchBoxBorderColorFocused,
+      boxShadow: '0rem 0.05rem 0.2rem 0.05rem rgba(0, 0, 0, 0.1)'
+    }
   },
   inputRootFocused: {
     borderColor: searchBoxBorderColorFocused,
     boxShadow: '0rem 0.05rem 0.2rem 0.05rem rgba(0, 0, 0, 0.1)'
   },
   inputStyle: {
-    padding: '10px 12px'
+    padding: '12px 16px'
   },
   tabsContainerRootStyle: {
     minHeight: 0
@@ -101,7 +105,7 @@ class SearchPage extends React.Component {
       >
         <div
           style={{
-            backgroundColor: '#F2F2F2',
+            backgroundColor: '#fff',
             borderBottom: '1px solid #e4e4e4'
           }}
         >
@@ -161,6 +165,7 @@ class SearchPage extends React.Component {
             value={0}
             indicatorColor={'secondary'}
             style={{
+              marginTop: 8,
               marginLeft: 149
             }}
             classes={{
