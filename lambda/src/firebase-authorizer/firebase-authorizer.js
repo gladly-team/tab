@@ -2,6 +2,7 @@
 
 import * as admin from 'firebase-admin'
 import AWS from 'aws-sdk'
+import uuid from 'uuid/v4'
 
 const encryptedFirebasePrivateKey = process.env['FIREBASE_PRIVATE_KEY']
 let decryptedFirebasePrivateKey = ''
@@ -19,8 +20,16 @@ let decryptedFirebasePrivateKey = ''
  * @returns {object} The AWS policy
  */
 const generatePolicy = function (user, allow, resource) {
+  // AWS might use the principal ID for caching (though I could not
+  // find documentation to confirm this). Though I can't think of
+  // a clear security risk from setting a static principal ID for all
+  // unauthenticated users, let's be cautious and generate unique
+  // IDs for every request.
+  // Related unanswered question:
+  // https://stackoverflow.com/q/48762730
+  const principalId = user.uid || `unauthenticated-${uuid()}`
   return {
-    principalId: user.uid,
+    principalId: principalId,
     policyDocument: {
       Version: '2012-10-17',
       Statement: [
