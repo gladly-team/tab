@@ -5,11 +5,6 @@ import FacebookBox from 'mdi-material-ui/FacebookBox'
 import Twitter from 'mdi-material-ui/Twitter'
 
 import logoGrey from 'js/assets/logos/logo-grey.svg'
-// import {
-//   lightestShadingColor,
-//   lighterTextColor,
-//   lightestTextColor
-// } from 'themes/theme'
 import {
   adblockerWhitelistingURL,
   contactUsURL,
@@ -23,11 +18,12 @@ import {
   twitterPageURL
 } from 'js/navigation/navigation'
 import Link from 'js/components/General/NavLink'
-// import IconWrapper from 'components/IconWrapper'
 
-export const lightestShadingColor = 'rgba(128, 128, 128, 0.04)'
-export const lighterTextColor = '#838383'
-export const lightestTextColor = '#cecece'
+// Matches tab-homepage style.
+const fontFamily = '"Helvetica Neue", Helvetica, Arial, sans-serif'
+const lightestShadingColor = 'rgba(128, 128, 128, 0.04)'
+const lighterTextColor = '#838383'
+const lightestTextColor = '#cecece'
 
 const IconWrapper = props => <div>{props.children}</div>
 
@@ -35,6 +31,7 @@ class Footer extends React.Component {
   render () {
     const { style } = this.props
     const footerLinkStyle = {
+      textDecoration: 'none',
       color: lightestTextColor,
       fontSize: 12,
       margin: 20
@@ -59,7 +56,8 @@ class Footer extends React.Component {
             paddingTop: 1,
             paddingBottom: 20,
             paddingLeft: 40,
-            paddingRight: 40
+            paddingRight: 40,
+            fontFamily: fontFamily
           },
           style
         )}
@@ -80,7 +78,7 @@ class Footer extends React.Component {
             }}
           >
             <Link to='/'>
-              <img src={logoGrey} style={{ height: 43 }} />
+              <img src={logoGrey} style={{ height: 43 }} alt='Tab for a Cause logo in grey' />
             </Link>
             <div
               style={{
