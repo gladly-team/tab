@@ -27,15 +27,33 @@ function mockAuthorizer (authorizationToken) {
       email: defaultEmail,
       email_verified: 'true'
     }
-  }
-  const parsedJwt = jwtDecode(authorizationToken)
-  return {
-    id: parsedJwt.sub,
-    // The email and email_verified properties may not exist for
-    // anonymous users.
-    email: parsedJwt.email || null,
-    // The email_verified claim is a string.
-    email_verified: parsedJwt.email_verified ? parsedJwt.email_verified.toString() : 'false'
+
+  // If the request is unauthenticated, allow access but do not
+  // provide any claims.
+  // The client sends the "unauthenticated" placeholder value
+  // because AWS API Gateway's custom authorizers will reject
+  // any request without a token and we want to provide
+  // unauthenticated access to our API.
+  // "If a specified identify source is missing, null, or empty,
+  // API Gateway returns a 401 Unauthorized response without calling
+  // the authorizer Lambda function.”
+  // https://docs.aws.amazon.com/apigateway/latest/developerguide/configure-api-gateway-lambda-authorization-with-console.html"
+  } else if (authorizationToken === 'unauthenticated') {
+    return {
+      id: null,
+      email: null,
+      email_verified: 'false'
+    }
+  } else {
+    const parsedJwt = jwtDecode(authorizationToken)
+    return {
+      id: parsedJwt.sub,
+      // The email and email_verified properties may not exist for
+      // anonymous users.
+      email: parsedJwt.email || null,
+      // The email_verified claim is a string.
+      email_verified: parsedJwt.email_verified ? parsedJwt.email_verified.toString() : 'false'
+    }
   }
 }
 

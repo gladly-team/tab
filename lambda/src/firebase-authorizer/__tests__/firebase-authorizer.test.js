@@ -217,10 +217,10 @@ test('authorization allows access when the user is anonymous (token does not hav
   checkUserAuthorization(event, context, callback)
 })
 
-test('authorization allows access with no claims when when no token is provided', (done) => {
+test('authorization allows access with no claims when the user has a placeholder "unauthenticated" Authorization header value', (done) => {
   const checkUserAuthorization = require('../firebase-authorizer').checkUserAuthorization
   const event = {
-    authorizationToken: null,
+    authorizationToken: 'unauthenticated',
     methodArn: 'arn:execute-api:blah:blah'
   }
   const context = {}

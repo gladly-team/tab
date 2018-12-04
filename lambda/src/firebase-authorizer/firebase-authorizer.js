@@ -46,9 +46,17 @@ const generatePolicy = function (user, allow, resource) {
 function checkUserAuthorization (event, context, callback) {
   const token = event.authorizationToken
 
-  // With no authorization token, allow access but do not
+  // If the request is unauthenticated, allow access but do not
   // provide any claims.
-  if (!token) {
+  // The client sends the "unauthenticated" placeholder value
+  // because AWS API Gateway's custom authorizers will reject
+  // any request without a token and we want to provide
+  // unauthenticated access to our API.
+  // "If a specified identify source is missing, null, or empty,
+  // API Gateway returns a 401 Unauthorized response without calling
+  // the authorizer Lambda function.”
+  // https://docs.aws.amazon.com/apigateway/latest/developerguide/configure-api-gateway-lambda-authorization-with-console.html"
+  if (token === 'unauthenticated') {
     const user = {
       uid: null,
       email: null,
