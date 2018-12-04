@@ -101,7 +101,9 @@ class SearchPage extends React.Component {
         style={{
           backgroundColor: '#fff',
           minWidth: '100vw',
-          minHeight: '100vh'
+          minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column'
         }}
       >
         <div
@@ -232,14 +234,18 @@ class SearchPage extends React.Component {
           <SearchResults
             query={query}
             style={{
-              background: 'none',
               marginLeft: searchResultsPaddingLeft,
               maxWidth: 600,
-              paddingTop: 20
+              paddingTop: 20,
+              marginBottom: 40
             }}
           />
         </div>
-        <Footer />
+        <Footer
+          style={{
+            marginTop: 'auto'
+          }}
+        />
       </div>
     )
   }
