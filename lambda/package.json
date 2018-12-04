@@ -5,7 +5,8 @@
   "private": true,
   "dependencies": {
     "aws-sdk": "^2.328.0",
-    "firebase-admin": "^5.5.0"
+    "firebase-admin": "^5.5.0",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

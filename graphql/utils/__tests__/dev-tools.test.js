@@ -93,4 +93,26 @@ describe('dev-tools', () => {
     const context = getGraphQLContextFromRequest(minimalRequestObject)
     expect(context).toEqual(expectedContext)
   })
+
+  it('correctly forms GraphQL context from a request object when the user has an Authorization header value of "unauthenticated"', () => {
+    const getGraphQLContextFromRequest = require('../dev-tools').getGraphQLContextFromRequest
+    const minimalRequestObject = {
+      header: (headerName) => {
+        if (headerName === 'Authorization') {
+          return 'unauthenticated'
+        } else {
+          return null
+        }
+      }
+    }
+    const expectedContext = {
+      user: {
+        id: null,
+        email: null,
+        emailVerified: false
+      }
+    }
+    const context = getGraphQLContextFromRequest(minimalRequestObject)
+    expect(context).toEqual(expectedContext)
+  })
 })

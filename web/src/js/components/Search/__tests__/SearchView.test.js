@@ -9,7 +9,7 @@ import {
 jest.mock('react-relay')
 jest.mock('js/components/General/withUserId')
 jest.mock('js/analytics/logEvent')
-jest.mock('js/components/Search/SearchContainer')
+jest.mock('js/components/Search/SearchPageContainer')
 
 afterEach(() => {
   jest.resetModules()
@@ -86,7 +86,7 @@ describe('SearchView', () => {
         }}
       />
     )
-    const SearchContainer = require('js/components/Search/SearchContainer').default
+    const SearchContainer = require('js/components/Search/SearchPageContainer').default
     const searchPageContainer = wrapper.find(SearchContainer)
     expect(searchPageContainer.prop('app')).toEqual(fakeProps.app)
     expect(searchPageContainer.prop('user')).toEqual(fakeProps.user)

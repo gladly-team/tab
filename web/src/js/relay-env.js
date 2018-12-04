@@ -22,9 +22,16 @@ async function fetchQuery (
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     }
-    if (userToken) {
-      headers['Authorization'] = userToken
-    }
+
+    // If the user does not have a token, send a placeholder value.
+    // We do this because AWS API Gateway's custom authorizers will
+    // reject any request without a token and we want to provide
+    // unauthenticated access to our API.
+    // "If a specified identify source is missing, null, or empty,
+    // API Gateway returns a 401 Unauthorized response without calling
+    // the authorizer Lambda function.”
+    // https://docs.aws.amazon.com/apigateway/latest/developerguide/configure-api-gateway-lambda-authorization-with-console.html"
+    headers['Authorization'] = userToken || 'unauthenticated'
 
     return fetch(`//${process.env.GRAPHQL_ENDPOINT}`, {
       method: 'POST',

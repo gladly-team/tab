@@ -1,9 +1,10 @@
 /* eslint-env jest */
-
-import * as admin from 'firebase-admin'
 import { cloneDeep } from 'lodash/lang'
 
+jest.mock('uuid/v4')
+
 afterEach(() => {
+  jest.resetModules()
   jest.clearAllMocks()
 })
 
@@ -47,6 +48,7 @@ test('authorization fails when token verification throws an error', (done) => {
   jest.spyOn(console, 'error')
     .mockImplementationOnce(() => {})
 
+  const admin = require('firebase-admin')
   admin.auth.mockImplementation(() => ({
     verifyIdToken: jest.fn(() => {
       return Promise.reject(new Error('Verification failed!'))
@@ -68,6 +70,7 @@ test('authorization fails when token verification throws an error', (done) => {
 test('authorization allows access when a good token is provided (for an authenticated email/password user)', (done) => {
   const decodedToken = cloneDeep(mockDecodedToken)
 
+  const admin = require('firebase-admin')
   admin.auth.mockImplementation(() => ({
     verifyIdToken: jest.fn(() => {
       return Promise.resolve(decodedToken)
@@ -106,6 +109,7 @@ test('authorization allows access when a good token is provided (for an authenti
 test('authorization still allows access when the user\'s email is not verified (for an authenticated email/password user)', (done) => {
   const decodedToken = cloneDeep(mockDecodedToken)
 
+  const admin = require('firebase-admin')
   admin.auth.mockImplementation(() => ({
     verifyIdToken: jest.fn(() => {
       return Promise.resolve(decodedToken)
@@ -142,11 +146,15 @@ test('authorization still allows access when the user\'s email is not verified (
 })
 
 test('authorization denies access when the user does not have an ID', (done) => {
+  const uuid = require('uuid/v4')
+  uuid.mockReturnValue('b919f576-36d7-43a9-8a92-fb978a4c346e')
+
   // Token does not have user ID data
   const decodedToken = cloneDeep(mockDecodedToken)
   delete decodedToken.uid
   delete decodedToken.sub
 
+  const admin = require('firebase-admin')
   admin.auth.mockImplementation(() => ({
     verifyIdToken: jest.fn(() => {
       return Promise.resolve(decodedToken)
@@ -160,7 +168,7 @@ test('authorization denies access when the user does not have an ID', (done) => 
   const context = {}
   const callback = (_, data) => {
     expect(data).toEqual({
-      principalId: undefined,
+      principalId: 'unauthenticated-b919f576-36d7-43a9-8a92-fb978a4c346e',
       policyDocument: {
         Version: '2012-10-17',
         Statement: [
@@ -182,6 +190,7 @@ test('authorization allows access when the user is anonymous (token does not hav
   // Token does not have email info
   const decodedToken = cloneDeep(mockDecodedTokenAnonymousUser)
 
+  const admin = require('firebase-admin')
   admin.auth.mockImplementation(() => ({
     verifyIdToken: jest.fn(() => {
       return Promise.resolve(decodedToken)
@@ -217,17 +226,19 @@ test('authorization allows access when the user is anonymous (token does not hav
   checkUserAuthorization(event, context, callback)
 })
 
-test('authorization allows access with no claims when when no token is provided', (done) => {
+test('authorization allows access with no claims when the user has a placeholder "unauthenticated" Authorization header value', (done) => {
+  const uuid = require('uuid/v4')
+  uuid.mockReturnValue('b919f576-36d7-43a9-8a92-fb978a4c346e')
   const checkUserAuthorization = require('../firebase-authorizer').checkUserAuthorization
   const event = {
-    authorizationToken: null,
+    authorizationToken: 'unauthenticated',
     methodArn: 'arn:execute-api:blah:blah'
   }
   const context = {}
   const callback = (err, data) => {
     expect(err).toBeNull()
     expect(data).toEqual({
-      principalId: null,
+      principalId: 'unauthenticated-b919f576-36d7-43a9-8a92-fb978a4c346e',
       policyDocument: {
         Version: '2012-10-17',
         Statement: [

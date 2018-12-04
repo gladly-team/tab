@@ -2,6 +2,7 @@
 
 import * as admin from 'firebase-admin'
 import AWS from 'aws-sdk'
+import uuid from 'uuid/v4'
 
 const encryptedFirebasePrivateKey = process.env['FIREBASE_PRIVATE_KEY']
 let decryptedFirebasePrivateKey = ''
@@ -19,8 +20,16 @@ let decryptedFirebasePrivateKey = ''
  * @returns {object} The AWS policy
  */
 const generatePolicy = function (user, allow, resource) {
+  // AWS might use the principal ID for caching (though I could not
+  // find documentation to confirm this). Though I can't think of
+  // a clear security risk from setting a static principal ID for all
+  // unauthenticated users, let's be cautious and generate unique
+  // IDs for every request.
+  // Related unanswered question:
+  // https://stackoverflow.com/q/48762730
+  const principalId = user.uid || `unauthenticated-${uuid()}`
   return {
-    principalId: user.uid,
+    principalId: principalId,
     policyDocument: {
       Version: '2012-10-17',
       Statement: [
@@ -46,9 +55,17 @@ const generatePolicy = function (user, allow, resource) {
 function checkUserAuthorization (event, context, callback) {
   const token = event.authorizationToken
 
-  // With no authorization token, allow access but do not
+  // If the request is unauthenticated, allow access but do not
   // provide any claims.
-  if (!token) {
+  // The client sends the "unauthenticated" placeholder value
+  // because AWS API Gateway's custom authorizers will reject
+  // any request without a token and we want to provide
+  // unauthenticated access to our API.
+  // "If a specified identify source is missing, null, or empty,
+  // API Gateway returns a 401 Unauthorized response without calling
+  // the authorizer Lambda function.”
+  // https://docs.aws.amazon.com/apigateway/latest/developerguide/configure-api-gateway-lambda-authorization-with-console.html"
+  if (token === 'unauthenticated') {
     const user = {
       uid: null,
       email: null,
