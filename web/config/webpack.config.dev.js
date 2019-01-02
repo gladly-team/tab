@@ -42,7 +42,7 @@ const favIcon = new FaviconsWebpackPlugin(paths.appLogo)
 
 let appEntry
 appEntry = [
-  `webpack-dev-server/client?http://${process.env.WEB_HOST}:${process.env.WEB_PORT}`,
+  `webpack-dev-server/client?http://${process.env.HOST}:${process.env.PORT}`,
   'webpack/hot/only-dev-server',
   'react-hot-loader/patch',
   // Include an alternative client for WebpackDevServer. A client's job is to

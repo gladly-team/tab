@@ -3,12 +3,13 @@
 
 var includes = require('lodash/includes')
 
+// TODO: remove
 // Our own defined variables we want to include in the build.
 var envVars = [
-  'WEB_HOST',
-  'WEB_PORT',
-  'WEBSITE_PROTOCOL',
-  'WEBSITE_DOMAIN',
+  // 'HOST',
+  // 'PORT',
+  // 'REACT_APP_WEBSITE_PROTOCOL',
+  // 'REACT_APP_WEBSITE_DOMAIN',
   'FIREBASE_API_KEY',
   'FIREBASE_AUTH_DOMAIN',
   'FIREBASE_DATABASE_URL',

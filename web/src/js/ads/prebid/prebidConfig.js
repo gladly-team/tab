@@ -248,8 +248,8 @@ export default () => {
 
     pbjs.que.push(() => {
       // http://prebid.org/dev-docs/publisher-api-reference.html#module_pbjs.setConfig
-      const protocol = process.env.WEBSITE_PROTOCOL ? process.env.WEBSITE_PROTOCOL : 'https'
-      const publisherDomain = `${protocol}://${process.env.WEBSITE_DOMAIN}`
+      const protocol = process.env.REACT_APP_WEBSITE_PROTOCOL ? process.env.REACT_APP_WEBSITE_PROTOCOL : 'https'
+      const publisherDomain = `${protocol}://${process.env.REACT_APP_WEBSITE_DOMAIN}`
       const pagePath = window.location.pathname
       pbjs.setConfig({
         // bidderTimeout: 700 // default
