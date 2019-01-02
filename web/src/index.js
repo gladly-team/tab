@@ -8,9 +8,9 @@ import { getUsername } from 'js/authentication/user'
 
 // Start Sentry logger
 // https://docs.sentry.io/clients/javascript/config/
-const sentryDSN = process.env.WEB_SENTRY_DSN
-const sentryDebug = process.env.WEB_SENTRY_DEBUG === 'true'
-const sentryEnableAutoBreadcrumbs = process.env.WEB_SENTRY_ENABLE_AUTO_BREADCRUMBS === 'true'
+const sentryDSN = process.env.REACT_APP_SENTRY_DSN
+const sentryDebug = process.env.REACT_APP_SENTRY_DEBUG === 'true'
+const sentryEnableAutoBreadcrumbs = process.env.REACT_APP_SENTRY_ENABLE_AUTO_BREADCRUMBS === 'true'
 try {
   Raven.config(sentryDSN, {
     environment: process.env.STAGE,
