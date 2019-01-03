@@ -13,7 +13,7 @@ const sentryDebug = process.env.REACT_APP_SENTRY_DEBUG === 'true'
 const sentryEnableAutoBreadcrumbs = process.env.REACT_APP_SENTRY_ENABLE_AUTO_BREADCRUMBS === 'true'
 try {
   Raven.config(sentryDSN, {
-    environment: process.env.STAGE,
+    environment: process.env.REACT_APP_SENTRY_STAGE,
     debug: sentryDebug,
     // https://github.com/getsentry/raven-js/issues/723
     // https://docs.sentry.io/clients/javascript/config/

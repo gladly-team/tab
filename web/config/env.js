@@ -17,8 +17,7 @@ var envVars = [
   // 'REACT_APP_SENTRY_DSN',
   // 'REACT_APP_SENTRY_DEBUG',
   // 'REACT_APP_SENTRY_ENABLE_AUTO_BREADCRUMBS',
-  // TODO: make STAGE specific to Sentry stage (the only place it's used)
-  'STAGE',
+  // 'REACT_APP_SENTRY_STAGE',
   'GRAPHQL_ENDPOINT',
   'GRAPHQL_PROXY_DOMAIN',
   'GRAPHQL_PROXY_PATH',

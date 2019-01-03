@@ -27,6 +27,7 @@ export const envVars = [
   { name: 'REACT_APP_FIREBASE_AUTH_DOMAIN' },
   { name: 'REACT_APP_FIREBASE_DATABASE_URL' },
   { name: 'REACT_APP_FIREBASE_PROJECT_ID' },
+  { name: 'REACT_APP_SENTRY_STAGE' },
   { name: 'REACT_APP_SENTRY_DSN' },
   { name: 'REACT_APP_SENTRY_DEBUG', optional: true },
   { name: 'REACT_APP_SENTRY_ENABLE_AUTO_BREADCRUMBS', optional: true },
