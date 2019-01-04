@@ -49,7 +49,9 @@ env:
   - TEST_LOGGER=sentry
   - TEST_SENTRY_PUBLIC_KEY=55d60901ba254432814cd9015d100959
   - TEST_SENTRY_PROJECT_ID=184604
-  - TEST_FIREBASE_CLIENT_EMAIL=firebase-adminsdk-kuncd@dev-tab-for-a-cause.iam.gserviceaccount.com
+  - TEST_LAMBDA_FIREBASE_DATABASE_URL=https://dev-tab-for-a-cause.firebaseio.com
+  - TEST_LAMBDA_FIREBASE_PROJECT_ID=dev-tab-for-a-cause
+  - TEST_LAMBDA_FIREBASE_CLIENT_EMAIL=firebase-adminsdk-kuncd@dev-tab-for-a-cause.iam.gserviceaccount.com
   # Endpoints
   - TEST_GRAPHQL_PROXY_DOMAIN=i3beinjq52.execute-api.us-west-2.amazonaws.com
   - TEST_GRAPHQL_PROXY_PATH=/test
@@ -100,7 +102,9 @@ env:
   - DEV_LOGGER=sentry
   - DEV_SENTRY_PUBLIC_KEY=55d60901ba254432814cd9015d100959
   - DEV_SENTRY_PROJECT_ID=184604
-  - DEV_FIREBASE_CLIENT_EMAIL=firebase-adminsdk-kuncd@dev-tab-for-a-cause.iam.gserviceaccount.com
+  - DEV_LAMBDA_FIREBASE_DATABASE_URL=https://dev-tab-for-a-cause.firebaseio.com
+  - DEV_LAMBDA_FIREBASE_PROJECT_ID=dev-tab-for-a-cause
+  - DEV_LAMBDA_FIREBASE_CLIENT_EMAIL=firebase-adminsdk-kuncd@dev-tab-for-a-cause.iam.gserviceaccount.com
   # Endpoints
   - DEV_GRAPHQL_PROXY_DOMAIN=53a9uos12e.execute-api.us-west-2.amazonaws.com
   - DEV_GRAPHQL_PROXY_PATH=/dev
@@ -146,7 +150,9 @@ env:
   - PROD_LOGGER=sentry
   - PROD_SENTRY_PUBLIC_KEY=55d60901ba254432814cd9015d100959
   - PROD_SENTRY_PROJECT_ID=184604
-  - PROD_FIREBASE_CLIENT_EMAIL=firebase-adminsdk-mg6w3@tab-for-a-cause.iam.gserviceaccount.com
+  - PROD_LAMBDA_FIREBASE_DATABASE_URL=https://tab-for-a-cause.firebaseio.com
+  - PROD_LAMBDA_FIREBASE_PROJECT_ID=tab-for-a-cause
+  - PROD_LAMBDA_FIREBASE_CLIENT_EMAIL=firebase-adminsdk-mg6w3@tab-for-a-cause.iam.gserviceaccount.com
   # Endpoints
   - PROD_GRAPHQL_PROXY_DOMAIN=qy89x5t2i9.execute-api.us-west-2.amazonaws.com
   - PROD_GRAPHQL_PROXY_PATH=/prod

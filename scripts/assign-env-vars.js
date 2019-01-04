@@ -38,10 +38,13 @@ export const envVars = [
   { name: 'TABLE_NAME_APPENDIX' },
   { name: 'GRAPHQL_PORT', optional: true },
   { name: 'LOGGER' },
+  // TODO: prefix these
   { name: 'SENTRY_PUBLIC_KEY' },
   { name: 'SENTRY_PROJECT_ID' },
   { name: 'SENTRY_PRIVATE_KEY' },
-  { name: 'FIREBASE_CLIENT_EMAIL' },
+  { name: 'LAMBDA_FIREBASE_DATABASE_URL' },
+  { name: 'LAMBDA_FIREBASE_PROJECT_ID' },
+  { name: 'LAMBDA_CLIENT_EMAIL' },
   { name: 'MIGRATION_ADMIN_KEY' }, // TODO: remove after migration
   // Endpoints
   { name: 'GRAPHQL_PROXY_DOMAIN' },
