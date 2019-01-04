@@ -256,7 +256,7 @@ function runDevServer (host, port, protocol) {
     // https://webpack.github.io/docs/webpack-dev-server.html#proxy
     proxy: {
       '/graphql': {
-        target: `http://${process.env.GRAPHQL_PROXY_DOMAIN}${process.env.GRAPHQL_PROXY_PATH}`,
+        target: `http://${process.env.DEVELOPMENT_GRAPHQL_PROXY_DOMAIN}${process.env.DEVELOPMENT_GRAPHQL_PROXY_PATH}`,
         secure: false,
         pathRewrite: {'^/graphql': ''}
       }
