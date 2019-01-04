@@ -4,7 +4,7 @@ import * as admin from 'firebase-admin'
 import AWS from 'aws-sdk'
 import uuid from 'uuid/v4'
 
-const encryptedFirebasePrivateKey = process.env['FIREBASE_PRIVATE_KEY']
+const encryptedFirebasePrivateKey = process.env['LAMBDA_FIREBASE_PRIVATE_KEY']
 let decryptedFirebasePrivateKey = ''
 
 /*

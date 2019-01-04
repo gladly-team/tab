@@ -69,4 +69,4 @@ functions:
       #   https://github.com/aws/aws-cli/issues/1043#issuecomment-65878875
       # To encrypt:
       #   `aws kms encrypt --key-id [kms-key-id] --plaintext [item]`
-      FIREBASE_PRIVATE_KEY: ${file(./src/firebase-authorizer/variables.yml):${self:provider.stage}.FIREBASE_PRIVATE_KEY}
+      LAMBDA_FIREBASE_PRIVATE_KEY: ${file(./src/firebase-authorizer/variables.yml):${self:provider.stage}.LAMBDA_FIREBASE_PRIVATE_KEY}
