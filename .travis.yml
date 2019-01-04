@@ -53,8 +53,8 @@ env:
   - TEST_LAMBDA_FIREBASE_PROJECT_ID=dev-tab-for-a-cause
   - TEST_LAMBDA_FIREBASE_CLIENT_EMAIL=firebase-adminsdk-kuncd@dev-tab-for-a-cause.iam.gserviceaccount.com
   # Endpoints
-  - TEST_GRAPHQL_PROXY_DOMAIN=i3beinjq52.execute-api.us-west-2.amazonaws.com
-  - TEST_GRAPHQL_PROXY_PATH=/test
+  - TEST_DEPLOYMENT_GRAPHQL_DOMAIN=i3beinjq52.execute-api.us-west-2.amazonaws.com
+  - TEST_DEPLOYMENT_GRAPHQL_PATH=/test
   - TEST_DYNAMODB_ENDPOINT=dynamodb.us-west-2.amazonaws.com
   - TEST_MEDIA_ENDPOINT=https://test-tab2017-media.gladly.io
   # Deployment
@@ -106,8 +106,8 @@ env:
   - DEV_LAMBDA_FIREBASE_PROJECT_ID=dev-tab-for-a-cause
   - DEV_LAMBDA_FIREBASE_CLIENT_EMAIL=firebase-adminsdk-kuncd@dev-tab-for-a-cause.iam.gserviceaccount.com
   # Endpoints
-  - DEV_GRAPHQL_PROXY_DOMAIN=53a9uos12e.execute-api.us-west-2.amazonaws.com
-  - DEV_GRAPHQL_PROXY_PATH=/dev
+  - DEV_DEPLOYMENT_GRAPHQL_DOMAIN=53a9uos12e.execute-api.us-west-2.amazonaws.com
+  - DEV_DEPLOYMENT_GRAPHQL_PATH=/dev
   - DEV_DYNAMODB_ENDPOINT=dynamodb.us-west-2.amazonaws.com
   - DEV_MEDIA_ENDPOINT=https://dev-tab2017-media.gladly.io
   # Deployment
@@ -154,8 +154,8 @@ env:
   - PROD_LAMBDA_FIREBASE_PROJECT_ID=tab-for-a-cause
   - PROD_LAMBDA_FIREBASE_CLIENT_EMAIL=firebase-adminsdk-mg6w3@tab-for-a-cause.iam.gserviceaccount.com
   # Endpoints
-  - PROD_GRAPHQL_PROXY_DOMAIN=qy89x5t2i9.execute-api.us-west-2.amazonaws.com
-  - PROD_GRAPHQL_PROXY_PATH=/prod
+  - PROD_DEPLOYMENT_GRAPHQL_DOMAIN=qy89x5t2i9.execute-api.us-west-2.amazonaws.com
+  - PROD_DEPLOYMENT_GRAPHQL_PATH=/prod
   - PROD_DYNAMODB_ENDPOINT=dynamodb.us-west-2.amazonaws.com
   - PROD_MEDIA_ENDPOINT=https://prod-tab2017-media.gladly.io
   # Deployment

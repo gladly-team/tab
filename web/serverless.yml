@@ -12,8 +12,8 @@ custom:
   stageDefault: dev
   stage: ${env:SLS_STAGE, self:custom.stageDefault}
   s3Bucket: ${env:WEB_S3_BUCKET_NAME}
-  graphQLProxyDomain: ${env:GRAPHQL_PROXY_DOMAIN}
-  graphQLProxyPath: ${env:GRAPHQL_PROXY_PATH}
+  graphQLProxyDomain: ${env:DEPLOYMENT_GRAPHQL_DOMAIN}
+  graphQLProxyPath: ${env:DEPLOYMENT_GRAPHQL_PATH}
   webAppName: Tab2017
   searchAppName: Tab2017
   graphQLAppName: TabGraphQL

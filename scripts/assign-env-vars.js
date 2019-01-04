@@ -47,8 +47,6 @@ export const envVars = [
   { name: 'LAMBDA_FIREBASE_CLIENT_EMAIL' },
   { name: 'MIGRATION_ADMIN_KEY' }, // TODO: remove after migration
   // Endpoints
-  { name: 'GRAPHQL_PROXY_DOMAIN' },
-  { name: 'GRAPHQL_PROXY_PATH' },
   { name: 'DYNAMODB_ENDPOINT' },
   { name: 'MEDIA_ENDPOINT' },
   // Deployment
@@ -56,6 +54,8 @@ export const envVars = [
   { name: 'WEB_S3_BUCKET_PATH' },
   { name: 'MEDIA_S3_BUCKET_NAME' },
   { name: 'WEB_LANDING_PAGE_DOMAIN' },
+  { name: 'DEPLOYMENT_GRAPHQL_DOMAIN' },
+  { name: 'DEPLOYMENT_GRAPHQL_PATH' },
   // Secrets
   { name: 'AWS_ACCESS_KEY_ID' },
   { name: 'AWS_SECRET_ACCESS_KEY' },
