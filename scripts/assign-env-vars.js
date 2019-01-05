@@ -13,8 +13,6 @@ export const envVars = [
   { name: 'AWS_ACCOUNT_ID' },
   { name: 'LOG_LEVEL' },
   // Web app
-  { name: 'HOST', optional: true },
-  { name: 'PORT', optional: true },
   { name: 'PUBLIC_PATH' },
   { name: 'REACT_APP_WEBSITE_DOMAIN' },
   { name: 'REACT_APP_WEBSITE_PROTOCOL' },
