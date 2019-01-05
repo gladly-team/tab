@@ -32,7 +32,7 @@ function startGraphQLServer (callback) {
 
   // Use express-graphql in development if desired.
   // Otherwise, just use our plain Lambda handler.
-  if (config.NODE_ENV === 'development' && config.ENABLE_GRAPHIQL) {
+  if (config.NODE_ENV === 'development' && process.env.DEVELOPMENT_ENABLE_GRAPHIQL) {
     logger.info(`GraphiQL is enabled on port ${graphQLPort}.`)
     // https://github.com/graphql/express-graphql#options
     graphQLApp.use('/',
