@@ -12,7 +12,7 @@ custom:
   stageDefault: dev
   s3Bucket: ${env:DEPLOYMENT_MEDIA_S3_BUCKET_NAME}
   cloudfrontMediaName: TabMedia
-  cloudfrontMediaDomainAlias: ${env:CLOUDFRONT_MEDIA_DOMAIN_ALIAS}
+  cloudfrontMediaDomainAlias: ${env:DEPLOYMENT_MEDIA_CLOUDFRONT_DOMAIN_ALIAS}
   SSLCertificateARN: ${env:SSL_CERTIFICATE_ARN}
 
 resources:

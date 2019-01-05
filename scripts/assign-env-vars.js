@@ -27,8 +27,6 @@ export const envVars = [
   { name: 'REACT_APP_SENTRY_DEBUG', optional: true },
   { name: 'REACT_APP_SENTRY_ENABLE_AUTO_BREADCRUMBS', optional: true },
   { name: 'REACT_APP_FEATURE_FLAG_SEARCH_PAGE_ENABLED', optional: true },
-  // Media
-  { name: 'CLOUDFRONT_MEDIA_DOMAIN_ALIAS' },
   // GraphQL / Lambda
   // TODO: prefix these
   { name: 'GRAPHQL_PORT', optional: true },
@@ -49,6 +47,7 @@ export const envVars = [
   { name: 'DEPLOYMENT_WEB_APP_S3_BUCKET_NAME' },
   { name: 'DEPLOYMENT_WEB_APP_S3_BUCKET_PATH' },
   { name: 'DEPLOYMENT_MEDIA_S3_BUCKET_NAME' },
+  { name: 'DEPLOYMENT_MEDIA_CLOUDFRONT_DOMAIN_ALIAS' },
   { name: 'DEPLOYMENT_LANDING_PAGE_DOMAIN' },
   { name: 'DEPLOYMENT_GRAPHQL_DOMAIN' },
   { name: 'DEPLOYMENT_GRAPHQL_PATH' },
