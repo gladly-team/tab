@@ -40,8 +40,8 @@ const allFixtures = [
 const getFixtures = function () {
   // Add an appendix to the table name if required.
   const tableNameAppendix = (
-    process.env.TABLE_NAME_APPENDIX
-    ? process.env.TABLE_NAME_APPENDIX
+    process.env.DB_TABLE_NAME_APPENDIX
+    ? process.env.DB_TABLE_NAME_APPENDIX
     : ''
   )
   return map(allFixtures, (fixtureObj) => {

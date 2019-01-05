@@ -3,19 +3,19 @@
 import getFixtures from '../getFixtures'
 
 afterEach(() => {
-  delete process.env.TABLE_NAME_APPENDIX
+  delete process.env.DB_TABLE_NAME_APPENDIX
 })
 
 describe('getting fixtures info', () => {
   it('returns expected names', () => {
-    process.env.TABLE_NAME_APPENDIX = ''
+    process.env.DB_TABLE_NAME_APPENDIX = ''
     const fixtureInfo = getFixtures()
     expect(fixtureInfo[0].tableName).toBe('Users')
     expect(fixtureInfo[1].tableName).toBe('Charities')
   })
 
   test('uses an appendix on table names when it is set', () => {
-    process.env.TABLE_NAME_APPENDIX = '-dev'
+    process.env.DB_TABLE_NAME_APPENDIX = '-dev'
     const fixtureInfo = getFixtures()
     expect(fixtureInfo[0].tableName).toBe('Users-dev')
     expect(fixtureInfo[1].tableName).toBe('Charities-dev')

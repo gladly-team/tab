@@ -42,7 +42,6 @@ env:
   # Media
   - TEST_CLOUDFRONT_MEDIA_DOMAIN_ALIAS=test-tab2017-media.gladly.io
   # GraphQL / Lambda
-  - TEST_TABLE_NAME_APPENDIX="-test"
   - TEST_GQL_LOGGER=sentry
   - TEST_GQL_SENTRY_PUBLIC_KEY=55d60901ba254432814cd9015d100959
   - TEST_GQL_SENTRY_PROJECT_ID=184604
@@ -53,6 +52,7 @@ env:
   # Endpoints
   - TEST_DYNAMODB_ENDPOINT=dynamodb.us-west-2.amazonaws.com
   - TEST_MEDIA_ENDPOINT=https://test-tab2017-media.gladly.io
+  - TEST_DB_TABLE_NAME_APPENDIX="-test"
   # Deployment
   - TEST_DEPLOYMENT_WEB_APP_CLOUDFRONT_DOMAIN_ALIAS=test-tab2017.gladly.io
   - TEST_WEB_S3_BUCKET_NAME=test-tab2017.gladly.io
@@ -92,7 +92,6 @@ env:
   # Media
   - DEV_CLOUDFRONT_MEDIA_DOMAIN_ALIAS=dev-tab2017-media.gladly.io
   # GraphQL / Lambda
-  - DEV_TABLE_NAME_APPENDIX="-dev"
   - DEV_GQL_LOGGER=sentry
   - DEV_GQL_SENTRY_PUBLIC_KEY=55d60901ba254432814cd9015d100959
   - DEV_GQL_SENTRY_PROJECT_ID=184604
@@ -103,6 +102,7 @@ env:
   # Endpoints
   - DEV_DYNAMODB_ENDPOINT=dynamodb.us-west-2.amazonaws.com
   - DEV_MEDIA_ENDPOINT=https://dev-tab2017-media.gladly.io
+  - DEV_DB_TABLE_NAME_APPENDIX="-dev"
   # Deployment
   - DEV_DEPLOYMENT_WEB_APP_CLOUDFRONT_DOMAIN_ALIAS=dev-tab2017.gladly.io
   - DEV_WEB_S3_BUCKET_NAME=dev-tab2017.gladly.io
@@ -137,7 +137,6 @@ env:
   # Media
   - PROD_CLOUDFRONT_MEDIA_DOMAIN_ALIAS=prod-tab2017-media.gladly.io
   # GraphQL / Lambda
-  - PROD_TABLE_NAME_APPENDIX="-prod"
   - PROD_GQL_LOGGER=sentry
   - PROD_GQL_SENTRY_PUBLIC_KEY=55d60901ba254432814cd9015d100959
   - PROD_GQL_SENTRY_PROJECT_ID=184604
@@ -148,6 +147,7 @@ env:
   # Endpoints
   - PROD_DYNAMODB_ENDPOINT=dynamodb.us-west-2.amazonaws.com
   - PROD_MEDIA_ENDPOINT=https://prod-tab2017-media.gladly.io
+  - PROD_DB_TABLE_NAME_APPENDIX="-prod"
   # Deployment
   - PROD_DEPLOYMENT_WEB_APP_CLOUDFRONT_DOMAIN_ALIAS=tab.gladly.io
   - PROD_WEB_S3_BUCKET_NAME=prod-tab2017.gladly.io

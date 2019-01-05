@@ -31,7 +31,6 @@ export const envVars = [
   { name: 'CLOUDFRONT_MEDIA_DOMAIN_ALIAS' },
   // GraphQL / Lambda
   // TODO: prefix these
-  { name: 'TABLE_NAME_APPENDIX' },
   { name: 'GRAPHQL_PORT', optional: true },
   { name: 'GQL_LOGGER' },
   { name: 'GQL_SENTRY_PUBLIC_KEY' },
@@ -41,9 +40,10 @@ export const envVars = [
   { name: 'LAMBDA_FIREBASE_DATABASE_URL' },
   { name: 'LAMBDA_FIREBASE_PROJECT_ID' },
   { name: 'LAMBDA_FIREBASE_CLIENT_EMAIL' },
-  // Endpoints
+  // Endpoints, shared among services
   { name: 'DYNAMODB_ENDPOINT' },
   { name: 'MEDIA_ENDPOINT' },
+  { name: 'DB_TABLE_NAME_APPENDIX' },
   // Deployment
   { name: 'DEPLOYMENT_WEB_APP_CLOUDFRONT_DOMAIN_ALIAS' },
   { name: 'WEB_S3_BUCKET_NAME' },

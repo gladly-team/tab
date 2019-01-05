@@ -12,8 +12,8 @@ const tablesInfoRaw = JSON.parse(fs.readFileSync(
 const getTableInfo = function () {
   // Add an appendix to the table name if required.
   const tableNameAppendix = (
-    process.env.TABLE_NAME_APPENDIX
-    ? process.env.TABLE_NAME_APPENDIX
+    process.env.DB_TABLE_NAME_APPENDIX
+    ? process.env.DB_TABLE_NAME_APPENDIX
     : ''
   )
 
