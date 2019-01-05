@@ -47,8 +47,9 @@ env:
   # GraphQL / Lambda
   - TEST_TABLE_NAME_APPENDIX="-test"
   - TEST_LOGGER=sentry
-  - TEST_SENTRY_PUBLIC_KEY=55d60901ba254432814cd9015d100959
-  - TEST_SENTRY_PROJECT_ID=184604
+  - TEST_GQL_SENTRY_PUBLIC_KEY=55d60901ba254432814cd9015d100959
+  - TEST_GQL_SENTRY_PROJECT_ID=184604
+  - TEST_GQL_SENTRY_STAGE=test
   - TEST_LAMBDA_FIREBASE_DATABASE_URL=https://dev-tab-for-a-cause.firebaseio.com
   - TEST_LAMBDA_FIREBASE_PROJECT_ID=dev-tab-for-a-cause
   - TEST_LAMBDA_FIREBASE_CLIENT_EMAIL=firebase-adminsdk-kuncd@dev-tab-for-a-cause.iam.gserviceaccount.com
@@ -100,8 +101,9 @@ env:
   # GraphQL / Lambda
   - DEV_TABLE_NAME_APPENDIX="-dev"
   - DEV_LOGGER=sentry
-  - DEV_SENTRY_PUBLIC_KEY=55d60901ba254432814cd9015d100959
-  - DEV_SENTRY_PROJECT_ID=184604
+  - DEV_GQL_SENTRY_PUBLIC_KEY=55d60901ba254432814cd9015d100959
+  - DEV_GQL_SENTRY_PROJECT_ID=184604
+  - DEV_GQL_SENTRY_STAGE=dev
   - DEV_LAMBDA_FIREBASE_DATABASE_URL=https://dev-tab-for-a-cause.firebaseio.com
   - DEV_LAMBDA_FIREBASE_PROJECT_ID=dev-tab-for-a-cause
   - DEV_LAMBDA_FIREBASE_CLIENT_EMAIL=firebase-adminsdk-kuncd@dev-tab-for-a-cause.iam.gserviceaccount.com
@@ -148,8 +150,9 @@ env:
   # GraphQL / Lambda
   - PROD_TABLE_NAME_APPENDIX="-prod"
   - PROD_LOGGER=sentry
-  - PROD_SENTRY_PUBLIC_KEY=55d60901ba254432814cd9015d100959
-  - PROD_SENTRY_PROJECT_ID=184604
+  - PROD_GQL_SENTRY_PUBLIC_KEY=55d60901ba254432814cd9015d100959
+  - PROD_GQL_SENTRY_PROJECT_ID=184604
+  - PROD_GQL_SENTRY_STAGE=production
   - PROD_LAMBDA_FIREBASE_DATABASE_URL=https://tab-for-a-cause.firebaseio.com
   - PROD_LAMBDA_FIREBASE_PROJECT_ID=tab-for-a-cause
   - PROD_LAMBDA_FIREBASE_CLIENT_EMAIL=firebase-adminsdk-mg6w3@tab-for-a-cause.iam.gserviceaccount.com

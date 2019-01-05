@@ -35,13 +35,14 @@ export const envVars = [
   // Media
   { name: 'CLOUDFRONT_MEDIA_DOMAIN_ALIAS' },
   // GraphQL / Lambda
+  // TODO: prefix these
   { name: 'TABLE_NAME_APPENDIX' },
   { name: 'GRAPHQL_PORT', optional: true },
   { name: 'LOGGER' },
-  // TODO: prefix these
-  { name: 'SENTRY_PUBLIC_KEY' },
-  { name: 'SENTRY_PROJECT_ID' },
+  { name: 'GQL_SENTRY_PUBLIC_KEY' },
+  { name: 'GQL_SENTRY_PROJECT_ID' },
   { name: 'SENTRY_PRIVATE_KEY' },
+  { name: 'GQL_SENTRY_STAGE' },
   { name: 'LAMBDA_FIREBASE_DATABASE_URL' },
   { name: 'LAMBDA_FIREBASE_PROJECT_ID' },
   { name: 'LAMBDA_FIREBASE_CLIENT_EMAIL' },
