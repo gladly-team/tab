@@ -10,7 +10,6 @@ module.exports = {
   AWS_REGION: process.env.AWS_REGION,
   DYNAMODB_ENDPOINT: process.env.DYNAMODB_ENDPOINT,
   MEDIA_ENDPOINT: process.env.MEDIA_ENDPOINT,
-  GRAPHQL_PORT: process.env.GRAPHQL_PORT,
   LOG_LEVEL: process.env.LOG_LEVEL || 'debug',
   LOGGER: process.env.GQL_LOGGER || 'console',
   ENABLE_GRAPHIQL: process.env.ENABLE_GRAPHIQL === '1',

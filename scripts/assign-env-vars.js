@@ -29,7 +29,6 @@ export const envVars = [
   { name: 'REACT_APP_FEATURE_FLAG_SEARCH_PAGE_ENABLED', optional: true },
   // GraphQL / Lambda
   // TODO: prefix these
-  { name: 'GRAPHQL_PORT', optional: true },
   { name: 'GQL_LOGGER' },
   { name: 'GQL_SENTRY_PUBLIC_KEY' },
   { name: 'GQL_SENTRY_PROJECT_ID' },
