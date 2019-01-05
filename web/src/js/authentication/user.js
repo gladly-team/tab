@@ -24,7 +24,7 @@ import {
 
 // Only for development.
 const shouldMockAuthentication = (
-  process.env.MOCK_DEV_AUTHENTICATION === 'true' &&
+  process.env.REACT_APP_MOCK_DEV_AUTHENTICATION === 'true' &&
   process.env.NODE_ENV === 'development'
 )
 

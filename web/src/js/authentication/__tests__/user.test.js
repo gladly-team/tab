@@ -10,7 +10,7 @@ import {
 
 jest.mock('js/utils/localstorage-mgr')
 
-const storedMockDevAuthenticationEnvVar = process.env.MOCK_DEV_AUTHENTICATION
+const storedMockDevAuthenticationEnvVar = process.env.REACT_APP_MOCK_DEV_AUTHENTICATION
 const storedNodeEnvVar = process.env.NODE_ENV
 
 afterEach(() => {
@@ -20,7 +20,7 @@ afterEach(() => {
   localStorageMgr.clear()
 
   // Reset env vars and modules
-  process.env.MOCK_DEV_AUTHENTICATION = storedMockDevAuthenticationEnvVar
+  process.env.REACT_APP_MOCK_DEV_AUTHENTICATION = storedMockDevAuthenticationEnvVar
   process.env.NODE_ENV = storedNodeEnvVar
   jest.resetModules()
 })
@@ -108,7 +108,7 @@ describe('authentication user module tests', () => {
     localStorageMgr.setItem(STORAGE_KEY_USERNAME, 'SomeUsername')
 
     // Set development env vars.
-    process.env.MOCK_DEV_AUTHENTICATION = 'true'
+    process.env.REACT_APP_MOCK_DEV_AUTHENTICATION = 'true'
     process.env.NODE_ENV = 'development'
 
     const getCurrentUser = require('js/authentication/user').getCurrentUser
@@ -147,7 +147,7 @@ describe('authentication user module tests', () => {
 
   test('getCurrentUserListener returns a mock user when using mock authentication in development', done => {
     // Set development env vars.
-    process.env.MOCK_DEV_AUTHENTICATION = 'true'
+    process.env.REACT_APP_MOCK_DEV_AUTHENTICATION = 'true'
     process.env.NODE_ENV = 'development'
 
     const getCurrentUserListener = require('js/authentication/user').getCurrentUserListener
