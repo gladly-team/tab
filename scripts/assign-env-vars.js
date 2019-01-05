@@ -13,11 +13,10 @@ export const envVars = [
   { name: 'AWS_ACCOUNT_ID' },
   { name: 'LOG_LEVEL' },
   // Web app
-  { name: 'PUBLIC_PATH' },
+  { name: 'PUBLIC_URL' }, // Used as base URL for serving static files.
   { name: 'REACT_APP_WEBSITE_DOMAIN' },
   { name: 'REACT_APP_WEBSITE_PROTOCOL' },
   { name: 'REACT_APP_GRAPHQL_ENDPOINT' },
-  { name: 'STATIC_FILES_ENDPOINT' },
   { name: 'CLOUDFRONT_DOMAIN_ALIAS' },
   { name: 'REACT_APP_ADS_ENABLED' },
   { name: 'REACT_APP_FIREBASE_API_KEY' },

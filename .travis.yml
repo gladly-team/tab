@@ -26,7 +26,7 @@ env:
   - TEST_AWS_ACCOUNT_ID=167811431063
   - TEST_LOG_LEVEL=fatal # Don't log errors during testing. Some errors are expected.
   # Web app
-  - TEST_PUBLIC_PATH=https://test-tab2017.gladly.io/
+  - TEST_PUBLIC_URL=https://test-tab2017.gladly.io/newtab/
   - TEST_REACT_APP_WEBSITE_DOMAIN=test-tab2017.gladly.io # user-visible domain, used in app JS
   - TEST_REACT_APP_WEBSITE_PROTOCOL=https
   - TEST_REACT_APP_GRAPHQL_ENDPOINT=test-tab2017.gladly.io/graphql/
@@ -37,7 +37,6 @@ env:
   - TEST_REACT_APP_SENTRY_DSN=https://16a4b33290c44b89979957634c3ff3e3@sentry.io/1014205
   - TEST_REACT_APP_SENTRY_ENABLE_AUTO_BREADCRUMBS=true
   - TEST_REACT_APP_SENTRY_STAGE=test
-  - TEST_STATIC_FILES_ENDPOINT=//test-tab2017.gladly.io/newtab
   - TEST_CLOUDFRONT_DOMAIN_ALIAS=test-tab2017.gladly.io
   - TEST_REACT_APP_ADS_ENABLED=false
   - TEST_FEATURE_FLAG_SEARCH_PAGE_ENABLED=false
@@ -79,7 +78,7 @@ env:
   - DEV_AWS_ACCOUNT_ID=167811431063
   - DEV_LOG_LEVEL=error
   # Web app
-  - DEV_PUBLIC_PATH=https://dev-tab2017.gladly.io/
+  - DEV_PUBLIC_URL=https://dev-tab2017.gladly.io/newtab/
   - DEV_REACT_APP_WEBSITE_DOMAIN=dev-tab2017.gladly.io  # user-visible domain, used in app JS
   - DEV_REACT_APP_WEBSITE_PROTOCOL=https
   - DEV_REACT_APP_GRAPHQL_ENDPOINT=dev-tab2017.gladly.io/graphql/
@@ -90,7 +89,6 @@ env:
   - DEV_REACT_APP_SENTRY_DSN=https://16a4b33290c44b89979957634c3ff3e3@sentry.io/1014205
   - DEV_REACT_APP_SENTRY_ENABLE_AUTO_BREADCRUMBS=true
   - DEV_REACT_APP_SENTRY_STAGE=dev
-  - DEV_STATIC_FILES_ENDPOINT=//dev-tab2017.gladly.io/newtab
   - DEV_CLOUDFRONT_DOMAIN_ALIAS=dev-tab2017.gladly.io
   - DEV_REACT_APP_ADS_ENABLED=true
   - DEV_FEATURE_FLAG_SEARCH_PAGE_ENABLED=true
@@ -127,7 +125,7 @@ env:
   - PROD_AWS_ACCOUNT_ID=167811431063
   - PROD_LOG_LEVEL=error
   # Web app
-  - PROD_PUBLIC_PATH=https://prod-tab2017.gladly.io/
+  - PROD_PUBLIC_URL=https://tab.gladly.io/newtab/
   - PROD_REACT_APP_WEBSITE_DOMAIN=tab.gladly.io # user-visible domain, used in app JS
   - PROD_REACT_APP_WEBSITE_PROTOCOL=https
   - PROD_REACT_APP_GRAPHQL_ENDPOINT=tab.gladly.io/graphql/
@@ -138,7 +136,6 @@ env:
   - PROD_REACT_APP_SENTRY_DSN=https://16a4b33290c44b89979957634c3ff3e3@sentry.io/1014205
   - PROD_REACT_APP_SENTRY_ENABLE_AUTO_BREADCRUMBS=true
   - PROD_REACT_APP_SENTRY_STAGE=prod
-  - PROD_STATIC_FILES_ENDPOINT=//tab.gladly.io/newtab
   - PROD_CLOUDFRONT_DOMAIN_ALIAS=tab.gladly.io
   - PROD_REACT_APP_ADS_ENABLED=true
   - PROD_FEATURE_FLAG_SEARCH_PAGE_ENABLED=false

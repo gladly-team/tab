@@ -21,7 +21,7 @@ var getClientEnvironment = require('./env')
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
-var publicPath = process.env.PUBLIC_PATH
+var publicPath = process.env.PUBLIC_URL
 // `publicUrl` is just like `publicPath`, but we will provide it to our app
 // as %PUBLIC_URL% in `index.html` and `process.env.PUBLIC_URL` in JavaScript.
 // Omit trailing slash as %PUBLIC_URL%/xyz looks better than %PUBLIC_URL%xyz.
@@ -65,7 +65,7 @@ module.exports = {
     filename: 'static/js/[name].[chunkhash:8].js',
     chunkFilename: 'static/js/[name].[chunkhash:8].js',
     // Static files are served from a different URL.
-    publicPath: `${process.env.STATIC_FILES_ENDPOINT}/`,
+    publicPath: `${process.env.PUBLIC_URL}/`,
     sourceMapFilename: '[file].map'
   },
   resolve: {
