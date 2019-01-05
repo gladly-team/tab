@@ -174,23 +174,23 @@ describe('assign-env-vars script', () => {
 
   it('assigns a stage-specific env value to the root env varible name', () => {
     const envStageName = 'DEV'
-    delete process.env.GRAPHQL_ENDPOINT
+    delete process.env.REACT_APP_GRAPHQL_ENDPOINT
     envVarNames.forEach((envVarName) => {
       process.env[`${envStageName}_${envVarName}`] = 'xyz'
     })
-    expect(process.env.GRAPHQL_ENDPOINT).not.toBeDefined()
+    expect(process.env.REACT_APP_GRAPHQL_ENDPOINT).not.toBeDefined()
     assignEnvVars(envStageName)
-    expect(process.env.GRAPHQL_ENDPOINT).toBe('xyz')
+    expect(process.env.REACT_APP_GRAPHQL_ENDPOINT).toBe('xyz')
   })
 
   it('ignores the stage name caps when assigning the env varible value', () => {
-    delete process.env.GRAPHQL_ENDPOINT
+    delete process.env.REACT_APP_GRAPHQL_ENDPOINT
     envVarNames.forEach((envVarName) => {
       process.env[`STAGING_${envVarName}`] = 'foobar'
     })
-    expect(process.env.GRAPHQL_ENDPOINT).not.toBeDefined()
+    expect(process.env.REACT_APP_GRAPHQL_ENDPOINT).not.toBeDefined()
     assignEnvVars('staging')
-    expect(process.env.GRAPHQL_ENDPOINT).toBe('foobar')
+    expect(process.env.REACT_APP_GRAPHQL_ENDPOINT).toBe('foobar')
   })
 
   it('does not assign value to an unlisted env variable name', () => {

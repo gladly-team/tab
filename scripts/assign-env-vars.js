@@ -16,7 +16,7 @@ export const envVars = [
   { name: 'PUBLIC_PATH' },
   { name: 'REACT_APP_WEBSITE_DOMAIN' },
   { name: 'REACT_APP_WEBSITE_PROTOCOL' },
-  { name: 'GRAPHQL_ENDPOINT' },
+  { name: 'REACT_APP_GRAPHQL_ENDPOINT' },
   { name: 'STATIC_FILES_ENDPOINT' },
   { name: 'CLOUDFRONT_DOMAIN_ALIAS' },
   { name: 'ADS_ENABLED' },

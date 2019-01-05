@@ -29,7 +29,7 @@ env:
   - TEST_PUBLIC_PATH=https://test-tab2017.gladly.io/
   - TEST_REACT_APP_WEBSITE_DOMAIN=test-tab2017.gladly.io # user-visible domain, used in app JS
   - TEST_REACT_APP_WEBSITE_PROTOCOL=https
-  - TEST_GRAPHQL_ENDPOINT=test-tab2017.gladly.io/graphql/
+  - TEST_REACT_APP_GRAPHQL_ENDPOINT=test-tab2017.gladly.io/graphql/
   - TEST_REACT_APP_FIREBASE_API_KEY=AIzaSyDrGghKLnfOwwaSnPM0unRDXz_4YdorKU4
   - TEST_REACT_APP_FIREBASE_AUTH_DOMAIN=dev-tab-for-a-cause.firebaseapp.com
   - TEST_REACT_APP_FIREBASE_DATABASE_URL=https://dev-tab-for-a-cause.firebaseio.com
@@ -82,7 +82,7 @@ env:
   - DEV_PUBLIC_PATH=https://dev-tab2017.gladly.io/
   - DEV_REACT_APP_WEBSITE_DOMAIN=dev-tab2017.gladly.io  # user-visible domain, used in app JS
   - DEV_REACT_APP_WEBSITE_PROTOCOL=https
-  - DEV_GRAPHQL_ENDPOINT=dev-tab2017.gladly.io/graphql/
+  - DEV_REACT_APP_GRAPHQL_ENDPOINT=dev-tab2017.gladly.io/graphql/
   - DEV_REACT_APP_FIREBASE_API_KEY=AIzaSyDrGghKLnfOwwaSnPM0unRDXz_4YdorKU4
   - DEV_REACT_APP_FIREBASE_AUTH_DOMAIN=dev-tab-for-a-cause.firebaseapp.com
   - DEV_REACT_APP_FIREBASE_DATABASE_URL=https://dev-tab-for-a-cause.firebaseio.com
@@ -130,7 +130,7 @@ env:
   - PROD_PUBLIC_PATH=https://prod-tab2017.gladly.io/
   - PROD_REACT_APP_WEBSITE_DOMAIN=tab.gladly.io # user-visible domain, used in app JS
   - PROD_REACT_APP_WEBSITE_PROTOCOL=https
-  - PROD_GRAPHQL_ENDPOINT=tab.gladly.io/graphql/
+  - PROD_REACT_APP_GRAPHQL_ENDPOINT=tab.gladly.io/graphql/
   - PROD_REACT_APP_FIREBASE_API_KEY=AIzaSyDZKbk3DzJwA9nWLlpt6hjqhTm6WY-WOnk
   - PROD_REACT_APP_FIREBASE_AUTH_DOMAIN=tab-for-a-cause.firebaseapp.com
   - PROD_REACT_APP_FIREBASE_DATABASE_URL=https://tab-for-a-cause.firebaseio.com
