@@ -64,8 +64,7 @@ module.exports = {
     // We don't currently advertise code splitting but Webpack supports it.
     filename: 'static/js/[name].[chunkhash:8].js',
     chunkFilename: 'static/js/[name].[chunkhash:8].js',
-    // Static files are served from a different URL.
-    publicPath: `${process.env.PUBLIC_URL}/`,
+    publicPath: publicPath,
     sourceMapFilename: '[file].map'
   },
   resolve: {
