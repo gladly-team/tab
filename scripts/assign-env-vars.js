@@ -17,7 +17,6 @@ export const envVars = [
   { name: 'REACT_APP_WEBSITE_DOMAIN' },
   { name: 'REACT_APP_WEBSITE_PROTOCOL' },
   { name: 'REACT_APP_GRAPHQL_ENDPOINT' },
-  { name: 'CLOUDFRONT_DOMAIN_ALIAS' },
   { name: 'REACT_APP_ADS_ENABLED' },
   { name: 'REACT_APP_FIREBASE_API_KEY' },
   { name: 'REACT_APP_FIREBASE_AUTH_DOMAIN' },
@@ -46,6 +45,7 @@ export const envVars = [
   { name: 'DYNAMODB_ENDPOINT' },
   { name: 'MEDIA_ENDPOINT' },
   // Deployment
+  { name: 'DEPLOYMENT_WEB_APP_CLOUDFRONT_DOMAIN_ALIAS' },
   { name: 'WEB_S3_BUCKET_NAME' },
   { name: 'WEB_S3_BUCKET_PATH' },
   { name: 'MEDIA_S3_BUCKET_NAME' },

@@ -17,7 +17,7 @@ custom:
   webAppName: Tab2017
   searchAppName: Tab2017
   graphQLAppName: TabGraphQL
-  cloudfrontDomainAlias: ${env:CLOUDFRONT_DOMAIN_ALIAS}
+  cloudfrontDomainAlias: ${env:DEPLOYMENT_WEB_APP_CLOUDFRONT_DOMAIN_ALIAS}
   SSLCertificateARN: ${env:SSL_CERTIFICATE_ARN}
   # How long Cloudfront should cache HTML at edges.
   CloudfrontHTMLCachingSeconds: 60
