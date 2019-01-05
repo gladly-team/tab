@@ -14,7 +14,6 @@ module.exports = {
   LOG_LEVEL: process.env.LOG_LEVEL || 'debug',
   LOGGER: process.env.LOGGER || 'console',
   ENABLE_GRAPHIQL: process.env.ENABLE_GRAPHIQL === '1',
-  MIGRATION_ADMIN_KEY: process.env.MIGRATION_ADMIN_KEY, // TODO: remove after migration
   TABLE_NAME_APPENDIX: process.env.TABLE_NAME_APPENDIX,
   SENTRY_PUBLIC_KEY: process.env.GQL_SENTRY_PUBLIC_KEY,
   SENTRY_PRIVATE_KEY: process.env.SENTRY_PRIVATE_KEY,

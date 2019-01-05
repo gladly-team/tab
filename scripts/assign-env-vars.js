@@ -42,7 +42,6 @@ export const envVars = [
   { name: 'LAMBDA_FIREBASE_DATABASE_URL' },
   { name: 'LAMBDA_FIREBASE_PROJECT_ID' },
   { name: 'LAMBDA_FIREBASE_CLIENT_EMAIL' },
-  { name: 'MIGRATION_ADMIN_KEY' }, // TODO: remove after migration
   // Endpoints
   { name: 'DYNAMODB_ENDPOINT' },
   { name: 'MEDIA_ENDPOINT' },
