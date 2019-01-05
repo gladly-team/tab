@@ -1,36 +1,13 @@
 // Grab NODE_ENV and REACT_APP_* environment variables and prepare them to be
 // injected into the application via DefinePlugin in Webpack configuration.
 
-var includes = require('lodash/includes')
-
-// TODO: remove
-// Our own defined variables we want to include in the build.
-var envVars = [
-  // 'HOST',
-  // 'PORT',
-  // 'REACT_APP_WEBSITE_PROTOCOL',
-  // 'REACT_APP_WEBSITE_DOMAIN',
-  // 'REACT_APP_FIREBASE_API_KEY',
-  // 'REACT_APP_FIREBASE_AUTH_DOMAIN',
-  // 'REACT_APP_FIREBASE_DATABASE_URL',
-  // 'REACT_APP_FIREBASE_PROJECT_ID',
-  // 'REACT_APP_SENTRY_DSN',
-  // 'REACT_APP_SENTRY_DEBUG',
-  // 'REACT_APP_SENTRY_ENABLE_AUTO_BREADCRUMBS',
-  // 'REACT_APP_SENTRY_STAGE',
-  // 'REACT_APP_GRAPHQL_ENDPOINT',
-  // 'REACT_APP_MOCK_DEV_AUTHENTICATION',
-  // 'REACT_APP_ADS_ENABLED',
-  // 'REACT_APP_FEATURE_FLAG_SEARCH_PAGE_ENABLED'
-]
-
 var REACT_APP = /^REACT_APP_/i
 
 function getClientEnvironment (publicUrl) {
   var processEnv = Object
     .keys(process.env)
     .filter((key) => {
-      return REACT_APP.test(key) || includes(envVars, key)
+      return REACT_APP.test(key)
     })
     .reduce((env, key) => {
       env[key] = JSON.stringify(process.env[key])
