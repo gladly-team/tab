@@ -19,7 +19,7 @@ export const envVars = [
   { name: 'REACT_APP_GRAPHQL_ENDPOINT' },
   { name: 'STATIC_FILES_ENDPOINT' },
   { name: 'CLOUDFRONT_DOMAIN_ALIAS' },
-  { name: 'ADS_ENABLED' },
+  { name: 'REACT_APP_ADS_ENABLED' },
   { name: 'REACT_APP_FIREBASE_API_KEY' },
   { name: 'REACT_APP_FIREBASE_AUTH_DOMAIN' },
   { name: 'REACT_APP_FIREBASE_DATABASE_URL' },

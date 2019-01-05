@@ -36,7 +36,7 @@ const htmlTemplate = new HtmlWebpackPlugin({
   },
   mobile: true,
   inject: false,
-  tabAdsEnabled: process.env.ADS_ENABLED === 'true'
+  tabAdsEnabled: process.env.REACT_APP_ADS_ENABLED === 'true'
 })
 const favIcon = new FaviconsWebpackPlugin(paths.appLogo)
 

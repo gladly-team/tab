@@ -239,7 +239,7 @@ module.exports = {
         minifyCSS: true,
         minifyURLs: true
       },
-      tabAdsEnabled: process.env.ADS_ENABLED === 'true'
+      tabAdsEnabled: process.env.REACT_APP_ADS_ENABLED === 'true'
     }),
     new FaviconsWebpackPlugin(paths.appLogo),
     // Makes some environment variables available to the JS code, for example:
