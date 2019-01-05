@@ -60,7 +60,7 @@ env:
   - TEST_DEPLOYMENT_LANDING_PAGE_DOMAIN=dev-tab-website.s3-website-us-west-2.amazonaws.com
   - TEST_DEPLOYMENT_GRAPHQL_DOMAIN=i3beinjq52.execute-api.us-west-2.amazonaws.com
   - TEST_DEPLOYMENT_GRAPHQL_PATH=/test
-  # Selenium
+  # End-to-end testing
   - TEST_SELENIUM_DRIVER_TYPE=remote
   - TEST_SELENIUM_HOST=https://test-tab2017.gladly.io
   - TEST_BROWSERSTACK_USER=kevinjennison1

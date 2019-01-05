@@ -11,6 +11,8 @@ export const envVars = [
   { name: 'NODE_ENV' },
   { name: 'AWS_REGION' },
   { name: 'AWS_ACCOUNT_ID' },
+  { name: 'AWS_ACCESS_KEY_ID' },
+  { name: 'AWS_SECRET_ACCESS_KEY' },
   { name: 'LOG_LEVEL' },
   // Web app
   { name: 'PUBLIC_URL' }, // Used as base URL for serving static files.
@@ -28,7 +30,6 @@ export const envVars = [
   { name: 'REACT_APP_SENTRY_ENABLE_AUTO_BREADCRUMBS', optional: true },
   { name: 'REACT_APP_FEATURE_FLAG_SEARCH_PAGE_ENABLED', optional: true },
   // GraphQL / Lambda
-  // TODO: prefix these
   { name: 'GQL_LOGGER' },
   { name: 'GQL_SENTRY_PUBLIC_KEY' },
   { name: 'GQL_SENTRY_PROJECT_ID' },
@@ -50,10 +51,7 @@ export const envVars = [
   { name: 'DEPLOYMENT_LANDING_PAGE_DOMAIN' },
   { name: 'DEPLOYMENT_GRAPHQL_DOMAIN' },
   { name: 'DEPLOYMENT_GRAPHQL_PATH' },
-  // Secrets
-  { name: 'AWS_ACCESS_KEY_ID' },
-  { name: 'AWS_SECRET_ACCESS_KEY' },
-  // Selenium Driver
+  // End-to-end testing
   { name: 'SELENIUM_DRIVER_TYPE', optional: true },
   { name: 'SELENIUM_HOST', optional: true },
   { name: 'BROWSERSTACK_USER', optional: true },
