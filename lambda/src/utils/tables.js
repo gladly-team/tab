@@ -3,8 +3,8 @@
 import { mapValues } from 'lodash/object'
 
 const tableNameAppendix = (
-  process.env.TABLE_NAME_APPENDIX
-  ? process.env.TABLE_NAME_APPENDIX
+  process.env.DB_TABLE_NAME_APPENDIX
+  ? process.env.DB_TABLE_NAME_APPENDIX
   : ''
 )
 

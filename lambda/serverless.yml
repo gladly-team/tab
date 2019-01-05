@@ -54,9 +54,9 @@ functions:
   firebaseAuthorizer:
     handler: build/firebase-authorizer/firebase-authorizer.serverlessHandler
     environment:
-      FIREBASE_PROJECT_ID: ${env:FIREBASE_PROJECT_ID}
-      FIREBASE_DATABASE_URL: ${env:FIREBASE_DATABASE_URL}
-      FIREBASE_CLIENT_EMAIL: ${env:FIREBASE_CLIENT_EMAIL}
+      LAMBDA_FIREBASE_PROJECT_ID: ${env:LAMBDA_FIREBASE_PROJECT_ID}
+      LAMBDA_FIREBASE_DATABASE_URL: ${env:LAMBDA_FIREBASE_DATABASE_URL}
+      LAMBDA_FIREBASE_CLIENT_EMAIL: ${env:LAMBDA_FIREBASE_CLIENT_EMAIL}
       # Encrypted with AWS KMS for encryption during deploy.
       #   https://docs.aws.amazon.com/lambda/latest/dg/env_variables.html
       #   https://docs.aws.amazon.com/cli/latest/reference/kms/encrypt.html
@@ -69,4 +69,4 @@ functions:
       #   https://github.com/aws/aws-cli/issues/1043#issuecomment-65878875
       # To encrypt:
       #   `aws kms encrypt --key-id [kms-key-id] --plaintext [item]`
-      FIREBASE_PRIVATE_KEY: ${file(./src/firebase-authorizer/variables.yml):${self:provider.stage}.FIREBASE_PRIVATE_KEY}
+      LAMBDA_FIREBASE_PRIVATE_KEY: ${file(./src/firebase-authorizer/variables.yml):${self:provider.stage}.LAMBDA_FIREBASE_PRIVATE_KEY}

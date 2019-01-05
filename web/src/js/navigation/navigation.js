@@ -45,8 +45,8 @@ export const absoluteUrl = (path) => {
   if (path.startsWith('http://') || path.startsWith('https://')) {
     return path
   }
-  const protocol = process.env.WEBSITE_PROTOCOL ? process.env.WEBSITE_PROTOCOL : 'https'
-  const baseUrl = `${protocol}://${process.env.WEBSITE_DOMAIN}`
+  const protocol = process.env.REACT_APP_WEBSITE_PROTOCOL ? process.env.REACT_APP_WEBSITE_PROTOCOL : 'https'
+  const baseUrl = `${protocol}://${process.env.REACT_APP_WEBSITE_DOMAIN}`
   return `${baseUrl}${path}`
 }
 

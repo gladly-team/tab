@@ -4,19 +4,19 @@ beforeEach(() => {
 })
 
 afterEach(() => {
-  delete process.env.TABLE_NAME_APPENDIX
+  delete process.env.DB_TABLE_NAME_APPENDIX
 })
 
 describe('the tablesName module', () => {
   it('returns expected names', () => {
-    process.env.TABLE_NAME_APPENDIX = ''
+    process.env.DB_TABLE_NAME_APPENDIX = ''
     const tableNames = require('../tables').default
     expect(tableNames.widgets).toBe('Widgets')
     expect(tableNames.userLevels).toBe('UserLevels')
   })
 
   test('uses custom table names appendix when set in config', () => {
-    process.env.TABLE_NAME_APPENDIX = '-dev'
+    process.env.DB_TABLE_NAME_APPENDIX = '-dev'
     const tableNames = require('../tables').default
     expect(tableNames.widgets).toBe('Widgets-dev')
     expect(tableNames.userLevels).toBe('UserLevels-dev')

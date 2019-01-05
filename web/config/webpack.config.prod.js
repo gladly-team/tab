@@ -21,7 +21,7 @@ var getClientEnvironment = require('./env')
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
-var publicPath = process.env.PUBLIC_PATH
+var publicPath = process.env.PUBLIC_URL
 // `publicUrl` is just like `publicPath`, but we will provide it to our app
 // as %PUBLIC_URL% in `index.html` and `process.env.PUBLIC_URL` in JavaScript.
 // Omit trailing slash as %PUBLIC_URL%/xyz looks better than %PUBLIC_URL%xyz.
@@ -64,8 +64,7 @@ module.exports = {
     // We don't currently advertise code splitting but Webpack supports it.
     filename: 'static/js/[name].[chunkhash:8].js',
     chunkFilename: 'static/js/[name].[chunkhash:8].js',
-    // Static files are served from a different URL.
-    publicPath: `${process.env.STATIC_FILES_ENDPOINT}/`,
+    publicPath: publicPath,
     sourceMapFilename: '[file].map'
   },
   resolve: {
@@ -239,7 +238,7 @@ module.exports = {
         minifyCSS: true,
         minifyURLs: true
       },
-      tabAdsEnabled: process.env.ADS_ENABLED === 'true'
+      tabAdsEnabled: process.env.REACT_APP_ADS_ENABLED === 'true'
     }),
     new FaviconsWebpackPlugin(paths.appLogo),
     // Makes some environment variables available to the JS code, for example:

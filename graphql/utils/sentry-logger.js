@@ -46,7 +46,7 @@ const sentryDSN = getSentryDSN()
 Raven.config(sentryDSN, {
   captureUnhandledRejections: true,
   autoBreadcrumbs: false,
-  environment: config.STAGE
+  environment: config.SENTRY_STAGE
 }).install()
 
 export default Raven

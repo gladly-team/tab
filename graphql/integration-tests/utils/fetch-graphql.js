@@ -3,8 +3,8 @@ import fetch from 'node-fetch'
 import logger from '../../utils/logger'
 
 const graphQLEndpoint = (
-  process.env.GRAPHQL_ENDPOINT
-  ? `https://${process.env.GRAPHQL_ENDPOINT}`
+  process.env.REACT_APP_GRAPHQL_ENDPOINT
+  ? `https://${process.env.REACT_APP_GRAPHQL_ENDPOINT}`
   : 'localhost:8080'
 )
 

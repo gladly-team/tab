@@ -10,7 +10,7 @@ import config from './config'
 import { handleError } from './utils/error-logging'
 import logger from './utils/logger'
 
-const GRAPHQL_PORT = config.GRAPHQL_PORT
+const graphQLPort = process.env.DEVELOPMENT_GRAPHQL_PORT
 
 let graphQLServer
 
@@ -32,8 +32,8 @@ function startGraphQLServer (callback) {
 
   // Use express-graphql in development if desired.
   // Otherwise, just use our plain Lambda handler.
-  if (config.NODE_ENV === 'development' && config.ENABLE_GRAPHIQL) {
-    logger.info(`GraphiQL is enabled on port ${GRAPHQL_PORT}.`)
+  if (config.NODE_ENV === 'development' && process.env.DEVELOPMENT_ENABLE_GRAPHIQL) {
+    logger.info(`GraphiQL is enabled on port ${graphQLPort}.`)
     // https://github.com/graphql/express-graphql#options
     graphQLApp.use('/',
       graphQLHTTP((req) => {
@@ -56,9 +56,9 @@ function startGraphQLServer (callback) {
     })
   }
 
-  graphQLServer = graphQLApp.listen(GRAPHQL_PORT, () => {
+  graphQLServer = graphQLApp.listen(graphQLPort, () => {
     logger.info(
-      `GraphQL server is now running on http://localhost:${GRAPHQL_PORT}`
+      `GraphQL server is now running on http://localhost:${graphQLPort}`
     )
     if (callback) {
       callback()

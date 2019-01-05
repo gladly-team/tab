@@ -33,7 +33,7 @@ async function fetchQuery (
     // https://docs.aws.amazon.com/apigateway/latest/developerguide/configure-api-gateway-lambda-authorization-with-console.html"
     headers['Authorization'] = userToken || 'unauthenticated'
 
-    return fetch(`//${process.env.GRAPHQL_ENDPOINT}`, {
+    return fetch(`//${process.env.REACT_APP_GRAPHQL_ENDPOINT}`, {
       method: 'POST',
       headers: headers,
       body: JSON.stringify({

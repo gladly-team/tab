@@ -35,7 +35,7 @@ if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
 }
 
 // Tools like Cloud9 rely on this.
-var DEFAULT_PORT = process.env.WEB_PORT || 3000
+var DEFAULT_PORT = process.env.PORT || 3000
 var compiler
 var handleCompile
 
@@ -256,7 +256,7 @@ function runDevServer (host, port, protocol) {
     // https://webpack.github.io/docs/webpack-dev-server.html#proxy
     proxy: {
       '/graphql': {
-        target: `http://${process.env.GRAPHQL_PROXY_DOMAIN}${process.env.GRAPHQL_PROXY_PATH}`,
+        target: `http://${process.env.DEVELOPMENT_GRAPHQL_PROXY_DOMAIN}${process.env.DEVELOPMENT_GRAPHQL_PROXY_PATH}`,
         secure: false,
         pathRewrite: {'^/graphql': ''}
       }
@@ -286,7 +286,7 @@ function runDevServer (host, port, protocol) {
 
 function run (port) {
   var protocol = process.env.HTTPS === 'true' ? 'https' : 'http'
-  var host = process.env.WEB_HOST || 'localhost'
+  var host = process.env.HOST || 'localhost'
   setupCompiler(host, port, protocol)
   runDevServer(host, port, protocol)
 }

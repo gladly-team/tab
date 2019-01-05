@@ -36,13 +36,13 @@ const htmlTemplate = new HtmlWebpackPlugin({
   },
   mobile: true,
   inject: false,
-  tabAdsEnabled: process.env.ADS_ENABLED === 'true'
+  tabAdsEnabled: process.env.REACT_APP_ADS_ENABLED === 'true'
 })
 const favIcon = new FaviconsWebpackPlugin(paths.appLogo)
 
 let appEntry
 appEntry = [
-  `webpack-dev-server/client?http://${process.env.WEB_HOST}:${process.env.WEB_PORT}`,
+  `webpack-dev-server/client?http://${process.env.HOST}:${process.env.PORT}`,
   'webpack/hot/only-dev-server',
   'react-hot-loader/patch',
   // Include an alternative client for WebpackDevServer. A client's job is to
@@ -67,7 +67,7 @@ appEntry = [
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
-var publicPath = process.env.PUBLIC_PATH || '/'
+var publicPath = process.env.PUBLIC_URL || '/'
 // `publicUrl` is just like `publicPath`, but we will provide it to our app
 // as %PUBLIC_URL% in `index.html` and `process.env.PUBLIC_URL` in JavaScript.
 // Omit trailing slash as %PUBLIC_PATH%/xyz looks better than %PUBLIC_PATH%xyz.

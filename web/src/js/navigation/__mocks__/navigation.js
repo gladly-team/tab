@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
-process.env.WEBSITE_PROTOCOL = 'https'
-process.env.WEBSITE_DOMAIN = 'tab-test-env.gladly.io'
+process.env.REACT_APP_WEBSITE_PROTOCOL = 'https'
+process.env.REACT_APP_WEBSITE_DOMAIN = 'tab-test-env.gladly.io'
 const navigationActual = require.requireActual('../navigation')
 
 const navigationMock = navigationActual

@@ -4,7 +4,7 @@ import { getTabsOpenedToday } from 'js/utils/local-user-data-mgr'
 const MAX_TABS_WITH_ADS = 150
 
 export default () => {
-  if (!(process.env.ADS_ENABLED === 'true')) {
+  if (!(process.env.REACT_APP_ADS_ENABLED === 'true')) {
     return false
   }
 
