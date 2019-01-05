@@ -9,8 +9,8 @@ require('dotenv-extended').load({
   schema: path.join(__dirname, '..', '.env.schema')
 })
 
-const s3Bucket = process.env.WEB_S3_BUCKET_NAME
-const s3BucketPath = process.env.WEB_S3_BUCKET_PATH || ''
+const s3Bucket = process.env.DEPLOYMENT_WEB_APP_S3_BUCKET_NAME
+const s3BucketPath = process.env.DEPLOYMENT_WEB_APP_S3_BUCKET_PATH || ''
 
 // Sync *.html files.
 function syncHTML () {

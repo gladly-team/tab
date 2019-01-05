@@ -55,10 +55,10 @@ env:
   - TEST_DB_TABLE_NAME_APPENDIX="-test"
   # Deployment
   - TEST_DEPLOYMENT_WEB_APP_CLOUDFRONT_DOMAIN_ALIAS=test-tab2017.gladly.io
-  - TEST_WEB_S3_BUCKET_NAME=test-tab2017.gladly.io
-  - TEST_WEB_S3_BUCKET_PATH=/newtab
-  - TEST_MEDIA_S3_BUCKET_NAME=test-tab2017-media.gladly.io
-  - TEST_WEB_LANDING_PAGE_DOMAIN=dev-tab-website.s3-website-us-west-2.amazonaws.com
+  - TEST_DEPLOYMENT_WEB_APP_S3_BUCKET_NAME=test-tab2017.gladly.io
+  - TEST_DEPLOYMENT_WEB_APP_S3_BUCKET_PATH=/newtab
+  - TEST_DEPLOYMENT_MEDIA_S3_BUCKET_NAME=test-tab2017-media.gladly.io
+  - TEST_DEPLOYMENT_LANDING_PAGE_DOMAIN=dev-tab-website.s3-website-us-west-2.amazonaws.com
   - TEST_DEPLOYMENT_GRAPHQL_DOMAIN=i3beinjq52.execute-api.us-west-2.amazonaws.com
   - TEST_DEPLOYMENT_GRAPHQL_PATH=/test
   # Selenium
@@ -105,10 +105,10 @@ env:
   - DEV_DB_TABLE_NAME_APPENDIX="-dev"
   # Deployment
   - DEV_DEPLOYMENT_WEB_APP_CLOUDFRONT_DOMAIN_ALIAS=dev-tab2017.gladly.io
-  - DEV_WEB_S3_BUCKET_NAME=dev-tab2017.gladly.io
-  - DEV_WEB_S3_BUCKET_PATH=/newtab
-  - DEV_MEDIA_S3_BUCKET_NAME=dev-tab2017-media.gladly.io
-  - DEV_WEB_LANDING_PAGE_DOMAIN=dev-tab-website.s3-website-us-west-2.amazonaws.com
+  - DEV_DEPLOYMENT_WEB_APP_S3_BUCKET_NAME=dev-tab2017.gladly.io
+  - DEV_DEPLOYMENT_WEB_APP_S3_BUCKET_PATH=/newtab
+  - DEV_DEPLOYMENT_MEDIA_S3_BUCKET_NAME=dev-tab2017-media.gladly.io
+  - DEV_DEPLOYMENT_LANDING_PAGE_DOMAIN=dev-tab-website.s3-website-us-west-2.amazonaws.com
   - DEV_DEPLOYMENT_GRAPHQL_DOMAIN=53a9uos12e.execute-api.us-west-2.amazonaws.com
   - DEV_DEPLOYMENT_GRAPHQL_PATH=/dev
   # Secrets: AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY, SENTRY_PRIVATE_KEY
@@ -150,10 +150,10 @@ env:
   - PROD_DB_TABLE_NAME_APPENDIX="-prod"
   # Deployment
   - PROD_DEPLOYMENT_WEB_APP_CLOUDFRONT_DOMAIN_ALIAS=tab.gladly.io
-  - PROD_WEB_S3_BUCKET_NAME=prod-tab2017.gladly.io
-  - PROD_WEB_S3_BUCKET_PATH=/newtab
-  - PROD_MEDIA_S3_BUCKET_NAME=prod-tab2017-media.gladly.io
-  - PROD_WEB_LANDING_PAGE_DOMAIN=prod-tab-website.s3-website-us-west-2.amazonaws.com
+  - PROD_DEPLOYMENT_WEB_APP_S3_BUCKET_NAME=prod-tab2017.gladly.io
+  - PROD_DEPLOYMENT_WEB_APP_S3_BUCKET_PATH=/newtab
+  - PROD_DEPLOYMENT_MEDIA_S3_BUCKET_NAME=prod-tab2017-media.gladly.io
+  - PROD_DEPLOYMENT_LANDING_PAGE_DOMAIN=prod-tab-website.s3-website-us-west-2.amazonaws.com
   - PROD_DEPLOYMENT_GRAPHQL_DOMAIN=qy89x5t2i9.execute-api.us-west-2.amazonaws.com
   - PROD_DEPLOYMENT_GRAPHQL_PATH=/prod
   # Secrets

@@ -46,10 +46,10 @@ export const envVars = [
   { name: 'DB_TABLE_NAME_APPENDIX' },
   // Deployment
   { name: 'DEPLOYMENT_WEB_APP_CLOUDFRONT_DOMAIN_ALIAS' },
-  { name: 'WEB_S3_BUCKET_NAME' },
-  { name: 'WEB_S3_BUCKET_PATH' },
-  { name: 'MEDIA_S3_BUCKET_NAME' },
-  { name: 'WEB_LANDING_PAGE_DOMAIN' },
+  { name: 'DEPLOYMENT_WEB_APP_S3_BUCKET_NAME' },
+  { name: 'DEPLOYMENT_WEB_APP_S3_BUCKET_PATH' },
+  { name: 'DEPLOYMENT_MEDIA_S3_BUCKET_NAME' },
+  { name: 'DEPLOYMENT_LANDING_PAGE_DOMAIN' },
   { name: 'DEPLOYMENT_GRAPHQL_DOMAIN' },
   { name: 'DEPLOYMENT_GRAPHQL_PATH' },
   // Secrets

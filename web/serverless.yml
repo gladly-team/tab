@@ -11,7 +11,7 @@ provider:
 custom:
   stageDefault: dev
   stage: ${env:SLS_STAGE, self:custom.stageDefault}
-  s3Bucket: ${env:WEB_S3_BUCKET_NAME}
+  s3Bucket: ${env:DEPLOYMENT_WEB_APP_S3_BUCKET_NAME}
   graphQLProxyDomain: ${env:DEPLOYMENT_GRAPHQL_DOMAIN}
   graphQLProxyPath: ${env:DEPLOYMENT_GRAPHQL_PATH}
   webAppName: Tab2017
@@ -21,7 +21,7 @@ custom:
   SSLCertificateARN: ${env:SSL_CERTIFICATE_ARN}
   # How long Cloudfront should cache HTML at edges.
   CloudfrontHTMLCachingSeconds: 60
-  websiteOrigin: ${env:WEB_LANDING_PAGE_DOMAIN}
+  websiteOrigin: ${env:DEPLOYMENT_LANDING_PAGE_DOMAIN}
   websiteAppName: TabLandingPage
 
 resources:
