@@ -22,7 +22,6 @@ env:
   # environment for testing.
   # @material-ui-1-todo
   - TEST_NODE_ENV=test
-  - TEST_STAGE=test
   - TEST_AWS_REGION=us-west-2
   - TEST_AWS_ACCOUNT_ID=167811431063
   - TEST_LOG_LEVEL=fatal # Don't log errors during testing. Some errors are expected.
@@ -76,7 +75,6 @@ env:
   - secure: ZkoXKB7r+JnUGGmN6Q9WUPO1bj9jkhl3YqnQK0ygsgskDHYmu2n4/36E+PJr6Ixs/oLOvzmrgXwPMwWAmoOuol0bKe7xToW1vxyUAfByH1pTtUPTRlkC3Mc7ReE5lmBjR9PMAVGdgKb2dc2vrc+6/Ao3u20Wp0Le2V/vfphxbBzH4ai3SG77MAxlqV88Zs/3exWzJeHdMe9tqE9hNAsdwJ/tf7Ah/geyT6tsAIb8I6WCVAk92g+4S2vFTqoQyCZ5cuEOJrtHuCWVD3aHAg6koIt/fWR+iLLejmrMfw3ECUXSxvBsEU46f0r4BfSCW3UdACfCKRiTQUOyDimi5lO0YxWg01WCrJ/rj74vAf/hGYTcEY3vxo9B0heaylBZDrePJEdgMAxH7mDEShE11R8cqBZNnzdoZIRW19UnJsUrb1QeQ7Add/t1tgik2hwbFGKT26sIgb0gOqrvUDBr/7s64X5RmL+X+hpu0+ugBGfncvrdoHg8fX3vg2632L0rJnHNgDUGWec96WPVyqvQlUN7+1i2pewxZuLuDRh8tZmm4S3wJMBq2doHGTPO+bNRP6hXQOyvdXsEIRJSBASibLMXTK4l5enx/JrCFmUAvrIFkkzFSRirXt0Mks2DHIV7vSeWE/3ZKa8OsH2X6QlB6foAtEkzAK5owS2LCQaomPEOmtA=
   ########## Dev stage ##########
   - DEV_NODE_ENV=production
-  - DEV_STAGE=dev
   - DEV_AWS_REGION=us-west-2
   - DEV_AWS_ACCOUNT_ID=167811431063
   - DEV_LOG_LEVEL=error
@@ -125,7 +123,6 @@ env:
   - secure: pR1GDWClMt/p/ouu8uyrryqG2m9QR3ADoUnTlqkrxMeCcOUqIYVV+WyX8ks99RjNiMJTKjB2iEKDOn0BL/ZFhdVhWEW0qzf+ry7j973cZ+qTNGl3iRlUDQ+J1PKYtg004keCLCPr3heIUZtD4Hwf6OzKSOqjvtJjvI7lTCVXM1l1YCg1uzba9zv13tM5bqsUM7zy8hoOMiPSXnSjqjgFFJkYxTIIylXttLPQeItt5VUI4IzADwnVyPQ10jbpfVefHkLCqtW+/nnLK23Dm+nm3+6iNfxPxCCI8AMz7Vg7yUeau2sQElj+CwfczJ+C8GZ1zmQffumAa7fSCq4V3dc4I6QqZ8XnSRXxPodpx/BJxDq4kBYtPYelH/Mf1+WpHcLfUW8J3VFhlEOckJr1PLgFPEkya7jCx3c3C6jSAhIisberS8MJfw5GwG7dnEWAPfxp9dqJg2iPiDECXWfmPVSBY0VDbl0MjLvyxrvxwXRpvW1o7tmIcECLC5F3+sKLE7LPLymOPfJBy9g4Dn/scaKdv7THN3DghOhv8A/i6uW6cFuFRdIwRvm6qlQjdwHuXZoXNNQgON9gcaOdDi61fdjK4cRdy5U6KJcurhjQqim9BWYZuM9F+9co69sXWlSuWvLpXPOlGs8R09ZXaD/X/klM1VQT0VHqBKujXZdrfMbbYIM=
   ########## Production stage ##########
   - PROD_NODE_ENV=production
-  - PROD_STAGE=production
   - PROD_AWS_REGION=us-west-2
   - PROD_AWS_ACCOUNT_ID=167811431063
   - PROD_LOG_LEVEL=error

@@ -7,7 +7,6 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'development'
 
 module.exports = {
   NODE_ENV: process.env.NODE_ENV,
-  STAGE: process.env.STAGE,
   AWS_REGION: process.env.AWS_REGION,
   DYNAMODB_ENDPOINT: process.env.DYNAMODB_ENDPOINT,
   MEDIA_ENDPOINT: process.env.MEDIA_ENDPOINT,

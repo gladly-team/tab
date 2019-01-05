@@ -9,7 +9,6 @@
 // to be set in all environments.
 export const envVars = [
   { name: 'NODE_ENV' },
-  { name: 'STAGE' },
   { name: 'AWS_REGION' },
   { name: 'AWS_ACCOUNT_ID' },
   { name: 'LOG_LEVEL' },
