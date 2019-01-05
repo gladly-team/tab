@@ -34,7 +34,7 @@ export const envVars = [
   // TODO: prefix these
   { name: 'TABLE_NAME_APPENDIX' },
   { name: 'GRAPHQL_PORT', optional: true },
-  { name: 'LOGGER' },
+  { name: 'GQL_LOGGER' },
   { name: 'GQL_SENTRY_PUBLIC_KEY' },
   { name: 'GQL_SENTRY_PROJECT_ID' },
   { name: 'SENTRY_PRIVATE_KEY' },

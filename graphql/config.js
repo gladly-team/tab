@@ -12,7 +12,7 @@ module.exports = {
   MEDIA_ENDPOINT: process.env.MEDIA_ENDPOINT,
   GRAPHQL_PORT: process.env.GRAPHQL_PORT,
   LOG_LEVEL: process.env.LOG_LEVEL || 'debug',
-  LOGGER: process.env.LOGGER || 'console',
+  LOGGER: process.env.GQL_LOGGER || 'console',
   ENABLE_GRAPHIQL: process.env.ENABLE_GRAPHIQL === '1',
   TABLE_NAME_APPENDIX: process.env.TABLE_NAME_APPENDIX,
   SENTRY_PUBLIC_KEY: process.env.GQL_SENTRY_PUBLIC_KEY,
