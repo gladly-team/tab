@@ -149,7 +149,7 @@ class Dashboard extends React.Component {
                 position: 'fixed',
                 zIndex: 10,
                 top: 14,
-                right: 16,
+                right: 10,
                 display: 'flex',
                 flexDirection: 'column'
               }}
