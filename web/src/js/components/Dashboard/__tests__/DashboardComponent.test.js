@@ -20,6 +20,7 @@ import LogAccountCreation from 'js/components/Dashboard/LogAccountCreationContai
 import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
 import ErrorMessage from 'js/components/General/ErrorMessage'
 import NewUserTour from 'js/components/Dashboard/NewUserTourContainer'
+import Notification from 'js/components/Dashboard/NotificationComponent'
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import { STORAGE_NEW_USER_HAS_COMPLETED_TOUR } from 'js/constants'
 import { getCurrentUser } from 'js/authentication/user'
@@ -514,5 +515,16 @@ describe('Dashboard component', () => {
       .find(Button)
       .length
     ).toBe(0)
+  })
+
+  it('a notification renders', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
+    const wrapper = shallow(
+      <DashboardComponent {...mockProps} />
+    )
+    expect(wrapper
+      .find(Notification)
+      .length
+    ).toBe(1)
   })
 })

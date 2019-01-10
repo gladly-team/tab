@@ -42,9 +42,6 @@ class Notification extends React.Component {
             >
               <Button
                 color={'default'}
-                style={{
-                  // margin: 10
-                }}
                 onClick={() => {
                   // TODO: dismiss
                 }}
@@ -56,9 +53,6 @@ class Notification extends React.Component {
                   ? (
                     <Button
                       color={'primary'}
-                      style={{
-                        // margin: 10
-                      }}
                       onClick={() => {
                         // TODO: do button action
                       }}
