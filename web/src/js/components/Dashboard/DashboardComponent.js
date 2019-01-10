@@ -111,29 +111,6 @@ class Dashboard extends React.Component {
     const { tabId } = this.state
     const errorMessage = this.state.errorMessage
 
-    const menuStyle = {
-      position: 'fixed',
-      zIndex: 10,
-      top: 14,
-      right: 16,
-      display: 'flex',
-      justifyItems: 'flex-end',
-      alignItems: 'center'
-    }
-    const menuTextStyle = {
-      fontSize: 24
-    }
-    const moneyRaisedStyle = Object.assign({}, menuTextStyle)
-    const bulletPointStyle = {
-      alignSelf: 'center',
-      width: 5,
-      height: 5,
-      marginTop: 2,
-      marginLeft: 12,
-      marginRight: 12
-    }
-    const userMenuStyle = Object.assign({}, menuTextStyle)
-
     // Whether or not a campaign should show on the dashboard
     // TODO: also make sure the user hasn't dismissed the campaign (`isCampaignShown` var)
     const isGlobalCampaignLive = !!((app && app.isGlobalCampaignLive))
@@ -168,21 +145,40 @@ class Dashboard extends React.Component {
         { user
           ? (
             <FadeInDashboardAnimation>
-              <div style={menuStyle}>
+              <div style={{
+                position: 'fixed',
+                zIndex: 10,
+                top: 14,
+                right: 16,
+                display: 'flex',
+                justifyItems: 'flex-end',
+                alignItems: 'center'
+              }}>
                 <MoneyRaised
                   app={app}
-                  style={moneyRaisedStyle}
+                  style={{
+                    fontSize: 24
+                  }}
                   launchFireworks={this.launchFireworks.bind(this)}
                 />
                 <CircleIcon
                   color={dashboardIconInactiveColor}
                   hoverColor={dashboardIconActiveColor}
-                  style={bulletPointStyle}
+                  style={{
+                    alignSelf: 'center',
+                    width: 5,
+                    height: 5,
+                    marginTop: 2,
+                    marginLeft: 12,
+                    marginRight: 12
+                  }}
                 />
                 <UserMenu
                   app={app}
                   user={user}
-                  style={userMenuStyle}
+                  style={{
+                    fontSize: 24
+                  }}
                   isUserAnonymous={this.state.isUserAnonymous}
                 />
               </div>
