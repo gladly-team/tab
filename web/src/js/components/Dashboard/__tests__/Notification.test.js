@@ -6,12 +6,13 @@ import {
 } from 'enzyme'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
+import Link from 'js/components/General/Link'
 
 const getMockProps = () => ({
   title: 'Message Title',
   message: 'Here is some additional information.',
   buttonText: 'Click Me',
-  buttonAction: 'http://example.com/some-link/'
+  buttonURL: 'http://example.com/some-link/'
 })
 
 describe('Notification component', () => {
@@ -51,7 +52,7 @@ describe('Notification component', () => {
   it('displays only the "dismiss" button when an action button is provided', () => {
     const Notification = require('js/components/Dashboard/NotificationComponent').default
     const mockProps = getMockProps()
-    delete mockProps.buttonAction
+    delete mockProps.buttonURL
     const wrapper = shallow(
       <Notification {...mockProps} />
     )
@@ -64,7 +65,7 @@ describe('Notification component', () => {
   it('displays two buttons when an action button is provided', () => {
     const Notification = require('js/components/Dashboard/NotificationComponent').default
     const mockProps = getMockProps()
-    mockProps.buttonAction = () => {}
+    mockProps.buttonURL = 'http://example.com'
     mockProps.buttonText = 'Do the thing'
     const wrapper = shallow(
       <Notification {...mockProps} />
@@ -73,5 +74,17 @@ describe('Notification component', () => {
       .toBe(2)
     expect(wrapper.find(Button).at(1).render().text())
       .toBe(`Do the thing`)
+  })
+
+  it('creates an outbound button link with the buttonURL', () => {
+    const Notification = require('js/components/Dashboard/NotificationComponent').default
+    const mockProps = getMockProps()
+    mockProps.buttonURL = 'http://example.com'
+    mockProps.buttonText = 'Do the thing'
+    const wrapper = shallow(
+      <Notification {...mockProps} />
+    )
+    expect(wrapper.find(Link).first().prop('to'))
+      .toBe('http://example.com')
   })
 })

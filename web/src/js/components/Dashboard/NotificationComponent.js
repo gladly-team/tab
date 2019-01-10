@@ -3,10 +3,11 @@ import PropTypes from 'prop-types'
 import Paper from '@material-ui/core/Paper'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
+import Link from 'js/components/General/Link'
 
 class Notification extends React.Component {
   render () {
-    const { style, title, message, buttonText, buttonAction } = this.props
+    const { style, title, message, buttonText, buttonURL } = this.props
     return (
       <div style={Object.assign({}, style, {
         width: 270
@@ -49,16 +50,22 @@ class Notification extends React.Component {
                 Dismiss
               </Button>
               {
-                (buttonText && buttonAction)
+                (buttonText && buttonURL)
                   ? (
-                    <Button
-                      color={'primary'}
-                      onClick={() => {
-                        // TODO: do button action
+                    <Link
+                      to={buttonURL}
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      style={{
+                        textDecoration: 'none'
                       }}
                     >
-                      {buttonText}
-                    </Button>
+                      <Button
+                        color={'primary'}
+                      >
+                        {buttonText}
+                      </Button>
+                    </Link>
                   )
                   : null
               }
@@ -75,10 +82,7 @@ Notification.propTypes = {
   title: PropTypes.string.isRequired,
   message: PropTypes.string.isRequired,
   buttonText: PropTypes.string,
-  buttonAction: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.string
-  ])
+  buttonURL: PropTypes.string
 }
 
 Notification.default = {

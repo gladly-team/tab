@@ -193,7 +193,7 @@ class Dashboard extends React.Component {
                       title={'Message Title'}
                       message={`Here is some additional information about why we're notifying you.`}
                       buttonText={'Click Me'}
-                      buttonAction={'http://example.com/some-link/'}
+                      buttonURL={'https://www.bing.com'}
                       style={{}}
                     />
                   )
