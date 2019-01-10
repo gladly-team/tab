@@ -10,7 +10,7 @@ class Notification extends React.Component {
     const { style, title, message, buttonText, buttonURL } = this.props
     return (
       <div style={Object.assign({}, style, {
-        width: 270
+        width: 340
       })}>
         <Paper
           style={{
@@ -25,7 +25,12 @@ class Notification extends React.Component {
             }}
           >
             <Typography
-              variant={'h6'}
+              style={{
+                fontWeight: 'bold',
+                marginBottom: 8,
+                marginTop: 8
+              }}
+              variant={'body2'}
             >
               {title}
             </Typography>

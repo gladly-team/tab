@@ -190,11 +190,15 @@ class Dashboard extends React.Component {
                 { showNotification
                   ? (
                     <Notification
-                      title={'Message Title'}
-                      message={`Here is some additional information about why we're notifying you.`}
-                      buttonText={'Click Me'}
-                      buttonURL={'https://www.bing.com'}
-                      style={{}}
+                      title={`Vote for the January Charity Spotlight`}
+                      message={`
+                        Each month this year, we're highlighting a charity chosen by our
+                        community. Nominate and vote for the nonprofit that means the most to you.`}
+                      buttonText={'Vote'}
+                      buttonURL={'https://goo.gl/forms/crNGLow4fg5fcKe63'}
+                      style={{
+                        marginTop: 4
+                      }}
                     />
                   )
                   : null
