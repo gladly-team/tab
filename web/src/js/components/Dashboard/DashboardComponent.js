@@ -30,6 +30,7 @@ import Fireworks from 'lib/fireworks-react'
 import RaisedButton from 'material-ui/RaisedButton'
 import CloseIcon from 'material-ui/svg-icons/navigation/close'
 import NewUserTour from 'js/components/Dashboard/NewUserTourContainer'
+import Notification from 'js/components/Dashboard/NotificationComponent'
 import { getCurrentUser } from 'js/authentication/user'
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import {
@@ -145,6 +146,9 @@ class Dashboard extends React.Component {
       !this.state.userAlreadyViewedNewUserTour
     )
 
+    // Whether to show a global announcement.
+    const showNotification = true
+
     return (
       <div
         style={{
@@ -183,6 +187,24 @@ class Dashboard extends React.Component {
                 />
               </div>
             </FadeInDashboardAnimation>
+          )
+          : null
+        }
+        { showNotification
+          ? (
+            <Notification
+              title={'Message Title'}
+              message={`Here is some additional information about why we're notifying you.`}
+              buttonText={'Click Me'}
+              buttonAction={'http://example.com/some-link/'}
+              // TODO: move into user menu div
+              style={{
+                zIndex: 11,
+                position: 'absolute',
+                right: 10,
+                top: 50
+              }}
+            />
           )
           : null
         }
