@@ -151,56 +151,56 @@ class Dashboard extends React.Component {
                 top: 14,
                 right: 16,
                 display: 'flex',
-                justifyItems: 'flex-end',
-                alignItems: 'center'
-              }}>
-                <MoneyRaised
-                  app={app}
-                  style={{
-                    fontSize: 24
-                  }}
-                  launchFireworks={this.launchFireworks.bind(this)}
-                />
-                <CircleIcon
-                  color={dashboardIconInactiveColor}
-                  hoverColor={dashboardIconActiveColor}
-                  style={{
-                    alignSelf: 'center',
-                    width: 5,
-                    height: 5,
-                    marginTop: 2,
-                    marginLeft: 12,
-                    marginRight: 12
-                  }}
-                />
-                <UserMenu
-                  app={app}
-                  user={user}
-                  style={{
-                    fontSize: 24
-                  }}
-                  isUserAnonymous={this.state.isUserAnonymous}
-                />
+                flexDirection: 'column'
+              }}
+              >
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                  alignItems: 'center'
+                }}>
+                  <MoneyRaised
+                    app={app}
+                    style={{
+                      fontSize: 24
+                    }}
+                    launchFireworks={this.launchFireworks.bind(this)}
+                  />
+                  <CircleIcon
+                    color={dashboardIconInactiveColor}
+                    hoverColor={dashboardIconActiveColor}
+                    style={{
+                      alignSelf: 'center',
+                      width: 5,
+                      height: 5,
+                      marginTop: 2,
+                      marginLeft: 12,
+                      marginRight: 12
+                    }}
+                  />
+                  <UserMenu
+                    app={app}
+                    user={user}
+                    style={{
+                      fontSize: 24
+                    }}
+                    isUserAnonymous={this.state.isUserAnonymous}
+                  />
+                </div>
+                { showNotification
+                  ? (
+                    <Notification
+                      title={'Message Title'}
+                      message={`Here is some additional information about why we're notifying you.`}
+                      buttonText={'Click Me'}
+                      buttonAction={'http://example.com/some-link/'}
+                      style={{}}
+                    />
+                  )
+                  : null
+                }
               </div>
             </FadeInDashboardAnimation>
-          )
-          : null
-        }
-        { showNotification
-          ? (
-            <Notification
-              title={'Message Title'}
-              message={`Here is some additional information about why we're notifying you.`}
-              buttonText={'Click Me'}
-              buttonAction={'http://example.com/some-link/'}
-              // TODO: move into user menu div
-              style={{
-                zIndex: 11,
-                position: 'absolute',
-                right: 10,
-                top: 50
-              }}
-            />
           )
           : null
         }
