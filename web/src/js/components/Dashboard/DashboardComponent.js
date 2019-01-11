@@ -30,10 +30,12 @@ import Fireworks from 'lib/fireworks-react'
 import RaisedButton from 'material-ui/RaisedButton'
 import CloseIcon from 'material-ui/svg-icons/navigation/close'
 import NewUserTour from 'js/components/Dashboard/NewUserTourContainer'
+import Notification from 'js/components/Dashboard/NotificationComponent'
 import { getCurrentUser } from 'js/authentication/user'
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import {
-  setUserDismissedAdExplanation
+  setUserDismissedAdExplanation,
+  hasUserDismissedNotificationRecently
 } from 'js/utils/local-user-data-mgr'
 import { STORAGE_NEW_USER_HAS_COMPLETED_TOUR } from 'js/constants'
 import {
@@ -47,6 +49,9 @@ import {
   SECOND_VERTICAL_AD_SLOT_DOM_ID,
   HORIZONTAL_AD_SLOT_DOM_ID
 } from 'js/ads/adSettings'
+import {
+  showGlobalNotification
+} from 'js/utils/feature-flags'
 
 class Dashboard extends React.Component {
   constructor (props) {
@@ -62,7 +67,9 @@ class Dashboard extends React.Component {
       // users.
       userAlreadyViewedNewUserTour: localStorageMgr.getItem(STORAGE_NEW_USER_HAS_COMPLETED_TOUR) === 'true',
       numAdsToShow: getNumberOfAdsToShow(),
-      showAdExplanation: shouldShowAdExplanation()
+      showAdExplanation: shouldShowAdExplanation(),
+      // Whether to show a global announcement.
+      showNotification: showGlobalNotification() && !hasUserDismissedNotificationRecently()
     }
   }
 
@@ -110,29 +117,6 @@ class Dashboard extends React.Component {
     const { tabId } = this.state
     const errorMessage = this.state.errorMessage
 
-    const menuStyle = {
-      position: 'fixed',
-      zIndex: 10,
-      top: 14,
-      right: 16,
-      display: 'flex',
-      justifyItems: 'flex-end',
-      alignItems: 'center'
-    }
-    const menuTextStyle = {
-      fontSize: 24
-    }
-    const moneyRaisedStyle = Object.assign({}, menuTextStyle)
-    const bulletPointStyle = {
-      alignSelf: 'center',
-      width: 5,
-      height: 5,
-      marginTop: 2,
-      marginLeft: 12,
-      marginRight: 12
-    }
-    const userMenuStyle = Object.assign({}, menuTextStyle)
-
     // Whether or not a campaign should show on the dashboard
     // TODO: also make sure the user hasn't dismissed the campaign (`isCampaignShown` var)
     const isGlobalCampaignLive = !!((app && app.isGlobalCampaignLive))
@@ -164,23 +148,69 @@ class Dashboard extends React.Component {
         { user
           ? (
             <FadeInDashboardAnimation>
-              <div style={menuStyle}>
-                <MoneyRaised
-                  app={app}
-                  style={moneyRaisedStyle}
-                  launchFireworks={this.launchFireworks.bind(this)}
-                />
-                <CircleIcon
-                  color={dashboardIconInactiveColor}
-                  hoverColor={dashboardIconActiveColor}
-                  style={bulletPointStyle}
-                />
-                <UserMenu
-                  app={app}
-                  user={user}
-                  style={userMenuStyle}
-                  isUserAnonymous={this.state.isUserAnonymous}
-                />
+              <div style={{
+                position: 'fixed',
+                zIndex: 10,
+                top: 14,
+                right: 10,
+                display: 'flex',
+                flexDirection: 'column'
+              }}
+              >
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                  alignItems: 'center'
+                }}>
+                  <MoneyRaised
+                    app={app}
+                    style={{
+                      fontSize: 24
+                    }}
+                    launchFireworks={this.launchFireworks.bind(this)}
+                  />
+                  <CircleIcon
+                    color={dashboardIconInactiveColor}
+                    hoverColor={dashboardIconActiveColor}
+                    style={{
+                      alignSelf: 'center',
+                      width: 5,
+                      height: 5,
+                      marginTop: 2,
+                      marginLeft: 12,
+                      marginRight: 12
+                    }}
+                  />
+                  <UserMenu
+                    app={app}
+                    user={user}
+                    style={{
+                      fontSize: 24
+                    }}
+                    isUserAnonymous={this.state.isUserAnonymous}
+                  />
+                </div>
+                { this.state.showNotification
+                  ? (
+                    <Notification
+                      title={`Vote for the January Charity Spotlight`}
+                      message={`
+                        Each month this year, we're highlighting a charity chosen by our
+                        community. Nominate and vote for the nonprofit that means the most to you.`}
+                      buttonText={'Vote'}
+                      buttonURL={'https://goo.gl/forms/crNGLow4fg5fcKe63'}
+                      onDismiss={() => {
+                        this.setState({
+                          showNotification: false
+                        })
+                      }}
+                      style={{
+                        marginTop: 4
+                      }}
+                    />
+                  )
+                  : null
+                }
               </div>
             </FadeInDashboardAnimation>
           )

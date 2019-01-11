@@ -181,4 +181,46 @@ describe('local user data manager', () => {
     localStorageMgr.setItem('tab.newUser.dismissedAdExplanation', 'blah')
     expect(hasUserDismissedAdExplanation()).toBe(false)
   })
+
+  // setNotificationDismissTime method
+  it('sets the notification dismiss time timestamp in localStorage', () => {
+    const setBrowserExtensionInstallTime = require('js/utils/local-user-data-mgr').setNotificationDismissTime
+    setBrowserExtensionInstallTime()
+    expect(localStorageMgr.setItem)
+      .toHaveBeenCalledWith('tab.user.notifications.dismissTime', moment.utc().toISOString())
+  })
+
+  // hasUserDismissedNotificationRecently method
+  it('returns true if the user dismissed a notification recently', () => {
+    const now = moment('2018-04-11T12:50:42.000') // ~1 day ago
+    localStorageMgr.setItem('tab.user.notifications.dismissTime', now.utc().toISOString())
+    const hasUserDismissedNotificationRecently = require('js/utils/local-user-data-mgr').hasUserDismissedNotificationRecently
+    const recentlyDismissed = hasUserDismissedNotificationRecently()
+    expect(recentlyDismissed).toBe(true)
+  })
+
+  it('returns false if the user has not dismissed a notification recently', () => {
+    const now = moment('2018-04-01T12:50:42.000') // ~12 days ago
+    localStorageMgr.setItem('tab.user.notifications.dismissTime', now.utc().toISOString())
+    const hasUserDismissedNotificationRecently = require('js/utils/local-user-data-mgr').hasUserDismissedNotificationRecently
+    const recentlyDismissed = hasUserDismissedNotificationRecently()
+    expect(recentlyDismissed).toBe(false)
+  })
+
+  it('returns false if the extension install date in localStorage is invalid', () => {
+    // Suppress expected MomentJS warning
+    jest.spyOn(console, 'warn').mockImplementationOnce(() => {})
+
+    localStorageMgr.setItem('tab.user.notifications.dismissTime', 'foo')
+    const hasUserDismissedNotificationRecently = require('js/utils/local-user-data-mgr').hasUserDismissedNotificationRecently
+    const recentlyDismissed = hasUserDismissedNotificationRecently()
+    expect(recentlyDismissed).toBe(false)
+  })
+
+  it('returns null if the extension install date in localStorage does not exist', () => {
+    localStorageMgr.removeItem('tab.user.notifications.dismissTime')
+    const hasUserDismissedNotificationRecently = require('js/utils/local-user-data-mgr').hasUserDismissedNotificationRecently
+    const recentlyDismissed = hasUserDismissedNotificationRecently()
+    expect(recentlyDismissed).toBe(false)
+  })
 })

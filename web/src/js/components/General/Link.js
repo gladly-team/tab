@@ -5,7 +5,7 @@ import { Link as LinkReactRouter } from 'react-router'
 // To handle both internal and external links.
 class Link extends React.Component {
   render () {
-    const { children, to, style, className } = this.props
+    const { children, to, style, className, ...otherProps } = this.props
 
     // This assumes that any internal link (intended for Gatsby) starts
     // with exactly one slash, and that anything else is external.
@@ -28,6 +28,7 @@ class Link extends React.Component {
         href={to}
         style={style}
         className={className}
+        {...otherProps}
       >
         {children}
       </a>

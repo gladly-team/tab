@@ -53,4 +53,15 @@ describe('Link', () => {
     )
     expect(wrapper.find('a').props().style).toEqual(someStyle)
   })
+
+  it('passes other props to the anchor elem', () => {
+    const Link = require('../Link').default
+    const wrapper = shallow(
+      <Link
+        to={'https://tab.gladly.io/'}
+        rel={'noopener'}
+      />
+    )
+    expect(wrapper.find('a').props().rel).toEqual('noopener')
+  })
 })

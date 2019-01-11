@@ -20,6 +20,7 @@ import LogAccountCreation from 'js/components/Dashboard/LogAccountCreationContai
 import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
 import ErrorMessage from 'js/components/General/ErrorMessage'
 import NewUserTour from 'js/components/Dashboard/NewUserTourContainer'
+import Notification from 'js/components/Dashboard/NotificationComponent'
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import { STORAGE_NEW_USER_HAS_COMPLETED_TOUR } from 'js/constants'
 import { getCurrentUser } from 'js/authentication/user'
@@ -36,8 +37,12 @@ import {
   HORIZONTAL_AD_SLOT_DOM_ID
 } from 'js/ads/adSettings'
 import {
-  setUserDismissedAdExplanation
+  setUserDismissedAdExplanation,
+  hasUserDismissedNotificationRecently
 } from 'js/utils/local-user-data-mgr'
+import {
+  showGlobalNotification
+} from 'js/utils/feature-flags'
 
 jest.mock('js/analytics/logEvent')
 jest.mock('js/utils/localstorage-mgr')
@@ -45,6 +50,7 @@ jest.mock('js/authentication/user')
 jest.mock('js/navigation/navigation')
 jest.mock('js/ads/adSettings')
 jest.mock('js/utils/local-user-data-mgr')
+jest.mock('js/utils/feature-flags')
 
 const mockNow = '2018-05-15T10:30:00.000'
 
@@ -513,6 +519,82 @@ describe('Dashboard component', () => {
       .find('[data-test-id="ad-explanation"]')
       .find(Button)
       .length
+    ).toBe(0)
+  })
+
+  it('renders a notification when one is live and the user has not dismissed it', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
+    showGlobalNotification.mockReset()
+    hasUserDismissedNotificationRecently.mockReset()
+    showGlobalNotification.mockReturnValueOnce(true)
+    hasUserDismissedNotificationRecently.mockReturnValueOnce(false)
+    const wrapper = shallow(
+      <DashboardComponent {...mockProps} />
+    )
+    expect(
+      wrapper
+        .find(Notification)
+        .length
+    ).toBe(1)
+  })
+
+  it('does not render a notification when one is not live', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
+    showGlobalNotification.mockReset()
+    hasUserDismissedNotificationRecently.mockReset()
+    showGlobalNotification.mockReturnValueOnce(false)
+    hasUserDismissedNotificationRecently.mockReturnValueOnce(false)
+    const wrapper = shallow(
+      <DashboardComponent {...mockProps} />
+    )
+    expect(
+      wrapper
+        .find(Notification)
+        .length
+    ).toBe(0)
+  })
+
+  it('does not render a notification when one is live but the user has dismissed it', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
+    showGlobalNotification.mockReset()
+    hasUserDismissedNotificationRecently.mockReset()
+    showGlobalNotification.mockReturnValueOnce(true)
+    hasUserDismissedNotificationRecently.mockReturnValueOnce(true)
+    const wrapper = shallow(
+      <DashboardComponent {...mockProps} />
+    )
+    expect(
+      wrapper
+        .find(Notification)
+        .length
+    ).toBe(0)
+  })
+
+  it('hides the notification the onDismiss callback is called', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent').default
+    showGlobalNotification.mockReset()
+    hasUserDismissedNotificationRecently.mockReset()
+    showGlobalNotification.mockReturnValueOnce(true)
+    hasUserDismissedNotificationRecently.mockReturnValueOnce(false)
+    const wrapper = shallow(
+      <DashboardComponent {...mockProps} />
+    )
+
+    // Notification should be visible.
+    expect(
+      wrapper
+        .find(Notification)
+        .length
+    ).toBe(1)
+
+    // Mock that the user dismisses the notification.
+    wrapper.find(Notification).prop('onDismiss')()
+
+    // Notification should be gone.
+    expect(
+      wrapper
+        .find(Notification)
+        .length
     ).toBe(0)
   })
 })
