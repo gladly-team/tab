@@ -34,7 +34,8 @@ import Notification from 'js/components/Dashboard/NotificationComponent'
 import { getCurrentUser } from 'js/authentication/user'
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import {
-  setUserDismissedAdExplanation
+  setUserDismissedAdExplanation,
+  hasUserDismissedNotificationRecently
 } from 'js/utils/local-user-data-mgr'
 import { STORAGE_NEW_USER_HAS_COMPLETED_TOUR } from 'js/constants'
 import {
@@ -48,6 +49,9 @@ import {
   SECOND_VERTICAL_AD_SLOT_DOM_ID,
   HORIZONTAL_AD_SLOT_DOM_ID
 } from 'js/ads/adSettings'
+import {
+  showGlobalNotification
+} from 'js/utils/feature-flags'
 
 class Dashboard extends React.Component {
   constructor (props) {
@@ -63,7 +67,9 @@ class Dashboard extends React.Component {
       // users.
       userAlreadyViewedNewUserTour: localStorageMgr.getItem(STORAGE_NEW_USER_HAS_COMPLETED_TOUR) === 'true',
       numAdsToShow: getNumberOfAdsToShow(),
-      showAdExplanation: shouldShowAdExplanation()
+      showAdExplanation: shouldShowAdExplanation(),
+      // Whether to show a global announcement.
+      showNotification: showGlobalNotification() && !hasUserDismissedNotificationRecently()
     }
   }
 
@@ -122,9 +128,6 @@ class Dashboard extends React.Component {
       moment().utc().diff(moment(user.joined), 'hours') < 2 &&
       !this.state.userAlreadyViewedNewUserTour
     )
-
-    // Whether to show a global announcement.
-    const showNotification = true
 
     return (
       <div
@@ -187,7 +190,7 @@ class Dashboard extends React.Component {
                     isUserAnonymous={this.state.isUserAnonymous}
                   />
                 </div>
-                { showNotification
+                { this.state.showNotification
                   ? (
                     <Notification
                       title={`Vote for the January Charity Spotlight`}
@@ -196,6 +199,11 @@ class Dashboard extends React.Component {
                         community. Nominate and vote for the nonprofit that means the most to you.`}
                       buttonText={'Vote'}
                       buttonURL={'https://goo.gl/forms/crNGLow4fg5fcKe63'}
+                      onDismiss={() => {
+                        this.setState({
+                          showNotification: false
+                        })
+                      }}
                       style={{
                         marginTop: 4
                       }}

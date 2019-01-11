@@ -7,12 +7,21 @@ import {
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import Link from 'js/components/General/Link'
+import {
+  setNotificationDismissTime
+} from 'js/utils/local-user-data-mgr'
+
+jest.mock('js/utils/local-user-data-mgr')
 
 const getMockProps = () => ({
   title: 'Message Title',
   message: 'Here is some additional information.',
   buttonText: 'Click Me',
   buttonURL: 'http://example.com/some-link/'
+})
+
+afterEach(() => {
+  jest.clearAllMocks()
 })
 
 describe('Notification component', () => {
@@ -86,5 +95,26 @@ describe('Notification component', () => {
     )
     expect(wrapper.find(Link).first().prop('to'))
       .toBe('http://example.com')
+  })
+
+  it('clicking the "dismiss" button sets the dismiss time in local storage', () => {
+    const Notification = require('js/components/Dashboard/NotificationComponent').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(
+      <Notification {...mockProps} />
+    )
+    wrapper.find(Button).first().simulate('click')
+    expect(setNotificationDismissTime).toHaveBeenCalled()
+  })
+
+  it('clicking the "dismiss" button calls the onDismiss prop', () => {
+    const Notification = require('js/components/Dashboard/NotificationComponent').default
+    const mockProps = getMockProps()
+    mockProps.onDismiss = jest.fn()
+    const wrapper = shallow(
+      <Notification {...mockProps} />
+    )
+    wrapper.find(Button).first().simulate('click')
+    expect(mockProps.onDismiss).toHaveBeenCalled()
   })
 })

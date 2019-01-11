@@ -7,7 +7,8 @@ import {
   STORAGE_EXTENSION_INSTALL_ID,
   STORAGE_APPROX_EXTENSION_INSTALL_TIME,
   STORAGE_TABS_RECENT_DAY_COUNT,
-  STORAGE_TABS_LAST_TAB_OPENED_DATE
+  STORAGE_TABS_LAST_TAB_OPENED_DATE,
+  STORAGE_NOTIFICATIONS_DISMISS_TIME
 } from 'js/constants'
 
 /**
@@ -162,4 +163,28 @@ export const setUserDismissedAdExplanation = () => {
  */
 export const hasUserDismissedAdExplanation = () => {
   return localStorageMgr.getItem(STORAGE_DISMISSED_AD_EXPLANATION) === 'true'
+}
+
+/**
+ * Saves now as the time the user dismissed the universal
+ * notification.
+ * @returns {undefined}
+ */
+export const setNotificationDismissTime = () => {
+  localStorageMgr.setItem(STORAGE_NOTIFICATIONS_DISMISS_TIME, moment.utc().toISOString())
+}
+
+/**
+ * Returns whether the user has dismissed the notification
+ * in the last few days.
+ * @returns {Boolean}
+ */
+export const hasUserDismissedNotificationRecently = () => {
+  const notificationDismissISOString = localStorageMgr
+    .getItem(STORAGE_NOTIFICATIONS_DISMISS_TIME)
+  const dismissTime = moment(notificationDismissISOString)
+  if (!notificationDismissISOString || !dismissTime.isValid()) {
+    return false
+  }
+  return moment().utc().diff(dismissTime, 'days') < 10
 }

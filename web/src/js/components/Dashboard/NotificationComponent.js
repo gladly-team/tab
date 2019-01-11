@@ -4,10 +4,13 @@ import Paper from '@material-ui/core/Paper'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import Link from 'js/components/General/Link'
+import {
+  setNotificationDismissTime
+} from 'js/utils/local-user-data-mgr'
 
 class Notification extends React.Component {
   render () {
-    const { style, title, message, buttonText, buttonURL } = this.props
+    const { style, title, message, buttonText, buttonURL, onDismiss } = this.props
     return (
       <div style={Object.assign({}, style, {
         width: 340
@@ -49,7 +52,10 @@ class Notification extends React.Component {
               <Button
                 color={'default'}
                 onClick={() => {
-                  // TODO: dismiss
+                  setNotificationDismissTime()
+                  if (onDismiss) {
+                    onDismiss()
+                  }
                 }}
               >
                 Dismiss
@@ -87,11 +93,13 @@ Notification.propTypes = {
   title: PropTypes.string.isRequired,
   message: PropTypes.string.isRequired,
   buttonText: PropTypes.string,
-  buttonURL: PropTypes.string
+  buttonURL: PropTypes.string,
+  onDismiss: PropTypes.func
 }
 
-Notification.default = {
-  style: {}
+Notification.defaultProps = {
+  style: {},
+  onDismiss: () => {}
 }
 
 export default Notification

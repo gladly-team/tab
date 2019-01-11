@@ -35,6 +35,7 @@ export const STORAGE_BACKGROUND_OPTION = 'tab.user.background.option'
 // An ISO timestamp: the time of the first tab opened in the
 // most recent day (UTC day) the user was active.
 export const STORAGE_TABS_LAST_TAB_OPENED_DATE = 'tab.user.lastTabDay.date'
+export const STORAGE_NOTIFICATIONS_DISMISS_TIME = 'tab.user.notifications.dismissTime'
 
 // The count of tabs opened in the most recent day the user was
 // active. It could be today (ongoing) or a day in the past.
