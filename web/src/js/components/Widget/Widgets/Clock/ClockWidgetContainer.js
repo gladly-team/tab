@@ -1,6 +1,6 @@
+import graphql from 'babel-plugin-relay/macro'
 import {
-  createFragmentContainer,
-  graphql
+  createFragmentContainer
 } from 'react-relay'
 
 import ClockWidget from 'js/components/Widget/Widgets/Clock/ClockWidgetComponent'

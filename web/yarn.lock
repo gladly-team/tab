@@ -2123,6 +2123,14 @@ babel-plugin-macros@2.4.2:
     cosmiconfig "^5.0.5"
     resolve "^1.8.1"
 
+babel-plugin-macros@^2.0.0:
+  version "2.4.5"
+  resolved "https://registry.yarnpkg.com/babel-plugin-macros/-/babel-plugin-macros-2.4.5.tgz#7000a9b1f72d19ceee19a5804f1d23d6daf38c13"
+  integrity sha512-+/9yteNQw3yuZ3krQUfjAeoT/f4EAdn3ELwhFfDj0rTMIaoHfIdrcLePOfIaL0qmFLpIcgPIL2Lzm58h+CGWaw==
+  dependencies:
+    cosmiconfig "^5.0.5"
+    resolve "^1.8.1"
+
 babel-plugin-named-asset-import@^0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-named-asset-import/-/babel-plugin-named-asset-import-0.3.0.tgz#3289ec622d19cd1cc84df8d784b41f1b048bd524"
@@ -2136,6 +2144,13 @@ babel-plugin-react-intl@^2.3.1:
     babel-runtime "^6.2.0"
     intl-messageformat-parser "^1.2.0"
     mkdirp "^0.5.1"
+
+babel-plugin-relay@^2.0.0-rc.1:
+  version "2.0.0-rc.1"
+  resolved "https://registry.yarnpkg.com/babel-plugin-relay/-/babel-plugin-relay-2.0.0-rc.1.tgz#43f50117be52960ad08bbcf51a1ee31cdeec83ad"
+  integrity sha512-NPrDvY7sjeTmxdMClCED/A5o7ovFpuY4NrKJpFsQxzABMbakrB0utJflfzn7T1ZY3TjdV7lQRjEvAKgoyw8xnQ==
+  dependencies:
+    babel-plugin-macros "^2.0.0"
 
 babel-plugin-syntax-class-properties@^6.8.0:
   version "6.13.0"

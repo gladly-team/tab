@@ -4,6 +4,7 @@
   "description": "Web app for Tab for a Cause.",
   "private": true,
   "devDependencies": {
+    "babel-plugin-relay": "^2.0.0-rc.1",
     "codecov": "^3.1.0",
     "cross-env": "^5.2.0",
     "dotenv-extended": "^2.3.0",
