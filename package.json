@@ -13,8 +13,7 @@
     "jest": "^23.6.0",
     "nodemon": "^1.18.4",
     "npm-run-all": "^4.1.3",
-    "npmlog": "^4.1.2",
-    "standard": "^10.0.2"
+    "npmlog": "^4.1.2"
   },
   "scripts": {
     "build": "yarn run all:install & docker-compose build",
@@ -28,8 +27,8 @@
     "ci:test": "babel-node ./scripts/runTests.js",
     "ci:test:integration": "babel-node ./scripts/runEndToEndTests.js",
     "parent:install": "yarn install",
-    "parent:lint": "standard \"scripts/**/*.js\"",
-    "parent:lint:fix": "standard \"scripts/**/*.js\" --fix",
+    "parent:lint": "echo \"TODO: lint scripts/**/*.js\"",
+    "parent:lint:fix": "echo \" TODO: lint fix scripts/**/*.js\"",
     "parent:test": "yarn run parent:lint && jest",
     "all:install": "yarn run parent:install && npm-run-all -s s3:install web:install graphql:install dynamodb:install lambda:install",
     "docker:start": "docker-compose up 2>&1 | node scripts/log-prefix.js [docker] cyan",
