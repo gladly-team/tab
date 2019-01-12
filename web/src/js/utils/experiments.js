@@ -292,7 +292,7 @@ export const experiments = [
 // We do this to be able to modify the experiments
 // variable during testing while keeping it in this file.
 // https://github.com/facebook/jest/issues/936#issuecomment-214939935
-const getExperiments = () => experiments
+const getExperiments = () => module.exports.experiments
 
 /**
  * Get the set of available group values for an experiment.
