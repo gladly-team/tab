@@ -1,7 +1,7 @@
-/* global graphql */
 
 import React from 'react'
 import { QueryRenderer } from 'react-relay'
+import graphql from 'babel-plugin-relay/macro'
 import { get } from 'lodash/object'
 import environment from 'js/relay-env'
 import AuthenticationContainer from 'js/components/Authentication/AuthenticationContainer'

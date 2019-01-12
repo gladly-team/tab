@@ -1,8 +1,8 @@
-/* global graphql */
 
 import React from 'react'
 import PropTypes from 'prop-types'
 import { QueryRenderer } from 'react-relay'
+import graphql from 'babel-plugin-relay/macro'
 import environment from 'js/relay-env'
 import SearchPageContainer from 'js/components/Search/SearchPageContainer'
 import withUserId from 'js/components/General/withUserId'

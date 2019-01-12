@@ -1,8 +1,8 @@
-/* global graphql */
 
 import React from 'react'
 import PropTypes from 'prop-types'
 import { QueryRenderer } from 'react-relay'
+import graphql from 'babel-plugin-relay/macro'
 import { withTheme } from '@material-ui/core/styles'
 import environment from 'js/relay-env'
 import moment from 'moment'
