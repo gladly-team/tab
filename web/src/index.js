@@ -46,7 +46,7 @@ const initApp = () => {
   initializeFirebase()
 
   require('./index.css')
-  ReactDOM.render(<Component />, document.getElementById('root'))
+  ReactDOM.render(<Root />, document.getElementById('root'))
 }
 
 try {
