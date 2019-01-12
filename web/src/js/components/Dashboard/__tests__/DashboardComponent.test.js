@@ -385,6 +385,7 @@ describe('Dashboard component', () => {
   it('displays the anonymous user sign-in prompt when the user is anonymous', async () => {
     expect.assertions(1)
 
+    getCurrentUser.mockReset()
     getCurrentUser.mockResolvedValueOnce({
       id: 'some-id-here',
       email: null,
@@ -410,6 +411,7 @@ describe('Dashboard component', () => {
   it('displays the correct text for the anonymous user sign-in prompt', async () => {
     expect.assertions(1)
 
+    getCurrentUser.mockReset()
     getCurrentUser.mockResolvedValueOnce({
       id: 'some-id-here',
       email: null,
@@ -440,6 +442,7 @@ describe('Dashboard component', () => {
   it('the anonymous user sign-in button leads to the correct URL', async () => {
     expect.assertions(1)
 
+    getCurrentUser.mockReset()
     getCurrentUser.mockResolvedValueOnce({
       id: 'some-id-here',
       email: null,
@@ -468,6 +471,7 @@ describe('Dashboard component', () => {
   it('does not display the anonymous user sign-in prompt when the user is not anonymous', async () => {
     expect.assertions(1)
 
+    getCurrentUser.mockReset()
     getCurrentUser.mockResolvedValueOnce({
       id: 'some-id-here',
       email: 'somebody@example.com',
