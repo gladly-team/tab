@@ -24,6 +24,6 @@ services:
     depends_on:
       - dynamodb
     env_file:
-      - ./dynamodb/.env.defaults
+      - ./dynamodb/.env
     environment:
       - DYNAMO_ENDPOINT=dynamodb:8000

@@ -8,9 +8,8 @@ var path = require('path')
 // that have already been set.
 // https://github.com/keithmorris/node-dotenv-extended
 require('dotenv-extended').load({
-  path: path.join(__dirname, '..', '.env'),
-  defaults: path.join(__dirname, '..', '.env.defaults'),
-  schema: path.join(__dirname, '..', '.env.schema')
+  path: path.join(__dirname, '..', '.env.local'),
+  defaults: path.join(__dirname, '..', '.env')
 })
 
 var chalk = require('chalk')

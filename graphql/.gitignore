@@ -1,3 +1,4 @@
 .serverless/
 coverage
 build/
+.env.local

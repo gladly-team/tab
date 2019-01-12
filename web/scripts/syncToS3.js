@@ -4,9 +4,8 @@ const spawnSync = require('child_process').spawnSync
 
 // Load environment variables from .env file.
 require('dotenv-extended').load({
-  path: path.join(__dirname, '..', '.env'),
-  defaults: path.join(__dirname, '..', '.env.defaults'),
-  schema: path.join(__dirname, '..', '.env.schema')
+  path: path.join(__dirname, '..', '.env.local'),
+  defaults: path.join(__dirname, '..', '.env')
 })
 
 const s3Bucket = process.env.DEPLOYMENT_WEB_APP_S3_BUCKET_NAME

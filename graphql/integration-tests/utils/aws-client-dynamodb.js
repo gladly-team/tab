@@ -4,9 +4,8 @@ var AWS = require('aws-sdk')
 
 // Load environment variables from .env file.
 require('dotenv-extended').load({
-  path: path.join(__dirname, '../../', '.env'),
-  defaults: path.join(__dirname, '../../', '.env.defaults'),
-  schema: path.join(__dirname, '../../', '.env.schema')
+  path: path.join(__dirname, '../../', '.env.local'),
+  defaults: path.join(__dirname, '../../', '.env')
 })
 
 AWS.config.update({
