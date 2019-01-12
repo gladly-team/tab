@@ -16,6 +16,10 @@
   <link href="<%= htmlWebpackPlugin.files.css[css] %>" rel="stylesheet">
   <% } %>
 
+  <!--
+    @gladly-customization:
+    global style for all served HTML
+  -->
   <style>
     html, body {
       padding: 0px;
@@ -34,12 +38,17 @@
     }
   </style>
 
-  <!-- The new tab page may be displayed in an iframe, so open
-    all links in the top frame. -->
+  <!--
+    @gladly-customization:
+    The new tab page may be displayed in an iframe, so open
+    all links in the top frame.
+  -->
   <base target="_top">
 
-  <!-- BEGIN: Google Global Site Tag (GST/gtag.js) -->
-  <!-- Global site tag (gtag.js) - AdWords: 1013744060 -->
+  <!--
+    @gladly-customization:
+    Google Global Site Tag (gtag.js) - AdWords: 1013744060 
+  -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=AW-1013744060"></script>
   <script>
    window.dataLayer = window.dataLayer || [];
@@ -47,7 +56,7 @@
    gtag('js', new Date());
    gtag('config', 'AW-1013744060');
   </script>
-  <!-- END: Google Global Site Tag (GST/gtag.js) -->
+
 </head>
 
 <body>
@@ -80,7 +89,11 @@
 </script>
 <% } %>
 
-<!-- BEGIN: Tab for a Cause global -->
+
+<!--
+  @gladly-customization:
+  Tab for a Cause global variable
+-->
 <script type="text/javascript">
   // Used for handling some communication between disparate parts
   // of our app (e.g. ads events happening before app code loads).
@@ -97,13 +110,18 @@
     }
   })()
 </script>
-<!-- END:Tab for a Cause global -->
 
-<!-- MaxMind for determining country location -->
+<!--
+  @gladly-customization:
+  MaxMind for determining country location
+-->
 <script src="//js.maxmind.com/js/apis/geoip2/v2.1/geoip2.js" type="text/javascript"></script>
 
-<!-- Facebook Pixel Code -->
-<!-- TODO: Facebook ID as env var -->
+
+<!--
+  @gladly-customization:
+  Facebook Pixel Code
+-->
 <script>
 /* eslint-disable */
 !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -116,9 +134,12 @@ fbq('init', '1813501258922708');
 <noscript><img height="1" width="1" style="display:none"
 src="https://www.facebook.com/tr?id=1813501258922708&ev=PageView&noscript=1"
 /></noscript>
-<!-- End Facebook Pixel Code -->
 
-<!-- BEGIN: Google Publisher Tag -->
+
+<!--
+  @gladly-customization:
+  Google Publisher Tag
+-->
 <script type="text/javascript">
   /* eslint-disable */
   // Google Tag Manager
@@ -137,11 +158,13 @@ src="https://www.facebook.com/tr?id=1813501258922708&ev=PageView&noscript=1"
   var head = document.getElementsByTagName('head')[0]
   head.appendChild(gads)
 </script>
-<!-- END: Google Publisher Tag -->
 
-<!-- BEGIN: Quantcast Choice. Consent Manager Tag -->
-<!-- https://www.quantcast.com/gdpr/quantcast-choice-self-serve/ -->
-<!-- https://quantcast.zendesk.com/hc/en-us/articles/360003814853-Technical-Implementation-Guide -->
+<!--
+  @gladly-customization:
+  Quantcast Choice Consent Manager Tag
+  https://www.quantcast.com/gdpr/quantcast-choice-self-serve/
+  https://quantcast.zendesk.com/hc/en-us/articles/360003814853-Technical-Implementation-Guide
+-->
 <script type="text/javascript" async=true>
   var __cmp = (function () {
     return typeof (__cmp) == "function" ? __cmp : function (c) {
@@ -235,9 +258,12 @@ src="https://www.facebook.com/tr?id=1813501258922708&ev=PageView&noscript=1"
         border-color: #d07ad5 !important;
     }
 </style>
-<!-- END: Quantcast Choice. Consent Manager Tag -->
+<!-- End: Quantcast Choice Consent Manager Tag -->
 
-<!-- Amazon apstag -->
+<!--
+  @gladly-customization:
+  Amazon apstag
+-->
 <script>
 !function(a9,a,p,s,t,A,g){if(a[a9])return;function q(c,r){a[a9]._Q.push([c,r])}a[a9]={init:function(){q("i",arguments)},fetchBids:function(){q("f",arguments)},setDisplayBids:function(){},targetingKeys:function(){return[]},_Q:[]};A=p.createElement(s);A.async=!0;A.src=t;g=p.getElementsByTagName(s)[0];g.parentNode.insertBefore(A,g)}("apstag",window,document,"script","//c.amazon-adsystem.com/aax2/apstag.js");
 </script>
@@ -251,7 +277,10 @@ src="https://www.facebook.com/tr?id=1813501258922708&ev=PageView&noscript=1"
 <% } %>
 
 <% if (htmlWebpackPlugin.options.tabAdsEnabled) { %>
-<!-- Begin PageFair -->
+<!--
+  @gladly-customization:
+  PageFair
+-->
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
 <script type="text/javascript">
   /* eslint-disable */
@@ -270,7 +299,7 @@ src="https://www.facebook.com/tr?id=1813501258922708&ev=PageView&noscript=1"
     }
   })();
 </script>
-<!-- End PageFair -->
+<!-- End: PageFair -->
 
 <% } %>
 
