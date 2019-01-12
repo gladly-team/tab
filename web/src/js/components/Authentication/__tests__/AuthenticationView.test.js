@@ -48,7 +48,7 @@ describe('AuthenticationView', () => {
     const wrapper = mount(
       <AuthenticationView />
     )
-    await wrapper.instance().componentDidMount()
+    await wrapper.instance().fetchUser()
     wrapper.update()
     expect(wrapper.find(QueryRenderer).prop('variables')).toEqual({
       userId: 'xyz987',
@@ -151,7 +151,7 @@ describe('AuthenticationView', () => {
     })
 
     const wrapper = mount(<AuthenticationView />)
-    await wrapper.instance().componentDidMount()
+    await wrapper.instance().fetchUser()
     wrapper.update()
 
     expect(createNewUser).toHaveBeenCalledTimes(1)
@@ -214,7 +214,7 @@ describe('AuthenticationView', () => {
     })
 
     const wrapper = mount(<AuthenticationView />)
-    await wrapper.instance().componentDidMount()
+    await wrapper.instance().fetchUser()
     wrapper.update()
 
     expect(createNewUser).toHaveBeenCalledTimes(3)

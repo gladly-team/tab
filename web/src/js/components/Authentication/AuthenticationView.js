@@ -27,8 +27,8 @@ class AuthenticationView extends React.Component {
     this.createNewUserAttempts = 0
   }
 
-  async componentDidMount () {
-    await this.fetchUser()
+  componentDidMount () {
+    this.fetchUser()
   }
 
   // If we have an authed user with a user ID, fetch the
