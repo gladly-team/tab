@@ -1,3 +1,4 @@
+import path from 'path'
 import cors from 'cors'
 import express from 'express'
 
@@ -5,7 +6,10 @@ import getLambdas from './src/getLambdas'
 
 // Load environment variables from .env file.
 // https://github.com/keithmorris/node-dotenv-extended
-require('dotenv-extended').load()
+require('dotenv-extended').load({
+  path: path.join(__dirname, '.env.local'),
+  defaults: path.join(__dirname, '.env')
+})
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'development'
 const LAMBDA_PORT = process.env.LAMBDA_PORT

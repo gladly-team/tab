@@ -12,9 +12,8 @@ var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlug
 // that have already been set.
 // https://github.com/keithmorris/node-dotenv-extended
 require('dotenv-extended').load({
-  path: path.join(__dirname, '..', '.env'),
-  defaults: path.join(__dirname, '..', '.env.defaults'),
-  schema: path.join(__dirname, '..', '.env.schema')
+  path: path.join(__dirname, '..', '.env.local'),
+  defaults: path.join(__dirname, '..', '.env')
 })
 var paths = require('./paths')
 var getClientEnvironment = require('./env')

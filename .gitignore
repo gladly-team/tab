@@ -1,8 +1,8 @@
 node_modules
 .DS_Store
 npm-debug.log
-.env
 web/jest
+.env.local
 
 # generated schema files
 graphql/data/schema.json

@@ -15,12 +15,12 @@
 ### Environment Variable Management
 There are a few places env vars are set:
 1. In `travis.yml` (for deployment)
-2. In `.env` and `.env.defaults` files (for development; via [dotenv](https://www.npmjs.com/package/dotenv-extended))
+2. In `.env` and `.env.local` files (for development; via [dotenv](https://www.npmjs.com/package/dotenv-extended))
 3. At the beginning of NPM scripts
 
 #### Best Practices
 * Any env vars that are necessary for production should go in `travis.yml`. Do not rely on `.env` files for deployment.
 * If you add an env var to `travis.yml`, add it to the list of env vars in `scripts/assign-env-vars.js`. This script sanity checks that all required env vars are defined and also manages stage-specific env vars during CI.
 * Avoid assigning env vars in NPM scripts.
-* `.env` should not be in source control. These files are specific to the developer.
-* Any variables in `.env` should have defaults in `.env.defaults`. Otherwise, new env vars will break other developers' local apps.
+* `.env.local` should not be in source control. These files are specific to the developer.
+* Any variables in `.env.local` should have defaults in `.env`. Otherwise, new env vars will break other developers' local apps.
