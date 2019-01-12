@@ -407,6 +407,7 @@ class UserMenu extends React.Component {
             <a
               href='https://gladly.zendesk.com/hc/en-us/categories/201939608-Tab-for-a-Cause'
               target='_blank'
+              rel='noopener noreferrer'
               style={{
                 color: menuItemIconColor,
                 textDecoration: 'none'

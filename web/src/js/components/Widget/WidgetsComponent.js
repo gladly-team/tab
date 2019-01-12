@@ -73,7 +73,9 @@ class Widgets extends React.Component {
             isCampaignLive
               ? null
               : <CenteredWidgetsContainer>
-                {user.widgets.edges.map((edge, index) => {
+              {
+                // eslint-disable-next-line array-callback-return
+                user.widgets.edges.map((edge, index) => {
                   if (
                     edge.node.type === WIDGET_TYPE_CLOCK
                   ) {
@@ -91,7 +93,9 @@ class Widgets extends React.Component {
           }
           <FadeInDashboardAnimation>
             <ActiveWidgetAnimation>
-              {user.widgets.edges.map((edge, index) => {
+            {
+              // eslint-disable-next-line array-callback-return
+              user.widgets.edges.map((edge, index) => {
                 if (user.activeWidget &&
                     edge.node.id === user.activeWidget) {
                   return (
