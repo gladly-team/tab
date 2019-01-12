@@ -99,6 +99,7 @@
     "sls:deploy": "serverless deploy -v",
     "sls:s3sync": "node scripts/syncToS3.js"
   },
+  "proxy": "http://localhost:8080",
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}",
