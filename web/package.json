@@ -26,7 +26,6 @@
     "@material-ui/icons": "^3.0.1",
     "@material-ui/lab": "^3.0.0-alpha.23",
     "aws-sdk": "^2.328.0",
-    "babel-core": "^6.26.0",
     "chalk": "1.1.3",
     "chromedriver": "^2.42.0",
     "firebase": "^5.6.0",
