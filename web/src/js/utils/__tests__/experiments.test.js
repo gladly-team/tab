@@ -7,6 +7,13 @@ import { isPlainObject } from 'lodash/lang'
 import moment from 'moment'
 import MockDate from 'mockdate'
 
+// Make it possible to override the experiments configuration
+// in tests.
+import * as experimentsModule from 'js/utils/experiments'
+experimentsModule._experiments.getExperiments = jest.fn(
+  () => experimentsModule._experimentsConfig
+)
+
 jest.mock('js/utils/localstorage-mgr')
 jest.mock('js/utils/feature-flags')
 jest.mock('js/relay-env', () => ({}))
@@ -38,15 +45,18 @@ afterEach(() => {
   // Clear any return values set in tests.
   mathRandomMock.mockReset()
 
+  // Reset the default experiments to the module's real ones.
+  experimentsModule._experiments.getExperiments
+    .mockReturnValue(experimentsModule._experimentsConfig)
+
   jest.clearAllMocks()
-  jest.resetModules()
   MockDate.reset()
 })
 
 /* Tests for the Experiment and ExperimentGroup objects */
 describe('Experiment and ExperimentGroup objects', () => {
   test('createExperiment returns an object with expected shape', () => {
-    const createExperiment = require('js/utils/experiments').createExperiment
+    const createExperiment = experimentsModule.createExperiment
     const experiment = createExperiment({
       name: 'fooTest'
     })
@@ -68,7 +78,7 @@ describe('Experiment and ExperimentGroup objects', () => {
   })
 
   test('createExperiment throws if a name is not provided', () => {
-    const createExperiment = require('js/utils/experiments').createExperiment
+    const createExperiment = experimentsModule.createExperiment
     expect(() => {
       createExperiment({
         active: true
@@ -77,7 +87,7 @@ describe('Experiment and ExperimentGroup objects', () => {
   })
 
   test('createExperimentGroup throws if missing a required key', () => {
-    const { createExperimentGroup } = require('js/utils/experiments')
+    const { createExperimentGroup } = experimentsModule
     expect(() => {
       createExperimentGroup({
         // Missing "value" key
@@ -87,7 +97,7 @@ describe('Experiment and ExperimentGroup objects', () => {
   })
 
   test('returns the "none" test group when the experiment is disabled', () => {
-    const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
+    const { createExperiment, createExperimentGroup } = experimentsModule
 
     // Mock that the user is assigned to an experiment group.
     const localStorageMgr = require('js/utils/localstorage-mgr').default
@@ -113,7 +123,7 @@ describe('Experiment and ExperimentGroup objects', () => {
   })
 
   test('returns the experiment test group when the experiment is not disabled', () => {
-    const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
+    const { createExperiment, createExperimentGroup } = experimentsModule
 
     // Mock that the user is assigned to an experiment group.
     const localStorageMgr = require('js/utils/localstorage-mgr').default
@@ -139,7 +149,7 @@ describe('Experiment and ExperimentGroup objects', () => {
   })
 
   test('returns the "none" test group when the experiment value in local storage is invalid', () => {
-    const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
+    const { createExperiment, createExperimentGroup } = experimentsModule
 
     // Invalid local storage value
     const localStorageMgr = require('js/utils/localstorage-mgr').default
@@ -166,7 +176,7 @@ describe('Experiment and ExperimentGroup objects', () => {
 
   test('does not assign the user to a test group when the experiment is inactive', () => {
     const localStorageMgr = require('js/utils/localstorage-mgr').default
-    const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
+    const { createExperiment, createExperimentGroup } = experimentsModule
     const experiment = createExperiment({
       name: 'fooTest',
       active: false,
@@ -189,7 +199,7 @@ describe('Experiment and ExperimentGroup objects', () => {
   })
 
   test('does not assign the user to a test group if the user is in a "none" test group and we have not increased the scope of the experiment', () => {
-    const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
+    const { createExperiment, createExperimentGroup } = experimentsModule
 
     // Mock that the user is assigned to an experiment group.
     const localStorageMgr = require('js/utils/localstorage-mgr').default
@@ -219,7 +229,7 @@ describe('Experiment and ExperimentGroup objects', () => {
   })
 
   test('does not assign the user to a test group if the user is already assigned a non-"none" test group, even if we have increased the scope of the experiment', () => {
-    const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
+    const { createExperiment, createExperimentGroup } = experimentsModule
 
     // Mock that the user is assigned to an experiment group.
     const localStorageMgr = require('js/utils/localstorage-mgr').default
@@ -249,7 +259,7 @@ describe('Experiment and ExperimentGroup objects', () => {
   })
 
   test('assigns the user to a test group if the user is in a "none" test group but we have increased the scope of the experiment', () => {
-    const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
+    const { createExperiment, createExperimentGroup } = experimentsModule
 
     // Mock that the user is assigned to an experiment group.
     const localStorageMgr = require('js/utils/localstorage-mgr').default
@@ -280,7 +290,7 @@ describe('Experiment and ExperimentGroup objects', () => {
   })
 
   test('when we have increased the % of users in the experiment, we use the difference in likelihoods when reassigning users who were previously in the "none" test group (and fail to include the user)', () => {
-    const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
+    const { createExperiment, createExperimentGroup } = experimentsModule
 
     // Mock that the user is assigned to an experiment group.
     const localStorageMgr = require('js/utils/localstorage-mgr').default
@@ -317,7 +327,7 @@ describe('Experiment and ExperimentGroup objects', () => {
   })
 
   test('when we have increased the % of users in the experiment, we use the difference in likelihoods when reassigning users who were previously in the "none" test group (and succeed in including the user)', () => {
-    const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
+    const { createExperiment, createExperimentGroup } = experimentsModule
 
     // Mock that the user is assigned to an experiment group.
     const localStorageMgr = require('js/utils/localstorage-mgr').default
@@ -354,7 +364,7 @@ describe('Experiment and ExperimentGroup objects', () => {
   })
 
   test('when reassigning users who were previously in the "none" test group, we save the latest "percentageOfExistingUsersInExperiment" to local storage', () => {
-    const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
+    const { createExperiment, createExperimentGroup } = experimentsModule
 
     // Mock that the user is assigned to an experiment group.
     const localStorageMgr = require('js/utils/localstorage-mgr').default
@@ -390,7 +400,7 @@ describe('Experiment and ExperimentGroup objects', () => {
 
   test('saves a test group to local storage when assigning a test group', () => {
     const localStorageMgr = require('js/utils/localstorage-mgr').default
-    const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
+    const { createExperiment, createExperimentGroup } = experimentsModule
     const experiment = createExperiment({
       name: 'fooTest',
       active: true,
@@ -415,7 +425,7 @@ describe('Experiment and ExperimentGroup objects', () => {
 
   test('saves "percentageOfExistingUsersInExperiment" to local storage when assigning a test group', () => {
     const localStorageMgr = require('js/utils/localstorage-mgr').default
-    const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
+    const { createExperiment, createExperimentGroup } = experimentsModule
     const experiment = createExperiment({
       name: 'fooTest',
       active: true,
@@ -442,7 +452,7 @@ describe('Experiment and ExperimentGroup objects', () => {
 
   test('saves the test group to the server when assigning a test group', () => {
     const UpdateUserExperimentGroupsMutation = require('js/mutations/UpdateUserExperimentGroupsMutation').default
-    const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
+    const { createExperiment, createExperimentGroup } = experimentsModule
     const experiment = createExperiment({
       name: 'fooTest',
       active: true,
@@ -472,7 +482,7 @@ describe('Experiment and ExperimentGroup objects', () => {
 
   test('selects from all the test groups when assigning the user to a test group', () => {
     const localStorageMgr = require('js/utils/localstorage-mgr').default
-    const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
+    const { createExperiment, createExperimentGroup } = experimentsModule
     const experiment = createExperiment({
       name: 'fooTest',
       active: true,
@@ -504,7 +514,7 @@ describe('Experiment and ExperimentGroup objects', () => {
 
   test('assigns the "none" test group when there are no other groups', () => {
     const localStorageMgr = require('js/utils/localstorage-mgr').default
-    const { createExperiment } = require('js/utils/experiments')
+    const { createExperiment } = experimentsModule
     const experiment = createExperiment({
       name: 'fooTest',
       active: true,
@@ -519,7 +529,7 @@ describe('Experiment and ExperimentGroup objects', () => {
 
   test('assigns the "none" test group when the user is not in the random percentage of users', () => {
     const localStorageMgr = require('js/utils/localstorage-mgr').default
-    const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
+    const { createExperiment, createExperimentGroup } = experimentsModule
     const experiment = createExperiment({
       name: 'fooTest',
       active: true,
@@ -552,7 +562,7 @@ describe('Experiment and ExperimentGroup objects', () => {
 
   test('assigns an experiment group when the user is included in the random percentage of users', () => {
     const localStorageMgr = require('js/utils/localstorage-mgr').default
-    const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
+    const { createExperiment, createExperimentGroup } = experimentsModule
     const experiment = createExperiment({
       name: 'fooTest',
       active: true,
@@ -585,7 +595,7 @@ describe('Experiment and ExperimentGroup objects', () => {
 
   test('assigns an experiment group when the user is included in the random percentage of *new* users', () => {
     const localStorageMgr = require('js/utils/localstorage-mgr').default
-    const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
+    const { createExperiment, createExperimentGroup } = experimentsModule
     const experiment = createExperiment({
       name: 'fooTest',
       active: true,
@@ -620,7 +630,7 @@ describe('Experiment and ExperimentGroup objects', () => {
 
   test('assigns the "none" group when the user is NOT included in the random percentage of *new* users', () => {
     const localStorageMgr = require('js/utils/localstorage-mgr').default
-    const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
+    const { createExperiment, createExperimentGroup } = experimentsModule
     const experiment = createExperiment({
       name: 'fooTest',
       active: true,
@@ -655,7 +665,7 @@ describe('Experiment and ExperimentGroup objects', () => {
 
   test('does not assign an experiment group when the user should be filtered out of the experiment', () => {
     const localStorageMgr = require('js/utils/localstorage-mgr').default
-    const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
+    const { createExperiment, createExperimentGroup } = experimentsModule
     const experiment = createExperiment({
       name: 'fooTest',
       active: true,
@@ -692,7 +702,7 @@ describe('Experiment and ExperimentGroup objects', () => {
 
   test('does not assign an experiment group when the user should be filtered out of the experiment (testing a "joined" filter)', () => {
     const localStorageMgr = require('js/utils/localstorage-mgr').default
-    const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
+    const { createExperiment, createExperimentGroup } = experimentsModule
     const joinedAtLeastThirtyDaysAgo = userInfo => {
       return moment().diff(moment(userInfo.joined), 'days') > 30
     }
@@ -733,7 +743,7 @@ describe('Experiment and ExperimentGroup objects', () => {
 
   test('assigns an experiment group when the user should not be filtered out of the experiment', () => {
     const localStorageMgr = require('js/utils/localstorage-mgr').default
-    const { createExperiment, createExperimentGroup } = require('js/utils/experiments')
+    const { createExperiment, createExperimentGroup } = experimentsModule
     const experiment = createExperiment({
       name: 'fooTest',
       active: true,
@@ -772,190 +782,185 @@ describe('Experiment and ExperimentGroup objects', () => {
 /* Test core functionality with fake experiments */
 describe('Main experiments functionality', () => {
   test('getUserExperimentGroup returns the expected value', () => {
-    const experimentsExports = require('js/utils/experiments')
 
     // Mock that the user is assigned to an experiment group.
     const localStorageMgr = require('js/utils/localstorage-mgr').default
     localStorageMgr.setItem('tab.experiments.fooTest', 'newThing')
 
-    experimentsExports.experiments = [
-      experimentsExports.createExperiment({
+    experimentsModule._experiments.getExperiments.mockReturnValue([
+      experimentsModule.createExperiment({
         name: 'exampleTest',
         active: true,
         disabled: false,
         percentageOfExistingUsersInExperiment: 100,
         groups: {
-          SOMETHING: experimentsExports.createExperimentGroup({
+          SOMETHING: experimentsModule.createExperimentGroup({
             value: 'hi',
             schemaValue: 'SOMETHING'
           }),
-          ANOTHER_THING: experimentsExports.createExperimentGroup({
+          ANOTHER_THING: experimentsModule.createExperimentGroup({
             value: 'bye',
             schemaValue: 'ANOTHER_THING'
           })
         }
       }),
-      experimentsExports.createExperiment({
+      experimentsModule.createExperiment({
         name: 'fooTest',
         active: true,
         disabled: false,
         percentageOfExistingUsersInExperiment: 100,
         groups: {
-          MY_CONTROL_GROUP: experimentsExports.createExperimentGroup({
+          MY_CONTROL_GROUP: experimentsModule.createExperimentGroup({
             value: 'sameOld',
             schemaValue: 'THE_CONTROL'
           }),
-          FUN_EXPERIMENT: experimentsExports.createExperimentGroup({
+          FUN_EXPERIMENT: experimentsModule.createExperimentGroup({
             value: 'newThing',
             schemaValue: 'EXPERIMENT'
           })
         }
       })
-    ]
-    expect(experimentsExports.getUserExperimentGroup('fooTest'))
+    ])
+    expect(experimentsModule.getUserExperimentGroup('fooTest'))
       .toBe('newThing')
   })
 
   test('getUserExperimentGroup returns "none" when the experiment does not exist', () => {
-    const experimentsExports = require('js/utils/experiments')
 
     // Mock that the user is assigned to an experiment group.
     const localStorageMgr = require('js/utils/localstorage-mgr').default
     localStorageMgr.setItem('tab.experiments.fooTest', 'newThing')
 
-    experimentsExports.experiments = [
-      experimentsExports.createExperiment({
+    experimentsModule._experiments.getExperiments.mockReturnValue([
+      experimentsModule.createExperiment({
         name: 'exampleTest',
         active: true,
         disabled: false,
         percentageOfExistingUsersInExperiment: 100,
         groups: {
-          SOMETHING: experimentsExports.createExperimentGroup({
+          SOMETHING: experimentsModule.createExperimentGroup({
             value: 'hi',
             schemaValue: 'SOMETHING'
           }),
-          ANOTHER_THING: experimentsExports.createExperimentGroup({
+          ANOTHER_THING: experimentsModule.createExperimentGroup({
             value: 'bye',
             schemaValue: 'ANOTHER_THING'
           })
         }
       }),
-      experimentsExports.createExperiment({
+      experimentsModule.createExperiment({
         name: 'fooTest',
         active: true,
         disabled: false,
         percentageOfExistingUsersInExperiment: 100,
         groups: {
-          MY_CONTROL_GROUP: experimentsExports.createExperimentGroup({
+          MY_CONTROL_GROUP: experimentsModule.createExperimentGroup({
             value: 'sameOld',
             schemaValue: 'THE_CONTROL'
           }),
-          FUN_EXPERIMENT: experimentsExports.createExperimentGroup({
+          FUN_EXPERIMENT: experimentsModule.createExperimentGroup({
             value: 'newThing',
             schemaValue: 'EXPERIMENT'
           })
         }
       })
-    ]
-    expect(experimentsExports.getUserExperimentGroup('someNonexistentTest'))
+    ])
+    expect(experimentsModule.getUserExperimentGroup('someNonexistentTest'))
       .toBe('none')
   })
 
   test('getUserExperimentGroup returns "none" when the experiment is disabled', () => {
-    const experimentsExports = require('js/utils/experiments')
 
     // Mock that the user is assigned to an experiment group.
     const localStorageMgr = require('js/utils/localstorage-mgr').default
     localStorageMgr.setItem('tab.experiments.fooTest', 'newThing')
 
-    experimentsExports.experiments = [
-      experimentsExports.createExperiment({
+    experimentsModule._experiments.getExperiments.mockReturnValue([
+      experimentsModule.createExperiment({
         name: 'exampleTest',
         active: true,
         disabled: false,
         percentageOfExistingUsersInExperiment: 100,
         groups: {
-          SOMETHING: experimentsExports.createExperimentGroup({
+          SOMETHING: experimentsModule.createExperimentGroup({
             value: 'hi',
             schemaValue: 'SOMETHING'
           }),
-          ANOTHER_THING: experimentsExports.createExperimentGroup({
+          ANOTHER_THING: experimentsModule.createExperimentGroup({
             value: 'bye',
             schemaValue: 'ANOTHER_THING'
           })
         }
       }),
-      experimentsExports.createExperiment({
+      experimentsModule.createExperiment({
         name: 'fooTest',
         active: true,
         disabled: true,
         percentageOfExistingUsersInExperiment: 100,
         groups: {
-          MY_CONTROL_GROUP: experimentsExports.createExperimentGroup({
+          MY_CONTROL_GROUP: experimentsModule.createExperimentGroup({
             value: 'sameOld',
             schemaValue: 'THE_CONTROL'
           }),
-          FUN_EXPERIMENT: experimentsExports.createExperimentGroup({
+          FUN_EXPERIMENT: experimentsModule.createExperimentGroup({
             value: 'newThing',
             schemaValue: 'EXPERIMENT'
           })
         }
       })
-    ]
-    expect(experimentsExports.getUserExperimentGroup('fooTest'))
+    ])
+    expect(experimentsModule.getUserExperimentGroup('fooTest'))
       .toBe('none')
   })
 
   test('getUserExperimentGroup returns "none" when there are no experiments', () => {
-    const experimentsExports = require('js/utils/experiments')
-    experimentsExports.experiments = []
-    expect(experimentsExports.getUserExperimentGroup('anOldTestWeRemoved'))
+    experimentsModule._experiments.getExperiments.mockReturnValue([])
+    expect(experimentsModule.getUserExperimentGroup('anOldTestWeRemoved'))
       .toBe('none')
   })
 
   test('getExperimentGroups returns the expected values', () => {
-    const experimentsExports = require('js/utils/experiments')
-    experimentsExports.experiments = [
-      experimentsExports.createExperiment({
+    experimentsModule._experiments.getExperiments.mockReturnValue([
+      experimentsModule.createExperiment({
         name: 'exampleTest',
         active: true,
         disabled: false,
         percentageOfExistingUsersInExperiment: 100,
         groups: {
-          SOMETHING: experimentsExports.createExperimentGroup({
+          SOMETHING: experimentsModule.createExperimentGroup({
             value: 'hi',
             schemaValue: 'SOMETHING'
           }),
-          ANOTHER_THING: experimentsExports.createExperimentGroup({
+          ANOTHER_THING: experimentsModule.createExperimentGroup({
             value: 'bye',
             schemaValue: 'ANOTHER_THING'
           })
         }
       }),
-      experimentsExports.createExperiment({
+      experimentsModule.createExperiment({
         name: 'fooTest',
         active: true,
         disabled: true,
         percentageOfExistingUsersInExperiment: 100,
         groups: {
-          MY_CONTROL_GROUP: experimentsExports.createExperimentGroup({
+          MY_CONTROL_GROUP: experimentsModule.createExperimentGroup({
             value: 'sameOld',
             schemaValue: 'THE_CONTROL'
           }),
-          FUN_EXPERIMENT: experimentsExports.createExperimentGroup({
+          FUN_EXPERIMENT: experimentsModule.createExperimentGroup({
             value: 'newThing',
             schemaValue: 'EXPERIMENT'
           })
         }
       })
-    ]
-    expect(experimentsExports.getExperimentGroups('fooTest'))
+    ])
+    expect(experimentsModule.getExperimentGroups('fooTest'))
       .toEqual({
         MY_CONTROL_GROUP: 'sameOld',
         FUN_EXPERIMENT: 'newThing',
         NONE: 'none'
       })
-    expect(experimentsExports.getExperimentGroups('exampleTest'))
+    expect(experimentsModule.getExperimentGroups('exampleTest'))
       .toEqual({
         SOMETHING: 'hi',
         ANOTHER_THING: 'bye',
@@ -964,26 +969,25 @@ describe('Main experiments functionality', () => {
   })
 
   test('getExperimentGroups returns only the "none" group when the experiment does not exist', () => {
-    const experimentsExports = require('js/utils/experiments')
-    experimentsExports.experiments = [
-      experimentsExports.createExperiment({
+    experimentsModule._experiments.getExperiments.mockReturnValue([
+      experimentsModule.createExperiment({
         name: 'fooTest',
         active: true,
         disabled: true,
         percentageOfExistingUsersInExperiment: 100,
         groups: {
-          MY_CONTROL_GROUP: experimentsExports.createExperimentGroup({
+          MY_CONTROL_GROUP: experimentsModule.createExperimentGroup({
             value: 'sameOld',
             schemaValue: 'THE_CONTROL'
           }),
-          FUN_EXPERIMENT: experimentsExports.createExperimentGroup({
+          FUN_EXPERIMENT: experimentsModule.createExperimentGroup({
             value: 'newThing',
             schemaValue: 'EXPERIMENT'
           })
         }
       })
-    ]
-    expect(experimentsExports.getExperimentGroups('thisExperimentDoesNotExist'))
+    ])
+    expect(experimentsModule.getExperimentGroups('thisExperimentDoesNotExist'))
       .toEqual({
         NONE: 'none'
       })
@@ -991,59 +995,58 @@ describe('Main experiments functionality', () => {
 
   test('assignUserToTestGroups assigns the user to all active tests but not inactive tests', () => {
     const localStorageMgr = require('js/utils/localstorage-mgr').default
-    const experimentsExports = require('js/utils/experiments')
-    experimentsExports.experiments = [
-      experimentsExports.createExperiment({
+    experimentsModule._experiments.getExperiments.mockReturnValue([
+      experimentsModule.createExperiment({
         name: 'exampleTest',
         active: true,
         disabled: false,
         percentageOfExistingUsersInExperiment: 100,
         groups: {
-          SOMETHING: experimentsExports.createExperimentGroup({
+          SOMETHING: experimentsModule.createExperimentGroup({
             value: 'hi',
             schemaValue: 'SOMETHING'
           }),
-          ANOTHER_THING: experimentsExports.createExperimentGroup({
+          ANOTHER_THING: experimentsModule.createExperimentGroup({
             value: 'bye',
             schemaValue: 'ANOTHER_THING'
           })
         }
       }),
-      experimentsExports.createExperiment({
+      experimentsModule.createExperiment({
         name: 'someTest',
         active: false,
         disabled: false,
         percentageOfExistingUsersInExperiment: 100,
         groups: {
-          GROUP_A: experimentsExports.createExperimentGroup({
+          GROUP_A: experimentsModule.createExperimentGroup({
             value: 'groupA',
             schemaValue: 'THE_A_GROUP'
           }),
-          GROUP_B: experimentsExports.createExperimentGroup({
+          GROUP_B: experimentsModule.createExperimentGroup({
             value: 'groupB',
             schemaValue: 'THE_B_GROUP'
           })
         }
       }),
-      experimentsExports.createExperiment({
+      experimentsModule.createExperiment({
         name: 'fooTest',
         active: true,
         disabled: false,
         percentageOfExistingUsersInExperiment: 100,
         groups: {
-          MY_CONTROL_GROUP: experimentsExports.createExperimentGroup({
+          MY_CONTROL_GROUP: experimentsModule.createExperimentGroup({
             value: 'sameOld',
             schemaValue: 'THE_CONTROL'
           }),
-          FUN_EXPERIMENT: experimentsExports.createExperimentGroup({
+          FUN_EXPERIMENT: experimentsModule.createExperimentGroup({
             value: 'newThing',
             schemaValue: 'EXPERIMENT'
           })
         }
       })
-    ]
+    ])
     const mockUserInfo = getMockUserInfo()
-    experimentsExports.assignUserToTestGroups(mockUserInfo)
+    experimentsModule.assignUserToTestGroups(mockUserInfo)
 
     // Should store test group in localStorage.
     expect(localStorageMgr.setItem)
@@ -1052,66 +1055,65 @@ describe('Main experiments functionality', () => {
       .toHaveBeenCalledWith('tab.experiments.fooTest', 'sameOld')
 
     // Should return the assigned test groups.
-    expect(experimentsExports.getUserExperimentGroup('exampleTest')).toBe('hi')
-    expect(experimentsExports.getUserExperimentGroup('someTest')).toBe('none')
-    expect(experimentsExports.getUserExperimentGroup('fooTest')).toBe('sameOld')
+    expect(experimentsModule.getUserExperimentGroup('exampleTest')).toBe('hi')
+    expect(experimentsModule.getUserExperimentGroup('someTest')).toBe('none')
+    expect(experimentsModule.getUserExperimentGroup('fooTest')).toBe('sameOld')
   })
 
   test('getUserTestGroupsForMutation returns the expected values for all tests (even inactive tests)', () => {
-    const experimentsExports = require('js/utils/experiments')
-    experimentsExports.experiments = [
-      experimentsExports.createExperiment({
+    experimentsModule._experiments.getExperiments.mockReturnValue([
+      experimentsModule.createExperiment({
         name: 'exampleTest',
         active: true,
         disabled: false,
         percentageOfExistingUsersInExperiment: 100,
         groups: {
-          SOMETHING: experimentsExports.createExperimentGroup({
+          SOMETHING: experimentsModule.createExperimentGroup({
             value: 'hi',
             schemaValue: 'SOMETHING'
           }),
-          ANOTHER_THING: experimentsExports.createExperimentGroup({
+          ANOTHER_THING: experimentsModule.createExperimentGroup({
             value: 'bye',
             schemaValue: 'ANOTHER_THING'
           })
         }
       }),
-      experimentsExports.createExperiment({
+      experimentsModule.createExperiment({
         name: 'someTest',
         active: false,
         disabled: false,
         percentageOfExistingUsersInExperiment: 100,
         groups: {
-          GROUP_A: experimentsExports.createExperimentGroup({
+          GROUP_A: experimentsModule.createExperimentGroup({
             value: 'groupA',
             schemaValue: 'THE_A_GROUP'
           }),
-          GROUP_B: experimentsExports.createExperimentGroup({
+          GROUP_B: experimentsModule.createExperimentGroup({
             value: 'groupB',
             schemaValue: 'THE_B_GROUP'
           })
         }
       }),
-      experimentsExports.createExperiment({
+      experimentsModule.createExperiment({
         name: 'fooTest',
         active: true,
         disabled: false,
         percentageOfExistingUsersInExperiment: 100,
         groups: {
-          MY_CONTROL_GROUP: experimentsExports.createExperimentGroup({
+          MY_CONTROL_GROUP: experimentsModule.createExperimentGroup({
             value: 'sameOld',
             schemaValue: 'THE_CONTROL'
           }),
-          FUN_EXPERIMENT: experimentsExports.createExperimentGroup({
+          FUN_EXPERIMENT: experimentsModule.createExperimentGroup({
             value: 'newThing',
             schemaValue: 'EXPERIMENT'
           })
         }
       })
-    ]
+    ])
     const mockUserInfo = getMockUserInfo()
-    experimentsExports.assignUserToTestGroups(mockUserInfo)
-    const userGroupsForMutation = experimentsExports.getUserTestGroupsForMutation()
+    experimentsModule.assignUserToTestGroups(mockUserInfo)
+    const userGroupsForMutation = experimentsModule.getUserTestGroupsForMutation()
     expect(userGroupsForMutation).toEqual({
       exampleTest: 'SOMETHING',
       someTest: 'NONE',
@@ -1123,7 +1125,7 @@ describe('Main experiments functionality', () => {
 /* Tests for actual experiments */
 describe('Actual experiments we are running or will run', () => {
   test('experiments match expected', () => {
-    const experiments = require('js/utils/experiments').experiments
+    const experiments = experimentsModule._experiments.getExperiments()
     expect(sortBy(experiments, o => o.name)).toMatchObject([
       // Experiments ordered alphabetically by name
       {
@@ -1140,7 +1142,7 @@ describe('Actual experiments we are running or will run', () => {
   })
 
   test('the experiments have valid groups object structure', () => {
-    const experiments = require('js/utils/experiments').experiments
+    const experiments = experimentsModule._experiments.getExperiments()
     experiments.forEach(exp => {
       forEach(exp.groups, group => {
         expect(isPlainObject(group)).toBe(true)
