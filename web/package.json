@@ -12,6 +12,7 @@
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.6.0",
     "enzyme-to-json": "^3.3.4",
+    "eslint-plugin-prettier": "^3.0.1",
     "graphql": "^14.0.2",
     "if-env": "^1.0.4",
     "jsonwebtoken": "^8.3.0",
