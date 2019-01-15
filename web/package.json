@@ -72,7 +72,7 @@
     "test:integration": "cross-env NODE_PATH=src/ react-scripts test --testPathPattern=e2e-tests",
     "test:codecov": "if-env LOG_TEST_COVERAGE=true && codecov || echo 'Skipping test coverage logging.'",
     "test:watch": "cross-env NODE_PATH=src/ react-scripts test --env=jsdom --testPathIgnorePatterns=e2e-tests --testPathIgnorePatterns=prebidPatches --watch",
-    "lint": "prettier **/*.{js,jsx,ts,tsx,json,css,scss,md}",
+    "lint": "prettier \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
     "lint:fix": "yarn run lint --write",
     "prebid:build": "npm-run-all -s prebid:install prebid:generate prebid:cp",
     "prebid:install": "cd ./node_modules/prebid.js/ && yarn install",
