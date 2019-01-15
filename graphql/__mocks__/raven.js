@@ -13,7 +13,7 @@ raven.Client = jest.fn(() => {
 })
 
 // Invoke the function like Raven would.
-raven.context = jest.fn((func) => {
+raven.context = jest.fn(func => {
   return func()
 })
 

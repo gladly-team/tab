@@ -1,47 +1,47 @@
-
 import BaseModel from '../base/BaseModel'
 import types from '../fieldTypes'
 import tableNames from '../tables'
 import { USER_REVENUE } from '../constants'
-import {
-  permissionAuthorizers
-} from '../../utils/authorization-helpers'
+import { permissionAuthorizers } from '../../utils/authorization-helpers'
 
 /*
  * @extends BaseModel
  */
 class UserRevenue extends BaseModel {
-  static get name () {
+  static get name() {
     return USER_REVENUE
   }
 
-  static get hashKey () {
+  static get hashKey() {
     return 'userId'
   }
 
-  static get rangeKey () {
+  static get rangeKey() {
     return 'timestamp'
   }
 
-  static get tableName () {
+  static get tableName() {
     return tableNames.userRevenueLog
   }
 
-  static get schema () {
+  static get schema() {
     return {
       userId: types.string().required(),
-      timestamp: types.string().isoDate().required(),
+      timestamp: types
+        .string()
+        .isoDate()
+        .required(),
       revenue: types.number().required(),
       dfpAdvertiserId: types.string(),
       adUnitCode: types.string(),
       tabId: types.string().uuid(),
-      adSize: types.string()
+      adSize: types.string(),
     }
   }
 
-  static get permissions () {
+  static get permissions() {
     return {
-      create: permissionAuthorizers.userIdMatchesHashKey
+      create: permissionAuthorizers.userIdMatchesHashKey,
     }
   }
 }

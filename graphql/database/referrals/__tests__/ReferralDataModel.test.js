@@ -2,9 +2,7 @@
 
 import tableNames from '../../tables'
 import ReferralDataModel from '../ReferralDataModel'
-import {
-  permissionAuthorizers
-} from '../../../utils/authorization-helpers'
+import { permissionAuthorizers } from '../../../utils/authorization-helpers'
 
 jest.mock('../../databaseClient')
 
@@ -42,14 +40,17 @@ describe('ReferralDataModel', () => {
   })
 
   it('has the correct indexPermissions permissions for ReferralsByReferrer', () => {
-    expect(ReferralDataModel.permissions.indexPermissions.ReferralsByReferrer.get).toBe(
-      permissionAuthorizers.userIdMatchesHashKey
-    )
-    expect(ReferralDataModel.permissions.indexPermissions.ReferralsByReferrer.getAll)
-      .toBeUndefined()
-    expect(ReferralDataModel.permissions.indexPermissions.ReferralsByReferrer.create)
-      .toBeUndefined()
-    expect(ReferralDataModel.permissions.indexPermissions.ReferralsByReferrer.update)
-      .toBeUndefined()
+    expect(
+      ReferralDataModel.permissions.indexPermissions.ReferralsByReferrer.get
+    ).toBe(permissionAuthorizers.userIdMatchesHashKey)
+    expect(
+      ReferralDataModel.permissions.indexPermissions.ReferralsByReferrer.getAll
+    ).toBeUndefined()
+    expect(
+      ReferralDataModel.permissions.indexPermissions.ReferralsByReferrer.create
+    ).toBeUndefined()
+    expect(
+      ReferralDataModel.permissions.indexPermissions.ReferralsByReferrer.update
+    ).toBeUndefined()
   })
 })

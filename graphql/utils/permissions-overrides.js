@@ -1,12 +1,14 @@
-
 import { get, values } from 'lodash/object'
 import { random } from 'lodash/number'
 
 // The names of the different overrides.
 export const REWARD_REFERRER_OVERRIDE = 'REWARD_REFERRER_OVERRIDE'
-export const GET_REFERRER_BY_USERNAME_OVERRIDE = 'GET_REFERRER_BY_USERNAME_OVERRIDE'
-export const ADD_NUM_USERS_RECRUITED_OVERRIDE = 'ADD_NUM_USERS_RECRUITED_OVERRIDE'
-export const GET_RECRUITS_LAST_ACTIVE_OVERRIDE = 'GET_RECRUITS_LAST_ACTIVE_OVERRIDE'
+export const GET_REFERRER_BY_USERNAME_OVERRIDE =
+  'GET_REFERRER_BY_USERNAME_OVERRIDE'
+export const ADD_NUM_USERS_RECRUITED_OVERRIDE =
+  'ADD_NUM_USERS_RECRUITED_OVERRIDE'
+export const GET_RECRUITS_LAST_ACTIVE_OVERRIDE =
+  'GET_RECRUITS_LAST_ACTIVE_OVERRIDE'
 export const ADD_VC_DONATED_BY_CHARITY = 'ADD_VC_DONATED_BY_CHARITY'
 
 // TODO: remove after migration
@@ -24,7 +26,7 @@ const validOverrides = {
   [GET_RECRUITS_LAST_ACTIVE_OVERRIDE]: `${GET_RECRUITS_LAST_ACTIVE_OVERRIDE}${validOverridesAppendix}`,
   [ADD_VC_DONATED_BY_CHARITY]: `${ADD_VC_DONATED_BY_CHARITY}${validOverridesAppendix}`,
   // TODO: remove after migration
-  [MIGRATION_OVERRIDE]: `${MIGRATION_OVERRIDE}${validOverridesAppendix}`
+  [MIGRATION_OVERRIDE]: `${MIGRATION_OVERRIDE}${validOverridesAppendix}`,
 }
 
 /**
@@ -38,10 +40,10 @@ const validOverrides = {
  * @return {string|boolean} An override string, or false
  *   if `overrideName` is not a valid override.
  */
-export const getPermissionsOverride = (overrideName) => {
+export const getPermissionsOverride = overrideName => {
   return get(validOverrides, overrideName, false)
 }
 
-export const isValidPermissionsOverride = (override) => {
+export const isValidPermissionsOverride = override => {
   return values(validOverrides).indexOf(override) !== -1
 }

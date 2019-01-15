@@ -1,4 +1,3 @@
-
 import UserWidgetModel from './UserWidgetModel'
 
 /**
@@ -16,7 +15,7 @@ export default async (userContext, userId, widgetId, enabled) => {
     userWidget = await UserWidgetModel.update(userContext, {
       userId: userId,
       widgetId: widgetId,
-      enabled: enabled
+      enabled: enabled,
     })
   } catch (e) {
     // The item likely does not exist. This might happen when a
@@ -27,7 +26,7 @@ export default async (userContext, userId, widgetId, enabled) => {
         userWidget = await UserWidgetModel.create(userContext, {
           userId: userId,
           widgetId: widgetId,
-          enabled: enabled
+          enabled: enabled,
         })
       } catch (e) {
         throw e

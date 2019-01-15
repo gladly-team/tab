@@ -17,7 +17,7 @@ export const DatabaseOperation = {
   CREATE: 'put',
   GET_ALL: 'scan',
   GET_BATCH: 'batchGet',
-  GET_ITEMS: 'batchGet'
+  GET_ITEMS: 'batchGet',
 }
 
 const availableOperations = [
@@ -28,7 +28,7 @@ const availableOperations = [
   'delete',
   'update',
   'scan',
-  'query'
+  'query',
 ]
 
 /**
@@ -38,16 +38,21 @@ const availableOperations = [
  * @param {Object} error - An error value to return
  * @return {function} An instance of `jest.fn`, a mock function
  */
-export const setMockDBResponse = function (operation, returnVal = null, error = null) {
+export const setMockDBResponse = function(
+  operation,
+  returnVal = null,
+  error = null
+) {
   jest.mock('./databaseClient')
   if (availableOperations.indexOf(operation) === -1) {
     const dbOps = Object.keys(DatabaseOperation).join(', ')
     throw new Error(`Mock database operation must be one of: ${dbOps}`)
   }
-  return databaseClient[operation]
-    .mockImplementationOnce((params, callback) => {
+  return databaseClient[operation].mockImplementationOnce(
+    (params, callback) => {
       callback(error, returnVal)
-    })
+    }
+  )
 }
 
 /**
@@ -66,9 +71,9 @@ export const clearAllMockDBResponses = () => {
  * @param {Object} permissions - The permissions object
  * @return {null}
  */
-export const setModelPermissions = function (modelClass, permissions) {
+export const setModelPermissions = function(modelClass, permissions) {
   Object.defineProperty(modelClass, 'permissions', {
-    get: () => permissions
+    get: () => permissions,
   })
 }
 
@@ -79,10 +84,10 @@ export const setModelPermissions = function (modelClass, permissions) {
  * @param {*} val - The value the getter should return
  * @return {null}
  */
-export const setModelGetterField = function (modelClass, fieldName, val) {
+export const setModelGetterField = function(modelClass, fieldName, val) {
   Object.defineProperty(modelClass, fieldName, {
     get: () => val,
-    configurable: true
+    configurable: true,
   })
 }
 
@@ -90,11 +95,11 @@ export const setModelGetterField = function (modelClass, fieldName, val) {
  * Get a mock user object (as passed from GraphQL context).
  * @return {Object} The mock user.
  */
-export const getMockUserContext = function () {
+export const getMockUserContext = function() {
   return {
     id: 'abcdefghijklmno',
     email: 'foo@bar.com',
-    emailVerified: true
+    emailVerified: true,
   }
 }
 
@@ -102,10 +107,10 @@ export const getMockUserContext = function () {
  * Get a mock user info.
  * @return {Object} The mock user info object.
  */
-export const getMockUserInfo = function () {
+export const getMockUserInfo = function() {
   return {
     id: 'abcdefghijklmno',
-    email: 'foo@bar.com'
+    email: 'foo@bar.com',
   }
 }
 
@@ -114,14 +119,16 @@ export const getMockUserInfo = function () {
  * @param {Object} attributes - Attributes to override when getting the mock user.
  * @return {Object} The mock user.
  */
-export const getMockUserInstance = function (attributes) {
+export const getMockUserInstance = function(attributes) {
   const defaultUserInfo = getMockUserInfo()
   const now = mockDate.defaultDateISO
-  return new UserModel(Object.assign({}, defaultUserInfo, attributes, {
-    created: now,
-    updated: now,
-    joined: now
-  }))
+  return new UserModel(
+    Object.assign({}, defaultUserInfo, attributes, {
+      created: now,
+      updated: now,
+      joined: now,
+    })
+  )
 }
 
 /**
@@ -142,10 +149,10 @@ mockDate.on = (dateStr = null, options = {}) => {
     mockDate._origDate = Date
   }
 
-  const constantDate = dateStr ? new Date(dateStr) : new Date(mockDate.defaultDateISO)
-  const mockCurrentTimeOnly = (
-    !!options.mockCurrentTimeOnly
-  )
+  const constantDate = dateStr
+    ? new Date(dateStr)
+    : new Date(mockDate.defaultDateISO)
+  const mockCurrentTimeOnly = !!options.mockCurrentTimeOnly
 
   global.Date = Date
   if (mockCurrentTimeOnly) {
@@ -170,11 +177,11 @@ mockDate.off = () => {
  * @param {Object} item - A database item.
  * @return {Object} The item with 'created' and 'updated' fields.
  */
-export const addTimestampFieldsToItem = (item) => {
+export const addTimestampFieldsToItem = item => {
   const now = moment.utc().toISOString()
   return Object.assign({}, item, {
     created: now,
-    updated: now
+    updated: now,
   })
 }
 
@@ -183,7 +190,7 @@ export const addTimestampFieldsToItem = (item) => {
  * @return {Object} An Error object with
  *.  code == 'ConditionalCheckFailedException'
  */
-export const ConditionalCheckFailedException = (item) => {
+export const ConditionalCheckFailedException = item => {
   const err = new Error('Conditional check failed.')
   err.code = 'ConditionalCheckFailedException'
   return err

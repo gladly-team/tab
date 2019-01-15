@@ -1,4 +1,3 @@
-
 import moment from 'moment'
 
 /**
@@ -6,15 +5,14 @@ import moment from 'moment'
  * @param {object} user - The user object from our DB
  * @return {number} The number of tabs opened today.
  */
-export const getTodayTabCount = (user) => {
-  const isFirstTabToday = (
-    moment(user.maxTabsDay.recentDay.date).utc().format('LL') !==
-    moment().utc().format('LL')
-  )
-  const todayTabCount = (
-    isFirstTabToday
-    ? 0
-    : user.maxTabsDay.recentDay.numTabs
-  )
+export const getTodayTabCount = user => {
+  const isFirstTabToday =
+    moment(user.maxTabsDay.recentDay.date)
+      .utc()
+      .format('LL') !==
+    moment()
+      .utc()
+      .format('LL')
+  const todayTabCount = isFirstTabToday ? 0 : user.maxTabsDay.recentDay.numTabs
   return todayTabCount
 }

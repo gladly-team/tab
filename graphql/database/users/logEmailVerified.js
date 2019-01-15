@@ -1,4 +1,3 @@
-
 import UserModel from './UserModel'
 import rewardReferringUser from './rewardReferringUser'
 import logger from '../../utils/logger'
@@ -18,7 +17,7 @@ const logEmailVerified = async (userContext, userId) => {
   try {
     returnedUser = await UserModel.update(userContext, {
       id: userId,
-      emailVerified: userContext.emailVerified
+      emailVerified: userContext.emailVerified,
     })
   } catch (e) {
     throw e
@@ -31,7 +30,9 @@ const logEmailVerified = async (userContext, userId) => {
     try {
       await rewardReferringUser(userContext, userId)
     } catch (e) {
-      logger.error(new Error(`Could not reward referring user for user ID ${userId}.`))
+      logger.error(
+        new Error(`Could not reward referring user for user ID ${userId}.`)
+      )
     }
   }
 

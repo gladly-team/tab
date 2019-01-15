@@ -2,5 +2,5 @@
 
 module.exports = {
   define: jest.fn(),
-  documentClient: jest.fn()
+  documentClient: jest.fn(),
 }

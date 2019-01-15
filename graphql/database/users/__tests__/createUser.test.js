@@ -17,7 +17,7 @@ import {
   getMockUserInstance,
   mockDate,
   setMockDBResponse,
-  clearAllMockDBResponses
+  clearAllMockDBResponses,
 } from '../../test-utils'
 
 jest.mock('../../databaseClient')
@@ -43,14 +43,10 @@ afterEach(() => {
   clearAllMockDBResponses()
 })
 
-function getExpectedCreateItemFromUserInfo (userInfo) {
-  return Object.assign(
-    {},
-    addTimestampFieldsToItem(userInfo),
-    {
-      joined: moment.utc().toISOString()
-    }
-  )
+function getExpectedCreateItemFromUserInfo(userInfo) {
+  return Object.assign({}, addTimestampFieldsToItem(userInfo), {
+    joined: moment.utc().toISOString(),
+  })
 }
 
 describe('createUser when user does not exist', () => {
@@ -59,13 +55,12 @@ describe('createUser when user does not exist', () => {
 
     // Mock database responses.
     const userInfo = getMockUserInfo()
-    const userReturnedFromCreate = getMockUserInstance(Object.assign({}, userInfo))
-    setMockDBResponse(
-      DatabaseOperation.CREATE,
-      {
-        Attributes: userReturnedFromCreate
-      }
+    const userReturnedFromCreate = getMockUserInstance(
+      Object.assign({}, userInfo)
     )
+    setMockDBResponse(DatabaseOperation.CREATE, {
+      Attributes: userReturnedFromCreate,
+    })
 
     const getOrCreateMethod = jest.spyOn(UserModel, 'getOrCreate')
     const referralData = null
@@ -73,12 +68,13 @@ describe('createUser when user does not exist', () => {
     userContext.emailVerified = false
     logUserExperimentGroups.mockResolvedValueOnce(userReturnedFromCreate)
 
-    await createUser(userContext, userInfo.id,
-      userInfo.email, referralData)
+    await createUser(userContext, userInfo.id, userInfo.email, referralData)
 
     const expectedCreateItem = getExpectedCreateItemFromUserInfo(userInfo)
-    expect(getOrCreateMethod)
-      .toHaveBeenCalledWith(userContext, expectedCreateItem)
+    expect(getOrCreateMethod).toHaveBeenCalledWith(
+      userContext,
+      expectedCreateItem
+    )
     expect(logReferralData).not.toHaveBeenCalled()
   })
 
@@ -87,13 +83,12 @@ describe('createUser when user does not exist', () => {
 
     // Mock database responses.
     const userInfo = getMockUserInfo()
-    const userReturnedFromCreate = getMockUserInstance(Object.assign({}, userInfo))
-    setMockDBResponse(
-      DatabaseOperation.CREATE,
-      {
-        Attributes: userReturnedFromCreate
-      }
+    const userReturnedFromCreate = getMockUserInstance(
+      Object.assign({}, userInfo)
     )
+    setMockDBResponse(DatabaseOperation.CREATE, {
+      Attributes: userReturnedFromCreate,
+    })
 
     const getOrCreateMethod = jest.spyOn(UserModel, 'getOrCreate')
     const referralData = {}
@@ -101,12 +96,13 @@ describe('createUser when user does not exist', () => {
     userContext.emailVerified = false
     logUserExperimentGroups.mockResolvedValueOnce(userReturnedFromCreate)
 
-    await createUser(userContext, userInfo.id,
-      userInfo.email, referralData)
+    await createUser(userContext, userInfo.id, userInfo.email, referralData)
 
     const expectedCreateItem = getExpectedCreateItemFromUserInfo(userInfo)
-    expect(getOrCreateMethod)
-      .toHaveBeenCalledWith(userContext, expectedCreateItem)
+    expect(getOrCreateMethod).toHaveBeenCalledWith(
+      userContext,
+      expectedCreateItem
+    )
     expect(logReferralData).not.toHaveBeenCalled()
   })
 
@@ -115,13 +111,12 @@ describe('createUser when user does not exist', () => {
 
     // Mock database responses.
     const userInfo = getMockUserInfo()
-    const userReturnedFromCreate = getMockUserInstance(Object.assign({}, userInfo))
-    setMockDBResponse(
-      DatabaseOperation.CREATE,
-      {
-        Attributes: userReturnedFromCreate
-      }
+    const userReturnedFromCreate = getMockUserInstance(
+      Object.assign({}, userInfo)
     )
+    setMockDBResponse(DatabaseOperation.CREATE, {
+      Attributes: userReturnedFromCreate,
+    })
     logUserExperimentGroups.mockResolvedValueOnce(userReturnedFromCreate)
 
     const getOrCreateMethod = jest.spyOn(UserModel, 'getOrCreate')
@@ -136,10 +131,12 @@ describe('createUser when user does not exist', () => {
     // The expected item to create will have no email.
     const expectedCreateItem = getExpectedCreateItemFromUserInfo({
       id: userInfo.id,
-      email: null
+      email: null,
     })
-    expect(getOrCreateMethod)
-      .toHaveBeenCalledWith(userContext, expectedCreateItem)
+    expect(getOrCreateMethod).toHaveBeenCalledWith(
+      userContext,
+      expectedCreateItem
+    )
   })
 
   it('uses the email address from the context (user claims), not the provided value', async () => {
@@ -147,13 +144,12 @@ describe('createUser when user does not exist', () => {
 
     // Mock database responses.
     const userInfo = getMockUserInfo()
-    const userReturnedFromCreate = getMockUserInstance(Object.assign({}, userInfo))
-    setMockDBResponse(
-      DatabaseOperation.CREATE,
-      {
-        Attributes: userReturnedFromCreate
-      }
+    const userReturnedFromCreate = getMockUserInstance(
+      Object.assign({}, userInfo)
     )
+    setMockDBResponse(DatabaseOperation.CREATE, {
+      Attributes: userReturnedFromCreate,
+    })
 
     const getOrCreateMethod = jest.spyOn(UserModel, 'getOrCreate')
 
@@ -167,10 +163,12 @@ describe('createUser when user does not exist', () => {
 
     const expectedCreateItem = getExpectedCreateItemFromUserInfo({
       id: userInfo.id,
-      email: 'someotheremail@example.com'
+      email: 'someotheremail@example.com',
     })
-    expect(getOrCreateMethod)
-      .toHaveBeenCalledWith(userContext, expectedCreateItem)
+    expect(getOrCreateMethod).toHaveBeenCalledWith(
+      userContext,
+      expectedCreateItem
+    )
   })
 
   it('works as expected with extensionInstallId and extensionInstallTimeApprox', async () => {
@@ -178,13 +176,12 @@ describe('createUser when user does not exist', () => {
 
     // Mock database responses.
     const userInfo = getMockUserInfo()
-    const userReturnedFromCreate = getMockUserInstance(Object.assign({}, userInfo))
-    setMockDBResponse(
-      DatabaseOperation.CREATE,
-      {
-        Attributes: userReturnedFromCreate
-      }
+    const userReturnedFromCreate = getMockUserInstance(
+      Object.assign({}, userInfo)
     )
+    setMockDBResponse(DatabaseOperation.CREATE, {
+      Attributes: userReturnedFromCreate,
+    })
 
     const getOrCreateMethod = jest.spyOn(UserModel, 'getOrCreate')
     const referralData = null
@@ -196,18 +193,27 @@ describe('createUser when user does not exist', () => {
     const extensionInstallId = '9359e548-1bd8-4bf1-9e10-09b5b6b4df34'
     const extensionInstallTimeApprox = '2018-08-18T01:12:59.187Z'
 
-    await createUser(userContext, userInfo.id,
-      userInfo.email, referralData, experimentGroups,
-      extensionInstallId, extensionInstallTimeApprox)
+    await createUser(
+      userContext,
+      userInfo.id,
+      userInfo.email,
+      referralData,
+      experimentGroups,
+      extensionInstallId,
+      extensionInstallTimeApprox
+    )
 
     const expectedCreateItem = Object.assign(
       getExpectedCreateItemFromUserInfo(userInfo),
       {
         extensionInstallId: extensionInstallId,
-        extensionInstallTimeApprox: extensionInstallTimeApprox
-      })
-    expect(getOrCreateMethod)
-      .toHaveBeenCalledWith(userContext, expectedCreateItem)
+        extensionInstallTimeApprox: extensionInstallTimeApprox,
+      }
+    )
+    expect(getOrCreateMethod).toHaveBeenCalledWith(
+      userContext,
+      expectedCreateItem
+    )
   })
 
   it('calls to set up initial widgets', async () => {
@@ -215,23 +221,23 @@ describe('createUser when user does not exist', () => {
 
     // Mock database responses.
     const userInfo = getMockUserInfo()
-    const userReturnedFromCreate = getMockUserInstance(Object.assign({}, userInfo))
-    setMockDBResponse(
-      DatabaseOperation.CREATE,
-      {
-        Attributes: userReturnedFromCreate
-      }
+    const userReturnedFromCreate = getMockUserInstance(
+      Object.assign({}, userInfo)
     )
+    setMockDBResponse(DatabaseOperation.CREATE, {
+      Attributes: userReturnedFromCreate,
+    })
 
     const referralData = null
     const userContext = cloneDeep(defaultUserContext)
     userContext.emailVerified = false
     logUserExperimentGroups.mockResolvedValueOnce(userReturnedFromCreate)
 
-    await createUser(userContext, userInfo.id,
-      userInfo.email, referralData)
-    expect(setUpWidgetsForNewUser)
-      .toHaveBeenCalledWith(userContext, userInfo.id)
+    await createUser(userContext, userInfo.id, userInfo.email, referralData)
+    expect(setUpWidgetsForNewUser).toHaveBeenCalledWith(
+      userContext,
+      userInfo.id
+    )
   })
 
   it('logs referral data', async () => {
@@ -239,37 +245,41 @@ describe('createUser when user does not exist', () => {
 
     // Mock database responses.
     const userInfo = getMockUserInfo()
-    const userReturnedFromCreate = getMockUserInstance(Object.assign({}, userInfo))
-    setMockDBResponse(
-      DatabaseOperation.CREATE,
-      {
-        Attributes: userReturnedFromCreate
-      }
+    const userReturnedFromCreate = getMockUserInstance(
+      Object.assign({}, userInfo)
     )
+    setMockDBResponse(DatabaseOperation.CREATE, {
+      Attributes: userReturnedFromCreate,
+    })
 
     const getOrCreateMethod = jest.spyOn(UserModel, 'getOrCreate')
     const referralData = {
-      referringUser: 'FriendOfMine'
+      referringUser: 'FriendOfMine',
     }
 
     // Mock fetching the referring user.
     const referringUserId = 'ppooiiuu-151a-4a9a-9289-06906670fd4e'
     getUserByUsername.mockResolvedValueOnce({
-      id: referringUserId
+      id: referringUserId,
     })
 
     const userContext = cloneDeep(defaultUserContext)
     userContext.emailVerified = false
     logUserExperimentGroups.mockResolvedValueOnce(userReturnedFromCreate)
 
-    await createUser(userContext, userInfo.id,
-      userInfo.email, referralData)
+    await createUser(userContext, userInfo.id, userInfo.email, referralData)
 
     const expectedCreateItem = getExpectedCreateItemFromUserInfo(userInfo)
-    expect(getOrCreateMethod)
-      .toHaveBeenCalledWith(userContext, expectedCreateItem)
-    expect(logReferralData)
-      .toHaveBeenCalledWith(userContext, userInfo.id, referringUserId, null)
+    expect(getOrCreateMethod).toHaveBeenCalledWith(
+      userContext,
+      expectedCreateItem
+    )
+    expect(logReferralData).toHaveBeenCalledWith(
+      userContext,
+      userInfo.id,
+      referringUserId,
+      null
+    )
   })
 
   it('works when referring user does not exist', async () => {
@@ -277,17 +287,16 @@ describe('createUser when user does not exist', () => {
 
     // Mock database responses.
     const userInfo = getMockUserInfo()
-    const userReturnedFromCreate = getMockUserInstance(Object.assign({}, userInfo))
-    setMockDBResponse(
-      DatabaseOperation.CREATE,
-      {
-        Attributes: userReturnedFromCreate
-      }
+    const userReturnedFromCreate = getMockUserInstance(
+      Object.assign({}, userInfo)
     )
+    setMockDBResponse(DatabaseOperation.CREATE, {
+      Attributes: userReturnedFromCreate,
+    })
 
     const getOrCreateMethod = jest.spyOn(UserModel, 'getOrCreate')
     const referralData = {
-      referringUser: 'FriendOfMine'
+      referringUser: 'FriendOfMine',
     }
 
     // Mock fetching the referring user.
@@ -297,14 +306,19 @@ describe('createUser when user does not exist', () => {
     userContext.emailVerified = false
     logUserExperimentGroups.mockResolvedValueOnce(userReturnedFromCreate)
 
-    await createUser(userContext, userInfo.id,
-      userInfo.email, referralData)
+    await createUser(userContext, userInfo.id, userInfo.email, referralData)
 
     const expectedCreateItem = getExpectedCreateItemFromUserInfo(userInfo)
-    expect(getOrCreateMethod)
-      .toHaveBeenCalledWith(userContext, expectedCreateItem)
-    expect(logReferralData)
-      .toHaveBeenCalledWith(userContext, userInfo.id, null, null)
+    expect(getOrCreateMethod).toHaveBeenCalledWith(
+      userContext,
+      expectedCreateItem
+    )
+    expect(logReferralData).toHaveBeenCalledWith(
+      userContext,
+      userInfo.id,
+      null,
+      null
+    )
   })
 
   it('returns the user even if there is an error logging referral data', async () => {
@@ -312,26 +326,24 @@ describe('createUser when user does not exist', () => {
 
     // Mock database responses.
     const userInfo = getMockUserInfo()
-    const userReturnedFromCreate = getMockUserInstance(Object.assign({}, userInfo))
-    setMockDBResponse(
-      DatabaseOperation.CREATE,
-      {
-        Attributes: userReturnedFromCreate
-      }
+    const userReturnedFromCreate = getMockUserInstance(
+      Object.assign({}, userInfo)
     )
+    setMockDBResponse(DatabaseOperation.CREATE, {
+      Attributes: userReturnedFromCreate,
+    })
 
     // Hide expected error output
-    jest.spyOn(console, 'error')
-      .mockImplementationOnce(() => {})
+    jest.spyOn(console, 'error').mockImplementationOnce(() => {})
 
     const referralData = {
-      referringChannel: '42'
+      referringChannel: '42',
     }
 
     // Mock fetching the referring user.
     const referringUserId = 'ppooiiuu-151a-4a9a-9289-06906670fd4e'
     getUserByUsername.mockResolvedValueOnce({
-      id: referringUserId
+      id: referringUserId,
     })
 
     // Some unexpected error in logging referral data.
@@ -343,8 +355,12 @@ describe('createUser when user does not exist', () => {
     userContext.emailVerified = false
     logUserExperimentGroups.mockResolvedValueOnce(userReturnedFromCreate)
 
-    const createdItem = await createUser(userContext, userInfo.id,
-      userInfo.email, referralData)
+    const createdItem = await createUser(
+      userContext,
+      userInfo.id,
+      userInfo.email,
+      referralData
+    )
 
     // The user was just created, so we expect the 'justCreated' field to be true.
     userReturnedFromCreate.justCreated = true
@@ -356,16 +372,15 @@ describe('createUser when user does not exist', () => {
 
     // Mock database responses.
     const userInfo = getMockUserInfo()
-    const userReturnedFromCreate = getMockUserInstance(Object.assign({}, userInfo))
-    setMockDBResponse(
-      DatabaseOperation.CREATE,
-      {
-        Attributes: userReturnedFromCreate
-      }
+    const userReturnedFromCreate = getMockUserInstance(
+      Object.assign({}, userInfo)
     )
+    setMockDBResponse(DatabaseOperation.CREATE, {
+      Attributes: userReturnedFromCreate,
+    })
 
     const referralData = {
-      referringChannel: '42'
+      referringChannel: '42',
     }
 
     // No referring user.
@@ -375,24 +390,26 @@ describe('createUser when user does not exist', () => {
     userContext.emailVerified = false
     logUserExperimentGroups.mockResolvedValueOnce(userReturnedFromCreate)
 
-    await createUser(userContext, userInfo.id,
-      userInfo.email, referralData)
-    expect(logReferralData)
-      .toHaveBeenCalledWith(userContext, userInfo.id, null, '42')
+    await createUser(userContext, userInfo.id, userInfo.email, referralData)
+    expect(logReferralData).toHaveBeenCalledWith(
+      userContext,
+      userInfo.id,
+      null,
+      '42'
+    )
   })
 
-  it('logs the user\'s experiment groups', async () => {
+  it("logs the user's experiment groups", async () => {
     expect.assertions(1)
 
     // Mock database responses.
     const userInfo = getMockUserInfo()
-    const userReturnedFromCreate = getMockUserInstance(Object.assign({}, userInfo))
-    setMockDBResponse(
-      DatabaseOperation.CREATE,
-      {
-        Attributes: userReturnedFromCreate
-      }
+    const userReturnedFromCreate = getMockUserInstance(
+      Object.assign({}, userInfo)
     )
+    setMockDBResponse(DatabaseOperation.CREATE, {
+      Attributes: userReturnedFromCreate,
+    })
     const referralData = null
 
     const userContext = cloneDeep(defaultUserContext)
@@ -401,27 +418,34 @@ describe('createUser when user does not exist', () => {
 
     const fakeExperimentGroups = {
       someExperiment: 2,
-      anotherThing: 0
+      anotherThing: 0,
     }
 
-    await createUser(userContext, userInfo.id,
-      userInfo.email, referralData, fakeExperimentGroups)
-    expect(logUserExperimentGroups)
-      .toHaveBeenCalledWith(userContext, userInfo.id, fakeExperimentGroups)
+    await createUser(
+      userContext,
+      userInfo.id,
+      userInfo.email,
+      referralData,
+      fakeExperimentGroups
+    )
+    expect(logUserExperimentGroups).toHaveBeenCalledWith(
+      userContext,
+      userInfo.id,
+      fakeExperimentGroups
+    )
   })
 
-  it('calls to log the user\'s experiment groups with an empty object if none is provided', async () => {
+  it("calls to log the user's experiment groups with an empty object if none is provided", async () => {
     expect.assertions(1)
 
     // Mock database responses.
     const userInfo = getMockUserInfo()
-    const userReturnedFromCreate = getMockUserInstance(Object.assign({}, userInfo))
-    setMockDBResponse(
-      DatabaseOperation.CREATE,
-      {
-        Attributes: userReturnedFromCreate
-      }
+    const userReturnedFromCreate = getMockUserInstance(
+      Object.assign({}, userInfo)
     )
+    setMockDBResponse(DatabaseOperation.CREATE, {
+      Attributes: userReturnedFromCreate,
+    })
     const referralData = null
 
     const userContext = cloneDeep(defaultUserContext)
@@ -429,24 +453,25 @@ describe('createUser when user does not exist', () => {
     logUserExperimentGroups.mockResolvedValueOnce(userReturnedFromCreate)
 
     // No experiment groups are provided.
-    await createUser(userContext, userInfo.id,
-      userInfo.email, referralData)
-    expect(logUserExperimentGroups)
-      .toHaveBeenCalledWith(userContext, userInfo.id, {})
+    await createUser(userContext, userInfo.id, userInfo.email, referralData)
+    expect(logUserExperimentGroups).toHaveBeenCalledWith(
+      userContext,
+      userInfo.id,
+      {}
+    )
   })
 
-  it('throws if there is an error logging the user\'s experiment groups', async () => {
+  it("throws if there is an error logging the user's experiment groups", async () => {
     expect.assertions(1)
 
     // Mock database responses.
     const userInfo = getMockUserInfo()
-    const userReturnedFromCreate = getMockUserInstance(Object.assign({}, userInfo))
-    setMockDBResponse(
-      DatabaseOperation.CREATE,
-      {
-        Attributes: userReturnedFromCreate
-      }
+    const userReturnedFromCreate = getMockUserInstance(
+      Object.assign({}, userInfo)
     )
+    setMockDBResponse(DatabaseOperation.CREATE, {
+      Attributes: userReturnedFromCreate,
+    })
     const referralData = null
 
     const userContext = cloneDeep(defaultUserContext)
@@ -457,12 +482,18 @@ describe('createUser when user does not exist', () => {
     })
     const fakeExperimentGroups = {
       someExperiment: 2,
-      anotherThing: 0
+      anotherThing: 0,
     }
 
-    return expect(createUser(userContext, userInfo.id,
-        userInfo.email, referralData, fakeExperimentGroups)
-      ).rejects.toThrow()
+    return expect(
+      createUser(
+        userContext,
+        userInfo.id,
+        userInfo.email,
+        referralData,
+        fakeExperimentGroups
+      )
+    ).rejects.toThrow()
   })
 
   it('calls the database as expected', async () => {
@@ -470,13 +501,12 @@ describe('createUser when user does not exist', () => {
 
     // Mock database responses.
     const userInfo = getMockUserInfo()
-    const userReturnedFromCreate = getMockUserInstance(Object.assign({}, userInfo))
-    const dbQueryMock = setMockDBResponse(
-      DatabaseOperation.CREATE,
-      {
-        Attributes: userReturnedFromCreate
-      }
+    const userReturnedFromCreate = getMockUserInstance(
+      Object.assign({}, userInfo)
     )
+    const dbQueryMock = setMockDBResponse(DatabaseOperation.CREATE, {
+      Attributes: userReturnedFromCreate,
+    })
 
     const referralData = null
     const expectedParamsUser = cloneDeep(userReturnedFromCreate)
@@ -488,20 +518,24 @@ describe('createUser when user does not exist', () => {
 
     const expectedParams = {
       ConditionExpression: '(#id <> :id)',
-      ExpressionAttributeNames: {'#id': 'id'},
+      ExpressionAttributeNames: { '#id': 'id' },
       ExpressionAttributeValues: {
-        ':id': userInfo.id
+        ':id': userInfo.id,
       },
       Item: expectedParamsUser,
-      TableName: UserModel.tableName
+      TableName: UserModel.tableName,
     }
 
     const userContext = cloneDeep(defaultUserContext)
     userContext.emailVerified = false
     logUserExperimentGroups.mockResolvedValueOnce(userReturnedFromCreate)
 
-    const createdItem = await createUser(userContext, userInfo.id,
-      userInfo.email, referralData)
+    const createdItem = await createUser(
+      userContext,
+      userInfo.id,
+      userInfo.email,
+      referralData
+    )
     const dbParams = dbQueryMock.mock.calls[0][0]
     expect(dbParams).toEqual(expectedParams)
 
@@ -525,21 +559,18 @@ describe('createUser when user already exists (should be idempotent)', () => {
 
     // Mock database responses.
     const userInfo = getMockUserInfo()
-    const existingUser = getMockUserInstance(Object.assign({}, userInfo, { emailVerified: true }))
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: existingUser
-      }
+    const existingUser = getMockUserInstance(
+      Object.assign({}, userInfo, { emailVerified: true })
     )
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: existingUser,
+    })
 
     const referralData = null
     const userContext = cloneDeep(defaultUserContext)
 
-    await createUser(userContext, userInfo.id,
-      userInfo.email, referralData)
-    expect(setUpWidgetsForNewUser)
-       .not.toHaveBeenCalled()
+    await createUser(userContext, userInfo.id, userInfo.email, referralData)
+    expect(setUpWidgetsForNewUser).not.toHaveBeenCalled()
   })
 
   it('does not log referral data', async () => {
@@ -553,33 +584,30 @@ describe('createUser when user already exists (should be idempotent)', () => {
     )
     const userInfo = getMockUserInfo()
     const referralData = {
-      referringUser: 'FriendOfMine'
+      referringUser: 'FriendOfMine',
     }
 
     // Mock database responses.
-    const existingUser = getMockUserInstance(Object.assign({}, userInfo, { emailVerified: true }))
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: existingUser
-      }
+    const existingUser = getMockUserInstance(
+      Object.assign({}, userInfo, { emailVerified: true })
     )
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: existingUser,
+    })
 
     // Mock fetching the referring user.
     const referringUserId = 'ppooiiuu-151a-4a9a-9289-06906670fd4e'
     getUserByUsername.mockResolvedValueOnce({
-      id: referringUserId
+      id: referringUserId,
     })
 
     const userContext = cloneDeep(defaultUserContext)
-    await createUser(userContext, userInfo.id,
-      userInfo.email, referralData)
+    await createUser(userContext, userInfo.id, userInfo.email, referralData)
 
-    expect(logReferralData)
-      .not.toHaveBeenCalled()
+    expect(logReferralData).not.toHaveBeenCalled()
   })
 
-  it('does not log the user\'s experiment groups', async () => {
+  it("does not log the user's experiment groups", async () => {
     expect.assertions(1)
 
     // Mock that the user already exists.
@@ -591,23 +619,27 @@ describe('createUser when user already exists (should be idempotent)', () => {
 
     // Mock database responses.
     const userInfo = getMockUserInfo()
-    const existingUser = getMockUserInstance(Object.assign({}, userInfo, { emailVerified: true }))
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: existingUser
-      }
+    const existingUser = getMockUserInstance(
+      Object.assign({}, userInfo, { emailVerified: true })
     )
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: existingUser,
+    })
 
     const referralData = null
     const userContext = cloneDeep(defaultUserContext)
     const fakeExperimentGroups = {
       someExperiment: 2,
-      anotherThing: 0
+      anotherThing: 0,
     }
 
-    await createUser(userContext, userInfo.id,
-      userInfo.email, referralData, fakeExperimentGroups)
+    await createUser(
+      userContext,
+      userInfo.id,
+      userInfo.email,
+      referralData,
+      fakeExperimentGroups
+    )
     expect(logUserExperimentGroups).not.toHaveBeenCalled()
   })
 
@@ -625,21 +657,24 @@ describe('createUser when user already exists (should be idempotent)', () => {
     )
 
     // Mock database responses.
-    const existingUser = getMockUserInstance(Object.assign({}, userInfo, { emailVerified: true }))
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: existingUser
-      }
+    const existingUser = getMockUserInstance(
+      Object.assign({}, userInfo, { emailVerified: true })
     )
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: existingUser,
+    })
 
     const userContext = cloneDeep(defaultUserContext)
-    const createdItem = await createUser(userContext, userInfo.id,
-      userInfo.email, referralData)
+    const createdItem = await createUser(
+      userContext,
+      userInfo.id,
+      userInfo.email,
+      referralData
+    )
     expect(createdItem).toEqual(existingUser)
   })
 
-  it('updates the existing user\'s email address if it is different from the user claims', async () => {
+  it("updates the existing user's email address if it is different from the user claims", async () => {
     expect.assertions(2)
 
     const userInfo = getMockUserInfo()
@@ -653,44 +688,41 @@ describe('createUser when user already exists (should be idempotent)', () => {
     )
 
     // Mock database responses.
-    const existingUser = getMockUserInstance(Object.assign({}, userInfo, { emailVerified: true }))
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: existingUser
-      }
+    const existingUser = getMockUserInstance(
+      Object.assign({}, userInfo, { emailVerified: true })
     )
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: existingUser,
+    })
 
     // Set the email in the user context.
     const userContext = cloneDeep(defaultUserContext)
     userContext.email = 'myemail@example.com'
 
     // Mock the response for updating the email address.
-    setMockDBResponse(
-      DatabaseOperation.UPDATE,
-      {
-        // Like original user but with modified email.
-        Attributes: Object.assign({},
-          existingUser,
-          { email: userContext.email })
-      }
-    )
+    setMockDBResponse(DatabaseOperation.UPDATE, {
+      // Like original user but with modified email.
+      Attributes: Object.assign({}, existingUser, { email: userContext.email }),
+    })
 
     const updateMethod = jest.spyOn(UserModel, 'update')
 
-    const returnedUser = await createUser(userContext, userInfo.id,
-      userInfo.email, referralData)
+    const returnedUser = await createUser(
+      userContext,
+      userInfo.id,
+      userInfo.email,
+      referralData
+    )
 
-    expect(updateMethod)
-      .toHaveBeenCalledWith(userContext, {
-        id: userInfo.id,
-        email: 'myemail@example.com',
-        updated: moment.utc().toISOString()
-      })
+    expect(updateMethod).toHaveBeenCalledWith(userContext, {
+      id: userInfo.id,
+      email: 'myemail@example.com',
+      updated: moment.utc().toISOString(),
+    })
     expect(returnedUser.email).toEqual('myemail@example.com')
   })
 
-  it('updates the existing user\'s emailVerified property if it is different from the value in user claims', async () => {
+  it("updates the existing user's emailVerified property if it is different from the value in user claims", async () => {
     expect.assertions(2)
 
     const userInfo = getMockUserInfo()
@@ -704,13 +736,12 @@ describe('createUser when user already exists (should be idempotent)', () => {
     )
 
     // Mock database responses.
-    const existingUser = getMockUserInstance(Object.assign({}, userInfo, { emailVerified: false }))
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: existingUser
-      }
+    const existingUser = getMockUserInstance(
+      Object.assign({}, userInfo, { emailVerified: false })
     )
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: existingUser,
+    })
 
     const userContext = cloneDeep(defaultUserContext)
     userContext.emailVerified = true // Different from the existing user's value
@@ -720,15 +751,18 @@ describe('createUser when user already exists (should be idempotent)', () => {
     const logEmailVerified = require('../logEmailVerified').default
     logEmailVerified.mockResolvedValue(updatedUser)
 
-    const returnedUser = await createUser(userContext, userInfo.id,
-      userInfo.email, referralData)
+    const returnedUser = await createUser(
+      userContext,
+      userInfo.id,
+      userInfo.email,
+      referralData
+    )
 
-    expect(logEmailVerified)
-      .toHaveBeenCalledWith(userContext, userInfo.id)
+    expect(logEmailVerified).toHaveBeenCalledWith(userContext, userInfo.id)
     expect(returnedUser.emailVerified).toBe(true)
   })
 
-  it('does not update the existing user\'s emailVerified property if it is the same as the value in user claims', async () => {
+  it("does not update the existing user's emailVerified property if it is the same as the value in user claims", async () => {
     expect.assertions(1)
 
     const userInfo = getMockUserInfo()
@@ -742,13 +776,12 @@ describe('createUser when user already exists (should be idempotent)', () => {
     )
 
     // Mock database responses.
-    const existingUser = getMockUserInstance(Object.assign({}, userInfo, { emailVerified: true }))
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: existingUser
-      }
+    const existingUser = getMockUserInstance(
+      Object.assign({}, userInfo, { emailVerified: true })
     )
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: existingUser,
+    })
 
     const userContext = cloneDeep(defaultUserContext)
     userContext.emailVerified = true // Same as the existing user's value
@@ -757,10 +790,8 @@ describe('createUser when user already exists (should be idempotent)', () => {
     const logEmailVerified = require('../logEmailVerified').default
     logEmailVerified.mockResolvedValue(existingUser)
 
-    await createUser(userContext, userInfo.id,
-      userInfo.email, referralData)
+    await createUser(userContext, userInfo.id, userInfo.email, referralData)
 
-    expect(logEmailVerified)
-      .not.toHaveBeenCalledWith(userContext, userInfo.id)
+    expect(logEmailVerified).not.toHaveBeenCalledWith(userContext, userInfo.id)
   })
 })

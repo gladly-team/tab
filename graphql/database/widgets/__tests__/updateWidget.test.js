@@ -4,7 +4,7 @@ import {
   updateWidgetData,
   updateWidgetVisibility,
   updateWidgetEnabled,
-  updateWidgetConfig
+  updateWidgetConfig,
 } from '../updateWidget'
 import updateUserWidgetData from '../userWidget/updateUserWidgetData'
 import updateUserWidgetConfig from '../userWidget/updateUserWidgetConfig'
@@ -13,9 +13,7 @@ import updateUserWidgetVisibility from '../userWidget/updateUserWidgetVisibility
 import UserWidgetModel from '../userWidget/UserWidgetModel'
 import BaseWidgetModel from '../baseWidget/BaseWidgetModel'
 import constructFullWidget from '../constructFullWidget'
-import {
-  getMockUserContext
-} from '../../test-utils'
+import { getMockUserContext } from '../../test-utils'
 
 jest.mock('../../databaseClient')
 jest.mock('../userWidget/updateUserWidgetData')
@@ -32,20 +30,19 @@ const mockUserWidget = new UserWidgetModel({
   userId: userId,
   widgetId: widgetId,
   data: {
-    foo: 'bar'
+    foo: 'bar',
   },
-  enabled: true
+  enabled: true,
 })
 const mockBaseWidget = new BaseWidgetModel({
   id: widgetId,
   name: 'Bookmarks',
-  position: 1
+  position: 1,
 })
 const fullWidget = constructFullWidget(mockUserWidget, mockBaseWidget)
-jest.spyOn(BaseWidgetModel, 'get')
-  .mockImplementation(() => {
-    return mockBaseWidget
-  })
+jest.spyOn(BaseWidgetModel, 'get').mockImplementation(() => {
+  return mockBaseWidget
+})
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -56,61 +53,101 @@ describe('update', () => {
     const newData = { foo: 'baz' }
     updateUserWidgetData.mockImplementation(() => {
       return Object.assign(mockUserWidget, {
-        data: newData
+        data: newData,
       })
     })
-    const returnedWidget = await updateWidgetData(userContext, userId,
-      widgetId, JSON.stringify(newData))
-    expect(updateUserWidgetData).toHaveBeenCalledWith(userContext, userId,
-      widgetId, newData)
-    expect(returnedWidget).toEqual(Object.assign(fullWidget, {
-      data: JSON.stringify(newData)
-    }))
+    const returnedWidget = await updateWidgetData(
+      userContext,
+      userId,
+      widgetId,
+      JSON.stringify(newData)
+    )
+    expect(updateUserWidgetData).toHaveBeenCalledWith(
+      userContext,
+      userId,
+      widgetId,
+      newData
+    )
+    expect(returnedWidget).toEqual(
+      Object.assign(fullWidget, {
+        data: JSON.stringify(newData),
+      })
+    )
   })
 
   test('updateWidgetVisibility', async () => {
     updateUserWidgetVisibility.mockImplementation(() => {
       return Object.assign(mockUserWidget, {
-        visible: false
+        visible: false,
       })
     })
-    const returnedWidget = await updateWidgetVisibility(userContext, userId,
-      widgetId, false)
-    expect(updateUserWidgetVisibility).toHaveBeenCalledWith(userContext, userId,
-      widgetId, false)
-    expect(returnedWidget).toEqual(Object.assign(fullWidget, {
-      visible: false
-    }))
+    const returnedWidget = await updateWidgetVisibility(
+      userContext,
+      userId,
+      widgetId,
+      false
+    )
+    expect(updateUserWidgetVisibility).toHaveBeenCalledWith(
+      userContext,
+      userId,
+      widgetId,
+      false
+    )
+    expect(returnedWidget).toEqual(
+      Object.assign(fullWidget, {
+        visible: false,
+      })
+    )
   })
 
   test('updateWidgetEnabled', async () => {
     updateUserWidgetEnabled.mockImplementation(() => {
       return Object.assign(mockUserWidget, {
-        enabled: false
+        enabled: false,
       })
     })
-    const returnedWidget = await updateWidgetEnabled(userContext, userId,
-      widgetId, false)
-    expect(updateUserWidgetEnabled).toHaveBeenCalledWith(userContext, userId,
-      widgetId, false)
-    expect(returnedWidget).toEqual(Object.assign(fullWidget, {
-      enabled: false
-    }))
+    const returnedWidget = await updateWidgetEnabled(
+      userContext,
+      userId,
+      widgetId,
+      false
+    )
+    expect(updateUserWidgetEnabled).toHaveBeenCalledWith(
+      userContext,
+      userId,
+      widgetId,
+      false
+    )
+    expect(returnedWidget).toEqual(
+      Object.assign(fullWidget, {
+        enabled: false,
+      })
+    )
   })
 
   test('updateWidgetConfig', async () => {
     const newConfig = { foo: 'baz' }
     updateUserWidgetConfig.mockImplementation(() => {
       return Object.assign(mockUserWidget, {
-        config: newConfig
+        config: newConfig,
       })
     })
-    const returnedWidget = await updateWidgetConfig(userContext, userId,
-      widgetId, JSON.stringify(newConfig))
-    expect(updateUserWidgetConfig).toHaveBeenCalledWith(userContext, userId,
-      widgetId, newConfig)
-    expect(returnedWidget).toEqual(Object.assign(fullWidget, {
-      config: JSON.stringify(newConfig)
-    }))
+    const returnedWidget = await updateWidgetConfig(
+      userContext,
+      userId,
+      widgetId,
+      JSON.stringify(newConfig)
+    )
+    expect(updateUserWidgetConfig).toHaveBeenCalledWith(
+      userContext,
+      userId,
+      widgetId,
+      newConfig
+    )
+    expect(returnedWidget).toEqual(
+      Object.assign(fullWidget, {
+        config: JSON.stringify(newConfig),
+      })
+    )
   })
 })

@@ -1,4 +1,3 @@
-
 import tables from '../../database/tables'
 
 export const tableNames = tables
@@ -6,52 +5,52 @@ export const tableNames = tables
 export const tableKeys = {
   users: {
     hash: 'id',
-    range: null
+    range: null,
   },
   userLevels: {
     hash: 'id',
-    range: null
+    range: null,
   },
   charities: {
     hash: 'id',
-    range: null
+    range: null,
   },
   vcDonationLog: {
     hash: 'userId',
-    range: 'timestamp'
+    range: 'timestamp',
   },
   vcDonationByCharity: {
     hash: 'charityId',
-    range: 'timestamp'
+    range: 'timestamp',
   },
   userRevenueLog: {
     hash: 'userId',
-    range: 'timestamp'
+    range: 'timestamp',
   },
   userDataConsentLog: {
     hash: 'userId',
-    range: 'timestamp'
+    range: 'timestamp',
   },
   backgroundImages: {
     hash: 'id',
-    range: null
+    range: null,
   },
   widgets: {
     hash: 'id',
-    range: null
+    range: null,
   },
   userWidgets: {
     hash: 'userId',
-    range: 'widgetId'
+    range: 'widgetId',
   },
   userTabsLog: {
     hash: 'userId',
-    range: 'timestamp'
+    range: 'timestamp',
   },
   referralDataLog: {
     hash: 'userId',
-    range: null
-  }
+    range: null,
+  },
 }
 
 export const tableFixtureFileNames = {
@@ -64,5 +63,5 @@ export const tableFixtureFileNames = {
   widgets: 'Widgets.json',
   userWidgets: 'UserWidgets.json',
   userTabsLog: '',
-  referralDataLog: 'ReferralDataLog.json'
+  referralDataLog: 'ReferralDataLog.json',
 }

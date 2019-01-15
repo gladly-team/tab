@@ -1,4 +1,3 @@
-
 import { isError } from 'lodash/lang'
 import Sentry, { sentryContextWrapper } from './sentry-logger'
 import config from '../config'
@@ -16,7 +15,7 @@ const logLevelsOrder = [
   logLevels.INFO,
   logLevels.WARN,
   logLevels.ERROR,
-  logLevels.FATAL
+  logLevels.FATAL,
 ]
 
 /*
@@ -38,27 +37,27 @@ export const loggerContextWrapper = (userContext, lambdaEvent, func) => {
 
 const logger = {}
 
-logger.log = (msg) => {
+logger.log = msg => {
   log(msg, logLevels.LOG)
 }
 
-logger.debug = (msg) => {
+logger.debug = msg => {
   log(msg, logLevels.DEBUG)
 }
 
-logger.info = (msg) => {
+logger.info = msg => {
   log(msg, logLevels.INFO)
 }
 
-logger.warn = (msg) => {
+logger.warn = msg => {
   log(msg, logLevels.WARN)
 }
 
-logger.error = (msg) => {
+logger.error = msg => {
   log(msg, logLevels.ERROR)
 }
 
-logger.fatal = (msg) => {
+logger.fatal = msg => {
   log(msg, logLevels.FATAL)
 }
 
@@ -75,13 +74,14 @@ export const logErrorWithId = (err, errId) => {
 
 export const shouldLog = (logLevel, globalLogLevel) => {
   return (
-    logLevelsOrder.indexOf(logLevel) >=
-    logLevelsOrder.indexOf(globalLogLevel)
+    logLevelsOrder.indexOf(logLevel) >= logLevelsOrder.indexOf(globalLogLevel)
   )
 }
 
 const log = (msg, logLevel) => {
-  if (!shouldLog(logLevel, config.LOG_LEVEL)) { return }
+  if (!shouldLog(logLevel, config.LOG_LEVEL)) {
+    return
+  }
   switch (config.LOGGER) {
     case 'console':
       switch (logLevel) {
@@ -107,18 +107,14 @@ const log = (msg, logLevel) => {
       break
     case 'sentry':
       // Sentry expects 'warning', not 'warn'
-      const level = (
-        logLevel === logLevels.WARN
-        ? 'warning'
-        : logLevel
-      )
+      const level = logLevel === logLevels.WARN ? 'warning' : logLevel
       if (isError(msg)) {
         Sentry.captureException(msg, {
-          level: level
+          level: level,
         })
       } else {
         Sentry.captureMessage(msg, {
-          level: level
+          level: level,
         })
       }
       break

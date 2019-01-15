@@ -4,9 +4,7 @@ import getWidget from '../getWidget'
 import BaseWidgetModel from '../baseWidget/BaseWidgetModel'
 import UserWidgetModel from '../userWidget/UserWidgetModel'
 import constructFullWidget from '../constructFullWidget'
-import {
-  getMockUserContext
-} from '../../test-utils'
+import { getMockUserContext } from '../../test-utils'
 
 jest.mock('../../databaseClient')
 jest.mock('../constructFullWidget')
@@ -19,25 +17,27 @@ describe('getWidget', () => {
     const baseWidget = new BaseWidgetModel({
       id: widgetId,
       name: 'Bookmarks',
-      position: 1
+      position: 1,
     })
     const userWidget = new UserWidgetModel({
       userId: userId,
       widgetId: widgetId,
       data: {
-        foo: 'bar'
+        foo: 'bar',
       },
-      enabled: true
+      enabled: true,
     })
-    const getBaseWidgetSpy = jest.spyOn(BaseWidgetModel, 'get')
+    const getBaseWidgetSpy = jest
+      .spyOn(BaseWidgetModel, 'get')
       .mockImplementationOnce(() => {
         return baseWidget
       })
-    const getUserWidgetSpy = jest.spyOn(UserWidgetModel, 'get')
+    const getUserWidgetSpy = jest
+      .spyOn(UserWidgetModel, 'get')
       .mockImplementationOnce(() => {
         return userWidget
       })
-    const mockFullWidget = { 'a': 'fake-widget' }
+    const mockFullWidget = { a: 'fake-widget' }
     constructFullWidget.mockImplementationOnce(() => mockFullWidget)
 
     const fetchedWidget = await getWidget(userContext, userId, widgetId)

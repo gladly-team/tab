@@ -9,7 +9,7 @@ describe('the tablesName module', () => {
   it('returns expected names', () => {
     jest.mock('../../config', () => {
       return {
-        DB_TABLE_NAME_APPENDIX: ''
+        DB_TABLE_NAME_APPENDIX: '',
       }
     })
     const tableNames = require('../tables').default
@@ -20,7 +20,7 @@ describe('the tablesName module', () => {
   it('uses custom table names appendix when set in config', () => {
     jest.mock('../../config', () => {
       return {
-        DB_TABLE_NAME_APPENDIX: '-dev'
+        DB_TABLE_NAME_APPENDIX: '-dev',
       }
     })
     const tableNames = require('../tables').default

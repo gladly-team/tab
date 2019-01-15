@@ -6,7 +6,7 @@ import {
   DatabaseOperation,
   getMockUserContext,
   getMockUserInstance,
-  setMockDBResponse
+  setMockDBResponse,
 } from '../../test-utils'
 
 // Mock the database client. This allows us to test
@@ -26,14 +26,12 @@ describe('addVcDonatedAllTime', () => {
     const vcToAdd = 12
 
     // Mock response to updating VC.
-    const userToReturn = Object.assign(
-      {},
-      getMockUserInstance(),
-      {
-        id: userId,
-        addVcDonatedAllTime: 32
-      })
-    const updateMethod = jest.spyOn(UserModel, 'update')
+    const userToReturn = Object.assign({}, getMockUserInstance(), {
+      id: userId,
+      addVcDonatedAllTime: 32,
+    })
+    const updateMethod = jest
+      .spyOn(UserModel, 'update')
       .mockImplementationOnce(() => {
         return userToReturn
       })
@@ -41,7 +39,7 @@ describe('addVcDonatedAllTime', () => {
     await addVcDonatedAllTime(userContext, userId, vcToAdd)
     expect(updateMethod).toHaveBeenCalledWith(userContext, {
       id: userId,
-      vcDonatedAllTime: {$add: vcToAdd}
+      vcDonatedAllTime: { $add: vcToAdd },
     })
   })
 
@@ -50,20 +48,13 @@ describe('addVcDonatedAllTime', () => {
     const vcToAdd = 12
 
     // Mock DB response.
-    const expectedReturnedUser = Object.assign(
-      {},
-      getMockUserInstance(),
-      {
-        id: userId,
-        vcDonatedAllTime: 32
-      }
-    )
-    const dbUpdateMock = setMockDBResponse(
-      DatabaseOperation.UPDATE,
-      {
-        Attributes: expectedReturnedUser
-      }
-    )
+    const expectedReturnedUser = Object.assign({}, getMockUserInstance(), {
+      id: userId,
+      vcDonatedAllTime: 32,
+    })
+    const dbUpdateMock = setMockDBResponse(DatabaseOperation.UPDATE, {
+      Attributes: expectedReturnedUser,
+    })
     const returnedUser = await addVcDonatedAllTime(userContext, userId, vcToAdd)
     expect(dbUpdateMock).toHaveBeenCalled()
     expect(returnedUser).toEqual(expectedReturnedUser)

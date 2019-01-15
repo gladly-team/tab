@@ -1,4 +1,3 @@
-
 import { forEach, sortBy } from 'lodash/collection'
 import UserLevelModel from './UserLevelModel'
 
@@ -12,11 +11,11 @@ import UserLevelModel from './UserLevelModel'
  */
 const getNextLevelFor = async (userContext, level, vcAllTime) => {
   const keys = [
-    {id: level + 1},
-    {id: level + 2},
-    {id: level + 3},
-    {id: level + 4},
-    {id: level + 5}
+    { id: level + 1 },
+    { id: level + 2 },
+    { id: level + 3 },
+    { id: level + 4 },
+    { id: level + 5 },
   ]
 
   var levels
@@ -31,10 +30,10 @@ const getNextLevelFor = async (userContext, level, vcAllTime) => {
     return null
   }
 
-  const sortedLevels = sortBy(levels, (level) => level.id)
+  const sortedLevels = sortBy(levels, level => level.id)
 
   var levelToReturn
-  forEach(sortedLevels, (level) => {
+  forEach(sortedLevels, level => {
     // If the level's required hearts is greater than the
     // user's number of hearts, it is the user's next level.
     if (level.hearts > vcAllTime) {

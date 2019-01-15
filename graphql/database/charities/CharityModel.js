@@ -1,4 +1,3 @@
-
 import BaseModel from '../base/BaseModel'
 import types from '../fieldTypes'
 import tableNames from '../tables'
@@ -12,19 +11,19 @@ const mediaRoot = config.MEDIA_ENDPOINT
  * @extends BaseModel
  */
 class Charity extends BaseModel {
-  static get name () {
+  static get name() {
     return CHARITY
   }
 
-  static get hashKey () {
+  static get hashKey() {
     return 'id'
   }
 
-  static get tableName () {
+  static get tableName() {
     return tableNames.charities
   }
 
-  static get schema () {
+  static get schema() {
     const self = this
     return {
       id: types.uuid(),
@@ -36,32 +35,31 @@ class Charity extends BaseModel {
       website: types.string().uri(),
       description: types.string(),
       impact: types.string(),
-      inactive: types.boolean()
-        .default(self.fieldDefaults.inactive)
+      inactive: types.boolean().default(self.fieldDefaults.inactive),
     }
   }
 
-  static get fieldDefaults () {
+  static get fieldDefaults() {
     return {
-      inactive: false
+      inactive: false,
     }
   }
 
-  static get permissions () {
+  static get permissions() {
     return {
       get: () => true,
-      getAll: () => true
+      getAll: () => true,
     }
   }
 
-  static get fieldDeserializers () {
+  static get fieldDeserializers() {
     return {
-      logo: (fileName) => {
+      logo: fileName => {
         return `${mediaRoot}/img/charities/charity-logos/${fileName}`
       },
-      image: (fileName) => {
+      image: fileName => {
         return `${mediaRoot}/img/charities/charity-post-donation-images/${fileName}`
-      }
+      },
     }
   }
 }

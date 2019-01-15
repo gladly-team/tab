@@ -10,15 +10,15 @@ describe('constructFullWidget', () => {
     const baseWidget = new BaseWidgetModel({
       id: 'ab5082cc-151a-4a9a-9289-06906670fd4e',
       name: 'Bookmarks',
-      position: 1
+      position: 1,
     })
     const userWidget = new UserWidgetModel({
       userId: 'cb5082cc-151a-4a9a-9289-06906670fd4e',
       widgetId: 'ab5082cc-151a-4a9a-9289-06906670fd4e',
       data: {
-        foo: 'bar'
+        foo: 'bar',
       },
-      enabled: true
+      enabled: true,
     })
     const fullWidget = constructFullWidget(userWidget, baseWidget)
     expect(fullWidget).toEqual({
@@ -28,12 +28,12 @@ describe('constructFullWidget', () => {
       name: 'Bookmarks',
       position: 1,
       data: JSON.stringify({
-        foo: 'bar'
+        foo: 'bar',
       }),
       config: JSON.stringify({}),
       settings: JSON.stringify({}),
       enabled: true,
-      visible: false
+      visible: false,
     })
     expect(fullWidget instanceof Widget).toBe(true)
   })

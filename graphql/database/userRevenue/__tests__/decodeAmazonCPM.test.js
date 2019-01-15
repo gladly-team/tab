@@ -10,7 +10,7 @@ jest.mock('../amazon-cpm-codes.json', () => {
     'code-4': '0.50',
     'code-5': '7.1',
     'code-6': '20',
-    'some-code': 'abc' // invalid
+    'some-code': 'abc', // invalid
   }
 })
 jest.mock('../../../utils/logger')

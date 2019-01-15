@@ -1,10 +1,7 @@
 /* eslint-env jest */
 
 import moment from 'moment'
-import {
-  getMockUserContext,
-  mockDate
-} from '../../test-utils'
+import { getMockUserContext, mockDate } from '../../test-utils'
 
 jest.mock('../../databaseClient')
 jest.mock('../getUserByUsername')
@@ -36,16 +33,18 @@ describe('setUsername', () => {
     expect(updateQuery).toHaveBeenCalledWith(userContext, {
       id: userContext.id,
       username: 'bob',
-      updated: moment.utc().toISOString()
+      updated: moment.utc().toISOString(),
     })
   })
 
   it('returns an error when the username is already taken', async () => {
     // Mock that another user already has this username.
-    jest.mock('../getUserByUsername', () => jest.fn(() => ({
-      id: 'abc123',
-      username: 'bob'
-    })))
+    jest.mock('../getUserByUsername', () =>
+      jest.fn(() => ({
+        id: 'abc123',
+        username: 'bob',
+      }))
+    )
 
     const UserModel = require('../UserModel').default
     const updateQuery = jest.spyOn(UserModel, 'update')
@@ -56,7 +55,7 @@ describe('setUsername', () => {
     expect(response.user).toBeNull()
     expect(response.errors).toContainEqual({
       code: 'USERNAME_DUPLICATE',
-      message: 'Username already exists'
+      message: 'Username already exists',
     })
 
     // We should not set the username for this user

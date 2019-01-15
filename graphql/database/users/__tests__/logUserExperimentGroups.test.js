@@ -6,11 +6,9 @@ import {
   getMockUserContext,
   getMockUserInstance,
   mockDate,
-  setMockDBResponse
+  setMockDBResponse,
 } from '../../test-utils'
-import {
-  getValidatedExperimentGroups
-} from '../../../utils/experiments'
+import { getValidatedExperimentGroups } from '../../../utils/experiments'
 
 jest.mock('../../databaseClient')
 jest.mock('../../../utils/experiments')
@@ -38,15 +36,20 @@ describe('logUserExperimentGroups', () => {
     const updateQuery = jest.spyOn(UserModel, 'update')
 
     const mockExperimentGroups = {
-      oneAdForNewUsers: 0
+      oneAdForNewUsers: 0,
     }
     getValidatedExperimentGroups.mockReturnValueOnce(mockExperimentGroups)
-    const logUserExperimentGroups = require('../logUserExperimentGroups').default
-    await logUserExperimentGroups(userContext, userContext.id, mockExperimentGroups)
+    const logUserExperimentGroups = require('../logUserExperimentGroups')
+      .default
+    await logUserExperimentGroups(
+      userContext,
+      userContext.id,
+      mockExperimentGroups
+    )
     expect(updateQuery).toHaveBeenCalledWith(userContext, {
       id: userContext.id,
       testOneAdForNewUsers: 0,
-      updated: moment.utc().toISOString()
+      updated: moment.utc().toISOString(),
     })
   })
 
@@ -57,15 +60,20 @@ describe('logUserExperimentGroups', () => {
     const updateQuery = jest.spyOn(UserModel, 'update')
 
     const mockExperimentGroups = {
-      adExplanation: 1
+      adExplanation: 1,
     }
     getValidatedExperimentGroups.mockReturnValueOnce(mockExperimentGroups)
-    const logUserExperimentGroups = require('../logUserExperimentGroups').default
-    await logUserExperimentGroups(userContext, userContext.id, mockExperimentGroups)
+    const logUserExperimentGroups = require('../logUserExperimentGroups')
+      .default
+    await logUserExperimentGroups(
+      userContext,
+      userContext.id,
+      mockExperimentGroups
+    )
     expect(updateQuery).toHaveBeenCalledWith(userContext, {
       id: userContext.id,
       testAdExplanation: 1,
-      updated: moment.utc().toISOString()
+      updated: moment.utc().toISOString(),
     })
   })
 
@@ -77,8 +85,13 @@ describe('logUserExperimentGroups', () => {
 
     const mockExperimentGroups = {}
     getValidatedExperimentGroups.mockReturnValueOnce(mockExperimentGroups)
-    const logUserExperimentGroups = require('../logUserExperimentGroups').default
-    await logUserExperimentGroups(userContext, userContext.id, mockExperimentGroups)
+    const logUserExperimentGroups = require('../logUserExperimentGroups')
+      .default
+    await logUserExperimentGroups(
+      userContext,
+      userContext.id,
+      mockExperimentGroups
+    )
     expect(updateQuery).not.toHaveBeenCalled()
   })
 
@@ -90,8 +103,13 @@ describe('logUserExperimentGroups', () => {
 
     const mockExperimentGroups = null
     getValidatedExperimentGroups.mockReturnValueOnce({}) // Will return an empty object
-    const logUserExperimentGroups = require('../logUserExperimentGroups').default
-    await logUserExperimentGroups(userContext, userContext.id, mockExperimentGroups)
+    const logUserExperimentGroups = require('../logUserExperimentGroups')
+      .default
+    await logUserExperimentGroups(
+      userContext,
+      userContext.id,
+      mockExperimentGroups
+    )
     expect(updateQuery).not.toHaveBeenCalled()
   })
 
@@ -99,27 +117,24 @@ describe('logUserExperimentGroups', () => {
     expect.assertions(1)
 
     // Mock DB response.
-    const expectedReturnedUser = Object.assign(
-      {},
-      getMockUserInstance(),
-      {
-        testGroupAnonSignIn: 1
-      }
-    )
-    setMockDBResponse(
-      DatabaseOperation.UPDATE,
-      {
-        Attributes: expectedReturnedUser
-      }
-    )
+    const expectedReturnedUser = Object.assign({}, getMockUserInstance(), {
+      testGroupAnonSignIn: 1,
+    })
+    setMockDBResponse(DatabaseOperation.UPDATE, {
+      Attributes: expectedReturnedUser,
+    })
 
     const mockExperimentGroups = {
-      anonSignIn: 1
+      anonSignIn: 1,
     }
     getValidatedExperimentGroups.mockReturnValueOnce(mockExperimentGroups)
-    const logUserExperimentGroups = require('../logUserExperimentGroups').default
-    const returnedUser = await logUserExperimentGroups(userContext, userContext.id,
-      mockExperimentGroups)
+    const logUserExperimentGroups = require('../logUserExperimentGroups')
+      .default
+    const returnedUser = await logUserExperimentGroups(
+      userContext,
+      userContext.id,
+      mockExperimentGroups
+    )
     expect(returnedUser).toEqual(expectedReturnedUser)
   })
 
@@ -127,22 +142,20 @@ describe('logUserExperimentGroups', () => {
     expect.assertions(1)
 
     // Mock DB response.
-    const expectedReturnedUser = Object.assign(
-      {},
-      getMockUserInstance()
-    )
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: expectedReturnedUser
-      }
-    )
+    const expectedReturnedUser = Object.assign({}, getMockUserInstance())
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: expectedReturnedUser,
+    })
 
     const mockExperimentGroups = {}
     getValidatedExperimentGroups.mockReturnValueOnce(mockExperimentGroups)
-    const logUserExperimentGroups = require('../logUserExperimentGroups').default
-    const returnedUser = await logUserExperimentGroups(userContext, userContext.id,
-      mockExperimentGroups)
+    const logUserExperimentGroups = require('../logUserExperimentGroups')
+      .default
+    const returnedUser = await logUserExperimentGroups(
+      userContext,
+      userContext.id,
+      mockExperimentGroups
+    )
     expect(returnedUser).toEqual(expectedReturnedUser)
   })
 
@@ -154,18 +167,23 @@ describe('logUserExperimentGroups', () => {
 
     // Have the validated groups differ from provided.
     const mockExperimentGroups = {
-      anonSignIn: 34543543
+      anonSignIn: 34543543,
     }
     getValidatedExperimentGroups.mockReturnValueOnce({
-      anonSignIn: null
+      anonSignIn: null,
     })
 
-    const logUserExperimentGroups = require('../logUserExperimentGroups').default
-    await logUserExperimentGroups(userContext, userContext.id, mockExperimentGroups)
+    const logUserExperimentGroups = require('../logUserExperimentGroups')
+      .default
+    await logUserExperimentGroups(
+      userContext,
+      userContext.id,
+      mockExperimentGroups
+    )
     expect(updateQuery).toHaveBeenCalledWith(userContext, {
       id: userContext.id,
       // Note: testGroupAnonSignIn not modified
-      updated: moment.utc().toISOString()
+      updated: moment.utc().toISOString(),
     })
   })
 })

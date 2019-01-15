@@ -1,12 +1,7 @@
-
 import fs from 'fs'
 import path from 'path'
 
-import {
-  tableNames,
-  tableKeys,
-  tableFixtureFileNames
-} from './table-utils'
+import { tableNames, tableKeys, tableFixtureFileNames } from './table-utils'
 import logger from '../../utils/logger'
 
 import AWS from './aws-client-dynamodb'
@@ -17,7 +12,7 @@ const docClient = new AWS.DynamoDB.DocumentClient()
 
 // To throttle large batches of data.
 const SLEEP_MS_BETWEEN_QUERY_BATCHES = 100
-function sleep (ms) {
+function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
@@ -34,30 +29,41 @@ const loadItemsIntoTable = async (items, tableName) => {
   }
   const params = {
     RequestItems: {
-      [tableName]: itemsToLoad.map((item) => {
+      [tableName]: itemsToLoad.map(item => {
         return {
           PutRequest: {
-            Item: item
-          }
+            Item: item,
+          },
         }
-      })
-    }
+      }),
+    },
   }
-  return docClient.batchWrite(params).promise()
-      .then(response => {
-        logger.debug(`BatchWrite succeeded: ${JSON.stringify(items)}`)
-      })
-      .catch(err => {
-        logger.error(`Unable to batch write items. Error: ${err}`)
-      })
+  return docClient
+    .batchWrite(params)
+    .promise()
+    .then(response => {
+      logger.debug(`BatchWrite succeeded: ${JSON.stringify(items)}`)
+    })
+    .catch(err => {
+      logger.error(`Unable to batch write items. Error: ${err}`)
+    })
 }
 
-const deleteItemsFromTable = async (items, tableName, hashKeyName, rangeKeyName) => {
+const deleteItemsFromTable = async (
+  items,
+  tableName,
+  hashKeyName,
+  rangeKeyName
+) => {
   const BATCH_MAX_ITEMS = 25
   var itemsToDelete = items
   if (items.length > BATCH_MAX_ITEMS) {
-    await deleteItemsFromTable(items.slice(BATCH_MAX_ITEMS - 1),
-      tableName, hashKeyName, rangeKeyName)
+    await deleteItemsFromTable(
+      items.slice(BATCH_MAX_ITEMS - 1),
+      tableName,
+      hashKeyName,
+      rangeKeyName
+    )
     if (SLEEP_MS_BETWEEN_QUERY_BATCHES > 0) {
       await sleep(SLEEP_MS_BETWEEN_QUERY_BATCHES)
     }
@@ -65,29 +71,31 @@ const deleteItemsFromTable = async (items, tableName, hashKeyName, rangeKeyName)
   }
   const params = {
     RequestItems: {
-      [tableName]: itemsToDelete.map((item) => {
+      [tableName]: itemsToDelete.map(item => {
         // Construct the key values.
         const keyValues = {
-          [hashKeyName]: item[hashKeyName]
+          [hashKeyName]: item[hashKeyName],
         }
         if (rangeKeyName) {
           keyValues[rangeKeyName] = item[rangeKeyName]
         }
         return {
           DeleteRequest: {
-            Key: keyValues
-          }
+            Key: keyValues,
+          },
         }
-      })
-    }
+      }),
+    },
   }
-  return docClient.batchWrite(params).promise()
-      .then(response => {
-        logger.debug(`BatchWrite delete succeeded: ${JSON.stringify(items)}`)
-      })
-      .catch(err => {
-        logger.error(`Unable to batch delete items. Error: ${err}`)
-      })
+  return docClient
+    .batchWrite(params)
+    .promise()
+    .then(response => {
+      logger.debug(`BatchWrite delete succeeded: ${JSON.stringify(items)}`)
+    })
+    .catch(err => {
+      logger.error(`Unable to batch delete items. Error: ${err}`)
+    })
 }
 
 /**
@@ -99,13 +107,13 @@ const deleteItemsFromTable = async (items, tableName, hashKeyName, rangeKeyName)
  * @return {arr} The items loaded from `fileName` after
  *   string replacement.
  */
-const getItemsFromJsonFile = function (filePath, strReplacements = []) {
+const getItemsFromJsonFile = function(filePath, strReplacements = []) {
   const fileStr = fs.readFileSync(filePath, 'utf8')
 
   // If needed, replace any strings in the fixtures before loading
   // them (e.g. replace a hardcoded user ID with a real user ID).
   var fileStrFinal = fileStr
-  strReplacements.forEach((item) => {
+  strReplacements.forEach(item => {
     if (item.before && item.after) {
       fileStrFinal = fileStr.replace(item.before, item.after)
     }
@@ -114,13 +122,22 @@ const getItemsFromJsonFile = function (filePath, strReplacements = []) {
   return items
 }
 
-export const loadFixturesIntoTable = async (filePath, tableName, strReplacements) => {
+export const loadFixturesIntoTable = async (
+  filePath,
+  tableName,
+  strReplacements
+) => {
   const items = getItemsFromJsonFile(filePath, strReplacements)
   return loadItemsIntoTable(items, tableName)
 }
 
-export const deleteFixturesFromTable = async (filePath, tableName, hashKeyName,
-  strReplacements, rangeKeyName = null) => {
+export const deleteFixturesFromTable = async (
+  filePath,
+  tableName,
+  hashKeyName,
+  strReplacements,
+  rangeKeyName = null
+) => {
   const items = getItemsFromJsonFile(filePath, strReplacements)
   return deleteItemsFromTable(items, tableName, hashKeyName, rangeKeyName)
 }
@@ -159,6 +176,11 @@ export const deleteFixtures = async (tableNameRef, strReplacements) => {
   const filePath = path.join(__dirname, '../fixtures/', fixtureFileName)
   const hashKeyName = tableKeys[tableNameRef]['hash']
   const rangeKeyName = tableKeys[tableNameRef]['range']
-  return deleteFixturesFromTable(filePath, tableName, hashKeyName,
-      strReplacements, rangeKeyName)
+  return deleteFixturesFromTable(
+    filePath,
+    tableName,
+    hashKeyName,
+    strReplacements,
+    rangeKeyName
+  )
 }

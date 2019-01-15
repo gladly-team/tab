@@ -14,8 +14,10 @@ Promise.promisifyAll(require('dynogels/lib/scan').prototype)
 Promise.promisifyAll(require('dynogels/lib/parallelScan').prototype)
 
 var dynogelsModel = dynogels.model
-dynogels.model = function (name, model) {
-  if (model) { Promise.promisifyAll(model) }
+dynogels.model = function(name, model) {
+  if (model) {
+    Promise.promisifyAll(model)
+  }
   return dynogelsModel.apply(dynogels, arguments)
 }
 

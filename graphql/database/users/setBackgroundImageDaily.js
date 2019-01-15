@@ -1,10 +1,7 @@
-
 import moment from 'moment'
 import UserModel from './UserModel'
 import getRandomBackgroundImage from '../backgroundImages/getRandomBackgroundImage'
-import {
-  USER_BACKGROUND_OPTION_DAILY
-} from '../constants'
+import { USER_BACKGROUND_OPTION_DAILY } from '../constants'
 
 /**
  * Set user's background image to change daily.
@@ -20,9 +17,9 @@ const setBackgroundImageDaily = async (userContext, userId) => {
       backgroundImage: {
         id: image.id,
         image: image.image,
-        timestamp: moment.utc().toISOString()
+        timestamp: moment.utc().toISOString(),
       },
-      backgroundOption: USER_BACKGROUND_OPTION_DAILY
+      backgroundOption: USER_BACKGROUND_OPTION_DAILY,
     })
     return userInstance
   } catch (e) {

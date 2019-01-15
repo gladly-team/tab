@@ -1,9 +1,8 @@
-
 import UserWidgetModel from './UserWidgetModel'
 
 /**
  * Update widget data.
-  * @param {object} userContext - The user authorizer object.
+ * @param {object} userContext - The user authorizer object.
  * @param {string} userId - The user id.
  * @param {string} widgetId - The widget id.
  * @param {Object} config - The new widget config.
@@ -16,7 +15,7 @@ export default async (userContext, userId, widgetId, config) => {
     userWidget = await UserWidgetModel.update(userContext, {
       userId: userId,
       widgetId: widgetId,
-      config: config
+      config: config,
     })
   } catch (e) {
     // The item likely does not exist. This might happen when a
@@ -27,7 +26,7 @@ export default async (userContext, userId, widgetId, config) => {
         userWidget = await UserWidgetModel.create(userContext, {
           userId: userId,
           widgetId: widgetId,
-          config: config
+          config: config,
         })
       } catch (e) {
         throw e

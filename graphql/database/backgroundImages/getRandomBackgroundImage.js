@@ -1,4 +1,3 @@
-
 import { sample } from 'lodash/collection'
 import BackgroundImageModel from './BackgroundImageModel'
 
@@ -8,7 +7,7 @@ import BackgroundImageModel from './BackgroundImageModel'
  * into a BackgroundImage instance.
  */
 
-export default async (userContext) => {
+export default async userContext => {
   try {
     const images = await BackgroundImageModel.getAll(userContext)
     return sample(images)

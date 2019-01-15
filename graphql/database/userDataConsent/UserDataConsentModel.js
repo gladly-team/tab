@@ -1,39 +1,45 @@
-
 import BaseModel from '../base/BaseModel'
 import types from '../fieldTypes'
 import tableNames from '../tables'
 import { USER_DATA_CONSENT } from '../constants'
-import {
-  permissionAuthorizers
-} from '../../utils/authorization-helpers'
+import { permissionAuthorizers } from '../../utils/authorization-helpers'
 
 /*
  * @extends BaseModel
  */
 class UserDataConsent extends BaseModel {
-  static get name () {
+  static get name() {
     return USER_DATA_CONSENT
   }
 
-  static get hashKey () {
+  static get hashKey() {
     return 'userId'
   }
 
-  static get rangeKey () {
+  static get rangeKey() {
     return 'timestamp'
   }
 
-  static get tableName () {
+  static get tableName() {
     return tableNames.userDataConsentLog
   }
 
-  static get schema () {
+  static get schema() {
     return {
       userId: types.string().required(),
-      timestamp: types.string().isoDate().required(),
+      timestamp: types
+        .string()
+        .isoDate()
+        .required(),
       consentString: types.string().required(),
-      consentCreated: types.string().isoDate().required(),
-      consentLastUpdated: types.string().isoDate().required(),
+      consentCreated: types
+        .string()
+        .isoDate()
+        .required(),
+      consentLastUpdated: types
+        .string()
+        .isoDate()
+        .required(),
       version: types.number(),
       vendorListVersion: types.number(),
       cmpId: types.number(),
@@ -41,13 +47,13 @@ class UserDataConsent extends BaseModel {
       consentScreen: types.number(),
       allowedPurposeIds: types.array().required(),
       allowedVendorIds: types.array().required(),
-      isGlobalConsent: types.boolean().required()
+      isGlobalConsent: types.boolean().required(),
     }
   }
 
-  static get permissions () {
+  static get permissions() {
     return {
-      create: permissionAuthorizers.userIdMatchesHashKey
+      create: permissionAuthorizers.userIdMatchesHashKey,
     }
   }
 }

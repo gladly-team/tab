@@ -3,7 +3,7 @@
 import {
   DatabaseOperation,
   getMockUserContext,
-  setMockDBResponse
+  setMockDBResponse,
 } from '../../test-utils'
 
 import VCDonationByCharityModel from '../VCDonationByCharityModel'
@@ -26,7 +26,12 @@ describe('getCharityVcReceived', () => {
     const mockStartTime = '2017-07-19T03:05:12.000Z'
     const mockEndTime = '2017-07-20T12:29:03.000Z'
 
-    await getCharityVcReceived(userContext, mockCharityId, mockStartTime, mockEndTime)
+    await getCharityVcReceived(
+      userContext,
+      mockCharityId,
+      mockStartTime,
+      mockEndTime
+    )
     expect(query).toHaveBeenCalledWith(userContext, mockCharityId)
     expect(queryExec).toHaveBeenCalled()
   })
@@ -37,28 +42,31 @@ describe('getCharityVcReceived', () => {
     const getCharityVcReceived = require('../getCharityVcReceived').default
 
     // Mock VCDonationByCharityModel query
-    const referralLogQueryMock = setMockDBResponse(
-      DatabaseOperation.QUERY,
-      {
-        Items: []
-      }
-    )
+    const referralLogQueryMock = setMockDBResponse(DatabaseOperation.QUERY, {
+      Items: [],
+    })
     const mockStartTime = '2017-07-19T03:05:12.000Z'
     const mockEndTime = '2017-07-20T12:29:03.000Z'
-    await getCharityVcReceived(userContext, mockCharityId, mockStartTime, mockEndTime)
+    await getCharityVcReceived(
+      userContext,
+      mockCharityId,
+      mockStartTime,
+      mockEndTime
+    )
 
     expect(referralLogQueryMock.mock.calls[0][0]).toEqual({
       ExpressionAttributeNames: {
         '#timestamp': 'timestamp',
-        '#charityId': 'charityId'
+        '#charityId': 'charityId',
       },
       ExpressionAttributeValues: {
         ':timestamp': '2017-07-19T03:00:00.000Z',
         ':timestamp_2': '2017-07-20T12:59:59.999Z',
-        ':charityId': mockCharityId
+        ':charityId': mockCharityId,
       },
-      KeyConditionExpression: '(#timestamp BETWEEN :timestamp AND :timestamp_2) AND (#charityId = :charityId)',
-      TableName: VCDonationByCharityModel.tableName
+      KeyConditionExpression:
+        '(#timestamp BETWEEN :timestamp AND :timestamp_2) AND (#charityId = :charityId)',
+      TableName: VCDonationByCharityModel.tableName,
     })
   })
 
@@ -68,15 +76,17 @@ describe('getCharityVcReceived', () => {
     const getCharityVcReceived = require('../getCharityVcReceived').default
 
     // Mock VCDonationByCharityModel query
-    setMockDBResponse(
-      DatabaseOperation.QUERY,
-      {
-        Items: []
-      }
-    )
+    setMockDBResponse(DatabaseOperation.QUERY, {
+      Items: [],
+    })
     const mockStartTime = '2017-07-19T03:05:12.000Z'
     const mockEndTime = '2017-07-20T12:29:03.000Z'
-    const totalVc = await getCharityVcReceived(userContext, mockCharityId, mockStartTime, mockEndTime)
+    const totalVc = await getCharityVcReceived(
+      userContext,
+      mockCharityId,
+      mockStartTime,
+      mockEndTime
+    )
     expect(totalVc).toBe(0)
   })
 
@@ -86,31 +96,33 @@ describe('getCharityVcReceived', () => {
     const getCharityVcReceived = require('../getCharityVcReceived').default
 
     // Mock VCDonationByCharityModel query
-    setMockDBResponse(
-      DatabaseOperation.QUERY,
-      {
-        Items: [
-          {
-            charityId: mockCharityId,
-            timestamp: '2017-07-19T03:00:00.000Z',
-            vcDonated: 16
-          },
-          {
-            charityId: mockCharityId,
-            timestamp: '2017-07-19T04:00:00.000Z',
-            vcDonated: 231
-          },
-          {
-            charityId: mockCharityId,
-            timestamp: '2017-07-19T05:00:00.000Z',
-            vcDonated: 34
-          }
-        ]
-      }
-    )
+    setMockDBResponse(DatabaseOperation.QUERY, {
+      Items: [
+        {
+          charityId: mockCharityId,
+          timestamp: '2017-07-19T03:00:00.000Z',
+          vcDonated: 16,
+        },
+        {
+          charityId: mockCharityId,
+          timestamp: '2017-07-19T04:00:00.000Z',
+          vcDonated: 231,
+        },
+        {
+          charityId: mockCharityId,
+          timestamp: '2017-07-19T05:00:00.000Z',
+          vcDonated: 34,
+        },
+      ],
+    })
     const mockStartTime = '2017-07-19T03:43:12.000Z'
     const mockEndTime = '2017-07-19T05:29:03.000Z'
-    const totalVc = await getCharityVcReceived(userContext, mockCharityId, mockStartTime, mockEndTime)
+    const totalVc = await getCharityVcReceived(
+      userContext,
+      mockCharityId,
+      mockStartTime,
+      mockEndTime
+    )
     expect(totalVc).toBe(281)
   })
 
@@ -118,28 +130,31 @@ describe('getCharityVcReceived', () => {
     expect.assertions(1)
 
     const getCharityVcReceived = require('../getCharityVcReceived').default
-    const referralLogQueryMock = setMockDBResponse(
-      DatabaseOperation.QUERY,
-      {
-        Items: []
-      }
-    )
+    const referralLogQueryMock = setMockDBResponse(DatabaseOperation.QUERY, {
+      Items: [],
+    })
     const mockStartTime = '2017-07-19T03:14:12.932Z'
     const mockEndTime = '2017-07-19T03:18:55.122Z'
-    await getCharityVcReceived(userContext, mockCharityId, mockStartTime, mockEndTime)
+    await getCharityVcReceived(
+      userContext,
+      mockCharityId,
+      mockStartTime,
+      mockEndTime
+    )
 
     expect(referralLogQueryMock.mock.calls[0][0]).toEqual({
       ExpressionAttributeNames: {
         '#timestamp': 'timestamp',
-        '#charityId': 'charityId'
+        '#charityId': 'charityId',
       },
       ExpressionAttributeValues: {
         ':timestamp': '2017-07-19T03:00:00.000Z',
         ':timestamp_2': '2017-07-19T03:59:59.999Z',
-        ':charityId': mockCharityId
+        ':charityId': mockCharityId,
       },
-      KeyConditionExpression: '(#timestamp BETWEEN :timestamp AND :timestamp_2) AND (#charityId = :charityId)',
-      TableName: VCDonationByCharityModel.tableName
+      KeyConditionExpression:
+        '(#timestamp BETWEEN :timestamp AND :timestamp_2) AND (#charityId = :charityId)',
+      TableName: VCDonationByCharityModel.tableName,
     })
   })
 
@@ -147,28 +162,31 @@ describe('getCharityVcReceived', () => {
     expect.assertions(1)
 
     const getCharityVcReceived = require('../getCharityVcReceived').default
-    const referralLogQueryMock = setMockDBResponse(
-      DatabaseOperation.QUERY,
-      {
-        Items: []
-      }
-    )
+    const referralLogQueryMock = setMockDBResponse(DatabaseOperation.QUERY, {
+      Items: [],
+    })
     const mockStartTime = '2017-07-19T01:00:00.000Z'
     const mockEndTime = '2017-07-19T05:00:00.000Z'
-    await getCharityVcReceived(userContext, mockCharityId, mockStartTime, mockEndTime)
+    await getCharityVcReceived(
+      userContext,
+      mockCharityId,
+      mockStartTime,
+      mockEndTime
+    )
 
     expect(referralLogQueryMock.mock.calls[0][0]).toEqual({
       ExpressionAttributeNames: {
         '#timestamp': 'timestamp',
-        '#charityId': 'charityId'
+        '#charityId': 'charityId',
       },
       ExpressionAttributeValues: {
         ':timestamp': '2017-07-19T01:00:00.000Z',
         ':timestamp_2': '2017-07-19T04:59:59.999Z',
-        ':charityId': mockCharityId
+        ':charityId': mockCharityId,
       },
-      KeyConditionExpression: '(#timestamp BETWEEN :timestamp AND :timestamp_2) AND (#charityId = :charityId)',
-      TableName: VCDonationByCharityModel.tableName
+      KeyConditionExpression:
+        '(#timestamp BETWEEN :timestamp AND :timestamp_2) AND (#charityId = :charityId)',
+      TableName: VCDonationByCharityModel.tableName,
     })
   })
 })

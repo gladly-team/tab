@@ -8,14 +8,7 @@ beforeEach(() => {
 
 describe('logger', () => {
   it('contains expected methods', () => {
-    const loggerMethods = [
-      'log',
-      'debug',
-      'info',
-      'warn',
-      'error',
-      'fatal'
-    ]
+    const loggerMethods = ['log', 'debug', 'info', 'warn', 'error', 'fatal']
     const logger = require('../logger').default
     loggerMethods.forEach(method => {
       expect(logger[method]).not.toBeUndefined()
@@ -27,11 +20,12 @@ describe('logger', () => {
       return {
         LOGGER: 'console',
         STAGE: 'test',
-        LOG_LEVEL: 'debug'
+        LOG_LEVEL: 'debug',
       }
     })
     const logErrorWithId = require('../logger').logErrorWithId
-    const consoleSpy = jest.spyOn(console, 'error')
+    const consoleSpy = jest
+      .spyOn(console, 'error')
       .mockImplementationOnce(() => {})
     const mockErr = new Error('Oops!')
     logErrorWithId(mockErr, 'abc-123')
@@ -52,7 +46,7 @@ describe('logger', () => {
     jest.mock('../../config', () => {
       return {
         LOGGER: 'console',
-        STAGE: 'test'
+        STAGE: 'test',
       }
     })
     const loggerContextWrapper = require('../logger').loggerContextWrapper
@@ -70,7 +64,7 @@ describe('logger', () => {
         STAGE: 'test',
         SENTRY_PUBLIC_KEY: 'abcdef',
         SENTRY_PRIVATE_KEY: 'xyzxyz',
-        SENTRY_PROJECT_ID: '123456'
+        SENTRY_PROJECT_ID: '123456',
       }
     })
     const loggerContextWrapper = require('../logger').loggerContextWrapper
@@ -79,16 +73,20 @@ describe('logger', () => {
     const userContext = {
       id: 'abc-123',
       email: 'bob@example.com',
-      extraneous: 'blah'
+      extraneous: 'blah',
     }
     const fakeLambdaEvent = { foo: 'bar' }
-    const response = loggerContextWrapper(userContext, fakeLambdaEvent, testFunc)
+    const response = loggerContextWrapper(
+      userContext,
+      fakeLambdaEvent,
+      testFunc
+    )
     expect(Sentry.setContext).toHaveBeenCalledWith({
       user: {
         id: 'abc-123',
-        email: 'bob@example.com'
+        email: 'bob@example.com',
       },
-      req: fakeLambdaEvent
+      req: fakeLambdaEvent,
     })
     expect(response).toBe('hi')
   })
@@ -98,11 +96,12 @@ describe('logger', () => {
       return {
         LOGGER: 'console',
         STAGE: 'test',
-        LOG_LEVEL: 'info'
+        LOG_LEVEL: 'info',
       }
     })
 
-    const consoleSpy = jest.spyOn(console, 'error')
+    const consoleSpy = jest
+      .spyOn(console, 'error')
       .mockImplementationOnce(() => {})
     const logger = require('../logger').default
     logger.error('blah')
@@ -114,11 +113,12 @@ describe('logger', () => {
       return {
         LOGGER: 'console',
         STAGE: 'test',
-        LOG_LEVEL: 'error'
+        LOG_LEVEL: 'error',
       }
     })
 
-    const consoleSpy = jest.spyOn(console, 'info')
+    const consoleSpy = jest
+      .spyOn(console, 'info')
       .mockImplementationOnce(() => {})
     const logger = require('../logger').default
     logger.info('blah')
@@ -133,7 +133,7 @@ describe('logger', () => {
         LOG_LEVEL: 'error',
         SENTRY_PUBLIC_KEY: 'abcdef',
         SENTRY_PRIVATE_KEY: 'xyzxyz',
-        SENTRY_PROJECT_ID: '123456'
+        SENTRY_PROJECT_ID: '123456',
       }
     })
     const Sentry = require('../sentry-logger').default
@@ -141,7 +141,7 @@ describe('logger', () => {
     const theErr = new Error('A big problem')
     logger.error(theErr)
     expect(Sentry.captureException).toHaveBeenCalledWith(theErr, {
-      level: 'error'
+      level: 'error',
     })
     expect(Sentry.captureMessage).not.toHaveBeenCalled()
   })
@@ -154,7 +154,7 @@ describe('logger', () => {
         LOG_LEVEL: 'error',
         SENTRY_PUBLIC_KEY: 'abcdef',
         SENTRY_PRIVATE_KEY: 'xyzxyz',
-        SENTRY_PROJECT_ID: '123456'
+        SENTRY_PROJECT_ID: '123456',
       }
     })
     const Sentry = require('../sentry-logger').default
@@ -162,7 +162,7 @@ describe('logger', () => {
     const theMsg = 'A thing happened, FYI'
     logger.error(theMsg)
     expect(Sentry.captureMessage).toHaveBeenCalledWith(theMsg, {
-      level: 'error'
+      level: 'error',
     })
     expect(Sentry.captureException).not.toHaveBeenCalled()
   })
@@ -175,7 +175,7 @@ describe('logger', () => {
         LOG_LEVEL: 'debug',
         SENTRY_PUBLIC_KEY: 'abcdef',
         SENTRY_PRIVATE_KEY: 'xyzxyz',
-        SENTRY_PROJECT_ID: '123456'
+        SENTRY_PROJECT_ID: '123456',
       }
     })
     const Sentry = require('../sentry-logger').default
@@ -183,7 +183,7 @@ describe('logger', () => {
     const theMsg = 'A thing happened, FYI'
     logger.warn(theMsg)
     expect(Sentry.captureMessage).toHaveBeenCalledWith(theMsg, {
-      level: 'warning'
+      level: 'warning',
     })
   })
 })

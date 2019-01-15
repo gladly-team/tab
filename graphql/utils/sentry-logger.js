@@ -1,4 +1,3 @@
-
 import Raven from 'raven'
 import config from '../config'
 
@@ -13,9 +12,9 @@ export const sentryContextWrapper = (userContext, lambdaEvent, func) => {
     Raven.setContext({
       user: {
         id: userContext.id,
-        email: userContext.email
+        email: userContext.email,
       },
-      req: lambdaEvent
+      req: lambdaEvent,
     })
     return func()
   })
@@ -28,16 +27,20 @@ export const sentryContextWrapper = (userContext, lambdaEvent, func) => {
  * @return {string | null}
  */
 const getSentryDSN = () => {
-  if (!config.SENTRY_PUBLIC_KEY ||
-      !config.SENTRY_PRIVATE_KEY ||
-      !config.SENTRY_PROJECT_ID) {
+  if (
+    !config.SENTRY_PUBLIC_KEY ||
+    !config.SENTRY_PRIVATE_KEY ||
+    !config.SENTRY_PROJECT_ID
+  ) {
     if (config.LOGGER === 'sentry') {
       throw new Error('Sentry configuration is incorrect.')
     } else {
       return null
     }
   }
-  return `https://${config.SENTRY_PUBLIC_KEY}:${config.SENTRY_PRIVATE_KEY}@sentry.io/${config.SENTRY_PROJECT_ID}`
+  return `https://${config.SENTRY_PUBLIC_KEY}:${
+    config.SENTRY_PRIVATE_KEY
+  }@sentry.io/${config.SENTRY_PROJECT_ID}`
 }
 
 // Configure the Sentry logger instance.
@@ -46,7 +49,7 @@ const sentryDSN = getSentryDSN()
 Raven.config(sentryDSN, {
   captureUnhandledRejections: true,
   autoBreadcrumbs: false,
-  environment: config.SENTRY_STAGE
+  environment: config.SENTRY_STAGE,
 }).install()
 
 export default Raven

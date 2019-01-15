@@ -1,24 +1,21 @@
 /* eslint-env jest */
 
-import {
-  handleError,
-  formatError
-} from '../error-logging'
+import { handleError, formatError } from '../error-logging'
 import {
   UNAUTHORIZED_QUERY,
   UnauthorizedQueryException,
-  UserDoesNotExistException
+  UserDoesNotExistException,
 } from '../exceptions'
 import logger from '../logger'
 
 jest.mock('../logger')
 
 class MockGraphQLError extends Error {
-  constructor (originalError) {
+  constructor(originalError) {
     super(originalError)
     this.message = originalError.message
-    this.locations = [ { line: 14, column: 3 } ]
-    this.path = [ 'user', 'widgets' ]
+    this.locations = [{ line: 14, column: 3 }]
+    this.path = ['user', 'widgets']
     this.originalError = originalError
   }
 }
@@ -34,7 +31,7 @@ describe('error-logging', () => {
       message: 'Yikes!',
       locations: mockGraphQLErr.locations,
       path: mockGraphQLErr.path,
-      code: null
+      code: null,
     }
     const formattedErr = formatError(mockGraphQLErr)
     expect(formattedErr).toEqual(expectedFormattedErr)
@@ -47,7 +44,7 @@ describe('error-logging', () => {
       message: 'Query not authorized.',
       locations: mockGraphQLErr.locations,
       path: mockGraphQLErr.path,
-      code: UNAUTHORIZED_QUERY
+      code: UNAUTHORIZED_QUERY,
     }
     const formattedErr = formatError(mockGraphQLErr)
     expect(formattedErr).toEqual(expectedFormattedErr)
@@ -59,7 +56,7 @@ describe('error-logging', () => {
       message: 'Yikes!',
       locations: mockGraphQLErr.locations,
       path: mockGraphQLErr.path,
-      code: null
+      code: null,
     }
     const formattedErr = handleError(mockGraphQLErr)
     expect(formattedErr).toEqual(expectedFormattedErr)
@@ -72,7 +69,9 @@ describe('error-logging', () => {
   })
 
   test('handleError logs a custom error', () => {
-    const mockGraphQLErr = new MockGraphQLError(new UnauthorizedQueryException())
+    const mockGraphQLErr = new MockGraphQLError(
+      new UnauthorizedQueryException()
+    )
     handleError(mockGraphQLErr)
     expect(logger.error).toHaveBeenCalledWith(mockGraphQLErr)
   })

@@ -9,7 +9,7 @@ import {
   getMockUserContext,
   getMockUserInstance,
   mockDate,
-  setMockDBResponse
+  setMockDBResponse,
 } from '../../test-utils'
 
 // Mock the database client. This allows us to test
@@ -38,15 +38,13 @@ describe('addVc', () => {
     const vcToAdd = 12
 
     // Mock response to updating VC.
-    const userToReturn = Object.assign(
-      {},
-      getMockUserInstance(),
-      {
-        id: userId,
-        vcAllTime: 46,
-        heartsUntilNextLevel: 4
-      })
-    const updateMethod = jest.spyOn(UserModel, 'update')
+    const userToReturn = Object.assign({}, getMockUserInstance(), {
+      id: userId,
+      vcAllTime: 46,
+      heartsUntilNextLevel: 4,
+    })
+    const updateMethod = jest
+      .spyOn(UserModel, 'update')
       .mockImplementationOnce(() => {
         return userToReturn
       })
@@ -54,9 +52,9 @@ describe('addVc', () => {
     await addVc(userContext, userId, vcToAdd)
     expect(updateMethod).toHaveBeenCalledWith(userContext, {
       id: userId,
-      vcCurrent: {$add: vcToAdd},
-      vcAllTime: {$add: vcToAdd},
-      heartsUntilNextLevel: {$add: -vcToAdd}
+      vcCurrent: { $add: vcToAdd },
+      vcAllTime: { $add: vcToAdd },
+      heartsUntilNextLevel: { $add: -vcToAdd },
     })
 
     // We should not call to get a new level because the
@@ -69,21 +67,18 @@ describe('addVc', () => {
     const vcToAdd = 12
 
     // Mock response to updating VC.
-    const userToReturn = Object.assign(
-      {},
-      getMockUserInstance(),
-      {
-        id: userId,
-        level: 3,
-        vcAllTime: 40,
-        heartsUntilNextLevel: 0 // user should level up
-      }
-    )
+    const userToReturn = Object.assign({}, getMockUserInstance(), {
+      id: userId,
+      level: 3,
+      vcAllTime: 40,
+      heartsUntilNextLevel: 0, // user should level up
+    })
     const finalReturnedUser = Object.assign({}, userToReturn, {
       level: 4,
-      heartsUntilNextLevel: 10
+      heartsUntilNextLevel: 10,
     })
-    const updateMethod = jest.spyOn(UserModel, 'update')
+    const updateMethod = jest
+      .spyOn(UserModel, 'update')
       .mockImplementationOnce(() => {
         return userToReturn
       })
@@ -94,7 +89,7 @@ describe('addVc', () => {
     getNextLevelFor.mockImplementationOnce(() => {
       return new UserLevelModel({
         id: 5,
-        hearts: 50
+        hearts: 50,
       })
     })
 
@@ -105,7 +100,7 @@ describe('addVc', () => {
     expect(updateMethod).toHaveBeenLastCalledWith(userContext, {
       id: userId,
       level: 4,
-      heartsUntilNextLevel: 10
+      heartsUntilNextLevel: 10,
     })
     expect(returnedUser).toEqual(finalReturnedUser)
   })
@@ -118,26 +113,19 @@ describe('addVc', () => {
     getNextLevelFor.mockImplementationOnce(() => {
       return new UserLevelModel({
         id: 5,
-        hearts: 50
+        hearts: 50,
       })
     })
 
     // Mock DB response.
-    const expectedReturnedUser = Object.assign(
-      {},
-      getMockUserInstance(),
-      {
-        id: userId,
-        vcAllTime: 46,
-        heartsUntilNextLevel: 4
-      }
-    )
-    const dbUpdateMock = setMockDBResponse(
-      DatabaseOperation.UPDATE,
-      {
-        Attributes: expectedReturnedUser
-      }
-    )
+    const expectedReturnedUser = Object.assign({}, getMockUserInstance(), {
+      id: userId,
+      vcAllTime: 46,
+      heartsUntilNextLevel: 4,
+    })
+    const dbUpdateMock = setMockDBResponse(DatabaseOperation.UPDATE, {
+      Attributes: expectedReturnedUser,
+    })
     const returnedUser = await addVc(userContext, userId, vcToAdd)
     expect(dbUpdateMock).toHaveBeenCalled()
     expect(returnedUser).toEqual(expectedReturnedUser)
@@ -151,38 +139,27 @@ describe('addVc', () => {
     getNextLevelFor.mockImplementationOnce(() => {
       return new UserLevelModel({
         id: 5,
-        hearts: 50
+        hearts: 50,
       })
     })
 
     // Mock DB responses.
-    const userToReturn = Object.assign(
-      {},
-      getMockUserInstance(),
-      {
-        id: userId,
-        vcAllTime: 30,
-        level: 3,
-        heartsUntilNextLevel: 0
-      }
-    )
-    const finalUserToReturn = Object.assign(
-      {}, userToReturn, {
-        level: 4,
-        heartsUntilNextLevel: 10
-      })
-    const dbUpdateMockFirst = setMockDBResponse(
-      DatabaseOperation.UPDATE,
-      {
-        Attributes: userToReturn
-      }
-    )
-    const dbUpdateMockSecond = setMockDBResponse(
-      DatabaseOperation.UPDATE,
-      {
-        Attributes: finalUserToReturn
-      }
-    )
+    const userToReturn = Object.assign({}, getMockUserInstance(), {
+      id: userId,
+      vcAllTime: 30,
+      level: 3,
+      heartsUntilNextLevel: 0,
+    })
+    const finalUserToReturn = Object.assign({}, userToReturn, {
+      level: 4,
+      heartsUntilNextLevel: 10,
+    })
+    const dbUpdateMockFirst = setMockDBResponse(DatabaseOperation.UPDATE, {
+      Attributes: userToReturn,
+    })
+    const dbUpdateMockSecond = setMockDBResponse(DatabaseOperation.UPDATE, {
+      Attributes: finalUserToReturn,
+    })
     const returnedUser = await addVc(userContext, userId, vcToAdd)
     expect(dbUpdateMockFirst).toHaveBeenCalled()
     expect(dbUpdateMockSecond).toHaveBeenCalled()

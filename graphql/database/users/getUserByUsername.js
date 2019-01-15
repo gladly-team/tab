@@ -1,10 +1,11 @@
-
 import UserModel from './UserModel'
 import {
   getPermissionsOverride,
-  GET_REFERRER_BY_USERNAME_OVERRIDE
+  GET_REFERRER_BY_USERNAME_OVERRIDE,
 } from '../../utils/permissions-overrides'
-const getReferrerOverride = getPermissionsOverride(GET_REFERRER_BY_USERNAME_OVERRIDE)
+const getReferrerOverride = getPermissionsOverride(
+  GET_REFERRER_BY_USERNAME_OVERRIDE
+)
 
 /**
  * Fetch the user by username.
@@ -22,7 +23,7 @@ const getUserByUsername = async (userContext, username) => {
   return UserModel.query(getReferrerOverride, username)
     .usingIndex('UsersByUsername')
     .execute()
-    .then((result) => {
+    .then(result => {
       if (result.length > 0) {
         return result[0]
       } else {

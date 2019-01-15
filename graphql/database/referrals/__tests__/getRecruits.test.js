@@ -4,7 +4,7 @@ import {
   DatabaseOperation,
   getMockUserContext,
   getMockUserInfo,
-  setMockDBResponse
+  setMockDBResponse,
 } from '../../test-utils'
 
 import ReferralDataModel from '../ReferralDataModel'
@@ -37,26 +37,24 @@ describe('getRecruits', () => {
     const getRecruits = require('../getRecruits').getRecruits
 
     // Mock ReferralDataModel query
-    const referralLogQueryMock = setMockDBResponse(
-      DatabaseOperation.QUERY,
-      {
-        Items: []
-      }
-    )
+    const referralLogQueryMock = setMockDBResponse(DatabaseOperation.QUERY, {
+      Items: [],
+    })
     await getRecruits(userContext, referringUserId, '2017-07-19T03:05:12Z')
 
     expect(referralLogQueryMock.mock.calls[0][0]).toEqual({
       ExpressionAttributeNames: {
         '#created': 'created',
-        '#referringUser': 'referringUser'
+        '#referringUser': 'referringUser',
       },
       ExpressionAttributeValues: {
         ':created': '2017-07-19T03:05:12Z',
-        ':referringUser': referringUserId
+        ':referringUser': referringUserId,
       },
       IndexName: 'ReferralsByReferrer',
-      KeyConditionExpression: '(#created >= :created) AND (#referringUser = :referringUser)',
-      TableName: ReferralDataModel.tableName
+      KeyConditionExpression:
+        '(#created >= :created) AND (#referringUser = :referringUser)',
+      TableName: ReferralDataModel.tableName,
     })
   })
 
@@ -65,26 +63,29 @@ describe('getRecruits', () => {
     const getRecruits = require('../getRecruits').getRecruits
 
     // Mock ReferralDataModel query
-    const referralLogQueryMock = setMockDBResponse(
-      DatabaseOperation.QUERY,
-      {
-        Items: []
-      }
+    const referralLogQueryMock = setMockDBResponse(DatabaseOperation.QUERY, {
+      Items: [],
+    })
+    await getRecruits(
+      userContext,
+      referringUserId,
+      null,
+      '2017-07-20T12:29:03Z'
     )
-    await getRecruits(userContext, referringUserId, null, '2017-07-20T12:29:03Z')
 
     expect(referralLogQueryMock.mock.calls[0][0]).toEqual({
       ExpressionAttributeNames: {
         '#created': 'created',
-        '#referringUser': 'referringUser'
+        '#referringUser': 'referringUser',
       },
       ExpressionAttributeValues: {
         ':created': '2017-07-20T12:29:03Z',
-        ':referringUser': referringUserId
+        ':referringUser': referringUserId,
       },
       IndexName: 'ReferralsByReferrer',
-      KeyConditionExpression: '(#created <= :created) AND (#referringUser = :referringUser)',
-      TableName: ReferralDataModel.tableName
+      KeyConditionExpression:
+        '(#created <= :created) AND (#referringUser = :referringUser)',
+      TableName: ReferralDataModel.tableName,
     })
   })
 
@@ -93,27 +94,30 @@ describe('getRecruits', () => {
     const getRecruits = require('../getRecruits').getRecruits
 
     // Mock ReferralDataModel query
-    const referralLogQueryMock = setMockDBResponse(
-      DatabaseOperation.QUERY,
-      {
-        Items: []
-      }
+    const referralLogQueryMock = setMockDBResponse(DatabaseOperation.QUERY, {
+      Items: [],
+    })
+    await getRecruits(
+      userContext,
+      referringUserId,
+      '2017-07-19T03:05:12Z',
+      '2017-07-20T12:29:03Z'
     )
-    await getRecruits(userContext, referringUserId, '2017-07-19T03:05:12Z', '2017-07-20T12:29:03Z')
 
     expect(referralLogQueryMock.mock.calls[0][0]).toEqual({
       ExpressionAttributeNames: {
         '#created': 'created',
-        '#referringUser': 'referringUser'
+        '#referringUser': 'referringUser',
       },
       ExpressionAttributeValues: {
         ':created': '2017-07-19T03:05:12Z',
         ':created_2': '2017-07-20T12:29:03Z',
-        ':referringUser': referringUserId
+        ':referringUser': referringUserId,
       },
       IndexName: 'ReferralsByReferrer',
-      KeyConditionExpression: '(#created BETWEEN :created AND :created_2) AND (#referringUser = :referringUser)',
-      TableName: ReferralDataModel.tableName
+      KeyConditionExpression:
+        '(#created BETWEEN :created AND :created_2) AND (#referringUser = :referringUser)',
+      TableName: ReferralDataModel.tableName,
     })
   })
 
@@ -127,64 +131,58 @@ describe('getRecruits', () => {
         userId: 'efghijklmnopqrs',
         referringUser: referringUserId,
         created: '2017-07-19T03:05:12Z',
-        updated: '2017-07-19T03:05:12Z'
+        updated: '2017-07-19T03:05:12Z',
       },
       {
         userId: 'pqrstuvwxyzabcd',
         referringUser: referringUserId,
         created: '2017-08-20T17:32:01Z',
-        updated: '2017-08-20T17:32:01Z'
-      }
+        updated: '2017-08-20T17:32:01Z',
+      },
     ]
-    const referralLogQueryMock = setMockDBResponse(
-      DatabaseOperation.QUERY,
-      {
-        Items: referralDataLogsToReturn
-      }
-    )
+    const referralLogQueryMock = setMockDBResponse(DatabaseOperation.QUERY, {
+      Items: referralDataLogsToReturn,
+    })
 
     // Mock User query
     const recruitedUsersToReturn = [
       {
         id: 'efghijklmnopqrs',
-        lastTabTimestamp: '2017-07-21T05:15:00Z' // >2 days after joining
+        lastTabTimestamp: '2017-07-21T05:15:00Z', // >2 days after joining
       },
       {
         id: 'pqrstuvwxyzabcd',
-        lastTabTimestamp: '2017-08-20T17:40:52Z' // <1 hour after joining
-      }
+        lastTabTimestamp: '2017-08-20T17:40:52Z', // <1 hour after joining
+      },
     ]
-    setMockDBResponse(
-      DatabaseOperation.GET_BATCH,
-      {
-        Responses: {
-          [UserModel.tableName]: recruitedUsersToReturn
-        }
-      }
-    )
+    setMockDBResponse(DatabaseOperation.GET_BATCH, {
+      Responses: {
+        [UserModel.tableName]: recruitedUsersToReturn,
+      },
+    })
 
     const returnedVal = await getRecruits(userContext, referringUserId)
     expect(referralLogQueryMock.mock.calls[0][0]).toEqual({
       ExpressionAttributeNames: {
-        '#referringUser': 'referringUser'
+        '#referringUser': 'referringUser',
       },
       ExpressionAttributeValues: {
-        ':referringUser': referringUserId
+        ':referringUser': referringUserId,
       },
       IndexName: 'ReferralsByReferrer',
       KeyConditionExpression: '(#referringUser = :referringUser)',
-      TableName: ReferralDataModel.tableName
+      TableName: ReferralDataModel.tableName,
     })
 
     const expectedReturn = [
       {
         recruitedAt: '2017-07-19T03:05:12Z',
-        lastActive: '2017-07-21T05:15:00Z'
+        lastActive: '2017-07-21T05:15:00Z',
       },
       {
         recruitedAt: '2017-08-20T17:32:01Z',
-        lastActive: '2017-08-20T17:40:52Z'
-      }
+        lastActive: '2017-08-20T17:40:52Z',
+      },
     ]
     expect(returnedVal).toEqual(expectedReturn)
   })
@@ -199,67 +197,61 @@ describe('getRecruits', () => {
         userId: 'efghijklmnopqrs',
         referringUser: referringUserId,
         created: '2017-07-19T03:05:12Z',
-        updated: '2017-07-19T03:05:12Z'
+        updated: '2017-07-19T03:05:12Z',
       },
       {
         userId: 'pqrstuvwxyzabcd',
         referringUser: referringUserId,
         created: '2017-08-20T17:32:01Z',
-        updated: '2017-08-20T17:32:01Z'
+        updated: '2017-08-20T17:32:01Z',
       },
       {
         userId: 'tuvwxyzabcdefgh',
         referringUser: referringUserId,
         created: '2017-07-23T01:18:11Z',
-        updated: '2017-07-23T01:18:11Z'
-      }
+        updated: '2017-07-23T01:18:11Z',
+      },
     ]
-    setMockDBResponse(
-      DatabaseOperation.QUERY,
-      {
-        Items: referralDataLogsToReturn
-      }
-    )
+    setMockDBResponse(DatabaseOperation.QUERY, {
+      Items: referralDataLogsToReturn,
+    })
 
     // Mock User query
     const recruitedUsersToReturn = [
       {
         id: 'efghijklmnopqrs',
-        lastTabTimestamp: null // no timestamp
+        lastTabTimestamp: null, // no timestamp
       },
       {
         id: 'pqrstuvwxyzabcd',
-        lastTabTimestamp: '2017-08-20T17:40:52Z' // valid
+        lastTabTimestamp: '2017-08-20T17:40:52Z', // valid
       },
       {
         // missing lastTabTimestamp field
-        id: 'tuvwxyzabcdefgh'
-      }
+        id: 'tuvwxyzabcdefgh',
+      },
     ]
-    setMockDBResponse(
-      DatabaseOperation.GET_BATCH,
-      {
-        Responses: {
-          [UserModel.tableName]: recruitedUsersToReturn
-        }
-      }
-    )
+    setMockDBResponse(DatabaseOperation.GET_BATCH, {
+      Responses: {
+        [UserModel.tableName]: recruitedUsersToReturn,
+      },
+    })
 
     const returnedVal = await getRecruits(userContext, referringUserId)
 
     const expectedReturn = [
       {
         recruitedAt: '2017-07-19T03:05:12Z',
-        lastActive: null
+        lastActive: null,
       },
       {
         recruitedAt: '2017-08-20T17:32:01Z',
-        lastActive: '2017-08-20T17:40:52Z'
+        lastActive: '2017-08-20T17:40:52Z',
       },
       {
         recruitedAt: '2017-07-23T01:18:11Z',
-        lastActive: null
-      }
+        lastActive: null,
+      },
     ]
     expect(returnedVal).toEqual(expectedReturn)
   })
@@ -270,12 +262,9 @@ describe('getRecruits', () => {
 
     // Mock ReferralDataModel query
     const referralDataLogsToReturn = []
-    setMockDBResponse(
-      DatabaseOperation.QUERY,
-      {
-        Items: referralDataLogsToReturn
-      }
-    )
+    setMockDBResponse(DatabaseOperation.QUERY, {
+      Items: referralDataLogsToReturn,
+    })
 
     // Mock User query
     const recruitedUsersToReturn = []
@@ -283,8 +272,8 @@ describe('getRecruits', () => {
       DatabaseOperation.GET_BATCH,
       {
         Responses: {
-          [UserModel.tableName]: recruitedUsersToReturn
-        }
+          [UserModel.tableName]: recruitedUsersToReturn,
+        },
       }
     )
 
@@ -294,29 +283,30 @@ describe('getRecruits', () => {
   })
 
   test('getTotalRecruitsCount works as expected', async () => {
-    const getTotalRecruitsCount = require('../getRecruits').getTotalRecruitsCount
+    const getTotalRecruitsCount = require('../getRecruits')
+      .getTotalRecruitsCount
     const recruitsEdgesTestA = [
       {
         cursor: 'abc',
         node: {
           recruitedAt: '2017-05-19T13:59:46.000Z',
-          lastActive: '2017-12-19T08:23:40.532Z'
-        }
+          lastActive: '2017-12-19T08:23:40.532Z',
+        },
       },
       {
         cursor: 'abc',
         node: {
           recruitedAt: '2017-02-07T13:59:46.000Z',
-          lastActive: '2017-02-07T18:00:09.031Z'
-        }
+          lastActive: '2017-02-07T18:00:09.031Z',
+        },
       },
       {
         cursor: 'abc',
         node: {
           recruitedAt: '2017-02-07T17:69:46.000Z',
-          lastActive: null
-        }
-      }
+          lastActive: null,
+        },
+      },
     ]
     expect(getTotalRecruitsCount(recruitsEdgesTestA)).toBe(3)
 
@@ -325,16 +315,16 @@ describe('getRecruits', () => {
         cursor: 'abc',
         node: {
           recruitedAt: '2017-05-19T13:59:46.000Z',
-          lastActive: '2017-12-19T08:23:40.532Z'
-        }
+          lastActive: '2017-12-19T08:23:40.532Z',
+        },
       },
       {
         cursor: 'abc',
         node: {
           recruitedAt: '2017-02-07T13:59:46.000Z',
-          lastActive: '2017-02-09T08:23:40.532Z'
-        }
-      }
+          lastActive: '2017-02-09T08:23:40.532Z',
+        },
+      },
     ]
     expect(getTotalRecruitsCount(recruitsEdgesTestB)).toBe(2)
 
@@ -352,23 +342,23 @@ describe('getRecruits', () => {
         cursor: 'abc',
         node: {
           recruitedAt: '2017-05-19T13:59:46.000Z',
-          lastActive: '2017-12-19T08:23:40.532Z'
-        }
+          lastActive: '2017-12-19T08:23:40.532Z',
+        },
       },
       {
         cursor: 'abc',
         node: {
           recruitedAt: '2017-02-07T13:59:46.000Z',
-          lastActive: '2017-02-07T18:00:09.031Z'
-        }
+          lastActive: '2017-02-07T18:00:09.031Z',
+        },
       },
       {
         cursor: 'abc',
         node: {
           recruitedAt: '2017-02-07T17:69:46.000Z',
-          lastActive: null
-        }
-      }
+          lastActive: null,
+        },
+      },
     ]
     expect(getRecruitsActiveForAtLeastOneDay(recruitsEdgesTestA)).toBe(1)
 
@@ -377,16 +367,16 @@ describe('getRecruits', () => {
         cursor: 'abc',
         node: {
           recruitedAt: '2017-05-19T13:59:46.000Z',
-          lastActive: '2017-12-19T08:23:40.532Z'
-        }
+          lastActive: '2017-12-19T08:23:40.532Z',
+        },
       },
       {
         cursor: 'abc',
         node: {
           recruitedAt: '2017-02-07T13:59:46.000Z',
-          lastActive: '2017-02-09T08:23:40.532Z'
-        }
-      }
+          lastActive: '2017-02-09T08:23:40.532Z',
+        },
+      },
     ]
     expect(getRecruitsActiveForAtLeastOneDay(recruitsEdgesTestB)).toBe(2)
 
@@ -400,16 +390,16 @@ describe('getRecruits', () => {
         cursor: 'abc',
         node: {
           recruitedAt: '2017-05-19T13:59:46.000Z',
-          lastActive: '2017-05-20T13:59:47.000Z'
-        }
+          lastActive: '2017-05-20T13:59:47.000Z',
+        },
       },
       {
         cursor: 'abc',
         node: {
           recruitedAt: '2017-05-19T13:59:46.000Z',
-          lastActive: '2017-05-20T13:59:45.499Z'
-        }
-      }
+          lastActive: '2017-05-20T13:59:45.499Z',
+        },
+      },
     ]
     expect(getRecruitsActiveForAtLeastOneDay(recruitsEdgesTestD)).toBe(1)
   })

@@ -1,4 +1,3 @@
-
 import UserWidgetModel from './UserWidgetModel'
 
 /**

@@ -1,4 +1,3 @@
-
 import moment from 'moment'
 import UserDataConsentModel from './UserDataConsentModel'
 const ConsentString = require('consent-string').ConsentString
@@ -11,7 +10,12 @@ const ConsentString = require('consent-string').ConsentString
  * @param {boolean} isGlobalConsent - Whether the user consent to all data use cases.
  * @return {Object} If successful, a single key ("success") with value `true`
  */
-const logUserDataConsent = async (userContext, userId, consentStr, isGlobalConsent) => {
+const logUserDataConsent = async (
+  userContext,
+  userId,
+  consentStr,
+  isGlobalConsent
+) => {
   // Decode the consent string.
   // https://github.com/InteractiveAdvertisingBureau/Consent-String-SDK-JS#documentation
   const ConsentData = new ConsentString(consentStr)
@@ -30,7 +34,7 @@ const logUserDataConsent = async (userContext, userId, consentStr, isGlobalConse
       consentScreen: ConsentData.getConsentScreen(),
       allowedPurposeIds: ConsentData.getPurposesAllowed(),
       allowedVendorIds: ConsentData.getVendorsAllowed(),
-      isGlobalConsent: isGlobalConsent
+      isGlobalConsent: isGlobalConsent,
     })
   } catch (e) {
     throw e

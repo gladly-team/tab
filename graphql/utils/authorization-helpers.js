@@ -1,4 +1,3 @@
-
 import { get } from 'lodash/object'
 
 /**
@@ -6,7 +5,7 @@ import { get } from 'lodash/object'
  * @param {obj} lambdaEvent - The "event" object provided to AWS Lambda.
  * @return {obj} The object of user claims.
  */
-export const getUserClaimsFromLambdaEvent = (lambdaEvent) => {
+export const getUserClaimsFromLambdaEvent = lambdaEvent => {
   // With a custom authorizer, we access keys on requestContext.authorizer object.
   // https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-mapping-template-reference.html#context-variable-reference
   return get(lambdaEvent, 'requestContext.authorizer', {})
@@ -17,7 +16,7 @@ export const getUserClaimsFromLambdaEvent = (lambdaEvent) => {
  * @param {obj} userClaims - The object of claims about the user
  * @return {obj} The object of user claims.
  */
-export const createGraphQLContext = (userClaims) => {
+export const createGraphQLContext = userClaims => {
   return {
     user: {
       // The id will not exist for unauthenticated users.
@@ -26,8 +25,10 @@ export const createGraphQLContext = (userClaims) => {
       // anonymous users.
       email: userClaims['email'] || null,
       // The email_verified claim is a string.
-      emailVerified: userClaims['email_verified'] ? userClaims['email_verified'] === 'true' : false
-    }
+      emailVerified: userClaims['email_verified']
+        ? userClaims['email_verified'] === 'true'
+        : false,
+    },
   }
 }
 

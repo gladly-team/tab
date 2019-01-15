@@ -8,7 +8,7 @@ import {
   setMockDBResponse,
   addTimestampFieldsToItem,
   getMockUserContext,
-  mockDate
+  mockDate,
 } from '../../test-utils'
 import decodeAmazonCPM from '../decodeAmazonCPM'
 import { random } from 'lodash/number'
@@ -22,7 +22,7 @@ const mockCurrentTime = '2017-06-22T01:13:28.000Z'
 
 beforeAll(() => {
   mockDate.on(mockCurrentTime, {
-    mockCurrentTimeOnly: true
+    mockCurrentTimeOnly: true,
   })
 })
 
@@ -41,7 +41,7 @@ describe('logRevenue', () => {
     const userId = userContext.id
     const returned = await logRevenue(userContext, userId, 0.0172, '2468')
     expect(returned).toEqual({
-      success: true
+      success: true,
     })
   })
 
@@ -58,7 +58,7 @@ describe('logRevenue', () => {
         userId: userId,
         timestamp: moment.utc().toISOString(),
         revenue: 0.0172,
-        dfpAdvertiserId: '2468'
+        dfpAdvertiserId: '2468',
       })
     )
   })
@@ -75,7 +75,7 @@ describe('logRevenue', () => {
       addTimestampFieldsToItem({
         userId: userId,
         timestamp: moment.utc().toISOString(),
-        revenue: 0.0172
+        revenue: 0.0172,
       })
     )
   })
@@ -95,7 +95,7 @@ describe('logRevenue', () => {
         timestamp: moment.utc().toISOString(),
         revenue: 0.0172,
         dfpAdvertiserId: '2468',
-        tabId: someTabId
+        tabId: someTabId,
       })
     )
   })
@@ -106,7 +106,16 @@ describe('logRevenue', () => {
     const userId = userContext.id
     const userRevenueCreate = jest.spyOn(UserRevenueModel, 'create')
     const someTabId = '712dca1a-3705-480f-95ff-314be86a2936'
-    await logRevenue(userContext, userId, 0.0172, '2468', null, null, someTabId, '728x90')
+    await logRevenue(
+      userContext,
+      userId,
+      0.0172,
+      '2468',
+      null,
+      null,
+      someTabId,
+      '728x90'
+    )
 
     expect(userRevenueCreate).toHaveBeenLastCalledWith(
       userContext,
@@ -116,7 +125,7 @@ describe('logRevenue', () => {
         revenue: 0.0172,
         dfpAdvertiserId: '2468',
         tabId: someTabId,
-        adSize: '728x90'
+        adSize: '728x90',
       })
     )
   })
@@ -128,8 +137,17 @@ describe('logRevenue', () => {
     const userRevenueCreate = jest.spyOn(UserRevenueModel, 'create')
     const someTabId = '712dca1a-3705-480f-95ff-314be86a2936'
     const someAdUnitCode = '/24681357/blah-blah/'
-    await logRevenue(userContext, userId, 0.0172, '2468', null, null, someTabId,
-      '728x90', someAdUnitCode)
+    await logRevenue(
+      userContext,
+      userId,
+      0.0172,
+      '2468',
+      null,
+      null,
+      someTabId,
+      '728x90',
+      someAdUnitCode
+    )
 
     expect(userRevenueCreate).toHaveBeenLastCalledWith(
       userContext,
@@ -140,7 +158,7 @@ describe('logRevenue', () => {
         dfpAdvertiserId: '2468',
         tabId: someTabId,
         adSize: '728x90',
-        adUnitCode: someAdUnitCode
+        adUnitCode: someAdUnitCode,
       })
     )
   })
@@ -149,8 +167,9 @@ describe('logRevenue', () => {
     expect.assertions(1)
 
     const userId = userContext.id
-    return expect(logRevenue(userContext, userId))
-      .rejects.toThrow('Revenue logging requires either "revenue" or "encodedRevenue" values')
+    return expect(logRevenue(userContext, userId)).rejects.toThrow(
+      'Revenue logging requires either "revenue" or "encodedRevenue" values'
+    )
   })
 
   test('it throws an error if both "revenue" nor "encodedRevenue" are provided but "aggregationOperation" is not', () => {
@@ -159,14 +178,17 @@ describe('logRevenue', () => {
     const userId = userContext.id
     const revenueObj = {
       encodingType: 'AMAZON_CPM',
-      encodedValue: 'some-code'
+      encodedValue: 'some-code',
     }
 
     // Mock decoding the Amazon code
-    decodeAmazonCPM.mockReturnValueOnce(8.50)
+    decodeAmazonCPM.mockReturnValueOnce(8.5)
 
-    return expect(logRevenue(userContext, userId, 0.23, null, revenueObj, undefined))
-      .rejects.toThrow('Revenue logging requires an "aggregationOperation" value if both "revenue" and "encodedRevenue" values are provided')
+    return expect(
+      logRevenue(userContext, userId, 0.23, null, revenueObj, undefined)
+    ).rejects.toThrow(
+      'Revenue logging requires an "aggregationOperation" value if both "revenue" and "encodedRevenue" values are provided'
+    )
   })
 
   test('it decodes an encoded Amazon CPM revenue object', async () => {
@@ -176,11 +198,11 @@ describe('logRevenue', () => {
     const userRevenueCreate = jest.spyOn(UserRevenueModel, 'create')
     const revenueObj = {
       encodingType: 'AMAZON_CPM',
-      encodedValue: 'some-code'
+      encodedValue: 'some-code',
     }
 
     // Mock decoding the Amazon code
-    decodeAmazonCPM.mockReturnValueOnce(8.50)
+    decodeAmazonCPM.mockReturnValueOnce(8.5)
 
     await logRevenue(userContext, userId, null, null, revenueObj)
 
@@ -189,7 +211,7 @@ describe('logRevenue', () => {
       addTimestampFieldsToItem({
         userId: userId,
         timestamp: moment.utc().toISOString(),
-        revenue: 0.0085
+        revenue: 0.0085,
       })
     )
   })
@@ -202,11 +224,11 @@ describe('logRevenue', () => {
     const revenueObj = {
       encodingType: 'AMAZON_CPM',
       encodedValue: 'some-code',
-      adSize: '300x250'
+      adSize: '300x250',
     }
 
     // Mock decoding the Amazon code
-    decodeAmazonCPM.mockReturnValueOnce(8.50)
+    decodeAmazonCPM.mockReturnValueOnce(8.5)
 
     await logRevenue(userContext, userId, null, null, revenueObj)
 
@@ -216,7 +238,7 @@ describe('logRevenue', () => {
         userId: userId,
         timestamp: moment.utc().toISOString(),
         revenue: 0.0085,
-        adSize: '300x250'
+        adSize: '300x250',
       })
     )
   })
@@ -227,10 +249,13 @@ describe('logRevenue', () => {
     const userId = userContext.id
     const revenueObj = {
       encodingType: 'NOT_A_VALID_TYPE_HERE',
-      encodedValue: 'some-code'
+      encodedValue: 'some-code',
     }
-    return expect(logRevenue(userContext, userId, null, null, revenueObj))
-      .rejects.toThrow('Invalid "encodingType" field for revenue object transformation')
+    return expect(
+      logRevenue(userContext, userId, null, null, revenueObj)
+    ).rejects.toThrow(
+      'Invalid "encodingType" field for revenue object transformation'
+    )
   })
 
   test('it throws an error if an invalid "aggregationOperation" is provided', () => {
@@ -239,14 +264,17 @@ describe('logRevenue', () => {
     const userId = userContext.id
     const revenueObj = {
       encodingType: 'AMAZON_CPM',
-      encodedValue: 'some-code'
+      encodedValue: 'some-code',
     }
 
     // Mock decoding the Amazon code
-    decodeAmazonCPM.mockReturnValueOnce(8.50)
+    decodeAmazonCPM.mockReturnValueOnce(8.5)
 
-    return expect(logRevenue(userContext, userId, 0.013, null, revenueObj, 'BLAH'))
-      .rejects.toThrow('Invalid "aggregationOperation" value. Must be one of: "MAX"')
+    return expect(
+      logRevenue(userContext, userId, 0.013, null, revenueObj, 'BLAH')
+    ).rejects.toThrow(
+      'Invalid "aggregationOperation" value. Must be one of: "MAX"'
+    )
   })
 
   test('it chooses the max revenue value when using "MAX" aggregationOperation', async () => {
@@ -256,11 +284,11 @@ describe('logRevenue', () => {
     const userRevenueCreate = jest.spyOn(UserRevenueModel, 'create')
     const revenueObj = {
       encodingType: 'AMAZON_CPM',
-      encodedValue: 'some-code'
+      encodedValue: 'some-code',
     }
 
     // Mock decoding the Amazon code
-    decodeAmazonCPM.mockReturnValueOnce(8.50)
+    decodeAmazonCPM.mockReturnValueOnce(8.5)
 
     await logRevenue(userContext, userId, 0.0072, null, revenueObj, 'MAX')
 
@@ -269,12 +297,12 @@ describe('logRevenue', () => {
       addTimestampFieldsToItem({
         userId: userId,
         timestamp: moment.utc().toISOString(),
-        revenue: 0.0085
+        revenue: 0.0085,
       })
     )
 
     // Redo with a lower encoded revenue value.
-    decodeAmazonCPM.mockReturnValueOnce(4.10)
+    decodeAmazonCPM.mockReturnValueOnce(4.1)
 
     await logRevenue(userContext, userId, 0.0068, null, revenueObj, 'MAX')
 
@@ -283,7 +311,7 @@ describe('logRevenue', () => {
       addTimestampFieldsToItem({
         userId: userId,
         timestamp: moment.utc().toISOString(),
-        revenue: 0.0068
+        revenue: 0.0068,
       })
     )
   })
@@ -297,14 +325,22 @@ describe('logRevenue', () => {
     const revenueObj = {
       encodingType: 'AMAZON_CPM',
       encodedValue: 'some-code',
-      adSize: '300x600'
+      adSize: '300x600',
     }
 
     // Mock decoding the Amazon code
-    decodeAmazonCPM.mockReturnValueOnce(8.50)
+    decodeAmazonCPM.mockReturnValueOnce(8.5)
 
-    await logRevenue(userContext, userId, 0.0072, null, revenueObj, 'MAX',
-      someTabId, '728x90')
+    await logRevenue(
+      userContext,
+      userId,
+      0.0072,
+      null,
+      revenueObj,
+      'MAX',
+      someTabId,
+      '728x90'
+    )
 
     expect(userRevenueCreate).toHaveBeenLastCalledWith(
       userContext,
@@ -313,15 +349,23 @@ describe('logRevenue', () => {
         timestamp: moment.utc().toISOString(),
         revenue: 0.0085,
         tabId: someTabId,
-        adSize: '300x600' // The encoded revenue value was higher
+        adSize: '300x600', // The encoded revenue value was higher
       })
     )
 
     // Redo with a lower encoded revenue value.
-    decodeAmazonCPM.mockReturnValueOnce(4.10)
+    decodeAmazonCPM.mockReturnValueOnce(4.1)
 
-    await logRevenue(userContext, userId, 0.0068, null, revenueObj, 'MAX',
-      someTabId, '728x90')
+    await logRevenue(
+      userContext,
+      userId,
+      0.0068,
+      null,
+      revenueObj,
+      'MAX',
+      someTabId,
+      '728x90'
+    )
 
     expect(userRevenueCreate).toHaveBeenLastCalledWith(
       userContext,
@@ -330,7 +374,7 @@ describe('logRevenue', () => {
         timestamp: moment.utc().toISOString(),
         revenue: 0.0068,
         tabId: someTabId,
-        adSize: '728x90' // The non-encoded revenue value was higher
+        adSize: '728x90', // The non-encoded revenue value was higher
       })
     )
   })
@@ -341,7 +385,7 @@ describe('logRevenue', () => {
     const userId = userContext.id
     const revenueObj = {
       encodingType: 'AMAZON_CPM',
-      encodedValue: 'some-code'
+      encodedValue: 'some-code',
     }
 
     // Mock decoding the Amazon code
@@ -349,8 +393,9 @@ describe('logRevenue', () => {
       throw new Error('Big decoding problem!')
     })
 
-    return expect(logRevenue(userContext, userId, null, null, revenueObj))
-      .rejects.toThrow('Big decoding problem!')
+    return expect(
+      logRevenue(userContext, userId, null, null, revenueObj)
+    ).rejects.toThrow('Big decoding problem!')
   })
 
   test('it throws an error if the decoded revenue object is null and there is no other revenue value', () => {
@@ -359,14 +404,15 @@ describe('logRevenue', () => {
     const userId = userContext.id
     const revenueObj = {
       encodingType: 'AMAZON_CPM',
-      encodedValue: 'some-code'
+      encodedValue: 'some-code',
     }
 
     // Mock decoding the Amazon code
     decodeAmazonCPM.mockReturnValueOnce(null)
 
-    return expect(logRevenue(userContext, userId, null, null, revenueObj))
-      .rejects.toThrow('Amazon revenue code "some-code" resolved to a nil value')
+    return expect(
+      logRevenue(userContext, userId, null, null, revenueObj)
+    ).rejects.toThrow('Amazon revenue code "some-code" resolved to a nil value')
   })
 
   test('retries with a new timestamp when a DB item already exists', async () => {
@@ -375,11 +421,9 @@ describe('logRevenue', () => {
     const userRevenueCreate = jest.spyOn(UserRevenueModel, 'create')
 
     // Mock that the item already exists.
-    setMockDBResponse(
-      DatabaseOperation.CREATE,
-      null,
-      { code: 'ConditionalCheckFailedException' }
-    )
+    setMockDBResponse(DatabaseOperation.CREATE, null, {
+      code: 'ConditionalCheckFailedException',
+    })
 
     // Control the random millisecond selection.
     random.mockReturnValueOnce(7)
@@ -392,7 +436,7 @@ describe('logRevenue', () => {
         userId: userContext.id,
         timestamp: '2017-06-22T01:13:28.000Z',
         revenue: 0.0172,
-        dfpAdvertiserId: '2468'
+        dfpAdvertiserId: '2468',
       })
     )
     expect(userRevenueCreate).toHaveBeenLastCalledWith(
@@ -401,7 +445,7 @@ describe('logRevenue', () => {
         userId: userContext.id,
         timestamp: '2017-06-22T01:13:28.007Z', // Different time
         revenue: 0.0172,
-        dfpAdvertiserId: '2468'
+        dfpAdvertiserId: '2468',
       })
     )
   })
@@ -411,19 +455,16 @@ describe('logRevenue', () => {
 
     // Mock that the item already exists for the original and the
     // retried "create" operations.
-    setMockDBResponse(
-      DatabaseOperation.CREATE,
-      null,
-      { code: 'ConditionalCheckFailedException' }
-    )
-    setMockDBResponse(
-      DatabaseOperation.CREATE,
-      null,
-      { code: 'ConditionalCheckFailedException' }
-    )
+    setMockDBResponse(DatabaseOperation.CREATE, null, {
+      code: 'ConditionalCheckFailedException',
+    })
+    setMockDBResponse(DatabaseOperation.CREATE, null, {
+      code: 'ConditionalCheckFailedException',
+    })
 
-    await expect(logRevenue(userContext, userContext.id, 0.0172, '2468'))
-      .rejects.toThrow()
+    await expect(
+      logRevenue(userContext, userContext.id, 0.0172, '2468')
+    ).rejects.toThrow()
   })
 
   test('throws an error when the DB returns an unexpected error', async () => {
@@ -431,13 +472,12 @@ describe('logRevenue', () => {
 
     // Mock that the item already exists for the original and the
     // retried "create" operations.
-    setMockDBResponse(
-      DatabaseOperation.CREATE,
-      null,
-      { code: 'BadExampleError' }
-    )
+    setMockDBResponse(DatabaseOperation.CREATE, null, {
+      code: 'BadExampleError',
+    })
 
-    await expect(logRevenue(userContext, userContext.id, 0.0172, '2468'))
-      .rejects.toThrow()
+    await expect(
+      logRevenue(userContext, userContext.id, 0.0172, '2468')
+    ).rejects.toThrow()
   })
 })

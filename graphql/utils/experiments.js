@@ -1,4 +1,3 @@
-
 import { get } from 'lodash/object'
 
 // Experiments with valid experiment group values.
@@ -7,32 +6,32 @@ const experimentConfig = {
   anonSignIn: {
     NONE: 0,
     AUTHED_USER_ONLY: 1,
-    ANONYMOUS_ALLOWED: 2
+    ANONYMOUS_ALLOWED: 2,
   },
   // @experiment-various-ad-sizes
   variousAdSizes: {
     NONE: 0,
     STANDARD: 1,
-    VARIOUS: 2
+    VARIOUS: 2,
   },
   // @experiment-third-ad
   thirdAd: {
     NONE: 0,
     TWO_ADS: 1,
-    THREE_ADS: 2
+    THREE_ADS: 2,
   },
   // @experiment-one-ad-for-new-users
   oneAdForNewUsers: {
     NONE: 0,
     DEFAULT: 1,
-    ONE_AD_AT_FIRST: 2
+    ONE_AD_AT_FIRST: 2,
   },
   // @experiment-ad-explanation
   adExplanation: {
     NONE: 0,
     DEFAULT: 1,
-    SHOW_EXPLANATION: 2
-  }
+    SHOW_EXPLANATION: 2,
+  },
 }
 
 /**
@@ -79,19 +78,19 @@ const isValidExperimentGroup = (experimentName, groupVal) => {
  *   the shape of the ExperimentGroupsType object in our GraphQL
  *   schema.
  */
-const getValidatedExperimentGroups = (clientExperimentGroups) => {
+const getValidatedExperimentGroups = clientExperimentGroups => {
   return getAllExperiments().reduce((map, experimentName) => {
     const clientGroupVal = get(clientExperimentGroups, experimentName)
-    const validatedGroupVal = isValidExperimentGroup(experimentName, clientGroupVal)
+    const validatedGroupVal = isValidExperimentGroup(
+      experimentName,
+      clientGroupVal
+    )
       ? clientGroupVal
       : null
     return Object.assign({}, map, {
-      [experimentName]: validatedGroupVal
+      [experimentName]: validatedGroupVal,
     })
   }, {})
 }
 
-export {
-  experimentConfig,
-  getValidatedExperimentGroups
-}
+export { experimentConfig, getValidatedExperimentGroups }

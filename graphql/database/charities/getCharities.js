@@ -1,4 +1,3 @@
-
 import { filter } from 'lodash/collection'
 import CharityModel from './CharityModel'
 

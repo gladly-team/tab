@@ -2,9 +2,7 @@
 
 import getCharities from '../getCharities'
 import CharityModel from '../CharityModel'
-import {
-  getMockUserContext
-} from '../../test-utils'
+import { getMockUserContext } from '../../test-utils'
 
 jest.mock('../../databaseClient')
 const userContext = getMockUserContext()
@@ -20,7 +18,7 @@ const getMockCharities = () => {
       website: 'example.com',
       description: 'Some description text.',
       impact: 'Some impact text.',
-      inactive: false
+      inactive: false,
     },
     {
       id: 'another-charity-id',
@@ -31,7 +29,7 @@ const getMockCharities = () => {
       website: 'example.com',
       description: 'Another description text.',
       impact: 'Another impact text.',
-      inactive: false
+      inactive: false,
     },
     {
       id: 'third-charity-id',
@@ -41,9 +39,9 @@ const getMockCharities = () => {
       image: 'third-charity-2.png',
       website: 'example.com',
       description: 'Third charity description text.',
-      impact: 'Third charity impact text.'
+      impact: 'Third charity impact text.',
       // inactive: false // Note: inactive key isn't required
-    }
+    },
   ]
 }
 
@@ -52,7 +50,8 @@ describe('getCharities', () => {
     expect.assertions(1)
 
     const mockCharities = getMockCharities()
-    const getAllCharitiesSpy = jest.spyOn(CharityModel, 'getAll')
+    const getAllCharitiesSpy = jest
+      .spyOn(CharityModel, 'getAll')
       .mockImplementationOnce(async () => mockCharities)
 
     await getCharities(userContext)
@@ -63,7 +62,8 @@ describe('getCharities', () => {
     expect.assertions(1)
 
     const mockCharities = getMockCharities()
-    jest.spyOn(CharityModel, 'getAll')
+    jest
+      .spyOn(CharityModel, 'getAll')
       .mockImplementationOnce(async () => mockCharities)
 
     const fetchedCharities = await getCharities(userContext)
@@ -76,7 +76,8 @@ describe('getCharities', () => {
     const mockCharities = getMockCharities()
     mockCharities[1].inactive = true
 
-    jest.spyOn(CharityModel, 'getAll')
+    jest
+      .spyOn(CharityModel, 'getAll')
       .mockImplementationOnce(async () => mockCharities)
     const fetchedCharities = await getCharities(userContext)
 
@@ -90,7 +91,8 @@ describe('getCharities', () => {
     const mockCharities = getMockCharities()
     mockCharities[1].inactive = true
 
-    jest.spyOn(CharityModel, 'getAll')
+    jest
+      .spyOn(CharityModel, 'getAll')
       .mockImplementationOnce(async () => mockCharities)
     const fetchedCharities = await getCharities(userContext)
 
@@ -106,7 +108,8 @@ describe('getCharities', () => {
       charity.inactive = true
     })
 
-    jest.spyOn(CharityModel, 'getAll')
+    jest
+      .spyOn(CharityModel, 'getAll')
       .mockImplementationOnce(async () => mockCharities)
     const fetchedCharities = await getCharities(userContext)
 

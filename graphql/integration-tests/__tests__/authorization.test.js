@@ -1,13 +1,7 @@
 /* eslint-env jest */
 
-import {
-  loadFixtures,
-  deleteFixtures
-} from '../utils/fixture-utils'
-import {
-  deleteUser,
-  getNewAuthedUser
-} from '../utils/auth-utils'
+import { loadFixtures, deleteFixtures } from '../utils/fixture-utils'
+import { deleteUser, getNewAuthedUser } from '../utils/auth-utils'
 import fetchQuery from '../utils/fetch-graphql'
 
 describe('GraphQL with authorized user', () => {
@@ -32,19 +26,16 @@ describe('GraphQL with authorized user', () => {
   beforeEach(async () => {
     // Load fixtures, replacing one of the hardcoded user IDs
     // with the authed user's ID.
-    await loadFixtures('users', [
-      { before: origUserId, after: userId }
-    ])
+    await loadFixtures('users', [{ before: origUserId, after: userId }])
   })
 
   afterEach(async () => {
-    await deleteFixtures('users', [
-      { before: origUserId, after: userId }
-    ])
+    await deleteFixtures('users', [{ before: origUserId, after: userId }])
   })
 
   test('it fetches the user when authorized', async () => {
-    const response = await fetchQuery(`
+    const response = await fetchQuery(
+      `
       query UserViewQuery(
         $userId: String!
       ) {
@@ -54,7 +45,7 @@ describe('GraphQL with authorized user', () => {
         }
       }`,
       {
-        userId: userId
+        userId: userId,
       },
       userIdToken
     )
@@ -74,7 +65,8 @@ describe('GraphQL with unauthorized user', () => {
   })
 
   test('it fails without an Authorization header', async () => {
-    const response = await fetchQuery(`
+    const response = await fetchQuery(
+      `
       query UserViewQuery(
         $userId: String!
       ) {
@@ -83,7 +75,7 @@ describe('GraphQL with unauthorized user', () => {
         }
       }`,
       {
-        userId: 'gqltest1-yz89-yz80-yz80-xyz789tuv456'
+        userId: 'gqltest1-yz89-yz80-yz80-xyz789tuv456',
       }
     )
     expect(response.message).toBe('Unauthorized')
@@ -91,7 +83,8 @@ describe('GraphQL with unauthorized user', () => {
   })
 
   test('it fails with a false user ID token', async () => {
-    const response = await fetchQuery(`
+    const response = await fetchQuery(
+      `
       query UserViewQuery(
         $userId: String!
       ) {
@@ -100,7 +93,7 @@ describe('GraphQL with unauthorized user', () => {
         }
       }`,
       {
-        userId: 'gqltest1-yz89-yz80-yz80-xyz789tuv456'
+        userId: 'gqltest1-yz89-yz80-yz80-xyz789tuv456',
       },
       'falsetoken123falsetoken123falsetoken123falsetoken123'
     )

@@ -7,17 +7,17 @@ beforeEach(() => {
     anonSignIn: {
       NONE: 0,
       AUTHED_USER_ONLY: 1,
-      ANONYMOUS_ALLOWED: 2
+      ANONYMOUS_ALLOWED: 2,
     },
     fooTest: {
       NONE: 0,
-      SOME_OTHER_GROUP: 1
+      SOME_OTHER_GROUP: 1,
     },
     anImportantTest: {
       FAIL: 'fail',
       SUCCEED: 'succeed',
-      AMBIGUOUS: 'ambiguous'
-    }
+      AMBIGUOUS: 'ambiguous',
+    },
   }
 })
 
@@ -32,12 +32,12 @@ describe('experiments', () => {
     const expGroups = getValidatedExperimentGroups({
       anonSignIn: 1,
       fooTest: 0,
-      anImportantTest: 'ambiguous'
+      anImportantTest: 'ambiguous',
     })
     expect(expGroups).toEqual({
       anonSignIn: 1,
       fooTest: 0,
-      anImportantTest: 'ambiguous'
+      anImportantTest: 'ambiguous',
     })
   })
 
@@ -48,7 +48,7 @@ describe('experiments', () => {
     expect(expGroups).toEqual({
       anonSignIn: null,
       fooTest: null,
-      anImportantTest: null
+      anImportantTest: null,
     })
   })
 
@@ -58,12 +58,12 @@ describe('experiments', () => {
     const expGroups = getValidatedExperimentGroups({
       anonSignIn: 3020,
       fooTest: 1,
-      anImportantTest: 'this is invalid!'
+      anImportantTest: 'this is invalid!',
     })
     expect(expGroups).toEqual({
       anonSignIn: null,
       fooTest: 1,
-      anImportantTest: null
+      anImportantTest: null,
     })
   })
 
@@ -74,7 +74,7 @@ describe('experiments', () => {
     expect(expGroups).toEqual({
       anonSignIn: null,
       fooTest: null,
-      anImportantTest: null
+      anImportantTest: null,
     })
   })
 
@@ -86,7 +86,7 @@ describe('experiments', () => {
     const expGroups = getValidatedExperimentGroups({
       anonSignIn: 1,
       fooTest: 0,
-      anImportantTest: 'ambiguous'
+      anImportantTest: 'ambiguous',
     })
     expect(expGroups).toEqual({})
   })
@@ -95,12 +95,12 @@ describe('experiments', () => {
     const getValidatedExperimentGroups = require('../experiments')
       .getValidatedExperimentGroups
     const expGroups = getValidatedExperimentGroups({
-      anonSignIn: 0
+      anonSignIn: 0,
     })
     expect(expGroups).toEqual({
       anonSignIn: 0,
       fooTest: null,
-      anImportantTest: null
+      anImportantTest: null,
     })
   })
 })

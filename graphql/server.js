@@ -3,8 +3,8 @@ import cors from 'cors'
 import express from 'express'
 import bodyParser from 'body-parser'
 import graphQLHTTP from 'express-graphql'
-import {clean} from 'require-clean'
-import {exec} from 'child_process'
+import { clean } from 'require-clean'
+import { exec } from 'child_process'
 
 import config from './config'
 import { handleError } from './utils/error-logging'
@@ -14,7 +14,7 @@ const graphQLPort = process.env.DEVELOPMENT_GRAPHQL_PORT
 
 let graphQLServer
 
-function startGraphQLServer (callback) {
+function startGraphQLServer(callback) {
   clean('./data/schema')
   clean('./handler')
   clean('./utils/dev-tools')
@@ -22,7 +22,7 @@ function startGraphQLServer (callback) {
   const { handler } = require('./handler')
   const {
     generateLambdaEventObjFromRequest,
-    getGraphQLContextFromRequest
+    getGraphQLContextFromRequest,
   } = require('./utils/dev-tools')
 
   const graphQLApp = express()
@@ -32,18 +32,22 @@ function startGraphQLServer (callback) {
 
   // Use express-graphql in development if desired.
   // Otherwise, just use our plain Lambda handler.
-  if (config.NODE_ENV === 'development' && process.env.DEVELOPMENT_ENABLE_GRAPHIQL) {
+  if (
+    config.NODE_ENV === 'development' &&
+    process.env.DEVELOPMENT_ENABLE_GRAPHIQL
+  ) {
     logger.info(`GraphiQL is enabled on port ${graphQLPort}.`)
     // https://github.com/graphql/express-graphql#options
-    graphQLApp.use('/',
-      graphQLHTTP((req) => {
+    graphQLApp.use(
+      '/',
+      graphQLHTTP(req => {
         const context = getGraphQLContextFromRequest(req)
         return {
           graphiql: true,
           pretty: true,
           schema: Schema,
           context: context,
-          formatError: handleError
+          formatError: handleError,
         }
       })
     )
@@ -66,7 +70,7 @@ function startGraphQLServer (callback) {
   })
 }
 
-function startServer (callback) {
+function startServer(callback) {
   // Shut down the server
   if (graphQLServer) {
     graphQLServer.close()
@@ -75,7 +79,7 @@ function startServer (callback) {
   // Compile the schema
   exec('yarn run update-schema', (error, stdout) => {
     logger.info(stdout)
-    function handleTaskDone () {
+    function handleTaskDone() {
       if (callback) {
         callback(new Error(error))
       }
@@ -89,13 +93,12 @@ const watcher = chokidar.watch([
   './server.js',
   './data/{schema}.js',
   './database/*.js',
-  './database/*/*.js'])
+  './database/*/*.js',
+])
 
 watcher.on('change', path => {
   logger.info(`\`${path}\` changed. Restarting.`)
-  startServer(() =>
-    logger.info('GraphQL server schema updated.')
-  )
+  startServer(() => logger.info('GraphQL server schema updated.'))
 })
 
 startServer()

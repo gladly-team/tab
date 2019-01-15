@@ -1,4 +1,3 @@
-
 import UserWidgetModel from './UserWidgetModel'
 
 /**
@@ -14,6 +13,6 @@ export default async (userContext, userId, widgetId, visible) => {
   return UserWidgetModel.update(userContext, {
     userId: userId,
     widgetId: widgetId,
-    visible: visible
+    visible: visible,
   })
 }

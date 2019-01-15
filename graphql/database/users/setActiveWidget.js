@@ -1,4 +1,3 @@
-
 import UserModel from './UserModel'
 
 /**
@@ -12,7 +11,7 @@ const setActiveWidget = async (userContext, userId, widgetId) => {
   try {
     const userInstance = await UserModel.update(userContext, {
       id: userId,
-      activeWidget: widgetId
+      activeWidget: widgetId,
     })
     return userInstance
   } catch (e) {

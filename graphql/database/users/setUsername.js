@@ -1,4 +1,3 @@
-
 import UserModel from './UserModel'
 import getUserByUsername from './getUserByUsername'
 import logger from '../../utils/logger'
@@ -21,19 +20,18 @@ const setUsername = async (userContext, userId, username) => {
 
       // If there's a user with the same username but a different ID
       // from this user, the username is taken.
-      usernameAlreadyExists = (
-        existingUser &&
-        existingUser.id !== userId
-      )
+      usernameAlreadyExists = existingUser && existingUser.id !== userId
     } catch (e) {
       // This is an unexpected failure. Return an error.
       logger.error(e)
       return {
         user: null,
-        errors: [{
-          code: 'USERNAME_LOOKUP_FAILURE',
-          message: 'Could not verify if username is taken or not'
-        }]
+        errors: [
+          {
+            code: 'USERNAME_LOOKUP_FAILURE',
+            message: 'Could not verify if username is taken or not',
+          },
+        ],
       }
     }
 
@@ -41,21 +39,23 @@ const setUsername = async (userContext, userId, username) => {
     if (usernameAlreadyExists) {
       return {
         user: null,
-        errors: [{
-          code: 'USERNAME_DUPLICATE',
-          message: 'Username already exists'
-        }]
+        errors: [
+          {
+            code: 'USERNAME_DUPLICATE',
+            message: 'Username already exists',
+          },
+        ],
       }
     }
 
     // Update the username.
     const userInstance = await UserModel.update(userContext, {
       id: userId,
-      username: username
+      username: username,
     })
     return {
       user: userInstance,
-      errors: []
+      errors: [],
     }
   } catch (e) {
     throw e

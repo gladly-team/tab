@@ -1,4 +1,3 @@
-
 import ReferralDataModel from './ReferralDataModel'
 
 /**
@@ -9,10 +8,15 @@ import ReferralDataModel from './ReferralDataModel'
  * @param {string} referringChannelId - The referring channel id.
  * @return {Promise<ReferralData>}  A promise that resolve into a referral data log.
  */
-export default async (userContext, userId, referringUserId, referringChannelId) => {
+export default async (
+  userContext,
+  userId,
+  referringUserId,
+  referringChannelId
+) => {
   return ReferralDataModel.create(userContext, {
     userId: userId,
     referringUser: referringUserId,
-    referringChannel: referringChannelId
+    referringChannel: referringChannelId,
   })
 }

@@ -1,9 +1,6 @@
-
 import logger from './logger'
 import { get } from 'lodash/object'
-import {
-  USER_DOES_NOT_EXIST
-} from './exceptions'
+import { USER_DOES_NOT_EXIST } from './exceptions'
 
 /*
  * Wrap a function and log all exceptions, then re-throw the
@@ -11,8 +8,8 @@ import {
  * @param {function} func - The function to wrap.
  * @return {null}
  */
-export const logExceptionsWrapper = (func) => {
-  return function () {
+export const logExceptionsWrapper = func => {
+  return function() {
     try {
       return func.apply(this, arguments)
     } catch (e) {
@@ -28,12 +25,12 @@ export const logExceptionsWrapper = (func) => {
  * @param {object} graphQLError - The GraphQL error.
  * @return {object} The error to send to the client.
  */
-export const formatError = (graphQLError) => {
+export const formatError = graphQLError => {
   return {
     message: graphQLError.message,
     locations: graphQLError.locations,
     path: graphQLError.path,
-    code: get(graphQLError, 'originalError.code', null)
+    code: get(graphQLError, 'originalError.code', null),
   }
 }
 
@@ -44,9 +41,7 @@ export const formatError = (graphQLError) => {
  * @return {Boolean} Whether we should log the error.
  */
 const shouldLogError = graphQLError => {
-  const errorCodesToSkipLogging = [
-    USER_DOES_NOT_EXIST
-  ]
+  const errorCodesToSkipLogging = [USER_DOES_NOT_EXIST]
   const errCode = get(graphQLError, 'originalError.code')
   return errorCodesToSkipLogging.indexOf(errCode) === -1
 }
@@ -58,7 +53,7 @@ const shouldLogError = graphQLError => {
  * @param {object} graphQLError - The GraphQL error.
  * @return {object} The error to send to the client (optionally formatted).
  */
-export const handleError = (graphQLError) => {
+export const handleError = graphQLError => {
   if (shouldLogError(graphQLError)) {
     logger.error(graphQLError)
   }

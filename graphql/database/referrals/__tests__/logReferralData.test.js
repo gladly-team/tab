@@ -8,7 +8,7 @@ import {
   DatabaseOperation,
   getMockUserContext,
   mockDate,
-  setMockDBResponse
+  setMockDBResponse,
 } from '../../test-utils'
 
 jest.mock('../../databaseClient')
@@ -34,9 +34,10 @@ describe('logReferralData', () => {
     // Mock response to creating a referral log.
     const mockReferralLog = new ReferralDataModel({
       userId: userId,
-      referringUser: referringUserId
+      referringUser: referringUserId,
     })
-    const createMethod = jest.spyOn(ReferralDataModel, 'create')
+    const createMethod = jest
+      .spyOn(ReferralDataModel, 'create')
       .mockImplementationOnce(() => {
         return mockReferralLog
       })
@@ -44,7 +45,7 @@ describe('logReferralData', () => {
     await logReferralData(userContext, userId, referringUserId)
     expect(createMethod).toHaveBeenCalledWith(userContext, {
       userId: userId,
-      referringUser: referringUserId
+      referringUser: referringUserId,
     })
   })
 
@@ -55,15 +56,16 @@ describe('logReferralData', () => {
       userId: userId,
       referringUser: referringUserId,
       created: moment.utc().toISOString(),
-      updated: moment.utc().toISOString()
+      updated: moment.utc().toISOString(),
     }
-    const dbCreateMock = setMockDBResponse(
-      DatabaseOperation.CREATE,
-      {
-        Attributes: {}
-      }
+    const dbCreateMock = setMockDBResponse(DatabaseOperation.CREATE, {
+      Attributes: {},
+    })
+    const returnedReferralData = await logReferralData(
+      userContext,
+      userId,
+      referringUserId
     )
-    const returnedReferralData = await logReferralData(userContext, userId, referringUserId)
     expect(dbCreateMock).toHaveBeenCalled()
     expect(returnedReferralData).toEqual(expectedReturnedLog)
   })
