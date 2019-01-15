@@ -31,6 +31,7 @@
     "cross-env": "^5.2.0",
     "dotenv-extended": "^2.3.0",
     "eslint": "^5.12.0",
+    "eslint-config-prettier": "^3.4.0",
     "eslint-plugin-prettier": "^3.0.1",
     "express": "^4.16.3",
     "express-graphql": "^0.6.12",
@@ -58,7 +59,7 @@
     "build:config": "NODE_ENV=production node -r dotenv-extended/config ./scripts/generateConfig.js",
     "deploy": "yarn run build && serverless deploy -v",
     "update-schema": "babel-node ./scripts/updateSchema.js",
-    "test": "npm-run-all -s test:lint test:run test:codecov",
+    "test": "npm-run-all -s lint test:run test:codecov",
     "test:run": "jest --testPathIgnorePatterns=integration-tests --maxWorkers=2 --coverage",
     "test:integration": "echo \"Not running integration tests.\"",
     "test:integration:enable-when-fixed": "jest --testPathPattern=integration-tests --coverage",
@@ -66,7 +67,7 @@
     "test:watch": "jest --testPathIgnorePatterns=integration-tests --watch",
     "format": "prettier \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
     "format:fix": "yarn run format --write",
-    "format:check": "eslint"
+    "lint": "eslint \"**/*.{js,jsx}\""
   },
   "repository": {
     "type": "git",
