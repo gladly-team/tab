@@ -1,15 +1,13 @@
 /* eslint-env jest */
 
 import React from 'react'
-import {
-  shallow
-} from 'enzyme'
+import { shallow } from 'enzyme'
 import moment from 'moment'
 import MockDate from 'mockdate'
 import { replaceUrl } from 'js/navigation/navigation'
 import {
   setBrowserExtensionInstallId,
-  setBrowserExtensionInstallTime
+  setBrowserExtensionInstallTime,
 } from 'js/utils/local-user-data-mgr'
 
 jest.mock('js/navigation/navigation')
@@ -28,35 +26,27 @@ afterEach(() => {
 
 const mockProps = {}
 
-describe('FirstTabView', function () {
+describe('FirstTabView', function() {
   it('renders without error', () => {
     const FirstTabView = require('js/components/Dashboard/FirstTabView').default
-    shallow(
-      <FirstTabView {...mockProps} />
-    )
+    shallow(<FirstTabView {...mockProps} />)
   })
 
   it('redirects to the dashboard on mount', () => {
     const FirstTabView = require('js/components/Dashboard/FirstTabView').default
-    shallow(
-      <FirstTabView {...mockProps} />
-    )
+    shallow(<FirstTabView {...mockProps} />)
     expect(replaceUrl).toHaveBeenCalledWith('/newtab/')
   })
 
   it('calls to set the extension install ID in local storage', () => {
     const FirstTabView = require('js/components/Dashboard/FirstTabView').default
-    shallow(
-      <FirstTabView {...mockProps} />
-    )
+    shallow(<FirstTabView {...mockProps} />)
     expect(setBrowserExtensionInstallId).toHaveBeenCalledTimes(1)
   })
 
   it('calls to set the extension install time in local storage', () => {
     const FirstTabView = require('js/components/Dashboard/FirstTabView').default
-    shallow(
-      <FirstTabView {...mockProps} />
-    )
+    shallow(<FirstTabView {...mockProps} />)
     expect(setBrowserExtensionInstallTime).toHaveBeenCalledTimes(1)
   })
 })

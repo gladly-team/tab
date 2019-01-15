@@ -21,7 +21,7 @@ authUserMock.getCurrentUserListener = jest.fn(() => ({
     return () => {
       unregisterAuthStateListener(callback)
     }
-  }
+  },
 }))
 
 authUserMock.signInAnonymously = jest.fn(() => {
@@ -30,7 +30,7 @@ authUserMock.signInAnonymously = jest.fn(() => {
     email: null,
     username: null,
     isAnonymous: true,
-    emailVerified: false
+    emailVerified: false,
   }
   authUserMock.getCurrentUser.mockResolvedValue(mockAnonUserObj)
   return Promise.resolve(mockAnonUserObj)
@@ -58,7 +58,7 @@ const unregisterAuthStateListener = listenerFunc => {
  *   user object
  * @return {function} A function to unsubscribe the listener
  */
-authUserMock.__triggerAuthStateChange = (firebaseUser) => {
+authUserMock.__triggerAuthStateChange = firebaseUser => {
   onAuthStateChangedCallbacks.forEach(cb => {
     cb(firebaseUser)
   })

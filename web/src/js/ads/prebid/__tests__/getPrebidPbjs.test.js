@@ -6,7 +6,7 @@ afterEach(() => {
   delete window.pbjs
 })
 
-describe('getPrebidPbjs', function () {
+describe('getPrebidPbjs', function() {
   it('sets window.pbjs', () => {
     delete window.pbjs
     expect(window.pbjs).toBeUndefined()
@@ -16,10 +16,10 @@ describe('getPrebidPbjs', function () {
 
   it('uses existing window.pbjs object if one exists', () => {
     // Set a fake existing pbjs
-    const fakeCmd = function () {}
+    const fakeCmd = function() {}
     const fakeExistingPbjs = {
       que: [fakeCmd],
-      foo: 'bar'
+      foo: 'bar',
     }
     window.pbjs = fakeExistingPbjs
 

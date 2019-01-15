@@ -8,7 +8,7 @@ import getPrebidPbjs from 'js/ads/prebid/getPrebidPbjs'
 // Log revenue from ads
 class LogRevenueComponent extends React.Component {
   // TODO: to avoid memory leak, unregister the pubads listener on unmount
-  componentDidMount () {
+  componentDidMount() {
     this.listenForSlotsLoadedEvent()
     this.logRevenueForAlreadyLoadedAds()
   }
@@ -19,7 +19,7 @@ class LogRevenueComponent extends React.Component {
    * @return {number|null} revenue - The $USD revenue equal to the highest Prebid
    *   bid CPM for the slot, divided by 1000 and rounded; null if there were no bids
    */
-  getPrebidRevenueForSlot (slotId) {
+  getPrebidRevenueForSlot(slotId) {
     // Get the slot's highest CPM bid from Prebid
     const pbjs = getPrebidPbjs()
     const slotBids = pbjs.getHighestCpmBids(slotId)
@@ -47,13 +47,12 @@ class LogRevenueComponent extends React.Component {
    *   which tells the backend how to decode the value
    * @return {string} encodedAmazonRevenue.encodedValue - The Amazon revenue code
    */
-  getEncodedAmazonRevenueForSlot (slotId) {
+  getEncodedAmazonRevenueForSlot(slotId) {
     const amazonBids = window.tabforacause.ads.amazonBids
-    const amazonBidExists = (
+    const amazonBidExists =
       // An empty string for either of these means no bid
       get(amazonBids, [slotId, 'amznbid']) &&
       get(amazonBids, [slotId, 'amzniid'])
-    )
     if (!amazonBidExists) {
       return null
     }
@@ -62,7 +61,7 @@ class LogRevenueComponent extends React.Component {
     return {
       encodingType: 'AMAZON_CPM',
       encodedValue: get(amazonBids, [slotId, 'amznbid']),
-      adSize: amazonAdSize
+      adSize: amazonAdSize,
     }
   }
 
@@ -72,7 +71,7 @@ class LogRevenueComponent extends React.Component {
    * @return {string|null} revenue - The ad dimensions in the form of
    * 'WIDTHxHEIGHT'.
    */
-  getPrebidAdSizeForSlot (slotId) {
+  getPrebidAdSizeForSlot(slotId) {
     // Get the slot's highest CPM bid from Prebid
     const pbjs = getPrebidPbjs()
     const slotBids = pbjs.getHighestCpmBids(slotId)
@@ -92,7 +91,7 @@ class LogRevenueComponent extends React.Component {
    *  https://developers.google.com/doubleclick-gpt/reference#googletag.events.SlotRenderEndedEvent
    *  Returns null if we do not have any stored event data.
    */
-  getSlotRenderEndedDataForSlotId (slotId) {
+  getSlotRenderEndedDataForSlotId(slotId) {
     var slotRenderEndedData = null
     try {
       slotRenderEndedData = window.tabforacause.ads.slotsRendered[slotId]
@@ -108,7 +107,7 @@ class LogRevenueComponent extends React.Component {
    * @param {string} adUnitCode - The DFP ad unit code
    * @return {null}
    */
-  logRevenueForSlotId (slotId, adUnitCode) {
+  logRevenueForSlotId(slotId, adUnitCode) {
     try {
       // If we have already logged revenue for this slot, don't log it again
       if (slotId in window.tabforacause.ads.slotsAlreadyLoggedRevenue) {
@@ -140,11 +139,9 @@ class LogRevenueComponent extends React.Component {
       // Get the advertiser ID. It will be null if Google Adsense
       // took the impression, so assume nulls are Adsense.
       const GOOGLE_ADSENSE_ID = '99'
-      const dfpAdvertiserId = (
-        slotRenderedData.advertiserId
-          ? slotRenderedData.advertiserId.toString()
-          : GOOGLE_ADSENSE_ID
-      )
+      const dfpAdvertiserId = slotRenderedData.advertiserId
+        ? slotRenderedData.advertiserId.toString()
+        : GOOGLE_ADSENSE_ID
 
       // Log the revenue
       LogUserRevenueMutation(
@@ -156,7 +153,7 @@ class LogRevenueComponent extends React.Component {
         amazonEncodedBid,
         // Only send aggregationOperation value if we have more than one
         // revenue value
-        ((prebidRevenue && amazonEncodedBid) ? 'MAX' : null),
+        prebidRevenue && amazonEncodedBid ? 'MAX' : null,
         this.props.tabId,
         adUnitCode
       )
@@ -167,14 +164,18 @@ class LogRevenueComponent extends React.Component {
 
   // Check if any ad slots have already loaded. If so,
   // log the revenue for those slots.
-  logRevenueForAlreadyLoadedAds () {
+  logRevenueForAlreadyLoadedAds() {
     try {
       // This may be set earlier by ads code (outside of core app code)
       const slotsLoadedObj = window.tabforacause.ads.slotsRendered
       if (Object.keys(slotsLoadedObj).length) {
         const self = this
-        Object.keys(slotsLoadedObj).forEach((slotId) => {
-          const getAdUnitPathFunc = get(slotsLoadedObj, [slotId, 'slot', 'getAdUnitPath'])
+        Object.keys(slotsLoadedObj).forEach(slotId => {
+          const getAdUnitPathFunc = get(slotsLoadedObj, [
+            slotId,
+            'slot',
+            'getAdUnitPath',
+          ])
           const adUnitCode = getAdUnitPathFunc ? getAdUnitPathFunc() : null
           self.logRevenueForSlotId(slotId, adUnitCode)
         })
@@ -185,11 +186,11 @@ class LogRevenueComponent extends React.Component {
   }
 
   // Listen for the Google ad load event
-  listenForSlotsLoadedEvent () {
+  listenForSlotsLoadedEvent() {
     const googletag = getGoogleTag()
     googletag.cmd.push(() => {
       // When a slot renders (before creative loads), log its revenue
-      googletag.pubads().addEventListener('slotRenderEnded', (event) => {
+      googletag.pubads().addEventListener('slotRenderEnded', event => {
         try {
           const slotId = event.slot.getSlotElementId()
           const adUnitCode = event.slot.getAdUnitPath()
@@ -204,19 +205,19 @@ class LogRevenueComponent extends React.Component {
     })
   }
 
-  render () {
+  render() {
     return null
   }
 }
 
 LogRevenueComponent.propTypes = {
   user: PropTypes.shape({
-    id: PropTypes.string.isRequired
+    id: PropTypes.string.isRequired,
   }).isRequired,
   tabId: PropTypes.string.isRequired,
   relay: PropTypes.shape({
-    environment: PropTypes.object.isRequired
-  })
+    environment: PropTypes.object.isRequired,
+  }),
 }
 
 export default LogRevenueComponent

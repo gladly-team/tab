@@ -1,21 +1,16 @@
 import React from 'react'
 import { Paper } from 'material-ui'
 import RaisedButton from 'material-ui/RaisedButton'
-import {
-  logout
-} from 'js/authentication/user'
-import {
-  goTo,
-  loginURL
-} from 'js/navigation/navigation'
+import { logout } from 'js/authentication/user'
+import { goTo, loginURL } from 'js/navigation/navigation'
 
 class MissingEmailMessage extends React.Component {
-  async restartAuthFlow () {
+  async restartAuthFlow() {
     await logout()
     goTo(loginURL)
   }
 
-  render () {
+  render() {
     var buttonLabel = 'SIGN IN USING ANOTHER METHOD'
     return (
       <Paper
@@ -23,21 +18,23 @@ class MissingEmailMessage extends React.Component {
         style={{
           padding: 24,
           maxWidth: 400,
-          backgroundColor: '#FFF'
+          backgroundColor: '#FFF',
         }}
       >
         <h3>We couldn't sign you in</h3>
-        <p>This can happen when Facebook or Google doesn't have your email address on file,
-         which we use to create your account.
-         Please try signing in with another method, such as an email and password.</p>
+        <p>
+          This can happen when Facebook or Google doesn't have your email
+          address on file, which we use to create your account. Please try
+          signing in with another method, such as an email and password.
+        </p>
 
         <span
           style={{
             display: 'flex',
             justifyContent: 'flex-end',
-            marginTop: 24
+            marginTop: 24,
           }}
-          data-test-id='missing-email-message-button-container'
+          data-test-id="missing-email-message-button-container"
         >
           <RaisedButton
             label={buttonLabel}

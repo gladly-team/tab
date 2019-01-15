@@ -6,7 +6,8 @@ afterEach(() => {
 
 describe('web test-utils', () => {
   test('mockGoogleTagSlotRenderEndedData returns expected defaults', () => {
-    const mockGoogleTagSlotRenderEndedData = require('js/utils/test-utils').mockGoogleTagSlotRenderEndedData
+    const mockGoogleTagSlotRenderEndedData = require('js/utils/test-utils')
+      .mockGoogleTagSlotRenderEndedData
     const slotRenderEndedData = mockGoogleTagSlotRenderEndedData()
     expect(slotRenderEndedData).toMatchObject({
       advertiserId: 1234,
@@ -17,20 +18,25 @@ describe('web test-utils', () => {
       serviceName: 'something',
       size: '728x90',
       sourceAgnosticCreativeId: null,
-      sourceAgnosticLineItemId: null
+      sourceAgnosticLineItemId: null,
     })
     expect(slotRenderEndedData).toHaveProperty('slot.getSlotElementId')
     expect(slotRenderEndedData.slot.getSlotElementId()).toBe('abc-123')
   })
 
   test('mockGoogleTagSlotRenderEndedData allows overriding slot ID and properties', () => {
-    const mockGoogleTagSlotRenderEndedData = require('js/utils/test-utils').mockGoogleTagSlotRenderEndedData
-    const slotRenderEndedData = mockGoogleTagSlotRenderEndedData('foobar', '/some/ad-unit/', {
-      advertiserId: null,
-      campaignId: 1357,
-      creativeId: 2468,
-      lineItemId: 1001
-    })
+    const mockGoogleTagSlotRenderEndedData = require('js/utils/test-utils')
+      .mockGoogleTagSlotRenderEndedData
+    const slotRenderEndedData = mockGoogleTagSlotRenderEndedData(
+      'foobar',
+      '/some/ad-unit/',
+      {
+        advertiserId: null,
+        campaignId: 1357,
+        creativeId: 2468,
+        lineItemId: 1001,
+      }
+    )
     expect(slotRenderEndedData).toMatchObject({
       advertiserId: null,
       campaignId: 1357,
@@ -40,16 +46,17 @@ describe('web test-utils', () => {
       serviceName: 'something',
       size: '728x90',
       sourceAgnosticCreativeId: null,
-      sourceAgnosticLineItemId: null
+      sourceAgnosticLineItemId: null,
     })
     expect(slotRenderEndedData).toHaveProperty('slot.getSlotElementId')
     expect(slotRenderEndedData.slot.getSlotElementId()).toBe('foobar')
   })
 
   test('mockAmazonBidResponse returns expected mock', () => {
-    const mockAmazonBidResponse = require('js/utils/test-utils').mockAmazonBidResponse
+    const mockAmazonBidResponse = require('js/utils/test-utils')
+      .mockAmazonBidResponse
     const mockAmazonBid = mockAmazonBidResponse({
-      slotID: 'abx-xyz'
+      slotID: 'abx-xyz',
     })
     expect(mockAmazonBid).toEqual({
       amznbid: '1',
@@ -57,7 +64,7 @@ describe('web test-utils', () => {
       amznp: '1',
       amznsz: '0x0',
       size: '0x0',
-      slotID: 'abx-xyz'
+      slotID: 'abx-xyz',
     })
   })
 
@@ -68,10 +75,9 @@ describe('web test-utils', () => {
 
     const anotherTestFunc = jest.fn()
     const testFunc = () => {
-      Promise.resolve()
-        .then(() => {
-          anotherTestFunc('hi')
-        })
+      Promise.resolve().then(() => {
+        anotherTestFunc('hi')
+      })
     }
 
     testFunc()
@@ -84,10 +90,9 @@ describe('web test-utils', () => {
 
     const anotherTestFunc = jest.fn()
     const testFunc = () => {
-      Promise.resolve()
-        .then(() => {
-          anotherTestFunc('hi')
-        })
+      Promise.resolve().then(() => {
+        anotherTestFunc('hi')
+      })
     }
 
     testFunc()
@@ -106,13 +111,12 @@ describe('web test-utils', () => {
       if (counter > 2) {
         anotherTestFunc('hi')
       }
-      Promise.resolve()
-        .then(() => {
-          setTimeout(() => {
-            counter += 1
-            testFunc()
-          }, 5)
-        })
+      Promise.resolve().then(() => {
+        setTimeout(() => {
+          counter += 1
+          testFunc()
+        }, 5)
+      })
     }
 
     testFunc()
@@ -130,13 +134,12 @@ describe('web test-utils', () => {
       if (counter > 2) {
         anotherTestFunc('hi')
       }
-      Promise.resolve()
-        .then(() => {
-          setTimeout(() => {
-            counter += 1
-            testFunc()
-          }, 5)
-        })
+      Promise.resolve().then(() => {
+        setTimeout(() => {
+          counter += 1
+          testFunc()
+        }, 5)
+      })
     }
 
     testFunc()
@@ -159,13 +162,12 @@ describe('web test-utils', () => {
       if (counter > 2) {
         anotherTestFunc('hi')
       }
-      Promise.resolve()
-        .then(() => {
-          setTimeout(() => {
-            counter += 1
-            testFunc()
-          }, 5)
-        })
+      Promise.resolve().then(() => {
+        setTimeout(() => {
+          counter += 1
+          testFunc()
+        }, 5)
+      })
     }
 
     testFunc()

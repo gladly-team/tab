@@ -1,7 +1,5 @@
 import graphql from 'babel-plugin-relay/macro'
-import {
-  createFragmentContainer
-} from 'react-relay'
+import { createFragmentContainer } from 'react-relay'
 
 import Account from 'js/components/Settings/Account/AccountComponent'
 
@@ -13,5 +11,5 @@ export default createFragmentContainer(Account, {
       username
       ...LogConsentDataContainer_user
     }
-  `
+  `,
 })

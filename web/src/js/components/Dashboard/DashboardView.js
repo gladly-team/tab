@@ -1,4 +1,3 @@
-
 import React from 'react'
 import graphql from 'babel-plugin-relay/macro'
 import { QueryRenderer } from 'react-relay'
@@ -10,16 +9,11 @@ import ErrorMessage from 'js/components/General/ErrorMessage'
 
 import DashboardContainer from 'js/components/Dashboard/DashboardContainer'
 import { createNewUser } from 'js/authentication/helpers'
-import {
-  goTo,
-  loginURL
-} from 'js/navigation/navigation'
-import {
-  ERROR_USER_DOES_NOT_EXIST
-} from 'js/constants'
+import { goTo, loginURL } from 'js/navigation/navigation'
+import { ERROR_USER_DOES_NOT_EXIST } from 'js/constants'
 
 class DashboardView extends React.Component {
-  render () {
+  render() {
     return (
       <AuthUserComponent>
         <QueryRenderer
@@ -40,8 +34,9 @@ class DashboardView extends React.Component {
               // on the server side, create the user and re-query if
               // possible. If it's not possible to create a new user,
               // redirect to the authentication page.
-              const userDoesNotExistError = error.source.errors
-                .some(err => err.code === ERROR_USER_DOES_NOT_EXIST)
+              const userDoesNotExistError = error.source.errors.some(
+                err => err.code === ERROR_USER_DOES_NOT_EXIST
+              )
 
               if (userDoesNotExistError) {
                 createNewUser()
@@ -61,10 +56,9 @@ class DashboardView extends React.Component {
             }
             const app = props.app || null
             const user = props.user || null
-            return (
-              <DashboardContainer app={app} user={user} />
-            )
-          }} />
+            return <DashboardContainer app={app} user={user} />
+          }}
+        />
       </AuthUserComponent>
     )
   }

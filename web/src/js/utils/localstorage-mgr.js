@@ -2,7 +2,7 @@
 
 const localStorageMgr = {}
 
-localStorageMgr.setItem = function (key, value) {
+localStorageMgr.setItem = function(key, value) {
   try {
     localStorage.setItem(key, value)
   } catch (e) {
@@ -10,7 +10,7 @@ localStorageMgr.setItem = function (key, value) {
   }
 }
 
-localStorageMgr.getItem = function (key) {
+localStorageMgr.getItem = function(key) {
   try {
     var value = localStorage.getItem(key)
     return value
@@ -20,7 +20,7 @@ localStorageMgr.getItem = function (key) {
   }
 }
 
-localStorageMgr.removeItem = function (key) {
+localStorageMgr.removeItem = function(key) {
   try {
     localStorage.removeItem(key)
   } catch (e) {

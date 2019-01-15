@@ -22,7 +22,7 @@ export default () => {
     fetchBids: jest.fn((config, bidsBackCallback) => {
       bidsBackCallback()
     }),
-    setDisplayBids: jest.fn()
+    setDisplayBids: jest.fn(),
   }
   return window.apstag
 }

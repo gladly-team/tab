@@ -1,7 +1,7 @@
 import React from 'react'
 
 class CenteredWidgetsContainer extends React.Component {
-  render () {
+  render() {
     const root = {
       display: 'flex',
       alignItems: 'center',
@@ -14,14 +14,10 @@ class CenteredWidgetsContainer extends React.Component {
       left: 0,
       overflow: 'hidden',
       boxSizing: 'border-box',
-      pointerEvents: 'none'
+      pointerEvents: 'none',
     }
 
-    return (
-      <div style={root}>
-        {this.props.children}
-      </div>
-    )
+    return <div style={root}>{this.props.children}</div>
   }
 }
 

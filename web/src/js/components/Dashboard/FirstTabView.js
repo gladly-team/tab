@@ -1,17 +1,14 @@
 import React from 'react'
-import {
-  dashboardURL,
-  replaceUrl
-} from 'js/navigation/navigation'
+import { dashboardURL, replaceUrl } from 'js/navigation/navigation'
 import {
   setBrowserExtensionInstallId,
-  setBrowserExtensionInstallTime
+  setBrowserExtensionInstallTime,
 } from 'js/utils/local-user-data-mgr'
 
 // The view the extensions open immediately after they're
 // added to the browser.
 class FirstTabView extends React.Component {
-  componentDidMount () {
+  componentDidMount() {
     // Here, we can do anything we need to do before
     // going to the main dashboard.
 
@@ -26,7 +23,7 @@ class FirstTabView extends React.Component {
     replaceUrl(dashboardURL)
   }
 
-  render () {
+  render() {
     return <span />
   }
 }

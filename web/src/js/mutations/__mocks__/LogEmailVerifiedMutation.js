@@ -7,9 +7,9 @@ var onErrorCallback = () => {}
 var defaultSuccessResponse = {
   logEmailVerified: {
     user: {
-      id: 'foo123'
-    }
-  }
+      id: 'foo123',
+    },
+  },
 }
 
 var defaultErrorResponse = null
@@ -19,7 +19,7 @@ export const __runOnCompleted = (response = null) => {
   onCompletedCallback(response)
 }
 
-export const __runOnError = (response) => {
+export const __runOnError = response => {
   onErrorCallback(response)
 }
 

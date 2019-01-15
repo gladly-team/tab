@@ -1,8 +1,5 @@
-
 import localStorageManager from 'js/utils/localstorage-mgr'
-import {
-  STORAGE_NEW_CONSENT_DATA_EXISTS
-} from 'js/constants'
+import { STORAGE_NEW_CONSENT_DATA_EXISTS } from 'js/constants'
 
 /**
  * Get the vendor consent string from the consent management platform.
@@ -11,7 +8,7 @@ import {
  */
 export const getConsentString = () => {
   return new Promise((resolve, reject) => {
-    function cmpSuccessCallback (consentData) {
+    function cmpSuccessCallback(consentData) {
       if (!consentData) {
         resolve(null)
       }
@@ -35,7 +32,7 @@ export const getConsentString = () => {
  */
 export const hasGlobalConsent = () => {
   return new Promise((resolve, reject) => {
-    function cmpSuccessCallback (consentData) {
+    function cmpSuccessCallback(consentData) {
       if (!consentData) {
         resolve(null)
       }
@@ -82,7 +79,7 @@ const registerConsentChangeCallbacksWithCMP = async () => {
     const consentString = await getConsentString()
     const isGlobalConsent = await hasGlobalConsent()
     if (consentString) {
-      consentCallbacks.forEach((callback) => {
+      consentCallbacks.forEach(callback => {
         callback(consentString, isGlobalConsent)
       })
     }
@@ -111,7 +108,7 @@ const registerConsentChangeCallbacksWithCMP = async () => {
  * @param {function} cb - The callback function
  * @return {undefined}
  */
-export const registerConsentCallback = (cb) => {
+export const registerConsentCallback = cb => {
   // If this is the first time we've registered a callback,
   // make sure our CMP will call all callbacks when the
   // consent data changes.
@@ -129,7 +126,7 @@ export const registerConsentCallback = (cb) => {
  * @param {function} cb - The callback function
  * @return {undefined}
  */
-export const unregisterConsentCallback = (cb) => {
+export const unregisterConsentCallback = cb => {
   const cbIndex = consentCallbacks.indexOf(cb)
   if (cbIndex > -1) {
     consentCallbacks.splice(cbIndex, 1)

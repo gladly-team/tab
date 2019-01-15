@@ -8,14 +8,14 @@ import {
   USER_BACKGROUND_OPTION_CUSTOM,
   USER_BACKGROUND_OPTION_COLOR,
   USER_BACKGROUND_OPTION_PHOTO,
-  USER_BACKGROUND_OPTION_DAILY
+  USER_BACKGROUND_OPTION_DAILY,
 } from 'js/constants'
 import {
   getUserBackgroundOption,
   getUserBackgroundCustomImage,
   getUserBackgroundColor,
   getUserBackgroundImageURL,
-  setBackgroundSettings
+  setBackgroundSettings,
 } from 'js/utils/local-bkg-settings'
 import SetBackgroundDailyImageMutation from 'js/mutations/SetBackgroundDailyImageMutation'
 import FadeBackgroundAnimation from 'js/components/Background/FadeBackgroundAnimation'
@@ -33,9 +33,9 @@ import FadeBackgroundAnimation from 'js/components/Background/FadeBackgroundAnim
  * storage, it updates the component state and messages the parent
  * frame. If the user's settings from the server are identical,
  * it should not update state or message the parent frame.
-*/
+ */
 class UserBackgroundImage extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       // The image we are currently showing (or fading in to show).
@@ -51,19 +51,19 @@ class UserBackgroundImage extends React.Component {
       backgroundOption: getUserBackgroundOption(),
       customImage: getUserBackgroundCustomImage(),
       backgroundColor: getUserBackgroundColor(),
-      backgroundImageURL: getUserBackgroundImageURL()
+      backgroundImageURL: getUserBackgroundImageURL(),
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.handlePropChanges(this.props)
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     this.handlePropChanges(nextProps)
   }
 
-  handlePropChanges (props) {
+  handlePropChanges(props) {
     // Update the state, localStorage, and extension
     // background settings if we have all prop data from
     // the server and the props differ from current state.
@@ -82,7 +82,7 @@ class UserBackgroundImage extends React.Component {
    * the server.
    * @return {Boolean} Whether all necessary props are defined
    */
-  arePropsReady (props) {
+  arePropsReady(props) {
     return (
       has(props, ['user', 'backgroundOption']) &&
       has(props, ['user', 'customImage']) &&
@@ -100,12 +100,14 @@ class UserBackgroundImage extends React.Component {
    *   or the next `this.props` from componentWillReceiveProps
    * @return {Boolean} Whether prop values differ from state values
    */
-  arePropsDifferentFromState (props) {
+  arePropsDifferentFromState(props) {
     return (
-      get(props, ['user', 'backgroundOption']) !== this.state.backgroundOption ||
+      get(props, ['user', 'backgroundOption']) !==
+        this.state.backgroundOption ||
       get(props, ['user', 'customImage']) !== this.state.customImage ||
       get(props, ['user', 'backgroundColor']) !== this.state.backgroundColor ||
-      get(props, ['user', 'backgroundImage', 'imageURL']) !== this.state.backgroundImageURL
+      get(props, ['user', 'backgroundImage', 'imageURL']) !==
+        this.state.backgroundImageURL
     )
   }
 
@@ -119,7 +121,7 @@ class UserBackgroundImage extends React.Component {
    *   or the next `this.props` from componentWillReceiveProps
    * @return {undefined}
    */
-  updateBackgroundSettings (props) {
+  updateBackgroundSettings(props) {
     let backgroundOption = get(props, ['user', 'backgroundOption'])
     let customImage = get(props, ['user', 'customImage'])
     let backgroundColor = get(props, ['user', 'backgroundColor'])
@@ -128,12 +130,16 @@ class UserBackgroundImage extends React.Component {
       backgroundOption: backgroundOption,
       customImage: customImage,
       backgroundColor: backgroundColor,
-      backgroundImageURL: backgroundImageURL
+      backgroundImageURL: backgroundImageURL,
     })
 
     // Update in localStorage and extension storage.
-    setBackgroundSettings(backgroundOption,
-      customImage, backgroundColor, backgroundImageURL)
+    setBackgroundSettings(
+      backgroundOption,
+      customImage,
+      backgroundColor,
+      backgroundImageURL
+    )
   }
 
   /**
@@ -145,26 +151,36 @@ class UserBackgroundImage extends React.Component {
    *   can't assume that `props.user` will be defined.
    * @return {undefined}
    */
-  getNewDailyImageIfNeeded (props) {
-    if (get(props, ['user', 'backgroundOption']) !== USER_BACKGROUND_OPTION_DAILY) {
+  getNewDailyImageIfNeeded(props) {
+    if (
+      get(props, ['user', 'backgroundOption']) !== USER_BACKGROUND_OPTION_DAILY
+    ) {
       return
     }
-    const lastTimeBackgroundImgChanged = get(props, ['user', 'backgroundImage', 'timestamp'])
+    const lastTimeBackgroundImgChanged = get(props, [
+      'user',
+      'backgroundImage',
+      'timestamp',
+    ])
     if (isNil(lastTimeBackgroundImgChanged)) {
       return
     }
 
-    const shouldChangeBackgroundImg = (
+    const shouldChangeBackgroundImg =
       !this.state.currentlyFetchingNewBackgroundImage &&
       // Check if today is a different day (in local time) than
       // the last time the background image changed.
-      !(moment().local().startOf('day').isSame(
-        moment(lastTimeBackgroundImgChanged).local().startOf('day'))
-      )
-    )
+      !moment()
+        .local()
+        .startOf('day')
+        .isSame(
+          moment(lastTimeBackgroundImgChanged)
+            .local()
+            .startOf('day')
+        )
 
     this.setState({
-      currentlyFetchingNewBackgroundImage: true
+      currentlyFetchingNewBackgroundImage: true,
     })
 
     // Fetch a new background image for today.
@@ -176,12 +192,12 @@ class UserBackgroundImage extends React.Component {
         // is outstanding.
         () => {
           this.setState({
-            currentlyFetchingNewBackgroundImage: false
+            currentlyFetchingNewBackgroundImage: false,
           })
         },
         () => {
           this.setState({
-            currentlyFetchingNewBackgroundImage: false
+            currentlyFetchingNewBackgroundImage: false,
           })
         }
       )
@@ -192,9 +208,9 @@ class UserBackgroundImage extends React.Component {
    * Handler for when the preloaded background image has loaded.
    * @return {undefined}
    */
-  onImgLoad () {
+  onImgLoad() {
     this.setState({
-      currentlyDisplayedImgURL: this.getImgURL()
+      currentlyDisplayedImgURL: this.getImgURL(),
     })
   }
 
@@ -203,9 +219,9 @@ class UserBackgroundImage extends React.Component {
    * load and throws an error.
    * @return {undefined}
    */
-  onImgError () {
+  onImgError() {
     this.setState({
-      imgPreloadError: true
+      imgPreloadError: true,
     })
     this.props.showError('We could not load your background image.')
   }
@@ -218,7 +234,7 @@ class UserBackgroundImage extends React.Component {
    * @return {String|null} The image URL if one exists, or null
    *   if the user does not have an image background.
    */
-  getImgURL () {
+  getImgURL() {
     const backgroundOption = this.state.backgroundOption
     switch (backgroundOption) {
       case USER_BACKGROUND_OPTION_CUSTOM:
@@ -238,15 +254,17 @@ class UserBackgroundImage extends React.Component {
    * @return {Boolean} Whether the user's background setting is
    *   for a photo background.
    */
-  isImgBackground () {
-    return [
-      USER_BACKGROUND_OPTION_CUSTOM,
-      USER_BACKGROUND_OPTION_DAILY,
-      USER_BACKGROUND_OPTION_PHOTO
-    ].indexOf(this.state.backgroundOption) > -1
+  isImgBackground() {
+    return (
+      [
+        USER_BACKGROUND_OPTION_CUSTOM,
+        USER_BACKGROUND_OPTION_DAILY,
+        USER_BACKGROUND_OPTION_PHOTO,
+      ].indexOf(this.state.backgroundOption) > -1
+    )
   }
 
-  render () {
+  render() {
     const isImgBackground = this.isImgBackground()
     const newestImgURL = this.getImgURL()
 
@@ -264,7 +282,7 @@ class UserBackgroundImage extends React.Component {
       bottom: 0,
       right: 0,
       left: 0,
-      zIndex: 'auto'
+      zIndex: 'auto',
     }
     var backgroundStyle = {}
     var invalidBackgroundSettings = false
@@ -274,7 +292,7 @@ class UserBackgroundImage extends React.Component {
       case USER_BACKGROUND_OPTION_CUSTOM:
         if (this.state.customImage) {
           backgroundStyle = {
-            backgroundImage: `url(${currentlyDisplayedImgURL})`
+            backgroundImage: `url(${currentlyDisplayedImgURL})`,
           }
         } else {
           invalidBackgroundSettings = true
@@ -283,7 +301,7 @@ class UserBackgroundImage extends React.Component {
       case USER_BACKGROUND_OPTION_COLOR:
         if (this.state.backgroundColor) {
           backgroundStyle = {
-            backgroundColor: this.state.backgroundColor
+            backgroundColor: this.state.backgroundColor,
           }
         } else {
           invalidBackgroundSettings = true
@@ -292,7 +310,7 @@ class UserBackgroundImage extends React.Component {
       case USER_BACKGROUND_OPTION_PHOTO:
         if (this.state.backgroundImageURL) {
           backgroundStyle = {
-            backgroundImage: `url(${currentlyDisplayedImgURL})`
+            backgroundImage: `url(${currentlyDisplayedImgURL})`,
           }
         } else {
           invalidBackgroundSettings = true
@@ -301,7 +319,7 @@ class UserBackgroundImage extends React.Component {
       case USER_BACKGROUND_OPTION_DAILY:
         if (this.state.backgroundImageURL) {
           backgroundStyle = {
-            backgroundImage: `url(${currentlyDisplayedImgURL})`
+            backgroundImage: `url(${currentlyDisplayedImgURL})`,
           }
         } else {
           invalidBackgroundSettings = true
@@ -310,7 +328,7 @@ class UserBackgroundImage extends React.Component {
       default:
         backgroundStyle = {
           backgroundImage: 'none',
-          backgroundColor: 'transparent'
+          backgroundColor: 'transparent',
         }
         break
     }
@@ -318,10 +336,14 @@ class UserBackgroundImage extends React.Component {
     // The fallback style if there's an error.
     if (this.state.imgPreloadError || invalidBackgroundSettings) {
       backgroundStyle = {
-        backgroundColor: '#4a90e2'
+        backgroundColor: '#4a90e2',
       }
     }
-    const finalBackgroundStyle = Object.assign({}, defaultStyle, backgroundStyle)
+    const finalBackgroundStyle = Object.assign(
+      {},
+      defaultStyle,
+      backgroundStyle
+    )
 
     // React key for the background element
     var backgroundKey = ``
@@ -355,9 +377,13 @@ class UserBackgroundImage extends React.Component {
     // images.
     return (
       <div>
-        { showBackground ? (
+        {showBackground ? (
           <FadeBackgroundAnimation>
-            <div key={backgroundKey} style={finalBackgroundStyle} data-test-id={'dashboard-background-img'}>
+            <div
+              key={backgroundKey}
+              style={finalBackgroundStyle}
+              data-test-id={'dashboard-background-img'}
+            >
               <div
                 data-test-id={'background-tint-overlay'}
                 style={{
@@ -368,21 +394,23 @@ class UserBackgroundImage extends React.Component {
                   left: 0,
                   zIndex: 'auto',
                   // Needs to match shading in extension new tab page.
-                  backgroundColor: `rgba(0, 0, 0, ${isImgBackground ? 0.15 : 0.03})`
-                }} />
+                  backgroundColor: `rgba(0, 0, 0, ${
+                    isImgBackground ? 0.15 : 0.03
+                  })`,
+                }}
+              />
             </div>
           </FadeBackgroundAnimation>
-        ) : null
-        }
-        { (isImgBackground)
-          ? <img
+        ) : null}
+        {isImgBackground ? (
+          <img
             style={{ display: 'none' }}
             src={newestImgURL}
             alt={''}
             onLoad={this.onImgLoad.bind(this)}
-            onError={this.onImgError.bind(this)} />
-          : null
-        }
+            onError={this.onImgError.bind(this)}
+          />
+        ) : null}
       </div>
     )
   }
@@ -396,17 +424,17 @@ UserBackgroundImage.propTypes = {
     backgroundColor: PropTypes.string,
     backgroundImage: PropTypes.shape({
       imageURL: PropTypes.string,
-      timestamp: PropTypes.string
-    })
+      timestamp: PropTypes.string,
+    }),
   }),
   showError: PropTypes.func,
   relay: PropTypes.shape({
-    environment: PropTypes.object.isRequired
-  })
+    environment: PropTypes.object.isRequired,
+  }),
 }
 
 UserBackgroundImage.defaultProps = {
-  showError: () => {}
+  showError: () => {},
 }
 
 export default UserBackgroundImage

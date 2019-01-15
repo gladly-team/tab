@@ -1,9 +1,7 @@
 /* eslint-env jest */
-import {
-  getDefaultTabGlobal
-} from 'js/utils/test-utils'
+import { getDefaultTabGlobal } from 'js/utils/test-utils'
 import getGoogleTag, {
-  __setPubadsRefreshMock
+  __setPubadsRefreshMock,
 } from 'js/ads/google/getGoogleTag'
 import getAmazonTag from 'js/ads/amazon/getAmazonTag'
 import getPrebidPbjs from 'js/ads/prebid/getPrebidPbjs'
@@ -123,7 +121,9 @@ describe('ads script', () => {
     const prebidConfig = require('js/ads/prebid/prebidConfig').default
     prebidConfig.mockImplementationOnce(() => {
       return new Promise((resolve, reject) => {
-        setTimeout(() => { resolve() }, 15e3)
+        setTimeout(() => {
+          resolve()
+        }, 15e3)
       })
     })
 
@@ -131,7 +131,9 @@ describe('ads script', () => {
     const amazonBidder = require('js/ads/amazon/amazonBidder').default
     amazonBidder.mockImplementationOnce(() => {
       return new Promise((resolve, reject) => {
-        setTimeout(() => { resolve() }, 15e3)
+        setTimeout(() => {
+          resolve()
+        }, 15e3)
       })
     })
 
@@ -156,7 +158,9 @@ describe('ads script', () => {
     const prebidConfig = require('js/ads/prebid/prebidConfig').default
     prebidConfig.mockImplementationOnce(() => {
       return new Promise((resolve, reject) => {
-        setTimeout(() => { resolve() }, 15e3)
+        setTimeout(() => {
+          resolve()
+        }, 15e3)
       })
     })
 
@@ -164,7 +168,9 @@ describe('ads script', () => {
     const amazonBidder = require('js/ads/amazon/amazonBidder').default
     amazonBidder.mockImplementationOnce(() => {
       return new Promise((resolve, reject) => {
-        setTimeout(() => { resolve() }, 80)
+        setTimeout(() => {
+          resolve()
+        }, 80)
       })
     })
 
@@ -188,7 +194,9 @@ describe('ads script', () => {
     const prebidConfig = require('js/ads/prebid/prebidConfig').default
     prebidConfig.mockImplementationOnce(() => {
       return new Promise((resolve, reject) => {
-        setTimeout(() => { resolve() }, 40)
+        setTimeout(() => {
+          resolve()
+        }, 40)
       })
     })
 
@@ -196,7 +204,9 @@ describe('ads script', () => {
     const amazonBidder = require('js/ads/amazon/amazonBidder').default
     amazonBidder.mockImplementationOnce(() => {
       return new Promise((resolve, reject) => {
-        setTimeout(() => { resolve() }, 40)
+        setTimeout(() => {
+          resolve()
+        }, 40)
       })
     })
 
@@ -217,7 +227,9 @@ describe('ads script', () => {
     const prebidConfig = require('js/ads/prebid/prebidConfig').default
     prebidConfig.mockImplementationOnce(() => {
       return new Promise((resolve, reject) => {
-        setTimeout(() => { resolve() }, 40)
+        setTimeout(() => {
+          resolve()
+        }, 40)
       })
     })
 
@@ -225,7 +237,9 @@ describe('ads script', () => {
     const amazonBidder = require('js/ads/amazon/amazonBidder').default
     amazonBidder.mockImplementationOnce(() => {
       return new Promise((resolve, reject) => {
-        setTimeout(() => { resolve() }, 40)
+        setTimeout(() => {
+          resolve()
+        }, 40)
       })
     })
 
@@ -246,13 +260,16 @@ describe('ads script', () => {
 
   it('calls to store Amazon bids on the window for analytics (if Amazon is included in the auction)', async () => {
     expect.assertions(1)
-    const storeAmazonBids = require('js/ads/amazon/amazonBidder').storeAmazonBids
+    const storeAmazonBids = require('js/ads/amazon/amazonBidder')
+      .storeAmazonBids
 
     // Mock that Amazon responds quickly
     const amazonBidder = require('js/ads/amazon/amazonBidder').default
     amazonBidder.mockImplementationOnce(() => {
       return new Promise((resolve, reject) => {
-        setTimeout(() => { resolve() }, 80)
+        setTimeout(() => {
+          resolve()
+        }, 80)
       })
     })
 
@@ -264,13 +281,16 @@ describe('ads script', () => {
 
   it('does not call to store Amazon bids on the window for analytics (if Amazon is not included in the auction)', async () => {
     expect.assertions(1)
-    const storeAmazonBids = require('js/ads/amazon/amazonBidder').storeAmazonBids
+    const storeAmazonBids = require('js/ads/amazon/amazonBidder')
+      .storeAmazonBids
 
     // Mock that Amazon responds slowly
     const amazonBidder = require('js/ads/amazon/amazonBidder').default
     amazonBidder.mockImplementationOnce(() => {
       return new Promise((resolve, reject) => {
-        setTimeout(() => { resolve() }, 15e3)
+        setTimeout(() => {
+          resolve()
+        }, 15e3)
       })
     })
 

@@ -1,7 +1,5 @@
 import graphql from 'babel-plugin-relay/macro'
-import {
-  commitMutation
-} from 'react-relay'
+import { commitMutation } from 'react-relay'
 
 const mutation = graphql`
   mutation LogUserDataConsentMutation($input: LogUserDataConsentInput!) {
@@ -11,21 +9,24 @@ const mutation = graphql`
   }
 `
 
-function commit (environment, userId, consentString, isGlobalConsent, onCompleted = () => {}) {
-  return commitMutation(
-    environment,
-    {
-      mutation,
-      variables: {
-        input: {
-          userId,
-          consentString,
-          isGlobalConsent
-        }
+function commit(
+  environment,
+  userId,
+  consentString,
+  isGlobalConsent,
+  onCompleted = () => {}
+) {
+  return commitMutation(environment, {
+    mutation,
+    variables: {
+      input: {
+        userId,
+        consentString,
+        isGlobalConsent,
       },
-      onCompleted
-    }
-  )
+    },
+    onCompleted,
+  })
 }
 
 export default commit

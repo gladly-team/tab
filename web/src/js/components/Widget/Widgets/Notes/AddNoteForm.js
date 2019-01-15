@@ -3,11 +3,11 @@ import PropTypes from 'prop-types'
 import EditWidgetChip from 'js/components/Widget/EditWidgetChip'
 
 class AddNoteForm extends React.Component {
-  create () {
+  create() {
     this.props.addNote('')
   }
 
-  render () {
+  render() {
     return (
       <EditWidgetChip
         widgetName={'Notes'}
@@ -18,10 +18,9 @@ class AddNoteForm extends React.Component {
 }
 
 AddNoteForm.propTypes = {
-  addNote: PropTypes.func.isRequired
+  addNote: PropTypes.func.isRequired,
 }
 
-AddNoteForm.defaultProps = {
-}
+AddNoteForm.defaultProps = {}
 
 export default AddNoteForm

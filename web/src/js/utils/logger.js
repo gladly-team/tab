@@ -1,4 +1,3 @@
-
 import { isError } from 'lodash/lang'
 import Raven from 'raven-js'
 
@@ -11,27 +10,27 @@ logLevels.ERROR = 'error'
 
 const logger = {}
 
-logger.log = (msg) => {
+logger.log = msg => {
   console.log(msg)
   log(msg, logLevels.LOG)
 }
 
-logger.debug = (msg) => {
+logger.debug = msg => {
   console.debug(msg)
   log(msg, logLevels.DEBUG)
 }
 
-logger.info = (msg) => {
+logger.info = msg => {
   console.info(msg)
   log(msg, logLevels.INFO)
 }
 
-logger.warn = (msg) => {
+logger.warn = msg => {
   console.warn(msg)
   log(msg, logLevels.WARN)
 }
 
-logger.error = (msg) => {
+logger.error = msg => {
   console.error(msg)
   log(msg, logLevels.ERROR)
 }
@@ -60,11 +59,11 @@ const log = (msg, logLevel) => {
   }
   if (isError(msg)) {
     Raven.captureException(msg, {
-      level: level
+      level: level,
     })
   } else {
     Raven.captureMessage(msg, {
-      level: level
+      level: level,
     })
   }
 }

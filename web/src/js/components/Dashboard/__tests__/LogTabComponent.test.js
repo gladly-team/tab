@@ -1,9 +1,7 @@
 /* eslint-env jest */
 
 import React from 'react'
-import {
-  shallow
-} from 'enzyme'
+import { shallow } from 'enzyme'
 import toJson from 'enzyme-to-json'
 
 import LogTabMutation from 'js/mutations/LogTabMutation'
@@ -16,9 +14,10 @@ afterEach(() => {
   jest.clearAllMocks()
 })
 
-describe('LogTabComponent', function () {
+describe('LogTabComponent', function() {
   it('renders without error and does not have any DOM elements', () => {
-    const LogTabComponent = require('js/components/Dashboard/LogTabComponent').default
+    const LogTabComponent = require('js/components/Dashboard/LogTabComponent')
+      .default
     const wrapper = shallow(
       <LogTabComponent
         user={{ id: 'abcdefghijklmno' }}
@@ -30,7 +29,8 @@ describe('LogTabComponent', function () {
   })
 
   it('logs the tab after a 1 second timeout', () => {
-    const LogTabComponent = require('js/components/Dashboard/LogTabComponent').default
+    const LogTabComponent = require('js/components/Dashboard/LogTabComponent')
+      .default
     const mockRelayEnvironment = {}
     const mockUserData = { id: 'abcdefghijklmno' }
     const tabId = 'abc-123'
@@ -45,12 +45,16 @@ describe('LogTabComponent', function () {
     jest.advanceTimersByTime(999)
     expect(LogTabMutation).not.toHaveBeenCalled()
     jest.advanceTimersByTime(1)
-    expect(LogTabMutation).toHaveBeenCalledWith(mockRelayEnvironment,
-      mockUserData.id, tabId)
+    expect(LogTabMutation).toHaveBeenCalledWith(
+      mockRelayEnvironment,
+      mockUserData.id,
+      tabId
+    )
   })
 
-  it('updates today\'s tab count in localStorage', () => {
-    const LogTabComponent = require('js/components/Dashboard/LogTabComponent').default
+  it("updates today's tab count in localStorage", () => {
+    const LogTabComponent = require('js/components/Dashboard/LogTabComponent')
+      .default
     const mockRelayEnvironment = {}
     const mockUserData = { id: 'abcdefghijklmno' }
     const tabId = 'abc-123'

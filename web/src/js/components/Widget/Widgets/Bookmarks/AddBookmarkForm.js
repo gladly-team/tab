@@ -5,21 +5,19 @@ import PropTypes from 'prop-types'
 
 import EditWidgetChip from 'js/components/Widget/EditWidgetChip'
 import TextField from 'material-ui/TextField'
-import appTheme, {
-  widgetEditButtonHover
-} from 'js/theme/default'
+import appTheme, { widgetEditButtonHover } from 'js/theme/default'
 
 class AddBookmarkForm extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       open: false,
       nameRequiredError: false,
-      urlRequiredError: false
+      urlRequiredError: false,
     }
   }
 
-  _handleKeyPress (e) {
+  _handleKeyPress(e) {
     if (e.key === 'Enter') {
       if (!e.shiftKey) {
         e.stopPropagation()
@@ -29,40 +27,43 @@ class AddBookmarkForm extends React.Component {
     }
   }
 
-  openForm () {
+  openForm() {
+    this.setState(
+      {
+        open: true,
+      },
+      () => {
+        this.focusInput()
+      }
+    )
+  }
+
+  closeForm() {
     this.setState({
-      open: true
-    }, () => {
-      this.focusInput()
+      open: false,
     })
   }
 
-  closeForm () {
-    this.setState({
-      open: false
-    })
-  }
-
-  focusInput () {
+  focusInput() {
     this.bookmarkNameTextField.focus()
   }
 
-  onNameValChange () {
+  onNameValChange() {
     const name = this.bookmarkNameTextField.input.value
     this.setState({
-      nameRequiredError: !name
+      nameRequiredError: !name,
     })
   }
 
-  onURLValChange () {
+  onURLValChange() {
     const url = this.bLink.input.value
     this.setState({
-      urlRequiredError: !url
+      urlRequiredError: !url,
     })
   }
 
-  addProtocolToURLIfNeeded (url) {
-    const hasProtocol = (s) => {
+  addProtocolToURLIfNeeded(url) {
+    const hasProtocol = s => {
       var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
       return regexp.test(s)
     }
@@ -73,21 +74,23 @@ class AddBookmarkForm extends React.Component {
     return url
   }
 
-  create () {
+  create() {
     const name = this.bookmarkNameTextField.input.value
     const url = this.bLink.input.value
 
     if (!name) {
       this.setState({
-        nameRequiredError: true
+        nameRequiredError: true,
       })
     }
     if (!url) {
       this.setState({
-        urlRequiredError: true
+        urlRequiredError: true,
       })
     }
-    if (!name || !url) { return }
+    if (!name || !url) {
+      return
+    }
 
     const link = this.addProtocolToURLIfNeeded(this.bLink.input.value)
     this.props.addBookmark(name, link)
@@ -97,22 +100,22 @@ class AddBookmarkForm extends React.Component {
     this.closeForm()
   }
 
-  render () {
+  render() {
     const textField = {
       underlineStyle: {
-        borderColor: appTheme.textField.underlineColor
+        borderColor: appTheme.textField.underlineColor,
       },
       underlineFocusStyle: {
-        borderColor: widgetEditButtonHover
+        borderColor: widgetEditButtonHover,
       },
       hintStyle: {
         color: appTheme.textField.underlineColor,
-        fontSize: 14
+        fontSize: 14,
       },
       inputStyle: {
         color: '#FFF',
-        fontSize: 14
-      }
+        fontSize: 14,
+      },
     }
 
     return (
@@ -132,13 +135,15 @@ class AddBookmarkForm extends React.Component {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              paddingBottom: 20
+              paddingBottom: 20,
             }}
           >
             <TextField
-              ref={(input) => { this.bookmarkNameTextField = input }}
+              ref={input => {
+                this.bookmarkNameTextField = input
+              }}
               onKeyPress={this._handleKeyPress.bind(this)}
-              hintText='Ex: Google'
+              hintText="Ex: Google"
               style={textField.style}
               inputStyle={textField.inputStyle}
               hintStyle={textField.hintStyle}
@@ -148,9 +153,11 @@ class AddBookmarkForm extends React.Component {
               errorText={this.state.nameRequiredError ? 'Enter a name' : null}
             />
             <TextField
-              ref={(input) => { this.bLink = input }}
+              ref={input => {
+                this.bLink = input
+              }}
               onKeyPress={this._handleKeyPress.bind(this)}
-              hintText='Ex: google.com'
+              hintText="Ex: google.com"
               style={textField.style}
               inputStyle={textField.inputStyle}
               hintStyle={textField.hintStyle}
@@ -170,11 +177,11 @@ AddBookmarkForm.propTypes = {
   addBookmark: PropTypes.func.isRequired,
   onEditModeToggle: PropTypes.func.isRequired,
   editMode: PropTypes.bool.isRequired,
-  showEditButton: PropTypes.bool.isRequired
+  showEditButton: PropTypes.bool.isRequired,
 }
 
 AddBookmarkForm.defaultProps = {
-  showEditButton: true
+  showEditButton: true,
 }
 
 export default AddBookmarkForm

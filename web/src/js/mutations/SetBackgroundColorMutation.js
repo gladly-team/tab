@@ -1,7 +1,5 @@
 import graphql from 'babel-plugin-relay/macro'
-import {
-  commitMutation
-} from 'react-relay'
+import { commitMutation } from 'react-relay'
 
 const mutation = graphql`
   mutation SetBackgroundColorMutation($input: SetUserBkgColorInput!) {
@@ -14,21 +12,23 @@ const mutation = graphql`
   }
 `
 
-function commit (environment, user, color,
-  onCompleted = () => {}, onError = () => {}) {
+function commit(
+  environment,
+  user,
+  color,
+  onCompleted = () => {},
+  onError = () => {}
+) {
   const userId = user.id
 
-  return commitMutation(
-    environment,
-    {
-      mutation,
-      variables: {
-        input: { userId, color }
-      },
-      onCompleted,
-      onError
-    }
-  )
+  return commitMutation(environment, {
+    mutation,
+    variables: {
+      input: { userId, color },
+    },
+    onCompleted,
+    onError,
+  })
 }
 
-export default {commit}
+export default { commit }

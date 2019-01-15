@@ -1,22 +1,13 @@
 /* eslint-env jest */
 
 import React from 'react'
-import {
-  mount,
-  shallow
-} from 'enzyme'
+import { mount, shallow } from 'enzyme'
 import AuthenticationView from 'js/components/Authentication/AuthenticationView'
-import {
-  QueryRenderer
-} from 'react-relay'
+import { QueryRenderer } from 'react-relay'
 import AuthenticationContainer from 'js/components/Authentication/AuthenticationContainer'
 import { createNewUser } from 'js/authentication/helpers'
-import {
-  ERROR_USER_DOES_NOT_EXIST
-} from 'js/constants'
-import {
-  getCurrentUser
-} from 'js/authentication/user'
+import { ERROR_USER_DOES_NOT_EXIST } from 'js/constants'
+import { getCurrentUser } from 'js/authentication/user'
 
 jest.mock('react-relay')
 jest.mock('js/components/Authentication/AuthenticationContainer')
@@ -30,9 +21,7 @@ afterEach(() => {
 
 describe('AuthenticationView', () => {
   it('renders without error', () => {
-    shallow(
-      <AuthenticationView />
-    )
+    shallow(<AuthenticationView />)
   })
 
   it('QueryRenderer receives the "variables" prop', async () => {
@@ -43,16 +32,14 @@ describe('AuthenticationView', () => {
       email: 'somebody@example.com',
       username: null,
       isAnonymous: false,
-      emailVerified: true
+      emailVerified: true,
     })
-    const wrapper = mount(
-      <AuthenticationView />
-    )
+    const wrapper = mount(<AuthenticationView />)
     await wrapper.instance().fetchUser()
     wrapper.update()
     expect(wrapper.find(QueryRenderer).prop('variables')).toEqual({
       userId: 'xyz987',
-      refetchCounter: 2
+      refetchCounter: 2,
     })
   })
 
@@ -60,12 +47,10 @@ describe('AuthenticationView', () => {
     QueryRenderer.__setQueryResponse({
       error: null,
       props: null,
-      retry: jest.fn()
+      retry: jest.fn(),
     })
 
-    const wrapper = mount(
-      <AuthenticationView />
-    )
+    const wrapper = mount(<AuthenticationView />)
     expect(wrapper.find(AuthenticationContainer).length).toBe(1)
   })
 
@@ -76,18 +61,16 @@ describe('AuthenticationView', () => {
       user: {
         id: 'abc123xyz456',
         email: 'foo@example.com',
-        username: 'MyUsername'
-      }
+        username: 'MyUsername',
+      },
     }
     QueryRenderer.__setQueryResponse({
       error: null,
       props: fakeProps,
-      retry: jest.fn()
+      retry: jest.fn(),
     })
 
-    const wrapper = mount(
-      <AuthenticationView />
-    )
+    const wrapper = mount(<AuthenticationView />)
 
     const authContainer = wrapper.find(AuthenticationContainer)
     expect(authContainer.prop('user')).toEqual(fakeProps.user)
@@ -101,7 +84,7 @@ describe('AuthenticationView', () => {
       email: 'somebody@example.com',
       username: null,
       isAnonymous: false,
-      emailVerified: true
+      emailVerified: true,
     })
 
     // Have the server return an error on the first request.
@@ -115,20 +98,22 @@ describe('AuthenticationView', () => {
           errors: [
             {
               message: 'No user exists with this ID.',
-              locations: [{
-                line: 8,
-                column: 3
-              }],
+              locations: [
+                {
+                  line: 8,
+                  column: 3,
+                },
+              ],
               path: ['user'],
-              code: ERROR_USER_DOES_NOT_EXIST
-            }
+              code: ERROR_USER_DOES_NOT_EXIST,
+            },
           ],
           operation: { foo: 'bar' },
-          variables: { foo: 'baz' }
-        }
+          variables: { foo: 'baz' },
+        },
       },
       props: null,
-      retry: mockRetryFn
+      retry: mockRetryFn,
     })
 
     // The server returns the user on the second request.
@@ -138,16 +123,16 @@ describe('AuthenticationView', () => {
         user: {
           id: 'abc123xyz456',
           email: 'foo@example.com',
-          username: null
-        }
+          username: null,
+        },
       },
-      retry: jest.fn()
+      retry: jest.fn(),
     })
 
     createNewUser.mockResolvedValue({
       id: 'acbdegfh2468',
       username: null,
-      email: null
+      email: null,
     })
 
     const wrapper = mount(<AuthenticationView />)
@@ -160,7 +145,7 @@ describe('AuthenticationView', () => {
     // refetch of data.
     expect(wrapper.find(QueryRenderer).prop('variables')).toEqual({
       userId: 'acbdegfh2468',
-      refetchCounter: 3
+      refetchCounter: 3,
     })
   })
 
@@ -176,7 +161,7 @@ describe('AuthenticationView', () => {
       email: 'somebody@example.com',
       username: null,
       isAnonymous: false,
-      emailVerified: true
+      emailVerified: true,
     })
 
     // Have the server return an error every time. This would only
@@ -191,26 +176,28 @@ describe('AuthenticationView', () => {
           errors: [
             {
               message: 'No user exists with this ID.',
-              locations: [{
-                line: 8,
-                column: 3
-              }],
+              locations: [
+                {
+                  line: 8,
+                  column: 3,
+                },
+              ],
               path: ['user'],
-              code: ERROR_USER_DOES_NOT_EXIST
-            }
+              code: ERROR_USER_DOES_NOT_EXIST,
+            },
           ],
           operation: { foo: 'bar' },
-          variables: { foo: 'baz' }
-        }
+          variables: { foo: 'baz' },
+        },
       },
       props: null,
-      retry: mockRetryFn
+      retry: mockRetryFn,
     })
 
     createNewUser.mockResolvedValue({
       id: 'acbdegfh2468',
       username: null,
-      email: null
+      email: null,
     })
 
     const wrapper = mount(<AuthenticationView />)

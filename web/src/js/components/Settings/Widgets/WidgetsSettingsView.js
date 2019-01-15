@@ -1,4 +1,3 @@
-
 import React from 'react'
 import { QueryRenderer } from 'react-relay'
 import graphql from 'babel-plugin-relay/macro'
@@ -10,7 +9,7 @@ import AuthUserComponent from 'js/components/General/AuthUserComponent'
 import ErrorMessage from 'js/components/General/ErrorMessage'
 
 class WidgetsSettingsView extends React.Component {
-  render () {
+  render() {
     return (
       <AuthUserComponent>
         <QueryRenderer
@@ -25,7 +24,7 @@ class WidgetsSettingsView extends React.Component {
               }
             }
           `}
-          render={({error, props}) => {
+          render={({ error, props }) => {
             if (error) {
               console.error(error, error.source)
               const errMsg = 'We had a problem loading the widget settings :('
@@ -35,18 +34,17 @@ class WidgetsSettingsView extends React.Component {
             const dataLoaded = !!props
             return (
               <SettingsChildWrapper loaded={dataLoaded}>
-                { dataLoaded
-                  ? (
-                    <WidgetsSettings
-                      app={props.app}
-                      user={props.user}
-                      showError={showError} />
-                  )
-                  : null
-                }
+                {dataLoaded ? (
+                  <WidgetsSettings
+                    app={props.app}
+                    user={props.user}
+                    showError={showError}
+                  />
+                ) : null}
               </SettingsChildWrapper>
             )
-          }} />
+          }}
+        />
       </AuthUserComponent>
     )
   }

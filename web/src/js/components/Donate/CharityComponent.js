@@ -6,22 +6,26 @@ import Typography from '@material-ui/core/Typography'
 import DonateHeartsControls from 'js/components/Donate/DonateHeartsControlsContainer'
 
 class Charity extends React.Component {
-  openCharityWebsite () {
+  openCharityWebsite() {
     const { charity } = this.props
 
     // The page might be iframed, so opening in _top or _blank is critical.
     window.open(charity.website, '_blank')
   }
 
-  render () {
+  render() {
     const { charity, user, style, showError } = this.props
 
     return (
       <Paper
-        style={Object.assign({}, {
-          minWidth: 250,
-          maxWidth: 360
-        }, style)}
+        style={Object.assign(
+          {},
+          {
+            minWidth: 250,
+            maxWidth: 360,
+          },
+          style
+        )}
       >
         <span
           style={{
@@ -29,12 +33,12 @@ class Charity extends React.Component {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'space-between',
-            height: '100%'
+            height: '100%',
           }}
         >
           <span
             style={{
-              padding: 0
+              padding: 0,
             }}
           >
             <img
@@ -42,17 +46,18 @@ class Charity extends React.Component {
               style={{
                 cursor: 'pointer',
                 maxWidth: '100%',
-                minWidth: '100%'
+                minWidth: '100%',
               }}
               src={charity.logo}
-              onClick={this.openCharityWebsite.bind(this)} />
+              onClick={this.openCharityWebsite.bind(this)}
+            />
           </span>
           <Typography
             variant={'h5'}
             style={{
               padding: 16,
               display: 'block',
-              textAlign: 'center'
+              textAlign: 'center',
             }}
           >
             {charity.name}
@@ -64,7 +69,7 @@ class Charity extends React.Component {
               paddingLeft: 16,
               paddingRight: 16,
               textAlign: 'center',
-              display: 'block'
+              display: 'block',
             }}
           >
             {charity.description}
@@ -74,7 +79,7 @@ class Charity extends React.Component {
             user={user}
             showError={showError}
             style={{
-              padding: 24
+              padding: 24,
             }}
           />
         </span>
@@ -89,18 +94,18 @@ Charity.propTypes = {
     description: PropTypes.string.isRequired,
     logo: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    website: PropTypes.string.isRequired
+    website: PropTypes.string.isRequired,
   }),
   user: PropTypes.shape({
     id: PropTypes.string.isRequired,
-    vcCurrent: PropTypes.number.isRequired
+    vcCurrent: PropTypes.number.isRequired,
   }),
   showError: PropTypes.func.isRequired,
-  style: PropTypes.object
+  style: PropTypes.object,
 }
 
 Charity.defaultProps = {
-  style: {}
+  style: {},
 }
 
 export default Charity

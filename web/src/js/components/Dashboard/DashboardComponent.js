@@ -22,7 +22,7 @@ import HeartIcon from 'material-ui/svg-icons/action/favorite'
 import {
   primaryColor,
   dashboardIconInactiveColor,
-  dashboardIconActiveColor
+  dashboardIconActiveColor,
 } from 'js/theme/default'
 import FadeInDashboardAnimation from 'js/components/General/FadeInDashboardAnimation'
 import ErrorMessage from 'js/components/General/ErrorMessage'
@@ -32,23 +32,18 @@ import { getCurrentUser } from 'js/authentication/user'
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import {
   setUserDismissedAdExplanation,
-  hasUserDismissedNotificationRecently
+  hasUserDismissedNotificationRecently,
 } from 'js/utils/local-user-data-mgr'
 import { STORAGE_NEW_USER_HAS_COMPLETED_TOUR } from 'js/constants'
-import {
-  goTo,
-  loginURL
-} from 'js/navigation/navigation'
+import { goTo, loginURL } from 'js/navigation/navigation'
 import {
   getNumberOfAdsToShow,
   shouldShowAdExplanation,
   VERTICAL_AD_SLOT_DOM_ID,
   SECOND_VERTICAL_AD_SLOT_DOM_ID,
-  HORIZONTAL_AD_SLOT_DOM_ID
+  HORIZONTAL_AD_SLOT_DOM_ID,
 } from 'js/ads/adSettings'
-import {
-  showGlobalNotification
-} from 'js/utils/feature-flags'
+import { showGlobalNotification } from 'js/utils/feature-flags'
 
 // Include ads code.
 // TODO: load this on mount, making sure the ads code behaves
@@ -57,7 +52,7 @@ import {
 import 'js/ads/ads'
 
 class Dashboard extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
@@ -68,15 +63,17 @@ class Dashboard extends React.Component {
       // This may be false if the user cleared their storage,
       // which is why we only show the tour to recently-joined
       // users.
-      userAlreadyViewedNewUserTour: localStorageMgr.getItem(STORAGE_NEW_USER_HAS_COMPLETED_TOUR) === 'true',
+      userAlreadyViewedNewUserTour:
+        localStorageMgr.getItem(STORAGE_NEW_USER_HAS_COMPLETED_TOUR) === 'true',
       numAdsToShow: getNumberOfAdsToShow(),
       showAdExplanation: shouldShowAdExplanation(),
       // Whether to show a global announcement.
-      showNotification: showGlobalNotification() && !hasUserDismissedNotificationRecently()
+      showNotification:
+        showGlobalNotification() && !hasUserDismissedNotificationRecently(),
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.determineAnonymousStatus()
   }
 
@@ -86,35 +83,38 @@ class Dashboard extends React.Component {
    * @return {Promise<undefined>} A Promise that resolves after
    *   the state has been updated.
    */
-  async determineAnonymousStatus () {
+  async determineAnonymousStatus() {
     const currentUser = await getCurrentUser()
     const isAnon = currentUser && currentUser.isAnonymous
     return new Promise((resolve, reject) => {
-      this.setState({
-        isUserAnonymous: isAnon
-      }, () => {
-        resolve()
-      })
+      this.setState(
+        {
+          isUserAnonymous: isAnon,
+        },
+        () => {
+          resolve()
+        }
+      )
     })
   }
 
-  showError (msg) {
+  showError(msg) {
     this.setState({
-      errorMessage: msg
+      errorMessage: msg,
     })
   }
 
-  clearError () {
+  clearError() {
     this.showError(null)
   }
 
-  launchFireworks (show) {
+  launchFireworks(show) {
     this.setState({
-      showFireworks: show
+      showFireworks: show,
     })
   }
 
-  render () {
+  render() {
     // Props will be null on first render.
     const { user, app } = this.props
     const { tabId } = this.state
@@ -122,15 +122,16 @@ class Dashboard extends React.Component {
 
     // Whether or not a campaign should show on the dashboard
     // TODO: also make sure the user hasn't dismissed the campaign (`isCampaignShown` var)
-    const isGlobalCampaignLive = !!((app && app.isGlobalCampaignLive))
+    const isGlobalCampaignLive = !!(app && app.isGlobalCampaignLive)
 
     // Show the tour if the user joined recently and localStorage
     // does not have a flag marking the tour as already viewed.
-    const showNewUserTour = (
+    const showNewUserTour =
       user &&
-      moment().utc().diff(moment(user.joined), 'hours') < 2 &&
+      moment()
+        .utc()
+        .diff(moment(user.joined), 'hours') < 2 &&
       !this.state.userAlreadyViewedNewUserTour
-    )
 
     return (
       <div
@@ -143,147 +144,138 @@ class Dashboard extends React.Component {
           overflowY: 'hidden',
           overflowX: 'auto',
           // Otherwise, campaigns can cover up bookmarks.
-          minWidth: 1080
+          minWidth: 1080,
         }}
         data-test-id={'app-dashboard'}
-        key={'dashboard-key'}>
-        <UserBackgroundImage user={user} showError={this.showError.bind(this)} />
-        { user
-          ? (
-            <FadeInDashboardAnimation>
-              <div style={{
+        key={'dashboard-key'}
+      >
+        <UserBackgroundImage
+          user={user}
+          showError={this.showError.bind(this)}
+        />
+        {user ? (
+          <FadeInDashboardAnimation>
+            <div
+              style={{
                 position: 'fixed',
                 zIndex: 10,
                 top: 14,
                 right: 10,
                 display: 'flex',
-                flexDirection: 'column'
+                flexDirection: 'column',
               }}
-              >
-                <div style={{
+            >
+              <div
+                style={{
                   display: 'flex',
                   justifyContent: 'flex-end',
-                  alignItems: 'center'
-                }}>
-                  <MoneyRaised
-                    app={app}
-                    style={{
-                      fontSize: 24
-                    }}
-                    launchFireworks={this.launchFireworks.bind(this)}
-                  />
-                  <CircleIcon
-                    color={dashboardIconInactiveColor}
-                    hoverColor={dashboardIconActiveColor}
-                    style={{
-                      alignSelf: 'center',
-                      width: 5,
-                      height: 5,
-                      marginTop: 2,
-                      marginLeft: 12,
-                      marginRight: 12
-                    }}
-                  />
-                  <UserMenu
-                    app={app}
-                    user={user}
-                    style={{
-                      fontSize: 24
-                    }}
-                    isUserAnonymous={this.state.isUserAnonymous}
-                  />
-                </div>
-                { this.state.showNotification
-                  ? (
-                    <Notification
-                      title={`Vote for the January Charity Spotlight`}
-                      message={`
-                        Each month this year, we're highlighting a charity chosen by our
-                        community. Nominate and vote for the nonprofit that means the most to you.`}
-                      buttonText={'Vote'}
-                      buttonURL={'https://goo.gl/forms/crNGLow4fg5fcKe63'}
-                      onDismiss={() => {
-                        this.setState({
-                          showNotification: false
-                        })
-                      }}
-                      style={{
-                        marginTop: 4
-                      }}
-                    />
-                  )
-                  : null
-                }
-              </div>
-            </FadeInDashboardAnimation>
-          )
-          : null
-        }
-        { (this.state.isUserAnonymous && user)
-          ? (
-            <FadeInDashboardAnimation>
-              <div
-                data-test-id={'anon-sign-in-prompt-dashboard'}
-                style={{
-                  position: 'absolute',
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  top: 14
+                  alignItems: 'center',
                 }}
               >
-                <Paper>
-                  <div
+                <MoneyRaised
+                  app={app}
+                  style={{
+                    fontSize: 24,
+                  }}
+                  launchFireworks={this.launchFireworks.bind(this)}
+                />
+                <CircleIcon
+                  color={dashboardIconInactiveColor}
+                  hoverColor={dashboardIconActiveColor}
+                  style={{
+                    alignSelf: 'center',
+                    width: 5,
+                    height: 5,
+                    marginTop: 2,
+                    marginLeft: 12,
+                    marginRight: 12,
+                  }}
+                />
+                <UserMenu
+                  app={app}
+                  user={user}
+                  style={{
+                    fontSize: 24,
+                  }}
+                  isUserAnonymous={this.state.isUserAnonymous}
+                />
+              </div>
+              {this.state.showNotification ? (
+                <Notification
+                  title={`Vote for the January Charity Spotlight`}
+                  message={`
+                        Each month this year, we're highlighting a charity chosen by our
+                        community. Nominate and vote for the nonprofit that means the most to you.`}
+                  buttonText={'Vote'}
+                  buttonURL={'https://goo.gl/forms/crNGLow4fg5fcKe63'}
+                  onDismiss={() => {
+                    this.setState({
+                      showNotification: false,
+                    })
+                  }}
+                  style={{
+                    marginTop: 4,
+                  }}
+                />
+              ) : null}
+            </div>
+          </FadeInDashboardAnimation>
+        ) : null}
+        {this.state.isUserAnonymous && user ? (
+          <FadeInDashboardAnimation>
+            <div
+              data-test-id={'anon-sign-in-prompt-dashboard'}
+              style={{
+                position: 'absolute',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                top: 14,
+              }}
+            >
+              <Paper>
+                <div
+                  style={{
+                    padding: '6px 14px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    background: dashboardIconInactiveColor,
+                  }}
+                >
+                  <Typography variant={'body2'}>
+                    Sign in to save your progress!
+                  </Typography>
+                  <Button
+                    color={'primary'}
                     style={{
-                      padding: '6px 14px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      background: dashboardIconInactiveColor
+                      marginLeft: 10,
+                      marginRight: 10,
+                    }}
+                    onClick={() => {
+                      goTo(loginURL, { noredirect: 'true' })
                     }}
                   >
-                    <Typography variant={'body2'}>
-                      Sign in to save your progress!
-                    </Typography>
-                    <Button
-                      color={'primary'}
-                      style={{
-                        marginLeft: 10,
-                        marginRight: 10
-                      }}
-                      onClick={() => {
-                        goTo(loginURL, { noredirect: 'true' })
-                      }}
-                    >
-                      Sign In
-                    </Button>
-                  </div>
-                </Paper>
-              </div>
-            </FadeInDashboardAnimation>
-          )
-          : null
-        }
+                    Sign In
+                  </Button>
+                </div>
+              </Paper>
+            </div>
+          </FadeInDashboardAnimation>
+        ) : null}
         <WidgetsContainer
           user={user}
           isCampaignLive={isGlobalCampaignLive}
           showError={this.showError.bind(this)}
         />
-        { isGlobalCampaignLive
-          ? (
-            <FadeInDashboardAnimation>
-              <CampaignBase
-                showError={this.showError.bind(this)}
-              />
-            </FadeInDashboardAnimation>
-          )
-          : null
-        }
-        {
-          this.state.showFireworks ?
-            // TODO: build a new fireworks component
+        {isGlobalCampaignLive ? (
+          <FadeInDashboardAnimation>
+            <CampaignBase showError={this.showError.bind(this)} />
+          </FadeInDashboardAnimation>
+        ) : null}
+        {this.state.showFireworks
+          ? // TODO: build a new fireworks component
             null
-            : null
-        }
-        { showNewUserTour ? <NewUserTour user={user} /> : null }
+          : null}
+        {showNewUserTour ? <NewUserTour user={user} /> : null}
         <div
           style={{
             position: 'absolute',
@@ -292,126 +284,119 @@ class Dashboard extends React.Component {
             alignItems: 'flex-end',
             flexDirection: 'row-reverse',
             bottom: 10,
-            right: 10
+            right: 10,
           }}
         >
           <div
             style={{
               display: 'flex',
               flexDirection: 'column',
-              overflow: 'visible'
+              overflow: 'visible',
             }}
           >
-            {
-              this.state.numAdsToShow > 2
-                ? <Ad
-                  adId={SECOND_VERTICAL_AD_SLOT_DOM_ID}
-                  style={{
-                    display: 'flex',
-                    minWidth: 300,
-                    overflow: 'visible'
-                  }}
-                />
-                : null
-            }
-            {
-              this.state.numAdsToShow > 1
-                ? <Ad
-                  adId={VERTICAL_AD_SLOT_DOM_ID}
-                  style={{
-                    display: 'flex',
-                    minWidth: 300,
-                    overflow: 'visible',
-                    marginTop: 10
-                  }}
-                />
-                : null
-            }
+            {this.state.numAdsToShow > 2 ? (
+              <Ad
+                adId={SECOND_VERTICAL_AD_SLOT_DOM_ID}
+                style={{
+                  display: 'flex',
+                  minWidth: 300,
+                  overflow: 'visible',
+                }}
+              />
+            ) : null}
+            {this.state.numAdsToShow > 1 ? (
+              <Ad
+                adId={VERTICAL_AD_SLOT_DOM_ID}
+                style={{
+                  display: 'flex',
+                  minWidth: 300,
+                  overflow: 'visible',
+                  marginTop: 10,
+                }}
+              />
+            ) : null}
           </div>
-          {
-            this.state.numAdsToShow > 0
-              ? (
-                <div
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    overflow: 'visible',
-                    marginRight: 10
-                  }}
-                >
-                  { (this.state.showAdExplanation && user)
-                    ? (
-                      <FadeInDashboardAnimation>
-                        <div
-                          data-test-id={'ad-explanation'}
+          {this.state.numAdsToShow > 0 ? (
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                overflow: 'visible',
+                marginRight: 10,
+              }}
+            >
+              {this.state.showAdExplanation && user ? (
+                <FadeInDashboardAnimation>
+                  <div
+                    data-test-id={'ad-explanation'}
+                    style={{
+                      display: 'inline-block',
+                      float: 'right',
+                    }}
+                  >
+                    <Paper>
+                      <div
+                        style={{
+                          display: 'flex',
+                          padding: '6px 14px',
+                          marginBottom: 10,
+                          alignItems: 'center',
+                          background: dashboardIconInactiveColor,
+                        }}
+                      >
+                        <HeartIcon
+                          color={primaryColor}
                           style={{
-                            display: 'inline-block',
-                            float: 'right'
+                            width: 24,
+                            height: 24,
+                            marginRight: 14,
+                          }}
+                        />
+                        <Typography variant={'body2'}>
+                          Did you know? The ads here are raising money for
+                          charity.
+                        </Typography>
+                        <Button
+                          color={'primary'}
+                          style={{
+                            marginLeft: 20,
+                            marginRight: 10,
+                          }}
+                          onClick={() => {
+                            setUserDismissedAdExplanation()
+                            this.setState({
+                              showAdExplanation: false,
+                            })
                           }}
                         >
-                          <Paper>
-                            <div
-                              style={{
-                                display: 'flex',
-                                padding: '6px 14px',
-                                marginBottom: 10,
-                                alignItems: 'center',
-                                background: dashboardIconInactiveColor
-                              }}
-                            >
-                              <HeartIcon
-                                color={primaryColor}
-                                style={{
-                                  width: 24,
-                                  height: 24,
-                                  marginRight: 14
-                                }}
-                              />
-                              <Typography variant={'body2'}>
-                                Did you know? The ads here are raising money for charity.
-                              </Typography>
-                              <Button
-                                color={'primary'}
-                                style={{
-                                  marginLeft: 20,
-                                  marginRight: 10
-                                }}
-                                onClick={() => {
-                                  setUserDismissedAdExplanation()
-                                  this.setState({
-                                    showAdExplanation: false
-                                  })
-                                }}
-                              >
-                              Got it
-                              </Button>
-                            </div>
-                          </Paper>
-                        </div>
-                      </FadeInDashboardAnimation>
-                    )
-                    : null
-                  }
-                  <Ad
-                    adId={HORIZONTAL_AD_SLOT_DOM_ID}
-                    style={{
-                      overflow: 'visible',
-                      minWidth: 728
-                    }}
-                  />
-                </div>
-              ) : null
-          }
+                          Got it
+                        </Button>
+                      </div>
+                    </Paper>
+                  </div>
+                </FadeInDashboardAnimation>
+              ) : null}
+              <Ad
+                adId={HORIZONTAL_AD_SLOT_DOM_ID}
+                style={{
+                  overflow: 'visible',
+                  minWidth: 728,
+                }}
+              />
+            </div>
+          ) : null}
         </div>
-        { user && tabId ? <LogTab user={user} tabId={tabId} /> : null }
-        { user && tabId ? <LogRevenue user={user} tabId={tabId} /> : null }
-        { user ? <LogConsentData user={user} /> : null }
-        { user ? <LogAccountCreation user={user} /> : null }
-        { user ? <AssignExperimentGroups user={user} isNewUser={false} /> : null }
-        { errorMessage
-          ? <ErrorMessage message={errorMessage}
-            onRequestClose={this.clearError.bind(this)} />
-          : null }
+        {user && tabId ? <LogTab user={user} tabId={tabId} /> : null}
+        {user && tabId ? <LogRevenue user={user} tabId={tabId} /> : null}
+        {user ? <LogConsentData user={user} /> : null}
+        {user ? <LogAccountCreation user={user} /> : null}
+        {user ? <AssignExperimentGroups user={user} isNewUser={false} /> : null}
+        {errorMessage ? (
+          <ErrorMessage
+            message={errorMessage}
+            onRequestClose={this.clearError.bind(this)}
+          />
+        ) : null}
       </div>
     )
   }
@@ -420,17 +405,17 @@ class Dashboard extends React.Component {
 Dashboard.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.string.isRequired,
-    joined: PropTypes.string.isRequired
+    joined: PropTypes.string.isRequired,
   }),
   app: PropTypes.shape({
-    isGlobalCampaignLive: PropTypes.bool
-  })
+    isGlobalCampaignLive: PropTypes.bool,
+  }),
 }
 
 Dashboard.defaultProps = {
   app: {
-    isGlobalCampaignLive: false
-  }
+    isGlobalCampaignLive: false,
+  },
 }
 
 export default Dashboard

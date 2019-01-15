@@ -1,12 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import {
-  accountCreated
-} from 'js/analytics/logEvent'
+import { accountCreated } from 'js/analytics/logEvent'
 
 class LogAccountCreation extends React.Component {
-  componentDidMount () {
+  componentDidMount() {
     const { user } = this.props
 
     // If this is the user's first tab, log the "accountCreated"
@@ -18,15 +16,15 @@ class LogAccountCreation extends React.Component {
     }
   }
 
-  render () {
+  render() {
     return null
   }
 }
 
 LogAccountCreation.propTypes = {
   user: PropTypes.shape({
-    tabs: PropTypes.number.isRequired
-  }).isRequired
+    tabs: PropTypes.number.isRequired,
+  }).isRequired,
 }
 
 export default LogAccountCreation

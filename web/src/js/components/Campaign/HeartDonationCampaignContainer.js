@@ -1,23 +1,19 @@
 import graphql from 'babel-plugin-relay/macro'
-import {
-  createFragmentContainer
-} from 'react-relay'
+import { createFragmentContainer } from 'react-relay'
 
 import HeartDonationCampaign from 'js/components/Campaign/HeartDonationCampaignComponent'
 
 export default createFragmentContainer(HeartDonationCampaign, {
   app: graphql`
-    fragment HeartDonationCampaignContainer_app on App @argumentDefinitions(
-      startTime: { type: "String" },
-      endTime: { type: "String" },
-    ) {
+    fragment HeartDonationCampaignContainer_app on App
+      @argumentDefinitions(
+        startTime: { type: "String" }
+        endTime: { type: "String" }
+      ) {
       charity(charityId: $charityId) {
         id
         name
-        vcReceived (
-          startTime: $startTime,
-          endTime: $endTime
-        )
+        vcReceived(startTime: $startTime, endTime: $endTime)
         ...DonateHeartsControlsContainer_charity
       }
     }
@@ -27,5 +23,5 @@ export default createFragmentContainer(HeartDonationCampaign, {
       vcCurrent
       ...DonateHeartsControlsContainer_user
     }
-  `
+  `,
 })

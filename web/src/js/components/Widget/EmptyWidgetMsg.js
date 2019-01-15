@@ -1,8 +1,7 @@
-
 import React from 'react'
 
 class EmptyWidgetMsg extends React.Component {
-  render () {
+  render() {
     return null
   }
 }

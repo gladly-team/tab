@@ -1,10 +1,8 @@
 import React from 'react'
-import {
-  checkIfEmailVerified
-} from 'js/authentication/helpers'
+import { checkIfEmailVerified } from 'js/authentication/helpers'
 
 class FirebaseAuthenticationUIAction extends React.Component {
-  componentDidMount () {
+  componentDidMount() {
     // See if the user verified their email address so that we can
     // log the verification. It would be better to user a cloud
     // function for this, or at least an official callback from the
@@ -13,7 +11,7 @@ class FirebaseAuthenticationUIAction extends React.Component {
     checkIfEmailVerified()
   }
 
-  render () {
+  render() {
     return null
   }
 }

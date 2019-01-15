@@ -10,7 +10,7 @@ afterEach(() => {
   process.env.REACT_APP_ADS_ENABLED = adsEnabledEnv // Reset env var after tests
 })
 
-describe('ads enabled status', function () {
+describe('ads enabled status', function() {
   it('disables ads when REACT_APP_ADS_ENABLED env var is not set', () => {
     process.env.REACT_APP_ADS_ENABLED = undefined
     const adsEnabledStatus = require('js/ads/adsEnabledStatus').default

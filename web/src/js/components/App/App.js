@@ -4,16 +4,16 @@ import { isInEuropeanUnion } from 'js/utils/client-location'
 import {
   registerConsentCallback,
   saveConsentUpdateEventToLocalStorage,
-  unregisterConsentCallback
+  unregisterConsentCallback,
 } from 'js/ads/consentManagement'
 
 class App extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.consentChangeCallback = null
   }
 
-  async componentDidMount () {
+  async componentDidMount() {
     var isEU
     try {
       isEU = await isInEuropeanUnion()
@@ -26,19 +26,19 @@ class App extends React.Component {
     }
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     if (this.consentChangeCallback) {
       unregisterConsentCallback(this.consentChangeCallback)
     }
   }
 
-  async handleDataConsentDecision () {
+  async handleDataConsentDecision() {
     // Store the consent data. We'll log it to the server with
     // the user's ID after the user authenticates.
     saveConsentUpdateEventToLocalStorage()
   }
 
-  render () {
+  render() {
     const root = {
       position: 'absolute',
       top: 0,
@@ -47,14 +47,10 @@ class App extends React.Component {
       left: 0,
       margin: 0,
       padding: 0,
-      border: 'none'
+      border: 'none',
     }
 
-    return (
-      <div style={root}>
-        {this.props.children}
-      </div>
-    )
+    return <div style={root}>{this.props.children}</div>
   }
 }
 

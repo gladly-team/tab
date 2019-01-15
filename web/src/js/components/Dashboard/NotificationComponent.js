@@ -4,49 +4,52 @@ import Paper from '@material-ui/core/Paper'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import Link from 'js/components/General/Link'
-import {
-  setNotificationDismissTime
-} from 'js/utils/local-user-data-mgr'
+import { setNotificationDismissTime } from 'js/utils/local-user-data-mgr'
 
 class Notification extends React.Component {
-  render () {
-    const { style, title, message, buttonText, buttonURL, onDismiss } = this.props
+  render() {
+    const {
+      style,
+      title,
+      message,
+      buttonText,
+      buttonURL,
+      onDismiss,
+    } = this.props
     return (
-      <div style={Object.assign({}, style, {
-        width: 340
-      })}>
+      <div
+        style={Object.assign({}, style, {
+          width: 340,
+        })}
+      >
         <Paper
           style={{
-            padding: '6px 14px'
+            padding: '6px 14px',
           }}
         >
           <span
             style={{
               display: 'flex',
               flexDirection: 'column',
-              alignItems: 'flex-start'
+              alignItems: 'flex-start',
             }}
           >
             <Typography
               style={{
                 fontWeight: 'bold',
                 marginBottom: 8,
-                marginTop: 8
+                marginTop: 8,
               }}
               variant={'body2'}
             >
               {title}
             </Typography>
-            <Typography
-              variant={'body2'}
-            >
-              {message}
-            </Typography>
+            <Typography variant={'body2'}>{message}</Typography>
             <div
               style={{
                 display: 'flex',
                 alignSelf: 'flex-end',
-                marginTop: 10
+                marginTop: 10,
               }}
             >
               <Button
@@ -60,26 +63,18 @@ class Notification extends React.Component {
               >
                 Dismiss
               </Button>
-              {
-                (buttonText && buttonURL)
-                  ? (
-                    <Link
-                      to={buttonURL}
-                      target='_blank'
-                      rel='noopener noreferrer'
-                      style={{
-                        textDecoration: 'none'
-                      }}
-                    >
-                      <Button
-                        color={'primary'}
-                      >
-                        {buttonText}
-                      </Button>
-                    </Link>
-                  )
-                  : null
-              }
+              {buttonText && buttonURL ? (
+                <Link
+                  to={buttonURL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    textDecoration: 'none',
+                  }}
+                >
+                  <Button color={'primary'}>{buttonText}</Button>
+                </Link>
+              ) : null}
             </div>
           </span>
         </Paper>
@@ -94,12 +89,12 @@ Notification.propTypes = {
   message: PropTypes.string.isRequired,
   buttonText: PropTypes.string,
   buttonURL: PropTypes.string,
-  onDismiss: PropTypes.func
+  onDismiss: PropTypes.func,
 }
 
 Notification.defaultProps = {
   style: {},
-  onDismiss: () => {}
+  onDismiss: () => {},
 }
 
 export default Notification

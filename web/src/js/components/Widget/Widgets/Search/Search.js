@@ -4,23 +4,23 @@ import SearchIcon from 'material-ui/svg-icons/action/search'
 import TextField from 'material-ui/TextField'
 import appTheme, {
   dashboardIconInactiveColor,
-  dashboardIconActiveColor
+  dashboardIconActiveColor,
 } from 'js/theme/default'
 import { getWidgetConfig } from 'js/utils/widgets-utils'
 import { searchExecuted } from 'js/analytics/logEvent'
 
 class Search extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
       hover: false,
       focused: false,
-      config: {}
+      config: {},
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     const { widget } = this.props
 
     // TODO: have server send these as objects
@@ -28,17 +28,17 @@ class Search extends React.Component {
     const settings = JSON.parse(widget.settings)
     const configuration = getWidgetConfig(config, settings)
     this.setState({
-      config: configuration
+      config: configuration,
     })
   }
 
-  handleKeyPress (e) {
+  handleKeyPress(e) {
     if (e.key === 'Enter') {
       this.executeSearch()
     }
   }
 
-  async executeSearch () {
+  async executeSearch() {
     await searchExecuted()
 
     const engine = this.state.config.engine || 'Google'
@@ -49,23 +49,23 @@ class Search extends React.Component {
     window.open(searchApi + searchTerm, '_top')
   }
 
-  onSearchHover (hover) {
+  onSearchHover(hover) {
     this.setState({
-      hover: hover
+      hover: hover,
     })
   }
 
-  onSearchClick () {
+  onSearchClick() {
     this.searchInput.focus()
   }
 
-  onInputFocusChanged (focused) {
+  onInputFocusChanged(focused) {
     this.setState({
-      focused: focused
+      focused: focused,
     })
   }
 
-  getSearchApi (engine) {
+  getSearchApi(engine) {
     switch (engine) {
       case 'Google':
         return 'https://www.google.com/search?q='
@@ -78,7 +78,7 @@ class Search extends React.Component {
     }
   }
 
-  render () {
+  render() {
     const searchContainerStyle = {
       display: 'flex',
       alignItems: 'center',
@@ -86,32 +86,28 @@ class Search extends React.Component {
       position: 'relative',
       zIndex: 1,
       marginLeft: 14,
-      height: 56
+      height: 56,
     }
     const iconStyle = {
-      marginRight: 14
+      marginRight: 14,
     }
     const underlineStyle = {
       borderColor: appTheme.palette.borderColor,
-      opacity: (
-        this.state.hover || this.state.focused
-          ? 100
-          : 0
-      ),
-      transition: 'opacity 150ms ease-in'
+      opacity: this.state.hover || this.state.focused ? 100 : 0,
+      transition: 'opacity 150ms ease-in',
     }
     const underlineFocusStyle = {
-      borderColor: dashboardIconActiveColor
+      borderColor: dashboardIconActiveColor,
     }
     const inputContainerStyle = {
-      width: 220
+      width: 220,
     }
     const inputStyle = {
       textAlign: 'left',
       color: dashboardIconActiveColor,
       fontSize: 18,
       fontWeight: 'normal',
-      fontFamily: appTheme.fontFamily
+      fontFamily: appTheme.fontFamily,
     }
 
     return (
@@ -119,10 +115,11 @@ class Search extends React.Component {
         style={searchContainerStyle}
         onClick={this.onSearchClick.bind(this)}
         onMouseEnter={this.onSearchHover.bind(this, true)}
-        onMouseLeave={this.onSearchHover.bind(this, false)}>
+        onMouseLeave={this.onSearchHover.bind(this, false)}
+      >
         <SearchIcon
           color={
-            (this.state.hover || this.state.focused)
+            this.state.hover || this.state.focused
               ? dashboardIconActiveColor
               : dashboardIconInactiveColor
           }
@@ -133,12 +130,15 @@ class Search extends React.Component {
           id={'tab-search-id'}
           onFocus={this.onInputFocusChanged.bind(this, true)}
           onBlur={this.onInputFocusChanged.bind(this, false)}
-          ref={(input) => { this.searchInput = input }}
+          ref={input => {
+            this.searchInput = input
+          }}
           onKeyPress={this.handleKeyPress.bind(this)}
           style={inputContainerStyle}
           inputStyle={inputStyle}
           underlineStyle={underlineStyle}
-          underlineFocusStyle={underlineFocusStyle} />
+          underlineFocusStyle={underlineFocusStyle}
+        />
       </span>
     )
   }
@@ -152,11 +152,11 @@ Search.propTypes = {
     data: PropTypes.string.isRequired,
     config: PropTypes.string.isRequired,
     settings: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired
+    type: PropTypes.string.isRequired,
   }).isRequired,
   user: PropTypes.shape({
-    id: PropTypes.string.isRequired
-  }).isRequired
+    id: PropTypes.string.isRequired,
+  }).isRequired,
 }
 
 export default Search

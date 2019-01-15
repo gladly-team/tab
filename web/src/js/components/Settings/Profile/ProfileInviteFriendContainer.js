@@ -1,7 +1,5 @@
 import graphql from 'babel-plugin-relay/macro'
-import {
-  createFragmentContainer
-} from 'react-relay'
+import { createFragmentContainer } from 'react-relay'
 
 import ProfileInviteFriend from 'js/components/Settings/Profile/ProfileInviteFriendComponent'
 
@@ -16,5 +14,5 @@ export default createFragmentContainer(ProfileInviteFriend, {
       numUsersRecruited
       ...InviteFriendContainer_user
     }
-  `
+  `,
 })

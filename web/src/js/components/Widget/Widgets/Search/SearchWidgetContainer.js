@@ -1,7 +1,5 @@
 import graphql from 'babel-plugin-relay/macro'
-import {
-  createFragmentContainer
-} from 'react-relay'
+import { createFragmentContainer } from 'react-relay'
 
 import SearchWidget from 'js/components/Widget/Widgets/Search/SearchWidgetComponent'
 
@@ -21,5 +19,5 @@ export default createFragmentContainer(SearchWidget, {
     fragment SearchWidgetContainer_user on User {
       id
     }
-  `
+  `,
 })

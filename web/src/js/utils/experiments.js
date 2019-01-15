@@ -1,24 +1,22 @@
-
-import {
-  filter,
-  find
-} from 'lodash/collection'
+import { filter, find } from 'lodash/collection'
 import { isNil } from 'lodash/lang'
 import localStorageMgr from 'js/utils/localstorage-mgr'
-import {
-  STORAGE_EXPERIMENT_PREFIX
-} from 'js/constants'
-import {
-  onlyIncludeNewUsers
-} from 'js/utils/experimentFilters'
+import { STORAGE_EXPERIMENT_PREFIX } from 'js/constants'
+import { onlyIncludeNewUsers } from 'js/utils/experimentFilters'
 import environment from 'js/relay-env'
 import UpdateUserExperimentGroupsMutation from 'js/mutations/UpdateUserExperimentGroupsMutation'
 
 const noneGroupKey = 'NONE'
 
-export const createExperiment = ({ name, active = false, disabled = false, groups,
-  filters = [], percentageOfExistingUsersInExperiment = 0.0,
-  percentageOfNewUsersInExperiment = 100.0 }) => {
+export const createExperiment = ({
+  name,
+  active = false,
+  disabled = false,
+  groups,
+  filters = [],
+  percentageOfExistingUsersInExperiment = 0.0,
+  percentageOfNewUsersInExperiment = 100.0,
+}) => {
   if (!name) {
     throw new Error('An experiment must have a unique "name" value.')
   }
@@ -56,17 +54,19 @@ export const createExperiment = ({ name, active = false, disabled = false, group
     filters: filters,
     // The different experiment groups the user could be assigned to.
     groups: Object.assign({}, groups, {
-      [noneGroupKey]: NoneExperimentGroup
+      [noneGroupKey]: NoneExperimentGroup,
     }),
     _localStorageKey: `${STORAGE_EXPERIMENT_PREFIX}.${name}`,
-    _saveTestGroupToLocalStorage: function (testGroupValue) {
+    _saveTestGroupToLocalStorage: function(testGroupValue) {
       localStorageMgr.setItem(this._localStorageKey, testGroupValue)
     },
     // This is to track changes/increases in % users included in a test.
     _localStorageKeyForPercentage: `${STORAGE_EXPERIMENT_PREFIX}.${name}.percentageOfUsersLastAssigned`,
-    _savePercentageUsersToLocalStorage: function () {
-      localStorageMgr.setItem(this._localStorageKeyForPercentage,
-        this.percentageOfExistingUsersInExperiment)
+    _savePercentageUsersToLocalStorage: function() {
+      localStorageMgr.setItem(
+        this._localStorageKeyForPercentage,
+        this.percentageOfExistingUsersInExperiment
+      )
     },
     /**
      * Get the value for the percentage of users included in this
@@ -75,10 +75,11 @@ export const createExperiment = ({ name, active = false, disabled = false, group
      *   `this.percentageOfExistingUsersInExperiment`; or, if we have never
      *   tried to assign this user, return zero.
      */
-    _getPercentageUsersFromLocalStorage: function () {
+    _getPercentageUsersFromLocalStorage: function() {
       const percentage = parseFloat(
         localStorageMgr.getItem(this._localStorageKeyForPercentage),
-        10)
+        10
+      )
       return isNaN(percentage) ? 0.0 : percentage
     },
     /**
@@ -87,7 +88,7 @@ export const createExperiment = ({ name, active = false, disabled = false, group
      * @returns {Boolean} Whether the user has previously been
      *   assigned to a group for this experiment.
      */
-    _hasBeenAssignedToGroup: function () {
+    _hasBeenAssignedToGroup: function() {
       return !isNil(localStorageMgr.getItem(this._localStorageKey))
     },
     /**
@@ -98,7 +99,7 @@ export const createExperiment = ({ name, active = false, disabled = false, group
      *   assignTestGroup.
      * @returns {undefined}
      */
-    _saveTestGroup: function (testGroup, userInfo) {
+    _saveTestGroup: function(testGroup, userInfo) {
       this._saveTestGroupToLocalStorage(testGroup.value)
 
       // Update storage with the current % of users who are included in the
@@ -106,15 +107,12 @@ export const createExperiment = ({ name, active = false, disabled = false, group
       this._savePercentageUsersToLocalStorage()
 
       const experimentName = this.name
-      UpdateUserExperimentGroupsMutation(
-        environment,
-        {
-          userId: userInfo.id,
-          experimentGroups: {
-            [experimentName]: testGroup.schemaValue
-          }
-        }
-      )
+      UpdateUserExperimentGroupsMutation(environment, {
+        userId: userInfo.id,
+        experimentGroups: {
+          [experimentName]: testGroup.schemaValue,
+        },
+      })
     },
     /**
      * Assign the user to an experiment group for this experiment.
@@ -126,7 +124,7 @@ export const createExperiment = ({ name, active = false, disabled = false, group
      *   signed up.
      * @returns {undefined}
      */
-    assignTestGroup: function (userInfo) {
+    assignTestGroup: function(userInfo) {
       if (!this.active) {
         return
       }
@@ -137,9 +135,11 @@ export const createExperiment = ({ name, active = false, disabled = false, group
 
       // If the filters exclude this user, don't assign them to an experiment
       // group.
-      if (!this.filters.every(function (filterFunc) {
-        return filterFunc.call(this, userInfo)
-      })) {
+      if (
+        !this.filters.every(function(filterFunc) {
+          return filterFunc.call(this, userInfo)
+        })
+      ) {
         return
       }
 
@@ -158,7 +158,10 @@ export const createExperiment = ({ name, active = false, disabled = false, group
       }
 
       // Exclude the "none" group.
-      const experimentGroups = filter(this.groups, groupObj => groupObj.value !== NoneExperimentGroup.value)
+      const experimentGroups = filter(
+        this.groups,
+        groupObj => groupObj.value !== NoneExperimentGroup.value
+      )
 
       // If there aren't any test groups, just save the "none" value.
       if (!experimentGroups.length) {
@@ -172,30 +175,27 @@ export const createExperiment = ({ name, active = false, disabled = false, group
       // we should use the difference in the percentages, which should
       // keep the value of `this.percentageOfExistingUsersInExperiment`
       // as a % of our active user base.
-      const likelihoodOfInclusion = (
-        userInfo.isNewUser
-          ? this.percentageOfNewUsersInExperiment
-          : (
-            100.0 *
-            (this.percentageOfExistingUsersInExperiment - previousPercentage) /
-            (100 - previousPercentage)
-          )
-      )
+      const likelihoodOfInclusion = userInfo.isNewUser
+        ? this.percentageOfNewUsersInExperiment
+        : (100.0 *
+            (this.percentageOfExistingUsersInExperiment - previousPercentage)) /
+          (100 - previousPercentage)
 
       // Only assign the experiment to a percentage of random users.
-      if ((100 * Math.random()) > likelihoodOfInclusion) {
+      if (100 * Math.random() > likelihoodOfInclusion) {
         this._saveTestGroup(this.groups.NONE, userInfo)
         return
       }
 
       // There's an equal chance of being assigned to any group,
       // excepting the "none" group.
-      const group = experimentGroups[Math.floor(Math.random() * experimentGroups.length)]
+      const group =
+        experimentGroups[Math.floor(Math.random() * experimentGroups.length)]
       this._saveTestGroup(group, userInfo)
     },
     // Return the the user's assigned experiment group, or the
     // NoneExperimentGroup if the user is not assigned to one.
-    getTestGroup: function () {
+    getTestGroup: function() {
       // If the test is disabled, return the "none" group value.
       if (this.disabled) {
         return this.groups.NONE
@@ -206,7 +206,7 @@ export const createExperiment = ({ name, active = false, disabled = false, group
       const groupVal = localStorageMgr.getItem(this._localStorageKey)
       const group = find(this.groups, { value: groupVal }) || this.groups.NONE
       return group
-    }
+    },
   }
 }
 
@@ -224,11 +224,13 @@ export const createExperiment = ({ name, active = false, disabled = false, group
  */
 export const createExperimentGroup = ({ value, schemaValue }) => {
   if (!(value && schemaValue)) {
-    throw new Error('An experiment group must have values for the "value" and "schemaValue" keys.')
+    throw new Error(
+      'An experiment group must have values for the "value" and "schemaValue" keys.'
+    )
   }
   return {
     value,
-    schemaValue
+    schemaValue,
   }
 }
 
@@ -236,7 +238,7 @@ export const createExperimentGroup = ({ value, schemaValue }) => {
 // experiment group (e.g., not included in the experiment).
 const NoneExperimentGroup = createExperimentGroup({
   value: 'none',
-  schemaValue: 'NONE'
+  schemaValue: 'NONE',
 })
 
 // Add experiment names here as constants.
@@ -254,46 +256,42 @@ export const _experimentsConfig = [
     name: EXPERIMENT_ONE_AD_FOR_NEW_USERS,
     active: true,
     disabled: false,
-    filters: [
-      onlyIncludeNewUsers
-    ],
+    filters: [onlyIncludeNewUsers],
     groups: {
       DEFAULT: createExperimentGroup({
         value: 'default',
-        schemaValue: 'DEFAULT'
+        schemaValue: 'DEFAULT',
       }),
       ONE_AD_AT_FIRST: createExperimentGroup({
         value: 'oneAd',
-        schemaValue: 'ONE_AD_AT_FIRST'
-      })
-    }
+        schemaValue: 'ONE_AD_AT_FIRST',
+      }),
+    },
   }),
   // @experiment-ad-explanation
   createExperiment({
     name: EXPERIMENT_AD_EXPLANATION,
     active: true,
     disabled: false,
-    filters: [
-      onlyIncludeNewUsers
-    ],
+    filters: [onlyIncludeNewUsers],
     groups: {
       DEFAULT: createExperimentGroup({
         value: 'default',
-        schemaValue: 'DEFAULT'
+        schemaValue: 'DEFAULT',
       }),
       SHOW_EXPLANATION: createExperimentGroup({
         value: 'explanation',
-        schemaValue: 'SHOW_EXPLANATION'
-      })
-    }
-  })
+        schemaValue: 'SHOW_EXPLANATION',
+      }),
+    },
+  }),
 ]
 
 // We do this to be able to modify the experiments
 // variable during testing while keeping it in this file.
 // https://github.com/facebook/jest/issues/936#issuecomment-214939935
 export const _experiments = {
-  getExperiments: () => _experimentsConfig
+  getExperiments: () => _experimentsConfig,
 }
 
 /**
@@ -313,18 +311,17 @@ export const getExperimentGroups = experimentName => {
   // NoneExperimentGroup.
   if (!exp) {
     return {
-      [noneGroupKey]: NoneExperimentGroup.value
+      [noneGroupKey]: NoneExperimentGroup.value,
     }
   }
 
   // Return only the ExperimentGroup string value for ease
   // of comparing user group membership.
   const groups = exp.groups
-  const groupNames = Object.keys(groups)
-    .reduce((result, key) => {
-      result[key] = groups[key].value
-      return result
-    }, {})
+  const groupNames = Object.keys(groups).reduce((result, key) => {
+    result[key] = groups[key].value
+    return result
+  }, {})
   return groupNames
 }
 

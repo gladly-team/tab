@@ -1,12 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {
-  formatUser,
-  getCurrentUserListener
-} from 'js/authentication/user'
-import {
-  checkAuthStateAndRedirectIfNeeded
-} from 'js/authentication/helpers'
+import { formatUser, getCurrentUserListener } from 'js/authentication/user'
+import { checkAuthStateAndRedirectIfNeeded } from 'js/authentication/helpers'
 
 // Get the authenticated user and, if the user is authenticated,
 // add the user's ID to the `variables` prop. By default, redirect
@@ -14,20 +9,20 @@ import {
 // TODO: change to a higher-order component:
 // https://reactjs.org/docs/higher-order-components.html
 class AuthUserComponent extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
-      userId: null
+      userId: null,
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     // Store unsubscribe function.
     // https://firebase.google.com/docs/reference/js/firebase.auth.Auth#onAuthStateChanged
     this.authListenerUnsubscribe = getCurrentUserListener()
       // Note: currently, this callback may be called when a user does not
       // exist on the server side, and some requests may fail.
-      .onAuthStateChanged((user) => {
+      .onAuthStateChanged(user => {
         // TODO: roll the formatting functionality into the
         // listener.
         if (user) {
@@ -39,13 +34,13 @@ class AuthUserComponent extends React.Component {
       })
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     if (typeof this.authListenerUnsubscribe === 'function') {
       this.authListenerUnsubscribe()
     }
   }
 
-  async checkUserAuth (user) {
+  async checkUserAuth(user) {
     // If the user is not fully logged in, redirect to the
     // appropriate auth page.
     try {
@@ -57,43 +52,39 @@ class AuthUserComponent extends React.Component {
     // If the user is authed, set the ID in state.
     if (!redirecting && user && user.id) {
       this.setState({
-        userId: user.id
+        userId: user.id,
       })
     }
   }
 
-  render () {
+  render() {
     if (!this.state.userId) {
       return null
     }
 
     const root = {
       height: '100%',
-      width: '100%'
+      width: '100%',
     }
 
-    const childrenWithProps = React.Children.map(this.props.children,
-      (child) => React.cloneElement(child, {
+    const childrenWithProps = React.Children.map(this.props.children, child =>
+      React.cloneElement(child, {
         variables: Object.assign({}, this.props.variables, {
-          userId: this.state.userId
-        })
+          userId: this.state.userId,
+        }),
       })
     )
 
-    return (
-      <div style={root}>
-        {childrenWithProps}
-      </div>
-    )
+    return <div style={root}>{childrenWithProps}</div>
   }
 }
 
 AuthUserComponent.propTypes = {
-  variables: PropTypes.object
+  variables: PropTypes.object,
 }
 
 AuthUserComponent.defaultProps = {
-  variables: {}
+  variables: {},
 }
 
 export default AuthUserComponent

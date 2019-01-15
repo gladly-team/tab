@@ -1,10 +1,8 @@
 import React from 'react'
-import {
-  getCurrentUserListener
-} from 'js/authentication/user'
+import { getCurrentUserListener } from 'js/authentication/user'
 
 // https://reactjs.org/docs/higher-order-components.html#convention-wrap-the-display-name-for-easy-debugging
-function getDisplayName (WrappedComponent) {
+function getDisplayName(WrappedComponent) {
   return WrappedComponent.displayName || WrappedComponent.name || 'Component'
 }
 
@@ -17,37 +15,38 @@ function getDisplayName (WrappedComponent) {
  */
 const withUserId = (options = {}) => WrappedComponent => {
   class CompWithUserId extends React.Component {
-    constructor (props) {
+    constructor(props) {
       super(props)
       this.state = {
         userId: null,
-        authStateLoaded: false
+        authStateLoaded: false,
       }
     }
 
-    componentDidMount () {
+    componentDidMount() {
       // Store unsubscribe function.
       // https://firebase.google.com/docs/reference/js/firebase.auth.Auth#onAuthStateChanged
-      this.authListenerUnsubscribe = getCurrentUserListener()
-        .onAuthStateChanged((user) => {
+      this.authListenerUnsubscribe = getCurrentUserListener().onAuthStateChanged(
+        user => {
           if (user && user.uid) {
             this.setState({
-              userId: user.uid
+              userId: user.uid,
             })
           }
           this.setState({
-            authStateLoaded: true
+            authStateLoaded: true,
           })
-        })
+        }
+      )
     }
 
-    componentWillUnmount () {
+    componentWillUnmount() {
       if (typeof this.authListenerUnsubscribe === 'function') {
         this.authListenerUnsubscribe()
       }
     }
 
-    render () {
+    render() {
       const { renderIfNoUser } = options
       // Return null if the user is not authenticated but the children require
       // an authenticated user.
@@ -61,7 +60,9 @@ const withUserId = (options = {}) => WrappedComponent => {
       return <WrappedComponent userId={this.state.userId} {...this.props} />
     }
   }
-  CompWithUserId.displayName = `CompWithUserId(${getDisplayName(WrappedComponent)})`
+  CompWithUserId.displayName = `CompWithUserId(${getDisplayName(
+    WrappedComponent
+  )})`
   return CompWithUserId
 }
 

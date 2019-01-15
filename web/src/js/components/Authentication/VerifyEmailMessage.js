@@ -1,51 +1,45 @@
 import React from 'react'
 import { Paper } from 'material-ui'
 import RaisedButton from 'material-ui/RaisedButton'
-import {
-  logout,
-  sendVerificationEmail
-} from 'js/authentication/user'
-import {
-  goTo,
-  loginURL
-} from 'js/navigation/navigation'
+import { logout, sendVerificationEmail } from 'js/authentication/user'
+import { goTo, loginURL } from 'js/navigation/navigation'
 
 class VerifyEmailMessage extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       emailResent: false,
       emailResendingInProgress: false,
-      emailResendingError: false
+      emailResendingError: false,
     }
   }
 
-  async resendEmailClick (e) {
+  async resendEmailClick(e) {
     this.setState({
       emailResendingInProgress: true,
-      emailResendingError: false
+      emailResendingError: false,
     })
     const emailSent = await sendVerificationEmail()
     if (emailSent) {
       this.setState({
         emailResent: true,
-        emailResendingInProgress: false
+        emailResendingInProgress: false,
       })
     } else {
       this.setState({
         emailResent: false,
         emailResendingError: true,
-        emailResendingInProgress: false
+        emailResendingInProgress: false,
       })
     }
   }
 
-  async restartAuthFlow () {
+  async restartAuthFlow() {
     await logout()
     goTo(loginURL)
   }
 
-  render () {
+  render() {
     var buttonLabel = 'RESEND EMAIL'
     var buttonDisabled = false
     if (this.state.emailResendingInProgress) {
@@ -67,7 +61,7 @@ class VerifyEmailMessage extends React.Component {
         style={{
           padding: 24,
           maxWidth: 400,
-          backgroundColor: '#FFF'
+          backgroundColor: '#FFF',
         }}
       >
         <p>Please check your email to verify your account.</p>
@@ -75,7 +69,7 @@ class VerifyEmailMessage extends React.Component {
           style={{
             display: 'flex',
             justifyContent: 'flex-end',
-            marginTop: 24
+            marginTop: 24,
           }}
           data-test-id={'verify-email-message-button-container'}
         >
@@ -84,7 +78,7 @@ class VerifyEmailMessage extends React.Component {
             disabled={buttonDisabled}
             onClick={this.restartAuthFlow.bind(this)}
             style={{
-              marginRight: 8
+              marginRight: 8,
             }}
           />
           <RaisedButton

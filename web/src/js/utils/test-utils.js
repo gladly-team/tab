@@ -4,11 +4,16 @@ import React from 'react'
 
 // Like Enzyme's `find` method, but polling to wait for
 // elements to mount.
-export const enzymeFindAsync = async (rootComponent, selector, maxTimeMs = 4000, intervalMs = 50) => {
-  function enzymeFind () {
+export const enzymeFindAsync = async (
+  rootComponent,
+  selector,
+  maxTimeMs = 4000,
+  intervalMs = 50
+) => {
+  function enzymeFind() {
     return rootComponent.update().find(selector)
   }
-  function timeout (ms) {
+  function timeout(ms) {
     return new Promise(resolve => setTimeout(resolve, ms))
   }
   var elems = []
@@ -33,26 +38,32 @@ export const enzymeFindAsync = async (rootComponent, selector, maxTimeMs = 4000,
  * @param {Object} properties - Values to override the default properties in the mock
  * @return {Object}
  */
-export const mockGoogleTagSlotRenderEndedData = (slotId = 'abc-123',
-  adUnitCode = '/123456/some-ad/', properties = {}) => {
-  return Object.assign({}, {
-    // https://developers.google.com/doubleclick-gpt/reference#googletagslot
-    slot: {
-      getSlotElementId: () => slotId,
-      getAdUnitPath: () => adUnitCode
-      // ... other methods here
+export const mockGoogleTagSlotRenderEndedData = (
+  slotId = 'abc-123',
+  adUnitCode = '/123456/some-ad/',
+  properties = {}
+) => {
+  return Object.assign(
+    {},
+    {
+      // https://developers.google.com/doubleclick-gpt/reference#googletagslot
+      slot: {
+        getSlotElementId: () => slotId,
+        getAdUnitPath: () => adUnitCode,
+        // ... other methods here
+      },
+      advertiserId: 1234,
+      campaignId: 99887766,
+      creativeId: 111222333444555,
+      isEmpty: false,
+      lineItemId: 123456,
+      serviceName: 'something',
+      size: '728x90',
+      sourceAgnosticCreativeId: null,
+      sourceAgnosticLineItemId: null,
     },
-    advertiserId: 1234,
-    campaignId: 99887766,
-    creativeId: 111222333444555,
-    isEmpty: false,
-    lineItemId: 123456,
-    serviceName: 'something',
-    size: '728x90',
-    sourceAgnosticCreativeId: null,
-    sourceAgnosticLineItemId: null
-  },
-  properties)
+    properties
+  )
 }
 
 /**
@@ -62,16 +73,22 @@ export const mockGoogleTagSlotRenderEndedData = (slotId = 'abc-123',
  * @param {Object} properties - Values to override the default properties in the mock
  * @return {Object}
  */
-export const mockGoogleTagImpressionViewableData = (slotId = 'abc-123', properties = {}) => {
-  return Object.assign({}, {
-    // https://developers.google.com/doubleclick-gpt/reference#googletagslot
-    slot: {
-      getSlotElementId: () => slotId
-      // ... other methods here
+export const mockGoogleTagImpressionViewableData = (
+  slotId = 'abc-123',
+  properties = {}
+) => {
+  return Object.assign(
+    {},
+    {
+      // https://developers.google.com/doubleclick-gpt/reference#googletagslot
+      slot: {
+        getSlotElementId: () => slotId,
+        // ... other methods here
+      },
+      serviceName: 'something',
     },
-    serviceName: 'something'
-  },
-  properties)
+    properties
+  )
 }
 
 /**
@@ -81,16 +98,22 @@ export const mockGoogleTagImpressionViewableData = (slotId = 'abc-123', properti
  * @param {Object} properties - Values to override the default properties in the mock
  * @return {Object}
  */
-export const mockGoogleTagSlotOnloadData = (slotId = 'abc-123', properties = {}) => {
-  return Object.assign({}, {
-    // https://developers.google.com/doubleclick-gpt/reference#googletagslot
-    slot: {
-      getSlotElementId: () => slotId
-      // ... other methods here
+export const mockGoogleTagSlotOnloadData = (
+  slotId = 'abc-123',
+  properties = {}
+) => {
+  return Object.assign(
+    {},
+    {
+      // https://developers.google.com/doubleclick-gpt/reference#googletagslot
+      slot: {
+        getSlotElementId: () => slotId,
+        // ... other methods here
+      },
+      serviceName: 'something',
     },
-    serviceName: 'something'
-  },
-  properties)
+    properties
+  )
 }
 
 /**
@@ -99,15 +122,18 @@ export const mockGoogleTagSlotOnloadData = (slotId = 'abc-123', properties = {})
  * @return {Object}
  */
 export const mockAmazonBidResponse = (properties = {}) => {
-  return Object.assign({}, {
-    amznbid: '1',
-    amzniid: 'some-id',
-    amznp: '1',
-    amznsz: '0x0',
-    size: '0x0',
-    slotID: 'div-gpt-ad-123456789-0'
-  },
-  properties)
+  return Object.assign(
+    {},
+    {
+      amznbid: '1',
+      amzniid: 'some-id',
+      amznp: '1',
+      amznsz: '0x0',
+      size: '0x0',
+      slotID: 'div-gpt-ad-123456789-0',
+    },
+    properties
+  )
 }
 
 /**
@@ -145,9 +171,9 @@ export const getDefaultTabGlobal = (properties = {}) => {
       // Marking which slots have had their revenue logged.
       // Key: slot ID
       // Value: `true`
-      slotsAlreadyLoggedRevenue: {}
+      slotsAlreadyLoggedRevenue: {},
     },
-    featureFlags: {}
+    featureFlags: {},
   }
 }
 
@@ -164,16 +190,13 @@ export const createMockReactComponent = (componentName, childProps = null) => {
   const MockComponent = props => {
     var children
     if (props) {
-      children = childProps ? (
-        React.Children.map(
-          props.children,
-          (child) => React.cloneElement(child, childProps)
-        )
-      ) : props.children
+      children = childProps
+        ? React.Children.map(props.children, child =>
+            React.cloneElement(child, childProps)
+          )
+        : props.children
     }
-    return (
-      <span>{children}</span>
-    )
+    return <span>{children}</span>
   }
   MockComponent.displayName = componentName || 'MyMockComponent'
   return MockComponent
@@ -195,7 +218,7 @@ export const flushAllPromises = async () => {
  * https://github.com/facebook/jest/issues/2157
  * @return {Promise<undefined>}
  */
-export const runAsyncTimerLoops = async (numLoops) => {
+export const runAsyncTimerLoops = async numLoops => {
   for (var i = 0; i < numLoops; i++) {
     await flushAllPromises()
     jest.runAllTimers()

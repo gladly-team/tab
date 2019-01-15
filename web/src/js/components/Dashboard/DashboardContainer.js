@@ -1,7 +1,5 @@
 import graphql from 'babel-plugin-relay/macro'
-import {
-  createFragmentContainer
-} from 'react-relay'
+import { createFragmentContainer } from 'react-relay'
 
 import Dashboard from 'js/components/Dashboard/DashboardComponent'
 
@@ -27,5 +25,5 @@ export default createFragmentContainer(Dashboard, {
       ...NewUserTourContainer_user
       ...AssignExperimentGroupsContainer_user
     }
-  `
+  `,
 })

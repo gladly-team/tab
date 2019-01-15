@@ -1,4 +1,3 @@
-
 const DEBUG = false
 
 var fbq = window.fbq

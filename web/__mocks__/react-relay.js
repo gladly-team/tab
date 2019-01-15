@@ -13,31 +13,31 @@ const RelayMock = jest.genMockFromModule('react-relay')
 */
 
 const relayChildContextTypes = {
-  relay: PropTypes.object
+  relay: PropTypes.object,
 }
 
 const relayEnvironment = {
-  lookup: jest.fn()
+  lookup: jest.fn(),
 }
 
 const relayContext = {
   relay: {
     environment: relayEnvironment,
-    variables: {}
-  }
+    variables: {},
+  },
 }
 
 const relayFragmentProps = {
   relay: {
-    environment: relayEnvironment
-  }
+    environment: relayEnvironment,
+  },
 }
 
 const relayRefetchProps = {
   relay: {
     environment: relayEnvironment,
-    refetch: jest.fn()
-  }
+    refetch: jest.fn(),
+  },
 }
 
 const relayPaginationProps = {
@@ -45,18 +45,18 @@ const relayPaginationProps = {
     environment: relayEnvironment,
     hasMore: jest.fn(),
     loadMore: jest.fn(),
-    isLoading: jest.fn()
-  }
+    isLoading: jest.fn(),
+  },
 }
 
-function makeRelayWrapper (relayProps) {
-  return function (Comp) {
+function makeRelayWrapper(relayProps) {
+  return function(Comp) {
     class HOC extends React.Component {
-      getChildContext () {
+      getChildContext() {
         return relayContext
       }
 
-      render () {
+      render() {
         return <Comp {...this.props} {...relayProps} />
       }
     }
@@ -77,7 +77,7 @@ RelayMock.createPaginationContainer = makeRelayWrapper(relayPaginationProps)
 var queryRendererResponse = {
   error: null,
   props: null,
-  retry: jest.fn()
+  retry: jest.fn(),
 }
 
 // A queue of mock QueryRender response objects that will be
@@ -152,7 +152,7 @@ RelayMock.__getMockRecordProxy = () => ({
   getValue: jest.fn(),
   setLinkedRecord: jest.fn(),
   setLinkedRecords: jest.fn(),
-  setValue: jest.fn()
+  setValue: jest.fn(),
 })
 
 module.exports = RelayMock

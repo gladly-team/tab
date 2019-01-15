@@ -8,24 +8,24 @@ export const __disableAutomaticCommandQueueExecution = () => {
 
 // Run all functions in googletag.cmd.
 export const __runCommandQueue = () => {
-  window.googletag.cmd.forEach((cmd) => cmd())
+  window.googletag.cmd.forEach(cmd => cmd())
 }
 
 var mockPubadsRefresh = jest.fn()
 const mockEnableSingleRequest = jest.fn()
 
 // Set a mock function for googletag.pubads().refresh.
-export const __setPubadsRefreshMock = (mockFunction) => {
+export const __setPubadsRefreshMock = mockFunction => {
   mockPubadsRefresh = mockFunction
 }
 
 // Mock an event fired.
 export const __runEventListenerCallbacks = (eventName, ...args) => {
-  eventListenerStore[eventName].forEach((f) => f(...args))
+  eventListenerStore[eventName].forEach(f => f(...args))
 }
 
 const mockCmd = []
-mockCmd.push = (f) => f()
+mockCmd.push = f => f()
 
 const eventListenerStore = {}
 
@@ -40,12 +40,12 @@ export default () => {
         eventListenerStore[eventName].push(callback)
       },
       enableSingleRequest: mockEnableSingleRequest,
-      refresh: mockPubadsRefresh
+      refresh: mockPubadsRefresh,
     }),
     defineSlot: jest.fn(() => ({
-      addService: jest.fn()
+      addService: jest.fn(),
     })),
-    enableServices: jest.fn()
+    enableServices: jest.fn(),
   }
   return window.googletag
 }

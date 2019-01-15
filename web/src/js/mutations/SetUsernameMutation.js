@@ -1,7 +1,5 @@
 import graphql from 'babel-plugin-relay/macro'
-import {
-  commitMutation
-} from 'react-relay'
+import { commitMutation } from 'react-relay'
 
 const mutation = graphql`
   mutation SetUsernameMutation($input: SetUsernameInput!) {
@@ -17,19 +15,21 @@ const mutation = graphql`
   }
 `
 
-function commit (environment, userId, username,
-  onCompleted = () => {}, onError = () => {}) {
-  return commitMutation(
-    environment,
-    {
-      mutation,
-      variables: {
-        input: { userId, username }
-      },
-      onCompleted,
-      onError
-    }
-  )
+function commit(
+  environment,
+  userId,
+  username,
+  onCompleted = () => {},
+  onError = () => {}
+) {
+  return commitMutation(environment, {
+    mutation,
+    variables: {
+      input: { userId, username },
+    },
+    onCompleted,
+    onError,
+  })
 }
 
 export default commit

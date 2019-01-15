@@ -8,6 +8,6 @@ export default {
     get: jest.fn(),
     getRoot: jest.fn(),
     getRootField: jest.fn(),
-    getPluralRootField: jest.fn()
-  }
+    getPluralRootField: jest.fn(),
+  },
 }

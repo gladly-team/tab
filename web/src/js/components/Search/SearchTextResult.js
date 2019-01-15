@@ -2,13 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 class SearchTextResult extends React.Component {
-  render () {
+  render() {
     const { result } = this.props
     return (
       <div
         style={{
           fontFamily: 'arial, sans-serif',
-          marginBottom: 24
+          marginBottom: 24,
         }}
       >
         <a href={result.linkURL} style={{ textDecoration: 'none' }}>
@@ -21,7 +21,7 @@ class SearchTextResult extends React.Component {
               textOverflow: 'ellipsis',
               fontSize: 18,
               fontWeight: 400,
-              lineHeight: 1.38
+              lineHeight: 1.38,
             }}
           >
             {result.title}
@@ -34,7 +34,7 @@ class SearchTextResult extends React.Component {
             lineHeight: 1.5,
             whiteSpace: 'nowrap',
             overflow: 'hidden',
-            textOverflow: 'ellipsis'
+            textOverflow: 'ellipsis',
           }}
         >
           {result.linkURL}
@@ -43,7 +43,7 @@ class SearchTextResult extends React.Component {
           style={{
             fontSize: 13,
             color: '#505050',
-            overflowWrap: 'break-word'
+            overflowWrap: 'break-word',
           }}
         >
           {result.snippet}
@@ -57,8 +57,8 @@ SearchTextResult.propTypes = {
   result: PropTypes.shape({
     title: PropTypes.string.isRequired,
     linkURL: PropTypes.string.isRequired,
-    snippet: PropTypes.string.isRequired
-  })
+    snippet: PropTypes.string.isRequired,
+  }),
 }
 
 SearchTextResult.defaultProps = {}

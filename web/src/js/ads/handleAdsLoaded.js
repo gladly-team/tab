@@ -1,4 +1,3 @@
-
 import getGoogleTag from 'js/ads/google/getGoogleTag'
 
 // Keep track of what ad slots have loaded. App code loads later and
@@ -12,11 +11,11 @@ export default () => {
       window.tabforacause.ads.slotsRendered[slotId] = eventData
     }
 
-    const markSlotAsViewable = (slotId) => {
+    const markSlotAsViewable = slotId => {
       window.tabforacause.ads.slotsViewable[slotId] = true
     }
 
-    const markSlotAsLoaded = (slotId) => {
+    const markSlotAsLoaded = slotId => {
       window.tabforacause.ads.slotsLoaded[slotId] = true
     }
 
@@ -31,7 +30,7 @@ export default () => {
       // https://developers.google.com/doubleclick-gpt/reference#googletag.events.SlotRenderEndedEvent
 
       // Keep track of data for rendered slots
-      googletag.pubads().addEventListener('slotRenderEnded', (event) => {
+      googletag.pubads().addEventListener('slotRenderEnded', event => {
         try {
           const slotId = event.slot.getSlotElementId()
           storeRenderedSlotData(slotId, event)
@@ -41,7 +40,7 @@ export default () => {
       })
 
       // Keep track of which slots have become viewable
-      googletag.pubads().addEventListener('impressionViewable', (event) => {
+      googletag.pubads().addEventListener('impressionViewable', event => {
         try {
           const slotId = event.slot.getSlotElementId()
           markSlotAsViewable(slotId)
@@ -51,7 +50,7 @@ export default () => {
       })
 
       // Keep track of which slots have actually loaded creative
-      googletag.pubads().addEventListener('slotOnload', (event) => {
+      googletag.pubads().addEventListener('slotOnload', event => {
         try {
           const slotId = event.slot.getSlotElementId()
           markSlotAsLoaded(slotId)

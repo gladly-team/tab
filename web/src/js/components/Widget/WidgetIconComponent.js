@@ -12,21 +12,21 @@ import ChatBubbleOutlineIcon from 'material-ui/svg-icons/communication/chat-bubb
 import SearchIcon from 'material-ui/svg-icons/action/search'
 import appTheme, {
   dashboardIconInactiveColor,
-  dashboardIconActiveColor
+  dashboardIconActiveColor,
 } from 'js/theme/default'
 import {
   WIDGET_TYPE_BOOKMARKS,
   WIDGET_TYPE_NOTES,
   WIDGET_TYPE_SEARCH,
-  WIDGET_TYPE_TODOS
+  WIDGET_TYPE_TODOS,
 } from 'js/constants'
 
 class WidgetIcon extends React.Component {
-  onWidgetIconClicked () {
+  onWidgetIconClicked() {
     this.props.onWidgetIconClicked(this.props.widget)
   }
 
-  render () {
+  render() {
     const { widget } = this.props
 
     const style = {
@@ -36,35 +36,31 @@ class WidgetIcon extends React.Component {
         borderRadius: '100%',
         margin: 5,
         width: 44,
-        height: 44
-      }
+        height: 44,
+      },
     }
     var activeStyle = {}
     if (this.props.active) {
-      const boxShadow = 'rgba(0, 0, 0, 0.3) 0px 19px 60px, rgba(0, 0, 0, 0.16) 0px 8px 10px'
+      const boxShadow =
+        'rgba(0, 0, 0, 0.3) 0px 19px 60px, rgba(0, 0, 0, 0.16) 0px 8px 10px'
       activeStyle = {
         background: appTheme.palette.primary1Color,
         boxShadow: boxShadow,
         transform: 'scale(1.14)',
-        WebkitBoxShadow: boxShadow
+        WebkitBoxShadow: boxShadow,
       }
     }
     const iconButtonStyle = Object.assign({}, style.container, activeStyle)
-    const iconColor = (
-      this.props.active
-        ? dashboardIconActiveColor
-        : dashboardIconInactiveColor
-    )
+    const iconColor = this.props.active
+      ? dashboardIconActiveColor
+      : dashboardIconInactiveColor
     const iconHoverColor = dashboardIconActiveColor
 
     var icon
     switch (widget.type) {
       case WIDGET_TYPE_BOOKMARKS:
         icon = (
-          <BookmarkBorderIcon
-            color={iconColor}
-            hoverColor={iconHoverColor}
-          />
+          <BookmarkBorderIcon color={iconColor} hoverColor={iconHoverColor} />
         )
         break
 
@@ -78,12 +74,7 @@ class WidgetIcon extends React.Component {
         break
 
       case WIDGET_TYPE_SEARCH:
-        icon = (
-          <SearchIcon
-            color={iconColor}
-            hoverColor={iconHoverColor}
-          />
-        )
+        icon = <SearchIcon color={iconColor} hoverColor={iconHoverColor} />
         break
 
       case WIDGET_TYPE_TODOS:
@@ -122,11 +113,11 @@ class WidgetIcon extends React.Component {
 WidgetIcon.propTypes = {
   widget: PropTypes.object.isRequired,
   onWidgetIconClicked: PropTypes.func.isRequired,
-  active: PropTypes.bool
+  active: PropTypes.bool,
 }
 
 WidgetIcon.defaultProps = {
-  active: false
+  active: false,
 }
 
 export default WidgetIcon

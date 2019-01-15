@@ -1,7 +1,5 @@
 import graphql from 'babel-plugin-relay/macro'
-import {
-  createFragmentContainer
-} from 'react-relay'
+import { createFragmentContainer } from 'react-relay'
 
 import NewUserTour from 'js/components/Dashboard/NewUserTourComponent'
 
@@ -14,5 +12,5 @@ export default createFragmentContainer(NewUserTour, {
     fragment NewUserTourContainer_user on User {
       ...InviteFriendContainer_user
     }
-  `
+  `,
 })

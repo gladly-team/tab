@@ -4,7 +4,7 @@ body {
   font-family: sans-serif;
 }
 
-/* Begin fade animation */ 
+/* Begin fade animation */
 .fade-enter {
   opacity: 0.01;
 }
@@ -29,18 +29,18 @@ body {
 
 .fade-appear.fade-appear-active {
   opacity: 1;
-  transition: opacity .3s ease-in;
-  -webkit-transition: opacity .3s ease-in;
-  -ms-transition: opacity .3s ease-in;
-  -moz-transition: opacity .3s ease-in;
+  transition: opacity 0.3s ease-in;
+  -webkit-transition: opacity 0.3s ease-in;
+  -ms-transition: opacity 0.3s ease-in;
+  -moz-transition: opacity 0.3s ease-in;
 }
-/* End fade animation */ 
+/* End fade animation */
 
 .fade-dashboard-enter {
   opacity: 0.01;
 }
 
-/* Begin fade-dashboard animation */ 
+/* Begin fade-dashboard animation */
 .fade-dashboard-enter.fade-dashboard-enter-active {
   opacity: 1;
   transition: opacity 800ms ease-in;
@@ -100,9 +100,9 @@ body {
   opacity: 1;
   transition: opacity 500ms ease-in;
 }
-/* End fade-background animation */ 
+/* End fade-background animation */
 
-/* Begin active-widget animation */ 
+/* Begin active-widget animation */
 .active-widget-enter {
   opacity: 0.01;
   /* Delay some time before entering to give the exiting component time to leave */
@@ -128,14 +128,14 @@ body {
 
 .active-widget-appear.active-widget-appear-active {
   opacity: 1;
-  transition: opacity 0.200s ease-in;
-  -webkit-transition: opacity 0.200s ease-in;
-  -ms-transition: opacity 0.200s ease-in;
-  -moz-transition: opacity 0.200s ease-in;
+  transition: opacity 0.2s ease-in;
+  -webkit-transition: opacity 0.2s ease-in;
+  -ms-transition: opacity 0.2s ease-in;
+  -moz-transition: opacity 0.2s ease-in;
 }
-/* End active-widget animation */ 
+/* End active-widget animation */
 
-/* Begin edit-widget-chip animation */ 
+/* Begin edit-widget-chip animation */
 .edit-widget-chip-enter {
   opacity: 0.01;
 }
@@ -153,7 +153,7 @@ body {
   opacity: 0.01;
   transition: opacity 100ms ease-in;
 }
-/* End edit-widget-chip animation */ 
+/* End edit-widget-chip animation */
 
 /* Links */
 a.active {

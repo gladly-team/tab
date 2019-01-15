@@ -7,45 +7,40 @@ import qs from 'qs'
 export const goTo = (location, paramsObj = {}) => {
   browserHistory.push({
     pathname: location,
-    search: qs.stringify(paramsObj)
-      ? `?${qs.stringify(paramsObj)}`
-      : null
+    search: qs.stringify(paramsObj) ? `?${qs.stringify(paramsObj)}` : null,
   })
 }
 
 export const replaceUrl = (location, paramsObj = {}) => {
   browserHistory.replace({
     pathname: location,
-    search: qs.stringify(paramsObj)
-      ? `?${qs.stringify(paramsObj)}`
-      : null
+    search: qs.stringify(paramsObj) ? `?${qs.stringify(paramsObj)}` : null,
   })
 }
 
 export const modifyURLParams = (paramsObj = {}) => {
-  const newParamsObj = Object.assign({},
-    getUrlParameters(),
-    paramsObj
-  )
+  const newParamsObj = Object.assign({}, getUrlParameters(), paramsObj)
   browserHistory.push({
     pathname: window.location.pathname,
     search: qs.stringify(newParamsObj)
       ? `?${qs.stringify(newParamsObj)}`
-      : null
+      : null,
   })
 }
 
-export const externalRedirect = (externalURL) => {
+export const externalRedirect = externalURL => {
   window.location = externalURL
 }
 
-export const absoluteUrl = (path) => {
+export const absoluteUrl = path => {
   // If the passed path is already an absolute URL,
   // just return it.
   if (path.startsWith('http://') || path.startsWith('https://')) {
     return path
   }
-  const protocol = process.env.REACT_APP_WEBSITE_PROTOCOL ? process.env.REACT_APP_WEBSITE_PROTOCOL : 'https'
+  const protocol = process.env.REACT_APP_WEBSITE_PROTOCOL
+    ? process.env.REACT_APP_WEBSITE_PROTOCOL
+    : 'https'
   const baseUrl = `${protocol}://${process.env.REACT_APP_WEBSITE_DOMAIN}`
   return `${baseUrl}${path}`
 }

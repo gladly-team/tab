@@ -7,12 +7,10 @@ import IconButton from 'material-ui/IconButton'
 import CheckCircleIcon from 'material-ui/svg-icons/action/check-circle'
 import RadioButtonUncheckedIcon from 'material-ui/svg-icons/toggle/radio-button-unchecked'
 import Subheader from 'material-ui/Subheader'
-import {
-  cardHeaderSubtitleStyle
-} from 'js/theme/default'
+import { cardHeaderSubtitleStyle } from 'js/theme/default'
 
 class BackgroundImagePicker extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     const { app, user } = props
@@ -33,11 +31,11 @@ class BackgroundImagePicker extends React.Component {
     }
 
     this.state = {
-      selectedImage: image || null
+      selectedImage: image || null,
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     // Call the image selection on mount so the parent component
     // can save the background settings.
     if (this.state.selectedImage) {
@@ -45,45 +43,41 @@ class BackgroundImagePicker extends React.Component {
     }
   }
 
-  onImageSelected (image) {
+  onImageSelected(image) {
     if (!image || !image.id) {
       return
     }
     this.setState({
-      selectedImage: image
+      selectedImage: image,
     })
 
     this.props.onBackgroundImageSelection(image)
   }
 
-  render () {
+  render() {
     const { app } = this.props
     const root = {
       display: 'flex',
       flexWrap: 'wrap',
-      justifyContent: 'space-around'
+      justifyContent: 'space-around',
     }
 
     const gridList = {
       width: '100%',
-      overflowY: 'auto'
+      overflowY: 'auto',
     }
 
     const header = Object.assign({}, cardHeaderSubtitleStyle, {
-      paddingLeft: 0
+      paddingLeft: 0,
     })
     return (
       <div style={root}>
         <Subheader style={header}>Select your photo</Subheader>
-        <GridList
-          cols={3}
-          cellHeight={170}
-          style={gridList}>
-          {app.backgroundImages.edges.map((edge) => {
-            const checked = (
+        <GridList cols={3} cellHeight={170} style={gridList}>
+          {app.backgroundImages.edges.map(edge => {
+            const checked =
               this.state.selectedImage &&
               this.state.selectedImage.id === edge.node.id
-            )
             return (
               <GridTile
                 key={edge.node.id}
@@ -92,14 +86,19 @@ class BackgroundImagePicker extends React.Component {
                 onClick={this.onImageSelected.bind(this, edge.node)}
                 actionIcon={
                   <IconButton
-                    onClick={this.onImageSelected.bind(this, edge.node)}>
-                    {checked
-                      ? <CheckCircleIcon color={'white'} />
-                      : <RadioButtonUncheckedIcon color={'white'} />
-                    }
-                  </IconButton>}>
+                    onClick={this.onImageSelected.bind(this, edge.node)}
+                  >
+                    {checked ? (
+                      <CheckCircleIcon color={'white'} />
+                    ) : (
+                      <RadioButtonUncheckedIcon color={'white'} />
+                    )}
+                  </IconButton>
+                }
+              >
                 <img alt={edge.node.name} src={edge.node.thumbnailURL} />
-              </GridTile>)
+              </GridTile>
+            )
           })}
         </GridList>
       </div>
@@ -115,18 +114,18 @@ BackgroundImagePicker.propTypes = {
           id: PropTypes.string,
           name: PropTypes.string,
           imageURL: PropTypes.string,
-          thumbnailURL: PropTypes.string
+          thumbnailURL: PropTypes.string,
         })
-      ).isRequired
-    }).isRequired
+      ).isRequired,
+    }).isRequired,
   }),
   user: PropTypes.shape({
     backgroundImage: PropTypes.shape({
       id: PropTypes.string.isRequired,
-      imageURL: PropTypes.string.isRequired
-    }).isRequired
+      imageURL: PropTypes.string.isRequired,
+    }).isRequired,
   }),
-  onBackgroundImageSelection: PropTypes.func.isRequired
+  onBackgroundImageSelection: PropTypes.func.isRequired,
 }
 
 export default BackgroundImagePicker

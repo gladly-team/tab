@@ -17,7 +17,7 @@ import {
   privacyPolicyURL,
   teamURL,
   termsOfServiceURL,
-  twitterPageURL
+  twitterPageURL,
 } from 'js/navigation/navigation'
 import Link from 'js/components/General/Link'
 
@@ -34,21 +34,21 @@ const styles = theme => ({
     fontSize: 12,
     margin: 20,
     '&:hover': {
-      color: lighterTextColor
-    }
+      color: lighterTextColor,
+    },
   },
   socialIcon: {
     color: lightestTextColor,
     width: 20,
     height: 20,
     '&:hover': {
-      color: lighterTextColor
-    }
-  }
+      color: lighterTextColor,
+    },
+  },
 })
 
 class Footer extends React.Component {
-  render () {
+  render() {
     const { classes, style } = this.props
     return (
       <div
@@ -60,7 +60,7 @@ class Footer extends React.Component {
             paddingBottom: 20,
             paddingLeft: 40,
             paddingRight: 40,
-            fontFamily: fontFamily
+            fontFamily: fontFamily,
           },
           style
         )}
@@ -69,7 +69,7 @@ class Footer extends React.Component {
         <div
           style={{
             display: 'flex',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
           }}
         >
           <div
@@ -77,24 +77,25 @@ class Footer extends React.Component {
               display: 'flex',
               justifyContent: 'flex-start',
               flexWrap: 'nowrap',
-              alignItems: 'center'
+              alignItems: 'center',
             }}
           >
             <Link to={homeURL}>
-              <img src={logoGrey} style={{ height: 43 }} alt='Tab for a Cause logo in grey' />
+              <img
+                src={logoGrey}
+                style={{ height: 43 }}
+                alt="Tab for a Cause logo in grey"
+              />
             </Link>
             <div
               style={{
                 marginLeft: 30,
                 display: 'flex',
                 flexWrap: 'wrap',
-                justifyContent: 'flex-start'
+                justifyContent: 'flex-start',
               }}
             >
-              <Link
-                to={externalHelpURL}
-                className={classes.footerLink}
-              >
+              <Link to={externalHelpURL} className={classes.footerLink}>
                 Help
               </Link>
               <Link
@@ -103,54 +104,32 @@ class Footer extends React.Component {
               >
                 Adblockers
               </Link>
-              <Link
-                to={financialsURL}
-                className={classes.footerLink}
-              >
+              <Link to={financialsURL} className={classes.footerLink}>
                 Financials
               </Link>
-              <Link
-                to={termsOfServiceURL}
-                className={classes.footerLink}
-              >
+              <Link to={termsOfServiceURL} className={classes.footerLink}>
                 Terms
               </Link>
-              <Link
-                to={privacyPolicyURL}
-                className={classes.footerLink}
-              >
+              <Link to={privacyPolicyURL} className={classes.footerLink}>
                 Privacy
               </Link>
-              <Link
-                to={teamURL}
-                className={classes.footerLink}
-              >
+              <Link to={teamURL} className={classes.footerLink}>
                 Team
               </Link>
-              <Link
-                to={contactUsURL}
-                className={classes.footerLink}
-              >
+              <Link to={contactUsURL} className={classes.footerLink}>
                 Contact
               </Link>
-              <Link
-                to={jobsURL}
-                className={classes.footerLink}
-              >
+              <Link to={jobsURL} className={classes.footerLink}>
                 Jobs
               </Link>
             </div>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', paddingTop: 4 }}>
             <Link to={facebookPageURL} style={{ margin: 12 }}>
-              <FacebookBox
-                className={classes.socialIcon}
-              />
+              <FacebookBox className={classes.socialIcon} />
             </Link>
             <Link to={twitterPageURL} style={{ margin: 12 }}>
-              <Twitter
-                className={classes.socialIcon}
-              />
+              <Twitter className={classes.socialIcon} />
             </Link>
           </div>
         </div>
@@ -161,11 +140,11 @@ class Footer extends React.Component {
 
 Footer.propTypes = {
   style: PropTypes.object,
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
 }
 
 Footer.defaultProps = {
-  style: {}
+  style: {},
 }
 
 export default withStyles(styles)(Footer)

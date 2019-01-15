@@ -3,20 +3,18 @@ import PropTypes from 'prop-types'
 
 import EditWidgetChip from 'js/components/Widget/EditWidgetChip'
 import TextField from 'material-ui/TextField'
-import appTheme, {
-  widgetEditButtonHover
-} from 'js/theme/default'
+import appTheme, { widgetEditButtonHover } from 'js/theme/default'
 
 class AddTodoForm extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       open: false,
-      textRequiredError: false
+      textRequiredError: false,
     }
   }
 
-  _handleKeyPress (e) {
+  _handleKeyPress(e) {
     if (e.key === 'Enter') {
       if (!e.shiftKey) {
         e.stopPropagation()
@@ -26,58 +24,63 @@ class AddTodoForm extends React.Component {
     }
   }
 
-  openForm () {
+  openForm() {
+    this.setState(
+      {
+        open: true,
+      },
+      () => {
+        this.focusInput()
+      }
+    )
+  }
+
+  closeForm() {
     this.setState({
-      open: true
-    }, () => {
-      this.focusInput()
+      open: false,
     })
   }
 
-  closeForm () {
-    this.setState({
-      open: false
-    })
-  }
-
-  focusInput () {
+  focusInput() {
     this.todoTextField.focus()
   }
 
-  validateTodoText () {
+  validateTodoText() {
     const text = this.todoTextField.input.refs.input.value
     this.setState({
-      textRequiredError: !text
+      textRequiredError: !text,
     })
   }
 
-  create () {
+  create() {
     this.validateTodoText()
 
     const text = this.todoTextField.input.refs.input.value
-    if (!text) { return }
+    if (!text) {
+      return
+    }
 
     this.props.addTodo(text)
     this.todoTextField.input.value = ''
     this.closeForm()
   }
 
-  render () {
+  render() {
     const textField = {
       underlineStyle: {
-        borderColor: appTheme.textField.underlineColor
+        borderColor: appTheme.textField.underlineColor,
       },
       underlineFocusStyle: {
-        borderColor: widgetEditButtonHover
+        borderColor: widgetEditButtonHover,
       },
       hintStyle: {
         color: appTheme.textField.underlineColor,
-        fontSize: 14
+        fontSize: 14,
       },
       inputStyle: {
         color: '#FFF',
-        fontSize: 14
-      }
+        fontSize: 14,
+      },
     }
 
     return (
@@ -94,14 +97,16 @@ class AddTodoForm extends React.Component {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              paddingBottom: 20
+              paddingBottom: 20,
             }}
           >
             <TextField
-              ref={(input) => { this.todoTextField = input }}
+              ref={input => {
+                this.todoTextField = input
+              }}
               multiLine
               onKeyPress={this._handleKeyPress.bind(this)}
-              hintText='What do you need to do?'
+              hintText="What do you need to do?"
               textareaStyle={textField.inputStyle}
               hintStyle={textField.hintStyle}
               underlineStyle={textField.underlineStyle}
@@ -117,10 +122,9 @@ class AddTodoForm extends React.Component {
 }
 
 AddTodoForm.propTypes = {
-  addTodo: PropTypes.func.isRequired
+  addTodo: PropTypes.func.isRequired,
 }
 
-AddTodoForm.defaultProps = {
-}
+AddTodoForm.defaultProps = {}
 
 export default AddTodoForm

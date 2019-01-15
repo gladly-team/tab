@@ -13,7 +13,7 @@ jest.mock('relay-commit-mutation-promise')
 const getMockInput = () => ({
   userId: 'abc-123',
   charityId: 'some-charity-id',
-  vc: 12
+  vc: 12,
 })
 
 const getMockAdditionalVars = () => ({})
@@ -35,16 +35,13 @@ describe('DonateVcMutation', () => {
     const DonateVcMutation = require('../DonateVcMutation').default
     const args = getMockInput()
     await DonateVcMutation(args, getMockAdditionalVars())
-    expect(commitMutation).toHaveBeenCalledWith(
-      environment,
-      {
-        mutation: expect.any(Function),
-        variables: {
-          input: args
-        },
-        updater: expect.any(Function)
-      }
-    )
+    expect(commitMutation).toHaveBeenCalledWith(environment, {
+      mutation: expect.any(Function),
+      variables: {
+        input: args,
+      },
+      updater: expect.any(Function),
+    })
   })
 
   it('updates the charity\'s "vcReceived" after donating', async () => {
@@ -63,8 +60,7 @@ describe('DonateVcMutation', () => {
     // Call the updater.
     const mutationUpdater = commitMutation.mock.calls[0][1].updater
     mutationUpdater(environment.store)
-    expect(mockCharityRecord.setValue)
-      .toHaveBeenCalledWith(433, 'vcReceived')
+    expect(mockCharityRecord.setValue).toHaveBeenCalledWith(433, 'vcReceived')
   })
 
   it('does not update the charity\'s "vcReceived" if the field is not already set', async () => {
@@ -81,8 +77,7 @@ describe('DonateVcMutation', () => {
     // Call the updater.
     const mutationUpdater = commitMutation.mock.calls[0][1].updater
     mutationUpdater(environment.store)
-    expect(mockCharityRecord.setValue)
-      .not.toHaveBeenCalled()
+    expect(mockCharityRecord.setValue).not.toHaveBeenCalled()
   })
 
   it('updates the charity\'s "vcReceived" for a given time period after donating', async () => {
@@ -93,8 +88,8 @@ describe('DonateVcMutation', () => {
     const mockAdditionalVars = {
       vcReceivedArgs: {
         startTime: '2017-04-09T19:00:00.000Z',
-        endTime: '2017-05-30T19:00:00.000Z'
-      }
+        endTime: '2017-05-30T19:00:00.000Z',
+      },
     }
     await DonateVcMutation(args, mockAdditionalVars)
 
@@ -107,11 +102,10 @@ describe('DonateVcMutation', () => {
     // Call the updater.
     const mutationUpdater = commitMutation.mock.calls[0][1].updater
     mutationUpdater(environment.store)
-    expect(mockCharityRecord.setValue)
-      .toHaveBeenCalledWith(433, 'vcReceived', {
-        startTime: '2017-04-09T19:00:00.000Z',
-        endTime: '2017-05-30T19:00:00.000Z'
-      })
+    expect(mockCharityRecord.setValue).toHaveBeenCalledWith(433, 'vcReceived', {
+      startTime: '2017-04-09T19:00:00.000Z',
+      endTime: '2017-05-30T19:00:00.000Z',
+    })
   })
 
   it('does not update the charity\'s "vcReceived" for a given time period after donating if not currently in the time period', async () => {
@@ -122,8 +116,8 @@ describe('DonateVcMutation', () => {
     const mockAdditionalVars = {
       vcReceivedArgs: {
         startTime: '2017-05-30T19:00:00.000Z',
-        endTime: '2017-06-10T19:00:00.000Z'
-      }
+        endTime: '2017-06-10T19:00:00.000Z',
+      },
     }
     await DonateVcMutation(args, mockAdditionalVars)
 
@@ -138,12 +132,10 @@ describe('DonateVcMutation', () => {
     mutationUpdater(environment.store)
 
     // Should only call to update "vcReceived" without a time period.
-    expect(mockCharityRecord.setValue)
-      .toHaveBeenCalledTimes(1)
+    expect(mockCharityRecord.setValue).toHaveBeenCalledTimes(1)
     // There should not be args for updating the Relay record (no startTime
     // or endTime).
-    expect(mockCharityRecord.setValue.mock.calls[0][3])
-      .toBeUndefined()
+    expect(mockCharityRecord.setValue.mock.calls[0][3]).toBeUndefined()
   })
 
   it('does nothing if the charity record is not in the store', async () => {

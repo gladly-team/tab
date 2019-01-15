@@ -1,7 +1,5 @@
 import graphql from 'babel-plugin-relay/macro'
-import {
-  createFragmentContainer
-} from 'react-relay'
+import { createFragmentContainer } from 'react-relay'
 
 import ProfileStats from 'js/components/Settings/Profile/ProfileStatsComponent'
 
@@ -21,5 +19,5 @@ export default createFragmentContainer(ProfileStats, {
       tabs
       vcDonatedAllTime
     }
-  `
+  `,
 })

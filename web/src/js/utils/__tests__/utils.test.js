@@ -1,8 +1,6 @@
 /* eslint-env jest */
 
-import localStorageMgr, {
-  __mockClear
-} from 'js/utils/localstorage-mgr'
+import localStorageMgr, { __mockClear } from 'js/utils/localstorage-mgr'
 
 jest.mock('js/utils/localstorage-mgr')
 
@@ -47,7 +45,7 @@ describe('URL query string utils', () => {
     const parseUrlSearchString = require('js/utils/utils').parseUrlSearchString
     expect(parseUrlSearchString('?myParam=foo&another=123')).toEqual({
       myParam: 'foo',
-      another: '123'
+      another: '123',
     })
   })
 })
@@ -59,7 +57,7 @@ describe('getting referral data', () => {
     const getReferralData = require('js/utils/utils').getReferralData
     expect(getReferralData()).toEqual({
       referringUser: 'sandra',
-      referringChannel: '42'
+      referringChannel: '42',
     })
   })
 
@@ -68,7 +66,7 @@ describe('getting referral data', () => {
     localStorageMgr.setItem('tab.referralData.referringChannel', undefined)
     const getReferralData = require('js/utils/utils').getReferralData
     expect(getReferralData()).toEqual({
-      referringUser: 'bob'
+      referringUser: 'bob',
     })
   })
 
@@ -77,7 +75,7 @@ describe('getting referral data', () => {
     localStorageMgr.setItem('tab.referralData.referringChannel', '33')
     const getReferralData = require('js/utils/utils').getReferralData
     expect(getReferralData()).toEqual({
-      referringChannel: '33'
+      referringChannel: '33',
     })
   })
 })
@@ -126,7 +124,7 @@ describe('number utils', () => {
     // Test thousands
     expect(abbreviateNumber(460932)).toBe('460.9K')
     expect(abbreviateNumber(-460932)).toBe('-460.9K')
-    expect(abbreviateNumber(460932.00)).toBe('460.9K')
+    expect(abbreviateNumber(460932.0)).toBe('460.9K')
     expect(abbreviateNumber(460932.9999, 3)).toBe('460.933K')
     expect(abbreviateNumber(460932, 0)).toBe('461K')
     expect(abbreviateNumber(460932, 2)).toBe('460.93K')

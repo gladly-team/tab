@@ -12,19 +12,21 @@ export const __runOnCompleted = (response = null) => {
     response = {
       setUsername: {
         user: usernameArg,
-        errors: null
-      }
+        errors: null,
+      },
     }
   }
   onCompletedCallback(response)
 }
 
-export const __runOnError = (response) => {
+export const __runOnError = response => {
   onErrorCallback(response)
 }
 
-export default jest.fn((environment, userId, username, onCompleted, onError) => {
-  onCompletedCallback = onCompleted
-  onErrorCallback = onError
-  usernameArg = username
-})
+export default jest.fn(
+  (environment, userId, username, onCompleted, onError) => {
+    onCompletedCallback = onCompleted
+    onErrorCallback = onError
+    usernameArg = username
+  }
+)

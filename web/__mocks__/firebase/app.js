@@ -17,7 +17,7 @@ var immediatelyReturnAuthUser = false
 var onAuthStateChangedCallbacks = []
 
 const authMock = {
-  get currentUser () {
+  get currentUser() {
     return firebaseUser
   },
   onAuthStateChanged: jest.fn(callback => {
@@ -38,7 +38,7 @@ const authMock = {
     return Promise.resolve({
       credential: {},
       user: firebaseUser,
-      additionalUserInfo: {}
+      additionalUserInfo: {},
     })
   }),
   signOut: jest.fn(() => Promise.resolve()),
@@ -47,9 +47,9 @@ const authMock = {
     return Promise.resolve({
       credential: {},
       user: firebaseUser,
-      additionalUserInfo: {}
+      additionalUserInfo: {},
     })
-  })
+  }),
 }
 
 const FirebaseAuthMock = () => {
@@ -57,20 +57,20 @@ const FirebaseAuthMock = () => {
 }
 
 FirebaseAuthMock.EmailAuthProvider = {
-  PROVIDER_ID: 'password'
+  PROVIDER_ID: 'password',
 }
 
 FirebaseAuthMock.GoogleAuthProvider = {
-  PROVIDER_ID: 'google.com'
+  PROVIDER_ID: 'google.com',
 }
 
 FirebaseAuthMock.FacebookAuthProvider = {
-  PROVIDER_ID: 'facebook.com'
+  PROVIDER_ID: 'facebook.com',
 }
 
 firebaseApp.auth = FirebaseAuthMock
 
-firebaseApp.__setFirebaseUser = (user) => {
+firebaseApp.__setFirebaseUser = user => {
   immediatelyReturnAuthUser = true
   firebaseUser = user
 }
@@ -82,7 +82,7 @@ firebaseApp.__setFirebaseUser = (user) => {
  *   user object
  * @return {function} A function to unsubscribe the listener
  */
-firebaseApp.__triggerAuthStateChange = (firebaseUser) => {
+firebaseApp.__triggerAuthStateChange = firebaseUser => {
   onAuthStateChangedCallbacks.forEach(cb => {
     cb(firebaseUser)
   })

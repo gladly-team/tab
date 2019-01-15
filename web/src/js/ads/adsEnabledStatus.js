@@ -1,4 +1,3 @@
-
 import { getTabsOpenedToday } from 'js/utils/local-user-data-mgr'
 
 const MAX_TABS_WITH_ADS = 150

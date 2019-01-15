@@ -1,4 +1,3 @@
-
 const POST_MSG_TYPE_BACKGROUND_SETTINGS = 'background-settings'
 
 export const postMessage = (type, data) => {
@@ -8,6 +7,6 @@ export const postMessage = (type, data) => {
   window.top.postMessage({ type: type, data: data }, '*')
 }
 
-export const postBackgroundSettings = (settings) => {
+export const postBackgroundSettings = settings => {
   postMessage(POST_MSG_TYPE_BACKGROUND_SETTINGS, settings)
 }

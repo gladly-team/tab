@@ -9,13 +9,7 @@ afterEach(() => {
 
 describe('logger', () => {
   it('contains expected methods', () => {
-    const loggerMethods = [
-      'log',
-      'debug',
-      'info',
-      'warn',
-      'error'
-    ]
+    const loggerMethods = ['log', 'debug', 'info', 'warn', 'error']
     const logger = require('js/utils/logger').default
     loggerMethods.forEach(method => {
       expect(logger[method]).not.toBeUndefined()
@@ -30,7 +24,7 @@ describe('logger', () => {
     const theErr = new Error('A big problem')
     logger.error(theErr)
     expect(Raven.captureException).toHaveBeenCalledWith(theErr, {
-      level: 'error'
+      level: 'error',
     })
     expect(Raven.captureMessage).not.toHaveBeenCalled()
   })
@@ -43,7 +37,7 @@ describe('logger', () => {
     const theMsg = 'A thing happened, FYI'
     logger.log(theMsg)
     expect(Raven.captureMessage).toHaveBeenCalledWith(theMsg, {
-      level: 'info'
+      level: 'info',
     })
   })
 
@@ -55,7 +49,7 @@ describe('logger', () => {
     const theMsg = 'A thing happened, FYI'
     logger.debug(theMsg)
     expect(Raven.captureMessage).toHaveBeenCalledWith(theMsg, {
-      level: 'info'
+      level: 'info',
     })
   })
 
@@ -67,7 +61,7 @@ describe('logger', () => {
     const theMsg = 'A thing happened, FYI'
     logger.info(theMsg)
     expect(Raven.captureMessage).toHaveBeenCalledWith(theMsg, {
-      level: 'info'
+      level: 'info',
     })
   })
 
@@ -79,7 +73,7 @@ describe('logger', () => {
     const theMsg = 'A thing happened, FYI'
     logger.warn(theMsg)
     expect(Raven.captureMessage).toHaveBeenCalledWith(theMsg, {
-      level: 'warning'
+      level: 'warning',
     })
   })
 
@@ -91,7 +85,7 @@ describe('logger', () => {
     const theMsg = 'A thing happened, FYI'
     logger.error(theMsg)
     expect(Raven.captureMessage).toHaveBeenCalledWith(theMsg, {
-      level: 'error'
+      level: 'error',
     })
     expect(Raven.captureException).not.toHaveBeenCalled()
   })
@@ -144,7 +138,7 @@ describe('logger', () => {
     const theMsg = 'A thing happened, FYI'
     logger.error(theMsg)
     expect(Raven.captureMessage).toHaveBeenCalledWith(theMsg, {
-      level: 'error'
+      level: 'error',
     })
     expect(Raven.captureException).not.toHaveBeenCalled()
   })

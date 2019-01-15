@@ -1,4 +1,3 @@
-
 export default () => {
   const googletag = window.googletag || {}
   googletag.cmd = googletag.cmd || []

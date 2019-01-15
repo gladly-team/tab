@@ -9,54 +9,52 @@ import LockOpenIcon from 'material-ui/svg-icons/action/lock-open'
 import AddCircleIcon from 'material-ui/svg-icons/content/add-circle'
 import appTheme, {
   widgetEditButtonInactive,
-  widgetEditButtonHover
+  widgetEditButtonHover,
 } from 'js/theme/default'
 import EditWidgetChipAnimation from 'js/components/Widget/EditWidgetChipAnimation'
 
 // Holds the widget name and any "add" or "edit"
 // buttons and menus.
 class EditWidgetChip extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
-      dimensions: {}
+      dimensions: {},
     }
   }
 
-  render () {
+  render() {
     const animationDurationMs = 140
 
-    const content = this.props.open
-      ? (
-        <span
-          key={'widget-edit-chip-add-form'}
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            width: '100%',
-            paddingTop: 20,
-            boxSizing: 'border-box'
-          }}
-        >
-          {this.props.widgetAddItemForm}
-        </span>
-      )
-      : (
-        <span
-          key={'widget-edit-chip-content'}
-          style={{
-            position: 'absolute',
-            minHeight: 32,
-            top: 0,
-            left: 0,
-            paddingLeft: 12,
-            paddingRight: 8
-          }}
-        >
-          <span>{this.props.widgetName}</span>
-        </span>
-      )
+    const content = this.props.open ? (
+      <span
+        key={'widget-edit-chip-add-form'}
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          width: '100%',
+          paddingTop: 20,
+          boxSizing: 'border-box',
+        }}
+      >
+        {this.props.widgetAddItemForm}
+      </span>
+    ) : (
+      <span
+        key={'widget-edit-chip-content'}
+        style={{
+          position: 'absolute',
+          minHeight: 32,
+          top: 0,
+          left: 0,
+          paddingLeft: 12,
+          paddingRight: 8,
+        }}
+      >
+        <span>{this.props.widgetName}</span>
+      </span>
+    )
 
     // Measure the dimensions of the child content and add
     // the dimensions to state. Then, we'll set the width
@@ -66,10 +64,10 @@ class EditWidgetChip extends React.Component {
     const measuredContent = (
       <Measure
         bounds
-        onResize={(contentRect) => {
+        onResize={contentRect => {
           if (contentRect.bounds) {
             this.setState({
-              dimensions: contentRect.bounds
+              dimensions: contentRect.bounds,
             })
           }
         }}
@@ -78,7 +76,7 @@ class EditWidgetChip extends React.Component {
           return (
             <EditWidgetChipAnimation>
               {React.cloneElement(content, {
-                ref: measureRef
+                ref: measureRef,
               })}
             </EditWidgetChipAnimation>
           )
@@ -93,13 +91,13 @@ class EditWidgetChip extends React.Component {
       position: 'absolute',
       zIndex: 5,
       top: 4,
-      right: 8
+      right: 8,
     }
 
     const iconBaseStyle = {
       cursor: 'pointer',
       color: 'rgba(255,255,255,.3)',
-      display: 'inline-block'
+      display: 'inline-block',
     }
 
     var editIcon = null
@@ -114,7 +112,7 @@ class EditWidgetChip extends React.Component {
             style={Object.assign({}, iconBaseStyle, {
               color: widgetEditButtonHover,
               float: 'right',
-              marginLeft: 4
+              marginLeft: 4,
             })}
           />
         )
@@ -127,70 +125,59 @@ class EditWidgetChip extends React.Component {
             hoverColor={widgetEditButtonHover}
             style={Object.assign({}, iconBaseStyle, {
               float: 'right',
-              marginLeft: 4
+              marginLeft: 4,
             })}
           />
         )
       }
     }
-    const icons = this.props.open
-      ? (
-        <div
-          key={'icons-expanded'}
-          style={iconContainerStyle}
-        >
-          <DeleteIcon
-            color={widgetEditButtonInactive}
-            hoverColor={widgetEditButtonHover}
-            style={iconBaseStyle}
-            onClick={() => {
-              this.props.onCancelAddItemClick()
-            }}
-          />
-          <CheckCircleIcon
-            color={widgetEditButtonInactive}
-            hoverColor={widgetEditButtonHover}
-            style={iconBaseStyle}
-            onClick={() => {
-              this.props.onItemCreatedClick()
-            }}
-          />
-        </div>
-      )
-      : (
-        <div
-          key={'icons-closed'}
-          style={iconContainerStyle}
-        >
-          {editIcon}
-          <AddCircleIcon
-            key={'widget-add-icon'}
-            color={widgetEditButtonInactive}
-            hoverColor={widgetEditButtonHover}
-            style={Object.assign({}, iconBaseStyle, {
-              float: 'right',
-              marginLeft: 4
-            })}
-            onClick={() => {
-              this.props.onEditModeToggle(false)
-              this.props.onAddItemClick()
-            }}
-          />
-        </div>
-      )
+    const icons = this.props.open ? (
+      <div key={'icons-expanded'} style={iconContainerStyle}>
+        <DeleteIcon
+          color={widgetEditButtonInactive}
+          hoverColor={widgetEditButtonHover}
+          style={iconBaseStyle}
+          onClick={() => {
+            this.props.onCancelAddItemClick()
+          }}
+        />
+        <CheckCircleIcon
+          color={widgetEditButtonInactive}
+          hoverColor={widgetEditButtonHover}
+          style={iconBaseStyle}
+          onClick={() => {
+            this.props.onItemCreatedClick()
+          }}
+        />
+      </div>
+    ) : (
+      <div key={'icons-closed'} style={iconContainerStyle}>
+        {editIcon}
+        <AddCircleIcon
+          key={'widget-add-icon'}
+          color={widgetEditButtonInactive}
+          hoverColor={widgetEditButtonHover}
+          style={Object.assign({}, iconBaseStyle, {
+            float: 'right',
+            marginLeft: 4,
+          })}
+          onClick={() => {
+            this.props.onEditModeToggle(false)
+            this.props.onAddItemClick()
+          }}
+        />
+      </div>
+    )
 
     // Sizing
     const titleHeight = 32
     const iconWidth = this.props.showEditOption ? 62 : 36
     const expandedWidth = 290
-    const width = (
-      this.props.open
-        ? expandedWidth
-        : (this.state.dimensions.width
-          ? this.state.dimensions.width + iconWidth
-          : 'auto'
-        )
-    )
+    const width = this.props.open
+      ? expandedWidth
+      : this.state.dimensions.width
+      ? this.state.dimensions.width + iconWidth
+      : 'auto'
     const height = this.state.dimensions.height
       ? this.state.dimensions.height
       : 'auto'
@@ -213,7 +200,7 @@ class EditWidgetChip extends React.Component {
             margin: 5,
             background: appTheme.palette.primary1Color,
             color: '#FFF',
-            userSelect: 'none'
+            userSelect: 'none',
           }}
         >
           <div
@@ -225,12 +212,10 @@ class EditWidgetChip extends React.Component {
               width: '100%',
               left: 0,
               top: 0,
-              boxSizing: 'border-box'
+              boxSizing: 'border-box',
             }}
           >
-            <EditWidgetChipAnimation>
-              {icons}
-            </EditWidgetChipAnimation>
+            <EditWidgetChipAnimation>{icons}</EditWidgetChipAnimation>
           </div>
           {measuredContent}
         </Paper>
@@ -257,7 +242,7 @@ EditWidgetChip.propTypes = {
   onCancelAddItemClick: PropTypes.func,
   // Called when confirming creation from the
   // `widgetAddItemForm` view.
-  onItemCreatedClick: PropTypes.func
+  onItemCreatedClick: PropTypes.func,
 }
 
 EditWidgetChip.defaultProps = {
@@ -267,7 +252,7 @@ EditWidgetChip.defaultProps = {
   editMode: false,
   onAddItemClick: () => {},
   onCancelAddItemClick: () => {},
-  onItemCreatedClick: () => {}
+  onItemCreatedClick: () => {},
 }
 
 export default EditWidgetChip

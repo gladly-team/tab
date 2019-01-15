@@ -25,8 +25,6 @@ describe('navigation utils', () => {
     process.env.REACT_APP_WEBSITE_DOMAIN = 'some.example.com'
 
     const absoluteUrl = require('../navigation').absoluteUrl
-    expect(absoluteUrl('https://foo.com/blah/')).toBe(
-      'https://foo.com/blah/'
-    )
+    expect(absoluteUrl('https://foo.com/blah/')).toBe('https://foo.com/blah/')
   })
 })

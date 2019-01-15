@@ -7,28 +7,28 @@ import AddCircle from 'material-ui/svg-icons/content/add-circle'
 import appTheme from 'js/theme/default'
 
 class NotesHeader extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
-      hoveringAdd: false
+      hoveringAdd: false,
     }
   }
 
-  addNote () {
+  addNote() {
     this.props.addNote()
   }
 
-  onAddBtnMouseMove (enter) {
+  onAddBtnMouseMove(enter) {
     this.setState({
-      hoveringAdd: enter
+      hoveringAdd: enter,
     })
   }
 
-  render () {
+  render() {
     const chip = {
       style: {
         margin: 5,
-        borderRadius: 3
+        borderRadius: 3,
       },
       backgroundColor: appTheme.palette.primary1Color,
       labelColor: '#FFF',
@@ -38,12 +38,13 @@ class NotesHeader extends React.Component {
         margin: '4px -4px 0px 4px',
         hoverColor: appTheme.fontIcon.color,
         color: 'rgba(255,255,255,.3)',
-        display: 'inline-block'
-      }
+        display: 'inline-block',
+      },
     }
 
-    var addIconColor = (this.state.hoveringAdd)
-      ? chip.addIcon.hoverColor : chip.addIcon.color
+    var addIconColor = this.state.hoveringAdd
+      ? chip.addIcon.hoverColor
+      : chip.addIcon.color
 
     return (
       <WidgetPieceWrapper>
@@ -51,15 +52,17 @@ class NotesHeader extends React.Component {
           key={'node-header-key'}
           backgroundColor={chip.backgroundColor}
           labelColor={chip.labelColor}
-          style={chip.style}>
-            Notes
-          <div style={{display: 'inline', marginLeft: 10}}>
+          style={chip.style}
+        >
+          Notes
+          <div style={{ display: 'inline', marginLeft: 10 }}>
             <AddCircle
               color={addIconColor}
               style={chip.addIcon}
               onClick={this.addNote.bind(this)}
               onMouseEnter={this.onAddBtnMouseMove.bind(this, true)}
-              onMouseLeave={this.onAddBtnMouseMove.bind(this, false)} />
+              onMouseLeave={this.onAddBtnMouseMove.bind(this, false)}
+            />
           </div>
         </Chip>
       </WidgetPieceWrapper>
@@ -68,10 +71,9 @@ class NotesHeader extends React.Component {
 }
 
 NotesHeader.propTypes = {
-  addNote: PropTypes.func.isRequired
+  addNote: PropTypes.func.isRequired,
 }
 
-NotesHeader.defaultProps = {
-}
+NotesHeader.defaultProps = {}
 
 export default NotesHeader

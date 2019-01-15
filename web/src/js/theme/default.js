@@ -1,11 +1,6 @@
-import {
-  cyan500,
-  white,
-  darkBlack,
-  fullBlack
-} from 'material-ui/styles/colors'
+import { cyan500, white, darkBlack, fullBlack } from 'material-ui/styles/colors'
 
-import {fade} from 'material-ui/utils/colorManipulator'
+import { fade } from 'material-ui/utils/colorManipulator'
 import spacing from 'material-ui/styles/spacing'
 
 // Logo color: #9d4ba3
@@ -48,34 +43,34 @@ export default {
     disabledColor: disabledColor,
     pickerHeaderColor: cyan500,
     clockCircleColor: fade(darkBlack, 0.07),
-    shadowColor: fullBlack
+    shadowColor: fullBlack,
   },
   fontIcon: {
     color: textColor,
-    hoverColor: textColor
+    hoverColor: textColor,
   },
   chip: {
-    deleteIconColor: textColor
+    deleteIconColor: textColor,
   },
   flatButton: {
     fontSize: 13,
-    fontWeight: buttonFontWeight
+    fontWeight: buttonFontWeight,
   },
   raisedButton: {
     fontSize: 13,
-    fontWeight: buttonFontWeight
+    fontWeight: buttonFontWeight,
   },
   textField: {
     underlineColor: dividerColor,
-    underlineFocusStyle: textColor
+    underlineFocusStyle: textColor,
   },
   toggle: {
     thumbOffColor: '#f3d6f5',
-    trackOffColor: '#d4add6'
+    trackOffColor: '#d4add6',
     // Lighter
     // thumbOffColor: '#fff4ff',
     // trackOffColor: '#fae2fb'
-  }
+  },
 }
 
 export const dashboardIconInactiveColor = 'rgba(255, 255, 255, 0.8)'
@@ -93,9 +88,9 @@ export const widgetEditButtonHover = white
 
 export const cardHeaderTitleStyle = {
   fontSize: 20,
-  fontWeight: 'normal'
+  fontWeight: 'normal',
 }
 export const cardHeaderSubtitleStyle = {
   fontSize: 14,
-  fontWeight: 'normal'
+  fontWeight: 'normal',
 }

@@ -7,7 +7,7 @@ import HappyIcon from 'material-ui/svg-icons/social/mood'
 import { Paper } from 'material-ui'
 
 class ProfileInviteFriend extends React.Component {
-  render () {
+  render() {
     const { app, user } = this.props
     const tabberWord = user.numUsersRecruited === 1 ? 'Tabber' : 'Tabbers'
     const spacingPx = 6
@@ -15,26 +15,28 @@ class ProfileInviteFriend extends React.Component {
       margin: spacingPx,
       flex: 1,
       paddingTop: 40,
-      paddingBottom: 40
+      paddingBottom: 40,
     }
     return (
       <span
         style={{
           display: 'flex',
           flexWrap: 'wrap',
-          margin: -spacingPx
+          margin: -spacingPx,
         }}
       >
-        <Paper style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignContent: 'middle',
-          padding: 10,
-          margin: spacingPx,
-          flex: 2,
-          flexBasis: '40%',
-          minWidth: 200
-        }}>
+        <Paper
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignContent: 'middle',
+            padding: 10,
+            margin: spacingPx,
+            flex: 2,
+            flexBasis: '40%',
+            minWidth: 200,
+          }}
+        >
           <span
             style={{
               display: 'flex',
@@ -47,12 +49,10 @@ class ProfileInviteFriend extends React.Component {
               marginBottom: 30,
               marginLeft: 8,
               marginRight: 8,
-              boxSizing: 'border-box'
+              boxSizing: 'border-box',
             }}
           >
-            <InviteFriend
-              user={user}
-            />
+            <InviteFriend user={user} />
           </span>
         </Paper>
         <Stat
@@ -75,7 +75,7 @@ class ProfileInviteFriend extends React.Component {
             minWidth: 200,
             padding: 20,
             color: lighterTextColor,
-            margin: spacingPx
+            margin: spacingPx,
           }}
         >
           <HappyIcon
@@ -83,12 +83,12 @@ class ProfileInviteFriend extends React.Component {
               minHeight: 24,
               minWidth: 24,
               marginRight: 8,
-              color: lighterTextColor
+              color: lighterTextColor,
             }}
           />
           <p>
-              Thank you! Every new Tabber raises more money for charity, and we
-              depend on people like you to get the word out.
+            Thank you! Every new Tabber raises more money for charity, and we
+            depend on people like you to get the word out.
           </p>
         </Paper>
       </span>
@@ -98,11 +98,11 @@ class ProfileInviteFriend extends React.Component {
 
 ProfileInviteFriend.propTypes = {
   app: PropTypes.shape({
-    referralVcReward: PropTypes.number.isRequired
+    referralVcReward: PropTypes.number.isRequired,
   }),
   user: PropTypes.shape({
-    numUsersRecruited: PropTypes.number.isRequired
-  })
+    numUsersRecruited: PropTypes.number.isRequired,
+  }),
 }
 
 export default ProfileInviteFriend

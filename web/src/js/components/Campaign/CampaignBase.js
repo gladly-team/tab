@@ -1,4 +1,3 @@
-
 import React from 'react'
 import PropTypes from 'prop-types'
 import { QueryRenderer } from 'react-relay'
@@ -13,11 +12,11 @@ import withUserId from 'js/components/General/withUserId'
 import HeartDonationCampaign from 'js/components/Campaign/HeartDonationCampaignContainer'
 
 class CampaignBase extends React.Component {
-  render () {
+  render() {
     const { userId, theme } = this.props
     const anchorStyle = {
       color: theme.palette.primary.main,
-      textDecoration: 'none'
+      textDecoration: 'none',
     }
     const CAMPAIGN_START_TIME_ISO = '2018-11-26T16:00:00.000Z'
     const CAMPAIGN_END_TIME_ISO = '2018-11-30T22:00:00.000Z'
@@ -29,24 +28,26 @@ class CampaignBase extends React.Component {
         // Hardcode campaign-specific data requirements here, and remove
         // after the campaign is no longer live.
         query={graphql`
-            query CampaignBaseQuery($userId: String!, $charityId: String!,
-              $startTime: String!, $endTime: String!) {
-              app {
-                ...HeartDonationCampaignContainer_app @arguments(
-                  startTime: $startTime,
-                  endTime: $endTime
-                )
-              }
-              user(userId: $userId) {
-                ...HeartDonationCampaignContainer_user
-              }
+          query CampaignBaseQuery(
+            $userId: String!
+            $charityId: String!
+            $startTime: String!
+            $endTime: String!
+          ) {
+            app {
+              ...HeartDonationCampaignContainer_app
+                @arguments(startTime: $startTime, endTime: $endTime)
             }
-          `}
+            user(userId: $userId) {
+              ...HeartDonationCampaignContainer_user
+            }
+          }
+        `}
         variables={{
           userId: userId,
           charityId: '77ee7208-62d7-41ad-a6e1-60f8d1dcfd9a',
           startTime: CAMPAIGN_START_TIME_ISO,
-          endTime: CAMPAIGN_END_TIME_ISO
+          endTime: CAMPAIGN_END_TIME_ISO,
         }}
         render={({ error, props, retry }) => {
           if (error) {
@@ -65,7 +66,7 @@ class CampaignBase extends React.Component {
               campaign={{
                 time: {
                   start: moment(CAMPAIGN_START_TIME_ISO),
-                  end: moment(CAMPAIGN_END_TIME_ISO)
+                  end: moment(CAMPAIGN_END_TIME_ISO),
                 },
                 heartsGoal: heartsGoal,
                 endContent: (
@@ -74,7 +75,7 @@ class CampaignBase extends React.Component {
                       variant={'h6'}
                       style={{
                         textAlign: 'center',
-                        marginTop: 4
+                        marginTop: 4,
                       }}
                     >
                       Thank You for Giving Directly!
@@ -82,34 +83,53 @@ class CampaignBase extends React.Component {
                     <div
                       style={{
                         margin: '14px 10px 20px',
-                        textAlign: 'left'
+                        textAlign: 'left',
                       }}
                     >
-                      <Typography
-                        variant={'body2'}
-                        gutterBottom
-                      >
+                      <Typography variant={'body2'} gutterBottom>
                         Thanks for welcoming{' '}
-                        <a href='https://www.givedirectly.org/' target='_blank' rel='noopener noreferrer' style={anchorStyle}>GiveDirectly</a>{' '}
-                        to Tab for a Cause this week! Your tabs will put cash into the hands of people{' '}
-                        who need it most.
+                        <a
+                          href="https://www.givedirectly.org/"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={anchorStyle}
+                        >
+                          GiveDirectly
+                        </a>{' '}
+                        to Tab for a Cause this week! Your tabs will put cash
+                        into the hands of people who need it most.
                       </Typography>
-                      <Typography
-                        variant={'body2'}
-                        gutterBottom
-                      >
-                        <span style={{ fontWeight: 'bold' }}>Your tabs, more causes:</span>{' '}
-                        Each month in 2019, we'll be highlighting the work of different charities in a{' '}
-                        <a href='https://www.facebook.com/notes/tab-for-a-cause/introducing-monthly-charity-spotlight/2071986076177802/' target='_blank' rel='noopener noreferrer' style={anchorStyle}>
-                        "Charity Spotlight"</a>. You'll be able to donate Hearts to a wider variety of causes,{' '}
-                        and best of all, you'll get to vote for which new non-profits we{' '}
-                        should feature! Learn more and nominate your favorite charity{' '}
-                        <a href='https://www.facebook.com/notes/tab-for-a-cause/introducing-monthly-charity-spotlight/2071986076177802/' target='_blank' rel='noopener noreferrer' style={anchorStyle}>
-                        here</a>.
+                      <Typography variant={'body2'} gutterBottom>
+                        <span style={{ fontWeight: 'bold' }}>
+                          Your tabs, more causes:
+                        </span>{' '}
+                        Each month in 2019, we'll be highlighting the work of
+                        different charities in a{' '}
+                        <a
+                          href="https://www.facebook.com/notes/tab-for-a-cause/introducing-monthly-charity-spotlight/2071986076177802/"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={anchorStyle}
+                        >
+                          "Charity Spotlight"
+                        </a>
+                        . You'll be able to donate Hearts to a wider variety of
+                        causes, and best of all, you'll get to vote for which
+                        new non-profits we should feature! Learn more and
+                        nominate your favorite charity{' '}
+                        <a
+                          href="https://www.facebook.com/notes/tab-for-a-cause/introducing-monthly-charity-spotlight/2071986076177802/"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={anchorStyle}
+                        >
+                          here
+                        </a>
+                        .
                       </Typography>
                     </div>
                   </div>
-                )
+                ),
               }}
               showError={this.props.showError}
             >
@@ -117,7 +137,7 @@ class CampaignBase extends React.Component {
                 variant={'h6'}
                 style={{
                   textAlign: 'center',
-                  marginTop: 4
+                  marginTop: 4,
                 }}
               >
                 This Giving Tuesday, Give Directly
@@ -125,40 +145,61 @@ class CampaignBase extends React.Component {
               <div
                 style={{
                   margin: '14px 10px 20px',
-                  textAlign: 'left'
+                  textAlign: 'left',
                 }}
               >
-                <Typography
-                  variant={'body2'}
-                  gutterBottom
-                >
+                <Typography variant={'body2'} gutterBottom>
                   We’re very excited to introduce a new charity partner,{' '}
-                  <a href='https://www.givedirectly.org/' target='_blank' rel='noopener noreferrer' style={anchorStyle}>GiveDirectly</a>!
+                  <a
+                    href="https://www.givedirectly.org/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={anchorStyle}
+                  >
+                    GiveDirectly
+                  </a>
+                  !
                 </Typography>
-                <Typography
-                  variant={'body2'}
-                  gutterBottom
-                >
-                  GiveDirectly offers a simple approach to addressing poverty: cut out{' '}
-                  intermediaries and allow poor families to decide for themselves what they{' '}
-                  need most. They consistently{' '}
-                  <a href='https://www.givedirectly.org/operating-model' target='_blank' rel='noopener noreferrer' style={anchorStyle}>measure their impact</a>,{' '}
-                  <a href='https://www.givedirectly.org/research-at-give-directly' target='_blank' rel='noopener noreferrer' style={anchorStyle}>show impressive results</a>,{' '}
-                  and are one of only nine top-rated charities on{' '}
-                  <a href='https://www.givewell.org/charities/give-directly' target='_blank' rel='noopener noreferrer' style={anchorStyle}>GiveWell</a>.
+                <Typography variant={'body2'} gutterBottom>
+                  GiveDirectly offers a simple approach to addressing poverty:
+                  cut out intermediaries and allow poor families to decide for
+                  themselves what they need most. They consistently{' '}
+                  <a
+                    href="https://www.givedirectly.org/operating-model"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={anchorStyle}
+                  >
+                    measure their impact
+                  </a>
+                  ,{' '}
+                  <a
+                    href="https://www.givedirectly.org/research-at-give-directly"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={anchorStyle}
+                  >
+                    show impressive results
+                  </a>
+                  , and are one of only nine top-rated charities on{' '}
+                  <a
+                    href="https://www.givewell.org/charities/give-directly"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={anchorStyle}
+                  >
+                    GiveWell
+                  </a>
+                  .
                 </Typography>
-                <Typography
-                  variant={'body2'}
-                  gutterBottom
-                >
-                  Join us in welcoming GiveDirectly to Tab for a Cause with a cornucopia of Hearts!
+                <Typography variant={'body2'} gutterBottom>
+                  Join us in welcoming GiveDirectly to Tab for a Cause with a
+                  cornucopia of Hearts!
                 </Typography>
-                <Typography
-                  variant={'body2'}
-                  gutterBottom
-                >
-                  <span style={{ fontWeight: 'bold' }}>Update: </span>congrats, we passed our original{' '}
-                  goal of 10M Hearts! Let's see if we can hit 18M!
+                <Typography variant={'body2'} gutterBottom>
+                  <span style={{ fontWeight: 'bold' }}>Update: </span>congrats,
+                  we passed our original goal of 10M Hearts! Let's see if we can
+                  hit 18M!
                 </Typography>
               </div>
             </HeartDonationCampaign>
@@ -178,7 +219,7 @@ class CampaignBase extends React.Component {
                 width: '100%',
                 height: '100%',
                 boxSizing: 'border-box',
-                pointerEvents: 'none'
+                pointerEvents: 'none',
               }}
             >
               <FadeInDashboardAnimation>
@@ -191,7 +232,7 @@ class CampaignBase extends React.Component {
                     marginBottom: 100,
                     padding: 0,
                     background: '#FFF',
-                    border: 'none'
+                    border: 'none',
                   }}
                 >
                   <div
@@ -200,8 +241,9 @@ class CampaignBase extends React.Component {
                       height: 3,
                       borderTopLeftRadius: 2,
                       borderTopRightRadius: 2,
-                      backgroundColor: theme.palette.secondary.main
-                    }} />
+                      backgroundColor: theme.palette.secondary.main,
+                    }}
+                  />
                   {currentCampaign}
                 </Paper>
               </FadeInDashboardAnimation>
@@ -216,7 +258,7 @@ class CampaignBase extends React.Component {
 CampaignBase.propTypes = {
   userId: PropTypes.string.isRequired,
   showError: PropTypes.func.isRequired,
-  theme: PropTypes.object.isRequired
+  theme: PropTypes.object.isRequired,
 }
 
 CampaignBase.defaultProps = {}

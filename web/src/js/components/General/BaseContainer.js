@@ -1,7 +1,7 @@
 import React from 'react'
 
 class BaseContainer extends React.Component {
-  render () {
+  render() {
     const root = {
       position: 'absolute',
       top: 0,
@@ -10,14 +10,10 @@ class BaseContainer extends React.Component {
       left: 0,
       margin: 0,
       padding: 0,
-      border: 'none'
+      border: 'none',
     }
 
-    return (
-      <div style={root}>
-        {this.props.children}
-      </div>
-    )
+    return <div style={root}>{this.props.children}</div>
   }
 }
 

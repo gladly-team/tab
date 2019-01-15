@@ -1,4 +1,3 @@
-
 import getAmazonTag from 'js/ads/amazon/getAmazonTag'
 import {
   getNumberOfAdsToShow,
@@ -8,7 +7,7 @@ import {
   CONSENT_MANAGEMENT_TIMEOUT,
   VERTICAL_AD_SLOT_DOM_ID,
   SECOND_VERTICAL_AD_SLOT_DOM_ID,
-  HORIZONTAL_AD_SLOT_DOM_ID
+  HORIZONTAL_AD_SLOT_DOM_ID,
 } from 'js/ads/adSettings'
 
 // Save returned Amazon bids.
@@ -33,7 +32,7 @@ export const storeAmazonBids = () => {
   // }
   try {
     if (amazonBids && amazonBids.length) {
-      amazonBids.forEach((bid) => {
+      amazonBids.forEach(bid => {
         window.tabforacause.ads.amazonBids[bid.slotID] = bid
       })
     }
@@ -49,7 +48,7 @@ export const storeAmazonBids = () => {
  * @return {Promise<undefined>} Resolves when the Amazon
  *   bid requests return or time out.
  */
-function initApstag () {
+function initApstag() {
   const numAds = getNumberOfAdsToShow()
   if (numAds < 1) {
     return
@@ -58,20 +57,22 @@ function initApstag () {
 
   // Only get bids for the horizontal ad slot if only
   // one ad is enabled.
-  const slots = [{
-    slotID: HORIZONTAL_AD_SLOT_DOM_ID,
-    sizes: getHorizontalAdSizes()
-  }]
+  const slots = [
+    {
+      slotID: HORIZONTAL_AD_SLOT_DOM_ID,
+      sizes: getHorizontalAdSizes(),
+    },
+  ]
   if (numAds > 1) {
     slots.push({
       slotID: VERTICAL_AD_SLOT_DOM_ID,
-      sizes: getVerticalAdSizes()
+      sizes: getVerticalAdSizes(),
     })
   }
   if (numAds > 2) {
     slots.push({
       slotID: SECOND_VERTICAL_AD_SLOT_DOM_ID,
-      sizes: getVerticalAdSizes()
+      sizes: getVerticalAdSizes(),
     })
   }
 
@@ -80,20 +81,21 @@ function initApstag () {
       pubID: '3397',
       adServer: 'googletag',
       gdpr: {
-        cmpTimeout: CONSENT_MANAGEMENT_TIMEOUT
-      }
+        cmpTimeout: CONSENT_MANAGEMENT_TIMEOUT,
+      },
     })
     apstag.fetchBids(
       {
         slots: slots,
-        timeout: BIDDER_TIMEOUT
+        timeout: BIDDER_TIMEOUT,
       },
-      function (bids) {
+      function(bids) {
         amazonBids = bids
         handleAuctionEnd()
-      })
+      }
+    )
 
-    function handleAuctionEnd () {
+    function handleAuctionEnd() {
       resolve()
     }
   })

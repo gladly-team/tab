@@ -2,16 +2,11 @@
 
 import getAmazonTag, {
   __disableAutomaticBidResponses,
-  __runBidsBack
+  __runBidsBack,
 } from 'js/ads/amazon/getAmazonTag'
 import getGoogleTag from 'js/ads/google/getGoogleTag'
-import {
-  getDefaultTabGlobal,
-  mockAmazonBidResponse
-} from 'js/utils/test-utils'
-import {
-  getNumberOfAdsToShow
-} from 'js/ads/adSettings'
+import { getDefaultTabGlobal, mockAmazonBidResponse } from 'js/utils/test-utils'
+import { getNumberOfAdsToShow } from 'js/ads/adSettings'
 
 jest.mock('js/ads/adSettings')
 jest.mock('js/ads/consentManagement')
@@ -40,7 +35,7 @@ afterAll(() => {
   delete window.tabforacause
 })
 
-describe('amazonBidder', function () {
+describe('amazonBidder', function() {
   it('runs without error', async () => {
     expect.assertions(0)
     const amazonBidder = require('js/ads/amazon/amazonBidder').default
@@ -56,7 +51,7 @@ describe('amazonBidder', function () {
 
     expect(apstag.init.mock.calls[0][0]).toMatchObject({
       pubID: '3397',
-      adServer: 'googletag'
+      adServer: 'googletag',
     })
   })
 
@@ -72,18 +67,14 @@ describe('amazonBidder', function () {
       slots: [
         {
           slotID: 'div-gpt-ad-24682468-0',
-          sizes: [
-            [728, 90]
-          ]
+          sizes: [[728, 90]],
         },
         {
           slotID: 'div-gpt-ad-1357913579-0',
-          sizes: [
-            [300, 250]
-          ]
-        }
+          sizes: [[300, 250]],
+        },
       ],
-      timeout: 700
+      timeout: 700,
     })
   })
 
@@ -92,7 +83,7 @@ describe('amazonBidder', function () {
     const apstag = getAmazonTag()
     const {
       getVerticalAdSizes,
-      getHorizontalAdSizes
+      getHorizontalAdSizes,
     } = require('js/ads/adSettings')
     getVerticalAdSizes.mockReturnValueOnce([[250, 250], [300, 600]])
     getHorizontalAdSizes.mockReturnValueOnce([[728, 90], [720, 300]])
@@ -103,20 +94,14 @@ describe('amazonBidder', function () {
       slots: [
         {
           slotID: 'div-gpt-ad-24682468-0',
-          sizes: [
-            [728, 90],
-            [720, 300]
-          ]
+          sizes: [[728, 90], [720, 300]],
         },
         {
           slotID: 'div-gpt-ad-1357913579-0',
-          sizes: [
-            [250, 250],
-            [300, 600]
-          ]
-        }
+          sizes: [[250, 250], [300, 600]],
+        },
       ],
-      timeout: 700
+      timeout: 700,
     })
   })
 
@@ -126,7 +111,9 @@ describe('amazonBidder', function () {
     const amazonBidder = require('js/ads/amazon/amazonBidder').default
     const promise = amazonBidder()
     promise.done = false
-    promise.then(() => { promise.done = true })
+    promise.then(() => {
+      promise.done = true
+    })
 
     // Flush all promises
     await new Promise(resolve => setImmediate(resolve))
@@ -140,7 +127,9 @@ describe('amazonBidder', function () {
     const amazonBidder = require('js/ads/amazon/amazonBidder').default
     const promise = amazonBidder()
     promise.done = false
-    promise.then(() => { promise.done = true })
+    promise.then(() => {
+      promise.done = true
+    })
 
     // Flush all promises
     await new Promise(resolve => setImmediate(resolve))
@@ -164,33 +153,38 @@ describe('amazonBidder', function () {
     })
 
     const amazonBidder = require('js/ads/amazon/amazonBidder').default
-    const storeAmazonBids = require('js/ads/amazon/amazonBidder').storeAmazonBids
+    const storeAmazonBids = require('js/ads/amazon/amazonBidder')
+      .storeAmazonBids
     amazonBidder()
 
     // Fake that apstag calls callback for returned bids
     const someBid = mockAmazonBidResponse({
       amznbid: 'some-id',
-      slotID: 'div-gpt-ad-123456789-0'
+      slotID: 'div-gpt-ad-123456789-0',
     })
     const someOtherBid = mockAmazonBidResponse({
       amznbid: 'some-other-id',
-      slotID: 'div-gpt-ad-24681357-0'
+      slotID: 'div-gpt-ad-24681357-0',
     })
     passedCallback([someBid, someOtherBid])
 
     // Should not have stored the bids yet.
-    expect(window.tabforacause.ads.amazonBids['div-gpt-ad-123456789-0'])
-      .toBeUndefined()
-    expect(window.tabforacause.ads.amazonBids['div-gpt-ad-24681357-0'])
-      .toBeUndefined()
+    expect(
+      window.tabforacause.ads.amazonBids['div-gpt-ad-123456789-0']
+    ).toBeUndefined()
+    expect(
+      window.tabforacause.ads.amazonBids['div-gpt-ad-24681357-0']
+    ).toBeUndefined()
 
     storeAmazonBids()
 
     // Now should have stored the bids.
-    expect(window.tabforacause.ads.amazonBids['div-gpt-ad-123456789-0'])
-      .toEqual(someBid)
-    expect(window.tabforacause.ads.amazonBids['div-gpt-ad-24681357-0'])
-      .toEqual(someOtherBid)
+    expect(
+      window.tabforacause.ads.amazonBids['div-gpt-ad-123456789-0']
+    ).toEqual(someBid)
+    expect(window.tabforacause.ads.amazonBids['div-gpt-ad-24681357-0']).toEqual(
+      someOtherBid
+    )
   })
 
   it('does not call apstag.fetchBids when zero ads are enabled', async () => {
@@ -205,7 +199,7 @@ describe('amazonBidder', function () {
     getNumberOfAdsToShow.mockReturnValue(1)
     const {
       getVerticalAdSizes,
-      getHorizontalAdSizes
+      getHorizontalAdSizes,
     } = require('js/ads/adSettings')
     getVerticalAdSizes.mockReturnValue([[300, 250]])
     getHorizontalAdSizes.mockReturnValue([[728, 90]])
@@ -217,11 +211,9 @@ describe('amazonBidder', function () {
       slots: [
         {
           slotID: 'div-gpt-ad-24682468-0',
-          sizes: [
-            [728, 90]
-          ]
-        }
-      ]
+          sizes: [[728, 90]],
+        },
+      ],
     })
   })
 
@@ -230,7 +222,7 @@ describe('amazonBidder', function () {
     const apstag = getAmazonTag()
     const {
       getVerticalAdSizes,
-      getHorizontalAdSizes
+      getHorizontalAdSizes,
     } = require('js/ads/adSettings')
     getVerticalAdSizes.mockReturnValue([[300, 250]])
     getHorizontalAdSizes.mockReturnValue([[728, 90]])
@@ -241,17 +233,13 @@ describe('amazonBidder', function () {
       slots: [
         {
           slotID: 'div-gpt-ad-24682468-0',
-          sizes: [
-            [728, 90]
-          ]
+          sizes: [[728, 90]],
         },
         {
           slotID: 'div-gpt-ad-1357913579-0',
-          sizes: [
-            [300, 250]
-          ]
-        }
-      ]
+          sizes: [[300, 250]],
+        },
+      ],
     })
   })
 
@@ -260,7 +248,7 @@ describe('amazonBidder', function () {
     const apstag = getAmazonTag()
     const {
       getVerticalAdSizes,
-      getHorizontalAdSizes
+      getHorizontalAdSizes,
     } = require('js/ads/adSettings')
     getVerticalAdSizes.mockReturnValue([[300, 250]])
     getHorizontalAdSizes.mockReturnValue([[728, 90]])
@@ -271,23 +259,17 @@ describe('amazonBidder', function () {
       slots: [
         {
           slotID: 'div-gpt-ad-24682468-0',
-          sizes: [
-            [728, 90]
-          ]
+          sizes: [[728, 90]],
         },
         {
           slotID: 'div-gpt-ad-1357913579-0',
-          sizes: [
-            [300, 250]
-          ]
+          sizes: [[300, 250]],
         },
         {
           slotID: 'div-gpt-ad-11235813-0',
-          sizes: [
-            [300, 250]
-          ]
-        }
-      ]
+          sizes: [[300, 250]],
+        },
+      ],
     })
   })
 })

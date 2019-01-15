@@ -1,7 +1,5 @@
 import graphql from 'babel-plugin-relay/macro'
-import {
-  createFragmentContainer
-} from 'react-relay'
+import { createFragmentContainer } from 'react-relay'
 
 import BookmarksWidget from 'js/components/Widget/Widgets/Bookmarks/BookmarksWidgetComponent'
 
@@ -20,5 +18,5 @@ export default createFragmentContainer(BookmarksWidget, {
     fragment BookmarksWidgetContainer_user on User {
       id
     }
-  `
+  `,
 })

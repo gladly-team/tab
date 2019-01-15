@@ -1,17 +1,17 @@
 import React from 'react'
 import {
   externalRedirect,
-  postUninstallSurveyURL
+  postUninstallSurveyURL,
 } from 'js/navigation/navigation'
 
 // The view the extensions open immediately after the
 // user uninstalls the extension.
 class PostUninstallView extends React.Component {
-  componentDidMount () {
+  componentDidMount() {
     externalRedirect(postUninstallSurveyURL)
   }
 
-  render () {
+  render() {
     return <span />
   }
 }

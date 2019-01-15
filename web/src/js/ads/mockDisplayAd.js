@@ -1,11 +1,10 @@
-
 import {
   VERTICAL_AD_SLOT_DOM_ID,
   SECOND_VERTICAL_AD_SLOT_DOM_ID,
-  HORIZONTAL_AD_SLOT_DOM_ID
+  HORIZONTAL_AD_SLOT_DOM_ID,
 } from 'js/ads/adSettings'
 
-export default function (adId) {
+export default function(adId) {
   var mockNetworkDelayMs = 0
   const useMockDelay = false
   if (useMockDelay) {
@@ -14,7 +13,7 @@ export default function (adId) {
   const mapDOMIdToHeight = {
     [VERTICAL_AD_SLOT_DOM_ID]: 250,
     [SECOND_VERTICAL_AD_SLOT_DOM_ID]: 250,
-    [HORIZONTAL_AD_SLOT_DOM_ID]: 90
+    [HORIZONTAL_AD_SLOT_DOM_ID]: 90,
   }
   const height = mapDOMIdToHeight[adId]
 
@@ -24,7 +23,9 @@ export default function (adId) {
     if (!elem) {
       return
     }
-    elem.setAttribute('style', `
+    elem.setAttribute(
+      'style',
+      `
       color: white;
       background: repeating-linear-gradient(
         -55deg,
@@ -35,6 +36,7 @@ export default function (adId) {
       );
       width: 100%;
       height: ${height}px;
-    `)
+    `
+    )
   }, mockNetworkDelayMs)
 }

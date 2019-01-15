@@ -13,30 +13,27 @@ afterEach(() => {
   jest.clearAllMocks()
 })
 
-function getMockProps () {
+function getMockProps() {
   return {
     adId: 'abc123',
     style: undefined,
-    adWrapperStyle: undefined
+    adWrapperStyle: undefined,
   }
 }
 
 describe('Ad component', () => {
   it('render a child with the provided ID', () => {
     const mockProps = getMockProps()
-    const wrapper = shallow(
-      <Ad {...mockProps} />
-    )
+    const wrapper = shallow(<Ad {...mockProps} />)
     expect(wrapper.find('div#abc123').length).toBe(1)
   })
 
   it('calls to display ad on mount', () => {
     const mockProps = getMockProps()
     mockProps.adId = 'my-ad-123'
-    const wrapper = shallow(
-      <Ad {...mockProps} />,
-      { disableLifecycleMethods: true }
-    )
+    const wrapper = shallow(<Ad {...mockProps} />, {
+      disableLifecycleMethods: true,
+    })
     expect(displayAd).not.toHaveBeenCalled()
     wrapper.instance().componentDidMount()
     expect(displayAd).toHaveBeenCalledTimes(1)
@@ -47,11 +44,9 @@ describe('Ad component', () => {
     const mockProps = getMockProps()
     mockProps.style = {
       display: 'inline',
-      color: 'green'
+      color: 'green',
     }
-    const wrapper = mount(
-      <Ad {...mockProps} />
-    )
+    const wrapper = mount(<Ad {...mockProps} />)
     const elem = findDOMNode(wrapper.instance())
     const elemStyle = window.getComputedStyle(elem)
     expect(elemStyle.display).toBe('inline')
@@ -61,11 +56,9 @@ describe('Ad component', () => {
   it('does not rerender after initial mount', done => {
     const mockProps = getMockProps()
     mockProps.style = {
-      background: 'purple'
+      background: 'purple',
     }
-    const wrapper = mount(
-      <Ad {...mockProps} />
-    )
+    const wrapper = mount(<Ad {...mockProps} />)
     const elem = findDOMNode(wrapper.instance())
     wrapper.setProps({ style: { background: 'yellow' } }, () => {
       const elemStyle = window.getComputedStyle(elem)

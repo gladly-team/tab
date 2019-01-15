@@ -1,10 +1,7 @@
 /* eslint-env jest */
 
 import React from 'react'
-import {
-  mount,
-  shallow
-} from 'enzyme'
+import { mount, shallow } from 'enzyme'
 
 jest.mock('react-relay')
 jest.mock('js/components/General/withUserId')
@@ -18,16 +15,12 @@ afterEach(() => {
 describe('SearchView', () => {
   it('renders without error', () => {
     const SearchView = require('js/components/Search/SearchView').default
-    shallow(
-      <SearchView />
-    ).dive()
+    shallow(<SearchView />).dive()
   })
 
   it('includes QueryRenderer', () => {
     const SearchView = require('js/components/Search/SearchView').default
-    const wrapper = mount(
-      <SearchView />
-    )
+    const wrapper = mount(<SearchView />)
     const { QueryRenderer } = require('react-relay')
     expect(wrapper.find(QueryRenderer).length).toBe(1)
   })
@@ -38,12 +31,10 @@ describe('SearchView', () => {
       <ChildComponent userId={'abc123xyz456'} {...props} />
     ))
     const SearchView = require('js/components/Search/SearchView').default
-    const wrapper = mount(
-      <SearchView />
-    )
+    const wrapper = mount(<SearchView />)
     const { QueryRenderer } = require('react-relay')
     expect(wrapper.find(QueryRenderer).prop('variables')).toEqual({
-      userId: 'abc123xyz456' // default value in withUserId mock
+      userId: 'abc123xyz456', // default value in withUserId mock
     })
   })
 
@@ -54,9 +45,7 @@ describe('SearchView', () => {
     ))
 
     const SearchView = require('js/components/Search/SearchView').default
-    const wrapper = mount(
-      <SearchView />
-    )
+    const wrapper = mount(<SearchView />)
     const { QueryRenderer } = require('react-relay')
     expect(wrapper.find(QueryRenderer).prop('variables')).not.toBeDefined()
   })
@@ -64,34 +53,35 @@ describe('SearchView', () => {
   it('passes "app", "user", "location" props to the SearchContainer when they exist', () => {
     const fakeProps = {
       app: {
-        some: 'value'
+        some: 'value',
       },
       user: {
         id: 'abc123xyz456',
-        vc: 233
-      }
+        vc: 233,
+      },
     }
     const { QueryRenderer } = require('react-relay')
     QueryRenderer.__setQueryResponse({
       error: null,
       props: fakeProps,
-      retry: jest.fn()
+      retry: jest.fn(),
     })
 
     const SearchView = require('js/components/Search/SearchView').default
     const wrapper = mount(
       <SearchView
         location={{
-          search: '?q=tacos'
+          search: '?q=tacos',
         }}
       />
     )
-    const SearchContainer = require('js/components/Search/SearchPageContainer').default
+    const SearchContainer = require('js/components/Search/SearchPageContainer')
+      .default
     const searchPageContainer = wrapper.find(SearchContainer)
     expect(searchPageContainer.prop('app')).toEqual(fakeProps.app)
     expect(searchPageContainer.prop('user')).toEqual(fakeProps.user)
     expect(searchPageContainer.prop('location')).toEqual({
-      search: '?q=tacos'
+      search: '?q=tacos',
     })
   })
 })

@@ -44,10 +44,10 @@ const getMockWindow = () => {
     pathname: '/iframe.html',
     port: '',
     protocol: 'chrome-extension',
-    search: ''
+    search: '',
   })
   parentWindow.document = Object.assign({}, parentWindow.document, {
-    referrer: ''
+    referrer: '',
   })
   parentWindow.parent = parentWindow
   parentWindow.top = parentWindow
@@ -55,9 +55,7 @@ const getMockWindow = () => {
   // Create the current window.
   const currentWindow = Object.create(new JSDOM())
   currentWindow.location = Object.assign({}, currentWindow.location, {
-    ancestorOrigins: [
-      'chrome-extension://abcdefghijklmnopqrs'
-    ],
+    ancestorOrigins: ['chrome-extension://abcdefghijklmnopqrs'],
     host: 'tab.gladly.io',
     hostname: 'tab.gladly.io',
     href: 'https://tab.gladly.io/newtab/',
@@ -65,31 +63,49 @@ const getMockWindow = () => {
     pathname: '/newtab/',
     port: '',
     protocol: 'https:',
-    search: ''
+    search: '',
   })
   currentWindow.document = Object.assign({}, currentWindow.document, {
-    referrer: ''
+    referrer: '',
   })
 
   // Give the current window a parent. Make accesing location
   // properties fail as we'd expect in a cross-origin environment.
   const parentWindowCrossDomain = Object.assign({}, parentWindow, {
-    get location () {
-      function crossOriginError () {
+    get location() {
+      function crossOriginError() {
         throw new Error('Blocked a frame from accessing a cross-origin frame.')
       }
       return {
-        get ancestorOrigins () { return crossOriginError() },
-        get host () { return crossOriginError() },
-        get hostname () { return crossOriginError() },
-        get href () { return crossOriginError() },
-        get origin () { return crossOriginError() },
-        get pathname () { return crossOriginError() },
-        get port () { return crossOriginError() },
-        get protocol () { return crossOriginError() },
-        get search () { return crossOriginError() }
+        get ancestorOrigins() {
+          return crossOriginError()
+        },
+        get host() {
+          return crossOriginError()
+        },
+        get hostname() {
+          return crossOriginError()
+        },
+        get href() {
+          return crossOriginError()
+        },
+        get origin() {
+          return crossOriginError()
+        },
+        get pathname() {
+          return crossOriginError()
+        },
+        get port() {
+          return crossOriginError()
+        },
+        get protocol() {
+          return crossOriginError()
+        },
+        get search() {
+          return crossOriginError()
+        },
       }
-    }
+    },
   })
   currentWindow.parent = parentWindowCrossDomain
   currentWindow.top = parentWindowCrossDomain
@@ -117,7 +133,7 @@ describe('Prebid.js patch test', () => {
       numIframes: 0,
       reachedTop: true,
       referer: 'https://tab.gladly.io/newtab/',
-      stack: ['https://tab.gladly.io/newtab/']
+      stack: ['https://tab.gladly.io/newtab/'],
     })
   })
 
@@ -129,9 +145,7 @@ describe('Prebid.js patch test', () => {
       // Ideally should set ancestorOrigins to an empty array,
       // but it hasn't caused problems. Leaving it as-is because
       // the function is deprecated.
-      ancestorOrigins: [
-        'chrome-extension://abcdefghijklmnopqrs'
-      ],
+      ancestorOrigins: ['chrome-extension://abcdefghijklmnopqrs'],
       host: 'tab.gladly.io',
       hostname: 'tab.gladly.io',
       href: 'https://tab.gladly.io/newtab/',
@@ -139,7 +153,7 @@ describe('Prebid.js patch test', () => {
       pathname: '/newtab/',
       port: '',
       protocol: 'https:',
-      search: ''
+      search: '',
     })
   })
 

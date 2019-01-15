@@ -1,8 +1,6 @@
 /* eslint-env jest */
 
-import {
-  STORAGE_NEW_CONSENT_DATA_EXISTS
-} from 'js/constants'
+import { STORAGE_NEW_CONSENT_DATA_EXISTS } from 'js/constants'
 
 jest.mock('js/utils/localstorage-mgr')
 
@@ -66,11 +64,12 @@ describe('consentManagement', () => {
         callback({
           consentData: 'abcdefghijklm', // consent string
           gdprApplies: true,
-          hasGlobalConsent: false
+          hasGlobalConsent: false,
         })
       }
     })
-    const getConsentString = require('js/ads/consentManagement').getConsentString
+    const getConsentString = require('js/ads/consentManagement')
+      .getConsentString
     const consentString = await getConsentString()
     expect(consentString).toEqual('abcdefghijklm')
   })
@@ -83,13 +82,15 @@ describe('consentManagement', () => {
     // Mute expected console error
     jest.spyOn(console, 'error').mockImplementationOnce(() => {})
 
-    const getConsentString = require('js/ads/consentManagement').getConsentString
+    const getConsentString = require('js/ads/consentManagement')
+      .getConsentString
     const consentString = await getConsentString()
     expect(consentString).toBeNull()
   })
 
   it('calls to display CMP UI as expected', () => {
-    const displayConsentUI = require('js/ads/consentManagement').displayConsentUI
+    const displayConsentUI = require('js/ads/consentManagement')
+      .displayConsentUI
     displayConsentUI()
     expect(window.__cmp).toHaveBeenCalledWith('displayConsentUi')
   })
@@ -104,11 +105,12 @@ describe('consentManagement', () => {
         callback({
           consentData: 'abcdefghijklm', // consent string
           gdprApplies: true,
-          hasGlobalConsent: false
+          hasGlobalConsent: false,
         })
       }
     })
-    const hasGlobalConsent = require('js/ads/consentManagement').hasGlobalConsent
+    const hasGlobalConsent = require('js/ads/consentManagement')
+      .hasGlobalConsent
     const isGlobalConsent = await hasGlobalConsent()
     expect(isGlobalConsent).toBe(false)
   })
@@ -123,7 +125,8 @@ describe('consentManagement', () => {
     // Mute expected console error
     jest.spyOn(console, 'error').mockImplementationOnce(() => {})
 
-    const hasGlobalConsent = require('js/ads/consentManagement').hasGlobalConsent
+    const hasGlobalConsent = require('js/ads/consentManagement')
+      .hasGlobalConsent
     const isGlobalConsent = await hasGlobalConsent()
     expect(isGlobalConsent).toBeNull()
   })
@@ -133,20 +136,23 @@ describe('consentManagement', () => {
 
     // Mock the CMP callback for getting consent data
     var mockCMPConsentChange
-    window.__cmp.mockImplementation((command, callback, getConsentDataCallback) => {
-      if (command === 'setConsentUiCallback') {
-        mockCMPConsentChange = callback
+    window.__cmp.mockImplementation(
+      (command, callback, getConsentDataCallback) => {
+        if (command === 'setConsentUiCallback') {
+          mockCMPConsentChange = callback
+        }
+        if (command === 'getConsentData') {
+          /* eslint-disable-next-line standard/no-callback-literal */
+          getConsentDataCallback({
+            consentData: 'abcdefghijklm',
+            gdprApplies: true,
+            hasGlobalConsent: false,
+          })
+        }
       }
-      if (command === 'getConsentData') {
-        /* eslint-disable-next-line standard/no-callback-literal */
-        getConsentDataCallback({
-          consentData: 'abcdefghijklm',
-          gdprApplies: true,
-          hasGlobalConsent: false
-        })
-      }
-    })
-    const registerConsentCallback = require('js/ads/consentManagement').registerConsentCallback
+    )
+    const registerConsentCallback = require('js/ads/consentManagement')
+      .registerConsentCallback
     const mockCallback = jest.fn()
     registerConsentCallback(mockCallback)
 
@@ -162,20 +168,23 @@ describe('consentManagement', () => {
 
     // Mock the CMP callback for getting consent data
     var mockCMPConsentChange
-    window.__cmp.mockImplementation((command, callback, getConsentDataCallback) => {
-      if (command === 'setConsentUiCallback') {
-        mockCMPConsentChange = callback
+    window.__cmp.mockImplementation(
+      (command, callback, getConsentDataCallback) => {
+        if (command === 'setConsentUiCallback') {
+          mockCMPConsentChange = callback
+        }
+        if (command === 'getConsentData') {
+          /* eslint-disable-next-line standard/no-callback-literal */
+          getConsentDataCallback({
+            consentData: 'abcdefghijklm',
+            gdprApplies: true,
+            hasGlobalConsent: false,
+          })
+        }
       }
-      if (command === 'getConsentData') {
-        /* eslint-disable-next-line standard/no-callback-literal */
-        getConsentDataCallback({
-          consentData: 'abcdefghijklm',
-          gdprApplies: true,
-          hasGlobalConsent: false
-        })
-      }
-    })
-    const registerConsentCallback = require('js/ads/consentManagement').registerConsentCallback
+    )
+    const registerConsentCallback = require('js/ads/consentManagement')
+      .registerConsentCallback
     const mockCallbackA = jest.fn()
     registerConsentCallback(mockCallbackA)
     const mockCallbackB = jest.fn()
@@ -196,22 +205,25 @@ describe('consentManagement', () => {
 
     // Mock the CMP callback for getting consent data
     var mockCMPConsentChange
-    window.__cmp.mockImplementation((command, callback, getConsentDataCallback) => {
-      if (command === 'setConsentUiCallback') {
-        mockCMPConsentChange = callback
+    window.__cmp.mockImplementation(
+      (command, callback, getConsentDataCallback) => {
+        if (command === 'setConsentUiCallback') {
+          mockCMPConsentChange = callback
+        }
+        if (command === 'getConsentData') {
+          /* eslint-disable-next-line standard/no-callback-literal */
+          getConsentDataCallback({
+            consentData: 'abcdefghijklm',
+            gdprApplies: true,
+            hasGlobalConsent: false,
+          })
+        }
       }
-      if (command === 'getConsentData') {
-        /* eslint-disable-next-line standard/no-callback-literal */
-        getConsentDataCallback({
-          consentData: 'abcdefghijklm',
-          gdprApplies: true,
-          hasGlobalConsent: false
-        })
-      }
-    })
+    )
 
     // Register some callbacks.
-    const registerConsentCallback = require('js/ads/consentManagement').registerConsentCallback
+    const registerConsentCallback = require('js/ads/consentManagement')
+      .registerConsentCallback
     const mockCallbackA = jest.fn()
     registerConsentCallback(mockCallbackA)
     const mockCallbackB = jest.fn()
@@ -226,7 +238,8 @@ describe('consentManagement', () => {
     expect(mockCallbackC).toHaveBeenCalledTimes(1)
 
     // Unregister some callbacks.
-    const unregisterConsentCallback = require('js/ads/consentManagement').unregisterConsentCallback
+    const unregisterConsentCallback = require('js/ads/consentManagement')
+      .unregisterConsentCallback
     unregisterConsentCallback(mockCallbackA)
     unregisterConsentCallback(mockCallbackC)
 
@@ -245,7 +258,10 @@ describe('consentManagement', () => {
     const saveConsentUpdateEventToLocalStorage = require('js/ads/consentManagement')
       .saveConsentUpdateEventToLocalStorage
     saveConsentUpdateEventToLocalStorage()
-    expect(localStorageManager.setItem).toHaveBeenCalledWith(STORAGE_NEW_CONSENT_DATA_EXISTS, 'true')
+    expect(localStorageManager.setItem).toHaveBeenCalledWith(
+      STORAGE_NEW_CONSENT_DATA_EXISTS,
+      'true'
+    )
   })
 
   it('checking if new consent needs to be logged works as expected', () => {
@@ -265,7 +281,8 @@ describe('consentManagement', () => {
     const markConsentDataAsLogged = require('js/ads/consentManagement')
       .markConsentDataAsLogged
     markConsentDataAsLogged()
-    expect(localStorageManager.removeItem)
-      .toHaveBeenCalledWith(STORAGE_NEW_CONSENT_DATA_EXISTS)
+    expect(localStorageManager.removeItem).toHaveBeenCalledWith(
+      STORAGE_NEW_CONSENT_DATA_EXISTS
+    )
   })
 })

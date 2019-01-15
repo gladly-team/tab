@@ -1,25 +1,15 @@
 /* eslint-env jest */
 
 import React from 'react'
-import {
-  mount,
-  shallow
-} from 'enzyme'
+import { mount, shallow } from 'enzyme'
 import DashboardView from 'js/components/Dashboard/DashboardView'
 import AuthUserComponent from 'js/components/General/AuthUserComponent'
-import {
-  QueryRenderer
-} from 'react-relay'
+import { QueryRenderer } from 'react-relay'
 import DashboardContainer from 'js/components/Dashboard/DashboardContainer'
 import ErrorMessage from 'js/components/General/ErrorMessage'
 import { createNewUser } from 'js/authentication/helpers'
-import {
-  goTo,
-  loginURL
-} from 'js/navigation/navigation'
-import {
-  ERROR_USER_DOES_NOT_EXIST
-} from 'js/constants'
+import { goTo, loginURL } from 'js/navigation/navigation'
+import { ERROR_USER_DOES_NOT_EXIST } from 'js/constants'
 
 jest.mock('js/components/General/AuthUserComponent')
 jest.mock('js/components/General/ErrorMessage')
@@ -35,15 +25,11 @@ afterEach(() => {
 
 describe('DashboardView', () => {
   it('renders without error', () => {
-    shallow(
-      <DashboardView />
-    )
+    shallow(<DashboardView />)
   })
 
   it('includes AuthUserComponent', () => {
-    const wrapper = shallow(
-      <DashboardView />
-    )
+    const wrapper = shallow(<DashboardView />)
     expect(wrapper.find(AuthUserComponent).length).toBe(1)
 
     // Make sure AuthUserComponent is the top-level component.
@@ -53,18 +39,14 @@ describe('DashboardView', () => {
   })
 
   it('includes QueryRenderer', () => {
-    const wrapper = shallow(
-      <DashboardView />
-    )
+    const wrapper = shallow(<DashboardView />)
     expect(wrapper.find(QueryRenderer).length).toBe(1)
   })
 
   it('QueryRenderer receives the "variables" prop', () => {
-    const wrapper = mount(
-      <DashboardView />
-    )
+    const wrapper = mount(<DashboardView />)
     expect(wrapper.find(QueryRenderer).prop('variables')).toEqual({
-      userId: 'abc123xyz456' // default value in AuthUser mock
+      userId: 'abc123xyz456', // default value in AuthUser mock
     })
   })
 
@@ -72,34 +54,30 @@ describe('DashboardView', () => {
     QueryRenderer.__setQueryResponse({
       error: null,
       props: null,
-      retry: jest.fn()
+      retry: jest.fn(),
     })
 
-    const wrapper = mount(
-      <DashboardView />
-    )
+    const wrapper = mount(<DashboardView />)
     expect(wrapper.find(DashboardContainer).length).toBe(1)
   })
 
   it('passes "app" and "user" props to the DashboardContainer when they exist', () => {
     const fakeProps = {
       app: {
-        some: 'value'
+        some: 'value',
       },
       user: {
         id: 'abc123xyz456',
-        vc: 233
-      }
+        vc: 233,
+      },
     }
     QueryRenderer.__setQueryResponse({
       error: null,
       props: fakeProps,
-      retry: jest.fn()
+      retry: jest.fn(),
     })
 
-    const wrapper = mount(
-      <DashboardView />
-    )
+    const wrapper = mount(<DashboardView />)
     const dashboardContainer = wrapper.find(DashboardContainer)
     expect(dashboardContainer.prop('app')).toEqual(fakeProps.app)
     expect(dashboardContainer.prop('user')).toEqual(fakeProps.user)
@@ -115,25 +93,25 @@ describe('DashboardView', () => {
           errors: [
             {
               message: 'Something went horribly wrong.',
-              locations: [{
-                line: 8,
-                column: 3
-              }],
+              locations: [
+                {
+                  line: 8,
+                  column: 3,
+                },
+              ],
               path: ['user'],
-              code: 'HORRIBLY_WRONG_ERROR'
-            }
+              code: 'HORRIBLY_WRONG_ERROR',
+            },
           ],
           operation: { foo: 'bar' },
-          variables: { foo: 'baz' }
-        }
+          variables: { foo: 'baz' },
+        },
       },
       props: null,
-      retry: jest.fn()
+      retry: jest.fn(),
     })
 
-    const wrapper = mount(
-      <DashboardView />
-    )
+    const wrapper = mount(<DashboardView />)
 
     // Dashboard should not render.
     expect(wrapper.find(DashboardContainer).length).toBe(0)
@@ -141,7 +119,8 @@ describe('DashboardView', () => {
     // Make sure the ErrorMessage exists and has the expected message.
     expect(wrapper.find(ErrorMessage).length).toBe(1)
     expect(wrapper.find(ErrorMessage).prop('message')).toBe(
-      'We had a problem loading your dashboard :(')
+      'We had a problem loading your dashboard :('
+    )
   })
 
   it('attempts to create a new user and refetch when there is a "user does not exist" error', async () => {
@@ -157,26 +136,28 @@ describe('DashboardView', () => {
           errors: [
             {
               message: 'No user exists with this ID.',
-              locations: [{
-                line: 8,
-                column: 3
-              }],
+              locations: [
+                {
+                  line: 8,
+                  column: 3,
+                },
+              ],
               path: ['user'],
-              code: ERROR_USER_DOES_NOT_EXIST
-            }
+              code: ERROR_USER_DOES_NOT_EXIST,
+            },
           ],
           operation: { foo: 'bar' },
-          variables: { foo: 'baz' }
-        }
+          variables: { foo: 'baz' },
+        },
       },
       props: null,
-      retry: mockRetryFn
+      retry: mockRetryFn,
     })
 
     createNewUser.mockResolvedValue({
       id: 'abc123xyz456',
       username: null,
-      email: null
+      email: null,
     })
 
     mount(<DashboardView />)
@@ -201,20 +182,22 @@ describe('DashboardView', () => {
           errors: [
             {
               message: 'No user exists with this ID.',
-              locations: [{
-                line: 8,
-                column: 3
-              }],
+              locations: [
+                {
+                  line: 8,
+                  column: 3,
+                },
+              ],
               path: ['user'],
-              code: ERROR_USER_DOES_NOT_EXIST
-            }
+              code: ERROR_USER_DOES_NOT_EXIST,
+            },
           ],
           operation: { foo: 'bar' },
-          variables: { foo: 'baz' }
-        }
+          variables: { foo: 'baz' },
+        },
       },
       props: null,
-      retry: mockRetryFn
+      retry: mockRetryFn,
     })
 
     // Failed to create a new user.

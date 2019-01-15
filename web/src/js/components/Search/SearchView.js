@@ -1,4 +1,3 @@
-
 import React from 'react'
 import PropTypes from 'prop-types'
 import { QueryRenderer } from 'react-relay'
@@ -25,7 +24,7 @@ const SearchViewQuery = props => {
           }
         `}
         variables={{
-          userId: userId
+          userId: userId,
         }}
         {...queryRendererProps}
       />
@@ -47,7 +46,7 @@ const SearchViewQuery = props => {
 }
 
 class SearchView extends React.Component {
-  render () {
+  render() {
     const { userId } = this.props
     return (
       <SearchViewQuery
@@ -73,19 +72,20 @@ class SearchView extends React.Component {
               location={this.props.location}
             />
           )
-        }} />
+        }}
+      />
     )
   }
 }
 
 SearchView.propTypes = {
   location: PropTypes.shape({
-    search: PropTypes.string.isRequired
-  })
+    search: PropTypes.string.isRequired,
+  }),
 }
 
 SearchView.defaultProps = {}
 
 export default withUserId({
-  renderIfNoUser: true
+  renderIfNoUser: true,
 })(SearchView)

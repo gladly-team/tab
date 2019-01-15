@@ -14,9 +14,7 @@ const muiTheme = createMuiTheme(defaultTheme)
 const Root = () => (
   <MuiThemeProvider theme={muiTheme}>
     <V0MuiThemeProvider muiTheme={legacyMuiTheme}>
-      <Router
-        history={browserHistory}
-        routes={Routes} />
+      <Router history={browserHistory} routes={Routes} />
     </V0MuiThemeProvider>
   </MuiThemeProvider>
 )

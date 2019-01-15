@@ -4,7 +4,7 @@ import prebidConfig from 'js/ads/prebid/prebidConfig'
 import getGoogleTag from 'js/ads/google/getGoogleTag'
 import getPrebidPbjs, {
   __disableAutomaticBidResponses,
-  __runBidsBack
+  __runBidsBack,
 } from 'js/ads/prebid/getPrebidPbjs'
 import { getDefaultTabGlobal } from 'js/utils/test-utils'
 import {
@@ -13,7 +13,7 @@ import {
   getHorizontalAdSizes,
   VERTICAL_AD_SLOT_DOM_ID,
   SECOND_VERTICAL_AD_SLOT_DOM_ID,
-  HORIZONTAL_AD_SLOT_DOM_ID
+  HORIZONTAL_AD_SLOT_DOM_ID,
 } from 'js/ads/adSettings'
 
 jest.mock('js/ads/adSettings')
@@ -40,7 +40,7 @@ afterAll(() => {
   delete window.pbjs
 })
 
-describe('prebidConfig', function () {
+describe('prebidConfig', function() {
   it('runs without error', async () => {
     expect.assertions(0)
     await prebidConfig()
@@ -74,13 +74,16 @@ describe('prebidConfig', function () {
     expect.assertions(1)
 
     // Mock that the client is in the EU
-    const isInEuropeanUnion = require('js/utils/client-location').isInEuropeanUnion
+    const isInEuropeanUnion = require('js/utils/client-location')
+      .isInEuropeanUnion
     isInEuropeanUnion.mockResolvedValue(true)
 
     const pbjs = getPrebidPbjs()
     await prebidConfig()
 
-    expect(pbjs.setConfig.mock.calls[0][0]['consentManagement']).not.toBeUndefined()
+    expect(
+      pbjs.setConfig.mock.calls[0][0]['consentManagement']
+    ).not.toBeUndefined()
   })
 
   it('resolves immediately when we expect the mock to return bids immediately', async () => {
@@ -88,7 +91,9 @@ describe('prebidConfig', function () {
 
     const promise = prebidConfig()
     promise.done = false
-    promise.then(() => { promise.done = true })
+    promise.then(() => {
+      promise.done = true
+    })
 
     // Flush all promises
     await new Promise(resolve => setImmediate(resolve))
@@ -101,7 +106,9 @@ describe('prebidConfig', function () {
 
     const promise = prebidConfig()
     promise.done = false
-    promise.then(() => { promise.done = true })
+    promise.then(() => {
+      promise.done = true
+    })
 
     // Flush all promises
     await new Promise(resolve => setImmediate(resolve))
@@ -119,7 +126,8 @@ describe('prebidConfig', function () {
     expect.assertions(1)
 
     // Mock that the client is not in the EU
-    const isInEuropeanUnion = require('js/utils/client-location').isInEuropeanUnion
+    const isInEuropeanUnion = require('js/utils/client-location')
+      .isInEuropeanUnion
     isInEuropeanUnion.mockResolvedValue(false)
 
     const pbjs = getPrebidPbjs()
@@ -137,12 +145,15 @@ describe('prebidConfig', function () {
     await prebidConfig()
 
     const adUnitConfig = pbjs.addAdUnits.mock.calls[0][0]
-    expect(adUnitConfig[0]['mediaTypes']['banner']['sizes'])
-      .toEqual([[728, 90]])
-    expect(adUnitConfig[1]['mediaTypes']['banner']['sizes'])
-      .toEqual([[250, 250]])
-    expect(adUnitConfig[2]['mediaTypes']['banner']['sizes'])
-      .toEqual([[250, 250]])
+    expect(adUnitConfig[0]['mediaTypes']['banner']['sizes']).toEqual([
+      [728, 90],
+    ])
+    expect(adUnitConfig[1]['mediaTypes']['banner']['sizes']).toEqual([
+      [250, 250],
+    ])
+    expect(adUnitConfig[2]['mediaTypes']['banner']['sizes']).toEqual([
+      [250, 250],
+    ])
   })
 
   it('gets bids for only the horizontal ad when there is only one ad', async () => {
@@ -187,17 +198,15 @@ describe('prebidConfig', function () {
     const pbjs = getPrebidPbjs()
     await prebidConfig()
     const adUnitConfig = pbjs.addAdUnits.mock.calls[0][0]
-    expect(
-      adUnitConfig[0]['bids'].map(bid => bid.bidder).sort())
-      .toEqual([
-        'aol',
-        'emx_digital',
-        'openx',
-        'pulsepoint',
-        'rhythmone',
-        'sonobi',
-        'sovrn'
-      ])
+    expect(adUnitConfig[0]['bids'].map(bid => bid.bidder).sort()).toEqual([
+      'aol',
+      'emx_digital',
+      'openx',
+      'pulsepoint',
+      'rhythmone',
+      'sonobi',
+      'sovrn',
+    ])
   })
 
   it('when there are two ads, the list of bidders for each ad match what is expected', async () => {
@@ -206,28 +215,24 @@ describe('prebidConfig', function () {
     const pbjs = getPrebidPbjs()
     await prebidConfig()
     const adUnitConfig = pbjs.addAdUnits.mock.calls[0][0]
-    expect(
-      adUnitConfig[0]['bids'].map(bid => bid.bidder).sort())
-      .toEqual([
-        'aol',
-        'emx_digital',
-        'openx',
-        'pulsepoint',
-        'rhythmone',
-        'sonobi',
-        'sovrn'
-      ])
-    expect(
-      adUnitConfig[1]['bids'].map(bid => bid.bidder).sort())
-      .toEqual([
-        'aol',
-        'emx_digital',
-        'openx',
-        'pulsepoint',
-        'rhythmone',
-        'sonobi',
-        'sovrn'
-      ])
+    expect(adUnitConfig[0]['bids'].map(bid => bid.bidder).sort()).toEqual([
+      'aol',
+      'emx_digital',
+      'openx',
+      'pulsepoint',
+      'rhythmone',
+      'sonobi',
+      'sovrn',
+    ])
+    expect(adUnitConfig[1]['bids'].map(bid => bid.bidder).sort()).toEqual([
+      'aol',
+      'emx_digital',
+      'openx',
+      'pulsepoint',
+      'rhythmone',
+      'sonobi',
+      'sovrn',
+    ])
   })
 
   it('when there are three ads, the list of bidders for each ad match what is expected', async () => {
@@ -237,38 +242,32 @@ describe('prebidConfig', function () {
     await prebidConfig()
     const adUnitConfig = pbjs.addAdUnits.mock.calls[0][0]
 
-    expect(
-      adUnitConfig[0]['bids'].map(bid => bid.bidder).sort())
-      .toEqual([
-        'aol',
-        'emx_digital',
-        'openx',
-        'pulsepoint',
-        'rhythmone',
-        'sonobi',
-        'sovrn'
-      ])
-    expect(
-      adUnitConfig[1]['bids'].map(bid => bid.bidder).sort())
-      .toEqual([
-        'aol',
-        'emx_digital',
-        'openx',
-        'pulsepoint',
-        'rhythmone',
-        'sonobi',
-        'sovrn'
-      ])
-    expect(
-      adUnitConfig[2]['bids'].map(bid => bid.bidder).sort())
-      .toEqual([
-        'aol',
-        // 'emx_digital',
-        'openx',
-        'pulsepoint',
-        'rhythmone',
-        'sonobi',
-        'sovrn'
-      ])
+    expect(adUnitConfig[0]['bids'].map(bid => bid.bidder).sort()).toEqual([
+      'aol',
+      'emx_digital',
+      'openx',
+      'pulsepoint',
+      'rhythmone',
+      'sonobi',
+      'sovrn',
+    ])
+    expect(adUnitConfig[1]['bids'].map(bid => bid.bidder).sort()).toEqual([
+      'aol',
+      'emx_digital',
+      'openx',
+      'pulsepoint',
+      'rhythmone',
+      'sonobi',
+      'sovrn',
+    ])
+    expect(adUnitConfig[2]['bids'].map(bid => bid.bidder).sort()).toEqual([
+      'aol',
+      // 'emx_digital',
+      'openx',
+      'pulsepoint',
+      'rhythmone',
+      'sonobi',
+      'sovrn',
+    ])
   })
 })

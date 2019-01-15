@@ -4,21 +4,19 @@ import Scrollable from 'js/components/General/Scrollable'
 
 const renderView = ({ style, ...props }) => {
   const viewStyle = {
-    paddingRight: 8
+    paddingRight: 8,
   }
-  return (
-    <div style={{ ...style, ...viewStyle }} {...props} />
-  )
+  return <div style={{ ...style, ...viewStyle }} {...props} />
 }
 
 class WidgetScrollSection extends React.Component {
-  render () {
+  render() {
     return (
       <Scrollable
         style={{
           height: '60vh',
           paddingRight: 6,
-          overflowX: 'hidden'
+          overflowX: 'hidden',
         }}
         renderView={renderView}
       >
@@ -29,11 +27,11 @@ class WidgetScrollSection extends React.Component {
 }
 
 WidgetScrollSection.propTypes = {
-  style: PropTypes.object
+  style: PropTypes.object,
 }
 
 WidgetScrollSection.defaultProps = {
-  style: {}
+  style: {},
 }
 
 export default WidgetScrollSection

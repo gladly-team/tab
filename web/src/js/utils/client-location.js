@@ -3,7 +3,7 @@ import localStorageMgr from 'js/utils/localstorage-mgr'
 import {
   STORAGE_LOCATION_COUNTRY_ISO_CODE,
   STORAGE_LOCATION_IS_IN_EU,
-  STORAGE_LOCATION_QUERY_TIME
+  STORAGE_LOCATION_QUERY_TIME,
 } from 'js/constants'
 import { isNil } from 'lodash/lang'
 import logger from 'js/utils/logger'
@@ -20,7 +20,7 @@ var location = null
 // more than once.
 var locationFetchPromise = null
 
-function ClientLocation (countryIsoCode, isInEuropeanUnion, queryTime) {
+function ClientLocation(countryIsoCode, isInEuropeanUnion, queryTime) {
   this.countryIsoCode = countryIsoCode
   this.isInEuropeanUnion = isInEuropeanUnion
 
@@ -34,11 +34,11 @@ function ClientLocation (countryIsoCode, isInEuropeanUnion, queryTime) {
  * @return {Boolean} Whether we should log the MaxMind error
  */
 const shouldLogMaxMindError = err => {
-  return [
-    'QUERY_FORBIDDEN',
-    'OUT_OF_QUERIES',
-    'PERMISSION_REQUIRED'
-  ].indexOf(err.code) > -1
+  return (
+    ['QUERY_FORBIDDEN', 'OUT_OF_QUERIES', 'PERMISSION_REQUIRED'].indexOf(
+      err.code
+    ) > -1
+  )
 }
 
 /**
@@ -92,12 +92,15 @@ const getLocationFromMaxMind = () => {
     // https://dev.maxmind.com/geoip/geoip2/javascript/
     try {
       window.geoip2.country(
-        (data) => {
+        data => {
           const isInEuropeanUnion = data.country.is_in_european_union === true
-          resolve(new ClientLocation(
-            data.country.iso_code,
-            isInEuropeanUnion,
-            moment.utc().toISOString()))
+          resolve(
+            new ClientLocation(
+              data.country.iso_code,
+              isInEuropeanUnion,
+              moment.utc().toISOString()
+            )
+          )
         },
         err => {
           // Log a subset of errors that we care about to Sentry.
@@ -126,18 +129,20 @@ const getLocationFromMaxMind = () => {
  */
 const getLocationFromLocalStorage = () => {
   const countryCode = localStorageMgr.getItem(STORAGE_LOCATION_COUNTRY_ISO_CODE)
-  const isInEuropeanUnionStr = localStorageMgr.getItem(STORAGE_LOCATION_IS_IN_EU)
+  const isInEuropeanUnionStr = localStorageMgr.getItem(
+    STORAGE_LOCATION_IS_IN_EU
+  )
   const queryTimeISO = localStorageMgr.getItem(STORAGE_LOCATION_QUERY_TIME)
   const queryTime = moment(queryTimeISO)
-  const isInEuropeanUnion = localStorageMgr.getItem(STORAGE_LOCATION_IS_IN_EU) === 'true'
+  const isInEuropeanUnion =
+    localStorageMgr.getItem(STORAGE_LOCATION_IS_IN_EU) === 'true'
 
   // If the location data does not exist, return null.
-  const isDataValid = (
+  const isDataValid =
     !isNil(countryCode) &&
     !isNil(isInEuropeanUnionStr) &&
     !isNil(queryTime) &&
     queryTime.isValid()
-  )
   if (!isDataValid) {
     return null
   }
@@ -158,9 +163,15 @@ const getLocationFromLocalStorage = () => {
  * @param {ClientLocation} location - The ClientLocation object
  * @return {undefined}
  */
-const setLocationInLocalStorage = (location) => {
-  localStorageMgr.setItem(STORAGE_LOCATION_COUNTRY_ISO_CODE, location.countryIsoCode)
-  localStorageMgr.setItem(STORAGE_LOCATION_IS_IN_EU, location.isInEuropeanUnion.toString())
+const setLocationInLocalStorage = location => {
+  localStorageMgr.setItem(
+    STORAGE_LOCATION_COUNTRY_ISO_CODE,
+    location.countryIsoCode
+  )
+  localStorageMgr.setItem(
+    STORAGE_LOCATION_IS_IN_EU,
+    location.isInEuropeanUnion.toString()
+  )
   localStorageMgr.setItem(STORAGE_LOCATION_QUERY_TIME, location.queryTime)
 }
 
@@ -177,7 +188,7 @@ const getLocation = async () => {
     const locationLocalStorage = getLocationFromLocalStorage()
     if (locationLocalStorage) {
       location = locationLocalStorage
-    // If location isn't in localStorage, query for it.
+      // If location isn't in localStorage, query for it.
     } else {
       // Throw an error if MaxMind cannot determine the location.
       var maxMindLocation = null

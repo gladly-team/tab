@@ -5,31 +5,24 @@ import {
   enterUsernameURL,
   loginURL,
   missingEmailMessageURL,
-  verifyEmailURL
+  verifyEmailURL,
 } from 'js/navigation/navigation'
-import {
-  getReferralData,
-  isInIframe
-} from 'js/utils/utils'
+import { getReferralData, isInIframe } from 'js/utils/utils'
 import {
   getUserToken,
   getCurrentUser,
   setUsernameInLocalStorage,
   signInAnonymously,
-  reloadUser
+  reloadUser,
 } from 'js/authentication/user'
 import environment from 'js/relay-env'
 import CreateNewUserMutation from 'js/mutations/CreateNewUserMutation'
 import LogEmailVerifiedMutation from 'js/mutations/LogEmailVerifiedMutation'
-import {
-  getUserTestGroupsForMutation
-} from 'js/utils/experiments'
-import {
-  isAnonymousUserSignInEnabled
-} from 'js/utils/feature-flags'
+import { getUserTestGroupsForMutation } from 'js/utils/experiments'
+import { isAnonymousUserSignInEnabled } from 'js/utils/feature-flags'
 import {
   getBrowserExtensionInstallId,
-  getBrowserExtensionInstallTime
+  getBrowserExtensionInstallTime,
 } from 'js/utils/local-user-data-mgr'
 import logger from 'js/utils/logger'
 
@@ -45,9 +38,7 @@ export const anonymousUserMandatorySignIn = () => {
   // If the user was authed but logged out, we remove the
   // extension install time from localStorage and this will
   // return false.
-  return (
-    !inAnonymousUserGracePeriod()
-  )
+  return !inAnonymousUserGracePeriod()
 }
 
 /**
@@ -74,10 +65,7 @@ const allowAnonymousUser = () => {
 
   // The user can have an anonymous account if the anonymous user
   // feature is enabled and they joined recently.
-  return (
-    isAnonymousUserSignInEnabled() &&
-    userRecentlyJoined
-  )
+  return isAnonymousUserSignInEnabled() && userRecentlyJoined
 }
 
 /**
@@ -134,7 +122,10 @@ const goToMainLoginPage = (urlParamsObj = {}) => {
  *   represents whether or not we redirected (e.g. true if the user was not fully
  *   authenticated).
  */
-export const checkAuthStateAndRedirectIfNeeded = async (user, fetchedUsername = null) => {
+export const checkAuthStateAndRedirectIfNeeded = async (
+  user,
+  fetchedUsername = null
+) => {
   var redirected = true
 
   // If the user is not fully logged in, redirect to the
@@ -166,14 +157,14 @@ export const checkAuthStateAndRedirectIfNeeded = async (user, fetchedUsername = 
         goToMainLoginPage()
         redirected = true
       }
-    // If not creating an anonymous user, go to the login page.
+      // If not creating an anonymous user, go to the login page.
     } else {
       goToMainLoginPage()
       redirected = true
     }
-  // If the user has an anonymous account and is allowed to be
-  // anonymous, do nothing. If they're anonymous but are not
-  // allowed to be anonymous, go to the login page.
+    // If the user has an anonymous account and is allowed to be
+    // anonymous, do nothing. If they're anonymous but are not
+    // allowed to be anonymous, go to the login page.
   } else if (user.isAnonymous) {
     if (allowAnonymousUser()) {
       redirected = false
@@ -190,16 +181,16 @@ export const checkAuthStateAndRedirectIfNeeded = async (user, fetchedUsername = 
         redirected = true
       }
     }
-  // If the user does not have an email address, show a message
-  // asking them to sign in with a different method.
+    // If the user does not have an email address, show a message
+    // asking them to sign in with a different method.
   } else if (!user.email) {
     replaceUrl(missingEmailMessageURL)
     redirected = true
-  // User is logged in but their email is not verified.
+    // User is logged in but their email is not verified.
   } else if (!user.emailVerified) {
     replaceUrl(verifyEmailURL)
     redirected = true
-  // User is logged in but has not set a username.
+    // User is logged in but has not set a username.
   } else if (!user.username) {
     // If the username isn't in localStorage, check if it
     // exists on the user from the database.
@@ -261,10 +252,10 @@ export const createNewUser = () => {
               experimentGroups,
               installId,
               installTime,
-              (response) => {
+              response => {
                 resolve(response.createNewUser)
               },
-              (err) => {
+              err => {
                 console.error('Error at createNewUser:', err)
                 reject(new Error('Could not create new user', err))
               }
@@ -294,7 +285,7 @@ export const checkIfEmailVerified = () => {
     var polledTimes = 0
     const maxTimesToPoll = 15
     const msWaitBetweenPolling = 250
-    function seeIfEmailVerified () {
+    function seeIfEmailVerified() {
       if (polledTimes > maxTimesToPoll) {
         return resolve(false)
       }
@@ -307,7 +298,10 @@ export const checkIfEmailVerified = () => {
             // correct latest value for email verification.
             getUserToken(true)
               .then(() => {
-                LogEmailVerifiedMutation(environment, user.id, () => {},
+                LogEmailVerifiedMutation(
+                  environment,
+                  user.id,
+                  () => {},
                   // onError
                   err => {
                     logger.error(err)
@@ -320,8 +314,8 @@ export const checkIfEmailVerified = () => {
                 reject(e)
               })
 
-          // The email is not yet verified. Wait some time, then try
-          // to poll Firebase again to see if it's changed.
+            // The email is not yet verified. Wait some time, then try
+            // to poll Firebase again to see if it's changed.
           } else {
             polledTimes += 1
 

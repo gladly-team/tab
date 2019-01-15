@@ -7,16 +7,16 @@ import TextField from 'material-ui/TextField'
 import { TwitterPicker } from 'react-color'
 
 export default class EditBookmarkWidgetModal extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       nameRequiredError: false,
       urlRequiredError: false,
-      colorPickerColor: null
+      colorPickerColor: null,
     }
   }
 
-  _handleKeyPress (e) {
+  _handleKeyPress(e) {
     if (e.key === 'Enter') {
       if (!e.shiftKey) {
         e.stopPropagation()
@@ -26,40 +26,40 @@ export default class EditBookmarkWidgetModal extends React.Component {
     }
   }
 
-  onNameValChange () {
+  onNameValChange() {
     const name = this.bookmarkNameTextField.input.value
     this.setState({
-      nameRequiredError: !name
+      nameRequiredError: !name,
     })
   }
 
-  onURLValChange () {
+  onURLValChange() {
     const url = this.bookmarkLinkTextField.input.value
     this.setState({
-      urlRequiredError: !url
+      urlRequiredError: !url,
     })
   }
 
-  setColor (colorInfo) {
+  setColor(colorInfo) {
     this.setState({
-      colorPickerColor: colorInfo.hex
+      colorPickerColor: colorInfo.hex,
     })
     this.props.setTemporaryColor(colorInfo.hex)
   }
 
-  save () {
+  save() {
     const name = this.bookmarkNameTextField.input.value
     const url = this.bookmarkLinkTextField.input.value
     const color = this.state.colorPickerColor
 
     if (!name) {
       this.setState({
-        nameRequiredError: true
+        nameRequiredError: true,
       })
     }
     if (!url) {
       this.setState({
-        urlRequiredError: true
+        urlRequiredError: true,
       })
     }
     if (!name || !url) {
@@ -68,99 +68,103 @@ export default class EditBookmarkWidgetModal extends React.Component {
     this.props.onEditSave(name, url, color)
   }
 
-  render () {
+  render() {
     return (
       <Dialog
-        title='Edit Bookmark'
+        title="Edit Bookmark"
         actionsContainerStyle={{
           display: 'flex',
           flexDirection: 'row',
-          justifyContent: 'space-between'
+          justifyContent: 'space-between',
           // alignItems: 'flex-start'
         }}
         autoScrollBodyContent
         actions={[
           <FlatButton
-            label='DELETE'
+            label="DELETE"
             primary
             style={{
-              color: '#FF0000'
+              color: '#FF0000',
             }}
             onClick={this.props.onDeleteBookmark}
           />,
           <span>
             <FlatButton
-              label='CANCEL'
+              label="CANCEL"
               primary
               style={{
-                margin: 2
+                margin: 2,
               }}
               onClick={this.props.onEditCancel}
             />
             <RaisedButton
-              label='SAVE'
+              label="SAVE"
               primary
               style={{
-                margin: 2
+                margin: 2,
               }}
               onClick={this.save.bind(this)}
             />
-          </span>
+          </span>,
         ]}
         modal
         open={this.props.open}
         contentStyle={{
-          maxWidth: 500
+          maxWidth: 500,
         }}
       >
         <span
           style={{
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'center'
+            alignItems: 'center',
           }}
         >
           <TextField
-            ref={(input) => { this.bookmarkNameTextField = input }}
+            ref={input => {
+              this.bookmarkNameTextField = input
+            }}
             onKeyPress={this._handleKeyPress.bind(this)}
             defaultValue={this.props.currentBookmarkName}
-            hintText='Ex: Google'
+            hintText="Ex: Google"
             onChange={this.onNameValChange.bind(this)}
             errorText={this.state.nameRequiredError ? 'Enter a name' : null}
           />
           <TextField
-            ref={(input) => { this.bookmarkLinkTextField = input }}
+            ref={input => {
+              this.bookmarkLinkTextField = input
+            }}
             onKeyPress={this._handleKeyPress.bind(this)}
             defaultValue={this.props.currentBookmarkLink}
-            hintText='Ex: google.com'
+            hintText="Ex: google.com"
             onChange={this.onURLValChange.bind(this)}
             errorText={this.state.urlRequiredError ? 'Enter a URL' : null}
           />
           <span
             style={{
-              margin: 10
+              margin: 10,
             }}
           >
             <RaisedButton
-              label='MOVE UP'
+              label="MOVE UP"
               default
               style={{
-                margin: 2
+                margin: 2,
               }}
               onClick={this.props.onReorderMoveUp}
             />
             <RaisedButton
-              label='MOVE DOWN'
+              label="MOVE DOWN"
               default
               style={{
-                margin: 2
+                margin: 2,
               }}
               onClick={this.props.onReorderMoveDown}
             />
           </span>
           <span
             style={{
-              margin: 10
+              margin: 10,
             }}
           >
             <TwitterPicker
@@ -184,8 +188,7 @@ EditBookmarkWidgetModal.propTypes = {
   onReorderMoveDown: PropTypes.func.isRequired,
   currentBookmarkName: PropTypes.string.isRequired,
   currentBookmarkLink: PropTypes.string.isRequired,
-  currentBookmarkColor: PropTypes.string.isRequired
+  currentBookmarkColor: PropTypes.string.isRequired,
 }
 
-EditBookmarkWidgetModal.defaultProps = {
-}
+EditBookmarkWidgetModal.defaultProps = {}

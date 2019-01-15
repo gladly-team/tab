@@ -1,7 +1,5 @@
 import graphql from 'babel-plugin-relay/macro'
-import {
-  createFragmentContainer
-} from 'react-relay'
+import { createFragmentContainer } from 'react-relay'
 
 import WidgetIcon from 'js/components/Widget/WidgetIconComponent'
 
@@ -12,5 +10,5 @@ export default createFragmentContainer(WidgetIcon, {
       type
       visible
     }
-  `
+  `,
 })

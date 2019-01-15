@@ -1,4 +1,3 @@
-
 import BookmarkBorderIcon from 'material-ui/svg-icons/action/bookmark-border'
 import ClockIcon from 'material-ui/svg-icons/action/schedule'
 import FormatListBulletedIcon from 'material-ui/svg-icons/editor/format-list-bulleted'
@@ -10,10 +9,10 @@ import {
   WIDGET_TYPE_CLOCK,
   WIDGET_TYPE_NOTES,
   WIDGET_TYPE_SEARCH,
-  WIDGET_TYPE_TODOS
+  WIDGET_TYPE_TODOS,
 } from 'js/constants'
 
-export const getWidgetIconFromWidgetType = (widgetType) => {
+export const getWidgetIconFromWidgetType = widgetType => {
   var icon
   switch (widgetType) {
     case WIDGET_TYPE_BOOKMARKS:

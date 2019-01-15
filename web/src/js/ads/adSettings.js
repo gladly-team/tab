@@ -1,17 +1,14 @@
-
 import moment from 'moment'
-import {
-  isVariousAdSizesEnabled
-} from 'js/utils/feature-flags'
+import { isVariousAdSizesEnabled } from 'js/utils/feature-flags'
 import {
   EXPERIMENT_AD_EXPLANATION,
   EXPERIMENT_ONE_AD_FOR_NEW_USERS,
   getExperimentGroups,
-  getUserExperimentGroup
+  getUserExperimentGroup,
 } from 'js/utils/experiments'
 import {
   getBrowserExtensionInstallTime,
-  hasUserDismissedAdExplanation
+  hasUserDismissedAdExplanation,
 } from 'js/utils/local-user-data-mgr'
 
 // Time to wait for the entire ad auction before
@@ -49,12 +46,11 @@ export const HORIZONTAL_AD_SLOT_DOM_ID = 'div-gpt-ad-1464385677836-0'
 export const shouldShowAdExplanation = () => {
   const hoursToShow = 4
   const installTime = getBrowserExtensionInstallTime()
-  const joinedRecently = !!installTime &&
-    moment().diff(installTime, 'hours') < hoursToShow
-  const userInExperimentalGroup = (
+  const joinedRecently =
+    !!installTime && moment().diff(installTime, 'hours') < hoursToShow
+  const userInExperimentalGroup =
     getUserExperimentGroup(EXPERIMENT_AD_EXPLANATION) ===
     getExperimentGroups(EXPERIMENT_AD_EXPLANATION).SHOW_EXPLANATION
-  )
   return !!(
     joinedRecently &&
     userInExperimentalGroup &&
@@ -70,11 +66,11 @@ export const shouldShowAdExplanation = () => {
  */
 const shouldShowOneAd = () => {
   const installTime = getBrowserExtensionInstallTime()
-  const joinedRecently = !!installTime && moment().diff(installTime, 'hours') < 24
-  const userInOneAdTestGroup = (
+  const joinedRecently =
+    !!installTime && moment().diff(installTime, 'hours') < 24
+  const userInOneAdTestGroup =
     getUserExperimentGroup(EXPERIMENT_ONE_AD_FOR_NEW_USERS) ===
     getExperimentGroups(EXPERIMENT_ONE_AD_FOR_NEW_USERS).ONE_AD_AT_FIRST
-  )
   return !!(joinedRecently && userInOneAdTestGroup)
 }
 
@@ -93,30 +89,27 @@ export const getNumberOfAdsToShow = () => {
  * @return {Array[Array]} An array of ad sizes
  */
 export const getVerticalAdSizes = () => {
-  const showVariousAdSizes = (
-    isVariousAdSizesEnabled()
-  )
-  return showVariousAdSizes ? [
-    [300, 250],
-    // Wider than we probably want to allow.
-    // [336, 280],
-    [250, 250],
-    [160, 600],
-    [120, 600],
-    [120, 240],
-    [240, 400],
-    [234, 60],
-    [180, 150],
-    [125, 125],
-    [120, 90],
-    [120, 60],
-    [120, 30],
-    [230, 33],
-    [300, 600]
-  ]
-    : [
-      [300, 250]
-    ]
+  const showVariousAdSizes = isVariousAdSizesEnabled()
+  return showVariousAdSizes
+    ? [
+        [300, 250],
+        // Wider than we probably want to allow.
+        // [336, 280],
+        [250, 250],
+        [160, 600],
+        [120, 600],
+        [120, 240],
+        [240, 400],
+        [234, 60],
+        [180, 150],
+        [125, 125],
+        [120, 90],
+        [120, 60],
+        [120, 30],
+        [230, 33],
+        [300, 600],
+      ]
+    : [[300, 250]]
 }
 
 /**
@@ -126,19 +119,16 @@ export const getVerticalAdSizes = () => {
  * @return {Array[Array]} An array of ad sizes
  */
 export const getHorizontalAdSizes = () => {
-  const showVariousAdSizes = (
-    isVariousAdSizesEnabled()
-  )
-  return showVariousAdSizes ? [
-    [728, 90],
-    [728, 210],
-    [720, 300],
-    // Taller than we probably want to allow.
-    // [500, 350],
-    // [550, 480],
-    [468, 60]
-  ]
-    : [
-      [728, 90]
-    ]
+  const showVariousAdSizes = isVariousAdSizesEnabled()
+  return showVariousAdSizes
+    ? [
+        [728, 90],
+        [728, 210],
+        [720, 300],
+        // Taller than we probably want to allow.
+        // [500, 350],
+        // [550, 480],
+        [468, 60],
+      ]
+    : [[728, 90]]
 }

@@ -1,7 +1,5 @@
 import graphql from 'babel-plugin-relay/macro'
-import {
-  createFragmentContainer
-} from 'react-relay'
+import { createFragmentContainer } from 'react-relay'
 
 import ProfileDonateHearts from 'js/components/Settings/Profile/ProfileDonateHeartsComponent'
 
@@ -22,5 +20,5 @@ export default createFragmentContainer(ProfileDonateHearts, {
     fragment ProfileDonateHeartsContainer_user on User {
       ...CharityContainer_user
     }
-  `
+  `,
 })

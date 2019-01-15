@@ -3,27 +3,20 @@ import PropTypes from 'prop-types'
 import FadeInAnimation from 'js/components/General/FadeInAnimation'
 
 class SettingsChildWrapper extends React.Component {
-  render () {
+  render() {
     const { children, loaded } = this.props
     return (
       <div
         style={{
           padding: 20,
-          minHeight: 400
+          minHeight: 400,
         }}
       >
-        { loaded
-          ? (
-            children
-              ? (
-                <FadeInAnimation>
-                  { children }
-                </FadeInAnimation>
-              )
-              : null
-          )
-          : null
-        }
+        {loaded ? (
+          children ? (
+            <FadeInAnimation>{children}</FadeInAnimation>
+          ) : null
+        ) : null}
       </div>
     )
   }
@@ -31,11 +24,11 @@ class SettingsChildWrapper extends React.Component {
 
 SettingsChildWrapper.propTypes = {
   children: PropTypes.element,
-  loaded: PropTypes.bool
+  loaded: PropTypes.bool,
 }
 
 SettingsChildWrapper.defaultProps = {
-  loaded: false
+  loaded: false,
 }
 
 export default SettingsChildWrapper
