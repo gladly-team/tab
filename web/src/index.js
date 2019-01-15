@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom'
 import Root from 'js/root'
 import { initializeFirebase } from 'js/authentication/firebaseConfig'
 import { getUsername } from 'js/authentication/user'
+import * as serviceWorker from './serviceWorker'
 
 // Start Sentry logger
 // https://docs.sentry.io/clients/javascript/config/
@@ -60,3 +61,8 @@ try {
   console.error('Failed to wrap app in Raven.context', e)
   initApp()
 }
+
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: http://bit.ly/CRA-PWA
+serviceWorker.unregister()
