@@ -2,6 +2,7 @@
 
 import React from 'react'
 import {
+  mount,
   shallow
 } from 'enzyme'
 import { cloneDeep } from 'lodash/lang'
@@ -33,6 +34,13 @@ describe('New user tour component', () => {
   it('renders without error', () => {
     const NewUserTourComponent = require('js/components/Dashboard/NewUserTourComponent').default
     shallow(
+      <NewUserTourComponent {...mockProps} />
+    )
+  })
+
+  it('mounts without error', () => {
+    const NewUserTourComponent = require('js/components/Dashboard/NewUserTourComponent').default
+    mount(
       <NewUserTourComponent {...mockProps} />
     )
   })
