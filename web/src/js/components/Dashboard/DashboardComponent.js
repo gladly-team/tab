@@ -51,10 +51,6 @@ import { showGlobalNotification } from 'js/utils/feature-flags'
 // should re-fetch ads).
 import 'js/ads/ads'
 
-// This commit is testing our pre-commit formatting.
-// This variable is unused.
-var foo = 10
-
 class Dashboard extends React.Component {
   constructor(props) {
     super(props)
