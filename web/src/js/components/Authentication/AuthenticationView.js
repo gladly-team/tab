@@ -16,6 +16,9 @@ class AuthenticationView extends React.Component {
     this.state = {
       relayVariables: {
         userId: null,
+        // This commit is testing our pre-commit formattting.
+        // I removed the trailing comma below but it should be
+        // added back.
         refetchCounter: 0,
       },
     }

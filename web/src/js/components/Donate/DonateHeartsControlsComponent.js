@@ -40,6 +40,8 @@ class DonateHeartsControls extends React.Component {
   }
 
   componentDidMount() {
+    // This commit is testing our pre-commit formatting.
+    // This comment is not spaced correctly but should be fixed automatically.
     const { user } = this.props
     this.setState({
       amountToDonate: user.vcCurrent,
