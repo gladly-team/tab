@@ -11,14 +11,10 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import EarthIcon from 'mdi-material-ui/Earth'
 import HeartIcon from '@material-ui/icons/Favorite'
+import { withTheme } from '@material-ui/core/styles'
 import InviteFriend from 'js/components/Settings/Profile/InviteFriendContainer'
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import { STORAGE_NEW_USER_HAS_COMPLETED_TOUR } from 'js/constants'
-
-import {
-  primaryColor,
-  textColor
-} from 'js/theme/default'
 
 // Note that the target components must be mounted
 // before the tour begins.
@@ -119,7 +115,9 @@ class NewUserTour extends React.Component {
   }
 
   render () {
-    const { user } = this.props
+    const { user, theme } = this.props
+    const primaryColor = theme.palette.primary.main
+    const textColor = theme.typography.body2.color
     return (
       <span>
         <Dialog
@@ -140,7 +138,7 @@ class NewUserTour extends React.Component {
           <DialogContent>
             <span style={{ display: 'flex', justifyContent: 'center' }}>
               <EarthIcon style={{ color: primaryColor, width: 32, height: 32, margin: 10, marginTop: 0 }} />
-              <HeartIcon style={{ width: 32, height: 32, margin: 10, marginTop: 0, color: primaryColor }} />
+              <HeartIcon style={{ color: primaryColor, width: 32, height: 32, margin: 10, marginTop: 0 }} />
             </span>
             <Typography variant={'body2'} paragraph>Now, every tab you open raises money for charity. (The money comes from showing ads in the corner of the page.)</Typography>
             <Typography variant={'body2'} paragraph>Just by surfing the web, you're feeding children, protecting the rainforest, and more.</Typography>
@@ -220,10 +218,11 @@ class NewUserTour extends React.Component {
 
 NewUserTour.propTypes = {
   user: PropTypes.shape({
-  }).isRequired
+  }).isRequired,
+  theme: PropTypes.object.isRequired
 }
 
 NewUserTour.defaultProps = {
 }
 
-export default NewUserTour
+export default withTheme()(NewUserTour)
