@@ -6,7 +6,8 @@ import {
 } from 'enzyme'
 import { cloneDeep } from 'lodash/lang'
 import Joyride from 'react-joyride'
-import Dialog from 'material-ui/Dialog'
+import Dialog from '@material-ui/core/Dialog'
+import DialogTitle from '@material-ui/core/DialogTitle'
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import { STORAGE_NEW_USER_HAS_COMPLETED_TOUR } from 'js/constants'
 
@@ -40,17 +41,19 @@ describe('New user tour component', () => {
     const NewUserTourComponent = require('js/components/Dashboard/NewUserTourComponent').default
     const wrapper = shallow(
       <NewUserTourComponent {...mockProps} />
-    )
+    ).dive()
     const introModal = wrapper.find(Dialog).first()
     expect(introModal.prop('open')).toBe(true)
-    expect(introModal.prop('title')).toBe('Your tabs are changing the world!')
+    expect(introModal
+      .find(DialogTitle).render().text())
+    .toBe('Your tabs are changing the world!')
   })
 
   it('does not run the Joyride tour until clicking through the first modal', () => {
     const NewUserTourComponent = require('js/components/Dashboard/NewUserTourComponent').default
     const wrapper = shallow(
       <NewUserTourComponent {...mockProps} />
-    )
+    ).dive()
     expect(wrapper.find(Joyride).first().prop('run')).toBe(false)
 
     // Mock a button click on the intro modal
@@ -67,17 +70,19 @@ describe('New user tour component', () => {
     const NewUserTourComponent = require('js/components/Dashboard/NewUserTourComponent').default
     const wrapper = shallow(
       <NewUserTourComponent {...mockProps} />
-    )
+    ).dive()
     const finalModal = wrapper.find(Dialog).last()
     expect(finalModal.prop('open')).toBe(false)
-    expect(finalModal.prop('title')).toBe("We're thrilled to have you!")
+    expect(finalModal
+      .find(DialogTitle).render().text())
+    .toBe("We're thrilled to have you!")
   })
 
   it('calls localStorage to mark that the user has completed the tour', () => {
     const NewUserTourComponent = require('js/components/Dashboard/NewUserTourComponent').default
     const wrapper = shallow(
       <NewUserTourComponent {...mockProps} />
-    )
+    ).dive()
     const joyrideComponent = wrapper.find(Joyride).first()
     const joyrideCallbackFn = joyrideComponent.prop('callback')
 
