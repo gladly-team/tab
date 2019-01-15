@@ -50,6 +50,12 @@ import {
   showGlobalNotification
 } from 'js/utils/feature-flags'
 
+// Include ads code.
+// TODO: load this on mount, making sure the ads code behaves
+// appropriately for a SPA (it should not reload libraries but
+// should re-fetch ads).
+import 'js/ads/ads'
+
 class Dashboard extends React.Component {
   constructor (props) {
     super(props)
