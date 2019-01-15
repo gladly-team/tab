@@ -1,278 +1,276 @@
 <!DOCTYPE html>
-<!--[if lt IE 7 ]> <html lang="en" class="ie6" <% if(htmlWebpackPlugin.files.manifest) { %> manifest="<%= htmlWebpackPlugin.files.manifest %>"<% } %>> <![endif]-->
-<!--[if IE 7 ]>    <html lang="en" class="ie7" <% if(htmlWebpackPlugin.files.manifest) { %> manifest="<%= htmlWebpackPlugin.files.manifest %>"<% } %>> <![endif]-->
-<!--[if IE 8 ]>    <html lang="en" class="ie8" <% if(htmlWebpackPlugin.files.manifest) { %> manifest="<%= htmlWebpackPlugin.files.manifest %>"<% } %>> <![endif]-->
-<!--[if IE 9 ]>    <html lang="en" class="ie9" <% if(htmlWebpackPlugin.files.manifest) { %> manifest="<%= htmlWebpackPlugin.files.manifest %>"<% } %>> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="" <% if(htmlWebpackPlugin.files.manifest) { %> manifest="<%= htmlWebpackPlugin.files.manifest %>"<% } %>> <!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  <title><%= htmlWebpackPlugin.options.title || 'Relay Fullstack'%></title>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="theme-color" content="#000000" />
+    <!--
+      manifest.json provides metadata used when your web app is added to the
+      homescreen on Android. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
 
-  <% if (htmlWebpackPlugin.options.mobile) { %>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <% } %>
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>Tab for a Cause</title>
 
-  <% for (var css in htmlWebpackPlugin.files.css) { %>
-  <link href="<%= htmlWebpackPlugin.files.css[css] %>" rel="stylesheet">
-  <% } %>
-
-  <style>
-    html, body {
-      padding: 0px;
-      margin: 0px;
-    }
-    html {
-      min-height: 100%;
-      position: relative;
-    }
-    /*
-      Some 3rd-party (e.g. Quantcast Choice) code creates iframes with
-      borders, which causes a flickering frame.
-     */
-    iframe {
-      border-width: 0px !important;
-    }
-  </style>
-
-  <!-- The new tab page may be displayed in an iframe, so open
-    all links in the top frame. -->
-  <base target="_top">
-
-  <!-- BEGIN: Google Global Site Tag (GST/gtag.js) -->
-  <!-- Global site tag (gtag.js) - AdWords: 1013744060 -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-1013744060"></script>
-  <script>
-   window.dataLayer = window.dataLayer || [];
-   function gtag(){dataLayer.push(arguments);}
-   gtag('js', new Date());
-   gtag('config', 'AW-1013744060');
-  </script>
-  <!-- END: Google Global Site Tag (GST/gtag.js) -->
-</head>
-
-<body>
-<% if (htmlWebpackPlugin.options.unsupportedBrowser) { %>
-<style>.unsupported-browser { display: none; }</style>
-<div class="unsupported-browser">
-  Sorry, your browser is not supported.  Please upgrade to
-  the latest version or switch your browser to use this site.
-  See <a href="http://outdatedbrowser.com/">outdatedbrowser.com</a>
-  for options.
-</div>
-<% } %>
-
-<% if (htmlWebpackPlugin.options.appMountId) { %>
-<div id="<%= htmlWebpackPlugin.options.appMountId%>"></div>
-<% } %>
-
-<% if (htmlWebpackPlugin.options.appMountIds && htmlWebpackPlugin.options.appMountIds.length > 0) { %>
-<% for (var index in htmlWebpackPlugin.options.appMountIds) { %>
-<div id="<%= htmlWebpackPlugin.options.appMountIds[index]%>"></div>
-<% } %>
-<% } %>
-
-<% if (htmlWebpackPlugin.options.window) { %>
-<script>
-  /* eslint-disable */
-  <% for (var varName in htmlWebpackPlugin.options.window) { %>
-    window['<%=varName%>'] = <%= JSON.stringify(htmlWebpackPlugin.options.window[varName]) %>;
-  <% } %>
-</script>
-<% } %>
-
-<!-- BEGIN: Tab for a Cause global -->
-<script type="text/javascript">
-  // Used for handling some communication between disparate parts
-  // of our app (e.g. ads events happening before app code loads).
-  (() => {
-    window.tabforacause = window.tabforacause || {
-      ads: {
-        amazonBids: {},
-        slotsRendered: {},
-        slotsViewable: {},
-        slotsLoaded: {},
-        slotsAlreadyLoggedRevenue: {}
-      },
-      featureFlags: {}
-    }
-  })()
-</script>
-<!-- END:Tab for a Cause global -->
-
-<!-- MaxMind for determining country location -->
-<script src="//js.maxmind.com/js/apis/geoip2/v2.1/geoip2.js" type="text/javascript"></script>
-
-<!-- Facebook Pixel Code -->
-<!-- TODO: Facebook ID as env var -->
-<script>
-/* eslint-disable */
-!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-document,'script','https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '1813501258922708');
-</script>
-<noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=1813501258922708&ev=PageView&noscript=1"
-/></noscript>
-<!-- End Facebook Pixel Code -->
-
-<!-- BEGIN: Google Publisher Tag -->
-<script type="text/javascript">
-  /* eslint-disable */
-  // Google Tag Manager
-  var googletag = window.googletag || {}
-  googletag.cmd = googletag.cmd || []
-  googletag.cmd.push(() => {
-    googletag.pubads().disableInitialLoad()
-  })
-
-  var gads = document.createElement('script')
-  gads.async = true
-  gads.type = 'text/javascript'
-  var useSSL = document.location.protocol === 'https:'
-  gads.src = (useSSL ? 'https:' : 'http:') +
-    '//www.googletagservices.com/tag/js/gpt.js'
-  var head = document.getElementsByTagName('head')[0]
-  head.appendChild(gads)
-</script>
-<!-- END: Google Publisher Tag -->
-
-<!-- BEGIN: Quantcast Choice. Consent Manager Tag -->
-<!-- https://www.quantcast.com/gdpr/quantcast-choice-self-serve/ -->
-<!-- https://quantcast.zendesk.com/hc/en-us/articles/360003814853-Technical-Implementation-Guide -->
-<script type="text/javascript" async=true>
-  var __cmp = (function () {
-    return typeof (__cmp) == "function" ? __cmp : function (c) {
-      var b = arguments;
-      if (!b.length) {
-        return __cmp.a;
+    <!--
+      @gladly-customization:
+      global style for all served HTML
+    -->
+    <style>
+      html, body {
+        padding: 0px;
+        margin: 0px;
       }
-      else if (c == '__cmp')
-        return false;
-      else {
-        if (typeof __cmp.a === 'undefined') {
-          __cmp.a = [];
+      html {
+        min-height: 100%;
+        position: relative;
+      }
+      /*
+        Some 3rd-party (e.g. Quantcast Choice) code creates iframes with
+        borders, which causes a flickering frame.
+       */
+      iframe {
+        border-width: 0px !important;
+      }
+    </style>
+
+    <!--
+      @gladly-customization:
+      The new tab page may be displayed in an iframe, so open
+      all links in the top frame.
+    -->
+    <base target="_top">
+
+    <!--
+      @gladly-customization:
+      Google Global Site Tag (gtag.js) - AdWords: 1013744060 
+    -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-1013744060"></script>
+    <script>
+     window.dataLayer = window.dataLayer || [];
+     function gtag(){dataLayer.push(arguments);}
+     gtag('js', new Date());
+     gtag('config', 'AW-1013744060');
+    </script>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+
+    <!--
+      @gladly-customization:
+      Tab for a Cause global variable
+    -->
+    <script type="text/javascript">
+      // Used for handling some communication between disparate parts
+      // of our app (e.g. ads events happening before app code loads).
+      (() => {
+        window.tabforacause = window.tabforacause || {
+          ads: {
+            amazonBids: {},
+            slotsRendered: {},
+            slotsViewable: {},
+            slotsLoaded: {},
+            slotsAlreadyLoggedRevenue: {}
+          },
+          featureFlags: {}
         }
-        __cmp.a.push([].slice.apply(b));
-      }
-    }
-  })();
-  /* eslint-disable */
-  // IAB standard docs:
-  // https://github.com/InteractiveAdvertisingBureau/GDPR-Transparency-and-Consent-Framework/blob/master/CMP%20JS%20API%20v1.1%20Final.md#what-api-will-need-to-be-provided-by-the-cmp-
-  // Can redisplay the consent UI with:
-  // window.__cmp('displayConsentUi')
-  var elem = document.createElement('script');
-  elem.src = "https://quantcast.mgr.consensu.org/cmp.js";
-  elem.async = true;
-  elem.type = "text/javascript";
-  var scpt = document.getElementsByTagName('script')[0];
-  scpt.parentNode.insertBefore(elem, scpt);
+      })()
+    </script>
 
-  window.__cmp('init', {
-    'Language': 'EN',
-    'Display UI': 'inEU', // 'inEU', 'always', 'never'
-    // 'service' for consenting only for this domain; 'global' if consenting for all web
-    'Consent Scope': 'service',
-    'Publisher Name': 'Tab for a Cause',
-    'Publisher Logo': 'https://tab.gladly.io/newtab/static/media/logo.539ef9c6.svg',
-    'Publisher Purpose IDs': [],
-    'Min Days Between UI Displays': 30,
-    'Non-Consent Display Frequency': 90,
-    // If true, displays a floating link on all pages
-    'Display Persistent Consent Link': false,
-    // Initial screen
-    'Initial Screen Title Text': 'We value your privacy',
-    'Initial Screen Body Text': 'We and our partners use technology such as cookies on our site to personalise content and ads, provide social media features, and analyse our traffic. Click below to consent to the use of this technology on Tab for a Cause. You can change your mind at any time by visiting your settings page.',
-    'Initial Screen Reject Button Text': 'I do not accept',
-    'Initial Screen Accept Button Text': 'I accept',
-    'Initial Screen Purpose Link Text': 'Show Purposes',
-    // Purpose screen
-    'Purpose Screen Title Text': 'We value your privacy',
-    'Purpose Screen Body Text': 'Tab for a Cause and our partners use technology such as cookies on our site to personalize content and ads, provide social media features, and analyze our traffic. You can toggle on or off your consent preference based on purpose for all companies listed under each purpose to the use of this technology on Tab for a Cause. You can change your mind and revisit your consent choices at anytime by visiting your settings page.',
-    'Purpose Screen Enable All Button Text': 'Enable all purposes',
-    'Purpose Screen Vendor Link Text': 'See full vendor list',
-    'Purpose Screen Cancel Button Text': 'Cancel',
-    'Purpose Screen Save and Exit Button Text': 'Save & Exit',
-    // Vendor screen
-    'Vendor Screen Title Text': 'We value your privacy',
-    'Vendor Screen Body Text': 'Tab for a Cause and our partners use technology such as cookies on our site to personalize content and ads, provide social media features, and analyze our traffic. You can toggle on or off your consent preference for each company to the use of this technology on Tab for a Cause. You can change your mind and revisit your consent choices at anytime by visiting your settings.',
-    'Vendor Screen Reject All Button Text': 'Reject All',
-    'Vendor Screen Accept All Button Text': 'Accept All',
-    'Vendor Screen Purposes Link Text': 'Back to purposes',
-    'Vendor Screen Cancel Button Text': 'Cancel',
-    'Vendor Screen Save and Exit Button Text': 'Save & Exit'
-  });
-</script>
-<style>
-    .qc-cmp-button,
-    .qc-cmp-button.qc-cmp-secondary-button:hover {
-        background-color: #9d4ba3 !important;
-        border-color: #9d4ba3 !important;
-    }
-    .qc-cmp-button:hover,
-    .qc-cmp-button.qc-cmp-secondary-button {
-        background-color: transparent !important;
-        border-color: #9d4ba3 !important;
-    }
-    .qc-cmp-alt-action,
-    .qc-cmp-link {
-        color: #9d4ba3 !important;
-    }
-    .qc-cmp-button,
-    .qc-cmp-button.qc-cmp-secondary-button:hover {
-        color: #FFF !important;
-    }
-    .qc-cmp-button:hover,
-    .qc-cmp-button.qc-cmp-secondary-button {
-        color: #9d4ba3 !important;
-    }
-    .qc-cmp-small-toggle.qc-cmp-toggle-on,
-    .qc-cmp-toggle.qc-cmp-toggle-on {
-        background-color: #d07ad5 !important;
-        border-color: #d07ad5 !important;
-    }
-</style>
-<!-- END: Quantcast Choice. Consent Manager Tag -->
+    <!--
+      @gladly-customization:
+      MaxMind for determining country location
+    -->
+    <script src="//js.maxmind.com/js/apis/geoip2/v2.1/geoip2.js" type="text/javascript"></script>
 
-<!-- Amazon apstag -->
-<script>
-!function(a9,a,p,s,t,A,g){if(a[a9])return;function q(c,r){a[a9]._Q.push([c,r])}a[a9]={init:function(){q("i",arguments)},fetchBids:function(){q("f",arguments)},setDisplayBids:function(){},targetingKeys:function(){return[]},_Q:[]};A=p.createElement(s);A.async=!0;A.src=t;g=p.getElementsByTagName(s)[0];g.parentNode.insertBefore(A,g)}("apstag",window,document,"script","//c.amazon-adsystem.com/aax2/apstag.js");
-</script>
 
-<% for (var chunk in htmlWebpackPlugin.files.chunks) { %>
-<script src="<%= htmlWebpackPlugin.files.chunks[chunk].entry %>"></script>
-<% } %>
+    <!--
+      @gladly-customization:
+      Facebook Pixel Code
+    -->
+    <script>
+    /* eslint-disable */
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+    document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1813501258922708');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1813501258922708&ev=PageView&noscript=1"
+    /></noscript>
 
-<% if (htmlWebpackPlugin.options.devServer) { %>
-<script src="<%= htmlWebpackPlugin.options.devServer%>/webpack-dev-server.js"></script>
-<% } %>
 
-<% if (htmlWebpackPlugin.options.tabAdsEnabled) { %>
-<!-- Begin PageFair -->
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
-<script type="text/javascript">
-  /* eslint-disable */
-  (function() {
-    try {
-      function async_load(script_url){
-        var protocol = ('https:' == document.location.protocol ? 'https://' : 'http://');
-        var s = document.createElement('script'); s.src = protocol + script_url;
-        var x = document.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x);
-      }
-      bm_website_code = '00B0E101417644EB';
-      jQuery(document).ready(function(){async_load('asset.pagefair.com/measure.min.js')});
-      jQuery(document).ready(function(){async_load('asset.pagefair.net/ads.min.js')});
-    } catch (e) {
-      console.error('Error with Pagefair:', e)
-    }
-  })();
-</script>
-<!-- End PageFair -->
+    <!--
+      @gladly-customization:
+      Google Publisher Tag
+    -->
+    <script type="text/javascript">
+      /* eslint-disable */
+      // Google Tag Manager
+      var googletag = window.googletag || {}
+      googletag.cmd = googletag.cmd || []
+      googletag.cmd.push(() => {
+        googletag.pubads().disableInitialLoad()
+      })
 
-<% } %>
+      var gads = document.createElement('script')
+      gads.async = true
+      gads.type = 'text/javascript'
+      var useSSL = document.location.protocol === 'https:'
+      gads.src = (useSSL ? 'https:' : 'http:') +
+        '//www.googletagservices.com/tag/js/gpt.js'
+      var head = document.getElementsByTagName('head')[0]
+      head.appendChild(gads)
+    </script>
 
-</body>
+    <!--
+      @gladly-customization:
+      Quantcast Choice Consent Manager Tag
+      https://www.quantcast.com/gdpr/quantcast-choice-self-serve/
+      https://quantcast.zendesk.com/hc/en-us/articles/360003814853-Technical-Implementation-Guide
+    -->
+    <script type="text/javascript" async=true>
+      var __cmp = (function () {
+        return typeof (__cmp) == "function" ? __cmp : function (c) {
+          var b = arguments;
+          if (!b.length) {
+            return __cmp.a;
+          }
+          else if (c == '__cmp')
+            return false;
+          else {
+            if (typeof __cmp.a === 'undefined') {
+              __cmp.a = [];
+            }
+            __cmp.a.push([].slice.apply(b));
+          }
+        }
+      })();
+      /* eslint-disable */
+      // IAB standard docs:
+      // https://github.com/InteractiveAdvertisingBureau/GDPR-Transparency-and-Consent-Framework/blob/master/CMP%20JS%20API%20v1.1%20Final.md#what-api-will-need-to-be-provided-by-the-cmp-
+      // Can redisplay the consent UI with:
+      // window.__cmp('displayConsentUi')
+      var elem = document.createElement('script');
+      elem.src = "https://quantcast.mgr.consensu.org/cmp.js";
+      elem.async = true;
+      elem.type = "text/javascript";
+      var scpt = document.getElementsByTagName('script')[0];
+      scpt.parentNode.insertBefore(elem, scpt);
+
+      window.__cmp('init', {
+        'Language': 'EN',
+        'Display UI': 'inEU', // 'inEU', 'always', 'never'
+        // 'service' for consenting only for this domain; 'global' if consenting for all web
+        'Consent Scope': 'service',
+        'Publisher Name': 'Tab for a Cause',
+        'Publisher Logo': 'https://tab.gladly.io/newtab/static/media/logo.539ef9c6.svg',
+        'Publisher Purpose IDs': [],
+        'Min Days Between UI Displays': 30,
+        'Non-Consent Display Frequency': 90,
+        // If true, displays a floating link on all pages
+        'Display Persistent Consent Link': false,
+        // Initial screen
+        'Initial Screen Title Text': 'We value your privacy',
+        'Initial Screen Body Text': 'We and our partners use technology such as cookies on our site to personalise content and ads, provide social media features, and analyse our traffic. Click below to consent to the use of this technology on Tab for a Cause. You can change your mind at any time by visiting your settings page.',
+        'Initial Screen Reject Button Text': 'I do not accept',
+        'Initial Screen Accept Button Text': 'I accept',
+        'Initial Screen Purpose Link Text': 'Show Purposes',
+        // Purpose screen
+        'Purpose Screen Title Text': 'We value your privacy',
+        'Purpose Screen Body Text': 'Tab for a Cause and our partners use technology such as cookies on our site to personalize content and ads, provide social media features, and analyze our traffic. You can toggle on or off your consent preference based on purpose for all companies listed under each purpose to the use of this technology on Tab for a Cause. You can change your mind and revisit your consent choices at anytime by visiting your settings page.',
+        'Purpose Screen Enable All Button Text': 'Enable all purposes',
+        'Purpose Screen Vendor Link Text': 'See full vendor list',
+        'Purpose Screen Cancel Button Text': 'Cancel',
+        'Purpose Screen Save and Exit Button Text': 'Save & Exit',
+        // Vendor screen
+        'Vendor Screen Title Text': 'We value your privacy',
+        'Vendor Screen Body Text': 'Tab for a Cause and our partners use technology such as cookies on our site to personalize content and ads, provide social media features, and analyze our traffic. You can toggle on or off your consent preference for each company to the use of this technology on Tab for a Cause. You can change your mind and revisit your consent choices at anytime by visiting your settings.',
+        'Vendor Screen Reject All Button Text': 'Reject All',
+        'Vendor Screen Accept All Button Text': 'Accept All',
+        'Vendor Screen Purposes Link Text': 'Back to purposes',
+        'Vendor Screen Cancel Button Text': 'Cancel',
+        'Vendor Screen Save and Exit Button Text': 'Save & Exit'
+      });
+    </script>
+    <style>
+        .qc-cmp-button,
+        .qc-cmp-button.qc-cmp-secondary-button:hover {
+            background-color: #9d4ba3 !important;
+            border-color: #9d4ba3 !important;
+        }
+        .qc-cmp-button:hover,
+        .qc-cmp-button.qc-cmp-secondary-button {
+            background-color: transparent !important;
+            border-color: #9d4ba3 !important;
+        }
+        .qc-cmp-alt-action,
+        .qc-cmp-link {
+            color: #9d4ba3 !important;
+        }
+        .qc-cmp-button,
+        .qc-cmp-button.qc-cmp-secondary-button:hover {
+            color: #FFF !important;
+        }
+        .qc-cmp-button:hover,
+        .qc-cmp-button.qc-cmp-secondary-button {
+            color: #9d4ba3 !important;
+        }
+        .qc-cmp-small-toggle.qc-cmp-toggle-on,
+        .qc-cmp-toggle.qc-cmp-toggle-on {
+            background-color: #d07ad5 !important;
+            border-color: #d07ad5 !important;
+        }
+    </style>
+    <!-- End: Quantcast Choice Consent Manager Tag -->
+
+    <!--
+      @gladly-customization:
+      Amazon apstag
+    -->
+    <script>
+    !function(a9,a,p,s,t,A,g){if(a[a9])return;function q(c,r){a[a9]._Q.push([c,r])}a[a9]={init:function(){q("i",arguments)},fetchBids:function(){q("f",arguments)},setDisplayBids:function(){},targetingKeys:function(){return[]},_Q:[]};A=p.createElement(s);A.async=!0;A.src=t;g=p.getElementsByTagName(s)[0];g.parentNode.insertBefore(A,g)}("apstag",window,document,"script","//c.amazon-adsystem.com/aax2/apstag.js");
+    </script>
+
+
+    <!--
+      @gladly-customization:
+      PageFair
+    -->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+    <script type="text/javascript">
+      /* eslint-disable */
+      (function() {
+        try {
+          function async_load(script_url){
+            var protocol = ('https:' == document.location.protocol ? 'https://' : 'http://');
+            var s = document.createElement('script'); s.src = protocol + script_url;
+            var x = document.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x);
+          }
+          bm_website_code = '00B0E101417644EB';
+          jQuery(document).ready(function(){async_load('asset.pagefair.com/measure.min.js')});
+          jQuery(document).ready(function(){async_load('asset.pagefair.net/ads.min.js')});
+        } catch (e) {
+          console.error('Error with Pagefair:', e)
+        }
+      })();
+    </script>
+    <!-- End: PageFair -->
+    
+  </body>
 </html>

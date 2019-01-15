@@ -248,7 +248,7 @@ export const EXPERIMENT_AD_EXPLANATION = 'adExplanation'
 // The "name" value of the experiment must be the same as the
 // field name of the GraphQL ExperimentGroup field name for
 // this test.
-export const experiments = [
+export const _experimentsConfig = [
   // @experiment-one-ad-for-new-users
   createExperiment({
     name: EXPERIMENT_ONE_AD_FOR_NEW_USERS,
@@ -292,7 +292,9 @@ export const experiments = [
 // We do this to be able to modify the experiments
 // variable during testing while keeping it in this file.
 // https://github.com/facebook/jest/issues/936#issuecomment-214939935
-const getExperiments = () => exports.experiments
+export const _experiments = {
+  getExperiments: () => _experimentsConfig
+}
 
 /**
  * Get the set of available group values for an experiment.
@@ -305,7 +307,7 @@ export const getExperimentGroups = experimentName => {
   if (!experimentName) {
     throw new Error('Must provide an experiment name.')
   }
-  const exp = find(getExperiments(), { name: experimentName })
+  const exp = find(_experiments.getExperiments(), { name: experimentName })
 
   // If there's no experiment with this name, return only the
   // NoneExperimentGroup.
@@ -337,7 +339,7 @@ export const getUserExperimentGroup = experimentName => {
   if (!experimentName) {
     throw new Error('Must provide an experiment name.')
   }
-  const exp = find(getExperiments(), { name: experimentName })
+  const exp = find(_experiments.getExperiments(), { name: experimentName })
 
   // If there's no experiment with this name, return the
   // NoneExperimentGroup value.
@@ -358,7 +360,7 @@ export const getUserExperimentGroup = experimentName => {
  * @returns {undefined}
  */
 export const assignUserToTestGroups = userInfo => {
-  const exps = getExperiments()
+  const exps = _experiments.getExperiments()
   exps.forEach(experiment => {
     if (experiment.active) {
       experiment.assignTestGroup(userInfo)
@@ -376,7 +378,7 @@ export const assignUserToTestGroups = userInfo => {
  *   ExperimentGroupsType.
  */
 export const getUserTestGroupsForMutation = () => {
-  const exps = getExperiments()
+  const exps = _experiments.getExperiments()
   const userGroupsSchema = exps.reduce((result, experiment) => {
     result[experiment.name] = experiment.getTestGroup().schemaValue
     return result

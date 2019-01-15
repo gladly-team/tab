@@ -26,9 +26,6 @@ import {
 } from 'js/theme/default'
 import FadeInDashboardAnimation from 'js/components/General/FadeInDashboardAnimation'
 import ErrorMessage from 'js/components/General/ErrorMessage'
-import Fireworks from 'lib/fireworks-react'
-import RaisedButton from 'material-ui/RaisedButton'
-import CloseIcon from 'material-ui/svg-icons/navigation/close'
 import NewUserTour from 'js/components/Dashboard/NewUserTourContainer'
 import Notification from 'js/components/Dashboard/NotificationComponent'
 import { getCurrentUser } from 'js/authentication/user'
@@ -52,6 +49,12 @@ import {
 import {
   showGlobalNotification
 } from 'js/utils/feature-flags'
+
+// Include ads code.
+// TODO: load this on mount, making sure the ads code behaves
+// appropriately for a SPA (it should not reload libraries but
+// should re-fetch ads).
+import 'js/ads/ads'
 
 class Dashboard extends React.Component {
   constructor (props) {
@@ -275,66 +278,9 @@ class Dashboard extends React.Component {
           : null
         }
         {
-          this.state.showFireworks ? (
-            <span>
-              <FadeInDashboardAnimation>
-                <CloseIcon
-                  style={{
-                    position: 'absolute',
-                    top: 14,
-                    right: 14,
-                    zIndex: 22,
-                    height: 32,
-                    width: 32,
-                    color: '#FFF',
-                    cursor: 'pointer'
-                  }}
-                  onClick={() => { this.launchFireworks(false) }}
-                />
-              </FadeInDashboardAnimation>
-              <FadeInDashboardAnimation>
-                <span
-                  style={{
-                    position: 'absolute',
-                    zIndex: 21,
-                    color: '#FFF',
-                    top: 14,
-                    left: 14,
-                    width: 240,
-                    fontSize: 18,
-                    lineHeight: '110%'
-                  }}
-                >
-                  <div>
-                    Tabbers, together we've raised over half a million dollars for charity. Congrats, and thank you!
-                  </div>
-                  <a
-                    href='https://www.facebook.com/notes/tab-for-a-cause/500000-raised-for-charity/1752143718162041/'
-                    target='_top'
-                  >
-                    <RaisedButton
-                      label='Share This Milestone'
-                      style={{
-                        marginTop: 8
-                      }}
-                      primary
-                    />
-                  </a>
-                </span>
-              </FadeInDashboardAnimation>
-              <Fireworks
-                width={window.innerWidth}
-                height={window.innerHeight}
-                background={'rgba(0, 0, 0, 0.01)'}
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  zIndex: 20
-                }}
-              />
-            </span>
-          )
+          this.state.showFireworks ?
+            // TODO: build a new fireworks component
+            null
             : null
         }
         { showNewUserTour ? <NewUserTour user={user} /> : null }

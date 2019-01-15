@@ -1,6 +1,6 @@
-/* global graphql */
 
 import React from 'react'
+import graphql from 'babel-plugin-relay/macro'
 import { QueryRenderer } from 'react-relay'
 import { get } from 'lodash/object'
 import environment from 'js/relay-env'

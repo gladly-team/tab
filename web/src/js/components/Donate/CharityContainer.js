@@ -1,6 +1,6 @@
+import graphql from 'babel-plugin-relay/macro'
 import {
-  createFragmentContainer,
-  graphql
+  createFragmentContainer
 } from 'react-relay'
 
 import Charity from 'js/components/Donate/CharityComponent'

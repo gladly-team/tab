@@ -9,7 +9,7 @@ class LogoWithText extends React.Component {
       height: 40
     }, this.props.style)
     return (
-      <img style={style} src={logoWithText} />
+      <img style={style} src={logoWithText} alt='Tab for a Cause logo' />
     )
   }
 }

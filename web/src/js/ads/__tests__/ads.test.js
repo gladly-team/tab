@@ -8,6 +8,7 @@ import getGoogleTag, {
 import getAmazonTag from 'js/ads/amazon/getAmazonTag'
 import getPrebidPbjs from 'js/ads/prebid/getPrebidPbjs'
 
+jest.mock('js/ads/prebid/prebid')
 jest.mock('js/ads/google/getGoogleTag')
 jest.mock('js/ads/amazon/getAmazonTag')
 jest.mock('js/ads/prebid/getPrebidPbjs')

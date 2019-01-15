@@ -1,3 +1,4 @@
+import 'js/ads/prebid/prebid' // Prebid library code
 import adsEnabled from 'js/ads/adsEnabledStatus'
 import amazonBidder, { storeAmazonBids } from 'js/ads/amazon/amazonBidder'
 import getAmazonTag from 'js/ads/amazon/getAmazonTag'

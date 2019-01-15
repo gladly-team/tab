@@ -1,6 +1,4 @@
-import {
-  graphql
-} from 'react-relay'
+import graphql from 'babel-plugin-relay/macro'
 import commitMutation from 'relay-commit-mutation-promise'
 import moment from 'moment'
 import { isNil } from 'lodash/lang'

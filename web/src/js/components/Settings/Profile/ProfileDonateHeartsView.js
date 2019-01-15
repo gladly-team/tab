@@ -1,7 +1,7 @@
-/* global graphql */
 
 import React from 'react'
-import {QueryRenderer} from 'react-relay'
+import { QueryRenderer } from 'react-relay'
+import graphql from 'babel-plugin-relay/macro'
 import environment from 'js/relay-env'
 
 import SettingsChildWrapper from 'js/components/Settings/SettingsChildWrapperComponent'

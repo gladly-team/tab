@@ -1,7 +1,7 @@
-/* global graphql */
 
 import React from 'react'
 import { QueryRenderer } from 'react-relay'
+import graphql from 'babel-plugin-relay/macro'
 import { get } from 'lodash/object'
 import environment from 'js/relay-env'
 import AuthenticationContainer from 'js/components/Authentication/AuthenticationContainer'
@@ -27,8 +27,8 @@ class AuthenticationView extends React.Component {
     this.createNewUserAttempts = 0
   }
 
-  async componentDidMount () {
-    await this.fetchUser()
+  componentDidMount () {
+    this.fetchUser()
   }
 
   // If we have an authed user with a user ID, fetch the

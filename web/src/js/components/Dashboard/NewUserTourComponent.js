@@ -2,20 +2,19 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Joyride from 'react-joyride'
 
-import Dialog from 'material-ui/Dialog'
 import Button from '@material-ui/core/Button'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogTitle from '@material-ui/core/DialogTitle'
 import EarthIcon from 'mdi-material-ui/Earth'
-import HeartIcon from 'material-ui/svg-icons/action/favorite'
+import HeartIcon from '@material-ui/icons/Favorite'
+import { withTheme } from '@material-ui/core/styles'
 import InviteFriend from 'js/components/Settings/Profile/InviteFriendContainer'
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import { STORAGE_NEW_USER_HAS_COMPLETED_TOUR } from 'js/constants'
-
-import {
-  primaryColor,
-  textColor
-} from 'js/theme/default'
 
 // Note that the target components must be mounted
 // before the tour begins.
@@ -25,8 +24,7 @@ const tourSteps = [
     target: '[data-tour-id="hearts"]',
     content: "You'll earn a Heart with every tab you open. Donate your Hearts to your favorite charity to tell us where to give money.",
     placement: 'bottom',
-    disableBeacon: true,
-    disableOverlayClose: true
+    disableBeacon: true
   },
   {
     target: '[data-tour-id="settings-button"]',
@@ -42,17 +40,26 @@ const tourSteps = [
   }
 ]
 
-const CustomTooltip = (props) => {
+// https://docs.react-joyride.com/custom-components
+const CustomTooltip = ({
+  continuous,
+  index,
+  step,
+  backProps,
+  closeProps,
+  primaryProps,
+  tooltipProps,
+}) => {
   return (
-    <div style={{ width: 300 }}>
+    <div {...tooltipProps} style={{ width: 300 }}>
       <Paper>
         <div style={{ padding: 20 }}>
-          <Typography variant={'body2'}>{props.content}</Typography>
+          <Typography variant={'body2'}>{step.content}</Typography>
         </div>
         <span style={{ display: 'flex', justifyContent: 'flex-end', padding: 10 }}>
-          { (props.stepIndex > 0) ? (
+          { (index > 0) ? (
             <Button
-              onClick={props.goToPreviousStep}
+              {...backProps}
               color='default'
             >
               Back
@@ -60,7 +67,7 @@ const CustomTooltip = (props) => {
           ) : null
           }
           <Button
-            onClick={props.goToNextStep}
+            {...primaryProps}
             color='primary'
           >
             Next
@@ -71,29 +78,19 @@ const CustomTooltip = (props) => {
   )
 }
 
-CustomTooltip.propTypes = {
-  content: PropTypes.string,
-  stepIndex: PropTypes.number.isRequired,
-  goToNextStep: PropTypes.func.isRequired,
-  goToPreviousStep: PropTypes.func.isRequired
-}
-
-CustomTooltip.defaultProps = {}
-
 class NewUserTour extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
       introModalOpen: true,
       beginTour: false,
-      stepIndex: 0,
       introFinalModalOpen: false
     }
   }
 
   joyrideCallback (data) {
-    const { action, index } = data
-    const isTourFinished = action === 'next' && index >= tourSteps.length
+    const { status } = data
+    const isTourFinished = status === 'finished'
     if (isTourFinished) {
       this.setState({
         introFinalModalOpen: true
@@ -111,27 +108,6 @@ class NewUserTour extends React.Component {
     })
   }
 
-  goToPreviousStep () {
-    this.setState({
-      stepIndex: this.state.stepIndex - 1
-    })
-  }
-
-  goToNextStep () {
-    this.setState({
-      stepIndex: this.state.stepIndex + 1
-    })
-  }
-
-  getCurrentStepContent () {
-    const stepObj = tourSteps[this.state.stepIndex]
-    if (stepObj && stepObj.content) {
-      return stepObj.content
-    } else {
-      return null
-    }
-  }
-
   introFinalModalButtonClick () {
     this.setState({
       introFinalModalOpen: false
@@ -139,36 +115,39 @@ class NewUserTour extends React.Component {
   }
 
   render () {
-    const { user } = this.props
+    const { user, theme } = this.props
+    const primaryColor = theme.palette.primary.main
+    const textColor = theme.typography.body2.color
     return (
       <span>
         <Dialog
-          title='Your tabs are changing the world!'
-          actionsContainerStyle={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'flex-end'
-          }}
-          actions={[
-            <Button
-              onClick={this.introModalButtonClick.bind(this)}
-              color='primary'
-            >
-              Next
-            </Button>
-          ]}
-          modal
           open={this.state.introModalOpen}
-          contentStyle={{
-            maxWidth: 500
+          disableBackdropClick
+          disableEscapeKeyDown
+          PaperProps={{
+            style: {
+              maxWidth: 500
+            }
           }}
         >
-          <span style={{ display: 'flex', justifyContent: 'center' }}>
-            <EarthIcon style={{ color: primaryColor, width: 32, height: 32, margin: 10, marginTop: 0 }} />
-            <HeartIcon color={primaryColor} style={{ width: 32, height: 32, margin: 10, marginTop: 0 }} />
-          </span>
-          <Typography variant={'body2'} paragraph>Now, every tab you open raises money for charity. (The money comes from showing ads in the corner of the page.)</Typography>
-          <Typography variant={'body2'} paragraph>Just by surfing the web, you're feeding children, protecting the rainforest, and more.</Typography>
+          <DialogTitle disableTypography>
+            <Typography variant={'h6'}>
+              Your tabs are changing the world!
+            </Typography>
+          </DialogTitle>
+          <DialogContent>
+            <span style={{ display: 'flex', justifyContent: 'center' }}>
+              <EarthIcon style={{ color: primaryColor, width: 32, height: 32, margin: 10, marginTop: 0 }} />
+              <HeartIcon style={{ color: primaryColor, width: 32, height: 32, margin: 10, marginTop: 0 }} />
+            </span>
+            <Typography variant={'body2'} paragraph>Now, every tab you open raises money for charity. (The money comes from showing ads in the corner of the page.)</Typography>
+            <Typography variant={'body2'} paragraph>Just by surfing the web, you're feeding children, protecting the rainforest, and more.</Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.introModalButtonClick.bind(this)} color='primary'>
+              Next
+            </Button>
+          </DialogActions>
         </Dialog>
         <Joyride
           steps={tourSteps}
@@ -178,13 +157,13 @@ class NewUserTour extends React.Component {
           disableOverlayClose
           callback={this.joyrideCallback.bind(this)}
           styles={{
-            zIndex: 4600,
             options: {
               arrowColor: '#fff',
               backgroundColor: '#fff',
               primaryColor: primaryColor,
               textColor: textColor,
-              overlayColor: 'rgba(0, 0, 0, 0.56)'
+              overlayColor: 'rgba(0, 0, 0, 0.56)',
+              zIndex: 4600
             },
             overlay: {
               cursor: 'default'
@@ -196,44 +175,41 @@ class NewUserTour extends React.Component {
           // We're choosing to control the component so it will match
           // the app theme. But we can remove this and the "stepIndex"
           // prop to let Joyride handle it.
-          tooltipComponent={
-            <CustomTooltip
-              content={this.getCurrentStepContent()}
-              stepIndex={this.state.stepIndex}
-              goToNextStep={this.goToNextStep.bind(this)}
-              goToPreviousStep={this.goToPreviousStep.bind(this)}
-            />
-          }
+          tooltipComponent={CustomTooltip}
         />
         <Dialog
-          title="We're thrilled to have you!"
-          actionsContainerStyle={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'flex-end'
+          open={this.state.introFinalModalOpen}
+          disableBackdropClick
+          disableEscapeKeyDown
+          PaperProps={{
+            style: {
+              maxWidth: 500
+            }
           }}
-          actions={[
+        >
+          <DialogTitle disableTypography>
+            <Typography variant={'h6'}>
+              We're thrilled to have you!
+            </Typography>
+          </DialogTitle>
+          <DialogContent>
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column'
+            }}>
+              <Typography variant={'body2'} paragraph>Thanks for making the world a better place, one tab at a time.</Typography>
+              <Typography variant={'body2'} paragraph>We can make a bigger impact together. Share Tab for a Cause with a few friends!</Typography>
+              <InviteFriend style={{ alignSelf: 'center' }} user={user} />
+            </div>
+          </DialogContent>
+          <DialogActions>
             <Button
               onClick={this.introFinalModalButtonClick.bind(this)}
               color='default'
             >
               Skip for now
             </Button>
-          ]}
-          modal
-          open={this.state.introFinalModalOpen}
-          contentStyle={{
-            maxWidth: 500
-          }}
-        >
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column'
-          }}>
-            <Typography variant={'body2'} paragraph>Thanks for making the world a better place, one tab at a time.</Typography>
-            <Typography variant={'body2'} paragraph>We can make a bigger impact together. Share Tab for a Cause with a few friends!</Typography>
-            <InviteFriend style={{ alignSelf: 'center' }} user={user} />
-          </div>
+          </DialogActions>
         </Dialog>
       </span>
     )
@@ -242,10 +218,11 @@ class NewUserTour extends React.Component {
 
 NewUserTour.propTypes = {
   user: PropTypes.shape({
-  }).isRequired
+  }).isRequired,
+  theme: PropTypes.object.isRequired
 }
 
 NewUserTour.defaultProps = {
 }
 
-export default NewUserTour
+export default withTheme()(NewUserTour)
