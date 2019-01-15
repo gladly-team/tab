@@ -10,7 +10,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import EarthIcon from 'mdi-material-ui/Earth'
-import HeartIcon from 'material-ui/svg-icons/action/favorite'
+import HeartIcon from '@material-ui/icons/Favorite'
 import InviteFriend from 'js/components/Settings/Profile/InviteFriendContainer'
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import { STORAGE_NEW_USER_HAS_COMPLETED_TOUR } from 'js/constants'
@@ -140,7 +140,7 @@ class NewUserTour extends React.Component {
           <DialogContent>
             <span style={{ display: 'flex', justifyContent: 'center' }}>
               <EarthIcon style={{ color: primaryColor, width: 32, height: 32, margin: 10, marginTop: 0 }} />
-              <HeartIcon color={primaryColor} style={{ width: 32, height: 32, margin: 10, marginTop: 0 }} />
+              <HeartIcon style={{ width: 32, height: 32, margin: 10, marginTop: 0, color: primaryColor }} />
             </span>
             <Typography variant={'body2'} paragraph>Now, every tab you open raises money for charity. (The money comes from showing ads in the corner of the page.)</Typography>
             <Typography variant={'body2'} paragraph>Just by surfing the web, you're feeding children, protecting the rainforest, and more.</Typography>
