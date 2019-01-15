@@ -15,13 +15,11 @@ jest.mock('js/utils/localstorage-mgr')
 const mockProps = {
   user: {}
 }
-
-const numberOfJoyrideTourSteps = 3
 const mockJoyrideCallbackData = {
   action: 'next',
-  controlled: true,
+  controlled: false,
   index: 1, // current step in the tour
-  lifecycle: 'init',
+  lifecycle: 'tooltip',
   size: 3,
   status: 'running',
   step: {
@@ -86,8 +84,9 @@ describe('New user tour component', () => {
     // Mock that Joyride calls its callback to indicate the
     // tour is complete.
     const callbackData = cloneDeep(mockJoyrideCallbackData)
-    callbackData.index = numberOfJoyrideTourSteps
+    callbackData.status = 'finished'
     joyrideCallbackFn(callbackData)
-    expect(localStorageMgr.setItem).toHaveBeenCalledWith(STORAGE_NEW_USER_HAS_COMPLETED_TOUR, 'true')
+    expect(localStorageMgr.setItem)
+      .toHaveBeenCalledWith(STORAGE_NEW_USER_HAS_COMPLETED_TOUR, 'true')
   })
 })

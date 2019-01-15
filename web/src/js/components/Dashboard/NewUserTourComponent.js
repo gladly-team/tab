@@ -25,8 +25,7 @@ const tourSteps = [
     target: '[data-tour-id="hearts"]',
     content: "You'll earn a Heart with every tab you open. Donate your Hearts to your favorite charity to tell us where to give money.",
     placement: 'bottom',
-    disableBeacon: true,
-    disableOverlayClose: true
+    disableBeacon: true
   },
   {
     target: '[data-tour-id="settings-button"]',
@@ -42,17 +41,26 @@ const tourSteps = [
   }
 ]
 
-const CustomTooltip = (props) => {
+// https://docs.react-joyride.com/custom-components
+const CustomTooltip = ({
+  continuous,
+  index,
+  step,
+  backProps,
+  closeProps,
+  primaryProps,
+  tooltipProps,
+}) => {
   return (
-    <div style={{ width: 300 }}>
+    <div {...tooltipProps} style={{ width: 300 }}>
       <Paper>
         <div style={{ padding: 20 }}>
-          <Typography variant={'body2'}>{props.content}</Typography>
+          <Typography variant={'body2'}>{step.content}</Typography>
         </div>
         <span style={{ display: 'flex', justifyContent: 'flex-end', padding: 10 }}>
-          { (props.stepIndex > 0) ? (
+          { (index > 0) ? (
             <Button
-              onClick={props.goToPreviousStep}
+              {...backProps}
               color='default'
             >
               Back
@@ -60,7 +68,7 @@ const CustomTooltip = (props) => {
           ) : null
           }
           <Button
-            onClick={props.goToNextStep}
+            {...primaryProps}
             color='primary'
           >
             Next
@@ -71,29 +79,19 @@ const CustomTooltip = (props) => {
   )
 }
 
-CustomTooltip.propTypes = {
-  content: PropTypes.string,
-  stepIndex: PropTypes.number.isRequired,
-  goToNextStep: PropTypes.func.isRequired,
-  goToPreviousStep: PropTypes.func.isRequired
-}
-
-CustomTooltip.defaultProps = {}
-
 class NewUserTour extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
       introModalOpen: true,
       beginTour: false,
-      stepIndex: 0,
       introFinalModalOpen: false
     }
   }
 
   joyrideCallback (data) {
-    const { action, index } = data
-    const isTourFinished = action === 'next' && index >= tourSteps.length
+    const { status } = data
+    const isTourFinished = status === 'finished'
     if (isTourFinished) {
       this.setState({
         introFinalModalOpen: true
@@ -109,27 +107,6 @@ class NewUserTour extends React.Component {
       introModalOpen: false,
       beginTour: true
     })
-  }
-
-  goToPreviousStep () {
-    this.setState({
-      stepIndex: this.state.stepIndex - 1
-    })
-  }
-
-  goToNextStep () {
-    this.setState({
-      stepIndex: this.state.stepIndex + 1
-    })
-  }
-
-  getCurrentStepContent () {
-    const stepObj = tourSteps[this.state.stepIndex]
-    if (stepObj && stepObj.content) {
-      return stepObj.content
-    } else {
-      return null
-    }
   }
 
   introFinalModalButtonClick () {
@@ -178,13 +155,13 @@ class NewUserTour extends React.Component {
           disableOverlayClose
           callback={this.joyrideCallback.bind(this)}
           styles={{
-            zIndex: 4600,
             options: {
               arrowColor: '#fff',
               backgroundColor: '#fff',
               primaryColor: primaryColor,
               textColor: textColor,
-              overlayColor: 'rgba(0, 0, 0, 0.56)'
+              overlayColor: 'rgba(0, 0, 0, 0.56)',
+              zIndex: 4600
             },
             overlay: {
               cursor: 'default'
@@ -196,14 +173,7 @@ class NewUserTour extends React.Component {
           // We're choosing to control the component so it will match
           // the app theme. But we can remove this and the "stepIndex"
           // prop to let Joyride handle it.
-          tooltipComponent={
-            <CustomTooltip
-              content={this.getCurrentStepContent()}
-              stepIndex={this.state.stepIndex}
-              goToNextStep={this.goToNextStep.bind(this)}
-              goToPreviousStep={this.goToPreviousStep.bind(this)}
-            />
-          }
+          tooltipComponent={CustomTooltip}
         />
         <Dialog
           title="We're thrilled to have you!"

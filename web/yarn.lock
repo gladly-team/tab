@@ -10773,10 +10773,10 @@ react-is@^16.3.2, react-is@^16.6.1, react-is@^16.6.3, react-is@^16.7.0:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.7.0.tgz#c1bd21c64f1f1364c6f70695ec02d69392f41bfa"
   integrity sha512-Z0VRQdF4NPDoI0tsXVMLkJLiwEBa+RP66g0xDHxgxysxSoCUccSten4RTF/UFvZF1dZvZ9Zu1sx+MDXwcOR34g==
 
-react-joyride@2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/react-joyride/-/react-joyride-2.0.1.tgz#acfe3181d5a44a453f229a638dc09763211653ca"
-  integrity sha512-hLnGmojTNIyO7lJenNI+khyLaTIQTVcAXVlX/Z6of+fi3Z4iz1i0mUL6Ev2L/76UyqegiHFBH0edAggPh8GgZw==
+react-joyride@2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/react-joyride/-/react-joyride-2.0.2.tgz#01f39990ff46a69f2cbfe1a8a2880dcc0f64d0c7"
+  integrity sha512-XJQB4QOPJoC48IU0LkCXwMZIu4Lvgw0AZ5iLyE7xL6l2TXQyk2eN+VOPjLWrRQfk7HBArezHKnc1Fd1jE/KNpA==
   dependencies:
     deep-diff "^1.0.2"
     deepmerge "^3.0.0"
@@ -10784,7 +10784,7 @@ react-joyride@2.0.1:
     is-lite "^0.2.2"
     nested-property "^0.0.7"
     react-floater "^0.6.2"
-    react-proptype-conditional-require "^1.0.4"
+    react-is "^16.7.0"
     scroll "^2.0.3"
     scroll-doc "^0.2.1"
     scrollparent "^2.0.1"
