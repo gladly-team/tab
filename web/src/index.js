@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom'
 import Root from 'js/root'
 import { initializeFirebase } from 'js/authentication/firebaseConfig'
 import { getUsername } from 'js/authentication/user'
-import * as serviceWorker from './serviceWorker'
+import * as serviceWorker from 'js/serviceWorker'
 
 // Start Sentry logger
 // https://docs.sentry.io/clients/javascript/config/
