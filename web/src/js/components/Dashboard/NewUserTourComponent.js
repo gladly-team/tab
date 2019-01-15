@@ -2,10 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Joyride from 'react-joyride'
 
-import Dialog from 'material-ui/Dialog'
 import Button from '@material-ui/core/Button'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import EarthIcon from 'mdi-material-ui/Earth'
 import HeartIcon from 'material-ui/svg-icons/action/favorite'
 import InviteFriend from 'js/components/Settings/Profile/InviteFriendContainer'
@@ -120,32 +123,33 @@ class NewUserTour extends React.Component {
     return (
       <span>
         <Dialog
-          title='Your tabs are changing the world!'
-          actionsContainerStyle={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'flex-end'
-          }}
-          actions={[
-            <Button
-              onClick={this.introModalButtonClick.bind(this)}
-              color='primary'
-            >
-              Next
-            </Button>
-          ]}
-          modal
           open={this.state.introModalOpen}
-          contentStyle={{
-            maxWidth: 500
+          disableBackdropClick
+          disableEscapeKeyDown
+          PaperProps={{
+            style: {
+              maxWidth: 500
+            }
           }}
         >
-          <span style={{ display: 'flex', justifyContent: 'center' }}>
-            <EarthIcon style={{ color: primaryColor, width: 32, height: 32, margin: 10, marginTop: 0 }} />
-            <HeartIcon color={primaryColor} style={{ width: 32, height: 32, margin: 10, marginTop: 0 }} />
-          </span>
-          <Typography variant={'body2'} paragraph>Now, every tab you open raises money for charity. (The money comes from showing ads in the corner of the page.)</Typography>
-          <Typography variant={'body2'} paragraph>Just by surfing the web, you're feeding children, protecting the rainforest, and more.</Typography>
+          <DialogTitle disableTypography>
+            <Typography variant={'h6'}>
+              Your tabs are changing the world!
+            </Typography>
+          </DialogTitle>
+          <DialogContent>
+            <span style={{ display: 'flex', justifyContent: 'center' }}>
+              <EarthIcon style={{ color: primaryColor, width: 32, height: 32, margin: 10, marginTop: 0 }} />
+              <HeartIcon color={primaryColor} style={{ width: 32, height: 32, margin: 10, marginTop: 0 }} />
+            </span>
+            <Typography variant={'body2'} paragraph>Now, every tab you open raises money for charity. (The money comes from showing ads in the corner of the page.)</Typography>
+            <Typography variant={'body2'} paragraph>Just by surfing the web, you're feeding children, protecting the rainforest, and more.</Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.introModalButtonClick.bind(this)} color='primary'>
+              Next
+            </Button>
+          </DialogActions>
         </Dialog>
         <Joyride
           steps={tourSteps}
@@ -176,34 +180,38 @@ class NewUserTour extends React.Component {
           tooltipComponent={CustomTooltip}
         />
         <Dialog
-          title="We're thrilled to have you!"
-          actionsContainerStyle={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'flex-end'
+          open={this.state.introFinalModalOpen}
+          disableBackdropClick
+          disableEscapeKeyDown
+          PaperProps={{
+            style: {
+              maxWidth: 500
+            }
           }}
-          actions={[
+        >
+          <DialogTitle disableTypography>
+            <Typography variant={'h6'}>
+              We're thrilled to have you!
+            </Typography>
+          </DialogTitle>
+          <DialogContent>
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column'
+            }}>
+              <Typography variant={'body2'} paragraph>Thanks for making the world a better place, one tab at a time.</Typography>
+              <Typography variant={'body2'} paragraph>We can make a bigger impact together. Share Tab for a Cause with a few friends!</Typography>
+              <InviteFriend style={{ alignSelf: 'center' }} user={user} />
+            </div>
+          </DialogContent>
+          <DialogActions>
             <Button
               onClick={this.introFinalModalButtonClick.bind(this)}
               color='default'
             >
               Skip for now
             </Button>
-          ]}
-          modal
-          open={this.state.introFinalModalOpen}
-          contentStyle={{
-            maxWidth: 500
-          }}
-        >
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column'
-          }}>
-            <Typography variant={'body2'} paragraph>Thanks for making the world a better place, one tab at a time.</Typography>
-            <Typography variant={'body2'} paragraph>We can make a bigger impact together. Share Tab for a Cause with a few friends!</Typography>
-            <InviteFriend style={{ alignSelf: 'center' }} user={user} />
-          </div>
+          </DialogActions>
         </Dialog>
       </span>
     )
