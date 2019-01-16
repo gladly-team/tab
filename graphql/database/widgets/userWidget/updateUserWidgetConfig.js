@@ -28,8 +28,8 @@ export default async (userContext, userId, widgetId, config) => {
           widgetId,
           config,
         })
-      } catch (e) {
-        throw e
+      } catch (err) {
+        throw err
       }
     } else {
       throw e

@@ -14,17 +14,15 @@ import { loggerContextWrapper } from './utils/logger'
 global.Promise = require('bluebird')
 const Promise = require('bluebird')
 
-const createResponse = function(statusCode, body) {
-  return {
-    statusCode,
-    headers: {
-      'Access-Control-Allow-Origin': '*', // Required for CORS
-    },
-    body: JSON.stringify(body),
-  }
-}
+const createResponse = (statusCode, body) => ({
+  statusCode,
+  headers: {
+    'Access-Control-Allow-Origin': '*', // Required for CORS
+  },
+  body: JSON.stringify(body),
+})
 
-export const handler = function(event) {
+export const handler = event => {
   let body
   try {
     body = JSON.parse(event.body)
@@ -47,6 +45,8 @@ export const handler = function(event) {
         // If graphql-js gets a logger, we can move logging there:
         // https://github.com/graphql/graphql-js/issues/284
         if (data && data.errors) {
+          // TODO: fix rule violation
+          // eslint-disable-next-line no-param-reassign
           data.errors = data.errors.map(err => handleError(err))
           return createResponse(500, data)
         }
@@ -59,6 +59,6 @@ export const handler = function(event) {
   )
 }
 
-export const serverlessHandler = function(event, context, callback) {
+export const serverlessHandler = (event, context, callback) => {
   handler(event).then(response => callback(null, response))
 }
