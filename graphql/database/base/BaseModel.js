@@ -48,6 +48,8 @@ class BaseModel {
         }
       }
       if (!isNil(val)) {
+        // TODO: clean up the logic in this constructor to use immutable variables.
+        // eslint-disable-next-line no-param-reassign
         obj[fieldName] = val
       }
     })
@@ -170,10 +172,14 @@ class BaseModel {
    */
   static get permissions() {
     return {
-      get: (userContext, hashKeyValue, rangeKeyValue) => false,
-      getAll: userContext => false,
-      update: (userContext, hashKeyValue, rangeKeyValue, item) => false,
-      create: (userContext, hashKeyValue, rangeKeyValue, item) => false,
+      // Receives: userContext, hashKeyValue, rangeKeyValue
+      get: () => false,
+      // Receives: userContext
+      getAll: () => false,
+      // Receives: userContext, hashKeyValue, rangeKeyValue, item
+      update: () => false,
+      // Receives: userContext, hashKeyValue, rangeKeyValue, item
+      create: () => false,
       indexPermissions: {},
     }
   }
@@ -215,7 +221,7 @@ class BaseModel {
     this.dynogelsModel = dynogels.define(this.name, options)
   }
 
-  static async get(userContext, hashKey, rangeKey, options) {
+  static async get(userContext, hashKey, rangeKey) {
     const self = this
     const keys = [hashKey]
     if (rangeKey) {
@@ -341,9 +347,13 @@ class BaseModel {
 
     // Add 'created' and 'updated' fields if they're not already set.
     if (!item.created) {
+      // TODO: fix rule violation
+      // eslint-disable-next-line no-param-reassign
       item.created = moment.utc().toISOString()
     }
     if (!item.updated) {
+      // TODO: fix rule violation
+      // eslint-disable-next-line no-param-reassign
       item.updated = moment.utc().toISOString()
     }
 
@@ -386,8 +396,8 @@ class BaseModel {
               created: false,
               item: fetchedItem,
             }))
-            .catch(err => {
-              throw err
+            .catch(error => {
+              throw error
             })
         }
         // Unhandled error
@@ -412,6 +422,8 @@ class BaseModel {
 
     // Update 'updated' field if it's not already set.
     if (!item.updated) {
+      // TODO: fix rule violation
+      // eslint-disable-next-line no-param-reassign
       item.updated = moment.utc().toISOString()
     }
 
@@ -427,6 +439,8 @@ class BaseModel {
       return Promise.reject(new UnauthorizedQueryException())
     }
 
+    // TODO: fix rule violation
+    // eslint-disable-next-line no-param-reassign
     params.ConditionExpression = params.ConditionExpression
       ? `${params.ConditionExpression} AND attribute_exists(${this.hashKey})`
       : `attribute_exists(${this.hashKey})`
@@ -462,10 +476,7 @@ class BaseModel {
 
     let result
     if (data instanceof Array) {
-      result = []
-      for (const index in data) {
-        result.push(deserializeObj(data[index]))
-      }
+      result = data.map(val => deserializeObj(val))
     } else {
       result = deserializeObj(data)
     }
@@ -510,7 +521,7 @@ class BaseModel {
 
     // Get the permissions from the model class. If no permissions are
     // defined, do not allow any access.
-    const permissions = this.permissions
+    const { permissions } = this
     if (!permissions) {
       return false
     }
