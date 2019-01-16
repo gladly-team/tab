@@ -11,12 +11,7 @@ jest.mock('../../databaseClient')
 
 jest.mock('consent-string', () => ({
   // https://facebook.github.io/jest/docs/en/es6-class-mocks.html#simple-mock-using-module-factory-parameter
-  ConsentString: jest.fn(
-    () =>
-      function() {
-        return {}
-      }
-  ),
+  ConsentString: jest.fn(() => () => ({})),
 }))
 
 const mockConsentData = {
@@ -68,7 +63,7 @@ describe('logUserDataConsent', () => {
     const userDataConsentCreate = jest.spyOn(UserDataConsentModel, 'create')
 
     // Mock decoding the consent string
-    const ConsentString = require('consent-string').ConsentString
+    const { ConsentString } = require('consent-string')
     ConsentString.mockImplementationOnce(() =>
       getMockConsentDataClass(mockConsentData)
     )

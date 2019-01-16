@@ -1,7 +1,7 @@
 import moment from 'moment'
 import UserDataConsentModel from './UserDataConsentModel'
 
-const ConsentString = require('consent-string').ConsentString
+const { ConsentString } = require('consent-string')
 
 /**
  * Log user data consent (e.g. from GDPR) using the IAB standard consent string.
