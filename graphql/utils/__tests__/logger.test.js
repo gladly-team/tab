@@ -21,7 +21,7 @@ describe('logger', () => {
       STAGE: 'test',
       LOG_LEVEL: 'debug',
     }))
-    const logErrorWithId = require('../logger').logErrorWithId
+    const { logErrorWithId } = require('../logger')
     const consoleSpy = jest
       .spyOn(console, 'error')
       .mockImplementationOnce(() => {})
@@ -33,7 +33,7 @@ describe('logger', () => {
   })
 
   test('shouldLog works as expected', () => {
-    const shouldLog = require('../logger').shouldLog
+    const { shouldLog } = require('../logger')
     expect(shouldLog('debug', 'info')).toBe(false)
     expect(shouldLog('info', 'debug')).toBe(true)
     expect(shouldLog('error', 'debug')).toBe(true)
@@ -45,7 +45,7 @@ describe('logger', () => {
       LOGGER: 'console',
       STAGE: 'test',
     }))
-    const loggerContextWrapper = require('../logger').loggerContextWrapper
+    const { loggerContextWrapper } = require('../logger')
     const testFunc = jest.fn(() => 'hi')
     const fakeLambdaEvent = { foo: 'bar' }
     const response = loggerContextWrapper({}, fakeLambdaEvent, testFunc)
@@ -61,7 +61,7 @@ describe('logger', () => {
       SENTRY_PRIVATE_KEY: 'xyzxyz',
       SENTRY_PROJECT_ID: '123456',
     }))
-    const loggerContextWrapper = require('../logger').loggerContextWrapper
+    const { loggerContextWrapper } = require('../logger')
     const Sentry = require('../sentry-logger').default
     const testFunc = jest.fn(() => 'hi')
     const userContext = {

@@ -2,7 +2,7 @@
 
 describe('utils', () => {
   test('isValidISOString works as expected', () => {
-    const isValidISOString = require('../utils').isValidISOString
+    const { isValidISOString } = require('../utils')
     expect(isValidISOString('abc')).toBe(false)
     expect(isValidISOString('')).toBe(false)
     expect(isValidISOString(0)).toBe(false)

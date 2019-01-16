@@ -9,9 +9,9 @@ import { USER_DOES_NOT_EXIST } from './exceptions'
  * @return {null}
  */
 export const logExceptionsWrapper = func =>
-  function() {
+  function wrapperFunc(...args) {
     try {
-      return func.apply(this, arguments)
+      return func.apply(this, args)
     } catch (e) {
       logger.error(e)
       throw e

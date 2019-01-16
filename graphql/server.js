@@ -1,3 +1,4 @@
+/* eslint import/no-extraneous-dependencies: 0 */
 import chokidar from 'chokidar'
 import cors from 'cors'
 import express from 'express'

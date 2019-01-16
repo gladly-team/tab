@@ -1,3 +1,4 @@
+/* eslint no-console: 0, import/no-extraneous-dependencies: 0 */
 import jwtDecode from 'jwt-decode'
 import {
   createGraphQLContext,

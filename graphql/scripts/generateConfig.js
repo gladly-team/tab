@@ -1,5 +1,5 @@
+/* eslint no-console: 0, import/no-extraneous-dependencies: 0 */
 const fs = require('fs')
-// eslint-disable-next-line import/no-extraneous-dependencies
 const mkdirp = require('mkdirp')
 const path = require('path')
 const config = require('../config')
@@ -20,11 +20,9 @@ function writeFile(filePath, contents, cb) {
 
 writeFile(configPath, content, err => {
   if (err) {
-    // eslint-disable-next-line no-console
     console.log(err)
     process.exit(1)
   } else {
-    // eslint-disable-next-line no-console
     console.log('build/config.js file generated')
   }
 })

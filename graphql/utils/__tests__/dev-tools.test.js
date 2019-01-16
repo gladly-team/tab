@@ -23,8 +23,7 @@ describe('dev-tools', () => {
   it('correctly forms GraphQL context from a request object when the user has a verified email', () => {
     const mockToken = cloneDeep(mockDecodedToken)
     jwtDecode.mockImplementationOnce(() => mockToken)
-    const getGraphQLContextFromRequest = require('../dev-tools')
-      .getGraphQLContextFromRequest
+    const { getGraphQLContextFromRequest } = require('../dev-tools')
     const minimalRequestObject = {
       header: headerName => {
         if (headerName === 'Authorization') {
@@ -50,8 +49,7 @@ describe('dev-tools', () => {
     delete mockToken.email_verified
     jwtDecode.mockImplementationOnce(() => mockToken)
 
-    const getGraphQLContextFromRequest = require('../dev-tools')
-      .getGraphQLContextFromRequest
+    const { getGraphQLContextFromRequest } = require('../dev-tools')
     const minimalRequestObject = {
       header: headerName => {
         if (headerName === 'Authorization') {
@@ -75,10 +73,9 @@ describe('dev-tools', () => {
     // Suppress expected console.warn statements.
     jest.spyOn(console, 'warn').mockImplementation(() => {})
 
-    const getGraphQLContextFromRequest = require('../dev-tools')
-      .getGraphQLContextFromRequest
+    const { getGraphQLContextFromRequest } = require('../dev-tools')
     const minimalRequestObject = {
-      header: headerName => null,
+      header: () => null,
     }
     const expectedContext = {
       user: {
@@ -92,8 +89,7 @@ describe('dev-tools', () => {
   })
 
   it('correctly forms GraphQL context from a request object when the user has an Authorization header value of "unauthenticated"', () => {
-    const getGraphQLContextFromRequest = require('../dev-tools')
-      .getGraphQLContextFromRequest
+    const { getGraphQLContextFromRequest } = require('../dev-tools')
     const minimalRequestObject = {
       header: headerName => {
         if (headerName === 'Authorization') {

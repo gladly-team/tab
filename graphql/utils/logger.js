@@ -1,3 +1,4 @@
+/* eslint no-console: 0 */
 import { isError } from 'lodash/lang'
 import Sentry, { sentryContextWrapper } from './sentry-logger'
 import config from '../config'
@@ -35,6 +36,58 @@ export const loggerContextWrapper = (userContext, lambdaEvent, func) => {
   }
 }
 
+export const shouldLog = (logLevel, globalLogLevel) =>
+  logLevelsOrder.indexOf(logLevel) >= logLevelsOrder.indexOf(globalLogLevel)
+
+const log = (msg, logLevel) => {
+  if (!shouldLog(logLevel, config.LOG_LEVEL)) {
+    return
+  }
+  switch (config.LOGGER) {
+    case 'console': {
+      switch (logLevel) {
+        case logLevels.DEBUG:
+          console.debug(msg)
+          break
+        case logLevels.LOG:
+          console.log(msg)
+          break
+        case logLevels.INFO:
+          console.info(msg)
+          break
+        case logLevels.WARN:
+          console.warn(msg)
+          break
+        case logLevels.ERROR:
+          console.error(msg)
+          break
+        case logLevels.FATAL:
+          console.error(msg)
+          break
+        default:
+          console.error(msg)
+      }
+      break
+    }
+    case 'sentry': {
+      // Sentry expects 'warning', not 'warn'
+      const level = logLevel === logLevels.WARN ? 'warning' : logLevel
+      if (isError(msg)) {
+        Sentry.captureException(msg, {
+          level,
+        })
+      } else {
+        Sentry.captureMessage(msg, {
+          level,
+        })
+      }
+      break
+    }
+    default:
+      break
+  }
+}
+
 const logger = {}
 
 logger.log = msg => {
@@ -68,56 +121,9 @@ logger.fatal = msg => {
  * @return {null}
  */
 export const logErrorWithId = (err, errId) => {
+  // eslint-disable-next-line no-param-reassign
   err.message = `${err.message}: Error ID ${errId}`
   logger.error(err)
-}
-
-export const shouldLog = (logLevel, globalLogLevel) =>
-  logLevelsOrder.indexOf(logLevel) >= logLevelsOrder.indexOf(globalLogLevel)
-
-const log = (msg, logLevel) => {
-  if (!shouldLog(logLevel, config.LOG_LEVEL)) {
-    return
-  }
-  switch (config.LOGGER) {
-    case 'console':
-      switch (logLevel) {
-        case logLevels.DEBUG:
-          console.debug(msg)
-          break
-        case logLevels.LOG:
-          console.log(msg)
-          break
-        case logLevels.INFO:
-          console.info(msg)
-          break
-        case logLevels.WARN:
-          console.warn(msg)
-          break
-        case logLevels.ERROR:
-          console.error(msg)
-          break
-        case logLevels.FATAL:
-          console.error(msg)
-          break
-      }
-      break
-    case 'sentry':
-      // Sentry expects 'warning', not 'warn'
-      const level = logLevel === logLevels.WARN ? 'warning' : logLevel
-      if (isError(msg)) {
-        Sentry.captureException(msg, {
-          level,
-        })
-      } else {
-        Sentry.captureMessage(msg, {
-          level,
-        })
-      }
-      break
-    default:
-      break
-  }
 }
 
 export default logger

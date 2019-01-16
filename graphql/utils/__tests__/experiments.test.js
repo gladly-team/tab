@@ -27,8 +27,7 @@ afterEach(() => {
 
 describe('experiments', () => {
   test('returns expected experiment groups when all are valid', () => {
-    const getValidatedExperimentGroups = require('../experiments')
-      .getValidatedExperimentGroups
+    const { getValidatedExperimentGroups } = require('../experiments')
     const expGroups = getValidatedExperimentGroups({
       anonSignIn: 1,
       fooTest: 0,
@@ -42,8 +41,7 @@ describe('experiments', () => {
   })
 
   test('returns all null experiment groups when none are provided', () => {
-    const getValidatedExperimentGroups = require('../experiments')
-      .getValidatedExperimentGroups
+    const { getValidatedExperimentGroups } = require('../experiments')
     const expGroups = getValidatedExperimentGroups({})
     expect(expGroups).toEqual({
       anonSignIn: null,
@@ -53,8 +51,7 @@ describe('experiments', () => {
   })
 
   test('returns a null experiment group value when the group value is invalid', () => {
-    const getValidatedExperimentGroups = require('../experiments')
-      .getValidatedExperimentGroups
+    const { getValidatedExperimentGroups } = require('../experiments')
     const expGroups = getValidatedExperimentGroups({
       anonSignIn: 3020,
       fooTest: 1,
@@ -68,8 +65,7 @@ describe('experiments', () => {
   })
 
   test('returns all null experiment groups when nothing is provided', () => {
-    const getValidatedExperimentGroups = require('../experiments')
-      .getValidatedExperimentGroups
+    const { getValidatedExperimentGroups } = require('../experiments')
     const expGroups = getValidatedExperimentGroups()
     expect(expGroups).toEqual({
       anonSignIn: null,
@@ -81,8 +77,7 @@ describe('experiments', () => {
   test('returns an empty object when there are no experiments', () => {
     const experiments = require('../experiments')
     experiments.experimentConfig = {}
-    const getValidatedExperimentGroups = require('../experiments')
-      .getValidatedExperimentGroups
+    const { getValidatedExperimentGroups } = require('../experiments')
     const expGroups = getValidatedExperimentGroups({
       anonSignIn: 1,
       fooTest: 0,
@@ -92,8 +87,7 @@ describe('experiments', () => {
   })
 
   test('works for anonSignIn "NONE" group', () => {
-    const getValidatedExperimentGroups = require('../experiments')
-      .getValidatedExperimentGroups
+    const { getValidatedExperimentGroups } = require('../experiments')
     const expGroups = getValidatedExperimentGroups({
       anonSignIn: 0,
     })
