@@ -27,7 +27,7 @@ class BaseModel {
       'updated',
     ])
     const customDeserializers = this.constructor.fieldDeserializers
-    const fieldDefaults = this.constructor.fieldDefaults
+    const { fieldDefaults } = this.constructor
 
     // Set properties for each field on the model.
     // * If `obj[fieldName]` exists, use the value of `obj[fieldName]`.

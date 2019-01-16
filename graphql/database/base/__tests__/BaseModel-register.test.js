@@ -8,7 +8,7 @@ jest.mock('../dynogels-promisified')
 jest.mock('../../databaseClient')
 
 // Add additional fields to the schema.
-const constructSchema = function(schema) {
+function constructSchema(schema) {
   return Object.assign(schema, {
     created: types.string().isoDate(),
     updated: types.string().isoDate(),
