@@ -7,7 +7,7 @@ import CharityModel from './CharityModel'
  * @return {Promise<Charity[]>} Returns a promise that resolves into
  * an array of Charity objects.
  */
-const getCharities = async (userContext, userId, widgetId) => {
+const getCharities = async userContext => {
   try {
     const allCharities = await CharityModel.getAll(userContext)
 

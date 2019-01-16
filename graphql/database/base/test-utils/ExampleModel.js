@@ -31,10 +31,10 @@ class ExampleModel extends BaseModel {
 
   static get permissions() {
     return {
-      get: (user, hashKeyValue, rangeKeyValue) => false,
+      get: () => false,
       getAll: () => false,
-      update: (user, hashKeyValue, rangeKeyValue) => false,
-      create: (user, hashKeyValue) => false,
+      update: () => false,
+      create: () => false,
     }
   }
 }

@@ -103,6 +103,7 @@ describe('getCharities', () => {
 
     const mockCharities = getMockCharities()
     mockCharities.forEach(charity => {
+      // eslint-disable-next-line no-param-reassign
       charity.inactive = true
     })
 
