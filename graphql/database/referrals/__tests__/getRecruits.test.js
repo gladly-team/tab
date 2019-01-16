@@ -20,7 +20,7 @@ afterEach(() => {
 describe('getRecruits', () => {
   test('getRecruits calls the database', async () => {
     const referringUserId = getMockUserInfo().id
-    const getRecruits = require('../getRecruits').getRecruits
+    const { getRecruits } = require('../getRecruits')
 
     // Spy on query methods
     const query = jest.spyOn(ReferralDataModel, 'query')
@@ -34,7 +34,7 @@ describe('getRecruits', () => {
 
   test('getRecruits (with startTime filter) forms ReferralDataLog database queries as expected', async () => {
     const referringUserId = getMockUserInfo().id
-    const getRecruits = require('../getRecruits').getRecruits
+    const { getRecruits } = require('../getRecruits')
 
     // Mock ReferralDataModel query
     const referralLogQueryMock = setMockDBResponse(DatabaseOperation.QUERY, {
@@ -60,7 +60,7 @@ describe('getRecruits', () => {
 
   test('getRecruits (with endTime filter) forms ReferralDataLog database query as expected', async () => {
     const referringUserId = getMockUserInfo().id
-    const getRecruits = require('../getRecruits').getRecruits
+    const { getRecruits } = require('../getRecruits')
 
     // Mock ReferralDataModel query
     const referralLogQueryMock = setMockDBResponse(DatabaseOperation.QUERY, {
@@ -91,7 +91,7 @@ describe('getRecruits', () => {
 
   test('getRecruits (with both startTime and endTime filter) forms ReferralDataLog database query as expected', async () => {
     const referringUserId = getMockUserInfo().id
-    const getRecruits = require('../getRecruits').getRecruits
+    const { getRecruits } = require('../getRecruits')
 
     // Mock ReferralDataModel query
     const referralLogQueryMock = setMockDBResponse(DatabaseOperation.QUERY, {
@@ -123,7 +123,7 @@ describe('getRecruits', () => {
 
   test('getRecruits (with no time filters) forms database queries and returns expected value', async () => {
     const referringUserId = getMockUserInfo().id
-    const getRecruits = require('../getRecruits').getRecruits
+    const { getRecruits } = require('../getRecruits')
 
     // Mock ReferralDataModel query
     const referralDataLogsToReturn = [
@@ -189,7 +189,7 @@ describe('getRecruits', () => {
 
   test('getRecruits (with missing lastTabTimestamp values) returns expected value', async () => {
     const referringUserId = getMockUserInfo().id
-    const getRecruits = require('../getRecruits').getRecruits
+    const { getRecruits } = require('../getRecruits')
 
     // Mock ReferralDataModel query
     const referralDataLogsToReturn = [
@@ -258,7 +258,7 @@ describe('getRecruits', () => {
 
   test('getRecruits (with no recruits) returns expected value', async () => {
     const referringUserId = getMockUserInfo().id
-    const getRecruits = require('../getRecruits').getRecruits
+    const { getRecruits } = require('../getRecruits')
 
     // Mock ReferralDataModel query
     const referralDataLogsToReturn = []
@@ -283,8 +283,7 @@ describe('getRecruits', () => {
   })
 
   test('getTotalRecruitsCount works as expected', async () => {
-    const getTotalRecruitsCount = require('../getRecruits')
-      .getTotalRecruitsCount
+    const { getTotalRecruitsCount } = require('../getRecruits')
     const recruitsEdgesTestA = [
       {
         cursor: 'abc',
@@ -335,8 +334,7 @@ describe('getRecruits', () => {
   })
 
   test('getRecruitsActiveForAtLeastOneDay works as expected', async () => {
-    const getRecruitsActiveForAtLeastOneDay = require('../getRecruits')
-      .getRecruitsActiveForAtLeastOneDay
+    const { getRecruitsActiveForAtLeastOneDay } = require('../getRecruits')
     const recruitsEdgesTestA = [
       {
         cursor: 'abc',

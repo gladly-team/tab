@@ -38,11 +38,11 @@ const availableOperations = [
  * @param {Object} error - An error value to return
  * @return {function} An instance of `jest.fn`, a mock function
  */
-export const setMockDBResponse = function(
+export const setMockDBResponse = (
   operation,
   returnVal = null,
   error = null
-) {
+) => {
   jest.mock('./databaseClient')
   if (availableOperations.indexOf(operation) === -1) {
     const dbOps = Object.keys(DatabaseOperation).join(', ')
@@ -71,7 +71,7 @@ export const clearAllMockDBResponses = () => {
  * @param {Object} permissions - The permissions object
  * @return {null}
  */
-export const setModelPermissions = function(modelClass, permissions) {
+export const setModelPermissions = (modelClass, permissions) => {
   Object.defineProperty(modelClass, 'permissions', {
     get: () => permissions,
   })
@@ -84,7 +84,7 @@ export const setModelPermissions = function(modelClass, permissions) {
  * @param {*} val - The value the getter should return
  * @return {null}
  */
-export const setModelGetterField = function(modelClass, fieldName, val) {
+export const setModelGetterField = (modelClass, fieldName, val) => {
   Object.defineProperty(modelClass, fieldName, {
     get: () => val,
     configurable: true,
@@ -95,31 +95,33 @@ export const setModelGetterField = function(modelClass, fieldName, val) {
  * Get a mock user object (as passed from GraphQL context).
  * @return {Object} The mock user.
  */
-export const getMockUserContext = function() {
-  return {
-    id: 'abcdefghijklmno',
-    email: 'foo@bar.com',
-    emailVerified: true,
-  }
-}
+export const getMockUserContext = () => ({
+  id: 'abcdefghijklmno',
+  email: 'foo@bar.com',
+  emailVerified: true,
+})
 
 /**
  * Get a mock user info.
  * @return {Object} The mock user info object.
  */
-export const getMockUserInfo = function() {
-  return {
-    id: 'abcdefghijklmno',
-    email: 'foo@bar.com',
-  }
-}
+export const getMockUserInfo = () => ({
+  id: 'abcdefghijklmno',
+  email: 'foo@bar.com',
+})
+
+/**
+ * Set the global `Date` to always return the same date.
+ */
+export const mockDate = {}
+mockDate.defaultDateISO = '2017-05-19T13:59:46.000Z'
 
 /**
  * Get a mock User instance.
  * @param {Object} attributes - Attributes to override when getting the mock user.
  * @return {Object} The mock user.
  */
-export const getMockUserInstance = function(attributes) {
+export const getMockUserInstance = attributes => {
   const defaultUserInfo = getMockUserInfo()
   const now = mockDate.defaultDateISO
   return new UserModel(
@@ -130,12 +132,6 @@ export const getMockUserInstance = function(attributes) {
     })
   )
 }
-
-/**
- * Set the global `Date` to always return the same date.
- */
-export const mockDate = {}
-mockDate.defaultDateISO = '2017-05-19T13:59:46.000Z'
 
 /**
  * Set the global `Date` to always return the same date.
@@ -190,7 +186,7 @@ export const addTimestampFieldsToItem = item => {
  * @return {Object} An Error object with
  *.  code == 'ConditionalCheckFailedException'
  */
-export const ConditionalCheckFailedException = item => {
+export const ConditionalCheckFailedException = () => {
   const err = new Error('Conditional check failed.')
   err.code = 'ConditionalCheckFailedException'
   return err

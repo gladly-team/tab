@@ -94,8 +94,8 @@ export default async (userContext, userId, charityId, vc) => {
               .toISOString(),
             vcDonated: vc,
           })
-        } catch (e) {
-          throw e
+        } catch (err) {
+          throw err
         }
       } else {
         throw e
