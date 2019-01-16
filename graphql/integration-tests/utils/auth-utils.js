@@ -1,3 +1,4 @@
+/* eslint-disable */
 // FIXME: update to new auth service.
 
 export const getUser = async username => {}

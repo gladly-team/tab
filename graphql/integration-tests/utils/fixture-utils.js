@@ -40,7 +40,7 @@ const loadItemsIntoTable = async (items, tableName) => {
   return docClient
     .batchWrite(params)
     .promise()
-    .then(response => {
+    .then(() => {
       logger.debug(`BatchWrite succeeded: ${JSON.stringify(items)}`)
     })
     .catch(err => {
@@ -89,7 +89,7 @@ const deleteItemsFromTable = async (
   return docClient
     .batchWrite(params)
     .promise()
-    .then(response => {
+    .then(() => {
       logger.debug(`BatchWrite delete succeeded: ${JSON.stringify(items)}`)
     })
     .catch(err => {
@@ -106,7 +106,7 @@ const deleteItemsFromTable = async (
  * @return {arr} The items loaded from `fileName` after
  *   string replacement.
  */
-const getItemsFromJsonFile = function(filePath, strReplacements = []) {
+const getItemsFromJsonFile = (filePath, strReplacements = []) => {
   const fileStr = fs.readFileSync(filePath, 'utf8')
 
   // If needed, replace any strings in the fixtures before loading

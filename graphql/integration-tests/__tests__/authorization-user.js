@@ -14,10 +14,7 @@ const fixtureUserId = 'gqltest1-12ab-12ab-12ab-123abc456def'
 
 beforeAll(async () => {
   // Create a authed user.
-  const userInfo = await getNewAuthedUser()
-  userId = userInfo.userId
-  userIdToken = userInfo.idToken
-  username = userInfo.username
+  ;({ userId, userIdToken, username } = await getNewAuthedUser())
 })
 
 afterAll(async () => {

@@ -12,10 +12,7 @@ describe('GraphQL with authorized user', () => {
 
   beforeAll(async () => {
     // Create a authed user.
-    const userInfo = await getNewAuthedUser()
-    userId = userInfo.userId
-    userIdToken = userInfo.idToken
-    username = userInfo.username
+    ;({ userId, userIdToken, username } = await getNewAuthedUser())
   })
 
   afterAll(async () => {
