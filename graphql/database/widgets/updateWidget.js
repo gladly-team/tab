@@ -1,4 +1,3 @@
-
 import BaseWidgetModel from './baseWidget/BaseWidgetModel'
 import constructFullWidget from './constructFullWidget'
 import updateUserWidgetData from './userWidget/updateUserWidgetData'
@@ -19,7 +18,12 @@ export const updateWidgetData = async (userContext, userId, widgetId, data) => {
   try {
     const parsedData = JSON.parse(data)
     const widget = await BaseWidgetModel.get(userContext, widgetId)
-    const userWidget = await updateUserWidgetData(userContext, userId, widgetId, parsedData)
+    const userWidget = await updateUserWidgetData(
+      userContext,
+      userId,
+      widgetId,
+      parsedData
+    )
     return constructFullWidget(userWidget, widget)
   } catch (e) {
     throw e
@@ -35,10 +39,20 @@ export const updateWidgetData = async (userContext, userId, widgetId, data) => {
  * @return {Promise<Widget>}  Returns a promise that resolves into a
  * widget.
  */
-export const updateWidgetVisibility = async (userContext, userId, widgetId, visible) => {
+export const updateWidgetVisibility = async (
+  userContext,
+  userId,
+  widgetId,
+  visible
+) => {
   try {
     const widget = await BaseWidgetModel.get(userContext, widgetId)
-    const userWidget = await updateUserWidgetVisibility(userContext, userId, widgetId, visible)
+    const userWidget = await updateUserWidgetVisibility(
+      userContext,
+      userId,
+      widgetId,
+      visible
+    )
     return constructFullWidget(userWidget, widget)
   } catch (e) {
     throw e
@@ -54,10 +68,20 @@ export const updateWidgetVisibility = async (userContext, userId, widgetId, visi
  * @return {Promise<Widget>}  Returns a promise that resolves into a
  * widget.
  */
-export const updateWidgetEnabled = async (userContext, userId, widgetId, enabled) => {
+export const updateWidgetEnabled = async (
+  userContext,
+  userId,
+  widgetId,
+  enabled
+) => {
   try {
     const widget = await BaseWidgetModel.get(userContext, widgetId)
-    const userWidget = await updateUserWidgetEnabled(userContext, userId, widgetId, enabled)
+    const userWidget = await updateUserWidgetEnabled(
+      userContext,
+      userId,
+      widgetId,
+      enabled
+    )
     return constructFullWidget(userWidget, widget)
   } catch (e) {
     throw e
@@ -73,11 +97,21 @@ export const updateWidgetEnabled = async (userContext, userId, widgetId, enabled
  * @return {Promise<Widget>}  Returns a promise that resolves into a
  * Widget.
  */
-export const updateWidgetConfig = async (userContext, userId, widgetId, config) => {
+export const updateWidgetConfig = async (
+  userContext,
+  userId,
+  widgetId,
+  config
+) => {
   try {
     const parsedConfig = JSON.parse(config)
     const widget = await BaseWidgetModel.get(userContext, widgetId)
-    const userWidget = await updateUserWidgetConfig(userContext, userId, widgetId, parsedConfig)
+    const userWidget = await updateUserWidgetConfig(
+      userContext,
+      userId,
+      widgetId,
+      parsedConfig
+    )
     return constructFullWidget(userWidget, widget)
   } catch (e) {
     throw e

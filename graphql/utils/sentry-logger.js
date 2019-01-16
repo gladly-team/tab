@@ -1,4 +1,3 @@
-
 import Raven from 'raven'
 import config from '../config'
 
@@ -8,18 +7,17 @@ import config from '../config'
  * @param {object} userContext - The user authorizer object.
  * @param {function} func - The function to wrap.
  */
-export const sentryContextWrapper = (userContext, lambdaEvent, func) => {
-  return Raven.context(() => {
+export const sentryContextWrapper = (userContext, lambdaEvent, func) =>
+  Raven.context(() => {
     Raven.setContext({
       user: {
         id: userContext.id,
-        email: userContext.email
+        email: userContext.email,
       },
-      req: lambdaEvent
+      req: lambdaEvent,
     })
     return func()
   })
-}
 
 /*
  * Return the Sentry DSN, or null if any environment variable
@@ -28,16 +26,20 @@ export const sentryContextWrapper = (userContext, lambdaEvent, func) => {
  * @return {string | null}
  */
 const getSentryDSN = () => {
-  if (!config.SENTRY_PUBLIC_KEY ||
-      !config.SENTRY_PRIVATE_KEY ||
-      !config.SENTRY_PROJECT_ID) {
+  if (
+    !config.SENTRY_PUBLIC_KEY ||
+    !config.SENTRY_PRIVATE_KEY ||
+    !config.SENTRY_PROJECT_ID
+  ) {
     if (config.LOGGER === 'sentry') {
       throw new Error('Sentry configuration is incorrect.')
     } else {
       return null
     }
   }
-  return `https://${config.SENTRY_PUBLIC_KEY}:${config.SENTRY_PRIVATE_KEY}@sentry.io/${config.SENTRY_PROJECT_ID}`
+  return `https://${config.SENTRY_PUBLIC_KEY}:${
+    config.SENTRY_PRIVATE_KEY
+  }@sentry.io/${config.SENTRY_PROJECT_ID}`
 }
 
 // Configure the Sentry logger instance.
@@ -46,7 +48,7 @@ const sentryDSN = getSentryDSN()
 Raven.config(sentryDSN, {
   captureUnhandledRejections: true,
   autoBreadcrumbs: false,
-  environment: config.SENTRY_STAGE
+  environment: config.SENTRY_STAGE,
 }).install()
 
 export default Raven

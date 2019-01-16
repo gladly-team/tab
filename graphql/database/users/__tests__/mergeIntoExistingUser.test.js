@@ -6,7 +6,7 @@ import {
   getMockUserContext,
   getMockUserInstance,
   mockDate,
-  setMockDBResponse
+  setMockDBResponse,
 } from '../../test-utils'
 
 jest.mock('../../databaseClient')
@@ -34,30 +34,26 @@ describe('mergeIntoExistingUser', () => {
     expect(updateQuery).toHaveBeenCalledWith(userContext, {
       id: userContext.id,
       mergedIntoExistingUser: true,
-      updated: moment.utc().toISOString()
+      updated: moment.utc().toISOString(),
     })
   })
 
   it('returns a "success" boolean', async () => {
     // Mock DB response.
-    const expectedReturnedUser = Object.assign(
-      {},
-      getMockUserInstance(),
-      {
-        mergedIntoExistingUser: true
-      }
-    )
-    setMockDBResponse(
-      DatabaseOperation.UPDATE,
-      {
-        Attributes: expectedReturnedUser
-      }
-    )
+    const expectedReturnedUser = Object.assign({}, getMockUserInstance(), {
+      mergedIntoExistingUser: true,
+    })
+    setMockDBResponse(DatabaseOperation.UPDATE, {
+      Attributes: expectedReturnedUser,
+    })
 
     const mergeIntoExistingUser = require('../mergeIntoExistingUser').default
-    const returnedUser = await mergeIntoExistingUser(userContext, userContext.id)
+    const returnedUser = await mergeIntoExistingUser(
+      userContext,
+      userContext.id
+    )
     expect(returnedUser).toEqual({
-      success: true
+      success: true,
     })
   })
 })

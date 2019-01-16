@@ -2,57 +2,54 @@
 
 import getCharities from '../getCharities'
 import CharityModel from '../CharityModel'
-import {
-  getMockUserContext
-} from '../../test-utils'
+import { getMockUserContext } from '../../test-utils'
 
 jest.mock('../../databaseClient')
 const userContext = getMockUserContext()
 
-const getMockCharities = () => {
-  return [
-    {
-      id: 'some-charity-id',
-      name: 'Some Charity',
-      category: 'education',
-      logo: 'something.png',
-      image: 'something-2.png',
-      website: 'example.com',
-      description: 'Some description text.',
-      impact: 'Some impact text.',
-      inactive: false
-    },
-    {
-      id: 'another-charity-id',
-      name: 'Another Charity',
-      category: 'water',
-      logo: 'another-thing.png',
-      image: 'another-thing-2.png',
-      website: 'example.com',
-      description: 'Another description text.',
-      impact: 'Another impact text.',
-      inactive: false
-    },
-    {
-      id: 'third-charity-id',
-      name: 'Third Charity',
-      category: 'water',
-      logo: 'third-charity.png',
-      image: 'third-charity-2.png',
-      website: 'example.com',
-      description: 'Third charity description text.',
-      impact: 'Third charity impact text.'
-      // inactive: false // Note: inactive key isn't required
-    }
-  ]
-}
+const getMockCharities = () => [
+  {
+    id: 'some-charity-id',
+    name: 'Some Charity',
+    category: 'education',
+    logo: 'something.png',
+    image: 'something-2.png',
+    website: 'example.com',
+    description: 'Some description text.',
+    impact: 'Some impact text.',
+    inactive: false,
+  },
+  {
+    id: 'another-charity-id',
+    name: 'Another Charity',
+    category: 'water',
+    logo: 'another-thing.png',
+    image: 'another-thing-2.png',
+    website: 'example.com',
+    description: 'Another description text.',
+    impact: 'Another impact text.',
+    inactive: false,
+  },
+  {
+    id: 'third-charity-id',
+    name: 'Third Charity',
+    category: 'water',
+    logo: 'third-charity.png',
+    image: 'third-charity-2.png',
+    website: 'example.com',
+    description: 'Third charity description text.',
+    impact: 'Third charity impact text.',
+    // inactive: false // Note: inactive key isn't required
+  },
+]
 
 describe('getCharities', () => {
   it('calls the database as expected', async () => {
     expect.assertions(1)
 
     const mockCharities = getMockCharities()
-    const getAllCharitiesSpy = jest.spyOn(CharityModel, 'getAll')
+    const getAllCharitiesSpy = jest
+      .spyOn(CharityModel, 'getAll')
       .mockImplementationOnce(async () => mockCharities)
 
     await getCharities(userContext)
@@ -63,7 +60,8 @@ describe('getCharities', () => {
     expect.assertions(1)
 
     const mockCharities = getMockCharities()
-    jest.spyOn(CharityModel, 'getAll')
+    jest
+      .spyOn(CharityModel, 'getAll')
       .mockImplementationOnce(async () => mockCharities)
 
     const fetchedCharities = await getCharities(userContext)
@@ -76,7 +74,8 @@ describe('getCharities', () => {
     const mockCharities = getMockCharities()
     mockCharities[1].inactive = true
 
-    jest.spyOn(CharityModel, 'getAll')
+    jest
+      .spyOn(CharityModel, 'getAll')
       .mockImplementationOnce(async () => mockCharities)
     const fetchedCharities = await getCharities(userContext)
 
@@ -90,7 +89,8 @@ describe('getCharities', () => {
     const mockCharities = getMockCharities()
     mockCharities[1].inactive = true
 
-    jest.spyOn(CharityModel, 'getAll')
+    jest
+      .spyOn(CharityModel, 'getAll')
       .mockImplementationOnce(async () => mockCharities)
     const fetchedCharities = await getCharities(userContext)
 
@@ -103,10 +103,12 @@ describe('getCharities', () => {
 
     const mockCharities = getMockCharities()
     mockCharities.forEach(charity => {
+      // eslint-disable-next-line no-param-reassign
       charity.inactive = true
     })
 
-    jest.spyOn(CharityModel, 'getAll')
+    jest
+      .spyOn(CharityModel, 'getAll')
       .mockImplementationOnce(async () => mockCharities)
     const fetchedCharities = await getCharities(userContext)
 

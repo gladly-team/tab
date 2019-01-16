@@ -3,26 +3,17 @@
 import React from 'react'
 import moment from 'moment'
 import MockDate from 'mockdate'
-import {
-  mount,
-  shallow
-} from 'enzyme'
-import {
-  checkAuthStateAndRedirectIfNeeded
-} from 'js/authentication/helpers'
+import { mount, shallow } from 'enzyme'
+import { checkAuthStateAndRedirectIfNeeded } from 'js/authentication/helpers'
 import {
   getUserToken,
   __getAuthListenerCallbacks,
   __unregisterAuthStateChangeListeners,
-  __triggerAuthStateChange
+  __triggerAuthStateChange,
 } from 'js/authentication/user'
 import localStorageMgr from 'js/utils/localstorage-mgr'
-import {
-  STORAGE_KEY_USERNAME
-} from 'js/constants'
-import {
-  flushAllPromises
-} from 'js/utils/test-utils'
+import { STORAGE_KEY_USERNAME } from 'js/constants'
+import { flushAllPromises } from 'js/utils/test-utils'
 
 jest.mock('js/authentication/helpers')
 jest.mock('js/authentication/user')
@@ -47,22 +38,18 @@ afterEach(() => {
 })
 
 const mockProps = {
-  variables: {}
+  variables: {},
 }
 
 describe('AuthUser tests', () => {
   it('renders without error', () => {
     const AuthUser = require('js/components/General/AuthUserComponent').default
-    shallow(
-      <AuthUser {...mockProps} />
-    )
+    shallow(<AuthUser {...mockProps} />)
   })
 
   it('unregisters its auth listener on unmount', () => {
     const AuthUser = require('js/components/General/AuthUserComponent').default
-    const wrapper = shallow(
-      <AuthUser {...mockProps} />
-    )
+    const wrapper = shallow(<AuthUser {...mockProps} />)
     expect(__getAuthListenerCallbacks().length).toBe(1)
     wrapper.unmount()
     expect(__getAuthListenerCallbacks().length).toBe(0)
@@ -86,7 +73,7 @@ describe('AuthUser tests', () => {
       uid: 'abc123',
       email: 'foo@bar.com',
       isAnonymous: false,
-      emailVerified: true
+      emailVerified: true,
     })
     await flushAllPromises()
     expect(MockChildComponent).toHaveBeenCalled()
@@ -110,7 +97,7 @@ describe('AuthUser tests', () => {
       uid: 'abc123',
       email: null, // no email
       isAnonymous: false,
-      emailVerified: false
+      emailVerified: false,
     })
     await flushAllPromises()
     expect(MockChildComponent).not.toHaveBeenCalled()
@@ -134,11 +121,13 @@ describe('AuthUser tests', () => {
       uid: 'abc123',
       email: 'foo@bar.com',
       isAnonymous: false,
-      emailVerified: true
+      emailVerified: true,
     })
 
     await flushAllPromises()
     wrapper.update()
-    expect(wrapper.find(MockChildComponent).prop('variables').userId).toBe('abc123')
+    expect(wrapper.find(MockChildComponent).prop('variables').userId).toBe(
+      'abc123'
+    )
   })
 })

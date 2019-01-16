@@ -1,4 +1,3 @@
-
 import UserModel from './UserModel'
 import getNextLevelFor from '../userLevels/getNextLevelFor'
 
@@ -13,23 +12,26 @@ import getNextLevelFor from '../userLevels/getNextLevelFor'
  */
 const addVc = async (userContext, userId, vc = 0) => {
   try {
-    var user = await UserModel.update(userContext, {
+    let user = await UserModel.update(userContext, {
       id: userId,
-      vcCurrent: {$add: vc},
-      vcAllTime: {$add: vc},
-      heartsUntilNextLevel: {$add: -vc}
+      vcCurrent: { $add: vc },
+      vcAllTime: { $add: vc },
+      heartsUntilNextLevel: { $add: -vc },
     })
 
     // Check if user gained a level.
     if (user.heartsUntilNextLevel < 1) {
-      const nextLevel = await getNextLevelFor(userContext,
-        user.level, user.vcAllTime)
+      const nextLevel = await getNextLevelFor(
+        userContext,
+        user.level,
+        user.vcAllTime
+      )
       if (nextLevel) {
         // Set the user's new level and related fields.
         user = await UserModel.update(userContext, {
           id: userId,
           level: nextLevel.id - 1, // current level is one fewer than next level
-          heartsUntilNextLevel: (nextLevel.hearts - user.vcAllTime)
+          heartsUntilNextLevel: nextLevel.hearts - user.vcAllTime,
         })
       }
     }

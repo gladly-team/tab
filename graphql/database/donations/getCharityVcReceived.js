@@ -1,4 +1,3 @@
-
 import moment from 'moment'
 import { isValidISOString } from '../../utils/utils'
 import VCDonationByCharityModel from './VCDonationByCharityModel'
@@ -13,9 +12,23 @@ import VCDonationByCharityModel from './VCDonationByCharityModel'
  * @param {String} endTime - An ISO string of the end of the time period to query.
  * @return {Promise<Number>} Returns a promise that resolves into a number.
  */
-const getCharityVcReceived = async (userContext, charityId, startTime, endTime) => {
-  if (!(startTime && isValidISOString(startTime) && endTime && isValidISOString(endTime))) {
-    throw new Error('You must provide valid ISO strings for `startTime` and `endTime` arguments.')
+const getCharityVcReceived = async (
+  userContext,
+  charityId,
+  startTime,
+  endTime
+) => {
+  if (
+    !(
+      startTime &&
+      isValidISOString(startTime) &&
+      endTime &&
+      isValidISOString(endTime)
+    )
+  ) {
+    throw new Error(
+      'You must provide valid ISO strings for `startTime` and `endTime` arguments.'
+    )
   }
   try {
     // Make sure the startTime and endTime are rounded to hours, which is
@@ -30,12 +43,17 @@ const getCharityVcReceived = async (userContext, charityId, startTime, endTime) 
       .endOf('hour')
       .toISOString()
 
-    const hourlyVcReceivedItems = await VCDonationByCharityModel
-      .query(userContext, charityId)
-      .where('timestamp').between(startTimeRoundedISO, endTimeRoundedISO)
+    const hourlyVcReceivedItems = await VCDonationByCharityModel.query(
+      userContext,
+      charityId
+    )
+      .where('timestamp')
+      .between(startTimeRoundedISO, endTimeRoundedISO)
       .execute()
-    const totalVc = hourlyVcReceivedItems
-      .reduce((acc, vcDonationItem) => acc + vcDonationItem.vcDonated, 0)
+    const totalVc = hourlyVcReceivedItems.reduce(
+      (acc, vcDonationItem) => acc + vcDonationItem.vcDonated,
+      0
+    )
     return totalVc
   } catch (e) {
     throw e

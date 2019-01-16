@@ -12,7 +12,7 @@ import {
   getMockUserContext,
   getMockUserInstance,
   mockDate,
-  setMockDBResponse
+  setMockDBResponse,
 } from '../../test-utils'
 
 jest.mock('../../databaseClient')
@@ -23,7 +23,7 @@ const mockCurrentTime = '2017-06-22T01:13:28.000Z'
 
 beforeAll(() => {
   mockDate.on(mockCurrentTime, {
-    mockCurrentTimeOnly: true
+    mockCurrentTimeOnly: true,
   })
 })
 
@@ -45,24 +45,20 @@ describe('logTab', () => {
       maxTabsDay: {
         maxDay: {
           date: moment.utc().toISOString(),
-          numTabs: 400
+          numTabs: 400,
         },
         recentDay: {
           date: moment.utc().toISOString(),
-          numTabs: 148 // valid: below daily maximum
-        }
-      }
+          numTabs: 148, // valid: below daily maximum
+        },
+      },
     })
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: mockUser
-      }
-    )
-    const updateMethod = jest.spyOn(UserModel, 'update')
-      .mockImplementationOnce(() => {
-        return mockUser
-      })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
+    const updateMethod = jest
+      .spyOn(UserModel, 'update')
+      .mockImplementationOnce(() => mockUser)
 
     const returnedUser = await logTab(userContext, userId)
 
@@ -72,19 +68,19 @@ describe('logTab', () => {
     // It should update tabs and validTabs.
     expect(updateMethod).toHaveBeenLastCalledWith(userContext, {
       id: userId,
-      tabs: {$add: 1},
-      validTabs: {$add: 1},
+      tabs: { $add: 1 },
+      validTabs: { $add: 1 },
       lastTabTimestamp: moment.utc().toISOString(),
       maxTabsDay: {
         maxDay: {
           date: moment.utc().toISOString(),
-          numTabs: 400
+          numTabs: 400,
         },
         recentDay: {
           date: moment.utc().toISOString(),
-          numTabs: 149
-        }
-      }
+          numTabs: 149,
+        },
+      },
     })
     expect(returnedUser).not.toBeNull()
   })
@@ -94,14 +90,11 @@ describe('logTab', () => {
 
     // Mock fetching the user.
     const mockUser = getMockUserInstance({
-      lastTabTimestamp: '2017-06-22T01:13:25.000Z'
+      lastTabTimestamp: '2017-06-22T01:13:25.000Z',
     })
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: mockUser
-      }
-    )
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
     const userTabsLogCreate = jest.spyOn(UserTabsLogModel, 'create')
     await logTab(userContext, userId)
 
@@ -109,8 +102,8 @@ describe('logTab', () => {
     expect(userTabsLogCreate).toHaveBeenLastCalledWith(
       userContext,
       addTimestampFieldsToItem({
-        userId: userId,
-        timestamp: moment.utc().toISOString()
+        userId,
+        timestamp: moment.utc().toISOString(),
       })
     )
   })
@@ -120,14 +113,11 @@ describe('logTab', () => {
 
     // Mock fetching the user.
     const mockUser = getMockUserInstance({
-      lastTabTimestamp: '2017-06-22T01:13:28.000Z'
+      lastTabTimestamp: '2017-06-22T01:13:28.000Z',
     })
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: mockUser
-      }
-    )
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
     const userTabsLogCreate = jest.spyOn(UserTabsLogModel, 'create')
     await logTab(userContext, userId)
 
@@ -135,8 +125,8 @@ describe('logTab', () => {
     expect(userTabsLogCreate).toHaveBeenLastCalledWith(
       userContext,
       addTimestampFieldsToItem({
-        userId: userId,
-        timestamp: moment.utc().toISOString()
+        userId,
+        timestamp: moment.utc().toISOString(),
       })
     )
   })
@@ -146,14 +136,11 @@ describe('logTab', () => {
 
     // Mock fetching the user.
     const mockUser = getMockUserInstance({
-      lastTabTimestamp: '2017-06-22T01:13:25.000Z'
+      lastTabTimestamp: '2017-06-22T01:13:25.000Z',
     })
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: mockUser
-      }
-    )
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
     const userTabsLogCreate = jest.spyOn(UserTabsLogModel, 'create')
     const tabId = uuid()
     await logTab(userContext, userId, tabId)
@@ -162,9 +149,9 @@ describe('logTab', () => {
     expect(userTabsLogCreate).toHaveBeenLastCalledWith(
       userContext,
       addTimestampFieldsToItem({
-        userId: userId,
+        userId,
         timestamp: moment.utc().toISOString(),
-        tabId: tabId
+        tabId,
       })
     )
   })
@@ -174,18 +161,14 @@ describe('logTab', () => {
 
     // Mock fetching the user.
     const mockUser = getMockUserInstance({
-      lastTabTimestamp: '2017-06-22T01:13:26.000Z'
+      lastTabTimestamp: '2017-06-22T01:13:26.000Z',
     })
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: mockUser
-      }
-    )
-    const updateMethod = jest.spyOn(UserModel, 'update')
-      .mockImplementationOnce(() => {
-        return mockUser
-      })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
+    const updateMethod = jest
+      .spyOn(UserModel, 'update')
+      .mockImplementationOnce(() => mockUser)
 
     const returnedUser = await logTab(userContext, userId)
 
@@ -195,18 +178,18 @@ describe('logTab', () => {
     // It should update tabs but not validTabs.
     expect(updateMethod).toHaveBeenLastCalledWith(userContext, {
       id: userId,
-      tabs: {$add: 1},
+      tabs: { $add: 1 },
       lastTabTimestamp: moment.utc().toISOString(),
       maxTabsDay: {
         maxDay: {
           date: moment.utc().toISOString(),
-          numTabs: 1
+          numTabs: 1,
         },
         recentDay: {
           date: moment.utc().toISOString(),
-          numTabs: 1
-        }
-      }
+          numTabs: 1,
+        },
+      },
     })
     expect(returnedUser).not.toBeNull()
   })
@@ -220,24 +203,20 @@ describe('logTab', () => {
       maxTabsDay: {
         maxDay: {
           date: moment.utc().toISOString(),
-          numTabs: 400
+          numTabs: 400,
         },
         recentDay: {
           date: moment.utc().toISOString(),
-          numTabs: 150 // invalid: exceeds maximum
-        }
-      }
+          numTabs: 150, // invalid: exceeds maximum
+        },
+      },
     })
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: mockUser
-      }
-    )
-    const updateMethod = jest.spyOn(UserModel, 'update')
-      .mockImplementationOnce(() => {
-        return mockUser
-      })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
+    const updateMethod = jest
+      .spyOn(UserModel, 'update')
+      .mockImplementationOnce(() => mockUser)
 
     const returnedUser = await logTab(userContext, userId)
 
@@ -247,23 +226,23 @@ describe('logTab', () => {
     // It should update tabs but not validTabs.
     expect(updateMethod).toHaveBeenLastCalledWith(userContext, {
       id: userId,
-      tabs: {$add: 1},
+      tabs: { $add: 1 },
       lastTabTimestamp: moment.utc().toISOString(),
       maxTabsDay: {
         maxDay: {
           date: moment.utc().toISOString(),
-          numTabs: 400
+          numTabs: 400,
         },
         recentDay: {
           date: moment.utc().toISOString(),
-          numTabs: 151
-        }
-      }
+          numTabs: 151,
+        },
+      },
     })
     expect(returnedUser).not.toBeNull()
   })
 
-  test('for the first tab logged today, it resets the date for today\'s tab counter', async () => {
+  test("for the first tab logged today, it resets the date for today's tab counter", async () => {
     const userId = userContext.id
 
     // Mock fetching the user.
@@ -271,25 +250,27 @@ describe('logTab', () => {
       lastTabTimestamp: '2017-06-22T01:13:25.000Z',
       maxTabsDay: {
         maxDay: {
-          date: moment.utc().subtract(3, 'days').toISOString(),
-          numTabs: 20
+          date: moment
+            .utc()
+            .subtract(3, 'days')
+            .toISOString(),
+          numTabs: 20,
         },
         recentDay: {
-          date: moment.utc().subtract(5, 'days').toISOString(),
-          numTabs: 5
-        }
-      }
+          date: moment
+            .utc()
+            .subtract(5, 'days')
+            .toISOString(),
+          numTabs: 5,
+        },
+      },
     })
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: mockUser
-      }
-    )
-    const updateMethod = jest.spyOn(UserModel, 'update')
-      .mockImplementationOnce(() => {
-        return mockUser
-      })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
+    const updateMethod = jest
+      .spyOn(UserModel, 'update')
+      .mockImplementationOnce(() => mockUser)
 
     await logTab(userContext, userId)
 
@@ -297,13 +278,16 @@ describe('logTab', () => {
     const maxTabsDayVal = updateMethod.mock.calls[0][1].maxTabsDay
     expect(maxTabsDayVal).toEqual({
       maxDay: {
-        date: moment.utc().subtract(3, 'days').toISOString(),
-        numTabs: 20 // stayed the same
+        date: moment
+          .utc()
+          .subtract(3, 'days')
+          .toISOString(),
+        numTabs: 20, // stayed the same
       },
       recentDay: {
         date: moment.utc().toISOString(),
-        numTabs: 1 // reset to 1
-      }
+        numTabs: 1, // reset to 1
+      },
     })
   })
 
@@ -315,25 +299,24 @@ describe('logTab', () => {
       lastTabTimestamp: '2017-06-22T01:13:25.000Z',
       maxTabsDay: {
         maxDay: {
-          date: moment.utc().subtract(3, 'days').toISOString(),
-          numTabs: 20
+          date: moment
+            .utc()
+            .subtract(3, 'days')
+            .toISOString(),
+          numTabs: 20,
         },
         recentDay: {
           date: moment.utc().toISOString(), // today
-          numTabs: 5
-        }
-      }
+          numTabs: 5,
+        },
+      },
     })
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: mockUser
-      }
-    )
-    const updateMethod = jest.spyOn(UserModel, 'update')
-      .mockImplementationOnce(() => {
-        return mockUser
-      })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
+    const updateMethod = jest
+      .spyOn(UserModel, 'update')
+      .mockImplementationOnce(() => mockUser)
 
     await logTab(userContext, userId)
 
@@ -341,13 +324,16 @@ describe('logTab', () => {
     const maxTabsDayVal = updateMethod.mock.calls[0][1].maxTabsDay
     expect(maxTabsDayVal).toEqual({
       maxDay: {
-        date: moment.utc().subtract(3, 'days').toISOString(),
-        numTabs: 20 // stayed the same
+        date: moment
+          .utc()
+          .subtract(3, 'days')
+          .toISOString(),
+        numTabs: 20, // stayed the same
       },
       recentDay: {
         date: moment.utc().toISOString(),
-        numTabs: 6 // added 1
-      }
+        numTabs: 6, // added 1
+      },
     })
   })
 
@@ -359,25 +345,24 @@ describe('logTab', () => {
       lastTabTimestamp: '2017-06-22T01:13:25.000Z',
       maxTabsDay: {
         maxDay: {
-          date: moment.utc().subtract(3, 'days').toISOString(),
-          numTabs: 44
+          date: moment
+            .utc()
+            .subtract(3, 'days')
+            .toISOString(),
+          numTabs: 44,
         },
         recentDay: {
           date: moment.utc().toISOString(),
-          numTabs: 43
-        }
-      }
+          numTabs: 43,
+        },
+      },
     })
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: mockUser
-      }
-    )
-    const updateMethod = jest.spyOn(UserModel, 'update')
-      .mockImplementationOnce(() => {
-        return mockUser
-      })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
+    const updateMethod = jest
+      .spyOn(UserModel, 'update')
+      .mockImplementationOnce(() => mockUser)
 
     await logTab(userContext, userId)
 
@@ -385,12 +370,12 @@ describe('logTab', () => {
     expect(maxTabsDayVal).toEqual({
       maxDay: {
         date: moment.utc().toISOString(), // today
-        numTabs: 44
+        numTabs: 44,
       },
       recentDay: {
         date: moment.utc().toISOString(),
-        numTabs: 44 // added 1
-      }
+        numTabs: 44, // added 1
+      },
     })
   })
 
@@ -403,24 +388,20 @@ describe('logTab', () => {
       maxTabsDay: {
         maxDay: {
           date: moment.utc().toISOString(),
-          numTabs: 44
+          numTabs: 44,
         },
         recentDay: {
           date: moment.utc().toISOString(),
-          numTabs: 44
-        }
-      }
+          numTabs: 44,
+        },
+      },
     })
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: mockUser
-      }
-    )
-    const updateMethod = jest.spyOn(UserModel, 'update')
-      .mockImplementationOnce(() => {
-        return mockUser
-      })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
+    const updateMethod = jest
+      .spyOn(UserModel, 'update')
+      .mockImplementationOnce(() => mockUser)
 
     await logTab(userContext, userId)
 
@@ -428,12 +409,12 @@ describe('logTab', () => {
     expect(maxTabsDayVal).toEqual({
       maxDay: {
         date: moment.utc().toISOString(),
-        numTabs: 45 // added 1
+        numTabs: 45, // added 1
       },
       recentDay: {
         date: moment.utc().toISOString(),
-        numTabs: 45 // added 1
-      }
+        numTabs: 45, // added 1
+      },
     })
   })
 
@@ -446,24 +427,20 @@ describe('logTab', () => {
       maxTabsDay: {
         maxDay: {
           date: moment.utc().toISOString(),
-          numTabs: 0
+          numTabs: 0,
         },
         recentDay: {
           date: moment.utc().toISOString(),
-          numTabs: 0
-        }
-      }
+          numTabs: 0,
+        },
+      },
     })
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: mockUser
-      }
-    )
-    const updateMethod = jest.spyOn(UserModel, 'update')
-      .mockImplementationOnce(() => {
-        return mockUser
-      })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
+    const updateMethod = jest
+      .spyOn(UserModel, 'update')
+      .mockImplementationOnce(() => mockUser)
 
     await logTab(userContext, userId)
 
@@ -471,12 +448,12 @@ describe('logTab', () => {
     expect(maxTabsDayVal).toEqual({
       maxDay: {
         date: moment.utc().toISOString(),
-        numTabs: 1 // added 1
+        numTabs: 1, // added 1
       },
       recentDay: {
         date: moment.utc().toISOString(),
-        numTabs: 1 // added 1
-      }
+        numTabs: 1, // added 1
+      },
     })
   })
 })

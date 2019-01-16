@@ -1,7 +1,5 @@
 import graphql from 'babel-plugin-relay/macro'
-import {
-  commitMutation
-} from 'react-relay'
+import { commitMutation } from 'react-relay'
 
 const mutation = graphql`
   mutation LogTabMutation($input: LogTabInput!) {
@@ -18,16 +16,13 @@ const mutation = graphql`
   }
 `
 
-function commit (environment, userId, tabId) {
-  return commitMutation(
-    environment,
-    {
-      mutation,
-      variables: {
-        input: { userId, tabId }
-      }
-    }
-  )
+function commit(environment, userId, tabId) {
+  return commitMutation(environment, {
+    mutation,
+    variables: {
+      input: { userId, tabId },
+    },
+  })
 }
 
 export default commit

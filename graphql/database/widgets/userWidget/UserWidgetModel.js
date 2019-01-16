@@ -1,65 +1,58 @@
-
 import BaseModel from '../../base/BaseModel'
 import types from '../../fieldTypes'
 import tableNames from '../../tables'
 import { USER_WIDGET } from '../../constants'
-import {
-  permissionAuthorizers
-} from '../../../utils/authorization-helpers'
+import { permissionAuthorizers } from '../../../utils/authorization-helpers'
 
 /*
  * @extends BaseModel
  */
 class UserWidget extends BaseModel {
-  static get name () {
+  static get name() {
     return USER_WIDGET
   }
 
-  static get hashKey () {
+  static get hashKey() {
     return 'userId'
   }
 
-  static get rangeKey () {
+  static get rangeKey() {
     return 'widgetId'
   }
 
-  static get tableName () {
+  static get tableName() {
     return tableNames.userWidgets
   }
 
   // Note: due to a bug, the "created" timestamp field does not
   // exist on UserWidget items created before 2018 Sept 21.
-  static get schema () {
+  static get schema() {
     const self = this
     return {
       userId: types.string().required(),
       widgetId: types.uuid(),
-      enabled: types.boolean()
-        .default(self.fieldDefaults.enabled),
-      visible: types.boolean()
-        .default(self.fieldDefaults.visible),
-      data: types.object()
-        .default(self.fieldDefaults.data),
-      config: types.object()
-        .default(self.fieldDefaults.config)
+      enabled: types.boolean().default(self.fieldDefaults.enabled),
+      visible: types.boolean().default(self.fieldDefaults.visible),
+      data: types.object().default(self.fieldDefaults.data),
+      config: types.object().default(self.fieldDefaults.config),
     }
   }
 
-  static get fieldDefaults () {
+  static get fieldDefaults() {
     return {
       enabled: false,
       visible: false,
       data: {},
-      config: {}
+      config: {},
     }
   }
 
-  static get permissions () {
+  static get permissions() {
     return {
       get: permissionAuthorizers.userIdMatchesHashKey,
       getAll: () => false,
       update: permissionAuthorizers.userIdMatchesHashKey,
-      create: permissionAuthorizers.userIdMatchesHashKey
+      create: permissionAuthorizers.userIdMatchesHashKey,
     }
   }
 }

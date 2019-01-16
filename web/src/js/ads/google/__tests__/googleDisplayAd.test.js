@@ -14,7 +14,7 @@ afterAll(() => {
   delete window.googletag
 })
 
-describe('googleDisplayAd', function () {
+describe('googleDisplayAd', function() {
   it('runs without error', () => {
     googleDisplayAd('my-ad')
   })

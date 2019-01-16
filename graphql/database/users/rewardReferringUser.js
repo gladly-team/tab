@@ -1,19 +1,15 @@
-
 import moment from 'moment'
 import ReferralDataModel from '../referrals/ReferralDataModel'
 import UserModel from './UserModel'
-import {
-  USER_REFERRAL_VC_REWARD
-} from '../constants'
+import { USER_REFERRAL_VC_REWARD } from '../constants'
 import {
   getPermissionsOverride,
-  REWARD_REFERRER_OVERRIDE
+  REWARD_REFERRER_OVERRIDE,
 } from '../../utils/permissions-overrides'
 import addVc from './addVc'
 import addUsersRecruited from './addUsersRecruited'
-import {
-  DATABASE_ITEM_DOES_NOT_EXIST
-} from '../../utils/exceptions'
+import { DATABASE_ITEM_DOES_NOT_EXIST } from '../../utils/exceptions'
+
 const override = getPermissionsOverride(REWARD_REFERRER_OVERRIDE)
 
 /**
@@ -31,7 +27,7 @@ const override = getPermissionsOverride(REWARD_REFERRER_OVERRIDE)
  */
 const rewardReferringUser = async (userContext, userId) => {
   // If the user does not have a referring user, return.
-  var referringUserId
+  let referringUserId
   try {
     const referralData = await ReferralDataModel.get(userContext, userId)
     if (referralData.referringUser) {
@@ -43,9 +39,8 @@ const rewardReferringUser = async (userContext, userId) => {
     // Referral data may not exist.
     if (e.code === DATABASE_ITEM_DOES_NOT_EXIST) {
       return false
-    } else {
-      throw e
     }
+    throw e
   }
 
   // If the referring user has already been rewarded, return.
@@ -60,7 +55,8 @@ const rewardReferringUser = async (userContext, userId) => {
     // change. We can remove this if we backfill the "emailVerified"
     // value for all users.
     const emailVerifyRewardChangeTime = moment('2018-09-14T20:00:00.000Z')
-    const userJoinedBeforeFeature = !referredUser.joined ||
+    const userJoinedBeforeFeature =
+      !referredUser.joined ||
       !moment(referredUser.joined).isValid() ||
       moment(referredUser.joined).isBefore(emailVerifyRewardChangeTime)
 
@@ -75,7 +71,7 @@ const rewardReferringUser = async (userContext, userId) => {
   try {
     await UserModel.update(userContext, {
       id: userId,
-      referrerRewarded: true
+      referrerRewarded: true,
     })
   } catch (e) {
     throw e
@@ -83,8 +79,7 @@ const rewardReferringUser = async (userContext, userId) => {
 
   // Reward the referring user.
   try {
-    await addVc(override, referringUserId,
-      USER_REFERRAL_VC_REWARD)
+    await addVc(override, referringUserId, USER_REFERRAL_VC_REWARD)
     await addUsersRecruited(referringUserId, 1)
   } catch (e) {
     throw e

@@ -1,7 +1,5 @@
 import graphql from 'babel-plugin-relay/macro'
-import {
-  commitMutation
-} from 'react-relay'
+import { commitMutation } from 'react-relay'
 
 const mutation = graphql`
   mutation UpdateWidgetDataMutation($input: UpdateWidgetDataInput!) {
@@ -13,22 +11,25 @@ const mutation = graphql`
   }
 `
 
-function commit (environment, user, widget, data,
-  onCompleted = () => {}, onError = () => {}) {
+function commit(
+  environment,
+  user,
+  widget,
+  data,
+  onCompleted = () => {},
+  onError = () => {}
+) {
   const userId = user.id
   const widgetId = widget.id
 
-  return commitMutation(
-    environment,
-    {
-      mutation,
-      variables: {
-        input: { userId, widgetId, data }
-      },
-      onCompleted,
-      onError
-    }
-  )
+  return commitMutation(environment, {
+    mutation,
+    variables: {
+      input: { userId, widgetId, data },
+    },
+    onCompleted,
+    onError,
+  })
 }
 
-export default {commit}
+export default { commit }

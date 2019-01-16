@@ -5,70 +5,67 @@ import Paper from 'material-ui/Paper'
 import Subheader from 'material-ui/Subheader'
 import Divider from 'material-ui/Divider'
 import PropTypes from 'prop-types'
-import {
-  cardHeaderSubtitleStyle
-} from 'js/theme/default'
+import { cardHeaderSubtitleStyle } from 'js/theme/default'
 
 class BackgroundColorPicker extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
-      selectedColor: '#000'
+      selectedColor: '#000',
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     const { user } = this.props
     const selectedColor = user.backgroundColor || this.state.selectedColor
-    this.onColorChanged({hex: selectedColor})
+    this.onColorChanged({ hex: selectedColor })
   }
 
-  onColorChanged (color) {
+  onColorChanged(color) {
     this.setState({
-      selectedColor: color.hex
+      selectedColor: color.hex,
     })
     this.props.onBackgroundColorSelection(color.hex)
   }
 
-  render () {
+  render() {
     const root = {
       display: 'flex',
       flexWrap: 'wrap',
-      justifyContent: 'space-around'
+      justifyContent: 'space-around',
     }
 
     const gridList = {
       display: 'flex',
-      width: '100%'
+      width: '100%',
     }
 
     const previewContainer = {
       width: '100%',
       padding: 10,
-      paddingTop: 0
+      paddingTop: 0,
     }
 
     const preview = {
       width: '100%',
       height: '60%',
-      backgroundColor: this.state.selectedColor
+      backgroundColor: this.state.selectedColor,
     }
 
     const header = Object.assign({}, cardHeaderSubtitleStyle, {
-      paddingLeft: 0
+      paddingLeft: 0,
     })
 
     const divider = {
-      marginBottom: 10
+      marginBottom: 10,
     }
 
     return (
       <div style={root}>
         <Subheader style={header}>Select your color</Subheader>
         <Divider style={divider} />
-        <div
-          style={gridList}>
+        <div style={gridList}>
           <div>
             <SketchPicker
               color={this.state.selectedColor}
@@ -87,9 +84,9 @@ class BackgroundColorPicker extends React.Component {
 
 BackgroundColorPicker.propTypes = {
   user: PropTypes.shape({
-    backgroundColor: PropTypes.string.isRequired
+    backgroundColor: PropTypes.string.isRequired,
   }),
-  onBackgroundColorSelection: PropTypes.func.isRequired
+  onBackgroundColorSelection: PropTypes.func.isRequired,
 }
 
 export default BackgroundColorPicker

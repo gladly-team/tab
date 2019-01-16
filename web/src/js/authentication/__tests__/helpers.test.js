@@ -9,35 +9,25 @@ import {
   enterUsernameURL,
   loginURL,
   missingEmailMessageURL,
-  verifyEmailURL
+  verifyEmailURL,
 } from 'js/navigation/navigation'
-import {
-  getReferralData,
-  isInIframe
-} from 'js/utils/utils'
+import { getReferralData, isInIframe } from 'js/utils/utils'
 import CreateNewUserMutation from 'js/mutations/CreateNewUserMutation'
 import LogEmailVerifiedMutation from 'js/mutations/LogEmailVerifiedMutation'
 import {
   getUserToken,
   getCurrentUser,
   reloadUser,
-  signInAnonymously
+  signInAnonymously,
 } from 'js/authentication/user'
-import {
-  flushAllPromises,
-  runAsyncTimerLoops
-} from 'js/utils/test-utils'
+import { flushAllPromises, runAsyncTimerLoops } from 'js/utils/test-utils'
 import logger from 'js/utils/logger'
-import {
-  getUserTestGroupsForMutation
-} from 'js/utils/experiments'
+import { getUserTestGroupsForMutation } from 'js/utils/experiments'
 import {
   getBrowserExtensionInstallId,
-  getBrowserExtensionInstallTime
+  getBrowserExtensionInstallTime,
 } from 'js/utils/local-user-data-mgr'
-import {
-  isAnonymousUserSignInEnabled
-} from 'js/utils/feature-flags'
+import { isAnonymousUserSignInEnabled } from 'js/utils/feature-flags'
 import environment from 'js/relay-env'
 
 jest.mock('js/relay-env')
@@ -56,16 +46,18 @@ jest.mock('js/utils/feature-flags')
 
 const mockNow = '2017-05-19T13:59:58.000Z'
 
-const setIfAnonymousUserIsAllowed = (allow) => {
+const setIfAnonymousUserIsAllowed = allow => {
   // Set the mocked return values that will allow or
   // or disallow the user to be anonymous.
   if (allow) {
     getBrowserExtensionInstallTime.mockReturnValue(
-      moment(mockNow).subtract(2, 'minutes'))
+      moment(mockNow).subtract(2, 'minutes')
+    )
     isAnonymousUserSignInEnabled.mockReturnValue(true)
   } else {
     getBrowserExtensionInstallTime.mockReturnValue(
-      moment(mockNow).subtract(23, 'days'))
+      moment(mockNow).subtract(23, 'days')
+    )
     isAnonymousUserSignInEnabled.mockReturnValue(false)
   }
 }
@@ -95,7 +87,7 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
       email: 'foo@bar.com',
       username: 'foo',
       isAnonymous: false,
-      emailVerified: true
+      emailVerified: true,
     }
     const redirected = await checkAuthStateAndRedirectIfNeeded(user)
 
@@ -113,7 +105,7 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
       email: null,
       username: null,
       isAnonymous: true,
-      emailVerified: false
+      emailVerified: false,
     }
 
     const checkAuthStateAndRedirectIfNeeded = require('js/authentication/helpers')
@@ -132,26 +124,36 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
 
     // User installed not-too-recently
     getBrowserExtensionInstallTime.mockReturnValue(
-      moment(mockNow).subtract(55, 'seconds'))
+      moment(mockNow).subtract(55, 'seconds')
+    )
 
     const user = {
       id: null,
       email: null,
       username: null,
       isAnonymous: null,
-      emailVerified: false
+      emailVerified: false,
     }
     isInIframe.mockReturnValue(false)
 
     CreateNewUserMutation.mockImplementation(
-      (environment, userId, email, referralData, experimentGroups, installId,
-        installTime, onCompleted, onError) => {
+      (
+        environment,
+        userId,
+        email,
+        referralData,
+        experimentGroups,
+        installId,
+        installTime,
+        onCompleted,
+        onError
+      ) => {
         onCompleted({
           createNewUser: {
             id: 'abc123',
             email: null,
-            username: null
-          }
+            username: null,
+          },
         })
       }
     )
@@ -176,19 +178,28 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
       email: null,
       username: null,
       isAnonymous: null,
-      emailVerified: false
+      emailVerified: false,
     }
     isInIframe.mockReturnValue(false)
 
     CreateNewUserMutation.mockImplementation(
-      (environment, userId, email, referralData, experimentGroups, installId,
-        installTime, onCompleted, onError) => {
+      (
+        environment,
+        userId,
+        email,
+        referralData,
+        experimentGroups,
+        installId,
+        installTime,
+        onCompleted,
+        onError
+      ) => {
         onCompleted({
           createNewUser: {
             id: 'abc123',
             email: null,
-            username: null
-          }
+            username: null,
+          },
         })
       }
     )
@@ -207,26 +218,36 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
 
     // The user installed just now
     getBrowserExtensionInstallTime.mockReturnValue(
-      moment(mockNow).subtract(28, 'seconds'))
+      moment(mockNow).subtract(28, 'seconds')
+    )
 
     const user = {
       id: null,
       email: null,
       username: null,
       isAnonymous: null,
-      emailVerified: false
+      emailVerified: false,
     }
     isInIframe.mockReturnValue(false)
 
     CreateNewUserMutation.mockImplementation(
-      (environment, userId, email, referralData, experimentGroups, installId,
-        installTime, onCompleted, onError) => {
+      (
+        environment,
+        userId,
+        email,
+        referralData,
+        experimentGroups,
+        installId,
+        installTime,
+        onCompleted,
+        onError
+      ) => {
         onCompleted({
           createNewUser: {
             id: 'abc123',
             email: null,
-            username: null
-          }
+            username: null,
+          },
         })
       }
     )
@@ -245,26 +266,36 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
 
     // User installed not-too-recently
     getBrowserExtensionInstallTime.mockReturnValue(
-      moment(mockNow).subtract(55, 'seconds'))
+      moment(mockNow).subtract(55, 'seconds')
+    )
 
     const user = {
       id: null,
       email: null,
       username: null,
       isAnonymous: null,
-      emailVerified: false
+      emailVerified: false,
     }
     isInIframe.mockReturnValue(false)
 
     CreateNewUserMutation.mockImplementation(
-      (environment, userId, email, referralData, experimentGroups, installId,
-        installTime, onCompleted, onError) => {
+      (
+        environment,
+        userId,
+        email,
+        referralData,
+        experimentGroups,
+        installId,
+        installTime,
+        onCompleted,
+        onError
+      ) => {
         onCompleted({
           createNewUser: {
             id: 'abc123',
             email: null,
-            username: null
-          }
+            username: null,
+          },
         })
       }
     )
@@ -289,19 +320,28 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
       email: null,
       username: null,
       isAnonymous: null,
-      emailVerified: false
+      emailVerified: false,
     }
     isInIframe.mockReturnValue(false)
 
     CreateNewUserMutation.mockImplementation(
-      (environment, userId, email, referralData, experimentGroups, installId,
-        installTime, onCompleted, onError) => {
+      (
+        environment,
+        userId,
+        email,
+        referralData,
+        experimentGroups,
+        installId,
+        installTime,
+        onCompleted,
+        onError
+      ) => {
         onCompleted({
           createNewUser: {
             id: 'abc123',
             email: null,
-            username: null
-          }
+            username: null,
+          },
         })
       }
     )
@@ -320,26 +360,36 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
 
     // The user installed just now
     getBrowserExtensionInstallTime.mockReturnValue(
-      moment(mockNow).subtract(28, 'seconds'))
+      moment(mockNow).subtract(28, 'seconds')
+    )
 
     const user = {
       id: null,
       email: null,
       username: null,
       isAnonymous: null,
-      emailVerified: false
+      emailVerified: false,
     }
     isInIframe.mockReturnValue(false)
 
     CreateNewUserMutation.mockImplementation(
-      (environment, userId, email, referralData, experimentGroups, installId,
-        installTime, onCompleted, onError) => {
+      (
+        environment,
+        userId,
+        email,
+        referralData,
+        experimentGroups,
+        installId,
+        installTime,
+        onCompleted,
+        onError
+      ) => {
         onCompleted({
           createNewUser: {
             id: 'abc123',
             email: null,
-            username: null
-          }
+            username: null,
+          },
         })
       }
     )
@@ -363,19 +413,28 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
       email: null,
       username: null,
       isAnonymous: false,
-      emailVerified: false
+      emailVerified: false,
     }
 
     // Mock a response from new user creation
     CreateNewUserMutation.mockImplementation(
-      (environment, userId, email, referralData, experimentGroups, installId,
-        installTime, onCompleted, onError) => {
+      (
+        environment,
+        userId,
+        email,
+        referralData,
+        experimentGroups,
+        installId,
+        installTime,
+        onCompleted,
+        onError
+      ) => {
         onCompleted({
           createNewUser: {
             id: 'abc123',
             email: null,
-            username: null
-          }
+            username: null,
+          },
         })
       }
     )
@@ -396,7 +455,8 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
     // Otherwise, the user is allowed to be anonymous.
     isAnonymousUserSignInEnabled.mockReturnValue(true)
     getBrowserExtensionInstallTime.mockReturnValue(
-      moment(mockNow).subtract(2, 'minutes'))
+      moment(mockNow).subtract(2, 'minutes')
+    )
 
     isInIframe.mockReturnValue(true)
 
@@ -405,7 +465,7 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
       email: null,
       username: null,
       isAnonymous: false,
-      emailVerified: false
+      emailVerified: false,
     }
 
     const checkAuthStateAndRedirectIfNeeded = require('js/authentication/helpers')
@@ -421,26 +481,36 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
 
     // The user installed just now
     getBrowserExtensionInstallTime.mockReturnValue(
-      moment(mockNow).subtract(28, 'seconds'))
+      moment(mockNow).subtract(28, 'seconds')
+    )
 
     const user = {
       uid: null,
       email: null,
       username: null,
       isAnonymous: false,
-      emailVerified: false
+      emailVerified: false,
     }
 
     // Mock a response from new user creation
     CreateNewUserMutation.mockImplementation(
-      (environment, userId, email, referralData, experimentGroups, installId,
-        installTime, onCompleted, onError) => {
+      (
+        environment,
+        userId,
+        email,
+        referralData,
+        experimentGroups,
+        installId,
+        installTime,
+        onCompleted,
+        onError
+      ) => {
         onCompleted({
           createNewUser: {
             id: 'abc123',
             email: null,
-            username: null
-          }
+            username: null,
+          },
         })
       }
     )
@@ -460,7 +530,8 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
 
     // This is longer than users are allowed to remain anonymous.
     getBrowserExtensionInstallTime.mockReturnValue(
-      moment(mockNow).subtract(5, 'days'))
+      moment(mockNow).subtract(5, 'days')
+    )
 
     // Otherwise, anonymous users are allowed.
     isAnonymousUserSignInEnabled.mockReturnValue(true)
@@ -472,15 +543,14 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
       email: null,
       username: null,
       isAnonymous: true,
-      emailVerified: false
+      emailVerified: false,
     }
 
     const checkAuthStateAndRedirectIfNeeded = require('js/authentication/helpers')
       .checkAuthStateAndRedirectIfNeeded
     await checkAuthStateAndRedirectIfNeeded(user)
 
-    expect(replaceUrl)
-      .toHaveBeenCalledWith(loginURL, { mandatory: 'true' }) // includes URL param
+    expect(replaceUrl).toHaveBeenCalledWith(loginURL, { mandatory: 'true' }) // includes URL param
   })
 
   it('does not redirect to the login screen if the user is anonymous and has been around less than the time needed for us to ask them to sign in', async () => {
@@ -488,7 +558,8 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
 
     // This is less than the max time users are allowed to remain anonymous.
     getBrowserExtensionInstallTime.mockReturnValue(
-      moment(mockNow).subtract(3, 'days'))
+      moment(mockNow).subtract(3, 'days')
+    )
 
     // Otherwise, anonymous users are allowed.
     isAnonymousUserSignInEnabled.mockReturnValue(true)
@@ -500,7 +571,7 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
       email: null,
       username: null,
       isAnonymous: true,
-      emailVerified: false
+      emailVerified: false,
     }
 
     const checkAuthStateAndRedirectIfNeeded = require('js/authentication/helpers')
@@ -521,7 +592,7 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
       email: null,
       username: 'foo',
       isAnonymous: false,
-      emailVerified: false
+      emailVerified: false,
     }
     const redirected = await checkAuthStateAndRedirectIfNeeded(user)
     expect(replaceUrl).toHaveBeenCalledWith(missingEmailMessageURL)
@@ -539,7 +610,7 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
       email: 'foo@bar.com',
       username: 'foo',
       isAnonymous: false,
-      emailVerified: false
+      emailVerified: false,
     }
     const redirected = await checkAuthStateAndRedirectIfNeeded(user)
     expect(replaceUrl).toHaveBeenCalledWith(verifyEmailURL)
@@ -557,7 +628,7 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
       email: 'foo@bar.com',
       username: null,
       isAnonymous: false,
-      emailVerified: true
+      emailVerified: true,
     }
     const redirected = await checkAuthStateAndRedirectIfNeeded(user)
     expect(replaceUrl).toHaveBeenCalledWith(enterUsernameURL)
@@ -575,9 +646,12 @@ describe('checkAuthStateAndRedirectIfNeeded tests', () => {
       email: 'foo@bar.com',
       username: null,
       isAnonymous: false,
-      emailVerified: true
+      emailVerified: true,
     }
-    const redirected = await checkAuthStateAndRedirectIfNeeded(user, 'SomeUsername')
+    const redirected = await checkAuthStateAndRedirectIfNeeded(
+      user,
+      'SomeUsername'
+    )
     expect(redirected).toBe(false)
   })
 })
@@ -592,7 +666,7 @@ describe('createNewUser tests', () => {
     const mockExtensionInstallTime = '2018-08-18T01:12:59.187Z'
     getBrowserExtensionInstallTime.mockReturnValueOnce(mockExtensionInstallTime)
     getUserTestGroupsForMutation.mockReturnValueOnce({
-      anonSignIn: 'ANONYMOUS_ALLOWED'
+      anonSignIn: 'ANONYMOUS_ALLOWED',
     })
 
     // Mock the authed user
@@ -601,20 +675,29 @@ describe('createNewUser tests', () => {
       email: 'somebody@example.com',
       username: null,
       isAnonymous: false,
-      emailVerified: false
+      emailVerified: false,
     })
 
     // Mock a response from new user creation
     CreateNewUserMutation.mockImplementationOnce(
-      (environment, userId, email, referralData, experimentGroups, installId,
-        installTime, onCompleted, onError) => {
+      (
+        environment,
+        userId,
+        email,
+        referralData,
+        experimentGroups,
+        installId,
+        installTime,
+        onCompleted,
+        onError
+      ) => {
         onCompleted({
           createNewUser: {
             id: 'abc123',
             email: 'somebody@example.com',
             username: null,
-            justCreated: true
-          }
+            justCreated: true,
+          },
         })
       }
     )
@@ -622,10 +705,17 @@ describe('createNewUser tests', () => {
     const createNewUser = require('js/authentication/helpers').createNewUser
     await createNewUser()
 
-    expect(CreateNewUserMutation)
-      .toHaveBeenCalledWith(environment, 'abc123', 'somebody@example.com', null,
-        { anonSignIn: 'ANONYMOUS_ALLOWED' }, mockUUID, mockExtensionInstallTime,
-        expect.any(Function), expect.any(Function))
+    expect(CreateNewUserMutation).toHaveBeenCalledWith(
+      environment,
+      'abc123',
+      'somebody@example.com',
+      null,
+      { anonSignIn: 'ANONYMOUS_ALLOWED' },
+      mockUUID,
+      mockExtensionInstallTime,
+      expect.any(Function),
+      expect.any(Function)
+    )
   })
 
   it('returns the new user data', async () => {
@@ -637,7 +727,7 @@ describe('createNewUser tests', () => {
       email: 'somebody@example.com',
       username: null,
       isAnonymous: false,
-      emailVerified: false
+      emailVerified: false,
     })
 
     getUserToken.mockResolvedValue('some-token')
@@ -645,15 +735,24 @@ describe('createNewUser tests', () => {
 
     // Mock a response from new user creation
     CreateNewUserMutation.mockImplementationOnce(
-      (environment, userId, email, referralData, experimentGroups, installId,
-        installTime, onCompleted, onError) => {
+      (
+        environment,
+        userId,
+        email,
+        referralData,
+        experimentGroups,
+        installId,
+        installTime,
+        onCompleted,
+        onError
+      ) => {
         onCompleted({
           createNewUser: {
             id: 'abc123',
             email: 'somebody@example.com',
             username: null,
-            justCreated: true
-          }
+            justCreated: true,
+          },
         })
       }
     )
@@ -665,7 +764,7 @@ describe('createNewUser tests', () => {
       id: 'abc123',
       email: 'somebody@example.com',
       username: null,
-      justCreated: true
+      justCreated: true,
     })
   })
 
@@ -673,7 +772,7 @@ describe('createNewUser tests', () => {
     expect.assertions(1)
     getUserToken.mockResolvedValue('some-token')
     getReferralData.mockImplementationOnce(() => ({
-      referringUser: 'asdf1234'
+      referringUser: 'asdf1234',
     }))
 
     // Mock the authed user
@@ -682,20 +781,29 @@ describe('createNewUser tests', () => {
       email: 'somebody@example.com',
       username: null,
       isAnonymous: false,
-      emailVerified: false
+      emailVerified: false,
     })
 
     // Mock a response from new user creation
     CreateNewUserMutation.mockImplementationOnce(
-      (environment, userId, email, referralData, experimentGroups, installId,
-        installTime, onCompleted, onError) => {
+      (
+        environment,
+        userId,
+        email,
+        referralData,
+        experimentGroups,
+        installId,
+        installTime,
+        onCompleted,
+        onError
+      ) => {
         onCompleted({
           createNewUser: {
             id: 'abc123',
             email: 'somebody@example.com',
             username: null,
-            justCreated: true
-          }
+            justCreated: true,
+          },
         })
       }
     )
@@ -704,7 +812,7 @@ describe('createNewUser tests', () => {
     await createNewUser()
 
     expect(CreateNewUserMutation.mock.calls[0][3]).toEqual({
-      referringUser: 'asdf1234'
+      referringUser: 'asdf1234',
     })
   })
 
@@ -712,7 +820,7 @@ describe('createNewUser tests', () => {
     expect.assertions(1)
 
     const experimentGroups = {
-      anonSignIn: 'AUTHED_USER_ONLY'
+      anonSignIn: 'AUTHED_USER_ONLY',
     }
     getUserTestGroupsForMutation.mockReturnValueOnce(experimentGroups)
     getUserToken.mockResolvedValue('some-token')
@@ -724,20 +832,29 @@ describe('createNewUser tests', () => {
       email: 'somebody@example.com',
       username: null,
       isAnonymous: false,
-      emailVerified: false
+      emailVerified: false,
     })
 
     // Mock a response from new user creation
     CreateNewUserMutation.mockImplementationOnce(
-      (environment, userId, email, referralData, experimentGroups, installId,
-        installTime, onCompleted, onError) => {
+      (
+        environment,
+        userId,
+        email,
+        referralData,
+        experimentGroups,
+        installId,
+        installTime,
+        onCompleted,
+        onError
+      ) => {
         onCompleted({
           createNewUser: {
             id: 'abc123',
             email: 'somebody@example.com',
             username: null,
-            justCreated: true
-          }
+            justCreated: true,
+          },
         })
       }
     )
@@ -757,7 +874,7 @@ describe('createNewUser tests', () => {
       email: 'somebody@example.com',
       username: null,
       isAnonymous: false,
-      emailVerified: false
+      emailVerified: false,
     })
 
     // Make getUserToken not resolve yet so we can confirm
@@ -767,15 +884,24 @@ describe('createNewUser tests', () => {
 
     // Mock a response from new user creation
     CreateNewUserMutation.mockImplementationOnce(
-      (environment, userId, email, referralData, experimentGroups, installId,
-        installTime, onCompleted, onError) => {
+      (
+        environment,
+        userId,
+        email,
+        referralData,
+        experimentGroups,
+        installId,
+        installTime,
+        onCompleted,
+        onError
+      ) => {
         onCompleted({
           createNewUser: {
             id: 'abc123',
             email: 'somebody@example.com',
             username: null,
-            justCreated: true
-          }
+            justCreated: true,
+          },
         })
       }
     )
@@ -805,12 +931,13 @@ describe('checkIfEmailVerified tests', () => {
       email: 'somebody@example.com',
       username: null,
       isAnonymous: false,
-      emailVerified: true
+      emailVerified: true,
     })
     reloadUser.mockResolvedValue(undefined)
     getUserToken.mockResolvedValue('some-token')
 
-    const checkIfEmailVerified = require('js/authentication/helpers').checkIfEmailVerified
+    const checkIfEmailVerified = require('js/authentication/helpers')
+      .checkIfEmailVerified
     const isVerified = await checkIfEmailVerified()
     expect(isVerified).toBe(true)
   })
@@ -823,12 +950,13 @@ describe('checkIfEmailVerified tests', () => {
       email: 'somebody@example.com',
       username: null,
       isAnonymous: false,
-      emailVerified: false
+      emailVerified: false,
     })
     reloadUser.mockResolvedValue(undefined)
     getUserToken.mockResolvedValue('some-token')
 
-    const checkIfEmailVerified = require('js/authentication/helpers').checkIfEmailVerified
+    const checkIfEmailVerified = require('js/authentication/helpers')
+      .checkIfEmailVerified
     const promise = checkIfEmailVerified()
     await runAsyncTimerLoops(25)
     const isVerified = await promise
@@ -842,7 +970,8 @@ describe('checkIfEmailVerified tests', () => {
     reloadUser.mockResolvedValue(undefined)
     getUserToken.mockResolvedValue('some-token')
 
-    const checkIfEmailVerified = require('js/authentication/helpers').checkIfEmailVerified
+    const checkIfEmailVerified = require('js/authentication/helpers')
+      .checkIfEmailVerified
     const promise = checkIfEmailVerified()
     await runAsyncTimerLoops(25)
     const isVerified = await promise
@@ -857,12 +986,13 @@ describe('checkIfEmailVerified tests', () => {
       email: 'somebody@example.com',
       username: null,
       isAnonymous: false,
-      emailVerified: false
+      emailVerified: false,
     })
     reloadUser.mockResolvedValue(undefined)
     getUserToken.mockResolvedValue('some-token')
 
-    const checkIfEmailVerified = require('js/authentication/helpers').checkIfEmailVerified
+    const checkIfEmailVerified = require('js/authentication/helpers')
+      .checkIfEmailVerified
     const promise = checkIfEmailVerified()
     await runAsyncTimerLoops(25)
     await promise
@@ -878,14 +1008,14 @@ describe('checkIfEmailVerified tests', () => {
         email: 'somebody@example.com',
         username: null,
         isAnonymous: false,
-        emailVerified: false
+        emailVerified: false,
       })
       .mockResolvedValueOnce({
         id: 'abc123',
         email: 'somebody@example.com',
         username: null,
         isAnonymous: false,
-        emailVerified: false
+        emailVerified: false,
       })
       // Third fetch has emailVerified=true
       .mockResolvedValue({
@@ -893,12 +1023,13 @@ describe('checkIfEmailVerified tests', () => {
         email: 'somebody@example.com',
         username: null,
         isAnonymous: false,
-        emailVerified: true
+        emailVerified: true,
       })
     reloadUser.mockResolvedValue(undefined)
     getUserToken.mockResolvedValue('some-token')
 
-    const checkIfEmailVerified = require('js/authentication/helpers').checkIfEmailVerified
+    const checkIfEmailVerified = require('js/authentication/helpers')
+      .checkIfEmailVerified
     const promise = checkIfEmailVerified()
     await runAsyncTimerLoops(25)
     const isVerified = await promise
@@ -914,14 +1045,14 @@ describe('checkIfEmailVerified tests', () => {
         email: 'somebody@example.com',
         username: null,
         isAnonymous: false,
-        emailVerified: false
+        emailVerified: false,
       })
       .mockResolvedValueOnce({
         id: 'abc123',
         email: 'somebody@example.com',
         username: null,
         isAnonymous: false,
-        emailVerified: false
+        emailVerified: false,
       })
       // Third fetch has emailVerified=true
       .mockResolvedValue({
@@ -929,12 +1060,13 @@ describe('checkIfEmailVerified tests', () => {
         email: 'somebody@example.com',
         username: null,
         isAnonymous: false,
-        emailVerified: true
+        emailVerified: true,
       })
     reloadUser.mockResolvedValue(undefined)
     getUserToken.mockResolvedValue('some-token')
 
-    const checkIfEmailVerified = require('js/authentication/helpers').checkIfEmailVerified
+    const checkIfEmailVerified = require('js/authentication/helpers')
+      .checkIfEmailVerified
     const promise = checkIfEmailVerified()
     await runAsyncTimerLoops(25)
     await promise
@@ -949,15 +1081,20 @@ describe('checkIfEmailVerified tests', () => {
       email: 'somebody@example.com',
       username: null,
       isAnonymous: false,
-      emailVerified: true
+      emailVerified: true,
     })
     reloadUser.mockResolvedValue(undefined)
     getUserToken.mockResolvedValue('some-token')
 
-    const checkIfEmailVerified = require('js/authentication/helpers').checkIfEmailVerified
+    const checkIfEmailVerified = require('js/authentication/helpers')
+      .checkIfEmailVerified
     await checkIfEmailVerified()
-    expect(LogEmailVerifiedMutation)
-      .toHaveBeenCalledWith(environment, 'abc123', expect.any(Function), expect.any(Function))
+    expect(LogEmailVerifiedMutation).toHaveBeenCalledWith(
+      environment,
+      'abc123',
+      expect.any(Function),
+      expect.any(Function)
+    )
   })
 
   it('force-refreshes the user token before logging the email as verified', async () => {
@@ -968,7 +1105,7 @@ describe('checkIfEmailVerified tests', () => {
       email: 'somebody@example.com',
       username: null,
       isAnonymous: false,
-      emailVerified: true
+      emailVerified: true,
     })
     reloadUser.mockImplementation(undefined)
 
@@ -976,14 +1113,15 @@ describe('checkIfEmailVerified tests', () => {
     // the LogEmailVerifiedMutation has not yet been called.
     getUserToken.mockReturnValueOnce(new Promise(() => {}))
 
-    const checkIfEmailVerified = require('js/authentication/helpers').checkIfEmailVerified
+    const checkIfEmailVerified = require('js/authentication/helpers')
+      .checkIfEmailVerified
     checkIfEmailVerified()
     await flushAllPromises()
     expect(getUserToken).toHaveBeenCalledWith(true)
     expect(LogEmailVerifiedMutation).not.toHaveBeenCalled()
   })
 
-  it('logs an error if refreshing the user token throws an error', async (done) => {
+  it('logs an error if refreshing the user token throws an error', async done => {
     expect.assertions(2)
 
     getCurrentUser.mockResolvedValue({
@@ -991,13 +1129,14 @@ describe('checkIfEmailVerified tests', () => {
       email: 'somebody@example.com',
       username: null,
       isAnonymous: false,
-      emailVerified: true
+      emailVerified: true,
     })
     reloadUser.mockImplementation(undefined)
     const mockErr = new Error('Sigh.')
     getUserToken.mockRejectedValue(mockErr)
 
-    const checkIfEmailVerified = require('js/authentication/helpers').checkIfEmailVerified
+    const checkIfEmailVerified = require('js/authentication/helpers')
+      .checkIfEmailVerified
     checkIfEmailVerified()
       // Ignore expected error
       .catch(e => {})
@@ -1009,7 +1148,7 @@ describe('checkIfEmailVerified tests', () => {
     await flushAllPromises()
   })
 
-  it('logs an error if reloading the Firebase user throws an error', async (done) => {
+  it('logs an error if reloading the Firebase user throws an error', async done => {
     expect.assertions(2)
 
     getCurrentUser
@@ -1018,20 +1157,21 @@ describe('checkIfEmailVerified tests', () => {
         email: 'somebody@example.com',
         username: null,
         isAnonymous: false,
-        emailVerified: false
+        emailVerified: false,
       })
       .mockResolvedValue({
         id: 'abc123',
         email: 'somebody@example.com',
         username: null,
         isAnonymous: false,
-        emailVerified: true
+        emailVerified: true,
       })
     const mockErr = new Error('Whoops!')
     reloadUser.mockRejectedValue(new Error('Whoops!'))
     getUserToken.mockResolvedValue('some-token')
 
-    const checkIfEmailVerified = require('js/authentication/helpers').checkIfEmailVerified
+    const checkIfEmailVerified = require('js/authentication/helpers')
+      .checkIfEmailVerified
     checkIfEmailVerified()
       // Ignore expected error
       .catch(e => {})
@@ -1043,16 +1183,16 @@ describe('checkIfEmailVerified tests', () => {
     await runAsyncTimerLoops(25)
   })
 
-  it('logs an error if getting the user throws an error', async (done) => {
+  it('logs an error if getting the user throws an error', async done => {
     expect.assertions(2)
 
     const mockErr = new Error('Uh oh.')
-    getCurrentUser
-      .mockRejectedValue(mockErr)
+    getCurrentUser.mockRejectedValue(mockErr)
     reloadUser.mockRejectedValue(undefined)
     getUserToken.mockResolvedValue('some-token')
 
-    const checkIfEmailVerified = require('js/authentication/helpers').checkIfEmailVerified
+    const checkIfEmailVerified = require('js/authentication/helpers')
+      .checkIfEmailVerified
     checkIfEmailVerified()
       // Ignore expected error
       .catch(e => {})

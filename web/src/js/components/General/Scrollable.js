@@ -3,17 +3,21 @@ import PropTypes from 'prop-types'
 import { Scrollbars } from 'react-custom-scrollbars'
 
 class Scrollable extends React.Component {
-  render () {
+  render() {
     // Must either set a height or set autoHeight=true.
     // https://github.com/malte-wessel/react-custom-scrollbars
     return (
       <Scrollbars
-        style={Object.assign({}, {
-          display: 'block',
-          padding: 0,
-          margin: 0,
-          height: 200
-        }, this.props.style)}
+        style={Object.assign(
+          {},
+          {
+            display: 'block',
+            padding: 0,
+            margin: 0,
+            height: 200,
+          },
+          this.props.style
+        )}
         {...this.props}
       >
         {this.props.children}
@@ -23,11 +27,11 @@ class Scrollable extends React.Component {
 }
 
 Scrollable.propTypes = {
-  style: PropTypes.object
+  style: PropTypes.object,
 }
 
 Scrollable.defaultProps = {
-  style: {}
+  style: {},
 }
 
 export default Scrollable

@@ -1,4 +1,3 @@
-
 import BaseWidgetModel from './baseWidget/BaseWidgetModel'
 import UserWidgetModel from './userWidget/UserWidgetModel'
 import constructFullWidget from './constructFullWidget'

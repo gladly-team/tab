@@ -8,7 +8,7 @@ import {
   getMockUserContext,
   getMockUserInfo,
   mockDate,
-  setMockDBResponse
+  setMockDBResponse,
 } from '../../../test-utils'
 
 jest.mock('../../../databaseClient')
@@ -36,31 +36,31 @@ describe('updateUserWidgetConfig', () => {
       widgetId: 'ab5082cc-151a-4a9a-9289-06906670fd4e',
       enabled: true,
       config: {
-        foo: 'bar'
-      }
+        foo: 'bar',
+      },
     })
     const newConfig = { foo: 'boop' }
     const expectedWidget = Object.assign({}, userWidget, {
       config: newConfig,
-      updated: moment.utc().toISOString()
+      updated: moment.utc().toISOString(),
     })
-    setMockDBResponse(
-      DatabaseOperation.UPDATE,
-      {
-        Attributes: expectedWidget
-      }
-    )
+    setMockDBResponse(DatabaseOperation.UPDATE, {
+      Attributes: expectedWidget,
+    })
 
     const userWidgetUpdateMethod = jest.spyOn(UserWidgetModel, 'update')
-    const updatedWidget = await updateUserWidgetConfig(userContext, userInfo.id,
-      userWidget.widgetId, newConfig)
-    expect(userWidgetUpdateMethod)
-      .toHaveBeenCalledWith(userContext, {
-        userId: userInfo.id,
-        widgetId: userWidget.widgetId,
-        updated: moment.utc().toISOString(),
-        config: newConfig
-      })
+    const updatedWidget = await updateUserWidgetConfig(
+      userContext,
+      userInfo.id,
+      userWidget.widgetId,
+      newConfig
+    )
+    expect(userWidgetUpdateMethod).toHaveBeenCalledWith(userContext, {
+      userId: userInfo.id,
+      widgetId: userWidget.widgetId,
+      updated: moment.utc().toISOString(),
+      config: newConfig,
+    })
     expect(updatedWidget).toEqual(expectedWidget)
   })
 
@@ -71,11 +71,9 @@ describe('updateUserWidgetConfig', () => {
     const userWidgetCreate = jest.spyOn(UserWidgetModel, 'create')
 
     // Set that the item doesn't exist when updating.
-    setMockDBResponse(
-      DatabaseOperation.UPDATE,
-      null,
-      { code: 'ConditionalCheckFailedException' }
-    )
+    setMockDBResponse(DatabaseOperation.UPDATE, null, {
+      code: 'ConditionalCheckFailedException',
+    })
 
     // Set the return for the created object.
     const userWidget = new UserWidgetModel({
@@ -83,29 +81,30 @@ describe('updateUserWidgetConfig', () => {
       widgetId: 'ab5082cc-151a-4a9a-9289-06906670fd4e',
       enabled: false,
       config: {
-        foo: 'bar'
-      }
+        foo: 'bar',
+      },
     })
     const newConfig = { foo: 'boop' }
     const expectedWidget = Object.assign({}, userWidget, {
       config: newConfig,
-      updated: moment.utc().toISOString()
+      updated: moment.utc().toISOString(),
     })
-    setMockDBResponse(
-      DatabaseOperation.CREATE,
-      {
-        Attributes: expectedWidget
-      }
-    )
+    setMockDBResponse(DatabaseOperation.CREATE, {
+      Attributes: expectedWidget,
+    })
 
-    await updateUserWidgetConfig(userContext, userInfo.id,
-      userWidget.widgetId, newConfig)
+    await updateUserWidgetConfig(
+      userContext,
+      userInfo.id,
+      userWidget.widgetId,
+      newConfig
+    )
     expect(userWidgetCreate).toHaveBeenCalledWith(userContext, {
       userId: userInfo.id,
       widgetId: userWidget.widgetId,
       created: moment.utc().toISOString(),
       updated: moment.utc().toISOString(),
-      config: newConfig
+      config: newConfig,
     })
   })
 
@@ -115,11 +114,9 @@ describe('updateUserWidgetConfig', () => {
     const userInfo = getMockUserInfo()
 
     // Set that the item doesn't exist when updating.
-    setMockDBResponse(
-      DatabaseOperation.UPDATE,
-      null,
-      { code: 'ConditionalCheckFailedException' }
-    )
+    setMockDBResponse(DatabaseOperation.UPDATE, null, {
+      code: 'ConditionalCheckFailedException',
+    })
 
     // Set the return for the created object.
     const userWidget = new UserWidgetModel({
@@ -127,24 +124,25 @@ describe('updateUserWidgetConfig', () => {
       widgetId: 'ab5082cc-151a-4a9a-9289-06906670fd4e',
       enabled: false,
       config: {
-        foo: 'bar'
-      }
+        foo: 'bar',
+      },
     })
     const newConfig = { foo: 'boop' }
     const expectedWidget = Object.assign({}, userWidget, {
       config: newConfig,
       created: moment.utc().toISOString(),
-      updated: moment.utc().toISOString()
+      updated: moment.utc().toISOString(),
     })
-    setMockDBResponse(
-      DatabaseOperation.CREATE,
-      {
-        Attributes: expectedWidget
-      }
-    )
+    setMockDBResponse(DatabaseOperation.CREATE, {
+      Attributes: expectedWidget,
+    })
 
-    const returnedUserWidget = await updateUserWidgetConfig(userContext,
-      userInfo.id, userWidget.widgetId, newConfig)
+    const returnedUserWidget = await updateUserWidgetConfig(
+      userContext,
+      userInfo.id,
+      userWidget.widgetId,
+      newConfig
+    )
     expect(returnedUserWidget).toEqual(expectedWidget)
   })
 
@@ -155,15 +153,13 @@ describe('updateUserWidgetConfig', () => {
     const widgetId = 'ab5082cc-151a-4a9a-9289-06906670fd4e'
 
     // Set some other update error.
-    setMockDBResponse(
-      DatabaseOperation.UPDATE,
-      null,
-      { code: 'SomethingElse' }
-    )
+    setMockDBResponse(DatabaseOperation.UPDATE, null, { code: 'SomethingElse' })
 
-    return expect(updateUserWidgetConfig(userContext,
-        userInfo.id, widgetId, { some: 'config' }))
-      .rejects.toThrow()
+    return expect(
+      updateUserWidgetConfig(userContext, userInfo.id, widgetId, {
+        some: 'config',
+      })
+    ).rejects.toThrow()
   })
 
   it('throws when there is a create error', async () => {
@@ -173,21 +169,19 @@ describe('updateUserWidgetConfig', () => {
     const widgetId = 'ab5082cc-151a-4a9a-9289-06906670fd4e'
 
     // Set that the item doesn't exist when updating.
-    setMockDBResponse(
-      DatabaseOperation.UPDATE,
-      null,
-      { code: 'ConditionalCheckFailedException' }
-    )
+    setMockDBResponse(DatabaseOperation.UPDATE, null, {
+      code: 'ConditionalCheckFailedException',
+    })
 
     // Set some error during creation.
-    setMockDBResponse(
-      DatabaseOperation.CREATE,
-      null,
-      { code: 'SomethingWentWrong' }
-    )
+    setMockDBResponse(DatabaseOperation.CREATE, null, {
+      code: 'SomethingWentWrong',
+    })
 
-    return expect(updateUserWidgetConfig(userContext,
-        userInfo.id, widgetId, { some: 'config' }))
-      .rejects.toThrow()
+    return expect(
+      updateUserWidgetConfig(userContext, userInfo.id, widgetId, {
+        some: 'config',
+      })
+    ).rejects.toThrow()
   })
 })

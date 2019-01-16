@@ -1,29 +1,20 @@
 /* eslint-env jest */
 /* global jasmine */
 
-import {
-    loadFixtures,
-    deleteFixtures
-} from '../utils/fixture-utils'
-import {
-  deleteUser,
-  getNewAuthedUser
-} from '../utils/auth-utils'
+import { loadFixtures, deleteFixtures } from '../utils/fixture-utils'
+import { deleteUser, getNewAuthedUser } from '../utils/auth-utils'
 import fetchQuery from '../utils/fetch-graphql'
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 180e3
 
-var username = null
-var userId = null
-var userIdToken = null
+let username = null
+let userId = null
+let userIdToken = null
 const fixtureUserId = 'gqltest1-12ab-12ab-12ab-123abc456def'
 
 beforeAll(async () => {
   // Create a authed user.
-  const userInfo = await getNewAuthedUser()
-  userId = userInfo.userId
-  userIdToken = userInfo.idToken
-  username = userInfo.username
+  ;({ userId, userIdToken, username } = await getNewAuthedUser())
 })
 
 afterAll(async () => {
@@ -34,15 +25,11 @@ afterAll(async () => {
 beforeEach(async () => {
   // Load fixtures, replacing one of the hardcoded user IDs
   // with the authed user's ID.
-  await loadFixtures('users', [
-    { before: fixtureUserId, after: userId }
-  ])
+  await loadFixtures('users', [{ before: fixtureUserId, after: userId }])
 })
 
 afterEach(async () => {
-  await deleteFixtures('users', [
-    { before: fixtureUserId, after: userId }
-  ])
+  await deleteFixtures('users', [{ before: fixtureUserId, after: userId }])
 })
 
 describe('User table queries', () => {
@@ -59,9 +46,13 @@ describe('User table queries', () => {
           }
       }
     `
-    const response = await fetchQuery(query, {
-      userId: userId
-    }, userIdToken)
+    const response = await fetchQuery(
+      query,
+      {
+        userId,
+      },
+      userIdToken
+    )
     expect(response.data.user.userId).toBe(userId)
     expect(response.data.user.username).toBe('kevin')
     expect(response.data.user.email).toBe('foo@bar.com')
@@ -81,7 +72,7 @@ describe('User table queries', () => {
       }
     `
     const response = await fetchQuery(query, {
-      userId: userId
+      userId,
     })
     expect(response.data).toBeUndefined()
     expect(response.message).toBe('Unauthorized')
@@ -100,9 +91,13 @@ describe('User table queries', () => {
           }
       }
     `
-    const response = await fetchQuery(query, {
-      userId: 'gqltest1-yz89-yz80-yz80-xyz789tuv456' // another user
-    }, userIdToken)
+    const response = await fetchQuery(
+      query,
+      {
+        userId: 'gqltest1-yz89-yz80-yz80-xyz789tuv456', // another user
+      },
+      userIdToken
+    )
     expect(response.data.user).toBeNull()
     expect(response.errors[0].message).toContain('Internal Error: ')
   }, 60e3)

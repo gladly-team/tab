@@ -1,11 +1,4 @@
-import {
-  WIDGET,
-  CHARITY,
-  USER,
-  BACKGROUND_IMAGE,
-  USER_RECRUITS
-} from '../database/constants'
-
+/* eslint no-use-before-define: 0 */
 import {
   GraphQLBoolean,
   GraphQLFloat,
@@ -16,7 +9,7 @@ import {
   GraphQLObjectType,
   GraphQLSchema,
   GraphQLString,
-  GraphQLInputObjectType
+  GraphQLInputObjectType,
 } from 'graphql'
 
 import {
@@ -26,12 +19,17 @@ import {
   globalIdField,
   mutationWithClientMutationId,
   nodeDefinitions,
-  connectionFromPromisedArray
+  connectionFromPromisedArray,
 } from 'graphql-relay'
-
 import {
-  experimentConfig
-} from '../utils/experiments'
+  WIDGET,
+  CHARITY,
+  USER,
+  BACKGROUND_IMAGE,
+  USER_RECRUITS,
+} from '../database/constants'
+
+import { experimentConfig } from '../utils/experiments'
 
 import Widget from '../database/widgets/Widget'
 import getWidget from '../database/widgets/getWidget'
@@ -41,7 +39,7 @@ import {
   updateWidgetData,
   updateWidgetVisibility,
   updateWidgetEnabled,
-  updateWidgetConfig
+  updateWidgetConfig,
 } from '../database/widgets/updateWidget'
 
 import UserModel from '../database/users/UserModel'
@@ -67,27 +65,29 @@ import getCharityVcReceived from '../database/donations/getCharityVcReceived'
 
 import BackgroundImageModel from '../database/backgroundImages/BackgroundImageModel'
 
+// eslint-disable-next-line import/no-named-as-default
 import getRecruits, {
   getTotalRecruitsCount,
-  getRecruitsActiveForAtLeastOneDay
+  getRecruitsActiveForAtLeastOneDay,
 } from '../database/referrals/getRecruits'
 
 import {
   getMoneyRaised,
   getReferralVcReward,
   getDollarsPerDayRate,
-  isGlobalCampaignLive
+  isGlobalCampaignLive,
 } from '../database/globals/globals'
 
 class App {
-  constructor (id) {
+  constructor(id) {
     this.id = id
   }
 
-  static getApp (id) {
+  static getApp(id) {
     return new App(id)
   }
 }
+
 /**
  * We get the node interface and field from the Relay library.
  *
@@ -102,27 +102,40 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     const { type, id } = fromGlobalId(globalId)
     if (type === 'App') {
       return App.getApp(id)
-    } else if (type === USER) {
+    }
+    if (type === USER) {
       return UserModel.get(context.user, id)
-    } else if (type === WIDGET) {
+    }
+    if (type === WIDGET) {
       return getWidget(context.user, id)
-    } else if (type === CHARITY) {
+    }
+    if (type === CHARITY) {
       return CharityModel.get(context.user, id)
-    } else if (type === BACKGROUND_IMAGE) {
+    }
+    if (type === BACKGROUND_IMAGE) {
       return BackgroundImageModel.get(context.user, id)
     }
     return null
   },
-  (obj) => {
+  obj => {
     if (obj instanceof App) {
+      // eslint-disable-next-line no-use-before-define
       return appType
-    } else if (obj instanceof UserModel) {
+    }
+    if (obj instanceof UserModel) {
+      // eslint-disable-next-line no-use-before-define
       return userType
-    } else if (obj instanceof Widget) {
+    }
+    if (obj instanceof Widget) {
+      // eslint-disable-next-line no-use-before-define
       return widgetType
-    } else if (obj instanceof CharityModel) {
+    }
+    if (obj instanceof CharityModel) {
+      // eslint-disable-next-line no-use-before-define
       return charityType
-    } else if (obj instanceof BackgroundImageModel) {
+    }
+    if (obj instanceof BackgroundImageModel) {
+      // eslint-disable-next-line no-use-before-define
       return backgroundImageType
     }
     return null
@@ -140,45 +153,46 @@ const backgroundImageType = new GraphQLObjectType({
     id: globalIdField(BACKGROUND_IMAGE),
     name: {
       type: GraphQLString,
-      description: 'the background image name'
+      description: 'the background image name',
     },
     image: {
       type: GraphQLString,
-      description: 'The image filename'
+      description: 'The image filename',
     },
     imageURL: {
       type: GraphQLString,
-      description: 'The image file URL'
+      description: 'The image file URL',
     },
     thumbnail: {
       type: GraphQLString,
-      description: 'The image thumbnail filename'
+      description: 'The image thumbnail filename',
     },
     thumbnailURL: {
       type: GraphQLString,
-      description: 'The image thumbnail URL'
+      description: 'The image thumbnail URL',
     },
     timestamp: {
       type: GraphQLString,
-      description: 'ISO datetime string of when the background image was last set'
-    }
+      description:
+        'ISO datetime string of when the background image was last set',
+    },
   }),
-  interfaces: [nodeInterface]
+  interfaces: [nodeInterface],
 })
 
 const maxTabsDayType = new GraphQLObjectType({
   name: 'MaxTabsDay',
-  description: 'Info about the user\'s day of most opened tabs',
+  description: "Info about the user's day of most opened tabs",
   fields: () => ({
     date: {
       type: GraphQLString,
-      description: 'The day the most tabs were opened'
+      description: 'The day the most tabs were opened',
     },
     numTabs: {
       type: GraphQLInt,
-      description: 'The number of tabs opened on that day'
-    }
-  })
+      description: 'The number of tabs opened on that day',
+    },
+  }),
 })
 
 const ExperimentGroupsType = new GraphQLInputObjectType({
@@ -191,10 +205,14 @@ const ExperimentGroupsType = new GraphQLInputObjectType({
         description: 'The test of allowing anonymous user authentication',
         values: {
           NONE: { value: experimentConfig.anonSignIn.NONE },
-          AUTHED_USER_ONLY: { value: experimentConfig.anonSignIn.AUTHED_USER_ONLY },
-          ANONYMOUS_ALLOWED: { value: experimentConfig.anonSignIn.ANONYMOUS_ALLOWED }
-        }
-      })
+          AUTHED_USER_ONLY: {
+            value: experimentConfig.anonSignIn.AUTHED_USER_ONLY,
+          },
+          ANONYMOUS_ALLOWED: {
+            value: experimentConfig.anonSignIn.ANONYMOUS_ALLOWED,
+          },
+        },
+      }),
     },
     variousAdSizes: {
       type: new GraphQLEnumType({
@@ -203,9 +221,9 @@ const ExperimentGroupsType = new GraphQLInputObjectType({
         values: {
           NONE: { value: experimentConfig.variousAdSizes.NONE },
           STANDARD: { value: experimentConfig.variousAdSizes.STANDARD },
-          VARIOUS: { value: experimentConfig.variousAdSizes.VARIOUS }
-        }
-      })
+          VARIOUS: { value: experimentConfig.variousAdSizes.VARIOUS },
+        },
+      }),
     },
     thirdAd: {
       type: new GraphQLEnumType({
@@ -214,9 +232,9 @@ const ExperimentGroupsType = new GraphQLInputObjectType({
         values: {
           NONE: { value: experimentConfig.thirdAd.NONE },
           TWO_ADS: { value: experimentConfig.thirdAd.TWO_ADS },
-          THREE_ADS: { value: experimentConfig.thirdAd.THREE_ADS }
-        }
-      })
+          THREE_ADS: { value: experimentConfig.thirdAd.THREE_ADS },
+        },
+      }),
     },
     oneAdForNewUsers: {
       type: new GraphQLEnumType({
@@ -225,9 +243,11 @@ const ExperimentGroupsType = new GraphQLInputObjectType({
         values: {
           NONE: { value: experimentConfig.oneAdForNewUsers.NONE },
           DEFAULT: { value: experimentConfig.oneAdForNewUsers.DEFAULT },
-          ONE_AD_AT_FIRST: { value: experimentConfig.oneAdForNewUsers.ONE_AD_AT_FIRST }
-        }
-      })
+          ONE_AD_AT_FIRST: {
+            value: experimentConfig.oneAdForNewUsers.ONE_AD_AT_FIRST,
+          },
+        },
+      }),
     },
     adExplanation: {
       type: new GraphQLEnumType({
@@ -236,11 +256,13 @@ const ExperimentGroupsType = new GraphQLInputObjectType({
         values: {
           NONE: { value: experimentConfig.adExplanation.NONE },
           DEFAULT: { value: experimentConfig.adExplanation.DEFAULT },
-          SHOW_EXPLANATION: { value: experimentConfig.adExplanation.SHOW_EXPLANATION }
-        }
-      })
-    }
-  }
+          SHOW_EXPLANATION: {
+            value: experimentConfig.adExplanation.SHOW_EXPLANATION,
+          },
+        },
+      }),
+    },
+  },
 })
 
 // TODO: fetch only the fields we need:
@@ -252,68 +274,68 @@ const userType = new GraphQLObjectType({
     id: globalIdField(USER),
     userId: {
       type: GraphQLString,
-      description: 'Users\'s username',
-      resolve: (user, _) => user.id
+      description: "Users's username",
+      resolve: user => user.id,
     },
     backgroundImage: {
       type: backgroundImageType,
-      description: 'Users\'s background image'
+      description: "Users's background image",
     },
     username: {
       type: GraphQLString,
-      description: 'Users\'s username'
+      description: "Users's username",
     },
     email: {
       type: GraphQLString,
-      description: 'User\'s email'
+      description: "User's email",
     },
     joined: {
       type: GraphQLString,
-      description: 'ISO datetime string of when the user joined'
+      description: 'ISO datetime string of when the user joined',
     },
     justCreated: {
       type: GraphQLBoolean,
-      description: 'Whether or not the user was created during this request;' /
+      description:
+        'Whether or not the user was created during this request;' /
         'helpful for a "get or create" mutation',
-      resolve: (user, _) => {
+      resolve: user =>
         // The user will only have the 'justCreated' field when it's a
         // brand new user item
-        return !!user.justCreated
-      }
+        !!user.justCreated,
     },
     vcCurrent: {
       type: GraphQLInt,
-      description: 'User\'s current VC'
+      description: "User's current VC",
     },
     vcAllTime: {
       type: GraphQLInt,
-      description: 'User\'s all time VC'
+      description: "User's all time VC",
     },
     tabs: {
       type: GraphQLInt,
-      description: 'User\'s all time tab count'
+      description: "User's all time tab count",
     },
     tabsToday: {
       type: GraphQLInt,
-      description: 'User\'s tab count for today'
+      description: "User's tab count for today",
     },
     maxTabsDay: {
       type: maxTabsDayType,
-      description: 'Info about the user\'s day of most opened tabs',
-      resolve: (user, _) => user.maxTabsDay.maxDay
+      description: "Info about the user's day of most opened tabs",
+      resolve: user => user.maxTabsDay.maxDay,
     },
     level: {
       type: GraphQLInt,
-      description: 'User\'s vc'
+      description: "User's vc",
     },
     // TODO: change to heartsForNextLevel to be able to get progress
     heartsUntilNextLevel: {
       type: GraphQLInt,
-      description: 'Remaing hearts until next level.'
+      description: 'Remaing hearts until next level.',
     },
     vcDonatedAllTime: {
       type: GraphQLInt,
-      description: 'User\'s total vc donated'
+      description: "User's total vc donated",
     },
     recruits: {
       type: userRecruitsConnection,
@@ -321,47 +343,54 @@ const userType = new GraphQLObjectType({
       args: {
         ...connectionArgs,
         startTime: { type: GraphQLString },
-        endTime: { type: GraphQLString }
+        endTime: { type: GraphQLString },
       },
-      resolve: (user, args, context) => connectionFromPromisedArray(
-        getRecruits(context.user, user.id, args.startTime, args.endTime), args)
+      resolve: (user, args, context) =>
+        connectionFromPromisedArray(
+          getRecruits(context.user, user.id, args.startTime, args.endTime),
+          args
+        ),
     },
     numUsersRecruited: {
       type: GraphQLInt,
-      description: 'The number of users this user has recruited'
+      description: 'The number of users this user has recruited',
     },
     widgets: {
       type: widgetConnection,
       description: 'User widgets',
       args: {
         ...connectionArgs,
-        enabled: { type: GraphQLBoolean }
+        enabled: { type: GraphQLBoolean },
       },
-      resolve: (user, args, context) => connectionFromPromisedArray(
-        getWidgets(context.user, user.id, args.enabled), args)
+      resolve: (user, args, context) =>
+        connectionFromPromisedArray(
+          getWidgets(context.user, user.id, args.enabled),
+          args
+        ),
     },
     activeWidget: {
       type: GraphQLString,
-      description: 'User\'s active widget id'
+      description: "User's active widget id",
     },
     backgroundOption: {
       type: GraphQLString,
-      description: 'User\'s background option'
+      description: "User's background option",
     },
     customImage: {
       type: GraphQLString,
-      description: 'User\'s background custom image'
+      description: "User's background custom image",
     },
     backgroundColor: {
       type: GraphQLString,
-      description: 'User\'s background color'
+      description: "User's background color",
     },
     mergedIntoExistingUser: {
       type: GraphQLBoolean,
-      description: 'Whether this user was created by an existing user and then merged into the existing user'
-    }
+      description:
+        'Whether this user was created by an existing user and then merged into the existing user',
+    },
   }),
-  interfaces: [nodeInterface]
+  interfaces: [nodeInterface],
 })
 
 const userRecruitType = new GraphQLObjectType({
@@ -376,12 +405,15 @@ const userRecruitType = new GraphQLObjectType({
     // just use a compound value of "referringUser" and "recruitedAt", which is
     // almost certainly unique, and just not implement nodeInterface now.
     // https://github.com/graphql/graphql-relay-js/blob/4fdadd3bbf3d5aaf66f1799be3e4eb010c115a4a/src/node/node.js#L138
-    id: globalIdField(USER_RECRUITS, (recruit) => `${recruit.referringUser}::${recruit.recruitedAt}`),
+    id: globalIdField(
+      USER_RECRUITS,
+      recruit => `${recruit.referringUser}::${recruit.recruitedAt}`
+    ),
     recruitedAt: {
       type: GraphQLString,
-      description: 'ISO datetime string of when the recruited user joined'
-    }
-  })
+      description: 'ISO datetime string of when the recruited user joined',
+    },
+  }),
   // We haven't implemented nodeInterface here because a refetch is unlikely. See above.
   // interfaces: [nodeInterface]
 })
@@ -393,38 +425,38 @@ const widgetType = new GraphQLObjectType({
     id: globalIdField(WIDGET),
     name: {
       type: GraphQLString,
-      description: 'Widget display name'
+      description: 'Widget display name',
     },
     type: {
       type: GraphQLString,
-      description: 'Widget type'
+      description: 'Widget type',
     },
     icon: {
       type: GraphQLString,
-      description: 'Widget icon'
+      description: 'Widget icon',
     },
     enabled: {
       type: GraphQLBoolean,
-      description: 'The Widget enabled state'
+      description: 'The Widget enabled state',
     },
     visible: {
       type: GraphQLBoolean,
-      description: 'The Widget visible state'
+      description: 'The Widget visible state',
     },
     data: {
       type: GraphQLString,
-      description: 'Widget data.'
+      description: 'Widget data.',
     },
     config: {
       type: GraphQLString,
-      description: 'Widget user specific configuration.'
+      description: 'Widget user specific configuration.',
     },
     settings: {
       type: GraphQLString,
-      description: 'Widget general configuration.'
-    }
+      description: 'Widget general configuration.',
+    },
   }),
-  interfaces: [nodeInterface]
+  interfaces: [nodeInterface],
 })
 
 const charityType = new GraphQLObjectType({
@@ -434,49 +466,54 @@ const charityType = new GraphQLObjectType({
     id: globalIdField(CHARITY),
     name: {
       type: GraphQLString,
-      description: 'the charity name'
+      description: 'the charity name',
     },
     category: {
       type: GraphQLString,
-      description: 'the charity category'
+      description: 'the charity category',
     },
     website: {
       type: GraphQLString,
-      description: 'the charity website'
+      description: 'the charity website',
     },
     description: {
       type: GraphQLString,
-      description: 'the charity description'
+      description: 'the charity description',
     },
     impact: {
       type: GraphQLString,
-      description: 'the charity impact message'
+      description: 'the charity impact message',
     },
     logo: {
       type: GraphQLString,
-      description: 'the charity logo image URI'
+      description: 'the charity logo image URI',
     },
     image: {
       type: GraphQLString,
-      description: 'the charity post-donation image URI'
+      description: 'the charity post-donation image URI',
     },
     imageCaption: {
       type: GraphQLString,
-      description: 'An optional caption for the post-donation image'
+      description: 'An optional caption for the post-donation image',
     },
     vcReceived: {
       type: GraphQLInt,
-      description: 'The number of VC the charity has received in a given time period.',
+      description:
+        'The number of VC the charity has received in a given time period.',
       args: {
         startTime: { type: GraphQLString },
-        endTime: { type: GraphQLString }
+        endTime: { type: GraphQLString },
       },
-      resolve: (charity, args, context) => {
-        return getCharityVcReceived(context.user, charity.id, args.startTime, args.endTime)
-      }
-    }
+      resolve: (charity, args, context) =>
+        getCharityVcReceived(
+          context.user,
+          charity.id,
+          args.startTime,
+          args.endTime
+        ),
+    },
   }),
-  interfaces: [nodeInterface]
+  interfaces: [nodeInterface],
 })
 
 const appType = new GraphQLObjectType({
@@ -486,58 +523,55 @@ const appType = new GraphQLObjectType({
     id: globalIdField('App'),
     moneyRaised: {
       type: GraphQLFloat,
-      resolve: () => {
-        return getMoneyRaised()
-      }
+      resolve: () => getMoneyRaised(),
     },
     dollarsPerDayRate: {
       type: GraphQLFloat,
-      resolve: () => {
-        return getDollarsPerDayRate()
-      }
+      resolve: () => getDollarsPerDayRate(),
     },
     referralVcReward: {
       type: GraphQLInt,
-      resolve: () => {
-        return getReferralVcReward()
-      }
+      resolve: () => getReferralVcReward(),
     },
     widgets: {
       type: widgetConnection,
       description: 'All the widgets',
       args: connectionArgs,
-      resolve: (_, args, context) => connectionFromPromisedArray(
-        getAllBaseWidgets(context.user), args)
+      resolve: (_, args, context) =>
+        connectionFromPromisedArray(getAllBaseWidgets(context.user), args),
     },
     charity: {
       type: charityType,
       description: 'One of the charities',
       args: {
-        charityId: { type: new GraphQLNonNull(GraphQLString) }
+        charityId: { type: new GraphQLNonNull(GraphQLString) },
       },
-      resolve: (_, { charityId }, context) => CharityModel.get(context.user, charityId)
+      resolve: (_, { charityId }, context) =>
+        CharityModel.get(context.user, charityId),
     },
     charities: {
       type: charityConnection,
       description: 'All the charities',
       args: connectionArgs,
-      resolve: (_, args, context) => connectionFromPromisedArray(
-        getCharities(context.user), args)
+      resolve: (_, args, context) =>
+        connectionFromPromisedArray(getCharities(context.user), args),
     },
     backgroundImages: {
       type: backgroundImageConnection,
       description: 'All the background Images',
       args: connectionArgs,
-      resolve: (_, args, context) => connectionFromPromisedArray(BackgroundImageModel.getAll(context.user), args)
+      resolve: (_, args, context) =>
+        connectionFromPromisedArray(
+          BackgroundImageModel.getAll(context.user),
+          args
+        ),
     },
     isGlobalCampaignLive: {
       type: GraphQLBoolean,
-      resolve: () => {
-        return isGlobalCampaignLive()
-      }
-    }
+      resolve: () => isGlobalCampaignLive(),
+    },
   }),
-  interfaces: [nodeInterface]
+  interfaces: [nodeInterface],
 })
 
 const customErrorType = new GraphQLObjectType({
@@ -546,13 +580,13 @@ const customErrorType = new GraphQLObjectType({
   fields: () => ({
     code: {
       type: GraphQLString,
-      description: 'The error code'
+      description: 'The error code',
     },
     message: {
       type: GraphQLString,
-      description: 'The error message'
-    }
-  })
+      description: 'The error message',
+    },
+  }),
 })
 
 /**
@@ -563,15 +597,15 @@ const customErrorType = new GraphQLObjectType({
  */
 const { connectionType: widgetConnection } = connectionDefinitions({
   name: WIDGET,
-  nodeType: widgetType
+  nodeType: widgetType,
 })
 const { connectionType: charityConnection } = connectionDefinitions({
   name: CHARITY,
-  nodeType: charityType
+  nodeType: charityType,
 })
 const { connectionType: backgroundImageConnection } = connectionDefinitions({
   name: BACKGROUND_IMAGE,
-  nodeType: backgroundImageType
+  nodeType: backgroundImageType,
 })
 const { connectionType: userRecruitsConnection } = connectionDefinitions({
   name: USER_RECRUITS,
@@ -584,14 +618,16 @@ const { connectionType: userRecruitsConnection } = connectionDefinitions({
     totalRecruits: {
       type: GraphQLInt,
       description: 'The count of users recruited (signed up)',
-      resolve: connection => getTotalRecruitsCount(connection.edges)
+      resolve: connection => getTotalRecruitsCount(connection.edges),
     },
     recruitsActiveForAtLeastOneDay: {
       type: GraphQLInt,
-      description: 'The count of users recruited who remained active for one day or more',
-      resolve: connection => getRecruitsActiveForAtLeastOneDay(connection.edges)
-    }
-  }
+      description:
+        'The count of users recruited who remained active for one day or more',
+      resolve: connection =>
+        getRecruitsActiveForAtLeastOneDay(connection.edges),
+    },
+  },
 })
 
 /**
@@ -601,18 +637,18 @@ const logTabMutation = mutationWithClientMutationId({
   name: 'LogTab',
   inputFields: {
     userId: { type: new GraphQLNonNull(GraphQLString) },
-    tabId: { type: GraphQLString }
+    tabId: { type: GraphQLString },
   },
   outputFields: {
     user: {
       type: userType,
-      resolve: user => user
-    }
+      resolve: user => user,
+    },
   },
   mutateAndGetPayload: ({ userId, tabId }, context) => {
     const { id } = fromGlobalId(userId)
     return logTab(context.user, id, tabId)
-  }
+  },
 })
 
 /**
@@ -624,20 +660,24 @@ const EncodedRevenueValueType = new GraphQLInputObjectType({
   description: 'An object representing a single revenue value',
   fields: {
     encodingType: {
-      type: new GraphQLNonNull(new GraphQLEnumType({
-        name: 'EncodedRevenueValueTypeEnum',
-        description: 'The type of transformation we should use to resolve the object into a revenue value',
-        values: {
-          AMAZON_CPM: { value: 'AMAZON_CPM' }
-        }
-      }))
+      type: new GraphQLNonNull(
+        new GraphQLEnumType({
+          name: 'EncodedRevenueValueTypeEnum',
+          description:
+            'The type of transformation we should use to resolve the object into a revenue value',
+          values: {
+            AMAZON_CPM: { value: 'AMAZON_CPM' },
+          },
+        })
+      ),
     },
     encodedValue: {
-      description: 'A string that we can decode to a revenue value (float) using the "encodingType" method',
-      type: new GraphQLNonNull(GraphQLString)
+      description:
+        'A string that we can decode to a revenue value (float) using the "encodingType" method',
+      type: new GraphQLNonNull(GraphQLString),
     },
-    adSize: { type: GraphQLString }
-  }
+    adSize: { type: GraphQLString },
+  },
 })
 
 const logUserRevenueMutation = mutationWithClientMutationId({
@@ -649,29 +689,31 @@ const logUserRevenueMutation = mutationWithClientMutationId({
     // in input fields:
     // https://github.com/graphql/graphql-js/issues/207
     encodedRevenue: {
-      description: 'A revenue value encoded because it is not available on the client side',
-      type: EncodedRevenueValueType
+      description:
+        'A revenue value encoded because it is not available on the client side',
+      type: EncodedRevenueValueType,
     },
     // Required if both "revenue" and "encodedRevenue" fields are present.
     aggregationOperation: {
       type: new GraphQLEnumType({
         name: 'LogUserRevenueAggregationOperationEnum',
-        description: 'The operation to use to resolve multiple values into a final revenue value. ' /
+        description:
+          'The operation to use to resolve multiple values into a final revenue value. ' /
           'We currently only support "MAX".',
         values: {
-          MAX: { value: 'MAX' }
-        }
-      })
+          MAX: { value: 'MAX' },
+        },
+      }),
     },
     dfpAdvertiserId: { type: GraphQLString },
     adUnitCode: { type: GraphQLString },
     tabId: { type: GraphQLString },
-    adSize: { type: GraphQLString }
+    adSize: { type: GraphQLString },
   },
   outputFields: {
     success: {
-      type: new GraphQLNonNull(GraphQLBoolean)
-    }
+      type: new GraphQLNonNull(GraphQLBoolean),
+    },
   },
   mutateAndGetPayload: (
     {
@@ -682,14 +724,23 @@ const logUserRevenueMutation = mutationWithClientMutationId({
       aggregationOperation,
       tabId,
       adSize,
-      adUnitCode
+      adUnitCode,
     },
     context
   ) => {
     const { id } = fromGlobalId(userId)
-    return logRevenue(context.user, id, revenue, dfpAdvertiserId, encodedRevenue,
-      aggregationOperation, tabId, adSize, adUnitCode)
-  }
+    return logRevenue(
+      context.user,
+      id,
+      revenue,
+      dfpAdvertiserId,
+      encodedRevenue,
+      aggregationOperation,
+      tabId,
+      adSize,
+      adUnitCode
+    )
+  },
 })
 
 /**
@@ -700,23 +751,23 @@ const donateVcMutation = mutationWithClientMutationId({
   inputFields: {
     userId: { type: new GraphQLNonNull(GraphQLString) },
     charityId: { type: new GraphQLNonNull(GraphQLString) },
-    vc: { type: new GraphQLNonNull(GraphQLInt) }
+    vc: { type: new GraphQLNonNull(GraphQLInt) },
   },
   outputFields: {
     user: {
       type: userType,
-      resolve: data => data.user
+      resolve: data => data.user,
     },
     errors: {
       type: new GraphQLList(customErrorType),
-      resolve: data => data.errors
-    }
+      resolve: data => data.errors,
+    },
   },
-  mutateAndGetPayload: ({userId, charityId, vc}, context) => {
+  mutateAndGetPayload: ({ userId, charityId, vc }, context) => {
     const userGlobalObj = fromGlobalId(userId)
     const charityGlobalObj = fromGlobalId(charityId)
     return donateVc(context.user, userGlobalObj.id, charityGlobalObj.id, vc)
-  }
+  },
 })
 
 /**
@@ -726,20 +777,23 @@ const setUserBkgImageMutation = mutationWithClientMutationId({
   name: 'SetUserBkgImage',
   inputFields: {
     userId: { type: new GraphQLNonNull(GraphQLString) },
-    imageId: { type: new GraphQLNonNull(GraphQLString) }
+    imageId: { type: new GraphQLNonNull(GraphQLString) },
   },
   outputFields: {
     user: {
       type: userType,
-      resolve: user => user
-    }
+      resolve: user => user,
+    },
   },
   mutateAndGetPayload: ({ userId, imageId }, context) => {
     const userGlobalObj = fromGlobalId(userId)
     const bckImageGlobalObj = fromGlobalId(imageId)
     return setBackgroundImage(
-      context.user, userGlobalObj.id, bckImageGlobalObj.id)
-  }
+      context.user,
+      userGlobalObj.id,
+      bckImageGlobalObj.id
+    )
+  },
 })
 
 /**
@@ -749,18 +803,18 @@ const setUserBkgColorMutation = mutationWithClientMutationId({
   name: 'SetUserBkgColor',
   inputFields: {
     userId: { type: new GraphQLNonNull(GraphQLString) },
-    color: { type: new GraphQLNonNull(GraphQLString) }
+    color: { type: new GraphQLNonNull(GraphQLString) },
   },
   outputFields: {
     user: {
       type: userType,
-      resolve: user => user
-    }
+      resolve: user => user,
+    },
   },
-  mutateAndGetPayload: ({userId, color}, context) => {
+  mutateAndGetPayload: ({ userId, color }, context) => {
     const userGlobalObj = fromGlobalId(userId)
     return setBackgroundColor(context.user, userGlobalObj.id, color)
-  }
+  },
 })
 
 /**
@@ -770,19 +824,22 @@ const setUserBkgCustomImageMutation = mutationWithClientMutationId({
   name: 'SetUserBkgCustomImage',
   inputFields: {
     userId: { type: new GraphQLNonNull(GraphQLString) },
-    image: { type: new GraphQLNonNull(GraphQLString) }
+    image: { type: new GraphQLNonNull(GraphQLString) },
   },
   outputFields: {
     user: {
       type: userType,
-      resolve: user => user
-    }
+      resolve: user => user,
+    },
   },
-  mutateAndGetPayload: ({userId, image}, context) => {
+  mutateAndGetPayload: ({ userId, image }, context) => {
     const userGlobalObj = fromGlobalId(userId)
     return setBackgroundImageFromCustomURL(
-      context.user, userGlobalObj.id, image)
-  }
+      context.user,
+      userGlobalObj.id,
+      image
+    )
+  },
 })
 
 /**
@@ -791,18 +848,18 @@ const setUserBkgCustomImageMutation = mutationWithClientMutationId({
 const setUserBkgDailyImageMutation = mutationWithClientMutationId({
   name: 'SetUserBkgDailyImage',
   inputFields: {
-    userId: { type: new GraphQLNonNull(GraphQLString) }
+    userId: { type: new GraphQLNonNull(GraphQLString) },
   },
   outputFields: {
     user: {
       type: userType,
-      resolve: user => user
-    }
+      resolve: user => user,
+    },
   },
-  mutateAndGetPayload: ({userId}, context) => {
+  mutateAndGetPayload: ({ userId }, context) => {
     const userGlobalObj = fromGlobalId(userId)
     return setBackgroundImageDaily(context.user, userGlobalObj.id)
-  }
+  },
 })
 
 /**
@@ -812,22 +869,22 @@ const setUserActiveWidgetMutation = mutationWithClientMutationId({
   name: 'SetUserActiveWidget',
   inputFields: {
     userId: { type: new GraphQLNonNull(GraphQLString) },
-    widgetId: { type: new GraphQLNonNull(GraphQLString) }
+    widgetId: { type: new GraphQLNonNull(GraphQLString) },
   },
   outputFields: {
     user: {
       type: userType,
-      resolve: user => user
-    }
+      resolve: user => user,
+    },
   },
-  mutateAndGetPayload: ({userId, widgetId}, context) => {
+  mutateAndGetPayload: ({ userId, widgetId }, context) => {
     const userGlobalObj = fromGlobalId(userId)
     // FIXME: widgetId should use `fromGlobalId` first. Note that
     // the active widget ID in the database for existing users is
     // currently using the global ID, so any change must be
     // backwards-compatible.
     return setActiveWidget(context.user, userGlobalObj.id, widgetId)
-  }
+  },
 })
 
 /**
@@ -838,21 +895,24 @@ const updateWidgetDataMutation = mutationWithClientMutationId({
   inputFields: {
     userId: { type: new GraphQLNonNull(GraphQLString) },
     widgetId: { type: new GraphQLNonNull(GraphQLString) },
-    data: { type: new GraphQLNonNull(GraphQLString) }
+    data: { type: new GraphQLNonNull(GraphQLString) },
   },
   outputFields: {
     widget: {
       type: widgetType,
-      resolve: (userWidget) => {
-        return userWidget
-      }
-    }
+      resolve: userWidget => userWidget,
+    },
   },
-  mutateAndGetPayload: ({userId, widgetId, data}, context) => {
+  mutateAndGetPayload: ({ userId, widgetId, data }, context) => {
     const userGlobalObj = fromGlobalId(userId)
     const widgetGlobalObj = fromGlobalId(widgetId)
-    return updateWidgetData(context.user, userGlobalObj.id, widgetGlobalObj.id, data)
-  }
+    return updateWidgetData(
+      context.user,
+      userGlobalObj.id,
+      widgetGlobalObj.id,
+      data
+    )
+  },
 })
 
 /**
@@ -863,21 +923,24 @@ const updateWidgetVisibilityMutation = mutationWithClientMutationId({
   inputFields: {
     userId: { type: new GraphQLNonNull(GraphQLString) },
     widgetId: { type: new GraphQLNonNull(GraphQLString) },
-    visible: { type: new GraphQLNonNull(GraphQLBoolean) }
+    visible: { type: new GraphQLNonNull(GraphQLBoolean) },
   },
   outputFields: {
     widget: {
       type: widgetType,
-      resolve: (userWidget) => {
-        return userWidget
-      }
-    }
+      resolve: userWidget => userWidget,
+    },
   },
-  mutateAndGetPayload: ({userId, widgetId, visible}, context) => {
+  mutateAndGetPayload: ({ userId, widgetId, visible }, context) => {
     const userGlobalObj = fromGlobalId(userId)
     const widgetGlobalObj = fromGlobalId(widgetId)
-    return updateWidgetVisibility(context.user, userGlobalObj.id, widgetGlobalObj.id, visible)
-  }
+    return updateWidgetVisibility(
+      context.user,
+      userGlobalObj.id,
+      widgetGlobalObj.id,
+      visible
+    )
+  },
 })
 
 /**
@@ -888,21 +951,24 @@ const updateWidgetEnabledMutation = mutationWithClientMutationId({
   inputFields: {
     userId: { type: new GraphQLNonNull(GraphQLString) },
     widgetId: { type: new GraphQLNonNull(GraphQLString) },
-    enabled: { type: new GraphQLNonNull(GraphQLBoolean) }
+    enabled: { type: new GraphQLNonNull(GraphQLBoolean) },
   },
   outputFields: {
     widget: {
       type: widgetType,
-      resolve: (userWidget) => {
-        return userWidget
-      }
-    }
+      resolve: userWidget => userWidget,
+    },
   },
-  mutateAndGetPayload: ({userId, widgetId, enabled}, context) => {
+  mutateAndGetPayload: ({ userId, widgetId, enabled }, context) => {
     const userGlobalObj = fromGlobalId(userId)
     const widgetGlobalObj = fromGlobalId(widgetId)
-    return updateWidgetEnabled(context.user, userGlobalObj.id, widgetGlobalObj.id, enabled)
-  }
+    return updateWidgetEnabled(
+      context.user,
+      userGlobalObj.id,
+      widgetGlobalObj.id,
+      enabled
+    )
+  },
 })
 
 /**
@@ -913,29 +979,32 @@ const updateWidgetConfigMutation = mutationWithClientMutationId({
   inputFields: {
     userId: { type: new GraphQLNonNull(GraphQLString) },
     widgetId: { type: new GraphQLNonNull(GraphQLString) },
-    config: { type: new GraphQLNonNull(GraphQLString) }
+    config: { type: new GraphQLNonNull(GraphQLString) },
   },
   outputFields: {
     widget: {
       type: widgetType,
-      resolve: (userWidget) => {
-        return userWidget
-      }
-    }
+      resolve: userWidget => userWidget,
+    },
   },
-  mutateAndGetPayload: ({userId, widgetId, config}, context) => {
+  mutateAndGetPayload: ({ userId, widgetId, config }, context) => {
     const userGlobalObj = fromGlobalId(userId)
     const widgetGlobalObj = fromGlobalId(widgetId)
-    return updateWidgetConfig(context.user, userGlobalObj.id, widgetGlobalObj.id, config)
-  }
+    return updateWidgetConfig(
+      context.user,
+      userGlobalObj.id,
+      widgetGlobalObj.id,
+      config
+    )
+  },
 })
 
 const ReferralDataInput = new GraphQLInputObjectType({
   name: 'ReferralData',
   fields: {
     referringUser: { type: GraphQLString },
-    referringChannel: { type: GraphQLString }
-  }
+    referringChannel: { type: GraphQLString },
+  },
 })
 
 /**
@@ -951,19 +1020,34 @@ const createNewUserMutation = mutationWithClientMutationId({
     referralData: { type: ReferralDataInput },
     experimentGroups: { type: ExperimentGroupsType },
     extensionInstallId: { type: GraphQLString },
-    extensionInstallTimeApprox: { type: GraphQLString }
+    extensionInstallTimeApprox: { type: GraphQLString },
   },
   outputFields: {
     user: {
       type: userType,
-      resolve: user => user
-    }
+      resolve: user => user,
+    },
   },
-  mutateAndGetPayload: ({ userId, email, referralData, experimentGroups,
-    extensionInstallId, extensionInstallTimeApprox }, context) => {
-    return createUser(context.user, userId, email, referralData, experimentGroups,
-      extensionInstallId, extensionInstallTimeApprox)
-  }
+  mutateAndGetPayload: (
+    {
+      userId,
+      email,
+      referralData,
+      experimentGroups,
+      extensionInstallId,
+      extensionInstallTimeApprox,
+    },
+    context
+  ) =>
+    createUser(
+      context.user,
+      userId,
+      email,
+      referralData,
+      experimentGroups,
+      extensionInstallId,
+      extensionInstallTimeApprox
+    ),
 })
 
 /**
@@ -973,40 +1057,44 @@ const updateUserExperimentGroupsMutation = mutationWithClientMutationId({
   name: 'UpdateUserExperimentGroups',
   inputFields: {
     userId: { type: new GraphQLNonNull(GraphQLString) },
-    experimentGroups: { type: ExperimentGroupsType }
+    experimentGroups: { type: ExperimentGroupsType },
   },
   outputFields: {
     user: {
       type: userType,
-      resolve: user => user
-    }
+      resolve: user => user,
+    },
   },
   mutateAndGetPayload: ({ userId, experimentGroups }, context) => {
     const userGlobalObj = fromGlobalId(userId)
-    return logUserExperimentGroups(context.user, userGlobalObj.id, experimentGroups)
-  }
+    return logUserExperimentGroups(
+      context.user,
+      userGlobalObj.id,
+      experimentGroups
+    )
+  },
 })
 
 const setUsernameMutation = mutationWithClientMutationId({
   name: 'SetUsername',
   inputFields: {
     userId: { type: new GraphQLNonNull(GraphQLString) },
-    username: { type: new GraphQLNonNull(GraphQLString) }
+    username: { type: new GraphQLNonNull(GraphQLString) },
   },
   outputFields: {
     user: {
       type: userType,
-      resolve: data => data.user
+      resolve: data => data.user,
     },
     errors: {
       type: new GraphQLList(customErrorType),
-      resolve: data => data.errors
-    }
+      resolve: data => data.errors,
+    },
   },
-  mutateAndGetPayload: ({userId, username}, context) => {
+  mutateAndGetPayload: ({ userId, username }, context) => {
     const userGlobalObj = fromGlobalId(userId)
     return setUsername(context.user, userGlobalObj.id, username)
-  }
+  },
 })
 
 /**
@@ -1016,16 +1104,15 @@ const mergeIntoExistingUserMutation = mutationWithClientMutationId({
   name: 'MergeIntoExistingUser',
   inputFields: {
     // Note that this is the raw user ID (not the Relay global).
-    userId: { type: new GraphQLNonNull(GraphQLString) }
+    userId: { type: new GraphQLNonNull(GraphQLString) },
   },
   outputFields: {
     success: {
-      type: new GraphQLNonNull(GraphQLBoolean)
-    }
+      type: new GraphQLNonNull(GraphQLBoolean),
+    },
   },
-  mutateAndGetPayload: ({ userId }, context) => {
-    return mergeIntoExistingUser(context.user, userId)
-  }
+  mutateAndGetPayload: ({ userId }, context) =>
+    mergeIntoExistingUser(context.user, userId),
 })
 
 /**
@@ -1035,16 +1122,15 @@ const logEmailVerifiedMutation = mutationWithClientMutationId({
   name: 'LogEmailVerifiedMutation',
   inputFields: {
     // Note that this is the raw user ID (not the Relay global).
-    userId: { type: new GraphQLNonNull(GraphQLString) }
+    userId: { type: new GraphQLNonNull(GraphQLString) },
   },
   outputFields: {
     user: {
-      type: userType
-    }
+      type: userType,
+    },
   },
-  mutateAndGetPayload: ({ userId }, context) => {
-    return logEmailVerified(context.user, userId)
-  }
+  mutateAndGetPayload: ({ userId }, context) =>
+    logEmailVerified(context.user, userId),
 })
 
 /**
@@ -1055,17 +1141,20 @@ const logUserDataConsentMutation = mutationWithClientMutationId({
   inputFields: {
     userId: { type: new GraphQLNonNull(GraphQLString) },
     consentString: { type: new GraphQLNonNull(GraphQLString) },
-    isGlobalConsent: { type: new GraphQLNonNull(GraphQLBoolean) }
+    isGlobalConsent: { type: new GraphQLNonNull(GraphQLBoolean) },
   },
   outputFields: {
     success: {
-      type: new GraphQLNonNull(GraphQLBoolean)
-    }
+      type: new GraphQLNonNull(GraphQLBoolean),
+    },
   },
-  mutateAndGetPayload: ({ userId, consentString, isGlobalConsent }, context) => {
+  mutateAndGetPayload: (
+    { userId, consentString, isGlobalConsent },
+    context
+  ) => {
     const { id } = fromGlobalId(userId)
     return logUserDataConsent(context.user, id, consentString, isGlobalConsent)
-  }
+  },
 })
 
 /**
@@ -1079,16 +1168,16 @@ const queryType = new GraphQLObjectType({
     // Add your own root fields here
     app: {
       type: appType,
-      resolve: () => App.getApp(1)
+      resolve: () => App.getApp(1),
     },
     user: {
       type: userType,
       args: {
-        userId: { type: new GraphQLNonNull(GraphQLString) }
+        userId: { type: new GraphQLNonNull(GraphQLString) },
       },
-      resolve: (_, args, context) => UserModel.get(context.user, args.userId)
-    }
-  })
+      resolve: (_, args, context) => UserModel.get(context.user, args.userId),
+    },
+  }),
 })
 
 /**
@@ -1119,15 +1208,16 @@ const mutationType = new GraphQLObjectType({
 
     createNewUser: createNewUserMutation,
     setUsername: setUsernameMutation,
-    updateUserExperimentGroups: updateUserExperimentGroupsMutation
-  })
+    updateUserExperimentGroups: updateUserExperimentGroupsMutation,
+  }),
 })
 
 /**
  * Finally, we construct our schema (whose starting query type is the query
  * type we defined above) and export it.
  */
-export var Schema = new GraphQLSchema({
+// eslint-disable-next-line import/prefer-default-export
+export const Schema = new GraphQLSchema({
   query: queryType,
-  mutation: mutationType
+  mutation: mutationType,
 })

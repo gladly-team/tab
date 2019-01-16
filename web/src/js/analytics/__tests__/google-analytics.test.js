@@ -21,8 +21,7 @@ describe('google-analytics tests', () => {
     })
 
     // Suppress an expected console error
-    jest.spyOn(global.console, 'error')
-      .mockImplementationOnce(() => {})
+    jest.spyOn(global.console, 'error').mockImplementationOnce(() => {})
 
     // This would throw an error if not handled appropriately
     require('js/analytics/google-analytics').default // eslint-disable-line no-unused-expressions
@@ -35,8 +34,7 @@ describe('google-analytics tests', () => {
     })
 
     // Suppress an expected console error
-    jest.spyOn(global.console, 'error')
-      .mockImplementationOnce(() => {})
+    jest.spyOn(global.console, 'error').mockImplementationOnce(() => {})
 
     // This would throw an error if not handled appropriately
     const GA = require('js/analytics/google-analytics').default
@@ -50,8 +48,7 @@ describe('google-analytics tests', () => {
     })
 
     // Suppress an expected console error
-    jest.spyOn(global.console, 'error')
-      .mockImplementationOnce(() => {})
+    jest.spyOn(global.console, 'error').mockImplementationOnce(() => {})
 
     // This would throw an error if not handled appropriately
     const GA = require('js/analytics/google-analytics').default
@@ -65,8 +62,7 @@ describe('google-analytics tests', () => {
     })
 
     // Suppress an expected console error
-    jest.spyOn(global.console, 'error')
-      .mockImplementationOnce(() => {})
+    jest.spyOn(global.console, 'error').mockImplementationOnce(() => {})
 
     // This would throw an error if not handled appropriately
     const GA = require('js/analytics/google-analytics').default
@@ -87,11 +83,11 @@ describe('google-analytics tests', () => {
 
     const GA = require('js/analytics/google-analytics').default
     GA.event({
-      foo: 'bar'
+      foo: 'bar',
     })
 
     expect(ReactGA.event).toHaveBeenCalledWith({
-      foo: 'bar'
+      foo: 'bar',
     })
   })
 
@@ -102,13 +98,13 @@ describe('google-analytics tests', () => {
     GA.ga('send', {
       hitType: 'event',
       eventCategory: 'Something',
-      eventAction: 'SomethingHappened'
+      eventAction: 'SomethingHappened',
     })
 
     expect(ReactGA.ga).toHaveBeenCalledWith('send', {
       hitType: 'event',
       eventCategory: 'Something',
-      eventAction: 'SomethingHappened'
+      eventAction: 'SomethingHappened',
     })
   })
 })

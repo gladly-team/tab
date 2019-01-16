@@ -4,7 +4,7 @@ import MockDate from 'mockdate'
 
 const getMockUserInfo = () => ({
   joined: '2017-05-19T13:59:58.000Z',
-  isNewUser: true
+  isNewUser: true,
 })
 
 const mockNow = '2017-05-19T13:59:58.000Z'
@@ -20,7 +20,9 @@ afterEach(() => {
 /* Tests for the Experiment and ExperimentGroup objects */
 describe('experiment filter', () => {
   test('excludeUsersWhoJoinedWithin works as expected with the default "days" unit', () => {
-    const { excludeUsersWhoJoinedWithin } = require('js/utils/experimentFilters')
+    const {
+      excludeUsersWhoJoinedWithin,
+    } = require('js/utils/experimentFilters')
     const excludeLastThirtyDays = excludeUsersWhoJoinedWithin(30)
     const mockUserInfo = getMockUserInfo()
     mockUserInfo.joined = '2017-05-17T13:59:58.000Z' // ~2 days ago
@@ -30,7 +32,9 @@ describe('experiment filter', () => {
   })
 
   test('excludeUsersWhoJoinedWithin works as expected with "seconds" unit', () => {
-    const { excludeUsersWhoJoinedWithin } = require('js/utils/experimentFilters')
+    const {
+      excludeUsersWhoJoinedWithin,
+    } = require('js/utils/experimentFilters')
     const excludeLastTenSeconds = excludeUsersWhoJoinedWithin(10, 'seconds')
     const mockUserInfo = getMockUserInfo()
     mockUserInfo.joined = '2017-05-19T13:59:56.000Z' // 2 seconds ago
@@ -50,21 +54,9 @@ describe('experiment filter', () => {
 
   test('includeIfAnyIsTrue works as expected', () => {
     const { includeIfAnyIsTrue } = require('js/utils/experimentFilters')
-    const filtersWithNoneTrue = [
-      () => false,
-      () => false,
-      () => false
-    ]
-    const filtersWithOneTrue = [
-      () => false,
-      () => true,
-      () => false
-    ]
-    const filtersWithAllTrue = [
-      () => true,
-      () => true,
-      () => true
-    ]
+    const filtersWithNoneTrue = [() => false, () => false, () => false]
+    const filtersWithOneTrue = [() => false, () => true, () => false]
+    const filtersWithAllTrue = [() => true, () => true, () => true]
     const mockUserInfo = getMockUserInfo()
     expect(includeIfAnyIsTrue(filtersWithNoneTrue)(mockUserInfo)).toBe(false)
     expect(includeIfAnyIsTrue(filtersWithOneTrue)(mockUserInfo)).toBe(true)
@@ -75,31 +67,31 @@ describe('experiment filter', () => {
     const {
       includeIfAnyIsTrue,
       excludeUsersWhoJoinedWithin,
-      onlyIncludeNewUsers
+      onlyIncludeNewUsers,
     } = require('js/utils/experimentFilters')
     const excludeLastTenDays = excludeUsersWhoJoinedWithin(10, 'days')
     const onlyNewUsersOrUsersWhoJoinedTenDaysAgo = [
       excludeLastTenDays,
-      onlyIncludeNewUsers
+      onlyIncludeNewUsers,
     ]
     const mockUserInfo = getMockUserInfo()
 
     mockUserInfo.joined = '2017-05-11T13:59:58.000Z' // ~8 days ago
     mockUserInfo.isNewUser = false
     expect(
-      includeIfAnyIsTrue(onlyNewUsersOrUsersWhoJoinedTenDaysAgo)(mockUserInfo))
-      .toBe(false)
+      includeIfAnyIsTrue(onlyNewUsersOrUsersWhoJoinedTenDaysAgo)(mockUserInfo)
+    ).toBe(false)
 
     mockUserInfo.joined = '2017-05-07T13:59:58.000Z' // ~12 days ago
     mockUserInfo.isNewUser = false
     expect(
-      includeIfAnyIsTrue(onlyNewUsersOrUsersWhoJoinedTenDaysAgo)(mockUserInfo))
-      .toBe(true)
+      includeIfAnyIsTrue(onlyNewUsersOrUsersWhoJoinedTenDaysAgo)(mockUserInfo)
+    ).toBe(true)
 
     mockUserInfo.joined = '2017-05-19T13:59:58.000Z' // just now
     mockUserInfo.isNewUser = true
     expect(
-      includeIfAnyIsTrue(onlyNewUsersOrUsersWhoJoinedTenDaysAgo)(mockUserInfo))
-      .toBe(true)
+      includeIfAnyIsTrue(onlyNewUsersOrUsersWhoJoinedTenDaysAgo)(mockUserInfo)
+    ).toBe(true)
   })
 })

@@ -1,18 +1,16 @@
 import moment from 'moment'
 
-import {
-  USER_REFERRAL_VC_REWARD
-} from '../constants'
+import { USER_REFERRAL_VC_REWARD } from '../constants'
 
 class Globals {
-  constructor () {
-    this.raised = 678810.00
+  constructor() {
+    this.raised = 678810.0
     this.raisedUpdateTime = moment('2019-01-11T18:02:00.000Z')
-    this.dollarsPerDayRate = 450.00
+    this.dollarsPerDayRate = 450.0
   }
 }
 
-function isGlobalCampaignLive () {
+function isGlobalCampaignLive() {
   return process.env.IS_GLOBAL_CAMPAIGN_LIVE === 'true' || false
 }
 
@@ -22,7 +20,7 @@ function isGlobalCampaignLive () {
  * raised over time.
  * @return {number}  A decimal rounded to two decimal places
  */
-function getMoneyRaised () {
+function getMoneyRaised() {
   const globals = new Globals()
   const secsInDay = 60 * 60 * 24
 
@@ -32,16 +30,16 @@ function getMoneyRaised () {
   const now = moment()
   const diff = now.diff(datetimeOfLastEntry, 'seconds')
   const secondsToDays = diff / secsInDay
-  const finalRaised = totalRaised + (secondsToDays * moneyRaisedRate)
+  const finalRaised = totalRaised + secondsToDays * moneyRaisedRate
   return finalRaised.toFixed(2)
 }
 
-function getDollarsPerDayRate () {
+function getDollarsPerDayRate() {
   const globals = new Globals()
   return globals.dollarsPerDayRate
 }
 
-function getReferralVcReward () {
+function getReferralVcReward() {
   return USER_REFERRAL_VC_REWARD
 }
 
@@ -50,5 +48,5 @@ export {
   getMoneyRaised,
   getDollarsPerDayRate,
   getReferralVcReward,
-  isGlobalCampaignLive
+  isGlobalCampaignLive,
 }

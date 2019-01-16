@@ -6,7 +6,7 @@ import {
   WIDGET_TYPE_CLOCK,
   WIDGET_TYPE_NOTES,
   WIDGET_TYPE_SEARCH,
-  WIDGET_TYPE_TODOS
+  WIDGET_TYPE_TODOS,
 } from 'js/constants'
 
 import BookmarksWidget from 'js/components/Widget/Widgets/Bookmarks/BookmarksWidgetContainer'
@@ -16,37 +16,42 @@ import NotesWidget from 'js/components/Widget/Widgets/Notes/NotesWidgetContainer
 import TodosWidget from 'js/components/Widget/Widgets/Todos/TodosWidgetContainer'
 
 class Widget extends React.Component {
-  render () {
+  render() {
     const { widget, user } = this.props
 
     switch (widget.type) {
       case WIDGET_TYPE_BOOKMARKS:
-        return (<BookmarksWidget
-          widget={widget}
-          user={user}
-          showError={this.props.showError} />)
+        return (
+          <BookmarksWidget
+            widget={widget}
+            user={user}
+            showError={this.props.showError}
+          />
+        )
 
       case WIDGET_TYPE_SEARCH:
-        return (<SearchWidget
-          widget={widget}
-          user={user} />)
+        return <SearchWidget widget={widget} user={user} />
 
       case WIDGET_TYPE_CLOCK:
-        return (<ClockWidget
-          widget={widget}
-          user={user} />)
+        return <ClockWidget widget={widget} user={user} />
 
       case WIDGET_TYPE_NOTES:
-        return (<NotesWidget
-          widget={widget}
-          user={user}
-          showError={this.props.showError} />)
+        return (
+          <NotesWidget
+            widget={widget}
+            user={user}
+            showError={this.props.showError}
+          />
+        )
 
       case WIDGET_TYPE_TODOS:
-        return (<TodosWidget
-          widget={widget}
-          user={user}
-          showError={this.props.showError} />)
+        return (
+          <TodosWidget
+            widget={widget}
+            user={user}
+            showError={this.props.showError}
+          />
+        )
       default:
         return null
     }
@@ -55,10 +60,10 @@ class Widget extends React.Component {
 
 Widget.propTypes = {
   widget: PropTypes.shape({
-    type: PropTypes.string.isRequired
+    type: PropTypes.string.isRequired,
   }).isRequired,
   user: PropTypes.object.isRequired,
-  showError: PropTypes.func.isRequired
+  showError: PropTypes.func.isRequired,
 }
 
 export default Widget

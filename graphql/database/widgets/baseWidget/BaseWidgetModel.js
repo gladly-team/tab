@@ -1,4 +1,3 @@
-
 import BaseModel from '../../base/BaseModel'
 import types from '../../fieldTypes'
 import tableNames from '../../tables'
@@ -8,42 +7,43 @@ import { BASE_WIDGET } from '../../constants'
  * @extends BaseModel
  */
 class BaseWidget extends BaseModel {
-  static get name () {
+  static get name() {
     return BASE_WIDGET
   }
 
-  static get hashKey () {
+  static get hashKey() {
     return 'id'
   }
 
-  static get tableName () {
+  static get tableName() {
     return tableNames.widgets
   }
 
-  static get schema () {
+  static get schema() {
     const self = this
     return {
       id: types.uuid(),
       name: types.string(),
-      position: types.number().integer()
+      position: types
+        .number()
+        .integer()
         .default(self.fieldDefaults.position),
       type: types.string(),
-      settings: types.object()
-        .default(self.fieldDefaults.settings)
+      settings: types.object().default(self.fieldDefaults.settings),
     }
   }
 
-  static get fieldDefaults () {
+  static get fieldDefaults() {
     return {
       position: 0,
-      settings: {}
+      settings: {},
     }
   }
 
-  static get permissions () {
+  static get permissions() {
     return {
       get: () => true,
-      getAll: () => true
+      getAll: () => true,
     }
   }
 }

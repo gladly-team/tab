@@ -1,7 +1,5 @@
 import graphql from 'babel-plugin-relay/macro'
-import {
-  createFragmentContainer
-} from 'react-relay'
+import { createFragmentContainer } from 'react-relay'
 
 import UserBackgroundImage from 'js/components/User/UserBackgroundImageComponent'
 
@@ -17,5 +15,5 @@ export default createFragmentContainer(UserBackgroundImage, {
         timestamp
       }
     }
-  `
+  `,
 })

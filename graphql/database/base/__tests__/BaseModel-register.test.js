@@ -2,18 +2,16 @@
 
 import dynogels from '../dynogels-promisified'
 import types from '../../fieldTypes'
-import {
-  setModelGetterField
-} from '../../test-utils'
+import { setModelGetterField } from '../../test-utils'
 
 jest.mock('../dynogels-promisified')
 jest.mock('../../databaseClient')
 
 // Add additional fields to the schema.
-const constructSchema = function (schema) {
+function constructSchema(schema) {
   return Object.assign(schema, {
     created: types.string().isoDate(),
-    updated: types.string().isoDate()
+    updated: types.string().isoDate(),
   })
 }
 
@@ -31,15 +29,12 @@ describe('BaseModel registering with Dynogels', () => {
     const schema = {}
     setModelGetterField(TestModel, 'schema', schema)
     TestModel.register()
-    expect(dynogels.define).toHaveBeenLastCalledWith(
-      TestModel.name,
-      {
-        hashKey: 'id',
-        tableName: TestModel.tableName,
-        timestamps: false,
-        schema: constructSchema(schema)
-      }
-    )
+    expect(dynogels.define).toHaveBeenLastCalledWith(TestModel.name, {
+      hashKey: 'id',
+      tableName: TestModel.tableName,
+      timestamps: false,
+      schema: constructSchema(schema),
+    })
   })
 
   it('works with both hash key and range key', () => {
@@ -49,16 +44,13 @@ describe('BaseModel registering with Dynogels', () => {
     const schema = {}
     setModelGetterField(TestModel, 'schema', schema)
     TestModel.register()
-    expect(dynogels.define).toHaveBeenLastCalledWith(
-      TestModel.name,
-      {
-        hashKey: 'id',
-        rangeKey: 'someOtherField',
-        tableName: TestModel.tableName,
-        timestamps: false,
-        schema: constructSchema(schema)
-      }
-    )
+    expect(dynogels.define).toHaveBeenLastCalledWith(TestModel.name, {
+      hashKey: 'id',
+      rangeKey: 'someOtherField',
+      tableName: TestModel.tableName,
+      timestamps: false,
+      schema: constructSchema(schema),
+    })
   })
 
   it('uses the correct schema', () => {
@@ -69,21 +61,18 @@ describe('BaseModel registering with Dynogels', () => {
       foo: 'bar',
       baz: {
         a: 12,
-        z: 'abc'
-      }
+        z: 'abc',
+      },
     }
     const expectedSchema = constructSchema(schema)
     setModelGetterField(TestModel, 'schema', schema)
     TestModel.register()
-    expect(dynogels.define).toHaveBeenLastCalledWith(
-      TestModel.name,
-      {
-        hashKey: 'id',
-        tableName: TestModel.tableName,
-        timestamps: false,
-        schema: expectedSchema
-      }
-    )
+    expect(dynogels.define).toHaveBeenLastCalledWith(TestModel.name, {
+      hashKey: 'id',
+      tableName: TestModel.tableName,
+      timestamps: false,
+      schema: expectedSchema,
+    })
   })
 
   it('works with indexes', () => {
@@ -92,22 +81,21 @@ describe('BaseModel registering with Dynogels', () => {
     setModelGetterField(TestModel, 'rangeKey', null)
     const schema = {}
     setModelGetterField(TestModel, 'schema', schema)
-    const indexes = [{
-      hashKey: 'myIndexHashKey',
-      name: 'MyIndex',
-      type: 'global'
-    }]
+    const indexes = [
+      {
+        hashKey: 'myIndexHashKey',
+        name: 'MyIndex',
+        type: 'global',
+      },
+    ]
     setModelGetterField(TestModel, 'indexes', indexes)
     TestModel.register()
-    expect(dynogels.define).toHaveBeenLastCalledWith(
-      TestModel.name,
-      {
-        hashKey: 'id',
-        tableName: TestModel.tableName,
-        indexes: indexes,
-        timestamps: false,
-        schema: constructSchema(schema)
-      }
-    )
+    expect(dynogels.define).toHaveBeenLastCalledWith(TestModel.name, {
+      hashKey: 'id',
+      tableName: TestModel.tableName,
+      indexes,
+      timestamps: false,
+      schema: constructSchema(schema),
+    })
   })
 })

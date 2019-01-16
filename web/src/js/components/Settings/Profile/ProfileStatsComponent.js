@@ -5,18 +5,13 @@ import RaisedButton from 'material-ui/RaisedButton'
 import HeartBorderIcon from 'material-ui/svg-icons/action/favorite-border'
 import Stat from 'js/components/Settings/Profile/StatComponent'
 import { Paper } from 'material-ui'
-import appTheme, {
-  lighterTextColor
-} from 'js/theme/default'
+import appTheme, { lighterTextColor } from 'js/theme/default'
 import ChartIcon from 'material-ui/svg-icons/editor/insert-chart'
-import {
-  goToInviteFriends,
-  goToDonate
-} from 'js/navigation/navigation'
+import { goToInviteFriends, goToDonate } from 'js/navigation/navigation'
 import { abbreviateNumber, commaFormatted } from 'js/utils/utils'
 
 class ProfileStats extends React.Component {
-  render () {
+  render() {
     const { user } = this.props
     const now = moment().utc()
     const daysSinceJoined = now.diff(moment(user.joined), 'days')
@@ -27,13 +22,13 @@ class ProfileStats extends React.Component {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      color: appTheme.palette.disabledColor
+      color: appTheme.palette.disabledColor,
     }
     const spacingPx = 6
     const statStyle = {
       flex: 1,
       flexBasis: '20%',
-      margin: spacingPx
+      margin: spacingPx,
     }
     const greeting = user.username ? `Hi, ${user.username}!` : 'Hi!'
     return (
@@ -46,7 +41,7 @@ class ProfileStats extends React.Component {
             paddingLeft: 20,
             paddingRight: 20,
             marginBottom: 2 * spacingPx,
-            color: lighterTextColor
+            color: lighterTextColor,
           }}
         >
           <ChartIcon
@@ -54,11 +49,11 @@ class ProfileStats extends React.Component {
               marginRight: 8,
               color: lighterTextColor,
               minHeight: 24,
-              minWidth: 24
+              minWidth: 24,
             }}
           />
           <p>
-            <span style={{fontWeight: 500}}>{greeting}</span>
+            <span style={{ fontWeight: 500 }}>{greeting}</span>
             <span> Here's all your great work Tabbing, by the numbers.</span>
           </p>
         </Paper>
@@ -66,7 +61,7 @@ class ProfileStats extends React.Component {
           style={{
             display: 'flex',
             flexWrap: 'wrap',
-            margin: -spacingPx
+            margin: -spacingPx,
           }}
         >
           <Stat
@@ -96,7 +91,13 @@ class ProfileStats extends React.Component {
               <span style={extraContentTextStyle}>
                 <span>{user.heartsUntilNextLevel}</span>
                 <HeartBorderIcon
-                  style={{ marginLeft: 0, marginRight: 2, height: 16, width: 16, paddingBottom: 0 }}
+                  style={{
+                    marginLeft: 0,
+                    marginRight: 2,
+                    height: 16,
+                    width: 16,
+                    paddingBottom: 0,
+                  }}
                   color={appTheme.palette.disabledColor}
                 />
                 <span>until next level</span>
@@ -110,7 +111,7 @@ class ProfileStats extends React.Component {
             style={statStyle}
             extraContent={
               <RaisedButton
-                label='Invite Friends'
+                label="Invite Friends"
                 style={{ marginTop: 14 }}
                 primary
                 onClick={goToInviteFriends}
@@ -123,7 +124,7 @@ class ProfileStats extends React.Component {
             style={statStyle}
             extraContent={
               <RaisedButton
-                label='Donate Hearts'
+                label="Donate Hearts"
                 style={{ marginTop: 14 }}
                 primary
                 onClick={goToDonate}
@@ -145,12 +146,12 @@ ProfileStats.propTypes = {
     level: PropTypes.number.isRequired,
     maxTabsDay: PropTypes.shape({
       date: PropTypes.string.isRequired,
-      numTabs: PropTypes.number.isRequired
+      numTabs: PropTypes.number.isRequired,
     }),
     numUsersRecruited: PropTypes.number.isRequired,
     tabs: PropTypes.number.isRequired,
-    vcDonatedAllTime: PropTypes.number.isRequired
-  }).isRequired
+    vcDonatedAllTime: PropTypes.number.isRequired,
+  }).isRequired,
 }
 
 export default ProfileStats

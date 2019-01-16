@@ -1,9 +1,7 @@
 /* eslint-env jest */
 
 import React from 'react'
-import {
-  shallow
-} from 'enzyme'
+import { shallow } from 'enzyme'
 import { cloneDeep } from 'lodash/lang'
 
 jest.mock('js/analytics/logEvent')
@@ -18,47 +16,44 @@ const mockUserData = {
       {
         node: {
           id: 'fake-widget-id-bookmarks',
-          type: 'bookmarks'
-        }
+          type: 'bookmarks',
+        },
       },
       {
         node: {
           id: 'fake-widget-id-notes',
-          type: 'notes'
-        }
+          type: 'notes',
+        },
       },
       {
         node: {
           id: 'fake-widget-id-todos',
-          type: 'todos'
-        }
+          type: 'todos',
+        },
       },
       {
         node: {
           id: 'fake-widget-id-clock',
-          type: 'clock'
-        }
-      }
-    ]
-  }
+          type: 'clock',
+        },
+      },
+    ],
+  },
 }
 
 const mockShowError = () => {}
 
-describe('Widgets component', function () {
-  it('renders without error', function () {
-    const WidgetsComponent = require('js/components/Widget/WidgetsComponent').default
+describe('Widgets component', function() {
+  it('renders without error', function() {
+    const WidgetsComponent = require('js/components/Widget/WidgetsComponent')
+      .default
     const userData = cloneDeep(mockUserData)
-    shallow(
-      <WidgetsComponent
-        user={userData}
-        showError={mockShowError}
-      />
-    )
+    shallow(<WidgetsComponent user={userData} showError={mockShowError} />)
   })
 
-  it('shows the center widgets (i.e. clock) when no campaign is running', function () {
-    const WidgetsComponent = require('js/components/Widget/WidgetsComponent').default
+  it('shows the center widgets (i.e. clock) when no campaign is running', function() {
+    const WidgetsComponent = require('js/components/Widget/WidgetsComponent')
+      .default
     const userData = {
       id: 'user-abc-123',
       activeWidget: null,
@@ -67,11 +62,11 @@ describe('Widgets component', function () {
           {
             node: {
               id: 'fake-widget-id-clock',
-              type: 'clock'
-            }
-          }
-        ]
-      }
+              type: 'clock',
+            },
+          },
+        ],
+      },
     }
     const wrapper = shallow(
       <WidgetsComponent
@@ -83,8 +78,9 @@ describe('Widgets component', function () {
     expect(wrapper.find('[data-test-id="widget-clock"]').length).toBe(1)
   })
 
-  it('hides the center widgets (i.e. clock) when a campaign is running', function () {
-    const WidgetsComponent = require('js/components/Widget/WidgetsComponent').default
+  it('hides the center widgets (i.e. clock) when a campaign is running', function() {
+    const WidgetsComponent = require('js/components/Widget/WidgetsComponent')
+      .default
     const userData = {
       id: 'user-abc-123',
       activeWidget: null,
@@ -93,11 +89,11 @@ describe('Widgets component', function () {
           {
             node: {
               id: 'fake-widget-id-clock',
-              type: 'clock'
-            }
-          }
-        ]
-      }
+              type: 'clock',
+            },
+          },
+        ],
+      },
     }
     const wrapper = shallow(
       <WidgetsComponent
@@ -110,14 +106,14 @@ describe('Widgets component', function () {
   })
 
   it('contains an ID for the new user tour (to showcase widgets)', () => {
-    const WidgetsComponent = require('js/components/Widget/WidgetsComponent').default
+    const WidgetsComponent = require('js/components/Widget/WidgetsComponent')
+      .default
     const wrapper = shallow(
       <WidgetsComponent user={mockUserData} showError={mockShowError} />
     )
 
     // Important: other code relies on the data-tour-id to show the
     // new user tour. Do not change it without updating it elsewhere.
-    expect(wrapper.find('[data-tour-id="widgets"]').length)
-      .toBe(1)
+    expect(wrapper.find('[data-tour-id="widgets"]').length).toBe(1)
   })
 })

@@ -5,27 +5,21 @@ import environment from 'js/relay-env'
 import UsernameField from 'js/components/General/UsernameField'
 import RaisedButton from 'material-ui/RaisedButton'
 import SetUsernameMutation from 'js/mutations/SetUsernameMutation'
-import {
-  setUsernameInLocalStorage
-} from 'js/authentication/user'
-import {
-  checkIfEmailVerified
-} from 'js/authentication/helpers'
-import {
-  goToDashboard
-} from 'js/navigation/navigation'
+import { setUsernameInLocalStorage } from 'js/authentication/user'
+import { checkIfEmailVerified } from 'js/authentication/helpers'
+import { goToDashboard } from 'js/navigation/navigation'
 
 class EnterUsernameForm extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       usernameDuplicate: false,
       otherError: false,
-      savingUsernameInProgress: false
+      savingUsernameInProgress: false,
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     // See if the user verified their email address so that we can
     // log the verification. It would be better to user a cloud
     // function for this, or at least an official callback from the
@@ -38,16 +32,16 @@ class EnterUsernameForm extends React.Component {
     checkIfEmailVerified()
   }
 
-  submit (e) {
+  submit(e) {
     const usernameValid = this.username.validate()
     const username = this.username.getValue()
     this.setState({
       usernameDuplicate: false,
-      otherError: false
+      otherError: false,
     })
     if (usernameValid) {
       this.setState({
-        savingUsernameInProgress: true
+        savingUsernameInProgress: true,
       })
       SetUsernameMutation(
         environment,
@@ -59,9 +53,9 @@ class EnterUsernameForm extends React.Component {
     }
   }
 
-  onMutationCompleted (response) {
+  onMutationCompleted(response) {
     this.setState({
-      savingUsernameInProgress: false
+      savingUsernameInProgress: false,
     })
     const data = response.setUsername
 
@@ -71,12 +65,12 @@ class EnterUsernameForm extends React.Component {
         // Username already exists
         if (err.code === 'USERNAME_DUPLICATE') {
           this.setState({
-            usernameDuplicate: true
+            usernameDuplicate: true,
           })
-        // Some other error
+          // Some other error
         } else {
           this.setState({
-            otherError: true
+            otherError: true,
           })
         }
       })
@@ -89,36 +83,38 @@ class EnterUsernameForm extends React.Component {
     goToDashboard()
   }
 
-  onMutationError (response) {
+  onMutationError(response) {
     // TODO: show better error message to the user
     console.error('Error saving username:', response)
     this.setState({
       savingUsernameInProgress: false,
-      otherError: true
+      otherError: true,
     })
   }
 
-  handleKeyPress (e) {
-    if (this.state.savingUsernameInProgress) { return }
+  handleKeyPress(e) {
+    if (this.state.savingUsernameInProgress) {
+      return
+    }
 
     if (e.key === 'Enter') {
       this.submit()
     }
   }
 
-  render () {
+  render() {
     return (
       <Paper
         zDepth={1}
         style={{
           padding: 24,
-          backgroundColor: '#FFF'
+          backgroundColor: '#FFF',
         }}
       >
         <span
           style={{
             fontSize: 20,
-            fontWeight: 500
+            fontWeight: 500,
           }}
         >
           Choose a username
@@ -127,9 +123,11 @@ class EnterUsernameForm extends React.Component {
           usernameDuplicate={this.state.usernameDuplicate}
           otherError={this.state.otherError}
           onKeyPress={this.handleKeyPress.bind(this)}
-          ref={(elem) => { this.username = elem }}
+          ref={elem => {
+            this.username = elem
+          }}
           style={{
-            display: 'block'
+            display: 'block',
           }}
           data-test-id={'enter-username-form-username-field'}
         />
@@ -137,7 +135,7 @@ class EnterUsernameForm extends React.Component {
           style={{
             display: 'flex',
             justifyContent: 'flex-end',
-            marginTop: 30
+            marginTop: 30,
           }}
           data-test-id={'enter-username-form-button-container'}
         >
@@ -155,8 +153,8 @@ class EnterUsernameForm extends React.Component {
 
 EnterUsernameForm.propTypes = {
   user: PropTypes.shape({
-    id: PropTypes.string
-  })
+    id: PropTypes.string,
+  }),
 }
 
 export default EnterUsernameForm

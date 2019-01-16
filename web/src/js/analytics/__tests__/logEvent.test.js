@@ -29,41 +29,52 @@ describe('logEvent', () => {
     const homepageView = require('js/analytics/logEvent').homepageView
     homepageView()
 
-    expect(fbq).toHaveBeenCalledWith('track', 'ViewContent', {content_name: 'Homepage'})
+    expect(fbq).toHaveBeenCalledWith('track', 'ViewContent', {
+      content_name: 'Homepage',
+    })
     expect(fbq).toHaveBeenCalledWith('track', 'PageView')
     expect(GA.pageview).toHaveBeenCalled()
   })
 
   test('signup page button click event calls analytics as expected', () => {
-    const signupPageButtonClick = require('js/analytics/logEvent').signupPageButtonClick
+    const signupPageButtonClick = require('js/analytics/logEvent')
+      .signupPageButtonClick
     signupPageButtonClick()
 
-    expect(fbq).toHaveBeenCalledWith('track', 'Lead', {content_name: 'SignupButtonClick'})
+    expect(fbq).toHaveBeenCalledWith('track', 'Lead', {
+      content_name: 'SignupButtonClick',
+    })
     expect(GA.event).toHaveBeenCalledWith({
       category: 'ButtonClick',
-      action: 'SignupButtonClick'
+      action: 'SignupButtonClick',
     })
   })
 
   test('signup page social button click event calls analytics as expected', () => {
-    const signupPageSocialButtonClick = require('js/analytics/logEvent').signupPageSocialButtonClick
+    const signupPageSocialButtonClick = require('js/analytics/logEvent')
+      .signupPageSocialButtonClick
     signupPageSocialButtonClick()
 
-    expect(fbq).toHaveBeenCalledWith('track', 'Lead', {content_name: 'SocialSignupButtonClick'})
+    expect(fbq).toHaveBeenCalledWith('track', 'Lead', {
+      content_name: 'SocialSignupButtonClick',
+    })
     expect(GA.event).toHaveBeenCalledWith({
       category: 'ButtonClick',
-      action: 'SocialSignupButtonClick'
+      action: 'SocialSignupButtonClick',
     })
   })
 
   test('signup page email button click event calls analytics as expected', () => {
-    const signupPageEmailButtonClick = require('js/analytics/logEvent').signupPageEmailButtonClick
+    const signupPageEmailButtonClick = require('js/analytics/logEvent')
+      .signupPageEmailButtonClick
     signupPageEmailButtonClick()
 
-    expect(fbq).toHaveBeenCalledWith('track', 'Lead', {content_name: 'EmailSignupButtonClick'})
+    expect(fbq).toHaveBeenCalledWith('track', 'Lead', {
+      content_name: 'EmailSignupButtonClick',
+    })
     expect(GA.event).toHaveBeenCalledWith({
       category: 'ButtonClick',
-      action: 'EmailSignupButtonClick'
+      action: 'EmailSignupButtonClick',
     })
   })
 
@@ -71,14 +82,16 @@ describe('logEvent', () => {
     const accountCreated = require('js/analytics/logEvent').accountCreated
     accountCreated()
 
-    expect(fbq).toHaveBeenCalledWith('track', 'CompleteRegistration', {content_name: 'AccountCreated'})
+    expect(fbq).toHaveBeenCalledWith('track', 'CompleteRegistration', {
+      content_name: 'AccountCreated',
+    })
     expect(GA.event).toHaveBeenCalledWith({
       category: 'ButtonClick',
-      action: 'AccountCreation'
+      action: 'AccountCreation',
     })
     expect(redditAccountCreationEvent).toHaveBeenCalled()
     expect(window.gtag).toHaveBeenCalledWith('event', 'conversion', {
-      'send_to': 'AW-1013744060/v2M_COqV6owBELyDsuMD'
+      send_to: 'AW-1013744060/v2M_COqV6owBELyDsuMD',
     })
   })
 
@@ -94,7 +107,7 @@ describe('logEvent', () => {
       hitType: 'event',
       eventCategory: 'Search',
       eventAction: 'SearchExecuted',
-      hitCallback: expect.any(Function)
+      hitCallback: expect.any(Function),
     })
   })
 
@@ -103,7 +116,9 @@ describe('logEvent', () => {
     newTabView()
 
     expect(fbq).toHaveBeenCalledWith('track', 'PageView')
-    expect(fbq).toHaveBeenCalledWith('track', 'ViewContent', {content_name: 'Newtab'})
+    expect(fbq).toHaveBeenCalledWith('track', 'ViewContent', {
+      content_name: 'Newtab',
+    })
     expect(GA.event).not.toHaveBeenCalledWith()
     expect(GA.pageview).not.toHaveBeenCalledWith()
   })

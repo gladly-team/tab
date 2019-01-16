@@ -1,12 +1,10 @@
 /* eslint-env jest */
 
 import React from 'react'
-import {
-  shallow
-} from 'enzyme'
+import { shallow } from 'enzyme'
 
 const getMockProps = () => ({
-  query: 'tacos'
+  query: 'tacos',
 })
 
 afterEach(() => {
@@ -17,8 +15,6 @@ describe('SearchResults component', () => {
   it('renders without error', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
-    shallow(
-      <SearchResults {...mockProps} />
-    )
+    shallow(<SearchResults {...mockProps} />)
   })
 })

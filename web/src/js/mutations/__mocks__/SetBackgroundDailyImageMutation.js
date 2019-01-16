@@ -4,11 +4,11 @@ var onCompletedCallback = () => {}
 var onErrorCallback = () => {}
 
 // Mock Relay data returns
-export const __runOnCompleted = (response) => {
+export const __runOnCompleted = response => {
   onCompletedCallback(response)
 }
 
-export const __runOnError = (response) => {
+export const __runOnError = response => {
   onErrorCallback(response)
 }
 

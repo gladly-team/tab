@@ -4,33 +4,37 @@ import { Paper } from 'material-ui'
 import { alternateAccentColor } from 'js/theme/default'
 
 class Stat extends React.Component {
-  render () {
-    const containerStyle = Object.assign({}, {
-      paddingTop: 50,
-      paddingBottom: 50,
-      minWidth: 200,
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignContent: 'middle'
-    }, this.props.style)
+  render() {
+    const containerStyle = Object.assign(
+      {},
+      {
+        paddingTop: 50,
+        paddingBottom: 50,
+        minWidth: 200,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignContent: 'middle',
+      },
+      this.props.style
+    )
     const statStyle = {
       color: alternateAccentColor,
       display: 'block',
       fontSize: 50,
-      textAlign: 'center'
+      textAlign: 'center',
     }
     const statTextStyle = {
       display: 'block',
       textAlign: 'center',
-      maxWidth: '70%'
+      maxWidth: '70%',
     }
     const extraContentStyle = {
       display: 'block',
       marginTop: 4,
       minHeight: 16,
       alignSelf: 'center',
-      textAlign: 'center'
+      textAlign: 'center',
     }
     return (
       <Paper style={containerStyle}>
@@ -38,32 +42,27 @@ class Stat extends React.Component {
           style={{
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'center'
+            alignItems: 'center',
           }}
         >
           <span style={statStyle}>{this.props.stat}</span>
           <span style={statTextStyle}>{this.props.statText}</span>
         </span>
-        <span style={extraContentStyle}>
-          {this.props.extraContent}
-        </span>
+        <span style={extraContentStyle}>{this.props.extraContent}</span>
       </Paper>
     )
   }
 }
 
 Stat.propTypes = {
-  stat: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.string
-  ]).isRequired,
+  stat: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
   statText: PropTypes.string.isRequired,
   extraContent: PropTypes.element,
-  style: PropTypes.object
+  style: PropTypes.object,
 }
 
 Stat.default = {
-  style: {}
+  style: {},
 }
 
 export default Stat

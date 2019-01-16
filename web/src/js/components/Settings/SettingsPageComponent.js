@@ -8,7 +8,7 @@ import {
   donateURL,
   inviteFriendsURL,
   statsURL,
-  widgetSettingsURL
+  widgetSettingsURL,
 } from 'js/navigation/navigation'
 import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
@@ -23,33 +23,33 @@ import CloseIcon from 'material-ui/svg-icons/navigation/close'
 
 const styles = theme => ({
   listSubheader: {
-    paddingLeft: 14
-  }
+    paddingLeft: 14,
+  },
 })
 
 class SettingsPage extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
-      errorMessage: null
+      errorMessage: null,
     }
   }
 
-  goToHome () {
+  goToHome() {
     goToDashboard()
   }
 
-  showError (msg) {
+  showError(msg) {
     this.setState({
-      errorMessage: msg
+      errorMessage: msg,
     })
   }
 
-  clearError () {
+  clearError() {
     this.showError(null)
   }
 
-  render () {
+  render() {
     const { classes } = this.props
     const showError = this.showError
     const errorMessage = this.state.errorMessage
@@ -63,12 +63,10 @@ class SettingsPage extends React.Component {
           color: '#fff',
           backgroundColor: '#F2F2F2',
           minWidth: '100vw',
-          minHeight: '100vh'
-        }}>
-        <AppBar
-          color={'primary'}
-          position={'sticky'}
-        >
+          minHeight: '100vh',
+        }}
+      >
+        <AppBar color={'primary'} position={'sticky'}>
           <Toolbar>
             <div style={{ flex: 1 }}>
               <Logo color={'white'} />
@@ -78,7 +76,7 @@ class SettingsPage extends React.Component {
                 style={{
                   color: '#fff',
                   width: 28,
-                  height: 28
+                  height: 28,
                 }}
               />
             </IconButton>
@@ -86,74 +84,61 @@ class SettingsPage extends React.Component {
         </AppBar>
         <div style={{ width: sidebarWidth, position: 'fixed' }}>
           <List style={{ marginLeft: sidebarLeftMargin }}>
-            <ListSubheader
-              disableSticky
-              className={classes.listSubheader}>
-                Settings
+            <ListSubheader disableSticky className={classes.listSubheader}>
+              Settings
             </ListSubheader>
-            <SettingsMenuItem
-              key={'widgets'}
-              to={widgetSettingsURL}>
-                      Widgets
+            <SettingsMenuItem key={'widgets'} to={widgetSettingsURL}>
+              Widgets
             </SettingsMenuItem>
-            <SettingsMenuItem
-              key={'background'}
-              to={backgroundSettingsURL}>
-                      Background
+            <SettingsMenuItem key={'background'} to={backgroundSettingsURL}>
+              Background
             </SettingsMenuItem>
             <Divider />
-            <ListSubheader
-              disableSticky
-              className={classes.listSubheader}>
-                Your Profile
+            <ListSubheader disableSticky className={classes.listSubheader}>
+              Your Profile
             </ListSubheader>
-            <SettingsMenuItem
-              key={'stats'}
-              to={statsURL}>
-                    Your Stats
+            <SettingsMenuItem key={'stats'} to={statsURL}>
+              Your Stats
             </SettingsMenuItem>
-            <SettingsMenuItem
-              key={'donate'}
-              to={donateURL}>
-                    Donate Hearts
+            <SettingsMenuItem key={'donate'} to={donateURL}>
+              Donate Hearts
             </SettingsMenuItem>
-            <SettingsMenuItem
-              key={'invite'}
-              to={inviteFriendsURL}>
-                    Invite Friends
+            <SettingsMenuItem key={'invite'} to={inviteFriendsURL}>
+              Invite Friends
             </SettingsMenuItem>
             <Divider />
-            <SettingsMenuItem
-              key={'account'}
-              to={accountURL}>
-                Account
+            <SettingsMenuItem key={'account'} to={accountURL}>
+              Account
             </SettingsMenuItem>
           </List>
         </div>
-        <div style={{
-          marginLeft: sidebarWidth,
-          boxSizing: 'border-box',
-          display: 'flex',
-          justifyContent: 'center'
-        }}>
-          {React.Children.map(
-            this.props.children,
-            (child) => React.cloneElement(child, {
-              showError: showError.bind(this)
+        <div
+          style={{
+            marginLeft: sidebarWidth,
+            boxSizing: 'border-box',
+            display: 'flex',
+            justifyContent: 'center',
+          }}
+        >
+          {React.Children.map(this.props.children, child =>
+            React.cloneElement(child, {
+              showError: showError.bind(this),
             })
           )}
         </div>
-        { errorMessage
-          ? <ErrorMessage message={errorMessage}
-            onRequestClose={this.clearError.bind(this)} />
-          : null }
+        {errorMessage ? (
+          <ErrorMessage
+            message={errorMessage}
+            onRequestClose={this.clearError.bind(this)}
+          />
+        ) : null}
       </div>
     )
   }
 }
 
 SettingsPage.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
 }
 
 export default withStyles(styles)(SettingsPage)

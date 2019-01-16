@@ -1,9 +1,9 @@
-
+/* eslint no-console: 0, import/no-extraneous-dependencies: 0 */
+import jwtDecode from 'jwt-decode'
 import {
   createGraphQLContext,
-  getUserClaimsFromLambdaEvent
+  getUserClaimsFromLambdaEvent,
 } from './authorization-helpers'
-import jwtDecode from 'jwt-decode'
 
 /**
  * Take a user token, return an object of user claims in the same
@@ -13,47 +13,51 @@ import jwtDecode from 'jwt-decode'
  *   Authorization header
  * @return {obj} The object of user claims.
  */
-function mockAuthorizer (authorizationToken) {
+function mockAuthorizer(authorizationToken) {
   if (!authorizationToken) {
     const defaultUserId = 'abcdefghijklmno'
     const defaultEmail = 'kevin@example.com'
     console.warn('Warning: dev user is missing an Authorization token.')
-    console.warn(`Using default user with id "${defaultUserId}"" and email "${defaultEmail}".`)
+    console.warn(
+      `Using default user with id "${defaultUserId}"" and email "${defaultEmail}".`
+    )
     // Default user. Helpful for GraphiQL until we support it with
     // an Authorization header.
     // See: https://github.com/graphql/graphiql/issues/59
     return {
       id: defaultUserId,
       email: defaultEmail,
-      email_verified: 'true'
+      email_verified: 'true',
     }
 
-  // If the request is unauthenticated, allow access but do not
-  // provide any claims.
-  // The client sends the "unauthenticated" placeholder value
-  // because AWS API Gateway's custom authorizers will reject
-  // any request without a token and we want to provide
-  // unauthenticated access to our API.
-  // "If a specified identify source is missing, null, or empty,
-  // API Gateway returns a 401 Unauthorized response without calling
-  // the authorizer Lambda function.”
-  // https://docs.aws.amazon.com/apigateway/latest/developerguide/configure-api-gateway-lambda-authorization-with-console.html"
-  } else if (authorizationToken === 'unauthenticated') {
+    // If the request is unauthenticated, allow access but do not
+    // provide any claims.
+    // The client sends the "unauthenticated" placeholder value
+    // because AWS API Gateway's custom authorizers will reject
+    // any request without a token and we want to provide
+    // unauthenticated access to our API.
+    // "If a specified identify source is missing, null, or empty,
+    // API Gateway returns a 401 Unauthorized response without calling
+    // the authorizer Lambda function.”
+    // https://docs.aws.amazon.com/apigateway/latest/developerguide/configure-api-gateway-lambda-authorization-with-console.html"
+  }
+  if (authorizationToken === 'unauthenticated') {
     return {
       id: null,
       email: null,
-      email_verified: 'false'
+      email_verified: 'false',
     }
-  } else {
-    const parsedJwt = jwtDecode(authorizationToken)
-    return {
-      id: parsedJwt.sub,
-      // The email and email_verified properties may not exist for
-      // anonymous users.
-      email: parsedJwt.email || null,
-      // The email_verified claim is a string.
-      email_verified: parsedJwt.email_verified ? parsedJwt.email_verified.toString() : 'false'
-    }
+  }
+  const parsedJwt = jwtDecode(authorizationToken)
+  return {
+    id: parsedJwt.sub,
+    // The email and email_verified properties may not exist for
+    // anonymous users.
+    email: parsedJwt.email || null,
+    // The email_verified claim is a string.
+    email_verified: parsedJwt.email_verified
+      ? parsedJwt.email_verified.toString()
+      : 'false',
   }
 }
 
@@ -72,7 +76,7 @@ function mockAuthorizer (authorizationToken) {
 //     "body": "A JSON string of the request payload."
 //     "isBase64Encoded": "A boolean flag to indicate if the applicable request payload is Base64-encode"
 // }
-export const generateLambdaEventObjFromRequest = (req) => {
+export const generateLambdaEventObjFromRequest = req => {
   // Get the user claims from their token.
   // Important: this is insecure and for local development only.
   const authorizerProperties = mockAuthorizer(req.header('Authorization'))
@@ -90,7 +94,7 @@ export const generateLambdaEventObjFromRequest = (req) => {
       resourceId: 'abcdef',
       stage: 'dev',
       authorizer: {
-        ...authorizerProperties
+        ...authorizerProperties,
       },
       requestId: 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee',
       identity: {
@@ -104,21 +108,22 @@ export const generateLambdaEventObjFromRequest = (req) => {
         cognitoAuthenticationType: null,
         cognitoAuthenticationProvider: null,
         userArn: null,
-        userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.86 Safari/537.36',
-        user: null
+        userAgent:
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.86 Safari/537.36',
+        user: null,
       },
       resourcePath: '/graphql',
       httpMethod: req.method,
-      apiId: 'abcdefghij'
+      apiId: 'abcdefghij',
     },
     body: JSON.stringify(req.body),
-    isBase64Encoded: false
+    isBase64Encoded: false,
   }
 }
 
 // An analogue to the AWS Lamda handler (../handler.handler)
 // but used with graphQLHTTP.
-export const getGraphQLContextFromRequest = (req) => {
+export const getGraphQLContextFromRequest = req => {
   const event = generateLambdaEventObjFromRequest(req)
   const claims = getUserClaimsFromLambdaEvent(event)
   return createGraphQLContext(claims)

@@ -18,104 +18,114 @@ const styles = theme => ({
     color: '#9d4ba3',
     textDecoration: 'none',
     cursor: 'pointer',
-    whiteSpace: 'nowrap'
+    whiteSpace: 'nowrap',
   },
   charityImpactText: {
     '& a': {
       color: '#9d4ba3',
-      textDecoration: 'none'
-    }
-  }
+      textDecoration: 'none',
+    },
+  },
 })
 
 class DonateHeartsControls extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       amountToDonate: 1,
       customAmountSliderOpen: false,
       donateInProgress: false,
-      thanksDialog: false
+      thanksDialog: false,
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     const { user } = this.props
     this.setState({
-      amountToDonate: user.vcCurrent
+      amountToDonate: user.vcCurrent,
     })
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     if (this.props.user.vcCurrent !== nextProps.user.vcCurrent) {
       this.setState({
-        amountToDonate: nextProps.user.vcCurrent
+        amountToDonate: nextProps.user.vcCurrent,
       })
     }
   }
 
-  openCustomSlider (event) {
+  openCustomSlider(event) {
     this.setState({
       customAmountSliderOpen: true,
-      anchorEl: event.currentTarget
+      anchorEl: event.currentTarget,
     })
   }
 
-  closeCustomSlider () {
+  closeCustomSlider() {
     this.setState({
-      customAmountSliderOpen: false
+      customAmountSliderOpen: false,
     })
   }
 
-  onCustomSliderValChange (event, value) {
-    this.setState({amountToDonate: value})
+  onCustomSliderValChange(event, value) {
+    this.setState({ amountToDonate: value })
   }
 
-  thanksDialogClose () {
+  thanksDialogClose() {
     this.setState({
-      thanksDialog: false
+      thanksDialog: false,
     })
   }
 
-  donateHearts () {
+  donateHearts() {
     if (this.state.amountToDonate <= 0 || this.state.donateInProgress) {
       return
     }
     this.setState({
-      donateInProgress: true
+      donateInProgress: true,
     })
-    const { charity, user, heartDonationCampaign: { time = {} } = {} } = this.props
+    const {
+      charity,
+      user,
+      heartDonationCampaign: { time = {} } = {},
+    } = this.props
     const self = this
     return DonateVcMutation(
       {
         userId: user.id,
         charityId: charity.id,
-        vc: this.state.amountToDonate
+        vc: this.state.amountToDonate,
       },
-      Object.assign({},
+      Object.assign(
+        {},
         // Optionally provided so we know which Relay record to
         // update to increase the total VC this charity has received.
-        (time.start && time.end) && {
-          vcReceivedArgs: {
-            startTime: moment(time.start).toISOString(),
-            endTime: moment(time.end).toISOString()
+        time.start &&
+          time.end && {
+            vcReceivedArgs: {
+              startTime: moment(time.start).toISOString(),
+              endTime: moment(time.end).toISOString(),
+            },
           }
-        })
-    ).then(() => {
-      self.setState({
-        thanksDialog: true,
-        donateInProgress: false
-      })
-    })
-      .catch(() => {
-        self.props.showError('Oops, we could not donate your Hearts just now :(')
+      )
+    )
+      .then(() => {
         self.setState({
-          donateInProgress: false
+          thanksDialog: true,
+          donateInProgress: false,
+        })
+      })
+      .catch(() => {
+        self.props.showError(
+          'Oops, we could not donate your Hearts just now :('
+        )
+        self.setState({
+          donateInProgress: false,
         })
       })
   }
 
-  render () {
+  render() {
     const { charity, user, theme, style, classes } = this.props
 
     const MIN_VC_FOR_CUSTOM_SLIDER = 2
@@ -124,8 +134,8 @@ class DonateHeartsControls extends React.Component {
     const impactMessage = sanitizeHtml(charity.impact, {
       allowedTags: ['b', 'i', 'em', 'strong', 'a', 'p'],
       allowedAttributes: {
-        a: ['href', 'target', 'rel']
-      }
+        a: ['href', 'target', 'rel'],
+      },
     })
 
     return (
@@ -134,69 +144,63 @@ class DonateHeartsControls extends React.Component {
           style={Object.assign({}, style, {
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'center'
+            alignItems: 'center',
           })}
         >
           <Button
             color={'primary'}
             variant={'contained'}
-            disabled={this.state.amountToDonate <= 0 || this.state.donateInProgress}
+            disabled={
+              this.state.amountToDonate <= 0 || this.state.donateInProgress
+            }
             onClick={this.donateHearts.bind(this)}
           >
             Donate {this.state.amountToDonate} {heartsText}
           </Button>
-          { user.vcCurrent > MIN_VC_FOR_CUSTOM_SLIDER
-            ? <span
+          {user.vcCurrent > MIN_VC_FOR_CUSTOM_SLIDER ? (
+            <span
               style={{
                 fontSize: 11,
                 color: theme.palette.text.disabled,
                 cursor: 'pointer',
-                marginTop: 5
+                marginTop: 5,
               }}
-              onClick={this.openCustomSlider.bind(this)}>
+              onClick={this.openCustomSlider.bind(this)}
+            >
               <Typography
                 variant={'caption'}
                 style={{
-                  color: theme.palette.text.disabled
+                  color: theme.palette.text.disabled,
                 }}
               >
-                  Or, donate a specific amount
+                Or, donate a specific amount
               </Typography>
             </span>
-            : null
-          }
+          ) : null}
         </span>
         <Popover
           open={this.state.customAmountSliderOpen}
           anchorEl={this.state.anchorEl}
-          anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
-          transformOrigin={{horizontal: 'left', vertical: 'top'}}
+          anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
+          transformOrigin={{ horizontal: 'left', vertical: 'top' }}
           onClose={this.closeCustomSlider.bind(this)}
         >
           <div
             style={{
               width: 330,
               height: 'auto',
-              padding: 20
+              padding: 20,
             }}
           >
             <div
               style={{
                 display: 'flex',
                 justifyContent: 'space-between',
-                marginBottom: 15
+                marginBottom: 15,
               }}
             >
-              <Typography
-                variant={'body2'}
-              >
-                Fewer Hearts
-              </Typography>
-              <Typography
-                variant={'body2'}
-              >
-                More Hearts
-              </Typography>
+              <Typography variant={'body2'}>Fewer Hearts</Typography>
+              <Typography variant={'body2'}>More Hearts</Typography>
             </div>
             <Slider
               min={1}
@@ -216,18 +220,19 @@ class DonateHeartsControls extends React.Component {
               variant={'h5'}
               style={{
                 lineHeight: 1.3,
-                textAlign: 'center'
+                textAlign: 'center',
               }}
             >
               Thanks for supporting{' '}
               <a
                 href={charity.website}
-                target='_blank'
-                rel='noopener noreferrer'
+                target="_blank"
+                rel="noopener noreferrer"
                 className={classes.charityTitleLink}
               >
                 {charity.name}
-              </a>!
+              </a>
+              !
             </Typography>
           </DialogTitle>
           <DialogContent>
@@ -235,14 +240,14 @@ class DonateHeartsControls extends React.Component {
               style={{
                 display: 'flex',
                 justifyContent: 'center',
-                maxWidth: '100%'
+                maxWidth: '100%',
               }}
             >
               <img
                 alt={`A demonstration of the work by ${charity.name}.`}
                 style={{
                   height: 240,
-                  border: `4px solid ${theme.palette.primary.main}`
+                  border: `4px solid ${theme.palette.primary.main}`,
                 }}
                 src={charity.image}
               />
@@ -252,31 +257,30 @@ class DonateHeartsControls extends React.Component {
                 paddingTop: charity.imageCaption ? 0 : 14,
                 paddingLeft: 34,
                 paddingRight: 34,
-                paddingBottom: 0
+                paddingBottom: 0,
               }}
             >
-              { charity.imageCaption
-                ? <Typography
+              {charity.imageCaption ? (
+                <Typography
                   variant={'caption'}
                   style={{
                     color: theme.palette.text.disabled,
-                    marginBottom: 4
+                    marginBottom: 4,
                   }}
                 >
                   {charity.imageCaption}
                 </Typography>
-                : null
-              }
+              ) : null}
               <span
                 style={theme.typography.body2}
                 className={classes.charityImpactText}
-                dangerouslySetInnerHTML={{__html: impactMessage}}
+                dangerouslySetInnerHTML={{ __html: impactMessage }}
               />
             </div>
           </DialogContent>
           <DialogActions
             style={{
-              margin: 10
+              margin: 10,
             }}
           >
             <Button
@@ -299,28 +303,28 @@ DonateHeartsControls.propTypes = {
     image: PropTypes.string.isRequired,
     impact: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    website: PropTypes.string.isRequired
+    website: PropTypes.string.isRequired,
   }),
   user: PropTypes.shape({
     id: PropTypes.string.isRequired,
-    vcCurrent: PropTypes.number.isRequired
+    vcCurrent: PropTypes.number.isRequired,
   }),
   // Provided so we know which Relay record to update
   // to increase the Hearts donated to the campaign.
   heartDonationCampaign: PropTypes.shape({
     time: PropTypes.shape({
       start: PropTypes.instanceOf(moment),
-      end: PropTypes.instanceOf(moment)
-    })
+      end: PropTypes.instanceOf(moment),
+    }),
   }),
   showError: PropTypes.func.isRequired,
   theme: PropTypes.object.isRequired,
   style: PropTypes.object.isRequired,
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
 }
 
 DonateHeartsControls.defaultProps = {
-  style: {}
+  style: {},
 }
 
 export default withStyles(styles, { withTheme: true })(DonateHeartsControls)

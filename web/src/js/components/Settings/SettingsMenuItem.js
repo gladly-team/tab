@@ -6,24 +6,24 @@ import ListItemText from '@material-ui/core/ListItemText'
 import NavLink from 'js/components/General/NavLink'
 
 class SettingsMenuItem extends React.Component {
-  render () {
+  render() {
     const { theme, to } = this.props
     const isActive = this.context.router.isActive(to)
-    const listItemStyle = Object.assign({},
-      isActive ? {
-        background: theme.palette.action.hover
-      } : null
+    const listItemStyle = Object.assign(
+      {},
+      isActive
+        ? {
+            background: theme.palette.action.hover,
+          }
+        : null
     )
     return (
-      <NavLink
-        to={this.props.to}
-        style={{ textDecoration: 'none' }}
-      >
+      <NavLink to={this.props.to} style={{ textDecoration: 'none' }}>
         <ListItem style={listItemStyle} button>
           <ListItemText
             primary={this.props.children}
             primaryTypographyProps={{
-              variant: 'body2'
+              variant: 'body2',
             }}
           />
         </ListItem>
@@ -33,11 +33,11 @@ class SettingsMenuItem extends React.Component {
 }
 
 SettingsMenuItem.contextTypes = {
-  router: PropTypes.object
+  router: PropTypes.object,
 }
 
 SettingsMenuItem.propTypes = {
   theme: PropTypes.object.isRequired,
-  to: PropTypes.string.isRequired
+  to: PropTypes.string.isRequired,
 }
 export default withTheme()(SettingsMenuItem)

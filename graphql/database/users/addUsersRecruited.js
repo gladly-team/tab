@@ -1,9 +1,9 @@
-
 import UserModel from './UserModel'
 import {
   getPermissionsOverride,
-  ADD_NUM_USERS_RECRUITED_OVERRIDE
+  ADD_NUM_USERS_RECRUITED_OVERRIDE,
 } from '../../utils/permissions-overrides'
+
 const override = getPermissionsOverride(ADD_NUM_USERS_RECRUITED_OVERRIDE)
 
 /**
@@ -15,9 +15,9 @@ const override = getPermissionsOverride(ADD_NUM_USERS_RECRUITED_OVERRIDE)
  */
 const addUsersRecruited = async (referringUserId, numUsersRecruited = 1) => {
   try {
-    var user = await UserModel.update(override, {
+    const user = await UserModel.update(override, {
       id: referringUserId,
-      numUsersRecruited: {$add: numUsersRecruited}
+      numUsersRecruited: { $add: numUsersRecruited },
     })
     return user
   } catch (e) {

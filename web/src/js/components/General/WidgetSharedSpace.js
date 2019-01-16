@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 class WidgetSharedSpace extends React.Component {
-  render () {
+  render() {
     const main = {
       position: 'absolute',
       zIndex: 1,
@@ -11,7 +11,7 @@ class WidgetSharedSpace extends React.Component {
       backgroundColor: 'transparent',
       width: 300,
       overflowX: 'hidden',
-      overflowY: 'hidden'
+      overflowY: 'hidden',
     }
 
     return (
@@ -23,11 +23,11 @@ class WidgetSharedSpace extends React.Component {
 }
 
 WidgetSharedSpace.propTypes = {
-  containerStyle: PropTypes.object
+  containerStyle: PropTypes.object,
 }
 
 WidgetSharedSpace.defaultProps = {
-  containerStyle: {}
+  containerStyle: {},
 }
 
 export default WidgetSharedSpace

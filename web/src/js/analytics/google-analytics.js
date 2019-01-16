@@ -1,4 +1,3 @@
-
 // https://github.com/react-ga/react-ga
 import ReactGA from 'react-ga'
 
@@ -18,7 +17,7 @@ try {
 
 // Wraps ReactGA methods in try/catch.
 class ReactGAWrapper {
-  static pageview () {
+  static pageview() {
     try {
       const url = `${window.location.pathname}${window.location.search}`
       debugLogger(`Logging GA pageview with url: ${url}`)
@@ -28,7 +27,7 @@ class ReactGAWrapper {
     }
   }
 
-  static event (gaEvent) {
+  static event(gaEvent) {
     try {
       debugLogger('Logging GA event:', JSON.stringify(gaEvent))
       ReactGA.event(gaEvent)
@@ -37,7 +36,7 @@ class ReactGAWrapper {
     }
   }
 
-  static ga (gaAction, gaEvent) {
+  static ga(gaAction, gaEvent) {
     try {
       debugLogger('Logging GA event:', gaAction, JSON.stringify(gaEvent))
       ReactGA.ga(gaAction, gaEvent)

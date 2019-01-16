@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { incrementTabsOpenedToday } from 'js/utils/local-user-data-mgr'
 
 class LogTabComponent extends React.Component {
-  componentDidMount () {
+  componentDidMount() {
     // Delay so that:
     // * the user sees their VC increment
     // * ads are more likely to have loaded
@@ -24,19 +24,19 @@ class LogTabComponent extends React.Component {
     incrementTabsOpenedToday()
   }
 
-  render () {
+  render() {
     return null
   }
 }
 
 LogTabComponent.propTypes = {
   user: PropTypes.shape({
-    id: PropTypes.string.isRequired
+    id: PropTypes.string.isRequired,
   }).isRequired,
   tabId: PropTypes.string.isRequired,
   relay: PropTypes.shape({
-    environment: PropTypes.object.isRequired
-  })
+    environment: PropTypes.object.isRequired,
+  }),
 }
 
 export default LogTabComponent

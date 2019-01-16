@@ -1,4 +1,3 @@
-
 import moment from 'moment'
 import VCDonationModel from './VCDonationModel'
 import VCDonationByCharityModel from './VCDonationByCharityModel'
@@ -6,9 +5,12 @@ import UserModel from '../users/UserModel'
 import addVcDonatedAllTime from '../users/addVcDonatedAllTime'
 import {
   getPermissionsOverride,
-  ADD_VC_DONATED_BY_CHARITY
+  ADD_VC_DONATED_BY_CHARITY,
 } from '../../utils/permissions-overrides'
-const addVCDonatedByCharityOverride = getPermissionsOverride(ADD_VC_DONATED_BY_CHARITY)
+
+const addVCDonatedByCharityOverride = getPermissionsOverride(
+  ADD_VC_DONATED_BY_CHARITY
+)
 
 /**
  * Donate the user's virtal currency to the specified charity.
@@ -30,32 +32,37 @@ export default async (userContext, userId, charityId, vc) => {
       const params = {}
       params.ConditionExpression = '#vcCurrent >= :vcToDonate'
       params.ExpressionAttributeNames = { '#vcCurrent': 'vcCurrent' }
-      params.ExpressionAttributeValues = {':vcToDonate': vc}
-      await UserModel.update(userContext, {
-        id: userId,
-        vcCurrent: {$add: -vc}
-      }, params)
+      params.ExpressionAttributeValues = { ':vcToDonate': vc }
+      await UserModel.update(
+        userContext,
+        {
+          id: userId,
+          vcCurrent: { $add: -vc },
+        },
+        params
+      )
     } catch (e) {
       // The user did not have sufficient VC.
       if (e.code === 'ConditionalCheckFailedException') {
         return {
           user: null,
-          errors: [{
-            code: 'VC_INSUFFICIENT_TO_DONATE',
-            message: `The user did not have the required ${vc} VC`
-          }]
+          errors: [
+            {
+              code: 'VC_INSUFFICIENT_TO_DONATE',
+              message: `The user did not have the required ${vc} VC`,
+            },
+          ],
         }
-      } else {
-        throw e
       }
+      throw e
     }
 
     // Create the VC donation.
     await VCDonationModel.create(userContext, {
-      userId: userId,
+      userId,
       timestamp: moment.utc().toISOString(),
-      charityId: charityId,
-      vcDonated: vc
+      charityId,
+      vcDonated: vc,
     })
 
     // Add VC donated to the user's all time count.
@@ -66,23 +73,29 @@ export default async (userContext, userId, charityId, vc) => {
     // not yet exist.
     try {
       await VCDonationByCharityModel.update(addVCDonatedByCharityOverride, {
-        charityId: charityId,
+        charityId,
         // The datetime of the start of this hour.
-        timestamp: moment.utc().startOf('hour').toISOString(),
-        vcDonated: {$add: vc}
+        timestamp: moment
+          .utc()
+          .startOf('hour')
+          .toISOString(),
+        vcDonated: { $add: vc },
       })
     } catch (e) {
       // The item does not exist, so create it.
       if (e.code === 'ConditionalCheckFailedException') {
         try {
           await VCDonationByCharityModel.create(addVCDonatedByCharityOverride, {
-            charityId: charityId,
+            charityId,
             // The datetime of the start of this hour.
-            timestamp: moment.utc().startOf('hour').toISOString(),
-            vcDonated: vc
+            timestamp: moment
+              .utc()
+              .startOf('hour')
+              .toISOString(),
+            vcDonated: vc,
           })
-        } catch (e) {
-          throw e
+        } catch (err) {
+          throw err
         }
       } else {
         throw e
@@ -90,8 +103,8 @@ export default async (userContext, userId, charityId, vc) => {
     }
 
     return {
-      user: user,
-      errors: null
+      user,
+      errors: null,
     }
   } catch (e) {
     throw e

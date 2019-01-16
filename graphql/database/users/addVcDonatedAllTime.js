@@ -1,4 +1,3 @@
-
 import UserModel from './UserModel'
 
 /**
@@ -12,9 +11,9 @@ import UserModel from './UserModel'
  */
 const addVcDonatedAllTime = async (userContext, userId, vc = 0) => {
   try {
-    var user = await UserModel.update(userContext, {
+    const user = await UserModel.update(userContext, {
       id: userId,
-      vcDonatedAllTime: {$add: vc}
+      vcDonatedAllTime: { $add: vc },
     })
     return user
   } catch (e) {

@@ -2,19 +2,13 @@ import React from 'react'
 // import PropTypes from 'prop-types'
 
 class WidgetPieceWrapper extends React.Component {
-  render () {
-    return (
-      <span>
-        {this.props.children}
-      </span>
-    )
+  render() {
+    return <span>{this.props.children}</span>
   }
 }
 
-WidgetPieceWrapper.propTypes = {
-}
+WidgetPieceWrapper.propTypes = {}
 
-WidgetPieceWrapper.defaultProps = {
-}
+WidgetPieceWrapper.defaultProps = {}
 
 export default WidgetPieceWrapper

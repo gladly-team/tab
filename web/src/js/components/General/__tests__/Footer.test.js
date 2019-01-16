@@ -10,7 +10,7 @@ describe('Footer', () => {
     shallow(<Footer />)
   })
 
-  it('matches expected snapshot', function () {
+  it('matches expected snapshot', function() {
     const Footer = require('../Footer').default
     const wrapper = shallow(<Footer />)
     expect(toJson(wrapper)).toMatchSnapshot()

@@ -1,4 +1,3 @@
-
 import moment from 'moment'
 import { isNil } from 'lodash/lang'
 import { random } from 'lodash/number'
@@ -14,12 +13,10 @@ const AGGREGATION_MAX = 'MAX'
  * @param {string|null} adSize - The ad dimensions, in form 'WIDTHxHEIGHT'
  * @return {Object}
  */
-const AdRevenue = (revenue, adSize) => {
-  return {
-    revenue: revenue || null,
-    adSize: adSize || null
-  }
-}
+const AdRevenue = (revenue, adSize) => ({
+  revenue: revenue || null,
+  adSize: adSize || null,
+})
 
 /**
  * Convert an encoded revenue object into a float value by a method specified
@@ -31,23 +28,31 @@ const AdRevenue = (revenue, adSize) => {
  *   should resolve into a float.
  * @return {Object} An AdRevenue object
  */
-const decodeRevenueObj = (revenueObj) => {
+const decodeRevenueObj = revenueObj => {
   if (!revenueObj) {
     return AdRevenue()
   }
-  var revenueVal
-  var adSize
+  let revenueVal
+  let adSize
   switch (revenueObj.encodingType) {
-    case AMAZON_CPM_REVENUE_TYPE:
+    case AMAZON_CPM_REVENUE_TYPE: {
       const decodedCPM = decodeAmazonCPM(revenueObj.encodedValue)
       if (isNil(decodedCPM)) {
-        throw new Error(`Amazon revenue code "${revenueObj.encodedValue}" resolved to a nil value`)
+        throw new Error(
+          `Amazon revenue code "${
+            revenueObj.encodedValue
+          }" resolved to a nil value`
+        )
       }
       revenueVal = decodedCPM / 1000
+      // eslint-disable-next-line prefer-destructuring
       adSize = revenueObj.adSize
       break
+    }
     default:
-      throw new Error('Invalid "encodingType" field for revenue object transformation')
+      throw new Error(
+        'Invalid "encodingType" field for revenue object transformation'
+      )
   }
   return AdRevenue(revenueVal, adSize)
 }
@@ -61,15 +66,17 @@ const decodeRevenueObj = (revenueObj) => {
  * @return {Object} An AdRevenue object
  */
 const aggregateRevenues = (revenueObjs, aggregationOperation) => {
-  var aggregatedRevenue
+  let aggregatedRevenue
   switch (aggregationOperation) {
     case AGGREGATION_MAX:
-      aggregatedRevenue = revenueObjs.reduce((a, b) => {
-        return a.revenue > b.revenue ? a : b
-      })
+      aggregatedRevenue = revenueObjs.reduce((a, b) =>
+        a.revenue > b.revenue ? a : b
+      )
       break
     default:
-      throw new Error(`Invalid "aggregationOperation" value. Must be one of: "${AGGREGATION_MAX}"`)
+      throw new Error(
+        `Invalid "aggregationOperation" value. Must be one of: "${AGGREGATION_MAX}"`
+      )
   }
   return aggregatedRevenue
 }
@@ -81,10 +88,11 @@ const aggregateRevenues = (revenueObjs, aggregationOperation) => {
  * @return {String} An ISO datetime with the milliseconds up to
  *   20ms greater than the provided ISODatetime.
  */
-const addMillisecondsToISODatetime = (ISODatetime) => {
+const addMillisecondsToISODatetime = ISODatetime => {
   const msToAdd = random(1, 20)
   return moment(ISODatetime)
-    .add(msToAdd, 'milliseconds').toISOString()
+    .add(msToAdd, 'milliseconds')
+    .toISOString()
 }
 
 /**
@@ -107,42 +115,57 @@ const addMillisecondsToISODatetime = (ISODatetime) => {
  * @param {string|null} adUnitCode - The DFP ID for the ad slot.
  * @return {Object} If successful, a single key ("success") with value `true`
  */
-const logRevenue = async (userContext, userId, revenue = null, dfpAdvertiserId = null,
-  encodedRevenue = null, aggregationOperation = null, tabId = null, adSize = null,
-  adUnitCode = null) => {
+const logRevenue = async (
+  userContext,
+  userId,
+  revenue = null,
+  dfpAdvertiserId = null,
+  encodedRevenue = null,
+  aggregationOperation = null,
+  tabId = null,
+  adSize = null,
+  adUnitCode = null
+) => {
   const revenueObj = AdRevenue(revenue, adSize)
 
   // Decode the encoded revenue, if needed
   const decodedRevenueObj = decodeRevenueObj(encodedRevenue)
 
-  var revenueObjToLog = null
+  let revenueObjToLog = null
   // Received no valid revenue value
   if (isNil(revenueObj.revenue) && isNil(decodedRevenueObj.revenue)) {
-    throw new Error('Revenue logging requires either "revenue" or "encodedRevenue" values')
-  // Only received "revenue"
+    throw new Error(
+      'Revenue logging requires either "revenue" or "encodedRevenue" values'
+    )
+    // Only received "revenue"
   } else if (!isNil(revenueObj.revenue) && isNil(decodedRevenueObj.revenue)) {
     revenueObjToLog = revenueObj
-  // Only received "encodedRevenue"
+    // Only received "encodedRevenue"
   } else if (!isNil(decodedRevenueObj.revenue) && isNil(revenueObj.revenue)) {
     revenueObjToLog = decodedRevenueObj
-  // Received both "revenue" and "encodedRevenue"
+    // Received both "revenue" and "encodedRevenue"
   } else if (!isNil(revenueObj.revenue) && !isNil(decodedRevenueObj.revenue)) {
     if (isNil(aggregationOperation)) {
-      throw new Error('Revenue logging requires an "aggregationOperation" value if both "revenue" and "encodedRevenue" values are provided')
+      throw new Error(
+        'Revenue logging requires an "aggregationOperation" value if both "revenue" and "encodedRevenue" values are provided'
+      )
     }
-    revenueObjToLog = aggregateRevenues([revenueObj, decodedRevenueObj], aggregationOperation)
+    revenueObjToLog = aggregateRevenues(
+      [revenueObj, decodedRevenueObj],
+      aggregationOperation
+    )
   }
 
   const ISOTimestamp = moment.utc().toISOString()
-  function createRevenueLogItem (createdISOTimestamp) {
+  function createRevenueLogItem(createdISOTimestamp) {
     return UserRevenueModel.create(userContext, {
-      userId: userId,
+      userId,
       timestamp: createdISOTimestamp,
       revenue: revenueObjToLog.revenue,
-      ...dfpAdvertiserId && { dfpAdvertiserId: dfpAdvertiserId },
-      ...tabId && { tabId: tabId },
-      ...revenueObjToLog.adSize && { adSize: revenueObjToLog.adSize },
-      ...adUnitCode && { adUnitCode: adUnitCode }
+      ...(dfpAdvertiserId && { dfpAdvertiserId }),
+      ...(tabId && { tabId }),
+      ...(revenueObjToLog.adSize && { adSize: revenueObjToLog.adSize }),
+      ...(adUnitCode && { adUnitCode }),
     })
   }
 
@@ -159,8 +182,8 @@ const logRevenue = async (userContext, userId, revenue = null, dfpAdvertiserId =
         // A messy but sufficient fix: modify the timestamp slightly.
         const newISOTimestamp = addMillisecondsToISODatetime(ISOTimestamp)
         await createRevenueLogItem(newISOTimestamp)
-      } catch (e) {
-        throw e
+      } catch (err) {
+        throw err
       }
     } else {
       throw e

@@ -22,7 +22,7 @@ describe('CharityModel', () => {
   })
 
   it('implements the tableName property', () => {
-    expect(Charity.tableName).toBe(tableNames['charities'])
+    expect(Charity.tableName).toBe(tableNames.charities)
   })
 
   it('constructs as expected', () => {
@@ -34,12 +34,14 @@ describe('CharityModel', () => {
       image: 'my-img.jpg',
       website: 'https://example.com',
       description: 'Info here.',
-      impact: ''
+      impact: '',
     }
     const item = Object.assign({}, new Charity(charityInfo))
-    expect(item).toEqual(Object.assign({}, charityInfo, {
-      logo: `${mediaRoot}/img/charities/charity-logos/my-logo.jpg`,
-      image: `${mediaRoot}/img/charities/charity-post-donation-images/my-img.jpg`
-    }))
+    expect(item).toEqual(
+      Object.assign({}, charityInfo, {
+        logo: `${mediaRoot}/img/charities/charity-logos/my-logo.jpg`,
+        image: `${mediaRoot}/img/charities/charity-post-donation-images/my-img.jpg`,
+      })
+    )
   })
 })

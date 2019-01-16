@@ -5,43 +5,47 @@ import TextField from 'material-ui/TextField'
 import { validateUsername } from 'js/utils/utils'
 
 class UsernameField extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.username = null
     this.state = {
       username: null,
-      error: null
+      error: null,
     }
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     if (nextProps.usernameDuplicate) {
       this.setErrorMessage('Username is already taken. Please choose another.')
     } else if (nextProps.otherError) {
-      this.setErrorMessage('There was an error saving your username. Please try again later.')
+      this.setErrorMessage(
+        'There was an error saving your username. Please try again later.'
+      )
     }
   }
 
-  hasValue () {
-    return this.username.input &&
+  hasValue() {
+    return (
+      this.username.input &&
       this.username.input.value &&
       this.username.input.value.trim()
+    )
   }
 
-  getValue () {
+  getValue() {
     if (this.hasValue) {
       return this.username.input.value.trim()
     }
     return null
   }
 
-  setErrorMessage (message) {
+  setErrorMessage(message) {
     this.setState({
-      error: message
+      error: message,
     })
   }
 
-  validate () {
+  validate() {
     if (this.hasValue()) {
       const username = this.username.input.value.trim()
       const isValid = validateUsername(username)
@@ -61,7 +65,7 @@ class UsernameField extends React.Component {
     }
   }
 
-  render () {
+  render() {
     const props = Object.assign({}, this.props)
     delete props['usernameDuplicate']
     delete props['otherError']
@@ -70,22 +74,25 @@ class UsernameField extends React.Component {
       <TextField
         id={'username-input'}
         data-test-id={'username-field-text-input'}
-        ref={(input) => { this.username = input }}
+        ref={input => {
+          this.username = input
+        }}
         floatingLabelText={<span>Username</span>}
         {...props}
-        errorText={this.state.error} />
+        errorText={this.state.error}
+      />
     )
   }
 }
 
 UsernameField.propTypes = {
   usernameDuplicate: PropTypes.bool,
-  otherError: PropTypes.bool
+  otherError: PropTypes.bool,
 }
 
 UsernameField.defaultProps = {
   usernameDuplicate: false,
-  otherError: false
+  otherError: false,
 }
 
 export default UsernameField

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { assignUserToTestGroups } from 'js/utils/experiments'
 
 class AssignExperimentGroups extends React.Component {
-  componentDidMount () {
+  componentDidMount() {
     const { user } = this.props
 
     // Assign the user to experiment groups. We do this every
@@ -13,11 +13,11 @@ class AssignExperimentGroups extends React.Component {
     assignUserToTestGroups({
       id: user.id,
       joined: user.joined,
-      isNewUser: this.props.isNewUser
+      isNewUser: this.props.isNewUser,
     })
   }
 
-  render () {
+  render() {
     return null
   }
 }
@@ -25,13 +25,13 @@ class AssignExperimentGroups extends React.Component {
 AssignExperimentGroups.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.string.isRequired,
-    joined: PropTypes.string.isRequired
+    joined: PropTypes.string.isRequired,
   }).isRequired,
-  isNewUser: PropTypes.bool.isRequired
+  isNewUser: PropTypes.bool.isRequired,
 }
 
 AssignExperimentGroups.defaultProps = {
-  isNewUser: false
+  isNewUser: false,
 }
 
 export default AssignExperimentGroups

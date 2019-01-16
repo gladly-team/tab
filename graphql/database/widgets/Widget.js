@@ -1,4 +1,3 @@
-
 import { WIDGET } from '../constants'
 
 /*
@@ -6,7 +5,7 @@ import { WIDGET } from '../constants'
  * BaseWidget and UserWidget.
  */
 class Widget {
-  static get name () {
+  static get name() {
     return WIDGET
   }
 }

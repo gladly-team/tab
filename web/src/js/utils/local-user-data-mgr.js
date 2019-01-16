@@ -1,4 +1,3 @@
-
 import moment from 'moment'
 import uuid from 'uuid/v4'
 import localStorageMgr from 'js/utils/localstorage-mgr'
@@ -8,7 +7,7 @@ import {
   STORAGE_APPROX_EXTENSION_INSTALL_TIME,
   STORAGE_TABS_RECENT_DAY_COUNT,
   STORAGE_TABS_LAST_TAB_OPENED_DATE,
-  STORAGE_NOTIFICATIONS_DISMISS_TIME
+  STORAGE_NOTIFICATIONS_DISMISS_TIME,
 } from 'js/constants'
 
 /**
@@ -30,7 +29,9 @@ const getTabsOpenedTodayFromStorage = () => {
  */
 const hasUserOpenedTabToday = () => {
   // An ISO timestamp
-  const tabCountDate = localStorageMgr.getItem(STORAGE_TABS_LAST_TAB_OPENED_DATE)
+  const tabCountDate = localStorageMgr.getItem(
+    STORAGE_TABS_LAST_TAB_OPENED_DATE
+  )
 
   // If no current date, assume no tabs have been opened today.
   if (!tabCountDate) {
@@ -39,10 +40,13 @@ const hasUserOpenedTabToday = () => {
 
   // If the current date is the same as the most recent date a
   // tab was opened, it is not the first tab today.
-  const hasOpenedTabToday = (
-    moment(tabCountDate).utc().format('LL') ===
-    moment().utc().format('LL')
-  )
+  const hasOpenedTabToday =
+    moment(tabCountDate)
+      .utc()
+      .format('LL') ===
+    moment()
+      .utc()
+      .format('LL')
   return hasOpenedTabToday
 }
 
@@ -51,7 +55,7 @@ const hasUserOpenedTabToday = () => {
  * value exists in storage, return zero.
  * @returns {number} The user's tab count
  */
-export const getTabsOpenedToday = function () {
+export const getTabsOpenedToday = function() {
   if (!hasUserOpenedTabToday()) {
     return 0
   }
@@ -64,7 +68,10 @@ export const getTabsOpenedToday = function () {
  * @returns {undefined}
  */
 const setLastTabOpenedDateInLocalStorage = () => {
-  localStorageMgr.setItem(STORAGE_TABS_LAST_TAB_OPENED_DATE, moment.utc().toISOString())
+  localStorageMgr.setItem(
+    STORAGE_TABS_LAST_TAB_OPENED_DATE,
+    moment.utc().toISOString()
+  )
 }
 
 /**
@@ -73,7 +80,7 @@ const setLastTabOpenedDateInLocalStorage = () => {
  * @param {number} tabCount - The number of tabs today
  * @returns {undefined}
  */
-const setTabCountInLocalStorage = (tabCount) => {
+const setTabCountInLocalStorage = tabCount => {
   localStorageMgr.setItem(STORAGE_TABS_RECENT_DAY_COUNT, tabCount)
 }
 
@@ -83,7 +90,7 @@ const setTabCountInLocalStorage = (tabCount) => {
  * the tab counter. If no values exist in localStorage, set them.
  * @returns {undefined}
  */
-export const incrementTabsOpenedToday = function () {
+export const incrementTabsOpenedToday = function() {
   if (hasUserOpenedTabToday()) {
     // Increment the tab count
     const currentTabCount = getTabsOpenedTodayFromStorage()
@@ -128,7 +135,10 @@ export const getBrowserExtensionInstallId = () => {
  * @returns {undefined}
  */
 export const setBrowserExtensionInstallTime = () => {
-  localStorageMgr.setItem(STORAGE_APPROX_EXTENSION_INSTALL_TIME, moment.utc().toISOString())
+  localStorageMgr.setItem(
+    STORAGE_APPROX_EXTENSION_INSTALL_TIME,
+    moment.utc().toISOString()
+  )
 }
 
 /**
@@ -140,7 +150,9 @@ export const setBrowserExtensionInstallTime = () => {
  *   extension on this device.
  */
 export const getBrowserExtensionInstallTime = () => {
-  const timeISOString = localStorageMgr.getItem(STORAGE_APPROX_EXTENSION_INSTALL_TIME)
+  const timeISOString = localStorageMgr.getItem(
+    STORAGE_APPROX_EXTENSION_INSTALL_TIME
+  )
   const time = moment(timeISOString)
   if (!timeISOString || !time.isValid()) {
     return null
@@ -171,7 +183,10 @@ export const hasUserDismissedAdExplanation = () => {
  * @returns {undefined}
  */
 export const setNotificationDismissTime = () => {
-  localStorageMgr.setItem(STORAGE_NOTIFICATIONS_DISMISS_TIME, moment.utc().toISOString())
+  localStorageMgr.setItem(
+    STORAGE_NOTIFICATIONS_DISMISS_TIME,
+    moment.utc().toISOString()
+  )
 }
 
 /**
@@ -180,11 +195,16 @@ export const setNotificationDismissTime = () => {
  * @returns {Boolean}
  */
 export const hasUserDismissedNotificationRecently = () => {
-  const notificationDismissISOString = localStorageMgr
-    .getItem(STORAGE_NOTIFICATIONS_DISMISS_TIME)
+  const notificationDismissISOString = localStorageMgr.getItem(
+    STORAGE_NOTIFICATIONS_DISMISS_TIME
+  )
   const dismissTime = moment(notificationDismissISOString)
   if (!notificationDismissISOString || !dismissTime.isValid()) {
     return false
   }
-  return moment().utc().diff(dismissTime, 'days') < 10
+  return (
+    moment()
+      .utc()
+      .diff(dismissTime, 'days') < 10
+  )
 }

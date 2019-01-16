@@ -26,42 +26,42 @@ import SearchView from 'js/components/Search/SearchView'
 
 export default (
   // TODO: Show 404 page from IndexRedirect
-  <Route path='/' component={BaseContainer}>
-    <Route path='newtab' component={App}>
+  <Route path="/" component={BaseContainer}>
+    <Route path="newtab" component={App}>
       <IndexRoute component={DashboardView} />
       <Route component={SettingsPageComponent}>
-        <Route path='settings'>
+        <Route path="settings">
           <IndexRoute component={WidgetsSettingsView} />
-          <Route path='widgets' component={WidgetsSettingsView} />
-          <Route path='background' component={BackgroundSettingsView} />
+          <Route path="widgets" component={WidgetsSettingsView} />
+          <Route path="background" component={BackgroundSettingsView} />
         </Route>
-        <Route path='profile'>
+        <Route path="profile">
           <IndexRoute component={ProfileStatsView} />
-          <Route path='stats' component={ProfileStatsView} />
-          <Route path='donate' component={ProfileDonateHearts} />
-          <Route path='invite' component={ProfileInviteFriend} />
+          <Route path="stats" component={ProfileStatsView} />
+          <Route path="donate" component={ProfileDonateHearts} />
+          <Route path="invite" component={ProfileInviteFriend} />
         </Route>
-        <Route path='account' component={AccountView} />
+        <Route path="account" component={AccountView} />
       </Route>
-      <Route path='first-tab'>
+      <Route path="first-tab">
         <IndexRoute component={FirstTabView} />
       </Route>
-      <Route path='uninstalled'>
+      <Route path="uninstalled">
         <IndexRoute component={PostUninstallView} />
       </Route>
-      <Route path='auth' component={AuthenticationView}>
+      <Route path="auth" component={AuthenticationView}>
         <IndexRoute component={FirebaseAuthenticationUI} />
-        <Route path='action' component={FirebaseAuthenticationUI} >
+        <Route path="action" component={FirebaseAuthenticationUI}>
           <IndexRoute component={FirebaseAuthenticationUIAction} />
         </Route>
-        <Route path='verify-email' component={VerifyEmailMessage} />
-        <Route path='username' component={EnterUsernameForm} />
-        <Route path='welcome' component={SignInIframeMessage} />
-        <Route path='missing-email' component={MissingEmailMessage} />
+        <Route path="verify-email" component={VerifyEmailMessage} />
+        <Route path="username" component={EnterUsernameForm} />
+        <Route path="welcome" component={SignInIframeMessage} />
+        <Route path="missing-email" component={MissingEmailMessage} />
       </Route>
-      <Redirect from='*' to='/newtab/' />
+      <Redirect from="*" to="/newtab/" />
     </Route>
-    <IndexRedirect from='*' to='/newtab/' />
-    <Route path='search' component={SearchView} />
+    <IndexRedirect from="*" to="/newtab/" />
+    <Route path="search" component={SearchView} />
   </Route>
 )

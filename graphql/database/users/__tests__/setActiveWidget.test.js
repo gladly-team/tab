@@ -8,7 +8,7 @@ import {
   getMockUserContext,
   getMockUserInstance,
   mockDate,
-  setMockDBResponse
+  setMockDBResponse,
 } from '../../test-utils'
 
 jest.mock('../../databaseClient')
@@ -35,7 +35,7 @@ describe('setActiveWidget', () => {
     expect(updateMethod).toHaveBeenCalledWith(userContext, {
       id: userContext.id,
       activeWidget: widgetId,
-      updated: moment.utc().toISOString()
+      updated: moment.utc().toISOString(),
     })
   })
 
@@ -43,14 +43,14 @@ describe('setActiveWidget', () => {
     const widgetId = 'abcdefgh-12ab-12ab-12ab-123abc456def'
     const expectedReturnedUser = getMockUserInstance()
 
-    const dbUpdateMock = setMockDBResponse(
-      DatabaseOperation.UPDATE,
-      {
-        Attributes: expectedReturnedUser
-      }
+    const dbUpdateMock = setMockDBResponse(DatabaseOperation.UPDATE, {
+      Attributes: expectedReturnedUser,
+    })
+    const response = await setActiveWidget(
+      userContext,
+      userContext.id,
+      widgetId
     )
-    const response = await setActiveWidget(userContext,
-      userContext.id, widgetId)
     expect(dbUpdateMock).toHaveBeenCalled()
     expect(response).toEqual(expectedReturnedUser)
   })

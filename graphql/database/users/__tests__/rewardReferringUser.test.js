@@ -10,7 +10,7 @@ import {
   getMockUserInfo,
   getMockUserInstance,
   setMockDBResponse,
-  clearAllMockDBResponses
+  clearAllMockDBResponses,
 } from '../../test-utils'
 
 jest.mock('../../databaseClient')
@@ -36,44 +36,40 @@ describe('rewardReferringUser', () => {
     const referringUserId = 'referring-user-id-123'
 
     // Mock getting the ReferralData.
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: Object.assign({}, new ReferralDataModel({
-          userId: userId,
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: Object.assign(
+        {},
+        new ReferralDataModel({
+          userId,
           referringUser: referringUserId,
-          referringChannel: null
-        }))
-      }
-    )
+          referringChannel: null,
+        })
+      ),
+    })
 
     // Mock getting the user to check if its referral has been rewarded.
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: Object.assign({}, mockUser, {
-          referrerRewarded: false,
-          joined: timeAfterEmailVerifyFeatureChange
-        })
-      }
-    )
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: Object.assign({}, mockUser, {
+        referrerRewarded: false,
+        joined: timeAfterEmailVerifyFeatureChange,
+      }),
+    })
 
     // Mock updating the user to mark the user as referred.
-    setMockDBResponse(
-      DatabaseOperation.UPDATE,
-      {
-        Attributes: Object.assign({}, mockUser, { referrerRewarded: true })
-      }
-    )
+    setMockDBResponse(DatabaseOperation.UPDATE, {
+      Attributes: Object.assign({}, mockUser, { referrerRewarded: true }),
+    })
 
     await rewardReferringUser(userContext, userId)
     const addVcCallParams = addVc.mock.calls[0]
-    expect(addVcCallParams[0]).toMatch(/REWARD_REFERRER_OVERRIDE_CONFIRMED_[0-9]{5}$/)
+    expect(addVcCallParams[0]).toMatch(
+      /REWARD_REFERRER_OVERRIDE_CONFIRMED_[0-9]{5}$/
+    )
     expect(addVcCallParams[1]).toBe(referringUserId)
     expect(addVcCallParams[2]).toBe(350)
   })
 
-  it('calls to increment the referring user\'s number of recruited users', async () => {
+  it("calls to increment the referring user's number of recruited users", async () => {
     expect.assertions(2)
 
     const userContext = getMockUserContext()
@@ -83,35 +79,29 @@ describe('rewardReferringUser', () => {
     const referringUserId = 'referring-user-id-123'
 
     // Mock getting the ReferralData.
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: Object.assign({}, new ReferralDataModel({
-          userId: userId,
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: Object.assign(
+        {},
+        new ReferralDataModel({
+          userId,
           referringUser: referringUserId,
-          referringChannel: null
-        }))
-      }
-    )
+          referringChannel: null,
+        })
+      ),
+    })
 
     // Mock getting the user to check if its referral has been rewarded.
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: Object.assign({}, mockUser, {
-          referrerRewarded: false,
-          joined: timeAfterEmailVerifyFeatureChange
-        })
-      }
-    )
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: Object.assign({}, mockUser, {
+        referrerRewarded: false,
+        joined: timeAfterEmailVerifyFeatureChange,
+      }),
+    })
 
     // Mock updating the user to mark the user as referred.
-    setMockDBResponse(
-      DatabaseOperation.UPDATE,
-      {
-        Attributes: Object.assign({}, mockUser, { referrerRewarded: true })
-      }
-    )
+    setMockDBResponse(DatabaseOperation.UPDATE, {
+      Attributes: Object.assign({}, mockUser, { referrerRewarded: true }),
+    })
 
     await rewardReferringUser(userContext, userId)
     expect(addUsersRecruited).toHaveBeenCalledWith(referringUserId, 1)
@@ -128,35 +118,29 @@ describe('rewardReferringUser', () => {
     const referringUserId = 'referring-user-id-123'
 
     // Mock getting the ReferralData.
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: Object.assign({}, new ReferralDataModel({
-          userId: userId,
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: Object.assign(
+        {},
+        new ReferralDataModel({
+          userId,
           referringUser: referringUserId,
-          referringChannel: null
-        }))
-      }
-    )
+          referringChannel: null,
+        })
+      ),
+    })
 
     // Mock getting the user to check if its referral has been rewarded.
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: Object.assign({}, mockUser, {
-          referrerRewarded: false,
-          joined: timeAfterEmailVerifyFeatureChange
-        })
-      }
-    )
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: Object.assign({}, mockUser, {
+        referrerRewarded: false,
+        joined: timeAfterEmailVerifyFeatureChange,
+      }),
+    })
 
     // Mock updating the user to mark the user as referred.
-    setMockDBResponse(
-      DatabaseOperation.UPDATE,
-      {
-        Attributes: Object.assign({}, mockUser, { referrerRewarded: true })
-      }
-    )
+    setMockDBResponse(DatabaseOperation.UPDATE, {
+      Attributes: Object.assign({}, mockUser, { referrerRewarded: true }),
+    })
 
     const response = await rewardReferringUser(userContext, userId)
     expect(response).toBe(true)
@@ -171,31 +155,22 @@ describe('rewardReferringUser', () => {
     const mockUser = getMockUserInstance(Object.assign({}, userInfo))
 
     // Mock getting the ReferralData.
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: null // no referral data exists
-      }
-    )
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: null, // no referral data exists
+    })
 
     // Mock getting the user to check if its referral has been rewarded.
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: Object.assign({}, mockUser, {
-          referrerRewarded: false,
-          joined: timeAfterEmailVerifyFeatureChange
-        })
-      }
-    )
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: Object.assign({}, mockUser, {
+        referrerRewarded: false,
+        joined: timeAfterEmailVerifyFeatureChange,
+      }),
+    })
 
     // Mock updating the user to mark the user as referred.
-    setMockDBResponse(
-      DatabaseOperation.UPDATE,
-      {
-        Attributes: Object.assign({}, mockUser, { referrerRewarded: true })
-      }
-    )
+    setMockDBResponse(DatabaseOperation.UPDATE, {
+      Attributes: Object.assign({}, mockUser, { referrerRewarded: true }),
+    })
 
     const response = await rewardReferringUser(userContext, userId)
     expect(response).toBe(false)
@@ -212,35 +187,29 @@ describe('rewardReferringUser', () => {
     const mockUser = getMockUserInstance(Object.assign({}, userInfo))
 
     // Mock getting the ReferralData.
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: Object.assign({}, new ReferralDataModel({
-          userId: userId,
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: Object.assign(
+        {},
+        new ReferralDataModel({
+          userId,
           referringUser: null, // no referring user
-          referringChannel: 'some-channel'
-        }))
-      }
-    )
+          referringChannel: 'some-channel',
+        })
+      ),
+    })
 
     // Mock getting the user to check if its referral has been rewarded.
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: Object.assign({}, mockUser, {
-          referrerRewarded: false,
-          joined: timeAfterEmailVerifyFeatureChange
-        })
-      }
-    )
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: Object.assign({}, mockUser, {
+        referrerRewarded: false,
+        joined: timeAfterEmailVerifyFeatureChange,
+      }),
+    })
 
     // Mock updating the user to mark the user as referred.
-    setMockDBResponse(
-      DatabaseOperation.UPDATE,
-      {
-        Attributes: Object.assign({}, mockUser, { referrerRewarded: true })
-      }
-    )
+    setMockDBResponse(DatabaseOperation.UPDATE, {
+      Attributes: Object.assign({}, mockUser, { referrerRewarded: true }),
+    })
 
     const response = await rewardReferringUser(userContext, userId)
     expect(response).toBe(false)
@@ -258,36 +227,30 @@ describe('rewardReferringUser', () => {
     const referringUserId = 'referring-user-id-123'
 
     // Mock getting the ReferralData.
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: Object.assign({}, new ReferralDataModel({
-          userId: userId,
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: Object.assign(
+        {},
+        new ReferralDataModel({
+          userId,
           referringUser: referringUserId,
-          referringChannel: null
-        }))
-      }
-    )
+          referringChannel: null,
+        })
+      ),
+    })
 
     // Mock getting the user to check if its referral has been rewarded.
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        // Note that the referrer was already rewarded.
-        Item: Object.assign({}, mockUser, {
-          referrerRewarded: true,
-          joined: timeAfterEmailVerifyFeatureChange
-        })
-      }
-    )
+    setMockDBResponse(DatabaseOperation.GET, {
+      // Note that the referrer was already rewarded.
+      Item: Object.assign({}, mockUser, {
+        referrerRewarded: true,
+        joined: timeAfterEmailVerifyFeatureChange,
+      }),
+    })
 
     // Mock updating the user to mark the user as referred.
-    setMockDBResponse(
-      DatabaseOperation.UPDATE,
-      {
-        Attributes: Object.assign({}, mockUser, { referrerRewarded: true })
-      }
-    )
+    setMockDBResponse(DatabaseOperation.UPDATE, {
+      Attributes: Object.assign({}, mockUser, { referrerRewarded: true }),
+    })
 
     const response = await rewardReferringUser(userContext, userId)
     expect(response).toBe(false)
@@ -305,35 +268,29 @@ describe('rewardReferringUser', () => {
     const referringUserId = 'referring-user-id-123'
 
     // Mock getting the ReferralData.
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: Object.assign({}, new ReferralDataModel({
-          userId: userId,
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: Object.assign(
+        {},
+        new ReferralDataModel({
+          userId,
           referringUser: referringUserId,
-          referringChannel: null
-        }))
-      }
-    )
+          referringChannel: null,
+        })
+      ),
+    })
 
     // Mock getting the user to check if its referral has been rewarded.
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: Object.assign({}, mockUser, {
-          referrerRewarded: false,
-          joined: timeBeforeEmailVerifyFeatureChange // before feature change
-        })
-      }
-    )
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: Object.assign({}, mockUser, {
+        referrerRewarded: false,
+        joined: timeBeforeEmailVerifyFeatureChange, // before feature change
+      }),
+    })
 
     // Mock updating the user to mark the user as referred.
-    setMockDBResponse(
-      DatabaseOperation.UPDATE,
-      {
-        Attributes: Object.assign({}, mockUser, { referrerRewarded: true })
-      }
-    )
+    setMockDBResponse(DatabaseOperation.UPDATE, {
+      Attributes: Object.assign({}, mockUser, { referrerRewarded: true }),
+    })
 
     const response = await rewardReferringUser(userContext, userId)
     expect(response).toBe(false)
@@ -349,35 +306,29 @@ describe('rewardReferringUser', () => {
     const referringUserId = 'referring-user-id-123'
 
     // Mock getting the ReferralData.
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: Object.assign({}, new ReferralDataModel({
-          userId: userId,
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: Object.assign(
+        {},
+        new ReferralDataModel({
+          userId,
           referringUser: referringUserId,
-          referringChannel: null
-        }))
-      }
-    )
+          referringChannel: null,
+        })
+      ),
+    })
 
     // Mock getting the user to check if its referral has been rewarded.
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: Object.assign({}, mockUser, {
-          referrerRewarded: false,
-          joined: undefined // missing datetime
-        })
-      }
-    )
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: Object.assign({}, mockUser, {
+        referrerRewarded: false,
+        joined: undefined, // missing datetime
+      }),
+    })
 
     // Mock updating the user to mark the user as referred.
-    setMockDBResponse(
-      DatabaseOperation.UPDATE,
-      {
-        Attributes: Object.assign({}, mockUser, { referrerRewarded: true })
-      }
-    )
+    setMockDBResponse(DatabaseOperation.UPDATE, {
+      Attributes: Object.assign({}, mockUser, { referrerRewarded: true }),
+    })
 
     const response = await rewardReferringUser(userContext, userId)
     expect(response).toBe(false)
@@ -399,26 +350,19 @@ describe('rewardReferringUser', () => {
     )
 
     // Mock getting the user to check if its referral has been rewarded.
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: Object.assign({}, mockUser, {
-          referrerRewarded: false,
-          joined: timeAfterEmailVerifyFeatureChange
-        })
-      }
-    )
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: Object.assign({}, mockUser, {
+        referrerRewarded: false,
+        joined: timeAfterEmailVerifyFeatureChange,
+      }),
+    })
 
     // Mock updating the user to mark the user as referred.
-    setMockDBResponse(
-      DatabaseOperation.UPDATE,
-      {
-        Attributes: Object.assign({}, mockUser, { referrerRewarded: true })
-      }
-    )
+    setMockDBResponse(DatabaseOperation.UPDATE, {
+      Attributes: Object.assign({}, mockUser, { referrerRewarded: true }),
+    })
 
-    return expect(rewardReferringUser(userContext, userId))
-      .rejects.toThrow()
+    return expect(rewardReferringUser(userContext, userId)).rejects.toThrow()
   })
 
   it('throws if there is an error when getting the user', async () => {
@@ -431,16 +375,16 @@ describe('rewardReferringUser', () => {
     const referringUserId = 'referring-user-id-123'
 
     // Mock getting the ReferralData.
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: Object.assign({}, new ReferralDataModel({
-          userId: userId,
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: Object.assign(
+        {},
+        new ReferralDataModel({
+          userId,
           referringUser: referringUserId,
-          referringChannel: null
-        }))
-      }
-    )
+          referringChannel: null,
+        })
+      ),
+    })
 
     // Mock getting the user to check if its referral has been rewarded.
     setMockDBResponse(
@@ -450,15 +394,11 @@ describe('rewardReferringUser', () => {
     )
 
     // Mock updating the user to mark the user as referred.
-    setMockDBResponse(
-      DatabaseOperation.UPDATE,
-      {
-        Attributes: Object.assign({}, mockUser, { referrerRewarded: true })
-      }
-    )
+    setMockDBResponse(DatabaseOperation.UPDATE, {
+      Attributes: Object.assign({}, mockUser, { referrerRewarded: true }),
+    })
 
-    return expect(rewardReferringUser(userContext, userId))
-      .rejects.toThrow()
+    return expect(rewardReferringUser(userContext, userId)).rejects.toThrow()
   })
 
   it('throws if there is an error when updating the user to mark its referrer as rewarded', async () => {
@@ -471,27 +411,24 @@ describe('rewardReferringUser', () => {
     const referringUserId = 'referring-user-id-123'
 
     // Mock getting the ReferralData.
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: Object.assign({}, new ReferralDataModel({
-          userId: userId,
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: Object.assign(
+        {},
+        new ReferralDataModel({
+          userId,
           referringUser: referringUserId,
-          referringChannel: null
-        }))
-      }
-    )
+          referringChannel: null,
+        })
+      ),
+    })
 
     // Mock getting the user to check if its referral has been rewarded.
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: Object.assign({}, mockUser, {
-          referrerRewarded: false,
-          joined: timeAfterEmailVerifyFeatureChange
-        })
-      }
-    )
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: Object.assign({}, mockUser, {
+        referrerRewarded: false,
+        joined: timeAfterEmailVerifyFeatureChange,
+      }),
+    })
 
     // Mock updating the user to mark the user as referred.
     setMockDBResponse(
@@ -500,8 +437,7 @@ describe('rewardReferringUser', () => {
       { code: 'SomeFakeError' } // simple mock error
     )
 
-    return expect(rewardReferringUser(userContext, userId))
-      .rejects.toThrow()
+    return expect(rewardReferringUser(userContext, userId)).rejects.toThrow()
   })
 
   it('throws if there is an error when rewarding the user with VC', async () => {
@@ -514,44 +450,39 @@ describe('rewardReferringUser', () => {
     const referringUserId = 'referring-user-id-123'
 
     // Mock getting the ReferralData.
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: Object.assign({}, new ReferralDataModel({
-          userId: userId,
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: Object.assign(
+        {},
+        new ReferralDataModel({
+          userId,
           referringUser: referringUserId,
-          referringChannel: null
-        }))
-      }
-    )
+          referringChannel: null,
+        })
+      ),
+    })
 
     // Mock getting the user to check if its referral has been rewarded.
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: Object.assign({}, mockUser, {
-          referrerRewarded: false,
-          joined: timeAfterEmailVerifyFeatureChange
-        })
-      }
-    )
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: Object.assign({}, mockUser, {
+        referrerRewarded: false,
+        joined: timeAfterEmailVerifyFeatureChange,
+      }),
+    })
 
     // Mock updating the user to mark the user as referred.
-    setMockDBResponse(
-      DatabaseOperation.UPDATE,
-      {
-        Attributes: Object.assign({}, mockUser, { referrerRewarded: true })
-      }
-    )
+    setMockDBResponse(DatabaseOperation.UPDATE, {
+      Attributes: Object.assign({}, mockUser, { referrerRewarded: true }),
+    })
 
     // Mock an error when adding VC.
     addVc.mockImplementationOnce(() => Promise.reject(new Error('Darn.')))
 
-    await expect(rewardReferringUser(userContext, userId))
-      .rejects.toThrow('Darn.')
+    await expect(rewardReferringUser(userContext, userId)).rejects.toThrow(
+      'Darn.'
+    )
   })
 
-  it('throws if there is an error when increasing the referrer\'s count of referred users', async () => {
+  it("throws if there is an error when increasing the referrer's count of referred users", async () => {
     expect.assertions(1)
 
     const userContext = getMockUserContext()
@@ -561,40 +492,37 @@ describe('rewardReferringUser', () => {
     const referringUserId = 'referring-user-id-123'
 
     // Mock getting the ReferralData.
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: Object.assign({}, new ReferralDataModel({
-          userId: userId,
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: Object.assign(
+        {},
+        new ReferralDataModel({
+          userId,
           referringUser: referringUserId,
-          referringChannel: null
-        }))
-      }
-    )
+          referringChannel: null,
+        })
+      ),
+    })
 
     // Mock getting the user to check if its referral has been rewarded.
-    setMockDBResponse(
-      DatabaseOperation.GET,
-      {
-        Item: Object.assign({}, mockUser, {
-          referrerRewarded: false,
-          joined: timeAfterEmailVerifyFeatureChange
-        })
-      }
-    )
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: Object.assign({}, mockUser, {
+        referrerRewarded: false,
+        joined: timeAfterEmailVerifyFeatureChange,
+      }),
+    })
 
     // Mock updating the user to mark the user as referred.
-    setMockDBResponse(
-      DatabaseOperation.UPDATE,
-      {
-        Attributes: Object.assign({}, mockUser, { referrerRewarded: true })
-      }
-    )
+    setMockDBResponse(DatabaseOperation.UPDATE, {
+      Attributes: Object.assign({}, mockUser, { referrerRewarded: true }),
+    })
 
     // Mock an error when adding VC.
-    addUsersRecruited.mockImplementationOnce(() => Promise.reject(new Error('Whoops.')))
+    addUsersRecruited.mockImplementationOnce(() =>
+      Promise.reject(new Error('Whoops.'))
+    )
 
-    await expect(rewardReferringUser(userContext, userId))
-      .rejects.toThrow('Whoops.')
+    await expect(rewardReferringUser(userContext, userId)).rejects.toThrow(
+      'Whoops.'
+    )
   })
 })

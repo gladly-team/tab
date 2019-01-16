@@ -1,12 +1,9 @@
-
 import { mapValues } from 'lodash/object'
 import config from '../config'
 
-const tableNameAppendix = (
-  config.DB_TABLE_NAME_APPENDIX
+const tableNameAppendix = config.DB_TABLE_NAME_APPENDIX
   ? config.DB_TABLE_NAME_APPENDIX
   : ''
-)
 
 const tables = {
   users: 'Users',
@@ -20,7 +17,7 @@ const tables = {
   widgets: 'Widgets',
   userWidgets: 'UserWidgets',
   userTabsLog: 'UserTabsLog',
-  referralDataLog: 'ReferralDataLog'
+  referralDataLog: 'ReferralDataLog',
 }
 
-export default mapValues(tables, (name) => `${name}${tableNameAppendix}`)
+export default mapValues(tables, name => `${name}${tableNameAppendix}`)

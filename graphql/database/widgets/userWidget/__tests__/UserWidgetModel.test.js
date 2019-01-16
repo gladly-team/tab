@@ -2,9 +2,7 @@
 
 import tableNames from '../../../tables'
 import UserWidgetModel from '../UserWidgetModel'
-import {
-  permissionAuthorizers
-} from '../../../../utils/authorization-helpers'
+import { permissionAuthorizers } from '../../../../utils/authorization-helpers'
 
 jest.mock('../../../databaseClient')
 
@@ -22,12 +20,13 @@ describe('UserWidgetModel', () => {
   })
 
   it('implements the tableName property', () => {
-    expect(UserWidgetModel.tableName).toBe(tableNames['userWidgets'])
+    expect(UserWidgetModel.tableName).toBe(tableNames.userWidgets)
   })
 
   it('has the correct get permission', () => {
     expect(UserWidgetModel.permissions.get).toBe(
-      permissionAuthorizers.userIdMatchesHashKey)
+      permissionAuthorizers.userIdMatchesHashKey
+    )
   })
 
   it('has the correct getAll permission', () => {
@@ -36,7 +35,8 @@ describe('UserWidgetModel', () => {
 
   it('has the correct update permission', () => {
     expect(UserWidgetModel.permissions.update).toBe(
-      permissionAuthorizers.userIdMatchesHashKey)
+      permissionAuthorizers.userIdMatchesHashKey
+    )
   })
 
   it('has the correct create permission', () => {

@@ -6,7 +6,7 @@ import {
   DatabaseOperation,
   getMockUserContext,
   getMockUserInfo,
-  setMockDBResponse
+  setMockDBResponse,
 } from '../../../test-utils'
 
 jest.mock('../../../databaseClient')
@@ -25,34 +25,32 @@ describe('getUserWidgetsByEnabledState', () => {
       new UserWidgetModel({
         userId: userInfo.id,
         widgetId: 'abc',
-        enabled: true
+        enabled: true,
       }),
       new UserWidgetModel({
         userId: userInfo.id,
         widgetId: 'def',
-        enabled: false
+        enabled: false,
       }),
       new UserWidgetModel({
         userId: userInfo.id,
         widgetId: 'ghi',
-        enabled: true
-      })
+        enabled: true,
+      }),
     ]
-    setMockDBResponse(
-      DatabaseOperation.QUERY,
-      {
-        Items: userWidgetsToGet
-      }
-    )
+    setMockDBResponse(DatabaseOperation.QUERY, {
+      Items: userWidgetsToGet,
+    })
     const userWidgetQueryMethod = jest.spyOn(UserWidgetModel, 'query')
-    const userWidgets = await getUserWidgetsByEnabledState(userContext, userInfo.id, true)
+    const userWidgets = await getUserWidgetsByEnabledState(
+      userContext,
+      userInfo.id,
+      true
+    )
     expect(userWidgetQueryMethod).toHaveBeenCalledWith(userContext, userInfo.id)
 
     // Should exclude the widgets that aren't enabled.
-    expect(userWidgets).toEqual([
-      userWidgetsToGet[0],
-      userWidgetsToGet[2]
-    ])
+    expect(userWidgets).toEqual([userWidgetsToGet[0], userWidgetsToGet[2]])
   })
 
   it('gets only non-enabled widgets', async () => {
@@ -63,27 +61,28 @@ describe('getUserWidgetsByEnabledState', () => {
       new UserWidgetModel({
         userId: userInfo.id,
         widgetId: 'abc',
-        enabled: true
+        enabled: true,
       }),
       new UserWidgetModel({
         userId: userInfo.id,
         widgetId: 'def',
-        enabled: false
+        enabled: false,
       }),
       new UserWidgetModel({
         userId: userInfo.id,
         widgetId: 'ghi',
-        enabled: true
-      })
+        enabled: true,
+      }),
     ]
-    setMockDBResponse(
-      DatabaseOperation.QUERY,
-      {
-        Items: userWidgetsToGet
-      }
-    )
+    setMockDBResponse(DatabaseOperation.QUERY, {
+      Items: userWidgetsToGet,
+    })
     const userWidgetQueryMethod = jest.spyOn(UserWidgetModel, 'query')
-    const userWidgets = await getUserWidgetsByEnabledState(userContext, userInfo.id, false)
+    const userWidgets = await getUserWidgetsByEnabledState(
+      userContext,
+      userInfo.id,
+      false
+    )
     expect(userWidgetQueryMethod).toHaveBeenCalledWith(userContext, userInfo.id)
 
     // Should exclude enabled widgets.

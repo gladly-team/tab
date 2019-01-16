@@ -5,16 +5,10 @@
 // https://facebook.github.io/jest/docs/en/manual-mocks.html
 
 const raven = jest.genMockFromModule('raven')
-raven.config = jest.fn(() => {
-  return raven
-})
-raven.Client = jest.fn(() => {
-  return raven
-})
+raven.config = jest.fn(() => raven)
+raven.Client = jest.fn(() => raven)
 
 // Invoke the function like Raven would.
-raven.context = jest.fn((func) => {
-  return func()
-})
+raven.context = jest.fn(func => func())
 
 export default raven

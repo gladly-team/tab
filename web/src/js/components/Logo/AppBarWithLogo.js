@@ -1,23 +1,20 @@
-
 import React from 'react'
 import AppBar from 'material-ui/AppBar'
 import LogoWithText from 'js/components/Logo/LogoWithText'
-import {
-  appBarLightColor
-} from 'js/theme/default'
+import { appBarLightColor } from 'js/theme/default'
 
 class AppBarWithLogo extends React.Component {
-  render () {
+  render() {
     return (
       <AppBar
         style={{
-          background: appBarLightColor
+          background: appBarLightColor,
         }}
         iconElementLeft={
           <LogoWithText
             style={{
               height: 34,
-              margin: 8
+              margin: 8,
             }}
           />
         }

@@ -1,9 +1,7 @@
 /* eslint-env jest */
 
 import React from 'react'
-import {
-  shallow
-} from 'enzyme'
+import { shallow } from 'enzyme'
 
 jest.mock('js/utils/client-location')
 jest.mock('js/ads/consentManagement')
@@ -16,45 +14,44 @@ beforeEach(() => {
 describe('App', () => {
   it('renders without error', () => {
     const App = require('js/components/App/App').default
-    shallow(
-      <App />
-    )
+    shallow(<App />)
   })
 
   it('registers callback with the CMP for data consent update (when in the EU)', async () => {
     // Mock that the client is in the EU
-    const isInEuropeanUnion = require('js/utils/client-location').isInEuropeanUnion
+    const isInEuropeanUnion = require('js/utils/client-location')
+      .isInEuropeanUnion
     isInEuropeanUnion.mockResolvedValue(true)
 
     const App = require('js/components/App/App').default
-    const wrapper = shallow(
-      <App />
-    )
+    const wrapper = shallow(<App />)
     await wrapper.instance().componentDidMount()
     wrapper.update()
-    const registerConsentCallback = require('js/ads/consentManagement').registerConsentCallback
+    const registerConsentCallback = require('js/ads/consentManagement')
+      .registerConsentCallback
     expect(registerConsentCallback).toHaveBeenCalled()
   })
 
   it('does not register callback with the CMP for data consent update (when not in the EU)', async () => {
     // Mock that the client is not in the EU
-    const isInEuropeanUnion = require('js/utils/client-location').isInEuropeanUnion
+    const isInEuropeanUnion = require('js/utils/client-location')
+      .isInEuropeanUnion
     isInEuropeanUnion.mockResolvedValue(false)
 
     const App = require('js/components/App/App').default
-    const wrapper = shallow(
-      <App />
-    )
+    const wrapper = shallow(<App />)
     await wrapper.instance().componentDidMount()
     wrapper.update()
-    const registerConsentCallback = require('js/ads/consentManagement').registerConsentCallback
+    const registerConsentCallback = require('js/ads/consentManagement')
+      .registerConsentCallback
     expect(registerConsentCallback).not.toHaveBeenCalled()
   })
 
-  it('saves to localStorage that there is updated consent data when the CMP says it\'s been updated', async () => {
+  it("saves to localStorage that there is updated consent data when the CMP says it's been updated", async () => {
     // Mock the callback registration so we can trigger it ourselves
     var cmpCallback
-    const registerConsentCallback = require('js/ads/consentManagement').registerConsentCallback
+    const registerConsentCallback = require('js/ads/consentManagement')
+      .registerConsentCallback
     registerConsentCallback.mockImplementationOnce(cb => {
       cmpCallback = cb
     })
@@ -63,12 +60,11 @@ describe('App', () => {
       .saveConsentUpdateEventToLocalStorage
 
     // Mock that the client is in the EU
-    const isInEuropeanUnion = require('js/utils/client-location').isInEuropeanUnion
+    const isInEuropeanUnion = require('js/utils/client-location')
+      .isInEuropeanUnion
     isInEuropeanUnion.mockResolvedValue(true)
     const App = require('js/components/App/App').default
-    const wrapper = shallow(
-      <App />
-    )
+    const wrapper = shallow(<App />)
     await wrapper.instance().componentDidMount()
     wrapper.update()
 
@@ -84,16 +80,16 @@ describe('App', () => {
     expect.assertions(2)
 
     // Mock that the client is in the EU
-    const isInEuropeanUnion = require('js/utils/client-location').isInEuropeanUnion
+    const isInEuropeanUnion = require('js/utils/client-location')
+      .isInEuropeanUnion
     isInEuropeanUnion.mockResolvedValue(true)
     const App = require('js/components/App/App').default
-    const wrapper = shallow(
-      <App />
-    )
+    const wrapper = shallow(<App />)
     await wrapper.instance().componentDidMount()
     wrapper.update()
 
-    const unregisterConsentCallback = require('js/ads/consentManagement').unregisterConsentCallback
+    const unregisterConsentCallback = require('js/ads/consentManagement')
+      .unregisterConsentCallback
     expect(unregisterConsentCallback).not.toHaveBeenCalled()
     wrapper.unmount()
     expect(unregisterConsentCallback).toHaveBeenCalled()

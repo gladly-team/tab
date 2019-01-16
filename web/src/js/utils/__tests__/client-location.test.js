@@ -5,7 +5,7 @@ import MockDate from 'mockdate'
 import {
   STORAGE_LOCATION_COUNTRY_ISO_CODE,
   STORAGE_LOCATION_IS_IN_EU,
-  STORAGE_LOCATION_QUERY_TIME
+  STORAGE_LOCATION_QUERY_TIME,
 } from 'js/constants'
 import { isNil } from 'lodash/lang'
 
@@ -23,32 +23,38 @@ const getMockMaxMindResponse = (
     code: continentIsoCode,
     geoname_id: 12345678,
     names: {
-      en: 'North America'
-    }
+      en: 'North America',
+    },
   },
   country: {
     iso_code: countryIsoCode,
     geoname_id: 24681012,
     names: {
-      en: 'United States'
+      en: 'United States',
     },
-    ...(!isNil(isInEuropeanUnion) && {is_in_european_union: isInEuropeanUnion})
+    ...(!isNil(isInEuropeanUnion) && {
+      is_in_european_union: isInEuropeanUnion,
+    }),
   },
   registered_country: {
     iso_code: countryIsoCode,
     geoname_id: 24681012,
     names: {
-      en: 'United States'
+      en: 'United States',
     },
-    ...(!isNil(isInEuropeanUnion) && {is_in_european_union: isInEuropeanUnion})
+    ...(!isNil(isInEuropeanUnion) && {
+      is_in_european_union: isInEuropeanUnion,
+    }),
   },
   traits: {
-    ip_address: '73.xxx.xxx.x'
-  }
+    ip_address: '73.xxx.xxx.x',
+  },
 })
 
 const mockGeoIP = {
-  country: jest.fn((successCallback, failureCallback) => successCallback(getMockMaxMindResponse()))
+  country: jest.fn((successCallback, failureCallback) =>
+    successCallback(getMockMaxMindResponse())
+  ),
 }
 
 beforeAll(() => {
@@ -86,7 +92,12 @@ describe('client-location', () => {
     const localStorageMgr = require('js/utils/localstorage-mgr').default
     localStorageMgr.setItem(STORAGE_LOCATION_COUNTRY_ISO_CODE, 'DE')
     localStorageMgr.setItem(STORAGE_LOCATION_IS_IN_EU, 'true')
-    localStorageMgr.setItem(STORAGE_LOCATION_QUERY_TIME, moment().utc().toISOString())
+    localStorageMgr.setItem(
+      STORAGE_LOCATION_QUERY_TIME,
+      moment()
+        .utc()
+        .toISOString()
+    )
 
     const getCountry = require('js/utils/client-location').getCountry
     const returnedVal = await getCountry()
@@ -101,7 +112,10 @@ describe('client-location', () => {
     const localStorageMgr = require('js/utils/localstorage-mgr').default
     localStorageMgr.setItem(STORAGE_LOCATION_COUNTRY_ISO_CODE, 'CA') // out-of-date location
     localStorageMgr.setItem(STORAGE_LOCATION_IS_IN_EU, 'false')
-    localStorageMgr.setItem(STORAGE_LOCATION_QUERY_TIME, '2018-02-10T09:00:00.000') // expired
+    localStorageMgr.setItem(
+      STORAGE_LOCATION_QUERY_TIME,
+      '2018-02-10T09:00:00.000'
+    ) // expired
 
     const getCountry = require('js/utils/client-location').getCountry
     const returnedVal = await getCountry()
@@ -116,7 +130,10 @@ describe('client-location', () => {
     const localStorageMgr = require('js/utils/localstorage-mgr').default
     localStorageMgr.setItem(STORAGE_LOCATION_COUNTRY_ISO_CODE, 'CA')
     localStorageMgr.setItem(STORAGE_LOCATION_IS_IN_EU, 'false')
-    localStorageMgr.setItem(STORAGE_LOCATION_QUERY_TIME, '2018-04-21T09:00:00.000') // not yet expired
+    localStorageMgr.setItem(
+      STORAGE_LOCATION_QUERY_TIME,
+      '2018-04-21T09:00:00.000'
+    ) // not yet expired
 
     const getCountry = require('js/utils/client-location').getCountry
     const returnedVal = await getCountry()
@@ -130,7 +147,12 @@ describe('client-location', () => {
     // Location exists in localStorage but we're missing the "isInEuropeanUnion" key
     const localStorageMgr = require('js/utils/localstorage-mgr').default
     localStorageMgr.setItem(STORAGE_LOCATION_COUNTRY_ISO_CODE, 'DE')
-    localStorageMgr.setItem(STORAGE_LOCATION_QUERY_TIME, moment().utc().toISOString())
+    localStorageMgr.setItem(
+      STORAGE_LOCATION_QUERY_TIME,
+      moment()
+        .utc()
+        .toISOString()
+    )
 
     const getCountry = require('js/utils/client-location').getCountry
     await getCountry()
@@ -144,37 +166,35 @@ describe('client-location', () => {
 
     // Check that localStorage has the correct values
     const localStorageMgr = require('js/utils/localstorage-mgr').default
-    expect(
-      localStorageMgr.getItem(STORAGE_LOCATION_COUNTRY_ISO_CODE)
-    ).toBe('US')
-    expect(
-      localStorageMgr.getItem(STORAGE_LOCATION_IS_IN_EU)
-    ).toBe('false')
-    expect(
-      localStorageMgr.getItem(STORAGE_LOCATION_QUERY_TIME)
-    ).toBe(moment.utc().toISOString())
+    expect(localStorageMgr.getItem(STORAGE_LOCATION_COUNTRY_ISO_CODE)).toBe(
+      'US'
+    )
+    expect(localStorageMgr.getItem(STORAGE_LOCATION_IS_IN_EU)).toBe('false')
+    expect(localStorageMgr.getItem(STORAGE_LOCATION_QUERY_TIME)).toBe(
+      moment.utc().toISOString()
+    )
   })
 
   it('stores the location result in localStorage after calling MaxMind (EU country variant)', async () => {
     expect.assertions(3)
-    mockGeoIP.country.mockImplementationOnce((successCallback, failureCallback) => {
-      // Mock that MaxMind says the location is Germany
-      return successCallback(getMockMaxMindResponse('DE', true))
-    })
+    mockGeoIP.country.mockImplementationOnce(
+      (successCallback, failureCallback) => {
+        // Mock that MaxMind says the location is Germany
+        return successCallback(getMockMaxMindResponse('DE', true))
+      }
+    )
     const getCountry = require('js/utils/client-location').getCountry
     await getCountry()
 
     // Check that localStorage has the correct values
     const localStorageMgr = require('js/utils/localstorage-mgr').default
-    expect(
-      localStorageMgr.getItem(STORAGE_LOCATION_COUNTRY_ISO_CODE)
-    ).toBe('DE')
-    expect(
-      localStorageMgr.getItem(STORAGE_LOCATION_IS_IN_EU)
-    ).toBe('true')
-    expect(
-      localStorageMgr.getItem(STORAGE_LOCATION_QUERY_TIME)
-    ).toBe(moment.utc().toISOString())
+    expect(localStorageMgr.getItem(STORAGE_LOCATION_COUNTRY_ISO_CODE)).toBe(
+      'DE'
+    )
+    expect(localStorageMgr.getItem(STORAGE_LOCATION_IS_IN_EU)).toBe('true')
+    expect(localStorageMgr.getItem(STORAGE_LOCATION_QUERY_TIME)).toBe(
+      moment.utc().toISOString()
+    )
   })
 
   it('does not set localStorage when having fetched from localStorage (i.e., no call to MaxMind)', async () => {
@@ -184,7 +204,12 @@ describe('client-location', () => {
     const localStorageMgr = require('js/utils/localstorage-mgr').default
     localStorageMgr.setItem(STORAGE_LOCATION_COUNTRY_ISO_CODE, 'DE')
     localStorageMgr.setItem(STORAGE_LOCATION_IS_IN_EU, 'true')
-    localStorageMgr.setItem(STORAGE_LOCATION_QUERY_TIME, moment().utc().toISOString())
+    localStorageMgr.setItem(
+      STORAGE_LOCATION_QUERY_TIME,
+      moment()
+        .utc()
+        .toISOString()
+    )
     jest.clearAllMocks()
 
     const getCountry = require('js/utils/client-location').getCountry
@@ -219,7 +244,12 @@ describe('client-location', () => {
     const localStorageMgr = require('js/utils/localstorage-mgr').default
     localStorageMgr.setItem(STORAGE_LOCATION_COUNTRY_ISO_CODE, 'DE')
     localStorageMgr.setItem(STORAGE_LOCATION_IS_IN_EU, 'true')
-    localStorageMgr.setItem(STORAGE_LOCATION_QUERY_TIME, moment().utc().toISOString())
+    localStorageMgr.setItem(
+      STORAGE_LOCATION_QUERY_TIME,
+      moment()
+        .utc()
+        .toISOString()
+    )
 
     const getCountry = require('js/utils/client-location').getCountry
     await getCountry()
@@ -231,18 +261,22 @@ describe('client-location', () => {
 
   it('returns expected value for isInEuropeanUnion when it is false (via MaxMind)', async () => {
     expect.assertions(1)
-    const isInEuropeanUnion = require('js/utils/client-location').isInEuropeanUnion
+    const isInEuropeanUnion = require('js/utils/client-location')
+      .isInEuropeanUnion
     const returnedVal = await isInEuropeanUnion()
     expect(returnedVal).toBe(false)
   })
 
   it('returns expected value for isInEuropeanUnion when it is true (via MaxMind)', async () => {
     expect.assertions(1)
-    mockGeoIP.country.mockImplementationOnce((successCallback, failureCallback) => {
-      // Mock that MaxMind says the location is Germany
-      return successCallback(getMockMaxMindResponse('DE', true))
-    })
-    const isInEuropeanUnion = require('js/utils/client-location').isInEuropeanUnion
+    mockGeoIP.country.mockImplementationOnce(
+      (successCallback, failureCallback) => {
+        // Mock that MaxMind says the location is Germany
+        return successCallback(getMockMaxMindResponse('DE', true))
+      }
+    )
+    const isInEuropeanUnion = require('js/utils/client-location')
+      .isInEuropeanUnion
     const returnedVal = await isInEuropeanUnion()
     expect(returnedVal).toBe(true)
   })
@@ -254,9 +288,15 @@ describe('client-location', () => {
     const localStorageMgr = require('js/utils/localstorage-mgr').default
     localStorageMgr.setItem(STORAGE_LOCATION_COUNTRY_ISO_CODE, 'DE')
     localStorageMgr.setItem(STORAGE_LOCATION_IS_IN_EU, 'false')
-    localStorageMgr.setItem(STORAGE_LOCATION_QUERY_TIME, moment().utc().toISOString())
+    localStorageMgr.setItem(
+      STORAGE_LOCATION_QUERY_TIME,
+      moment()
+        .utc()
+        .toISOString()
+    )
 
-    const isInEuropeanUnion = require('js/utils/client-location').isInEuropeanUnion
+    const isInEuropeanUnion = require('js/utils/client-location')
+      .isInEuropeanUnion
     const returnedVal = await isInEuropeanUnion()
     expect(returnedVal).toBe(false)
   })
@@ -268,9 +308,15 @@ describe('client-location', () => {
     const localStorageMgr = require('js/utils/localstorage-mgr').default
     localStorageMgr.setItem(STORAGE_LOCATION_COUNTRY_ISO_CODE, 'DE')
     localStorageMgr.setItem(STORAGE_LOCATION_IS_IN_EU, 'true')
-    localStorageMgr.setItem(STORAGE_LOCATION_QUERY_TIME, moment().utc().toISOString())
+    localStorageMgr.setItem(
+      STORAGE_LOCATION_QUERY_TIME,
+      moment()
+        .utc()
+        .toISOString()
+    )
 
-    const isInEuropeanUnion = require('js/utils/client-location').isInEuropeanUnion
+    const isInEuropeanUnion = require('js/utils/client-location')
+      .isInEuropeanUnion
     const returnedVal = await isInEuropeanUnion()
     expect(returnedVal).toBe(true)
   })
@@ -282,12 +328,16 @@ describe('client-location', () => {
     jest.spyOn(console, 'error').mockImplementationOnce(() => {})
 
     // Mock a MaxMind error
-    mockGeoIP.country.mockImplementationOnce((successCallback, failureCallback) => {
-      return failureCallback({ code: 'BAD_THING_HAPPENED' })
-    })
+    mockGeoIP.country.mockImplementationOnce(
+      (successCallback, failureCallback) => {
+        return failureCallback({ code: 'BAD_THING_HAPPENED' })
+      }
+    )
 
     const getCountry = require('js/utils/client-location').getCountry
-    await expect(getCountry()).rejects.toThrow('Could not determine client location country')
+    await expect(getCountry()).rejects.toThrow(
+      'Could not determine client location country'
+    )
   })
 
   it('throws an error if MaxMind returns an error when trying to get EU membership status', async () => {
@@ -297,12 +347,17 @@ describe('client-location', () => {
     jest.spyOn(console, 'error').mockImplementationOnce(() => {})
 
     // Mock a MaxMind error
-    mockGeoIP.country.mockImplementationOnce((successCallback, failureCallback) => {
-      return failureCallback({ code: 'BAD_THING_HAPPENED' })
-    })
+    mockGeoIP.country.mockImplementationOnce(
+      (successCallback, failureCallback) => {
+        return failureCallback({ code: 'BAD_THING_HAPPENED' })
+      }
+    )
 
-    const isInEuropeanUnion = require('js/utils/client-location').isInEuropeanUnion
-    await expect(isInEuropeanUnion()).rejects.toThrow('Could not determine client location EU membership')
+    const isInEuropeanUnion = require('js/utils/client-location')
+      .isInEuropeanUnion
+    await expect(isInEuropeanUnion()).rejects.toThrow(
+      'Could not determine client location EU membership'
+    )
   })
 
   it('does not log an error for a typical MaxMind error', async () => {
@@ -313,9 +368,11 @@ describe('client-location', () => {
     jest.spyOn(console, 'error').mockImplementationOnce(() => {})
 
     // Mock a MaxMind error
-    mockGeoIP.country.mockImplementationOnce((successCallback, failureCallback) => {
-      return failureCallback({ code: 'HTTP_TIMEOUT' })
-    })
+    mockGeoIP.country.mockImplementationOnce(
+      (successCallback, failureCallback) => {
+        return failureCallback({ code: 'HTTP_TIMEOUT' })
+      }
+    )
 
     const getCountry = require('js/utils/client-location').getCountry
     try {
@@ -333,9 +390,11 @@ describe('client-location', () => {
     jest.spyOn(console, 'error').mockImplementationOnce(() => {})
 
     // Mock a MaxMind error
-    mockGeoIP.country.mockImplementationOnce((successCallback, failureCallback) => {
-      return failureCallback({ code: 'OUT_OF_QUERIES' })
-    })
+    mockGeoIP.country.mockImplementationOnce(
+      (successCallback, failureCallback) => {
+        return failureCallback({ code: 'OUT_OF_QUERIES' })
+      }
+    )
 
     const getCountry = require('js/utils/client-location').getCountry
     try {

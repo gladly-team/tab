@@ -5,28 +5,24 @@ import FlatButton from 'material-ui/FlatButton'
 import Forward from 'material-ui/svg-icons/content/forward'
 
 class CircleButton extends React.Component {
-  render () {
+  render() {
     const iconContainer = {
       position: 'relative',
       top: -2,
-      left: 1
+      left: 1,
     }
 
-    const icon = (
-      <Forward
-        style={iconContainer}
-        color={'#FFF'} />)
+    const icon = <Forward style={iconContainer} color={'#FFF'} />
 
     const defaultStyle = {
       width: this.props.size,
       height: this.props.size,
       minWidth: this.props.size,
       borderRadius: '100%',
-      border: '1px solid #FFF'
+      border: '1px solid #FFF',
     }
 
-    const finalStyle = Object.assign({},
-      defaultStyle, this.props.buttonStyle)
+    const finalStyle = Object.assign({}, defaultStyle, this.props.buttonStyle)
 
     const props = Object.assign({}, this.props)
     delete props['buttonId']
@@ -38,9 +34,10 @@ class CircleButton extends React.Component {
         id={this.props.buttonId}
         {...props}
         style={finalStyle}
-        backgroundColor='transparent'
-        hoverColor='rgba(255,255,255,.1)'
-        icon={icon} />
+        backgroundColor="transparent"
+        hoverColor="rgba(255,255,255,.1)"
+        icon={icon}
+      />
     )
   }
 }
@@ -48,13 +45,13 @@ class CircleButton extends React.Component {
 CircleButton.propTypes = {
   buttonId: PropTypes.string,
   size: PropTypes.number,
-  buttonStyle: PropTypes.object
+  buttonStyle: PropTypes.object,
 }
 
 CircleButton.defaultProps = {
   buttonStyle: {},
   size: 50,
-  buttonId: ''
+  buttonId: '',
 }
 
 export default CircleButton

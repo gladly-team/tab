@@ -22,22 +22,24 @@ import { STORAGE_NEW_USER_HAS_COMPLETED_TOUR } from 'js/constants'
 const tourSteps = [
   {
     target: '[data-tour-id="hearts"]',
-    content: "You'll earn a Heart with every tab you open. Donate your Hearts to your favorite charity to tell us where to give money.",
+    content:
+      "You'll earn a Heart with every tab you open. Donate your Hearts to your favorite charity to tell us where to give money.",
     placement: 'bottom',
-    disableBeacon: true
+    disableBeacon: true,
   },
   {
     target: '[data-tour-id="settings-button"]',
-    content: 'Visit your settings to change your background image, donate Hearts, and track your progress.',
+    content:
+      'Visit your settings to change your background image, donate Hearts, and track your progress.',
     placement: 'bottom',
-    disableBeacon: true
+    disableBeacon: true,
   },
   {
     target: '[data-tour-id="widgets"]',
     content: 'Use widgets to add bookmarks, take notes, and more.',
     placement: 'bottom',
-    disableBeacon: true
-  }
+    disableBeacon: true,
+  },
 ]
 
 // https://docs.react-joyride.com/custom-components
@@ -56,20 +58,15 @@ const CustomTooltip = ({
         <div style={{ padding: 20 }}>
           <Typography variant={'body2'}>{step.content}</Typography>
         </div>
-        <span style={{ display: 'flex', justifyContent: 'flex-end', padding: 10 }}>
-          { (index > 0) ? (
-            <Button
-              {...backProps}
-              color='default'
-            >
+        <span
+          style={{ display: 'flex', justifyContent: 'flex-end', padding: 10 }}
+        >
+          {index > 0 ? (
+            <Button {...backProps} color="default">
               Back
             </Button>
-          ) : null
-          }
-          <Button
-            {...primaryProps}
-            color='primary'
-          >
+          ) : null}
+          <Button {...primaryProps} color="primary">
             Next
           </Button>
         </span>
@@ -79,21 +76,21 @@ const CustomTooltip = ({
 }
 
 class NewUserTour extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       introModalOpen: true,
       beginTour: false,
-      introFinalModalOpen: false
+      introFinalModalOpen: false,
     }
   }
 
-  joyrideCallback (data) {
+  joyrideCallback(data) {
     const { status } = data
     const isTourFinished = status === 'finished'
     if (isTourFinished) {
       this.setState({
-        introFinalModalOpen: true
+        introFinalModalOpen: true,
       })
 
       // Mark that the user has viewed the tour
@@ -101,20 +98,20 @@ class NewUserTour extends React.Component {
     }
   }
 
-  introModalButtonClick () {
+  introModalButtonClick() {
     this.setState({
       introModalOpen: false,
-      beginTour: true
+      beginTour: true,
     })
   }
 
-  introFinalModalButtonClick () {
+  introFinalModalButtonClick() {
     this.setState({
-      introFinalModalOpen: false
+      introFinalModalOpen: false,
     })
   }
 
-  render () {
+  render() {
     const { user, theme } = this.props
     const primaryColor = theme.palette.primary.main
     const textColor = theme.typography.body2.color
@@ -126,8 +123,8 @@ class NewUserTour extends React.Component {
           disableEscapeKeyDown
           PaperProps={{
             style: {
-              maxWidth: 500
-            }
+              maxWidth: 500,
+            },
           }}
         >
           <DialogTitle disableTypography>
@@ -137,14 +134,39 @@ class NewUserTour extends React.Component {
           </DialogTitle>
           <DialogContent>
             <span style={{ display: 'flex', justifyContent: 'center' }}>
-              <EarthIcon style={{ color: primaryColor, width: 32, height: 32, margin: 10, marginTop: 0 }} />
-              <HeartIcon style={{ color: primaryColor, width: 32, height: 32, margin: 10, marginTop: 0 }} />
+              <EarthIcon
+                style={{
+                  color: primaryColor,
+                  width: 32,
+                  height: 32,
+                  margin: 10,
+                  marginTop: 0,
+                }}
+              />
+              <HeartIcon
+                style={{
+                  color: primaryColor,
+                  width: 32,
+                  height: 32,
+                  margin: 10,
+                  marginTop: 0,
+                }}
+              />
             </span>
-            <Typography variant={'body2'} paragraph>Now, every tab you open raises money for charity. (The money comes from showing ads in the corner of the page.)</Typography>
-            <Typography variant={'body2'} paragraph>Just by surfing the web, you're feeding children, protecting the rainforest, and more.</Typography>
+            <Typography variant={'body2'} paragraph>
+              Now, every tab you open raises money for charity. (The money comes
+              from showing ads in the corner of the page.)
+            </Typography>
+            <Typography variant={'body2'} paragraph>
+              Just by surfing the web, you're feeding children, protecting the
+              rainforest, and more.
+            </Typography>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.introModalButtonClick.bind(this)} color='primary'>
+            <Button
+              onClick={this.introModalButtonClick.bind(this)}
+              color="primary"
+            >
               Next
             </Button>
           </DialogActions>
@@ -163,14 +185,14 @@ class NewUserTour extends React.Component {
               primaryColor: primaryColor,
               textColor: textColor,
               overlayColor: 'rgba(0, 0, 0, 0.56)',
-              zIndex: 4600
+              zIndex: 4600,
             },
             overlay: {
-              cursor: 'default'
-            }
+              cursor: 'default',
+            },
           }}
           floaterProps={{
-            disableAnimation: true
+            disableAnimation: true,
           }}
           // We're choosing to control the component so it will match
           // the app theme. But we can remove this and the "stepIndex"
@@ -183,29 +205,34 @@ class NewUserTour extends React.Component {
           disableEscapeKeyDown
           PaperProps={{
             style: {
-              maxWidth: 500
-            }
+              maxWidth: 500,
+            },
           }}
         >
           <DialogTitle disableTypography>
-            <Typography variant={'h6'}>
-              We're thrilled to have you!
-            </Typography>
+            <Typography variant={'h6'}>We're thrilled to have you!</Typography>
           </DialogTitle>
           <DialogContent>
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column'
-            }}>
-              <Typography variant={'body2'} paragraph>Thanks for making the world a better place, one tab at a time.</Typography>
-              <Typography variant={'body2'} paragraph>We can make a bigger impact together. Share Tab for a Cause with a few friends!</Typography>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
+              <Typography variant={'body2'} paragraph>
+                Thanks for making the world a better place, one tab at a time.
+              </Typography>
+              <Typography variant={'body2'} paragraph>
+                We can make a bigger impact together. Share Tab for a Cause with
+                a few friends!
+              </Typography>
               <InviteFriend style={{ alignSelf: 'center' }} user={user} />
             </div>
           </DialogContent>
           <DialogActions>
             <Button
               onClick={this.introFinalModalButtonClick.bind(this)}
-              color='default'
+              color="default"
             >
               Skip for now
             </Button>
@@ -217,12 +244,10 @@ class NewUserTour extends React.Component {
 }
 
 NewUserTour.propTypes = {
-  user: PropTypes.shape({
-  }).isRequired,
-  theme: PropTypes.object.isRequired
+  user: PropTypes.shape({}).isRequired,
+  theme: PropTypes.object.isRequired,
 }
 
-NewUserTour.defaultProps = {
-}
+NewUserTour.defaultProps = {}
 
 export default withTheme()(NewUserTour)

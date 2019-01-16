@@ -3,30 +3,21 @@
 import React from 'react'
 import moment from 'moment'
 import MockDate from 'mockdate'
-import {
-  shallow
-} from 'enzyme'
+import { shallow } from 'enzyme'
 import {
   createNewUser,
-  checkAuthStateAndRedirectIfNeeded
+  checkAuthStateAndRedirectIfNeeded,
 } from 'js/authentication/helpers'
 import {
   goTo,
   replaceUrl,
   goToDashboard,
   missingEmailMessageURL,
-  verifyEmailURL
+  verifyEmailURL,
 } from 'js/navigation/navigation'
-import {
-  getCurrentUser,
-  sendVerificationEmail
-} from 'js/authentication/user'
-import {
-  getUrlParameters
-} from 'js/utils/utils'
-import {
-  getBrowserExtensionInstallId
-} from 'js/utils/local-user-data-mgr'
+import { getCurrentUser, sendVerificationEmail } from 'js/authentication/user'
+import { getUrlParameters } from 'js/utils/utils'
+import { getBrowserExtensionInstallId } from 'js/utils/local-user-data-mgr'
 import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
 
 jest.mock('js/authentication/helpers')
@@ -41,13 +32,13 @@ const mockFetchUser = jest.fn()
 const MockProps = () => {
   return {
     location: {
-      pathname: '/newtab/auth/'
+      pathname: '/newtab/auth/',
     },
     user: {
       id: null,
-      username: null
+      username: null,
     },
-    fetchUser: mockFetchUser
+    fetchUser: mockFetchUser,
   }
 }
 
@@ -68,132 +59,114 @@ afterEach(() => {
   MockDate.reset()
 })
 
-describe('Authentication.js tests', function () {
+describe('Authentication.js tests', function() {
   it('renders without error', () => {
-    const Authentication = require('js/components/Authentication/Authentication').default
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
     const mockProps = MockProps()
-    shallow(
-      <Authentication {...mockProps} />
-    )
+    shallow(<Authentication {...mockProps} />)
   })
 
   it('displays the endorsement quote', async () => {
     expect.assertions(1)
 
-    const Authentication = require('js/components/Authentication/Authentication').default
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
     const mockProps = MockProps()
-    const wrapper = shallow(
-      <Authentication {...mockProps} />
-    )
+    const wrapper = shallow(<Authentication {...mockProps} />)
 
     // Wait for mount to complete.
     const component = wrapper.instance()
     await component.componentDidMount()
     wrapper.update()
 
-    expect(wrapper
-      .find('[data-test-id="endorsement-quote"]').length
-    ).toBe(1)
+    expect(wrapper.find('[data-test-id="endorsement-quote"]').length).toBe(1)
   })
 
   it('typically does not display the sign-in explanation', async () => {
     expect.assertions(1)
 
-    const Authentication = require('js/components/Authentication/Authentication').default
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
     const mockProps = MockProps()
-    const wrapper = shallow(
-      <Authentication {...mockProps} />
-    )
+    const wrapper = shallow(<Authentication {...mockProps} />)
 
     // Wait for mount to complete.
     const component = wrapper.instance()
     await component.componentDidMount()
     wrapper.update()
 
-    expect(wrapper
-      .find('[data-test-id="anon-sign-in-fyi"]').length
-    ).toBe(0)
+    expect(wrapper.find('[data-test-id="anon-sign-in-fyi"]').length).toBe(0)
   })
 
   it('displays the sign-in explanation (and hides the quote) when it is a mandatory sign-in', async () => {
     expect.assertions(2)
 
-    const Authentication = require('js/components/Authentication/Authentication').default
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
     const mockProps = MockProps()
     mockProps.location.pathname = '/newtab/auth/'
 
     // Sign-in is mandatory when there is a "mandatory=true" URL param.
     getUrlParameters.mockReturnValue({
-      mandatory: 'true'
+      mandatory: 'true',
     })
     getCurrentUser.mockResolvedValue({
       id: 'abc123',
       email: null,
       username: null,
       isAnonymous: true,
-      emailVerified: false
+      emailVerified: false,
     })
 
-    const wrapper = shallow(
-      <Authentication {...mockProps} />
-    )
+    const wrapper = shallow(<Authentication {...mockProps} />)
 
     // Wait for mount to complete.
     const component = wrapper.instance()
     await component.componentDidMount()
     wrapper.update()
 
-    expect(wrapper
-      .find('[data-test-id="anon-sign-in-fyi"]').length
-    ).toBe(1)
-    expect(wrapper
-      .find('[data-test-id="endorsement-quote"]').length
-    ).toBe(0)
+    expect(wrapper.find('[data-test-id="anon-sign-in-fyi"]').length).toBe(1)
+    expect(wrapper.find('[data-test-id="endorsement-quote"]').length).toBe(0)
   })
 
-  it('does not display the sign-in explanation when it is a mandatory sign-in but we\'re on the iframe message page', async () => {
+  it("does not display the sign-in explanation when it is a mandatory sign-in but we're on the iframe message page", async () => {
     expect.assertions(2)
 
-    const Authentication = require('js/components/Authentication/Authentication').default
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
     const mockProps = MockProps()
     mockProps.location.pathname = '/newtab/auth/welcome/'
 
     // Sign-in is mandatory when there is a "mandatory=true" URL param.
     getUrlParameters.mockReturnValue({
-      mandatory: 'true'
+      mandatory: 'true',
     })
     getCurrentUser.mockResolvedValue({
       id: 'abc123',
       email: null,
       username: null,
       isAnonymous: true,
-      emailVerified: false
+      emailVerified: false,
     })
 
-    const wrapper = shallow(
-      <Authentication {...mockProps} />
-    )
+    const wrapper = shallow(<Authentication {...mockProps} />)
 
     // Wait for mount to complete.
     const component = wrapper.instance()
     await component.componentDidMount()
     wrapper.update()
 
-    expect(wrapper
-      .find('[data-test-id="anon-sign-in-fyi"]').length
-    ).toBe(0)
-    expect(wrapper
-      .find('[data-test-id="endorsement-quote"]').length
-    ).toBe(1)
+    expect(wrapper.find('[data-test-id="anon-sign-in-fyi"]').length).toBe(0)
+    expect(wrapper.find('[data-test-id="endorsement-quote"]').length).toBe(1)
   })
 
   it('calls the `navigateToAuthStep` method on mount', async () => {
     expect.assertions(1)
-    const Authentication = require('js/components/Authentication/Authentication').default
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
     const mockProps = MockProps()
-    const wrapper = shallow(
-      <Authentication {...mockProps} />
-    )
+    const wrapper = shallow(<Authentication {...mockProps} />)
 
     // Mock method and simulate mount.
     const component = wrapper.instance()
@@ -212,14 +185,13 @@ describe('Authentication.js tests', function () {
       email: 'foo@bar.com',
       username: 'SomeUsername',
       isAnonymous: false,
-      emailVerified: true
+      emailVerified: true,
     })
 
-    const Authentication = require('js/components/Authentication/Authentication').default
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
     const mockProps = MockProps()
-    const wrapper = shallow(
-      <Authentication {...mockProps} />
-    )
+    const wrapper = shallow(<Authentication {...mockProps} />)
 
     // Mock method and simulate mount.
     const component = wrapper.instance()
@@ -238,14 +210,13 @@ describe('Authentication.js tests', function () {
       email: 'foo@bar.com',
       username: 'SomeUsername',
       isAnonymous: false,
-      emailVerified: true
+      emailVerified: true,
     })
 
-    const Authentication = require('js/components/Authentication/Authentication').default
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
     const mockProps = MockProps()
-    const wrapper = shallow(
-      <Authentication {...mockProps} />
-    )
+    const wrapper = shallow(<Authentication {...mockProps} />)
 
     // Wait for mount to complete.
     const component = wrapper.instance()
@@ -264,18 +235,17 @@ describe('Authentication.js tests', function () {
       email: 'foo@bar.com',
       username: 'SomeUsername',
       isAnonymous: false,
-      emailVerified: true
+      emailVerified: true,
     })
 
     getUrlParameters.mockReturnValue({
-      noredirect: 'true'
+      noredirect: 'true',
     })
 
-    const Authentication = require('js/components/Authentication/Authentication').default
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
     const mockProps = MockProps()
-    const wrapper = shallow(
-      <Authentication {...mockProps} />
-    )
+    const wrapper = shallow(<Authentication {...mockProps} />)
 
     // Wait for mount to complete.
     const component = wrapper.instance()
@@ -294,18 +264,17 @@ describe('Authentication.js tests', function () {
       email: 'foo@bar.com',
       username: 'SomeUsername',
       isAnonymous: false,
-      emailVerified: true
+      emailVerified: true,
     })
 
     getUrlParameters.mockReturnValue({
-      noredirect: 'something'
+      noredirect: 'something',
     })
 
-    const Authentication = require('js/components/Authentication/Authentication').default
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
     const mockProps = MockProps()
-    const wrapper = shallow(
-      <Authentication {...mockProps} />
-    )
+    const wrapper = shallow(<Authentication {...mockProps} />)
 
     // Wait for mount to complete.
     const component = wrapper.instance()
@@ -324,14 +293,13 @@ describe('Authentication.js tests', function () {
       email: null,
       username: 'SomeUsername',
       isAnonymous: false,
-      emailVerified: false
+      emailVerified: false,
     })
 
-    const Authentication = require('js/components/Authentication/Authentication').default
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
     const mockProps = MockProps()
-    const wrapper = shallow(
-      <Authentication {...mockProps} />
-    )
+    const wrapper = shallow(<Authentication {...mockProps} />)
 
     // Wait for mount to complete.
     const component = wrapper.instance()
@@ -342,7 +310,8 @@ describe('Authentication.js tests', function () {
 
   it('does not redirect at all if the URL is /auth/action/*', async () => {
     expect.assertions(3)
-    const Authentication = require('js/components/Authentication/Authentication').default
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
     const mockProps = MockProps()
     mockProps.location.pathname = '/auth/action/verify/'
 
@@ -353,12 +322,10 @@ describe('Authentication.js tests', function () {
       email: 'foo@bar.com',
       username: null,
       isAnonymous: false,
-      emailVerified: false
+      emailVerified: false,
     })
 
-    const wrapper = shallow(
-      <Authentication {...mockProps} />
-    )
+    const wrapper = shallow(<Authentication {...mockProps} />)
     const component = wrapper.instance()
     await component.navigateToAuthStep()
     expect(goTo).not.toHaveBeenCalled()
@@ -367,7 +334,8 @@ describe('Authentication.js tests', function () {
   })
 
   it('after sign-in, goes to missing email message screen if no email address', () => {
-    const Authentication = require('js/components/Authentication/Authentication').default
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
     const mockProps = MockProps()
 
     // Args for onSignInSuccess
@@ -382,19 +350,20 @@ describe('Authentication.js tests', function () {
       providerData: {},
       providerId: 'some-id',
       refreshToken: 'xyzxyz',
-      uid: 'abc123'
+      uid: 'abc123',
     }
     const mockFirebaseCredential = {}
     const mockFirebaseDefaultRedirectURL = ''
 
-    const wrapper = shallow(
-      <Authentication {...mockProps} />
-    )
+    const wrapper = shallow(<Authentication {...mockProps} />)
     const component = wrapper.instance()
 
     // Mock a call from FirebaseUI after user signs in
-    component.onSignInSuccess(mockFirebaseUserInstance,
-      mockFirebaseCredential, mockFirebaseDefaultRedirectURL)
+    component.onSignInSuccess(
+      mockFirebaseUserInstance,
+      mockFirebaseCredential,
+      mockFirebaseDefaultRedirectURL
+    )
     expect(goTo).toHaveBeenCalledWith(missingEmailMessageURL)
   })
 
@@ -413,7 +382,7 @@ describe('Authentication.js tests', function () {
       providerData: {},
       providerId: 'some-id',
       refreshToken: 'xyzxyz',
-      uid: 'abc123'
+      uid: 'abc123',
     }
     const mockFirebaseCredential = {}
     const mockFirebaseDefaultRedirectURL = ''
@@ -423,26 +392,28 @@ describe('Authentication.js tests', function () {
       email: 'foo@bar.com',
       username: null,
       isAnonymous: false,
-      emailVerified: false // Note that email is unverified
+      emailVerified: false, // Note that email is unverified
     })
     createNewUser.mockResolvedValue({
       id: 'abc123',
       email: 'foo@bar.com',
-      username: null
+      username: null,
     })
 
     sendVerificationEmail.mockImplementation(() => Promise.resolve(true))
 
-    const Authentication = require('js/components/Authentication/Authentication').default
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
     const mockProps = MockProps()
-    const wrapper = shallow(
-      <Authentication {...mockProps} />
-    )
+    const wrapper = shallow(<Authentication {...mockProps} />)
     const component = wrapper.instance()
 
     // Mock a call from FirebaseUI after user signs in
-    await component.onSignInSuccess(mockFirebaseUserInstance,
-      mockFirebaseCredential, mockFirebaseDefaultRedirectURL)
+    await component.onSignInSuccess(
+      mockFirebaseUserInstance,
+      mockFirebaseCredential,
+      mockFirebaseDefaultRedirectURL
+    )
 
     expect(sendVerificationEmail).toHaveBeenCalledTimes(1)
     expect(goTo).toHaveBeenCalledWith(verifyEmailURL)
@@ -463,7 +434,7 @@ describe('Authentication.js tests', function () {
       providerData: {},
       providerId: 'some-id',
       refreshToken: 'xyzxyz',
-      uid: 'abc123'
+      uid: 'abc123',
     }
     const mockFirebaseCredential = {}
     const mockFirebaseDefaultRedirectURL = ''
@@ -473,35 +444,36 @@ describe('Authentication.js tests', function () {
       email: 'foo@bar.com',
       username: null,
       isAnonymous: false,
-      emailVerified: true
+      emailVerified: true,
     })
     createNewUser.mockResolvedValue({
       id: 'abc123',
       email: 'foo@bar.com',
       username: null,
-      justCreated: true
+      justCreated: true,
     })
 
-    const Authentication = require('js/components/Authentication/Authentication').default
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
     const mockProps = MockProps()
-    const wrapper = shallow(
-      <Authentication {...mockProps} />
-    )
+    const wrapper = shallow(<Authentication {...mockProps} />)
     const component = wrapper.instance()
 
     // Mock a call from FirebaseUI after user signs in
-    await component.onSignInSuccess(mockFirebaseUserInstance,
-      mockFirebaseCredential, mockFirebaseDefaultRedirectURL)
+    await component.onSignInSuccess(
+      mockFirebaseUserInstance,
+      mockFirebaseCredential,
+      mockFirebaseDefaultRedirectURL
+    )
 
     expect(mockFetchUser).toHaveBeenCalledTimes(1)
   })
 
   it('renders AssignExperimentGroups component', () => {
-    const Authentication = require('js/components/Authentication/Authentication').default
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
     const mockProps = MockProps()
-    const wrapper = shallow(
-      <Authentication {...mockProps} />
-    )
+    const wrapper = shallow(<Authentication {...mockProps} />)
     const comp = wrapper.find(AssignExperimentGroups)
     expect(comp.length).toBe(1)
     expect(comp.prop('isNewUser')).toBe(true)

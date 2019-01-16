@@ -3,7 +3,7 @@
 import {
   getPermissionsOverride,
   isValidPermissionsOverride,
-  REWARD_REFERRER_OVERRIDE
+  REWARD_REFERRER_OVERRIDE,
 } from '../permissions-overrides'
 
 describe('permission overrides', () => {

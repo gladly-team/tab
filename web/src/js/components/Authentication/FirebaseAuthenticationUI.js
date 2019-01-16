@@ -6,43 +6,43 @@ import { FirebaseAuth } from 'react-firebaseui'
 import {
   dashboardURL,
   privacyPolicyURL,
-  termsOfServiceURL
+  termsOfServiceURL,
 } from 'js/navigation/navigation'
 import {
   signupPageButtonClick,
   signupPageEmailButtonClick,
-  signupPageSocialButtonClick
+  signupPageSocialButtonClick,
 } from 'js/analytics/logEvent'
 import logger from 'js/utils/logger'
 import environment from 'js/relay-env'
 import MergeIntoExistingUserMutation from 'js/mutations/MergeIntoExistingUserMutation'
 
 class FirebaseAuthenticationUI extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.configureFirebaseUI()
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     this.removeButtonClickListeners()
   }
 
-  socialButtonClicked (e) {
+  socialButtonClicked(e) {
     signupPageButtonClick()
     signupPageSocialButtonClick()
   }
 
-  emailButtonClicked (e) {
+  emailButtonClicked(e) {
     signupPageButtonClick()
     signupPageEmailButtonClick()
   }
 
   // Poll a few times for an element by classnames
-  async getElementByClassNamePolling (classnames) {
-    function getElems () {
+  async getElementByClassNamePolling(classnames) {
+    function getElems() {
       return document.getElementsByClassName(classnames)
     }
-    function timeout (ms) {
+    function timeout(ms) {
       return new Promise(resolve => setTimeout(resolve, ms))
     }
     var elems = []
@@ -64,17 +64,19 @@ class FirebaseAuthenticationUI extends React.Component {
   // TODO: fix this hack after replacing/updating firebaseweb-ui.
   // This callback is called before the sign-in buttons are
   // rendered, so poll for the elements.
-  async addButtonClickListeners () {
+  async addButtonClickListeners() {
     // Facebook
     const facebookButton = await this.getElementByClassNamePolling(
-      'firebaseui-idp-button firebaseui-idp-facebook')
+      'firebaseui-idp-button firebaseui-idp-facebook'
+    )
     if (facebookButton) {
       facebookButton.addEventListener('click', this.socialButtonClicked)
     }
 
     // Google
     const googleButton = await this.getElementByClassNamePolling(
-      'firebaseui-idp-button firebaseui-idp-google')
+      'firebaseui-idp-button firebaseui-idp-google'
+    )
     if (googleButton) {
       googleButton.addEventListener('click', this.socialButtonClicked)
     }
@@ -88,23 +90,26 @@ class FirebaseAuthenticationUI extends React.Component {
 
     // Email & password
     const emailButton = await this.getElementByClassNamePolling(
-      'firebaseui-idp-button firebaseui-idp-password')
+      'firebaseui-idp-button firebaseui-idp-password'
+    )
     if (emailButton) {
       emailButton.addEventListener('click', this.emailButtonClicked)
     }
   }
 
-  async removeButtonClickListeners () {
+  async removeButtonClickListeners() {
     // Facebook
     const facebookButton = await this.getElementByClassNamePolling(
-      'firebaseui-idp-button firebaseui-idp-facebook')
+      'firebaseui-idp-button firebaseui-idp-facebook'
+    )
     if (facebookButton) {
       facebookButton.removeEventListener('click', this.socialButtonClicked)
     }
 
     // Google
     const googleButton = await this.getElementByClassNamePolling(
-      'firebaseui-idp-button firebaseui-idp-google')
+      'firebaseui-idp-button firebaseui-idp-google'
+    )
     if (googleButton) {
       googleButton.removeEventListener('click', this.socialButtonClicked)
     }
@@ -118,13 +123,14 @@ class FirebaseAuthenticationUI extends React.Component {
 
     // Email & password
     const emailButton = await this.getElementByClassNamePolling(
-      'firebaseui-idp-button firebaseui-idp-password')
+      'firebaseui-idp-button firebaseui-idp-password'
+    )
     if (emailButton) {
       emailButton.removeEventListener('click', this.emailButtonClicked)
     }
   }
 
-  configureFirebaseUI () {
+  configureFirebaseUI() {
     // Configure FirebaseUI.
     // https://github.com/firebase/firebaseui-web#example-with-all-parameters-used
     this.uiConfig = {
@@ -137,16 +143,16 @@ class FirebaseAuthenticationUI extends React.Component {
       signInOptions: [
         {
           provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-          scopes: ['https://www.googleapis.com/auth/userinfo.email']
+          scopes: ['https://www.googleapis.com/auth/userinfo.email'],
         },
         {
           provider: firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-          scopes: ['email']
+          scopes: ['email'],
         },
         {
           provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
-          requireDisplayName: false
-        }
+          requireDisplayName: false,
+        },
       ],
       // Allow anonymous users to sign in.
       autoUpgradeAnonymousUsers: true,
@@ -184,7 +190,9 @@ class FirebaseAuthenticationUI extends React.Component {
             // Mark the anonymous user as merged in our database (a duplicate).
             // Here, we could also merge the anonymous user's data with the
             // existing user but we don't do that currently.
-            MergeIntoExistingUserMutation(environment, anonymousUser.uid,
+            MergeIntoExistingUserMutation(
+              environment,
+              anonymousUser.uid,
               // onCompleted
               () => {
                 resolve()
@@ -205,7 +213,8 @@ class FirebaseAuthenticationUI extends React.Component {
               const authedUser = authResult.user
 
               // Delete the anonymous user in Firebase.
-              return anonymousUser.delete()
+              return anonymousUser
+                .delete()
                 .catch(e => {
                   logger.error(e)
                 })
@@ -217,7 +226,7 @@ class FirebaseAuthenticationUI extends React.Component {
             .catch(e => {
               logger.error(e)
             })
-        }
+        },
       },
       // Just using the constant rather than importing firebaseui
       // https://github.com/firebase/firebaseui-web#credential-helper
@@ -226,17 +235,14 @@ class FirebaseAuthenticationUI extends React.Component {
       // Terms of service URL
       tosUrl: termsOfServiceURL,
       // Privacy policy URL
-      privacyPolicyUrl: privacyPolicyURL
+      privacyPolicyUrl: privacyPolicyURL,
     }
   }
 
-  render () {
+  render() {
     return (
       <span>
-        <FirebaseAuth
-          uiConfig={this.uiConfig}
-          firebaseAuth={firebase.auth()}
-        />
+        <FirebaseAuth uiConfig={this.uiConfig} firebaseAuth={firebase.auth()} />
         {this.props.children}
       </span>
     )
@@ -245,12 +251,12 @@ class FirebaseAuthenticationUI extends React.Component {
 
 FirebaseAuthenticationUI.propTypes = {
   onSignInSuccess: PropTypes.func.isRequired,
-  children: PropTypes.element
+  children: PropTypes.element,
 }
 
 // https://github.com/facebook/react/issues/6653
 FirebaseAuthenticationUI.defaultProps = {
-  onSignInSuccess: () => {}
+  onSignInSuccess: () => {},
 }
 
 export default FirebaseAuthenticationUI

@@ -1,4 +1,3 @@
-
 import { find, sortBy } from 'lodash/collection'
 import BaseWidgetModel from './baseWidget/BaseWidgetModel'
 import UserWidgetModel from './userWidget/UserWidgetModel'
@@ -17,20 +16,22 @@ import getUserWidgetsByEnabledState from './userWidget/getUserWidgetsByEnabledSt
 const getWidgets = async (userContext, userId, enabled = false) => {
   try {
     // Get user widgets.
-    var userWidgets
+    let userWidgets
     if (enabled) {
-      userWidgets = await getUserWidgetsByEnabledState(userContext, userId, true)
+      userWidgets = await getUserWidgetsByEnabledState(
+        userContext,
+        userId,
+        true
+      )
     } else {
-      userWidgets = await UserWidgetModel
-        .query(userContext, userId)
-        .execute()
+      userWidgets = await UserWidgetModel.query(userContext, userId).execute()
     }
 
     // Get base widgets.
     const keys = []
-    userWidgets.forEach((userWidget) => {
+    userWidgets.forEach(userWidget => {
       keys.push({
-        id: userWidget.widgetId
+        id: userWidget.widgetId,
       })
     })
     if (!keys || keys.length === 0) {
@@ -40,15 +41,16 @@ const getWidgets = async (userContext, userId, enabled = false) => {
 
     // Merge user widgets with base widgets.
     const mergedWidgets = []
-    userWidgets.forEach((userWidget) => {
-      const baseWidget = find(baseWidgets, (baseWidget) => {
-        return baseWidget.id === userWidget.widgetId
-      })
+    userWidgets.forEach(userWidget => {
+      const baseWidget = find(
+        baseWidgets,
+        bWidget => bWidget.id === userWidget.widgetId
+      )
       mergedWidgets.push(constructFullWidget(userWidget, baseWidget))
     })
 
     // Sort widgets.
-    const sortedWidgets = sortBy(mergedWidgets, (obj) => obj.position)
+    const sortedWidgets = sortBy(mergedWidgets, obj => obj.position)
     return sortedWidgets
   } catch (e) {
     throw e

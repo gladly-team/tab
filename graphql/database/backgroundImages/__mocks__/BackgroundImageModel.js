@@ -10,7 +10,7 @@ export const mockImages = [
     imageURL: 'https://example.com/lake.jpg',
     thumbnail: 'lake.jpg',
     thumbnailURL: 'https://example.com/lake.jpg',
-    timestamp: '2017-08-01T21:35:48Z'
+    timestamp: '2017-08-01T21:35:48Z',
   },
   {
     id: '90bfe202-54a9-4eea-9003-5e91572387dd',
@@ -20,11 +20,11 @@ export const mockImages = [
     thumbnail: 'puppy.jpg',
     thumbnailURL: 'https://example.com/puppy.jpg',
     created: '2017-07-18T20:45:53Z',
-    updated: '2017-07-18T20:45:53Z'
-  }
+    updated: '2017-07-18T20:45:53Z',
+  },
 ]
 
 export default {
   get: jest.fn(() => mockImages[1]),
-  getAll: jest.fn(() => mockImages)
+  getAll: jest.fn(() => mockImages),
 }

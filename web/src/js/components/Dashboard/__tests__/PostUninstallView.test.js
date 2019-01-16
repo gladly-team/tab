@@ -1,9 +1,7 @@
 /* eslint-env jest */
 
 import React from 'react'
-import {
-  shallow
-} from 'enzyme'
+import { shallow } from 'enzyme'
 
 import { externalRedirect } from 'js/navigation/navigation'
 
@@ -15,19 +13,19 @@ afterEach(() => {
 
 const mockProps = {}
 
-describe('PostUninstallView', function () {
+describe('PostUninstallView', function() {
   it('renders without error', () => {
-    const PostUninstallView = require('js/components/Dashboard/PostUninstallView').default
-    shallow(
-      <PostUninstallView {...mockProps} />
-    )
+    const PostUninstallView = require('js/components/Dashboard/PostUninstallView')
+      .default
+    shallow(<PostUninstallView {...mockProps} />)
   })
 
   it('redirects to the survey doc on mount', () => {
-    const PostUninstallView = require('js/components/Dashboard/PostUninstallView').default
-    shallow(
-      <PostUninstallView {...mockProps} />
+    const PostUninstallView = require('js/components/Dashboard/PostUninstallView')
+      .default
+    shallow(<PostUninstallView {...mockProps} />)
+    expect(externalRedirect).toHaveBeenCalledWith(
+      'https://goo.gl/forms/XUICFx9psTwCzEIE2'
     )
-    expect(externalRedirect).toHaveBeenCalledWith('https://goo.gl/forms/XUICFx9psTwCzEIE2')
   })
 })

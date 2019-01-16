@@ -4,15 +4,13 @@ import moment from 'moment'
 import UserModel from '../UserModel'
 import setBackgroundImageDaily from '../setBackgroundImageDaily'
 import getRandomBackgroundImage from '../../backgroundImages/getRandomBackgroundImage'
-import {
-  USER_BACKGROUND_OPTION_DAILY
-} from '../../constants'
+import { USER_BACKGROUND_OPTION_DAILY } from '../../constants'
 import {
   DatabaseOperation,
   getMockUserContext,
   getMockUserInstance,
   mockDate,
-  setMockDBResponse
+  setMockDBResponse,
 } from '../../test-utils'
 
 jest.mock('../../databaseClient')
@@ -38,22 +36,19 @@ describe('setBackgroundImageDaily', () => {
       backgroundImage: {
         id: mockImage.id,
         image: mockImage.image,
-        timestamp: moment.utc().toISOString()
+        timestamp: moment.utc().toISOString(),
       },
       backgroundOption: USER_BACKGROUND_OPTION_DAILY,
-      updated: moment.utc().toISOString()
+      updated: moment.utc().toISOString(),
     })
   })
 
   it('calls the database as expected', async () => {
     const userId = userContext.id
     const expectedReturnedUser = getMockUserInstance()
-    const dbUpdateMock = setMockDBResponse(
-      DatabaseOperation.UPDATE,
-      {
-        Attributes: expectedReturnedUser
-      }
-    )
+    const dbUpdateMock = setMockDBResponse(DatabaseOperation.UPDATE, {
+      Attributes: expectedReturnedUser,
+    })
     const returnedUser = await setBackgroundImageDaily(userContext, userId)
     expect(dbUpdateMock).toHaveBeenCalled()
     expect(returnedUser).toEqual(expectedReturnedUser)

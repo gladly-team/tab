@@ -8,9 +8,9 @@ var defaultSuccessResponse = {
   mergeIntoExistingUser: {
     user: {
       id: 'foo123',
-      mergedIntoExistingUser: true
-    }
-  }
+      mergedIntoExistingUser: true,
+    },
+  },
 }
 
 var defaultErrorResponse = null
@@ -20,7 +20,7 @@ export const __runOnCompleted = (response = null) => {
   onCompletedCallback(response)
 }
 
-export const __runOnError = (response) => {
+export const __runOnError = response => {
   onErrorCallback(response)
 }
 

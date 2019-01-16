@@ -1,9 +1,6 @@
-
 import moment from 'moment'
 import UserModel from './UserModel'
-import {
-  USER_BACKGROUND_OPTION_PHOTO
-} from '../constants'
+import { USER_BACKGROUND_OPTION_PHOTO } from '../constants'
 import BackgroundImageModel from '../backgroundImages/BackgroundImageModel'
 
 /**
@@ -16,18 +13,15 @@ import BackgroundImageModel from '../backgroundImages/BackgroundImageModel'
 const setBackgroundImage = async (userContext, userId, imageId, mode) => {
   try {
     const image = await BackgroundImageModel.get(userContext, imageId)
-    if (!mode) {
-      mode = USER_BACKGROUND_OPTION_PHOTO
-    }
     const userInstance = await UserModel.update(userContext, {
       id: userId,
       backgroundImage: {
         id: image.id,
         image: image.image,
         thumbnail: image.thumbnail,
-        timestamp: moment.utc().toISOString()
+        timestamp: moment.utc().toISOString(),
       },
-      backgroundOption: mode
+      backgroundOption: mode || USER_BACKGROUND_OPTION_PHOTO,
     })
     return userInstance
   } catch (e) {

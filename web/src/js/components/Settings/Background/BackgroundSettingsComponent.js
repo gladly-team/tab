@@ -1,25 +1,20 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { get } from 'lodash/object'
-import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton'
+import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton'
 import Divider from 'material-ui/Divider'
-import {Card, CardHeader} from 'material-ui/Card'
+import { Card, CardHeader } from 'material-ui/Card'
 
 import BackgroundImagePicker from 'js/components/Background/BackgroundImagePickerContainer'
 import BackgroundColorPicker from 'js/components/Background/BackgroundColorPickerContainer'
 import BackgroundCustomImagePicker from 'js/components/Background/BackgroundCustomImagePickerContainer'
-import {
-  cardHeaderTitleStyle,
-  cardHeaderSubtitleStyle
-} from 'js/theme/default'
-import {
-  setBackgroundSettings
-} from 'js/utils/local-bkg-settings'
+import { cardHeaderTitleStyle, cardHeaderSubtitleStyle } from 'js/theme/default'
+import { setBackgroundSettings } from 'js/utils/local-bkg-settings'
 import {
   USER_BACKGROUND_OPTION_CUSTOM,
   USER_BACKGROUND_OPTION_COLOR,
   USER_BACKGROUND_OPTION_PHOTO,
-  USER_BACKGROUND_OPTION_DAILY
+  USER_BACKGROUND_OPTION_DAILY,
 } from 'js/constants'
 import SetBackgroundImageMutation from 'js/mutations/SetBackgroundImageMutation'
 import SetBackgroundColorMutation from 'js/mutations/SetBackgroundColorMutation'
@@ -27,20 +22,22 @@ import SetBackgroundCustomImageMutation from 'js/mutations/SetBackgroundCustomIm
 import SetBackgroundDailyImageMutation from 'js/mutations/SetBackgroundDailyImageMutation'
 
 class BackgroundSettings extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.defaultSelection = USER_BACKGROUND_OPTION_PHOTO
 
     this.state = {
-      selected: props.user.backgroundOption || this.defaultSelection
+      selected: props.user.backgroundOption || this.defaultSelection,
     }
   }
 
-  onChange (event, backgroundOption) {
-    if (!backgroundOption) { return }
+  onChange(event, backgroundOption) {
+    if (!backgroundOption) {
+      return
+    }
     this.setState({
-      selected: backgroundOption
+      selected: backgroundOption,
     })
     this.updateLocalStorageBackgroundSettings(backgroundOption)
 
@@ -61,8 +58,12 @@ class BackgroundSettings extends React.Component {
    *   option; one of 'custom', 'photo', 'daily', or 'color'
    * @return {undefined}
    */
-  updateLocalStorageBackgroundSettings (backgroundOption = null,
-    customImage = null, backgroundColor = null, backgroundImageURL = null) {
+  updateLocalStorageBackgroundSettings(
+    backgroundOption = null,
+    customImage = null,
+    backgroundColor = null,
+    backgroundImageURL = null
+  ) {
     setBackgroundSettings(
       backgroundOption || this.props.user.backgroundOption,
       customImage || this.props.user.customImage,
@@ -81,7 +82,7 @@ class BackgroundSettings extends React.Component {
    * @param {string} image.thumbnailURL - The image's thumbnail URL
    * @return {undefined}
    */
-  onBackgroundImageSelection (image) {
+  onBackgroundImageSelection(image) {
     SetBackgroundImageMutation.commit(
       this.props.relay.environment,
       this.props.user,
@@ -90,7 +91,11 @@ class BackgroundSettings extends React.Component {
       this.onSaveError.bind(this)
     )
     this.updateLocalStorageBackgroundSettings(
-      USER_BACKGROUND_OPTION_PHOTO, null, null, image.imageURL)
+      USER_BACKGROUND_OPTION_PHOTO,
+      null,
+      null,
+      image.imageURL
+    )
   }
 
   /**
@@ -99,7 +104,7 @@ class BackgroundSettings extends React.Component {
    * @param {string} color - The color hex value
    * @return {undefined}
    */
-  onBackgroundColorSelection (color) {
+  onBackgroundColorSelection(color) {
     SetBackgroundColorMutation.commit(
       this.props.relay.environment,
       this.props.user,
@@ -108,7 +113,11 @@ class BackgroundSettings extends React.Component {
       this.onSaveError.bind(this)
     )
     this.updateLocalStorageBackgroundSettings(
-      USER_BACKGROUND_OPTION_COLOR, null, color, null)
+      USER_BACKGROUND_OPTION_COLOR,
+      null,
+      color,
+      null
+    )
   }
 
   /**
@@ -117,7 +126,7 @@ class BackgroundSettings extends React.Component {
    * @param {string} imgURL - The custom image's URL
    * @return {undefined}
    */
-  onCustomImageSelection (imgURL) {
+  onCustomImageSelection(imgURL) {
     SetBackgroundCustomImageMutation.commit(
       this.props.relay.environment,
       this.props.user,
@@ -126,7 +135,11 @@ class BackgroundSettings extends React.Component {
       this.onSaveError.bind(this)
     )
     this.updateLocalStorageBackgroundSettings(
-      USER_BACKGROUND_OPTION_CUSTOM, imgURL, null, null)
+      USER_BACKGROUND_OPTION_CUSTOM,
+      imgURL,
+      null,
+      null
+    )
   }
 
   /**
@@ -134,7 +147,7 @@ class BackgroundSettings extends React.Component {
    * Update database and localStorage.
    * @return {undefined}
    */
-  onDailyPhotoOptionSelected () {
+  onDailyPhotoOptionSelected() {
     SetBackgroundDailyImageMutation(
       this.props.relay.environment,
       this.props.user.id,
@@ -146,48 +159,63 @@ class BackgroundSettings extends React.Component {
         if (this.state.selected !== USER_BACKGROUND_OPTION_DAILY) {
           return
         }
-        const newImgURL = get(data, 'setUserBkgDailyImage.user.backgroundImage.imageURL')
+        const newImgURL = get(
+          data,
+          'setUserBkgDailyImage.user.backgroundImage.imageURL'
+        )
         this.updateLocalStorageBackgroundSettings(
-          USER_BACKGROUND_OPTION_DAILY, null, null, newImgURL)
+          USER_BACKGROUND_OPTION_DAILY,
+          null,
+          null,
+          newImgURL
+        )
       },
       this.onSaveError.bind(this)
     )
 
     this.updateLocalStorageBackgroundSettings(
-      USER_BACKGROUND_OPTION_DAILY, null, null, null)
+      USER_BACKGROUND_OPTION_DAILY,
+      null,
+      null,
+      null
+    )
   }
 
-  onSaveSuccess () {}
+  onSaveSuccess() {}
 
-  onSaveError () {
-    this.props.showError('Oops, we are having trouble saving your settings right now :(')
+  onSaveError() {
+    this.props.showError(
+      'Oops, we are having trouble saving your settings right now :('
+    )
   }
 
-  render () {
+  render() {
     const { app, user, showError } = this.props
-    if (!this.state.selected) { return null }
+    if (!this.state.selected) {
+      return null
+    }
 
     const optionContainer = {
-      padding: 10
+      padding: 10,
     }
     const divider = {
       marginTop: 24,
-      marginBottom: 8
+      marginBottom: 8,
     }
     const radioBtnGroupStyle = {
       marginLeft: 4,
-      width: 220
+      width: 220,
     }
     const radioBtnStyle = {
       marginBottom: 6,
-      fontSize: 14
+      fontSize: 14,
     }
     const cardBody = {
-      padding: 10
+      padding: 10,
     }
 
     var backgroundPicker
-    var dividerCmp = (<Divider style={divider} />)
+    var dividerCmp = <Divider style={divider} />
 
     // These components display below the radio buttons when
     // an option is selected.
@@ -211,7 +239,9 @@ class BackgroundSettings extends React.Component {
         backgroundPicker = (
           <BackgroundColorPicker
             user={user}
-            onBackgroundColorSelection={this.onBackgroundColorSelection.bind(this)}
+            onBackgroundColorSelection={this.onBackgroundColorSelection.bind(
+              this
+            )}
           />
         )
         break
@@ -221,7 +251,9 @@ class BackgroundSettings extends React.Component {
           <BackgroundImagePicker
             app={app}
             user={user}
-            onBackgroundImageSelection={this.onBackgroundImageSelection.bind(this)}
+            onBackgroundImageSelection={this.onBackgroundImageSelection.bind(
+              this
+            )}
           />
         )
         break
@@ -231,43 +263,50 @@ class BackgroundSettings extends React.Component {
           <BackgroundImagePicker
             app={app}
             user={user}
-            onBackgroundImageSelection={this.onBackgroundImageSelection.bind(this)}
+            onBackgroundImageSelection={this.onBackgroundImageSelection.bind(
+              this
+            )}
           />
         )
         break
     }
 
     return (
-      <Card
-        style={optionContainer}>
+      <Card style={optionContainer}>
         <CardHeader
           title={'Background'}
           titleStyle={cardHeaderTitleStyle}
           subtitleStyle={cardHeaderSubtitleStyle}
           actAsExpander={false}
-          showExpandableButton={false} />
+          showExpandableButton={false}
+        />
         <div style={cardBody}>
           <RadioButtonGroup
             style={radioBtnGroupStyle}
             onChange={this.onChange.bind(this)}
-            name='photoModes'
-            valueSelected={this.state.selected}>
+            name="photoModes"
+            valueSelected={this.state.selected}
+          >
             <RadioButton
               style={radioBtnStyle}
               value={USER_BACKGROUND_OPTION_DAILY}
-              label='New photo daily' />
+              label="New photo daily"
+            />
             <RadioButton
               style={radioBtnStyle}
               value={USER_BACKGROUND_OPTION_PHOTO}
-              label='Selected photo' />
+              label="Selected photo"
+            />
             <RadioButton
               style={radioBtnStyle}
               value={USER_BACKGROUND_OPTION_CUSTOM}
-              label='Custom photo' />
+              label="Custom photo"
+            />
             <RadioButton
               style={radioBtnStyle}
               value={USER_BACKGROUND_OPTION_COLOR}
-              label='Color' />
+              label="Color"
+            />
           </RadioButtonGroup>
           {dividerCmp}
           {backgroundPicker}
@@ -285,13 +324,13 @@ BackgroundSettings.propTypes = {
     customImage: PropTypes.string,
     backgroundColor: PropTypes.string,
     backgroundImage: PropTypes.shape({
-      imageURL: PropTypes.string
-    })
+      imageURL: PropTypes.string,
+    }),
   }),
   showError: PropTypes.func.isRequired,
   relay: PropTypes.shape({
-    environment: PropTypes.object.isRequired
-  })
+    environment: PropTypes.object.isRequired,
+  }),
 }
 
 export default BackgroundSettings

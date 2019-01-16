@@ -1,4 +1,3 @@
-
 import moment from 'moment'
 import { get, has } from 'lodash/object'
 import { isObject, isFunction, isNil } from 'lodash/lang'
@@ -8,7 +7,7 @@ import types from '../fieldTypes'
 import {
   DatabaseItemDoesNotExistException,
   NotImplementedException,
-  UnauthorizedQueryException
+  UnauthorizedQueryException,
 } from '../../utils/exceptions'
 import dbClient from '../databaseClient'
 import { isValidPermissionsOverride } from '../../utils/permissions-overrides'
@@ -19,14 +18,16 @@ const Promise = require('bluebird')
 dynogels.documentClient(dbClient)
 
 class BaseModel {
-  constructor (obj) {
+  constructor(obj) {
     if (!obj || typeof obj !== 'object') {
       return
     }
-    const fieldNames = [].concat(Object.keys(this.constructor.schema),
-      ['created', 'updated'])
+    const fieldNames = [].concat(Object.keys(this.constructor.schema), [
+      'created',
+      'updated',
+    ])
     const customDeserializers = this.constructor.fieldDeserializers
-    const fieldDefaults = this.constructor.fieldDefaults
+    const { fieldDefaults } = this.constructor
 
     // Set properties for each field on the model.
     // * If `obj[fieldName]` exists, use the value of `obj[fieldName]`.
@@ -34,12 +35,12 @@ class BaseModel {
     //   the field if one exists.
     // * If both the value and default value are nil, do not set
     //   the property.
-    fieldNames.forEach((fieldName) => {
+    fieldNames.forEach(fieldName => {
       let val = null
       if (has(obj, fieldName)) {
         val = obj[fieldName]
       } else if (has(fieldDefaults, fieldName)) {
-        var fieldDefault = fieldDefaults[fieldName]
+        const fieldDefault = fieldDefaults[fieldName]
         if (isFunction(fieldDefault)) {
           val = fieldDefault()
         } else {
@@ -47,6 +48,8 @@ class BaseModel {
         }
       }
       if (!isNil(val)) {
+        // TODO: clean up the logic in this constructor to use immutable variables.
+        // eslint-disable-next-line no-param-reassign
         obj[fieldName] = val
       }
     })
@@ -56,13 +59,13 @@ class BaseModel {
     // * If the returned value is null or undefined, do not set
     //   the property.
     const self = this
-    fieldNames.forEach((fieldName) => {
-      var val = null
+    fieldNames.forEach(fieldName => {
+      let val = null
       if (has(obj, fieldName)) {
         val = obj[fieldName]
       }
       if (isFunction(get(customDeserializers, fieldName, false))) {
-        let deserializeFunc = customDeserializers[fieldName]
+        const deserializeFunc = customDeserializers[fieldName]
         val = deserializeFunc(val, obj)
       }
       if (!isNil(val)) {
@@ -76,7 +79,7 @@ class BaseModel {
    * You are required to override this function on the child class.
    * @return {string} The name of the model.
    */
-  static get name () {
+  static get name() {
     throw new NotImplementedException()
   }
 
@@ -85,7 +88,7 @@ class BaseModel {
    * You are required to override this function on the child class.
    * @return {string} The name of the database table.
    */
-  static get tableName () {
+  static get tableName() {
     throw new NotImplementedException()
   }
 
@@ -94,7 +97,7 @@ class BaseModel {
    * You are required to override this function on the child class.
    * @return {string} The name of the hashKey for the DynamoDB table.
    */
-  static get hashKey () {
+  static get hashKey() {
     throw new NotImplementedException()
   }
 
@@ -102,7 +105,7 @@ class BaseModel {
    * The name of the range key (if it exists) for the DynamoDB table.
    * @return {string} The name of the hashKey for the DynamoDB table.
    */
-  static get rangeKey () {
+  static get rangeKey() {
     return null
   }
 
@@ -118,7 +121,7 @@ class BaseModel {
    * @return {string} index.name - The name of the index.
    * @return {string} index.type - Either "global" or "local".
    */
-  static get indexes () {
+  static get indexes() {
     return null
   }
 
@@ -127,7 +130,7 @@ class BaseModel {
    * You are required to override this function on the child class.
    * @return {object} The table schema.
    */
-  static get schema () {
+  static get schema() {
     throw new NotImplementedException()
   }
 
@@ -137,7 +140,7 @@ class BaseModel {
    *   If a field's default value is a function, it will be called to
    *   generate the value.
    */
-  static get fieldDefaults () {
+  static get fieldDefaults() {
     return {}
   }
 
@@ -150,7 +153,7 @@ class BaseModel {
    *   if one exists. If the fieldDeserializer returns undefined or null,
    *   we will not set the property.
    */
-  static get fieldDeserializers () {
+  static get fieldDeserializers() {
     return {}
   }
 
@@ -167,13 +170,17 @@ class BaseModel {
    *   Secondary indexes must be authorized separately in `indexPermissions`,
    *   with a property key set to the name of the secondary index.
    */
-  static get permissions () {
+  static get permissions() {
     return {
-      get: (userContext, hashKeyValue, rangeKeyValue) => false,
-      getAll: (userContext) => false,
-      update: (userContext, hashKeyValue, rangeKeyValue, item) => false,
-      create: (userContext, hashKeyValue, rangeKeyValue, item) => false,
-      indexPermissions: {}
+      // Receives: userContext, hashKeyValue, rangeKeyValue
+      get: () => false,
+      // Receives: userContext
+      getAll: () => false,
+      // Receives: userContext, hashKeyValue, rangeKeyValue, item
+      update: () => false,
+      // Receives: userContext, hashKeyValue, rangeKeyValue, item
+      create: () => false,
+      indexPermissions: {},
     }
   }
 
@@ -182,14 +189,14 @@ class BaseModel {
    * using any methods that query the database.
    * @return {undefined}
    */
-  static register () {
+  static register() {
     // logger.debug(`Registering model ${this.name} to table ${this.tableName}.`)
 
     // Add two ISO timestamps, 'created' and 'updated', to
     // the item's fields.
     const schema = Object.assign(this.schema, {
       created: types.string().isoDate(),
-      updated: types.string().isoDate()
+      updated: types.string().isoDate(),
     })
 
     const options = {
@@ -199,10 +206,10 @@ class BaseModel {
       // Handle timestamps ourselves, not through dynogels.
       timestamps: false,
 
-      schema: schema
+      schema,
     }
     if (this.rangeKey) {
-      options['rangeKey'] = this.rangeKey
+      options.rangeKey = this.rangeKey
     }
 
     // Add any secondary indexes.
@@ -214,9 +221,9 @@ class BaseModel {
     this.dynogelsModel = dynogels.define(this.name, options)
   }
 
-  static async get (userContext, hashKey, rangeKey, options) {
+  static async get(userContext, hashKey, rangeKey) {
     const self = this
-    let keys = [hashKey]
+    const keys = [hashKey]
     if (rangeKey) {
       keys.push(rangeKey)
     }
@@ -224,7 +231,8 @@ class BaseModel {
     if (!this.isQueryAuthorized(userContext, 'get', hashKey, rangeKey)) {
       return Promise.reject(new UnauthorizedQueryException())
     }
-    return this.dynogelsModel.getAsync(...keys)
+    return this.dynogelsModel
+      .getAsync(...keys)
       .then(data => {
         if (isNil(data)) {
           throw new DatabaseItemDoesNotExistException()
@@ -238,13 +246,13 @@ class BaseModel {
 
   // `keys` can be an array of hashKey strings or an array of objects
   // containing hashKeys and rangeKeys
-  static async getBatch (userContext, keys) {
+  static async getBatch(userContext, keys) {
     const self = this
     // logger.debug(`Getting multiple objs with keys ${JSON.stringify(keys)} from table ${this.tableName}.`)
-    var authorizationError = false
-    keys.forEach((key) => {
-      var hashKey
-      var rangeKey
+    let authorizationError = false
+    keys.forEach(key => {
+      let hashKey
+      let rangeKey
       if (isObject(key)) {
         hashKey = get(key, [self.hashKey], null)
         rangeKey = get(key, [self.rangeKey], null)
@@ -258,21 +266,23 @@ class BaseModel {
     if (authorizationError) {
       return Promise.reject(new UnauthorizedQueryException())
     }
-    return this.dynogelsModel.getItemsAsync(keys)
+    return this.dynogelsModel
+      .getItemsAsync(keys)
       .then(data => self.deserialize(data))
       .catch(err => {
         throw err
       })
   }
 
-  static async getAll (userContext) {
+  static async getAll(userContext) {
     // logger.debug(`Getting all objs in table ${this.tableName}.`)
     const self = this
     if (!this.isQueryAuthorized(userContext, 'getAll')) {
       return Promise.reject(new UnauthorizedQueryException())
     }
     // https://github.com/clarkie/dynogels#scan
-    return this.dynogelsModel.scan()
+    return this.dynogelsModel
+      .scan()
       .loadAll()
       .execAsync()
       .then(data => self.deserialize(data.Items))
@@ -281,30 +291,41 @@ class BaseModel {
       })
   }
 
-  static query (userContext, hashKey) {
+  static query(userContext, hashKey) {
     // logger.debug(`Querying hashKey ${hashKey} on table ${this.tableName}.`)
 
     // Return a dynogels chainable query, but use our own
     // `exec` function so we can deserialize the response.
     // Execute the query by calling `.execute()`.
     const queryObj = this.dynogelsModel.query(hashKey)
-    queryObj.execute = async () => this._execAsync(userContext, hashKey, queryObj)
+    queryObj.execute = async () =>
+      this._execAsync(userContext, hashKey, queryObj)
     return queryObj
   }
 
-  static async _execAsync (userContext, hashKey, queryObj) {
+  static async _execAsync(userContext, hashKey, queryObj) {
     const self = this
 
     // See if this query is happening on an index.
-    var indexName = null
+    let indexName = null
     if (has(queryObj, 'request.IndexName')) {
       indexName = queryObj.request.IndexName
     }
-    if (!this.isQueryAuthorized(userContext, 'get', hashKey, null, null, indexName)) {
+    if (
+      !this.isQueryAuthorized(
+        userContext,
+        'get',
+        hashKey,
+        null,
+        null,
+        indexName
+      )
+    ) {
       return Promise.reject(new UnauthorizedQueryException())
     }
 
-    return queryObj.execAsync()
+    return queryObj
+      .execAsync()
       .then(data => self.deserialize(data.Items))
       .catch(err => {
         throw err
@@ -318,24 +339,29 @@ class BaseModel {
    * @param {boolean} overwrite - Whether to overwrite an existing item
    *   if one exists with the same hash key
    * @return {Object} item - The created item
-  */
-  static async create (userContext, item, overwrite = false) {
+   */
+  static async create(userContext, item, overwrite = false) {
     // logger.debug(`Creating item in ${this.tableName}: ${JSON.stringify(item, null, 2)}`)
     const self = this
     const hashKey = item[this.hashKey]
 
     // Add 'created' and 'updated' fields if they're not already set.
     if (!item.created) {
+      // TODO: fix rule violation
+      // eslint-disable-next-line no-param-reassign
       item.created = moment.utc().toISOString()
     }
     if (!item.updated) {
+      // TODO: fix rule violation
+      // eslint-disable-next-line no-param-reassign
       item.updated = moment.utc().toISOString()
     }
 
     if (!this.isQueryAuthorized(userContext, 'create', hashKey, null, item)) {
       return Promise.reject(new UnauthorizedQueryException())
     }
-    return this.dynogelsModel.createAsync(item, { overwrite: overwrite })
+    return this.dynogelsModel
+      .createAsync(item, { overwrite })
       .then(data => self.deserialize(data))
       .catch(err => {
         throw err
@@ -351,35 +377,31 @@ class BaseModel {
    *   previously exist and was created
    * @return {Object} response.item - The created item (or fetched item if it
    *   already existed and `overwrite` is false)
-  */
-  static async getOrCreate (userContext, item) {
+   */
+  static async getOrCreate(userContext, item) {
     const self = this
     return this.create(userContext, item, false)
-      .then(createdItem => {
-        return {
-          created: true,
-          item: createdItem
-        }
-      })
+      .then(createdItem => ({
+        created: true,
+        item: createdItem,
+      }))
       .catch(err => {
         // Overwrite is false and the item already existed.
         // Get the item and return it.
         if (err.code === 'ConditionalCheckFailedException') {
           const hashKey = item[self.hashKey]
-          return self.get(userContext, hashKey)
-            .then(fetchedItem => {
-              return {
-                created: false,
-                item: fetchedItem
-              }
+          return self
+            .get(userContext, hashKey)
+            .then(fetchedItem => ({
+              created: false,
+              item: fetchedItem,
+            }))
+            .catch(error => {
+              throw error
             })
-            .catch(err => {
-              throw err
-            })
-        } else {
-          // Unhandled error
-          throw err
         }
+        // Unhandled error
+        throw err
       })
   }
 
@@ -391,8 +413,8 @@ class BaseModel {
    *   update expressions. See:
    *   http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html#Expressions.ConditionExpressions.SimpleComparisons
    * @return {Object} item - The updated item
-  */
-  static async update (userContext, item, params = {}) {
+   */
+  static async update(userContext, item, params = {}) {
     // logger.debug(`Updating item in ${this.tableName}: ${JSON.stringify(item, null, 2)}`)
     const self = this
     const hashKeyValue = item[this.hashKey]
@@ -400,19 +422,32 @@ class BaseModel {
 
     // Update 'updated' field if it's not already set.
     if (!item.updated) {
+      // TODO: fix rule violation
+      // eslint-disable-next-line no-param-reassign
       item.updated = moment.utc().toISOString()
     }
 
-    if (!this.isQueryAuthorized(userContext, 'update', hashKeyValue, rangeKeyValue, item)) {
+    if (
+      !this.isQueryAuthorized(
+        userContext,
+        'update',
+        hashKeyValue,
+        rangeKeyValue,
+        item
+      )
+    ) {
       return Promise.reject(new UnauthorizedQueryException())
     }
 
+    // TODO: fix rule violation
+    // eslint-disable-next-line no-param-reassign
     params.ConditionExpression = params.ConditionExpression
       ? `${params.ConditionExpression} AND attribute_exists(${this.hashKey})`
       : `attribute_exists(${this.hashKey})`
 
     const options = Object.assign({}, params, { ReturnValues: 'ALL_NEW' })
-    return this.dynogelsModel.updateAsync(item, options)
+    return this.dynogelsModel
+      .updateAsync(item, options)
       .then(data => self.deserialize(data))
       .catch(err => {
         throw err
@@ -425,9 +460,9 @@ class BaseModel {
    * @param {Object || Object[]} obj - The database object or list of objects.
    * @return {Object | Object[]} An instance of `this`, with the attributes
    *   of `obj` and possibly some additional default attributes.
-  */
-  static deserialize (data) {
-    const deserializeObj = (item) => {
+   */
+  static deserialize(data) {
+    const deserializeObj = item => {
       // Item may be null.
       if (!item) {
         return null
@@ -439,12 +474,9 @@ class BaseModel {
       return new Cls(item.attrs)
     }
 
-    var result
+    let result
     if (data instanceof Array) {
-      result = []
-      for (var index in data) {
-        result.push(deserializeObj(data[index]))
-      }
+      result = data.map(val => deserializeObj(val))
     } else {
       result = deserializeObj(data)
     }
@@ -463,8 +495,14 @@ class BaseModel {
    *   a secondary index.
    * @return {boolean} Whether the userContext is authorized.
    */
-  static isQueryAuthorized (userContext, operation, hashKeyValue = null,
-    rangeKeyValue = null, item = null, indexName = null) {
+  static isQueryAuthorized(
+    userContext,
+    operation,
+    hashKeyValue = null,
+    rangeKeyValue = null,
+    item = null,
+    indexName = null
+  ) {
     // Check if the DB call has an authorization override
     // that ignores the user-level permissions.
     if (isValidPermissionsOverride(userContext)) {
@@ -476,19 +514,14 @@ class BaseModel {
       return false
     }
 
-    const validOperations = [
-      'get',
-      'getAll',
-      'update',
-      'create'
-    ]
+    const validOperations = ['get', 'getAll', 'update', 'create']
     if (validOperations.indexOf(operation) === -1) {
       return false
     }
 
     // Get the permissions from the model class. If no permissions are
     // defined, do not allow any access.
-    const permissions = this.permissions
+    const { permissions } = this
     if (!permissions) {
       return false
     }
@@ -497,9 +530,13 @@ class BaseModel {
     // If the function does not exist, do not allow any access.
     // If this operation is happening on a secondary index, get the authorizer
     // function for that index.
-    var authorizerFunction
+    let authorizerFunction
     if (indexName) {
-      authorizerFunction = get(permissions, ['indexPermissions', indexName, operation])
+      authorizerFunction = get(permissions, [
+        'indexPermissions',
+        indexName,
+        operation,
+      ])
     } else {
       authorizerFunction = get(permissions, [operation])
     }
@@ -508,10 +545,16 @@ class BaseModel {
     }
 
     // If the authorizer function returns `true`, the query is authorized.
-    var isAuthorized = false
+    let isAuthorized = false
     try {
-      isAuthorized = (authorizerFunction(userContext, hashKeyValue,
-        rangeKeyValue, item, indexName)) === true
+      isAuthorized =
+        authorizerFunction(
+          userContext,
+          hashKeyValue,
+          rangeKeyValue,
+          item,
+          indexName
+        ) === true
     } catch (err) {
       isAuthorized = false
       logger.error(err)

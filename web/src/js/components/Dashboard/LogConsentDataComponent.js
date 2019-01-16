@@ -8,16 +8,16 @@ import {
   hasGlobalConsent,
   markConsentDataAsLogged,
   registerConsentCallback,
-  unregisterConsentCallback
+  unregisterConsentCallback,
 } from 'js/ads/consentManagement'
 
 class LogConsentDataComponent extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.consentChangeCallback = null
   }
 
-  async componentDidMount () {
+  async componentDidMount() {
     // Register a callback for any new consent updates.
     var isEU
     try {
@@ -40,13 +40,13 @@ class LogConsentDataComponent extends React.Component {
     }
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     if (this.consentChangeCallback) {
       unregisterConsentCallback(this.consentChangeCallback)
     }
   }
 
-  logDataConsentDecision (consentString, isGlobalConsent) {
+  logDataConsentDecision(consentString, isGlobalConsent) {
     const { relay, user } = this.props
     // If we're missing a consent string, don't log.
     if (!consentString) {
@@ -65,18 +65,18 @@ class LogConsentDataComponent extends React.Component {
     )
   }
 
-  render () {
+  render() {
     return null
   }
 }
 
 LogConsentDataComponent.propTypes = {
   user: PropTypes.shape({
-    id: PropTypes.string.isRequired
+    id: PropTypes.string.isRequired,
   }).isRequired,
   relay: PropTypes.shape({
-    environment: PropTypes.object.isRequired
-  })
+    environment: PropTypes.object.isRequired,
+  }),
 }
 
 export default LogConsentDataComponent

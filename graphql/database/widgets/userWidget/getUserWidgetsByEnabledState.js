@@ -1,4 +1,4 @@
-
+import { filter } from 'lodash/collection'
 import UserWidgetModel from './UserWidgetModel'
 
 /**
@@ -9,18 +9,12 @@ import UserWidgetModel from './UserWidgetModel'
  * @return {Promise<UserWidget[]>}  Returns a promise that resolves into a
  * list of user widgets.
  */
-const getUserWidgetsByEnabledState = (userContext, userId, enabled) => {
-  return UserWidgetModel.query(userContext, userId)
+const getUserWidgetsByEnabledState = (userContext, userId, enabled) =>
+  UserWidgetModel.query(userContext, userId)
     .execute()
     .then(widgets => {
-      const result = []
-      for (var index in widgets) {
-        if (widgets[index].enabled === enabled) {
-          result.push(widgets[index])
-        }
-      }
+      const result = filter(widgets, w => w.enabled === enabled)
       return result
     })
-}
 
 export default getUserWidgetsByEnabledState

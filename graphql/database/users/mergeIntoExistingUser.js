@@ -1,4 +1,3 @@
-
 import UserModel from './UserModel'
 
 /**
@@ -14,7 +13,7 @@ const mergeIntoExistingUser = async (userContext, userId) => {
   try {
     await UserModel.update(userContext, {
       id: userId,
-      mergedIntoExistingUser: true
+      mergedIntoExistingUser: true,
     })
   } catch (e) {
     throw e

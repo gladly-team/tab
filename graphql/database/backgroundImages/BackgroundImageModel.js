@@ -1,4 +1,3 @@
-
 import BaseModel from '../base/BaseModel'
 import types from '../fieldTypes'
 import tableNames from '../tables'
@@ -11,19 +10,19 @@ const mediaRoot = config.MEDIA_ENDPOINT
  * @extends BaseModel
  */
 class BackgroundImage extends BaseModel {
-  static get name () {
+  static get name() {
     return BACKGROUND_IMAGE
   }
 
-  static get hashKey () {
+  static get hashKey() {
     return 'id'
   }
 
-  static get tableName () {
+  static get tableName() {
     return tableNames.backgroundImages
   }
 
-  static get schema () {
+  static get schema() {
     return {
       id: types.uuid(),
       name: types.string(),
@@ -34,35 +33,31 @@ class BackgroundImage extends BaseModel {
       // Filename.
       thumbnail: types.string(),
       // Absolute URL. Only returned during deserialization.
-      thumbnailURL: types.string().forbidden()
+      thumbnailURL: types.string().forbidden(),
     }
   }
 
-  static get permissions () {
+  static get permissions() {
     return {
       get: () => true,
-      getAll: () => true
+      getAll: () => true,
     }
   }
 
-  static get fieldDeserializers () {
+  static get fieldDeserializers() {
     return {
       imageURL: (imageURL, obj) => {
-        const finalURL = (
-          obj.image
+        const finalURL = obj.image
           ? `${mediaRoot}/img/backgrounds/${obj.image}`
           : null
-        )
         return finalURL
       },
       thumbnailURL: (thumbnailURL, obj) => {
-        const finalURL = (
-          obj.thumbnail
+        const finalURL = obj.thumbnail
           ? `${mediaRoot}/img/background-thumbnails/${obj.thumbnail}`
           : null
-        )
         return finalURL
-      }
+      },
     }
   }
 }

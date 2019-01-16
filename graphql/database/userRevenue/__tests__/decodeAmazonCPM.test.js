@@ -2,20 +2,18 @@
 
 import logger from '../../../utils/logger'
 
-jest.mock('../amazon-cpm-codes.json', () => {
-  return {
-    'code-1': '0.01',
-    'code-2': '0.02',
-    'code-3': '0.03',
-    'code-4': '0.50',
-    'code-5': '7.1',
-    'code-6': '20',
-    'some-code': 'abc' // invalid
-  }
-})
+jest.mock('../amazon-cpm-codes.json', () => ({
+  'code-1': '0.01',
+  'code-2': '0.02',
+  'code-3': '0.03',
+  'code-4': '0.50',
+  'code-5': '7.1',
+  'code-6': '20',
+  'some-code': 'abc', // invalid
+}))
 jest.mock('../../../utils/logger')
 
-var nodeEnv = process.env.NODE_ENV
+const nodeEnv = process.env.NODE_ENV
 
 afterEach(() => {
   jest.clearAllMocks()

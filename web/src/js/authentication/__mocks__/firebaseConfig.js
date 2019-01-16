@@ -1,4 +1,3 @@
-
 import firebase from 'firebase/app'
 import 'firebase/auth'
 
@@ -6,7 +5,7 @@ const config = {
   apiKey: 'abc123',
   authDomain: 'localhost',
   databaseURL: 'foo',
-  projectId: 'xyz'
+  projectId: 'xyz',
 }
 
 export const initializeFirebase = () => {

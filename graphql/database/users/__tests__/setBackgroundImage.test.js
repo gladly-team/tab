@@ -6,14 +6,14 @@ import setBackgroundImage from '../setBackgroundImage'
 import BackgroundImageModel from '../../backgroundImages/BackgroundImageModel'
 import {
   USER_BACKGROUND_OPTION_PHOTO,
-  USER_BACKGROUND_OPTION_CUSTOM
+  USER_BACKGROUND_OPTION_CUSTOM,
 } from '../../constants'
 import {
   DatabaseOperation,
   getMockUserContext,
   getMockUserInstance,
   mockDate,
-  setMockDBResponse
+  setMockDBResponse,
 } from '../../test-utils'
 
 jest.mock('../../databaseClient')
@@ -46,10 +46,10 @@ describe('setBackgroundImage', () => {
         id: mockImage.id,
         image: mockImage.image,
         thumbnail: mockImage.thumbnail,
-        timestamp: moment.utc().toISOString()
+        timestamp: moment.utc().toISOString(),
       },
       backgroundOption: USER_BACKGROUND_OPTION_PHOTO,
-      updated: moment.utc().toISOString()
+      updated: moment.utc().toISOString(),
     })
   })
 
@@ -66,10 +66,10 @@ describe('setBackgroundImage', () => {
         id: mockImage.id,
         image: mockImage.image,
         thumbnail: mockImage.thumbnail,
-        timestamp: moment.utc().toISOString()
+        timestamp: moment.utc().toISOString(),
       },
       backgroundOption: USER_BACKGROUND_OPTION_PHOTO,
-      updated: moment.utc().toISOString()
+      updated: moment.utc().toISOString(),
     })
   })
 
@@ -86,10 +86,10 @@ describe('setBackgroundImage', () => {
         id: mockImage.id,
         image: mockImage.image,
         thumbnail: mockImage.thumbnail,
-        timestamp: moment.utc().toISOString()
+        timestamp: moment.utc().toISOString(),
       },
       backgroundOption: USER_BACKGROUND_OPTION_CUSTOM,
-      updated: moment.utc().toISOString()
+      updated: moment.utc().toISOString(),
     })
   })
 
@@ -98,13 +98,15 @@ describe('setBackgroundImage', () => {
     const imageId = 'abc-123'
     const mode = USER_BACKGROUND_OPTION_CUSTOM
     const expectedReturnedUser = getMockUserInstance()
-    const dbUpdateMock = setMockDBResponse(
-      DatabaseOperation.UPDATE,
-      {
-        Attributes: expectedReturnedUser
-      }
+    const dbUpdateMock = setMockDBResponse(DatabaseOperation.UPDATE, {
+      Attributes: expectedReturnedUser,
+    })
+    const returnedUser = await setBackgroundImage(
+      userContext,
+      userId,
+      imageId,
+      mode
     )
-    const returnedUser = await setBackgroundImage(userContext, userId, imageId, mode)
     expect(dbUpdateMock).toHaveBeenCalled()
     expect(returnedUser).toEqual(expectedReturnedUser)
   })

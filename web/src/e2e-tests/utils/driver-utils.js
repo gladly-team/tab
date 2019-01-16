@@ -1,24 +1,23 @@
-
 const webdriver = require('selenium-webdriver')
 const By = webdriver.By
 const until = webdriver.until
 
-export default (driver) => ({
-  waitForElementExistsByCustomSelector: (selector) => {
+export default driver => ({
+  waitForElementExistsByCustomSelector: selector => {
     return driver.wait(until.elementLocated(selector))
   },
 
-  waitForElementExistsByTestId: (dataTestId) => {
-    return driver.wait(until.elementLocated(
-      By.css("[data-test-id='" + dataTestId + "']")
-    ))
+  waitForElementExistsByTestId: dataTestId => {
+    return driver.wait(
+      until.elementLocated(By.css("[data-test-id='" + dataTestId + "']"))
+    )
   },
 
-  getText: (selector) => {
+  getText: selector => {
     return driver.findElement(selector).getText()
   },
 
-  getValue: (selector) => {
+  getValue: selector => {
     return driver.findElement(selector).getAttribute('value')
   },
 
@@ -26,11 +25,11 @@ export default (driver) => ({
     return driver.findElement(selector).sendKeys(value)
   },
 
-  click: (selector) => {
+  click: selector => {
     return driver.findElement(selector).click()
   },
 
-  navigateTo: (url) => {
+  navigateTo: url => {
     return driver.navigate().to(url)
-  }
+  },
 })

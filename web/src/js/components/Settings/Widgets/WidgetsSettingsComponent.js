@@ -3,15 +3,15 @@ import PropTypes from 'prop-types'
 import WidgetSettings from 'js/components/Settings/Widgets/WidgetSettingsContainer'
 
 class WidgetsSettings extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
-      userWidgets: null
+      userWidgets: null,
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     const { user } = this.props
 
     const userWidgets = {}
@@ -23,11 +23,11 @@ class WidgetsSettings extends React.Component {
     }
 
     this.setState({
-      userWidgets: userWidgets
+      userWidgets: userWidgets,
     })
   }
 
-  render () {
+  render() {
     const { user, app, showError } = this.props
 
     // We need to wait for the
@@ -39,14 +39,17 @@ class WidgetsSettings extends React.Component {
 
     const self = this
     return (
-      <div style={{ paddingTop: 0 }} >
+      <div style={{ paddingTop: 0 }}>
         {app.widgets.edges.map((edge, index) => {
-          return (<WidgetSettings
-            key={index}
-            user={user}
-            appWidget={edge.node}
-            widget={self.state.userWidgets[edge.node.name] || null}
-            showError={showError} />)
+          return (
+            <WidgetSettings
+              key={index}
+              user={user}
+              appWidget={edge.node}
+              widget={self.state.userWidgets[edge.node.name] || null}
+              showError={showError}
+            />
+          )
         })}
       </div>
     )
@@ -56,7 +59,7 @@ class WidgetsSettings extends React.Component {
 WidgetsSettings.propTypes = {
   user: PropTypes.object.isRequired,
   app: PropTypes.object.isRequired,
-  showError: PropTypes.func.isRequired
+  showError: PropTypes.func.isRequired,
 }
 
 export default WidgetsSettings

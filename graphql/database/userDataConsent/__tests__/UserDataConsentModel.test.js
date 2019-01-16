@@ -2,9 +2,7 @@
 
 import tableNames from '../../tables'
 import UserDataConsentModel from '../UserDataConsentModel'
-import {
-  permissionAuthorizers
-} from '../../../utils/authorization-helpers'
+import { permissionAuthorizers } from '../../../utils/authorization-helpers'
 
 jest.mock('../../databaseClient')
 

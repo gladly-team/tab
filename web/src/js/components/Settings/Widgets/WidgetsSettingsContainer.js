@@ -1,7 +1,5 @@
 import graphql from 'babel-plugin-relay/macro'
-import {
-  createFragmentContainer
-} from 'react-relay'
+import { createFragmentContainer } from 'react-relay'
 
 import WidgetsSettings from 'js/components/Settings/Widgets/WidgetsSettingsComponent'
 
@@ -32,5 +30,5 @@ export default createFragmentContainer(WidgetsSettings, {
         }
       }
     }
-  `
+  `,
 })

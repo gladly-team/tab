@@ -6,7 +6,7 @@ import {
   getMockUserContext,
   getMockUserInfo,
   getMockUserInstance,
-  mockDate
+  mockDate,
 } from '../test-utils'
 
 beforeAll(() => {
@@ -22,14 +22,14 @@ describe('test-utils', () => {
     expect(getMockUserContext()).toEqual({
       id: 'abcdefghijklmno',
       email: 'foo@bar.com',
-      emailVerified: true
+      emailVerified: true,
     })
   })
 
   test('getMockUserInfo returns expected object', () => {
     expect(getMockUserInfo()).toEqual({
       id: 'abcdefghijklmno',
-      email: 'foo@bar.com'
+      email: 'foo@bar.com',
     })
   })
 
@@ -48,7 +48,8 @@ describe('test-utils', () => {
     expectedUser.created = mockDate.defaultDateISO
     expectedUser.updated = mockDate.defaultDateISO
     expectedUser.joined = mockDate.defaultDateISO
-    expect(getMockUserInstance({ username: 'Bob', heartsUntilNextLevel: 12 }))
-      .toEqual(expectedUser)
+    expect(
+      getMockUserInstance({ username: 'Bob', heartsUntilNextLevel: 12 })
+    ).toEqual(expectedUser)
   })
 })

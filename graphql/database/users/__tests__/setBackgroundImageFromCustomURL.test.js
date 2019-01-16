@@ -3,15 +3,13 @@
 import moment from 'moment'
 import UserModel from '../UserModel'
 import setBackgroundImageFromCustomURL from '../setBackgroundImageFromCustomURL'
-import {
-  USER_BACKGROUND_OPTION_CUSTOM
-} from '../../constants'
+import { USER_BACKGROUND_OPTION_CUSTOM } from '../../constants'
 import {
   DatabaseOperation,
   getMockUserContext,
   getMockUserInstance,
   mockDate,
-  setMockDBResponse
+  setMockDBResponse,
 } from '../../test-utils'
 
 jest.mock('../../databaseClient')
@@ -34,20 +32,21 @@ describe('setBackgroundImageFromCustomURL', () => {
       id: userContext.id,
       customImage: imgUrl,
       backgroundOption: USER_BACKGROUND_OPTION_CUSTOM,
-      updated: moment.utc().toISOString()
+      updated: moment.utc().toISOString(),
     })
   })
 
   it('calls the database as expected', async () => {
     const imgUrl = 'https://imgur.com/fake-image/'
     const expectedReturnedUser = getMockUserInstance()
-    const dbUpdateMock = setMockDBResponse(
-      DatabaseOperation.UPDATE,
-      {
-        Attributes: expectedReturnedUser
-      }
+    const dbUpdateMock = setMockDBResponse(DatabaseOperation.UPDATE, {
+      Attributes: expectedReturnedUser,
+    })
+    const returnedUser = await setBackgroundImageFromCustomURL(
+      userContext,
+      userContext.id,
+      imgUrl
     )
-    const returnedUser = await setBackgroundImageFromCustomURL(userContext, userContext.id, imgUrl)
     expect(dbUpdateMock).toHaveBeenCalled()
     expect(returnedUser).toEqual(expectedReturnedUser)
   })

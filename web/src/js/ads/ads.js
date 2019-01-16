@@ -7,9 +7,7 @@ import setUpGoogleAds from 'js/ads/google/setUpGoogleAds'
 import getPrebidPbjs from 'js/ads/prebid/getPrebidPbjs'
 import handleAdsLoaded from 'js/ads/handleAdsLoaded'
 import prebidConfig from 'js/ads/prebid/prebidConfig'
-import {
-  AUCTION_TIMEOUT
-} from 'js/ads/adSettings'
+import { AUCTION_TIMEOUT } from 'js/ads/adSettings'
 
 // Enabled bidders.
 const BIDDER_PREBID = 'prebid'
@@ -27,7 +25,7 @@ const requestManager = {
 
   // Whether we've already requested ads from the ad
   // server.
-  adserverRequestSent: false
+  adserverRequestSent: false,
 }
 
 /**
@@ -35,7 +33,7 @@ const requestManager = {
  * to DFP to fetch ads.
  * @return {undefined}
  */
-function sendAdserverRequest () {
+function sendAdserverRequest() {
   // Return if the request to the adserver was already sent.
   if (requestManager.adserverRequestSent === true) {
     return
@@ -62,15 +60,16 @@ function sendAdserverRequest () {
  * Whether all bidders have returned bids.
  * @return {boolean}
  */
-function allBiddersBack () {
-  return bidders
-    .map(function (bidder) {
-      return requestManager.bidders[bidder]
-    })
-    // Remove false values (bidders that have not responded).
-    .filter(Boolean)
+function allBiddersBack() {
+  return (
     // If length is equal to bidders, all bidders are back.
-    .length === bidders.length
+    bidders
+      .map(function(bidder) {
+        return requestManager.bidders[bidder]
+      })
+      // Remove false values (bidders that have not responded).
+      .filter(Boolean).length === bidders.length
+  )
 }
 
 /**
@@ -78,7 +77,7 @@ function allBiddersBack () {
  * returned bids, call the ad server.
  * @return {undefined}
  */
-function bidderCompleted (bidder) {
+function bidderCompleted(bidder) {
   // Return if the request to the adserver was already sent.
   if (requestManager.adserverRequestSent === true) {
     return
@@ -102,7 +101,7 @@ const loadAdCode = () => {
     .then(() => {
       bidderCompleted(BIDDER_AMAZON)
     })
-    .catch((err) => {
+    .catch(err => {
       console.error(err)
       bidderCompleted(BIDDER_AMAZON)
     })
@@ -112,7 +111,7 @@ const loadAdCode = () => {
     .then(() => {
       bidderCompleted(BIDDER_PREBID)
     })
-    .catch((err) => {
+    .catch(err => {
       console.error(err)
       bidderCompleted(BIDDER_PREBID)
     })

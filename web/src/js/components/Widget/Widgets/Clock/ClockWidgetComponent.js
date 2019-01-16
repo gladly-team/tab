@@ -6,7 +6,7 @@ import { getWidgetConfig } from 'js/utils/widgets-utils'
 import appTheme from 'js/theme/default'
 
 class ClockWidget extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.updateClockInterval = 0
@@ -14,11 +14,11 @@ class ClockWidget extends React.Component {
     this.state = {
       date: '',
       time: '',
-      config: {}
+      config: {},
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     const self = this
     this.updateClockInterval = setInterval(() => {
       self.setDateTime(self.state.config)
@@ -30,16 +30,16 @@ class ClockWidget extends React.Component {
     const settings = JSON.parse(widget.settings)
     const configuration = getWidgetConfig(config, settings)
     this.setState({
-      config: configuration
+      config: configuration,
     })
     this.setDateTime(configuration)
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     clearInterval(this.updateClockInterval)
   }
 
-  setDateTime (config) {
+  setDateTime(config) {
     const format24 = config.format24
     var date = moment().format('dddd, MMMM D')
     var time
@@ -56,15 +56,15 @@ class ClockWidget extends React.Component {
 
     this.setState({
       date: date,
-      time: time
+      time: time,
     })
   }
 
-  render () {
+  render() {
     const clockContainer = {
       marginBottom: 110,
       pointerEvents: 'none',
-      userSelect: 'none'
+      userSelect: 'none',
     }
 
     const timeStyle = {
@@ -73,7 +73,7 @@ class ClockWidget extends React.Component {
       fontWeight: 'bold',
       margin: 0,
       lineHeight: '90%',
-      fontFamily: appTheme.fontFamily
+      fontFamily: appTheme.fontFamily,
     }
 
     const dateStyle = {
@@ -81,13 +81,17 @@ class ClockWidget extends React.Component {
       fontSize: 28,
       margin: 0,
       fontWeight: 'normal',
-      fontFamily: appTheme.fontFamily
+      fontFamily: appTheme.fontFamily,
     }
 
     return (
       <div style={clockContainer}>
-        <h1 style={timeStyle} data-test-id={'clock-widget-time'}>{this.state.time}</h1>
-        <h2 style={dateStyle} data-test-id={'clock-widget-date'}>{this.state.date}</h2>
+        <h1 style={timeStyle} data-test-id={'clock-widget-time'}>
+          {this.state.time}
+        </h1>
+        <h2 style={dateStyle} data-test-id={'clock-widget-date'}>
+          {this.state.date}
+        </h2>
       </div>
     )
   }
@@ -100,11 +104,11 @@ ClockWidget.propTypes = {
     enabled: PropTypes.bool.isRequired,
     config: PropTypes.string.isRequired,
     settings: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired
+    type: PropTypes.string.isRequired,
   }).isRequired,
   user: PropTypes.shape({
-    id: PropTypes.string.isRequired
-  }).isRequired
+    id: PropTypes.string.isRequired,
+  }).isRequired,
 }
 
 export default ClockWidget

@@ -8,7 +8,7 @@ export const __mockClear = () => {
 }
 
 export default {
-  getItem: jest.fn((key) => {
+  getItem: jest.fn(key => {
     return mockStorage[key]
   }),
   setItem: jest.fn((key, val) => {
@@ -17,9 +17,9 @@ export default {
     }
   }),
   removeItem: jest.fn((key, val) => {
-    delete (mockStorage[key])
+    delete mockStorage[key]
   }),
   clear: () => {
     __mockClear()
-  }
+  },
 }

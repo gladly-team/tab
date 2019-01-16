@@ -6,7 +6,7 @@ const AWS = require('aws-sdk')
 // https://github.com/clarkie/dynogels/blob/d8e265eea3826ef6268e6c242854b1a09d15124c/test/test-helper.js#L8
 const mockDynamoDB = () => {
   const opts = {
-    endpoint: 'http://localhost:8000'
+    endpoint: 'http://localhost:8000',
   }
   const db = new AWS.DynamoDB(opts)
 
@@ -29,7 +29,7 @@ const mockDynamoDB = () => {
 const mockDocClient = () => {
   const client = new AWS.DynamoDB.DocumentClient({
     service: mockDynamoDB(),
-    convertEmptyValues: true
+    convertEmptyValues: true,
   })
 
   // Mock data returns for each operation.
@@ -38,65 +38,65 @@ const mockDocClient = () => {
     callback(null, {
       Items: [
         {
-          foo: 'bar'
+          foo: 'bar',
         },
         {
-          'foo': 'baz'
-        }
-      ]
+          foo: 'baz',
+        },
+      ],
     })
   })
   client.batchWrite = jest.fn((params, callback) => {
     callback(null, {
-      Attributes: {}
+      Attributes: {},
     })
   })
   client.put = jest.fn((params, callback) => {
     callback(null, {
-      Attributes: {}
+      Attributes: {},
     })
   })
   client.get = jest.fn((params, callback) => {
     callback(null, {
       Item: {
-        foo: 'bar'
-      }
+        foo: 'bar',
+      },
     })
   })
   client.delete = jest.fn((params, callback) => {
     callback(null, {
-      Attributes: {}
+      Attributes: {},
     })
   })
   client.update = jest.fn((params, callback) => {
     callback(null, {
       Item: {
-        foo: 'bar'
-      }
+        foo: 'bar',
+      },
     })
   })
   client.scan = jest.fn((params, callback) => {
     callback(null, {
       Items: [
         {
-          foo: 'bar'
+          foo: 'bar',
         },
         {
-          'foo': 'baz'
-        }
-      ]
+          foo: 'baz',
+        },
+      ],
     })
   })
   client.query = jest.fn((params, callback) => {
     callback(null, {
       Items: [
         {
-          foo: 'bar'
+          foo: 'bar',
         },
         {
-          'foo': 'baz'
-        }
-      ]
+          foo: 'baz',
+        },
+      ],
     })
   })
 

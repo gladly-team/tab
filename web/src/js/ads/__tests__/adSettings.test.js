@@ -2,17 +2,15 @@
 
 import moment from 'moment'
 import MockDate from 'mockdate'
-import {
-  isVariousAdSizesEnabled
-} from 'js/utils/feature-flags'
+import { isVariousAdSizesEnabled } from 'js/utils/feature-flags'
 import {
   EXPERIMENT_AD_EXPLANATION,
   EXPERIMENT_ONE_AD_FOR_NEW_USERS,
-  getUserExperimentGroup
+  getUserExperimentGroup,
 } from 'js/utils/experiments'
 import {
   getBrowserExtensionInstallTime,
-  hasUserDismissedAdExplanation
+  hasUserDismissedAdExplanation,
 } from 'js/utils/local-user-data-mgr'
 
 jest.mock('js/utils/feature-flags')
@@ -38,7 +36,7 @@ describe('ad settings', () => {
       VERTICAL_AD_UNIT_ID,
       VERTICAL_AD_SLOT_DOM_ID,
       HORIZONTAL_AD_UNIT_ID,
-      HORIZONTAL_AD_SLOT_DOM_ID
+      HORIZONTAL_AD_SLOT_DOM_ID,
     } = require('js/ads/adSettings')
     expect(VERTICAL_AD_UNIT_ID).toBe('/43865596/HBTR')
     expect(VERTICAL_AD_SLOT_DOM_ID).toBe('div-gpt-ad-1464385742501-0')
@@ -48,8 +46,9 @@ describe('ad settings', () => {
 
   // @experiment-one-ad-for-new-users
   test('[no-one-ad] [recently-installed] shows 3 ads', () => {
-    getBrowserExtensionInstallTime
-      .mockReturnValue(moment(mockNow).subtract(23, 'hours'))
+    getBrowserExtensionInstallTime.mockReturnValue(
+      moment(mockNow).subtract(23, 'hours')
+    )
     getUserExperimentGroup.mockImplementation(experimentName => {
       switch (experimentName) {
         case EXPERIMENT_ONE_AD_FOR_NEW_USERS:
@@ -58,13 +57,15 @@ describe('ad settings', () => {
           return 'none'
       }
     })
-    const getNumberOfAdsToShow = require('js/ads/adSettings').getNumberOfAdsToShow
+    const getNumberOfAdsToShow = require('js/ads/adSettings')
+      .getNumberOfAdsToShow
     expect(getNumberOfAdsToShow()).toEqual(3)
   })
 
   test('[one-ad] [recently-installed] shows 1 ad', () => {
-    getBrowserExtensionInstallTime
-      .mockReturnValue(moment(mockNow).subtract(23, 'hours'))
+    getBrowserExtensionInstallTime.mockReturnValue(
+      moment(mockNow).subtract(23, 'hours')
+    )
     getUserExperimentGroup.mockImplementation(experimentName => {
       switch (experimentName) {
         case EXPERIMENT_ONE_AD_FOR_NEW_USERS:
@@ -73,7 +74,8 @@ describe('ad settings', () => {
           return 'none'
       }
     })
-    const getNumberOfAdsToShow = require('js/ads/adSettings').getNumberOfAdsToShow
+    const getNumberOfAdsToShow = require('js/ads/adSettings')
+      .getNumberOfAdsToShow
     expect(getNumberOfAdsToShow()).toEqual(1)
   })
 
@@ -87,14 +89,16 @@ describe('ad settings', () => {
           return 'none'
       }
     })
-    const getNumberOfAdsToShow = require('js/ads/adSettings').getNumberOfAdsToShow
+    const getNumberOfAdsToShow = require('js/ads/adSettings')
+      .getNumberOfAdsToShow
     expect(getNumberOfAdsToShow()).toEqual(3)
   })
 
   // @experiment-ad-explanation
   test('[no-ad-explanation] [no-recently-installed] shouldShowOneAd returns false', () => {
-    getBrowserExtensionInstallTime
-      .mockReturnValue(moment(mockNow).subtract(10, 'days'))
+    getBrowserExtensionInstallTime.mockReturnValue(
+      moment(mockNow).subtract(10, 'days')
+    )
     getUserExperimentGroup.mockImplementation(experimentName => {
       switch (experimentName) {
         case EXPERIMENT_AD_EXPLANATION:
@@ -108,8 +112,9 @@ describe('ad settings', () => {
   })
 
   test('[no-ad-explanation] [recently-installed] shouldShowAdExplanation returns false', () => {
-    getBrowserExtensionInstallTime
-      .mockReturnValue(moment(mockNow).subtract(12, 'seconds'))
+    getBrowserExtensionInstallTime.mockReturnValue(
+      moment(mockNow).subtract(12, 'seconds')
+    )
     getUserExperimentGroup.mockImplementation(experimentName => {
       switch (experimentName) {
         case EXPERIMENT_AD_EXPLANATION:
@@ -123,8 +128,9 @@ describe('ad settings', () => {
   })
 
   test('[ad-explanation] [no-recently-installed] shouldShowAdExplanation returns false', () => {
-    getBrowserExtensionInstallTime
-      .mockReturnValue(moment(mockNow).subtract(10, 'days'))
+    getBrowserExtensionInstallTime.mockReturnValue(
+      moment(mockNow).subtract(10, 'days')
+    )
     getUserExperimentGroup.mockImplementation(experimentName => {
       switch (experimentName) {
         case EXPERIMENT_AD_EXPLANATION:
@@ -152,8 +158,9 @@ describe('ad settings', () => {
   })
 
   test('[ad-explanation] [recently-installed] shouldShowAdExplanation returns true', () => {
-    getBrowserExtensionInstallTime
-      .mockReturnValue(moment(mockNow).subtract(12, 'seconds'))
+    getBrowserExtensionInstallTime.mockReturnValue(
+      moment(mockNow).subtract(12, 'seconds')
+    )
     getUserExperimentGroup.mockImplementation(experimentName => {
       switch (experimentName) {
         case EXPERIMENT_AD_EXPLANATION:
@@ -167,8 +174,9 @@ describe('ad settings', () => {
   })
 
   test('[ad-explanation] [recently-installed] [no-dismissed] shouldShowAdExplanation returns true', () => {
-    getBrowserExtensionInstallTime
-      .mockReturnValue(moment(mockNow).subtract(12, 'seconds'))
+    getBrowserExtensionInstallTime.mockReturnValue(
+      moment(mockNow).subtract(12, 'seconds')
+    )
     hasUserDismissedAdExplanation.mockReturnValue(false)
     getUserExperimentGroup.mockImplementation(experimentName => {
       switch (experimentName) {
@@ -183,8 +191,9 @@ describe('ad settings', () => {
   })
 
   test('[ad-explanation] [recently-installed] [dismissed] shouldShowAdExplanation returns false', () => {
-    getBrowserExtensionInstallTime
-      .mockReturnValue(moment(mockNow).subtract(12, 'seconds'))
+    getBrowserExtensionInstallTime.mockReturnValue(
+      moment(mockNow).subtract(12, 'seconds')
+    )
     hasUserDismissedAdExplanation.mockReturnValue(true)
     getUserExperimentGroup.mockImplementation(experimentName => {
       switch (experimentName) {
@@ -201,56 +210,46 @@ describe('ad settings', () => {
   test('getVerticalAdSizes returns the expected ad sizes when various ad sizes are disabled', () => {
     isVariousAdSizesEnabled.mockReturnValue(false)
     const getVerticalAdSizes = require('js/ads/adSettings').getVerticalAdSizes
-    expect(getVerticalAdSizes()).toEqual(
-      [
-        [300, 250]
-      ]
-    )
+    expect(getVerticalAdSizes()).toEqual([[300, 250]])
   })
 
   test('getHorizontalAdSizes returns the expected ad sizes when various ad sizes are disabled', () => {
     isVariousAdSizesEnabled.mockReturnValue(false)
-    const getHorizontalAdSizes = require('js/ads/adSettings').getHorizontalAdSizes
-    expect(getHorizontalAdSizes()).toEqual(
-      [
-        [728, 90]
-      ]
-    )
+    const getHorizontalAdSizes = require('js/ads/adSettings')
+      .getHorizontalAdSizes
+    expect(getHorizontalAdSizes()).toEqual([[728, 90]])
   })
 
   test('getVerticalAdSizes returns the expected ad sizes when various ad sizes are enabled', () => {
     isVariousAdSizesEnabled.mockReturnValue(true)
     const getVerticalAdSizes = require('js/ads/adSettings').getVerticalAdSizes
-    expect(getVerticalAdSizes()).toEqual(
-      [
-        [300, 250],
-        [250, 250],
-        [160, 600],
-        [120, 600],
-        [120, 240],
-        [240, 400],
-        [234, 60],
-        [180, 150],
-        [125, 125],
-        [120, 90],
-        [120, 60],
-        [120, 30],
-        [230, 33],
-        [300, 600]
-      ]
-    )
+    expect(getVerticalAdSizes()).toEqual([
+      [300, 250],
+      [250, 250],
+      [160, 600],
+      [120, 600],
+      [120, 240],
+      [240, 400],
+      [234, 60],
+      [180, 150],
+      [125, 125],
+      [120, 90],
+      [120, 60],
+      [120, 30],
+      [230, 33],
+      [300, 600],
+    ])
   })
 
   test('getHorizontalAdSizes returns the expected ad sizes when various ad sizes are enabled', () => {
     isVariousAdSizesEnabled.mockReturnValue(true)
-    const getHorizontalAdSizes = require('js/ads/adSettings').getHorizontalAdSizes
-    expect(getHorizontalAdSizes()).toEqual(
-      [
-        [728, 90],
-        [728, 210],
-        [720, 300],
-        [468, 60]
-      ]
-    )
+    const getHorizontalAdSizes = require('js/ads/adSettings')
+      .getHorizontalAdSizes
+    expect(getHorizontalAdSizes()).toEqual([
+      [728, 90],
+      [728, 210],
+      [720, 300],
+      [468, 60],
+    ])
   })
 })

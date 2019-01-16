@@ -1,5 +1,4 @@
-
-function getWidgetConfig (config, settings) {
+function getWidgetConfig(config, settings) {
   const configuration = {}
   var value
   var field
@@ -16,6 +15,4 @@ function getWidgetConfig (config, settings) {
   return configuration
 }
 
-export {
-  getWidgetConfig
-}
+export { getWidgetConfig }

@@ -6,7 +6,7 @@ var bidsBackHandler = () => {}
 // which resolves the promise for tests. Call this to disable
 // automatic bid responses.
 export const __disableAutomaticBidResponses = () => {
-  window.pbjs.requestBids = jest.fn((requestBidsSettings) => {
+  window.pbjs.requestBids = jest.fn(requestBidsSettings => {
     bidsBackHandler = requestBidsSettings.bidsBackHandler
   })
 }
@@ -24,11 +24,11 @@ export const __disableAutomaticQueExecution = () => {
 
 // Run all functions in pbjs.que.
 export const __runQue = () => {
-  window.pbjs.que.forEach((cmd) => cmd())
+  window.pbjs.que.forEach(cmd => cmd())
 }
 
 const mockQue = []
-mockQue.push = (f) => f()
+mockQue.push = f => f()
 
 export default () => {
   window.pbjs = window.pbjs || {
@@ -36,10 +36,10 @@ export default () => {
     setConfig: jest.fn(),
     bidderSettings: {},
     addAdUnits: jest.fn(),
-    requestBids: jest.fn((requestBidsSettings) => {
+    requestBids: jest.fn(requestBidsSettings => {
       requestBidsSettings.bidsBackHandler({})
     }),
-    setTargetingForGPTAsync: jest.fn()
+    setTargetingForGPTAsync: jest.fn(),
   }
   return window.pbjs
 }

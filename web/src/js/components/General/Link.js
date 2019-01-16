@@ -4,7 +4,7 @@ import { Link as LinkReactRouter } from 'react-router'
 
 // To handle both internal and external links.
 class Link extends React.Component {
-  render () {
+  render() {
     const { children, to, style, className, ...otherProps } = this.props
 
     // This assumes that any internal link (intended for Gatsby) starts
@@ -14,22 +14,13 @@ class Link extends React.Component {
     // Use gatsby-link for internal links, and <a> for others
     if (internal) {
       return (
-        <LinkReactRouter
-          to={to}
-          style={style}
-          className={className}
-        >
+        <LinkReactRouter to={to} style={style} className={className}>
           {children}
         </LinkReactRouter>
       )
     }
     return (
-      <a
-        href={to}
-        style={style}
-        className={className}
-        {...otherProps}
-      >
+      <a href={to} style={style} className={className} {...otherProps}>
         {children}
       </a>
     )
@@ -39,16 +30,16 @@ class Link extends React.Component {
 Link.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node
+    PropTypes.node,
   ]),
   style: PropTypes.object,
   to: PropTypes.string.isRequired,
-  className: PropTypes.string
+  className: PropTypes.string,
 }
 
 Link.defaultProps = {
   style: {},
-  className: ''
+  className: '',
 }
 
 export default Link

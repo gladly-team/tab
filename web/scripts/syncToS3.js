@@ -1,18 +1,17 @@
-
 var path = require('path')
 const spawnSync = require('child_process').spawnSync
 
 // Load environment variables from .env file.
 require('dotenv-extended').load({
   path: path.join(__dirname, '..', '.env.local'),
-  defaults: path.join(__dirname, '..', '.env')
+  defaults: path.join(__dirname, '..', '.env'),
 })
 
 const s3Bucket = process.env.DEPLOYMENT_WEB_APP_S3_BUCKET_NAME
 const s3BucketPath = process.env.DEPLOYMENT_WEB_APP_S3_BUCKET_PATH || ''
 
 // Sync *.html files.
-function syncHTML () {
+function syncHTML() {
   const args = [
     's3',
     'sync',
@@ -25,7 +24,7 @@ function syncHTML () {
     '--cache-control',
     'no-cache',
     '--metadata-directive',
-    'REPLACE'
+    'REPLACE',
   ]
   const result = spawnSync('aws', args)
   const stdout = result.stdout ? result.stdout.toString() : ''
@@ -42,7 +41,7 @@ function syncHTML () {
 }
 
 // Sync everything except *.html files.
-function syncStaticFiles () {
+function syncStaticFiles() {
   const STATIC_FILES_CACHE_CONTROL_SECONDS = 60 * 60 * 24 * 365
   const args = [
     's3',
@@ -56,7 +55,7 @@ function syncStaticFiles () {
     '--cache-control',
     `max-age=${STATIC_FILES_CACHE_CONTROL_SECONDS}`,
     '--metadata-directive',
-    'REPLACE'
+    'REPLACE',
   ]
   const result = spawnSync('aws', args)
   const stdout = result.stdout ? result.stdout.toString() : ''
@@ -72,7 +71,7 @@ function syncStaticFiles () {
   }
 }
 
-function syncDirectory () {
+function syncDirectory() {
   syncHTML()
   syncStaticFiles()
 }

@@ -1,7 +1,5 @@
 import graphql from 'babel-plugin-relay/macro'
-import {
-  createFragmentContainer
-} from 'react-relay'
+import { createFragmentContainer } from 'react-relay'
 
 import BackgroundSettings from 'js/components/Settings/Background/BackgroundSettingsComponent'
 
@@ -24,5 +22,5 @@ export default createFragmentContainer(BackgroundSettings, {
     fragment BackgroundSettingsContainer_app on App {
       ...BackgroundImagePickerContainer_app
     }
-  `
+  `,
 })

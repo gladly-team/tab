@@ -1,7 +1,5 @@
 import graphql from 'babel-plugin-relay/macro'
-import {
-  createFragmentContainer
-} from 'react-relay'
+import { createFragmentContainer } from 'react-relay'
 
 import DonateHeartsControlsComponent from 'js/components/Donate/DonateHeartsControlsComponent'
 
@@ -21,5 +19,5 @@ export default createFragmentContainer(DonateHeartsControlsComponent, {
       id
       vcCurrent
     }
-  `
+  `,
 })

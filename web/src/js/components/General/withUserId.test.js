@@ -1,21 +1,15 @@
 /* eslint-env jest */
 
 import React from 'react'
-import {
-  shallow
-} from 'enzyme'
+import { shallow } from 'enzyme'
 import {
   __getAuthListenerCallbacks,
   __unregisterAuthStateChangeListeners,
-  __triggerAuthStateChange
+  __triggerAuthStateChange,
 } from 'js/authentication/user'
-import {
-  flushAllPromises
-} from 'js/utils/test-utils'
+import { flushAllPromises } from 'js/utils/test-utils'
 import localStorageMgr from 'js/utils/localstorage-mgr'
-import {
-  STORAGE_KEY_USERNAME
-} from 'js/constants'
+import { STORAGE_KEY_USERNAME } from 'js/constants'
 
 jest.mock('js/authentication/user')
 
@@ -54,7 +48,7 @@ describe('withUserId', () => {
       uid: 'abc123',
       email: 'foo@bar.com',
       isAnonymous: false,
-      emailVerified: true
+      emailVerified: true,
     })
     await flushAllPromises()
     expect(wrapper.find(MockComponent).length).toBe(1)
@@ -72,7 +66,7 @@ describe('withUserId', () => {
       uid: null,
       email: null,
       isAnonymous: false,
-      emailVerified: false
+      emailVerified: false,
     })
     await flushAllPromises()
     expect(wrapper.find(MockComponent).length).toBe(0)
@@ -99,7 +93,7 @@ describe('withUserId', () => {
 
     // Allow an unauthed user.
     const WrappedComponent = withUserId({
-      renderIfNoUser: true
+      renderIfNoUser: true,
     })(MockComponent)
 
     const wrapper = shallow(<WrappedComponent />)
@@ -108,7 +102,7 @@ describe('withUserId', () => {
       uid: null,
       email: null,
       isAnonymous: false,
-      emailVerified: false
+      emailVerified: false,
     })
     await flushAllPromises()
     expect(wrapper.find(MockComponent).length).toBe(1)
@@ -122,7 +116,7 @@ describe('withUserId', () => {
 
     // Allow an unauthed user.
     const WrappedComponent = withUserId({
-      renderIfNoUser: true
+      renderIfNoUser: true,
     })(MockComponent)
 
     const wrapper = shallow(<WrappedComponent />)
@@ -144,13 +138,12 @@ describe('withUserId', () => {
       uid: 'abc123',
       email: 'foo@bar.com',
       isAnonymous: false,
-      emailVerified: true
+      emailVerified: true,
     })
 
     await flushAllPromises()
     wrapper.update()
-    expect(wrapper.find(MockComponent).prop('userId'))
-      .toBe('abc123')
+    expect(wrapper.find(MockComponent).prop('userId')).toBe('abc123')
   })
 
   it('renders children only after determing the auth state', async () => {
@@ -161,7 +154,7 @@ describe('withUserId', () => {
 
     // Allow an unauthed user.
     const WrappedComponent = withUserId({
-      renderIfNoUser: true
+      renderIfNoUser: true,
     })(MockComponent)
 
     const wrapper = shallow(<WrappedComponent />)
@@ -175,7 +168,7 @@ describe('withUserId', () => {
       uid: 'abc123',
       email: 'foo@bar.com',
       isAnonymous: false,
-      emailVerified: true
+      emailVerified: true,
     })
 
     await flushAllPromises()

@@ -8,13 +8,21 @@ export const __runOnCompleted = (response = null) => {
   if (!response) {
     response = {
       logUserDataConsent: {
-        success: true
-      }
+        success: true,
+      },
     }
   }
   onCompletedCallback(response)
 }
 
-export default jest.fn((environment, userId, consentString, isGlobalConsent, onCompleted = () => {}) => {
-  onCompletedCallback = onCompleted
-})
+export default jest.fn(
+  (
+    environment,
+    userId,
+    consentString,
+    isGlobalConsent,
+    onCompleted = () => {}
+  ) => {
+    onCompletedCallback = onCompleted
+  }
+)

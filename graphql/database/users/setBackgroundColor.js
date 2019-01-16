@@ -1,8 +1,5 @@
-
 import UserModel from './UserModel'
-import {
-  USER_BACKGROUND_OPTION_COLOR
-} from '../constants'
+import { USER_BACKGROUND_OPTION_COLOR } from '../constants'
 
 /**
  * Set user's background color.
@@ -16,7 +13,7 @@ const setBackgroundColor = async (userContext, userId, color) => {
     const userInstance = await UserModel.update(userContext, {
       id: userId,
       backgroundColor: color,
-      backgroundOption: USER_BACKGROUND_OPTION_COLOR
+      backgroundOption: USER_BACKGROUND_OPTION_COLOR,
     })
     return userInstance
   } catch (e) {

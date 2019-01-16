@@ -1,18 +1,17 @@
-
 import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 
 class CountdownClock extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
-      countdownClock: this.getCountdownClockText()
+      countdownClock: this.getCountdownClockText(),
     }
   }
 
-  getCountdownClockText () {
+  getCountdownClockText() {
     const campaignEndDatetime = moment(this.props.campaignEndDatetime)
     var timeRemaining = campaignEndDatetime.diff(moment.utc(), 'milliseconds')
     if (timeRemaining < 0) {
@@ -23,29 +22,29 @@ class CountdownClock extends React.Component {
       ${duration.minutes()}m ${duration.seconds()}s`
   }
 
-  componentDidMount () {
+  componentDidMount() {
     const self = this
 
     // Every second, update the countdown clock
     this.timeRemainingInterval = setInterval(() => {
       self.setState({
-        countdownClock: self.getCountdownClockText()
+        countdownClock: self.getCountdownClockText(),
       })
     }, 1000)
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     clearInterval(this.timeRemainingInterval)
   }
 
-  render () {
+  render() {
     return <span>{this.state.countdownClock}</span>
   }
 }
 
 CountdownClock.propTypes = {
   campaignStartDatetime: PropTypes.instanceOf(moment),
-  campaignEndDatetime: PropTypes.instanceOf(moment).isRequired
+  campaignEndDatetime: PropTypes.instanceOf(moment).isRequired,
 }
 
 export default CountdownClock

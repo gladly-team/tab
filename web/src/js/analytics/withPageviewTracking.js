@@ -1,4 +1,3 @@
-
 import React from 'react'
 import { newTabView, pageview } from 'js/analytics/logEvent'
 import { dashboardURL } from 'js/navigation/navigation'
@@ -7,7 +6,7 @@ import { dashboardURL } from 'js/navigation/navigation'
 // event when the React Router location changes.
 // https://github.com/react-ga/react-ga/issues/122#issuecomment-299692833
 const withPageviewTracking = (WrappedComponent, options = {}) => {
-  const trackPageview = (pathname) => {
+  const trackPageview = pathname => {
     // Do not track a regular pageview for the new tab page.
     // This prevents us from going over our Google Analytics
     // event limit.
@@ -19,12 +18,12 @@ const withPageviewTracking = (WrappedComponent, options = {}) => {
   }
 
   const Wrapper = class extends React.Component {
-    componentDidMount () {
+    componentDidMount() {
       const pathname = this.props.location.pathname
       trackPageview(pathname)
     }
 
-    componentWillReceiveProps (nextProps) {
+    componentWillReceiveProps(nextProps) {
       const currentPage = this.props.location.pathname
       const nextPage = nextProps.location.pathname
 
@@ -33,7 +32,7 @@ const withPageviewTracking = (WrappedComponent, options = {}) => {
       }
     }
 
-    render () {
+    render() {
       return <WrappedComponent {...this.props} />
     }
   }

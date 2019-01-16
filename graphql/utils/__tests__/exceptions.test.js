@@ -6,7 +6,7 @@ import {
   DatabaseItemDoesNotExistException,
   UserReachedMaxLevelException,
   UserDoesNotExistException,
-  EmptyOperationStackException
+  EmptyOperationStackException,
 } from '../exceptions'
 
 describe('custom exceptions', () => {

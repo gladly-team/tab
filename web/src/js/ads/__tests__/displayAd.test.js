@@ -10,7 +10,7 @@ beforeEach(() => {
   jest.resetModules()
 })
 
-describe('displayAd', function () {
+describe('displayAd', function() {
   it('calls mockDisplayAd when ads are not enabled', () => {
     jest.mock('js/ads/adsEnabledStatus', () => () => false)
     const displayAd = require('js/ads/displayAd').default

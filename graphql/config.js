@@ -1,11 +1,10 @@
-
-var path = require('path')
+const path = require('path')
 
 // Load environment variables from .env file.
 // https://github.com/keithmorris/node-dotenv-extended
 require('dotenv-extended').load({
   path: path.join(__dirname, '.env.local'),
-  defaults: path.join(__dirname, '.env')
+  defaults: path.join(__dirname, '.env'),
 })
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'development'
@@ -21,5 +20,5 @@ module.exports = {
   SENTRY_PUBLIC_KEY: process.env.GQL_SENTRY_PUBLIC_KEY,
   SENTRY_PRIVATE_KEY: process.env.SENTRY_PRIVATE_KEY,
   SENTRY_PROJECT_ID: process.env.GQL_SENTRY_PROJECT_ID,
-  SENTRY_STAGE: process.env.GQL_SENTRY_STAGE
+  SENTRY_STAGE: process.env.GQL_SENTRY_STAGE,
 }

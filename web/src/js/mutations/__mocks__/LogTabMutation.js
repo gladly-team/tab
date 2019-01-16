@@ -14,19 +14,21 @@ export const __runOnCompleted = (response = null) => {
           heartsUntilNextLevel: 10,
           level: 5,
           tabs: 2,
-          vcCurrent: 45
-        }
-      }
+          vcCurrent: 45,
+        },
+      },
     }
   }
   onCompletedCallback(response)
 }
 
-export const __runOnError = (response) => {
+export const __runOnError = response => {
   onErrorCallback(response)
 }
 
-export default jest.fn((environment, userId, tabId, onCompleted = () => {}, onError = () => {}) => {
-  onCompletedCallback = onCompleted
-  onErrorCallback = onError
-})
+export default jest.fn(
+  (environment, userId, tabId, onCompleted = () => {}, onError = () => {}) => {
+    onCompletedCallback = onCompleted
+    onErrorCallback = onError
+  }
+)

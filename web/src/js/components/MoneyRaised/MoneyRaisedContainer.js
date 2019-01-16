@@ -1,7 +1,5 @@
 import graphql from 'babel-plugin-relay/macro'
-import {
-  createFragmentContainer
-} from 'react-relay'
+import { createFragmentContainer } from 'react-relay'
 
 import MoneyRaised from 'js/components/MoneyRaised/MoneyRaisedComponent'
 
@@ -11,5 +9,5 @@ export default createFragmentContainer(MoneyRaised, {
       moneyRaised
       dollarsPerDayRate
     }
-  `
+  `,
 })

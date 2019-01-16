@@ -1,16 +1,12 @@
 /* eslint-env jest */
 
-import {
-  STORAGE_KEY_USERNAME
-} from 'js/constants'
-import {
-  absoluteUrl,
-  enterUsernameURL
-} from 'js/navigation/navigation'
+import { STORAGE_KEY_USERNAME } from 'js/constants'
+import { absoluteUrl, enterUsernameURL } from 'js/navigation/navigation'
 
 jest.mock('js/utils/localstorage-mgr')
 
-const storedMockDevAuthenticationEnvVar = process.env.REACT_APP_MOCK_DEV_AUTHENTICATION
+const storedMockDevAuthenticationEnvVar =
+  process.env.REACT_APP_MOCK_DEV_AUTHENTICATION
 const storedNodeEnvVar = process.env.NODE_ENV
 
 afterEach(() => {
@@ -34,7 +30,8 @@ describe('authentication user module tests', () => {
   })
 
   test('setUsernameInLocalStorage works as expected', () => {
-    const setUsernameInLocalStorage = require('js/authentication/user').setUsernameInLocalStorage
+    const setUsernameInLocalStorage = require('js/authentication/user')
+      .setUsernameInLocalStorage
     setUsernameInLocalStorage('MichaelC')
     const localStorageMgr = require('js/utils/localstorage-mgr').default
     expect(localStorageMgr.getItem(STORAGE_KEY_USERNAME)).toBe('MichaelC')
@@ -51,14 +48,14 @@ describe('authentication user module tests', () => {
       email: 'ostrichcoat@example.com',
       isAnonymous: false,
       emailVerified: true,
-      getIdToken: jest.fn(() => 'fake-token-123')
+      getIdToken: jest.fn(() => 'fake-token-123'),
     }
     expect(formatUser(firebaseUser)).toEqual({
       id: 'abc123',
       email: 'ostrichcoat@example.com',
       username: 'PaulM',
       isAnonymous: false,
-      emailVerified: true
+      emailVerified: true,
     })
   })
 
@@ -75,7 +72,7 @@ describe('authentication user module tests', () => {
       email: 'foo@example.com',
       isAnonymous: false,
       emailVerified: true,
-      getIdToken: jest.fn(() => 'fake-token-123')
+      getIdToken: jest.fn(() => 'fake-token-123'),
     })
 
     const getCurrentUser = require('js/authentication/user').getCurrentUser
@@ -85,7 +82,7 @@ describe('authentication user module tests', () => {
       email: 'foo@example.com',
       username: 'RGates',
       isAnonymous: false,
-      emailVerified: true
+      emailVerified: true,
     })
   })
 
@@ -118,30 +115,32 @@ describe('authentication user module tests', () => {
       email: 'kevin@example.com',
       username: 'SomeUsername',
       isAnonymous: false,
-      emailVerified: true
+      emailVerified: true,
     })
   })
 
   test('getCurrentUserListener calls listeners with the Firebase user object when the auth state changes', done => {
-    const getCurrentUserListener = require('js/authentication/user').getCurrentUserListener
+    const getCurrentUserListener = require('js/authentication/user')
+      .getCurrentUserListener
     getCurrentUserListener().onAuthStateChanged(currentUser => {
       expect(currentUser).toMatchObject({
         uid: 'xyz987',
         email: 'foo@example.com',
         isAnonymous: false,
-        emailVerified: true
+        emailVerified: true,
         // Will also have getIdToken method.
       })
       done()
     })
 
-    const __triggerAuthStateChange = require('firebase/app').__triggerAuthStateChange
+    const __triggerAuthStateChange = require('firebase/app')
+      .__triggerAuthStateChange
     __triggerAuthStateChange({
       uid: 'xyz987',
       email: 'foo@example.com',
       isAnonymous: false,
       emailVerified: true,
-      getIdToken: jest.fn(() => 'fake-token-123')
+      getIdToken: jest.fn(() => 'fake-token-123'),
     })
   })
 
@@ -150,13 +149,14 @@ describe('authentication user module tests', () => {
     process.env.REACT_APP_MOCK_DEV_AUTHENTICATION = 'true'
     process.env.NODE_ENV = 'development'
 
-    const getCurrentUserListener = require('js/authentication/user').getCurrentUserListener
+    const getCurrentUserListener = require('js/authentication/user')
+      .getCurrentUserListener
     getCurrentUserListener().onAuthStateChanged(currentUser => {
       expect(currentUser).toMatchObject({
         uid: 'abcdefghijklmno',
         email: 'kevin@example.com',
         isAnonymous: false,
-        emailVerified: true
+        emailVerified: true,
         // Will also have getIdToken method.
       })
       done()
@@ -172,7 +172,7 @@ describe('authentication user module tests', () => {
       email: 'foo@example.com',
       isAnonymous: false,
       emailVerified: true,
-      getIdToken: jest.fn(() => 'fake-token-123')
+      getIdToken: jest.fn(() => 'fake-token-123'),
     })
 
     const getUserToken = require('js/authentication/user').getUserToken
@@ -191,7 +191,7 @@ describe('authentication user module tests', () => {
     expect(token).toBeNull()
   })
 
-  test('logout calls Firebase\'s sign out method', async () => {
+  test("logout calls Firebase's sign out method", async () => {
     expect.assertions(1)
     const firebase = require('firebase/app')
     const logout = require('js/authentication/user').logout
@@ -209,7 +209,7 @@ describe('authentication user module tests', () => {
       email: 'foo@example.com',
       isAnonymous: false,
       emailVerified: true,
-      getIdToken: mockFirebaseGetIdToken
+      getIdToken: mockFirebaseGetIdToken,
     })
 
     const getUserToken = require('js/authentication/user').getUserToken
@@ -227,7 +227,7 @@ describe('authentication user module tests', () => {
       email: 'foo@example.com',
       isAnonymous: false,
       emailVerified: true,
-      getIdToken: mockFirebaseGetIdToken
+      getIdToken: mockFirebaseGetIdToken,
     })
 
     const getUserToken = require('js/authentication/user').getUserToken
@@ -240,32 +240,43 @@ describe('authentication user module tests', () => {
     const localStorageMgr = require('js/utils/localstorage-mgr').default
     const logout = require('js/authentication/user').logout
     await logout()
-    expect(localStorageMgr.removeItem)
-      .toHaveBeenCalledWith('tab.user.username')
-    expect(localStorageMgr.removeItem)
-      .toHaveBeenCalledWith('tab.user.lastTabDay.date')
-    expect(localStorageMgr.removeItem)
-      .toHaveBeenCalledWith('tab.user.lastTabDay.count')
-    expect(localStorageMgr.removeItem)
-      .toHaveBeenCalledWith('tab.clientLocation.countryIsoCode')
-    expect(localStorageMgr.removeItem)
-      .toHaveBeenCalledWith('tab.clientLocation.isInEU')
-    expect(localStorageMgr.removeItem)
-      .toHaveBeenCalledWith('tab.clientLocation.queryTime')
-    expect(localStorageMgr.removeItem)
-      .toHaveBeenCalledWith('tab.referralData.referringUser')
-    expect(localStorageMgr.removeItem)
-      .toHaveBeenCalledWith('tab.referralData.referringChannel')
-    expect(localStorageMgr.removeItem)
-      .toHaveBeenCalledWith('tab.consentData.newConsentDataExists')
-    expect(localStorageMgr.removeItem)
-      .toHaveBeenCalledWith('tab.newUser.hasCompletedTour')
-    expect(localStorageMgr.removeItem)
-      .toHaveBeenCalledWith('tab.newUser.extensionInstallId')
-    expect(localStorageMgr.removeItem)
-      .toHaveBeenCalledWith('tab.newUser.approxInstallTime')
-    expect(localStorageMgr.removeItem)
-      .toHaveBeenCalledWith('tab.experiments.anonUser')
+    expect(localStorageMgr.removeItem).toHaveBeenCalledWith('tab.user.username')
+    expect(localStorageMgr.removeItem).toHaveBeenCalledWith(
+      'tab.user.lastTabDay.date'
+    )
+    expect(localStorageMgr.removeItem).toHaveBeenCalledWith(
+      'tab.user.lastTabDay.count'
+    )
+    expect(localStorageMgr.removeItem).toHaveBeenCalledWith(
+      'tab.clientLocation.countryIsoCode'
+    )
+    expect(localStorageMgr.removeItem).toHaveBeenCalledWith(
+      'tab.clientLocation.isInEU'
+    )
+    expect(localStorageMgr.removeItem).toHaveBeenCalledWith(
+      'tab.clientLocation.queryTime'
+    )
+    expect(localStorageMgr.removeItem).toHaveBeenCalledWith(
+      'tab.referralData.referringUser'
+    )
+    expect(localStorageMgr.removeItem).toHaveBeenCalledWith(
+      'tab.referralData.referringChannel'
+    )
+    expect(localStorageMgr.removeItem).toHaveBeenCalledWith(
+      'tab.consentData.newConsentDataExists'
+    )
+    expect(localStorageMgr.removeItem).toHaveBeenCalledWith(
+      'tab.newUser.hasCompletedTour'
+    )
+    expect(localStorageMgr.removeItem).toHaveBeenCalledWith(
+      'tab.newUser.extensionInstallId'
+    )
+    expect(localStorageMgr.removeItem).toHaveBeenCalledWith(
+      'tab.newUser.approxInstallTime'
+    )
+    expect(localStorageMgr.removeItem).toHaveBeenCalledWith(
+      'tab.experiments.anonUser'
+    )
     expect(localStorageMgr.removeItem).toHaveBeenCalledTimes(13)
   })
 
@@ -281,14 +292,15 @@ describe('authentication user module tests', () => {
       isAnonymous: false,
       emailVerified: true,
       getIdToken: jest.fn(() => 'fake-token-123'),
-      sendEmailVerification: mockSendEmailVerification
+      sendEmailVerification: mockSendEmailVerification,
     })
 
-    const sendVerificationEmail = require('js/authentication/user').sendVerificationEmail
+    const sendVerificationEmail = require('js/authentication/user')
+      .sendVerificationEmail
     const response = await sendVerificationEmail()
     expect(mockSendEmailVerification).toHaveBeenCalledWith({
       // Make sure post-verification page redirect is correct.
-      url: absoluteUrl(enterUsernameURL)
+      url: absoluteUrl(enterUsernameURL),
     })
     expect(mockSendEmailVerification).toHaveBeenCalledTimes(1)
     expect(response).toBe(true)
@@ -304,7 +316,8 @@ describe('authentication user module tests', () => {
     const __setFirebaseUser = require('firebase/app').__setFirebaseUser
     __setFirebaseUser(null)
 
-    const sendVerificationEmail = require('js/authentication/user').sendVerificationEmail
+    const sendVerificationEmail = require('js/authentication/user')
+      .sendVerificationEmail
     const response = await sendVerificationEmail()
     expect(mockSendEmailVerification).not.toHaveBeenCalled()
     expect(response).toBe(false)
@@ -329,10 +342,11 @@ describe('authentication user module tests', () => {
       isAnonymous: false,
       emailVerified: true,
       getIdToken: jest.fn(() => 'fake-token-123'),
-      sendEmailVerification: mockSendEmailVerification
+      sendEmailVerification: mockSendEmailVerification,
     })
 
-    const sendVerificationEmail = require('js/authentication/user').sendVerificationEmail
+    const sendVerificationEmail = require('js/authentication/user')
+      .sendVerificationEmail
     const response = await sendVerificationEmail()
     expect(response).toBe(false)
   })
@@ -350,16 +364,17 @@ describe('authentication user module tests', () => {
       email: null,
       isAnonymous: true,
       emailVerified: false,
-      getIdToken: jest.fn(() => 'fake-token-123')
+      getIdToken: jest.fn(() => 'fake-token-123'),
     })
-    const signInAnonymously = require('js/authentication/user').signInAnonymously
+    const signInAnonymously = require('js/authentication/user')
+      .signInAnonymously
     const response = await signInAnonymously()
     expect(response).toMatchObject({
       id: 'xyz987',
       email: null,
       isAnonymous: true,
       emailVerified: false,
-      username: 'SomeUsername'
+      username: 'SomeUsername',
     })
   })
 
@@ -378,7 +393,7 @@ describe('authentication user module tests', () => {
       isAnonymous: false,
       emailVerified: true,
       getIdToken: jest.fn(() => 'fake-token-123'),
-      reload: mockReload
+      reload: mockReload,
     })
 
     const reloadUser = require('js/authentication/user').reloadUser

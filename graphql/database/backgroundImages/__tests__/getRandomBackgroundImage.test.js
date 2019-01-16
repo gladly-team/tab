@@ -2,9 +2,7 @@
 
 import getRandomBackgroundImage from '../getRandomBackgroundImage'
 import { mockImages } from '../__mocks__/BackgroundImageModel'
-import {
-  getMockUserContext
-} from '../../test-utils'
+import { getMockUserContext } from '../../test-utils'
 
 jest.mock('../../databaseClient')
 jest.mock('../BackgroundImageModel')

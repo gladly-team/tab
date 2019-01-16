@@ -1,7 +1,5 @@
 import graphql from 'babel-plugin-relay/macro'
-import {
-  createFragmentContainer
-} from 'react-relay'
+import { createFragmentContainer } from 'react-relay'
 
 import UserMenu from 'js/components/User/UserMenuComponent'
 
@@ -16,10 +14,10 @@ export default createFragmentContainer(UserMenu, {
       id
       vcCurrent
       level
-      heartsUntilNextLevel 
+      heartsUntilNextLevel
       vcDonatedAllTime
       numUsersRecruited
       tabsToday
     }
-  `
+  `,
 })

@@ -20,19 +20,19 @@ import {
   goToDonate,
   goToLogin,
   goToSettings,
-  goToStats
+  goToStats,
 } from 'js/navigation/navigation'
 import { logout } from 'js/authentication/user'
 import appTheme, {
   dashboardIconActiveColor,
   dashboardIconInactiveColor,
-  dividerColor
+  dividerColor,
 } from 'js/theme/default'
 import { commaFormatted } from 'js/utils/utils'
 import { MAX_DAILY_HEARTS_FROM_TABS } from 'js/constants'
 
 class UserMenu extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       heartsHover: false,
@@ -42,11 +42,11 @@ class UserMenu extends React.Component {
       // refs
       heartsPopoverAnchorElem: null,
       heartsHoverPopoverAnchorElem: null,
-      menuPopoverAnchorElem: null
+      menuPopoverAnchorElem: null,
     }
   }
 
-  async logout () {
+  async logout() {
     var logoutSuccess = false
     try {
       logoutSuccess = await logout()
@@ -58,52 +58,52 @@ class UserMenu extends React.Component {
     }
   }
 
-  onHeartsHover (hovering, event) {
+  onHeartsHover(hovering, event) {
     this.setState({
       heartsHover: hovering,
-      heartsHoverPopoverAnchorElem: event.currentTarget
+      heartsHoverPopoverAnchorElem: event.currentTarget,
     })
   }
 
-  onHeartsClick (event) {
+  onHeartsClick(event) {
     this.setState({
       heartsPopoverOpen: !this.state.open,
-      heartsPopoverAnchorElem: event.currentTarget
+      heartsPopoverAnchorElem: event.currentTarget,
     })
   }
 
-  handleHeartsPopoverClose () {
+  handleHeartsPopoverClose() {
     this.setState({
-      heartsPopoverOpen: false
+      heartsPopoverOpen: false,
     })
   }
 
-  onMenuClick (event) {
+  onMenuClick(event) {
     this.setState({
       menuOpen: !this.state.open,
-      menuPopoverAnchorElem: event.currentTarget
+      menuPopoverAnchorElem: event.currentTarget,
     })
   }
 
-  handleMenuPopoverClose () {
+  handleMenuPopoverClose() {
     this.setState({
-      menuOpen: false
+      menuOpen: false,
     })
   }
 
-  onMenuIconHover (hovering) {
+  onMenuIconHover(hovering) {
     this.setState({
-      menuIconHover: hovering
+      menuIconHover: hovering,
     })
   }
 
-  onHover (hovering) {
+  onHover(hovering) {
     this.setState({
-      hover: hovering
+      hover: hovering,
     })
   }
 
-  render () {
+  render() {
     const { app, user, isUserAnonymous } = this.props
     if (!user || !app) {
       return null
@@ -111,58 +111,61 @@ class UserMenu extends React.Component {
 
     const userMenuStyle = {
       display: 'flex',
-      alignItems: 'center'
+      alignItems: 'center',
     }
 
     // Hearts style
-    const textStyle = Object.assign({}, {
-      color: this.state.heartsHover
-        ? dashboardIconActiveColor
-        : dashboardIconInactiveColor,
-      transition: 'color 300ms ease-in',
-      fontSize: 18,
-      fontWeight: 'normal',
-      fontFamily: appTheme.fontFamily,
-      userSelect: 'none',
-      cursor: 'pointer'
-    }, this.props.style)
+    const textStyle = Object.assign(
+      {},
+      {
+        color: this.state.heartsHover
+          ? dashboardIconActiveColor
+          : dashboardIconInactiveColor,
+        transition: 'color 300ms ease-in',
+        fontSize: 18,
+        fontWeight: 'normal',
+        fontFamily: appTheme.fontFamily,
+        userSelect: 'none',
+        cursor: 'pointer',
+      },
+      this.props.style
+    )
     const heartsStyle = Object.assign({}, textStyle, {
       marginRight: 0,
       display: 'flex',
-      alignItems: 'center'
+      alignItems: 'center',
     })
 
     // Hearts popover style
     const heartsPopoverStyle = {
       textAlign: 'center',
-      width: 210
+      width: 210,
     }
-    const heartsPopoverSectionStyle = {
-    }
+    const heartsPopoverSectionStyle = {}
     const dividerStyle = {
       marginTop: 16,
-      marginBottom: 12
+      marginBottom: 12,
     }
     const statTextStyle = {
       fontSize: 14,
       display: 'block',
       marginTop: 4,
-      marginBottom: 4
+      marginBottom: 4,
     }
     const smallHeartIconStyle = {
       height: 16,
-      marginLeft: -3
+      marginLeft: -3,
     }
     const statNumberStyle = {
       fontSize: 24,
-      display: 'block'
+      display: 'block',
     }
     const popoverButtonStyle = {
       marginTop: 6,
-      marginBottom: 0
+      marginBottom: 0,
     }
     const popoverButtonLabelStyle = {
-      fontSize: 13
+      fontSize: 13,
     }
 
     // Popover section on how to earn Hearts.
@@ -171,56 +174,58 @@ class UserMenu extends React.Component {
       textAlign: 'left',
       color: dividerColor,
       marginTop: 1,
-      marginBottom: 1
+      marginBottom: 1,
     })
-    const rewardAmountsSectionStyle = Object.assign({}, heartsPopoverSectionStyle, {
-      paddingLeft: 22,
-      paddingRight: 22
-    })
+    const rewardAmountsSectionStyle = Object.assign(
+      {},
+      heartsPopoverSectionStyle,
+      {
+        paddingLeft: 22,
+        paddingRight: 22,
+      }
+    )
     const rewardTextStyle = {
       textAlign: 'left',
-      flex: 6
+      flex: 6,
     }
     const rewardValueStyle = {
       flex: 3,
-      textAlign: 'right'
+      textAlign: 'right',
     }
 
     // Menu style
     const menuWidth = 200
     const menuPopoverStyle = {
       padding: 0,
-      width: menuWidth
+      width: menuWidth,
     }
     const menuIconButtonStyle = {
       padding: 0,
       width: 40,
-      height: 40
+      height: 40,
     }
     const menuIconStyle = {
-      color: (
-        this.state.menuIconHover
-          ? dashboardIconActiveColor
-          : dashboardIconInactiveColor
-      ),
+      color: this.state.menuIconHover
+        ? dashboardIconActiveColor
+        : dashboardIconInactiveColor,
       transition: 'color 300ms ease-in',
-      fontSize: 22
+      fontSize: 22,
     }
     const menuStyle = {
       width: menuWidth,
       overflowX: 'hidden',
       backgroundColor: 'transparent',
-      fontFamily: appTheme.fontFamily
+      fontFamily: appTheme.fontFamily,
     }
     const menuItemStyle = {
       fontSize: 14,
-      color: appTheme.palette.alternateTextColor
+      color: appTheme.palette.alternateTextColor,
     }
     const menuItemIconColor = '#FFFFFF'
     const menuItemSvgIconStyle = {
       color: menuItemIconColor,
       height: 22,
-      width: 22
+      width: 22,
     }
 
     // Used to let the user know they aren't earning any more
@@ -229,8 +234,7 @@ class UserMenu extends React.Component {
 
     // TODO: add level bar
     return (
-      <div
-        style={userMenuStyle}>
+      <div style={userMenuStyle}>
         <div
           style={heartsStyle}
           onMouseEnter={this.onHeartsHover.bind(this, true)}
@@ -240,39 +244,46 @@ class UserMenu extends React.Component {
         >
           <span>{commaFormatted(user.vcCurrent)}</span>
           <span
-            style={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-            ref={(ref) => { this.heartIconContainer = ref }}
+            style={{
+              position: 'relative',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+            ref={ref => {
+              this.heartIconContainer = ref
+            }}
           >
             <HeartBorderIcon
               style={{ marginLeft: 2, height: 24, width: 24, paddingBottom: 0 }}
               color={dashboardIconInactiveColor}
               hoverColor={dashboardIconActiveColor}
             />
-            { reachedMaxDailyHearts
-              ? (
-                <CheckmarkIcon
-                  style={{ height: 16, width: 16, position: 'absolute', paddingLeft: 4, paddingBottom: 2 }}
-                  color={dashboardIconInactiveColor}
-                  hoverColor={dashboardIconActiveColor}
-                />
-              )
-              : null
-            }
-            { reachedMaxDailyHearts
-              ? (
-                <DashboardPopover
-                  open={this.state.heartsHover && !this.state.heartsPopoverOpen}
-                  anchorEl={this.state.heartsHoverPopoverAnchorElem}
-                  style={heartsPopoverStyle}
-                >
-                  <div style={{ padding: 10 }}>
-                    You've earned the maximum Hearts from opening tabs today! You'll
-                    be able to earn more Hearts in a few hours.
-                  </div>
-                </DashboardPopover>
-              )
-              : null
-            }
+            {reachedMaxDailyHearts ? (
+              <CheckmarkIcon
+                style={{
+                  height: 16,
+                  width: 16,
+                  position: 'absolute',
+                  paddingLeft: 4,
+                  paddingBottom: 2,
+                }}
+                color={dashboardIconInactiveColor}
+                hoverColor={dashboardIconActiveColor}
+              />
+            ) : null}
+            {reachedMaxDailyHearts ? (
+              <DashboardPopover
+                open={this.state.heartsHover && !this.state.heartsPopoverOpen}
+                anchorEl={this.state.heartsHoverPopoverAnchorElem}
+                style={heartsPopoverStyle}
+              >
+                <div style={{ padding: 10 }}>
+                  You've earned the maximum Hearts from opening tabs today!
+                  You'll be able to earn more Hearts in a few hours.
+                </div>
+              </DashboardPopover>
+            ) : null}
           </span>
         </div>
         <DashboardPopover
@@ -283,8 +294,16 @@ class UserMenu extends React.Component {
         >
           <div style={{ paddingTop: 10, paddingBottom: 10 }}>
             <div style={heartsPopoverSectionStyle}>
-              <span style={statTextStyle}><span style={statNumberStyle}>Level {user.level}</span></span>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <span style={statTextStyle}>
+                <span style={statNumberStyle}>Level {user.level}</span>
+              </span>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
                 <span>{user.heartsUntilNextLevel}</span>
                 <HeartBorderIcon
                   style={smallHeartIconStyle}
@@ -296,14 +315,21 @@ class UserMenu extends React.Component {
             <Divider style={dividerStyle} />
             <div style={heartsPopoverSectionStyle}>
               <span style={statTextStyle}>
-                <span style={Object.assign({}, statNumberStyle, {
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                })}>
+                <span
+                  style={Object.assign({}, statNumberStyle, {
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  })}
+                >
                   <span>{user.vcDonatedAllTime}</span>
                   <HeartBorderIcon
-                    style={{ marginLeft: 2, height: 24, width: 24, paddingBottom: 1 }}
+                    style={{
+                      marginLeft: 2,
+                      height: 24,
+                      width: 24,
+                      paddingBottom: 1,
+                    }}
                     color={dashboardIconActiveColor}
                   />
                 </span>
@@ -311,7 +337,7 @@ class UserMenu extends React.Component {
               </span>
               <div>
                 <RaisedButton
-                  label='Donate Hearts'
+                  label="Donate Hearts"
                   style={popoverButtonStyle}
                   labelStyle={popoverButtonLabelStyle}
                   primary
@@ -322,12 +348,13 @@ class UserMenu extends React.Component {
             <Divider style={dividerStyle} />
             <div style={heartsPopoverSectionStyle}>
               <span style={statTextStyle}>
-                <span style={statNumberStyle}>{user.numUsersRecruited}</span> Tabbers Recruited
+                <span style={statNumberStyle}>{user.numUsersRecruited}</span>{' '}
+                Tabbers Recruited
               </span>
               <div>
                 <RaisedButton
-                  label='Invite A Friend'
-                  labelPosition='before'
+                  label="Invite A Friend"
+                  labelPosition="before"
                   style={popoverButtonStyle}
                   labelStyle={popoverButtonLabelStyle}
                   primary
@@ -339,20 +366,36 @@ class UserMenu extends React.Component {
             <div style={rewardAmountsSectionStyle}>
               <span style={rewardMethodContainerStyle}>
                 <span style={rewardTextStyle}>Open a tab</span>
-                <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
                   <span style={rewardValueStyle}>1</span>
                   <HeartBorderIcon
-                    style={Object.assign({}, smallHeartIconStyle, { marginRight: -4 })}
+                    style={Object.assign({}, smallHeartIconStyle, {
+                      marginRight: -4,
+                    })}
                     color={dividerColor}
                   />
                 </span>
               </span>
               <span style={rewardMethodContainerStyle}>
                 <span style={rewardTextStyle}>Recruit a friend</span>
-                <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
                   <span style={rewardValueStyle}>{app.referralVcReward}</span>
                   <HeartBorderIcon
-                    style={Object.assign({}, smallHeartIconStyle, { marginRight: -4 })}
+                    style={Object.assign({}, smallHeartIconStyle, {
+                      marginRight: -4,
+                    })}
                     color={dividerColor}
                   />
                 </span>
@@ -383,59 +426,84 @@ class UserMenu extends React.Component {
             style={menuStyle}
             menuItemStyle={menuItemStyle}
           >
-            <MenuItem primaryText='Settings' onClick={goToSettings}
+            <MenuItem
+              primaryText="Settings"
+              onClick={goToSettings}
               leftIcon={
-                <SettingsIcon color={menuItemIconColor} style={menuItemSvgIconStyle} />
+                <SettingsIcon
+                  color={menuItemIconColor}
+                  style={menuItemSvgIconStyle}
+                />
               }
             />
-            <MenuItem primaryText='Donate Hearts' onClick={goToDonate}
+            <MenuItem
+              primaryText="Donate Hearts"
+              onClick={goToDonate}
               leftIcon={
-                <HeartIcon color={menuItemIconColor} style={menuItemSvgIconStyle} />
+                <HeartIcon
+                  color={menuItemIconColor}
+                  style={menuItemSvgIconStyle}
+                />
               }
             />
-            <MenuItem primaryText='Invite Friends' onClick={goToInviteFriends}
+            <MenuItem
+              primaryText="Invite Friends"
+              onClick={goToInviteFriends}
               leftIcon={
-                <PersonAddIcon color={menuItemIconColor} style={menuItemSvgIconStyle} />
+                <PersonAddIcon
+                  color={menuItemIconColor}
+                  style={menuItemSvgIconStyle}
+                />
               }
             />
-            <MenuItem primaryText='Your Stats' onClick={goToStats}
+            <MenuItem
+              primaryText="Your Stats"
+              onClick={goToStats}
               leftIcon={
-                <ChartIcon color={menuItemIconColor} style={menuItemSvgIconStyle} />
+                <ChartIcon
+                  color={menuItemIconColor}
+                  style={menuItemSvgIconStyle}
+                />
               }
             />
             <Divider style={{ marginBottom: 0, marginTop: 0 }} />
             <a
-              href='https://gladly.zendesk.com/hc/en-us/categories/201939608-Tab-for-a-Cause'
-              target='_blank'
-              rel='noopener noreferrer'
+              href="https://gladly.zendesk.com/hc/en-us/categories/201939608-Tab-for-a-Cause"
+              target="_blank"
+              rel="noopener noreferrer"
               style={{
                 color: menuItemIconColor,
-                textDecoration: 'none'
+                textDecoration: 'none',
               }}
             >
-              <MenuItem primaryText='Help' onClick={goToStats}
+              <MenuItem
+                primaryText="Help"
+                onClick={goToStats}
                 leftIcon={
-                  <HelpIcon color={menuItemIconColor} style={menuItemSvgIconStyle} />
+                  <HelpIcon
+                    color={menuItemIconColor}
+                    style={menuItemSvgIconStyle}
+                  />
                 }
                 style={menuItemStyle}
               />
             </a>
-            { !isUserAnonymous
-              ? <Divider style={{ marginBottom: 0, marginTop: 0 }} />
-              : null
-            }
-            { !isUserAnonymous
-              ? (
-                <MenuItem
-                  primaryText='Sign Out'
-                  onClick={this.logout.bind(this)}
-                  data-test-id={'app-menu-sign-out'}
-                  leftIcon={
-                    <ExitToAppIcon color={menuItemIconColor} style={menuItemSvgIconStyle} />
-                  }
-                />
-              ) : null
-            }
+            {!isUserAnonymous ? (
+              <Divider style={{ marginBottom: 0, marginTop: 0 }} />
+            ) : null}
+            {!isUserAnonymous ? (
+              <MenuItem
+                primaryText="Sign Out"
+                onClick={this.logout.bind(this)}
+                data-test-id={'app-menu-sign-out'}
+                leftIcon={
+                  <ExitToAppIcon
+                    color={menuItemIconColor}
+                    style={menuItemSvgIconStyle}
+                  />
+                }
+              />
+            ) : null}
           </Menu>
         </DashboardPopover>
       </div>
@@ -445,7 +513,7 @@ class UserMenu extends React.Component {
 
 UserMenu.propTypes = {
   app: PropTypes.shape({
-    referralVcReward: PropTypes.number.isRequired
+    referralVcReward: PropTypes.number.isRequired,
   }),
   user: PropTypes.shape({
     vcCurrent: PropTypes.number.isRequired,
@@ -453,15 +521,15 @@ UserMenu.propTypes = {
     heartsUntilNextLevel: PropTypes.number.isRequired,
     vcDonatedAllTime: PropTypes.number.isRequired,
     numUsersRecruited: PropTypes.number.isRequired,
-    tabsToday: PropTypes.number.isRequired
+    tabsToday: PropTypes.number.isRequired,
   }),
   isUserAnonymous: PropTypes.bool,
-  style: PropTypes.object
+  style: PropTypes.object,
 }
 
 UserMenu.defaultProps = {
   isUserAnonymous: false,
-  style: {}
+  style: {},
 }
 
 export default UserMenu

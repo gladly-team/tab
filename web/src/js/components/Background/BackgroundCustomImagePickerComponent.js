@@ -4,89 +4,87 @@ import PropTypes from 'prop-types'
 import Subheader from 'material-ui/Subheader'
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
-import {
-  cardHeaderSubtitleStyle
-} from 'js/theme/default'
+import { cardHeaderSubtitleStyle } from 'js/theme/default'
 import brokenImage from 'js/assets/nopicture.jpg'
 
 class BackgroundCustomeImagePicker extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
-      image: null
+      image: null,
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     const { user } = this.props
     if (user.customImage) {
       this.setState({
-        image: user.customImage
+        image: user.customImage,
       })
       this.updateUserCustomImg(user.customImage)
     }
   }
 
-  onChange (event, newValue) {
+  onChange(event, newValue) {
     // May want to validate URI and have separate error message
     // if it's invalid.
     this.setState({
-      image: newValue
+      image: newValue,
     })
   }
 
-  updateUserCustomImg (imgURL) {
+  updateUserCustomImg(imgURL) {
     this.props.onCustomImageSelection(imgURL)
   }
 
-  clear () {
+  clear() {
     this.imgLink.input.value = ''
     this.setState({
-      image: null
+      image: null,
     })
   }
 
-  onImgLoaded () {
+  onImgLoaded() {
     const { user } = this.props
     if (this.state.image && this.state.image !== user.customImage) {
       this.updateUserCustomImg(this.state.image)
     }
   }
 
-  onErrorLoadingImg () {
+  onErrorLoadingImg() {
     this.props.showError('Could not load that image.')
     this.setState({
-      image: null
+      image: null,
     })
   }
 
-  render () {
+  render() {
     const image = this.state.image || brokenImage
 
     const root = {
       width: '100%',
       display: 'flex',
       flexWrap: 'wrap',
-      justifyContent: 'flex-start'
+      justifyContent: 'flex-start',
     }
 
     const textInput = {
       fontSize: 14,
-      width: '100%'
+      width: '100%',
     }
 
     const column1 = {
       flex: 1,
-      paddingRight: 30
+      paddingRight: 30,
     }
 
     const column2 = {
-      flex: 1
+      flex: 1,
     }
 
     const header = Object.assign({}, cardHeaderSubtitleStyle, {
-      paddingLeft: 0
+      paddingLeft: 0,
     })
 
     const preview = {
@@ -95,30 +93,33 @@ class BackgroundCustomeImagePicker extends React.Component {
       position: 'relative',
       left: 0,
       width: '100%',
-      top: 0
+      top: 0,
     }
 
     const clear = {
       margin: 5,
-      marginLeft: 0
+      marginLeft: 0,
     }
 
     return (
       <div style={root}>
-        <div
-          style={column1}>
+        <div style={column1}>
           <Subheader style={header}>Enter an image URL</Subheader>
           <TextField
-            ref={(input) => { this.imgLink = input }}
+            ref={input => {
+              this.imgLink = input
+            }}
             style={textInput}
             value={this.state.image || ''}
-            hintText='Image URL'
-            onChange={this.onChange.bind(this)} />
+            hintText="Image URL"
+            onChange={this.onChange.bind(this)}
+          />
           <RaisedButton
-            label='CLEAR'
+            label="CLEAR"
             onClick={this.clear.bind(this)}
             default
-            style={clear} />
+            style={clear}
+          />
         </div>
         <div style={column2}>
           <img
@@ -126,7 +127,8 @@ class BackgroundCustomeImagePicker extends React.Component {
             onLoad={this.onImgLoaded.bind(this)}
             onError={this.onErrorLoadingImg.bind(this)}
             style={preview}
-            src={image} />
+            src={image}
+          />
         </div>
       </div>
     )
@@ -135,10 +137,10 @@ class BackgroundCustomeImagePicker extends React.Component {
 
 BackgroundCustomeImagePicker.propTypes = {
   user: PropTypes.shape({
-    customImage: PropTypes.string.isRequired
+    customImage: PropTypes.string.isRequired,
   }),
   showError: PropTypes.func.isRequired,
-  onCustomImageSelection: PropTypes.func.isRequired
+  onCustomImageSelection: PropTypes.func.isRequired,
 }
 
 export default BackgroundCustomeImagePicker

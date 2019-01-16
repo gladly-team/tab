@@ -6,15 +6,12 @@ import InfoOutlineIcon from 'material-ui/svg-icons/action/info-outline'
 import { lighterTextColor } from 'js/theme/default'
 
 class ProfileDonateHearts extends React.Component {
-  render () {
+  render() {
     const { app, user } = this.props
-    const containerStyle = {
-    }
+    const containerStyle = {}
     const spacingPx = 6
     return (
-      <div
-        key={'charities-container-key'}
-        style={containerStyle}>
+      <div key={'charities-container-key'} style={containerStyle}>
         <Paper
           style={{
             display: 'flex',
@@ -23,7 +20,7 @@ class ProfileDonateHearts extends React.Component {
             paddingLeft: 20,
             paddingRight: 20,
             marginBottom: 2 * spacingPx,
-            color: lighterTextColor
+            color: lighterTextColor,
           }}
         >
           <InfoOutlineIcon
@@ -31,11 +28,12 @@ class ProfileDonateHearts extends React.Component {
               marginRight: 8,
               color: lighterTextColor,
               minHeight: 24,
-              minWidth: 24
+              minWidth: 24,
             }}
           />
-          <p>When you donate Hearts, you're telling us to give
-             more of the money we raise to that charity.
+          <p>
+            When you donate Hearts, you're telling us to give more of the money
+            we raise to that charity.
           </p>
         </Paper>
         <span
@@ -43,10 +41,10 @@ class ProfileDonateHearts extends React.Component {
             display: 'flex',
             flexWrap: 'wrap',
             justifyContent: 'center',
-            marginBottom: 34
+            marginBottom: 34,
           }}
         >
-          {app.charities.edges.map((edge) => {
+          {app.charities.edges.map(edge => {
             return (
               <Charity
                 key={edge.node.id}
@@ -54,7 +52,7 @@ class ProfileDonateHearts extends React.Component {
                 user={user}
                 showError={this.props.showError}
                 style={{
-                  margin: spacingPx
+                  margin: spacingPx,
                 }}
               />
             )
@@ -68,7 +66,7 @@ class ProfileDonateHearts extends React.Component {
 ProfileDonateHearts.propTypes = {
   app: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired,
-  showError: PropTypes.func.isRequired
+  showError: PropTypes.func.isRequired,
 }
 
 export default ProfileDonateHearts

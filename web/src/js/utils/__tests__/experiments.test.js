@@ -1,8 +1,5 @@
 /* eslint-env jest */
-import {
-  forEach,
-  sortBy
-} from 'lodash/collection'
+import { forEach, sortBy } from 'lodash/collection'
 import { isPlainObject } from 'lodash/lang'
 import moment from 'moment'
 import MockDate from 'mockdate'
@@ -24,7 +21,7 @@ let mathRandomMock
 const getMockUserInfo = () => ({
   id: 'some-user-id',
   joined: '2017-05-19T13:59:58.000Z',
-  isNewUser: false
+  isNewUser: false,
 })
 
 const mockNow = '2017-05-19T13:59:58.000Z'
@@ -33,8 +30,7 @@ beforeEach(() => {
   MockDate.set(moment(mockNow))
 
   // Control for randomness in tests.
-  mathRandomMock = jest.spyOn(Math, 'random')
-    .mockReturnValue(0)
+  mathRandomMock = jest.spyOn(Math, 'random').mockReturnValue(0)
 })
 
 afterEach(() => {
@@ -46,8 +42,9 @@ afterEach(() => {
   mathRandomMock.mockReset()
 
   // Reset the default experiments to the module's real ones.
-  experimentsModule._experiments.getExperiments
-    .mockReturnValue(experimentsModule._experimentsConfig)
+  experimentsModule._experiments.getExperiments.mockReturnValue(
+    experimentsModule._experimentsConfig
+  )
 
   jest.clearAllMocks()
   MockDate.reset()
@@ -58,7 +55,7 @@ describe('Experiment and ExperimentGroup objects', () => {
   test('createExperiment returns an object with expected shape', () => {
     const createExperiment = experimentsModule.createExperiment
     const experiment = createExperiment({
-      name: 'fooTest'
+      name: 'fooTest',
     })
     expect(experiment).toMatchObject({
       name: 'fooTest',
@@ -67,13 +64,13 @@ describe('Experiment and ExperimentGroup objects', () => {
       groups: {
         NONE: {
           value: 'none',
-          schemaValue: 'NONE'
-        }
+          schemaValue: 'NONE',
+        },
       },
       _localStorageKey: 'tab.experiments.fooTest',
       _saveTestGroupToLocalStorage: expect.any(Function),
       assignTestGroup: expect.any(Function),
-      getTestGroup: expect.any(Function)
+      getTestGroup: expect.any(Function),
     })
   })
 
@@ -81,7 +78,7 @@ describe('Experiment and ExperimentGroup objects', () => {
     const createExperiment = experimentsModule.createExperiment
     expect(() => {
       createExperiment({
-        active: true
+        active: true,
       })
     }).toThrow()
   })
@@ -91,7 +88,7 @@ describe('Experiment and ExperimentGroup objects', () => {
     expect(() => {
       createExperimentGroup({
         // Missing "value" key
-        schemaValue: 'blah'
+        schemaValue: 'blah',
       })
     }).toThrow()
   })
@@ -111,13 +108,13 @@ describe('Experiment and ExperimentGroup objects', () => {
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
-          schemaValue: 'THE_CONTROL'
+          schemaValue: 'THE_CONTROL',
         }),
         FUN_EXPERIMENT: createExperimentGroup({
           value: 'newThing',
-          schemaValue: 'EXPERIMENT'
-        })
-      }
+          schemaValue: 'EXPERIMENT',
+        }),
+      },
     })
     expect(experiment.getTestGroup().value).toEqual('none')
   })
@@ -137,13 +134,13 @@ describe('Experiment and ExperimentGroup objects', () => {
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
-          schemaValue: 'THE_CONTROL'
+          schemaValue: 'THE_CONTROL',
         }),
         FUN_EXPERIMENT: createExperimentGroup({
           value: 'newThing',
-          schemaValue: 'EXPERIMENT'
-        })
-      }
+          schemaValue: 'EXPERIMENT',
+        }),
+      },
     })
     expect(experiment.getTestGroup().value).toEqual('newThing')
   })
@@ -163,13 +160,13 @@ describe('Experiment and ExperimentGroup objects', () => {
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
-          schemaValue: 'THE_CONTROL'
+          schemaValue: 'THE_CONTROL',
         }),
         FUN_EXPERIMENT: createExperimentGroup({
           value: 'newThing',
-          schemaValue: 'EXPERIMENT'
-        })
-      }
+          schemaValue: 'EXPERIMENT',
+        }),
+      },
     })
     expect(experiment.getTestGroup().value).toEqual('none')
   })
@@ -185,13 +182,13 @@ describe('Experiment and ExperimentGroup objects', () => {
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
-          schemaValue: 'THE_CONTROL'
+          schemaValue: 'THE_CONTROL',
         }),
         FUN_EXPERIMENT: createExperimentGroup({
           value: 'newThing',
-          schemaValue: 'EXPERIMENT'
-        })
-      }
+          schemaValue: 'EXPERIMENT',
+        }),
+      },
     })
     const mockUserInfo = getMockUserInfo()
     experiment.assignTestGroup(mockUserInfo)
@@ -204,7 +201,10 @@ describe('Experiment and ExperimentGroup objects', () => {
     // Mock that the user is assigned to an experiment group.
     const localStorageMgr = require('js/utils/localstorage-mgr').default
     localStorageMgr.setItem('tab.experiments.fooTest', 'none')
-    localStorageMgr.setItem('tab.experiments.fooTest.percentageOfUsersLastAssigned', '15')
+    localStorageMgr.setItem(
+      'tab.experiments.fooTest.percentageOfUsersLastAssigned',
+      '15'
+    )
     localStorageMgr.setItem.mockClear()
 
     const experiment = createExperiment({
@@ -215,13 +215,13 @@ describe('Experiment and ExperimentGroup objects', () => {
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
-          schemaValue: 'THE_CONTROL'
+          schemaValue: 'THE_CONTROL',
         }),
         FUN_EXPERIMENT: createExperimentGroup({
           value: 'newThing',
-          schemaValue: 'EXPERIMENT'
-        })
-      }
+          schemaValue: 'EXPERIMENT',
+        }),
+      },
     })
     const mockUserInfo = getMockUserInfo()
     experiment.assignTestGroup(mockUserInfo)
@@ -234,7 +234,10 @@ describe('Experiment and ExperimentGroup objects', () => {
     // Mock that the user is assigned to an experiment group.
     const localStorageMgr = require('js/utils/localstorage-mgr').default
     localStorageMgr.setItem('tab.experiments.fooTest', 'newThing')
-    localStorageMgr.setItem('tab.experiments.fooTest.percentageOfUsersLastAssigned', '15')
+    localStorageMgr.setItem(
+      'tab.experiments.fooTest.percentageOfUsersLastAssigned',
+      '15'
+    )
     localStorageMgr.setItem.mockClear()
 
     const experiment = createExperiment({
@@ -245,13 +248,13 @@ describe('Experiment and ExperimentGroup objects', () => {
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
-          schemaValue: 'THE_CONTROL'
+          schemaValue: 'THE_CONTROL',
         }),
         FUN_EXPERIMENT: createExperimentGroup({
           value: 'newThing',
-          schemaValue: 'EXPERIMENT'
-        })
-      }
+          schemaValue: 'EXPERIMENT',
+        }),
+      },
     })
     const mockUserInfo = getMockUserInfo()
     experiment.assignTestGroup(mockUserInfo)
@@ -264,7 +267,10 @@ describe('Experiment and ExperimentGroup objects', () => {
     // Mock that the user is assigned to an experiment group.
     const localStorageMgr = require('js/utils/localstorage-mgr').default
     localStorageMgr.setItem('tab.experiments.fooTest', 'none')
-    localStorageMgr.setItem('tab.experiments.fooTest.percentageOfUsersLastAssigned', '15')
+    localStorageMgr.setItem(
+      'tab.experiments.fooTest.percentageOfUsersLastAssigned',
+      '15'
+    )
     localStorageMgr.setItem.mockClear()
 
     const experiment = createExperiment({
@@ -275,18 +281,20 @@ describe('Experiment and ExperimentGroup objects', () => {
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
-          schemaValue: 'THE_CONTROL'
+          schemaValue: 'THE_CONTROL',
         }),
         FUN_EXPERIMENT: createExperimentGroup({
           value: 'newThing',
-          schemaValue: 'EXPERIMENT'
-        })
-      }
+          schemaValue: 'EXPERIMENT',
+        }),
+      },
     })
     const mockUserInfo = getMockUserInfo()
     experiment.assignTestGroup(mockUserInfo)
-    expect(localStorageMgr.setItem)
-      .toHaveBeenCalledWith('tab.experiments.fooTest', 'sameOld')
+    expect(localStorageMgr.setItem).toHaveBeenCalledWith(
+      'tab.experiments.fooTest',
+      'sameOld'
+    )
   })
 
   test('when we have increased the % of users in the experiment, we use the difference in likelihoods when reassigning users who were previously in the "none" test group (and fail to include the user)', () => {
@@ -295,7 +303,10 @@ describe('Experiment and ExperimentGroup objects', () => {
     // Mock that the user is assigned to an experiment group.
     const localStorageMgr = require('js/utils/localstorage-mgr').default
     localStorageMgr.setItem('tab.experiments.fooTest', 'none')
-    localStorageMgr.setItem('tab.experiments.fooTest.percentageOfUsersLastAssigned', '15')
+    localStorageMgr.setItem(
+      'tab.experiments.fooTest.percentageOfUsersLastAssigned',
+      '15'
+    )
     localStorageMgr.setItem.mockClear()
 
     const experiment = createExperiment({
@@ -306,24 +317,26 @@ describe('Experiment and ExperimentGroup objects', () => {
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
-          schemaValue: 'THE_CONTROL'
+          schemaValue: 'THE_CONTROL',
         }),
         FUN_EXPERIMENT: createExperimentGroup({
           value: 'newThing',
-          schemaValue: 'EXPERIMENT'
-        })
-      }
+          schemaValue: 'EXPERIMENT',
+        }),
+      },
     })
 
     mathRandomMock
       // The user should be again excluded from the test because this value is
       // greater than ~29 = 100 * (40 - 15) / (100 - 15).
-      .mockReturnValueOnce(0.30) // for determining % inclusion
+      .mockReturnValueOnce(0.3) // for determining % inclusion
       .mockReturnValueOnce(0.99) // for determining experimental group
     const mockUserInfo = getMockUserInfo()
     experiment.assignTestGroup(mockUserInfo)
-    expect(localStorageMgr.setItem)
-      .toHaveBeenCalledWith('tab.experiments.fooTest', 'none')
+    expect(localStorageMgr.setItem).toHaveBeenCalledWith(
+      'tab.experiments.fooTest',
+      'none'
+    )
   })
 
   test('when we have increased the % of users in the experiment, we use the difference in likelihoods when reassigning users who were previously in the "none" test group (and succeed in including the user)', () => {
@@ -332,7 +345,10 @@ describe('Experiment and ExperimentGroup objects', () => {
     // Mock that the user is assigned to an experiment group.
     const localStorageMgr = require('js/utils/localstorage-mgr').default
     localStorageMgr.setItem('tab.experiments.fooTest', 'none')
-    localStorageMgr.setItem('tab.experiments.fooTest.percentageOfUsersLastAssigned', '15')
+    localStorageMgr.setItem(
+      'tab.experiments.fooTest.percentageOfUsersLastAssigned',
+      '15'
+    )
     localStorageMgr.setItem.mockClear()
 
     const experiment = createExperiment({
@@ -343,13 +359,13 @@ describe('Experiment and ExperimentGroup objects', () => {
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
-          schemaValue: 'THE_CONTROL'
+          schemaValue: 'THE_CONTROL',
         }),
         FUN_EXPERIMENT: createExperimentGroup({
           value: 'newThing',
-          schemaValue: 'EXPERIMENT'
-        })
-      }
+          schemaValue: 'EXPERIMENT',
+        }),
+      },
     })
 
     mathRandomMock
@@ -359,8 +375,10 @@ describe('Experiment and ExperimentGroup objects', () => {
       .mockReturnValueOnce(0.99) // for determining experimental group
     const mockUserInfo = getMockUserInfo()
     experiment.assignTestGroup(mockUserInfo)
-    expect(localStorageMgr.setItem)
-      .toHaveBeenCalledWith('tab.experiments.fooTest', 'newThing')
+    expect(localStorageMgr.setItem).toHaveBeenCalledWith(
+      'tab.experiments.fooTest',
+      'newThing'
+    )
   })
 
   test('when reassigning users who were previously in the "none" test group, we save the latest "percentageOfExistingUsersInExperiment" to local storage', () => {
@@ -369,7 +387,10 @@ describe('Experiment and ExperimentGroup objects', () => {
     // Mock that the user is assigned to an experiment group.
     const localStorageMgr = require('js/utils/localstorage-mgr').default
     localStorageMgr.setItem('tab.experiments.fooTest', 'none')
-    localStorageMgr.setItem('tab.experiments.fooTest.percentageOfUsersLastAssigned', '15')
+    localStorageMgr.setItem(
+      'tab.experiments.fooTest.percentageOfUsersLastAssigned',
+      '15'
+    )
     localStorageMgr.setItem.mockClear()
 
     const experiment = createExperiment({
@@ -380,13 +401,13 @@ describe('Experiment and ExperimentGroup objects', () => {
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
-          schemaValue: 'THE_CONTROL'
+          schemaValue: 'THE_CONTROL',
         }),
         FUN_EXPERIMENT: createExperimentGroup({
           value: 'newThing',
-          schemaValue: 'EXPERIMENT'
-        })
-      }
+          schemaValue: 'EXPERIMENT',
+        }),
+      },
     })
 
     mathRandomMock
@@ -394,8 +415,10 @@ describe('Experiment and ExperimentGroup objects', () => {
       .mockReturnValueOnce(0.99) // for determining experimental group
     const mockUserInfo = getMockUserInfo()
     experiment.assignTestGroup(mockUserInfo)
-    expect(localStorageMgr.setItem)
-      .toHaveBeenCalledWith('tab.experiments.fooTest.percentageOfUsersLastAssigned', 40)
+    expect(localStorageMgr.setItem).toHaveBeenCalledWith(
+      'tab.experiments.fooTest.percentageOfUsersLastAssigned',
+      40
+    )
   })
 
   test('saves a test group to local storage when assigning a test group', () => {
@@ -409,18 +432,20 @@ describe('Experiment and ExperimentGroup objects', () => {
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
-          schemaValue: 'THE_CONTROL'
+          schemaValue: 'THE_CONTROL',
         }),
         FUN_EXPERIMENT: createExperimentGroup({
           value: 'newThing',
-          schemaValue: 'EXPERIMENT'
-        })
-      }
+          schemaValue: 'EXPERIMENT',
+        }),
+      },
     })
     const mockUserInfo = getMockUserInfo()
     experiment.assignTestGroup(mockUserInfo)
-    expect(localStorageMgr.setItem)
-      .toHaveBeenCalledWith('tab.experiments.fooTest', 'sameOld')
+    expect(localStorageMgr.setItem).toHaveBeenCalledWith(
+      'tab.experiments.fooTest',
+      'sameOld'
+    )
   })
 
   test('saves "percentageOfExistingUsersInExperiment" to local storage when assigning a test group', () => {
@@ -434,24 +459,27 @@ describe('Experiment and ExperimentGroup objects', () => {
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
-          schemaValue: 'THE_CONTROL'
+          schemaValue: 'THE_CONTROL',
         }),
         FUN_EXPERIMENT: createExperimentGroup({
           value: 'newThing',
-          schemaValue: 'EXPERIMENT'
-        })
-      }
+          schemaValue: 'EXPERIMENT',
+        }),
+      },
     })
     const mockUserInfo = getMockUserInfo()
     experiment.assignTestGroup(mockUserInfo)
 
     // "percentageOfUsersLastAssigned" defaults to 100.
-    expect(localStorageMgr.setItem)
-      .toHaveBeenCalledWith('tab.experiments.fooTest.percentageOfUsersLastAssigned', 100)
+    expect(localStorageMgr.setItem).toHaveBeenCalledWith(
+      'tab.experiments.fooTest.percentageOfUsersLastAssigned',
+      100
+    )
   })
 
   test('saves the test group to the server when assigning a test group', () => {
-    const UpdateUserExperimentGroupsMutation = require('js/mutations/UpdateUserExperimentGroupsMutation').default
+    const UpdateUserExperimentGroupsMutation = require('js/mutations/UpdateUserExperimentGroupsMutation')
+      .default
     const { createExperiment, createExperimentGroup } = experimentsModule
     const experiment = createExperiment({
       name: 'fooTest',
@@ -461,23 +489,25 @@ describe('Experiment and ExperimentGroup objects', () => {
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
-          schemaValue: 'THE_CONTROL'
+          schemaValue: 'THE_CONTROL',
         }),
         FUN_EXPERIMENT: createExperimentGroup({
           value: 'newThing',
-          schemaValue: 'EXPERIMENT'
-        })
-      }
+          schemaValue: 'EXPERIMENT',
+        }),
+      },
     })
     const mockUserInfo = getMockUserInfo()
     experiment.assignTestGroup(mockUserInfo)
-    expect(UpdateUserExperimentGroupsMutation)
-      .toHaveBeenCalledWith({}, {
+    expect(UpdateUserExperimentGroupsMutation).toHaveBeenCalledWith(
+      {},
+      {
         userId: 'some-user-id',
         experimentGroups: {
-          fooTest: 'THE_CONTROL'
-        }
-      })
+          fooTest: 'THE_CONTROL',
+        },
+      }
+    )
   })
 
   test('selects from all the test groups when assigning the user to a test group', () => {
@@ -491,25 +521,27 @@ describe('Experiment and ExperimentGroup objects', () => {
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
-          schemaValue: 'THE_CONTROL'
+          schemaValue: 'THE_CONTROL',
         }),
         FUN_EXPERIMENT: createExperimentGroup({
           value: 'newThing',
-          schemaValue: 'EXPERIMENT'
+          schemaValue: 'EXPERIMENT',
         }),
         CRAZY_EXPERIMENT: createExperimentGroup({
           value: 'crazyThing',
-          schemaValue: 'WOWOWOW'
-        })
-      }
+          schemaValue: 'WOWOWOW',
+        }),
+      },
     })
 
     // Control for randomness, picking the last group value.
     mathRandomMock.mockReturnValue(0.99)
     const mockUserInfo = getMockUserInfo()
     experiment.assignTestGroup(mockUserInfo)
-    expect(localStorageMgr.setItem)
-      .toHaveBeenCalledWith('tab.experiments.fooTest', 'crazyThing')
+    expect(localStorageMgr.setItem).toHaveBeenCalledWith(
+      'tab.experiments.fooTest',
+      'crazyThing'
+    )
   })
 
   test('assigns the "none" test group when there are no other groups', () => {
@@ -519,12 +551,14 @@ describe('Experiment and ExperimentGroup objects', () => {
       name: 'fooTest',
       active: true,
       disabled: false,
-      groups: {}
+      groups: {},
     })
     const mockUserInfo = getMockUserInfo()
     experiment.assignTestGroup(mockUserInfo)
-    expect(localStorageMgr.setItem)
-      .toHaveBeenCalledWith('tab.experiments.fooTest', 'none')
+    expect(localStorageMgr.setItem).toHaveBeenCalledWith(
+      'tab.experiments.fooTest',
+      'none'
+    )
   })
 
   test('assigns the "none" test group when the user is not in the random percentage of users', () => {
@@ -538,17 +572,17 @@ describe('Experiment and ExperimentGroup objects', () => {
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
-          schemaValue: 'THE_CONTROL'
+          schemaValue: 'THE_CONTROL',
         }),
         FUN_EXPERIMENT: createExperimentGroup({
           value: 'newThing',
-          schemaValue: 'EXPERIMENT'
+          schemaValue: 'EXPERIMENT',
         }),
         CRAZY_EXPERIMENT: createExperimentGroup({
           value: 'crazyThing',
-          schemaValue: 'WOWOWOW'
-        })
-      }
+          schemaValue: 'WOWOWOW',
+        }),
+      },
     })
 
     mathRandomMock
@@ -556,8 +590,10 @@ describe('Experiment and ExperimentGroup objects', () => {
       .mockReturnValueOnce(0.99) // for determining experimental group
     const mockUserInfo = getMockUserInfo()
     experiment.assignTestGroup(mockUserInfo)
-    expect(localStorageMgr.setItem)
-      .toHaveBeenCalledWith('tab.experiments.fooTest', 'none')
+    expect(localStorageMgr.setItem).toHaveBeenCalledWith(
+      'tab.experiments.fooTest',
+      'none'
+    )
   })
 
   test('assigns an experiment group when the user is included in the random percentage of users', () => {
@@ -571,17 +607,17 @@ describe('Experiment and ExperimentGroup objects', () => {
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
-          schemaValue: 'THE_CONTROL'
+          schemaValue: 'THE_CONTROL',
         }),
         FUN_EXPERIMENT: createExperimentGroup({
           value: 'newThing',
-          schemaValue: 'EXPERIMENT'
+          schemaValue: 'EXPERIMENT',
         }),
         CRAZY_EXPERIMENT: createExperimentGroup({
           value: 'crazyThing',
-          schemaValue: 'WOWOWOW'
-        })
-      }
+          schemaValue: 'WOWOWOW',
+        }),
+      },
     })
 
     mathRandomMock
@@ -589,8 +625,10 @@ describe('Experiment and ExperimentGroup objects', () => {
       .mockReturnValueOnce(0.99) // for determining experimental group
     const mockUserInfo = getMockUserInfo()
     experiment.assignTestGroup(mockUserInfo)
-    expect(localStorageMgr.setItem)
-      .toHaveBeenCalledWith('tab.experiments.fooTest', 'crazyThing')
+    expect(localStorageMgr.setItem).toHaveBeenCalledWith(
+      'tab.experiments.fooTest',
+      'crazyThing'
+    )
   })
 
   test('assigns an experiment group when the user is included in the random percentage of *new* users', () => {
@@ -605,17 +643,17 @@ describe('Experiment and ExperimentGroup objects', () => {
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
-          schemaValue: 'THE_CONTROL'
+          schemaValue: 'THE_CONTROL',
         }),
         FUN_EXPERIMENT: createExperimentGroup({
           value: 'newThing',
-          schemaValue: 'EXPERIMENT'
+          schemaValue: 'EXPERIMENT',
         }),
         CRAZY_EXPERIMENT: createExperimentGroup({
           value: 'crazyThing',
-          schemaValue: 'WOWOWOW'
-        })
-      }
+          schemaValue: 'WOWOWOW',
+        }),
+      },
     })
 
     mathRandomMock
@@ -624,8 +662,10 @@ describe('Experiment and ExperimentGroup objects', () => {
     const mockUserInfo = getMockUserInfo()
     mockUserInfo.isNewUser = true
     experiment.assignTestGroup(mockUserInfo)
-    expect(localStorageMgr.setItem)
-      .toHaveBeenCalledWith('tab.experiments.fooTest', 'crazyThing')
+    expect(localStorageMgr.setItem).toHaveBeenCalledWith(
+      'tab.experiments.fooTest',
+      'crazyThing'
+    )
   })
 
   test('assigns the "none" group when the user is NOT included in the random percentage of *new* users', () => {
@@ -640,17 +680,17 @@ describe('Experiment and ExperimentGroup objects', () => {
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
-          schemaValue: 'THE_CONTROL'
+          schemaValue: 'THE_CONTROL',
         }),
         FUN_EXPERIMENT: createExperimentGroup({
           value: 'newThing',
-          schemaValue: 'EXPERIMENT'
+          schemaValue: 'EXPERIMENT',
         }),
         CRAZY_EXPERIMENT: createExperimentGroup({
           value: 'crazyThing',
-          schemaValue: 'WOWOWOW'
-        })
-      }
+          schemaValue: 'WOWOWOW',
+        }),
+      },
     })
 
     mathRandomMock
@@ -659,8 +699,10 @@ describe('Experiment and ExperimentGroup objects', () => {
     const mockUserInfo = getMockUserInfo()
     mockUserInfo.isNewUser = true
     experiment.assignTestGroup(mockUserInfo)
-    expect(localStorageMgr.setItem)
-      .toHaveBeenCalledWith('tab.experiments.fooTest', 'none')
+    expect(localStorageMgr.setItem).toHaveBeenCalledWith(
+      'tab.experiments.fooTest',
+      'none'
+    )
   })
 
   test('does not assign an experiment group when the user should be filtered out of the experiment', () => {
@@ -675,23 +717,23 @@ describe('Experiment and ExperimentGroup objects', () => {
         // We should exclude all new users from the experiment.
         userInfo => {
           return !userInfo.isNewUser
-        }
+        },
       ],
       percentageOfExistingUsersInExperiment: 100,
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
-          schemaValue: 'THE_CONTROL'
+          schemaValue: 'THE_CONTROL',
         }),
         FUN_EXPERIMENT: createExperimentGroup({
           value: 'newThing',
-          schemaValue: 'EXPERIMENT'
+          schemaValue: 'EXPERIMENT',
         }),
         CRAZY_EXPERIMENT: createExperimentGroup({
           value: 'crazyThing',
-          schemaValue: 'WOWOWOW'
-        })
-      }
+          schemaValue: 'WOWOWOW',
+        }),
+      },
     })
 
     const mockUserInfo = getMockUserInfo()
@@ -710,24 +752,22 @@ describe('Experiment and ExperimentGroup objects', () => {
       name: 'fooTest',
       active: true,
       disabled: false,
-      filters: [
-        joinedAtLeastThirtyDaysAgo
-      ],
+      filters: [joinedAtLeastThirtyDaysAgo],
       percentageOfExistingUsersInExperiment: 100,
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
-          schemaValue: 'THE_CONTROL'
+          schemaValue: 'THE_CONTROL',
         }),
         FUN_EXPERIMENT: createExperimentGroup({
           value: 'newThing',
-          schemaValue: 'EXPERIMENT'
+          schemaValue: 'EXPERIMENT',
         }),
         CRAZY_EXPERIMENT: createExperimentGroup({
           value: 'crazyThing',
-          schemaValue: 'WOWOWOW'
-        })
-      }
+          schemaValue: 'WOWOWOW',
+        }),
+      },
     })
 
     const mockUserInfo = getMockUserInfo()
@@ -737,8 +777,10 @@ describe('Experiment and ExperimentGroup objects', () => {
 
     mockUserInfo.joined = '2017-03-17T13:59:58.000Z' // ~60 days ago, should be included
     experiment.assignTestGroup(mockUserInfo)
-    expect(localStorageMgr.setItem)
-      .toHaveBeenCalledWith('tab.experiments.fooTest', 'sameOld')
+    expect(localStorageMgr.setItem).toHaveBeenCalledWith(
+      'tab.experiments.fooTest',
+      'sameOld'
+    )
   })
 
   test('assigns an experiment group when the user should not be filtered out of the experiment', () => {
@@ -752,37 +794,38 @@ describe('Experiment and ExperimentGroup objects', () => {
         // We should exclude all new users from the experiment.
         userInfo => {
           return !userInfo.isNewUser
-        }
+        },
       ],
       percentageOfExistingUsersInExperiment: 100,
       groups: {
         MY_CONTROL_GROUP: createExperimentGroup({
           value: 'sameOld',
-          schemaValue: 'THE_CONTROL'
+          schemaValue: 'THE_CONTROL',
         }),
         FUN_EXPERIMENT: createExperimentGroup({
           value: 'newThing',
-          schemaValue: 'EXPERIMENT'
+          schemaValue: 'EXPERIMENT',
         }),
         CRAZY_EXPERIMENT: createExperimentGroup({
           value: 'crazyThing',
-          schemaValue: 'WOWOWOW'
-        })
-      }
+          schemaValue: 'WOWOWOW',
+        }),
+      },
     })
 
     const mockUserInfo = getMockUserInfo()
     mockUserInfo.isNewUser = false // user should be included
     experiment.assignTestGroup(mockUserInfo)
-    expect(localStorageMgr.setItem)
-      .toHaveBeenCalledWith('tab.experiments.fooTest', 'sameOld')
+    expect(localStorageMgr.setItem).toHaveBeenCalledWith(
+      'tab.experiments.fooTest',
+      'sameOld'
+    )
   })
 })
 
 /* Test core functionality with fake experiments */
 describe('Main experiments functionality', () => {
   test('getUserExperimentGroup returns the expected value', () => {
-
     // Mock that the user is assigned to an experiment group.
     const localStorageMgr = require('js/utils/localstorage-mgr').default
     localStorageMgr.setItem('tab.experiments.fooTest', 'newThing')
@@ -796,13 +839,13 @@ describe('Main experiments functionality', () => {
         groups: {
           SOMETHING: experimentsModule.createExperimentGroup({
             value: 'hi',
-            schemaValue: 'SOMETHING'
+            schemaValue: 'SOMETHING',
           }),
           ANOTHER_THING: experimentsModule.createExperimentGroup({
             value: 'bye',
-            schemaValue: 'ANOTHER_THING'
-          })
-        }
+            schemaValue: 'ANOTHER_THING',
+          }),
+        },
       }),
       experimentsModule.createExperiment({
         name: 'fooTest',
@@ -812,21 +855,19 @@ describe('Main experiments functionality', () => {
         groups: {
           MY_CONTROL_GROUP: experimentsModule.createExperimentGroup({
             value: 'sameOld',
-            schemaValue: 'THE_CONTROL'
+            schemaValue: 'THE_CONTROL',
           }),
           FUN_EXPERIMENT: experimentsModule.createExperimentGroup({
             value: 'newThing',
-            schemaValue: 'EXPERIMENT'
-          })
-        }
-      })
+            schemaValue: 'EXPERIMENT',
+          }),
+        },
+      }),
     ])
-    expect(experimentsModule.getUserExperimentGroup('fooTest'))
-      .toBe('newThing')
+    expect(experimentsModule.getUserExperimentGroup('fooTest')).toBe('newThing')
   })
 
   test('getUserExperimentGroup returns "none" when the experiment does not exist', () => {
-
     // Mock that the user is assigned to an experiment group.
     const localStorageMgr = require('js/utils/localstorage-mgr').default
     localStorageMgr.setItem('tab.experiments.fooTest', 'newThing')
@@ -840,13 +881,13 @@ describe('Main experiments functionality', () => {
         groups: {
           SOMETHING: experimentsModule.createExperimentGroup({
             value: 'hi',
-            schemaValue: 'SOMETHING'
+            schemaValue: 'SOMETHING',
           }),
           ANOTHER_THING: experimentsModule.createExperimentGroup({
             value: 'bye',
-            schemaValue: 'ANOTHER_THING'
-          })
-        }
+            schemaValue: 'ANOTHER_THING',
+          }),
+        },
       }),
       experimentsModule.createExperiment({
         name: 'fooTest',
@@ -856,21 +897,21 @@ describe('Main experiments functionality', () => {
         groups: {
           MY_CONTROL_GROUP: experimentsModule.createExperimentGroup({
             value: 'sameOld',
-            schemaValue: 'THE_CONTROL'
+            schemaValue: 'THE_CONTROL',
           }),
           FUN_EXPERIMENT: experimentsModule.createExperimentGroup({
             value: 'newThing',
-            schemaValue: 'EXPERIMENT'
-          })
-        }
-      })
+            schemaValue: 'EXPERIMENT',
+          }),
+        },
+      }),
     ])
-    expect(experimentsModule.getUserExperimentGroup('someNonexistentTest'))
-      .toBe('none')
+    expect(
+      experimentsModule.getUserExperimentGroup('someNonexistentTest')
+    ).toBe('none')
   })
 
   test('getUserExperimentGroup returns "none" when the experiment is disabled', () => {
-
     // Mock that the user is assigned to an experiment group.
     const localStorageMgr = require('js/utils/localstorage-mgr').default
     localStorageMgr.setItem('tab.experiments.fooTest', 'newThing')
@@ -884,13 +925,13 @@ describe('Main experiments functionality', () => {
         groups: {
           SOMETHING: experimentsModule.createExperimentGroup({
             value: 'hi',
-            schemaValue: 'SOMETHING'
+            schemaValue: 'SOMETHING',
           }),
           ANOTHER_THING: experimentsModule.createExperimentGroup({
             value: 'bye',
-            schemaValue: 'ANOTHER_THING'
-          })
-        }
+            schemaValue: 'ANOTHER_THING',
+          }),
+        },
       }),
       experimentsModule.createExperiment({
         name: 'fooTest',
@@ -900,23 +941,23 @@ describe('Main experiments functionality', () => {
         groups: {
           MY_CONTROL_GROUP: experimentsModule.createExperimentGroup({
             value: 'sameOld',
-            schemaValue: 'THE_CONTROL'
+            schemaValue: 'THE_CONTROL',
           }),
           FUN_EXPERIMENT: experimentsModule.createExperimentGroup({
             value: 'newThing',
-            schemaValue: 'EXPERIMENT'
-          })
-        }
-      })
+            schemaValue: 'EXPERIMENT',
+          }),
+        },
+      }),
     ])
-    expect(experimentsModule.getUserExperimentGroup('fooTest'))
-      .toBe('none')
+    expect(experimentsModule.getUserExperimentGroup('fooTest')).toBe('none')
   })
 
   test('getUserExperimentGroup returns "none" when there are no experiments', () => {
     experimentsModule._experiments.getExperiments.mockReturnValue([])
-    expect(experimentsModule.getUserExperimentGroup('anOldTestWeRemoved'))
-      .toBe('none')
+    expect(experimentsModule.getUserExperimentGroup('anOldTestWeRemoved')).toBe(
+      'none'
+    )
   })
 
   test('getExperimentGroups returns the expected values', () => {
@@ -929,13 +970,13 @@ describe('Main experiments functionality', () => {
         groups: {
           SOMETHING: experimentsModule.createExperimentGroup({
             value: 'hi',
-            schemaValue: 'SOMETHING'
+            schemaValue: 'SOMETHING',
           }),
           ANOTHER_THING: experimentsModule.createExperimentGroup({
             value: 'bye',
-            schemaValue: 'ANOTHER_THING'
-          })
-        }
+            schemaValue: 'ANOTHER_THING',
+          }),
+        },
       }),
       experimentsModule.createExperiment({
         name: 'fooTest',
@@ -945,27 +986,25 @@ describe('Main experiments functionality', () => {
         groups: {
           MY_CONTROL_GROUP: experimentsModule.createExperimentGroup({
             value: 'sameOld',
-            schemaValue: 'THE_CONTROL'
+            schemaValue: 'THE_CONTROL',
           }),
           FUN_EXPERIMENT: experimentsModule.createExperimentGroup({
             value: 'newThing',
-            schemaValue: 'EXPERIMENT'
-          })
-        }
-      })
+            schemaValue: 'EXPERIMENT',
+          }),
+        },
+      }),
     ])
-    expect(experimentsModule.getExperimentGroups('fooTest'))
-      .toEqual({
-        MY_CONTROL_GROUP: 'sameOld',
-        FUN_EXPERIMENT: 'newThing',
-        NONE: 'none'
-      })
-    expect(experimentsModule.getExperimentGroups('exampleTest'))
-      .toEqual({
-        SOMETHING: 'hi',
-        ANOTHER_THING: 'bye',
-        NONE: 'none'
-      })
+    expect(experimentsModule.getExperimentGroups('fooTest')).toEqual({
+      MY_CONTROL_GROUP: 'sameOld',
+      FUN_EXPERIMENT: 'newThing',
+      NONE: 'none',
+    })
+    expect(experimentsModule.getExperimentGroups('exampleTest')).toEqual({
+      SOMETHING: 'hi',
+      ANOTHER_THING: 'bye',
+      NONE: 'none',
+    })
   })
 
   test('getExperimentGroups returns only the "none" group when the experiment does not exist', () => {
@@ -978,19 +1017,20 @@ describe('Main experiments functionality', () => {
         groups: {
           MY_CONTROL_GROUP: experimentsModule.createExperimentGroup({
             value: 'sameOld',
-            schemaValue: 'THE_CONTROL'
+            schemaValue: 'THE_CONTROL',
           }),
           FUN_EXPERIMENT: experimentsModule.createExperimentGroup({
             value: 'newThing',
-            schemaValue: 'EXPERIMENT'
-          })
-        }
-      })
+            schemaValue: 'EXPERIMENT',
+          }),
+        },
+      }),
     ])
-    expect(experimentsModule.getExperimentGroups('thisExperimentDoesNotExist'))
-      .toEqual({
-        NONE: 'none'
-      })
+    expect(
+      experimentsModule.getExperimentGroups('thisExperimentDoesNotExist')
+    ).toEqual({
+      NONE: 'none',
+    })
   })
 
   test('assignUserToTestGroups assigns the user to all active tests but not inactive tests', () => {
@@ -1004,13 +1044,13 @@ describe('Main experiments functionality', () => {
         groups: {
           SOMETHING: experimentsModule.createExperimentGroup({
             value: 'hi',
-            schemaValue: 'SOMETHING'
+            schemaValue: 'SOMETHING',
           }),
           ANOTHER_THING: experimentsModule.createExperimentGroup({
             value: 'bye',
-            schemaValue: 'ANOTHER_THING'
-          })
-        }
+            schemaValue: 'ANOTHER_THING',
+          }),
+        },
       }),
       experimentsModule.createExperiment({
         name: 'someTest',
@@ -1020,13 +1060,13 @@ describe('Main experiments functionality', () => {
         groups: {
           GROUP_A: experimentsModule.createExperimentGroup({
             value: 'groupA',
-            schemaValue: 'THE_A_GROUP'
+            schemaValue: 'THE_A_GROUP',
           }),
           GROUP_B: experimentsModule.createExperimentGroup({
             value: 'groupB',
-            schemaValue: 'THE_B_GROUP'
-          })
-        }
+            schemaValue: 'THE_B_GROUP',
+          }),
+        },
       }),
       experimentsModule.createExperiment({
         name: 'fooTest',
@@ -1036,23 +1076,27 @@ describe('Main experiments functionality', () => {
         groups: {
           MY_CONTROL_GROUP: experimentsModule.createExperimentGroup({
             value: 'sameOld',
-            schemaValue: 'THE_CONTROL'
+            schemaValue: 'THE_CONTROL',
           }),
           FUN_EXPERIMENT: experimentsModule.createExperimentGroup({
             value: 'newThing',
-            schemaValue: 'EXPERIMENT'
-          })
-        }
-      })
+            schemaValue: 'EXPERIMENT',
+          }),
+        },
+      }),
     ])
     const mockUserInfo = getMockUserInfo()
     experimentsModule.assignUserToTestGroups(mockUserInfo)
 
     // Should store test group in localStorage.
-    expect(localStorageMgr.setItem)
-      .toHaveBeenCalledWith('tab.experiments.exampleTest', 'hi')
-    expect(localStorageMgr.setItem)
-      .toHaveBeenCalledWith('tab.experiments.fooTest', 'sameOld')
+    expect(localStorageMgr.setItem).toHaveBeenCalledWith(
+      'tab.experiments.exampleTest',
+      'hi'
+    )
+    expect(localStorageMgr.setItem).toHaveBeenCalledWith(
+      'tab.experiments.fooTest',
+      'sameOld'
+    )
 
     // Should return the assigned test groups.
     expect(experimentsModule.getUserExperimentGroup('exampleTest')).toBe('hi')
@@ -1070,13 +1114,13 @@ describe('Main experiments functionality', () => {
         groups: {
           SOMETHING: experimentsModule.createExperimentGroup({
             value: 'hi',
-            schemaValue: 'SOMETHING'
+            schemaValue: 'SOMETHING',
           }),
           ANOTHER_THING: experimentsModule.createExperimentGroup({
             value: 'bye',
-            schemaValue: 'ANOTHER_THING'
-          })
-        }
+            schemaValue: 'ANOTHER_THING',
+          }),
+        },
       }),
       experimentsModule.createExperiment({
         name: 'someTest',
@@ -1086,13 +1130,13 @@ describe('Main experiments functionality', () => {
         groups: {
           GROUP_A: experimentsModule.createExperimentGroup({
             value: 'groupA',
-            schemaValue: 'THE_A_GROUP'
+            schemaValue: 'THE_A_GROUP',
           }),
           GROUP_B: experimentsModule.createExperimentGroup({
             value: 'groupB',
-            schemaValue: 'THE_B_GROUP'
-          })
-        }
+            schemaValue: 'THE_B_GROUP',
+          }),
+        },
       }),
       experimentsModule.createExperiment({
         name: 'fooTest',
@@ -1102,14 +1146,14 @@ describe('Main experiments functionality', () => {
         groups: {
           MY_CONTROL_GROUP: experimentsModule.createExperimentGroup({
             value: 'sameOld',
-            schemaValue: 'THE_CONTROL'
+            schemaValue: 'THE_CONTROL',
           }),
           FUN_EXPERIMENT: experimentsModule.createExperimentGroup({
             value: 'newThing',
-            schemaValue: 'EXPERIMENT'
-          })
-        }
-      })
+            schemaValue: 'EXPERIMENT',
+          }),
+        },
+      }),
     ])
     const mockUserInfo = getMockUserInfo()
     experimentsModule.assignUserToTestGroups(mockUserInfo)
@@ -1117,7 +1161,7 @@ describe('Main experiments functionality', () => {
     expect(userGroupsForMutation).toEqual({
       exampleTest: 'SOMETHING',
       someTest: 'NONE',
-      fooTest: 'THE_CONTROL'
+      fooTest: 'THE_CONTROL',
     })
   })
 })
@@ -1131,13 +1175,13 @@ describe('Actual experiments we are running or will run', () => {
       {
         name: 'adExplanation',
         active: true,
-        disabled: false
+        disabled: false,
       },
       {
         name: 'oneAdForNewUsers',
         active: true,
-        disabled: false
-      }
+        disabled: false,
+      },
     ])
   })
 

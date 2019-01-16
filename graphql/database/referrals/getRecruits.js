@@ -1,4 +1,3 @@
-
 import moment from 'moment'
 import { filter } from 'lodash/collection'
 
@@ -7,9 +6,12 @@ import ReferralDataModel from './ReferralDataModel'
 import UserModel from '../users/UserModel'
 import {
   getPermissionsOverride,
-  GET_RECRUITS_LAST_ACTIVE_OVERRIDE
+  GET_RECRUITS_LAST_ACTIVE_OVERRIDE,
 } from '../../utils/permissions-overrides'
-const getRecruitsOverride = getPermissionsOverride(GET_RECRUITS_LAST_ACTIVE_OVERRIDE)
+
+const getRecruitsOverride = getPermissionsOverride(
+  GET_RECRUITS_LAST_ACTIVE_OVERRIDE
+)
 
 /**
  * Get an array of a user's recruits.
@@ -26,10 +28,17 @@ const getRecruitsOverride = getPermissionsOverride(GET_RECRUITS_LAST_ACTIVE_OVER
  * @return {string|null} recruit.lastActive - The ISO timestamp of when
  *   the recruited user last opened a tab
  */
-export const getRecruits = async (userContext, referringUserId, startTime = null, endTime = null) => {
+export const getRecruits = async (
+  userContext,
+  referringUserId,
+  startTime = null,
+  endTime = null
+) => {
   // Build the basic query
-  var refLogsQuery = ReferralDataModel.query(userContext, referringUserId)
-    .usingIndex('ReferralsByReferrer')
+  const refLogsQuery = ReferralDataModel.query(
+    userContext,
+    referringUserId
+  ).usingIndex('ReferralsByReferrer')
 
   // Validate startTime and/or endTime, if provided
   if (startTime && !isValidISOString(startTime)) {
@@ -58,23 +67,24 @@ export const getRecruits = async (userContext, referringUserId, startTime = null
 
   // Batch-get times of last tab opened for recruits of shape:
   // [{ userId: 'timeOfLastTab' }]
-  const recruitsLastActiveTimes = await UserModel.getBatch(getRecruitsOverride,
+  const recruitsLastActiveTimes = await UserModel.getBatch(
+    getRecruitsOverride,
     referralLogs.map(recruit => recruit.userId) // array of recruits' user IDs
-  ).then((recruits) => {
-    let recruitsLastActiveMap = {}
-    recruits.forEach((user) => {
+  ).then(recruits => {
+    const recruitsLastActiveMap = {}
+    recruits.forEach(user => {
       recruitsLastActiveMap[user.id] = user.lastTabTimestamp || null
     })
     return recruitsLastActiveMap
   })
 
   const recruitData = []
-  referralLogs.forEach((referralLog) => {
+  referralLogs.forEach(referralLog => {
     // Do not include any sensitive user data about recruits, because
     // this data is visible to the referrer.
     recruitData.push({
       recruitedAt: referralLog.created,
-      lastActive: recruitsLastActiveTimes[referralLog.userId] || null
+      lastActive: recruitsLastActiveTimes[referralLog.userId] || null,
     })
   })
   return recruitData
@@ -92,7 +102,7 @@ export const getRecruits = async (userContext, referringUserId, startTime = null
  *   the recruited user last opened a tab
  * @return {integer} The total number of recruits in the returned set.
  */
-export const getTotalRecruitsCount = (recruitsEdges) => {
+export const getTotalRecruitsCount = recruitsEdges => {
   if (!recruitsEdges) {
     return 0
   }
@@ -113,19 +123,20 @@ export const getTotalRecruitsCount = (recruitsEdges) => {
  * @return {integer} The number of recruits in the returned set who
  *   were active for at least one day.
  */
-export const getRecruitsActiveForAtLeastOneDay = (recruitsEdges) => {
+export const getRecruitsActiveForAtLeastOneDay = recruitsEdges => {
   if (!recruitsEdges) {
     return 0
   }
-  return filter(recruitsEdges, (recruitEdge) => {
+  return filter(recruitsEdges, recruitEdge => {
     if (!recruitEdge.node.lastActive) {
       return false
     }
     // true if "lastActive" is >1 day after "recruitedAt"
     return (
       moment(recruitEdge.node.lastActive).diff(
-        moment(recruitEdge.node.recruitedAt), 'seconds') >=
-      86400
+        moment(recruitEdge.node.recruitedAt),
+        'seconds'
+      ) >= 86400
     )
   }).length
 }

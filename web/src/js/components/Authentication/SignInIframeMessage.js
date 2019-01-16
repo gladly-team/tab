@@ -2,13 +2,8 @@ import React from 'react'
 import { Paper } from 'material-ui'
 import Typography from '@material-ui/core/Typography'
 import RaisedButton from 'material-ui/RaisedButton'
-import {
-  absoluteUrl,
-  loginURL
-} from 'js/navigation/navigation'
-import {
-  getUrlParameters
-} from 'js/utils/utils'
+import { absoluteUrl, loginURL } from 'js/navigation/navigation'
+import { getUrlParameters } from 'js/utils/utils'
 
 // This view primarily exists as an intermediary to open
 // the authentication page outside of an iframe, because
@@ -18,19 +13,19 @@ import {
 // and open a new tab; our browser extensions currently iframe
 // the page.
 class SignInIframeMessage extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       // Whether we are requiring the anonymous user to sign in.
-      isMandatoryAnonymousSignIn: getUrlParameters()['mandatory'] === 'true'
+      isMandatoryAnonymousSignIn: getUrlParameters()['mandatory'] === 'true',
     }
   }
 
-  openAuthOutsideIframe () {
+  openAuthOutsideIframe() {
     window.open(absoluteUrl(loginURL), '_top')
   }
 
-  render () {
+  render() {
     const showRequiredSignInExplanation = this.state.isMandatoryAnonymousSignIn
     var buttonLabel = 'SIGN IN'
     return (
@@ -40,33 +35,32 @@ class SignInIframeMessage extends React.Component {
           padding: 24,
           maxWidth: 400,
           backgroundColor: '#FFF',
-          marginBottom: 60
+          marginBottom: 60,
         }}
       >
         <Typography variant={'h6'}>
-          {
-            showRequiredSignInExplanation
-              ? `Great job so far!`
-              : `Let's get started!`
-          }
+          {showRequiredSignInExplanation
+            ? `Great job so far!`
+            : `Let's get started!`}
         </Typography>
-        {
-          showRequiredSignInExplanation
-            ? <Typography variant={'body2'}>
-              You've already made a positive impact! Let's keep this progress safe:
-              we ask you to sign in after a while so you don't lose access
-              to your notes, bookmarks, and Hearts (even if you drop your computer
-              in a puddle).
-            </Typography>
-            : <Typography variant={'body2'}>
-              Sign in to customize your new tab page and raise money for your favorite causes.
-            </Typography>
-        }
+        {showRequiredSignInExplanation ? (
+          <Typography variant={'body2'}>
+            You've already made a positive impact! Let's keep this progress
+            safe: we ask you to sign in after a while so you don't lose access
+            to your notes, bookmarks, and Hearts (even if you drop your computer
+            in a puddle).
+          </Typography>
+        ) : (
+          <Typography variant={'body2'}>
+            Sign in to customize your new tab page and raise money for your
+            favorite causes.
+          </Typography>
+        )}
         <span
           style={{
             display: 'flex',
             justifyContent: 'flex-end',
-            marginTop: 24
+            marginTop: 24,
           }}
         >
           <RaisedButton

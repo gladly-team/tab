@@ -1,18 +1,15 @@
-
 import React from 'react'
 import PropTypes from 'prop-types'
 import RaisedButton from 'material-ui/RaisedButton'
-import appTheme, {
-  alternateAccentColor
-} from 'js/theme/default'
+import appTheme, { alternateAccentColor } from 'js/theme/default'
 import Logo from 'js/components/Logo/Logo'
 
 class StickerCampaignThanks extends React.Component {
-  render () {
+  render() {
     const { user } = this.props
     const anchorStyle = {
       textDecoration: 'none',
-      color: alternateAccentColor
+      color: alternateAccentColor,
     }
 
     return (
@@ -23,7 +20,7 @@ class StickerCampaignThanks extends React.Component {
           paddingLeft: 12,
           paddingRight: 12,
           fontFamily: appTheme.fontFamily,
-          color: appTheme.textColor
+          color: appTheme.textColor,
         }}
       >
         <span
@@ -32,13 +29,15 @@ class StickerCampaignThanks extends React.Component {
             justifyContent: 'center',
             fontSize: 20,
             marginTop: 4,
-            lineHeight: '140%'
+            lineHeight: '140%',
           }}
         >
-          <span style={{
-            display: 'flex',
-            alignItems: 'flex-end'
-          }}>
+          <span
+            style={{
+              display: 'flex',
+              alignItems: 'flex-end',
+            }}
+          >
             <Logo style={{ height: 30, marginRight: 8 }} />
             <span>Thanks to all who spread the love!</span>
           </span>
@@ -48,58 +47,64 @@ class StickerCampaignThanks extends React.Component {
             display: 'block',
             fontSize: 14,
             marginTop: 8,
-            marginBottom: 8
+            marginBottom: 8,
           }}
         >
-          Thank you to all the Tabbers who got the word out this past week! A special congrats to
-          the <a style={anchorStyle} href='https://www.facebook.com/notes/tab-for-a-cause/tab-for-a-cause-sticker-challenge-roundup/1729753810401032/' target='_blank'>
-          top 10 recruiters</a> :)
+          Thank you to all the Tabbers who got the word out this past week! A
+          special congrats to the{' '}
+          <a
+            style={anchorStyle}
+            href="https://www.facebook.com/notes/tab-for-a-cause/tab-for-a-cause-sticker-challenge-roundup/1729753810401032/"
+            target="_blank"
+          >
+            top 10 recruiters
+          </a>{' '}
+          :)
         </span>
         <span
           style={{
             display: 'block',
             fontSize: 14,
             marginTop: 8,
-            marginBottom: 8
+            marginBottom: 8,
           }}
         >
-          We rely on people like you to spread the word so we can make an even greater positive impact.
-          Here's to more goodwill in 2018!
+          We rely on people like you to spread the word so we can make an even
+          greater positive impact. Here's to more goodwill in 2018!
         </span>
 
         <span
           style={{
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'center'
+            alignItems: 'center',
           }}
         >
           <span
             style={{
               width: 280,
               marginTop: 12,
-              marginBottom: 12
+              marginBottom: 12,
             }}
-          > {
-              (user.recruits.recruitsActiveForAtLeastOneDay >= 2)
-                ? (
-                  <span
-                    data-test-id={'sticker-campaign-thanks-success'}
-                  >
-                    <a href='https://docs.google.com/forms/d/e/1FAIpQLScVcV3EkYpkhqUG7hDGULUMJM_h57-3GnaRSg95p_UheP44dw/viewform' target='_blank'>
-                      <RaisedButton
-                        label='Claim Your Stickers'
-                        style={{
-                          display: 'block',
-                          marginTop: 8
-                        }}
-                        primary
-                      />
-                    </a>
-                  </span>
-                )
-                : null
-            }
+          >
+            {' '}
+            {user.recruits.recruitsActiveForAtLeastOneDay >= 2 ? (
+              <span data-test-id={'sticker-campaign-thanks-success'}>
+                <a
+                  href="https://docs.google.com/forms/d/e/1FAIpQLScVcV3EkYpkhqUG7hDGULUMJM_h57-3GnaRSg95p_UheP44dw/viewform"
+                  target="_blank"
+                >
+                  <RaisedButton
+                    label="Claim Your Stickers"
+                    style={{
+                      display: 'block',
+                      marginTop: 8,
+                    }}
+                    primary
+                  />
+                </a>
+              </span>
+            ) : null}
           </span>
         </span>
       </div>
@@ -112,9 +117,9 @@ StickerCampaignThanks.propTypes = {
     username: PropTypes.string.isRequired,
     recruits: PropTypes.shape({
       totalRecruits: PropTypes.number,
-      recruitsActiveForAtLeastOneDay: PropTypes.number
-    }).isRequired
-  })
+      recruitsActiveForAtLeastOneDay: PropTypes.number,
+    }).isRequired,
+  }),
 }
 
 export default StickerCampaignThanks

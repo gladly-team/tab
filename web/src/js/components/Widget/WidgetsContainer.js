@@ -1,7 +1,5 @@
 import graphql from 'babel-plugin-relay/macro'
-import {
-  createFragmentContainer
-} from 'react-relay'
+import { createFragmentContainer } from 'react-relay'
 
 import Widgets from 'js/components/Widget/WidgetsComponent'
 
@@ -11,7 +9,7 @@ export default createFragmentContainer(Widgets, {
       id
       activeWidget
       ...WidgetContainer_user
-      widgets(first: 20 enabled:true) {
+      widgets(first: 20, enabled: true) {
         edges {
           node {
             id
@@ -22,5 +20,5 @@ export default createFragmentContainer(Widgets, {
         }
       }
     }
-  `
+  `,
 })

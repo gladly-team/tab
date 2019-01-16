@@ -10,7 +10,8 @@ import * as serviceWorker from 'js/serviceWorker'
 // https://docs.sentry.io/clients/javascript/config/
 const sentryDSN = process.env.REACT_APP_SENTRY_DSN
 const sentryDebug = process.env.REACT_APP_SENTRY_DEBUG === 'true'
-const sentryEnableAutoBreadcrumbs = process.env.REACT_APP_SENTRY_ENABLE_AUTO_BREADCRUMBS === 'true'
+const sentryEnableAutoBreadcrumbs =
+  process.env.REACT_APP_SENTRY_ENABLE_AUTO_BREADCRUMBS === 'true'
 try {
   Raven.config(sentryDSN, {
     environment: process.env.REACT_APP_SENTRY_STAGE,
@@ -22,8 +23,8 @@ try {
     whitelistUrls: [
       /tab\.gladly\.io\/newtab\/static/,
       /prod-tab2017\.gladly\.io\/newtab\/static/,
-      /dev-tab2017\.gladly\.io\/newtab\/static/
-    ]
+      /dev-tab2017\.gladly\.io\/newtab\/static/,
+    ],
   }).install()
 } catch (e) {
   console.error(e)
@@ -35,7 +36,7 @@ try {
   const username = getUsername()
   if (username) {
     Raven.setUserContext({
-      username: username
+      username: username,
     })
   }
 } catch (e) {

@@ -10,19 +10,19 @@ import { alternateAccentColor } from 'js/theme/default'
 const styles = theme => ({
   inputUnderline: {
     '&:after': {
-      borderColor: alternateAccentColor
-    }
+      borderColor: alternateAccentColor,
+    },
   },
   formLabelRoot: {
     '&$formLabelFocused': {
-      color: alternateAccentColor
-    }
+      color: alternateAccentColor,
+    },
   },
-  formLabelFocused: {}
+  formLabelFocused: {},
 })
 
 class InviteFriend extends React.Component {
-  getReferralUrl () {
+  getReferralUrl() {
     const baseURL = 'https://tab.gladly.io'
     const referralUrl = this.props.user.username
       ? `${baseURL}/?u=${this.props.user.username}`
@@ -30,41 +30,44 @@ class InviteFriend extends React.Component {
     return referralUrl
   }
 
-  onTextFieldClicked () {
+  onTextFieldClicked() {
     this.input.select()
   }
 
-  render () {
+  render() {
     const { classes } = this.props
     const referralUrl = this.getReferralUrl()
 
     return (
       <TextField
         id={'refer-friend-input'}
-        inputRef={(input) => { this.input = input }}
+        inputRef={input => {
+          this.input = input
+        }}
         onClick={this.onTextFieldClicked.bind(this)}
         value={referralUrl}
         label={'Share this link'}
-        helperText={this.props.user.username
-          ? `and you'll get 350 Hearts for every person who joins!`
-          : `and have a bigger positive impact!`
+        helperText={
+          this.props.user.username
+            ? `and you'll get 350 Hearts for every person who joins!`
+            : `and have a bigger positive impact!`
         }
         InputProps={{
           classes: {
-            underline: classes.inputUnderline
-          }
+            underline: classes.inputUnderline,
+          },
         }}
         /* eslint-disable-next-line react/jsx-no-duplicate-props */
         inputProps={{
           style: {
-            textAlign: 'left'
-          }
+            textAlign: 'left',
+          },
         }}
         InputLabelProps={{
           FormLabelClasses: {
             root: classes.formLabelRoot,
-            focused: classes.formLabelFocused
-          }
+            focused: classes.formLabelFocused,
+          },
         }}
         style={this.props.style}
       />
@@ -74,14 +77,14 @@ class InviteFriend extends React.Component {
 
 InviteFriend.propTypes = {
   user: PropTypes.shape({
-    username: PropTypes.string
+    username: PropTypes.string,
   }),
   classes: PropTypes.object.isRequired,
-  style: PropTypes.object
+  style: PropTypes.object,
 }
 
 InviteFriend.defaultProps = {
-  style: {}
+  style: {},
 }
 
 export default withStyles(styles)(InviteFriend)

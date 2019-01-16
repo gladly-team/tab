@@ -1,4 +1,3 @@
-
 import { isEmpty, isNil } from 'lodash/lang'
 import { get } from 'lodash/object'
 import moment from 'moment'
@@ -23,8 +22,15 @@ import logger from '../../utils/logger'
  *   which the user has been assigned.
  * @return {Promise<User>}  A promise that resolves into a User instance.
  */
-const createUser = async (userContext, userId, email = null, referralData = null,
-  experimentGroups = {}, extensionInstallId = null, extensionInstallTimeApprox = null) => {
+const createUser = async (
+  userContext,
+  userId,
+  email = null, // eslint-disable-line no-unused-vars
+  referralData = null,
+  experimentGroups = {},
+  extensionInstallId = null,
+  extensionInstallTimeApprox = null
+) => {
   // Get or create the user.
   const userInfo = Object.assign(
     {
@@ -34,30 +40,33 @@ const createUser = async (userContext, userId, email = null, referralData = null
       // but it isn't guaranteed to be verified (may not truly belong
       // to the user).
       email: userContext.email || null,
-      joined: moment.utc().toISOString()
+      joined: moment.utc().toISOString(),
     },
-    !isNil(extensionInstallId) ? {
-      extensionInstallId: extensionInstallId
-    }
+    !isNil(extensionInstallId)
+      ? {
+          extensionInstallId,
+        }
       : null,
-    !isNil(extensionInstallTimeApprox) ? {
-      extensionInstallTimeApprox: extensionInstallTimeApprox
-    }
+    !isNil(extensionInstallTimeApprox)
+      ? {
+          extensionInstallTimeApprox,
+        }
       : null
   )
+  let response
   try {
-    var response = await UserModel.getOrCreate(userContext, userInfo)
+    response = await UserModel.getOrCreate(userContext, userInfo)
   } catch (e) {
     throw e
   }
-  var returnedUser = response.item
+  let returnedUser = response.item
 
   // If the user's email differs from the one in the database,
   // update it. This will happen when anonymous users sign in.
   if (returnedUser.email !== userContext.email) {
     returnedUser = await UserModel.update(userContext, {
       id: userId,
-      email: userContext.email
+      email: userContext.email,
     })
   }
 
@@ -77,7 +86,7 @@ const createUser = async (userContext, userId, email = null, referralData = null
 
   /**
    * After this point, we handle setup for brand new users only.
-   **/
+   * */
 
   // Set up default widgets.
   try {
@@ -89,38 +98,49 @@ const createUser = async (userContext, userId, email = null, referralData = null
   // Log referral data.
   if (referralData && !isEmpty(referralData)) {
     const referringUserUsername = referralData.referringUser
-    const referringChannelId = (
-      referralData.referringChannel
+    const referringChannelId = referralData.referringChannel
       ? referralData.referringChannel
       : null
-    )
 
     // Referring user may not exist if referring username
     // was manipulated.
-    var referringUserId = null
+    let referringUserId = null
     try {
       if (referringUserUsername) {
-        const referringUser = await getUserByUsername(userContext,
-          referringUserUsername)
+        const referringUser = await getUserByUsername(
+          userContext,
+          referringUserUsername
+        )
         referringUserId = referringUser.id
       }
-    } catch (e) {}
+    } catch (e) {} // eslint-disable-line no-empty
 
     // Log the referral data.
     try {
-      await logReferralData(userContext, userId, referringUserId, referringChannelId)
+      await logReferralData(
+        userContext,
+        userId,
+        referringUserId,
+        referringChannelId
+      )
     } catch (e) {
-      logger.error(new Error(`Could not log referrer data:
+      logger.error(
+        new Error(`Could not log referrer data:
         user: ${userInfo.id},
         referring user: ${referringUserId}.
         ${e}
-      `))
+      `)
+      )
     }
   }
 
   // Log the experimental groups to which the user belongs.
   try {
-    returnedUser = await logUserExperimentGroups(userContext, userId, experimentGroups)
+    returnedUser = await logUserExperimentGroups(
+      userContext,
+      userId,
+      experimentGroups
+    )
   } catch (e) {
     throw e
   }

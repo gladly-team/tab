@@ -5,19 +5,19 @@ import CircularProgress from 'material-ui/CircularProgress'
 import Forward from 'material-ui/svg-icons/content/forward'
 
 class AuthActionButtom extends React.Component {
-  onClicked () {
+  onClicked() {
     if (!this.props.loading) {
       this.props.onClicked()
     }
   }
 
-  render () {
+  render() {
     var loginIcon = (
       <Forward
         style={{
           marginTop: -3,
           marginRight: 8,
-          width: 30
+          width: 30,
         }}
       />
     )
@@ -30,11 +30,11 @@ class AuthActionButtom extends React.Component {
             width: 30,
             height: 30,
             marginTop: -3,
-            marginRight: 8
+            marginRight: 8,
           }}
           innerStyle={{
             width: 30,
-            height: 30
+            height: 30,
           }}
         />
       )
@@ -49,15 +49,16 @@ class AuthActionButtom extends React.Component {
             color: '#FFF',
             border: '1px solid #FFF',
             display: 'flex',
-            alignItems: 'center'
+            alignItems: 'center',
           }}
-          labelPosition='before'
+          labelPosition="before"
           labelStyle={{
             display: 'inline-block',
-            marginTop: -3
+            marginTop: -3,
           }}
           icon={loginIcon}
-          onClick={this.onClicked.bind(this)} />
+          onClick={this.onClicked.bind(this)}
+        />
       </div>
     )
   }
@@ -68,11 +69,11 @@ AuthActionButtom.propTypes = {
   btnId: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   loading: PropTypes.bool.isRequired,
-  onClicked: PropTypes.func.isRequired
+  onClicked: PropTypes.func.isRequired,
 }
 
 AuthActionButtom.defaultProps = {
-  containerStyle: {}
+  containerStyle: {},
 }
 
 export default AuthActionButtom

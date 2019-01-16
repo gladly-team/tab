@@ -12,22 +12,23 @@ import logger from 'js/utils/logger'
 // appended to its filename, so we should rename it when
 // it's modified. We should only add CSS to this external
 // stylesheet when absolutely necessary.
-const searchExternalCSSLink = 'https://tab.gladly.io/newtab/search-2018.29.11.16.35.css'
+const searchExternalCSSLink =
+  'https://tab.gladly.io/newtab/search-2018.29.11.16.35.css'
 
 const styles = theme => ({
   searchAdsContainer: {
     '& iframe': {
-      width: '100%'
+      width: '100%',
     },
     // To address the unnecessary bottom padding in the ads
     // iframe.
-    marginBottom: -16
+    marginBottom: -16,
   },
   searchResultsContainer: {
     '& iframe': {
-      width: '100%'
-    }
-  }
+      width: '100%',
+    },
+  },
 })
 
 const backgroundColor = '#fff'
@@ -43,8 +44,8 @@ const resultStyle = {
     bold: false,
     onHover: {
       color: '#1a0dab',
-      underline: true
-    }
+      underline: true,
+    },
   },
   description: {
     fontSize: 13,
@@ -53,8 +54,8 @@ const resultStyle = {
     bold: false,
     onHover: {
       color: '#505050',
-      underline: false
-    }
+      underline: false,
+    },
   },
   URL: {
     fontSize: 13,
@@ -63,9 +64,9 @@ const resultStyle = {
     bold: false,
     onHover: {
       color: '#007526',
-      underline: false
-    }
-  }
+      underline: false,
+    },
+  },
 }
 
 const templateStyles = {
@@ -79,13 +80,13 @@ const templateStyles = {
     // How many lines to show the ad on.
     // adLayout: 3,
     // Additional CSS to apply within the YPA iframe.
-    cssLink: searchExternalCSSLink
+    cssLink: searchExternalCSSLink,
   },
   // The "Ads" label.
   AdUnitLabel: {
     position: 'Top Left',
     fontsize: 11, // valid values: 6-24
-    color: grey
+    color: grey,
   },
   Title: {
     fontsize: resultStyle.title.fontSize,
@@ -94,8 +95,8 @@ const templateStyles = {
     bold: resultStyle.title.bold,
     onHover: {
       color: resultStyle.title.onHover.color,
-      underline: resultStyle.title.onHover.underline
-    }
+      underline: resultStyle.title.onHover.underline,
+    },
   },
   Description: {
     fontsize: resultStyle.description.fontSize,
@@ -104,8 +105,8 @@ const templateStyles = {
     bold: resultStyle.description.bold,
     onHover: {
       color: resultStyle.description.onHover.color,
-      underline: resultStyle.description.onHover.underline
-    }
+      underline: resultStyle.description.onHover.underline,
+    },
   },
   URL: {
     fontsize: resultStyle.URL.fontSize,
@@ -114,8 +115,8 @@ const templateStyles = {
     bold: resultStyle.URL.bold,
     onHover: {
       color: resultStyle.URL.onHover.color,
-      underline: resultStyle.URL.onHover.underline
-    }
+      underline: resultStyle.URL.onHover.underline,
+    },
   },
   LocalAds: {
     fontsize: resultStyle.description.fontSize,
@@ -124,8 +125,8 @@ const templateStyles = {
     bold: resultStyle.description.bold,
     onHover: {
       color: resultStyle.description.onHover.color,
-      underline: resultStyle.description.onHover.underline
-    }
+      underline: resultStyle.description.onHover.underline,
+    },
   },
   MerchantRating: {
     fontsize: resultStyle.description.fontSize,
@@ -134,8 +135,8 @@ const templateStyles = {
     bold: resultStyle.description.bold,
     onHover: {
       color: resultStyle.description.onHover.color,
-      underline: resultStyle.description.onHover.underline
-    }
+      underline: resultStyle.description.onHover.underline,
+    },
   },
   SiteLink: {
     fontsize: resultStyle.description.fontSize,
@@ -145,8 +146,8 @@ const templateStyles = {
     onHover: {
       // Same as title
       color: resultStyle.title.onHover.color,
-      underline: resultStyle.title.onHover.underline
-    }
+      underline: resultStyle.title.onHover.underline,
+    },
   },
   EnhancedSiteLink: {
     fontsize: resultStyle.description.fontSize,
@@ -156,8 +157,8 @@ const templateStyles = {
     onHover: {
       // Same as title
       color: resultStyle.title.onHover.color,
-      underline: resultStyle.title.onHover.underline
-    }
+      underline: resultStyle.title.onHover.underline,
+    },
   },
   SmartAnnotations: {
     fontsize: resultStyle.description.fontSize,
@@ -166,17 +167,17 @@ const templateStyles = {
     bold: resultStyle.description.bold,
     onHover: {
       color: resultStyle.description.onHover.color,
-      underline: resultStyle.description.onHover.underline
-    }
+      underline: resultStyle.description.onHover.underline,
+    },
   },
   ImageInAds: {
     align: 'right',
-    size: '50x50'
+    size: '50x50',
   },
   OfficialSiteBadge: {
     fontsize: resultStyle.description.fontSize,
     color: backgroundColor,
-    backgroundColor: grey
+    backgroundColor: grey,
   },
   CallExtension: {
     fontsize: resultStyle.description.fontSize,
@@ -186,9 +187,9 @@ const templateStyles = {
     onHover: {
       // Same as title
       color: resultStyle.title.onHover.color,
-      underline: resultStyle.title.onHover.underline
-    }
-  }
+      underline: resultStyle.title.onHover.underline,
+    },
+  },
 }
 
 /**
@@ -230,7 +231,7 @@ const fetchSearchResults = (query = null, onNoResults = () => {}) => {
     ReviewExtension: false,
     // Not in YPA documentation. Wheteher to show a number
     // of keywords that look mostly unhelpful.
-    CalloutExtension: false
+    CalloutExtension: false,
   }
 
   // Fetch search results.
@@ -238,10 +239,10 @@ const fetchSearchResults = (query = null, onNoResults = () => {}) => {
   // clone everything we pass.
   window.ypaAds.insertMultiAd({
     ypaPubParams: {
-      query: query
+      query: query,
     },
     ypaAdTagOptions: {
-      adultFilter: false // false means do not allow adult ads
+      adultFilter: false, // false means do not allow adult ads
     },
     ypaAdConfig: '00000129a',
     ypaAdTypeTag: '',
@@ -263,15 +264,15 @@ const fetchSearchResults = (query = null, onNoResults = () => {}) => {
         ypaSlotOptions: {
           AdOptions: {
             Mobile: Object.assign({}, cloneDeep(adOptions), {
-              AdRange: '1-2'
+              AdRange: '1-2',
             }),
-            DeskTop: Object.assign({}, cloneDeep(adOptions))
+            DeskTop: Object.assign({}, cloneDeep(adOptions)),
           },
           TemplateOptions: {
             Mobile: cloneDeep(templateStyles),
-            DeskTop: cloneDeep(templateStyles)
-          }
-        }
+            DeskTop: cloneDeep(templateStyles),
+          },
+        },
       },
       {
         ypaAdSlotId: 'GY_Algo',
@@ -283,31 +284,30 @@ const fetchSearchResults = (query = null, onNoResults = () => {}) => {
         ypaSlotOptions: {
           TemplateOptions: {
             Mobile: cloneDeep(templateStyles),
-            DeskTop: cloneDeep(templateStyles)
-          }
-        }
-      }
-    ]
+            DeskTop: cloneDeep(templateStyles),
+          },
+        },
+      },
+    ],
   })
 }
 
 class SearchResults extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       noSearchResults: false,
-      unexpectedSearchError: false
+      unexpectedSearchError: false,
     }
   }
 
-  getSearchResults () {
+  getSearchResults() {
     if (!window.ypaAds) {
       console.error(`
         Search provider Javascript not loaded.
-        Could not fetch search results.`
-      )
+        Could not fetch search results.`)
       this.setState({
-        unexpectedSearchError: true
+        unexpectedSearchError: true,
       })
       return
     }
@@ -319,54 +319,60 @@ class SearchResults extends React.Component {
     // Reset state of search results.
     this.setState({
       noSearchResults: false,
-      unexpectedSearchError: false
+      unexpectedSearchError: false,
     })
 
     const self = this
     try {
-      fetchSearchResults(query, (err) => {
+      fetchSearchResults(query, err => {
         if (err.NO_COVERAGE) {
           // No results for this search.
           self.setState({
-            noSearchResults: true
+            noSearchResults: true,
           })
         } else if (err.URL_UNREGISTERED) {
           self.setState({
-            unexpectedSearchError: true
+            unexpectedSearchError: true,
           })
-          logger.error(new Error('Domain is not registered with our search partner.'))
+          logger.error(
+            new Error('Domain is not registered with our search partner.')
+          )
         } else {
           self.setState({
-            unexpectedSearchError: true
+            unexpectedSearchError: true,
           })
           logger.error(new Error('Unexpected search error:', err))
         }
       })
     } catch (e) {
       this.setState({
-        unexpectedSearchError: true
+        unexpectedSearchError: true,
       })
       logger.error(e)
     }
   }
 
-  componentDidUpdate (prevProps) {
+  componentDidUpdate(prevProps) {
     if (this.props.query && this.props.query !== prevProps.query) {
       this.getSearchResults()
     }
   }
 
-  render () {
+  render() {
     const { query, classes, style } = this.props
     return (
       <div
-        data-test-id='search-results-container'
-        style={Object.assign({}, {
-          // Min height prevents visibly shifting content below,
-          // like the footer.
-          minHeight: this.state.noSearchResults ? 0 : 1200,
-          boxSizing: 'border-box'
-        }, style)}
+        data-test-id="search-results-container"
+        style={Object.assign(
+          {},
+          {
+            // Min height prevents visibly shifting content below,
+            // like the footer.
+            minHeight: this.state.noSearchResults ? 0 : 1200,
+            boxSizing: 'border-box',
+          },
+          style
+        )}
       >
         <Helmet
           onChangeClientState={(newState, addedTags) => {
@@ -381,35 +387,28 @@ class SearchResults extends React.Component {
                 self.getSearchResults()
               })
             }
-          }
-          }
+          }}
         >
-          <script src='https://s.yimg.com/uv/dm/scripts/syndication.js' />
-          <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:300,400,500' />
+          <script src="https://s.yimg.com/uv/dm/scripts/syndication.js" />
+          <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
+          />
         </Helmet>
         <div>
-          { this.state.noSearchResults
-            ? (
-              <Typography variant={'body1'} gutterBottom>
-                No results found for <span style={{ fontWeight: 'bold' }}>{query}</span>
-              </Typography>
-            ) : null
-          }
-          { this.state.unexpectedSearchError
-            ? (
-              <Typography variant={'body1'} gutterBottom>
-                Unable to search at this time.
-              </Typography>
-            ) : null
-          }
-          <div
-            id='search-ads'
-            className={classes.searchAdsContainer}
-          />
-          <div
-            id='search-results'
-            className={classes.searchResultsContainer}
-          />
+          {this.state.noSearchResults ? (
+            <Typography variant={'body1'} gutterBottom>
+              No results found for{' '}
+              <span style={{ fontWeight: 'bold' }}>{query}</span>
+            </Typography>
+          ) : null}
+          {this.state.unexpectedSearchError ? (
+            <Typography variant={'body1'} gutterBottom>
+              Unable to search at this time.
+            </Typography>
+          ) : null}
+          <div id="search-ads" className={classes.searchAdsContainer} />
+          <div id="search-results" className={classes.searchResultsContainer} />
         </div>
       </div>
     )
@@ -419,11 +418,11 @@ class SearchResults extends React.Component {
 SearchResults.propTypes = {
   query: PropTypes.string,
   classes: PropTypes.object.isRequired,
-  style: PropTypes.object
+  style: PropTypes.object,
 }
 
 SearchResults.defaultProps = {
-  style: {}
+  style: {},
 }
 
 export default withStyles(styles)(SearchResults)

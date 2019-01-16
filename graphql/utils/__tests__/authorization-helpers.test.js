@@ -3,7 +3,7 @@
 import {
   createGraphQLContext,
   getUserClaimsFromLambdaEvent,
-  permissionAuthorizers
+  permissionAuthorizers,
 } from '../authorization-helpers'
 
 describe('authorization-helpers', () => {
@@ -11,12 +11,12 @@ describe('authorization-helpers', () => {
     const claims = {
       id: 'abc123',
       email: 'foo@bar.com',
-      email_verified: 'true'
+      email_verified: 'true',
     }
     const minimalLambdaEventObj = {
       requestContext: {
-        authorizer: {...claims}
-      }
+        authorizer: { ...claims },
+      },
     }
     const fetchedClaims = getUserClaimsFromLambdaEvent(minimalLambdaEventObj)
     expect(fetchedClaims).toEqual(claims)
@@ -26,14 +26,14 @@ describe('authorization-helpers', () => {
     const userClaims = {
       id: 'abc123',
       email: 'foo@bar.com',
-      email_verified: 'true'
+      email_verified: 'true',
     }
     const expectedContext = {
       user: {
         id: 'abc123',
         email: 'foo@bar.com',
-        emailVerified: true
-      }
+        emailVerified: true,
+      },
     }
     const context = createGraphQLContext(userClaims)
     expect(expectedContext).toEqual(context)
@@ -44,18 +44,21 @@ describe('permission authorizer functions', () => {
   const user = {
     id: 'abcdefghijklmno',
     email: 'abc@example.com',
-    emailVerified: true
+    emailVerified: true,
   }
 
   test('userIdMatchesHashKey works if user ID matches hash key', () => {
-    expect(permissionAuthorizers.userIdMatchesHashKey(
-      user, 'abcdefghijklmno')
+    expect(
+      permissionAuthorizers.userIdMatchesHashKey(user, 'abcdefghijklmno')
     ).toBe(true)
   })
 
   test('userIdMatchesHashKey fails if user ID does not match hash key', () => {
-    expect(permissionAuthorizers.userIdMatchesHashKey(
-      user, '95bbefbf-63d1-4d36-931e-212fbe2bc3d9')
+    expect(
+      permissionAuthorizers.userIdMatchesHashKey(
+        user,
+        '95bbefbf-63d1-4d36-931e-212fbe2bc3d9'
+      )
     ).toBe(false)
   })
 })

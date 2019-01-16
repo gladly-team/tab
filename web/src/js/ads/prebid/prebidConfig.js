@@ -1,4 +1,3 @@
-
 import getPrebidPbjs from 'js/ads/prebid/getPrebidPbjs'
 import { isInEuropeanUnion } from 'js/utils/client-location'
 import {
@@ -11,7 +10,7 @@ import {
   SECOND_VERTICAL_AD_UNIT_ID,
   SECOND_VERTICAL_AD_SLOT_DOM_ID,
   HORIZONTAL_AD_UNIT_ID,
-  HORIZONTAL_AD_SLOT_DOM_ID
+  HORIZONTAL_AD_SLOT_DOM_ID,
 } from 'js/ads/adSettings'
 
 const getAdUnits = () => {
@@ -22,61 +21,61 @@ const getAdUnits = () => {
     code: HORIZONTAL_AD_SLOT_DOM_ID,
     mediaTypes: {
       banner: {
-        sizes: getHorizontalAdSizes()
-      }
+        sizes: getHorizontalAdSizes(),
+      },
     },
     bids: [
       {
         bidder: 'sonobi',
         params: {
           dom_id: HORIZONTAL_AD_SLOT_DOM_ID,
-          ad_unit: HORIZONTAL_AD_UNIT_ID
-        }
+          ad_unit: HORIZONTAL_AD_UNIT_ID,
+        },
       },
       {
         bidder: 'pulsepoint',
         params: {
           cf: '728X90',
           cp: '560174',
-          ct: '460981'
-        }
+          ct: '460981',
+        },
       },
       {
         bidder: 'aol',
         params: {
           network: '10559.1',
           placement: '4117691',
-          sizeId: '225'
-        }
+          sizeId: '225',
+        },
       },
       {
         bidder: 'sovrn',
         params: {
-          tagid: '438918'
-        }
+          tagid: '438918',
+        },
       },
       {
         bidder: 'openx',
         params: {
           unit: '538658529',
-          delDomain: 'tabforacause-d.openx.net'
-        }
+          delDomain: 'tabforacause-d.openx.net',
+        },
       },
       // EMX Digital was formerly brealtime.
       // http://prebid.org/dev-docs/bidders.html#emx_digital
       {
         bidder: 'emx_digital',
         params: {
-          tagid: '29672'
-        }
+          tagid: '29672',
+        },
       },
       {
         bidder: 'rhythmone',
         params: {
-          placementId: '73423'
-        }
-      }
-    ]
+          placementId: '73423',
+        },
+      },
+    ],
   }
 
   // Rectangle-style ad with all bidders
@@ -84,59 +83,59 @@ const getAdUnits = () => {
     code: VERTICAL_AD_SLOT_DOM_ID,
     mediaTypes: {
       banner: {
-        sizes: getVerticalAdSizes()
-      }
+        sizes: getVerticalAdSizes(),
+      },
     },
     bids: [
       {
         bidder: 'sonobi',
         params: {
           dom_id: VERTICAL_AD_SLOT_DOM_ID,
-          ad_unit: VERTICAL_AD_UNIT_ID
-        }
+          ad_unit: VERTICAL_AD_UNIT_ID,
+        },
       },
       {
         bidder: 'pulsepoint',
         params: {
           cf: '300X250',
           cp: '560174',
-          ct: '460982'
-        }
+          ct: '460982',
+        },
       },
       {
         bidder: 'aol',
         params: {
           network: '10559.1',
           placement: '4117692',
-          sizeId: '170'
-        }
+          sizeId: '170',
+        },
       },
       {
         bidder: 'sovrn',
         params: {
-          tagid: '438916'
-        }
+          tagid: '438916',
+        },
       },
       {
         bidder: 'openx',
         params: {
           unit: '538658529',
-          delDomain: 'tabforacause-d.openx.net'
-        }
+          delDomain: 'tabforacause-d.openx.net',
+        },
       },
       {
         bidder: 'emx_digital',
         params: {
-          tagid: '29673'
-        }
+          tagid: '29673',
+        },
       },
       {
         bidder: 'rhythmone',
         params: {
-          placementId: '73423'
-        }
-      }
-    ]
+          placementId: '73423',
+        },
+      },
+    ],
   }
 
   // Rectangle-style ad with some bidders for when
@@ -149,45 +148,45 @@ const getAdUnits = () => {
     code: SECOND_VERTICAL_AD_SLOT_DOM_ID,
     mediaTypes: {
       banner: {
-        sizes: getVerticalAdSizes()
-      }
+        sizes: getVerticalAdSizes(),
+      },
     },
     bids: [
       {
         bidder: 'sonobi',
         params: {
           dom_id: SECOND_VERTICAL_AD_SLOT_DOM_ID,
-          ad_unit: SECOND_VERTICAL_AD_UNIT_ID
-        }
+          ad_unit: SECOND_VERTICAL_AD_UNIT_ID,
+        },
       },
       {
         bidder: 'pulsepoint',
         params: {
           cf: '300X250',
           cp: '560174',
-          ct: '665497'
-        }
+          ct: '665497',
+        },
       },
       {
         bidder: 'aol',
         params: {
           network: '10559.1',
           placement: '4997858',
-          sizeId: '170'
-        }
+          sizeId: '170',
+        },
       },
       {
         bidder: 'sovrn',
         params: {
-          tagid: '589343'
-        }
+          tagid: '589343',
+        },
       },
       {
         bidder: 'openx',
         params: {
           unit: '538658529',
-          delDomain: 'tabforacause-d.openx.net'
-        }
+          delDomain: 'tabforacause-d.openx.net',
+        },
       },
       // {
       //   bidder: 'emx_digital',
@@ -198,10 +197,10 @@ const getAdUnits = () => {
       {
         bidder: 'rhythmone',
         params: {
-          placementId: '73423'
-        }
-      }
-    ]
+          placementId: '73423',
+        },
+      },
+    ],
   }
 
   if (!numAdsToShow) {
@@ -209,15 +208,12 @@ const getAdUnits = () => {
   } else if (numAdsToShow === 1) {
     return [horizontalAdUnit]
   } else if (numAdsToShow === 2) {
-    return [
-      horizontalAdUnit,
-      verticalAdUnitForTwoAds
-    ]
+    return [horizontalAdUnit, verticalAdUnitForTwoAds]
   } else {
     return [
       horizontalAdUnit,
       firstVerticalAdUnitForThreeAds,
-      secondVerticalAdUnitForThreeAds
+      secondVerticalAdUnitForThreeAds,
     ]
   }
 }
@@ -248,8 +244,12 @@ export default () => {
 
     pbjs.que.push(() => {
       // http://prebid.org/dev-docs/publisher-api-reference.html#module_pbjs.setConfig
-      const protocol = process.env.REACT_APP_WEBSITE_PROTOCOL ? process.env.REACT_APP_WEBSITE_PROTOCOL : 'https'
-      const publisherDomain = `${protocol}://${process.env.REACT_APP_WEBSITE_DOMAIN}`
+      const protocol = process.env.REACT_APP_WEBSITE_PROTOCOL
+        ? process.env.REACT_APP_WEBSITE_PROTOCOL
+        : 'https'
+      const publisherDomain = `${protocol}://${
+        process.env.REACT_APP_WEBSITE_DOMAIN
+      }`
       const pagePath = window.location.pathname
       pbjs.setConfig({
         // bidderTimeout: 700 // default
@@ -265,9 +265,9 @@ export default () => {
             // poor ad performance.
             iframe: {
               bidders: 'emx_digital',
-              filter: 'include'
-            }
-          }
+              filter: 'include',
+            },
+          },
         },
         // GDPR consent. Only enable the consentManagement module here
         // if consent is required, to avoid the unnecessary delay of calling
@@ -277,27 +277,27 @@ export default () => {
           consentManagement: {
             cmpApi: 'iab',
             timeout: CONSENT_MANAGEMENT_TIMEOUT,
-            allowAuctionWithoutConsent: true
-          }
-        })
+            allowAuctionWithoutConsent: true,
+          },
+        }),
       })
 
       pbjs.addAdUnits(adUnits)
       pbjs.bidderSettings = {
         aol: {
-        // AOL sends gross CPM.
-          bidCpmAdjustment: function (bidCpm) {
-            return bidCpm * 0.80
-          }
-        }
+          // AOL sends gross CPM.
+          bidCpmAdjustment: function(bidCpm) {
+            return bidCpm * 0.8
+          },
+        },
       }
 
       pbjs.requestBids({
-        bidsBackHandler: handleAuctionEnd
+        bidsBackHandler: handleAuctionEnd,
       })
     })
 
-    function handleAuctionEnd () {
+    function handleAuctionEnd() {
       resolve()
     }
   })

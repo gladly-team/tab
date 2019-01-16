@@ -9,14 +9,14 @@ import TextField from '@material-ui/core/TextField'
 import appTheme, {
   dashboardTransparentBackground,
   widgetEditButtonInactive,
-  widgetEditButtonHover
+  widgetEditButtonHover,
 } from 'js/theme/default'
 
 import { withStyles } from '@material-ui/core/styles'
 
 // Custom styling for placeholder text.
 const placeholder = {
-  color: appTheme.textField.underlineColor
+  color: appTheme.textField.underlineColor,
 }
 
 // https://github.com/callemall/material-ui/blob/86dbd4986c6fdc1f32c088abb3b73d25974272e8/src/Input/Input.js#L117-L120
@@ -25,23 +25,23 @@ const styles = theme => ({
     '&::-webkit-input-placeholder': placeholder,
     '&::-moz-placeholder': placeholder,
     '&:-ms-input-placeholder': placeholder,
-    '&::-ms-input-placeholder': placeholder
-  }
+    '&::-ms-input-placeholder': placeholder,
+  },
 })
 
 class Note extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
-      showDeleteButton: false
+      showDeleteButton: false,
     }
 
     this.noteChangedTimer = 0
     this.hoverTimer = 0
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     if (this.hoverTimer) {
       clearTimeout(this.hoverTimer)
     }
@@ -50,32 +50,32 @@ class Note extends React.Component {
     }
   }
 
-  removeStickyNote () {
+  removeStickyNote() {
     this.props.removeStickyNote(this.props.index)
   }
 
-  onMouseHoverChange (isHovering) {
+  onMouseHoverChange(isHovering) {
     if (this.hoverTimer) {
       clearTimeout(this.hoverTimer)
     }
     if (isHovering) {
       this.hoverTimer = setTimeout(() => {
         this.setState({
-          showDeleteButton: true
+          showDeleteButton: true,
         })
       }, 500)
     } else {
       this.setState({
-        showDeleteButton: false
+        showDeleteButton: false,
       })
     }
   }
 
-  onNoteClick () {
+  onNoteClick() {
     this.noteInput.focus()
   }
 
-  onNoteChanged (event) {
+  onNoteChanged(event) {
     if (this.noteChangedTimer) {
       clearTimeout(this.noteChangedTimer)
     }
@@ -87,7 +87,7 @@ class Note extends React.Component {
     }, 500)
   }
 
-  getNoteDate () {
+  getNoteDate() {
     var noteDateFormat = 'MMM D'
     var now = moment()
     var noteDate = moment(this.props.note.created)
@@ -97,7 +97,7 @@ class Note extends React.Component {
     return noteDate.format(noteDateFormat)
   }
 
-  render () {
+  render() {
     const { note, classes } = this.props
 
     const defaultPaper = {
@@ -106,17 +106,17 @@ class Note extends React.Component {
       borderRadius: 3,
       borderLeftStyle: 'solid',
       borderLeftColor: note.color,
-      borderLeftWidth: 5
+      borderLeftWidth: 5,
     }
     const noteContent = {
-      padding: '0 15px 5px 15px'
+      padding: '0 15px 5px 15px',
     }
     const chip = {
       style: {
-        margin: 5
+        margin: 5,
       },
       labelColor: appTheme.textField.underlineColor,
-      backgroundColor: 'rgba(0,0,0,0)'
+      backgroundColor: 'rgba(0,0,0,0)',
     }
 
     const otherTransitions = 'fill 0.15s ease-in'
@@ -129,7 +129,7 @@ class Note extends React.Component {
         ? `opacity 0.2s ease-in 0.5s, ${otherTransitions}`
         : `opacity 0.1s ease-in, ${otherTransitions}`,
       pointerEvents: this.state.showDeleteButton ? 'all' : 'none',
-      display: 'inline-block'
+      display: 'inline-block',
     }
     var noteDate = this.getNoteDate()
 
@@ -142,11 +142,12 @@ class Note extends React.Component {
           onMouseEnter={this.onMouseHoverChange.bind(this, true)}
           onMouseLeave={this.onMouseHoverChange.bind(this, false)}
         >
-          <div style={{display: 'inline-block'}}>
+          <div style={{ display: 'inline-block' }}>
             <Chip
               labelColor={chip.labelColor}
               backgroundColor={chip.backgroundColor}
-              style={chip.style}>
+              style={chip.style}
+            >
               {noteDate}
             </Chip>
           </div>
@@ -154,7 +155,8 @@ class Note extends React.Component {
             color={widgetEditButtonInactive}
             hoverColor={widgetEditButtonHover}
             style={deleteIconStyle}
-            onClick={this.removeStickyNote.bind(this)} />
+            onClick={this.removeStickyNote.bind(this)}
+          />
           <div style={noteContent}>
             <TextField
               id={'note-content-' + this.props.index}
@@ -163,18 +165,20 @@ class Note extends React.Component {
                 style: {
                   color: '#FFF',
                   fontSize: 14,
-                  fontFamily: appTheme.fontFamily
+                  fontFamily: appTheme.fontFamily,
                 },
                 classes: {
-                  input: classes.textFieldInput
-                }
+                  input: classes.textFieldInput,
+                },
               }}
               multiline
               fullWidth
               placeholder={'Your note here...'}
               defaultValue={note.content ? note.content : ''}
               onChange={this.onNoteChanged.bind(this)}
-              inputRef={(note) => { this.noteInput = note }}
+              inputRef={note => {
+                this.noteInput = note
+              }}
             />
           </div>
         </div>
@@ -188,7 +192,7 @@ Note.propTypes = {
   removeStickyNote: PropTypes.func.isRequired,
   note: PropTypes.object.isRequired,
   onNoteUpdated: PropTypes.func,
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
 }
 
 export default withStyles(styles)(Note)
