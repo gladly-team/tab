@@ -1,3 +1,4 @@
+/* eslint no-use-before-define: 0 */
 import {
   GraphQLBoolean,
   GraphQLFloat,
@@ -64,6 +65,7 @@ import getCharityVcReceived from '../database/donations/getCharityVcReceived'
 
 import BackgroundImageModel from '../database/backgroundImages/BackgroundImageModel'
 
+// eslint-disable-next-line import/no-named-as-default
 import getRecruits, {
   getTotalRecruitsCount,
   getRecruitsActiveForAtLeastOneDay,
@@ -85,6 +87,7 @@ class App {
     return new App(id)
   }
 }
+
 /**
  * We get the node interface and field from the Relay library.
  *
@@ -116,18 +119,23 @@ const { nodeInterface, nodeField } = nodeDefinitions(
   },
   obj => {
     if (obj instanceof App) {
+      // eslint-disable-next-line no-use-before-define
       return appType
     }
     if (obj instanceof UserModel) {
+      // eslint-disable-next-line no-use-before-define
       return userType
     }
     if (obj instanceof Widget) {
+      // eslint-disable-next-line no-use-before-define
       return widgetType
     }
     if (obj instanceof CharityModel) {
+      // eslint-disable-next-line no-use-before-define
       return charityType
     }
     if (obj instanceof BackgroundImageModel) {
+      // eslint-disable-next-line no-use-before-define
       return backgroundImageType
     }
     return null
@@ -267,7 +275,7 @@ const userType = new GraphQLObjectType({
     userId: {
       type: GraphQLString,
       description: "Users's username",
-      resolve: (user, _) => user.id,
+      resolve: user => user.id,
     },
     backgroundImage: {
       type: backgroundImageType,
@@ -290,7 +298,7 @@ const userType = new GraphQLObjectType({
       description:
         'Whether or not the user was created during this request;' /
         'helpful for a "get or create" mutation',
-      resolve: (user, _) =>
+      resolve: user =>
         // The user will only have the 'justCreated' field when it's a
         // brand new user item
         !!user.justCreated,
@@ -314,7 +322,7 @@ const userType = new GraphQLObjectType({
     maxTabsDay: {
       type: maxTabsDayType,
       description: "Info about the user's day of most opened tabs",
-      resolve: (user, _) => user.maxTabsDay.maxDay,
+      resolve: user => user.maxTabsDay.maxDay,
     },
     level: {
       type: GraphQLInt,
@@ -1208,7 +1216,8 @@ const mutationType = new GraphQLObjectType({
  * Finally, we construct our schema (whose starting query type is the query
  * type we defined above) and export it.
  */
-export var Schema = new GraphQLSchema({
+// eslint-disable-next-line import/prefer-default-export
+export const Schema = new GraphQLSchema({
   query: queryType,
   mutation: mutationType,
 })
