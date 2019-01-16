@@ -51,8 +51,9 @@ describe('BaseModel `isQueryAuthorized` method', () => {
   it('does not authorize if operation properties are not functions', () => {
     const TestModel = require('../test-utils/ExampleModel').default
     const newPermissions = validOperations.reduce((result, item) => {
-      result[item] = 'hi'
-      return result
+      const newPermission = result
+      newPermission[item] = 'hi'
+      return newPermission
     }, {})
     setModelPermissions(TestModel, newPermissions)
     validOperations.forEach(operation => {
@@ -69,8 +70,9 @@ describe('BaseModel `isQueryAuthorized` method', () => {
   it('authorizes all operations if each returns true', () => {
     const TestModel = require('../test-utils/ExampleModel').default
     const newPermissions = validOperations.reduce((result, item) => {
-      result[item] = () => true
-      return result
+      const newPermission = result
+      newPermission[item] = () => true
+      return newPermission
     }, {})
     setModelPermissions(TestModel, newPermissions)
     validOperations.forEach(operation => {
@@ -117,8 +119,9 @@ describe('BaseModel `isQueryAuthorized` method', () => {
 
     // Make the model permissions allow operations.
     const newPermissions = validOperations.reduce((result, item) => {
-      result[item] = () => true
-      return result
+      const newPermission = result
+      newPermission[item] = () => true
+      return newPermission
     }, {})
     setModelPermissions(TestModel, newPermissions)
 
@@ -139,8 +142,9 @@ describe('BaseModel `isQueryAuthorized` method', () => {
 
     // Make the model permissions allow operations.
     const newPermissions = validOperations.reduce((result, item) => {
-      result[item] = () => true
-      return result
+      const newPermission = result
+      newPermission[item] = () => true
+      return newPermission
     }, {})
     setModelPermissions(TestModel, newPermissions)
 
@@ -161,8 +165,9 @@ describe('BaseModel `isQueryAuthorized` method', () => {
 
     // Make the model disallow all operations.
     const newPermissions = validOperations.reduce((result, item) => {
-      result[item] = () => false
-      return result
+      const newPermission = result
+      newPermission[item] = () => false
+      return newPermission
     }, {})
     setModelPermissions(TestModel, newPermissions)
 
