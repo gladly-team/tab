@@ -88,6 +88,7 @@ const log = (msg, logLevel) => {
   }
 }
 
+// Testing automatic formatting
 const logger = {};
 
 logger.log = msg => {
