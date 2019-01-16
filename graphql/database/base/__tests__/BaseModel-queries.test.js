@@ -68,9 +68,9 @@ describe('BaseModel queries', () => {
     const response = await ExampleModel.getAll(user)
     expect(dbQueryMock.mock.calls[0][0]).toEqual(expectedDBParams)
     expect(response.length).toBe(fixturesA.length)
-    for (const index in response) {
+    Object.values(response).forEach(index => {
       expect(response[index]).toEqual(fixturesA[index])
-    }
+    })
   })
 
   it('fails with unauthorized `getAll`', async () => {
