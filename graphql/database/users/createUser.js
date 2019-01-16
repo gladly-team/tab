@@ -44,12 +44,12 @@ const createUser = async (
     },
     !isNil(extensionInstallId)
       ? {
-          extensionInstallId: extensionInstallId,
+          extensionInstallId,
         }
       : null,
     !isNil(extensionInstallTimeApprox)
       ? {
-          extensionInstallTimeApprox: extensionInstallTimeApprox,
+          extensionInstallTimeApprox,
         }
       : null
   )
@@ -58,7 +58,7 @@ const createUser = async (
   } catch (e) {
     throw e
   }
-  var returnedUser = response.item
+  let returnedUser = response.item
 
   // If the user's email differs from the one in the database,
   // update it. This will happen when anonymous users sign in.
@@ -85,7 +85,7 @@ const createUser = async (
 
   /**
    * After this point, we handle setup for brand new users only.
-   **/
+   * */
 
   // Set up default widgets.
   try {
@@ -103,7 +103,7 @@ const createUser = async (
 
     // Referring user may not exist if referring username
     // was manipulated.
-    var referringUserId = null
+    let referringUserId = null
     try {
       if (referringUserUsername) {
         const referringUser = await getUserByUsername(

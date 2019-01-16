@@ -13,7 +13,7 @@ import logger from '../../utils/logger'
  * @return {Promise<User>}  A promise that resolves into a User instance.
  */
 const logEmailVerified = async (userContext, userId) => {
-  var returnedUser
+  let returnedUser
   try {
     returnedUser = await UserModel.update(userContext, {
       id: userId,

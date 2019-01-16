@@ -33,18 +33,16 @@ describe('logReferralData', () => {
 
     // Mock response to creating a referral log.
     const mockReferralLog = new ReferralDataModel({
-      userId: userId,
+      userId,
       referringUser: referringUserId,
     })
     const createMethod = jest
       .spyOn(ReferralDataModel, 'create')
-      .mockImplementationOnce(() => {
-        return mockReferralLog
-      })
+      .mockImplementationOnce(() => mockReferralLog)
 
     await logReferralData(userContext, userId, referringUserId)
     expect(createMethod).toHaveBeenCalledWith(userContext, {
-      userId: userId,
+      userId,
       referringUser: referringUserId,
     })
   })
@@ -53,7 +51,7 @@ describe('logReferralData', () => {
     const userId = userContext.id
     const referringUserId = 'ab5082cc-151a-4a9a-9289-06906670fd4e'
     const expectedReturnedLog = {
-      userId: userId,
+      userId,
       referringUser: referringUserId,
       created: moment.utc().toISOString(),
       updated: moment.utc().toISOString(),

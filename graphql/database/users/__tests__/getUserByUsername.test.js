@@ -21,7 +21,7 @@ describe('getUserByUsername', () => {
   it('works as expected', async () => {
     const username = 'jonsnow'
     const userContextAuthorized = Object.assign({}, userContext, {
-      username: username,
+      username,
     })
     const query = jest.spyOn(UserModel, 'query')
     const queryExec = jest.spyOn(UserModel, '_execAsync')
@@ -37,7 +37,7 @@ describe('getUserByUsername', () => {
   it('calls the database', async () => {
     const username = 'jonsnow'
     const userContextAuthorized = Object.assign({}, userContext, {
-      username: username,
+      username,
     })
 
     const itemToReturn = getMockUserInstance({

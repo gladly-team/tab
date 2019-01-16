@@ -18,7 +18,7 @@ const getNextLevelFor = async (userContext, level, vcAllTime) => {
     { id: level + 5 },
   ]
 
-  var levels
+  let levels
   try {
     levels = await UserLevelModel.getBatch(userContext, keys)
   } catch (e) {
@@ -32,7 +32,7 @@ const getNextLevelFor = async (userContext, level, vcAllTime) => {
 
   const sortedLevels = sortBy(levels, level => level.id)
 
-  var levelToReturn
+  let levelToReturn
   forEach(sortedLevels, level => {
     // If the level's required hearts is greater than the
     // user's number of hearts, it is the user's next level.
@@ -43,10 +43,9 @@ const getNextLevelFor = async (userContext, level, vcAllTime) => {
   })
   if (levelToReturn) {
     return levelToReturn
-  } else {
-    // Fetch more levels.
-    return getNextLevelFor(userContext, levels[levels.length - 1].id, vcAllTime)
   }
+  // Fetch more levels.
+  return getNextLevelFor(userContext, levels[levels.length - 1].id, vcAllTime)
 }
 
 export default getNextLevelFor

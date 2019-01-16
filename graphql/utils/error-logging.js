@@ -1,5 +1,5 @@
-import logger from './logger'
 import { get } from 'lodash/object'
+import logger from './logger'
 import { USER_DOES_NOT_EXIST } from './exceptions'
 
 /*
@@ -8,8 +8,8 @@ import { USER_DOES_NOT_EXIST } from './exceptions'
  * @param {function} func - The function to wrap.
  * @return {null}
  */
-export const logExceptionsWrapper = func => {
-  return function() {
+export const logExceptionsWrapper = func =>
+  function() {
     try {
       return func.apply(this, arguments)
     } catch (e) {
@@ -17,7 +17,6 @@ export const logExceptionsWrapper = func => {
       throw e
     }
   }
-}
 
 /*
  * Format GraphQL error before sending to the client.
@@ -25,14 +24,12 @@ export const logExceptionsWrapper = func => {
  * @param {object} graphQLError - The GraphQL error.
  * @return {object} The error to send to the client.
  */
-export const formatError = graphQLError => {
-  return {
-    message: graphQLError.message,
-    locations: graphQLError.locations,
-    path: graphQLError.path,
-    code: get(graphQLError, 'originalError.code', null),
-  }
-}
+export const formatError = graphQLError => ({
+  message: graphQLError.message,
+  locations: graphQLError.locations,
+  path: graphQLError.path,
+  code: get(graphQLError, 'originalError.code', null),
+})
 
 /*
  * Determine whether we should log an error. Some errors are

@@ -72,11 +72,8 @@ export const logErrorWithId = (err, errId) => {
   logger.error(err)
 }
 
-export const shouldLog = (logLevel, globalLogLevel) => {
-  return (
-    logLevelsOrder.indexOf(logLevel) >= logLevelsOrder.indexOf(globalLogLevel)
-  )
-}
+export const shouldLog = (logLevel, globalLogLevel) =>
+  logLevelsOrder.indexOf(logLevel) >= logLevelsOrder.indexOf(globalLogLevel)
 
 const log = (msg, logLevel) => {
   if (!shouldLog(logLevel, config.LOG_LEVEL)) {
@@ -110,11 +107,11 @@ const log = (msg, logLevel) => {
       const level = logLevel === logLevels.WARN ? 'warning' : logLevel
       if (isError(msg)) {
         Sentry.captureException(msg, {
-          level: level,
+          level,
         })
       } else {
         Sentry.captureMessage(msg, {
-          level: level,
+          level,
         })
       }
       break

@@ -27,9 +27,7 @@ describe('getAllBaseWidgets', () => {
 
     const baseWidgetGetAllMethod = jest
       .spyOn(BaseWidgetModel, 'getAll')
-      .mockImplementation(() => {
-        return baseWidgetsToGet
-      })
+      .mockImplementation(() => baseWidgetsToGet)
 
     const baseWidgetsReturned = await getAllBaseWidgets(userContext)
     expect(baseWidgetGetAllMethod).toHaveBeenCalledWith(userContext)

@@ -1,5 +1,6 @@
 import moment from 'moment'
 import UserDataConsentModel from './UserDataConsentModel'
+
 const ConsentString = require('consent-string').ConsentString
 
 /**
@@ -22,7 +23,7 @@ const logUserDataConsent = async (
 
   try {
     await UserDataConsentModel.create(userContext, {
-      userId: userId,
+      userId,
       timestamp: moment.utc().toISOString(),
       consentString: consentStr,
       consentCreated: moment(ConsentData.created).toISOString(),
@@ -34,7 +35,7 @@ const logUserDataConsent = async (
       consentScreen: ConsentData.getConsentScreen(),
       allowedPurposeIds: ConsentData.getPurposesAllowed(),
       allowedVendorIds: ConsentData.getVendorsAllowed(),
-      isGlobalConsent: isGlobalConsent,
+      isGlobalConsent,
     })
   } catch (e) {
     throw e

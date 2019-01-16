@@ -42,14 +42,12 @@ describe('getWidgets', () => {
     ]
 
     const userWidgetQueryMethod = jest.spyOn(UserWidgetModel, 'query')
-    jest.spyOn(UserWidgetModel, '_execAsync').mockImplementation(() => {
-      return userWidgetsToGet
-    })
+    jest
+      .spyOn(UserWidgetModel, '_execAsync')
+      .mockImplementation(() => userWidgetsToGet)
     const baseWidgetGetBatchMethod = jest
       .spyOn(BaseWidgetModel, 'getBatch')
-      .mockImplementation(() => {
-        return baseWidgetsToGet
-      })
+      .mockImplementation(() => baseWidgetsToGet)
 
     const userWidgets = await getWidgets(userContext, userInfo.id)
     expect(userWidgetQueryMethod).toHaveBeenCalledWith(userContext, userInfo.id)
@@ -92,12 +90,8 @@ describe('getWidgets', () => {
     const userWidgetQueryMethod = jest.spyOn(UserWidgetModel, 'query')
     const baseWidgetGetBatchMethod = jest
       .spyOn(BaseWidgetModel, 'getBatch')
-      .mockImplementation(() => {
-        return baseWidgetsToGet
-      })
-    getUserWidgetsByEnabledState.mockImplementation(() => {
-      return userWidgetsToGet
-    })
+      .mockImplementation(() => baseWidgetsToGet)
+    getUserWidgetsByEnabledState.mockImplementation(() => userWidgetsToGet)
 
     const userWidgets = await getWidgets(userContext, userInfo.id, true)
     expect(userWidgetQueryMethod).not.toHaveBeenCalled()

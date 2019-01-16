@@ -16,13 +16,11 @@ describe('logger', () => {
   })
 
   it('logs the error with the ID', () => {
-    jest.mock('../../config', () => {
-      return {
-        LOGGER: 'console',
-        STAGE: 'test',
-        LOG_LEVEL: 'debug',
-      }
-    })
+    jest.mock('../../config', () => ({
+      LOGGER: 'console',
+      STAGE: 'test',
+      LOG_LEVEL: 'debug',
+    }))
     const logErrorWithId = require('../logger').logErrorWithId
     const consoleSpy = jest
       .spyOn(console, 'error')
@@ -43,12 +41,10 @@ describe('logger', () => {
   })
 
   test('loggerContextWrapper calls the passed function and returns its value', () => {
-    jest.mock('../../config', () => {
-      return {
-        LOGGER: 'console',
-        STAGE: 'test',
-      }
-    })
+    jest.mock('../../config', () => ({
+      LOGGER: 'console',
+      STAGE: 'test',
+    }))
     const loggerContextWrapper = require('../logger').loggerContextWrapper
     const testFunc = jest.fn(() => 'hi')
     const fakeLambdaEvent = { foo: 'bar' }
@@ -58,15 +54,13 @@ describe('logger', () => {
   })
 
   test('loggerContextWrapper sets Raven context for Sentry logging', () => {
-    jest.mock('../../config', () => {
-      return {
-        LOGGER: 'sentry',
-        STAGE: 'test',
-        SENTRY_PUBLIC_KEY: 'abcdef',
-        SENTRY_PRIVATE_KEY: 'xyzxyz',
-        SENTRY_PROJECT_ID: '123456',
-      }
-    })
+    jest.mock('../../config', () => ({
+      LOGGER: 'sentry',
+      STAGE: 'test',
+      SENTRY_PUBLIC_KEY: 'abcdef',
+      SENTRY_PRIVATE_KEY: 'xyzxyz',
+      SENTRY_PROJECT_ID: '123456',
+    }))
     const loggerContextWrapper = require('../logger').loggerContextWrapper
     const Sentry = require('../sentry-logger').default
     const testFunc = jest.fn(() => 'hi')
@@ -92,13 +86,11 @@ describe('logger', () => {
   })
 
   test('logger calls console method as expected', () => {
-    jest.mock('../../config', () => {
-      return {
-        LOGGER: 'console',
-        STAGE: 'test',
-        LOG_LEVEL: 'info',
-      }
-    })
+    jest.mock('../../config', () => ({
+      LOGGER: 'console',
+      STAGE: 'test',
+      LOG_LEVEL: 'info',
+    }))
 
     const consoleSpy = jest
       .spyOn(console, 'error')
@@ -109,13 +101,11 @@ describe('logger', () => {
   })
 
   test('logger does not log if message is less important than the LOG_LEVEL', () => {
-    jest.mock('../../config', () => {
-      return {
-        LOGGER: 'console',
-        STAGE: 'test',
-        LOG_LEVEL: 'error',
-      }
-    })
+    jest.mock('../../config', () => ({
+      LOGGER: 'console',
+      STAGE: 'test',
+      LOG_LEVEL: 'error',
+    }))
 
     const consoleSpy = jest
       .spyOn(console, 'info')
@@ -126,16 +116,14 @@ describe('logger', () => {
   })
 
   test('logger calls Sentry with an exception', () => {
-    jest.mock('../../config', () => {
-      return {
-        LOGGER: 'sentry',
-        STAGE: 'test',
-        LOG_LEVEL: 'error',
-        SENTRY_PUBLIC_KEY: 'abcdef',
-        SENTRY_PRIVATE_KEY: 'xyzxyz',
-        SENTRY_PROJECT_ID: '123456',
-      }
-    })
+    jest.mock('../../config', () => ({
+      LOGGER: 'sentry',
+      STAGE: 'test',
+      LOG_LEVEL: 'error',
+      SENTRY_PUBLIC_KEY: 'abcdef',
+      SENTRY_PRIVATE_KEY: 'xyzxyz',
+      SENTRY_PROJECT_ID: '123456',
+    }))
     const Sentry = require('../sentry-logger').default
     const logger = require('../logger').default
     const theErr = new Error('A big problem')
@@ -147,16 +135,14 @@ describe('logger', () => {
   })
 
   test('logger calls Sentry with a message', () => {
-    jest.mock('../../config', () => {
-      return {
-        LOGGER: 'sentry',
-        STAGE: 'test',
-        LOG_LEVEL: 'error',
-        SENTRY_PUBLIC_KEY: 'abcdef',
-        SENTRY_PRIVATE_KEY: 'xyzxyz',
-        SENTRY_PROJECT_ID: '123456',
-      }
-    })
+    jest.mock('../../config', () => ({
+      LOGGER: 'sentry',
+      STAGE: 'test',
+      LOG_LEVEL: 'error',
+      SENTRY_PUBLIC_KEY: 'abcdef',
+      SENTRY_PRIVATE_KEY: 'xyzxyz',
+      SENTRY_PROJECT_ID: '123456',
+    }))
     const Sentry = require('../sentry-logger').default
     const logger = require('../logger').default
     const theMsg = 'A thing happened, FYI'
@@ -168,16 +154,14 @@ describe('logger', () => {
   })
 
   test('logger calls Sentry with "warning" level', () => {
-    jest.mock('../../config', () => {
-      return {
-        LOGGER: 'sentry',
-        STAGE: 'test',
-        LOG_LEVEL: 'debug',
-        SENTRY_PUBLIC_KEY: 'abcdef',
-        SENTRY_PRIVATE_KEY: 'xyzxyz',
-        SENTRY_PROJECT_ID: '123456',
-      }
-    })
+    jest.mock('../../config', () => ({
+      LOGGER: 'sentry',
+      STAGE: 'test',
+      LOG_LEVEL: 'debug',
+      SENTRY_PUBLIC_KEY: 'abcdef',
+      SENTRY_PRIVATE_KEY: 'xyzxyz',
+      SENTRY_PROJECT_ID: '123456',
+    }))
     const Sentry = require('../sentry-logger').default
     const logger = require('../logger').default
     const theMsg = 'A thing happened, FYI'

@@ -1,5 +1,5 @@
-import UserModel from './UserModel'
 import { isEmpty, isNil } from 'lodash/lang'
+import UserModel from './UserModel'
 import { getValidatedExperimentGroups } from '../../utils/experiments'
 
 /**
@@ -18,7 +18,7 @@ const logUserExperimentGroups = async (
   userId,
   experimentGroups = {}
 ) => {
-  var returnedUser
+  let returnedUser
 
   // If there are no experiment groups to update, simply get and
   // return the user.

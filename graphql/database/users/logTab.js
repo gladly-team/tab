@@ -18,7 +18,7 @@ import { getTodayTabCount } from './user-utils'
 const isTabValid = (tabsOpenedToday, lastTabTimestampStr) => {
   const COOLDOWN_SECONDS = 2
   const now = moment.utc()
-  var lastTabTimestamp = lastTabTimestampStr
+  const lastTabTimestamp = lastTabTimestampStr
     ? moment.utc(lastTabTimestampStr)
     : null
   const enoughTimeSinceLastTab =
@@ -94,9 +94,9 @@ const logTab = async (userContext, userId, tabId = null) => {
 
     // Log the tab for analytics whether a valid tab or not.
     await UserTabsLogModel.create(userContext, {
-      userId: userId,
+      userId,
       timestamp: moment.utc().toISOString(),
-      ...(tabId && { tabId: tabId }),
+      ...(tabId && { tabId }),
     })
   } catch (e) {
     throw e

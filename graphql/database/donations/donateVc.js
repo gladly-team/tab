@@ -7,6 +7,7 @@ import {
   getPermissionsOverride,
   ADD_VC_DONATED_BY_CHARITY,
 } from '../../utils/permissions-overrides'
+
 const addVCDonatedByCharityOverride = getPermissionsOverride(
   ADD_VC_DONATED_BY_CHARITY
 )
@@ -52,16 +53,15 @@ export default async (userContext, userId, charityId, vc) => {
             },
           ],
         }
-      } else {
-        throw e
       }
+      throw e
     }
 
     // Create the VC donation.
     await VCDonationModel.create(userContext, {
-      userId: userId,
+      userId,
       timestamp: moment.utc().toISOString(),
-      charityId: charityId,
+      charityId,
       vcDonated: vc,
     })
 
@@ -73,7 +73,7 @@ export default async (userContext, userId, charityId, vc) => {
     // not yet exist.
     try {
       await VCDonationByCharityModel.update(addVCDonatedByCharityOverride, {
-        charityId: charityId,
+        charityId,
         // The datetime of the start of this hour.
         timestamp: moment
           .utc()
@@ -86,7 +86,7 @@ export default async (userContext, userId, charityId, vc) => {
       if (e.code === 'ConditionalCheckFailedException') {
         try {
           await VCDonationByCharityModel.create(addVCDonatedByCharityOverride, {
-            charityId: charityId,
+            charityId,
             // The datetime of the start of this hour.
             timestamp: moment
               .utc()
@@ -103,7 +103,7 @@ export default async (userContext, userId, charityId, vc) => {
     }
 
     return {
-      user: user,
+      user,
       errors: null,
     }
   } catch (e) {

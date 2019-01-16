@@ -45,9 +45,7 @@ describe('addVc', () => {
     })
     const updateMethod = jest
       .spyOn(UserModel, 'update')
-      .mockImplementationOnce(() => {
-        return userToReturn
-      })
+      .mockImplementationOnce(() => userToReturn)
 
     await addVc(userContext, userId, vcToAdd)
     expect(updateMethod).toHaveBeenCalledWith(userContext, {
@@ -79,19 +77,16 @@ describe('addVc', () => {
     })
     const updateMethod = jest
       .spyOn(UserModel, 'update')
-      .mockImplementationOnce(() => {
-        return userToReturn
-      })
-      .mockImplementationOnce(() => {
-        return finalReturnedUser
-      })
+      .mockImplementationOnce(() => userToReturn)
+      .mockImplementationOnce(() => finalReturnedUser)
 
-    getNextLevelFor.mockImplementationOnce(() => {
-      return new UserLevelModel({
-        id: 5,
-        hearts: 50,
-      })
-    })
+    getNextLevelFor.mockImplementationOnce(
+      () =>
+        new UserLevelModel({
+          id: 5,
+          hearts: 50,
+        })
+    )
 
     const returnedUser = await addVc(userContext, userId, vcToAdd)
 
@@ -110,12 +105,13 @@ describe('addVc', () => {
     const vcToAdd = 12
 
     // Mock getting next level.
-    getNextLevelFor.mockImplementationOnce(() => {
-      return new UserLevelModel({
-        id: 5,
-        hearts: 50,
-      })
-    })
+    getNextLevelFor.mockImplementationOnce(
+      () =>
+        new UserLevelModel({
+          id: 5,
+          hearts: 50,
+        })
+    )
 
     // Mock DB response.
     const expectedReturnedUser = Object.assign({}, getMockUserInstance(), {
@@ -136,12 +132,13 @@ describe('addVc', () => {
     const vcToAdd = 12
 
     // Mock getting next level.
-    getNextLevelFor.mockImplementationOnce(() => {
-      return new UserLevelModel({
-        id: 5,
-        hearts: 50,
-      })
-    })
+    getNextLevelFor.mockImplementationOnce(
+      () =>
+        new UserLevelModel({
+          id: 5,
+          hearts: 50,
+        })
+    )
 
     // Mock DB responses.
     const userToReturn = Object.assign({}, getMockUserInstance(), {

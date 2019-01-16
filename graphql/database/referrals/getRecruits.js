@@ -8,6 +8,7 @@ import {
   getPermissionsOverride,
   GET_RECRUITS_LAST_ACTIVE_OVERRIDE,
 } from '../../utils/permissions-overrides'
+
 const getRecruitsOverride = getPermissionsOverride(
   GET_RECRUITS_LAST_ACTIVE_OVERRIDE
 )
@@ -34,7 +35,7 @@ export const getRecruits = async (
   endTime = null
 ) => {
   // Build the basic query
-  var refLogsQuery = ReferralDataModel.query(
+  const refLogsQuery = ReferralDataModel.query(
     userContext,
     referringUserId
   ).usingIndex('ReferralsByReferrer')
@@ -70,7 +71,7 @@ export const getRecruits = async (
     getRecruitsOverride,
     referralLogs.map(recruit => recruit.userId) // array of recruits' user IDs
   ).then(recruits => {
-    let recruitsLastActiveMap = {}
+    const recruitsLastActiveMap = {}
     recruits.forEach(user => {
       recruitsLastActiveMap[user.id] = user.lastTabTimestamp || null
     })

@@ -37,12 +37,12 @@ const widgetConfigurations = [
  * @return {Promise<boolean>} A promise that resolves into `true`
  *   when complete
  */
-export default async (userContext, userId) => {
-  return Promise.all(
+export default async (userContext, userId) =>
+  Promise.all(
     widgetConfigurations.map(async widgetConfig => {
       try {
         await UserWidgetModel.create(userContext, {
-          userId: userId,
+          userId,
           widgetId: widgetConfig.id,
           enabled: widgetConfig.enabled,
         })
@@ -55,4 +55,3 @@ export default async (userContext, userId) => {
     .catch(err => {
       throw err
     })
-}

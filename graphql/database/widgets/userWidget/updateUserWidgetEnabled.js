@@ -10,12 +10,12 @@ import UserWidgetModel from './UserWidgetModel'
  * Widget.
  */
 export default async (userContext, userId, widgetId, enabled) => {
-  var userWidget
+  let userWidget
   try {
     userWidget = await UserWidgetModel.update(userContext, {
-      userId: userId,
-      widgetId: widgetId,
-      enabled: enabled,
+      userId,
+      widgetId,
+      enabled,
     })
   } catch (e) {
     // The item likely does not exist. This might happen when a
@@ -24,9 +24,9 @@ export default async (userContext, userId, widgetId, enabled) => {
     if (e.code === 'ConditionalCheckFailedException') {
       try {
         userWidget = await UserWidgetModel.create(userContext, {
-          userId: userId,
-          widgetId: widgetId,
-          enabled: enabled,
+          userId,
+          widgetId,
+          enabled,
         })
       } catch (e) {
         throw e

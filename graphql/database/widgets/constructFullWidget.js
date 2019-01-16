@@ -8,13 +8,12 @@ import Widget from './Widget'
  * @return {Object<UserWidget>}  Returns an instance of UserWidget
  * with all the widget information.
  */
-const constructFullWidget = (userWidget, widget) => {
-  return Object.assign(new Widget(), userWidget, widget, {
+const constructFullWidget = (userWidget, widget) =>
+  Object.assign(new Widget(), userWidget, widget, {
     id: userWidget.widgetId,
     data: JSON.stringify(userWidget.data),
     config: JSON.stringify(userWidget.config),
     settings: JSON.stringify(widget.settings),
   })
-}
 
 export default constructFullWidget

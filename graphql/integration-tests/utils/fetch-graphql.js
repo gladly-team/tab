@@ -12,20 +12,18 @@ function fetchQuery(graphQLQueryStr, variablesObj, userIdToken) {
     'Content-Type': 'application/json',
   }
   if (userIdToken) {
-    headers['Authorization'] = userIdToken
+    headers.Authorization = userIdToken
   }
 
   return fetch(graphQLEndpoint, {
     method: 'POST',
-    headers: headers,
+    headers,
     body: JSON.stringify({
       query: graphQLQueryStr,
       variables: variablesObj,
     }),
   })
-    .then(response => {
-      return response.json()
-    })
+    .then(response => response.json())
     .catch(err => {
       logger.error(err)
     })

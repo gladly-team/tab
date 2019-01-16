@@ -27,8 +27,8 @@ const userContext = getMockUserContext()
 const userId = userContext.id
 const widgetId = 'ab5082cc-151a-4a9a-9289-06906670fd4e'
 const mockUserWidget = new UserWidgetModel({
-  userId: userId,
-  widgetId: widgetId,
+  userId,
+  widgetId,
   data: {
     foo: 'bar',
   },
@@ -40,9 +40,7 @@ const mockBaseWidget = new BaseWidgetModel({
   position: 1,
 })
 const fullWidget = constructFullWidget(mockUserWidget, mockBaseWidget)
-jest.spyOn(BaseWidgetModel, 'get').mockImplementation(() => {
-  return mockBaseWidget
-})
+jest.spyOn(BaseWidgetModel, 'get').mockImplementation(() => mockBaseWidget)
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -51,11 +49,11 @@ afterEach(() => {
 describe('update', () => {
   test('updateWidgetData', async () => {
     const newData = { foo: 'baz' }
-    updateUserWidgetData.mockImplementation(() => {
-      return Object.assign(mockUserWidget, {
+    updateUserWidgetData.mockImplementation(() =>
+      Object.assign(mockUserWidget, {
         data: newData,
       })
-    })
+    )
     const returnedWidget = await updateWidgetData(
       userContext,
       userId,
@@ -76,11 +74,11 @@ describe('update', () => {
   })
 
   test('updateWidgetVisibility', async () => {
-    updateUserWidgetVisibility.mockImplementation(() => {
-      return Object.assign(mockUserWidget, {
+    updateUserWidgetVisibility.mockImplementation(() =>
+      Object.assign(mockUserWidget, {
         visible: false,
       })
-    })
+    )
     const returnedWidget = await updateWidgetVisibility(
       userContext,
       userId,
@@ -101,11 +99,11 @@ describe('update', () => {
   })
 
   test('updateWidgetEnabled', async () => {
-    updateUserWidgetEnabled.mockImplementation(() => {
-      return Object.assign(mockUserWidget, {
+    updateUserWidgetEnabled.mockImplementation(() =>
+      Object.assign(mockUserWidget, {
         enabled: false,
       })
-    })
+    )
     const returnedWidget = await updateWidgetEnabled(
       userContext,
       userId,
@@ -127,11 +125,11 @@ describe('update', () => {
 
   test('updateWidgetConfig', async () => {
     const newConfig = { foo: 'baz' }
-    updateUserWidgetConfig.mockImplementation(() => {
-      return Object.assign(mockUserWidget, {
+    updateUserWidgetConfig.mockImplementation(() =>
+      Object.assign(mockUserWidget, {
         config: newConfig,
       })
-    })
+    )
     const returnedWidget = await updateWidgetConfig(
       userContext,
       userId,

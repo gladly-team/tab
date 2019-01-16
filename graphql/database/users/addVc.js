@@ -12,7 +12,7 @@ import getNextLevelFor from '../userLevels/getNextLevelFor'
  */
 const addVc = async (userContext, userId, vc = 0) => {
   try {
-    var user = await UserModel.update(userContext, {
+    let user = await UserModel.update(userContext, {
       id: userId,
       vcCurrent: { $add: vc },
       vcAllTime: { $add: vc },

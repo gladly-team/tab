@@ -206,8 +206,8 @@ describe('createUser when user does not exist', () => {
     const expectedCreateItem = Object.assign(
       getExpectedCreateItemFromUserInfo(userInfo),
       {
-        extensionInstallId: extensionInstallId,
-        extensionInstallTimeApprox: extensionInstallTimeApprox,
+        extensionInstallId,
+        extensionInstallTimeApprox,
       }
     )
     expect(getOrCreateMethod).toHaveBeenCalledWith(

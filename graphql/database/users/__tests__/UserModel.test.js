@@ -38,7 +38,7 @@ describe('UserModel', () => {
   })
 
   it('implements the tableName property', () => {
-    expect(User.tableName).toBe(tableNames['users'])
+    expect(User.tableName).toBe(tableNames.users)
   })
 
   it('has the correct get permission', () => {

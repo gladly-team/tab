@@ -7,8 +7,8 @@ import config from '../config'
  * @param {object} userContext - The user authorizer object.
  * @param {function} func - The function to wrap.
  */
-export const sentryContextWrapper = (userContext, lambdaEvent, func) => {
-  return Raven.context(() => {
+export const sentryContextWrapper = (userContext, lambdaEvent, func) =>
+  Raven.context(() => {
     Raven.setContext({
       user: {
         id: userContext.id,
@@ -18,7 +18,6 @@ export const sentryContextWrapper = (userContext, lambdaEvent, func) => {
     })
     return func()
   })
-}
 
 /*
  * Return the Sentry DSN, or null if any environment variable

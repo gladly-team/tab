@@ -14,7 +14,7 @@ import logger from '../../utils/logger'
 const setUsername = async (userContext, userId, username) => {
   try {
     // See if the username is taken.
-    var usernameAlreadyExists = true
+    let usernameAlreadyExists = true
     try {
       const existingUser = await getUserByUsername(userContext, username)
 
@@ -51,7 +51,7 @@ const setUsername = async (userContext, userId, username) => {
     // Update the username.
     const userInstance = await UserModel.update(userContext, {
       id: userId,
-      username: username,
+      username,
     })
     return {
       user: userInstance,

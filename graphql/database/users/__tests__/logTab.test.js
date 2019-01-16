@@ -58,9 +58,7 @@ describe('logTab', () => {
     })
     const updateMethod = jest
       .spyOn(UserModel, 'update')
-      .mockImplementationOnce(() => {
-        return mockUser
-      })
+      .mockImplementationOnce(() => mockUser)
 
     const returnedUser = await logTab(userContext, userId)
 
@@ -104,7 +102,7 @@ describe('logTab', () => {
     expect(userTabsLogCreate).toHaveBeenLastCalledWith(
       userContext,
       addTimestampFieldsToItem({
-        userId: userId,
+        userId,
         timestamp: moment.utc().toISOString(),
       })
     )
@@ -127,7 +125,7 @@ describe('logTab', () => {
     expect(userTabsLogCreate).toHaveBeenLastCalledWith(
       userContext,
       addTimestampFieldsToItem({
-        userId: userId,
+        userId,
         timestamp: moment.utc().toISOString(),
       })
     )
@@ -151,9 +149,9 @@ describe('logTab', () => {
     expect(userTabsLogCreate).toHaveBeenLastCalledWith(
       userContext,
       addTimestampFieldsToItem({
-        userId: userId,
+        userId,
         timestamp: moment.utc().toISOString(),
-        tabId: tabId,
+        tabId,
       })
     )
   })
@@ -170,9 +168,7 @@ describe('logTab', () => {
     })
     const updateMethod = jest
       .spyOn(UserModel, 'update')
-      .mockImplementationOnce(() => {
-        return mockUser
-      })
+      .mockImplementationOnce(() => mockUser)
 
     const returnedUser = await logTab(userContext, userId)
 
@@ -220,9 +216,7 @@ describe('logTab', () => {
     })
     const updateMethod = jest
       .spyOn(UserModel, 'update')
-      .mockImplementationOnce(() => {
-        return mockUser
-      })
+      .mockImplementationOnce(() => mockUser)
 
     const returnedUser = await logTab(userContext, userId)
 
@@ -276,9 +270,7 @@ describe('logTab', () => {
     })
     const updateMethod = jest
       .spyOn(UserModel, 'update')
-      .mockImplementationOnce(() => {
-        return mockUser
-      })
+      .mockImplementationOnce(() => mockUser)
 
     await logTab(userContext, userId)
 
@@ -324,9 +316,7 @@ describe('logTab', () => {
     })
     const updateMethod = jest
       .spyOn(UserModel, 'update')
-      .mockImplementationOnce(() => {
-        return mockUser
-      })
+      .mockImplementationOnce(() => mockUser)
 
     await logTab(userContext, userId)
 
@@ -372,9 +362,7 @@ describe('logTab', () => {
     })
     const updateMethod = jest
       .spyOn(UserModel, 'update')
-      .mockImplementationOnce(() => {
-        return mockUser
-      })
+      .mockImplementationOnce(() => mockUser)
 
     await logTab(userContext, userId)
 
@@ -413,9 +401,7 @@ describe('logTab', () => {
     })
     const updateMethod = jest
       .spyOn(UserModel, 'update')
-      .mockImplementationOnce(() => {
-        return mockUser
-      })
+      .mockImplementationOnce(() => mockUser)
 
     await logTab(userContext, userId)
 
@@ -454,9 +440,7 @@ describe('logTab', () => {
     })
     const updateMethod = jest
       .spyOn(UserModel, 'update')
-      .mockImplementationOnce(() => {
-        return mockUser
-      })
+      .mockImplementationOnce(() => mockUser)
 
     await logTab(userContext, userId)
 

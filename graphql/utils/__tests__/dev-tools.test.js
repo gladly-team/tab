@@ -22,18 +22,15 @@ const mockDecodedToken = {
 describe('dev-tools', () => {
   it('correctly forms GraphQL context from a request object when the user has a verified email', () => {
     const mockToken = cloneDeep(mockDecodedToken)
-    jwtDecode.mockImplementationOnce(() => {
-      return mockToken
-    })
+    jwtDecode.mockImplementationOnce(() => mockToken)
     const getGraphQLContextFromRequest = require('../dev-tools')
       .getGraphQLContextFromRequest
     const minimalRequestObject = {
       header: headerName => {
         if (headerName === 'Authorization') {
           return 'fake.token'
-        } else {
-          return null
         }
+        return null
       },
     }
     const expectedContext = {
@@ -51,9 +48,7 @@ describe('dev-tools', () => {
     const mockToken = cloneDeep(mockDecodedToken)
     delete mockToken.email
     delete mockToken.email_verified
-    jwtDecode.mockImplementationOnce(() => {
-      return mockToken
-    })
+    jwtDecode.mockImplementationOnce(() => mockToken)
 
     const getGraphQLContextFromRequest = require('../dev-tools')
       .getGraphQLContextFromRequest
@@ -61,9 +56,8 @@ describe('dev-tools', () => {
       header: headerName => {
         if (headerName === 'Authorization') {
           return 'fake.token'
-        } else {
-          return null
         }
+        return null
       },
     }
     const expectedContext = {
@@ -104,9 +98,8 @@ describe('dev-tools', () => {
       header: headerName => {
         if (headerName === 'Authorization') {
           return 'unauthenticated'
-        } else {
-          return null
         }
+        return null
       },
     }
     const expectedContext = {

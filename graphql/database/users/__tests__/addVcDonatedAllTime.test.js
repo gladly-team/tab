@@ -32,9 +32,7 @@ describe('addVcDonatedAllTime', () => {
     })
     const updateMethod = jest
       .spyOn(UserModel, 'update')
-      .mockImplementationOnce(() => {
-        return userToReturn
-      })
+      .mockImplementationOnce(() => userToReturn)
 
     await addVcDonatedAllTime(userContext, userId, vcToAdd)
     expect(updateMethod).toHaveBeenCalledWith(userContext, {

@@ -278,18 +278,16 @@ class User extends BaseModel {
 
   static get fieldDeserializers() {
     return {
-      tabsToday: (tabsToday, userObj) => {
+      tabsToday: (tabsToday, userObj) =>
         // Calculate tabsToday based on the maxTabsDay value
-        return getTodayTabCount(userObj)
-      },
-      backgroundImage: (backgroundImage, userObj) => {
-        return Object.assign({}, backgroundImage, {
+        getTodayTabCount(userObj),
+      backgroundImage: (backgroundImage, userObj) =>
+        Object.assign({}, backgroundImage, {
           imageURL: `${mediaRoot}/img/backgrounds/${backgroundImage.image}`,
           thumbnailURL: `${mediaRoot}/img/background-thumbnails/${
             backgroundImage.thumbnail
           }`,
-        })
-      },
+        }),
     }
   }
 

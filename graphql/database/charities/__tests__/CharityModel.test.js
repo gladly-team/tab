@@ -22,7 +22,7 @@ describe('CharityModel', () => {
   })
 
   it('implements the tableName property', () => {
-    expect(Charity.tableName).toBe(tableNames['charities'])
+    expect(Charity.tableName).toBe(tableNames.charities)
   })
 
   it('constructs as expected', () => {

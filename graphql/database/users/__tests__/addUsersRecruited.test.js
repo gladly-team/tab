@@ -29,9 +29,7 @@ describe('addUsersRecruited', () => {
     })
     const updateMethod = jest
       .spyOn(UserModel, 'update')
-      .mockImplementationOnce(() => {
-        return userToReturn
-      })
+      .mockImplementationOnce(() => userToReturn)
 
     await addUsersRecruited(referringUserId, numUsersRecruited)
     const updateMethodCalledParams = updateMethod.mock.calls[0]

@@ -1,5 +1,5 @@
-var path = require('path')
-var AWS = require('aws-sdk')
+const path = require('path')
+const AWS = require('aws-sdk')
 
 // Load environment variables from .env file.
 require('dotenv-extended').load({

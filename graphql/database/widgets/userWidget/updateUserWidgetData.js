@@ -9,10 +9,9 @@ import UserWidgetModel from './UserWidgetModel'
  * @return {Promise<Widget>}  Returns a promise that resolves into a
  * Widget.
  */
-export default async (userContext, userId, widgetId, data) => {
-  return UserWidgetModel.update(userContext, {
-    userId: userId,
-    widgetId: widgetId,
-    data: data,
+export default async (userContext, userId, widgetId, data) =>
+  UserWidgetModel.update(userContext, {
+    userId,
+    widgetId,
+    data,
   })
-}

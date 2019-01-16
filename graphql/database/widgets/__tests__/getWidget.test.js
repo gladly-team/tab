@@ -20,8 +20,8 @@ describe('getWidget', () => {
       position: 1,
     })
     const userWidget = new UserWidgetModel({
-      userId: userId,
-      widgetId: widgetId,
+      userId,
+      widgetId,
       data: {
         foo: 'bar',
       },
@@ -29,14 +29,10 @@ describe('getWidget', () => {
     })
     const getBaseWidgetSpy = jest
       .spyOn(BaseWidgetModel, 'get')
-      .mockImplementationOnce(() => {
-        return baseWidget
-      })
+      .mockImplementationOnce(() => baseWidget)
     const getUserWidgetSpy = jest
       .spyOn(UserWidgetModel, 'get')
-      .mockImplementationOnce(() => {
-        return userWidget
-      })
+      .mockImplementationOnce(() => userWidget)
     const mockFullWidget = { a: 'fake-widget' }
     constructFullWidget.mockImplementationOnce(() => mockFullWidget)
 

@@ -16,7 +16,7 @@ import getUserWidgetsByEnabledState from './userWidget/getUserWidgetsByEnabledSt
 const getWidgets = async (userContext, userId, enabled = false) => {
   try {
     // Get user widgets.
-    var userWidgets
+    let userWidgets
     if (enabled) {
       userWidgets = await getUserWidgetsByEnabledState(
         userContext,
@@ -42,9 +42,10 @@ const getWidgets = async (userContext, userId, enabled = false) => {
     // Merge user widgets with base widgets.
     const mergedWidgets = []
     userWidgets.forEach(userWidget => {
-      const baseWidget = find(baseWidgets, baseWidget => {
-        return baseWidget.id === userWidget.widgetId
-      })
+      const baseWidget = find(
+        baseWidgets,
+        baseWidget => baseWidget.id === userWidget.widgetId
+      )
       mergedWidgets.push(constructFullWidget(userWidget, baseWidget))
     })
 

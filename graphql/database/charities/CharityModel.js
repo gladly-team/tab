@@ -54,12 +54,9 @@ class Charity extends BaseModel {
 
   static get fieldDeserializers() {
     return {
-      logo: fileName => {
-        return `${mediaRoot}/img/charities/charity-logos/${fileName}`
-      },
-      image: fileName => {
-        return `${mediaRoot}/img/charities/charity-post-donation-images/${fileName}`
-      },
+      logo: fileName => `${mediaRoot}/img/charities/charity-logos/${fileName}`,
+      image: fileName =>
+        `${mediaRoot}/img/charities/charity-post-donation-images/${fileName}`,
     }
   }
 }

@@ -38,19 +38,16 @@ const experimentConfig = {
  * Return an object of the configured experiments.
  * @return {Object} An object with a key for each experiment name.
  */
-const getExperiments = () => {
+const getExperiments = () =>
   // Calling exports to be able to modify the experimentGroups
   // variable during testing while keeping it in this file.
-  return exports.experimentConfig
-}
+  exports.experimentConfig
 
 /**
  * Return an array of the names of configured experiments.
  * @return {String[]} An array of the names of all experiments.
  */
-const getAllExperiments = () => {
-  return Object.keys(getExperiments())
-}
+const getAllExperiments = () => Object.keys(getExperiments())
 
 /**
  * Return whether an experiment group value is valid for the given
@@ -78,8 +75,8 @@ const isValidExperimentGroup = (experimentName, groupVal) => {
  *   the shape of the ExperimentGroupsType object in our GraphQL
  *   schema.
  */
-const getValidatedExperimentGroups = clientExperimentGroups => {
-  return getAllExperiments().reduce((map, experimentName) => {
+const getValidatedExperimentGroups = clientExperimentGroups =>
+  getAllExperiments().reduce((map, experimentName) => {
     const clientGroupVal = get(clientExperimentGroups, experimentName)
     const validatedGroupVal = isValidExperimentGroup(
       experimentName,
@@ -91,6 +88,5 @@ const getValidatedExperimentGroups = clientExperimentGroups => {
       [experimentName]: validatedGroupVal,
     })
   }, {})
-}
 
 export { experimentConfig, getValidatedExperimentGroups }

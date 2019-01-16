@@ -40,7 +40,7 @@ describe('rewardReferringUser', () => {
       Item: Object.assign(
         {},
         new ReferralDataModel({
-          userId: userId,
+          userId,
           referringUser: referringUserId,
           referringChannel: null,
         })
@@ -83,7 +83,7 @@ describe('rewardReferringUser', () => {
       Item: Object.assign(
         {},
         new ReferralDataModel({
-          userId: userId,
+          userId,
           referringUser: referringUserId,
           referringChannel: null,
         })
@@ -122,7 +122,7 @@ describe('rewardReferringUser', () => {
       Item: Object.assign(
         {},
         new ReferralDataModel({
-          userId: userId,
+          userId,
           referringUser: referringUserId,
           referringChannel: null,
         })
@@ -191,7 +191,7 @@ describe('rewardReferringUser', () => {
       Item: Object.assign(
         {},
         new ReferralDataModel({
-          userId: userId,
+          userId,
           referringUser: null, // no referring user
           referringChannel: 'some-channel',
         })
@@ -231,7 +231,7 @@ describe('rewardReferringUser', () => {
       Item: Object.assign(
         {},
         new ReferralDataModel({
-          userId: userId,
+          userId,
           referringUser: referringUserId,
           referringChannel: null,
         })
@@ -272,7 +272,7 @@ describe('rewardReferringUser', () => {
       Item: Object.assign(
         {},
         new ReferralDataModel({
-          userId: userId,
+          userId,
           referringUser: referringUserId,
           referringChannel: null,
         })
@@ -310,7 +310,7 @@ describe('rewardReferringUser', () => {
       Item: Object.assign(
         {},
         new ReferralDataModel({
-          userId: userId,
+          userId,
           referringUser: referringUserId,
           referringChannel: null,
         })
@@ -379,7 +379,7 @@ describe('rewardReferringUser', () => {
       Item: Object.assign(
         {},
         new ReferralDataModel({
-          userId: userId,
+          userId,
           referringUser: referringUserId,
           referringChannel: null,
         })
@@ -415,7 +415,7 @@ describe('rewardReferringUser', () => {
       Item: Object.assign(
         {},
         new ReferralDataModel({
-          userId: userId,
+          userId,
           referringUser: referringUserId,
           referringChannel: null,
         })
@@ -454,7 +454,7 @@ describe('rewardReferringUser', () => {
       Item: Object.assign(
         {},
         new ReferralDataModel({
-          userId: userId,
+          userId,
           referringUser: referringUserId,
           referringChannel: null,
         })
@@ -496,7 +496,7 @@ describe('rewardReferringUser', () => {
       Item: Object.assign(
         {},
         new ReferralDataModel({
-          userId: userId,
+          userId,
           referringUser: referringUserId,
           referringChannel: null,
         })

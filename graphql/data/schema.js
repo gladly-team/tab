@@ -1,12 +1,4 @@
 import {
-  WIDGET,
-  CHARITY,
-  USER,
-  BACKGROUND_IMAGE,
-  USER_RECRUITS,
-} from '../database/constants'
-
-import {
   GraphQLBoolean,
   GraphQLFloat,
   GraphQLInt,
@@ -28,6 +20,13 @@ import {
   nodeDefinitions,
   connectionFromPromisedArray,
 } from 'graphql-relay'
+import {
+  WIDGET,
+  CHARITY,
+  USER,
+  BACKGROUND_IMAGE,
+  USER_RECRUITS,
+} from '../database/constants'
 
 import { experimentConfig } from '../utils/experiments'
 
@@ -100,13 +99,17 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     const { type, id } = fromGlobalId(globalId)
     if (type === 'App') {
       return App.getApp(id)
-    } else if (type === USER) {
+    }
+    if (type === USER) {
       return UserModel.get(context.user, id)
-    } else if (type === WIDGET) {
+    }
+    if (type === WIDGET) {
       return getWidget(context.user, id)
-    } else if (type === CHARITY) {
+    }
+    if (type === CHARITY) {
       return CharityModel.get(context.user, id)
-    } else if (type === BACKGROUND_IMAGE) {
+    }
+    if (type === BACKGROUND_IMAGE) {
       return BackgroundImageModel.get(context.user, id)
     }
     return null
@@ -114,13 +117,17 @@ const { nodeInterface, nodeField } = nodeDefinitions(
   obj => {
     if (obj instanceof App) {
       return appType
-    } else if (obj instanceof UserModel) {
+    }
+    if (obj instanceof UserModel) {
       return userType
-    } else if (obj instanceof Widget) {
+    }
+    if (obj instanceof Widget) {
       return widgetType
-    } else if (obj instanceof CharityModel) {
+    }
+    if (obj instanceof CharityModel) {
       return charityType
-    } else if (obj instanceof BackgroundImageModel) {
+    }
+    if (obj instanceof BackgroundImageModel) {
       return backgroundImageType
     }
     return null
@@ -283,11 +290,10 @@ const userType = new GraphQLObjectType({
       description:
         'Whether or not the user was created during this request;' /
         'helpful for a "get or create" mutation',
-      resolve: (user, _) => {
+      resolve: (user, _) =>
         // The user will only have the 'justCreated' field when it's a
         // brand new user item
-        return !!user.justCreated
-      },
+        !!user.justCreated,
     },
     vcCurrent: {
       type: GraphQLInt,
@@ -490,14 +496,13 @@ const charityType = new GraphQLObjectType({
         startTime: { type: GraphQLString },
         endTime: { type: GraphQLString },
       },
-      resolve: (charity, args, context) => {
-        return getCharityVcReceived(
+      resolve: (charity, args, context) =>
+        getCharityVcReceived(
           context.user,
           charity.id,
           args.startTime,
           args.endTime
-        )
-      },
+        ),
     },
   }),
   interfaces: [nodeInterface],
@@ -510,21 +515,15 @@ const appType = new GraphQLObjectType({
     id: globalIdField('App'),
     moneyRaised: {
       type: GraphQLFloat,
-      resolve: () => {
-        return getMoneyRaised()
-      },
+      resolve: () => getMoneyRaised(),
     },
     dollarsPerDayRate: {
       type: GraphQLFloat,
-      resolve: () => {
-        return getDollarsPerDayRate()
-      },
+      resolve: () => getDollarsPerDayRate(),
     },
     referralVcReward: {
       type: GraphQLInt,
-      resolve: () => {
-        return getReferralVcReward()
-      },
+      resolve: () => getReferralVcReward(),
     },
     widgets: {
       type: widgetConnection,
@@ -561,9 +560,7 @@ const appType = new GraphQLObjectType({
     },
     isGlobalCampaignLive: {
       type: GraphQLBoolean,
-      resolve: () => {
-        return isGlobalCampaignLive()
-      },
+      resolve: () => isGlobalCampaignLive(),
     },
   }),
   interfaces: [nodeInterface],
@@ -895,9 +892,7 @@ const updateWidgetDataMutation = mutationWithClientMutationId({
   outputFields: {
     widget: {
       type: widgetType,
-      resolve: userWidget => {
-        return userWidget
-      },
+      resolve: userWidget => userWidget,
     },
   },
   mutateAndGetPayload: ({ userId, widgetId, data }, context) => {
@@ -925,9 +920,7 @@ const updateWidgetVisibilityMutation = mutationWithClientMutationId({
   outputFields: {
     widget: {
       type: widgetType,
-      resolve: userWidget => {
-        return userWidget
-      },
+      resolve: userWidget => userWidget,
     },
   },
   mutateAndGetPayload: ({ userId, widgetId, visible }, context) => {
@@ -955,9 +948,7 @@ const updateWidgetEnabledMutation = mutationWithClientMutationId({
   outputFields: {
     widget: {
       type: widgetType,
-      resolve: userWidget => {
-        return userWidget
-      },
+      resolve: userWidget => userWidget,
     },
   },
   mutateAndGetPayload: ({ userId, widgetId, enabled }, context) => {
@@ -985,9 +976,7 @@ const updateWidgetConfigMutation = mutationWithClientMutationId({
   outputFields: {
     widget: {
       type: widgetType,
-      resolve: userWidget => {
-        return userWidget
-      },
+      resolve: userWidget => userWidget,
     },
   },
   mutateAndGetPayload: ({ userId, widgetId, config }, context) => {
@@ -1041,8 +1030,8 @@ const createNewUserMutation = mutationWithClientMutationId({
       extensionInstallTimeApprox,
     },
     context
-  ) => {
-    return createUser(
+  ) =>
+    createUser(
       context.user,
       userId,
       email,
@@ -1050,8 +1039,7 @@ const createNewUserMutation = mutationWithClientMutationId({
       experimentGroups,
       extensionInstallId,
       extensionInstallTimeApprox
-    )
-  },
+    ),
 })
 
 /**
@@ -1115,9 +1103,8 @@ const mergeIntoExistingUserMutation = mutationWithClientMutationId({
       type: new GraphQLNonNull(GraphQLBoolean),
     },
   },
-  mutateAndGetPayload: ({ userId }, context) => {
-    return mergeIntoExistingUser(context.user, userId)
-  },
+  mutateAndGetPayload: ({ userId }, context) =>
+    mergeIntoExistingUser(context.user, userId),
 })
 
 /**
@@ -1134,9 +1121,8 @@ const logEmailVerifiedMutation = mutationWithClientMutationId({
       type: userType,
     },
   },
-  mutateAndGetPayload: ({ userId }, context) => {
-    return logEmailVerified(context.user, userId)
-  },
+  mutateAndGetPayload: ({ userId }, context) =>
+    logEmailVerified(context.user, userId),
 })
 
 /**

@@ -7,43 +7,41 @@ import { getMockUserContext } from '../../test-utils'
 jest.mock('../../databaseClient')
 const userContext = getMockUserContext()
 
-const getMockCharities = () => {
-  return [
-    {
-      id: 'some-charity-id',
-      name: 'Some Charity',
-      category: 'education',
-      logo: 'something.png',
-      image: 'something-2.png',
-      website: 'example.com',
-      description: 'Some description text.',
-      impact: 'Some impact text.',
-      inactive: false,
-    },
-    {
-      id: 'another-charity-id',
-      name: 'Another Charity',
-      category: 'water',
-      logo: 'another-thing.png',
-      image: 'another-thing-2.png',
-      website: 'example.com',
-      description: 'Another description text.',
-      impact: 'Another impact text.',
-      inactive: false,
-    },
-    {
-      id: 'third-charity-id',
-      name: 'Third Charity',
-      category: 'water',
-      logo: 'third-charity.png',
-      image: 'third-charity-2.png',
-      website: 'example.com',
-      description: 'Third charity description text.',
-      impact: 'Third charity impact text.',
-      // inactive: false // Note: inactive key isn't required
-    },
-  ]
-}
+const getMockCharities = () => [
+  {
+    id: 'some-charity-id',
+    name: 'Some Charity',
+    category: 'education',
+    logo: 'something.png',
+    image: 'something-2.png',
+    website: 'example.com',
+    description: 'Some description text.',
+    impact: 'Some impact text.',
+    inactive: false,
+  },
+  {
+    id: 'another-charity-id',
+    name: 'Another Charity',
+    category: 'water',
+    logo: 'another-thing.png',
+    image: 'another-thing-2.png',
+    website: 'example.com',
+    description: 'Another description text.',
+    impact: 'Another impact text.',
+    inactive: false,
+  },
+  {
+    id: 'third-charity-id',
+    name: 'Third Charity',
+    category: 'water',
+    logo: 'third-charity.png',
+    image: 'third-charity-2.png',
+    website: 'example.com',
+    description: 'Third charity description text.',
+    impact: 'Third charity impact text.',
+    // inactive: false // Note: inactive key isn't required
+  },
+]
 
 describe('getCharities', () => {
   it('calls the database as expected', async () => {

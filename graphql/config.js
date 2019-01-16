@@ -1,4 +1,4 @@
-var path = require('path')
+const path = require('path')
 
 // Load environment variables from .env file.
 // https://github.com/keithmorris/node-dotenv-extended

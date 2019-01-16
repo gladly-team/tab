@@ -32,15 +32,13 @@ describe('getNextLevelFor', () => {
     const vcAllTime = 40
     const userLevelGetBatch = jest
       .spyOn(UserLevelModel, 'getBatch')
-      .mockImplementationOnce(() => {
-        return [
-          new UserLevelModel({ id: 4, hearts: 50 }),
-          new UserLevelModel({ id: 5, hearts: 60 }),
-          new UserLevelModel({ id: 6, hearts: 70 }),
-          new UserLevelModel({ id: 7, hearts: 80 }),
-          new UserLevelModel({ id: 8, hearts: 90 }),
-        ]
-      })
+      .mockImplementationOnce(() => [
+        new UserLevelModel({ id: 4, hearts: 50 }),
+        new UserLevelModel({ id: 5, hearts: 60 }),
+        new UserLevelModel({ id: 6, hearts: 70 }),
+        new UserLevelModel({ id: 7, hearts: 80 }),
+        new UserLevelModel({ id: 8, hearts: 90 }),
+      ])
     await getNextLevelFor(userContext, level, vcAllTime)
     expect(userLevelGetBatch).toHaveBeenCalledWith(userContext, [
       { id: level + 1 },
@@ -54,15 +52,15 @@ describe('getNextLevelFor', () => {
   it('returns the correct level even if items are not sorted', async () => {
     const level = 3
     const vcAllTime = 40
-    jest.spyOn(UserLevelModel, 'getBatch').mockImplementationOnce(() => {
-      return [
+    jest
+      .spyOn(UserLevelModel, 'getBatch')
+      .mockImplementationOnce(() => [
         new UserLevelModel({ id: 8, hearts: 90 }),
         new UserLevelModel({ id: 5, hearts: 60 }),
         new UserLevelModel({ id: 6, hearts: 70 }),
         new UserLevelModel({ id: 7, hearts: 80 }),
         new UserLevelModel({ id: 4, hearts: 50 }),
-      ]
-    })
+      ])
     const nextLevel = await getNextLevelFor(userContext, level, vcAllTime)
     expect(nextLevel).toEqual(new UserLevelModel({ id: 4, hearts: 50 }))
   })
@@ -70,9 +68,7 @@ describe('getNextLevelFor', () => {
   it('returns null if we ran out of levels', async () => {
     const level = 3
     const vcAllTime = 95
-    jest.spyOn(UserLevelModel, 'getBatch').mockImplementationOnce(() => {
-      return []
-    })
+    jest.spyOn(UserLevelModel, 'getBatch').mockImplementationOnce(() => [])
     const nextLevel = await getNextLevelFor(userContext, level, vcAllTime)
     expect(nextLevel).toBeNull()
   })
@@ -82,24 +78,20 @@ describe('getNextLevelFor', () => {
     const vcAllTime = 105
     const userLevelGetBatch = jest
       .spyOn(UserLevelModel, 'getBatch')
-      .mockImplementationOnce(() => {
-        return [
-          new UserLevelModel({ id: 8, hearts: 90 }),
-          new UserLevelModel({ id: 5, hearts: 60 }),
-          new UserLevelModel({ id: 6, hearts: 70 }),
-          new UserLevelModel({ id: 7, hearts: 80 }),
-          new UserLevelModel({ id: 4, hearts: 50 }),
-        ]
-      })
-      .mockImplementationOnce(() => {
-        return [
-          new UserLevelModel({ id: 9, hearts: 100 }),
-          new UserLevelModel({ id: 10, hearts: 110 }),
-          new UserLevelModel({ id: 11, hearts: 120 }),
-          new UserLevelModel({ id: 12, hearts: 130 }),
-          new UserLevelModel({ id: 13, hearts: 140 }),
-        ]
-      })
+      .mockImplementationOnce(() => [
+        new UserLevelModel({ id: 8, hearts: 90 }),
+        new UserLevelModel({ id: 5, hearts: 60 }),
+        new UserLevelModel({ id: 6, hearts: 70 }),
+        new UserLevelModel({ id: 7, hearts: 80 }),
+        new UserLevelModel({ id: 4, hearts: 50 }),
+      ])
+      .mockImplementationOnce(() => [
+        new UserLevelModel({ id: 9, hearts: 100 }),
+        new UserLevelModel({ id: 10, hearts: 110 }),
+        new UserLevelModel({ id: 11, hearts: 120 }),
+        new UserLevelModel({ id: 12, hearts: 130 }),
+        new UserLevelModel({ id: 13, hearts: 140 }),
+      ])
     const nextLevel = await getNextLevelFor(userContext, level, vcAllTime)
     expect(nextLevel).toEqual(new UserLevelModel({ id: 10, hearts: 110 }))
     expect(userLevelGetBatch).toHaveBeenCalledTimes(2)

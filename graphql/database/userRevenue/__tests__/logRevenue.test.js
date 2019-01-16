@@ -1,6 +1,7 @@
 /* eslint-env jest */
 
 import moment from 'moment'
+import { random } from 'lodash/number'
 import UserRevenueModel from '../UserRevenueModel'
 import logRevenue from '../logRevenue'
 import {
@@ -11,7 +12,6 @@ import {
   mockDate,
 } from '../../test-utils'
 import decodeAmazonCPM from '../decodeAmazonCPM'
-import { random } from 'lodash/number'
 
 jest.mock('../decodeAmazonCPM')
 jest.mock('../../databaseClient')
@@ -55,7 +55,7 @@ describe('logRevenue', () => {
     expect(userRevenueCreate).toHaveBeenLastCalledWith(
       userContext,
       addTimestampFieldsToItem({
-        userId: userId,
+        userId,
         timestamp: moment.utc().toISOString(),
         revenue: 0.0172,
         dfpAdvertiserId: '2468',
@@ -73,7 +73,7 @@ describe('logRevenue', () => {
     expect(userRevenueCreate).toHaveBeenLastCalledWith(
       userContext,
       addTimestampFieldsToItem({
-        userId: userId,
+        userId,
         timestamp: moment.utc().toISOString(),
         revenue: 0.0172,
       })
@@ -91,7 +91,7 @@ describe('logRevenue', () => {
     expect(userRevenueCreate).toHaveBeenLastCalledWith(
       userContext,
       addTimestampFieldsToItem({
-        userId: userId,
+        userId,
         timestamp: moment.utc().toISOString(),
         revenue: 0.0172,
         dfpAdvertiserId: '2468',
@@ -120,7 +120,7 @@ describe('logRevenue', () => {
     expect(userRevenueCreate).toHaveBeenLastCalledWith(
       userContext,
       addTimestampFieldsToItem({
-        userId: userId,
+        userId,
         timestamp: moment.utc().toISOString(),
         revenue: 0.0172,
         dfpAdvertiserId: '2468',
@@ -152,7 +152,7 @@ describe('logRevenue', () => {
     expect(userRevenueCreate).toHaveBeenLastCalledWith(
       userContext,
       addTimestampFieldsToItem({
-        userId: userId,
+        userId,
         timestamp: moment.utc().toISOString(),
         revenue: 0.0172,
         dfpAdvertiserId: '2468',
@@ -209,7 +209,7 @@ describe('logRevenue', () => {
     expect(userRevenueCreate).toHaveBeenLastCalledWith(
       userContext,
       addTimestampFieldsToItem({
-        userId: userId,
+        userId,
         timestamp: moment.utc().toISOString(),
         revenue: 0.0085,
       })
@@ -235,7 +235,7 @@ describe('logRevenue', () => {
     expect(userRevenueCreate).toHaveBeenLastCalledWith(
       userContext,
       addTimestampFieldsToItem({
-        userId: userId,
+        userId,
         timestamp: moment.utc().toISOString(),
         revenue: 0.0085,
         adSize: '300x250',
@@ -295,7 +295,7 @@ describe('logRevenue', () => {
     expect(userRevenueCreate).toHaveBeenLastCalledWith(
       userContext,
       addTimestampFieldsToItem({
-        userId: userId,
+        userId,
         timestamp: moment.utc().toISOString(),
         revenue: 0.0085,
       })
@@ -309,7 +309,7 @@ describe('logRevenue', () => {
     expect(userRevenueCreate).toHaveBeenLastCalledWith(
       userContext,
       addTimestampFieldsToItem({
-        userId: userId,
+        userId,
         timestamp: moment.utc().toISOString(),
         revenue: 0.0068,
       })
@@ -345,7 +345,7 @@ describe('logRevenue', () => {
     expect(userRevenueCreate).toHaveBeenLastCalledWith(
       userContext,
       addTimestampFieldsToItem({
-        userId: userId,
+        userId,
         timestamp: moment.utc().toISOString(),
         revenue: 0.0085,
         tabId: someTabId,
@@ -370,7 +370,7 @@ describe('logRevenue', () => {
     expect(userRevenueCreate).toHaveBeenLastCalledWith(
       userContext,
       addTimestampFieldsToItem({
-        userId: userId,
+        userId,
         timestamp: moment.utc().toISOString(),
         revenue: 0.0068,
         tabId: someTabId,

@@ -40,7 +40,7 @@ class BaseModel {
       if (has(obj, fieldName)) {
         val = obj[fieldName]
       } else if (has(fieldDefaults, fieldName)) {
-        var fieldDefault = fieldDefaults[fieldName]
+        const fieldDefault = fieldDefaults[fieldName]
         if (isFunction(fieldDefault)) {
           val = fieldDefault()
         } else {
@@ -58,12 +58,12 @@ class BaseModel {
     //   the property.
     const self = this
     fieldNames.forEach(fieldName => {
-      var val = null
+      let val = null
       if (has(obj, fieldName)) {
         val = obj[fieldName]
       }
       if (isFunction(get(customDeserializers, fieldName, false))) {
-        let deserializeFunc = customDeserializers[fieldName]
+        const deserializeFunc = customDeserializers[fieldName]
         val = deserializeFunc(val, obj)
       }
       if (!isNil(val)) {
@@ -200,10 +200,10 @@ class BaseModel {
       // Handle timestamps ourselves, not through dynogels.
       timestamps: false,
 
-      schema: schema,
+      schema,
     }
     if (this.rangeKey) {
-      options['rangeKey'] = this.rangeKey
+      options.rangeKey = this.rangeKey
     }
 
     // Add any secondary indexes.
@@ -217,7 +217,7 @@ class BaseModel {
 
   static async get(userContext, hashKey, rangeKey, options) {
     const self = this
-    let keys = [hashKey]
+    const keys = [hashKey]
     if (rangeKey) {
       keys.push(rangeKey)
     }
@@ -243,10 +243,10 @@ class BaseModel {
   static async getBatch(userContext, keys) {
     const self = this
     // logger.debug(`Getting multiple objs with keys ${JSON.stringify(keys)} from table ${this.tableName}.`)
-    var authorizationError = false
+    let authorizationError = false
     keys.forEach(key => {
-      var hashKey
-      var rangeKey
+      let hashKey
+      let rangeKey
       if (isObject(key)) {
         hashKey = get(key, [self.hashKey], null)
         rangeKey = get(key, [self.rangeKey], null)
@@ -301,7 +301,7 @@ class BaseModel {
     const self = this
 
     // See if this query is happening on an index.
-    var indexName = null
+    let indexName = null
     if (has(queryObj, 'request.IndexName')) {
       indexName = queryObj.request.IndexName
     }
@@ -351,7 +351,7 @@ class BaseModel {
       return Promise.reject(new UnauthorizedQueryException())
     }
     return this.dynogelsModel
-      .createAsync(item, { overwrite: overwrite })
+      .createAsync(item, { overwrite })
       .then(data => self.deserialize(data))
       .catch(err => {
         throw err
@@ -371,12 +371,10 @@ class BaseModel {
   static async getOrCreate(userContext, item) {
     const self = this
     return this.create(userContext, item, false)
-      .then(createdItem => {
-        return {
-          created: true,
-          item: createdItem,
-        }
-      })
+      .then(createdItem => ({
+        created: true,
+        item: createdItem,
+      }))
       .catch(err => {
         // Overwrite is false and the item already existed.
         // Get the item and return it.
@@ -384,19 +382,16 @@ class BaseModel {
           const hashKey = item[self.hashKey]
           return self
             .get(userContext, hashKey)
-            .then(fetchedItem => {
-              return {
-                created: false,
-                item: fetchedItem,
-              }
-            })
+            .then(fetchedItem => ({
+              created: false,
+              item: fetchedItem,
+            }))
             .catch(err => {
               throw err
             })
-        } else {
-          // Unhandled error
-          throw err
         }
+        // Unhandled error
+        throw err
       })
   }
 
@@ -465,10 +460,10 @@ class BaseModel {
       return new Cls(item.attrs)
     }
 
-    var result
+    let result
     if (data instanceof Array) {
       result = []
-      for (var index in data) {
+      for (const index in data) {
         result.push(deserializeObj(data[index]))
       }
     } else {
@@ -524,7 +519,7 @@ class BaseModel {
     // If the function does not exist, do not allow any access.
     // If this operation is happening on a secondary index, get the authorizer
     // function for that index.
-    var authorizerFunction
+    let authorizerFunction
     if (indexName) {
       authorizerFunction = get(permissions, [
         'indexPermissions',
@@ -539,7 +534,7 @@ class BaseModel {
     }
 
     // If the authorizer function returns `true`, the query is authorized.
-    var isAuthorized = false
+    let isAuthorized = false
     try {
       isAuthorized =
         authorizerFunction(

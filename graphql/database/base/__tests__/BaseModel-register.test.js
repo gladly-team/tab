@@ -93,7 +93,7 @@ describe('BaseModel registering with Dynogels', () => {
     expect(dynogels.define).toHaveBeenLastCalledWith(TestModel.name, {
       hashKey: 'id',
       tableName: TestModel.tableName,
-      indexes: indexes,
+      indexes,
       timestamps: false,
       schema: constructSchema(schema),
     })

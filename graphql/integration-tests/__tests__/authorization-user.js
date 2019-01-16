@@ -7,9 +7,9 @@ import fetchQuery from '../utils/fetch-graphql'
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 180e3
 
-var username = null
-var userId = null
-var userIdToken = null
+let username = null
+let userId = null
+let userIdToken = null
 const fixtureUserId = 'gqltest1-12ab-12ab-12ab-123abc456def'
 
 beforeAll(async () => {
@@ -52,7 +52,7 @@ describe('User table queries', () => {
     const response = await fetchQuery(
       query,
       {
-        userId: userId,
+        userId,
       },
       userIdToken
     )
@@ -75,7 +75,7 @@ describe('User table queries', () => {
       }
     `
     const response = await fetchQuery(query, {
-      userId: userId,
+      userId,
     })
     expect(response.data).toBeUndefined()
     expect(response.message).toBe('Unauthorized')

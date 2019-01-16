@@ -1,5 +1,3 @@
-'use strict'
-
 import 'babel-polyfill' // For async/await support.
 import { graphql } from 'graphql'
 import { Schema } from './data/schema'
@@ -18,7 +16,7 @@ const Promise = require('bluebird')
 
 const createResponse = function(statusCode, body) {
   return {
-    statusCode: statusCode,
+    statusCode,
     headers: {
       'Access-Control-Allow-Origin': '*', // Required for CORS
     },
@@ -27,7 +25,7 @@ const createResponse = function(statusCode, body) {
 }
 
 export const handler = function(event) {
-  var body
+  let body
   try {
     body = JSON.parse(event.body)
   } catch (e) {
@@ -39,8 +37,8 @@ export const handler = function(event) {
   const context = createGraphQLContext(claims)
 
   // Add context to any logs (e.g. the user and request data).
-  return loggerContextWrapper(context.user, event, () => {
-    return graphql(Schema, body.query, null, context, body.variables)
+  return loggerContextWrapper(context.user, event, () =>
+    graphql(Schema, body.query, null, context, body.variables)
       .then(data => {
         // Check if the GraphQL response contains any errors, and
         // if it does, handle them.
@@ -58,7 +56,7 @@ export const handler = function(event) {
         handleError(err)
         return createResponse(500, 'Internal Error')
       })
-  })
+  )
 }
 
 export const serverlessHandler = function(event, context, callback) {

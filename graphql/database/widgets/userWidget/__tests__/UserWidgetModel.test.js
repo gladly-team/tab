@@ -20,7 +20,7 @@ describe('UserWidgetModel', () => {
   })
 
   it('implements the tableName property', () => {
-    expect(UserWidgetModel.tableName).toBe(tableNames['userWidgets'])
+    expect(UserWidgetModel.tableName).toBe(tableNames.userWidgets)
   })
 
   it('has the correct get permission', () => {

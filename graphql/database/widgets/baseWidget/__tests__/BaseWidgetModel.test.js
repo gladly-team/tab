@@ -15,6 +15,6 @@ describe('BaseWidgetModel', () => {
   })
 
   it('implements the tableName property', () => {
-    expect(BaseWidgetModel.tableName).toBe(tableNames['widgets'])
+    expect(BaseWidgetModel.tableName).toBe(tableNames.widgets)
   })
 })

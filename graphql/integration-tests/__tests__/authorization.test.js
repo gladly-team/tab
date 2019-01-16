@@ -5,9 +5,9 @@ import { deleteUser, getNewAuthedUser } from '../utils/auth-utils'
 import fetchQuery from '../utils/fetch-graphql'
 
 describe('GraphQL with authorized user', () => {
-  var username = null
-  var userId = null
-  var userIdToken = null
+  let username = null
+  let userId = null
+  let userIdToken = null
   const origUserId = 'gqltest1-yz89-yz80-yz80-xyz789tuv456'
 
   beforeAll(async () => {
@@ -45,7 +45,7 @@ describe('GraphQL with authorized user', () => {
         }
       }`,
       {
-        userId: userId,
+        userId,
       },
       userIdToken
     )

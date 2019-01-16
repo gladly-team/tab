@@ -11,11 +11,12 @@ jest.mock('../../databaseClient')
 
 jest.mock('consent-string', () => ({
   // https://facebook.github.io/jest/docs/en/es6-class-mocks.html#simple-mock-using-module-factory-parameter
-  ConsentString: jest.fn(() => {
-    return function() {
-      return {}
-    }
-  }),
+  ConsentString: jest.fn(
+    () =>
+      function() {
+        return {}
+      }
+  ),
 }))
 
 const mockConsentData = {
@@ -68,9 +69,9 @@ describe('logUserDataConsent', () => {
 
     // Mock decoding the consent string
     const ConsentString = require('consent-string').ConsentString
-    ConsentString.mockImplementationOnce(function() {
-      return getMockConsentDataClass(mockConsentData)
-    })
+    ConsentString.mockImplementationOnce(() =>
+      getMockConsentDataClass(mockConsentData)
+    )
 
     const logUserDataConsent = require('../logUserDataConsent').default
     await logUserDataConsent(userContext, userId, 'fake-consent-string', true)
@@ -78,7 +79,7 @@ describe('logUserDataConsent', () => {
     expect(userDataConsentCreate).toHaveBeenLastCalledWith(
       userContext,
       addTimestampFieldsToItem({
-        userId: userId,
+        userId,
         timestamp: moment.utc().toISOString(),
         consentString: 'fake-consent-string',
         consentCreated: mockConsentData.created,
@@ -112,7 +113,7 @@ describe('logUserDataConsent', () => {
 
     expect(userDataConsentCreate.mock.calls[0][1]).toMatchObject(
       addTimestampFieldsToItem({
-        userId: userId,
+        userId,
         timestamp: moment.utc().toISOString(),
         consentString: consentStr,
         consentCreated: '2018-05-24T04:50:35.700Z',

@@ -5,6 +5,7 @@ import { tableNames, tableKeys, tableFixtureFileNames } from './table-utils'
 import logger from '../../utils/logger'
 
 import AWS from './aws-client-dynamodb'
+
 const docClient = new AWS.DynamoDB.DocumentClient()
 
 // Consider simplifying fixtures by using factories, e.g.:
@@ -18,7 +19,7 @@ function sleep(ms) {
 
 const loadItemsIntoTable = async (items, tableName) => {
   const BATCH_MAX_ITEMS = 25
-  var itemsToLoad = items
+  let itemsToLoad = items
   if (items.length > BATCH_MAX_ITEMS) {
     await loadItemsIntoTable(items.slice(BATCH_MAX_ITEMS - 1), tableName)
     logger.info(`Items loaded: ${items.length}`)
@@ -29,13 +30,11 @@ const loadItemsIntoTable = async (items, tableName) => {
   }
   const params = {
     RequestItems: {
-      [tableName]: itemsToLoad.map(item => {
-        return {
-          PutRequest: {
-            Item: item,
-          },
-        }
-      }),
+      [tableName]: itemsToLoad.map(item => ({
+        PutRequest: {
+          Item: item,
+        },
+      })),
     },
   }
   return docClient
@@ -56,7 +55,7 @@ const deleteItemsFromTable = async (
   rangeKeyName
 ) => {
   const BATCH_MAX_ITEMS = 25
-  var itemsToDelete = items
+  let itemsToDelete = items
   if (items.length > BATCH_MAX_ITEMS) {
     await deleteItemsFromTable(
       items.slice(BATCH_MAX_ITEMS - 1),
@@ -112,7 +111,7 @@ const getItemsFromJsonFile = function(filePath, strReplacements = []) {
 
   // If needed, replace any strings in the fixtures before loading
   // them (e.g. replace a hardcoded user ID with a real user ID).
-  var fileStrFinal = fileStr
+  let fileStrFinal = fileStr
   strReplacements.forEach(item => {
     if (item.before && item.after) {
       fileStrFinal = fileStr.replace(item.before, item.after)
@@ -174,8 +173,8 @@ export const deleteFixtures = async (tableNameRef, strReplacements) => {
   const tableName = tableNames[tableNameRef]
   const fixtureFileName = tableFixtureFileNames[tableNameRef]
   const filePath = path.join(__dirname, '../fixtures/', fixtureFileName)
-  const hashKeyName = tableKeys[tableNameRef]['hash']
-  const rangeKeyName = tableKeys[tableNameRef]['range']
+  const hashKeyName = tableKeys[tableNameRef].hash
+  const rangeKeyName = tableKeys[tableNameRef].range
   return deleteFixturesFromTable(
     filePath,
     tableName,

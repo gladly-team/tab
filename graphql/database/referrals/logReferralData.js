@@ -13,10 +13,9 @@ export default async (
   userId,
   referringUserId,
   referringChannelId
-) => {
-  return ReferralDataModel.create(userContext, {
-    userId: userId,
+) =>
+  ReferralDataModel.create(userContext, {
+    userId,
     referringUser: referringUserId,
     referringChannel: referringChannelId,
   })
-}

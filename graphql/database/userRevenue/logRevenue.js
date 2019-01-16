@@ -13,12 +13,10 @@ const AGGREGATION_MAX = 'MAX'
  * @param {string|null} adSize - The ad dimensions, in form 'WIDTHxHEIGHT'
  * @return {Object}
  */
-const AdRevenue = (revenue, adSize) => {
-  return {
-    revenue: revenue || null,
-    adSize: adSize || null,
-  }
-}
+const AdRevenue = (revenue, adSize) => ({
+  revenue: revenue || null,
+  adSize: adSize || null,
+})
 
 /**
  * Convert an encoded revenue object into a float value by a method specified
@@ -34,8 +32,8 @@ const decodeRevenueObj = revenueObj => {
   if (!revenueObj) {
     return AdRevenue()
   }
-  var revenueVal
-  var adSize
+  let revenueVal
+  let adSize
   switch (revenueObj.encodingType) {
     case AMAZON_CPM_REVENUE_TYPE:
       const decodedCPM = decodeAmazonCPM(revenueObj.encodedValue)
@@ -66,12 +64,12 @@ const decodeRevenueObj = revenueObj => {
  * @return {Object} An AdRevenue object
  */
 const aggregateRevenues = (revenueObjs, aggregationOperation) => {
-  var aggregatedRevenue
+  let aggregatedRevenue
   switch (aggregationOperation) {
     case AGGREGATION_MAX:
-      aggregatedRevenue = revenueObjs.reduce((a, b) => {
-        return a.revenue > b.revenue ? a : b
-      })
+      aggregatedRevenue = revenueObjs.reduce((a, b) =>
+        a.revenue > b.revenue ? a : b
+      )
       break
     default:
       throw new Error(
@@ -131,7 +129,7 @@ const logRevenue = async (
   // Decode the encoded revenue, if needed
   const decodedRevenueObj = decodeRevenueObj(encodedRevenue)
 
-  var revenueObjToLog = null
+  let revenueObjToLog = null
   // Received no valid revenue value
   if (isNil(revenueObj.revenue) && isNil(decodedRevenueObj.revenue)) {
     throw new Error(
@@ -159,13 +157,13 @@ const logRevenue = async (
   const ISOTimestamp = moment.utc().toISOString()
   function createRevenueLogItem(createdISOTimestamp) {
     return UserRevenueModel.create(userContext, {
-      userId: userId,
+      userId,
       timestamp: createdISOTimestamp,
       revenue: revenueObjToLog.revenue,
-      ...(dfpAdvertiserId && { dfpAdvertiserId: dfpAdvertiserId }),
-      ...(tabId && { tabId: tabId }),
+      ...(dfpAdvertiserId && { dfpAdvertiserId }),
+      ...(tabId && { tabId }),
       ...(revenueObjToLog.adSize && { adSize: revenueObjToLog.adSize }),
-      ...(adUnitCode && { adUnitCode: adUnitCode }),
+      ...(adUnitCode && { adUnitCode }),
     })
   }
 
