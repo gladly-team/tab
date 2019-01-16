@@ -81,12 +81,11 @@
     }
   },
   "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
+    "**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
       "yarn run format:fix",
       "git add"
     ]
   },
-
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gladly-team/tab.git"
