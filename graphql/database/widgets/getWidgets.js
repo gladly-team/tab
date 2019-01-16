@@ -44,7 +44,7 @@ const getWidgets = async (userContext, userId, enabled = false) => {
     userWidgets.forEach(userWidget => {
       const baseWidget = find(
         baseWidgets,
-        baseWidget => baseWidget.id === userWidget.widgetId
+        bWidget => bWidget.id === userWidget.widgetId
       )
       mergedWidgets.push(constructFullWidget(userWidget, baseWidget))
     })

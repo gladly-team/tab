@@ -49,8 +49,9 @@ const isTabValid = (tabsOpenedToday, lastTabTimestampStr) => {
 const logTab = async (userContext, userId, tabId = null) => {
   // Check if it's a valid tab before incrementing user VC or
   // the user's valid tab count.
+  let user
   try {
-    var user = await UserModel.get(userContext, userId)
+    user = await UserModel.get(userContext, userId)
   } catch (e) {
     throw e
   }

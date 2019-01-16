@@ -1,3 +1,4 @@
+/* eslint import/prefer-default-export: 0 */
 import moment from 'moment'
 
 /**

@@ -281,7 +281,7 @@ class User extends BaseModel {
       tabsToday: (tabsToday, userObj) =>
         // Calculate tabsToday based on the maxTabsDay value
         getTodayTabCount(userObj),
-      backgroundImage: (backgroundImage, userObj) =>
+      backgroundImage: backgroundImage =>
         Object.assign({}, backgroundImage, {
           imageURL: `${mediaRoot}/img/backgrounds/${backgroundImage.image}`,
           thumbnailURL: `${mediaRoot}/img/background-thumbnails/${

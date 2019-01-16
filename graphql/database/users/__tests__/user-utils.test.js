@@ -29,7 +29,7 @@ describe('user utils', () => {
         },
       },
     })
-    const getTodayTabCount = require('../user-utils').getTodayTabCount
+    const { getTodayTabCount } = require('../user-utils')
     expect(getTodayTabCount(mockUser)).toBe(148)
   })
 
@@ -46,7 +46,7 @@ describe('user utils', () => {
         },
       },
     })
-    const getTodayTabCount = require('../user-utils').getTodayTabCount
+    const { getTodayTabCount } = require('../user-utils')
     expect(getTodayTabCount(mockUser)).toBe(0)
   })
 })

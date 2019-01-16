@@ -51,7 +51,7 @@ export default async (userContext, userId) =>
       }
     })
   )
-    .then(data => true)
+    .then(() => true)
     .catch(err => {
       throw err
     })

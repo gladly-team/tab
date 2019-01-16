@@ -25,7 +25,7 @@ import logger from '../../utils/logger'
 const createUser = async (
   userContext,
   userId,
-  email = null,
+  email = null, // eslint-disable-line no-unused-vars
   referralData = null,
   experimentGroups = {},
   extensionInstallId = null,
@@ -53,8 +53,9 @@ const createUser = async (
         }
       : null
   )
+  let response
   try {
-    var response = await UserModel.getOrCreate(userContext, userInfo)
+    response = await UserModel.getOrCreate(userContext, userInfo)
   } catch (e) {
     throw e
   }
@@ -112,7 +113,7 @@ const createUser = async (
         )
         referringUserId = referringUser.id
       }
-    } catch (e) {}
+    } catch (e) {} // eslint-disable-line no-empty
 
     // Log the referral data.
     try {
