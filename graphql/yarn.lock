@@ -59,9 +59,9 @@
     "@types/node" "*"
 
 "@types/node@*":
-  version "10.11.4"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.11.4.tgz#e8bd933c3f78795d580ae41d86590bfc1f4f389d"
-  integrity sha512-ojnbBiKkZFYRfQpmtnnWTMw+rzGp/JiystjluW9jgN3VzRwilXddJ6aGQ9V/7iuDG06SBgn7ozW9k3zcAnYjYQ==
+  version "10.12.18"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.12.18.tgz#1d3ca764718915584fcd9f6344621b7672665c67"
+  integrity sha512-fh+pAqt4xRzPfqA6eh3Z2y6fyZavRIumvjhaCL753+TVkGKGhpPeyrJG2JftD0T9q4GF00KjefsQ+PQNDdWQaQ==
 
 abab@^1.0.4:
   version "1.0.4"
@@ -459,12 +459,11 @@ atob@^2.0.0:
   integrity sha1-GcenYEc3dEaPILLS0DNyrX1Mv10=
 
 auto-parse@^1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/auto-parse/-/auto-parse-1.3.0.tgz#c3450c3147a2a4a94bfa1d07011cbcf0d8d22003"
-  integrity sha1-w0UMMUeipKlL+h0HARy88NjSIAM=
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/auto-parse/-/auto-parse-1.6.0.tgz#5dfc2692e9e650bae4cc6132cbb7bb49ffb37bc9"
+  integrity sha512-bxQzTBuQxezN8G4d2kd8U7ozJ1vUlEFwa7RVbBIL7IH8nxWikCup/JcdMadEFwnHRUFuJrlYo7i0domuFSXp4w==
   dependencies:
-    lodash "^4.16.3"
-    typpy "^2.3.6"
+    typpy "2.3.10"
 
 aws-sdk@2.58.0:
   version "2.58.0"
@@ -3345,9 +3344,9 @@ function-bind@^1.1.1:
   integrity sha512-yIovAzMX49sF8Yl58fSCWJ5svSLuaibPxXQJFLmBObTuCr0Mf1KiPopGM9NiFjiYBCbfaa2Fh6breQ6ANVTI0A==
 
 function.name@^1.0.3:
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/function.name/-/function.name-1.0.8.tgz#d11c12e4a7dfa7de7c71d9c504567083bb6be05b"
-  integrity sha1-0RwS5Kffp958cdnFBFZwg7tr4Fs=
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/function.name/-/function.name-1.0.12.tgz#34eec84476d9fb67977924a4cdcb98ec85695726"
+  integrity sha512-C7Tu+rAFrWW5RjXqtKtXp2xOdCujq+4i8ZH3w0uz/xrYHBwXZrPt96x8cDAEHrIjeyEv/Jm6iDGyqupbaVQTlw==
   dependencies:
     noop6 "^1.0.1"
 
@@ -5092,7 +5091,7 @@ lodash@3.x:
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
   integrity sha1-W/Rejkm6QYnhfUgnid/RW9FAt7Y=
 
-lodash@4.17.4, lodash@^4.0.0, lodash@^4.11.1, lodash@^4.13.1, lodash@^4.14.0, lodash@^4.16.3, lodash@^4.2.0, lodash@^4.3.0, lodash@^4.8.0:
+lodash@4.17.4, lodash@^4.0.0, lodash@^4.11.1, lodash@^4.13.1, lodash@^4.14.0, lodash@^4.2.0, lodash@^4.3.0, lodash@^4.8.0:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
   integrity sha1-eCA6TRwyiuHYbcpkYONptX9AVa4=
@@ -5539,9 +5538,9 @@ node-source-walk@^3.0.0, node-source-walk@^3.2.0:
     babylon "^6.17.0"
 
 noop6@^1.0.1:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/noop6/-/noop6-1.0.6.tgz#eb2b6b5ee1248a02838ee0cea12e8dd5caaf849b"
-  integrity sha1-6ytrXuEkigKDjuDOoS6N1cqvhJs=
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/noop6/-/noop6-1.0.8.tgz#eff06e2e5b3621e9e5618f389d6a2294f76e64ad"
+  integrity sha512-+Al5csMVc40I8xRfJsyBcN1IbpyvebOuQmMfxdw+AL6ECELey12ANgNTRhMfTwNIDU4W9W0g8EHLcsb3+3qPFA==
 
 nopt@^4.0.1:
   version "4.0.1"
@@ -7586,10 +7585,10 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typpy@^2.3.6:
-  version "2.3.8"
-  resolved "https://registry.yarnpkg.com/typpy/-/typpy-2.3.8.tgz#5dfc0a1e9b9e4f9287ef8fa94dce8aa18103e581"
-  integrity sha1-XfwKHpueT5KH74+pTc6KoYED5YE=
+typpy@2.3.10:
+  version "2.3.10"
+  resolved "https://registry.yarnpkg.com/typpy/-/typpy-2.3.10.tgz#63a39e4171cbbb4cdefb590009228a3de9a22b2f"
+  integrity sha512-DKiSmYeXF4q+K0H999sVROLjwsngad5AloblLo72No+xVT9W09ytUIOCC/3puHsf+Dsf8M2hoPds0H1HwJgQqg==
   dependencies:
     function.name "^1.0.3"
 
