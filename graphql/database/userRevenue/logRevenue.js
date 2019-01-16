@@ -35,7 +35,7 @@ const decodeRevenueObj = revenueObj => {
   let revenueVal
   let adSize
   switch (revenueObj.encodingType) {
-    case AMAZON_CPM_REVENUE_TYPE:
+    case AMAZON_CPM_REVENUE_TYPE: {
       const decodedCPM = decodeAmazonCPM(revenueObj.encodedValue)
       if (isNil(decodedCPM)) {
         throw new Error(
@@ -45,8 +45,10 @@ const decodeRevenueObj = revenueObj => {
         )
       }
       revenueVal = decodedCPM / 1000
+      // eslint-disable-next-line prefer-destructuring
       adSize = revenueObj.adSize
       break
+    }
     default:
       throw new Error(
         'Invalid "encodingType" field for revenue object transformation'
@@ -180,8 +182,8 @@ const logRevenue = async (
         // A messy but sufficient fix: modify the timestamp slightly.
         const newISOTimestamp = addMillisecondsToISODatetime(ISOTimestamp)
         await createRevenueLogItem(newISOTimestamp)
-      } catch (e) {
-        throw e
+      } catch (err) {
+        throw err
       }
     } else {
       throw e

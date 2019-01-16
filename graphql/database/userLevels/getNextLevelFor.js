@@ -30,16 +30,17 @@ const getNextLevelFor = async (userContext, level, vcAllTime) => {
     return null
   }
 
-  const sortedLevels = sortBy(levels, level => level.id)
+  const sortedLevels = sortBy(levels, thisLevel => thisLevel.id)
 
   let levelToReturn
-  forEach(sortedLevels, level => {
+  forEach(sortedLevels, thisLevel => {
     // If the level's required hearts is greater than the
     // user's number of hearts, it is the user's next level.
-    if (level.hearts > vcAllTime) {
-      levelToReturn = level
+    if (thisLevel.hearts > vcAllTime) {
+      levelToReturn = thisLevel
       return false
     }
+    return true
   })
   if (levelToReturn) {
     return levelToReturn

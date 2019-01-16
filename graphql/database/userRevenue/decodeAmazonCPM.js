@@ -12,7 +12,7 @@ const decodeAmazonCPM = amazonCPMCode => {
     return 0.0
   }
   const cpmVal = parseFloat(cpmStr)
-  if (isNaN(cpmVal)) {
+  if (Number.isNaN(cpmVal)) {
     throw new Error(
       `Amazon CPM code "${amazonCPMCode}" resolved to a non-numeric value`
     )
