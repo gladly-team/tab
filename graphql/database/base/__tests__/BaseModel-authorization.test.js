@@ -50,11 +50,13 @@ describe('BaseModel `isQueryAuthorized` method', () => {
 
   it('does not authorize if operation properties are not functions', () => {
     const TestModel = require('../test-utils/ExampleModel').default
-    const newPermissions = validOperations.reduce((result, item) => {
-      const newPermission = result
-      newPermission[item] = 'hi'
-      return newPermission
-    }, {})
+    const newPermissions = validOperations.reduce(
+      (result, item) =>
+        Object.assign({}, result, {
+          [item]: 'hi',
+        }),
+      {}
+    )
     setModelPermissions(TestModel, newPermissions)
     validOperations.forEach(operation => {
       const isAuthorized = TestModel.isQueryAuthorized(
@@ -69,11 +71,13 @@ describe('BaseModel `isQueryAuthorized` method', () => {
 
   it('authorizes all operations if each returns true', () => {
     const TestModel = require('../test-utils/ExampleModel').default
-    const newPermissions = validOperations.reduce((result, item) => {
-      const newPermission = result
-      newPermission[item] = () => true
-      return newPermission
-    }, {})
+    const newPermissions = validOperations.reduce(
+      (result, item) =>
+        Object.assign({}, result, {
+          [item]: () => true,
+        }),
+      {}
+    )
     setModelPermissions(TestModel, newPermissions)
     validOperations.forEach(operation => {
       const isAuthorized = TestModel.isQueryAuthorized(
@@ -118,11 +122,13 @@ describe('BaseModel `isQueryAuthorized` method', () => {
     const TestModel = require('../test-utils/ExampleModel').default
 
     // Make the model permissions allow operations.
-    const newPermissions = validOperations.reduce((result, item) => {
-      const newPermission = result
-      newPermission[item] = () => true
-      return newPermission
-    }, {})
+    const newPermissions = validOperations.reduce(
+      (result, item) =>
+        Object.assign({}, result, {
+          [item]: () => true,
+        }),
+      {}
+    )
     setModelPermissions(TestModel, newPermissions)
 
     // All operations should fail without a user.
@@ -141,11 +147,13 @@ describe('BaseModel `isQueryAuthorized` method', () => {
     const TestModel = require('../test-utils/ExampleModel').default
 
     // Make the model permissions allow operations.
-    const newPermissions = validOperations.reduce((result, item) => {
-      const newPermission = result
-      newPermission[item] = () => true
-      return newPermission
-    }, {})
+    const newPermissions = validOperations.reduce(
+      (result, item) =>
+        Object.assign({}, result, {
+          [item]: () => true,
+        }),
+      {}
+    )
     setModelPermissions(TestModel, newPermissions)
 
     // All operations should fail without a user.
@@ -164,11 +172,13 @@ describe('BaseModel `isQueryAuthorized` method', () => {
     const TestModel = require('../test-utils/ExampleModel').default
 
     // Make the model disallow all operations.
-    const newPermissions = validOperations.reduce((result, item) => {
-      const newPermission = result
-      newPermission[item] = () => false
-      return newPermission
-    }, {})
+    const newPermissions = validOperations.reduce(
+      (result, item) =>
+        Object.assign({}, result, {
+          [item]: () => false,
+        }),
+      {}
+    )
     setModelPermissions(TestModel, newPermissions)
 
     validOperations.forEach(operation => {
