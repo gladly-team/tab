@@ -10,12 +10,7 @@ import BackgroundImageModel from '../backgroundImages/BackgroundImageModel'
  * @param {string} imageId - The image id.
  * @return {Promise<User>}  A promise that resolves into a User instance.
  */
-const setBackgroundImage = async (
-  userContext,
-  userId,
-  imageId,
-  mode = USER_BACKGROUND_OPTION_PHOTO
-) => {
+const setBackgroundImage = async (userContext, userId, imageId, mode) => {
   try {
     const image = await BackgroundImageModel.get(userContext, imageId)
     const userInstance = await UserModel.update(userContext, {
@@ -26,7 +21,7 @@ const setBackgroundImage = async (
         thumbnail: image.thumbnail,
         timestamp: moment.utc().toISOString(),
       },
-      backgroundOption: mode,
+      backgroundOption: mode || USER_BACKGROUND_OPTION_PHOTO,
     })
     return userInstance
   } catch (e) {
