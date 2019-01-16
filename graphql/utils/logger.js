@@ -88,7 +88,7 @@ const log = (msg, logLevel) => {
   }
 }
 
-const logger = {}
+const logger = {};
 
 logger.log = msg => {
   log(msg, logLevels.LOG)
