@@ -1,3 +1,4 @@
+import 'babel-polyfill' // For async/await support.
 import { graphql } from 'graphql'
 import { Schema } from './data/schema'
 import {
@@ -6,12 +7,6 @@ import {
 } from './utils/authorization-helpers'
 import { handleError } from './utils/error-logging'
 import { loggerContextWrapper } from './utils/logger'
-
-// https://github.com/babel/babel-loader/issues/401#issuecomment-365650944
-if (!global._babelPolyfill) {
-  // For async/await support.
-  require('babel-polyfill')
-}
 
 // Note: we need to use Bluebird until at least Node 8. Using
 // native promises breaks Sentry/Raven context:
