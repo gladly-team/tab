@@ -116,11 +116,6 @@ provider:
         - "${self:custom.dbTableArnBase}ReferralDataLog-${self:provider.stage}"
         - "${self:custom.dbTableArnBase}ReferralDataLog-${self:provider.stage}/index/*"
 
-plugins:
-  # Include only the required node modules.
-  # https://github.com/dougmoscrop/serverless-plugin-include-dependencies
-  - serverless-plugin-include-dependencies
-
 # Only include the build and its node modules.
 package:
   exclude:
