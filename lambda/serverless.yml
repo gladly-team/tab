@@ -38,6 +38,11 @@ custom:
   # TODO: make KMS key an env var
   awsKmsKeyArn: arn:aws:kms:us-west-2:167811431063:key/de8bda45-b6cd-421f-8f56-de56bfb9f97b
 
+plugins:
+  # Include only the required node modules.
+  # https://github.com/dougmoscrop/serverless-plugin-include-dependencies
+  - serverless-plugin-include-dependencies
+
 # Only include the build and its node modules.
 package:
   exclude:
