@@ -455,12 +455,20 @@ describe('logRevenue', () => {
 
     // Mock that the item already exists for the original and the
     // retried "create" operations.
-    setMockDBResponse(DatabaseOperation.CREATE, null, {
-      code: 'ConditionalCheckFailedException',
-    })
-    setMockDBResponse(DatabaseOperation.CREATE, null, {
-      code: 'ConditionalCheckFailedException',
-    })
+    setMockDBResponse(
+      DatabaseOperation.CREATE,
+      null,
+      new Error({
+        code: 'ConditionalCheckFailedException',
+      })
+    )
+    setMockDBResponse(
+      DatabaseOperation.CREATE,
+      null,
+      new Error({
+        code: 'ConditionalCheckFailedException',
+      })
+    )
 
     await expect(
       logRevenue(userContext, userContext.id, 0.0172, '2468')
