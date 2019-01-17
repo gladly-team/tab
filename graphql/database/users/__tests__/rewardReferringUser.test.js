@@ -346,7 +346,7 @@ describe('rewardReferringUser', () => {
     setMockDBResponse(
       DatabaseOperation.GET,
       null,
-      { code: 'SomeFakeError' } // simple mock error
+      new Error({ code: 'SomeFakeError' }) // simple mock error
     )
 
     // Mock getting the user to check if its referral has been rewarded.
@@ -362,7 +362,7 @@ describe('rewardReferringUser', () => {
       Attributes: Object.assign({}, mockUser, { referrerRewarded: true }),
     })
 
-    return expect(rewardReferringUser(userContext, userId)).rejects.toThrow()
+    await expect(rewardReferringUser(userContext, userId)).rejects.toThrow()
   })
 
   it('throws if there is an error when getting the user', async () => {
@@ -390,7 +390,7 @@ describe('rewardReferringUser', () => {
     setMockDBResponse(
       DatabaseOperation.GET,
       null,
-      { code: 'SomeFakeError' } // simple mock error
+      new Error({ code: 'SomeFakeError' }) // simple mock error
     )
 
     // Mock updating the user to mark the user as referred.
@@ -398,7 +398,7 @@ describe('rewardReferringUser', () => {
       Attributes: Object.assign({}, mockUser, { referrerRewarded: true }),
     })
 
-    return expect(rewardReferringUser(userContext, userId)).rejects.toThrow()
+    await expect(rewardReferringUser(userContext, userId)).rejects.toThrow()
   })
 
   it('throws if there is an error when updating the user to mark its referrer as rewarded', async () => {
@@ -434,14 +434,16 @@ describe('rewardReferringUser', () => {
     setMockDBResponse(
       DatabaseOperation.UPDATE,
       null,
-      { code: 'SomeFakeError' } // simple mock error
+      new Error({ code: 'SomeFakeError' }) // simple mock error
     )
 
-    return expect(rewardReferringUser(userContext, userId)).rejects.toThrow()
+    // FIXME
+    await expect(rewardReferringUser(userContext, userId)).rejects.toThrow()
   })
 
   it('throws if there is an error when rewarding the user with VC', async () => {
     expect.assertions(1)
+    // console.log('====================')
 
     const userContext = getMockUserContext()
     const userInfo = getMockUserInfo()

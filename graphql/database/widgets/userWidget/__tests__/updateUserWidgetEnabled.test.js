@@ -141,7 +141,11 @@ describe('updateUserWidgetEnabled', () => {
     const widgetId = 'ab5082cc-151a-4a9a-9289-06906670fd4e'
 
     // Set some other update error.
-    setMockDBResponse(DatabaseOperation.UPDATE, null, { code: 'SomethingElse' })
+    setMockDBResponse(
+      DatabaseOperation.UPDATE,
+      null,
+      new Error({ code: 'SomethingElse' })
+    )
 
     return expect(
       updateUserWidgetEnabled(userContext, userInfo.id, widgetId, true)
@@ -155,9 +159,13 @@ describe('updateUserWidgetEnabled', () => {
     const widgetId = 'ab5082cc-151a-4a9a-9289-06906670fd4e'
 
     // Set that the item doesn't exist when updating.
-    setMockDBResponse(DatabaseOperation.UPDATE, null, {
-      code: 'ConditionalCheckFailedException',
-    })
+    setMockDBResponse(
+      DatabaseOperation.UPDATE,
+      null,
+      new Error({
+        code: 'ConditionalCheckFailedException',
+      })
+    )
 
     // Set some error during creation.
     setMockDBResponse(DatabaseOperation.CREATE, null, {
