@@ -6,6 +6,9 @@ import { initializeFirebase } from 'js/authentication/firebaseConfig'
 import { getUsername } from 'js/authentication/user'
 import * as serviceWorker from 'js/serviceWorker'
 
+// Husky test: we should align this misaligned comment:
+// I am misaligned
+
 // Start Sentry logger
 // https://docs.sentry.io/clients/javascript/config/
 const sentryDSN = process.env.REACT_APP_SENTRY_DSN

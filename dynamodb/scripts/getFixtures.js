@@ -2,6 +2,8 @@
 import { map } from 'lodash/collection'
 import { cloneDeep } from 'lodash/lang'
 
+// Husky test: we should align this misaligned comment:
+// I am misaligned
 const allFixtures = [
   {
     tableName: 'Users',

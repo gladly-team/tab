@@ -1,5 +1,7 @@
 /* eslint import/no-extraneous-dependencies: 0 */
 
+// Husky test: we should align this misaligned comment:
+// I am misaligned
 const path = require('path')
 const AWS = require('aws-sdk')
 
