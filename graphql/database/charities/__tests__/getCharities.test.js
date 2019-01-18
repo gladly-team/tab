@@ -2,7 +2,7 @@
 
 import getCharities from '../getCharities'
 import CharityModel from '../CharityModel'
-import { getMockUserContext } from '../../test-utils'
+import { getMockUserContext, clearAllMockDBResponses } from '../../test-utils'
 
 jest.mock('../../databaseClient')
 const userContext = getMockUserContext()
@@ -18,6 +18,7 @@ const getMockCharities = () => [
     description: 'Some description text.',
     impact: 'Some impact text.',
     inactive: false,
+    isPermanentPartner: true,
   },
   {
     id: 'another-charity-id',
@@ -29,6 +30,7 @@ const getMockCharities = () => [
     description: 'Another description text.',
     impact: 'Another impact text.',
     inactive: false,
+    isPermanentPartner: true,
   },
   {
     id: 'third-charity-id',
@@ -39,9 +41,14 @@ const getMockCharities = () => [
     website: 'example.com',
     description: 'Third charity description text.',
     impact: 'Third charity impact text.',
-    // inactive: false // Note: inactive key isn't required
+    inactive: false,
+    isPermanentPartner: true,
   },
 ]
+
+afterEach(() => {
+  clearAllMockDBResponses()
+})
 
 describe('getCharities', () => {
   it('calls the database as expected', async () => {
@@ -114,5 +121,50 @@ describe('getCharities', () => {
 
     const expectedCharities = []
     expect(fetchedCharities).toEqual(expectedCharities)
+  })
+
+  it('filters on isPermanentPartner when a filter is provided', async () => {
+    expect.assertions(3)
+
+    const mockCharities = getMockCharities()
+    mockCharities[0].isPermanentPartner = true
+    mockCharities[1].isPermanentPartner = false
+    mockCharities[2].isPermanentPartner = true
+    jest
+      .spyOn(CharityModel, 'getAll')
+      .mockImplementation(async () => mockCharities)
+    const permanentPartnerCharities = [mockCharities[0], mockCharities[2]]
+    const nonpermanentPartnerCharities = [mockCharities[1]]
+
+    // Get only permanent partner charities.
+    expect(
+      await getCharities(userContext, { isPermanentPartner: true })
+    ).toEqual(permanentPartnerCharities)
+
+    // Get only non-permanent partner charities.
+    expect(
+      await getCharities(userContext, { isPermanentPartner: false })
+    ).toEqual(nonpermanentPartnerCharities)
+
+    // Don't filter on permanent partner status.
+    expect(await getCharities(userContext)).toEqual(mockCharities)
+  })
+
+  it('returns an empty array when all charities are non-permanent and the isPermanentPartner filter is true', async () => {
+    expect.assertions(1)
+
+    const mockCharities = getMockCharities()
+    mockCharities.forEach(charity => {
+      // eslint-disable-next-line no-param-reassign
+      charity.isPermanentPartner = false
+    })
+
+    jest
+      .spyOn(CharityModel, 'getAll')
+      .mockImplementationOnce(async () => mockCharities)
+    const fetchedCharities = await getCharities(userContext, {
+      isPermanentPartner: true,
+    })
+    expect(fetchedCharities).toEqual([])
   })
 })

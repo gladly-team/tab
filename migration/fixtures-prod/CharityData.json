@@ -9,7 +9,9 @@
     "impact": "Nearly one billion people lack access to clean water, but thankfully $25 is all it takes for Water.org to provide someone with a lifetime of clean water. Your donation helps bring us one step closer to a world without thirst.",
     "description": "Provides safe water and sanitation solutions that give communities health, hope, and a future",
     "created": "2017-07-18T20:45:53Z",
-    "updated": "2017-07-18T20:45:53Z"
+    "updated": "2017-07-18T20:45:53Z",
+    "inactive": false,
+    "isPermanentPartner": true
   },
   {
     "id": "90bfe202-54a9-4eea-9003-5e91572387dd",
@@ -21,7 +23,9 @@
     "impact": "Your donation helps provide crisis relief, opportunities to learn, and a better future for children all across the globe. With your support, we can make sure no child is without a helping hand.",
     "description": "Giving the world's children a healthy start, an opportunity to learn, and protection from harm",
     "created": "2017-07-18T20:45:53Z",
-    "updated": "2017-07-18T20:45:53Z"
+    "updated": "2017-07-18T20:45:53Z",
+    "inactive": false,
+    "isPermanentPartner": true
   },
   {
     "id": "3caf69b6-9803-4495-9a5c-5ae0316bf367",
@@ -33,7 +37,9 @@
     "impact": "Your donation will focus on literacy and gender inequality in education, two issues where Room to Read believes they can have the greatest impact. Nearly 10 million children have benefitted from Room to Read's efforts so far, and your support keeps that number growing.",
     "description": "Creating a future in which all the world's children can pursue a quality education",
     "created": "2017-07-18T20:45:53Z",
-    "updated": "2017-07-18T20:45:53Z"
+    "updated": "2017-07-18T20:45:53Z",
+    "inactive": false,
+    "isPermanentPartner": true
   },
   {
     "id": "1ff620f3-dd55-496d-be37-2b66c4d1c807",
@@ -45,7 +51,9 @@
     "impact": "<p>With your help, <a href='https://www.experienceeducate.org/' target='_blank' rel='noopener noreferrer'>Educate!</a> is preparing youth in Africa with the skills to succeed in today's economy. They tackle youth unemployment by reforming what schools teach and how they teach it, so that students in Africa have the skills to start businesses, get jobs and drive development in their communities.</p><p>A randomized controlled trial found that Educate! graduates DOUBLE their incomes and that the Educate! model has an outsized impact on girls.</p>",
     "description": "Preparing youth in Africa with the skills to succeed in today's economy",
     "created": "2017-07-18T20:45:53Z",
-    "updated": "2017-07-18T20:45:53Z"
+    "updated": "2017-07-18T20:45:53Z",
+    "inactive": false,
+    "isPermanentPartner": true
   },
   {
     "id": "53aa6c29-74dc-44ca-a8e5-9d78321341b7",
@@ -57,7 +65,9 @@
     "impact": "Wherever abuses of human rights exist, HRW is there to give voice to the voiceless and power to the powerless. Right now your donation is being used to expose police brutality in China, raise concern over the growth of drone violence, and so much more.",
     "description": "An independent, international organization that defends the rights of people worldwide",
     "created": "2017-07-18T20:45:53Z",
-    "updated": "2017-07-18T20:45:53Z"
+    "updated": "2017-07-18T20:45:53Z",
+    "inactive": false,
+    "isPermanentPartner": true
   },
   {
     "id": "fecda3ac-7adc-49cd-9a8c-b78073e15e7a",
@@ -69,7 +79,9 @@
     "impact": "For more than 25 years, donations like yours have helped fund some of the most innovative solutions to the problems that threaten our planet. And as always, your donation will be matched dollar for dollar by the governments, foundations, and other donors that support Conservation International's work.",
     "description": "Because saving nature is the only way to save ourselves",
     "created": "2017-07-18T20:45:53Z",
-    "updated": "2017-07-18T20:45:53Z"
+    "updated": "2017-07-18T20:45:53Z",
+    "inactive": false,
+    "isPermanentPartner": true
   },
   {
     "id": "ea019270-1cda-411f-b41e-90406fbe15ee",
@@ -81,7 +93,9 @@
     "impact": "Your donation helps move us one step closer to ending world hunger. Right now Action Against Hunger is providing lifesaving support to the victims of the Nepal earthquake, preventing cholera in the D.R Congo, and much more.",
     "description": "A global humanitarian organization committed to ending world hunger",
     "created": "2017-07-18T20:45:53Z",
-    "updated": "2017-07-18T20:45:53Z"
+    "updated": "2017-07-18T20:45:53Z",
+    "inactive": false,
+    "isPermanentPartner": true
   },
   {
     "id": "978ee12f-6bc1-464e-af3a-2f56b6274292",
@@ -93,7 +107,9 @@
     "impact": "Last year those funds were used to support the Sarcoma Foundation of America. Tune into this year's Project for Awesome to help decide where this donation goes!",
     "description": "Distributes 100% of donations to non-profits selected by Nerdfighteria and the Project for Awesome",
     "created": "2017-07-18T20:45:53Z",
-    "updated": "2017-07-18T20:45:53Z"
+    "updated": "2017-07-18T20:45:53Z",
+    "inactive": false,
+    "isPermanentPartner": true
   },
   {
     "id": "77ee7208-62d7-41ad-a6e1-60f8d1dcfd9a",
@@ -106,6 +122,8 @@
     "impact": "<p>Thank you for giving directly. Your decision to send cash means poor families themselves will be empowered to prioritize their own needs.</p><p>Want to stay in the loop on what happens next? <a href='http://go.pardot.com/l/209742/2017-08-31/bcbz8' target='_blank' rel='noopener noreferrer'>Join GiveDirectly's mailing list</a>. GiveDirectly aims for a high bar on updates - content that will teach you something or leave you interested.</p><p>In the meantime, <a href='https://live.givedirectly.org/' target='_blank' rel='noopener noreferrer'>hear from ten randomly selected recipients</a> who we recently enrolled (in their own words).</p>",
     "description": "Offers a simple approach to addressing poverty: cut out intermediaries and allow poor families to decide for themselves what they need most.",
     "created": "2018-11-15T18:00:000Z",
-    "updated": "2018-11-15T18:00:000Z"
+    "updated": "2018-11-15T18:00:000Z",
+    "inactive": false,
+    "isPermanentPartner": true
   }
 ]
