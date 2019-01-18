@@ -1,183 +1,183 @@
 /* eslint-env jest */
-'use strict'
-import { getLambdasFromServerlessConfig } from '../getLambdas'
+"use strict";
+import { getLambdasFromServerlessConfig } from "../getLambdas";
 
-import example from '../example/example'
-import someService from '../someService/someService'
+import example from "../example/example";
+import someService from "../someService/someService";
 
-jest.mock('yamljs')
-jest.mock('../someService/someService', () => ({}), {virtual: true})
-jest.mock('../example/example', () => ({}), {virtual: true})
+jest.mock("yamljs");
+jest.mock("../someService/someService", () => ({}), { virtual: true });
+jest.mock("../example/example", () => ({}), { virtual: true });
 
-describe('test lambda function loading from Serverless YAML', () => {
-  test('it creates correct lambda info from serverless.yml with no events', () => {
+describe("test lambda function loading from Serverless YAML", () => {
+  test("it creates correct lambda info from serverless.yml with no events", () => {
     let lambdas = getLambdasFromServerlessConfig({
-      service: 'lambda',
+      service: "lambda",
       provider: {
-        name: 'aws',
-        runtime: 'nodejs4.3'
+        name: "aws",
+        runtime: "nodejs4.3"
       }
-    })
-    expect(lambdas).toEqual([])
-  })
+    });
+    expect(lambdas).toEqual([]);
+  });
 
   test('it creates correct lambda info from serverless.yml with one "get" event', () => {
     let lambdas = getLambdasFromServerlessConfig({
-      service: 'lambda',
+      service: "lambda",
       provider: {
-        name: 'aws',
-        runtime: 'nodejs4.3'
+        name: "aws",
+        runtime: "nodejs4.3"
       },
       functions: {
         example: {
-          handler: 'example/example.serverlessHandler',
+          handler: "example/example.serverlessHandler",
           events: [
             {
               http: {
-                path: 'example/',
-                method: 'get'
+                path: "example/",
+                method: "get"
               }
             }
           ]
         }
       }
-    })
+    });
 
     expect(lambdas).toEqual([
       {
-        name: 'example',
-        path: 'example/',
-        httpMethod: 'get',
+        name: "example",
+        path: "example/",
+        httpMethod: "get",
         handler: example.handler
       }
-    ])
-  })
+    ]);
+  });
 
-  test('it creates correct lambda info from serverless.yml with multiple HTTP events', () => {
+  test("it creates correct lambda info from serverless.yml with multiple HTTP events", () => {
     let lambdas = getLambdasFromServerlessConfig({
-      service: 'lambda',
+      service: "lambda",
       provider: {
-        name: 'aws',
-        runtime: 'nodejs4.3'
+        name: "aws",
+        runtime: "nodejs4.3"
       },
       functions: {
         example: {
-          handler: 'example/example.serverlessHandler',
+          handler: "example/example.serverlessHandler",
           events: [
             {
               http: {
-                path: 'example/',
-                method: 'get'
+                path: "example/",
+                method: "get"
               }
             },
             {
               http: {
-                path: 'example/',
-                method: 'post'
+                path: "example/",
+                method: "post"
               }
             }
           ]
         },
         someService: {
-          handler: 'someService/someService.serverlessHandler',
+          handler: "someService/someService.serverlessHandler",
           events: [
             {
               http: {
-                path: 'some-action/',
-                method: 'post'
+                path: "some-action/",
+                method: "post"
               }
             }
           ]
         }
       }
-    })
+    });
 
     expect(lambdas).toEqual([
       {
-        name: 'example',
-        path: 'example/',
-        httpMethod: 'get',
+        name: "example",
+        path: "example/",
+        httpMethod: "get",
         handler: example.handler
       },
       {
-        name: 'example',
-        path: 'example/',
-        httpMethod: 'post',
+        name: "example",
+        path: "example/",
+        httpMethod: "post",
         handler: example.handler
       },
       {
-        name: 'someService',
-        path: 'some-action/',
-        httpMethod: 'post',
+        name: "someService",
+        path: "some-action/",
+        httpMethod: "post",
         handler: someService.handler
       }
-    ])
-  })
+    ]);
+  });
 
-  test('it ignores lambda functions that are not HTTP events', () => {
+  test("it ignores lambda functions that are not HTTP events", () => {
     let lambdas = getLambdasFromServerlessConfig({
-      service: 'lambda',
+      service: "lambda",
       provider: {
-        name: 'aws',
-        runtime: 'nodejs4.3'
+        name: "aws",
+        runtime: "nodejs4.3"
       },
       functions: {
         example: {
-          handler: 'example/example.serverlessHandler',
+          handler: "example/example.serverlessHandler",
           events: [
             {
-              s3: 'some-s3-bucket'
+              s3: "some-s3-bucket"
             },
             {
               http: {
-                path: 'example/',
-                method: 'get'
+                path: "example/",
+                method: "get"
               }
             },
             {
               http: {
-                path: 'example/',
-                method: 'post'
+                path: "example/",
+                method: "post"
               }
             }
           ]
         },
         someService: {
-          handler: 'someService/someService.serverlessHandler',
+          handler: "someService/someService.serverlessHandler",
           events: [
             {
               http: {
-                path: 'some-action/',
-                method: 'post'
+                path: "some-action/",
+                method: "post"
               }
             },
             {
-              schedule: 'rate(10 minutes)'
+              schedule: "rate(10 minutes)"
             }
           ]
         }
       }
-    })
+    });
 
     expect(lambdas).toEqual([
       {
-        name: 'example',
-        path: 'example/',
-        httpMethod: 'get',
+        name: "example",
+        path: "example/",
+        httpMethod: "get",
         handler: example.handler
       },
       {
-        name: 'example',
-        path: 'example/',
-        httpMethod: 'post',
+        name: "example",
+        path: "example/",
+        httpMethod: "post",
         handler: example.handler
       },
       {
-        name: 'someService',
-        path: 'some-action/',
-        httpMethod: 'post',
+        name: "someService",
+        path: "some-action/",
+        httpMethod: "post",
         handler: someService.handler
       }
-    ])
-  })
-})
+    ]);
+  });
+});

@@ -1,11 +1,11 @@
 /* eslint-disable standard/no-callback-literal */
 
-import * as admin from 'firebase-admin'
-import AWS from 'aws-sdk'
-import uuid from 'uuid/v4'
+import * as admin from "firebase-admin";
+import AWS from "aws-sdk";
+import uuid from "uuid/v4";
 
-const encryptedFirebasePrivateKey = process.env['LAMBDA_FIREBASE_PRIVATE_KEY']
-let decryptedFirebasePrivateKey = ''
+const encryptedFirebasePrivateKey = process.env["LAMBDA_FIREBASE_PRIVATE_KEY"];
+let decryptedFirebasePrivateKey = "";
 
 /*
  * Generate the AWS policy document to return from the authorizer.
@@ -19,7 +19,7 @@ let decryptedFirebasePrivateKey = ''
  * @param {string} resource - The AWS resource ARN the user wants to access.
  * @returns {object} The AWS policy
  */
-const generatePolicy = function (user, allow, resource) {
+const generatePolicy = function(user, allow, resource) {
   // AWS might use the principal ID for caching (though I could not
   // find documentation to confirm this). Though I can't think of
   // a clear security risk from setting a static principal ID for all
@@ -27,33 +27,31 @@ const generatePolicy = function (user, allow, resource) {
   // IDs for every request.
   // Related unanswered question:
   // https://stackoverflow.com/q/48762730
-  const principalId = user.uid || `unauthenticated-${uuid()}`
+  const principalId = user.uid || `unauthenticated-${uuid()}`;
   return {
     principalId: principalId,
     policyDocument: {
-      Version: '2012-10-17',
+      Version: "2012-10-17",
       Statement: [
         {
-          Action: 'execute-api:Invoke',
-          Effect: allow ? 'Allow' : 'Deny',
+          Action: "execute-api:Invoke",
+          Effect: allow ? "Allow" : "Deny",
           Resource: resource
         }
       ]
     },
-    context: (
-      allow
+    context: allow
       ? {
-        id: user.uid,
-        email: user.email,
-        email_verified: user.email_verified
-      }
+          id: user.uid,
+          email: user.email,
+          email_verified: user.email_verified
+        }
       : {}
-    )
-  }
-}
+  };
+};
 
-function checkUserAuthorization (event, context, callback) {
-  const token = event.authorizationToken
+function checkUserAuthorization(event, context, callback) {
+  const token = event.authorizationToken;
 
   // If the request is unauthenticated, allow access but do not
   // provide any claims.
@@ -65,16 +63,16 @@ function checkUserAuthorization (event, context, callback) {
   // API Gateway returns a 401 Unauthorized response without calling
   // the authorizer Lambda function.”
   // https://docs.aws.amazon.com/apigateway/latest/developerguide/configure-api-gateway-lambda-authorization-with-console.html"
-  if (token === 'unauthenticated') {
+  if (token === "unauthenticated") {
     const user = {
       uid: null,
       email: null,
       email_verified: false
-    }
+    };
 
     // Generate AWS authorization policy
-    callback(null, generatePolicy(user, true, event.methodArn))
-  // There is an authorization token, so validate it.
+    callback(null, generatePolicy(user, true, event.methodArn));
+    // There is an authorization token, so validate it.
   } else {
     try {
       // Only initialize the app if it hasn't already been initialized.
@@ -85,34 +83,37 @@ function checkUserAuthorization (event, context, callback) {
             projectId: process.env.LAMBDA_FIREBASE_PROJECT_ID,
             clientEmail: process.env.LAMBDA_FIREBASE_CLIENT_EMAIL,
             // https://stackoverflow.com/a/41044630/1332513
-            privateKey: decryptedFirebasePrivateKey.replace(/\\n/g, '\n')
+            privateKey: decryptedFirebasePrivateKey.replace(/\\n/g, "\n")
           }),
           databaseURL: process.env.LAMBDA_FIREBASE_DATABASE_URL
-        })
+        });
       }
 
       // Validate the Firebase token.
-      admin.auth().verifyIdToken(token)
-        .then((decodedToken) => {
+      admin
+        .auth()
+        .verifyIdToken(token)
+        .then(decodedToken => {
           const user = {
             uid: decodedToken.uid,
             email: decodedToken.email || null,
             email_verified: decodedToken.email_verified || false
-          }
+          };
 
           // Conditions for authorization. We do not check for a valid
           // email because we create the user before email validation.
-          const valid = !!user.uid
+          const valid = !!user.uid;
 
           // Generate AWS authorization policy
-          callback(null, generatePolicy(user, valid, event.methodArn))
-        }).catch((e) => {
-          console.error(e)
-          callback('Error: Invalid token')
+          callback(null, generatePolicy(user, valid, event.methodArn));
         })
+        .catch(e => {
+          console.error(e);
+          callback("Error: Invalid token");
+        });
     } catch (e) {
-      console.error(e)
-      callback('Error: Invalid token')
+      console.error(e);
+      callback("Error: Invalid token");
     }
   }
 }
@@ -120,29 +121,32 @@ function checkUserAuthorization (event, context, callback) {
 const handler = (event, context, callback) => {
   // Decrypt secure environment variables.
   if (decryptedFirebasePrivateKey) {
-    checkUserAuthorization(event, context, callback)
+    checkUserAuthorization(event, context, callback);
   } else {
     // Decrypt code should run once and variables stored outside of the function
     // handler so that these are decrypted once per container
-    const kms = new AWS.KMS()
-    kms.decrypt({ CiphertextBlob: Buffer.from(encryptedFirebasePrivateKey, 'base64') }, (err, data) => {
-      if (err) {
-        console.log('Decrypt error:', err)
-        callback('Error decrypting secure environnment variables.')
-        return
+    const kms = new AWS.KMS();
+    kms.decrypt(
+      { CiphertextBlob: Buffer.from(encryptedFirebasePrivateKey, "base64") },
+      (err, data) => {
+        if (err) {
+          console.log("Decrypt error:", err);
+          callback("Error decrypting secure environnment variables.");
+          return;
+        }
+        decryptedFirebasePrivateKey = data.Plaintext.toString("ascii");
+        checkUserAuthorization(event, context, callback);
       }
-      decryptedFirebasePrivateKey = data.Plaintext.toString('ascii')
-      checkUserAuthorization(event, context, callback)
-    })
+    );
   }
-}
+};
 
 const serverlessHandler = (event, context, callback) => {
-  handler(event, context, callback)
-}
+  handler(event, context, callback);
+};
 
 module.exports = {
   handler: handler,
   serverlessHandler: serverlessHandler,
   checkUserAuthorization: checkUserAuthorization
-}
+};

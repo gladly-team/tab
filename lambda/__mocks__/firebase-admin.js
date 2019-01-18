@@ -4,12 +4,12 @@
 // call `jest.unmock('firebase-admin')`:
 // https://facebook.github.io/jest/docs/en/manual-mocks.html
 
-const firebaseAdmin = jest.genMockFromModule('firebase-admin')
+const firebaseAdmin = jest.genMockFromModule("firebase-admin");
 
 firebaseAdmin.auth = jest.fn(() => ({
   verifyIdToken: jest.fn(() => Promise.resolve(null))
-}))
+}));
 
-firebaseAdmin.apps = jest.fn(() => [])
+firebaseAdmin.apps = jest.fn(() => []);
 
-module.exports = firebaseAdmin
+module.exports = firebaseAdmin;
