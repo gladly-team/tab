@@ -1,3 +1,4 @@
+/* eslint import/no-extraneous-dependencies: 0 */
 import { map } from 'lodash/collection'
 import { cloneDeep } from 'lodash/lang'
 
@@ -36,7 +37,7 @@ const allFixtures = [
   },
 ]
 
-const getFixtures = function() {
+const getFixtures = () => {
   // Add an appendix to the table name if required.
   const tableNameAppendix = process.env.DB_TABLE_NAME_APPENDIX
     ? process.env.DB_TABLE_NAME_APPENDIX

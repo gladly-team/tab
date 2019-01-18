@@ -1,3 +1,4 @@
+/* eslint no-console: 0 */
 import AWS from '../aws-client'
 import confirmCommand from './confirmCommand'
 import getTableInfo from './getTableInfo'
@@ -15,7 +16,7 @@ function createOrUpdateTable(tableConfig) {
   dynamodb.describeTable(describeParams, (err, tableDescription) => {
     // Table does not exist, so create it.
     if (err && err.code === 'ResourceNotFoundException') {
-      dynamodb.createTable(tableConfig, (err, data) => {
+      dynamodb.createTable(tableConfig, () => {
         if (err) {
           console.error(
             `Unable to create table "${
@@ -55,7 +56,7 @@ function createOrUpdateTable(tableConfig) {
         }
       }
 
-      dynamodb.updateTable(updateParams, (err, data) => {
+      dynamodb.updateTable(updateParams, () => {
         if (err && err.code === 'ValidationException') {
           console.error(
             `Did not update table "${tableConfig.TableName}". Nothing changed.`

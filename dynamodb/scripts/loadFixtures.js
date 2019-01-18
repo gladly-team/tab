@@ -1,3 +1,4 @@
+/* eslint no-console: 0 */
 import fs from 'fs'
 import path from 'path'
 
@@ -8,7 +9,7 @@ import getFixtures from './getFixtures'
 const docClient = new AWS.DynamoDB.DocumentClient()
 
 function loadTable(fixture) {
-  const tableName = fixture.tableName
+  const { tableName } = fixture
   const jsonFile = path.join(__dirname, '../fixtures/', fixture.jsonFile)
   console.log(`Loading "${tableName}" table data from ${jsonFile}.`)
 
@@ -19,7 +20,7 @@ function loadTable(fixture) {
       Item: item,
     }
 
-    docClient.put(params, (err, data) => {
+    docClient.put(params, err => {
       if (err) {
         console.error(
           `Unable to add item ${JSON.stringify(

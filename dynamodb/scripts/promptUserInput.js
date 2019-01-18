@@ -1,7 +1,5 @@
 export default function(question, callback) {
-  const stdin = process.stdin
-  const stdout = process.stdout
-
+  const { stdin, stdout } = process
   stdin.resume()
   stdout.write(question)
 

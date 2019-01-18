@@ -1,8 +1,9 @@
-import prompt from './promptUserInput.js'
+/* eslint no-console: 0 */
+import prompt from './promptUserInput'
 
 // Safety check to prevent accidentally running database operations
 // against a production DB.
-const confirmCommand = function(callback) {
+const confirmCommand = callback => {
   const databaseEndpoint = process.env.DYNAMODB_ENDPOINT
 
   // Standard local dev enpoint.
