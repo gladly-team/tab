@@ -4,7 +4,7 @@
   "description": "Tab for a Cause.",
   "private": true,
   "dependencies": {
-    "aws-sdk": "^2.389.0",
+    "aws-sdk": "^2.390.0",
     "firebase-admin": "^6.5.0",
     "lodash": "^4.17.11",
     "uuid": "^3.3.2"
