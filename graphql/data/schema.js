@@ -552,9 +552,25 @@ const appType = new GraphQLObjectType({
     charities: {
       type: charityConnection,
       description: 'All the charities',
-      args: connectionArgs,
-      resolve: (_, args, context) =>
-        connectionFromPromisedArray(getCharities(context.user), args),
+      args: {
+        ...connectionArgs,
+        filters: {
+          type: new GraphQLInputObjectType({
+            name: 'CharitiesFilters',
+            description: 'Fields on which to filter the list of charities.',
+            fields: {
+              isPermanentPartner: { type: GraphQLBoolean },
+            },
+          }),
+        },
+      },
+      resolve: (_, args, context) => {
+        const { filters } = args
+        return connectionFromPromisedArray(
+          getCharities(context.user, filters),
+          args
+        )
+      },
     },
     backgroundImages: {
       type: backgroundImageConnection,

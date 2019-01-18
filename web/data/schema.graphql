@@ -13,7 +13,7 @@ type App implements Node {
   charity(charityId: String!): Charity
 
   """All the charities"""
-  charities(after: String, first: Int, before: String, last: Int): CharityConnection
+  charities(after: String, first: Int, before: String, last: Int, filters: CharitiesFilters): CharityConnection
 
   """All the background Images"""
   backgroundImages(after: String, first: Int, before: String, last: Int): BackgroundImageConnection
@@ -60,6 +60,11 @@ type BackgroundImageEdge {
 
   """A cursor for use in pagination"""
   cursor: String!
+}
+
+"""Fields on which to filter the list of charities."""
+input CharitiesFilters {
+  isPermanentPartner: Boolean
 }
 
 """A charitable charity"""

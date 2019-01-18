@@ -35,13 +35,25 @@ class Charity extends BaseModel {
       website: types.string().uri(),
       description: types.string(),
       impact: types.string(),
-      inactive: types.boolean().default(self.fieldDefaults.inactive),
+      inactive: types
+        .boolean()
+        .default(self.fieldDefaults.inactive)
+        .description(
+          `If true, we will behave like the charity is not in the database.`
+        ),
+      isPermanentPartner: types
+        .boolean()
+        .default(self.fieldDefaults.isPermanentPartner)
+        .description(
+          `Whether to show the charity on the "Donate Hearts" page and elsewhere`
+        ),
     }
   }
 
   static get fieldDefaults() {
     return {
       inactive: false,
+      isPermanentPartner: false,
     }
   }
 
