@@ -21,15 +21,17 @@
     "cors": "^2.8.5",
     "cross-env": "^5.2.0",
     "dotenv-extended": "^2.3.0",
+    "eslint": "^5.12.0",
+    "eslint-plugin-prettier": "^3.0.1",
     "express": "^4.16.4",
     "if-env": "^1.0.4",
     "jest": "^23.6.0",
     "lodash": "^4.17.11",
     "nodemon": "^1.18.9",
     "npm-run-all": "^4.1.5",
+    "prettier": "^1.15.3",
     "serverless": "^1.36.1",
     "serverless-plugin-include-dependencies": "^3.2.1",
-    "standard": "^10.0.2",
     "yamljs": "^0.3.0"
   },
   "scripts": {
@@ -37,11 +39,13 @@
     "deploy": "yarn run build && serverless deploy -v",
     "build": "rm -rf ./build && npm run build:compile",
     "build:compile": "cross-env NODE_ENV=production babel --out-dir='build' --ignore='build,coverage,__mocks__,__tests__,node_modules' ./src/",
-    "test": "npm-run-all -s test:lint test:run test:codecov",
+    "test": "npm-run-all -s format:check test:run test:codecov",
     "test:run": "jest --coverage",
     "test:codecov": "if-env LOG_TEST_COVERAGE=true && codecov || echo 'Skipping test coverage logging.'",
     "test:watch": "jest --watch",
-    "test:lint": "standard --verbose"
+    "format": "prettier \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
+    "format:fix": "yarn run format --write",
+    "lint": "eslint \"**/*.{js,jsx}\""
   },
   "repository": {
     "type": "git",
