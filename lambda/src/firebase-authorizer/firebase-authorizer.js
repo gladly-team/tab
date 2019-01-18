@@ -1,10 +1,10 @@
-/* eslint-disable standard/no-callback-literal */
+/* eslint standard/no-callback-literal: 0, no-console: 0 */
 
 import * as admin from 'firebase-admin'
 import AWS from 'aws-sdk'
 import uuid from 'uuid/v4'
 
-const encryptedFirebasePrivateKey = process.env['LAMBDA_FIREBASE_PRIVATE_KEY']
+const encryptedFirebasePrivateKey = process.env.LAMBDA_FIREBASE_PRIVATE_KEY
 let decryptedFirebasePrivateKey = ''
 
 /*
@@ -19,7 +19,7 @@ let decryptedFirebasePrivateKey = ''
  * @param {string} resource - The AWS resource ARN the user wants to access.
  * @returns {object} The AWS policy
  */
-const generatePolicy = function (user, allow, resource) {
+const generatePolicy = (user, allow, resource) => {
   // AWS might use the principal ID for caching (though I could not
   // find documentation to confirm this). Though I can't think of
   // a clear security risk from setting a static principal ID for all
@@ -29,30 +29,28 @@ const generatePolicy = function (user, allow, resource) {
   // https://stackoverflow.com/q/48762730
   const principalId = user.uid || `unauthenticated-${uuid()}`
   return {
-    principalId: principalId,
+    principalId,
     policyDocument: {
       Version: '2012-10-17',
       Statement: [
         {
           Action: 'execute-api:Invoke',
           Effect: allow ? 'Allow' : 'Deny',
-          Resource: resource
-        }
-      ]
+          Resource: resource,
+        },
+      ],
     },
-    context: (
-      allow
+    context: allow
       ? {
-        id: user.uid,
-        email: user.email,
-        email_verified: user.email_verified
-      }
-      : {}
-    )
+          id: user.uid,
+          email: user.email,
+          email_verified: user.email_verified,
+        }
+      : {},
   }
 }
 
-function checkUserAuthorization (event, context, callback) {
+function checkUserAuthorization(event, context, callback) {
   const token = event.authorizationToken
 
   // If the request is unauthenticated, allow access but do not
@@ -69,12 +67,12 @@ function checkUserAuthorization (event, context, callback) {
     const user = {
       uid: null,
       email: null,
-      email_verified: false
+      email_verified: false,
     }
 
     // Generate AWS authorization policy
     callback(null, generatePolicy(user, true, event.methodArn))
-  // There is an authorization token, so validate it.
+    // There is an authorization token, so validate it.
   } else {
     try {
       // Only initialize the app if it hasn't already been initialized.
@@ -85,19 +83,21 @@ function checkUserAuthorization (event, context, callback) {
             projectId: process.env.LAMBDA_FIREBASE_PROJECT_ID,
             clientEmail: process.env.LAMBDA_FIREBASE_CLIENT_EMAIL,
             // https://stackoverflow.com/a/41044630/1332513
-            privateKey: decryptedFirebasePrivateKey.replace(/\\n/g, '\n')
+            privateKey: decryptedFirebasePrivateKey.replace(/\\n/g, '\n'),
           }),
-          databaseURL: process.env.LAMBDA_FIREBASE_DATABASE_URL
+          databaseURL: process.env.LAMBDA_FIREBASE_DATABASE_URL,
         })
       }
 
       // Validate the Firebase token.
-      admin.auth().verifyIdToken(token)
-        .then((decodedToken) => {
+      admin
+        .auth()
+        .verifyIdToken(token)
+        .then(decodedToken => {
           const user = {
             uid: decodedToken.uid,
             email: decodedToken.email || null,
-            email_verified: decodedToken.email_verified || false
+            email_verified: decodedToken.email_verified || false,
           }
 
           // Conditions for authorization. We do not check for a valid
@@ -106,7 +106,8 @@ function checkUserAuthorization (event, context, callback) {
 
           // Generate AWS authorization policy
           callback(null, generatePolicy(user, valid, event.methodArn))
-        }).catch((e) => {
+        })
+        .catch(e => {
           console.error(e)
           callback('Error: Invalid token')
         })
@@ -125,15 +126,18 @@ const handler = (event, context, callback) => {
     // Decrypt code should run once and variables stored outside of the function
     // handler so that these are decrypted once per container
     const kms = new AWS.KMS()
-    kms.decrypt({ CiphertextBlob: Buffer.from(encryptedFirebasePrivateKey, 'base64') }, (err, data) => {
-      if (err) {
-        console.log('Decrypt error:', err)
-        callback('Error decrypting secure environnment variables.')
-        return
+    kms.decrypt(
+      { CiphertextBlob: Buffer.from(encryptedFirebasePrivateKey, 'base64') },
+      (err, data) => {
+        if (err) {
+          console.log('Decrypt error:', err)
+          callback('Error decrypting secure environnment variables.')
+          return
+        }
+        decryptedFirebasePrivateKey = data.Plaintext.toString('ascii')
+        checkUserAuthorization(event, context, callback)
       }
-      decryptedFirebasePrivateKey = data.Plaintext.toString('ascii')
-      checkUserAuthorization(event, context, callback)
-    })
+    )
   }
 }
 
@@ -142,7 +146,7 @@ const serverlessHandler = (event, context, callback) => {
 }
 
 module.exports = {
-  handler: handler,
-  serverlessHandler: serverlessHandler,
-  checkUserAuthorization: checkUserAuthorization
+  handler,
+  serverlessHandler,
+  checkUserAuthorization,
 }

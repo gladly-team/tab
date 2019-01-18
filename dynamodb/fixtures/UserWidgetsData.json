@@ -1,16 +1,16 @@
 [
   {
-  	"userId": "abcdefghijklmno",
+    "userId": "abcdefghijklmno",
     "widgetId": "a8cfd733-639b-49d4-a822-116cc7e5c2e2",
     "enabled": true,
     "visible": false,
     "data": {
-    	"bookmarks": [
-    		{
-    			"name": "Google",
-    			"link": "https://www.google.com/" 
-    		}
-    	]
+      "bookmarks": [
+        {
+          "name": "Google",
+          "link": "https://www.google.com/"
+        }
+      ]
     },
     "created": "2017-07-18T20:45:53Z",
     "updated": "2017-07-18T20:45:53Z"

@@ -1,3 +1,4 @@
+/* eslint import/no-extraneous-dependencies: 0, no-console: 0 */
 import path from 'path'
 import cors from 'cors'
 import express from 'express'
@@ -8,11 +9,11 @@ import getLambdas from './src/getLambdas'
 // https://github.com/keithmorris/node-dotenv-extended
 require('dotenv-extended').load({
   path: path.join(__dirname, '.env.local'),
-  defaults: path.join(__dirname, '.env')
+  defaults: path.join(__dirname, '.env'),
 })
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'development'
-const LAMBDA_PORT = process.env.LAMBDA_PORT
+const { LAMBDA_PORT } = process.env
 
 let appServer
 
@@ -31,7 +32,7 @@ let appServer
 //     "body": "A JSON string of the request payload."
 //     "isBase64Encoded": "A boolean flag to indicate if the applicable request payload is Base64-encode"
 // }
-function generateLambdaEventObj (req) {
+function generateLambdaEventObj(req) {
   // Need to use body-parser if we want this to be populated
   const body = req.body ? JSON.stringify(req.body) : ''
 
@@ -46,12 +47,12 @@ function generateLambdaEventObj (req) {
     // User identity lives in context. See:
     // https://docs.aws.amazon.com/lambda/latest/dg/nodejs-prog-model-context.html
     requestContext: {},
-    body: body,
-    isBase64Encoded: false
+    body,
+    isBase64Encoded: false,
   }
 }
 
-function startServer (callback) {
+function startServer(callback) {
   // Shut down the server if it's running.
   if (appServer) {
     appServer.close()
@@ -62,19 +63,25 @@ function startServer (callback) {
 
   // Set endpoints for lambda functions.
   const lambdas = getLambdas()
-  lambdas.forEach((lambda) => {
+  lambdas.forEach(lambda => {
     if (lambda.httpMethod === 'get') {
-      app.get('/' + lambda.path, (req, res) => {
-        lambda.handler(generateLambdaEventObj(req))
+      app.get(`/${lambda.path}`, (req, res) => {
+        lambda
+          .handler(generateLambdaEventObj(req))
           .then(response => res.send(response))
       })
-      console.log('Set up GET method at /' + lambda.path + ' for service "' + lambda.name + '".')
+      console.log(
+        `Set up GET method at /${lambda.path} for service "${lambda.name}".`
+      )
     } else if (lambda.httpMethod === 'post') {
-      app.post('/' + lambda.path, (req, res) => {
-        lambda.handler(generateLambdaEventObj(req))
+      app.post(`/${lambda.path}`, (req, res) => {
+        lambda
+          .handler(generateLambdaEventObj(req))
           .then(response => res.send(response))
       })
-      console.log('Set up POST method at /' + lambda.path + ' for service "' + lambda.name + '".')
+      console.log(
+        `Set up POST method at /${lambda.path} for service "${lambda.name}".`
+      )
     }
   })
 

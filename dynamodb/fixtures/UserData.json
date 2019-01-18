@@ -10,23 +10,23 @@
     "tabs": 1,
     "validTabs": 0,
     "maxTabsDay": {
-        "maxDay": {
-            "date": "2017-07-18T20:45:53Z",
-            "numTabs": 1
-        },
-        "recentDay": {
-            "date": "2017-07-18T20:45:53Z",
-            "numTabs": 1
-        }
+      "maxDay": {
+        "date": "2017-07-18T20:45:53Z",
+        "numTabs": 1
+      },
+      "recentDay": {
+        "date": "2017-07-18T20:45:53Z",
+        "numTabs": 1
+      }
     },
     "heartsUntilNextLevel": 5,
     "vcDonatedAllTime": 0,
     "numUsersRecruited": 3,
     "backgroundImage": {
-        "id": "9308b921-44c7-4b4e-845d-3b01fa73fa2b",
-        "image": "94bbd29b17fe4fa3b45777281a392f21.jpg",
-        "thumbnail": "5d4dfd0b34134879903f0480720bd746.jpg",
-        "timestamp": "2017-07-18T20:45:53Z"
+      "id": "9308b921-44c7-4b4e-845d-3b01fa73fa2b",
+      "image": "94bbd29b17fe4fa3b45777281a392f21.jpg",
+      "thumbnail": "5d4dfd0b34134879903f0480720bd746.jpg",
+      "timestamp": "2017-07-18T20:45:53Z"
     },
     "backgroundOption": "photo",
     "backgroundColor": null,
@@ -46,23 +46,23 @@
     "tabs": 130,
     "validTabs": 100,
     "maxTabsDay": {
-        "maxDay": {
-            "date": "2017-07-19T03:05:12Z",
-            "numTabs": 130
-        },
-        "recentDay": {
-            "date": "2017-07-19T03:05:12Z",
-            "numTabs": 130
-        }
+      "maxDay": {
+        "date": "2017-07-19T03:05:12Z",
+        "numTabs": 130
+      },
+      "recentDay": {
+        "date": "2017-07-19T03:05:12Z",
+        "numTabs": 130
+      }
     },
     "heartsUntilNextLevel": 25,
     "vcDonatedAllTime": 50,
     "numUsersRecruited": 0,
     "backgroundImage": {
-        "id": "9308b921-44c7-4b4e-845d-3b01fa73fa2b",
-        "image": "94bbd29b17fe4fa3b45777281a392f21.jpg",
-        "thumbnail": "5d4dfd0b34134879903f0480720bd746.jpg",
-        "timestamp": "2017-07-19T03:05:12Z"
+      "id": "9308b921-44c7-4b4e-845d-3b01fa73fa2b",
+      "image": "94bbd29b17fe4fa3b45777281a392f21.jpg",
+      "thumbnail": "5d4dfd0b34134879903f0480720bd746.jpg",
+      "timestamp": "2017-07-19T03:05:12Z"
     },
     "backgroundOption": "photo",
     "backgroundColor": null,
@@ -82,23 +82,23 @@
     "tabs": 560,
     "validTabs": 550,
     "maxTabsDay": {
-        "maxDay": {
-            "date": "2017-07-21T18:41:30Z",
-            "numTabs": 305
-        },
-        "recentDay": {
-            "date": "2017-07-22T20:02:02Z",
-            "numTabs": 200
-        }
+      "maxDay": {
+        "date": "2017-07-21T18:41:30Z",
+        "numTabs": 305
+      },
+      "recentDay": {
+        "date": "2017-07-22T20:02:02Z",
+        "numTabs": 200
+      }
     },
     "heartsUntilNextLevel": 123,
     "vcDonatedAllTime": 150,
     "numUsersRecruited": 0,
     "backgroundImage": {
-        "id": "9308b921-44c7-4b4e-845d-3b01fa73fa2b",
-        "image": "94bbd29b17fe4fa3b45777281a392f21.jpg",
-        "thumbnail": "5d4dfd0b34134879903f0480720bd746.jpg",
-        "timestamp": "2017-07-19T18:41:30Z"
+      "id": "9308b921-44c7-4b4e-845d-3b01fa73fa2b",
+      "image": "94bbd29b17fe4fa3b45777281a392f21.jpg",
+      "thumbnail": "5d4dfd0b34134879903f0480720bd746.jpg",
+      "timestamp": "2017-07-19T18:41:30Z"
     },
     "backgroundOption": "photo",
     "backgroundColor": null,
@@ -118,23 +118,23 @@
     "tabs": 0,
     "validTabs": 0,
     "maxTabsDay": {
-        "maxDay": {
-            "date": "2017-07-23T01:18:11Z",
-            "numTabs": 0
-        },
-        "recentDay": {
-            "date": "2017-07-23T01:18:11Z",
-            "numTabs": 0
-        }
+      "maxDay": {
+        "date": "2017-07-23T01:18:11Z",
+        "numTabs": 0
+      },
+      "recentDay": {
+        "date": "2017-07-23T01:18:11Z",
+        "numTabs": 0
+      }
     },
     "heartsUntilNextLevel": 5,
     "vcDonatedAllTime": 0,
     "numUsersRecruited": 0,
     "backgroundImage": {
-        "id": "9308b921-44c7-4b4e-845d-3b01fa73fa2b",
-        "image": "94bbd29b17fe4fa3b45777281a392f21.jpg",
-        "thumbnail": "5d4dfd0b34134879903f0480720bd746.jpg",
-        "timestamp": "2017-07-23T01:18:11Z"
+      "id": "9308b921-44c7-4b4e-845d-3b01fa73fa2b",
+      "image": "94bbd29b17fe4fa3b45777281a392f21.jpg",
+      "thumbnail": "5d4dfd0b34134879903f0480720bd746.jpg",
+      "timestamp": "2017-07-23T01:18:11Z"
     },
     "backgroundOption": "photo",
     "backgroundColor": null,

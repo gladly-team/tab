@@ -1,9 +1,9 @@
-
-import prompt from './promptUserInput.js'
+/* eslint no-console: 0 */
+import prompt from './promptUserInput'
 
 // Safety check to prevent accidentally running database operations
 // against a production DB.
-const confirmCommand = function (callback) {
+const confirmCommand = callback => {
   const databaseEndpoint = process.env.DYNAMODB_ENDPOINT
 
   // Standard local dev enpoint.
@@ -14,7 +14,7 @@ const confirmCommand = function (callback) {
 
   prompt(
     `You are running against a database at ${databaseEndpoint}. Are you sure you want to continue? (y/n)\n`,
-    (response) => {
+    response => {
       if (response !== 'y') {
         console.log('Exiting.')
         process.exit()

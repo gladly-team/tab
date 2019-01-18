@@ -1,5 +1,4 @@
 /* global jest */
-'use strict'
 
 const YAMLMock = jest.genMockFromModule('yamljs')
 
@@ -9,16 +8,16 @@ let mockYAML = Object.create(null)
 // newMockYAML should be an object containing file names
 // for keys and objects or arrays reqpresenting the parsed
 // YAML loaded from that file.
-function __setMockYAML (newMockYAML) {
+function __setMockYAML(newMockYAML) {
   mockYAML = newMockYAML
 }
 
-function __getMockYAML () {
+function __getMockYAML() {
   return mockYAML
 }
 
 // A custom version of YAML.load.
-function load (filePath) {
+function load(filePath) {
   return mockYAML[filePath] || {}
 }
 

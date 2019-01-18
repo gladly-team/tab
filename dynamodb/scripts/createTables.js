@@ -1,37 +1,42 @@
-
+/* eslint no-console: 0 */
 import AWS from '../aws-client'
 import confirmCommand from './confirmCommand'
 import getTableInfo from './getTableInfo'
+
 const dynamodb = new AWS.DynamoDB()
 
 const tables = getTableInfo()
 
-function createOrUpdateTable (tableConfig) {
+function createOrUpdateTable(tableConfig) {
   const describeParams = {
-    TableName: tableConfig.TableName
+    TableName: tableConfig.TableName,
   }
 
   // First check if table exists.
   dynamodb.describeTable(describeParams, (err, tableDescription) => {
     // Table does not exist, so create it.
     if (err && err.code === 'ResourceNotFoundException') {
-      dynamodb.createTable(tableConfig, function (err, data) {
+      dynamodb.createTable(tableConfig, () => {
         if (err) {
-          console.error(`Unable to create table "${tableConfig.TableName}". Error JSON: ${JSON.stringify(err, null, 2)}`)
+          console.error(
+            `Unable to create table "${
+              tableConfig.TableName
+            }". Error JSON: ${JSON.stringify(err, null, 2)}`
+          )
         } else {
           console.log(`Created table "${tableConfig.TableName}"`)
           // console.log(`Table description JSON: ${JSON.stringify(data, null, 2)}`)
         }
       })
 
-    // Table exists, so update it.
+      // Table exists, so update it.
     } else {
       // Only include update-able properties.
       const updateParams = {
         TableName: tableConfig.TableName,
         AttributeDefinitions: tableConfig.AttributeDefinitions,
         GlobalSecondaryIndexUpdates: tableConfig.GlobalSecondaryIndexUpdates,
-        StreamSpecification: tableConfig.StreamSpecification
+        StreamSpecification: tableConfig.StreamSpecification,
       }
 
       // Only include ProvisionedThroughput if it's changed.
@@ -42,17 +47,26 @@ function createOrUpdateTable (tableConfig) {
         const oldTableConfig = tableDescription.Table.ProvisionedThroughput
         const newTableConfig = tableConfig.ProvisionedThroughput
         if (
-          oldTableConfig.ReadCapacityUnits !== newTableConfig.ReadCapacityUnits ||
-          oldTableConfig.WriteCapacityUnits !== newTableConfig.WriteCapacityUnits) {
+          oldTableConfig.ReadCapacityUnits !==
+            newTableConfig.ReadCapacityUnits ||
+          oldTableConfig.WriteCapacityUnits !==
+            newTableConfig.WriteCapacityUnits
+        ) {
           updateParams.ProvisionedThroughput = newTableConfig
         }
       }
 
-      dynamodb.updateTable(updateParams, function (err, data) {
+      dynamodb.updateTable(updateParams, () => {
         if (err && err.code === 'ValidationException') {
-          console.error(`Did not update table "${tableConfig.TableName}". Nothing changed.`)
+          console.error(
+            `Did not update table "${tableConfig.TableName}". Nothing changed.`
+          )
         } else if (err) {
-          console.error(`Unable to update table "${tableConfig.TableName}". Error JSON: ${JSON.stringify(err, null, 2)}`)
+          console.error(
+            `Unable to update table "${
+              tableConfig.TableName
+            }". Error JSON: ${JSON.stringify(err, null, 2)}`
+          )
         } else {
           console.log(`Updated table "${tableConfig.TableName}".`)
           // console.log(`Table description JSON: ${JSON.stringify(data, null, 2)}`)
@@ -63,5 +77,5 @@ function createOrUpdateTable (tableConfig) {
 }
 
 confirmCommand(() => {
-  tables.forEach((table) => createOrUpdateTable(table))
+  tables.forEach(table => createOrUpdateTable(table))
 })

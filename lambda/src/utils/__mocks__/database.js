@@ -1,20 +1,18 @@
-
 // Mock our database.
-const getFn = (params) => {
+const getFn = params => {
   if (params.Key.id === 'abc123') {
     return Promise.resolve({
       Item: {
         username: 'fake_user',
         id: 'abc123',
-        vcCurrent: 350
-      }
+        vcCurrent: 350,
+      },
     })
-  } else {
-    return Promise.reject(new Error())
   }
+  return Promise.reject(new Error())
 }
 
 module.exports = {
   get: getFn,
-  set: () => Promise.reject(new Error())
+  set: () => Promise.reject(new Error()),
 }

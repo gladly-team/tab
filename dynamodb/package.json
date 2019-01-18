@@ -13,13 +13,20 @@
     "babel-jest": "^23.6.0",
     "codecov": "^3.1.0",
     "dotenv-extended": "^2.3.0",
+    "eslint": "^5.12.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-prettier": "^3.5.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-plugin-prettier": "^3.0.1",
+    "eslint-plugin-react": "^7.12.4",
     "if-env": "^1.0.4",
     "jest": "^23.6.0",
     "lodash": "^4.17.11",
     "npm-run-all": "^4.1.5",
+    "prettier": "^1.15.3",
     "serverless": "^1.36.1",
-    "serverless-dynamodb-autoscaling": "^0.6.2",
-    "standard": "^10.0.2"
+    "serverless-dynamodb-autoscaling": "^0.6.2"
   },
   "scripts": {
     "init": "npm run delete-tables && npm run bootstrap",
@@ -31,8 +38,9 @@
     "test:run": "jest --coverage",
     "test:codecov": "if-env LOG_TEST_COVERAGE=true && codecov || echo 'Skipping test coverage logging.'",
     "test:watch": "jest --watch",
-    "lint": "standard",
-    "lint:fix": "standard --fix",
+    "format": "prettier \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
+    "format:fix": "yarn run format --write",
+    "lint": "eslint \"**/*.{js,jsx}\"",
     "deploy": "serverless deploy -v"
   },
   "repository": {

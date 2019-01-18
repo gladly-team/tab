@@ -14,7 +14,7 @@
     "icon": null,
     "name": "Search",
     "type": "search",
-    "settings": [ 
+    "settings": [
       {
         "field": "engine",
         "type": "choices",
@@ -32,7 +32,7 @@
     "icon": null,
     "name": "Clock",
     "type": "clock",
-    "settings": [ 
+    "settings": [
       {
         "field": "format24",
         "type": "boolean",

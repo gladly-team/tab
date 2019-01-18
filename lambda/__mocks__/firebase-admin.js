@@ -7,7 +7,7 @@
 const firebaseAdmin = jest.genMockFromModule('firebase-admin')
 
 firebaseAdmin.auth = jest.fn(() => ({
-  verifyIdToken: jest.fn(() => Promise.resolve(null))
+  verifyIdToken: jest.fn(() => Promise.resolve(null)),
 }))
 
 firebaseAdmin.apps = jest.fn(() => [])
