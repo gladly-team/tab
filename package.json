@@ -10,7 +10,9 @@
     "@babel/preset-env": "^7.2.3",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^23.6.0",
+    "husky": "^1.3.1",
     "jest": "^23.6.0",
+    "lint-staged": "^8.1.0",
     "nodemon": "^1.18.9",
     "npm-run-all": "^4.1.5",
     "npmlog": "^4.1.2"
@@ -35,15 +37,18 @@
     "dynamodb:deploy": "cd ./dynamodb && yarn run deploy",
     "dynamodb:install": "cd ./dynamodb && yarn install",
     "dynamodb:test": "cd ./dynamodb && yarn test",
+    "dynamodb:format:fix": "cd ./dynamodb && yarn run format:fix",
     "graphql:deploy": "cd ./graphql && yarn run deploy",
     "graphql:install": "cd ./graphql && yarn install",
     "graphql:start": "cd ./graphql && yarn run start 2>&1 | node ../scripts/log-prefix.js [graphql] green",
     "graphql:test": "cd ./graphql && yarn test",
+    "graphql:format:fix": "cd ./graphql && yarn run format:fix",
     "graphql:test:integration": "cd ./graphql && yarn run test:integration",
     "lambda:deploy": "cd ./lambda && yarn run deploy",
     "lambda:install": "cd ./lambda && yarn install",
     "lambda:start": "cd ./lambda && yarn run start 2>&1 | node ../scripts/log-prefix.js [lambda] red",
     "lambda:test": "cd ./lambda && yarn test",
+    "lambda:format:fix": "cd ./lambda && yarn run format:fix",
     "web:deploy": "cd ./web && yarn run deploy",
     "web:graphqlschema:monitor": "nodemon --watch graphql/data/schema.graphql --exec \"yarn run web:graphqlschema:update\" 2>&1 | node scripts/log-prefix.js [node] grey",
     "web:graphqlschema:update": "cp graphql/data/schema.graphql web/data/schema.graphql",
@@ -51,9 +56,24 @@
     "web:test": "cd ./web && yarn test",
     "web:test:integration": "cd ./web && yarn test:integration",
     "web:start": "cd ./web && yarn run start 2>&1 | node ../scripts/log-prefix.js [web] blue",
+    "web:format:fix": "cd ./web && yarn run format:fix",
     "s3:deploy": "cd ./s3 && yarn run deploy",
     "s3:install": "cd ./s3 && yarn install",
     "s3:start": "cd ./s3 && yarn run start | node ../scripts/log-prefix.js [s3] yellow"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
+      "yarn run web:format:fix",
+      "yarn run graphql:format:fix",
+      "yarn run lambda:format:fix",
+      "yarn run dynamodb:format:fix",
+      "git add"
+    ]
   },
   "jest": {
     "roots": [
