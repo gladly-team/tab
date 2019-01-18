@@ -14,19 +14,19 @@ const handler = event => {
   return Promise.resolve({
     statusCode: 200,
     body: JSON.stringify({
-      message: "Hello world from hearts!",
-      input: event
-    })
-  });
-};
+      message: 'Hello world from hearts!',
+      input: event,
+    }),
+  })
+}
 
 const serverlessHandler = (event, context, callback) => {
-  handler(event).then(response => callback(null, response));
-};
+  handler(event).then(response => callback(null, response))
+}
 module.exports = {
   handler: handler,
-  serverlessHandler: serverlessHandler
-};
+  serverlessHandler: serverlessHandler,
+}
 ```
 
 Try to keep the `serverlessHandler` function as minimal as possible, so that your code remains testable and usable outside the serverless framework.

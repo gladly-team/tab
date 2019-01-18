@@ -1,11 +1,11 @@
 export default function(question, callback) {
-  const stdin = process.stdin;
-  const stdout = process.stdout;
+  const stdin = process.stdin
+  const stdout = process.stdout
 
-  stdin.resume();
-  stdout.write(question);
+  stdin.resume()
+  stdout.write(question)
 
-  stdin.once("data", data => {
-    callback(data.toString().trim());
-  });
+  stdin.once('data', data => {
+    callback(data.toString().trim())
+  })
 }

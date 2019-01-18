@@ -1,22 +1,22 @@
-import AWS from "aws-sdk";
+import AWS from 'aws-sdk'
 
 AWS.config.update({
   region: process.env.AWS_REGION,
   endpoint: process.env.DYNAMODB_ENDPOINT,
   // TODO: remove and rely on IAM role permissions.
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
-});
-const dynamoDb = new AWS.DynamoDB.DocumentClient();
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+})
+const dynamoDb = new AWS.DynamoDB.DocumentClient()
 
-const database = {};
+const database = {}
 
 database.put = function(params) {
-  return dynamoDb.put(params).promise();
-};
+  return dynamoDb.put(params).promise()
+}
 
 database.get = function(params) {
-  return dynamoDb.get(params).promise();
-};
+  return dynamoDb.get(params).promise()
+}
 
-export default database;
+export default database
