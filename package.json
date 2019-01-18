@@ -24,7 +24,6 @@
     "manage-fixtures": "babel-node ./scripts/manage-fixtures.js",
     "test": "npm-run-all -s parent:test graphql:test lambda:test web:test dynamodb:test",
     "test:integration": "npm-run-all -s graphql:test:integration web:test:integration",
-    "format:fix": "npm-run-all -p web:format:fix graphql:format:fix lambda:format:fix dynamodb:format:fix",
     "ci:deploy": "babel-node ./scripts/deploy.js",
     "ci:deployservices": "npm-run-all -s dynamodb:deploy lambda:deploy graphql:deploy s3:deploy web:deploy",
     "ci:test": "babel-node ./scripts/runTests.js",
@@ -69,7 +68,10 @@
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
-      "yarn run format:fix",
+      "yarn run web:format:fix",
+      "yarn run graphql:format:fix",
+      "yarn run lambda:format:fix",
+      "yarn run dynamodb:format:fix",
       "git add"
     ]
   },
