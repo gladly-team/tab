@@ -11,19 +11,19 @@ const getServerlessConfig = function() {
 
 export const getLambdasFromServerlessConfig = function(serverlessConfig) {
   const lambdaFunctions = [];
-  if (serverlessConfig["functions"]) {
-    const lambdas = serverlessConfig["functions"];
+  if (serverlessConfig.functions) {
+    const lambdas = serverlessConfig.functions;
     for (const key in lambdas) {
-      let lambda = lambdas[key];
+      const lambda = lambdas[key];
 
       // Only set up functions triggered by HTTP GET and POST events.
       if (lambda.events) {
         lambda.events.forEach(event => {
-          let isHttpEvent =
+          const isHttpEvent =
             has(event, "http.path") &&
             (event.http.method === "get" || event.http.method === "post");
           if (isHttpEvent) {
-            let handlerModulePath = "./" + key + "/" + key;
+            const handlerModulePath = `./${key}/${key}`;
             lambdaFunctions.push({
               name: key,
               path: event.http.path,

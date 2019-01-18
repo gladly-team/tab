@@ -1,6 +1,7 @@
 /* eslint-env jest */
 
 import confirmCommand from "../confirmCommand";
+
 jest.mock("../promptUserInput");
 const prompt = require("../promptUserInput").default;
 

@@ -5,7 +5,7 @@ import { cloneDeep } from "lodash/lang";
 
 const tablesJsonFile = "tables.json";
 const tablesInfoRaw = JSON.parse(
-  fs.readFileSync(path.join(__dirname, "../" + tablesJsonFile), "utf8")
+  fs.readFileSync(path.join(__dirname, `../${tablesJsonFile}`), "utf8")
 );
 
 const getTableInfo = function() {

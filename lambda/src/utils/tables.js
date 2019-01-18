@@ -1,5 +1,3 @@
-"use strict";
-
 import { mapValues } from "lodash/object";
 
 const tableNameAppendix = process.env.DB_TABLE_NAME_APPENDIX

@@ -1,5 +1,4 @@
 /* global jest */
-"use strict";
 
 const YAMLMock = jest.genMockFromModule("yamljs");
 

@@ -8,9 +8,8 @@ const getFn = params => {
         vcCurrent: 350
       }
     });
-  } else {
-    return Promise.reject(new Error());
   }
+  return Promise.reject(new Error());
 };
 
 module.exports = {

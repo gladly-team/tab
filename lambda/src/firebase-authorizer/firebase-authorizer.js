@@ -4,7 +4,7 @@ import * as admin from "firebase-admin";
 import AWS from "aws-sdk";
 import uuid from "uuid/v4";
 
-const encryptedFirebasePrivateKey = process.env["LAMBDA_FIREBASE_PRIVATE_KEY"];
+const encryptedFirebasePrivateKey = process.env.LAMBDA_FIREBASE_PRIVATE_KEY;
 let decryptedFirebasePrivateKey = "";
 
 /*
@@ -29,7 +29,7 @@ const generatePolicy = function(user, allow, resource) {
   // https://stackoverflow.com/q/48762730
   const principalId = user.uid || `unauthenticated-${uuid()}`;
   return {
-    principalId: principalId,
+    principalId,
     policyDocument: {
       Version: "2012-10-17",
       Statement: [
@@ -146,7 +146,7 @@ const serverlessHandler = (event, context, callback) => {
 };
 
 module.exports = {
-  handler: handler,
-  serverlessHandler: serverlessHandler,
-  checkUserAuthorization: checkUserAuthorization
+  handler,
+  serverlessHandler,
+  checkUserAuthorization
 };

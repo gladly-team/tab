@@ -49,9 +49,9 @@ test("authorization fails when token verification throws an error", done => {
 
   const admin = require("firebase-admin");
   admin.auth.mockImplementation(() => ({
-    verifyIdToken: jest.fn(() => {
-      return Promise.reject(new Error("Verification failed!"));
-    })
+    verifyIdToken: jest.fn(() =>
+      Promise.reject(new Error("Verification failed!"))
+    )
   }));
   const checkUserAuthorization = require("../firebase-authorizer")
     .checkUserAuthorization;
@@ -72,9 +72,7 @@ test("authorization allows access when a good token is provided (for an authenti
 
   const admin = require("firebase-admin");
   admin.auth.mockImplementation(() => ({
-    verifyIdToken: jest.fn(() => {
-      return Promise.resolve(decodedToken);
-    })
+    verifyIdToken: jest.fn(() => Promise.resolve(decodedToken))
   }));
   const checkUserAuthorization = require("../firebase-authorizer")
     .checkUserAuthorization;
@@ -112,9 +110,7 @@ test("authorization still allows access when the user's email is not verified (f
 
   const admin = require("firebase-admin");
   admin.auth.mockImplementation(() => ({
-    verifyIdToken: jest.fn(() => {
-      return Promise.resolve(decodedToken);
-    })
+    verifyIdToken: jest.fn(() => Promise.resolve(decodedToken))
   }));
   const checkUserAuthorization = require("../firebase-authorizer")
     .checkUserAuthorization;
@@ -158,9 +154,7 @@ test("authorization denies access when the user does not have an ID", done => {
 
   const admin = require("firebase-admin");
   admin.auth.mockImplementation(() => ({
-    verifyIdToken: jest.fn(() => {
-      return Promise.resolve(decodedToken);
-    })
+    verifyIdToken: jest.fn(() => Promise.resolve(decodedToken))
   }));
   const checkUserAuthorization = require("../firebase-authorizer")
     .checkUserAuthorization;
@@ -195,9 +189,7 @@ test("authorization allows access when the user is anonymous (token does not hav
 
   const admin = require("firebase-admin");
   admin.auth.mockImplementation(() => ({
-    verifyIdToken: jest.fn(() => {
-      return Promise.resolve(decodedToken);
-    })
+    verifyIdToken: jest.fn(() => Promise.resolve(decodedToken))
   }));
   const checkUserAuthorization = require("../firebase-authorizer")
     .checkUserAuthorization;

@@ -1,6 +1,7 @@
 import AWS from "../aws-client";
 import confirmCommand from "./confirmCommand";
 import getTableInfo from "./getTableInfo";
+
 const dynamodb = new AWS.DynamoDB();
 
 const tables = getTableInfo();
@@ -14,7 +15,7 @@ function createOrUpdateTable(tableConfig) {
   dynamodb.describeTable(describeParams, (err, tableDescription) => {
     // Table does not exist, so create it.
     if (err && err.code === "ResourceNotFoundException") {
-      dynamodb.createTable(tableConfig, function(err, data) {
+      dynamodb.createTable(tableConfig, (err, data) => {
         if (err) {
           console.error(
             `Unable to create table "${
@@ -54,7 +55,7 @@ function createOrUpdateTable(tableConfig) {
         }
       }
 
-      dynamodb.updateTable(updateParams, function(err, data) {
+      dynamodb.updateTable(updateParams, (err, data) => {
         if (err && err.code === "ValidationException") {
           console.error(
             `Did not update table "${tableConfig.TableName}". Nothing changed.`

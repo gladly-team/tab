@@ -1,20 +1,21 @@
 // This file is just an example.
 
-var AWS = require("./aws-client");
-var docClient = new AWS.DynamoDB.DocumentClient();
+const AWS = require("./aws-client");
 
-var table = "Users";
+const docClient = new AWS.DynamoDB.DocumentClient();
 
-var userId = 3;
+const table = "Users";
 
-var params = {
+const userId = 3;
+
+const params = {
   TableName: table,
   Key: {
     UserId: userId
   }
 };
 
-docClient.get(params, function(err, data) {
+docClient.get(params, (err, data) => {
   if (err) {
     console.error(
       "Unable to read item. Error JSON:",

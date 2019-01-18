@@ -1,6 +1,7 @@
 import AWS from "../aws-client";
 import confirmCommand from "./confirmCommand";
 import getTableInfo from "./getTableInfo";
+
 const dynamodb = new AWS.DynamoDB();
 
 const tables = getTableInfo();

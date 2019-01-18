@@ -46,7 +46,7 @@ function generateLambdaEventObj(req) {
     // User identity lives in context. See:
     // https://docs.aws.amazon.com/lambda/latest/dg/nodejs-prog-model-context.html
     requestContext: {},
-    body: body,
+    body,
     isBase64Encoded: false
   };
 }
@@ -64,30 +64,22 @@ function startServer(callback) {
   const lambdas = getLambdas();
   lambdas.forEach(lambda => {
     if (lambda.httpMethod === "get") {
-      app.get("/" + lambda.path, (req, res) => {
+      app.get(`/${lambda.path}`, (req, res) => {
         lambda
           .handler(generateLambdaEventObj(req))
           .then(response => res.send(response));
       });
       console.log(
-        "Set up GET method at /" +
-          lambda.path +
-          ' for service "' +
-          lambda.name +
-          '".'
+        `Set up GET method at /${lambda.path} for service "${lambda.name}".`
       );
     } else if (lambda.httpMethod === "post") {
-      app.post("/" + lambda.path, (req, res) => {
+      app.post(`/${lambda.path}`, (req, res) => {
         lambda
           .handler(generateLambdaEventObj(req))
           .then(response => res.send(response));
       });
       console.log(
-        "Set up POST method at /" +
-          lambda.path +
-          ' for service "' +
-          lambda.name +
-          '".'
+        `Set up POST method at /${lambda.path} for service "${lambda.name}".`
       );
     }
   });

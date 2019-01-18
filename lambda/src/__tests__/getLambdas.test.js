@@ -1,5 +1,5 @@
 /* eslint-env jest */
-"use strict";
+
 import { getLambdasFromServerlessConfig } from "../getLambdas";
 
 import example from "../example/example";
@@ -11,7 +11,7 @@ jest.mock("../example/example", () => ({}), { virtual: true });
 
 describe("test lambda function loading from Serverless YAML", () => {
   test("it creates correct lambda info from serverless.yml with no events", () => {
-    let lambdas = getLambdasFromServerlessConfig({
+    const lambdas = getLambdasFromServerlessConfig({
       service: "lambda",
       provider: {
         name: "aws",
@@ -22,7 +22,7 @@ describe("test lambda function loading from Serverless YAML", () => {
   });
 
   test('it creates correct lambda info from serverless.yml with one "get" event', () => {
-    let lambdas = getLambdasFromServerlessConfig({
+    const lambdas = getLambdasFromServerlessConfig({
       service: "lambda",
       provider: {
         name: "aws",
@@ -54,7 +54,7 @@ describe("test lambda function loading from Serverless YAML", () => {
   });
 
   test("it creates correct lambda info from serverless.yml with multiple HTTP events", () => {
-    let lambdas = getLambdasFromServerlessConfig({
+    const lambdas = getLambdasFromServerlessConfig({
       service: "lambda",
       provider: {
         name: "aws",
@@ -115,7 +115,7 @@ describe("test lambda function loading from Serverless YAML", () => {
   });
 
   test("it ignores lambda functions that are not HTTP events", () => {
-    let lambdas = getLambdasFromServerlessConfig({
+    const lambdas = getLambdasFromServerlessConfig({
       service: "lambda",
       provider: {
         name: "aws",
