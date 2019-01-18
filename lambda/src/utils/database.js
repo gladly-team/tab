@@ -1,7 +1,5 @@
 import AWS from 'aws-sdk'
 
-// Husky test: we should align this misaligned comment:
-// I am misaligned
 AWS.config.update({
   region: process.env.AWS_REGION,
   endpoint: process.env.DYNAMODB_ENDPOINT,

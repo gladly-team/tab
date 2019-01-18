@@ -3,8 +3,6 @@ import { isError } from 'lodash/lang'
 import Sentry, { sentryContextWrapper } from './sentry-logger'
 import config from '../config'
 
-// Husky test: we should align this misaligned comment:
-// I am misaligned
 const logLevels = {}
 logLevels.LOG = 'log'
 logLevels.DEBUG = 'debug'
