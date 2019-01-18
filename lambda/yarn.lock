@@ -3544,10 +3544,10 @@ find-up@^3.0.0:
   dependencies:
     locate-path "^3.0.0"
 
-firebase-admin@^6.3.0:
-  version "6.3.0"
-  resolved "https://registry.yarnpkg.com/firebase-admin/-/firebase-admin-6.3.0.tgz#68ca0842ece2774c9455f7e1a054bacc24dde804"
-  integrity sha512-9jEt69a9VB0X3WMJJkKDzOKKmCdqX+iIcfTke5dI16GfbHlfbvqXVisgKIwAmi8Ea7FYc1t3V/WCEJUrWnJ8tA==
+firebase-admin@^6.5.0:
+  version "6.5.0"
+  resolved "https://registry.yarnpkg.com/firebase-admin/-/firebase-admin-6.5.0.tgz#61954e57f595850af184c6eafad9612c2aa196bc"
+  integrity sha512-0ejmbmx8VCjVCZVxpvVckDqFOULEL455eNtyJOGag4QmCE8n89J5X9GhR027mdHis5mpIiGJtnqpe6jO3E6QZA==
   dependencies:
     "@firebase/app" "^0.3.4"
     "@firebase/database" "^0.3.6"
