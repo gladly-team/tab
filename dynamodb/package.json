@@ -29,7 +29,7 @@
     "create-tables": "babel-node ./scripts/createTables.js",
     "delete-tables": "babel-node ./scripts/deleteTables.js",
     "load-fixtures": "babel-node ./scripts/loadFixtures.js",
-    "test": "npm-run-all -s format:check test:run test:codecov",
+    "test": "npm-run-all -s lint test:run test:codecov",
     "test:run": "jest --coverage",
     "test:codecov": "if-env LOG_TEST_COVERAGE=true && codecov || echo 'Skipping test coverage logging.'",
     "test:watch": "jest --watch",
