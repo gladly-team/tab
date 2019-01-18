@@ -11,12 +11,8 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient()
 
 const database = {}
 
-database.put = function(params) {
-  return dynamoDb.put(params).promise()
-}
+database.put = params => dynamoDb.put(params).promise()
 
-database.get = function(params) {
-  return dynamoDb.get(params).promise()
-}
+database.get = params => dynamoDb.get(params).promise()
 
 export default database
