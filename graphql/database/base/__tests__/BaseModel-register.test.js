@@ -34,6 +34,9 @@ describe('BaseModel registering with Dynogels', () => {
       tableName: TestModel.tableName,
       timestamps: false,
       schema: constructSchema(schema),
+      validation: {
+        convert: false,
+      },
     })
   })
 
@@ -50,6 +53,9 @@ describe('BaseModel registering with Dynogels', () => {
       tableName: TestModel.tableName,
       timestamps: false,
       schema: constructSchema(schema),
+      validation: {
+        convert: false,
+      },
     })
   })
 
@@ -72,6 +78,9 @@ describe('BaseModel registering with Dynogels', () => {
       tableName: TestModel.tableName,
       timestamps: false,
       schema: expectedSchema,
+      validation: {
+        convert: false,
+      },
     })
   })
 
@@ -96,6 +105,9 @@ describe('BaseModel registering with Dynogels', () => {
       indexes,
       timestamps: false,
       schema: constructSchema(schema),
+      validation: {
+        convert: false,
+      },
     })
   })
 })

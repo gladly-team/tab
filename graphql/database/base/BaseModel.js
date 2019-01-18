@@ -206,6 +206,13 @@ class BaseModel {
       // Handle timestamps ourselves, not through dynogels.
       timestamps: false,
 
+      // Options passed to Joi.
+      validation: {
+        // Do not allow casting values during validation.
+        // https://github.com/hapijs/joi/blob/v14.3.1/API.md#validatevalue-schema-options-callback
+        convert: false,
+      },
+
       schema,
     }
     if (this.rangeKey) {
