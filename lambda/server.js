@@ -1,3 +1,4 @@
+/* eslint import/no-extraneous-dependencies: 0, no-console: 0 */
 import path from 'path'
 import cors from 'cors'
 import express from 'express'
@@ -12,7 +13,7 @@ require('dotenv-extended').load({
 })
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'development'
-const LAMBDA_PORT = process.env.LAMBDA_PORT
+const { LAMBDA_PORT } = process.env
 
 let appServer
 

@@ -1,4 +1,4 @@
-/* eslint-disable standard/no-callback-literal */
+/* eslint standard/no-callback-literal: 0, no-console: 0 */
 
 import * as admin from 'firebase-admin'
 import AWS from 'aws-sdk'
@@ -19,7 +19,7 @@ let decryptedFirebasePrivateKey = ''
  * @param {string} resource - The AWS resource ARN the user wants to access.
  * @returns {object} The AWS policy
  */
-const generatePolicy = function(user, allow, resource) {
+const generatePolicy = (user, allow, resource) => {
   // AWS might use the principal ID for caching (though I could not
   // find documentation to confirm this). Though I can't think of
   // a clear security risk from setting a static principal ID for all

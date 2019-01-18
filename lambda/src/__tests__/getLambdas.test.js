@@ -2,7 +2,9 @@
 
 import { getLambdasFromServerlessConfig } from '../getLambdas'
 
+/* eslint-disable-next-line import/no-unresolved */
 import example from '../example/example'
+/* eslint-disable-next-line import/no-unresolved */
 import someService from '../someService/someService'
 
 jest.mock('yamljs')
