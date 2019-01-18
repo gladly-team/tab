@@ -6,7 +6,7 @@ import ProfileDonateHearts from 'js/components/Settings/Profile/ProfileDonateHea
 export default createFragmentContainer(ProfileDonateHearts, {
   app: graphql`
     fragment ProfileDonateHeartsContainer_app on App {
-      charities(first: 20) {
+      charities(first: 20, filters: { isPermanentPartner: true }) {
         edges {
           node {
             id

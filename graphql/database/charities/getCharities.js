@@ -9,7 +9,6 @@ import CharityModel from './CharityModel'
  * an array of Charity objects.
  */
 const getCharities = async (userContext, filters = {}) => {
-  console.log('filters', filters)
   const { isPermanentPartner } = filters
   try {
     const allCharities = await CharityModel.getAll(userContext)
