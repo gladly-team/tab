@@ -18,9 +18,11 @@ class CampaignBase extends React.Component {
       color: theme.palette.primary.main,
       textDecoration: 'none',
     }
-    const CAMPAIGN_START_TIME_ISO = '2018-11-26T16:00:00.000Z'
-    const CAMPAIGN_END_TIME_ISO = '2018-11-30T22:00:00.000Z'
-    const heartsGoal = 18e6
+    // TODO: update before launching.
+    const CAMPAIGN_START_TIME_ISO = '2019-01-18T12:00:00.000Z'
+    // const CAMPAIGN_START_TIME_ISO = '2019-01-22T22:00:00.000Z'
+    const CAMPAIGN_END_TIME_ISO = '2019-01-25T22:00:00.000Z'
+    const heartsGoal = 6e6
 
     return (
       <QueryRenderer
@@ -45,7 +47,7 @@ class CampaignBase extends React.Component {
         `}
         variables={{
           userId: userId,
-          charityId: '77ee7208-62d7-41ad-a6e1-60f8d1dcfd9a',
+          charityId: 'c2571424-c610-4af6-b5e5-1227b9b09692',
           startTime: CAMPAIGN_START_TIME_ISO,
           endTime: CAMPAIGN_END_TIME_ISO,
         }}
@@ -78,7 +80,7 @@ class CampaignBase extends React.Component {
                         marginTop: 4,
                       }}
                     >
-                      Thank You for Giving Directly!
+                      Thank You for Supporting A21!
                     </Typography>
                     <div
                       style={{
@@ -87,36 +89,34 @@ class CampaignBase extends React.Component {
                       }}
                     >
                       <Typography variant={'body2'} gutterBottom>
-                        Thanks for welcoming{' '}
+                        Thanks for supporting{' '}
                         <a
-                          href="https://www.givedirectly.org/"
+                          href="https://www.a21.org"
                           target="_blank"
                           rel="noopener noreferrer"
                           style={anchorStyle}
                         >
-                          GiveDirectly
-                        </a>{' '}
-                        to Tab for a Cause this week! Your tabs will put cash
-                        into the hands of people who need it most.
+                          The A21 Campaign
+                        </a>
+                        ! With your help, they are working to eradicate human
+                        trafficking through awareness, intervention, and
+                        aftercare.{' '}
                       </Typography>
-                      <Typography variant={'body2'} gutterBottom>
+                      <Typography>
                         <span style={{ fontWeight: 'bold' }}>
                           Your tabs, more causes:
                         </span>{' '}
-                        Each month in 2019, we'll be highlighting the work of
-                        different charities in a{' '}
+                        Throughout 2019, we'll be highlighting the work of
+                        different charities in this{' '}
                         <a
                           href="https://www.facebook.com/notes/tab-for-a-cause/introducing-monthly-charity-spotlight/2071986076177802/"
                           target="_blank"
                           rel="noopener noreferrer"
                           style={anchorStyle}
                         >
-                          "Charity Spotlight"
+                          Charity Spotlight
                         </a>
-                        . You'll be able to donate Hearts to a wider variety of
-                        causes, and best of all, you'll get to vote for which
-                        new non-profits we should feature! Learn more and
-                        nominate your favorite charity{' '}
+                        . Learn more and nominate your favorite charity{' '}
                         <a
                           href="https://www.facebook.com/notes/tab-for-a-cause/introducing-monthly-charity-spotlight/2071986076177802/"
                           target="_blank"
@@ -140,7 +140,7 @@ class CampaignBase extends React.Component {
                   marginTop: 4,
                 }}
               >
-                This Giving Tuesday, Give Directly
+                January Spotlight: Help End Slavery
               </Typography>
               <div
                 style={{
@@ -149,57 +149,40 @@ class CampaignBase extends React.Component {
                 }}
               >
                 <Typography variant={'body2'} gutterBottom>
-                  We’re very excited to introduce a new charity partner,{' '}
+                  The final votes are in: Tabbers have selected{' '}
                   <a
-                    href="https://www.givedirectly.org/"
+                    href="https://www.a21.org"
                     target="_blank"
                     rel="noopener noreferrer"
                     style={anchorStyle}
                   >
-                    GiveDirectly
+                    The A21 Campaign
+                  </a>{' '}
+                  for our January{' '}
+                  <a
+                    href="https://www.facebook.com/notes/tab-for-a-cause/introducing-monthly-charity-spotlight/2071986076177802/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={anchorStyle}
+                  >
+                    Charity Spotlight
                   </a>
-                  !
+                  . A21 is a leading non-profit in the fight against slavery and
+                  human trafficking. There are millions of people in slavery,
+                  and A21 works tirelessly to shine a light on the problem,
+                  identify victims, and support survivors.
                 </Typography>
                 <Typography variant={'body2'} gutterBottom>
-                  GiveDirectly offers a simple approach to addressing poverty:
-                  cut out intermediaries and allow poor families to decide for
-                  themselves what they need most. They consistently{' '}
+                  Join us in supporting A21! (Then,{' '}
                   <a
-                    href="https://www.givedirectly.org/operating-model"
+                    href="https://en.wikipedia.org/wiki/Human_trafficking"
                     target="_blank"
                     rel="noopener noreferrer"
                     style={anchorStyle}
                   >
-                    measure their impact
+                    learn more
                   </a>
-                  ,{' '}
-                  <a
-                    href="https://www.givedirectly.org/research-at-give-directly"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={anchorStyle}
-                  >
-                    show impressive results
-                  </a>
-                  , and are one of only nine top-rated charities on{' '}
-                  <a
-                    href="https://www.givewell.org/charities/give-directly"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={anchorStyle}
-                  >
-                    GiveWell
-                  </a>
-                  .
-                </Typography>
-                <Typography variant={'body2'} gutterBottom>
-                  Join us in welcoming GiveDirectly to Tab for a Cause with a
-                  cornucopia of Hearts!
-                </Typography>
-                <Typography variant={'body2'} gutterBottom>
-                  <span style={{ fontWeight: 'bold' }}>Update: </span>congrats,
-                  we passed our original goal of 10M Hearts! Let's see if we can
-                  hit 18M!
+                  .)
                 </Typography>
               </div>
             </HeartDonationCampaign>
