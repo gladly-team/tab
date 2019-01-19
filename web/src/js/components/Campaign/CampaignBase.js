@@ -70,6 +70,65 @@ class CampaignBase extends React.Component {
                   end: moment(CAMPAIGN_END_TIME_ISO),
                 },
                 heartsGoal: heartsGoal,
+                endContent: (
+                  <div>
+                    <Typography
+                      variant={'h6'}
+                      style={{
+                        textAlign: 'center',
+                        marginTop: 4,
+                      }}
+                    >
+                      Thank You for Supporting A21!
+                    </Typography>
+                    <div
+                      style={{
+                        margin: '14px 10px 20px',
+                        textAlign: 'left',
+                      }}
+                    >
+                      <Typography variant={'body2'} gutterBottom>
+                        Thanks for supporting{' '}
+                        <a
+                          href="https://www.a21.org"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={anchorStyle}
+                        >
+                          The A21 Campaign
+                        </a>
+                        ! With your help, they are working to eradicate human
+                        trafficking through awareness, intervention, and
+                        aftercare.{' '}
+                      </Typography>
+                      <Typography>
+                        <span style={{ fontWeight: 'bold' }}>
+                          Your tabs, more causes:
+                        </span>{' '}
+                        Throughout 2019, we'll be highlighting the work of
+                        different charities in this{' '}
+                        <a
+                          href="https://www.facebook.com/notes/tab-for-a-cause/introducing-monthly-charity-spotlight/2071986076177802/"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={anchorStyle}
+                        >
+                          Charity Spotlight
+                        </a>
+                        . Learn more and nominate your favorite charity{' '}
+                        <a
+                          href="https://www.facebook.com/notes/tab-for-a-cause/introducing-monthly-charity-spotlight/2071986076177802/"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={anchorStyle}
+                        >
+                          here
+                        </a>
+                        .
+                      </Typography>
+                    </div>
+                  </div>
+                ),
               }}
               showError={this.props.showError}
             >
