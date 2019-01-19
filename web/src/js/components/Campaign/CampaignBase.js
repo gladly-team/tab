@@ -20,8 +20,9 @@ class CampaignBase extends React.Component {
     }
     // TODO: update before launching.
     const CAMPAIGN_START_TIME_ISO = '2019-01-18T12:00:00.000Z'
-    const CAMPAIGN_END_TIME_ISO = '2019-01-29T22:00:00.000Z'
-    const heartsGoal = 8e6
+    // const CAMPAIGN_START_TIME_ISO = '2019-01-22T22:00:00.000Z'
+    const CAMPAIGN_END_TIME_ISO = '2019-01-25T22:00:00.000Z'
+    const heartsGoal = 6e6
 
     return (
       <QueryRenderer
