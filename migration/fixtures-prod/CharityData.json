@@ -125,5 +125,19 @@
     "updated": "2018-11-15T18:00:000Z",
     "inactive": false,
     "isPermanentPartner": true
+  },
+  {
+    "id": "c2571424-c610-4af6-b5e5-1227b9b09692",
+    "name": "The A21 Campaign",
+    "category": "Human Rights",
+    "logo": "a21-201901.png",
+    "image": "a21.jpg",
+    "website": "https://www.a21.org",
+    "impact": "Your donation will help A21 fight to abolish slavery from the world. Together, we are eradicating human trafficking through awareness, intervention, and aftercare. ",
+    "description": "Works to fight human trafficking and slavery.",
+    "created": "2019-01-18T18:00:000Z",
+    "updated": "2019-01-18T18:00:000Z",
+    "inactive": false,
+    "isPermanentPartner": false
   }
 ]
