@@ -36,6 +36,7 @@ export const STORAGE_BACKGROUND_OPTION = 'tab.user.background.option'
 export const STORAGE_TABS_LAST_TAB_OPENED_DATE = 'tab.user.lastTabDay.date'
 export const STORAGE_NOTIFICATIONS_DISMISS_TIME =
   'tab.user.notifications.dismissTime'
+export const STORAGE_CAMPAIGN_DISMISS_TIME = 'tab.user.campaign.dismissTime'
 
 // The count of tabs opened in the most recent day the user was
 // active. It could be today (ongoing) or a day in the past.

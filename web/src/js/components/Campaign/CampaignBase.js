@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import { QueryRenderer } from 'react-relay'
 import graphql from 'babel-plugin-relay/macro'
 import { withTheme } from '@material-ui/core/styles'
+import IconButton from '@material-ui/core/IconButton'
+import CloseIcon from '@material-ui/icons/Close'
 import environment from 'js/relay-env'
 import moment from 'moment'
 import FadeInDashboardAnimation from 'js/components/General/FadeInDashboardAnimation'
@@ -10,10 +12,11 @@ import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import withUserId from 'js/components/General/withUserId'
 import HeartDonationCampaign from 'js/components/Campaign/HeartDonationCampaignContainer'
+import { setCampaignDismissTime } from 'js/utils/local-user-data-mgr'
 
 class CampaignBase extends React.Component {
   render() {
-    const { userId, theme } = this.props
+    const { userId, theme, onDismiss } = this.props
     const anchorStyle = {
       color: theme.palette.primary.main,
       textDecoration: 'none',
@@ -209,6 +212,7 @@ class CampaignBase extends React.Component {
                 <Paper
                   elevation={1}
                   style={{
+                    position: 'relative',
                     pointerEvents: 'all',
                     minWidth: 400,
                     margin: 0,
@@ -227,6 +231,19 @@ class CampaignBase extends React.Component {
                       backgroundColor: theme.palette.secondary.main,
                     }}
                   />
+                  <IconButton
+                    onClick={() => {
+                      setCampaignDismissTime()
+                      onDismiss()
+                    }}
+                    style={{
+                      position: 'absolute',
+                      top: 5,
+                      right: 2,
+                    }}
+                  >
+                    <CloseIcon />
+                  </IconButton>
                   {currentCampaign}
                 </Paper>
               </FadeInDashboardAnimation>
@@ -241,9 +258,12 @@ class CampaignBase extends React.Component {
 CampaignBase.propTypes = {
   userId: PropTypes.string.isRequired,
   showError: PropTypes.func.isRequired,
+  onDismiss: PropTypes.func.isRequired,
   theme: PropTypes.object.isRequired,
 }
 
-CampaignBase.defaultProps = {}
+CampaignBase.defaultProps = {
+  onDismiss: () => {},
+}
 
 export default withTheme()(withUserId()(CampaignBase))
