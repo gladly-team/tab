@@ -9,9 +9,7 @@ import CampaignBase from 'js/components/Campaign/CampaignBase'
 class CampaignBaseView extends React.Component {
   render() {
     const { userId } = this.props
-    // TODO: update before launching.
-    const CAMPAIGN_START_TIME_ISO = '2019-01-18T12:00:00.000Z'
-    // const CAMPAIGN_START_TIME_ISO = '2019-01-22T22:00:00.000Z'
+    const CAMPAIGN_START_TIME_ISO = '2019-01-22T20:00:00.000Z'
     const CAMPAIGN_END_TIME_ISO = '2019-01-25T22:00:00.000Z'
 
     return (
