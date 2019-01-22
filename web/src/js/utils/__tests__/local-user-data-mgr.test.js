@@ -86,8 +86,7 @@ describe('local user data manager', () => {
     )
     localStorageMgr.setItem('tab.user.lastTabDay.count', 14)
     jest.clearAllMocks()
-    const incrementTabsOpenedToday = require('js/utils/local-user-data-mgr')
-      .incrementTabsOpenedToday
+    const { incrementTabsOpenedToday } = require('js/utils/local-user-data-mgr')
     incrementTabsOpenedToday()
     expect(localStorageMgr.setItem).toHaveBeenCalledWith(
       'tab.user.lastTabDay.count',
@@ -108,8 +107,7 @@ describe('local user data manager', () => {
     )
     localStorageMgr.setItem('tab.user.lastTabDay.count', 14)
     jest.clearAllMocks()
-    const incrementTabsOpenedToday = require('js/utils/local-user-data-mgr')
-      .incrementTabsOpenedToday
+    const { incrementTabsOpenedToday } = require('js/utils/local-user-data-mgr')
     incrementTabsOpenedToday()
     expect(localStorageMgr.setItem).toHaveBeenCalledWith(
       'tab.user.lastTabDay.count',
@@ -122,8 +120,7 @@ describe('local user data manager', () => {
   })
 
   it('resets the counter of tabs today when the last tab day values are not set in localStorage', () => {
-    const incrementTabsOpenedToday = require('js/utils/local-user-data-mgr')
-      .incrementTabsOpenedToday
+    const { incrementTabsOpenedToday } = require('js/utils/local-user-data-mgr')
     incrementTabsOpenedToday()
     expect(localStorageMgr.setItem).toHaveBeenCalledWith(
       'tab.user.lastTabDay.count',
@@ -138,8 +135,7 @@ describe('local user data manager', () => {
   it('resets the counter of tabs today when the last tab date value is not set in localStorage', () => {
     localStorageMgr.setItem('tab.user.lastTabDay.count', 6)
     jest.clearAllMocks()
-    const incrementTabsOpenedToday = require('js/utils/local-user-data-mgr')
-      .incrementTabsOpenedToday
+    const { incrementTabsOpenedToday } = require('js/utils/local-user-data-mgr')
     incrementTabsOpenedToday()
     expect(localStorageMgr.setItem).toHaveBeenCalledWith(
       'tab.user.lastTabDay.count',
@@ -159,8 +155,7 @@ describe('local user data manager', () => {
         .toISOString()
     )
     jest.clearAllMocks()
-    const incrementTabsOpenedToday = require('js/utils/local-user-data-mgr')
-      .incrementTabsOpenedToday
+    const { incrementTabsOpenedToday } = require('js/utils/local-user-data-mgr')
     incrementTabsOpenedToday()
     expect(localStorageMgr.setItem).toHaveBeenCalledWith(
       'tab.user.lastTabDay.count',
@@ -176,8 +171,9 @@ describe('local user data manager', () => {
   it('sets the extension install ID in localStorage', () => {
     const mockUUID = '9359e548-1bd8-4bf1-9e10-09b5b6b4df34'
     uuid.mockReturnValueOnce(mockUUID)
-    const setBrowserExtensionInstallId = require('js/utils/local-user-data-mgr')
-      .setBrowserExtensionInstallId
+    const {
+      setBrowserExtensionInstallId,
+    } = require('js/utils/local-user-data-mgr')
     setBrowserExtensionInstallId()
     expect(localStorageMgr.setItem).toHaveBeenCalledWith(
       'tab.newUser.extensionInstallId',
@@ -190,24 +186,27 @@ describe('local user data manager', () => {
     const mockUUID = '9359e548-1bd8-4bf1-9e10-09b5b6b4df34'
     uuid.mockReturnValueOnce(mockUUID)
     localStorageMgr.setItem('tab.newUser.extensionInstallId', mockUUID)
-    const getBrowserExtensionInstallId = require('js/utils/local-user-data-mgr')
-      .getBrowserExtensionInstallId
+    const {
+      getBrowserExtensionInstallId,
+    } = require('js/utils/local-user-data-mgr')
     const installId = getBrowserExtensionInstallId()
     expect(installId).toBe(mockUUID)
   })
 
   it('returns null if the extension ID in localStorage does not exist', () => {
     localStorageMgr.removeItem('tab.newUser.extensionInstallId')
-    const getBrowserExtensionInstallId = require('js/utils/local-user-data-mgr')
-      .getBrowserExtensionInstallId
+    const {
+      getBrowserExtensionInstallId,
+    } = require('js/utils/local-user-data-mgr')
     const installTime = getBrowserExtensionInstallId()
     expect(installTime).toBeNull()
   })
 
   // setBrowserExtensionInstallTime method
   it('sets the extension install time timestamp in localStorage', () => {
-    const setBrowserExtensionInstallTime = require('js/utils/local-user-data-mgr')
-      .setBrowserExtensionInstallTime
+    const {
+      setBrowserExtensionInstallTime,
+    } = require('js/utils/local-user-data-mgr')
     setBrowserExtensionInstallTime()
     expect(localStorageMgr.setItem).toHaveBeenCalledWith(
       'tab.newUser.approxInstallTime',
@@ -222,8 +221,9 @@ describe('local user data manager', () => {
       'tab.newUser.approxInstallTime',
       now.utc().toISOString()
     )
-    const getBrowserExtensionInstallTime = require('js/utils/local-user-data-mgr')
-      .getBrowserExtensionInstallTime
+    const {
+      getBrowserExtensionInstallTime,
+    } = require('js/utils/local-user-data-mgr')
     const installTime = getBrowserExtensionInstallTime()
     expect(installTime.isSame(now)).toBe(true)
   })
@@ -233,16 +233,18 @@ describe('local user data manager', () => {
     jest.spyOn(console, 'warn').mockImplementationOnce(() => {})
 
     localStorageMgr.setItem('tab.newUser.approxInstallTime', 'foo')
-    const getBrowserExtensionInstallTime = require('js/utils/local-user-data-mgr')
-      .getBrowserExtensionInstallTime
+    const {
+      getBrowserExtensionInstallTime,
+    } = require('js/utils/local-user-data-mgr')
     const installTime = getBrowserExtensionInstallTime()
     expect(installTime).toBeNull()
   })
 
   it('returns null if the extension install date in localStorage does not exist', () => {
     localStorageMgr.removeItem('tab.newUser.approxInstallTime')
-    const getBrowserExtensionInstallTime = require('js/utils/local-user-data-mgr')
-      .getBrowserExtensionInstallTime
+    const {
+      getBrowserExtensionInstallTime,
+    } = require('js/utils/local-user-data-mgr')
     const installTime = getBrowserExtensionInstallTime()
     expect(installTime).toBeNull()
   })
@@ -272,9 +274,10 @@ describe('local user data manager', () => {
 
   // setNotificationDismissTime method
   it('sets the notification dismiss time timestamp in localStorage', () => {
-    const setBrowserExtensionInstallTime = require('js/utils/local-user-data-mgr')
-      .setNotificationDismissTime
-    setBrowserExtensionInstallTime()
+    const {
+      setNotificationDismissTime,
+    } = require('js/utils/local-user-data-mgr')
+    setNotificationDismissTime()
     expect(localStorageMgr.setItem).toHaveBeenCalledWith(
       'tab.user.notifications.dismissTime',
       moment.utc().toISOString()
@@ -288,8 +291,9 @@ describe('local user data manager', () => {
       'tab.user.notifications.dismissTime',
       now.utc().toISOString()
     )
-    const hasUserDismissedNotificationRecently = require('js/utils/local-user-data-mgr')
-      .hasUserDismissedNotificationRecently
+    const {
+      hasUserDismissedNotificationRecently,
+    } = require('js/utils/local-user-data-mgr')
     const recentlyDismissed = hasUserDismissedNotificationRecently()
     expect(recentlyDismissed).toBe(true)
   })
@@ -300,8 +304,9 @@ describe('local user data manager', () => {
       'tab.user.notifications.dismissTime',
       now.utc().toISOString()
     )
-    const hasUserDismissedNotificationRecently = require('js/utils/local-user-data-mgr')
-      .hasUserDismissedNotificationRecently
+    const {
+      hasUserDismissedNotificationRecently,
+    } = require('js/utils/local-user-data-mgr')
     const recentlyDismissed = hasUserDismissedNotificationRecently()
     expect(recentlyDismissed).toBe(false)
   })
@@ -311,16 +316,18 @@ describe('local user data manager', () => {
     jest.spyOn(console, 'warn').mockImplementationOnce(() => {})
 
     localStorageMgr.setItem('tab.user.notifications.dismissTime', 'foo')
-    const hasUserDismissedNotificationRecently = require('js/utils/local-user-data-mgr')
-      .hasUserDismissedNotificationRecently
+    const {
+      hasUserDismissedNotificationRecently,
+    } = require('js/utils/local-user-data-mgr')
     const recentlyDismissed = hasUserDismissedNotificationRecently()
     expect(recentlyDismissed).toBe(false)
   })
 
   it('returns null if the extension install date in localStorage does not exist', () => {
     localStorageMgr.removeItem('tab.user.notifications.dismissTime')
-    const hasUserDismissedNotificationRecently = require('js/utils/local-user-data-mgr')
-      .hasUserDismissedNotificationRecently
+    const {
+      hasUserDismissedNotificationRecently,
+    } = require('js/utils/local-user-data-mgr')
     const recentlyDismissed = hasUserDismissedNotificationRecently()
     expect(recentlyDismissed).toBe(false)
   })
