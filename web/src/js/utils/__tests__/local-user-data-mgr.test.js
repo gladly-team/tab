@@ -331,4 +331,62 @@ describe('local user data manager', () => {
     const recentlyDismissed = hasUserDismissedNotificationRecently()
     expect(recentlyDismissed).toBe(false)
   })
+
+  // setCampaignDismissTime method
+  it('sets the notification dismiss time timestamp in localStorage', () => {
+    const { setCampaignDismissTime } = require('js/utils/local-user-data-mgr')
+    setCampaignDismissTime()
+    expect(localStorageMgr.setItem).toHaveBeenCalledWith(
+      'tab.user.campaign.dismissTime',
+      moment.utc().toISOString()
+    )
+  })
+
+  // hasUserDismissedCampaignRecently method
+  it('returns true if the user dismissed a notification recently', () => {
+    const now = moment('2018-04-11T12:50:42.000') // ~1 day ago
+    localStorageMgr.setItem(
+      'tab.user.campaign.dismissTime',
+      now.utc().toISOString()
+    )
+    const {
+      hasUserDismissedCampaignRecently,
+    } = require('js/utils/local-user-data-mgr')
+    const recentlyDismissed = hasUserDismissedCampaignRecently()
+    expect(recentlyDismissed).toBe(true)
+  })
+
+  it('returns false if the user has not dismissed a notification recently', () => {
+    const now = moment('2018-03-28T12:50:42.000') // ~15 days ago
+    localStorageMgr.setItem(
+      'tab.user.campaign.dismissTime',
+      now.utc().toISOString()
+    )
+    const {
+      hasUserDismissedCampaignRecently,
+    } = require('js/utils/local-user-data-mgr')
+    const recentlyDismissed = hasUserDismissedCampaignRecently()
+    expect(recentlyDismissed).toBe(false)
+  })
+
+  it('returns false if the extension install date in localStorage is invalid', () => {
+    // Suppress expected MomentJS warning
+    jest.spyOn(console, 'warn').mockImplementationOnce(() => {})
+
+    localStorageMgr.setItem('tab.user.campaign.dismissTime', 'foo')
+    const {
+      hasUserDismissedCampaignRecently,
+    } = require('js/utils/local-user-data-mgr')
+    const recentlyDismissed = hasUserDismissedCampaignRecently()
+    expect(recentlyDismissed).toBe(false)
+  })
+
+  it('returns null if the extension install date in localStorage does not exist', () => {
+    localStorageMgr.removeItem('tab.user.campaign.dismissTime')
+    const {
+      hasUserDismissedCampaignRecently,
+    } = require('js/utils/local-user-data-mgr')
+    const recentlyDismissed = hasUserDismissedCampaignRecently()
+    expect(recentlyDismissed).toBe(false)
+  })
 })
