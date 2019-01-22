@@ -9,7 +9,7 @@ import MoneyRaised from 'js/components/MoneyRaised/MoneyRaisedContainer'
 import UserBackgroundImage from 'js/components/User/UserBackgroundImageContainer'
 import UserMenu from 'js/components/User/UserMenuContainer'
 import WidgetsContainer from 'js/components/Widget/WidgetsContainer'
-import CampaignBase from 'js/components/Campaign/CampaignBase'
+import CampaignBase from 'js/components/Campaign/CampaignBaseView'
 import Ad from 'js/components/Ad/Ad'
 import LogTab from 'js/components/Dashboard/LogTabContainer'
 import LogRevenue from 'js/components/Dashboard/LogRevenueContainer'
@@ -35,6 +35,7 @@ import {
 import {
   setUserDismissedAdExplanation,
   hasUserDismissedNotificationRecently,
+  hasUserDismissedCampaignRecently,
 } from 'js/utils/local-user-data-mgr'
 import { showGlobalNotification } from 'js/utils/feature-flags'
 
@@ -105,13 +106,24 @@ describe('Dashboard component', () => {
     expect(wrapper.find(WidgetsContainer).length).toBe(1)
   })
 
-  it('renders CampaignBase component when the campaign is live', () => {
+  it('renders CampaignBase component when the campaign is live and the user has not dismissed it', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const modifiedProps = cloneDeep(mockProps)
     modifiedProps.app.isGlobalCampaignLive = true
+    hasUserDismissedCampaignRecently.mockReturnValueOnce(false)
     const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
     expect(wrapper.find(CampaignBase).length).toBe(1)
+  })
+
+  it('does not render the CampaignBase component when the campaign is live but the user has dismissed it', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.app.isGlobalCampaignLive = true
+    hasUserDismissedCampaignRecently.mockReturnValueOnce(true)
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+    expect(wrapper.find(CampaignBase).length).toBe(0)
   })
 
   it('does not render CampaignBase component when the campaign is not live', () => {
@@ -119,8 +131,44 @@ describe('Dashboard component', () => {
       .default
     const modifiedProps = cloneDeep(mockProps)
     modifiedProps.app.isGlobalCampaignLive = false
+    hasUserDismissedCampaignRecently.mockReturnValueOnce(false)
     const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
     expect(wrapper.find(CampaignBase).length).toBe(0)
+  })
+
+  it('hides the campaign when the onDismiss callback is called', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.app.isGlobalCampaignLive = true
+    hasUserDismissedCampaignRecently.mockReturnValueOnce(false)
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+
+    // Campaign should be visible.
+    expect(wrapper.find(CampaignBase).length).toBe(1)
+
+    // Mock that the user dismisses the notification.
+    wrapper.find(CampaignBase).prop('onDismiss')()
+
+    // Notification should be gone.
+    expect(wrapper.find(CampaignBase).length).toBe(0)
+  })
+
+  it('changes the value of the isCampaignLive passed to widgets when the campaign is dismissed', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.app.isGlobalCampaignLive = true
+    hasUserDismissedCampaignRecently.mockReturnValueOnce(false)
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+
+    expect(wrapper.find(WidgetsContainer).prop('isCampaignLive')).toBe(true)
+
+    // Mock that the user dismisses the notification.
+    wrapper.find(CampaignBase).prop('onDismiss')()
+
+    // Prop should change.
+    expect(wrapper.find(WidgetsContainer).prop('isCampaignLive')).toBe(false)
   })
 
   it('does not render any ad components when 0 ads are enabled', () => {
@@ -517,7 +565,7 @@ describe('Dashboard component', () => {
     expect(wrapper.find(Notification).length).toBe(0)
   })
 
-  it('hides the notification the onDismiss callback is called', () => {
+  it('hides the notification when the onDismiss callback is called', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     showGlobalNotification.mockReset()

@@ -8,6 +8,7 @@ import {
   STORAGE_TABS_RECENT_DAY_COUNT,
   STORAGE_TABS_LAST_TAB_OPENED_DATE,
   STORAGE_NOTIFICATIONS_DISMISS_TIME,
+  STORAGE_CAMPAIGN_DISMISS_TIME,
 } from 'js/constants'
 
 /**
@@ -206,5 +207,36 @@ export const hasUserDismissedNotificationRecently = () => {
     moment()
       .utc()
       .diff(dismissTime, 'days') < 10
+  )
+}
+
+/**
+ * Saves now as the time the user dismissed a campaign.
+ * @returns {undefined}
+ */
+export const setCampaignDismissTime = () => {
+  localStorageMgr.setItem(
+    STORAGE_CAMPAIGN_DISMISS_TIME,
+    moment.utc().toISOString()
+  )
+}
+
+/**
+ * Returns whether the user has dismissed a campaign
+ * in the last few days.
+ * @returns {Boolean}
+ */
+export const hasUserDismissedCampaignRecently = () => {
+  const campaignDismissISOString = localStorageMgr.getItem(
+    STORAGE_CAMPAIGN_DISMISS_TIME
+  )
+  const dismissTime = moment(campaignDismissISOString)
+  if (!campaignDismissISOString || !dismissTime.isValid()) {
+    return false
+  }
+  return (
+    moment()
+      .utc()
+      .diff(dismissTime, 'days') < 14
   )
 }

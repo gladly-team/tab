@@ -10,7 +10,7 @@ import MoneyRaised from 'js/components/MoneyRaised/MoneyRaisedContainer'
 import UserBackgroundImage from 'js/components/User/UserBackgroundImageContainer'
 import UserMenu from 'js/components/User/UserMenuContainer'
 import WidgetsContainer from 'js/components/Widget/WidgetsContainer'
-import CampaignBase from 'js/components/Campaign/CampaignBase'
+import CampaignBase from 'js/components/Campaign/CampaignBaseView'
 import Ad from 'js/components/Ad/Ad'
 import LogTab from 'js/components/Dashboard/LogTabContainer'
 import LogRevenue from 'js/components/Dashboard/LogRevenueContainer'
@@ -33,6 +33,7 @@ import localStorageMgr from 'js/utils/localstorage-mgr'
 import {
   setUserDismissedAdExplanation,
   hasUserDismissedNotificationRecently,
+  hasUserDismissedCampaignRecently,
 } from 'js/utils/local-user-data-mgr'
 import { STORAGE_NEW_USER_HAS_COMPLETED_TOUR } from 'js/constants'
 import { goTo, loginURL } from 'js/navigation/navigation'
@@ -70,6 +71,7 @@ class Dashboard extends React.Component {
       // Whether to show a global announcement.
       showNotification:
         showGlobalNotification() && !hasUserDismissedNotificationRecently(),
+      hasUserDismissedCampaignRecently: hasUserDismissedCampaignRecently(),
     }
   }
 
@@ -121,8 +123,11 @@ class Dashboard extends React.Component {
     const errorMessage = this.state.errorMessage
 
     // Whether or not a campaign should show on the dashboard
-    // TODO: also make sure the user hasn't dismissed the campaign (`isCampaignShown` var)
-    const isGlobalCampaignLive = !!(app && app.isGlobalCampaignLive)
+    const isGlobalCampaignLive = !!(
+      app &&
+      app.isGlobalCampaignLive &&
+      !this.state.hasUserDismissedCampaignRecently
+    )
 
     // Show the tour if the user joined recently and localStorage
     // does not have a flag marking the tour as already viewed.
@@ -268,7 +273,14 @@ class Dashboard extends React.Component {
         />
         {isGlobalCampaignLive ? (
           <FadeInDashboardAnimation>
-            <CampaignBase showError={this.showError.bind(this)} />
+            <CampaignBase
+              onDismiss={() => {
+                this.setState({
+                  hasUserDismissedCampaignRecently: true,
+                })
+              }}
+              showError={this.showError.bind(this)}
+            />
           </FadeInDashboardAnimation>
         ) : null}
         {this.state.showFireworks
