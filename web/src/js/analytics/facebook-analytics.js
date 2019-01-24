@@ -1,8 +1,10 @@
+import logger from 'js/utils/logger'
+
 const DEBUG = false
 
 var fbq = window.fbq
 if (!fbq) {
-  console.error('Facebook analytics are not available on `window.fbq`.')
+  logger.error('Facebook analytics are not available on `window.fbq`.')
 }
 
 const facebookAnalytics = (...args) => {
@@ -12,7 +14,7 @@ const facebookAnalytics = (...args) => {
     }
     fbq.apply(this, args)
   } catch (e) {
-    console.error('Failed to track Facebook Analytics event.', e)
+    logger.error(e)
   }
 }
 

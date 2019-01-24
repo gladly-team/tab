@@ -37,7 +37,8 @@ async function fetchQuery(operation, variables, cacheConfig, uploadables) {
         // QueryRenderer.
         // https://github.com/facebook/relay/issues/1913
         if (responseJSON.errors && responseJSON.errors.length > 0) {
-          logger.error(responseJSON.errors)
+          console.error('Errors in Relay environment fetch:')
+          console.error(responseJSON.errors)
           responseJSON.data = null
           return responseJSON
         }

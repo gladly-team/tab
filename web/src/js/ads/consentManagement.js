@@ -1,5 +1,6 @@
 import localStorageManager from 'js/utils/localstorage-mgr'
 import { STORAGE_NEW_CONSENT_DATA_EXISTS } from 'js/constants'
+import logger from 'js/utils/logger'
 
 /**
  * Get the vendor consent string from the consent management platform.
@@ -19,7 +20,7 @@ export const getConsentString = () => {
     try {
       window.__cmp('getConsentData', null, cmpSuccessCallback)
     } catch (e) {
-      console.error(e)
+      logger.error(e)
       resolve(null)
     }
   })
@@ -43,7 +44,7 @@ export const hasGlobalConsent = () => {
     try {
       window.__cmp('getConsentData', null, cmpSuccessCallback)
     } catch (e) {
-      console.error(e)
+      logger.error(e)
       resolve(null)
     }
   })
