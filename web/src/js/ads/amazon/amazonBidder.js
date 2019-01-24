@@ -9,6 +9,7 @@ import {
   SECOND_VERTICAL_AD_SLOT_DOM_ID,
   HORIZONTAL_AD_SLOT_DOM_ID,
 } from 'js/ads/adSettings'
+import logger from 'js/utils/logger'
 
 // Save returned Amazon bids.
 var amazonBids
@@ -37,7 +38,7 @@ export const storeAmazonBids = () => {
       })
     }
   } catch (e) {
-    console.error('Could not store Amazon bids', e)
+    logger.error('Could not store Amazon bids', e)
   }
 }
 

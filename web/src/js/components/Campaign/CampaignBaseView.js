@@ -5,6 +5,7 @@ import graphql from 'babel-plugin-relay/macro'
 import environment from 'js/relay-env'
 import withUserId from 'js/components/General/withUserId'
 import CampaignBase from 'js/components/Campaign/CampaignBase'
+import logger from 'js/utils/logger'
 
 class CampaignBaseView extends React.Component {
   render() {
@@ -41,7 +42,7 @@ class CampaignBaseView extends React.Component {
         }}
         render={({ error, props, retry }) => {
           if (error) {
-            console.error(error)
+            logger.error(error)
           }
           if (!props) {
             return null

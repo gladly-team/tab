@@ -1,5 +1,6 @@
 /* global fetch */
 import { getUserToken } from 'js/authentication/user'
+import logger from 'js/utils/logger'
 const { Environment, Network, RecordSource, Store } = require('relay-runtime')
 
 // Fetches the results of an operation (query/mutation/etc)
@@ -36,7 +37,7 @@ async function fetchQuery(operation, variables, cacheConfig, uploadables) {
         // QueryRenderer.
         // https://github.com/facebook/relay/issues/1913
         if (responseJSON.errors && responseJSON.errors.length > 0) {
-          console.log('relay-env errors', responseJSON.errors)
+          logger.error(responseJSON.errors)
           responseJSON.data = null
           return responseJSON
         }
@@ -44,7 +45,7 @@ async function fetchQuery(operation, variables, cacheConfig, uploadables) {
       })
     })
   } catch (e) {
-    console.error(e)
+    logger.error(e)
   }
 }
 

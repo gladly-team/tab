@@ -1,4 +1,5 @@
 import getGoogleTag from 'js/ads/google/getGoogleTag'
+import logger from 'js/utils/logger'
 
 // Keep track of what ad slots have loaded. App code loads later and
 // therefore can miss the slot loading event. This gives the app code
@@ -35,7 +36,7 @@ export default () => {
           const slotId = event.slot.getSlotElementId()
           storeRenderedSlotData(slotId, event)
         } catch (e) {
-          console.error('Could not store rendered slot data', e)
+          logger.error('Could not store rendered slot data', e)
         }
       })
 
@@ -45,7 +46,7 @@ export default () => {
           const slotId = event.slot.getSlotElementId()
           markSlotAsViewable(slotId)
         } catch (e) {
-          console.error('Could not mark ad slot as viewable', e)
+          logger.error('Could not mark ad slot as viewable', e)
         }
       })
 
@@ -55,11 +56,11 @@ export default () => {
           const slotId = event.slot.getSlotElementId()
           markSlotAsLoaded(slotId)
         } catch (e) {
-          console.error('Could not mark ad slot as loaded', e)
+          logger.error('Could not mark ad slot as loaded', e)
         }
       })
     })
   } catch (e) {
-    console.error('Could not handle GPT slot loaded event', e)
+    logger.error('Could not handle GPT slot loaded event', e)
   }
 }

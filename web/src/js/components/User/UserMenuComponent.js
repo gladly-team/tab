@@ -30,6 +30,7 @@ import appTheme, {
 } from 'js/theme/default'
 import { commaFormatted } from 'js/utils/utils'
 import { MAX_DAILY_HEARTS_FROM_TABS } from 'js/constants'
+import logger from 'js/utils/logger'
 
 class UserMenu extends React.Component {
   constructor(props) {
@@ -51,7 +52,7 @@ class UserMenu extends React.Component {
     try {
       logoutSuccess = await logout()
     } catch (e) {
-      console.error(e)
+      logger.error(e)
     }
     if (logoutSuccess) {
       goToLogin()

@@ -4,6 +4,7 @@ import LogUserRevenueMutation from 'js/mutations/LogUserRevenueMutation'
 import PropTypes from 'prop-types'
 import getGoogleTag from 'js/ads/google/getGoogleTag'
 import getPrebidPbjs from 'js/ads/prebid/getPrebidPbjs'
+import logger from 'js/utils/logger'
 
 // Log revenue from ads
 class LogRevenueComponent extends React.Component {
@@ -96,7 +97,7 @@ class LogRevenueComponent extends React.Component {
     try {
       slotRenderEndedData = window.tabforacause.ads.slotsRendered[slotId]
     } catch (e) {
-      console.error(e)
+      logger.error(e)
     }
     return slotRenderEndedData
   }
@@ -158,7 +159,8 @@ class LogRevenueComponent extends React.Component {
         adUnitCode
       )
     } catch (e) {
-      console.error('Could not log revenue for ad slot', e)
+      console.error('Could not log revenue for ad slot:')
+      logger.error(e)
     }
   }
 
@@ -181,7 +183,8 @@ class LogRevenueComponent extends React.Component {
         })
       }
     } catch (e) {
-      console.error('Could not log revenue for ad slot', e)
+      console.error('Could not log revenue for ad slot:')
+      logger.error(e)
     }
   }
 
@@ -199,7 +202,8 @@ class LogRevenueComponent extends React.Component {
           window.tabforacause.ads.slotsRendered[slotId] = event
           this.logRevenueForSlotId(slotId, adUnitCode)
         } catch (e) {
-          console.error('Could not log revenue for ad slot', e)
+          console.error('Could not log revenue for ad slot:')
+          logger.error(e)
         }
       })
     })

@@ -11,6 +11,7 @@ import {
   widgetEditButtonHover,
 } from 'js/theme/default'
 import hexToRgbA from 'hex-to-rgba'
+import logger from 'js/utils/logger'
 
 class BookmarkChip extends React.Component {
   constructor(props) {
@@ -120,7 +121,7 @@ class BookmarkChip extends React.Component {
         bookmarkColor = hexToRgbA(colorOverride, 0.36)
         bookmarkHex = colorOverride
       } catch (e) {
-        console.error('Error converting bookmark color to RGBA.', e)
+        logger.error('Error converting bookmark color to RGBA.', e)
       }
     }
     return (

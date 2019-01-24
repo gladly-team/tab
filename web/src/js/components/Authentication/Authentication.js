@@ -18,6 +18,7 @@ import {
 import LogoWithText from 'js/components/Logo/LogoWithText'
 import { getUrlParameters } from 'js/utils/utils'
 import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
+import logger from 'js/utils/logger'
 
 // Handle the authentication flow:
 //   check if current user is fully authenticated and redirect
@@ -158,7 +159,7 @@ class Authentication extends React.Component {
             })
             .catch(err => {
               // TODO: show error message to the user
-              console.error(err)
+              logger.error(err)
             })
         } else {
           // Fetch the user from our database. This will update the `user`
@@ -169,7 +170,7 @@ class Authentication extends React.Component {
       })
       .catch(err => {
         // TODO: show error message to the user
-        console.error(err)
+        logger.error(err)
       })
   }
 

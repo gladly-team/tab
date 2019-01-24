@@ -8,6 +8,7 @@ import SetUsernameMutation from 'js/mutations/SetUsernameMutation'
 import { setUsernameInLocalStorage } from 'js/authentication/user'
 import { checkIfEmailVerified } from 'js/authentication/helpers'
 import { goToDashboard } from 'js/navigation/navigation'
+import logger from 'js/utils/logger'
 
 class EnterUsernameForm extends React.Component {
   constructor(props) {
@@ -85,7 +86,8 @@ class EnterUsernameForm extends React.Component {
 
   onMutationError(response) {
     // TODO: show better error message to the user
-    console.error('Error saving username:', response)
+    console.error('Error saving username:')
+    logger.error(response)
     this.setState({
       savingUsernameInProgress: false,
       otherError: true,
