@@ -7,6 +7,7 @@ import SettingsChildWrapper from 'js/components/Settings/SettingsChildWrapperCom
 import WidgetsSettings from 'js/components/Settings/Widgets/WidgetsSettingsContainer'
 import AuthUserComponent from 'js/components/General/AuthUserComponent'
 import ErrorMessage from 'js/components/General/ErrorMessage'
+import logger from 'js/utils/logger'
 
 class WidgetsSettingsView extends React.Component {
   render() {
@@ -26,7 +27,7 @@ class WidgetsSettingsView extends React.Component {
           `}
           render={({ error, props }) => {
             if (error) {
-              console.error(error, error.source)
+              logger.error(error, error.source)
               const errMsg = 'We had a problem loading the widget settings :('
               return <ErrorMessage message={errMsg} />
             }

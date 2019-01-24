@@ -8,6 +8,7 @@ import getPrebidPbjs from 'js/ads/prebid/getPrebidPbjs'
 import handleAdsLoaded from 'js/ads/handleAdsLoaded'
 import prebidConfig from 'js/ads/prebid/prebidConfig'
 import { AUCTION_TIMEOUT } from 'js/ads/adSettings'
+import logger from 'js/utils/logger'
 
 // Enabled bidders.
 const BIDDER_PREBID = 'prebid'
@@ -102,7 +103,7 @@ const loadAdCode = () => {
       bidderCompleted(BIDDER_AMAZON)
     })
     .catch(err => {
-      console.error(err)
+      logger.error(err)
       bidderCompleted(BIDDER_AMAZON)
     })
 
@@ -112,7 +113,7 @@ const loadAdCode = () => {
       bidderCompleted(BIDDER_PREBID)
     })
     .catch(err => {
-      console.error(err)
+      logger.error(err)
       bidderCompleted(BIDDER_PREBID)
     })
 }

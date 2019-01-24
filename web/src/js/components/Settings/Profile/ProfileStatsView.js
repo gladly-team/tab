@@ -7,6 +7,7 @@ import SettingsChildWrapper from 'js/components/Settings/SettingsChildWrapperCom
 import ProfileStats from 'js/components/Settings/Profile/ProfileStatsContainer'
 import AuthUserComponent from 'js/components/General/AuthUserComponent'
 import ErrorMessage from 'js/components/General/ErrorMessage'
+import logger from 'js/utils/logger'
 
 class ProfileStatsView extends React.Component {
   render() {
@@ -23,7 +24,7 @@ class ProfileStatsView extends React.Component {
           `}
           render={({ error, props }) => {
             if (error) {
-              console.error(error, error.source)
+              logger.error(error, error.source)
               const errMsg = 'We had a problem loading your stats :('
               return <ErrorMessage message={errMsg} />
             }

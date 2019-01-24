@@ -5,6 +5,7 @@ import graphql from 'babel-plugin-relay/macro'
 import environment from 'js/relay-env'
 import SearchPageContainer from 'js/components/Search/SearchPageContainer'
 import withUserId from 'js/components/General/withUserId'
+import logger from 'js/utils/logger'
 
 // Make a different query for anonymous users than for
 // authenticated users.
@@ -54,7 +55,7 @@ class SearchView extends React.Component {
         environment={environment}
         render={({ error, props }) => {
           if (error) {
-            console.error(error)
+            logger.error(error)
           }
           if (!props) {
             props = {}

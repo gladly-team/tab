@@ -303,7 +303,7 @@ class SearchResults extends React.Component {
 
   getSearchResults() {
     if (!window.ypaAds) {
-      console.error(`
+      logger.error(`
         Search provider Javascript not loaded.
         Could not fetch search results.`)
       this.setState({

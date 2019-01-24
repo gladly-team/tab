@@ -7,6 +7,7 @@ import AuthenticationContainer from 'js/components/Authentication/Authentication
 import { getCurrentUser } from 'js/authentication/user'
 import { createNewUser } from 'js/authentication/helpers'
 import { ERROR_USER_DOES_NOT_EXIST } from 'js/constants'
+import logger from 'js/utils/logger'
 
 // Fetch the user from our database if the user is
 // authenticated.
@@ -83,7 +84,7 @@ class AuthenticationView extends React.Component {
                   throw e
                 })
             } else {
-              console.error(error)
+              logger.error(error)
             }
           }
           if (!props) {

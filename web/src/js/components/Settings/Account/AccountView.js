@@ -6,6 +6,7 @@ import SettingsChildWrapper from 'js/components/Settings/SettingsChildWrapperCom
 import Account from 'js/components/Settings/Account/AccountContainer'
 import AuthUserComponent from 'js/components/General/AuthUserComponent'
 import ErrorMessage from 'js/components/General/ErrorMessage'
+import logger from 'js/utils/logger'
 
 class AccountView extends React.Component {
   render() {
@@ -22,7 +23,7 @@ class AccountView extends React.Component {
           `}
           render={({ error, props }) => {
             if (error) {
-              console.error(error, error.source)
+              logger.error(error, error.source)
               const errMsg = 'We had a problem loading your account :('
               return <ErrorMessage message={errMsg} />
             }

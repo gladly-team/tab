@@ -17,6 +17,7 @@ import {
   STORAGE_EXPERIMENT_ANON_USER,
 } from 'js/constants'
 import { absoluteUrl, enterUsernameURL } from 'js/navigation/navigation'
+import logger from 'js/utils/logger'
 
 // Only for development.
 const shouldMockAuthentication =
@@ -204,7 +205,7 @@ export const logout = async () => {
         resolve(true)
       })
       .catch(e => {
-        console.log(e)
+        logger.error(e)
         resolve(false)
       })
   })
@@ -229,7 +230,7 @@ const sendFirebaseVerificationEmail = async firebaseUser => {
           resolve(true)
         })
         .catch(err => {
-          console.error(err)
+          logger.error(err)
           resolve(false)
         })
     } catch (e) {
@@ -249,7 +250,7 @@ export const sendVerificationEmail = async () => {
 
     // If there is no current user, we cannot send an email.
     if (!authUser) {
-      console.error('Could not send confirmation email: no authenticated user.')
+      logger.error('Could not send confirmation email: no authenticated user.')
       return false
     }
 
@@ -257,7 +258,7 @@ export const sendVerificationEmail = async () => {
     const emailSent = await sendFirebaseVerificationEmail(authUser)
     return emailSent
   } catch (e) {
-    console.error(e)
+    logger.error(e)
     return false
   }
 }
