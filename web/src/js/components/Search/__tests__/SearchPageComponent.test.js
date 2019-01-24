@@ -41,6 +41,15 @@ describe('Search page component', () => {
     shallow(<SearchPageComponent {...mockProps} />).dive()
   })
 
+  it('renders without error when user and app props are not defined', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    delete mockProps.app
+    delete mockProps.user
+    shallow(<SearchPageComponent {...mockProps} />).dive()
+  })
+
   it('renders no DOM elements when the search page feature is not enabled', () => {
     isSearchPageEnabled.mockReturnValue(false)
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')

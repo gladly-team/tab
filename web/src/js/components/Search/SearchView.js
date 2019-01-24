@@ -60,15 +60,11 @@ class SearchView extends React.Component {
           if (!props) {
             props = {}
           }
-
-          // Require the app data but allow a null user prop.
-          if (!props.app) {
-            return null
-          }
+          const app = props.app || null
           const user = props.user || null
           return (
             <SearchPageContainer
-              app={props.app}
+              app={app}
               user={user}
               location={this.props.location}
             />
