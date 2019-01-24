@@ -225,18 +225,20 @@ export const checkAuthStateAndRedirectIfNeeded = async (
  *   set; or null, if not yet set
  */
 export const createNewUser = () => {
-  // Get the currently-authenticated user.
-  return getCurrentUser()
-    .then(user => {
-      // If there's no authenticated user, we can't create a new user.
-      if (!user || !user.id) {
-        throw new Error('Cannot create a new user. User is not authenticated.')
-      }
+  // Force-refetch the user ID token so it will have the
+  // correct latest value for email verification.
+  return getUserToken(true)
+    .then(() => {
+      // Get the currently-authenticated user.
+      return getCurrentUser()
+        .then(user => {
+          // If there's no authenticated user, we can't create a new user.
+          if (!user || !user.id) {
+            throw new Error(
+              'Cannot create a new user. User is not authenticated.'
+            )
+          }
 
-      // Force-refetch the user ID token so it will have the
-      // correct latest value for email verification.
-      return getUserToken(true)
-        .then(() => {
           // Get additional data we want to log with creation.
           const referralData = getReferralData()
           const experimentGroups = getUserTestGroupsForMutation()
