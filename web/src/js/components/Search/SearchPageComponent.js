@@ -263,7 +263,7 @@ SearchPage.propTypes = {
     // TODO: pass these to the MoneyRaised component
     // moneyRaised: PropTypes.number.isRequired
     // dollarsPerDayRate: PropTypes.number.isRequired
-  }).isRequired,
+  }),
 }
 
 SearchPage.defaultProps = {}
