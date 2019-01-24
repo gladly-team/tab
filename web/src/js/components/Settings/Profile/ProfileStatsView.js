@@ -24,7 +24,7 @@ class ProfileStatsView extends React.Component {
           `}
           render={({ error, props }) => {
             if (error) {
-              logger.error(error, error.source)
+              logger.error(error)
               const errMsg = 'We had a problem loading your stats :('
               return <ErrorMessage message={errMsg} />
             }

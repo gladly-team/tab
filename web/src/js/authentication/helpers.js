@@ -256,8 +256,8 @@ export const createNewUser = () => {
                 resolve(response.createNewUser)
               },
               err => {
-                console.error('Error at createNewUser:', err)
-                reject(new Error('Could not create new user', err))
+                console.error('Could not create new user:')
+                reject(err)
               }
             )
           })
@@ -267,7 +267,7 @@ export const createNewUser = () => {
         })
     })
     .catch(e => {
-      console.error(e)
+      logger.error(e)
       throw e
     })
 }

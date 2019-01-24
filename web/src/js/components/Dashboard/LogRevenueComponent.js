@@ -159,7 +159,6 @@ class LogRevenueComponent extends React.Component {
         adUnitCode
       )
     } catch (e) {
-      console.error('Could not log revenue for ad slot:')
       logger.error(e)
     }
   }
@@ -183,7 +182,6 @@ class LogRevenueComponent extends React.Component {
         })
       }
     } catch (e) {
-      console.error('Could not log revenue for ad slot:')
       logger.error(e)
     }
   }
@@ -202,7 +200,6 @@ class LogRevenueComponent extends React.Component {
           window.tabforacause.ads.slotsRendered[slotId] = event
           this.logRevenueForSlotId(slotId, adUnitCode)
         } catch (e) {
-          console.error('Could not log revenue for ad slot:')
           logger.error(e)
         }
       })

@@ -38,7 +38,7 @@ export const storeAmazonBids = () => {
       })
     }
   } catch (e) {
-    logger.error('Could not store Amazon bids', e)
+    logger.error(e)
   }
 }
 

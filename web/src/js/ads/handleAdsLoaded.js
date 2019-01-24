@@ -36,7 +36,7 @@ export default () => {
           const slotId = event.slot.getSlotElementId()
           storeRenderedSlotData(slotId, event)
         } catch (e) {
-          logger.error('Could not store rendered slot data', e)
+          logger.error(e)
         }
       })
 
@@ -46,7 +46,7 @@ export default () => {
           const slotId = event.slot.getSlotElementId()
           markSlotAsViewable(slotId)
         } catch (e) {
-          logger.error('Could not mark ad slot as viewable', e)
+          logger.error(e)
         }
       })
 
@@ -56,11 +56,11 @@ export default () => {
           const slotId = event.slot.getSlotElementId()
           markSlotAsLoaded(slotId)
         } catch (e) {
-          logger.error('Could not mark ad slot as loaded', e)
+          logger.error(e)
         }
       })
     })
   } catch (e) {
-    logger.error('Could not handle GPT slot loaded event', e)
+    logger.error(e)
   }
 }

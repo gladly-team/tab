@@ -121,7 +121,7 @@ class BookmarkChip extends React.Component {
         bookmarkColor = hexToRgbA(colorOverride, 0.36)
         bookmarkHex = colorOverride
       } catch (e) {
-        logger.error('Error converting bookmark color to RGBA.', e)
+        logger.error(e)
       }
     }
     return (
