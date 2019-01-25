@@ -130,7 +130,7 @@ class SettingsPage extends React.Component {
           <Switch>
             <Route
               exact
-              path="/newtab/settings/widgets"
+              path="/newtab/settings/widgets/"
               render={props => (
                 <WidgetsSettingsView
                   {...props}
@@ -141,7 +141,7 @@ class SettingsPage extends React.Component {
 
             <Route
               exact
-              path="/newtab/settings/background"
+              path="/newtab/settings/background/"
               render={props => (
                 <BackgroundSettingsView
                   {...props}
@@ -158,7 +158,7 @@ class SettingsPage extends React.Component {
             />
             <Route
               exact
-              path="/newtab/profile/donate"
+              path="/newtab/profile/donate/"
               render={props => (
                 <ProfileDonateHearts
                   {...props}
@@ -168,7 +168,7 @@ class SettingsPage extends React.Component {
             />
             <Route
               exact
-              path="/newtab/profile/invite"
+              path="/newtab/profile/invite/"
               render={props => (
                 <ProfileInviteFriend
                   {...props}
@@ -178,7 +178,7 @@ class SettingsPage extends React.Component {
             />
             <Route
               exact
-              path="/newtab/account"
+              path="/newtab/account/"
               render={props => (
                 <AccountView {...props} showError={showError.bind(this)} />
               )}

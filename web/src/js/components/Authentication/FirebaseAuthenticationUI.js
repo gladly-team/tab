@@ -247,7 +247,7 @@ class FirebaseAuthenticationUI extends React.Component {
         <FirebaseAuth uiConfig={this.uiConfig} firebaseAuth={firebase.auth()} />
         <Route
           exact
-          path="/newtab/auth/action"
+          path="/newtab/auth/action/"
           component={FirebaseAuthenticationUIAction}
         />
       </span>

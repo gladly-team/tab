@@ -232,26 +232,26 @@ class Authentication extends React.Component {
               <Switch>
                 <Route
                   exact
-                  path="/newtab/auth/verify-email"
+                  path="/newtab/auth/verify-email/"
                   component={VerifyEmailMessage}
                 />
                 <Route
                   exact
-                  path="/newtab/auth/username"
+                  path="/newtab/auth/username/"
                   render={props => <EnterUsernameForm {...props} user={user} />}
                 />
                 <Route
                   exact
-                  path="/newtab/auth/welcome"
+                  path="/newtab/auth/welcome/"
                   component={SignInIframeMessage}
                 />
                 <Route
                   exact
-                  path="/newtab/auth/missing-email"
+                  path="/newtab/auth/missing-email/"
                   component={MissingEmailMessage}
                 />
                 <Route
-                  path="/newtab/auth"
+                  path="/newtab/auth/"
                   render={props => (
                     <FirebaseAuthenticationUI
                       {...props}

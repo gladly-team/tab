@@ -59,18 +59,18 @@ class App extends React.Component {
     return (
       <div style={root}>
         <Switch>
-          <Route exact path="/newtab" component={DashboardView} />
-          <Route path="/newtab/settings" component={SettingsPageComponent} />
-          <Route path="/newtab/account" component={SettingsPageComponent} />
-          <Route path="/newtab/profile" component={SettingsPageComponent} />
-          <Route exact path="/newtab/first-tab" component={FirstTabView} />
+          <Route exact path="/newtab/" component={DashboardView} />
+          <Route path="/newtab/settings/" component={SettingsPageComponent} />
+          <Route path="/newtab/account/" component={SettingsPageComponent} />
+          <Route path="/newtab/profile/" component={SettingsPageComponent} />
+          <Route exact path="/newtab/first-tab/" component={FirstTabView} />
           <Route
             exact
-            path="/newtab/uninstalled"
+            path="/newtab/uninstalled/"
             component={PostUninstallView}
           />
-          <Route path="/newtab/auth" component={AuthenticationView} />
-          <Redirect from="*" to="/newtab" />
+          <Route path="/newtab/auth/" component={AuthenticationView} />
+          <Redirect from="*" to="/newtab/" />
         </Switch>
       </div>
     )

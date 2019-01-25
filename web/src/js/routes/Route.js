@@ -7,8 +7,8 @@ import SearchView from 'js/components/Search/SearchView'
 export default props => (
   // TODO: Show 404 page from Redirect
   <Switch>
-    <Route path="/newtab" component={App} />
-    <Route path="/search" component={SearchView} />
+    <Route path="/newtab/" component={App} />
+    <Route path="/search/" component={SearchView} />
     <Redirect from="*" to="/newtab" />
   </Switch>
 )
