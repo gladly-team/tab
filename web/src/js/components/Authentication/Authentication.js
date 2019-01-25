@@ -262,13 +262,6 @@ class Authentication extends React.Component {
                 />
               </Switch>
             ) : null}
-            {/*
-                <Route exact path="action" component={FirebaseAuthenticationUI}>
-                  <IndexRoute component={FirebaseAuthenticationUIAction} />
-                </Route>
-                <Route exact path="welcome" component={SignInIframeMessage} />
-                <Route exact path="missing-email" component={MissingEmailMessage} />
-                */}
           </span>
           {!showRequiredSignInExplanation ? (
             // Using same style as homepage
