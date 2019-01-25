@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Route, Switch } from 'react-router-dom'
+import { Redirect, Route, Switch } from 'react-router-dom'
 import ErrorMessage from 'js/components/General/ErrorMessage'
 import {
   goToDashboard,
@@ -130,16 +130,6 @@ class SettingsPage extends React.Component {
           <Switch>
             <Route
               exact
-              path="/newtab/settings"
-              render={props => (
-                <WidgetsSettingsView
-                  {...props}
-                  showError={showError.bind(this)}
-                />
-              )}
-            />
-            <Route
-              exact
               path="/newtab/settings/widgets"
               render={props => (
                 <WidgetsSettingsView
@@ -193,6 +183,13 @@ class SettingsPage extends React.Component {
                 <AccountView {...props} showError={showError.bind(this)} />
               )}
             />
+            {/* Redirect any incorrect paths */}
+            <Redirect
+              from="/newtab/settings/*"
+              to="/newtab/settings/widgets/"
+            />
+            <Redirect from="/newtab/profile/*" to="/newtab/profile/stats/" />
+            <Redirect from="/newtab/account/*" to="/newtab/account/" />
           </Switch>
         </div>
         {errorMessage ? (
