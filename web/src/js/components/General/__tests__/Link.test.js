@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { shallow } from 'enzyme'
-import { Link as LinkReactRouter } from 'react-router'
+import { Link as LinkReactRouter } from 'react-router-dom'
 
 describe('Link', () => {
   it('renders without error', () => {
@@ -10,7 +10,7 @@ describe('Link', () => {
     shallow(<Link to={'/'} />)
   })
 
-  it('uses react-router Link component when navigating to a relative URL', () => {
+  it('uses react-router-dom Link component when navigating to a relative URL', () => {
     const Link = require('../Link').default
     const testUrls = ['/', '/some-url/here/', '/123/', '/thing']
     testUrls.forEach(testUrl => {
@@ -32,7 +32,7 @@ describe('Link', () => {
     })
   })
 
-  it('passes style prop to the react-router Link component', () => {
+  it('passes style prop to the react-router-dom Link component', () => {
     const Link = require('../Link').default
     const someStyle = { fontSize: 12, color: '#cdcdcd' }
     const wrapper = shallow(

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link as LinkReactRouter } from 'react-router'
+import { Link as LinkReactRouter } from 'react-router-dom'
 
 // To handle both internal and external links.
 class Link extends React.Component {

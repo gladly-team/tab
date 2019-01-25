@@ -3,6 +3,12 @@ import PropTypes from 'prop-types'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import { isEqual } from 'lodash/lang'
+import { Route, Switch } from 'react-router-dom'
+import FirebaseAuthenticationUI from 'js/components/Authentication/FirebaseAuthenticationUI'
+import VerifyEmailMessage from 'js/components/Authentication/VerifyEmailMessage'
+import EnterUsernameForm from 'js/components/Authentication/EnterUsernameForm'
+import SignInIframeMessage from 'js/components/Authentication/SignInIframeMessage'
+import MissingEmailMessage from 'js/components/Authentication/MissingEmailMessage'
 import { getCurrentUser, sendVerificationEmail } from 'js/authentication/user'
 import {
   checkAuthStateAndRedirectIfNeeded,
@@ -222,14 +228,47 @@ class Authentication extends React.Component {
               padding: 20,
             }}
           >
-            {this.state.loadChildren
-              ? React.Children.map(this.props.children, child =>
-                  React.cloneElement(child, {
-                    onSignInSuccess: this.onSignInSuccess.bind(this),
-                    user: user,
-                  })
-                )
-              : null}
+            {this.state.loadChildren ? (
+              <Switch>
+                <Route
+                  exact
+                  path="/newtab/auth/verify-email"
+                  component={VerifyEmailMessage}
+                />
+                <Route
+                  exact
+                  path="/newtab/auth/username"
+                  render={props => <EnterUsernameForm {...props} user={user} />}
+                />
+                <Route
+                  exact
+                  path="/newtab/auth/welcome"
+                  component={SignInIframeMessage}
+                />
+                <Route
+                  exact
+                  path="/newtab/auth/missing-email"
+                  component={MissingEmailMessage}
+                />
+                <Route
+                  path="/newtab/auth"
+                  render={props => (
+                    <FirebaseAuthenticationUI
+                      {...props}
+                      onSignInSuccess={this.onSignInSuccess.bind(this)}
+                      user={user}
+                    />
+                  )}
+                />
+              </Switch>
+            ) : null}
+            {/*
+                <Route exact path="action" component={FirebaseAuthenticationUI}>
+                  <IndexRoute component={FirebaseAuthenticationUIAction} />
+                </Route>
+                <Route exact path="welcome" component={SignInIframeMessage} />
+                <Route exact path="missing-email" component={MissingEmailMessage} />
+                */}
           </span>
           {!showRequiredSignInExplanation ? (
             // Using same style as homepage

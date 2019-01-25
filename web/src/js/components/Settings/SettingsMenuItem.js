@@ -8,7 +8,10 @@ import NavLink from 'js/components/General/NavLink'
 class SettingsMenuItem extends React.Component {
   render() {
     const { theme, to } = this.props
-    const isActive = this.context.router.isActive(to)
+    // FIXME:
+    // https://github.com/ReactTraining/react-router/issues/4793
+    const isActive = false
+    // const isActive = this.context.router.isActive(to)
     const listItemStyle = Object.assign(
       {},
       isActive
@@ -18,7 +21,7 @@ class SettingsMenuItem extends React.Component {
         : null
     )
     return (
-      <NavLink to={this.props.to} style={{ textDecoration: 'none' }}>
+      <NavLink to={to} style={{ textDecoration: 'none' }}>
         <ListItem style={listItemStyle} button>
           <ListItemText
             primary={this.props.children}

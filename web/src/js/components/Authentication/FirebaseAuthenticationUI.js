@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import { FirebaseAuth } from 'react-firebaseui'
+import { Route } from 'react-router-dom'
+import FirebaseAuthenticationUIAction from 'js/components/Authentication/FirebaseAuthenticationUIAction'
 import {
   dashboardURL,
   privacyPolicyURL,
@@ -243,7 +245,11 @@ class FirebaseAuthenticationUI extends React.Component {
     return (
       <span>
         <FirebaseAuth uiConfig={this.uiConfig} firebaseAuth={firebase.auth()} />
-        {this.props.children}
+        <Route
+          exact
+          path="/newtab/auth/action"
+          component={FirebaseAuthenticationUIAction}
+        />
       </span>
     )
   }

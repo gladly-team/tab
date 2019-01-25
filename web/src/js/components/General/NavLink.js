@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 
 // A link element that knows if it's active. If active,
 // it sets an active class and passes an active={true}
@@ -9,7 +9,9 @@ import { Link } from 'react-router'
 // https://stackoverflow.com/q/34418254/1332513
 class NavLink extends React.Component {
   render() {
-    const isActive = this.context.router.isActive(this.props.to)
+    // FIXME: use new NavLink
+    // const isActive = this.context.router.isActive(this.props.to)
+    const isActive = false
     const className = isActive ? 'active' : ''
     return (
       <Link to={this.props.to} className={className} style={this.props.style}>

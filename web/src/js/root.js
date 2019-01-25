@@ -1,11 +1,13 @@
 import React from 'react'
-import { browserHistory, Router } from 'react-router'
+import { Router } from 'react-router-dom'
+import { browserHistory } from 'js/navigation/navigation'
 import Routes from 'js/routes/Route'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import { MuiThemeProvider as V0MuiThemeProvider } from 'material-ui'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import defaultThemeLegacy from 'js/theme/default'
 import defaultTheme from 'js/theme/defaultV1'
+import BaseContainer from 'js/components/General/BaseContainer'
 
 const legacyMuiTheme = getMuiTheme(defaultThemeLegacy)
 const muiTheme = createMuiTheme(defaultTheme)
@@ -14,7 +16,11 @@ const muiTheme = createMuiTheme(defaultTheme)
 const Root = () => (
   <MuiThemeProvider theme={muiTheme}>
     <V0MuiThemeProvider muiTheme={legacyMuiTheme}>
-      <Router history={browserHistory} routes={Routes} />
+      <BaseContainer>
+        <Router history={browserHistory}>
+          <Routes />
+        </Router>
+      </BaseContainer>
     </V0MuiThemeProvider>
   </MuiThemeProvider>
 )
