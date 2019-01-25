@@ -3,26 +3,20 @@ import PropTypes from 'prop-types'
 import { withTheme } from '@material-ui/core/styles'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
-import NavLink from 'js/components/General/NavLink'
+import { NavLink } from 'react-router-dom'
 
 class SettingsMenuItem extends React.Component {
   render() {
     const { theme, to } = this.props
-    // FIXME:
-    // https://github.com/ReactTraining/react-router/issues/4793
-    const isActive = false
-    // const isActive = this.context.router.isActive(to)
-    const listItemStyle = Object.assign(
-      {},
-      isActive
-        ? {
-            background: theme.palette.action.hover,
-          }
-        : null
-    )
     return (
-      <NavLink to={to} style={{ textDecoration: 'none' }}>
-        <ListItem style={listItemStyle} button>
+      <NavLink
+        to={to}
+        style={{ textDecoration: 'none', display: 'block' }}
+        activeStyle={{
+          background: theme.palette.action.hover,
+        }}
+      >
+        <ListItem button>
           <ListItemText
             primary={this.props.children}
             primaryTypographyProps={{
