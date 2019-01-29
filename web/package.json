@@ -64,7 +64,7 @@
   "scripts": {
     "start": "yarn run relay && nodemon --watch data/schema.graphql --exec yarn run start:react-app & yarn run relay:watch",
     "start:react-app": "cross-env NODE_PATH=src/ react-scripts start",
-    "build": "yarn run relay && cross-env NODE_PATH=src/ react-scripts build",
+    "build": "yarn run relay --watchman false && cross-env NODE_PATH=src/ react-scripts build",
     "eject": "react-scripts eject",
     "postinstall": "patch-package",
     "deploy": "npm-run-all -s build sls:s3sync sls:deploy",
