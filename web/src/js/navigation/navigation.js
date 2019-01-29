@@ -1,8 +1,8 @@
-import { browserHistory } from 'react-router'
+import createBrowserHistory from 'history/createBrowserHistory'
 import { getUrlParameters } from 'js/utils/utils'
 import qs from 'qs'
 
-// TODO: replace this with Link navigation via react-router.
+export const browserHistory = createBrowserHistory()
 
 export const goTo = (location, paramsObj = {}) => {
   browserHistory.push({

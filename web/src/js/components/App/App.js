@@ -1,4 +1,5 @@
 import React from 'react'
+import { Redirect, Route, Switch } from 'react-router-dom'
 import withPageviewTracking from 'js/analytics/withPageviewTracking'
 import { isInEuropeanUnion } from 'js/utils/client-location'
 import {
@@ -6,6 +7,11 @@ import {
   saveConsentUpdateEventToLocalStorage,
   unregisterConsentCallback,
 } from 'js/ads/consentManagement'
+import DashboardView from 'js/components/Dashboard/DashboardView'
+import AuthenticationView from 'js/components/Authentication/AuthenticationView'
+import SettingsPageComponent from 'js/components/Settings/SettingsPageComponent'
+import FirstTabView from 'js/components/Dashboard/FirstTabView'
+import PostUninstallView from 'js/components/Dashboard/PostUninstallView'
 
 class App extends React.Component {
   constructor(props) {
@@ -50,7 +56,24 @@ class App extends React.Component {
       border: 'none',
     }
 
-    return <div style={root}>{this.props.children}</div>
+    return (
+      <div style={root}>
+        <Switch>
+          <Route exact path="/newtab/" component={DashboardView} />
+          <Route path="/newtab/settings/" component={SettingsPageComponent} />
+          <Route path="/newtab/account/" component={SettingsPageComponent} />
+          <Route path="/newtab/profile/" component={SettingsPageComponent} />
+          <Route exact path="/newtab/first-tab/" component={FirstTabView} />
+          <Route
+            exact
+            path="/newtab/uninstalled/"
+            component={PostUninstallView}
+          />
+          <Route path="/newtab/auth/" component={AuthenticationView} />
+          <Redirect from="*" to="/newtab/" />
+        </Switch>
+      </div>
+    )
   }
 }
 
