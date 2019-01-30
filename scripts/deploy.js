@@ -22,7 +22,9 @@ process.env.SLS_STAGE = serverlessStage
 console.log(`Set Serverless stage (SLS_STAGE) to "${serverlessStage}".`)
 
 console.log('Deploying...')
-const deploy = spawn('yarn', ['run', 'ci:deployservices'], {stdio: 'inherit'})
+const deploy = spawn('yarn', ['run', 'ci:deployservices'], {
+  stdio: 'inherit',
+})
 
 // Exit this process with the child process code.
-deploy.on('exit', (code) => process.exit(code))
+deploy.on('exit', code => process.exit(code))

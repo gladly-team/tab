@@ -1,4 +1,3 @@
-
 // Used to assign stage-specific env vars in our CI setup
 // to the env var names used in app code.
 // For example, in the "dev" stage, we assign the value of
@@ -29,6 +28,7 @@ export const envVars = [
   { name: 'REACT_APP_SENTRY_DEBUG', optional: true },
   { name: 'REACT_APP_SENTRY_ENABLE_AUTO_BREADCRUMBS', optional: true },
   { name: 'REACT_APP_FEATURE_FLAG_SEARCH_PAGE_ENABLED', optional: true },
+  { name: 'REACT_APP_MEASURE_TIME_TO_INTERACTIVE', optional: true },
   // GraphQL / Lambda
   { name: 'GQL_LOGGER' },
   { name: 'GQL_SENTRY_PUBLIC_KEY' },
@@ -55,24 +55,24 @@ export const envVars = [
   { name: 'SELENIUM_DRIVER_TYPE', optional: true },
   { name: 'SELENIUM_HOST', optional: true },
   { name: 'BROWSERSTACK_USER', optional: true },
-  { name: 'BROWSERSTACK_KEY', optional: true }
+  { name: 'BROWSERSTACK_KEY', optional: true },
 ]
 
 // Expect one argument, the stage name.
-const assignEnvVars = function (stageName, allEnvVarsRequired = true) {
+const assignEnvVars = (stageName, allEnvVarsRequired = true) => {
   // Using the name of the stage, assign the stage-specific
   // value to the environment value name.
   const stageNameUppercase = stageName ? stageName.toUpperCase() : ''
   const stagePrefix = stageNameUppercase ? `${stageNameUppercase}_` : ''
-  envVars.forEach((envVar) => {
+  envVars.forEach(envVar => {
     const envVarName = envVar.name
 
     // Delete the existing env var so that any undefined,
     // optional stage-specific env vars remain undefined.
     delete process.env[envVarName]
 
-    let stageEnvVarName = `${stagePrefix}${envVarName}`
-    let stageEnvVar = process.env[stageEnvVarName]
+    const stageEnvVarName = `${stagePrefix}${envVarName}`
+    const stageEnvVar = process.env[stageEnvVarName]
 
     if (typeof stageEnvVar === 'undefined' || stageEnvVar === null) {
       // If the env var is optional and unset, log the info.
