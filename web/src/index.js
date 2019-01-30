@@ -2,7 +2,6 @@ import Raven from 'raven-js'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Root from 'js/root'
-import { initializeFirebase } from 'js/authentication/firebaseConfig'
 import { getUsername } from 'js/authentication/user'
 import * as serviceWorker from 'js/serviceWorker'
 
@@ -44,9 +43,6 @@ try {
 }
 
 const initApp = () => {
-  // Init Firebase
-  initializeFirebase()
-
   require('./index.css')
   ReactDOM.render(<Root />, document.getElementById('root'))
 }

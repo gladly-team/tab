@@ -1,5 +1,6 @@
 import React from 'react'
 import { Router } from 'react-router-dom'
+import ttiPolyfill from 'tti-polyfill'
 import { browserHistory } from 'js/navigation/navigation'
 import Routes from 'js/routes/Route'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
@@ -8,12 +9,24 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import defaultThemeLegacy from 'js/theme/default'
 import defaultTheme from 'js/theme/defaultV1'
 import BaseContainer from 'js/components/General/BaseContainer'
-import ttiPolyfill from 'tti-polyfill'
+import { initializeFirebase } from 'js/authentication/firebaseConfig'
+import logger from 'js/utils/logger'
 
 const legacyMuiTheme = getMuiTheme(defaultThemeLegacy)
 const muiTheme = createMuiTheme(defaultTheme)
 
 class Root extends React.Component {
+  constructor(props) {
+    super(props)
+
+    // Initialize Firebase.
+    try {
+      initializeFirebase()
+    } catch (e) {
+      logger.error(e)
+    }
+  }
+
   componentDidMount() {
     // Measure time to interactive (TTI):
     // https://developers.google.com/web/fundamentals/performance/user-centric-performance-metrics#time_to_interactive
