@@ -15,6 +15,9 @@ const muiTheme = createMuiTheme(defaultTheme)
 
 class Root extends React.Component {
   componentDidMount() {
+    // Measure time to interactive (TTI):
+    // https://developers.google.com/web/fundamentals/performance/user-centric-performance-metrics#time_to_interactive
+    // https://github.com/GoogleChromeLabs/tti-polyfill
     try {
       if (process.env.REACT_APP_MEASURE_TIME_TO_INTERACTIVE === 'true') {
         ttiPolyfill.getFirstConsistentlyInteractive().then(tti => {
