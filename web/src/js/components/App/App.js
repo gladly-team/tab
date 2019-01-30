@@ -1,5 +1,8 @@
 import React from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
+import { MuiThemeProvider as V0MuiThemeProvider } from 'material-ui'
+import getMuiTheme from 'material-ui/styles/getMuiTheme'
+import defaultThemeLegacy from 'js/theme/default'
 import withPageviewTracking from 'js/analytics/withPageviewTracking'
 import { isInEuropeanUnion } from 'js/utils/client-location'
 import {
@@ -12,6 +15,8 @@ import AuthenticationView from 'js/components/Authentication/AuthenticationView'
 import SettingsPageComponent from 'js/components/Settings/SettingsPageComponent'
 import FirstTabView from 'js/components/Dashboard/FirstTabView'
 import PostUninstallView from 'js/components/Dashboard/PostUninstallView'
+
+const legacyMuiTheme = getMuiTheme(defaultThemeLegacy)
 
 class App extends React.Component {
   constructor(props) {
@@ -45,34 +50,37 @@ class App extends React.Component {
   }
 
   render() {
-    const root = {
-      position: 'absolute',
-      top: 0,
-      right: 0,
-      bottom: 0,
-      left: 0,
-      margin: 0,
-      padding: 0,
-      border: 'none',
-    }
-
+    // @material-ui-1-todo: remove legacy theme provider
     return (
-      <div style={root}>
-        <Switch>
-          <Route exact path="/newtab/" component={DashboardView} />
-          <Route path="/newtab/settings/" component={SettingsPageComponent} />
-          <Route path="/newtab/account/" component={SettingsPageComponent} />
-          <Route path="/newtab/profile/" component={SettingsPageComponent} />
-          <Route exact path="/newtab/first-tab/" component={FirstTabView} />
-          <Route
-            exact
-            path="/newtab/uninstalled/"
-            component={PostUninstallView}
-          />
-          <Route path="/newtab/auth/" component={AuthenticationView} />
-          <Redirect from="*" to="/newtab/" />
-        </Switch>
-      </div>
+      <V0MuiThemeProvider muiTheme={legacyMuiTheme}>
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+            margin: 0,
+            padding: 0,
+            border: 'none',
+          }}
+        >
+          <Switch>
+            <Route exact path="/newtab/" component={DashboardView} />
+            <Route path="/newtab/settings/" component={SettingsPageComponent} />
+            <Route path="/newtab/account/" component={SettingsPageComponent} />
+            <Route path="/newtab/profile/" component={SettingsPageComponent} />
+            <Route exact path="/newtab/first-tab/" component={FirstTabView} />
+            <Route
+              exact
+              path="/newtab/uninstalled/"
+              component={PostUninstallView}
+            />
+            <Route path="/newtab/auth/" component={AuthenticationView} />
+            <Redirect from="*" to="/newtab/" />
+          </Switch>
+        </div>
+      </V0MuiThemeProvider>
     )
   }
 }
