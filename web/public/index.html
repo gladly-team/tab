@@ -29,7 +29,7 @@
       Set up the TTI polyfill for non-production environments:
       https://github.com/GoogleChromeLabs/tti-polyfill
     -->
-    <% if (process.env.NODE_ENV !== "production"){ %>
+    <% if (process.env.REACT_APP_MEASURE_TIME_TO_INTERACTIVE === "true"){ %>
     <script>
     !function(){if('PerformanceLongTaskTiming' in window){var g=window.__tti={e:[]};
     g.o=new PerformanceObserver(function(l){g.e=g.e.concat(l.getEntries())});

@@ -15,10 +15,14 @@ const muiTheme = createMuiTheme(defaultTheme)
 
 class Root extends React.Component {
   componentDidMount() {
-    if (process.env.NODE_ENV !== 'production') {
-      ttiPolyfill.getFirstConsistentlyInteractive().then(tti => {
-        console.log(`Time to interactive: ${tti}`)
-      })
+    try {
+      if (process.env.REACT_APP_MEASURE_TIME_TO_INTERACTIVE === 'true') {
+        ttiPolyfill.getFirstConsistentlyInteractive().then(tti => {
+          console.log(`Time to interactive: ${tti}`)
+        })
+      }
+    } catch (e) {
+      console.error(e)
     }
   }
 
