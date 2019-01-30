@@ -59,6 +59,7 @@
     "react-transition-group": "^2.5.3",
     "relay-commit-mutation-promise": "^1.0.1",
     "sanitize-html": "^1.19.1",
+    "tti-polyfill": "^0.2.2",
     "uuid": "^3.3.2",
     "xregexp": "^4.2.0"
   },

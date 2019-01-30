@@ -26,6 +26,19 @@
 
     <!--
       @gladly-customization:
+      Set up the TTI polyfill for non-production environments:
+      https://github.com/GoogleChromeLabs/tti-polyfill
+    -->
+    <% if (process.env.NODE_ENV !== "production"){ %>
+    <script>
+    !function(){if('PerformanceLongTaskTiming' in window){var g=window.__tti={e:[]};
+    g.o=new PerformanceObserver(function(l){g.e=g.e.concat(l.getEntries())});
+    g.o.observe({entryTypes:['longtask']})}}();
+    </script>
+    <% } %>
+
+    <!--
+      @gladly-customization:
       global style for all served HTML
     -->
     <style>
