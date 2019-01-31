@@ -49,7 +49,7 @@ class Root extends React.Component {
         <MuiThemeProvider theme={muiTheme}>
           <BaseContainer>
             <Router history={browserHistory}>
-              <Suspense fallback={<FullPageLoader delay={350} />}>
+              <Suspense fallback={<FullPageLoader delay={800} />}>
                 <Switch>
                   <Route path="/newtab/" component={App} />
                   <Route path="/search/" component={SearchView} />
