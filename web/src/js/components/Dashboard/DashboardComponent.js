@@ -290,7 +290,11 @@ class Dashboard extends React.Component {
           ? // TODO: build a new fireworks component
             null
           : null}
-        {showNewUserTour ? <NewUserTour user={user} /> : null}
+        {showNewUserTour ? (
+          <Suspense fallback={null}>
+            <NewUserTour user={user} />
+          </Suspense>
+        ) : null}
         <div
           style={{
             position: 'absolute',
