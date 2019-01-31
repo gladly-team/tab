@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import logoDefault from 'js/assets/logos/logo.svg'
 import logoWhite from 'js/assets/logos/logo-white.svg'
 
-class LogoWithText extends React.Component {
+class Logo extends React.Component {
   render() {
     const { color, style } = this.props
     const finalStyle = Object.assign(
@@ -18,14 +18,14 @@ class LogoWithText extends React.Component {
   }
 }
 
-LogoWithText.props = {
+Logo.props = {
   style: PropTypes.object,
   color: PropTypes.oneOf(['purple', 'white']),
 }
 
-LogoWithText.defaultProps = {
+Logo.defaultProps = {
   style: {},
   color: 'purple',
 }
 
-export default LogoWithText
+export default Logo
