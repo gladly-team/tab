@@ -11,10 +11,8 @@ import {
   unregisterConsentCallback,
 } from 'js/ads/consentManagement'
 import FullPageLoader from 'js/components/General/FullPageLoader'
+import DashboardView from 'js/components/Dashboard/DashboardView'
 
-const DashboardView = lazy(() =>
-  import('js/components/Dashboard/DashboardView')
-)
 const AuthenticationView = lazy(() =>
   import('js/components/Authentication/AuthenticationView')
 )
