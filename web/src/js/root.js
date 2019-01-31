@@ -1,6 +1,5 @@
 import React, { Suspense, lazy } from 'react'
 import { Redirect, Route, Router, Switch } from 'react-router-dom'
-import ttiPolyfill from 'tti-polyfill'
 import { browserHistory } from 'js/navigation/navigation'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import defaultTheme from 'js/theme/defaultV1'
@@ -32,8 +31,10 @@ class Root extends React.Component {
     // https://github.com/GoogleChromeLabs/tti-polyfill
     try {
       if (process.env.REACT_APP_MEASURE_TIME_TO_INTERACTIVE === 'true') {
-        ttiPolyfill.getFirstConsistentlyInteractive().then(tti => {
-          console.log(`Time to interactive: ${tti}`)
+        import('tti-polyfill').then(ttiPolyfill => {
+          ttiPolyfill.getFirstConsistentlyInteractive().then(tti => {
+            console.log(`Time to interactive: ${tti}`)
+          })
         })
       }
     } catch (e) {
