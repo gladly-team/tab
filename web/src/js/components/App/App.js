@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense, lazy } from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 import { MuiThemeProvider as V0MuiThemeProvider } from 'material-ui'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
@@ -10,11 +10,21 @@ import {
   saveConsentUpdateEventToLocalStorage,
   unregisterConsentCallback,
 } from 'js/ads/consentManagement'
-import DashboardView from 'js/components/Dashboard/DashboardView'
-import AuthenticationView from 'js/components/Authentication/AuthenticationView'
-import SettingsPageComponent from 'js/components/Settings/SettingsPageComponent'
-import FirstTabView from 'js/components/Dashboard/FirstTabView'
-import PostUninstallView from 'js/components/Dashboard/PostUninstallView'
+import FullPageLoader from 'js/components/General/FullPageLoader'
+
+const DashboardView = lazy(() =>
+  import('js/components/Dashboard/DashboardView')
+)
+const AuthenticationView = lazy(() =>
+  import('js/components/Authentication/AuthenticationView')
+)
+const SettingsPageComponent = lazy(() =>
+  import('js/components/Settings/SettingsPageComponent')
+)
+const FirstTabView = lazy(() => import('js/components/Dashboard/FirstTabView'))
+const PostUninstallView = lazy(() =>
+  import('js/components/Dashboard/PostUninstallView')
+)
 
 const legacyMuiTheme = getMuiTheme(defaultThemeLegacy)
 
@@ -65,20 +75,31 @@ class App extends React.Component {
             border: 'none',
           }}
         >
-          <Switch>
-            <Route exact path="/newtab/" component={DashboardView} />
-            <Route path="/newtab/settings/" component={SettingsPageComponent} />
-            <Route path="/newtab/account/" component={SettingsPageComponent} />
-            <Route path="/newtab/profile/" component={SettingsPageComponent} />
-            <Route exact path="/newtab/first-tab/" component={FirstTabView} />
-            <Route
-              exact
-              path="/newtab/uninstalled/"
-              component={PostUninstallView}
-            />
-            <Route path="/newtab/auth/" component={AuthenticationView} />
-            <Redirect from="*" to="/newtab/" />
-          </Switch>
+          <Suspense fallback={<FullPageLoader delay={350} />}>
+            <Switch>
+              <Route exact path="/newtab/" component={DashboardView} />
+              <Route
+                path="/newtab/settings/"
+                component={SettingsPageComponent}
+              />
+              <Route
+                path="/newtab/account/"
+                component={SettingsPageComponent}
+              />
+              <Route
+                path="/newtab/profile/"
+                component={SettingsPageComponent}
+              />
+              <Route exact path="/newtab/first-tab/" component={FirstTabView} />
+              <Route
+                exact
+                path="/newtab/uninstalled/"
+                component={PostUninstallView}
+              />
+              <Route path="/newtab/auth/" component={AuthenticationView} />
+              <Redirect from="*" to="/newtab/" />
+            </Switch>
+          </Suspense>
         </div>
       </V0MuiThemeProvider>
     )
