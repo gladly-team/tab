@@ -45,8 +45,8 @@ class Root extends React.Component {
   render() {
     // TODO: Show 404 page
     return (
-      <ErrorBoundary>
-        <MuiThemeProvider theme={muiTheme}>
+      <MuiThemeProvider theme={muiTheme}>
+        <ErrorBoundary>
           <BaseContainer>
             <Router history={browserHistory}>
               <Suspense fallback={<FullPageLoader delay={800} />}>
@@ -58,8 +58,8 @@ class Root extends React.Component {
               </Suspense>
             </Router>
           </BaseContainer>
-        </MuiThemeProvider>
-      </ErrorBoundary>
+        </ErrorBoundary>
+      </MuiThemeProvider>
     )
   }
 }
