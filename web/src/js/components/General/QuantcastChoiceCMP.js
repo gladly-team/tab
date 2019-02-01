@@ -29,7 +29,7 @@ class QuantcastChoiceCMP extends React.Component {
     })()
     window.__cmp('init', {
       Language: 'EN',
-      'Display UI': 'always', // 'inEU', 'always', 'never'
+      'Display UI': 'inEU', // 'inEU', 'always', 'never'
       // 'service' for consenting only for this domain; 'global' if consenting for all web
       'Consent Scope': 'service',
       'Publisher Name': 'Tab for a Cause',
