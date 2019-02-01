@@ -28,6 +28,9 @@ const styles = theme => ({
   },
 })
 
+// TODO: may want to lazy-load the "thanks" dialog to avoid
+// loading it on every new tab when a HeartDonationCampaign
+// is active.
 class DonateHeartsControls extends React.Component {
   constructor(props) {
     super(props)
