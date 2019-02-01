@@ -25,6 +25,7 @@ import {
 } from 'js/theme/default'
 import FadeInDashboardAnimation from 'js/components/General/FadeInDashboardAnimation'
 import ErrorMessage from 'js/components/General/ErrorMessage'
+import QuantcastChoiceCMP from 'js/components/General/QuantcastChoiceCMP'
 import Notification from 'js/components/Dashboard/NotificationComponent'
 import { getCurrentUser } from 'js/authentication/user'
 import localStorageMgr from 'js/utils/localstorage-mgr'
@@ -420,6 +421,7 @@ class Dashboard extends React.Component {
             onRequestClose={this.clearError.bind(this)}
           />
         ) : null}
+        <QuantcastChoiceCMP />
       </div>
     )
   }
