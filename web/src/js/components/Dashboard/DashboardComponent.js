@@ -10,7 +10,6 @@ import MoneyRaised from 'js/components/MoneyRaised/MoneyRaisedContainer'
 import UserBackgroundImage from 'js/components/User/UserBackgroundImageContainer'
 import UserMenu from 'js/components/User/UserMenuContainer'
 import WidgetsContainer from 'js/components/Widget/WidgetsContainer'
-import CampaignBase from 'js/components/Campaign/CampaignBaseView'
 import Ad from 'js/components/Ad/Ad'
 import LogTab from 'js/components/Dashboard/LogTabContainer'
 import LogRevenue from 'js/components/Dashboard/LogRevenueContainer'
@@ -53,6 +52,9 @@ import 'js/ads/ads'
 
 const NewUserTour = lazy(() =>
   import('js/components/Dashboard/NewUserTourContainer')
+)
+const CampaignBase = lazy(() =>
+  import('js/components/Campaign/CampaignBaseView')
 )
 
 class Dashboard extends React.Component {
@@ -276,14 +278,16 @@ class Dashboard extends React.Component {
         />
         {isGlobalCampaignLive ? (
           <FadeInDashboardAnimation>
-            <CampaignBase
-              onDismiss={() => {
-                this.setState({
-                  hasUserDismissedCampaignRecently: true,
-                })
-              }}
-              showError={this.showError.bind(this)}
-            />
+            <Suspense fallback={null}>
+              <CampaignBase
+                onDismiss={() => {
+                  this.setState({
+                    hasUserDismissedCampaignRecently: true,
+                  })
+                }}
+                showError={this.showError.bind(this)}
+              />
+            </Suspense>
           </FadeInDashboardAnimation>
         ) : null}
         {this.state.showFireworks
