@@ -1,10 +1,8 @@
 /* eslint-disable no-useless-escape */
-
-import React from 'react'
+import React, { Suspense, lazy } from 'react'
 import PropTypes from 'prop-types'
 import Paper from 'material-ui/Paper'
 import EditIcon from 'material-ui/svg-icons/editor/mode-edit'
-import EditBookmarkWidgetModal from 'js/components/Widget/Widgets/Bookmarks/EditBookmarkWidgetModal'
 import {
   dashboardTransparentBackground,
   widgetEditButtonInactive,
@@ -12,6 +10,10 @@ import {
 } from 'js/theme/default'
 import hexToRgbA from 'hex-to-rgba'
 import logger from 'js/utils/logger'
+
+const EditBookmarkWidgetModal = lazy(() =>
+  import('js/components/Widget/Widgets/Bookmarks/EditBookmarkWidgetModal')
+)
 
 class BookmarkChip extends React.Component {
   constructor(props) {
@@ -171,21 +173,25 @@ class BookmarkChip extends React.Component {
             {bookmark.name}
           </span>
         </Paper>
-        <EditBookmarkWidgetModal
-          ref={modal => {
-            this.editBookmarkModal = modal
-          }}
-          open={this.state.isEditing}
-          onEditCancel={this.onEditCancel.bind(this)}
-          onEditSave={this.onEditSave.bind(this)}
-          onDeleteBookmark={this.onDeleteBookmark.bind(this)}
-          currentBookmarkName={bookmark.name}
-          currentBookmarkLink={bookmark.link}
-          currentBookmarkColor={bookmarkHex}
-          onReorderMoveUp={this.onReorderMoveUp.bind(this)}
-          onReorderMoveDown={this.onReorderMoveDown.bind(this)}
-          setTemporaryColor={this.setTemporaryColor.bind(this)}
-        />
+        {this.state.isEditing ? (
+          <Suspense fallback={null}>
+            <EditBookmarkWidgetModal
+              ref={modal => {
+                this.editBookmarkModal = modal
+              }}
+              open={this.state.isEditing}
+              onEditCancel={this.onEditCancel.bind(this)}
+              onEditSave={this.onEditSave.bind(this)}
+              onDeleteBookmark={this.onDeleteBookmark.bind(this)}
+              currentBookmarkName={bookmark.name}
+              currentBookmarkLink={bookmark.link}
+              currentBookmarkColor={bookmarkHex}
+              onReorderMoveUp={this.onReorderMoveUp.bind(this)}
+              onReorderMoveDown={this.onReorderMoveDown.bind(this)}
+              setTemporaryColor={this.setTemporaryColor.bind(this)}
+            />
+          </Suspense>
+        ) : null}
       </span>
     )
   }
