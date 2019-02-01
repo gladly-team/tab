@@ -90,7 +90,7 @@ class Account extends React.Component {
               actionButton={
                 <Button
                   color={'primary'}
-                  variant={'raised'}
+                  variant={'contained'}
                   onClick={this.reviewDataPrivacy}
                 >
                   Review choices
