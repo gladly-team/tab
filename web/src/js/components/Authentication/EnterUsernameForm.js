@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Paper } from 'material-ui'
+import Paper from 'material-ui/Paper'
 import environment from 'js/relay-env'
 import UsernameField from 'js/components/General/UsernameField'
 import RaisedButton from 'material-ui/RaisedButton'

@@ -4,7 +4,7 @@ import InviteFriend from 'js/components/Settings/Profile/InviteFriendContainer'
 import Stat from 'js/components/Settings/Profile/StatComponent'
 import { lighterTextColor } from 'js/theme/default'
 import HappyIcon from 'material-ui/svg-icons/social/mood'
-import { Paper } from 'material-ui'
+import Paper from 'material-ui/Paper'
 
 class ProfileInviteFriend extends React.Component {
   render() {

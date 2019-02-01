@@ -1,5 +1,5 @@
 import React from 'react'
-import { Paper } from 'material-ui'
+import Paper from 'material-ui/Paper'
 import RaisedButton from 'material-ui/RaisedButton'
 import { logout, sendVerificationEmail } from 'js/authentication/user'
 import { goTo, loginURL } from 'js/navigation/navigation'

@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
-import { MuiThemeProvider as V0MuiThemeProvider } from 'material-ui'
+import V0MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import defaultThemeLegacy from 'js/theme/default'
 import withPageviewTracking from 'js/analytics/withPageviewTracking'

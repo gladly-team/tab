@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Charity from 'js/components/Donate/CharityContainer'
-import { Paper } from 'material-ui'
+import Paper from 'material-ui/Paper'
 import InfoOutlineIcon from 'material-ui/svg-icons/action/info-outline'
 import { lighterTextColor } from 'js/theme/default'
 
