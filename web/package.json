@@ -60,8 +60,7 @@
     "relay-commit-mutation-promise": "^1.0.1",
     "sanitize-html": "^1.19.1",
     "tti-polyfill": "^0.2.2",
-    "uuid": "^3.3.2",
-    "xregexp": "^4.2.0"
+    "uuid": "^3.3.2"
   },
   "scripts": {
     "start": "yarn run relay && nodemon --watch data/schema.graphql --exec yarn run start:react-app & yarn run relay:watch",

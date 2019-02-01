@@ -5,7 +5,6 @@ import {
   STORAGE_REFERRAL_DATA_REFERRING_CHANNEL,
   STORAGE_REFERRAL_DATA_REFERRING_USER,
 } from 'js/constants'
-import XRegExp from 'xregexp'
 import qs from 'qs'
 
 /**
@@ -17,10 +16,7 @@ export const validateUsername = username => {
   if (username.length < 2) {
     return false
   }
-  // Based on:
-  // https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_SignUp.html#CognitoUserPools-SignUp-request-Username
-  var re = XRegExp('^[\\p{L}\\p{M}\\p{S}\\p{N}\\p{P}]+$')
-  return re.test(username)
+  return true
 }
 
 // Note: in general, we should probably use react-router's

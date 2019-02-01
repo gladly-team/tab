@@ -31,10 +31,21 @@ describe('validating username', () => {
     expect(validateUsername('somebody!123')).toEqual(true)
   })
 
-  it('rejects other special characters', () => {
+  it('accepts modified Roman letters', () => {
     const validateUsername = require('js/utils/utils').validateUsername
-    expect(validateUsername('©')).toEqual(false)
-    expect(validateUsername('💩')).toEqual(false)
+    expect(validateUsername('óóóó')).toEqual(true)
+    expect(validateUsername('åååå')).toEqual(true)
+  })
+
+  it('accepts Mandarin', () => {
+    const validateUsername = require('js/utils/utils').validateUsername
+    expect(validateUsername('我我我我')).toEqual(true)
+  })
+
+  it('accpets other special characters', () => {
+    const validateUsername = require('js/utils/utils').validateUsername
+    expect(validateUsername('©©©©')).toEqual(true)
+    expect(validateUsername('💩💩💩💩')).toEqual(true)
   })
 })
 
