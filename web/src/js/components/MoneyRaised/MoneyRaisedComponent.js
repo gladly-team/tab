@@ -1,15 +1,15 @@
-import React from 'react'
+import React, { Suspense, lazy } from 'react'
 import PropTypes from 'prop-types'
 import { commaFormatted, currencyFormatted } from 'js/utils/utils'
 import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 import RaisedButton from 'material-ui/RaisedButton'
 import { goToInviteFriends } from 'js/navigation/navigation'
-import Sparkle from 'react-sparkle'
-
 import appTheme, {
   dashboardIconActiveColor,
   dashboardIconInactiveColor,
 } from 'js/theme/default'
+
+const Sparkle = lazy(() => import('react-sparkle'))
 
 class MoneyRaised extends React.Component {
   constructor(props) {
@@ -150,13 +150,15 @@ class MoneyRaised extends React.Component {
       >
         <span style={textStyle}>{amountDonated}</span>
         {celebrateMilestone ? (
-          <Sparkle
-            color={milestoneMoneyRaisedColor}
-            count={18}
-            fadeOutSpeed={40}
-            overflowPx={14}
-            flicker={false}
-          />
+          <Suspense fallback={null}>
+            <Sparkle
+              color={milestoneMoneyRaisedColor}
+              count={18}
+              fadeOutSpeed={40}
+              overflowPx={14}
+              flicker={false}
+            />
+          </Suspense>
         ) : null}
         <DashboardPopover
           style={popoverStyle}
