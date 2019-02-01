@@ -1,5 +1,5 @@
 import React from 'react'
-import { Paper } from 'material-ui'
+import Paper from 'material-ui/Paper'
 import Typography from '@material-ui/core/Typography'
 import RaisedButton from 'material-ui/RaisedButton'
 import { absoluteUrl, loginURL } from 'js/navigation/navigation'
