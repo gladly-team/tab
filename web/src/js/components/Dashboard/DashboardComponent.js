@@ -25,6 +25,7 @@ import {
 } from 'js/theme/default'
 import FadeInDashboardAnimation from 'js/components/General/FadeInDashboardAnimation'
 import ErrorMessage from 'js/components/General/ErrorMessage'
+import QuantcastChoiceCMP from 'js/components/General/QuantcastChoiceCMP'
 import Notification from 'js/components/Dashboard/NotificationComponent'
 import { getCurrentUser } from 'js/authentication/user'
 import localStorageMgr from 'js/utils/localstorage-mgr'
@@ -43,6 +44,8 @@ import {
   HORIZONTAL_AD_SLOT_DOM_ID,
 } from 'js/ads/adSettings'
 import { showGlobalNotification } from 'js/utils/feature-flags'
+import ErrorBoundary from 'js/components/General/ErrorBoundary'
+import Timeout from 'js/components/General/Timeout'
 
 // Include ads code.
 // TODO: load this on mount, making sure the ads code behaves
@@ -420,6 +423,11 @@ class Dashboard extends React.Component {
             onRequestClose={this.clearError.bind(this)}
           />
         ) : null}
+        <ErrorBoundary ignoreErrors>
+          <Timeout ms={2500}>
+            {timedOut => (timedOut ? <QuantcastChoiceCMP /> : null)}
+          </Timeout>
+        </ErrorBoundary>
       </div>
     )
   }

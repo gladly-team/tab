@@ -55,7 +55,11 @@ export const hasGlobalConsent = () => {
  * @return {undefined}
  */
 export const displayConsentUI = () => {
-  window.__cmp('displayConsentUi')
+  try {
+    window.__cmp('displayConsentUi')
+  } catch (e) {
+    logger.error(e)
+  }
 }
 
 // Our own storage of consent callback functions. We manage
@@ -100,7 +104,11 @@ const registerConsentChangeCallbacksWithCMP = async () => {
   // whether in the EU or not. We can't rely on it calling
   // just once, nor can we rely on consent data existing.
   // We reached out to Quantcast about this.
-  window.__cmp('setConsentUiCallback', callCallbacksAndReRegister)
+  try {
+    window.__cmp('setConsentUiCallback', callCallbacksAndReRegister)
+  } catch (e) {
+    logger.error(e)
+  }
 }
 
 /**
