@@ -45,6 +45,7 @@ import {
 } from 'js/ads/adSettings'
 import { showGlobalNotification } from 'js/utils/feature-flags'
 import ErrorBoundary from 'js/components/General/ErrorBoundary'
+import Timeout from 'js/components/General/Timeout'
 
 // Include ads code.
 // TODO: load this on mount, making sure the ads code behaves
@@ -423,7 +424,9 @@ class Dashboard extends React.Component {
           />
         ) : null}
         <ErrorBoundary ignoreErrors>
-          <QuantcastChoiceCMP />
+          <Timeout ms={2500}>
+            {timedOut => (timedOut ? <QuantcastChoiceCMP /> : null)}
+          </Timeout>
         </ErrorBoundary>
       </div>
     )
