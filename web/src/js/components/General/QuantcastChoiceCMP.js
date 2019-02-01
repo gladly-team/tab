@@ -11,24 +11,22 @@ import { Helmet } from 'react-helmet'
 class QuantcastChoiceCMP extends React.Component {
   constructor(props) {
     super(props)
-    const __cmp = (function() {
-      return typeof __cmp == 'function'
-        ? __cmp
+    window.__cmp = (function() {
+      return typeof window.__cmp === 'function'
+        ? window.__cmp
         : function(c) {
             var b = arguments
             if (!b.length) {
-              return __cmp.a
+              return window.__cmp.a
             } else if (c === '__cmp') return false
             else {
-              if (typeof __cmp.a === 'undefined') {
-                __cmp.a = []
+              if (typeof window.__cmp.a === 'undefined') {
+                window.__cmp.a = []
               }
-              __cmp.a.push([].slice.apply(b))
+              window.__cmp.a.push([].slice.apply(b))
             }
           }
     })()
-    window.__cmp = __cmp
-
     window.__cmp('init', {
       Language: 'EN',
       'Display UI': 'always', // 'inEU', 'always', 'never'
