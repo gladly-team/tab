@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import logger from 'js/utils/logger'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
@@ -23,7 +24,11 @@ class ErrorBoundary extends React.Component {
   }
 
   render() {
+    const { ignoreErrors } = this.props
     if (this.state.hasError) {
+      if (ignoreErrors) {
+        return null
+      }
       return (
         <div
           style={{
@@ -99,6 +104,14 @@ class ErrorBoundary extends React.Component {
 
     return this.props.children
   }
+}
+
+ErrorBoundary.propTypes = {
+  ignoreErrors: PropTypes.bool,
+}
+
+ErrorBoundary.defaultProps = {
+  ignoreErrors: false,
 }
 
 export default ErrorBoundary

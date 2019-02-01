@@ -44,6 +44,7 @@ import {
   HORIZONTAL_AD_SLOT_DOM_ID,
 } from 'js/ads/adSettings'
 import { showGlobalNotification } from 'js/utils/feature-flags'
+import ErrorBoundary from 'js/components/General/ErrorBoundary'
 
 // Include ads code.
 // TODO: load this on mount, making sure the ads code behaves
@@ -421,7 +422,9 @@ class Dashboard extends React.Component {
             onRequestClose={this.clearError.bind(this)}
           />
         ) : null}
-        <QuantcastChoiceCMP />
+        <ErrorBoundary ignoreErrors>
+          <QuantcastChoiceCMP />
+        </ErrorBoundary>
       </div>
     )
   }

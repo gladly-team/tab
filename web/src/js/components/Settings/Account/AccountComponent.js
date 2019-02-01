@@ -8,6 +8,7 @@ import { isInEuropeanUnion } from 'js/utils/client-location'
 import { displayConsentUI } from 'js/ads/consentManagement'
 import LogConsentData from 'js/components/Dashboard/LogConsentDataContainer'
 import QuantcastChoiceCMP from 'js/components/General/QuantcastChoiceCMP'
+import ErrorBoundary from 'js/components/General/ErrorBoundary'
 
 export const AccountItem = props => (
   <div
@@ -99,7 +100,9 @@ class Account extends React.Component {
             {user ? <LogConsentData user={user} /> : null}
           </span>
         ) : null}
-        <QuantcastChoiceCMP />
+        <ErrorBoundary ignoreErrors>
+          <QuantcastChoiceCMP />
+        </ErrorBoundary>
       </Paper>
     )
   }

@@ -15,7 +15,9 @@ jest.mock('js/components/Logo/LogoWithText')
 jest.mock('js/navigation/navigation')
 jest.mock('js/utils/logger')
 
-const getMockProps = () => ({})
+const getMockProps = () => ({
+  ignoreErrors: false,
+})
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -40,6 +42,21 @@ describe('ErrorBoundary', function() {
     )
     wrapper.find(ProblemComponent).simulateError(err)
     expect(logger.error).toHaveBeenCalledWith(err)
+  })
+
+  it("does not return the UI, even when there's an error, if the ignoreErrors prop is true", () => {
+    const ErrorBoundary = require('js/components/General/ErrorBoundary').default
+    const mockProps = getMockProps()
+    mockProps.ignoreErrors = true
+    const ProblemComponent = props => <div>No problem here!</div>
+    const wrapper = mount(
+      <ErrorBoundary {...mockProps}>
+        <ProblemComponent />
+      </ErrorBoundary>
+    )
+    wrapper.find(ProblemComponent).simulateError(new Error('Oh no!'))
+    wrapper.update()
+    expect(wrapper.html()).toEqual('<div>No problem here!</div>')
   })
 
   it('returns the children until an error is thrown', () => {
