@@ -1,19 +1,16 @@
-import React from 'react'
+import React, { Suspense, lazy } from 'react'
 import { Redirect, Route, Router, Switch } from 'react-router-dom'
-import ttiPolyfill from 'tti-polyfill'
 import { browserHistory } from 'js/navigation/navigation'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
-import { MuiThemeProvider as V0MuiThemeProvider } from 'material-ui'
-import getMuiTheme from 'material-ui/styles/getMuiTheme'
-import defaultThemeLegacy from 'js/theme/default'
 import defaultTheme from 'js/theme/defaultV1'
 import BaseContainer from 'js/components/General/BaseContainer'
+import FullPageLoader from 'js/components/General/FullPageLoader'
+import ErrorBoundary from 'js/components/General/ErrorBoundary'
 import { initializeFirebase } from 'js/authentication/firebaseConfig'
 import logger from 'js/utils/logger'
-import App from 'js/components/App/App'
-import SearchView from 'js/components/Search/SearchView'
 
-const legacyMuiTheme = getMuiTheme(defaultThemeLegacy)
+const App = lazy(() => import('js/components/App/App'))
+const SearchView = lazy(() => import('js/components/Search/SearchView'))
 const muiTheme = createMuiTheme(defaultTheme)
 
 class Root extends React.Component {
@@ -34,8 +31,10 @@ class Root extends React.Component {
     // https://github.com/GoogleChromeLabs/tti-polyfill
     try {
       if (process.env.REACT_APP_MEASURE_TIME_TO_INTERACTIVE === 'true') {
-        ttiPolyfill.getFirstConsistentlyInteractive().then(tti => {
-          console.log(`Time to interactive: ${tti}`)
+        import('tti-polyfill').then(ttiPolyfill => {
+          ttiPolyfill.getFirstConsistentlyInteractive().then(tti => {
+            console.log(`Time to interactive: ${tti}`)
+          })
         })
       }
     } catch (e) {
@@ -44,21 +43,22 @@ class Root extends React.Component {
   }
 
   render() {
-    // @material-ui-1-todo: remove legacy theme provider
     // TODO: Show 404 page
     return (
       <MuiThemeProvider theme={muiTheme}>
-        <V0MuiThemeProvider muiTheme={legacyMuiTheme}>
+        <ErrorBoundary>
           <BaseContainer>
             <Router history={browserHistory}>
-              <Switch>
-                <Route path="/newtab/" component={App} />
-                <Route path="/search/" component={SearchView} />
-                <Redirect from="*" to="/newtab" />
-              </Switch>
+              <Suspense fallback={<FullPageLoader delay={800} />}>
+                <Switch>
+                  <Route path="/newtab/" component={App} />
+                  <Route path="/search/" component={SearchView} />
+                  <Redirect from="*" to="/newtab/" />
+                </Switch>
+              </Suspense>
             </Router>
           </BaseContainer>
-        </V0MuiThemeProvider>
+        </ErrorBoundary>
       </MuiThemeProvider>
     )
   }

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense, lazy } from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import Input from '@material-ui/core/Input'
@@ -12,7 +12,8 @@ import { goTo, dashboardURL, modifyURLParams } from 'js/navigation/navigation'
 import LogoWithText from 'js/components/Logo/LogoWithText'
 import { parseUrlSearchString } from 'js/utils/utils'
 import SearchResults from 'js/components/Search/SearchResults'
-import Footer from 'js/components/General/Footer'
+
+const Footer = lazy(() => import('js/components/General/Footer'))
 
 const searchBoxBorderColor = '#ced4da'
 const searchBoxBorderColorFocused = '#bdbdbd'
@@ -240,11 +241,13 @@ class SearchPage extends React.Component {
             }}
           />
         </div>
-        <Footer
-          style={{
-            marginTop: 'auto',
-          }}
-        />
+        <Suspense fallback={null}>
+          <Footer
+            style={{
+              marginTop: 'auto',
+            }}
+          />
+        </Suspense>
       </div>
     )
   }

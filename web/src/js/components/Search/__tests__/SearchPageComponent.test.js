@@ -15,6 +15,16 @@ jest.mock('js/utils/feature-flags')
 jest.mock('js/navigation/navigation')
 jest.mock('js/components/Search/SearchResults')
 
+// Enzyme does not yet support React.lazy and React.Suspense,
+// so let's just not render lazy-loaded children for now.
+// https://github.com/airbnb/enzyme/issues/1917
+jest.mock('react', () => {
+  const React = jest.requireActual('react')
+  React.Suspense = () => null
+  React.lazy = jest.fn(() => () => null)
+  return React
+})
+
 const getMockProps = () => ({
   user: {
     id: 'some-user-id-here',

@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/href-no-hash */
-import React from 'react'
+import React, { Suspense, lazy } from 'react'
 import PropTypes from 'prop-types'
 import uuid from 'uuid/v4'
 import moment from 'moment'
@@ -26,7 +26,6 @@ import {
 } from 'js/theme/default'
 import FadeInDashboardAnimation from 'js/components/General/FadeInDashboardAnimation'
 import ErrorMessage from 'js/components/General/ErrorMessage'
-import NewUserTour from 'js/components/Dashboard/NewUserTourContainer'
 import Notification from 'js/components/Dashboard/NotificationComponent'
 import { getCurrentUser } from 'js/authentication/user'
 import localStorageMgr from 'js/utils/localstorage-mgr'
@@ -51,6 +50,10 @@ import { showGlobalNotification } from 'js/utils/feature-flags'
 // appropriately for a SPA (it should not reload libraries but
 // should re-fetch ads).
 import 'js/ads/ads'
+
+const NewUserTour = lazy(() =>
+  import('js/components/Dashboard/NewUserTourContainer')
+)
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -287,7 +290,11 @@ class Dashboard extends React.Component {
           ? // TODO: build a new fireworks component
             null
           : null}
-        {showNewUserTour ? <NewUserTour user={user} /> : null}
+        {showNewUserTour ? (
+          <Suspense fallback={null}>
+            <NewUserTour user={user} />
+          </Suspense>
+        ) : null}
         <div
           style={{
             position: 'absolute',
