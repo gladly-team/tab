@@ -9,9 +9,11 @@ import {
   externalRedirect,
   externalContactUsURL,
 } from 'js/navigation/navigation'
+import logger from 'js/utils/logger'
 
 jest.mock('js/components/Logo/LogoWithText')
 jest.mock('js/navigation/navigation')
+jest.mock('js/utils/logger')
 
 const getMockProps = () => ({})
 
@@ -24,6 +26,20 @@ describe('ErrorBoundary', function() {
     const ErrorBoundary = require('js/components/General/ErrorBoundary').default
     const mockProps = getMockProps()
     shallow(<ErrorBoundary {...mockProps} />)
+  })
+
+  it('logs when an error is thrown', () => {
+    const ErrorBoundary = require('js/components/General/ErrorBoundary').default
+    const mockProps = getMockProps()
+    const err = new Error('Uh oh.')
+    const ProblemComponent = props => null
+    const wrapper = mount(
+      <ErrorBoundary {...mockProps}>
+        <ProblemComponent />
+      </ErrorBoundary>
+    )
+    wrapper.find(ProblemComponent).simulateError(err)
+    expect(logger.error).toHaveBeenCalledWith(err)
   })
 
   it('returns the children until an error is thrown', () => {
