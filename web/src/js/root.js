@@ -1,16 +1,45 @@
-import React, { Suspense, lazy } from 'react'
+import React from 'react'
 import { Redirect, Route, Router, Switch } from 'react-router-dom'
 import { browserHistory } from 'js/navigation/navigation'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import defaultTheme from 'js/theme/defaultV1'
 import BaseContainer from 'js/components/General/BaseContainer'
-import FullPageLoader from 'js/components/General/FullPageLoader'
 import ErrorBoundary from 'js/components/General/ErrorBoundary'
 import { initializeFirebase } from 'js/authentication/firebaseConfig'
 import logger from 'js/utils/logger'
 
-const App = lazy(() => import('js/components/App/App'))
-const SearchView = lazy(() => import('js/components/Search/SearchView'))
+// This is a hack to generate separate apps for the new tab
+// page and search. We do this because create-react-app does
+// not currently support more than one entry point. See:
+// https://github.com/facebook/create-react-app/issues/1084#issuecomment-365495580
+// Our goal is to use load only the necessary assets for the
+// root new tab and search pages without downloading any
+// critical JS asynchronously, while not switching away from
+// CRA, ejecting from CRA, or dealing with the overhead of
+// managing distinct codebases. In the future, it would be
+// better for us to have a monorepo structure of some kind
+// (see: https://github.com/facebook/create-react-app/issues/1492),
+// use the built-in multiple entry points (if CRA supports
+// it down the line), or switching to another framework.
+var TheApp
+var appPath
+switch (process.env.REACT_APP_WHICH_APP) {
+  case 'newtab': {
+    TheApp = require('js/components/App/App').default
+    appPath = '/newtab/'
+    break
+  }
+  case 'search': {
+    TheApp = require('js/components/Search/SearchView').default
+    appPath = '/search/'
+    break
+  }
+  default: {
+    TheApp = require('js/components/App/App').default
+    appPath = '/newtab/'
+  }
+}
+
 const muiTheme = createMuiTheme(defaultTheme)
 
 class Root extends React.Component {
@@ -49,13 +78,10 @@ class Root extends React.Component {
         <ErrorBoundary>
           <BaseContainer>
             <Router history={browserHistory}>
-              <Suspense fallback={<FullPageLoader delay={800} />}>
-                <Switch>
-                  <Route path="/newtab/" component={App} />
-                  <Route path="/search/" component={SearchView} />
-                  <Redirect from="*" to="/newtab/" />
-                </Switch>
-              </Suspense>
+              <Switch>
+                <Route path={appPath} component={TheApp} />
+                <Redirect from="*" to={appPath} />
+              </Switch>
             </Router>
           </BaseContainer>
         </ErrorBoundary>

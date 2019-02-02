@@ -63,9 +63,14 @@
     "uuid": "^3.3.2"
   },
   "scripts": {
-    "start": "yarn run relay && nodemon --watch data/schema.graphql --exec yarn run start:react-app & yarn run relay:watch",
-    "start:react-app": "cross-env NODE_PATH=src/ react-scripts start",
-    "build": "yarn run relay --watchman false && cross-env NODE_PATH=src/ react-scripts build",
+    "start": "echo \"Run either start:newtab or start:search\"",
+    "start:newtab": "yarn run relay && nodemon --watch data/schema.graphql --exec yarn run start:newtab:react-scripts & yarn run relay:watch",
+    "start:newtab:react-scripts": "cross-env NODE_PATH=src/ REACT_APP_WHICH_APP=newtab react-scripts start",
+    "start:search": "yarn run relay && nodemon --watch data/schema.graphql --exec yarn run start:search:react-scripts & yarn run relay:watch",
+    "start:search:react-scripts": "cross-env NODE_PATH=src/ REACT_APP_WHICH_APP=search react-scripts start",
+    "build": "echo \"Run either build:newtab or build:search\"",
+    "build:newtab": "yarn run relay --watchman false && cross-env NODE_PATH=src/ REACT_APP_WHICH_APP=newtab react-scripts build",
+    "build:search": "yarn run relay --watchman false && cross-env NODE_PATH=src/ cross-env REACT_APP_WHICH_APP=search react-scripts build",
     "eject": "react-scripts eject",
     "bundle:analyze": "source-map-explorer",
     "bundle:analyze-buddy": "bundle-buddy build/static/js/*.map",
