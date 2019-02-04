@@ -12,6 +12,8 @@ import {
 } from 'js/ads/consentManagement'
 import FullPageLoader from 'js/components/General/FullPageLoader'
 import DashboardView from 'js/components/Dashboard/DashboardView'
+import QuantcastChoiceCMP from 'js/components/General/QuantcastChoiceCMP'
+import ErrorBoundary from 'js/components/General/ErrorBoundary'
 
 const AuthenticationView = lazy(() =>
   import('js/components/Authentication/AuthenticationView')
@@ -98,6 +100,9 @@ class App extends React.Component {
               <Redirect from="*" to="/newtab/" />
             </Switch>
           </Suspense>
+          <ErrorBoundary ignoreErrors>
+            <QuantcastChoiceCMP />
+          </ErrorBoundary>
         </div>
       </V0MuiThemeProvider>
     )
