@@ -153,6 +153,33 @@
 
     <!--
       @gladly-customization:
+      Quantcast Choice Consent Manager Tag
+      This is paired with our QuantcastChoiceCMP component.
+      https://www.quantcast.com/gdpr/quantcast-choice-self-serve/
+      https://quantcast.zendesk.com/hc/en-us/articles/360003814853-Technical-Implementation-Guide
+    -->
+    <script type="text/javascript" async=true>
+      /* eslint-disable */
+      var __cmp = (function () {
+        return typeof (__cmp) == "function" ? __cmp : function (c) {
+          var b = arguments;
+          if (!b.length) {
+            return __cmp.a;
+          }
+          else if (c == '__cmp')
+            return false;
+          else {
+            if (typeof __cmp.a === 'undefined') {
+              __cmp.a = [];
+            }
+            __cmp.a.push([].slice.apply(b));
+          }
+        }
+      })();
+    </script>
+
+    <!--
+      @gladly-customization:
       Amazon apstag
     -->
     <script>
