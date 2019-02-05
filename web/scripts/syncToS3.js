@@ -7,20 +7,37 @@ require('dotenv-extended').load({
   defaults: path.join(__dirname, '..', '.env'),
 })
 
-const s3Bucket = process.env.DEPLOYMENT_WEB_APP_S3_BUCKET_NAME
-const s3BucketPath = process.env.DEPLOYMENT_WEB_APP_S3_BUCKET_PATH || ''
+const argv = require('minimist')(process.argv.slice(2))
+var s3Destination
+switch (argv.app) {
+  case 'newtab':
+    s3Destination = `s3://${
+      process.env.DEPLOYMENT_WEB_APP_S3_BUCKET_NAME
+    }${process.env.DEPLOYMENT_WEB_APP_S3_BUCKET_PATH || ''}/`
+    break
+  case 'search':
+    s3Destination = `s3://${
+      process.env.DEPLOYMENT_SEARCH_APP_S3_BUCKET_NAME
+    }${process.env.TEST_DEPLOYMENT_SEARCH_APP_S3_BUCKET_PATH || ''}/`
+    break
+  default:
+    throw new Error(
+      'Expected --app command line argument to equal "newtab" or "search".'
+    )
+}
+console.log(`Deploying "${argv.app}" app to ${s3Destination}`)
 
-// Sync *.html files.
-function syncHTML() {
+// Sync everything except the static folder.
+function syncNonStaticFiles() {
   const args = [
     's3',
     'sync',
     'build/',
-    `s3://${s3Bucket}${s3BucketPath}/`,
-    '--exclude',
-    '*',
+    s3Destination,
     '--include',
-    '*.html',
+    '*',
+    '--exclude',
+    'static/*',
     '--cache-control',
     'no-cache',
     '--metadata-directive',
@@ -40,18 +57,16 @@ function syncHTML() {
   }
 }
 
-// Sync everything except *.html files.
+// Sync everything in the static folder.
 function syncStaticFiles() {
   const STATIC_FILES_CACHE_CONTROL_SECONDS = 60 * 60 * 24 * 365
   const args = [
     's3',
     'sync',
     'build/',
-    `s3://${s3Bucket}${s3BucketPath}/`,
+    s3Destination,
     '--include',
-    '*',
-    '--exclude',
-    '*.html',
+    'static/*',
     '--cache-control',
     `max-age=${STATIC_FILES_CACHE_CONTROL_SECONDS}`,
     '--metadata-directive',
@@ -72,7 +87,7 @@ function syncStaticFiles() {
 }
 
 function syncDirectory() {
-  syncHTML()
+  syncNonStaticFiles()
   syncStaticFiles()
 }
 

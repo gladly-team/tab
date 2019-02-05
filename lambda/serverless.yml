@@ -32,6 +32,7 @@ provider:
       Action:
         - KMS:Decrypt
       Resource: ${self:custom.awsKmsKeyArn} 
+    # TODO: we may need role permissions for Lambda@Edge
 
 custom:
   stageDefault: dev
