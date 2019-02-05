@@ -77,7 +77,7 @@ functions:
       #   `aws kms encrypt --key-id [kms-key-id] --plaintext [item]`
       LAMBDA_FIREBASE_PRIVATE_KEY: ${file(./src/firebase-authorizer/variables.yml):${self:provider.stage}.LAMBDA_FIREBASE_PRIVATE_KEY}
   newtabAppLambdaEdge:
-    handler: build/newtab-app-lambda-edge/newtab-app-lambda-edge
+    handler: build/newtab-app-lambda-edge/newtab-app-lambda-edge.handler
     # This adds this Lambda@Edge function to a cache behavior on our
     # CloudFront distribution (as a LambdaFunctionAssociation).
     # When CloudFront calls our origin, this function rewrites all
@@ -96,7 +96,7 @@ functions:
        # This must match a path pattern in a cache behavior.
        pathPattern: 'newtab*'
   searchAppLambdaEdge:
-    handler: build/search-app-lambda-edge/search-app-lambda-edge
+    handler: build/search-app-lambda-edge/search-app-lambda-edge.handler
     lambdaAtEdge:
        distribution: 'WebAppCloudFrontDistribution'
        eventType: 'origin-request'
