@@ -47,7 +47,7 @@ plugins:
   # distribution.
   # https://github.com/serverless/serverless/issues/3944
   # https://github.com/silvermine/serverless-plugin-cloudfront-lambda-edge
-  - @silvermine/serverless-plugin-cloudfront-lambda-edge
+  - serverless-plugin-cloudfront-lambda-edge
 
 # Only include the build and its node modules.
 package:
