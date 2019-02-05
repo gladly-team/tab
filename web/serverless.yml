@@ -11,11 +11,12 @@ provider:
 custom:
   stageDefault: dev
   stage: ${env:SLS_STAGE, self:custom.stageDefault}
-  s3Bucket: ${env:DEPLOYMENT_WEB_APP_S3_BUCKET_NAME}
+  newTabAppS3Bucket: ${env:DEPLOYMENT_WEB_APP_S3_BUCKET_NAME}
+  searchAppS3Bucket: ${env:DEPLOYMENT_SEARCH_APP_S3_BUCKET_NAME}
   graphQLProxyDomain: ${env:DEPLOYMENT_GRAPHQL_DOMAIN}
   graphQLProxyPath: ${env:DEPLOYMENT_GRAPHQL_PATH}
   webAppName: Tab2017
-  searchAppName: Tab2017
+  searchAppName: SearchForACause
   graphQLAppName: TabGraphQL
   cloudfrontDomainAlias: ${env:DEPLOYMENT_WEB_APP_CLOUDFRONT_DOMAIN_ALIAS}
   SSLCertificateARN: ${env:SSL_CERTIFICATE_ARN}
@@ -26,16 +27,15 @@ custom:
 
 resources:
   Resources:
-
+    # New tab app S3 bucket
     TabS3Bucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: ${self:custom.s3Bucket}
+        BucketName: ${self:custom.newTabAppS3Bucket}
         AccessControl: PublicRead
         WebsiteConfiguration:
           IndexDocument: index.html
           ErrorDocument: index.html
-
     TabS3BucketPolicy:
       Type: AWS::S3::BucketPolicy
       Properties:
@@ -48,7 +48,30 @@ resources:
               Principal: "*"
               Action:
                 - s3:GetObject
-              Resource: arn:aws:s3:::${self:custom.s3Bucket}/*
+              Resource: arn:aws:s3:::${self:custom.newTabAppS3Bucket}/*
+
+    # Search app S3 bucket
+    SearchAppS3Bucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.searchAppS3Bucket}
+        AccessControl: PublicRead
+        WebsiteConfiguration:
+          IndexDocument: index.html
+          ErrorDocument: index.html
+    SearchAppS3BucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket:
+          Ref: SearchAppS3Bucket
+        PolicyDocument:
+          Statement:
+            - Sid: PublicReadGetObject
+              Effect: Allow
+              Principal: "*"
+              Action:
+                - s3:GetObject
+              Resource: arn:aws:s3:::${self:custom.searchAppS3Bucket}/*
 
     # Serve the app through Cloudfront.
     WebAppCloudFrontDistribution:
@@ -58,9 +81,20 @@ resources:
         DistributionConfig:
           Origins:
             # Web S3 bucket.
-            - DomainName: ${self:custom.s3Bucket}.s3.amazonaws.com
+            - DomainName: ${self:custom.newTabAppS3Bucket}.s3.amazonaws.com
               # An identifier for the origin. This must be unique within the distribution.
               Id: ${self:custom.webAppName}
+              CustomOriginConfig:
+                HTTPPort: 80
+                HTTPSPort: 443
+                # HTTP only is required for S3 buckets that are configured as
+                # website endpoints:
+                # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesOriginProtocolPolicy 
+                OriginProtocolPolicy: http-only
+            # Search for a Cause S3 bucket.
+            - DomainName: ${self:custom.searchAppS3Bucket}.s3.amazonaws.com
+              # An identifier for the origin. This must be unique within the distribution.
+              Id: ${self:custom.searchAppName}
               CustomOriginConfig:
                 HTTPPort: 80
                 HTTPSPort: 443
@@ -84,7 +118,7 @@ resources:
                 HTTPSPort: 443
                 OriginProtocolPolicy: http-only
           Enabled: true
-          Comment: ${self:custom.stage} new tab page and homepage
+          Comment: ${self:custom.stage} new tab app, search app, and homepage
           # No default root object; our website (landing page) app handles it.
           # DefaultRootObject: index.html
           Aliases:
@@ -245,4 +279,4 @@ resources:
   # we need to define the DomainName output for CloudFormation
   Outputs:
     WebAppCloudFrontDistributionOutput:
-      Value: ${self:custom.s3Bucket}.s3.amazonaws.com
+      Value: ${self:custom.newTabAppS3Bucket}.s3.amazonaws.com
