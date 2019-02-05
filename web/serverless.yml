@@ -153,8 +153,6 @@ resources:
           # browser-cached.
           CacheBehaviors:
             # New tab app
-            # Note: we attach a Lambda@Edge function to this cache behavior
-            # in lambda/serverless.yml.
             - PathPattern: 'newtab*'
               # Short caching of non-static files for some speed gains and
               # reduced request volume to S3 origin.
@@ -172,9 +170,8 @@ resources:
                   Forward: none
               Compress: true
               ViewerProtocolPolicy: redirect-to-https
+              # TODO: LambdaFunctionAssociations
             # Search app
-            # Note: we attach a Lambda@Edge function to this cache behavior
-            # in lambda/serverless.yml.
             - PathPattern: 'search*'
               # Short caching of non-static files for some speed gains and
               # reduced request volume to S3 origin.

@@ -10,29 +10,18 @@ provider:
   region: us-west-2
   stage: ${env:SLS_STAGE, self:custom.stageDefault}
   iamRoleStatements:
-    ## TODO: more precise permissions when needed
-    # - Effect: "Allow"
-    #   Action:
-    #     - "dynamodb:BatchGetItem"
-    #     - "dynamodb:BatchWriteItem"
-    #     - "dynamodb:DeleteItem"
-    #     - "dynamodb:DescribeReservedCapacity"
-    #     - "dynamodb:DescribeReservedCapacityOfferings"
-    #     - "dynamodb:DescribeTable"
-    #     - "dynamodb:DescribeTimeToLive"
-    #     - "dynamodb:GetItem"
-    #     - "dynamodb:ListTables"
-    #     - "dynamodb:ListTagsOfResource"
-    #     - "dynamodb:PutItem"
-    #     - "dynamodb:Query"
-    #     - "dynamodb:Scan"
-    #     - "dynamodb:UpdateItem"
-    #   Resource: "*"
     - Effect: Allow
       Action:
         - KMS:Decrypt
       Resource: ${self:custom.awsKmsKeyArn} 
-    # TODO: we may need role permissions for Lambda@Edge
+    # For Lambda@Edge functions
+    - Effect: Allow
+      Action:
+        - logs:CreateLogGroup
+        - logs:CreateLogStream
+        - logs:PutLogEvents
+        - logs:DescribeLogStreams
+      Resource: arn:aws:logs:*:*:*
 
 custom:
   stageDefault: dev
@@ -43,11 +32,6 @@ plugins:
   # Include only the required node modules.
   # https://github.com/dougmoscrop/serverless-plugin-include-dependencies
   - serverless-plugin-include-dependencies
-  # Associate the latest Lambda@Edge functions with their CloudFront
-  # distribution.
-  # https://github.com/serverless/serverless/issues/3944
-  # https://github.com/silvermine/serverless-plugin-cloudfront-lambda-edge
-  - serverless-plugin-cloudfront-lambda-edge
 
 # Only include the build and its node modules.
 package:
@@ -76,30 +60,14 @@ functions:
       # To encrypt:
       #   `aws kms encrypt --key-id [kms-key-id] --plaintext [item]`
       LAMBDA_FIREBASE_PRIVATE_KEY: ${file(./src/firebase-authorizer/variables.yml):${self:provider.stage}.LAMBDA_FIREBASE_PRIVATE_KEY}
+  # We manually reference the ARN of these Lambda@Edge functions in our
+  # CloudFront stack. Unfortunately, serverless-plugin-cloudfront-lambda-edge
+  # does not support cross-service references:
+  # https://github.com/silvermine/serverless-plugin-cloudfront-lambda-edge/issues/1
+  # Perhaps Serverless will support this in the future:
+  # https://github.com/serverless/serverless/issues/3944
   newtabAppLambdaEdge:
     handler: build/newtab-app-lambda-edge/newtab-app-lambda-edge.handler
-    # This adds this Lambda@Edge function to a cache behavior on our
-    # CloudFront distribution (as a LambdaFunctionAssociation).
-    # When CloudFront calls our origin, this function rewrites all
-    # HTML requests to the root index.html to serve the single-page
-    # app. We don't want to rely on setting S3's error document to the
-    # index.html file, because then S3 will return a 404 to Cloudfront,
-    # which will call the 404 error document; CloudFront only allows
-    # one custom 404 error document, which means this wouldn't work
-    # for two single-page apps on the same CF distribution.
-    lambdaAtEdge:
-       distribution: 'WebAppCloudFrontDistribution'
-        # "Executes on a cache miss, before a request is forwarded to
-        # the origin"
-        # https://aws.amazon.com/blogs/networking-and-content-delivery/lambdaedge-design-best-practices/
-       eventType: 'origin-request'
-       # This must match a path pattern in a cache behavior.
-       pathPattern: 'newtab*'
   searchAppLambdaEdge:
     handler: build/search-app-lambda-edge/search-app-lambda-edge.handler
-    lambdaAtEdge:
-       distribution: 'WebAppCloudFrontDistribution'
-       eventType: 'origin-request'
-       pathPattern: 'search*'
-
     
