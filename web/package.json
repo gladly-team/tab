@@ -76,7 +76,9 @@
     "bundle:analyze": "source-map-explorer",
     "bundle:analyze-buddy": "bundle-buddy build/static/js/*.map",
     "postinstall": "patch-package",
-    "deploy": "npm-run-all -s sls:deploy build:newtab s3sync --app newtab build:search s3sync --app search",
+    "deploy": "npm-run-all -s sls:deploy build:newtab deploy:newtab build:search deploy:search",
+    "deploy:newtab": "node scripts/syncToS3.js --app newtab",
+    "deploy:search": "node scripts/syncToS3.js --app search",
     "relay": "relay-compiler --src ./src/ --schema ./data/schema.graphql",
     "relay:watch": "nodemon --watch src/ --watch data/schema.graphql --ignore **/__generated__/**/* --exec \"yarn run relay\"",
     "test": "cross-env NODE_PATH=src/ npm-run-all -s format:check test:run test:codecov",
@@ -93,8 +95,7 @@
     "prebid:cp": "echo \"/* eslint-disable */\" > ./src/js/ads/prebid/prebid.js && cat ./node_modules/prebid.js/build/dist/prebid.js >> ./src/js/ads/prebid/prebid.js",
     "prebid:create-patches": "yarn patch-package prebid.js --include '^(src|modules)/'",
     "prebid:test-patches": "cross-env NODE_PATH=node_modules/prebid.js/ react-scripts test prebidPatches",
-    "sls:deploy": "serverless deploy -v",
-    "s3sync": "node scripts/syncToS3.js"
+    "sls:deploy": "serverless deploy -v"
   },
   "proxy": "http://localhost:8080",
   "jest": {
