@@ -151,6 +151,8 @@ resources:
           # browser-cached.
           CacheBehaviors:
             # New tab app
+            # Note: we attach a Lambda@Edge function to this cache behavior
+            # in lambda/serverless.yml.
             - PathPattern: 'newtab*'
               # Short caching of non-static files for some speed gains and
               # reduced request volume to S3 origin.
@@ -168,21 +170,9 @@ resources:
                   Forward: none
               Compress: true
               ViewerProtocolPolicy: redirect-to-https
-              # When CloudFront calls our origin, this function rewrites all
-              # HTML requests to the root index.html to serve the single-page
-              # app. We don't want to rely on setting S3's error document to the
-              # index.html file, because then S3 will return a 404 to Cloudfront,
-              # which will call the 404 error document; CloudFront only allows
-              # one custom 404 error document, which means this wouldn't work
-              # for two single-page apps on the same CF distribution.
-              LambdaFunctionAssociations:
-                # "Executes on a cache miss, before a request is forwarded to
-                # the origin"
-                # https://aws.amazon.com/blogs/networking-and-content-delivery/lambdaedge-design-best-practices/
-                - EventType: origin-request
-                  # TODO: replace with reference to CF stack
-                  LambdaFunctionARN: arn:aws:lambda:us-east-1:167811431063:function:experimenting-lambda-edge:2
             # Search app
+            # Note: we attach a Lambda@Edge function to this cache behavior
+            # in lambda/serverless.yml.
             - PathPattern: 'search*'
               # Short caching of non-static files for some speed gains and
               # reduced request volume to S3 origin.
@@ -200,13 +190,6 @@ resources:
                   Forward: none
               Compress: true
               ViewerProtocolPolicy: redirect-to-https
-              LambdaFunctionAssociations:
-                # "Executes on a cache miss, before a request is forwarded to
-                # the origin"
-                # https://aws.amazon.com/blogs/networking-and-content-delivery/lambdaedge-design-best-practices/
-                - EventType: origin-request
-                  # TODO: replace with reference to CF stack
-                  LambdaFunctionARN: arn:aws:lambda:us-east-1:167811431063:function:experimenting-lambda-edge:2
             # GraphQL
             - PathPattern: 'graphql*'
               MinTTL: 0

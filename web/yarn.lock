@@ -1208,6 +1208,14 @@
     ramda "^0.25.0"
     source-map-support "^0.5.5"
 
+"@silvermine/serverless-plugin-cloudfront-lambda-edge@2.1.1":
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@silvermine/serverless-plugin-cloudfront-lambda-edge/-/serverless-plugin-cloudfront-lambda-edge-2.1.1.tgz#7257afb7033891eb0a90ba57f7e5f4b754a53e2a"
+  integrity sha512-1mmMOXMHcKjGpAk+yjNw8p43/zdKiK3z+zgrjCkc/MNK/q8GmTQ+pfkMqi0dhSozxDYCpnN9tTumRjWXgLBDjw==
+  dependencies:
+    class.extend "0.9.2"
+    underscore "1.8.3"
+
 "@svgr/core@^2.4.1":
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/@svgr/core/-/core-2.4.1.tgz#03a407c28c4a1d84305ae95021e8eabfda8fa731"
@@ -2896,6 +2904,11 @@ class-utils@^0.3.5:
     define-property "^0.2.5"
     isobject "^3.0.0"
     static-extend "^0.1.1"
+
+class.extend@0.9.2:
+  version "0.9.2"
+  resolved "https://registry.yarnpkg.com/class.extend/-/class.extend-0.9.2.tgz#e1cbda3697cb31d3cdab1c001d269075c9031f78"
+  integrity sha1-4cvaNpfLMdPNqxwAHSaQdckDH3g=
 
 classnames@^2.2.5:
   version "2.2.6"
@@ -12746,6 +12759,11 @@ undefsafe@^2.0.2:
   integrity sha1-Il9rngM3Zj4Njnz9aG/Cg2zKznY=
   dependencies:
     debug "^2.2.0"
+
+underscore@1.8.3:
+  version "1.8.3"
+  resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.8.3.tgz#4f3fb53b106e6097fcf9cb4109f2a5e9bdfa5022"
+  integrity sha1-Tz+1OxBuYJf8+ctBCfKl6b36UCI=
 
 underscore@^1.8.3:
   version "1.9.1"
