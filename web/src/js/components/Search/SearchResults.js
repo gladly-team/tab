@@ -13,7 +13,7 @@ import logger from 'js/utils/logger'
 // it's modified. We should only add CSS to this external
 // stylesheet when absolutely necessary.
 const searchExternalCSSLink =
-  'https://tab.gladly.io/newtab/search-2018.29.11.16.35.css'
+  'https://tab.gladly.io/search/search-2018.29.11.16.35.css'
 
 const styles = theme => ({
   searchAdsContainer: {
