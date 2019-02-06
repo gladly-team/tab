@@ -20,6 +20,7 @@ provider:
 
 custom:
   stageDefault: dev
+  stage: ${env:SLS_STAGE, self:custom.stageDefault}
 
 # We are using a custom role (building on the default Serverless role)
 # so that we can add edgelambda.amazonaws.com as a trust provider.
