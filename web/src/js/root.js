@@ -1,5 +1,5 @@
 import React from 'react'
-import { Redirect, Route, Router, Switch } from 'react-router-dom'
+import { Route, Router, Switch } from 'react-router-dom'
 import { browserHistory } from 'js/navigation/navigation'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import defaultTheme from 'js/theme/defaultV1'
@@ -80,7 +80,6 @@ class Root extends React.Component {
             <Router history={browserHistory}>
               <Switch>
                 <Route path={appPath} component={TheApp} />
-                <Redirect from="*" to={appPath} />
               </Switch>
             </Router>
           </BaseContainer>
