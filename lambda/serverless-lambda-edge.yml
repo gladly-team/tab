@@ -1,0 +1,55 @@
+
+# We have a separate Serverless config file because Lambda@Edge
+# functions must be in us-east-1 and Serverless does not support
+# multi-region deployments or Lambda@Edge: 
+# https://github.com/serverless/serverless/issues/4123
+# https://github.com/serverless/serverless/issues/3944
+# Serverless also does not support customizing the yml filename,
+# so we just cp the file before deploying.
+# https://github.com/serverless/serverless/issues/4473
+service:
+  name: lambda-edge
+  awsKmsKeyArn: ${self:custom.awsKmsKeyArn} 
+frameworkVersion: ">=1.12.0 <2.0.0"
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  region: us-east-1
+  stage: ${env:SLS_STAGE, self:custom.stageDefault}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - logs:CreateLogGroup
+        - logs:CreateLogStream
+        - logs:PutLogEvents
+        - logs:DescribeLogStreams
+      Resource: arn:aws:logs:*:*:*
+
+custom:
+  stageDefault: dev
+
+plugins:
+  # Include only the required node modules.
+  # https://github.com/dougmoscrop/serverless-plugin-include-dependencies
+  - serverless-plugin-include-dependencies
+
+# Only include the build and its node modules.
+package:
+  exclude:
+    - ./**
+  include:
+    - build/**
+
+functions:
+  # We manually reference the ARN of these Lambda@Edge functions in our
+  # CloudFront stack. Unfortunately, serverless-plugin-cloudfront-lambda-edge
+  # does not support cross-service references:
+  # https://github.com/silvermine/serverless-plugin-cloudfront-lambda-edge/issues/1
+  # Perhaps Serverless will support this in the future:
+  # https://github.com/serverless/serverless/issues/3944
+  newtabAppLambdaEdge:
+    handler: build/newtab-app-lambda-edge/newtab-app-lambda-edge.handler
+  searchAppLambdaEdge:
+    handler: build/search-app-lambda-edge/search-app-lambda-edge.handler
+    

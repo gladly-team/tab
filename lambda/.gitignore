@@ -2,3 +2,4 @@
 coverage
 build
 .env.local
+serverless.yml

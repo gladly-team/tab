@@ -1,4 +1,12 @@
 
+# We have a separate Serverless config file because Lambda@Edge
+# functions must be in us-east-1 and Serverless does not support
+# multi-region deployments or Lambda@Edge: 
+# https://github.com/serverless/serverless/issues/4123
+# https://github.com/serverless/serverless/issues/3944
+# Serverless also does not support customizing the yml filename,
+# so we just cp the file before deploying.
+# https://github.com/serverless/serverless/issues/4473
 service:
   name: lambda
   awsKmsKeyArn: ${self:custom.awsKmsKeyArn} 
@@ -14,14 +22,6 @@ provider:
       Action:
         - KMS:Decrypt
       Resource: ${self:custom.awsKmsKeyArn} 
-    # For Lambda@Edge functions
-    - Effect: Allow
-      Action:
-        - logs:CreateLogGroup
-        - logs:CreateLogStream
-        - logs:PutLogEvents
-        - logs:DescribeLogStreams
-      Resource: arn:aws:logs:*:*:*
 
 custom:
   stageDefault: dev
@@ -60,14 +60,3 @@ functions:
       # To encrypt:
       #   `aws kms encrypt --key-id [kms-key-id] --plaintext [item]`
       LAMBDA_FIREBASE_PRIVATE_KEY: ${file(./src/firebase-authorizer/variables.yml):${self:provider.stage}.LAMBDA_FIREBASE_PRIVATE_KEY}
-  # We manually reference the ARN of these Lambda@Edge functions in our
-  # CloudFront stack. Unfortunately, serverless-plugin-cloudfront-lambda-edge
-  # does not support cross-service references:
-  # https://github.com/silvermine/serverless-plugin-cloudfront-lambda-edge/issues/1
-  # Perhaps Serverless will support this in the future:
-  # https://github.com/serverless/serverless/issues/3944
-  newtabAppLambdaEdge:
-    handler: build/newtab-app-lambda-edge/newtab-app-lambda-edge.handler
-  searchAppLambdaEdge:
-    handler: build/search-app-lambda-edge/search-app-lambda-edge.handler
-    
