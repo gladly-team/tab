@@ -51,7 +51,7 @@ resources:
         ManagedPolicyArns:
           - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
         Policies:
-          - PolicyName: GladlyLambdaEdgeExecutionRole
+          - PolicyName: gladly-${self:custom.stage}-lambda-execution-role
             PolicyDocument:
               Version: '2012-10-17'
               Statement:
