@@ -9,7 +9,6 @@
 # https://github.com/serverless/serverless/issues/4473
 service:
   name: lambda-edge
-  awsKmsKeyArn: ${self:custom.awsKmsKeyArn} 
 frameworkVersion: ">=1.12.0 <2.0.0"
 
 provider:
@@ -17,29 +16,69 @@ provider:
   runtime: nodejs6.10
   region: us-east-1
   stage: ${env:SLS_STAGE, self:custom.stageDefault}
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - logs:CreateLogGroup
-        - logs:CreateLogStream
-        - logs:PutLogEvents
-        - logs:DescribeLogStreams
-      Resource: arn:aws:logs:*:*:*
+  role: gladlyLambdaEdgeRole
 
 custom:
   stageDefault: dev
 
-plugins:
-  # Include only the required node modules.
-  # https://github.com/dougmoscrop/serverless-plugin-include-dependencies
-  - serverless-plugin-include-dependencies
-
-# Only include the build and its node modules.
-package:
-  exclude:
-    - ./**
-  include:
-    - build/**
+# We are using a custom role (building on the default Serverless role)
+# so that we can add edgelambda.amazonaws.com as a trust provider.
+# Custom IAM roles:
+# https://serverless.com/framework/docs/providers/aws/guide/iam/
+# AWS permissions for Lambda@Edge:
+# https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-edge-permissions.html
+# Serverless does not yet support Lambda@Edge:
+# https://github.com/serverless/serverless/issues/3944
+resources:
+  Resources:
+    gladlyLambdaEdgeRole:
+      Type: AWS::IAM::Role
+      Properties:
+        Path: /gladly/lambda-edge/
+        # Required if you want to use 'serverless deploy --function' later on.
+        RoleName: GladlyLambdaEdgeRole
+        AssumeRolePolicyDocument:
+          Version: '2017'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+                  - edgelambda.amazonaws.com
+              Action: sts:AssumeRole
+        # Note that these rights are needed if you want your function to be
+        # able to communicate with resources within your VPC.
+        ManagedPolicyArns:
+          - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
+        Policies:
+          - PolicyName: GladlyLambdaEdgeExecutionRole
+            PolicyDocument:
+              Version: '2017'
+              Statement:
+                # Note that these rights are given in the default policy and are
+                # required if you want logs out of your lambdas.
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogGroup
+                    - logs:CreateLogStream
+                    - logs:PutLogEvents
+                    - logs:DescribeLogStreams
+                  Resource:
+                    - 'Fn::Join':
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
+                -  Effect: "Allow"
+                   Action:
+                     - "s3:PutObject"
+                   Resource:
+                     Fn::Join:
+                       - ""
+                       - - "arn:aws:s3:::"
+                         - "Ref" : "ServerlessDeploymentBucket"
 
 functions:
   # We manually reference the ARN of these Lambda@Edge functions in our
