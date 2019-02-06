@@ -36,7 +36,7 @@ resources:
       Properties:
         Path: /gladly/lambda-edge/
         # Required if you want to use 'serverless deploy --function' later on.
-        RoleName: GladlyLambdaEdgeRole
+        RoleName: gladly-${self:custom.stage}-lambda-edge-role
         AssumeRolePolicyDocument:
           Version: '2012-10-17'
           Statement:
