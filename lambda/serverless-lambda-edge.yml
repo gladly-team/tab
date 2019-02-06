@@ -38,7 +38,7 @@ resources:
         # Required if you want to use 'serverless deploy --function' later on.
         RoleName: GladlyLambdaEdgeRole
         AssumeRolePolicyDocument:
-          Version: 2017
+          Version: '2012-10-17'
           Statement:
             - Effect: Allow
               Principal:
@@ -53,7 +53,7 @@ resources:
         Policies:
           - PolicyName: GladlyLambdaEdgeExecutionRole
             PolicyDocument:
-              Version: 2017
+              Version: '2012-10-17'
               Statement:
                 # Note that these rights are given in the default policy and are
                 # required if you want logs out of your lambdas.
