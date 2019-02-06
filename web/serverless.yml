@@ -12,7 +12,9 @@ custom:
   stageDefault: dev
   stage: ${env:SLS_STAGE, self:custom.stageDefault}
   newTabAppS3Bucket: ${env:DEPLOYMENT_WEB_APP_S3_BUCKET_NAME}
+  newTabAppLambdaEdgeFunctionARN: arn:aws:lambda:us-east-1:${env:AWS_ACCOUNT_ID}:function:lambda-edge-${self:provider.stage}-newtabAppLambdaEdge:1
   searchAppS3Bucket: ${env:DEPLOYMENT_SEARCH_APP_S3_BUCKET_NAME}
+  searchAppLambdaEdgeFunctionARN: arn:aws:lambda:us-east-1:${env:AWS_ACCOUNT_ID}:function:lambda-edge-${self:provider.stage}-searchAppLambdaEdge:1
   graphQLProxyDomain: ${env:DEPLOYMENT_GRAPHQL_DOMAIN}
   graphQLProxyPath: ${env:DEPLOYMENT_GRAPHQL_PATH}
   webAppName: Tab2017
@@ -170,7 +172,19 @@ resources:
                   Forward: none
               Compress: true
               ViewerProtocolPolicy: redirect-to-https
-              # TODO: LambdaFunctionAssociations
+              # When CloudFront calls our origin, this function rewrites all
+              # HTML requests to the root index.html to serve the single-page
+              # app. We don't want to rely on setting S3's error document to the
+              # index.html file, because then S3 will return a 404 to Cloudfront,
+              # which will call the 404 error document; CloudFront only allows
+              # one custom 404 error document, which means this wouldn't work
+              # for two single-page apps on the same CF distribution.
+              LambdaFunctionAssociations:
+                # "Executes on a cache miss, before a request is forwarded to
+                # the origin"
+                # https://aws.amazon.com/blogs/networking-and-content-delivery/lambdaedge-design-best-practices/
+                - EventType: origin-request
+                  LambdaFunctionARN: ${self:custom.newTabAppLambdaEdgeFunctionARN}
             # Search app
             - PathPattern: 'search*'
               # Short caching of non-static files for some speed gains and
@@ -189,6 +203,9 @@ resources:
                   Forward: none
               Compress: true
               ViewerProtocolPolicy: redirect-to-https
+              LambdaFunctionAssociations:
+                - EventType: origin-request
+                  LambdaFunctionARN: ${self:custom.searchAppLambdaEdgeFunctionARN}
             # GraphQL
             - PathPattern: 'graphql*'
               MinTTL: 0
