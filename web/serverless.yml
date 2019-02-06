@@ -12,9 +12,9 @@ custom:
   stageDefault: dev
   stage: ${env:SLS_STAGE, self:custom.stageDefault}
   newTabAppS3Bucket: ${env:DEPLOYMENT_WEB_APP_S3_BUCKET_NAME}
-  newTabAppLambdaEdgeFunctionARN: arn:aws:lambda:us-east-1:${env:AWS_ACCOUNT_ID}:function:lambda-edge-${self:provider.stage}-newtabAppLambdaEdge:4
+  newTabAppLambdaEdgeFunctionARN: arn:aws:lambda:us-east-1:${env:AWS_ACCOUNT_ID}:function:lambda-edge-${self:provider.stage}-newtabAppLambdaEdge:${env:DEPLOYMENT_WEB_APP_LAMBDA_EDGE_FUNCTION_VERSION}
   searchAppS3Bucket: ${env:DEPLOYMENT_SEARCH_APP_S3_BUCKET_NAME}
-  searchAppLambdaEdgeFunctionARN: arn:aws:lambda:us-east-1:${env:AWS_ACCOUNT_ID}:function:lambda-edge-${self:provider.stage}-searchAppLambdaEdge:4
+  searchAppLambdaEdgeFunctionARN: arn:aws:lambda:us-east-1:${env:AWS_ACCOUNT_ID}:function:lambda-edge-${self:provider.stage}-searchAppLambdaEdge:${env:DEPLOYMENT_SEARCH_APP_LAMBDA_EDGE_FUNCTION_VERSION}
   graphQLProxyDomain: ${env:DEPLOYMENT_GRAPHQL_DOMAIN}
   graphQLProxyPath: ${env:DEPLOYMENT_GRAPHQL_PATH}
   webAppName: Tab2017
