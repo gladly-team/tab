@@ -21,6 +21,8 @@ import logger from 'js/utils/logger'
 // (see: https://github.com/facebook/create-react-app/issues/1492),
 // use the built-in multiple entry points (if CRA supports
 // it down the line), or switching to another framework.
+// See this pull request for details:
+// https://github.com/gladly-team/tab/pull/466
 var TheApp
 var appPath
 switch (process.env.REACT_APP_WHICH_APP) {
