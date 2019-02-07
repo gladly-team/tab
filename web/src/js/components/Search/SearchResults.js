@@ -296,12 +296,16 @@ class SearchResults extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      searchProviderJSLoaded: !!window.ypaAds,
       noSearchResults: false,
       unexpectedSearchError: false,
     }
   }
 
   getSearchResults() {
+    // TODO: if it does not exist, don't query. Instead, load the
+    //   script and wait for it to re-query.
+    console.log('getSearchResults: window.ypaAds exists:', !!window.ypaAds)
     if (!window.ypaAds) {
       logger.error(`
         Search provider Javascript not loaded.
@@ -349,6 +353,12 @@ class SearchResults extends React.Component {
         unexpectedSearchError: true,
       })
       logger.error(e)
+    }
+  }
+
+  componentDidMount() {
+    if (this.props.query) {
+      this.getSearchResults()
     }
   }
 

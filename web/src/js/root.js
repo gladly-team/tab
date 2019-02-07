@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Router, Switch } from 'react-router-dom'
+import { Router } from 'react-router-dom'
 import { browserHistory } from 'js/navigation/navigation'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import defaultTheme from 'js/theme/defaultV1'
@@ -24,16 +24,13 @@ import logger from 'js/utils/logger'
 // See this pull request for details:
 // https://github.com/gladly-team/tab/pull/466
 var TheApp
-var appPath
 switch (process.env.REACT_APP_WHICH_APP) {
   case 'newtab': {
     TheApp = require('js/components/App/App').default
-    appPath = '/newtab/'
     break
   }
   case 'search': {
     TheApp = require('js/components/Search/SearchApp').default
-    appPath = '/search/'
     break
   }
   default: {
@@ -81,9 +78,7 @@ class Root extends React.Component {
         <ErrorBoundary>
           <BaseContainer>
             <Router history={browserHistory}>
-              <Switch>
-                <Route path={appPath} component={TheApp} />
-              </Switch>
+              <TheApp />
             </Router>
           </BaseContainer>
         </ErrorBoundary>

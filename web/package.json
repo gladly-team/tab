@@ -73,7 +73,8 @@
     "start:search:react-scripts": "cross-env NODE_PATH=src/ REACT_APP_WHICH_APP=search react-scripts start",
     "build": "echo \"Run either build:newtab or build:search\"",
     "build:newtab": "yarn run relay --watchman false && cross-var \"cross-env NODE_PATH=src/ REACT_APP_WHICH_APP=newtab PUBLIC_URL=$DEPLOYMENT_WEB_APP_PUBLIC_URL react-scripts build\"",
-    "build:search": "yarn run relay --watchman false && cross-var \"cross-env NODE_PATH=src/ REACT_APP_WHICH_APP=search PUBLIC_URL=$DEPLOYMENT_SEARCH_APP_PUBLIC_URL react-scripts build\"",
+    "build:search": "yarn run relay --watchman false && cross-var \"cross-env NODE_PATH=src/ REACT_APP_WHICH_APP=search PUBLIC_URL=$DEPLOYMENT_SEARCH_APP_PUBLIC_URL react-scripts build\" && mv build search && mkdir build && mv search build && react-snap",
+    "serve": "echo \"Serving from build. Note that http-server must be installed globally.\" && http-server build -p 5000",
     "eject": "react-scripts eject",
     "bundle:analyze": "source-map-explorer",
     "bundle:analyze-buddy": "bundle-buddy build/static/js/*.map",
@@ -118,6 +119,17 @@
     "not ie <= 11",
     "not op_mini all"
   ],
+  "reactSnap": {
+    "include": [
+      "/"
+    ],
+    "publicPath": "/search/",
+    "source": "build/search",
+    "viewport": {
+      "width": 1440,
+      "height": 798
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gladly-team/tab.git"
