@@ -6,7 +6,11 @@ import toJson from 'enzyme-to-json'
 import Input from '@material-ui/core/Input'
 import SearchIcon from '@material-ui/icons/Search'
 import { isSearchPageEnabled } from 'js/utils/feature-flags'
-import { goTo, dashboardURL, modifyURLParams } from 'js/navigation/navigation'
+import {
+  externalRedirect,
+  dashboardURL,
+  modifyURLParams,
+} from 'js/navigation/navigation'
 import SearchResults from 'js/components/Search/SearchResults'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
@@ -75,7 +79,7 @@ describe('Search page component', () => {
       .default
     const mockProps = getMockProps()
     shallow(<SearchPageComponent {...mockProps} />).dive()
-    expect(goTo).toHaveBeenCalledWith(dashboardURL)
+    expect(externalRedirect).toHaveBeenCalledWith(dashboardURL)
   })
 
   it('renders DOM elements when the search page feature is enabled', () => {
@@ -93,7 +97,7 @@ describe('Search page component', () => {
       .default
     const mockProps = getMockProps()
     shallow(<SearchPageComponent {...mockProps} />).dive()
-    expect(goTo).not.toHaveBeenCalled()
+    expect(externalRedirect).not.toHaveBeenCalled()
   })
 
   it('shows the search text in the box when loading a previous search', () => {
