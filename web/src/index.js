@@ -23,6 +23,9 @@ try {
       /tab\.gladly\.io\/newtab\/static/,
       /prod-tab2017\.gladly\.io\/newtab\/static/,
       /dev-tab2017\.gladly\.io\/newtab\/static/,
+      /tab\.gladly\.io\/search\/static/,
+      /prod-tab2017\.gladly\.io\/search\/static/,
+      /dev-tab2017\.gladly\.io\/search\/static/,
     ],
   }).install()
 } catch (e) {

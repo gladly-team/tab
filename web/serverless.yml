@@ -11,31 +11,41 @@ provider:
 custom:
   stageDefault: dev
   stage: ${env:SLS_STAGE, self:custom.stageDefault}
-  s3Bucket: ${env:DEPLOYMENT_WEB_APP_S3_BUCKET_NAME}
+  newTabAppS3Bucket: ${env:DEPLOYMENT_WEB_APP_S3_BUCKET_NAME}
+  newTabAppLambdaEdgeFunctionARN: arn:aws:lambda:us-east-1:${env:AWS_ACCOUNT_ID}:function:lambda-edge-${self:provider.stage}-newtabAppLambdaEdge:${env:DEPLOYMENT_WEB_APP_LAMBDA_EDGE_FUNCTION_VERSION}
+  searchAppS3Bucket: ${env:DEPLOYMENT_SEARCH_APP_S3_BUCKET_NAME}
+  searchAppLambdaEdgeFunctionARN: arn:aws:lambda:us-east-1:${env:AWS_ACCOUNT_ID}:function:lambda-edge-${self:provider.stage}-searchAppLambdaEdge:${env:DEPLOYMENT_SEARCH_APP_LAMBDA_EDGE_FUNCTION_VERSION}
   graphQLProxyDomain: ${env:DEPLOYMENT_GRAPHQL_DOMAIN}
   graphQLProxyPath: ${env:DEPLOYMENT_GRAPHQL_PATH}
   webAppName: Tab2017
-  searchAppName: Tab2017
+  searchAppName: SearchForACause
   graphQLAppName: TabGraphQL
   cloudfrontDomainAlias: ${env:DEPLOYMENT_WEB_APP_CLOUDFRONT_DOMAIN_ALIAS}
   SSLCertificateARN: ${env:SSL_CERTIFICATE_ARN}
-  # How long Cloudfront should cache HTML at edges.
-  CloudfrontHTMLCachingSeconds: 60
+  # How long Cloudfront should cache no-cache objects, such
+  # as HTML, at edge locations.
+  CloudfrontNonStaticCachingSeconds: 60
+  # The max time Cloudfront should cache static files.
+  CloudfrontMaxLongLivedCachingSeconds: 63115200 # two years
   websiteOrigin: ${env:DEPLOYMENT_LANDING_PAGE_DOMAIN}
   websiteAppName: TabLandingPage
 
 resources:
   Resources:
-
+    # New tab app S3 bucket
     TabS3Bucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: ${self:custom.s3Bucket}
+        BucketName: ${self:custom.newTabAppS3Bucket}
         AccessControl: PublicRead
         WebsiteConfiguration:
           IndexDocument: index.html
-          ErrorDocument: index.html
-
+          # FYI: We don't want to rely on setting S3's error document to the
+          # index.html file, because then S3 will return a 404 to Cloudfront,
+          # which will call the 404 error document; CloudFront only allows
+          # one custom 404 error document, which means this wouldn't work
+          # for two single-page apps on the same CF distribution.
+          ErrorDocument: newtab/index.html
     TabS3BucketPolicy:
       Type: AWS::S3::BucketPolicy
       Properties:
@@ -48,7 +58,30 @@ resources:
               Principal: "*"
               Action:
                 - s3:GetObject
-              Resource: arn:aws:s3:::${self:custom.s3Bucket}/*
+              Resource: arn:aws:s3:::${self:custom.newTabAppS3Bucket}/*
+
+    # Search app S3 bucket
+    SearchAppS3Bucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.searchAppS3Bucket}
+        AccessControl: PublicRead
+        WebsiteConfiguration:
+          IndexDocument: index.html
+          ErrorDocument: search/index.html
+    SearchAppS3BucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket:
+          Ref: SearchAppS3Bucket
+        PolicyDocument:
+          Statement:
+            - Sid: PublicReadGetObject
+              Effect: Allow
+              Principal: "*"
+              Action:
+                - s3:GetObject
+              Resource: arn:aws:s3:::${self:custom.searchAppS3Bucket}/*
 
     # Serve the app through Cloudfront.
     WebAppCloudFrontDistribution:
@@ -58,9 +91,20 @@ resources:
         DistributionConfig:
           Origins:
             # Web S3 bucket.
-            - DomainName: ${self:custom.s3Bucket}.s3.amazonaws.com
+            - DomainName: ${self:custom.newTabAppS3Bucket}.s3.amazonaws.com
               # An identifier for the origin. This must be unique within the distribution.
               Id: ${self:custom.webAppName}
+              CustomOriginConfig:
+                HTTPPort: 80
+                HTTPSPort: 443
+                # HTTP only is required for S3 buckets that are configured as
+                # website endpoints:
+                # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesOriginProtocolPolicy 
+                OriginProtocolPolicy: http-only
+            # Search for a Cause S3 bucket.
+            - DomainName: ${self:custom.searchAppS3Bucket}.s3.amazonaws.com
+              # An identifier for the origin. This must be unique within the distribution.
+              Id: ${self:custom.searchAppName}
               CustomOriginConfig:
                 HTTPPort: 80
                 HTTPSPort: 443
@@ -84,60 +128,39 @@ resources:
                 HTTPSPort: 443
                 OriginProtocolPolicy: http-only
           Enabled: true
-          Comment: ${self:custom.stage} new tab page and homepage
+          Comment: ${self:custom.stage} new tab app, search app, and homepage
           # No default root object; our website (landing page) app handles it.
           # DefaultRootObject: index.html
           Aliases:
             - ${self:custom.cloudfrontDomainAlias}
-          # Always show our single page app when there is a 404 error.
-          # This is necessary because the S3 origin for most /newtab/* requests
-          # will return a 404, becuase it's a single-page app with only a
-          # single root index.html file in S3.
-          # Note that this means we will never show the homepage's 404 page.
+          # Show the homepage's 404 page if any origin returns 404.
           # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HTTPStatusCodes.html#HTTPStatusCodes-custom-error-pages
           CustomErrorResponses:
             - ErrorCode: 404
               ResponseCode: 200
-              ResponsePagePath: /newtab/index.html
+              ResponsePagePath: /404.html
               # We always return our HTML page for 404 errors, and most
               # pageviews are 404 errors because of the single-page app.
               # This is effectively how long we keep the HTML page in
               # edge caches.
               # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HTTPStatusCodes.html
-              ErrorCachingMinTTL: ${self:custom.CloudfrontHTMLCachingSeconds}
+              ErrorCachingMinTTL: ${self:custom.CloudfrontNonStaticCachingSeconds}
           # How CloudFront determines cache behavior:
           #   https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html#ExpirationDownloadDist
           # CloudFront guide to CacheBehavior:
           #   https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-cachebehavior.html
-          # Note that this is primarily specifying how Cloudfront edges should
-          # cache files. For browser caching, we must still set Cache-Control headers
-          # on the origin server (S3).
+          # We rely on Cache-Control headers set on the origin S3 buckets
+          # to set long-lived CloudFront caching files at edge locations.
+          # We enforce a minimum, short CF cache for objects that aren't
+          # browser-cached.
           CacheBehaviors:
-            # New tab app HTML files. This origin also handles any 404
-            # errors, as configured in CustomErrorResponses.
-            # PathPattern docs:
-            #   https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesPathPattern
-            - PathPattern: 'newtab/*.html'
-              # Short HTML caching for some spage speed gains and
+            # New tab app
+            - PathPattern: 'newtab*'
+              # Short caching of non-static files for some speed gains and
               # reduced request volume to S3 origin.
-              MinTTL: ${self:custom.CloudfrontHTMLCachingSeconds}
-              MaxTTL: ${self:custom.CloudfrontHTMLCachingSeconds}
-              AllowedMethods:
-                - HEAD
-                - GET
-                - OPTIONS
-              TargetOriginId: ${self:custom.webAppName}
-              ForwardedValues:
-                QueryString: false
-                Cookies:
-                  Forward: none
-              # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html
-              Compress: true
-              ViewerProtocolPolicy: redirect-to-https
-            # New tab app (non-HTML) static files
-            - PathPattern: 'newtab/*'
-              MinTTL: 31536000 # one year
-              MaxTTL: 63072000 # two years
+              MinTTL: ${self:custom.CloudfrontNonStaticCachingSeconds}
+              # Allow the origin to set long-lived caching on files.
+              MaxTTL: ${self:custom.CloudfrontMaxLongLivedCachingSeconds}
               AllowedMethods:
                 - HEAD
                 - GET
@@ -149,12 +172,26 @@ resources:
                   Forward: none
               Compress: true
               ViewerProtocolPolicy: redirect-to-https
-            # Search app HTML files.
-            - PathPattern: 'search/*.html'
-              # Short HTML caching for some spage speed gains and
+              # When CloudFront calls our origin, this function rewrites all
+              # HTML requests to the root index.html to serve the single-page
+              # app. We don't want to rely on setting S3's error document to the
+              # index.html file, because then S3 will return a 404 to Cloudfront,
+              # which will call the 404 error document; CloudFront only allows
+              # one custom 404 error document, which means this wouldn't work
+              # for two single-page apps on the same CF distribution.
+              LambdaFunctionAssociations:
+                # "Executes on a cache miss, before a request is forwarded to
+                # the origin"
+                # https://aws.amazon.com/blogs/networking-and-content-delivery/lambdaedge-design-best-practices/
+                - EventType: origin-request
+                  LambdaFunctionARN: ${self:custom.newTabAppLambdaEdgeFunctionARN}
+            # Search app
+            - PathPattern: 'search*'
+              # Short caching of non-static files for some speed gains and
               # reduced request volume to S3 origin.
-              MinTTL: ${self:custom.CloudfrontHTMLCachingSeconds}
-              MaxTTL: ${self:custom.CloudfrontHTMLCachingSeconds}
+              MinTTL: ${self:custom.CloudfrontNonStaticCachingSeconds}
+              # Allow the origin to set long-lived caching on files.
+              MaxTTL: ${self:custom.CloudfrontMaxLongLivedCachingSeconds}
               AllowedMethods:
                 - HEAD
                 - GET
@@ -166,21 +203,9 @@ resources:
                   Forward: none
               Compress: true
               ViewerProtocolPolicy: redirect-to-https
-            # Search app (non-HTML) static files
-            - PathPattern: 'search/*'
-              MinTTL: 31536000 # one year
-              MaxTTL: 63072000 # two years
-              AllowedMethods:
-                - HEAD
-                - GET
-                - OPTIONS
-              TargetOriginId: ${self:custom.searchAppName}
-              ForwardedValues:
-                QueryString: false
-                Cookies:
-                  Forward: none
-              Compress: true
-              ViewerProtocolPolicy: redirect-to-https
+              LambdaFunctionAssociations:
+                - EventType: origin-request
+                  LambdaFunctionARN: ${self:custom.searchAppLambdaEdgeFunctionARN}
             # GraphQL
             - PathPattern: 'graphql*'
               MinTTL: 0
@@ -206,10 +231,11 @@ resources:
               ViewerProtocolPolicy: redirect-to-https
             # Send all remaining traffic to our homepage
             - PathPattern: '*'
-              # Short HTML caching for some spage speed gains and
+              # Short caching of non-static files for some speed gains and
               # reduced request volume to S3 origin.
-              MinTTL: ${self:custom.CloudfrontHTMLCachingSeconds}
-              MaxTTL: ${self:custom.CloudfrontHTMLCachingSeconds}
+              MinTTL: ${self:custom.CloudfrontNonStaticCachingSeconds}
+              # Allow the origin to set long-lived caching on files.
+              MaxTTL: ${self:custom.CloudfrontMaxLongLivedCachingSeconds}
               AllowedMethods:
                 - HEAD
                 - GET
@@ -245,4 +271,4 @@ resources:
   # we need to define the DomainName output for CloudFormation
   Outputs:
     WebAppCloudFrontDistributionOutput:
-      Value: ${self:custom.s3Bucket}.s3.amazonaws.com
+      Value: ${self:custom.newTabAppS3Bucket}.s3.amazonaws.com

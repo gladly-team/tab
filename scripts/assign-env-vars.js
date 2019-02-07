@@ -14,7 +14,6 @@ export const envVars = [
   { name: 'AWS_SECRET_ACCESS_KEY' },
   { name: 'LOG_LEVEL' },
   // Web app
-  { name: 'PUBLIC_URL' }, // Used as base URL for serving static files.
   { name: 'REACT_APP_WEBSITE_DOMAIN' },
   { name: 'REACT_APP_WEBSITE_PROTOCOL' },
   { name: 'REACT_APP_GRAPHQL_ENDPOINT' },
@@ -46,6 +45,12 @@ export const envVars = [
   { name: 'DEPLOYMENT_WEB_APP_CLOUDFRONT_DOMAIN_ALIAS' },
   { name: 'DEPLOYMENT_WEB_APP_S3_BUCKET_NAME' },
   { name: 'DEPLOYMENT_WEB_APP_S3_BUCKET_PATH' },
+  { name: 'DEPLOYMENT_WEB_APP_PUBLIC_URL' }, // Assigned to PUBLIC_URL during build
+  { name: 'DEPLOYMENT_SEARCH_APP_S3_BUCKET_NAME' },
+  { name: 'DEPLOYMENT_SEARCH_APP_S3_BUCKET_PATH' },
+  { name: 'DEPLOYMENT_SEARCH_APP_PUBLIC_URL' }, // Assigned to PUBLIC_URL during build
+  { name: 'DEPLOYMENT_WEB_APP_LAMBDA_EDGE_FUNCTION_VERSION' },
+  { name: 'DEPLOYMENT_SEARCH_APP_LAMBDA_EDGE_FUNCTION_VERSION' },
   { name: 'DEPLOYMENT_MEDIA_S3_BUCKET_NAME' },
   { name: 'DEPLOYMENT_MEDIA_CLOUDFRONT_DOMAIN_ALIAS' },
   { name: 'DEPLOYMENT_LANDING_PAGE_DOMAIN' },

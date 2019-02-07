@@ -1,0 +1,95 @@
+
+# We have a separate Serverless config file because Lambda@Edge
+# functions must be in us-east-1 and Serverless does not support
+# multi-region deployments or Lambda@Edge: 
+# https://github.com/serverless/serverless/issues/4123
+# https://github.com/serverless/serverless/issues/3944
+# Serverless also does not support customizing the yml filename,
+# so we just cp the file before deploying.
+# https://github.com/serverless/serverless/issues/4473
+service:
+  name: lambda-edge
+frameworkVersion: ">=1.12.0 <2.0.0"
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  region: us-east-1
+  stage: ${env:SLS_STAGE, self:custom.stageDefault}
+  role: gladlyLambdaEdgeRole
+
+custom:
+  stageDefault: dev
+  stage: ${env:SLS_STAGE, self:custom.stageDefault}
+
+# We are using a custom role (building on the default Serverless role)
+# so that we can add edgelambda.amazonaws.com as a trust provider.
+# Custom IAM roles:
+# https://serverless.com/framework/docs/providers/aws/guide/iam/
+# AWS permissions for Lambda@Edge:
+# https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-edge-permissions.html
+# Serverless does not yet support Lambda@Edge:
+# https://github.com/serverless/serverless/issues/3944
+resources:
+  Resources:
+    gladlyLambdaEdgeRole:
+      Type: AWS::IAM::Role
+      Properties:
+        Path: /gladly/lambda-edge/
+        # Required if you want to use 'serverless deploy --function' later on.
+        RoleName: gladly-${self:custom.stage}-lambda-edge-role
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+                  - edgelambda.amazonaws.com
+              Action: sts:AssumeRole
+        # Note that these rights are needed if you want your function to be
+        # able to communicate with resources within your VPC.
+        ManagedPolicyArns:
+          - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
+        Policies:
+          - PolicyName: gladly-${self:custom.stage}-lambda-execution-role
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+                # Note that these rights are given in the default policy and are
+                # required if you want logs out of your lambdas.
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogGroup
+                    - logs:CreateLogStream
+                    - logs:PutLogEvents
+                    - logs:DescribeLogStreams
+                  Resource:
+                    - 'Fn::Join':
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
+                -  Effect: "Allow"
+                   Action:
+                     - "s3:PutObject"
+                   Resource:
+                     Fn::Join:
+                       - ""
+                       - - "arn:aws:s3:::"
+                         - "Ref" : "ServerlessDeploymentBucket"
+
+functions:
+  # We manually reference the ARN of these Lambda@Edge functions in our
+  # CloudFront stack. Unfortunately, serverless-plugin-cloudfront-lambda-edge
+  # does not support cross-service references:
+  # https://github.com/silvermine/serverless-plugin-cloudfront-lambda-edge/issues/1
+  # Perhaps Serverless will support this in the future:
+  # https://github.com/serverless/serverless/issues/3944
+  newtabAppLambdaEdge:
+    handler: build/newtab-app-lambda-edge/newtab-app-lambda-edge.handler
+  searchAppLambdaEdge:
+    handler: build/search-app-lambda-edge/search-app-lambda-edge.handler
+    

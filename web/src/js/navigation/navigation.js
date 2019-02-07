@@ -5,6 +5,12 @@ import qs from 'qs'
 export const browserHistory = createBrowserHistory()
 
 export const goTo = (location, paramsObj = {}) => {
+  // TODO: if the first path is not the same, we are on a separate
+  //   SPA (/newtab/ vs. /search/), so we must externalRedirect.
+  //   Let's do that automatically so we can use the same navigation
+  //   everywhere.
+  // TODO: automatically use externalRedirect for absolute URLs to
+  //   a different domain. Then, we can deprecate externalRedirect.
   browserHistory.push({
     pathname: location,
     search: qs.stringify(paramsObj) ? `?${qs.stringify(paramsObj)}` : null,
@@ -12,6 +18,12 @@ export const goTo = (location, paramsObj = {}) => {
 }
 
 export const replaceUrl = (location, paramsObj = {}) => {
+  // TODO: if the first path is not the same, we are on a separate
+  //   SPA (/newtab/ vs. /search/), so we must externalRedirect.
+  //   Let's do that automatically so we can use the same navigation
+  //   everywhere.
+  // TODO: automatically use externalRedirect for absolute URLs to
+  //   a different domain. Then, we can deprecate externalRedirect.
   browserHistory.replace({
     pathname: location,
     search: qs.stringify(paramsObj) ? `?${qs.stringify(paramsObj)}` : null,

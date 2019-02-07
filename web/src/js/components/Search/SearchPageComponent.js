@@ -8,7 +8,11 @@ import SearchIcon from '@material-ui/icons/Search'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import { isSearchPageEnabled } from 'js/utils/feature-flags'
-import { goTo, dashboardURL, modifyURLParams } from 'js/navigation/navigation'
+import {
+  externalRedirect,
+  dashboardURL,
+  modifyURLParams,
+} from 'js/navigation/navigation'
 import LogoWithText from 'js/components/Logo/LogoWithText'
 import { parseUrlSearchString } from 'js/utils/utils'
 import SearchResults from 'js/components/Search/SearchResults'
@@ -60,7 +64,8 @@ class SearchPage extends React.Component {
 
   componentDidMount() {
     if (!this.state.searchFeatureEnabled) {
-      goTo(dashboardURL)
+      // Cannot use pushState now that the apps are separate.
+      externalRedirect(dashboardURL)
     }
   }
 

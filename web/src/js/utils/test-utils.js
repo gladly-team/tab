@@ -1,6 +1,10 @@
 /* eslint-env jest */
 
 import React from 'react'
+import { shape } from 'prop-types'
+import { mount } from 'enzyme'
+
+import { BrowserRouter } from 'react-router-dom'
 
 // Like Enzyme's `find` method, but polling to wait for
 // elements to mount.
@@ -223,4 +227,22 @@ export const runAsyncTimerLoops = async numLoops => {
     await flushAllPromises()
     jest.runAllTimers()
   }
+}
+
+// https://github.com/airbnb/enzyme/issues/1112#issuecomment-383216288
+export const mountWithRouter = node => {
+  // Instantiate router context
+  const router = {
+    history: new BrowserRouter().history,
+    route: {
+      location: {},
+      match: {},
+    },
+  }
+  const createContext = () => ({
+    context: { router },
+    childContextTypes: { router: shape({}) },
+  })
+
+  return mount(node, createContext())
 }

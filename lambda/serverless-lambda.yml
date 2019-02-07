@@ -1,4 +1,12 @@
 
+# We have a separate Serverless config file because Lambda@Edge
+# functions must be in us-east-1 and Serverless does not support
+# multi-region deployments or Lambda@Edge: 
+# https://github.com/serverless/serverless/issues/4123
+# https://github.com/serverless/serverless/issues/3944
+# Serverless also does not support customizing the yml filename,
+# so we just cp the file before deploying.
+# https://github.com/serverless/serverless/issues/4473
 service:
   name: lambda
   awsKmsKeyArn: ${self:custom.awsKmsKeyArn} 
@@ -10,24 +18,6 @@ provider:
   region: us-west-2
   stage: ${env:SLS_STAGE, self:custom.stageDefault}
   iamRoleStatements:
-    ## TODO: more precise permissions when needed
-    # - Effect: "Allow"
-    #   Action:
-    #     - "dynamodb:BatchGetItem"
-    #     - "dynamodb:BatchWriteItem"
-    #     - "dynamodb:DeleteItem"
-    #     - "dynamodb:DescribeReservedCapacity"
-    #     - "dynamodb:DescribeReservedCapacityOfferings"
-    #     - "dynamodb:DescribeTable"
-    #     - "dynamodb:DescribeTimeToLive"
-    #     - "dynamodb:GetItem"
-    #     - "dynamodb:ListTables"
-    #     - "dynamodb:ListTagsOfResource"
-    #     - "dynamodb:PutItem"
-    #     - "dynamodb:Query"
-    #     - "dynamodb:Scan"
-    #     - "dynamodb:UpdateItem"
-    #   Resource: "*"
     - Effect: Allow
       Action:
         - KMS:Decrypt
