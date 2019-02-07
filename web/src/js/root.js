@@ -35,8 +35,9 @@ switch (process.env.REACT_APP_WHICH_APP) {
     break
   }
   default: {
-    TheApp = require('js/components/App/App').default
-    appPath = '/newtab/'
+    throw new Error(
+      `Env var "REACT_APP_WHICH_APP" should be set to "newtab" or "search".`
+    )
   }
 }
 
