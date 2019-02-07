@@ -30,7 +30,7 @@ switch (process.env.REACT_APP_WHICH_APP) {
     break
   }
   case 'search': {
-    TheApp = require('js/components/Search/SearchView').default
+    TheApp = require('js/components/Search/SearchApp').default
     appPath = '/search/'
     break
   }

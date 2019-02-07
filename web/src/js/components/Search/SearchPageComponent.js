@@ -1,6 +1,5 @@
 import React, { Suspense, lazy } from 'react'
 import PropTypes from 'prop-types'
-import { Redirect, Route, Switch } from 'react-router-dom'
 import { withStyles } from '@material-ui/core/styles'
 import Input from '@material-ui/core/Input'
 import IconButton from '@material-ui/core/IconButton'
@@ -91,7 +90,7 @@ class SearchPage extends React.Component {
   }
 
   render() {
-    const { classes, location } = this.props
+    const { classes } = this.props
     const query = this.getSearchQueryDecoded()
     const queryEncoded = query ? encodeURI(query) : ''
     const searchResultsPaddingLeft = 170
@@ -254,11 +253,6 @@ class SearchPage extends React.Component {
             }}
           />
         </Suspense>
-        {/* Redirect all /search/* URLs to /search/ for now. */}
-        <Switch>
-          <Route exact path="/search/" render={() => {}} />
-          <Redirect from="*" to={{ ...location, pathname: '/search/' }} />
-        </Switch>
       </div>
     )
   }
