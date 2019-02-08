@@ -61,7 +61,13 @@ spawnSync('mv', ['build/build-temp', `build/${buildSubdirectory}`])
 // For the search app, un react-snap to prerender HTML.
 if (appName === 'search') {
   console.log(`Running react-snap to prerender HTML...`)
-  spawnSync('react-snap')
+  const reactSnapResult = spawnSync('react-snap')
+  if (reactSnapResult.stdout) {
+    console.log(reactSnapResult.stdout.toString())
+  }
+  if (reactSnapResult.stderr) {
+    console.log(reactSnapResult.stderr.toString())
+  }
 }
 
 console.log(`Finished building "${appName}".`)
