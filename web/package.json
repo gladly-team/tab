@@ -124,6 +124,7 @@
       "/"
     ],
     "publicPath": "/search/",
+    "skipThirdPartyRequests": true,
     "source": "build/search",
     "viewport": {
       "width": 1440,
