@@ -16,6 +16,7 @@ import {
 import LogoWithText from 'js/components/Logo/LogoWithText'
 import { parseUrlSearchString } from 'js/utils/utils'
 import SearchResults from 'js/components/Search/SearchResults'
+import { isReactSnapClient } from 'js/utils/search-utils'
 
 const Footer = lazy(() => import('js/components/General/Footer'))
 
@@ -59,6 +60,7 @@ class SearchPage extends React.Component {
     this.state = {
       searchFeatureEnabled: isSearchPageEnabled(),
       searchText: '',
+      showPlaceholderText: false,
     }
   }
 
@@ -67,6 +69,9 @@ class SearchPage extends React.Component {
       // Cannot use pushState now that the apps are separate.
       externalRedirect(dashboardURL)
     }
+    this.setState({
+      showPlaceholderText: !isReactSnapClient(),
+    })
   }
 
   getSearchQueryDecoded() {
@@ -145,7 +150,13 @@ class SearchPage extends React.Component {
                     this.search()
                   }
                 }}
-                placeholder="Search to raise money for charity..."
+                placeholder={
+                  // Don't immediately render the placeholder text because
+                  // we may rapidly replace it with the query on first render.
+                  this.state.showPlaceholderText
+                    ? 'Search to raise money for charity...'
+                    : ''
+                }
                 disableUnderline
                 fullWidth
                 classes={{
