@@ -58,6 +58,7 @@ class SearchPage extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      query: '',
       searchFeatureEnabled: isSearchPageEnabled(),
       searchText: '',
       showPlaceholderText: false,
@@ -69,19 +70,23 @@ class SearchPage extends React.Component {
       // Cannot use pushState now that the apps are separate.
       externalRedirect(dashboardURL)
     }
+    const { location } = this.props
+
+    // Wait until after mount to update prerendered state.
+    const query = parseUrlSearchString(location.search).q
     this.setState({
       showPlaceholderText: !isReactSnapClient(),
+      query: query,
+      searchText: query,
     })
-  }
-
-  getSearchQueryDecoded() {
-    const { location } = this.props
-    return parseUrlSearchString(location.search).q
   }
 
   search() {
     const newQuery = this.state.searchText
     if (newQuery) {
+      this.setState({
+        query: newQuery,
+      })
       modifyURLParams({
         q: newQuery,
       })
@@ -96,7 +101,7 @@ class SearchPage extends React.Component {
 
   render() {
     const { classes } = this.props
-    const query = this.getSearchQueryDecoded()
+    const { query, searchText } = this.state
     const queryEncoded = query ? encodeURI(query) : ''
     const searchResultsPaddingLeft = 170
     if (!this.state.searchFeatureEnabled) {
@@ -143,7 +148,7 @@ class SearchPage extends React.Component {
               <Input
                 id="search-input"
                 type={'text'}
-                defaultValue={query}
+                value={searchText}
                 onChange={this.onSearchTextChange.bind(this)}
                 onKeyPress={e => {
                   if (e.key === 'Enter') {
