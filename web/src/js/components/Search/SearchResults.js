@@ -426,7 +426,7 @@ class SearchResults extends React.Component {
 }
 
 SearchResults.propTypes = {
-  query: PropTypes.string,
+  query: PropTypes.string.isRequired,
   classes: PropTypes.object.isRequired,
   style: PropTypes.object,
 }

@@ -58,6 +58,7 @@ class SearchPage extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      query: '',
       searchFeatureEnabled: isSearchPageEnabled(),
       searchText: '',
       showPlaceholderText: false,
@@ -72,9 +73,14 @@ class SearchPage extends React.Component {
     const { location } = this.props
 
     // Wait until after mount to update prerendered state.
+    const query = parseUrlSearchString(location.search).q || ''
     this.setState({
+      // We always derive the query value from the "q" parameter
+      // value. We keep it in state so that we update the
+      // prerendered components after mount.
+      query: query,
       showPlaceholderText: !isReactSnapClient(),
-      searchText: parseUrlSearchString(location.search).q || '',
+      searchText: query,
     })
   }
 
@@ -84,6 +90,7 @@ class SearchPage extends React.Component {
     const prevQuery = parseUrlSearchString(prevProps.location.search).q
     if (currentQuery !== prevQuery) {
       this.setState({
+        query: currentQuery,
         searchText: currentQuery,
       })
     }
@@ -105,11 +112,8 @@ class SearchPage extends React.Component {
   }
 
   render() {
-    const { classes, location } = this.props
-    const { searchText } = this.state
-
-    // We always derive the query value from the "q" parameter value.
-    const query = parseUrlSearchString(location.search).q
+    const { classes } = this.props
+    const { query, searchText } = this.state
     const queryEncoded = query ? encodeURI(query) : ''
     const searchResultsPaddingLeft = 170
     if (!this.state.searchFeatureEnabled) {
