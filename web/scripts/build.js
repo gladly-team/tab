@@ -12,15 +12,18 @@ require('dotenv-extended').load({
 process.env.NODE_PATH = 'src/'
 
 const argv = require('minimist')(process.argv.slice(2))
-var appName = argv.app
+const appName = argv.app
+var buildSubdirectory
 switch (argv.app) {
   case 'newtab':
     process.env.REACT_APP_WHICH_APP = 'newtab'
     process.env.PUBLIC_URL = process.env.DEPLOYMENT_WEB_APP_PUBLIC_URL
+    buildSubdirectory = 'newtab'
     break
   case 'search':
     process.env.REACT_APP_WHICH_APP = 'search'
     process.env.PUBLIC_URL = process.env.DEPLOYMENT_SEARCH_APP_PUBLIC_URL
+    buildSubdirectory = 'search'
     break
   default:
     throw new Error(
@@ -48,17 +51,18 @@ if (sterr) {
   console.log(sterr)
 }
 
-// For the search app, move built code into a "search"
-// subdirectory so we can run react-snap with a publicPath
-// of /search/.
-if (appName === 'search') {
-  spawnSync('mv', ['build', 'search'])
-  spawnSync('mkdir', ['build'])
-  spawnSync('mv', ['search', 'build'])
+// Move built code into a subdirectory so that local servers
+// can use the expected public path.
+spawnSync('mv', ['build', 'build-temp'])
+spawnSync('mkdir', ['build'])
+spawnSync('mv', ['build-temp', 'build'])
+spawnSync('mv', ['build/build-temp', `build/${buildSubdirectory}`])
 
-  // Run react-snap to prerender HTML.
+// For the search app, un react-snap to prerender HTML.
+if (appName === 'search') {
   console.log(`Running react-snap to prerender HTML...`)
   spawnSync('react-snap')
 }
 
-console.log(`Finished building "${appName}"`)
+console.log(`Finished building "${appName}".`)
+console.log('You can serve the app locally by running `yarn run serve`.')

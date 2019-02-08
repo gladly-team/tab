@@ -9,6 +9,8 @@ require('dotenv-extended').load({
 
 const argv = require('minimist')(process.argv.slice(2))
 var s3Destination
+
+// TODO: set the subdirectory of the build
 switch (argv.app) {
   case 'newtab':
     s3Destination = `s3://${
