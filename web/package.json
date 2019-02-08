@@ -123,7 +123,7 @@
     "include": [
       "/"
     ],
-    "publicPath": "/search/",
+    "publicPath": "https://dev-tab2017.gladly.io/search/",
     "skipThirdPartyRequests": true,
     "source": "build/search",
     "viewport": {
