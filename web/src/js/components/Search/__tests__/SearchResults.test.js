@@ -5,9 +5,11 @@ import { shallow } from 'enzyme'
 import { Helmet } from 'react-helmet'
 import Typography from '@material-ui/core/Typography'
 import logger from 'js/utils/logger'
+import fetchSearchResults from 'js/components/Search/fetchSearchResults'
 
 jest.mock('react-helmet')
 jest.mock('js/utils/logger')
+jest.mock('js/components/Search/fetchSearchResults')
 
 const getMockProps = () => ({
   query: 'tacos',
@@ -36,7 +38,7 @@ describe('SearchResults component', () => {
   //   const SearchResults = require('js/components/Search/SearchResults').default
   //   const mockProps = getMockProps()
   //   shallow(<SearchResults {...mockProps} />).dive()
-  //   expect(window.ypaAds.insertMultiAd).not.toHaveBeenCalled()
+  //   expect(fetchSearchResults).not.toHaveBeenCalled()
   // })
 
   it('applies style to the root element', () => {
@@ -107,12 +109,12 @@ describe('SearchResults component', () => {
   //   )
 
   //   // Should not yet have fetched search results.
-  //   expect(window.ypaAds.insertMultiAd).not.toHaveBeenCalled()
+  //   expect(fetchSearchResults).not.toHaveBeenCalled()
 
   //   // Mock the script's onload.
   //   const scriptOnloadHandler = mockScriptTag.addEventListener.mock.calls[0][1]
   //   scriptOnloadHandler()
-  //   expect(window.ypaAds.insertMultiAd).toHaveBeenCalledTimes(1)
+  //   expect(fetchSearchResults).toHaveBeenCalledTimes(1)
   // })
 
   it('fetches search results when the search query prop changes', () => {
@@ -120,18 +122,16 @@ describe('SearchResults component', () => {
     const mockProps = getMockProps()
     mockProps.query = 'foo'
     const wrapper = shallow(<SearchResults {...mockProps} />).dive()
-    window.ypaAds.insertMultiAd.mockClear()
+    fetchSearchResults.mockClear()
     wrapper.setProps({
       query: 'best coffee in alaska',
     })
-    const fetchedQuery =
-      window.ypaAds.insertMultiAd.mock.calls[0][0].ypaPubParams.query
+    const fetchedQuery = fetchSearchResults.mock.calls[0][0]
     expect(fetchedQuery).toBe('best coffee in alaska')
     wrapper.setProps({
       query: 'pizza',
     })
-    const newFetchedQuery =
-      window.ypaAds.insertMultiAd.mock.calls[1][0].ypaPubParams.query
+    const newFetchedQuery = fetchSearchResults.mock.calls[1][0]
     expect(newFetchedQuery).toBe('pizza')
   })
 
@@ -141,7 +141,7 @@ describe('SearchResults component', () => {
     mockProps.query = ''
     const wrapper = shallow(<SearchResults {...mockProps} />).dive()
     wrapper.instance().getSearchResults()
-    expect(window.ypaAds.insertMultiAd).not.toHaveBeenCalled()
+    expect(fetchSearchResults).not.toHaveBeenCalled()
   })
 
   it('shows "no results" when the search does not yield results', () => {
@@ -153,8 +153,7 @@ describe('SearchResults component', () => {
     wrapper.setProps({
       query: query,
     })
-    const onNoAdCallback =
-      window.ypaAds.insertMultiAd.mock.calls[0][0].ypaAdSlotInfo[1].ypaOnNoAd
+    const onNoAdCallback = fetchSearchResults.mock.calls[0][1]
 
     // Mock no ad results.
     onNoAdCallback({
@@ -184,8 +183,7 @@ describe('SearchResults component', () => {
     wrapper.setProps({
       query: query,
     })
-    const onNoAdCallback =
-      window.ypaAds.insertMultiAd.mock.calls[0][0].ypaAdSlotInfo[1].ypaOnNoAd
+    const onNoAdCallback = fetchSearchResults.mock.calls[0][1]
 
     // Mock no ad results.
     onNoAdCallback({
@@ -204,8 +202,7 @@ describe('SearchResults component', () => {
     wrapper.setProps({
       query: query,
     })
-    const onNoAdCallback =
-      window.ypaAds.insertMultiAd.mock.calls[0][0].ypaAdSlotInfo[1].ypaOnNoAd
+    const onNoAdCallback = fetchSearchResults.mock.calls[0][1]
 
     // Mock no ad results.
     onNoAdCallback({
@@ -233,8 +230,7 @@ describe('SearchResults component', () => {
     wrapper.setProps({
       query: query,
     })
-    const onNoAdCallback =
-      window.ypaAds.insertMultiAd.mock.calls[0][0].ypaAdSlotInfo[1].ypaOnNoAd
+    const onNoAdCallback = fetchSearchResults.mock.calls[0][1]
 
     // Mock no ad results.
     onNoAdCallback({
@@ -263,7 +259,7 @@ describe('SearchResults component', () => {
     const query = 'apple pie'
 
     // Mock some error and then search.
-    window.ypaAds.insertMultiAd.mockImplementationOnce(() => {
+    fetchSearchResults.mockImplementationOnce(() => {
       throw new Error('Oops.')
     })
     wrapper.setProps({
