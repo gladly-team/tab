@@ -74,7 +74,7 @@ class SearchPage extends React.Component {
     // Wait until after mount to update prerendered state.
     this.setState({
       showPlaceholderText: !isReactSnapClient(),
-      searchText: parseUrlSearchString(location.search).q,
+      searchText: parseUrlSearchString(location.search).q || '',
     })
   }
 

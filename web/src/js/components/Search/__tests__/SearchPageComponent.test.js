@@ -107,7 +107,7 @@ describe('Search page component', () => {
     const mockProps = getMockProps()
     mockProps.location.search = '?q=blahblah'
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
-    expect(wrapper.find(Input).prop('defaultValue')).toBe('blahblah')
+    expect(wrapper.find(Input).prop('value')).toBe('blahblah')
   })
 
   it('clicking the search button updates the "q" URL parameter', () => {
