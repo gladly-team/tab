@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import logger from 'js/utils/logger'
 import fetchSearchResults from 'js/components/Search/fetchSearchResults'
+import YPAConfiguration from 'js/components/Search/YPAConfiguration'
 
 const styles = theme => ({
   searchAdsContainer: {
@@ -86,11 +87,13 @@ class SearchResults extends React.Component {
     }
   }
 
-  componentDidMount() {
-    if (this.props.query) {
-      this.getSearchResults()
-    }
-  }
+  // Commenting out because the inline script should call
+  // for search results on page load.
+  // componentDidMount() {
+  //   if (this.props.query) {
+  //     this.getSearchResults()
+  //   }
+  // }
 
   componentDidUpdate(prevProps) {
     if (this.props.query && this.props.query !== prevProps.query) {
@@ -100,6 +103,7 @@ class SearchResults extends React.Component {
 
   render() {
     const { query, classes, style } = this.props
+    // TODO: set the "no results" callback on the Helmet script.
     return (
       <div
         data-test-id="search-results-container"
@@ -114,26 +118,16 @@ class SearchResults extends React.Component {
           style
         )}
       >
-        <Helmet
-          onChangeClientState={(newState, addedTags) => {
-            // Fetch search results after the external JS has loaded.
-            // https://github.com/nfl/react-helmet/issues/146#issuecomment-271552211
-            // This solution isn't great for page speed when we're not
-            // server-rendering this page.
-            const self = this
-            const { scriptTags } = addedTags
-            if (scriptTags && scriptTags.length) {
-              scriptTags[0].addEventListener('load', () => {
-                self.getSearchResults()
-              })
-            }
-          }}
-        >
-          <script src="https://s.yimg.com/uv/dm/scripts/syndication.js" />
+        <Helmet>
           <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
           />
+          <script>
+            {`
+            window.ypaAds.insertMultiAd(${JSON.stringify(YPAConfiguration)})
+          `}
+          </script>
         </Helmet>
         <div>
           {this.state.noSearchResults ? (
