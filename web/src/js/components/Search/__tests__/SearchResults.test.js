@@ -58,27 +58,6 @@ describe('SearchResults component', () => {
     })
   })
 
-  it('adds the search JS script to the head of the document', () => {
-    const SearchResults = require('js/components/Search/SearchResults').default
-    const mockProps = getMockProps()
-    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
-    const script = wrapper.find(Helmet).find('script')
-    expect(script.prop('src')).toBe(
-      'https://s.yimg.com/uv/dm/scripts/syndication.js'
-    )
-  })
-
-  it('adds the search JS script to the head of the document even when there is no query', () => {
-    const SearchResults = require('js/components/Search/SearchResults').default
-    const mockProps = getMockProps()
-    delete mockProps.query
-    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
-    const script = wrapper.find(Helmet).find('script')
-    expect(script.prop('src')).toBe(
-      'https://s.yimg.com/uv/dm/scripts/syndication.js'
-    )
-  })
-
   // TODO: this will only happen if YPA is not defined
   // it('adds an onload listener to fetch search results', () => {
   //   const SearchResults = require('js/components/Search/SearchResults').default
