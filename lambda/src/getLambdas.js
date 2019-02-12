@@ -7,6 +7,7 @@ import YAML from 'yamljs'
 /* eslint-disable-next-line import/no-extraneous-dependencies */
 import { has } from 'lodash'
 
+// FIXME
 const getServerlessConfig = () =>
   YAML.load(path.join(__dirname, '..', 'serverless.yml'))
 

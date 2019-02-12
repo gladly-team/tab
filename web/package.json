@@ -24,6 +24,7 @@
     "patch-package": "6.0.0-11",
     "prettier": "1.15.3",
     "react-scripts": "^2.1.3",
+    "react-snap": "^1.23.0",
     "relay-compiler": "^2.0.0",
     "relay-runtime": "^2.0.0",
     "selenium-webdriver": "^3.4.0",
@@ -71,8 +72,9 @@
     "start:search": "yarn run relay && nodemon --watch data/schema.graphql --exec yarn run start:search:react-scripts & yarn run relay:watch",
     "start:search:react-scripts": "cross-env NODE_PATH=src/ REACT_APP_WHICH_APP=search react-scripts start",
     "build": "echo \"Run either build:newtab or build:search\"",
-    "build:newtab": "yarn run relay --watchman false && cross-var \"cross-env NODE_PATH=src/ REACT_APP_WHICH_APP=newtab PUBLIC_URL=$DEPLOYMENT_WEB_APP_PUBLIC_URL react-scripts build\"",
-    "build:search": "yarn run relay --watchman false && cross-var \"cross-env NODE_PATH=src/ REACT_APP_WHICH_APP=search PUBLIC_URL=$DEPLOYMENT_SEARCH_APP_PUBLIC_URL react-scripts build\"",
+    "build:newtab": "yarn run relay --watchman false && node scripts/build.js --app newtab",
+    "build:search": "yarn run relay --watchman false && node scripts/build.js --app search",
+    "serve": "echo \"Serving from build. Note that http-server must be installed globally.\" && http-server build -p 5000",
     "eject": "react-scripts eject",
     "bundle:analyze": "source-map-explorer",
     "bundle:analyze-buddy": "bundle-buddy build/static/js/*.map",
@@ -117,6 +119,18 @@
     "not ie <= 11",
     "not op_mini all"
   ],
+  "reactSnap": {
+    "include": [
+      "/"
+    ],
+    "publicPath": "/search/",
+    "skipThirdPartyRequests": true,
+    "source": "build/search",
+    "viewport": {
+      "width": 1440,
+      "height": 798
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gladly-team/tab.git"

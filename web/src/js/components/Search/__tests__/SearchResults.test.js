@@ -2,12 +2,20 @@
 
 import React from 'react'
 import { shallow } from 'enzyme'
-import { Helmet } from 'react-helmet'
 import Typography from '@material-ui/core/Typography'
 import logger from 'js/utils/logger'
+import fetchSearchResults from 'js/components/Search/fetchSearchResults'
+import {
+  addReactRootElementToDOM,
+  getDefaultSearchGlobal,
+  impersonateReactSnapClient,
+  setUserAgentToTypicalTestUserAgent,
+} from 'js/utils/test-utils'
+import { modifyURLParams } from 'js/navigation/navigation'
 
 jest.mock('react-helmet')
 jest.mock('js/utils/logger')
+jest.mock('js/components/Search/fetchSearchResults')
 
 const getMockProps = () => ({
   query: 'tacos',
@@ -18,6 +26,17 @@ beforeAll(() => {
   window.ypaAds = {
     insertMultiAd: jest.fn(),
   }
+})
+
+beforeEach(() => {
+  window.searchforacause = getDefaultSearchGlobal()
+
+  // To reset "ReactSnap" user agent.
+  setUserAgentToTypicalTestUserAgent()
+
+  // Reset the DOM between tests.
+  document.getElementsByTagName('html')[0].innerHTML = ''
+  addReactRootElementToDOM()
 })
 
 afterEach(() => {
@@ -31,11 +50,48 @@ describe('SearchResults component', () => {
     shallow(<SearchResults {...mockProps} />).dive()
   })
 
-  it('does not fetch search results on mount (because we need to wait until the search JS is loaded)', () => {
+  it('contains the expected element for search ad results', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
-    shallow(<SearchResults {...mockProps} />).dive()
-    expect(window.ypaAds.insertMultiAd).not.toHaveBeenCalled()
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+
+    // Important: don't change this div ID without updating the YPA
+    // configuration
+    const searchAdDivs = wrapper.find('[id="search-ads"]')
+    expect(searchAdDivs.length).toEqual(1)
+    const searchAdDiv = searchAdDivs.first()
+
+    // Note: we need these props for YPA to work correctly.
+    // Using dangerouslySetInnerHTML and suppressHydrationWarning
+    // prevents rerendering this element during hydration:
+    // https://github.com/reactjs/rfcs/pull/46#issuecomment-385182716
+    // Related: https://github.com/facebook/react/issues/6622
+    expect(searchAdDiv.prop('suppressHydrationWarning')).toBe(true)
+    expect(searchAdDiv.prop('dangerouslySetInnerHTML')).toEqual({
+      __html: '',
+    })
+  })
+
+  it('contains the expected element for search (algo) results', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+
+    // Important: don't change this div ID without updating the YPA
+    // configuration
+    const searchAdDivs = wrapper.find('[id="search-results"]')
+    expect(searchAdDivs.length).toEqual(1)
+    const searchAdDiv = searchAdDivs.first()
+
+    // Note: we need these props for YPA to work correctly.
+    // Using dangerouslySetInnerHTML and suppressHydrationWarning
+    // prevents rerendering this element during hydration:
+    // https://github.com/reactjs/rfcs/pull/46#issuecomment-385182716
+    // Related: https://github.com/facebook/react/issues/6622
+    expect(searchAdDiv.prop('suppressHydrationWarning')).toBe(true)
+    expect(searchAdDiv.prop('dangerouslySetInnerHTML')).toEqual({
+      __html: '',
+    })
   })
 
   it('applies style to the root element', () => {
@@ -55,90 +111,79 @@ describe('SearchResults component', () => {
     })
   })
 
-  it('adds the search JS script to the head of the document', () => {
+  it('does not fetch search results the first time the search query prop changes when results were already fetched on page load', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
+    mockProps.query = ''
+    window.searchforacause.search.fetchedOnPageLoad = true
     const wrapper = shallow(<SearchResults {...mockProps} />).dive()
-    const script = wrapper.find(Helmet).find('script')
-    expect(script.prop('src')).toBe(
-      'https://s.yimg.com/uv/dm/scripts/syndication.js'
-    )
-  })
-
-  it('adds the search JS script to the head of the document even when there is no query', () => {
-    const SearchResults = require('js/components/Search/SearchResults').default
-    const mockProps = getMockProps()
-    delete mockProps.query
-    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
-    const script = wrapper.find(Helmet).find('script')
-    expect(script.prop('src')).toBe(
-      'https://s.yimg.com/uv/dm/scripts/syndication.js'
-    )
-  })
-
-  it('adds an onload listener to fetch search results', () => {
-    const SearchResults = require('js/components/Search/SearchResults').default
-    const mockProps = getMockProps()
-    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
-
-    // Mock that Helmet has added a script to the head.
-    const helmet = wrapper.find(Helmet)
-    const mockScriptTag = {
-      addEventListener: jest.fn(),
-    }
-    helmet.prop('onChangeClientState')(
-      {
-        baseTag: {},
-        defer: [],
-        encode: [],
-        htmlAttributes: [],
-        linkTags: [],
-        metaTags: [],
-        noscriptTags: [],
-        scriptTags: [],
-        styleTags: [],
-        // ... other values
-      },
-      {
-        scriptTags: [mockScriptTag],
-      }
-    )
-
-    // Should not yet have fetched search results.
-    expect(window.ypaAds.insertMultiAd).not.toHaveBeenCalled()
-
-    // Mock the script's onload.
-    const scriptOnloadHandler = mockScriptTag.addEventListener.mock.calls[0][1]
-    scriptOnloadHandler()
-    expect(window.ypaAds.insertMultiAd).toHaveBeenCalledTimes(1)
+    fetchSearchResults.mockClear()
+    wrapper.setProps({
+      query: 'cake',
+    })
+    expect(fetchSearchResults).not.toHaveBeenCalled()
+    wrapper.setProps({
+      query: 'pie',
+    })
+    expect(fetchSearchResults).toHaveBeenCalledTimes(1)
   })
 
   it('fetches search results when the search query prop changes', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
     mockProps.query = 'foo'
+    window.searchforacause.search.fetchedOnPageLoad = false
     const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    fetchSearchResults.mockClear()
     wrapper.setProps({
       query: 'best coffee in alaska',
     })
-    const fetchedQuery =
-      window.ypaAds.insertMultiAd.mock.calls[0][0].ypaPubParams.query
+    const fetchedQuery = fetchSearchResults.mock.calls[0][0]
     expect(fetchedQuery).toBe('best coffee in alaska')
     wrapper.setProps({
       query: 'pizza',
     })
-    const newFetchedQuery =
-      window.ypaAds.insertMultiAd.mock.calls[1][0].ypaPubParams.query
+    const newFetchedQuery = fetchSearchResults.mock.calls[1][0]
     expect(newFetchedQuery).toBe('pizza')
+  })
+
+  it('does not fetch search results when the search query prop changes to an empty string', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'pizza'
+    window.searchforacause.search.fetchedOnPageLoad = false
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    fetchSearchResults.mockClear()
+    wrapper.setProps({
+      query: '',
+    })
+    expect(fetchSearchResults).not.toHaveBeenCalled()
+  })
+
+  it('fetches search results on mount when the search query exists and results were not fetched on page load', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'cake'
+    window.searchforacause.search.fetchedOnPageLoad = false
+    shallow(<SearchResults {...mockProps} />).dive()
+    expect(fetchSearchResults).toHaveBeenCalledTimes(1)
+  })
+
+  it('does not fetch search results on mount when the search query exists but results were already fetched on page load', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = ''
+    window.searchforacause.search.fetchedOnPageLoad = true
+    shallow(<SearchResults {...mockProps} />).dive()
+    expect(fetchSearchResults).not.toHaveBeenCalled()
   })
 
   it('does not fetch search results when the search query is an empty string on page load', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
     mockProps.query = ''
-    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
-    wrapper.instance().getSearchResults()
-    expect(window.ypaAds.insertMultiAd).not.toHaveBeenCalled()
+    shallow(<SearchResults {...mockProps} />).dive()
+    expect(fetchSearchResults).not.toHaveBeenCalled()
   })
 
   it('shows "no results" when the search does not yield results', () => {
@@ -150,8 +195,7 @@ describe('SearchResults component', () => {
     wrapper.setProps({
       query: query,
     })
-    const onNoAdCallback =
-      window.ypaAds.insertMultiAd.mock.calls[0][0].ypaAdSlotInfo[1].ypaOnNoAd
+    const onNoAdCallback = fetchSearchResults.mock.calls[0][1]
 
     // Mock no ad results.
     onNoAdCallback({
@@ -181,8 +225,7 @@ describe('SearchResults component', () => {
     wrapper.setProps({
       query: query,
     })
-    const onNoAdCallback =
-      window.ypaAds.insertMultiAd.mock.calls[0][0].ypaAdSlotInfo[1].ypaOnNoAd
+    const onNoAdCallback = fetchSearchResults.mock.calls[0][1]
 
     // Mock no ad results.
     onNoAdCallback({
@@ -201,8 +244,7 @@ describe('SearchResults component', () => {
     wrapper.setProps({
       query: query,
     })
-    const onNoAdCallback =
-      window.ypaAds.insertMultiAd.mock.calls[0][0].ypaAdSlotInfo[1].ypaOnNoAd
+    const onNoAdCallback = fetchSearchResults.mock.calls[0][1]
 
     // Mock no ad results.
     onNoAdCallback({
@@ -230,8 +272,7 @@ describe('SearchResults component', () => {
     wrapper.setProps({
       query: query,
     })
-    const onNoAdCallback =
-      window.ypaAds.insertMultiAd.mock.calls[0][0].ypaAdSlotInfo[1].ypaOnNoAd
+    const onNoAdCallback = fetchSearchResults.mock.calls[0][1]
 
     // Mock no ad results.
     onNoAdCallback({
@@ -260,7 +301,7 @@ describe('SearchResults component', () => {
     const query = 'apple pie'
 
     // Mock some error and then search.
-    window.ypaAds.insertMultiAd.mockImplementationOnce(() => {
+    fetchSearchResults.mockImplementationOnce(() => {
       throw new Error('Oops.')
     })
     wrapper.setProps({
@@ -275,5 +316,178 @@ describe('SearchResults component', () => {
         ).length
     ).toBe(1)
     expect(logger.error).toHaveBeenCalledWith(new Error('Oops.'))
+  })
+
+  it('[inline-script] adds an inline script to the document on mount when prerendering with react-snap', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = ''
+    impersonateReactSnapClient()
+    expect(
+      document.querySelector('script[data-test-id="search-inline-script"]')
+    ).toBeNull()
+    shallow(<SearchResults {...mockProps} />).dive()
+    expect(
+      document.querySelector('script[data-test-id="search-inline-script"]')
+    ).not.toBeNull()
+  })
+
+  it('[inline-script] does not add an inline script to the document when the render is not from react-snap', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = ''
+    setUserAgentToTypicalTestUserAgent() // not ReactSnap user agent
+    shallow(<SearchResults {...mockProps} />).dive()
+    expect(
+      document.querySelector('script[data-test-id="search-inline-script"]')
+    ).toBeNull()
+  })
+
+  it('[inline-script] calls window.ypaAds.insertMultiAd via inline script when a "q" location parameter exists', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = '' // the inline script does not rely on this prop
+    modifyURLParams({ q: 'foo' })
+    impersonateReactSnapClient()
+    shallow(<SearchResults {...mockProps} />).dive()
+    expect(window.ypaAds.insertMultiAd).toHaveBeenCalledTimes(1)
+
+    // It should use our YPA configuration.
+    expect(window.ypaAds.insertMultiAd.mock.calls[0][0]).toMatchObject({
+      ypaAdTagOptions: {
+        adultFilter: false,
+      },
+      ypaAdConfig: '00000129a',
+    })
+  })
+
+  it('[inline-script] does not call window.ypaAds.insertMultiAd via inline script when a "q" location parameter does not exist', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = '' // the inline script does not rely on this prop
+    modifyURLParams({ q: null })
+    impersonateReactSnapClient()
+    shallow(<SearchResults {...mockProps} />).dive()
+    expect(window.ypaAds.insertMultiAd).not.toHaveBeenCalled()
+  })
+
+  it('[inline-script] sets "fetchedOnPageLoad" to true via inline script when a "q" location parameter exists', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = '' // the inline script does not rely on this prop
+    window.searchforacause.search.fetchedOnPageLoad = false
+    modifyURLParams({ q: 'foo' })
+    impersonateReactSnapClient()
+    shallow(<SearchResults {...mockProps} />).dive()
+    expect(window.searchforacause.search.fetchedOnPageLoad).toBe(true)
+  })
+
+  it('[inline-script] does not set "fetchedOnPageLoad" to true via inline script when a "q" location parameter does not exist', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = '' // the inline script does not rely on this prop
+    window.searchforacause.search.fetchedOnPageLoad = false
+    modifyURLParams({ q: null })
+    impersonateReactSnapClient()
+    shallow(<SearchResults {...mockProps} />).dive()
+    expect(window.searchforacause.search.fetchedOnPageLoad).toBe(false)
+  })
+
+  it('[inline-script] shows a "no results" message when fetching search results via inline script returns no results', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'nonexistent stuff' // the inline script does not rely on this prop
+    modifyURLParams({ q: 'foo' })
+    impersonateReactSnapClient()
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    expect(window.ypaAds.insertMultiAd).toHaveBeenCalledTimes(1)
+    const errCallback =
+      window.ypaAds.insertMultiAd.mock.calls[0][0].ypaAdSlotInfo[1].ypaOnNoAd
+    errCallback({ NO_COVERAGE: true })
+    expect(
+      wrapper
+        .find(Typography)
+        .filterWhere(
+          n => n.render().text() === `No results found for nonexistent stuff`
+        ).length
+    ).toBe(1)
+  })
+
+  it('[inline-script] shows an error message when fetching search results via inline script fails', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = '' // the inline script does not rely on this prop
+    modifyURLParams({ q: 'foo' })
+    impersonateReactSnapClient()
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    expect(window.ypaAds.insertMultiAd).toHaveBeenCalledTimes(1)
+    const errCallback =
+      window.ypaAds.insertMultiAd.mock.calls[0][0].ypaAdSlotInfo[1].ypaOnNoAd
+    errCallback({ SOMETHING_WE_DID_NOT_SEE_COMING: true })
+    expect(
+      wrapper
+        .find(Typography)
+        .filterWhere(
+          n => n.render().text() === 'Unable to search at this time.'
+        ).length
+    ).toBe(1)
+  })
+
+  it('[inline-script] catches thrown errors from window.ypaAds.insertMultiAd via inline script', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = '' // the inline script does not rely on this prop
+    modifyURLParams({ q: 'foo' })
+    impersonateReactSnapClient()
+
+    //  Mock an error.
+    window.ypaAds.insertMultiAd.mockImplementationOnce(() => {
+      throw new Error('Search prob!')
+    })
+
+    // Suppress expected console log.
+    jest.spyOn(console, 'error').mockReturnValueOnce()
+
+    shallow(<SearchResults {...mockProps} />).dive()
+    expect(console.error).toHaveBeenCalledWith(Error('Search prob!'))
+  })
+
+  it('[inline-script] catches thrown errors if we fail to add the inline script during prerendering', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    impersonateReactSnapClient()
+
+    //  Mock an error.
+    jest.spyOn(document, 'createElement').mockImplementationOnce(() => {
+      throw new Error('Rendering prob!')
+    })
+
+    // Suppress expected console log.
+    jest.spyOn(console, 'error').mockReturnValueOnce()
+
+    shallow(<SearchResults {...mockProps} />).dive()
+    expect(console.error).toHaveBeenCalledWith(
+      'Could not prerender the inline script to fetch search results.'
+    )
+  })
+
+  it('registers a listener to the "searchresulterror" event on mount', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    const evtListener = jest.spyOn(window, 'addEventListener')
+    shallow(<SearchResults {...mockProps} />).dive()
+    expect(evtListener).toHaveBeenCalledTimes(1)
+    expect(evtListener.mock.calls[0][0]).toEqual('searchresulterror')
+  })
+
+  it('registers a listener to the "searchresulterror" event before unmount', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    const evtListenerRemove = jest.spyOn(window, 'removeEventListener')
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    expect(evtListenerRemove).not.toHaveBeenCalled()
+    wrapper.unmount()
+    expect(evtListenerRemove).toHaveBeenCalledTimes(1)
+    expect(evtListenerRemove.mock.calls[0][0]).toEqual('searchresulterror')
   })
 })

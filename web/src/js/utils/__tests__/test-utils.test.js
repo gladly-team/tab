@@ -178,4 +178,37 @@ describe('web test-utils', () => {
     await flushAllPromises()
     expect(anotherTestFunc).not.toHaveBeenCalled()
   })
+
+  test('impersonateReactSnapClient sets the user agent to ReactSnap', () => {
+    const { impersonateReactSnapClient } = require('js/utils/test-utils')
+    Object.defineProperty(window.navigator, 'userAgent', {
+      value: 'Something',
+      writable: true,
+    })
+    expect(window.navigator.userAgent).toEqual('Something')
+    impersonateReactSnapClient()
+    expect(window.navigator.userAgent).toEqual('ReactSnap')
+  })
+
+  test('setUserAgentToTypicalTestUserAgent sets the user agent to Mozilla etc.', () => {
+    const {
+      setUserAgentToTypicalTestUserAgent,
+    } = require('js/utils/test-utils')
+    Object.defineProperty(window.navigator, 'userAgent', {
+      value: 'Something',
+      writable: true,
+    })
+    expect(window.navigator.userAgent).toEqual('Something')
+    setUserAgentToTypicalTestUserAgent()
+    expect(window.navigator.userAgent).toEqual(
+      'Mozilla/5.0 (darwin) AppleWebKit/537.36 (KHTML, like Gecko) jsdom/11.12.0'
+    )
+  })
+
+  test('addReactRootElementToDOM adds a div with ID "root" to the DOM', () => {
+    const { addReactRootElementToDOM } = require('js/utils/test-utils')
+    expect(document.getElementById('root')).toBeNull()
+    addReactRootElementToDOM()
+    expect(document.getElementById('root')).not.toBeNull()
+  })
 })

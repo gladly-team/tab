@@ -16,6 +16,7 @@ import {
 import LogoWithText from 'js/components/Logo/LogoWithText'
 import { parseUrlSearchString } from 'js/utils/utils'
 import SearchResults from 'js/components/Search/SearchResults'
+import { isReactSnapClient } from 'js/utils/search-utils'
 
 const Footer = lazy(() => import('js/components/General/Footer'))
 
@@ -57,8 +58,10 @@ class SearchPage extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      query: '',
       searchFeatureEnabled: isSearchPageEnabled(),
       searchText: '',
+      showPlaceholderText: false,
     }
   }
 
@@ -67,11 +70,30 @@ class SearchPage extends React.Component {
       // Cannot use pushState now that the apps are separate.
       externalRedirect(dashboardURL)
     }
+    const { location } = this.props
+
+    // Wait until after mount to update prerendered state.
+    const query = parseUrlSearchString(location.search).q || ''
+    this.setState({
+      // We always derive the query value from the "q" parameter
+      // value. We keep it in state so that we update the
+      // prerendered components after mount.
+      query: query,
+      showPlaceholderText: !isReactSnapClient(),
+      searchText: query,
+    })
   }
 
-  getSearchQueryDecoded() {
+  componentDidUpdate(prevProps) {
     const { location } = this.props
-    return parseUrlSearchString(location.search).q
+    const currentQuery = parseUrlSearchString(location.search).q
+    const prevQuery = parseUrlSearchString(prevProps.location.search).q
+    if (currentQuery !== prevQuery) {
+      this.setState({
+        query: currentQuery,
+        searchText: currentQuery,
+      })
+    }
   }
 
   search() {
@@ -91,7 +113,7 @@ class SearchPage extends React.Component {
 
   render() {
     const { classes } = this.props
-    const query = this.getSearchQueryDecoded()
+    const { query, searchText } = this.state
     const queryEncoded = query ? encodeURI(query) : ''
     const searchResultsPaddingLeft = 170
     if (!this.state.searchFeatureEnabled) {
@@ -138,14 +160,20 @@ class SearchPage extends React.Component {
               <Input
                 id="search-input"
                 type={'text'}
-                defaultValue={query}
+                value={searchText}
                 onChange={this.onSearchTextChange.bind(this)}
                 onKeyPress={e => {
                   if (e.key === 'Enter') {
                     this.search()
                   }
                 }}
-                placeholder="Search to raise money for charity..."
+                placeholder={
+                  // Don't immediately render the placeholder text because
+                  // we may rapidly replace it with the query on first render.
+                  this.state.showPlaceholderText
+                    ? 'Search to raise money for charity...'
+                    : ''
+                }
                 disableUnderline
                 fullWidth
                 classes={{

@@ -4,7 +4,7 @@ import { QueryRenderer } from 'react-relay'
 import graphql from 'babel-plugin-relay/macro'
 import environment from 'js/relay-env'
 import SearchPageContainer from 'js/components/Search/SearchPageContainer'
-import withUserId from 'js/components/General/withUserId'
+// import withUserId from 'js/components/General/withUserId'
 import logger from 'js/utils/logger'
 
 // Make a different query for anonymous users than for
@@ -83,6 +83,9 @@ SearchView.propTypes = {
 
 SearchView.defaultProps = {}
 
-export default withUserId({
-  renderIfNoUser: true,
-})(SearchView)
+// TODO: move withUserId and QueryRenderer to children
+//   so we don't slow down initial page load.
+// export default withUserId({
+//   renderIfNoUser: true,
+// })(SearchView)
+export default SearchView

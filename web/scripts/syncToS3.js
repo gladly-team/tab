@@ -9,16 +9,20 @@ require('dotenv-extended').load({
 
 const argv = require('minimist')(process.argv.slice(2))
 var s3Destination
+var buildSubdirectory
+
 switch (argv.app) {
   case 'newtab':
     s3Destination = `s3://${
       process.env.DEPLOYMENT_WEB_APP_S3_BUCKET_NAME
     }${process.env.DEPLOYMENT_WEB_APP_S3_BUCKET_PATH || ''}/`
+    buildSubdirectory = 'newtab'
     break
   case 'search':
     s3Destination = `s3://${
       process.env.DEPLOYMENT_SEARCH_APP_S3_BUCKET_NAME
     }${process.env.TEST_DEPLOYMENT_SEARCH_APP_S3_BUCKET_PATH || ''}/`
+    buildSubdirectory = 'search'
     break
   default:
     throw new Error(
@@ -32,7 +36,7 @@ function syncNonStaticFiles() {
   const args = [
     's3',
     'sync',
-    'build/',
+    `build/${buildSubdirectory}/`,
     s3Destination,
     '--include',
     '*',
@@ -63,7 +67,7 @@ function syncStaticFiles() {
   const args = [
     's3',
     'sync',
-    'build/',
+    `build/${buildSubdirectory}/`,
     s3Destination,
     '--include',
     'static/*',

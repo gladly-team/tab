@@ -1,6 +1,6 @@
 import Raven from 'raven-js'
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { hydrate, render } from 'react-dom'
 import Root from 'js/root'
 import { getUsername } from 'js/authentication/user'
 import * as serviceWorker from 'js/serviceWorker'
@@ -47,7 +47,12 @@ try {
 
 const initApp = () => {
   require('./index.css')
-  ReactDOM.render(<Root />, document.getElementById('root'))
+  const rootElement = document.getElementById('root')
+  if (rootElement.hasChildNodes()) {
+    hydrate(<Root />, rootElement)
+  } else {
+    render(<Root />, rootElement)
+  }
 }
 
 try {

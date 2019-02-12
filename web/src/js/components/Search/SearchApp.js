@@ -10,8 +10,8 @@ class SearchApp extends React.Component {
       <div>
         {/* Redirect all /search/* URLs to /search/ for now. */}
         <Switch>
-          <Route exact path="/search/" component={SearchView} />
-          <Redirect from="*" to={{ ...location, pathname: '/search/' }} />
+          <Route exact path="/search" component={SearchView} />
+          <Redirect from="*" to={{ ...location, pathname: '/search' }} />
         </Switch>
       </div>
     )

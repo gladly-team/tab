@@ -1,19 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { cloneDeep } from 'lodash/lang'
 import { Helmet } from 'react-helmet'
 import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import logger from 'js/utils/logger'
+import fetchSearchResults from 'js/components/Search/fetchSearchResults'
+import YPAConfiguration from 'js/components/Search/YPAConfiguration'
+import { isReactSnapClient } from 'js/utils/search-utils'
 
-// Important: to modify some styles within the iframe, we
-// pass an external stylesheet URL to the YPA API below.
-// This file lives in web/public/. It does not get a hash
-// appended to its filename, so we should rename it when
-// it's modified. We should only add CSS to this external
-// stylesheet when absolutely necessary.
-const searchExternalCSSLink =
-  'https://tab.gladly.io/search/search-2018.29.11.16.35.css'
+// This component expects the YPA search JS to already have
+// executed and for the `searchforacause` global variable
+// to be defined.
 
 const styles = theme => ({
   searchAdsContainer: {
@@ -31,273 +28,119 @@ const styles = theme => ({
   },
 })
 
-const backgroundColor = '#fff'
-const fontFamily = "'Roboto', arial, sans-serif"
-const grey = '#aaa'
-const resultStyle = {
-  adSpacing: 26,
-  lineSpacing: 18,
-  title: {
-    fontSize: 18,
-    color: '#1a0dab',
-    underline: false,
-    bold: false,
-    onHover: {
-      color: '#1a0dab',
-      underline: true,
-    },
-  },
-  description: {
-    fontSize: 13,
-    color: '#505050',
-    underline: false,
-    bold: false,
-    onHover: {
-      color: '#505050',
-      underline: false,
-    },
-  },
-  URL: {
-    fontSize: 13,
-    color: '#007526',
-    underline: false,
-    bold: false,
-    onHover: {
-      color: '#007526',
-      underline: false,
-    },
-  },
-}
-
-const templateStyles = {
-  AdUnit: {
-    backgroundColor: backgroundColor,
-    borderColor: backgroundColor,
-    lineSpacing: resultStyle.lineSpacing, // valid values: 8-25
-    adSpacing: resultStyle.adSpacing, // valid values: 5-30
-    font: fontFamily,
-    urlAboveDescription: true,
-    // How many lines to show the ad on.
-    // adLayout: 3,
-    // Additional CSS to apply within the YPA iframe.
-    cssLink: searchExternalCSSLink,
-  },
-  // The "Ads" label.
-  AdUnitLabel: {
-    position: 'Top Left',
-    fontsize: 11, // valid values: 6-24
-    color: grey,
-  },
-  Title: {
-    fontsize: resultStyle.title.fontSize,
-    color: resultStyle.title.color,
-    underline: resultStyle.title.underline,
-    bold: resultStyle.title.bold,
-    onHover: {
-      color: resultStyle.title.onHover.color,
-      underline: resultStyle.title.onHover.underline,
-    },
-  },
-  Description: {
-    fontsize: resultStyle.description.fontSize,
-    color: resultStyle.description.color,
-    underline: resultStyle.description.underline,
-    bold: resultStyle.description.bold,
-    onHover: {
-      color: resultStyle.description.onHover.color,
-      underline: resultStyle.description.onHover.underline,
-    },
-  },
-  URL: {
-    fontsize: resultStyle.URL.fontSize,
-    color: resultStyle.URL.color,
-    underline: resultStyle.URL.underline,
-    bold: resultStyle.URL.bold,
-    onHover: {
-      color: resultStyle.URL.onHover.color,
-      underline: resultStyle.URL.onHover.underline,
-    },
-  },
-  LocalAds: {
-    fontsize: resultStyle.description.fontSize,
-    color: grey,
-    underline: resultStyle.description.underline,
-    bold: resultStyle.description.bold,
-    onHover: {
-      color: resultStyle.description.onHover.color,
-      underline: resultStyle.description.onHover.underline,
-    },
-  },
-  MerchantRating: {
-    fontsize: resultStyle.description.fontSize,
-    color: grey,
-    underline: resultStyle.description.underline,
-    bold: resultStyle.description.bold,
-    onHover: {
-      color: resultStyle.description.onHover.color,
-      underline: resultStyle.description.onHover.underline,
-    },
-  },
-  SiteLink: {
-    fontsize: resultStyle.description.fontSize,
-    color: resultStyle.title.color, // same as title
-    underline: resultStyle.description.underline,
-    bold: resultStyle.description.bold,
-    onHover: {
-      // Same as title
-      color: resultStyle.title.onHover.color,
-      underline: resultStyle.title.onHover.underline,
-    },
-  },
-  EnhancedSiteLink: {
-    fontsize: resultStyle.description.fontSize,
-    color: resultStyle.title.color, // same as title
-    underline: resultStyle.description.underline,
-    bold: resultStyle.description.bold,
-    onHover: {
-      // Same as title
-      color: resultStyle.title.onHover.color,
-      underline: resultStyle.title.onHover.underline,
-    },
-  },
-  SmartAnnotations: {
-    fontsize: resultStyle.description.fontSize,
-    color: grey,
-    underline: resultStyle.description.underline,
-    bold: resultStyle.description.bold,
-    onHover: {
-      color: resultStyle.description.onHover.color,
-      underline: resultStyle.description.onHover.underline,
-    },
-  },
-  ImageInAds: {
-    align: 'right',
-    size: '50x50',
-  },
-  OfficialSiteBadge: {
-    fontsize: resultStyle.description.fontSize,
-    color: backgroundColor,
-    backgroundColor: grey,
-  },
-  CallExtension: {
-    fontsize: resultStyle.description.fontSize,
-    color: resultStyle.title.color, // same as title
-    underline: resultStyle.description.underline,
-    bold: resultStyle.description.bold,
-    onHover: {
-      // Same as title
-      color: resultStyle.title.onHover.color,
-      underline: resultStyle.title.onHover.underline,
-    },
-  },
-}
-
-/**
- * Call the YPA API to display search results in their iframe.
- * @param {String} query - The search query, unencoded.
- * @param {Function} onNoResults - A callback function that will
- *   be invoked if there are zero results for the search.
- * @return {undefined}
- */
-const fetchSearchResults = (query = null, onNoResults = () => {}) => {
-  const adOptions = {
-    // The ad start rank and the ad end rank in the list of
-    // search results.
-    AdRange: '1-4',
-    // Whether to show favicons near ads.
-    Favicon: false,
-    // Whether to show local ads.
-    LocalAds: true,
-    // Whether to use the "long ad title".
-    Lat: true,
-    // Whether to show "site links" in ads.
-    SiteLink: true,
-    // Whether to show merchant star ratings on ads.
-    MerchantRating: true,
-    // Whether to show images in ads.
-    ImageInAds: false,
-    // Whether to show "enhanced site links" in ads.
-    EnhancedSiteLink: true,
-    // Whether to show "smart annotations" in ads.
-    SmartAnnotations: false,
-    // Whether to show an "official site badge" next to ads
-    // with a verified site.
-    OfficialSiteBadge: true,
-    // Whether to show an option to call the businesses next
-    // to their ads.
-    CallExtension: true,
-    // Not in YPA documentation. Wheteher to show an
-    // advertiser-selected review quote.
-    ReviewExtension: false,
-    // Not in YPA documentation. Wheteher to show a number
-    // of keywords that look mostly unhelpful.
-    CalloutExtension: false,
-  }
-
-  // Fetch search results.
-  // Note: YPA mutates objects we pass to it, so make sure to
-  // clone everything we pass.
-  window.ypaAds.insertMultiAd({
-    ypaPubParams: {
-      query: query,
-    },
-    ypaAdTagOptions: {
-      adultFilter: false, // false means do not allow adult ads
-    },
-    ypaAdConfig: '00000129a',
-    ypaAdTypeTag: '',
-    // For now, we'll just show non-personalized ads in the EU:
-    // "When gdpr=0 or missing, Oath will perform an IP check on the user
-    // to determine jurisdiction. If euconsent is empty, or if the IAB string
-    // is missing, Oath will return non-personalized search ads and search web
-    // results."
-    // gdpr: false
-    // euconsent: '',
-    ypaAdSlotInfo: [
-      {
-        ypaAdSlotId: 'GY_Top_Center',
-        ypaAdDivId: 'search-ads',
-        ypaAdWidth: '600',
-        ypaAdHeight: '891',
-        // Callback function for when there are no ads.
-        // ypaOnNoAd: foo,
-        ypaSlotOptions: {
-          AdOptions: {
-            Mobile: Object.assign({}, cloneDeep(adOptions), {
-              AdRange: '1-2',
-            }),
-            DeskTop: Object.assign({}, cloneDeep(adOptions)),
-          },
-          TemplateOptions: {
-            Mobile: cloneDeep(templateStyles),
-            DeskTop: cloneDeep(templateStyles),
-          },
-        },
-      },
-      {
-        ypaAdSlotId: 'GY_Algo',
-        ypaAdDivId: 'search-results',
-        ypaAdWidth: '600',
-        ypaAdHeight: '827',
-        // Callback function for when there are no search results.
-        ypaOnNoAd: onNoResults,
-        ypaSlotOptions: {
-          TemplateOptions: {
-            Mobile: cloneDeep(templateStyles),
-            DeskTop: cloneDeep(templateStyles),
-          },
-        },
-      },
-    ],
-  })
-}
-
 class SearchResults extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       noSearchResults: false,
       unexpectedSearchError: false,
+    }
+  }
+
+  componentDidMount() {
+    // Fetch a query if one exists on mount.
+    if (this.props.query) {
+      this.getSearchResults()
+    }
+
+    // When prerendering the page, add an inline script to fetch
+    // search results even before parsing our app JS.
+    // This adds any errors to a window variable and emits an
+    // event so we can update state here.
+    if (isReactSnapClient()) {
+      try {
+        // If there is a query on page load, fetch it.
+        const js = `
+          try {
+            if (new URLSearchParams(window.location.search).get('q')) {
+              var config = ${JSON.stringify(YPAConfiguration)}
+              config.ypaAdSlotInfo[1].ypaOnNoAd = function(err) {
+                window.searchforacause.search.YPAErrorOnPageLoad = err
+                var evt = new CustomEvent('searchresulterror', { detail: err })
+                window.dispatchEvent(evt)
+              }
+              window.ypaAds.insertMultiAd(config)
+              window.searchforacause.search.fetchedOnPageLoad = true
+            }
+          } catch (e) {
+            console.error(e)
+          }
+        `
+        const s = document.createElement('script')
+        s.type = 'text/javascript'
+        s.dataset['testId'] = 'search-inline-script'
+        s.innerHTML = js
+
+        // Render the script immediately after our app's DOM root.
+        // Important: the target divs for search results must exist
+        // in the DOM *before* we call YPA's JS. Otherwise, YPA will
+        // not fetch search results.
+        const reactRoot = document.getElementById('root')
+        reactRoot.parentNode.insertBefore(s, reactRoot.nextSibling)
+      } catch (e) {
+        console.error(
+          'Could not prerender the inline script to fetch search results.'
+        )
+      }
+    }
+
+    // Listen for any error/empty search results from fetching
+    // search results via the inline script.
+    window.addEventListener(
+      'searchresulterror',
+      this.handleSearchResultsEvent.bind(this),
+      false
+    )
+
+    // Update state with any error/empty search results that
+    // already occurred from fetching search results via the
+    // inline script.
+    const searchErr = window.searchforacause.search.YPAErrorOnPageLoad
+    if (searchErr) {
+      this.handleSearchResultsError(searchErr)
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    // Fetch search results if a query exists and the query
+    // has changed.
+    if (this.props.query && this.props.query !== prevProps.query) {
+      this.getSearchResults()
+    }
+  }
+
+  componentWillUnmount() {
+    // Remove the listener for any error/empty search results
+    // from fetching search results via the inline script.
+    window.removeEventListener(
+      'searchresulterror',
+      this.handleSearchResultsEvent.bind(this),
+      false
+    )
+  }
+
+  handleSearchResultsEvent(event) {
+    this.handleSearchResultsError(event.detail)
+  }
+
+  handleSearchResultsError(err) {
+    if (err.URL_UNREGISTERED) {
+      this.setState({
+        unexpectedSearchError: true,
+      })
+      logger.error(
+        new Error('Domain is not registered with our search partner.')
+      )
+    } else if (err.NO_COVERAGE) {
+      // No results for this search.
+      this.setState({
+        noSearchResults: true,
+      })
+    } else {
+      this.setState({
+        unexpectedSearchError: true,
+      })
+      logger.error(new Error('Unexpected search error:', err))
     }
   }
 
@@ -316,45 +159,27 @@ class SearchResults extends React.Component {
       return
     }
 
+    // If this is the first query, we may have already fetched
+    // results via inline script. If so, don't re-fetch them.
+    const alreadyFetchedQuery = window.searchforacause.search.fetchedOnPageLoad
+    if (alreadyFetchedQuery) {
+      window.searchforacause.search.fetchedOnPageLoad = false
+      return
+    }
+
     // Reset state of search results.
     this.setState({
       noSearchResults: false,
       unexpectedSearchError: false,
     })
 
-    const self = this
     try {
-      fetchSearchResults(query, err => {
-        if (err.NO_COVERAGE) {
-          // No results for this search.
-          self.setState({
-            noSearchResults: true,
-          })
-        } else if (err.URL_UNREGISTERED) {
-          self.setState({
-            unexpectedSearchError: true,
-          })
-          logger.error(
-            new Error('Domain is not registered with our search partner.')
-          )
-        } else {
-          self.setState({
-            unexpectedSearchError: true,
-          })
-          logger.error(new Error('Unexpected search error:', err))
-        }
-      })
+      fetchSearchResults(query, this.handleSearchResultsError.bind(this))
     } catch (e) {
       this.setState({
         unexpectedSearchError: true,
       })
       logger.error(e)
-    }
-  }
-
-  componentDidUpdate(prevProps) {
-    if (this.props.query && this.props.query !== prevProps.query) {
-      this.getSearchResults()
     }
   }
 
@@ -374,22 +199,7 @@ class SearchResults extends React.Component {
           style
         )}
       >
-        <Helmet
-          onChangeClientState={(newState, addedTags) => {
-            // Fetch search results after the external JS has loaded.
-            // https://github.com/nfl/react-helmet/issues/146#issuecomment-271552211
-            // This solution isn't great for page speed when we're not
-            // server-rendering this page.
-            const self = this
-            const { scriptTags } = addedTags
-            if (scriptTags && scriptTags.length) {
-              scriptTags[0].addEventListener('load', () => {
-                self.getSearchResults()
-              })
-            }
-          }}
-        >
-          <script src="https://s.yimg.com/uv/dm/scripts/syndication.js" />
+        <Helmet>
           <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
@@ -407,8 +217,28 @@ class SearchResults extends React.Component {
               Unable to search at this time.
             </Typography>
           ) : null}
-          <div id="search-ads" className={classes.searchAdsContainer} />
-          <div id="search-results" className={classes.searchResultsContainer} />
+          <div
+            id="search-ads"
+            className={classes.searchAdsContainer}
+            // Important: if these containers are unmounted or mutated,
+            // YPA's JS will cancel the call to fetch search results.
+            // Using dangerouslySetInnerHTML and suppressHydrationWarning
+            // prevents rerendering this element during hydration:
+            // https://github.com/reactjs/rfcs/pull/46#issuecomment-385182716
+            // Related: https://github.com/facebook/react/issues/6622
+            dangerouslySetInnerHTML={{
+              __html: '',
+            }}
+            suppressHydrationWarning
+          />
+          <div
+            id="search-results"
+            className={classes.searchResultsContainer}
+            dangerouslySetInnerHTML={{
+              __html: '',
+            }}
+            suppressHydrationWarning
+          />
         </div>
       </div>
     )
