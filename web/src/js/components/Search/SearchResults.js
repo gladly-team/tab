@@ -37,6 +37,113 @@ class SearchResults extends React.Component {
     }
   }
 
+  componentDidMount() {
+    // Fetch a query if one exists on mount.
+    if (this.props.query) {
+      this.getSearchResults()
+    }
+
+    // When prerendering the page, add an inline script to fetch
+    // search results even before parsing our app JS.
+    // This adds any errors to a window variable and emits an
+    // event so we can update state here.
+    if (isReactSnapClient()) {
+      try {
+        // If there is a query on page load, fetch it.
+        const js = `
+          try {
+            if (new URLSearchParams(window.location.search).get('q')) {
+              var config = ${JSON.stringify(YPAConfiguration)}
+              config.ypaAdSlotInfo[1].ypaOnNoAd = function(err) {
+                window.searchforacause.search.YPAErrorOnPageLoad = err
+                var evt = new CustomEvent('searchresulterror', { detail: err })
+                window.dispatchEvent(evt)
+              }
+              window.ypaAds.insertMultiAd(config)
+              window.searchforacause.search.fetchedOnPageLoad = true
+            }
+          } catch (e) {
+            console.error(e)
+          }
+        `
+        const s = document.createElement('script')
+        s.type = 'text/javascript'
+        s.dataset['testId'] = 'search-inline-script'
+        s.innerHTML = js
+
+        // Render the script immediately after our app's DOM root.
+        // Important: the target divs for search results must exist
+        // in the DOM *before* we call YPA's JS. Otherwise, YPA will
+        // not fetch search results.
+        const reactRoot = document.getElementById('root')
+        reactRoot.parentNode.insertBefore(s, reactRoot.nextSibling)
+      } catch (e) {
+        console.error(
+          'Could not prerender the inline script to fetch search results.'
+        )
+      }
+    }
+
+    // Listen for any error/empty search results from fetching
+    // search results via the inline script.
+    window.addEventListener(
+      'searchresulterror',
+      this.handleSearchResultsEvent.bind(this),
+      false
+    )
+
+    // Update state with any error/empty search results that
+    // already occurred from fetching search results via the
+    // inline script.
+    const searchErr = window.searchforacause.search.YPAErrorOnPageLoad
+    if (searchErr) {
+      this.handleSearchResultsError(searchErr)
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    // Fetch search results if a query exists and the query
+    // has changed.
+    if (this.props.query && this.props.query !== prevProps.query) {
+      this.getSearchResults()
+    }
+  }
+
+  componentWillUnmount() {
+    // Remove the listener for any error/empty search results
+    // from fetching search results via the inline script.
+    window.removeEventListener(
+      'searchresulterror',
+      this.handleSearchResultsEvent.bind(this),
+      false
+    )
+  }
+
+  handleSearchResultsEvent(event) {
+    this.handleSearchResultsError(event.detail)
+  }
+
+  handleSearchResultsError(err) {
+    if (err.URL_UNREGISTERED) {
+      this.setState({
+        unexpectedSearchError: true,
+      })
+      logger.error(
+        new Error('Domain is not registered with our search partner.')
+      )
+    } else if (err.NO_COVERAGE) {
+      // No results for this search.
+      this.setState({
+        noSearchResults: true,
+      })
+    } else {
+      this.setState({
+        unexpectedSearchError: true,
+      })
+      logger.error(new Error('Unexpected search error:', err))
+    }
+  }
+
   getSearchResults() {
     if (!window.ypaAds) {
       logger.error(`
@@ -66,83 +173,13 @@ class SearchResults extends React.Component {
       unexpectedSearchError: false,
     })
 
-    const self = this
     try {
-      fetchSearchResults(query, err => {
-        if (err.NO_COVERAGE) {
-          // No results for this search.
-          self.setState({
-            noSearchResults: true,
-          })
-        } else if (err.URL_UNREGISTERED) {
-          self.setState({
-            unexpectedSearchError: true,
-          })
-          logger.error(
-            new Error('Domain is not registered with our search partner.')
-          )
-        } else {
-          self.setState({
-            unexpectedSearchError: true,
-          })
-          logger.error(new Error('Unexpected search error:', err))
-        }
-      })
+      fetchSearchResults(query, this.handleSearchResultsError.bind(this))
     } catch (e) {
       this.setState({
         unexpectedSearchError: true,
       })
       logger.error(e)
-    }
-  }
-
-  componentDidMount() {
-    // Fetch a query if one exists on mount.
-    if (this.props.query) {
-      this.getSearchResults()
-    }
-
-    // When prerendering the page, add an inline script to fetch
-    // search results even before parsing our app JS.
-    // TODO: have the inline script handle "no results" and
-    //   search errors.
-    if (isReactSnapClient()) {
-      try {
-        // If there is a query on page load, fetch it.
-        const js = `
-          try {
-            if (new URLSearchParams(window.location.search).get('q')) {
-              window.ypaAds.insertMultiAd(${JSON.stringify(YPAConfiguration)})
-              window.searchforacause.search.fetchedOnPageLoad = true
-            }
-          } catch (e) {
-            console.error(e)
-          }
-        `
-        const s = document.createElement('script')
-        s.type = 'text/javascript'
-        s.dataset['testId'] = 'search-inline-script'
-        s.innerHTML = js
-
-        // Render the script immediately after our app's DOM root.
-        // Important: the target divs for search results must exist
-        // in the DOM *before* we call YPA's JS. Otherwise, YPA will
-        // not fetch search results.
-        const reactRoot = document.getElementById('root')
-        reactRoot.parentNode.insertBefore(s, reactRoot.nextSibling)
-      } catch (e) {
-        console.error(
-          'Could not prerender the inline script to fetch search results.'
-        )
-      }
-    }
-  }
-
-  componentDidUpdate(prevProps) {
-    // Fetch search results if a query exists and the query
-    // has changed.
-    if (this.props.query && this.props.query !== prevProps.query) {
-      this.getSearchResults()
     }
   }
 

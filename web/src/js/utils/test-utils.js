@@ -188,8 +188,7 @@ export const getDefaultTabGlobal = (properties = {}) => {
 export const getDefaultSearchGlobal = (properties = {}) => ({
   search: {
     fetchedOnPageLoad: false,
-    errorOnPageLoad: false,
-    noResultsOnPageLoad: false,
+    YPAErrorOnPageLoad: null,
   },
 })
 
