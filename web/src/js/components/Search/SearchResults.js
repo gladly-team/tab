@@ -96,6 +96,8 @@ class SearchResults extends React.Component {
     if (isReactSnapClient()) {
       try {
         // TODO: add tests
+        // FIXME: don't set fetchedOnPageLoad=true if there is no query.
+        //   It causes the subsequent query to fail.
         const js = `
           try {
             window.ypaAds.insertMultiAd(${JSON.stringify(YPAConfiguration)})
