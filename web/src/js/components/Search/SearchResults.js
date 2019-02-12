@@ -8,6 +8,10 @@ import fetchSearchResults from 'js/components/Search/fetchSearchResults'
 import YPAConfiguration from 'js/components/Search/YPAConfiguration'
 import { isReactSnapClient } from 'js/utils/search-utils'
 
+// This component expects the YPA search JS to already have
+// executed and for the `searchforacause` global variable
+// to be defined.
+
 const styles = theme => ({
   searchAdsContainer: {
     '& iframe': {
@@ -28,16 +32,12 @@ class SearchResults extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      searchProviderJSLoaded: !!window.ypaAds,
       noSearchResults: false,
       unexpectedSearchError: false,
     }
   }
 
   getSearchResults() {
-    // TODO: if it does not exist, don't query. Instead, load the
-    //   script and wait for it to re-query.
-    // console.log('getSearchResults: window.ypaAds exists:', !!window.ypaAds)
     if (!window.ypaAds) {
       logger.error(`
         Search provider Javascript not loaded.
@@ -142,7 +142,6 @@ class SearchResults extends React.Component {
 
   render() {
     const { query, classes, style } = this.props
-    // TODO: set the "no results" callback on the Helmet script.
     return (
       <div
         data-test-id="search-results-container"
