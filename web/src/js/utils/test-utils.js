@@ -258,3 +258,37 @@ export const mountWithRouter = node => {
 
   return mount(node, createContext())
 }
+
+/**
+ * Set the user agent to "ReactSnap" to impersonate the
+ * client that will prerender the page.
+ * @return {undefined}
+ */
+export const impersonateReactSnapClient = () => {
+  Object.defineProperty(window.navigator, 'userAgent', {
+    value: 'ReactSnap',
+    writable: true,
+  })
+}
+
+/**
+ * Set the user agent to a reasonable UA for unit test.
+ * @return {undefined}
+ */
+export const setUserAgentToTypicalTestUserAgent = () => {
+  Object.defineProperty(window.navigator, 'userAgent', {
+    value:
+      'Mozilla/5.0 (darwin) AppleWebKit/537.36 (KHTML, like Gecko) jsdom/11.12.0',
+    writable: true,
+  })
+}
+
+/**
+ * Add a div with ID "root" to the DOM.
+ * @return {undefined}
+ */
+export const addReactRootElementToDOM = () => {
+  const div = document.createElement('div')
+  div.id = 'root'
+  document.body.appendChild(div)
+}

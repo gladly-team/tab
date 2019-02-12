@@ -1,11 +1,16 @@
 /* eslint-env jest */
 
 import React from 'react'
-import { shallow } from 'enzyme'
+import { mount, shallow } from 'enzyme'
 import Typography from '@material-ui/core/Typography'
 import logger from 'js/utils/logger'
 import fetchSearchResults from 'js/components/Search/fetchSearchResults'
-import { getDefaultSearchGlobal } from 'js/utils/test-utils'
+import {
+  addReactRootElementToDOM,
+  getDefaultSearchGlobal,
+  impersonateReactSnapClient,
+  setUserAgentToTypicalTestUserAgent,
+} from 'js/utils/test-utils'
 
 jest.mock('react-helmet')
 jest.mock('js/utils/logger')
@@ -20,10 +25,14 @@ beforeAll(() => {
   window.ypaAds = {
     insertMultiAd: jest.fn(),
   }
+  addReactRootElementToDOM()
 })
 
 beforeEach(() => {
   window.searchforacause = getDefaultSearchGlobal()
+
+  // To reset "ReactSnap" user agent.
+  setUserAgentToTypicalTestUserAgent()
 })
 
 afterEach(() => {
@@ -305,5 +314,19 @@ describe('SearchResults component', () => {
         ).length
     ).toBe(1)
     expect(logger.error).toHaveBeenCalledWith(new Error('Oops.'))
+  })
+
+  it('adds an inline script to the document on mount when prerendering with react-snap', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = ''
+    impersonateReactSnapClient()
+    expect(
+      document.querySelector('script[data-test-id="search-inline-script"]')
+    ).toBeNull()
+    shallow(<SearchResults {...mockProps} />).dive()
+    expect(
+      document.querySelector('script[data-test-id="search-inline-script"]')
+    ).not.toBeNull()
   })
 })
