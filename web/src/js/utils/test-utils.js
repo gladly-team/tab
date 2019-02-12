@@ -182,6 +182,18 @@ export const getDefaultTabGlobal = (properties = {}) => {
 }
 
 /**
+ * Return the default starting value of `window.searchforacause`
+ * @return {Object}
+ */
+export const getDefaultSearchGlobal = (properties = {}) => ({
+  search: {
+    fetchedOnPageLoad: false,
+    errorOnPageLoad: false,
+    noResultsOnPageLoad: false,
+  },
+})
+
+/**
  * Create a mock React component for testing. The component will render
  * any React.children.
  * @param {String} componentName - The value of the component's displayName;

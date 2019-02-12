@@ -2,10 +2,10 @@
 
 import React from 'react'
 import { shallow } from 'enzyme'
-import { Helmet } from 'react-helmet'
 import Typography from '@material-ui/core/Typography'
 import logger from 'js/utils/logger'
 import fetchSearchResults from 'js/components/Search/fetchSearchResults'
+import { getDefaultSearchGlobal } from 'js/utils/test-utils'
 
 jest.mock('react-helmet')
 jest.mock('js/utils/logger')
@@ -20,6 +20,10 @@ beforeAll(() => {
   window.ypaAds = {
     insertMultiAd: jest.fn(),
   }
+})
+
+beforeEach(() => {
+  window.searchforacause = getDefaultSearchGlobal()
 })
 
 afterEach(() => {
