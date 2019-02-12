@@ -89,21 +89,17 @@ class SearchResults extends React.Component {
   }
 
   componentDidMount() {
-    // TODO: fetch if we did not already search on first page load
-    //   (e.g. inline script failed for some reason)
-    // if (this.props.query) {
-    //   this.getSearchResults()
-    // }
-
     // When prerendering the page, add an inline script to fetch
     // search results even before parsing our app JS.
     // TODO: have the inline script handle "no results" and
     //   search errors.
     if (isReactSnapClient()) {
       try {
+        // TODO: add tests
         const js = `
           try {
             window.ypaAds.insertMultiAd(${JSON.stringify(YPAConfiguration)})
+            window.searchforacause.search.fetchedOnPageLoad = true
           } catch (e) {
             console.error(e)
           }
@@ -128,10 +124,19 @@ class SearchResults extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    // TODO: don't fetch again if we already did on first page load.
+    // Fetch search results if a query exists and the query
+    // has changed.
+    // TODO: add tests
     if (this.props.query && this.props.query !== prevProps.query) {
-      // FIXME: reenable
-      // this.getSearchResults()
+      // If this is the first query, we may have already fetched
+      // results via inline script. Don't fetch them this time.
+      const alreadyFetchedQuery =
+        window.searchforacause.search.fetchedOnPageLoad
+      if (alreadyFetchedQuery) {
+        window.searchforacause.search.fetchedOnPageLoad = false
+      } else {
+        this.getSearchResults()
+      }
     }
   }
 

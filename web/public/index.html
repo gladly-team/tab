@@ -31,6 +31,7 @@
       https://github.com/GoogleChromeLabs/tti-polyfill
     -->
     <script>
+    /* eslint-disable */
     !function(){if('PerformanceLongTaskTiming' in window){var g=window.__tti={e:[]};
     g.o=new PerformanceObserver(function(l){g.e=g.e.concat(l.getEntries())});
     g.o.observe({entryTypes:['longtask']})}}();
@@ -80,6 +81,7 @@
     -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=AW-1013744060"></script>
     <script>
+      /* eslint-disable */
      window.dataLayer = window.dataLayer || [];
      function gtag(){dataLayer.push(arguments);}
      gtag('js', new Date());
@@ -88,13 +90,14 @@
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
 
+    <% if (process.env.REACT_APP_WHICH_APP === "newtab"){ %>
     <!--
       @gladly-customization:
       Tab for a Cause global variable
     -->
     <script type="text/javascript">
+      /* eslint-disable */
       // Used for handling some communication between disparate parts
       // of our app (e.g. ads events happening before app code loads).
       (() => {
@@ -110,6 +113,29 @@
         }
       })()
     </script>
+    <% } %>
+
+    <% if (process.env.REACT_APP_WHICH_APP === "search"){ %>
+    <!--
+      @gladly-customization:
+      Search for a Cause global variable
+    -->
+    <script type="text/javascript">
+      /* eslint-disable */
+      (() => {
+        window.searchforacause = window.searchforacause || {
+          // We rely on this in the SearchResults component.
+          search: {
+            fetchedOnPageLoad: false,
+            errorOnPageLoad: false,
+            noResultsOnPageLoad: false,
+          }
+        }
+      })()
+    </script>
+    <% } %>
+
+    <div id="root"></div>
 
     <% if (process.env.REACT_APP_WHICH_APP === "newtab"){ %>
     <!--
@@ -196,6 +222,7 @@
       Amazon apstag
     -->
     <script>
+    /* eslint-disable */
     !function(a9,a,p,s,t,A,g){if(a[a9])return;function q(c,r){a[a9]._Q.push([c,r])}a[a9]={init:function(){q("i",arguments)},fetchBids:function(){q("f",arguments)},setDisplayBids:function(){},targetingKeys:function(){return[]},_Q:[]};A=p.createElement(s);A.async=!0;A.src=t;g=p.getElementsByTagName(s)[0];g.parentNode.insertBefore(A,g)}("apstag",window,document,"script","//c.amazon-adsystem.com/aax2/apstag.js");
     </script>
     <% } %>
