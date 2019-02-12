@@ -52,6 +52,14 @@ class SearchResults extends React.Component {
       return
     }
 
+    // If this is the first query, we may have already fetched
+    // results via inline script. If so, don't re-fetch them.
+    const alreadyFetchedQuery = window.searchforacause.search.fetchedOnPageLoad
+    if (alreadyFetchedQuery) {
+      window.searchforacause.search.fetchedOnPageLoad = false
+      return
+    }
+
     // Reset state of search results.
     this.setState({
       noSearchResults: false,
@@ -89,6 +97,11 @@ class SearchResults extends React.Component {
   }
 
   componentDidMount() {
+    // Fetch a query if one exists on mount.
+    if (this.props.query) {
+      this.getSearchResults()
+    }
+
     // When prerendering the page, add an inline script to fetch
     // search results even before parsing our app JS.
     // TODO: have the inline script handle "no results" and
@@ -131,17 +144,8 @@ class SearchResults extends React.Component {
   componentDidUpdate(prevProps) {
     // Fetch search results if a query exists and the query
     // has changed.
-    // TODO: add tests
     if (this.props.query && this.props.query !== prevProps.query) {
-      // If this is the first query, we may have already fetched
-      // results via inline script. Don't fetch them this time.
-      const alreadyFetchedQuery =
-        window.searchforacause.search.fetchedOnPageLoad
-      if (alreadyFetchedQuery) {
-        window.searchforacause.search.fetchedOnPageLoad = false
-      } else {
-        this.getSearchResults()
-      }
+      this.getSearchResults()
     }
   }
 

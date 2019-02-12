@@ -121,6 +121,7 @@ describe('SearchResults component', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
     mockProps.query = 'foo'
+    window.searchforacause.search.fetchedOnPageLoad = false
     const wrapper = shallow(<SearchResults {...mockProps} />).dive()
     fetchSearchResults.mockClear()
     wrapper.setProps({
@@ -140,6 +141,28 @@ describe('SearchResults component', () => {
     const mockProps = getMockProps()
     mockProps.query = 'pizza'
     window.searchforacause.search.fetchedOnPageLoad = false
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    fetchSearchResults.mockClear()
+    wrapper.setProps({
+      query: '',
+    })
+    expect(fetchSearchResults).not.toHaveBeenCalled()
+  })
+
+  it('fetches search results on mount when the search query exists and results were not fetched on page load', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'cake'
+    window.searchforacause.search.fetchedOnPageLoad = false
+    shallow(<SearchResults {...mockProps} />).dive()
+    expect(fetchSearchResults).toHaveBeenCalledTimes(1)
+  })
+
+  it('does not fetch search results on mount when the search query exists but results were already fetched on page load', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = ''
+    window.searchforacause.search.fetchedOnPageLoad = true
     shallow(<SearchResults {...mockProps} />).dive()
     expect(fetchSearchResults).not.toHaveBeenCalled()
   })
