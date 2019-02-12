@@ -50,14 +50,6 @@ describe('SearchResults component', () => {
     shallow(<SearchResults {...mockProps} />).dive()
   })
 
-  // TODO: should not fetch on mount if YPA is not defined; otherwise, it should
-  // it('does not fetch search results on mount (because we need to wait until the search JS is loaded)', () => {
-  //   const SearchResults = require('js/components/Search/SearchResults').default
-  //   const mockProps = getMockProps()
-  //   shallow(<SearchResults {...mockProps} />).dive()
-  //   expect(fetchSearchResults).not.toHaveBeenCalled()
-  // })
-
   it('applies style to the root element', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
@@ -74,44 +66,6 @@ describe('SearchResults component', () => {
       background: '#FF0000',
     })
   })
-
-  // TODO: this will only happen if YPA is not defined
-  // it('adds an onload listener to fetch search results', () => {
-  //   const SearchResults = require('js/components/Search/SearchResults').default
-  //   const mockProps = getMockProps()
-  //   const wrapper = shallow(<SearchResults {...mockProps} />).dive()
-
-  //   // Mock that Helmet has added a script to the head.
-  //   const helmet = wrapper.find(Helmet)
-  //   const mockScriptTag = {
-  //     addEventListener: jest.fn(),
-  //   }
-  //   helmet.prop('onChangeClientState')(
-  //     {
-  //       baseTag: {},
-  //       defer: [],
-  //       encode: [],
-  //       htmlAttributes: [],
-  //       linkTags: [],
-  //       metaTags: [],
-  //       noscriptTags: [],
-  //       scriptTags: [],
-  //       styleTags: [],
-  //       // ... other values
-  //     },
-  //     {
-  //       scriptTags: [mockScriptTag],
-  //     }
-  //   )
-
-  //   // Should not yet have fetched search results.
-  //   expect(fetchSearchResults).not.toHaveBeenCalled()
-
-  //   // Mock the script's onload.
-  //   const scriptOnloadHandler = mockScriptTag.addEventListener.mock.calls[0][1]
-  //   scriptOnloadHandler()
-  //   expect(fetchSearchResults).toHaveBeenCalledTimes(1)
-  // })
 
   it('does not fetch search results the first time the search query prop changes when results were already fetched on page load', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
