@@ -100,8 +100,11 @@ class SearchResults extends React.Component {
         //   It causes the subsequent query to fail.
         const js = `
           try {
-            window.ypaAds.insertMultiAd(${JSON.stringify(YPAConfiguration)})
-            window.searchforacause.search.fetchedOnPageLoad = true
+            // If there is a query on page load, fetch it.
+            if (new URLSearchParams(window.location.search).get('q')) {
+              window.ypaAds.insertMultiAd(${JSON.stringify(YPAConfiguration)})
+              window.searchforacause.search.fetchedOnPageLoad = true
+            }
           } catch (e) {
             console.error(e)
           }
