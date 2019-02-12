@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography'
 import logger from 'js/utils/logger'
 import fetchSearchResults from 'js/components/Search/fetchSearchResults'
 import YPAConfiguration from 'js/components/Search/YPAConfiguration'
+import { isReactSnapClient } from 'js/utils/search-utils'
 
 const styles = theme => ({
   searchAdsContainer: {
@@ -87,17 +88,50 @@ class SearchResults extends React.Component {
     }
   }
 
-  // Commenting out because the inline script should call
-  // for search results on page load.
-  // componentDidMount() {
-  //   if (this.props.query) {
-  //     this.getSearchResults()
-  //   }
-  // }
+  componentDidMount() {
+    // TODO: fetch if we did not already search on first page load
+    //   (e.g. inline script failed for some reason)
+    // if (this.props.query) {
+    //   this.getSearchResults()
+    // }
+
+    // When prerendering the page, add an inline script to fetch
+    // search results even before parsing our app JS.
+    // TODO: have the inline script handle "no results" and
+    //   search errors.
+    if (isReactSnapClient()) {
+      try {
+        const js = `
+          try {
+            window.ypaAds.insertMultiAd(${JSON.stringify(YPAConfiguration)})
+          } catch (e) {
+            console.error(e)
+          }
+        `
+        const s = document.createElement('script')
+        s.type = 'text/javascript'
+        s.dataset['testId'] = 'search-inline-script'
+        s.innerHTML = js
+
+        // Render the script immediately after our app's DOM root.
+        // Important: the target divs for search results must exist
+        // in the DOM *before* we call YPA's JS. Otherwise, YPA will
+        // not fetch search results.
+        const reactRoot = document.getElementById('root')
+        reactRoot.parentNode.insertBefore(s, reactRoot.nextSibling)
+      } catch (e) {
+        console.error(
+          'Could not prerender the inline script to fetch search results.'
+        )
+      }
+    }
+  }
 
   componentDidUpdate(prevProps) {
+    // TODO: don't fetch again if we already did on first page load.
     if (this.props.query && this.props.query !== prevProps.query) {
-      this.getSearchResults()
+      // FIXME: reenable
+      // this.getSearchResults()
     }
   }
 
@@ -123,11 +157,6 @@ class SearchResults extends React.Component {
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
           />
-          <script>
-            {`
-            window.ypaAds.insertMultiAd(${JSON.stringify(YPAConfiguration)})
-          `}
-          </script>
         </Helmet>
         <div>
           {this.state.noSearchResults ? (
@@ -141,8 +170,28 @@ class SearchResults extends React.Component {
               Unable to search at this time.
             </Typography>
           ) : null}
-          <div id="search-ads" className={classes.searchAdsContainer} />
-          <div id="search-results" className={classes.searchResultsContainer} />
+          <div
+            id="search-ads"
+            className={classes.searchAdsContainer}
+            // Important: if these containers are unmounted or mutated,
+            // YPA's JS will cancel the call to fetch search results.
+            // Using dangerouslySetInnerHTML and suppressHydrationWarning
+            // prevents rerendering this element during hydration:
+            // https://github.com/reactjs/rfcs/pull/46#issuecomment-385182716
+            // Related: https://github.com/facebook/react/issues/6622
+            dangerouslySetInnerHTML={{
+              __html: '',
+            }}
+            suppressHydrationWarning
+          />
+          <div
+            id="search-results"
+            className={classes.searchResultsContainer}
+            dangerouslySetInnerHTML={{
+              __html: '',
+            }}
+            suppressHydrationWarning
+          />
         </div>
       </div>
     )
