@@ -50,6 +50,50 @@ describe('SearchResults component', () => {
     shallow(<SearchResults {...mockProps} />).dive()
   })
 
+  it('contains the expected element for search ad results', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+
+    // Important: don't change this div ID without updating the YPA
+    // configuration
+    const searchAdDivs = wrapper.find('[id="search-ads"]')
+    expect(searchAdDivs.length).toEqual(1)
+    const searchAdDiv = searchAdDivs.first()
+
+    // Note: we need these props for YPA to work correctly.
+    // Using dangerouslySetInnerHTML and suppressHydrationWarning
+    // prevents rerendering this element during hydration:
+    // https://github.com/reactjs/rfcs/pull/46#issuecomment-385182716
+    // Related: https://github.com/facebook/react/issues/6622
+    expect(searchAdDiv.prop('suppressHydrationWarning')).toBe(true)
+    expect(searchAdDiv.prop('dangerouslySetInnerHTML')).toEqual({
+      __html: '',
+    })
+  })
+
+  it('contains the expected element for search (algo) results', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+
+    // Important: don't change this div ID without updating the YPA
+    // configuration
+    const searchAdDivs = wrapper.find('[id="search-results"]')
+    expect(searchAdDivs.length).toEqual(1)
+    const searchAdDiv = searchAdDivs.first()
+
+    // Note: we need these props for YPA to work correctly.
+    // Using dangerouslySetInnerHTML and suppressHydrationWarning
+    // prevents rerendering this element during hydration:
+    // https://github.com/reactjs/rfcs/pull/46#issuecomment-385182716
+    // Related: https://github.com/facebook/react/issues/6622
+    expect(searchAdDiv.prop('suppressHydrationWarning')).toBe(true)
+    expect(searchAdDiv.prop('dangerouslySetInnerHTML')).toEqual({
+      __html: '',
+    })
+  })
+
   it('applies style to the root element', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
