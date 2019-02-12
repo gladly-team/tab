@@ -100,6 +100,23 @@ describe('SearchResults component', () => {
   //   expect(fetchSearchResults).toHaveBeenCalledTimes(1)
   // })
 
+  it('does not fetch search results the first time the search query prop changes when results were already fetched on page load', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = ''
+    window.searchforacause.search.fetchedOnPageLoad = true
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    fetchSearchResults.mockClear()
+    wrapper.setProps({
+      query: 'cake',
+    })
+    expect(fetchSearchResults).not.toHaveBeenCalled()
+    wrapper.setProps({
+      query: 'pie',
+    })
+    expect(fetchSearchResults).toHaveBeenCalledTimes(1)
+  })
+
   it('fetches search results when the search query prop changes', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
@@ -118,12 +135,20 @@ describe('SearchResults component', () => {
     expect(newFetchedQuery).toBe('pizza')
   })
 
+  it('does not fetch search results when the search query prop changes to an empty string', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'pizza'
+    window.searchforacause.search.fetchedOnPageLoad = false
+    shallow(<SearchResults {...mockProps} />).dive()
+    expect(fetchSearchResults).not.toHaveBeenCalled()
+  })
+
   it('does not fetch search results when the search query is an empty string on page load', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
     mockProps.query = ''
-    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
-    wrapper.instance().getSearchResults()
+    shallow(<SearchResults {...mockProps} />).dive()
     expect(fetchSearchResults).not.toHaveBeenCalled()
   })
 
