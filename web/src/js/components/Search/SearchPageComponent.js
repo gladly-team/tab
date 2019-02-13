@@ -291,15 +291,6 @@ SearchPage.propTypes = {
   location: PropTypes.shape({
     search: PropTypes.string.isRequired,
   }),
-  // May not exist if the user is not signed in.
-  user: PropTypes.shape({
-    id: PropTypes.string,
-  }),
-  app: PropTypes.shape({
-    // TODO: pass these to the MoneyRaised component
-    // moneyRaised: PropTypes.number.isRequired
-    // dollarsPerDayRate: PropTypes.number.isRequired
-  }),
 }
 
 SearchPage.defaultProps = {}
