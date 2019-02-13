@@ -17,6 +17,7 @@ import LogoWithText from 'js/components/Logo/LogoWithText'
 import { parseUrlSearchString } from 'js/utils/utils'
 import SearchResults from 'js/components/Search/SearchResults'
 import { isReactSnapClient } from 'js/utils/search-utils'
+import SearchMenuQuery from 'js/components/Search/SearchMenuQuery'
 
 const Footer = lazy(() => import('js/components/General/Footer'))
 
@@ -195,6 +196,11 @@ class SearchPage extends React.Component {
                 }
               />
             </div>
+            <SearchMenuQuery
+              style={{
+                marginLeft: 'auto',
+              }}
+            />
           </div>
           <Tabs
             value={0}
