@@ -88,6 +88,7 @@ class MoneyRaised extends React.Component {
   handlePopoverRequestClose() {
     this.setState({
       open: false,
+      hover: false,
     })
   }
 
@@ -164,7 +165,7 @@ class MoneyRaised extends React.Component {
           style={popoverStyle}
           open={this.state.open}
           anchorEl={this.state.anchorEl}
-          onRequestClose={this.handlePopoverRequestClose.bind(this)}
+          onClose={this.handlePopoverRequestClose.bind(this)}
         >
           <div style={{ padding: 10, paddingTop: 0 }}>
             <p>This is how much money Tabbers have raised for charity.</p>

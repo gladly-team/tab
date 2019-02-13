@@ -256,7 +256,7 @@ class UserMenu extends React.Component {
           style={menuPopoverStyle}
           open={this.state.menuOpen}
           anchorEl={this.state.menuPopoverAnchorElem}
-          onRequestClose={this.handleMenuPopoverClose.bind(this)}
+          onClose={this.handleMenuPopoverClose.bind(this)}
         >
           <Menu
             width={menuWidth}

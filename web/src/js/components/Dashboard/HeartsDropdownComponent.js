@@ -6,16 +6,11 @@ import Divider from 'material-ui/Divider'
 import { dividerColor, dashboardIconActiveColor } from 'js/theme/default'
 import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 import { goToInviteFriends, goToDonate } from 'js/navigation/navigation'
+// import Typography from '@material-ui/core/Typography'
 
 const HeartsDropdownComponent = props => {
   const { anchorElement, app, onClose, open, user } = props
 
-  // Hearts popover style
-  const heartsPopoverStyle = {
-    textAlign: 'center',
-    width: 210,
-  }
-  const heartsPopoverSectionStyle = {}
   const dividerStyle = {
     marginTop: 16,
     marginBottom: 12,
@@ -42,7 +37,6 @@ const HeartsDropdownComponent = props => {
     fontSize: 13,
   }
 
-  // Popover section on how to earn Hearts.
   const rewardMethodContainerStyle = Object.assign({}, statTextStyle, {
     display: 'flex',
     textAlign: 'left',
@@ -50,14 +44,6 @@ const HeartsDropdownComponent = props => {
     marginTop: 1,
     marginBottom: 1,
   })
-  const rewardAmountsSectionStyle = Object.assign(
-    {},
-    heartsPopoverSectionStyle,
-    {
-      paddingLeft: 22,
-      paddingRight: 22,
-    }
-  )
   const rewardTextStyle = {
     textAlign: 'left',
     flex: 6,
@@ -71,11 +57,14 @@ const HeartsDropdownComponent = props => {
     <DashboardPopover
       open={open}
       anchorEl={anchorElement}
-      onRequestClose={onClose}
-      style={heartsPopoverStyle}
+      onClose={onClose}
+      style={{
+        textAlign: 'center',
+        width: 210,
+      }}
     >
       <div style={{ paddingTop: 10, paddingBottom: 10 }}>
-        <div style={heartsPopoverSectionStyle}>
+        <div>
           <span style={statTextStyle}>
             <span style={statNumberStyle}>Level {user.level}</span>
           </span>
@@ -95,7 +84,7 @@ const HeartsDropdownComponent = props => {
           </div>
         </div>
         <Divider style={dividerStyle} />
-        <div style={heartsPopoverSectionStyle}>
+        <div>
           <span style={statTextStyle}>
             <span
               style={Object.assign({}, statNumberStyle, {
@@ -128,7 +117,7 @@ const HeartsDropdownComponent = props => {
           </div>
         </div>
         <Divider style={dividerStyle} />
-        <div style={heartsPopoverSectionStyle}>
+        <div>
           <span style={statTextStyle}>
             <span style={statNumberStyle}>{user.numUsersRecruited}</span>{' '}
             Tabbers Recruited
@@ -145,7 +134,12 @@ const HeartsDropdownComponent = props => {
           </div>
         </div>
         <Divider style={dividerStyle} />
-        <div style={rewardAmountsSectionStyle}>
+        <div
+          style={{
+            paddingLeft: 22,
+            paddingRight: 22,
+          }}
+        >
           <span style={rewardMethodContainerStyle}>
             <span style={rewardTextStyle}>Open a tab</span>
             <span

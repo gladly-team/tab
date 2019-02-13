@@ -6,7 +6,7 @@ import { shallow } from 'enzyme'
 const getMockProps = () => ({
   anchorEl: <div>hi</div>,
   open: false,
-  onRequestClose: () => {},
+  onClose: () => {},
 })
 
 describe('DashboardPopover', () => {
