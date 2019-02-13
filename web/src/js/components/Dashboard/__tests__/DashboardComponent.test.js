@@ -6,10 +6,9 @@ import moment from 'moment'
 import { cloneDeep } from 'lodash/lang'
 import { shallow } from 'enzyme'
 import MoneyRaised from 'js/components/MoneyRaised/MoneyRaisedContainer'
-import UserBackgroundImage from 'js/components/User/UserBackgroundImageContainer'
-import UserMenu from 'js/components/User/UserMenuContainer'
+import UserBackgroundImage from 'js/components/Dashboard/UserBackgroundImageContainer'
+import UserMenu from 'js/components/Dashboard/UserMenuContainer'
 import WidgetsContainer from 'js/components/Widget/WidgetsContainer'
-import CampaignBase from 'js/components/Campaign/CampaignBaseView'
 import Ad from 'js/components/Ad/Ad'
 import LogTab from 'js/components/Dashboard/LogTabContainer'
 import LogRevenue from 'js/components/Dashboard/LogRevenueContainer'
@@ -35,7 +34,6 @@ import {
 import {
   setUserDismissedAdExplanation,
   hasUserDismissedNotificationRecently,
-  hasUserDismissedCampaignRecently,
 } from 'js/utils/local-user-data-mgr'
 import { showGlobalNotification } from 'js/utils/feature-flags'
 

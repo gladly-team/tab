@@ -24,14 +24,14 @@ const MockProps = () => {
 describe('User menu component', () => {
   it('renders without error', () => {
     const mockProps = MockProps()
-    const UserMenuComponent = require('js/components/User/UserMenuComponent')
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
       .default
     shallow(<UserMenuComponent {...mockProps} />)
   })
 
   it('contains an ID for the new user tour (to showcase hearts)', () => {
     const mockProps = MockProps()
-    const UserMenuComponent = require('js/components/User/UserMenuComponent')
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
       .default
     const wrapper = shallow(<UserMenuComponent {...mockProps} />)
 
@@ -42,7 +42,7 @@ describe('User menu component', () => {
 
   it('contains an ID for the new user tour (to showcase the settings button)', () => {
     const mockProps = MockProps()
-    const UserMenuComponent = require('js/components/User/UserMenuComponent')
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
       .default
     const wrapper = shallow(<UserMenuComponent {...mockProps} />)
 
@@ -53,7 +53,7 @@ describe('User menu component', () => {
 
   it('contains a "sign out" menu item', () => {
     const mockProps = MockProps()
-    const UserMenuComponent = require('js/components/User/UserMenuComponent')
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
       .default
     const wrapper = shallow(<UserMenuComponent {...mockProps} />)
     const hasSignOut =
@@ -66,7 +66,7 @@ describe('User menu component', () => {
   it('does not contain a "sign out" menu item if the user is anonymous', () => {
     const mockProps = MockProps()
     mockProps.isUserAnonymous = true
-    const UserMenuComponent = require('js/components/User/UserMenuComponent')
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
       .default
     const wrapper = shallow(<UserMenuComponent {...mockProps} />)
     const hasSignOut =
