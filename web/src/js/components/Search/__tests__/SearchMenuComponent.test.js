@@ -26,7 +26,7 @@ describe('SearchMenuComponent', () => {
     shallow(<SearchMenuComponent {...mockProps} />)
   })
 
-  it('assigns styles to the root elemnt', () => {
+  it('assigns styles to the root element', () => {
     const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
       .default
     const mockProps = getMockProps()

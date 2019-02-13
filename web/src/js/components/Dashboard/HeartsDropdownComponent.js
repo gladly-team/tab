@@ -72,7 +72,7 @@ const HeartsDropdownComponent = props => {
                 root: classes.heartIconRoot,
               }}
               style={{
-                height: 16, // TODO: use body2 font size
+                height: 16,
               }}
             />
             <Typography
