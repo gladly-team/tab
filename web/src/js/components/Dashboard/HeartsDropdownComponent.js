@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
-import RaisedButton from 'material-ui/RaisedButton'
+import Button from '@material-ui/core/Button'
 import Divider from '@material-ui/core/Divider'
 import HeartBorderIcon from 'material-ui/svg-icons/action/favorite-border'
 import { dividerColor, dashboardIconActiveColor } from 'js/theme/default'
@@ -26,14 +26,10 @@ const HeartsDropdownComponent = props => {
     paddingTop: 12,
     paddingBottom: 20,
   }
-  const popoverButtonStyle = {
-    marginTop: 6,
+  const buttonStyle = {
+    marginTop: 8,
     marginBottom: 0,
   }
-  const popoverButtonLabelStyle = {
-    fontSize: 13,
-  }
-
   return (
     <DashboardPopover open={open} anchorEl={anchorElement} onClose={onClose}>
       <div
@@ -124,13 +120,14 @@ const HeartsDropdownComponent = props => {
             </Typography>
           </span>
           <div>
-            <RaisedButton
-              label="Donate Hearts"
-              style={popoverButtonStyle}
-              labelStyle={popoverButtonLabelStyle}
-              primary
+            <Button
+              variant={'contained'}
+              color={'primary'}
+              style={buttonStyle}
               onClick={goToDonate}
-            />
+            >
+              Donate Hearts
+            </Button>
           </div>
         </div>
         <Divider classes={{ root: classes.dividerRoot }} />
@@ -150,18 +147,18 @@ const HeartsDropdownComponent = props => {
               }}
               variant={'body2'}
             >
-              Tabbers Recruited
+              Tabbers recruited
             </Typography>
           </div>
           <div>
-            <RaisedButton
-              label="Invite A Friend"
-              labelPosition="before"
-              style={popoverButtonStyle}
-              labelStyle={popoverButtonLabelStyle}
-              primary
+            <Button
+              variant={'contained'}
+              color={'primary'}
+              style={buttonStyle}
               onClick={goToInviteFriends}
-            />
+            >
+              Invite A Friend
+            </Button>
           </div>
         </div>
         <Divider classes={{ root: classes.dividerRoot }} />
