@@ -20,10 +20,6 @@ const getMockProps = () => ({
   onClose: () => {},
 })
 
-afterEach(() => {
-  jest.resetModules()
-})
-
 describe('HeartsDropdownComponent', () => {
   it('renders without error', () => {
     const HeartsDropdownComponent = require('js/components/Dashboard/HeartsDropdownComponent')
