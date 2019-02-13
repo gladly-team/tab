@@ -1,33 +1,28 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { withStyles } from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
 import RaisedButton from 'material-ui/RaisedButton'
 import HeartBorderIcon from 'material-ui/svg-icons/action/favorite-border'
 import Divider from 'material-ui/Divider'
 import { dividerColor, dashboardIconActiveColor } from 'js/theme/default'
 import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 import { goToInviteFriends, goToDonate } from 'js/navigation/navigation'
-// import Typography from '@material-ui/core/Typography'
+
+// TODO: break out to make the component customizable:
+// https://material-ui.com/customization/overrides/#3-specific-variation-of-a-component
+const styles = {
+  root: {
+    color: 'white',
+  },
+}
 
 const HeartsDropdownComponent = props => {
-  const { anchorElement, app, onClose, open, user } = props
+  const { anchorElement, app, classes, onClose, open, user } = props
 
   const dividerStyle = {
     marginTop: 16,
     marginBottom: 12,
-  }
-  const statTextStyle = {
-    fontSize: 14,
-    display: 'block',
-    marginTop: 4,
-    marginBottom: 4,
-  }
-  const smallHeartIconStyle = {
-    height: 16,
-    marginLeft: -3,
-  }
-  const statNumberStyle = {
-    fontSize: 24,
-    display: 'block',
   }
   const popoverButtonStyle = {
     marginTop: 6,
@@ -37,37 +32,26 @@ const HeartsDropdownComponent = props => {
     fontSize: 13,
   }
 
-  const rewardMethodContainerStyle = Object.assign({}, statTextStyle, {
-    display: 'flex',
-    textAlign: 'left',
-    color: dividerColor,
-    marginTop: 1,
-    marginBottom: 1,
-  })
-  const rewardTextStyle = {
-    textAlign: 'left',
-    flex: 6,
-  }
-  const rewardValueStyle = {
-    flex: 3,
-    textAlign: 'right',
-  }
-
   return (
-    <DashboardPopover
-      open={open}
-      anchorEl={anchorElement}
-      onClose={onClose}
-      style={{
-        textAlign: 'center',
-        width: 210,
-      }}
-    >
-      <div style={{ paddingTop: 10, paddingBottom: 10 }}>
+    <DashboardPopover open={open} anchorEl={anchorElement} onClose={onClose}>
+      <div
+        style={{
+          paddingTop: 10,
+          paddingBottom: 10,
+          width: 210,
+          textAlign: 'center',
+        }}
+      >
         <div>
-          <span style={statTextStyle}>
-            <span style={statNumberStyle}>Level {user.level}</span>
-          </span>
+          <Typography
+            classes={{
+              root: classes.root,
+            }}
+            variant={'h5'}
+            color={'primary'}
+          >
+            Level {user.level}
+          </Typography>
           <div
             style={{
               display: 'flex',
@@ -75,25 +59,49 @@ const HeartsDropdownComponent = props => {
               justifyContent: 'center',
             }}
           >
-            <span>{user.heartsUntilNextLevel}</span>
+            <Typography
+              classes={{
+                root: classes.root,
+              }}
+              variant={'body2'}
+            >
+              {user.heartsUntilNextLevel}
+            </Typography>
             <HeartBorderIcon
-              style={smallHeartIconStyle}
+              style={{
+                height: 16, // TODO: use body2 font size
+              }}
               color={dashboardIconActiveColor}
             />
-            <span> until next level</span>
+            <Typography
+              classes={{
+                root: classes.root,
+              }}
+              variant={'body2'}
+            >
+              {' '}
+              until next level
+            </Typography>
           </div>
         </div>
         <Divider style={dividerStyle} />
         <div>
-          <span style={statTextStyle}>
+          <span>
             <span
-              style={Object.assign({}, statNumberStyle, {
+              style={{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-              })}
+              }}
             >
-              <span>{user.vcDonatedAllTime}</span>
+              <Typography
+                classes={{
+                  root: classes.root,
+                }}
+                variant={'h5'}
+              >
+                {user.vcDonatedAllTime}
+              </Typography>
               <HeartBorderIcon
                 style={{
                   marginLeft: 2,
@@ -104,7 +112,14 @@ const HeartsDropdownComponent = props => {
                 color={dashboardIconActiveColor}
               />
             </span>
-            <span>Donated</span>
+            <Typography
+              classes={{
+                root: classes.root,
+              }}
+              variant={'body2'}
+            >
+              donated
+            </Typography>
           </span>
           <div>
             <RaisedButton
@@ -118,10 +133,24 @@ const HeartsDropdownComponent = props => {
         </div>
         <Divider style={dividerStyle} />
         <div>
-          <span style={statTextStyle}>
-            <span style={statNumberStyle}>{user.numUsersRecruited}</span>{' '}
-            Tabbers Recruited
-          </span>
+          <div>
+            <Typography
+              classes={{
+                root: classes.root,
+              }}
+              variant={'h5'}
+            >
+              {user.numUsersRecruited}
+            </Typography>
+            <Typography
+              classes={{
+                root: classes.root,
+              }}
+              variant={'body2'}
+            >
+              Tabbers Recruited
+            </Typography>
+          </div>
           <div>
             <RaisedButton
               label="Invite A Friend"
@@ -138,44 +167,81 @@ const HeartsDropdownComponent = props => {
           style={{
             paddingLeft: 22,
             paddingRight: 22,
+            textAlign: 'left',
           }}
         >
-          <span style={rewardMethodContainerStyle}>
-            <span style={rewardTextStyle}>Open a tab</span>
-            <span
+          <div style={{ display: 'flex' }}>
+            <Typography
+              classes={{
+                root: classes.root,
+              }}
+              variant={'body2'}
+              style={{
+                flex: 6,
+              }}
+            >
+              Open a tab
+            </Typography>
+            <div
               style={{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
             >
-              <span style={rewardValueStyle}>1</span>
+              <Typography
+                classes={{
+                  root: classes.root,
+                }}
+                variant={'body2'}
+                style={{ textAlign: 'right' }}
+              >
+                1
+              </Typography>
               <HeartBorderIcon
-                style={Object.assign({}, smallHeartIconStyle, {
-                  marginRight: -4,
-                })}
+                style={{
+                  height: 16,
+                }}
                 color={dividerColor}
               />
-            </span>
-          </span>
-          <span style={rewardMethodContainerStyle}>
-            <span style={rewardTextStyle}>Recruit a friend</span>
-            <span
+            </div>
+          </div>
+          <div style={{ display: 'flex' }}>
+            <Typography
+              classes={{
+                root: classes.root,
+              }}
+              variant={'body2'}
+              style={{
+                flex: 6,
+              }}
+            >
+              Recruit a friend
+            </Typography>
+            <div
               style={{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
             >
-              <span style={rewardValueStyle}>{app.referralVcReward}</span>
+              <Typography
+                classes={{
+                  root: classes.root,
+                }}
+                variant={'body2'}
+                style={{ textAlign: 'right' }}
+              >
+                {app.referralVcReward}
+              </Typography>
               <HeartBorderIcon
-                style={Object.assign({}, smallHeartIconStyle, {
-                  marginRight: -4,
-                })}
+                style={{
+                  height: 16,
+                }}
                 color={dividerColor}
               />
-            </span>
-          </span>
+            </div>
+          </div>
         </div>
       </div>
     </DashboardPopover>
@@ -189,6 +255,7 @@ HeartsDropdownComponent.propTypes = {
   app: PropTypes.shape({
     referralVcReward: PropTypes.number.isRequired,
   }),
+  classes: PropTypes.object.isRequired,
   user: PropTypes.shape({
     vcCurrent: PropTypes.number.isRequired,
     level: PropTypes.number.isRequired,
@@ -205,4 +272,4 @@ HeartsDropdownComponent.defaultProps = {
   open: false,
 }
 
-export default HeartsDropdownComponent
+export default withStyles(styles)(HeartsDropdownComponent)
