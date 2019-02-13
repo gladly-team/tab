@@ -1,17 +1,16 @@
 import graphql from 'babel-plugin-relay/macro'
 import { createFragmentContainer } from 'react-relay'
 
-import UserMenu from 'js/components/Dashboard/UserMenuComponent'
+import HeartsDropdown from 'js/components/Dashboard/HeartsDropdownComponent'
 
-export default createFragmentContainer(UserMenu, {
+export default createFragmentContainer(HeartsDropdown, {
   app: graphql`
-    fragment UserMenuContainer_app on App {
+    fragment HeartsDropdownContainer_app on App {
       referralVcReward
-      ...HeartsDropdownContainer_app
     }
   `,
   user: graphql`
-    fragment UserMenuContainer_user on User {
+    fragment HeartsDropdownContainer_user on User {
       id
       vcCurrent
       level
@@ -19,7 +18,6 @@ export default createFragmentContainer(UserMenu, {
       vcDonatedAllTime
       numUsersRecruited
       tabsToday
-      ...HeartsDropdownContainer_user
     }
   `,
 })
