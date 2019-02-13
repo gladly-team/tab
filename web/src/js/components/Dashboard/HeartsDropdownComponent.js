@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import RaisedButton from 'material-ui/RaisedButton'
+import Divider from '@material-ui/core/Divider'
 import HeartBorderIcon from 'material-ui/svg-icons/action/favorite-border'
-import Divider from 'material-ui/Divider'
 import { dividerColor, dashboardIconActiveColor } from 'js/theme/default'
 import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 import { goToInviteFriends, goToDonate } from 'js/navigation/navigation'
@@ -15,14 +15,16 @@ const styles = {
   typographyRoot: {
     color: 'white',
   },
+  dividerRoot: {
+    backgroundColor: 'rgba(255, 255, 255, 0.20)',
+  },
 }
 
 const HeartsDropdownComponent = props => {
   const { anchorElement, app, classes, onClose, open, user } = props
-
-  const dividerStyle = {
-    marginTop: 16,
-    marginBottom: 12,
+  const sectionStyle = {
+    paddingTop: 12,
+    paddingBottom: 20,
   }
   const popoverButtonStyle = {
     marginTop: 6,
@@ -42,7 +44,7 @@ const HeartsDropdownComponent = props => {
           textAlign: 'center',
         }}
       >
-        <div>
+        <div style={sectionStyle}>
           <Typography
             classes={{
               root: classes.typographyRoot,
@@ -84,8 +86,8 @@ const HeartsDropdownComponent = props => {
             </Typography>
           </div>
         </div>
-        <Divider style={dividerStyle} />
-        <div>
+        <Divider classes={{ root: classes.dividerRoot }} />
+        <div style={sectionStyle}>
           <span>
             <span
               style={{
@@ -131,8 +133,8 @@ const HeartsDropdownComponent = props => {
             />
           </div>
         </div>
-        <Divider style={dividerStyle} />
-        <div>
+        <Divider classes={{ root: classes.dividerRoot }} />
+        <div style={sectionStyle}>
           <div>
             <Typography
               classes={{
@@ -162,9 +164,10 @@ const HeartsDropdownComponent = props => {
             />
           </div>
         </div>
-        <Divider style={dividerStyle} />
+        <Divider classes={{ root: classes.dividerRoot }} />
         <div
           style={{
+            paddingTop: 12,
             paddingLeft: 22,
             paddingRight: 22,
             textAlign: 'left',
