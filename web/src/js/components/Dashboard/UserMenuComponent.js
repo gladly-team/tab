@@ -1,27 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
-import Divider from 'material-ui/Divider'
-import Menu from 'material-ui/Menu'
-import MenuItem from 'material-ui/MenuItem'
 import IconButton from 'material-ui/IconButton'
-import HeartIcon from 'material-ui/svg-icons/action/favorite'
 import HeartBorderIcon from 'material-ui/svg-icons/action/favorite-border'
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert'
-import SettingsIcon from 'material-ui/svg-icons/action/settings'
-import HelpIcon from 'material-ui/svg-icons/action/help'
-import PersonAddIcon from 'material-ui/svg-icons/social/person-add'
-import ChartIcon from 'material-ui/svg-icons/editor/insert-chart'
 import CheckmarkIcon from 'material-ui/svg-icons/action/done'
-import ExitToAppIcon from 'material-ui/svg-icons/action/exit-to-app'
-import {
-  goToInviteFriends,
-  goToDonate,
-  goToLogin,
-  goToSettings,
-  goToStats,
-} from 'js/navigation/navigation'
 import { logout } from 'js/authentication/user'
+import { goToLogin } from 'js/navigation/navigation'
 import appTheme, {
   dashboardIconActiveColor,
   dashboardIconInactiveColor,
@@ -30,6 +15,7 @@ import { commaFormatted } from 'js/utils/utils'
 import { MAX_DAILY_HEARTS_FROM_TABS } from 'js/constants'
 import logger from 'js/utils/logger'
 import HeartsDropdown from 'js/components/Dashboard/HeartsDropdownContainer'
+import SettingsDropdown from 'js/components/Dashboard/SettingsDropdownComponent'
 
 class UserMenu extends React.Component {
   constructor(props) {
@@ -142,11 +128,6 @@ class UserMenu extends React.Component {
     })
 
     // Menu style
-    const menuWidth = 200
-    const menuPopoverStyle = {
-      padding: 0,
-      width: menuWidth,
-    }
     const menuIconButtonStyle = {
       padding: 0,
       width: 40,
@@ -158,22 +139,6 @@ class UserMenu extends React.Component {
         : dashboardIconInactiveColor,
       transition: 'color 300ms ease-in',
       fontSize: 22,
-    }
-    const menuStyle = {
-      width: menuWidth,
-      overflowX: 'hidden',
-      backgroundColor: 'transparent',
-      fontFamily: appTheme.fontFamily,
-    }
-    const menuItemStyle = {
-      fontSize: 14,
-      color: appTheme.palette.alternateTextColor,
-    }
-    const menuItemIconColor = '#FFFFFF'
-    const menuItemSvgIconStyle = {
-      color: menuItemIconColor,
-      height: 22,
-      width: 22,
     }
 
     // Used to let the user know they aren't earning any more
@@ -207,6 +172,7 @@ class UserMenu extends React.Component {
               color={dashboardIconInactiveColor}
               hoverColor={dashboardIconActiveColor}
             />
+            {/* FIXME: move this to another component and style */}
             {reachedMaxDailyHearts ? (
               <CheckmarkIcon
                 style={{
@@ -252,98 +218,13 @@ class UserMenu extends React.Component {
         >
           <MoreVertIcon />
         </IconButton>
-        <DashboardPopover
-          style={menuPopoverStyle}
+        <SettingsDropdown
           open={this.state.menuOpen}
-          anchorEl={this.state.menuPopoverAnchorElem}
+          anchorElement={this.state.menuPopoverAnchorElem}
           onClose={this.handleMenuPopoverClose.bind(this)}
-        >
-          <Menu
-            width={menuWidth}
-            autoWidth={false}
-            style={menuStyle}
-            menuItemStyle={menuItemStyle}
-          >
-            <MenuItem
-              primaryText="Settings"
-              onClick={goToSettings}
-              leftIcon={
-                <SettingsIcon
-                  color={menuItemIconColor}
-                  style={menuItemSvgIconStyle}
-                />
-              }
-            />
-            <MenuItem
-              primaryText="Donate Hearts"
-              onClick={goToDonate}
-              leftIcon={
-                <HeartIcon
-                  color={menuItemIconColor}
-                  style={menuItemSvgIconStyle}
-                />
-              }
-            />
-            <MenuItem
-              primaryText="Invite Friends"
-              onClick={goToInviteFriends}
-              leftIcon={
-                <PersonAddIcon
-                  color={menuItemIconColor}
-                  style={menuItemSvgIconStyle}
-                />
-              }
-            />
-            <MenuItem
-              primaryText="Your Stats"
-              onClick={goToStats}
-              leftIcon={
-                <ChartIcon
-                  color={menuItemIconColor}
-                  style={menuItemSvgIconStyle}
-                />
-              }
-            />
-            <Divider style={{ marginBottom: 0, marginTop: 0 }} />
-            <a
-              href="https://gladly.zendesk.com/hc/en-us/categories/201939608-Tab-for-a-Cause"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                color: menuItemIconColor,
-                textDecoration: 'none',
-              }}
-            >
-              <MenuItem
-                primaryText="Help"
-                onClick={goToStats}
-                leftIcon={
-                  <HelpIcon
-                    color={menuItemIconColor}
-                    style={menuItemSvgIconStyle}
-                  />
-                }
-                style={menuItemStyle}
-              />
-            </a>
-            {!isUserAnonymous ? (
-              <Divider style={{ marginBottom: 0, marginTop: 0 }} />
-            ) : null}
-            {!isUserAnonymous ? (
-              <MenuItem
-                primaryText="Sign Out"
-                onClick={this.logout.bind(this)}
-                data-test-id={'app-menu-sign-out'}
-                leftIcon={
-                  <ExitToAppIcon
-                    color={menuItemIconColor}
-                    style={menuItemSvgIconStyle}
-                  />
-                }
-              />
-            ) : null}
-          </Menu>
-        </DashboardPopover>
+          onLogoutClick={this.logout.bind(this)}
+          isUserAnonymous={isUserAnonymous}
+        />
       </div>
     )
   }

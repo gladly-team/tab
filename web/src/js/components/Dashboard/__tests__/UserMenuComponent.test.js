@@ -2,7 +2,6 @@
 
 import React from 'react'
 import { shallow } from 'enzyme'
-import MenuItem from 'material-ui/MenuItem'
 
 const MockProps = () => {
   return {
@@ -49,30 +48,5 @@ describe('User menu component', () => {
     // Important: other code relies on the data-tour-id to show the
     // new user tour. Do not change it without updating it elsewhere.
     expect(wrapper.find('[data-tour-id="settings-button"]').length).toBe(1)
-  })
-
-  it('contains a "sign out" menu item', () => {
-    const mockProps = MockProps()
-    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
-      .default
-    const wrapper = shallow(<UserMenuComponent {...mockProps} />)
-    const hasSignOut =
-      wrapper.find(MenuItem).filterWhere(elem => {
-        return elem.prop('primaryText') === 'Sign Out'
-      }).length === 1
-    expect(hasSignOut).toBe(true)
-  })
-
-  it('does not contain a "sign out" menu item if the user is anonymous', () => {
-    const mockProps = MockProps()
-    mockProps.isUserAnonymous = true
-    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
-      .default
-    const wrapper = shallow(<UserMenuComponent {...mockProps} />)
-    const hasSignOut =
-      wrapper.find(MenuItem).filterWhere(elem => {
-        return elem.prop('primaryText') === 'Sign Out'
-      }).length === 1
-    expect(hasSignOut).toBe(false)
   })
 })
