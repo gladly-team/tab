@@ -1,11 +1,14 @@
 /* eslint-env jest */
 
 import React from 'react'
-import { mount, shallow } from 'enzyme'
+import { shallow } from 'enzyme'
 import Typography from '@material-ui/core/Typography'
 import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
+import Link from 'js/components/General/Link'
+import { inviteFriendsURL, donateURL } from 'js/navigation/navigation'
 
 jest.mock('@material-ui/icons/FavoriteBorder', () => () => '[heart icon]')
+jest.mock('js/navigation/navigation')
 
 const getMockProps = () => ({
   anchorElement: <div>hi</div>,
@@ -155,5 +158,37 @@ describe('HeartsDropdownComponent', () => {
       )
       .parent()
     expect(elem.render().text()).toEqual('Recruit a friend480[heart icon]')
+  })
+
+  it('shows a "donate hearts" button that links to the donate hearts page', () => {
+    const HeartsDropdownComponent = require('js/components/Dashboard/HeartsDropdownComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<HeartsDropdownComponent {...mockProps} />).dive()
+    const linkElem = wrapper.find(Link).first()
+    expect(linkElem.prop('to')).toEqual(donateURL)
+    expect(
+      linkElem
+        .children()
+        .first()
+        .render()
+        .text()
+    ).toEqual('Donate Hearts')
+  })
+
+  it('shows an "invite friends" button that links to the invite friends page', () => {
+    const HeartsDropdownComponent = require('js/components/Dashboard/HeartsDropdownComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<HeartsDropdownComponent {...mockProps} />).dive()
+    const linkElem = wrapper.find(Link).at(1)
+    expect(linkElem.prop('to')).toEqual(inviteFriendsURL)
+    expect(
+      linkElem
+        .children()
+        .first()
+        .render()
+        .text()
+    ).toEqual('Invite A Friend')
   })
 })

@@ -6,7 +6,8 @@ import Button from '@material-ui/core/Button'
 import Divider from '@material-ui/core/Divider'
 import HeartBorderIcon from '@material-ui/icons/FavoriteBorder'
 import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
-import { goToInviteFriends, goToDonate } from 'js/navigation/navigation'
+import { inviteFriendsURL, donateURL } from 'js/navigation/navigation'
+import Link from 'js/components/General/Link'
 
 // TODO: break out to make the component customizable:
 // https://material-ui.com/customization/overrides/#3-specific-variation-of-a-component
@@ -125,16 +126,11 @@ const HeartsDropdownComponent = props => {
               donated
             </Typography>
           </span>
-          <div>
-            <Button
-              variant={'contained'}
-              color={'primary'}
-              style={buttonStyle}
-              onClick={goToDonate}
-            >
+          <Link to={donateURL}>
+            <Button variant={'contained'} color={'primary'} style={buttonStyle}>
               Donate Hearts
             </Button>
-          </div>
+          </Link>
         </div>
         <Divider classes={{ root: classes.dividerRoot }} />
         <div style={sectionStyle}>
@@ -156,16 +152,11 @@ const HeartsDropdownComponent = props => {
               Tabbers recruited
             </Typography>
           </div>
-          <div>
-            <Button
-              variant={'contained'}
-              color={'primary'}
-              style={buttonStyle}
-              onClick={goToInviteFriends}
-            >
+          <Link to={inviteFriendsURL}>
+            <Button variant={'contained'} color={'primary'} style={buttonStyle}>
               Invite A Friend
             </Button>
-          </div>
+          </Link>
         </div>
         <Divider classes={{ root: classes.dividerRoot }} />
         <div

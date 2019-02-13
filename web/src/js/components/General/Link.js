@@ -38,7 +38,9 @@ Link.propTypes = {
 }
 
 Link.defaultProps = {
-  style: {},
+  style: {
+    textDecoration: 'none',
+  },
   className: '',
 }
 
