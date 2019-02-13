@@ -14,6 +14,6 @@ describe('DashboardPopover', () => {
     const DashboardPopover = require('js/components/Dashboard/DashboardPopover')
       .default
     const mockProps = getMockProps()
-    shallow(<DashboardPopover {...mockProps} />)
+    shallow(<DashboardPopover {...mockProps} />).dive()
   })
 })
