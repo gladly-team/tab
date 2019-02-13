@@ -212,12 +212,12 @@ class Dashboard extends React.Component {
               </div>
               {this.state.showNotification ? (
                 <Notification
-                  title={`Vote for the January Charity Spotlight`}
+                  title={`Vote for the February Charity Spotlight`}
                   message={`
                         Each month this year, we're highlighting a charity chosen by our
                         community. Nominate and vote for the nonprofit that means the most to you.`}
                   buttonText={'Vote'}
-                  buttonURL={'https://goo.gl/forms/crNGLow4fg5fcKe63'}
+                  buttonURL={'https://goo.gl/forms/mjjHSoO6lp2TEsgA3'}
                   onDismiss={() => {
                     this.setState({
                       showNotification: false,
