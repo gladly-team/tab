@@ -12,7 +12,7 @@ import { goToInviteFriends, goToDonate } from 'js/navigation/navigation'
 // TODO: break out to make the component customizable:
 // https://material-ui.com/customization/overrides/#3-specific-variation-of-a-component
 const styles = {
-  root: {
+  typographyRoot: {
     color: 'white',
   },
 }
@@ -45,7 +45,7 @@ const HeartsDropdownComponent = props => {
         <div>
           <Typography
             classes={{
-              root: classes.root,
+              root: classes.typographyRoot,
             }}
             variant={'h5'}
             color={'primary'}
@@ -61,7 +61,7 @@ const HeartsDropdownComponent = props => {
           >
             <Typography
               classes={{
-                root: classes.root,
+                root: classes.typographyRoot,
               }}
               variant={'body2'}
             >
@@ -75,7 +75,7 @@ const HeartsDropdownComponent = props => {
             />
             <Typography
               classes={{
-                root: classes.root,
+                root: classes.typographyRoot,
               }}
               variant={'body2'}
             >
@@ -96,7 +96,7 @@ const HeartsDropdownComponent = props => {
             >
               <Typography
                 classes={{
-                  root: classes.root,
+                  root: classes.typographyRoot,
                 }}
                 variant={'h5'}
               >
@@ -114,7 +114,7 @@ const HeartsDropdownComponent = props => {
             </span>
             <Typography
               classes={{
-                root: classes.root,
+                root: classes.typographyRoot,
               }}
               variant={'body2'}
             >
@@ -136,7 +136,7 @@ const HeartsDropdownComponent = props => {
           <div>
             <Typography
               classes={{
-                root: classes.root,
+                root: classes.typographyRoot,
               }}
               variant={'h5'}
             >
@@ -144,7 +144,7 @@ const HeartsDropdownComponent = props => {
             </Typography>
             <Typography
               classes={{
-                root: classes.root,
+                root: classes.typographyRoot,
               }}
               variant={'body2'}
             >
@@ -173,7 +173,7 @@ const HeartsDropdownComponent = props => {
           <div style={{ display: 'flex' }}>
             <Typography
               classes={{
-                root: classes.root,
+                root: classes.typographyRoot,
               }}
               variant={'body2'}
               style={{
@@ -191,7 +191,7 @@ const HeartsDropdownComponent = props => {
             >
               <Typography
                 classes={{
-                  root: classes.root,
+                  root: classes.typographyRoot,
                 }}
                 variant={'body2'}
                 style={{ textAlign: 'right' }}
@@ -209,7 +209,7 @@ const HeartsDropdownComponent = props => {
           <div style={{ display: 'flex' }}>
             <Typography
               classes={{
-                root: classes.root,
+                root: classes.typographyRoot,
               }}
               variant={'body2'}
               style={{
@@ -227,7 +227,7 @@ const HeartsDropdownComponent = props => {
             >
               <Typography
                 classes={{
-                  root: classes.root,
+                  root: classes.typographyRoot,
                 }}
                 variant={'body2'}
                 style={{ textAlign: 'right' }}
