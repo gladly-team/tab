@@ -4,12 +4,11 @@ import PropTypes from 'prop-types'
 const SearchMenuComponent = props => {
   const {
     style,
-    app: { dollarsPerDayRate, moneyRaised },
+    app: { moneyRaised },
   } = props
   return (
     <div style={style}>
-      <div>{moneyRaised}</div>
-      <div>{dollarsPerDayRate}</div>
+      <div>Money raised: ${moneyRaised}</div>
     </div>
   )
 }
