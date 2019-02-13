@@ -1,7 +1,21 @@
-/* globals Image */
+import logger from 'js/utils/logger'
 
-export const redditAccountCreationEvent = () => {
-  var i = new Image()
-  i.src =
-    'https://alb.reddit.com/snoo.gif?q=CAAHAAABAAoACQAAAAAA7xUOAA==&s=RGC2UDUA43GMsxM-RWyC1n_k5kkF8YB_CfcyBdhIMtw='
+// https://www.reddithelp.com/en/categories/advertising/creating-ads/installing-reddit-conversion-pixel
+const redditAnalytics = (...args) => {
+  const DEBUG = false
+
+  const rdt = window.rdt
+  if (!rdt) {
+    logger.error('Reddit analytics are not available on `window.rdt`.')
+  }
+  try {
+    if (DEBUG) {
+      console.log('Logging Reddit event with args:', args)
+    }
+    rdt.apply(this, args)
+  } catch (e) {
+    logger.error(e)
+  }
 }
+
+export default redditAnalytics

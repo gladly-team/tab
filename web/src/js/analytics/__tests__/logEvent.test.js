@@ -2,7 +2,7 @@
 
 import fbq from 'js/analytics/facebook-analytics'
 import GA from 'js/analytics/google-analytics'
-import { redditAccountCreationEvent } from 'js/analytics/reddit-analytics'
+import rdt from 'js/analytics/reddit-analytics'
 
 jest.mock('js/analytics/facebook-analytics')
 jest.mock('js/analytics/google-analytics')
@@ -89,7 +89,7 @@ describe('logEvent', () => {
       category: 'ButtonClick',
       action: 'AccountCreation',
     })
-    expect(redditAccountCreationEvent).toHaveBeenCalled()
+    expect(rdt).toHaveBeenCalledWith('track', 'SignUp')
     expect(window.gtag).toHaveBeenCalledWith('event', 'conversion', {
       send_to: 'AW-1013744060/v2M_COqV6owBELyDsuMD',
     })
@@ -102,7 +102,7 @@ describe('logEvent', () => {
     searchExecuted()
 
     expect(fbq).not.toHaveBeenCalled()
-    expect(redditAccountCreationEvent).not.toHaveBeenCalled()
+    expect(rdt).not.toHaveBeenCalled()
     expect(GA.ga).toHaveBeenCalledWith('send', {
       hitType: 'event',
       eventCategory: 'Search',
