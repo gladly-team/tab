@@ -1,6 +1,6 @@
 import fbq from 'js/analytics/facebook-analytics'
 import GA from 'js/analytics/google-analytics'
-import { redditAccountCreationEvent } from 'js/analytics/reddit-analytics'
+import rdt from 'js/analytics/reddit-analytics'
 
 // We automatically track most pageviews on location change.
 // See ./withPageviewTracking higher-order component.
@@ -51,7 +51,7 @@ export const accountCreated = () => {
     category: 'ButtonClick',
     action: 'AccountCreation',
   })
-  redditAccountCreationEvent()
+  rdt('track', 'SignUp')
 
   // Google Ads conversion tracking.
   window.gtag('event', 'conversion', {
