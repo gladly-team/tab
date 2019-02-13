@@ -4,8 +4,7 @@ import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import Divider from '@material-ui/core/Divider'
-import HeartBorderIcon from 'material-ui/svg-icons/action/favorite-border'
-import { dividerColor, dashboardIconActiveColor } from 'js/theme/default'
+import HeartBorderIcon from '@material-ui/icons/FavoriteBorder'
 import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 import { goToInviteFriends, goToDonate } from 'js/navigation/navigation'
 
@@ -17,6 +16,9 @@ const styles = {
   },
   dividerRoot: {
     backgroundColor: 'rgba(255, 255, 255, 0.20)',
+  },
+  heartIconRoot: {
+    color: 'white',
   },
 }
 
@@ -66,10 +68,12 @@ const HeartsDropdownComponent = props => {
               {user.heartsUntilNextLevel}
             </Typography>
             <HeartBorderIcon
+              classes={{
+                root: classes.heartIconRoot,
+              }}
               style={{
                 height: 16, // TODO: use body2 font size
               }}
-              color={dashboardIconActiveColor}
             />
             <Typography
               classes={{
@@ -101,13 +105,15 @@ const HeartsDropdownComponent = props => {
                 {user.vcDonatedAllTime}
               </Typography>
               <HeartBorderIcon
+                classes={{
+                  root: classes.heartIconRoot,
+                }}
                 style={{
                   marginLeft: 2,
                   height: 24,
                   width: 24,
                   paddingBottom: 1,
                 }}
-                color={dashboardIconActiveColor}
               />
             </span>
             <Typography
@@ -199,10 +205,12 @@ const HeartsDropdownComponent = props => {
                 1
               </Typography>
               <HeartBorderIcon
+                classes={{
+                  root: classes.heartIconRoot,
+                }}
                 style={{
                   height: 16,
                 }}
-                color={dividerColor}
               />
             </div>
           </div>
@@ -235,10 +243,12 @@ const HeartsDropdownComponent = props => {
                 {app.referralVcReward}
               </Typography>
               <HeartBorderIcon
+                classes={{
+                  root: classes.heartIconRoot,
+                }}
                 style={{
                   height: 16,
                 }}
-                color={dividerColor}
               />
             </div>
           </div>
