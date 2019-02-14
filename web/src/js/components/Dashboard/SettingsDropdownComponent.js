@@ -5,15 +5,13 @@ import MenuList from '@material-ui/core/MenuList'
 import MenuItem from '@material-ui/core/MenuItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
-import Divider from 'material-ui/Divider'
+import Divider from '@material-ui/core/Divider'
 import HeartIcon from '@material-ui/icons/Favorite'
 import SettingsIcon from '@material-ui/icons/Settings'
 import HelpIcon from '@material-ui/icons/Help'
 import PersonAddIcon from '@material-ui/icons/PersonAdd'
 import ChartIcon from '@material-ui/icons/InsertChart'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
-
-// import Divider from '@material-ui/core/Divider'
 import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 // import { inviteFriendsURL, donateURL } from 'js/navigation/navigation'
 // import Link from 'js/components/General/Link'
@@ -37,9 +35,9 @@ const styles = {
     color: fontColor,
     fontSize: 22,
   },
-  // dividerRoot: {
-  //   backgroundColor: 'rgba(255, 255, 255, 0.20)',
-  // },
+  divider: {
+    backgroundColor: 'rgba(255, 255, 255, 0.20)',
+  },
 }
 
 const SettingsDropdownComponent = props => {
@@ -99,7 +97,7 @@ const SettingsDropdownComponent = props => {
             Your Stats
           </ListItemText>
         </MenuItem>
-        <Divider style={{ marginBottom: 0, marginTop: 0 }} />
+        <Divider className={classes.divider} />
         <a
           href="https://gladly.zendesk.com/hc/en-us/categories/201939608-Tab-for-a-Cause"
           target="_blank"
@@ -121,9 +119,7 @@ const SettingsDropdownComponent = props => {
             </ListItemText>
           </MenuItem>
         </a>
-        {!isUserAnonymous ? (
-          <Divider style={{ marginBottom: 0, marginTop: 0 }} />
-        ) : null}
+        {!isUserAnonymous ? <Divider className={classes.divider} /> : null}
         {!isUserAnonymous ? (
           <MenuItem onClick={onLogoutClick} data-test-id={'app-menu-sign-out'}>
             <ListItemIcon>
