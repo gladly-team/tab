@@ -146,7 +146,7 @@ const SettingsDropdownComponent = props => {
   )
 }
 
-SettingsDropdownComponent.displayNamae = 'SettingsDropdownComponent'
+SettingsDropdownComponent.displayName = 'SettingsDropdownComponent'
 
 SettingsDropdownComponent.propTypes = {
   anchorElement: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),

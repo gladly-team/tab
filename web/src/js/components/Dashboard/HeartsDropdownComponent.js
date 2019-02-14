@@ -249,7 +249,7 @@ const HeartsDropdownComponent = props => {
   )
 }
 
-HeartsDropdownComponent.displayNamae = 'HeartsDropdownComponent'
+HeartsDropdownComponent.displayName = 'HeartsDropdownComponent'
 
 HeartsDropdownComponent.propTypes = {
   anchorElement: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),

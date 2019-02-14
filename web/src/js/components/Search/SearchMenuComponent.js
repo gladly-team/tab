@@ -13,7 +13,7 @@ const SearchMenuComponent = props => {
   )
 }
 
-SearchMenuComponent.displayNamae = 'SearchMenuComponent'
+SearchMenuComponent.displayName = 'SearchMenuComponent'
 
 SearchMenuComponent.propTypes = {
   // May not exist if the user is not signed in.
