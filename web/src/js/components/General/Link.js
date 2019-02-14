@@ -7,6 +7,8 @@ class Link extends React.Component {
   render() {
     const { children, to, style, className, ...otherProps } = this.props
 
+    // TODO: like navigation `goTo`, we need to also handle navigation
+    // between newtab and search apps.
     // This assumes that any internal link (intended for Gatsby) starts
     // with exactly one slash, and that anything else is external.
     const internal = /^\/(?!\/)/.test(to)

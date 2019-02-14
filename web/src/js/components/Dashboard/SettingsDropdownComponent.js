@@ -13,14 +13,14 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd'
 import ChartIcon from '@material-ui/icons/InsertChart'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
-// import { inviteFriendsURL, donateURL } from 'js/navigation/navigation'
-// import Link from 'js/components/General/Link'
-
+import Link from 'js/components/General/Link'
 import {
-  goToInviteFriends,
-  goToDonate,
-  goToSettings,
-  goToStats,
+  goTo,
+  donateURL,
+  inviteFriendsURL,
+  externalHelpURL,
+  settingsURL,
+  statsURL,
 } from 'js/navigation/navigation'
 
 // TODO: break out to make the component customizable:
@@ -53,7 +53,11 @@ const SettingsDropdownComponent = props => {
   return (
     <DashboardPopover open={open} anchorEl={anchorElement} onClose={onClose}>
       <MenuList style={{ width: 200 }}>
-        <MenuItem onClick={goToSettings}>
+        <MenuItem
+          onClick={() => {
+            goTo(settingsURL)
+          }}
+        >
           <ListItemIcon>
             <SettingsIcon className={classes.icon} />
           </ListItemIcon>
@@ -64,7 +68,11 @@ const SettingsDropdownComponent = props => {
             Settings
           </ListItemText>
         </MenuItem>
-        <MenuItem onClick={goToDonate}>
+        <MenuItem
+          onClick={() => {
+            goTo(donateURL)
+          }}
+        >
           <ListItemIcon>
             <HeartIcon className={classes.icon} />
           </ListItemIcon>
@@ -75,7 +83,11 @@ const SettingsDropdownComponent = props => {
             Donate Hearts
           </ListItemText>
         </MenuItem>
-        <MenuItem onClick={goToInviteFriends}>
+        <MenuItem
+          onClick={() => {
+            goTo(inviteFriendsURL)
+          }}
+        >
           <ListItemIcon>
             <PersonAddIcon className={classes.icon} />
           </ListItemIcon>
@@ -86,7 +98,11 @@ const SettingsDropdownComponent = props => {
             Invite Friends
           </ListItemText>
         </MenuItem>
-        <MenuItem onClick={goToStats}>
+        <MenuItem
+          onClick={() => {
+            goTo(statsURL)
+          }}
+        >
           <ListItemIcon>
             <ChartIcon className={classes.icon} />
           </ListItemIcon>
@@ -98,16 +114,8 @@ const SettingsDropdownComponent = props => {
           </ListItemText>
         </MenuItem>
         <Divider className={classes.divider} />
-        <a
-          href="https://gladly.zendesk.com/hc/en-us/categories/201939608-Tab-for-a-Cause"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            // color: menuItemIconColor,
-            textDecoration: 'none',
-          }}
-        >
-          <MenuItem onClick={goToStats}>
+        <Link to={externalHelpURL} target="_blank">
+          <MenuItem>
             <ListItemIcon>
               <HelpIcon className={classes.icon} />
             </ListItemIcon>
@@ -118,7 +126,7 @@ const SettingsDropdownComponent = props => {
               Help
             </ListItemText>
           </MenuItem>
-        </a>
+        </Link>
         {!isUserAnonymous ? <Divider className={classes.divider} /> : null}
         {!isUserAnonymous ? (
           <MenuItem onClick={onLogoutClick} data-test-id={'app-menu-sign-out'}>
