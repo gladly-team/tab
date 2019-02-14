@@ -5,21 +5,21 @@ import MenuList from '@material-ui/core/MenuList'
 import MenuItem from '@material-ui/core/MenuItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
+import Divider from 'material-ui/Divider'
+import HeartIcon from '@material-ui/icons/Favorite'
+import SettingsIcon from '@material-ui/icons/Settings'
+import HelpIcon from '@material-ui/icons/Help'
+import PersonAddIcon from '@material-ui/icons/PersonAdd'
+import ChartIcon from '@material-ui/icons/InsertChart'
+import ExitToAppIcon from '@material-ui/icons/ExitToApp'
+
 // import Typography from '@material-ui/core/Typography'
 // import Button from '@material-ui/core/Button'
 // import Divider from '@material-ui/core/Divider'
-// import HeartBorderIcon from '@material-ui/icons/FavoriteBorder'
 import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 // import { inviteFriendsURL, donateURL } from 'js/navigation/navigation'
 // import Link from 'js/components/General/Link'
 
-import Divider from 'material-ui/Divider'
-import HeartIcon from 'material-ui/svg-icons/action/favorite'
-import SettingsIcon from 'material-ui/svg-icons/action/settings'
-import HelpIcon from 'material-ui/svg-icons/action/help'
-import PersonAddIcon from 'material-ui/svg-icons/social/person-add'
-import ChartIcon from 'material-ui/svg-icons/editor/insert-chart'
-import ExitToAppIcon from 'material-ui/svg-icons/action/exit-to-app'
 import {
   goToInviteFriends,
   goToDonate,
@@ -29,59 +29,68 @@ import {
 
 // TODO: break out to make the component customizable:
 // https://material-ui.com/customization/overrides/#3-specific-variation-of-a-component
+const fontColor = 'white'
 const styles = {
-  typographyRoot: {
-    color: 'white',
+  // https://material-ui.com/demos/menus/#customized-menuitem
+  listItemTextPrimary: {
+    color: fontColor,
   },
-  dividerRoot: {
-    backgroundColor: 'rgba(255, 255, 255, 0.20)',
+  icon: {
+    color: fontColor,
   },
-  heartIconRoot: {
-    color: 'white',
-  },
+  // typographyRoot: {
+  //   color: fontColor,
+  // },
+  // dividerRoot: {
+  //   backgroundColor: 'rgba(255, 255, 255, 0.20)',
+  // },
 }
 
 const SettingsDropdownComponent = props => {
-  const { anchorElement, isUserAnonymous, onClose, onLogoutClick, open } = props
+  const {
+    anchorElement,
+    classes,
+    isUserAnonymous,
+    onClose,
+    onLogoutClick,
+    open,
+  } = props
 
-  const menuItemIconColor = '#FFFFFF'
-  const menuItemSvgIconStyle = {
-    color: menuItemIconColor,
-    height: 22,
-    width: 22,
-  }
+  console.log('classes', classes)
   return (
     <DashboardPopover open={open} anchorEl={anchorElement} onClose={onClose}>
       <MenuList style={{ width: 200 }}>
         <MenuItem onClick={goToSettings}>
           <ListItemIcon>
-            <SettingsIcon
-              color={menuItemIconColor}
-              style={menuItemSvgIconStyle}
-            />
+            <SettingsIcon className={classes.icon} />
           </ListItemIcon>
-          <ListItemText>Settings</ListItemText>
+          <ListItemText classes={{ primary: classes.listItemTextPrimary }}>
+            Settings
+          </ListItemText>
         </MenuItem>
         <MenuItem onClick={goToDonate}>
           <ListItemIcon>
-            <HeartIcon color={menuItemIconColor} style={menuItemSvgIconStyle} />
+            <HeartIcon className={classes.icon} />
           </ListItemIcon>
-          <ListItemText>Donate Hearts</ListItemText>
+          <ListItemText classes={{ primary: classes.listItemTextPrimary }}>
+            Donate Hearts
+          </ListItemText>
         </MenuItem>
         <MenuItem onClick={goToInviteFriends}>
           <ListItemIcon>
-            <PersonAddIcon
-              color={menuItemIconColor}
-              style={menuItemSvgIconStyle}
-            />
+            <PersonAddIcon className={classes.icon} />
           </ListItemIcon>
-          <ListItemText>Invite Friends</ListItemText>
+          <ListItemText classes={{ primary: classes.listItemTextPrimary }}>
+            Invite Friends
+          </ListItemText>
         </MenuItem>
         <MenuItem onClick={goToStats}>
           <ListItemIcon>
-            <ChartIcon color={menuItemIconColor} style={menuItemSvgIconStyle} />
+            <ChartIcon className={classes.icon} />
           </ListItemIcon>
-          <ListItemText>Your Stats</ListItemText>
+          <ListItemText classes={{ primary: classes.listItemTextPrimary }}>
+            Your Stats
+          </ListItemText>
         </MenuItem>
         <Divider style={{ marginBottom: 0, marginTop: 0 }} />
         <a
@@ -89,18 +98,17 @@ const SettingsDropdownComponent = props => {
           target="_blank"
           rel="noopener noreferrer"
           style={{
-            color: menuItemIconColor,
+            // color: menuItemIconColor,
             textDecoration: 'none',
           }}
         >
           <MenuItem onClick={goToStats}>
             <ListItemIcon>
-              <HelpIcon
-                color={menuItemIconColor}
-                style={menuItemSvgIconStyle}
-              />
+              <HelpIcon className={classes.icon} />
             </ListItemIcon>
-            <ListItemText>Help</ListItemText>
+            <ListItemText classes={{ primary: classes.listItemTextPrimary }}>
+              Help
+            </ListItemText>
           </MenuItem>
         </a>
         {!isUserAnonymous ? (
@@ -109,12 +117,11 @@ const SettingsDropdownComponent = props => {
         {!isUserAnonymous ? (
           <MenuItem onClick={onLogoutClick} data-test-id={'app-menu-sign-out'}>
             <ListItemIcon>
-              <ExitToAppIcon
-                color={menuItemIconColor}
-                style={menuItemSvgIconStyle}
-              />
+              <ExitToAppIcon className={classes.icon} />
             </ListItemIcon>
-            <ListItemText>Sign Out</ListItemText>
+            <ListItemText classes={{ primary: classes.listItemTextPrimary }}>
+              Sign Out
+            </ListItemText>
           </MenuItem>
         ) : null}
       </MenuList>
