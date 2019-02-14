@@ -13,8 +13,6 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd'
 import ChartIcon from '@material-ui/icons/InsertChart'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 
-// import Typography from '@material-ui/core/Typography'
-// import Button from '@material-ui/core/Button'
 // import Divider from '@material-ui/core/Divider'
 import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 // import { inviteFriendsURL, donateURL } from 'js/navigation/navigation'
@@ -37,10 +35,8 @@ const styles = {
   },
   icon: {
     color: fontColor,
+    fontSize: 22,
   },
-  // typographyRoot: {
-  //   color: fontColor,
-  // },
   // dividerRoot: {
   //   backgroundColor: 'rgba(255, 255, 255, 0.20)',
   // },
@@ -56,7 +52,6 @@ const SettingsDropdownComponent = props => {
     open,
   } = props
 
-  console.log('classes', classes)
   return (
     <DashboardPopover open={open} anchorEl={anchorElement} onClose={onClose}>
       <MenuList style={{ width: 200 }}>
@@ -64,7 +59,10 @@ const SettingsDropdownComponent = props => {
           <ListItemIcon>
             <SettingsIcon className={classes.icon} />
           </ListItemIcon>
-          <ListItemText classes={{ primary: classes.listItemTextPrimary }}>
+          <ListItemText
+            classes={{ primary: classes.listItemTextPrimary }}
+            primaryTypographyProps={{ variant: 'body2' }}
+          >
             Settings
           </ListItemText>
         </MenuItem>
@@ -72,7 +70,10 @@ const SettingsDropdownComponent = props => {
           <ListItemIcon>
             <HeartIcon className={classes.icon} />
           </ListItemIcon>
-          <ListItemText classes={{ primary: classes.listItemTextPrimary }}>
+          <ListItemText
+            classes={{ primary: classes.listItemTextPrimary }}
+            primaryTypographyProps={{ variant: 'body2' }}
+          >
             Donate Hearts
           </ListItemText>
         </MenuItem>
@@ -80,7 +81,10 @@ const SettingsDropdownComponent = props => {
           <ListItemIcon>
             <PersonAddIcon className={classes.icon} />
           </ListItemIcon>
-          <ListItemText classes={{ primary: classes.listItemTextPrimary }}>
+          <ListItemText
+            classes={{ primary: classes.listItemTextPrimary }}
+            primaryTypographyProps={{ variant: 'body2' }}
+          >
             Invite Friends
           </ListItemText>
         </MenuItem>
@@ -88,7 +92,10 @@ const SettingsDropdownComponent = props => {
           <ListItemIcon>
             <ChartIcon className={classes.icon} />
           </ListItemIcon>
-          <ListItemText classes={{ primary: classes.listItemTextPrimary }}>
+          <ListItemText
+            classes={{ primary: classes.listItemTextPrimary }}
+            primaryTypographyProps={{ variant: 'body2' }}
+          >
             Your Stats
           </ListItemText>
         </MenuItem>
@@ -106,7 +113,10 @@ const SettingsDropdownComponent = props => {
             <ListItemIcon>
               <HelpIcon className={classes.icon} />
             </ListItemIcon>
-            <ListItemText classes={{ primary: classes.listItemTextPrimary }}>
+            <ListItemText
+              classes={{ primary: classes.listItemTextPrimary }}
+              primaryTypographyProps={{ variant: 'body2' }}
+            >
               Help
             </ListItemText>
           </MenuItem>
@@ -119,7 +129,10 @@ const SettingsDropdownComponent = props => {
             <ListItemIcon>
               <ExitToAppIcon className={classes.icon} />
             </ListItemIcon>
-            <ListItemText classes={{ primary: classes.listItemTextPrimary }}>
+            <ListItemText
+              classes={{ primary: classes.listItemTextPrimary }}
+              primaryTypographyProps={{ variant: 'body2' }}
+            >
               Sign Out
             </ListItemText>
           </MenuItem>
