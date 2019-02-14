@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import MenuList from '@material-ui/core/MenuList'
 import MenuItem from '@material-ui/core/MenuItem'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
+import ListItemText from '@material-ui/core/ListItemText'
 // import Typography from '@material-ui/core/Typography'
 // import Button from '@material-ui/core/Button'
 // import Divider from '@material-ui/core/Divider'
@@ -24,7 +26,6 @@ import {
   goToSettings,
   goToStats,
 } from 'js/navigation/navigation'
-import appTheme from 'js/theme/default'
 
 // TODO: break out to make the component customizable:
 // https://material-ui.com/customization/overrides/#3-specific-variation-of-a-component
@@ -53,26 +54,34 @@ const SettingsDropdownComponent = props => {
     <DashboardPopover open={open} anchorEl={anchorElement} onClose={onClose}>
       <MenuList style={{ width: 200 }}>
         <MenuItem onClick={goToSettings}>
-          <SettingsIcon
-            color={menuItemIconColor}
-            style={menuItemSvgIconStyle}
-          />
-          <span>Settings</span>
+          <ListItemIcon>
+            <SettingsIcon
+              color={menuItemIconColor}
+              style={menuItemSvgIconStyle}
+            />
+          </ListItemIcon>
+          <ListItemText>Settings</ListItemText>
         </MenuItem>
         <MenuItem onClick={goToDonate}>
-          <HeartIcon color={menuItemIconColor} style={menuItemSvgIconStyle} />
-          <span>Donate Hearts</span>
+          <ListItemIcon>
+            <HeartIcon color={menuItemIconColor} style={menuItemSvgIconStyle} />
+          </ListItemIcon>
+          <ListItemText>Donate Hearts</ListItemText>
         </MenuItem>
         <MenuItem onClick={goToInviteFriends}>
-          <PersonAddIcon
-            color={menuItemIconColor}
-            style={menuItemSvgIconStyle}
-          />
-          <span>Invite Friends</span>
+          <ListItemIcon>
+            <PersonAddIcon
+              color={menuItemIconColor}
+              style={menuItemSvgIconStyle}
+            />
+          </ListItemIcon>
+          <ListItemText>Invite Friends</ListItemText>
         </MenuItem>
         <MenuItem onClick={goToStats}>
-          <ChartIcon color={menuItemIconColor} style={menuItemSvgIconStyle} />
-          <span>Your Stats</span>
+          <ListItemIcon>
+            <ChartIcon color={menuItemIconColor} style={menuItemSvgIconStyle} />
+          </ListItemIcon>
+          <ListItemText>Your Stats</ListItemText>
         </MenuItem>
         <Divider style={{ marginBottom: 0, marginTop: 0 }} />
         <a
@@ -85,8 +94,13 @@ const SettingsDropdownComponent = props => {
           }}
         >
           <MenuItem onClick={goToStats}>
-            <HelpIcon color={menuItemIconColor} style={menuItemSvgIconStyle} />
-            <span>Help</span>
+            <ListItemIcon>
+              <HelpIcon
+                color={menuItemIconColor}
+                style={menuItemSvgIconStyle}
+              />
+            </ListItemIcon>
+            <ListItemText>Help</ListItemText>
           </MenuItem>
         </a>
         {!isUserAnonymous ? (
@@ -94,11 +108,13 @@ const SettingsDropdownComponent = props => {
         ) : null}
         {!isUserAnonymous ? (
           <MenuItem onClick={onLogoutClick} data-test-id={'app-menu-sign-out'}>
-            <ExitToAppIcon
-              color={menuItemIconColor}
-              style={menuItemSvgIconStyle}
-            />
-            <span>Sign Out</span>
+            <ListItemIcon>
+              <ExitToAppIcon
+                color={menuItemIconColor}
+                style={menuItemSvgIconStyle}
+              />
+            </ListItemIcon>
+            <ListItemText>Sign Out</ListItemText>
           </MenuItem>
         ) : null}
       </MenuList>
