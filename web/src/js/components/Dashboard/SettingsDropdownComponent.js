@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
+import MenuList from '@material-ui/core/MenuList'
+import MenuItem from '@material-ui/core/MenuItem'
 // import Typography from '@material-ui/core/Typography'
 // import Button from '@material-ui/core/Button'
 // import Divider from '@material-ui/core/Divider'
@@ -10,8 +12,6 @@ import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 // import Link from 'js/components/General/Link'
 
 import Divider from 'material-ui/Divider'
-import Menu from 'material-ui/Menu'
-import MenuItem from 'material-ui/MenuItem'
 import HeartIcon from 'material-ui/svg-icons/action/favorite'
 import SettingsIcon from 'material-ui/svg-icons/action/settings'
 import HelpIcon from 'material-ui/svg-icons/action/help'
@@ -43,17 +43,6 @@ const styles = {
 const SettingsDropdownComponent = props => {
   const { anchorElement, isUserAnonymous, onClose, onLogoutClick, open } = props
 
-  const menuWidth = 200
-  const menuStyle = {
-    width: menuWidth,
-    overflowX: 'hidden',
-    backgroundColor: 'transparent',
-    fontFamily: appTheme.fontFamily,
-  }
-  const menuItemStyle = {
-    fontSize: 14,
-    color: appTheme.palette.alternateTextColor,
-  }
   const menuItemIconColor = '#FFFFFF'
   const menuItemSvgIconStyle = {
     color: menuItemIconColor,
@@ -62,46 +51,29 @@ const SettingsDropdownComponent = props => {
   }
   return (
     <DashboardPopover open={open} anchorEl={anchorElement} onClose={onClose}>
-      <Menu
-        width={menuWidth}
-        autoWidth={false}
-        style={menuStyle}
-        menuItemStyle={menuItemStyle}
-      >
-        <MenuItem
-          primaryText="Settings"
-          onClick={goToSettings}
-          leftIcon={
-            <SettingsIcon
-              color={menuItemIconColor}
-              style={menuItemSvgIconStyle}
-            />
-          }
-        />
-        <MenuItem
-          primaryText="Donate Hearts"
-          onClick={goToDonate}
-          leftIcon={
-            <HeartIcon color={menuItemIconColor} style={menuItemSvgIconStyle} />
-          }
-        />
-        <MenuItem
-          primaryText="Invite Friends"
-          onClick={goToInviteFriends}
-          leftIcon={
-            <PersonAddIcon
-              color={menuItemIconColor}
-              style={menuItemSvgIconStyle}
-            />
-          }
-        />
-        <MenuItem
-          primaryText="Your Stats"
-          onClick={goToStats}
-          leftIcon={
-            <ChartIcon color={menuItemIconColor} style={menuItemSvgIconStyle} />
-          }
-        />
+      <MenuList style={{ width: 200 }}>
+        <MenuItem onClick={goToSettings}>
+          <SettingsIcon
+            color={menuItemIconColor}
+            style={menuItemSvgIconStyle}
+          />
+          <span>Settings</span>
+        </MenuItem>
+        <MenuItem onClick={goToDonate}>
+          <HeartIcon color={menuItemIconColor} style={menuItemSvgIconStyle} />
+          <span>Donate Hearts</span>
+        </MenuItem>
+        <MenuItem onClick={goToInviteFriends}>
+          <PersonAddIcon
+            color={menuItemIconColor}
+            style={menuItemSvgIconStyle}
+          />
+          <span>Invite Friends</span>
+        </MenuItem>
+        <MenuItem onClick={goToStats}>
+          <ChartIcon color={menuItemIconColor} style={menuItemSvgIconStyle} />
+          <span>Your Stats</span>
+        </MenuItem>
         <Divider style={{ marginBottom: 0, marginTop: 0 }} />
         <a
           href="https://gladly.zendesk.com/hc/en-us/categories/201939608-Tab-for-a-Cause"
@@ -112,35 +84,24 @@ const SettingsDropdownComponent = props => {
             textDecoration: 'none',
           }}
         >
-          <MenuItem
-            primaryText="Help"
-            onClick={goToStats}
-            leftIcon={
-              <HelpIcon
-                color={menuItemIconColor}
-                style={menuItemSvgIconStyle}
-              />
-            }
-            style={menuItemStyle}
-          />
+          <MenuItem onClick={goToStats}>
+            <HelpIcon color={menuItemIconColor} style={menuItemSvgIconStyle} />
+            <span>Help</span>
+          </MenuItem>
         </a>
         {!isUserAnonymous ? (
           <Divider style={{ marginBottom: 0, marginTop: 0 }} />
         ) : null}
         {!isUserAnonymous ? (
-          <MenuItem
-            primaryText="Sign Out"
-            onClick={onLogoutClick}
-            data-test-id={'app-menu-sign-out'}
-            leftIcon={
-              <ExitToAppIcon
-                color={menuItemIconColor}
-                style={menuItemSvgIconStyle}
-              />
-            }
-          />
+          <MenuItem onClick={onLogoutClick} data-test-id={'app-menu-sign-out'}>
+            <ExitToAppIcon
+              color={menuItemIconColor}
+              style={menuItemSvgIconStyle}
+            />
+            <span>Sign Out</span>
+          </MenuItem>
         ) : null}
-      </Menu>
+      </MenuList>
     </DashboardPopover>
   )
 }
