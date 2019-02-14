@@ -19,6 +19,7 @@ export default createFragmentContainer(UserMenu, {
       vcDonatedAllTime
       numUsersRecruited
       tabsToday
+      ...HeartsContainer_user
       ...HeartsDropdownContainer_user
     }
   `,
