@@ -10,20 +10,14 @@ import {
 } from 'js/theme/default'
 import logger from 'js/utils/logger'
 import Hearts from 'js/components/Dashboard/HeartsContainer'
-import HeartsDropdown from 'js/components/Dashboard/HeartsDropdownContainer'
 import SettingsDropdown from 'js/components/Dashboard/SettingsDropdownComponent'
 
 class UserMenu extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      heartsHover: false,
-      heartsPopoverOpen: false,
       menuIconHover: false,
       menuOpen: false,
-      // refs
-      heartsPopoverAnchorElem: null,
-      heartsHoverPopoverAnchorElem: null,
       menuPopoverAnchorElem: null,
     }
   }
@@ -67,13 +61,7 @@ class UserMenu extends React.Component {
 
   render() {
     const { app, user, isUserAnonymous } = this.props
-    const {
-      heartsHover,
-      heartsPopoverAnchorElem,
-      heartsPopoverOpen,
-      menuOpen,
-      menuPopoverAnchorElem,
-    } = this.state
+    const { menuOpen, menuPopoverAnchorElem } = this.state
     if (!user || !app) {
       return null
     }
@@ -99,41 +87,7 @@ class UserMenu extends React.Component {
     // TODO: add level bar
     return (
       <div style={userMenuStyle}>
-        <Hearts
-          user={user}
-          isHovering={heartsHover}
-          isPopoverOpen={heartsPopoverOpen}
-          popoverAnchorElem={heartsPopoverAnchorElem}
-          onClick={event => {
-            this.setState({
-              heartsPopoverOpen: true,
-              heartsPopoverAnchorElem: event.currentTarget,
-            })
-          }}
-          onMouseEnter={event => {
-            this.setState({
-              heartsHover: true,
-              heartsHoverPopoverAnchorElem: event.currentTarget,
-            })
-          }}
-          onMouseLeave={event => {
-            this.setState({
-              heartsHover: false,
-            })
-          }}
-        />
-        {/* TODO: pass this to the Hearts component as a prop */}
-        <HeartsDropdown
-          app={app}
-          user={user}
-          open={heartsPopoverOpen}
-          onClose={() => {
-            this.setState({
-              heartsPopoverOpen: false,
-            })
-          }}
-          anchorElement={heartsPopoverAnchorElem}
-        />
+        <Hearts app={app} user={user} />
         <IconButton
           style={menuIconButtonStyle}
           iconStyle={menuIconStyle}

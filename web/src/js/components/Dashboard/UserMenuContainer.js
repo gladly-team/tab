@@ -7,7 +7,7 @@ export default createFragmentContainer(UserMenu, {
   app: graphql`
     fragment UserMenuContainer_app on App {
       referralVcReward
-      ...HeartsDropdownContainer_app
+      ...HeartsContainer_app
     }
   `,
   user: graphql`
@@ -20,7 +20,6 @@ export default createFragmentContainer(UserMenu, {
       numUsersRecruited
       tabsToday
       ...HeartsContainer_user
-      ...HeartsDropdownContainer_user
     }
   `,
 })
