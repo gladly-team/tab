@@ -5,25 +5,26 @@ import { commaFormatted } from 'js/utils/utils'
 import { MAX_DAILY_HEARTS_FROM_TABS } from 'js/constants'
 import HeartBorderIcon from '@material-ui/icons/FavoriteBorder'
 import CheckmarkIcon from '@material-ui/icons/Done'
-
+import Typography from '@material-ui/core/Typography'
 import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
-import appTheme, {
-  dashboardIconActiveColor,
-  dashboardIconInactiveColor,
-} from 'js/theme/default'
 
 // TODO: break out to make the component customizable:
 // https://material-ui.com/customization/overrides/#3-specific-variation-of-a-component
 const fontColor = 'rgba(255, 255, 255, 0.8)'
 const fontColorActive = 'white'
 const styles = {
+  heartCount: {
+    color: fontColor,
+    transition: 'color 300ms ease-in',
+    fontSize: 24,
+    fontWeight: 'normal',
+    userSelect: 'none',
+    cursor: 'pointer',
+  },
   heartIcon: {
     color: fontColor,
     transition: 'color 300ms ease-in',
     cursor: 'pointer',
-    '&:hover': {
-      color: fontColorActive,
-    },
     marginLeft: 2,
     height: 24,
     width: 24,
@@ -33,9 +34,6 @@ const styles = {
     color: fontColor,
     transition: 'color 300ms ease-in',
     cursor: 'pointer',
-    '&:hover': {
-      color: fontColorActive,
-    },
     height: 16,
     width: 16,
     position: 'absolute',
@@ -64,37 +62,26 @@ const HeartsComponent = props => {
   const reachedMaxDailyHeartsFromTabs =
     user.tabsToday >= MAX_DAILY_HEARTS_FROM_TABS
 
-  const heartsPopoverStyle = {
-    textAlign: 'center',
-    width: 210,
-  }
-  const textStyle = Object.assign(
-    {},
-    {
-      color: isHovering ? dashboardIconActiveColor : dashboardIconInactiveColor,
-      transition: 'color 300ms ease-in',
-      fontSize: 18,
-      fontWeight: 'normal',
-      fontFamily: appTheme.fontFamily,
-      userSelect: 'none',
-      cursor: 'pointer',
-    },
+  // TODO: define style on parent
+  const rootStyle = Object.assign(
+    { marginRight: 0, display: 'flex', alignItems: 'center' },
     style
   )
-  const heartsStyle = Object.assign({}, textStyle, {
-    marginRight: 0,
-    display: 'flex',
-    alignItems: 'center',
-  })
+
   return (
     <div
-      style={heartsStyle}
+      style={rootStyle}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       onClick={onClick}
       data-tour-id={'hearts'}
     >
-      <span>{commaFormatted(user.vcCurrent)}</span>
+      <Typography
+        style={{ ...(isHovering && { color: fontColorActive }) }}
+        className={classes.heartCount}
+      >
+        {commaFormatted(user.vcCurrent)}
+      </Typography>
       <span
         style={{
           position: 'relative',
@@ -103,16 +90,25 @@ const HeartsComponent = props => {
           alignItems: 'center',
         }}
       >
-        <HeartBorderIcon className={classes.heartIcon} />
+        <HeartBorderIcon
+          style={{ ...(isHovering && { color: fontColorActive }) }}
+          className={classes.heartIcon}
+        />
         {reachedMaxDailyHeartsFromTabs ? (
-          <CheckmarkIcon className={classes.checkmarkIcon} />
+          <CheckmarkIcon
+            style={{ ...(isHovering && { color: fontColorActive }) }}
+            className={classes.checkmarkIcon}
+          />
         ) : null}
         {/* FIXME: style; pass this as a prop to the Hearts component */}
         {reachedMaxDailyHeartsFromTabs ? (
           <DashboardPopover
             open={isHovering && !isPopoverOpen}
             anchorEl={popoverAnchorElement}
-            style={heartsPopoverStyle}
+            style={{
+              textAlign: 'center',
+              width: 210,
+            }}
           >
             <div style={{ padding: 10 }}>
               You've earned the maximum Hearts from opening tabs today! You'll
