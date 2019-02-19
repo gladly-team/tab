@@ -93,7 +93,7 @@ class HeartsComponent extends React.Component {
           >
             {commaFormatted(user.vcCurrent)}
           </Typography>
-          <span
+          <div
             style={{
               position: 'relative',
               display: 'flex',
@@ -119,14 +119,7 @@ class HeartsComponent extends React.Component {
                 className={classes.checkmarkIcon}
               />
             ) : null}
-            {/* FIXME: style; make sure we hide it when we stop hovering */}
-            <MaxHeartsDropdownMessageComponent
-              open={
-                reachedMaxDailyHeartsFromTabs && isHovering && !isPopoverOpen
-              }
-              anchorElement={anchorElement}
-            />
-          </span>
+          </div>
         </div>
         <HeartsDropdown
           app={app}
@@ -137,6 +130,10 @@ class HeartsComponent extends React.Component {
               isPopoverOpen: false,
             })
           }}
+          anchorElement={anchorElement}
+        />
+        <MaxHeartsDropdownMessageComponent
+          open={reachedMaxDailyHeartsFromTabs && isHovering && !isPopoverOpen}
           anchorElement={anchorElement}
         />
       </div>

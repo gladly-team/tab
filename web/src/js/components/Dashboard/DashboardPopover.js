@@ -4,7 +4,7 @@ import Popover from '@material-ui/core/Popover'
 import { withTheme } from '@material-ui/core/styles'
 
 const DashboardPopover = props => {
-  const { anchorEl, children, onClose, open, theme } = props
+  const { anchorEl, children, onClose, open, theme, ...otherProps } = props
   return (
     <Popover
       open={open}
@@ -16,6 +16,7 @@ const DashboardPopover = props => {
           backgroundColor: 'rgba(0, 0, 0, 0.36)', // TODO: make themable
         },
       }}
+      {...otherProps}
     >
       <div
         style={{

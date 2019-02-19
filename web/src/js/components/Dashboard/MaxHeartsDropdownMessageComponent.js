@@ -12,7 +12,18 @@ const styles = {
 const MaxHeartsDropdownMessageComponent = props => {
   const { anchorElement, classes } = props
   return (
-    <DashboardPopover open={props.open} anchorEl={anchorElement}>
+    <DashboardPopover
+      open={props.open}
+      anchorEl={anchorElement}
+      // Necessary to prevent the Modal component from stealing
+      // hover away from the root element:
+      // https://github.com/mui-org/material-ui/issues/14345#issuecomment-463919440
+      // Could use Popper compnent as an alternative:
+      // https://github.com/mui-org/material-ui/issues/9893#issuecomment-406891098
+      style={{
+        pointerEvents: 'none',
+      }}
+    >
       <div style={{ padding: 10, width: 210, textAlign: 'center' }}>
         <Typography className={classes.typography} variant={'body2'}>
           You've earned the maximum Hearts from opening tabs today! You'll be
