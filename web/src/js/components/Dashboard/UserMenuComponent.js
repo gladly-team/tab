@@ -102,6 +102,8 @@ class UserMenu extends React.Component {
         <Hearts
           user={user}
           isHovering={heartsHover}
+          isPopoverOpen={heartsPopoverOpen}
+          popoverAnchorElem={heartsPopoverAnchorElem}
           onClick={event => {
             this.setState({
               heartsPopoverOpen: true,

@@ -3,19 +3,59 @@ import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import { commaFormatted } from 'js/utils/utils'
 import { MAX_DAILY_HEARTS_FROM_TABS } from 'js/constants'
+import HeartBorderIcon from '@material-ui/icons/FavoriteBorder'
+import CheckmarkIcon from '@material-ui/icons/Done'
 
 import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
-import HeartBorderIcon from 'material-ui/svg-icons/action/favorite-border'
-import CheckmarkIcon from 'material-ui/svg-icons/action/done'
 import appTheme, {
   dashboardIconActiveColor,
   dashboardIconInactiveColor,
 } from 'js/theme/default'
 
-const styles = {}
+// TODO: break out to make the component customizable:
+// https://material-ui.com/customization/overrides/#3-specific-variation-of-a-component
+const fontColor = 'rgba(255, 255, 255, 0.8)'
+const fontColorActive = 'white'
+const styles = {
+  heartIcon: {
+    color: fontColor,
+    transition: 'color 300ms ease-in',
+    cursor: 'pointer',
+    '&:hover': {
+      color: fontColorActive,
+    },
+    marginLeft: 2,
+    height: 24,
+    width: 24,
+    paddingBottom: 0,
+  },
+  checkmarkIcon: {
+    color: fontColor,
+    transition: 'color 300ms ease-in',
+    cursor: 'pointer',
+    '&:hover': {
+      color: fontColorActive,
+    },
+    height: 16,
+    width: 16,
+    position: 'absolute',
+    paddingLeft: 4,
+    paddingBottom: 2,
+  },
+}
 
 const HeartsComponent = props => {
-  const { isHovering, onClick, onMouseEnter, onMouseLeave, style, user } = props
+  const {
+    classes,
+    isHovering,
+    isPopoverOpen,
+    onClick,
+    onMouseEnter,
+    onMouseLeave,
+    popoverAnchorElement,
+    style,
+    user,
+  } = props
 
   // TODO: if we move this logic to the parent, remove the
   // fetched data from this container.
@@ -63,29 +103,15 @@ const HeartsComponent = props => {
           alignItems: 'center',
         }}
       >
-        <HeartBorderIcon
-          style={{ marginLeft: 2, height: 24, width: 24, paddingBottom: 0 }}
-          color={dashboardIconInactiveColor}
-          hoverColor={dashboardIconActiveColor}
-        />
+        <HeartBorderIcon className={classes.heartIcon} />
         {reachedMaxDailyHeartsFromTabs ? (
-          <CheckmarkIcon
-            style={{
-              height: 16,
-              width: 16,
-              position: 'absolute',
-              paddingLeft: 4,
-              paddingBottom: 2,
-            }}
-            color={dashboardIconInactiveColor}
-            hoverColor={dashboardIconActiveColor}
-          />
+          <CheckmarkIcon className={classes.checkmarkIcon} />
         ) : null}
         {/* FIXME: style; pass this as a prop to the Hearts component */}
         {reachedMaxDailyHeartsFromTabs ? (
           <DashboardPopover
-            open={isHovering && !this.state.heartsPopoverOpen}
-            anchorEl={this.state.heartsHoverPopoverAnchorElem}
+            open={isHovering && !isPopoverOpen}
+            anchorEl={popoverAnchorElement}
             style={heartsPopoverStyle}
           >
             <div style={{ padding: 10 }}>
@@ -104,9 +130,11 @@ HeartsComponent.displayName = 'HeartsComponent'
 HeartsComponent.propTypes = {
   classes: PropTypes.object.isRequired,
   isHovering: PropTypes.bool.isRequired,
+  isPopoverOpen: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
   onMouseEnter: PropTypes.func.isRequired,
   onMouseLeave: PropTypes.func.isRequired,
+  popoverAnchorElement: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
   user: PropTypes.shape({
     tabsToday: PropTypes.number.isRequired,
     vcCurrent: PropTypes.number.isRequired,
@@ -116,6 +144,7 @@ HeartsComponent.propTypes = {
 HeartsComponent.defaultProps = {
   classes: {},
   isHovering: false,
+  isPopoverOpen: false,
   onClick: () => {},
   onMouseEnter: () => {},
   onMouseLeave: () => {},
