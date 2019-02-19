@@ -4,10 +4,6 @@ import React from 'react'
 import { shallow } from 'enzyme'
 
 const getMockProps = () => ({
-  isHovering: false,
-  onClick: () => {},
-  onMouseEnter: () => {},
-  onMouseLeave: () => {},
   user: {
     tabsToday: 31,
     vcCurrent: 482,
