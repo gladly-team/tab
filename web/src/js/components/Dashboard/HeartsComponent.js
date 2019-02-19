@@ -6,8 +6,8 @@ import { MAX_DAILY_HEARTS_FROM_TABS } from 'js/constants'
 import HeartBorderIcon from '@material-ui/icons/FavoriteBorder'
 import CheckmarkIcon from '@material-ui/icons/Done'
 import Typography from '@material-ui/core/Typography'
-import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 import HeartsDropdown from 'js/components/Dashboard/HeartsDropdownContainer'
+import MaxHeartsDropdownMessageComponent from 'js/components/Dashboard/MaxHeartsDropdownMessageComponent'
 
 // TODO: break out to make the component customizable:
 // https://material-ui.com/customization/overrides/#3-specific-variation-of-a-component
@@ -58,8 +58,6 @@ class HeartsComponent extends React.Component {
     const { isHovering, isPopoverOpen } = this.state
     const anchorElement = this.anchorElement
 
-    // TODO: if we move this logic to the parent, remove the
-    // fetched data from this container.
     // Used to let the user know they aren't earning any more
     // Hearts from tabs today.
     const reachedMaxDailyHeartsFromTabs =
@@ -122,21 +120,12 @@ class HeartsComponent extends React.Component {
               />
             ) : null}
             {/* FIXME: style; make sure we hide it when we stop hovering */}
-            {reachedMaxDailyHeartsFromTabs ? (
-              <DashboardPopover
-                open={isHovering && !isPopoverOpen}
-                anchorEl={anchorElement}
-                style={{
-                  textAlign: 'center',
-                  width: 210,
-                }}
-              >
-                <div style={{ padding: 10 }}>
-                  You've earned the maximum Hearts from opening tabs today!
-                  You'll be able to earn more Hearts in a few hours.
-                </div>
-              </DashboardPopover>
-            ) : null}
+            <MaxHeartsDropdownMessageComponent
+              open={
+                reachedMaxDailyHeartsFromTabs && isHovering && !isPopoverOpen
+              }
+              anchorElement={anchorElement}
+            />
           </span>
         </div>
         <HeartsDropdown
