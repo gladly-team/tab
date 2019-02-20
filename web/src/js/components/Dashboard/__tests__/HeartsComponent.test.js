@@ -1,9 +1,11 @@
 /* eslint-env jest */
 
 import React from 'react'
-import { mount, shallow } from 'enzyme'
+import { shallow } from 'enzyme'
 import Typography from '@material-ui/core/Typography'
 import HeartBorderIcon from '@material-ui/icons/FavoriteBorder'
+import HeartsDropdown from 'js/components/Dashboard/HeartsDropdownContainer'
+import { mountWithHOC } from 'js/utils/test-utils'
 
 jest.mock('js/components/Dashboard/HeartsDropdownContainer')
 jest.mock('js/components/Dashboard/MaxHeartsDropdownMessageComponent')
@@ -57,7 +59,7 @@ describe('HeartsComponent', () => {
     const HeartsComponent = require('js/components/Dashboard/HeartsComponent')
       .default
     const mockProps = getMockProps()
-    const wrapper = mount(<HeartsComponent {...mockProps} />)
+    const wrapper = mountWithHOC(<HeartsComponent {...mockProps} />)
     const typographyComputedStyle = window.getComputedStyle(
       wrapper.find(Typography).getDOMNode()
     )
@@ -67,22 +69,59 @@ describe('HeartsComponent', () => {
     )
   })
 
-  it('is the expected color when hovering', () => {
+  it('is the expected color after clicking', () => {
     const HeartsComponent = require('js/components/Dashboard/HeartsComponent')
       .default
     const mockProps = getMockProps()
-    const wrapper = mount(<HeartsComponent {...mockProps} />)
+    const wrapper = mountWithHOC(<HeartsComponent {...mockProps} />)
 
-    // Simulate hover on the hearts icon
+    // Simulate click on the hearts icon
     wrapper
       .find(HeartBorderIcon)
       .first()
-      // .simulate('mouseenter')
       .simulate('click')
 
     const typographyComputedStyle = window.getComputedStyle(
       wrapper.find(Typography).getDOMNode()
     )
     expect(typographyComputedStyle).toHaveProperty('color', 'white')
+  })
+
+  it('is the expected color when hovering', () => {
+    const HeartsComponent = require('js/components/Dashboard/HeartsComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = mountWithHOC(<HeartsComponent {...mockProps} />)
+
+    // Simulate hover on the parent div
+    wrapper.find('[data-tour-id="hearts"]').simulate('mouseenter')
+    const typographyComputedStyle = window.getComputedStyle(
+      wrapper.find(Typography).getDOMNode()
+    )
+    expect(typographyComputedStyle).toHaveProperty('color', 'white')
+
+    // Simulate ending hover
+    wrapper.find('[data-tour-id="hearts"]').simulate('mouseleave')
+    const typographyComputedStyleNoHover = window.getComputedStyle(
+      wrapper.find(Typography).getDOMNode()
+    )
+    expect(typographyComputedStyleNoHover).toHaveProperty(
+      'color',
+      'rgba(0, 0, 0, 0.87)'
+    )
+  })
+
+  it('opens the dropdown on click', () => {
+    const HeartsComponent = require('js/components/Dashboard/HeartsComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = mountWithHOC(<HeartsComponent {...mockProps} />)
+
+    expect(wrapper.find(HeartsDropdown).prop('open')).toBe(false)
+    wrapper
+      .find(Typography)
+      .first()
+      .simulate('click')
+    expect(wrapper.find(HeartsDropdown).prop('open')).toBe(true)
   })
 })

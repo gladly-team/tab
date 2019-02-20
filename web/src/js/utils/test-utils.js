@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { shape } from 'prop-types'
-import { mount } from 'enzyme'
+import { shallow, mount } from 'enzyme'
 
 import { BrowserRouter } from 'react-router-dom'
 
@@ -290,4 +290,17 @@ export const addReactRootElementToDOM = () => {
   const div = document.createElement('div')
   div.id = 'root'
   document.body.appendChild(div)
+}
+
+/**
+ * Makes Enzyme's wrapper works as expected when the
+ * component is wrapped in a HOC. See:
+ *   https://github.com/airbnb/enzyme/issues/1395#issuecomment-362319366
+ * Alternative may be to use MUI's test utils:
+ *   https://material-ui.com/guides/testing/#testing
+ * Related: https://github.com/mui-org/material-ui/issues/9266
+ * @return {undefined}
+ */
+export const mountWithHOC = component => {
+  return mount(shallow(component).get(0))
 }
