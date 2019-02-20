@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import { commaFormatted } from 'js/utils/utils'
 import { MAX_DAILY_HEARTS_FROM_TABS } from 'js/constants'
+import ButtonBase from '@material-ui/core/ButtonBase'
 import HeartBorderIcon from '@material-ui/icons/FavoriteBorder'
 import CheckmarkIcon from '@material-ui/icons/Done'
 import Typography from '@material-ui/core/Typography'
@@ -65,62 +66,66 @@ class HeartsComponent extends React.Component {
 
     return (
       <div>
-        <div
-          data-tour-id={'hearts'}
-          ref={anchorElement => (this.anchorElement = anchorElement)}
-          onMouseEnter={event => {
-            this.setState({
-              isHovering: true,
-            })
-          }}
-          onMouseLeave={event => {
-            this.setState({
-              isHovering: false,
-            })
-          }}
-          onClick={event => {
-            this.setState({
-              isPopoverOpen: true,
-            })
-          }}
-          style={{ marginRight: 0, display: 'flex', alignItems: 'center' }}
-        >
-          <Typography
-            style={{
-              ...((isHovering || isPopoverOpen) && { color: fontColorActive }),
-            }}
-            className={classes.heartCount}
-          >
-            {commaFormatted(user.vcCurrent)}
-          </Typography>
+        <ButtonBase>
           <div
-            style={{
-              position: 'relative',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
+            data-tour-id={'hearts'}
+            ref={anchorElement => (this.anchorElement = anchorElement)}
+            onMouseEnter={event => {
+              this.setState({
+                isHovering: true,
+              })
             }}
+            onMouseLeave={event => {
+              this.setState({
+                isHovering: false,
+              })
+            }}
+            onClick={event => {
+              this.setState({
+                isPopoverOpen: true,
+              })
+            }}
+            style={{ marginRight: 0, display: 'flex', alignItems: 'center' }}
           >
-            <HeartBorderIcon
+            <Typography
               style={{
                 ...((isHovering || isPopoverOpen) && {
                   color: fontColorActive,
                 }),
               }}
-              className={classes.heartIcon}
-            />
-            {reachedMaxDailyHeartsFromTabs ? (
-              <CheckmarkIcon
+              className={classes.heartCount}
+            >
+              {commaFormatted(user.vcCurrent)}
+            </Typography>
+            <div
+              style={{
+                position: 'relative',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <HeartBorderIcon
                 style={{
                   ...((isHovering || isPopoverOpen) && {
                     color: fontColorActive,
                   }),
                 }}
-                className={classes.checkmarkIcon}
+                className={classes.heartIcon}
               />
-            ) : null}
+              {reachedMaxDailyHeartsFromTabs ? (
+                <CheckmarkIcon
+                  style={{
+                    ...((isHovering || isPopoverOpen) && {
+                      color: fontColorActive,
+                    }),
+                  }}
+                  className={classes.checkmarkIcon}
+                />
+              ) : null}
+            </div>
           </div>
-        </div>
+        </ButtonBase>
         <HeartsDropdown
           app={app}
           user={user}
