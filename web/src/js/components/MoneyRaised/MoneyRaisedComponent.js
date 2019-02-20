@@ -2,10 +2,11 @@ import React, { Suspense, lazy } from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
 import { commaFormatted, currencyFormatted } from 'js/utils/utils'
 import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
-import RaisedButton from 'material-ui/RaisedButton'
-import { goToInviteFriends } from 'js/navigation/navigation'
+import { inviteFriendsURL } from 'js/navigation/navigation'
+import Link from 'js/components/General/Link'
 
 const Sparkle = lazy(() => import('react-sparkle'))
 
@@ -173,14 +174,11 @@ class MoneyRaised extends React.Component {
                 justifyContent: 'center',
               }}
             >
-              <RaisedButton
-                label="Invite Friends"
-                primary
-                onClick={goToInviteFriends}
-                labelStyle={{
-                  fontSize: 13,
-                }}
-              />
+              <Link to={inviteFriendsURL}>
+                <Button variant={'contained'} color={'primary'}>
+                  Invite Friends
+                </Button>
+              </Link>
             </div>
           </div>
         </DashboardPopover>
