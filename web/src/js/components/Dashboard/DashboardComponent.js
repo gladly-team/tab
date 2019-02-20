@@ -64,7 +64,6 @@ class Dashboard extends React.Component {
     this.state = {
       errorMessage: null,
       tabId: uuid(),
-      showFireworks: false,
       isUserAnonymous: false, // Set after mount if true
       // This may be false if the user cleared their storage,
       // which is why we only show the tour to recently-joined
@@ -113,12 +112,6 @@ class Dashboard extends React.Component {
 
   clearError() {
     this.showError(null)
-  }
-
-  launchFireworks(show) {
-    this.setState({
-      showFireworks: show,
-    })
   }
 
   render() {
@@ -182,13 +175,7 @@ class Dashboard extends React.Component {
                   alignItems: 'center',
                 }}
               >
-                <MoneyRaised
-                  app={app}
-                  style={{
-                    fontSize: 24,
-                  }}
-                  launchFireworks={this.launchFireworks.bind(this)}
-                />
+                <MoneyRaised app={app} />
                 <CircleIcon
                   color={dashboardIconInactiveColor}
                   hoverColor={dashboardIconActiveColor}
@@ -290,10 +277,6 @@ class Dashboard extends React.Component {
             </Suspense>
           </FadeInDashboardAnimation>
         ) : null}
-        {this.state.showFireworks
-          ? // TODO: build a new fireworks component
-            null
-          : null}
         {showNewUserTour ? (
           <Suspense fallback={null}>
             <NewUserTour user={user} />
