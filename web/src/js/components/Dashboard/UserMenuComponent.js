@@ -84,7 +84,9 @@ class UserMenu extends React.Component {
       fontSize: 22,
     }
 
-    // TODO: add level bar
+    // TODO: move MoneyRaised component here
+    // TODO: move settings icon into its own component
+    // TODO: add more tests for UserMenu
     return (
       <div style={userMenuStyle}>
         <Hearts app={app} user={user} />
