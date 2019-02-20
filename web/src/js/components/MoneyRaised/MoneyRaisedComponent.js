@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
+import ButtonBase from '@material-ui/core/ButtonBase'
 import { commaFormatted, currencyFormatted } from 'js/utils/utils'
 import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 import { inviteFriendsURL } from 'js/navigation/navigation'
@@ -92,56 +93,59 @@ class MoneyRaised extends React.Component {
     )}`
 
     return (
-      <div
-        ref={anchorEl => (this.anchorEl = anchorEl)}
-        onClick={() => {
-          if (this.celebratingMilestone() && launchFireworks) {
-            launchFireworks(true)
-          } else {
-            this.setState({
-              open: !this.state.open,
-            })
-          }
-        }}
-        onMouseEnter={() => {
-          this.setState({
-            isHovering: true,
-          })
-        }}
-        onMouseLeave={() => {
-          this.setState({
-            isHovering: false,
-          })
-        }}
-        style={{
-          position: 'relative',
-          userSelect: 'none',
-          cursor: 'default',
-        }}
-      >
-        <Typography
-          className={classes.moneyRaisedText}
-          style={{
-            color: celebrateMilestone
-              ? milestoneMoneyRaisedColor
-              : isHovering
-              ? fontColorActive
-              : fontColor,
-          }}
-        >
-          {moneyRaisedFormatted}
-        </Typography>
-        {celebrateMilestone ? (
-          <Suspense fallback={null}>
-            <Sparkle
-              color={milestoneMoneyRaisedColor}
-              count={18}
-              fadeOutSpeed={40}
-              overflowPx={14}
-              flicker={false}
-            />
-          </Suspense>
-        ) : null}
+      <div style={{ position: 'relative' }}>
+        <ButtonBase>
+          <div
+            ref={anchorEl => (this.anchorEl = anchorEl)}
+            onClick={() => {
+              if (this.celebratingMilestone() && launchFireworks) {
+                launchFireworks(true)
+              } else {
+                this.setState({
+                  open: !this.state.open,
+                })
+              }
+            }}
+            onMouseEnter={() => {
+              this.setState({
+                isHovering: true,
+              })
+            }}
+            onMouseLeave={() => {
+              this.setState({
+                isHovering: false,
+              })
+            }}
+            style={{
+              userSelect: 'none',
+              cursor: 'default',
+            }}
+          >
+            <Typography
+              className={classes.moneyRaisedText}
+              style={{
+                color: celebrateMilestone
+                  ? milestoneMoneyRaisedColor
+                  : isHovering
+                  ? fontColorActive
+                  : fontColor,
+              }}
+            >
+              {moneyRaisedFormatted}
+            </Typography>
+            {celebrateMilestone ? (
+              <Suspense fallback={null}>
+                <Sparkle
+                  color={milestoneMoneyRaisedColor}
+                  count={18}
+                  fadeOutSpeed={40}
+                  overflowPx={14}
+                  flicker={false}
+                />
+              </Suspense>
+            ) : null}
+          </div>
+        </ButtonBase>
         <DashboardPopover
           open={this.state.open}
           anchorEl={this.anchorEl}
