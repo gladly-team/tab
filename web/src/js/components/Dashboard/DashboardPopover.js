@@ -11,6 +11,7 @@ const DashboardPopover = props => {
       anchorEl={anchorEl}
       onClose={onClose}
       anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+      transformOrigin={{ horizontal: 'right', vertical: 'top' }}
       PaperProps={{
         style: {
           backgroundColor: 'rgba(0, 0, 0, 0.36)', // TODO: make themable
