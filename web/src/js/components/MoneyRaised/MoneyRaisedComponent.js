@@ -1,14 +1,11 @@
 import React, { Suspense, lazy } from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
 import { commaFormatted, currencyFormatted } from 'js/utils/utils'
 import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 import RaisedButton from 'material-ui/RaisedButton'
 import { goToInviteFriends } from 'js/navigation/navigation'
-import appTheme, {
-  dashboardIconActiveColor,
-  dashboardIconInactiveColor,
-} from 'js/theme/default'
 
 const Sparkle = lazy(() => import('react-sparkle'))
 
@@ -17,6 +14,10 @@ const fontColorActive = 'white'
 const styles = {
   moneyRaisedText: {
     color: fontColor,
+    fontSize: 24,
+    fontWeight: 'normal',
+    transition: 'color 300ms ease-in',
+    cursor: 'pointer',
   },
   dropdownText: {
     color: fontColorActive,
@@ -29,7 +30,7 @@ class MoneyRaised extends React.Component {
     this.timer = 0
     this.state = {
       moneyRaised: 0,
-      hovering: false,
+      isHovering: false,
       open: false,
     }
     this.anchorEl = null
@@ -71,46 +72,30 @@ class MoneyRaised extends React.Component {
   // Returns boolean, whether we're drawing attention to the current
   // amount raised
   celebratingMilestone() {
+    const { moneyRaised } = this.state
     const milestoneStart = 5e5
     const milestoneEnd = 5.03e5
-    return (
-      this.state.moneyRaised >= milestoneStart &&
-      this.state.moneyRaised < milestoneEnd
-    )
+    return moneyRaised >= milestoneStart && moneyRaised < milestoneEnd
   }
 
   render() {
-    if (!this.props.app) {
+    const { app, classes, launchFireworks } = this.props
+    const { isHovering, moneyRaised } = this.state
+    if (!app) {
       return null
     }
     const celebrateMilestone = this.celebratingMilestone()
     const milestoneMoneyRaisedColor = '#FFEBA2'
-    const textStyle = Object.assign(
-      {},
-      {
-        color: celebrateMilestone
-          ? milestoneMoneyRaisedColor
-          : this.state.hover
-          ? dashboardIconActiveColor
-          : dashboardIconInactiveColor,
-        transition: 'color 300ms ease-in',
-        cursor: 'pointer',
-        fontSize: 18,
-        fontFamily: appTheme.fontFamily,
-        fontWeight: 'normal',
-      },
-      this.props.style
-    )
     const moneyRaisedFormatted = `$${commaFormatted(
-      currencyFormatted(this.state.moneyRaised)
+      currencyFormatted(moneyRaised)
     )}`
 
     return (
       <div
         ref={anchorEl => (this.anchorEl = anchorEl)}
         onClick={() => {
-          if (this.celebratingMilestone() && this.props.launchFireworks) {
-            this.props.launchFireworks(true)
+          if (this.celebratingMilestone() && launchFireworks) {
+            launchFireworks(true)
           } else {
             this.setState({
               open: !this.state.open,
@@ -119,12 +104,12 @@ class MoneyRaised extends React.Component {
         }}
         onMouseEnter={() => {
           this.setState({
-            hover: true,
+            isHovering: true,
           })
         }}
         onMouseLeave={() => {
           this.setState({
-            hover: false,
+            isHovering: false,
           })
         }}
         style={{
@@ -133,7 +118,18 @@ class MoneyRaised extends React.Component {
           cursor: 'default',
         }}
       >
-        <span style={textStyle}>{moneyRaisedFormatted}</span>
+        <Typography
+          className={classes.moneyRaisedText}
+          style={{
+            color: celebrateMilestone
+              ? milestoneMoneyRaisedColor
+              : isHovering
+              ? fontColorActive
+              : fontColor,
+          }}
+        >
+          {moneyRaisedFormatted}
+        </Typography>
         {celebrateMilestone ? (
           <Suspense fallback={null}>
             <Sparkle
@@ -151,16 +147,30 @@ class MoneyRaised extends React.Component {
           onClose={() => {
             this.setState({
               open: false,
-              hover: false,
+              isHovering: false,
             })
           }}
         >
-          <div style={{ padding: 10, paddingTop: 0, width: 180 }}>
-            <p>This is how much money Tabbers have raised for charity.</p>
-            <p>Recruit your friends to raise more!</p>
+          <div style={{ padding: 12, width: 160 }}>
+            <Typography
+              variant={'body2'}
+              className={classes.dropdownText}
+              gutterBottom
+            >
+              This is how much money Tabbers have raised for charity.
+            </Typography>
+            <Typography
+              variant={'body2'}
+              className={classes.dropdownText}
+              gutterBottom
+            >
+              Recruit your friends to raise more!
+            </Typography>
             <div
               style={{
-                textAlign: 'center',
+                marginTop: 14,
+                display: 'flex',
+                justifyContent: 'center',
               }}
             >
               <RaisedButton
@@ -185,12 +195,9 @@ MoneyRaised.propTypes = {
     dollarsPerDayRate: PropTypes.number.isRequired,
   }).isRequired,
   classes: PropTypes.object.isRequired,
-  style: PropTypes.object,
   launchFireworks: PropTypes.func,
 }
 
-MoneyRaised.defaultProps = {
-  style: {},
-}
+MoneyRaised.defaultProps = {}
 
 export default withStyles(styles)(MoneyRaised)
