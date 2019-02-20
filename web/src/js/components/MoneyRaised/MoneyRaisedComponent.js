@@ -16,80 +16,44 @@ class MoneyRaised extends React.Component {
     super(props)
     this.timer = 0
     this.state = {
-      amountDonated: 0,
+      moneyRaised: 0,
       hovering: false,
       open: false,
     }
-  }
-
-  incrementAmount() {
-    var latestAmountRaised = this.state.amountDonated
-    var newAmountRaisedRounded = +(latestAmountRaised + 0.01).toFixed(2)
-    this.setState({
-      amountDonated: newAmountRaisedRounded,
-    })
+    this.anchorEl = null
   }
 
   componentDidMount() {
-    this.setCounter(this.props.app)
+    this.setCounter()
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (!this.props.app && nextProps.app) {
-      this.setCounter(nextProps.app)
+  componentWillUnmount() {
+    if (this.timer) {
+      clearInterval(this.timer)
     }
   }
 
-  setCounter(app) {
-    if (!app) {
-      return
-    }
-
+  setCounter() {
+    const { app } = this.props
     const secondsInDay = 864
+
     // Recalculate based on time that elapsed since the base amount.
     const moneyRaised = app.moneyRaised
     const dollarsPerDayRate = app.dollarsPerDayRate
     const secondsPerPenny = secondsInDay / dollarsPerDayRate
 
     this.setState({
-      amountDonated: moneyRaised,
+      moneyRaised: moneyRaised,
     })
 
-    if (!(secondsPerPenny <= 0)) {
-      var millisecondsPerPenny = Math.round(Math.abs(secondsPerPenny) * 1000)
-      this.timer = setInterval(
-        this.incrementAmount.bind(this),
-        millisecondsPerPenny
-      )
+    if (secondsPerPenny > 0) {
+      const millisecondsPerPenny = Math.round(Math.abs(secondsPerPenny) * 1000)
+      this.timer = setInterval(() => {
+        this.setState({
+          moneyRaised: +(this.state.moneyRaised + 0.01).toFixed(2),
+        })
+      }, millisecondsPerPenny)
     }
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.timer)
-  }
-
-  onHover(hovering) {
-    this.setState({
-      hover: hovering,
-    })
-  }
-
-  onClick(event) {
-    if (this.celebratingMilestone()) {
-      this.props.launchFireworks(true)
-    } else {
-      this.setState({
-        open: !this.state.open,
-        anchorEl: event.currentTarget,
-      })
-    }
-  }
-
-  handlePopoverRequestClose() {
-    this.setState({
-      open: false,
-      hover: false,
-    })
   }
 
   // Returns boolean, whether we're drawing attention to the current
@@ -98,8 +62,8 @@ class MoneyRaised extends React.Component {
     const milestoneStart = 5e5
     const milestoneEnd = 5.03e5
     return (
-      this.state.amountDonated >= milestoneStart &&
-      this.state.amountDonated < milestoneEnd
+      this.state.moneyRaised >= milestoneStart &&
+      this.state.moneyRaised < milestoneEnd
     )
   }
 
@@ -107,21 +71,8 @@ class MoneyRaised extends React.Component {
     if (!this.props.app) {
       return null
     }
-
     const celebrateMilestone = this.celebratingMilestone()
     const milestoneMoneyRaisedColor = '#FFEBA2'
-
-    const containerStyle = {
-      position: 'relative',
-      userSelect: 'none',
-      cursor: 'default',
-    }
-    const popoverStyle = {
-      width: 180,
-    }
-    const buttonContainerStyle = {
-      textAlign: 'center',
-    }
     const textStyle = Object.assign(
       {},
       {
@@ -138,18 +89,39 @@ class MoneyRaised extends React.Component {
       },
       this.props.style
     )
-
-    const moneyRaised = this.state.amountDonated
-    var amountDonated = '$' + commaFormatted(currencyFormatted(moneyRaised))
+    const moneyRaisedFormatted = `$${commaFormatted(
+      currencyFormatted(this.state.moneyRaised)
+    )}`
 
     return (
       <div
-        onClick={this.onClick.bind(this)}
-        onMouseEnter={this.onHover.bind(this, true)}
-        onMouseLeave={this.onHover.bind(this, false)}
-        style={containerStyle}
+        ref={anchorEl => (this.anchorEl = anchorEl)}
+        onClick={() => {
+          if (this.celebratingMilestone() && this.props.launchFireworks) {
+            this.props.launchFireworks(true)
+          } else {
+            this.setState({
+              open: !this.state.open,
+            })
+          }
+        }}
+        onMouseEnter={() => {
+          this.setState({
+            hover: true,
+          })
+        }}
+        onMouseLeave={() => {
+          this.setState({
+            hover: false,
+          })
+        }}
+        style={{
+          position: 'relative',
+          userSelect: 'none',
+          cursor: 'default',
+        }}
       >
-        <span style={textStyle}>{amountDonated}</span>
+        <span style={textStyle}>{moneyRaisedFormatted}</span>
         {celebrateMilestone ? (
           <Suspense fallback={null}>
             <Sparkle
@@ -162,15 +134,23 @@ class MoneyRaised extends React.Component {
           </Suspense>
         ) : null}
         <DashboardPopover
-          style={popoverStyle}
           open={this.state.open}
-          anchorEl={this.state.anchorEl}
-          onClose={this.handlePopoverRequestClose.bind(this)}
+          anchorEl={this.anchorEl}
+          onClose={() => {
+            this.setState({
+              open: false,
+              hover: false,
+            })
+          }}
         >
-          <div style={{ padding: 10, paddingTop: 0 }}>
+          <div style={{ padding: 10, paddingTop: 0, width: 180 }}>
             <p>This is how much money Tabbers have raised for charity.</p>
             <p>Recruit your friends to raise more!</p>
-            <div style={buttonContainerStyle}>
+            <div
+              style={{
+                textAlign: 'center',
+              }}
+            >
               <RaisedButton
                 label="Invite Friends"
                 primary
@@ -191,14 +171,13 @@ MoneyRaised.propTypes = {
   app: PropTypes.shape({
     moneyRaised: PropTypes.number.isRequired,
     dollarsPerDayRate: PropTypes.number.isRequired,
-  }),
+  }).isRequired,
   style: PropTypes.object,
   launchFireworks: PropTypes.func,
 }
 
 MoneyRaised.defaultProps = {
   style: {},
-  launchFireworks: () => {},
 }
 
 export default MoneyRaised
