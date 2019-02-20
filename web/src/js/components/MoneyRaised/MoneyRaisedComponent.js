@@ -1,5 +1,6 @@
 import React, { Suspense, lazy } from 'react'
 import PropTypes from 'prop-types'
+import { withStyles } from '@material-ui/core/styles'
 import { commaFormatted, currencyFormatted } from 'js/utils/utils'
 import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -10,6 +11,17 @@ import appTheme, {
 } from 'js/theme/default'
 
 const Sparkle = lazy(() => import('react-sparkle'))
+
+const fontColor = 'rgba(255, 255, 255, 0.8)'
+const fontColorActive = 'white'
+const styles = {
+  moneyRaisedText: {
+    color: fontColor,
+  },
+  dropdownText: {
+    color: fontColorActive,
+  },
+}
 
 class MoneyRaised extends React.Component {
   constructor(props) {
@@ -172,6 +184,7 @@ MoneyRaised.propTypes = {
     moneyRaised: PropTypes.number.isRequired,
     dollarsPerDayRate: PropTypes.number.isRequired,
   }).isRequired,
+  classes: PropTypes.object.isRequired,
   style: PropTypes.object,
   launchFireworks: PropTypes.func,
 }
@@ -180,4 +193,4 @@ MoneyRaised.defaultProps = {
   style: {},
 }
 
-export default MoneyRaised
+export default withStyles(styles)(MoneyRaised)
