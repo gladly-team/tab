@@ -21,7 +21,7 @@ const getMockProps = () => ({
   isUserAnonymous: false,
   open: true,
   onClose: () => {},
-  onLogoutClick: () => {},
+  onLogoutClick: jest.fn(),
 })
 
 afterEach(() => {
@@ -205,5 +205,17 @@ describe('SettingsDropdownComponent', () => {
         return elem.render().text() === 'Sign Out'
       }).length === 1
     expect(hasSignOut).toBe(false)
+  })
+
+  it('calls the onLogoutClick prop when the "sign out" button is clicked', () => {
+    const mockProps = getMockProps()
+    const SettingsDropdownComponent = require('js/components/Dashboard/SettingsDropdownComponent')
+      .default
+    const wrapper = shallow(<SettingsDropdownComponent {...mockProps} />).dive()
+    const signOutElem = wrapper.find(MenuItem).filterWhere(elem => {
+      return elem.render().text() === 'Sign Out'
+    })
+    signOutElem.simulate('click')
+    expect(mockProps.onLogoutClick).toHaveBeenCalled()
   })
 })

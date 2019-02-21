@@ -4,9 +4,20 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import { mountWithHOC } from 'js/utils/test-utils'
 import SettingsDropdown from 'js/components/Dashboard/SettingsDropdownComponent'
+import { logout } from 'js/authentication/user'
+import { goToLogin } from 'js/navigation/navigation'
+import logger from 'js/utils/logger'
+
+jest.mock('js/authentication/user')
+jest.mock('js/navigation/navigation')
+jest.mock('js/utils/logger')
 
 const getMockProps = () => ({
   isUserAnonymous: false,
+})
+
+afterEach(() => {
+  jest.clearAllMocks()
 })
 
 describe('SettingsButtonComponent', () => {
@@ -111,5 +122,52 @@ describe('SettingsButtonComponent', () => {
       .first()
       .simulate('click')
     expect(wrapper.find(SettingsDropdown).prop('open')).toBe(true)
+  })
+
+  it('calls to log out when SettingsDropdown calls onLogoutClick', () => {
+    const SettingsButtonComponent = require('js/components/Dashboard/SettingsButtonComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = mountWithHOC(<SettingsButtonComponent {...mockProps} />)
+
+    const onLogoutClickFunc = wrapper
+      .find(SettingsDropdown)
+      .prop('onLogoutClick')
+    onLogoutClickFunc()
+    expect(logout).toHaveBeenCalled()
+  })
+
+  it('redirects to the login page on a successful logout', done => {
+    const SettingsButtonComponent = require('js/components/Dashboard/SettingsButtonComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = mountWithHOC(<SettingsButtonComponent {...mockProps} />)
+
+    logout.mockResolvedValueOnce(true)
+    goToLogin.mockImplementationOnce(async () => {
+      done()
+    })
+    const onLogoutClickFunc = wrapper
+      .find(SettingsDropdown)
+      .prop('onLogoutClick')
+    onLogoutClickFunc()
+  })
+
+  it('logs an error on a failed logout', done => {
+    const SettingsButtonComponent = require('js/components/Dashboard/SettingsButtonComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = mountWithHOC(<SettingsButtonComponent {...mockProps} />)
+
+    logout.mockImplementationOnce(async () => {
+      throw new Error('Uh oh :(')
+    })
+    logger.error.mockImplementationOnce(async () => {
+      done()
+    })
+    const onLogoutClickFunc = wrapper
+      .find(SettingsDropdown)
+      .prop('onLogoutClick')
+    onLogoutClickFunc()
   })
 })
