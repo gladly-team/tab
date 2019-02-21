@@ -118,4 +118,23 @@ describe('MoneyRaisedComponent', () => {
       'rgba(255, 255, 255, 0.8)'
     )
   })
+
+  it('is the expected color after clicking', () => {
+    const MoneyRaisedComponent = require('js/components/MoneyRaised/MoneyRaisedComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = mountWithHOC(<MoneyRaisedComponent {...mockProps} />)
+    wrapper
+      .find(Typography)
+      .first()
+      .simulate('click')
+
+    const typographyComputedStyle = window.getComputedStyle(
+      wrapper
+        .find(Typography)
+        .first()
+        .getDOMNode()
+    )
+    expect(typographyComputedStyle).toHaveProperty('color', 'white')
+  })
 })

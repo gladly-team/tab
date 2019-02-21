@@ -33,7 +33,7 @@ class MoneyRaised extends React.Component {
     this.state = {
       moneyRaised: 0,
       isHovering: false,
-      open: false,
+      isPopoverOpen: false,
     }
     this.anchorEl = null
   }
@@ -82,7 +82,7 @@ class MoneyRaised extends React.Component {
 
   render() {
     const { app, classes, launchFireworks } = this.props
-    const { isHovering, moneyRaised } = this.state
+    const { isHovering, moneyRaised, isPopoverOpen } = this.state
     if (!app) {
       return null
     }
@@ -103,7 +103,7 @@ class MoneyRaised extends React.Component {
                 launchFireworks(true)
               } else {
                 this.setState({
-                  open: !this.state.open,
+                  isPopoverOpen: !this.state.open,
                 })
               }
             }}
@@ -127,7 +127,7 @@ class MoneyRaised extends React.Component {
               style={{
                 color: celebrateMilestone
                   ? milestoneMoneyRaisedColor
-                  : isHovering
+                  : isHovering || isPopoverOpen
                   ? fontColorActive
                   : fontColor,
               }}
@@ -148,11 +148,11 @@ class MoneyRaised extends React.Component {
           </div>
         </ButtonBase>
         <DashboardPopover
-          open={this.state.open}
+          open={this.state.isPopoverOpen}
           anchorEl={this.anchorEl}
           onClose={() => {
             this.setState({
-              open: false,
+              isPopoverOpen: false,
               isHovering: false,
             })
           }}
