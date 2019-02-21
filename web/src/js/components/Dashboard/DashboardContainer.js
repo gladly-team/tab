@@ -7,7 +7,6 @@ export default createFragmentContainer(Dashboard, {
   app: graphql`
     fragment DashboardContainer_app on App {
       isGlobalCampaignLive
-      ...MoneyRaisedContainer_app
       ...UserMenuContainer_app
     }
   `,

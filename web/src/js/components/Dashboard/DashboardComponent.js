@@ -6,7 +6,6 @@ import moment from 'moment'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
-import MoneyRaised from 'js/components/MoneyRaised/MoneyRaisedContainer'
 import UserBackgroundImage from 'js/components/Dashboard/UserBackgroundImageContainer'
 import UserMenu from 'js/components/Dashboard/UserMenuContainer'
 import WidgetsContainer from 'js/components/Widget/WidgetsContainer'
@@ -16,13 +15,8 @@ import LogRevenue from 'js/components/Dashboard/LogRevenueContainer'
 import LogConsentData from 'js/components/Dashboard/LogConsentDataContainer'
 import LogAccountCreation from 'js/components/Dashboard/LogAccountCreationContainer'
 import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
-import CircleIcon from 'material-ui/svg-icons/image/lens'
 import HeartIcon from 'material-ui/svg-icons/action/favorite'
-import {
-  primaryColor,
-  dashboardIconInactiveColor,
-  dashboardIconActiveColor,
-} from 'js/theme/default'
+import { primaryColor, dashboardIconInactiveColor } from 'js/theme/default'
 import FadeInDashboardAnimation from 'js/components/General/FadeInDashboardAnimation'
 import ErrorMessage from 'js/components/General/ErrorMessage'
 import Notification from 'js/components/Dashboard/NotificationComponent'
@@ -168,35 +162,14 @@ class Dashboard extends React.Component {
                 flexDirection: 'column',
               }}
             >
-              <div
+              <UserMenu
+                app={app}
+                user={user}
                 style={{
-                  display: 'flex',
-                  justifyContent: 'flex-end',
-                  alignItems: 'center',
+                  fontSize: 24,
                 }}
-              >
-                <MoneyRaised app={app} />
-                <CircleIcon
-                  color={dashboardIconInactiveColor}
-                  hoverColor={dashboardIconActiveColor}
-                  style={{
-                    alignSelf: 'center',
-                    width: 5,
-                    height: 5,
-                    marginTop: 2,
-                    marginLeft: 12,
-                    marginRight: 12,
-                  }}
-                />
-                <UserMenu
-                  app={app}
-                  user={user}
-                  style={{
-                    fontSize: 24,
-                  }}
-                  isUserAnonymous={this.state.isUserAnonymous}
-                />
-              </div>
+                isUserAnonymous={this.state.isUserAnonymous}
+              />
               {this.state.showNotification ? (
                 <Notification
                   title={`Vote for the February Charity Spotlight`}

@@ -86,13 +86,6 @@ describe('Dashboard component', () => {
     shallow(<DashboardComponent {...mockProps} />)
   })
 
-  it('renders MoneyRaised component', () => {
-    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
-      .default
-    const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    expect(wrapper.find(MoneyRaised).length).toBe(1)
-  })
-
   it('renders UserBackgroundImage component', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default

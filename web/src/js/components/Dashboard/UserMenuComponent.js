@@ -9,6 +9,8 @@ import {
   dashboardIconInactiveColor,
 } from 'js/theme/default'
 import logger from 'js/utils/logger'
+import MoneyRaised from 'js/components/MoneyRaised/MoneyRaisedContainer'
+import CircleIcon from 'material-ui/svg-icons/image/lens'
 import Hearts from 'js/components/Dashboard/HeartsContainer'
 import SettingsDropdown from 'js/components/Dashboard/SettingsDropdownComponent'
 
@@ -65,34 +67,43 @@ class UserMenu extends React.Component {
     if (!user || !app) {
       return null
     }
-    const userMenuStyle = {
-      display: 'flex',
-      alignItems: 'center',
-    }
 
-    // Menu style
-    const menuIconButtonStyle = {
-      padding: 0,
-      width: 40,
-      height: 40,
-    }
-    const menuIconStyle = {
-      color: this.state.menuIconHover
-        ? dashboardIconActiveColor
-        : dashboardIconInactiveColor,
-      transition: 'color 300ms ease-in',
-      fontSize: 22,
-    }
-
-    // TODO: move MoneyRaised component here
     // TODO: move settings icon into its own component
     // TODO: add more tests for UserMenu
     return (
-      <div style={userMenuStyle}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <MoneyRaised app={app} />
+        <CircleIcon
+          color={dashboardIconInactiveColor}
+          hoverColor={dashboardIconActiveColor}
+          style={{
+            alignSelf: 'center',
+            width: 5,
+            height: 5,
+            marginTop: 2,
+            marginLeft: 12,
+            marginRight: 12,
+          }}
+        />
         <Hearts app={app} user={user} />
         <IconButton
-          style={menuIconButtonStyle}
-          iconStyle={menuIconStyle}
+          style={{
+            padding: 0,
+            width: 40,
+            height: 40,
+          }}
+          iconStyle={{
+            color: this.state.menuIconHover
+              ? dashboardIconActiveColor
+              : dashboardIconInactiveColor,
+            transition: 'color 300ms ease-in',
+            fontSize: 22,
+          }}
           onMouseEnter={this.onMenuIconHover.bind(this, true)}
           onMouseLeave={this.onMenuIconHover.bind(this, false)}
           onClick={this.onMenuClick.bind(this)}

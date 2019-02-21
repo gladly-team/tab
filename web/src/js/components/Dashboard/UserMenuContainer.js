@@ -7,6 +7,7 @@ export default createFragmentContainer(UserMenu, {
   app: graphql`
     fragment UserMenuContainer_app on App {
       referralVcReward
+      ...MoneyRaisedContainer_app
       ...HeartsContainer_app
     }
   `,
