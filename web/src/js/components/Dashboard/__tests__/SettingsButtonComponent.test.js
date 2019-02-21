@@ -2,6 +2,8 @@
 
 import React from 'react'
 import { shallow } from 'enzyme'
+import IconButton from '@material-ui/core/IconButton'
+import { mountWithHOC } from 'js/utils/test-utils'
 
 const getMockProps = () => ({
   isUserAnonymous: false,
@@ -24,5 +26,78 @@ describe('SettingsButtonComponent', () => {
     // Important: other code relies on the data-tour-id to show the
     // new user tour. Do not change it without updating it elsewhere.
     expect(wrapper.find('[data-tour-id="settings-button"]').length).toBe(1)
+  })
+
+  it('is the expected color when not hovering', () => {
+    const SettingsButtonComponent = require('js/components/Dashboard/SettingsButtonComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = mountWithHOC(<SettingsButtonComponent {...mockProps} />)
+    const typographyComputedStyle = window.getComputedStyle(
+      wrapper
+        .find('[data-test-id="settings-button"]')
+        .first()
+        .getDOMNode()
+    )
+    expect(typographyComputedStyle).toHaveProperty(
+      'color',
+      'rgba(255, 255, 255, 0.8)'
+    )
+  })
+
+  it('is the expected color when hovering', () => {
+    const SettingsButtonComponent = require('js/components/Dashboard/SettingsButtonComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = mountWithHOC(<SettingsButtonComponent {...mockProps} />)
+
+    // Simulate hover
+    wrapper
+      .find('[data-test-id="settings-button"]')
+      .first()
+      .simulate('mouseenter')
+    const typographyComputedStyle = window.getComputedStyle(
+      wrapper
+        .find('[data-test-id="settings-button"]')
+        .first()
+        .getDOMNode()
+    )
+    expect(typographyComputedStyle).toHaveProperty('color', 'white')
+
+    // Simulate end hovering
+    wrapper
+      .find('[data-test-id="settings-button"]')
+      .first()
+      .simulate('mouseleave')
+    const typographyComputedStyleNoHover = window.getComputedStyle(
+      wrapper
+        .find('[data-test-id="settings-button"]')
+        .first()
+        .getDOMNode()
+    )
+    expect(typographyComputedStyleNoHover).toHaveProperty(
+      'color',
+      'rgba(255, 255, 255, 0.8)'
+    )
+  })
+
+  it('is the expected color after clicking', () => {
+    const SettingsButtonComponent = require('js/components/Dashboard/SettingsButtonComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = mountWithHOC(<SettingsButtonComponent {...mockProps} />)
+
+    // Simulate hover
+    wrapper
+      .find('[data-test-id="settings-button"]')
+      .first()
+      .simulate('click')
+    const typographyComputedStyle = window.getComputedStyle(
+      wrapper
+        .find('[data-test-id="settings-button"]')
+        .first()
+        .getDOMNode()
+    )
+    expect(typographyComputedStyle).toHaveProperty('color', 'white')
   })
 })

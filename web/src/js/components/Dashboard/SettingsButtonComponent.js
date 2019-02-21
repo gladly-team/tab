@@ -51,7 +51,7 @@ class SettingsButtonComponent extends React.Component {
 
   render() {
     const { classes, isUserAnonymous } = this.props
-    const { isPopoverOpen } = this.state
+    const { isHovering, isPopoverOpen } = this.state
     const anchorElement = this.anchorElement
     return (
       <div>
@@ -60,9 +60,22 @@ class SettingsButtonComponent extends React.Component {
           data-test-id={'settings-button'}
           data-tour-id={'settings-button'}
           className={classes.settingsIcon}
+          style={{
+            color: isHovering || isPopoverOpen ? fontColorActive : fontColor,
+          }}
           onClick={() => {
             this.setState({
               isPopoverOpen: !this.state.open,
+            })
+          }}
+          onMouseEnter={event => {
+            this.setState({
+              isHovering: true,
+            })
+          }}
+          onMouseLeave={event => {
+            this.setState({
+              isHovering: false,
             })
           }}
         >
