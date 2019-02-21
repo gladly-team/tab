@@ -30,9 +30,9 @@ const styles = {
     height: 40,
     transition: 'color 300ms ease-in',
     fontSize: 22,
-
     '&:hover': {
       color: fontColorActive,
+      backgroundColor: 'transparent',
     },
   },
 }
@@ -104,12 +104,12 @@ class UserMenu extends React.Component {
         <CircleIcon className={classes.circleIcon} />
         <Hearts app={app} user={user} />
         <IconButton
+          data-test-id={'app-menu-icon'}
+          data-tour-id={'settings-button'}
           className={classes.settingsIcon}
           onMouseEnter={this.onMenuIconHover.bind(this, true)}
           onMouseLeave={this.onMenuIconHover.bind(this, false)}
           onClick={this.onMenuClick.bind(this)}
-          data-test-id={'app-menu-icon'}
-          data-tour-id={'settings-button'}
         >
           <MoreVertIcon />
         </IconButton>
