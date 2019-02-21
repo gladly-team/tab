@@ -14,6 +14,10 @@ const Sparkle = lazy(() => import('react-sparkle'))
 const fontColor = 'rgba(255, 255, 255, 0.8)'
 const fontColorActive = 'white'
 const styles = {
+  buttonBase: {
+    color: fontColorActive,
+    borderRadius: 2,
+  },
   moneyRaisedText: {
     color: fontColor,
     fontSize: 24,
@@ -94,7 +98,7 @@ class MoneyRaised extends React.Component {
 
     return (
       <div style={{ position: 'relative' }}>
-        <ButtonBase>
+        <ButtonBase className={classes.buttonBase}>
           <div
             data-test-id={'money-raised-button'}
             ref={anchorEl => (this.anchorEl = anchorEl)}

@@ -15,6 +15,10 @@ import MaxHeartsDropdownMessageComponent from 'js/components/Dashboard/MaxHearts
 const fontColor = 'rgba(255, 255, 255, 0.8)'
 const fontColorActive = 'white'
 const styles = {
+  buttonBase: {
+    color: fontColorActive,
+    borderRadius: 2,
+  },
   heartCount: {
     color: fontColor,
     transition: 'color 300ms ease-in',
@@ -66,7 +70,7 @@ class HeartsComponent extends React.Component {
 
     return (
       <div>
-        <ButtonBase>
+        <ButtonBase className={classes.buttonBase}>
           <div
             data-tour-id={'hearts'}
             ref={anchorElement => (this.anchorElement = anchorElement)}
