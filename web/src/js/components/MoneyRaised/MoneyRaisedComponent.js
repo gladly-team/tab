@@ -148,7 +148,7 @@ class MoneyRaised extends React.Component {
           </div>
         </ButtonBase>
         <DashboardPopover
-          open={this.state.isPopoverOpen}
+          open={isPopoverOpen}
           anchorEl={this.anchorEl}
           onClose={() => {
             this.setState({

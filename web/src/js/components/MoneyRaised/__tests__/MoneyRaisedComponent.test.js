@@ -3,7 +3,10 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import Typography from '@material-ui/core/Typography'
+import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
+import Link from 'js/components/General/Link'
 import { mountWithHOC } from 'js/utils/test-utils'
+import { inviteFriendsURL } from 'js/navigation/navigation'
 
 jest.mock('js/navigation/navigation')
 jest.mock('js/components/General/Link')
@@ -124,11 +127,7 @@ describe('MoneyRaisedComponent', () => {
       .default
     const mockProps = getMockProps()
     const wrapper = mountWithHOC(<MoneyRaisedComponent {...mockProps} />)
-    wrapper
-      .find(Typography)
-      .first()
-      .simulate('click')
-
+    wrapper.find('[data-test-id="money-raised-button"]').simulate('click')
     const typographyComputedStyle = window.getComputedStyle(
       wrapper
         .find(Typography)
@@ -136,5 +135,29 @@ describe('MoneyRaisedComponent', () => {
         .getDOMNode()
     )
     expect(typographyComputedStyle).toHaveProperty('color', 'white')
+  })
+
+  it('opens the dropdown on click', () => {
+    const MoneyRaisedComponent = require('js/components/MoneyRaised/MoneyRaisedComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<MoneyRaisedComponent {...mockProps} />).dive()
+    expect(wrapper.find(DashboardPopover).prop('open')).toBe(false)
+    wrapper.find('[data-test-id="money-raised-button"]').simulate('click')
+    expect(wrapper.find(DashboardPopover).prop('open')).toBe(true)
+  })
+
+  it('has a link to invite friends in the dropdown', () => {
+    const MoneyRaisedComponent = require('js/components/MoneyRaised/MoneyRaisedComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<MoneyRaisedComponent {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find(DashboardPopover)
+        .children()
+        .find(Link)
+        .prop('to')
+    ).toEqual(inviteFriendsURL)
   })
 })
