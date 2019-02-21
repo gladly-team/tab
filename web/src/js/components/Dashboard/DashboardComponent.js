@@ -165,9 +165,6 @@ class Dashboard extends React.Component {
               <UserMenu
                 app={app}
                 user={user}
-                style={{
-                  fontSize: 24,
-                }}
                 isUserAnonymous={this.state.isUserAnonymous}
               />
               {this.state.showNotification ? (

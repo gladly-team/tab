@@ -5,17 +5,8 @@ import { shallow } from 'enzyme'
 
 const MockProps = () => {
   return {
-    user: {
-      vcCurrent: 32,
-      level: 8,
-      heartsUntilNextLevel: 14,
-      vcDonatedAllTime: 90,
-      numUsersRecruited: 1,
-      tabsToday: 4,
-    },
-    app: {
-      referralVcReward: 350,
-    },
+    user: {},
+    app: {},
     isUserAnonymous: false,
   }
 }

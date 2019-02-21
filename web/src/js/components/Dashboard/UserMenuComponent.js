@@ -45,25 +45,14 @@ class UserMenu extends React.Component {
 
 // TODO: remove data this component doesn't use
 UserMenu.propTypes = {
-  app: PropTypes.shape({
-    referralVcReward: PropTypes.number.isRequired,
-  }),
+  app: PropTypes.shape({}).isRequired,
   classes: PropTypes.object.isRequired,
   isUserAnonymous: PropTypes.bool,
-  style: PropTypes.object,
-  user: PropTypes.shape({
-    vcCurrent: PropTypes.number.isRequired,
-    level: PropTypes.number.isRequired,
-    heartsUntilNextLevel: PropTypes.number.isRequired,
-    vcDonatedAllTime: PropTypes.number.isRequired,
-    numUsersRecruited: PropTypes.number.isRequired,
-    tabsToday: PropTypes.number.isRequired,
-  }),
+  user: PropTypes.shape({}).isRequired,
 }
 
 UserMenu.defaultProps = {
   isUserAnonymous: false,
-  style: {},
 }
 
 export default withStyles(styles)(UserMenu)

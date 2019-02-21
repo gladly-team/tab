@@ -6,20 +6,12 @@ import UserMenu from 'js/components/Dashboard/UserMenuComponent'
 export default createFragmentContainer(UserMenu, {
   app: graphql`
     fragment UserMenuContainer_app on App {
-      referralVcReward
       ...MoneyRaisedContainer_app
       ...HeartsContainer_app
     }
   `,
   user: graphql`
     fragment UserMenuContainer_user on User {
-      id
-      vcCurrent
-      level
-      heartsUntilNextLevel
-      vcDonatedAllTime
-      numUsersRecruited
-      tabsToday
       ...HeartsContainer_user
     }
   `,
