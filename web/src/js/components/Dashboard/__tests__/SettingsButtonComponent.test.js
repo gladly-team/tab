@@ -2,8 +2,8 @@
 
 import React from 'react'
 import { shallow } from 'enzyme'
-import IconButton from '@material-ui/core/IconButton'
 import { mountWithHOC } from 'js/utils/test-utils'
+import SettingsDropdown from 'js/components/Dashboard/SettingsDropdownComponent'
 
 const getMockProps = () => ({
   isUserAnonymous: false,
@@ -86,8 +86,6 @@ describe('SettingsButtonComponent', () => {
       .default
     const mockProps = getMockProps()
     const wrapper = mountWithHOC(<SettingsButtonComponent {...mockProps} />)
-
-    // Simulate hover
     wrapper
       .find('[data-test-id="settings-button"]')
       .first()
@@ -99,5 +97,19 @@ describe('SettingsButtonComponent', () => {
         .getDOMNode()
     )
     expect(typographyComputedStyle).toHaveProperty('color', 'white')
+  })
+
+  it('opens the dropdown on click', () => {
+    const SettingsButtonComponent = require('js/components/Dashboard/SettingsButtonComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = mountWithHOC(<SettingsButtonComponent {...mockProps} />)
+
+    expect(wrapper.find(SettingsDropdown).prop('open')).toBe(false)
+    wrapper
+      .find('[data-test-id="settings-button"]')
+      .first()
+      .simulate('click')
+    expect(wrapper.find(SettingsDropdown).prop('open')).toBe(true)
   })
 })
