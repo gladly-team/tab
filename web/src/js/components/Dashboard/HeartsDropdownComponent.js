@@ -5,6 +5,7 @@ import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import Divider from '@material-ui/core/Divider'
 import HeartBorderIcon from '@material-ui/icons/FavoriteBorder'
+import { commaFormatted } from 'js/utils/utils'
 import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 import { inviteFriendsURL, donateURL } from 'js/navigation/navigation'
 import Link from 'js/components/General/Link'
@@ -103,7 +104,7 @@ const HeartsDropdownComponent = props => {
                 }}
                 variant={'h5'}
               >
-                {user.vcDonatedAllTime}
+                {commaFormatted(user.vcDonatedAllTime)}
               </Typography>
               <HeartBorderIcon
                 classes={{

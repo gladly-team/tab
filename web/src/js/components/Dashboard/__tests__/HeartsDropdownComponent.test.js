@@ -101,7 +101,7 @@ describe('HeartsDropdownComponent', () => {
             .indexOf('donated') > -1
       )
       .parent()
-    expect(elem.render().text()).toEqual('3002[heart icon]donated')
+    expect(elem.render().text()).toEqual('3,002[heart icon]donated')
   })
 
   it('displays the expected "tabbers recruited" text', () => {
