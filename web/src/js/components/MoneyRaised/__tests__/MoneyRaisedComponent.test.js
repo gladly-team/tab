@@ -18,6 +18,10 @@ const getMockProps = () => ({
   },
 })
 
+afterEach(() => {
+  jest.clearAllMocks()
+})
+
 describe('MoneyRaisedComponent', () => {
   it('renders without error', () => {
     const MoneyRaisedComponent = require('js/components/MoneyRaised/MoneyRaisedComponent')
@@ -159,5 +163,16 @@ describe('MoneyRaisedComponent', () => {
         .find(Link)
         .prop('to')
     ).toEqual(inviteFriendsURL)
+  })
+
+  it('clears the interval on unmount', () => {
+    const MoneyRaisedComponent = require('js/components/MoneyRaised/MoneyRaisedComponent')
+      .default
+    const mockProps = getMockProps()
+    const clearIntervalSpy = jest.spyOn(window, 'clearInterval')
+    const wrapper = shallow(<MoneyRaisedComponent {...mockProps} />).dive()
+    expect(clearIntervalSpy).not.toHaveBeenCalled()
+    wrapper.unmount()
+    expect(clearIntervalSpy).toHaveBeenCalledTimes(1)
   })
 })
