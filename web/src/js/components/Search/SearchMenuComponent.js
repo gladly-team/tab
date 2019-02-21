@@ -1,14 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import MoneyRaised from 'js/components/MoneyRaised/MoneyRaisedContainer'
 
 const SearchMenuComponent = props => {
-  const {
-    style,
-    app: { moneyRaised },
-  } = props
+  const { style, app } = props
   return (
     <div style={style}>
-      <div>Money raised: ${moneyRaised}</div>
+      <MoneyRaised app={app} />
     </div>
   )
 }
@@ -20,11 +18,7 @@ SearchMenuComponent.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.string,
   }),
-  app: PropTypes.shape({
-    // TODO: move these to the MoneyRaised component
-    moneyRaised: PropTypes.number.isRequired,
-    dollarsPerDayRate: PropTypes.number.isRequired,
-  }),
+  app: PropTypes.shape({}).isRequired,
 }
 
 SearchMenuComponent.defaultProps = {}
