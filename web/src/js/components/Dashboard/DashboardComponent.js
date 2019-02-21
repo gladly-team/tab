@@ -150,7 +150,7 @@ class Dashboard extends React.Component {
           user={user}
           showError={this.showError.bind(this)}
         />
-        {user ? (
+        {user && app ? (
           <FadeInDashboardAnimation>
             <div
               style={{

@@ -22,11 +22,6 @@ const styles = {
 class UserMenu extends React.Component {
   render() {
     const { app, classes, user, isUserAnonymous } = this.props
-    if (!user || !app) {
-      return null
-    }
-
-    // TODO: add more tests for UserMenu
     return (
       <div
         style={{
@@ -43,7 +38,6 @@ class UserMenu extends React.Component {
   }
 }
 
-// TODO: remove data this component doesn't use
 UserMenu.propTypes = {
   app: PropTypes.shape({}).isRequired,
   classes: PropTypes.object.isRequired,
