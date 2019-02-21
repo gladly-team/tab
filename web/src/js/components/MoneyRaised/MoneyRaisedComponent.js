@@ -96,6 +96,7 @@ class MoneyRaised extends React.Component {
       <div style={{ position: 'relative' }}>
         <ButtonBase>
           <div
+            data-test-id={'money-raised-button'}
             ref={anchorEl => (this.anchorEl = anchorEl)}
             onClick={() => {
               if (this.celebratingMilestone() && launchFireworks) {
