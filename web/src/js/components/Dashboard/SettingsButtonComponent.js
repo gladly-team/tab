@@ -57,7 +57,7 @@ class SettingsButtonComponent extends React.Component {
       <div>
         <IconButton
           buttonRef={anchorElement => (this.anchorElement = anchorElement)}
-          data-test-id={'app-menu-icon'}
+          data-test-id={'settings-button'}
           data-tour-id={'settings-button'}
           className={classes.settingsIcon}
           onClick={() => {

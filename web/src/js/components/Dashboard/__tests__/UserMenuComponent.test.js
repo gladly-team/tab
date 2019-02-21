@@ -27,15 +27,4 @@ describe('User menu component', () => {
       .default
     shallow(<UserMenuComponent {...mockProps} />).dive()
   })
-
-  it('contains an ID for the new user tour (to showcase the settings button)', () => {
-    const mockProps = MockProps()
-    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
-      .default
-    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
-
-    // Important: other code relies on the data-tour-id to show the
-    // new user tour. Do not change it without updating it elsewhere.
-    expect(wrapper.find('[data-tour-id="settings-button"]').length).toBe(1)
-  })
 })
