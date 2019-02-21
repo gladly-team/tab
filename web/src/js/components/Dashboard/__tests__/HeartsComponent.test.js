@@ -66,11 +66,14 @@ describe('HeartsComponent', () => {
     const mockProps = getMockProps()
     const wrapper = mountWithHOC(<HeartsComponent {...mockProps} />)
     const typographyComputedStyle = window.getComputedStyle(
-      wrapper.find(Typography).getDOMNode()
+      wrapper
+        .find(Typography)
+        .first()
+        .getDOMNode()
     )
     expect(typographyComputedStyle).toHaveProperty(
       'color',
-      'rgba(0, 0, 0, 0.87)'
+      'rgba(255, 255, 255, 0.8)'
     )
   })
 
@@ -87,7 +90,10 @@ describe('HeartsComponent', () => {
       .simulate('click')
 
     const typographyComputedStyle = window.getComputedStyle(
-      wrapper.find(Typography).getDOMNode()
+      wrapper
+        .find(Typography)
+        .first()
+        .getDOMNode()
     )
     expect(typographyComputedStyle).toHaveProperty('color', 'white')
   })
@@ -101,18 +107,24 @@ describe('HeartsComponent', () => {
     // Simulate hover on the parent div
     wrapper.find('[data-tour-id="hearts"]').simulate('mouseenter')
     const typographyComputedStyle = window.getComputedStyle(
-      wrapper.find(Typography).getDOMNode()
+      wrapper
+        .find(Typography)
+        .first()
+        .getDOMNode()
     )
     expect(typographyComputedStyle).toHaveProperty('color', 'white')
 
     // Simulate ending hover
     wrapper.find('[data-tour-id="hearts"]').simulate('mouseleave')
     const typographyComputedStyleNoHover = window.getComputedStyle(
-      wrapper.find(Typography).getDOMNode()
+      wrapper
+        .find(Typography)
+        .first()
+        .getDOMNode()
     )
     expect(typographyComputedStyleNoHover).toHaveProperty(
       'color',
-      'rgba(0, 0, 0, 0.87)'
+      'rgba(255, 255, 255, 0.8)'
     )
   })
 

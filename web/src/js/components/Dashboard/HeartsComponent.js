@@ -93,9 +93,8 @@ class HeartsComponent extends React.Component {
           >
             <Typography
               style={{
-                ...((isHovering || isPopoverOpen) && {
-                  color: fontColorActive,
-                }),
+                color:
+                  isHovering || isPopoverOpen ? fontColorActive : fontColor,
               }}
               className={classes.heartCount}
             >
