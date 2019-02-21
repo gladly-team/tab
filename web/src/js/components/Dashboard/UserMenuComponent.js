@@ -1,18 +1,41 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import IconButton from 'material-ui/IconButton'
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert'
+import { withStyles } from '@material-ui/core/styles'
+import IconButton from '@material-ui/core/IconButton'
+import MoreVertIcon from '@material-ui/icons/MoreVert'
+import CircleIcon from '@material-ui/icons/Lens'
 import { logout } from 'js/authentication/user'
 import { goToLogin } from 'js/navigation/navigation'
-import {
-  dashboardIconActiveColor,
-  dashboardIconInactiveColor,
-} from 'js/theme/default'
 import logger from 'js/utils/logger'
 import MoneyRaised from 'js/components/MoneyRaised/MoneyRaisedContainer'
-import CircleIcon from 'material-ui/svg-icons/image/lens'
 import Hearts from 'js/components/Dashboard/HeartsContainer'
 import SettingsDropdown from 'js/components/Dashboard/SettingsDropdownComponent'
+
+const fontColor = 'rgba(255, 255, 255, 0.8)'
+const fontColorActive = 'white'
+const styles = {
+  circleIcon: {
+    color: fontColor,
+    alignSelf: 'center',
+    width: 5,
+    height: 5,
+    marginTop: 2,
+    marginLeft: 12,
+    marginRight: 12,
+  },
+  settingsIcon: {
+    color: fontColor,
+    padding: 0,
+    width: 40,
+    height: 40,
+    transition: 'color 300ms ease-in',
+    fontSize: 22,
+
+    '&:hover': {
+      color: fontColorActive,
+    },
+  },
+}
 
 class UserMenu extends React.Component {
   constructor(props) {
@@ -62,7 +85,7 @@ class UserMenu extends React.Component {
   }
 
   render() {
-    const { app, user, isUserAnonymous } = this.props
+    const { app, classes, user, isUserAnonymous } = this.props
     const { menuOpen, menuPopoverAnchorElem } = this.state
     if (!user || !app) {
       return null
@@ -78,32 +101,10 @@ class UserMenu extends React.Component {
         }}
       >
         <MoneyRaised app={app} />
-        <CircleIcon
-          color={dashboardIconInactiveColor}
-          hoverColor={dashboardIconActiveColor}
-          style={{
-            alignSelf: 'center',
-            width: 5,
-            height: 5,
-            marginTop: 2,
-            marginLeft: 12,
-            marginRight: 12,
-          }}
-        />
+        <CircleIcon className={classes.circleIcon} />
         <Hearts app={app} user={user} />
         <IconButton
-          style={{
-            padding: 0,
-            width: 40,
-            height: 40,
-          }}
-          iconStyle={{
-            color: this.state.menuIconHover
-              ? dashboardIconActiveColor
-              : dashboardIconInactiveColor,
-            transition: 'color 300ms ease-in',
-            fontSize: 22,
-          }}
+          className={classes.settingsIcon}
           onMouseEnter={this.onMenuIconHover.bind(this, true)}
           onMouseLeave={this.onMenuIconHover.bind(this, false)}
           onClick={this.onMenuClick.bind(this)}
@@ -129,6 +130,9 @@ UserMenu.propTypes = {
   app: PropTypes.shape({
     referralVcReward: PropTypes.number.isRequired,
   }),
+  classes: PropTypes.object.isRequired,
+  isUserAnonymous: PropTypes.bool,
+  style: PropTypes.object,
   user: PropTypes.shape({
     vcCurrent: PropTypes.number.isRequired,
     level: PropTypes.number.isRequired,
@@ -137,8 +141,6 @@ UserMenu.propTypes = {
     numUsersRecruited: PropTypes.number.isRequired,
     tabsToday: PropTypes.number.isRequired,
   }),
-  isUserAnonymous: PropTypes.bool,
-  style: PropTypes.object,
 }
 
 UserMenu.defaultProps = {
@@ -146,4 +148,4 @@ UserMenu.defaultProps = {
   style: {},
 }
 
-export default UserMenu
+export default withStyles(styles)(UserMenu)
