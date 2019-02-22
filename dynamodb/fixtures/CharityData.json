@@ -139,5 +139,19 @@
     "updated": "2019-01-18T18:00:000Z",
     "inactive": false,
     "isPermanentPartner": false
+  },
+  {
+    "id": "a2b549e0-d53e-4a57-b84d-3925e9ccbd76",
+    "name": "World Wildlife Fund",
+    "category": "The Environment",
+    "logo": "wwf-201902.png",
+    "image": "wwf.jpg",
+    "website": "https://www.worldwildlife.org",
+    "impact": "Your donation will help WWF protect our environment. Together, we are ensuring our habitat on Earth survives for generations to come.",
+    "description": "Conserves nature and reduces the most pressing threats to the diversity of life on Earth.",
+    "created": "2019-02-22T18:00:000Z",
+    "updated": "2019-02-22T18:00:000Z",
+    "inactive": false,
+    "isPermanentPartner": false
   }
 ]
