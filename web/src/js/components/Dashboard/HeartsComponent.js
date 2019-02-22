@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { get } from 'lodash/object'
 import { withStyles } from '@material-ui/core/styles'
 import ButtonBase from '@material-ui/core/ButtonBase'
 import HeartBorderIcon from '@material-ui/icons/FavoriteBorder'
@@ -10,17 +11,11 @@ import { MAX_DAILY_HEARTS_FROM_TABS } from 'js/constants'
 import HeartsDropdown from 'js/components/Dashboard/HeartsDropdownContainer'
 import MaxHeartsDropdownMessageComponent from 'js/components/Dashboard/MaxHeartsDropdownMessageComponent'
 
-// TODO: break out to make the component customizable:
-// https://material-ui.com/customization/overrides/#3-specific-variation-of-a-component
-const fontColor = 'rgba(255, 255, 255, 0.8)'
-const fontColorActive = 'white'
 const styles = {
   buttonBase: {
-    color: fontColorActive,
     borderRadius: 2,
   },
   heartCount: {
-    color: fontColor,
     transition: 'color 300ms ease-in',
     fontSize: 24,
     fontWeight: 'normal',
@@ -28,7 +23,6 @@ const styles = {
     cursor: 'pointer',
   },
   heartIcon: {
-    color: fontColor,
     transition: 'color 300ms ease-in',
     cursor: 'pointer',
     marginLeft: 2,
@@ -37,7 +31,6 @@ const styles = {
     paddingBottom: 0,
   },
   checkmarkIcon: {
-    color: fontColor,
     transition: 'color 300ms ease-in',
     cursor: 'pointer',
     height: 16,
@@ -59,7 +52,7 @@ class HeartsComponent extends React.Component {
   }
 
   render() {
-    const { app, classes, user } = this.props
+    const { app, classes, theme, user } = this.props
     const { isHovering, isPopoverOpen } = this.state
     const anchorElement = this.anchorElement
 
@@ -92,9 +85,15 @@ class HeartsComponent extends React.Component {
             style={{ marginRight: 0, display: 'flex', alignItems: 'center' }}
           >
             <Typography
+              variant={'h2'}
               style={{
-                color:
-                  isHovering || isPopoverOpen ? fontColorActive : fontColor,
+                ...((isHovering || isPopoverOpen) && {
+                  color: get(
+                    theme,
+                    'overrides.MuiTypography.h2.&:hover.color',
+                    'inherit'
+                  ),
+                }),
               }}
               className={classes.heartCount}
             >
@@ -110,18 +109,28 @@ class HeartsComponent extends React.Component {
             >
               <HeartBorderIcon
                 style={{
-                  ...((isHovering || isPopoverOpen) && {
-                    color: fontColorActive,
-                  }),
+                  color:
+                    isHovering || isPopoverOpen
+                      ? get(
+                          theme,
+                          'overrides.MuiTypography.h2.&:hover.color',
+                          'inherit'
+                        )
+                      : get(theme, 'typography.h2.color', 'inherit'),
                 }}
                 className={classes.heartIcon}
               />
               {reachedMaxDailyHeartsFromTabs ? (
                 <CheckmarkIcon
                   style={{
-                    ...((isHovering || isPopoverOpen) && {
-                      color: fontColorActive,
-                    }),
+                    color:
+                      isHovering || isPopoverOpen
+                        ? get(
+                            theme,
+                            'overrides.MuiTypography.h2.&:hover.color',
+                            'inherit'
+                          )
+                        : get(theme, 'typography.h2.color', 'inherit'),
                   }}
                   className={classes.checkmarkIcon}
                 />
@@ -157,10 +166,11 @@ HeartsComponent.propTypes = {
     tabsToday: PropTypes.number.isRequired,
     vcCurrent: PropTypes.number.isRequired,
   }),
+  theme: PropTypes.object.isRequired,
 }
 
 HeartsComponent.defaultProps = {
   classes: {},
 }
 
-export default withStyles(styles)(HeartsComponent)
+export default withStyles(styles, { withTheme: true })(HeartsComponent)
