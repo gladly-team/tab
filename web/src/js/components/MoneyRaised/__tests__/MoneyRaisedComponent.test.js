@@ -9,8 +9,6 @@ import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 import Link from 'js/components/General/Link'
 import { inviteFriendsURL } from 'js/navigation/navigation'
 
-const defaultTheme = createMuiTheme()
-
 jest.mock('js/navigation/navigation')
 jest.mock('js/components/General/Link')
 
@@ -96,6 +94,7 @@ describe('MoneyRaisedComponent', () => {
   })
 
   it('uses the MUI theme h2 hover color when the dropdown is open', () => {
+    const defaultTheme = createMuiTheme()
     const MoneyRaisedComponent = require('js/components/MoneyRaised/MoneyRaisedComponent')
       .default
     const mockProps = getMockProps()
@@ -131,6 +130,7 @@ describe('MoneyRaisedComponent', () => {
   })
 
   it('falls back to "inherit" color if the MUI theme h2 hover color is not defined', () => {
+    const defaultTheme = createMuiTheme()
     const MoneyRaisedComponent = require('js/components/MoneyRaised/MoneyRaisedComponent')
       .default
     const mockProps = getMockProps()
