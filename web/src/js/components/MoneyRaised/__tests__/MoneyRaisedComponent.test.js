@@ -95,7 +95,6 @@ describe('MoneyRaisedComponent', () => {
     ).toEqual('h5')
   })
 
-  // TODO: test fallback to inherited color if the hover color is not defined
   it('uses the MUI theme h5 hover color when the dropdown is open', () => {
     const MoneyRaisedComponent = require('js/components/MoneyRaised/MoneyRaisedComponent')
       .default
@@ -129,6 +128,32 @@ describe('MoneyRaisedComponent', () => {
         .getDOMNode()
     )
     expect(typographyComputedStyle).toHaveProperty('color', 'rgb(200, 100, 40)')
+  })
+
+  it('falls back to "inherit" color if the MUI theme h5 hover color is not defined', () => {
+    const MoneyRaisedComponent = require('js/components/MoneyRaised/MoneyRaisedComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = mount(
+      <MuiThemeProvider
+        theme={{
+          ...defaultTheme,
+          overrides: {
+            ...defaultTheme.overrides,
+            MuiTypography: {},
+          },
+        }}
+      >
+        <MoneyRaisedComponent {...mockProps} />
+      </MuiThemeProvider>
+    )
+    wrapper.find('[data-test-id="money-raised-button"]').simulate('click')
+    expect(
+      wrapper
+        .find(Typography)
+        .first()
+        .prop('style')
+    ).toHaveProperty('color', 'inherit')
   })
 
   it('opens the dropdown on click', () => {
