@@ -1,5 +1,6 @@
 import React, { Suspense, lazy } from 'react'
 import PropTypes from 'prop-types'
+import { get } from 'lodash/object'
 import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
@@ -11,23 +12,17 @@ import Link from 'js/components/General/Link'
 
 const Sparkle = lazy(() => import('react-sparkle'))
 
-const fontColor = 'rgba(255, 255, 255, 0.8)'
-const fontColorActive = 'white'
 const styles = {
   buttonBase: {
-    color: fontColorActive,
     borderRadius: 2,
   },
   moneyRaisedText: {
-    color: fontColor,
     fontSize: 24,
     fontWeight: 'normal',
     transition: 'color 300ms ease-in',
     cursor: 'pointer',
   },
-  dropdownText: {
-    color: fontColorActive,
-  },
+  dropdownText: {},
 }
 
 class MoneyRaised extends React.Component {
@@ -36,7 +31,6 @@ class MoneyRaised extends React.Component {
     this.timer = 0
     this.state = {
       moneyRaised: 0,
-      isHovering: false,
       isPopoverOpen: false,
     }
     this.anchorEl = null
@@ -85,8 +79,8 @@ class MoneyRaised extends React.Component {
   }
 
   render() {
-    const { app, classes, launchFireworks } = this.props
-    const { isHovering, moneyRaised, isPopoverOpen } = this.state
+    const { app, classes, launchFireworks, theme } = this.props
+    const { moneyRaised, isPopoverOpen } = this.state
     if (!app) {
       return null
     }
@@ -111,29 +105,23 @@ class MoneyRaised extends React.Component {
                 })
               }
             }}
-            onMouseEnter={() => {
-              this.setState({
-                isHovering: true,
-              })
-            }}
-            onMouseLeave={() => {
-              this.setState({
-                isHovering: false,
-              })
-            }}
             style={{
               userSelect: 'none',
               cursor: 'default',
             }}
           >
             <Typography
+              variant={'h5'}
               className={classes.moneyRaisedText}
               style={{
-                color: celebrateMilestone
-                  ? milestoneMoneyRaisedColor
-                  : isHovering || isPopoverOpen
-                  ? fontColorActive
-                  : fontColor,
+                // TODO: milestone color when celebrating a milestone
+                ...(isPopoverOpen && {
+                  color: get(
+                    theme,
+                    'overrides.MuiTypography.h5.&:hover.color',
+                    'inherit'
+                  ),
+                }),
               }}
             >
               {moneyRaisedFormatted}
@@ -157,7 +145,6 @@ class MoneyRaised extends React.Component {
           onClose={() => {
             this.setState({
               isPopoverOpen: false,
-              isHovering: false,
             })
           }}
         >
@@ -203,8 +190,9 @@ MoneyRaised.propTypes = {
   }).isRequired,
   classes: PropTypes.object.isRequired,
   launchFireworks: PropTypes.func,
+  theme: PropTypes.object.isRequired,
 }
 
 MoneyRaised.defaultProps = {}
 
-export default withStyles(styles)(MoneyRaised)
+export default withStyles(styles, { withTheme: true })(MoneyRaised)

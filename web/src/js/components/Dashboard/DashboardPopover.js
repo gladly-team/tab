@@ -12,17 +12,13 @@ const DashboardPopover = props => {
       onClose={onClose}
       anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-      PaperProps={{
-        style: {
-          backgroundColor: 'rgba(0, 0, 0, 0.36)', // TODO: make themable
-        },
-      }}
       {...otherProps}
     >
       <div
         style={{
           width: '100%',
           height: 3,
+          // TODO: add tests that we're using this MUI theme color
           backgroundColor: theme.palette.primary.main,
         }}
       />

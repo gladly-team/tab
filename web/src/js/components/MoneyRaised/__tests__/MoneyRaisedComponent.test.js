@@ -1,12 +1,15 @@
 /* eslint-env jest */
 
 import React from 'react'
-import { shallow } from 'enzyme'
+import { mount, shallow } from 'enzyme'
+import { get } from 'lodash/object'
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 import Link from 'js/components/General/Link'
-import { mountWithHOC } from 'js/utils/test-utils'
 import { inviteFriendsURL } from 'js/navigation/navigation'
+
+const defaultTheme = createMuiTheme()
 
 jest.mock('js/navigation/navigation')
 jest.mock('js/components/General/Link')
@@ -79,58 +82,45 @@ describe('MoneyRaisedComponent', () => {
     ).toEqual('$650,200.68')
   })
 
-  it('is the expected color when not hovering', () => {
+  it('uses the MUI h5 Typography variant (this is important because our nested theme styles the h5 variant)', () => {
     const MoneyRaisedComponent = require('js/components/MoneyRaised/MoneyRaisedComponent')
       .default
     const mockProps = getMockProps()
-    const wrapper = mountWithHOC(<MoneyRaisedComponent {...mockProps} />)
-    const typographyComputedStyle = window.getComputedStyle(
+    const wrapper = shallow(<MoneyRaisedComponent {...mockProps} />).dive()
+    expect(
       wrapper
         .find(Typography)
         .first()
-        .getDOMNode()
-    )
-    expect(typographyComputedStyle).toHaveProperty(
-      'color',
-      'rgba(255, 255, 255, 0.8)'
-    )
+        .prop('variant')
+    ).toEqual('h5')
   })
 
-  it('is the expected color when hovering', () => {
+  // TODO: test fallback to inherited color if the hover color is not defined
+  it('uses the MUI theme h5 hover color when the dropdown is open', () => {
     const MoneyRaisedComponent = require('js/components/MoneyRaised/MoneyRaisedComponent')
       .default
     const mockProps = getMockProps()
-    const wrapper = mountWithHOC(<MoneyRaisedComponent {...mockProps} />)
-
-    // Simulate hover on the parent div
-    wrapper.find('[data-test-id="money-raised-button"]').simulate('mouseenter')
-    const typographyComputedStyle = window.getComputedStyle(
-      wrapper
-        .find(Typography)
-        .first()
-        .getDOMNode()
+    const wrapper = mount(
+      <MuiThemeProvider
+        theme={{
+          ...defaultTheme,
+          overrides: {
+            ...defaultTheme.overrides,
+            MuiTypography: {
+              ...get(defaultTheme, 'overrides.MuiTypography', {}),
+              h5: {
+                ...get(defaultTheme, 'overrides.MuiTypography.h5', {}),
+                '&:hover': {
+                  color: 'rgb(200, 100, 40)',
+                },
+              },
+            },
+          },
+        }}
+      >
+        <MoneyRaisedComponent {...mockProps} />
+      </MuiThemeProvider>
     )
-    expect(typographyComputedStyle).toHaveProperty('color', 'white')
-
-    // Simulate ending hover
-    wrapper.find('[data-test-id="money-raised-button"]').simulate('mouseleave')
-    const typographyComputedStyleNoHover = window.getComputedStyle(
-      wrapper
-        .find(Typography)
-        .first()
-        .getDOMNode()
-    )
-    expect(typographyComputedStyleNoHover).toHaveProperty(
-      'color',
-      'rgba(255, 255, 255, 0.8)'
-    )
-  })
-
-  it('is the expected color after clicking', () => {
-    const MoneyRaisedComponent = require('js/components/MoneyRaised/MoneyRaisedComponent')
-      .default
-    const mockProps = getMockProps()
-    const wrapper = mountWithHOC(<MoneyRaisedComponent {...mockProps} />)
     wrapper.find('[data-test-id="money-raised-button"]').simulate('click')
     const typographyComputedStyle = window.getComputedStyle(
       wrapper
@@ -138,7 +128,7 @@ describe('MoneyRaisedComponent', () => {
         .first()
         .getDOMNode()
     )
-    expect(typographyComputedStyle).toHaveProperty('color', 'white')
+    expect(typographyComputedStyle).toHaveProperty('color', 'rgb(200, 100, 40)')
   })
 
   it('opens the dropdown on click', () => {

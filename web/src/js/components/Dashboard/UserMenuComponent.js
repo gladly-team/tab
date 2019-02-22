@@ -1,10 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { withStyles } from '@material-ui/core/styles'
+import { get } from 'lodash/object'
+import {
+  createMuiTheme,
+  MuiThemeProvider,
+  withStyles,
+} from '@material-ui/core/styles'
 import CircleIcon from '@material-ui/icons/Lens'
+import theme from 'js/theme/defaultV1'
 import MoneyRaised from 'js/components/MoneyRaised/MoneyRaisedContainer'
 import Hearts from 'js/components/Dashboard/HeartsContainer'
 import SettingsButton from 'js/components/Dashboard/SettingsButtonComponent'
+
+const defaultTheme = createMuiTheme(theme)
 
 const fontColor = 'rgba(255, 255, 255, 0.8)'
 const styles = {
@@ -22,18 +30,65 @@ const styles = {
 class UserMenu extends React.Component {
   render() {
     const { app, classes, user, isUserAnonymous } = this.props
+
+    // TODO: add tests for provided theme structure
     return (
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
+      <MuiThemeProvider
+        theme={{
+          ...defaultTheme,
+          palette: {
+            ...defaultTheme.palette,
+            background: {
+              ...defaultTheme.palette.background,
+              paper: '#ff0000',
+            },
+          },
+          typography: {
+            ...defaultTheme.typography,
+            h5: {
+              ...defaultTheme.typography.h5,
+              color: 'rgba(255, 255, 255, 0.8)',
+            },
+            body2: {
+              ...defaultTheme.typography.body2,
+              color: '#fff',
+            },
+          },
+          overrides: {
+            ...defaultTheme.overrides,
+            MuiButtonBase: {
+              ...defaultTheme.overrides.MuiButtonBase,
+              ...get(defaultTheme, 'overrides.MuiButtonBase.root', {}),
+              root: {
+                ...get(defaultTheme, 'overrides.MuiButtonBase.root', {}),
+                color: '#ffff00',
+              },
+            },
+            MuiTypography: {
+              ...get(defaultTheme, 'overrides.MuiTypography', {}),
+              h5: {
+                ...get(defaultTheme, 'overrides.MuiTypography.h5', {}),
+                '&:hover': {
+                  // color: '#fff',
+                  color: '#00ff00',
+                },
+              },
+            },
+          },
         }}
       >
-        <MoneyRaised app={app} />
-        <CircleIcon className={classes.circleIcon} />
-        <Hearts app={app} user={user} />
-        <SettingsButton isUserAnonymous={isUserAnonymous} />
-      </div>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
+          <MoneyRaised app={app} />
+          <CircleIcon className={classes.circleIcon} />
+          <Hearts app={app} user={user} />
+          <SettingsButton isUserAnonymous={isUserAnonymous} />
+        </div>
+      </MuiThemeProvider>
     )
   }
 }

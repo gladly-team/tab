@@ -44,6 +44,7 @@ const theme = createMuiTheme({
   overrides: {
     MuiButtonBase: {
       root: {
+        // Make the button ripple color black by default.
         color: 'rgba(0, 0, 0, 0.87)',
       },
     },
