@@ -45,7 +45,7 @@ class CampaignBase extends React.Component {
                   marginTop: 4,
                 }}
               >
-                Thank You for Supporting A21!
+                Thank You for Supporting WWF!
               </Typography>
               <div
                 style={{
@@ -54,17 +54,17 @@ class CampaignBase extends React.Component {
                 }}
               >
                 <Typography variant={'body2'} gutterBottom>
-                  Thanks for supporting{' '}
+                  Thanks for supporting the{' '}
                   <a
-                    href="https://www.a21.org"
+                    href="https://www.worldwildlife.org"
                     target="_blank"
                     rel="noopener noreferrer"
                     style={anchorStyle}
                   >
-                    The A21 Campaign
+                    World Wildlife Fund
                   </a>
-                  ! With your help, they are working to eradicate human
-                  trafficking through awareness, intervention, and aftercare.{' '}
+                  ! With your help, they are working to safeguard food, climate,
+                  fresh water, wildlife, forests, and oceans.{' '}
                 </Typography>
                 <Typography>
                   <span style={{ fontWeight: 'bold' }}>
@@ -104,7 +104,7 @@ class CampaignBase extends React.Component {
             marginTop: 4,
           }}
         >
-          January Spotlight: Help End Slavery
+          February Spotlight: World Wildlife Fund
         </Typography>
         <div
           style={{
@@ -113,16 +113,16 @@ class CampaignBase extends React.Component {
           }}
         >
           <Typography variant={'body2'} gutterBottom>
-            The final votes are in: Tabbers have selected{' '}
+            The final votes are in, and this month Tabbers have selected the{' '}
             <a
-              href="https://www.a21.org"
+              href="https://www.worldwildlife.org"
               target="_blank"
               rel="noopener noreferrer"
               style={anchorStyle}
             >
-              The A21 Campaign
+              World Wildlife Fund
             </a>{' '}
-            for our January{' '}
+            for our February{' '}
             <a
               href="https://www.facebook.com/notes/tab-for-a-cause/introducing-monthly-charity-spotlight/2071986076177802/"
               target="_blank"
@@ -131,22 +131,12 @@ class CampaignBase extends React.Component {
             >
               Charity Spotlight
             </a>
-            . A21 is a leading non-profit in the fight against slavery and human
-            trafficking. There are millions of people in slavery, and A21 works
-            tirelessly to shine a light on the problem, identify victims, and
-            support survivors.
+            . WWF works to protect the future of nature through forest
+            conservation, wildlife protection, safeguarding our oceans, and
+            fighting against climate change.
           </Typography>
           <Typography variant={'body2'} gutterBottom>
-            Join us in supporting A21! (Then,{' '}
-            <a
-              href="https://en.wikipedia.org/wiki/Human_trafficking"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={anchorStyle}
-            >
-              learn more
-            </a>
-            .)
+            Stand up for our planet by donating some hearts to WWF!
           </Typography>
         </div>
       </HeartDonationCampaign>
