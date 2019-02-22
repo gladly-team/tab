@@ -18,7 +18,12 @@ const DashboardPopover = props => {
         style={{
           width: '100%',
           height: 3,
-          // TODO: add tests that we're using this MUI theme color
+          // We should test that we're using this MUI theme color
+          // (e.g., see them tests in MoneyRaisedComponent). Skipping
+          // for now because testing portal components with Enzyme
+          // appears to still be a pain:
+          // https://github.com/airbnb/enzyme/issues/252#issuecomment-266125422
+          // https://github.com/mui-org/material-ui/issues/14342
           backgroundColor: theme.palette.primary.main,
         }}
       />
