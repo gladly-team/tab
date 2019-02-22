@@ -73,7 +73,8 @@ describe('User menu component', () => {
     )
     expect(typographyComputedStyle).toHaveProperty(
       'color',
-      'rgba(255, 255, 255, 0.8)'
+      // 'rgba(255, 255, 255, 0.8)'
+      'rgba(0, 0, 255, 0.8)'
     )
   })
 
@@ -95,7 +96,8 @@ describe('User menu component', () => {
     const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
     const theme = wrapper.find(MuiThemeProvider).prop('theme')
     expect(theme.typography.h2).toMatchObject({
-      color: 'rgba(255, 255, 255, 0.8)',
+      // color: 'rgba(255, 255, 255, 0.8)',
+      color: 'rgba(0, 0, 255, 0.8)',
     })
   })
 

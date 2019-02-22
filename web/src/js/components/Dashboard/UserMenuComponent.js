@@ -14,10 +14,10 @@ import SettingsButton from 'js/components/Dashboard/SettingsButtonComponent'
 
 const defaultTheme = createMuiTheme(theme)
 
-const fontColor = 'rgba(255, 255, 255, 0.8)'
 const styles = {
   circleIcon: {
-    color: fontColor,
+    // color: 'rgba(255, 255, 255, 0.8)',
+    color: 'rgba(0, 0, 255, 0.8)',
     alignSelf: 'center',
     width: 5,
     height: 5,
@@ -45,7 +45,8 @@ class UserMenu extends React.Component {
             ...defaultTheme.typography,
             h2: {
               ...defaultTheme.typography.h2,
-              color: 'rgba(255, 255, 255, 0.8)',
+              // color: 'rgba(255, 255, 255, 0.8)',
+              color: 'rgba(0, 0, 255, 0.8)',
             },
             body2: {
               ...defaultTheme.typography.body2,
