@@ -111,14 +111,14 @@ class MoneyRaised extends React.Component {
             }}
           >
             <Typography
-              variant={'h5'}
+              variant={'h2'}
               className={classes.moneyRaisedText}
               style={{
                 // TODO: milestone color when celebrating a milestone
                 ...(isPopoverOpen && {
                   color: get(
                     theme,
-                    'overrides.MuiTypography.h5.&:hover.color',
+                    'overrides.MuiTypography.h2.&:hover.color',
                     'inherit'
                   ),
                 }),

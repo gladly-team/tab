@@ -82,7 +82,7 @@ describe('MoneyRaisedComponent', () => {
     ).toEqual('$650,200.68')
   })
 
-  it('uses the MUI h5 Typography variant (this is important because our nested theme styles the h5 variant)', () => {
+  it('uses the MUI h2 Typography variant (this is important because our nested theme styles the h2 variant)', () => {
     const MoneyRaisedComponent = require('js/components/MoneyRaised/MoneyRaisedComponent')
       .default
     const mockProps = getMockProps()
@@ -92,10 +92,10 @@ describe('MoneyRaisedComponent', () => {
         .find(Typography)
         .first()
         .prop('variant')
-    ).toEqual('h5')
+    ).toEqual('h2')
   })
 
-  it('uses the MUI theme h5 hover color when the dropdown is open', () => {
+  it('uses the MUI theme h2 hover color when the dropdown is open', () => {
     const MoneyRaisedComponent = require('js/components/MoneyRaised/MoneyRaisedComponent')
       .default
     const mockProps = getMockProps()
@@ -107,8 +107,8 @@ describe('MoneyRaisedComponent', () => {
             ...defaultTheme.overrides,
             MuiTypography: {
               ...get(defaultTheme, 'overrides.MuiTypography', {}),
-              h5: {
-                ...get(defaultTheme, 'overrides.MuiTypography.h5', {}),
+              h2: {
+                ...get(defaultTheme, 'overrides.MuiTypography.h2', {}),
                 '&:hover': {
                   color: 'rgb(200, 100, 40)',
                 },
@@ -130,7 +130,7 @@ describe('MoneyRaisedComponent', () => {
     expect(typographyComputedStyle).toHaveProperty('color', 'rgb(200, 100, 40)')
   })
 
-  it('falls back to "inherit" color if the MUI theme h5 hover color is not defined', () => {
+  it('falls back to "inherit" color if the MUI theme h2 hover color is not defined', () => {
     const MoneyRaisedComponent = require('js/components/MoneyRaised/MoneyRaisedComponent')
       .default
     const mockProps = getMockProps()

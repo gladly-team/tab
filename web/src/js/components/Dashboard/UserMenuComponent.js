@@ -45,8 +45,8 @@ class UserMenu extends React.Component {
           },
           typography: {
             ...defaultTheme.typography,
-            h5: {
-              ...defaultTheme.typography.h5,
+            h2: {
+              ...defaultTheme.typography.h2,
               color: 'rgba(255, 255, 255, 0.8)',
             },
             body2: {
@@ -66,8 +66,8 @@ class UserMenu extends React.Component {
             },
             MuiTypography: {
               ...get(defaultTheme, 'overrides.MuiTypography', {}),
-              h5: {
-                ...get(defaultTheme, 'overrides.MuiTypography.h5', {}),
+              h2: {
+                ...get(defaultTheme, 'overrides.MuiTypography.h2', {}),
                 '&:hover': {
                   // color: '#fff',
                   color: '#00ff00',
