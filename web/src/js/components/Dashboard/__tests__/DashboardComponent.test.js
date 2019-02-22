@@ -75,6 +75,7 @@ const mockProps = {
   user: {
     id: 'abc-123',
     joined: '2017-04-10T14:00:00.000',
+    tabs: 12,
   },
   app: {
     isGlobalCampaignLive: false,
@@ -137,6 +138,28 @@ describe('Dashboard component', () => {
   //   hasUserDismissedCampaignRecently.mockReturnValueOnce(true)
   //   const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
   //   expect(wrapper.find(CampaignBase).length).toBe(0)
+  // })
+
+  // it("does not render the CampaignBase component when the campaign is live but the it's the user's first tab", () => {
+  //   const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+  //     .default
+  //   const modifiedProps = cloneDeep(mockProps)
+  //   modifiedProps.user.tabs = 1
+  //   modifiedProps.app.isGlobalCampaignLive = true
+  //   hasUserDismissedCampaignRecently.mockReturnValueOnce(false)
+  //   const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+  //   expect(wrapper.find(CampaignBase).length).toBe(0)
+  // })
+
+  // it("does render the CampaignBase component when the campaign is live and it's the user's second tab", () => {
+  //   const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+  //     .default
+  //   const modifiedProps = cloneDeep(mockProps)
+  //   modifiedProps.user.tabs = 2
+  //   modifiedProps.app.isGlobalCampaignLive = true
+  //   hasUserDismissedCampaignRecently.mockReturnValueOnce(false)
+  //   const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+  //   expect(wrapper.find(CampaignBase).length).toBe(1)
   // })
 
   // it('does not render CampaignBase component when the campaign is not live', () => {

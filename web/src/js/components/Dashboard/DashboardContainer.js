@@ -15,6 +15,7 @@ export default createFragmentContainer(Dashboard, {
     fragment DashboardContainer_user on User {
       id
       joined
+      tabs
       ...WidgetsContainer_user
       ...UserBackgroundImageContainer_user
       ...UserMenuContainer_user
