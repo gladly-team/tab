@@ -46,9 +46,9 @@
     "name": "Educate!",
     "category": "Education",
     "logo": "educate-201807.jpg",
-    "image": "educate.jpg",
+    "image": "educate-201902.jpg",
     "website": "http://www.experienceeducate.org/",
-    "impact": "<p>\"<a href='https://www.experienceeducate.org/' target='_blank' rel='noopener noreferrer'>Educate!</a> prepares youth in Africa with the skills to succeed in today's economy. We tackle youth unemployment by partnering with schools and governments to reform what schools teach and how they teach it, so that students in Africa have the skills to start businesses, get jobs and drive development in their communities. Our goal is to make this practical, skills-based model part of national education systems across Africa.</p><p>\"In 2019, we're partnering with the government to pilot in 60+ schools in Kenya, working in 175+ secondary schools in Rwanda and 750+ schools in Uganda (25% of the country) reaching over 44,000 students intensively and 545,000 more broadly. Two rigorous external evaluations, including a randomized controlled trial, found that towards the end of secondary school, participants of our program earn nearly DOUBLE the income of their peers and are 44% more likely to launch a business. Girls achieve even greater results. Our graduates change their lives and their communities, such as <a href='https://www.experienceeducate.org/videoplayer/2017/12/15/educate-training-tomorrows-leaders' target='_blank' rel='noopener noreferrer'>Lillian Aero</a> who employs over 100 AIDS-affected women.\"</p>",
+    "impact": "<p><a href='https://www.experienceeducate.org/' target='_blank' rel='noopener noreferrer'>Educate!</a> prepares youth in Africa with the skills to succeed in today's economy.</p><p>Educate! tackles youth unemployment by partnering with schools and governments to reform what schools teach and how they teach it, so that students in Africa have the skills to start businesses, get jobs and drive development in their communities. In 2019, Educate! is partnering with the government to pilot in 60+ schools in Kenya, working in 175+ secondary schools in Rwanda and 750+ schools in Uganda (25% of the country) reaching over 44,000 students intensively and 545,000 more broadly.</p>",
     "description": "Preparing youth in Africa with the skills to succeed in today's economy",
     "created": "2017-07-18T20:45:53Z",
     "updated": "2017-07-18T20:45:53Z",
@@ -137,6 +137,20 @@
     "description": "Works to fight human trafficking and slavery.",
     "created": "2019-01-18T18:00:000Z",
     "updated": "2019-01-18T18:00:000Z",
+    "inactive": false,
+    "isPermanentPartner": false
+  },
+  {
+    "id": "a2b549e0-d53e-4a57-b84d-3925e9ccbd76",
+    "name": "World Wildlife Fund",
+    "category": "The Environment",
+    "logo": "wwf-201902.png",
+    "image": "wwf.jpg",
+    "website": "https://www.worldwildlife.org",
+    "impact": "Your donation will help WWF protect our environment. Together, we are ensuring our habitat on Earth survives for generations to come.",
+    "description": "Conserves nature and reduces the most pressing threats to the diversity of life on Earth.",
+    "created": "2019-02-22T18:00:000Z",
+    "updated": "2019-02-22T18:00:000Z",
     "inactive": false,
     "isPermanentPartner": false
   }

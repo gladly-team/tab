@@ -111,14 +111,19 @@ class Dashboard extends React.Component {
   render() {
     // Props will be null on first render.
     const { user, app } = this.props
-    const { tabId } = this.state
+    const {
+      hasUserDismissedCampaignRecently,
+      userAlreadyViewedNewUserTour,
+      tabId,
+    } = this.state
     const errorMessage = this.state.errorMessage
 
     // Whether or not a campaign should show on the dashboard
-    const isGlobalCampaignLive = !!(
+    const showCampaign = !!(
       app &&
       app.isGlobalCampaignLive &&
-      !this.state.hasUserDismissedCampaignRecently
+      !hasUserDismissedCampaignRecently &&
+      user.tabs > 1
     )
 
     // Show the tour if the user joined recently and localStorage
@@ -128,7 +133,7 @@ class Dashboard extends React.Component {
       moment()
         .utc()
         .diff(moment(user.joined), 'hours') < 2 &&
-      !this.state.userAlreadyViewedNewUserTour
+      !userAlreadyViewedNewUserTour
 
     return (
       <div
@@ -230,10 +235,10 @@ class Dashboard extends React.Component {
         ) : null}
         <WidgetsContainer
           user={user}
-          isCampaignLive={isGlobalCampaignLive}
+          isCampaignLive={showCampaign}
           showError={this.showError.bind(this)}
         />
-        {isGlobalCampaignLive ? (
+        {showCampaign ? (
           <FadeInDashboardAnimation>
             <Suspense fallback={null}>
               <CampaignBase
@@ -382,6 +387,7 @@ Dashboard.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.string.isRequired,
     joined: PropTypes.string.isRequired,
+    tabs: PropTypes.number.isRequired,
   }),
   app: PropTypes.shape({
     isGlobalCampaignLive: PropTypes.bool,
