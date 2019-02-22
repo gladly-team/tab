@@ -30,8 +30,6 @@ const styles = {
 class UserMenu extends React.Component {
   render() {
     const { app, classes, user, isUserAnonymous } = this.props
-
-    // TODO: add tests for provided theme structure
     return (
       <MuiThemeProvider
         theme={{
