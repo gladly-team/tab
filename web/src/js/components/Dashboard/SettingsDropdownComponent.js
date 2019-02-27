@@ -39,10 +39,16 @@ const SettingsDropdownComponent = props => {
     onClose,
     onLogoutClick,
     open,
+    ...otherProps
   } = props
 
   return (
-    <DashboardPopover open={open} anchorEl={anchorElement} onClose={onClose}>
+    <DashboardPopover
+      open={open}
+      anchorEl={anchorElement}
+      onClose={onClose}
+      {...otherProps}
+    >
       <MenuList style={{ width: 200 }}>
         <MenuItem
           onClick={() => {

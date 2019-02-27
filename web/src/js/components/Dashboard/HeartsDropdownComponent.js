@@ -13,7 +13,7 @@ import Link from 'js/components/General/Link'
 const styles = {}
 
 const HeartsDropdownComponent = props => {
-  const { anchorElement, app, onClose, open, user } = props
+  const { anchorElement, app, onClose, open, user, ...otherProps } = props
   const sectionStyle = {
     paddingTop: 12,
     paddingBottom: 20,
@@ -23,7 +23,12 @@ const HeartsDropdownComponent = props => {
     marginBottom: 0,
   }
   return (
-    <DashboardPopover open={open} anchorEl={anchorElement} onClose={onClose}>
+    <DashboardPopover
+      open={open}
+      anchorEl={anchorElement}
+      onClose={onClose}
+      {...otherProps}
+    >
       <div
         style={{
           paddingTop: 10,

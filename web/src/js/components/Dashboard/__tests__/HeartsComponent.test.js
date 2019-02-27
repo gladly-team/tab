@@ -407,4 +407,15 @@ describe('HeartsComponent', () => {
         .prop('style')
     ).toHaveProperty('color', 'inherit')
   })
+
+  it('sets a marginTop on the HeartsDropdown component', () => {
+    const HeartsComponent = require('js/components/Dashboard/HeartsComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<HeartsComponent {...mockProps} />).dive()
+    expect(wrapper.find(HeartsDropdown).prop('style')).toHaveProperty(
+      'marginTop',
+      6
+    )
+  })
 })

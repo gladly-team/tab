@@ -191,4 +191,17 @@ describe('HeartsDropdownComponent', () => {
         .text()
     ).toEqual('Invite A Friend')
   })
+
+  it('passes the "style" prop to the DashboardPopover component', () => {
+    const HeartsDropdownComponent = require('js/components/Dashboard/HeartsDropdownComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.style = {
+      color: 'chartreuse',
+    }
+    const wrapper = shallow(<HeartsDropdownComponent {...mockProps} />).dive()
+    expect(wrapper.find(DashboardPopover).prop('style')).toEqual(
+      mockProps.style
+    )
+  })
 })

@@ -147,6 +147,9 @@ class MoneyRaised extends React.Component {
               isPopoverOpen: false,
             })
           }}
+          style={{
+            marginTop: 6,
+          }}
         >
           <div style={{ padding: 12, width: 160 }}>
             <Typography

@@ -218,4 +218,17 @@ describe('SettingsDropdownComponent', () => {
     signOutElem.simulate('click')
     expect(mockProps.onLogoutClick).toHaveBeenCalled()
   })
+
+  it('passes the "style" prop to the DashboardPopover component', () => {
+    const SettingsDropdownComponent = require('js/components/Dashboard/SettingsDropdownComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.style = {
+      color: 'chartreuse',
+    }
+    const wrapper = shallow(<SettingsDropdownComponent {...mockProps} />).dive()
+    expect(wrapper.find(DashboardPopover).prop('style')).toEqual(
+      mockProps.style
+    )
+  })
 })

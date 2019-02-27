@@ -190,4 +190,15 @@ describe('MoneyRaisedComponent', () => {
     wrapper.unmount()
     expect(clearIntervalSpy).toHaveBeenCalledTimes(1)
   })
+
+  it('sets a marginTop on the DashboardPopover component', () => {
+    const MoneyRaisedComponent = require('js/components/MoneyRaised/MoneyRaisedComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<MoneyRaisedComponent {...mockProps} />).dive()
+    expect(wrapper.find(DashboardPopover).prop('style')).toHaveProperty(
+      'marginTop',
+      6
+    )
+  })
 })

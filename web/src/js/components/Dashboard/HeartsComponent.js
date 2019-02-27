@@ -148,6 +148,9 @@ class HeartsComponent extends React.Component {
             })
           }}
           anchorElement={anchorElement}
+          style={{
+            marginTop: 6,
+          }}
         />
         <MaxHeartsDropdownMessageComponent
           open={reachedMaxDailyHeartsFromTabs && isHovering && !isPopoverOpen}
