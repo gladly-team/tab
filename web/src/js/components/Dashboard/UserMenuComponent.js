@@ -36,17 +36,15 @@ class UserMenu extends React.Component {
             ...defaultTheme.palette,
             background: {
               ...defaultTheme.palette.background,
-              paper: '#ff0000',
+              paper: 'rgba(0, 0, 0, 0.36)',
             },
-            // divider: 'rgba(255, 255, 255, 0.20)',
-            divider: 'rgba(0, 255, 0, 0.90)',
+            divider: 'rgba(255, 255, 255, 0.20)',
           },
           typography: {
             ...defaultTheme.typography,
             h2: {
               ...defaultTheme.typography.h2,
-              // color: 'rgba(255, 255, 255, 0.8)',
-              color: 'rgba(0, 0, 255, 0.8)',
+              color: 'rgba(255, 255, 255, 0.8)',
             },
             h3: {
               ...defaultTheme.typography.h3,
@@ -78,7 +76,7 @@ class UserMenu extends React.Component {
               ...get(defaultTheme, 'overrides.MuiButtonBase', {}),
               root: {
                 ...get(defaultTheme, 'overrides.MuiButtonBase.root', {}),
-                color: '#ffff00',
+                color: '#fff',
               },
             },
             MuiSvgIcon: {
@@ -91,8 +89,7 @@ class UserMenu extends React.Component {
               h2: {
                 ...get(defaultTheme, 'overrides.MuiTypography.h2', {}),
                 '&:hover': {
-                  // color: '#fff',
-                  color: '#00ff00',
+                  color: '#fff',
                 },
               },
             },
@@ -108,8 +105,7 @@ class UserMenu extends React.Component {
           <MoneyRaised app={app} />
           <CircleIcon
             style={{
-              // color: 'rgba(255, 255, 255, 0.8)',
-              color: 'rgba(0, 0, 255, 0.8)',
+              color: 'rgba(255, 255, 255, 0.8)',
             }}
             classes={{
               root: classes.circleIcon,
