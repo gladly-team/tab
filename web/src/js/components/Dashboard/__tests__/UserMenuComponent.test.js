@@ -112,6 +112,17 @@ describe('User menu component', () => {
     })
   })
 
+  it('sets the expected theme overrides.MuiListItemIcon.root values', () => {
+    const mockProps = getMockProps()
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
+      .default
+    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
+    const theme = wrapper.find(MuiThemeProvider).prop('theme')
+    expect(theme.overrides.MuiListItemIcon.root).toMatchObject({
+      color: '#fff',
+    })
+  })
+
   it('sets the expected theme overrides.MuiButtonBase.root values', () => {
     const mockProps = getMockProps()
     const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')

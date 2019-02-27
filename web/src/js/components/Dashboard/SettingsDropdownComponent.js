@@ -23,19 +23,14 @@ import {
   statsURL,
 } from 'js/navigation/navigation'
 
-// TODO: break out to make the component customizable:
-// https://material-ui.com/customization/overrides/#3-specific-variation-of-a-component
-const fontColor = 'white'
 const styles = {
   // https://material-ui.com/demos/menus/#customized-menuitem
-  listItemTextPrimary: {
-    color: fontColor,
-  },
+  listItemTextPrimary: {},
   icon: {
-    color: fontColor,
     fontSize: 22,
   },
   divider: {
+    // TODO: use theme
     backgroundColor: 'rgba(255, 255, 255, 0.20)',
   },
 }
