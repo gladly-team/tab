@@ -16,8 +16,6 @@ const defaultTheme = createMuiTheme(theme)
 
 const styles = {
   circleIcon: {
-    // color: 'rgba(255, 255, 255, 0.8)',
-    color: 'rgba(0, 0, 255, 0.8)',
     alignSelf: 'center',
     width: 5,
     height: 5,
@@ -83,6 +81,11 @@ class UserMenu extends React.Component {
                 color: '#ffff00',
               },
             },
+            MuiSvgIcon: {
+              root: {
+                color: '#fff',
+              },
+            },
             MuiTypography: {
               ...get(defaultTheme, 'overrides.MuiTypography', {}),
               h2: {
@@ -103,7 +106,15 @@ class UserMenu extends React.Component {
           }}
         >
           <MoneyRaised app={app} />
-          <CircleIcon className={classes.circleIcon} />
+          <CircleIcon
+            style={{
+              // color: 'rgba(255, 255, 255, 0.8)',
+              color: 'rgba(0, 0, 255, 0.8)',
+            }}
+            classes={{
+              root: classes.circleIcon,
+            }}
+          />
           <Hearts app={app} user={user} />
           <SettingsButton isUserAnonymous={isUserAnonymous} />
         </div>

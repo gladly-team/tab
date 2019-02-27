@@ -14,7 +14,6 @@ const styles = {
     padding: 0,
     width: 40,
     height: 40,
-    transition: 'color 300ms ease-in',
     fontSize: 22,
     '&:hover': {
       backgroundColor: 'transparent',
@@ -55,16 +54,6 @@ class SettingsButtonComponent extends React.Component {
           data-test-id={'settings-button'}
           data-tour-id={'settings-button'}
           className={classes.settingsIcon}
-          style={{
-            color:
-              isHovering || isPopoverOpen
-                ? get(
-                    theme,
-                    'overrides.MuiTypography.h2.&:hover.color',
-                    'inherit'
-                  )
-                : get(theme, 'typography.h2.color', 'inherit'),
-          }}
           onClick={() => {
             this.setState({
               isPopoverOpen: !this.state.open,
@@ -81,7 +70,19 @@ class SettingsButtonComponent extends React.Component {
             })
           }}
         >
-          <MoreVertIcon />
+          <MoreVertIcon
+            style={{
+              color:
+                isHovering || isPopoverOpen
+                  ? get(
+                      theme,
+                      'overrides.MuiTypography.h2.&:hover.color',
+                      'inherit'
+                    )
+                  : get(theme, 'typography.h2.color', 'inherit'),
+              transition: 'color 300ms ease-in',
+            }}
+          />
         </IconButton>
         <SettingsDropdown
           open={isPopoverOpen}

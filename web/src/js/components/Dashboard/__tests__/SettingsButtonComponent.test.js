@@ -5,6 +5,7 @@ import { get } from 'lodash/object'
 import { mount, shallow } from 'enzyme'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
+import MoreVertIcon from '@material-ui/icons/MoreVert'
 import { mountWithHOC } from 'js/utils/test-utils'
 import SettingsDropdown from 'js/components/Dashboard/SettingsDropdownComponent'
 import { logout } from 'js/authentication/user'
@@ -130,7 +131,7 @@ describe('SettingsButtonComponent', () => {
     )
     const computedStyle = window.getComputedStyle(
       wrapper
-        .find(IconButton)
+        .find(MoreVertIcon)
         .first()
         .getDOMNode()
     )
@@ -169,7 +170,7 @@ describe('SettingsButtonComponent', () => {
       .simulate('click')
     const computedStyle = window.getComputedStyle(
       wrapper
-        .find(IconButton)
+        .find(MoreVertIcon)
         .first()
         .getDOMNode()
     )
@@ -197,7 +198,7 @@ describe('SettingsButtonComponent', () => {
     wrapper.find(IconButton).simulate('click')
     expect(
       wrapper
-        .find(IconButton)
+        .find(MoreVertIcon)
         .first()
         .prop('style')
     ).toHaveProperty('color', 'inherit')

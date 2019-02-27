@@ -10,15 +10,10 @@ import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 import { inviteFriendsURL, donateURL } from 'js/navigation/navigation'
 import Link from 'js/components/General/Link'
 
-const styles = {
-  // TODO: use theme colors
-  heartIconRoot: {
-    color: 'white',
-  },
-}
+const styles = {}
 
 const HeartsDropdownComponent = props => {
-  const { anchorElement, app, classes, onClose, open, user } = props
+  const { anchorElement, app, onClose, open, user } = props
   const sectionStyle = {
     paddingTop: 12,
     paddingBottom: 20,
@@ -50,9 +45,6 @@ const HeartsDropdownComponent = props => {
               {user.heartsUntilNextLevel}
             </Typography>
             <HeartBorderIcon
-              classes={{
-                root: classes.heartIconRoot,
-              }}
               style={{
                 height: 16,
               }}
@@ -74,9 +66,6 @@ const HeartsDropdownComponent = props => {
                 {commaFormatted(user.vcDonatedAllTime)}
               </Typography>
               <HeartBorderIcon
-                classes={{
-                  root: classes.heartIconRoot,
-                }}
                 style={{
                   marginLeft: 2,
                   height: 24,
@@ -134,9 +123,6 @@ const HeartsDropdownComponent = props => {
                 1
               </Typography>
               <HeartBorderIcon
-                classes={{
-                  root: classes.heartIconRoot,
-                }}
                 style={{
                   height: 16,
                 }}
@@ -163,9 +149,6 @@ const HeartsDropdownComponent = props => {
                 {app.referralVcReward}
               </Typography>
               <HeartBorderIcon
-                classes={{
-                  root: classes.heartIconRoot,
-                }}
                 style={{
                   height: 16,
                 }}
