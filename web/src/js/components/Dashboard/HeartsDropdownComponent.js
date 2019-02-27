@@ -16,9 +16,6 @@ const styles = {
   typographyRoot: {
     color: 'white',
   },
-  dividerRoot: {
-    backgroundColor: 'rgba(255, 255, 255, 0.20)',
-  },
   heartIconRoot: {
     color: 'white',
   },
@@ -88,7 +85,7 @@ const HeartsDropdownComponent = props => {
             </Typography>
           </div>
         </div>
-        <Divider classes={{ root: classes.dividerRoot }} />
+        <Divider />
         <div style={sectionStyle}>
           <span>
             <span
@@ -133,7 +130,7 @@ const HeartsDropdownComponent = props => {
             </Button>
           </Link>
         </div>
-        <Divider classes={{ root: classes.dividerRoot }} />
+        <Divider />
         <div style={sectionStyle}>
           <div>
             <Typography
@@ -159,7 +156,7 @@ const HeartsDropdownComponent = props => {
             </Button>
           </Link>
         </div>
-        <Divider classes={{ root: classes.dividerRoot }} />
+        <Divider />
         <div
           style={{
             paddingTop: 12,

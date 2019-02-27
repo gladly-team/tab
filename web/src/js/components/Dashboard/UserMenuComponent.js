@@ -40,6 +40,8 @@ class UserMenu extends React.Component {
               ...defaultTheme.palette.background,
               paper: '#ff0000',
             },
+            // divider: 'rgba(255, 255, 255, 0.20)',
+            divider: 'rgba(0, 255, 0, 0.90)',
           },
           typography: {
             ...defaultTheme.typography,

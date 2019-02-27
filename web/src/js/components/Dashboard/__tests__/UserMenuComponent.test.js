@@ -84,8 +84,11 @@ describe('User menu component', () => {
       .default
     const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
     const theme = wrapper.find(MuiThemeProvider).prop('theme')
-    expect(theme.palette.background).toMatchObject({
-      paper: '#ff0000',
+    expect(theme.palette).toMatchObject({
+      background: {
+        paper: '#ff0000',
+      },
+      divider: 'rgba(0, 255, 0, 0.90)',
     })
   })
 

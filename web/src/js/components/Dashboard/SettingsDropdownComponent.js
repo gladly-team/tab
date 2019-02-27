@@ -29,10 +29,6 @@ const styles = {
   icon: {
     fontSize: 22,
   },
-  divider: {
-    // TODO: use theme
-    backgroundColor: 'rgba(255, 255, 255, 0.20)',
-  },
 }
 
 const SettingsDropdownComponent = props => {
@@ -108,7 +104,7 @@ const SettingsDropdownComponent = props => {
             Your Stats
           </ListItemText>
         </MenuItem>
-        <Divider className={classes.divider} />
+        <Divider />
         <Link to={externalHelpURL} target="_blank">
           <MenuItem>
             <ListItemIcon>
@@ -122,7 +118,7 @@ const SettingsDropdownComponent = props => {
             </ListItemText>
           </MenuItem>
         </Link>
-        {!isUserAnonymous ? <Divider className={classes.divider} /> : null}
+        {!isUserAnonymous ? <Divider /> : null}
         {!isUserAnonymous ? (
           <MenuItem onClick={onLogoutClick} data-test-id={'app-menu-sign-out'}>
             <ListItemIcon>
