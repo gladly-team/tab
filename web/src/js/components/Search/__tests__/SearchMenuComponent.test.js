@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { mount, shallow } from 'enzyme'
+import { MuiThemeProvider } from '@material-ui/core/styles'
 import Hearts from 'js/components/Dashboard/HeartsContainer'
 import CircleIcon from '@material-ui/icons/Lens'
 import SettingsButton from 'js/components/Dashboard/SettingsButtonComponent'
@@ -113,5 +114,40 @@ describe('SearchMenuComponent', () => {
     }
     const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
     expect(wrapper.find(SettingsButton).exists()).toBe(true)
+  })
+
+  it('sets the expected theme typography h2 values', () => {
+    const mockProps = getMockProps()
+    const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
+      .default
+    const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
+    const theme = wrapper.find(MuiThemeProvider).prop('theme')
+    expect(theme.typography.h2).toMatchObject({
+      color: 'rgba(0, 0, 0, 0.66)',
+    })
+  })
+
+  it('sets the expected theme overrides.MuiSvgIcon.root values', () => {
+    const mockProps = getMockProps()
+    const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
+      .default
+    const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
+    const theme = wrapper.find(MuiThemeProvider).prop('theme')
+    expect(theme.overrides.MuiSvgIcon.root).toMatchObject({
+      color: 'rgba(0, 0, 0, 0.66)',
+    })
+  })
+
+  it('sets the expected theme overrides.MuiTypography.h2 values', () => {
+    const mockProps = getMockProps()
+    const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
+      .default
+    const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
+    const theme = wrapper.find(MuiThemeProvider).prop('theme')
+    expect(theme.overrides.MuiTypography.h2).toMatchObject({
+      '&:hover': {
+        color: 'rgba(0, 0, 0, 0.87)',
+      },
+    })
   })
 })
