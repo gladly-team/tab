@@ -50,6 +50,18 @@ class UserMenu extends React.Component {
               // color: 'rgba(255, 255, 255, 0.8)',
               color: 'rgba(0, 0, 255, 0.8)',
             },
+            h3: {
+              ...defaultTheme.typography.h3,
+              color: '#fff',
+            },
+            h4: {
+              ...defaultTheme.typography.h4,
+              color: '#fff',
+            },
+            h5: {
+              ...defaultTheme.typography.h5,
+              color: '#fff',
+            },
             body2: {
               ...defaultTheme.typography.body2,
               color: '#fff',

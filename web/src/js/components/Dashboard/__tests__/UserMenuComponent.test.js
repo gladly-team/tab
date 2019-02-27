@@ -104,6 +104,39 @@ describe('User menu component', () => {
     })
   })
 
+  it('sets the expected theme typography h3 values', () => {
+    const mockProps = getMockProps()
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
+      .default
+    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
+    const theme = wrapper.find(MuiThemeProvider).prop('theme')
+    expect(theme.typography.h3).toMatchObject({
+      color: '#fff',
+    })
+  })
+
+  it('sets the expected theme typography h4 values', () => {
+    const mockProps = getMockProps()
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
+      .default
+    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
+    const theme = wrapper.find(MuiThemeProvider).prop('theme')
+    expect(theme.typography.h4).toMatchObject({
+      color: '#fff',
+    })
+  })
+
+  it('sets the expected theme typography h5 values', () => {
+    const mockProps = getMockProps()
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
+      .default
+    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
+    const theme = wrapper.find(MuiThemeProvider).prop('theme')
+    expect(theme.typography.h5).toMatchObject({
+      color: '#fff',
+    })
+  })
+
   it('sets the expected theme typography body2 values', () => {
     const mockProps = getMockProps()
     const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')

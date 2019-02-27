@@ -10,12 +10,8 @@ import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 import { inviteFriendsURL, donateURL } from 'js/navigation/navigation'
 import Link from 'js/components/General/Link'
 
-// TODO: break out to make the component customizable:
-// https://material-ui.com/customization/overrides/#3-specific-variation-of-a-component
 const styles = {
-  typographyRoot: {
-    color: 'white',
-  },
+  // TODO: use theme colors
   heartIconRoot: {
     color: 'white',
   },
@@ -42,15 +38,7 @@ const HeartsDropdownComponent = props => {
         }}
       >
         <div style={sectionStyle}>
-          <Typography
-            classes={{
-              root: classes.typographyRoot,
-            }}
-            variant={'h5'}
-            color={'primary'}
-          >
-            Level {user.level}
-          </Typography>
+          <Typography variant={'h5'}>Level {user.level}</Typography>
           <div
             style={{
               display: 'flex',
@@ -58,12 +46,7 @@ const HeartsDropdownComponent = props => {
               justifyContent: 'center',
             }}
           >
-            <Typography
-              classes={{
-                root: classes.typographyRoot,
-              }}
-              variant={'body2'}
-            >
+            <Typography variant={'body2'}>
               {user.heartsUntilNextLevel}
             </Typography>
             <HeartBorderIcon
@@ -74,15 +57,7 @@ const HeartsDropdownComponent = props => {
                 height: 16,
               }}
             />
-            <Typography
-              classes={{
-                root: classes.typographyRoot,
-              }}
-              variant={'body2'}
-            >
-              {' '}
-              until next level
-            </Typography>
+            <Typography variant={'body2'}> until next level</Typography>
           </div>
         </div>
         <Divider />
@@ -95,12 +70,7 @@ const HeartsDropdownComponent = props => {
                 justifyContent: 'center',
               }}
             >
-              <Typography
-                classes={{
-                  root: classes.typographyRoot,
-                }}
-                variant={'h5'}
-              >
+              <Typography variant={'h5'}>
                 {commaFormatted(user.vcDonatedAllTime)}
               </Typography>
               <HeartBorderIcon
@@ -115,14 +85,7 @@ const HeartsDropdownComponent = props => {
                 }}
               />
             </span>
-            <Typography
-              classes={{
-                root: classes.typographyRoot,
-              }}
-              variant={'body2'}
-            >
-              donated
-            </Typography>
+            <Typography variant={'body2'}>donated</Typography>
           </span>
           <Link to={donateURL}>
             <Button variant={'contained'} color={'primary'} style={buttonStyle}>
@@ -133,22 +96,8 @@ const HeartsDropdownComponent = props => {
         <Divider />
         <div style={sectionStyle}>
           <div>
-            <Typography
-              classes={{
-                root: classes.typographyRoot,
-              }}
-              variant={'h5'}
-            >
-              {user.numUsersRecruited}
-            </Typography>
-            <Typography
-              classes={{
-                root: classes.typographyRoot,
-              }}
-              variant={'body2'}
-            >
-              Tabbers recruited
-            </Typography>
+            <Typography variant={'h5'}>{user.numUsersRecruited}</Typography>
+            <Typography variant={'body2'}>Tabbers recruited</Typography>
           </div>
           <Link to={inviteFriendsURL}>
             <Button variant={'contained'} color={'primary'} style={buttonStyle}>
@@ -167,9 +116,6 @@ const HeartsDropdownComponent = props => {
         >
           <div style={{ display: 'flex' }}>
             <Typography
-              classes={{
-                root: classes.typographyRoot,
-              }}
               variant={'body2'}
               style={{
                 flex: 6,
@@ -184,13 +130,7 @@ const HeartsDropdownComponent = props => {
                 justifyContent: 'center',
               }}
             >
-              <Typography
-                classes={{
-                  root: classes.typographyRoot,
-                }}
-                variant={'body2'}
-                style={{ textAlign: 'right' }}
-              >
+              <Typography variant={'body2'} style={{ textAlign: 'right' }}>
                 1
               </Typography>
               <HeartBorderIcon
@@ -205,9 +145,6 @@ const HeartsDropdownComponent = props => {
           </div>
           <div style={{ display: 'flex' }}>
             <Typography
-              classes={{
-                root: classes.typographyRoot,
-              }}
               variant={'body2'}
               style={{
                 flex: 6,
@@ -222,13 +159,7 @@ const HeartsDropdownComponent = props => {
                 justifyContent: 'center',
               }}
             >
-              <Typography
-                classes={{
-                  root: classes.typographyRoot,
-                }}
-                variant={'body2'}
-                style={{ textAlign: 'right' }}
-              >
+              <Typography variant={'body2'} style={{ textAlign: 'right' }}>
                 {app.referralVcReward}
               </Typography>
               <HeartBorderIcon
