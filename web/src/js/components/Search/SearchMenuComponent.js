@@ -98,9 +98,7 @@ SearchMenuComponent.propTypes = {
   classes: PropTypes.object.isRequired,
   style: PropTypes.object,
   // May not exist if the user is not signed in.
-  user: PropTypes.shape({
-    id: PropTypes.string,
-  }),
+  user: PropTypes.shape({}),
 }
 
 SearchMenuComponent.defaultProps = {
