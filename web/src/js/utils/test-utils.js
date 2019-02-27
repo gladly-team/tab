@@ -259,6 +259,22 @@ export const mountWithRouter = node => {
 }
 
 /**
+ * Change the window.location object, merging with existing values.
+ * @param {Object} modifiedLocation - An object with any values
+ *   to modify on the window.location object.
+ * @return {undefined}
+ */
+export const setWindowLocation = modifiedLocation => {
+  const windowLocation = JSON.stringify(window.location)
+  delete window.location
+  Object.defineProperty(window, 'location', {
+    value: Object.assign({}, JSON.parse(windowLocation), modifiedLocation),
+    configurable: true,
+    writable: true,
+  })
+}
+
+/**
  * Set the user agent to "ReactSnap" to impersonate the
  * client that will prerender the page.
  * @return {undefined}
