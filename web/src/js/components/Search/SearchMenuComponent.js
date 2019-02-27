@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-// import { get } from 'lodash/object'
+import { get } from 'lodash/object'
 import {
   createMuiTheme,
   MuiThemeProvider,
@@ -32,68 +32,29 @@ const SearchMenuComponent = props => {
     <MuiThemeProvider
       theme={{
         ...defaultTheme,
-        // palette: {
-        //   ...defaultTheme.palette,
-        //   background: {
-        //     ...defaultTheme.palette.background,
-        //     paper: 'rgba(0, 0, 0, 0.36)',
-        //   },
-        //   divider: 'rgba(255, 255, 255, 0.20)',
-        // },
-        // typography: {
-        //   ...defaultTheme.typography,
-        //   h2: {
-        //     ...defaultTheme.typography.h2,
-        //     color: 'rgba(255, 255, 255, 0.8)',
-        //   },
-        //   h3: {
-        //     ...defaultTheme.typography.h3,
-        //     color: '#fff',
-        //   },
-        //   h4: {
-        //     ...defaultTheme.typography.h4,
-        //     color: '#fff',
-        //   },
-        //   h5: {
-        //     ...defaultTheme.typography.h5,
-        //     color: '#fff',
-        //   },
-        //   body2: {
-        //     ...defaultTheme.typography.body2,
-        //     color: '#fff',
-        //   },
-        // },
-        // overrides: {
-        //   ...defaultTheme.overrides,
-        //   MuiListItemIcon: {
-        //     ...get(defaultTheme, 'overrides.MuiListItemIcon', {}),
-        //     root: {
-        //       ...get(defaultTheme, 'overrides.MuiListItemIcon.root', {}),
-        //       color: '#fff',
-        //     },
-        //   },
-        //   MuiButtonBase: {
-        //     ...get(defaultTheme, 'overrides.MuiButtonBase', {}),
-        //     root: {
-        //       ...get(defaultTheme, 'overrides.MuiButtonBase.root', {}),
-        //       color: '#fff',
-        //     },
-        //   },
-        //   MuiSvgIcon: {
-        //     root: {
-        //       color: '#fff',
-        //     },
-        //   },
-        //   MuiTypography: {
-        //     ...get(defaultTheme, 'overrides.MuiTypography', {}),
-        //     h2: {
-        //       ...get(defaultTheme, 'overrides.MuiTypography.h2', {}),
-        //       '&:hover': {
-        //         color: '#fff',
-        //       },
-        //     },
-        //   },
-        // },
+        typography: {
+          ...defaultTheme.typography,
+          h2: {
+            ...defaultTheme.typography.h2,
+            color: 'rgba(0, 0, 0, 0.66)',
+          },
+        },
+        overrides: {
+          MuiSvgIcon: {
+            root: {
+              color: 'rgba(0, 0, 0, 0.66)',
+            },
+          },
+          MuiTypography: {
+            ...get(defaultTheme, 'overrides.MuiTypography', {}),
+            h2: {
+              ...get(defaultTheme, 'overrides.MuiTypography.h2', {}),
+              '&:hover': {
+                color: 'rgba(0, 0, 0, 0.87)',
+              },
+            },
+          },
+        },
       }}
     >
       <div
@@ -115,17 +76,16 @@ const SearchMenuComponent = props => {
           >
             <CircleIcon
               style={{
-                // color: 'rgba(255, 255, 255, 0.8)',
-                color: 'inherit',
+                color: 'rgba(0, 0, 0, 0.66)',
               }}
               classes={{
                 root: classes.circleIcon,
               }}
             />
             <Hearts app={app} user={user} />
+            <SettingsButton isUserAnonymous={false} />
           </div>
         ) : null}
-        <SettingsButton isUserAnonymous={!userExists} />
       </div>
     </MuiThemeProvider>
   )
