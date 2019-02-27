@@ -1,7 +1,10 @@
 /* eslint-env jest */
 
 import React from 'react'
-import { shallow } from 'enzyme'
+import { get } from 'lodash/object'
+import { mount, shallow } from 'enzyme'
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
+import IconButton from '@material-ui/core/IconButton'
 import { mountWithHOC } from 'js/utils/test-utils'
 import SettingsDropdown from 'js/components/Dashboard/SettingsDropdownComponent'
 import { logout } from 'js/authentication/user'
@@ -37,77 +40,6 @@ describe('SettingsButtonComponent', () => {
     // Important: other code relies on the data-tour-id to show the
     // new user tour. Do not change it without updating it elsewhere.
     expect(wrapper.find('[data-tour-id="settings-button"]').length).toBe(1)
-  })
-
-  it('is the expected color when not hovering', () => {
-    const SettingsButtonComponent = require('js/components/Dashboard/SettingsButtonComponent')
-      .default
-    const mockProps = getMockProps()
-    const wrapper = mountWithHOC(<SettingsButtonComponent {...mockProps} />)
-    const typographyComputedStyle = window.getComputedStyle(
-      wrapper
-        .find('[data-test-id="settings-button"]')
-        .first()
-        .getDOMNode()
-    )
-    expect(typographyComputedStyle).toHaveProperty(
-      'color',
-      'rgba(255, 255, 255, 0.8)'
-    )
-  })
-
-  it('is the expected color when hovering', () => {
-    const SettingsButtonComponent = require('js/components/Dashboard/SettingsButtonComponent')
-      .default
-    const mockProps = getMockProps()
-    const wrapper = mountWithHOC(<SettingsButtonComponent {...mockProps} />)
-
-    // Simulate hover
-    wrapper
-      .find('[data-test-id="settings-button"]')
-      .first()
-      .simulate('mouseenter')
-    const typographyComputedStyle = window.getComputedStyle(
-      wrapper
-        .find('[data-test-id="settings-button"]')
-        .first()
-        .getDOMNode()
-    )
-    expect(typographyComputedStyle).toHaveProperty('color', 'white')
-
-    // Simulate end hovering
-    wrapper
-      .find('[data-test-id="settings-button"]')
-      .first()
-      .simulate('mouseleave')
-    const typographyComputedStyleNoHover = window.getComputedStyle(
-      wrapper
-        .find('[data-test-id="settings-button"]')
-        .first()
-        .getDOMNode()
-    )
-    expect(typographyComputedStyleNoHover).toHaveProperty(
-      'color',
-      'rgba(255, 255, 255, 0.8)'
-    )
-  })
-
-  it('is the expected color after clicking', () => {
-    const SettingsButtonComponent = require('js/components/Dashboard/SettingsButtonComponent')
-      .default
-    const mockProps = getMockProps()
-    const wrapper = mountWithHOC(<SettingsButtonComponent {...mockProps} />)
-    wrapper
-      .find('[data-test-id="settings-button"]')
-      .first()
-      .simulate('click')
-    const typographyComputedStyle = window.getComputedStyle(
-      wrapper
-        .find('[data-test-id="settings-button"]')
-        .first()
-        .getDOMNode()
-    )
-    expect(typographyComputedStyle).toHaveProperty('color', 'white')
   })
 
   it('opens the dropdown on click', () => {
@@ -169,5 +101,105 @@ describe('SettingsButtonComponent', () => {
       .find(SettingsDropdown)
       .prop('onLogoutClick')
     onLogoutClickFunc()
+  })
+
+  it('uses the MUI theme h2 color for the settings button icon', () => {
+    const defaultTheme = createMuiTheme()
+    const SettingsButtonComponent = require('js/components/Dashboard/SettingsButtonComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = mount(
+      <MuiThemeProvider
+        theme={{
+          ...defaultTheme,
+          typography: {
+            ...defaultTheme.typography,
+            h2: {
+              ...defaultTheme.typography.h2,
+              color: 'rgba(1, 0, 255, 0.44)',
+            },
+            body2: {
+              ...defaultTheme.typography.body2,
+              color: '#fff',
+            },
+          },
+        }}
+      >
+        <SettingsButtonComponent {...mockProps} />
+      </MuiThemeProvider>
+    )
+    const computedStyle = window.getComputedStyle(
+      wrapper
+        .find(IconButton)
+        .first()
+        .getDOMNode()
+    )
+    expect(computedStyle).toHaveProperty('color', 'rgba(1, 0, 255, 0.44)')
+  })
+
+  it('uses the MUI theme h2 hover color for the settings button icon when the dropdown is open', () => {
+    const defaultTheme = createMuiTheme()
+    const SettingsButtonComponent = require('js/components/Dashboard/SettingsButtonComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = mount(
+      <MuiThemeProvider
+        theme={{
+          ...defaultTheme,
+          overrides: {
+            ...defaultTheme.overrides,
+            MuiTypography: {
+              ...get(defaultTheme, 'overrides.MuiTypography', {}),
+              h2: {
+                ...get(defaultTheme, 'overrides.MuiTypography.h2', {}),
+                '&:hover': {
+                  color: 'rgb(67, 90, 120)',
+                },
+              },
+            },
+          },
+        }}
+      >
+        <SettingsButtonComponent {...mockProps} />
+      </MuiThemeProvider>
+    )
+    wrapper
+      .find(IconButton)
+      .first()
+      .simulate('click')
+    const computedStyle = window.getComputedStyle(
+      wrapper
+        .find(IconButton)
+        .first()
+        .getDOMNode()
+    )
+    expect(computedStyle).toHaveProperty('color', 'rgb(67, 90, 120)')
+  })
+
+  it('falls back to "inherit" color for the settings button icon if the MUI theme h2 hover color is not defined, when the dropdown is open', () => {
+    const defaultTheme = createMuiTheme()
+    const SettingsButtonComponent = require('js/components/Dashboard/SettingsButtonComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = mount(
+      <MuiThemeProvider
+        theme={{
+          ...defaultTheme,
+          overrides: {
+            ...defaultTheme.overrides,
+            MuiTypography: {},
+          },
+        }}
+      >
+        <SettingsButtonComponent {...mockProps} />
+      </MuiThemeProvider>
+    )
+    wrapper.find(IconButton).simulate('click')
+    expect(
+      wrapper
+        .find(IconButton)
+        .first()
+        .prop('style')
+    ).toHaveProperty('color', 'inherit')
   })
 })

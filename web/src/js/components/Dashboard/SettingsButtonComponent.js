@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { get } from 'lodash/object'
 import { withStyles } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
@@ -8,20 +9,14 @@ import { logout } from 'js/authentication/user'
 import { goToLogin } from 'js/navigation/navigation'
 import logger from 'js/utils/logger'
 
-// TODO: break out to make the component customizable:
-// https://material-ui.com/customization/overrides/#3-specific-variation-of-a-component
-const fontColor = 'rgba(255, 255, 255, 0.8)'
-const fontColorActive = 'white'
 const styles = {
   settingsIcon: {
-    color: fontColor,
     padding: 0,
     width: 40,
     height: 40,
     transition: 'color 300ms ease-in',
     fontSize: 22,
     '&:hover': {
-      color: fontColorActive,
       backgroundColor: 'transparent',
     },
   },
@@ -50,7 +45,7 @@ class SettingsButtonComponent extends React.Component {
   }
 
   render() {
-    const { classes, isUserAnonymous } = this.props
+    const { classes, isUserAnonymous, theme } = this.props
     const { isHovering, isPopoverOpen } = this.state
     const anchorElement = this.anchorElement
     return (
@@ -61,7 +56,14 @@ class SettingsButtonComponent extends React.Component {
           data-tour-id={'settings-button'}
           className={classes.settingsIcon}
           style={{
-            color: isHovering || isPopoverOpen ? fontColorActive : fontColor,
+            color:
+              isHovering || isPopoverOpen
+                ? get(
+                    theme,
+                    'overrides.MuiTypography.h2.&:hover.color',
+                    'inherit'
+                  )
+                : get(theme, 'typography.h2.color', 'inherit'),
           }}
           onClick={() => {
             this.setState({
@@ -100,10 +102,11 @@ class SettingsButtonComponent extends React.Component {
 SettingsButtonComponent.propTypes = {
   classes: PropTypes.object.isRequired,
   isUserAnonymous: PropTypes.bool.isRequired,
+  theme: PropTypes.object.isRequired,
 }
 
 SettingsButtonComponent.defaultProps = {
   classes: {},
 }
 
-export default withStyles(styles)(SettingsButtonComponent)
+export default withStyles(styles, { withTheme: true })(SettingsButtonComponent)
