@@ -3,13 +3,61 @@
 
 import { setWindowLocation } from 'js/utils/test-utils'
 
+const mockBrowserHistory = {
+  push: jest.fn(),
+  replace: jest.fn(),
+}
+jest.mock('history/createBrowserHistory', () =>
+  jest.fn(() => mockBrowserHistory)
+)
+
 beforeAll(() => {
   process.env.REACT_APP_WEBSITE_PROTOCOL = 'https'
 })
 
 afterEach(() => {
   delete process.env.REACT_APP_WEBSITE_DOMAIN
-  jest.resetModules()
+  jest.clearAllMocks()
+})
+
+describe('goTo', () => {
+  it('calls history.push as expected', () => {
+    const { goTo } = require('../navigation')
+    goTo('/some/path/')
+    expect(mockBrowserHistory.push).toHaveBeenCalledWith({
+      pathname: '/some/path/',
+      search: null,
+    })
+  })
+
+  it('calls history.push with query parameters', () => {
+    const { goTo } = require('../navigation')
+    goTo('/some/path/', { someParam: 'abc', foo: 'blah' })
+    expect(mockBrowserHistory.push).toHaveBeenCalledWith({
+      pathname: '/some/path/',
+      search: '?someParam=abc&foo=blah',
+    })
+  })
+})
+
+describe('replaceUrl', () => {
+  it('calls history.replace as expected', () => {
+    const { replaceUrl } = require('../navigation')
+    replaceUrl('/some/path/')
+    expect(mockBrowserHistory.replace).toHaveBeenCalledWith({
+      pathname: '/some/path/',
+      search: null,
+    })
+  })
+
+  it('calls history.replace with query parameters', () => {
+    const { replaceUrl } = require('../navigation')
+    replaceUrl('/some/path/', { someParam: 'abc', foo: 'blah' })
+    expect(mockBrowserHistory.replace).toHaveBeenCalledWith({
+      pathname: '/some/path/',
+      search: '?someParam=abc&foo=blah',
+    })
+  })
 })
 
 describe('absoluteUrl', () => {
