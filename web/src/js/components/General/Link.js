@@ -1,17 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link as LinkReactRouter } from 'react-router-dom'
+import { isURLForDifferentApp } from 'js/navigation/utils'
 
 // To handle both internal and external links.
 class Link extends React.Component {
   render() {
     const { children, to, style, className, ...otherProps } = this.props
-
-    // TODO: like navigation `goTo`, we need to also handle navigation
-    // between newtab and search apps.
-    // This assumes that any internal link (intended for Gatsby) starts
-    // with exactly one slash, and that anything else is external.
-    const internal = /^\/(?!\/)/.test(to)
+    const internal = !isURLForDifferentApp(to)
 
     // Use gatsby-link for internal links, and <a> for others
     if (internal) {

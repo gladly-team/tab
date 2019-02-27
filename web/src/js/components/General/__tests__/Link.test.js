@@ -3,6 +3,18 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import { Link as LinkReactRouter } from 'react-router-dom'
+import { isURLForDifferentApp } from 'js/navigation/utils'
+
+jest.mock('react-router-dom')
+jest.mock('js/navigation/utils')
+
+beforeEach(() => {
+  isURLForDifferentApp.mockReturnValue(false)
+})
+
+afterEach(() => {
+  isURLForDifferentApp.mockReset()
+})
 
 describe('Link', () => {
   it('renders without error', () => {
@@ -10,30 +22,25 @@ describe('Link', () => {
     shallow(<Link to={'/'} />)
   })
 
-  it('uses react-router-dom Link component when navigating to a relative URL', () => {
+  it('uses react-router-dom Link component when navigating to a URL within the current single-page app', () => {
     const Link = require('../Link').default
-    const testUrls = ['/', '/some-url/here/', '/123/', '/thing']
-    testUrls.forEach(testUrl => {
-      const wrapper = shallow(<Link to={testUrl} />)
-      expect(wrapper.find(LinkReactRouter).length).toBe(1)
-    })
+    isURLForDifferentApp.mockReturnValue(false)
+    const wrapper = shallow(<Link to={'/some/path/'} />)
+    expect(wrapper.find(LinkReactRouter).exists()).toBe(true)
+    expect(wrapper.find('a').exists()).toBe(false)
   })
 
-  it('uses anchor elem when navigating to an absolute URL', () => {
+  it('uses anchor elem when navigating to a URL outside of the current single-page app', () => {
     const Link = require('../Link').default
-    const testUrls = [
-      'https://tab.gladly.io/',
-      'localhost:3000/some-url/here/',
-      'https://gladly.io',
-    ]
-    testUrls.forEach(testUrl => {
-      const wrapper = shallow(<Link to={testUrl} />)
-      expect(wrapper.find('a').length).toBe(1)
-    })
+    isURLForDifferentApp.mockReturnValue(true) // external URL
+    const wrapper = shallow(<Link to={'/some/path/'} />)
+    expect(wrapper.find('a').exists()).toBe(true)
+    expect(wrapper.find(LinkReactRouter).exists()).toBe(false)
   })
 
   it('passes style prop to the react-router-dom Link component', () => {
     const Link = require('../Link').default
+    isURLForDifferentApp.mockReturnValue(false)
     const someStyle = { fontSize: 12, color: '#cdcdcd' }
     const wrapper = shallow(
       <Link to={'/'} style={someStyle} hoverStyle={{ color: 'red' }} />
@@ -43,6 +50,7 @@ describe('Link', () => {
 
   it('passes style prop to anchor elem', () => {
     const Link = require('../Link').default
+    isURLForDifferentApp.mockReturnValue(true) // external URL
     const someStyle = { fontSize: 12, color: '#cdcdcd' }
     const wrapper = shallow(
       <Link
@@ -56,6 +64,7 @@ describe('Link', () => {
 
   it('passes other props to the anchor elem', () => {
     const Link = require('../Link').default
+    isURLForDifferentApp.mockReturnValue(true) // external URL
     const wrapper = shallow(
       <Link to={'https://tab.gladly.io/'} rel={'noopener'} />
     )
