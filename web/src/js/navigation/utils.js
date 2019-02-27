@@ -33,6 +33,9 @@ export const isURLForDifferentApp = newURL => {
   return false
 }
 
+// TODO: deprecate using this directly. Instead, just rely
+//   on navigation's goTo and replaceUrl, which handles
+//   external redirects intelligently.
 /**
  * Set window.location to a new URL
  * @param {String} newURL - The URL to navigate to

@@ -1,33 +1,34 @@
 import createBrowserHistory from 'history/createBrowserHistory'
+import { externalRedirect, isURLForDifferentApp } from 'js/navigation/utils'
 import { getUrlParameters } from 'js/utils/utils'
 import qs from 'qs'
 
 export const browserHistory = createBrowserHistory()
 
 export const goTo = (path, paramsObj = {}) => {
-  // TODO: if the first path is not the same, we are on a separate
-  //   SPA (/newtab/ vs. /search/), so we must externalRedirect.
-  //   Let's do that automatically so we can use the same navigation
-  //   everywhere.
-  // TODO: automatically use externalRedirect for absolute URLs to
-  //   a different domain. Then, we can deprecate externalRedirect.
-  browserHistory.push({
-    pathname: path,
-    search: qs.stringify(paramsObj) ? `?${qs.stringify(paramsObj)}` : null,
-  })
+  const queryString = qs.stringify(paramsObj)
+  if (isURLForDifferentApp(path)) {
+    let externalURL = queryString ? `${path}?${queryString}` : path
+    externalRedirect(externalURL)
+  } else {
+    browserHistory.push({
+      pathname: path,
+      search: queryString ? `?${queryString}` : null,
+    })
+  }
 }
 
 export const replaceUrl = (path, paramsObj = {}) => {
-  // TODO: if the first path is not the same, we are on a separate
-  //   SPA (/newtab/ vs. /search/), so we must externalRedirect.
-  //   Let's do that automatically so we can use the same navigation
-  //   everywhere.
-  // TODO: automatically use externalRedirect for absolute URLs to
-  //   a different domain. Then, we can deprecate externalRedirect.
-  browserHistory.replace({
-    pathname: path,
-    search: qs.stringify(paramsObj) ? `?${qs.stringify(paramsObj)}` : null,
-  })
+  const queryString = qs.stringify(paramsObj)
+  if (isURLForDifferentApp(path)) {
+    let externalURL = queryString ? `${path}?${queryString}` : path
+    externalRedirect(externalURL)
+  } else {
+    browserHistory.replace({
+      pathname: path,
+      search: qs.stringify(paramsObj) ? `?${qs.stringify(paramsObj)}` : null,
+    })
+  }
 }
 
 export const modifyURLParams = (paramsObj = {}) => {

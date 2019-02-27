@@ -1,7 +1,7 @@
 /* eslint-env jest */
 /* globals process */
 
-import { setWindowLocation } from 'js/utils/test-utils'
+import { externalRedirect, isURLForDifferentApp } from 'js/navigation/utils'
 
 const mockBrowserHistory = {
   push: jest.fn(),
@@ -10,6 +10,7 @@ const mockBrowserHistory = {
 jest.mock('history/createBrowserHistory', () =>
   jest.fn(() => mockBrowserHistory)
 )
+jest.mock('js/navigation/utils')
 
 beforeAll(() => {
   process.env.REACT_APP_WEBSITE_PROTOCOL = 'https'
@@ -38,6 +39,22 @@ describe('goTo', () => {
       search: '?someParam=abc&foo=blah',
     })
   })
+
+  it('calls externalRedirect when the new URL is on a different app', () => {
+    const { goTo } = require('js/navigation/navigation')
+    isURLForDifferentApp.mockReturnValueOnce(true)
+    goTo('/some/path/')
+    expect(externalRedirect).toHaveBeenCalledWith('/some/path/')
+  })
+
+  it('calls externalRedirect with the correct querystring when the new URL is on a different app', () => {
+    const { goTo } = require('js/navigation/navigation')
+    isURLForDifferentApp.mockReturnValueOnce(true)
+    goTo('/some/path/', { someParam: 'abc', foo: 'blah' })
+    expect(externalRedirect).toHaveBeenCalledWith(
+      '/some/path/?someParam=abc&foo=blah'
+    )
+  })
 })
 
 describe('replaceUrl', () => {
@@ -57,6 +74,22 @@ describe('replaceUrl', () => {
       pathname: '/some/path/',
       search: '?someParam=abc&foo=blah',
     })
+  })
+
+  it('calls externalRedirect when the new URL is on a different app', () => {
+    const { replaceUrl } = require('js/navigation/navigation')
+    isURLForDifferentApp.mockReturnValueOnce(true)
+    replaceUrl('/some/path/')
+    expect(externalRedirect).toHaveBeenCalledWith('/some/path/')
+  })
+
+  it('calls externalRedirect with the correct querystring when the new URL is on a different app', () => {
+    const { replaceUrl } = require('js/navigation/navigation')
+    isURLForDifferentApp.mockReturnValueOnce(true)
+    replaceUrl('/some/path/', { greeting: 'hello', name: 'fred' })
+    expect(externalRedirect).toHaveBeenCalledWith(
+      '/some/path/?greeting=hello&name=fred'
+    )
   })
 })
 
