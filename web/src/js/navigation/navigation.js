@@ -40,10 +40,6 @@ export const modifyURLParams = (paramsObj = {}) => {
   })
 }
 
-export const externalRedirect = externalURL => {
-  window.location = externalURL
-}
-
 export const absoluteUrl = path => {
   // If the passed path is already an absolute URL,
   // just return it.

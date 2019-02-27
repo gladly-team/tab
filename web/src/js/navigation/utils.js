@@ -32,3 +32,12 @@ export const isURLForDifferentApp = newURL => {
   // Otherwise, assume we're on the same app.
   return false
 }
+
+/**
+ * Set window.location to a new URL
+ * @param {String} newURL - The URL to navigate to
+ * @return {undefined}
+ */
+export const externalRedirect = externalURL => {
+  window.location = externalURL
+}

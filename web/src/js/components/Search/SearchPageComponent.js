@@ -8,11 +8,8 @@ import SearchIcon from '@material-ui/icons/Search'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import { isSearchPageEnabled } from 'js/utils/feature-flags'
-import {
-  externalRedirect,
-  dashboardURL,
-  modifyURLParams,
-} from 'js/navigation/navigation'
+import { dashboardURL, modifyURLParams } from 'js/navigation/navigation'
+import { externalRedirect } from 'js/navigation/utils'
 import LogoWithText from 'js/components/Logo/LogoWithText'
 import { parseUrlSearchString } from 'js/utils/utils'
 import SearchResults from 'js/components/Search/SearchResults'
