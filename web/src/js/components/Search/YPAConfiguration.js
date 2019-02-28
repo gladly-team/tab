@@ -230,7 +230,7 @@ const YPAConfiguration = {
   ypaAdTypeTag: '',
   // Pagination of search results. The calling function should
   // set this value. Valid values are 1-9999.
-  // ypaPageCount: 1,
+  // ypaPageCount: '1',
   // For now, we'll just show non-personalized ads in the EU:
   // "When gdpr=0 or missing, Oath will perform an IP check on the user
   // to determine jurisdiction. If euconsent is empty, or if the IAB string
