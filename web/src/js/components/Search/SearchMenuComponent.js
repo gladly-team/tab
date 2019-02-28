@@ -44,7 +44,9 @@ const SearchMenuComponent = props => {
         },
         overrides: {
           MuiSvgIcon: {
+            ...get(defaultTheme, 'overrides.MuiSvgIcon', {}),
             root: {
+              ...get(defaultTheme, 'overrides.MuiSvgIcon.root', {}),
               color: 'rgba(0, 0, 0, 0.66)',
               fontSize: menuFontSize,
             },
