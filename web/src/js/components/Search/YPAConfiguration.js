@@ -188,7 +188,7 @@ const adOptions = {
   // Whether to show "site links" in ads.
   SiteLink: true,
   // Whether to show merchant star ratings on ads.
-  MerchantRating: true,
+  MerchantRating: false,
   // Whether to show images in ads.
   ImageInAds: false,
   // Whether to show "enhanced site links" in ads.
