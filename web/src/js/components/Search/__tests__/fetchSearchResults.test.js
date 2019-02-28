@@ -38,6 +38,25 @@ describe('fetchSearchResults', () => {
     expect(config.ypaPubParams.query).toEqual(query)
   })
 
+  it('sets the page index in the YPA configuration', () => {
+    const fetchSearchResults = require('js/components/Search/fetchSearchResults')
+      .default
+    const query = 'some search thing'
+    const page = 234
+    fetchSearchResults(query, () => {}, page)
+    const config = window.ypaAds.insertMultiAd.mock.calls[0][0]
+    expect(config.ypaPageCount).toEqual('234')
+  })
+
+  it('defaults the page index to "1" in the YPA configuration if it\'s not passed', () => {
+    const fetchSearchResults = require('js/components/Search/fetchSearchResults')
+      .default
+    const query = 'some search thing'
+    fetchSearchResults(query)
+    const config = window.ypaAds.insertMultiAd.mock.calls[0][0]
+    expect(config.ypaPageCount).toEqual('1')
+  })
+
   it('sets the error callback in the YPA configuration', () => {
     const fetchSearchResults = require('js/components/Search/fetchSearchResults')
       .default

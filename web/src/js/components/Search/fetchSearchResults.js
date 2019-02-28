@@ -16,7 +16,7 @@ const fetchSearchResults = (query = null, onNoResults = () => {}, page = 1) => {
   config.ypaAdSlotInfo[1].ypaOnNoAd = onNoResults
 
   // Note that the page index must be a string.
-  // TODO
+  config.ypaPageCount = page.toString()
 
   // Fetch search results.
   // Note: YPA mutates objects we pass to it, so make sure to
