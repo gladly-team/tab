@@ -48,7 +48,7 @@ describe('User background image component', () => {
         timestamp: '2017-05-19T13:59:46.000Z',
       },
     }
-    const UserBackgroundImageComponent = require('js/components/User/UserBackgroundImageComponent')
+    const UserBackgroundImageComponent = require('js/components/Dashboard/UserBackgroundImageComponent')
       .default
     const wrapper = shallow(
       <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
@@ -70,7 +70,7 @@ describe('User background image component', () => {
     getUserBackgroundColor.mockReturnValue('#FF0000')
     getUserBackgroundImageURL.mockReturnValue('https://example.com/pic.png')
 
-    const UserBackgroundImageComponent = require('js/components/User/UserBackgroundImageComponent')
+    const UserBackgroundImageComponent = require('js/components/Dashboard/UserBackgroundImageComponent')
       .default
     const wrapper = shallow(
       <UserBackgroundImageComponent user={null} relay={{ environment: {} }} />
@@ -96,7 +96,7 @@ describe('User background image component', () => {
         timestamp: '2017-05-19T13:59:46.000Z',
       },
     }
-    const UserBackgroundImageComponent = require('js/components/User/UserBackgroundImageComponent')
+    const UserBackgroundImageComponent = require('js/components/Dashboard/UserBackgroundImageComponent')
       .default
     const wrapper = shallow(
       <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
@@ -120,7 +120,7 @@ describe('User background image component', () => {
       'https://example.com/something.png'
     )
 
-    const UserBackgroundImageComponent = require('js/components/User/UserBackgroundImageComponent')
+    const UserBackgroundImageComponent = require('js/components/Dashboard/UserBackgroundImageComponent')
       .default
     const wrapper = shallow(
       <UserBackgroundImageComponent user={null} relay={{ environment: {} }} />
@@ -146,7 +146,7 @@ describe('User background image component', () => {
         timestamp: '2017-05-19T13:59:46.000Z',
       },
     }
-    const UserBackgroundImageComponent = require('js/components/User/UserBackgroundImageComponent')
+    const UserBackgroundImageComponent = require('js/components/Dashboard/UserBackgroundImageComponent')
       .default
     const wrapper = shallow(
       <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
@@ -170,7 +170,7 @@ describe('User background image component', () => {
     getUserBackgroundColor.mockReturnValue(null)
     getUserBackgroundImageURL.mockReturnValue('https://example.com/pic.png')
 
-    const UserBackgroundImageComponent = require('js/components/User/UserBackgroundImageComponent')
+    const UserBackgroundImageComponent = require('js/components/Dashboard/UserBackgroundImageComponent')
       .default
     const wrapper = shallow(
       <UserBackgroundImageComponent user={null} relay={{ environment: {} }} />
@@ -196,7 +196,7 @@ describe('User background image component', () => {
         timestamp: '2017-05-19T13:59:46.000Z',
       },
     }
-    const UserBackgroundImageComponent = require('js/components/User/UserBackgroundImageComponent')
+    const UserBackgroundImageComponent = require('js/components/Dashboard/UserBackgroundImageComponent')
       .default
     const wrapper = shallow(
       <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
@@ -215,7 +215,7 @@ describe('User background image component', () => {
     getUserBackgroundColor.mockReturnValue('#FF0000')
     getUserBackgroundImageURL.mockReturnValue('https://example.com/pic.png')
 
-    const UserBackgroundImageComponent = require('js/components/User/UserBackgroundImageComponent')
+    const UserBackgroundImageComponent = require('js/components/Dashboard/UserBackgroundImageComponent')
       .default
     const wrapper = shallow(
       <UserBackgroundImageComponent user={null} relay={{ environment: {} }} />
@@ -234,7 +234,7 @@ describe('User background image component', () => {
     getUserBackgroundColor.mockReturnValue('#FF0000')
     getUserBackgroundImageURL.mockReturnValue('https://example.com/pic.png')
 
-    const UserBackgroundImageComponent = require('js/components/User/UserBackgroundImageComponent')
+    const UserBackgroundImageComponent = require('js/components/Dashboard/UserBackgroundImageComponent')
       .default
     const wrapper = shallow(
       <UserBackgroundImageComponent user={null} relay={{ environment: {} }} />
@@ -270,7 +270,7 @@ describe('User background image component', () => {
     getUserBackgroundColor.mockReturnValue('#FF0000')
     getUserBackgroundImageURL.mockReturnValue('https://example.com/pic.png')
 
-    const UserBackgroundImageComponent = require('js/components/User/UserBackgroundImageComponent')
+    const UserBackgroundImageComponent = require('js/components/Dashboard/UserBackgroundImageComponent')
       .default
     const wrapper = shallow(
       <UserBackgroundImageComponent user={null} relay={{ environment: {} }} />
@@ -316,7 +316,7 @@ describe('User background image component', () => {
         timestamp: '2017-05-19T13:59:46.000Z',
       },
     }
-    const UserBackgroundImageComponent = require('js/components/User/UserBackgroundImageComponent')
+    const UserBackgroundImageComponent = require('js/components/Dashboard/UserBackgroundImageComponent')
       .default
     const wrapper = shallow(
       <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
@@ -342,7 +342,7 @@ describe('User background image component', () => {
         timestamp: '2017-05-19T13:59:46.000Z',
       },
     }
-    const UserBackgroundImageComponent = require('js/components/User/UserBackgroundImageComponent')
+    const UserBackgroundImageComponent = require('js/components/Dashboard/UserBackgroundImageComponent')
       .default
     const wrapper = shallow(
       <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
@@ -368,7 +368,7 @@ describe('User background image component', () => {
         timestamp: '2017-05-19T13:59:46.000Z',
       },
     }
-    const UserBackgroundImageComponent = require('js/components/User/UserBackgroundImageComponent')
+    const UserBackgroundImageComponent = require('js/components/Dashboard/UserBackgroundImageComponent')
       .default
     const wrapper = shallow(
       <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
@@ -390,7 +390,7 @@ describe('User background image component', () => {
     getUserBackgroundColor.mockReturnValue(null)
     getUserBackgroundImageURL.mockReturnValue(null)
 
-    const UserBackgroundImageComponent = require('js/components/User/UserBackgroundImageComponent')
+    const UserBackgroundImageComponent = require('js/components/Dashboard/UserBackgroundImageComponent')
       .default
     const wrapper = shallow(
       <UserBackgroundImageComponent user={null} relay={{ environment: {} }} />
@@ -417,7 +417,7 @@ describe('User background image component', () => {
         timestamp: '2017-05-19T13:59:46.000Z',
       },
     }
-    const UserBackgroundImageComponent = require('js/components/User/UserBackgroundImageComponent')
+    const UserBackgroundImageComponent = require('js/components/Dashboard/UserBackgroundImageComponent')
       .default
     const wrapper = shallow(
       <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
@@ -445,7 +445,7 @@ describe('User background image component', () => {
         timestamp: '2017-05-19T13:59:46.000Z',
       },
     }
-    const UserBackgroundImageComponent = require('js/components/User/UserBackgroundImageComponent')
+    const UserBackgroundImageComponent = require('js/components/Dashboard/UserBackgroundImageComponent')
       .default
     const showErrorHandler = jest.fn()
     const wrapper = shallow(
@@ -463,7 +463,7 @@ describe('User background image component', () => {
   })
 
   it('correctly determines whether background props are different from state', () => {
-    const UserBackgroundImageComponent = require('js/components/User/UserBackgroundImageComponent')
+    const UserBackgroundImageComponent = require('js/components/Dashboard/UserBackgroundImageComponent')
       .default
     const wrapper = shallow(
       <UserBackgroundImageComponent user={null} relay={{ environment: {} }} />
@@ -544,7 +544,7 @@ describe('User background image component', () => {
 
     // As if we have not yet fetched the user from the server.
     const user = null
-    const UserBackgroundImageComponent = require('js/components/User/UserBackgroundImageComponent')
+    const UserBackgroundImageComponent = require('js/components/Dashboard/UserBackgroundImageComponent')
       .default
     const wrapper = shallow(<UserBackgroundImageComponent user={user} />)
     const state = wrapper.state()
@@ -571,7 +571,7 @@ describe('User background image component', () => {
         timestamp: '2017-05-19T13:59:46.000Z',
       },
     }
-    const UserBackgroundImageComponent = require('js/components/User/UserBackgroundImageComponent')
+    const UserBackgroundImageComponent = require('js/components/Dashboard/UserBackgroundImageComponent')
       .default
     shallow(
       <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
@@ -596,7 +596,7 @@ describe('User background image component', () => {
         timestamp: '2017-05-19T13:59:46.000Z',
       },
     }
-    const UserBackgroundImageComponent = require('js/components/User/UserBackgroundImageComponent')
+    const UserBackgroundImageComponent = require('js/components/Dashboard/UserBackgroundImageComponent')
       .default
     shallow(
       <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
@@ -615,7 +615,7 @@ describe('User background image component', () => {
         timestamp: '2017-05-19T13:59:46.000Z',
       },
     }
-    const UserBackgroundImageComponent = require('js/components/User/UserBackgroundImageComponent')
+    const UserBackgroundImageComponent = require('js/components/Dashboard/UserBackgroundImageComponent')
       .default
     const wrapper = mount(
       <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
@@ -649,7 +649,7 @@ describe('User background image component', () => {
         timestamp: '2017-05-19T13:59:46.000Z',
       },
     }
-    const UserBackgroundImageComponent = require('js/components/User/UserBackgroundImageComponent')
+    const UserBackgroundImageComponent = require('js/components/Dashboard/UserBackgroundImageComponent')
       .default
     const wrapper = mount(
       <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
@@ -683,7 +683,7 @@ describe('User background image component', () => {
         timestamp: '2017-05-19T13:59:46.000Z',
       },
     }
-    const UserBackgroundImageComponent = require('js/components/User/UserBackgroundImageComponent')
+    const UserBackgroundImageComponent = require('js/components/Dashboard/UserBackgroundImageComponent')
       .default
     const wrapper = mount(
       <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
@@ -708,7 +708,7 @@ describe('User background image component', () => {
         timestamp: '2017-05-19T13:59:46.000Z',
       },
     }
-    const UserBackgroundImageComponent = require('js/components/User/UserBackgroundImageComponent')
+    const UserBackgroundImageComponent = require('js/components/Dashboard/UserBackgroundImageComponent')
       .default
     const wrapper = mount(
       <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
@@ -737,7 +737,7 @@ describe('User background image component', () => {
       .default
 
     // Current time is the day after the background image last changed.
-    const UserBackgroundImageComponent = require('js/components/User/UserBackgroundImageComponent')
+    const UserBackgroundImageComponent = require('js/components/Dashboard/UserBackgroundImageComponent')
       .default
     shallow(
       <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
@@ -761,7 +761,7 @@ describe('User background image component', () => {
       .default
 
     // Current time is the day after the background image last changed.
-    const UserBackgroundImageComponent = require('js/components/User/UserBackgroundImageComponent')
+    const UserBackgroundImageComponent = require('js/components/Dashboard/UserBackgroundImageComponent')
       .default
     shallow(
       <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
@@ -786,7 +786,7 @@ describe('User background image component', () => {
       .default
 
     // Current time is the day after the background image last changed.
-    const UserBackgroundImageComponent = require('js/components/User/UserBackgroundImageComponent')
+    const UserBackgroundImageComponent = require('js/components/Dashboard/UserBackgroundImageComponent')
       .default
     const wrapper = shallow(
       <UserBackgroundImageComponent user={null} relay={{ environment: {} }} />
@@ -825,7 +825,7 @@ describe('User background image component', () => {
 
     const SetBackgroundDailyImageMutation = require('js/mutations/SetBackgroundDailyImageMutation')
       .default
-    const UserBackgroundImageComponent = require('js/components/User/UserBackgroundImageComponent')
+    const UserBackgroundImageComponent = require('js/components/Dashboard/UserBackgroundImageComponent')
       .default
     shallow(
       <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
@@ -848,7 +848,7 @@ describe('User background image component', () => {
 
     const SetBackgroundDailyImageMutation = require('js/mutations/SetBackgroundDailyImageMutation')
       .default
-    const UserBackgroundImageComponent = require('js/components/User/UserBackgroundImageComponent')
+    const UserBackgroundImageComponent = require('js/components/Dashboard/UserBackgroundImageComponent')
       .default
     shallow(
       <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
@@ -872,7 +872,7 @@ describe('User background image component', () => {
 
     const SetBackgroundDailyImageMutation = require('js/mutations/SetBackgroundDailyImageMutation')
       .default
-    const UserBackgroundImageComponent = require('js/components/User/UserBackgroundImageComponent')
+    const UserBackgroundImageComponent = require('js/components/Dashboard/UserBackgroundImageComponent')
       .default
     shallow(
       <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />
@@ -895,7 +895,7 @@ describe('User background image component', () => {
 
     const SetBackgroundDailyImageMutation = require('js/mutations/SetBackgroundDailyImageMutation')
       .default
-    const UserBackgroundImageComponent = require('js/components/User/UserBackgroundImageComponent')
+    const UserBackgroundImageComponent = require('js/components/Dashboard/UserBackgroundImageComponent')
       .default
     const wrapper = shallow(
       <UserBackgroundImageComponent user={user} relay={{ environment: {} }} />

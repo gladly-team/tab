@@ -4,10 +4,8 @@ import logger from 'js/utils/logger'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import LogoWithText from 'js/components/Logo/LogoWithText'
-import {
-  externalRedirect,
-  externalContactUsURL,
-} from 'js/navigation/navigation'
+import { externalContactUsURL } from 'js/navigation/navigation'
+import { externalRedirect } from 'js/navigation/utils'
 
 class ErrorBoundary extends React.Component {
   constructor(props) {

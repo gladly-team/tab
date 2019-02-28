@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { shape } from 'prop-types'
-import { mount } from 'enzyme'
+import { shallow, mount } from 'enzyme'
 
 import { BrowserRouter } from 'react-router-dom'
 
@@ -259,6 +259,22 @@ export const mountWithRouter = node => {
 }
 
 /**
+ * Change the window.location object, merging with existing values.
+ * @param {Object} modifiedLocation - An object with any values
+ *   to modify on the window.location object.
+ * @return {undefined}
+ */
+export const setWindowLocation = modifiedLocation => {
+  const windowLocation = JSON.stringify(window.location)
+  delete window.location
+  Object.defineProperty(window, 'location', {
+    value: Object.assign({}, JSON.parse(windowLocation), modifiedLocation),
+    configurable: true,
+    writable: true,
+  })
+}
+
+/**
  * Set the user agent to "ReactSnap" to impersonate the
  * client that will prerender the page.
  * @return {undefined}
@@ -290,4 +306,17 @@ export const addReactRootElementToDOM = () => {
   const div = document.createElement('div')
   div.id = 'root'
   document.body.appendChild(div)
+}
+
+/**
+ * Makes Enzyme's wrapper works as expected when the
+ * component is wrapped in a HOC. See:
+ *   https://github.com/airbnb/enzyme/issues/1395#issuecomment-362319366
+ * Alternative may be to use MUI's test utils:
+ *   https://material-ui.com/guides/testing/#testing
+ * Related: https://github.com/mui-org/material-ui/issues/9266
+ * @return {undefined}
+ */
+export const mountWithHOC = component => {
+  return mount(shallow(component).get(0))
 }

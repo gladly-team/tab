@@ -5,14 +5,13 @@ import { mount, shallow } from 'enzyme'
 import LogoWithText from 'js/components/Logo/LogoWithText'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
-import {
-  externalRedirect,
-  externalContactUsURL,
-} from 'js/navigation/navigation'
+import { externalContactUsURL } from 'js/navigation/navigation'
+import { externalRedirect } from 'js/navigation/utils'
 import logger from 'js/utils/logger'
 
 jest.mock('js/components/Logo/LogoWithText')
 jest.mock('js/navigation/navigation')
+jest.mock('js/navigation/utils')
 jest.mock('js/utils/logger')
 
 const getMockProps = () => ({

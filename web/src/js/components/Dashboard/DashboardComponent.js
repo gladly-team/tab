@@ -6,9 +6,8 @@ import moment from 'moment'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
-import MoneyRaised from 'js/components/MoneyRaised/MoneyRaisedContainer'
-import UserBackgroundImage from 'js/components/User/UserBackgroundImageContainer'
-import UserMenu from 'js/components/User/UserMenuContainer'
+import UserBackgroundImage from 'js/components/Dashboard/UserBackgroundImageContainer'
+import UserMenu from 'js/components/Dashboard/UserMenuContainer'
 import WidgetsContainer from 'js/components/Widget/WidgetsContainer'
 import Ad from 'js/components/Ad/Ad'
 import LogTab from 'js/components/Dashboard/LogTabContainer'
@@ -16,13 +15,8 @@ import LogRevenue from 'js/components/Dashboard/LogRevenueContainer'
 import LogConsentData from 'js/components/Dashboard/LogConsentDataContainer'
 import LogAccountCreation from 'js/components/Dashboard/LogAccountCreationContainer'
 import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
-import CircleIcon from 'material-ui/svg-icons/image/lens'
 import HeartIcon from 'material-ui/svg-icons/action/favorite'
-import {
-  primaryColor,
-  dashboardIconInactiveColor,
-  dashboardIconActiveColor,
-} from 'js/theme/default'
+import { primaryColor, dashboardIconInactiveColor } from 'js/theme/default'
 import FadeInDashboardAnimation from 'js/components/General/FadeInDashboardAnimation'
 import ErrorMessage from 'js/components/General/ErrorMessage'
 import Notification from 'js/components/Dashboard/NotificationComponent'
@@ -64,7 +58,6 @@ class Dashboard extends React.Component {
     this.state = {
       errorMessage: null,
       tabId: uuid(),
-      showFireworks: false,
       isUserAnonymous: false, // Set after mount if true
       // This may be false if the user cleared their storage,
       // which is why we only show the tour to recently-joined
@@ -115,12 +108,6 @@ class Dashboard extends React.Component {
     this.showError(null)
   }
 
-  launchFireworks(show) {
-    this.setState({
-      showFireworks: show,
-    })
-  }
-
   render() {
     // Props will be null on first render.
     const { user, app } = this.props
@@ -168,7 +155,7 @@ class Dashboard extends React.Component {
           user={user}
           showError={this.showError.bind(this)}
         />
-        {user ? (
+        {user && app ? (
           <FadeInDashboardAnimation>
             <div
               style={{
@@ -180,41 +167,11 @@ class Dashboard extends React.Component {
                 flexDirection: 'column',
               }}
             >
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'flex-end',
-                  alignItems: 'center',
-                }}
-              >
-                <MoneyRaised
-                  app={app}
-                  style={{
-                    fontSize: 24,
-                  }}
-                  launchFireworks={this.launchFireworks.bind(this)}
-                />
-                <CircleIcon
-                  color={dashboardIconInactiveColor}
-                  hoverColor={dashboardIconActiveColor}
-                  style={{
-                    alignSelf: 'center',
-                    width: 5,
-                    height: 5,
-                    marginTop: 2,
-                    marginLeft: 12,
-                    marginRight: 12,
-                  }}
-                />
-                <UserMenu
-                  app={app}
-                  user={user}
-                  style={{
-                    fontSize: 24,
-                  }}
-                  isUserAnonymous={this.state.isUserAnonymous}
-                />
-              </div>
+              <UserMenu
+                app={app}
+                user={user}
+                isUserAnonymous={this.state.isUserAnonymous}
+              />
               {this.state.showNotification ? (
                 <Notification
                   title={`Vote for the February Charity Spotlight`}
@@ -295,10 +252,6 @@ class Dashboard extends React.Component {
             </Suspense>
           </FadeInDashboardAnimation>
         ) : null}
-        {this.state.showFireworks
-          ? // TODO: build a new fireworks component
-            null
-          : null}
         {showNewUserTour ? (
           <Suspense fallback={null}>
             <NewUserTour user={user} />

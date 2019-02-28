@@ -8,7 +8,6 @@ const navigationMock = navigationActual
 navigationMock.goTo = jest.fn()
 navigationMock.replaceUrl = jest.fn()
 navigationMock.modifyURLParams = jest.fn()
-navigationMock.externalRedirect = jest.fn()
 navigationMock.goToHome = jest.fn(() => {
   navigationMock.goTo(navigationMock.dashboardURL)
 })

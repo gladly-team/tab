@@ -179,6 +179,15 @@ describe('web test-utils', () => {
     expect(anotherTestFunc).not.toHaveBeenCalled()
   })
 
+  test('setWindowLocation modifies the window.location object', () => {
+    const { setWindowLocation } = require('js/utils/test-utils')
+    expect(window.location.hostname).not.toEqual('foo.com')
+    setWindowLocation({
+      hostname: 'foo.com',
+    })
+    expect(window.location.hostname).toEqual('foo.com')
+  })
+
   test('impersonateReactSnapClient sets the user agent to ReactSnap', () => {
     const { impersonateReactSnapClient } = require('js/utils/test-utils')
     Object.defineProperty(window.navigator, 'userAgent', {

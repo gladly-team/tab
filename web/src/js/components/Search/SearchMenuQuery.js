@@ -3,24 +3,24 @@ import PropTypes from 'prop-types'
 import { QueryRenderer } from 'react-relay'
 import graphql from 'babel-plugin-relay/macro'
 import environment from 'js/relay-env'
-import SearchPageContainer from 'js/components/Search/SearchPageContainer'
-// import withUserId from 'js/components/General/withUserId'
+import SearchMenuContainer from 'js/components/Search/SearchMenuContainer'
+import withUserId from 'js/components/General/withUserId'
 import logger from 'js/utils/logger'
 
 // Make a different query for anonymous users than for
 // authenticated users.
-const SearchViewQuery = props => {
+const SearchMenuQueryRenderer = props => {
   const { userId, ...queryRendererProps } = props
   if (userId) {
     return (
       <QueryRenderer
         query={graphql`
-          query SearchViewQuery($userId: String!) {
+          query SearchMenuQuery($userId: String!) {
             app {
-              ...SearchPageContainer_app
+              ...SearchMenuContainer_app
             }
             user(userId: $userId) {
-              ...SearchPageContainer_user
+              ...SearchMenuContainer_user
             }
           }
         `}
@@ -34,9 +34,9 @@ const SearchViewQuery = props => {
     return (
       <QueryRenderer
         query={graphql`
-          query SearchViewAnonymousQuery {
+          query SearchMenuQueryAnonymousQuery {
             app {
-              ...SearchPageContainer_app
+              ...SearchMenuContainer_app
             }
           }
         `}
@@ -46,26 +46,25 @@ const SearchViewQuery = props => {
   }
 }
 
-class SearchView extends React.Component {
+class SearchMenuQuery extends React.Component {
   render() {
     const { userId } = this.props
     return (
-      <SearchViewQuery
+      <SearchMenuQueryRenderer
         userId={userId}
         environment={environment}
         render={({ error, props }) => {
           if (error) {
             logger.error(error)
           }
-          if (!props) {
-            props = {}
+          if (!(props && props.app)) {
+            return
           }
-          const app = props.app || null
-          const user = props.user || null
           return (
-            <SearchPageContainer
-              app={app}
-              user={user}
+            <SearchMenuContainer
+              {...this.props}
+              app={props.app}
+              user={props.user || null}
               location={this.props.location}
             />
           )
@@ -75,17 +74,14 @@ class SearchView extends React.Component {
   }
 }
 
-SearchView.propTypes = {
+SearchMenuQuery.propTypes = {
   location: PropTypes.shape({
     search: PropTypes.string.isRequired,
   }),
 }
 
-SearchView.defaultProps = {}
+SearchMenuQuery.defaultProps = {}
 
-// TODO: move withUserId and QueryRenderer to children
-//   so we don't slow down initial page load.
-// export default withUserId({
-//   renderIfNoUser: true,
-// })(SearchView)
-export default SearchView
+export default withUserId({
+  renderIfNoUser: true,
+})(SearchMenuQuery)

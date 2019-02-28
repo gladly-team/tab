@@ -6,17 +6,15 @@ import toJson from 'enzyme-to-json'
 import Input from '@material-ui/core/Input'
 import SearchIcon from '@material-ui/icons/Search'
 import { isSearchPageEnabled } from 'js/utils/feature-flags'
-import {
-  externalRedirect,
-  dashboardURL,
-  modifyURLParams,
-} from 'js/navigation/navigation'
+import { dashboardURL, modifyURLParams } from 'js/navigation/navigation'
+import { externalRedirect } from 'js/navigation/utils'
 import SearchResults from 'js/components/Search/SearchResults'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 
 jest.mock('js/utils/feature-flags')
 jest.mock('js/navigation/navigation')
+jest.mock('js/navigation/utils')
 jest.mock('js/components/Search/SearchResults')
 
 // Enzyme does not yet support React.lazy and React.Suspense,

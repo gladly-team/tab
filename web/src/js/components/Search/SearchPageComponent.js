@@ -8,15 +8,13 @@ import SearchIcon from '@material-ui/icons/Search'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import { isSearchPageEnabled } from 'js/utils/feature-flags'
-import {
-  externalRedirect,
-  dashboardURL,
-  modifyURLParams,
-} from 'js/navigation/navigation'
+import { dashboardURL, modifyURLParams } from 'js/navigation/navigation'
+import { externalRedirect } from 'js/navigation/utils'
 import LogoWithText from 'js/components/Logo/LogoWithText'
 import { parseUrlSearchString } from 'js/utils/utils'
 import SearchResults from 'js/components/Search/SearchResults'
 import { isReactSnapClient } from 'js/utils/search-utils'
+import SearchMenuQuery from 'js/components/Search/SearchMenuQuery'
 
 const Footer = lazy(() => import('js/components/General/Footer'))
 
@@ -195,6 +193,11 @@ class SearchPage extends React.Component {
                 }
               />
             </div>
+            <SearchMenuQuery
+              style={{
+                marginLeft: 'auto',
+              }}
+            />
           </div>
           <Tabs
             value={0}
@@ -290,15 +293,6 @@ SearchPage.propTypes = {
   classes: PropTypes.object.isRequired,
   location: PropTypes.shape({
     search: PropTypes.string.isRequired,
-  }),
-  // May not exist if the user is not signed in.
-  user: PropTypes.shape({
-    id: PropTypes.string,
-  }),
-  app: PropTypes.shape({
-    // TODO: pass these to the MoneyRaised component
-    // moneyRaised: PropTypes.number.isRequired
-    // dollarsPerDayRate: PropTypes.number.isRequired
   }),
 }
 

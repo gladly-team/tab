@@ -1,66 +1,52 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Popover from 'material-ui/Popover/Popover'
-import appTheme, { dashboardTransparentBackground } from 'js/theme/default'
+import Popover from '@material-ui/core/Popover'
+import { withTheme } from '@material-ui/core/styles'
 
-class DashboardPopover extends React.Component {
-  handleRequestClose() {
-    this.props.onRequestClose()
-  }
-
-  render() {
-    const style = Object.assign(
-      {},
-      {
-        backgroundColor: dashboardTransparentBackground,
-        width: 220,
-        padding: 0,
-        paddingTop: 0,
-        fontSize: 14,
-        color: appTheme.palette.alternateTextColor,
-        fontFamily: appTheme.fontFamily,
-      },
-      this.props.style
-    )
-    const headerStyle = {
-      width: '100%',
-      height: 3,
-      backgroundColor: appTheme.palette.primary1Color,
-    }
-
-    return (
-      <Popover
-        open={this.props.open}
-        anchorEl={this.props.anchorEl}
-        onRequestClose={this.handleRequestClose.bind(this)}
-        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-        targetOrigin={{ horizontal: 'right', vertical: 'top' }}
-        style={style}
-        useLayerForClickAway={false}
-        // @material-ui-1-todo: remove this className and the CSS in index.css.
-        // This is a workaround for a bug in Popover positioning:
-        // https://github.com/mui-org/material-ui/issues/8040#issuecomment-351827522
-        className={'tooltip-root'}
-      >
-        <div style={headerStyle} />
-        {this.props.children}
-      </Popover>
-    )
-  }
+const DashboardPopover = props => {
+  const { anchorEl, children, onClose, open, theme, ...otherProps } = props
+  return (
+    <Popover
+      open={open}
+      anchorEl={anchorEl}
+      onClose={onClose}
+      anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+      transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+      {...otherProps}
+    >
+      <div
+        style={{
+          width: '100%',
+          height: 3,
+          // We should test that we're using this MUI theme color
+          // (e.g., see them tests in MoneyRaisedComponent). Skipping
+          // for now because testing portal components with Enzyme
+          // appears to still be a pain:
+          // https://github.com/airbnb/enzyme/issues/252#issuecomment-266125422
+          // https://github.com/mui-org/material-ui/issues/14342
+          backgroundColor: theme.palette.primary.main,
+        }}
+      />
+      {children}
+    </Popover>
+  )
 }
 
 DashboardPopover.propTypes = {
-  open: PropTypes.bool,
   anchorEl: PropTypes.object,
-  onRequestClose: PropTypes.func,
-  style: PropTypes.object,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
+  onClose: PropTypes.func,
+  open: PropTypes.bool,
+  theme: PropTypes.object.isRequired,
 }
 
 DashboardPopover.defaultProps = {
   open: false,
   anchorEl: null,
-  onRequestClose: () => {},
-  style: {},
+  onClose: () => {},
 }
 
-export default DashboardPopover
+export default withTheme()(DashboardPopover)

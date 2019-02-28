@@ -3,9 +3,10 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 
-import { externalRedirect } from 'js/navigation/navigation'
+import { externalRedirect } from 'js/navigation/utils'
 
 jest.mock('js/navigation/navigation')
+jest.mock('js/navigation/utils')
 
 afterEach(() => {
   jest.clearAllMocks()
