@@ -25,6 +25,8 @@ const styles = {
   },
 }
 
+const menuFontSize = 24
+
 class UserMenu extends React.Component {
   render() {
     const { app, classes, user, isUserAnonymous } = this.props
@@ -45,6 +47,7 @@ class UserMenu extends React.Component {
             h2: {
               ...defaultTheme.typography.h2,
               color: 'rgba(255, 255, 255, 0.8)',
+              fontSize: menuFontSize,
             },
             h3: {
               ...defaultTheme.typography.h3,
@@ -82,6 +85,7 @@ class UserMenu extends React.Component {
             MuiSvgIcon: {
               root: {
                 color: '#fff',
+                fontSize: menuFontSize,
               },
             },
             MuiTypography: {

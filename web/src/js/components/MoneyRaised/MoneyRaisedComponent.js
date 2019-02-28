@@ -17,7 +17,6 @@ const styles = {
     borderRadius: 2,
   },
   moneyRaisedText: {
-    fontSize: 24,
     fontWeight: 'normal',
     transition: 'color 300ms ease-in',
     cursor: 'pointer',

@@ -124,6 +124,7 @@ describe('SearchMenuComponent', () => {
     const theme = wrapper.find(MuiThemeProvider).prop('theme')
     expect(theme.typography.h2).toMatchObject({
       color: 'rgba(0, 0, 0, 0.66)',
+      fontSize: 22,
     })
   })
 
@@ -135,6 +136,7 @@ describe('SearchMenuComponent', () => {
     const theme = wrapper.find(MuiThemeProvider).prop('theme')
     expect(theme.overrides.MuiSvgIcon.root).toMatchObject({
       color: 'rgba(0, 0, 0, 0.66)',
+      fontSize: 22,
     })
   })
 

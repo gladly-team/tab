@@ -17,7 +17,6 @@ const styles = {
   },
   heartCount: {
     transition: 'color 300ms ease-in',
-    fontSize: 24,
     fontWeight: 'normal',
     userSelect: 'none',
     cursor: 'pointer',
@@ -26,8 +25,6 @@ const styles = {
     transition: 'color 300ms ease-in',
     cursor: 'pointer',
     marginLeft: 2,
-    height: 24,
-    width: 24,
     paddingBottom: 0,
   },
   checkmarkIcon: {

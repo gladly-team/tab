@@ -99,6 +99,7 @@ describe('User menu component', () => {
     const theme = wrapper.find(MuiThemeProvider).prop('theme')
     expect(theme.typography.h2).toMatchObject({
       color: 'rgba(255, 255, 255, 0.8)',
+      fontSize: 24,
     })
   })
 
@@ -176,6 +177,7 @@ describe('User menu component', () => {
     const theme = wrapper.find(MuiThemeProvider).prop('theme')
     expect(theme.overrides.MuiSvgIcon.root).toMatchObject({
       color: '#fff',
+      fontSize: 24,
     })
   })
 

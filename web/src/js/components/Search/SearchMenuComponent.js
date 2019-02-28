@@ -25,6 +25,8 @@ const styles = {
   },
 }
 
+const menuFontSize = 22
+
 const SearchMenuComponent = props => {
   const { app, classes, style, user } = props
   const userExists = !!user
@@ -37,12 +39,14 @@ const SearchMenuComponent = props => {
           h2: {
             ...defaultTheme.typography.h2,
             color: 'rgba(0, 0, 0, 0.66)',
+            fontSize: menuFontSize,
           },
         },
         overrides: {
           MuiSvgIcon: {
             root: {
               color: 'rgba(0, 0, 0, 0.66)',
+              fontSize: menuFontSize,
             },
           },
           MuiTypography: {
