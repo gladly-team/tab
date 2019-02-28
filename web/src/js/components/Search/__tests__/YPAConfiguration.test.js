@@ -50,4 +50,22 @@ describe('YPA configuration', () => {
       YPAConfiguration.ypaAdSlotInfo[0].ypaSlotOptions.AdOptions.Mobile.AdRange
     ).toEqual('1-2')
   })
+
+  it('adds 26px of spacing between search results', () => {
+    const YPAConfiguration = require('js/components/Search/YPAConfiguration')
+      .default
+    expect(
+      YPAConfiguration.ypaAdSlotInfo[1].ypaSlotOptions.TemplateOptions.DeskTop
+        .AdUnit.adSpacing
+    ).toEqual(26)
+  })
+
+  it('adds 20px of spacing between ad results', () => {
+    const YPAConfiguration = require('js/components/Search/YPAConfiguration')
+      .default
+    expect(
+      YPAConfiguration.ypaAdSlotInfo[0].ypaSlotOptions.TemplateOptions.DeskTop
+        .AdUnit.adSpacing
+    ).toEqual(20)
+  })
 })

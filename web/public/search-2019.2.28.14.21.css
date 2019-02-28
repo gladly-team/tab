@@ -10,3 +10,7 @@
 b {
   font-weight: normal !important;
 }
+/* Add a bottom border to the ads div. */
+.ypaAdSS .ypaAdUnit {
+  border-bottom: 1px solid rgb(228, 228, 228);
+}
