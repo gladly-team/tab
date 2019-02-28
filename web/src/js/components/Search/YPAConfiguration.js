@@ -12,7 +12,7 @@ import { cloneDeep } from 'lodash/lang'
 // it's modified. We should only add CSS to this external
 // stylesheet when absolutely necessary.
 const searchExternalCSSLink =
-  'https://tab.gladly.io/search/search-2018.29.11.16.35.css'
+  'https://tab.gladly.io/search/search-2019.2.28.14.21.css'
 
 const backgroundColor = '#fff'
 const fontFamily = "'Roboto', arial, sans-serif"
@@ -175,6 +175,14 @@ const templateStyles = {
   },
 }
 
+const adUnitTemplateOptions = {
+  ...templateStyles,
+  AdUnit: {
+    ...templateStyles.AdUnit,
+    adSpacing: 20,
+  },
+}
+
 const adOptions = {
   // The ad start rank and the ad end rank in the list of
   // search results.
@@ -243,8 +251,8 @@ const YPAConfiguration = {
           DeskTop: Object.assign({}, cloneDeep(adOptions)),
         },
         TemplateOptions: {
-          Mobile: cloneDeep(templateStyles),
-          DeskTop: cloneDeep(templateStyles),
+          Mobile: cloneDeep(adUnitTemplateOptions),
+          DeskTop: cloneDeep(adUnitTemplateOptions),
         },
       },
     },
