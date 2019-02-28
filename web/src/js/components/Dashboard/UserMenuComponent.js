@@ -82,6 +82,13 @@ class UserMenu extends React.Component {
                 color: '#fff',
               },
             },
+            MuiIconButton: {
+              ...get(defaultTheme, 'overrides.MuiIconButton', {}),
+              root: {
+                ...get(defaultTheme, 'overrides.MuiIconButton.root', {}),
+                color: '#fff',
+              },
+            },
             MuiSvgIcon: {
               ...get(defaultTheme, 'overrides.MuiSvgIcon', {}),
               root: {
