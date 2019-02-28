@@ -104,7 +104,8 @@
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}",
-      "!**/__generated__/**"
+      "!**/__generated__/**",
+      "!src/js/ads/prebid/prebid.js"
     ],
     "snapshotSerializers": [
       "enzyme-to-json/serializer"

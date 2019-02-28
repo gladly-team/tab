@@ -1,0 +1,2 @@
+ignore:
+  - src/js/ads/prebid/prebid.js
