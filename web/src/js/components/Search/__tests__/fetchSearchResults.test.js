@@ -29,6 +29,15 @@ describe('fetchSearchResults', () => {
     )
   })
 
+  it('sets the query value in the YPA configuration', () => {
+    const fetchSearchResults = require('js/components/Search/fetchSearchResults')
+      .default
+    const query = 'some search thing'
+    fetchSearchResults(query)
+    const config = window.ypaAds.insertMultiAd.mock.calls[0][0]
+    expect(config.ypaPubParams.query).toEqual(query)
+  })
+
   it('sets the error callback in the YPA configuration', () => {
     const fetchSearchResults = require('js/components/Search/fetchSearchResults')
       .default

@@ -12,6 +12,7 @@ import YPAConfiguration from 'js/components/Search/YPAConfiguration'
  */
 const fetchSearchResults = (query = null, onNoResults = () => {}) => {
   const config = cloneDeep(YPAConfiguration)
+  config.ypaPubParams.query = query
   config.ypaAdSlotInfo[1].ypaOnNoAd = onNoResults
 
   // Fetch search results.
