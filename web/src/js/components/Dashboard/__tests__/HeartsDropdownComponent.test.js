@@ -104,7 +104,7 @@ describe('HeartsDropdownComponent', () => {
     expect(elem.render().text()).toEqual('3,002[heart icon]donated')
   })
 
-  it('displays the expected "tabbers recruited" text', () => {
+  it('displays the expected "friends recruited" text when there are multiple recruited', () => {
     const HeartsDropdownComponent = require('js/components/Dashboard/HeartsDropdownComponent')
       .default
     const mockProps = getMockProps()
@@ -117,10 +117,29 @@ describe('HeartsDropdownComponent', () => {
           n
             .render()
             .text()
-            .indexOf('Tabbers recruited') > -1
+            .indexOf('friends recruited') > -1
       )
       .parent()
-    expect(elem.render().text()).toEqual('4Tabbers recruited')
+    expect(elem.render().text()).toEqual('4friends recruited')
+  })
+
+  it('displays the expected "friends recruited" text when there is one recruited', () => {
+    const HeartsDropdownComponent = require('js/components/Dashboard/HeartsDropdownComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user.numUsersRecruited = 1
+    const wrapper = shallow(<HeartsDropdownComponent {...mockProps} />).dive()
+    const elem = wrapper
+      .find(Typography)
+      .filterWhere(
+        n =>
+          n
+            .render()
+            .text()
+            .indexOf('friend recruited') > -1
+      )
+      .parent()
+    expect(elem.render().text()).toEqual('1friend recruited')
   })
 
   it('displays the expected "open a tab" reward text', () => {

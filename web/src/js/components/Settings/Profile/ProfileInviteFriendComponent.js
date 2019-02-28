@@ -9,7 +9,7 @@ import Paper from 'material-ui/Paper'
 class ProfileInviteFriend extends React.Component {
   render() {
     const { app, user } = this.props
-    const tabberWord = user.numUsersRecruited === 1 ? 'Tabber' : 'Tabbers'
+    const friendWord = user.numUsersRecruited === 1 ? 'friend' : 'friends'
     const spacingPx = 6
     const statStyle = {
       margin: spacingPx,
@@ -57,7 +57,7 @@ class ProfileInviteFriend extends React.Component {
         </Paper>
         <Stat
           stat={user.numUsersRecruited}
-          statText={`${tabberWord} recruited`}
+          statText={`${friendWord} recruited`}
           style={statStyle}
         />
         <Stat
@@ -87,7 +87,7 @@ class ProfileInviteFriend extends React.Component {
             }}
           />
           <p>
-            Thank you! Every new Tabber raises more money for charity, and we
+            Thank you! Every new person raises more money for charity, and we
             depend on people like you to get the word out.
           </p>
         </Paper>

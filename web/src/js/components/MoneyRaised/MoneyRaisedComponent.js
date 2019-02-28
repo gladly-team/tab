@@ -156,7 +156,7 @@ class MoneyRaised extends React.Component {
               className={classes.dropdownText}
               gutterBottom
             >
-              This is how much money Tabbers have raised for charity.
+              This is how much money our community has raised for charity.
             </Typography>
             <Typography
               variant={'body2'}

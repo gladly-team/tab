@@ -22,6 +22,7 @@ const HeartsDropdownComponent = props => {
     marginTop: 8,
     marginBottom: 0,
   }
+  const friendWord = user.numUsersRecruited === 1 ? 'friend' : 'friends'
   return (
     <DashboardPopover
       open={open}
@@ -91,7 +92,7 @@ const HeartsDropdownComponent = props => {
         <div style={sectionStyle}>
           <div>
             <Typography variant={'h5'}>{user.numUsersRecruited}</Typography>
-            <Typography variant={'body2'}>Tabbers recruited</Typography>
+            <Typography variant={'body2'}>{friendWord} recruited</Typography>
           </div>
           <Link to={inviteFriendsURL}>
             <Button variant={'contained'} color={'primary'} style={buttonStyle}>
