@@ -236,6 +236,10 @@ class SearchResults extends React.Component {
   }
 
   changePage(newPageIndex) {
+    if (newPageIndex === this.state.page) {
+      return
+    }
+
     this.setState(
       {
         page: newPageIndex,

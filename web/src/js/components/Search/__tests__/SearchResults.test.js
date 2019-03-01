@@ -684,7 +684,7 @@ describe('SearchResults component', () => {
     )
   })
 
-  it('clicking to a new results page refetches search results', () => {
+  it('refetches search results when clicking to a new results page', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
     mockProps.query = 'ice cream'
@@ -708,7 +708,20 @@ describe('SearchResults component', () => {
     )
   })
 
-  it('clicking to a new results page scrolls to the top of the page', () => {
+  it('clicking the same results page does not refetch search results', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'ice cream'
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    wrapper.setState({
+      page: 3,
+    })
+    fetchSearchResults.mockClear()
+    wrapper.find('[data-test-id="pagination-3"]').simulate('click')
+    expect(fetchSearchResults).not.toHaveBeenCalled()
+  })
+
+  it('scrolls to the top of the page when clicking to a new results page', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
     const wrapper = shallow(<SearchResults {...mockProps} />).dive()
@@ -721,7 +734,7 @@ describe('SearchResults component', () => {
     expect(window.document.body.scrollTop).toBe(0)
   })
 
-  it('clicking to a new results page sets the "p" query parameter to the page number', () => {
+  it('sets the "p" query parameter to the page number when clicking to a new results page', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
     const wrapper = shallow(<SearchResults {...mockProps} />).dive()
