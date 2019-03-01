@@ -63,7 +63,6 @@ class SearchResults extends React.Component {
     if (isReactSnapClient()) {
       try {
         // If there is a query on page load, fetch it.
-        // TODO: use page in inline script
         const js = `
           try {
             if (new URLSearchParams(window.location.search).get('q')) {
