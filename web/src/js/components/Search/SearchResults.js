@@ -9,6 +9,7 @@ import { modifyURLParams } from 'js/navigation/navigation'
 import fetchSearchResults from 'js/components/Search/fetchSearchResults'
 import YPAConfiguration from 'js/components/Search/YPAConfiguration'
 import { isReactSnapClient } from 'js/utils/search-utils'
+import { parseUrlSearchString } from 'js/utils/utils'
 
 // This component expects the YPA search JS to already have
 // executed and for the `searchforacause` global variable
@@ -45,10 +46,18 @@ class SearchResults extends React.Component {
   }
 
   componentDidMount() {
+    const { location, query } = this.props
+
     // Fetch a query if one exists on mount.
-    if (this.props.query) {
+    if (query) {
       this.getSearchResults()
     }
+
+    // Wait until after mount to update prerendered state.
+    this.setState({
+      // Get the current page number from the query string.
+      page: parseInt(parseUrlSearchString(location.search).p, 10) || 1,
+    })
 
     // When prerendering the page, add an inline script to fetch
     // search results even before parsing our app JS.
@@ -324,6 +333,9 @@ class SearchResults extends React.Component {
 SearchResults.propTypes = {
   query: PropTypes.string,
   classes: PropTypes.object.isRequired,
+  location: PropTypes.shape({
+    search: PropTypes.string.isRequired,
+  }),
   style: PropTypes.object,
 }
 

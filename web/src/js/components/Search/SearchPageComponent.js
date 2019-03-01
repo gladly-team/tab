@@ -110,7 +110,7 @@ class SearchPage extends React.Component {
   }
 
   render() {
-    const { classes } = this.props
+    const { classes, location } = this.props
     const { query, searchText } = this.state
     const queryEncoded = query ? encodeURI(query) : ''
     const searchResultsPaddingLeft = 170
@@ -269,6 +269,7 @@ class SearchPage extends React.Component {
         <div>
           <SearchResults
             query={query}
+            location={location}
             style={{
               marginLeft: searchResultsPaddingLeft,
               maxWidth: 600,

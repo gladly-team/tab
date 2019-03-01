@@ -19,8 +19,11 @@ jest.mock('js/utils/logger')
 jest.mock('js/components/Search/fetchSearchResults')
 
 const getMockProps = () => ({
-  query: 'tacos',
   classes: {},
+  location: {
+    search: '',
+  },
+  query: 'tacos',
 })
 
 beforeAll(() => {
@@ -667,5 +670,35 @@ describe('SearchResults component', () => {
     expect(new URLSearchParams(window.location.search).get('p')).toEqual('7')
     wrapper.find('[data-test-id="pagination-5"]').simulate('click')
     expect(new URLSearchParams(window.location.search).get('p')).toEqual('5')
+  })
+
+  it('has a "page" state of 1 by default', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.location = {
+      search: '',
+    }
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    expect(wrapper.state('page')).toEqual(1)
+  })
+
+  it('sets the "page" state to the value of the "p" URL param on mount', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.location = {
+      search: '?p=14',
+    }
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    expect(wrapper.state('page')).toEqual(14)
+  })
+
+  it('sets the "page" state to 1 if the value of the "p" URL param is not a valid integer', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.location = {
+      search: '?p=foo',
+    }
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    expect(wrapper.state('page')).toEqual(1)
   })
 })

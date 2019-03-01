@@ -181,6 +181,17 @@ describe('Search page component', () => {
     expect(wrapper.find(SearchResults).prop('query')).toEqual('something here')
   })
 
+  it('passes the location object to the SearchResults component', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location.search = '?q=foo&another=thing'
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.find(SearchResults).prop('location')).toMatchObject({
+      search: '?q=foo&another=thing',
+    })
+  })
+
   // This is important for prerendering scripts for search results.
   it('renders the SearchResults component on mount even if there is no query', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
