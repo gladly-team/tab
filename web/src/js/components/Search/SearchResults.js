@@ -278,10 +278,7 @@ class SearchResults extends React.Component {
           }}
           suppressHydrationWarning
         />
-        <div
-          // style={{ marginTop: 'auto' }}
-          className={classes.paginationContainer}
-        >
+        <div className={classes.paginationContainer}>
           {page > MIN_PAGE ? (
             <div
               data-test-id={'pagination-previous'}
