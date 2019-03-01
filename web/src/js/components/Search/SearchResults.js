@@ -225,7 +225,7 @@ class SearchResults extends React.Component {
     const MAX_PAGE = 9999
     const paginationIndices = range(
       Math.max(MIN_PAGE, Math.min(page - 4, MAX_PAGE - 8)),
-      Math.min(MAX_PAGE, Math.max(page + 4, MIN_PAGE + 8))
+      Math.min(MAX_PAGE + 1, Math.max(page + 4, MIN_PAGE + 8))
     )
     return (
       <div

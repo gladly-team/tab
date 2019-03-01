@@ -608,6 +608,14 @@ describe('SearchResults component', () => {
     )
   })
 
+  it('does render the 9999th pagination button when on the final page (page 9999)', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.page = 9999
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    expect(wrapper.find('[data-test-id="pagination-9999"]').exists()).toBe(true)
+  })
+
   it('does not render the "next page" pagination button when on the final page (page 9999)', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
