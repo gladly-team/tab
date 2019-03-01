@@ -655,4 +655,17 @@ describe('SearchResults component', () => {
     wrapper.find('[data-test-id="pagination-7"]').simulate('click')
     expect(window.document.body.scrollTop).toBe(0)
   })
+
+  it('clicking to a new results page sets the "p" query parameter to the page number', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    wrapper.setState({
+      page: 1,
+    })
+    wrapper.find('[data-test-id="pagination-7"]').simulate('click')
+    expect(new URLSearchParams(window.location.search).get('p')).toEqual('7')
+    wrapper.find('[data-test-id="pagination-5"]').simulate('click')
+    expect(new URLSearchParams(window.location.search).get('p')).toEqual('5')
+  })
 })
