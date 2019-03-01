@@ -280,7 +280,7 @@ class SearchResults extends React.Component {
             <div
               data-test-id={'pagination-previous'}
               onClick={() => {
-                this.changePage(this.state.page - 1)
+                this.changePage(page - 1)
               }}
             >
               PREVIOUS
@@ -306,7 +306,7 @@ class SearchResults extends React.Component {
             <div
               data-test-id={'pagination-next'}
               onClick={() => {
-                this.changePage(this.state.page + 1)
+                this.changePage(page + 1)
               }}
             >
               NEXT

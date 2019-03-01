@@ -665,6 +665,28 @@ describe('SearchResults component', () => {
     expect(mockProps.onPageChange).toHaveBeenCalledWith(7)
   })
 
+  it('calls the onPageChange prop when clicking the "next page" button', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'ice cream'
+    mockProps.page = 3
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    fetchSearchResults.mockClear()
+    wrapper.find('[data-test-id="pagination-next"]').simulate('click')
+    expect(mockProps.onPageChange).toHaveBeenCalledWith(4)
+  })
+
+  it('calls the onPageChange prop when clicking the "previous page" button', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'ice cream'
+    mockProps.page = 7
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    fetchSearchResults.mockClear()
+    wrapper.find('[data-test-id="pagination-previous"]').simulate('click')
+    expect(mockProps.onPageChange).toHaveBeenCalledWith(6)
+  })
+
   it('does not call the onPageChange prop when clicking the current results page', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
