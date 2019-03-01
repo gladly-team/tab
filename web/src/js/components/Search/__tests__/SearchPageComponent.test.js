@@ -181,15 +181,13 @@ describe('Search page component', () => {
     expect(wrapper.find(SearchResults).prop('query')).toEqual('something here')
   })
 
-  it('passes the location object to the SearchResults component', () => {
+  it('passes the page number to the SearchResults component', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
-    mockProps.location.search = '?q=foo&another=thing'
+    mockProps.location.search = '?q=foo&p=12'
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
-    expect(wrapper.find(SearchResults).prop('location')).toMatchObject({
-      search: '?q=foo&another=thing',
-    })
+    expect(wrapper.find(SearchResults).prop('page')).toBe(12)
   })
 
   // This is important for prerendering scripts for search results.

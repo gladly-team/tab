@@ -20,9 +20,8 @@ jest.mock('js/components/Search/fetchSearchResults')
 
 const getMockProps = () => ({
   classes: {},
-  location: {
-    search: '',
-  },
+  page: 1,
+  onPageChange: jest.fn(),
   query: 'tacos',
 })
 
@@ -214,45 +213,35 @@ describe('SearchResults component', () => {
     ).toBe(1)
   })
 
-  it('fetches search results when the page changes in the search string', () => {
+  it('fetches search results when the page changes', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
-    mockProps.location = {
-      search: '?q=foo&p=2',
-    }
+    mockProps.page = 2
     window.searchforacause.search.fetchedOnPageLoad = false
     const wrapper = shallow(<SearchResults {...mockProps} />).dive()
     fetchSearchResults.mockClear()
     wrapper.setProps({
-      location: {
-        search: '?q=foo&p=4',
-      },
+      page: 4,
     })
     const fetchedPage = fetchSearchResults.mock.calls[0][2]
     expect(fetchedPage).toBe(4)
     wrapper.setProps({
-      location: {
-        search: '?q=foo&p=211',
-      },
+      page: 211,
     })
 
     const newFetchedPage = fetchSearchResults.mock.calls[1][2]
     expect(newFetchedPage).toBe(211)
   })
 
-  it('does not fetch search results when the page stays the same in the search string', () => {
+  it('does not fetch search results when the page stays the same', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
-    mockProps.location = {
-      search: '?q=foo&p=2&somethingElse=blah',
-    }
+    mockProps.page = 2
     window.searchforacause.search.fetchedOnPageLoad = false
     const wrapper = shallow(<SearchResults {...mockProps} />).dive()
     fetchSearchResults.mockClear()
     wrapper.setProps({
-      location: {
-        search: '?q=foo&p=2&somethingElse=ichanged',
-      },
+      page: 2,
     })
     expect(fetchSearchResults).not.toHaveBeenCalled()
   })
@@ -261,17 +250,13 @@ describe('SearchResults component', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
     mockProps.query = 'foo'
-    mockProps.location = {
-      search: '?q=foo&p=2',
-    }
+    mockProps.page = 2
     window.searchforacause.search.fetchedOnPageLoad = false
     const wrapper = shallow(<SearchResults {...mockProps} />).dive()
     fetchSearchResults.mockClear()
     wrapper.setProps({
       query: 'blah',
-      location: {
-        search: '?q=blah&p=4',
-      },
+      page: 4,
     })
     expect(fetchSearchResults).toHaveBeenCalledTimes(1)
   })
@@ -560,10 +545,8 @@ describe('SearchResults component', () => {
   it('does not render the "previous page" pagination button when on the first page', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
+    mockProps.page = 1
     const wrapper = shallow(<SearchResults {...mockProps} />).dive()
-    wrapper.setState({
-      page: 1,
-    })
     expect(wrapper.find('[data-test-id="pagination-previous"]').exists()).toBe(
       false
     )
@@ -572,10 +555,8 @@ describe('SearchResults component', () => {
   it('renders the "previous page" pagination button when on the second page', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
+    mockProps.page = 2
     const wrapper = shallow(<SearchResults {...mockProps} />).dive()
-    wrapper.setState({
-      page: 2,
-    })
     expect(wrapper.find('[data-test-id="pagination-previous"]').exists()).toBe(
       true
     )
@@ -584,10 +565,8 @@ describe('SearchResults component', () => {
   it('renders the "previous page" pagination button when on the eleventh page', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
+    mockProps.page = 11
     const wrapper = shallow(<SearchResults {...mockProps} />).dive()
-    wrapper.setState({
-      page: 11,
-    })
     expect(wrapper.find('[data-test-id="pagination-previous"]').exists()).toBe(
       true
     )
@@ -596,10 +575,8 @@ describe('SearchResults component', () => {
   it('does not render the "next page" pagination button when on the final page (page 9999)', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
+    mockProps.page = 9999
     const wrapper = shallow(<SearchResults {...mockProps} />).dive()
-    wrapper.setState({
-      page: 9999,
-    })
     expect(wrapper.find('[data-test-id="pagination-next"]').exists()).toBe(
       false
     )
@@ -608,30 +585,24 @@ describe('SearchResults component', () => {
   it('renders the "next page" pagination button when on the first page', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
+    mockProps.page = 1
     const wrapper = shallow(<SearchResults {...mockProps} />).dive()
-    wrapper.setState({
-      page: 1,
-    })
     expect(wrapper.find('[data-test-id="pagination-next"]').exists()).toBe(true)
   })
 
   it('renders the "next page" pagination button when on the eleventh page', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
+    mockProps.page = 11
     const wrapper = shallow(<SearchResults {...mockProps} />).dive()
-    wrapper.setState({
-      page: 11,
-    })
     expect(wrapper.find('[data-test-id="pagination-next"]').exists()).toBe(true)
   })
 
   it('renders the expected pagination buttons when on the first page', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
+    mockProps.page = 1
     const wrapper = shallow(<SearchResults {...mockProps} />).dive()
-    wrapper.setState({
-      page: 1,
-    })
     const expectedPages = range(1, 9)
     expectedPages.forEach(pageNum => {
       expect(
@@ -646,10 +617,8 @@ describe('SearchResults component', () => {
   it('renders the expected pagination buttons when on the eleventh page', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
+    mockProps.page = 11
     const wrapper = shallow(<SearchResults {...mockProps} />).dive()
-    wrapper.setState({
-      page: 11,
-    })
     const expectedPages = range(7, 15)
     expectedPages.forEach(pageNum => {
       expect(
@@ -667,10 +636,8 @@ describe('SearchResults component', () => {
   it('renders the expected pagination buttons when on the 9998th page', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
+    mockProps.page = 9998
     const wrapper = shallow(<SearchResults {...mockProps} />).dive()
-    wrapper.setState({
-      page: 9998,
-    })
     const expectedPages = range(9991, 9999)
     expectedPages.forEach(pageNum => {
       expect(
@@ -684,96 +651,39 @@ describe('SearchResults component', () => {
     )
   })
 
-  it('refetches search results when clicking to a new results page', () => {
+  it('calls the onPageChange prop when clicking to a new results page', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
     mockProps.query = 'ice cream'
+    mockProps.page = 1
     const wrapper = shallow(<SearchResults {...mockProps} />).dive()
-    wrapper.setState({
-      page: 1,
-    })
     fetchSearchResults.mockClear()
     wrapper.find('[data-test-id="pagination-2"]').simulate('click')
-    expect(fetchSearchResults).toHaveBeenCalledWith(
-      expect.any(String),
-      expect.any(Function),
-      2
-    )
+    expect(mockProps.onPageChange).toHaveBeenCalledWith(2)
     fetchSearchResults.mockClear()
     wrapper.find('[data-test-id="pagination-7"]').simulate('click')
-    expect(fetchSearchResults).toHaveBeenCalledWith(
-      expect.any(String),
-      expect.any(Function),
-      7
-    )
+    expect(mockProps.onPageChange).toHaveBeenCalledWith(7)
   })
 
-  it('clicking the same results page does not refetch search results', () => {
+  it('does not call the onPageChange prop when clicking the current results page', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
     mockProps.query = 'ice cream'
+    mockProps.page = 3
     const wrapper = shallow(<SearchResults {...mockProps} />).dive()
-    wrapper.setState({
-      page: 3,
-    })
     fetchSearchResults.mockClear()
     wrapper.find('[data-test-id="pagination-3"]').simulate('click')
-    expect(fetchSearchResults).not.toHaveBeenCalled()
+    expect(mockProps.onPageChange).not.toHaveBeenCalled()
   })
 
   it('scrolls to the top of the page when clicking to a new results page', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
+    mockProps.page = 1
     const wrapper = shallow(<SearchResults {...mockProps} />).dive()
-    wrapper.setState({
-      page: 1,
-    })
     window.document.body.scrollTop = 829
     expect(window.document.body.scrollTop).toBe(829)
     wrapper.find('[data-test-id="pagination-7"]').simulate('click')
     expect(window.document.body.scrollTop).toBe(0)
-  })
-
-  it('sets the "p" query parameter to the page number when clicking to a new results page', () => {
-    const SearchResults = require('js/components/Search/SearchResults').default
-    const mockProps = getMockProps()
-    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
-    wrapper.setState({
-      page: 1,
-    })
-    wrapper.find('[data-test-id="pagination-7"]').simulate('click')
-    expect(new URLSearchParams(window.location.search).get('p')).toEqual('7')
-    wrapper.find('[data-test-id="pagination-5"]').simulate('click')
-    expect(new URLSearchParams(window.location.search).get('p')).toEqual('5')
-  })
-
-  it('has a "page" state of 1 by default', () => {
-    const SearchResults = require('js/components/Search/SearchResults').default
-    const mockProps = getMockProps()
-    mockProps.location = {
-      search: '',
-    }
-    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
-    expect(wrapper.state('page')).toEqual(1)
-  })
-
-  it('sets the "page" state to the value of the "p" URL param on mount', () => {
-    const SearchResults = require('js/components/Search/SearchResults').default
-    const mockProps = getMockProps()
-    mockProps.location = {
-      search: '?p=14',
-    }
-    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
-    expect(wrapper.state('page')).toEqual(14)
-  })
-
-  it('sets the "page" state to 1 if the value of the "p" URL param is not a valid integer', () => {
-    const SearchResults = require('js/components/Search/SearchResults').default
-    const mockProps = getMockProps()
-    mockProps.location = {
-      search: '?p=foo',
-    }
-    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
-    expect(wrapper.state('page')).toEqual(1)
   })
 })
