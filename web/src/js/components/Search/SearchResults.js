@@ -41,27 +41,16 @@ class SearchResults extends React.Component {
     this.state = {
       noSearchResults: false,
       unexpectedSearchError: false,
-      page: 1,
     }
   }
 
   componentDidMount() {
-    const { location, query } = this.props
+    const { query } = this.props
 
     // Fetch a query if one exists on mount.
     if (query) {
       this.getSearchResults()
     }
-
-    // Wait until after mount to update prerendered state.
-    this.setState({
-      // We derive the current page number from the "p" parameter
-      // value. We keep it in state so that we update the
-      // prerendered components after mount, because at prerender
-      // time we do not know the page number. We can remove this
-      // from state if we switch to server-side rendering.
-      page: this.getPageNumberFromSearchString(location.search),
-    })
 
     // When prerendering the page, add an inline script to fetch
     // search results even before parsing our app JS.
@@ -123,27 +112,13 @@ class SearchResults extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { location } = this.props
-
-    // If the page number has changed, fetch new search results.
-    const currentPage = this.getPageNumberFromSearchString(location.search)
-    const prevPage = this.getPageNumberFromSearchString(
-      prevProps.location.search
-    )
-    if (currentPage !== prevPage) {
-      this.setState(
-        {
-          page: currentPage,
-        },
-        () => {
-          // After the page state updates, fetch new results.
-          this.getSearchResults()
-        }
-      )
-      // Fetch search results if a query exists and the query
-      // has changed.
-    } else if (this.props.query && this.props.query !== prevProps.query) {
-      // TODO: reset page to 1 if query is different
+    // Fetch search results if a query exists and either the page
+    // or query has changed.
+    if (
+      this.props.query &&
+      (this.props.page !== prevProps.page ||
+        this.props.query !== prevProps.query)
+    ) {
       this.getSearchResults()
     }
   }
@@ -156,18 +131,6 @@ class SearchResults extends React.Component {
       this.handleSearchResultsEvent.bind(this),
       false
     )
-  }
-
-  /**
-   * Take a search string, such as ?abc=hi&p=12, and return the
-   * integer value of the "p" URL parameter. If the parameter is
-   * not set or is not an integer, return 1.
-   * @param {String} searchStr - The URL parameter string,
-   *   such as '?myParam=foo&another=bar'
-   * @return {Number} The search results page inded
-   */
-  getPageNumberFromSearchString(searchStr) {
-    return parseInt(parseUrlSearchString(searchStr).p, 10) || 1
   }
 
   handleSearchResultsEvent(event) {
@@ -205,8 +168,7 @@ class SearchResults extends React.Component {
       })
       return
     }
-    const { page } = this.state
-    const { query } = this.props
+    const { page, query } = this.props
     if (!query) {
       return
     }
@@ -236,32 +198,18 @@ class SearchResults extends React.Component {
   }
 
   changePage(newPageIndex) {
-    if (newPageIndex === this.state.page) {
+    const { onPageChange, page } = this.props
+    if (newPageIndex === page) {
       return
     }
-
-    this.setState(
-      {
-        page: newPageIndex,
-      },
-      () => {
-        // After the page state updates, fetch new results.
-        this.getSearchResults()
-      }
-    )
+    onPageChange(newPageIndex)
 
     // Scroll to the top of the page.
     document.body.scrollTop = document.documentElement.scrollTop = 0
-
-    // Update the "p" query parameter.
-    modifyURLParams({
-      p: newPageIndex,
-    })
   }
 
   render() {
-    const { page } = this.state
-    const { query, classes, style } = this.props
+    const { classes, page, query, style } = this.props
 
     // Include 8 pages total, 4 lower and 4 higher when possible.
     // Page 9999 is the maximum, so stop there.
@@ -372,14 +320,14 @@ class SearchResults extends React.Component {
 
 SearchResults.propTypes = {
   query: PropTypes.string,
+  page: PropTypes.number,
+  onPageChange: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
-  location: PropTypes.shape({
-    search: PropTypes.string.isRequired,
-  }),
   style: PropTypes.object,
 }
 
 SearchResults.defaultProps = {
+  page: 1,
   style: {},
 }
 

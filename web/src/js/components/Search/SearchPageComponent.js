@@ -73,12 +73,13 @@ class SearchPage extends React.Component {
     // Wait until after mount to update prerendered state.
     const query = parseUrlSearchString(location.search).q || ''
     this.setState({
-      // We always derive the query value from the "q" parameter
-      // value. We keep it in state so that we update the
+      // We always derive the query and page values URL parameter
+      // values. We keep tehse in state so that we update the
       // prerendered components after mount, because at prerender
-      // time we do not know the query. We can remove this
+      // time we do not know the query string. We can remove this
       // from state if we switch to server-side rendering.
       query: query,
+      page: this.getPageNumberFromSearchString(location.search),
       showPlaceholderText: !isReactSnapClient(),
       searchText: query,
     })
@@ -94,6 +95,29 @@ class SearchPage extends React.Component {
         searchText: currentQuery,
       })
     }
+
+    // Check if the page number has changed.
+    const currentPage = this.getPageNumberFromSearchString(location.search)
+    const prevPage = this.getPageNumberFromSearchString(
+      prevProps.location.search
+    )
+    if (currentPage !== prevPage) {
+      this.setState({
+        page: currentPage,
+      })
+    }
+  }
+
+  /**
+   * Take a search string, such as ?abc=hi&p=12, and return the
+   * integer value of the "p" URL parameter. If the parameter is
+   * not set or is not an integer, return 1.
+   * @param {String} searchStr - The URL parameter string,
+   *   such as '?myParam=foo&another=bar'
+   * @return {Number} The search results page inded
+   */
+  getPageNumberFromSearchString(searchStr) {
+    return parseInt(parseUrlSearchString(searchStr).p, 10) || 1
   }
 
   search() {
@@ -112,8 +136,8 @@ class SearchPage extends React.Component {
   }
 
   render() {
-    const { classes, location } = this.props
-    const { query, searchText } = this.state
+    const { classes } = this.props
+    const { page, query, searchText } = this.state
     const queryEncoded = query ? encodeURI(query) : ''
     const searchResultsPaddingLeft = 170
     if (!this.state.searchFeatureEnabled) {
@@ -271,7 +295,13 @@ class SearchPage extends React.Component {
         <div>
           <SearchResults
             query={query}
-            location={location}
+            page={page}
+            onPageChange={newPageIndex => {
+              // Update the "p" query parameter.
+              modifyURLParams({
+                p: newPageIndex,
+              })
+            }}
             style={{
               marginLeft: searchResultsPaddingLeft,
               maxWidth: 600,
