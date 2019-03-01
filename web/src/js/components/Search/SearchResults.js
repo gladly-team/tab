@@ -5,22 +5,19 @@ import { Helmet } from 'react-helmet'
 import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import logger from 'js/utils/logger'
-import { modifyURLParams } from 'js/navigation/navigation'
 import fetchSearchResults from 'js/components/Search/fetchSearchResults'
 import YPAConfiguration from 'js/components/Search/YPAConfiguration'
 import { isReactSnapClient } from 'js/utils/search-utils'
-import { parseUrlSearchString } from 'js/utils/utils'
 
 // This component expects the YPA search JS to already have
 // executed and for the `searchforacause` global variable
 // to be defined.
 
 const styles = theme => ({
-  paginationContainer: {
+  searchResultsParentContainer: {
     display: 'flex',
-    justifyContent: 'space-between',
-    maxWidth: 520,
-    margin: '20px auto',
+    flexDirection: 'column',
+    boxSizing: 'border-box',
   },
   searchAdsContainer: {
     '& iframe': {
@@ -32,6 +29,13 @@ const styles = theme => ({
     '& iframe': {
       width: '100%',
     },
+  },
+  paginationContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    width: '100%',
+    maxWidth: 520,
+    margin: 'auto auto 20px auto',
   },
 })
 
@@ -223,17 +227,15 @@ class SearchResults extends React.Component {
       Math.max(MIN_PAGE, Math.min(page - 4, MAX_PAGE - 8)),
       Math.min(MAX_PAGE, Math.max(page + 4, MIN_PAGE + 8))
     )
-    // TODO: stick pagination to bottom of container
     return (
       <div
-        data-test-id="search-results-container"
+        className={classes.searchResultsParentContainer}
         style={Object.assign(
           {},
           {
             // Min height prevents visibly shifting content below,
             // like the footer.
             minHeight: this.state.noSearchResults ? 0 : 1200,
-            boxSizing: 'border-box',
           },
           style
         )}
@@ -244,42 +246,43 @@ class SearchResults extends React.Component {
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
           />
         </Helmet>
-        <div>
-          {this.state.noSearchResults ? (
-            <Typography variant={'body1'} gutterBottom>
-              No results found for{' '}
-              <span style={{ fontWeight: 'bold' }}>{query}</span>
-            </Typography>
-          ) : null}
-          {this.state.unexpectedSearchError ? (
-            <Typography variant={'body1'} gutterBottom>
-              Unable to search at this time.
-            </Typography>
-          ) : null}
-          <div
-            id="search-ads"
-            className={classes.searchAdsContainer}
-            // Important: if these containers are unmounted or mutated,
-            // YPA's JS will cancel the call to fetch search results.
-            // Using dangerouslySetInnerHTML and suppressHydrationWarning
-            // prevents rerendering this element during hydration:
-            // https://github.com/reactjs/rfcs/pull/46#issuecomment-385182716
-            // Related: https://github.com/facebook/react/issues/6622
-            dangerouslySetInnerHTML={{
-              __html: '',
-            }}
-            suppressHydrationWarning
-          />
-          <div
-            id="search-results"
-            className={classes.searchResultsContainer}
-            dangerouslySetInnerHTML={{
-              __html: '',
-            }}
-            suppressHydrationWarning
-          />
-        </div>
-        <div className={classes.paginationContainer}>
+        {this.state.noSearchResults ? (
+          <Typography variant={'body1'} gutterBottom>
+            No results found for{' '}
+            <span style={{ fontWeight: 'bold' }}>{query}</span>
+          </Typography>
+        ) : null}
+        {this.state.unexpectedSearchError ? (
+          <Typography variant={'body1'} gutterBottom>
+            Unable to search at this time.
+          </Typography>
+        ) : null}
+        <div
+          id="search-ads"
+          className={classes.searchAdsContainer}
+          // Important: if these containers are unmounted or mutated,
+          // YPA's JS will cancel the call to fetch search results.
+          // Using dangerouslySetInnerHTML and suppressHydrationWarning
+          // prevents rerendering this element during hydration:
+          // https://github.com/reactjs/rfcs/pull/46#issuecomment-385182716
+          // Related: https://github.com/facebook/react/issues/6622
+          dangerouslySetInnerHTML={{
+            __html: '',
+          }}
+          suppressHydrationWarning
+        />
+        <div
+          id="search-results"
+          className={classes.searchResultsContainer}
+          dangerouslySetInnerHTML={{
+            __html: '',
+          }}
+          suppressHydrationWarning
+        />
+        <div
+          // style={{ marginTop: 'auto' }}
+          className={classes.paginationContainer}
+        >
           {page > MIN_PAGE ? (
             <div
               data-test-id={'pagination-previous'}
