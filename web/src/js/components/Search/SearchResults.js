@@ -69,6 +69,10 @@ class SearchResults extends React.Component {
                 var evt = new CustomEvent('searchresulterror', { detail: err })
                 window.dispatchEvent(evt)
               }
+              var page = new URLSearchParams(window.location.search).get('p')
+              if (page) {
+                config.ypaPageCount = page
+              }
               window.ypaAds.insertMultiAd(config)
               window.searchforacause.search.fetchedOnPageLoad = true
             }

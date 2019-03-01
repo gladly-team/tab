@@ -44,6 +44,11 @@ beforeEach(() => {
 
 afterEach(() => {
   jest.clearAllMocks()
+
+  modifyURLParams({
+    q: null,
+    p: null,
+  })
 })
 
 describe('SearchResults component', () => {
@@ -420,6 +425,37 @@ describe('SearchResults component', () => {
     impersonateReactSnapClient()
     shallow(<SearchResults {...mockProps} />).dive()
     expect(window.ypaAds.insertMultiAd).not.toHaveBeenCalled()
+  })
+
+  it('[inline-script] calls window.ypaAds.insertMultiAd with a page number when a "p" URL parameter exists', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = '' // the inline script does not rely on this prop
+    modifyURLParams({
+      q: 'foo',
+      p: 17,
+    })
+    impersonateReactSnapClient()
+    shallow(<SearchResults {...mockProps} />).dive()
+    expect(window.ypaAds.insertMultiAd.mock.calls[0][0]).toHaveProperty(
+      'ypaPageCount',
+      '17'
+    )
+  })
+
+  it('[inline-script] calls window.ypaAds.insertMultiAd WITHOUT a page number when a "p" URL parameter does not exist', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = '' // the inline script does not rely on this prop
+    modifyURLParams({
+      q: 'foo',
+      p: null,
+    })
+    impersonateReactSnapClient()
+    shallow(<SearchResults {...mockProps} />).dive()
+    expect(window.ypaAds.insertMultiAd.mock.calls[0][0]).not.toHaveProperty(
+      'ypaPageCount'
+    )
   })
 
   it('[inline-script] sets "fetchedOnPageLoad" to true via inline script when a "q" location parameter exists', () => {
