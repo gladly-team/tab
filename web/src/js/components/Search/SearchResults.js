@@ -5,6 +5,7 @@ import { Helmet } from 'react-helmet'
 import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import logger from 'js/utils/logger'
+import { modifyURLParams } from 'js/navigation/navigation'
 import fetchSearchResults from 'js/components/Search/fetchSearchResults'
 import YPAConfiguration from 'js/components/Search/YPAConfiguration'
 import { isReactSnapClient } from 'js/utils/search-utils'
@@ -204,7 +205,10 @@ class SearchResults extends React.Component {
     // Scroll to the top of the page.
     document.body.scrollTop = document.documentElement.scrollTop = 0
 
-    // TODO: update the "p" query parameter
+    // Update the "p" query parameter.
+    modifyURLParams({
+      p: newPageIndex,
+    })
   }
 
   render() {
