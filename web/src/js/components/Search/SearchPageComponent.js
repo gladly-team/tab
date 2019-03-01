@@ -75,7 +75,9 @@ class SearchPage extends React.Component {
     this.setState({
       // We always derive the query value from the "q" parameter
       // value. We keep it in state so that we update the
-      // prerendered components after mount.
+      // prerendered components after mount, because at prerender
+      // time we do not know the query. We can remove this
+      // from state if we switch to server-side rendering.
       query: query,
       showPlaceholderText: !isReactSnapClient(),
       searchText: query,

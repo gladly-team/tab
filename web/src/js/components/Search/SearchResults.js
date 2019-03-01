@@ -55,7 +55,11 @@ class SearchResults extends React.Component {
 
     // Wait until after mount to update prerendered state.
     this.setState({
-      // Get the current page number from the query string.
+      // We derive the current page number from the "p" parameter
+      // value. We keep it in state so that we update the
+      // prerendered components after mount, because at prerender
+      // time we do not know the page number. We can remove this
+      // from state if we switch to server-side rendering.
       page: parseInt(parseUrlSearchString(location.search).p, 10) || 1,
     })
 
