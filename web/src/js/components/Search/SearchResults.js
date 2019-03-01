@@ -66,6 +66,7 @@ class SearchResults extends React.Component {
     if (isReactSnapClient()) {
       try {
         // If there is a query on page load, fetch it.
+        // TODO: use page in inline script
         const js = `
           try {
             if (new URLSearchParams(window.location.search).get('q')) {
@@ -120,7 +121,9 @@ class SearchResults extends React.Component {
   componentDidUpdate(prevProps) {
     // Fetch search results if a query exists and the query
     // has changed.
+    // TODO: get search results if the page has changed
     if (this.props.query && this.props.query !== prevProps.query) {
+      // TODO: reset page to 1 if query is different
       this.getSearchResults()
     }
   }
@@ -232,6 +235,7 @@ class SearchResults extends React.Component {
       Math.max(MIN_PAGE, Math.min(page - 4, MAX_PAGE - 8)),
       Math.min(MAX_PAGE, Math.max(page + 4, MIN_PAGE + 8))
     )
+    // TODO: stick pagination to bottom of container
     return (
       <div
         data-test-id="search-results-container"
