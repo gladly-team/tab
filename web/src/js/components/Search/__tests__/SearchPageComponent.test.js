@@ -98,6 +98,58 @@ describe('Search page component', () => {
     expect(externalRedirect).not.toHaveBeenCalled()
   })
 
+  it('sets the "query" state to the value of the "q" URL param on mount', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location = {
+      search: '?q=yumtacos',
+    }
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.state('query')).toEqual('yumtacos')
+  })
+
+  it('sets the "page" state to the value of the "p" URL param on mount', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location = {
+      search: '?p=14',
+    }
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.state('page')).toEqual(14)
+  })
+
+  it('sets the "page" state to 1 if the value of the "p" URL param is not a valid integer', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location = {
+      search: '?p=foo',
+    }
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.state('page')).toEqual(1)
+  })
+
+  it('sets the "p" query parameter to the page number when clicking to a new results page', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location = {
+      search: '?p=14',
+    }
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const onPageChangeHandler = wrapper.find(SearchResults).prop('onPageChange')
+    onPageChangeHandler(7)
+    expect(modifyURLParams).toHaveBeenCalledWith({
+      p: 7,
+    })
+    onPageChangeHandler(102)
+    expect(modifyURLParams).toHaveBeenCalledWith({
+      p: 102,
+    })
+  })
+
   it('shows the search text in the box when loading a previous search', () => {
     isSearchPageEnabled.mockReturnValue(true)
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
