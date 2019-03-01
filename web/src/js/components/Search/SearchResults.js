@@ -211,14 +211,13 @@ class SearchResults extends React.Component {
     const { page } = this.state
     const { query, classes, style } = this.props
 
-    // Include 8 pages lower and higher.
+    // Include 8 pages total, 4 lower and 4 higher when possible.
     // Page 9999 is the maximum, so stop there.
     const MIN_PAGE = 1
     const MAX_PAGE = 9999
-    const lowestPageToShow = Math.max(MIN_PAGE, page - 4)
     const paginationIndices = range(
-      lowestPageToShow,
-      Math.min(lowestPageToShow + 8, MAX_PAGE)
+      Math.max(MIN_PAGE, Math.min(page - 4, MAX_PAGE - 8)),
+      Math.min(MAX_PAGE, Math.max(page + 4, MIN_PAGE + 8))
     )
     return (
       <div

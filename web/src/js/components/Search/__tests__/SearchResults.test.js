@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { shallow } from 'enzyme'
+import { range } from 'lodash/util'
 import Typography from '@material-ui/core/Typography'
 import logger from 'js/utils/logger'
 import fetchSearchResults from 'js/components/Search/fetchSearchResults'
@@ -489,5 +490,132 @@ describe('SearchResults component', () => {
     wrapper.unmount()
     expect(evtListenerRemove).toHaveBeenCalledTimes(1)
     expect(evtListenerRemove.mock.calls[0][0]).toEqual('searchresulterror')
+  })
+
+  it('does not render the "previous page" pagination button when on the first page', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    wrapper.setState({
+      page: 1,
+    })
+    expect(wrapper.find('[data-test-id="pagination-previous"]').exists()).toBe(
+      false
+    )
+  })
+
+  it('renders the "previous page" pagination button when on the second page', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    wrapper.setState({
+      page: 2,
+    })
+    expect(wrapper.find('[data-test-id="pagination-previous"]').exists()).toBe(
+      true
+    )
+  })
+
+  it('renders the "previous page" pagination button when on the eleventh page', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    wrapper.setState({
+      page: 11,
+    })
+    expect(wrapper.find('[data-test-id="pagination-previous"]').exists()).toBe(
+      true
+    )
+  })
+
+  it('does not render the "next page" pagination button when on the final page (page 9999)', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    wrapper.setState({
+      page: 9999,
+    })
+    expect(wrapper.find('[data-test-id="pagination-next"]').exists()).toBe(
+      false
+    )
+  })
+
+  it('renders the "next page" pagination button when on the first page', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    wrapper.setState({
+      page: 1,
+    })
+    expect(wrapper.find('[data-test-id="pagination-next"]').exists()).toBe(true)
+  })
+
+  it('renders the "next page" pagination button when on the eleventh page', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    wrapper.setState({
+      page: 11,
+    })
+    expect(wrapper.find('[data-test-id="pagination-next"]').exists()).toBe(true)
+  })
+
+  it('renders the expected pagination buttons when on the first page', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    wrapper.setState({
+      page: 1,
+    })
+    const expectedPages = range(1, 9)
+    expectedPages.forEach(pageNum => {
+      expect(
+        wrapper.find(`[data-test-id="pagination-${pageNum}"]`).exists()
+      ).toBe(true)
+    })
+
+    // Page 9 should not exist.
+    expect(wrapper.find(`[data-test-id="pagination-9"]`).exists()).toBe(false)
+  })
+
+  it('renders the expected pagination buttons when on the eleventh page', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    wrapper.setState({
+      page: 11,
+    })
+    const expectedPages = range(7, 15)
+    expectedPages.forEach(pageNum => {
+      expect(
+        wrapper.find(`[data-test-id="pagination-${pageNum}"]`).exists()
+      ).toBe(true)
+    })
+
+    // Page 6 should not exist.
+    expect(wrapper.find(`[data-test-id="pagination-6"]`).exists()).toBe(false)
+
+    // Page 15 should not exist.
+    expect(wrapper.find(`[data-test-id="pagination-15"]`).exists()).toBe(false)
+  })
+
+  it('renders the expected pagination buttons when on the 9998th page', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    wrapper.setState({
+      page: 9998,
+    })
+    const expectedPages = range(9991, 9999)
+    expectedPages.forEach(pageNum => {
+      expect(
+        wrapper.find(`[data-test-id="pagination-${pageNum}"]`).exists()
+      ).toBe(true)
+    })
+
+    // Page 10000 should not exist.
+    expect(wrapper.find(`[data-test-id="pagination-10000"]`).exists()).toBe(
+      false
+    )
   })
 })
