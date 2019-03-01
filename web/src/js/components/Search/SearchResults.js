@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { range } from 'lodash/util'
 import { Helmet } from 'react-helmet'
 import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
@@ -13,6 +14,12 @@ import { isReactSnapClient } from 'js/utils/search-utils'
 // to be defined.
 
 const styles = theme => ({
+  paginationContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    maxWidth: 520,
+    margin: '20px auto',
+  },
   searchAdsContainer: {
     '& iframe': {
       width: '100%',
@@ -32,6 +39,7 @@ class SearchResults extends React.Component {
     this.state = {
       noSearchResults: false,
       unexpectedSearchError: false,
+      page: 1,
     }
   }
 
@@ -152,6 +160,7 @@ class SearchResults extends React.Component {
       })
       return
     }
+    const { page } = this.state
     const { query } = this.props
     if (!query) {
       return
@@ -172,7 +181,7 @@ class SearchResults extends React.Component {
     })
 
     try {
-      fetchSearchResults(query, this.handleSearchResultsError.bind(this))
+      fetchSearchResults(query, this.handleSearchResultsError.bind(this), page)
     } catch (e) {
       this.setState({
         unexpectedSearchError: true,
@@ -181,8 +190,36 @@ class SearchResults extends React.Component {
     }
   }
 
+  changePage(newPageIndex) {
+    this.setState(
+      {
+        page: newPageIndex,
+      },
+      () => {
+        // After the page state updates, fetch new results.
+        this.getSearchResults()
+      }
+    )
+
+    // Scroll to the top of the page.
+    document.body.scrollTop = document.documentElement.scrollTop = 0
+
+    // TODO: update the "p" query parameter
+  }
+
   render() {
+    const { page } = this.state
     const { query, classes, style } = this.props
+
+    // Include 8 pages lower and higher.
+    // Page 9999 is the maximum, so stop there.
+    const MIN_PAGE = 1
+    const MAX_PAGE = 9999
+    const lowestPageToShow = Math.max(MIN_PAGE, page - 4)
+    const paginationIndices = range(
+      lowestPageToShow,
+      Math.min(lowestPageToShow + 8, MAX_PAGE)
+    )
     return (
       <div
         data-test-id="search-results-container"
@@ -237,6 +274,44 @@ class SearchResults extends React.Component {
             }}
             suppressHydrationWarning
           />
+        </div>
+        <div className={classes.paginationContainer}>
+          {page > MIN_PAGE ? (
+            <div
+              data-test-id={'pagination-previous'}
+              onClick={() => {
+                this.changePage(this.state.page - 1)
+              }}
+            >
+              PREVIOUS
+            </div>
+          ) : null}
+          {paginationIndices.map(pageNum => (
+            <div
+              key={`page-${pageNum}`}
+              data-test-id={`pagination-${pageNum}`}
+              style={{
+                ...(pageNum === page && {
+                  color: 'red',
+                }),
+              }}
+              onClick={() => {
+                this.changePage(pageNum)
+              }}
+            >
+              {pageNum}
+            </div>
+          ))}
+          {page < MAX_PAGE ? (
+            <div
+              data-test-id={'pagination-next'}
+              onClick={() => {
+                this.changePage(this.state.page + 1)
+              }}
+            >
+              NEXT
+            </div>
+          ) : null}
         </div>
       </div>
     )
