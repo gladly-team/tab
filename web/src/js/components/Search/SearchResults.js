@@ -63,6 +63,10 @@ class SearchResults extends React.Component {
     if (isReactSnapClient()) {
       try {
         // If there is a query on page load, fetch it.
+        // FIXME: either set query explicitly or rename "p" query
+        // parameter. YPA will get the search term from the "p"
+        // parameter by, so this will search "hello":
+        // https://dev-tab2017.gladly.io/search?q=tacos&p=hello
         const js = `
           try {
             if (new URLSearchParams(window.location.search).get('q')) {
@@ -215,6 +219,7 @@ class SearchResults extends React.Component {
     document.body.scrollTop = document.documentElement.scrollTop = 0
   }
 
+  // TODO: use buttons for pagination
   render() {
     const { classes, page, query, style } = this.props
 
