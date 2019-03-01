@@ -160,7 +160,7 @@ describe('Search page component', () => {
     expect(wrapper.find(Input).prop('value')).toBe('blahblah')
   })
 
-  it('clicking the search button updates the "q" URL parameter', () => {
+  it('clicking the search button updates the "q" URL parameter and sets the page to 1', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
@@ -177,10 +177,11 @@ describe('Search page component', () => {
     wrapper.find(SearchIcon).simulate('click')
     expect(modifyURLParams).toHaveBeenCalledWith({
       q: 'free ice cream',
+      p: 1,
     })
   })
 
-  it('hitting enter in the search input updates the "q" URL parameter', () => {
+  it('hitting enter in the search input updates the "q" URL parameter  and sets the page to 1', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
@@ -195,6 +196,7 @@ describe('Search page component', () => {
       .simulate('keypress', { key: 'Enter' })
     expect(modifyURLParams).toHaveBeenCalledWith({
       q: 'register to vote',
+      p: 1,
     })
   })
 

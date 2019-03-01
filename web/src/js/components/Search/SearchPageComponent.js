@@ -124,6 +124,7 @@ class SearchPage extends React.Component {
     const newQuery = this.state.searchText
     if (newQuery) {
       modifyURLParams({
+        p: 1,
         q: newQuery,
       })
     }
