@@ -61,7 +61,7 @@ const getFakeSearchResults = query => {
   ])
 }
 
-class SearchResults extends React.PureComponent {
+class FakeSearchResults extends React.PureComponent {
   render() {
     const { query } = this.props
     if (!query) {
@@ -93,10 +93,10 @@ class SearchResults extends React.PureComponent {
   }
 }
 
-SearchResults.propTypes = {
+FakeSearchResults.propTypes = {
   query: PropTypes.string,
 }
 
-SearchResults.defaultProps = {}
+FakeSearchResults.defaultProps = {}
 
-export default SearchResults
+export default FakeSearchResults
