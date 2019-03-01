@@ -60,7 +60,7 @@ class SearchResults extends React.Component {
       // prerendered components after mount, because at prerender
       // time we do not know the page number. We can remove this
       // from state if we switch to server-side rendering.
-      page: parseInt(parseUrlSearchString(location.search).p, 10) || 1,
+      page: this.getPageNumberFromSearchString(location.search),
     })
 
     // When prerendering the page, add an inline script to fetch
@@ -123,10 +123,26 @@ class SearchResults extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    // Fetch search results if a query exists and the query
-    // has changed.
-    // TODO: get search results if the page has changed
-    if (this.props.query && this.props.query !== prevProps.query) {
+    const { location } = this.props
+
+    // If the page number has changed, fetch new search results.
+    const currentPage = this.getPageNumberFromSearchString(location.search)
+    const prevPage = this.getPageNumberFromSearchString(
+      prevProps.location.search
+    )
+    if (currentPage !== prevPage) {
+      this.setState(
+        {
+          page: currentPage,
+        },
+        () => {
+          // After the page state updates, fetch new results.
+          this.getSearchResults()
+        }
+      )
+      // Fetch search results if a query exists and the query
+      // has changed.
+    } else if (this.props.query && this.props.query !== prevProps.query) {
       // TODO: reset page to 1 if query is different
       this.getSearchResults()
     }
@@ -140,6 +156,18 @@ class SearchResults extends React.Component {
       this.handleSearchResultsEvent.bind(this),
       false
     )
+  }
+
+  /**
+   * Take a search string, such as ?abc=hi&p=12, and return the
+   * integer value of the "p" URL parameter. If the parameter is
+   * not set or is not an integer, return 1.
+   * @param {String} searchStr - The URL parameter string,
+   *   such as '?myParam=foo&another=bar'
+   * @return {Number} The search results page inded
+   */
+  getPageNumberFromSearchString(searchStr) {
+    return parseInt(parseUrlSearchString(searchStr).p, 10) || 1
   }
 
   handleSearchResultsEvent(event) {

@@ -214,6 +214,68 @@ describe('SearchResults component', () => {
     ).toBe(1)
   })
 
+  it('fetches search results when the page changes in the search string', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.location = {
+      search: '?q=foo&p=2',
+    }
+    window.searchforacause.search.fetchedOnPageLoad = false
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    fetchSearchResults.mockClear()
+    wrapper.setProps({
+      location: {
+        search: '?q=foo&p=4',
+      },
+    })
+    const fetchedPage = fetchSearchResults.mock.calls[0][2]
+    expect(fetchedPage).toBe(4)
+    wrapper.setProps({
+      location: {
+        search: '?q=foo&p=211',
+      },
+    })
+
+    const newFetchedPage = fetchSearchResults.mock.calls[1][2]
+    expect(newFetchedPage).toBe(211)
+  })
+
+  it('does not fetch search results when the page stays the same in the search string', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.location = {
+      search: '?q=foo&p=2&somethingElse=blah',
+    }
+    window.searchforacause.search.fetchedOnPageLoad = false
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    fetchSearchResults.mockClear()
+    wrapper.setProps({
+      location: {
+        search: '?q=foo&p=2&somethingElse=ichanged',
+      },
+    })
+    expect(fetchSearchResults).not.toHaveBeenCalled()
+  })
+
+  it('only fetches search results once when both the page and query values change', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'foo'
+    mockProps.location = {
+      search: '?q=foo&p=2',
+    }
+    window.searchforacause.search.fetchedOnPageLoad = false
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    fetchSearchResults.mockClear()
+    wrapper.setProps({
+      query: 'blah',
+      location: {
+        search: '?q=blah&p=4',
+      },
+    })
+    expect(fetchSearchResults).toHaveBeenCalledTimes(1)
+  })
+
   it('sets a min-height to the results container before fetching results', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
