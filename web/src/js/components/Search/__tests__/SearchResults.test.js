@@ -618,4 +618,41 @@ describe('SearchResults component', () => {
       false
     )
   })
+
+  it('clicking to a new results page refetches search results', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'ice cream'
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    wrapper.setState({
+      page: 1,
+    })
+    fetchSearchResults.mockClear()
+    wrapper.find('[data-test-id="pagination-2"]').simulate('click')
+    expect(fetchSearchResults).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.any(Function),
+      2
+    )
+    fetchSearchResults.mockClear()
+    wrapper.find('[data-test-id="pagination-7"]').simulate('click')
+    expect(fetchSearchResults).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.any(Function),
+      7
+    )
+  })
+
+  it('clicking to a new results page scrolls to the top of the page', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    wrapper.setState({
+      page: 1,
+    })
+    window.document.body.scrollTop = 829
+    expect(window.document.body.scrollTop).toBe(829)
+    wrapper.find('[data-test-id="pagination-7"]').simulate('click')
+    expect(window.document.body.scrollTop).toBe(0)
+  })
 })
