@@ -14,10 +14,17 @@ import logger from 'js/utils/logger'
 // Save returned Amazon bids.
 var amazonBids
 
+// Make sure we only add the event listener once.
+var addedCreativeEventListener = false
+
 // WIP
 // TODO: call when initializing apstag, test, write tests
 // See the ads/amazon/README.md for more info.
 const addListenerForAmazonCreativeMessage = () => {
+  if (addedCreativeEventListener) {
+    return
+  }
+  addedCreativeEventListener = true
   window.addEventListener(
     'message',
     event => {
@@ -88,6 +95,7 @@ function initApstag() {
   if (numAds < 1) {
     return
   }
+  addListenerForAmazonCreativeMessage()
   const apstag = getAmazonTag()
 
   // Only get bids for the horizontal ad slot if only
