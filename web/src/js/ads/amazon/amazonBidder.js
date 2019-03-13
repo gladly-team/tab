@@ -14,6 +14,40 @@ import logger from 'js/utils/logger'
 // Save returned Amazon bids.
 var amazonBids
 
+// WIP
+// TODO: call when initializing apstag, test, write tests
+// See the ads/amazon/README.md for more info.
+const addListenerForAmazonCreativeMessage = () => {
+  window.addEventListener(
+    'message',
+    event => {
+      const { data } = event
+      const apstag = getAmazonTag()
+      // Make sure the message is from apstag.
+      if (!data || data.type !== 'apstag') {
+        return
+      }
+
+      if (!apstag) {
+        console.error('The apstag window variable is not defined.')
+        return
+      }
+
+      // Make sure the message includes an ad ID.
+      if (!data.adId) {
+        console.error(
+          'The message from apstag did not contain an "adId" field.'
+        )
+        return
+      }
+
+      // Render the ad.
+      apstag.renderImp(event.source.document, data.adId)
+    },
+    false
+  )
+}
+
 /**
  * If there are Amazon bids, store them in the tabforacause
  * global object for use with analytics. Only do this if the
