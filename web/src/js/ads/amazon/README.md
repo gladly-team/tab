@@ -30,6 +30,22 @@ In a SafeFrame, this creative won't work because it won't have access to the par
 
 ```
 try {
+  // Listen for a response from the parent page.
+  window.addEventListener(
+    'message',
+    event => {
+      // Make sure this is an apstag response.
+      if (!event.data || event.data.type !== 'apstagResponse') {
+        return
+      }
+      console.log('Received response!')
+      console.log(event.data)
+    },
+    false
+  )
+
+
+  // Message the parent page.
   window.parent.postMessage({
     type: 'apstag',
     adId: "%%PATTERN:amzniid%%"

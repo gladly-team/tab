@@ -25,9 +25,14 @@ const addListenerForAmazonCreativeMessage = () => {
     return
   }
   addedCreativeEventListener = true
+  const GOOGLE_ADSERVER_DOMAIN = 'tpc.googlesyndication.com'
   window.addEventListener(
     'message',
     event => {
+      // Only accept messages from Google's SafeFrame.
+      if (event.origin !== `https://${GOOGLE_ADSERVER_DOMAIN}`) {
+        return
+      }
       const { data } = event
       const apstag = getAmazonTag()
       // Make sure the message is from apstag.
@@ -48,8 +53,20 @@ const addListenerForAmazonCreativeMessage = () => {
         return
       }
 
+      console.log('Parent page received message.')
+
       // Render the ad.
-      apstag.renderImp(event.source.document, data.adId)
+      // console.log('This is when we would render the apstag ad!')
+      // console.log(event.source)
+      event.source.postMessage(
+        {
+          type: 'apstagResponse',
+          thing: 'foo',
+        },
+        `https://${GOOGLE_ADSERVER_DOMAIN}`
+      )
+      console.log('Sent message with type "apstagResponse"')
+      // apstag.renderImp(event.source.document, data.adId)
     },
     false
   )
