@@ -450,6 +450,56 @@ describe('amazonBidder SafeFrame creative', () => {
     expect(returnVal).toBe(true)
   })
 
+  it('ignores messages that do not come from an expected origin', () => {
+    const mockAddEventListener = jest
+      .spyOn(window, 'addEventListener')
+      .mockImplementation(() => {})
+    const mockMessageEvent = {
+      origin: 'https://tab.gladly.io',
+      data: {
+        type: 'apstagResponse',
+        adDocumentData: {
+          bodyHTML: '<div>hi</div>',
+          cookie: '',
+          headHTML: '',
+          title: '',
+        },
+      },
+    }
+    const {
+      apstagSafeFrameCreativeCode,
+    } = require('js/ads/amazon/amazonBidder')
+    apstagSafeFrameCreativeCode()
+    const messageHandler = mockAddEventListener.mock.calls[0][1]
+
+    const acceptedOrigins = [
+      'https://tab.gladly.io',
+      'https://dev-tab2017.gladly.io',
+      'https://localhost:3000',
+      'https://local-dev-tab.gladly.io:3000',
+    ]
+    acceptedOrigins.forEach(domain => {
+      let msg = Object.assign({}, mockMessageEvent, {
+        origin: domain,
+      })
+      console.log(msg)
+      expect(messageHandler(msg)).toBe(true)
+    })
+
+    const rejectedOrigins = [
+      'https://foo.gladly.io',
+      'http://localhost:3000', // not HTTPS
+      'https://some-other-site.com',
+      'https://tab.gladly.io.foobar.io',
+    ]
+    rejectedOrigins.forEach(domain => {
+      let msg = Object.assign({}, mockMessageEvent, {
+        origin: domain,
+      })
+      expect(messageHandler(msg)).toBe(false)
+    })
+  })
+
   it('does not modify the document if the message does not have the "apstagResponse" type', () => {
     const mockAddEventListener = jest
       .spyOn(window, 'addEventListener')

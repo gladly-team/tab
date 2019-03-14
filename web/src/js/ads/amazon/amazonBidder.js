@@ -51,8 +51,6 @@ const addListenerForAmazonCreativeMessage = () => {
           return false
         }
 
-        console.log('Parent page received message.')
-
         // Create a document that we'll render the ad into.
         const mockDocument = new JSDOM().window.document
         apstag.renderImp(mockDocument, data.adId)
@@ -72,8 +70,6 @@ const addListenerForAmazonCreativeMessage = () => {
           },
           `https://${GOOGLE_ADSERVER_DOMAIN}`
         )
-
-        console.log('Sent message with type "apstagResponse"')
         return true
       },
       false
@@ -88,9 +84,18 @@ export const apstagSafeFrameCreativeCode = () => {
     // Listen for a response from the parent page.
     window.addEventListener(
       'message',
-      event => {
-        // TODO:
+      function(event) {
         // Make sure the message comes from one of our domains.
+        if (
+          [
+            'https://tab.gladly.io',
+            'https://dev-tab2017.gladly.io',
+            'https://localhost:3000',
+            'https://local-dev-tab.gladly.io:3000',
+          ].indexOf(event.origin) < 0
+        ) {
+          return false
+        }
 
         // Make sure this is an apstag response.
         if (!event.data || event.data.type !== 'apstagResponse') {
@@ -103,10 +108,7 @@ export const apstagSafeFrameCreativeCode = () => {
           )
           return false
         }
-        const { adDocumentData } = event.data
-
-        console.log('apstag ad document data:')
-        console.log(adDocumentData)
+        var adDocumentData = event.data.adDocumentData
 
         // Update the ad document with the rendered HTML.
         window.document.cookie = adDocumentData.cookie
