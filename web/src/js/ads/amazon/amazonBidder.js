@@ -37,6 +37,7 @@ const addListenerForAmazonCreativeMessage = () => {
         }
         const { data } = event
         const apstag = getAmazonTag()
+
         // Make sure the message is from apstag.
         if (!data || data.type !== 'apstag') {
           return
@@ -57,7 +58,7 @@ const addListenerForAmazonCreativeMessage = () => {
           return
         }
 
-        // console.log('Parent page received message.')
+        console.log('Parent page received message.')
 
         // Create a document that we'll render the ad into.
         const mockDocument = new JSDOM().window.document
@@ -78,7 +79,8 @@ const addListenerForAmazonCreativeMessage = () => {
           },
           `https://${GOOGLE_ADSERVER_DOMAIN}`
         )
-        // console.log('Sent message with type "apstagResponse"')
+
+        console.log('Sent message with type "apstagResponse"')
       },
       false
     )
@@ -108,8 +110,9 @@ export const apstagSafeFrameCreativeCode = () => {
           return
         }
         const { adDocumentData } = event.data
-        // console.log('apstag ad document data:')
-        // console.log(adDocumentData)
+
+        console.log('apstag ad document data:')
+        console.log(adDocumentData)
 
         // Update the ad document with the rendered HTML.
         window.document.cookie = adDocumentData.cookie
