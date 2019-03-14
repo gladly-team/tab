@@ -22,108 +22,116 @@ var addedCreativeEventListener = false
 // TODO: call when initializing apstag, test, write tests
 // See the ads/amazon/README.md for more info.
 const addListenerForAmazonCreativeMessage = () => {
-  if (addedCreativeEventListener) {
-    return
-  }
-  addedCreativeEventListener = true
-  const GOOGLE_ADSERVER_DOMAIN = 'tpc.googlesyndication.com'
-  window.addEventListener(
-    'message',
-    event => {
-      // Only accept messages from Google's SafeFrame.
-      if (event.origin !== `https://${GOOGLE_ADSERVER_DOMAIN}`) {
-        return
-      }
-      const { data } = event
-      const apstag = getAmazonTag()
-      // Make sure the message is from apstag.
-      if (!data || data.type !== 'apstag') {
-        return
-      }
+  try {
+    if (addedCreativeEventListener) {
+      return
+    }
+    addedCreativeEventListener = true
+    const GOOGLE_ADSERVER_DOMAIN = 'tpc.googlesyndication.com'
+    window.addEventListener(
+      'message',
+      event => {
+        // Only accept messages from Google's SafeFrame.
+        if (event.origin !== `https://${GOOGLE_ADSERVER_DOMAIN}`) {
+          return
+        }
+        const { data } = event
+        const apstag = getAmazonTag()
+        // Make sure the message is from apstag.
+        if (!data || data.type !== 'apstag') {
+          return
+        }
 
-      // Make sure the apstag JS has loaded on the parent window.
-      if (!apstag) {
-        console.error('The apstag window variable is not defined.')
-        return
-      }
+        // Make sure the apstag JS has loaded on the parent window.
+        if (!apstag) {
+          console.error('The apstag window variable is not defined.')
+          return
+        }
 
-      // Make sure the posted message from the ad creative
-      // includes an ad ID.
-      if (!data.adId) {
-        console.error(
-          'The message from apstag did not contain an "adId" field.'
+        // Make sure the posted message from the ad creative
+        // includes an ad ID.
+        if (!data.adId) {
+          console.error(
+            'The message from apstag did not contain an "adId" field.'
+          )
+          return
+        }
+
+        // console.log('Parent page received message.')
+
+        // Create a document that we'll render the ad into.
+        const mockDocument = new JSDOM().window.document
+        apstag.renderImp(mockDocument, data.adId)
+
+        // Pass the ad-rendered document attributes to the
+        // SafeFrame so it can render it into the iframe.
+        const adDocumentData = {
+          title: mockDocument.title,
+          headHTML: mockDocument.head ? mockDocument.head.innerHTML : '',
+          bodyHTML: mockDocument.body ? mockDocument.body.innerHTML : '',
+          cookie: mockDocument.cookie,
+        }
+        event.source.postMessage(
+          {
+            type: 'apstagResponse',
+            adDocumentData: adDocumentData,
+          },
+          `https://${GOOGLE_ADSERVER_DOMAIN}`
         )
-        return
-      }
-
-      // console.log('Parent page received message.')
-
-      // Create a document that we'll render the ad into.
-      const mockDocument = new JSDOM().window.document
-      apstag.renderImp(mockDocument, data.adId)
-
-      // Pass the ad-rendered document attributes to the
-      // SafeFrame so it can render it into the iframe.
-      const adDocumentData = {
-        title: mockDocument.title,
-        headHTML: mockDocument.head ? mockDocument.head.innerHTML : '',
-        bodyHTML: mockDocument.body ? mockDocument.body.innerHTML : '',
-        cookie: mockDocument.cookie,
-      }
-      event.source.postMessage(
-        {
-          type: 'apstagResponse',
-          adDocumentData: adDocumentData,
-        },
-        `https://${GOOGLE_ADSERVER_DOMAIN}`
-      )
-      // console.log('Sent message with type "apstagResponse"')
-    },
-    false
-  )
+        // console.log('Sent message with type "apstagResponse"')
+      },
+      false
+    )
+  } catch (e) {
+    console.error(e)
+  }
 }
 
 export const apstagSafeFrameCreativeCode = () => {
-  // Listen for a response from the parent page.
-  window.addEventListener(
-    'message',
-    event => {
-      // TODO:
-      // Make sure the message comes from one of our domains.
+  try {
+    // Listen for a response from the parent page.
+    window.addEventListener(
+      'message',
+      event => {
+        // TODO:
+        // Make sure the message comes from one of our domains.
 
-      // Make sure this is an apstag response.
-      if (!event.data || event.data.type !== 'apstagResponse') {
-        return
-      }
+        // Make sure this is an apstag response.
+        if (!event.data || event.data.type !== 'apstagResponse') {
+          return
+        }
 
-      if (!event.data || !event.data.adDocumentData) {
-        console.error(
-          'The message from the parent did not contain an "adDocumentData" object.'
-        )
-        return
-      }
-      const { adDocumentData } = event.data
-      // console.log('apstag ad document data:')
-      // console.log(adDocumentData)
+        if (!event.data || !event.data.adDocumentData) {
+          console.error(
+            'The message from the parent did not contain an "adDocumentData" object.'
+          )
+          return
+        }
+        const { adDocumentData } = event.data
+        // console.log('apstag ad document data:')
+        // console.log(adDocumentData)
 
-      // Update the ad document with the rendered HTML.
-      window.document.cookie = adDocumentData.cookie
-      window.document.head.innerHTML = adDocumentData.headHTML
-      window.document.title = adDocumentData.title
-      window.document.body.innerHTML = adDocumentData.bodyHTML
-    },
-    false
-  )
+        // Update the ad document with the rendered HTML.
+        window.document.cookie = adDocumentData.cookie
+        window.document.head.innerHTML = adDocumentData.headHTML
+        window.document.title = adDocumentData.title
+        window.document.body.innerHTML = adDocumentData.bodyHTML
+      },
+      false
+    )
 
-  // Message the parent page.
-  window.parent.postMessage(
-    {
-      type: 'apstag',
-      // Our ad server replaces this placeholder.
-      adId: '%%PATTERN:amzniid%%',
-    },
-    '*'
-  )
+    // Message the parent page.
+    window.parent.postMessage(
+      {
+        type: 'apstag',
+        // Our ad server replaces this placeholder.
+        adId: '%%PATTERN:amzniid%%',
+      },
+      '*'
+    )
+  } catch (e) {
+    console.error(e)
+  }
 }
 
 /**
