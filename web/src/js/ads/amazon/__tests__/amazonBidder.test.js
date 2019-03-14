@@ -482,7 +482,6 @@ describe('amazonBidder SafeFrame creative', () => {
       let msg = Object.assign({}, mockMessageEvent, {
         origin: domain,
       })
-      console.log(msg)
       expect(messageHandler(msg)).toBe(true)
     })
 
