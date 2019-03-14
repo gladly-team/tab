@@ -10,6 +10,7 @@ import {
   HORIZONTAL_AD_SLOT_DOM_ID,
 } from 'js/ads/adSettings'
 import logger from 'js/utils/logger'
+import { JSDOM } from 'jsdom'
 
 // Save returned Amazon bids.
 var amazonBids
@@ -40,12 +41,14 @@ const addListenerForAmazonCreativeMessage = () => {
         return
       }
 
+      // Make sure the apstag JS has loaded on the parent window.
       if (!apstag) {
         console.error('The apstag window variable is not defined.')
         return
       }
 
-      // Make sure the message includes an ad ID.
+      // Make sure the posted message from the ad creative
+      // includes an ad ID.
       if (!data.adId) {
         console.error(
           'The message from apstag did not contain an "adId" field.'
@@ -53,22 +56,73 @@ const addListenerForAmazonCreativeMessage = () => {
         return
       }
 
-      console.log('Parent page received message.')
+      // console.log('Parent page received message.')
 
-      // Render the ad.
-      // console.log('This is when we would render the apstag ad!')
-      // console.log(event.source)
+      // Create a document that we'll render the ad into.
+      const mockDocument = new JSDOM().window.document
+      apstag.renderImp(mockDocument, data.adId)
+
+      // Pass the ad-rendered document attributes to the
+      // SafeFrame so it can render it into the iframe.
+      const adDocumentData = {
+        title: mockDocument.title,
+        headHTML: mockDocument.head ? mockDocument.head.innerHTML : '',
+        bodyHTML: mockDocument.body ? mockDocument.body.innerHTML : '',
+        cookie: mockDocument.cookie,
+      }
       event.source.postMessage(
         {
           type: 'apstagResponse',
-          thing: 'foo',
+          adDocumentData: adDocumentData,
         },
         `https://${GOOGLE_ADSERVER_DOMAIN}`
       )
-      console.log('Sent message with type "apstagResponse"')
-      // apstag.renderImp(event.source.document, data.adId)
+      // console.log('Sent message with type "apstagResponse"')
     },
     false
+  )
+}
+
+export const apstagSafeFrameCreativeCode = () => {
+  // Listen for a response from the parent page.
+  window.addEventListener(
+    'message',
+    event => {
+      // TODO:
+      // Make sure the message comes from one of our domains.
+
+      // Make sure this is an apstag response.
+      if (!event.data || event.data.type !== 'apstagResponse') {
+        return
+      }
+
+      if (!event.data || !event.data.adDocumentData) {
+        console.error(
+          'The message from the parent did not contain an "adDocumentData" object.'
+        )
+        return
+      }
+      const { adDocumentData } = event.data
+      // console.log('apstag ad document data:')
+      // console.log(adDocumentData)
+
+      // Update the ad document with the rendered HTML.
+      window.document.cookie = adDocumentData.cookie
+      window.document.head.innerHTML = adDocumentData.headHTML
+      window.document.title = adDocumentData.title
+      window.document.body.innerHTML = adDocumentData.bodyHTML
+    },
+    false
+  )
+
+  // Message the parent page.
+  window.parent.postMessage(
+    {
+      type: 'apstag',
+      // Our ad server replaces this placeholder.
+      adId: '%%PATTERN:amzniid%%',
+    },
+    '*'
   )
 }
 
