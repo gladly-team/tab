@@ -274,6 +274,132 @@ describe('amazonBidder', () => {
   })
 })
 
+describe('amazonBidder creative message handler', () => {
+  beforeEach(() => {
+    jest.spyOn(console, 'error').mockImplementation(() => {})
+  })
+
+  it('adds a message event listener to the window', () => {
+    const mockAddEventListener = jest
+      .spyOn(window, 'addEventListener')
+      .mockImplementation(() => {})
+    const amazonBidder = require('js/ads/amazon/amazonBidder').default
+    amazonBidder()
+    expect(mockAddEventListener).toHaveBeenCalledTimes(1)
+    expect(mockAddEventListener).toHaveBeenCalledWith(
+      'message',
+      expect.any(Function),
+      false
+    )
+  })
+
+  it('does not do anything if the message does not come from the Google SafeFrame', () => {
+    const mockAddEventListener = jest
+      .spyOn(window, 'addEventListener')
+      .mockImplementation(() => {})
+    const mockMessageEvent = {
+      origin: 'http://some-site.com',
+      data: {
+        type: 'apstag',
+        adId: 'abc-123',
+      },
+      source: {
+        postMessage: jest.fn(),
+      },
+    }
+
+    const amazonBidder = require('js/ads/amazon/amazonBidder').default
+    amazonBidder()
+    const messageHandler = mockAddEventListener.mock.calls[0][1]
+    const returnVal = messageHandler(mockMessageEvent)
+    expect(returnVal).toBe(false)
+    expect(mockMessageEvent.source.postMessage).not.toHaveBeenCalled()
+  })
+
+  it('does not do anything if the ad ID is not defined', () => {
+    const mockAddEventListener = jest
+      .spyOn(window, 'addEventListener')
+      .mockImplementation(() => {})
+    const mockMessageEvent = {
+      origin: 'https://tpc.googlesyndication.com',
+      data: {
+        type: 'apstag',
+        adId: undefined,
+      },
+      source: {
+        postMessage: jest.fn(),
+      },
+    }
+
+    const amazonBidder = require('js/ads/amazon/amazonBidder').default
+    amazonBidder()
+    const messageHandler = mockAddEventListener.mock.calls[0][1]
+    const returnVal = messageHandler(mockMessageEvent)
+    expect(returnVal).toBe(false)
+    expect(mockMessageEvent.source.postMessage).not.toHaveBeenCalled()
+  })
+
+  it('posts a message to the SafeFrame', () => {
+    const mockAddEventListener = jest
+      .spyOn(window, 'addEventListener')
+      .mockImplementation(() => {})
+    const mockMessageEvent = {
+      origin: 'https://tpc.googlesyndication.com',
+      data: {
+        type: 'apstag',
+        adId: 'abc-123',
+      },
+      source: {
+        postMessage: jest.fn(),
+      },
+    }
+
+    const amazonBidder = require('js/ads/amazon/amazonBidder').default
+    amazonBidder()
+    const messageHandler = mockAddEventListener.mock.calls[0][1]
+    const returnVal = messageHandler(mockMessageEvent)
+    expect(returnVal).toBe(true)
+    expect(mockMessageEvent.source.postMessage).toHaveBeenCalledTimes(1)
+  })
+
+  it('posts a message to the SafeFrame with document data of the ad and the correct target domain', () => {
+    const mockAddEventListener = jest
+      .spyOn(window, 'addEventListener')
+      .mockImplementation(() => {})
+    const mockMessageEvent = {
+      origin: 'https://tpc.googlesyndication.com',
+      data: {
+        type: 'apstag',
+        adId: 'abc-123',
+      },
+      source: {
+        postMessage: jest.fn(),
+      },
+    }
+    window.apstag.renderImp.mockImplementationOnce((doc, adId) => {
+      doc.body.innerHTML = '<div>foobar</div>'
+      doc.head.innerHTML = '<title>HI!</title>'
+    })
+
+    const amazonBidder = require('js/ads/amazon/amazonBidder').default
+    amazonBidder()
+    const messageHandler = mockAddEventListener.mock.calls[0][1]
+    messageHandler(mockMessageEvent)
+    expect(mockMessageEvent.source.postMessage).toHaveBeenCalledWith(
+      {
+        type: 'apstagResponse',
+        adDocumentData: {
+          title: 'HI!',
+          headHTML: '<title>HI!</title>',
+          bodyHTML: '<div>foobar</div>',
+          cookie: '',
+        },
+      },
+      'https://tpc.googlesyndication.com'
+    )
+  })
+})
+
 describe('amazonBidder SafeFrame creative', () => {
   it('adds a message event listener to the window', () => {
     const mockAddEventListener = jest

@@ -15,38 +15,31 @@ import { JSDOM } from 'jsdom'
 // Save returned Amazon bids.
 var amazonBids
 
-// Make sure we only add the event listener once.
-var addedCreativeEventListener = false
-
 // WIP
 // TODO: call when initializing apstag, test, write tests
 // See the ads/amazon/README.md for more info.
 const addListenerForAmazonCreativeMessage = () => {
   try {
-    if (addedCreativeEventListener) {
-      return
-    }
-    addedCreativeEventListener = true
     const GOOGLE_ADSERVER_DOMAIN = 'tpc.googlesyndication.com'
     window.addEventListener(
       'message',
       event => {
         // Only accept messages from Google's SafeFrame.
         if (event.origin !== `https://${GOOGLE_ADSERVER_DOMAIN}`) {
-          return
+          return false
         }
         const { data } = event
         const apstag = getAmazonTag()
 
         // Make sure the message is from apstag.
         if (!data || data.type !== 'apstag') {
-          return
+          return false
         }
 
         // Make sure the apstag JS has loaded on the parent window.
         if (!apstag) {
           console.error('The apstag window variable is not defined.')
-          return
+          return false
         }
 
         // Make sure the posted message from the ad creative
@@ -55,7 +48,7 @@ const addListenerForAmazonCreativeMessage = () => {
           console.error(
             'The message from apstag did not contain an "adId" field.'
           )
-          return
+          return false
         }
 
         console.log('Parent page received message.')
@@ -81,6 +74,7 @@ const addListenerForAmazonCreativeMessage = () => {
         )
 
         console.log('Sent message with type "apstagResponse"')
+        return true
       },
       false
     )
