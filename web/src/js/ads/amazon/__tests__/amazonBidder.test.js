@@ -35,7 +35,7 @@ afterAll(() => {
   delete window.tabforacause
 })
 
-describe('amazonBidder', function() {
+describe('amazonBidder', () => {
   it('runs without error', async () => {
     expect.assertions(0)
     const amazonBidder = require('js/ads/amazon/amazonBidder').default
@@ -271,5 +271,126 @@ describe('amazonBidder', function() {
         },
       ],
     })
+  })
+})
+
+describe('amazonBidder SafeFrame creative', () => {
+  it('adds a message event listener to the window', () => {
+    const mockAddEventListener = jest
+      .spyOn(window, 'addEventListener')
+      .mockImplementation(() => {})
+    const {
+      apstagSafeFrameCreativeCode,
+    } = require('js/ads/amazon/amazonBidder')
+    apstagSafeFrameCreativeCode()
+    expect(mockAddEventListener).toHaveBeenCalledTimes(1)
+    expect(mockAddEventListener).toHaveBeenCalledWith(
+      'message',
+      expect.any(Function),
+      false
+    )
+  })
+
+  it('modifies the document if the message has the correct structure', () => {
+    const mockAddEventListener = jest
+      .spyOn(window, 'addEventListener')
+      .mockImplementation(() => {})
+    const mockMessageEvent = {
+      origin: 'https://tab.gladly.io',
+      data: {
+        type: 'apstagResponse',
+        adDocumentData: {
+          bodyHTML: '<div>hi</div>',
+          cookie: '',
+          headHTML: '<link rel="shortcut icon" href="favicon.ico">',
+          title: 'My Title',
+        },
+      },
+    }
+
+    window.document.body.innerHTML = '<span>some stuff</span>'
+
+    const {
+      apstagSafeFrameCreativeCode,
+    } = require('js/ads/amazon/amazonBidder')
+    apstagSafeFrameCreativeCode()
+    const messageHandler = mockAddEventListener.mock.calls[0][1]
+    const returnVal = messageHandler(mockMessageEvent)
+    expect(window.document.body.innerHTML).toEqual('<div>hi</div>')
+    expect(window.document.head.innerHTML).toEqual(
+      '<link rel="shortcut icon" href="favicon.ico"><title>My Title</title>'
+    )
+    expect(window.document.title).toEqual('My Title')
+    expect(returnVal).toBe(true)
+  })
+
+  it('does not modify the document if the message does not have the "apstagResponse" type', () => {
+    const mockAddEventListener = jest
+      .spyOn(window, 'addEventListener')
+      .mockImplementation(() => {})
+    const mockMessageEvent = {
+      origin: 'https://tab.gladly.io',
+      data: {
+        type: 'something',
+        adDocumentData: {
+          bodyHTML: '<div>hi</div>',
+          cookie: '',
+          headHTML: '',
+          title: '',
+        },
+      },
+    }
+
+    window.document.body.innerHTML = '<span>some stuff</span>'
+
+    const {
+      apstagSafeFrameCreativeCode,
+    } = require('js/ads/amazon/amazonBidder')
+    apstagSafeFrameCreativeCode()
+    const messageHandler = mockAddEventListener.mock.calls[0][1]
+    const returnVal = messageHandler(mockMessageEvent)
+    expect(window.document.body.innerHTML).toEqual('<span>some stuff</span>')
+    expect(returnVal).toBe(false)
+  })
+
+  it('posts a message to the parent window', () => {
+    const mockParentPostMessage = jest
+      .spyOn(window.parent, 'postMessage')
+      .mockImplementation(() => {})
+    const {
+      apstagSafeFrameCreativeCode,
+    } = require('js/ads/amazon/amazonBidder')
+    apstagSafeFrameCreativeCode()
+    expect(mockParentPostMessage).toHaveBeenCalledTimes(1)
+  })
+
+  it('posts a message with the expected structure', () => {
+    const mockParentPostMessage = jest
+      .spyOn(window.parent, 'postMessage')
+      .mockImplementation(() => {})
+    const {
+      apstagSafeFrameCreativeCode,
+    } = require('js/ads/amazon/amazonBidder')
+    apstagSafeFrameCreativeCode()
+    expect(mockParentPostMessage).toHaveBeenCalledWith(
+      {
+        type: 'apstag',
+        adId: '%%PATTERN:amzniid%%',
+      },
+      '*'
+    )
+  })
+
+  it('catches any thrown errors and logs to the console', () => {
+    const mockErr = new Error('Error in the apstag creative!')
+    jest.spyOn(window.parent, 'postMessage').mockImplementationOnce(() => {
+      throw mockErr
+    })
+    jest.spyOn(console, 'error').mockImplementationOnce(() => {})
+    const {
+      apstagSafeFrameCreativeCode,
+    } = require('js/ads/amazon/amazonBidder')
+    apstagSafeFrameCreativeCode()
+    expect(console.error).toHaveBeenCalledWith(mockErr)
   })
 })

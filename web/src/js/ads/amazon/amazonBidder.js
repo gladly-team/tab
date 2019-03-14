@@ -100,14 +100,14 @@ export const apstagSafeFrameCreativeCode = () => {
 
         // Make sure this is an apstag response.
         if (!event.data || event.data.type !== 'apstagResponse') {
-          return
+          return false
         }
 
         if (!event.data || !event.data.adDocumentData) {
           console.error(
             'The message from the parent did not contain an "adDocumentData" object.'
           )
-          return
+          return false
         }
         const { adDocumentData } = event.data
 
@@ -119,6 +119,7 @@ export const apstagSafeFrameCreativeCode = () => {
         window.document.head.innerHTML = adDocumentData.headHTML
         window.document.title = adDocumentData.title
         window.document.body.innerHTML = adDocumentData.bodyHTML
+        return true
       },
       false
     )
