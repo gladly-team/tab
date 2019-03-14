@@ -10,7 +10,6 @@ import {
   HORIZONTAL_AD_SLOT_DOM_ID,
 } from 'js/ads/adSettings'
 import logger from 'js/utils/logger'
-import { JSDOM } from 'jsdom'
 
 // Save returned Amazon bids.
 var amazonBids
@@ -59,7 +58,7 @@ const addListenerForAmazonCreativeMessage = () => {
         }
 
         // Create a document that we'll render the ad into.
-        const mockDocument = new JSDOM().window.document
+        const mockDocument = window.document.implementation.createHTMLDocument()
         apstag.renderImp(mockDocument, data.adId)
 
         // Pass the ad-rendered document attributes to the
