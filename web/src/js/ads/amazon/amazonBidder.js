@@ -15,9 +15,16 @@ import { JSDOM } from 'jsdom'
 // Save returned Amazon bids.
 var amazonBids
 
-// WIP
-// TODO: call when initializing apstag, test, write tests
-// See the ads/amazon/README.md for more info.
+/**
+ * Add a message listener for messages from apstag ad creative
+ * served inside a Google SafeFrame.
+ * This is a temporary fix for the issue described here:
+ *   https://github.com/gladly-team/tab/issues/481
+ * See the ads/amazon/README.md for more info.
+ * We should remove this code and update the creative in our
+ * ad server as soon as the ABP bug is fixed.
+ * @return {undefined}
+ */
 const addListenerForAmazonCreativeMessage = () => {
   try {
     const GOOGLE_ADSERVER_DOMAIN = 'tpc.googlesyndication.com'
@@ -79,6 +86,15 @@ const addListenerForAmazonCreativeMessage = () => {
   }
 }
 
+/**
+ * This is ad creative for apstag ads served from Google Ad
+ * Manager. This code is only here for testing.
+ * This is a temporary fix for the issue described here:
+ *   https://github.com/gladly-team/tab/issues/481
+ * We should remove this code and update the creative in our
+ * ad server as soon as the ABP bug is fixed.
+ * @return {undefined}
+ */
 export const apstagSafeFrameCreativeCode = () => {
   try {
     // Listen for a response from the parent page.

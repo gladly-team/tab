@@ -26,7 +26,7 @@ Or, prettified:
 
 This creative relies on access to the top frame's `apstag` variable and associated state.
 
-In a SafeFrame, this creative won't work because it won't have access to the parent window. Instead, we can have the creative post a message to the parent window with the ad ID, and then the parent window can call `apstag.renderImp`.
+In a SafeFrame, this creative won't work because it won't have access to the parent window. Instead, we can have the creative post a message to the parent window with the ad ID, and then the parent window can call `apstag.renderImp`, then pass back the ad document's HTML for the creative to render.
 
 ```
 try {
@@ -54,3 +54,5 @@ try {
   console.error(e)
 }
 ```
+
+See [this issue](https://github.com/gladly-team/tab/issues/481) for why we want to render Amazon creative in a SafeFrame.
