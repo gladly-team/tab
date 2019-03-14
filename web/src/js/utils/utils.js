@@ -190,3 +190,37 @@ export const isInIframe = () => {
     return true
   }
 }
+
+/**
+ * Get an of domain names we use for production.
+ * @return {Array[String]} A list of domain names we use
+ *  for our app on production.
+ */
+export const getProductionDomainNames = () => {
+  return ['tab.gladly.io']
+}
+
+/**
+ * Get an of domain names we use for development and testing.
+ * @return {Array[String]} A list of domain names we use
+ *  for our app in development and testing stages.
+ */
+export const getDevelopmentDomainNames = () => {
+  return ['test-tab2017.gladly.io', 'dev-tab2017.gladly.io']
+}
+
+/**
+ * Get an of domain names we use for local development.
+ * @return {Array[String]} A list of domain names we use
+ *  for our app in local development.
+ */
+export const getLocalDevelopmentDomainNames = () => {
+  return ['localhost:3000', 'local-dev-tab.gladly.io:3000']
+}
+
+export const getAllDomainNames = () => {
+  return []
+    .concat(getLocalDevelopmentDomainNames())
+    .concat(getDevelopmentDomainNames())
+    .concat(getProductionDomainNames())
+}
