@@ -275,6 +275,13 @@ describe('amazonBidder', () => {
 })
 
 describe('amazonBidder creative message handler', () => {
+  beforeAll(() => {
+    // Create a parent div for the iframes.
+    const div = document.createElement('div')
+    div.id = 'apstag-iframes'
+    document.body.append(div)
+  })
+
   beforeEach(() => {
     jest.spyOn(console, 'error').mockImplementation(() => {})
   })

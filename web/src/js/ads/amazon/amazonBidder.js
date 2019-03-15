@@ -58,7 +58,10 @@ const addListenerForAmazonCreativeMessage = () => {
         }
 
         // Create a document that we'll render the ad into.
-        const mockDocument = window.document.implementation.createHTMLDocument()
+        const iframe = document.createElement('iframe')
+        iframe.style.display = 'none'
+        document.getElementById('apstag-iframes').append(iframe)
+        const mockDocument = iframe.contentDocument
         apstag.renderImp(mockDocument, data.adId)
 
         // Pass the ad-rendered document attributes to the
@@ -76,6 +79,7 @@ const addListenerForAmazonCreativeMessage = () => {
           },
           `https://${GOOGLE_ADSERVER_DOMAIN}`
         )
+        iframe.remove()
         return true
       },
       false
