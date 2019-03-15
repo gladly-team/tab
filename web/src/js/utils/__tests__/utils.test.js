@@ -172,3 +172,37 @@ describe('iframe utils', () => {
   //   jsdom.reconfigureWindow(window, { top: window.self })
   // })
 })
+
+describe('domain name utils', () => {
+  it('returns expected production domain names', () => {
+    const { getProductionDomainNames } = require('js/utils/utils')
+    expect(getProductionDomainNames()).toEqual(['tab.gladly.io'])
+  })
+
+  it('returns expected development domain names', () => {
+    const { getDevelopmentDomainNames } = require('js/utils/utils')
+    expect(getDevelopmentDomainNames()).toEqual([
+      'test-tab2017.gladly.io',
+      'dev-tab2017.gladly.io',
+    ])
+  })
+
+  it('returns expected local development domain names', () => {
+    const { getLocalDevelopmentDomainNames } = require('js/utils/utils')
+    expect(getLocalDevelopmentDomainNames()).toEqual([
+      'localhost:3000',
+      'local-dev-tab.gladly.io:3000',
+    ])
+  })
+
+  it('returns expected domain names in aggregate', () => {
+    const { getAllDomainNames } = require('js/utils/utils')
+    expect(getAllDomainNames()).toEqual([
+      'localhost:3000',
+      'local-dev-tab.gladly.io:3000',
+      'test-tab2017.gladly.io',
+      'dev-tab2017.gladly.io',
+      'tab.gladly.io',
+    ])
+  })
+})
