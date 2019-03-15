@@ -113,6 +113,7 @@ class UserMenu extends React.Component {
           style={{
             display: 'flex',
             alignItems: 'center',
+            justifyContent: 'flex-end',
           }}
         >
           <MoneyRaised app={app} />
