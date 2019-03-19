@@ -22,7 +22,14 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>Tab for a Cause</title>
+    
+    <% if (process.env.REACT_APP_WHICH_APP === "newtab"){ %>
+      <title>Tab for a Cause</title>
+    <% } %>
+
+    <% if (process.env.REACT_APP_WHICH_APP === "search"){ %>
+      <title>Search for a Cause</title>
+    <% } %>
 
     <% if (process.env.REACT_APP_MEASURE_TIME_TO_INTERACTIVE === "true"){ %>
     <!--
