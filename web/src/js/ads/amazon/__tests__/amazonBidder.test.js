@@ -35,7 +35,7 @@ afterAll(() => {
   delete window.tabforacause
 })
 
-describe('amazonBidder', function() {
+describe('amazonBidder', () => {
   it('runs without error', async () => {
     expect.assertions(0)
     const amazonBidder = require('js/ads/amazon/amazonBidder').default
