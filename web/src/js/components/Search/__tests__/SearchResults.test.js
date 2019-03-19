@@ -806,4 +806,56 @@ describe('SearchResults component', () => {
     wrapper.find('[data-test-id="pagination-7"]').simulate('click')
     expect(window.document.body.scrollTop).toBe(0)
   })
+
+  it('hides the pagination container when there are no search results', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'foo'
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+
+    // The pagination container should not be hidden.
+    expect(
+      wrapper.find('[data-test-id="pagination-container"]').prop('style')
+    ).toHaveProperty('display', 'block')
+
+    const query = 'this search will yield no results, sadly'
+    wrapper.setProps({
+      query: query,
+    })
+    const onNoAdCallback = fetchSearchResults.mock.calls[0][1]
+    onNoAdCallback({
+      NO_COVERAGE: 1,
+    })
+
+    // The pagination container should be hidden now.
+    expect(
+      wrapper.find('[data-test-id="pagination-container"]').prop('style')
+    ).toHaveProperty('display', 'none')
+  })
+
+  it('hides the pagination container when there is an unexpected search error', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'foo'
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+
+    // The pagination container should not be hidden.
+    expect(
+      wrapper.find('[data-test-id="pagination-container"]').prop('style')
+    ).toHaveProperty('display', 'block')
+
+    const query = 'this search will have some error, sadly'
+    wrapper.setProps({
+      query: query,
+    })
+    const onNoAdCallback = fetchSearchResults.mock.calls[0][1]
+    onNoAdCallback({
+      URL_UNREGISTERED: 1,
+    })
+
+    // The pagination container should be hidden now.
+    expect(
+      wrapper.find('[data-test-id="pagination-container"]').prop('style')
+    ).toHaveProperty('display', 'none')
+  })
 })

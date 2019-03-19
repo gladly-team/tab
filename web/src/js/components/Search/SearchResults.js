@@ -285,7 +285,16 @@ class SearchResults extends React.Component {
           }}
           suppressHydrationWarning
         />
-        <div className={classes.paginationContainer}>
+        <div
+          data-test-id={'pagination-container'}
+          className={classes.paginationContainer}
+          style={{
+            display:
+              this.state.noSearchResults || this.state.unexpectedSearchError
+                ? 'none'
+                : 'block',
+          }}
+        >
           {page > MIN_PAGE ? (
             <Button
               data-test-id={'pagination-previous'}
