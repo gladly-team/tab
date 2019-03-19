@@ -98,6 +98,58 @@ describe('Search page component', () => {
     expect(externalRedirect).not.toHaveBeenCalled()
   })
 
+  it('sets the "query" state to the value of the "q" URL param on mount', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location = {
+      search: '?q=yumtacos',
+    }
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.state('query')).toEqual('yumtacos')
+  })
+
+  it('sets the "page" state to the value of the "page" URL param on mount', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location = {
+      search: '?page=14',
+    }
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.state('page')).toEqual(14)
+  })
+
+  it('sets the "page" state to 1 if the value of the "page" URL param is not a valid integer', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location = {
+      search: '?age=foo',
+    }
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.state('page')).toEqual(1)
+  })
+
+  it('sets the "p" query parameter to the page number when clicking to a new results page', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location = {
+      search: '?page=14',
+    }
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const onPageChangeHandler = wrapper.find(SearchResults).prop('onPageChange')
+    onPageChangeHandler(7)
+    expect(modifyURLParams).toHaveBeenCalledWith({
+      page: 7,
+    })
+    onPageChangeHandler(102)
+    expect(modifyURLParams).toHaveBeenCalledWith({
+      page: 102,
+    })
+  })
+
   it('shows the search text in the box when loading a previous search', () => {
     isSearchPageEnabled.mockReturnValue(true)
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
@@ -108,7 +160,7 @@ describe('Search page component', () => {
     expect(wrapper.find(Input).prop('value')).toBe('blahblah')
   })
 
-  it('clicking the search button updates the "q" URL parameter', () => {
+  it('clicking the search button updates the "q" URL parameter and sets the page to 1', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
@@ -125,10 +177,11 @@ describe('Search page component', () => {
     wrapper.find(SearchIcon).simulate('click')
     expect(modifyURLParams).toHaveBeenCalledWith({
       q: 'free ice cream',
+      page: 1,
     })
   })
 
-  it('hitting enter in the search input updates the "q" URL parameter', () => {
+  it('hitting enter in the search input updates the "q" URL parameter  and sets the page to 1', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
@@ -143,6 +196,7 @@ describe('Search page component', () => {
       .simulate('keypress', { key: 'Enter' })
     expect(modifyURLParams).toHaveBeenCalledWith({
       q: 'register to vote',
+      page: 1,
     })
   })
 
@@ -181,24 +235,24 @@ describe('Search page component', () => {
     expect(wrapper.find(SearchResults).prop('query')).toEqual('something here')
   })
 
+  it('passes the page number to the SearchResults component', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location.search = '?q=foo&page=12'
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.find(SearchResults).prop('page')).toBe(12)
+  })
+
   // This is important for prerendering scripts for search results.
   it('renders the SearchResults component on mount even if there is no query', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
-    mockProps.location.search = '?q=foo&another=thing'
+    mockProps.location.search = ''
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
-    expect(wrapper.find(SearchResults).prop('query')).toEqual('foo')
-
-    // Update the search parameter.
-    wrapper.setProps(
-      Object.assign({}, mockProps, {
-        location: {
-          search: '?q=something%20here',
-        },
-      })
-    )
-    expect(wrapper.find(SearchResults).prop('query')).toEqual('something here')
+    expect(wrapper.find(SearchResults).exists()).toBe(true)
+    expect(wrapper.find(SearchResults).prop('query')).toEqual('')
   })
 
   it('contains all the expected search category tabs', () => {

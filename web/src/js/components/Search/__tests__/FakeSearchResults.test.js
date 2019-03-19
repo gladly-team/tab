@@ -13,8 +13,9 @@ afterEach(() => {
 
 describe('SearchResults component', () => {
   it('renders without error', () => {
-    const SearchResults = require('js/components/Search/SearchResults').default
+    const FakeSearchResults = require('js/components/Search/FakeSearchResults')
+      .default
     const mockProps = getMockProps()
-    shallow(<SearchResults {...mockProps} />)
+    shallow(<FakeSearchResults {...mockProps} />)
   })
 })

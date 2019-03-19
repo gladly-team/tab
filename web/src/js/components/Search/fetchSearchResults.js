@@ -10,9 +10,13 @@ import YPAConfiguration from 'js/components/Search/YPAConfiguration'
  *   be invoked if there are zero results for the search.
  * @return {undefined}
  */
-const fetchSearchResults = (query = null, onNoResults = () => {}) => {
+const fetchSearchResults = (query = null, onNoResults = () => {}, page = 1) => {
   const config = cloneDeep(YPAConfiguration)
+  config.ypaPubParams.query = query
   config.ypaAdSlotInfo[1].ypaOnNoAd = onNoResults
+
+  // Note that the page index must be a string.
+  config.ypaPageCount = page.toString()
 
   // Fetch search results.
   // Note: YPA mutates objects we pass to it, so make sure to

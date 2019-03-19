@@ -1,7 +1,9 @@
 /* eslint-env jest */
 
 import React from 'react'
-import { shallow } from 'enzyme'
+import { mount, shallow } from 'enzyme'
+import { range } from 'lodash/util'
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import logger from 'js/utils/logger'
 import fetchSearchResults from 'js/components/Search/fetchSearchResults'
@@ -13,13 +15,17 @@ import {
 } from 'js/utils/test-utils'
 import { modifyURLParams } from 'js/navigation/navigation'
 
-jest.mock('react-helmet')
+jest.mock('react-helmet', () => ({
+  Helmet: jest.fn(() => null),
+}))
 jest.mock('js/utils/logger')
 jest.mock('js/components/Search/fetchSearchResults')
 
 const getMockProps = () => ({
-  query: 'tacos',
   classes: {},
+  page: 1,
+  onPageChange: jest.fn(),
+  query: 'tacos',
 })
 
 beforeAll(() => {
@@ -41,6 +47,11 @@ beforeEach(() => {
 
 afterEach(() => {
   jest.clearAllMocks()
+
+  modifyURLParams({
+    q: null,
+    page: null,
+  })
 })
 
 describe('SearchResults component', () => {
@@ -210,6 +221,54 @@ describe('SearchResults component', () => {
     ).toBe(1)
   })
 
+  it('fetches search results when the page changes', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.page = 2
+    window.searchforacause.search.fetchedOnPageLoad = false
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    fetchSearchResults.mockClear()
+    wrapper.setProps({
+      page: 4,
+    })
+    const fetchedPage = fetchSearchResults.mock.calls[0][2]
+    expect(fetchedPage).toBe(4)
+    wrapper.setProps({
+      page: 211,
+    })
+
+    const newFetchedPage = fetchSearchResults.mock.calls[1][2]
+    expect(newFetchedPage).toBe(211)
+  })
+
+  it('does not fetch search results when the page stays the same', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.page = 2
+    window.searchforacause.search.fetchedOnPageLoad = false
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    fetchSearchResults.mockClear()
+    wrapper.setProps({
+      page: 2,
+    })
+    expect(fetchSearchResults).not.toHaveBeenCalled()
+  })
+
+  it('only fetches search results once when both the page and query values change', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'foo'
+    mockProps.page = 2
+    window.searchforacause.search.fetchedOnPageLoad = false
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    fetchSearchResults.mockClear()
+    wrapper.setProps({
+      query: 'blah',
+      page: 4,
+    })
+    expect(fetchSearchResults).toHaveBeenCalledTimes(1)
+  })
+
   it('sets a min-height to the results container before fetching results', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
@@ -218,6 +277,24 @@ describe('SearchResults component', () => {
   })
 
   it('removes the a min-height from the results container if there are no search results', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    const query = 'this search will yield no results, sadly'
+    wrapper.setProps({
+      query: query,
+    })
+    const onNoAdCallback = fetchSearchResults.mock.calls[0][1]
+
+    // Mock no ad results.
+    onNoAdCallback({
+      NO_COVERAGE: 1,
+    })
+
+    expect(wrapper.get(0).props.style.minHeight).toBe(0)
+  })
+
+  it('removes the a min-height from the results container if there is an error when searching', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
     const wrapper = shallow(<SearchResults {...mockProps} />).dive()
@@ -246,21 +323,11 @@ describe('SearchResults component', () => {
     })
     const onNoAdCallback = fetchSearchResults.mock.calls[0][1]
 
-    // Mock no ad results.
+    // Mock some error.
     onNoAdCallback({
-      URL_UNREGISTERED: 1,
+      SOME_ERROR: 1,
     })
-
-    expect(
-      wrapper
-        .find(Typography)
-        .filterWhere(
-          n => n.render().text() === 'Unable to search at this time.'
-        ).length
-    ).toBe(1)
-    expect(logger.error).toHaveBeenCalledWith(
-      new Error('Domain is not registered with our search partner.')
-    )
+    expect(wrapper.get(0).props.style.minHeight).toBe(0)
   })
 
   it('shows an error message and logs an error when there is some unexpected error', () => {
@@ -273,8 +340,6 @@ describe('SearchResults component', () => {
       query: query,
     })
     const onNoAdCallback = fetchSearchResults.mock.calls[0][1]
-
-    // Mock no ad results.
     onNoAdCallback({
       SOMETHING_WE_DID_NOT_SEE_COMING: 1,
     })
@@ -369,6 +434,37 @@ describe('SearchResults component', () => {
     impersonateReactSnapClient()
     shallow(<SearchResults {...mockProps} />).dive()
     expect(window.ypaAds.insertMultiAd).not.toHaveBeenCalled()
+  })
+
+  it('[inline-script] calls window.ypaAds.insertMultiAd with a page number when a "page" URL parameter exists', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = '' // the inline script does not rely on this prop
+    modifyURLParams({
+      q: 'foo',
+      page: 17,
+    })
+    impersonateReactSnapClient()
+    shallow(<SearchResults {...mockProps} />).dive()
+    expect(window.ypaAds.insertMultiAd.mock.calls[0][0]).toHaveProperty(
+      'ypaPageCount',
+      '17'
+    )
+  })
+
+  it('[inline-script] calls window.ypaAds.insertMultiAd WITHOUT a page number when a "p" URL parameter does not exist', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = '' // the inline script does not rely on this prop
+    modifyURLParams({
+      q: 'foo',
+      page: null,
+    })
+    impersonateReactSnapClient()
+    shallow(<SearchResults {...mockProps} />).dive()
+    expect(window.ypaAds.insertMultiAd.mock.calls[0][0]).not.toHaveProperty(
+      'ypaPageCount'
+    )
   })
 
   it('[inline-script] sets "fetchedOnPageLoad" to true via inline script when a "q" location parameter exists', () => {
@@ -489,5 +585,277 @@ describe('SearchResults component', () => {
     wrapper.unmount()
     expect(evtListenerRemove).toHaveBeenCalledTimes(1)
     expect(evtListenerRemove.mock.calls[0][0]).toEqual('searchresulterror')
+  })
+
+  it('does not render the "previous page" pagination button when on the first page', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.page = 1
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    expect(wrapper.find('[data-test-id="pagination-previous"]').exists()).toBe(
+      false
+    )
+  })
+
+  it('renders the "previous page" pagination button when on the second page', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.page = 2
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    expect(wrapper.find('[data-test-id="pagination-previous"]').exists()).toBe(
+      true
+    )
+  })
+
+  it('renders the "previous page" pagination button when on the eleventh page', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.page = 11
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    expect(wrapper.find('[data-test-id="pagination-previous"]').exists()).toBe(
+      true
+    )
+  })
+
+  it('does render the 9999th pagination button when on the final page (page 9999)', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.page = 9999
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    expect(wrapper.find('[data-test-id="pagination-9999"]').exists()).toBe(true)
+  })
+
+  it('does not render the "next page" pagination button when on the final page (page 9999)', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.page = 9999
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    expect(wrapper.find('[data-test-id="pagination-next"]').exists()).toBe(
+      false
+    )
+  })
+
+  it('renders the "next page" pagination button when on the first page', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.page = 1
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    expect(wrapper.find('[data-test-id="pagination-next"]').exists()).toBe(true)
+  })
+
+  it('renders the "next page" pagination button when on the eleventh page', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.page = 11
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    expect(wrapper.find('[data-test-id="pagination-next"]').exists()).toBe(true)
+  })
+
+  it('renders the expected pagination buttons when on the first page', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.page = 1
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    const expectedPages = range(1, 9)
+    expectedPages.forEach(pageNum => {
+      expect(
+        wrapper.find(`[data-test-id="pagination-${pageNum}"]`).exists()
+      ).toBe(true)
+    })
+
+    // Page 9 should not exist.
+    expect(wrapper.find(`[data-test-id="pagination-9"]`).exists()).toBe(false)
+  })
+
+  it('renders the expected pagination buttons when on the eleventh page', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.page = 11
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    const expectedPages = range(7, 15)
+    expectedPages.forEach(pageNum => {
+      expect(
+        wrapper.find(`[data-test-id="pagination-${pageNum}"]`).exists()
+      ).toBe(true)
+    })
+
+    // Page 6 should not exist.
+    expect(wrapper.find(`[data-test-id="pagination-6"]`).exists()).toBe(false)
+
+    // Page 15 should not exist.
+    expect(wrapper.find(`[data-test-id="pagination-15"]`).exists()).toBe(false)
+  })
+
+  it('renders the expected pagination buttons when on the 9998th page', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.page = 9998
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    const expectedPages = range(9991, 9999)
+    expectedPages.forEach(pageNum => {
+      expect(
+        wrapper.find(`[data-test-id="pagination-${pageNum}"]`).exists()
+      ).toBe(true)
+    })
+
+    // Page 10000 should not exist.
+    expect(wrapper.find(`[data-test-id="pagination-10000"]`).exists()).toBe(
+      false
+    )
+  })
+
+  it('calls the onPageChange prop when clicking to a new results page', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'ice cream'
+    mockProps.page = 1
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    wrapper.find('[data-test-id="pagination-2"]').simulate('click')
+    expect(mockProps.onPageChange).toHaveBeenCalledWith(2)
+    wrapper.find('[data-test-id="pagination-7"]').simulate('click')
+    expect(mockProps.onPageChange).toHaveBeenCalledWith(7)
+  })
+
+  it('calls the onPageChange prop when clicking the "next page" button', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'ice cream'
+    mockProps.page = 3
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    wrapper.find('[data-test-id="pagination-next"]').simulate('click')
+    expect(mockProps.onPageChange).toHaveBeenCalledWith(4)
+  })
+
+  it('calls the onPageChange prop when clicking the "previous page" button', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'ice cream'
+    mockProps.page = 7
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    wrapper.find('[data-test-id="pagination-previous"]').simulate('click')
+    expect(mockProps.onPageChange).toHaveBeenCalledWith(6)
+  })
+
+  it('does not call the onPageChange prop when clicking the current results page', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'ice cream'
+    mockProps.page = 3
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    wrapper.find('[data-test-id="pagination-3"]').simulate('click')
+    expect(mockProps.onPageChange).not.toHaveBeenCalled()
+  })
+
+  it('disables the button of the current results page', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'ice cream'
+    mockProps.page = 3
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    expect(wrapper.find('[data-test-id="pagination-3"]').prop('disabled')).toBe(
+      true
+    )
+  })
+
+  it('does not disable buttons for other results pages besides the one we are on', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'ice cream'
+    mockProps.page = 3
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    expect(
+      wrapper.find('[data-test-id="pagination-4"]').prop('disabled')
+    ).toBeUndefined()
+  })
+
+  it('uses our secondary color as the color of the button text of the current results page', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'ice cream'
+    mockProps.page = 3
+    const ourTheme = createMuiTheme({
+      palette: {
+        primary: {
+          main: '#dedede',
+        },
+        secondary: {
+          main: '#b94f4f',
+        },
+      },
+    })
+    const wrapper = mount(
+      <MuiThemeProvider theme={ourTheme}>
+        <SearchResults {...mockProps} />
+      </MuiThemeProvider>
+    )
+    expect(
+      wrapper
+        .find('[data-test-id="pagination-3"]')
+        .first()
+        .prop('style')
+    ).toHaveProperty('color', '#b94f4f')
+  })
+
+  it('scrolls to the top of the page when clicking to a new results page', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.page = 1
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    window.document.body.scrollTop = 829
+    expect(window.document.body.scrollTop).toBe(829)
+    wrapper.find('[data-test-id="pagination-7"]').simulate('click')
+    expect(window.document.body.scrollTop).toBe(0)
+  })
+
+  it('hides the pagination container when there are no search results', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'foo'
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+
+    // The pagination container should not be hidden.
+    expect(
+      wrapper.find('[data-test-id="pagination-container"]').prop('style')
+    ).toHaveProperty('display', 'block')
+
+    const query = 'this search will yield no results, sadly'
+    wrapper.setProps({
+      query: query,
+    })
+    const onNoAdCallback = fetchSearchResults.mock.calls[0][1]
+    onNoAdCallback({
+      NO_COVERAGE: 1,
+    })
+
+    // The pagination container should be hidden now.
+    expect(
+      wrapper.find('[data-test-id="pagination-container"]').prop('style')
+    ).toHaveProperty('display', 'none')
+  })
+
+  it('hides the pagination container when there is an unexpected search error', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'foo'
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+
+    // The pagination container should not be hidden.
+    expect(
+      wrapper.find('[data-test-id="pagination-container"]').prop('style')
+    ).toHaveProperty('display', 'block')
+
+    const query = 'this search will have some error, sadly'
+    wrapper.setProps({
+      query: query,
+    })
+    const onNoAdCallback = fetchSearchResults.mock.calls[0][1]
+    onNoAdCallback({
+      URL_UNREGISTERED: 1,
+    })
+
+    // The pagination container should be hidden now.
+    expect(
+      wrapper.find('[data-test-id="pagination-container"]').prop('style')
+    ).toHaveProperty('display', 'none')
   })
 })

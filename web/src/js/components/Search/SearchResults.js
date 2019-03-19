@@ -1,8 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { range } from 'lodash/util'
 import { Helmet } from 'react-helmet'
 import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
 import logger from 'js/utils/logger'
 import fetchSearchResults from 'js/components/Search/fetchSearchResults'
 import YPAConfiguration from 'js/components/Search/YPAConfiguration'
@@ -13,6 +15,11 @@ import { isReactSnapClient } from 'js/utils/search-utils'
 // to be defined.
 
 const styles = theme => ({
+  searchResultsParentContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    boxSizing: 'border-box',
+  },
   searchAdsContainer: {
     '& iframe': {
       width: '100%',
@@ -23,6 +30,16 @@ const styles = theme => ({
     '& iframe': {
       width: '100%',
     },
+  },
+  paginationContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    width: '100%',
+    maxWidth: 520,
+    margin: 'auto auto 20px auto',
+  },
+  paginationButton: {
+    minWidth: 40,
   },
 })
 
@@ -36,8 +53,10 @@ class SearchResults extends React.Component {
   }
 
   componentDidMount() {
+    const { query } = this.props
+
     // Fetch a query if one exists on mount.
-    if (this.props.query) {
+    if (query) {
       this.getSearchResults()
     }
 
@@ -56,6 +75,10 @@ class SearchResults extends React.Component {
                 window.searchforacause.search.YPAErrorOnPageLoad = err
                 var evt = new CustomEvent('searchresulterror', { detail: err })
                 window.dispatchEvent(evt)
+              }
+              var page = new URLSearchParams(window.location.search).get('page')
+              if (page) {
+                config.ypaPageCount = page
               }
               window.ypaAds.insertMultiAd(config)
               window.searchforacause.search.fetchedOnPageLoad = true
@@ -100,9 +123,13 @@ class SearchResults extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    // Fetch search results if a query exists and the query
-    // has changed.
-    if (this.props.query && this.props.query !== prevProps.query) {
+    // Fetch search results if a query exists and either the page
+    // or query has changed.
+    if (
+      this.props.query &&
+      (this.props.page !== prevProps.page ||
+        this.props.query !== prevProps.query)
+    ) {
       this.getSearchResults()
     }
   }
@@ -152,7 +179,7 @@ class SearchResults extends React.Component {
       })
       return
     }
-    const { query } = this.props
+    const { page, query } = this.props
     if (!query) {
       return
     }
@@ -172,7 +199,7 @@ class SearchResults extends React.Component {
     })
 
     try {
-      fetchSearchResults(query, this.handleSearchResultsError.bind(this))
+      fetchSearchResults(query, this.handleSearchResultsError.bind(this), page)
     } catch (e) {
       this.setState({
         unexpectedSearchError: true,
@@ -181,18 +208,40 @@ class SearchResults extends React.Component {
     }
   }
 
+  changePage(newPageIndex) {
+    const { onPageChange, page } = this.props
+    if (newPageIndex === page) {
+      return
+    }
+    onPageChange(newPageIndex)
+
+    // Scroll to the top of the page.
+    document.body.scrollTop = document.documentElement.scrollTop = 0
+  }
+
   render() {
-    const { query, classes, style } = this.props
+    const { classes, page, query, style, theme } = this.props
+
+    // Include 8 pages total, 4 lower and 4 higher when possible.
+    // Page 9999 is the maximum, so stop there.
+    const MIN_PAGE = 1
+    const MAX_PAGE = 9999
+    const paginationIndices = range(
+      Math.max(MIN_PAGE, Math.min(page - 4, MAX_PAGE - 8)),
+      Math.min(MAX_PAGE + 1, Math.max(page + 4, MIN_PAGE + 8))
+    )
     return (
       <div
-        data-test-id="search-results-container"
+        className={classes.searchResultsParentContainer}
         style={Object.assign(
           {},
           {
             // Min height prevents visibly shifting content below,
             // like the footer.
-            minHeight: this.state.noSearchResults ? 0 : 1200,
-            boxSizing: 'border-box',
+            minHeight:
+              this.state.noSearchResults || this.state.unexpectedSearchError
+                ? 0
+                : 1200,
           },
           style
         )}
@@ -203,40 +252,92 @@ class SearchResults extends React.Component {
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
           />
         </Helmet>
-        <div>
-          {this.state.noSearchResults ? (
-            <Typography variant={'body1'} gutterBottom>
-              No results found for{' '}
-              <span style={{ fontWeight: 'bold' }}>{query}</span>
-            </Typography>
+        {this.state.noSearchResults ? (
+          <Typography variant={'body1'} gutterBottom>
+            No results found for{' '}
+            <span style={{ fontWeight: 'bold' }}>{query}</span>
+          </Typography>
+        ) : null}
+        {this.state.unexpectedSearchError ? (
+          <Typography variant={'body1'} gutterBottom>
+            Unable to search at this time.
+          </Typography>
+        ) : null}
+        <div
+          id="search-ads"
+          className={classes.searchAdsContainer}
+          // Important: if these containers are unmounted or mutated,
+          // YPA's JS will cancel the call to fetch search results.
+          // Using dangerouslySetInnerHTML and suppressHydrationWarning
+          // prevents rerendering this element during hydration:
+          // https://github.com/reactjs/rfcs/pull/46#issuecomment-385182716
+          // Related: https://github.com/facebook/react/issues/6622
+          dangerouslySetInnerHTML={{
+            __html: '',
+          }}
+          suppressHydrationWarning
+        />
+        <div
+          id="search-results"
+          className={classes.searchResultsContainer}
+          dangerouslySetInnerHTML={{
+            __html: '',
+          }}
+          suppressHydrationWarning
+        />
+        <div
+          data-test-id={'pagination-container'}
+          className={classes.paginationContainer}
+          style={{
+            display:
+              this.state.noSearchResults || this.state.unexpectedSearchError
+                ? 'none'
+                : 'block',
+          }}
+        >
+          {page > MIN_PAGE ? (
+            <Button
+              data-test-id={'pagination-previous'}
+              className={classes.paginationButton}
+              onClick={() => {
+                this.changePage(page - 1)
+              }}
+            >
+              PREVIOUS
+            </Button>
           ) : null}
-          {this.state.unexpectedSearchError ? (
-            <Typography variant={'body1'} gutterBottom>
-              Unable to search at this time.
-            </Typography>
+          {paginationIndices.map(pageNum => (
+            <Button
+              key={`page-${pageNum}`}
+              className={classes.paginationButton}
+              data-test-id={`pagination-${pageNum}`}
+              {...pageNum === page && {
+                color: 'secondary',
+                disabled: true,
+              }}
+              style={{
+                ...(pageNum === page && {
+                  color: theme.palette.secondary.main,
+                }),
+              }}
+              onClick={() => {
+                this.changePage(pageNum)
+              }}
+            >
+              {pageNum}
+            </Button>
+          ))}
+          {page < MAX_PAGE ? (
+            <Button
+              data-test-id={'pagination-next'}
+              className={classes.paginationButton}
+              onClick={() => {
+                this.changePage(page + 1)
+              }}
+            >
+              NEXT
+            </Button>
           ) : null}
-          <div
-            id="search-ads"
-            className={classes.searchAdsContainer}
-            // Important: if these containers are unmounted or mutated,
-            // YPA's JS will cancel the call to fetch search results.
-            // Using dangerouslySetInnerHTML and suppressHydrationWarning
-            // prevents rerendering this element during hydration:
-            // https://github.com/reactjs/rfcs/pull/46#issuecomment-385182716
-            // Related: https://github.com/facebook/react/issues/6622
-            dangerouslySetInnerHTML={{
-              __html: '',
-            }}
-            suppressHydrationWarning
-          />
-          <div
-            id="search-results"
-            className={classes.searchResultsContainer}
-            dangerouslySetInnerHTML={{
-              __html: '',
-            }}
-            suppressHydrationWarning
-          />
         </div>
       </div>
     )
@@ -245,12 +346,16 @@ class SearchResults extends React.Component {
 
 SearchResults.propTypes = {
   query: PropTypes.string,
+  page: PropTypes.number,
+  onPageChange: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
   style: PropTypes.object,
+  theme: PropTypes.object.isRequired,
 }
 
 SearchResults.defaultProps = {
+  page: 1,
   style: {},
 }
 
-export default withStyles(styles)(SearchResults)
+export default withStyles(styles, { withTheme: true })(SearchResults)
