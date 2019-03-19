@@ -109,12 +109,12 @@ describe('Search page component', () => {
     expect(wrapper.state('query')).toEqual('yumtacos')
   })
 
-  it('sets the "page" state to the value of the "p" URL param on mount', () => {
+  it('sets the "page" state to the value of the "page" URL param on mount', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
     mockProps.location = {
-      search: '?p=14',
+      search: '?page=14',
     }
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
     expect(wrapper.state('page')).toEqual(14)
@@ -142,11 +142,11 @@ describe('Search page component', () => {
     const onPageChangeHandler = wrapper.find(SearchResults).prop('onPageChange')
     onPageChangeHandler(7)
     expect(modifyURLParams).toHaveBeenCalledWith({
-      p: 7,
+      page: 7,
     })
     onPageChangeHandler(102)
     expect(modifyURLParams).toHaveBeenCalledWith({
-      p: 102,
+      page: 102,
     })
   })
 
@@ -177,7 +177,7 @@ describe('Search page component', () => {
     wrapper.find(SearchIcon).simulate('click')
     expect(modifyURLParams).toHaveBeenCalledWith({
       q: 'free ice cream',
-      p: 1,
+      page: 1,
     })
   })
 
@@ -196,7 +196,7 @@ describe('Search page component', () => {
       .simulate('keypress', { key: 'Enter' })
     expect(modifyURLParams).toHaveBeenCalledWith({
       q: 'register to vote',
-      p: 1,
+      page: 1,
     })
   })
 
@@ -239,7 +239,7 @@ describe('Search page component', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
-    mockProps.location.search = '?q=foo&p=12'
+    mockProps.location.search = '?q=foo&page=12'
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
     expect(wrapper.find(SearchResults).prop('page')).toBe(12)
   })

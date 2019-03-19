@@ -47,7 +47,7 @@ afterEach(() => {
 
   modifyURLParams({
     q: null,
-    p: null,
+    page: null,
   })
 })
 
@@ -433,7 +433,7 @@ describe('SearchResults component', () => {
     mockProps.query = '' // the inline script does not rely on this prop
     modifyURLParams({
       q: 'foo',
-      p: 17,
+      page: 17,
     })
     impersonateReactSnapClient()
     shallow(<SearchResults {...mockProps} />).dive()
@@ -449,7 +449,7 @@ describe('SearchResults component', () => {
     mockProps.query = '' // the inline script does not rely on this prop
     modifyURLParams({
       q: 'foo',
-      p: null,
+      page: null,
     })
     impersonateReactSnapClient()
     shallow(<SearchResults {...mockProps} />).dive()
