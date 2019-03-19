@@ -110,7 +110,7 @@ class SearchPage extends React.Component {
 
   /**
    * Take a search string, such as ?abc=hi&p=12, and return the
-   * integer value of the "p" URL parameter. If the parameter is
+   * integer value of the "page" URL parameter. If the parameter is
    * not set or is not an integer, return 1.
    * @param {String} searchStr - The URL parameter string,
    *   such as '?myParam=foo&another=bar'
@@ -298,7 +298,6 @@ class SearchPage extends React.Component {
             query={query}
             page={page}
             onPageChange={newPageIndex => {
-              // Update the "p" query parameter.
               modifyURLParams({
                 page: newPageIndex,
               })

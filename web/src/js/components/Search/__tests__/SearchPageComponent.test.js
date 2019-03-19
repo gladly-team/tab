@@ -120,12 +120,12 @@ describe('Search page component', () => {
     expect(wrapper.state('page')).toEqual(14)
   })
 
-  it('sets the "page" state to 1 if the value of the "p" URL param is not a valid integer', () => {
+  it('sets the "page" state to 1 if the value of the "page" URL param is not a valid integer', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
     mockProps.location = {
-      search: '?p=foo',
+      search: '?age=foo',
     }
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
     expect(wrapper.state('page')).toEqual(1)
@@ -136,7 +136,7 @@ describe('Search page component', () => {
       .default
     const mockProps = getMockProps()
     mockProps.location = {
-      search: '?p=14',
+      search: '?page=14',
     }
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
     const onPageChangeHandler = wrapper.find(SearchResults).prop('onPageChange')

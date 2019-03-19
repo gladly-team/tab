@@ -436,7 +436,7 @@ describe('SearchResults component', () => {
     expect(window.ypaAds.insertMultiAd).not.toHaveBeenCalled()
   })
 
-  it('[inline-script] calls window.ypaAds.insertMultiAd with a page number when a "p" URL parameter exists', () => {
+  it('[inline-script] calls window.ypaAds.insertMultiAd with a page number when a "page" URL parameter exists', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
     mockProps.query = '' // the inline script does not rely on this prop
