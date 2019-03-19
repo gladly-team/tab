@@ -294,6 +294,24 @@ describe('SearchResults component', () => {
     expect(wrapper.get(0).props.style.minHeight).toBe(0)
   })
 
+  it('removes the a min-height from the results container if there is an error when searching', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    const query = 'this search will yield no results, sadly'
+    wrapper.setProps({
+      query: query,
+    })
+    const onNoAdCallback = fetchSearchResults.mock.calls[0][1]
+
+    // Mock no ad results.
+    onNoAdCallback({
+      NO_COVERAGE: 1,
+    })
+
+    expect(wrapper.get(0).props.style.minHeight).toBe(0)
+  })
+
   it('shows an error message and logs an error when the search errors with "URL_UNREGISTERED"', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
@@ -305,21 +323,11 @@ describe('SearchResults component', () => {
     })
     const onNoAdCallback = fetchSearchResults.mock.calls[0][1]
 
-    // Mock no ad results.
+    // Mock some error.
     onNoAdCallback({
-      URL_UNREGISTERED: 1,
+      SOME_ERROR: 1,
     })
-
-    expect(
-      wrapper
-        .find(Typography)
-        .filterWhere(
-          n => n.render().text() === 'Unable to search at this time.'
-        ).length
-    ).toBe(1)
-    expect(logger.error).toHaveBeenCalledWith(
-      new Error('Domain is not registered with our search partner.')
-    )
+    expect(wrapper.get(0).props.style.minHeight).toBe(0)
   })
 
   it('shows an error message and logs an error when there is some unexpected error', () => {
@@ -332,8 +340,6 @@ describe('SearchResults component', () => {
       query: query,
     })
     const onNoAdCallback = fetchSearchResults.mock.calls[0][1]
-
-    // Mock no ad results.
     onNoAdCallback({
       SOMETHING_WE_DID_NOT_SEE_COMING: 1,
     })

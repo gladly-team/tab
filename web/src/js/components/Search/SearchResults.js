@@ -238,7 +238,10 @@ class SearchResults extends React.Component {
           {
             // Min height prevents visibly shifting content below,
             // like the footer.
-            minHeight: this.state.noSearchResults ? 0 : 1200,
+            minHeight:
+              this.state.noSearchResults || this.state.unexpectedSearchError
+                ? 0
+                : 1200,
           },
           style
         )}
