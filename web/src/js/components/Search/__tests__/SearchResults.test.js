@@ -1,8 +1,9 @@
 /* eslint-env jest */
 
 import React from 'react'
-import { shallow } from 'enzyme'
+import { mount, shallow } from 'enzyme'
 import { range } from 'lodash/util'
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import logger from 'js/utils/logger'
 import fetchSearchResults from 'js/components/Search/fetchSearchResults'
@@ -14,7 +15,9 @@ import {
 } from 'js/utils/test-utils'
 import { modifyURLParams } from 'js/navigation/navigation'
 
-jest.mock('react-helmet')
+jest.mock('react-helmet', () => ({
+  Helmet: jest.fn(() => null),
+}))
 jest.mock('js/utils/logger')
 jest.mock('js/components/Search/fetchSearchResults')
 
@@ -701,10 +704,8 @@ describe('SearchResults component', () => {
     mockProps.query = 'ice cream'
     mockProps.page = 1
     const wrapper = shallow(<SearchResults {...mockProps} />).dive()
-    fetchSearchResults.mockClear()
     wrapper.find('[data-test-id="pagination-2"]').simulate('click')
     expect(mockProps.onPageChange).toHaveBeenCalledWith(2)
-    fetchSearchResults.mockClear()
     wrapper.find('[data-test-id="pagination-7"]').simulate('click')
     expect(mockProps.onPageChange).toHaveBeenCalledWith(7)
   })
@@ -715,7 +716,6 @@ describe('SearchResults component', () => {
     mockProps.query = 'ice cream'
     mockProps.page = 3
     const wrapper = shallow(<SearchResults {...mockProps} />).dive()
-    fetchSearchResults.mockClear()
     wrapper.find('[data-test-id="pagination-next"]').simulate('click')
     expect(mockProps.onPageChange).toHaveBeenCalledWith(4)
   })
@@ -726,7 +726,6 @@ describe('SearchResults component', () => {
     mockProps.query = 'ice cream'
     mockProps.page = 7
     const wrapper = shallow(<SearchResults {...mockProps} />).dive()
-    fetchSearchResults.mockClear()
     wrapper.find('[data-test-id="pagination-previous"]').simulate('click')
     expect(mockProps.onPageChange).toHaveBeenCalledWith(6)
   })
@@ -737,9 +736,58 @@ describe('SearchResults component', () => {
     mockProps.query = 'ice cream'
     mockProps.page = 3
     const wrapper = shallow(<SearchResults {...mockProps} />).dive()
-    fetchSearchResults.mockClear()
     wrapper.find('[data-test-id="pagination-3"]').simulate('click')
     expect(mockProps.onPageChange).not.toHaveBeenCalled()
+  })
+
+  it('disables the button of the current results page', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'ice cream'
+    mockProps.page = 3
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    expect(wrapper.find('[data-test-id="pagination-3"]').prop('disabled')).toBe(
+      true
+    )
+  })
+
+  it('does not disable buttons for other results pages besides the one we are on', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'ice cream'
+    mockProps.page = 3
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    expect(
+      wrapper.find('[data-test-id="pagination-4"]').prop('disabled')
+    ).toBeUndefined()
+  })
+
+  it('uses our secondary color as the color of the button text of the current results page', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'ice cream'
+    mockProps.page = 3
+    const ourTheme = createMuiTheme({
+      palette: {
+        primary: {
+          main: '#dedede',
+        },
+        secondary: {
+          main: '#b94f4f',
+        },
+      },
+    })
+    const wrapper = mount(
+      <MuiThemeProvider theme={ourTheme}>
+        <SearchResults {...mockProps} />
+      </MuiThemeProvider>
+    )
+    expect(
+      wrapper
+        .find('[data-test-id="pagination-3"]')
+        .first()
+        .prop('style')
+    ).toHaveProperty('color', '#b94f4f')
   })
 
   it('scrolls to the top of the page when clicking to a new results page', () => {

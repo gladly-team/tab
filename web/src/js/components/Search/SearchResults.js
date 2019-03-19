@@ -4,6 +4,7 @@ import { range } from 'lodash/util'
 import { Helmet } from 'react-helmet'
 import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
 import logger from 'js/utils/logger'
 import fetchSearchResults from 'js/components/Search/fetchSearchResults'
 import YPAConfiguration from 'js/components/Search/YPAConfiguration'
@@ -36,6 +37,9 @@ const styles = theme => ({
     width: '100%',
     maxWidth: 520,
     margin: 'auto auto 20px auto',
+  },
+  paginationButton: {
+    minWidth: 40,
   },
 })
 
@@ -215,9 +219,8 @@ class SearchResults extends React.Component {
     document.body.scrollTop = document.documentElement.scrollTop = 0
   }
 
-  // TODO: use buttons for pagination
   render() {
-    const { classes, page, query, style } = this.props
+    const { classes, page, query, style, theme } = this.props
 
     // Include 8 pages total, 4 lower and 4 higher when possible.
     // Page 9999 is the maximum, so stop there.
@@ -281,22 +284,28 @@ class SearchResults extends React.Component {
         />
         <div className={classes.paginationContainer}>
           {page > MIN_PAGE ? (
-            <div
+            <Button
               data-test-id={'pagination-previous'}
+              className={classes.paginationButton}
               onClick={() => {
                 this.changePage(page - 1)
               }}
             >
               PREVIOUS
-            </div>
+            </Button>
           ) : null}
           {paginationIndices.map(pageNum => (
-            <div
+            <Button
               key={`page-${pageNum}`}
+              className={classes.paginationButton}
               data-test-id={`pagination-${pageNum}`}
+              {...pageNum === page && {
+                color: 'secondary',
+                disabled: true,
+              }}
               style={{
                 ...(pageNum === page && {
-                  color: 'red',
+                  color: theme.palette.secondary.main,
                 }),
               }}
               onClick={() => {
@@ -304,17 +313,18 @@ class SearchResults extends React.Component {
               }}
             >
               {pageNum}
-            </div>
+            </Button>
           ))}
           {page < MAX_PAGE ? (
-            <div
+            <Button
               data-test-id={'pagination-next'}
+              className={classes.paginationButton}
               onClick={() => {
                 this.changePage(page + 1)
               }}
             >
               NEXT
-            </div>
+            </Button>
           ) : null}
         </div>
       </div>
@@ -328,6 +338,7 @@ SearchResults.propTypes = {
   onPageChange: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
   style: PropTypes.object,
+  theme: PropTypes.object.isRequired,
 }
 
 SearchResults.defaultProps = {
@@ -335,4 +346,4 @@ SearchResults.defaultProps = {
   style: {},
 }
 
-export default withStyles(styles)(SearchResults)
+export default withStyles(styles, { withTheme: true })(SearchResults)
