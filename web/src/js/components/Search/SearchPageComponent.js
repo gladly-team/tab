@@ -117,14 +117,14 @@ class SearchPage extends React.Component {
    * @return {Number} The search results page inded
    */
   getPageNumberFromSearchString(searchStr) {
-    return parseInt(parseUrlSearchString(searchStr).p, 10) || 1
+    return parseInt(parseUrlSearchString(searchStr).page, 10) || 1
   }
 
   search() {
     const newQuery = this.state.searchText
     if (newQuery) {
       modifyURLParams({
-        p: 1,
+        page: 1,
         q: newQuery,
       })
     }
@@ -300,7 +300,7 @@ class SearchPage extends React.Component {
             onPageChange={newPageIndex => {
               // Update the "p" query parameter.
               modifyURLParams({
-                p: newPageIndex,
+                page: newPageIndex,
               })
             }}
             style={{

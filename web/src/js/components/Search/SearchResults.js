@@ -63,10 +63,6 @@ class SearchResults extends React.Component {
     if (isReactSnapClient()) {
       try {
         // If there is a query on page load, fetch it.
-        // FIXME: either set query explicitly or rename "p" query
-        // parameter. YPA will get the search term from the "p"
-        // parameter by, so this will search "hello":
-        // https://dev-tab2017.gladly.io/search?q=tacos&p=hello
         const js = `
           try {
             if (new URLSearchParams(window.location.search).get('q')) {
@@ -76,7 +72,7 @@ class SearchResults extends React.Component {
                 var evt = new CustomEvent('searchresulterror', { detail: err })
                 window.dispatchEvent(evt)
               }
-              var page = new URLSearchParams(window.location.search).get('p')
+              var page = new URLSearchParams(window.location.search).get('page')
               if (page) {
                 config.ypaPageCount = page
               }
