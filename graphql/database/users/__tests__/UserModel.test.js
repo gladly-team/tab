@@ -251,6 +251,18 @@ describe('UserModel', () => {
         timestamp: moment.utc().toISOString(),
       },
       backgroundOption: 'daily',
+      searches: 0,
+      maxSearchesDay: {
+        maxDay: {
+          date: moment.utc().toISOString(),
+          numSearches: 0,
+        },
+        recentDay: {
+          date: moment.utc().toISOString(),
+          numSearches: 0,
+        },
+      },
+      searchesToday: 0,
     })
   })
 
@@ -276,6 +288,31 @@ describe('UserModel', () => {
     expect(item).toMatchObject({
       id: 'bb5082cc-151a-4a9a-9289-06906670fd4e',
       tabsToday: 47,
+    })
+  })
+
+  it('constructs with the expected "searchesToday" value', () => {
+    const item = Object.assign(
+      {},
+      new User({
+        id: 'bb5082cc-151a-4a9a-9289-06906670fd4e',
+        email: 'foo@bar.com',
+        username: 'Foo Bar',
+        maxSearchesDay: {
+          maxDay: {
+            date: moment.utc().toISOString(),
+            numSearches: 300,
+          },
+          recentDay: {
+            date: moment.utc().toISOString(),
+            numSearches: 47,
+          },
+        },
+      })
+    )
+    expect(item).toMatchObject({
+      id: 'bb5082cc-151a-4a9a-9289-06906670fd4e',
+      searchesToday: 47,
     })
   })
 })
