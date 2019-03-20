@@ -702,6 +702,7 @@ const logTabMutation = mutationWithClientMutationId({
 const logSearchMutation = mutationWithClientMutationId({
   name: 'LogSearch',
   inputFields: {
+    // Note that this is the raw user ID (not the Relay global).
     userId: { type: new GraphQLNonNull(GraphQLString) },
   },
   outputFields: {
@@ -710,10 +711,7 @@ const logSearchMutation = mutationWithClientMutationId({
       resolve: user => user,
     },
   },
-  mutateAndGetPayload: ({ userId }, context) => {
-    const { id } = fromGlobalId(userId)
-    return logSearch(context.user, id)
-  },
+  mutateAndGetPayload: ({ userId }, context) => logSearch(context.user, userId),
 })
 
 /**

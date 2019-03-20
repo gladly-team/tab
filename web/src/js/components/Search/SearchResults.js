@@ -9,6 +9,8 @@ import logger from 'js/utils/logger'
 import fetchSearchResults from 'js/components/Search/fetchSearchResults'
 import YPAConfiguration from 'js/components/Search/YPAConfiguration'
 import { isReactSnapClient } from 'js/utils/search-utils'
+import { getCurrentUser } from 'js/authentication/user'
+import LogSearchMutation from 'js/mutations/LogSearchMutation'
 
 // This component expects the YPA search JS to already have
 // executed and for the `searchforacause` global variable
@@ -206,6 +208,17 @@ class SearchResults extends React.Component {
       })
       logger.error(e)
     }
+
+    // Log the search event.
+    // We're not passing the user as a prop to this component because
+    // we don't want to delay the component mount.
+    getCurrentUser().then(user => {
+      if (user && user.id) {
+        LogSearchMutation({
+          userId: user.id,
+        })
+      }
+    })
   }
 
   changePage(newPageIndex) {

@@ -13,13 +13,18 @@ import {
   impersonateReactSnapClient,
   setUserAgentToTypicalTestUserAgent,
 } from 'js/utils/test-utils'
+import { getCurrentUser } from 'js/authentication/user'
 import { modifyURLParams } from 'js/navigation/navigation'
+import LogSearchMutation from 'js/mutations/LogSearchMutation'
+import { flushAllPromises } from 'js/utils/test-utils'
 
 jest.mock('react-helmet', () => ({
   Helmet: jest.fn(() => null),
 }))
 jest.mock('js/utils/logger')
 jest.mock('js/components/Search/fetchSearchResults')
+jest.mock('js/authentication/user')
+jest.mock('js/mutations/LogSearchMutation')
 
 const getMockProps = () => ({
   classes: {},
@@ -857,5 +862,72 @@ describe('SearchResults component', () => {
     expect(
       wrapper.find('[data-test-id="pagination-container"]').prop('style')
     ).toHaveProperty('display', 'none')
+  })
+
+  it('logs a search event on mount', async () => {
+    expect.assertions(2)
+
+    getCurrentUser.mockResolvedValueOnce({
+      id: 'abc123xyz789',
+      email: 'example@example.com',
+      username: 'example',
+      isAnonymous: false,
+      emailVerified: true,
+    })
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'foo'
+    window.searchforacause.search.fetchedOnPageLoad = false
+    shallow(<SearchResults {...mockProps} />).dive()
+    await flushAllPromises()
+    expect(LogSearchMutation).toHaveBeenCalledTimes(1)
+    expect(LogSearchMutation).toHaveBeenCalledWith({
+      userId: 'abc123xyz789',
+    })
+  })
+
+  it('logs a search event when the query changes', async () => {
+    expect.assertions(2)
+
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'foo'
+    window.searchforacause.search.fetchedOnPageLoad = false
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    LogSearchMutation.mockClear()
+    getCurrentUser.mockResolvedValueOnce({
+      id: 'abc123xyz789',
+      email: 'example@example.com',
+      username: 'example',
+      isAnonymous: false,
+      emailVerified: true,
+    })
+    wrapper.setProps({
+      query: 'best coffee in alaska',
+    })
+    await flushAllPromises()
+    expect(LogSearchMutation).toHaveBeenCalledTimes(1)
+    expect(LogSearchMutation).toHaveBeenCalledWith({
+      userId: 'abc123xyz789',
+    })
+  })
+
+  it('does not log a search event when the user is not authenticated', async () => {
+    expect.assertions(1)
+
+    getCurrentUser.mockResolvedValueOnce({
+      id: null,
+      email: null,
+      username: null,
+      isAnonymous: false,
+      emailVerified: false,
+    })
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'foo'
+    window.searchforacause.search.fetchedOnPageLoad = false
+    shallow(<SearchResults {...mockProps} />).dive()
+    await flushAllPromises()
+    expect(LogSearchMutation).not.toHaveBeenCalled()
   })
 })
