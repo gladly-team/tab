@@ -59,7 +59,7 @@ describe('logSearch', () => {
       .spyOn(UserModel, 'update')
       .mockImplementationOnce(() => mockUser)
 
-    const returnedUser = await logSearch(userContext, userId)
+    await logSearch(userContext, userId)
 
     // VC should increment.
     expect(addVc).toHaveBeenCalled()
