@@ -58,6 +58,7 @@ class SearchPage extends React.Component {
     this.state = {
       query: '',
       searchFeatureEnabled: isSearchPageEnabled(),
+      searchSource: null,
       searchText: '',
       showPlaceholderText: false,
     }
@@ -81,6 +82,7 @@ class SearchPage extends React.Component {
       query: query,
       page: this.getPageNumberFromSearchString(location.search),
       showPlaceholderText: !isReactSnapClient(),
+      searchSource: parseUrlSearchString(location.search).src || null,
       searchText: query,
     })
   }
@@ -138,7 +140,7 @@ class SearchPage extends React.Component {
 
   render() {
     const { classes } = this.props
-    const { page, query, searchText } = this.state
+    const { page, query, searchSource, searchText } = this.state
     const queryEncoded = query ? encodeURI(query) : ''
     const searchResultsPaddingLeft = 170
     if (!this.state.searchFeatureEnabled) {
@@ -302,6 +304,7 @@ class SearchPage extends React.Component {
                 page: newPageIndex,
               })
             }}
+            searchSource={searchSource}
             style={{
               marginLeft: searchResultsPaddingLeft,
               maxWidth: 600,

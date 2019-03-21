@@ -244,6 +244,35 @@ describe('Search page component', () => {
     expect(wrapper.find(SearchResults).prop('page')).toBe(12)
   })
 
+  it('passes "1" as the default page number to the SearchResults component when the "page" URL param is not set', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location.search = '?q=foo'
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.find(SearchResults).prop('page')).toBe(1)
+  })
+
+  it('passes the search source to the SearchResults component when the "page" URL param is set', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location.search = '?q=foo&src=some-source'
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.find(SearchResults).prop('searchSource')).toEqual(
+      'some-source'
+    )
+  })
+
+  it('passes null as the search source to the SearchResults component when the "src" URL param is not set', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location.search = '?q=foo'
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.find(SearchResults).prop('searchSource')).toBeNull()
+  })
+
   // This is important for prerendering scripts for search results.
   it('renders the SearchResults component on mount even if there is no query', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
