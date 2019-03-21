@@ -7,7 +7,7 @@ import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 const styles = {}
 
 const MaxHeartsDropdownMessageComponent = props => {
-  const { anchorElement } = props
+  const { anchorElement, message } = props
   return (
     <DashboardPopover
       open={props.open}
@@ -23,10 +23,7 @@ const MaxHeartsDropdownMessageComponent = props => {
       }}
     >
       <div style={{ padding: 10, width: 210, textAlign: 'center' }}>
-        <Typography variant={'body2'}>
-          You've earned the maximum Hearts from opening tabs today! You'll be
-          able to earn more Hearts in a few hours.
-        </Typography>
+        <Typography variant={'body2'}>{message}</Typography>
       </div>
     </DashboardPopover>
   )
@@ -38,6 +35,7 @@ MaxHeartsDropdownMessageComponent.displayName =
 MaxHeartsDropdownMessageComponent.propTypes = {
   anchorElement: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
   classes: PropTypes.object.isRequired,
+  message: PropTypes.string.isRequired,
   open: PropTypes.bool.isRequired,
 }
 

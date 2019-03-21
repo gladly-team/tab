@@ -163,6 +163,8 @@ class HeartsComponent extends React.Component {
             !isPopoverOpen
           }
           anchorElement={anchorElement}
+          message={`You've earned the maximum Hearts from opening tabs today! You'll be
+          able to earn more Hearts in a few hours.`}
         />
       </div>
     )

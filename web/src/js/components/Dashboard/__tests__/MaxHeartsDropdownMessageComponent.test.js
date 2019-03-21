@@ -9,6 +9,7 @@ jest.mock('js/components/Dashboard/DashboardPopover')
 
 const getMockProps = () => ({
   anchorElement: <div id="foo" />,
+  message: `You've earned the maximum Hearts for now.`,
   open: false,
 })
 
@@ -24,6 +25,7 @@ describe('MaxHeartsDropdownMessageComponent', () => {
     const MaxHeartsDropdownMessageComponent = require('js/components/Dashboard/MaxHeartsDropdownMessageComponent')
       .default
     const mockProps = getMockProps()
+    mockProps.message = `You've earned the maximum Hearts for now :( Try again later`
     const wrapper = shallow(
       <MaxHeartsDropdownMessageComponent {...mockProps} />
     ).dive()
@@ -33,9 +35,7 @@ describe('MaxHeartsDropdownMessageComponent', () => {
         .first()
         .render()
         .text()
-    ).toEqual(
-      "You've earned the maximum Hearts from opening tabs today! You'll be able to earn more Hearts in a few hours."
-    )
+    ).toEqual(`You've earned the maximum Hearts for now :( Try again later`)
   })
 
   it('uses the MUI body2 Typography variant for the main text (this is important because our nested theme styles the body2 variant)', () => {
