@@ -2,6 +2,7 @@
   Configuration
 **/
 
+export const MAX_DAILY_HEARTS_FROM_SEARCHES = 150
 export const MAX_DAILY_HEARTS_FROM_TABS = 150
 
 /**

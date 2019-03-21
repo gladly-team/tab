@@ -125,7 +125,7 @@ class UserMenu extends React.Component {
               root: classes.circleIcon,
             }}
           />
-          <Hearts app={app} user={user} />
+          <Hearts app={app} user={user} showMaxHeartsFromTabsMessage />
           <SettingsButton isUserAnonymous={isUserAnonymous} />
         </div>
       </MuiThemeProvider>

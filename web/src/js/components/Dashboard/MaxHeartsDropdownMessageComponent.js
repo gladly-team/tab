@@ -4,13 +4,10 @@ import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 
-const styles = {
-  typography: {
-    color: 'white',
-  },
-}
+const styles = {}
+
 const MaxHeartsDropdownMessageComponent = props => {
-  const { anchorElement, classes } = props
+  const { anchorElement, message } = props
   return (
     <DashboardPopover
       open={props.open}
@@ -22,13 +19,11 @@ const MaxHeartsDropdownMessageComponent = props => {
       // https://github.com/mui-org/material-ui/issues/9893#issuecomment-406891098
       style={{
         pointerEvents: 'none',
+        marginTop: 6,
       }}
     >
       <div style={{ padding: 10, width: 210, textAlign: 'center' }}>
-        <Typography className={classes.typography} variant={'body2'}>
-          You've earned the maximum Hearts from opening tabs today! You'll be
-          able to earn more Hearts in a few hours.
-        </Typography>
+        <Typography variant={'body2'}>{message}</Typography>
       </div>
     </DashboardPopover>
   )
@@ -40,6 +35,7 @@ MaxHeartsDropdownMessageComponent.displayName =
 MaxHeartsDropdownMessageComponent.propTypes = {
   anchorElement: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
   classes: PropTypes.object.isRequired,
+  message: PropTypes.string.isRequired,
   open: PropTypes.bool.isRequired,
 }
 

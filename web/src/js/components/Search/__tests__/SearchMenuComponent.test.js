@@ -74,6 +74,20 @@ describe('SearchMenuComponent', () => {
     expect(wrapper.find(Hearts).exists()).toBe(true)
   })
 
+  it('sets the "showMaxHeartsFromSearchesMessage" to true on the Hearts component', () => {
+    const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user = {
+      tabsToday: 123,
+      vcCurrent: 864,
+    }
+    const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
+    expect(wrapper.find(Hearts).prop('showMaxHeartsFromSearchesMessage')).toBe(
+      true
+    )
+  })
+
   it('does not show the CircleIcon component if there is no user', () => {
     const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
       .default

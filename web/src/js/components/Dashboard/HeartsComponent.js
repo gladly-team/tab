@@ -7,7 +7,10 @@ import HeartBorderIcon from '@material-ui/icons/FavoriteBorder'
 import CheckmarkIcon from '@material-ui/icons/Done'
 import Typography from '@material-ui/core/Typography'
 import { commaFormatted } from 'js/utils/utils'
-import { MAX_DAILY_HEARTS_FROM_TABS } from 'js/constants'
+import {
+  MAX_DAILY_HEARTS_FROM_SEARCHES,
+  MAX_DAILY_HEARTS_FROM_TABS,
+} from 'js/constants'
 import HeartsDropdown from 'js/components/Dashboard/HeartsDropdownContainer'
 import MaxHeartsDropdownMessageComponent from 'js/components/Dashboard/MaxHeartsDropdownMessageComponent'
 
@@ -49,15 +52,23 @@ class HeartsComponent extends React.Component {
   }
 
   render() {
-    const { app, classes, theme, user } = this.props
+    const {
+      app,
+      classes,
+      showMaxHeartsFromSearchesMessage,
+      showMaxHeartsFromTabsMessage,
+      theme,
+      user,
+    } = this.props
     const { isHovering, isPopoverOpen } = this.state
     const anchorElement = this.anchorElement
 
-    // Used to let the user know they aren't earning any more
-    // Hearts from tabs today.
+    // Let the user know they aren't earning any more Hearts from
+    // tabs or searches today.
     const reachedMaxDailyHeartsFromTabs =
       user.tabsToday >= MAX_DAILY_HEARTS_FROM_TABS
-
+    const reachedMaxDailyHeartsFromSearches =
+      user.searchesToday >= MAX_DAILY_HEARTS_FROM_SEARCHES
     return (
       <div>
         <ButtonBase className={classes.buttonBase}>
@@ -117,7 +128,10 @@ class HeartsComponent extends React.Component {
                 }}
                 className={classes.heartIcon}
               />
-              {reachedMaxDailyHeartsFromTabs ? (
+              {(showMaxHeartsFromTabsMessage &&
+                reachedMaxDailyHeartsFromTabs) ||
+              (showMaxHeartsFromSearchesMessage &&
+                reachedMaxDailyHeartsFromSearches) ? (
                 <CheckmarkIcon
                   style={{
                     color:
@@ -150,8 +164,23 @@ class HeartsComponent extends React.Component {
           }}
         />
         <MaxHeartsDropdownMessageComponent
-          open={reachedMaxDailyHeartsFromTabs && isHovering && !isPopoverOpen}
+          open={
+            ((showMaxHeartsFromTabsMessage && reachedMaxDailyHeartsFromTabs) ||
+              (showMaxHeartsFromSearchesMessage &&
+                reachedMaxDailyHeartsFromSearches)) &&
+            isHovering &&
+            !isPopoverOpen
+          }
           anchorElement={anchorElement}
+          message={
+            reachedMaxDailyHeartsFromTabs && reachedMaxDailyHeartsFromSearches
+              ? `You've earned the maximum Hearts for now. You'll be able to earn more Hearts in a while.`
+              : reachedMaxDailyHeartsFromTabs
+              ? `You've earned the maximum Hearts from opening tabs today! You'll be able to earn more Hearts in a while.`
+              : reachedMaxDailyHeartsFromSearches
+              ? `You've earned the maximum Hearts from searching today! You'll be able to earn more Hearts in a while.`
+              : `You've earned the maximum Hearts for now.`
+          }
         />
       </div>
     )
@@ -163,14 +192,19 @@ HeartsComponent.displayName = 'HeartsComponent'
 HeartsComponent.propTypes = {
   classes: PropTypes.object.isRequired,
   user: PropTypes.shape({
+    searchesToday: PropTypes.number.isRequired,
     tabsToday: PropTypes.number.isRequired,
     vcCurrent: PropTypes.number.isRequired,
   }),
+  showMaxHeartsFromSearchesMessage: PropTypes.bool,
+  showMaxHeartsFromTabsMessage: PropTypes.bool,
   theme: PropTypes.object.isRequired,
 }
 
 HeartsComponent.defaultProps = {
   classes: {},
+  showMaxHeartsFromSearchesMessage: false,
+  showMaxHeartsFromTabsMessage: false,
 }
 
 export default withStyles(styles, { withTheme: true })(HeartsComponent)

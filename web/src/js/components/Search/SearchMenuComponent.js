@@ -88,7 +88,7 @@ const SearchMenuComponent = props => {
                 root: classes.circleIcon,
               }}
             />
-            <Hearts app={app} user={user} />
+            <Hearts app={app} user={user} showMaxHeartsFromSearchesMessage />
             <SettingsButton isUserAnonymous={false} />
           </div>
         ) : null}
