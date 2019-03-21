@@ -128,6 +128,10 @@ class SearchPage extends React.Component {
       modifyURLParams({
         page: 1,
         q: newQuery,
+        src: 'self',
+      })
+      this.setState({
+        searchSource: 'self',
       })
     }
   }

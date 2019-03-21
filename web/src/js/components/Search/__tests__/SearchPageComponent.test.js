@@ -160,7 +160,7 @@ describe('Search page component', () => {
     expect(wrapper.find(Input).prop('value')).toBe('blahblah')
   })
 
-  it('clicking the search button updates the "q" URL parameter and sets the page to 1', () => {
+  it('clicking the search button updates the "q" URL parameter, sets the page to 1, and sets the "src" to "self"', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
@@ -178,10 +178,11 @@ describe('Search page component', () => {
     expect(modifyURLParams).toHaveBeenCalledWith({
       q: 'free ice cream',
       page: 1,
+      src: 'self',
     })
   })
 
-  it('hitting enter in the search input updates the "q" URL parameter  and sets the page to 1', () => {
+  it('hitting enter in the search input updates the "q" URL parameter, sets the page to 1, and sets the "src" to "self"', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
@@ -197,6 +198,7 @@ describe('Search page component', () => {
     expect(modifyURLParams).toHaveBeenCalledWith({
       q: 'register to vote',
       page: 1,
+      src: 'self',
     })
   })
 
@@ -271,6 +273,23 @@ describe('Search page component', () => {
     mockProps.location.search = '?q=foo'
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
     expect(wrapper.find(SearchResults).prop('searchSource')).toBeNull()
+  })
+
+  it('passes "self" as the "searchSource" the SearchResults component when entering a new search on the page', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location.search = ''
+    const wrapper = mount(<SearchPageComponent {...mockProps} />)
+    expect(wrapper.find(SearchResults).prop('searchSource')).toBeNull()
+    const searchInput = wrapper
+      .find(Input)
+      .first()
+      .find('input')
+    searchInput
+      .simulate('change', { target: { value: 'register to vote' } })
+      .simulate('keypress', { key: 'Enter' })
+    expect(wrapper.find(SearchResults).prop('searchSource')).toEqual('self')
   })
 
   // This is important for prerendering scripts for search results.
