@@ -360,4 +360,73 @@ describe('logSearch', () => {
       },
     })
   })
+
+  test('it logs the source of the search when provided', async () => {
+    expect.assertions(1)
+
+    const userId = userContext.id
+    const mockUser = getMockUserInstance({
+      lastSearchTimestamp: '2017-06-22T01:13:25.000Z',
+      maxSearchesDay: {
+        maxDay: {
+          date: moment.utc().toISOString(),
+          numSearches: 400,
+        },
+        recentDay: {
+          date: moment.utc().toISOString(),
+          numSearches: 148, // valid: below daily maximum
+        },
+      },
+    })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
+    const userSearchLogCreate = jest.spyOn(UserSearchLogModel, 'create')
+    await logSearch(userContext, userId, {
+      source: 'chrome',
+    })
+
+    expect(userSearchLogCreate).toHaveBeenLastCalledWith(
+      userContext,
+      addTimestampFieldsToItem({
+        userId,
+        timestamp: moment.utc().toISOString(),
+        source: 'chrome',
+      })
+    )
+  })
+
+  test('it does not logs the source of the search when it is not one of the valid sources', async () => {
+    expect.assertions(1)
+
+    const userId = userContext.id
+    const mockUser = getMockUserInstance({
+      lastSearchTimestamp: '2017-06-22T01:13:25.000Z',
+      maxSearchesDay: {
+        maxDay: {
+          date: moment.utc().toISOString(),
+          numSearches: 400,
+        },
+        recentDay: {
+          date: moment.utc().toISOString(),
+          numSearches: 148, // valid: below daily maximum
+        },
+      },
+    })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
+    const userSearchLogCreate = jest.spyOn(UserSearchLogModel, 'create')
+    await logSearch(userContext, userId, {
+      source: 'blahblahblah',
+    })
+
+    expect(userSearchLogCreate).toHaveBeenLastCalledWith(
+      userContext,
+      addTimestampFieldsToItem({
+        userId,
+        timestamp: moment.utc().toISOString(),
+      })
+    )
+  })
 })
