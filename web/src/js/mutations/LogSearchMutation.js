@@ -18,11 +18,11 @@ const mutation = graphql`
   }
 `
 
-export default ({ userId }) => {
+export default input => {
   return commitMutation(environment, {
     mutation,
     variables: {
-      input: { userId },
+      input: input,
     },
   })
 }
