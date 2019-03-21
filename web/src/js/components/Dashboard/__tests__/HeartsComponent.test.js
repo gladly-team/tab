@@ -14,14 +14,17 @@ import { mountWithHOC } from 'js/utils/test-utils'
 jest.mock('js/components/Dashboard/HeartsDropdownContainer')
 jest.mock('js/components/Dashboard/MaxHeartsDropdownMessageComponent')
 jest.mock('js/constants', () => ({
+  MAX_DAILY_HEARTS_FROM_SEARCHES: 1000,
   MAX_DAILY_HEARTS_FROM_TABS: 1000,
 }))
 
 const getMockProps = () => ({
   user: {
+    searchesToday: 0,
     tabsToday: 31,
     vcCurrent: 482,
   },
+  showMaxHeartsFromSearchesMessage: false,
   showMaxHeartsFromTabsMessage: false,
 })
 
@@ -107,7 +110,37 @@ describe('HeartsComponent', () => {
     expect(wrapper.find(CheckmarkIcon).exists()).toBe(false)
   })
 
-  it('does not show the "max hearts from tabs" dropdown on hover if the user has not maxed out daily hearts from tabs', () => {
+  it('does not show a checkmark in the heart if the user has not maxed out daily hearts from searches', () => {
+    const HeartsComponent = require('js/components/Dashboard/HeartsComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.showMaxHeartsFromSearchesMessage = true
+    mockProps.user.searchesToday = 999
+    const wrapper = shallow(<HeartsComponent {...mockProps} />).dive()
+    expect(wrapper.find(CheckmarkIcon).exists()).toBe(false)
+  })
+
+  it('shows a checkmark in the heart if the user has maxed out daily hearts from searches', () => {
+    const HeartsComponent = require('js/components/Dashboard/HeartsComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.showMaxHeartsFromSearchesMessage = true
+    mockProps.user.searchesToday = 1000
+    const wrapper = shallow(<HeartsComponent {...mockProps} />).dive()
+    expect(wrapper.find(CheckmarkIcon).exists()).toBe(true)
+  })
+
+  it('does not show a checkmark in the heart if "showMaxHeartsFromTabsMessage" is false, even when the user has maxed out daily hearts from searches', () => {
+    const HeartsComponent = require('js/components/Dashboard/HeartsComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.showMaxHeartsFromSearchesMessage = false
+    mockProps.user.searchesToday = 1000
+    const wrapper = shallow(<HeartsComponent {...mockProps} />).dive()
+    expect(wrapper.find(CheckmarkIcon).exists()).toBe(false)
+  })
+
+  it('does not show the "max hearts" dropdown on hover if the user has not maxed out daily hearts from tabs', () => {
     const HeartsComponent = require('js/components/Dashboard/HeartsComponent')
       .default
     const mockProps = getMockProps()
@@ -120,7 +153,7 @@ describe('HeartsComponent', () => {
     )
   })
 
-  it('shows the "max hearts from tabs" dropdown on hover if the user has maxed out daily hearts from tabs', () => {
+  it('shows the "max hearts" dropdown on hover if the user has maxed out daily hearts from tabs', () => {
     const HeartsComponent = require('js/components/Dashboard/HeartsComponent')
       .default
     const mockProps = getMockProps()
@@ -133,7 +166,7 @@ describe('HeartsComponent', () => {
     )
   })
 
-  it('does not show the "max hearts from tabs" dropdown on hover if "showMaxHeartsFromTabsMessage" is false, even when the user has maxed out daily hearts from tabs', () => {
+  it('does not show the "max hearts" dropdown on hover if "showMaxHeartsFromTabsMessage" is false, even when the user has maxed out daily hearts from tabs', () => {
     const HeartsComponent = require('js/components/Dashboard/HeartsComponent')
       .default
     const mockProps = getMockProps()
@@ -146,7 +179,46 @@ describe('HeartsComponent', () => {
     )
   })
 
-  it('does not show the "max hearts from tabs" dropdown if the hearts dropdown is open', () => {
+  it('does not show the "max hearts" dropdown on hover if the user has not maxed out daily hearts from searches', () => {
+    const HeartsComponent = require('js/components/Dashboard/HeartsComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.showMaxHeartsFromSearchesMessage = true
+    mockProps.user.searchesToday = 999
+    const wrapper = shallow(<HeartsComponent {...mockProps} />).dive()
+    wrapper.find('[data-tour-id="hearts"]').simulate('mouseenter')
+    expect(wrapper.find(MaxHeartsDropdownMessageComponent).prop('open')).toBe(
+      false
+    )
+  })
+
+  it('shows the "max hearts" dropdown on hover if the user has maxed out daily hearts from searches', () => {
+    const HeartsComponent = require('js/components/Dashboard/HeartsComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.showMaxHeartsFromSearchesMessage = true
+    mockProps.user.searchesToday = 1000
+    const wrapper = shallow(<HeartsComponent {...mockProps} />).dive()
+    wrapper.find('[data-tour-id="hearts"]').simulate('mouseenter')
+    expect(wrapper.find(MaxHeartsDropdownMessageComponent).prop('open')).toBe(
+      true
+    )
+  })
+
+  it('does not show the "max hearts" dropdown on hover if "showMaxHeartsFromSearchesMessage" is false, even when the user has maxed out daily hearts from searches', () => {
+    const HeartsComponent = require('js/components/Dashboard/HeartsComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.showMaxHeartsFromSearchesMessage = false
+    mockProps.user.searchesToday = 1000
+    const wrapper = shallow(<HeartsComponent {...mockProps} />).dive()
+    wrapper.find('[data-tour-id="hearts"]').simulate('mouseenter')
+    expect(wrapper.find(MaxHeartsDropdownMessageComponent).prop('open')).toBe(
+      false
+    )
+  })
+
+  it('does not show the "max hearts" dropdown if the hearts dropdown is open', () => {
     const HeartsComponent = require('js/components/Dashboard/HeartsComponent')
       .default
     const mockProps = getMockProps()
@@ -162,6 +234,53 @@ describe('HeartsComponent', () => {
       false
     )
     expect(wrapper.find(HeartsDropdown).prop('open')).toBe(true)
+  })
+
+  it('shows the expected "max hearts" message if the user has maxed out daily hearts from tabs', () => {
+    const HeartsComponent = require('js/components/Dashboard/HeartsComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.showMaxHeartsFromTabsMessage = true
+    mockProps.user.tabsToday = 1000
+    const wrapper = shallow(<HeartsComponent {...mockProps} />).dive()
+    wrapper.find('[data-tour-id="hearts"]').simulate('mouseenter')
+    expect(
+      wrapper.find(MaxHeartsDropdownMessageComponent).prop('message')
+    ).toBe(
+      `You've earned the maximum Hearts from opening tabs today! You'll be able to earn more Hearts in a while.`
+    )
+  })
+
+  it('shows the expected "max hearts" message if the user has maxed out daily hearts from searches', () => {
+    const HeartsComponent = require('js/components/Dashboard/HeartsComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.showMaxHeartsFromSearchesMessage = true
+    mockProps.user.searchesToday = 1000
+    const wrapper = shallow(<HeartsComponent {...mockProps} />).dive()
+    wrapper.find('[data-tour-id="hearts"]').simulate('mouseenter')
+    expect(
+      wrapper.find(MaxHeartsDropdownMessageComponent).prop('message')
+    ).toBe(
+      `You've earned the maximum Hearts from searching today! You'll be able to earn more Hearts in a while.`
+    )
+  })
+
+  it('shows the expected "max hearts" message if the user has maxed out daily hearts from tabs AND searches', () => {
+    const HeartsComponent = require('js/components/Dashboard/HeartsComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.showMaxHeartsFromTabsMessage = true
+    mockProps.user.tabsToday = 1000
+    mockProps.showMaxHeartsFromSearchesMessage = true
+    mockProps.user.searchesToday = 1000
+    const wrapper = shallow(<HeartsComponent {...mockProps} />).dive()
+    wrapper.find('[data-tour-id="hearts"]').simulate('mouseenter')
+    expect(
+      wrapper.find(MaxHeartsDropdownMessageComponent).prop('message')
+    ).toBe(
+      `You've earned the maximum Hearts for now. You'll be able to earn more Hearts in a while.`
+    )
   })
 
   it('uses the MUI h2 Typography variant for the main text (this is important because our nested theme styles the h2 variant)', () => {
