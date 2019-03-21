@@ -7,7 +7,7 @@ import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 const styles = {}
 
 const MaxHeartsDropdownMessageComponent = props => {
-  const { anchorElement, classes } = props
+  const { anchorElement } = props
   return (
     <DashboardPopover
       open={props.open}
@@ -23,7 +23,7 @@ const MaxHeartsDropdownMessageComponent = props => {
       }}
     >
       <div style={{ padding: 10, width: 210, textAlign: 'center' }}>
-        <Typography className={classes.typography} variant={'body2'}>
+        <Typography variant={'body2'}>
           You've earned the maximum Hearts from opening tabs today! You'll be
           able to earn more Hearts in a few hours.
         </Typography>
