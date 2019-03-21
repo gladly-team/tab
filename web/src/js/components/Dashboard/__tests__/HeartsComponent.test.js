@@ -22,6 +22,7 @@ const getMockProps = () => ({
     tabsToday: 31,
     vcCurrent: 482,
   },
+  showMaxHeartsFromTabsMessage: false,
 })
 
 afterEach(() => {
@@ -80,6 +81,7 @@ describe('HeartsComponent', () => {
     const HeartsComponent = require('js/components/Dashboard/HeartsComponent')
       .default
     const mockProps = getMockProps()
+    mockProps.showMaxHeartsFromTabsMessage = true
     mockProps.user.tabsToday = 999
     const wrapper = shallow(<HeartsComponent {...mockProps} />).dive()
     expect(wrapper.find(CheckmarkIcon).exists()).toBe(false)
@@ -89,15 +91,27 @@ describe('HeartsComponent', () => {
     const HeartsComponent = require('js/components/Dashboard/HeartsComponent')
       .default
     const mockProps = getMockProps()
+    mockProps.showMaxHeartsFromTabsMessage = true
     mockProps.user.tabsToday = 1000
     const wrapper = shallow(<HeartsComponent {...mockProps} />).dive()
     expect(wrapper.find(CheckmarkIcon).exists()).toBe(true)
+  })
+
+  it('does not show a checkmark in the heart if "showMaxHeartsFromTabsMessage" is false, even when the user has maxed out daily hearts from tabs', () => {
+    const HeartsComponent = require('js/components/Dashboard/HeartsComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.showMaxHeartsFromTabsMessage = false
+    mockProps.user.tabsToday = 1000
+    const wrapper = shallow(<HeartsComponent {...mockProps} />).dive()
+    expect(wrapper.find(CheckmarkIcon).exists()).toBe(false)
   })
 
   it('does not show the "max hearts from tabs" dropdown on hover if the user has not maxed out daily hearts from tabs', () => {
     const HeartsComponent = require('js/components/Dashboard/HeartsComponent')
       .default
     const mockProps = getMockProps()
+    mockProps.showMaxHeartsFromTabsMessage = true
     mockProps.user.tabsToday = 999
     const wrapper = shallow(<HeartsComponent {...mockProps} />).dive()
     wrapper.find('[data-tour-id="hearts"]').simulate('mouseenter')
@@ -110,6 +124,7 @@ describe('HeartsComponent', () => {
     const HeartsComponent = require('js/components/Dashboard/HeartsComponent')
       .default
     const mockProps = getMockProps()
+    mockProps.showMaxHeartsFromTabsMessage = true
     mockProps.user.tabsToday = 1000
     const wrapper = shallow(<HeartsComponent {...mockProps} />).dive()
     wrapper.find('[data-tour-id="hearts"]').simulate('mouseenter')
@@ -118,10 +133,24 @@ describe('HeartsComponent', () => {
     )
   })
 
+  it('does not show the "max hearts from tabs" dropdown on hover if "showMaxHeartsFromTabsMessage" is false, even when the user has maxed out daily hearts from tabs', () => {
+    const HeartsComponent = require('js/components/Dashboard/HeartsComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.showMaxHeartsFromTabsMessage = false
+    mockProps.user.tabsToday = 1000
+    const wrapper = shallow(<HeartsComponent {...mockProps} />).dive()
+    wrapper.find('[data-tour-id="hearts"]').simulate('mouseenter')
+    expect(wrapper.find(MaxHeartsDropdownMessageComponent).prop('open')).toBe(
+      false
+    )
+  })
+
   it('does not show the "max hearts from tabs" dropdown if the hearts dropdown is open', () => {
     const HeartsComponent = require('js/components/Dashboard/HeartsComponent')
       .default
     const mockProps = getMockProps()
+    mockProps.showMaxHeartsFromTabsMessage = true
     mockProps.user.tabsToday = 1000
     const wrapper = shallow(<HeartsComponent {...mockProps} />).dive()
     wrapper.find('[data-tour-id="hearts"]').simulate('mouseenter')
@@ -153,6 +182,7 @@ describe('HeartsComponent', () => {
     const HeartsComponent = require('js/components/Dashboard/HeartsComponent')
       .default
     const mockProps = getMockProps()
+    mockProps.showMaxHeartsFromTabsMessage = true
     const wrapper = mount(
       <MuiThemeProvider
         theme={{
@@ -313,6 +343,7 @@ describe('HeartsComponent', () => {
     const HeartsComponent = require('js/components/Dashboard/HeartsComponent')
       .default
     const mockProps = getMockProps()
+    mockProps.showMaxHeartsFromTabsMessage = true
     mockProps.user.tabsToday = 1001
     const wrapper = mount(
       <MuiThemeProvider
@@ -348,6 +379,7 @@ describe('HeartsComponent', () => {
     const HeartsComponent = require('js/components/Dashboard/HeartsComponent')
       .default
     const mockProps = getMockProps()
+    mockProps.showMaxHeartsFromTabsMessage = true
     mockProps.user.tabsToday = 1001
     const wrapper = mount(
       <MuiThemeProvider
@@ -385,6 +417,7 @@ describe('HeartsComponent', () => {
     const HeartsComponent = require('js/components/Dashboard/HeartsComponent')
       .default
     const mockProps = getMockProps()
+    mockProps.showMaxHeartsFromTabsMessage = true
     mockProps.user.tabsToday = 1001
     const wrapper = mount(
       <MuiThemeProvider

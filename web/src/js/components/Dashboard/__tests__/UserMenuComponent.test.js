@@ -47,6 +47,15 @@ describe('User menu component', () => {
     expect(wrapper.find(Hearts).exists()).toBe(true)
   })
 
+  it('sets the "showMaxHeartsFromTabsMessage" to true on the Hearts component', () => {
+    const mockProps = getMockProps()
+    mockProps.isUserAnonymous = false
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
+      .default
+    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
+    expect(wrapper.find(Hearts).prop('showMaxHeartsFromTabsMessage')).toBe(true)
+  })
+
   it('passes the isUserAnonymous prop to the SettingsButton component', () => {
     const mockProps = getMockProps()
     mockProps.isUserAnonymous = false

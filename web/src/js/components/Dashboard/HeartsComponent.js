@@ -49,7 +49,13 @@ class HeartsComponent extends React.Component {
   }
 
   render() {
-    const { app, classes, theme, user } = this.props
+    const {
+      app,
+      classes,
+      showMaxHeartsFromTabsMessage,
+      theme,
+      user,
+    } = this.props
     const { isHovering, isPopoverOpen } = this.state
     const anchorElement = this.anchorElement
 
@@ -117,7 +123,7 @@ class HeartsComponent extends React.Component {
                 }}
                 className={classes.heartIcon}
               />
-              {reachedMaxDailyHeartsFromTabs ? (
+              {showMaxHeartsFromTabsMessage && reachedMaxDailyHeartsFromTabs ? (
                 <CheckmarkIcon
                   style={{
                     color:
@@ -150,7 +156,12 @@ class HeartsComponent extends React.Component {
           }}
         />
         <MaxHeartsDropdownMessageComponent
-          open={reachedMaxDailyHeartsFromTabs && isHovering && !isPopoverOpen}
+          open={
+            showMaxHeartsFromTabsMessage &&
+            reachedMaxDailyHeartsFromTabs &&
+            isHovering &&
+            !isPopoverOpen
+          }
           anchorElement={anchorElement}
         />
       </div>
@@ -166,11 +177,13 @@ HeartsComponent.propTypes = {
     tabsToday: PropTypes.number.isRequired,
     vcCurrent: PropTypes.number.isRequired,
   }),
+  showMaxHeartsFromTabsMessage: PropTypes.bool,
   theme: PropTypes.object.isRequired,
 }
 
 HeartsComponent.defaultProps = {
   classes: {},
+  showMaxHeartsFromTabsMessage: false,
 }
 
 export default withStyles(styles, { withTheme: true })(HeartsComponent)
