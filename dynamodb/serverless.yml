@@ -119,6 +119,15 @@ custom:
           minimum: 1
           maximum: 1000
           usage: 0.60
+      userSearchLogTable:
+        read:
+          minimum: 1
+          maximum: 1000
+          usage: 0.75
+        write:
+          minimum: 1
+          maximum: 1000
+          usage: 0.60
       referralDataLogTable:
         read:
           minimum: 1
@@ -228,6 +237,15 @@ custom:
           usage: 0.75
         write:
           minimum: 30
+          maximum: 9001
+          usage: 0.60
+      userSearchLogTable:
+        read:
+          minimum: 1
+          maximum: 9001
+          usage: 0.75
+        write:
+          minimum: 1
           maximum: 9001
           usage: 0.60
       referralDataLogTable:
@@ -345,6 +363,15 @@ custom:
         minimum: ${self:custom.customCapacities.${self:provider.stage}.userTabsLogTable.write.minimum}
         maximum: ${self:custom.customCapacities.${self:provider.stage}.userTabsLogTable.write.maximum}
         usage: ${self:custom.customCapacities.${self:provider.stage}.userTabsLogTable.write.usage}
+    - table: userSearchLogTable
+      read:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.userSearchLogTable.read.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.userSearchLogTable.read.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.userSearchLogTable.read.usage}
+      write:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.userSearchLogTable.write.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.userSearchLogTable.write.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.userSearchLogTable.write.usage}
     - table: referralDataLogTable
       index:
         - ReferralsByReferrer
@@ -546,6 +573,24 @@ resources:
       Type: AWS::DynamoDB::Table
       Properties:  
         TableName: UserTabsLog-${self:provider.stage}
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+          - AttributeName: timestamp
+            KeyType: RANGE
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: timestamp
+            AttributeType: S
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+    userSearchLogTable:  
+      Type: AWS::DynamoDB::Table
+      Properties:  
+        TableName: UserSearchLog-${self:provider.stage}
         KeySchema:
           - AttributeName: userId
             KeyType: HASH

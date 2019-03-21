@@ -227,6 +227,16 @@ type LogEmailVerifiedMutationPayload {
   clientMutationId: String
 }
 
+input LogSearchInput {
+  userId: String!
+  clientMutationId: String
+}
+
+type LogSearchPayload {
+  user: User
+  clientMutationId: String
+}
+
 input LogTabInput {
   userId: String!
   tabId: String
@@ -275,6 +285,15 @@ type LogUserRevenuePayload {
   clientMutationId: String
 }
 
+"""Info about the user's day of most searches"""
+type MaxSearchesDay {
+  """The day (datetime)the most searches occurred"""
+  date: String
+
+  """The number of searches made on that day"""
+  numSearches: Int
+}
+
 """Info about the user's day of most opened tabs"""
 type MaxTabsDay {
   """The day the most tabs were opened"""
@@ -296,6 +315,7 @@ type MergeIntoExistingUserPayload {
 
 type Mutation {
   logTab(input: LogTabInput!): LogTabPayload
+  logSearch(input: LogSearchInput!): LogSearchPayload
   logUserRevenue(input: LogUserRevenueInput!): LogUserRevenuePayload
   logUserDataConsent(input: LogUserDataConsentInput!): LogUserDataConsentPayload
   donateVc(input: DonateVcInput!): DonateVcPayload
@@ -546,6 +566,15 @@ type User implements Node {
   Whether this user was created by an existing user and then merged into the existing user
   """
   mergedIntoExistingUser: Boolean
+
+  """User's all time search count"""
+  searches: Int
+
+  """User's search count for today"""
+  searchesToday: Int
+
+  """Info about the user's day of most searches"""
+  maxSearchesDay: MaxSearchesDay
 }
 
 """Info about a user recruited by a referring user"""

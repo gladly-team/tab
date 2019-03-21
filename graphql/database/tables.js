@@ -17,6 +17,7 @@ const tables = {
   widgets: 'Widgets',
   userWidgets: 'UserWidgets',
   userTabsLog: 'UserTabsLog',
+  userSearchLog: 'UserSearchLog',
   referralDataLog: 'ReferralDataLog',
 }
 

@@ -515,6 +515,7 @@ describe('createUser when user does not exist', () => {
     delete expectedParamsUser.backgroundImage.imageURL
     delete expectedParamsUser.backgroundImage.thumbnailURL
     delete expectedParamsUser.tabsToday
+    delete expectedParamsUser.searchesToday
 
     const expectedParams = {
       ConditionExpression: '(#id <> :id)',

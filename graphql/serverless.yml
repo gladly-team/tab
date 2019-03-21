@@ -94,6 +94,11 @@ provider:
       Action:
         - "dynamodb:PutItem"
       Resource: "${self:custom.dbTableArnBase}UserTabsLog-${self:provider.stage}"
+    # UserSearchLog table
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:PutItem"
+      Resource: "${self:custom.dbTableArnBase}UserSearchLog-${self:provider.stage}"
     # UserRevenueLog table
     - Effect: "Allow"
       Action:

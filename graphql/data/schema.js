@@ -47,6 +47,7 @@ import createUser from '../database/users/createUser'
 import setUsername from '../database/users/setUsername'
 import logEmailVerified from '../database/users/logEmailVerified'
 import logTab from '../database/users/logTab'
+import logSearch from '../database/users/logSearch'
 import logRevenue from '../database/userRevenue/logRevenue'
 import logUserDataConsent from '../database/userDataConsent/logUserDataConsent'
 import mergeIntoExistingUser from '../database/users/mergeIntoExistingUser'
@@ -191,6 +192,21 @@ const maxTabsDayType = new GraphQLObjectType({
     numTabs: {
       type: GraphQLInt,
       description: 'The number of tabs opened on that day',
+    },
+  }),
+})
+
+const maxSearchesDayType = new GraphQLObjectType({
+  name: 'MaxSearchesDay',
+  description: "Info about the user's day of most searches",
+  fields: () => ({
+    date: {
+      type: GraphQLString,
+      description: 'The day (datetime)the most searches occurred',
+    },
+    numSearches: {
+      type: GraphQLInt,
+      description: 'The number of searches made on that day',
     },
   }),
 })
@@ -388,6 +404,19 @@ const userType = new GraphQLObjectType({
       type: GraphQLBoolean,
       description:
         'Whether this user was created by an existing user and then merged into the existing user',
+    },
+    searches: {
+      type: GraphQLInt,
+      description: "User's all time search count",
+    },
+    searchesToday: {
+      type: GraphQLInt,
+      description: "User's search count for today",
+    },
+    maxSearchesDay: {
+      type: maxSearchesDayType,
+      description: "Info about the user's day of most searches",
+      resolve: user => user.maxSearchesDay.maxDay,
     },
   }),
   interfaces: [nodeInterface],
@@ -647,7 +676,7 @@ const { connectionType: userRecruitsConnection } = connectionDefinitions({
 })
 
 /**
- * Updated the user vc.
+ * Log a tab, update VC, and change related stats.
  */
 const logTabMutation = mutationWithClientMutationId({
   name: 'LogTab',
@@ -665,6 +694,24 @@ const logTabMutation = mutationWithClientMutationId({
     const { id } = fromGlobalId(userId)
     return logTab(context.user, id, tabId)
   },
+})
+
+/**
+ * Log a search, update VC, and change related stats.
+ */
+const logSearchMutation = mutationWithClientMutationId({
+  name: 'LogSearch',
+  inputFields: {
+    // Note that this is the raw user ID (not the Relay global).
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+  },
+  outputFields: {
+    user: {
+      type: userType,
+      resolve: user => user,
+    },
+  },
+  mutateAndGetPayload: ({ userId }, context) => logSearch(context.user, userId),
 })
 
 /**
@@ -1204,6 +1251,7 @@ const mutationType = new GraphQLObjectType({
   name: 'Mutation',
   fields: () => ({
     logTab: logTabMutation,
+    logSearch: logSearchMutation,
     logUserRevenue: logUserRevenueMutation,
     logUserDataConsent: logUserDataConsentMutation,
     donateVc: donateVcMutation,

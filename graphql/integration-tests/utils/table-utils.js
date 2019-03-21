@@ -47,6 +47,10 @@ export const tableKeys = {
     hash: 'userId',
     range: 'timestamp',
   },
+  userSearchLog: {
+    hash: 'userId',
+    range: 'timestamp',
+  },
   referralDataLog: {
     hash: 'userId',
     range: null,
@@ -63,5 +67,6 @@ export const tableFixtureFileNames = {
   widgets: 'Widgets.json',
   userWidgets: 'UserWidgets.json',
   userTabsLog: '',
+  userSearchLog: '',
   referralDataLog: 'ReferralDataLog.json',
 }

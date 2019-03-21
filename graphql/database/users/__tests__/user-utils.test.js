@@ -49,4 +49,38 @@ describe('user utils', () => {
     const { getTodayTabCount } = require('../user-utils')
     expect(getTodayTabCount(mockUser)).toBe(0)
   })
+
+  test('getTodaySearchCount calculates the correct amount when maxSearchesDay has a recentDay of today', () => {
+    const mockUser = getMockUserInstance({
+      maxSearchesDay: {
+        maxDay: {
+          date: moment.utc().toISOString(),
+          numSearches: 400,
+        },
+        recentDay: {
+          date: moment.utc().toISOString(),
+          numSearches: 148,
+        },
+      },
+    })
+    const { getTodaySearchCount } = require('../user-utils')
+    expect(getTodaySearchCount(mockUser)).toBe(148)
+  })
+
+  test('getTodaySearchCount calculates the correct amount when maxSearchesDay has a recentDay of prior to today', () => {
+    const mockUser = getMockUserInstance({
+      maxSearchesDay: {
+        maxDay: {
+          date: moment.utc().toISOString(),
+          numSearches: 400,
+        },
+        recentDay: {
+          date: '2017-06-18T01:13:28.000Z', // not today
+          numSearches: 14,
+        },
+      },
+    })
+    const { getTodaySearchCount } = require('../user-utils')
+    expect(getTodaySearchCount(mockUser)).toBe(0)
+  })
 })

@@ -6,7 +6,7 @@ import tableNames from '../tables'
 import { USER, USER_BACKGROUND_OPTION_DAILY } from '../constants'
 import { permissionAuthorizers } from '../../utils/authorization-helpers'
 import config from '../../config'
-import { getTodayTabCount } from './user-utils'
+import { getTodayTabCount, getTodaySearchCount } from './user-utils'
 import {
   DATABASE_ITEM_DOES_NOT_EXIST,
   UserDoesNotExistException,
@@ -205,6 +205,45 @@ class User extends BaseModel {
       extensionInstallTimeApprox: types.string().isoDate()
         .description(`The approximate datetime the user installed the extension.
           This value is assigned on the client so is not trustworthy.`),
+      // Search for a Cause
+      searches: types
+        .number()
+        .integer()
+        .default(self.fieldDefaults.searches)
+        .description(
+          `The total number of searches the user has made since joining.`
+        ),
+      searchesToday: types
+        .number()
+        .integer()
+        .forbidden() // only set in deserializer
+        .description(`How many searches the user has made today (UTC day).`),
+      maxSearchesDay: types
+        .object({
+          // The count of searches for the day on which the user
+          // searched the most number of times.
+          maxDay: types.object({
+            date: types.string().isoDate(),
+            numSearches: types.number().integer(),
+          }),
+          // The count of searches for the current (or most recent) day
+          // the user has searched.
+          recentDay: types.object({
+            date: types.string().isoDate(),
+            numSearches: types.number().integer(),
+          }),
+        })
+        .default(
+          self.fieldDefaults.maxSearchesDay,
+          `Default is zero searches for today.`
+        )
+        .description(
+          `A tracker of the day with the largest number of searches.`
+        ),
+      lastSearchTimestamp: types
+        .string()
+        .isoDate()
+        .description(`The datetime of the last time the user searched.`),
       // Group assignments for experiments / split-tests
       testGroupAnonSignIn: types
         .number()
@@ -273,6 +312,17 @@ class User extends BaseModel {
         timestamp: moment.utc().toISOString(),
       }),
       backgroundOption: USER_BACKGROUND_OPTION_DAILY,
+      searches: 0,
+      maxSearchesDay: () => ({
+        maxDay: {
+          date: moment.utc().toISOString(),
+          numSearches: 0,
+        },
+        recentDay: {
+          date: moment.utc().toISOString(),
+          numSearches: 0,
+        },
+      }),
     }
   }
 
@@ -281,6 +331,9 @@ class User extends BaseModel {
       tabsToday: (tabsToday, userObj) =>
         // Calculate tabsToday based on the maxTabsDay value
         getTodayTabCount(userObj),
+      searchesToday: (tabsToday, userObj) =>
+        // Calculate searchesToday based on the maxSearchesDay value
+        getTodaySearchCount(userObj),
       backgroundImage: backgroundImage =>
         Object.assign({}, backgroundImage, {
           imageURL: `${mediaRoot}/img/backgrounds/${backgroundImage.image}`,
