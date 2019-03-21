@@ -31,6 +31,7 @@ const getMockProps = () => ({
   page: 1,
   onPageChange: jest.fn(),
   query: 'tacos',
+  searchSource: null,
 })
 
 beforeAll(() => {
@@ -955,5 +956,29 @@ describe('SearchResults component', () => {
     shallow(<SearchResults {...mockProps} />).dive()
     await flushAllPromises()
     expect(LogSearchMutation).not.toHaveBeenCalled()
+  })
+
+  it('logs the search source when the prop is provided', async () => {
+    expect.assertions(2)
+
+    getCurrentUser.mockResolvedValue({
+      id: 'abc123xyz789',
+      email: 'example@example.com',
+      username: 'example',
+      isAnonymous: false,
+      emailVerified: true,
+    })
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'foo'
+    mockProps.searchSource = 'somesource'
+    window.searchforacause.search.fetchedOnPageLoad = false
+    shallow(<SearchResults {...mockProps} />).dive()
+    await flushAllPromises()
+    expect(LogSearchMutation).toHaveBeenCalledTimes(1)
+    expect(LogSearchMutation).toHaveBeenCalledWith({
+      userId: 'abc123xyz789',
+      source: 'somesource',
+    })
   })
 })

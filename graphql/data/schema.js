@@ -704,6 +704,7 @@ const logSearchMutation = mutationWithClientMutationId({
   inputFields: {
     // Note that this is the raw user ID (not the Relay global).
     userId: { type: new GraphQLNonNull(GraphQLString) },
+    source: { type: GraphQLString },
   },
   outputFields: {
     user: {
@@ -711,7 +712,8 @@ const logSearchMutation = mutationWithClientMutationId({
       resolve: user => user,
     },
   },
-  mutateAndGetPayload: ({ userId }, context) => logSearch(context.user, userId),
+  mutateAndGetPayload: ({ userId, ...additionalData }, context) =>
+    logSearch(context.user, userId, additionalData),
 })
 
 /**
