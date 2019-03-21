@@ -19,6 +19,7 @@ const MaxHeartsDropdownMessageComponent = props => {
       // https://github.com/mui-org/material-ui/issues/9893#issuecomment-406891098
       style={{
         pointerEvents: 'none',
+        marginTop: 6,
       }}
     >
       <div style={{ padding: 10, width: 210, textAlign: 'center' }}>
