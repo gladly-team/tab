@@ -12,9 +12,7 @@ const MAX_DAILY_HEARTS_FROM_SEARCHES = 150
  * @param {string} userId - The user id.
  * @return {Promise<User>} A promise that resolves into a User instance.
  */
-const logSearch = async (userContext, userId) => {
-  // Check if it's a valid tab before incrementing user VC or
-  // the user's valid tab count.
+const logSearch = async (userContext, userId, searchData = {}) => {
   let user
   try {
     user = await UserModel.get(userContext, userId)
@@ -62,9 +60,15 @@ const logSearch = async (userContext, userId) => {
     })
 
     // Log the search for analytics.
+    const validSearchSources = ['self', 'chrome', 'ff', 'tab']
+    const source =
+      searchData.source && validSearchSources.indexOf(searchData.source) > -1
+        ? searchData.source
+        : null
     await UserSearchLogModel.create(userContext, {
       userId,
       timestamp: moment.utc().toISOString(),
+      ...(source && { source }),
     })
   } catch (e) {
     throw e

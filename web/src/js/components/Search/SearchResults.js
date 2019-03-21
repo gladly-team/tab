@@ -181,7 +181,7 @@ class SearchResults extends React.Component {
       })
       return
     }
-    const { page, query } = this.props
+    const { page, query, searchSource } = this.props
     if (!query) {
       return
     }
@@ -193,6 +193,7 @@ class SearchResults extends React.Component {
       if (user && user.id) {
         LogSearchMutation({
           userId: user.id,
+          ...(searchSource && { source: searchSource }),
         })
       }
     })
@@ -362,6 +363,7 @@ SearchResults.propTypes = {
   page: PropTypes.number,
   onPageChange: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
+  searchSource: PropTypes.string,
   style: PropTypes.object,
   theme: PropTypes.object.isRequired,
 }
