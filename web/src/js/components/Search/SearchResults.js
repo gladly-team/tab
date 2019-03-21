@@ -186,6 +186,17 @@ class SearchResults extends React.Component {
       return
     }
 
+    // Log the search event.
+    // We're not passing the user as a prop to this component because
+    // we don't want to delay the component mount.
+    getCurrentUser().then(user => {
+      if (user && user.id) {
+        LogSearchMutation({
+          userId: user.id,
+        })
+      }
+    })
+
     // If this is the first query, we may have already fetched
     // results via inline script. If so, don't re-fetch them.
     const alreadyFetchedQuery = window.searchforacause.search.fetchedOnPageLoad
@@ -208,17 +219,6 @@ class SearchResults extends React.Component {
       })
       logger.error(e)
     }
-
-    // Log the search event.
-    // We're not passing the user as a prop to this component because
-    // we don't want to delay the component mount.
-    getCurrentUser().then(user => {
-      if (user && user.id) {
-        LogSearchMutation({
-          userId: user.id,
-        })
-      }
-    })
   }
 
   changePage(newPageIndex) {

@@ -52,11 +52,12 @@ beforeEach(() => {
 
 afterEach(() => {
   jest.clearAllMocks()
-
   modifyURLParams({
     q: null,
     page: null,
   })
+  delete window.searchforacause.search.fetchedOnPageLoad
+  getCurrentUser.mockResolvedValue(null)
 })
 
 describe('SearchResults component', () => {
@@ -867,7 +868,7 @@ describe('SearchResults component', () => {
   it('logs a search event on mount', async () => {
     expect.assertions(2)
 
-    getCurrentUser.mockResolvedValueOnce({
+    getCurrentUser.mockResolvedValue({
       id: 'abc123xyz789',
       email: 'example@example.com',
       username: 'example',
@@ -886,6 +887,31 @@ describe('SearchResults component', () => {
     })
   })
 
+  it('logs a search event on mount when the page fetched search results before the React app loaded', async () => {
+    expect.assertions(2)
+
+    getCurrentUser.mockResolvedValue({
+      id: 'abc123xyz789',
+      email: 'example@example.com',
+      username: 'example',
+      isAnonymous: false,
+      emailVerified: true,
+    })
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'foo'
+
+    // Fetched search results on page load
+    window.searchforacause.search.fetchedOnPageLoad = true
+
+    shallow(<SearchResults {...mockProps} />).dive()
+    await flushAllPromises()
+    expect(LogSearchMutation).toHaveBeenCalledTimes(1)
+    expect(LogSearchMutation).toHaveBeenCalledWith({
+      userId: 'abc123xyz789',
+    })
+  })
+
   it('logs a search event when the query changes', async () => {
     expect.assertions(2)
 
@@ -895,7 +921,7 @@ describe('SearchResults component', () => {
     window.searchforacause.search.fetchedOnPageLoad = false
     const wrapper = shallow(<SearchResults {...mockProps} />).dive()
     LogSearchMutation.mockClear()
-    getCurrentUser.mockResolvedValueOnce({
+    getCurrentUser.mockResolvedValue({
       id: 'abc123xyz789',
       email: 'example@example.com',
       username: 'example',
@@ -915,7 +941,7 @@ describe('SearchResults component', () => {
   it('does not log a search event when the user is not authenticated', async () => {
     expect.assertions(1)
 
-    getCurrentUser.mockResolvedValueOnce({
+    getCurrentUser.mockResolvedValue({
       id: null,
       email: null,
       username: null,
