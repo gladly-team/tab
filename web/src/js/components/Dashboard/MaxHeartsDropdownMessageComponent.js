@@ -4,11 +4,8 @@ import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 
-const styles = {
-  typography: {
-    color: 'white',
-  },
-}
+const styles = {}
+
 const MaxHeartsDropdownMessageComponent = props => {
   const { anchorElement, classes } = props
   return (

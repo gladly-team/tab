@@ -38,6 +38,21 @@ describe('MaxHeartsDropdownMessageComponent', () => {
     )
   })
 
+  it('uses the MUI body2 Typography variant for the main text (this is important because our nested theme styles the body2 variant)', () => {
+    const MaxHeartsDropdownMessageComponent = require('js/components/Dashboard/MaxHeartsDropdownMessageComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(
+      <MaxHeartsDropdownMessageComponent {...mockProps} />
+    ).dive()
+    expect(
+      wrapper
+        .find(Typography)
+        .first()
+        .prop('variant')
+    ).toEqual('body2')
+  })
+
   it('passes the "open" prop to DashboardPopover', () => {
     const MaxHeartsDropdownMessageComponent = require('js/components/Dashboard/MaxHeartsDropdownMessageComponent')
       .default
