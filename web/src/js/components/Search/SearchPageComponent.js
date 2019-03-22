@@ -340,7 +340,7 @@ class SearchPage extends React.Component {
               <Paper
                 style={{
                   padding: '10px 18px',
-                  backgroundColor: 'rgb(242, 222, 222, 0.8)',
+                  backgroundColor: 'rgb(242, 222, 222)',
                 }}
               >
                 <span
