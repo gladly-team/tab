@@ -15,6 +15,7 @@ import { parseUrlSearchString } from 'js/utils/utils'
 import SearchResults from 'js/components/Search/SearchResults'
 import { isReactSnapClient } from 'js/utils/search-utils'
 import SearchMenuQuery from 'js/components/Search/SearchMenuQuery'
+import detectAdblocker from 'js/utils/detectAdblocker'
 
 const Footer = lazy(() => import('js/components/General/Footer'))
 
@@ -56,6 +57,7 @@ class SearchPage extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      isAdBlockerEnabled: false,
       query: '',
       searchFeatureEnabled: isSearchPageEnabled(),
       searchSource: null,
@@ -85,6 +87,17 @@ class SearchPage extends React.Component {
       searchSource: parseUrlSearchString(location.search).src || null,
       searchText: query,
     })
+
+    // AdBlockerDetection
+    detectAdblocker()
+      .then(isEnabled => {
+        this.setState({
+          isAdBlockerEnabled: isEnabled,
+        })
+      })
+      .catch(e => {
+        console.error(e)
+      })
   }
 
   componentDidUpdate(prevProps) {
@@ -144,7 +157,13 @@ class SearchPage extends React.Component {
 
   render() {
     const { classes } = this.props
-    const { page, query, searchSource, searchText } = this.state
+    const {
+      isAdBlockerEnabled,
+      page,
+      query,
+      searchSource,
+      searchText,
+    } = this.state
     const queryEncoded = query ? encodeURI(query) : ''
     const searchResultsPaddingLeft = 170
     if (!this.state.searchFeatureEnabled) {
@@ -300,6 +319,15 @@ class SearchPage extends React.Component {
           </Tabs>
         </div>
         <div>
+          {isAdBlockerEnabled ? (
+            <div>
+              <h1>You're blocking ads :(</h1>
+            </div>
+          ) : (
+            <div>
+              <h4>You're not blocking ads :)</h4>
+            </div>
+          )}
           <SearchResults
             query={query}
             page={page}
