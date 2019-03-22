@@ -5,8 +5,15 @@ import { mount, shallow } from 'enzyme'
 import toJson from 'enzyme-to-json'
 import Input from '@material-ui/core/Input'
 import SearchIcon from '@material-ui/icons/Search'
+import Typography from '@material-ui/core/Typography'
+import Link from 'js/components/General/Link'
+import Button from '@material-ui/core/Button'
 import { isSearchPageEnabled } from 'js/utils/feature-flags'
-import { dashboardURL, modifyURLParams } from 'js/navigation/navigation'
+import {
+  adblockerWhitelistingURL,
+  dashboardURL,
+  modifyURLParams,
+} from 'js/navigation/navigation'
 import { externalRedirect } from 'js/navigation/utils'
 import SearchResults from 'js/components/Search/SearchResults'
 import Tabs from '@material-ui/core/Tabs'
@@ -477,5 +484,64 @@ describe('Search page component', () => {
     shallow(<SearchPageComponent {...mockProps} />).dive()
     await flushAllPromises()
     expect(mockConsoleError).toHaveBeenCalledWith(mockErr)
+  })
+
+  it('shows the expected "disable your ad blocker" message', async () => {
+    expect.assertions(2)
+
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    detectAdblocker.mockResolvedValue(true)
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    await flushAllPromises()
+    const messageElem = wrapper.find(
+      '[data-test-id="search-prevented-warning"]'
+    )
+    expect(
+      messageElem
+        .find(Typography)
+        .first()
+        .render()
+        .text()
+    ).toEqual('Please disable your ad blocker')
+    expect(
+      messageElem
+        .find(Typography)
+        .at(1)
+        .render()
+        .text()
+    ).toEqual(
+      `We use search ads to raise money for charity. You'll likely need to whitelist Search for a Cause for search results to show.`
+    )
+  })
+
+  it('shows the expected "show me how" button on the "disable ad blocker" message', async () => {
+    expect.assertions(2)
+
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    detectAdblocker.mockResolvedValue(true)
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    await flushAllPromises()
+    const messageElem = wrapper.find(
+      '[data-test-id="search-prevented-warning"]'
+    )
+    expect(
+      messageElem
+        .find(Link)
+        .first()
+        .prop('to')
+    ).toEqual(adblockerWhitelistingURL)
+    expect(
+      messageElem
+        .find(Link)
+        .first()
+        .children()
+        .find(Button)
+        .render()
+        .text()
+    ).toEqual('Show me how')
   })
 })
