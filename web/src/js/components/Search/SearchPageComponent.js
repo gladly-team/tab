@@ -320,7 +320,7 @@ class SearchPage extends React.Component {
         </div>
         <div>
           {isAdBlockerEnabled ? (
-            <div>
+            <div data-test-id={'search-prevented-warning'}>
               <h1>You're blocking ads :(</h1>
             </div>
           ) : (
