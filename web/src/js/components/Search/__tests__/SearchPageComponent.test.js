@@ -114,6 +114,62 @@ describe('Search page component', () => {
     expect(externalRedirect).not.toHaveBeenCalled()
   })
 
+  it('sets a min-width on the entire page', () => {
+    isSearchPageEnabled.mockReturnValue(true)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(
+      wrapper.find('[data-test-id="search-page"]').prop('style')
+    ).toHaveProperty('minWidth', 1100)
+  })
+
+  it('sets expected styling on the main search results column', () => {
+    isSearchPageEnabled.mockReturnValue(true)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find('[data-test-id="search-primary-results-column"]')
+        .prop('style')
+    ).toMatchObject({
+      marginLeft: 170,
+      marginTop: 20,
+      width: 600,
+    })
+  })
+
+  it('sets a max-width on the search results', () => {
+    isSearchPageEnabled.mockReturnValue(true)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.find(SearchResults).prop('style')).toHaveProperty(
+      'maxWidth',
+      600
+    )
+  })
+
+  it('sets expected styling on the search sidebar', () => {
+    isSearchPageEnabled.mockReturnValue(true)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(
+      wrapper.find('[data-test-id="search-sidebar"]').prop('style')
+    ).toMatchObject({
+      boxSizing: 'border-box',
+      display: 'flex',
+      maxWidth: 410,
+      minWidth: 300,
+    })
+  })
+
   it('sets the "query" state to the value of the "q" URL param on mount', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default

@@ -188,9 +188,7 @@ class SearchPage extends React.Component {
         data-test-id={'search-page'}
         style={{
           backgroundColor: '#fff',
-          // For demonstration only
           minWidth: 1100,
-          // minWidth: '100vw',
           minHeight: '100vh',
           display: 'flex',
           flexDirection: 'column',
@@ -340,6 +338,7 @@ class SearchPage extends React.Component {
           }}
         >
           <div
+            data-test-id={'search-primary-results-column'}
             style={{
               marginLeft: searchResultsPaddingLeft,
               marginTop: 20,
