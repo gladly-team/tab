@@ -167,7 +167,7 @@ class SearchPage extends React.Component {
     const { classes } = this.props
 
     // For demonstration only
-    let isAdBlockerEnabled = true
+    let isAdBlockerEnabled = false
     const {
       // isAdBlockerEnabled,
       page,
@@ -340,7 +340,7 @@ class SearchPage extends React.Component {
             style={{
               marginLeft: searchResultsPaddingLeft,
               marginTop: 20,
-              maxWidth: 600,
+              width: 600,
             }}
           >
             {isAdBlockerEnabled ? (
@@ -348,7 +348,7 @@ class SearchPage extends React.Component {
                 data-test-id={'search-prevented-warning'}
                 style={{
                   marginBottom: 20,
-                  width: 600,
+                  width: '100%',
                 }}
               >
                 <Paper
