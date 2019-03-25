@@ -5,17 +5,27 @@ import { mount, shallow } from 'enzyme'
 import toJson from 'enzyme-to-json'
 import Input from '@material-ui/core/Input'
 import SearchIcon from '@material-ui/icons/Search'
+import Typography from '@material-ui/core/Typography'
+import Link from 'js/components/General/Link'
+import Button from '@material-ui/core/Button'
 import { isSearchPageEnabled } from 'js/utils/feature-flags'
-import { dashboardURL, modifyURLParams } from 'js/navigation/navigation'
+import {
+  adblockerWhitelistingForSearchURL,
+  dashboardURL,
+  modifyURLParams,
+} from 'js/navigation/navigation'
 import { externalRedirect } from 'js/navigation/utils'
 import SearchResults from 'js/components/Search/SearchResults'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
+import detectAdblocker from 'js/utils/detectAdblocker'
+import { flushAllPromises } from 'js/utils/test-utils'
 
 jest.mock('js/utils/feature-flags')
 jest.mock('js/navigation/navigation')
 jest.mock('js/navigation/utils')
 jest.mock('js/components/Search/SearchResults')
+jest.mock('js/utils/detectAdblocker')
 
 // Enzyme does not yet support React.lazy and React.Suspense,
 // so let's just not render lazy-loaded children for now.
@@ -42,6 +52,7 @@ beforeEach(() => {
 })
 
 afterEach(() => {
+  detectAdblocker.mockResolvedValue(false)
   jest.clearAllMocks()
 })
 
@@ -430,5 +441,107 @@ describe('Search page component', () => {
       .find(Tab)
       .filterWhere(n => n.render().text() === 'Maps')
     expect(tab.prop('href')).toBe('https://www.google.com/maps')
+  })
+
+  it('shows the "ad blocker enabled" message when we detect an ad blocker', async () => {
+    expect.assertions(1)
+
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    detectAdblocker.mockResolvedValue(true)
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    await flushAllPromises()
+    expect(
+      wrapper.find('[data-test-id="search-prevented-warning"]').exists()
+    ).toBe(true)
+  })
+
+  it('does not show the "ad blocker enabled" message when we do not detect an ad blocker', async () => {
+    expect.assertions(1)
+
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    detectAdblocker.mockResolvedValue(false)
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    await flushAllPromises()
+    expect(
+      wrapper.find('[data-test-id="search-prevented-warning"]').exists()
+    ).toBe(false)
+  })
+
+  it('calls console.error when the ad blocker detection throws', async () => {
+    expect.assertions(1)
+
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    const mockErr = new Error('Oh nooooo')
+    detectAdblocker.mockImplementation(() => Promise.reject(mockErr))
+    const mockConsoleError = jest.fn()
+    jest.spyOn(console, 'error').mockImplementationOnce(mockConsoleError)
+    shallow(<SearchPageComponent {...mockProps} />).dive()
+    await flushAllPromises()
+    expect(mockConsoleError).toHaveBeenCalledWith(mockErr)
+  })
+
+  it('shows the expected "disable your ad blocker" message', async () => {
+    expect.assertions(2)
+
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    detectAdblocker.mockResolvedValue(true)
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    await flushAllPromises()
+    const messageElem = wrapper.find(
+      '[data-test-id="search-prevented-warning"]'
+    )
+    expect(
+      messageElem
+        .find(Typography)
+        .first()
+        .render()
+        .text()
+    ).toEqual('Please disable your ad blocker')
+    expect(
+      messageElem
+        .find(Typography)
+        .at(1)
+        .render()
+        .text()
+    ).toEqual(
+      `We use search ads to raise money for charity. You'll likely need to whitelist Search for a Cause for search results to show.`
+    )
+  })
+
+  it('shows the expected "show me how" button on the "disable ad blocker" message', async () => {
+    expect.assertions(2)
+
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    detectAdblocker.mockResolvedValue(true)
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    await flushAllPromises()
+    const messageElem = wrapper.find(
+      '[data-test-id="search-prevented-warning"]'
+    )
+    expect(
+      messageElem
+        .find(Link)
+        .first()
+        .prop('to')
+    ).toEqual(adblockerWhitelistingForSearchURL)
+    expect(
+      messageElem
+        .find(Link)
+        .first()
+        .children()
+        .find(Button)
+        .render()
+        .text()
+    ).toEqual('Show me how')
   })
 })

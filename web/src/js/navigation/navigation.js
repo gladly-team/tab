@@ -84,6 +84,9 @@ export const financialsURL = absoluteUrl('/financials/')
 export const teamURL = absoluteUrl('/team/')
 export const jobsURL = absoluteUrl('/jobs/')
 export const adblockerWhitelistingURL = absoluteUrl('/adblockers/')
+export const adblockerWhitelistingForSearchURL = absoluteUrl(
+  '/adblockers/search/'
+)
 
 // External links
 

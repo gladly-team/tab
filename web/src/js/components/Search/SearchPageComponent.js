@@ -7,14 +7,23 @@ import InputAdornment from '@material-ui/core/InputAdornment'
 import SearchIcon from '@material-ui/icons/Search'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
+import Paper from '@material-ui/core/Paper'
+import Button from '@material-ui/core/Button'
+import Typography from '@material-ui/core/Typography'
 import { isSearchPageEnabled } from 'js/utils/feature-flags'
-import { dashboardURL, modifyURLParams } from 'js/navigation/navigation'
+import {
+  adblockerWhitelistingForSearchURL,
+  dashboardURL,
+  modifyURLParams,
+} from 'js/navigation/navigation'
 import { externalRedirect } from 'js/navigation/utils'
 import LogoWithText from 'js/components/Logo/LogoWithText'
 import { parseUrlSearchString } from 'js/utils/utils'
 import SearchResults from 'js/components/Search/SearchResults'
 import { isReactSnapClient } from 'js/utils/search-utils'
 import SearchMenuQuery from 'js/components/Search/SearchMenuQuery'
+import detectAdblocker from 'js/utils/detectAdblocker'
+import Link from 'js/components/General/Link'
 
 const Footer = lazy(() => import('js/components/General/Footer'))
 
@@ -56,6 +65,7 @@ class SearchPage extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      isAdBlockerEnabled: false,
       query: '',
       searchFeatureEnabled: isSearchPageEnabled(),
       searchSource: null,
@@ -85,6 +95,17 @@ class SearchPage extends React.Component {
       searchSource: parseUrlSearchString(location.search).src || null,
       searchText: query,
     })
+
+    // AdBlockerDetection
+    detectAdblocker()
+      .then(isEnabled => {
+        this.setState({
+          isAdBlockerEnabled: isEnabled,
+        })
+      })
+      .catch(e => {
+        console.error(e)
+      })
   }
 
   componentDidUpdate(prevProps) {
@@ -144,7 +165,13 @@ class SearchPage extends React.Component {
 
   render() {
     const { classes } = this.props
-    const { page, query, searchSource, searchText } = this.state
+    const {
+      isAdBlockerEnabled,
+      page,
+      query,
+      searchSource,
+      searchText,
+    } = this.state
     const queryEncoded = query ? encodeURI(query) : ''
     const searchResultsPaddingLeft = 170
     if (!this.state.searchFeatureEnabled) {
@@ -300,6 +327,64 @@ class SearchPage extends React.Component {
           </Tabs>
         </div>
         <div>
+          {isAdBlockerEnabled ? (
+            <div
+              data-test-id={'search-prevented-warning'}
+              style={{
+                marginLeft: searchResultsPaddingLeft,
+                marginTop: 20,
+                marginBottom: 20,
+                width: 600,
+              }}
+            >
+              <Paper
+                style={{
+                  padding: '10px 18px',
+                  backgroundColor: 'rgb(242, 222, 222)',
+                }}
+              >
+                <span
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'flex-start',
+                  }}
+                >
+                  <Typography
+                    style={{
+                      color: 'rgb(169, 68, 66)',
+                      fontWeight: 'bold',
+                      marginBottom: 8,
+                      marginTop: 8,
+                    }}
+                    variant={'h6'}
+                  >
+                    Please disable your ad blocker
+                  </Typography>
+                  <Typography variant={'body2'}>
+                    We use search ads to raise money for charity. You'll likely
+                    need to whitelist Search for a Cause for search results to
+                    show.
+                  </Typography>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignSelf: 'flex-end',
+                      marginTop: 10,
+                    }}
+                  >
+                    <Link
+                      to={adblockerWhitelistingForSearchURL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Button color={'default'}>Show me how</Button>
+                    </Link>
+                  </div>
+                </span>
+              </Paper>
+            </div>
+          ) : null}
           <SearchResults
             query={query}
             page={page}
@@ -334,8 +419,9 @@ SearchPage.propTypes = {
   location: PropTypes.shape({
     search: PropTypes.string.isRequired,
   }),
+  theme: PropTypes.object.isRequired,
 }
 
 SearchPage.defaultProps = {}
 
-export default withStyles(styles)(SearchPage)
+export default withStyles(styles, { withTheme: true })(SearchPage)

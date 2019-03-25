@@ -2855,6 +2855,11 @@ bl@^1.0.0:
     readable-stream "^2.3.5"
     safe-buffer "^5.1.1"
 
+blockadblock@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/blockadblock/-/blockadblock-3.2.1.tgz#888c80a8eb221cc3f1e84a0f066e54c90fe87d66"
+  integrity sha1-iIyAqOsiHMPx6EoPBm5UyQ/ofWY=
+
 bluebird@^3.5.0, bluebird@^3.5.1, bluebird@^3.5.3:
   version "3.5.3"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.3.tgz#7d01c6f9616c9a51ab0f8c549a79dfe6ec33efa7"
