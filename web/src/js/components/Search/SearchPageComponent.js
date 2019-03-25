@@ -455,7 +455,7 @@ class SearchPage extends React.Component {
                   alignItems: 'flex-start',
                 }}
               >
-                <Typography variant={'h6'}>Your searches do good!</Typography>
+                <Typography variant={'h6'}>Your searches do good :)</Typography>
                 <Typography variant={'body2'}>
                   When you search, you raise money for charity! The money comes
                   from the ads in search results, and you decide where the money
