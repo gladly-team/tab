@@ -165,11 +165,8 @@ class SearchPage extends React.Component {
 
   render() {
     const { classes } = this.props
-
-    // For demonstration only
-    let isAdBlockerEnabled = true
     const {
-      // isAdBlockerEnabled,
+      isAdBlockerEnabled,
       page,
       query,
       searchSource,
@@ -412,8 +409,6 @@ class SearchPage extends React.Component {
                 maxWidth: 600,
                 marginBottom: 40,
                 height: 700,
-                // For demonstration only
-                backgroundColor: 'aqua',
               }}
             />
           </div>
@@ -427,20 +422,39 @@ class SearchPage extends React.Component {
               boxSizing: 'border-box',
               maxWidth: 410,
               minWidth: 300,
-              // For demonstration only
-              backgroundColor: 'green',
             }}
           >
-            <div
+            <Paper
               style={{
-                // For demonstration only
-                height: 500,
                 width: '100%',
-                backgroundColor: 'purple',
+                boxSizing: 'border-box',
+                padding: '10px 18px',
               }}
             >
-              some stuff here
-            </div>
+              <span
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'flex-start',
+                }}
+              >
+                <Typography variant={'h6'}>Your searches do good :)</Typography>
+                <Typography variant={'body2'}>
+                  When you search, you raise money for charity! The money comes
+                  from the ads in search results, and you decide where the money
+                  goes by donating your hearts to your favorite nonprofit.
+                </Typography>
+                <div
+                  style={{
+                    display: 'flex',
+                    alignSelf: 'flex-end',
+                    marginTop: 10,
+                  }}
+                >
+                  <Button color={'primary'}>Got it!</Button>
+                </div>
+              </span>
+            </Paper>
             <Paper
               style={{
                 width: '100%',
