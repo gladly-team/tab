@@ -319,6 +319,18 @@ describe('SearchResults component', () => {
     expect(wrapper.get(0).props.style.minHeight).toBe(0)
   })
 
+  it('removes the a min-height from the results container if ad ad blocker is enabled (because it may block the search request entirely)', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.isAdBlockerEnabled = true
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    const query = 'this search will be blocked'
+    wrapper.setProps({
+      query: query,
+    })
+    expect(wrapper.get(0).props.style.minHeight).toBe(0)
+  })
+
   it('shows an error message and logs an error when the search errors with "URL_UNREGISTERED"', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
@@ -363,6 +375,22 @@ describe('SearchResults component', () => {
         SOMETHING_WE_DID_NOT_SEE_COMING: 1,
       })
     )
+  })
+
+  it('shows an error message when an ad blocker is enabled', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'foo'
+    mockProps.isAdBlockerEnabled = true
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find(Typography)
+        .filterWhere(
+          n => n.render().text() === 'Unable to search at this time.'
+        )
+        .exists()
+    ).toBe(true)
   })
 
   it('shows an error message and logs an error when the YPA JS throws', () => {
@@ -861,6 +889,17 @@ describe('SearchResults component', () => {
     })
 
     // The pagination container should be hidden now.
+    expect(
+      wrapper.find('[data-test-id="pagination-container"]').prop('style')
+    ).toHaveProperty('display', 'none')
+  })
+
+  it('hides the pagination container when an ad blocker is enabled', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'foo'
+    mockProps.isAdBlockerEnabled = true
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
     expect(
       wrapper.find('[data-test-id="pagination-container"]').prop('style')
     ).toHaveProperty('display', 'none')

@@ -257,6 +257,28 @@ describe('Search page component', () => {
     expect(wrapper.find(SearchResults).prop('page')).toBe(12)
   })
 
+  it('passes "isAdBlockerEnabled = false" to the SearchResults component', async () => {
+    expect.assertions(1)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    detectAdblocker.mockResolvedValue(false)
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    await flushAllPromises()
+    expect(wrapper.find(SearchResults).prop('isAdBlockerEnabled')).toBe(false)
+  })
+
+  it('passes "isAdBlockerEnabled = true" to the SearchResults component', async () => {
+    expect.assertions(1)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    detectAdblocker.mockResolvedValue(true)
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    await flushAllPromises()
+    expect(wrapper.find(SearchResults).prop('isAdBlockerEnabled')).toBe(true)
+  })
+
   it('passes "1" as the default page number to the SearchResults component when the "page" URL param is not set', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
