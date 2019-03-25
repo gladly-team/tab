@@ -408,7 +408,6 @@ class SearchPage extends React.Component {
               style={{
                 maxWidth: 600,
                 marginBottom: 40,
-                height: 700,
               }}
             />
           </div>
