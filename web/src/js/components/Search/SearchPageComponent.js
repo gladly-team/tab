@@ -167,7 +167,7 @@ class SearchPage extends React.Component {
     const { classes } = this.props
 
     // For demonstration only
-    let isAdBlockerEnabled = false
+    let isAdBlockerEnabled = true
     const {
       // isAdBlockerEnabled,
       page,
@@ -421,8 +421,10 @@ class SearchPage extends React.Component {
             data-test-id={'search-sidebar'}
             style={{
               display: 'flex',
+              flexDirection: 'column',
               margin: '20px 40px',
               width: '100%',
+              boxSizing: 'border-box',
               maxWidth: 410,
               minWidth: 300,
               // For demonstration only
@@ -439,6 +441,37 @@ class SearchPage extends React.Component {
             >
               some stuff here
             </div>
+            <Paper
+              style={{
+                width: '100%',
+                boxSizing: 'border-box',
+                padding: '10px 18px',
+              }}
+            >
+              <span
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'flex-start',
+                }}
+              >
+                <Typography variant={'h6'}>Your searches do good!</Typography>
+                <Typography variant={'body2'}>
+                  When you search, you raise money for charity! The money comes
+                  from the ads in search results, and you decide where the money
+                  goes by donating your hearts to your favorite nonprofit.
+                </Typography>
+                <div
+                  style={{
+                    display: 'flex',
+                    alignSelf: 'flex-end',
+                    marginTop: 10,
+                  }}
+                >
+                  <Button color={'primary'}>Got it!</Button>
+                </div>
+              </span>
+            </Paper>
           </div>
         </div>
         <Suspense fallback={null}>
