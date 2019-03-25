@@ -429,37 +429,7 @@ class SearchPage extends React.Component {
                 width: '100%',
                 boxSizing: 'border-box',
                 padding: '10px 18px',
-              }}
-            >
-              <span
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'flex-start',
-                }}
-              >
-                <Typography variant={'h6'}>Your searches do good :)</Typography>
-                <Typography variant={'body2'}>
-                  When you search, you raise money for charity! The money comes
-                  from the ads in search results, and you decide where the money
-                  goes by donating your hearts to your favorite nonprofit.
-                </Typography>
-                <div
-                  style={{
-                    display: 'flex',
-                    alignSelf: 'flex-end',
-                    marginTop: 10,
-                  }}
-                >
-                  <Button color={'primary'}>Got it!</Button>
-                </div>
-              </span>
-            </Paper>
-            <Paper
-              style={{
-                width: '100%',
-                boxSizing: 'border-box',
-                padding: '10px 18px',
+                marginBottom: 20,
               }}
             >
               <span
