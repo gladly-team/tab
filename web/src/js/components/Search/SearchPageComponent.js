@@ -459,7 +459,7 @@ class SearchPage extends React.Component {
                     marginTop: 10,
                   }}
                 >
-                  <Button color={'primary'}>Got it!</Button>
+                  <Button color={'primary'}>Great!</Button>
                 </div>
               </span>
             </Paper>
