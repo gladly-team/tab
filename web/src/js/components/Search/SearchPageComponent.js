@@ -349,6 +349,7 @@ class SearchPage extends React.Component {
                 }}
               >
                 <Paper
+                  elevation={1}
                   style={{
                     padding: '10px 18px',
                     backgroundColor: 'rgb(242, 222, 222)',
@@ -425,6 +426,7 @@ class SearchPage extends React.Component {
             }}
           >
             <Paper
+              elevation={1}
               style={{
                 width: '100%',
                 boxSizing: 'border-box',
@@ -439,7 +441,12 @@ class SearchPage extends React.Component {
                   alignItems: 'flex-start',
                 }}
               >
-                <Typography variant={'h6'}>Your searches do good :)</Typography>
+                <Typography
+                  variant={'h6'}
+                  style={{ marginTop: 8, marginBottom: 8 }}
+                >
+                  Your searches do good :)
+                </Typography>
                 <Typography variant={'body2'}>
                   When you search, you raise money for charity! The money comes
                   from the ads in search results, and you decide where the money
