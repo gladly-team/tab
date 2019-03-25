@@ -434,6 +434,7 @@ class SearchPage extends React.Component {
             {' '}
             {showIntroMessage ? (
               <Paper
+                data-test-id={'search-intro-msg'}
                 elevation={1}
                 style={{
                   width: '100%',

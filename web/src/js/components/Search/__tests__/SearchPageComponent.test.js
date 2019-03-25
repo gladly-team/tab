@@ -20,12 +20,17 @@ import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import detectAdblocker from 'js/utils/detectAdblocker'
 import { flushAllPromises } from 'js/utils/test-utils'
+import {
+  hasUserDismissedSearchIntro,
+  setUserDismissedSearchIntro,
+} from 'js/utils/local-user-data-mgr'
 
 jest.mock('js/utils/feature-flags')
 jest.mock('js/navigation/navigation')
 jest.mock('js/navigation/utils')
 jest.mock('js/components/Search/SearchResults')
 jest.mock('js/utils/detectAdblocker')
+jest.mock('js/utils/local-user-data-mgr')
 
 // Enzyme does not yet support React.lazy and React.Suspense,
 // so let's just not render lazy-loaded children for now.
@@ -565,5 +570,110 @@ describe('Search page component', () => {
         .render()
         .text()
     ).toEqual('Show me how')
+  })
+
+  it('shows the intro message if the user has not dismissed it', () => {
+    hasUserDismissedSearchIntro.mockReturnValueOnce(false)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.find('[data-test-id="search-intro-msg"]').exists()).toBe(
+      true
+    )
+  })
+
+  it('does not show the intro message if the user has already dismissed it', () => {
+    hasUserDismissedSearchIntro.mockReturnValueOnce(true)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.find('[data-test-id="search-intro-msg"]').exists()).toBe(
+      false
+    )
+  })
+
+  it('clicking the dismiss button on the intro message hides the intro message', () => {
+    hasUserDismissedSearchIntro.mockReturnValueOnce(false)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.find('[data-test-id="search-intro-msg"]').exists()).toBe(
+      true
+    )
+    wrapper
+      .find('[data-test-id="search-intro-msg"]')
+      .find(Button)
+      .first()
+      .simulate('click')
+    expect(wrapper.find('[data-test-id="search-intro-msg"]').exists()).toBe(
+      false
+    )
+  })
+
+  it('clicking the dismiss button sets the dismissal in local storage', () => {
+    hasUserDismissedSearchIntro.mockReturnValueOnce(false)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    wrapper
+      .find('[data-test-id="search-intro-msg"]')
+      .find(Button)
+      .first()
+      .simulate('click')
+    expect(setUserDismissedSearchIntro).toHaveBeenCalledTimes(1)
+  })
+
+  it('shows the expected intro message title', () => {
+    hasUserDismissedSearchIntro.mockReturnValueOnce(false)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find('[data-test-id="search-intro-msg"]')
+        .find(Typography)
+        .first()
+        .render()
+        .text()
+    ).toEqual('Your searches do good :)')
+  })
+
+  it('shows the expected intro message description', () => {
+    hasUserDismissedSearchIntro.mockReturnValueOnce(false)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find('[data-test-id="search-intro-msg"]')
+        .find(Typography)
+        .at(1)
+        .render()
+        .text()
+    ).toEqual(
+      'When you search, you raise money for charity! The money comes from the ads in search results, and you decide where the money goes by donating your hearts to your favorite nonprofit.'
+    )
+  })
+
+  it('shows the expected intro message button text', () => {
+    hasUserDismissedSearchIntro.mockReturnValueOnce(false)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find('[data-test-id="search-intro-msg"]')
+        .find(Button)
+        .first()
+        .render()
+        .text()
+    ).toEqual('Great!')
   })
 })
