@@ -165,8 +165,11 @@ class SearchPage extends React.Component {
 
   render() {
     const { classes } = this.props
+
+    // For demonstration only
+    let isAdBlockerEnabled = true
     const {
-      isAdBlockerEnabled,
+      // isAdBlockerEnabled,
       page,
       query,
       searchSource,
@@ -182,7 +185,9 @@ class SearchPage extends React.Component {
         data-test-id={'search-page'}
         style={{
           backgroundColor: '#fff',
-          minWidth: '100vw',
+          // For demonstration only
+          minWidth: 1100,
+          // minWidth: '100vw',
           minHeight: '100vh',
           display: 'flex',
           flexDirection: 'column',
@@ -326,81 +331,115 @@ class SearchPage extends React.Component {
             />
           </Tabs>
         </div>
-        <div>
-          {isAdBlockerEnabled ? (
-            <div
-              data-test-id={'search-prevented-warning'}
-              style={{
-                marginLeft: searchResultsPaddingLeft,
-                marginTop: 20,
-                marginBottom: 20,
-                width: 600,
-              }}
-            >
-              <Paper
-                style={{
-                  padding: '10px 18px',
-                  backgroundColor: 'rgb(242, 222, 222)',
-                }}
-              >
-                <span
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'flex-start',
-                  }}
-                >
-                  <Typography
-                    style={{
-                      color: 'rgb(169, 68, 66)',
-                      fontWeight: 'bold',
-                      marginBottom: 8,
-                      marginTop: 8,
-                    }}
-                    variant={'h6'}
-                  >
-                    Please disable your ad blocker
-                  </Typography>
-                  <Typography variant={'body2'}>
-                    We use search ads to raise money for charity. You'll likely
-                    need to whitelist Search for a Cause for search results to
-                    show.
-                  </Typography>
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignSelf: 'flex-end',
-                      marginTop: 10,
-                    }}
-                  >
-                    <Link
-                      to={adblockerWhitelistingForSearchURL}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <Button color={'default'}>Show me how</Button>
-                    </Link>
-                  </div>
-                </span>
-              </Paper>
-            </div>
-          ) : null}
-          <SearchResults
-            query={query}
-            page={page}
-            onPageChange={newPageIndex => {
-              modifyURLParams({
-                page: newPageIndex,
-              })
-            }}
-            searchSource={searchSource}
+        <div
+          style={{
+            display: 'flex',
+          }}
+        >
+          <div
             style={{
               marginLeft: searchResultsPaddingLeft,
+              marginTop: 20,
               maxWidth: 600,
-              paddingTop: 20,
-              marginBottom: 40,
             }}
-          />
+          >
+            {isAdBlockerEnabled ? (
+              <div
+                data-test-id={'search-prevented-warning'}
+                style={{
+                  marginBottom: 20,
+                  width: 600,
+                }}
+              >
+                <Paper
+                  style={{
+                    padding: '10px 18px',
+                    backgroundColor: 'rgb(242, 222, 222)',
+                  }}
+                >
+                  <span
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'flex-start',
+                    }}
+                  >
+                    <Typography
+                      style={{
+                        color: 'rgb(169, 68, 66)',
+                        fontWeight: 'bold',
+                        marginBottom: 8,
+                        marginTop: 8,
+                      }}
+                      variant={'h6'}
+                    >
+                      Please disable your ad blocker
+                    </Typography>
+                    <Typography variant={'body2'}>
+                      We use search ads to raise money for charity. You'll
+                      likely need to whitelist Search for a Cause for search
+                      results to show.
+                    </Typography>
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignSelf: 'flex-end',
+                        marginTop: 10,
+                      }}
+                    >
+                      <Link
+                        to={adblockerWhitelistingForSearchURL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Button color={'default'}>Show me how</Button>
+                      </Link>
+                    </div>
+                  </span>
+                </Paper>
+              </div>
+            ) : null}
+            <SearchResults
+              query={query}
+              page={page}
+              onPageChange={newPageIndex => {
+                modifyURLParams({
+                  page: newPageIndex,
+                })
+              }}
+              searchSource={searchSource}
+              style={{
+                maxWidth: 600,
+                marginBottom: 40,
+                height: 700,
+                // For demonstration only
+                backgroundColor: 'aqua',
+              }}
+            />
+          </div>
+          <div
+            data-test-id={'search-sidebar'}
+            style={{
+              display: 'flex',
+              margin: '20px 40px',
+              width: '100%',
+              maxWidth: 410,
+              minWidth: 300,
+              // For demonstration only
+              backgroundColor: 'green',
+            }}
+          >
+            <div
+              style={{
+                // For demonstration only
+                height: 500,
+                width: '100%',
+                backgroundColor: 'purple',
+              }}
+            >
+              some stuff here
+            </div>
+          </div>
         </div>
         <Suspense fallback={null}>
           <Footer
