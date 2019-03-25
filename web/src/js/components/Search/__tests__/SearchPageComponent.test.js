@@ -713,7 +713,7 @@ describe('Search page component', () => {
         .render()
         .text()
     ).toEqual(
-      'When you search, you raise money for charity! The money comes from the ads in search results, and you decide where the money goes by donating your hearts to your favorite nonprofit.'
+      'When you search, you raise money for charity! The money comes from the ads in search results, and you decide where the money goes by donating your Hearts to your favorite nonprofit.'
     )
   })
 

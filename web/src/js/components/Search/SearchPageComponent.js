@@ -458,7 +458,7 @@ class SearchPage extends React.Component {
                   <Typography variant={'body2'}>
                     When you search, you raise money for charity! The money
                     comes from the ads in search results, and you decide where
-                    the money goes by donating your hearts to your favorite
+                    the money goes by donating your Hearts to your favorite
                     nonprofit.
                   </Typography>
                   <div
