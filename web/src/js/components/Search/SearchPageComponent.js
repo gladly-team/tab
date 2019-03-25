@@ -267,7 +267,7 @@ class SearchPage extends React.Component {
           </div>
           <Tabs
             value={0}
-            indicatorColor={'secondary'}
+            indicatorColor={'primary'}
             style={{
               marginTop: 8,
               marginLeft: 149,
@@ -470,6 +470,7 @@ class SearchPage extends React.Component {
                   >
                     <Button
                       color={'primary'}
+                      variant={'contained'}
                       onClick={() => {
                         setUserDismissedSearchIntro()
                         this.setState({
