@@ -24,6 +24,10 @@ import { isReactSnapClient } from 'js/utils/search-utils'
 import SearchMenuQuery from 'js/components/Search/SearchMenuQuery'
 import detectAdblocker from 'js/utils/detectAdblocker'
 import Link from 'js/components/General/Link'
+import {
+  hasUserDismissedSearchIntro,
+  setUserDismissedSearchIntro,
+} from 'js/utils/local-user-data-mgr'
 
 const Footer = lazy(() => import('js/components/General/Footer'))
 
@@ -65,6 +69,7 @@ class SearchPage extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      showIntroMessage: !hasUserDismissedSearchIntro(),
       isAdBlockerEnabled: false,
       query: '',
       searchFeatureEnabled: isSearchPageEnabled(),
@@ -169,6 +174,7 @@ class SearchPage extends React.Component {
       isAdBlockerEnabled,
       page,
       query,
+      showIntroMessage,
       searchSource,
       searchText,
     } = this.state
@@ -425,44 +431,58 @@ class SearchPage extends React.Component {
               minWidth: 300,
             }}
           >
-            <Paper
-              elevation={1}
-              style={{
-                width: '100%',
-                boxSizing: 'border-box',
-                padding: '10px 18px',
-                marginBottom: 20,
-              }}
-            >
-              <span
+            {' '}
+            {showIntroMessage ? (
+              <Paper
+                elevation={1}
                 style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'flex-start',
+                  width: '100%',
+                  boxSizing: 'border-box',
+                  padding: '10px 18px',
+                  marginBottom: 20,
                 }}
               >
-                <Typography
-                  variant={'h6'}
-                  style={{ marginTop: 8, marginBottom: 8 }}
-                >
-                  Your searches do good :)
-                </Typography>
-                <Typography variant={'body2'}>
-                  When you search, you raise money for charity! The money comes
-                  from the ads in search results, and you decide where the money
-                  goes by donating your hearts to your favorite nonprofit.
-                </Typography>
-                <div
+                <span
                   style={{
                     display: 'flex',
-                    alignSelf: 'flex-end',
-                    marginTop: 10,
+                    flexDirection: 'column',
+                    alignItems: 'flex-start',
                   }}
                 >
-                  <Button color={'primary'}>Great!</Button>
-                </div>
-              </span>
-            </Paper>
+                  <Typography
+                    variant={'h6'}
+                    style={{ marginTop: 8, marginBottom: 8 }}
+                  >
+                    Your searches do good :)
+                  </Typography>
+                  <Typography variant={'body2'}>
+                    When you search, you raise money for charity! The money
+                    comes from the ads in search results, and you decide where
+                    the money goes by donating your hearts to your favorite
+                    nonprofit.
+                  </Typography>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignSelf: 'flex-end',
+                      marginTop: 10,
+                    }}
+                  >
+                    <Button
+                      color={'primary'}
+                      onClick={() => {
+                        setUserDismissedSearchIntro()
+                        this.setState({
+                          showIntroMessage: false,
+                        })
+                      }}
+                    >
+                      Great!
+                    </Button>
+                  </div>
+                </span>
+              </Paper>
+            ) : null}
           </div>
         </div>
         <Suspense fallback={null}>
