@@ -234,7 +234,14 @@ class SearchResults extends React.Component {
   }
 
   render() {
-    const { classes, page, query, style, theme } = this.props
+    const {
+      classes,
+      isAdBlockerEnabled,
+      page,
+      query,
+      style,
+      theme,
+    } = this.props
 
     // Include 8 pages total, 4 lower and 4 higher when possible.
     // Page 9999 is the maximum, so stop there.
@@ -253,7 +260,9 @@ class SearchResults extends React.Component {
             // Min height prevents visibly shifting content below,
             // like the footer.
             minHeight:
-              this.state.noSearchResults || this.state.unexpectedSearchError
+              this.state.noSearchResults ||
+              this.state.unexpectedSearchError ||
+              isAdBlockerEnabled
                 ? 0
                 : 1200,
           },
@@ -272,7 +281,7 @@ class SearchResults extends React.Component {
             <span style={{ fontWeight: 'bold' }}>{query}</span>
           </Typography>
         ) : null}
-        {this.state.unexpectedSearchError ? (
+        {this.state.unexpectedSearchError || isAdBlockerEnabled ? (
           <Typography variant={'body1'} gutterBottom>
             Unable to search at this time.
           </Typography>
@@ -304,7 +313,9 @@ class SearchResults extends React.Component {
           className={classes.paginationContainer}
           style={{
             display:
-              this.state.noSearchResults || this.state.unexpectedSearchError
+              this.state.noSearchResults ||
+              this.state.unexpectedSearchError ||
+              isAdBlockerEnabled
                 ? 'none'
                 : 'block',
           }}
@@ -359,6 +370,7 @@ class SearchResults extends React.Component {
 }
 
 SearchResults.propTypes = {
+  isAdBlockerEnabled: PropTypes.bool.isRequired,
   query: PropTypes.string,
   page: PropTypes.number,
   onPageChange: PropTypes.func.isRequired,
@@ -369,6 +381,7 @@ SearchResults.propTypes = {
 }
 
 SearchResults.defaultProps = {
+  isAdBlockerEnabled: false,
   page: 1,
   style: {},
 }
