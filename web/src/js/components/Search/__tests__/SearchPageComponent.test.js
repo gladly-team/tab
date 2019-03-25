@@ -10,7 +10,7 @@ import Link from 'js/components/General/Link'
 import Button from '@material-ui/core/Button'
 import { isSearchPageEnabled } from 'js/utils/feature-flags'
 import {
-  adblockerWhitelistingURL,
+  adblockerWhitelistingForSearchURL,
   dashboardURL,
   modifyURLParams,
 } from 'js/navigation/navigation'
@@ -533,7 +533,7 @@ describe('Search page component', () => {
         .find(Link)
         .first()
         .prop('to')
-    ).toEqual(adblockerWhitelistingURL)
+    ).toEqual(adblockerWhitelistingForSearchURL)
     expect(
       messageElem
         .find(Link)

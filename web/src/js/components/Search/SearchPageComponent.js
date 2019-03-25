@@ -12,7 +12,7 @@ import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import { isSearchPageEnabled } from 'js/utils/feature-flags'
 import {
-  adblockerWhitelistingURL,
+  adblockerWhitelistingForSearchURL,
   dashboardURL,
   modifyURLParams,
 } from 'js/navigation/navigation'
@@ -374,7 +374,7 @@ class SearchPage extends React.Component {
                     }}
                   >
                     <Link
-                      to={adblockerWhitelistingURL}
+                      to={adblockerWhitelistingForSearchURL}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
