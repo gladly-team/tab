@@ -80,7 +80,7 @@ class SearchPage extends React.Component {
   }
 
   componentDidMount() {
-    // TODO: add tests for this
+    // Don't change state on mount when prerendering with React Snap.
     if (isReactSnapClient()) {
       return
     }
