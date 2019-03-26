@@ -250,7 +250,7 @@ describe('local user data manager', () => {
   })
 
   // setUserDismissedAdExplanation method
-  it('sets the extension install time timestamp in localStorage', () => {
+  it('sets the ad explanation dismissal in localStorage', () => {
     const {
       setUserDismissedAdExplanation,
     } = require('js/utils/local-user-data-mgr')
@@ -262,7 +262,7 @@ describe('local user data manager', () => {
   })
 
   // hasUserDismissedAdExplanation
-  it('gets the extension install date from localStorage', () => {
+  it('gets the ad explanation dismissal in localStorage', () => {
     localStorageMgr.setItem('tab.newUser.dismissedAdExplanation', 'true')
     const {
       hasUserDismissedAdExplanation,
@@ -388,5 +388,28 @@ describe('local user data manager', () => {
     } = require('js/utils/local-user-data-mgr')
     const recentlyDismissed = hasUserDismissedCampaignRecently()
     expect(recentlyDismissed).toBe(false)
+  })
+
+  // setUserDismissedSearchIntro method
+  it('sets the search intro dismissal in localStorage', () => {
+    const {
+      setUserDismissedSearchIntro,
+    } = require('js/utils/local-user-data-mgr')
+    setUserDismissedSearchIntro()
+    expect(localStorageMgr.setItem).toHaveBeenCalledWith(
+      'search.newUser.dismissedIntro',
+      'true'
+    )
+  })
+
+  // getUserDismissedSearchIntro
+  it('gets the search intro dismissal in localStorage', () => {
+    localStorageMgr.setItem('search.newUser.dismissedIntro', 'true')
+    const {
+      hasUserDismissedSearchIntro,
+    } = require('js/utils/local-user-data-mgr')
+    expect(hasUserDismissedSearchIntro()).toBe(true)
+    localStorageMgr.setItem('search.newUser.dismissedIntro', 'blah')
+    expect(hasUserDismissedSearchIntro()).toBe(false)
   })
 })

@@ -79,6 +79,13 @@ export const STORAGE_EXPERIMENT_ANON_USER = 'tab.experiments.anonUser'
 export const STORAGE_EXPERIMENT_VARIOUS_AD_SIZES =
   'tab.experiments.variousAdSizes'
 
+// search.newUser: values related to the Search for a Cause new user
+//   experience, such as data we need for unauthenticated users or
+//   temporary data we don't want to store server-side. Stored client-side
+//   only.
+export const SEARCH_STORAGE_NEW_USER_HAS_DISMISSED_INTRO =
+  'search.newUser.dismissedIntro'
+
 /**
   Error codes passed from server-side.
 **/
