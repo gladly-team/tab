@@ -114,7 +114,7 @@ class CampaignBase extends React.Component {
           }}
         >
           <Typography variant={'body2'} gutterBottom>
-            The final votes are in, and this month Tabbers have selected the{' '}
+            The final votes are in, and this month Tabbers have selected{' '}
             <a
               href="https://www.girlsnotbrides.org"
               target="_blank"
