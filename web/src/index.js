@@ -49,10 +49,34 @@ const initApp = () => {
   require('./index.css')
   const rootElement = document.getElementById('root')
   if (rootElement.hasChildNodes()) {
-    hydrate(<Root />, rootElement)
+    hydrate(<Root />, rootElement, () => {
+      // Remove prerendered JSS.
+      // https://github.com/stereobooster/react-snap/issues/99#issuecomment-355663842
+      // https://material-ui.com/guides/server-rendering/#the-client-side
+      try {
+        Array.from(document.querySelectorAll('[data-jss-snap]')).forEach(elem =>
+          elem.parentNode.removeChild(elem)
+        )
+      } catch (e) {
+        console.error(e)
+      }
+    })
   } else {
     render(<Root />, rootElement)
   }
+}
+
+// Mark all prerendered JSS so we can remove it on mount.
+// https://github.com/stereobooster/react-snap/issues/99#issuecomment-355663842
+// https://material-ui.com/guides/server-rendering/#the-client-side
+try {
+  window.snapSaveState = () => {
+    Array.from(document.querySelectorAll('[data-jss]')).forEach(elem =>
+      elem.setAttribute('data-jss-snap', '')
+    )
+  }
+} catch (e) {
+  console.error(e)
 }
 
 try {

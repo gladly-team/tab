@@ -2,6 +2,7 @@ import moment from 'moment'
 import uuid from 'uuid/v4'
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import {
+  SEARCH_STORAGE_NEW_USER_HAS_DISMISSED_INTRO,
   STORAGE_DISMISSED_AD_EXPLANATION,
   STORAGE_EXTENSION_INSTALL_ID,
   STORAGE_APPROX_EXTENSION_INSTALL_TIME,
@@ -238,5 +239,25 @@ export const hasUserDismissedCampaignRecently = () => {
     moment()
       .utc()
       .diff(dismissTime, 'days') < 14
+  )
+}
+
+/**
+ * Marks that the user has dismissed the search page introduction.
+ * @returns {undefined}
+ */
+export const setUserDismissedSearchIntro = () => {
+  localStorageMgr.setItem(SEARCH_STORAGE_NEW_USER_HAS_DISMISSED_INTRO, 'true')
+}
+
+/**
+ * Gets whether the user has dismissed the search page introduction.
+ * @returns {Boolean} Whether the user has dismissed introduction
+ *   message.
+ */
+export const hasUserDismissedSearchIntro = () => {
+  return (
+    localStorageMgr.getItem(SEARCH_STORAGE_NEW_USER_HAS_DISMISSED_INTRO) ===
+    'true'
   )
 }
