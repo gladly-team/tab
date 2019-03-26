@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import logoDefault from 'js/assets/logos/logo.svg'
 import logoWhite from 'js/assets/logos/logo-white.svg'
 
+// TODO: incorporate LogoWithText and search logo into this component
 class Logo extends React.Component {
   render() {
     const { color, style } = this.props
