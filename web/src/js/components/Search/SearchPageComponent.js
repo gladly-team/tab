@@ -65,21 +65,28 @@ const styles = theme => ({
   },
 })
 
+// TODO: need to fix JSS due to React Snap problems?
+// https://github.com/stereobooster/react-snap/issues/99#issuecomment-355663842
+// https://material-ui.com/guides/server-rendering/#the-client-side
 class SearchPage extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      showIntroMessage: !hasUserDismissedSearchIntro(),
+      showIntroMessage: false,
       isAdBlockerEnabled: false,
       query: '',
       searchFeatureEnabled: isSearchPageEnabled(),
       searchSource: null,
       searchText: '',
-      showPlaceholderText: false,
+      mounted: false,
     }
   }
 
   componentDidMount() {
+    // TODO: add tests for this
+    if (isReactSnapClient()) {
+      return
+    }
     if (!this.state.searchFeatureEnabled) {
       // Cannot use pushState now that the apps are separate.
       externalRedirect(dashboardURL)
@@ -90,15 +97,16 @@ class SearchPage extends React.Component {
     const query = parseUrlSearchString(location.search).q || ''
     this.setState({
       // We always derive the query and page values URL parameter
-      // values. We keep tehse in state so that we update the
+      // values. We keep these in state so that we update the
       // prerendered components after mount, because at prerender
-      // time we do not know the query string. We can remove this
+      // time we do not know search state. We can remove this
       // from state if we switch to server-side rendering.
+      mounted: true, // in other words, this is not React Snap prerendering
       query: query,
       page: this.getPageNumberFromSearchString(location.search),
-      showPlaceholderText: !isReactSnapClient(),
       searchSource: parseUrlSearchString(location.search).src || null,
       searchText: query,
+      showIntroMessage: !hasUserDismissedSearchIntro(),
     })
 
     // AdBlockerDetection
@@ -172,6 +180,7 @@ class SearchPage extends React.Component {
     const { classes } = this.props
     const {
       isAdBlockerEnabled,
+      mounted,
       page,
       query,
       showIntroMessage,
@@ -234,9 +243,7 @@ class SearchPage extends React.Component {
                 placeholder={
                   // Don't immediately render the placeholder text because
                   // we may rapidly replace it with the query on first render.
-                  this.state.showPlaceholderText
-                    ? 'Search to raise money for charity...'
-                    : ''
+                  mounted ? 'Search to raise money for charity...' : ''
                 }
                 disableUnderline
                 fullWidth
