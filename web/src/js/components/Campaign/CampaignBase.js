@@ -45,7 +45,7 @@ class CampaignBase extends React.Component {
                   marginTop: 4,
                 }}
               >
-                Thank You for Supporting WWF!
+                Thank You for Supporting Girls Not Brides!
               </Typography>
               <div
                 style={{
@@ -54,17 +54,18 @@ class CampaignBase extends React.Component {
                 }}
               >
                 <Typography variant={'body2'} gutterBottom>
-                  Thanks for supporting the{' '}
+                  Thanks for supporting{' '}
                   <a
-                    href="https://www.worldwildlife.org"
+                    href="https://www.girlsnotbrides.org"
                     target="_blank"
                     rel="noopener noreferrer"
                     style={anchorStyle}
                   >
-                    World Wildlife Fund
+                    Girls Not Brides
                   </a>
-                  ! With your help, they are working to safeguard food, climate,
-                  fresh water, wildlife, forests, and oceans.{' '}
+                  ! With your help, they are working to end child marriage
+                  worldwide to make a difference in the lives of millions of
+                  girls.{' '}
                 </Typography>
                 <Typography>
                   <span style={{ fontWeight: 'bold' }}>
@@ -104,7 +105,7 @@ class CampaignBase extends React.Component {
             marginTop: 4,
           }}
         >
-          February Spotlight: World Wildlife Fund
+          March Spotlight: Girls Not Brides
         </Typography>
         <div
           style={{
@@ -115,14 +116,14 @@ class CampaignBase extends React.Component {
           <Typography variant={'body2'} gutterBottom>
             The final votes are in, and this month Tabbers have selected the{' '}
             <a
-              href="https://www.worldwildlife.org"
+              href="https://www.girlsnotbrides.org"
               target="_blank"
               rel="noopener noreferrer"
               style={anchorStyle}
             >
-              World Wildlife Fund
+              Girls Not Brides
             </a>{' '}
-            for our February{' '}
+            for our March{' '}
             <a
               href="https://www.facebook.com/notes/tab-for-a-cause/introducing-monthly-charity-spotlight/2071986076177802/"
               target="_blank"
@@ -131,12 +132,14 @@ class CampaignBase extends React.Component {
             >
               Charity Spotlight
             </a>
-            . WWF works to protect the future of nature through forest
-            conservation, wildlife protection, safeguarding our oceans, and
-            fighting against climate change.
+            . Girls Not Brides is committed to ending child marriage, enabling
+            girls to fulfill their potential. They want to ensure that every
+            girl has the right to lead the life that she chooses and that, by
+            ending child marriage, we can all have a safer, healthier and more
+            prosperous future.
           </Typography>
           <Typography variant={'body2'} gutterBottom>
-            Stand up for our planet by donating some hearts to WWF!
+            Join us in supporting Girls Not Brides by donating hearts!
           </Typography>
         </div>
       </HeartDonationCampaign>
