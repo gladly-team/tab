@@ -65,9 +65,6 @@ const styles = theme => ({
   },
 })
 
-// TODO: need to fix JSS due to React Snap problems?
-// https://github.com/stereobooster/react-snap/issues/99#issuecomment-355663842
-// https://material-ui.com/guides/server-rendering/#the-client-side
 class SearchPage extends React.Component {
   constructor(props) {
     super(props)
