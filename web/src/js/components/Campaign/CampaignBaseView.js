@@ -11,7 +11,7 @@ class CampaignBaseView extends React.Component {
   render() {
     const { userId } = this.props
     const CAMPAIGN_START_TIME_ISO = '2019-03-26T20:00:00.000Z'
-    const CAMPAIGN_END_TIME_ISO = '2019-03-29T20:00:00.000Z'
+    const CAMPAIGN_END_TIME_ISO = '2019-04-01T18:00:00.000Z'
 
     return (
       <QueryRenderer
