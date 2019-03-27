@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { range } from 'lodash/util'
-import { Helmet } from 'react-helmet'
 import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
@@ -269,12 +268,6 @@ class SearchResults extends React.Component {
           style
         )}
       >
-        <Helmet>
-          <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
-          />
-        </Helmet>
         {this.state.noSearchResults ? (
           <Typography variant={'body1'} gutterBottom>
             No results found for{' '}
