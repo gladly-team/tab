@@ -2,14 +2,14 @@
 
 import React from 'react'
 import { mount, shallow } from 'enzyme'
-import LogoWithText from 'js/components/Logo/LogoWithText'
+import Logo from 'js/components/Logo/Logo'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import { externalContactUsURL } from 'js/navigation/navigation'
 import { externalRedirect } from 'js/navigation/utils'
 import logger from 'js/utils/logger'
 
-jest.mock('js/components/Logo/LogoWithText')
+jest.mock('js/components/Logo/Logo')
 jest.mock('js/navigation/navigation')
 jest.mock('js/navigation/utils')
 jest.mock('js/utils/logger')
@@ -89,7 +89,7 @@ describe('ErrorBoundary', function() {
     )
   })
 
-  it('shows the logo', () => {
+  it('shows the logo with expected props', () => {
     const ErrorBoundary = require('js/components/General/ErrorBoundary').default
     const mockProps = getMockProps()
     const wrapper = mount(
@@ -98,7 +98,12 @@ describe('ErrorBoundary', function() {
       </ErrorBoundary>
     )
     wrapper.setState({ hasError: true })
-    expect(wrapper.find(LogoWithText).length).toBe(1)
+    const logoComponent = wrapper.find(Logo)
+    expect(logoComponent.prop('brand')).not.toBeDefined()
+    expect(logoComponent.prop('includeText')).toBe(true)
+    expect(logoComponent.prop('style')).toEqual({
+      height: 40,
+    })
   })
 
   it('shows a button to contact us', () => {
