@@ -60,7 +60,7 @@
     "react-router": "^4.3.1",
     "react-router-dom": "4.4.0-beta.6",
     "react-sparkle": "^1.0.4",
-    "react-transition-group": "^2.5.3",
+    "react-transition-group": "^2.7.1",
     "relay-commit-mutation-promise": "^1.0.1",
     "sanitize-html": "^1.19.1",
     "tti-polyfill": "^0.2.2",
