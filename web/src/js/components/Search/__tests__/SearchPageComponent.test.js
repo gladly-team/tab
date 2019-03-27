@@ -128,7 +128,7 @@ describe('Search page component', () => {
     const mockProps = getMockProps()
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
     const logoComponent = wrapper.find(Logo)
-    expect(logoComponent.prop('brand')).not.toBeDefined()
+    expect(logoComponent.prop('brand')).toEqual('search')
     expect(logoComponent.prop('includeText')).toBe(true)
     expect(logoComponent.prop('style')).toEqual({
       width: 100,

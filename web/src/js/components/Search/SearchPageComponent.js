@@ -218,6 +218,7 @@ class SearchPage extends React.Component {
             }}
           >
             <Logo
+              brand={'search'}
               includeText
               style={{
                 width: 100,

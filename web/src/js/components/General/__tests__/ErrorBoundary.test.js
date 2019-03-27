@@ -99,7 +99,7 @@ describe('ErrorBoundary', function() {
     )
     wrapper.setState({ hasError: true })
     const logoComponent = wrapper.find(Logo)
-    expect(logoComponent.prop('brand')).not.toBeDefined()
+    expect(logoComponent.prop('brand')).toEqual('tab')
     expect(logoComponent.prop('includeText')).toBe(true)
     expect(logoComponent.prop('style')).toEqual({
       height: 40,

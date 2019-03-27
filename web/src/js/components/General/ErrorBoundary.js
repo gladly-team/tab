@@ -43,7 +43,7 @@ class ErrorBoundary extends React.Component {
               left: 0,
             }}
           >
-            <Logo includeText style={{ height: 40 }} />
+            <Logo brand={'tab'} includeText style={{ height: 40 }} />
           </div>
           <div
             style={{
