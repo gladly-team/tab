@@ -5,6 +5,7 @@ import { shallow } from 'enzyme'
 
 const getMockProps = () => ({
   color: 'purple',
+  includeText: false,
 })
 
 describe('Logo component', () => {
@@ -52,5 +53,13 @@ describe('Logo component', () => {
     mockProps.color = 'white'
     const wrapper = shallow(<Logo {...mockProps} />)
     expect(wrapper.find('img').prop('src')).toEqual('logo-white.svg')
+  })
+
+  it('uses the correct file for includeText=true', () => {
+    const Logo = require('js/components/Logo/Logo').default
+    const mockProps = getMockProps()
+    mockProps.includeText = true
+    const wrapper = shallow(<Logo {...mockProps} />)
+    expect(wrapper.find('img').prop('src')).toEqual('logo-with-text.svg')
   })
 })
