@@ -19,6 +19,7 @@ import { getCurrentUser, sendVerificationEmail } from 'js/authentication/user'
 import { getUrlParameters } from 'js/utils/utils'
 import { getBrowserExtensionInstallId } from 'js/utils/local-user-data-mgr'
 import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
+import Logo from 'js/components/Logo/Logo'
 
 jest.mock('js/authentication/helpers')
 jest.mock('js/authentication/user')
@@ -26,6 +27,7 @@ jest.mock('js/navigation/navigation')
 jest.mock('js/utils/utils')
 jest.mock('js/utils/local-user-data-mgr')
 jest.mock('js/components/Dashboard/AssignExperimentGroupsContainer')
+jest.mock('js/components/Logo/Logo')
 
 const mockFetchUser = jest.fn()
 
@@ -65,6 +67,27 @@ describe('Authentication.js tests', function() {
       .default
     const mockProps = MockProps()
     shallow(<Authentication {...mockProps} />)
+  })
+
+  it('shows the logo with expected props', async () => {
+    expect.assertions(3)
+
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    const wrapper = shallow(<Authentication {...mockProps} />)
+
+    // Wait for mount to complete.
+    const component = wrapper.instance()
+    await component.componentDidMount()
+    wrapper.update()
+
+    const logoComponent = wrapper.find(Logo)
+    expect(logoComponent.prop('brand')).not.toBeDefined()
+    expect(logoComponent.prop('includeText')).toBe(true)
+    expect(logoComponent.prop('style')).toEqual({
+      height: 40,
+    })
   })
 
   it('displays the endorsement quote', async () => {
