@@ -221,7 +221,6 @@ class SearchPage extends React.Component {
               brand={'search'}
               includeText
               style={{
-                width: 100,
                 height: 36,
               }}
             />
@@ -279,7 +278,7 @@ class SearchPage extends React.Component {
             indicatorColor={'primary'}
             style={{
               marginTop: 8,
-              marginLeft: 149,
+              marginLeft: 170,
             }}
             classes={{
               root: classes.tabsContainerRootStyle,

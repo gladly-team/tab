@@ -131,7 +131,6 @@ describe('Search page component', () => {
     expect(logoComponent.prop('brand')).toEqual('search')
     expect(logoComponent.prop('includeText')).toBe(true)
     expect(logoComponent.prop('style')).toEqual({
-      width: 100,
       height: 36,
     })
   })
