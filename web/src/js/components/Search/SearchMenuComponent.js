@@ -7,7 +7,7 @@ import {
   withStyles,
 } from '@material-ui/core/styles'
 import CircleIcon from '@material-ui/icons/Lens'
-import theme from 'js/theme/defaultV1'
+import theme from 'js/theme/searchTheme'
 import MoneyRaised from 'js/components/MoneyRaised/MoneyRaisedContainer'
 import Hearts from 'js/components/Dashboard/HeartsContainer'
 import SettingsButton from 'js/components/Dashboard/SettingsButtonComponent'
