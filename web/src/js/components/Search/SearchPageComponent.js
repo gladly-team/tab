@@ -24,6 +24,10 @@ import { isReactSnapClient } from 'js/utils/search-utils'
 import SearchMenuQuery from 'js/components/Search/SearchMenuQuery'
 import detectAdblocker from 'js/utils/detectAdblocker'
 import Link from 'js/components/General/Link'
+import {
+  hasUserDismissedSearchIntro,
+  setUserDismissedSearchIntro,
+} from 'js/utils/local-user-data-mgr'
 
 const Footer = lazy(() => import('js/components/General/Footer'))
 
@@ -61,20 +65,28 @@ const styles = theme => ({
   },
 })
 
+// Note: do not use react-helmet until v6 is published, due to
+// this stack overflow bug:
+// https://github.com/nfl/react-helmet/issues/373
 class SearchPage extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      showIntroMessage: false,
       isAdBlockerEnabled: false,
       query: '',
       searchFeatureEnabled: isSearchPageEnabled(),
       searchSource: null,
       searchText: '',
-      showPlaceholderText: false,
+      mounted: false,
     }
   }
 
   componentDidMount() {
+    // Don't change state on mount when prerendering with React Snap.
+    if (isReactSnapClient()) {
+      return
+    }
     if (!this.state.searchFeatureEnabled) {
       // Cannot use pushState now that the apps are separate.
       externalRedirect(dashboardURL)
@@ -85,15 +97,16 @@ class SearchPage extends React.Component {
     const query = parseUrlSearchString(location.search).q || ''
     this.setState({
       // We always derive the query and page values URL parameter
-      // values. We keep tehse in state so that we update the
+      // values. We keep these in state so that we update the
       // prerendered components after mount, because at prerender
-      // time we do not know the query string. We can remove this
+      // time we do not know search state. We can remove this
       // from state if we switch to server-side rendering.
+      mounted: true, // in other words, this is not React Snap prerendering
       query: query,
       page: this.getPageNumberFromSearchString(location.search),
-      showPlaceholderText: !isReactSnapClient(),
       searchSource: parseUrlSearchString(location.search).src || null,
       searchText: query,
+      showIntroMessage: !hasUserDismissedSearchIntro(),
     })
 
     // AdBlockerDetection
@@ -167,8 +180,10 @@ class SearchPage extends React.Component {
     const { classes } = this.props
     const {
       isAdBlockerEnabled,
+      mounted,
       page,
       query,
+      showIntroMessage,
       searchSource,
       searchText,
     } = this.state
@@ -182,7 +197,7 @@ class SearchPage extends React.Component {
         data-test-id={'search-page'}
         style={{
           backgroundColor: '#fff',
-          minWidth: '100vw',
+          minWidth: 1100,
           minHeight: '100vh',
           display: 'flex',
           flexDirection: 'column',
@@ -228,9 +243,7 @@ class SearchPage extends React.Component {
                 placeholder={
                   // Don't immediately render the placeholder text because
                   // we may rapidly replace it with the query on first render.
-                  this.state.showPlaceholderText
-                    ? 'Search to raise money for charity...'
-                    : ''
+                  mounted ? 'Search to raise money for charity...' : ''
                 }
                 disableUnderline
                 fullWidth
@@ -261,7 +274,7 @@ class SearchPage extends React.Component {
           </div>
           <Tabs
             value={0}
-            indicatorColor={'secondary'}
+            indicatorColor={'primary'}
             style={{
               marginTop: 8,
               marginLeft: 149,
@@ -326,21 +339,114 @@ class SearchPage extends React.Component {
             />
           </Tabs>
         </div>
-        <div>
-          {isAdBlockerEnabled ? (
-            <div
-              data-test-id={'search-prevented-warning'}
-              style={{
-                marginLeft: searchResultsPaddingLeft,
-                marginTop: 20,
-                marginBottom: 20,
-                width: 600,
-              }}
-            >
-              <Paper
+        <div
+          style={{
+            display: 'flex',
+          }}
+        >
+          <div
+            data-test-id={'search-primary-results-column'}
+            style={{
+              marginLeft: searchResultsPaddingLeft,
+              marginTop: 20,
+              width: 600,
+            }}
+          >
+            {isAdBlockerEnabled ? (
+              <div
+                data-test-id={'search-prevented-warning'}
                 style={{
+                  marginBottom: 20,
+                  width: '100%',
+                }}
+              >
+                <Paper
+                  elevation={1}
+                  style={{
+                    padding: '10px 18px',
+                    backgroundColor: 'rgb(242, 222, 222)',
+                  }}
+                >
+                  <span
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'flex-start',
+                    }}
+                  >
+                    <Typography
+                      style={{
+                        color: 'rgb(169, 68, 66)',
+                        fontWeight: 'bold',
+                        marginBottom: 8,
+                        marginTop: 8,
+                      }}
+                      variant={'h6'}
+                    >
+                      Please disable your ad blocker
+                    </Typography>
+                    <Typography variant={'body2'}>
+                      We use search ads to raise money for charity. You'll
+                      likely need to whitelist Search for a Cause for search
+                      results to show.
+                    </Typography>
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignSelf: 'flex-end',
+                        marginTop: 10,
+                      }}
+                    >
+                      <Link
+                        to={adblockerWhitelistingForSearchURL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Button color={'default'}>Show me how</Button>
+                      </Link>
+                    </div>
+                  </span>
+                </Paper>
+              </div>
+            ) : null}
+            <SearchResults
+              query={query}
+              page={page}
+              onPageChange={newPageIndex => {
+                modifyURLParams({
+                  page: newPageIndex,
+                })
+              }}
+              isAdBlockerEnabled={isAdBlockerEnabled}
+              searchSource={searchSource}
+              style={{
+                maxWidth: 600,
+                marginBottom: 40,
+              }}
+            />
+          </div>
+          <div
+            data-test-id={'search-sidebar'}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              margin: '20px 40px',
+              width: '100%',
+              boxSizing: 'border-box',
+              maxWidth: 410,
+              minWidth: 300,
+            }}
+          >
+            {' '}
+            {showIntroMessage ? (
+              <Paper
+                data-test-id={'search-intro-msg'}
+                elevation={1}
+                style={{
+                  width: '100%',
+                  boxSizing: 'border-box',
                   padding: '10px 18px',
-                  backgroundColor: 'rgb(242, 222, 222)',
+                  marginBottom: 20,
                 }}
               >
                 <span
@@ -351,20 +457,16 @@ class SearchPage extends React.Component {
                   }}
                 >
                   <Typography
-                    style={{
-                      color: 'rgb(169, 68, 66)',
-                      fontWeight: 'bold',
-                      marginBottom: 8,
-                      marginTop: 8,
-                    }}
                     variant={'h6'}
+                    style={{ marginTop: 8, marginBottom: 8 }}
                   >
-                    Please disable your ad blocker
+                    Your searches do good :)
                   </Typography>
                   <Typography variant={'body2'}>
-                    We use search ads to raise money for charity. You'll likely
-                    need to whitelist Search for a Cause for search results to
-                    show.
+                    When you search, you raise money for charity! The money
+                    comes from the ads in search results, and you decide where
+                    the money goes by donating your Hearts to your favorite
+                    nonprofit.
                   </Typography>
                   <div
                     style={{
@@ -373,35 +475,23 @@ class SearchPage extends React.Component {
                       marginTop: 10,
                     }}
                   >
-                    <Link
-                      to={adblockerWhitelistingForSearchURL}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <Button
+                      color={'primary'}
+                      variant={'contained'}
+                      onClick={() => {
+                        setUserDismissedSearchIntro()
+                        this.setState({
+                          showIntroMessage: false,
+                        })
+                      }}
                     >
-                      <Button color={'default'}>Show me how</Button>
-                    </Link>
+                      Great!
+                    </Button>
                   </div>
                 </span>
               </Paper>
-            </div>
-          ) : null}
-          <SearchResults
-            query={query}
-            page={page}
-            onPageChange={newPageIndex => {
-              modifyURLParams({
-                page: newPageIndex,
-              })
-            }}
-            isAdBlockerEnabled={isAdBlockerEnabled}
-            searchSource={searchSource}
-            style={{
-              marginLeft: searchResultsPaddingLeft,
-              maxWidth: 600,
-              paddingTop: 20,
-              marginBottom: 40,
-            }}
-          />
+            ) : null}
+          </div>
         </div>
         <Suspense fallback={null}>
           <Footer

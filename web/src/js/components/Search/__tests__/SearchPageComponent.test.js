@@ -20,12 +20,21 @@ import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import detectAdblocker from 'js/utils/detectAdblocker'
 import { flushAllPromises } from 'js/utils/test-utils'
+import {
+  hasUserDismissedSearchIntro,
+  setUserDismissedSearchIntro,
+} from 'js/utils/local-user-data-mgr'
+import {
+  impersonateReactSnapClient,
+  setUserAgentToTypicalTestUserAgent,
+} from 'js/utils/test-utils'
 
 jest.mock('js/utils/feature-flags')
 jest.mock('js/navigation/navigation')
 jest.mock('js/navigation/utils')
 jest.mock('js/components/Search/SearchResults')
 jest.mock('js/utils/detectAdblocker')
+jest.mock('js/utils/local-user-data-mgr')
 
 // Enzyme does not yet support React.lazy and React.Suspense,
 // so let's just not render lazy-loaded children for now.
@@ -53,6 +62,7 @@ beforeEach(() => {
 
 afterEach(() => {
   detectAdblocker.mockResolvedValue(false)
+  setUserAgentToTypicalTestUserAgent()
   jest.clearAllMocks()
 })
 
@@ -109,6 +119,62 @@ describe('Search page component', () => {
     expect(externalRedirect).not.toHaveBeenCalled()
   })
 
+  it('sets a min-width on the entire page', () => {
+    isSearchPageEnabled.mockReturnValue(true)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(
+      wrapper.find('[data-test-id="search-page"]').prop('style')
+    ).toHaveProperty('minWidth', 1100)
+  })
+
+  it('sets expected styling on the main search results column', () => {
+    isSearchPageEnabled.mockReturnValue(true)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find('[data-test-id="search-primary-results-column"]')
+        .prop('style')
+    ).toMatchObject({
+      marginLeft: 170,
+      marginTop: 20,
+      width: 600,
+    })
+  })
+
+  it('sets a max-width on the search results', () => {
+    isSearchPageEnabled.mockReturnValue(true)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.find(SearchResults).prop('style')).toHaveProperty(
+      'maxWidth',
+      600
+    )
+  })
+
+  it('sets expected styling on the search sidebar', () => {
+    isSearchPageEnabled.mockReturnValue(true)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(
+      wrapper.find('[data-test-id="search-sidebar"]').prop('style')
+    ).toMatchObject({
+      boxSizing: 'border-box',
+      display: 'flex',
+      maxWidth: 410,
+      minWidth: 300,
+    })
+  })
+
   it('sets the "query" state to the value of the "q" URL param on mount', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
@@ -120,6 +186,18 @@ describe('Search page component', () => {
     expect(wrapper.state('query')).toEqual('yumtacos')
   })
 
+  it('does not set the "query" state to the value of the "q" URL param when prerendering with React Snap', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location = {
+      search: '?q=yumtacos',
+    }
+    impersonateReactSnapClient()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.state('query')).toEqual('')
+  })
+
   it('sets the "page" state to the value of the "page" URL param on mount', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
@@ -129,6 +207,18 @@ describe('Search page component', () => {
     }
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
     expect(wrapper.state('page')).toEqual(14)
+  })
+
+  it('does not set the "page" state to the value of the "page" URL param when prerendering with React Snap', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location = {
+      search: '?page=14',
+    }
+    impersonateReactSnapClient()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.state('page')).toBeUndefined()
   })
 
   it('sets the "page" state to 1 if the value of the "page" URL param is not a valid integer', () => {
@@ -565,5 +655,122 @@ describe('Search page component', () => {
         .render()
         .text()
     ).toEqual('Show me how')
+  })
+
+  it('shows the intro message if the user has not dismissed it', () => {
+    hasUserDismissedSearchIntro.mockReturnValueOnce(false)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.find('[data-test-id="search-intro-msg"]').exists()).toBe(
+      true
+    )
+  })
+
+  it('does not show the intro message if the user has already dismissed it', () => {
+    hasUserDismissedSearchIntro.mockReturnValueOnce(true)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.find('[data-test-id="search-intro-msg"]').exists()).toBe(
+      false
+    )
+  })
+
+  it('clicking the dismiss button on the intro message hides the intro message', () => {
+    hasUserDismissedSearchIntro.mockReturnValueOnce(false)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.find('[data-test-id="search-intro-msg"]').exists()).toBe(
+      true
+    )
+    wrapper
+      .find('[data-test-id="search-intro-msg"]')
+      .find(Button)
+      .first()
+      .simulate('click')
+    expect(wrapper.find('[data-test-id="search-intro-msg"]').exists()).toBe(
+      false
+    )
+  })
+
+  it('clicking the dismiss button sets the dismissal in local storage', () => {
+    hasUserDismissedSearchIntro.mockReturnValueOnce(false)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    wrapper
+      .find('[data-test-id="search-intro-msg"]')
+      .find(Button)
+      .first()
+      .simulate('click')
+    expect(setUserDismissedSearchIntro).toHaveBeenCalledTimes(1)
+  })
+
+  it('shows the expected intro message title', () => {
+    hasUserDismissedSearchIntro.mockReturnValueOnce(false)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find('[data-test-id="search-intro-msg"]')
+        .find(Typography)
+        .first()
+        .render()
+        .text()
+    ).toEqual('Your searches do good :)')
+  })
+
+  it('shows the expected intro message description', () => {
+    hasUserDismissedSearchIntro.mockReturnValueOnce(false)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find('[data-test-id="search-intro-msg"]')
+        .find(Typography)
+        .at(1)
+        .render()
+        .text()
+    ).toEqual(
+      'When you search, you raise money for charity! The money comes from the ads in search results, and you decide where the money goes by donating your Hearts to your favorite nonprofit.'
+    )
+  })
+
+  it('shows the expected intro message button text', () => {
+    hasUserDismissedSearchIntro.mockReturnValueOnce(false)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find('[data-test-id="search-intro-msg"]')
+        .find(Button)
+        .first()
+        .render()
+        .text()
+    ).toEqual('Great!')
+  })
+
+  it('does not show the intro message if prerendering with React Snap', () => {
+    hasUserDismissedSearchIntro.mockReturnValueOnce(false)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    impersonateReactSnapClient()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.find('[data-test-id="search-intro-msg"]').exists()).toBe(
+      false
+    )
   })
 })

@@ -153,5 +153,19 @@
     "updated": "2019-02-22T18:00:000Z",
     "inactive": false,
     "isPermanentPartner": false
+  },
+  {
+    "id": "3e47df5d-1a1e-432b-8d81-12dc5453563e",
+    "name": "Girls Not Brides",
+    "category": "Human Rights",
+    "logo": "girls-not-brides.png",
+    "image": "girls-not-brides.jpg",
+    "website": "https://www.girlsnotbrides.org/",
+    "impact": "Your donation will help Girls Not Brides bring child marriage to global attention, build an understanding of what it will take to end child marriage and call for the laws, policies and programs that will make a difference in the lives of millions of girls.",
+    "description": "Works to end child marriage worldwide.",
+    "created": "2019-03-26T18:00:000Z",
+    "updated": "2019-03-26T18:00:000Z",
+    "inactive": false,
+    "isPermanentPartner": false
   }
 ]
