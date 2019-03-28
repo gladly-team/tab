@@ -2,3 +2,4 @@ node_modules
 coverage
 build
 data
+__generated__
