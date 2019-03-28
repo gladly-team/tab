@@ -1,8 +1,6 @@
 import React from 'react'
 import { Route, Router, Switch } from 'react-router-dom'
 import { browserHistory } from 'js/navigation/navigation'
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
-import defaultTheme from 'js/theme/defaultV1'
 import BaseContainer from 'js/components/General/BaseContainer'
 import ErrorBoundary from 'js/components/General/ErrorBoundary'
 import { initializeFirebase } from 'js/authentication/firebaseConfig'
@@ -43,8 +41,6 @@ switch (process.env.REACT_APP_WHICH_APP) {
   }
 }
 
-const muiTheme = createMuiTheme(defaultTheme)
-
 class Root extends React.Component {
   constructor(props) {
     super(props)
@@ -77,17 +73,15 @@ class Root extends React.Component {
   render() {
     // TODO: Show 404 page
     return (
-      <MuiThemeProvider theme={muiTheme}>
-        <ErrorBoundary>
-          <BaseContainer>
-            <Router history={browserHistory}>
-              <Switch>
-                <Route path={appPath} component={TheApp} />
-              </Switch>
-            </Router>
-          </BaseContainer>
-        </ErrorBoundary>
-      </MuiThemeProvider>
+      <ErrorBoundary>
+        <BaseContainer>
+          <Router history={browserHistory}>
+            <Switch>
+              <Route path={appPath} component={TheApp} />
+            </Switch>
+          </Router>
+        </BaseContainer>
+      </ErrorBoundary>
     )
   }
 }

@@ -21,7 +21,7 @@ import {
   verifyEmailURL,
   goToDashboard,
 } from 'js/navigation/navigation'
-import LogoWithText from 'js/components/Logo/LogoWithText'
+import Logo from 'js/components/Logo/Logo'
 import { getUrlParameters } from 'js/utils/utils'
 import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
 import logger from 'js/utils/logger'
@@ -208,7 +208,7 @@ class Authentication extends React.Component {
             left: 0,
           }}
         >
-          <LogoWithText style={{ height: 40 }} />
+          <Logo brand={'tab'} includeText style={{ height: 40 }} />
         </div>
         <span
           style={{

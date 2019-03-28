@@ -28,6 +28,7 @@ import {
   impersonateReactSnapClient,
   setUserAgentToTypicalTestUserAgent,
 } from 'js/utils/test-utils'
+import Logo from 'js/components/Logo/Logo'
 
 jest.mock('js/utils/feature-flags')
 jest.mock('js/navigation/navigation')
@@ -35,6 +36,7 @@ jest.mock('js/navigation/utils')
 jest.mock('js/components/Search/SearchResults')
 jest.mock('js/utils/detectAdblocker')
 jest.mock('js/utils/local-user-data-mgr')
+jest.mock('js/components/Logo/Logo')
 
 // Enzyme does not yet support React.lazy and React.Suspense,
 // so let's just not render lazy-loaded children for now.
@@ -117,6 +119,20 @@ describe('Search page component', () => {
     const mockProps = getMockProps()
     shallow(<SearchPageComponent {...mockProps} />).dive()
     expect(externalRedirect).not.toHaveBeenCalled()
+  })
+
+  it('includes the Logo component with expected props', () => {
+    isSearchPageEnabled.mockReturnValue(true)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const logoComponent = wrapper.find(Logo)
+    expect(logoComponent.prop('brand')).toEqual('search')
+    expect(logoComponent.prop('includeText')).toBe(true)
+    expect(logoComponent.prop('style')).toEqual({
+      height: 36,
+    })
   })
 
   it('sets a min-width on the entire page', () => {

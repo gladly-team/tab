@@ -1,7 +1,9 @@
 import React, { Suspense, lazy } from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import V0MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
+import defaultTheme from 'js/theme/defaultV1'
 import defaultThemeLegacy from 'js/theme/default'
 import withPageviewTracking from 'js/analytics/withPageviewTracking'
 import { isInEuropeanUnion } from 'js/utils/client-location'
@@ -26,6 +28,7 @@ const PostUninstallView = lazy(() =>
   import('js/components/Dashboard/PostUninstallView')
 )
 
+const muiTheme = createMuiTheme(defaultTheme)
 const legacyMuiTheme = getMuiTheme(defaultThemeLegacy)
 
 class App extends React.Component {
@@ -62,49 +65,55 @@ class App extends React.Component {
   render() {
     // @material-ui-1-todo: remove legacy theme provider
     return (
-      <V0MuiThemeProvider muiTheme={legacyMuiTheme}>
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0,
-            margin: 0,
-            padding: 0,
-            border: 'none',
-          }}
-        >
-          <Suspense fallback={<FullPageLoader delay={350} />}>
-            <Switch>
-              <Route exact path="/newtab/" component={DashboardView} />
-              <Route
-                path="/newtab/settings/"
-                component={SettingsPageComponent}
-              />
-              <Route
-                path="/newtab/account/"
-                component={SettingsPageComponent}
-              />
-              <Route
-                path="/newtab/profile/"
-                component={SettingsPageComponent}
-              />
-              <Route exact path="/newtab/first-tab/" component={FirstTabView} />
-              <Route
-                exact
-                path="/newtab/uninstalled/"
-                component={PostUninstallView}
-              />
-              <Route path="/newtab/auth/" component={AuthenticationView} />
-              <Redirect from="*" to="/newtab/" />
-            </Switch>
-          </Suspense>
-          <ErrorBoundary ignoreErrors>
-            <QuantcastChoiceCMP />
-          </ErrorBoundary>
-        </div>
-      </V0MuiThemeProvider>
+      <MuiThemeProvider theme={muiTheme}>
+        <V0MuiThemeProvider muiTheme={legacyMuiTheme}>
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              right: 0,
+              bottom: 0,
+              left: 0,
+              margin: 0,
+              padding: 0,
+              border: 'none',
+            }}
+          >
+            <Suspense fallback={<FullPageLoader delay={350} />}>
+              <Switch>
+                <Route exact path="/newtab/" component={DashboardView} />
+                <Route
+                  path="/newtab/settings/"
+                  component={SettingsPageComponent}
+                />
+                <Route
+                  path="/newtab/account/"
+                  component={SettingsPageComponent}
+                />
+                <Route
+                  path="/newtab/profile/"
+                  component={SettingsPageComponent}
+                />
+                <Route
+                  exact
+                  path="/newtab/first-tab/"
+                  component={FirstTabView}
+                />
+                <Route
+                  exact
+                  path="/newtab/uninstalled/"
+                  component={PostUninstallView}
+                />
+                <Route path="/newtab/auth/" component={AuthenticationView} />
+                <Redirect from="*" to="/newtab/" />
+              </Switch>
+            </Suspense>
+            <ErrorBoundary ignoreErrors>
+              <QuantcastChoiceCMP />
+            </ErrorBoundary>
+          </div>
+        </V0MuiThemeProvider>
+      </MuiThemeProvider>
     )
   }
 }
