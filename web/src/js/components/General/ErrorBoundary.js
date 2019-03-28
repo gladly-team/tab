@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import logger from 'js/utils/logger'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
-import LogoWithText from 'js/components/Logo/LogoWithText'
+import Logo from 'js/components/Logo/Logo'
 import { externalContactUsURL } from 'js/navigation/navigation'
 import { externalRedirect } from 'js/navigation/utils'
 
@@ -43,7 +43,7 @@ class ErrorBoundary extends React.Component {
               left: 0,
             }}
           >
-            <LogoWithText style={{ height: 40 }} />
+            <Logo brand={'tab'} includeText style={{ height: 40 }} />
           </div>
           <div
             style={{

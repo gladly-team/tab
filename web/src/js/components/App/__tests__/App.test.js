@@ -2,6 +2,8 @@
 
 import React from 'react'
 import { shallow } from 'enzyme'
+import { MuiThemeProvider } from '@material-ui/core/styles'
+import V0MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 
 jest.mock('js/utils/client-location')
 jest.mock('js/ads/consentManagement')
@@ -15,6 +17,18 @@ describe('App', () => {
   it('renders without error', () => {
     const App = require('js/components/App/App').default
     shallow(<App />)
+  })
+
+  it('contains the legacy MUI theme provider', async () => {
+    const App = require('js/components/App/App').default
+    const wrapper = shallow(<App />)
+    expect(wrapper.find(V0MuiThemeProvider).exists()).toBe(true)
+  })
+
+  it('contains the MUI theme provider', async () => {
+    const App = require('js/components/App/App').default
+    const wrapper = shallow(<App />)
+    expect(wrapper.find(MuiThemeProvider).exists()).toBe(true)
   })
 
   it('registers callback with the CMP for data consent update (when in the EU)', async () => {

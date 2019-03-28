@@ -17,7 +17,7 @@ import {
   modifyURLParams,
 } from 'js/navigation/navigation'
 import { externalRedirect } from 'js/navigation/utils'
-import LogoWithText from 'js/components/Logo/LogoWithText'
+import Logo from 'js/components/Logo/Logo'
 import { parseUrlSearchString } from 'js/utils/utils'
 import SearchResults from 'js/components/Search/SearchResults'
 import { isReactSnapClient } from 'js/utils/search-utils'
@@ -217,9 +217,10 @@ class SearchPage extends React.Component {
               justifyContent: 'flex-start',
             }}
           >
-            <LogoWithText
+            <Logo
+              brand={'search'}
+              includeText
               style={{
-                width: 100,
                 height: 36,
               }}
             />
@@ -277,7 +278,7 @@ class SearchPage extends React.Component {
             indicatorColor={'primary'}
             style={{
               marginTop: 8,
-              marginLeft: 149,
+              marginLeft: 170,
             }}
             classes={{
               root: classes.tabsContainerRootStyle,
