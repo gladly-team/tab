@@ -6,7 +6,6 @@ import { shallow } from 'enzyme'
 import { goTo } from 'js/navigation/navigation'
 
 jest.mock('js/navigation/navigation')
-jest.mock('js/navigation/navigation')
 
 afterEach(() => {
   jest.clearAllMocks()
