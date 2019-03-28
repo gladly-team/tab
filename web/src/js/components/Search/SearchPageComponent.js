@@ -221,7 +221,7 @@ class SearchPage extends React.Component {
               brand={'search'}
               includeText
               style={{
-                height: 36,
+                width: 116,
               }}
             />
             <div
