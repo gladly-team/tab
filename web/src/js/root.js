@@ -23,22 +23,18 @@ import logger from 'js/utils/logger'
 // https://github.com/gladly-team/tab/pull/466
 var TheApp
 var appPath
-switch (process.env.REACT_APP_WHICH_APP) {
-  case 'newtab': {
-    TheApp = require('js/components/App/App').default
-    appPath = '/newtab/'
-    break
-  }
-  case 'search': {
-    TheApp = require('js/components/Search/SearchApp').default
-    appPath = '/search/'
-    break
-  }
-  default: {
-    throw new Error(
-      `Env var "REACT_APP_WHICH_APP" should be set to "newtab" or "search".`
-    )
-  }
+if (process.env.REACT_APP_WHICH_APP === 'newtab') {
+  TheApp = require('js/components/App/App').default
+  appPath = '/newtab/'
+} else if (process.env.REACT_APP_WHICH_APP === 'search') {
+  TheApp = require('js/components/Search/SearchApp').default
+  appPath = '/search/'
+} else {
+  throw new Error(
+    `Env var "REACT_APP_WHICH_APP" should be set to "newtab" or "search". Received: "${
+      process.env.REACT_APP_WHICH_APP
+    }"`
+  )
 }
 
 class Root extends React.Component {
