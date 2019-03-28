@@ -78,7 +78,7 @@
     "serve": "echo \"Serving from build. Note that http-server must be installed globally.\" && http-server build -p 5000",
     "eject": "react-scripts eject",
     "bundle:analyze": "source-map-explorer",
-    "bundle:analyze-buddy": "bundle-buddy build/static/js/*.map",
+    "bundle:analyze-buddy": "bundle-buddy build/**/*.map",
     "postinstall": "patch-package",
     "deploy": "npm-run-all -s sls:deploy build:newtab deploy:newtab build:search deploy:search",
     "deploy:newtab": "node scripts/syncToS3.js --app newtab",
