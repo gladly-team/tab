@@ -5,6 +5,7 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import defaultSearchTheme from 'js/theme/searchTheme'
 import SearchPageComponent from 'js/components/Search/SearchPageComponent'
 import SearchPostUninstallView from 'js/components/Search/SearchPostUninstallView'
+import SearchRandomQueryView from 'js/components/Search/SearchRandomQueryView'
 
 const muiTheme = createMuiTheme(defaultSearchTheme)
 
@@ -21,6 +22,11 @@ class SearchApp extends React.Component {
               exact
               path="/search/uninstalled/"
               component={SearchPostUninstallView}
+            />
+            <Route
+              exact
+              path="/search/random/"
+              component={SearchRandomQueryView}
             />
             <Redirect from="*" to={{ ...location, pathname: '/search' }} />
           </Switch>
