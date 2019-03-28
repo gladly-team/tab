@@ -7,7 +7,17 @@ import { goTo, searchBaseURL } from 'js/navigation/navigation'
 // search results.
 class SearchRandomQueryView extends React.Component {
   componentDidMount() {
-    goTo(searchBaseURL)
+    const queries = [
+      'volunteer opportunities near me',
+      'how to have a bake sale for charity',
+      'ways to raise money for non-profits',
+      'random acts of kindness',
+      'ways to make someone smile',
+    ]
+    const query = queries[Math.floor(Math.random() * queries.length)]
+    goTo(searchBaseURL, {
+      q: query,
+    })
   }
 
   render() {
