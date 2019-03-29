@@ -4,6 +4,7 @@ import { range } from 'lodash/util'
 import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
+import Link from 'js/components/General/Link'
 import logger from 'js/utils/logger'
 import fetchSearchResults from 'js/components/Search/fetchSearchResults'
 import YPAConfiguration from 'js/components/Search/YPAConfiguration'
@@ -275,9 +276,19 @@ class SearchResults extends React.Component {
           </Typography>
         ) : null}
         {this.state.unexpectedSearchError || isAdBlockerEnabled ? (
-          <Typography variant={'body1'} gutterBottom>
-            Unable to search at this time.
-          </Typography>
+          <div data-test-id={'search-err-msg'}>
+            <Typography variant={'body1'} gutterBottom>
+              Unable to search at this time.
+            </Typography>
+            <Link
+              to={`https://www.google.com/search?q=${encodeURI(query)}`}
+              target="_top"
+            >
+              <Button color={'primary'} variant={'contained'} size={'small'}>
+                Search Google
+              </Button>
+            </Link>
+          </div>
         ) : null}
         <div
           id="search-ads"
