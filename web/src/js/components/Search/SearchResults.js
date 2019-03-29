@@ -250,6 +250,12 @@ class SearchResults extends React.Component {
       Math.max(MIN_PAGE, Math.min(page - 4, MAX_PAGE - 8)),
       Math.min(MAX_PAGE + 1, Math.max(page + 4, MIN_PAGE + 8))
     )
+
+    // Whether there are no search results for whatever reason.
+    const noResultsToDisplay =
+      this.state.noSearchResults ||
+      this.state.unexpectedSearchError ||
+      isAdBlockerEnabled
     return (
       <div
         className={classes.searchResultsParentContainer}
@@ -258,12 +264,7 @@ class SearchResults extends React.Component {
           {
             // Min height prevents visibly shifting content below,
             // like the footer.
-            minHeight:
-              this.state.noSearchResults ||
-              this.state.unexpectedSearchError ||
-              isAdBlockerEnabled
-                ? 0
-                : 1200,
+            minHeight: noResultsToDisplay ? 0 : 1200,
           },
           style
         )}
@@ -305,12 +306,7 @@ class SearchResults extends React.Component {
           data-test-id={'pagination-container'}
           className={classes.paginationContainer}
           style={{
-            display:
-              this.state.noSearchResults ||
-              this.state.unexpectedSearchError ||
-              isAdBlockerEnabled
-                ? 'none'
-                : 'block',
+            display: noResultsToDisplay ? 'none' : 'block',
           }}
         >
           {page > MIN_PAGE ? (
