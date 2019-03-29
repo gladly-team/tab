@@ -331,6 +331,14 @@ describe('SearchResults component', () => {
     expect(wrapper.get(0).props.style.minHeight).toBe(0)
   })
 
+  it('removes the a min-height from the results container if there is no search query set', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = '' // no query
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    expect(wrapper.get(0).props.style.minHeight).toBe(0)
+  })
+
   it('shows an error message and logs an error when the search errors with "URL_UNREGISTERED"', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
@@ -416,6 +424,23 @@ describe('SearchResults component', () => {
         ).length
     ).toBe(1)
     expect(logger.error).toHaveBeenCalledWith(new Error('Oops.'))
+  })
+
+  it('shows a message if there is no search query', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = ''
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find(Typography)
+        .filterWhere(
+          n =>
+            n.render().text() ===
+            'Search something to start raising money for charity!'
+        )
+        .exists()
+    ).toBe(true)
   })
 
   it('[inline-script] adds an inline script to the document on mount when prerendering with react-snap', () => {
@@ -899,6 +924,16 @@ describe('SearchResults component', () => {
     const mockProps = getMockProps()
     mockProps.query = 'foo'
     mockProps.isAdBlockerEnabled = true
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    expect(
+      wrapper.find('[data-test-id="pagination-container"]').prop('style')
+    ).toHaveProperty('display', 'none')
+  })
+
+  it('hides the pagination container when no search query is set', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = ''
     const wrapper = shallow(<SearchResults {...mockProps} />).dive()
     expect(
       wrapper.find('[data-test-id="pagination-container"]').prop('style')

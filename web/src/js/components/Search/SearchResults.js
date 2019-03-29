@@ -50,6 +50,7 @@ class SearchResults extends React.Component {
     this.state = {
       noSearchResults: false,
       unexpectedSearchError: false,
+      mounted: false, // i.e. we've mounted to a real user, not pre-rendering
     }
   }
 
@@ -59,6 +60,14 @@ class SearchResults extends React.Component {
     // Fetch a query if one exists on mount.
     if (query) {
       this.getSearchResults()
+    }
+
+    // Mark that we've mounted for a real user. In other words, this
+    // is not React Snap prerendering.
+    if (!isReactSnapClient()) {
+      this.setState({
+        mounted: true,
+      })
     }
 
     // When prerendering the page, add an inline script to fetch
@@ -252,7 +261,9 @@ class SearchResults extends React.Component {
     )
 
     // Whether there are no search results for whatever reason.
+    const isEmptyQuery = this.state.mounted && !query
     const noResultsToDisplay =
+      isEmptyQuery ||
       this.state.noSearchResults ||
       this.state.unexpectedSearchError ||
       isAdBlockerEnabled
@@ -278,6 +289,11 @@ class SearchResults extends React.Component {
         {this.state.unexpectedSearchError || isAdBlockerEnabled ? (
           <Typography variant={'body1'} gutterBottom>
             Unable to search at this time.
+          </Typography>
+        ) : null}
+        {isEmptyQuery ? (
+          <Typography variant={'body1'} gutterBottom>
+            Search something to start raising money for charity!
           </Typography>
         ) : null}
         <div
