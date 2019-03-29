@@ -5,6 +5,8 @@ import { mount, shallow } from 'enzyme'
 import { range } from 'lodash/util'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
+import Link from 'js/components/General/Link'
 import logger from 'js/utils/logger'
 import fetchSearchResults from 'js/components/Search/fetchSearchResults'
 import {
@@ -385,6 +387,32 @@ describe('SearchResults component', () => {
     )
   })
 
+  it('shows a button to search Google when there is an unexpected error', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'ice cream!'
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    const onNoAdCallback = fetchSearchResults.mock.calls[0][1]
+    onNoAdCallback({
+      SOMETHING_WE_DID_NOT_SEE_COMING: 1,
+    })
+
+    const errMsgContainer = wrapper.find('[data-test-id="search-err-msg"]')
+    expect(
+      errMsgContainer
+        .find(Button)
+        .first()
+        .render()
+        .text()
+    ).toEqual('Search Google')
+    expect(
+      errMsgContainer
+        .find(Link)
+        .first()
+        .prop('to')
+    ).toEqual('https://www.google.com/search?q=ice%20cream!')
+  })
+
   it('shows an error message when an ad blocker is enabled', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
@@ -399,6 +427,16 @@ describe('SearchResults component', () => {
         )
         .exists()
     ).toBe(true)
+  })
+
+  it('does not show a button to search Google when an ad blocker is enabled', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'foo'
+    mockProps.isAdBlockerEnabled = true
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    const errMsgContainer = wrapper.find('[data-test-id="search-err-msg"]')
+    expect(errMsgContainer.find(Button).exists()).toBe(false)
   })
 
   it('shows an error message and logs an error when the YPA JS throws', () => {
