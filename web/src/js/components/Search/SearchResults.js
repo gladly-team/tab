@@ -290,8 +290,7 @@ class SearchResults extends React.Component {
           <Typography variant={'body1'} gutterBottom>
             Unable to search at this time.
           </Typography>
-        ) : null}
-        {isEmptyQuery ? (
+        ) : isEmptyQuery ? (
           <Typography variant={'body1'} gutterBottom>
             Search something to start raising money for charity!
           </Typography>

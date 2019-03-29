@@ -443,6 +443,36 @@ describe('SearchResults component', () => {
     ).toBe(true)
   })
 
+  it('only shows the single error message if an ad blocker is enabled and there is no search query', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = ''
+    mockProps.isAdBlockerEnabled = true
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+
+    // Show the ad blocker error.
+    expect(
+      wrapper
+        .find(Typography)
+        .filterWhere(
+          n => n.render().text() === 'Unable to search at this time.'
+        )
+        .exists()
+    ).toBe(true)
+
+    // Do not show this "empty query" message.
+    expect(
+      wrapper
+        .find(Typography)
+        .filterWhere(
+          n =>
+            n.render().text() ===
+            'Search something to start raising money for charity!'
+        )
+        .exists()
+    ).toBe(false)
+  })
+
   it('[inline-script] adds an inline script to the document on mount when prerendering with react-snap', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
