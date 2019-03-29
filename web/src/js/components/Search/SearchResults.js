@@ -292,14 +292,16 @@ class SearchResults extends React.Component {
             <Typography variant={'body1'} gutterBottom>
               Unable to search at this time.
             </Typography>
-            <Link
-              to={`https://www.google.com/search?q=${encodeURI(query)}`}
-              target="_top"
-            >
-              <Button color={'primary'} variant={'contained'} size={'small'}>
-                Search Google
-              </Button>
-            </Link>
+            {isAdBlockerEnabled ? null : (
+              <Link
+                to={`https://www.google.com/search?q=${encodeURI(query)}`}
+                target="_top"
+              >
+                <Button color={'primary'} variant={'contained'} size={'small'}>
+                  Search Google
+                </Button>
+              </Link>
+            )}
           </div>
         ) : isEmptyQuery ? (
           <Typography variant={'body1'} gutterBottom>

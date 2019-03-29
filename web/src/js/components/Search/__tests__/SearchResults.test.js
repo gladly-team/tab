@@ -429,6 +429,16 @@ describe('SearchResults component', () => {
     ).toBe(true)
   })
 
+  it('does not show a button to search Google when an ad blocker is enabled', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'foo'
+    mockProps.isAdBlockerEnabled = true
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    const errMsgContainer = wrapper.find('[data-test-id="search-err-msg"]')
+    expect(errMsgContainer.find(Button).exists()).toBe(false)
+  })
+
   it('shows an error message and logs an error when the YPA JS throws', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
