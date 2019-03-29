@@ -8,6 +8,7 @@ import V0MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import SearchPageComponent from 'js/components/Search/SearchPageComponent'
 import SearchPostUninstallView from 'js/components/Search/SearchPostUninstallView'
 import SearchRandomQueryView from 'js/components/Search/SearchRandomQueryView'
+import ErrorBoundary from 'js/components/General/ErrorBoundary'
 
 jest.mock('js/components/Search/SearchPageComponent')
 jest.mock('js/components/Search/SearchPostUninstallView')
@@ -29,6 +30,13 @@ describe('SearchApp', () => {
     const SearchApp = require('js/components/Search/SearchApp').default
     const wrapper = shallow(<SearchApp />)
     expect(wrapper.find(MuiThemeProvider).exists()).toBe(true)
+  })
+
+  it('contains an error boundary', async () => {
+    const SearchApp = require('js/components/Search/SearchApp').default
+    const wrapper = shallow(<SearchApp />)
+    expect(wrapper.find(ErrorBoundary).exists()).toBe(true)
+    expect(wrapper.find(ErrorBoundary).prop('brand')).toBeUndefined()
   })
 
   it('contains the main search page route', async () => {
