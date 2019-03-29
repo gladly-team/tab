@@ -3,10 +3,9 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 
-import { externalRedirect } from 'js/navigation/utils'
+import { goTo } from 'js/navigation/navigation'
 
 jest.mock('js/navigation/navigation')
-jest.mock('js/navigation/utils')
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -25,8 +24,6 @@ describe('SearchPostUninstallView', function() {
     const SearchPostUninstallView = require('js/components/Search/SearchPostUninstallView')
       .default
     shallow(<SearchPostUninstallView {...mockProps} />)
-    expect(externalRedirect).toHaveBeenCalledWith(
-      'https://forms.gle/A3Xam2op2gFjoQNU6'
-    )
+    expect(goTo).toHaveBeenCalledWith('https://forms.gle/A3Xam2op2gFjoQNU6')
   })
 })

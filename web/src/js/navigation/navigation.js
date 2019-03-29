@@ -74,6 +74,9 @@ export const statsURL = '/newtab/profile/stats/'
 export const inviteFriendsURL = '/newtab/profile/invite/'
 export const accountURL = '/newtab/account/'
 
+// Search
+export const searchBaseURL = '/search'
+
 // Homepage
 
 export const homeURL = absoluteUrl('/')

@@ -2,8 +2,16 @@
 
 import React from 'react'
 import { shallow } from 'enzyme'
+import { Route } from 'react-router-dom'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import V0MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import SearchPageComponent from 'js/components/Search/SearchPageComponent'
+import SearchPostUninstallView from 'js/components/Search/SearchPostUninstallView'
+import SearchRandomQueryView from 'js/components/Search/SearchRandomQueryView'
+
+jest.mock('js/components/Search/SearchPageComponent')
+jest.mock('js/components/Search/SearchPostUninstallView')
+jest.mock('js/components/Search/SearchRandomQueryView')
 
 describe('SearchApp', () => {
   it('renders without error', () => {
@@ -21,5 +29,41 @@ describe('SearchApp', () => {
     const SearchApp = require('js/components/Search/SearchApp').default
     const wrapper = shallow(<SearchApp />)
     expect(wrapper.find(MuiThemeProvider).exists()).toBe(true)
+  })
+
+  it('contains the main search page route', async () => {
+    const SearchApp = require('js/components/Search/SearchApp').default
+    const wrapper = shallow(<SearchApp />)
+    const route = wrapper
+      .find(Route)
+      // Do not change this URL, because people may have linked
+      // to search results.
+      .filterWhere(n => n.prop('path') === '/search')
+    expect(route.exists()).toBe(true)
+    expect(route.prop('component')).toBe(SearchPageComponent)
+  })
+
+  it('contains the search browser extension post-uninstall route', async () => {
+    const SearchApp = require('js/components/Search/SearchApp').default
+    const wrapper = shallow(<SearchApp />)
+    const route = wrapper
+      .find(Route)
+      // Do not change this URL, because the browser extensions
+      // use it.
+      .filterWhere(n => n.prop('path') === '/search/uninstalled/')
+    expect(route.exists()).toBe(true)
+    expect(route.prop('component')).toBe(SearchPostUninstallView)
+  })
+
+  it('contains the search browser extension post-uninstall route', async () => {
+    const SearchApp = require('js/components/Search/SearchApp').default
+    const wrapper = shallow(<SearchApp />)
+    const route = wrapper
+      .find(Route)
+      // Do not change this URL, because the browser extensions
+      // use it.
+      .filterWhere(n => n.prop('path') === '/search/random/')
+    expect(route.exists()).toBe(true)
+    expect(route.prop('component')).toBe(SearchRandomQueryView)
   })
 })
