@@ -5,6 +5,8 @@ import { mount, shallow } from 'enzyme'
 import { range } from 'lodash/util'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
+import Link from 'js/components/General/Link'
 import logger from 'js/utils/logger'
 import fetchSearchResults from 'js/components/Search/fetchSearchResults'
 import {
@@ -331,6 +333,14 @@ describe('SearchResults component', () => {
     expect(wrapper.get(0).props.style.minHeight).toBe(0)
   })
 
+  it('removes the a min-height from the results container if there is no search query set', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = '' // no query
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    expect(wrapper.get(0).props.style.minHeight).toBe(0)
+  })
+
   it('shows an error message and logs an error when the search errors with "URL_UNREGISTERED"', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
@@ -377,6 +387,32 @@ describe('SearchResults component', () => {
     )
   })
 
+  it('shows a button to search Google when there is an unexpected error', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'ice cream!'
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    const onNoAdCallback = fetchSearchResults.mock.calls[0][1]
+    onNoAdCallback({
+      SOMETHING_WE_DID_NOT_SEE_COMING: 1,
+    })
+
+    const errMsgContainer = wrapper.find('[data-test-id="search-err-msg"]')
+    expect(
+      errMsgContainer
+        .find(Button)
+        .first()
+        .render()
+        .text()
+    ).toEqual('Search Google')
+    expect(
+      errMsgContainer
+        .find(Link)
+        .first()
+        .prop('to')
+    ).toEqual('https://www.google.com/search?q=ice%20cream!')
+  })
+
   it('shows an error message when an ad blocker is enabled', () => {
     const SearchResults = require('js/components/Search/SearchResults').default
     const mockProps = getMockProps()
@@ -391,6 +427,16 @@ describe('SearchResults component', () => {
         )
         .exists()
     ).toBe(true)
+  })
+
+  it('does not show a button to search Google when an ad blocker is enabled', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = 'foo'
+    mockProps.isAdBlockerEnabled = true
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    const errMsgContainer = wrapper.find('[data-test-id="search-err-msg"]')
+    expect(errMsgContainer.find(Button).exists()).toBe(false)
   })
 
   it('shows an error message and logs an error when the YPA JS throws', () => {
@@ -416,6 +462,53 @@ describe('SearchResults component', () => {
         ).length
     ).toBe(1)
     expect(logger.error).toHaveBeenCalledWith(new Error('Oops.'))
+  })
+
+  it('shows a message if there is no search query', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = ''
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find(Typography)
+        .filterWhere(
+          n =>
+            n.render().text() ===
+            'Search something to start raising money for charity!'
+        )
+        .exists()
+    ).toBe(true)
+  })
+
+  it('only shows the single error message if an ad blocker is enabled and there is no search query', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = ''
+    mockProps.isAdBlockerEnabled = true
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+
+    // Show the ad blocker error.
+    expect(
+      wrapper
+        .find(Typography)
+        .filterWhere(
+          n => n.render().text() === 'Unable to search at this time.'
+        )
+        .exists()
+    ).toBe(true)
+
+    // Do not show this "empty query" message.
+    expect(
+      wrapper
+        .find(Typography)
+        .filterWhere(
+          n =>
+            n.render().text() ===
+            'Search something to start raising money for charity!'
+        )
+        .exists()
+    ).toBe(false)
   })
 
   it('[inline-script] adds an inline script to the document on mount when prerendering with react-snap', () => {
@@ -899,6 +992,16 @@ describe('SearchResults component', () => {
     const mockProps = getMockProps()
     mockProps.query = 'foo'
     mockProps.isAdBlockerEnabled = true
+    const wrapper = shallow(<SearchResults {...mockProps} />).dive()
+    expect(
+      wrapper.find('[data-test-id="pagination-container"]').prop('style')
+    ).toHaveProperty('display', 'none')
+  })
+
+  it('hides the pagination container when no search query is set', () => {
+    const SearchResults = require('js/components/Search/SearchResults').default
+    const mockProps = getMockProps()
+    mockProps.query = ''
     const wrapper = shallow(<SearchResults {...mockProps} />).dive()
     expect(
       wrapper.find('[data-test-id="pagination-container"]').prop('style')
