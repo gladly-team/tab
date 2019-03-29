@@ -67,7 +67,7 @@ class App extends React.Component {
     return (
       <MuiThemeProvider theme={muiTheme}>
         <V0MuiThemeProvider muiTheme={legacyMuiTheme}>
-          <ErrorBoundary>
+          <ErrorBoundary brand={'tab'}>
             <div
               style={{
                 position: 'absolute',
@@ -109,7 +109,7 @@ class App extends React.Component {
                   <Redirect from="*" to="/newtab/" />
                 </Switch>
               </Suspense>
-              <ErrorBoundary ignoreErrors>
+              <ErrorBoundary ignoreErrors brand={'tab'}>
                 <QuantcastChoiceCMP />
               </ErrorBoundary>
             </div>

@@ -49,7 +49,7 @@ describe('App', () => {
         .find(ErrorBoundary)
         .first()
         .prop('brand')
-    ).toBeUndefined()
+    ).toEqual('tab')
   })
 
   it('wraps our CMP in an error boundary that ignores caught errors', async () => {

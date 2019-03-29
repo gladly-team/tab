@@ -15,7 +15,7 @@ class SearchApp extends React.Component {
     const { location } = this.props
     return (
       <MuiThemeProvider theme={muiTheme}>
-        <ErrorBoundary>
+        <ErrorBoundary brand={'search'}>
           <div>
             {/* Redirect all /search/* URLs to /search/ for now. */}
             <Switch>

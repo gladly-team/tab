@@ -22,7 +22,7 @@ class ErrorBoundary extends React.Component {
   }
 
   render() {
-    const { ignoreErrors } = this.props
+    const { brand, ignoreErrors } = this.props
     if (this.state.hasError) {
       if (ignoreErrors) {
         return null
@@ -43,7 +43,7 @@ class ErrorBoundary extends React.Component {
               left: 0,
             }}
           >
-            <Logo brand={'tab'} includeText style={{ height: 40 }} />
+            <Logo brand={brand} includeText style={{ height: 40 }} />
           </div>
           <div
             style={{
@@ -105,10 +105,12 @@ class ErrorBoundary extends React.Component {
 }
 
 ErrorBoundary.propTypes = {
+  brand: PropTypes.oneOf(['tab', 'search']),
   ignoreErrors: PropTypes.bool,
 }
 
 ErrorBoundary.defaultProps = {
+  brand: 'tab',
   ignoreErrors: false,
 }
 

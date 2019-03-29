@@ -36,7 +36,7 @@ describe('SearchApp', () => {
     const SearchApp = require('js/components/Search/SearchApp').default
     const wrapper = shallow(<SearchApp />)
     expect(wrapper.find(ErrorBoundary).exists()).toBe(true)
-    expect(wrapper.find(ErrorBoundary).prop('brand')).toBeUndefined()
+    expect(wrapper.find(ErrorBoundary).prop('brand')).toEqual('search')
   })
 
   it('contains the main search page route', async () => {

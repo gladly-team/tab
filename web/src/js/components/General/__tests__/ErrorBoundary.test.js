@@ -15,6 +15,7 @@ jest.mock('js/navigation/utils')
 jest.mock('js/utils/logger')
 
 const getMockProps = () => ({
+  brand: 'tab',
   ignoreErrors: false,
 })
 
@@ -92,6 +93,7 @@ describe('ErrorBoundary', function() {
   it('shows the logo with expected props', () => {
     const ErrorBoundary = require('js/components/General/ErrorBoundary').default
     const mockProps = getMockProps()
+    mockProps.brand = 'tab'
     const wrapper = mount(
       <ErrorBoundary {...mockProps}>
         <div>hey there</div>
@@ -104,6 +106,20 @@ describe('ErrorBoundary', function() {
     expect(logoComponent.prop('style')).toEqual({
       height: 40,
     })
+  })
+
+  it('passes the brand prop to the logo', () => {
+    const ErrorBoundary = require('js/components/General/ErrorBoundary').default
+    const mockProps = getMockProps()
+    mockProps.brand = 'search'
+    const wrapper = mount(
+      <ErrorBoundary {...mockProps}>
+        <div>hey there</div>
+      </ErrorBoundary>
+    )
+    wrapper.setState({ hasError: true })
+    const logoComponent = wrapper.find(Logo)
+    expect(logoComponent.prop('brand')).toEqual('search')
   })
 
   it('shows a button to contact us', () => {
