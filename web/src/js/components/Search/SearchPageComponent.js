@@ -78,7 +78,7 @@ class SearchPage extends React.Component {
       searchFeatureEnabled: isSearchPageEnabled(),
       searchSource: null,
       searchText: '',
-      mounted: false,
+      mounted: false, // i.e. we've mounted to a real user, not pre-rendering
     }
   }
 

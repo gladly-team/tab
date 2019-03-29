@@ -11,7 +11,14 @@ const path = require('path')
 exports.handler = (event, context, callback) => {
   const request = event.Records[0].cf.request
   if (!path.extname(request.uri)) {
-    request.uri = '/search/index.html'
+    // Only return a prerendered page for the search page.
+    // In the future, we may want to change this to pre-render
+    // additional pages.
+    if (request.uri.match('^/search/?(?!.*/)')) {
+      request.uri = '/search/index.html'
+    } else {
+      request.uri = '/search/200.html'
+    }
   }
   callback(null, request)
 }
