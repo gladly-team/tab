@@ -50,6 +50,7 @@ class SearchResults extends React.Component {
     this.state = {
       noSearchResults: false,
       unexpectedSearchError: false,
+      mounted: false, // i.e. we've mounted to a real user, not pre-rendering
     }
   }
 
@@ -59,6 +60,14 @@ class SearchResults extends React.Component {
     // Fetch a query if one exists on mount.
     if (query) {
       this.getSearchResults()
+    }
+
+    // Mark that we've mounted for a real user. In other words, this
+    // is not React Snap prerendering.
+    if (!isReactSnapClient()) {
+      this.setState({
+        mounted: true,
+      })
     }
 
     // When prerendering the page, add an inline script to fetch
@@ -250,6 +259,14 @@ class SearchResults extends React.Component {
       Math.max(MIN_PAGE, Math.min(page - 4, MAX_PAGE - 8)),
       Math.min(MAX_PAGE + 1, Math.max(page + 4, MIN_PAGE + 8))
     )
+
+    // Whether there are no search results for whatever reason.
+    const isEmptyQuery = this.state.mounted && !query
+    const noResultsToDisplay =
+      isEmptyQuery ||
+      this.state.noSearchResults ||
+      this.state.unexpectedSearchError ||
+      isAdBlockerEnabled
     return (
       <div
         className={classes.searchResultsParentContainer}
@@ -258,12 +275,7 @@ class SearchResults extends React.Component {
           {
             // Min height prevents visibly shifting content below,
             // like the footer.
-            minHeight:
-              this.state.noSearchResults ||
-              this.state.unexpectedSearchError ||
-              isAdBlockerEnabled
-                ? 0
-                : 1200,
+            minHeight: noResultsToDisplay ? 0 : 1200,
           },
           style
         )}
@@ -277,6 +289,10 @@ class SearchResults extends React.Component {
         {this.state.unexpectedSearchError || isAdBlockerEnabled ? (
           <Typography variant={'body1'} gutterBottom>
             Unable to search at this time.
+          </Typography>
+        ) : isEmptyQuery ? (
+          <Typography variant={'body1'} gutterBottom>
+            Search something to start raising money for charity!
           </Typography>
         ) : null}
         <div
@@ -305,12 +321,7 @@ class SearchResults extends React.Component {
           data-test-id={'pagination-container'}
           className={classes.paginationContainer}
           style={{
-            display:
-              this.state.noSearchResults ||
-              this.state.unexpectedSearchError ||
-              isAdBlockerEnabled
-                ? 'none'
-                : 'block',
+            display: noResultsToDisplay ? 'none' : 'block',
           }}
         >
           {page > MIN_PAGE ? (
