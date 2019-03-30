@@ -2,6 +2,7 @@ const webdriver = require('selenium-webdriver')
 const By = webdriver.By
 const until = webdriver.until
 
+// TODO: we should just extend the driver for ease of use.
 export default driver => ({
   waitForElementExistsByCustomSelector: selector => {
     return driver.wait(until.elementLocated(selector))
