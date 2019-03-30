@@ -9,16 +9,16 @@ export default driver => ({
 
   waitForElementExistsByTestId: dataTestId => {
     return driver.wait(
-      until.elementLocated(By.css("[data-test-id='" + dataTestId + "']"))
+      until.elementLocated(By.css(`[data-test-id='${dataTestId}']`))
     )
   },
 
-  getText: selector => {
-    return driver.findElement(selector).getText()
+  getElementByTestId: dataTestId => {
+    return driver.findElement(By.css(`[data-test-id='${dataTestId}']`))
   },
 
-  getValue: selector => {
-    return driver.findElement(selector).getAttribute('value')
+  getElementByCSSSelector: selector => {
+    return driver.findElement(By.css(selector))
   },
 
   setValue: (selector, value) => {
