@@ -232,7 +232,7 @@ class SearchPage extends React.Component {
               }}
             >
               <Input
-                id="search-input"
+                data-test-id={'search-input'}
                 type={'text'}
                 value={searchText}
                 onChange={this.onSearchTextChange.bind(this)}
