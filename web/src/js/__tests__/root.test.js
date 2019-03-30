@@ -2,6 +2,9 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 
+jest.mock('js/components/App/App', () => () => null)
+jest.mock('js/components/Search/SearchApp', () => () => null)
+
 afterEach(() => {
   jest.resetModules()
   delete process.env.REACT_APP_WHICH_APP

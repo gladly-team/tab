@@ -6,6 +6,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import defaultTheme from 'js/theme/defaultV1'
 import defaultThemeLegacy from 'js/theme/default'
 import withPageviewTracking from 'js/analytics/withPageviewTracking'
+import ErrorBoundary from 'js/components/General/ErrorBoundary'
 import { isInEuropeanUnion } from 'js/utils/client-location'
 import {
   registerConsentCallback,
@@ -15,7 +16,6 @@ import {
 import FullPageLoader from 'js/components/General/FullPageLoader'
 import DashboardView from 'js/components/Dashboard/DashboardView'
 import QuantcastChoiceCMP from 'js/components/General/QuantcastChoiceCMP'
-import ErrorBoundary from 'js/components/General/ErrorBoundary'
 
 const AuthenticationView = lazy(() =>
   import('js/components/Authentication/AuthenticationView')
@@ -67,51 +67,53 @@ class App extends React.Component {
     return (
       <MuiThemeProvider theme={muiTheme}>
         <V0MuiThemeProvider muiTheme={legacyMuiTheme}>
-          <div
-            style={{
-              position: 'absolute',
-              top: 0,
-              right: 0,
-              bottom: 0,
-              left: 0,
-              margin: 0,
-              padding: 0,
-              border: 'none',
-            }}
-          >
-            <Suspense fallback={<FullPageLoader delay={350} />}>
-              <Switch>
-                <Route exact path="/newtab/" component={DashboardView} />
-                <Route
-                  path="/newtab/settings/"
-                  component={SettingsPageComponent}
-                />
-                <Route
-                  path="/newtab/account/"
-                  component={SettingsPageComponent}
-                />
-                <Route
-                  path="/newtab/profile/"
-                  component={SettingsPageComponent}
-                />
-                <Route
-                  exact
-                  path="/newtab/first-tab/"
-                  component={FirstTabView}
-                />
-                <Route
-                  exact
-                  path="/newtab/uninstalled/"
-                  component={PostUninstallView}
-                />
-                <Route path="/newtab/auth/" component={AuthenticationView} />
-                <Redirect from="*" to="/newtab/" />
-              </Switch>
-            </Suspense>
-            <ErrorBoundary ignoreErrors>
-              <QuantcastChoiceCMP />
-            </ErrorBoundary>
-          </div>
+          <ErrorBoundary brand={'tab'}>
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                right: 0,
+                bottom: 0,
+                left: 0,
+                margin: 0,
+                padding: 0,
+                border: 'none',
+              }}
+            >
+              <Suspense fallback={<FullPageLoader delay={350} />}>
+                <Switch>
+                  <Route exact path="/newtab/" component={DashboardView} />
+                  <Route
+                    path="/newtab/settings/"
+                    component={SettingsPageComponent}
+                  />
+                  <Route
+                    path="/newtab/account/"
+                    component={SettingsPageComponent}
+                  />
+                  <Route
+                    path="/newtab/profile/"
+                    component={SettingsPageComponent}
+                  />
+                  <Route
+                    exact
+                    path="/newtab/first-tab/"
+                    component={FirstTabView}
+                  />
+                  <Route
+                    exact
+                    path="/newtab/uninstalled/"
+                    component={PostUninstallView}
+                  />
+                  <Route path="/newtab/auth/" component={AuthenticationView} />
+                  <Redirect from="*" to="/newtab/" />
+                </Switch>
+              </Suspense>
+              <ErrorBoundary ignoreErrors brand={'tab'}>
+                <QuantcastChoiceCMP />
+              </ErrorBoundary>
+            </div>
+          </ErrorBoundary>
         </V0MuiThemeProvider>
       </MuiThemeProvider>
     )
