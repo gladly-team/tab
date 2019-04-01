@@ -50,6 +50,11 @@ const logUserExperimentGroups = async (
       ? {
           testAdExplanation: validatedGroups.adExplanation,
         }
+      : null,
+    !isNil(validatedGroups.searchIntro)
+      ? {
+          testGroupSearchIntro: validatedGroups.searchIntro,
+        }
       : null
   )
   try {

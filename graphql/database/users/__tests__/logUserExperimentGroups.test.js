@@ -77,6 +77,30 @@ describe('logUserExperimentGroups', () => {
     })
   })
 
+  it('sets the testGroupSearchIntro value when it is provided', async () => {
+    expect.assertions(1)
+
+    const UserModel = require('../UserModel').default
+    const updateQuery = jest.spyOn(UserModel, 'update')
+
+    const mockExperimentGroups = {
+      searchIntro: 0,
+    }
+    getValidatedExperimentGroups.mockReturnValueOnce(mockExperimentGroups)
+    const logUserExperimentGroups = require('../logUserExperimentGroups')
+      .default
+    await logUserExperimentGroups(
+      userContext,
+      userContext.id,
+      mockExperimentGroups
+    )
+    expect(updateQuery).toHaveBeenCalledWith(userContext, {
+      id: userContext.id,
+      testGroupSearchIntro: 0,
+      updated: moment.utc().toISOString(),
+    })
+  })
+
   it('does not update the item when no experiment groups are provided', async () => {
     expect.assertions(1)
 
@@ -118,14 +142,14 @@ describe('logUserExperimentGroups', () => {
 
     // Mock DB response.
     const expectedReturnedUser = Object.assign({}, getMockUserInstance(), {
-      testGroupAnonSignIn: 1,
+      testGroupSearchIntro: 1,
     })
     setMockDBResponse(DatabaseOperation.UPDATE, {
       Attributes: expectedReturnedUser,
     })
 
     const mockExperimentGroups = {
-      anonSignIn: 1,
+      searchIntro: 1,
     }
     getValidatedExperimentGroups.mockReturnValueOnce(mockExperimentGroups)
     const logUserExperimentGroups = require('../logUserExperimentGroups')
@@ -167,10 +191,10 @@ describe('logUserExperimentGroups', () => {
 
     // Have the validated groups differ from provided.
     const mockExperimentGroups = {
-      anonSignIn: 34543543,
+      testGroupSearchIntro: 34543543,
     }
     getValidatedExperimentGroups.mockReturnValueOnce({
-      anonSignIn: null,
+      testGroupSearchIntro: null,
     })
 
     const logUserExperimentGroups = require('../logUserExperimentGroups')
@@ -182,7 +206,7 @@ describe('logUserExperimentGroups', () => {
     )
     expect(updateQuery).toHaveBeenCalledWith(userContext, {
       id: userContext.id,
-      // Note: testGroupAnonSignIn not modified
+      // Note: the experiment group is not modified
       updated: moment.utc().toISOString(),
     })
   })

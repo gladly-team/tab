@@ -278,6 +278,20 @@ const ExperimentGroupsType = new GraphQLInputObjectType({
         },
       }),
     },
+    searchIntro: {
+      type: new GraphQLEnumType({
+        name: 'ExperimentGroupSearchIntro',
+        description:
+          'The test of showing an introduction message to Search for a Cause',
+        values: {
+          NONE: { value: experimentConfig.searchIntro.NONE },
+          NO_INTRO: { value: experimentConfig.searchIntro.NO_INTRO },
+          INTRO_A: {
+            value: experimentConfig.searchIntro.INTRO_A,
+          },
+        },
+      }),
+    },
   },
 })
 

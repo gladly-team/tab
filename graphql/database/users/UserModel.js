@@ -281,6 +281,12 @@ class User extends BaseModel {
         .allow(null)
         .description(`Which group the user is in for the "ad explanation" split-test.
           This value is assigned on the client so is not trustworthy.`),
+      testGroupSearchIntro: types
+        .number()
+        .integer()
+        .allow(null)
+        .description(`Which group the user is in for the "search intro" split-test.
+          This value is assigned on the client so is not trustworthy.`),
     }
   }
 
