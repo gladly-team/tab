@@ -569,7 +569,7 @@ describe('Dashboard component', () => {
     showGlobalNotification.mockReturnValueOnce(true)
     hasUserDismissedNotificationRecently.mockReturnValueOnce(false)
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    expect(wrapper.find(Notification).length).toBe(1)
+    expect(wrapper.find('[data-test-id="global-notification"]').length).toBe(1)
   })
 
   it('does not render a notification when one is not live', () => {
@@ -580,7 +580,7 @@ describe('Dashboard component', () => {
     showGlobalNotification.mockReturnValueOnce(false)
     hasUserDismissedNotificationRecently.mockReturnValueOnce(false)
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    expect(wrapper.find(Notification).length).toBe(0)
+    expect(wrapper.find('[data-test-id="global-notification"]').length).toBe(0)
   })
 
   it('does not render a notification when one is live but the user has dismissed it', () => {
@@ -591,7 +591,7 @@ describe('Dashboard component', () => {
     showGlobalNotification.mockReturnValueOnce(true)
     hasUserDismissedNotificationRecently.mockReturnValueOnce(true)
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    expect(wrapper.find(Notification).length).toBe(0)
+    expect(wrapper.find('[data-test-id="global-notification"]').length).toBe(0)
   })
 
   it('hides the notification when the onDismiss callback is called', () => {
@@ -604,12 +604,12 @@ describe('Dashboard component', () => {
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
 
     // Notification should be visible.
-    expect(wrapper.find(Notification).length).toBe(1)
+    expect(wrapper.find('[data-test-id="global-notification"]').length).toBe(1)
 
     // Mock that the user dismisses the notification.
-    wrapper.find(Notification).prop('onDismiss')()
+    wrapper.find('[data-test-id="global-notification"]').prop('onDismiss')()
 
     // Notification should be gone.
-    expect(wrapper.find(Notification).length).toBe(0)
+    expect(wrapper.find('[data-test-id="global-notification"]').length).toBe(0)
   })
 })

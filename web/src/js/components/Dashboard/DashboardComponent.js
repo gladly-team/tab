@@ -180,6 +180,7 @@ class Dashboard extends React.Component {
               />
               {this.state.showNotification ? (
                 <Notification
+                  data-test-id={'global-notification'}
                   title={`Vote for the March Charity Spotlight`}
                   message={`
                         Each month this year, we're highlighting a charity chosen by our
