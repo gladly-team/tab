@@ -14,6 +14,8 @@ const getMockProps = () => ({
   message: 'Here is some additional information.',
   buttonText: 'Click Me',
   buttonURL: 'http://example.com/some-link/',
+  onClick: undefined,
+  onDismiss: undefined,
 })
 
 afterEach(() => {
@@ -57,7 +59,7 @@ describe('Notification component', () => {
     ).toBe(`ABC 123 this is a message`)
   })
 
-  it('displays only the "dismiss" button when an action button is provided', () => {
+  it('displays only the "dismiss" button when no action button is provided', () => {
     const Notification = require('js/components/Dashboard/NotificationComponent')
       .default
     const mockProps = getMockProps()
@@ -105,7 +107,39 @@ describe('Notification component', () => {
     ).toBe('http://example.com')
   })
 
-  it('clicking the "dismiss" button sets the dismiss time in local storage', () => {
+  it('does not create an outbound button link when buttonText is not provided', () => {
+    const Notification = require('js/components/Dashboard/NotificationComponent')
+      .default
+    const mockProps = getMockProps()
+    delete mockProps.buttonText
+    mockProps.buttonURL = 'http://example.com'
+    mockProps.onClick = jest.fn()
+    const wrapper = shallow(<Notification {...mockProps} />)
+    expect(
+      wrapper
+        .find(Link)
+        .first()
+        .exists()
+    ).toBe(false)
+  })
+
+  it('does not create an outbound button link when neither buttonURL nor onClick is provided', () => {
+    const Notification = require('js/components/Dashboard/NotificationComponent')
+      .default
+    const mockProps = getMockProps()
+    delete mockProps.buttonURL
+    delete mockProps.onClick
+    mockProps.buttonText = 'Do the thing'
+    const wrapper = shallow(<Notification {...mockProps} />)
+    expect(
+      wrapper
+        .find(Link)
+        .first()
+        .exists()
+    ).toBe(false)
+  })
+
+  it('sets the dismiss time in local storage when clicking the "dismiss" button', () => {
     const Notification = require('js/components/Dashboard/NotificationComponent')
       .default
     const mockProps = getMockProps()
@@ -117,7 +151,7 @@ describe('Notification component', () => {
     expect(setNotificationDismissTime).toHaveBeenCalled()
   })
 
-  it('clicking the "dismiss" button calls the onDismiss prop', () => {
+  it('calls the onDismiss prop when clicking the "dismiss" button', () => {
     const Notification = require('js/components/Dashboard/NotificationComponent')
       .default
     const mockProps = getMockProps()
@@ -128,5 +162,38 @@ describe('Notification component', () => {
       .first()
       .simulate('click')
     expect(mockProps.onDismiss).toHaveBeenCalled()
+  })
+
+  it('displays two buttons when we provide an action button with "onClick"', () => {
+    const Notification = require('js/components/Dashboard/NotificationComponent')
+      .default
+    const mockProps = getMockProps()
+    delete mockProps.buttonURL
+    mockProps.buttonText = 'Click the button'
+    mockProps.onClick = jest.fn()
+    const wrapper = shallow(<Notification {...mockProps} />)
+    expect(wrapper.find(Button).length).toBe(2)
+    expect(
+      wrapper
+        .find(Button)
+        .at(1)
+        .render()
+        .text()
+    ).toBe(`Click the button`)
+  })
+
+  it('calls the onClick prop when clicking the action button with an onClick prop', () => {
+    const Notification = require('js/components/Dashboard/NotificationComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.buttonText = 'Click the button'
+    delete mockProps.buttonURL
+    mockProps.onClick = jest.fn()
+    const wrapper = shallow(<Notification {...mockProps} />)
+    wrapper
+      .find(Button)
+      .at(1)
+      .simulate('click')
+    expect(mockProps.onClick).toHaveBeenCalled()
   })
 })

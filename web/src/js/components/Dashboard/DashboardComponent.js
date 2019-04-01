@@ -203,8 +203,9 @@ class Dashboard extends React.Component {
                   message={`
                         Now, you can raise money for charity each time you search! It's the search results you know and love—plus doing good.`}
                   buttonText={'Try it out'}
-                  // TODO: need an onClick
-                  buttonURL={'#'}
+                  onClick={() => {
+                    console.log('Action button clicked!')
+                  }}
                   onDismiss={() => {
                     // TODO: log dismissal
                     this.setState({
