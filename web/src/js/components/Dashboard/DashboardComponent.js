@@ -69,6 +69,11 @@ class Dashboard extends React.Component {
       // Whether to show a global announcement.
       showNotification:
         showGlobalNotification() && !hasUserDismissedNotificationRecently(),
+      // Determines what message (if any) we should show to introduce
+      // Search for a Cause.
+      // TODO: use constants
+      // TODO: fetch from server to determine if user has already dismissed the message
+      searchIntroExperimentGroup: 1,
       hasUserDismissedCampaignRecently: hasUserDismissedCampaignRecently(),
     }
   }
@@ -114,6 +119,7 @@ class Dashboard extends React.Component {
     const {
       hasUserDismissedCampaignRecently,
       userAlreadyViewedNewUserTour,
+      searchIntroExperimentGroup,
       tabId,
     } = this.state
     const errorMessage = this.state.errorMessage
@@ -183,6 +189,25 @@ class Dashboard extends React.Component {
                   onDismiss={() => {
                     this.setState({
                       showNotification: false,
+                    })
+                  }}
+                  style={{
+                    marginTop: 4,
+                  }}
+                />
+              ) : null}
+              {searchIntroExperimentGroup === 1 ? (
+                <Notification
+                  title={`Introducing Search for a Cause`}
+                  message={`
+                        Now, you can raise money for charity each time you search! It's the search results you know and love—plus doing good.`}
+                  buttonText={'Try it out'}
+                  // TODO: need an onClick
+                  buttonURL={'#'}
+                  onDismiss={() => {
+                    // TODO: log dismissal
+                    this.setState({
+                      searchIntroExperimentGroup: false,
                     })
                   }}
                   style={{
