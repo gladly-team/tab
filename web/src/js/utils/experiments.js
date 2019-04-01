@@ -2,7 +2,7 @@ import { filter, find } from 'lodash/collection'
 import { isNil } from 'lodash/lang'
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import { STORAGE_EXPERIMENT_PREFIX } from 'js/constants'
-import { onlyIncludeNewUsers } from 'js/utils/experimentFilters'
+// import { onlyIncludeNewUsers } from 'js/utils/experimentFilters'
 import environment from 'js/relay-env'
 import UpdateUserExperimentGroupsMutation from 'js/mutations/UpdateUserExperimentGroupsMutation'
 
@@ -251,40 +251,23 @@ export const EXPERIMENT_AD_EXPLANATION = 'adExplanation'
 // field name of the GraphQL ExperimentGroup field name for
 // this test.
 export const _experimentsConfig = [
-  // @experiment-one-ad-for-new-users
-  createExperiment({
-    name: EXPERIMENT_ONE_AD_FOR_NEW_USERS,
-    active: true,
-    disabled: false,
-    filters: [onlyIncludeNewUsers],
-    groups: {
-      DEFAULT: createExperimentGroup({
-        value: 'default',
-        schemaValue: 'DEFAULT',
-      }),
-      ONE_AD_AT_FIRST: createExperimentGroup({
-        value: 'oneAd',
-        schemaValue: 'ONE_AD_AT_FIRST',
-      }),
-    },
-  }),
-  // @experiment-ad-explanation
-  createExperiment({
-    name: EXPERIMENT_AD_EXPLANATION,
-    active: true,
-    disabled: false,
-    filters: [onlyIncludeNewUsers],
-    groups: {
-      DEFAULT: createExperimentGroup({
-        value: 'default',
-        schemaValue: 'DEFAULT',
-      }),
-      SHOW_EXPLANATION: createExperimentGroup({
-        value: 'explanation',
-        schemaValue: 'SHOW_EXPLANATION',
-      }),
-    },
-  }),
+  // // @experiment-example
+  // createExperiment({
+  //   name: EXPERIMENT_EXAMPLE_NAME,
+  //   active: true,
+  //   disabled: false,
+  //   filters: [onlyIncludeNewUsers],
+  //   groups: {
+  //     DEFAULT: createExperimentGroup({
+  //       value: 'default',
+  //       schemaValue: 'DEFAULT',
+  //     }),
+  //     SOME_EXAMPLE_FEATURE: createExperimentGroup({
+  //       value: 'exampleFeature',
+  //       schemaValue: 'EXAMPLE_FEATURE',
+  //     }),
+  //   },
+  // }),
 ]
 
 // We do this to be able to modify the experiments
