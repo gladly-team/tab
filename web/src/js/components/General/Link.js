@@ -8,17 +8,20 @@ class Link extends React.Component {
   render() {
     const { children, to, style, className, ...otherProps } = this.props
     const internal = !isURLForDifferentApp(to)
+    const finalStyle = Object.assign({}, style, {
+      textDecoration: 'none',
+    })
 
     // Use gatsby-link for internal links, and <a> for others
     if (internal) {
       return (
-        <LinkReactRouter to={to} style={style} className={className}>
+        <LinkReactRouter to={to} style={finalStyle} className={className}>
           {children}
         </LinkReactRouter>
       )
     }
     return (
-      <a href={to} style={style} className={className} {...otherProps}>
+      <a href={to} style={finalStyle} className={className} {...otherProps}>
         {children}
       </a>
     )
@@ -36,9 +39,7 @@ Link.propTypes = {
 }
 
 Link.defaultProps = {
-  style: {
-    textDecoration: 'none',
-  },
+  style: {},
   className: '',
 }
 

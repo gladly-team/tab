@@ -15,6 +15,7 @@ import {
   adblockerWhitelistingForSearchURL,
   dashboardURL,
   modifyURLParams,
+  searchBetaFeedback,
 } from 'js/navigation/navigation'
 import { externalRedirect } from 'js/navigation/utils'
 import Logo from 'js/components/Logo/Logo'
@@ -217,13 +218,30 @@ class SearchPage extends React.Component {
               justifyContent: 'flex-start',
             }}
           >
-            <Logo
-              brand={'search'}
-              includeText
+            <div
               style={{
-                width: 116,
+                // Just so the "beta" text doesn't modify layout
+                height: 40,
               }}
-            />
+            >
+              <Logo
+                brand={'search'}
+                includeText
+                style={{
+                  width: 116,
+                }}
+              />
+              <Typography
+                color={'primary'}
+                variant={'overline'}
+                style={{
+                  lineHeight: '60%',
+                  fontWeight: 'bold',
+                }}
+              >
+                beta
+              </Typography>
+            </div>
             <div
               style={{
                 maxWidth: 600,
@@ -267,11 +285,25 @@ class SearchPage extends React.Component {
                 }
               />
             </div>
-            <SearchMenuQuery
+            <div
               style={{
                 marginLeft: 'auto',
+                display: 'flex',
+                alignItems: 'center',
               }}
-            />
+            >
+              <Link
+                to={searchBetaFeedback}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  marginRight: 14,
+                }}
+              >
+                <Button color={'primary'}>Feedback</Button>
+              </Link>
+              <SearchMenuQuery />
+            </div>
           </div>
           <Tabs
             value={0}

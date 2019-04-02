@@ -13,6 +13,7 @@ import {
   adblockerWhitelistingForSearchURL,
   dashboardURL,
   modifyURLParams,
+  searchBetaFeedback,
 } from 'js/navigation/navigation'
 import { externalRedirect } from 'js/navigation/utils'
 import SearchResults from 'js/components/Search/SearchResults'
@@ -37,6 +38,7 @@ jest.mock('js/components/Search/SearchResults')
 jest.mock('js/utils/detectAdblocker')
 jest.mock('js/utils/local-user-data-mgr')
 jest.mock('js/components/Logo/Logo')
+jest.mock('js/components/General/Link')
 
 // Enzyme does not yet support React.lazy and React.Suspense,
 // so let's just not render lazy-loaded children for now.
@@ -788,5 +790,22 @@ describe('Search page component', () => {
     expect(wrapper.find('[data-test-id="search-intro-msg"]').exists()).toBe(
       false
     )
+  })
+
+  it('includes a feedback button', () => {
+    isSearchPageEnabled.mockReturnValue(true)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const feedbackLink = wrapper.find(Link)
+    expect(feedbackLink.prop('to')).toEqual(searchBetaFeedback)
+    expect(
+      feedbackLink
+        .find(Button)
+        .first()
+        .render()
+        .text()
+    ).toEqual('Feedback')
   })
 })
