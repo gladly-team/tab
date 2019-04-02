@@ -201,6 +201,14 @@ input ExperimentGroups {
   thirdAd: ExperimentGroupThirdAd
   oneAdForNewUsers: ExperimentGroupOneAdForNewUsers
   adExplanation: ExperimentGroupAdExplanation
+  searchIntro: ExperimentGroupSearchIntro
+}
+
+"""The test of showing an introduction message to Search for a Cause"""
+enum ExperimentGroupSearchIntro {
+  NONE
+  NO_INTRO
+  INTRO_A
 }
 
 """The test of enabling a third ad"""
