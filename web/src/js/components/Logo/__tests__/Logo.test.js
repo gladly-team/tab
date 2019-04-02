@@ -40,6 +40,15 @@ describe('Logo component', () => {
     })
   })
 
+  // The alt text can cause a flash of text on Firefox before the
+  // image loads.
+  it('does not contain alt text', () => {
+    const Logo = require('js/components/Logo/Logo').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<Logo {...mockProps} />)
+    expect(wrapper.find('img').prop('alt')).toBeUndefined()
+  })
+
   it('defaults to the purple "tab" logo', () => {
     const Logo = require('js/components/Logo/Logo').default
     const mockProps = getMockProps()
