@@ -80,6 +80,7 @@ beforeEach(() => {
 afterEach(() => {
   localStorageMgr.clear()
   getUserExperimentGroup.mockReturnValue('none')
+  jest.clearAllMocks()
 })
 
 afterAll(() => {
@@ -685,7 +686,7 @@ describe('Dashboard component', () => {
       .default
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
     wrapper.find('[data-test-id="search-intro-a"]').prop('onClick')()
-    expect(goTo).toHaveBeenCalledWith(searchChromeExtensionPage)
+    expect(goTo).toHaveBeenCalledWith(searchFirefoxExtensionPage)
   })
 
   it('[search-intro-A] redirects to the Chrome web store when the user clicks the search intro action button on an unknown/unsupported browser', () => {
