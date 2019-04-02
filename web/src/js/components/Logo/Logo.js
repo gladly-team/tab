@@ -51,7 +51,8 @@ class Logo extends React.Component {
         throw new Error(`No logo exists for brand "${brand}".`)
       }
     }
-    return <img style={finalStyle} src={logo} alt="Tab for a Cause logo" />
+    // eslint-disable-next-line jsx-a11y/alt-text
+    return <img style={finalStyle} src={logo} />
   }
 }
 
