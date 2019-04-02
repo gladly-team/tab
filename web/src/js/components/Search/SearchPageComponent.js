@@ -218,13 +218,36 @@ class SearchPage extends React.Component {
               justifyContent: 'flex-start',
             }}
           >
-            <Logo
-              brand={'search'}
-              includeText
+            <div
               style={{
-                width: 116,
+                // Just so the "beta" text doesn't modify layout
+                height: 40,
               }}
-            />
+            >
+              <Logo
+                brand={'search'}
+                includeText
+                style={{
+                  width: 116,
+                }}
+              />
+              <Typography
+                color={'primary'}
+                variant={'overline'}
+                // variant={'caption'}
+                // variant={'body2'}
+                style={{
+                  lineHeight: '60%',
+                  fontWeight: 'bold',
+                  // color: 'rgba(0, 0, 0, 0.66)',
+                  // fontStyle: 'italic',
+                  // paddingLeft: 49,
+                  // lineHeight: '50%',
+                }}
+              >
+                beta
+              </Typography>
+            </div>
             <div
               style={{
                 maxWidth: 600,
