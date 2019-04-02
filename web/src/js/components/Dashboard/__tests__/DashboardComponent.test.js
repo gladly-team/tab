@@ -95,6 +95,7 @@ const mockProps = {
     id: 'abc-123',
     joined: '2017-04-10T14:00:00.000',
     tabs: 12,
+    experimentActions: {},
   },
   app: {
     isGlobalCampaignLive: false,
@@ -650,6 +651,39 @@ describe('Dashboard component', () => {
     const elem = wrapper.find('[data-test-id="search-intro-a"]')
     expect(elem.exists()).toBe(true)
     expect(elem.prop('title')).toEqual(`Introducing Search for a Cause`)
+  })
+
+  it('[search-intro-A] does not render the search intro notification when the user has previously clicked it', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    getUserExperimentGroup.mockReturnValue('introA')
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.experimentActions.searchIntro = 'CLICK'
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+    const elem = wrapper.find('[data-test-id="search-intro-a"]')
+    expect(elem.exists()).toBe(false)
+  })
+
+  it('[search-intro-A] does not render the search intro notification when the user has previously dismissed it', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    getUserExperimentGroup.mockReturnValue('introA')
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.experimentActions.searchIntro = 'DISMISS'
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+    const elem = wrapper.find('[data-test-id="search-intro-a"]')
+    expect(elem.exists()).toBe(false)
+  })
+
+  it('[search-intro-A] does render the search intro notification if the user has not taken any action', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    getUserExperimentGroup.mockReturnValue('introA')
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.experimentActions.searchIntro = 'NONE'
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+    const elem = wrapper.find('[data-test-id="search-intro-a"]')
+    expect(elem.exists()).toBe(true)
   })
 
   it('[search-intro-A] hides the search intro when the onClick callback is called', async () => {
