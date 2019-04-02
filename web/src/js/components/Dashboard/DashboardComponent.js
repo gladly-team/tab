@@ -230,7 +230,7 @@ class Dashboard extends React.Component {
                   data-test-id={'search-intro-a'}
                   title={`Introducing Search for a Cause`}
                   message={`
-                        Now, you can raise money for charity each time you search! It's the search results you know and love—plus doing good.`}
+                        Now, you can raise money for charity each time you search! It's the search results you know and love—but for a good cause.`}
                   buttonText={'Try it out'}
                   onClick={async () => {
                     // Log the click.
