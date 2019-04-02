@@ -76,7 +76,6 @@ class Dashboard extends React.Component {
         showGlobalNotification() && !hasUserDismissedNotificationRecently(),
       // Determines what message (if any) we should show to introduce
       // Search for a Cause.
-      // TODO: use constants
       // TODO: fetch from server to determine if user has already dismissed the message
       searchIntroExperimentGroup: getUserExperimentGroup(
         EXPERIMENT_SEARCH_INTRO
@@ -207,12 +206,18 @@ class Dashboard extends React.Component {
               {searchIntroExperimentGroup ===
               getExperimentGroups(EXPERIMENT_SEARCH_INTRO).INTRO_A ? (
                 <Notification
+                  // TODO: tests
+                  data-test-id={'search-intro-a'}
                   title={`Introducing Search for a Cause`}
                   message={`
                         Now, you can raise money for charity each time you search! It's the search results you know and love—plus doing good.`}
                   buttonText={'Try it out'}
                   onClick={() => {
                     console.log('Action button clicked!')
+                    // TODO:
+                    //  - log click
+                    //  - detect browser
+                    //  - open link to FF/Chrome extension store
                   }}
                   onDismiss={() => {
                     // TODO: log dismissal
