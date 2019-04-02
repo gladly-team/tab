@@ -15,6 +15,7 @@ import {
   adblockerWhitelistingForSearchURL,
   dashboardURL,
   modifyURLParams,
+  searchBetaFeedback,
 } from 'js/navigation/navigation'
 import { externalRedirect } from 'js/navigation/utils'
 import Logo from 'js/components/Logo/Logo'
@@ -267,11 +268,25 @@ class SearchPage extends React.Component {
                 }
               />
             </div>
-            <SearchMenuQuery
+            <div
               style={{
                 marginLeft: 'auto',
+                display: 'flex',
+                alignItems: 'center',
               }}
-            />
+            >
+              <Link
+                to={searchBetaFeedback}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  marginRight: 14,
+                }}
+              >
+                <Button color={'primary'}>Feedback</Button>
+              </Link>
+              <SearchMenuQuery />
+            </div>
           </div>
           <Tabs
             value={0}

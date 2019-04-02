@@ -38,20 +38,20 @@ describe('Link', () => {
     expect(wrapper.find(LinkReactRouter).exists()).toBe(false)
   })
 
-  it('passes style prop to the react-router-dom Link component', () => {
+  it('passes style prop to the react-router-dom Link component and defaults to textDecoration = "none"', () => {
     const Link = require('../Link').default
     isURLForDifferentApp.mockReturnValue(false)
-    const someStyle = { fontSize: 12, color: '#cdcdcd' }
+    const someStyle = { fontSize: 12, color: '#cdcdcd', textDecoration: 'none' }
     const wrapper = shallow(
       <Link to={'/'} style={someStyle} hoverStyle={{ color: 'red' }} />
     )
     expect(wrapper.find(LinkReactRouter).props().style).toEqual(someStyle)
   })
 
-  it('passes style prop to anchor elem', () => {
+  it('passes style prop to anchor elem and defaults to textDecoration = "none"', () => {
     const Link = require('../Link').default
     isURLForDifferentApp.mockReturnValue(true) // external URL
-    const someStyle = { fontSize: 12, color: '#cdcdcd' }
+    const someStyle = { fontSize: 12, color: '#cdcdcd', textDecoration: 'none' }
     const wrapper = shallow(
       <Link
         to={'https://tab.gladly.io/'}

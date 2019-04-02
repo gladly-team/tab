@@ -93,9 +93,11 @@ export const adblockerWhitelistingForSearchURL = absoluteUrl(
 
 // External links
 
+// Surveys
 export const postUninstallSurveyURL = 'https://goo.gl/forms/XUICFx9psTwCzEIE2'
 export const searchPostUninstallSurveyURL =
   'https://forms.gle/A3Xam2op2gFjoQNU6'
+export const searchBetaFeedback = 'https://forms.gle/B97aCWA6A68Qfe4u5'
 
 // Zendesk
 export const externalHelpURL =
