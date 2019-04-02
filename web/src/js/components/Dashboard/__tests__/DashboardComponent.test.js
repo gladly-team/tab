@@ -17,7 +17,6 @@ import LogAccountCreation from 'js/components/Dashboard/LogAccountCreationContai
 import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
 import ErrorMessage from 'js/components/General/ErrorMessage'
 import NewUserTour from 'js/components/Dashboard/NewUserTourContainer'
-import Notification from 'js/components/Dashboard/NotificationComponent'
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import { STORAGE_NEW_USER_HAS_COMPLETED_TOUR } from 'js/constants'
 import { getCurrentUser } from 'js/authentication/user'
@@ -37,6 +36,13 @@ import {
 } from 'js/utils/local-user-data-mgr'
 import { showGlobalNotification } from 'js/utils/feature-flags'
 
+// TODO: test the "search intro" experiment
+// import {
+//   EXPERIMENT_SEARCH_INTRO,
+//   getExperimentGroups,
+//   getUserExperimentGroup,
+// } from 'js/utils/experiments'
+
 jest.mock('js/analytics/logEvent')
 jest.mock('js/utils/localstorage-mgr')
 jest.mock('js/authentication/user')
@@ -44,6 +50,7 @@ jest.mock('js/navigation/navigation')
 jest.mock('js/ads/adSettings')
 jest.mock('js/utils/local-user-data-mgr')
 jest.mock('js/utils/feature-flags')
+jest.mock('js/utils/experiments')
 
 const mockNow = '2018-05-15T10:30:00.000'
 

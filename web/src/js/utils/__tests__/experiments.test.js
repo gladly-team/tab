@@ -1177,6 +1177,11 @@ describe('Actual experiments we are running or will run', () => {
       //   active: true,
       //   disabled: false,
       // },
+      {
+        name: 'searchIntro',
+        active: true,
+        disabled: false,
+      },
     ])
   })
 

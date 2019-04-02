@@ -37,6 +37,11 @@ import {
   HORIZONTAL_AD_SLOT_DOM_ID,
 } from 'js/ads/adSettings'
 import { showGlobalNotification } from 'js/utils/feature-flags'
+import {
+  EXPERIMENT_SEARCH_INTRO,
+  getExperimentGroups,
+  getUserExperimentGroup,
+} from 'js/utils/experiments'
 
 // Include ads code.
 // TODO: load this on mount, making sure the ads code behaves
@@ -73,7 +78,9 @@ class Dashboard extends React.Component {
       // Search for a Cause.
       // TODO: use constants
       // TODO: fetch from server to determine if user has already dismissed the message
-      searchIntroExperimentGroup: 1,
+      searchIntroExperimentGroup: getUserExperimentGroup(
+        EXPERIMENT_SEARCH_INTRO
+      ),
       hasUserDismissedCampaignRecently: hasUserDismissedCampaignRecently(),
     }
   }
@@ -197,7 +204,8 @@ class Dashboard extends React.Component {
                   }}
                 />
               ) : null}
-              {searchIntroExperimentGroup === 1 ? (
+              {searchIntroExperimentGroup ===
+              getExperimentGroups(EXPERIMENT_SEARCH_INTRO).INTRO_A ? (
                 <Notification
                   title={`Introducing Search for a Cause`}
                   message={`
