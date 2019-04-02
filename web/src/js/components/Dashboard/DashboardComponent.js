@@ -22,12 +22,17 @@ import ErrorMessage from 'js/components/General/ErrorMessage'
 import Notification from 'js/components/Dashboard/NotificationComponent'
 import { getCurrentUser } from 'js/authentication/user'
 import localStorageMgr from 'js/utils/localstorage-mgr'
+import { detectSupportedBrowser } from 'js/utils/detectBrowser'
 import {
   setUserDismissedAdExplanation,
   hasUserDismissedNotificationRecently,
   hasUserDismissedCampaignRecently,
 } from 'js/utils/local-user-data-mgr'
-import { STORAGE_NEW_USER_HAS_COMPLETED_TOUR } from 'js/constants'
+import {
+  CHROME_BROWSER,
+  FIREFOX_BROWSER,
+  STORAGE_NEW_USER_HAS_COMPLETED_TOUR,
+} from 'js/constants'
 import { goTo, loginURL } from 'js/navigation/navigation'
 import {
   getNumberOfAdsToShow,
@@ -81,11 +86,16 @@ class Dashboard extends React.Component {
         EXPERIMENT_SEARCH_INTRO
       ),
       hasUserDismissedCampaignRecently: hasUserDismissedCampaignRecently(),
+      // Let's assume a Chrome browser until we detect it.
+      browser: CHROME_BROWSER,
     }
   }
 
   componentDidMount() {
     this.determineAnonymousStatus()
+    this.setState({
+      browser: detectSupportedBrowser(),
+    })
   }
 
   /**
@@ -123,6 +133,7 @@ class Dashboard extends React.Component {
     // Props will be null on first render.
     const { user, app } = this.props
     const {
+      browser,
       hasUserDismissedCampaignRecently,
       userAlreadyViewedNewUserTour,
       searchIntroExperimentGroup,
@@ -213,9 +224,17 @@ class Dashboard extends React.Component {
                   buttonText={'Try it out'}
                   onClick={() => {
                     console.log('Action button clicked!')
+                    if (browser === CHROME_BROWSER) {
+                      console.log('Go to Chrome Web Store.')
+                    } else if (browser === FIREFOX_BROWSER) {
+                      console.log('Go to Firefox Addons Store.')
+                    } else {
+                      console.log(
+                        'Unsupported browser, but go to Chrome Web Store.'
+                      )
+                    }
                     // TODO:
                     //  - log click
-                    //  - detect browser
                     //  - open link to FF/Chrome extension store
                   }}
                   onDismiss={() => {
