@@ -1,3 +1,4 @@
+import moment from 'moment'
 import { isEmpty, isNil } from 'lodash/lang'
 import UserModel from './UserModel'
 import { getValidatedExperimentGroups } from '../../utils/experiments'
@@ -41,14 +42,11 @@ const logUserExperimentGroups = async (
       id: userId,
     },
     // Active experiment groups
-    !isNil(validatedGroups.oneAdForNewUsers)
+    // @experiment-search-intro
+    !isNil(validatedGroups.searchIntro)
       ? {
-          testOneAdForNewUsers: validatedGroups.oneAdForNewUsers,
-        }
-      : null,
-    !isNil(validatedGroups.adExplanation)
-      ? {
-          testAdExplanation: validatedGroups.adExplanation,
+          testGroupSearchIntro: validatedGroups.searchIntro,
+          testGroupSearchIntroJoinedTime: moment.utc().toISOString(),
         }
       : null
   )

@@ -32,6 +32,12 @@ const experimentConfig = {
     DEFAULT: 1,
     SHOW_EXPLANATION: 2,
   },
+  // @experiment-search-intro
+  searchIntro: {
+    NONE: 0,
+    NO_INTRO: 1,
+    INTRO_A: 2,
+  },
 }
 
 /**

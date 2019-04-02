@@ -13,6 +13,9 @@ export default createFragmentContainer(Dashboard, {
   user: graphql`
     fragment DashboardContainer_user on User {
       id
+      experimentActions {
+        searchIntro
+      }
       joined
       tabs
       ...WidgetsContainer_user

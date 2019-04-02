@@ -17,13 +17,21 @@ import LogAccountCreation from 'js/components/Dashboard/LogAccountCreationContai
 import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
 import ErrorMessage from 'js/components/General/ErrorMessage'
 import NewUserTour from 'js/components/Dashboard/NewUserTourContainer'
-import Notification from 'js/components/Dashboard/NotificationComponent'
 import localStorageMgr from 'js/utils/localstorage-mgr'
-import { STORAGE_NEW_USER_HAS_COMPLETED_TOUR } from 'js/constants'
+import {
+  CHROME_BROWSER,
+  FIREFOX_BROWSER,
+  UNSUPPORTED_BROWSER,
+  STORAGE_NEW_USER_HAS_COMPLETED_TOUR,
+} from 'js/constants'
 import { getCurrentUser } from 'js/authentication/user'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
-import { goTo } from 'js/navigation/navigation'
+import {
+  goTo,
+  searchChromeExtensionPage,
+  searchFirefoxExtensionPage,
+} from 'js/navigation/navigation'
 import {
   getNumberOfAdsToShow,
   shouldShowAdExplanation,
@@ -36,6 +44,9 @@ import {
   hasUserDismissedNotificationRecently,
 } from 'js/utils/local-user-data-mgr'
 import { showGlobalNotification } from 'js/utils/feature-flags'
+import { getUserExperimentGroup } from 'js/utils/experiments'
+import { detectSupportedBrowser } from 'js/utils/detectBrowser'
+import LogUserExperimentActionsMutation from 'js/mutations/LogUserExperimentActionsMutation'
 
 jest.mock('js/analytics/logEvent')
 jest.mock('js/utils/localstorage-mgr')
@@ -44,6 +55,9 @@ jest.mock('js/navigation/navigation')
 jest.mock('js/ads/adSettings')
 jest.mock('js/utils/local-user-data-mgr')
 jest.mock('js/utils/feature-flags')
+jest.mock('js/utils/experiments')
+jest.mock('js/utils/detectBrowser')
+jest.mock('js/mutations/LogUserExperimentActionsMutation')
 
 const mockNow = '2018-05-15T10:30:00.000'
 
@@ -61,8 +75,15 @@ beforeAll(() => {
   MockDate.set(moment(mockNow))
 })
 
+beforeEach(() => {
+  detectSupportedBrowser.mockReturnValue(CHROME_BROWSER)
+  LogUserExperimentActionsMutation.mockResolvedValue()
+})
+
 afterEach(() => {
   localStorageMgr.clear()
+  getUserExperimentGroup.mockReturnValue('none')
+  jest.clearAllMocks()
 })
 
 afterAll(() => {
@@ -74,6 +95,7 @@ const mockProps = {
     id: 'abc-123',
     joined: '2017-04-10T14:00:00.000',
     tabs: 12,
+    experimentActions: {},
   },
   app: {
     isGlobalCampaignLive: false,
@@ -569,7 +591,7 @@ describe('Dashboard component', () => {
     showGlobalNotification.mockReturnValueOnce(true)
     hasUserDismissedNotificationRecently.mockReturnValueOnce(false)
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    expect(wrapper.find(Notification).length).toBe(1)
+    expect(wrapper.find('[data-test-id="global-notification"]').length).toBe(1)
   })
 
   it('does not render a notification when one is not live', () => {
@@ -580,7 +602,7 @@ describe('Dashboard component', () => {
     showGlobalNotification.mockReturnValueOnce(false)
     hasUserDismissedNotificationRecently.mockReturnValueOnce(false)
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    expect(wrapper.find(Notification).length).toBe(0)
+    expect(wrapper.find('[data-test-id="global-notification"]').length).toBe(0)
   })
 
   it('does not render a notification when one is live but the user has dismissed it', () => {
@@ -591,7 +613,7 @@ describe('Dashboard component', () => {
     showGlobalNotification.mockReturnValueOnce(true)
     hasUserDismissedNotificationRecently.mockReturnValueOnce(true)
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    expect(wrapper.find(Notification).length).toBe(0)
+    expect(wrapper.find('[data-test-id="global-notification"]').length).toBe(0)
   })
 
   it('hides the notification when the onDismiss callback is called', () => {
@@ -604,12 +626,148 @@ describe('Dashboard component', () => {
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
 
     // Notification should be visible.
-    expect(wrapper.find(Notification).length).toBe(1)
+    expect(wrapper.find('[data-test-id="global-notification"]').length).toBe(1)
 
     // Mock that the user dismisses the notification.
-    wrapper.find(Notification).prop('onDismiss')()
+    wrapper.find('[data-test-id="global-notification"]').prop('onDismiss')()
 
     // Notification should be gone.
-    expect(wrapper.find(Notification).length).toBe(0)
+    expect(wrapper.find('[data-test-id="global-notification"]').length).toBe(0)
+  })
+
+  it('[search-intro-A] does not render the search intro notification when the user is in the control group', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    getUserExperimentGroup.mockReturnValue('none')
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    expect(wrapper.find('[data-test-id="search-intro-a"]').exists()).toBe(false)
+  })
+
+  it('[search-intro-A] renders the search intro notification when the user is in the experimental group', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    getUserExperimentGroup.mockReturnValue('introA')
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    const elem = wrapper.find('[data-test-id="search-intro-a"]')
+    expect(elem.exists()).toBe(true)
+    expect(elem.prop('title')).toEqual(`Introducing Search for a Cause`)
+  })
+
+  it('[search-intro-A] does not render the search intro notification when the user has previously clicked it', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    getUserExperimentGroup.mockReturnValue('introA')
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.experimentActions.searchIntro = 'CLICK'
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+    const elem = wrapper.find('[data-test-id="search-intro-a"]')
+    expect(elem.exists()).toBe(false)
+  })
+
+  it('[search-intro-A] does not render the search intro notification when the user has previously dismissed it', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    getUserExperimentGroup.mockReturnValue('introA')
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.experimentActions.searchIntro = 'DISMISS'
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+    const elem = wrapper.find('[data-test-id="search-intro-a"]')
+    expect(elem.exists()).toBe(false)
+  })
+
+  it('[search-intro-A] does render the search intro notification if the user has not taken any action', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    getUserExperimentGroup.mockReturnValue('introA')
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.experimentActions.searchIntro = 'NONE'
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+    const elem = wrapper.find('[data-test-id="search-intro-a"]')
+    expect(elem.exists()).toBe(true)
+  })
+
+  it('[search-intro-A] hides the search intro when the onClick callback is called', async () => {
+    expect.assertions(2)
+    getUserExperimentGroup.mockReturnValue('introA')
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    expect(wrapper.find('[data-test-id="search-intro-a"]').length).toBe(1)
+    await wrapper.find('[data-test-id="search-intro-a"]').prop('onClick')()
+    expect(wrapper.find('[data-test-id="search-intro-a"]').length).toBe(0)
+  })
+
+  it('[search-intro-A] hides the search intro when the onDismiss callback is called', async () => {
+    expect.assertions(2)
+    getUserExperimentGroup.mockReturnValue('introA')
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    expect(wrapper.find('[data-test-id="search-intro-a"]').length).toBe(1)
+    await wrapper.find('[data-test-id="search-intro-a"]').prop('onDismiss')()
+    expect(wrapper.find('[data-test-id="search-intro-a"]').length).toBe(0)
+  })
+
+  it('[search-intro-A] logs the search intro experiment action when the onClick callback is called', async () => {
+    expect.assertions(1)
+    getUserExperimentGroup.mockReturnValue('introA')
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    await wrapper.find('[data-test-id="search-intro-a"]').prop('onClick')()
+    expect(LogUserExperimentActionsMutation).toHaveBeenCalledWith({
+      userId: 'abc-123',
+      experimentActions: {
+        searchIntro: 'CLICK',
+      },
+    })
+  })
+
+  it('[search-intro-A] logs the search intro experiment action when the onDismiss callback is called', async () => {
+    expect.assertions(1)
+    getUserExperimentGroup.mockReturnValue('introA')
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    await wrapper.find('[data-test-id="search-intro-a"]').prop('onDismiss')()
+    expect(LogUserExperimentActionsMutation).toHaveBeenCalledWith({
+      userId: 'abc-123',
+      experimentActions: {
+        searchIntro: 'DISMISS',
+      },
+    })
+  })
+
+  it('[search-intro-A] redirects to the Chrome web store when the user clicks the search intro action button on a Chrome browser', async () => {
+    expect.assertions(1)
+    detectSupportedBrowser.mockReturnValue(CHROME_BROWSER)
+    getUserExperimentGroup.mockReturnValue('introA')
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    await wrapper.find('[data-test-id="search-intro-a"]').prop('onClick')()
+    expect(goTo).toHaveBeenCalledWith(searchChromeExtensionPage)
+  })
+
+  it('[search-intro-A] redirects to the Firefox addons store when the user clicks the search intro action button on a Firefox browser', async () => {
+    expect.assertions(1)
+    detectSupportedBrowser.mockReturnValue(FIREFOX_BROWSER)
+    getUserExperimentGroup.mockReturnValue('introA')
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    await wrapper.find('[data-test-id="search-intro-a"]').prop('onClick')()
+    expect(goTo).toHaveBeenCalledWith(searchFirefoxExtensionPage)
+  })
+
+  it('[search-intro-A] redirects to the Chrome web store when the user clicks the search intro action button on an unknown/unsupported browser', async () => {
+    expect.assertions(1)
+    detectSupportedBrowser.mockReturnValue(UNSUPPORTED_BROWSER)
+    getUserExperimentGroup.mockReturnValue('introA')
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    await wrapper.find('[data-test-id="search-intro-a"]').prop('onClick')()
+    expect(goTo).toHaveBeenCalledWith(searchChromeExtensionPage)
   })
 })

@@ -14,6 +14,7 @@ class Notification extends React.Component {
       message,
       buttonText,
       buttonURL,
+      onClick,
       onDismiss,
     } = this.props
     return (
@@ -74,6 +75,10 @@ class Notification extends React.Component {
                 >
                   <Button color={'primary'}>{buttonText}</Button>
                 </Link>
+              ) : buttonText && onClick ? (
+                <Button onClick={onClick} color={'primary'}>
+                  {buttonText}
+                </Button>
               ) : null}
             </div>
           </span>
@@ -90,6 +95,7 @@ Notification.propTypes = {
   buttonText: PropTypes.string,
   buttonURL: PropTypes.string,
   onDismiss: PropTypes.func,
+  onClick: PropTypes.func,
 }
 
 Notification.defaultProps = {

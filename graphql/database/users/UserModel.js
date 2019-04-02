@@ -281,6 +281,27 @@ class User extends BaseModel {
         .allow(null)
         .description(`Which group the user is in for the "ad explanation" split-test.
           This value is assigned on the client so is not trustworthy.`),
+      testGroupSearchIntro: types
+        .number()
+        .integer()
+        .allow(null)
+        .description(`Which group the user is in for the "search intro" split-test.
+          This value is assigned on the client so is not trustworthy.`),
+      testGroupSearchIntroJoinedTime: types.string().isoDate()
+        .description(`The time the user was assigned a group for the "search intro"
+          split-test.`),
+      testSearchIntroAction: types
+        .number()
+        .integer()
+        .allow(null)
+        .description(
+          `Any action the user took for the "search intro" split-test.
+           0 = no action, 1 = dismissed, 2 = clicked to try Search for a Cause.
+          `
+        ),
+      testSearchIntroActionTime: types.string().isoDate()
+        .description(`The time the user made the action (testSearchIntroAction)
+          for the "search intro" split-test.`),
     }
   }
 

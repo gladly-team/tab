@@ -7,6 +7,7 @@ import V0MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import ErrorBoundary from 'js/components/General/ErrorBoundary'
 import QuantcastChoiceCMP from 'js/components/General/QuantcastChoiceCMP'
 
+jest.mock('js/components/Dashboard/DashboardView')
 jest.mock('js/utils/client-location')
 jest.mock('js/components/General/QuantcastChoiceCMP')
 jest.mock('js/ads/consentManagement')

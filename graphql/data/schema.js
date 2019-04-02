@@ -57,6 +57,8 @@ import setBackgroundImageFromCustomURL from '../database/users/setBackgroundImag
 import setBackgroundColor from '../database/users/setBackgroundColor'
 import setBackgroundImageDaily from '../database/users/setBackgroundImageDaily'
 import logUserExperimentGroups from '../database/users/logUserExperimentGroups'
+import logUserExperimentActions from '../database/users/logUserExperimentActions'
+import constructExperimentActionsType from '../database/users/constructExperimentActionsType'
 
 import CharityModel from '../database/charities/CharityModel'
 import getCharities from '../database/charities/getCharities'
@@ -278,7 +280,47 @@ const ExperimentGroupsType = new GraphQLInputObjectType({
         },
       }),
     },
+    searchIntro: {
+      type: new GraphQLEnumType({
+        name: 'ExperimentGroupSearchIntro',
+        description:
+          'The test of showing an introduction message to Search for a Cause',
+        values: {
+          NONE: { value: experimentConfig.searchIntro.NONE },
+          NO_INTRO: { value: experimentConfig.searchIntro.NO_INTRO },
+          INTRO_A: {
+            value: experimentConfig.searchIntro.INTRO_A,
+          },
+        },
+      }),
+    },
   },
+})
+
+const experimentActionsFields = {
+  searchIntro: {
+    type: new GraphQLEnumType({
+      name: 'ExperimentActionSearchIntro',
+      description: 'Action taken in response to the "search intro" experiment.',
+      values: {
+        NONE: { value: 0 },
+        DISMISS: { value: 1 },
+        CLICK: { value: 2 },
+      },
+    }),
+  },
+}
+
+const ExperimentActionsType = new GraphQLInputObjectType({
+  name: 'ExperimentActions',
+  description: 'The actions a user may take in an experiment',
+  fields: experimentActionsFields,
+})
+
+const ExperimentActionsOutputType = new GraphQLObjectType({
+  name: 'ExperimentActionsOutput',
+  description: 'The actions a user has taken in an experiment',
+  fields: () => experimentActionsFields,
 })
 
 // TODO: fetch only the fields we need:
@@ -417,6 +459,11 @@ const userType = new GraphQLObjectType({
       type: maxSearchesDayType,
       description: "Info about the user's day of most searches",
       resolve: user => user.maxSearchesDay.maxDay,
+    },
+    experimentActions: {
+      type: ExperimentActionsOutputType,
+      description: 'Actions the user has taken during experiments',
+      resolve: user => constructExperimentActionsType(user),
     },
   }),
   interfaces: [nodeInterface],
@@ -1140,6 +1187,31 @@ const updateUserExperimentGroupsMutation = mutationWithClientMutationId({
   },
 })
 
+/**
+ * Log action a user takes in an experiment.
+ */
+const logUserExperimentActionsMutation = mutationWithClientMutationId({
+  name: 'LogUserExperimentActions',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    experimentActions: { type: ExperimentActionsType },
+  },
+  outputFields: {
+    user: {
+      type: userType,
+      resolve: user => user,
+    },
+  },
+  mutateAndGetPayload: ({ userId, experimentActions }, context) => {
+    const userGlobalObj = fromGlobalId(userId)
+    return logUserExperimentActions(
+      context.user,
+      userGlobalObj.id,
+      experimentActions
+    )
+  },
+})
+
 const setUsernameMutation = mutationWithClientMutationId({
   name: 'SetUsername',
   inputFields: {
@@ -1275,6 +1347,7 @@ const mutationType = new GraphQLObjectType({
     createNewUser: createNewUserMutation,
     setUsername: setUsernameMutation,
     updateUserExperimentGroups: updateUserExperimentGroupsMutation,
+    logUserExperimentActions: logUserExperimentActionsMutation,
   }),
 })
 

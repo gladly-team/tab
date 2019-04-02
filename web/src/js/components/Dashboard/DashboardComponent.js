@@ -22,13 +22,23 @@ import ErrorMessage from 'js/components/General/ErrorMessage'
 import Notification from 'js/components/Dashboard/NotificationComponent'
 import { getCurrentUser } from 'js/authentication/user'
 import localStorageMgr from 'js/utils/localstorage-mgr'
+import { detectSupportedBrowser } from 'js/utils/detectBrowser'
 import {
   setUserDismissedAdExplanation,
   hasUserDismissedNotificationRecently,
   hasUserDismissedCampaignRecently,
 } from 'js/utils/local-user-data-mgr'
-import { STORAGE_NEW_USER_HAS_COMPLETED_TOUR } from 'js/constants'
-import { goTo, loginURL } from 'js/navigation/navigation'
+import {
+  CHROME_BROWSER,
+  FIREFOX_BROWSER,
+  STORAGE_NEW_USER_HAS_COMPLETED_TOUR,
+} from 'js/constants'
+import {
+  goTo,
+  loginURL,
+  searchChromeExtensionPage,
+  searchFirefoxExtensionPage,
+} from 'js/navigation/navigation'
 import {
   getNumberOfAdsToShow,
   shouldShowAdExplanation,
@@ -37,6 +47,12 @@ import {
   HORIZONTAL_AD_SLOT_DOM_ID,
 } from 'js/ads/adSettings'
 import { showGlobalNotification } from 'js/utils/feature-flags'
+import {
+  EXPERIMENT_SEARCH_INTRO,
+  getExperimentGroups,
+  getUserExperimentGroup,
+} from 'js/utils/experiments'
+import LogUserExperimentActionsMutation from 'js/mutations/LogUserExperimentActionsMutation'
 
 // Include ads code.
 // TODO: load this on mount, making sure the ads code behaves
@@ -69,12 +85,22 @@ class Dashboard extends React.Component {
       // Whether to show a global announcement.
       showNotification:
         showGlobalNotification() && !hasUserDismissedNotificationRecently(),
+      // Determines what message (if any) we should show to introduce
+      // Search for a Cause.
+      searchIntroExperimentGroup: getUserExperimentGroup(
+        EXPERIMENT_SEARCH_INTRO
+      ),
       hasUserDismissedCampaignRecently: hasUserDismissedCampaignRecently(),
+      // Let's assume a Chrome browser until we detect it.
+      browser: CHROME_BROWSER,
     }
   }
 
   componentDidMount() {
     this.determineAnonymousStatus()
+    this.setState({
+      browser: detectSupportedBrowser(),
+    })
   }
 
   /**
@@ -112,8 +138,10 @@ class Dashboard extends React.Component {
     // Props will be null on first render.
     const { user, app } = this.props
     const {
+      browser,
       hasUserDismissedCampaignRecently,
       userAlreadyViewedNewUserTour,
+      searchIntroExperimentGroup,
       tabId,
     } = this.state
     const errorMessage = this.state.errorMessage
@@ -174,6 +202,7 @@ class Dashboard extends React.Component {
               />
               {this.state.showNotification ? (
                 <Notification
+                  data-test-id={'global-notification'}
                   title={`Vote for the March Charity Spotlight`}
                   message={`
                         Each month this year, we're highlighting a charity chosen by our
@@ -183,6 +212,60 @@ class Dashboard extends React.Component {
                   onDismiss={() => {
                     this.setState({
                       showNotification: false,
+                    })
+                  }}
+                  style={{
+                    marginTop: 4,
+                  }}
+                />
+              ) : null}
+              {// @experiment-search-intro
+              searchIntroExperimentGroup ===
+                getExperimentGroups(EXPERIMENT_SEARCH_INTRO).INTRO_A &&
+              !(
+                user.experimentActions.searchIntro === 'CLICK' ||
+                user.experimentActions.searchIntro === 'DISMISS'
+              ) ? (
+                <Notification
+                  data-test-id={'search-intro-a'}
+                  title={`Introducing Search for a Cause`}
+                  message={`
+                        Now, you can raise money for charity each time you search! It's the search results you know and love—plus doing good.`}
+                  buttonText={'Try it out'}
+                  onClick={async () => {
+                    // Log the click.
+                    await LogUserExperimentActionsMutation({
+                      userId: user.id,
+                      experimentActions: {
+                        [EXPERIMENT_SEARCH_INTRO]: 'CLICK',
+                      },
+                    })
+
+                    // Hide the message because we don't want the user to
+                    // need to dismiss it after clicking the action, which
+                    // would also confuse our test metrics.
+                    this.setState({
+                      searchIntroExperimentGroup: false,
+                    })
+
+                    if (browser === CHROME_BROWSER) {
+                      goTo(searchChromeExtensionPage)
+                    } else if (browser === FIREFOX_BROWSER) {
+                      goTo(searchFirefoxExtensionPage)
+                    } else {
+                      goTo(searchChromeExtensionPage)
+                    }
+                  }}
+                  onDismiss={async () => {
+                    // Log the dismissal.
+                    await LogUserExperimentActionsMutation({
+                      userId: user.id,
+                      experimentActions: {
+                        [EXPERIMENT_SEARCH_INTRO]: 'DISMISS',
+                      },
+                    })
+                    this.setState({
+                      searchIntroExperimentGroup: false,
                     })
                   }}
                   style={{
@@ -386,6 +469,9 @@ class Dashboard extends React.Component {
 Dashboard.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.string.isRequired,
+    experimentActions: PropTypes.shape({
+      searchIntro: PropTypes.string,
+    }).isRequired,
     joined: PropTypes.string.isRequired,
     tabs: PropTypes.number.isRequired,
   }),

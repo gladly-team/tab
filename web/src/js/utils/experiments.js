@@ -2,7 +2,11 @@ import { filter, find } from 'lodash/collection'
 import { isNil } from 'lodash/lang'
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import { STORAGE_EXPERIMENT_PREFIX } from 'js/constants'
-// import { onlyIncludeNewUsers } from 'js/utils/experimentFilters'
+import {
+  includeIfAnyIsTrue,
+  excludeUsersWhoJoinedWithin,
+  onlyIncludeNewUsers,
+} from 'js/utils/experimentFilters'
 import environment from 'js/relay-env'
 import UpdateUserExperimentGroupsMutation from 'js/mutations/UpdateUserExperimentGroupsMutation'
 
@@ -245,6 +249,7 @@ const NoneExperimentGroup = createExperimentGroup({
 export const EXPERIMENT_THIRD_AD = 'thirdAd'
 export const EXPERIMENT_ONE_AD_FOR_NEW_USERS = 'oneAdForNewUsers'
 export const EXPERIMENT_AD_EXPLANATION = 'adExplanation'
+export const EXPERIMENT_SEARCH_INTRO = 'searchIntro'
 
 // Add ExperimentGroup objects here to enable new experiments.
 // The "name" value of the experiment must be the same as the
@@ -268,6 +273,32 @@ export const _experimentsConfig = [
   //     }),
   //   },
   // }),
+  // @experiment-search-intro
+  createExperiment({
+    name: EXPERIMENT_SEARCH_INTRO,
+    active: false,
+    disabled: false,
+    percentageOfExistingUsersInExperiment: 1.0,
+    percentageOfNewUsersInExperiment: 100.0,
+    filters: [
+      // In this test, include brand new users and users
+      // who joined more than 2 months ago.
+      includeIfAnyIsTrue([
+        onlyIncludeNewUsers,
+        excludeUsersWhoJoinedWithin(2, 'months'),
+      ]),
+    ],
+    groups: {
+      NO_INTRO: createExperimentGroup({
+        value: 'noIntro',
+        schemaValue: 'NO_INTRO',
+      }),
+      INTRO_A: createExperimentGroup({
+        value: 'introA',
+        schemaValue: 'INTRO_A',
+      }),
+    },
+  }),
 ]
 
 // We do this to be able to modify the experiments

@@ -173,6 +173,23 @@ enum EncodedRevenueValueTypeEnum {
   AMAZON_CPM
 }
 
+"""The actions a user may take in an experiment"""
+input ExperimentActions {
+  searchIntro: ExperimentActionSearchIntro
+}
+
+"""Action taken in response to the "search intro" experiment."""
+enum ExperimentActionSearchIntro {
+  NONE
+  DISMISS
+  CLICK
+}
+
+"""The actions a user has taken in an experiment"""
+type ExperimentActionsOutput {
+  searchIntro: ExperimentActionSearchIntro
+}
+
 """The test of showing an explanation of why there are ads"""
 enum ExperimentGroupAdExplanation {
   NONE
@@ -201,6 +218,14 @@ input ExperimentGroups {
   thirdAd: ExperimentGroupThirdAd
   oneAdForNewUsers: ExperimentGroupOneAdForNewUsers
   adExplanation: ExperimentGroupAdExplanation
+  searchIntro: ExperimentGroupSearchIntro
+}
+
+"""The test of showing an introduction message to Search for a Cause"""
+enum ExperimentGroupSearchIntro {
+  NONE
+  NO_INTRO
+  INTRO_A
 }
 
 """The test of enabling a third ad"""
@@ -258,6 +283,17 @@ input LogUserDataConsentInput {
 
 type LogUserDataConsentPayload {
   success: Boolean!
+  clientMutationId: String
+}
+
+input LogUserExperimentActionsInput {
+  userId: String!
+  experimentActions: ExperimentActions
+  clientMutationId: String
+}
+
+type LogUserExperimentActionsPayload {
+  user: User
   clientMutationId: String
 }
 
@@ -334,6 +370,7 @@ type Mutation {
   createNewUser(input: CreateNewUserInput!): CreateNewUserPayload
   setUsername(input: SetUsernameInput!): SetUsernamePayload
   updateUserExperimentGroups(input: UpdateUserExperimentGroupsInput!): UpdateUserExperimentGroupsPayload
+  logUserExperimentActions(input: LogUserExperimentActionsInput!): LogUserExperimentActionsPayload
 }
 
 """An object with an ID"""
@@ -576,6 +613,9 @@ type User implements Node {
 
   """Info about the user's day of most searches"""
   maxSearchesDay: MaxSearchesDay
+
+  """Actions the user has taken during experiments"""
+  experimentActions: ExperimentActionsOutput
 }
 
 """Info about a user recruited by a referring user"""
