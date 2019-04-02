@@ -33,7 +33,12 @@ import {
   FIREFOX_BROWSER,
   STORAGE_NEW_USER_HAS_COMPLETED_TOUR,
 } from 'js/constants'
-import { goTo, loginURL } from 'js/navigation/navigation'
+import {
+  goTo,
+  loginURL,
+  searchChromeExtensionPage,
+  searchFirefoxExtensionPage,
+} from 'js/navigation/navigation'
 import {
   getNumberOfAdsToShow,
   shouldShowAdExplanation,
@@ -223,19 +228,23 @@ class Dashboard extends React.Component {
                         Now, you can raise money for charity each time you search! It's the search results you know and love—plus doing good.`}
                   buttonText={'Try it out'}
                   onClick={() => {
-                    console.log('Action button clicked!')
-                    if (browser === CHROME_BROWSER) {
-                      console.log('Go to Chrome Web Store.')
-                    } else if (browser === FIREFOX_BROWSER) {
-                      console.log('Go to Firefox Addons Store.')
-                    } else {
-                      console.log(
-                        'Unsupported browser, but go to Chrome Web Store.'
-                      )
-                    }
                     // TODO:
                     //  - log click
-                    //  - open link to FF/Chrome extension store
+
+                    // Hide the message because we don't want the user to
+                    // need to dismiss it after clicking the action, which
+                    // would also confuse our test metrics.
+                    this.setState({
+                      searchIntroExperimentGroup: false,
+                    })
+
+                    if (browser === CHROME_BROWSER) {
+                      goTo(searchChromeExtensionPage)
+                    } else if (browser === FIREFOX_BROWSER) {
+                      goTo(searchFirefoxExtensionPage)
+                    } else {
+                      goTo(searchChromeExtensionPage)
+                    }
                   }}
                   onDismiss={() => {
                     // TODO: log dismissal
