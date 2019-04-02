@@ -222,7 +222,11 @@ class Dashboard extends React.Component {
               ) : null}
               {// @experiment-search-intro
               searchIntroExperimentGroup ===
-              getExperimentGroups(EXPERIMENT_SEARCH_INTRO).INTRO_A ? (
+                getExperimentGroups(EXPERIMENT_SEARCH_INTRO).INTRO_A &&
+              !(
+                user.experimentActions.searchIntro === 'CLICK' ||
+                user.experimentActions.searchIntro === 'DISMISS'
+              ) ? (
                 <Notification
                   data-test-id={'search-intro-a'}
                   title={`Introducing Search for a Cause`}
@@ -466,6 +470,9 @@ class Dashboard extends React.Component {
 Dashboard.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.string.isRequired,
+    experimentActions: PropTypes.shape({
+      searchIntro: PropTypes.string,
+    }).isRequired,
     joined: PropTypes.string.isRequired,
     tabs: PropTypes.number.isRequired,
   }),

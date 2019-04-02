@@ -185,6 +185,11 @@ enum ExperimentActionSearchIntro {
   CLICK
 }
 
+"""The actions a user has taken in an experiment"""
+type ExperimentActionsOutput {
+  searchIntro: ExperimentActionSearchIntro
+}
+
 """The test of showing an explanation of why there are ads"""
 enum ExperimentGroupAdExplanation {
   NONE
@@ -608,6 +613,9 @@ type User implements Node {
 
   """Info about the user's day of most searches"""
   maxSearchesDay: MaxSearchesDay
+
+  """Actions the user has taken during experiments"""
+  experimentActions: ExperimentActionsOutput
 }
 
 """Info about a user recruited by a referring user"""

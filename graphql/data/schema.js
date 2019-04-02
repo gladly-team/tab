@@ -58,6 +58,7 @@ import setBackgroundColor from '../database/users/setBackgroundColor'
 import setBackgroundImageDaily from '../database/users/setBackgroundImageDaily'
 import logUserExperimentGroups from '../database/users/logUserExperimentGroups'
 import logUserExperimentActions from '../database/users/logUserExperimentActions'
+import constructExperimentActionsType from '../database/users/constructExperimentActionsType'
 
 import CharityModel from '../database/charities/CharityModel'
 import getCharities from '../database/charities/getCharities'
@@ -296,23 +297,30 @@ const ExperimentGroupsType = new GraphQLInputObjectType({
   },
 })
 
+const experimentActionsFields = {
+  searchIntro: {
+    type: new GraphQLEnumType({
+      name: 'ExperimentActionSearchIntro',
+      description: 'Action taken in response to the "search intro" experiment.',
+      values: {
+        NONE: { value: 0 },
+        DISMISS: { value: 1 },
+        CLICK: { value: 2 },
+      },
+    }),
+  },
+}
+
 const ExperimentActionsType = new GraphQLInputObjectType({
   name: 'ExperimentActions',
   description: 'The actions a user may take in an experiment',
-  fields: {
-    searchIntro: {
-      type: new GraphQLEnumType({
-        name: 'ExperimentActionSearchIntro',
-        description:
-          'Action taken in response to the "search intro" experiment.',
-        values: {
-          NONE: { value: 0 },
-          DISMISS: { value: 1 },
-          CLICK: { value: 2 },
-        },
-      }),
-    },
-  },
+  fields: experimentActionsFields,
+})
+
+const ExperimentActionsOutputType = new GraphQLObjectType({
+  name: 'ExperimentActionsOutput',
+  description: 'The actions a user has taken in an experiment',
+  fields: () => experimentActionsFields,
 })
 
 // TODO: fetch only the fields we need:
@@ -451,6 +459,11 @@ const userType = new GraphQLObjectType({
       type: maxSearchesDayType,
       description: "Info about the user's day of most searches",
       resolve: user => user.maxSearchesDay.maxDay,
+    },
+    experimentActions: {
+      type: ExperimentActionsOutputType,
+      description: 'Actions the user has taken during experiments',
+      resolve: user => constructExperimentActionsType(user),
     },
   }),
   interfaces: [nodeInterface],
