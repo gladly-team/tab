@@ -97,6 +97,7 @@ describe('logUserExperimentGroups', () => {
     expect(updateQuery).toHaveBeenCalledWith(userContext, {
       id: userContext.id,
       testGroupSearchIntro: 0,
+      testGroupSearchIntroJoinedTime: moment.utc().toISOString(),
       updated: moment.utc().toISOString(),
     })
   })

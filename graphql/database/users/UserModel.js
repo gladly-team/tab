@@ -287,6 +287,9 @@ class User extends BaseModel {
         .allow(null)
         .description(`Which group the user is in for the "search intro" split-test.
           This value is assigned on the client so is not trustworthy.`),
+      testGroupSearchIntroJoinedTime: types.string().isoDate()
+        .description(`The time the user was assigned a group for the "search intro"
+          split-test.`),
     }
   }
 
