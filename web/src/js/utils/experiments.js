@@ -276,8 +276,7 @@ export const _experimentsConfig = [
   // @experiment-search-intro
   createExperiment({
     name: EXPERIMENT_SEARCH_INTRO,
-    // TODO: make inactive before deploy
-    active: true,
+    active: false,
     disabled: false,
     percentageOfExistingUsersInExperiment: 1.0,
     percentageOfNewUsersInExperiment: 100.0,
