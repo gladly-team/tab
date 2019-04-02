@@ -206,7 +206,6 @@ class Dashboard extends React.Component {
               {searchIntroExperimentGroup ===
               getExperimentGroups(EXPERIMENT_SEARCH_INTRO).INTRO_A ? (
                 <Notification
-                  // TODO: tests
                   data-test-id={'search-intro-a'}
                   title={`Introducing Search for a Cause`}
                   message={`

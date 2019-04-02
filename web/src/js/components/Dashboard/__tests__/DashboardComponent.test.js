@@ -35,13 +35,7 @@ import {
   hasUserDismissedNotificationRecently,
 } from 'js/utils/local-user-data-mgr'
 import { showGlobalNotification } from 'js/utils/feature-flags'
-
-// TODO: test the "search intro" experiment
-// import {
-//   EXPERIMENT_SEARCH_INTRO,
-//   getExperimentGroups,
-//   getUserExperimentGroup,
-// } from 'js/utils/experiments'
+import { getUserExperimentGroup } from 'js/utils/experiments'
 
 jest.mock('js/analytics/logEvent')
 jest.mock('js/utils/localstorage-mgr')
@@ -70,6 +64,7 @@ beforeAll(() => {
 
 afterEach(() => {
   localStorageMgr.clear()
+  getUserExperimentGroup.mockReturnValue('none')
 })
 
 afterAll(() => {
@@ -618,5 +613,23 @@ describe('Dashboard component', () => {
 
     // Notification should be gone.
     expect(wrapper.find('[data-test-id="global-notification"]').length).toBe(0)
+  })
+
+  it('does not render the search intro notification when the user is in the control group', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    getUserExperimentGroup.mockReturnValue('none')
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    expect(wrapper.find('[data-test-id="search-intro-a"]').exists()).toBe(false)
+  })
+
+  it('renders the search intro notification when the user is in the experimental group', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    getUserExperimentGroup.mockReturnValue('introA')
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    const elem = wrapper.find('[data-test-id="search-intro-a"]')
+    expect(elem.exists()).toBe(true)
+    expect(elem.prop('title')).toEqual(`Introducing Search for a Cause`)
   })
 })
