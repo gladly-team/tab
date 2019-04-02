@@ -87,7 +87,6 @@ class Dashboard extends React.Component {
         showGlobalNotification() && !hasUserDismissedNotificationRecently(),
       // Determines what message (if any) we should show to introduce
       // Search for a Cause.
-      // TODO: fetch from server to determine if user has already dismissed the message
       searchIntroExperimentGroup: getUserExperimentGroup(
         EXPERIMENT_SEARCH_INTRO
       ),
