@@ -1172,16 +1172,11 @@ describe('Actual experiments we are running or will run', () => {
     const experiments = experimentsModule._experiments.getExperiments()
     expect(sortBy(experiments, o => o.name)).toMatchObject([
       // Experiments ordered alphabetically by name
-      {
-        name: 'adExplanation',
-        active: true,
-        disabled: false,
-      },
-      {
-        name: 'oneAdForNewUsers',
-        active: true,
-        disabled: false,
-      },
+      // {
+      //   name: 'exampleExperiment',
+      //   active: true,
+      //   disabled: false,
+      // },
     ])
   })
 

@@ -1,12 +1,6 @@
 import moment from 'moment'
 import { isVariousAdSizesEnabled } from 'js/utils/feature-flags'
 import {
-  EXPERIMENT_AD_EXPLANATION,
-  EXPERIMENT_ONE_AD_FOR_NEW_USERS,
-  getExperimentGroups,
-  getUserExperimentGroup,
-} from 'js/utils/experiments'
-import {
   getBrowserExtensionInstallTime,
   hasUserDismissedAdExplanation,
 } from 'js/utils/local-user-data-mgr'
@@ -39,8 +33,8 @@ export const HORIZONTAL_AD_SLOT_DOM_ID = 'div-gpt-ad-1464385677836-0'
 
 /**
  * Determine if we should show the explanation that the ads raise
- * money for charity. We'll show it for users in the "ad explanation"
- * experimental group for the first X hours after they join.
+ * money for charity. We'll show it to users for the first X hours
+ * after they join.
  * @return {Boolean} Whether to show one ad.
  */
 export const shouldShowAdExplanation = () => {
@@ -48,30 +42,19 @@ export const shouldShowAdExplanation = () => {
   const installTime = getBrowserExtensionInstallTime()
   const joinedRecently =
     !!installTime && moment().diff(installTime, 'hours') < hoursToShow
-  const userInExperimentalGroup =
-    getUserExperimentGroup(EXPERIMENT_AD_EXPLANATION) ===
-    getExperimentGroups(EXPERIMENT_AD_EXPLANATION).SHOW_EXPLANATION
-  return !!(
-    joinedRecently &&
-    userInExperimentalGroup &&
-    !hasUserDismissedAdExplanation()
-  )
+  return !!(joinedRecently && !hasUserDismissedAdExplanation())
 }
 
 /**
- * Determine if we should show only one ad. We'll show one ad for
- * users in the "one ad" test group for the first X hours after
- * they join.
+ * Determine if we should show only one ad. We'll show one ad to
+ * users for the first X hours after they join.
  * @return {Boolean} Whether to show one ad.
  */
 const shouldShowOneAd = () => {
   const installTime = getBrowserExtensionInstallTime()
   const joinedRecently =
     !!installTime && moment().diff(installTime, 'hours') < 24
-  const userInOneAdTestGroup =
-    getUserExperimentGroup(EXPERIMENT_ONE_AD_FOR_NEW_USERS) ===
-    getExperimentGroups(EXPERIMENT_ONE_AD_FOR_NEW_USERS).ONE_AD_AT_FIRST
-  return !!(joinedRecently && userInOneAdTestGroup)
+  return !!joinedRecently
 }
 
 /**
