@@ -234,15 +234,9 @@ class SearchPage extends React.Component {
               <Typography
                 color={'primary'}
                 variant={'overline'}
-                // variant={'caption'}
-                // variant={'body2'}
                 style={{
                   lineHeight: '60%',
                   fontWeight: 'bold',
-                  // color: 'rgba(0, 0, 0, 0.66)',
-                  // fontStyle: 'italic',
-                  // paddingLeft: 49,
-                  // lineHeight: '50%',
                 }}
               >
                 beta
