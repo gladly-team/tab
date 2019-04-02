@@ -52,6 +52,7 @@ import {
   getExperimentGroups,
   getUserExperimentGroup,
 } from 'js/utils/experiments'
+import LogUserExperimentActionsMutation from 'js/mutations/LogUserExperimentActionsMutation'
 
 // Include ads code.
 // TODO: load this on mount, making sure the ads code behaves
@@ -219,7 +220,8 @@ class Dashboard extends React.Component {
                   }}
                 />
               ) : null}
-              {searchIntroExperimentGroup ===
+              {// @experiment-search-intro
+              searchIntroExperimentGroup ===
               getExperimentGroups(EXPERIMENT_SEARCH_INTRO).INTRO_A ? (
                 <Notification
                   data-test-id={'search-intro-a'}
@@ -227,9 +229,14 @@ class Dashboard extends React.Component {
                   message={`
                         Now, you can raise money for charity each time you search! It's the search results you know and love—plus doing good.`}
                   buttonText={'Try it out'}
-                  onClick={() => {
-                    // TODO:
-                    //  - log click
+                  onClick={async () => {
+                    // Log the click.
+                    await LogUserExperimentActionsMutation({
+                      userId: user.id,
+                      experimentActions: {
+                        [EXPERIMENT_SEARCH_INTRO]: 'CLICK',
+                      },
+                    })
 
                     // Hide the message because we don't want the user to
                     // need to dismiss it after clicking the action, which
@@ -246,8 +253,14 @@ class Dashboard extends React.Component {
                       goTo(searchChromeExtensionPage)
                     }
                   }}
-                  onDismiss={() => {
-                    // TODO: log dismissal
+                  onDismiss={async () => {
+                    // Log the dismissal.
+                    await LogUserExperimentActionsMutation({
+                      userId: user.id,
+                      experimentActions: {
+                        [EXPERIMENT_SEARCH_INTRO]: 'DISMISS',
+                      },
+                    })
                     this.setState({
                       searchIntroExperimentGroup: false,
                     })

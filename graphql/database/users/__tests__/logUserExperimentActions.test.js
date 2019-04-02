@@ -8,7 +8,6 @@ import {
   mockDate,
   setMockDBResponse,
 } from '../../test-utils'
-import { getValidatedExperimentGroups } from '../../../utils/experiments'
 
 jest.mock('../../databaseClient')
 jest.mock('../../../utils/experiments')
@@ -25,31 +24,29 @@ afterAll(() => {
 
 beforeEach(() => {
   jest.clearAllMocks()
-  getValidatedExperimentGroups.mockReturnValue({})
 })
 
-describe('logUserExperimentGroups', () => {
+describe('logUserExperimentActions', () => {
   it('sets the testGroupSearchIntro value when it is provided', async () => {
     expect.assertions(1)
 
     const UserModel = require('../UserModel').default
     const updateQuery = jest.spyOn(UserModel, 'update')
 
-    const mockExperimentGroups = {
-      searchIntro: 0,
+    const mockExperimentActions = {
+      searchIntro: 2,
     }
-    getValidatedExperimentGroups.mockReturnValueOnce(mockExperimentGroups)
-    const logUserExperimentGroups = require('../logUserExperimentGroups')
+    const logUserExperimentActions = require('../logUserExperimentActions')
       .default
-    await logUserExperimentGroups(
+    await logUserExperimentActions(
       userContext,
       userContext.id,
-      mockExperimentGroups
+      mockExperimentActions
     )
     expect(updateQuery).toHaveBeenCalledWith(userContext, {
       id: userContext.id,
-      testGroupSearchIntro: 0,
-      testGroupSearchIntroJoinedTime: moment.utc().toISOString(),
+      testSearchIntroAction: 2,
+      testSearchIntroActionTime: moment.utc().toISOString(),
       updated: moment.utc().toISOString(),
     })
   })
@@ -60,14 +57,13 @@ describe('logUserExperimentGroups', () => {
     const UserModel = require('../UserModel').default
     const updateQuery = jest.spyOn(UserModel, 'update')
 
-    const mockExperimentGroups = {}
-    getValidatedExperimentGroups.mockReturnValueOnce(mockExperimentGroups)
-    const logUserExperimentGroups = require('../logUserExperimentGroups')
+    const mockExperimentActions = {}
+    const logUserExperimentActions = require('../logUserExperimentActions')
       .default
-    await logUserExperimentGroups(
+    await logUserExperimentActions(
       userContext,
       userContext.id,
-      mockExperimentGroups
+      mockExperimentActions
     )
     expect(updateQuery).not.toHaveBeenCalled()
   })
@@ -78,14 +74,13 @@ describe('logUserExperimentGroups', () => {
     const UserModel = require('../UserModel').default
     const updateQuery = jest.spyOn(UserModel, 'update')
 
-    const mockExperimentGroups = null
-    getValidatedExperimentGroups.mockReturnValueOnce({}) // Will return an empty object
-    const logUserExperimentGroups = require('../logUserExperimentGroups')
+    const mockExperimentActions = null
+    const logUserExperimentActions = require('../logUserExperimentActions')
       .default
-    await logUserExperimentGroups(
+    await logUserExperimentActions(
       userContext,
       userContext.id,
-      mockExperimentGroups
+      mockExperimentActions
     )
     expect(updateQuery).not.toHaveBeenCalled()
   })
@@ -101,16 +96,15 @@ describe('logUserExperimentGroups', () => {
       Attributes: expectedReturnedUser,
     })
 
-    const mockExperimentGroups = {
+    const mockExperimentActions = {
       searchIntro: 1,
     }
-    getValidatedExperimentGroups.mockReturnValueOnce(mockExperimentGroups)
-    const logUserExperimentGroups = require('../logUserExperimentGroups')
+    const logUserExperimentActions = require('../logUserExperimentActions')
       .default
-    const returnedUser = await logUserExperimentGroups(
+    const returnedUser = await logUserExperimentActions(
       userContext,
       userContext.id,
-      mockExperimentGroups
+      mockExperimentActions
     )
     expect(returnedUser).toEqual(expectedReturnedUser)
   })
@@ -124,43 +118,14 @@ describe('logUserExperimentGroups', () => {
       Item: expectedReturnedUser,
     })
 
-    const mockExperimentGroups = {}
-    getValidatedExperimentGroups.mockReturnValueOnce(mockExperimentGroups)
-    const logUserExperimentGroups = require('../logUserExperimentGroups')
+    const mockExperimentActions = {}
+    const logUserExperimentActions = require('../logUserExperimentActions')
       .default
-    const returnedUser = await logUserExperimentGroups(
+    const returnedUser = await logUserExperimentActions(
       userContext,
       userContext.id,
-      mockExperimentGroups
+      mockExperimentActions
     )
     expect(returnedUser).toEqual(expectedReturnedUser)
-  })
-
-  it('does not save a test group value if it is invalid', async () => {
-    expect.assertions(1)
-
-    const UserModel = require('../UserModel').default
-    const updateQuery = jest.spyOn(UserModel, 'update')
-
-    // Have the validated groups differ from provided.
-    const mockExperimentGroups = {
-      testGroupSearchIntro: 34543543,
-    }
-    getValidatedExperimentGroups.mockReturnValueOnce({
-      testGroupSearchIntro: null,
-    })
-
-    const logUserExperimentGroups = require('../logUserExperimentGroups')
-      .default
-    await logUserExperimentGroups(
-      userContext,
-      userContext.id,
-      mockExperimentGroups
-    )
-    expect(updateQuery).toHaveBeenCalledWith(userContext, {
-      id: userContext.id,
-      // Note: the experiment group is not modified
-      updated: moment.utc().toISOString(),
-    })
   })
 })

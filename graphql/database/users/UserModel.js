@@ -290,6 +290,18 @@ class User extends BaseModel {
       testGroupSearchIntroJoinedTime: types.string().isoDate()
         .description(`The time the user was assigned a group for the "search intro"
           split-test.`),
+      testSearchIntroAction: types
+        .number()
+        .integer()
+        .allow(null)
+        .description(
+          `Any action the user took for the "search intro" split-test.
+           0 = no action, 1 = dismissed, 2 = clicked to try Search for a Cause.
+          `
+        ),
+      testSearchIntroActionTime: types.string().isoDate()
+        .description(`The time the user made the action (testSearchIntroAction)
+          for the "search intro" split-test.`),
     }
   }
 

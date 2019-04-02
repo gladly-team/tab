@@ -46,6 +46,7 @@ import {
 import { showGlobalNotification } from 'js/utils/feature-flags'
 import { getUserExperimentGroup } from 'js/utils/experiments'
 import { detectSupportedBrowser } from 'js/utils/detectBrowser'
+import LogUserExperimentActionsMutation from 'js/mutations/LogUserExperimentActionsMutation'
 
 jest.mock('js/analytics/logEvent')
 jest.mock('js/utils/localstorage-mgr')
@@ -56,6 +57,7 @@ jest.mock('js/utils/local-user-data-mgr')
 jest.mock('js/utils/feature-flags')
 jest.mock('js/utils/experiments')
 jest.mock('js/utils/detectBrowser')
+jest.mock('js/mutations/LogUserExperimentActionsMutation')
 
 const mockNow = '2018-05-15T10:30:00.000'
 
@@ -75,6 +77,7 @@ beforeAll(() => {
 
 beforeEach(() => {
   detectSupportedBrowser.mockReturnValue(CHROME_BROWSER)
+  LogUserExperimentActionsMutation.mockResolvedValue()
 })
 
 afterEach(() => {
@@ -649,53 +652,88 @@ describe('Dashboard component', () => {
     expect(elem.prop('title')).toEqual(`Introducing Search for a Cause`)
   })
 
-  it('[search-intro-A] hides the search intro when the onClick callback is called', () => {
+  it('[search-intro-A] hides the search intro when the onClick callback is called', async () => {
+    expect.assertions(2)
     getUserExperimentGroup.mockReturnValue('introA')
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
     expect(wrapper.find('[data-test-id="search-intro-a"]').length).toBe(1)
-    wrapper.find('[data-test-id="search-intro-a"]').prop('onClick')()
+    await wrapper.find('[data-test-id="search-intro-a"]').prop('onClick')()
     expect(wrapper.find('[data-test-id="search-intro-a"]').length).toBe(0)
   })
 
-  it('[search-intro-A] hides the search intro when the onDismiss callback is called', () => {
+  it('[search-intro-A] hides the search intro when the onDismiss callback is called', async () => {
+    expect.assertions(2)
     getUserExperimentGroup.mockReturnValue('introA')
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
     expect(wrapper.find('[data-test-id="search-intro-a"]').length).toBe(1)
-    wrapper.find('[data-test-id="search-intro-a"]').prop('onDismiss')()
+    await wrapper.find('[data-test-id="search-intro-a"]').prop('onDismiss')()
     expect(wrapper.find('[data-test-id="search-intro-a"]').length).toBe(0)
   })
 
-  it('[search-intro-A] redirects to the Chrome web store when the user clicks the search intro action button on a Chrome browser', () => {
+  it('[search-intro-A] logs the search intro experiment action when the onClick callback is called', async () => {
+    expect.assertions(1)
+    getUserExperimentGroup.mockReturnValue('introA')
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    await wrapper.find('[data-test-id="search-intro-a"]').prop('onClick')()
+    expect(LogUserExperimentActionsMutation).toHaveBeenCalledWith({
+      userId: 'abc-123',
+      experimentActions: {
+        searchIntro: 'CLICK',
+      },
+    })
+  })
+
+  it('[search-intro-A] logs the search intro experiment action when the onDismiss callback is called', async () => {
+    expect.assertions(1)
+    getUserExperimentGroup.mockReturnValue('introA')
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    await wrapper.find('[data-test-id="search-intro-a"]').prop('onDismiss')()
+    expect(LogUserExperimentActionsMutation).toHaveBeenCalledWith({
+      userId: 'abc-123',
+      experimentActions: {
+        searchIntro: 'DISMISS',
+      },
+    })
+  })
+
+  it('[search-intro-A] redirects to the Chrome web store when the user clicks the search intro action button on a Chrome browser', async () => {
+    expect.assertions(1)
     detectSupportedBrowser.mockReturnValue(CHROME_BROWSER)
     getUserExperimentGroup.mockReturnValue('introA')
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    wrapper.find('[data-test-id="search-intro-a"]').prop('onClick')()
+    await wrapper.find('[data-test-id="search-intro-a"]').prop('onClick')()
     expect(goTo).toHaveBeenCalledWith(searchChromeExtensionPage)
   })
 
-  it('[search-intro-A] redirects to the Firefox addons store when the user clicks the search intro action button on a Firefox browser', () => {
+  it('[search-intro-A] redirects to the Firefox addons store when the user clicks the search intro action button on a Firefox browser', async () => {
+    expect.assertions(1)
     detectSupportedBrowser.mockReturnValue(FIREFOX_BROWSER)
     getUserExperimentGroup.mockReturnValue('introA')
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    wrapper.find('[data-test-id="search-intro-a"]').prop('onClick')()
+    await wrapper.find('[data-test-id="search-intro-a"]').prop('onClick')()
     expect(goTo).toHaveBeenCalledWith(searchFirefoxExtensionPage)
   })
 
-  it('[search-intro-A] redirects to the Chrome web store when the user clicks the search intro action button on an unknown/unsupported browser', () => {
+  it('[search-intro-A] redirects to the Chrome web store when the user clicks the search intro action button on an unknown/unsupported browser', async () => {
+    expect.assertions(1)
     detectSupportedBrowser.mockReturnValue(UNSUPPORTED_BROWSER)
     getUserExperimentGroup.mockReturnValue('introA')
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    wrapper.find('[data-test-id="search-intro-a"]').prop('onClick')()
+    await wrapper.find('[data-test-id="search-intro-a"]').prop('onClick')()
     expect(goTo).toHaveBeenCalledWith(searchChromeExtensionPage)
   })
 })

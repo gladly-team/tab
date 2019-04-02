@@ -57,6 +57,7 @@ import setBackgroundImageFromCustomURL from '../database/users/setBackgroundImag
 import setBackgroundColor from '../database/users/setBackgroundColor'
 import setBackgroundImageDaily from '../database/users/setBackgroundImageDaily'
 import logUserExperimentGroups from '../database/users/logUserExperimentGroups'
+import logUserExperimentActions from '../database/users/logUserExperimentActions'
 
 import CharityModel from '../database/charities/CharityModel'
 import getCharities from '../database/charities/getCharities'
@@ -289,6 +290,25 @@ const ExperimentGroupsType = new GraphQLInputObjectType({
           INTRO_A: {
             value: experimentConfig.searchIntro.INTRO_A,
           },
+        },
+      }),
+    },
+  },
+})
+
+const ExperimentActionsType = new GraphQLInputObjectType({
+  name: 'ExperimentActions',
+  description: 'The actions a user may take in an experiment',
+  fields: {
+    searchIntro: {
+      type: new GraphQLEnumType({
+        name: 'ExperimentActionSearchIntro',
+        description:
+          'Action taken in response to the "search intro" experiment.',
+        values: {
+          NONE: { value: 0 },
+          DISMISS: { value: 1 },
+          CLICK: { value: 2 },
         },
       }),
     },
@@ -1154,6 +1174,31 @@ const updateUserExperimentGroupsMutation = mutationWithClientMutationId({
   },
 })
 
+/**
+ * Log action a user takes in an experiment.
+ */
+const logUserExperimentActionsMutation = mutationWithClientMutationId({
+  name: 'LogUserExperimentActions',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    experimentActions: { type: ExperimentActionsType },
+  },
+  outputFields: {
+    user: {
+      type: userType,
+      resolve: user => user,
+    },
+  },
+  mutateAndGetPayload: ({ userId, experimentActions }, context) => {
+    const userGlobalObj = fromGlobalId(userId)
+    return logUserExperimentActions(
+      context.user,
+      userGlobalObj.id,
+      experimentActions
+    )
+  },
+})
+
 const setUsernameMutation = mutationWithClientMutationId({
   name: 'SetUsername',
   inputFields: {
@@ -1289,6 +1334,7 @@ const mutationType = new GraphQLObjectType({
     createNewUser: createNewUserMutation,
     setUsername: setUsernameMutation,
     updateUserExperimentGroups: updateUserExperimentGroupsMutation,
+    logUserExperimentActions: logUserExperimentActionsMutation,
   }),
 })
 

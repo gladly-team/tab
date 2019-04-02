@@ -173,6 +173,18 @@ enum EncodedRevenueValueTypeEnum {
   AMAZON_CPM
 }
 
+"""The actions a user may take in an experiment"""
+input ExperimentActions {
+  searchIntro: ExperimentActionSearchIntro
+}
+
+"""Action taken in response to the "search intro" experiment."""
+enum ExperimentActionSearchIntro {
+  NONE
+  DISMISS
+  CLICK
+}
+
 """The test of showing an explanation of why there are ads"""
 enum ExperimentGroupAdExplanation {
   NONE
@@ -269,6 +281,17 @@ type LogUserDataConsentPayload {
   clientMutationId: String
 }
 
+input LogUserExperimentActionsInput {
+  userId: String!
+  experimentActions: ExperimentActions
+  clientMutationId: String
+}
+
+type LogUserExperimentActionsPayload {
+  user: User
+  clientMutationId: String
+}
+
 enum LogUserRevenueAggregationOperationEnum {
   MAX
 }
@@ -342,6 +365,7 @@ type Mutation {
   createNewUser(input: CreateNewUserInput!): CreateNewUserPayload
   setUsername(input: SetUsernameInput!): SetUsernamePayload
   updateUserExperimentGroups(input: UpdateUserExperimentGroupsInput!): UpdateUserExperimentGroupsPayload
+  logUserExperimentActions(input: LogUserExperimentActionsInput!): LogUserExperimentActionsPayload
 }
 
 """An object with an ID"""

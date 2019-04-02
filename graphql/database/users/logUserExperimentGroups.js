@@ -42,16 +42,7 @@ const logUserExperimentGroups = async (
       id: userId,
     },
     // Active experiment groups
-    !isNil(validatedGroups.oneAdForNewUsers)
-      ? {
-          testOneAdForNewUsers: validatedGroups.oneAdForNewUsers,
-        }
-      : null,
-    !isNil(validatedGroups.adExplanation)
-      ? {
-          testAdExplanation: validatedGroups.adExplanation,
-        }
-      : null,
+    // @experiment-search-intro
     !isNil(validatedGroups.searchIntro)
       ? {
           testGroupSearchIntro: validatedGroups.searchIntro,
