@@ -5,7 +5,7 @@ const constructWikiURL = query => {
   const params = {
     action: 'query',
     generator: 'prefixsearch',
-    gpssearch: 'new en', // TODO: use query
+    gpssearch: query,
     gpsnamespace: 0,
     gpslimit: 1,
     prop: 'pageimages|extracts|description|images|info|imageinfo',
@@ -15,7 +15,7 @@ const constructWikiURL = query => {
     exsentences: 1,
     exlimit: 3,
     formatversion: 2,
-    pithumbsize: 62,
+    pithumbsize: 300,
     imlimit: 4,
     inprop: 'url',
     format: 'json',
