@@ -30,6 +30,7 @@ import {
   hasUserDismissedSearchIntro,
   setUserDismissedSearchIntro,
 } from 'js/utils/local-user-data-mgr'
+import ErrorBoundary from 'js/components/General/ErrorBoundary'
 
 const Footer = lazy(() => import('js/components/General/Footer'))
 
@@ -525,7 +526,9 @@ class SearchPage extends React.Component {
                 </span>
               </Paper>
             ) : null}
-            {query ? <WikipediaQuery query={query} /> : null}
+            <ErrorBoundary brand={'search'} ignoreErrors>
+              {query ? <WikipediaQuery query={query} /> : null}
+            </ErrorBoundary>
           </div>
         </div>
         <Suspense fallback={null}>
