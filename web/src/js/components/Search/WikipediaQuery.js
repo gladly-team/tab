@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { get } from 'lodash/object'
 import fetchWikipediaResults from 'js/components/Search/fetchWikipediaResults'
+import WikipediaPage from 'js/components/Search/WikipediaPageComponent'
 
 class WikipediaQuery extends React.Component {
   constructor(props) {
@@ -56,35 +57,15 @@ class WikipediaQuery extends React.Component {
       fullurl: pageURL,
       thumbnail: { source: thumbnailURL } = {},
     } = pageData
+
     return (
-      <div>
-        <div>{title}</div>
-        <div>{description}</div>
-        {thumbnailURL ? (
-          <img
-            src={thumbnailURL}
-            alt={'Thumbnail from Wikipedia'}
-            style={{
-              maxHeight: 180,
-            }}
-          />
-        ) : null}
-        <p>{extract}</p>
-        <a href={pageURL}>Read more</a>
-        <p>
-          From <a href={pageURL}>Wikipedia</a>
-        </p>
-        <p>
-          Content under{' '}
-          <a
-            href={'https://creativecommons.org/licenses/by-sa/3.0/'}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            CC BY-SA
-          </a>
-        </p>
-      </div>
+      <WikipediaPage
+        title={title}
+        description={description}
+        thumbnailURL={thumbnailURL}
+        extract={extract}
+        pageURL={pageURL}
+      />
     )
   }
 }
