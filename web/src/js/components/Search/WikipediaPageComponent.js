@@ -1,10 +1,19 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { withTheme } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 
 const WikipediaPageComponent = props => {
-  const { extract, description, pageURL, style, thumbnailURL, title } = props
+  const {
+    extract,
+    description,
+    pageURL,
+    style,
+    theme,
+    thumbnailURL,
+    title,
+  } = props
   return (
     <Paper data-test-id={'search-wiki-page'} elevation={1} style={style}>
       <div
@@ -37,10 +46,18 @@ const WikipediaPageComponent = props => {
         ) : null}
       </div>
       <div style={{ padding: 20, borderBottom: '1px solid #e4e4e4' }}>
-        <Typography variant={'body2'}>{extract}</Typography>
-        <a href={pageURL}>
-          <Typography variant={'body2'}>Read more</Typography>
-        </a>
+        <Typography variant={'body2'}>
+          {extract}{' '}
+          <a
+            href={pageURL}
+            style={{
+              color: theme.palette.primary.main,
+              textDecoration: 'none',
+            }}
+          >
+            Read more
+          </a>
+        </Typography>
       </div>
       <div style={{ padding: 20 }}>
         <Typography variant={'body2'}>
@@ -74,4 +91,4 @@ WikipediaPageComponent.defaultProps = {
   style: {},
 }
 
-export default WikipediaPageComponent
+export default withTheme()(WikipediaPageComponent)
