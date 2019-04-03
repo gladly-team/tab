@@ -16,6 +16,13 @@ class WikipediaQuery extends React.Component {
     this.queryWikipedia()
   }
 
+  componentDidUpdate(prevProps) {
+    // Fetch Wikipedia data if a query exists and has changed.
+    if (this.props.query && this.props.query !== prevProps.query) {
+      this.queryWikipedia()
+    }
+  }
+
   async queryWikipedia() {
     const { query } = this.props
     console.log(`Querying Wikipedia with query ${query}`)
