@@ -527,7 +527,16 @@ class SearchPage extends React.Component {
               </Paper>
             ) : null}
             <ErrorBoundary brand={'search'} ignoreErrors>
-              {query ? <WikipediaQuery query={query} /> : null}
+              {query ? (
+                <WikipediaQuery
+                  query={query}
+                  style={{
+                    width: '100%',
+                    boxSizing: 'border-box',
+                    marginBottom: 20,
+                  }}
+                />
+              ) : null}
             </ErrorBoundary>
           </div>
         </div>
