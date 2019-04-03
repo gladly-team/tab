@@ -51,7 +51,7 @@ const constructWikiURL = query => {
     // Page images settings:
     // https://www.mediawiki.org/w/api.php?action=help&modules=query%2Bpageimages
     pilimit: 1, // The max number of page images to fetch.
-    pithumbsize: 300, // The maximum image width in pixels.
+    pithumbsize: 200, // The maximum image width in pixels.
     // All the properties to fetch for the page:
     // https://www.mediawiki.org/w/api.php?action=help&modules=query
     prop: 'description|extracts|imageinfo|images|info|pageimages',
