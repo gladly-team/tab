@@ -1,28 +1,47 @@
+import qs from 'qs'
+
 // TODO
 const constructWikiURL = query => {
-  const origin = '*'
-  return `https://en.wikipedia.org/w/api.php?action=query&generator=prefixsearch&gpssearch=new%20en&gpsnamespace=0&gpslimit=1&prop=pageimages|extracts|description|images|info|imageinfo&pilimit=2&exintro&explaintext&exsentences=1&exlimit=3&formatversion=2&pithumbsize=62&imlimit=4&inprop=url&format=json&origin=${origin}`
+  const params = {
+    action: 'query',
+    generator: 'prefixsearch',
+    gpssearch: 'new en', // TODO: use query
+    gpsnamespace: 0,
+    gpslimit: 1,
+    prop: 'pageimages|extracts|description|images|info|imageinfo',
+    pilimit: 2,
+    exintro: true,
+    explaintext: true,
+    exsentences: 1,
+    exlimit: 3,
+    formatversion: 2,
+    pithumbsize: 62,
+    imlimit: 4,
+    inprop: 'url',
+    format: 'json',
+    origin: '*',
+  }
+  const searchStr = qs.stringify(params)
+  const urlBase = 'https://en.wikipedia.org/w/api.php'
+  return `${urlBase}?${searchStr}`
 }
 
 /**
- * Call the YPA API to display search results in their iframe.
+ * Call Wikipedia to fetch the most relevant page(s).
  * @param {String} query - The search query, unencoded.
- * @return {Promise<Object>}
+ * @return {Promise<Object>} The Wikipedia API response.
  */
 const fetchWikipediaResults = async (query = null) => {
   const endpoint = constructWikiURL(query)
   const headers = {
     Accept: 'application/json',
     'Content-Type': 'application/json',
-    // Origin: window.location.origin,
   }
   return fetch(endpoint, {
     method: 'GET',
     headers: headers,
   }).then(response => {
-    console.log('response', response)
     return response.json().then(responseJSON => {
-      console.log('responseJSON', responseJSON)
       return responseJSON
     })
   })
