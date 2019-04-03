@@ -7,7 +7,7 @@ class WikipediaQuery extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      queryComplete: false,
+      queryInProgress: false,
       responseData: null,
     }
   }
@@ -25,19 +25,26 @@ class WikipediaQuery extends React.Component {
 
   async queryWikipedia() {
     const { query } = this.props
-    console.log(`Querying Wikipedia with query ${query}`)
     if (!query) {
       return
     }
+    this.setState({
+      queryInProgress: true,
+    })
+    console.log(`Querying Wikipedia with query ${query}`)
     const results = await fetchWikipediaResults(query)
     this.setState({
       responseData: results,
+      queryInProgress: false,
     })
   }
 
   render() {
-    const { responseData } = this.state
+    const { responseData, queryInProgress } = this.state
     const pageData = get(responseData, 'query.pages[0]')
+    if (queryInProgress) {
+      return null
+    }
     if (!pageData) {
       return <div>Nothing found</div>
     }
