@@ -653,6 +653,23 @@ describe('Dashboard component', () => {
     expect(elem.prop('title')).toEqual(`Introducing Search for a Cause`)
   })
 
+  it('[search-intro-A] does not render the search intro notification when the user has opened fewer than 4 tabs', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    getUserExperimentGroup.mockReturnValue('introA')
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.tabs = 2
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+    expect(wrapper.find('[data-test-id="search-intro-a"]').exists()).toBe(false)
+    wrapper.setProps({
+      user: {
+        ...modifiedProps.user,
+        tabs: 4,
+      },
+    })
+    expect(wrapper.find('[data-test-id="search-intro-a"]').exists()).toBe(true)
+  })
+
   it('[search-intro-A] does not render the search intro notification when the user has previously clicked it', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default

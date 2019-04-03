@@ -225,7 +225,8 @@ class Dashboard extends React.Component {
               !(
                 user.experimentActions.searchIntro === 'CLICK' ||
                 user.experimentActions.searchIntro === 'DISMISS'
-              ) ? (
+              ) &&
+              user.tabs > 3 ? (
                 <Notification
                   data-test-id={'search-intro-a'}
                   title={`Introducing Search for a Cause`}
