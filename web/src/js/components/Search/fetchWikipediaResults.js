@@ -54,7 +54,7 @@ const constructWikiURL = query => {
     pithumbsize: 300, // The maximum image width in pixels.
     // All the properties to fetch for the page:
     // https://www.mediawiki.org/w/api.php?action=help&modules=query
-    prop: 'pageimages|extracts|description|images|info|imageinfo',
+    prop: 'description|extracts|imageinfo|images|info|pageimages',
     // Allow automatic page redirects:
     // https://www.mediawiki.org/wiki/API:Query#Resolving_redirects
     redirects: true,
