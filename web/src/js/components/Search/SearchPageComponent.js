@@ -23,6 +23,7 @@ import { parseUrlSearchString } from 'js/utils/utils'
 import SearchResults from 'js/components/Search/SearchResults'
 import { isReactSnapClient } from 'js/utils/search-utils'
 import SearchMenuQuery from 'js/components/Search/SearchMenuQuery'
+import WikipediaQuery from 'js/components/Search/WikipediaQuery'
 import detectAdblocker from 'js/utils/detectAdblocker'
 import Link from 'js/components/General/Link'
 import {
@@ -524,6 +525,7 @@ class SearchPage extends React.Component {
                 </span>
               </Paper>
             ) : null}
+            {query ? <WikipediaQuery query={query} /> : null}
           </div>
         </div>
         <Suspense fallback={null}>
