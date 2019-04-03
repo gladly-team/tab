@@ -1,13 +1,28 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { withTheme } from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 
+const styles = {
+  wikiAttribution: {
+    // Same as footer link color
+    color: '#cecece',
+    lineHeight: '110%',
+  },
+  wikiAttributionLink: {
+    color: '#cecece',
+    '&:hover': {
+      color: '#838383',
+    },
+  },
+}
+
 const WikipediaPageComponent = props => {
   const {
-    extract,
+    classes,
     description,
+    extract,
     pageURL,
     style,
     theme,
@@ -59,16 +74,20 @@ const WikipediaPageComponent = props => {
           </a>
         </Typography>
       </div>
-      <div style={{ padding: 20 }}>
-        <Typography variant={'body2'}>
-          From <a href={pageURL}>Wikipedia</a>
+      <div style={{ padding: '12px 20px' }}>
+        <Typography variant={'caption'} className={classes.wikiAttribution}>
+          From{' '}
+          <a href={pageURL} className={classes.wikiAttributionLink}>
+            Wikipedia
+          </a>
         </Typography>
-        <Typography variant={'body2'}>
+        <Typography variant={'caption'} className={classes.wikiAttribution}>
           Content under{' '}
           <a
             href={'https://creativecommons.org/licenses/by-sa/3.0/'}
             target="_blank"
             rel="noopener noreferrer"
+            className={classes.wikiAttributionLink}
           >
             CC BY-SA
           </a>
@@ -79,11 +98,13 @@ const WikipediaPageComponent = props => {
 }
 
 WikipediaPageComponent.propTypes = {
+  classes: PropTypes.object.isRequired,
   description: PropTypes.string.isRequired,
   extract: PropTypes.string.isRequired,
   pageURL: PropTypes.string.isRequired,
   style: PropTypes.object,
   thumbnailURL: PropTypes.string,
+  theme: PropTypes.object.isRequired,
   title: PropTypes.string.isRequired,
 }
 
@@ -91,4 +112,4 @@ WikipediaPageComponent.defaultProps = {
   style: {},
 }
 
-export default withTheme()(WikipediaPageComponent)
+export default withStyles(styles, { withTheme: true })(WikipediaPageComponent)
