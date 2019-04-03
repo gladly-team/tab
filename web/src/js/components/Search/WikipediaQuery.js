@@ -54,19 +54,21 @@ class WikipediaQuery extends React.Component {
       description,
       extract,
       fullurl: pageURL,
-      thumbnail: { source: thumbnailURL },
+      thumbnail: { source: thumbnailURL } = {},
     } = pageData
     return (
       <div>
         <div>{title}</div>
         <div>{description}</div>
-        <img
-          src={thumbnailURL}
-          alt={'Thumbnail from Wikipedia'}
-          style={{
-            maxHeight: 180,
-          }}
-        />
+        {thumbnailURL ? (
+          <img
+            src={thumbnailURL}
+            alt={'Thumbnail from Wikipedia'}
+            style={{
+              maxHeight: 180,
+            }}
+          />
+        ) : null}
         <p>{extract}</p>
         <a href={pageURL}>Read more</a>
         <p>
