@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 
+const borderStyle = '1px solid #e4e4e4'
 const styles = {
   wikiAttribution: {
     // Same as footer link color
@@ -35,7 +36,7 @@ const WikipediaPageComponent = props => {
         style={{
           display: 'flex',
           alignItems: 'center',
-          borderBottom: '1px solid #e4e4e4',
+          borderBottom: borderStyle,
         }}
       >
         <div style={{ flex: 5, padding: 20 }}>
@@ -60,7 +61,7 @@ const WikipediaPageComponent = props => {
           </div>
         ) : null}
       </div>
-      <div style={{ padding: 20, borderBottom: '1px solid #e4e4e4' }}>
+      <div style={{ padding: 20, borderBottom: borderStyle }}>
         <Typography variant={'body2'}>
           {extract}{' '}
           <a
