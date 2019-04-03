@@ -20,6 +20,9 @@ const constructWikiURL = query => {
     inprop: 'url',
     format: 'json',
     origin: '*',
+    // Allow automatic page redirects:
+    // https://www.mediawiki.org/wiki/API:Query#Resolving_redirects
+    redirects: true,
   }
   const searchStr = qs.stringify(params)
   const urlBase = 'https://en.wikipedia.org/w/api.php'
