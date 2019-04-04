@@ -320,3 +320,25 @@ export const addReactRootElementToDOM = () => {
 export const mountWithHOC = component => {
   return mount(shallow(component).get(0))
 }
+
+/**
+ * Mock a response from window.fetch.
+ * @return {Promise<Object>}
+ */
+export const mockFetchResponse = overrides =>
+  Object.assign(
+    {},
+    {
+      body: {},
+      bodyUsed: true,
+      headers: {},
+      json: () => Promise.resolve({}),
+      ok: true,
+      redirected: false,
+      status: 200,
+      statusText: '',
+      type: 'cors',
+      url: 'https://example.com/foo/',
+    },
+    overrides
+  )

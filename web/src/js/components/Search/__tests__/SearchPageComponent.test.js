@@ -39,6 +39,7 @@ jest.mock('js/utils/detectAdblocker')
 jest.mock('js/utils/local-user-data-mgr')
 jest.mock('js/components/Logo/Logo')
 jest.mock('js/components/General/Link')
+jest.mock('js/components/Search/WikipediaQuery')
 
 // Enzyme does not yet support React.lazy and React.Suspense,
 // so let's just not render lazy-loaded children for now.

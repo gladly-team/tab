@@ -71,7 +71,7 @@ const constructWikiURL = query => {
  * @param {String} query - The search query, unencoded.
  * @return {Promise<Object>} The Wikipedia API response.
  */
-const fetchWikipediaResults = async (query = null) => {
+const fetchWikipediaResults = (query = null) => {
   const endpoint = constructWikiURL(query)
   const headers = {
     Accept: 'application/json',
