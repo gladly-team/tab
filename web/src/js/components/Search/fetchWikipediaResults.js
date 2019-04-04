@@ -1,6 +1,5 @@
 import qs from 'qs'
 
-// TODO: add tests
 /**
  * Build the request URL to fetch page information from
  * the Wikipedia API.
@@ -23,7 +22,7 @@ const constructWikiURL = query => {
     // receive th excerpt as HTML.
     exintro: true,
     exlimit: 3, // The max number of extracts to fetch.
-    exsentences: 1, // Only get the eextract's first sentence.
+    exsentences: 1, // Only get the extract's first sentence.
     // For JSON, we should use formatversion=2:
     // https://www.mediawiki.org/wiki/API:Page_info_in_search_results
     format: 'json',
@@ -65,7 +64,7 @@ const constructWikiURL = query => {
   return `${urlBase}?${searchStr}`
 }
 
-// TODO: add tests
+// TODO: throw if query is null/empty
 /**
  * Call Wikipedia to fetch the most relevant page(s).
  * @param {String} query - The search query, unencoded.
