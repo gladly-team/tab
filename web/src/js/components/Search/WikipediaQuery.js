@@ -58,6 +58,7 @@ class WikipediaQuery extends React.Component {
       thumbnail: { source: thumbnailURL } = {},
     } = pageData
 
+    // TODO: sanitize the extract HTML
     return (
       <WikipediaPage
         title={title}

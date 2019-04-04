@@ -19,9 +19,10 @@ const constructWikiURL = query => {
     // Extracts (i.e. excerpts) settings:
     // https://www.mediawiki.org/w/api.php?action=help&modules=query%2Bextracts
     // Only get content in the first section of the page.
+    // We have not set the "explaintext" setting, so we will
+    // receive th excerpt as HTML.
     exintro: true,
     exlimit: 3, // The max number of extracts to fetch.
-    explaintext: true, // Get the extract as plain text.
     exsentences: 1, // Only get the eextract's first sentence.
     // For JSON, we should use formatversion=2:
     // https://www.mediawiki.org/wiki/API:Page_info_in_search_results

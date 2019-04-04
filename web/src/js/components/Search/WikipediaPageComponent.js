@@ -1,11 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { withStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/styles'
+import { withTheme } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 
 const borderStyle = '1px solid #e4e4e4'
-const styles = {
+
+// We're using the theme data in our styles. See:
+// https://github.com/mui-org/material-ui/issues/8726#issuecomment-452047345
+const useStyles = makeStyles({
+  wikiExtractHTML: props => ({
+    '& p': props.theme.typography.body2,
+  }),
   wikiAttribution: {
     // Same as footer link color
     color: '#cecece',
@@ -17,11 +24,10 @@ const styles = {
       color: '#838383',
     },
   },
-}
+})
 
 const WikipediaPageComponent = props => {
   const {
-    classes,
     description,
     extract,
     pageURL,
@@ -30,6 +36,9 @@ const WikipediaPageComponent = props => {
     thumbnailURL,
     title,
   } = props
+  const classes = useStyles({
+    theme: theme,
+  })
   return (
     <Paper data-test-id={'search-wiki-page'} elevation={1} style={style}>
       <div
@@ -62,8 +71,11 @@ const WikipediaPageComponent = props => {
         ) : null}
       </div>
       <div style={{ padding: 20, borderBottom: borderStyle }}>
+        <span
+          dangerouslySetInnerHTML={{ __html: extract }}
+          className={classes.wikiExtractHTML}
+        />{' '}
         <Typography variant={'body2'}>
-          {extract}{' '}
           <a
             href={pageURL}
             style={{
@@ -99,7 +111,7 @@ const WikipediaPageComponent = props => {
 }
 
 WikipediaPageComponent.propTypes = {
-  classes: PropTypes.object.isRequired,
+  // TODO: make description optional
   description: PropTypes.string.isRequired,
   extract: PropTypes.string.isRequired,
   pageURL: PropTypes.string.isRequired,
@@ -113,4 +125,4 @@ WikipediaPageComponent.defaultProps = {
   style: {},
 }
 
-export default withStyles(styles, { withTheme: true })(WikipediaPageComponent)
+export default withTheme()(WikipediaPageComponent)
