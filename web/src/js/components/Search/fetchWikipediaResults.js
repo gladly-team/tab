@@ -80,11 +80,15 @@ const fetchWikipediaResults = async (query = null) => {
   return fetch(endpoint, {
     method: 'GET',
     headers: headers,
-  }).then(response => {
-    return response.json().then(responseJSON => {
-      return responseJSON
-    })
   })
+    .then(response => {
+      return response.json().then(responseJSON => {
+        return responseJSON
+      })
+    })
+    .catch(e => {
+      throw e
+    })
 }
 
 export default fetchWikipediaResults

@@ -34,11 +34,18 @@ class WikipediaQuery extends React.Component {
       queryInProgress: true,
     })
     console.log(`Querying Wikipedia with query ${query}`)
-    const results = await fetchWikipediaResults(query)
-    this.setState({
-      responseData: results,
-      queryInProgress: false,
-    })
+    try {
+      const results = await fetchWikipediaResults(query)
+      this.setState({
+        responseData: results,
+        queryInProgress: false,
+      })
+    } catch (e) {
+      console.error(e)
+      this.setState({
+        queryInProgress: false,
+      })
+    }
   }
 
   render() {
