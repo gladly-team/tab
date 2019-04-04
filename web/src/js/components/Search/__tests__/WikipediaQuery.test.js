@@ -107,6 +107,38 @@ describe('WikipediaQuery', () => {
     )
   })
 
+  it('strips out any <script> tags from the extract HTML before passing it to the WikipediaPageComponent', async () => {
+    expect.assertions(1)
+    const mockData = getMockWikipediaResponseData({
+      extract: '<p>Hi there, this is malicious! <script>alert("Hi!")</script>',
+    })
+    fetchWikipediaResults.mockResolvedValue(mockData)
+    const WikipediaQuery = require('js/components/Search/WikipediaQuery')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<WikipediaQuery {...mockProps} />)
+    await flushAllPromises()
+    expect(wrapper.find(WikipediaPage).prop('extract')).toEqual(
+      '<p>Hi there, this is malicious! </p>'
+    )
+  })
+
+  it('strips out any <a> tags from the extract HTML before passing it to the WikipediaPageComponent', async () => {
+    expect.assertions(1)
+    const mockData = getMockWikipediaResponseData({
+      extract: '<p>Hi there, <a href="/foo">click this link</a>!',
+    })
+    fetchWikipediaResults.mockResolvedValue(mockData)
+    const WikipediaQuery = require('js/components/Search/WikipediaQuery')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<WikipediaQuery {...mockProps} />)
+    await flushAllPromises()
+    expect(wrapper.find(WikipediaPage).prop('extract')).toEqual(
+      '<p>Hi there, click this link!</p>'
+    )
+  })
+
   it('passes the page URL to the WikipediaPageComponent', async () => {
     expect.assertions(1)
     fetchWikipediaResults.mockResolvedValue(getMockWikipediaResponseData())
