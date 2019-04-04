@@ -42,4 +42,18 @@ describe('fetchWikipediaResults', () => {
       },
     })
   })
+
+  it('throws if response.json() throws an error', async () => {
+    expect.assertions(1)
+    global.fetch.mockImplementation(() =>
+      Promise.resolve(
+        mockFetchResponse({
+          json: () => Promise.reject(new Error('Bad JSON!')),
+        })
+      )
+    )
+    const fetchWikipediaResults = require('js/components/Search/fetchWikipediaResults')
+      .default
+    expect(fetchWikipediaResults()).rejects.toThrow('Bad JSON!')
+  })
 })

@@ -81,11 +81,14 @@ const fetchWikipediaResults = (query = null) => {
     method: 'GET',
     headers: headers,
   })
-    .then(response => {
-      return response.json().then(responseJSON => {
-        return responseJSON
-      })
-    })
+    .then(response =>
+      response
+        .json()
+        .then(responseJSON => responseJSON)
+        .catch(e => {
+          throw e
+        })
+    )
     .catch(e => {
       throw e
     })
