@@ -62,7 +62,7 @@ const WikipediaPageComponent = props => {
               justifyContent: 'center',
               alignItems: 'center',
               maxWidth: 200,
-              maxHeight: 150,
+              height: 150,
               overflow: 'hidden',
             }}
           >
