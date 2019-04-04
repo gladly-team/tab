@@ -48,7 +48,7 @@ class WikipediaQuery extends React.Component {
       return null
     }
     if (!pageData) {
-      return <div>Nothing found</div>
+      return null
     }
     // console.log(pageData)
     const {
