@@ -119,8 +119,6 @@ describe('fetchWikipediaResults', () => {
     const expectedPageProps = [
       'description',
       'extracts',
-      'imageinfo',
-      'images',
       'info',
       'pageimages',
     ].join('|')
@@ -179,15 +177,13 @@ describe('fetchWikipediaResults', () => {
     })
   })
 
-  it('sets the URL parameters for the Wikipedia image settings', async () => {
+  it("does not set the URL parameters for the Wikipedia image settings, which we aren't currently using", async () => {
     expect.assertions(1)
     const fetchWikipediaResults = require('js/components/Search/fetchWikipediaResults')
       .default
     await fetchWikipediaResults('blue whales')
     const urlParams = getURLParamsObjFromURL(fetch.mock.calls[0][0])
-    expect(urlParams).toMatchObject({
-      imlimit: '4',
-    })
+    expect(urlParams).not.toHaveProperty('imlimit')
   })
 
   it('sets the URL parameters for the Wikipedia page info settings', async () => {

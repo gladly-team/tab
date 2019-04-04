@@ -40,8 +40,8 @@ const constructWikiURL = query => {
     // Note that if we want URLs of images, we probably have to
     // make another API call:
     // https://stackoverflow.com/a/8363589
-    // TODO: remove this if we don't use the images.
-    imlimit: 4, // The max number of images to fetch.
+    // Removing because we don't currently use them.
+    // imlimit: 4, // The max number of images to fetch.
     // Info settings:
     // https://www.mediawiki.org/w/api.php?action=help&modules=query%2Binfo
     inprop: 'url', // Get the URL of the Wikipedia page.
@@ -54,7 +54,7 @@ const constructWikiURL = query => {
     pithumbsize: 200, // The maximum image width in pixels.
     // All the properties to fetch for the page:
     // https://www.mediawiki.org/w/api.php?action=help&modules=query
-    prop: 'description|extracts|imageinfo|images|info|pageimages',
+    prop: 'description|extracts|info|pageimages',
     // Allow automatic page redirects:
     // https://www.mediawiki.org/wiki/API:Query#Resolving_redirects
     redirects: true,
