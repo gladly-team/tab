@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { get } from 'lodash/object'
+import sanitizeHtml from 'sanitize-html'
 import fetchWikipediaResults from 'js/components/Search/fetchWikipediaResults'
 import WikipediaPage from 'js/components/Search/WikipediaPageComponent'
 
@@ -58,13 +59,41 @@ class WikipediaQuery extends React.Component {
       thumbnail: { source: thumbnailURL } = {},
     } = pageData
 
-    // TODO: sanitize the extract HTML
+    // Sanitize the HTML returned by Wikipedia.
+    const extractSanitized = sanitizeHtml(extract, {
+      allowedTags: [
+        'h3',
+        'h4',
+        'h5',
+        'h6',
+        'blockquote',
+        'p',
+        'ul',
+        'ol',
+        'nl',
+        'li',
+        'b',
+        'i',
+        'strong',
+        'em',
+        'strike',
+        'code',
+        'hr',
+        'br',
+        'div',
+        'table',
+        'thead',
+        'caption',
+        'small',
+      ],
+      allowedAttributes: false,
+    })
     return (
       <WikipediaPage
         title={title}
         description={description}
         thumbnailURL={thumbnailURL}
-        extract={extract}
+        extract={extractSanitized}
         pageURL={pageURL}
       />
     )
