@@ -64,13 +64,15 @@ const constructWikiURL = query => {
   return `${urlBase}?${searchStr}`
 }
 
-// TODO: throw if query is null/empty
 /**
  * Call Wikipedia to fetch the most relevant page(s).
  * @param {String} query - The search query, unencoded.
  * @return {Promise<Object>} The Wikipedia API response.
  */
-const fetchWikipediaResults = (query = null) => {
+const fetchWikipediaResults = async (query = null) => {
+  if (!query) {
+    throw new Error(`Wikipedia query must be a non-empty string.`)
+  }
   const endpoint = constructWikiURL(query)
   const headers = {
     Accept: 'application/json',

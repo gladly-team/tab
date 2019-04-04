@@ -50,6 +50,30 @@ describe('fetchWikipediaResults', () => {
     })
   })
 
+  it('throws if the provided query is null', async () => {
+    expect.assertions(1)
+    global.fetch.mockImplementation(() =>
+      Promise.reject(new Error('I failed to fetch'))
+    )
+    const fetchWikipediaResults = require('js/components/Search/fetchWikipediaResults')
+      .default
+    expect(fetchWikipediaResults(null)).rejects.toThrow(
+      'Wikipedia query must be a non-empty string.'
+    )
+  })
+
+  it('throws if the provided query is an empty string', async () => {
+    expect.assertions(1)
+    global.fetch.mockImplementation(() =>
+      Promise.reject(new Error('I failed to fetch'))
+    )
+    const fetchWikipediaResults = require('js/components/Search/fetchWikipediaResults')
+      .default
+    expect(fetchWikipediaResults('')).rejects.toThrow(
+      'Wikipedia query must be a non-empty string.'
+    )
+  })
+
   it('throws if fetch throws an error', async () => {
     expect.assertions(1)
     global.fetch.mockImplementation(() =>
@@ -57,7 +81,9 @@ describe('fetchWikipediaResults', () => {
     )
     const fetchWikipediaResults = require('js/components/Search/fetchWikipediaResults')
       .default
-    expect(fetchWikipediaResults()).rejects.toThrow('I failed to fetch')
+    expect(fetchWikipediaResults('blue whales')).rejects.toThrow(
+      'I failed to fetch'
+    )
   })
 
   it('throws if response.json() throws an error', async () => {
@@ -71,7 +97,7 @@ describe('fetchWikipediaResults', () => {
     )
     const fetchWikipediaResults = require('js/components/Search/fetchWikipediaResults')
       .default
-    expect(fetchWikipediaResults()).rejects.toThrow('Bad JSON!')
+    expect(fetchWikipediaResults('blue whales')).rejects.toThrow('Bad JSON!')
   })
 
   it('sets the URL parameter "action" to "query"', async () => {
