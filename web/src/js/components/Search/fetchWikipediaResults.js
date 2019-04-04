@@ -22,6 +22,8 @@ const constructWikiURL = query => {
     // receive th excerpt as HTML.
     exintro: true,
     exlimit: 3, // The max number of extracts to fetch.
+    // Warning: we may not want to use this due to bugs:
+    // https://www.mediawiki.org/wiki/Extension:TextExtracts#Caveats
     exsentences: 1, // Only get the extract's first sentence.
     // For JSON, we should use formatversion=2:
     // https://www.mediawiki.org/wiki/API:Page_info_in_search_results

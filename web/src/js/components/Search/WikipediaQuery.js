@@ -42,9 +42,8 @@ class WikipediaQuery extends React.Component {
     this.setState({
       queryInProgress: true,
     })
-    console.log(`Querying Wikipedia with query ${query}`)
     this.cancelablePromise = makePromiseCancelable(fetchWikipediaResults(query))
-    this.cancelablePromise.promise
+    return this.cancelablePromise.promise
       .then(response => {
         this.setState({
           responseData: response,
