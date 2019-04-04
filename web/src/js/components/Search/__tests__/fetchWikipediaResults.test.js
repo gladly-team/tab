@@ -7,12 +7,7 @@ afterEach(() => {
 })
 
 beforeEach(() => {
-  global.fetch.mockImplementation(
-    () =>
-      new Promise((resolve, reject) => {
-        resolve(mockFetchResponse())
-      })
-  )
+  global.fetch.mockImplementation(() => Promise.resolve(mockFetchResponse()))
 })
 
 describe('fetchWikipediaResults', () => {
