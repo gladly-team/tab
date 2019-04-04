@@ -52,7 +52,10 @@ const WikipediaPageComponent = props => {
       >
         <div style={{ flex: 5, padding: 20 }}>
           <Typography variant={'h5'}>{title}</Typography>
-          <Typography variant={'caption'} style={{ lineHeight: '110%' }}>
+          <Typography
+            variant={'caption'}
+            style={{ lineHeight: '110%', marginTop: 4 }}
+          >
             {description}
           </Typography>
         </div>
