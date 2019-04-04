@@ -23,7 +23,7 @@ describe('fetchWikipediaResults', () => {
   it('calls fetch once', async () => {
     const fetchWikipediaResults = require('js/components/Search/fetchWikipediaResults')
       .default
-    await fetchWikipediaResults()
+    await fetchWikipediaResults('blue whales')
     expect(fetch).toHaveBeenCalledTimes(1)
   })
 
@@ -31,7 +31,7 @@ describe('fetchWikipediaResults', () => {
     expect.assertions(1)
     const fetchWikipediaResults = require('js/components/Search/fetchWikipediaResults')
       .default
-    await fetchWikipediaResults()
+    await fetchWikipediaResults('blue whales')
     expect(fetch.mock.calls[0][1]).toMatchObject({
       method: 'GET',
     })
@@ -41,7 +41,7 @@ describe('fetchWikipediaResults', () => {
     expect.assertions(1)
     const fetchWikipediaResults = require('js/components/Search/fetchWikipediaResults')
       .default
-    await fetchWikipediaResults()
+    await fetchWikipediaResults('blue whales')
     expect(fetch.mock.calls[0][1]).toMatchObject({
       headers: {
         Accept: 'application/json',
@@ -78,7 +78,7 @@ describe('fetchWikipediaResults', () => {
     expect.assertions(1)
     const fetchWikipediaResults = require('js/components/Search/fetchWikipediaResults')
       .default
-    await fetchWikipediaResults()
+    await fetchWikipediaResults('blue whales')
     const urlParams = getURLParamsObjFromURL(fetch.mock.calls[0][0])
     expect(urlParams).toMatchObject({
       action: 'query',
@@ -89,7 +89,7 @@ describe('fetchWikipediaResults', () => {
     expect.assertions(1)
     const fetchWikipediaResults = require('js/components/Search/fetchWikipediaResults')
       .default
-    await fetchWikipediaResults()
+    await fetchWikipediaResults('blue whales')
     const expectedPageProps = [
       'description',
       'extracts',
@@ -108,7 +108,7 @@ describe('fetchWikipediaResults', () => {
     expect.assertions(1)
     const fetchWikipediaResults = require('js/components/Search/fetchWikipediaResults')
       .default
-    await fetchWikipediaResults()
+    await fetchWikipediaResults('blue whales')
     const urlParams = getURLParamsObjFromURL(fetch.mock.calls[0][0])
     expect(urlParams).toMatchObject({
       format: 'json',
@@ -120,7 +120,7 @@ describe('fetchWikipediaResults', () => {
     expect.assertions(1)
     const fetchWikipediaResults = require('js/components/Search/fetchWikipediaResults')
       .default
-    await fetchWikipediaResults()
+    await fetchWikipediaResults('blue whales')
     const urlParams = getURLParamsObjFromURL(fetch.mock.calls[0][0])
     expect(urlParams).toMatchObject({
       exintro: 'true',
@@ -133,7 +133,7 @@ describe('fetchWikipediaResults', () => {
     expect.assertions(1)
     const fetchWikipediaResults = require('js/components/Search/fetchWikipediaResults')
       .default
-    await fetchWikipediaResults()
+    await fetchWikipediaResults('blue whales')
     const urlParams = getURLParamsObjFromURL(fetch.mock.calls[0][0])
     expect(urlParams).toMatchObject({
       generator: 'prefixsearch',
@@ -145,11 +145,11 @@ describe('fetchWikipediaResults', () => {
     expect.assertions(1)
     const fetchWikipediaResults = require('js/components/Search/fetchWikipediaResults')
       .default
-    await fetchWikipediaResults()
+    await fetchWikipediaResults('blue whales')
     const urlParams = getURLParamsObjFromURL(fetch.mock.calls[0][0])
     expect(urlParams).toMatchObject({
       gpsnamespace: '0',
-      gpssearch: '',
+      gpssearch: 'blue whales',
     })
   })
 
@@ -157,7 +157,7 @@ describe('fetchWikipediaResults', () => {
     expect.assertions(1)
     const fetchWikipediaResults = require('js/components/Search/fetchWikipediaResults')
       .default
-    await fetchWikipediaResults()
+    await fetchWikipediaResults('blue whales')
     const urlParams = getURLParamsObjFromURL(fetch.mock.calls[0][0])
     expect(urlParams).toMatchObject({
       imlimit: '4',
@@ -168,7 +168,7 @@ describe('fetchWikipediaResults', () => {
     expect.assertions(1)
     const fetchWikipediaResults = require('js/components/Search/fetchWikipediaResults')
       .default
-    await fetchWikipediaResults()
+    await fetchWikipediaResults('blue whales')
     const urlParams = getURLParamsObjFromURL(fetch.mock.calls[0][0])
     expect(urlParams).toMatchObject({
       inprop: 'url',
@@ -179,7 +179,7 @@ describe('fetchWikipediaResults', () => {
     expect.assertions(1)
     const fetchWikipediaResults = require('js/components/Search/fetchWikipediaResults')
       .default
-    await fetchWikipediaResults()
+    await fetchWikipediaResults('blue whales')
     const urlParams = getURLParamsObjFromURL(fetch.mock.calls[0][0])
     expect(urlParams).toMatchObject({
       pilimit: '1',
@@ -191,7 +191,7 @@ describe('fetchWikipediaResults', () => {
     expect.assertions(1)
     const fetchWikipediaResults = require('js/components/Search/fetchWikipediaResults')
       .default
-    await fetchWikipediaResults()
+    await fetchWikipediaResults('blue whales')
     const urlParams = getURLParamsObjFromURL(fetch.mock.calls[0][0])
     expect(urlParams).toMatchObject({
       redirects: 'true',
