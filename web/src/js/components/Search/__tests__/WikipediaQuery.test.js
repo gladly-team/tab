@@ -66,4 +66,57 @@ describe('WikipediaQuery', () => {
     await flushAllPromises()
     expect(wrapper.find(WikipediaPage).prop('title')).toEqual('Grand Canyon')
   })
+
+  it('passes the description to the WikipediaPageComponent', async () => {
+    expect.assertions(1)
+    fetchWikipediaResults.mockResolvedValue(getMockWikipediaResponseData())
+    const WikipediaQuery = require('js/components/Search/WikipediaQuery')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<WikipediaQuery {...mockProps} />)
+    await flushAllPromises()
+    expect(wrapper.find(WikipediaPage).prop('description')).toEqual(
+      'A steep-sided canyon carved by the Colorado River in Arizona, United States'
+    )
+  })
+
+  it('passes the thumbnail URL to the WikipediaPageComponent', async () => {
+    expect.assertions(1)
+    fetchWikipediaResults.mockResolvedValue(getMockWikipediaResponseData())
+    const WikipediaQuery = require('js/components/Search/WikipediaQuery')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<WikipediaQuery {...mockProps} />)
+    await flushAllPromises()
+    expect(wrapper.find(WikipediaPage).prop('thumbnailURL')).toEqual(
+      'https://upload.wikimedia.org/wikipedia/commons/thu…/133px-Grand_Canyon_view_from_Pima_Point_2010.jpg'
+    )
+  })
+
+  it('passes the extract HTML to the WikipediaPageComponent', async () => {
+    expect.assertions(1)
+    const mockData = getMockWikipediaResponseData()
+    fetchWikipediaResults.mockResolvedValue(mockData)
+    const WikipediaQuery = require('js/components/Search/WikipediaQuery')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<WikipediaQuery {...mockProps} />)
+    await flushAllPromises()
+    expect(wrapper.find(WikipediaPage).prop('extract')).toEqual(
+      mockData.query.pages[0].extract
+    )
+  })
+
+  it('passes the page URL to the WikipediaPageComponent', async () => {
+    expect.assertions(1)
+    fetchWikipediaResults.mockResolvedValue(getMockWikipediaResponseData())
+    const WikipediaQuery = require('js/components/Search/WikipediaQuery')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<WikipediaQuery {...mockProps} />)
+    await flushAllPromises()
+    expect(wrapper.find(WikipediaPage).prop('pageURL')).toEqual(
+      'https://en.wikipedia.org/wiki/Grand_Canyon'
+    )
+  })
 })
