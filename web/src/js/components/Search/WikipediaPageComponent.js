@@ -12,6 +12,8 @@ const borderStyle = '1px solid #e4e4e4'
 const useStyles = makeStyles({
   wikiExtractHTML: props => ({
     '& p': props.theme.typography.body2,
+    '& i': props.theme.typography.body2,
+    '& bold': props.theme.typography.body2,
   }),
   wikiAttribution: {
     // Same as footer link color
