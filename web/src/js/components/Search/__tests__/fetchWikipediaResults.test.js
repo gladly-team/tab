@@ -43,6 +43,16 @@ describe('fetchWikipediaResults', () => {
     })
   })
 
+  it('throws if fetch throws an error', async () => {
+    expect.assertions(1)
+    global.fetch.mockImplementation(() =>
+      Promise.reject(new Error('I failed to fetch'))
+    )
+    const fetchWikipediaResults = require('js/components/Search/fetchWikipediaResults')
+      .default
+    expect(fetchWikipediaResults()).rejects.toThrow('I failed to fetch')
+  })
+
   it('throws if response.json() throws an error', async () => {
     expect.assertions(1)
     global.fetch.mockImplementation(() =>
