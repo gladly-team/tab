@@ -5,6 +5,7 @@ import sanitizeHtml from 'sanitize-html'
 import fetchWikipediaResults from 'js/components/Search/fetchWikipediaResults'
 import WikipediaPage from 'js/components/Search/WikipediaPageComponent'
 
+// TODO: add tests
 class WikipediaQuery extends React.Component {
   constructor(props) {
     super(props)

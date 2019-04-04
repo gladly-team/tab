@@ -28,6 +28,7 @@ const useStyles = makeStyles({
   },
 })
 
+// TODO: add tests
 const WikipediaPageComponent = props => {
   const {
     description,
