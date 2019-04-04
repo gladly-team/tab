@@ -4,6 +4,7 @@ import { get } from 'lodash/object'
 import sanitizeHtml from 'sanitize-html'
 import fetchWikipediaResults from 'js/components/Search/fetchWikipediaResults'
 import WikipediaPage from 'js/components/Search/WikipediaPageComponent'
+import { makePromiseCancelable } from 'js/utils/utils'
 
 // TODO: add tests
 class WikipediaQuery extends React.Component {
@@ -13,10 +14,17 @@ class WikipediaQuery extends React.Component {
       queryInProgress: false,
       responseData: null,
     }
+    this.cancelablePromise = null
   }
 
   componentDidMount() {
     this.queryWikipedia()
+  }
+
+  componentWillUnmount() {
+    if (this.cancelablePromise && this.cancelablePromise.cancel) {
+      this.cancelablePromise.cancel()
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -26,7 +34,7 @@ class WikipediaQuery extends React.Component {
     }
   }
 
-  async queryWikipedia() {
+  queryWikipedia() {
     const { query } = this.props
     if (!query) {
       return
@@ -35,18 +43,22 @@ class WikipediaQuery extends React.Component {
       queryInProgress: true,
     })
     console.log(`Querying Wikipedia with query ${query}`)
-    try {
-      const results = await fetchWikipediaResults(query)
-      this.setState({
-        responseData: results,
-        queryInProgress: false,
+    this.cancelablePromise = makePromiseCancelable(fetchWikipediaResults(query))
+    this.cancelablePromise.promise
+      .then(response => {
+        this.setState({
+          responseData: response,
+          queryInProgress: false,
+        })
       })
-    } catch (e) {
-      console.error(e)
-      this.setState({
-        queryInProgress: false,
+      .catch(e => {
+        this.setState({
+          queryInProgress: false,
+        })
+        if (!e.reason === 'isCanceled') {
+          console.error(e)
+        }
       })
-    }
   }
 
   render() {
