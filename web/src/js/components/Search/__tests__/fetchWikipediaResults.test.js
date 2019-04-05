@@ -121,6 +121,7 @@ describe('fetchWikipediaResults', () => {
       'extracts',
       'info',
       'pageimages',
+      'pageprops',
     ].join('|')
     const urlParams = getURLParamsObjFromURL(fetch.mock.calls[0][0])
     expect(urlParams).toMatchObject({
@@ -206,6 +207,17 @@ describe('fetchWikipediaResults', () => {
     expect(urlParams).toMatchObject({
       pilimit: '1',
       pithumbsize: '200',
+    })
+  })
+
+  it('sets the URL parameter for the disambiguation page prop', async () => {
+    expect.assertions(1)
+    const fetchWikipediaResults = require('js/components/Search/fetchWikipediaResults')
+      .default
+    await fetchWikipediaResults('blue whales')
+    const urlParams = getURLParamsObjFromURL(fetch.mock.calls[0][0])
+    expect(urlParams).toMatchObject({
+      ppprop: 'disambiguation',
     })
   })
 

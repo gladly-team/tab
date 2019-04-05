@@ -38,6 +38,7 @@ const getMockWikipediaResponseData = (pageOverrides, responseOverrides) =>
               pagelanguage: 'en',
               pagelanguagedir: 'ltr',
               pagelanguagehtmlcode: 'en',
+              pageprops: {},
               thumbnail: {
                 source:
                   'https://upload.wikimedia.org/wikipedia/commons/thu…/133px-Grand_Canyon_view_from_Pima_Point_2010.jpg',
@@ -186,6 +187,22 @@ describe('WikipediaQuery', () => {
         query: [],
       }
     )
+    fetchWikipediaResults.mockResolvedValue(mockData)
+    const WikipediaQuery = require('js/components/Search/WikipediaQuery')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<WikipediaQuery {...mockProps} />)
+    await flushAllPromises()
+    expect(wrapper.html()).toBeNull()
+  })
+
+  it('does not render if the returned page is a disambiguation', async () => {
+    expect.assertions(1)
+    const mockData = getMockWikipediaResponseData({
+      pageprops: {
+        disambiguation: '',
+      },
+    })
     fetchWikipediaResults.mockResolvedValue(mockData)
     const WikipediaQuery = require('js/components/Search/WikipediaQuery')
       .default

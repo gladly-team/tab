@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { isNil } from 'lodash/lang'
 import { get } from 'lodash/object'
 import sanitizeHtml from 'sanitize-html'
 import fetchWikipediaResults from 'js/components/Search/fetchWikipediaResults'
@@ -70,7 +71,9 @@ class WikipediaQuery extends React.Component {
     if (!pageData) {
       return null
     }
-    // console.log(pageData)
+    if (!isNil(get(pageData, 'pageprops.disambiguation'))) {
+      return null
+    }
     const {
       title,
       description,
