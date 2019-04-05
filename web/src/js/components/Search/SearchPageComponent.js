@@ -527,8 +527,7 @@ class SearchPage extends React.Component {
               </Paper>
             ) : null}
             <ErrorBoundary brand={'search'} ignoreErrors>
-              {// TODO: add tests
-              query ? (
+              {query ? (
                 <WikipediaQuery
                   query={query}
                   style={{

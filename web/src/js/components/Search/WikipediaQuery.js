@@ -7,7 +7,6 @@ import fetchWikipediaResults from 'js/components/Search/fetchWikipediaResults'
 import WikipediaPage from 'js/components/Search/WikipediaPageComponent'
 import { makePromiseCancelable } from 'js/utils/utils'
 
-// TODO: add tests
 class WikipediaQuery extends React.Component {
   constructor(props) {
     super(props)
