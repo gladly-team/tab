@@ -1,6 +1,7 @@
 /* eslint-env jest */
 
 import localStorageMgr, { __mockClear } from 'js/utils/localstorage-mgr'
+import { flushAllPromises } from 'js/utils/test-utils'
 
 jest.mock('js/utils/localstorage-mgr')
 
@@ -204,5 +205,56 @@ describe('domain name utils', () => {
       'dev-tab2017.gladly.io',
       'tab.gladly.io',
     ])
+  })
+})
+
+describe('makePromiseCancelable', () => {
+  it('returns the expected object', () => {
+    const { makePromiseCancelable } = require('js/utils/utils')
+    expect(makePromiseCancelable(new Promise(() => {}))).toEqual({
+      promise: expect.any(Promise),
+      cancel: expect.any(Function),
+    })
+  })
+
+  it('resolves as expected', async () => {
+    expect.assertions(1)
+    const { makePromiseCancelable } = require('js/utils/utils')
+    const prom = Promise.resolve({ data: 'hi!' })
+    const cancelablePromise = makePromiseCancelable(prom)
+    cancelablePromise.promise
+      .then(response => {
+        expect(response.data).toEqual('hi!')
+      })
+      .catch(e => {
+        throw e
+      })
+    await flushAllPromises()
+  })
+
+  it('rejects with "isCanceled" true when canceled', async () => {
+    expect.assertions(1)
+    const { makePromiseCancelable } = require('js/utils/utils')
+    const prom = Promise.resolve()
+    const cancelablePromise = makePromiseCancelable(prom)
+    cancelablePromise.promise
+      .then(() => {})
+      .catch(e => {
+        expect(e.isCanceled).toBe(true)
+      })
+    cancelablePromise.cancel()
+    await flushAllPromises()
+  })
+
+  it('rejects with "isCanceled" undefined when some other error throws', async () => {
+    expect.assertions(1)
+    const { makePromiseCancelable } = require('js/utils/utils')
+    const prom = Promise.reject(new Error('Uh oh'))
+    const cancelablePromise = makePromiseCancelable(prom)
+    return cancelablePromise.promise
+      .then(() => {})
+      .catch(e => {
+        expect(e.isCanceled).toBeUndefined()
+      })
   })
 })

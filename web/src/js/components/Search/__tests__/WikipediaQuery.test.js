@@ -4,7 +4,7 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import fetchWikipediaResults from 'js/components/Search/fetchWikipediaResults'
 import WikipediaPage from 'js/components/Search/WikipediaPageComponent'
-import { createMockReactComponent, flushAllPromises } from 'js/utils/test-utils'
+import { flushAllPromises } from 'js/utils/test-utils'
 
 jest.mock('js/components/Search/fetchWikipediaResults')
 jest.mock('js/components/Search/WikipediaPageComponent')
