@@ -51,12 +51,13 @@ class WikipediaQuery extends React.Component {
         })
       })
       .catch(e => {
+        if (e && e.isCanceled) {
+          return
+        }
         this.setState({
           queryInProgress: false,
         })
-        if (!e.reason === 'isCanceled') {
-          console.error(e)
-        }
+        console.error(e)
       })
   }
 

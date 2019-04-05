@@ -4,7 +4,7 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import fetchWikipediaResults from 'js/components/Search/fetchWikipediaResults'
 import WikipediaPage from 'js/components/Search/WikipediaPageComponent'
-import { flushAllPromises } from 'js/utils/test-utils'
+import { createMockReactComponent, flushAllPromises } from 'js/utils/test-utils'
 
 jest.mock('js/components/Search/fetchWikipediaResults')
 jest.mock('js/components/Search/WikipediaPageComponent')
@@ -58,6 +58,10 @@ const getMockWikipediaResponseData = (pageOverrides, responseOverrides) =>
 
 const getMockProps = () => ({
   query: 'grand canyon',
+})
+
+beforeEach(() => {
+  fetchWikipediaResults.mockResolvedValue(getMockWikipediaResponseData())
 })
 
 describe('WikipediaQuery', () => {
@@ -189,5 +193,87 @@ describe('WikipediaQuery', () => {
     const wrapper = shallow(<WikipediaQuery {...mockProps} />)
     await flushAllPromises()
     expect(wrapper.html()).toBeNull()
+  })
+
+  it('does not render anything while a query is in progress', async () => {
+    expect.assertions(2)
+
+    // Mock that the Wikipedia request takes some time.
+    jest.useFakeTimers()
+    fetchWikipediaResults.mockImplementationOnce(() => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(getMockWikipediaResponseData())
+        }, 8e3)
+      })
+    })
+    const WikipediaQuery = require('js/components/Search/WikipediaQuery')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<WikipediaQuery {...mockProps} />)
+    await flushAllPromises()
+    expect(wrapper.html()).toBeNull()
+
+    // Mock that the Wikipedia request returns.
+    jest.advanceTimersByTime(10e3)
+    await flushAllPromises()
+    expect(wrapper.html()).not.toBeNull()
+  })
+
+  it('does not throw or log an error if the query returns after the component has unmounted', async () => {
+    expect.assertions(1)
+    jest.spyOn(console, 'error').mockImplementationOnce(() => {})
+
+    // Mock that the Wikipedia request takes some time.
+    jest.useFakeTimers()
+    fetchWikipediaResults.mockImplementationOnce(() => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(getMockWikipediaResponseData())
+        }, 8e3)
+      })
+    })
+    const WikipediaQuery = require('js/components/Search/WikipediaQuery')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<WikipediaQuery {...mockProps} />)
+    await flushAllPromises()
+
+    // Unmount
+    wrapper.unmount()
+
+    // Mock that the Wikipedia request returns.
+    jest.advanceTimersByTime(10e3)
+    await flushAllPromises()
+
+    expect(console.error).not.toHaveBeenCalled()
+  })
+
+  it('logs an error to console when the promise fails for reasons other than being canceled', async () => {
+    expect.assertions(2)
+    jest.spyOn(console, 'error').mockImplementationOnce(() => {})
+
+    // Mock that the Wikipedia request takes some time and throws an error.
+    jest.useFakeTimers()
+    const mockErr = new Error('Oh no!')
+    fetchWikipediaResults.mockImplementationOnce(() => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          reject(mockErr)
+        }, 8e3)
+      })
+    })
+    const WikipediaQuery = require('js/components/Search/WikipediaQuery')
+      .default
+    const mockProps = getMockProps()
+    shallow(<WikipediaQuery {...mockProps} />)
+    await flushAllPromises()
+
+    // Make the Wikipedia promise reject.
+    jest.advanceTimersByTime(10e3)
+    await flushAllPromises()
+
+    expect(console.error).toHaveBeenCalledTimes(1)
+    expect(console.error).toHaveBeenCalledWith(mockErr)
   })
 })
