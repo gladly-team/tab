@@ -23,12 +23,14 @@ import { parseUrlSearchString } from 'js/utils/utils'
 import SearchResults from 'js/components/Search/SearchResults'
 import { isReactSnapClient } from 'js/utils/search-utils'
 import SearchMenuQuery from 'js/components/Search/SearchMenuQuery'
+import WikipediaQuery from 'js/components/Search/WikipediaQuery'
 import detectAdblocker from 'js/utils/detectAdblocker'
 import Link from 'js/components/General/Link'
 import {
   hasUserDismissedSearchIntro,
   setUserDismissedSearchIntro,
 } from 'js/utils/local-user-data-mgr'
+import ErrorBoundary from 'js/components/General/ErrorBoundary'
 
 const Footer = lazy(() => import('js/components/General/Footer'))
 
@@ -524,6 +526,18 @@ class SearchPage extends React.Component {
                 </span>
               </Paper>
             ) : null}
+            <ErrorBoundary brand={'search'} ignoreErrors>
+              {query ? (
+                <WikipediaQuery
+                  query={query}
+                  style={{
+                    width: '100%',
+                    boxSizing: 'border-box',
+                    marginBottom: 20,
+                  }}
+                />
+              ) : null}
+            </ErrorBoundary>
           </div>
         </div>
         <Suspense fallback={null}>

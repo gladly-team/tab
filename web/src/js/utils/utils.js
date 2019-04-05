@@ -224,3 +224,26 @@ export const getAllDomainNames = () => {
     .concat(getDevelopmentDomainNames())
     .concat(getProductionDomainNames())
 }
+
+/**
+ * Add a "cancel" method to a Promise. See:
+ * https://reactjs.org/blog/2015/12/16/ismounted-antipattern.html
+ * https://github.com/facebook/react/issues/5465#issuecomment-157888325
+ * @param {Promise}
+ * @return {Object} An object containing a promise and cancel methodd.
+ */
+export const makePromiseCancelable = promise => {
+  let hasCanceled_ = false
+  const wrappedPromise = new Promise((resolve, reject) => {
+    promise.then(
+      val => (hasCanceled_ ? reject({ isCanceled: true }) : resolve(val)),
+      error => (hasCanceled_ ? reject({ isCanceled: true }) : reject(error))
+    )
+  })
+  return {
+    promise: wrappedPromise,
+    cancel() {
+      hasCanceled_ = true
+    },
+  }
+}

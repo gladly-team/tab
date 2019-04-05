@@ -220,4 +220,63 @@ describe('web test-utils', () => {
     addReactRootElementToDOM()
     expect(document.getElementById('root')).not.toBeNull()
   })
+
+  test('mockFetchResponse returns the expected default object', () => {
+    const { mockFetchResponse } = require('js/utils/test-utils')
+    expect(mockFetchResponse()).toMatchObject({
+      body: expect.any(Object),
+      bodyUsed: true,
+      headers: {},
+      json: expect.any(Function),
+      ok: true,
+      redirected: false,
+      status: 200,
+      statusText: '',
+      type: 'cors',
+      url: 'https://example.com/foo/',
+    })
+  })
+
+  test('mockFetchResponse allows overriding the default object', () => {
+    const { mockFetchResponse } = require('js/utils/test-utils')
+    expect(
+      mockFetchResponse({
+        status: 403,
+        statusText: 'Verboten',
+        headers: { Accept: 'application/json' },
+      })
+    ).toMatchObject({
+      body: expect.any(Object),
+      bodyUsed: true,
+      headers: {
+        Accept: 'application/json',
+      },
+      json: expect.any(Function),
+      ok: true,
+      redirected: false,
+      status: 403,
+      statusText: 'Verboten',
+      type: 'cors',
+      url: 'https://example.com/foo/',
+    })
+  })
+
+  test('mockFetchResponse resolves response.json() to an empty object by default', async () => {
+    expect.assertions(1)
+    const { mockFetchResponse } = require('js/utils/test-utils')
+    const json = await mockFetchResponse().json()
+    expect(json).toEqual({})
+  })
+
+  test('mockFetchResponse allows overriding response.json()', async () => {
+    expect.assertions(1)
+    const { mockFetchResponse } = require('js/utils/test-utils')
+    const response = mockFetchResponse({
+      json: jest.fn(() => Promise.resolve({ my: 'data!' })),
+    })
+    const json = await response.json()
+    expect(json).toEqual({
+      my: 'data!',
+    })
+  })
 })
