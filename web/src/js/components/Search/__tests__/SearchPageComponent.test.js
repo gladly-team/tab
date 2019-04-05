@@ -30,6 +30,8 @@ import {
   setUserAgentToTypicalTestUserAgent,
 } from 'js/utils/test-utils'
 import Logo from 'js/components/Logo/Logo'
+import WikipediaQuery from 'js/components/Search/WikipediaQuery'
+import ErrorBoundary from 'js/components/General/ErrorBoundary'
 
 jest.mock('js/utils/feature-flags')
 jest.mock('js/navigation/navigation')
@@ -808,5 +810,46 @@ describe('Search page component', () => {
         .render()
         .text()
     ).toEqual('Feedback')
+  })
+
+  it('does not render the WikipediaQuery component if there is no query', () => {
+    isSearchPageEnabled.mockReturnValue(true)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location.search = ''
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.find(WikipediaQuery).exists()).toBe(false)
+  })
+
+  it('passes the query to the WikipediaQuery component', () => {
+    isSearchPageEnabled.mockReturnValue(true)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location.search = '?q=big%20bad%20wolf'
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.find(WikipediaQuery).prop('query')).toEqual('big bad wolf')
+  })
+
+  it('wraps the WikipediaQuery component in an error boundary that swallows errors', () => {
+    isSearchPageEnabled.mockReturnValue(true)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location.search = '?q=big%20bad%20wolf'
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find(WikipediaQuery)
+        .parent()
+        .type()
+    ).toEqual(ErrorBoundary)
+    expect(
+      wrapper
+        .find(WikipediaQuery)
+        .parent()
+        .prop('ignoreErrors')
+    ).toBe(true)
   })
 })
