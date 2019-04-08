@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+// TODO: use class styles
+
 const WebPageSearchResult = props => {
   const {
     // eslint-disable-next-line no-unused-vars

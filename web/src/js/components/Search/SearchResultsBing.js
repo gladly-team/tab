@@ -11,46 +11,9 @@ import getMockBingSearchResults from 'js/components/Search/getMockBingSearchResu
 import { isReactSnapClient } from 'js/utils/search-utils'
 import { getCurrentUser } from 'js/authentication/user'
 import LogSearchMutation from 'js/mutations/LogSearchMutation'
+import NewsSearchResults from 'js/components/Search/NewsSearchResults'
 import WebPageSearchResult from 'js/components/Search/WebPageSearchResult'
 import sanitizeHtml from 'sanitize-html'
-
-const NewsSearchResult = props => {
-  const {
-    // eslint-disable-next-line no-unused-vars
-    item: { category, contractualRules, description, image, name, url },
-  } = props
-  return (
-    <div>
-      {image ? <div>TODO: news image</div> : null}
-      <Link to={url}>
-        <span
-          dangerouslySetInnerHTML={{
-            __html: name,
-          }}
-        />
-      </Link>
-      <p>{description}</p>
-    </div>
-  )
-}
-
-NewsSearchResult.propTypes = {
-  item: PropTypes.shape({
-    category: PropTypes.string,
-    contractualRules: PropTypes.string,
-    description: PropTypes.string,
-    id: PropTypes.string.isRequired,
-    image: PropTypes.shape({
-      thumbnail: PropTypes.shape({
-        contentUrl: PropTypes.string,
-        height: PropTypes.number,
-        width: PropTypes.number,
-      }),
-    }),
-    name: PropTypes.string,
-    url: PropTypes.string,
-  }).isRequired,
-}
 
 const styles = theme => ({
   searchResultsParentContainer: {
@@ -72,6 +35,15 @@ const styles = theme => ({
     minWidth: 40,
   },
 })
+
+const stripHTML = html => {
+  return html
+    ? sanitizeHtml(html, {
+        allowedTags: [],
+        allowedAttributes: {},
+      })
+    : undefined
+}
 
 class SearchResults extends React.Component {
   constructor(props) {
@@ -166,45 +138,50 @@ class SearchResults extends React.Component {
   renderSearchResultItem(itemRankingData) {
     const { searchResultsData } = this.state
 
+    // Get the data for this item.
     // https://github.com/Azure-Samples/cognitive-services-REST-api-samples/blob/master/Tutorials/Bing-Web-Search/public/js/script.js#L168
     const typeName =
       itemRankingData.answerType[0].toLowerCase() +
       itemRankingData.answerType.slice(1)
-    const itemDataRaw = get(
-      searchResultsData,
-      `${typeName}.value[${itemRankingData.resultIndex}]`
-    )
+    // https://github.com/Azure-Samples/cognitive-services-REST-api-samples/blob/master/Tutorials/Bing-Web-Search/public/js/script.js#L172
+    const itemDataRaw = itemRankingData.resultIndex
+      ? // One result of the specified type (e.g., one webpage link)
+        get(
+          searchResultsData,
+          `${typeName}.value[${itemRankingData.resultIndex}]`
+        )
+      : // All results of the specified type (e.g., all videos)
+        get(searchResultsData, `${typeName}.value`)
+
+    // Return null if we couldn't find the result item data.
     if (!itemDataRaw) {
+      console.error(`Couldn't find item data for:`, itemRankingData)
       return null
     }
 
-    // Sanitize HTML.
-    const itemData = Object.assign({}, itemDataRaw, {
-      displayUrl: itemDataRaw.displayUrl
-        ? sanitizeHtml(itemDataRaw.displayUrl, {
-            allowedTags: [],
-            allowedAttributes: {},
-          })
-        : undefined,
-      name: itemDataRaw.name
-        ? sanitizeHtml(itemDataRaw.name, {
-            allowedTags: [],
-            allowedAttributes: {},
-          })
-        : undefined,
-      snippet: itemDataRaw.snippet
-        ? sanitizeHtml(itemDataRaw.snippet, {
-            allowedTags: [],
-            allowedAttributes: {},
-          })
-        : undefined,
-    })
+    // Render a different component depending on the result type.
     switch (itemRankingData.answerType) {
       case 'WebPages': {
-        return <WebPageSearchResult key={itemData.id} item={itemData} />
+        let webPageItem = Object.assign({}, itemDataRaw, {
+          displayUrl: stripHTML(itemDataRaw.displayUrl),
+          name: stripHTML(itemDataRaw.name),
+          snippet: stripHTML(itemDataRaw.snippet),
+        })
+        return <WebPageSearchResult key={webPageItem.id} item={webPageItem} />
       }
       case 'News': {
-        return <NewsSearchResult key={itemData.id} item={itemData} />
+        let newsItems = itemDataRaw.map(newsItem => {
+          return Object.assign({}, newsItem, {
+            description: stripHTML(newsItem.description),
+            displayUrl: stripHTML(newsItem.displayUrl),
+            name: stripHTML(newsItem.name),
+          })
+        })
+        if (!newsItems.length) {
+          console.error(`No news items found for:`, itemDataRaw)
+          return null
+        }
+        return <NewsSearchResults newsItems={newsItems} />
       }
       default: {
         return null

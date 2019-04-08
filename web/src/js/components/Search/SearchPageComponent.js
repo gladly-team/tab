@@ -191,7 +191,7 @@ class SearchPage extends React.Component {
       searchText,
     } = this.state
     const queryEncoded = query ? encodeURI(query) : ''
-    const searchResultsPaddingLeft = 170
+    const searchResultsPaddingLeft = 150
     if (!this.state.searchFeatureEnabled) {
       return null
     }
@@ -312,7 +312,7 @@ class SearchPage extends React.Component {
             indicatorColor={'primary'}
             style={{
               marginTop: 8,
-              marginLeft: 170,
+              marginLeft: 150,
             }}
             classes={{
               root: classes.tabsContainerRootStyle,
@@ -384,7 +384,7 @@ class SearchPage extends React.Component {
             style={{
               marginLeft: searchResultsPaddingLeft,
               marginTop: 20,
-              width: 600,
+              width: 620,
             }}
           >
             {isAdBlockerEnabled ? (
