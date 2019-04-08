@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { get } from 'lodash/object'
 import { range } from 'lodash/util'
 import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
@@ -10,6 +11,74 @@ import getMockBingSearchResults from 'js/components/Search/getMockBingSearchResu
 import { isReactSnapClient } from 'js/utils/search-utils'
 import { getCurrentUser } from 'js/authentication/user'
 import LogSearchMutation from 'js/mutations/LogSearchMutation'
+
+const WebPageSearchResult = props => {
+  const {
+    // eslint-disable-next-line no-unused-vars
+    item: { deepLinks, displayUrl, name, snippet, url },
+  } = props
+  return (
+    <div>
+      <Link to={url}>
+        <span
+          dangerouslySetInnerHTML={{
+            __html: name,
+          }}
+        />
+      </Link>
+      <p>{snippet}</p>
+    </div>
+  )
+}
+
+WebPageSearchResult.propTypes = {
+  item: PropTypes.shape({
+    deepLinks: PropTypes.array,
+    displayUrl: PropTypes.string,
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string,
+    snippet: PropTypes.string,
+    url: PropTypes.string,
+  }).isRequired,
+}
+
+const NewsSearchResult = props => {
+  const {
+    // eslint-disable-next-line no-unused-vars
+    item: { category, contractualRules, description, image, name, url },
+  } = props
+  return (
+    <div>
+      {image ? <div>TODO: news image</div> : null}
+      <Link to={url}>
+        <span
+          dangerouslySetInnerHTML={{
+            __html: name,
+          }}
+        />
+      </Link>
+      <p>{description}</p>
+    </div>
+  )
+}
+
+NewsSearchResult.propTypes = {
+  item: PropTypes.shape({
+    category: PropTypes.string,
+    contractualRules: PropTypes.string,
+    description: PropTypes.string,
+    id: PropTypes.string.isRequired,
+    image: PropTypes.shape({
+      thumbnail: PropTypes.shape({
+        contentUrl: PropTypes.string,
+        height: PropTypes.number,
+        width: PropTypes.number,
+      }),
+    }),
+    name: PropTypes.string,
+    url: PropTypes.string,
+  }).isRequired,
+}
 
 const styles = theme => ({
   searchResultsParentContainer: {
@@ -36,7 +105,7 @@ class SearchResults extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      searchResultData: null,
+      searchResultsData: null,
       noSearchResults: false,
       unexpectedSearchError: false,
       mounted: false, // i.e. we've mounted to a real user, not pre-rendering
@@ -101,7 +170,7 @@ class SearchResults extends React.Component {
     try {
       const searchResults = await getMockBingSearchResults()
       this.setState({
-        searchResultData: searchResults,
+        searchResultsData: searchResults,
       })
     } catch (e) {
       this.setState({
@@ -122,6 +191,33 @@ class SearchResults extends React.Component {
     document.body.scrollTop = document.documentElement.scrollTop = 0
   }
 
+  renderSearchResultItem(itemRankingData) {
+    const { searchResultsData } = this.state
+
+    // https://github.com/Azure-Samples/cognitive-services-REST-api-samples/blob/master/Tutorials/Bing-Web-Search/public/js/script.js#L168
+    const typeName =
+      itemRankingData.answerType[0].toLowerCase() +
+      itemRankingData.answerType.slice(1)
+    const itemData = get(
+      searchResultsData,
+      `${typeName}.value[${itemRankingData.resultIndex}]`
+    )
+    if (!itemData) {
+      return null
+    }
+    switch (itemRankingData.answerType) {
+      case 'WebPages': {
+        return <WebPageSearchResult key={itemData.id} item={itemData} />
+      }
+      case 'News': {
+        return <NewsSearchResult key={itemData.id} item={itemData} />
+      }
+      default: {
+        return null
+      }
+    }
+  }
+
   render() {
     const {
       classes,
@@ -131,6 +227,22 @@ class SearchResults extends React.Component {
       style,
       theme,
     } = this.props
+    const { searchResultsData } = this.state
+
+    // eslint-disable-next-line no-unused-vars
+    const poleResults = get(searchResultsData, 'rankingResponse.pole.items', [])
+    const mainResults = get(
+      searchResultsData,
+      'rankingResponse.mainline.items',
+      []
+    )
+
+    // eslint-disable-next-line no-unused-vars
+    const sidebarResults = get(
+      searchResultsData,
+      'rankingResponse.sidebar.items',
+      []
+    )
 
     // Include 8 pages total, 4 lower and 4 higher when possible.
     // Page 9999 is the maximum, so stop there.
@@ -190,6 +302,7 @@ class SearchResults extends React.Component {
         ) : null}
         <div id="search-results" className={classes.searchResultsContainer}>
           RESULTS HERE
+          {mainResults.map(result => this.renderSearchResultItem(result))}
         </div>
         <div
           data-test-id={'pagination-container'}
