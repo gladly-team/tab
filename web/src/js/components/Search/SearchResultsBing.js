@@ -11,36 +11,8 @@ import getMockBingSearchResults from 'js/components/Search/getMockBingSearchResu
 import { isReactSnapClient } from 'js/utils/search-utils'
 import { getCurrentUser } from 'js/authentication/user'
 import LogSearchMutation from 'js/mutations/LogSearchMutation'
-
-const WebPageSearchResult = props => {
-  const {
-    // eslint-disable-next-line no-unused-vars
-    item: { deepLinks, displayUrl, name, snippet, url },
-  } = props
-  return (
-    <div>
-      <Link to={url}>
-        <span
-          dangerouslySetInnerHTML={{
-            __html: name,
-          }}
-        />
-      </Link>
-      <p>{snippet}</p>
-    </div>
-  )
-}
-
-WebPageSearchResult.propTypes = {
-  item: PropTypes.shape({
-    deepLinks: PropTypes.array,
-    displayUrl: PropTypes.string,
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string,
-    snippet: PropTypes.string,
-    url: PropTypes.string,
-  }).isRequired,
-}
+import WebPageSearchResult from 'js/components/Search/WebPageSearchResult'
+import sanitizeHtml from 'sanitize-html'
 
 const NewsSearchResult = props => {
   const {
@@ -198,13 +170,35 @@ class SearchResults extends React.Component {
     const typeName =
       itemRankingData.answerType[0].toLowerCase() +
       itemRankingData.answerType.slice(1)
-    const itemData = get(
+    const itemDataRaw = get(
       searchResultsData,
       `${typeName}.value[${itemRankingData.resultIndex}]`
     )
-    if (!itemData) {
+    if (!itemDataRaw) {
       return null
     }
+
+    // Sanitize HTML.
+    const itemData = Object.assign({}, itemDataRaw, {
+      displayUrl: itemDataRaw.displayUrl
+        ? sanitizeHtml(itemDataRaw.displayUrl, {
+            allowedTags: [],
+            allowedAttributes: {},
+          })
+        : undefined,
+      name: itemDataRaw.name
+        ? sanitizeHtml(itemDataRaw.name, {
+            allowedTags: [],
+            allowedAttributes: {},
+          })
+        : undefined,
+      snippet: itemDataRaw.snippet
+        ? sanitizeHtml(itemDataRaw.snippet, {
+            allowedTags: [],
+            allowedAttributes: {},
+          })
+        : undefined,
+    })
     switch (itemRankingData.answerType) {
       case 'WebPages': {
         return <WebPageSearchResult key={itemData.id} item={itemData} />
@@ -301,7 +295,6 @@ class SearchResults extends React.Component {
           </Typography>
         ) : null}
         <div id="search-results" className={classes.searchResultsContainer}>
-          RESULTS HERE
           {mainResults.map(result => this.renderSearchResultItem(result))}
         </div>
         <div
