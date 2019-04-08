@@ -20,7 +20,7 @@ import {
 import { externalRedirect } from 'js/navigation/utils'
 import Logo from 'js/components/Logo/Logo'
 import { parseUrlSearchString } from 'js/utils/utils'
-import SearchResults from 'js/components/Search/SearchResults'
+import SearchResultsBing from 'js/components/Search/SearchResultsBing'
 import { isReactSnapClient } from 'js/utils/search-utils'
 import SearchMenuQuery from 'js/components/Search/SearchMenuQuery'
 import WikipediaQuery from 'js/components/Search/WikipediaQuery'
@@ -444,7 +444,7 @@ class SearchPage extends React.Component {
                 </Paper>
               </div>
             ) : null}
-            <SearchResults
+            <SearchResultsBing
               query={query}
               page={page}
               onPageChange={newPageIndex => {

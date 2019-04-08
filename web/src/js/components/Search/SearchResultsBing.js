@@ -6,15 +6,10 @@ import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import Link from 'js/components/General/Link'
 import logger from 'js/utils/logger'
-import fetchSearchResults from 'js/components/Search/fetchSearchResults'
-import YPAConfiguration from 'js/components/Search/YPAConfiguration'
+import getMockBingSearchResults from 'js/components/Search/getMockBingSearchResults'
 import { isReactSnapClient } from 'js/utils/search-utils'
 import { getCurrentUser } from 'js/authentication/user'
 import LogSearchMutation from 'js/mutations/LogSearchMutation'
-
-// This component expects the YPA search JS to already have
-// executed and for the `searchforacause` global variable
-// to be defined.
 
 const styles = theme => ({
   searchResultsParentContainer: {
@@ -22,16 +17,8 @@ const styles = theme => ({
     flexDirection: 'column',
     boxSizing: 'border-box',
   },
-  searchAdsContainer: {
-    '& iframe': {
-      width: '100%',
-    },
-  },
   searchResultsContainer: {
     marginTop: 6,
-    '& iframe': {
-      width: '100%',
-    },
   },
   paginationContainer: {
     display: 'flex',
@@ -49,6 +36,7 @@ class SearchResults extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      searchResultData: null,
       noSearchResults: false,
       unexpectedSearchError: false,
       mounted: false, // i.e. we've mounted to a real user, not pre-rendering
@@ -70,67 +58,6 @@ class SearchResults extends React.Component {
         mounted: true,
       })
     }
-
-    // When prerendering the page, add an inline script to fetch
-    // search results even before parsing our app JS.
-    // This adds any errors to a window variable and emits an
-    // event so we can update state here.
-    if (isReactSnapClient()) {
-      try {
-        // If there is a query on page load, fetch it.
-        const js = `
-          try {
-            if (new URLSearchParams(window.location.search).get('q')) {
-              var config = ${JSON.stringify(YPAConfiguration)}
-              config.ypaAdSlotInfo[1].ypaOnNoAd = function(err) {
-                window.searchforacause.search.YPAErrorOnPageLoad = err
-                var evt = new CustomEvent('searchresulterror', { detail: err })
-                window.dispatchEvent(evt)
-              }
-              var page = new URLSearchParams(window.location.search).get('page')
-              if (page) {
-                config.ypaPageCount = page
-              }
-              window.ypaAds.insertMultiAd(config)
-              window.searchforacause.search.fetchedOnPageLoad = true
-            }
-          } catch (e) {
-            console.error(e)
-          }
-        `
-        const s = document.createElement('script')
-        s.type = 'text/javascript'
-        s.dataset['testId'] = 'search-inline-script'
-        s.innerHTML = js
-
-        // Render the script immediately after our app's DOM root.
-        // Important: the target divs for search results must exist
-        // in the DOM *before* we call YPA's JS. Otherwise, YPA will
-        // not fetch search results.
-        const reactRoot = document.getElementById('root')
-        reactRoot.parentNode.insertBefore(s, reactRoot.nextSibling)
-      } catch (e) {
-        console.error(
-          'Could not prerender the inline script to fetch search results.'
-        )
-      }
-    }
-
-    // Listen for any error/empty search results from fetching
-    // search results via the inline script.
-    window.addEventListener(
-      'searchresulterror',
-      this.handleSearchResultsEvent.bind(this),
-      false
-    )
-
-    // Update state with any error/empty search results that
-    // already occurred from fetching search results via the
-    // inline script.
-    const searchErr = window.searchforacause.search.YPAErrorOnPageLoad
-    if (searchErr) {
-      this.handleSearchResultsError(searchErr)
-    }
   }
 
   componentDidUpdate(prevProps) {
@@ -145,52 +72,10 @@ class SearchResults extends React.Component {
     }
   }
 
-  componentWillUnmount() {
-    // Remove the listener for any error/empty search results
-    // from fetching search results via the inline script.
-    window.removeEventListener(
-      'searchresulterror',
-      this.handleSearchResultsEvent.bind(this),
-      false
-    )
-  }
+  componentWillUnmount() {}
 
-  handleSearchResultsEvent(event) {
-    this.handleSearchResultsError(event.detail)
-  }
-
-  handleSearchResultsError(err) {
-    if (err.URL_UNREGISTERED) {
-      this.setState({
-        unexpectedSearchError: true,
-      })
-      logger.error(
-        new Error('Domain is not registered with our search partner.')
-      )
-    } else if (err.NO_COVERAGE) {
-      // No results for this search.
-      this.setState({
-        noSearchResults: true,
-      })
-    } else {
-      this.setState({
-        unexpectedSearchError: true,
-      })
-      logger.error(new Error('Unexpected search error:', err))
-    }
-  }
-
-  getSearchResults() {
-    if (!window.ypaAds) {
-      logger.error(`
-        Search provider Javascript not loaded.
-        Could not fetch search results.`)
-      this.setState({
-        unexpectedSearchError: true,
-      })
-      return
-    }
-    const { page, query, searchSource } = this.props
+  async getSearchResults() {
+    const { query, searchSource } = this.props
     if (!query) {
       return
     }
@@ -207,14 +92,6 @@ class SearchResults extends React.Component {
       }
     })
 
-    // If this is the first query, we may have already fetched
-    // results via inline script. If so, don't re-fetch them.
-    const alreadyFetchedQuery = window.searchforacause.search.fetchedOnPageLoad
-    if (alreadyFetchedQuery) {
-      window.searchforacause.search.fetchedOnPageLoad = false
-      return
-    }
-
     // Reset state of search results.
     this.setState({
       noSearchResults: false,
@@ -222,7 +99,10 @@ class SearchResults extends React.Component {
     })
 
     try {
-      fetchSearchResults(query, this.handleSearchResultsError.bind(this), page)
+      const searchResults = await getMockBingSearchResults()
+      this.setState({
+        searchResultData: searchResults,
+      })
     } catch (e) {
       this.setState({
         unexpectedSearchError: true,
@@ -308,28 +188,9 @@ class SearchResults extends React.Component {
             Search something to start raising money for charity!
           </Typography>
         ) : null}
-        <div
-          id="search-ads"
-          className={classes.searchAdsContainer}
-          // Important: if these containers are unmounted or mutated,
-          // YPA's JS will cancel the call to fetch search results.
-          // Using dangerouslySetInnerHTML and suppressHydrationWarning
-          // prevents rerendering this element during hydration:
-          // https://github.com/reactjs/rfcs/pull/46#issuecomment-385182716
-          // Related: https://github.com/facebook/react/issues/6622
-          dangerouslySetInnerHTML={{
-            __html: '',
-          }}
-          suppressHydrationWarning
-        />
-        <div
-          id="search-results"
-          className={classes.searchResultsContainer}
-          dangerouslySetInnerHTML={{
-            __html: '',
-          }}
-          suppressHydrationWarning
-        />
+        <div id="search-results" className={classes.searchResultsContainer}>
+          RESULTS HERE
+        </div>
         <div
           data-test-id={'pagination-container'}
           className={classes.paginationContainer}
