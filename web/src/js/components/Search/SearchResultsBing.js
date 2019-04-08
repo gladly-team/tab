@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { isNil } from 'lodash/lang'
 import { get } from 'lodash/object'
 import { range } from 'lodash/util'
 import { withStyles } from '@material-ui/core/styles'
@@ -144,7 +145,7 @@ class SearchResults extends React.Component {
       itemRankingData.answerType[0].toLowerCase() +
       itemRankingData.answerType.slice(1)
     // https://github.com/Azure-Samples/cognitive-services-REST-api-samples/blob/master/Tutorials/Bing-Web-Search/public/js/script.js#L172
-    const itemDataRaw = itemRankingData.resultIndex
+    const itemDataRaw = !isNil(itemRankingData.resultIndex)
       ? // One result of the specified type (e.g., one webpage link)
         get(
           searchResultsData,
@@ -181,7 +182,7 @@ class SearchResults extends React.Component {
           console.error(`No news items found for:`, itemDataRaw)
           return null
         }
-        return <NewsSearchResults newsItems={newsItems} />
+        return <NewsSearchResults key={'news-results'} newsItems={newsItems} />
       }
       default: {
         return null
