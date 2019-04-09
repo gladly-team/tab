@@ -20,6 +20,19 @@ const NewsSearchItem = props => {
     },
   } = props
 
+  // If the title or description are too long, slice them
+  // and add ellipses.
+  const MAX_DESC_CHARS = 125
+  const MAX_TITLE_CHARS = 80
+  const subtitle =
+    description.length > MAX_DESC_CHARS
+      ? `${description.slice(0, MAX_DESC_CHARS)} ...`
+      : name
+  const title =
+    name.length > MAX_TITLE_CHARS
+      ? `${name.slice(0, MAX_TITLE_CHARS)} ...`
+      : name
+
   // TODO
   // const timeSincePublished = datePublished
   return (
@@ -66,25 +79,22 @@ const NewsSearchItem = props => {
               fontFamily: 'Roboto, arial, sans-serif',
               color: '#1a0dab',
               margin: 0,
-              fontSize: 18,
+              fontSize: 16,
               fontWeight: 400,
               lineHeight: 1.38,
               minHeight: 0,
               minWidth: 0,
             }}
           >
-            {name}
+            {title}
           </h3>
         </a>
         {// Only show the description if there is no image.
         image ? null : (
           <div
             style={{
-              // TODO: remove this item if we can't reliably
-              // display it in a pretty way.
-              display: 'none',
               flex: 1,
-              margin: '10px 0px',
+              margin: 0,
               minHeight: 0,
               minWidth: 0,
             }}
@@ -97,7 +107,7 @@ const NewsSearchItem = props => {
                 overflow: 'hidden',
               }}
             >
-              {description}
+              {subtitle}
             </p>
           </div>
         )}
