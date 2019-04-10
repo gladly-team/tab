@@ -114,6 +114,7 @@ class SearchResults extends React.Component {
 
     try {
       const searchResults = await fetchBingSearchResults(query)
+      // console.log('searchResults', searchResults)
       this.setState({
         searchResultsData: searchResults,
       })
@@ -156,7 +157,7 @@ class SearchResults extends React.Component {
 
     // Return null if we couldn't find the result item data.
     if (!itemDataRaw) {
-      console.error(`Couldn't find item data for:`, itemRankingData)
+      // console.error(`Couldn't find item data for:`, itemRankingData)
       return null
     }
 
