@@ -221,6 +221,9 @@ class SearchResults extends React.Component {
       []
     )
 
+    // Hiding until we make it functional.
+    const SHOW_PAGINATION = false
+
     // Include 8 pages total, 4 lower and 4 higher when possible.
     // Page 9999 is the maximum, so stop there.
     const MIN_PAGE = 1
@@ -245,7 +248,7 @@ class SearchResults extends React.Component {
           {
             // Min height prevents visibly shifting content below,
             // like the footer.
-            minHeight: noResultsToDisplay ? 0 : 1200,
+            minHeight: noResultsToDisplay ? 0 : 1000,
           },
           style
         )}
@@ -286,7 +289,7 @@ class SearchResults extends React.Component {
           data-test-id={'pagination-container'}
           className={classes.paginationContainer}
           style={{
-            display: noResultsToDisplay ? 'none' : 'block',
+            display: !SHOW_PAGINATION || noResultsToDisplay ? 'none' : 'block',
           }}
         >
           {page > MIN_PAGE ? (
