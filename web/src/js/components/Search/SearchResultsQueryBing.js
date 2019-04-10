@@ -1,5 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { isNil } from 'lodash/lang'
+import { get } from 'lodash/object'
 import logger from 'js/utils/logger'
 import SearchResultsBing from 'js/components/Search/SearchResultsBing'
 import fetchBingSearchResults from 'js/components/Search/fetchBingSearchResults'
@@ -89,6 +91,68 @@ class SearchResultsQueryBing extends React.Component {
     }
   }
 
+  /**
+   * Restructure the raw search results data into search sections with
+   * each item's full data.
+   * @param {Object} data - The search results data returned from the API
+   * @return {Object} searchResults - The restructured search results data
+   * @return {Array<SearchResultItem>} searchResults.pole - Search result items in the "pole"
+   *   (i.e. most prominent) display position.
+   * @return {Array<SearchResultItem>} searchResults.mainline - Search result items in the
+   *   "mainline" (i.e. second-most-prominent) display position.
+   * @return {Array<SearchResultItem>} searchResults.sidebar - Search result items in the "sidebar"
+   *   (i.e. less prominent) display position.
+   * The SearchResultItem has a structure of:
+   *   {String} SearchResultItem.type - The type of search result (e.g. WebPages, News, Videos).
+   *   {String} SearchResultItem.key - A unique key for this search result item
+   *   {Object} SearchResultItem.value - The raw data for this search result item as
+   *.    returned by the API.
+   */
+  restructureSearchResultsData(data) {
+    const searchResultSections = ['pole', 'mainline', 'sidebar']
+    const restructuredData = searchResultSections.reduce(
+      (newData, sectionName) => {
+        // Get the ranked list for this section.
+        const rankingItems = get(
+          data,
+          `rankingResponse.${sectionName}.items`,
+          []
+        )
+
+        // For each ranked item, get the actual data for that item.
+        // https://github.com/Azure-Samples/cognitive-services-REST-api-samples/blob/master/Tutorials/Bing-Web-Search/public/js/script.js#L168
+        const newItems = rankingItems.map(itemRankingData => {
+          const typeName =
+            itemRankingData.answerType[0].toLowerCase() +
+            itemRankingData.answerType.slice(1)
+          // https://github.com/Azure-Samples/cognitive-services-REST-api-samples/blob/master/Tutorials/Bing-Web-Search/public/js/script.js#L172
+          const itemData = !isNil(itemRankingData.resultIndex)
+            ? // One result of the specified type (e.g., one webpage link)
+              get(data, `${typeName}.value[${itemRankingData.resultIndex}]`)
+            : // All results of the specified type (e.g., all videos)
+              get(data, `${typeName}.value`)
+
+          // Return null if we couldn't find the result item data.
+          if (!(itemRankingData.answerType && itemData)) {
+            // console.error(`Couldn't find item data for:`, itemRankingData)
+            return null
+          }
+          return {
+            type: itemRankingData.answerType,
+            key: itemData.id
+              ? `${itemRankingData.answerType}-${itemData.id}`
+              : itemRankingData.answerType,
+            value: itemData,
+          }
+        })
+        newData[sectionName] = newItems
+        return newData
+      },
+      {}
+    )
+    return restructuredData
+  }
+
   changePage(newPageIndex) {
     const { onPageChange, page } = this.props
     if (newPageIndex === page) {
@@ -108,12 +172,15 @@ class SearchResultsQueryBing extends React.Component {
       searchResultsData,
       unexpectedSearchError,
     } = this.state
+    const restructuredData = this.restructureSearchResultsData(
+      searchResultsData
+    )
 
     // Whether there are no search results for whatever reason.
     const isEmptyQuery = this.state.mounted && !query
     return (
       <SearchResultsBing
-        data={searchResultsData}
+        data={restructuredData}
         isEmptyQuery={isEmptyQuery}
         isError={unexpectedSearchError}
         isQueryInProgress={queryInProgress}

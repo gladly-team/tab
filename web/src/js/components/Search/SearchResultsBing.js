@@ -1,7 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { isNil } from 'lodash/lang'
-import { get } from 'lodash/object'
 import { range } from 'lodash/util'
 import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
@@ -44,13 +42,6 @@ const SearchResultsBing = props => {
     style,
     theme,
   } = props
-
-  // eslint-disable-next-line no-unused-vars
-  const poleResults = get(data, 'rankingResponse.pole.items', [])
-  const mainResults = get(data, 'rankingResponse.mainline.items', [])
-
-  // eslint-disable-next-line no-unused-vars
-  const sidebarResults = get(data, 'rankingResponse.sidebar.items', [])
 
   // Hiding until we make it functional.
   const SHOW_PAGINATION = false
@@ -105,32 +96,12 @@ const SearchResultsBing = props => {
       ) : null}
       {isQueryInProgress ? null : (
         <div id="search-results" className={classes.searchResultsContainer}>
-          {mainResults.map(itemRankingData => {
-            // Get the data for this item.
-            // https://github.com/Azure-Samples/cognitive-services-REST-api-samples/blob/master/Tutorials/Bing-Web-Search/public/js/script.js#L168
-            const typeName =
-              itemRankingData.answerType[0].toLowerCase() +
-              itemRankingData.answerType.slice(1)
-            // https://github.com/Azure-Samples/cognitive-services-REST-api-samples/blob/master/Tutorials/Bing-Web-Search/public/js/script.js#L172
-            const itemData = !isNil(itemRankingData.resultIndex)
-              ? // One result of the specified type (e.g., one webpage link)
-                get(data, `${typeName}.value[${itemRankingData.resultIndex}]`)
-              : // All results of the specified type (e.g., all videos)
-                get(data, `${typeName}.value`)
-
-            // Return null if we couldn't find the result item data.
-            if (!(itemRankingData.answerType && itemData)) {
-              // console.error(`Couldn't find item data for:`, itemRankingData)
-              return null
-            }
-            const key = itemData.id
-              ? `${itemRankingData.answerType}-${itemData.id}`
-              : itemRankingData.answerType
+          {data.mainline.map(searchResultItemData => {
             return (
               <SearchResultItem
-                key={key}
-                type={itemRankingData.answerType}
-                itemData={itemData}
+                key={searchResultItemData.key}
+                type={searchResultItemData.type}
+                itemData={searchResultItemData.value}
               />
             )
           })}
@@ -193,7 +164,32 @@ const SearchResultsBing = props => {
 
 SearchResultsBing.propTypes = {
   classes: PropTypes.object.isRequired,
-  data: PropTypes.object,
+  data: PropTypes.shape({
+    pole: PropTypes.arrayOf(
+      PropTypes.shape({
+        type: PropTypes.string.isRequired,
+        key: PropTypes.string.isRequired,
+        value: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
+          .isRequired,
+      })
+    ).isRequired,
+    mainline: PropTypes.arrayOf(
+      PropTypes.shape({
+        type: PropTypes.string.isRequired,
+        key: PropTypes.string.isRequired,
+        value: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
+          .isRequired,
+      })
+    ).isRequired,
+    sidebar: PropTypes.arrayOf(
+      PropTypes.shape({
+        type: PropTypes.string.isRequired,
+        key: PropTypes.string.isRequired,
+        value: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
+          .isRequired,
+      })
+    ).isRequired,
+  }).isRequired,
   isEmptyQuery: PropTypes.bool.isRequired,
   isError: PropTypes.bool.isRequired,
   isQueryInProgress: PropTypes.bool.isRequired,
