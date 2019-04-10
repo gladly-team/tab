@@ -51,6 +51,7 @@ class SearchResults extends React.Component {
     super(props)
     this.state = {
       searchResultsData: null,
+      queryInProgress: false,
       noSearchResults: false,
       unexpectedSearchError: false,
       mounted: false, // i.e. we've mounted to a real user, not pre-rendering
@@ -109,6 +110,7 @@ class SearchResults extends React.Component {
     // Reset state of search results.
     this.setState({
       noSearchResults: false,
+      queryInProgress: true,
       unexpectedSearchError: false,
     })
 
@@ -117,10 +119,12 @@ class SearchResults extends React.Component {
       // console.log('searchResults', searchResults)
       this.setState({
         searchResultsData: searchResults,
+        queryInProgress: false,
       })
     } catch (e) {
       this.setState({
         unexpectedSearchError: true,
+        queryInProgress: false,
       })
       logger.error(e)
     }
@@ -200,7 +204,7 @@ class SearchResults extends React.Component {
       style,
       theme,
     } = this.props
-    const { searchResultsData } = this.state
+    const { queryInProgress, searchResultsData } = this.state
 
     // eslint-disable-next-line no-unused-vars
     const poleResults = get(searchResultsData, 'rankingResponse.pole.items', [])
@@ -273,9 +277,11 @@ class SearchResults extends React.Component {
             Search something to start raising money for charity!
           </Typography>
         ) : null}
-        <div id="search-results" className={classes.searchResultsContainer}>
-          {mainResults.map(result => this.renderSearchResultItem(result))}
-        </div>
+        {queryInProgress ? null : (
+          <div id="search-results" className={classes.searchResultsContainer}>
+            {mainResults.map(result => this.renderSearchResultItem(result))}
+          </div>
+        )}
         <div
           data-test-id={'pagination-container'}
           className={classes.paginationContainer}
