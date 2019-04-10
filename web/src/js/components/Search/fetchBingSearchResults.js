@@ -14,7 +14,10 @@ const fetchBingSearchResults = async (query = null) => {
     // process.env.NODE_ENV === 'development' &&
     process.env.REACT_APP_MOCK_SEARCH_RESULTS === 'true'
   ) {
-    return getMockBingSearchResults()
+    // Mock search results, including network delay.
+    return new Promise(resolve => {
+      setTimeout(() => resolve(getMockBingSearchResults()), 400)
+    })
   }
   try {
     const searchURL = `${endpoint}?q=${encodeURI(query)}`

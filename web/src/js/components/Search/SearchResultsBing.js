@@ -7,11 +7,6 @@ import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import Link from 'js/components/General/Link'
-import logger from 'js/utils/logger'
-import fetchBingSearchResults from 'js/components/Search/fetchBingSearchResults'
-import { isReactSnapClient } from 'js/utils/search-utils'
-import { getCurrentUser } from 'js/authentication/user'
-import LogSearchMutation from 'js/mutations/LogSearchMutation'
 import NewsSearchResults from 'js/components/Search/NewsSearchResults'
 import WebPageSearchResult from 'js/components/Search/WebPageSearchResult'
 import sanitizeHtml from 'sanitize-html'
@@ -46,103 +41,9 @@ const stripHTML = html => {
     : undefined
 }
 
-class SearchResults extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      searchResultsData: null,
-      queryInProgress: false,
-      noSearchResults: false,
-      unexpectedSearchError: false,
-      mounted: false, // i.e. we've mounted to a real user, not pre-rendering
-    }
-  }
-
-  componentDidMount() {
-    const { query } = this.props
-
-    // Fetch a query if one exists on mount.
-    if (query) {
-      this.getSearchResults()
-    }
-
-    // Mark that we've mounted for a real user. In other words, this
-    // is not React Snap prerendering.
-    if (!isReactSnapClient()) {
-      this.setState({
-        mounted: true,
-      })
-    }
-  }
-
-  componentDidUpdate(prevProps) {
-    // Fetch search results if a query exists and either the page
-    // or query has changed.
-    if (
-      this.props.query &&
-      (this.props.page !== prevProps.page ||
-        this.props.query !== prevProps.query)
-    ) {
-      this.getSearchResults()
-    }
-  }
-
-  componentWillUnmount() {}
-
-  async getSearchResults() {
-    const { query, searchSource } = this.props
-    if (!query) {
-      return
-    }
-
-    // Log the search event.
-    // We're not passing the user as a prop to this component because
-    // we don't want to delay the component mount.
-    getCurrentUser().then(user => {
-      if (user && user.id) {
-        LogSearchMutation({
-          userId: user.id,
-          ...(searchSource && { source: searchSource }),
-        })
-      }
-    })
-
-    // Reset state of search results.
-    this.setState({
-      noSearchResults: false,
-      queryInProgress: true,
-      unexpectedSearchError: false,
-    })
-
-    try {
-      const searchResults = await fetchBingSearchResults(query)
-      // console.log('searchResults', searchResults)
-      this.setState({
-        searchResultsData: searchResults,
-        queryInProgress: false,
-      })
-    } catch (e) {
-      this.setState({
-        unexpectedSearchError: true,
-        queryInProgress: false,
-      })
-      logger.error(e)
-    }
-  }
-
-  changePage(newPageIndex) {
-    const { onPageChange, page } = this.props
-    if (newPageIndex === page) {
-      return
-    }
-    onPageChange(newPageIndex)
-
-    // Scroll to the top of the page.
-    document.body.scrollTop = document.documentElement.scrollTop = 0
-  }
-
+class SearchResultsBing extends React.Component {
   renderSearchResultItem(itemRankingData) {
-    const { searchResultsData } = this.state
+    const { data } = this.props
 
     // Get the data for this item.
     // https://github.com/Azure-Samples/cognitive-services-REST-api-samples/blob/master/Tutorials/Bing-Web-Search/public/js/script.js#L168
@@ -152,12 +53,9 @@ class SearchResults extends React.Component {
     // https://github.com/Azure-Samples/cognitive-services-REST-api-samples/blob/master/Tutorials/Bing-Web-Search/public/js/script.js#L172
     const itemDataRaw = !isNil(itemRankingData.resultIndex)
       ? // One result of the specified type (e.g., one webpage link)
-        get(
-          searchResultsData,
-          `${typeName}.value[${itemRankingData.resultIndex}]`
-        )
+        get(data, `${typeName}.value[${itemRankingData.resultIndex}]`)
       : // All results of the specified type (e.g., all videos)
-        get(searchResultsData, `${typeName}.value`)
+        get(data, `${typeName}.value`)
 
     // Return null if we couldn't find the result item data.
     if (!itemDataRaw) {
@@ -198,28 +96,25 @@ class SearchResults extends React.Component {
   render() {
     const {
       classes,
+      data,
       isAdBlockerEnabled,
+      isEmptyQuery,
+      isError,
+      isQueryInProgress,
+      noSearchResults,
+      onPageChange,
       page,
       query,
       style,
       theme,
     } = this.props
-    const { queryInProgress, searchResultsData } = this.state
 
     // eslint-disable-next-line no-unused-vars
-    const poleResults = get(searchResultsData, 'rankingResponse.pole.items', [])
-    const mainResults = get(
-      searchResultsData,
-      'rankingResponse.mainline.items',
-      []
-    )
+    const poleResults = get(data, 'rankingResponse.pole.items', [])
+    const mainResults = get(data, 'rankingResponse.mainline.items', [])
 
     // eslint-disable-next-line no-unused-vars
-    const sidebarResults = get(
-      searchResultsData,
-      'rankingResponse.sidebar.items',
-      []
-    )
+    const sidebarResults = get(data, 'rankingResponse.sidebar.items', [])
 
     // Hiding until we make it functional.
     const SHOW_PAGINATION = false
@@ -233,13 +128,8 @@ class SearchResults extends React.Component {
       Math.min(MAX_PAGE + 1, Math.max(page + 4, MIN_PAGE + 8))
     )
 
-    // Whether there are no search results for whatever reason.
-    const isEmptyQuery = this.state.mounted && !query
     const noResultsToDisplay =
-      isEmptyQuery ||
-      this.state.noSearchResults ||
-      this.state.unexpectedSearchError ||
-      isAdBlockerEnabled
+      isEmptyQuery || noSearchResults || isError || isAdBlockerEnabled
     return (
       <div
         className={classes.searchResultsParentContainer}
@@ -253,13 +143,13 @@ class SearchResults extends React.Component {
           style
         )}
       >
-        {this.state.noSearchResults ? (
+        {noSearchResults ? (
           <Typography variant={'body1'} gutterBottom>
             No results found for{' '}
             <span style={{ fontWeight: 'bold' }}>{query}</span>
           </Typography>
         ) : null}
-        {this.state.unexpectedSearchError || isAdBlockerEnabled ? (
+        {isError || isAdBlockerEnabled ? (
           <div data-test-id={'search-err-msg'}>
             <Typography variant={'body1'} gutterBottom>
               Unable to search at this time.
@@ -280,7 +170,7 @@ class SearchResults extends React.Component {
             Search something to start raising money for charity!
           </Typography>
         ) : null}
-        {queryInProgress ? null : (
+        {isQueryInProgress ? null : (
           <div id="search-results" className={classes.searchResultsContainer}>
             {mainResults.map(result => this.renderSearchResultItem(result))}
           </div>
@@ -297,7 +187,7 @@ class SearchResults extends React.Component {
               data-test-id={'pagination-previous'}
               className={classes.paginationButton}
               onClick={() => {
-                this.changePage(page - 1)
+                onPageChange(page - 1)
               }}
             >
               PREVIOUS
@@ -318,7 +208,7 @@ class SearchResults extends React.Component {
                 }),
               }}
               onClick={() => {
-                this.changePage(pageNum)
+                onPageChange(pageNum)
               }}
             >
               {pageNum}
@@ -329,7 +219,7 @@ class SearchResults extends React.Component {
               data-test-id={'pagination-next'}
               className={classes.paginationButton}
               onClick={() => {
-                this.changePage(page + 1)
+                onPageChange(page + 1)
               }}
             >
               NEXT
@@ -341,21 +231,21 @@ class SearchResults extends React.Component {
   }
 }
 
-SearchResults.propTypes = {
-  isAdBlockerEnabled: PropTypes.bool.isRequired,
-  query: PropTypes.string,
-  page: PropTypes.number,
-  onPageChange: PropTypes.func.isRequired,
+SearchResultsBing.propTypes = {
   classes: PropTypes.object.isRequired,
-  searchSource: PropTypes.string,
+  data: PropTypes.object,
+  isAdBlockerEnabled: PropTypes.bool.isRequired,
+  isEmptyQuery: PropTypes.bool.isRequired,
+  isError: PropTypes.bool.isRequired,
+  isQueryInProgress: PropTypes.bool.isRequired,
+  noSearchResults: PropTypes.bool.isRequired,
+  onPageChange: PropTypes.func.isRequired,
+  page: PropTypes.number.isRequired,
+  query: PropTypes.string.isRequired,
   style: PropTypes.object,
   theme: PropTypes.object.isRequired,
 }
 
-SearchResults.defaultProps = {
-  isAdBlockerEnabled: false,
-  page: 1,
-  style: {},
-}
+SearchResultsBing.defaultProps = {}
 
-export default withStyles(styles, { withTheme: true })(SearchResults)
+export default withStyles(styles, { withTheme: true })(SearchResultsBing)
