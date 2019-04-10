@@ -27,6 +27,10 @@ export const envVars = [
   { name: 'REACT_APP_SENTRY_DEBUG', optional: true },
   { name: 'REACT_APP_SENTRY_ENABLE_AUTO_BREADCRUMBS', optional: true },
   { name: 'REACT_APP_FEATURE_FLAG_SEARCH_PAGE_ENABLED', optional: true },
+  {
+    name: 'REACT_APP_FEATURE_FLAG_REDIRECT_SEARCH_TO_THIRD_PARTY',
+    optional: true,
+  },
   { name: 'REACT_APP_MEASURE_TIME_TO_INTERACTIVE', optional: true },
   // GraphQL / Lambda
   { name: 'GQL_LOGGER' },

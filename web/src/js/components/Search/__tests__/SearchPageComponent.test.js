@@ -8,7 +8,10 @@ import SearchIcon from '@material-ui/icons/Search'
 import Typography from '@material-ui/core/Typography'
 import Link from 'js/components/General/Link'
 import Button from '@material-ui/core/Button'
-import { isSearchPageEnabled } from 'js/utils/feature-flags'
+import {
+  isSearchPageEnabled,
+  shouldRedirectSearchToThirdParty,
+} from 'js/utils/feature-flags'
 import {
   adblockerWhitelistingForSearchURL,
   dashboardURL,
@@ -65,6 +68,7 @@ const getMockProps = () => ({
 
 beforeEach(() => {
   isSearchPageEnabled.mockReturnValue(true)
+  shouldRedirectSearchToThirdParty.mockReturnValue(false)
 })
 
 afterEach(() => {
@@ -99,6 +103,15 @@ describe('Search page component', () => {
     expect(toJson(wrapper)).toEqual('')
   })
 
+  it('renders no DOM elements when the third-party redirect is enabled', () => {
+    shouldRedirectSearchToThirdParty.mockReturnValue(true)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(toJson(wrapper)).toEqual('')
+  })
+
   it('redirects to the dashboard when the search page feature is not enabled', () => {
     isSearchPageEnabled.mockReturnValue(false)
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
@@ -106,6 +119,20 @@ describe('Search page component', () => {
     const mockProps = getMockProps()
     shallow(<SearchPageComponent {...mockProps} />).dive()
     expect(externalRedirect).toHaveBeenCalledWith(dashboardURL)
+  })
+
+  it('redirects to Google when the third-party redirect is enabled', () => {
+    shouldRedirectSearchToThirdParty.mockReturnValue(true)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location = {
+      search: '?q=yumtacos',
+    }
+    shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(externalRedirect).toHaveBeenCalledWith(
+      'https://www.google.com/search?q=yumtacos'
+    )
   })
 
   it('renders DOM elements when the search page feature is enabled', () => {
