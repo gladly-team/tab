@@ -111,25 +111,28 @@ const NewsSearchItem = props => {
             </p>
           </div>
         )}
-        {contractualRules.map((contractualRule, index) => {
-          return (
-            <p
-              key={index}
-              style={{
-                flexShrink: 0,
-                marginTop: 'auto',
-                marginBottom: 0,
-                fontSize: 13,
-                color: '#007526',
-                lineHeight: 1.5,
-                minHeight: 0,
-                minWidth: 0,
-              }}
-            >
-              {contractualRule.text}
-            </p>
-          )
-        })}
+        {// TODO: show provider if no contractual text
+        contractualRules
+          ? contractualRules.map((contractualRule, index) => {
+              return (
+                <p
+                  key={index}
+                  style={{
+                    flexShrink: 0,
+                    marginTop: 'auto',
+                    marginBottom: 0,
+                    fontSize: 13,
+                    color: '#007526',
+                    lineHeight: 1.5,
+                    minHeight: 0,
+                    minWidth: 0,
+                  }}
+                >
+                  {contractualRule.text}
+                </p>
+              )
+            })
+          : null}
       </div>
     </Paper>
   )
