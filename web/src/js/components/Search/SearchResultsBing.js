@@ -35,7 +35,6 @@ class SearchResultsBing extends React.Component {
     const {
       classes,
       data,
-      isAdBlockerEnabled,
       isEmptyQuery,
       isError,
       isQueryInProgress,
@@ -66,8 +65,7 @@ class SearchResultsBing extends React.Component {
       Math.min(MAX_PAGE + 1, Math.max(page + 4, MIN_PAGE + 8))
     )
 
-    const noResultsToDisplay =
-      isEmptyQuery || noSearchResults || isError || isAdBlockerEnabled
+    const noResultsToDisplay = isEmptyQuery || noSearchResults || isError
     return (
       <div
         className={classes.searchResultsParentContainer}
@@ -87,21 +85,19 @@ class SearchResultsBing extends React.Component {
             <span style={{ fontWeight: 'bold' }}>{query}</span>
           </Typography>
         ) : null}
-        {isError || isAdBlockerEnabled ? (
+        {isError ? (
           <div data-test-id={'search-err-msg'}>
             <Typography variant={'body1'} gutterBottom>
               Unable to search at this time.
             </Typography>
-            {isAdBlockerEnabled ? null : (
-              <Link
-                to={`https://www.google.com/search?q=${encodeURI(query)}`}
-                target="_top"
-              >
-                <Button color={'primary'} variant={'contained'} size={'small'}>
-                  Search Google
-                </Button>
-              </Link>
-            )}
+            <Link
+              to={`https://www.google.com/search?q=${encodeURI(query)}`}
+              target="_top"
+            >
+              <Button color={'primary'} variant={'contained'} size={'small'}>
+                Search Google
+              </Button>
+            </Link>
           </div>
         ) : isEmptyQuery ? (
           <Typography variant={'body1'} gutterBottom>
@@ -200,7 +196,6 @@ class SearchResultsBing extends React.Component {
 SearchResultsBing.propTypes = {
   classes: PropTypes.object.isRequired,
   data: PropTypes.object,
-  isAdBlockerEnabled: PropTypes.bool.isRequired,
   isEmptyQuery: PropTypes.bool.isRequired,
   isError: PropTypes.bool.isRequired,
   isQueryInProgress: PropTypes.bool.isRequired,

@@ -101,7 +101,7 @@ class SearchResultsQueryBing extends React.Component {
   }
 
   render() {
-    const { isAdBlockerEnabled, page, query } = this.props
+    const { page, query } = this.props
     const {
       noSearchResults,
       queryInProgress,
@@ -114,7 +114,6 @@ class SearchResultsQueryBing extends React.Component {
     return (
       <SearchResultsBing
         data={searchResultsData}
-        isAdBlockerEnabled={isAdBlockerEnabled}
         isEmptyQuery={isEmptyQuery}
         isError={unexpectedSearchError}
         isQueryInProgress={queryInProgress}
@@ -128,7 +127,6 @@ class SearchResultsQueryBing extends React.Component {
 }
 
 SearchResultsQueryBing.propTypes = {
-  isAdBlockerEnabled: PropTypes.bool.isRequired,
   query: PropTypes.string,
   page: PropTypes.number,
   onPageChange: PropTypes.func.isRequired,
@@ -136,7 +134,6 @@ SearchResultsQueryBing.propTypes = {
 }
 
 SearchResultsQueryBing.defaultProps = {
-  isAdBlockerEnabled: false,
   page: 1,
   style: {},
 }

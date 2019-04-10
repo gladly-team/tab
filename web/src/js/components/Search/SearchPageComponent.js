@@ -468,7 +468,6 @@ class SearchPage extends React.Component {
                   page: newPageIndex,
                 })
               }}
-              isAdBlockerEnabled={isAdBlockerEnabled}
               searchSource={searchSource}
               style={{
                 maxWidth: 600,
