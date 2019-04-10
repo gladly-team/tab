@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import Link from 'js/components/General/Link'
 import logger from 'js/utils/logger'
-import getMockBingSearchResults from 'js/components/Search/getMockBingSearchResults'
+import fetchBingSearchResults from 'js/components/Search/fetchBingSearchResults'
 import { isReactSnapClient } from 'js/utils/search-utils'
 import { getCurrentUser } from 'js/authentication/user'
 import LogSearchMutation from 'js/mutations/LogSearchMutation'
@@ -113,7 +113,7 @@ class SearchResults extends React.Component {
     })
 
     try {
-      const searchResults = await getMockBingSearchResults()
+      const searchResults = await fetchBingSearchResults(query)
       this.setState({
         searchResultsData: searchResults,
       })
