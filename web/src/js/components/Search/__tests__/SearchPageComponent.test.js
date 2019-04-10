@@ -19,7 +19,7 @@ import {
   searchBetaFeedback,
 } from 'js/navigation/navigation'
 import { externalRedirect } from 'js/navigation/utils'
-import SearchResultsBing from 'js/components/Search/SearchResultsBing'
+import SearchResultsQueryBing from 'js/components/Search/SearchResultsQueryBing'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import detectAdblocker from 'js/utils/detectAdblocker'
@@ -39,7 +39,7 @@ import ErrorBoundary from 'js/components/General/ErrorBoundary'
 jest.mock('js/utils/feature-flags')
 jest.mock('js/navigation/navigation')
 jest.mock('js/navigation/utils')
-jest.mock('js/components/Search/SearchResultsBing')
+jest.mock('js/components/Search/SearchResultsQueryBing')
 jest.mock('js/utils/detectAdblocker')
 jest.mock('js/utils/local-user-data-mgr')
 jest.mock('js/components/Logo/Logo')
@@ -201,7 +201,7 @@ describe('Search page component', () => {
       .default
     const mockProps = getMockProps()
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
-    expect(wrapper.find(SearchResultsBing).prop('style')).toHaveProperty(
+    expect(wrapper.find(SearchResultsQueryBing).prop('style')).toHaveProperty(
       'maxWidth',
       600
     )
@@ -289,7 +289,7 @@ describe('Search page component', () => {
     }
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
     const onPageChangeHandler = wrapper
-      .find(SearchResultsBing)
+      .find(SearchResultsQueryBing)
       .prop('onPageChange')
     onPageChangeHandler(7)
     expect(modifyURLParams).toHaveBeenCalledWith({
@@ -369,13 +369,13 @@ describe('Search page component', () => {
     expect(modifyURLParams).not.toHaveBeenCalled()
   })
 
-  it('passes the decoded query to the SearchResultsBing component', () => {
+  it('passes the decoded query to the SearchResultsQueryBing component', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
     mockProps.location.search = '?q=foo&another=thing'
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
-    expect(wrapper.find(SearchResultsBing).prop('query')).toEqual('foo')
+    expect(wrapper.find(SearchResultsQueryBing).prop('query')).toEqual('foo')
 
     // Update the search parameter.
     wrapper.setProps(
@@ -385,21 +385,21 @@ describe('Search page component', () => {
         },
       })
     )
-    expect(wrapper.find(SearchResultsBing).prop('query')).toEqual(
+    expect(wrapper.find(SearchResultsQueryBing).prop('query')).toEqual(
       'something here'
     )
   })
 
-  it('passes the page number to the SearchResultsBing component', () => {
+  it('passes the page number to the SearchResultsQueryBing component', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
     mockProps.location.search = '?q=foo&page=12'
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
-    expect(wrapper.find(SearchResultsBing).prop('page')).toBe(12)
+    expect(wrapper.find(SearchResultsQueryBing).prop('page')).toBe(12)
   })
 
-  it('passes "isAdBlockerEnabled = false" to the SearchResultsBing component', async () => {
+  it('passes "isAdBlockerEnabled = false" to the SearchResultsQueryBing component', async () => {
     expect.assertions(1)
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
@@ -407,12 +407,12 @@ describe('Search page component', () => {
     detectAdblocker.mockResolvedValue(false)
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
     await flushAllPromises()
-    expect(wrapper.find(SearchResultsBing).prop('isAdBlockerEnabled')).toBe(
-      false
-    )
+    expect(
+      wrapper.find(SearchResultsQueryBing).prop('isAdBlockerEnabled')
+    ).toBe(false)
   })
 
-  it('passes "isAdBlockerEnabled = true" to the SearchResultsBing component', async () => {
+  it('passes "isAdBlockerEnabled = true" to the SearchResultsQueryBing component', async () => {
     expect.assertions(1)
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
@@ -420,47 +420,47 @@ describe('Search page component', () => {
     detectAdblocker.mockResolvedValue(true)
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
     await flushAllPromises()
-    expect(wrapper.find(SearchResultsBing).prop('isAdBlockerEnabled')).toBe(
-      true
-    )
+    expect(
+      wrapper.find(SearchResultsQueryBing).prop('isAdBlockerEnabled')
+    ).toBe(true)
   })
 
-  it('passes "1" as the default page number to the SearchResultsBing component when the "page" URL param is not set', () => {
+  it('passes "1" as the default page number to the SearchResultsQueryBing component when the "page" URL param is not set', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
     mockProps.location.search = '?q=foo'
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
-    expect(wrapper.find(SearchResultsBing).prop('page')).toBe(1)
+    expect(wrapper.find(SearchResultsQueryBing).prop('page')).toBe(1)
   })
 
-  it('passes the search source to the SearchResultsBing component when the "page" URL param is set', () => {
+  it('passes the search source to the SearchResultsQueryBing component when the "page" URL param is set', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
     mockProps.location.search = '?q=foo&src=some-source'
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
-    expect(wrapper.find(SearchResultsBing).prop('searchSource')).toEqual(
+    expect(wrapper.find(SearchResultsQueryBing).prop('searchSource')).toEqual(
       'some-source'
     )
   })
 
-  it('passes null as the search source to the SearchResultsBing component when the "src" URL param is not set', () => {
+  it('passes null as the search source to the SearchResultsQueryBing component when the "src" URL param is not set', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
     mockProps.location.search = '?q=foo'
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
-    expect(wrapper.find(SearchResultsBing).prop('searchSource')).toBeNull()
+    expect(wrapper.find(SearchResultsQueryBing).prop('searchSource')).toBeNull()
   })
 
-  it('passes "self" as the "searchSource" the SearchResultsBing component when entering a new search on the page', () => {
+  it('passes "self" as the "searchSource" the SearchResultsQueryBing component when entering a new search on the page', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
     mockProps.location.search = ''
     const wrapper = mount(<SearchPageComponent {...mockProps} />)
-    expect(wrapper.find(SearchResultsBing).prop('searchSource')).toBeNull()
+    expect(wrapper.find(SearchResultsQueryBing).prop('searchSource')).toBeNull()
     const searchInput = wrapper
       .find(Input)
       .first()
@@ -468,18 +468,20 @@ describe('Search page component', () => {
     searchInput
       .simulate('change', { target: { value: 'register to vote' } })
       .simulate('keypress', { key: 'Enter' })
-    expect(wrapper.find(SearchResultsBing).prop('searchSource')).toEqual('self')
+    expect(wrapper.find(SearchResultsQueryBing).prop('searchSource')).toEqual(
+      'self'
+    )
   })
 
   // This is important for prerendering scripts for search results.
-  it('renders the SearchResultsBing component on mount even if there is no query', () => {
+  it('renders the SearchResultsQueryBing component on mount even if there is no query', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
     mockProps.location.search = ''
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
-    expect(wrapper.find(SearchResultsBing).exists()).toBe(true)
-    expect(wrapper.find(SearchResultsBing).prop('query')).toEqual('')
+    expect(wrapper.find(SearchResultsQueryBing).exists()).toBe(true)
+    expect(wrapper.find(SearchResultsQueryBing).prop('query')).toEqual('')
   })
 
   it('contains all the expected search category tabs', () => {
