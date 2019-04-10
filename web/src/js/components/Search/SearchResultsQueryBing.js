@@ -121,31 +121,32 @@ class SearchResultsQueryBing extends React.Component {
 
         // For each ranked item, get the actual data for that item.
         // https://github.com/Azure-Samples/cognitive-services-REST-api-samples/blob/master/Tutorials/Bing-Web-Search/public/js/script.js#L168
-        const newItems = rankingItems.map(itemRankingData => {
-          const typeName =
-            itemRankingData.answerType[0].toLowerCase() +
-            itemRankingData.answerType.slice(1)
-          // https://github.com/Azure-Samples/cognitive-services-REST-api-samples/blob/master/Tutorials/Bing-Web-Search/public/js/script.js#L172
-          const itemData = !isNil(itemRankingData.resultIndex)
-            ? // One result of the specified type (e.g., one webpage link)
-              get(data, `${typeName}.value[${itemRankingData.resultIndex}]`)
-            : // All results of the specified type (e.g., all videos)
-              get(data, `${typeName}.value`)
+        newData[sectionName] = rankingItems
+          .map(itemRankingData => {
+            const typeName =
+              itemRankingData.answerType[0].toLowerCase() +
+              itemRankingData.answerType.slice(1)
+            // https://github.com/Azure-Samples/cognitive-services-REST-api-samples/blob/master/Tutorials/Bing-Web-Search/public/js/script.js#L172
+            const itemData = !isNil(itemRankingData.resultIndex)
+              ? // One result of the specified type (e.g., one webpage link)
+                get(data, `${typeName}.value[${itemRankingData.resultIndex}]`)
+              : // All results of the specified type (e.g., all videos)
+                get(data, `${typeName}.value`)
 
-          // Return null if we couldn't find the result item data.
-          if (!(itemRankingData.answerType && itemData)) {
-            // console.error(`Couldn't find item data for:`, itemRankingData)
-            return null
-          }
-          return {
-            type: itemRankingData.answerType,
-            key: itemData.id
-              ? `${itemRankingData.answerType}-${itemData.id}`
-              : itemRankingData.answerType,
-            value: itemData,
-          }
-        })
-        newData[sectionName] = newItems
+            // Return null if we couldn't find the result item data.
+            if (!(itemRankingData.answerType && itemData)) {
+              return null
+            }
+            return {
+              type: itemRankingData.answerType,
+              key: itemData.id
+                ? `${itemRankingData.answerType}-${itemData.id}`
+                : itemRankingData.answerType,
+              value: itemData,
+            }
+          })
+          // Filter null item data.
+          .filter(itemData => !!itemData)
         return newData
       },
       {}
