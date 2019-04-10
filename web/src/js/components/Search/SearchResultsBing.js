@@ -7,9 +7,7 @@ import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import Link from 'js/components/General/Link'
-import NewsSearchResults from 'js/components/Search/NewsSearchResults'
-import WebPageSearchResult from 'js/components/Search/WebPageSearchResult'
-import sanitizeHtml from 'sanitize-html'
+import SearchResultItem from 'js/components/Search/SearchResultItem'
 
 const styles = theme => ({
   searchResultsParentContainer: {
@@ -32,67 +30,7 @@ const styles = theme => ({
   },
 })
 
-const stripHTML = html => {
-  return html
-    ? sanitizeHtml(html, {
-        allowedTags: [],
-        allowedAttributes: {},
-      })
-    : undefined
-}
-
 class SearchResultsBing extends React.Component {
-  renderSearchResultItem(itemRankingData) {
-    const { data } = this.props
-
-    // Get the data for this item.
-    // https://github.com/Azure-Samples/cognitive-services-REST-api-samples/blob/master/Tutorials/Bing-Web-Search/public/js/script.js#L168
-    const typeName =
-      itemRankingData.answerType[0].toLowerCase() +
-      itemRankingData.answerType.slice(1)
-    // https://github.com/Azure-Samples/cognitive-services-REST-api-samples/blob/master/Tutorials/Bing-Web-Search/public/js/script.js#L172
-    const itemDataRaw = !isNil(itemRankingData.resultIndex)
-      ? // One result of the specified type (e.g., one webpage link)
-        get(data, `${typeName}.value[${itemRankingData.resultIndex}]`)
-      : // All results of the specified type (e.g., all videos)
-        get(data, `${typeName}.value`)
-
-    // Return null if we couldn't find the result item data.
-    if (!itemDataRaw) {
-      // console.error(`Couldn't find item data for:`, itemRankingData)
-      return null
-    }
-
-    // Render a different component depending on the result type.
-    switch (itemRankingData.answerType) {
-      case 'WebPages': {
-        let webPageItem = Object.assign({}, itemDataRaw, {
-          displayUrl: stripHTML(itemDataRaw.displayUrl),
-          name: stripHTML(itemDataRaw.name),
-          snippet: stripHTML(itemDataRaw.snippet),
-        })
-        return <WebPageSearchResult key={webPageItem.id} item={webPageItem} />
-      }
-      case 'News': {
-        let newsItems = itemDataRaw.map(newsItem => {
-          return Object.assign({}, newsItem, {
-            description: stripHTML(newsItem.description),
-            displayUrl: stripHTML(newsItem.displayUrl),
-            name: stripHTML(newsItem.name),
-          })
-        })
-        if (!newsItems.length) {
-          console.error(`No news items found for:`, itemDataRaw)
-          return null
-        }
-        return <NewsSearchResults key={'news-results'} newsItems={newsItems} />
-      }
-      default: {
-        return null
-      }
-    }
-  }
-
   render() {
     const {
       classes,
@@ -172,7 +110,35 @@ class SearchResultsBing extends React.Component {
         ) : null}
         {isQueryInProgress ? null : (
           <div id="search-results" className={classes.searchResultsContainer}>
-            {mainResults.map(result => this.renderSearchResultItem(result))}
+            {mainResults.map(itemRankingData => {
+              // Get the data for this item.
+              // https://github.com/Azure-Samples/cognitive-services-REST-api-samples/blob/master/Tutorials/Bing-Web-Search/public/js/script.js#L168
+              const typeName =
+                itemRankingData.answerType[0].toLowerCase() +
+                itemRankingData.answerType.slice(1)
+              // https://github.com/Azure-Samples/cognitive-services-REST-api-samples/blob/master/Tutorials/Bing-Web-Search/public/js/script.js#L172
+              const itemData = !isNil(itemRankingData.resultIndex)
+                ? // One result of the specified type (e.g., one webpage link)
+                  get(data, `${typeName}.value[${itemRankingData.resultIndex}]`)
+                : // All results of the specified type (e.g., all videos)
+                  get(data, `${typeName}.value`)
+
+              // Return null if we couldn't find the result item data.
+              if (!(itemRankingData.answerType && itemData)) {
+                // console.error(`Couldn't find item data for:`, itemRankingData)
+                return null
+              }
+              const key = itemData.id
+                ? `${itemRankingData.answerType}-${itemData.id}`
+                : itemRankingData.answerType
+              return (
+                <SearchResultItem
+                  key={key}
+                  type={itemRankingData.answerType}
+                  itemData={itemData}
+                />
+              )
+            })}
           </div>
         )}
         <div
