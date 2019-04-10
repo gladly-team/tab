@@ -10,7 +10,10 @@ import Tab from '@material-ui/core/Tab'
 import Paper from '@material-ui/core/Paper'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
-import { isSearchPageEnabled } from 'js/utils/feature-flags'
+import {
+  isSearchPageEnabled,
+  shouldRedirectSearchToThirdParty,
+} from 'js/utils/feature-flags'
 import {
   adblockerWhitelistingForSearchURL,
   dashboardURL,
@@ -79,6 +82,7 @@ class SearchPage extends React.Component {
       isAdBlockerEnabled: false,
       query: '',
       searchFeatureEnabled: isSearchPageEnabled(),
+      searchRedirectToThirdParty: shouldRedirectSearchToThirdParty(),
       searchSource: null,
       searchText: '',
       mounted: false, // i.e. we've mounted to a real user, not pre-rendering
@@ -98,6 +102,12 @@ class SearchPage extends React.Component {
 
     // Wait until after mount to update prerendered state.
     const query = parseUrlSearchString(location.search).q || ''
+
+    // Redirect to Google if enabled.
+    if (this.state.searchRedirectToThirdParty) {
+      externalRedirect(`https://www.google.com/search?q=${encodeURI(query)}`)
+    }
+
     this.setState({
       // We always derive the query and page values URL parameter
       // values. We keep these in state so that we update the
@@ -195,6 +205,12 @@ class SearchPage extends React.Component {
     if (!this.state.searchFeatureEnabled) {
       return null
     }
+
+    // If redirecting to Google, don't render our page at all.
+    if (this.state.searchRedirectToThirdParty) {
+      return null
+    }
+
     return (
       <div
         data-test-id={'search-page'}
