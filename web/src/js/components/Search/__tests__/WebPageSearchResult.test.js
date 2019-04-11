@@ -24,7 +24,7 @@ describe('WebPageSearchResult', () => {
     const WebPageSearchResult = require('js/components/Search/WebPageSearchResult')
       .default
     const mockProps = getMockProps()
-    shallow(<WebPageSearchResult {...mockProps} />)
+    shallow(<WebPageSearchResult {...mockProps} />).dive()
   })
 
   it('returns null if the displayUrl is not provided', () => {
@@ -33,7 +33,7 @@ describe('WebPageSearchResult', () => {
       .default
     const mockProps = getMockProps()
     delete mockProps.item.displayUrl
-    const wrapper = shallow(<WebPageSearchResult {...mockProps} />)
+    const wrapper = shallow(<WebPageSearchResult {...mockProps} />).dive()
     expect(wrapper.html()).toBeNull()
   })
 
@@ -43,7 +43,7 @@ describe('WebPageSearchResult', () => {
       .default
     const mockProps = getMockProps()
     delete mockProps.item.name
-    const wrapper = shallow(<WebPageSearchResult {...mockProps} />)
+    const wrapper = shallow(<WebPageSearchResult {...mockProps} />).dive()
     expect(wrapper.html()).toBeNull()
   })
 
@@ -53,7 +53,7 @@ describe('WebPageSearchResult', () => {
       .default
     const mockProps = getMockProps()
     delete mockProps.item.snippet
-    const wrapper = shallow(<WebPageSearchResult {...mockProps} />)
+    const wrapper = shallow(<WebPageSearchResult {...mockProps} />).dive()
     expect(wrapper.html()).toBeNull()
   })
 
@@ -63,7 +63,7 @@ describe('WebPageSearchResult', () => {
       .default
     const mockProps = getMockProps()
     delete mockProps.item.url
-    const wrapper = shallow(<WebPageSearchResult {...mockProps} />)
+    const wrapper = shallow(<WebPageSearchResult {...mockProps} />).dive()
     expect(wrapper.html()).toBeNull()
   })
 })

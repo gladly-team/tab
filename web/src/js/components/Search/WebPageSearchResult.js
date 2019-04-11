@@ -1,10 +1,42 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { withStyles } from '@material-ui/core/styles'
+
+const styles = () => ({
+  container: {
+    fontFamily: 'arial, sans-serif',
+    marginBottom: 24,
+  },
+  title: {
+    fontFamily: 'Roboto, arial, sans-serif',
+    color: '#1a0dab',
+    margin: 0,
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    fontSize: 18,
+    fontWeight: 400,
+    lineHeight: 1.38,
+  },
+  displayUrl: {
+    fontSize: 13,
+    color: '#007526',
+    lineHeight: 1.5,
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
+  snippet: {
+    fontSize: 13,
+    color: '#505050',
+    overflowWrap: 'break-word',
+  },
+})
 
 // TODO: use class styles
 
 const WebPageSearchResult = props => {
   const {
+    classes,
     item: { displayUrl, name, snippet, url },
   } = props
 
@@ -13,54 +45,18 @@ const WebPageSearchResult = props => {
     return null
   }
   return (
-    <div
-      style={{
-        fontFamily: 'arial, sans-serif',
-        marginBottom: 24,
-      }}
-    >
+    <div className={classes.container}>
       <a href={url} style={{ textDecoration: 'none' }}>
-        <h3
-          style={{
-            fontFamily: 'Roboto, arial, sans-serif',
-            color: '#1a0dab',
-            margin: 0,
-            whiteSpace: 'nowrap',
-            textOverflow: 'ellipsis',
-            fontSize: 18,
-            fontWeight: 400,
-            lineHeight: 1.38,
-          }}
-        >
-          {name}
-        </h3>
+        <h3 className={classes.title}>{name}</h3>
       </a>
-      <div
-        style={{
-          fontSize: 13,
-          color: '#007526',
-          lineHeight: 1.5,
-          whiteSpace: 'nowrap',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-        }}
-      >
-        {displayUrl}
-      </div>
-      <div
-        style={{
-          fontSize: 13,
-          color: '#505050',
-          overflowWrap: 'break-word',
-        }}
-      >
-        {snippet}
-      </div>
+      <div className={classes.displayUrl}>{displayUrl}</div>
+      <div className={classes.snippet}>{snippet}</div>
     </div>
   )
 }
 
 WebPageSearchResult.propTypes = {
+  classes: PropTypes.object.isRequired,
   item: PropTypes.shape({
     deepLinks: PropTypes.array,
     displayUrl: PropTypes.string.isRequired,
@@ -73,4 +69,4 @@ WebPageSearchResult.propTypes = {
 
 WebPageSearchResult.defaultProps = {}
 
-export default WebPageSearchResult
+export default withStyles(styles)(WebPageSearchResult)
