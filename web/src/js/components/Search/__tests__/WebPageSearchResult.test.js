@@ -2,7 +2,10 @@
 
 import React from 'react'
 import { shallow } from 'enzyme'
-import { getMockBingWebPageResult } from 'js/utils/test-utils-search'
+import {
+  getMockBingWebPageResult,
+  getMockBingWebPageDeepLinkObject,
+} from 'js/utils/test-utils-search'
 
 // TODO: add tests
 
@@ -119,5 +122,30 @@ describe('WebPageSearchResult', () => {
         .first()
         .text()
     ).toEqual(mockProps.item.snippet)
+  })
+
+  it('creates no DeepLink elements when there are no deep links', () => {
+    const WebPageSearchResult = require('js/components/Search/WebPageSearchResult')
+      .default
+    const { DeepLink } = require('js/components/Search/WebPageSearchResult')
+    const mockProps = getMockProps()
+    mockProps.item.deepLinks = []
+    const wrapper = shallow(<WebPageSearchResult {...mockProps} />).dive()
+    expect(wrapper.find(DeepLink).exists()).toBe(false)
+  })
+
+  it('creates DeepLink elements when the deep links exist', () => {
+    const WebPageSearchResult = require('js/components/Search/WebPageSearchResult')
+      .default
+    const { DeepLink } = require('js/components/Search/WebPageSearchResult')
+    const mockProps = getMockProps()
+    mockProps.item.deepLinks = [
+      getMockBingWebPageDeepLinkObject(),
+      getMockBingWebPageDeepLinkObject(),
+      getMockBingWebPageDeepLinkObject(),
+    ]
+    const wrapper = shallow(<WebPageSearchResult {...mockProps} />).dive()
+    expect(wrapper.find(DeepLink).exists()).toBe(true)
+    expect(wrapper.find(DeepLink).length).toEqual(3)
   })
 })

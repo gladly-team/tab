@@ -11,18 +11,28 @@ export const getMockUniqueID = () => {
 }
 
 // https://docs.microsoft.com/en-us/rest/api/cognitiveservices/bing-web-api-v7-reference#webpage
+export const getMockBingWebPageDeepLinkObject = overrides => {
+  return Object.assign(
+    {},
+    {
+      name: 'This site is related',
+      url: getMockUniqueURL(),
+      urlPingSuffix: 'something',
+      snippet: 'This is <b>a snippet</b> related to the site.',
+    },
+    overrides
+  )
+}
+
+// https://docs.microsoft.com/en-us/rest/api/cognitiveservices/bing-web-api-v7-reference#webpage
 export const getMockBingWebPageResult = overrides => {
   return Object.assign(
     {},
     {
       dateLastCrawled: '2018-12-24T15:23:39',
       deepLinks: [
-        {
-          name: 'This site is related',
-          url: getMockUniqueURL(),
-          urlPingSuffix: 'something',
-          snippet: 'This is <b>a snippet</b> related to the site.',
-        },
+        getMockBingWebPageDeepLinkObject(),
+        getMockBingWebPageDeepLinkObject(),
       ],
       displayUrl: 'https://example.com',
       id: getMockUniqueID(),

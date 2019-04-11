@@ -29,6 +29,39 @@ describe('getMockUniqueID', () => {
   })
 })
 
+describe('getMockBingWebPageDeepLinkObject', () => {
+  it('includes the expected keys', () => {
+    const {
+      getMockBingWebPageDeepLinkObject,
+    } = require('js/utils/test-utils-search')
+    expect(Object.keys(getMockBingWebPageDeepLinkObject()).sort()).toEqual([
+      'name',
+      'snippet',
+      'url',
+      'urlPingSuffix',
+    ])
+  })
+
+  it('allows overriding values', () => {
+    const {
+      getMockBingWebPageDeepLinkObject,
+    } = require('js/utils/test-utils-search')
+    const defaultData = getMockBingWebPageDeepLinkObject()
+    expect(defaultData).toMatchObject({
+      name: 'This site is related',
+      snippet: 'This is <b>a snippet</b> related to the site.',
+    })
+    expect(
+      getMockBingWebPageDeepLinkObject({
+        name: 'A really nice link',
+      })
+    ).toMatchObject({
+      name: 'A really nice link',
+      snippet: 'This is <b>a snippet</b> related to the site.',
+    })
+  })
+})
+
 describe('getMockBingWebPageResult', () => {
   it('includes the expected keys', () => {
     const { getMockBingWebPageResult } = require('js/utils/test-utils-search')

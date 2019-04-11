@@ -47,7 +47,7 @@ const styles = () => ({
   },
 })
 
-const DeepLink = props => {
+export const DeepLink = props => {
   const {
     classes,
     item: { name, snippet, url },
@@ -99,8 +99,18 @@ const WebPageSearchResult = props => {
       <a href={url} className={classes.titleLink}>
         <h3 className={classes.title}>{name}</h3>
       </a>
-      <div className={classes.displayUrl}>{displayUrl}</div>
-      <div className={classes.snippet}>{snippet}</div>
+      <div
+        data-test-id={'search-result-webpage-url'}
+        className={classes.displayUrl}
+      >
+        {displayUrl}
+      </div>
+      <div
+        data-test-id={'search-result-webpage-snippet'}
+        className={classes.snippet}
+      >
+        {snippet}
+      </div>
       {deepLinks && deepLinks.length ? (
         <div className={classes.deepLinksContainer}>
           {deepLinks.map((deepLink, index) => {
