@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
+import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import { get } from 'lodash/object'
@@ -25,10 +26,88 @@ moment.updateLocale('en', {
     yy: '%dY',
   },
 })
-// TODO: use class styles
+
+const styles = () => ({
+  container: {
+    // Same as WebPageSearchResult
+    fontFamily: 'arial, sans-serif',
+    marginBottom: 26,
+  },
+  topStoriesLabel: {
+    marginBottom: 8,
+  },
+  newsItem: {
+    margin: '0px 12px 0px 0px',
+    minWidth: 200,
+    height: 254,
+    fontFamily: 'arial, sans-serif',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  newsItemImgAnchor: {
+    textDecoration: 'none',
+  },
+  newsItemImgContainer: {
+    flex: 1,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    overflow: 'hidden',
+    minHeight: 0,
+    minWidth: 0,
+  },
+  newsItemTextContainer: {
+    flex: 1,
+    padding: 16,
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  newsItemTitleAnchor: {
+    textDecoration: 'none',
+  },
+  newsItemTitleText: {
+    fontFamily: 'Roboto, arial, sans-serif',
+    color: '#1a0dab',
+    margin: 0,
+    fontSize: 16,
+    fontWeight: 400,
+    lineHeight: 1.38,
+    minHeight: 0,
+    minWidth: 0,
+  },
+  newsItemDescriptionContainer: {
+    flex: 1,
+    margin: 0,
+    minHeight: 0,
+    minWidth: 0,
+  },
+  newsItemDescription: {
+    fontSize: 13,
+    color: '#505050', // Same as WebPageSearchResult description
+    overflowWrap: 'break-word',
+    overflow: 'hidden',
+  },
+  attributionText: {
+    flexShrink: 0,
+    margin: 0,
+    fontSize: 13,
+    color: '#007526', // Same as WebPageSearchResult displayed URL
+    lineHeight: 1.5,
+    minHeight: 0,
+    minWidth: 0,
+  },
+  timeSincePublishedText: {
+    fontSize: 13,
+    lineHeight: 1.5,
+    color: 'rgba(0, 0, 0, 0.66)', // same color as search menu
+    margin: 0,
+  },
+})
 
 const NewsSearchItem = props => {
   const {
+    classes,
     item: {
       contractualRules,
       datePublished,
@@ -61,79 +140,22 @@ const NewsSearchItem = props => {
       ? moment(datePublished).fromNow()
       : null
   return (
-    <Paper
-      elevation={1}
-      style={{
-        margin: '0px 12px 0px 0px',
-        minWidth: 200,
-        height: 254,
-        fontFamily: 'arial, sans-serif',
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
+    <Paper elevation={1} className={classes.newsItem}>
       {image ? (
-        <a href={url} style={{ textDecoration: 'none' }}>
-          <div
-            style={{
-              flex: 1,
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: '100%',
-              overflow: 'hidden',
-              minHeight: 0,
-              minWidth: 0,
-            }}
-          >
+        <a href={url} className={classes.newsItemImgAnchor}>
+          <div className={classes.newsItemImgContainer}>
             <img src={image.thumbnail.contentUrl} alt="" />
           </div>
         </a>
       ) : null}
-      <div
-        style={{
-          flex: 1,
-          padding: 16,
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
-        <a href={url} style={{ textDecoration: 'none' }}>
-          <h3
-            style={{
-              fontFamily: 'Roboto, arial, sans-serif',
-              color: '#1a0dab',
-              margin: 0,
-              fontSize: 16,
-              fontWeight: 400,
-              lineHeight: 1.38,
-              minHeight: 0,
-              minWidth: 0,
-            }}
-          >
-            {title}
-          </h3>
+      <div className={classes.newsItemTextContainer}>
+        <a href={url} className={classes.newsItemTitleAnchor}>
+          <h3 className={classes.newsItemTitleText}>{title}</h3>
         </a>
         {// Only show the description if there is no image.
         image ? null : (
-          <div
-            style={{
-              flex: 1,
-              margin: 0,
-              minHeight: 0,
-              minWidth: 0,
-            }}
-          >
-            <p
-              style={{
-                fontSize: 13,
-                color: '#505050',
-                overflowWrap: 'break-word',
-                overflow: 'hidden',
-              }}
-            >
-              {subtitle}
-            </p>
+          <div className={classes.newsItemDescriptionContainer}>
+            <p className={classes.newsItemDescription}>{subtitle}</p>
           </div>
         )}
         <div style={{ display: 'flex', marginTop: 'auto' }}>
@@ -143,15 +165,7 @@ const NewsSearchItem = props => {
                 <p
                   data-test-id={'search-result-news-attribution'}
                   key={index}
-                  style={{
-                    flexShrink: 0,
-                    margin: 0,
-                    fontSize: 13,
-                    color: '#007526',
-                    lineHeight: 1.5,
-                    minHeight: 0,
-                    minWidth: 0,
-                  }}
+                  className={classes.attributionText}
                 >
                   {contractualRule.text}
                 </p>
@@ -161,15 +175,7 @@ const NewsSearchItem = props => {
             <p
               data-test-id={'search-result-news-attribution'}
               key={'attribution-text'}
-              style={{
-                flexShrink: 0,
-                margin: 0,
-                fontSize: 13,
-                color: '#007526',
-                lineHeight: 1.5,
-                minHeight: 0,
-                minWidth: 0,
-              }}
+              className={classes.attributionText}
             >
               {get(provider, '[0].name')}
             </p>
@@ -177,12 +183,7 @@ const NewsSearchItem = props => {
           {timeSincePublished ? (
             <p
               data-test-id={'search-result-news-time-since'}
-              style={{
-                fontSize: 13,
-                lineHeight: 1.5,
-                color: 'rgba(0, 0, 0, 0.66)', // same color as search menu
-                margin: 0,
-              }}
+              className={classes.timeSincePublishedText}
             >
               &nbsp;· {timeSincePublished}
             </p>
@@ -248,19 +249,14 @@ NewsSearchItem.propTypes = {
 NewsSearchItem.defaultProps = {}
 
 const NewsSearchResults = props => {
-  const { newsItems } = props
+  const { classes, newsItems } = props
 
   // Only display 3 news items. If we want to display more,
   // we need horizontal scrolling.
   const newsItemsToShow = newsItems.slice(0, 3)
   return (
-    <div
-      style={{
-        fontFamily: 'arial, sans-serif',
-        marginBottom: 24,
-      }}
-    >
-      <Typography variant={'h6'} style={{ marginBottom: 8 }}>
+    <div className={classes.container}>
+      <Typography variant={'h6'} className={classes.topStoriesLabel}>
         Top stories
       </Typography>
       <div
@@ -269,7 +265,11 @@ const NewsSearchResults = props => {
         }}
       >
         {newsItemsToShow.map(newsItem => (
-          <NewsSearchItem key={newsItem.url} item={newsItem} />
+          <NewsSearchItem
+            key={newsItem.url}
+            classes={classes}
+            item={newsItem}
+          />
         ))}
       </div>
     </div>
@@ -277,9 +277,10 @@ const NewsSearchResults = props => {
 }
 
 NewsSearchResults.propTypes = {
+  classes: PropTypes.object.isRequired,
   newsItems: PropTypes.arrayOf(NewsSearchItem.propTypes.item),
 }
 
 NewsSearchResults.defaultProps = {}
 
-export default NewsSearchResults
+export default withStyles(styles)(NewsSearchResults)
