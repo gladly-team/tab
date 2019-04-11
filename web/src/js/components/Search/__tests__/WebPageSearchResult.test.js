@@ -66,4 +66,58 @@ describe('WebPageSearchResult', () => {
     const wrapper = shallow(<WebPageSearchResult {...mockProps} />).dive()
     expect(wrapper.html()).toBeNull()
   })
+
+  it('displays the title in h3', () => {
+    const WebPageSearchResult = require('js/components/Search/WebPageSearchResult')
+      .default
+    const mockProps = getMockProps()
+    mockProps.item.name = 'Big Bad Wolf'
+    const wrapper = shallow(<WebPageSearchResult {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find('h3')
+        .first()
+        .text()
+    ).toEqual('Big Bad Wolf')
+  })
+
+  it('the parent of the title is an anchor tag with a link to the URL', () => {
+    const WebPageSearchResult = require('js/components/Search/WebPageSearchResult')
+      .default
+    const mockProps = getMockProps()
+    mockProps.item.url = 'https://example.com/foo/bar/'
+    const wrapper = shallow(<WebPageSearchResult {...mockProps} />).dive()
+    const title = wrapper.find('h3').first()
+    expect(title.parent().type()).toEqual('a')
+    expect(title.parent().prop('href')).toEqual('https://example.com/foo/bar/')
+  })
+
+  it('displays the page URL', () => {
+    const WebPageSearchResult = require('js/components/Search/WebPageSearchResult')
+      .default
+    const mockProps = getMockProps()
+    mockProps.item.displayUrl = 'https://some.example.com'
+    const wrapper = shallow(<WebPageSearchResult {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find('[data-test-id="search-result-webpage-url"]')
+        .first()
+        .text()
+    ).toEqual('https://some.example.com')
+  })
+
+  it('displays the page snippet', () => {
+    const WebPageSearchResult = require('js/components/Search/WebPageSearchResult')
+      .default
+    const mockProps = getMockProps()
+    mockProps.item.snippet =
+      'A wolf dresses up like a grandma in this thrilling tale.'
+    const wrapper = shallow(<WebPageSearchResult {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find('[data-test-id="search-result-webpage-snippet"]')
+        .first()
+        .text()
+    ).toEqual(mockProps.item.snippet)
+  })
 })
