@@ -2,23 +2,23 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
+import { get } from 'lodash/object'
 
 // TODO: use class styles
 
 const NewsSearchItem = props => {
   const {
     item: {
-      // eslint-disable-next-line no-unused-vars
-      category,
       contractualRules,
-      // eslint-disable-next-line no-unused-vars
-      datePublished,
+      // datePublished,
       description,
       image,
       name,
+      provider,
       url,
     },
   } = props
+  // console.log('news item', props.item)
 
   // If the title or description are too long, slice them
   // and add ellipses.
@@ -111,28 +111,45 @@ const NewsSearchItem = props => {
             </p>
           </div>
         )}
-        {// TODO: show provider if no contractual text
-        contractualRules
-          ? contractualRules.map((contractualRule, index) => {
-              return (
-                <p
-                  key={index}
-                  style={{
-                    flexShrink: 0,
-                    marginTop: 'auto',
-                    marginBottom: 0,
-                    fontSize: 13,
-                    color: '#007526',
-                    lineHeight: 1.5,
-                    minHeight: 0,
-                    minWidth: 0,
-                  }}
-                >
-                  {contractualRule.text}
-                </p>
-              )
-            })
-          : null}
+        {contractualRules ? (
+          contractualRules.map((contractualRule, index) => {
+            return (
+              <p
+                data-test-id={'search-result-news-attribution'}
+                key={index}
+                style={{
+                  flexShrink: 0,
+                  marginTop: 'auto',
+                  marginBottom: 0,
+                  fontSize: 13,
+                  color: '#007526',
+                  lineHeight: 1.5,
+                  minHeight: 0,
+                  minWidth: 0,
+                }}
+              >
+                {contractualRule.text}
+              </p>
+            )
+          })
+        ) : get(provider, '[0].name') ? (
+          <p
+            data-test-id={'search-result-news-attribution'}
+            key={'attribution-text'}
+            style={{
+              flexShrink: 0,
+              marginTop: 'auto',
+              marginBottom: 0,
+              fontSize: 13,
+              color: '#007526',
+              lineHeight: 1.5,
+              minHeight: 0,
+              minWidth: 0,
+            }}
+          >
+            {get(provider, '[0].name')}
+          </p>
+        ) : null}
       </div>
     </Paper>
   )
@@ -150,7 +167,7 @@ NewsSearchItem.propTypes = {
     datePublished: PropTypes.string,
     description: PropTypes.string,
     headline: PropTypes.bool,
-    id: PropTypes.string.isRequired,
+    id: PropTypes.string, // may not exist
     image: PropTypes.shape({
       thumbnail: PropTypes.shape({
         contentUrl: PropTypes.string,
@@ -164,6 +181,17 @@ NewsSearchItem.propTypes = {
       })
     ),
     name: PropTypes.string.isRequired,
+    provider: PropTypes.arrayOf(
+      PropTypes.shape({
+        _type: PropTypes.string,
+        name: PropTypes.string,
+        image: PropTypes.shape({
+          thumbnail: PropTypes.shape({
+            contentUrl: PropTypes.string,
+          }),
+        }),
+      })
+    ),
     url: PropTypes.string.isRequired,
     video: PropTypes.shape({
       allowHttpsEmbed: PropTypes.bool,
