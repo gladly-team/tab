@@ -120,6 +120,8 @@ const NewsSearchItem = props => {
   } = props
   // console.log('news item', props.item)
 
+  // TODO: we should be smarter and slice between words.
+  //   Create a util for this.
   // If the title or description are too long, slice them
   // and add ellipses.
   const MAX_DESC_CHARS = 125

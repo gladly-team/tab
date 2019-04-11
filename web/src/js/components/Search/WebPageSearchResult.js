@@ -53,6 +53,8 @@ export const DeepLink = props => {
     item: { name, snippet, url },
   } = props
 
+  // TODO: we should be smarter and slice between words.
+  //   Create a util for this.
   // If the title or snippet are too long, slice them
   // and add ellipses.
   const MAX_TITLE_CHARS = 28
