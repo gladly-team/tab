@@ -1,16 +1,37 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import moment from 'moment'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import { get } from 'lodash/object'
 
+// Make "time from" text much shorter:
+// https://github.com/moment/moment/issues/2781#issuecomment-160739129
+moment.locale('en', {
+  relativeTime: {
+    future: 'in %s',
+    past: '%s',
+    s: '%dm',
+    ss: '%ss',
+    m: '1%dm',
+    mm: '%dm',
+    h: '1%dh',
+    hh: '%dh',
+    d: '1%dd',
+    dd: '%dd',
+    M: '1%dM',
+    MM: '%dM',
+    y: '1%dY',
+    yy: '%dY',
+  },
+})
 // TODO: use class styles
 
 const NewsSearchItem = props => {
   const {
     item: {
       contractualRules,
-      // datePublished,
+      datePublished,
       description,
       image,
       name,
@@ -33,8 +54,12 @@ const NewsSearchItem = props => {
       ? `${name.slice(0, MAX_TITLE_CHARS)} ...`
       : name
 
-  // TODO
-  // const timeSincePublished = datePublished
+  // TODO: flexbox + ellipses for organization name
+
+  const timeSincePublished =
+    datePublished && moment(datePublished).isValid()
+      ? moment(datePublished).fromNow()
+      : null
   return (
     <Paper
       elevation={1}
@@ -111,45 +136,58 @@ const NewsSearchItem = props => {
             </p>
           </div>
         )}
-        {contractualRules ? (
-          contractualRules.map((contractualRule, index) => {
-            return (
-              <p
-                data-test-id={'search-result-news-attribution'}
-                key={index}
-                style={{
-                  flexShrink: 0,
-                  marginTop: 'auto',
-                  marginBottom: 0,
-                  fontSize: 13,
-                  color: '#007526',
-                  lineHeight: 1.5,
-                  minHeight: 0,
-                  minWidth: 0,
-                }}
-              >
-                {contractualRule.text}
-              </p>
-            )
-          })
-        ) : get(provider, '[0].name') ? (
-          <p
-            data-test-id={'search-result-news-attribution'}
-            key={'attribution-text'}
-            style={{
-              flexShrink: 0,
-              marginTop: 'auto',
-              marginBottom: 0,
-              fontSize: 13,
-              color: '#007526',
-              lineHeight: 1.5,
-              minHeight: 0,
-              minWidth: 0,
-            }}
-          >
-            {get(provider, '[0].name')}
-          </p>
-        ) : null}
+        <div style={{ display: 'flex', marginTop: 'auto' }}>
+          {contractualRules ? (
+            contractualRules.map((contractualRule, index) => {
+              return (
+                <p
+                  data-test-id={'search-result-news-attribution'}
+                  key={index}
+                  style={{
+                    flexShrink: 0,
+                    margin: 0,
+                    fontSize: 13,
+                    color: '#007526',
+                    lineHeight: 1.5,
+                    minHeight: 0,
+                    minWidth: 0,
+                  }}
+                >
+                  {contractualRule.text}
+                </p>
+              )
+            })
+          ) : get(provider, '[0].name') ? (
+            <p
+              data-test-id={'search-result-news-attribution'}
+              key={'attribution-text'}
+              style={{
+                flexShrink: 0,
+                margin: 0,
+                fontSize: 13,
+                color: '#007526',
+                lineHeight: 1.5,
+                minHeight: 0,
+                minWidth: 0,
+              }}
+            >
+              {get(provider, '[0].name')}
+            </p>
+          ) : null}
+          {timeSincePublished ? (
+            <p
+              data-test-id={'search-result-news-time-since'}
+              style={{
+                fontSize: 13,
+                lineHeight: 1.5,
+                color: 'rgba(0, 0, 0, 0.66)', // same color as search menu
+                margin: 0,
+              }}
+            >
+              &nbsp;· {timeSincePublished}
+            </p>
+          ) : null}
+        </div>
       </div>
     </Paper>
   )
@@ -164,10 +202,10 @@ NewsSearchItem.propTypes = {
         text: PropTypes.string,
       })
     ),
-    datePublished: PropTypes.string,
+    datePublished: PropTypes.string, // might not exist
     description: PropTypes.string,
     headline: PropTypes.bool,
-    id: PropTypes.string, // may not exist
+    id: PropTypes.string, // might not exist
     image: PropTypes.shape({
       thumbnail: PropTypes.shape({
         contentUrl: PropTypes.string,
