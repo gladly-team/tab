@@ -111,3 +111,64 @@ describe('getMockBingWebPageResult', () => {
     })
   })
 })
+
+describe('getMockBingNewsArticleResult', () => {
+  it('includes the expected keys', () => {
+    const {
+      getMockBingNewsArticleResult,
+    } = require('js/utils/test-utils-search')
+    expect(Object.keys(getMockBingNewsArticleResult()).sort()).toEqual([
+      'category',
+      'clusteredArticles',
+      'contractualRules',
+      'datePublished',
+      'description',
+      'headline',
+      'id',
+      'image',
+      'mentions',
+      'name',
+      'provider',
+      'url',
+      'video',
+    ])
+  })
+
+  it('generates unique IDs for each mock news article', () => {
+    const {
+      getMockBingNewsArticleResult,
+    } = require('js/utils/test-utils-search')
+    expect(getMockBingNewsArticleResult().id).not.toEqual(
+      getMockBingNewsArticleResult().id
+    )
+  })
+
+  it('generates unique URLs for each mock news article', () => {
+    const {
+      getMockBingNewsArticleResult,
+    } = require('js/utils/test-utils-search')
+    expect(getMockBingNewsArticleResult().url).not.toEqual(
+      getMockBingNewsArticleResult().url
+    )
+  })
+
+  it('allows overriding values', () => {
+    const {
+      getMockBingNewsArticleResult,
+    } = require('js/utils/test-utils-search')
+    const defaultData = getMockBingNewsArticleResult()
+    expect(defaultData).toMatchObject({
+      datePublished: '2018-12-24T15:23:39',
+    })
+    expect(
+      getMockBingNewsArticleResult({
+        url: 'https://another-example.com/other-news/',
+        name: 'Now this is what I call clickbait!',
+      })
+    ).toMatchObject({
+      datePublished: '2018-12-24T15:23:39', // did not change
+      url: 'https://another-example.com/other-news/',
+      name: 'Now this is what I call clickbait!',
+    })
+  })
+})

@@ -44,3 +44,56 @@ export const getMockBingWebPageResult = overrides => {
     overrides
   )
 }
+
+// https://docs.microsoft.com/en-us/rest/api/cognitiveservices/bing-news-api-v7-reference#newsarticle
+export const getMockBingNewsArticleResult = overrides => {
+  return Object.assign(
+    {},
+    {
+      category: 'Politics',
+      clusteredArticles: undefined,
+      contractualRules: [
+        {
+          _type: 'ContractualRules/TextAttribution',
+          text: 'A Good News Site',
+        },
+      ],
+      datePublished: '2018-12-24T15:23:39',
+      description:
+        'Something <b>truly incredible</b> and newsworthy happened! Wow. You cannot miss this article.',
+      headline: undefined,
+      id: getMockUniqueID(),
+      image: {
+        contentUrl: 'https://media.example.com/foo.png',
+        thumbnail: {
+          contentUrl: 'https://www.bing.com/some-url/',
+          width: 700,
+          height: 466,
+        },
+      },
+      mentions: [
+        {
+          name: 'New York City',
+        },
+        {
+          name: 'Madonna',
+        },
+      ],
+      name: 'An <b>Incredible</b> Event in NYC',
+      provider: [
+        {
+          _type: 'Organization',
+          name: 'A Good News Site',
+          image: {
+            thumbnail: {
+              contentUrl: 'https://www.bing.com/some-image-url/',
+            },
+          },
+        },
+      ],
+      url: getMockUniqueURL(),
+      video: undefined,
+    },
+    overrides
+  )
+}
