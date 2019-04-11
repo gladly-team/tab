@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core/styles'
 const styles = () => ({
   container: {
     fontFamily: 'arial, sans-serif',
-    marginBottom: 24,
+    marginBottom: 26,
   },
   title: {
     fontFamily: 'Roboto, arial, sans-serif',
@@ -20,13 +20,14 @@ const styles = () => ({
   displayUrl: {
     fontSize: 13,
     color: '#007526',
-    lineHeight: 1.5,
+    lineHeight: 1.56,
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
   },
   snippet: {
     fontSize: 13,
+    lineHeight: 1.5,
     color: '#505050',
     overflowWrap: 'break-word',
   },
