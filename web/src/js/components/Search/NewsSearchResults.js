@@ -7,7 +7,7 @@ import { get } from 'lodash/object'
 
 // Make "time from" text much shorter:
 // https://github.com/moment/moment/issues/2781#issuecomment-160739129
-moment.locale('en', {
+moment.updateLocale('en', {
   relativeTime: {
     future: 'in %s',
     past: '%s',
