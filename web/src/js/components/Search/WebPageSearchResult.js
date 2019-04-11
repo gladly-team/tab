@@ -117,6 +117,8 @@ const WebPageSearchResult = props => {
           className={classes.deepLinksContainer}
         >
           {deepLinks.map((deepLink, index) => {
+            // TODO: if most don't have a snippet, make them small links
+            //   (see earlier commit for styling).
             return (
               <DeepLink key={deepLink.url} classes={classes} item={deepLink} />
             )
