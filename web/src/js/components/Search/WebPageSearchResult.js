@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
-import CircleIcon from '@material-ui/icons/Lens'
 
 const styles = () => ({
   container: {
@@ -38,27 +37,52 @@ const styles = () => ({
   deepLinksContainer: {
     display: 'flex',
     flexWrap: 'wrap',
-    marginTop: 2,
-  },
-  deepLinkParent: {
-    display: 'flex',
-    alignItems: 'center',
+    justifyContent: 'flex-start',
+    paddingLeft: 0,
   },
   deepLink: {
-    color: '#1a0dab',
-    fontSize: 13,
-    lineHeight: 1.5,
-    textDecoration: 'none',
-  },
-  deepLinkDivider: {
-    color: 'rgba(0, 0, 0, 0.66)',
-    width: 3,
-    fontSize: 10,
-    margin: '0px 8px',
+    flex: '42%',
+    maxWidth: '42%',
+    padding: '10px 24px',
   },
 })
 
-// TODO: use class styles
+const DeepLink = props => {
+  const {
+    classes,
+    item: { name, snippet, url },
+  } = props
+
+  // If the title or snippet are too long, slice them
+  // and add ellipses.
+  const MAX_TITLE_CHARS = 24
+  const MAX_DESC_CHARS = 76
+  const title =
+    name.length > MAX_TITLE_CHARS
+      ? `${name.slice(0, MAX_TITLE_CHARS)} ...`
+      : name
+  const description =
+    snippet && snippet.length > MAX_DESC_CHARS
+      ? `${snippet.slice(0, MAX_DESC_CHARS)} ...`
+      : snippet
+  return (
+    <div className={classes.deepLink}>
+      <a href={url} className={classes.titleLink}>
+        <h3 className={classes.title}>{title}</h3>
+      </a>
+      {snippet ? <div className={classes.snippet}>{description}</div> : null}
+    </div>
+  )
+}
+
+DeepLink.propTypes = {
+  classes: PropTypes.object.isRequired,
+  item: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    snippet: PropTypes.string,
+    url: PropTypes.string.isRequired,
+  }).isRequired,
+}
 
 const WebPageSearchResult = props => {
   const {
@@ -81,14 +105,7 @@ const WebPageSearchResult = props => {
         <div className={classes.deepLinksContainer}>
           {deepLinks.map((deepLink, index) => {
             return (
-              <div key={deepLink.url} className={classes.deepLinkParent}>
-                <a href={deepLink.url} className={classes.deepLink}>
-                  {deepLink.name}
-                </a>
-                {index < deepLinks.length - 1 ? (
-                  <CircleIcon className={classes.deepLinkDivider} />
-                ) : null}
-              </div>
+              <DeepLink key={deepLink.url} classes={classes} item={deepLink} />
             )
           })}
         </div>
