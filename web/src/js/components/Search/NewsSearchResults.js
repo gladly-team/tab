@@ -141,6 +141,7 @@ const NewsSearchItem = props => {
 NewsSearchItem.propTypes = {
   item: PropTypes.shape({
     category: PropTypes.string,
+    clusteredArticles: PropTypes.array,
     contractualRules: PropTypes.arrayOf(
       PropTypes.shape({
         text: PropTypes.string,
@@ -148,6 +149,8 @@ NewsSearchItem.propTypes = {
     ),
     datePublished: PropTypes.string,
     description: PropTypes.string,
+    headline: PropTypes.bool,
+    id: PropTypes.string.isRequired,
     image: PropTypes.shape({
       thumbnail: PropTypes.shape({
         contentUrl: PropTypes.string,
@@ -155,8 +158,24 @@ NewsSearchItem.propTypes = {
         width: PropTypes.number,
       }),
     }),
-    name: PropTypes.string,
-    url: PropTypes.string,
+    mentions: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string,
+      })
+    ),
+    name: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired,
+    video: PropTypes.shape({
+      allowHttpsEmbed: PropTypes.bool,
+      embedHtml: PropTypes.string,
+      motionThumbnailUrl: PropTypes.string,
+      name: PropTypes.string,
+      thumbnail: PropTypes.shape({
+        height: PropTypes.number,
+        width: PropTypes.number,
+      }),
+      thumbnailUrl: PropTypes.string,
+    }),
   }).isRequired,
 }
 

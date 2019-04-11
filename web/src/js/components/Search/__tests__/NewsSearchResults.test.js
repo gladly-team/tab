@@ -2,20 +2,12 @@
 
 import React from 'react'
 import { shallow } from 'enzyme'
+import { getMockBingNewsArticleResult } from 'js/utils/test-utils-search'
 
 // TODO: add tests
 
 const getMockProps = () => ({
-  newsItems: [
-    {
-      some: 'data',
-      url: 'https://example.com/foo/',
-    },
-    {
-      some: 'other-data',
-      url: 'https://example.com/thing/',
-    },
-  ],
+  newsItems: [getMockBingNewsArticleResult(), getMockBingNewsArticleResult()],
 })
 
 beforeEach(() => {
