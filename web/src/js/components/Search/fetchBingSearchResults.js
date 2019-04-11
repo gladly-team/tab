@@ -9,6 +9,9 @@ const endpoint = 'https://dev-search-api.gladly.io/api/query'
  * @return {Object}
  */
 const fetchBingSearchResults = async (query = null) => {
+  if (!query) {
+    throw new Error(`Search query must be a non-empty string.`)
+  }
   if (
     // TODO: add this back before deploying to master.
     // process.env.NODE_ENV === 'development' &&
