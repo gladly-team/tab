@@ -5,9 +5,13 @@ import PropTypes from 'prop-types'
 
 const WebPageSearchResult = props => {
   const {
-    // eslint-disable-next-line no-unused-vars
-    item: { deepLinks, displayUrl, name, snippet, url },
+    item: { displayUrl, name, snippet, url },
   } = props
+
+  // If any required props are missing, don't render anything.
+  if (!(displayUrl && name && snippet && url)) {
+    return null
+  }
   return (
     <div
       style={{
@@ -59,11 +63,11 @@ const WebPageSearchResult = props => {
 WebPageSearchResult.propTypes = {
   item: PropTypes.shape({
     deepLinks: PropTypes.array,
-    displayUrl: PropTypes.string,
+    displayUrl: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
-    name: PropTypes.string,
-    snippet: PropTypes.string,
-    url: PropTypes.string,
+    name: PropTypes.string.isRequired,
+    snippet: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired,
   }).isRequired,
 }
 
