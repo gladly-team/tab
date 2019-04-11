@@ -130,7 +130,14 @@ const WebPageSearchResult = props => {
 WebPageSearchResult.propTypes = {
   classes: PropTypes.object.isRequired,
   item: PropTypes.shape({
-    deepLinks: PropTypes.array,
+    deepLinks: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        url: PropTypes.string.isRequired,
+        urlPingSuffix: PropTypes.string,
+        snippet: PropTypes.string,
+      })
+    ),
     displayUrl: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
