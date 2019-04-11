@@ -178,6 +178,12 @@ class SearchResultsQueryBing extends React.Component {
       searchResultsData
     )
 
+    // console.log('DATA:')
+    // console.log(searchResultsData)
+    // console.log('RESTRUCTURED DATA:')
+    // console.log(restructuredData)
+    // console.log('============')
+
     // Whether there are no search results for whatever reason.
     const isEmptyQuery = this.state.mounted && !query
     return (
