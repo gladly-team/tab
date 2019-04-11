@@ -55,7 +55,7 @@ export const DeepLink = props => {
 
   // If the title or snippet are too long, slice them
   // and add ellipses.
-  const MAX_TITLE_CHARS = 24
+  const MAX_TITLE_CHARS = 28
   const MAX_DESC_CHARS = 76
   const title =
     name.length > MAX_TITLE_CHARS
@@ -112,7 +112,10 @@ const WebPageSearchResult = props => {
         {snippet}
       </div>
       {deepLinks && deepLinks.length ? (
-        <div className={classes.deepLinksContainer}>
+        <div
+          data-test-id={'search-result-webpage-deep-link-container'}
+          className={classes.deepLinksContainer}
+        >
           {deepLinks.map((deepLink, index) => {
             return (
               <DeepLink key={deepLink.url} classes={classes} item={deepLink} />

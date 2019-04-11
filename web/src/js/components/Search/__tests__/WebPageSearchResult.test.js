@@ -1,13 +1,11 @@
 /* eslint-env jest */
 
 import React from 'react'
-import { shallow } from 'enzyme'
+import { mount, shallow } from 'enzyme'
 import {
   getMockBingWebPageResult,
   getMockBingWebPageDeepLinkObject,
 } from 'js/utils/test-utils-search'
-
-// TODO: add tests
 
 const getMockProps = () => ({
   item: getMockBingWebPageResult(),
@@ -84,7 +82,7 @@ describe('WebPageSearchResult', () => {
     ).toEqual('Big Bad Wolf')
   })
 
-  it('the parent of the title is an anchor tag with a link to the URL', () => {
+  it('creates an anchor tag as the parent of the title, with a link to the URL', () => {
     const WebPageSearchResult = require('js/components/Search/WebPageSearchResult')
       .default
     const mockProps = getMockProps()
@@ -147,5 +145,122 @@ describe('WebPageSearchResult', () => {
     const wrapper = shallow(<WebPageSearchResult {...mockProps} />).dive()
     expect(wrapper.find(DeepLink).exists()).toBe(true)
     expect(wrapper.find(DeepLink).length).toEqual(3)
+  })
+
+  it('[deep link] dislays the expected deep link title', () => {
+    const WebPageSearchResult = require('js/components/Search/WebPageSearchResult')
+      .default
+    const mockProps = getMockProps()
+    mockProps.item.deepLinks = [
+      getMockBingWebPageDeepLinkObject({
+        name: 'I am a deep link!',
+      }),
+    ]
+    const wrapper = mount(<WebPageSearchResult {...mockProps} />)
+    const deepLinkContainer = wrapper.find(
+      '[data-test-id="search-result-webpage-deep-link-container"]'
+    )
+    expect(
+      deepLinkContainer
+        .find('h3')
+        .first()
+        .text()
+    ).toEqual('I am a deep link!')
+  })
+
+  it('[deep link] truncates the deep link title if it is long', () => {
+    const WebPageSearchResult = require('js/components/Search/WebPageSearchResult')
+      .default
+    const mockProps = getMockProps()
+    mockProps.item.deepLinks = [
+      getMockBingWebPageDeepLinkObject({
+        name:
+          'I am a deep link title, but I am a bit too long for this world :(',
+      }),
+    ]
+    const wrapper = mount(<WebPageSearchResult {...mockProps} />)
+    const deepLinkContainer = wrapper.find(
+      '[data-test-id="search-result-webpage-deep-link-container"]'
+    )
+    expect(
+      deepLinkContainer
+        .find('h3')
+        .first()
+        .text()
+    ).toEqual('I am a deep link title, but  ...')
+  })
+
+  it('[deep link] creates an anchor tag as the parent of the title, with a link to the URL', () => {
+    const WebPageSearchResult = require('js/components/Search/WebPageSearchResult')
+      .default
+    const mockProps = getMockProps()
+    mockProps.item.deepLinks = [
+      getMockBingWebPageDeepLinkObject({
+        url: 'https://example.com/deep-linky/',
+      }),
+    ]
+    const wrapper = mount(<WebPageSearchResult {...mockProps} />)
+    const deepLinkContainer = wrapper.find(
+      '[data-test-id="search-result-webpage-deep-link-container"]'
+    )
+    expect(
+      deepLinkContainer
+        .find('h3')
+        .first()
+        .parent()
+        .type()
+    ).toEqual('a')
+    expect(
+      deepLinkContainer
+        .find('h3')
+        .first()
+        .parent()
+        .prop('href')
+    ).toEqual('https://example.com/deep-linky/')
+  })
+
+  it('[deep link] dislays the snippet', () => {
+    const WebPageSearchResult = require('js/components/Search/WebPageSearchResult')
+      .default
+    const mockProps = getMockProps()
+    mockProps.item.deepLinks = [
+      getMockBingWebPageDeepLinkObject({
+        snippet: 'I am a deep link snippet.',
+      }),
+    ]
+    const wrapper = mount(<WebPageSearchResult {...mockProps} />)
+    const deepLinkContainer = wrapper.find(
+      '[data-test-id="search-result-webpage-deep-link-container"]'
+    )
+    expect(
+      deepLinkContainer
+        .find('div')
+        .findWhere(elem => elem.text() === 'I am a deep link snippet.')
+        .exists()
+    ).toBe(true)
+  })
+
+  it('[deep link] truncates the snippet if it is long', () => {
+    const WebPageSearchResult = require('js/components/Search/WebPageSearchResult')
+      .default
+    const mockProps = getMockProps()
+    mockProps.item.deepLinks = [
+      getMockBingWebPageDeepLinkObject({
+        snippet:
+          'I am a deep link snippet. However, I am quite long, which means they will cut me off with some ellipses, I know it!',
+      }),
+    ]
+    const wrapper = mount(<WebPageSearchResult {...mockProps} />)
+    const deepLinkContainer = wrapper.find(
+      '[data-test-id="search-result-webpage-deep-link-container"]'
+    )
+    expect(
+      deepLinkContainer
+        .find('div')
+        .at(2)
+        .text()
+    ).toEqual(
+      'I am a deep link snippet. However, I am quite long, which means they will cu ...'
+    )
   })
 })
