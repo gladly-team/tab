@@ -27,7 +27,7 @@ const NewsSearchItem = props => {
   const subtitle =
     description.length > MAX_DESC_CHARS
       ? `${description.slice(0, MAX_DESC_CHARS)} ...`
-      : name
+      : description
   const title =
     name.length > MAX_TITLE_CHARS
       ? `${name.slice(0, MAX_TITLE_CHARS)} ...`
