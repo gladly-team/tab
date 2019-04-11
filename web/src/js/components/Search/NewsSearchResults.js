@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import { get } from 'lodash/object'
+import { getBingThumbnailURLToFillDimensions } from 'js/utils/search-utils'
 
 // Make "time from" text much shorter:
 // https://github.com/moment/moment/issues/2781#issuecomment-160739129
@@ -53,6 +54,7 @@ const styles = () => ({
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
+    maxHeight: 100,
     overflow: 'hidden',
     minHeight: 0,
     minWidth: 0,
@@ -146,7 +148,20 @@ const NewsSearchItem = props => {
       {image ? (
         <a href={url} className={classes.newsItemImgAnchor}>
           <div className={classes.newsItemImgContainer}>
-            <img src={image.thumbnail.contentUrl} alt="" />
+            <img
+              src={getBingThumbnailURLToFillDimensions(
+                image.thumbnail.contentUrl,
+                {
+                  width: image.thumbnail.width,
+                  height: image.thumbnail.height,
+                },
+                {
+                  width: 200,
+                  height: 100,
+                }
+              )}
+              alt=""
+            />
           </div>
         </a>
       ) : null}

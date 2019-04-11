@@ -20,3 +20,117 @@ describe('isReactSnapClient', () => {
     expect(isReactSnapClient()).toBe(false)
   })
 })
+
+describe('getBingThumbnailURLToFillDimensions', () => {
+  it('returns an unmodified URL when imageDimensions is not defined', () => {
+    const mockURL = 'https://www.bing.com/th?id=abcdefg&pid=News'
+    const imageDimensions = undefined
+    const desiredDimensions = { width: 200, height: 100 }
+    const {
+      getBingThumbnailURLToFillDimensions,
+    } = require('js/utils/search-utils')
+    expect(
+      getBingThumbnailURLToFillDimensions(
+        mockURL,
+        imageDimensions,
+        desiredDimensions
+      )
+    ).toEqual(mockURL)
+  })
+
+  it('returns an unmodified URL when imageDimensions is missing a dimension', () => {
+    const mockURL = 'https://www.bing.com/th?id=abcdefg&pid=News'
+    const imageDimensions = { height: 100 } // malformed
+    const desiredDimensions = { width: 200, height: 100 }
+    const {
+      getBingThumbnailURLToFillDimensions,
+    } = require('js/utils/search-utils')
+    expect(
+      getBingThumbnailURLToFillDimensions(
+        mockURL,
+        imageDimensions,
+        desiredDimensions
+      )
+    ).toEqual(mockURL)
+  })
+
+  it('returns an unmodified URL when desiredDimensions is not defined', () => {
+    const mockURL = 'https://www.bing.com/th?id=abcdefg&pid=News'
+    const imageDimensions = { width: 750, height: 1200 }
+    const desiredDimensions = undefined
+    const {
+      getBingThumbnailURLToFillDimensions,
+    } = require('js/utils/search-utils')
+    expect(
+      getBingThumbnailURLToFillDimensions(
+        mockURL,
+        imageDimensions,
+        desiredDimensions
+      )
+    ).toEqual(mockURL)
+  })
+
+  it('returns an unmodified URL when desiredDimensions is missing a dimension', () => {
+    const mockURL = 'https://www.bing.com/th?id=abcdefg&pid=News'
+    const imageDimensions = { width: 750, height: 1200 }
+    const desiredDimensions = { width: 350 } // malformed
+    const {
+      getBingThumbnailURLToFillDimensions,
+    } = require('js/utils/search-utils')
+    expect(
+      getBingThumbnailURLToFillDimensions(
+        mockURL,
+        imageDimensions,
+        desiredDimensions
+      )
+    ).toEqual(mockURL)
+  })
+
+  it('returns the expected dimensions when the desired space is 3x the image and a different ratio', () => {
+    const mockURL = 'https://www.bing.com/th?id=abcdefg&pid=News'
+    const imageDimensions = { width: 100, height: 100 }
+    const desiredDimensions = { width: 300, height: 500 }
+    const {
+      getBingThumbnailURLToFillDimensions,
+    } = require('js/utils/search-utils')
+    expect(
+      getBingThumbnailURLToFillDimensions(
+        mockURL,
+        imageDimensions,
+        desiredDimensions
+      )
+    ).toEqual('https://www.bing.com/th?id=abcdefg&pid=News&w=500&h=500&c=7')
+  })
+
+  it('returns the expected dimensions when the desired space is half the image and the same ratio', () => {
+    const mockURL = 'https://www.bing.com/th?id=abcdefg&pid=News'
+    const imageDimensions = { width: 400, height: 800 }
+    const desiredDimensions = { width: 200, height: 400 }
+    const {
+      getBingThumbnailURLToFillDimensions,
+    } = require('js/utils/search-utils')
+    expect(
+      getBingThumbnailURLToFillDimensions(
+        mockURL,
+        imageDimensions,
+        desiredDimensions
+      )
+    ).toEqual('https://www.bing.com/th?id=abcdefg&pid=News&w=200&h=400&c=7')
+  })
+
+  it("returns the expected dimensions when the desired space is double the image's width but the same height", () => {
+    const mockURL = 'https://www.bing.com/th?id=abcdefg&pid=News'
+    const imageDimensions = { width: 100, height: 400 }
+    const desiredDimensions = { width: 200, height: 400 }
+    const {
+      getBingThumbnailURLToFillDimensions,
+    } = require('js/utils/search-utils')
+    expect(
+      getBingThumbnailURLToFillDimensions(
+        mockURL,
+        imageDimensions,
+        desiredDimensions
+      )
+    ).toEqual('https://www.bing.com/th?id=abcdefg&pid=News&w=200&h=800&c=7')
+  })
+})
