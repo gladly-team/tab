@@ -23,8 +23,9 @@ import {
 import { externalRedirect } from 'js/navigation/utils'
 import Logo from 'js/components/Logo/Logo'
 import { parseUrlSearchString } from 'js/utils/utils'
+import SearchResults from 'js/components/Search/SearchResults'
 import SearchResultsQueryBing from 'js/components/Search/SearchResultsQueryBing'
-import { isReactSnapClient } from 'js/utils/search-utils'
+import { getSearchProvider, isReactSnapClient } from 'js/utils/search-utils'
 import SearchMenuQuery from 'js/components/Search/SearchMenuQuery'
 import WikipediaQuery from 'js/components/Search/WikipediaQuery'
 import detectAdblocker from 'js/utils/detectAdblocker'
@@ -34,6 +35,7 @@ import {
   setUserDismissedSearchIntro,
 } from 'js/utils/local-user-data-mgr'
 import ErrorBoundary from 'js/components/General/ErrorBoundary'
+import { SEARCH_PROVIDER_BING } from 'js/constants'
 
 const Footer = lazy(() => import('js/components/General/Footer'))
 
@@ -82,6 +84,7 @@ class SearchPage extends React.Component {
       isAdBlockerEnabled: false,
       query: '',
       searchFeatureEnabled: isSearchPageEnabled(),
+      searchProvider: getSearchProvider(),
       searchRedirectToThirdParty: shouldRedirectSearchToThirdParty(),
       searchSource: null,
       searchText: '',
@@ -197,6 +200,7 @@ class SearchPage extends React.Component {
       page,
       query,
       showIntroMessage,
+      searchProvider,
       searchSource,
       searchText,
     } = this.state
@@ -460,20 +464,38 @@ class SearchPage extends React.Component {
                 </Paper>
               </div>
             ) : null}
-            <SearchResultsQueryBing
-              query={query}
-              page={page}
-              onPageChange={newPageIndex => {
-                modifyURLParams({
-                  page: newPageIndex,
-                })
-              }}
-              searchSource={searchSource}
-              style={{
-                maxWidth: 600,
-                marginBottom: 40,
-              }}
-            />
+            {searchProvider === SEARCH_PROVIDER_BING ? (
+              <SearchResultsQueryBing
+                query={query}
+                page={page}
+                onPageChange={newPageIndex => {
+                  modifyURLParams({
+                    page: newPageIndex,
+                  })
+                }}
+                searchSource={searchSource}
+                style={{
+                  maxWidth: 600,
+                  marginBottom: 40,
+                }}
+              />
+            ) : (
+              <SearchResults
+                query={query}
+                page={page}
+                onPageChange={newPageIndex => {
+                  modifyURLParams({
+                    page: newPageIndex,
+                  })
+                }}
+                isAdBlockerEnabled={isAdBlockerEnabled}
+                searchSource={searchSource}
+                style={{
+                  maxWidth: 600,
+                  marginBottom: 40,
+                }}
+              />
+            )}
           </div>
           <div
             data-test-id={'search-sidebar'}

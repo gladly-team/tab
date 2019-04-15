@@ -19,6 +19,7 @@ import {
   searchBetaFeedback,
 } from 'js/navigation/navigation'
 import { externalRedirect } from 'js/navigation/utils'
+import SearchResults from 'js/components/Search/SearchResults'
 import SearchResultsQueryBing from 'js/components/Search/SearchResultsQueryBing'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
@@ -28,23 +29,22 @@ import {
   hasUserDismissedSearchIntro,
   setUserDismissedSearchIntro,
 } from 'js/utils/local-user-data-mgr'
-import {
-  impersonateReactSnapClient,
-  setUserAgentToTypicalTestUserAgent,
-} from 'js/utils/test-utils'
 import Logo from 'js/components/Logo/Logo'
 import WikipediaQuery from 'js/components/Search/WikipediaQuery'
 import ErrorBoundary from 'js/components/General/ErrorBoundary'
+import { getSearchProvider, isReactSnapClient } from 'js/utils/search-utils'
 
 jest.mock('js/utils/feature-flags')
 jest.mock('js/navigation/navigation')
 jest.mock('js/navigation/utils')
+jest.mock('js/components/Search/SearchResults')
 jest.mock('js/components/Search/SearchResultsQueryBing')
 jest.mock('js/utils/detectAdblocker')
 jest.mock('js/utils/local-user-data-mgr')
 jest.mock('js/components/Logo/Logo')
 jest.mock('js/components/General/Link')
 jest.mock('js/components/Search/WikipediaQuery')
+jest.mock('js/utils/search-utils')
 
 // Enzyme does not yet support React.lazy and React.Suspense,
 // so let's just not render lazy-loaded children for now.
@@ -69,11 +69,12 @@ const getMockProps = () => ({
 beforeEach(() => {
   isSearchPageEnabled.mockReturnValue(true)
   shouldRedirectSearchToThirdParty.mockReturnValue(false)
+  getSearchProvider.mockReturnValue('bing')
 })
 
 afterEach(() => {
   detectAdblocker.mockResolvedValue(false)
-  setUserAgentToTypicalTestUserAgent()
+  isReactSnapClient.mockReturnValue(false)
   jest.clearAllMocks()
 })
 
@@ -241,7 +242,7 @@ describe('Search page component', () => {
     mockProps.location = {
       search: '?q=yumtacos',
     }
-    impersonateReactSnapClient()
+    isReactSnapClient.mockReturnValue(true)
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
     expect(wrapper.state('query')).toEqual('')
   })
@@ -264,7 +265,7 @@ describe('Search page component', () => {
     mockProps.location = {
       search: '?page=14',
     }
-    impersonateReactSnapClient()
+    isReactSnapClient.mockReturnValue(true)
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
     expect(wrapper.state('page')).toBeUndefined()
   })
@@ -367,95 +368,6 @@ describe('Search page component', () => {
       .simulate('change', { target: { value: '' } })
       .simulate('keypress', { key: 'Enter' })
     expect(modifyURLParams).not.toHaveBeenCalled()
-  })
-
-  it('passes the decoded query to the SearchResultsQueryBing component', () => {
-    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
-      .default
-    const mockProps = getMockProps()
-    mockProps.location.search = '?q=foo&another=thing'
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
-    expect(wrapper.find(SearchResultsQueryBing).prop('query')).toEqual('foo')
-
-    // Update the search parameter.
-    wrapper.setProps(
-      Object.assign({}, mockProps, {
-        location: {
-          search: '?q=something%20here',
-        },
-      })
-    )
-    expect(wrapper.find(SearchResultsQueryBing).prop('query')).toEqual(
-      'something here'
-    )
-  })
-
-  it('passes the page number to the SearchResultsQueryBing component', () => {
-    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
-      .default
-    const mockProps = getMockProps()
-    mockProps.location.search = '?q=foo&page=12'
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
-    expect(wrapper.find(SearchResultsQueryBing).prop('page')).toBe(12)
-  })
-
-  it('passes "1" as the default page number to the SearchResultsQueryBing component when the "page" URL param is not set', () => {
-    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
-      .default
-    const mockProps = getMockProps()
-    mockProps.location.search = '?q=foo'
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
-    expect(wrapper.find(SearchResultsQueryBing).prop('page')).toBe(1)
-  })
-
-  it('passes the search source to the SearchResultsQueryBing component when the "page" URL param is set', () => {
-    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
-      .default
-    const mockProps = getMockProps()
-    mockProps.location.search = '?q=foo&src=some-source'
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
-    expect(wrapper.find(SearchResultsQueryBing).prop('searchSource')).toEqual(
-      'some-source'
-    )
-  })
-
-  it('passes null as the search source to the SearchResultsQueryBing component when the "src" URL param is not set', () => {
-    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
-      .default
-    const mockProps = getMockProps()
-    mockProps.location.search = '?q=foo'
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
-    expect(wrapper.find(SearchResultsQueryBing).prop('searchSource')).toBeNull()
-  })
-
-  it('passes "self" as the "searchSource" the SearchResultsQueryBing component when entering a new search on the page', () => {
-    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
-      .default
-    const mockProps = getMockProps()
-    mockProps.location.search = ''
-    const wrapper = mount(<SearchPageComponent {...mockProps} />)
-    expect(wrapper.find(SearchResultsQueryBing).prop('searchSource')).toBeNull()
-    const searchInput = wrapper
-      .find(Input)
-      .first()
-      .find('input')
-    searchInput
-      .simulate('change', { target: { value: 'register to vote' } })
-      .simulate('keypress', { key: 'Enter' })
-    expect(wrapper.find(SearchResultsQueryBing).prop('searchSource')).toEqual(
-      'self'
-    )
-  })
-
-  // This is important for prerendering scripts for search results.
-  it('renders the SearchResultsQueryBing component on mount even if there is no query', () => {
-    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
-      .default
-    const mockProps = getMockProps()
-    mockProps.location.search = ''
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
-    expect(wrapper.find(SearchResultsQueryBing).exists()).toBe(true)
-    expect(wrapper.find(SearchResultsQueryBing).prop('query')).toEqual('')
   })
 
   it('contains all the expected search category tabs', () => {
@@ -799,7 +711,7 @@ describe('Search page component', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
-    impersonateReactSnapClient()
+    isReactSnapClient.mockReturnValue(true)
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
     expect(wrapper.find('[data-test-id="search-intro-msg"]').exists()).toBe(
       false
@@ -862,5 +774,213 @@ describe('Search page component', () => {
         .parent()
         .prop('ignoreErrors')
     ).toBe(true)
+  })
+})
+
+describe('Search results from Bing', () => {
+  beforeEach(() => {
+    getSearchProvider.mockReturnValue('bing')
+  })
+
+  it('[bing] passes the decoded query to the SearchResultsQueryBing component', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location.search = '?q=foo&another=thing'
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.find(SearchResultsQueryBing).prop('query')).toEqual('foo')
+
+    // Update the search parameter.
+    wrapper.setProps(
+      Object.assign({}, mockProps, {
+        location: {
+          search: '?q=something%20here',
+        },
+      })
+    )
+    expect(wrapper.find(SearchResultsQueryBing).prop('query')).toEqual(
+      'something here'
+    )
+  })
+
+  it('[bing] passes the page number to the SearchResultsQueryBing component', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location.search = '?q=foo&page=12'
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.find(SearchResultsQueryBing).prop('page')).toBe(12)
+  })
+
+  it('[bing] passes "1" as the default page number to the SearchResultsQueryBing component when the "page" URL param is not set', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location.search = '?q=foo'
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.find(SearchResultsQueryBing).prop('page')).toBe(1)
+  })
+
+  it('[bing] passes the search source to the SearchResultsQueryBing component when the "page" URL param is set', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location.search = '?q=foo&src=some-source'
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.find(SearchResultsQueryBing).prop('searchSource')).toEqual(
+      'some-source'
+    )
+  })
+
+  it('[bing] passes null as the search source to the SearchResultsQueryBing component when the "src" URL param is not set', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location.search = '?q=foo'
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.find(SearchResultsQueryBing).prop('searchSource')).toBeNull()
+  })
+
+  it('[bing] passes "self" as the "searchSource" the SearchResultsQueryBing component when entering a new search on the page', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location.search = ''
+    const wrapper = mount(<SearchPageComponent {...mockProps} />)
+    expect(wrapper.find(SearchResultsQueryBing).prop('searchSource')).toBeNull()
+    const searchInput = wrapper
+      .find(Input)
+      .first()
+      .find('input')
+    searchInput
+      .simulate('change', { target: { value: 'register to vote' } })
+      .simulate('keypress', { key: 'Enter' })
+    expect(wrapper.find(SearchResultsQueryBing).prop('searchSource')).toEqual(
+      'self'
+    )
+  })
+
+  // This is important for prerendering scripts for search results.
+  it('[bing] renders the SearchResultsQueryBing component on mount even if there is no query', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location.search = ''
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.find(SearchResultsQueryBing).exists()).toBe(true)
+    expect(wrapper.find(SearchResultsQueryBing).prop('query')).toEqual('')
+  })
+})
+
+describe('Search results from Yahoo', () => {
+  beforeEach(() => {
+    getSearchProvider.mockReturnValue('yahoo')
+  })
+
+  it('[yahoo] passes the decoded query to the SearchResults component', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location.search = '?q=foo&another=thing'
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.find(SearchResults).prop('query')).toEqual('foo')
+
+    // Update the search parameter.
+    wrapper.setProps(
+      Object.assign({}, mockProps, {
+        location: {
+          search: '?q=something%20here',
+        },
+      })
+    )
+    expect(wrapper.find(SearchResults).prop('query')).toEqual('something here')
+  })
+
+  it('[yahoo] passes the page number to the SearchResults component', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location.search = '?q=foo&page=12'
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.find(SearchResults).prop('page')).toBe(12)
+  })
+
+  it('[yahoo] passes "1" as the default page number to the SearchResults component when the "page" URL param is not set', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location.search = '?q=foo'
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.find(SearchResults).prop('page')).toBe(1)
+  })
+
+  it('[yahoo] passes the search source to the SearchResults component when the "page" URL param is set', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location.search = '?q=foo&src=some-source'
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.find(SearchResults).prop('searchSource')).toEqual(
+      'some-source'
+    )
+  })
+
+  it('[yahoo] passes null as the search source to the SearchResults component when the "src" URL param is not set', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location.search = '?q=foo'
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.find(SearchResults).prop('searchSource')).toBeNull()
+  })
+
+  it('[yahoo] passes "self" as the "searchSource" the SearchResults component when entering a new search on the page', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location.search = ''
+    const wrapper = mount(<SearchPageComponent {...mockProps} />)
+    expect(wrapper.find(SearchResults).prop('searchSource')).toBeNull()
+    const searchInput = wrapper
+      .find(Input)
+      .first()
+      .find('input')
+    searchInput
+      .simulate('change', { target: { value: 'register to vote' } })
+      .simulate('keypress', { key: 'Enter' })
+    expect(wrapper.find(SearchResults).prop('searchSource')).toEqual('self')
+  })
+
+  // This is important for prerendering scripts for search results.
+  it('[yahoo] renders the SearchResults component on mount even if there is no query', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location.search = ''
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.find(SearchResults).exists()).toBe(true)
+    expect(wrapper.find(SearchResults).prop('query')).toEqual('')
+  })
+
+  it('[yahoo] passes "isAdBlockerEnabled = false" to the SearchResults component', async () => {
+    expect.assertions(1)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    detectAdblocker.mockResolvedValue(false)
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    await flushAllPromises()
+    expect(wrapper.find(SearchResults).prop('isAdBlockerEnabled')).toBe(false)
+  })
+
+  it('[yahoo] passes "isAdBlockerEnabled = true" to the SearchResults component', async () => {
+    expect.assertions(1)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    detectAdblocker.mockResolvedValue(true)
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    await flushAllPromises()
+    expect(wrapper.find(SearchResults).prop('isAdBlockerEnabled')).toBe(true)
   })
 })
