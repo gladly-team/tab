@@ -187,7 +187,7 @@ describe('WebPageSearchResult', () => {
         .find('h3')
         .first()
         .text()
-    ).toEqual('I am a deep link title, but  ...')
+    ).toEqual('I am a deep link title, but ...')
   })
 
   it('[deep link] creates an anchor tag as the parent of the title, with a link to the URL', () => {
@@ -260,7 +260,7 @@ describe('WebPageSearchResult', () => {
         .at(2)
         .text()
     ).toEqual(
-      'I am a deep link snippet. However, I am quite long, which means they will cu ...'
+      'I am a deep link snippet. However, I am quite long, which means they will ...'
     )
   })
 })

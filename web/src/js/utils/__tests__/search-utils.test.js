@@ -77,3 +77,60 @@ describe('getBingThumbnailURLToFillDimensions', () => {
     ).toEqual('https://www.bing.com/th?id=abcdefg&pid=News&w=200&h=400&c=7')
   })
 })
+
+describe('clipTextToNearestWord', () => {
+  it('returns the unmodified text if it is shorter than the max characters', () => {
+    const text = 'Hi there! I am text.'
+    const maxCharacters = 120
+    const { clipTextToNearestWord } = require('js/utils/search-utils')
+    expect(clipTextToNearestWord(text, maxCharacters)).toEqual(text)
+  })
+
+  it('returns clipped text and ellipses if it exceeds the max character count', () => {
+    const text = 'abcdefghijklmnop'
+    const maxCharacters = 12
+    const { clipTextToNearestWord } = require('js/utils/search-utils')
+    expect(clipTextToNearestWord(text, maxCharacters)).toEqual(
+      'abcdefghijkl ...'
+    )
+  })
+
+  it('clips text to the nearest whitespace if not too far back in the text', () => {
+    const text = 'abcde fgh ijklm nop qrstu v wxy'
+    const maxCharacters = 18
+    const { clipTextToNearestWord } = require('js/utils/search-utils')
+    expect(clipTextToNearestWord(text, maxCharacters)).toEqual(
+      'abcde fgh ijklm ...'
+    )
+  })
+
+  it('clips text in the middle of a word if the previous whitespace is too far back in the text', () => {
+    const text = 'abcde fghijklmnopqrstuv wxyz'
+    const maxCharacters = 20
+    const { clipTextToNearestWord } = require('js/utils/search-utils')
+    expect(clipTextToNearestWord(text, maxCharacters)).toEqual(
+      'abcde fghijklmnopqrs ...'
+    )
+  })
+
+  it('does not return only ellipses if the max character length is very short', () => {
+    const text = 'abcdefghijklmnop'
+    const maxCharacters = 6
+    const { clipTextToNearestWord } = require('js/utils/search-utils')
+    expect(clipTextToNearestWord(text, maxCharacters)).toEqual('abcdef ...')
+  })
+
+  it('does not return only ellipses if the max character length is very, very short', () => {
+    const text = 'abcdefghijklmnop'
+    const maxCharacters = 2
+    const { clipTextToNearestWord } = require('js/utils/search-utils')
+    expect(clipTextToNearestWord(text, maxCharacters)).toEqual('ab ...')
+  })
+
+  it('returns only the first character if there is whitespace after it and the maxCharacters limit is small', () => {
+    const text = 'a bcdefghijklmnop'
+    const maxCharacters = 8
+    const { clipTextToNearestWord } = require('js/utils/search-utils')
+    expect(clipTextToNearestWord(text, maxCharacters)).toEqual('a ...')
+  })
+})

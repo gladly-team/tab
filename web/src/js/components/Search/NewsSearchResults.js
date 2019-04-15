@@ -5,7 +5,10 @@ import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import { get } from 'lodash/object'
-import { getBingThumbnailURLToFillDimensions } from 'js/utils/search-utils'
+import {
+  clipTextToNearestWord,
+  getBingThumbnailURLToFillDimensions,
+} from 'js/utils/search-utils'
 
 // Make "time from" text much shorter:
 // https://github.com/moment/moment/issues/2781#issuecomment-160739129
@@ -127,20 +130,10 @@ const NewsSearchItem = props => {
   } = props
   // console.log('news item', props.item)
 
-  // TODO: we should be smarter and slice between words.
-  //   Create a util for this.
   // If the title or description are too long, slice them
   // and add ellipses.
-  const MAX_DESC_CHARS = 125
-  const MAX_TITLE_CHARS = 80
-  const subtitle =
-    description.length > MAX_DESC_CHARS
-      ? `${description.slice(0, MAX_DESC_CHARS)} ...`
-      : description
-  const title =
-    name.length > MAX_TITLE_CHARS
-      ? `${name.slice(0, MAX_TITLE_CHARS)} ...`
-      : name
+  const subtitle = clipTextToNearestWord(description, 125)
+  const title = clipTextToNearestWord(name, 80)
 
   const timeSincePublished =
     datePublished && moment(datePublished).isValid()

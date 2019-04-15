@@ -42,3 +42,33 @@ export const getBingThumbnailURLToFillDimensions = (
   url.searchParams.set('c', 7)
   return url.href
 }
+
+/**
+ * Clip text to max characters at the most recent word break,
+ * adding ellipses.
+ * @param {String} text - The text to clip
+ * @param {Number} maxCharacters - The maximum number of characters
+ *   to allow, excluding ellipses
+ * @return {String} The new text, clipped if it exceeded the max
+ *   characters, or unchanged if it had fewer.
+ */
+export const clipTextToNearestWord = (text, maxCharacters) => {
+  if (maxCharacters >= text.length) {
+    return text
+  }
+
+  // How many characters we should clip *below* the max character
+  // limit. For example, if there is no whitespace at all, we
+  // shouldn't return an empty string. Likewise, we probably want
+  // to cut a long word in half rather than return very little text.
+  const MAX_EXTRA_CHARS_CLIPPED = 8
+
+  // The whitespace nearest to the index of maxCharacters.
+  const indexOfPrevWhitespace = text.lastIndexOf(' ', maxCharacters)
+  const indexToClip =
+    indexOfPrevWhitespace < 1 ||
+    maxCharacters - indexOfPrevWhitespace > MAX_EXTRA_CHARS_CLIPPED
+      ? maxCharacters
+      : indexOfPrevWhitespace
+  return `${text.substring(0, indexToClip)} ...`
+}

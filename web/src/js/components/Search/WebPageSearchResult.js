@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
+import { clipTextToNearestWord } from 'js/utils/search-utils'
 
 const styles = () => ({
   container: {
@@ -53,20 +54,11 @@ export const DeepLink = props => {
     item: { name, snippet, url },
   } = props
 
-  // TODO: we should be smarter and slice between words.
-  //   Create a util for this.
   // If the title or snippet are too long, slice them
   // and add ellipses.
-  const MAX_TITLE_CHARS = 28
-  const MAX_DESC_CHARS = 76
-  const title =
-    name.length > MAX_TITLE_CHARS
-      ? `${name.slice(0, MAX_TITLE_CHARS)} ...`
-      : name
-  const description =
-    snippet && snippet.length > MAX_DESC_CHARS
-      ? `${snippet.slice(0, MAX_DESC_CHARS)} ...`
-      : snippet
+  const title = clipTextToNearestWord(name, 28)
+  const description = clipTextToNearestWord(snippet, 76)
+
   return (
     <div className={classes.deepLink}>
       <a href={url} className={classes.titleLink}>
