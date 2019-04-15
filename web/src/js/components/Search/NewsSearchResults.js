@@ -152,10 +152,6 @@ const NewsSearchItem = props => {
               src={getBingThumbnailURLToFillDimensions(
                 image.thumbnail.contentUrl,
                 {
-                  width: image.thumbnail.width,
-                  height: image.thumbnail.height,
-                },
-                {
                   width: 200,
                   height: 100,
                 }
