@@ -72,7 +72,7 @@ const styles = () => ({
     fontFamily: 'Roboto, arial, sans-serif',
     color: '#1a0dab',
     margin: 0,
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: 400,
     lineHeight: 1.38,
     minHeight: 0,
