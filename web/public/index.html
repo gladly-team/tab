@@ -172,7 +172,6 @@
     <% } %>
 
     <div id="root"></div>
-    <div id="apstag-iframes" style="display: none"></div>
 
     <% if (process.env.REACT_APP_WHICH_APP === "newtab"){ %>
     <!--
@@ -262,6 +261,15 @@
     /* eslint-disable */
     !function(a9,a,p,s,t,A,g){if(a[a9])return;function q(c,r){a[a9]._Q.push([c,r])}a[a9]={init:function(){q("i",arguments)},fetchBids:function(){q("f",arguments)},setDisplayBids:function(){},targetingKeys:function(){return[]},_Q:[]};A=p.createElement(s);A.async=!0;A.src=t;g=p.getElementsByTagName(s)[0];g.parentNode.insertBefore(A,g)}("apstag",window,document,"script","//c.amazon-adsystem.com/aax2/apstag.js");
     </script>
+    <% } %>
+
+    <% if (process.env.REACT_APP_WHICH_APP === "newtab"){ %>
+    <!--
+      @gladly-customization:
+      Index Exchange. See:
+      https://kb.indexexchange.com/Wrapper/Installation/Universal_Library_Implementation.htm
+    -->
+    <script async src="//js-sec.indexww.com/ht/p/189508-208262485043658.js"></script>
     <% } %>
     
   </body>

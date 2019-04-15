@@ -13,7 +13,7 @@ frameworkVersion: ">=1.12.0 <2.0.0"
 
 provider:
   name: aws
-  runtime: nodejs6.10
+  runtime: nodejs8.10
   region: us-east-1
   stage: ${env:SLS_STAGE, self:custom.stageDefault}
   role: gladlyLambdaEdgeRole
