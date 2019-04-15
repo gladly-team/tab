@@ -71,6 +71,9 @@ export const getBingThumbnailURLToFillDimensions = (
  *   characters, or unchanged if it had fewer.
  */
 export const clipTextToNearestWord = (text, maxCharacters) => {
+  if (!(text && text.length)) {
+    return text
+  }
   if (maxCharacters >= text.length) {
     return text
   }

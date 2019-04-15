@@ -163,4 +163,11 @@ describe('clipTextToNearestWord', () => {
     const { clipTextToNearestWord } = require('js/utils/search-utils')
     expect(clipTextToNearestWord(text, maxCharacters)).toEqual('a ...')
   })
+
+  it('does not throw if passed null text', () => {
+    const text = null
+    const maxCharacters = 120
+    const { clipTextToNearestWord } = require('js/utils/search-utils')
+    expect(clipTextToNearestWord(text, maxCharacters)).toEqual(null)
+  })
 })
