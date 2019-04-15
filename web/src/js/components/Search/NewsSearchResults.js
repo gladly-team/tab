@@ -91,7 +91,11 @@ const styles = () => ({
     overflow: 'hidden',
   },
   attributionText: {
-    flexShrink: 0,
+    textOverflow: 'ellipsis',
+    flexShrink: 1,
+    flexGrow: 0,
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
     margin: 0,
     fontSize: 13,
     color: '#007526', // Same as WebPageSearchResult displayed URL
@@ -100,6 +104,7 @@ const styles = () => ({
     minWidth: 0,
   },
   timeSincePublishedText: {
+    flexShrink: 0,
     fontSize: 13,
     lineHeight: 1.5,
     color: 'rgba(0, 0, 0, 0.66)', // same color as search menu
@@ -136,8 +141,6 @@ const NewsSearchItem = props => {
     name.length > MAX_TITLE_CHARS
       ? `${name.slice(0, MAX_TITLE_CHARS)} ...`
       : name
-
-  // TODO: flexbox + ellipses for organization name
 
   const timeSincePublished =
     datePublished && moment(datePublished).isValid()
