@@ -1,5 +1,9 @@
 /* eslint-env jest */
 
+afterEach(() => {
+  delete process.env.REACT_APP_SEARCH_PROVIDER
+})
+
 describe('isReactSnapClient', () => {
   it('returns true when the userAgent is "ReactSnap"', () => {
     Object.defineProperty(window.navigator, 'userAgent', {
@@ -18,6 +22,32 @@ describe('isReactSnapClient', () => {
     })
     const { isReactSnapClient } = require('js/utils/search-utils')
     expect(isReactSnapClient()).toBe(false)
+  })
+})
+
+describe('getSearchProvider', () => {
+  it('returns "bing" when the search provider env var is set to "bing"', () => {
+    process.env.REACT_APP_SEARCH_PROVIDER = 'bing'
+    const { getSearchProvider } = require('js/utils/search-utils')
+    expect(getSearchProvider()).toEqual('bing')
+  })
+
+  it('returns "yahoo" when the search provider env var is set to "yahoo"', () => {
+    process.env.REACT_APP_SEARCH_PROVIDER = 'yahoo'
+    const { getSearchProvider } = require('js/utils/search-utils')
+    expect(getSearchProvider()).toEqual('yahoo')
+  })
+
+  it('returns "yahoo" when the search provider env var is NOT set', () => {
+    delete process.env.REACT_APP_SEARCH_PROVIDER
+    const { getSearchProvider } = require('js/utils/search-utils')
+    expect(getSearchProvider()).toEqual('yahoo')
+  })
+
+  it('returns "yahoo" when the search provider env var is set to an invalid value', () => {
+    process.env.REACT_APP_SEARCH_PROVIDER = 'boop'
+    const { getSearchProvider } = require('js/utils/search-utils')
+    expect(getSearchProvider()).toEqual('yahoo')
   })
 })
 

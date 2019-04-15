@@ -98,3 +98,6 @@ export const ERROR_USER_DOES_NOT_EXIST = 'USER_DOES_NOT_EXIST'
 export const CHROME_BROWSER = 'chrome'
 export const FIREFOX_BROWSER = 'firefox'
 export const UNSUPPORTED_BROWSER = 'other'
+
+export const SEARCH_PROVIDER_BING = 'bing'
+export const SEARCH_PROVIDER_YAHOO = 'yahoo'

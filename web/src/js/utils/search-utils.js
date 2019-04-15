@@ -1,3 +1,5 @@
+import { SEARCH_PROVIDER_BING, SEARCH_PROVIDER_YAHOO } from 'js/constants'
+
 // Returns whether react-snap is the one running the app.
 // This is useful to adjust what we want to prerender.
 // https://github.com/stereobooster/react-snap/issues/245#issuecomment-414347911
@@ -6,6 +8,22 @@ export const isReactSnapClient = () => {
     return navigator.userAgent === 'ReactSnap'
   } catch (e) {
     return false
+  }
+}
+
+/**
+ * Return which search provider to use.
+ * @return {String} The search provider name, either 'bing' or 'yahoo'.
+ */
+export const getSearchProvider = () => {
+  const envSearchProvider = process.env.REACT_APP_SEARCH_PROVIDER
+  switch (envSearchProvider) {
+    case SEARCH_PROVIDER_BING:
+      return SEARCH_PROVIDER_BING
+    case SEARCH_PROVIDER_YAHOO:
+      return SEARCH_PROVIDER_YAHOO
+    default:
+      return SEARCH_PROVIDER_YAHOO
   }
 }
 
