@@ -276,10 +276,10 @@ export const _experimentsConfig = [
   // @experiment-search-intro
   createExperiment({
     name: EXPERIMENT_SEARCH_INTRO,
-    active: false,
+    active: true,
     disabled: false,
     percentageOfExistingUsersInExperiment: 1.0,
-    percentageOfNewUsersInExperiment: 100.0,
+    percentageOfNewUsersInExperiment: 40.0,
     filters: [
       // In this test, include brand new users and users
       // who joined more than 2 months ago.
