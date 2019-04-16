@@ -227,7 +227,7 @@ const YPAConfiguration = {
     adultFilter: false, // false means do not allow adult ads
   },
   ypaAdConfig: '00000129a',
-  ypaAdTypeTag: '',
+  ypaAdTypeTag: '__alt__ddc_tab_gladly_io',
   // Pagination of search results. The calling function should
   // set this value. Valid values are 1-9999.
   // ypaPageCount: '1',
