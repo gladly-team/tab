@@ -278,7 +278,7 @@ export const _experimentsConfig = [
     name: EXPERIMENT_SEARCH_INTRO,
     active: true,
     disabled: false,
-    percentageOfExistingUsersInExperiment: 1.0,
+    percentageOfExistingUsersInExperiment: 4.0,
     percentageOfNewUsersInExperiment: 40.0,
     filters: [
       // In this test, include brand new users and users
