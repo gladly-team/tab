@@ -229,9 +229,23 @@ class Dashboard extends React.Component {
               user.tabs > 3 ? (
                 <Notification
                   data-test-id={'search-intro-a'}
-                  title={`Introducing Search for a Cause`}
-                  message={`
-                        Now, you can raise money for charity each time you search! It's the search results you know and love—but for a good cause.`}
+                  title={`We're working on Search for a Cause`}
+                  message={
+                    <span>
+                      <Typography variant={'body2'} gutterBottom>
+                        You already know Tab for a Cause, where{' '}
+                        <b>tabs = money for charity</b>. Now, we want to have an
+                        even bigger impact by making{' '}
+                        <b>searches = money for charity</b>.
+                      </Typography>
+                      <Typography variant={'body2'} gutterBottom>
+                        You're one of the first people we're introducing to
+                        Search for a Cause. It's early, but we think it's a
+                        great start, and we'd love your feedback. Will you test
+                        it out?
+                      </Typography>
+                    </span>
+                  }
                   buttonText={'Try it out'}
                   onClick={async () => {
                     // Log the click.
@@ -270,6 +284,7 @@ class Dashboard extends React.Component {
                     })
                   }}
                   style={{
+                    width: 440,
                     marginTop: 4,
                   }}
                 />
