@@ -18,11 +18,7 @@ class Notification extends React.Component {
       onDismiss,
     } = this.props
     return (
-      <div
-        style={Object.assign({}, style, {
-          width: 340,
-        })}
-      >
+      <div style={Object.assign({ width: 340 }, style)}>
         <Paper
           style={{
             padding: '6px 14px',
@@ -45,7 +41,16 @@ class Notification extends React.Component {
             >
               {title}
             </Typography>
-            <Typography variant={'body2'}>{message}</Typography>
+            {typeof message === 'string' ? (
+              <Typography
+                data-test-id={'notification-message'}
+                variant={'body2'}
+              >
+                {message}
+              </Typography>
+            ) : (
+              <div data-test-id={'notification-message'}>{message}</div>
+            )}
             <div
               style={{
                 display: 'flex',
@@ -91,7 +96,7 @@ class Notification extends React.Component {
 Notification.propTypes = {
   style: PropTypes.object,
   title: PropTypes.string.isRequired,
-  message: PropTypes.string.isRequired,
+  message: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
   buttonText: PropTypes.string,
   buttonURL: PropTypes.string,
   onDismiss: PropTypes.func,
