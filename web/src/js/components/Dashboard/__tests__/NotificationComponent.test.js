@@ -44,19 +44,39 @@ describe('Notification component', () => {
     ).toBe(`Some title!`)
   })
 
-  it('displays the notification message', () => {
+  it('displays the notification message as Typography when the message prop is a string', () => {
     const Notification = require('js/components/Dashboard/NotificationComponent')
       .default
     const mockProps = getMockProps()
     mockProps.message = 'ABC 123 this is a message'
     const wrapper = shallow(<Notification {...mockProps} />)
-    expect(
-      wrapper
-        .find(Typography)
-        .at(1)
-        .children()
-        .text()
-    ).toBe(`ABC 123 this is a message`)
+    const notificationMsg = wrapper.find(
+      '[data-test-id="notification-message"]'
+    )
+    expect(notificationMsg.type()).toEqual(Typography)
+    expect(notificationMsg.children().text()).toBe(`ABC 123 this is a message`)
+  })
+
+  it('displays the notification message as a div with children when the message prop is a node', () => {
+    const Notification = require('js/components/Dashboard/NotificationComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.message = (
+      <div>
+        <p>
+          This message is a little more <b>complicated</b>.
+        </p>
+        <p>Isn't it</p>
+      </div>
+    )
+    const wrapper = shallow(<Notification {...mockProps} />)
+    const notificationMsg = wrapper.find(
+      '[data-test-id="notification-message"]'
+    )
+    expect(notificationMsg.type()).toEqual('div')
+    expect(notificationMsg.children().html()).toEqual(
+      `<div><p>This message is a little more <b>complicated</b>.</p><p>Isn&#x27;t it</p></div>`
+    )
   })
 
   it('displays only the "dismiss" button when no action button is provided', () => {

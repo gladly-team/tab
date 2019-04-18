@@ -650,7 +650,7 @@ describe('Dashboard component', () => {
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
     const elem = wrapper.find('[data-test-id="search-intro-a"]')
     expect(elem.exists()).toBe(true)
-    expect(elem.prop('title')).toEqual(`Introducing Search for a Cause`)
+    expect(elem.prop('title')).toEqual(`We're working on Search for a Cause`)
   })
 
   it('[search-intro-A] does not render the search intro notification when the user has opened fewer than 4 tabs', () => {
