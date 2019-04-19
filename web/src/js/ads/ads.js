@@ -1,6 +1,7 @@
 import 'js/ads/prebid/prebid' // Prebid library code
 import adsEnabled from 'js/ads/adsEnabledStatus'
 import amazonBidder, { storeAmazonBids } from 'js/ads/amazon/amazonBidder'
+import indexExchangeBidder from 'js/ads/indexExchange/indexExchangeBidder'
 import getAmazonTag from 'js/ads/amazon/getAmazonTag'
 import getGoogleTag from 'js/ads/google/getGoogleTag'
 import setUpGoogleAds from 'js/ads/google/setUpGoogleAds'
@@ -13,7 +14,8 @@ import logger from 'js/utils/logger'
 // Enabled bidders.
 const BIDDER_PREBID = 'prebid'
 const BIDDER_AMAZON = 'amazon'
-const bidders = [BIDDER_PREBID, BIDDER_AMAZON]
+const BIDDER_IX = 'ix'
+const bidders = [BIDDER_PREBID, BIDDER_AMAZON, BIDDER_IX]
 
 // Keep track of which bidders have responded.
 const requestManager = {
@@ -115,6 +117,19 @@ const loadAdCode = () => {
     .catch(err => {
       logger.error(err)
       bidderCompleted(BIDDER_PREBID)
+    })
+
+  // FIXME: set a feature flag for this (enabled by a
+  //   debug URL parameter). We don't want to enable it
+  //   until it's returning real bids.
+  // Index Exchange
+  indexExchangeBidder()
+    .then(() => {
+      bidderCompleted(BIDDER_IX)
+    })
+    .catch(err => {
+      logger.error(err)
+      bidderCompleted(BIDDER_IX)
     })
 }
 
