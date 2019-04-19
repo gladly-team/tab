@@ -16,8 +16,17 @@ describe('getIndexExchangeTag', function() {
     expect(ixTag).toBe(fakeExistingTag)
   })
 
-  it('returns undefined if window.headertag is not set', () => {
+  it('returns a placeholder object with cmd if window.headertag is not set', () => {
     const ixTag = getIndexExchangeTag()
-    expect(ixTag).toBeUndefined()
+    expect(ixTag).toEqual({
+      cmd: [],
+    })
+  })
+
+  it("sets window.headertag if it isn't already set", () => {
+    expect(window.headertag).toBeUndefined()
+    getIndexExchangeTag()
+    expect(window.headertag).not.toBeUndefined()
+    expect(window.headertag.cmd).toEqual([])
   })
 })

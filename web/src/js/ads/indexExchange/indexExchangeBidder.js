@@ -14,7 +14,11 @@ const fetchIndexExchangeDemand = () => {
   if (numAds < 1) {
     return
   }
-  const ixTag = getIndexExchangeTag()
+
+  // Note: use ixTag.cmd.push because the JS may not have
+  // loaded. Index Exchange hasn't documented the cmd
+  // behavior so it may break.
+  let ixTag = getIndexExchangeTag()
 
   // Only get bids for the horizontal ad slot if only
   // one ad is enabled.
@@ -27,10 +31,20 @@ const fetchIndexExchangeDemand = () => {
   }
 
   return new Promise((resolve, reject) => {
-    ixTag.retrieveDemand(slots, demand => {
-      // TODO: handle demand and set targeting
-      console.log(demand)
-      handleAuctionEnd()
+    // Note that Index Exchange hasn't documented the cmd
+    // behavior so it may break.
+    ixTag.cmd.push(() => {
+      console.log('Index Exchange: retrieving demand')
+
+      // IX appears to reinitialize the variable on load. Noet
+      let ixTag = getIndexExchangeTag()
+
+      // Note: the current request is to a casalemedia URL.
+      ixTag.retrieveDemand(slots, demand => {
+        // TODO: handle demand and set targeting
+        console.log('Index Exchange: demand', demand)
+        handleAuctionEnd()
+      })
     })
 
     function handleAuctionEnd() {
