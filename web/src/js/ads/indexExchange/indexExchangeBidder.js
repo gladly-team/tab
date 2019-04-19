@@ -1,5 +1,11 @@
 import getIndexExchangeTag from 'js/ads/indexExchange/getIndexExchangeTag'
-import { getNumberOfAdsToShow, BIDDER_TIMEOUT } from 'js/ads/adSettings'
+import {
+  getNumberOfAdsToShow,
+  BIDDER_TIMEOUT,
+  VERTICAL_AD_UNIT_ID,
+  SECOND_VERTICAL_AD_UNIT_ID,
+  HORIZONTAL_AD_UNIT_ID,
+} from 'js/ads/adSettings'
 import getGoogleTag from 'js/ads/google/getGoogleTag'
 import logger from 'js/utils/logger'
 
@@ -21,14 +27,25 @@ const fetchIndexExchangeDemand = () => {
   // behavior so it may break.
   let ixTag = getIndexExchangeTag()
 
-  // Only get bids for the horizontal ad slot if only
-  // one ad is enabled.
-  const slots = [{ htSlotName: 'd-1-728x90-atf-bottom-leaderboard' }]
+  // Key = the GAM ad unit; value = the Index Exchange ID
+  const mapGAMSlotsToIXSlots = {
+    // Bottom leaderboard
+    [HORIZONTAL_AD_UNIT_ID]: 'd-1-728x90-atf-bottom-leaderboard',
+    // Bottom-right rectangle ad
+    [VERTICAL_AD_UNIT_ID]: 'd-3-300x250-atf-bottom-right_rectangle',
+    // Second (upper) rectangle ad
+    [SECOND_VERTICAL_AD_UNIT_ID]: 'd-2-300x250-atf-middle-right_rectangle',
+  }
+
+  // Only get bids for the number of ads we'll show.
+  const IXSlots = [{ htSlotName: mapGAMSlotsToIXSlots[HORIZONTAL_AD_UNIT_ID] }]
   if (numAds > 1) {
-    slots.push({ htSlotName: 'd-3-300x250-atf-bottom-right_rectangle' })
+    IXSlots.push({ htSlotName: mapGAMSlotsToIXSlots[VERTICAL_AD_UNIT_ID] })
   }
   if (numAds > 2) {
-    slots.push({ htSlotName: 'd-2-300x250-atf-middle-right_rectangle' })
+    IXSlots.push({
+      htSlotName: mapGAMSlotsToIXSlots[SECOND_VERTICAL_AD_UNIT_ID],
+    })
   }
 
   return new Promise((resolve, reject) => {
@@ -40,33 +57,51 @@ const fetchIndexExchangeDemand = () => {
       // IX appears to reinitialize the variable on load.
       let ixTag = getIndexExchangeTag()
 
+      // Fetch bid responses from Index Exchange.
       // Note: the current request is to a casalemedia URL.
-      ixTag.retrieveDemand(slots, demand => {
+      ixTag.retrieveDemand(IXSlots, demand => {
         // console.log('Index Exchange: demand', demand)
 
         // Set adserver targeting for any returned demand.
         // IX demand should set the IOM and ix_id parameters.
         try {
-          const googletag = getGoogleTag()
           if (demand && demand.slot) {
-            slots.forEach(slot => {
-              const slotBidResponseArray = demand.slot[slot.htSlotName]
-              slotBidResponseArray.forEach(slotBidResponse => {
-                if (slotBidResponse && slotBidResponse.targeting) {
-                  Object.keys(slotBidResponse.targeting).forEach(
-                    targetingKey => {
-                      // FIXME: we need to set targeting on the specific slot.
-                      // googletag.cmd.push(() => {
-                      //   googletag.pubads().setTargeting(
-                      //     targetingKey,
-                      //     // IX's targeting value is an array with one string.
-                      //     slotBidResponse.targeting[targetingKey][0]
-                      //   )
-                      // })
+            const googletag = getGoogleTag()
+
+            // Loop through defined GAM slots to set any targeting.
+            googletag.cmd.push(() => {
+              googletag
+                .pubads()
+                .getSlots()
+                .forEach(googleSlot => {
+                  const IXSlotName =
+                    mapGAMSlotsToIXSlots[googleSlot.getAdUnitPath()]
+                  if (!IXSlotName) {
+                    // No Index Exchange unit for this Google slot.
+                    return
+                  }
+                  const IXBidResponseArray = demand.slot[IXSlotName]
+                  if (!IXBidResponseArray || !IXBidResponseArray.length) {
+                    // No Index Exchange bid for this ad unit.
+                    return
+                  }
+                  IXBidResponseArray.forEach(IXBidResponse => {
+                    if (!IXBidResponse.targeting) {
+                      // No IX targeting provided.
+                      return
                     }
-                  )
-                }
-              })
+                    // Set IX targeting on this slot.
+                    Object.keys(IXBidResponse.targeting).forEach(
+                      targetingKey => {
+                        googleSlot.setTargeting(
+                          targetingKey,
+                          // IX's targeting value is an array with one string.
+                          IXBidResponse.targeting[targetingKey][0]
+                        )
+                      }
+                    )
+                  })
+                })
             })
           }
         } catch (e) {

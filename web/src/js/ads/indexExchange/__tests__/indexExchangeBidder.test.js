@@ -128,33 +128,48 @@ describe('indexExchangeBidder', () => {
     jest.advanceTimersByTime(701)
   })
 
-  // it('sets the expected targeting for Google Ad Manager when all slots have bids', async () => {
-  //   expect.assertions(2)
-  //   const getGoogleTag = require('js/ads/google/getGoogleTag').default
-  //   const googletag = getGoogleTag()
+  it('sets the expected targeting for Google Ad Manager when all slots have bids', async () => {
+    expect.assertions(6)
+    const getGoogleTag = require('js/ads/google/getGoogleTag').default
+    const googletag = getGoogleTag()
 
-  //   // Mock the bid response.
-  //   const indexExchangeBidder = require('js/ads/indexExchange/indexExchangeBidder')
-  //     .default
-  //   const getIndexExchangeTag = require('js/ads/indexExchange/getIndexExchangeTag')
-  //     .default
-  //   const ixTag = getIndexExchangeTag()
-  //   const { mockIndexExchangeBidResponse } = require('js/utils/test-utils')
-  //   const mockBidResponse = mockIndexExchangeBidResponse()
-  //   ixTag.retrieveDemand.mockImplementation((config, callback) =>
-  //     callback(mockBidResponse)
-  //   )
-  //   await indexExchangeBidder()
-  //   expect(googletag.pubads().setTargeting).toHaveBeenCalledWith(
-  //     'IOM',
-  //     '728x90_5000'
-  //   )
-  //   expect(googletag.pubads().setTargeting).toHaveBeenCalledWith(
-  //     'ix_id',
-  //     '_mBnLnF5V'
-  //   )
-  // })
-
-  // TODO:
-  // test handling response
+    // Mock the bid response.
+    const indexExchangeBidder = require('js/ads/indexExchange/indexExchangeBidder')
+      .default
+    const getIndexExchangeTag = require('js/ads/indexExchange/getIndexExchangeTag')
+      .default
+    const ixTag = getIndexExchangeTag()
+    const { mockIndexExchangeBidResponse } = require('js/utils/test-utils')
+    const mockBidResponse = mockIndexExchangeBidResponse()
+    ixTag.retrieveDemand.mockImplementation((config, callback) =>
+      callback(mockBidResponse)
+    )
+    await indexExchangeBidder()
+    const googleSlots = googletag.pubads().getSlots()
+    const [leaderboardSlot, rectangleSlot, secondRectangleSlot] = googleSlots
+    expect(leaderboardSlot.setTargeting).toHaveBeenCalledWith(
+      'IOM',
+      '728x90_5000'
+    )
+    expect(leaderboardSlot.setTargeting).toHaveBeenCalledWith(
+      'ix_id',
+      '_mBnLnF5V'
+    )
+    expect(rectangleSlot.setTargeting).toHaveBeenCalledWith(
+      'IOM',
+      '300x250_5000'
+    )
+    expect(rectangleSlot.setTargeting).toHaveBeenCalledWith(
+      'ix_id',
+      '_C7VB5HUd'
+    )
+    expect(secondRectangleSlot.setTargeting).toHaveBeenCalledWith(
+      'IOM',
+      '300x250_5000'
+    )
+    expect(secondRectangleSlot.setTargeting).toHaveBeenCalledWith(
+      'ix_id',
+      '_fB5UzqU2'
+    )
+  })
 })

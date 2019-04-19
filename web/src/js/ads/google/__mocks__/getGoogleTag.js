@@ -19,6 +19,21 @@ export const __setPubadsRefreshMock = mockFunction => {
   mockPubadsRefresh = mockFunction
 }
 
+const MockSlot = adUnitPath => ({
+  getAdUnitPath: () => adUnitPath,
+  setTargeting: jest.fn(),
+})
+
+const mockSlots = [
+  // Mock ad unit IDs from the adSettings mock.
+  MockSlot('/99887766/HBTL'), // bottom leaderboard
+  MockSlot('/11223344/HBTR'), // first (bottom) rectangle ad
+  MockSlot('/44556677/HBTR2'), // second (top) rectangle ad
+]
+
+const mockGetSlots = jest.fn(() => {
+  return mockSlots
+})
 const mockSetTargeting = jest.fn()
 
 // Mock an event fired.
@@ -41,6 +56,7 @@ export default () => {
         }
         eventListenerStore[eventName].push(callback)
       },
+      getSlots: mockGetSlots,
       enableSingleRequest: mockEnableSingleRequest,
       refresh: mockPubadsRefresh,
       setTargeting: mockSetTargeting,
