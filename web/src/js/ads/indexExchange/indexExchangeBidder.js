@@ -24,10 +24,10 @@ const fetchIndexExchangeDemand = () => {
   // one ad is enabled.
   const slots = [{ htSlotName: 'd-1-728x90-atf-bottom-leaderboard' }]
   if (numAds > 1) {
-    slots.push({ htSlotName: 'd-2-300x250-atf-middle-right_rectangle' })
+    slots.push({ htSlotName: 'd-3-300x250-atf-bottom-right_rectangle' })
   }
   if (numAds > 2) {
-    slots.push({ htSlotName: 'd-3-300x250-atf-bottom-right_rectangle' })
+    slots.push({ htSlotName: 'd-2-300x250-atf-middle-right_rectangle' })
   }
 
   return new Promise((resolve, reject) => {
