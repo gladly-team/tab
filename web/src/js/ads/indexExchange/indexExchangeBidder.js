@@ -36,7 +36,7 @@ const fetchIndexExchangeDemand = () => {
     ixTag.cmd.push(() => {
       console.log('Index Exchange: retrieving demand')
 
-      // IX appears to reinitialize the variable on load. Noet
+      // IX appears to reinitialize the variable on load.
       let ixTag = getIndexExchangeTag()
 
       // Note: the current request is to a casalemedia URL.
