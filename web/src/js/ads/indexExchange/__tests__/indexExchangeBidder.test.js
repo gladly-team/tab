@@ -2,6 +2,7 @@
 
 jest.mock('js/ads/adSettings')
 jest.mock('js/ads/indexExchange/getIndexExchangeTag')
+jest.mock('js/ads/google/getGoogleTag')
 
 beforeAll(() => {
   jest.useFakeTimers()
@@ -43,6 +44,7 @@ describe('indexExchangeBidder', () => {
   })
 
   it('only gets bids for the leaderboard ad when one ad is enabled', async () => {
+    expect.assertions(2)
     const { getNumberOfAdsToShow } = require('js/ads/adSettings')
     getNumberOfAdsToShow.mockReturnValue(1)
     const indexExchangeBidder = require('js/ads/indexExchange/indexExchangeBidder')
@@ -58,6 +60,7 @@ describe('indexExchangeBidder', () => {
   })
 
   it('gets bids for the leaderboard and rectangle ads when two ads are enabled', async () => {
+    expect.assertions(2)
     const { getNumberOfAdsToShow } = require('js/ads/adSettings')
     getNumberOfAdsToShow.mockReturnValue(2)
     const indexExchangeBidder = require('js/ads/indexExchange/indexExchangeBidder')
@@ -74,6 +77,7 @@ describe('indexExchangeBidder', () => {
   })
 
   it('gets bids for the leaderboard and rectangle ads when three ads are enabled', async () => {
+    expect.assertions(2)
     const { getNumberOfAdsToShow } = require('js/ads/adSettings')
     getNumberOfAdsToShow.mockReturnValue(3)
     const indexExchangeBidder = require('js/ads/indexExchange/indexExchangeBidder')
@@ -123,6 +127,33 @@ describe('indexExchangeBidder', () => {
     // Here, bidder timeout is 700ms.
     jest.advanceTimersByTime(701)
   })
+
+  // it('sets the expected targeting for Google Ad Manager when all slots have bids', async () => {
+  //   expect.assertions(2)
+  //   const getGoogleTag = require('js/ads/google/getGoogleTag').default
+  //   const googletag = getGoogleTag()
+
+  //   // Mock the bid response.
+  //   const indexExchangeBidder = require('js/ads/indexExchange/indexExchangeBidder')
+  //     .default
+  //   const getIndexExchangeTag = require('js/ads/indexExchange/getIndexExchangeTag')
+  //     .default
+  //   const ixTag = getIndexExchangeTag()
+  //   const { mockIndexExchangeBidResponse } = require('js/utils/test-utils')
+  //   const mockBidResponse = mockIndexExchangeBidResponse()
+  //   ixTag.retrieveDemand.mockImplementation((config, callback) =>
+  //     callback(mockBidResponse)
+  //   )
+  //   await indexExchangeBidder()
+  //   expect(googletag.pubads().setTargeting).toHaveBeenCalledWith(
+  //     'IOM',
+  //     '728x90_5000'
+  //   )
+  //   expect(googletag.pubads().setTargeting).toHaveBeenCalledWith(
+  //     'ix_id',
+  //     '_mBnLnF5V'
+  //   )
+  // })
 
   // TODO:
   // test handling response

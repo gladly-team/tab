@@ -1,6 +1,7 @@
 import getIndexExchangeTag from 'js/ads/indexExchange/getIndexExchangeTag'
 import { getNumberOfAdsToShow, BIDDER_TIMEOUT } from 'js/ads/adSettings'
-// import logger from 'js/utils/logger'
+import getGoogleTag from 'js/ads/google/getGoogleTag'
+import logger from 'js/utils/logger'
 
 /**
  * Return a promise that resolves when the Index Exchange bid
@@ -34,15 +35,43 @@ const fetchIndexExchangeDemand = () => {
     // Note that Index Exchange hasn't documented the cmd
     // behavior so it may break.
     ixTag.cmd.push(() => {
-      console.log('Index Exchange: retrieving demand')
+      // console.log('Index Exchange: retrieving demand')
 
       // IX appears to reinitialize the variable on load.
       let ixTag = getIndexExchangeTag()
 
       // Note: the current request is to a casalemedia URL.
       ixTag.retrieveDemand(slots, demand => {
-        // TODO: handle demand and set targeting
-        console.log('Index Exchange: demand', demand)
+        // console.log('Index Exchange: demand', demand)
+
+        // Set adserver targeting for any returned demand.
+        // IX demand should set the IOM and ix_id parameters.
+        try {
+          const googletag = getGoogleTag()
+          if (demand && demand.slot) {
+            slots.forEach(slot => {
+              const slotBidResponseArray = demand.slot[slot.htSlotName]
+              slotBidResponseArray.forEach(slotBidResponse => {
+                if (slotBidResponse && slotBidResponse.targeting) {
+                  Object.keys(slotBidResponse.targeting).forEach(
+                    targetingKey => {
+                      // FIXME: we need to set targeting on the specific slot.
+                      // googletag.cmd.push(() => {
+                      //   googletag.pubads().setTargeting(
+                      //     targetingKey,
+                      //     // IX's targeting value is an array with one string.
+                      //     slotBidResponse.targeting[targetingKey][0]
+                      //   )
+                      // })
+                    }
+                  )
+                }
+              })
+            })
+          }
+        } catch (e) {
+          logger.error(e)
+        }
         handleAuctionEnd()
       })
     })

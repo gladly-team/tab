@@ -19,6 +19,8 @@ export const __setPubadsRefreshMock = mockFunction => {
   mockPubadsRefresh = mockFunction
 }
 
+const mockSetTargeting = jest.fn()
+
 // Mock an event fired.
 export const __runEventListenerCallbacks = (eventName, ...args) => {
   eventListenerStore[eventName].forEach(f => f(...args))
@@ -41,6 +43,7 @@ export default () => {
       },
       enableSingleRequest: mockEnableSingleRequest,
       refresh: mockPubadsRefresh,
+      setTargeting: mockSetTargeting,
     }),
     defineSlot: jest.fn(() => ({
       addService: jest.fn(),
