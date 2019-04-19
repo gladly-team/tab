@@ -141,6 +141,81 @@ export const mockAmazonBidResponse = (properties = {}) => {
 }
 
 /**
+ * Create a mock bid response from Index Exchange.
+ * @return {Object}
+ */
+export const mockIndexExchangeBidResponse = (properties = {}) => {
+  return {
+    slot: {
+      'd-1-728x90-atf-bottom-leaderboard': [
+        {
+          targeting: {
+            IOM: ['728x90_5000'],
+            ix_id: ['_mBnLnF5V'],
+          },
+          price: 7000,
+          adm: '',
+          size: [728, 90],
+          partnerId: 'IndexExchangeHtb',
+        },
+      ],
+      'd-2-300x250-atf-middle-right_rectangle': [
+        {
+          targeting: {
+            IOM: ['300x250_5000'],
+            ix_id: ['_fB5UzqU2'],
+          },
+          price: 5000,
+          adm: '_admcodehere_',
+          size: [300, 250],
+          partnerId: 'IndexExchangeHtb',
+        },
+      ],
+      'd-3-300x250-atf-bottom-right_rectangle': [
+        {
+          targeting: {
+            IOM: ['300x250_5000'],
+            ix_id: ['_C7VB5HUd'],
+          },
+          price: 3500,
+          adm: '_admcodehere_',
+          size: [300, 250],
+          partnerId: 'IndexExchangeHtb',
+        },
+      ],
+    },
+    page: [],
+    identity: {
+      AdserverOrgIp: {
+        data: {
+          source: 'adserver.org',
+          uids: [
+            {
+              id: '233aed36-ea6a-4a2d-aac0-d948e2a7db65',
+              ext: {
+                rtiPartner: 'TDID',
+              },
+            },
+            {
+              id: 'TRUE',
+              ext: {
+                rtiPartner: 'TDID_LOOKUP',
+              },
+            },
+            {
+              id: '2019-02-28T04:53:55',
+              ext: {
+                rtiPartner: 'TDID_CREATED_AT',
+              },
+            },
+          ],
+        },
+      },
+    },
+  }
+}
+
+/**
  * Return the default starting value of `window.tabforacause`
  * @return {Object}
  */
