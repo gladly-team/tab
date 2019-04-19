@@ -3,6 +3,10 @@
 jest.mock('js/ads/adSettings')
 jest.mock('js/ads/indexExchange/getIndexExchangeTag')
 
+beforeAll(() => {
+  jest.useFakeTimers()
+})
+
 beforeEach(() => {
   // Mock the IX tag
   delete window.headertag
@@ -86,7 +90,40 @@ describe('indexExchangeBidder', () => {
     ])
   })
 
+  it('the bidder resolves when the bid response returns', done => {
+    const indexExchangeBidder = require('js/ads/indexExchange/indexExchangeBidder')
+      .default
+    const getIndexExchangeTag = require('js/ads/indexExchange/getIndexExchangeTag')
+      .default
+    const ixTag = getIndexExchangeTag()
+
+    let retrieveDemandCallback
+    ixTag.retrieveDemand.mockImplementation((config, callback) => {
+      retrieveDemandCallback = callback
+    })
+    indexExchangeBidder().then(() => {
+      done()
+    })
+    retrieveDemandCallback()
+  })
+
+  it('the bidder resolves when we pass the bidder timeout', done => {
+    const indexExchangeBidder = require('js/ads/indexExchange/indexExchangeBidder')
+      .default
+    const getIndexExchangeTag = require('js/ads/indexExchange/getIndexExchangeTag')
+      .default
+    const ixTag = getIndexExchangeTag()
+
+    // Mock that retrieveDemand never calls the callback.
+    ixTag.retrieveDemand.mockImplementation(() => {})
+    indexExchangeBidder().then(() => {
+      done()
+    })
+
+    // Here, bidder timeout is 700ms.
+    jest.advanceTimersByTime(701)
+  })
+
   // TODO:
   // test handling response
-  // test timeout
 })
