@@ -1,3 +1,5 @@
+import { getUrlParameters } from 'js/utils/utils'
+
 // Turn on a global notification. Set this to `true` to show
 // the message in NotificationComponent to all users.
 export const showGlobalNotification = () => false
@@ -12,4 +14,5 @@ export const isSearchPageEnabled = () =>
 export const shouldRedirectSearchToThirdParty = () =>
   process.env.REACT_APP_FEATURE_FLAG_REDIRECT_SEARCH_TO_THIRD_PARTY === 'true'
 
-export const enableIndexExchangeBidder = () => true
+export const enableIndexExchangeBidder = () =>
+  getUrlParameters().ixDebug === 'true'
