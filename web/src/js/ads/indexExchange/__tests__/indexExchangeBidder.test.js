@@ -148,29 +148,25 @@ describe('indexExchangeBidder', () => {
     await indexExchangeBidder()
     const googleSlots = googletag.pubads().getSlots()
     const [leaderboardSlot, rectangleSlot, secondRectangleSlot] = googleSlots
-    expect(leaderboardSlot.setTargeting).toHaveBeenCalledWith(
-      'IOM',
-      '728x90_5000'
-    )
-    expect(leaderboardSlot.setTargeting).toHaveBeenCalledWith(
-      'ix_id',
-      '_mBnLnF5V'
-    )
-    expect(rectangleSlot.setTargeting).toHaveBeenCalledWith(
-      'IOM',
-      '300x250_5000'
-    )
-    expect(rectangleSlot.setTargeting).toHaveBeenCalledWith(
-      'ix_id',
-      '_C7VB5HUd'
+    expect(leaderboardSlot.setTargeting).toHaveBeenCalledWith('IOM', [
+      '728x90_5000',
+    ])
+    expect(leaderboardSlot.setTargeting).toHaveBeenCalledWith('ix_id', [
+      '_mBnLnF5V',
+    ])
+    expect(rectangleSlot.setTargeting).toHaveBeenCalledWith('IOM', [
+      '300x250_5000',
+    ])
+    expect(rectangleSlot.setTargeting).toHaveBeenCalledWith('ix_id', [
+      '_C7VB5HUd',
+    ])
+    expect(secondRectangleSlot.setTargeting).toHaveBeenCalledWith(
+      'ad_thing',
+      'thingy_abc'
     )
     expect(secondRectangleSlot.setTargeting).toHaveBeenCalledWith(
-      'IOM',
-      '300x250_5000'
-    )
-    expect(secondRectangleSlot.setTargeting).toHaveBeenCalledWith(
-      'ix_id',
-      '_fB5UzqU2'
+      'some_key',
+      'my-cool-value123'
     )
   })
 
@@ -217,18 +213,15 @@ describe('indexExchangeBidder', () => {
     )
     await indexExchangeBidder()
     const [leaderboardSlot] = googletag.pubads().getSlots()
-    expect(leaderboardSlot.setTargeting).toHaveBeenCalledWith(
-      'IOM',
-      '728x90_5000'
-    )
-    expect(leaderboardSlot.setTargeting).toHaveBeenCalledWith(
-      'ix_id',
-      '_some_ix_id'
-    )
-    expect(leaderboardSlot.setTargeting).toHaveBeenCalledWith(
-      'partner_thing',
-      'foobar'
-    )
+    expect(leaderboardSlot.setTargeting).toHaveBeenCalledWith('IOM', [
+      '728x90_5000',
+    ])
+    expect(leaderboardSlot.setTargeting).toHaveBeenCalledWith('ix_id', [
+      '_some_ix_id',
+    ])
+    expect(leaderboardSlot.setTargeting).toHaveBeenCalledWith('partner_thing', [
+      'foobar',
+    ])
   })
 
   it('does not throw, log an error, or set targeting if the bid response is undefined', async () => {

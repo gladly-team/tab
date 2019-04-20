@@ -93,10 +93,10 @@ const fetchIndexExchangeDemand = () => {
                     // Set IX targeting on this slot.
                     Object.keys(IXBidResponse.targeting).forEach(
                       targetingKey => {
+                        // https://developers.google.com/doubleclick-gpt/reference#googletag.Slot_setTargeting
                         googleSlot.setTargeting(
                           targetingKey,
-                          // IX's targeting value is an array with one string.
-                          IXBidResponse.targeting[targetingKey][0]
+                          IXBidResponse.targeting[targetingKey]
                         )
                       }
                     )

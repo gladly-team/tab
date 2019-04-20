@@ -162,13 +162,14 @@ export const mockIndexExchangeBidResponse = (properties = {}) => {
       'd-2-300x250-atf-middle-right_rectangle': [
         {
           targeting: {
-            IOM: ['300x250_5000'],
-            ix_id: ['_fB5UzqU2'],
+            // Apparently, targeting values might be arrays or just keys
+            some_key: 'my-cool-value123',
+            ad_thing: 'thingy_abc',
           },
           price: 5000,
           adm: '_admcodehere_',
           size: [300, 250],
-          partnerId: 'IndexExchangeHtb',
+          partnerId: 'SomePartner',
         },
       ],
       'd-3-300x250-atf-bottom-right_rectangle': [
