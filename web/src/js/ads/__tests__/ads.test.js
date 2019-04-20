@@ -12,10 +12,12 @@ jest.mock('js/ads/amazon/getAmazonTag')
 jest.mock('js/ads/prebid/getPrebidPbjs')
 jest.mock('js/ads/prebid/prebidConfig')
 jest.mock('js/ads/amazon/amazonBidder')
+jest.mock('js/ads/indexExchange/indexExchangeBidder')
 jest.mock('js/utils/client-location')
 jest.mock('js/ads/handleAdsLoaded')
 jest.mock('js/ads/adsEnabledStatus')
 jest.mock('js/ads/google/setUpGoogleAds')
+jest.mock('js/utils/feature-flags')
 
 beforeAll(() => {
   jest.useFakeTimers()
@@ -25,6 +27,10 @@ beforeEach(() => {
   // Enable ads by default.
   const adsEnabledStatus = require('js/ads/adsEnabledStatus').default
   adsEnabledStatus.mockReturnValue(true)
+
+  // Assume Index Exchange is enabled.
+  const { enableIndexExchangeBidder } = require('js/utils/feature-flags')
+  enableIndexExchangeBidder.mockReturnValue(true)
 
   // Mock apstag
   delete window.apstag
@@ -63,9 +69,12 @@ describe('ads script', () => {
   })
 
   it('calls the expected bidders and ad server', async () => {
-    expect.assertions(3)
+    expect.assertions(4)
+
     const amazonBidder = require('js/ads/amazon/amazonBidder').default
     const prebidConfig = require('js/ads/prebid/prebidConfig').default
+    const indexExchangeBidder = require('js/ads/indexExchange/indexExchangeBidder')
+      .default
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
 
@@ -76,13 +85,30 @@ describe('ads script', () => {
 
     expect(amazonBidder).toHaveBeenCalledTimes(1)
     expect(prebidConfig).toHaveBeenCalledTimes(1)
+    expect(indexExchangeBidder).toHaveBeenCalledTimes(1)
     expect(googletagMockRefresh).toHaveBeenCalledTimes(1)
   })
 
+  it('does not call Index Exchange if the bidder is not enabled', async () => {
+    expect.assertions(1)
+    const { enableIndexExchangeBidder } = require('js/utils/feature-flags')
+    enableIndexExchangeBidder.mockReturnValue(false)
+    const indexExchangeBidder = require('js/ads/indexExchange/indexExchangeBidder')
+      .default
+    const googletagMockRefresh = jest.fn()
+    __setPubadsRefreshMock(googletagMockRefresh)
+
+    require('js/ads/ads')
+    await new Promise(resolve => setImmediate(resolve))
+    expect(indexExchangeBidder).not.toHaveBeenCalled()
+  })
+
   it('does not call expected bidders or ad server when ads are not enabled', async () => {
-    expect.assertions(3)
+    expect.assertions(4)
     const amazonBidder = require('js/ads/amazon/amazonBidder').default
     const prebidConfig = require('js/ads/prebid/prebidConfig').default
+    const indexExchangeBidder = require('js/ads/indexExchange/indexExchangeBidder')
+      .default
 
     // Disable ads.
     const adsEnabledStatus = require('js/ads/adsEnabledStatus').default
@@ -98,6 +124,7 @@ describe('ads script', () => {
 
     expect(amazonBidder).not.toHaveBeenCalled()
     expect(prebidConfig).not.toHaveBeenCalled()
+    expect(indexExchangeBidder).not.toHaveBeenCalledTimes(1)
     expect(googletagMockRefresh).not.toHaveBeenCalled()
   })
 
@@ -130,6 +157,17 @@ describe('ads script', () => {
     // Mock that Amazon is very slow to respond
     const amazonBidder = require('js/ads/amazon/amazonBidder').default
     amazonBidder.mockImplementationOnce(() => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve()
+        }, 15e3)
+      })
+    })
+
+    // Mock that Index Exchange is very slow to respond
+    const indexExchangeBidder = require('js/ads/indexExchange/indexExchangeBidder')
+      .default
+    indexExchangeBidder.mockImplementationOnce(() => {
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           resolve()
@@ -174,6 +212,17 @@ describe('ads script', () => {
       })
     })
 
+    // Mock that Index Exchange responds quickly
+    const indexExchangeBidder = require('js/ads/indexExchange/indexExchangeBidder')
+      .default
+    indexExchangeBidder.mockImplementationOnce(() => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve()
+        }, 80)
+      })
+    })
+
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
 
@@ -210,6 +259,17 @@ describe('ads script', () => {
       })
     })
 
+    // Mock that Index Exchange responds quickly
+    const indexExchangeBidder = require('js/ads/indexExchange/indexExchangeBidder')
+      .default
+    indexExchangeBidder.mockImplementationOnce(() => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve()
+        }, 40)
+      })
+    })
+
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
 
@@ -236,6 +296,17 @@ describe('ads script', () => {
     // Mock that Amazon responds quickly
     const amazonBidder = require('js/ads/amazon/amazonBidder').default
     amazonBidder.mockImplementationOnce(() => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve()
+        }, 40)
+      })
+    })
+
+    // Mock that Index Exchange responds quickly
+    const indexExchangeBidder = require('js/ads/indexExchange/indexExchangeBidder')
+      .default
+    indexExchangeBidder.mockImplementationOnce(() => {
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           resolve()

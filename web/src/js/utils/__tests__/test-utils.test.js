@@ -280,3 +280,23 @@ describe('web test-utils', () => {
     })
   })
 })
+
+describe('mockIndexExchangeBidResponse', () => {
+  it('returns expected properties', () => {
+    const { mockIndexExchangeBidResponse } = require('js/utils/test-utils')
+    expect(Object.keys(mockIndexExchangeBidResponse()).sort()).toEqual([
+      'identity',
+      'page',
+      'slot',
+    ])
+  })
+
+  it('returns expected slots', () => {
+    const { mockIndexExchangeBidResponse } = require('js/utils/test-utils')
+    expect(Object.keys(mockIndexExchangeBidResponse().slot).sort()).toEqual([
+      'd-1-728x90-atf-bottom-leaderboard',
+      'd-2-300x250-atf-middle-right_rectangle',
+      'd-3-300x250-atf-bottom-right_rectangle',
+    ])
+  })
+})
