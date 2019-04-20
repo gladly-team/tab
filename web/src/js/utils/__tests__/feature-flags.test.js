@@ -33,4 +33,9 @@ describe('feature flags', () => {
     process.env.REACT_APP_FEATURE_FLAG_SEARCH_PAGE_ENABLED = 'true'
     expect(isSearchPageEnabled()).toBe(true)
   })
+
+  test('enableIndexExchangeBidder is false', () => {
+    const { enableIndexExchangeBidder } = require('js/utils/feature-flags')
+    expect(enableIndexExchangeBidder()).toBe(false)
+  })
 })

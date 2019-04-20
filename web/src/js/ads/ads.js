@@ -10,12 +10,21 @@ import handleAdsLoaded from 'js/ads/handleAdsLoaded'
 import prebidConfig from 'js/ads/prebid/prebidConfig'
 import { AUCTION_TIMEOUT } from 'js/ads/adSettings'
 import logger from 'js/utils/logger'
+import { enableIndexExchangeBidder } from 'js/utils/feature-flags'
+
+// We don't want to enable IX until they're returning
+// real bids.
+const INDEX_EXCHANGE_ENABLED = enableIndexExchangeBidder()
 
 // Enabled bidders.
 const BIDDER_PREBID = 'prebid'
 const BIDDER_AMAZON = 'amazon'
 const BIDDER_IX = 'ix'
-const bidders = [BIDDER_PREBID, BIDDER_AMAZON, BIDDER_IX]
+
+const bidders = [BIDDER_PREBID, BIDDER_AMAZON]
+if (INDEX_EXCHANGE_ENABLED) {
+  bidders.push(BIDDER_IX)
+}
 
 // Keep track of which bidders have responded.
 const requestManager = {
@@ -119,18 +128,17 @@ const loadAdCode = () => {
       bidderCompleted(BIDDER_PREBID)
     })
 
-  // FIXME: set a feature flag for this (enabled by a
-  //   debug URL parameter). We don't want to enable it
-  //   until it's returning real bids.
   // Index Exchange
-  indexExchangeBidder()
-    .then(() => {
-      bidderCompleted(BIDDER_IX)
-    })
-    .catch(err => {
-      logger.error(err)
-      bidderCompleted(BIDDER_IX)
-    })
+  if (INDEX_EXCHANGE_ENABLED) {
+    indexExchangeBidder()
+      .then(() => {
+        bidderCompleted(BIDDER_IX)
+      })
+      .catch(err => {
+        logger.error(err)
+        bidderCompleted(BIDDER_IX)
+      })
+  }
 }
 
 if (adsEnabled()) {

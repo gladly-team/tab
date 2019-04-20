@@ -11,3 +11,5 @@ export const isSearchPageEnabled = () =>
 
 export const shouldRedirectSearchToThirdParty = () =>
   process.env.REACT_APP_FEATURE_FLAG_REDIRECT_SEARCH_TO_THIRD_PARTY === 'true'
+
+export const enableIndexExchangeBidder = () => true
