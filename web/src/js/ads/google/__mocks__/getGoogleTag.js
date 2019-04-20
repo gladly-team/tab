@@ -49,7 +49,7 @@ const eventListenerStore = {}
 export default () => {
   window.googletag = window.googletag || {
     cmd: mockCmd,
-    pubads: () => ({
+    pubads: jest.fn(() => ({
       addEventListener: (eventName, callback) => {
         if (!eventListenerStore[eventName]) {
           eventListenerStore[eventName] = []
@@ -60,7 +60,7 @@ export default () => {
       enableSingleRequest: mockEnableSingleRequest,
       refresh: mockPubadsRefresh,
       setTargeting: mockSetTargeting,
-    }),
+    })),
     defineSlot: jest.fn(() => ({
       addService: jest.fn(),
     })),

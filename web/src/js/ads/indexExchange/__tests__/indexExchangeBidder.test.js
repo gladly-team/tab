@@ -3,6 +3,7 @@
 jest.mock('js/ads/adSettings')
 jest.mock('js/ads/indexExchange/getIndexExchangeTag')
 jest.mock('js/ads/google/getGoogleTag')
+jest.mock('js/utils/logger')
 
 beforeAll(() => {
   jest.useFakeTimers()
@@ -171,5 +172,220 @@ describe('indexExchangeBidder', () => {
       'ix_id',
       '_fB5UzqU2'
     )
+  })
+
+  it('sets targeting for multiple bids on a single slot', async () => {
+    expect.assertions(3)
+    const logger = require('js/utils/logger').default
+    const getGoogleTag = require('js/ads/google/getGoogleTag').default
+    const googletag = getGoogleTag()
+
+    // Mock the bid response.
+    const indexExchangeBidder = require('js/ads/indexExchange/indexExchangeBidder')
+      .default
+    const getIndexExchangeTag = require('js/ads/indexExchange/getIndexExchangeTag')
+      .default
+    const ixTag = getIndexExchangeTag()
+    ixTag.retrieveDemand.mockImplementation((config, callback) =>
+      callback({
+        slot: {
+          'd-1-728x90-atf-bottom-leaderboard': [
+            {
+              targeting: {
+                IOM: ['728x90_5000'],
+                ix_id: ['_some_ix_id'],
+              },
+              price: 7000,
+              adm: '',
+              size: [728, 90],
+              partnerId: 'IndexExchangeHtb',
+            },
+            {
+              targeting: {
+                partner_thing: ['foobar'],
+              },
+              price: 5000,
+              adm: '',
+              size: [728, 90],
+              partnerId: 'AnotherPartner',
+            },
+          ],
+        },
+        page: [],
+        identity: {},
+      })
+    )
+    await indexExchangeBidder()
+    const [leaderboardSlot] = googletag.pubads().getSlots()
+    expect(leaderboardSlot.setTargeting).toHaveBeenCalledWith(
+      'IOM',
+      '728x90_5000'
+    )
+    expect(leaderboardSlot.setTargeting).toHaveBeenCalledWith(
+      'ix_id',
+      '_some_ix_id'
+    )
+    expect(leaderboardSlot.setTargeting).toHaveBeenCalledWith(
+      'partner_thing',
+      'foobar'
+    )
+  })
+
+  it('does not throw, log an error, or set targeting if the bid response is undefined', async () => {
+    expect.assertions(4)
+    const logger = require('js/utils/logger').default
+    const getGoogleTag = require('js/ads/google/getGoogleTag').default
+    const googletag = getGoogleTag()
+
+    // Mock the bid response.
+    const indexExchangeBidder = require('js/ads/indexExchange/indexExchangeBidder')
+      .default
+    const getIndexExchangeTag = require('js/ads/indexExchange/getIndexExchangeTag')
+      .default
+    const ixTag = getIndexExchangeTag()
+    ixTag.retrieveDemand.mockImplementation((config, callback) =>
+      callback(undefined)
+    )
+    await indexExchangeBidder()
+    expect(logger.error).not.toHaveBeenCalled()
+    googletag
+      .pubads()
+      .getSlots()
+      .forEach(slot => {
+        expect(slot.setTargeting).not.toHaveBeenCalled()
+      })
+  })
+
+  it('does not throw, log an error, or set targeting if the bid response is an empty object', async () => {
+    expect.assertions(4)
+    const logger = require('js/utils/logger').default
+    const getGoogleTag = require('js/ads/google/getGoogleTag').default
+    const googletag = getGoogleTag()
+
+    // Mock the bid response.
+    const indexExchangeBidder = require('js/ads/indexExchange/indexExchangeBidder')
+      .default
+    const getIndexExchangeTag = require('js/ads/indexExchange/getIndexExchangeTag')
+      .default
+    const ixTag = getIndexExchangeTag()
+    ixTag.retrieveDemand.mockImplementation((config, callback) => callback({}))
+    await indexExchangeBidder()
+    expect(logger.error).not.toHaveBeenCalled()
+    googletag
+      .pubads()
+      .getSlots()
+      .forEach(slot => {
+        expect(slot.setTargeting).not.toHaveBeenCalled()
+      })
+  })
+
+  it('does not throw, log an error, or set targeting if the bid response has no slot responses', async () => {
+    expect.assertions(4)
+    const logger = require('js/utils/logger').default
+    const getGoogleTag = require('js/ads/google/getGoogleTag').default
+    const googletag = getGoogleTag()
+
+    // Mock the bid response.
+    const indexExchangeBidder = require('js/ads/indexExchange/indexExchangeBidder')
+      .default
+    const getIndexExchangeTag = require('js/ads/indexExchange/getIndexExchangeTag')
+      .default
+    const ixTag = getIndexExchangeTag()
+    ixTag.retrieveDemand.mockImplementation((config, callback) =>
+      callback({
+        slot: {},
+        page: [],
+        identity: {},
+      })
+    )
+    await indexExchangeBidder()
+    expect(logger.error).not.toHaveBeenCalled()
+    googletag
+      .pubads()
+      .getSlots()
+      .forEach(slot => {
+        expect(slot.setTargeting).not.toHaveBeenCalled()
+      })
+  })
+
+  it('does not throw, log an error, or set targeting if IX returns an unexpected slot ID', async () => {
+    expect.assertions(4)
+    const logger = require('js/utils/logger').default
+    const getGoogleTag = require('js/ads/google/getGoogleTag').default
+    const googletag = getGoogleTag()
+
+    // Mock the bid response.
+    const indexExchangeBidder = require('js/ads/indexExchange/indexExchangeBidder')
+      .default
+    const getIndexExchangeTag = require('js/ads/indexExchange/getIndexExchangeTag')
+      .default
+    const ixTag = getIndexExchangeTag()
+    ixTag.retrieveDemand.mockImplementation((config, callback) =>
+      callback({
+        slot: {
+          'this-slot-does-not-exist-for-us': [
+            {
+              targeting: {
+                IOM: ['728x90_5000'],
+                ix_id: ['_mBnLnF5V'],
+              },
+              price: 7000,
+              adm: '',
+              size: [728, 90],
+              partnerId: 'IndexExchangeHtb',
+            },
+          ],
+        },
+        page: [],
+        identity: {},
+      })
+    )
+    await indexExchangeBidder()
+    expect(logger.error).not.toHaveBeenCalled()
+    googletag
+      .pubads()
+      .getSlots()
+      .forEach(slot => {
+        expect(slot.setTargeting).not.toHaveBeenCalled()
+      })
+  })
+
+  it('does not throw, log an error, or set targeting if IX does not define targeting values for a slot', async () => {
+    expect.assertions(4)
+    const logger = require('js/utils/logger').default
+    const getGoogleTag = require('js/ads/google/getGoogleTag').default
+    const googletag = getGoogleTag()
+
+    // Mock the bid response.
+    const indexExchangeBidder = require('js/ads/indexExchange/indexExchangeBidder')
+      .default
+    const getIndexExchangeTag = require('js/ads/indexExchange/getIndexExchangeTag')
+      .default
+    const ixTag = getIndexExchangeTag()
+    ixTag.retrieveDemand.mockImplementation((config, callback) =>
+      callback({
+        slot: {
+          'd-1-728x90-atf-bottom-leaderboard': [
+            {
+              targeting: {},
+              price: 7000,
+              adm: '',
+              size: [728, 90],
+              partnerId: 'IndexExchangeHtb',
+            },
+          ],
+        },
+        page: [],
+        identity: {},
+      })
+    )
+    await indexExchangeBidder()
+    expect(logger.error).not.toHaveBeenCalled()
+    googletag
+      .pubads()
+      .getSlots()
+      .forEach(slot => {
+        expect(slot.setTargeting).not.toHaveBeenCalled()
+      })
   })
 })
