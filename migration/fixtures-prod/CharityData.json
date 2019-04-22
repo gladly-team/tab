@@ -167,5 +167,19 @@
     "updated": "2019-03-26T18:00:000Z",
     "inactive": false,
     "isPermanentPartner": false
+  },
+  {
+    "id": "a6e9650c-776e-4f0d-acb0-da6827318e61",
+    "name": "Cool Earth",
+    "category": "The Environment",
+    "logo": "placeholder.png",
+    "image": "cool-earth.png",
+    "website": "https://www.coolearth.org",
+    "impact": "Together, we can help Cool Earth put in place the simple steps that change the fate of at-risk rainforest while empowering local communities. Thanks for your support!",
+    "description": "Works alongside rainforest communities to halt deforestation",
+    "created": "2019-04-22T18:00:000Z",
+    "updated": "2019-04-22T18:00:000Z",
+    "inactive": false,
+    "isPermanentPartner": false
   }
 ]

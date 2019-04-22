@@ -10,8 +10,9 @@ import logger from 'js/utils/logger'
 class CampaignBaseView extends React.Component {
   render() {
     const { userId } = this.props
-    const CAMPAIGN_START_TIME_ISO = '2019-03-26T20:00:00.000Z'
-    const CAMPAIGN_END_TIME_ISO = '2019-04-01T18:00:00.000Z'
+    const CAMPAIGN_START_TIME_ISO = '2019-04-22T19:00:00.000Z'
+    const CAMPAIGN_END_TIME_ISO = '2019-04-26T19:00:00.000Z'
+    const CHARITY_ID = 'a6e9650c-776e-4f0d-acb0-da6827318e61'
 
     return (
       <QueryRenderer
@@ -36,7 +37,7 @@ class CampaignBaseView extends React.Component {
         `}
         variables={{
           userId: userId,
-          charityId: '3e47df5d-1a1e-432b-8d81-12dc5453563e',
+          charityId: CHARITY_ID,
           startTime: CAMPAIGN_START_TIME_ISO,
           endTime: CAMPAIGN_END_TIME_ISO,
         }}

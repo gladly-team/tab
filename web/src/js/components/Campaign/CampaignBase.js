@@ -45,7 +45,7 @@ class CampaignBase extends React.Component {
                   marginTop: 4,
                 }}
               >
-                Thank You for Supporting Girls Not Brides!
+                Thank You for Supporting Cool Earth!
               </Typography>
               <div
                 style={{
@@ -54,18 +54,17 @@ class CampaignBase extends React.Component {
                 }}
               >
                 <Typography variant={'body2'} gutterBottom>
-                  Thanks for supporting{' '}
+                  With your help,{' '}
                   <a
-                    href="https://www.girlsnotbrides.org"
+                    href="https://www.coolearth.org"
                     target="_blank"
                     rel="noopener noreferrer"
                     style={anchorStyle}
                   >
-                    Girls Not Brides
-                  </a>
-                  ! With your help, they are working to end child marriage
-                  worldwide to make a difference in the lives of millions of
-                  girls.{' '}
+                    Cool Earth
+                  </a>{' '}
+                  is working alongside local communities to halt deforestation
+                  and combat climate change. Thank you!{' '}
                 </Typography>
                 <Typography>
                   <span style={{ fontWeight: 'bold' }}>
@@ -105,7 +104,7 @@ class CampaignBase extends React.Component {
             marginTop: 4,
           }}
         >
-          March Spotlight: Girls Not Brides
+          April Spotlight: Cool Earth
         </Typography>
         <div
           style={{
@@ -114,16 +113,16 @@ class CampaignBase extends React.Component {
           }}
         >
           <Typography variant={'body2'} gutterBottom>
-            The final votes are in, and this month Tabbers have selected{' '}
+            This month, Tabbers selected{' '}
             <a
-              href="https://www.girlsnotbrides.org"
+              href="https://www.coolearth.org"
               target="_blank"
               rel="noopener noreferrer"
               style={anchorStyle}
             >
-              Girls Not Brides
+              Cool Earth
             </a>{' '}
-            for our March{' '}
+            for our April{' '}
             <a
               href="https://www.facebook.com/notes/tab-for-a-cause/introducing-monthly-charity-spotlight/2071986076177802/"
               target="_blank"
@@ -132,14 +131,14 @@ class CampaignBase extends React.Component {
             >
               Charity Spotlight
             </a>
-            . Girls Not Brides is committed to ending child marriage, enabling
-            girls to fulfill their potential. They want to ensure that every
-            girl has the right to lead the life that she chooses and that, by
-            ending child marriage, we can all have a safer, healthier and more
-            prosperous future.
+            —a particularly fitting choice for Earth Day on April 22nd! Cool
+            Earth works alongside rainforest communities to halt deforestation
+            and its impact on climate change. We continue to rapidly lose
+            rainforest, and their mission is to curb that loss by putting local
+            people back in control of their forest.
           </Typography>
           <Typography variant={'body2'} gutterBottom>
-            Join us in supporting Girls Not Brides by donating hearts!
+            Join us in supporting Cool Earth!
           </Typography>
         </div>
       </HeartDonationCampaign>
