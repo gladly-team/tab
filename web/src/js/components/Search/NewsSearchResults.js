@@ -16,17 +16,17 @@ moment.updateLocale('en', {
   relativeTime: {
     future: 'in %s',
     past: '%s',
-    s: '%dm',
+    s: '%ds',
     ss: '%ss',
-    m: '1%dm',
+    m: '%dm',
     mm: '%dm',
-    h: '1%dh',
+    h: '%dh',
     hh: '%dh',
-    d: '1%dd',
+    d: '%dd',
     dd: '%dd',
-    M: '1%dM',
+    M: '%dM',
     MM: '%dM',
-    y: '1%dY',
+    y: '%dY',
     yy: '%dY',
   },
 })
@@ -115,7 +115,7 @@ const styles = () => ({
   },
 })
 
-const NewsSearchItem = props => {
+export const NewsSearchItem = props => {
   const {
     classes,
     item: {
@@ -140,9 +140,17 @@ const NewsSearchItem = props => {
       ? moment(datePublished).fromNow()
       : null
   return (
-    <Paper elevation={1} className={classes.newsItem}>
+    <Paper
+      elevation={1}
+      className={classes.newsItem}
+      data-test-id={'search-result-news-container'}
+    >
       {image ? (
-        <a href={url} className={classes.newsItemImgAnchor}>
+        <a
+          href={url}
+          className={classes.newsItemImgAnchor}
+          data-test-id={'search-result-news-img-container'}
+        >
           <div className={classes.newsItemImgContainer}>
             <img
               src={getBingThumbnailURLToFillDimensions(
@@ -159,12 +167,22 @@ const NewsSearchItem = props => {
       ) : null}
       <div className={classes.newsItemTextContainer}>
         <a href={url} className={classes.newsItemTitleAnchor}>
-          <h3 className={classes.newsItemTitleText}>{title}</h3>
+          <h3
+            className={classes.newsItemTitleText}
+            data-test-id={'search-result-news-title'}
+          >
+            {title}
+          </h3>
         </a>
         {// Only show the description if there is no image.
         image ? null : (
           <div className={classes.newsItemDescriptionContainer}>
-            <p className={classes.newsItemDescription}>{subtitle}</p>
+            <p
+              className={classes.newsItemDescription}
+              data-test-id={'search-result-news-description'}
+            >
+              {subtitle}
+            </p>
           </div>
         )}
         <div style={{ display: 'flex', marginTop: 'auto' }}>
@@ -182,7 +200,7 @@ const NewsSearchItem = props => {
             })
           ) : get(provider, '[0].name') ? (
             <p
-              data-test-id={'search-result-news-attribution'}
+              data-test-id={'search-result-news-provider'}
               key={'attribution-text'}
               className={classes.attributionText}
             >
