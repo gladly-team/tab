@@ -14,8 +14,6 @@ jest.mock('js/authentication/user')
 jest.mock('js/mutations/LogSearchMutation')
 jest.mock('js/utils/logger')
 
-// TODO: add tests
-
 const getMockProps = () => ({
   query: null,
   page: null,
@@ -207,4 +205,9 @@ describe('SearchResultsQueryBing', () => {
     wrapper.setProps({ page: 2 })
     expect(wrapper.find(SearchResultsBing).prop('page')).toEqual(2)
   })
+
+  // TODO: add tests
+  // - onPageChange called as expected; page scrolls to top
+  // - no error when component unmounts during query (see WikipediaQuery example)
+  // - data is restructured as expected
 })

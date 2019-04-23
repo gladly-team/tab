@@ -79,6 +79,9 @@ class SearchResultsQueryBing extends React.Component {
       // TODO: cancel the promise if the component unmounts
       // TODO: pagination
       const searchResults = await fetchBingSearchResults(query)
+
+      // TODO: handle returned error objects. See:
+      // https://docs.microsoft.com/en-us/rest/api/cognitiveservices/bing-web-api-v7-reference#errorresponse
       this.setState({
         searchResultsData: searchResults,
         queryInProgress: false,
