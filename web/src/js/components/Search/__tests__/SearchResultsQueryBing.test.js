@@ -6,6 +6,7 @@ import { getMockSuccessfulSearchQuery } from 'js/utils/test-utils-search'
 import fetchBingSearchResults from 'js/components/Search/fetchBingSearchResults'
 import { flushAllPromises } from 'js/utils/test-utils'
 import SearchResultsBing from 'js/components/Search/SearchResultsBing'
+import logger from 'js/utils/logger'
 
 jest.mock('js/components/Search/fetchBingSearchResults')
 jest.mock('js/components/Search/SearchResultsBing')
@@ -146,6 +147,21 @@ describe('SearchResultsQueryBing', () => {
     const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
     await flushAllPromises()
     expect(wrapper.find(SearchResultsBing).prop('isError')).toBe(true)
+  })
+
+  it('logs an error when the query request throws', async () => {
+    expect.assertions(1)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+    const mockErr = new Error('Search did not work.')
+    fetchBingSearchResults.mockImplementation(() => {
+      throw mockErr
+    })
+    shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    expect(logger.error).toHaveBeenCalledWith(mockErr)
   })
 
   it('passes isQueryInProgress=true to SearchResultsBing when the query is pending', async () => {
