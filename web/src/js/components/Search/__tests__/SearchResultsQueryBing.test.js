@@ -35,6 +35,72 @@ describe('SearchResultsQueryBing', () => {
     shallow(<SearchResultsQueryBing {...mockProps} />)
   })
 
+  it('calls fetchBingSearchResults on mount when the query exists', async () => {
+    expect.assertions(2)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+    shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    expect(fetchBingSearchResults).toHaveBeenCalledTimes(1)
+    expect(fetchBingSearchResults).toHaveBeenCalledWith('tacos')
+  })
+
+  it('calls fetchBingSearchResults when the query changes', async () => {
+    expect.assertions(2)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+    const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    fetchBingSearchResults.mockClear()
+    wrapper.setProps({ query: 'pizza' })
+    expect(fetchBingSearchResults).toHaveBeenCalledTimes(1)
+    expect(fetchBingSearchResults).toHaveBeenCalledWith('pizza')
+  })
+
+  it('calls fetchBingSearchResults when the page changes', async () => {
+    expect.assertions(3)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+    const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    fetchBingSearchResults.mockClear()
+    expect(fetchBingSearchResults).not.toHaveBeenCalled()
+    wrapper.setProps({ page: 2 })
+    expect(fetchBingSearchResults).toHaveBeenCalledTimes(1)
+    expect(fetchBingSearchResults).toHaveBeenCalledWith('tacos')
+  })
+
+  it('does not call fetchBingSearchResults when some unrelated prop changes', async () => {
+    expect.assertions(1)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+    mockProps.totallyFakeProp = 'hi'
+    const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    fetchBingSearchResults.mockClear()
+    wrapper.setProps({ totallyFakeProp: 'bye' })
+    expect(fetchBingSearchResults).not.toHaveBeenCalled()
+  })
+
+  it('does not call fetchBingSearchResults on mount when the query does not exist', async () => {
+    expect.assertions(1)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = null
+    shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    expect(fetchBingSearchResults).not.toHaveBeenCalled()
+  })
+
   it('passes isEmptyQuery=false to SearchResultsBing when the query exists', async () => {
     expect.assertions(1)
     const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')

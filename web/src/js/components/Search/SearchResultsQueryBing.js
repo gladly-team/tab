@@ -77,6 +77,7 @@ class SearchResultsQueryBing extends React.Component {
 
     try {
       // TODO: cancel the promise if the component unmounts
+      // TODO: pagination
       const searchResults = await fetchBingSearchResults(query)
       // console.log('searchResults', searchResults)
       this.setState({
