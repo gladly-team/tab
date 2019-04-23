@@ -9,6 +9,11 @@ const getMockProps = () => ({
   newsItems: [getMockBingNewsArticleResult(), getMockBingNewsArticleResult()],
 })
 
+const getMockNewsStoryProps = () => ({
+  classes: {},
+  item: getMockBingNewsArticleResult(),
+})
+
 beforeEach(() => {
   jest.clearAllMocks()
 })
@@ -99,5 +104,124 @@ describe('NewsSearchResults', () => {
     expect(secondNewsStory.key()).toEqual('https://example.com/another-url/')
     expect(secondNewsStory.prop('classes')).toEqual(expect.any(Object))
     expect(secondNewsStory.prop('item')).toEqual(mockProps.newsItems[1])
+  })
+})
+
+describe('NewsSearchItem', () => {
+  it('displays the title text', () => {
+    const { NewsSearchItem } = require('js/components/Search/NewsSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.name = 'This is A Nice Title'
+    const wrapper = shallow(<NewsSearchItem {...mockProps} />).dive()
+    const titleElem = wrapper.find('[data-test-id="search-result-news-title"]')
+    expect(titleElem.text()).toEqual('This is A Nice Title')
+    expect(titleElem.type()).toEqual('h3')
+  })
+
+  it('puts the title text in an anchor tag', () => {
+    const { NewsSearchItem } = require('js/components/Search/NewsSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.name = 'This is A Nice Title'
+    mockProps.item.url = 'https://example.com/foobar/'
+    const wrapper = shallow(<NewsSearchItem {...mockProps} />).dive()
+    const titleElem = wrapper.find('[data-test-id="search-result-news-title"]')
+    expect(titleElem.parent().type()).toEqual('a')
+    expect(titleElem.parent().prop('href')).toEqual(
+      'https://example.com/foobar/'
+    )
+  })
+
+  it('displays the title text', () => {
+    const { NewsSearchItem } = require('js/components/Search/NewsSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.name = 'This is A Nice Title'
+    const wrapper = shallow(<NewsSearchItem {...mockProps} />).dive()
+    const titleElem = wrapper.find('[data-test-id="search-result-news-title"]')
+    expect(titleElem.text()).toEqual('This is A Nice Title')
+    expect(titleElem.type()).toEqual('h3')
+  })
+
+  it('crops the title text if it is too long', () => {
+    const { NewsSearchItem } = require('js/components/Search/NewsSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.name =
+      'This is A Nice Title, But It is a Bit Wordy, Would You Not Agree? Especially This Last Part.'
+    const wrapper = shallow(<NewsSearchItem {...mockProps} />).dive()
+    const titleElem = wrapper.find('[data-test-id="search-result-news-title"]')
+    expect(titleElem.text()).toEqual(
+      'This is A Nice Title, But It is a Bit Wordy, Would You Not Agree? Especially ...'
+    )
+    expect(titleElem.type()).toEqual('h3')
+  })
+
+  it('displays the image content when an image exists', () => {
+    const { NewsSearchItem } = require('js/components/Search/NewsSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.image = {
+      contentUrl: 'https://media.example.com/foo.png',
+      thumbnail: {
+        contentUrl: 'https://www.bing.com/some-url/',
+        width: 700,
+        height: 466,
+      },
+    }
+    const wrapper = shallow(<NewsSearchItem {...mockProps} />).dive()
+    const elem = wrapper.find(
+      '[data-test-id="search-result-news-img-container"]'
+    )
+    expect(elem.exists()).toBe(true)
+  })
+
+  it('does not display the image content when an image does not exist', () => {
+    const { NewsSearchItem } = require('js/components/Search/NewsSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.image = undefined
+    const wrapper = shallow(<NewsSearchItem {...mockProps} />).dive()
+    const elem = wrapper.find(
+      '[data-test-id="search-result-news-img-container"]'
+    )
+    expect(elem.exists()).toBe(false)
+  })
+
+  it('displays the image in an anchor tag', () => {
+    const { NewsSearchItem } = require('js/components/Search/NewsSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.image = {
+      contentUrl: 'https://media.example.com/foo.png',
+      thumbnail: {
+        contentUrl: 'https://www.bing.com/some-url/',
+        width: 700,
+        height: 466,
+      },
+    }
+    mockProps.item.url = 'https://example.com/foobar/'
+    const wrapper = shallow(<NewsSearchItem {...mockProps} />).dive()
+    const elem = wrapper.find(
+      '[data-test-id="search-result-news-img-container"]'
+    )
+    expect(elem.type()).toEqual('a')
+    expect(elem.prop('href')).toEqual('https://example.com/foobar/')
+  })
+
+  it('displays the expected img element', () => {
+    const { NewsSearchItem } = require('js/components/Search/NewsSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.image = {
+      contentUrl: 'https://media.example.com/foo.png',
+      thumbnail: {
+        contentUrl: 'https://www.bing.com/some-url/',
+        width: 700,
+        height: 466,
+      },
+    }
+    const wrapper = shallow(<NewsSearchItem {...mockProps} />).dive()
+    const elem = wrapper.find(
+      '[data-test-id="search-result-news-img-container"]'
+    )
+    const imgElem = elem.find('img').first()
+    expect(imgElem.prop('src')).toEqual(
+      'https://www.bing.com/some-url/?w=200&h=100&c=7'
+    )
+    expect(imgElem.prop('alt')).toEqual('')
   })
 })
