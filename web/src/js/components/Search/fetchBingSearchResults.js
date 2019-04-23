@@ -1,8 +1,5 @@
 import getMockBingSearchResults from 'js/components/Search/getMockBingSearchResults'
 
-// TODO: env var
-const endpoint = 'https://dev-search-api.gladly.io/api/query'
-
 /**
  * Call our search API endpoint.
  * @param {String} query - The search query, unencoded.
@@ -22,6 +19,8 @@ const fetchBingSearchResults = async (query = null) => {
     })
   }
   try {
+    // TODO: env var
+    const endpoint = 'https://dev-search-api.gladly.io/api/query'
     const searchURL = `${endpoint}?q=${encodeURI(query)}`
     return fetch(searchURL, {
       method: 'GET',
