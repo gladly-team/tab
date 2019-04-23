@@ -18,7 +18,7 @@ export const getMockBingWebPageDeepLinkObject = overrides => {
       name: 'This site is related',
       url: getMockUniqueURL(),
       urlPingSuffix: 'something',
-      snippet: 'This is <b>a snippet</b> related to the site.',
+      snippet: 'This is a snippet related to the site.',
     },
     overrides
   )
@@ -97,3 +97,99 @@ export const getMockBingNewsArticleResult = overrides => {
     overrides
   )
 }
+
+// A successful search response object. Add more types as
+// we use them.
+// https://docs.microsoft.com/en-us/rest/api/cognitiveservices/bing-web-api-v7-reference#searchresponse
+export const getMockSuccessfulSearchQuery = overrides => {
+  const query = 'tacoss'
+  return Object.assign(
+    {},
+    {
+      _type: 'SearchResponse',
+      // computation: {},
+      // entities: {},
+      // images: {},
+      news: {
+        _type: 'News',
+        id: 'https://api.cognitive.microsoft.com/api/v7/#News',
+        value: [
+          getMockBingNewsArticleResult(),
+          getMockBingNewsArticleResult(),
+          getMockBingNewsArticleResult(),
+          getMockBingNewsArticleResult(),
+        ],
+      },
+      queryContext: {
+        alteredQuery: 'tacos',
+        adultIntent: false,
+        askUserForLocation: true,
+        originalQuery: query,
+      },
+      rankingResponse: {
+        // Very top results (e.g. computations, timezone)
+        // pole: {},
+        // Main results
+        mainline: {
+          items: [
+            {
+              answerType: 'WebPages',
+              resultIndex: 0,
+              value: {
+                id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.0',
+              },
+            },
+            {
+              answerType: 'News',
+              value: {
+                id: 'https://api.cognitive.microsoft.com/api/v7/#News',
+              },
+            },
+            {
+              answerType: 'WebPages',
+              resultIndex: 1,
+              value: {
+                id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.1',
+              },
+            },
+            {
+              answerType: 'WebPages',
+              resultIndex: 2,
+              value: {
+                id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.2',
+              },
+            },
+          ],
+        },
+        // Side results, typically images and entities
+        // sidebar: {
+        //   items: [],
+        // },
+      },
+      // spellSuggestions: {},
+      // relatedSearches: {},
+      // videos: {}
+      webPages: {
+        _type: 'Web/WebAnswer',
+        totalEstimatedMatches: 5250000,
+        id: 'https://api.cognitive.microsoft.com/api/v7/#News',
+        value: [
+          getMockBingWebPageResult({
+            id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.0',
+          }),
+          getMockBingWebPageResult({
+            id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.1',
+          }),
+          getMockBingWebPageResult({
+            id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.2',
+          }),
+        ],
+        webSearchUrl: `https://www.bing.com/search?q=${query}`,
+      },
+    },
+    overrides
+  )
+}
+
+// TODO: mock error response
+// https://docs.microsoft.com/en-us/rest/api/cognitiveservices/bing-web-api-v7-reference#errorresponse

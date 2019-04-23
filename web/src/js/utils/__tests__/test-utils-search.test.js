@@ -49,7 +49,7 @@ describe('getMockBingWebPageDeepLinkObject', () => {
     const defaultData = getMockBingWebPageDeepLinkObject()
     expect(defaultData).toMatchObject({
       name: 'This site is related',
-      snippet: 'This is <b>a snippet</b> related to the site.',
+      snippet: 'This is a snippet related to the site.',
     })
     expect(
       getMockBingWebPageDeepLinkObject({
@@ -57,7 +57,7 @@ describe('getMockBingWebPageDeepLinkObject', () => {
       })
     ).toMatchObject({
       name: 'A really nice link',
-      snippet: 'This is <b>a snippet</b> related to the site.',
+      snippet: 'This is a snippet related to the site.',
     })
   })
 })
@@ -169,6 +169,88 @@ describe('getMockBingNewsArticleResult', () => {
       datePublished: '2018-12-24T15:23:39', // did not change
       url: 'https://another-example.com/other-news/',
       name: 'Now this is what I call clickbait!',
+    })
+  })
+})
+
+describe('getMockBingWebPageResult', () => {
+  it('includes the expected keys', () => {
+    const { getMockBingWebPageResult } = require('js/utils/test-utils-search')
+    expect(Object.keys(getMockBingWebPageResult()).sort()).toEqual([
+      'dateLastCrawled',
+      'deepLinks',
+      'displayUrl',
+      'id',
+      'name',
+      'searchTags',
+      'snippet',
+      'url',
+    ])
+  })
+
+  it('generates unique IDs for each mock webpage', () => {
+    const { getMockBingWebPageResult } = require('js/utils/test-utils-search')
+    expect(getMockBingWebPageResult().id).not.toEqual(
+      getMockBingWebPageResult().id
+    )
+  })
+
+  it('generates unique URLs for each mock webpage', () => {
+    const { getMockBingWebPageResult } = require('js/utils/test-utils-search')
+    expect(getMockBingWebPageResult().url).not.toEqual(
+      getMockBingWebPageResult().url
+    )
+  })
+
+  it('allows overriding values', () => {
+    const { getMockBingWebPageResult } = require('js/utils/test-utils-search')
+    const defaultData = getMockBingWebPageResult()
+    expect(defaultData).toMatchObject({
+      dateLastCrawled: '2018-12-24T15:23:39',
+      displayUrl: 'https://example.com',
+      name: 'A <b>Really Awesome</b> Webpage',
+    })
+    expect(
+      getMockBingWebPageResult({
+        dateLastCrawled: '2020-11-03T20:01:21',
+        displayUrl: 'https://another-example.com',
+      })
+    ).toMatchObject({
+      dateLastCrawled: '2020-11-03T20:01:21',
+      displayUrl: 'https://another-example.com',
+      name: 'A <b>Really Awesome</b> Webpage',
+    })
+  })
+})
+
+describe('getMockSuccessfulSearchQuery', () => {
+  it('includes the expected keys', () => {
+    const {
+      getMockSuccessfulSearchQuery,
+    } = require('js/utils/test-utils-search')
+    expect(Object.keys(getMockSuccessfulSearchQuery()).sort()).toEqual([
+      '_type',
+      'news',
+      'queryContext',
+      'rankingResponse',
+      'webPages',
+    ])
+  })
+
+  it('allows overriding values', () => {
+    const {
+      getMockSuccessfulSearchQuery,
+    } = require('js/utils/test-utils-search')
+    const defaultData = getMockSuccessfulSearchQuery()
+    expect(defaultData).toMatchObject({
+      _type: 'SearchResponse',
+    })
+    expect(
+      getMockSuccessfulSearchQuery({
+        _type: 'foobar',
+      })
+    ).toMatchObject({
+      _type: 'foobar',
     })
   })
 })
