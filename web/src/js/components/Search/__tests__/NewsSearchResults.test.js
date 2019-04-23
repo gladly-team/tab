@@ -2,6 +2,8 @@
 
 import React from 'react'
 import { shallow } from 'enzyme'
+import moment from 'moment'
+import MockDate from 'mockdate'
 import { getMockBingNewsArticleResult } from 'js/utils/test-utils-search'
 import Typography from '@material-ui/core/Typography'
 
@@ -14,8 +16,15 @@ const getMockNewsStoryProps = () => ({
   item: getMockBingNewsArticleResult(),
 })
 
+const mockNow = '2017-05-19T13:59:58.000Z'
+
 beforeEach(() => {
   jest.clearAllMocks()
+  MockDate.set(moment(mockNow))
+})
+
+afterEach(() => {
+  MockDate.reset()
 })
 
 describe('NewsSearchResults', () => {
@@ -375,5 +384,113 @@ describe('NewsSearchItem', () => {
     )
     expect(providerTextElem.exists()).toBe(true)
     expect(providerTextElem.text()).toEqual('The Pretty Good News Site')
+  })
+
+  it('displays the "time since published" text if a date is provided', () => {
+    const { NewsSearchItem } = require('js/components/Search/NewsSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.datePublished = moment(
+      '2017-05-19T11:30:00.000Z'
+    ).toISOString()
+    const wrapper = shallow(<NewsSearchItem {...mockProps} />).dive()
+    const elem = wrapper.find('[data-test-id="search-result-news-time-since"]')
+    expect(elem.exists()).toBe(true)
+  })
+
+  it('does not display the "time since published" text if no date is provided', () => {
+    const { NewsSearchItem } = require('js/components/Search/NewsSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.datePublished = undefined
+    const wrapper = shallow(<NewsSearchItem {...mockProps} />).dive()
+    const elem = wrapper.find('[data-test-id="search-result-news-time-since"]')
+    expect(elem.exists()).toBe(false)
+  })
+
+  it('shows a seconds abbreviation in the "time since published" text if published a few seconds ago', () => {
+    const { NewsSearchItem } = require('js/components/Search/NewsSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.datePublished = moment(
+      '2017-05-19T13:59:56.412Z'
+    ).toISOString()
+    const wrapper = shallow(<NewsSearchItem {...mockProps} />).dive()
+    const elem = wrapper.find('[data-test-id="search-result-news-time-since"]')
+    expect(elem.text()).toEqual(' · 2s')
+  })
+
+  it('shows a seconds abbreviation in the "time since published" text if published 40 seconds ago', () => {
+    const { NewsSearchItem } = require('js/components/Search/NewsSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.datePublished = moment(
+      '2017-05-19T13:59:18.412Z'
+    ).toISOString()
+    const wrapper = shallow(<NewsSearchItem {...mockProps} />).dive()
+    const elem = wrapper.find('[data-test-id="search-result-news-time-since"]')
+    expect(elem.text()).toEqual(' · 40s')
+  })
+
+  it('shows a minute abbreviation in the "time since published" text if published almost 1 minute ago', () => {
+    const { NewsSearchItem } = require('js/components/Search/NewsSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.datePublished = moment(
+      '2017-05-19T13:59:02.412Z'
+    ).toISOString()
+    const wrapper = shallow(<NewsSearchItem {...mockProps} />).dive()
+    const elem = wrapper.find('[data-test-id="search-result-news-time-since"]')
+    expect(elem.text()).toEqual(' · 1m')
+  })
+
+  it('shows a minute abbreviation in the "time since published" text if published ~30 minutes ago', () => {
+    const { NewsSearchItem } = require('js/components/Search/NewsSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.datePublished = moment(
+      '2017-05-19T13:29:30.000Z'
+    ).toISOString()
+    const wrapper = shallow(<NewsSearchItem {...mockProps} />).dive()
+    const elem = wrapper.find('[data-test-id="search-result-news-time-since"]')
+    expect(elem.text()).toEqual(' · 30m')
+  })
+
+  it('shows an hour abbreviation in the "time since published" text if published ~50 minutes ago', () => {
+    const { NewsSearchItem } = require('js/components/Search/NewsSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.datePublished = moment(
+      '2017-05-19T13:08:30.000Z'
+    ).toISOString()
+    const wrapper = shallow(<NewsSearchItem {...mockProps} />).dive()
+    const elem = wrapper.find('[data-test-id="search-result-news-time-since"]')
+    expect(elem.text()).toEqual(' · 1h')
+  })
+
+  it('shows an hour abbreviation in the "time since published" text if published ~18 hours ago', () => {
+    const { NewsSearchItem } = require('js/components/Search/NewsSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.datePublished = moment(
+      '2017-05-18T19:59:41.000Z'
+    ).toISOString()
+    const wrapper = shallow(<NewsSearchItem {...mockProps} />).dive()
+    const elem = wrapper.find('[data-test-id="search-result-news-time-since"]')
+    expect(elem.text()).toEqual(' · 18h')
+  })
+
+  it('shows a days abbreviation in the "time since published" text if published ~2 days ago', () => {
+    const { NewsSearchItem } = require('js/components/Search/NewsSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.datePublished = moment(
+      '2017-05-17T19:59:41.000Z'
+    ).toISOString()
+    const wrapper = shallow(<NewsSearchItem {...mockProps} />).dive()
+    const elem = wrapper.find('[data-test-id="search-result-news-time-since"]')
+    expect(elem.text()).toEqual(' · 2d')
+  })
+
+  it('shows a months abbreviation in the "time since published" text if published ~40 days ago', () => {
+    const { NewsSearchItem } = require('js/components/Search/NewsSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.datePublished = moment(
+      '2017-04-11T19:59:41.000Z'
+    ).toISOString()
+    const wrapper = shallow(<NewsSearchItem {...mockProps} />).dive()
+    const elem = wrapper.find('[data-test-id="search-result-news-time-since"]')
+    expect(elem.text()).toEqual(' · 1M')
   })
 })
