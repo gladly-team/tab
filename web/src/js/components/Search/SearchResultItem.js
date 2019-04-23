@@ -31,7 +31,6 @@ const SearchResultItem = props => {
       let newsItems = itemData.map(newsItem => {
         return Object.assign({}, newsItem, {
           description: stripHTML(newsItem.description),
-          displayUrl: stripHTML(newsItem.displayUrl),
           name: stripHTML(newsItem.name),
         })
       })
