@@ -259,4 +259,121 @@ describe('NewsSearchItem', () => {
       'Gummi bears biscuit bonbon jujubes cheesecake gummies cotton candy ice cream chocolate cake. Macaroon jelly beans gummies ...'
     )
   })
+
+  it('displays contractual rules text if one rule exists', () => {
+    const { NewsSearchItem } = require('js/components/Search/NewsSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.contractualRules = [
+      {
+        _type: 'ContractualRules/TextAttribution',
+        text: 'A Good News Site',
+      },
+    ]
+    const wrapper = shallow(<NewsSearchItem {...mockProps} />).dive()
+    const attributionElems = wrapper.find(
+      '[data-test-id="search-result-news-attribution"]'
+    )
+    expect(attributionElems.length).toEqual(1)
+    expect(attributionElems.first().text()).toEqual('A Good News Site')
+  })
+
+  it('displays contractual rules text if more than one rule exists', () => {
+    const { NewsSearchItem } = require('js/components/Search/NewsSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.contractualRules = [
+      {
+        _type: 'ContractualRules/TextAttribution',
+        text: 'A Good News Site',
+      },
+      {
+        _type: 'ContractualRules/TextAttribution',
+        text: 'Newsy News Daily',
+      },
+    ]
+    const wrapper = shallow(<NewsSearchItem {...mockProps} />).dive()
+    const attributionElems = wrapper.find(
+      '[data-test-id="search-result-news-attribution"]'
+    )
+    expect(attributionElems.length).toEqual(2)
+    expect(attributionElems.first().text()).toEqual('A Good News Site')
+    expect(attributionElems.at(1).text()).toEqual('Newsy News Daily')
+  })
+
+  it('does not display contractual rules text if not provided a rules item', () => {
+    const { NewsSearchItem } = require('js/components/Search/NewsSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    delete mockProps.item.contractualRules
+    const wrapper = shallow(<NewsSearchItem {...mockProps} />).dive()
+    const attributionElems = wrapper.find(
+      '[data-test-id="search-result-news-attribution"]'
+    )
+    expect(attributionElems.exists()).toBe(false)
+  })
+
+  it('does not display contractual rules text if provided undefined rules', () => {
+    const { NewsSearchItem } = require('js/components/Search/NewsSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.contractualRules = undefined
+    const wrapper = shallow(<NewsSearchItem {...mockProps} />).dive()
+    const attributionElems = wrapper.find(
+      '[data-test-id="search-result-news-attribution"]'
+    )
+    expect(attributionElems.exists()).toBe(false)
+  })
+
+  it('does not display contractual rules text if provided empty array of rules', () => {
+    const { NewsSearchItem } = require('js/components/Search/NewsSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.contractualRules = []
+    const wrapper = shallow(<NewsSearchItem {...mockProps} />).dive()
+    const attributionElems = wrapper.find(
+      '[data-test-id="search-result-news-attribution"]'
+    )
+    expect(attributionElems.exists()).toBe(false)
+  })
+
+  it('does not display the provider name if a contractual rule exists', () => {
+    const { NewsSearchItem } = require('js/components/Search/NewsSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.contractualRules = [
+      {
+        _type: 'ContractualRules/TextAttribution',
+        text: 'A Good News Site',
+      },
+    ]
+    mockProps.item.provider = [
+      {
+        _type: 'Organization',
+        name: 'The Pretty Good News Site',
+      },
+    ]
+    const wrapper = shallow(<NewsSearchItem {...mockProps} />).dive()
+    expect(
+      wrapper.find('[data-test-id="search-result-news-attribution"]').exists()
+    ).toBe(true)
+    expect(
+      wrapper.find('[data-test-id="search-result-news-provider"]').exists()
+    ).toBe(false)
+  })
+
+  it('displays the provider name if no contractual rules exist', () => {
+    const { NewsSearchItem } = require('js/components/Search/NewsSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.contractualRules = undefined
+    mockProps.item.provider = [
+      {
+        _type: 'Organization',
+        name: 'The Pretty Good News Site',
+      },
+    ]
+    const wrapper = shallow(<NewsSearchItem {...mockProps} />).dive()
+    expect(
+      wrapper.find('[data-test-id="search-result-news-attribution"]').exists()
+    ).toBe(false)
+    const providerTextElem = wrapper.find(
+      '[data-test-id="search-result-news-provider"]'
+    )
+    expect(providerTextElem.exists()).toBe(true)
+    expect(providerTextElem.text()).toEqual('The Pretty Good News Site')
+  })
 })

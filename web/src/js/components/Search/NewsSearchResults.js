@@ -200,7 +200,7 @@ export const NewsSearchItem = props => {
             })
           ) : get(provider, '[0].name') ? (
             <p
-              data-test-id={'search-result-news-attribution'}
+              data-test-id={'search-result-news-provider'}
               key={'attribution-text'}
               className={classes.attributionText}
             >
