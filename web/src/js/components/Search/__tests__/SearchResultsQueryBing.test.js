@@ -82,6 +82,36 @@ describe('SearchResultsQueryBing', () => {
     expect(wrapper.find(SearchResultsBing).prop('isError')).toBe(true)
   })
 
+  it('passes isQueryInProgress=true to SearchResultsBing when the query is pending', async () => {
+    expect.assertions(2)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+
+    // Mock that therequest takes some time.
+    jest.useFakeTimers()
+    fetchBingSearchResults.mockImplementationOnce(() => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(getMockSuccessfulSearchQuery())
+        }, 8e3)
+      })
+    })
+
+    const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    expect(wrapper.find(SearchResultsBing).prop('isQueryInProgress')).toBe(true)
+
+    // Mock that the request returns.
+    jest.advanceTimersByTime(10e3)
+    await flushAllPromises()
+
+    expect(wrapper.find(SearchResultsBing).prop('isQueryInProgress')).toBe(
+      false
+    )
+  })
+
   it('passes the page number to SearchResultsBing', async () => {
     expect.assertions(2)
     const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
