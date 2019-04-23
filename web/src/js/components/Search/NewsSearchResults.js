@@ -115,7 +115,7 @@ const styles = () => ({
   },
 })
 
-const NewsSearchItem = props => {
+export const NewsSearchItem = props => {
   const {
     classes,
     item: {
