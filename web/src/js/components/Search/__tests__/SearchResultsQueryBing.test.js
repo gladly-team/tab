@@ -16,7 +16,7 @@ jest.mock('js/utils/logger')
 // TODO: add tests
 
 const getMockProps = () => ({
-  query: 'tacos',
+  query: null,
   page: null,
   onPageChange: jest.fn(),
   searchSource: null,
@@ -35,11 +35,34 @@ describe('SearchResultsQueryBing', () => {
     shallow(<SearchResultsQueryBing {...mockProps} />)
   })
 
+  it('passes isEmptyQuery=false to SearchResultsBing when the query exists', async () => {
+    expect.assertions(1)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+    const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    expect(wrapper.find(SearchResultsBing).prop('isEmptyQuery')).toBe(false)
+  })
+
+  it('passes isEmptyQuery=true to SearchResultsBing when the query exists', async () => {
+    expect.assertions(1)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = null
+    const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    expect(wrapper.find(SearchResultsBing).prop('isEmptyQuery')).toBe(true)
+  })
+
   it('passes isError=false to SearchResultsBing when the query succeeds', async () => {
     expect.assertions(1)
     const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
       .default
     const mockProps = getMockProps()
+    mockProps.query = 'tacos'
     const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
     await flushAllPromises()
     expect(wrapper.find(SearchResultsBing).prop('isError')).toBe(false)
@@ -50,6 +73,7 @@ describe('SearchResultsQueryBing', () => {
     const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
       .default
     const mockProps = getMockProps()
+    mockProps.query = 'tacos'
     fetchBingSearchResults.mockImplementation(() => {
       throw new Error('Search did not work.')
     })
@@ -63,6 +87,7 @@ describe('SearchResultsQueryBing', () => {
     const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
       .default
     const mockProps = getMockProps()
+    mockProps.query = 'tacos'
     mockProps.page = 124
     const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
     await flushAllPromises()
