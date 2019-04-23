@@ -7,6 +7,8 @@ jest.mock('js/components/Search/getMockBingSearchResults')
 beforeEach(() => {
   process.env.NODE_ENV = 'test'
   process.env.REACT_APP_MOCK_SEARCH_RESULTS = false
+  process.env.REACT_APP_SEARCH_QUERY_ENDPOINT =
+    'https://search-api.example.com/query'
   global.fetch.mockImplementation(() => Promise.resolve(mockFetchResponse()))
   jest.useFakeTimers()
 })
@@ -26,11 +28,23 @@ describe('fetchBingSearchResults', () => {
 
   it('calls the expected endpoint', async () => {
     expect.assertions(1)
+    process.env.REACT_APP_SEARCH_QUERY_ENDPOINT =
+      'https://some-endpoint.example.com/api/query'
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
       .default
     await fetchBingSearchResults('blue whales')
     expect(fetch.mock.calls[0][0]).toEqual(
-      'https://dev-search-api.gladly.io/api/query?q=blue%20whales'
+      'https://some-endpoint.example.com/api/query?q=blue%20whales'
+    )
+  })
+
+  it('throws if the query endpoint environment variable is not defined', async () => {
+    expect.assertions(1)
+    delete process.env.REACT_APP_SEARCH_QUERY_ENDPOINT
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    expect(fetchBingSearchResults('blue whales')).rejects.toThrow(
+      'Search query endpoint is not defined.'
     )
   })
 

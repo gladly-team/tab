@@ -19,8 +19,10 @@ const fetchBingSearchResults = async (query = null) => {
     })
   }
   try {
-    // TODO: env var
-    const endpoint = 'https://dev-search-api.gladly.io/api/query'
+    const endpoint = process.env.REACT_APP_SEARCH_QUERY_ENDPOINT
+    if (!endpoint) {
+      throw new Error('Search query endpoint is not defined.')
+    }
     const searchURL = `${endpoint}?q=${encodeURI(query)}`
     return fetch(searchURL, {
       method: 'GET',
