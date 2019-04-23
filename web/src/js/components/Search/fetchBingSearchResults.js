@@ -13,8 +13,7 @@ const fetchBingSearchResults = async (query = null) => {
     throw new Error(`Search query must be a non-empty string.`)
   }
   if (
-    // TODO: add this back before deploying to master.
-    // process.env.NODE_ENV === 'development' &&
+    process.env.NODE_ENV === 'development' &&
     process.env.REACT_APP_MOCK_SEARCH_RESULTS === 'true'
   ) {
     // Mock search results, including network delay.
