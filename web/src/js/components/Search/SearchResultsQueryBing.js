@@ -79,7 +79,6 @@ class SearchResultsQueryBing extends React.Component {
       // TODO: cancel the promise if the component unmounts
       // TODO: pagination
       const searchResults = await fetchBingSearchResults(query)
-      // console.log('searchResults', searchResults)
       this.setState({
         searchResultsData: searchResults,
         queryInProgress: false,
@@ -178,12 +177,6 @@ class SearchResultsQueryBing extends React.Component {
     const restructuredData = this.restructureSearchResultsData(
       searchResultsData
     )
-
-    // console.log('DATA:')
-    // console.log(searchResultsData)
-    // console.log('RESTRUCTURED DATA:')
-    // console.log(restructuredData)
-    // console.log('============')
 
     // Whether there are no search results for whatever reason.
     const isEmptyQuery = this.state.mounted && !query
