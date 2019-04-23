@@ -131,16 +131,6 @@ describe('NewsSearchItem', () => {
     )
   })
 
-  it('displays the title text', () => {
-    const { NewsSearchItem } = require('js/components/Search/NewsSearchResults')
-    const mockProps = getMockNewsStoryProps()
-    mockProps.item.name = 'This is A Nice Title'
-    const wrapper = shallow(<NewsSearchItem {...mockProps} />).dive()
-    const titleElem = wrapper.find('[data-test-id="search-result-news-title"]')
-    expect(titleElem.text()).toEqual('This is A Nice Title')
-    expect(titleElem.type()).toEqual('h3')
-  })
-
   it('crops the title text if it is too long', () => {
     const { NewsSearchItem } = require('js/components/Search/NewsSearchResults')
     const mockProps = getMockNewsStoryProps()
@@ -223,5 +213,50 @@ describe('NewsSearchItem', () => {
       'https://www.bing.com/some-url/?w=200&h=100&c=7'
     )
     expect(imgElem.prop('alt')).toEqual('')
+  })
+
+  it('displays the description text if there is no image', () => {
+    const { NewsSearchItem } = require('js/components/Search/NewsSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.image = undefined
+    mockProps.item.description =
+      'Wafer tiramisu chupa chups cupcake tart cupcake lemon drops sesame snaps.'
+    const wrapper = shallow(<NewsSearchItem {...mockProps} />).dive()
+    const elem = wrapper.find('[data-test-id="search-result-news-description"]')
+    expect(elem.exists()).toBe(true)
+    expect(elem.text()).toEqual(
+      'Wafer tiramisu chupa chups cupcake tart cupcake lemon drops sesame snaps.'
+    )
+  })
+
+  it('does not display the description text if there is no image', () => {
+    const { NewsSearchItem } = require('js/components/Search/NewsSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.image = {
+      contentUrl: 'https://media.example.com/foo.png',
+      thumbnail: {
+        contentUrl: 'https://www.bing.com/some-url/',
+        width: 700,
+        height: 466,
+      },
+    }
+    mockProps.item.description = 'Sugar plum halvah chocolate oat cake biscuit.'
+    const wrapper = shallow(<NewsSearchItem {...mockProps} />).dive()
+    const elem = wrapper.find('[data-test-id="search-result-news-description"]')
+    expect(elem.exists()).toBe(false)
+  })
+
+  it('crops the description text if it is too long', () => {
+    const { NewsSearchItem } = require('js/components/Search/NewsSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.image = undefined
+    mockProps.item.description =
+      'Gummi bears biscuit bonbon jujubes cheesecake gummies cotton candy ice cream chocolate cake. Macaroon jelly beans gummies gummi bears dragée. Liquorice oat cake candy canes lollipop.'
+    const wrapper = shallow(<NewsSearchItem {...mockProps} />).dive()
+    const elem = wrapper.find('[data-test-id="search-result-news-description"]')
+    expect(elem.exists()).toBe(true)
+    expect(elem.text()).toEqual(
+      'Gummi bears biscuit bonbon jujubes cheesecake gummies cotton candy ice cream chocolate cake. Macaroon jelly beans gummies ...'
+    )
   })
 })
