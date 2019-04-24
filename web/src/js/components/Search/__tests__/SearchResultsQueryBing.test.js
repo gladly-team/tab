@@ -256,7 +256,62 @@ describe('SearchResultsQueryBing', () => {
     expect(mockProps.onPageChange).not.toHaveBeenCalled()
   })
 
+  it('does not throw or log an error if the query returns after the component has unmounted', async () => {
+    expect.assertions(1)
+
+    // Mock that the Wikipedia request takes some time.
+    jest.useFakeTimers()
+    fetchBingSearchResults.mockImplementation(() => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(getMockSuccessfulSearchQuery())
+        }, 8e3)
+      })
+    })
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+    const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+
+    // Unmount
+    wrapper.unmount()
+
+    // Mock that the request returns.
+    jest.advanceTimersByTime(10e3)
+    await flushAllPromises()
+
+    expect(logger.error).not.toHaveBeenCalled()
+  })
+
+  it('logs an error the promise fails for reasons other than being canceled', async () => {
+    expect.assertions(1)
+
+    // Mock that the request takes some time.
+    jest.useFakeTimers()
+    const mockErr = new Error('Oh no!')
+    fetchBingSearchResults.mockImplementation(() => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          reject(mockErr)
+        }, 8e3)
+      })
+    })
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+    shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+
+    // Mock that the request returns.
+    jest.advanceTimersByTime(10e3)
+    await flushAllPromises()
+
+    expect(logger.error).toHaveBeenCalledWith(mockErr)
+  })
+
   // TODO: add tests
-  // - no error when component unmounts during query (see WikipediaQuery example)
   // - data is restructured as expected
 })

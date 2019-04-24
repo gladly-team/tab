@@ -8,6 +8,7 @@ import fetchBingSearchResults from 'js/components/Search/fetchBingSearchResults'
 import { isReactSnapClient } from 'js/utils/search-utils'
 import { getCurrentUser } from 'js/authentication/user'
 import LogSearchMutation from 'js/mutations/LogSearchMutation'
+import { makePromiseCancelable } from 'js/utils/utils'
 
 class SearchResultsQueryBing extends React.Component {
   constructor(props) {
@@ -19,6 +20,7 @@ class SearchResultsQueryBing extends React.Component {
       unexpectedSearchError: false,
       mounted: false, // i.e. we've mounted to a real user, not pre-rendering
     }
+    this.cancelablePromise = null
   }
 
   componentDidMount() {
@@ -35,6 +37,12 @@ class SearchResultsQueryBing extends React.Component {
       this.setState({
         mounted: true,
       })
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.cancelablePromise && this.cancelablePromise.cancel) {
+      this.cancelablePromise.cancel()
     }
   }
 
@@ -76,9 +84,11 @@ class SearchResultsQueryBing extends React.Component {
     })
 
     try {
-      // TODO: cancel the promise if the component unmounts
       // TODO: pagination
-      const searchResults = await fetchBingSearchResults(query)
+      this.cancelablePromise = makePromiseCancelable(
+        fetchBingSearchResults(query)
+      )
+      const searchResults = await this.cancelablePromise.promise
 
       // TODO: handle returned error objects. See:
       // https://docs.microsoft.com/en-us/rest/api/cognitiveservices/bing-web-api-v7-reference#errorresponse
@@ -87,6 +97,9 @@ class SearchResultsQueryBing extends React.Component {
         queryInProgress: false,
       })
     } catch (e) {
+      if (e && e.isCanceled) {
+        return
+      }
       this.setState({
         unexpectedSearchError: true,
         queryInProgress: false,
