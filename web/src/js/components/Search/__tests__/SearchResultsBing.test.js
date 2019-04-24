@@ -8,8 +8,9 @@ import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import Link from 'js/components/General/Link'
 import { showBingPagination } from 'js/utils/search-utils'
+import SearchResultItem from 'js/components/Search/SearchResultItem'
 
-jest.mock('js/components/Search/SearchResultItem', () => () => null)
+jest.mock('js/components/Search/SearchResultItem')
 jest.mock('js/components/General/Link')
 jest.mock('js/utils/search-utils')
 
@@ -36,14 +37,14 @@ const getMockProps = () => ({
     sidebar: [
       {
         type: 'WebPages',
-        key: 'some-key-1',
+        key: 'some-key-3',
         value: {
           data: 'here',
         },
       },
       {
         type: 'WebPages',
-        key: 'some-key-2',
+        key: 'some-key-4',
         value: {
           data: 'here',
         },
@@ -223,6 +224,36 @@ describe('SearchResultsBing: tests for non-results display', () => {
         )
         .exists()
     ).toBe(true)
+  })
+})
+
+describe('SearchResultsBing: tests for displaying search results', () => {
+  it('renders the expected number of search result items', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
+    expect(wrapper.find(SearchResultItem).length).toEqual(2)
+  })
+
+  it('passes the expected data to the first search result item', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
+    const elem = wrapper.find(SearchResultItem).first()
+    expect(elem.prop('type')).toEqual(mockProps.data.mainline[0].type)
+    expect(elem.prop('itemData')).toEqual(mockProps.data.mainline[0].value)
+  })
+
+  it('passes the expected data to the second search result item', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
+    const elem = wrapper.find(SearchResultItem).at(1)
+    expect(elem.prop('type')).toEqual(mockProps.data.mainline[1].type)
+    expect(elem.prop('itemData')).toEqual(mockProps.data.mainline[1].value)
   })
 })
 

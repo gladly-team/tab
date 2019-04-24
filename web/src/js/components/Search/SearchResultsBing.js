@@ -97,7 +97,10 @@ const SearchResultsBing = props => {
         </Typography>
       ) : null}
       {isQueryInProgress ? null : (
-        <div id="search-results" className={classes.searchResultsContainer}>
+        <div
+          data-test-id={'search-results'}
+          className={classes.searchResultsContainer}
+        >
           {data.mainline.map(searchResultItemData => {
             return (
               <SearchResultItem
