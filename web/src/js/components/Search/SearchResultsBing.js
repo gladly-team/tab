@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import Link from 'js/components/General/Link'
 import SearchResultItem from 'js/components/Search/SearchResultItem'
+import { showBingPagination } from 'js/utils/search-utils'
 
 const styles = theme => ({
   searchResultsParentContainer: {
@@ -44,7 +45,7 @@ const SearchResultsBing = props => {
   } = props
 
   // Hiding until we make it functional.
-  const SHOW_PAGINATION = false
+  const SHOW_PAGINATION = showBingPagination()
 
   // Include 8 pages total, 4 lower and 4 higher when possible.
   // Page 9999 is the maximum, so stop there.
