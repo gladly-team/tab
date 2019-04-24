@@ -28,10 +28,6 @@ beforeEach(() => {
   const adsEnabledStatus = require('js/ads/adsEnabledStatus').default
   adsEnabledStatus.mockReturnValue(true)
 
-  // Assume Index Exchange is enabled.
-  const { enableIndexExchangeBidder } = require('js/utils/feature-flags')
-  enableIndexExchangeBidder.mockReturnValue(true)
-
   // Mock apstag
   delete window.apstag
   window.apstag = getAmazonTag()
@@ -87,20 +83,6 @@ describe('ads script', () => {
     expect(prebidConfig).toHaveBeenCalledTimes(1)
     expect(indexExchangeBidder).toHaveBeenCalledTimes(1)
     expect(googletagMockRefresh).toHaveBeenCalledTimes(1)
-  })
-
-  it('does not call Index Exchange if the bidder is not enabled', async () => {
-    expect.assertions(1)
-    const { enableIndexExchangeBidder } = require('js/utils/feature-flags')
-    enableIndexExchangeBidder.mockReturnValue(false)
-    const indexExchangeBidder = require('js/ads/indexExchange/indexExchangeBidder')
-      .default
-    const googletagMockRefresh = jest.fn()
-    __setPubadsRefreshMock(googletagMockRefresh)
-
-    require('js/ads/ads')
-    await new Promise(resolve => setImmediate(resolve))
-    expect(indexExchangeBidder).not.toHaveBeenCalled()
   })
 
   it('does not call expected bidders or ad server when ads are not enabled', async () => {
