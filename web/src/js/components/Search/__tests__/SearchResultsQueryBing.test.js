@@ -312,6 +312,293 @@ describe('SearchResultsQueryBing', () => {
     expect(logger.error).toHaveBeenCalledWith(mockErr)
   })
 
-  // TODO: add tests
-  // - data is restructured as expected
+  it('passes the expected data structure to SearchResultsBing', async () => {
+    expect.assertions(1)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+    const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    const passedData = wrapper.find(SearchResultsBing).prop('data')
+    expect(passedData).toEqual({
+      mainline: [
+        {
+          key:
+            'WebPages-https://api.cognitive.microsoft.com/api/v7/#WebPages.0',
+          type: 'WebPages',
+          value: {
+            dateLastCrawled: '2018-12-24T15:23:39',
+            deepLinks: [
+              {
+                name: 'This site is related',
+                snippet: 'This is a snippet related to the site.',
+                url: 'https://example.com/some-url-265',
+                urlPingSuffix: 'something',
+              },
+              {
+                name: 'This site is related',
+                snippet: 'This is a snippet related to the site.',
+                url: 'https://example.com/some-url-266',
+                urlPingSuffix: 'something',
+              },
+            ],
+            displayUrl: 'https://example.com',
+            id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.0',
+            name: 'A <b>Really Awesome</b> Webpage',
+            searchTags: [],
+            snippet:
+              "This <b>really awesome</b> website is definitely what you're looking for.",
+            url: 'https://example.com/some-url-267',
+          },
+        },
+        {
+          key: 'News',
+          type: 'News',
+          value: [
+            {
+              category: 'Politics',
+              clusteredArticles: undefined,
+              contractualRules: [
+                {
+                  _type: 'ContractualRules/TextAttribution',
+                  text: 'A Good News Site',
+                },
+              ],
+              datePublished: '2018-12-24T15:23:39',
+              description:
+                'Something <b>truly incredible</b> and newsworthy happened! Wow. You cannot miss this article.',
+              headline: undefined,
+              id: 'https://api.cognitive.microsoft.com/api/v7/some-fake-id-141',
+              image: {
+                contentUrl: 'https://media.example.com/foo.png',
+                thumbnail: {
+                  contentUrl: 'https://www.bing.com/some-url/',
+                  height: 466,
+                  width: 700,
+                },
+              },
+              mentions: [
+                {
+                  name: 'New York City',
+                },
+                {
+                  name: 'Madonna',
+                },
+              ],
+              name: 'An <b>Incredible</b> Event in NYC',
+              provider: [
+                {
+                  _type: 'Organization',
+                  image: {
+                    thumbnail: {
+                      contentUrl: 'https://www.bing.com/some-image-url/',
+                    },
+                  },
+                  name: 'A Good News Site',
+                },
+              ],
+              url: 'https://example.com/some-url-261',
+              video: undefined,
+            },
+            {
+              category: 'Politics',
+              clusteredArticles: undefined,
+              contractualRules: [
+                {
+                  _type: 'ContractualRules/TextAttribution',
+                  text: 'A Good News Site',
+                },
+              ],
+              datePublished: '2018-12-24T15:23:39',
+              description:
+                'Something <b>truly incredible</b> and newsworthy happened! Wow. You cannot miss this article.',
+              headline: undefined,
+              id: 'https://api.cognitive.microsoft.com/api/v7/some-fake-id-142',
+              image: {
+                contentUrl: 'https://media.example.com/foo.png',
+                thumbnail: {
+                  contentUrl: 'https://www.bing.com/some-url/',
+                  height: 466,
+                  width: 700,
+                },
+              },
+              mentions: [
+                {
+                  name: 'New York City',
+                },
+                {
+                  name: 'Madonna',
+                },
+              ],
+              name: 'An <b>Incredible</b> Event in NYC',
+              provider: [
+                {
+                  _type: 'Organization',
+                  image: {
+                    thumbnail: {
+                      contentUrl: 'https://www.bing.com/some-image-url/',
+                    },
+                  },
+                  name: 'A Good News Site',
+                },
+              ],
+              url: 'https://example.com/some-url-262',
+              video: undefined,
+            },
+            {
+              category: 'Politics',
+              clusteredArticles: undefined,
+              contractualRules: [
+                {
+                  _type: 'ContractualRules/TextAttribution',
+                  text: 'A Good News Site',
+                },
+              ],
+              datePublished: '2018-12-24T15:23:39',
+              description:
+                'Something <b>truly incredible</b> and newsworthy happened! Wow. You cannot miss this article.',
+              headline: undefined,
+              id: 'https://api.cognitive.microsoft.com/api/v7/some-fake-id-143',
+              image: {
+                contentUrl: 'https://media.example.com/foo.png',
+                thumbnail: {
+                  contentUrl: 'https://www.bing.com/some-url/',
+                  height: 466,
+                  width: 700,
+                },
+              },
+              mentions: [
+                {
+                  name: 'New York City',
+                },
+                {
+                  name: 'Madonna',
+                },
+              ],
+              name: 'An <b>Incredible</b> Event in NYC',
+              provider: [
+                {
+                  _type: 'Organization',
+                  image: {
+                    thumbnail: {
+                      contentUrl: 'https://www.bing.com/some-image-url/',
+                    },
+                  },
+                  name: 'A Good News Site',
+                },
+              ],
+              url: 'https://example.com/some-url-263',
+              video: undefined,
+            },
+            {
+              category: 'Politics',
+              clusteredArticles: undefined,
+              contractualRules: [
+                {
+                  _type: 'ContractualRules/TextAttribution',
+                  text: 'A Good News Site',
+                },
+              ],
+              datePublished: '2018-12-24T15:23:39',
+              description:
+                'Something <b>truly incredible</b> and newsworthy happened! Wow. You cannot miss this article.',
+              headline: undefined,
+              id: 'https://api.cognitive.microsoft.com/api/v7/some-fake-id-144',
+              image: {
+                contentUrl: 'https://media.example.com/foo.png',
+                thumbnail: {
+                  contentUrl: 'https://www.bing.com/some-url/',
+                  height: 466,
+                  width: 700,
+                },
+              },
+              mentions: [
+                {
+                  name: 'New York City',
+                },
+                {
+                  name: 'Madonna',
+                },
+              ],
+              name: 'An <b>Incredible</b> Event in NYC',
+              provider: [
+                {
+                  _type: 'Organization',
+                  image: {
+                    thumbnail: {
+                      contentUrl: 'https://www.bing.com/some-image-url/',
+                    },
+                  },
+                  name: 'A Good News Site',
+                },
+              ],
+              url: 'https://example.com/some-url-264',
+              video: undefined,
+            },
+          ],
+        },
+        {
+          key:
+            'WebPages-https://api.cognitive.microsoft.com/api/v7/#WebPages.1',
+          type: 'WebPages',
+          value: {
+            dateLastCrawled: '2018-12-24T15:23:39',
+            deepLinks: [
+              {
+                name: 'This site is related',
+                snippet: 'This is a snippet related to the site.',
+                url: 'https://example.com/some-url-268',
+                urlPingSuffix: 'something',
+              },
+              {
+                name: 'This site is related',
+                snippet: 'This is a snippet related to the site.',
+                url: 'https://example.com/some-url-269',
+                urlPingSuffix: 'something',
+              },
+            ],
+            displayUrl: 'https://example.com',
+            id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.1',
+            name: 'A <b>Really Awesome</b> Webpage',
+            searchTags: [],
+            snippet:
+              "This <b>really awesome</b> website is definitely what you're looking for.",
+            url: 'https://example.com/some-url-270',
+          },
+        },
+        {
+          key:
+            'WebPages-https://api.cognitive.microsoft.com/api/v7/#WebPages.2',
+          type: 'WebPages',
+          value: {
+            dateLastCrawled: '2018-12-24T15:23:39',
+            deepLinks: [
+              {
+                name: 'This site is related',
+                snippet: 'This is a snippet related to the site.',
+                url: 'https://example.com/some-url-271',
+                urlPingSuffix: 'something',
+              },
+              {
+                name: 'This site is related',
+                snippet: 'This is a snippet related to the site.',
+                url: 'https://example.com/some-url-272',
+                urlPingSuffix: 'something',
+              },
+            ],
+            displayUrl: 'https://example.com',
+            id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.2',
+            name: 'A <b>Really Awesome</b> Webpage',
+            searchTags: [],
+            snippet:
+              "This <b>really awesome</b> website is definitely what you're looking for.",
+            url: 'https://example.com/some-url-273',
+          },
+        },
+      ],
+      pole: [],
+      sidebar: [],
+    })
+  })
 })
