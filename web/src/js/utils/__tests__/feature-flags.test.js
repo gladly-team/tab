@@ -41,27 +41,4 @@ describe('feature flags', () => {
     process.env.REACT_APP_FEATURE_FLAG_SEARCH_PAGE_ENABLED = 'true'
     expect(isSearchPageEnabled()).toBe(true)
   })
-
-  test("enableIndexExchangeBidder is false if the ixDebug parameter isn't set to true", () => {
-    const { enableIndexExchangeBidder } = require('js/utils/feature-flags')
-    getUrlParameters.mockReturnValue({})
-    expect(enableIndexExchangeBidder()).toBe(false)
-    getUrlParameters.mockReturnValue({
-      foo: 'bar',
-    })
-    expect(enableIndexExchangeBidder()).toBe(false)
-    getUrlParameters.mockReturnValue({
-      ixDebug: 'something',
-    })
-    expect(enableIndexExchangeBidder()).toBe(false)
-  })
-
-  test('enableIndexExchangeBidder is true if the ixDebug parameter is set to true', () => {
-    const { enableIndexExchangeBidder } = require('js/utils/feature-flags')
-    getUrlParameters.mockReturnValue({})
-    getUrlParameters.mockReturnValue({
-      ixDebug: 'true',
-    })
-    expect(enableIndexExchangeBidder()).toBe(true)
-  })
 })
