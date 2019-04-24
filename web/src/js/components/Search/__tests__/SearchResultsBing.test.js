@@ -13,8 +13,6 @@ jest.mock('js/components/Search/SearchResultItem', () => () => null)
 jest.mock('js/components/General/Link')
 jest.mock('js/utils/search-utils')
 
-// TODO: add tests
-
 const getMockProps = () => ({
   classes: {},
   data: {
