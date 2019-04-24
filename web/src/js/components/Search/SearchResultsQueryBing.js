@@ -69,6 +69,7 @@ class SearchResultsQueryBing extends React.Component {
     // we don't want to delay the component mount.
     getCurrentUser().then(user => {
       if (user && user.id) {
+        // TODO: add tests for this
         LogSearchMutation({
           userId: user.id,
           ...(searchSource && { source: searchSource }),
