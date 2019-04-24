@@ -2,13 +2,17 @@
 
 import React from 'react'
 import { shallow } from 'enzyme'
+import { getMockSuccessfulSearchQuery } from 'js/utils/test-utils-search'
+import fetchBingSearchResults from 'js/components/Search/fetchBingSearchResults'
+import { flushAllPromises } from 'js/utils/test-utils'
+import SearchResultsBing from 'js/components/Search/SearchResultsBing'
+import logger from 'js/utils/logger'
 
 jest.mock('js/components/Search/fetchBingSearchResults')
 jest.mock('js/components/Search/SearchResultsBing')
 jest.mock('js/authentication/user')
 jest.mock('js/mutations/LogSearchMutation')
-
-// TODO: add tests
+jest.mock('js/utils/logger')
 
 const getMockProps = () => ({
   query: null,
@@ -19,6 +23,7 @@ const getMockProps = () => ({
 
 beforeEach(() => {
   jest.clearAllMocks()
+  fetchBingSearchResults.mockResolvedValue(getMockSuccessfulSearchQuery())
 })
 
 describe('SearchResultsQueryBing', () => {
@@ -27,5 +32,573 @@ describe('SearchResultsQueryBing', () => {
       .default
     const mockProps = getMockProps()
     shallow(<SearchResultsQueryBing {...mockProps} />)
+  })
+
+  it('calls fetchBingSearchResults on mount when the query exists', async () => {
+    expect.assertions(2)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+    shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    expect(fetchBingSearchResults).toHaveBeenCalledTimes(1)
+    expect(fetchBingSearchResults).toHaveBeenCalledWith('tacos')
+  })
+
+  it('calls fetchBingSearchResults when the query changes', async () => {
+    expect.assertions(2)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+    const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    fetchBingSearchResults.mockClear()
+    wrapper.setProps({ query: 'pizza' })
+    expect(fetchBingSearchResults).toHaveBeenCalledTimes(1)
+    expect(fetchBingSearchResults).toHaveBeenCalledWith('pizza')
+  })
+
+  it('calls fetchBingSearchResults when the page changes', async () => {
+    expect.assertions(3)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+    const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    fetchBingSearchResults.mockClear()
+    expect(fetchBingSearchResults).not.toHaveBeenCalled()
+    wrapper.setProps({ page: 2 })
+    expect(fetchBingSearchResults).toHaveBeenCalledTimes(1)
+    expect(fetchBingSearchResults).toHaveBeenCalledWith('tacos')
+  })
+
+  it('does not call fetchBingSearchResults when some unrelated prop changes', async () => {
+    expect.assertions(1)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+    mockProps.totallyFakeProp = 'hi'
+    const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    fetchBingSearchResults.mockClear()
+    wrapper.setProps({ totallyFakeProp: 'bye' })
+    expect(fetchBingSearchResults).not.toHaveBeenCalled()
+  })
+
+  it('does not call fetchBingSearchResults on mount when the query does not exist', async () => {
+    expect.assertions(1)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = null
+    shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    expect(fetchBingSearchResults).not.toHaveBeenCalled()
+  })
+
+  it('passes isEmptyQuery=false to SearchResultsBing when the query exists', async () => {
+    expect.assertions(1)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+    const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    expect(wrapper.find(SearchResultsBing).prop('isEmptyQuery')).toBe(false)
+  })
+
+  it('passes isEmptyQuery=true to SearchResultsBing when the query exists', async () => {
+    expect.assertions(1)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = null
+    const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    expect(wrapper.find(SearchResultsBing).prop('isEmptyQuery')).toBe(true)
+  })
+
+  it('passes isError=false to SearchResultsBing when the query succeeds', async () => {
+    expect.assertions(1)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+    const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    expect(wrapper.find(SearchResultsBing).prop('isError')).toBe(false)
+  })
+
+  it('passes isError=true to SearchResultsBing when the query request throws', async () => {
+    expect.assertions(1)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+    fetchBingSearchResults.mockImplementation(() => {
+      throw new Error('Search did not work.')
+    })
+    const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    expect(wrapper.find(SearchResultsBing).prop('isError')).toBe(true)
+  })
+
+  it('logs an error when the query request throws', async () => {
+    expect.assertions(1)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+    const mockErr = new Error('Search did not work.')
+    fetchBingSearchResults.mockImplementation(() => {
+      throw mockErr
+    })
+    shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    expect(logger.error).toHaveBeenCalledWith(mockErr)
+  })
+
+  it('passes isQueryInProgress=true to SearchResultsBing when the query is pending', async () => {
+    expect.assertions(2)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+
+    // Mock that therequest takes some time.
+    jest.useFakeTimers()
+    fetchBingSearchResults.mockImplementationOnce(() => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(getMockSuccessfulSearchQuery())
+        }, 8e3)
+      })
+    })
+
+    const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    expect(wrapper.find(SearchResultsBing).prop('isQueryInProgress')).toBe(true)
+
+    // Mock that the request returns.
+    jest.advanceTimersByTime(10e3)
+    await flushAllPromises()
+
+    expect(wrapper.find(SearchResultsBing).prop('isQueryInProgress')).toBe(
+      false
+    )
+  })
+
+  it('passes the page number to SearchResultsBing', async () => {
+    expect.assertions(2)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+    mockProps.page = 124
+    const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    expect(wrapper.find(SearchResultsBing).prop('page')).toEqual(124)
+    wrapper.setProps({ page: 2 })
+    expect(wrapper.find(SearchResultsBing).prop('page')).toEqual(2)
+  })
+
+  it('calls the onPageChange prop when clicking to a new results page', async () => {
+    expect.assertions(1)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+    mockProps.page = 124
+    const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    const onPageChangeTrigger = wrapper
+      .find(SearchResultsBing)
+      .prop('onPageChange')
+    onPageChangeTrigger(12)
+    expect(mockProps.onPageChange).toHaveBeenCalledWith(12)
+  })
+
+  it('scrolls to the top of the page when clicking to a new results page', async () => {
+    expect.assertions(2)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+    mockProps.page = 124
+    const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    window.document.body.scrollTop = 829
+    expect(window.document.body.scrollTop).toBe(829)
+    const onPageChangeTrigger = wrapper
+      .find(SearchResultsBing)
+      .prop('onPageChange')
+    onPageChangeTrigger(12)
+    expect(window.document.body.scrollTop).toBe(0)
+  })
+
+  it('does not call the onPageChange prop when clicking the current results page', async () => {
+    expect.assertions(1)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+    mockProps.page = 42
+    const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    const onPageChangeTrigger = wrapper
+      .find(SearchResultsBing)
+      .prop('onPageChange')
+    onPageChangeTrigger(42)
+    expect(mockProps.onPageChange).not.toHaveBeenCalled()
+  })
+
+  it('does not throw or log an error if the query returns after the component has unmounted', async () => {
+    expect.assertions(1)
+
+    // Mock that the Wikipedia request takes some time.
+    jest.useFakeTimers()
+    fetchBingSearchResults.mockImplementation(() => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(getMockSuccessfulSearchQuery())
+        }, 8e3)
+      })
+    })
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+    const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+
+    // Unmount
+    wrapper.unmount()
+
+    // Mock that the request returns.
+    jest.advanceTimersByTime(10e3)
+    await flushAllPromises()
+
+    expect(logger.error).not.toHaveBeenCalled()
+  })
+
+  it('logs an error the promise fails for reasons other than being canceled', async () => {
+    expect.assertions(1)
+
+    // Mock that the request takes some time.
+    jest.useFakeTimers()
+    const mockErr = new Error('Oh no!')
+    fetchBingSearchResults.mockImplementation(() => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          reject(mockErr)
+        }, 8e3)
+      })
+    })
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+    shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+
+    // Mock that the request returns.
+    jest.advanceTimersByTime(10e3)
+    await flushAllPromises()
+
+    expect(logger.error).toHaveBeenCalledWith(mockErr)
+  })
+
+  it('passes the expected data structure to SearchResultsBing', async () => {
+    expect.assertions(1)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+    const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    const passedData = wrapper.find(SearchResultsBing).prop('data')
+    expect(passedData).toEqual({
+      mainline: [
+        {
+          key:
+            'WebPages-https://api.cognitive.microsoft.com/api/v7/#WebPages.0',
+          type: 'WebPages',
+          value: {
+            dateLastCrawled: '2018-12-24T15:23:39',
+            deepLinks: [
+              {
+                name: 'This site is related',
+                snippet: 'This is a snippet related to the site.',
+                url: 'https://example.com/some-url-265',
+                urlPingSuffix: 'something',
+              },
+              {
+                name: 'This site is related',
+                snippet: 'This is a snippet related to the site.',
+                url: 'https://example.com/some-url-266',
+                urlPingSuffix: 'something',
+              },
+            ],
+            displayUrl: 'https://example.com',
+            id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.0',
+            name: 'A <b>Really Awesome</b> Webpage',
+            searchTags: [],
+            snippet:
+              "This <b>really awesome</b> website is definitely what you're looking for.",
+            url: 'https://example.com/some-url-267',
+          },
+        },
+        {
+          key: 'News',
+          type: 'News',
+          value: [
+            {
+              category: 'Politics',
+              clusteredArticles: undefined,
+              contractualRules: [
+                {
+                  _type: 'ContractualRules/TextAttribution',
+                  text: 'A Good News Site',
+                },
+              ],
+              datePublished: '2018-12-24T15:23:39',
+              description:
+                'Something <b>truly incredible</b> and newsworthy happened! Wow. You cannot miss this article.',
+              headline: undefined,
+              id: 'https://api.cognitive.microsoft.com/api/v7/some-fake-id-141',
+              image: {
+                contentUrl: 'https://media.example.com/foo.png',
+                thumbnail: {
+                  contentUrl: 'https://www.bing.com/some-url/',
+                  height: 466,
+                  width: 700,
+                },
+              },
+              mentions: [
+                {
+                  name: 'New York City',
+                },
+                {
+                  name: 'Madonna',
+                },
+              ],
+              name: 'An <b>Incredible</b> Event in NYC',
+              provider: [
+                {
+                  _type: 'Organization',
+                  image: {
+                    thumbnail: {
+                      contentUrl: 'https://www.bing.com/some-image-url/',
+                    },
+                  },
+                  name: 'A Good News Site',
+                },
+              ],
+              url: 'https://example.com/some-url-261',
+              video: undefined,
+            },
+            {
+              category: 'Politics',
+              clusteredArticles: undefined,
+              contractualRules: [
+                {
+                  _type: 'ContractualRules/TextAttribution',
+                  text: 'A Good News Site',
+                },
+              ],
+              datePublished: '2018-12-24T15:23:39',
+              description:
+                'Something <b>truly incredible</b> and newsworthy happened! Wow. You cannot miss this article.',
+              headline: undefined,
+              id: 'https://api.cognitive.microsoft.com/api/v7/some-fake-id-142',
+              image: {
+                contentUrl: 'https://media.example.com/foo.png',
+                thumbnail: {
+                  contentUrl: 'https://www.bing.com/some-url/',
+                  height: 466,
+                  width: 700,
+                },
+              },
+              mentions: [
+                {
+                  name: 'New York City',
+                },
+                {
+                  name: 'Madonna',
+                },
+              ],
+              name: 'An <b>Incredible</b> Event in NYC',
+              provider: [
+                {
+                  _type: 'Organization',
+                  image: {
+                    thumbnail: {
+                      contentUrl: 'https://www.bing.com/some-image-url/',
+                    },
+                  },
+                  name: 'A Good News Site',
+                },
+              ],
+              url: 'https://example.com/some-url-262',
+              video: undefined,
+            },
+            {
+              category: 'Politics',
+              clusteredArticles: undefined,
+              contractualRules: [
+                {
+                  _type: 'ContractualRules/TextAttribution',
+                  text: 'A Good News Site',
+                },
+              ],
+              datePublished: '2018-12-24T15:23:39',
+              description:
+                'Something <b>truly incredible</b> and newsworthy happened! Wow. You cannot miss this article.',
+              headline: undefined,
+              id: 'https://api.cognitive.microsoft.com/api/v7/some-fake-id-143',
+              image: {
+                contentUrl: 'https://media.example.com/foo.png',
+                thumbnail: {
+                  contentUrl: 'https://www.bing.com/some-url/',
+                  height: 466,
+                  width: 700,
+                },
+              },
+              mentions: [
+                {
+                  name: 'New York City',
+                },
+                {
+                  name: 'Madonna',
+                },
+              ],
+              name: 'An <b>Incredible</b> Event in NYC',
+              provider: [
+                {
+                  _type: 'Organization',
+                  image: {
+                    thumbnail: {
+                      contentUrl: 'https://www.bing.com/some-image-url/',
+                    },
+                  },
+                  name: 'A Good News Site',
+                },
+              ],
+              url: 'https://example.com/some-url-263',
+              video: undefined,
+            },
+            {
+              category: 'Politics',
+              clusteredArticles: undefined,
+              contractualRules: [
+                {
+                  _type: 'ContractualRules/TextAttribution',
+                  text: 'A Good News Site',
+                },
+              ],
+              datePublished: '2018-12-24T15:23:39',
+              description:
+                'Something <b>truly incredible</b> and newsworthy happened! Wow. You cannot miss this article.',
+              headline: undefined,
+              id: 'https://api.cognitive.microsoft.com/api/v7/some-fake-id-144',
+              image: {
+                contentUrl: 'https://media.example.com/foo.png',
+                thumbnail: {
+                  contentUrl: 'https://www.bing.com/some-url/',
+                  height: 466,
+                  width: 700,
+                },
+              },
+              mentions: [
+                {
+                  name: 'New York City',
+                },
+                {
+                  name: 'Madonna',
+                },
+              ],
+              name: 'An <b>Incredible</b> Event in NYC',
+              provider: [
+                {
+                  _type: 'Organization',
+                  image: {
+                    thumbnail: {
+                      contentUrl: 'https://www.bing.com/some-image-url/',
+                    },
+                  },
+                  name: 'A Good News Site',
+                },
+              ],
+              url: 'https://example.com/some-url-264',
+              video: undefined,
+            },
+          ],
+        },
+        {
+          key:
+            'WebPages-https://api.cognitive.microsoft.com/api/v7/#WebPages.1',
+          type: 'WebPages',
+          value: {
+            dateLastCrawled: '2018-12-24T15:23:39',
+            deepLinks: [
+              {
+                name: 'This site is related',
+                snippet: 'This is a snippet related to the site.',
+                url: 'https://example.com/some-url-268',
+                urlPingSuffix: 'something',
+              },
+              {
+                name: 'This site is related',
+                snippet: 'This is a snippet related to the site.',
+                url: 'https://example.com/some-url-269',
+                urlPingSuffix: 'something',
+              },
+            ],
+            displayUrl: 'https://example.com',
+            id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.1',
+            name: 'A <b>Really Awesome</b> Webpage',
+            searchTags: [],
+            snippet:
+              "This <b>really awesome</b> website is definitely what you're looking for.",
+            url: 'https://example.com/some-url-270',
+          },
+        },
+        {
+          key:
+            'WebPages-https://api.cognitive.microsoft.com/api/v7/#WebPages.2',
+          type: 'WebPages',
+          value: {
+            dateLastCrawled: '2018-12-24T15:23:39',
+            deepLinks: [
+              {
+                name: 'This site is related',
+                snippet: 'This is a snippet related to the site.',
+                url: 'https://example.com/some-url-271',
+                urlPingSuffix: 'something',
+              },
+              {
+                name: 'This site is related',
+                snippet: 'This is a snippet related to the site.',
+                url: 'https://example.com/some-url-272',
+                urlPingSuffix: 'something',
+              },
+            ],
+            displayUrl: 'https://example.com',
+            id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.2',
+            name: 'A <b>Really Awesome</b> Webpage',
+            searchTags: [],
+            snippet:
+              "This <b>really awesome</b> website is definitely what you're looking for.",
+            url: 'https://example.com/some-url-273',
+          },
+        },
+      ],
+      pole: [],
+      sidebar: [],
+    })
   })
 })

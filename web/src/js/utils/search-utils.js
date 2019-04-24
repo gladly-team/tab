@@ -28,6 +28,12 @@ export const getSearchProvider = () => {
 }
 
 /**
+ * Whether to enable pagination buttons for Bing search results.
+ * @return {Boolean} Whether to show pagination buttons.
+ */
+export const showBingPagination = () => false
+
+/**
  * Add width and height parameters to a Bing thumbnail URL so we
  * fetch an image whose dimensions will fill the desired space.
  * See:
