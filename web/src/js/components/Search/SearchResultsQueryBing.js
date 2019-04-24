@@ -191,7 +191,7 @@ class SearchResultsQueryBing extends React.Component {
         isQueryInProgress={queryInProgress}
         noSearchResults={noSearchResults}
         query={query}
-        onPageChange={this.changePage}
+        onPageChange={this.changePage.bind(this)}
         page={page}
       />
     )

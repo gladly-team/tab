@@ -206,8 +206,57 @@ describe('SearchResultsQueryBing', () => {
     expect(wrapper.find(SearchResultsBing).prop('page')).toEqual(2)
   })
 
+  it('calls the onPageChange prop when clicking to a new results page', async () => {
+    expect.assertions(1)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+    mockProps.page = 124
+    const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    const onPageChangeTrigger = wrapper
+      .find(SearchResultsBing)
+      .prop('onPageChange')
+    onPageChangeTrigger(12)
+    expect(mockProps.onPageChange).toHaveBeenCalledWith(12)
+  })
+
+  it('scrolls to the top of the page when clicking to a new results page', async () => {
+    expect.assertions(2)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+    mockProps.page = 124
+    const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    window.document.body.scrollTop = 829
+    expect(window.document.body.scrollTop).toBe(829)
+    const onPageChangeTrigger = wrapper
+      .find(SearchResultsBing)
+      .prop('onPageChange')
+    onPageChangeTrigger(12)
+    expect(window.document.body.scrollTop).toBe(0)
+  })
+
+  it('does not call the onPageChange prop when clicking the current results page', async () => {
+    expect.assertions(1)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+    mockProps.page = 42
+    const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    const onPageChangeTrigger = wrapper
+      .find(SearchResultsBing)
+      .prop('onPageChange')
+    onPageChangeTrigger(42)
+    expect(mockProps.onPageChange).not.toHaveBeenCalled()
+  })
+
   // TODO: add tests
-  // - onPageChange called as expected; page scrolls to top
   // - no error when component unmounts during query (see WikipediaQuery example)
   // - data is restructured as expected
 })
