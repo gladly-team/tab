@@ -7,6 +7,8 @@ import fetchBingSearchResults from 'js/components/Search/fetchBingSearchResults'
 import { flushAllPromises } from 'js/utils/test-utils'
 import SearchResultsBing from 'js/components/Search/SearchResultsBing'
 import logger from 'js/utils/logger'
+import LogSearchMutation from 'js/mutations/LogSearchMutation'
+import { getCurrentUser } from 'js/authentication/user'
 
 jest.mock('js/components/Search/fetchBingSearchResults')
 jest.mock('js/components/Search/SearchResultsBing')
@@ -24,6 +26,13 @@ const getMockProps = () => ({
 beforeEach(() => {
   jest.clearAllMocks()
   fetchBingSearchResults.mockResolvedValue(getMockSuccessfulSearchQuery())
+  getCurrentUser.mockResolvedValue({
+    id: 'abc123xyz789',
+    email: 'example@example.com',
+    username: 'example',
+    isAnonymous: false,
+    emailVerified: true,
+  })
 })
 
 describe('SearchResultsQueryBing', () => {
@@ -98,6 +107,108 @@ describe('SearchResultsQueryBing', () => {
     shallow(<SearchResultsQueryBing {...mockProps} />)
     await flushAllPromises()
     expect(fetchBingSearchResults).not.toHaveBeenCalled()
+  })
+
+  it('calls LogSearchMutation on mount when the query exists', async () => {
+    expect.assertions(2)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+    shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    expect(LogSearchMutation).toHaveBeenCalledTimes(1)
+    expect(LogSearchMutation).toHaveBeenCalledWith({ userId: 'abc123xyz789' })
+  })
+
+  it('calls LogSearchMutation when the query changes', async () => {
+    expect.assertions(2)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+    const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    LogSearchMutation.mockClear()
+    wrapper.setProps({ query: 'pizza' })
+    await flushAllPromises()
+    expect(LogSearchMutation).toHaveBeenCalledTimes(1)
+    expect(LogSearchMutation).toHaveBeenCalledWith({ userId: 'abc123xyz789' })
+  })
+
+  it('calls LogSearchMutation when the page changes', async () => {
+    expect.assertions(3)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+    const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    LogSearchMutation.mockClear()
+    expect(LogSearchMutation).not.toHaveBeenCalled()
+    wrapper.setProps({ page: 2 })
+    await flushAllPromises()
+    expect(LogSearchMutation).toHaveBeenCalledTimes(1)
+    expect(LogSearchMutation).toHaveBeenCalledWith({ userId: 'abc123xyz789' })
+  })
+
+  it('does not call LogSearchMutation when some unrelated prop changes', async () => {
+    expect.assertions(1)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+    mockProps.totallyFakeProp = 'hi'
+    const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    LogSearchMutation.mockClear()
+    wrapper.setProps({ totallyFakeProp: 'bye' })
+    expect(LogSearchMutation).not.toHaveBeenCalled()
+  })
+
+  it('does not call LogSearchMutation on mount when the query does not exist', async () => {
+    expect.assertions(1)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = null
+    shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    expect(LogSearchMutation).not.toHaveBeenCalled()
+  })
+
+  it('does not calls LogSearchMutation when the user is not authenticated', async () => {
+    expect.assertions(1)
+    getCurrentUser.mockResolvedValue({
+      id: null,
+      email: null,
+      username: null,
+      isAnonymous: false,
+      emailVerified: false,
+    })
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+    shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    expect(LogSearchMutation).not.toHaveBeenCalled()
+  })
+
+  it('calls LogSearchMutation with the search source, if provided', async () => {
+    expect.assertions(2)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+    mockProps.searchSource = 'some-source'
+    shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    expect(LogSearchMutation).toHaveBeenCalledTimes(1)
+    expect(LogSearchMutation).toHaveBeenCalledWith({
+      source: 'some-source',
+      userId: 'abc123xyz789',
+    })
   })
 
   it('passes isEmptyQuery=false to SearchResultsBing when the query exists', async () => {
