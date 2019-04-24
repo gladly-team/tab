@@ -66,7 +66,7 @@ beforeEach(() => {
   jest.clearAllMocks()
 })
 
-describe('SearchResultsBing', () => {
+describe('SearchResultsBing: tests for non-results display', () => {
   it('renders without error', () => {
     const SearchResultsBing = require('js/components/Search/SearchResultsBing')
       .default
@@ -224,9 +224,42 @@ describe('SearchResultsBing', () => {
         .exists()
     ).toBe(true)
   })
+})
+
+describe('SearchResultsBing: tests for pagination', () => {
+  beforeEach(() => {
+    showBingPagination.mockReturnValue(true)
+  })
+
+  it('shows the pagination container when it is enabled', () => {
+    showBingPagination.mockReturnValue(true)
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'ice cream'
+    mockProps.page = 1
+    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
+    expect(
+      wrapper.find('[data-test-id="pagination-container"]').prop('style')
+        .display
+    ).toEqual('block')
+  })
+
+  it('does not show the pagination container when it is not enabled', () => {
+    showBingPagination.mockReturnValue(false)
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'ice cream'
+    mockProps.page = 1
+    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
+    expect(
+      wrapper.find('[data-test-id="pagination-container"]').prop('style')
+        .display
+    ).toEqual('none')
+  })
 
   it('calls the onPageChange prop when clicking to a new results page', () => {
-    showBingPagination.mockReturnValue(true)
     const SearchResultsBing = require('js/components/Search/SearchResultsBing')
       .default
     const mockProps = getMockProps()
@@ -240,7 +273,6 @@ describe('SearchResultsBing', () => {
   })
 
   it('calls the onPageChange prop when clicking the "next page" button', () => {
-    showBingPagination.mockReturnValue(true)
     const SearchResultsBing = require('js/components/Search/SearchResultsBing')
       .default
     const mockProps = getMockProps()
@@ -252,7 +284,6 @@ describe('SearchResultsBing', () => {
   })
 
   it('calls the onPageChange prop when clicking the "previous page" button', () => {
-    showBingPagination.mockReturnValue(true)
     const SearchResultsBing = require('js/components/Search/SearchResultsBing')
       .default
     const mockProps = getMockProps()
