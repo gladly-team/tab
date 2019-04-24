@@ -333,23 +333,23 @@ describe('SearchResultsQueryBing', () => {
               {
                 name: 'This site is related',
                 snippet: 'This is a snippet related to the site.',
-                url: 'https://example.com/some-url-265',
+                url: expect.any(String),
                 urlPingSuffix: 'something',
               },
               {
                 name: 'This site is related',
                 snippet: 'This is a snippet related to the site.',
-                url: 'https://example.com/some-url-266',
+                url: expect.any(String),
                 urlPingSuffix: 'something',
               },
             ],
             displayUrl: 'https://example.com',
-            id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.0',
+            id: expect.any(String),
             name: 'A <b>Really Awesome</b> Webpage',
             searchTags: [],
             snippet:
               "This <b>really awesome</b> website is definitely what you're looking for.",
-            url: 'https://example.com/some-url-267',
+            url: expect.any(String),
           },
         },
         {
@@ -369,7 +369,7 @@ describe('SearchResultsQueryBing', () => {
               description:
                 'Something <b>truly incredible</b> and newsworthy happened! Wow. You cannot miss this article.',
               headline: undefined,
-              id: 'https://api.cognitive.microsoft.com/api/v7/some-fake-id-141',
+              id: expect.any(String),
               image: {
                 contentUrl: 'https://media.example.com/foo.png',
                 thumbnail: {
@@ -398,7 +398,7 @@ describe('SearchResultsQueryBing', () => {
                   name: 'A Good News Site',
                 },
               ],
-              url: 'https://example.com/some-url-261',
+              url: expect.any(String),
               video: undefined,
             },
             {
@@ -414,7 +414,7 @@ describe('SearchResultsQueryBing', () => {
               description:
                 'Something <b>truly incredible</b> and newsworthy happened! Wow. You cannot miss this article.',
               headline: undefined,
-              id: 'https://api.cognitive.microsoft.com/api/v7/some-fake-id-142',
+              id: expect.any(String),
               image: {
                 contentUrl: 'https://media.example.com/foo.png',
                 thumbnail: {
@@ -443,7 +443,7 @@ describe('SearchResultsQueryBing', () => {
                   name: 'A Good News Site',
                 },
               ],
-              url: 'https://example.com/some-url-262',
+              url: expect.any(String),
               video: undefined,
             },
             {
@@ -459,7 +459,7 @@ describe('SearchResultsQueryBing', () => {
               description:
                 'Something <b>truly incredible</b> and newsworthy happened! Wow. You cannot miss this article.',
               headline: undefined,
-              id: 'https://api.cognitive.microsoft.com/api/v7/some-fake-id-143',
+              id: expect.any(String),
               image: {
                 contentUrl: 'https://media.example.com/foo.png',
                 thumbnail: {
@@ -488,7 +488,7 @@ describe('SearchResultsQueryBing', () => {
                   name: 'A Good News Site',
                 },
               ],
-              url: 'https://example.com/some-url-263',
+              url: expect.any(String),
               video: undefined,
             },
             {
@@ -504,7 +504,7 @@ describe('SearchResultsQueryBing', () => {
               description:
                 'Something <b>truly incredible</b> and newsworthy happened! Wow. You cannot miss this article.',
               headline: undefined,
-              id: 'https://api.cognitive.microsoft.com/api/v7/some-fake-id-144',
+              id: expect.any(String),
               image: {
                 contentUrl: 'https://media.example.com/foo.png',
                 thumbnail: {
@@ -533,7 +533,7 @@ describe('SearchResultsQueryBing', () => {
                   name: 'A Good News Site',
                 },
               ],
-              url: 'https://example.com/some-url-264',
+              url: expect.any(String),
               video: undefined,
             },
           ],
@@ -548,23 +548,23 @@ describe('SearchResultsQueryBing', () => {
               {
                 name: 'This site is related',
                 snippet: 'This is a snippet related to the site.',
-                url: 'https://example.com/some-url-268',
+                url: expect.any(String),
                 urlPingSuffix: 'something',
               },
               {
                 name: 'This site is related',
                 snippet: 'This is a snippet related to the site.',
-                url: 'https://example.com/some-url-269',
+                url: expect.any(String),
                 urlPingSuffix: 'something',
               },
             ],
             displayUrl: 'https://example.com',
-            id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.1',
+            id: expect.any(String),
             name: 'A <b>Really Awesome</b> Webpage',
             searchTags: [],
             snippet:
               "This <b>really awesome</b> website is definitely what you're looking for.",
-            url: 'https://example.com/some-url-270',
+            url: expect.any(String),
           },
         },
         {
@@ -577,23 +577,23 @@ describe('SearchResultsQueryBing', () => {
               {
                 name: 'This site is related',
                 snippet: 'This is a snippet related to the site.',
-                url: 'https://example.com/some-url-271',
+                url: expect.any(String),
                 urlPingSuffix: 'something',
               },
               {
                 name: 'This site is related',
                 snippet: 'This is a snippet related to the site.',
-                url: 'https://example.com/some-url-272',
+                url: expect.any(String),
                 urlPingSuffix: 'something',
               },
             ],
             displayUrl: 'https://example.com',
-            id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.2',
+            id: expect.any(String),
             name: 'A <b>Really Awesome</b> Webpage',
             searchTags: [],
             snippet:
               "This <b>really awesome</b> website is definitely what you're looking for.",
-            url: 'https://example.com/some-url-273',
+            url: expect.any(String),
           },
         },
       ],
