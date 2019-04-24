@@ -1,13 +1,14 @@
 /* eslint-env jest */
 
 import React from 'react'
-import { shallow } from 'enzyme'
+import { mount, shallow } from 'enzyme'
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import Link from 'js/components/General/Link'
 import { showBingPagination } from 'js/utils/search-utils'
 
-jest.mock('js/components/Search/SearchResultItem')
+jest.mock('js/components/Search/SearchResultItem', () => () => null)
 jest.mock('js/components/General/Link')
 jest.mock('js/utils/search-utils')
 
@@ -224,6 +225,35 @@ describe('SearchResultsBing: tests for non-results display', () => {
         .exists()
     ).toBe(true)
   })
+
+  it('uses our secondary color as the color of the button text of the current results page', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'ice cream'
+    mockProps.page = 3
+    const ourTheme = createMuiTheme({
+      palette: {
+        primary: {
+          main: '#dedede',
+        },
+        secondary: {
+          main: '#b94f4f',
+        },
+      },
+    })
+    const wrapper = mount(
+      <MuiThemeProvider theme={ourTheme}>
+        <SearchResultsBing {...mockProps} />
+      </MuiThemeProvider>
+    )
+    expect(
+      wrapper
+        .find('[data-test-id="pagination-3"]')
+        .first()
+        .prop('style')
+    ).toHaveProperty('color', '#b94f4f')
+  })
 })
 
 describe('SearchResultsBing: tests for pagination', () => {
@@ -257,6 +287,54 @@ describe('SearchResultsBing: tests for pagination', () => {
       wrapper.find('[data-test-id="pagination-container"]').prop('style')
         .display
     ).toEqual('none')
+  })
+
+  it('hides the pagination container when there are no search results', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'ice cream'
+    mockProps.isEmptyQuery = false
+    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
+
+    // The pagination container should not be hidden.
+    expect(
+      wrapper.find('[data-test-id="pagination-container"]').prop('style')
+    ).toHaveProperty('display', 'block')
+
+    wrapper.setProps({
+      query: '',
+      isEmptyQuery: true,
+    })
+
+    // The pagination container should be hidden now.
+    expect(
+      wrapper.find('[data-test-id="pagination-container"]').prop('style')
+    ).toHaveProperty('display', 'none')
+  })
+
+  it('hides the pagination container when there is an error', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'ice cream'
+    mockProps.isError = false
+    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
+
+    // The pagination container should not be hidden.
+    expect(
+      wrapper.find('[data-test-id="pagination-container"]').prop('style')
+    ).toHaveProperty('display', 'block')
+
+    wrapper.setProps({
+      query: '',
+      isError: true,
+    })
+
+    // The pagination container should be hidden now.
+    expect(
+      wrapper.find('[data-test-id="pagination-container"]').prop('style')
+    ).toHaveProperty('display', 'none')
   })
 
   it('calls the onPageChange prop when clicking to a new results page', () => {
