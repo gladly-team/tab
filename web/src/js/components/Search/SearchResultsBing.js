@@ -57,6 +57,7 @@ const SearchResultsBing = props => {
   )
 
   const noResultsToDisplay = isEmptyQuery || noSearchResults || isError
+  const searchComplete = !isQueryInProgress && !isEmptyQuery
   return (
     <div
       className={classes.searchResultsParentContainer}
@@ -65,7 +66,7 @@ const SearchResultsBing = props => {
         {
           // Min height prevents visibly shifting content below,
           // like the footer.
-          minHeight: noResultsToDisplay ? 0 : 1000,
+          minHeight: noResultsToDisplay || searchComplete ? 0 : 1000,
         },
         style
       )}
@@ -96,7 +97,10 @@ const SearchResultsBing = props => {
         </Typography>
       ) : null}
       {isQueryInProgress ? null : (
-        <div id="search-results" className={classes.searchResultsContainer}>
+        <div
+          data-test-id={'search-results'}
+          className={classes.searchResultsContainer}
+        >
           {data.mainline.map(searchResultItemData => {
             return (
               <SearchResultItem
