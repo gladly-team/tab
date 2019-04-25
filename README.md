@@ -15,14 +15,14 @@
 
 1. Clone this repository.
 2. In the top level directory, run `yarn run build`. This installs dependencies and builds Docker images.
-3. Run `yarn start`.
+3. Run `yarn run start:newtab`.
 4. On first run, you'll have to create database tables and load fixtures.
     * `cd dynamodb`
     * `yarn run init`
 
 ### Development Tips
 
-* The `start` script in the top-level `package.json` orchestrates running services.
+* The `start:newtab` script in the top-level `package.json` orchestrates running services.
 * The lambda, graphql, and web services use [dotenv-extended](https://www.npmjs.com/package/dotenv-extended) to manage environment variables. The `.env` files specify defaults, which you can override with your file named `.env.local`.
 
 ### Deployment
