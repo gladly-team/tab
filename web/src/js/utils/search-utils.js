@@ -34,6 +34,12 @@ export const getSearchProvider = () => {
 export const showBingPagination = () => false
 
 /**
+ * Get how many search results to fetch per page.
+ * @return {Number} The count of search results per page.
+ */
+export const getSearchResultCountPerPage = () => 10
+
+/**
  * Add width and height parameters to a Bing thumbnail URL so we
  * fetch an image whose dimensions will fill the desired space.
  * See:

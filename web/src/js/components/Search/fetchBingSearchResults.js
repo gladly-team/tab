@@ -1,4 +1,5 @@
 import getMockBingSearchResults from 'js/components/Search/getMockBingSearchResults'
+import { getSearchResultCountPerPage } from 'js/utils/search-utils'
 
 /**
  * Call our search API endpoint.
@@ -23,7 +24,10 @@ const fetchBingSearchResults = async (query = null) => {
     if (!endpoint) {
       throw new Error('Search query endpoint is not defined.')
     }
-    const searchURL = `${endpoint}?q=${encodeURI(query)}`
+    // const searchURL = `${endpoint}?q=${encodeURI(query)}`
+    const searchURL = `${endpoint}?q=${encodeURI(
+      query
+    )}&count=${getSearchResultCountPerPage()}`
     return fetch(searchURL, {
       method: 'GET',
       headers: {
