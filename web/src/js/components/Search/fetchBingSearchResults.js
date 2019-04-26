@@ -24,10 +24,15 @@ const fetchBingSearchResults = async (query = null) => {
     if (!endpoint) {
       throw new Error('Search query endpoint is not defined.')
     }
-    // const searchURL = `${endpoint}?q=${encodeURI(query)}`
+
+    // Possible values:
+    // Computation, Entities, Images, News, RelatedSearches, SpellSuggestions,
+    // TimeZone, Videos, Webpages
+    // Add to filters as we support displaying a cateogry.
+    const responseFilter = 'Webpages,News'
     const searchURL = `${endpoint}?q=${encodeURI(
       query
-    )}&count=${getSearchResultCountPerPage()}`
+    )}&count=${getSearchResultCountPerPage()}&responseFilter=${responseFilter}`
     return fetch(searchURL, {
       method: 'GET',
       headers: {

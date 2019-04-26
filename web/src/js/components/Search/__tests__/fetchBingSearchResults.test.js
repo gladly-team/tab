@@ -34,7 +34,7 @@ describe('fetchBingSearchResults', () => {
       .default
     await fetchBingSearchResults('blue whales')
     expect(fetch.mock.calls[0][0]).toEqual(
-      'https://some-endpoint.example.com/api/query?q=blue%20whales&count=10'
+      'https://some-endpoint.example.com/api/query?q=blue%20whales&count=10&responseFilter=Webpages,News'
     )
   })
 
