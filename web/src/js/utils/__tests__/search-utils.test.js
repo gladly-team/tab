@@ -178,3 +178,10 @@ describe('showBingPagination', () => {
     expect(showBingPagination()).toBe(false)
   })
 })
+
+describe('getSearchResultCountPerPage', () => {
+  it('returns 10', () => {
+    const { getSearchResultCountPerPage } = require('js/utils/search-utils')
+    expect(getSearchResultCountPerPage()).toBe(10)
+  })
+})
