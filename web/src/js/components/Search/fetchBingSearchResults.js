@@ -41,7 +41,12 @@ const fetchBingSearchResults = async (query = null) => {
       },
     })
       .then(response => {
-        return response.json()
+        return response
+          .json()
+          .then(response => response.bing)
+          .catch(e => {
+            throw e
+          })
       })
       .catch(e => {
         throw e

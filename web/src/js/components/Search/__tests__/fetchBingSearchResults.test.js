@@ -38,6 +38,32 @@ describe('fetchBingSearchResults', () => {
     )
   })
 
+  it('returns the contents of the "bing" key', async () => {
+    expect.assertions(1)
+    global.fetch.mockImplementation(() =>
+      Promise.resolve(
+        mockFetchResponse({
+          json: () =>
+            Promise.resolve({
+              bing: {
+                foo: 'bar',
+                hi: 'there',
+                abc: [1, 2, 3],
+              },
+            }),
+        })
+      )
+    )
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    const results = await fetchBingSearchResults('blue whales')
+    expect(results).toEqual({
+      foo: 'bar',
+      hi: 'there',
+      abc: [1, 2, 3],
+    })
+  })
+
   it('throws if the query endpoint environment variable is not defined', async () => {
     expect.assertions(1)
     delete process.env.REACT_APP_SEARCH_QUERY_ENDPOINT
