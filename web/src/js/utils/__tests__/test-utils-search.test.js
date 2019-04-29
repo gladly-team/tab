@@ -179,28 +179,21 @@ describe('getMockSuccessfulSearchQuery', () => {
       getMockSuccessfulSearchQuery,
     } = require('js/utils/test-utils-search')
     expect(Object.keys(getMockSuccessfulSearchQuery()).sort()).toEqual([
+      'bing',
+      'bingExtras',
+    ])
+  })
+
+  it('includes the expected keys in the "bing" property value', () => {
+    const {
+      getMockSuccessfulSearchQuery,
+    } = require('js/utils/test-utils-search')
+    expect(Object.keys(getMockSuccessfulSearchQuery().bing).sort()).toEqual([
       '_type',
       'news',
       'queryContext',
       'rankingResponse',
       'webPages',
     ])
-  })
-
-  it('allows overriding values', () => {
-    const {
-      getMockSuccessfulSearchQuery,
-    } = require('js/utils/test-utils-search')
-    const defaultData = getMockSuccessfulSearchQuery()
-    expect(defaultData).toMatchObject({
-      _type: 'SearchResponse',
-    })
-    expect(
-      getMockSuccessfulSearchQuery({
-        _type: 'foobar',
-      })
-    ).toMatchObject({
-      _type: 'foobar',
-    })
   })
 })

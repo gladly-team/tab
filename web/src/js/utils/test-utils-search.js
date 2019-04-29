@@ -101,11 +101,10 @@ export const getMockBingNewsArticleResult = overrides => {
 // A successful search response object. Add more types as
 // we use them.
 // https://docs.microsoft.com/en-us/rest/api/cognitiveservices/bing-web-api-v7-reference#searchresponse
-export const getMockSuccessfulSearchQuery = overrides => {
+export const getMockSuccessfulSearchQuery = () => {
   const query = 'tacoss'
-  return Object.assign(
-    {},
-    {
+  return {
+    bing: {
       _type: 'SearchResponse',
       // computation: {},
       // entities: {},
@@ -187,8 +186,8 @@ export const getMockSuccessfulSearchQuery = overrides => {
         webSearchUrl: `https://www.bing.com/search?q=${query}`,
       },
     },
-    overrides
-  )
+    bingExtras: {},
+  }
 }
 
 // TODO: mock error response

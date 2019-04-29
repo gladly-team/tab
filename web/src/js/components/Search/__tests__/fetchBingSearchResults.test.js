@@ -38,7 +38,7 @@ describe('fetchBingSearchResults', () => {
     )
   })
 
-  it('returns the contents of the "bing" key', async () => {
+  it('returns the expected contents of the response body', async () => {
     expect.assertions(1)
     global.fetch.mockImplementation(() =>
       Promise.resolve(
@@ -50,6 +50,9 @@ describe('fetchBingSearchResults', () => {
                 hi: 'there',
                 abc: [1, 2, 3],
               },
+              bingQuery: {
+                msEdgeClientID: 'abc-123',
+              },
             }),
         })
       )
@@ -58,9 +61,14 @@ describe('fetchBingSearchResults', () => {
       .default
     const results = await fetchBingSearchResults('blue whales')
     expect(results).toEqual({
-      foo: 'bar',
-      hi: 'there',
-      abc: [1, 2, 3],
+      bing: {
+        foo: 'bar',
+        hi: 'there',
+        abc: [1, 2, 3],
+      },
+      bingQuery: {
+        msEdgeClientID: 'abc-123',
+      },
     })
   })
 

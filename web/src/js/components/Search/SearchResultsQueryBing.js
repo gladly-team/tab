@@ -191,7 +191,7 @@ class SearchResultsQueryBing extends React.Component {
       unexpectedSearchError,
     } = this.state
     const restructuredData = this.restructureSearchResultsData(
-      searchResultsData
+      get(searchResultsData, 'bing')
     )
 
     // Whether there are no search results for whatever reason.
