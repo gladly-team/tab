@@ -9,12 +9,14 @@ import SearchResultsBing from 'js/components/Search/SearchResultsBing'
 import logger from 'js/utils/logger'
 import LogSearchMutation from 'js/mutations/LogSearchMutation'
 import { getCurrentUser } from 'js/authentication/user'
+import { setBingClientID } from 'js/utils/local-user-data-mgr'
 
 jest.mock('js/components/Search/fetchBingSearchResults')
 jest.mock('js/components/Search/SearchResultsBing')
 jest.mock('js/authentication/user')
 jest.mock('js/mutations/LogSearchMutation')
 jest.mock('js/utils/logger')
+jest.mock('js/utils/local-user-data-mgr')
 
 const getMockProps = () => ({
   query: null,
@@ -280,7 +282,7 @@ describe('SearchResultsQueryBing', () => {
     const mockProps = getMockProps()
     mockProps.query = 'tacos'
 
-    // Mock that therequest takes some time.
+    // Mock that the request takes some time.
     jest.useFakeTimers()
     fetchBingSearchResults.mockImplementationOnce(() => {
       return new Promise((resolve, reject) => {
@@ -421,6 +423,50 @@ describe('SearchResultsQueryBing', () => {
     await flushAllPromises()
 
     expect(logger.error).toHaveBeenCalledWith(mockErr)
+  })
+
+  it('calls to set the Bing ID in local storage when the response includes a Bing ID', async () => {
+    expect.assertions(1)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+
+    const mockResponse = getMockSuccessfulSearchQuery()
+    const mockResponseWithBingId = {
+      ...mockResponse,
+      bingExtras: {
+        ...mockResponse.bingExtras,
+        msEdgeClientID: 'qwerty-123',
+      },
+    }
+    fetchBingSearchResults.mockResolvedValue(mockResponseWithBingId)
+
+    shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    expect(setBingClientID).toHaveBeenCalledWith('qwerty-123')
+  })
+
+  it('does not call to set the Bing ID in local storage when the response does not include a Bing ID', async () => {
+    expect.assertions(1)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+
+    const mockResponse = getMockSuccessfulSearchQuery()
+    const mockResponseWithBingId = {
+      ...mockResponse,
+      bingExtras: {
+        ...mockResponse.bingExtras,
+        msEdgeClientID: null,
+      },
+    }
+    fetchBingSearchResults.mockResolvedValue(mockResponseWithBingId)
+
+    shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    expect(setBingClientID).not.toHaveBeenCalled()
   })
 
   it('passes the expected data structure to SearchResultsBing', async () => {

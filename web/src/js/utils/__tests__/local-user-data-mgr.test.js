@@ -412,4 +412,23 @@ describe('local user data manager', () => {
     localStorageMgr.setItem('search.newUser.dismissedIntro', 'blah')
     expect(hasUserDismissedSearchIntro()).toBe(false)
   })
+
+  // setBingClientID method
+  it('sets the Bing client ID in localStorage', () => {
+    const { setBingClientID } = require('js/utils/local-user-data-mgr')
+    setBingClientID('my-bing-id')
+    expect(localStorageMgr.setItem).toHaveBeenCalledWith(
+      'search.user.bingClientID',
+      'my-bing-id'
+    )
+  })
+
+  // getBingClientID
+  it('gets the Bing client ID in localStorage', () => {
+    localStorageMgr.setItem('search.user.bingClientID', 'my-bing-id')
+    const { getBingClientID } = require('js/utils/local-user-data-mgr')
+    expect(getBingClientID()).toBe('my-bing-id')
+    localStorageMgr.setItem('search.user.bingClientID', 'blah')
+    expect(getBingClientID()).toBe('blah')
+  })
 })

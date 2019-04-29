@@ -86,6 +86,9 @@ export const STORAGE_EXPERIMENT_VARIOUS_AD_SIZES =
 export const SEARCH_STORAGE_NEW_USER_HAS_DISMISSED_INTRO =
   'search.newUser.dismissedIntro'
 
+// search.user: values related to the Search for a Cause user.
+export const SEARCH_STORAGE_USER_BING_CLIENT_ID = 'search.user.bingClientID'
+
 /**
   Error codes passed from server-side.
 **/
