@@ -32,6 +32,7 @@ import {
 import Logo from 'js/components/Logo/Logo'
 import WikipediaQuery from 'js/components/Search/WikipediaQuery'
 import ErrorBoundary from 'js/components/General/ErrorBoundary'
+import ErrorBoundarySearchResults from 'js/components/Search/ErrorBoundarySearchResults'
 import { getSearchProvider, isReactSnapClient } from 'js/utils/search-utils'
 
 jest.mock('js/utils/feature-flags')
@@ -869,6 +870,21 @@ describe('Search results from Bing', () => {
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
     expect(wrapper.find(SearchResultsQueryBing).exists()).toBe(true)
     expect(wrapper.find(SearchResultsQueryBing).prop('query')).toEqual('')
+  })
+
+  it('[bing] wraps the SearchResultsQueryBing component in an error boundary', () => {
+    isSearchPageEnabled.mockReturnValue(true)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location.search = '?q=big%20bad%20wolf'
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find(SearchResultsQueryBing)
+        .parent()
+        .type()
+    ).toEqual(ErrorBoundarySearchResults)
   })
 })
 
