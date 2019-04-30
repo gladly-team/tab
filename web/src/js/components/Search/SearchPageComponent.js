@@ -35,6 +35,7 @@ import {
   setUserDismissedSearchIntro,
 } from 'js/utils/local-user-data-mgr'
 import ErrorBoundary from 'js/components/General/ErrorBoundary'
+import ErrorBoundarySearchResults from 'js/components/Search/ErrorBoundarySearchResults'
 import { SEARCH_PROVIDER_BING } from 'js/constants'
 
 const Footer = lazy(() => import('js/components/General/Footer'))
@@ -465,20 +466,22 @@ class SearchPage extends React.Component {
               </div>
             ) : null}
             {searchProvider === SEARCH_PROVIDER_BING ? (
-              <SearchResultsQueryBing
-                query={query}
-                page={page}
-                onPageChange={newPageIndex => {
-                  modifyURLParams({
-                    page: newPageIndex,
-                  })
-                }}
-                searchSource={searchSource}
-                style={{
-                  maxWidth: 600,
-                  marginBottom: 40,
-                }}
-              />
+              <ErrorBoundarySearchResults>
+                <SearchResultsQueryBing
+                  query={query}
+                  page={page}
+                  onPageChange={newPageIndex => {
+                    modifyURLParams({
+                      page: newPageIndex,
+                    })
+                  }}
+                  searchSource={searchSource}
+                  style={{
+                    maxWidth: 600,
+                    marginBottom: 40,
+                  }}
+                />
+              </ErrorBoundarySearchResults>
             ) : (
               <SearchResults
                 query={query}
