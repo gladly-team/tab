@@ -1,5 +1,7 @@
+import qs from 'qs'
 import getMockBingSearchResults from 'js/components/Search/getMockBingSearchResults'
 import { getSearchResultCountPerPage } from 'js/utils/search-utils'
+// import { getBingClientID } from 'js/utils/local-user-data-mgr'
 
 /**
  * Call our search API endpoint.
@@ -25,14 +27,24 @@ const fetchBingSearchResults = async (query = null) => {
       throw new Error('Search query endpoint is not defined.')
     }
 
-    // Possible values:
-    // Computation, Entities, Images, News, RelatedSearches, SpellSuggestions,
-    // TimeZone, Videos, Webpages
-    // Add to filters as we support displaying a cateogry.
-    const responseFilter = 'Webpages,News'
-    const searchURL = `${endpoint}?q=${encodeURI(
-      query
-    )}&count=${getSearchResultCountPerPage()}&responseFilter=${responseFilter}`
+    // TODO: send the Bing client ID if one exists.
+    // const bingClientID = getBingClientID()
+    const params = {
+      q: query,
+      count: getSearchResultCountPerPage(),
+    }
+    const searchURL = `${endpoint}?${qs.stringify(params)}&${qs.stringify(
+      {
+        // Possible values:
+        // Computation, Entities, Images, News, RelatedSearches, SpellSuggestions,
+        // TimeZone, Videos, Webpages
+        // Makes sure commas for list items are not encoded.
+        // Bing makes this mandatory.
+        responseFilter: 'Webpages,News',
+      },
+      { arrayFormat: 'comma', encode: false }
+    )}`
+
     return fetch(searchURL, {
       method: 'GET',
       headers: {
