@@ -58,6 +58,9 @@ const SearchResultsBing = props => {
 
   const noSearchResults = queryReturned && !data.mainline.length
   const noResultsToDisplay = isEmptyQuery || noSearchResults || isError
+
+  // TODO: if error, don't show "no results".
+  // TODO: if error or "no results", don't show any results.
   return (
     <div
       className={classes.searchResultsParentContainer}
