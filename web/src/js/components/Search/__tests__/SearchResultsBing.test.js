@@ -339,6 +339,79 @@ describe('SearchResultsBing: tests for non-results display', () => {
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
     expect(wrapper.find(SearchResultItem).exists()).toBe(false)
   })
+
+  it('renders the search result attribution text when there are search results', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
+    expect(
+      wrapper.find('[data-test-id="search-results-attribution"]').exists()
+    ).toBe(true)
+  })
+
+  it('renders the expected text for the search result attribution', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
+    const attributionContainer = wrapper.find(
+      '[data-test-id="search-results-attribution"]'
+    )
+    expect(
+      attributionContainer
+        .find(Typography)
+        .render()
+        .text()
+    ).toEqual('Results by Microsoft')
+  })
+
+  it('links to Microsoft from the search result attribution text', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
+    const attributionContainer = wrapper.find(
+      '[data-test-id="search-results-attribution"]'
+    )
+    expect(attributionContainer.find(Link).prop('to')).toEqual(
+      'https://privacy.microsoft.com/privacystatement'
+    )
+  })
+
+  it('does not render the search result attribution text when there are no search results', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = ''
+    mockProps.isError = false
+    mockProps.isEmptyQuery = true
+    mockProps.queryReturned = true
+    mockProps.data = {
+      pole: [],
+      mainline: [
+        {
+          type: 'WebPages',
+          key: 'some-key-1',
+          value: {
+            data: 'here',
+          },
+        },
+        {
+          type: 'WebPages',
+          key: 'some-key-2',
+          value: {
+            data: 'here',
+          },
+        },
+      ],
+      sidebar: [],
+    }
+    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
+    expect(
+      wrapper.find('[data-test-id="search-results-attribution"]').exists()
+    ).toBe(false)
+  })
 })
 
 describe('SearchResultsBing: tests for displaying search results', () => {
