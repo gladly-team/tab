@@ -3,6 +3,7 @@ import uuid from 'uuid/v4'
 import localStorageMgr from 'js/utils/localstorage-mgr'
 import {
   SEARCH_STORAGE_NEW_USER_HAS_DISMISSED_INTRO,
+  SEARCH_STORAGE_USER_BING_CLIENT_ID,
   STORAGE_DISMISSED_AD_EXPLANATION,
   STORAGE_EXTENSION_INSTALL_ID,
   STORAGE_APPROX_EXTENSION_INSTALL_TIME,
@@ -261,3 +262,20 @@ export const hasUserDismissedSearchIntro = () => {
     'true'
   )
 }
+
+/**
+ * Saves the Bing user client ID to local storage. This is Bing's
+ * X-MSEdge-ClientID value. See:
+ * https://docs.microsoft.com/en-us/rest/api/cognitiveservices/bing-web-api-v7-reference#headers
+ * @returns {undefined}
+ */
+export const setBingClientID = bingClientID => {
+  localStorageMgr.setItem(SEARCH_STORAGE_USER_BING_CLIENT_ID, bingClientID)
+}
+
+/**
+ * Get the Bing user client ID from local storage.
+ * @returns {String|null}
+ */
+export const getBingClientID = () =>
+  localStorageMgr.getItem(SEARCH_STORAGE_USER_BING_CLIENT_ID) || null

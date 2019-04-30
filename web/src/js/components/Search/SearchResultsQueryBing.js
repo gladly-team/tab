@@ -9,6 +9,7 @@ import { isReactSnapClient } from 'js/utils/search-utils'
 import { getCurrentUser } from 'js/authentication/user'
 import LogSearchMutation from 'js/mutations/LogSearchMutation'
 import { makePromiseCancelable } from 'js/utils/utils'
+import { setBingClientID } from 'js/utils/local-user-data-mgr'
 
 class SearchResultsQueryBing extends React.Component {
   constructor(props) {
@@ -96,6 +97,18 @@ class SearchResultsQueryBing extends React.Component {
         searchResultsData: searchResults,
         queryInProgress: false,
       })
+
+      // If the X-MSEdge-ClientID exists in the response, store it. See:
+      // https://docs.microsoft.com/en-us/rest/api/cognitiveservices/bing-web-api-v7-reference#headers
+      // We return this value in the "bingExtras.msEdgeClientID".
+      try {
+        const bingClientID = get(searchResults, 'bingExtras.msEdgeClientID')
+        if (bingClientID) {
+          setBingClientID(bingClientID)
+        }
+      } catch (e) {
+        logger.error(e)
+      }
     } catch (e) {
       if (e && e.isCanceled) {
         return
@@ -191,7 +204,7 @@ class SearchResultsQueryBing extends React.Component {
       unexpectedSearchError,
     } = this.state
     const restructuredData = this.restructureSearchResultsData(
-      searchResultsData
+      get(searchResultsData, 'bing')
     )
 
     // Whether there are no search results for whatever reason.
