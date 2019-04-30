@@ -91,12 +91,12 @@ class SearchResultsQueryBing extends React.Component {
       )
       const searchResults = await this.cancelablePromise.promise
 
-      // TODO: handle returned error objects. See:
-      // https://docs.microsoft.com/en-us/rest/api/cognitiveservices/bing-web-api-v7-reference#errorresponse
       this.setState({
         queryInProgress: false,
         queryReturned: true,
         searchResultsData: searchResults,
+        // https://docs.microsoft.com/en-us/rest/api/cognitiveservices/bing-web-api-v7-reference#errorresponse
+        unexpectedSearchError: get(searchResults, 'bing.errors', []).length > 0,
       })
 
       // If the X-MSEdge-ClientID exists in the response, store it. See:
@@ -110,6 +110,9 @@ class SearchResultsQueryBing extends React.Component {
       } catch (e) {
         logger.error(e)
       }
+
+      // TODO:
+      // If Bing returns errors, log them.
     } catch (e) {
       if (e && e.isCanceled) {
         return

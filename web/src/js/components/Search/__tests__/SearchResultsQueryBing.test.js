@@ -2,7 +2,10 @@
 
 import React from 'react'
 import { shallow } from 'enzyme'
-import { getMockSuccessfulSearchQuery } from 'js/utils/test-utils-search'
+import {
+  getMockSuccessfulSearchQuery,
+  getMockErrorSearchQuery,
+} from 'js/utils/test-utils-search'
 import fetchBingSearchResults from 'js/components/Search/fetchBingSearchResults'
 import { flushAllPromises } from 'js/utils/test-utils'
 import SearchResultsBing from 'js/components/Search/SearchResultsBing'
@@ -521,6 +524,20 @@ describe('SearchResultsQueryBing', () => {
     wrapper.setProps({ query: 'something else' })
     await flushAllPromises()
     expect(wrapper.find(SearchResultsBing).prop('isError')).toBe(false)
+  })
+
+  it('passes isError=true to SearchResultsBing when Bing returns an error object', async () => {
+    expect.assertions(1)
+
+    // Mock that Bing returns an error.
+    fetchBingSearchResults.mockResolvedValue(getMockErrorSearchQuery())
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+    const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    expect(wrapper.find(SearchResultsBing).prop('isError')).toBe(true)
   })
 
   it('calls to set the Bing ID in local storage when the response includes a Bing ID', async () => {
