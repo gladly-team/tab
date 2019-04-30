@@ -59,8 +59,6 @@ const SearchResultsBing = props => {
   const noSearchResults = queryReturned && !data.mainline.length
   const noResultsToDisplay = isEmptyQuery || noSearchResults || isError
 
-  // TODO: if error, don't show "no results".
-  // TODO: if error or "no results", don't show any results.
   return (
     <div
       className={classes.searchResultsParentContainer}
@@ -74,12 +72,6 @@ const SearchResultsBing = props => {
         style
       )}
     >
-      {noSearchResults ? (
-        <Typography variant={'body1'} gutterBottom>
-          No results found for{' '}
-          <span style={{ fontWeight: 'bold' }}>{query}</span>
-        </Typography>
-      ) : null}
       {isError ? (
         <div data-test-id={'search-err-msg'}>
           <Typography variant={'body1'} gutterBottom>
@@ -98,8 +90,12 @@ const SearchResultsBing = props => {
         <Typography variant={'body1'} gutterBottom>
           Search something to start raising money for charity!
         </Typography>
-      ) : null}
-      {isQueryInProgress ? null : (
+      ) : noSearchResults ? (
+        <Typography variant={'body1'} gutterBottom>
+          No results found for{' '}
+          <span style={{ fontWeight: 'bold' }}>{query}</span>
+        </Typography>
+      ) : isQueryInProgress ? null : (
         <div
           data-test-id={'search-results'}
           className={classes.searchResultsContainer}
