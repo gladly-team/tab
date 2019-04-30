@@ -27,6 +27,18 @@ const styles = theme => ({
   paginationButton: {
     minWidth: 40,
   },
+  resultsAttributionContainer: {
+    borderTop: '1px solid #e4e4e4',
+    display: 'flex',
+    justifyContent: 'flex-end',
+  },
+  resultsAttribution: {
+    padding: 8,
+    color: '#cecece',
+    '&:hover': {
+      textDecoration: 'underline',
+    },
+  },
 })
 
 const SearchResultsBing = props => {
@@ -99,6 +111,9 @@ const SearchResultsBing = props => {
         <div
           data-test-id={'search-results'}
           className={classes.searchResultsContainer}
+          style={{
+            display: noResultsToDisplay ? 'none' : 'block',
+          }}
         >
           {data.mainline.map(searchResultItemData => {
             return (
@@ -109,6 +124,23 @@ const SearchResultsBing = props => {
               />
             )
           })}
+          <div
+            data-test-id={'search-results-attribution'}
+            className={classes.resultsAttributionContainer}
+          >
+            <Link
+              to={'https://privacy.microsoft.com/privacystatement'}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Typography
+                variant={'caption'}
+                className={classes.resultsAttribution}
+              >
+                Results by Microsoft
+              </Typography>
+            </Link>
+          </div>
         </div>
       )}
       <div
