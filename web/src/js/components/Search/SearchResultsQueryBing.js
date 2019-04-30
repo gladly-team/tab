@@ -79,8 +79,8 @@ class SearchResultsQueryBing extends React.Component {
 
     // Reset state of search results.
     this.setState({
-      queryReturned: false,
       queryInProgress: true,
+      queryReturned: false,
       unexpectedSearchError: false,
     })
 
@@ -94,9 +94,9 @@ class SearchResultsQueryBing extends React.Component {
       // TODO: handle returned error objects. See:
       // https://docs.microsoft.com/en-us/rest/api/cognitiveservices/bing-web-api-v7-reference#errorresponse
       this.setState({
-        searchResultsData: searchResults,
-        queryReturned: true,
         queryInProgress: false,
+        queryReturned: true,
+        searchResultsData: searchResults,
       })
 
       // If the X-MSEdge-ClientID exists in the response, store it. See:
@@ -115,8 +115,9 @@ class SearchResultsQueryBing extends React.Component {
         return
       }
       this.setState({
-        unexpectedSearchError: true,
         queryInProgress: false,
+        queryReturned: true,
+        unexpectedSearchError: true,
       })
       logger.error(e)
     }

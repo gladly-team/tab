@@ -453,6 +453,34 @@ describe('SearchResultsQueryBing', () => {
     expect(logger.error).toHaveBeenCalledWith(mockErr)
   })
 
+  it('passes isError=false to SearchResultsBing when fetching Bing results is successful', async () => {
+    expect.assertions(1)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+    const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    expect(wrapper.find(SearchResultsBing).prop('isError')).toBe(false)
+  })
+
+  it('passes isError=true to SearchResultsBing when fetching Bing results throws', async () => {
+    expect.assertions(1)
+
+    // Mock that the request throws an error.
+    const mockErr = new Error('Oh no!')
+    fetchBingSearchResults.mockImplementation(() => {
+      return new Promise((resolve, reject) => reject(mockErr))
+    })
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+    const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    expect(wrapper.find(SearchResultsBing).prop('isError')).toBe(true)
+  })
+
   it('calls to set the Bing ID in local storage when the response includes a Bing ID', async () => {
     expect.assertions(1)
     const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
