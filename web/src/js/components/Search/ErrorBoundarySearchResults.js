@@ -1,9 +1,7 @@
 import React from 'react'
 import logger from 'js/utils/logger'
-import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button'
-import Link from 'js/components/General/Link'
 import { getUrlParameters } from 'js/utils/utils'
+import SearchResultErrorMessage from 'js/components/Search/SearchResultErrorMessage'
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -22,25 +20,7 @@ class ErrorBoundary extends React.Component {
   render() {
     if (this.state.hasError) {
       const query = getUrlParameters().q || null
-      return (
-        <div>
-          <Typography variant={'body1'} gutterBottom>
-            Unable to search at this time.
-          </Typography>
-          <Link
-            to={
-              query
-                ? `https://www.google.com/search?q=${encodeURI(query)}`
-                : 'https://www.google.com'
-            }
-            target="_top"
-          >
-            <Button color={'primary'} variant={'contained'} size={'small'}>
-              Search Google
-            </Button>
-          </Link>
-        </div>
-      )
+      return <SearchResultErrorMessage query={query} />
     }
 
     return this.props.children
