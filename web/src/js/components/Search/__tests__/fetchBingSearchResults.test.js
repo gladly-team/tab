@@ -3,6 +3,8 @@
 import { mockFetchResponse } from 'js/utils/test-utils'
 
 jest.mock('js/components/Search/getMockBingSearchResults')
+jest.mock('js/utils/search-utils')
+jest.mock('js/utils/local-user-data-mgr')
 
 beforeEach(() => {
   process.env.NODE_ENV = 'test'
@@ -36,6 +38,52 @@ describe('fetchBingSearchResults', () => {
     expect(fetch.mock.calls[0][0]).toEqual(
       'https://some-endpoint.example.com/api/query?q=blue%20whales&count=10&responseFilter=Webpages,News'
     )
+  })
+
+  it('uses the expected responseFilter value', async () => {
+    expect.assertions(1)
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults('blue whales')
+    const calledURL = fetch.mock.calls[0][0]
+    const { searchParams } = new URL(calledURL)
+    expect(searchParams.get('responseFilter')).toEqual('Webpages,News')
+  })
+
+  it('uses the "count" value from getSearchResultCountPerPage', async () => {
+    expect.assertions(1)
+    const { getSearchResultCountPerPage } = require('js/utils/search-utils')
+    getSearchResultCountPerPage.mockReturnValue(132)
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults('blue whales')
+    const calledURL = fetch.mock.calls[0][0]
+    const { searchParams } = new URL(calledURL)
+    expect(searchParams.get('count')).toEqual('132')
+  })
+
+  it('sends the Bing client ID if one exists', async () => {
+    expect.assertions(1)
+    const { getBingClientID } = require('js/utils/local-user-data-mgr')
+    getBingClientID.mockReturnValue('bing-id-987654321')
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults('blue whales')
+    const calledURL = fetch.mock.calls[0][0]
+    const { searchParams } = new URL(calledURL)
+    expect(searchParams.get('bingClientID')).toEqual('bing-id-987654321')
+  })
+
+  it('does not set the Bing client ID if no ID exists', async () => {
+    expect.assertions(1)
+    const { getBingClientID } = require('js/utils/local-user-data-mgr')
+    getBingClientID.mockReturnValue(null)
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults('blue whales')
+    const calledURL = fetch.mock.calls[0][0]
+    const { searchParams } = new URL(calledURL)
+    expect(searchParams.get('bingClientID')).toBeNull()
   })
 
   it('returns the expected contents of the response body', async () => {

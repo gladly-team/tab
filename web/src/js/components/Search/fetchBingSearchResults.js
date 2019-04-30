@@ -1,7 +1,7 @@
 import qs from 'qs'
 import getMockBingSearchResults from 'js/components/Search/getMockBingSearchResults'
 import { getSearchResultCountPerPage } from 'js/utils/search-utils'
-// import { getBingClientID } from 'js/utils/local-user-data-mgr'
+import { getBingClientID } from 'js/utils/local-user-data-mgr'
 
 /**
  * Call our search API endpoint.
@@ -27,13 +27,12 @@ const fetchBingSearchResults = async (query = null) => {
       throw new Error('Search query endpoint is not defined.')
     }
 
-    // TODO: send the Bing client ID if one exists.
-    // const bingClientID = getBingClientID()
-    const params = {
+    const bingClientID = getBingClientID()
+    const searchURL = `${endpoint}?${qs.stringify({
       q: query,
       count: getSearchResultCountPerPage(),
-    }
-    const searchURL = `${endpoint}?${qs.stringify(params)}&${qs.stringify(
+      ...(bingClientID && { bingClientID }),
+    })}&${qs.stringify(
       {
         // Possible values:
         // Computation, Entities, Images, News, RelatedSearches, SpellSuggestions,
