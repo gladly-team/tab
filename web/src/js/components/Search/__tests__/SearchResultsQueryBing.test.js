@@ -540,6 +540,53 @@ describe('SearchResultsQueryBing', () => {
     expect(wrapper.find(SearchResultsBing).prop('isError')).toBe(true)
   })
 
+  it('logs errors when Bing returns an error object', async () => {
+    expect.assertions(3)
+
+    // Mock that Bing returns errors.
+    const mockErrResponse = getMockErrorSearchQuery()
+    const response = {
+      ...mockErrResponse,
+      bing: {
+        ...mockErrResponse.bing,
+        errors: [
+          {
+            code: 'InvalidAuthorization',
+            subCode: 'AuthorizationMissing',
+            message: 'Authorization is required.',
+            moreDetails: 'Subscription key is not recognized.',
+          },
+          {
+            code: 'InvalidRequest',
+            subCode: 'ParameterMissing',
+            message: 'Required parameter is missing.',
+            parameter: 'q',
+          },
+        ],
+      },
+    }
+    fetchBingSearchResults.mockResolvedValue(response)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'tacos'
+    shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    expect(logger.error).toHaveBeenCalledTimes(2)
+    expect(logger.error).toHaveBeenCalledWith({
+      code: 'InvalidAuthorization',
+      subCode: 'AuthorizationMissing',
+      message: 'Authorization is required.',
+      moreDetails: 'Subscription key is not recognized.',
+    })
+    expect(logger.error).toHaveBeenCalledWith({
+      code: 'InvalidRequest',
+      subCode: 'ParameterMissing',
+      message: 'Required parameter is missing.',
+      parameter: 'q',
+    })
+  })
+
   it('calls to set the Bing ID in local storage when the response includes a Bing ID', async () => {
     expect.assertions(1)
     const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
