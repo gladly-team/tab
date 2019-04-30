@@ -10,6 +10,7 @@ import logger from 'js/utils/logger'
 import LogSearchMutation from 'js/mutations/LogSearchMutation'
 import { getCurrentUser } from 'js/authentication/user'
 import { setBingClientID } from 'js/utils/local-user-data-mgr'
+import { isReactSnapClient } from 'js/utils/search-utils'
 
 jest.mock('js/components/Search/fetchBingSearchResults')
 jest.mock('js/components/Search/SearchResultsBing')
@@ -17,6 +18,7 @@ jest.mock('js/authentication/user')
 jest.mock('js/mutations/LogSearchMutation')
 jest.mock('js/utils/logger')
 jest.mock('js/utils/local-user-data-mgr')
+jest.mock('js/utils/search-utils')
 
 const getMockProps = () => ({
   query: null,
@@ -224,7 +226,7 @@ describe('SearchResultsQueryBing', () => {
     expect(wrapper.find(SearchResultsBing).prop('isEmptyQuery')).toBe(false)
   })
 
-  it('passes isEmptyQuery=true to SearchResultsBing when the query exists', async () => {
+  it('passes isEmptyQuery=true to SearchResultsBing when the query does not exist', async () => {
     expect.assertions(1)
     const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
       .default
@@ -233,6 +235,18 @@ describe('SearchResultsQueryBing', () => {
     const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
     await flushAllPromises()
     expect(wrapper.find(SearchResultsBing).prop('isEmptyQuery')).toBe(true)
+  })
+
+  it('passes isEmptyQuery=false to SearchResultsBing when the query does not exist but we are prerendering the HTML', async () => {
+    expect.assertions(1)
+    isReactSnapClient.mockReturnValue(true)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = null
+    const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    expect(wrapper.find(SearchResultsBing).prop('isEmptyQuery')).toBe(false)
   })
 
   it('passes isError=false to SearchResultsBing when the query succeeds', async () => {
@@ -276,7 +290,7 @@ describe('SearchResultsQueryBing', () => {
   })
 
   it('passes isQueryInProgress=true to SearchResultsBing when the query is pending', async () => {
-    expect.assertions(2)
+    expect.assertions(4)
     const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
       .default
     const mockProps = getMockProps()
@@ -284,7 +298,7 @@ describe('SearchResultsQueryBing', () => {
 
     // Mock that the request takes some time.
     jest.useFakeTimers()
-    fetchBingSearchResults.mockImplementationOnce(() => {
+    fetchBingSearchResults.mockImplementation(() => {
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           resolve(getMockSuccessfulSearchQuery())
@@ -303,10 +317,22 @@ describe('SearchResultsQueryBing', () => {
     expect(wrapper.find(SearchResultsBing).prop('isQueryInProgress')).toBe(
       false
     )
+
+    // A new search should reset isQueryInProgress to true.
+    wrapper.setProps({ query: 'something else' })
+    expect(wrapper.find(SearchResultsBing).prop('isQueryInProgress')).toBe(true)
+
+    // Mock that the request returns.
+    jest.advanceTimersByTime(10e3)
+    await flushAllPromises()
+
+    expect(wrapper.find(SearchResultsBing).prop('isQueryInProgress')).toBe(
+      false
+    )
   })
 
   it('passes queryReturned=false to SearchResultsBing when the query is pending and true when it is complete', async () => {
-    expect.assertions(2)
+    expect.assertions(4)
     const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
       .default
     const mockProps = getMockProps()
@@ -324,6 +350,16 @@ describe('SearchResultsQueryBing', () => {
 
     const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
     await flushAllPromises()
+    expect(wrapper.find(SearchResultsBing).prop('queryReturned')).toBe(false)
+
+    // Mock that the request returns.
+    jest.advanceTimersByTime(10e3)
+    await flushAllPromises()
+
+    expect(wrapper.find(SearchResultsBing).prop('queryReturned')).toBe(true)
+
+    // A new search should reset queryReturned to false.
+    wrapper.setProps({ query: 'something else' })
     expect(wrapper.find(SearchResultsBing).prop('queryReturned')).toBe(false)
 
     // Mock that the request returns.
@@ -465,7 +501,7 @@ describe('SearchResultsQueryBing', () => {
   })
 
   it('passes isError=true to SearchResultsBing when fetching Bing results throws', async () => {
-    expect.assertions(1)
+    expect.assertions(2)
 
     // Mock that the request throws an error.
     const mockErr = new Error('Oh no!')
@@ -479,6 +515,12 @@ describe('SearchResultsQueryBing', () => {
     const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
     await flushAllPromises()
     expect(wrapper.find(SearchResultsBing).prop('isError')).toBe(true)
+
+    // If a new search succeeds, isError should be false.
+    fetchBingSearchResults.mockResolvedValue(getMockSuccessfulSearchQuery())
+    wrapper.setProps({ query: 'something else' })
+    await flushAllPromises()
+    expect(wrapper.find(SearchResultsBing).prop('isError')).toBe(false)
   })
 
   it('calls to set the Bing ID in local storage when the response includes a Bing ID', async () => {
