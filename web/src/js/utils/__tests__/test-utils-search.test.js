@@ -197,3 +197,26 @@ describe('getMockSuccessfulSearchQuery', () => {
     ])
   })
 })
+
+describe('getMockErrorSearchQuery', () => {
+  it('includes the expected keys', () => {
+    const { getMockErrorSearchQuery } = require('js/utils/test-utils-search')
+    expect(Object.keys(getMockErrorSearchQuery()).sort()).toEqual([
+      'bing',
+      'bingExtras',
+    ])
+  })
+
+  it('includes the expected keys in the "bing" property value', () => {
+    const { getMockErrorSearchQuery } = require('js/utils/test-utils-search')
+    expect(Object.keys(getMockErrorSearchQuery().bing).sort()).toEqual([
+      '_type',
+      'errors',
+    ])
+  })
+
+  it('includes error items in the errors array', () => {
+    const { getMockErrorSearchQuery } = require('js/utils/test-utils-search')
+    expect(getMockErrorSearchQuery().bing.errors.length).toBeGreaterThan(0)
+  })
+})

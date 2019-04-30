@@ -36,10 +36,10 @@ const SearchResultsBing = props => {
     isEmptyQuery,
     isError,
     isQueryInProgress,
-    noSearchResults,
     onPageChange,
     page,
     query,
+    queryReturned,
     style,
     theme,
   } = props
@@ -56,8 +56,9 @@ const SearchResultsBing = props => {
     Math.min(MAX_PAGE + 1, Math.max(page + 4, MIN_PAGE + 8))
   )
 
+  const noSearchResults = queryReturned && !data.mainline.length
   const noResultsToDisplay = isEmptyQuery || noSearchResults || isError
-  const searchComplete = !isQueryInProgress && !isEmptyQuery
+
   return (
     <div
       className={classes.searchResultsParentContainer}
@@ -66,17 +67,11 @@ const SearchResultsBing = props => {
         {
           // Min height prevents visibly shifting content below,
           // like the footer.
-          minHeight: noResultsToDisplay || searchComplete ? 0 : 1000,
+          minHeight: noResultsToDisplay || queryReturned ? 0 : 1000,
         },
         style
       )}
     >
-      {noSearchResults ? (
-        <Typography variant={'body1'} gutterBottom>
-          No results found for{' '}
-          <span style={{ fontWeight: 'bold' }}>{query}</span>
-        </Typography>
-      ) : null}
       {isError ? (
         <div data-test-id={'search-err-msg'}>
           <Typography variant={'body1'} gutterBottom>
@@ -95,8 +90,12 @@ const SearchResultsBing = props => {
         <Typography variant={'body1'} gutterBottom>
           Search something to start raising money for charity!
         </Typography>
-      ) : null}
-      {isQueryInProgress ? null : (
+      ) : noSearchResults ? (
+        <Typography variant={'body1'} gutterBottom>
+          No results found for{' '}
+          <span style={{ fontWeight: 'bold' }}>{query}</span>
+        </Typography>
+      ) : isQueryInProgress ? null : (
         <div
           data-test-id={'search-results'}
           className={classes.searchResultsContainer}
@@ -198,7 +197,7 @@ SearchResultsBing.propTypes = {
   isEmptyQuery: PropTypes.bool.isRequired,
   isError: PropTypes.bool.isRequired,
   isQueryInProgress: PropTypes.bool.isRequired,
-  noSearchResults: PropTypes.bool.isRequired,
+  queryReturned: PropTypes.bool.isRequired,
   onPageChange: PropTypes.func.isRequired,
   page: PropTypes.number.isRequired,
   query: PropTypes.string.isRequired,

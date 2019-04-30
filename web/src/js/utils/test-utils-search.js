@@ -190,5 +190,19 @@ export const getMockSuccessfulSearchQuery = () => {
   }
 }
 
-// TODO: mock error response
+// A mock search response object with a Bing error.
 // https://docs.microsoft.com/en-us/rest/api/cognitiveservices/bing-web-api-v7-reference#errorresponse
+export const getMockErrorSearchQuery = () => ({
+  bing: {
+    _type: 'ErrorResponse',
+    errors: [
+      {
+        code: 'InvalidAuthorization',
+        subCode: 'AuthorizationMissing',
+        message: 'Authorization is required.',
+        moreDetails: 'Subscription key is not recognized.',
+      },
+    ],
+  },
+  bingExtras: {},
+})

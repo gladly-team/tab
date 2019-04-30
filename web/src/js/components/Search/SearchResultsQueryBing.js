@@ -17,7 +17,7 @@ class SearchResultsQueryBing extends React.Component {
     this.state = {
       searchResultsData: null,
       queryInProgress: false,
-      noSearchResults: false,
+      queryReturned: false,
       unexpectedSearchError: false,
       mounted: false, // i.e. we've mounted to a real user, not pre-rendering
     }
@@ -79,8 +79,8 @@ class SearchResultsQueryBing extends React.Component {
 
     // Reset state of search results.
     this.setState({
-      noSearchResults: false,
       queryInProgress: true,
+      queryReturned: false,
       unexpectedSearchError: false,
     })
 
@@ -90,12 +90,14 @@ class SearchResultsQueryBing extends React.Component {
         fetchBingSearchResults(query)
       )
       const searchResults = await this.cancelablePromise.promise
+      const searchErrors = get(searchResults, 'bing.errors', [])
 
-      // TODO: handle returned error objects. See:
-      // https://docs.microsoft.com/en-us/rest/api/cognitiveservices/bing-web-api-v7-reference#errorresponse
       this.setState({
-        searchResultsData: searchResults,
         queryInProgress: false,
+        queryReturned: true,
+        searchResultsData: searchResults,
+        // https://docs.microsoft.com/en-us/rest/api/cognitiveservices/bing-web-api-v7-reference#errorresponse
+        unexpectedSearchError: searchErrors.length > 0,
       })
 
       // If the X-MSEdge-ClientID exists in the response, store it. See:
@@ -109,13 +111,21 @@ class SearchResultsQueryBing extends React.Component {
       } catch (e) {
         logger.error(e)
       }
+
+      // If Bing returns errors, log them.
+      if (searchErrors.length) {
+        searchErrors.forEach(err => {
+          logger.error(err)
+        })
+      }
     } catch (e) {
       if (e && e.isCanceled) {
         return
       }
       this.setState({
-        unexpectedSearchError: true,
         queryInProgress: false,
+        queryReturned: true,
+        unexpectedSearchError: true,
       })
       logger.error(e)
     }
@@ -198,8 +208,8 @@ class SearchResultsQueryBing extends React.Component {
   render() {
     const { page, query } = this.props
     const {
-      noSearchResults,
       queryInProgress,
+      queryReturned,
       searchResultsData,
       unexpectedSearchError,
     } = this.state
@@ -215,8 +225,8 @@ class SearchResultsQueryBing extends React.Component {
         isEmptyQuery={isEmptyQuery}
         isError={unexpectedSearchError}
         isQueryInProgress={queryInProgress}
-        noSearchResults={noSearchResults}
         query={query}
+        queryReturned={queryReturned}
         onPageChange={this.changePage.bind(this)}
         page={page}
       />
