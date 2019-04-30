@@ -36,10 +36,10 @@ const SearchResultsBing = props => {
     isEmptyQuery,
     isError,
     isQueryInProgress,
-    noSearchResults,
     onPageChange,
     page,
     query,
+    queryReturned,
     style,
     theme,
   } = props
@@ -56,8 +56,8 @@ const SearchResultsBing = props => {
     Math.min(MAX_PAGE + 1, Math.max(page + 4, MIN_PAGE + 8))
   )
 
+  const noSearchResults = queryReturned && !data.mainline.length
   const noResultsToDisplay = isEmptyQuery || noSearchResults || isError
-  const searchComplete = !isQueryInProgress && !isEmptyQuery
   return (
     <div
       className={classes.searchResultsParentContainer}
@@ -66,7 +66,7 @@ const SearchResultsBing = props => {
         {
           // Min height prevents visibly shifting content below,
           // like the footer.
-          minHeight: noResultsToDisplay || searchComplete ? 0 : 1000,
+          minHeight: noResultsToDisplay || queryReturned ? 0 : 1000,
         },
         style
       )}
@@ -198,7 +198,7 @@ SearchResultsBing.propTypes = {
   isEmptyQuery: PropTypes.bool.isRequired,
   isError: PropTypes.bool.isRequired,
   isQueryInProgress: PropTypes.bool.isRequired,
-  noSearchResults: PropTypes.bool.isRequired,
+  queryReturned: PropTypes.bool.isRequired,
   onPageChange: PropTypes.func.isRequired,
   page: PropTypes.number.isRequired,
   query: PropTypes.string.isRequired,

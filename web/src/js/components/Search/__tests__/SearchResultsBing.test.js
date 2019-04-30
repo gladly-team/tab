@@ -54,10 +54,10 @@ const getMockProps = () => ({
   isEmptyQuery: false,
   isError: false,
   isQueryInProgress: false,
-  noSearchResults: false,
   onPageChange: jest.fn(),
   page: 1,
   query: 'healthy salad recipes, not tacos',
+  queryReturned: true,
 })
 
 beforeEach(() => {
@@ -97,8 +97,13 @@ describe('SearchResultsBing: tests for non-results display', () => {
     const SearchResultsBing = require('js/components/Search/SearchResultsBing')
       .default
     const mockProps = getMockProps()
+    mockProps.data = {
+      pole: [],
+      mainline: [],
+      sidebar: [],
+    }
     mockProps.query = 'foo'
-    mockProps.noSearchResults = true
+    mockProps.queryReturned = true
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
     expect(
       wrapper
@@ -114,10 +119,15 @@ describe('SearchResultsBing: tests for non-results display', () => {
       .default
     const mockProps = getMockProps()
     mockProps.query = 'pizza'
+    mockProps.data = {
+      pole: [],
+      mainline: [],
+      sidebar: [],
+    }
     mockProps.isError = false
     mockProps.isEmptyQuery = false
-    mockProps.noSearchResults = false
     mockProps.isQueryInProgress = true // waiting for a response
+    mockProps.queryReturned = false
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
     expect(wrapper.get(0).props.style.minHeight).toBe(1000)
   })
@@ -129,7 +139,6 @@ describe('SearchResultsBing: tests for non-results display', () => {
     mockProps.query = 'pizza'
     mockProps.isError = false
     mockProps.isEmptyQuery = false
-    mockProps.noSearchResults = false
     mockProps.isQueryInProgress = false
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
     expect(wrapper.get(0).props.style.minHeight).toBe(0)
@@ -142,7 +151,6 @@ describe('SearchResultsBing: tests for non-results display', () => {
     mockProps.query = ''
     mockProps.isError = false
     mockProps.isEmptyQuery = true // empty query
-    mockProps.noSearchResults = false
     mockProps.isQueryInProgress = false
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
     expect(wrapper.get(0).props.style.minHeight).toBe(0)
@@ -153,7 +161,12 @@ describe('SearchResultsBing: tests for non-results display', () => {
       .default
     const mockProps = getMockProps()
     mockProps.query = 'this search will yield no results, sadly'
-    mockProps.noSearchResults = true
+    mockProps.queryReturned = true
+    mockProps.data = {
+      pole: [],
+      mainline: [],
+      sidebar: [],
+    }
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
     expect(wrapper.get(0).props.style.minHeight).toBe(0)
   })

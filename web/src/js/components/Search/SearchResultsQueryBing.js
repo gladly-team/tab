@@ -17,7 +17,7 @@ class SearchResultsQueryBing extends React.Component {
     this.state = {
       searchResultsData: null,
       queryInProgress: false,
-      noSearchResults: false,
+      queryReturned: false,
       unexpectedSearchError: false,
       mounted: false, // i.e. we've mounted to a real user, not pre-rendering
     }
@@ -79,7 +79,7 @@ class SearchResultsQueryBing extends React.Component {
 
     // Reset state of search results.
     this.setState({
-      noSearchResults: false,
+      queryReturned: false,
       queryInProgress: true,
       unexpectedSearchError: false,
     })
@@ -95,6 +95,7 @@ class SearchResultsQueryBing extends React.Component {
       // https://docs.microsoft.com/en-us/rest/api/cognitiveservices/bing-web-api-v7-reference#errorresponse
       this.setState({
         searchResultsData: searchResults,
+        queryReturned: true,
         queryInProgress: false,
       })
 
@@ -198,8 +199,8 @@ class SearchResultsQueryBing extends React.Component {
   render() {
     const { page, query } = this.props
     const {
-      noSearchResults,
       queryInProgress,
+      queryReturned,
       searchResultsData,
       unexpectedSearchError,
     } = this.state
@@ -215,8 +216,8 @@ class SearchResultsQueryBing extends React.Component {
         isEmptyQuery={isEmptyQuery}
         isError={unexpectedSearchError}
         isQueryInProgress={queryInProgress}
-        noSearchResults={noSearchResults}
         query={query}
+        queryReturned={queryReturned}
         onPageChange={this.changePage.bind(this)}
         page={page}
       />
