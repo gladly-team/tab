@@ -13,7 +13,10 @@ import logger from 'js/utils/logger'
 import LogSearchMutation from 'js/mutations/LogSearchMutation'
 import { getCurrentUser } from 'js/authentication/user'
 import { setBingClientID } from 'js/utils/local-user-data-mgr'
-import { isReactSnapClient } from 'js/utils/search-utils'
+import {
+  isReactSnapClient,
+  getSearchResultCountPerPage,
+} from 'js/utils/search-utils'
 
 jest.mock('js/components/Search/fetchBingSearchResults')
 jest.mock('js/components/Search/SearchResultsBing')
@@ -24,14 +27,15 @@ jest.mock('js/utils/local-user-data-mgr')
 jest.mock('js/utils/search-utils')
 
 const getMockProps = () => ({
-  query: null,
-  page: null,
+  query: undefined,
+  page: undefined,
   onPageChange: jest.fn(),
-  searchSource: null,
+  searchSource: undefined,
 })
 
 beforeEach(() => {
   jest.clearAllMocks()
+  getSearchResultCountPerPage.mockReturnValue(10)
   fetchBingSearchResults.mockResolvedValue(getMockSuccessfulSearchQuery())
   getCurrentUser.mockResolvedValue({
     id: 'abc123xyz789',
@@ -59,7 +63,7 @@ describe('SearchResultsQueryBing', () => {
     shallow(<SearchResultsQueryBing {...mockProps} />)
     await flushAllPromises()
     expect(fetchBingSearchResults).toHaveBeenCalledTimes(1)
-    expect(fetchBingSearchResults).toHaveBeenCalledWith('tacos')
+    expect(fetchBingSearchResults).toHaveBeenCalledWith('tacos', {})
   })
 
   it('calls fetchBingSearchResults when the query changes', async () => {
@@ -73,7 +77,7 @@ describe('SearchResultsQueryBing', () => {
     fetchBingSearchResults.mockClear()
     wrapper.setProps({ query: 'pizza' })
     expect(fetchBingSearchResults).toHaveBeenCalledTimes(1)
-    expect(fetchBingSearchResults).toHaveBeenCalledWith('pizza')
+    expect(fetchBingSearchResults).toHaveBeenCalledWith('pizza', {})
   })
 
   it('calls fetchBingSearchResults when the page changes', async () => {
@@ -82,13 +86,51 @@ describe('SearchResultsQueryBing', () => {
       .default
     const mockProps = getMockProps()
     mockProps.query = 'tacos'
+    getSearchResultCountPerPage.mockReturnValue(10)
     const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
     await flushAllPromises()
     fetchBingSearchResults.mockClear()
     expect(fetchBingSearchResults).not.toHaveBeenCalled()
     wrapper.setProps({ page: 2 })
     expect(fetchBingSearchResults).toHaveBeenCalledTimes(1)
-    expect(fetchBingSearchResults).toHaveBeenCalledWith('tacos')
+    expect(fetchBingSearchResults).toHaveBeenCalledWith('tacos', { offset: 10 })
+  })
+
+  it('calls fetchBingSearchResults with the expected offset value based on the page number and results per page', async () => {
+    expect.assertions(5)
+    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
+      .default
+    const mockProps = getMockProps()
+
+    // No offset value for the first page.
+    mockProps.query = 'tacos'
+    mockProps.page = 1
+    getSearchResultCountPerPage.mockReturnValue(10)
+    const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
+    await flushAllPromises()
+    expect(fetchBingSearchResults.mock.calls[0][1]).not.toHaveProperty('offset')
+    fetchBingSearchResults.mockClear()
+
+    // Expected offset value for the second page.
+    wrapper.setProps({ page: 2 })
+    expect(fetchBingSearchResults.mock.calls[0][1]).toHaveProperty('offset', 10)
+    fetchBingSearchResults.mockClear()
+
+    // Expected offset value for the eighth page.
+    wrapper.setProps({ page: 8 })
+    expect(fetchBingSearchResults.mock.calls[0][1]).toHaveProperty('offset', 70)
+    fetchBingSearchResults.mockClear()
+
+    // The offset for the pages changes if we change how many
+    // results per page to show.
+    getSearchResultCountPerPage.mockReturnValue(12)
+    wrapper.setProps({ page: 3 })
+    expect(fetchBingSearchResults.mock.calls[0][1]).toHaveProperty('offset', 24)
+    fetchBingSearchResults.mockClear()
+
+    wrapper.setProps({ page: 8 })
+    expect(fetchBingSearchResults.mock.calls[0][1]).toHaveProperty('offset', 84)
+    fetchBingSearchResults.mockClear()
   })
 
   it('does not call fetchBingSearchResults when some unrelated prop changes', async () => {

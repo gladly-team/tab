@@ -175,7 +175,7 @@ describe('clipTextToNearestWord', () => {
 describe('showBingPagination', () => {
   it('returns false', () => {
     const { showBingPagination } = require('js/utils/search-utils')
-    expect(showBingPagination()).toBe(false)
+    expect(showBingPagination()).toBe(true)
   })
 })
 
