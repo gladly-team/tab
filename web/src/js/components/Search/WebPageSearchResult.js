@@ -10,6 +10,9 @@ const styles = () => ({
   },
   titleLink: {
     textDecoration: 'none',
+    '&:hover': {
+      textDecoration: 'underline',
+    },
   },
   title: {
     fontFamily: 'Roboto, arial, sans-serif',
