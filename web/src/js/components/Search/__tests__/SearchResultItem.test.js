@@ -63,7 +63,7 @@ describe('SearchResultItem', () => {
     expect(wrapper.at(0).key()).toEqual('my-nice-id')
   })
 
-  it('strips HTML from the display URL for a WebPageSearchResult', () => {
+  it('does not strip HTML from the display URL for a WebPageSearchResult', () => {
     const SearchResultItem = require('js/components/Search/SearchResultItem')
       .default
     const mockProps = getMockProps()
@@ -72,10 +72,12 @@ describe('SearchResultItem', () => {
       displayUrl: '<b>www.example.com</b>',
     })
     const wrapper = shallow(<SearchResultItem {...mockProps} />)
-    expect(wrapper.at(0).prop('item').displayUrl).toEqual('www.example.com')
+    expect(wrapper.at(0).prop('item').displayUrl).toEqual(
+      '<b>www.example.com</b>'
+    )
   })
 
-  it('strips HTML from the name for a WebPageSearchResult', () => {
+  it('does not strip HTML from the name for a WebPageSearchResult', () => {
     const SearchResultItem = require('js/components/Search/SearchResultItem')
       .default
     const mockProps = getMockProps()
@@ -84,10 +86,12 @@ describe('SearchResultItem', () => {
       name: 'The <b>Tastiest</b> <i>Tacos</i>!!1',
     })
     const wrapper = shallow(<SearchResultItem {...mockProps} />)
-    expect(wrapper.at(0).prop('item').name).toEqual('The Tastiest Tacos!!1')
+    expect(wrapper.at(0).prop('item').name).toEqual(
+      'The <b>Tastiest</b> <i>Tacos</i>!!1'
+    )
   })
 
-  it('strips HTML from the snippet for a WebPageSearchResult', () => {
+  it('does not strip HTML from the snippet for a WebPageSearchResult', () => {
     const SearchResultItem = require('js/components/Search/SearchResultItem')
       .default
     const mockProps = getMockProps()
@@ -98,7 +102,7 @@ describe('SearchResultItem', () => {
     })
     const wrapper = shallow(<SearchResultItem {...mockProps} />)
     expect(wrapper.at(0).prop('item').snippet).toEqual(
-      "This really awesome website is definitely what you're looking for."
+      "This <b>really awesome</b> website is definitely what you're looking for."
     )
   })
 
@@ -128,7 +132,7 @@ describe('SearchResultItem', () => {
     expect(wrapper.at(0).key()).toEqual('news-results')
   })
 
-  it('strips HTML from the description for a NewsSearchResults', () => {
+  it('does not strip HTML from the description for a NewsSearchResults', () => {
     const SearchResultItem = require('js/components/Search/SearchResultItem')
       .default
     const mockProps = getMockProps()
@@ -142,11 +146,11 @@ describe('SearchResultItem', () => {
     ]
     const wrapper = shallow(<SearchResultItem {...mockProps} />)
     expect(wrapper.at(0).prop('newsItems')[0].description).toEqual(
-      'Something truly incredible and newsworthy happened!'
+      'Something <b>truly incredible</b> and newsworthy happened!'
     )
   })
 
-  it('strips HTML from the name for a NewsSearchResults', () => {
+  it('does not strip HTML from the name for a NewsSearchResults', () => {
     const SearchResultItem = require('js/components/Search/SearchResultItem')
       .default
     const mockProps = getMockProps()
@@ -159,7 +163,7 @@ describe('SearchResultItem', () => {
     ]
     const wrapper = shallow(<SearchResultItem {...mockProps} />)
     expect(wrapper.at(0).prop('newsItems')[0].name).toEqual(
-      'An Incredible Event in NYC'
+      'An <b>Incredible</b> Event in NYC'
     )
   })
 })
