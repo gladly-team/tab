@@ -43,7 +43,11 @@ const styles = theme => ({
   },
   resultsCountText: {
     color: 'rgba(0, 0, 0, 0.46)',
-    padding: '4px 0px',
+    paddingTop: 4,
+    paddingBottom: 10,
+  },
+  noResultsMessages: {
+    marginTop: 20,
   },
 })
 
@@ -93,13 +97,24 @@ const SearchResultsBing = props => {
       )}
     >
       {isError ? (
-        <SearchResultErrorMessage query={query} />
+        <SearchResultErrorMessage
+          className={classes.noResultsMessages}
+          query={query}
+        />
       ) : isEmptyQuery ? (
-        <Typography variant={'body1'} gutterBottom>
+        <Typography
+          variant={'body1'}
+          className={classes.noResultsMessages}
+          gutterBottom
+        >
           Search something to start raising money for charity!
         </Typography>
       ) : noSearchResultsReturned ? (
-        <Typography variant={'body1'} gutterBottom>
+        <Typography
+          variant={'body1'}
+          className={classes.noResultsMessages}
+          gutterBottom
+        >
           No results found for{' '}
           <span style={{ fontWeight: 'bold' }}>{query}</span>
         </Typography>

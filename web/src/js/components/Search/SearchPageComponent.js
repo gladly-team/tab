@@ -404,7 +404,7 @@ class SearchPage extends React.Component {
             data-test-id={'search-primary-results-column'}
             style={{
               marginLeft: searchResultsPaddingLeft,
-              marginTop: 20,
+              marginTop: 0,
               width: 620,
             }}
           >

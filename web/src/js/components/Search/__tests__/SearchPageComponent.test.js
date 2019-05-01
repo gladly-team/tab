@@ -192,7 +192,7 @@ describe('Search page component', () => {
         .prop('style')
     ).toMatchObject({
       marginLeft: 150,
-      marginTop: 20,
+      marginTop: 0,
       width: 620,
     })
   })
