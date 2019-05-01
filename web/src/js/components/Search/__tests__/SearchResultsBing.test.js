@@ -140,6 +140,7 @@ describe('SearchResultsBing: tests for non-results display', () => {
     mockProps.isError = false
     mockProps.isEmptyQuery = false
     mockProps.isQueryInProgress = false
+    mockProps.queryReturned = true
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
     expect(wrapper.get(0).props.style.minHeight).toBe(0)
   })
@@ -477,7 +478,7 @@ describe('SearchResultsBing: tests for pagination', () => {
     ).toEqual('none')
   })
 
-  it('hides the pagination container when there are no search results', () => {
+  it('hides the pagination container when there is an empty query', () => {
     const SearchResultsBing = require('js/components/Search/SearchResultsBing')
       .default
     const mockProps = getMockProps()
@@ -496,6 +497,48 @@ describe('SearchResultsBing: tests for pagination', () => {
     })
 
     // The pagination container should be hidden now.
+    expect(
+      wrapper.find('[data-test-id="pagination-container"]').prop('style')
+    ).toHaveProperty('display', 'none')
+  })
+
+  it('hides the pagination container when the search query is in progress', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'pizza'
+    mockProps.data = {
+      pole: [],
+      mainline: [],
+      sidebar: [],
+    }
+    mockProps.isError = false
+    mockProps.isEmptyQuery = false
+    mockProps.isQueryInProgress = true // waiting for a response
+    mockProps.queryReturned = false
+    mockProps.isEmptyQuery = false
+    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
+    expect(
+      wrapper.find('[data-test-id="pagination-container"]').prop('style')
+    ).toHaveProperty('display', 'none')
+  })
+
+  it('hides the pagination container when there are no search results', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'pizza'
+    mockProps.data = {
+      pole: [],
+      mainline: [],
+      sidebar: [],
+    }
+    mockProps.isError = false
+    mockProps.isEmptyQuery = false
+    mockProps.isQueryInProgress = false
+    mockProps.queryReturned = true
+    mockProps.isEmptyQuery = false
+    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
     expect(
       wrapper.find('[data-test-id="pagination-container"]').prop('style')
     ).toHaveProperty('display', 'none')

@@ -68,8 +68,8 @@ const SearchResultsBing = props => {
     Math.min(MAX_PAGE + 1, Math.max(page + 4, MIN_PAGE + 8))
   )
 
-  const noSearchResults = queryReturned && !data.mainline.length
-  const noResultsToDisplay = isEmptyQuery || noSearchResults || isError
+  const noSearchResultsReturned = queryReturned && !data.mainline.length
+  const noResultsToDisplay = isEmptyQuery || !data.mainline.length || isError
 
   return (
     <div
@@ -79,7 +79,7 @@ const SearchResultsBing = props => {
         {
           // Min height prevents visibly shifting content below,
           // like the footer.
-          minHeight: noResultsToDisplay || queryReturned ? 0 : 1000,
+          minHeight: queryReturned || !isQueryInProgress ? 0 : 1000,
         },
         style
       )}
@@ -102,7 +102,7 @@ const SearchResultsBing = props => {
         <Typography variant={'body1'} gutterBottom>
           Search something to start raising money for charity!
         </Typography>
-      ) : noSearchResults ? (
+      ) : noSearchResultsReturned ? (
         <Typography variant={'body1'} gutterBottom>
           No results found for{' '}
           <span style={{ fontWeight: 'bold' }}>{query}</span>
