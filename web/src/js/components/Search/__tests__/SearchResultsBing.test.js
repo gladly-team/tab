@@ -3,7 +3,6 @@
 import React from 'react'
 import { mount, shallow } from 'enzyme'
 import { range } from 'lodash/util'
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import Link from 'js/components/General/Link'
 import { showBingPagination } from 'js/utils/search-utils'
@@ -17,6 +16,7 @@ jest.mock('js/utils/search-utils')
 const getMockProps = () => ({
   classes: {},
   data: {
+    resultsCount: 3,
     pole: [],
     mainline: [
       {
@@ -374,13 +374,14 @@ describe('SearchResultsBing: tests for non-results display', () => {
     )
   })
 
-  it('does not render the search result attribution text when there are no search results', () => {
+  it('does not render the search result attribution text when it is an empty query', () => {
     const SearchResultsBing = require('js/components/Search/SearchResultsBing')
       .default
     const mockProps = getMockProps()
     mockProps.query = ''
     mockProps.isError = false
     mockProps.isEmptyQuery = true
+    mockProps.isQueryInProgress = false
     mockProps.queryReturned = true
     mockProps.data = {
       pole: [],
@@ -406,6 +407,119 @@ describe('SearchResultsBing: tests for non-results display', () => {
     expect(
       wrapper.find('[data-test-id="search-results-attribution"]').exists()
     ).toBe(false)
+  })
+
+  it('does not render the search result attribution text when there are no search results', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = ''
+    mockProps.isError = false
+    mockProps.isEmptyQuery = false
+    mockProps.isQueryInProgress = false
+    mockProps.queryReturned = true
+    mockProps.data = {
+      pole: [],
+      mainline: [],
+      sidebar: [],
+    }
+    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
+    expect(
+      wrapper.find('[data-test-id="search-results-attribution"]').exists()
+    ).toBe(false)
+  })
+
+  it('renders the expected text for the total search result count', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.data.resultsCount = 41500000
+    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find('[data-test-id="search-results-count"]')
+        .render()
+        .text()
+    ).toEqual('41,500,000 results')
+  })
+
+  it('does not render the total search result count if the value is zero', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.data.resultsCount = 0
+    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
+    expect(wrapper.find('[data-test-id="search-results-count"]').exists()).toBe(
+      false
+    )
+  })
+
+  it('does not render the total search result count if the value is undefined', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.data.resultsCount = undefined
+    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
+    expect(wrapper.find('[data-test-id="search-results-count"]').exists()).toBe(
+      false
+    )
+  })
+
+  it('does not render the total search result count if the query is empty', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.data.resultsCount = 20100
+    mockProps.query = ''
+    mockProps.isError = false
+    mockProps.isEmptyQuery = true
+    mockProps.isQueryInProgress = false
+    mockProps.queryReturned = true
+    mockProps.data = {
+      pole: [],
+      mainline: [
+        {
+          type: 'WebPages',
+          key: 'some-key-1',
+          value: {
+            data: 'here',
+          },
+        },
+        {
+          type: 'WebPages',
+          key: 'some-key-2',
+          value: {
+            data: 'here',
+          },
+        },
+      ],
+      sidebar: [],
+    }
+    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
+    expect(wrapper.find('[data-test-id="search-results-count"]').exists()).toBe(
+      false
+    )
+  })
+
+  it('does not render the total search result count if there are no results', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.data.resultsCount = 20100
+    mockProps.query = ''
+    mockProps.isError = false
+    mockProps.isEmptyQuery = false
+    mockProps.isQueryInProgress = false
+    mockProps.queryReturned = true
+    mockProps.data = {
+      pole: [],
+      mainline: [],
+      sidebar: [],
+    }
+    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
+    expect(wrapper.find('[data-test-id="search-results-count"]').exists()).toBe(
+      false
+    )
   })
 })
 

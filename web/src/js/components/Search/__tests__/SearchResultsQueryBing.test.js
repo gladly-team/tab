@@ -683,6 +683,7 @@ describe('SearchResultsQueryBing', () => {
     await flushAllPromises()
     const passedData = wrapper.find(SearchResultsBing).prop('data')
     expect(passedData).toEqual({
+      resultsCount: 5250000,
       mainline: [
         {
           key:

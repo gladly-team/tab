@@ -8,6 +8,7 @@ import Link from 'js/components/General/Link'
 import SearchResultItem from 'js/components/Search/SearchResultItem'
 import SearchResultErrorMessage from 'js/components/Search/SearchResultErrorMessage'
 import { showBingPagination } from 'js/utils/search-utils'
+import { commaFormatted } from 'js/utils/utils'
 
 const styles = theme => ({
   searchResultsParentContainer: {
@@ -40,6 +41,14 @@ const styles = theme => ({
     '&:hover': {
       textDecoration: 'underline',
     },
+  },
+  resultsCountText: {
+    color: 'rgba(0, 0, 0, 0.46)',
+    paddingTop: 4,
+    paddingBottom: 10,
+  },
+  noResultsMessages: {
+    marginTop: 20,
   },
 })
 
@@ -89,13 +98,24 @@ const SearchResultsBing = props => {
       )}
     >
       {isError ? (
-        <SearchResultErrorMessage query={query} />
+        <SearchResultErrorMessage
+          className={classes.noResultsMessages}
+          query={query}
+        />
       ) : isEmptyQuery ? (
-        <Typography variant={'body1'} gutterBottom>
+        <Typography
+          variant={'body1'}
+          className={classes.noResultsMessages}
+          gutterBottom
+        >
           Search something to start raising money for charity!
         </Typography>
       ) : noSearchResultsReturned ? (
-        <Typography variant={'body1'} gutterBottom>
+        <Typography
+          variant={'body1'}
+          className={classes.noResultsMessages}
+          gutterBottom
+        >
           No results found for{' '}
           <span style={{ fontWeight: 'bold' }}>{query}</span>
         </Typography>
@@ -107,6 +127,15 @@ const SearchResultsBing = props => {
             display: noResultsToDisplay ? 'none' : 'block',
           }}
         >
+          {data.resultsCount ? (
+            <Typography
+              data-test-id={'search-results-count'}
+              variant={'caption'}
+              className={classes.resultsCountText}
+            >
+              {commaFormatted(data.resultsCount)} results
+            </Typography>
+          ) : null}
           {data.mainline.map(searchResultItemData => {
             return (
               <SearchResultItem
@@ -194,6 +223,7 @@ const SearchResultsBing = props => {
 SearchResultsBing.propTypes = {
   classes: PropTypes.object.isRequired,
   data: PropTypes.shape({
+    resultsCount: PropTypes.number,
     pole: PropTypes.arrayOf(
       PropTypes.shape({
         type: PropTypes.string.isRequired,

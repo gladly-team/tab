@@ -76,4 +76,26 @@ describe('SearchResultErrorMessage', () => {
         .prop('to')
     ).toEqual('https://www.google.com/search?q=ice%20cream')
   })
+
+  it('passes extra props to the root div', () => {
+    const SearchResultErrorMessage = require('js/components/Search/SearchResultErrorMessage')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'ice cream'
+    mockProps.style = { color: 'teal' }
+    mockProps.className = 'my-class'
+    const wrapper = shallow(<SearchResultErrorMessage {...mockProps} />)
+    expect(
+      wrapper
+        .find('div')
+        .first()
+        .prop('style')
+    ).toEqual({ color: 'teal' })
+    expect(
+      wrapper
+        .find('div')
+        .first()
+        .prop('className')
+    ).toEqual('my-class')
+  })
 })
