@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import Link from 'js/components/General/Link'
 import SearchResultItem from 'js/components/Search/SearchResultItem'
+import SearchResultErrorMessage from 'js/components/Search/SearchResultErrorMessage'
 import { showBingPagination } from 'js/utils/search-utils'
 
 const styles = theme => ({
@@ -70,7 +71,6 @@ const SearchResultsBing = props => {
 
   const noSearchResults = queryReturned && !data.mainline.length
   const noResultsToDisplay = isEmptyQuery || noSearchResults || isError
-
   return (
     <div
       className={classes.searchResultsParentContainer}
@@ -85,19 +85,7 @@ const SearchResultsBing = props => {
       )}
     >
       {isError ? (
-        <div data-test-id={'search-err-msg'}>
-          <Typography variant={'body1'} gutterBottom>
-            Unable to search at this time.
-          </Typography>
-          <Link
-            to={`https://www.google.com/search?q=${encodeURI(query)}`}
-            target="_top"
-          >
-            <Button color={'primary'} variant={'contained'} size={'small'}>
-              Search Google
-            </Button>
-          </Link>
-        </div>
+        <SearchResultErrorMessage query={query} />
       ) : isEmptyQuery ? (
         <Typography variant={'body1'} gutterBottom>
           Search something to start raising money for charity!
