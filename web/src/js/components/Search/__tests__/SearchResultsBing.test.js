@@ -3,7 +3,6 @@
 import React from 'react'
 import { mount, shallow } from 'enzyme'
 import { range } from 'lodash/util'
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import Link from 'js/components/General/Link'
 import { showBingPagination } from 'js/utils/search-utils'
