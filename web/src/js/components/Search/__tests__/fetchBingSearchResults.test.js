@@ -86,6 +86,30 @@ describe('fetchBingSearchResults', () => {
     expect(searchParams.get('bingClientID')).toBeNull()
   })
 
+  it('sets the "offset" parameter value if provided', async () => {
+    expect.assertions(1)
+    const { getBingClientID } = require('js/utils/local-user-data-mgr')
+    getBingClientID.mockReturnValue('bing-id-987654321')
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults('blue whales', { offset: 20 })
+    const calledURL = fetch.mock.calls[0][0]
+    const { searchParams } = new URL(calledURL)
+    expect(searchParams.get('offset')).toEqual('20')
+  })
+
+  it('does not set the "offset" parameter value if not provided', async () => {
+    expect.assertions(1)
+    const { getBingClientID } = require('js/utils/local-user-data-mgr')
+    getBingClientID.mockReturnValue(null)
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults('blue whales', {})
+    const calledURL = fetch.mock.calls[0][0]
+    const { searchParams } = new URL(calledURL)
+    expect(searchParams.get('offset')).toBeNull()
+  })
+
   it('returns the expected contents of the response body', async () => {
     expect.assertions(1)
     global.fetch.mockImplementation(() =>

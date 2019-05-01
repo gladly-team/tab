@@ -6,9 +6,10 @@ import { getBingClientID } from 'js/utils/local-user-data-mgr'
 /**
  * Call our search API endpoint.
  * @param {String} query - The search query, unencoded.
+ * @param {Object} options - Additional search parameters to send.
  * @return {Object}
  */
-const fetchBingSearchResults = async (query = null) => {
+const fetchBingSearchResults = async (query = null, { offset } = {}) => {
   if (!query) {
     throw new Error(`Search query must be a non-empty string.`)
   }
@@ -32,6 +33,7 @@ const fetchBingSearchResults = async (query = null) => {
       q: query,
       count: getSearchResultCountPerPage(),
       ...(bingClientID && { bingClientID }),
+      ...(offset && { offset }),
     })}&${qs.stringify(
       {
         // Possible values:
