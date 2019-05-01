@@ -20,13 +20,13 @@ const styles = theme => ({
   },
   paginationContainer: {
     display: 'flex',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     width: '100%',
-    maxWidth: 520,
     margin: 'auto auto 20px auto',
   },
   paginationButton: {
     minWidth: 40,
+    margin: 6,
   },
   resultsAttributionContainer: {
     borderTop: '1px solid #e4e4e4',
@@ -60,16 +60,18 @@ const SearchResultsBing = props => {
   // Hiding until we make it functional.
   const SHOW_PAGINATION = showBingPagination()
 
-  // Include 8 pages total, 4 lower and 4 higher when possible.
+  // Include 5 pages total, 2 lower and 2 higher when possible.
   // Page 9999 is the maximum, so stop there.
   const MIN_PAGE = 1
   const MAX_PAGE = 9999
   const paginationIndices = range(
-    Math.max(MIN_PAGE, Math.min(page - 4, MAX_PAGE - 8)),
-    Math.min(MAX_PAGE + 1, Math.max(page + 4, MIN_PAGE + 8))
+    Math.max(MIN_PAGE, Math.min(page - 2, MAX_PAGE - 5)),
+    Math.min(MAX_PAGE + 1, Math.max(page + 3, MIN_PAGE + 5))
   )
 
   const noSearchResultsReturned = queryReturned && !data.mainline.length
+
+  // TODO: add queryInProgress
   const noResultsToDisplay = isEmptyQuery || !data.mainline.length || isError
 
   return (
@@ -136,7 +138,7 @@ const SearchResultsBing = props => {
         data-test-id={'pagination-container'}
         className={classes.paginationContainer}
         style={{
-          display: !SHOW_PAGINATION || noResultsToDisplay ? 'none' : 'block',
+          display: !SHOW_PAGINATION || noResultsToDisplay ? 'none' : 'flex',
         }}
       >
         {page > MIN_PAGE ? (

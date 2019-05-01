@@ -4,7 +4,6 @@ import React from 'react'
 import { mount, shallow } from 'enzyme'
 import { range } from 'lodash/util'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
-import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import Link from 'js/components/General/Link'
 import { showBingPagination } from 'js/utils/search-utils'
@@ -437,7 +436,7 @@ describe('SearchResultsBing: tests for pagination', () => {
     expect(
       wrapper.find('[data-test-id="pagination-container"]').prop('style')
         .display
-    ).toEqual('block')
+    ).toEqual('flex')
   })
 
   it('does not show the pagination container when it is not enabled', () => {
@@ -465,7 +464,7 @@ describe('SearchResultsBing: tests for pagination', () => {
     // The pagination container should not be hidden.
     expect(
       wrapper.find('[data-test-id="pagination-container"]').prop('style')
-    ).toHaveProperty('display', 'block')
+    ).toHaveProperty('display', 'flex')
 
     wrapper.setProps({
       query: '',
@@ -531,7 +530,7 @@ describe('SearchResultsBing: tests for pagination', () => {
     // The pagination container should not be hidden.
     expect(
       wrapper.find('[data-test-id="pagination-container"]').prop('style')
-    ).toHaveProperty('display', 'block')
+    ).toHaveProperty('display', 'flex')
 
     wrapper.setProps({
       query: '',
@@ -630,7 +629,7 @@ describe('SearchResultsBing: tests for pagination', () => {
     const mockProps = getMockProps()
     mockProps.page = 11
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
-    const expectedPages = range(7, 15)
+    const expectedPages = range(9, 13)
     expectedPages.forEach(pageNum => {
       expect(
         wrapper.find(`[data-test-id="pagination-${pageNum}"]`).exists()
@@ -650,7 +649,7 @@ describe('SearchResultsBing: tests for pagination', () => {
     const mockProps = getMockProps()
     mockProps.page = 11
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
-    const expectedPages = range(7, 15)
+    const expectedPages = range(9, 13)
     expectedPages.forEach(pageNum => {
       expect(
         wrapper.find(`[data-test-id="pagination-${pageNum}"]`).exists()
@@ -670,7 +669,7 @@ describe('SearchResultsBing: tests for pagination', () => {
     const mockProps = getMockProps()
     mockProps.page = 9998
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
-    const expectedPages = range(9991, 9999)
+    const expectedPages = range(9995, 9999)
     expectedPages.forEach(pageNum => {
       expect(
         wrapper.find(`[data-test-id="pagination-${pageNum}"]`).exists()
@@ -692,8 +691,8 @@ describe('SearchResultsBing: tests for pagination', () => {
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
     wrapper.find('[data-test-id="pagination-2"]').simulate('click')
     expect(mockProps.onPageChange).toHaveBeenCalledWith(2)
-    wrapper.find('[data-test-id="pagination-7"]').simulate('click')
-    expect(mockProps.onPageChange).toHaveBeenCalledWith(7)
+    wrapper.find('[data-test-id="pagination-5"]').simulate('click')
+    expect(mockProps.onPageChange).toHaveBeenCalledWith(5)
   })
 
   it('calls the onPageChange prop when clicking the "next page" button', () => {
