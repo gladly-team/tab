@@ -41,6 +41,10 @@ const styles = theme => ({
       textDecoration: 'underline',
     },
   },
+  resultsCountText: {
+    color: 'rgba(0, 0, 0, 0.46)',
+    padding: '4px 0px',
+  },
 })
 
 const SearchResultsBing = props => {
@@ -107,6 +111,14 @@ const SearchResultsBing = props => {
             display: noResultsToDisplay ? 'none' : 'block',
           }}
         >
+          {data.resultsCount ? (
+            <Typography
+              variant={'caption'}
+              className={classes.resultsCountText}
+            >
+              {data.resultsCount} results
+            </Typography>
+          ) : null}
           {data.mainline.map(searchResultItemData => {
             return (
               <SearchResultItem
@@ -194,6 +206,7 @@ const SearchResultsBing = props => {
 SearchResultsBing.propTypes = {
   classes: PropTypes.object.isRequired,
   data: PropTypes.shape({
+    resultsCount: PropTypes.number,
     pole: PropTypes.arrayOf(
       PropTypes.shape({
         type: PropTypes.string.isRequired,

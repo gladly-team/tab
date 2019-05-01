@@ -153,8 +153,9 @@ class SearchResultsQueryBing extends React.Component {
    */
   restructureSearchResultsData(data) {
     const searchResultSections = ['pole', 'mainline', 'sidebar']
-    const restructuredData = searchResultSections.reduce(
-      (newData, sectionName) => {
+    const restructuredData = Object.assign(
+      {},
+      searchResultSections.reduce((newData, sectionName) => {
         // Get the ranked list for this section.
         const rankingItems = get(
           data,
@@ -191,8 +192,10 @@ class SearchResultsQueryBing extends React.Component {
           // Filter null item data.
           .filter(itemData => !!itemData)
         return newData
-      },
-      {}
+      }, {}),
+      {
+        resultsCount: get(data, 'webPages.totalEstimatedMatches'),
+      }
     )
     return restructuredData
   }
