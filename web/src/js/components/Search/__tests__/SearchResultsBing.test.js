@@ -777,32 +777,18 @@ describe('SearchResultsBing: tests for pagination', () => {
     ).toBeUndefined()
   })
 
-  it('uses our secondary color as the color of the button text of the current results page', () => {
+  it('uses the expected color for the button text of the current results page', () => {
     const SearchResultsBing = require('js/components/Search/SearchResultsBing')
       .default
     const mockProps = getMockProps()
     mockProps.query = 'ice cream'
     mockProps.page = 3
-    const ourTheme = createMuiTheme({
-      palette: {
-        primary: {
-          main: '#dedede',
-        },
-        secondary: {
-          main: '#b94f4f',
-        },
-      },
-    })
-    const wrapper = mount(
-      <MuiThemeProvider theme={ourTheme}>
-        <SearchResultsBing {...mockProps} />
-      </MuiThemeProvider>
-    )
+    const wrapper = mount(<SearchResultsBing {...mockProps} />)
     expect(
       wrapper
         .find('[data-test-id="pagination-3"]')
         .first()
         .prop('style')
-    ).toHaveProperty('color', '#b94f4f')
+    ).toHaveProperty('color', 'rgba(0, 0, 0, 0.87)')
   })
 })

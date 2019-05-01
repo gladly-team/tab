@@ -55,7 +55,6 @@ const SearchResultsBing = props => {
     query,
     queryReturned,
     style,
-    theme,
   } = props
 
   // Hiding until we make it functional.
