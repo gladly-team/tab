@@ -31,7 +31,7 @@ export const getSearchProvider = () => {
  * Whether to enable pagination buttons for Bing search results.
  * @return {Boolean} Whether to show pagination buttons.
  */
-export const showBingPagination = () => false
+export const showBingPagination = () => true
 
 /**
  * Get how many search results to fetch per page.

@@ -10,6 +10,7 @@ import { getCurrentUser } from 'js/authentication/user'
 import LogSearchMutation from 'js/mutations/LogSearchMutation'
 import { makePromiseCancelable } from 'js/utils/utils'
 import { setBingClientID } from 'js/utils/local-user-data-mgr'
+import { getSearchResultCountPerPage } from 'js/utils/search-utils'
 
 class SearchResultsQueryBing extends React.Component {
   constructor(props) {
@@ -60,7 +61,7 @@ class SearchResultsQueryBing extends React.Component {
   }
 
   async getSearchResults() {
-    const { query, searchSource } = this.props
+    const { page, query, searchSource } = this.props
     if (!query) {
       return
     }
@@ -85,9 +86,11 @@ class SearchResultsQueryBing extends React.Component {
     })
 
     try {
-      // TODO: pagination
+      const offset = getSearchResultCountPerPage() * (page - 1)
       this.cancelablePromise = makePromiseCancelable(
-        fetchBingSearchResults(query)
+        fetchBingSearchResults(query, {
+          ...(offset && { offset }),
+        })
       )
       const searchResults = await this.cancelablePromise.promise
       const searchErrors = get(searchResults, 'bing.errors', [])
@@ -236,7 +239,7 @@ class SearchResultsQueryBing extends React.Component {
 
 SearchResultsQueryBing.propTypes = {
   query: PropTypes.string,
-  page: PropTypes.number,
+  page: PropTypes.number.isRequired,
   onPageChange: PropTypes.func.isRequired,
   searchSource: PropTypes.string,
 }
