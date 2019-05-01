@@ -4,7 +4,6 @@ import React from 'react'
 import { mount, shallow } from 'enzyme'
 import { range } from 'lodash/util'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
-import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import Link from 'js/components/General/Link'
 import { showBingPagination } from 'js/utils/search-utils'
@@ -146,6 +145,24 @@ describe('SearchResultsBing: tests for non-results display', () => {
     expect(wrapper.get(0).props.style.minHeight).toBe(0)
   })
 
+  it('sets a min-height to the results container when the query is not in progress and has not returned', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'pizza'
+    mockProps.data = {
+      pole: [],
+      mainline: [],
+      sidebar: [],
+    }
+    mockProps.isError = false
+    mockProps.isEmptyQuery = false
+    mockProps.isQueryInProgress = false
+    mockProps.queryReturned = false
+    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
+    expect(wrapper.get(0).props.style.minHeight).toBe(1000)
+  })
+
   it('removes the a min-height from the results container when the query is empty', () => {
     const SearchResultsBing = require('js/components/Search/SearchResultsBing')
       .default
@@ -154,6 +171,7 @@ describe('SearchResultsBing: tests for non-results display', () => {
     mockProps.isError = false
     mockProps.isEmptyQuery = true // empty query
     mockProps.isQueryInProgress = false
+    mockProps.queryReturned = false
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
     expect(wrapper.get(0).props.style.minHeight).toBe(0)
   })
@@ -437,7 +455,7 @@ describe('SearchResultsBing: tests for pagination', () => {
     expect(
       wrapper.find('[data-test-id="pagination-container"]').prop('style')
         .display
-    ).toEqual('block')
+    ).toEqual('flex')
   })
 
   it('does not show the pagination container when it is not enabled', () => {
@@ -465,7 +483,7 @@ describe('SearchResultsBing: tests for pagination', () => {
     // The pagination container should not be hidden.
     expect(
       wrapper.find('[data-test-id="pagination-container"]').prop('style')
-    ).toHaveProperty('display', 'block')
+    ).toHaveProperty('display', 'flex')
 
     wrapper.setProps({
       query: '',
@@ -486,6 +504,42 @@ describe('SearchResultsBing: tests for pagination', () => {
     mockProps.data = {
       pole: [],
       mainline: [],
+      sidebar: [],
+    }
+    mockProps.isError = false
+    mockProps.isEmptyQuery = false
+    mockProps.isQueryInProgress = true // waiting for a response
+    mockProps.queryReturned = false
+    mockProps.isEmptyQuery = false
+    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
+    expect(
+      wrapper.find('[data-test-id="pagination-container"]').prop('style')
+    ).toHaveProperty('display', 'none')
+  })
+
+  it('hides the pagination container when the search query is in progress and results are still available from the previous page', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'pizza'
+    mockProps.data = {
+      pole: [],
+      mainline: [
+        {
+          type: 'WebPages',
+          key: 'some-key-1',
+          value: {
+            data: 'here',
+          },
+        },
+        {
+          type: 'WebPages',
+          key: 'some-key-2',
+          value: {
+            data: 'here',
+          },
+        },
+      ],
       sidebar: [],
     }
     mockProps.isError = false
@@ -531,7 +585,7 @@ describe('SearchResultsBing: tests for pagination', () => {
     // The pagination container should not be hidden.
     expect(
       wrapper.find('[data-test-id="pagination-container"]').prop('style')
-    ).toHaveProperty('display', 'block')
+    ).toHaveProperty('display', 'flex')
 
     wrapper.setProps({
       query: '',
@@ -630,7 +684,7 @@ describe('SearchResultsBing: tests for pagination', () => {
     const mockProps = getMockProps()
     mockProps.page = 11
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
-    const expectedPages = range(7, 15)
+    const expectedPages = range(9, 13)
     expectedPages.forEach(pageNum => {
       expect(
         wrapper.find(`[data-test-id="pagination-${pageNum}"]`).exists()
@@ -650,7 +704,7 @@ describe('SearchResultsBing: tests for pagination', () => {
     const mockProps = getMockProps()
     mockProps.page = 11
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
-    const expectedPages = range(7, 15)
+    const expectedPages = range(9, 13)
     expectedPages.forEach(pageNum => {
       expect(
         wrapper.find(`[data-test-id="pagination-${pageNum}"]`).exists()
@@ -670,7 +724,7 @@ describe('SearchResultsBing: tests for pagination', () => {
     const mockProps = getMockProps()
     mockProps.page = 9998
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
-    const expectedPages = range(9991, 9999)
+    const expectedPages = range(9995, 9999)
     expectedPages.forEach(pageNum => {
       expect(
         wrapper.find(`[data-test-id="pagination-${pageNum}"]`).exists()
@@ -692,8 +746,8 @@ describe('SearchResultsBing: tests for pagination', () => {
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
     wrapper.find('[data-test-id="pagination-2"]').simulate('click')
     expect(mockProps.onPageChange).toHaveBeenCalledWith(2)
-    wrapper.find('[data-test-id="pagination-7"]').simulate('click')
-    expect(mockProps.onPageChange).toHaveBeenCalledWith(7)
+    wrapper.find('[data-test-id="pagination-5"]').simulate('click')
+    expect(mockProps.onPageChange).toHaveBeenCalledWith(5)
   })
 
   it('calls the onPageChange prop when clicking the "next page" button', () => {
@@ -742,32 +796,18 @@ describe('SearchResultsBing: tests for pagination', () => {
     ).toBeUndefined()
   })
 
-  it('uses our secondary color as the color of the button text of the current results page', () => {
+  it('uses the expected color for the button text of the current results page', () => {
     const SearchResultsBing = require('js/components/Search/SearchResultsBing')
       .default
     const mockProps = getMockProps()
     mockProps.query = 'ice cream'
     mockProps.page = 3
-    const ourTheme = createMuiTheme({
-      palette: {
-        primary: {
-          main: '#dedede',
-        },
-        secondary: {
-          main: '#b94f4f',
-        },
-      },
-    })
-    const wrapper = mount(
-      <MuiThemeProvider theme={ourTheme}>
-        <SearchResultsBing {...mockProps} />
-      </MuiThemeProvider>
-    )
+    const wrapper = mount(<SearchResultsBing {...mockProps} />)
     expect(
       wrapper
         .find('[data-test-id="pagination-3"]')
         .first()
         .prop('style')
-    ).toHaveProperty('color', '#b94f4f')
+    ).toHaveProperty('color', 'rgba(0, 0, 0, 0.87)')
   })
 })
