@@ -25,6 +25,7 @@ const styles = theme => ({
     margin: 'auto auto 20px auto',
   },
   paginationButton: {
+    color: 'rgba(0, 0, 0, 0.46)',
     minWidth: 40,
     margin: 6,
   },
@@ -162,7 +163,8 @@ const SearchResultsBing = props => {
             }}
             style={{
               ...(pageNum === page && {
-                color: theme.palette.secondary.main,
+                color: 'rgba(0, 0, 0, 0.87)',
+                borderBottom: '2px solid rgba(0, 0, 0, 0.87)',
               }),
             }}
             onClick={() => {
