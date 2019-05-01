@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography'
 import Link from 'js/components/General/Link'
 import { showBingPagination } from 'js/utils/search-utils'
 import SearchResultItem from 'js/components/Search/SearchResultItem'
+import SearchResultErrorMessage from 'js/components/Search/SearchResultErrorMessage'
 
 jest.mock('js/components/Search/SearchResultItem')
 jest.mock('js/components/General/Link')
@@ -195,14 +196,7 @@ describe('SearchResultsBing: tests for non-results display', () => {
     mockProps.query = 'foo'
     mockProps.isError = true
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
-    expect(
-      wrapper
-        .find(Typography)
-        .filterWhere(
-          n => n.render().text() === 'Unable to search at this time.'
-        )
-        .exists()
-    ).toBe(true)
+    expect(wrapper.find(SearchResultErrorMessage).exists()).toBe(true)
   })
 
   it('only shows an error message (does not show "no results") when there is some error', () => {
@@ -218,14 +212,7 @@ describe('SearchResultsBing: tests for non-results display', () => {
       sidebar: [],
     }
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
-    expect(
-      wrapper
-        .find(Typography)
-        .filterWhere(
-          n => n.render().text() === 'Unable to search at this time.'
-        )
-        .exists()
-    ).toBe(true)
+    expect(wrapper.find(SearchResultErrorMessage).exists()).toBe(true)
     expect(
       wrapper
         .find(Typography)
@@ -236,27 +223,16 @@ describe('SearchResultsBing: tests for non-results display', () => {
     ).toBe(false)
   })
 
-  it('shows a button to search Google when there is an unexpected error', () => {
+  it('passes the query to the error message when there is an unexpected error (so we can link to a Google search)', () => {
     const SearchResultsBing = require('js/components/Search/SearchResultsBing')
       .default
     const mockProps = getMockProps()
     mockProps.query = 'ice cream'
     mockProps.isError = true
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
-    const errMsgContainer = wrapper.find('[data-test-id="search-err-msg"]')
-    expect(
-      errMsgContainer
-        .find(Button)
-        .first()
-        .render()
-        .text()
-    ).toEqual('Search Google')
-    expect(
-      errMsgContainer
-        .find(Link)
-        .first()
-        .prop('to')
-    ).toEqual('https://www.google.com/search?q=ice%20cream')
+    expect(wrapper.find(SearchResultErrorMessage).prop('query')).toEqual(
+      'ice cream'
+    )
   })
 
   it('does not render any search result items when there is some error', () => {
