@@ -70,6 +70,9 @@ const styles = () => ({
   },
   newsItemTitleAnchor: {
     textDecoration: 'none',
+    '&:hover': {
+      textDecoration: 'underline',
+    },
   },
   newsItemTitleText: {
     fontFamily: 'Roboto, arial, sans-serif',
