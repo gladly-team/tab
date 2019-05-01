@@ -70,9 +70,8 @@ const SearchResultsBing = props => {
   )
 
   const noSearchResultsReturned = queryReturned && !data.mainline.length
-
-  // TODO: add queryInProgress
-  const noResultsToDisplay = isEmptyQuery || !data.mainline.length || isError
+  const noResultsToDisplay =
+    isEmptyQuery || !data.mainline.length || isQueryInProgress || isError
 
   return (
     <div

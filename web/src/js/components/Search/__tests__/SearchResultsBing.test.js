@@ -498,6 +498,42 @@ describe('SearchResultsBing: tests for pagination', () => {
     ).toHaveProperty('display', 'none')
   })
 
+  it('hides the pagination container when the search query is in progress and results are still available from the previous page', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'pizza'
+    mockProps.data = {
+      pole: [],
+      mainline: [
+        {
+          type: 'WebPages',
+          key: 'some-key-1',
+          value: {
+            data: 'here',
+          },
+        },
+        {
+          type: 'WebPages',
+          key: 'some-key-2',
+          value: {
+            data: 'here',
+          },
+        },
+      ],
+      sidebar: [],
+    }
+    mockProps.isError = false
+    mockProps.isEmptyQuery = false
+    mockProps.isQueryInProgress = true // waiting for a response
+    mockProps.queryReturned = false
+    mockProps.isEmptyQuery = false
+    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
+    expect(
+      wrapper.find('[data-test-id="pagination-container"]').prop('style')
+    ).toHaveProperty('display', 'none')
+  })
+
   it('hides the pagination container when there are no search results', () => {
     const SearchResultsBing = require('js/components/Search/SearchResultsBing')
       .default
