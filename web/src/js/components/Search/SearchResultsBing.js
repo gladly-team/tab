@@ -70,6 +70,7 @@ const SearchResultsBing = props => {
   )
 
   const noSearchResultsReturned = queryReturned && !data.mainline.length
+
   const noResultsToDisplay =
     isEmptyQuery || !data.mainline.length || isQueryInProgress || isError
 
@@ -79,9 +80,10 @@ const SearchResultsBing = props => {
       style={Object.assign(
         {},
         {
-          // Min height prevents visibly shifting content below,
-          // like the footer.
-          minHeight: queryReturned || !isQueryInProgress ? 0 : 1000,
+          // Set a min-height during queries to prevent the footer
+          // from flickering before the search results return.
+          minHeight:
+            isEmptyQuery || (queryReturned && !isQueryInProgress) ? 0 : 1000,
         },
         style
       )}

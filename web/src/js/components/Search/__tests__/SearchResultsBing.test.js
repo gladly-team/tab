@@ -145,6 +145,24 @@ describe('SearchResultsBing: tests for non-results display', () => {
     expect(wrapper.get(0).props.style.minHeight).toBe(0)
   })
 
+  it('sets a min-height to the results container when the query is not in progress and has not returned', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.query = 'pizza'
+    mockProps.data = {
+      pole: [],
+      mainline: [],
+      sidebar: [],
+    }
+    mockProps.isError = false
+    mockProps.isEmptyQuery = false
+    mockProps.isQueryInProgress = false
+    mockProps.queryReturned = false
+    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
+    expect(wrapper.get(0).props.style.minHeight).toBe(1000)
+  })
+
   it('removes the a min-height from the results container when the query is empty', () => {
     const SearchResultsBing = require('js/components/Search/SearchResultsBing')
       .default
@@ -153,6 +171,7 @@ describe('SearchResultsBing: tests for non-results display', () => {
     mockProps.isError = false
     mockProps.isEmptyQuery = true // empty query
     mockProps.isQueryInProgress = false
+    mockProps.queryReturned = false
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
     expect(wrapper.get(0).props.style.minHeight).toBe(0)
   })
