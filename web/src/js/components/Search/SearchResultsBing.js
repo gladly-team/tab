@@ -8,6 +8,7 @@ import Link from 'js/components/General/Link'
 import SearchResultItem from 'js/components/Search/SearchResultItem'
 import SearchResultErrorMessage from 'js/components/Search/SearchResultErrorMessage'
 import { showBingPagination } from 'js/utils/search-utils'
+import { commaFormatted } from 'js/utils/utils'
 
 const styles = theme => ({
   searchResultsParentContainer: {
@@ -128,10 +129,11 @@ const SearchResultsBing = props => {
         >
           {data.resultsCount ? (
             <Typography
+              data-test-id={'search-results-count'}
               variant={'caption'}
               className={classes.resultsCountText}
             >
-              {data.resultsCount} results
+              {commaFormatted(data.resultsCount)} results
             </Typography>
           ) : null}
           {data.mainline.map(searchResultItemData => {
