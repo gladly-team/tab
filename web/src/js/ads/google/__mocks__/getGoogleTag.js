@@ -1,5 +1,14 @@
 /* eslint-env jest */
 
+import {
+  VERTICAL_AD_UNIT_ID,
+  VERTICAL_AD_SLOT_DOM_ID,
+  SECOND_VERTICAL_AD_UNIT_ID,
+  SECOND_VERTICAL_AD_SLOT_DOM_ID,
+  HORIZONTAL_AD_UNIT_ID,
+  HORIZONTAL_AD_SLOT_DOM_ID,
+} from 'js/ads/adSettings'
+
 // By default, we run functions in the queue immediately.
 // Call this to disable that.
 export const __disableAutomaticCommandQueueExecution = () => {
@@ -29,18 +38,18 @@ const mockSlots = [
   // Mock ad unit IDs from the adSettings mock.
   // Bottom leaderboard
   MockSlot({
-    adUnitPath: '/99887766/HBTL',
-    slotElementId: 'div-gpt-ad-24682468-0',
+    adUnitPath: HORIZONTAL_AD_UNIT_ID,
+    slotElementId: HORIZONTAL_AD_SLOT_DOM_ID,
   }),
   // First (bottom) rectangle ad
   MockSlot({
-    adUnitPath: '/11223344/HBTR',
-    slotElementId: 'div-gpt-ad-1357913579-0',
+    adUnitPath: VERTICAL_AD_UNIT_ID,
+    slotElementId: VERTICAL_AD_SLOT_DOM_ID,
   }),
   // Second (top) rectangle ad
   MockSlot({
-    adUnitPath: '/44556677/HBTR2',
-    slotElementId: 'div-gpt-ad-11235813-0',
+    adUnitPath: SECOND_VERTICAL_AD_UNIT_ID,
+    slotElementId: SECOND_VERTICAL_AD_SLOT_DOM_ID,
   }),
 ]
 
