@@ -19,16 +19,29 @@ export const __setPubadsRefreshMock = mockFunction => {
   mockPubadsRefresh = mockFunction
 }
 
-const MockSlot = adUnitPath => ({
+const MockSlot = ({ adUnitPath, slotElementId }) => ({
   getAdUnitPath: () => adUnitPath,
+  getSlotElementId: () => slotElementId,
   setTargeting: jest.fn(),
 })
 
 const mockSlots = [
   // Mock ad unit IDs from the adSettings mock.
-  MockSlot('/99887766/HBTL'), // bottom leaderboard
-  MockSlot('/11223344/HBTR'), // first (bottom) rectangle ad
-  MockSlot('/44556677/HBTR2'), // second (top) rectangle ad
+  // Bottom leaderboard
+  MockSlot({
+    adUnitPath: '/99887766/HBTL',
+    slotElementId: 'div-gpt-ad-24682468-0',
+  }),
+  // First (bottom) rectangle ad
+  MockSlot({
+    adUnitPath: '/11223344/HBTR',
+    slotElementId: 'div-gpt-ad-1357913579-0',
+  }),
+  // Second (top) rectangle ad
+  MockSlot({
+    adUnitPath: '/44556677/HBTR2',
+    slotElementId: 'div-gpt-ad-11235813-0',
+  }),
 ]
 
 const mockGetSlots = jest.fn(() => {
