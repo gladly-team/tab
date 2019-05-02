@@ -167,7 +167,6 @@ describe('indexExchangeBidder', () => {
 
   it('sets targeting for multiple bids on a single slot', async () => {
     expect.assertions(3)
-    const logger = require('js/utils/logger').default
     const getGoogleTag = require('js/ads/google/getGoogleTag').default
     const googletag = getGoogleTag()
 
@@ -375,5 +374,67 @@ describe('indexExchangeBidder', () => {
       .forEach(slot => {
         expect(slot.setTargeting).not.toHaveBeenCalled()
       })
+  })
+
+  it('stores the bids in the tab global for analytics', async () => {
+    expect.assertions(3)
+    const { getTabGlobal } = require('js/utils/utils')
+    const tabGlobal = getTabGlobal()
+
+    // Mock the bid response.
+    const indexExchangeBidder = require('js/ads/indexExchange/indexExchangeBidder')
+      .default
+    const getIndexExchangeTag = require('js/ads/indexExchange/getIndexExchangeTag')
+      .default
+    const ixTag = getIndexExchangeTag()
+    const { mockIndexExchangeBidResponse } = require('js/utils/test-utils')
+    const mockBidResponse = mockIndexExchangeBidResponse()
+    ixTag.retrieveDemand.mockImplementation((config, callback) =>
+      callback(mockBidResponse)
+    )
+    await indexExchangeBidder()
+    const {
+      VERTICAL_AD_SLOT_DOM_ID,
+      SECOND_VERTICAL_AD_SLOT_DOM_ID,
+      HORIZONTAL_AD_SLOT_DOM_ID,
+    } = require('js/ads/adSettings')
+    expect(tabGlobal.ads.indexExchangeBids[HORIZONTAL_AD_SLOT_DOM_ID]).toEqual([
+      {
+        targeting: {
+          IOM: ['728x90_5000'],
+          ix_id: ['_mBnLnF5V'],
+        },
+        price: 7000,
+        adm: '',
+        size: [728, 90],
+        partnerId: 'IndexExchangeHtb',
+      },
+    ])
+    expect(tabGlobal.ads.indexExchangeBids[VERTICAL_AD_SLOT_DOM_ID]).toEqual([
+      {
+        targeting: {
+          IOM: ['300x250_5000'],
+          ix_id: ['_C7VB5HUd'],
+        },
+        price: 3500,
+        adm: '_admcodehere_',
+        size: [300, 250],
+        partnerId: 'IndexExchangeHtb',
+      },
+    ])
+    expect(
+      tabGlobal.ads.indexExchangeBids[SECOND_VERTICAL_AD_SLOT_DOM_ID]
+    ).toEqual([
+      {
+        targeting: {
+          some_key: 'my-cool-value123',
+          ad_thing: 'thingy_abc',
+        },
+        price: 5000,
+        adm: '_admcodehere_',
+        size: [300, 250],
+        partnerId: 'SomePartner',
+      },
+    ])
   })
 })
