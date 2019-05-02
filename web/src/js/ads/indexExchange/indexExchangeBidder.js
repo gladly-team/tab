@@ -8,6 +8,30 @@ import {
 } from 'js/ads/adSettings'
 import getGoogleTag from 'js/ads/google/getGoogleTag'
 import logger from 'js/utils/logger'
+import { getTabGlobal } from 'js/utils/utils'
+
+// Save returned bids.
+var indexExchangeBids
+
+/**
+ * If there are IX bids, store them in the tabforacause
+ * global object for use with analytics. Only do this if the
+ * bids return early enough to be included in the ad server
+ request; otherwise, the bids are not meaningful.
+ * @return {undefined}
+ */
+export const storeIndexExchangeBids = () => {
+  // Bid object structure:
+  // {
+  //
+  // }
+  try {
+    const tabGlobal = getTabGlobal()
+    console.log(indexExchangeBids, tabGlobal)
+  } catch (e) {
+    logger.error(e)
+  }
+}
 
 /**
  * Return a promise that resolves when the Index Exchange bid
@@ -61,6 +85,8 @@ const fetchIndexExchangeDemand = () => {
       // Note: the current request is to a casalemedia URL.
       ixTag.retrieveDemand(IXSlots, demand => {
         // console.log('Index Exchange: demand', demand)
+        // Store the demand so we can log it in analytics if needed.
+        indexExchangeBids = demand
 
         // Set adserver targeting for any returned demand.
         // IX demand should set the IOM and ix_id parameters.
