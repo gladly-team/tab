@@ -1,5 +1,6 @@
 import getGoogleTag from 'js/ads/google/getGoogleTag'
 import logger from 'js/utils/logger'
+import { getTabGlobal } from 'js/utils/utils'
 
 // Keep track of what ad slots have loaded. App code loads later and
 // therefore can miss the slot loading event. This gives the app code
@@ -7,17 +8,18 @@ import logger from 'js/utils/logger'
 export default () => {
   try {
     const googletag = getGoogleTag()
+    const tabGlobal = getTabGlobal()
 
     const storeRenderedSlotData = (slotId, eventData) => {
-      window.tabforacause.ads.slotsRendered[slotId] = eventData
+      tabGlobal.ads.slotsRendered[slotId] = eventData
     }
 
     const markSlotAsViewable = slotId => {
-      window.tabforacause.ads.slotsViewable[slotId] = true
+      tabGlobal.ads.slotsViewable[slotId] = true
     }
 
     const markSlotAsLoaded = slotId => {
-      window.tabforacause.ads.slotsLoaded[slotId] = true
+      tabGlobal.ads.slotsLoaded[slotId] = true
     }
 
     googletag.cmd.push(() => {

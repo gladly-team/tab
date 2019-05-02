@@ -6,7 +6,6 @@ import getPrebidPbjs, {
   __disableAutomaticBidResponses,
   __runBidsBack,
 } from 'js/ads/prebid/getPrebidPbjs'
-import { getDefaultTabGlobal } from 'js/utils/test-utils'
 import {
   getNumberOfAdsToShow,
   getVerticalAdSizes,
@@ -21,8 +20,6 @@ jest.mock('js/ads/prebid/getPrebidPbjs')
 jest.mock('js/utils/client-location')
 
 beforeEach(() => {
-  window.tabforacause = getDefaultTabGlobal()
-
   delete window.pbjs
   window.pbjs = getPrebidPbjs()
 

@@ -1,5 +1,4 @@
 /* eslint-env jest */
-import { getDefaultTabGlobal } from 'js/utils/test-utils'
 import getGoogleTag, {
   __setPubadsRefreshMock,
 } from 'js/ads/google/getGoogleTag'
@@ -36,9 +35,6 @@ beforeEach(() => {
   delete window.pbjs
   window.pbjs = getPrebidPbjs()
 
-  // Mock tabforacause global
-  window.tabforacause = getDefaultTabGlobal()
-
   // Set up googletag
   delete window.googletag
   window.googletag = getGoogleTag()
@@ -53,7 +49,6 @@ afterAll(() => {
   delete window.googletag
   delete window.apstag
   delete window.pbjs
-  delete window.tabforacause
 })
 
 describe('ads script', () => {

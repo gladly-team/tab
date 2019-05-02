@@ -1,7 +1,8 @@
 /* eslint-env jest */
 
+import { getTabGlobal } from 'js/utils/utils'
 import {
-  getDefaultTabGlobal,
+  deleteTabGlobal,
   mockGoogleTagImpressionViewableData,
   mockGoogleTagSlotOnloadData,
   mockGoogleTagSlotRenderEndedData,
@@ -9,7 +10,6 @@ import {
 
 beforeEach(() => {
   delete window.googletag
-  delete window.tabforacause
 
   // Mock googletag
   const mockAddEventListener = jest.fn()
@@ -20,20 +20,17 @@ beforeEach(() => {
     }),
   }
 
-  // Mock tabforacause global
-  window.tabforacause = getDefaultTabGlobal()
-
   jest.clearAllMocks()
   jest.resetModules()
 })
 
 afterAll(() => {
   delete window.googletag
-  delete window.tabforacause
+  deleteTabGlobal()
 })
 
 describe('handleAdsLoaded', function() {
-  it('adds a slot ID to window.tabforacause\'s "rendered slots" object when GPT\'s "slotRenderEnded" event is fired', () => {
+  it('adds a slot ID to the tab global\'s "rendered slots" object when GPT\'s "slotRenderEnded" event is fired', () => {
     // Mock GPT's pubads addEventListener so we can fake an event
     const googleEventListenerCalls = {}
     window.googletag
@@ -64,23 +61,22 @@ describe('handleAdsLoaded', function() {
     )
 
     // Make sure we've marked the slot as loaded
-    expect(window.tabforacause.ads.slotsRendered[slotId]).toBe(
-      mockSlotRenderEventData
-    )
+    const tabGlobal = getTabGlobal()
+    expect(tabGlobal.ads.slotsRendered[slotId]).toBe(mockSlotRenderEventData)
 
     // Make sure it works multiple times
     const otherSlotId = 'xyz-987'
     const otherMockSlotRenderEventData = mockGoogleTagSlotRenderEndedData(
       otherSlotId
     )
-    expect(window.tabforacause.ads.slotsRendered[otherSlotId]).toBeUndefined()
+    expect(tabGlobal.ads.slotsRendered[otherSlotId]).toBeUndefined()
     slotRenderEndedEventCallback(otherMockSlotRenderEventData)
-    expect(window.tabforacause.ads.slotsRendered[otherSlotId]).toBe(
+    expect(tabGlobal.ads.slotsRendered[otherSlotId]).toBe(
       otherMockSlotRenderEventData
     )
   })
 
-  it('marks a slot as loaded on window.tabforacause\'s "viewable slots" object when GPT\'s "impressionViewable" event is fired', () => {
+  it('marks a slot as loaded on the tab global\'s "viewable slots" object when GPT\'s "impressionViewable" event is fired', () => {
     // Mock GPT's pubads addEventListener so we can fake an event
     const googleEventListenerCalls = {}
     window.googletag
@@ -111,19 +107,20 @@ describe('handleAdsLoaded', function() {
     )
 
     // Make sure we've marked the slot as loaded
-    expect(window.tabforacause.ads.slotsViewable[slotId]).toBe(true)
+    const tabGlobal = getTabGlobal()
+    expect(tabGlobal.ads.slotsViewable[slotId]).toBe(true)
 
     // Make sure it works multiple times
     const otherSlotId = 'xyz-987'
     const otherMockSlotLoadEventData = mockGoogleTagImpressionViewableData(
       otherSlotId
     )
-    expect(window.tabforacause.ads.slotsViewable[otherSlotId]).toBeUndefined()
+    expect(tabGlobal.ads.slotsViewable[otherSlotId]).toBeUndefined()
     slotRenderEndedEventCallback(otherMockSlotLoadEventData)
-    expect(window.tabforacause.ads.slotsViewable[otherSlotId]).toBe(true)
+    expect(tabGlobal.ads.slotsViewable[otherSlotId]).toBe(true)
   })
 
-  it('marks a slot as loaded on window.tabforacause\'s "loaded slots" object when GPT\'s "slotOnload" event is fired', () => {
+  it('marks a slot as loaded on the tab global\'s "loaded slots" object when GPT\'s "slotOnload" event is fired', () => {
     // Mock GPT's pubads addEventListener so we can fake an event
     const googleEventListenerCalls = {}
     window.googletag
@@ -152,13 +149,14 @@ describe('handleAdsLoaded', function() {
     expect(googleEventListenerCalls['slotOnload'][0][0]).toEqual('slotOnload')
 
     // Make sure we've marked the slot as loaded
-    expect(window.tabforacause.ads.slotsLoaded[slotId]).toBe(true)
+    const tabGlobal = getTabGlobal()
+    expect(tabGlobal.ads.slotsLoaded[slotId]).toBe(true)
 
     // Make sure it works multiple times
     const otherSlotId = 'xyz-987'
     const otherMockSlotLoadEventData = mockGoogleTagSlotOnloadData(otherSlotId)
-    expect(window.tabforacause.ads.slotsLoaded[otherSlotId]).toBeUndefined()
+    expect(tabGlobal.ads.slotsLoaded[otherSlotId]).toBeUndefined()
     slotRenderEndedEventCallback(otherMockSlotLoadEventData)
-    expect(window.tabforacause.ads.slotsLoaded[otherSlotId]).toBe(true)
+    expect(tabGlobal.ads.slotsLoaded[otherSlotId]).toBe(true)
   })
 })

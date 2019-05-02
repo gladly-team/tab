@@ -5,8 +5,9 @@ import getAmazonTag, {
   __runBidsBack,
 } from 'js/ads/amazon/getAmazonTag'
 import getGoogleTag from 'js/ads/google/getGoogleTag'
-import { getDefaultTabGlobal, mockAmazonBidResponse } from 'js/utils/test-utils'
+import { deleteTabGlobal, mockAmazonBidResponse } from 'js/utils/test-utils'
 import { getNumberOfAdsToShow } from 'js/ads/adSettings'
+import { getTabGlobal } from 'js/utils/utils'
 
 jest.mock('js/ads/adSettings')
 jest.mock('js/ads/consentManagement')
@@ -16,9 +17,6 @@ beforeEach(() => {
   // Mock apstag
   delete window.apstag
   window.apstag = getAmazonTag()
-
-  // Mock tabforacause global
-  window.tabforacause = getDefaultTabGlobal()
 
   // Set up googletag
   delete window.googletag
@@ -32,7 +30,7 @@ afterEach(() => {
 afterAll(() => {
   delete window.googletag
   delete window.apstag
-  delete window.tabforacause
+  deleteTabGlobal()
 })
 
 describe('amazonBidder', () => {
@@ -168,21 +166,17 @@ describe('amazonBidder', () => {
     })
     passedCallback([someBid, someOtherBid])
 
+    const tabGlobal = getTabGlobal()
+
     // Should not have stored the bids yet.
-    expect(
-      window.tabforacause.ads.amazonBids['div-gpt-ad-123456789-0']
-    ).toBeUndefined()
-    expect(
-      window.tabforacause.ads.amazonBids['div-gpt-ad-24681357-0']
-    ).toBeUndefined()
+    expect(tabGlobal.ads.amazonBids['div-gpt-ad-123456789-0']).toBeUndefined()
+    expect(tabGlobal.ads.amazonBids['div-gpt-ad-24681357-0']).toBeUndefined()
 
     storeAmazonBids()
 
     // Now should have stored the bids.
-    expect(
-      window.tabforacause.ads.amazonBids['div-gpt-ad-123456789-0']
-    ).toEqual(someBid)
-    expect(window.tabforacause.ads.amazonBids['div-gpt-ad-24681357-0']).toEqual(
+    expect(tabGlobal.ads.amazonBids['div-gpt-ad-123456789-0']).toEqual(someBid)
+    expect(tabGlobal.ads.amazonBids['div-gpt-ad-24681357-0']).toEqual(
       someOtherBid
     )
   })

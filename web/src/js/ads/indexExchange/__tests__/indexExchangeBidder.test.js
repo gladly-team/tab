@@ -16,10 +16,6 @@ beforeEach(() => {
     .default
   window.headertag = getIndexExchangeTag()
 
-  // Mock tabforacause global
-  const { getDefaultTabGlobal } = require('js/utils/test-utils')
-  window.tabforacause = getDefaultTabGlobal()
-
   // Set up googletag
   delete window.googletag
   const getGoogleTag = require('js/ads/google/getGoogleTag').default
@@ -32,7 +28,6 @@ afterEach(() => {
 
 afterAll(() => {
   delete window.headertag
-  delete window.tabforacause
   delete window.googletag
 })
 

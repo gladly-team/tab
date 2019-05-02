@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import getGoogleTag from 'js/ads/google/getGoogleTag'
 import getPrebidPbjs from 'js/ads/prebid/getPrebidPbjs'
 import logger from 'js/utils/logger'
+import { getTabGlobal } from 'js/utils/utils'
 
 // Log revenue from ads
 class LogRevenueComponent extends React.Component {
@@ -49,7 +50,8 @@ class LogRevenueComponent extends React.Component {
    * @return {string} encodedAmazonRevenue.encodedValue - The Amazon revenue code
    */
   getEncodedAmazonRevenueForSlot(slotId) {
-    const amazonBids = window.tabforacause.ads.amazonBids
+    const tabGlobal = getTabGlobal()
+    const amazonBids = tabGlobal.ads.amazonBids
     const amazonBidExists =
       // An empty string for either of these means no bid
       get(amazonBids, [slotId, 'amznbid']) &&
@@ -95,7 +97,8 @@ class LogRevenueComponent extends React.Component {
   getSlotRenderEndedDataForSlotId(slotId) {
     var slotRenderEndedData = null
     try {
-      slotRenderEndedData = window.tabforacause.ads.slotsRendered[slotId]
+      const tabGlobal = getTabGlobal()
+      slotRenderEndedData = tabGlobal.ads.slotsRendered[slotId]
     } catch (e) {
       logger.error(e)
     }
@@ -111,11 +114,12 @@ class LogRevenueComponent extends React.Component {
   logRevenueForSlotId(slotId, adUnitCode) {
     try {
       // If we have already logged revenue for this slot, don't log it again
-      if (slotId in window.tabforacause.ads.slotsAlreadyLoggedRevenue) {
+      const tabGlobal = getTabGlobal()
+      if (slotId in tabGlobal.ads.slotsAlreadyLoggedRevenue) {
         return
       }
       // Mark that we've logged revenue for this slot
-      window.tabforacause.ads.slotsAlreadyLoggedRevenue[slotId] = true
+      tabGlobal.ads.slotsAlreadyLoggedRevenue[slotId] = true
 
       // Get data for the rendered slot
       const slotRenderedData = this.getSlotRenderEndedDataForSlotId(slotId)
@@ -168,7 +172,8 @@ class LogRevenueComponent extends React.Component {
   logRevenueForAlreadyLoadedAds() {
     try {
       // This may be set earlier by ads code (outside of core app code)
-      const slotsLoadedObj = window.tabforacause.ads.slotsRendered
+      const tabGlobal = getTabGlobal()
+      const slotsLoadedObj = tabGlobal.ads.slotsRendered
       if (Object.keys(slotsLoadedObj).length) {
         const self = this
         Object.keys(slotsLoadedObj).forEach(slotId => {
@@ -197,7 +202,8 @@ class LogRevenueComponent extends React.Component {
           const adUnitCode = event.slot.getAdUnitPath()
 
           // Store rendered slot data
-          window.tabforacause.ads.slotsRendered[slotId] = event
+          const tabGlobal = getTabGlobal()
+          tabGlobal.ads.slotsRendered[slotId] = event
           this.logRevenueForSlotId(slotId, adUnitCode)
         } catch (e) {
           logger.error(e)

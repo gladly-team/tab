@@ -247,3 +247,52 @@ export const makePromiseCancelable = promise => {
     },
   }
 }
+
+/**
+ * Get the "window.tabforacause" global variable.
+ * Used for handling some communication between disparate parts
+ * of our app (e.g. ads events happening before app code loads).
+ * @return {Object}
+ */
+export const getTabGlobal = () => {
+  const tabforacause = window.tabforacause || {
+    ads: {
+      // Bid objects returned from apstag
+      // Key: slot ID
+      // Value: bid object
+      amazonBids: {},
+
+      // Objects from googletag's "slotRenderEnded" event. This event fires
+      // before the "slotOnload" event; i.e., before the actual creative loads.
+      // Key: slot ID
+      // Value: https://developers.google.com/doubleclick-gpt/reference#googletageventsslotrenderendedevent
+      slotsRendered: {},
+
+      // Marking which slots have fired googletag's "impressionViewable" event.
+      // See:
+      // https://developers.google.com/doubleclick-gpt/reference#googletageventsimpressionviewableevent
+      // Key: slot ID
+      // Value: `true`
+      slotsViewable: {},
+
+      // Marking which slots have fired googletag's "slotOnload" event;
+      // i.e., which slots have loaded creative. See:
+      // https://developers.google.com/doubleclick-gpt/reference#googletag.events.SlotRenderEndedEvent
+      // Key: slot ID
+      // Value: `true`
+      slotsLoaded: {},
+
+      // Marking which slots have had their revenue logged.
+      // Key: slot ID
+      // Value: `true`
+      slotsAlreadyLoggedRevenue: {},
+    },
+    featureFlags: {},
+  }
+  // We're not running in global scope, so make sure to
+  // assign to the window.
+  if (!window.tabforacause) {
+    window.tabforacause = tabforacause
+  }
+  return tabforacause
+}
