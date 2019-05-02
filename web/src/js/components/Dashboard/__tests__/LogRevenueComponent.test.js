@@ -3,8 +3,9 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import toJson from 'enzyme-to-json'
+import { getTabGlobal } from 'js/utils/utils'
 import {
-  getDefaultTabGlobal,
+  deleteTabGlobal,
   mockAmazonBidResponse,
   mockGoogleTagSlotRenderEndedData,
 } from 'js/utils/test-utils'
@@ -35,22 +36,15 @@ beforeEach(() => {
   delete window.apstag
   window.apstag = getAmazonTag
 
-  // Mock tabforacause global
-  delete window.tabforacause
-  window.tabforacause = getDefaultTabGlobal()
-
   window.pbjs.getHighestCpmBids.mockReturnValue({})
 })
 
 afterEach(() => {
   jest.clearAllMocks()
-})
-
-afterAll(() => {
   delete window.googletag
   delete window.pbjs
   delete window.apstag
-  delete window.tabforacause
+  deleteTabGlobal()
 })
 
 describe('LogRevenueComponent', function() {
@@ -71,14 +65,17 @@ describe('LogRevenueComponent', function() {
     // Mark an ad slot as loaded
     const slotId = 'my-slot-2468'
     const adUnitCode = '/some/ad-unit/'
-    window.tabforacause.ads.slotsRendered[
-      slotId
-    ] = mockGoogleTagSlotRenderEndedData(slotId, adUnitCode, {
-      advertiserId: 132435,
-    })
+    const tabGlobal = getTabGlobal()
+    tabGlobal.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
+      slotId,
+      adUnitCode,
+      {
+        advertiserId: 132435,
+      }
+    )
     // We use "slotsViewable" as the measure of ads already loaded
-    // window.tabforacause.ads.slotsLoaded[slotId] = true
-    window.tabforacause.ads.slotsViewable[slotId] = true
+    // tabGlobal.ads.slotsLoaded[slotId] = true
+    tabGlobal.ads.slotsViewable[slotId] = true
 
     // Mock a Prebid bid value for the slot
     const mockRevenueValue = 0.172
@@ -91,7 +88,7 @@ describe('LogRevenueComponent', function() {
     ])
 
     // Mock no Amazon bids
-    window.tabforacause.ads.amazonBids = {}
+    tabGlobal.ads.amazonBids = {}
 
     const LogRevenueComponent = require('js/components/Dashboard/LogRevenueComponent')
       .default
@@ -120,20 +117,21 @@ describe('LogRevenueComponent', function() {
     )
 
     // It should mark this slot as logged
-    expect(window.tabforacause.ads.slotsAlreadyLoggedRevenue[slotId]).toBe(true)
+    expect(tabGlobal.ads.slotsAlreadyLoggedRevenue[slotId]).toBe(true)
   })
 
   it('does not log revenue for slots that have already been logged', () => {
     // Mark an ad slot as loaded
     const slotId = 'abc-123'
-    window.tabforacause.ads.slotsRendered[
+    const tabGlobal = getTabGlobal()
+    tabGlobal.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
       slotId
-    ] = mockGoogleTagSlotRenderEndedData(slotId)
-    window.tabforacause.ads.slotsLoaded[slotId] = true
-    window.tabforacause.ads.slotsViewable[slotId] = true
+    )
+    tabGlobal.ads.slotsLoaded[slotId] = true
+    tabGlobal.ads.slotsViewable[slotId] = true
 
     // Mark the ad slot as having already been logged
-    window.tabforacause.ads.slotsAlreadyLoggedRevenue[slotId] = true
+    tabGlobal.ads.slotsAlreadyLoggedRevenue[slotId] = true
 
     // Mock a Prebid bid value for the slot
     const mockRevenueValue = 0.172
@@ -146,7 +144,7 @@ describe('LogRevenueComponent', function() {
     ])
 
     // Mock no Amazon bids
-    window.tabforacause.ads.amazonBids = {}
+    tabGlobal.ads.amazonBids = {}
 
     const LogRevenueComponent = require('js/components/Dashboard/LogRevenueComponent')
       .default
@@ -169,17 +167,18 @@ describe('LogRevenueComponent', function() {
   it('does not throw an error or log revenue if there are not any bids for a slot', () => {
     // Mark an ad slot as loaded
     const slotId = 'abc-123'
-    window.tabforacause.ads.slotsRendered[
+    const tabGlobal = getTabGlobal()
+    tabGlobal.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
       slotId
-    ] = mockGoogleTagSlotRenderEndedData(slotId)
-    window.tabforacause.ads.slotsLoaded[slotId] = true
-    window.tabforacause.ads.slotsViewable[slotId] = true
+    )
+    tabGlobal.ads.slotsLoaded[slotId] = true
+    tabGlobal.ads.slotsViewable[slotId] = true
 
     // Mock no Prebid bids for the slot
     window.pbjs.getHighestCpmBids.mockReturnValue([])
 
     // Mock no Amazon bids
-    window.tabforacause.ads.amazonBids = {}
+    tabGlobal.ads.amazonBids = {}
 
     const LogRevenueComponent = require('js/components/Dashboard/LogRevenueComponent')
       .default
@@ -203,13 +202,16 @@ describe('LogRevenueComponent', function() {
     // Mark an ad slot as loaded
     const slotId = 'abc-123'
     const adUnitCode = '/some/ad-unit/'
-    window.tabforacause.ads.slotsRendered[
-      slotId
-    ] = mockGoogleTagSlotRenderEndedData(slotId, adUnitCode, {
-      advertiserId: 9876543,
-    })
-    window.tabforacause.ads.slotsLoaded[slotId] = true
-    window.tabforacause.ads.slotsViewable[slotId] = true
+    const tabGlobal = getTabGlobal()
+    tabGlobal.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
+      slotId,
+      adUnitCode,
+      {
+        advertiserId: 9876543,
+      }
+    )
+    tabGlobal.ads.slotsLoaded[slotId] = true
+    tabGlobal.ads.slotsViewable[slotId] = true
 
     // Mock a Prebid bid value for the slot
     const mockRevenueValue = 0.1234567890123456789
@@ -222,7 +224,7 @@ describe('LogRevenueComponent', function() {
     ])
 
     // Mock no Amazon bids
-    window.tabforacause.ads.amazonBids = {}
+    tabGlobal.ads.amazonBids = {}
 
     const LogRevenueComponent = require('js/components/Dashboard/LogRevenueComponent')
       .default
@@ -255,7 +257,8 @@ describe('LogRevenueComponent', function() {
   it('after mount, logs revenue when GPT fires a "slot rendered" event', () => {
     const slotId = 'xyz-987'
     const adUnitCode = '/some/ad-unit/'
-    window.tabforacause.ads.slotsRendered = {}
+    const tabGlobal = getTabGlobal()
+    tabGlobal.ads.slotsRendered = {}
 
     // Mock a Prebid bid value for the slot
     const mockRevenueValue = 2.31
@@ -268,7 +271,7 @@ describe('LogRevenueComponent', function() {
     ])
 
     // Mock no Amazon bids
-    window.tabforacause.ads.amazonBids = {}
+    tabGlobal.ads.amazonBids = {}
 
     // We'll run the googletag command queue manually.
     __disableAutomaticCommandQueueExecution()
@@ -317,7 +320,8 @@ describe('LogRevenueComponent', function() {
   it('defaults to 99 (Google Adsense) DFP Advertiser ID when the advertiser ID does not exist', () => {
     const slotId = 'xyz-987'
     const adUnitCode = '/some/ad-unit/'
-    window.tabforacause.ads.slotsRendered = {}
+    const tabGlobal = getTabGlobal()
+    tabGlobal.ads.slotsRendered = {}
 
     // Mock a Prebid bid value for the slot
     const mockRevenueValue = 2.31
@@ -330,7 +334,7 @@ describe('LogRevenueComponent', function() {
     ])
 
     // Mock no Amazon bids
-    window.tabforacause.ads.amazonBids = {}
+    tabGlobal.ads.amazonBids = {}
 
     // We'll run the googletag command queue manually.
     __disableAutomaticCommandQueueExecution()
@@ -383,19 +387,22 @@ describe('LogRevenueComponent', function() {
     // Mark an ad slot as loaded
     const slotId = 'my-slot-2468'
     const adUnitCode = '/some/ad-unit/'
-    window.tabforacause.ads.slotsRendered[
-      slotId
-    ] = mockGoogleTagSlotRenderEndedData(slotId, adUnitCode, {
-      advertiserId: 132435,
-    })
-    window.tabforacause.ads.slotsLoaded[slotId] = true
-    window.tabforacause.ads.slotsViewable[slotId] = true
+    const tabGlobal = getTabGlobal()
+    tabGlobal.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
+      slotId,
+      adUnitCode,
+      {
+        advertiserId: 132435,
+      }
+    )
+    tabGlobal.ads.slotsLoaded[slotId] = true
+    tabGlobal.ads.slotsViewable[slotId] = true
 
     // Mock no Prebid bids for the slot
     window.pbjs.getHighestCpmBids.mockReturnValue([])
 
     // Mock an Amazon bid
-    window.tabforacause.ads.amazonBids = {
+    tabGlobal.ads.amazonBids = {
       [slotId]: mockAmazonBidResponse({
         slotID: slotId,
         amznbid: 'a-bid-code',
@@ -438,13 +445,16 @@ describe('LogRevenueComponent', function() {
     // Mark an ad slot as loaded
     const slotId = 'my-slot-2468'
     const adUnitCode = '/some/ad-unit/'
-    window.tabforacause.ads.slotsRendered[
-      slotId
-    ] = mockGoogleTagSlotRenderEndedData(slotId, adUnitCode, {
-      advertiserId: 132435,
-    })
-    window.tabforacause.ads.slotsLoaded[slotId] = true
-    window.tabforacause.ads.slotsViewable[slotId] = true
+    const tabGlobal = getTabGlobal()
+    tabGlobal.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
+      slotId,
+      adUnitCode,
+      {
+        advertiserId: 132435,
+      }
+    )
+    tabGlobal.ads.slotsLoaded[slotId] = true
+    tabGlobal.ads.slotsViewable[slotId] = true
 
     // Mock a Prebid bid value for the slot
     const mockRevenueValue = 2.31
@@ -457,7 +467,7 @@ describe('LogRevenueComponent', function() {
     ])
 
     // Mock an Amazon bid
-    window.tabforacause.ads.amazonBids = {
+    tabGlobal.ads.amazonBids = {
       [slotId]: mockAmazonBidResponse({
         slotID: slotId,
         amznbid: 'a-bid-code',
@@ -500,13 +510,16 @@ describe('LogRevenueComponent', function() {
     // Mark an ad slot as loaded
     const slotId = 'my-slot-2468'
     const adUnitCode = '/some/ad-unit/'
-    window.tabforacause.ads.slotsRendered[
-      slotId
-    ] = mockGoogleTagSlotRenderEndedData(slotId, adUnitCode, {
-      advertiserId: 132435,
-    })
-    window.tabforacause.ads.slotsLoaded[slotId] = true
-    window.tabforacause.ads.slotsViewable[slotId] = true
+    const tabGlobal = getTabGlobal()
+    tabGlobal.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
+      slotId,
+      adUnitCode,
+      {
+        advertiserId: 132435,
+      }
+    )
+    tabGlobal.ads.slotsLoaded[slotId] = true
+    tabGlobal.ads.slotsViewable[slotId] = true
 
     // Mock a Prebid bid value for the slot
     const mockRevenueValue = 2.31
@@ -519,7 +532,7 @@ describe('LogRevenueComponent', function() {
     ])
 
     // Mock an Amazon bid
-    window.tabforacause.ads.amazonBids = {
+    tabGlobal.ads.amazonBids = {
       [slotId]: mockAmazonBidResponse({
         slotID: slotId,
         amznbid: '', // empty bid
@@ -556,9 +569,10 @@ describe('LogRevenueComponent', function() {
   it('logs a warning, but does not throw an error or log revenue, if slot data is missing', () => {
     // Mark an ad slot as loaded
     const slotId = 'my-slot-2468'
-    window.tabforacause.ads.slotsRendered[slotId] = undefined // Missing slot data
-    window.tabforacause.ads.slotsLoaded[slotId] = true
-    window.tabforacause.ads.slotsViewable[slotId] = true
+    const tabGlobal = getTabGlobal()
+    tabGlobal.ads.slotsRendered[slotId] = undefined // Missing slot data
+    tabGlobal.ads.slotsLoaded[slotId] = true
+    tabGlobal.ads.slotsViewable[slotId] = true
 
     // Mock console.warn
     const mockConsoleWarn = jest.fn()
@@ -575,7 +589,7 @@ describe('LogRevenueComponent', function() {
     ])
 
     // Mock no Amazon bids
-    window.tabforacause.ads.amazonBids = {}
+    tabGlobal.ads.amazonBids = {}
 
     const LogRevenueComponent = require('js/components/Dashboard/LogRevenueComponent')
       .default
@@ -601,13 +615,16 @@ describe('LogRevenueComponent', function() {
     // Mark an ad slot as loaded
     const slotId = 'my-slot-2468'
     const adUnitCode = '/some/ad-unit/'
-    window.tabforacause.ads.slotsRendered[
-      slotId
-    ] = mockGoogleTagSlotRenderEndedData(slotId, adUnitCode, {
-      advertiserId: 132435,
-    })
-    window.tabforacause.ads.slotsLoaded[slotId] = true
-    window.tabforacause.ads.slotsViewable[slotId] = true
+    const tabGlobal = getTabGlobal()
+    tabGlobal.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
+      slotId,
+      adUnitCode,
+      {
+        advertiserId: 132435,
+      }
+    )
+    tabGlobal.ads.slotsLoaded[slotId] = true
+    tabGlobal.ads.slotsViewable[slotId] = true
 
     // Mock a Prebid bid value for the slot
     const mockRevenueValue = 2.31
@@ -620,7 +637,7 @@ describe('LogRevenueComponent', function() {
     ])
 
     // Mock an Amazon bid
-    window.tabforacause.ads.amazonBids = {
+    tabGlobal.ads.amazonBids = {
       [slotId]: mockAmazonBidResponse({
         slotID: slotId,
         amznbid: 'a-bid-code',
