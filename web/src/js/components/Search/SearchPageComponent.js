@@ -412,6 +412,7 @@ class SearchPage extends React.Component {
               <div
                 data-test-id={'search-prevented-warning'}
                 style={{
+                  marginTop: 20,
                   marginBottom: 20,
                   width: '100%',
                 }}

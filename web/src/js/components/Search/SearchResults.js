@@ -21,6 +21,7 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'column',
     boxSizing: 'border-box',
+    marginTop: 20,
   },
   searchAdsContainer: {
     '& iframe': {
