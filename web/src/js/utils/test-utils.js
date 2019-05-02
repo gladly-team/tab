@@ -217,6 +217,14 @@ export const mockIndexExchangeBidResponse = (properties = {}) => {
 }
 
 /**
+ * Delete `window.tabforacause`.
+ * @return {undefined}
+ */
+export const deleteTabGlobal = () => {
+  delete window.tabforacause
+}
+
+/**
  * Return the default starting value of `window.tabforacause`
  * @return {Object}
  */

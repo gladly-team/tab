@@ -300,3 +300,12 @@ describe('mockIndexExchangeBidResponse', () => {
     ])
   })
 })
+
+describe('deleteTabGlobal', () => {
+  it('deletes window.tabforacause', () => {
+    window.tabforacause = 'foobar'
+    const { deleteTabGlobal } = require('js/utils/test-utils')
+    deleteTabGlobal()
+    expect(window.tabforacause).toBeUndefined()
+  })
+})
