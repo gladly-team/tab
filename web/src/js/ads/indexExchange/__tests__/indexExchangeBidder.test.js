@@ -438,3 +438,18 @@ describe('indexExchangeBidder', () => {
     ])
   })
 })
+
+describe('markIndexExchangeBidsAsIncluded', () => {
+  it('sets the IX bids "includedInAdServerRequest" property to true', () => {
+    const { getTabGlobal } = require('js/utils/utils')
+    const tabGlobal = getTabGlobal()
+    expect(tabGlobal.ads.indexExchangeBids.includedInAdServerRequest).toBe(
+      false
+    )
+    const {
+      markIndexExchangeBidsAsIncluded,
+    } = require('js/ads/indexExchange/indexExchangeBidder')
+    markIndexExchangeBidsAsIncluded()
+    expect(tabGlobal.ads.indexExchangeBids.includedInAdServerRequest).toBe(true)
+  })
+})

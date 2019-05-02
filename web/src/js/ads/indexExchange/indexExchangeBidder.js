@@ -11,20 +11,14 @@ import logger from 'js/utils/logger'
 import { getTabGlobal } from 'js/utils/utils'
 
 /**
- * If there are IX bids, store them in the tabforacause
- * global object for use with analytics. Only do this if the
- * bids return early enough to be included in the ad server
- request; otherwise, the bids are not meaningful.
+ * Mark that the Index Exchange bids were returned in time
+ * to be included in the ad server request.
  * @return {undefined}
  */
-export const storeIndexExchangeBids = () => {
-  // Bid object structure:
-  // {
-  //
-  // }
+export const markIndexExchangeBidsAsIncluded = () => {
   try {
     const tabGlobal = getTabGlobal()
-    console.log(indexExchangeBids, tabGlobal)
+    tabGlobal.ads.indexExchangeBids.includedInAdServerRequest = true
   } catch (e) {
     logger.error(e)
   }
