@@ -348,6 +348,52 @@ describe('ads script', () => {
     expect(storeAmazonBids).not.toHaveBeenCalled()
   })
 
+  it('calls to mark IX bids as included in the bid for analytics (if IX is included in the auction)', async () => {
+    expect.assertions(1)
+    const {
+      markIndexExchangeBidsAsIncluded,
+    } = require('js/ads/indexExchange/indexExchangeBidder')
+
+    // Mock that IX responds quickly
+    const indexExchangeBidder = require('js/ads/indexExchange/indexExchangeBidder')
+      .default
+    indexExchangeBidder.mockImplementationOnce(() => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve()
+        }, 80)
+      })
+    })
+
+    require('js/ads/ads')
+    jest.advanceTimersByTime(100)
+    await new Promise(resolve => setImmediate(resolve))
+    expect(markIndexExchangeBidsAsIncluded).toHaveBeenCalledTimes(1)
+  })
+
+  it('does not call to mark IX bids as included in the bid for analytics (if IX is not included in the auction)', async () => {
+    expect.assertions(1)
+    const {
+      markIndexExchangeBidsAsIncluded,
+    } = require('js/ads/indexExchange/indexExchangeBidder')
+
+    // Mock that IX responds quickly
+    const indexExchangeBidder = require('js/ads/indexExchange/indexExchangeBidder')
+      .default
+    indexExchangeBidder.mockImplementationOnce(() => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve()
+        }, 15e3)
+      })
+    })
+
+    require('js/ads/ads')
+    jest.advanceTimersByTime(3e3)
+    await new Promise(resolve => setImmediate(resolve))
+    expect(markIndexExchangeBidsAsIncluded).not.toHaveBeenCalled()
+  })
+
   it('calls handleAdsLoaded', async () => {
     expect.assertions(1)
     const handleAdsLoaded = require('js/ads/handleAdsLoaded').default

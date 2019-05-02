@@ -1,7 +1,9 @@
 import 'js/ads/prebid/prebid' // Prebid library code
 import adsEnabled from 'js/ads/adsEnabledStatus'
 import amazonBidder, { storeAmazonBids } from 'js/ads/amazon/amazonBidder'
-import indexExchangeBidder from 'js/ads/indexExchange/indexExchangeBidder'
+import indexExchangeBidder, {
+  markIndexExchangeBidsAsIncluded,
+} from 'js/ads/indexExchange/indexExchangeBidder'
 import getAmazonTag from 'js/ads/amazon/getAmazonTag'
 import getGoogleTag from 'js/ads/google/getGoogleTag'
 import setUpGoogleAds from 'js/ads/google/setUpGoogleAds'
@@ -47,6 +49,9 @@ function sendAdserverRequest() {
   // For revenue analytics.
   if (requestManager.bidders[BIDDER_AMAZON]) {
     storeAmazonBids()
+  }
+  if (requestManager.bidders[BIDDER_IX]) {
+    markIndexExchangeBidsAsIncluded()
   }
 
   // Set targeting and make a request to DFP.
