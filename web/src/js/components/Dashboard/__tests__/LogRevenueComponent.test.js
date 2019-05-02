@@ -90,6 +90,9 @@ describe('LogRevenueComponent', function() {
     // Mock no Amazon bids
     tabGlobal.ads.amazonBids = {}
 
+    // Mock no Index Exchange bids
+    tabGlobal.ads.indexExchangeBids = {}
+
     const LogRevenueComponent = require('js/components/Dashboard/LogRevenueComponent')
       .default
     const mockUserId = 'abcdefghijklmno'
@@ -146,6 +149,9 @@ describe('LogRevenueComponent', function() {
     // Mock no Amazon bids
     tabGlobal.ads.amazonBids = {}
 
+    // Mock no Index Exchange bids
+    tabGlobal.ads.indexExchangeBids = {}
+
     const LogRevenueComponent = require('js/components/Dashboard/LogRevenueComponent')
       .default
     const mockUserId = 'abcdefghijklmno'
@@ -179,6 +185,9 @@ describe('LogRevenueComponent', function() {
 
     // Mock no Amazon bids
     tabGlobal.ads.amazonBids = {}
+
+    // Mock no Index Exchange bids
+    tabGlobal.ads.indexExchangeBids = {}
 
     const LogRevenueComponent = require('js/components/Dashboard/LogRevenueComponent')
       .default
@@ -226,6 +235,9 @@ describe('LogRevenueComponent', function() {
     // Mock no Amazon bids
     tabGlobal.ads.amazonBids = {}
 
+    // Mock no Index Exchange bids
+    tabGlobal.ads.indexExchangeBids = {}
+
     const LogRevenueComponent = require('js/components/Dashboard/LogRevenueComponent')
       .default
     const mockUserId = 'abcdefghijklmno'
@@ -272,6 +284,9 @@ describe('LogRevenueComponent', function() {
 
     // Mock no Amazon bids
     tabGlobal.ads.amazonBids = {}
+
+    // Mock no Index Exchange bids
+    tabGlobal.ads.indexExchangeBids = {}
 
     // We'll run the googletag command queue manually.
     __disableAutomaticCommandQueueExecution()
@@ -335,6 +350,9 @@ describe('LogRevenueComponent', function() {
 
     // Mock no Amazon bids
     tabGlobal.ads.amazonBids = {}
+
+    // Mock no Index Exchange bids
+    tabGlobal.ads.indexExchangeBids = {}
 
     // We'll run the googletag command queue manually.
     __disableAutomaticCommandQueueExecution()
@@ -590,6 +608,9 @@ describe('LogRevenueComponent', function() {
 
     // Mock no Amazon bids
     tabGlobal.ads.amazonBids = {}
+
+    // Mock no Index Exchange bids
+    tabGlobal.ads.indexExchangeBids = {}
 
     const LogRevenueComponent = require('js/components/Dashboard/LogRevenueComponent')
       .default
