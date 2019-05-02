@@ -258,3 +258,52 @@ describe('makePromiseCancelable', () => {
       })
   })
 })
+
+describe('getTabGlobal', () => {
+  afterEach(() => {
+    delete window.tabforacause
+  })
+
+  it('returns an object with the expected keys', () => {
+    const { getTabGlobal } = require('js/utils/utils')
+    expect(Object.keys(getTabGlobal()).sort()).toEqual(['ads', 'featureFlags'])
+  })
+
+  it('returns an ads object with the expected keys', () => {
+    const { getTabGlobal } = require('js/utils/utils')
+    expect(Object.keys(getTabGlobal().ads).sort()).toEqual([
+      'amazonBids',
+      'slotsAlreadyLoggedRevenue',
+      'slotsLoaded',
+      'slotsRendered',
+      'slotsViewable',
+    ])
+  })
+
+  it('sets window.tabforacause', () => {
+    delete window.tabforacause
+    expect(window.tabforacause).toBeUndefined()
+    const { getTabGlobal } = require('js/utils/utils')
+    getTabGlobal()
+    expect(window.tabforacause).not.toBeUndefined()
+  })
+
+  it('uses existing window.tabforacause object if one exists', () => {
+    const existingTabGlobal = {
+      ads: {
+        amazonBids: {
+          someThing: 'here',
+        },
+        slotsRendered: {},
+        slotsViewable: {},
+        slotsLoaded: {},
+        slotsAlreadyLoggedRevenue: {},
+      },
+      featureFlags: {},
+    }
+    window.tabforacause = existingTabGlobal
+    const { getTabGlobal } = require('js/utils/utils')
+    const tabGlobal = getTabGlobal()
+    expect(tabGlobal).toBe(existingTabGlobal)
+  })
+})
