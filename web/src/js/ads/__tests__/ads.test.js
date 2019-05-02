@@ -1,5 +1,4 @@
 /* eslint-env jest */
-import { getDefaultTabGlobal } from 'js/utils/test-utils'
 import getGoogleTag, {
   __setPubadsRefreshMock,
 } from 'js/ads/google/getGoogleTag'

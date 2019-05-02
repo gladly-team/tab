@@ -114,8 +114,7 @@ class LogRevenueComponent extends React.Component {
   logRevenueForSlotId(slotId, adUnitCode) {
     try {
       // If we have already logged revenue for this slot, don't log it again
-      // const tabGlobal = getTabGlobal()
-      const tabGlobal = window.tabforacause
+      const tabGlobal = getTabGlobal()
       if (slotId in tabGlobal.ads.slotsAlreadyLoggedRevenue) {
         return
       }

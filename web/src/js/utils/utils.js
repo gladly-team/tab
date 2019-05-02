@@ -250,6 +250,8 @@ export const makePromiseCancelable = promise => {
 
 /**
  * Get the "window.tabforacause" global variable.
+ * Used for handling some communication between disparate parts
+ * of our app (e.g. ads events happening before app code loads).
  * @return {Object}
  */
 export const getTabGlobal = () => {
