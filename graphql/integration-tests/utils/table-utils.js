@@ -55,6 +55,10 @@ export const tableKeys = {
     hash: 'userId',
     range: null,
   },
+  referralLinkClickLog: {
+    hash: 'userId',
+    range: 'timestamp',
+  },
 }
 
 export const tableFixtureFileNames = {
@@ -69,4 +73,5 @@ export const tableFixtureFileNames = {
   userTabsLog: '',
   userSearchLog: '',
   referralDataLog: 'ReferralDataLog.json',
+  referralLinkClickLog: '',
 }

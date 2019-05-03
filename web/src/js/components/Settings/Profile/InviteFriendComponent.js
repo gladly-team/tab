@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import TextField from '@material-ui/core/TextField'
 import { withStyles } from '@material-ui/core/styles'
 import { alternateAccentColor } from 'js/theme/default'
+import LogReferralLinkClick from 'js/mutations/LogReferralLinkClickMutation'
+import logger from 'js/utils/logger'
 
 // Can replace this with a proper theme after fully migrating to
 // material-ui 1.0.
@@ -31,7 +33,19 @@ class InviteFriend extends React.Component {
   }
 
   onTextFieldClicked() {
-    this.input.select()
+    if (this.input) {
+      this.input.select()
+    }
+
+    // Log that the user clicked their referral link,
+    // which helps us gauge attempted but unsuccessful
+    // referrals.
+    const { user } = this.props
+    return LogReferralLinkClick({
+      userId: user.id,
+    }).catch(e => {
+      logger.error(e)
+    })
   }
 
   render() {
@@ -77,6 +91,7 @@ class InviteFriend extends React.Component {
 
 InviteFriend.propTypes = {
   user: PropTypes.shape({
+    id: PropTypes.string.isRequired,
     username: PropTypes.string,
   }),
   classes: PropTypes.object.isRequired,
