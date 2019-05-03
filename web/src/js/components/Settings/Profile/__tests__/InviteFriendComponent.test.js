@@ -4,9 +4,15 @@ import React from 'react'
 import TextField from '@material-ui/core/TextField'
 import { cloneDeep } from 'lodash/lang'
 import { mount, shallow } from 'enzyme'
+import LogReferralLinkClick from 'js/mutations/LogReferralLinkClickMutation'
+import logger from 'js/utils/logger'
+
+jest.mock('js/mutations/LogReferralLinkClickMutation')
+jest.mock('js/utils/logger')
 
 const mockProps = {
   user: {
+    id: 'abc-123',
     username: 'bob',
   },
   classes: {
@@ -15,6 +21,10 @@ const mockProps = {
     formLabelFocused: 'something',
   },
 }
+
+afterEach(() => {
+  jest.clearAllMocks()
+})
 
 describe('Invite friend component', () => {
   it('renders without error', () => {
@@ -69,7 +79,7 @@ describe('Invite friend component', () => {
     ).toBe(referralUrl)
   })
 
-  it('contains the correct description text  when there is no provided username', () => {
+  it('contains the correct description text when there is no provided username', () => {
     const InviteFriendComponent = require('js/components/Settings/Profile/InviteFriendComponent')
       .default
     const newMockProps = cloneDeep(mockProps)
@@ -87,5 +97,34 @@ describe('Invite friend component', () => {
         .first()
         .prop('helperText')
     ).toBe(`and have a bigger positive impact!`)
+  })
+
+  it('logs when the user clicks on their referral link', () => {
+    const InviteFriendComponent = require('js/components/Settings/Profile/InviteFriendComponent')
+      .default
+    const wrapper = shallow(<InviteFriendComponent {...mockProps} />).dive()
+    const onClickCallback = wrapper
+      .find(TextField)
+      .first()
+      .prop('onClick')
+    onClickCallback()
+    expect(LogReferralLinkClick).toHaveBeenCalledWith({
+      userId: 'abc-123',
+    })
+  })
+
+  it('logs an error if LogReferralLinkClick throws', async () => {
+    expect.assertions(1)
+    const mockErr = new Error('LogReferralLinkClick messed up.')
+    LogReferralLinkClick.mockImplementationOnce(() => Promise.reject(mockErr))
+    const InviteFriendComponent = require('js/components/Settings/Profile/InviteFriendComponent')
+      .default
+    const wrapper = shallow(<InviteFriendComponent {...mockProps} />).dive()
+    const onClickCallback = wrapper
+      .find(TextField)
+      .first()
+      .prop('onClick')
+    await onClickCallback()
+    expect(logger.error).toHaveBeenCalledWith(mockErr)
   })
 })
