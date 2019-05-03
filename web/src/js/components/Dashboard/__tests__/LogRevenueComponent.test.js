@@ -90,6 +90,9 @@ describe('LogRevenueComponent', function() {
     // Mock no Amazon bids
     tabGlobal.ads.amazonBids = {}
 
+    // Mock no Index Exchange bids
+    tabGlobal.ads.indexExchangeBids = {}
+
     const LogRevenueComponent = require('js/components/Dashboard/LogRevenueComponent')
       .default
     const mockUserId = 'abcdefghijklmno'
@@ -146,6 +149,9 @@ describe('LogRevenueComponent', function() {
     // Mock no Amazon bids
     tabGlobal.ads.amazonBids = {}
 
+    // Mock no Index Exchange bids
+    tabGlobal.ads.indexExchangeBids = {}
+
     const LogRevenueComponent = require('js/components/Dashboard/LogRevenueComponent')
       .default
     const mockUserId = 'abcdefghijklmno'
@@ -180,6 +186,9 @@ describe('LogRevenueComponent', function() {
     // Mock no Amazon bids
     tabGlobal.ads.amazonBids = {}
 
+    // Mock no Index Exchange bids
+    tabGlobal.ads.indexExchangeBids = {}
+
     const LogRevenueComponent = require('js/components/Dashboard/LogRevenueComponent')
       .default
     const mockUserId = 'abcdefghijklmno'
@@ -198,7 +207,7 @@ describe('LogRevenueComponent', function() {
     expect(LogUserRevenueMutation).not.toHaveBeenCalled()
   })
 
-  it('rounds excessively long decimals in revenue value', () => {
+  it('rounds excessively long decimals in Prebid revenue value', () => {
     // Mark an ad slot as loaded
     const slotId = 'abc-123'
     const adUnitCode = '/some/ad-unit/'
@@ -225,6 +234,9 @@ describe('LogRevenueComponent', function() {
 
     // Mock no Amazon bids
     tabGlobal.ads.amazonBids = {}
+
+    // Mock no Index Exchange bids
+    tabGlobal.ads.indexExchangeBids = {}
 
     const LogRevenueComponent = require('js/components/Dashboard/LogRevenueComponent')
       .default
@@ -272,6 +284,9 @@ describe('LogRevenueComponent', function() {
 
     // Mock no Amazon bids
     tabGlobal.ads.amazonBids = {}
+
+    // Mock no Index Exchange bids
+    tabGlobal.ads.indexExchangeBids = {}
 
     // We'll run the googletag command queue manually.
     __disableAutomaticCommandQueueExecution()
@@ -335,6 +350,9 @@ describe('LogRevenueComponent', function() {
 
     // Mock no Amazon bids
     tabGlobal.ads.amazonBids = {}
+
+    // Mock no Index Exchange bids
+    tabGlobal.ads.indexExchangeBids = {}
 
     // We'll run the googletag command queue manually.
     __disableAutomaticCommandQueueExecution()
@@ -427,7 +445,7 @@ describe('LogRevenueComponent', function() {
     expect(LogUserRevenueMutation).toHaveBeenCalledWith(
       mockRelayEnvironment,
       mockUserId,
-      null,
+      0,
       '132435',
       null,
       {
@@ -566,6 +584,675 @@ describe('LogRevenueComponent', function() {
     )
   })
 
+  it('logs Index Exchange revenue when there are no other bids', () => {
+    // Mark an ad slot as loaded
+    const slotId = 'my-slot-2468'
+    const adUnitCode = '/some/ad-unit/'
+    const tabGlobal = getTabGlobal()
+    tabGlobal.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
+      slotId,
+      adUnitCode,
+      {
+        advertiserId: 132435,
+      }
+    )
+    tabGlobal.ads.slotsLoaded[slotId] = true
+    tabGlobal.ads.slotsViewable[slotId] = true
+
+    // Mock no Prebid bids for the slot
+    window.pbjs.getHighestCpmBids.mockReturnValue([])
+
+    // Mock no Amazon bids
+    tabGlobal.ads.amazonBids = {}
+
+    // Mock some Index Exchange bids
+    tabGlobal.ads.indexExchangeBids = {
+      includedInAdServerRequest: true,
+      [slotId]: [
+        {
+          targeting: {
+            IOM: ['728x90_5000'],
+            ix_id: ['_mBnLnF5V'],
+          },
+          price: 730,
+          adm: '',
+          size: [728, 90],
+          partnerId: 'IndexExchangeHtb',
+        },
+      ],
+    }
+
+    const LogRevenueComponent = require('js/components/Dashboard/LogRevenueComponent')
+      .default
+    const mockUserId = 'abcdefghijklmno'
+    const tabId = '712dca1a-3705-480f-95ff-314be86a2936'
+    const mockRelayEnvironment = {}
+    shallow(
+      <LogRevenueComponent
+        user={{
+          id: mockUserId,
+        }}
+        tabId={tabId}
+        relay={{ environment: mockRelayEnvironment }}
+      />
+    )
+    expect(LogUserRevenueMutation).toHaveBeenCalledWith(
+      mockRelayEnvironment,
+      mockUserId,
+      0.0073,
+      '132435',
+      '728x90',
+      null,
+      null,
+      tabId,
+      adUnitCode
+    )
+  })
+
+  it('selects the highest-value Index Exchange revenue, if there are multiple IX bids', () => {
+    // Mark an ad slot as loaded
+    const slotId = 'my-slot-2468'
+    const adUnitCode = '/some/ad-unit/'
+    const tabGlobal = getTabGlobal()
+    tabGlobal.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
+      slotId,
+      adUnitCode,
+      {
+        advertiserId: 132435,
+      }
+    )
+    tabGlobal.ads.slotsLoaded[slotId] = true
+    tabGlobal.ads.slotsViewable[slotId] = true
+
+    // Mock no Prebid bids for the slot
+    window.pbjs.getHighestCpmBids.mockReturnValue([])
+
+    // Mock no Amazon bids
+    tabGlobal.ads.amazonBids = {}
+
+    // Mock some Index Exchange bids
+    tabGlobal.ads.indexExchangeBids = {
+      includedInAdServerRequest: true,
+      [slotId]: [
+        {
+          targeting: {
+            IOM: ['728x90_5000'],
+            ix_id: ['_mBnLnF5V'],
+          },
+          price: 730,
+          adm: '',
+          size: [728, 90],
+          partnerId: 'IndexExchangeHtb',
+        },
+        {
+          targeting: {
+            IOM: ['728x90_5000'],
+            ix_id: ['_mBnLnF5V'],
+          },
+          price: 120,
+          adm: '',
+          size: [728, 90],
+          partnerId: 'IndexExchangeHtb',
+        },
+        {
+          targeting: {
+            IOM: ['728x90_5000'],
+            ix_id: ['_mBnLnF5V'],
+          },
+          price: 990, // winning bid
+          adm: '',
+          size: [728, 90],
+          partnerId: 'IndexExchangeHtb',
+        },
+      ],
+    }
+
+    const LogRevenueComponent = require('js/components/Dashboard/LogRevenueComponent')
+      .default
+    const mockUserId = 'abcdefghijklmno'
+    const tabId = '712dca1a-3705-480f-95ff-314be86a2936'
+    const mockRelayEnvironment = {}
+    shallow(
+      <LogRevenueComponent
+        user={{
+          id: mockUserId,
+        }}
+        tabId={tabId}
+        relay={{ environment: mockRelayEnvironment }}
+      />
+    )
+    expect(LogUserRevenueMutation).toHaveBeenCalledWith(
+      mockRelayEnvironment,
+      mockUserId,
+      0.0099,
+      '132435',
+      '728x90',
+      null,
+      null,
+      tabId,
+      adUnitCode
+    )
+  })
+
+  it('does not log Index Exchange revenue when the IX bids did not return in time for the auction', () => {
+    // Mark an ad slot as loaded
+    const slotId = 'my-slot-2468'
+    const adUnitCode = '/some/ad-unit/'
+    const tabGlobal = getTabGlobal()
+    tabGlobal.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
+      slotId,
+      adUnitCode,
+      {
+        advertiserId: 132435,
+      }
+    )
+    tabGlobal.ads.slotsLoaded[slotId] = true
+    tabGlobal.ads.slotsViewable[slotId] = true
+
+    // Mock no Prebid bids for the slot
+    window.pbjs.getHighestCpmBids.mockReturnValue([])
+
+    // Mock no Amazon bids
+    tabGlobal.ads.amazonBids = {}
+
+    // Mock some Index Exchange bids
+    tabGlobal.ads.indexExchangeBids = {
+      includedInAdServerRequest: false, // is not part of the auction
+      [slotId]: [
+        {
+          targeting: {
+            IOM: ['728x90_5000'],
+            ix_id: ['_mBnLnF5V'],
+          },
+          price: 730,
+          adm: '',
+          size: [728, 90],
+          partnerId: 'IndexExchangeHtb',
+        },
+      ],
+    }
+
+    const LogRevenueComponent = require('js/components/Dashboard/LogRevenueComponent')
+      .default
+    const mockUserId = 'abcdefghijklmno'
+    const tabId = '712dca1a-3705-480f-95ff-314be86a2936'
+    const mockRelayEnvironment = {}
+    shallow(
+      <LogRevenueComponent
+        user={{
+          id: mockUserId,
+        }}
+        tabId={tabId}
+        relay={{ environment: mockRelayEnvironment }}
+      />
+    )
+    expect(LogUserRevenueMutation).not.toHaveBeenCalled()
+  })
+
+  it('rounds excessively long decimals in the Index Exchange revenue value', () => {
+    // Mark an ad slot as loaded
+    const slotId = 'my-slot-2468'
+    const adUnitCode = '/some/ad-unit/'
+    const tabGlobal = getTabGlobal()
+    tabGlobal.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
+      slotId,
+      adUnitCode,
+      {
+        advertiserId: 132435,
+      }
+    )
+    tabGlobal.ads.slotsLoaded[slotId] = true
+    tabGlobal.ads.slotsViewable[slotId] = true
+
+    // Mock no Prebid bids for the slot
+    window.pbjs.getHighestCpmBids.mockReturnValue([])
+
+    // Mock no Amazon bids
+    tabGlobal.ads.amazonBids = {}
+
+    // Mock some Index Exchange bids
+    tabGlobal.ads.indexExchangeBids = {
+      includedInAdServerRequest: true,
+      [slotId]: [
+        {
+          targeting: {
+            IOM: ['728x90_5000'],
+            ix_id: ['_mBnLnF5V'],
+          },
+          price: 120.1234567890123456789,
+          adm: '',
+          size: [728, 90],
+          partnerId: 'IndexExchangeHtb',
+        },
+      ],
+    }
+
+    const LogRevenueComponent = require('js/components/Dashboard/LogRevenueComponent')
+      .default
+    const mockUserId = 'abcdefghijklmno'
+    const tabId = '712dca1a-3705-480f-95ff-314be86a2936'
+    const mockRelayEnvironment = {}
+    shallow(
+      <LogRevenueComponent
+        user={{
+          id: mockUserId,
+        }}
+        tabId={tabId}
+        relay={{ environment: mockRelayEnvironment }}
+      />
+    )
+    expect(LogUserRevenueMutation).toHaveBeenCalledWith(
+      mockRelayEnvironment,
+      mockUserId,
+      0.00120123456789,
+      '132435',
+      '728x90',
+      null,
+      null,
+      tabId,
+      adUnitCode
+    )
+  })
+
+  it('passes a null ad size if the Index Exchange size value does not exist', () => {
+    // Mark an ad slot as loaded
+    const slotId = 'my-slot-2468'
+    const adUnitCode = '/some/ad-unit/'
+    const tabGlobal = getTabGlobal()
+    tabGlobal.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
+      slotId,
+      adUnitCode,
+      {
+        advertiserId: 132435,
+      }
+    )
+    tabGlobal.ads.slotsLoaded[slotId] = true
+    tabGlobal.ads.slotsViewable[slotId] = true
+
+    // Mock no Prebid bids for the slot
+    window.pbjs.getHighestCpmBids.mockReturnValue([])
+
+    // Mock no Amazon bids
+    tabGlobal.ads.amazonBids = {}
+
+    // Mock some Index Exchange bids
+    tabGlobal.ads.indexExchangeBids = {
+      includedInAdServerRequest: true,
+      [slotId]: [
+        {
+          targeting: {
+            IOM: ['728x90_5000'],
+            ix_id: ['_mBnLnF5V'],
+          },
+          price: 310,
+          adm: '',
+          size: null, // ad size is missing
+          partnerId: 'IndexExchangeHtb',
+        },
+      ],
+    }
+
+    const LogRevenueComponent = require('js/components/Dashboard/LogRevenueComponent')
+      .default
+    const mockUserId = 'abcdefghijklmno'
+    const tabId = '712dca1a-3705-480f-95ff-314be86a2936'
+    const mockRelayEnvironment = {}
+    shallow(
+      <LogRevenueComponent
+        user={{
+          id: mockUserId,
+        }}
+        tabId={tabId}
+        relay={{ environment: mockRelayEnvironment }}
+      />
+    )
+    expect(LogUserRevenueMutation).toHaveBeenCalledWith(
+      mockRelayEnvironment,
+      mockUserId,
+      0.0031,
+      '132435',
+      null,
+      null,
+      null,
+      tabId,
+      adUnitCode
+    )
+  })
+
+  it('passes a null ad size if the Index Exchange size value is an array with more than two values', () => {
+    // Mark an ad slot as loaded
+    const slotId = 'my-slot-2468'
+    const adUnitCode = '/some/ad-unit/'
+    const tabGlobal = getTabGlobal()
+    tabGlobal.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
+      slotId,
+      adUnitCode,
+      {
+        advertiserId: 132435,
+      }
+    )
+    tabGlobal.ads.slotsLoaded[slotId] = true
+    tabGlobal.ads.slotsViewable[slotId] = true
+
+    // Mock no Prebid bids for the slot
+    window.pbjs.getHighestCpmBids.mockReturnValue([])
+
+    // Mock no Amazon bids
+    tabGlobal.ads.amazonBids = {}
+
+    // Mock some Index Exchange bids
+    tabGlobal.ads.indexExchangeBids = {
+      includedInAdServerRequest: true,
+      [slotId]: [
+        {
+          targeting: {
+            IOM: ['728x90_5000'],
+            ix_id: ['_mBnLnF5V'],
+          },
+          price: 310,
+          adm: '',
+          size: [728, 90, 2008], // ad size is malformed
+          partnerId: 'IndexExchangeHtb',
+        },
+      ],
+    }
+
+    const LogRevenueComponent = require('js/components/Dashboard/LogRevenueComponent')
+      .default
+    const mockUserId = 'abcdefghijklmno'
+    const tabId = '712dca1a-3705-480f-95ff-314be86a2936'
+    const mockRelayEnvironment = {}
+    shallow(
+      <LogRevenueComponent
+        user={{
+          id: mockUserId,
+        }}
+        tabId={tabId}
+        relay={{ environment: mockRelayEnvironment }}
+      />
+    )
+    expect(LogUserRevenueMutation).toHaveBeenCalledWith(
+      mockRelayEnvironment,
+      mockUserId,
+      0.0031,
+      '132435',
+      null,
+      null,
+      null,
+      tabId,
+      adUnitCode
+    )
+  })
+
+  it('logs the Index Exchange revenue and ad size when it is higher than the Prebid revenue', () => {
+    // Mark an ad slot as loaded
+    const slotId = 'my-slot-2468'
+    const adUnitCode = '/some/ad-unit/'
+    const tabGlobal = getTabGlobal()
+    tabGlobal.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
+      slotId,
+      adUnitCode,
+      {
+        advertiserId: 132435,
+      }
+    )
+    tabGlobal.ads.slotsLoaded[slotId] = true
+    tabGlobal.ads.slotsViewable[slotId] = true
+
+    window.pbjs.getHighestCpmBids.mockReturnValue([
+      {
+        cpm: 1.2,
+        size: '300x250',
+        // ... other bid info exists here
+      },
+    ])
+
+    // Mock no Amazon bids
+    tabGlobal.ads.amazonBids = {}
+
+    // Mock some Index Exchange bids
+    tabGlobal.ads.indexExchangeBids = {
+      includedInAdServerRequest: true,
+      [slotId]: [
+        {
+          targeting: {
+            IOM: ['728x90_5000'],
+            ix_id: ['_mBnLnF5V'],
+          },
+          price: 730,
+          adm: '',
+          size: [728, 90],
+          partnerId: 'IndexExchangeHtb',
+        },
+      ],
+    }
+
+    const LogRevenueComponent = require('js/components/Dashboard/LogRevenueComponent')
+      .default
+    const mockUserId = 'abcdefghijklmno'
+    const tabId = '712dca1a-3705-480f-95ff-314be86a2936'
+    const mockRelayEnvironment = {}
+    shallow(
+      <LogRevenueComponent
+        user={{
+          id: mockUserId,
+        }}
+        tabId={tabId}
+        relay={{ environment: mockRelayEnvironment }}
+      />
+    )
+    expect(LogUserRevenueMutation).toHaveBeenCalledWith(
+      mockRelayEnvironment,
+      mockUserId,
+      0.0073,
+      '132435',
+      '728x90',
+      null,
+      null,
+      tabId,
+      adUnitCode
+    )
+  })
+
+  it('logs the Prebid revenue and ad size when it is higher than the Index Exchange revenue', () => {
+    // Mark an ad slot as loaded
+    const slotId = 'my-slot-2468'
+    const adUnitCode = '/some/ad-unit/'
+    const tabGlobal = getTabGlobal()
+    tabGlobal.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
+      slotId,
+      adUnitCode,
+      {
+        advertiserId: 132435,
+      }
+    )
+    tabGlobal.ads.slotsLoaded[slotId] = true
+    tabGlobal.ads.slotsViewable[slotId] = true
+
+    window.pbjs.getHighestCpmBids.mockReturnValue([
+      {
+        cpm: 12.8,
+        size: '300x250',
+        // ... other bid info exists here
+      },
+    ])
+
+    // Mock no Amazon bids
+    tabGlobal.ads.amazonBids = {}
+
+    // Mock some Index Exchange bids
+    tabGlobal.ads.indexExchangeBids = {
+      includedInAdServerRequest: true,
+      [slotId]: [
+        {
+          targeting: {
+            IOM: ['728x90_5000'],
+            ix_id: ['_mBnLnF5V'],
+          },
+          price: 730,
+          adm: '',
+          size: [728, 90],
+          partnerId: 'IndexExchangeHtb',
+        },
+      ],
+    }
+
+    const LogRevenueComponent = require('js/components/Dashboard/LogRevenueComponent')
+      .default
+    const mockUserId = 'abcdefghijklmno'
+    const tabId = '712dca1a-3705-480f-95ff-314be86a2936'
+    const mockRelayEnvironment = {}
+    shallow(
+      <LogRevenueComponent
+        user={{
+          id: mockUserId,
+        }}
+        tabId={tabId}
+        relay={{ environment: mockRelayEnvironment }}
+      />
+    )
+    expect(LogUserRevenueMutation).toHaveBeenCalledWith(
+      mockRelayEnvironment,
+      mockUserId,
+      0.0128,
+      '132435',
+      '300x250',
+      null,
+      null,
+      tabId,
+      adUnitCode
+    )
+  })
+
+  it('logs the Prebid revenue and ad size when the Index Exchange bid is missing revenue data', () => {
+    // Mark an ad slot as loaded
+    const slotId = 'my-slot-2468'
+    const adUnitCode = '/some/ad-unit/'
+    const tabGlobal = getTabGlobal()
+    tabGlobal.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
+      slotId,
+      adUnitCode,
+      {
+        advertiserId: 132435,
+      }
+    )
+    tabGlobal.ads.slotsLoaded[slotId] = true
+    tabGlobal.ads.slotsViewable[slotId] = true
+
+    window.pbjs.getHighestCpmBids.mockReturnValue([
+      {
+        cpm: 12.8,
+        size: '300x250',
+        // ... other bid info exists here
+      },
+    ])
+
+    // Mock no Amazon bids
+    tabGlobal.ads.amazonBids = {}
+
+    // Mock some Index Exchange bids
+    tabGlobal.ads.indexExchangeBids = {
+      includedInAdServerRequest: true,
+      [slotId]: [
+        {
+          targeting: {
+            IOM: ['728x90_5000'],
+            ix_id: ['_mBnLnF5V'],
+          },
+          price: null, // this is unexpected
+          adm: '',
+          size: [728, 90],
+          partnerId: 'IndexExchangeHtb',
+        },
+      ],
+    }
+
+    const LogRevenueComponent = require('js/components/Dashboard/LogRevenueComponent')
+      .default
+    const mockUserId = 'abcdefghijklmno'
+    const tabId = '712dca1a-3705-480f-95ff-314be86a2936'
+    const mockRelayEnvironment = {}
+    shallow(
+      <LogRevenueComponent
+        user={{
+          id: mockUserId,
+        }}
+        tabId={tabId}
+        relay={{ environment: mockRelayEnvironment }}
+      />
+    )
+    expect(LogUserRevenueMutation).toHaveBeenCalledWith(
+      mockRelayEnvironment,
+      mockUserId,
+      0.0128,
+      '132435',
+      '300x250',
+      null,
+      null,
+      tabId,
+      adUnitCode
+    )
+  })
+
+  it('logs the Prebid revenue when the Index Exchange slot is missing any bid data', () => {
+    // Mark an ad slot as loaded
+    const slotId = 'my-slot-2468'
+    const adUnitCode = '/some/ad-unit/'
+    const tabGlobal = getTabGlobal()
+    tabGlobal.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
+      slotId,
+      adUnitCode,
+      {
+        advertiserId: 132435,
+      }
+    )
+    tabGlobal.ads.slotsLoaded[slotId] = true
+    tabGlobal.ads.slotsViewable[slotId] = true
+
+    window.pbjs.getHighestCpmBids.mockReturnValue([
+      {
+        cpm: 12.8,
+        size: '300x250',
+        // ... other bid info exists here
+      },
+    ])
+
+    // Mock no Amazon bids
+    tabGlobal.ads.amazonBids = {}
+
+    // Mock some Index Exchange bids
+    tabGlobal.ads.indexExchangeBids = {
+      includedInAdServerRequest: true,
+      // Missing slot data
+    }
+
+    const LogRevenueComponent = require('js/components/Dashboard/LogRevenueComponent')
+      .default
+    const mockUserId = 'abcdefghijklmno'
+    const tabId = '712dca1a-3705-480f-95ff-314be86a2936'
+    const mockRelayEnvironment = {}
+    shallow(
+      <LogRevenueComponent
+        user={{
+          id: mockUserId,
+        }}
+        tabId={tabId}
+        relay={{ environment: mockRelayEnvironment }}
+      />
+    )
+    expect(LogUserRevenueMutation).toHaveBeenCalledWith(
+      mockRelayEnvironment,
+      mockUserId,
+      0.0128,
+      '132435',
+      '300x250',
+      null,
+      null,
+      tabId,
+      adUnitCode
+    )
+  })
+
   it('logs a warning, but does not throw an error or log revenue, if slot data is missing', () => {
     // Mark an ad slot as loaded
     const slotId = 'my-slot-2468'
@@ -590,6 +1277,9 @@ describe('LogRevenueComponent', function() {
 
     // Mock no Amazon bids
     tabGlobal.ads.amazonBids = {}
+
+    // Mock no Index Exchange bids
+    tabGlobal.ads.indexExchangeBids = {}
 
     const LogRevenueComponent = require('js/components/Dashboard/LogRevenueComponent')
       .default

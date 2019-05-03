@@ -262,6 +262,15 @@ export const getTabGlobal = () => {
       // Value: bid object
       amazonBids: {},
 
+      // Bids returned from Index Exchange.
+      // Key: slot element ID
+      // Value: bid object
+      indexExchangeBids: {
+        // Whether the bids were returned in time to be part
+        // of the request to our ad server.
+        includedInAdServerRequest: false,
+      },
+
       // Objects from googletag's "slotRenderEnded" event. This event fires
       // before the "slotOnload" event; i.e., before the actual creative loads.
       // Key: slot ID

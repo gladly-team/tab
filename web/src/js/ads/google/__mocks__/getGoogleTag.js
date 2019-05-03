@@ -1,5 +1,14 @@
 /* eslint-env jest */
 
+import {
+  VERTICAL_AD_UNIT_ID,
+  VERTICAL_AD_SLOT_DOM_ID,
+  SECOND_VERTICAL_AD_UNIT_ID,
+  SECOND_VERTICAL_AD_SLOT_DOM_ID,
+  HORIZONTAL_AD_UNIT_ID,
+  HORIZONTAL_AD_SLOT_DOM_ID,
+} from 'js/ads/adSettings'
+
 // By default, we run functions in the queue immediately.
 // Call this to disable that.
 export const __disableAutomaticCommandQueueExecution = () => {
@@ -19,16 +28,29 @@ export const __setPubadsRefreshMock = mockFunction => {
   mockPubadsRefresh = mockFunction
 }
 
-const MockSlot = adUnitPath => ({
+const MockSlot = ({ adUnitPath, slotElementId }) => ({
   getAdUnitPath: () => adUnitPath,
+  getSlotElementId: () => slotElementId,
   setTargeting: jest.fn(),
 })
 
 const mockSlots = [
   // Mock ad unit IDs from the adSettings mock.
-  MockSlot('/99887766/HBTL'), // bottom leaderboard
-  MockSlot('/11223344/HBTR'), // first (bottom) rectangle ad
-  MockSlot('/44556677/HBTR2'), // second (top) rectangle ad
+  // Bottom leaderboard
+  MockSlot({
+    adUnitPath: HORIZONTAL_AD_UNIT_ID,
+    slotElementId: HORIZONTAL_AD_SLOT_DOM_ID,
+  }),
+  // First (bottom) rectangle ad
+  MockSlot({
+    adUnitPath: VERTICAL_AD_UNIT_ID,
+    slotElementId: VERTICAL_AD_SLOT_DOM_ID,
+  }),
+  // Second (top) rectangle ad
+  MockSlot({
+    adUnitPath: SECOND_VERTICAL_AD_UNIT_ID,
+    slotElementId: SECOND_VERTICAL_AD_SLOT_DOM_ID,
+  }),
 ]
 
 const mockGetSlots = jest.fn(() => {

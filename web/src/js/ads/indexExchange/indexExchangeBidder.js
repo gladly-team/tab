@@ -8,6 +8,21 @@ import {
 } from 'js/ads/adSettings'
 import getGoogleTag from 'js/ads/google/getGoogleTag'
 import logger from 'js/utils/logger'
+import { getTabGlobal } from 'js/utils/utils'
+
+/**
+ * Mark that the Index Exchange bids were returned in time
+ * to be included in the ad server request.
+ * @return {undefined}
+ */
+export const markIndexExchangeBidsAsIncluded = () => {
+  try {
+    const tabGlobal = getTabGlobal()
+    tabGlobal.ads.indexExchangeBids.includedInAdServerRequest = true
+  } catch (e) {
+    logger.error(e)
+  }
+}
 
 /**
  * Return a promise that resolves when the Index Exchange bid
@@ -60,13 +75,12 @@ const fetchIndexExchangeDemand = () => {
       // Fetch bid responses from Index Exchange.
       // Note: the current request is to a casalemedia URL.
       ixTag.retrieveDemand(IXSlots, demand => {
-        // console.log('Index Exchange: demand', demand)
-
         // Set adserver targeting for any returned demand.
         // IX demand should set the IOM and ix_id parameters.
         try {
           if (demand && demand.slot) {
             const googletag = getGoogleTag()
+            const tabGlobal = getTabGlobal()
 
             // Loop through defined GAM slots to set any targeting.
             googletag.cmd.push(() => {
@@ -101,6 +115,15 @@ const fetchIndexExchangeDemand = () => {
                       }
                     )
                   })
+
+                  // Store the bids for analytics.
+                  try {
+                    tabGlobal.ads.indexExchangeBids[
+                      googleSlot.getSlotElementId()
+                    ] = IXBidResponseArray
+                  } catch (e) {
+                    logger.error(e)
+                  }
                 })
             })
           }

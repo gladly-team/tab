@@ -69,6 +69,53 @@ class LogRevenueComponent extends React.Component {
   }
 
   /**
+   * Get the top Index Exchange bid for this slot.
+   * @param {string} slotId - The DFP slot ID
+   * @return {Object|null} IXBid
+   * @return {number|null} IXBid.revenue - The $USD revenue equal to the highest Prebid
+   *   bid CPM for the slot, divided by 1000 and rounded; null if there were no bids
+   * @return {number|null} IXBid.size - A string of the ad size, such as '728x90'
+   */
+  getIndexExchangeBidForSlot(slotId) {
+    const tabGlobal = getTabGlobal()
+
+    // If Index Exchange did not respond in time for the request
+    // to the ad server, their bids will not win.
+    if (!get(tabGlobal, 'ads.indexExchangeBids.includedInAdServerRequest')) {
+      return null
+    }
+
+    const ixBidsForSlot = get(
+      tabGlobal,
+      ['ads', 'indexExchangeBids', slotId],
+      []
+    )
+    if (!ixBidsForSlot.length) {
+      return null
+    }
+
+    // Get the highest-priced IX bid object.
+    const highestIXBid = ixBidsForSlot.reduce((topBidSoFar, currBid) => {
+      return get(currBid, 'price', 0) > get(topBidSoFar, 'price', 0)
+        ? currBid
+        : topBidSoFar
+    }, ixBidsForSlot[0])
+
+    // Index Exchange’s returned "price" field is a CPM in cents, so
+    // 265 = $2.65 CPM. Convert to real impression revenue and round.
+    const revenue =
+      Math.round((get(highestIXBid, 'price', 0) / 10e4) * 10e14) / 10e14
+
+    return {
+      revenue: revenue,
+      size:
+        (get(highestIXBid, 'size', []) || []).length === 2
+          ? get(highestIXBid, 'size').join('x')
+          : null,
+    }
+  }
+
+  /**
    * Get the ad dimensions for the winning Prebid bid for this slot
    * @param {string} slotId - The DFP slot ID
    * @return {string|null} revenue - The ad dimensions in the form of
@@ -128,18 +175,25 @@ class LogRevenueComponent extends React.Component {
         return
       }
 
-      // Get revenue from highest Prebid bid
-      const prebidRevenue = this.getPrebidRevenueForSlot(slotId)
+      // Get revenue from highest Prebid bid.
+      const prebidRevenue = this.getPrebidRevenueForSlot(slotId) || 0
+      const prebidAdSize = this.getPrebidAdSizeForSlot(slotId)
 
-      // Get the slot's bid from Amazon
+      // Get info of the highest Index Exchange bid.
+      const { revenue: IXRevenue = 0, size: IXAdSize = null } =
+        this.getIndexExchangeBidForSlot(slotId) || {}
+
+      // Choose the higher revenue for this slot as the expected winner.
+      const revenue = prebidRevenue > IXRevenue ? prebidRevenue : IXRevenue
+      let adSize = prebidRevenue > IXRevenue ? prebidAdSize : IXAdSize
+
+      // Get the slot's bid from Amazon.
       const amazonEncodedBid = this.getEncodedAmazonRevenueForSlot(slotId)
 
       // If no revenue, don't log anything
-      if (!prebidRevenue && !amazonEncodedBid) {
+      if (!revenue && !amazonEncodedBid) {
         return
       }
-
-      const adSize = this.getPrebidAdSizeForSlot(slotId)
 
       // Get the advertiser ID. It will be null if Google Adsense
       // took the impression, so assume nulls are Adsense.
@@ -152,7 +206,7 @@ class LogRevenueComponent extends React.Component {
       LogUserRevenueMutation(
         this.props.relay.environment,
         this.props.user.id,
-        prebidRevenue,
+        revenue,
         dfpAdvertiserId,
         adSize,
         amazonEncodedBid,

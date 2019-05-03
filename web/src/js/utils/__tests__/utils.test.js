@@ -273,6 +273,7 @@ describe('getTabGlobal', () => {
     const { getTabGlobal } = require('js/utils/utils')
     expect(Object.keys(getTabGlobal().ads).sort()).toEqual([
       'amazonBids',
+      'indexExchangeBids',
       'slotsAlreadyLoggedRevenue',
       'slotsLoaded',
       'slotsRendered',
