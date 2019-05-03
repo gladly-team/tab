@@ -252,6 +252,16 @@ type LogEmailVerifiedMutationPayload {
   clientMutationId: String
 }
 
+input LogReferralLinkClickInput {
+  userId: String!
+  clientMutationId: String
+}
+
+type LogReferralLinkClickPayload {
+  success: Boolean!
+  clientMutationId: String
+}
+
 input LogSearchInput {
   userId: String!
   source: String
@@ -358,6 +368,7 @@ type Mutation {
   donateVc(input: DonateVcInput!): DonateVcPayload
   mergeIntoExistingUser(input: MergeIntoExistingUserInput!): MergeIntoExistingUserPayload
   logEmailVerified(input: LogEmailVerifiedMutationInput!): LogEmailVerifiedMutationPayload
+  logReferralLinkClick(input: LogReferralLinkClickInput!): LogReferralLinkClickPayload
   setUserBkgImage(input: SetUserBkgImageInput!): SetUserBkgImagePayload
   setUserBkgColor(input: SetUserBkgColorInput!): SetUserBkgColorPayload
   setUserBkgCustomImage(input: SetUserBkgCustomImageInput!): SetUserBkgCustomImagePayload

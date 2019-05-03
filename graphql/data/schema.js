@@ -59,6 +59,7 @@ import setBackgroundImageDaily from '../database/users/setBackgroundImageDaily'
 import logUserExperimentGroups from '../database/users/logUserExperimentGroups'
 import logUserExperimentActions from '../database/users/logUserExperimentActions'
 import constructExperimentActionsType from '../database/users/constructExperimentActionsType'
+import logReferralLinkClick from '../database/referrals/logReferralLinkClick'
 
 import CharityModel from '../database/charities/CharityModel'
 import getCharities from '../database/charities/getCharities'
@@ -764,6 +765,25 @@ const logSearchMutation = mutationWithClientMutationId({
 })
 
 /**
+ * Log a click on a user's referral link.
+ */
+const logReferralLinkClickMutation = mutationWithClientMutationId({
+  name: 'LogReferralLinkClick',
+  inputFields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+  },
+  outputFields: {
+    success: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+    },
+  },
+  mutateAndGetPayload: ({ userId }, context) => {
+    const { id } = fromGlobalId(userId)
+    return logReferralLinkClick(context.user, id)
+  },
+})
+
+/**
  * Log earned revenue for a user
  */
 
@@ -1331,6 +1351,7 @@ const mutationType = new GraphQLObjectType({
     donateVc: donateVcMutation,
     mergeIntoExistingUser: mergeIntoExistingUserMutation,
     logEmailVerified: logEmailVerifiedMutation,
+    logReferralLinkClick: logReferralLinkClickMutation,
 
     setUserBkgImage: setUserBkgImageMutation,
     setUserBkgColor: setUserBkgColorMutation,

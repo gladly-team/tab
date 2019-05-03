@@ -3,8 +3,8 @@ import commitMutation from 'relay-commit-mutation-promise'
 import environment from 'js/relay-env'
 
 const mutation = graphql`
-  mutation LogReferralLinkClick($input: LogReferralLinkClickInput!) {
-    logSearch(input: $input) {
+  mutation LogReferralLinkClickMutation($input: LogReferralLinkClickInput!) {
+    logReferralLinkClick(input: $input) {
       success
     }
   }
