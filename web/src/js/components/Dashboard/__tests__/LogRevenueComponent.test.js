@@ -1253,6 +1253,81 @@ describe('LogRevenueComponent', function() {
     )
   })
 
+  it('logs Amazon revenue when there is an IX bid but no Prebid bid', () => {
+    // Mark an ad slot as loaded
+    const slotId = 'my-slot-2468'
+    const adUnitCode = '/some/ad-unit/'
+    const tabGlobal = getTabGlobal()
+    tabGlobal.ads.slotsRendered[slotId] = mockGoogleTagSlotRenderEndedData(
+      slotId,
+      adUnitCode,
+      {
+        advertiserId: 132435,
+      }
+    )
+    tabGlobal.ads.slotsLoaded[slotId] = true
+    tabGlobal.ads.slotsViewable[slotId] = true
+
+    // Mock no Prebid bids.
+    window.pbjs.getHighestCpmBids.mockReturnValue([])
+
+    // Mock an Amazon bid
+    tabGlobal.ads.amazonBids = {
+      [slotId]: mockAmazonBidResponse({
+        slotID: slotId,
+        amznbid: 'a-bid-code',
+        size: '728x90',
+      }),
+    }
+
+    // Mock some Index Exchange bids
+    tabGlobal.ads.indexExchangeBids = {
+      includedInAdServerRequest: true,
+      [slotId]: [
+        {
+          targeting: {
+            IOM: ['728x90_5000'],
+            ix_id: ['_mBnLnF5V'],
+          },
+          price: 231,
+          adm: '',
+          size: [728, 90],
+          partnerId: 'IndexExchangeHtb',
+        },
+      ],
+    }
+
+    const LogRevenueComponent = require('js/components/Dashboard/LogRevenueComponent')
+      .default
+    const mockUserId = 'abcdefghijklmno'
+    const tabId = '712dca1a-3705-480f-95ff-314be86a2936'
+    const mockRelayEnvironment = {}
+    shallow(
+      <LogRevenueComponent
+        user={{
+          id: mockUserId,
+        }}
+        tabId={tabId}
+        relay={{ environment: mockRelayEnvironment }}
+      />
+    )
+    expect(LogUserRevenueMutation).toHaveBeenCalledWith(
+      mockRelayEnvironment,
+      mockUserId,
+      0.00231,
+      '132435',
+      '728x90',
+      {
+        encodingType: 'AMAZON_CPM',
+        encodedValue: 'a-bid-code',
+        adSize: '728x90',
+      },
+      'MAX',
+      tabId,
+      adUnitCode
+    )
+  })
+
   it('logs a warning, but does not throw an error or log revenue, if slot data is missing', () => {
     // Mark an ad slot as loaded
     const slotId = 'my-slot-2468'
