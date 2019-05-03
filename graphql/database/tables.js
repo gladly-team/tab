@@ -19,6 +19,7 @@ const tables = {
   userTabsLog: 'UserTabsLog',
   userSearchLog: 'UserSearchLog',
   referralDataLog: 'ReferralDataLog',
+  referralLinkClickLog: 'ReferralLinkClickLog',
 }
 
 export default mapValues(tables, name => `${name}${tableNameAppendix}`)

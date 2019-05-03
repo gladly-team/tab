@@ -12,6 +12,7 @@ export const USER_LEVEL = 'UserLevel'
 export const BACKGROUND_IMAGE = 'BackgroundImage'
 export const USER_RECRUITS = 'UserRecruits'
 export const REFERRAL_DATA = 'ReferralData'
+export const REFERRAL_LINK_CLICK_LOG = 'ReferralLinkClickLog'
 export const USER_REVENUE = 'UserRevenue'
 export const USER_DATA_CONSENT = 'UserDataConsent'
 

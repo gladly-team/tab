@@ -222,5 +222,20 @@
       "ReadCapacityUnits": 1,
       "WriteCapacityUnits": 1
     }
+  },
+  {
+    "TableName": "ReferralLinkClickLog",
+    "KeySchema": [
+      { "AttributeName": "userId", "KeyType": "HASH" },
+      { "AttributeName": "timestamp", "KeyType": "RANGE" }
+    ],
+    "AttributeDefinitions": [
+      { "AttributeName": "userId", "AttributeType": "S" },
+      { "AttributeName": "timestamp", "AttributeType": "S" }
+    ],
+    "ProvisionedThroughput": {
+      "ReadCapacityUnits": 1,
+      "WriteCapacityUnits": 1
+    }
   }
 ]

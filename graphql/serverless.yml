@@ -120,6 +120,11 @@ provider:
       Resource:
         - "${self:custom.dbTableArnBase}ReferralDataLog-${self:provider.stage}"
         - "${self:custom.dbTableArnBase}ReferralDataLog-${self:provider.stage}/index/*"
+    # ReferralLinkClickLog table
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:PutItem"
+      Resource: "${self:custom.dbTableArnBase}ReferralLinkClickLog-${self:provider.stage}"
 
 plugins:
   # Include only the required node modules.
