@@ -1,5 +1,6 @@
 import React from 'react'
 import { get } from 'lodash/object'
+import { isNil } from 'lodash/lang'
 import LogUserRevenueMutation from 'js/mutations/LogUserRevenueMutation'
 import PropTypes from 'prop-types'
 import getGoogleTag from 'js/ads/google/getGoogleTag'
@@ -212,7 +213,7 @@ class LogRevenueComponent extends React.Component {
         amazonEncodedBid,
         // Only send aggregationOperation value if we have more than one
         // revenue value
-        revenue && amazonEncodedBid ? 'MAX' : null,
+        !isNil(revenue) && !isNil(amazonEncodedBid) ? 'MAX' : null,
         this.props.tabId,
         adUnitCode
       )
