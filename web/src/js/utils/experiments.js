@@ -305,7 +305,7 @@ export const _experimentsConfig = [
   // @experiment-referral-notification
   createExperiment({
     name: EXPERIMENT_REFERRAL_NOTIFICATION,
-    active: false,
+    active: true,
     disabled: false,
     percentageOfExistingUsersInExperiment: 30.0,
     percentageOfNewUsersInExperiment: 0,
