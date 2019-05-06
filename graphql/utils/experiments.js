@@ -38,6 +38,16 @@ const experimentConfig = {
     NO_INTRO: 1,
     INTRO_A: 2,
   },
+  // @experiment-referral-notification
+  referralNotification: {
+    NONE: 0,
+    NO_NOTIFICATION: 1,
+    COPY_A: 2,
+    COPY_B: 3,
+    COPY_C: 4,
+    COPY_D: 5,
+    COPY_E: 6,
+  },
 }
 
 /**

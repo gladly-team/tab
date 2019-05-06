@@ -295,6 +295,34 @@ const ExperimentGroupsType = new GraphQLInputObjectType({
         },
       }),
     },
+    referralNotification: {
+      type: new GraphQLEnumType({
+        name: 'ExperimentGroupReferralNotification',
+        description:
+          'The test of showing a notification to ask users to recruit friends',
+        values: {
+          NONE: { value: experimentConfig.referralNotification.NONE },
+          NO_INTRO: {
+            value: experimentConfig.referralNotification.NO_NOTIFICATION,
+          },
+          COPY_A: {
+            value: experimentConfig.referralNotification.COPY_A,
+          },
+          COPY_B: {
+            value: experimentConfig.referralNotification.COPY_B,
+          },
+          COPY_C: {
+            value: experimentConfig.referralNotification.COPY_C,
+          },
+          COPY_D: {
+            value: experimentConfig.referralNotification.COPY_D,
+          },
+          COPY_E: {
+            value: experimentConfig.referralNotification.COPY_E,
+          },
+        },
+      }),
+    },
   },
 })
 
@@ -303,6 +331,18 @@ const experimentActionsFields = {
     type: new GraphQLEnumType({
       name: 'ExperimentActionSearchIntro',
       description: 'Action taken in response to the "search intro" experiment.',
+      values: {
+        NONE: { value: 0 },
+        DISMISS: { value: 1 },
+        CLICK: { value: 2 },
+      },
+    }),
+  },
+  referralNotification: {
+    type: new GraphQLEnumType({
+      name: 'ExperimentActionReferralNotification',
+      description:
+        'Action taken in response to the "referral notification" experiment.',
       values: {
         NONE: { value: 0 },
         DISMISS: { value: 1 },

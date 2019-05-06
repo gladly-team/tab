@@ -48,6 +48,13 @@ const logUserExperimentGroups = async (
           testGroupSearchIntro: validatedGroups.searchIntro,
           testGroupSearchIntroJoinedTime: moment.utc().toISOString(),
         }
+      : null,
+    // @experiment-referral-notification
+    !isNil(validatedGroups.referralNotification)
+      ? {
+          testGroupReferralNotification: validatedGroups.referralNotification,
+          testGroupReferralNotificationJoinedTime: moment.utc().toISOString(),
+        }
       : null
   )
   try {
