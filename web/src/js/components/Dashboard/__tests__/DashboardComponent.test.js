@@ -29,6 +29,7 @@ import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import {
   goTo,
+  inviteFriendsURL,
   searchChromeExtensionPage,
   searchFirefoxExtensionPage,
 } from 'js/navigation/navigation'
@@ -635,10 +636,18 @@ describe('Dashboard component', () => {
     expect(wrapper.find('[data-test-id="global-notification"]').length).toBe(0)
   })
 
-  it('[search-intro-A] does not render the search intro notification when the user is in the control group', () => {
+  it('[search-intro-A] does not render the search intro notification when the user is not in the experiment', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     getUserExperimentGroup.mockReturnValue('none')
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    expect(wrapper.find('[data-test-id="search-intro-a"]').exists()).toBe(false)
+  })
+
+  it('[search-intro-A] does not render the search intro notification when the user is in the control group', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    getUserExperimentGroup.mockReturnValue('noIntro')
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
     expect(wrapper.find('[data-test-id="search-intro-a"]').exists()).toBe(false)
   })
@@ -786,5 +795,237 @@ describe('Dashboard component', () => {
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
     await wrapper.find('[data-test-id="search-intro-a"]').prop('onClick')()
     expect(goTo).toHaveBeenCalledWith(searchChromeExtensionPage)
+  })
+
+  it('[referral-notification-experiment] does not render the notification when the user is not in the experiment', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    getUserExperimentGroup.mockReturnValue('none')
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    expect(
+      wrapper.find('[data-test-id="experiment-referral-notification"]').exists()
+    ).toBe(false)
+  })
+
+  it('[referral-notification-experiment] does not render the notification when the user is in the control group', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    getUserExperimentGroup.mockReturnValue('noNotification')
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    expect(
+      wrapper.find('[data-test-id="experiment-referral-notification"]').exists()
+    ).toBe(false)
+  })
+
+  it('[referral-notification-experiment] renders the notification when the user is in an experimental group', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    getUserExperimentGroup.mockReturnValue('copyA')
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    const elem = wrapper.find(
+      '[data-test-id="experiment-referral-notification"]'
+    )
+    expect(elem.exists()).toBe(true)
+  })
+
+  it('[referral-notification-experiment] does not render the notification when the user has previously clicked it', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    getUserExperimentGroup.mockReturnValue('copyA')
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.experimentActions.referralNotification = 'CLICK'
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+    const elem = wrapper.find(
+      '[data-test-id="experiment-referral-notification"]'
+    )
+    expect(elem.exists()).toBe(false)
+  })
+
+  it('[referral-notification-experiment] does not render the notification when the user has previously dismissed it', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    getUserExperimentGroup.mockReturnValue('copyA')
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.experimentActions.referralNotification = 'DISMISS'
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+    const elem = wrapper.find(
+      '[data-test-id="experiment-referral-notification"]'
+    )
+    expect(elem.exists()).toBe(false)
+  })
+
+  it('[referral-notification-experiment] does render the notification if the user has not taken any action', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    getUserExperimentGroup.mockReturnValue('copyA')
+    const modifiedProps = cloneDeep(mockProps)
+    modifiedProps.user.experimentActions.referralNotification = 'NONE'
+    const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+    const elem = wrapper.find(
+      '[data-test-id="experiment-referral-notification"]'
+    )
+    expect(elem.exists()).toBe(true)
+  })
+
+  it('[referral-notification-experiment] hides the search intro when the onClick callback is called', async () => {
+    expect.assertions(2)
+    getUserExperimentGroup.mockReturnValue('copyA')
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    expect(
+      wrapper.find('[data-test-id="experiment-referral-notification"]').length
+    ).toBe(1)
+    await wrapper
+      .find('[data-test-id="experiment-referral-notification"]')
+      .prop('onClick')()
+    expect(
+      wrapper.find('[data-test-id="experiment-referral-notification"]').length
+    ).toBe(0)
+  })
+
+  it('[referral-notification-experiment] hides the search intro when the onDismiss callback is called', async () => {
+    expect.assertions(2)
+    getUserExperimentGroup.mockReturnValue('copyA')
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    expect(
+      wrapper.find('[data-test-id="experiment-referral-notification"]').length
+    ).toBe(1)
+    await wrapper
+      .find('[data-test-id="experiment-referral-notification"]')
+      .prop('onDismiss')()
+    expect(
+      wrapper.find('[data-test-id="experiment-referral-notification"]').length
+    ).toBe(0)
+  })
+
+  it('[referral-notification-experiment] logs the search intro experiment action when the onClick callback is called', async () => {
+    expect.assertions(1)
+    getUserExperimentGroup.mockReturnValue('copyA')
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    await wrapper
+      .find('[data-test-id="experiment-referral-notification"]')
+      .prop('onClick')()
+    expect(LogUserExperimentActionsMutation).toHaveBeenCalledWith({
+      userId: 'abc-123',
+      experimentActions: {
+        referralNotification: 'CLICK',
+      },
+    })
+  })
+
+  it('[referral-notification-experiment] logs the search intro experiment action when the onDismiss callback is called', async () => {
+    expect.assertions(1)
+    getUserExperimentGroup.mockReturnValue('copyA')
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    await wrapper
+      .find('[data-test-id="experiment-referral-notification"]')
+      .prop('onDismiss')()
+    expect(LogUserExperimentActionsMutation).toHaveBeenCalledWith({
+      userId: 'abc-123',
+      experimentActions: {
+        referralNotification: 'DISMISS',
+      },
+    })
+  })
+
+  it('[referral-notification-experiment] navigates to the "invite friends" page when the user clicks the referral notification action button', async () => {
+    expect.assertions(1)
+    getUserExperimentGroup.mockReturnValue('copyA')
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    await wrapper
+      .find('[data-test-id="experiment-referral-notification"]')
+      .prop('onClick')()
+    expect(goTo).toHaveBeenCalledWith(inviteFriendsURL)
+  })
+
+  it('[referral-notification-experiment] [copyA] renders the expected copy', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    getUserExperimentGroup.mockReturnValue('copyA')
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    const elem = wrapper.find(
+      '[data-test-id="experiment-referral-notification"]'
+    )
+    expect(elem.prop('title')).toEqual(`Together we can change the world!`)
+    expect(
+      elem
+        .prop('message')
+        .indexOf('Tab for a Cause is likely the easiest way to raise') > -1
+    ).toBe(true)
+  })
+
+  it('[referral-notification-experiment] [copyB] renders the expected copy', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    getUserExperimentGroup.mockReturnValue('copyB')
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    const elem = wrapper.find(
+      '[data-test-id="experiment-referral-notification"]'
+    )
+    expect(elem.prop('title')).toEqual(`Earn more hearts!`)
+    expect(
+      elem
+        .prop('message')
+        .indexOf("Spread the word about Tab for a Cause and you'll earn") > -1
+    ).toBe(true)
+  })
+
+  it('[referral-notification-experiment] [copyC] renders the expected copy', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    getUserExperimentGroup.mockReturnValue('copyC')
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    const elem = wrapper.find(
+      '[data-test-id="experiment-referral-notification"]'
+    )
+    expect(elem.prop('title')).toEqual(`Recruit your first friend`)
+    expect(
+      elem
+        .prop('message')
+        .indexOf("It looks like you haven't gotten any friends to join") > -1
+    ).toBe(true)
+  })
+
+  it('[referral-notification-experiment] [copyD] renders the expected copy', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    getUserExperimentGroup.mockReturnValue('copyD')
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    const elem = wrapper.find(
+      '[data-test-id="experiment-referral-notification"]'
+    )
+    expect(elem.prop('title')).toEqual(`Help spread the word!`)
+    expect(
+      elem
+        .prop('message')
+        .indexOf("Sadly, most people don't know that Tab for a Cause exists.") >
+        -1
+    ).toBe(true)
+  })
+
+  it('[referral-notification-experiment] [copyE] renders the expected copy', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    getUserExperimentGroup.mockReturnValue('copyE')
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    const elem = wrapper.find(
+      '[data-test-id="experiment-referral-notification"]'
+    )
+    expect(elem.prop('title')).toEqual(`Double your charitable impact!`)
+    expect(
+      elem
+        .prop('message')
+        .indexOf('Get a friend to join you on Tab for a Cause, and together') >
+        -1
+    ).toBe(true)
   })
 })

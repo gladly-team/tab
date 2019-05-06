@@ -35,6 +35,7 @@ import {
 } from 'js/constants'
 import {
   goTo,
+  inviteFriendsURL,
   loginURL,
   searchChromeExtensionPage,
   searchFirefoxExtensionPage,
@@ -48,6 +49,7 @@ import {
 } from 'js/ads/adSettings'
 import { showGlobalNotification } from 'js/utils/feature-flags'
 import {
+  EXPERIMENT_REFERRAL_NOTIFICATION,
   EXPERIMENT_SEARCH_INTRO,
   getExperimentGroups,
   getUserExperimentGroup,
@@ -89,6 +91,10 @@ class Dashboard extends React.Component {
       // Search for a Cause.
       searchIntroExperimentGroup: getUserExperimentGroup(
         EXPERIMENT_SEARCH_INTRO
+      ),
+      // @experiment-referral-notification
+      referralNotificationExperimentGroup: getUserExperimentGroup(
+        EXPERIMENT_REFERRAL_NOTIFICATION
       ),
       hasUserDismissedCampaignRecently: hasUserDismissedCampaignRecently(),
       // Let's assume a Chrome browser until we detect it.
@@ -141,6 +147,7 @@ class Dashboard extends React.Component {
       browser,
       hasUserDismissedCampaignRecently,
       userAlreadyViewedNewUserTour,
+      referralNotificationExperimentGroup,
       searchIntroExperimentGroup,
       tabId,
     } = this.state
@@ -162,6 +169,57 @@ class Dashboard extends React.Component {
         .utc()
         .diff(moment(user.joined), 'hours') < 2 &&
       !userAlreadyViewedNewUserTour
+
+    // Determine if the user is in an experimental group for
+    // the "referral notification" experiment.
+    const referralExperiment = getExperimentGroups(
+      EXPERIMENT_REFERRAL_NOTIFICATION
+    )
+    let isInReferralNotificationExperimentalGroup = false
+    let referralNotificationTitle
+    let referralNotificationBody
+    switch (referralNotificationExperimentGroup) {
+      case referralExperiment.NO_NOTIFICATION: {
+        break
+      }
+      case referralExperiment.COPY_A: {
+        isInReferralNotificationExperimentalGroup = true
+        referralNotificationTitle = 'Together we can change the world!'
+        referralNotificationBody =
+          "Tab for a Cause is likely the easiest way to raise money for charity. Thanks to you, we are close to $1,000,000 raised. However, if each Tabber convinced just one friend to join, we'd raise MILLIONS together simply by browsing the web. Will you help us spread the word?"
+        break
+      }
+      case referralExperiment.COPY_B: {
+        isInReferralNotificationExperimentalGroup = true
+        referralNotificationTitle = 'Earn more hearts!'
+        referralNotificationBody =
+          "Spread the word about Tab for a Cause and you'll earn 350 extra hearts for each friend that starts Tabbing!"
+        break
+      }
+      case referralExperiment.COPY_C: {
+        isInReferralNotificationExperimentalGroup = true
+        referralNotificationTitle = 'Recruit your first friend'
+        referralNotificationBody =
+          "It looks like you haven't gotten any friends to join you on Tab for a Cause yet :( Could you let a few people know about it?"
+        break
+      }
+      case referralExperiment.COPY_D: {
+        isInReferralNotificationExperimentalGroup = true
+        referralNotificationTitle = 'Help spread the word!'
+        referralNotificationBody =
+          "Sadly, most people don't know that Tab for a Cause exists. If you are enjoying raising money as you browse the web, could you increase your impact by telling a few friends about Tabbing?"
+        break
+      }
+      case referralExperiment.COPY_E: {
+        isInReferralNotificationExperimentalGroup = true
+        referralNotificationTitle = 'Double your charitable impact!'
+        referralNotificationBody =
+          "Get a friend to join you on Tab for a Cause, and together we'll make the world an even better place."
+        break
+      }
+      default:
+        break
+    }
 
     return (
       <div
@@ -215,6 +273,50 @@ class Dashboard extends React.Component {
                     })
                   }}
                   style={{
+                    marginTop: 4,
+                  }}
+                />
+              ) : null}
+              {// @experiment-referral-notification
+              isInReferralNotificationExperimentalGroup &&
+              !(
+                user.experimentActions.referralNotification === 'CLICK' ||
+                user.experimentActions.referralNotification === 'DISMISS'
+              ) ? (
+                <Notification
+                  data-test-id={'experiment-referral-notification'}
+                  title={referralNotificationTitle}
+                  message={referralNotificationBody}
+                  buttonText={'Tell a friend'}
+                  onClick={async () => {
+                    // Log the click.
+                    await LogUserExperimentActionsMutation({
+                      userId: user.id,
+                      experimentActions: {
+                        [EXPERIMENT_REFERRAL_NOTIFICATION]: 'CLICK',
+                      },
+                    })
+                    this.setState({
+                      referralNotificationExperimentGroup: false,
+                    })
+
+                    // Open the "invite friends" page.
+                    goTo(inviteFriendsURL)
+                  }}
+                  onDismiss={async () => {
+                    // Log the dismissal.
+                    await LogUserExperimentActionsMutation({
+                      userId: user.id,
+                      experimentActions: {
+                        [EXPERIMENT_REFERRAL_NOTIFICATION]: 'DISMISS',
+                      },
+                    })
+                    this.setState({
+                      referralNotificationExperimentGroup: false,
+                    })
+                  }}
+                  style={{
+                    width: 380,
                     marginTop: 4,
                   }}
                 />
@@ -486,6 +588,7 @@ Dashboard.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.string.isRequired,
     experimentActions: PropTypes.shape({
+      referralNotification: PropTypes.string,
       searchIntro: PropTypes.string,
     }).isRequired,
     joined: PropTypes.string.isRequired,
