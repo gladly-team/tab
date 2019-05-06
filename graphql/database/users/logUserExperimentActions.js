@@ -40,6 +40,14 @@ const logUserExperimentActions = async (
           testSearchIntroAction: experimentActions.searchIntro,
           testSearchIntroActionTime: moment.utc().toISOString(),
         }
+      : null,
+    // @experiment-referral-notification
+    !isNil(experimentActions.referralNotification)
+      ? {
+          testReferralNotificationAction:
+            experimentActions.referralNotification,
+          testReferralNotificationActionTime: moment.utc().toISOString(),
+        }
       : null
   )
   try {

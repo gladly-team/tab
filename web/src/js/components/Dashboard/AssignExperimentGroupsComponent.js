@@ -12,6 +12,7 @@ class AssignExperimentGroups extends React.Component {
     // may have added new experiments.
     assignUserToTestGroups({
       id: user.id,
+      numUsersRecruited: user.numUsersRecruited,
       joined: user.joined,
       isNewUser: this.props.isNewUser,
     })
@@ -26,6 +27,7 @@ AssignExperimentGroups.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.string.isRequired,
     joined: PropTypes.string.isRequired,
+    numUsersRecruited: PropTypes.number.isRequired,
   }).isRequired,
   isNewUser: PropTypes.bool.isRequired,
 }

@@ -51,6 +51,30 @@ describe('logUserExperimentActions', () => {
     })
   })
 
+  it('sets the testReferralNotificationAction value when it is provided', async () => {
+    expect.assertions(1)
+
+    const UserModel = require('../UserModel').default
+    const updateQuery = jest.spyOn(UserModel, 'update')
+
+    const mockExperimentActions = {
+      referralNotification: 1,
+    }
+    const logUserExperimentActions = require('../logUserExperimentActions')
+      .default
+    await logUserExperimentActions(
+      userContext,
+      userContext.id,
+      mockExperimentActions
+    )
+    expect(updateQuery).toHaveBeenCalledWith(userContext, {
+      id: userContext.id,
+      testReferralNotificationAction: 1,
+      testReferralNotificationActionTime: moment.utc().toISOString(),
+      updated: moment.utc().toISOString(),
+    })
+  })
+
   it('does not update the item when no experiment groups are provided', async () => {
     expect.assertions(1)
 

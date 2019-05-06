@@ -173,9 +173,17 @@ enum EncodedRevenueValueTypeEnum {
   AMAZON_CPM
 }
 
+"""Action taken in response to the "referral notification" experiment."""
+enum ExperimentActionReferralNotification {
+  NONE
+  DISMISS
+  CLICK
+}
+
 """The actions a user may take in an experiment"""
 input ExperimentActions {
   searchIntro: ExperimentActionSearchIntro
+  referralNotification: ExperimentActionReferralNotification
 }
 
 """Action taken in response to the "search intro" experiment."""
@@ -188,6 +196,7 @@ enum ExperimentActionSearchIntro {
 """The actions a user has taken in an experiment"""
 type ExperimentActionsOutput {
   searchIntro: ExperimentActionSearchIntro
+  referralNotification: ExperimentActionReferralNotification
 }
 
 """The test of showing an explanation of why there are ads"""
@@ -211,6 +220,17 @@ enum ExperimentGroupOneAdForNewUsers {
   ONE_AD_AT_FIRST
 }
 
+"""The test of showing a notification to ask users to recruit friends"""
+enum ExperimentGroupReferralNotification {
+  NONE
+  NO_NOTIFICATION
+  COPY_A
+  COPY_B
+  COPY_C
+  COPY_D
+  COPY_E
+}
+
 """The experimental groups to which the user is assigned"""
 input ExperimentGroups {
   anonSignIn: ExperimentGroupAnonSignIn
@@ -219,6 +239,7 @@ input ExperimentGroups {
   oneAdForNewUsers: ExperimentGroupOneAdForNewUsers
   adExplanation: ExperimentGroupAdExplanation
   searchIntro: ExperimentGroupSearchIntro
+  referralNotification: ExperimentGroupReferralNotification
 }
 
 """The test of showing an introduction message to Search for a Cause"""

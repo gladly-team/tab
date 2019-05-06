@@ -1178,6 +1178,11 @@ describe('Actual experiments we are running or will run', () => {
       //   disabled: false,
       // },
       {
+        name: 'referralNotification',
+        active: false,
+        disabled: false,
+      },
+      {
         name: 'searchIntro',
         active: true,
         disabled: false,

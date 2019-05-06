@@ -302,6 +302,27 @@ class User extends BaseModel {
       testSearchIntroActionTime: types.string().isoDate()
         .description(`The time the user made the action (testSearchIntroAction)
           for the "search intro" split-test.`),
+      testGroupReferralNotification: types
+        .number()
+        .integer()
+        .allow(null)
+        .description(`Which group the user is in for the "referral notification" split-test.
+          This value is assigned on the client so is not trustworthy.`),
+      testGroupReferralNotificationJoinedTime: types.string().isoDate()
+        .description(`The time the user was assigned a group for the "referral notification"
+          split-test.`),
+      testReferralNotificationAction: types
+        .number()
+        .integer()
+        .allow(null)
+        .description(
+          `Any action the user took for the "referral notification" split-test.
+           0 = no action, 1 = dismissed, 2 = clicked to the "invite friend" page.
+          `
+        ),
+      testReferralNotificationActionTime: types.string().isoDate()
+        .description(`The time the user took an action for the "referral notification"
+          split-test.`),
     }
   }
 

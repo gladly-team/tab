@@ -6,6 +6,7 @@ import {
   includeIfAnyIsTrue,
   excludeUsersWhoJoinedWithin,
   onlyIncludeNewUsers,
+  onlyIncludeUsersWithNoRecruits,
 } from 'js/utils/experimentFilters'
 import environment from 'js/relay-env'
 import UpdateUserExperimentGroupsMutation from 'js/mutations/UpdateUserExperimentGroupsMutation'
@@ -122,11 +123,12 @@ export const createExperiment = ({
      * Assign the user to an experiment group for this experiment.
      * @param {Object} userInfo
      * @param {String} userInfo.id - The user's ID
-     * @param {String} userInfo.joined - The ISO string of when the
-     *   user joined.
      * @param {Boolean} userInfo.isNewUser - Whether this user has just
      *   signed up.
-     * @returns {undefined}
+     * @param {String} userInfo.joined - The ISO string of when the
+     *   user joined.
+     * @param {Number} userInfo.numUsersRecruited - How many users the
+     *   current user has recruited.
      */
     assignTestGroup: function(userInfo) {
       if (!this.active) {
@@ -250,6 +252,7 @@ export const EXPERIMENT_THIRD_AD = 'thirdAd'
 export const EXPERIMENT_ONE_AD_FOR_NEW_USERS = 'oneAdForNewUsers'
 export const EXPERIMENT_AD_EXPLANATION = 'adExplanation'
 export const EXPERIMENT_SEARCH_INTRO = 'searchIntro'
+export const EXPERIMENT_REFERRAL_NOTIFICATION = 'referralNotification'
 
 // Add ExperimentGroup objects here to enable new experiments.
 // The "name" value of the experiment must be the same as the
@@ -296,6 +299,44 @@ export const _experimentsConfig = [
       INTRO_A: createExperimentGroup({
         value: 'introA',
         schemaValue: 'INTRO_A',
+      }),
+    },
+  }),
+  // @experiment-referral-notification
+  createExperiment({
+    name: EXPERIMENT_REFERRAL_NOTIFICATION,
+    active: false,
+    disabled: false,
+    percentageOfExistingUsersInExperiment: 30.0,
+    percentageOfNewUsersInExperiment: 0,
+    filters: [
+      onlyIncludeUsersWithNoRecruits,
+      excludeUsersWhoJoinedWithin(3, 'days'),
+    ],
+    groups: {
+      NO_NOTIFICATION: createExperimentGroup({
+        value: 'noNotification',
+        schemaValue: 'NO_NOTIFICATION',
+      }),
+      COPY_A: createExperimentGroup({
+        value: 'copyA',
+        schemaValue: 'COPY_A',
+      }),
+      COPY_B: createExperimentGroup({
+        value: 'copyB',
+        schemaValue: 'COPY_B',
+      }),
+      COPY_C: createExperimentGroup({
+        value: 'copyC',
+        schemaValue: 'COPY_C',
+      }),
+      COPY_D: createExperimentGroup({
+        value: 'copyD',
+        schemaValue: 'COPY_D',
+      }),
+      COPY_E: createExperimentGroup({
+        value: 'copyE',
+        schemaValue: 'COPY_E',
       }),
     },
   }),
@@ -364,10 +405,12 @@ export const getUserExperimentGroup = experimentName => {
  * Assigns the user to test groups for all active tests.
  * @param {Object} userInfo
  * @param {String} userInfo.id - The user's ID
- * @param {String} userInfo.joined - The ISO string of when the
- *   user joined.
  * @param {Boolean} userInfo.isNewUser - Whether this user has just
  *   signed up.
+ * @param {String} userInfo.joined - The ISO string of when the
+ *   user joined.
+ * @param {Number} userInfo.numUsersRecruited - How many users the
+ *   current user has recruited.
  * @returns {undefined}
  */
 export const assignUserToTestGroups = userInfo => {

@@ -8,6 +8,7 @@ export default createFragmentContainer(AssignExperimentGroups, {
     fragment AssignExperimentGroupsContainer_user on User {
       id
       joined
+      numUsersRecruited
     }
   `,
 })
