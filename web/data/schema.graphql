@@ -223,7 +223,7 @@ enum ExperimentGroupOneAdForNewUsers {
 """The test of showing a notification to ask users to recruit friends"""
 enum ExperimentGroupReferralNotification {
   NONE
-  NO_INTRO
+  NO_NOTIFICATION
   COPY_A
   COPY_B
   COPY_C

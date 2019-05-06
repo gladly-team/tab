@@ -302,7 +302,7 @@ const ExperimentGroupsType = new GraphQLInputObjectType({
           'The test of showing a notification to ask users to recruit friends',
         values: {
           NONE: { value: experimentConfig.referralNotification.NONE },
-          NO_INTRO: {
+          NO_NOTIFICATION: {
             value: experimentConfig.referralNotification.NO_NOTIFICATION,
           },
           COPY_A: {
