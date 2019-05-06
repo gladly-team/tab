@@ -250,6 +250,7 @@ export const EXPERIMENT_THIRD_AD = 'thirdAd'
 export const EXPERIMENT_ONE_AD_FOR_NEW_USERS = 'oneAdForNewUsers'
 export const EXPERIMENT_AD_EXPLANATION = 'adExplanation'
 export const EXPERIMENT_SEARCH_INTRO = 'searchIntro'
+export const EXPERIMENT_REFERRAL_NOTIFICATION = 'referralNotification'
 
 // Add ExperimentGroup objects here to enable new experiments.
 // The "name" value of the experiment must be the same as the
@@ -296,6 +297,45 @@ export const _experimentsConfig = [
       INTRO_A: createExperimentGroup({
         value: 'introA',
         schemaValue: 'INTRO_A',
+      }),
+    },
+  }),
+  // @experiment-referral-notification
+  createExperiment({
+    name: EXPERIMENT_REFERRAL_NOTIFICATION,
+    active: false,
+    disabled: false,
+    percentageOfExistingUsersInExperiment: 30.0,
+    percentageOfNewUsersInExperiment: 0,
+    filters: [
+      excludeUsersWhoJoinedWithin(3, 'days'),
+      // TODO: only include people who have not referred
+      // anybody.
+    ],
+    groups: {
+      NO_NOTIFICATION: createExperimentGroup({
+        value: 'noNotification',
+        schemaValue: 'NO_NOTIFICATION',
+      }),
+      COPY_A: createExperimentGroup({
+        value: 'copyA',
+        schemaValue: 'COPY_A',
+      }),
+      COPY_B: createExperimentGroup({
+        value: 'copyB',
+        schemaValue: 'COPY_B',
+      }),
+      COPY_C: createExperimentGroup({
+        value: 'copyC',
+        schemaValue: 'COPY_C',
+      }),
+      COPY_D: createExperimentGroup({
+        value: 'copyD',
+        schemaValue: 'COPY_D',
+      }),
+      COPY_E: createExperimentGroup({
+        value: 'copyE',
+        schemaValue: 'COPY_E',
       }),
     },
   }),
