@@ -1179,7 +1179,7 @@ describe('Actual experiments we are running or will run', () => {
       // },
       {
         name: 'referralNotification',
-        active: false,
+        active: true,
         disabled: false,
       },
       {
