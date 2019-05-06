@@ -6,6 +6,7 @@ import {
   includeIfAnyIsTrue,
   excludeUsersWhoJoinedWithin,
   onlyIncludeNewUsers,
+  onlyIncludeUsersWithNoRecruits,
 } from 'js/utils/experimentFilters'
 import environment from 'js/relay-env'
 import UpdateUserExperimentGroupsMutation from 'js/mutations/UpdateUserExperimentGroupsMutation'
@@ -122,11 +123,12 @@ export const createExperiment = ({
      * Assign the user to an experiment group for this experiment.
      * @param {Object} userInfo
      * @param {String} userInfo.id - The user's ID
-     * @param {String} userInfo.joined - The ISO string of when the
-     *   user joined.
      * @param {Boolean} userInfo.isNewUser - Whether this user has just
      *   signed up.
-     * @returns {undefined}
+     * @param {String} userInfo.joined - The ISO string of when the
+     *   user joined.
+     * @param {Number} userInfo.numUsersRecruited - How many users the
+     *   current user has recruited.
      */
     assignTestGroup: function(userInfo) {
       if (!this.active) {
@@ -308,9 +310,8 @@ export const _experimentsConfig = [
     percentageOfExistingUsersInExperiment: 30.0,
     percentageOfNewUsersInExperiment: 0,
     filters: [
+      onlyIncludeUsersWithNoRecruits,
       excludeUsersWhoJoinedWithin(3, 'days'),
-      // TODO: only include people who have not referred
-      // anybody.
     ],
     groups: {
       NO_NOTIFICATION: createExperimentGroup({
@@ -404,10 +405,12 @@ export const getUserExperimentGroup = experimentName => {
  * Assigns the user to test groups for all active tests.
  * @param {Object} userInfo
  * @param {String} userInfo.id - The user's ID
- * @param {String} userInfo.joined - The ISO string of when the
- *   user joined.
  * @param {Boolean} userInfo.isNewUser - Whether this user has just
  *   signed up.
+ * @param {String} userInfo.joined - The ISO string of when the
+ *   user joined.
+ * @param {Number} userInfo.numUsersRecruited - How many users the
+ *   current user has recruited.
  * @returns {undefined}
  */
 export const assignUserToTestGroups = userInfo => {

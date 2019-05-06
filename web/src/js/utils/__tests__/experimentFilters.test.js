@@ -4,7 +4,8 @@ import MockDate from 'mockdate'
 
 const getMockUserInfo = () => ({
   joined: '2017-05-19T13:59:58.000Z',
-  isNewUser: true,
+  isNewUser: false,
+  numUsersRecruited: 0,
 })
 
 const mockNow = '2017-05-19T13:59:58.000Z'
@@ -50,6 +51,21 @@ describe('experiment filter', () => {
     expect(onlyIncludeNewUsers(mockUserInfo)).toBe(true)
     mockUserInfo.isNewUser = false
     expect(onlyIncludeNewUsers(mockUserInfo)).toBe(false)
+  })
+
+  test('onlyIncludeUsersWithNoRecruits works as expected', () => {
+    const {
+      onlyIncludeUsersWithNoRecruits,
+    } = require('js/utils/experimentFilters')
+    const mockUserInfo = getMockUserInfo()
+    mockUserInfo.numUsersRecruited = 0
+    expect(onlyIncludeUsersWithNoRecruits(mockUserInfo)).toBe(true)
+    mockUserInfo.numUsersRecruited = 1
+    expect(onlyIncludeUsersWithNoRecruits(mockUserInfo)).toBe(false)
+    mockUserInfo.numUsersRecruited = 2
+    expect(onlyIncludeUsersWithNoRecruits(mockUserInfo)).toBe(false)
+    mockUserInfo.numUsersRecruited = undefined
+    expect(onlyIncludeUsersWithNoRecruits(mockUserInfo)).toBe(false)
   })
 
   test('includeIfAnyIsTrue works as expected', () => {

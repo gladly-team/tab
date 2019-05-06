@@ -11,6 +11,7 @@ const getMockProps = () => ({
   user: {
     id: 'some-user-id',
     joined: '2017-05-19T13:59:58.000Z',
+    numUsersRecruited: 2,
   },
 })
 
@@ -34,8 +35,9 @@ describe('AssignExperimentGroupsComponent', function() {
     shallow(<AssignExperimentGroupsComponent {...mockProps} />)
     expect(assignUserToTestGroups).toHaveBeenCalledWith({
       id: 'some-user-id',
-      joined: '2017-05-19T13:59:58.000Z',
       isNewUser: false,
+      joined: '2017-05-19T13:59:58.000Z',
+      numUsersRecruited: 2,
     })
   })
 })
