@@ -93,7 +93,10 @@ const getCurrentFirebaseUser = async () => {
   return new Promise((resolve, reject) => {
     try {
       // https://firebase.google.com/docs/auth/web/manage-users
-      firebase.auth().onAuthStateChanged(authUser => {
+      var unsubscribe = firebase.auth().onAuthStateChanged(authUser => {
+        if (unsubscribe && typeof unsubscribe === 'function') {
+          unsubscribe()
+        }
         if (authUser) {
           resolve(authUser)
         } else {
@@ -110,7 +113,7 @@ const getCurrentFirebaseUser = async () => {
  * Get the current user object. Returns null if the user is not
  * logged in.
  * @returns {Promise<({user}|null)>}  A promise that resolves into either
- *   a user obejct or null.
+ *   a user object or null.
  */
 export const getCurrentUser = async () => {
   try {

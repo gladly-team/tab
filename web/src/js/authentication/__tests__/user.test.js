@@ -124,6 +124,61 @@ describe('getCurrentUser tests', () => {
       emailVerified: true,
     })
   })
+
+  it('unsubscribes the Firebase onAuthStateChanged listener after using it once', done => {
+    expect.assertions(1)
+
+    // formatUser gets the username from localStorage.
+    const localStorageMgr = require('js/utils/localstorage-mgr').default
+    localStorageMgr.setItem(STORAGE_KEY_USERNAME, 'RGates')
+
+    const {
+      __setOnAuthStateChangeUnsubscribeFunction,
+      __setFirebaseUser,
+    } = require('firebase/app')
+
+    const mockAuthUnsubscribeFunc = jest.fn(() => {
+      expect(true).toBe(true)
+      done()
+    })
+    __setOnAuthStateChangeUnsubscribeFunction(mockAuthUnsubscribeFunc)
+    __setFirebaseUser({
+      uid: 'xyz987',
+      email: 'foo@example.com',
+      isAnonymous: false,
+      emailVerified: true,
+      getIdToken: jest.fn(() => 'fake-token-123'),
+    })
+
+    const getCurrentUser = require('js/authentication/user').getCurrentUser
+    getCurrentUser()
+  })
+
+  it('does not throw if the Firebase onAuthStateChanged unsubscribe function is not a function for some reason', async () => {
+    expect.assertions(0)
+
+    // formatUser gets the username from localStorage.
+    const localStorageMgr = require('js/utils/localstorage-mgr').default
+    localStorageMgr.setItem(STORAGE_KEY_USERNAME, 'RGates')
+
+    const {
+      __setOnAuthStateChangeUnsubscribeFunction,
+      __setFirebaseUser,
+    } = require('firebase/app')
+
+    const mockAuthUnsubscribeFunc = undefined
+    __setOnAuthStateChangeUnsubscribeFunction(mockAuthUnsubscribeFunc)
+    __setFirebaseUser({
+      uid: 'xyz987',
+      email: 'foo@example.com',
+      isAnonymous: false,
+      emailVerified: true,
+      getIdToken: jest.fn(() => 'fake-token-123'),
+    })
+
+    const getCurrentUser = require('js/authentication/user').getCurrentUser
+    await getCurrentUser()
+  })
 })
 
 describe('getCurrentUserListener tests', () => {
