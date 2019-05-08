@@ -93,7 +93,7 @@ const getCurrentFirebaseUser = async () => {
   return new Promise((resolve, reject) => {
     try {
       // https://firebase.google.com/docs/auth/web/manage-users
-      var unsubscribe = firebase.auth().onAuthStateChanged(authUser => {
+      const unsubscribe = firebase.auth().onAuthStateChanged(authUser => {
         if (unsubscribe && typeof unsubscribe === 'function') {
           unsubscribe()
         }
