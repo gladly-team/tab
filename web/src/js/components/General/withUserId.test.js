@@ -8,7 +8,6 @@ import {
   __triggerAuthStateChange,
 } from 'js/authentication/user'
 import { flushAllPromises } from 'js/utils/test-utils'
-import localStorageMgr from 'js/utils/localstorage-mgr'
 import { STORAGE_KEY_USERNAME } from 'js/constants'
 
 jest.mock('js/authentication/user')
@@ -43,10 +42,10 @@ describe('withUserId', () => {
     const MockComponent = () => null
     const WrappedComponent = withUserId()(MockComponent)
     const wrapper = shallow(<WrappedComponent />)
-    localStorageMgr.setItem(STORAGE_KEY_USERNAME, 'SomeUsername')
     __triggerAuthStateChange({
-      uid: 'abc123',
+      id: 'abc123',
       email: 'foo@bar.com',
+      username: 'SomeUsername',
       isAnonymous: false,
       emailVerified: true,
     })
@@ -61,10 +60,10 @@ describe('withUserId', () => {
     const MockComponent = () => null
     const WrappedComponent = withUserId()(MockComponent)
     const wrapper = shallow(<WrappedComponent />)
-    localStorageMgr.setItem(STORAGE_KEY_USERNAME, 'SomeUsername')
     __triggerAuthStateChange({
-      uid: null,
+      id: null,
       email: null,
+      username: 'SomeUsername',
       isAnonymous: false,
       emailVerified: false,
     })
@@ -79,7 +78,6 @@ describe('withUserId', () => {
     const MockComponent = () => null
     const WrappedComponent = withUserId()(MockComponent)
     const wrapper = shallow(<WrappedComponent />)
-    localStorageMgr.setItem(STORAGE_KEY_USERNAME, 'SomeUsername')
     __triggerAuthStateChange(null)
     await flushAllPromises()
     expect(wrapper.find(MockComponent).length).toBe(0)
@@ -97,10 +95,10 @@ describe('withUserId', () => {
     })(MockComponent)
 
     const wrapper = shallow(<WrappedComponent />)
-    localStorageMgr.setItem(STORAGE_KEY_USERNAME, 'SomeUsername')
     __triggerAuthStateChange({
-      uid: null,
+      id: null,
       email: null,
+      username: 'SomeUsername',
       isAnonymous: false,
       emailVerified: false,
     })
@@ -120,7 +118,6 @@ describe('withUserId', () => {
     })(MockComponent)
 
     const wrapper = shallow(<WrappedComponent />)
-    localStorageMgr.setItem(STORAGE_KEY_USERNAME, 'SomeUsername')
     __triggerAuthStateChange(null)
     await flushAllPromises()
     expect(wrapper.find(MockComponent).length).toBe(1)
@@ -133,10 +130,10 @@ describe('withUserId', () => {
     const MockComponent = () => null
     const WrappedComponent = withUserId()(MockComponent)
     const wrapper = shallow(<WrappedComponent />)
-    localStorageMgr.setItem(STORAGE_KEY_USERNAME, 'SomeUsername')
     __triggerAuthStateChange({
-      uid: 'abc123',
+      id: 'abc123',
       email: 'foo@bar.com',
+      username: 'SomeUsername',
       isAnonymous: false,
       emailVerified: true,
     })
@@ -158,15 +155,15 @@ describe('withUserId', () => {
     })(MockComponent)
 
     const wrapper = shallow(<WrappedComponent />)
-    localStorageMgr.setItem(STORAGE_KEY_USERNAME, 'SomeUsername')
 
     // Should not yet have rendered children.
     await flushAllPromises()
     expect(wrapper.find(MockComponent).length).toBe(0)
 
     __triggerAuthStateChange({
-      uid: 'abc123',
+      id: 'abc123',
       email: 'foo@bar.com',
+      username: 'SomeUsername',
       isAnonymous: false,
       emailVerified: true,
     })

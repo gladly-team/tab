@@ -35,7 +35,7 @@ export const getUsername = () => {
 
 /**
  * Set the username in localStorage.
- * @pararms {string} The user's username
+ * @params {string} The user's username
  */
 export const setUsernameInLocalStorage = username => {
   return localStorageMgr.setItem(STORAGE_KEY_USERNAME, username)
@@ -44,14 +44,14 @@ export const setUsernameInLocalStorage = username => {
 /**
  * Take the user object from our auth service and create
  * the object we'll use in the app.
- * @returns {object} user - The user object for the app.
- * @returns {string} user.id - The user's ID
- * @returns {string} user.email - The user's email
- * @returns {string} user.username - The user's username
- * @returns {boolean} user.isAnonymous - Whether the user is anonymous
- * @returns {boolean} user.emailVerified - Whether the user has verified their email
+ * @returns {Pbject} AuthUser - The user object for the app.
+ * @returns {String} AuthUser.id - The user's ID
+ * @returns {String} AuthUser.email - The user's email
+ * @returns {String} AuthUser.username - The user's username
+ * @returns {Boolean} AuthUser.isAnonymous - Whether the user is anonymous
+ * @returns {Boolean} AuthUser.emailVerified - Whether the user has verified their email
  */
-export const formatUser = authUserObj => {
+const formatUser = authUserObj => {
   return {
     id: authUserObj.uid,
     email: authUserObj.email,
@@ -61,7 +61,10 @@ export const formatUser = authUserObj => {
   }
 }
 
-// TODO: documentation
+/**
+ * Get a mock, pared-down Firebase user for offline development.
+ * @return {Object}
+ */
 const getMockFirebaseUser = () => {
   const userId = 'abcdefghijklmno'
   const email = 'kevin@example.com'
@@ -117,8 +120,8 @@ const getCurrentFirebaseUser = async () => {
 /**
  * Get the current user object. Returns null if the user is not
  * logged in.
- * @returns {Promise<({user}|null)>}  A promise that resolves into either
- *   a user object or null.
+ * @returns {Promise<({AuthUser}|null)>}  A promise that resolves into either
+ *   an AuthUser object or null.
  */
 export const getCurrentUser = async () => {
   try {
@@ -134,27 +137,27 @@ export const getCurrentUser = async () => {
 }
 
 /**
- * TODO
- * @returns {Function}
+ * A function to register a listener for when the user's authentication
+ * state changes between signed in and not signed in.
+ * @return {AuthUser|null} An object representing the authenticated
+ *   user, or null if the user does not exist.
  */
-export const getCurrentUserListener = () => {
-  return {
-    onAuthStateChanged: callback => {
-      const unsubscribe = firebase.auth().onAuthStateChanged(firebaseUser => {
-        let user = null
-        if (shouldMockAuthentication) {
-          // For development only. Return a mock user.
-          user = formatUser(getMockFirebaseUser())
-        } else if (firebaseUser) {
-          user = formatUser(firebaseUser)
-        } else {
-          user = null
-        }
-        callback(user)
-      })
-      return unsubscribe
-    },
-  }
+export const onAuthStateChanged = callback => {
+  // Return the listener unsubscribe function.
+  // https://firebase.google.com/docs/reference/js/firebase.auth.Auth#onAuthStateChanged
+  const unsubscribe = firebase.auth().onAuthStateChanged(firebaseUser => {
+    let user = null
+    if (shouldMockAuthentication) {
+      // For development only. Return a mock user.
+      user = formatUser(getMockFirebaseUser())
+    } else if (firebaseUser) {
+      user = formatUser(firebaseUser)
+    } else {
+      user = null
+    }
+    callback(user)
+  })
+  return unsubscribe
 }
 
 /**

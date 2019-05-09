@@ -11,8 +11,6 @@ import {
   __unregisterAuthStateChangeListeners,
   __triggerAuthStateChange,
 } from 'js/authentication/user'
-import localStorageMgr from 'js/utils/localstorage-mgr'
-import { STORAGE_KEY_USERNAME } from 'js/constants'
 import { flushAllPromises } from 'js/utils/test-utils'
 
 jest.mock('js/authentication/helpers')
@@ -26,9 +24,6 @@ beforeAll(() => {
 
 beforeEach(() => {
   MockDate.set(moment(mockNow))
-
-  // Set the user's username in localStorage.
-  localStorageMgr.setItem(STORAGE_KEY_USERNAME, 'SomeUsername')
 })
 
 afterEach(() => {
@@ -68,10 +63,10 @@ describe('AuthUser tests', () => {
         <MockChildComponent />
       </AuthUser>
     )
-    localStorageMgr.setItem(STORAGE_KEY_USERNAME, 'SomeUsername')
     __triggerAuthStateChange({
-      uid: 'abc123',
+      id: 'abc123',
       email: 'foo@bar.com',
+      username: 'SomeUsername',
       isAnonymous: false,
       emailVerified: true,
     })
@@ -92,10 +87,10 @@ describe('AuthUser tests', () => {
         <MockChildComponent />
       </AuthUser>
     )
-    localStorageMgr.setItem(STORAGE_KEY_USERNAME, 'SomeUsername')
     __triggerAuthStateChange({
-      uid: 'abc123',
+      id: 'abc123',
       email: null, // no email
+      username: 'SomeUsername',
       isAnonymous: false,
       emailVerified: false,
     })
@@ -116,10 +111,10 @@ describe('AuthUser tests', () => {
         <MockChildComponent />
       </AuthUser>
     )
-    localStorageMgr.setItem(STORAGE_KEY_USERNAME, 'SomeUsername')
     __triggerAuthStateChange({
-      uid: 'abc123',
+      id: 'abc123',
       email: 'foo@bar.com',
+      username: 'SomeUsername',
       isAnonymous: false,
       emailVerified: true,
     })

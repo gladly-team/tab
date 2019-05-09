@@ -43,30 +43,6 @@ describe('setUsername tests', () => {
   })
 })
 
-describe('formatUser tests', () => {
-  it('works as expected', () => {
-    // formatUser gets the username from localStorage.
-    const localStorageMgr = require('js/utils/localstorage-mgr').default
-    localStorageMgr.setItem(STORAGE_KEY_USERNAME, 'PaulM')
-
-    const formatUser = require('js/authentication/user').formatUser
-    const firebaseUser = {
-      uid: 'abc123',
-      email: 'ostrichcoat@example.com',
-      isAnonymous: false,
-      emailVerified: true,
-      getIdToken: jest.fn(() => 'fake-token-123'),
-    }
-    expect(formatUser(firebaseUser)).toEqual({
-      id: 'abc123',
-      email: 'ostrichcoat@example.com',
-      username: 'PaulM',
-      isAnonymous: false,
-      emailVerified: true,
-    })
-  })
-})
-
 describe('getCurrentUser tests', () => {
   it('returns a user when one exists', async () => {
     expect.assertions(1)
@@ -184,15 +160,14 @@ describe('getCurrentUser tests', () => {
   })
 })
 
-describe('getCurrentUserListener tests', () => {
+describe('onAuthStateChanged tests', () => {
   it('calls listeners with the Firebase user object when the auth state changes', done => {
     // formatUser gets the username from localStorage.
     const localStorageMgr = require('js/utils/localstorage-mgr').default
     localStorageMgr.setItem(STORAGE_KEY_USERNAME, 'DoraSplora')
 
-    const getCurrentUserListener = require('js/authentication/user')
-      .getCurrentUserListener
-    getCurrentUserListener().onAuthStateChanged(currentUser => {
+    const { onAuthStateChanged } = require('js/authentication/user')
+    onAuthStateChanged(currentUser => {
       expect(currentUser).toMatchObject({
         id: 'xyz987',
         email: 'foo@example.com',
@@ -223,9 +198,8 @@ describe('getCurrentUserListener tests', () => {
     const localStorageMgr = require('js/utils/localstorage-mgr').default
     localStorageMgr.setItem(STORAGE_KEY_USERNAME, 'kevin')
 
-    const getCurrentUserListener = require('js/authentication/user')
-      .getCurrentUserListener
-    getCurrentUserListener().onAuthStateChanged(currentUser => {
+    const { onAuthStateChanged } = require('js/authentication/user')
+    onAuthStateChanged(currentUser => {
       expect(currentUser).toMatchObject({
         id: 'abcdefghijklmno',
         email: 'kevin@example.com',
