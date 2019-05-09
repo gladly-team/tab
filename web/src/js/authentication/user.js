@@ -27,7 +27,7 @@ const shouldMockAuthentication =
 /**
  * Get the username. This uses localStorage, not our user database,
  * so that we can rely on it during the sign up process.
- * @returns {string} The user's username
+ * @return {String} The user's username
  */
 export const getUsername = () => {
   return localStorageMgr.getItem(STORAGE_KEY_USERNAME)
@@ -35,7 +35,7 @@ export const getUsername = () => {
 
 /**
  * Set the username in localStorage.
- * @pararms {string} The user's username
+ * @params {String} The user's username
  */
 export const setUsernameInLocalStorage = username => {
   return localStorageMgr.setItem(STORAGE_KEY_USERNAME, username)
@@ -44,14 +44,14 @@ export const setUsernameInLocalStorage = username => {
 /**
  * Take the user object from our auth service and create
  * the object we'll use in the app.
- * @returns {object} user - The user object for the app.
- * @returns {string} user.id - The user's ID
- * @returns {string} user.email - The user's email
- * @returns {string} user.username - The user's username
- * @returns {boolean} user.isAnonymous - Whether the user is anonymous
- * @returns {boolean} user.emailVerified - Whether the user has verified their email
+ * @return {Object} AuthUser - The user object for the app.
+ * @return {String} AuthUser.id - The user's ID
+ * @return {String} AuthUser.email - The user's email
+ * @return {String} AuthUser.username - The user's username
+ * @return {Boolean} AuthUser.isAnonymous - Whether the user is anonymous
+ * @return {Boolean} AuthUser.emailVerified - Whether the user has verified their email
  */
-export const formatUser = authUserObj => {
+const formatUser = authUserObj => {
   return {
     id: authUserObj.uid,
     email: authUserObj.email,
@@ -62,38 +62,49 @@ export const formatUser = authUserObj => {
 }
 
 /**
+ * Get a mock, pared-down Firebase user for offline development.
+ * @return {Object}
+ */
+const getMockFirebaseUser = () => {
+  const userId = 'abcdefghijklmno'
+  const email = 'kevin@example.com'
+  const tokenPayload = {
+    sub: userId,
+    email: 'kevin@example.com',
+    email_verified: true,
+  }
+  const jwt = require('jsonwebtoken')
+  const token = jwt.sign(tokenPayload, 'fakeSecret')
+  return {
+    uid: userId,
+    email: email,
+    isAnonymous: false,
+    emailVerified: true,
+    getIdToken: () => {
+      return token
+    },
+  }
+}
+
+/**
  * Return the raw Firebase user instance.
- * @returns {user} a Firebase User
+ * @return {Object} a Firebase User
  */
 const getCurrentFirebaseUser = async () => {
   // For development only: optionally mock the user
   // and user token.
   if (shouldMockAuthentication) {
     return new Promise((resolve, reject) => {
-      const userId = 'abcdefghijklmno'
-      const email = 'kevin@example.com'
-      const tokenPayload = {
-        sub: userId,
-        email: 'kevin@example.com',
-        email_verified: true,
-      }
-      const jwt = require('jsonwebtoken')
-      const token = jwt.sign(tokenPayload, 'fakeSecret')
-      resolve({
-        uid: userId,
-        email: email,
-        isAnonymous: false,
-        emailVerified: true,
-        getIdToken: () => {
-          return token
-        },
-      })
+      resolve(getMockFirebaseUser())
     })
   }
   return new Promise((resolve, reject) => {
     try {
       // https://firebase.google.com/docs/auth/web/manage-users
-      firebase.auth().onAuthStateChanged(authUser => {
+      const unsubscribe = firebase.auth().onAuthStateChanged(authUser => {
+        if (unsubscribe && typeof unsubscribe === 'function') {
+          unsubscribe()
+        }
         if (authUser) {
           resolve(authUser)
         } else {
@@ -109,8 +120,8 @@ const getCurrentFirebaseUser = async () => {
 /**
  * Get the current user object. Returns null if the user is not
  * logged in.
- * @returns {Promise<({user}|null)>}  A promise that resolves into either
- *   a user obejct or null.
+ * @return {Promise<({AuthUser}|null)>}  A promise that resolves into either
+ *   an AuthUser object or null.
  */
 export const getCurrentUser = async () => {
   try {
@@ -126,27 +137,37 @@ export const getCurrentUser = async () => {
 }
 
 /**
- * Get the raw Auth object, which is observable with `onAuthStateChanged`.
- * @returns {object} a `firebase.auth` object
+ * A function to register a listener for when the user's authentication
+ * state changes between signed in and not signed in.
+ * @param {Function} A function register a callback, which is called
+ *   when the user's auth state changes and receives the new AuthUser
+ *   object.
+ * @return {Function} A function that, when called, will to unsubscribe
+ *   the callback from future changes in authentication state.
  */
-export const getCurrentUserListener = () => {
-  // For development only: optionally mock a barebones
-  // version of the `firebase.auth` object.
-  if (shouldMockAuthentication) {
-    return {
-      onAuthStateChanged: callback => {
-        getCurrentFirebaseUser().then(user => callback(user))
-      },
+export const onAuthStateChanged = callback => {
+  // Return the listener unsubscribe function.
+  // https://firebase.google.com/docs/reference/js/firebase.auth.Auth#onAuthStateChanged
+  const unsubscribe = firebase.auth().onAuthStateChanged(firebaseUser => {
+    let user = null
+    if (shouldMockAuthentication) {
+      // For development only. Return a mock user.
+      user = formatUser(getMockFirebaseUser())
+    } else if (firebaseUser) {
+      user = formatUser(firebaseUser)
+    } else {
+      user = null
     }
-  }
-  return firebase.auth()
+    callback(user)
+  })
+  return unsubscribe
 }
 
 /**
  * Get the user's token.
  * @param {Boolean} forceRefresh - Whether to force Firebase to refresh
  *   the token regardless of expiration status.
- * @returns {(string|null)} The token, if the user is authenticated;
+ * @return {(string|null)} The token, if the user is authenticated;
  *   otherwise, null.
  */
 export const getUserToken = async forceRefresh => {
@@ -168,7 +189,7 @@ export const getUserToken = async forceRefresh => {
 
 /**
  * Delete any sensitive localStorage items.
- * @returns {null}
+ * @return {null}
  */
 const clearAuthLocalStorageItems = () => {
   // Currently, removes everything except background settings.
@@ -189,7 +210,7 @@ const clearAuthLocalStorageItems = () => {
 
 /**
  * Log the user out.
- * @returns {Promise<boolean>}  A promise that resolves into a boolean,
+ * @return {Promise<Boolean>}  A promise that resolves into a boolean,
  *   whether or not the logout was successful.
  */
 export const logout = async () => {
@@ -213,8 +234,8 @@ export const logout = async () => {
 
 /**
  * Send a confirmation email to a Firebase user.
- * @param {object} firebaseUser - A Firebase user instance
- * @returns {Promise<boolean>}  A promise that resolves into a boolean,
+ * @param {Object} firebaseUser - A Firebase user instance
+ * @return {Promise<Boolean>}  A promise that resolves into a boolean,
  *   whether or not the email was sent successfully.
  */
 const sendFirebaseVerificationEmail = async firebaseUser => {
@@ -241,7 +262,7 @@ const sendFirebaseVerificationEmail = async firebaseUser => {
 
 /**
  * Send an email for the current user to verify their email address.
- * @returns {Promise<boolean>}  A promise that resolves into a boolean,
+ * @return {Promise<Boolean>}  A promise that resolves into a boolean,
  *   whether or not the email was sent successfully.
  */
 export const sendVerificationEmail = async () => {
@@ -265,7 +286,7 @@ export const sendVerificationEmail = async () => {
 
 /**
  * Sign in a user anonymously and return their user object.
- * @returns {Promise<{user}>} A Promise resolving into the
+ * @return {Promise<{AuthUser}>} A Promise resolving into the
  *   user object.
  */
 export const signInAnonymously = async () => {
@@ -289,7 +310,7 @@ export const signInAnonymously = async () => {
 
 /**
  * Reload the Firebase user data from the server.
- * @returns {Promise<undefined>}
+ * @return {Promise<undefined>}
  */
 export const reloadUser = async () => {
   var user

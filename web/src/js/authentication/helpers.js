@@ -133,7 +133,7 @@ export const checkAuthStateAndRedirectIfNeeded = async (
   // User is not logged in.
   if (!user || !user.id) {
     // To reduce noise in user creation stats, only create an anonymous
-    // user if the user recently installed the browser extension.]
+    // user if the user recently installed the browser extension.
     if (shouldCreateAnonymousUser()) {
       // Authenticate the user anonymously.
       try {

@@ -8,6 +8,8 @@ const firebaseApp = jest.genMockFromModule('firebase')
 // By default, return no user.
 var firebaseUser = null
 
+var onAuthStateChangedUnsubscribeFunction = jest.fn()
+
 // By default, do not immediately return a user from
 // onAuthStateChanged.
 var immediatelyReturnAuthUser = false
@@ -27,8 +29,11 @@ const authMock = {
     // was set with __setFirebaseUser. This makes
     // async testing a little easier.
     if (immediatelyReturnAuthUser) {
-      callback(firebaseUser)
+      setTimeout(() => {
+        callback(firebaseUser)
+      }, 1)
     }
+    return onAuthStateChangedUnsubscribeFunction
   }),
   signInAnonymously: jest.fn(() => {
     // Should resolve into a non-null Firebase user credential.
@@ -73,6 +78,10 @@ firebaseApp.auth = FirebaseAuthMock
 firebaseApp.__setFirebaseUser = user => {
   immediatelyReturnAuthUser = true
   firebaseUser = user
+}
+
+firebaseApp.__setOnAuthStateChangeUnsubscribeFunction = unsubscribeFunc => {
+  onAuthStateChangedUnsubscribeFunction = unsubscribeFunc
 }
 
 /**

@@ -1,5 +1,5 @@
 import React from 'react'
-import { getCurrentUserListener } from 'js/authentication/user'
+import { onAuthStateChanged } from 'js/authentication/user'
 
 // https://reactjs.org/docs/higher-order-components.html#convention-wrap-the-display-name-for-easy-debugging
 function getDisplayName(WrappedComponent) {
@@ -26,18 +26,16 @@ const withUserId = (options = {}) => WrappedComponent => {
     componentDidMount() {
       // Store unsubscribe function.
       // https://firebase.google.com/docs/reference/js/firebase.auth.Auth#onAuthStateChanged
-      this.authListenerUnsubscribe = getCurrentUserListener().onAuthStateChanged(
-        user => {
-          if (user && user.uid) {
-            this.setState({
-              userId: user.uid,
-            })
-          }
+      this.authListenerUnsubscribe = onAuthStateChanged(user => {
+        if (user && user.id) {
           this.setState({
-            authStateLoaded: true,
+            userId: user.id,
           })
         }
-      )
+        this.setState({
+          authStateLoaded: true,
+        })
+      })
     }
 
     componentWillUnmount() {

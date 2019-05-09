@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { formatUser, getCurrentUserListener } from 'js/authentication/user'
+import { onAuthStateChanged } from 'js/authentication/user'
 import { checkAuthStateAndRedirectIfNeeded } from 'js/authentication/helpers'
 
 // Get the authenticated user and, if the user is authenticated,
@@ -17,21 +17,11 @@ class AuthUserComponent extends React.Component {
   }
 
   componentDidMount() {
-    // Store unsubscribe function.
-    // https://firebase.google.com/docs/reference/js/firebase.auth.Auth#onAuthStateChanged
-    this.authListenerUnsubscribe = getCurrentUserListener()
-      // Note: currently, this callback may be called when a user does not
-      // exist on the server side, and some requests may fail.
-      .onAuthStateChanged(user => {
-        // TODO: roll the formatting functionality into the
-        // listener.
-        if (user) {
-          const formattedUser = formatUser(user)
-          this.checkUserAuth(formattedUser)
-        } else {
-          this.checkUserAuth(user)
-        }
-      })
+    // Note: currently, this callback may be called when a user does not
+    // exist on the server side, and some requests may fail.
+    this.authListenerUnsubscribe = onAuthStateChanged(user => {
+      this.checkUserAuth(user)
+    })
   }
 
   componentWillUnmount() {

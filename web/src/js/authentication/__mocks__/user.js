@@ -12,17 +12,15 @@ authUserMock.formatUser = authUserActual.formatUser
 // Store callbacks for onAuthStateChanged so we can manually
 // call them when changing the user state.
 var onAuthStateChangedCallbacks = []
-authUserMock.getCurrentUserListener = jest.fn(() => ({
-  onAuthStateChanged: callback => {
-    onAuthStateChangedCallbacks.push(callback)
+authUserMock.onAuthStateChanged = jest.fn(callback => {
+  onAuthStateChangedCallbacks.push(callback)
 
-    // Return a function to unregister the callback as
-    // Firebase auth does.
-    return () => {
-      unregisterAuthStateListener(callback)
-    }
-  },
-}))
+  // Return a function to unregister the callback as
+  // Firebase auth does.
+  return () => {
+    unregisterAuthStateListener(callback)
+  }
+})
 
 authUserMock.signInAnonymously = jest.fn(() => {
   const mockAnonUserObj = {
@@ -53,14 +51,13 @@ const unregisterAuthStateListener = listenerFunc => {
 
 /**
  * Call all registered callbacks for the getCurrentUserListener
- * with a Firebase user object.
- * @param {Object} firebaseUser - An object resembling a Firebase
- *   user object
+ * with our auth user object.
+ * @param {Object} authUser - Our auth user object
  * @return {function} A function to unsubscribe the listener
  */
-authUserMock.__triggerAuthStateChange = firebaseUser => {
+authUserMock.__triggerAuthStateChange = authUser => {
   onAuthStateChangedCallbacks.forEach(cb => {
-    cb(firebaseUser)
+    cb(authUser)
   })
 }
 
