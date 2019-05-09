@@ -8,7 +8,6 @@ import {
   __triggerAuthStateChange,
 } from 'js/authentication/user'
 import { flushAllPromises } from 'js/utils/test-utils'
-import { STORAGE_KEY_USERNAME } from 'js/constants'
 
 jest.mock('js/authentication/user')
 
