@@ -11,6 +11,11 @@ function getDisplayName(WrappedComponent) {
  * @param {Object} options
  * @param {Boolean} options.renderIfNoUser - If true, we will render the
  *   children even if there is no user ID (the user is not signed in).
+ *   Defaults to false.
+ * @param {Boolean} options.createUserIfPossible - If true, when a user does
+ *   not exist, we will create a new anonymous user both in our auth service
+ *   and in our database. We might not always create a new user, depending on
+ *   our anonymous user restrictions. Defaults to true.
  * @return {Function} A higher-order component.
  */
 const withUser = (options = {}) => WrappedComponent => {
@@ -45,7 +50,7 @@ const withUser = (options = {}) => WrappedComponent => {
     }
 
     render() {
-      const { renderIfNoUser } = options
+      const { renderIfNoUser = false } = options
       // Return null if the user is not authenticated but the children require
       // an authenticated user.
       if (!this.state.authUser && !renderIfNoUser) {

@@ -105,6 +105,7 @@ const goToMainLoginPage = (urlParamsObj = {}) => {
   }
 }
 
+// TODO: break into simpler pieces
 /**
  * Based on the user object state, determine if we need to redirect
  * to an authentication page. If the user is not fully authenticated,
