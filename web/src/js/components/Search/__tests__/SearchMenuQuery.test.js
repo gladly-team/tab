@@ -4,7 +4,7 @@ import React from 'react'
 import { mount, shallow } from 'enzyme'
 
 jest.mock('react-relay')
-jest.mock('js/components/General/withUserId')
+jest.mock('js/components/General/withUser')
 jest.mock('js/analytics/logEvent')
 jest.mock('js/components/Search/SearchMenuContainer')
 
@@ -28,23 +28,33 @@ describe('SearchMenuQuery', () => {
   })
 
   it('QueryRenderer has the "variables" prop when the user is authenticated', () => {
-    const withUserId = require('js/components/General/withUserId').default
-    withUserId.mockImplementation(options => ChildComponent => props => (
-      <ChildComponent userId={'abc123xyz456'} {...props} />
+    const withUser = require('js/components/General/withUser').default
+    withUser.mockImplementation(options => ChildComponent => props => (
+      <ChildComponent
+        authUser={{
+          id: 'abc123xyz456',
+          email: 'foo@example.com',
+          username: 'example',
+          isAnonymous: false,
+          emailVerified: true,
+        }}
+        {...props}
+      />
     ))
     const SearchMenuQuery = require('js/components/Search/SearchMenuQuery')
       .default
     const wrapper = mount(<SearchMenuQuery />)
     const { QueryRenderer } = require('react-relay')
-    expect(wrapper.find(QueryRenderer).prop('variables')).toEqual({
-      userId: 'abc123xyz456', // default value in withUserId mock
-    })
+    expect(wrapper.find(QueryRenderer).prop('variables')).toHaveProperty(
+      'userId',
+      'abc123xyz456'
+    )
   })
 
   it('QueryRenderer does not have the "variables" prop when the user is not authenticated', () => {
-    const withUserId = require('js/components/General/withUserId').default
-    withUserId.mockImplementation(options => ChildComponent => props => (
-      <ChildComponent userId={null} {...props} />
+    const withUser = require('js/components/General/withUser').default
+    withUser.mockImplementation(options => ChildComponent => props => (
+      <ChildComponent authUser={null} {...props} />
     ))
 
     const SearchMenuQuery = require('js/components/Search/SearchMenuQuery')
