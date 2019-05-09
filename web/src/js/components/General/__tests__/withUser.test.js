@@ -16,18 +16,18 @@ afterEach(() => {
   __unregisterAuthStateChangeListeners()
 })
 
-describe('withUserId', () => {
+describe('withUser', () => {
   it('renders without error', () => {
-    const withUserId = require('js/components/General/withUserId').default
+    const withUser = require('js/components/General/withUser').default
     const MockComponent = () => null
-    const WrappedComponent = withUserId()(MockComponent)
+    const WrappedComponent = withUser()(MockComponent)
     shallow(<WrappedComponent />)
   })
 
   it('unregisters its auth listener on unmount', () => {
-    const withUserId = require('js/components/General/withUserId').default
+    const withUser = require('js/components/General/withUser').default
     const MockComponent = () => null
-    const WrappedComponent = withUserId()(MockComponent)
+    const WrappedComponent = withUser()(MockComponent)
     const wrapper = shallow(<WrappedComponent />)
     expect(__getAuthListenerCallbacks().length).toBe(1)
     wrapper.unmount()
@@ -37,9 +37,9 @@ describe('withUserId', () => {
   it('renders children if the user has an ID', async () => {
     expect.assertions(1)
 
-    const withUserId = require('js/components/General/withUserId').default
+    const withUser = require('js/components/General/withUser').default
     const MockComponent = () => null
-    const WrappedComponent = withUserId()(MockComponent)
+    const WrappedComponent = withUser()(MockComponent)
     const wrapper = shallow(<WrappedComponent />)
     __triggerAuthStateChange({
       id: 'abc123',
@@ -55,9 +55,9 @@ describe('withUserId', () => {
   it('does not render children if the user does not have an ID, by default', async () => {
     expect.assertions(1)
 
-    const withUserId = require('js/components/General/withUserId').default
+    const withUser = require('js/components/General/withUser').default
     const MockComponent = () => null
-    const WrappedComponent = withUserId()(MockComponent)
+    const WrappedComponent = withUser()(MockComponent)
     const wrapper = shallow(<WrappedComponent />)
     __triggerAuthStateChange({
       id: null,
@@ -73,9 +73,9 @@ describe('withUserId', () => {
   it('does not render children if the user is null, by default', async () => {
     expect.assertions(1)
 
-    const withUserId = require('js/components/General/withUserId').default
+    const withUser = require('js/components/General/withUser').default
     const MockComponent = () => null
-    const WrappedComponent = withUserId()(MockComponent)
+    const WrappedComponent = withUser()(MockComponent)
     const wrapper = shallow(<WrappedComponent />)
     __triggerAuthStateChange(null)
     await flushAllPromises()
@@ -85,11 +85,11 @@ describe('withUserId', () => {
   it('renders children if the user does not have an ID when the "renderIfNoUser" option is true', async () => {
     expect.assertions(1)
 
-    const withUserId = require('js/components/General/withUserId').default
+    const withUser = require('js/components/General/withUser').default
     const MockComponent = () => null
 
     // Allow an unauthed user.
-    const WrappedComponent = withUserId({
+    const WrappedComponent = withUser({
       renderIfNoUser: true,
     })(MockComponent)
 
@@ -108,11 +108,11 @@ describe('withUserId', () => {
   it('renders children if the user is null when the "renderIfNoUser" option is true', async () => {
     expect.assertions(1)
 
-    const withUserId = require('js/components/General/withUserId').default
+    const withUser = require('js/components/General/withUser').default
     const MockComponent = () => null
 
     // Allow an unauthed user.
-    const WrappedComponent = withUserId({
+    const WrappedComponent = withUser({
       renderIfNoUser: true,
     })(MockComponent)
 
@@ -122,34 +122,35 @@ describe('withUserId', () => {
     expect(wrapper.find(MockComponent).length).toBe(1)
   })
 
-  it('passes the userId as a prop to the wrapped component', async () => {
+  it('passes the user as a prop to the wrapped component', async () => {
     expect.assertions(1)
 
-    const withUserId = require('js/components/General/withUserId').default
+    const withUser = require('js/components/General/withUser').default
     const MockComponent = () => null
-    const WrappedComponent = withUserId()(MockComponent)
+    const WrappedComponent = withUser()(MockComponent)
     const wrapper = shallow(<WrappedComponent />)
-    __triggerAuthStateChange({
+    const mockAuthUser = {
       id: 'abc123',
       email: 'foo@bar.com',
       username: 'SomeUsername',
       isAnonymous: false,
       emailVerified: true,
-    })
+    }
+    __triggerAuthStateChange(mockAuthUser)
 
     await flushAllPromises()
     wrapper.update()
-    expect(wrapper.find(MockComponent).prop('userId')).toBe('abc123')
+    expect(wrapper.find(MockComponent).prop('authUser')).toEqual(mockAuthUser)
   })
 
   it('renders children only after determing the auth state', async () => {
     expect.assertions(2)
 
-    const withUserId = require('js/components/General/withUserId').default
+    const withUser = require('js/components/General/withUser').default
     const MockComponent = () => null
 
     // Allow an unauthed user.
-    const WrappedComponent = withUserId({
+    const WrappedComponent = withUser({
       renderIfNoUser: true,
     })(MockComponent)
 

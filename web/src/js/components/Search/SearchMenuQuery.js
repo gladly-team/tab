@@ -4,7 +4,7 @@ import { QueryRenderer } from 'react-relay'
 import graphql from 'babel-plugin-relay/macro'
 import environment from 'js/relay-env'
 import SearchMenuContainer from 'js/components/Search/SearchMenuContainer'
-import withUserId from 'js/components/General/withUserId'
+import withUser from 'js/components/General/withUser'
 import logger from 'js/utils/logger'
 
 // Make a different query for anonymous users than for
@@ -48,7 +48,8 @@ const SearchMenuQueryRenderer = props => {
 
 class SearchMenuQuery extends React.Component {
   render() {
-    const { userId } = this.props
+    const { authUser } = this.props
+    const userId = authUser ? authUser.id : null
     return (
       <SearchMenuQueryRenderer
         userId={userId}
@@ -75,6 +76,13 @@ class SearchMenuQuery extends React.Component {
 }
 
 SearchMenuQuery.propTypes = {
+  authUser: PropTypes.shape({
+    id: PropTypes.string,
+    email: PropTypes.string,
+    username: PropTypes.string,
+    isAnonymous: PropTypes.bool,
+    emailVerified: PropTypes.bool,
+  }),
   location: PropTypes.shape({
     search: PropTypes.string.isRequired,
   }),
@@ -82,6 +90,6 @@ SearchMenuQuery.propTypes = {
 
 SearchMenuQuery.defaultProps = {}
 
-export default withUserId({
+export default withUser({
   renderIfNoUser: true,
 })(SearchMenuQuery)
