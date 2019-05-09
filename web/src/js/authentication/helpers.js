@@ -105,6 +105,35 @@ const goToMainLoginPage = (urlParamsObj = {}) => {
   }
 }
 
+/**
+ * Create an anonymous user in our authentication system and on our
+ * server side, if possible.
+ * @return {Object|null} The new user object (AuthUser), or null
+ *   if we could not create a user.
+ */
+export const createAnonymousUserIfPossible = async () => {
+  // To reduce noise in user creation stats, only create an anonymous
+  // user if the user recently installed the browser extension.
+  if (shouldCreateAnonymousUser()) {
+    // Authenticate the user anonymously.
+    try {
+      await signInAnonymously()
+    } catch (e) {
+      throw e
+    }
+
+    // Create a user in our database.
+    try {
+      await createNewUser()
+    } catch (e) {
+      throw e
+    }
+    return await getCurrentUser()
+  } else {
+    return null
+  }
+}
+
 // TODO: break into simpler pieces
 /**
  * Based on the user object state, determine if we need to redirect

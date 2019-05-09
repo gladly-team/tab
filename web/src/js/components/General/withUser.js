@@ -36,6 +36,9 @@ const withUser = (options = {}) => WrappedComponent => {
           this.setState({
             authUser: user,
           })
+        } else {
+          // TODO:
+          // Create the user, if possible.
         }
         this.setState({
           authStateLoaded: true,

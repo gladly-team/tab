@@ -51,7 +51,7 @@ const setIfAnonymousUserIsAllowed = allow => {
   // or disallow the user to be anonymous.
   if (allow) {
     getBrowserExtensionInstallTime.mockReturnValue(
-      moment(mockNow).subtract(2, 'minutes')
+      moment(mockNow).subtract(11, 'seconds')
     )
     isAnonymousUserSignInEnabled.mockReturnValue(true)
   } else {
@@ -73,6 +73,202 @@ beforeEach(() => {
 afterEach(() => {
   jest.clearAllMocks()
   MockDate.reset()
+})
+
+describe('createAnonymousUserIfPossible tests', () => {
+  it('does not create a new user when the user is unauthed and the user installed the extension not-too-recently', async () => {
+    expect.assertions(2)
+    setIfAnonymousUserIsAllowed(true)
+
+    // User installed not-too-recently
+    getBrowserExtensionInstallTime.mockReturnValue(
+      moment(mockNow).subtract(55, 'seconds')
+    )
+
+    CreateNewUserMutation.mockImplementation(
+      (
+        environment,
+        userId,
+        email,
+        referralData,
+        experimentGroups,
+        installId,
+        installTime,
+        onCompleted,
+        onError
+      ) => {
+        onCompleted({
+          createNewUser: {
+            id: 'abc123',
+            email: null,
+            username: null,
+          },
+        })
+      }
+    )
+
+    const {
+      createAnonymousUserIfPossible,
+    } = require('js/authentication/helpers')
+    await createAnonymousUserIfPossible()
+
+    expect(signInAnonymously).not.toHaveBeenCalled()
+    expect(CreateNewUserMutation).not.toHaveBeenCalled()
+  })
+
+  it('does not create a new user when the user is unauthed and the user does not have an extension install time in local storage', async () => {
+    expect.assertions(2)
+    setIfAnonymousUserIsAllowed(true)
+
+    // We don't know when the user installed
+    getBrowserExtensionInstallTime.mockReturnValue(null)
+
+    CreateNewUserMutation.mockImplementation(
+      (
+        environment,
+        userId,
+        email,
+        referralData,
+        experimentGroups,
+        installId,
+        installTime,
+        onCompleted,
+        onError
+      ) => {
+        onCompleted({
+          createNewUser: {
+            id: 'abc123',
+            email: null,
+            username: null,
+          },
+        })
+      }
+    )
+
+    const {
+      createAnonymousUserIfPossible,
+    } = require('js/authentication/helpers')
+    await createAnonymousUserIfPossible()
+
+    expect(signInAnonymously).not.toHaveBeenCalled()
+    expect(CreateNewUserMutation).not.toHaveBeenCalled()
+  })
+
+  it('creates a new user when the user is unauthed and the user installed very recently', async () => {
+    expect.assertions(2)
+    setIfAnonymousUserIsAllowed(true)
+
+    // The user installed just now
+    getBrowserExtensionInstallTime.mockReturnValue(
+      moment(mockNow).subtract(28, 'seconds')
+    )
+
+    CreateNewUserMutation.mockImplementation(
+      (
+        environment,
+        userId,
+        email,
+        referralData,
+        experimentGroups,
+        installId,
+        installTime,
+        onCompleted,
+        onError
+      ) => {
+        onCompleted({
+          createNewUser: {
+            id: 'abc123',
+            email: null,
+            username: null,
+          },
+        })
+      }
+    )
+
+    const {
+      createAnonymousUserIfPossible,
+    } = require('js/authentication/helpers')
+    await createAnonymousUserIfPossible()
+
+    expect(signInAnonymously).toHaveBeenCalledTimes(1)
+    expect(CreateNewUserMutation).toHaveBeenCalledTimes(1)
+  })
+
+  it('returns null if we do not create an anonymous user', async () => {
+    expect.assertions(1)
+    setIfAnonymousUserIsAllowed(false) // not allowed
+    CreateNewUserMutation.mockImplementation(
+      (
+        environment,
+        userId,
+        email,
+        referralData,
+        experimentGroups,
+        installId,
+        installTime,
+        onCompleted,
+        onError
+      ) => {
+        onCompleted({
+          createNewUser: {
+            id: 'abc123',
+            email: null,
+            username: null,
+          },
+        })
+      }
+    )
+
+    const {
+      createAnonymousUserIfPossible,
+    } = require('js/authentication/helpers')
+    const response = await createAnonymousUserIfPossible()
+    expect(response).toBeNull()
+  })
+
+  it('returns the AuthUser object if we create a new user', async () => {
+    expect.assertions(1)
+    setIfAnonymousUserIsAllowed(true)
+    const {
+      createAnonymousUserIfPossible,
+    } = require('js/authentication/helpers')
+    const response = await createAnonymousUserIfPossible()
+
+    // From authentication/user.js mock.
+    expect(response).toEqual({
+      id: 'abc123xyz789',
+      email: null,
+      username: null,
+      isAnonymous: true,
+      emailVerified: false,
+    })
+  })
+
+  it('throws if anonymous sign-in fails', async () => {
+    expect.assertions(1)
+    setIfAnonymousUserIsAllowed(true)
+    const mockErr = new Error('Yikes.')
+    signInAnonymously.mockImplementationOnce(() => {
+      throw mockErr
+    })
+    const {
+      createAnonymousUserIfPossible,
+    } = require('js/authentication/helpers')
+    await expect(createAnonymousUserIfPossible()).rejects.toThrow(mockErr)
+  })
+
+  it('throws if server-side user creation fails', async () => {
+    expect.assertions(1)
+    setIfAnonymousUserIsAllowed(true)
+    const mockErr = new Error('Yikes.')
+    getUserToken.mockImplementationOnce(() => {
+      throw mockErr
+    })
+    const {
+      createAnonymousUserIfPossible,
+    } = require('js/authentication/helpers')
+    await expect(createAnonymousUserIfPossible()).rejects.toThrow(mockErr)
+  })
 })
 
 describe('checkAuthStateAndRedirectIfNeeded tests', () => {
