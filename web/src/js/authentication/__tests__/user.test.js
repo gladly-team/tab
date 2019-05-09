@@ -4,6 +4,9 @@ import { STORAGE_KEY_USERNAME } from 'js/constants'
 import { absoluteUrl, enterUsernameURL } from 'js/navigation/navigation'
 
 jest.mock('js/utils/localstorage-mgr')
+jest.mock('jsonwebtoken', () => ({
+  sign: () => 'fake-signed-token',
+}))
 
 const storedMockDevAuthenticationEnvVar =
   process.env.REACT_APP_MOCK_DEV_AUTHENTICATION
@@ -183,15 +186,19 @@ describe('getCurrentUser tests', () => {
 
 describe('getCurrentUserListener tests', () => {
   it('calls listeners with the Firebase user object when the auth state changes', done => {
+    // formatUser gets the username from localStorage.
+    const localStorageMgr = require('js/utils/localstorage-mgr').default
+    localStorageMgr.setItem(STORAGE_KEY_USERNAME, 'DoraSplora')
+
     const getCurrentUserListener = require('js/authentication/user')
       .getCurrentUserListener
     getCurrentUserListener().onAuthStateChanged(currentUser => {
       expect(currentUser).toMatchObject({
-        uid: 'xyz987',
+        id: 'xyz987',
         email: 'foo@example.com',
+        username: 'DoraSplora',
         isAnonymous: false,
         emailVerified: true,
-        // Will also have getIdToken method.
       })
       done()
     })
@@ -212,18 +219,26 @@ describe('getCurrentUserListener tests', () => {
     process.env.REACT_APP_MOCK_DEV_AUTHENTICATION = 'true'
     process.env.NODE_ENV = 'development'
 
+    // formatUser gets the username from localStorage.
+    const localStorageMgr = require('js/utils/localstorage-mgr').default
+    localStorageMgr.setItem(STORAGE_KEY_USERNAME, 'kevin')
+
     const getCurrentUserListener = require('js/authentication/user')
       .getCurrentUserListener
     getCurrentUserListener().onAuthStateChanged(currentUser => {
       expect(currentUser).toMatchObject({
-        uid: 'abcdefghijklmno',
+        id: 'abcdefghijklmno',
         email: 'kevin@example.com',
+        username: 'kevin',
         isAnonymous: false,
         emailVerified: true,
-        // Will also have getIdToken method.
       })
       done()
     })
+
+    const __triggerAuthStateChange = require('firebase/app')
+      .__triggerAuthStateChange
+    __triggerAuthStateChange(null)
   })
 })
 

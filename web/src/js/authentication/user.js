@@ -61,6 +61,28 @@ export const formatUser = authUserObj => {
   }
 }
 
+// TODO: documentation
+const getMockFirebaseUser = () => {
+  const userId = 'abcdefghijklmno'
+  const email = 'kevin@example.com'
+  const tokenPayload = {
+    sub: userId,
+    email: 'kevin@example.com',
+    email_verified: true,
+  }
+  const jwt = require('jsonwebtoken')
+  const token = jwt.sign(tokenPayload, 'fakeSecret')
+  return {
+    uid: userId,
+    email: email,
+    isAnonymous: false,
+    emailVerified: true,
+    getIdToken: () => {
+      return token
+    },
+  }
+}
+
 /**
  * Return the raw Firebase user instance.
  * @returns {user} a Firebase User
@@ -70,24 +92,7 @@ const getCurrentFirebaseUser = async () => {
   // and user token.
   if (shouldMockAuthentication) {
     return new Promise((resolve, reject) => {
-      const userId = 'abcdefghijklmno'
-      const email = 'kevin@example.com'
-      const tokenPayload = {
-        sub: userId,
-        email: 'kevin@example.com',
-        email_verified: true,
-      }
-      const jwt = require('jsonwebtoken')
-      const token = jwt.sign(tokenPayload, 'fakeSecret')
-      resolve({
-        uid: userId,
-        email: email,
-        isAnonymous: false,
-        emailVerified: true,
-        getIdToken: () => {
-          return token
-        },
-      })
+      resolve(getMockFirebaseUser())
     })
   }
   return new Promise((resolve, reject) => {
@@ -129,20 +134,27 @@ export const getCurrentUser = async () => {
 }
 
 /**
- * Get the raw Auth object, which is observable with `onAuthStateChanged`.
- * @returns {object} a `firebase.auth` object
+ * TODO
+ * @returns {Function}
  */
 export const getCurrentUserListener = () => {
-  // For development only: optionally mock a barebones
-  // version of the `firebase.auth` object.
-  if (shouldMockAuthentication) {
-    return {
-      onAuthStateChanged: callback => {
-        getCurrentFirebaseUser().then(user => callback(user))
-      },
-    }
+  return {
+    onAuthStateChanged: callback => {
+      const unsubscribe = firebase.auth().onAuthStateChanged(firebaseUser => {
+        let user = null
+        if (shouldMockAuthentication) {
+          // For development only. Return a mock user.
+          user = formatUser(getMockFirebaseUser())
+        } else if (firebaseUser) {
+          user = formatUser(firebaseUser)
+        } else {
+          user = null
+        }
+        callback(user)
+      })
+      return unsubscribe
+    },
   }
-  return firebase.auth()
 }
 
 /**
