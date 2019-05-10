@@ -134,6 +134,68 @@ export const createAnonymousUserIfPossible = async () => {
   }
 }
 
+/**
+ * Based on the AuthUser object state, determine if we need to redirect
+ * to an authentication page. If the user is not fully authenticated,
+ * redirect and return true. If the user is fully authenticated, do
+ * not redirect and return false.
+ * @param {object} user - The AuthUser object
+ * @param {string} user.id - The user's ID
+ * @param {string} user.email - The user's email
+ * @param {string} user.username - The user's username
+ * @param {boolean} user.isAnonymous - Whether the user is anonymous
+ * @param {boolean} user.emailVerified - Whether the user has verified their email
+ * @return {Boolean} Whether or not we redirected (e.g. true if the
+ *   user was not fully authenticated).
+ */
+export const redirectToAuthIfNeeded = user => {
+  var redirected = true
+
+  // User does not exist. Require login.
+  if (!user || !user.id) {
+    goToMainLoginPage()
+    redirected = true
+    // If the user has an anonymous account and is allowed to be
+    // anonymous, do nothing. If they're anonymous but are not
+    // allowed to be anonymous, go to the login page.
+  } else if (user.isAnonymous) {
+    if (allowAnonymousUser()) {
+      redirected = false
+    } else {
+      // This is an anonymous user who was using the app but is now
+      // required to sign in.
+      if (anonymousUserMandatorySignIn()) {
+        // Include the "mandatory" URL parameter so we're able to
+        // show an explanation on the sign-in views.
+        goToMainLoginPage({ mandatory: 'true' })
+        redirected = true
+      } else {
+        goToMainLoginPage()
+        redirected = true
+      }
+    }
+    // If the user does not have an email address, show a message
+    // asking them to sign in with a different method.
+  } else if (!user.email) {
+    replaceUrl(missingEmailMessageURL)
+    redirected = true
+    // User is logged in but their email is not verified.
+  } else if (!user.emailVerified) {
+    replaceUrl(verifyEmailURL)
+    redirected = true
+    // User is logged in but has not set a username.
+  } else if (!user.username) {
+    // The "enter username" view needs to fetch the user from the
+    // server to confirm there isn't a username set. The username
+    // from AuthUser relies on local storage.
+    replaceUrl(enterUsernameURL)
+    redirected = true
+  } else {
+    redirected = false
+  }
+  return redirected
+}
+
 // TODO: break into simpler pieces
 /**
  * Based on the user object state, determine if we need to redirect
