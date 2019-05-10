@@ -1,5 +1,6 @@
 import React from 'react'
 import { onAuthStateChanged } from 'js/authentication/user'
+import { createAnonymousUserIfPossible } from 'js/authentication/helpers'
 
 // https://reactjs.org/docs/higher-order-components.html#convention-wrap-the-display-name-for-easy-debugging
 function getDisplayName(WrappedComponent) {
@@ -35,14 +36,28 @@ const withUser = (options = {}) => WrappedComponent => {
         if (user && user.id) {
           this.setState({
             authUser: user,
+            authStateLoaded: true,
           })
         } else {
-          // TODO:
           // Create the user, if possible.
+          createAnonymousUserIfPossible()
+            .then(user => {
+              if (user && user.id) {
+                this.setState({
+                  authUser: user,
+                })
+              }
+            })
+            .catch(e => {
+              // console.error(e)
+            })
+            // Equivalent to .finally()
+            .then(() => {
+              this.setState({
+                authStateLoaded: true,
+              })
+            })
         }
-        this.setState({
-          authStateLoaded: true,
-        })
       })
     }
 
@@ -54,13 +69,13 @@ const withUser = (options = {}) => WrappedComponent => {
 
     render() {
       const { renderIfNoUser = false } = options
+      // Don't render the children until we've determined the auth state.
+      if (!this.state.authStateLoaded) {
+        return null
+      }
       // Return null if the user is not authenticated but the children require
       // an authenticated user.
       if (!this.state.authUser && !renderIfNoUser) {
-        return null
-      }
-      // Don't render the children until we've retrieved the user.
-      if (!this.state.authStateLoaded) {
         return null
       }
       return <WrappedComponent authUser={this.state.authUser} {...this.props} />
