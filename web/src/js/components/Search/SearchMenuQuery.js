@@ -91,5 +91,6 @@ SearchMenuQuery.propTypes = {
 SearchMenuQuery.defaultProps = {}
 
 export default withUser({
+  redirectToAuthIfIncomplete: false,
   renderIfNoUser: true,
 })(SearchMenuQuery)
