@@ -27,6 +27,7 @@ const withUser = (options = {}) => WrappedComponent => {
       this.state = {
         authUser: null,
         authStateLoaded: false,
+        userCreationInProgress: false,
       }
     }
 
@@ -43,6 +44,12 @@ const withUser = (options = {}) => WrappedComponent => {
           })
         } else if (createUserIfPossible) {
           // Create the user, if possible.
+          // Mark that user creation is in process so that we don't
+          // don't render child components after the user is authed
+          // but before the user exists in our database.
+          this.setState({
+            userCreationInProgress: true,
+          })
           createAnonymousUserIfPossible()
             .then(user => {
               if (user && user.id) {
@@ -58,6 +65,7 @@ const withUser = (options = {}) => WrappedComponent => {
             .then(() => {
               this.setState({
                 authStateLoaded: true,
+                userCreationInProgress: false,
               })
             })
         } else {
@@ -76,16 +84,18 @@ const withUser = (options = {}) => WrappedComponent => {
 
     render() {
       const { renderIfNoUser = false } = options
+      const { authUser, authStateLoaded, userCreationInProgress } = this.state
       // Don't render the children until we've determined the auth state.
-      if (!this.state.authStateLoaded) {
+      // if (!authStateLoaded) {
+      if (!authStateLoaded || userCreationInProgress) {
         return null
       }
       // Return null if the user is not authenticated but the children require
       // an authenticated user.
-      if (!this.state.authUser && !renderIfNoUser) {
+      if (!authUser && !renderIfNoUser) {
         return null
       }
-      return <WrappedComponent authUser={this.state.authUser} {...this.props} />
+      return <WrappedComponent authUser={authUser} {...this.props} />
     }
   }
   CompWithUser.displayName = `CompWithUser(${getDisplayName(WrappedComponent)})`

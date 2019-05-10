@@ -227,6 +227,59 @@ describe('withUser', () => {
     expect(wrapper.find(MockComponent).exists()).toBe(true)
   })
 
+  it('renders children only after user creation is complete, even if the auth state changes, when we create a new anonymous user', async () => {
+    expect.assertions(3)
+
+    jest.useFakeTimers()
+
+    // Mock a delay in creating a new user.
+    createAnonymousUserIfPossible.mockImplementation(
+      () =>
+        new Promise(resolve => {
+          setTimeout(() => {
+            resolve({
+              id: 'abc123',
+              email: null,
+              username: null,
+              isAnonymous: true,
+              emailVerified: false,
+            })
+          }, 3e4)
+        })
+    )
+
+    const withUser = require('js/components/General/withUser').default
+    const MockComponent = () => null
+    const WrappedComponent = withUser({
+      renderIfNoUser: true,
+    })(MockComponent)
+
+    const wrapper = shallow(<WrappedComponent />)
+
+    // User is not authed.
+    __triggerAuthStateChange(null)
+
+    // Should not yet have rendered children.
+    await flushAllPromises()
+    expect(wrapper.find(MockComponent).exists()).toBe(false)
+
+    // Even though the user is authed, we should still not render the
+    // children because user creation has not completed.
+    __triggerAuthStateChange({
+      id: 'abc123',
+      email: null,
+      username: null,
+      isAnonymous: true,
+      emailVerified: false,
+    })
+    await flushAllPromises()
+    expect(wrapper.find(MockComponent).exists()).toBe(false)
+
+    jest.advanceTimersByTime(4e4)
+    await flushAllPromises()
+    expect(wrapper.find(MockComponent).exists()).toBe(true)
+  })
+
   it('passes a null user to the child component when we could not create a new anonymous user and "renderIfNoUser" is true', async () => {
     expect.assertions(1)
 
