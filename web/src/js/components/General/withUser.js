@@ -13,7 +13,10 @@ function getDisplayName(WrappedComponent) {
 }
 
 /**
- * Adds an AuthUser prop (from authentication) to a child component.
+ * Adds an "authUser" prop, an AuthUser object from our authentication, to
+ * the wrapped child component. Optionally, it attempts to create a user if
+ * one does not exist and redirects to the authentication page if the user
+ * is not fully authenticated.
  * @param {Object} options
  * @param {Boolean} options.renderIfNoUser - If true, we will render the
  *   children even if there is no user ID (the user is not signed in).
