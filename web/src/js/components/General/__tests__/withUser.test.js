@@ -8,7 +8,10 @@ import {
   __triggerAuthStateChange,
 } from 'js/authentication/user'
 import { flushAllPromises } from 'js/utils/test-utils'
-import { createAnonymousUserIfPossible } from 'js/authentication/helpers'
+import {
+  createAnonymousUserIfPossible,
+  redirectToAuthIfNeeded,
+} from 'js/authentication/helpers'
 import logger from 'js/utils/logger'
 
 jest.mock('js/authentication/user')
@@ -18,6 +21,7 @@ jest.mock('js/utils/logger')
 afterEach(() => {
   jest.clearAllMocks()
   createAnonymousUserIfPossible.mockResolvedValue(null)
+  redirectToAuthIfNeeded.mockReturnValue(false)
   __unregisterAuthStateChangeListeners()
 })
 
@@ -435,5 +439,68 @@ describe('withUser', () => {
     wrapper.update()
     expect(createAnonymousUserIfPossible).not.toHaveBeenCalled()
     expect(wrapper.find(MockComponent).prop('authUser')).toBeNull()
+  })
+
+  it('does not render children if we are redirecting to an auth page', async () => {
+    expect.assertions(1)
+
+    redirectToAuthIfNeeded.mockReturnValue(true)
+    const withUser = require('js/components/General/withUser').default
+    const MockComponent = () => null
+    const WrappedComponent = withUser()(MockComponent)
+    const wrapper = shallow(<WrappedComponent />)
+    __triggerAuthStateChange({
+      id: 'abc123',
+      email: null,
+      username: null,
+      isAnonymous: false,
+      emailVerified: false,
+    })
+    await flushAllPromises()
+    expect(wrapper.find(MockComponent).exists()).toBe(false)
+  })
+
+  it('renders children when we would have redirected to an auth page but the "redirectToAuthIfIncomplete" option is false', async () => {
+    expect.assertions(1)
+
+    redirectToAuthIfNeeded.mockReturnValue(true)
+    const withUser = require('js/components/General/withUser').default
+    const MockComponent = () => null
+    const WrappedComponent = withUser({ redirectToAuthIfIncomplete: false })(
+      MockComponent
+    )
+    const wrapper = shallow(<WrappedComponent />)
+    __triggerAuthStateChange({
+      id: 'abc123',
+      email: null,
+      username: null,
+      isAnonymous: false,
+      emailVerified: false,
+    })
+    await flushAllPromises()
+    expect(wrapper.find(MockComponent).exists()).toBe(true)
+  })
+
+  it('logs an error if `redirectToAuthIfNeeded` throws', async () => {
+    expect.assertions(1)
+
+    const mockErr = new Error('Critical redirect failure.')
+    redirectToAuthIfNeeded.mockImplementation(() => {
+      throw mockErr
+    })
+    // redirectToAuthIfNeeded.mockReturnValue(true)
+    const withUser = require('js/components/General/withUser').default
+    const MockComponent = () => null
+    const WrappedComponent = withUser()(MockComponent)
+    shallow(<WrappedComponent />)
+    __triggerAuthStateChange({
+      id: 'abc123',
+      email: null,
+      username: null,
+      isAnonymous: false,
+      emailVerified: false,
+    })
+    await flushAllPromises()
+    expect(logger.error).toHaveBeenCalledWith(mockErr)
   })
 })

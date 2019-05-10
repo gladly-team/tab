@@ -1,6 +1,9 @@
 import React from 'react'
 import { onAuthStateChanged } from 'js/authentication/user'
-import { createAnonymousUserIfPossible } from 'js/authentication/helpers'
+import {
+  createAnonymousUserIfPossible,
+  redirectToAuthIfNeeded,
+} from 'js/authentication/helpers'
 import logger from 'js/utils/logger'
 
 // https://reactjs.org/docs/higher-order-components.html#convention-wrap-the-display-name-for-easy-debugging
@@ -18,6 +21,11 @@ function getDisplayName(WrappedComponent) {
  *   not exist, we will create a new anonymous user both in our auth service
  *   and in our database. We might not always create a new user, depending on
  *   our anonymous user restrictions. Defaults to true.
+ * @param {Boolean} options.redirectToAuthIfIncomplete - If true, when a user
+ *   is not authenticated or has not completed sign-up (e.g. does not have a
+ *   user ID), we will redirect to the appropriate authentication page.
+ *   our anonymous user restrictions. It should be false when using withUser
+ *   in a page where authentication is optional. Defaults to true.
  * @return {Function} A higher-order component.
  */
 const withUser = (options = {}) => WrappedComponent => {
@@ -46,7 +54,10 @@ const withUser = (options = {}) => WrappedComponent => {
     }
 
     async determineAuthState(user) {
-      const { createUserIfPossible = true } = options
+      const {
+        createUserIfPossible = true,
+        redirectToAuthIfIncomplete = true,
+      } = options
       let authUser = user
 
       // If the user doesn't exist, create one if possible.
@@ -58,6 +69,7 @@ const withUser = (options = {}) => WrappedComponent => {
           userCreationInProgress: true,
         })
         try {
+          // TODO: probably need to make this cancelable
           authUser = await createAnonymousUserIfPossible()
         } catch (e) {
           logger.error(e)
@@ -67,10 +79,24 @@ const withUser = (options = {}) => WrappedComponent => {
           })
         }
       }
-      this.setState({
-        authUser: authUser,
-        authStateLoaded: true,
-      })
+
+      // If the user must complete the authentication process, optionally
+      // redirect to the appropriate auth page.
+      let redirected = false
+      if (redirectToAuthIfIncomplete) {
+        try {
+          redirected = redirectToAuthIfNeeded(authUser)
+        } catch (e) {
+          logger.error(e)
+        }
+      }
+
+      if (!redirected) {
+        this.setState({
+          authUser: authUser,
+          authStateLoaded: true,
+        })
+      }
     }
 
     render() {

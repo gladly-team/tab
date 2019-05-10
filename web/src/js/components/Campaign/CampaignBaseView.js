@@ -77,4 +77,4 @@ CampaignBaseView.propTypes = {
 }
 CampaignBaseView.defaultProps = {}
 
-export default withUser()(CampaignBaseView)
+export default withUser({ redirectToAuthIfIncomplete: false })(CampaignBaseView)
