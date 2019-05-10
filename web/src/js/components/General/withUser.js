@@ -32,47 +32,10 @@ const withUser = (options = {}) => WrappedComponent => {
     }
 
     componentDidMount() {
-      const { createUserIfPossible = true } = options
-
       // Store unsubscribe function.
       // https://firebase.google.com/docs/reference/js/firebase.auth.Auth#onAuthStateChanged
       this.authListenerUnsubscribe = onAuthStateChanged(user => {
-        if (user && user.id) {
-          this.setState({
-            authUser: user,
-            authStateLoaded: true,
-          })
-        } else if (createUserIfPossible) {
-          // Create the user, if possible.
-          // Mark that user creation is in process so that we don't
-          // don't render child components after the user is authed
-          // but before the user exists in our database.
-          this.setState({
-            userCreationInProgress: true,
-          })
-          createAnonymousUserIfPossible()
-            .then(user => {
-              if (user && user.id) {
-                this.setState({
-                  authUser: user,
-                })
-              }
-            })
-            .catch(e => {
-              logger.error(e)
-            })
-            // Equivalent to .finally()
-            .then(() => {
-              this.setState({
-                authStateLoaded: true,
-                userCreationInProgress: false,
-              })
-            })
-        } else {
-          this.setState({
-            authStateLoaded: true,
-          })
-        }
+        this.determineAuthState(user)
       })
     }
 
@@ -80,6 +43,34 @@ const withUser = (options = {}) => WrappedComponent => {
       if (typeof this.authListenerUnsubscribe === 'function') {
         this.authListenerUnsubscribe()
       }
+    }
+
+    async determineAuthState(user) {
+      const { createUserIfPossible = true } = options
+      let authUser = user
+
+      // If the user doesn't exist, create one if possible.
+      if (!(user && user.id) && createUserIfPossible) {
+        // Mark that user creation is in process so that we don't
+        // don't render child components after the user is authed
+        // but before the user exists in our database.
+        this.setState({
+          userCreationInProgress: true,
+        })
+        try {
+          authUser = await createAnonymousUserIfPossible()
+        } catch (e) {
+          logger.error(e)
+        } finally {
+          this.setState({
+            userCreationInProgress: false,
+          })
+        }
+      }
+      this.setState({
+        authUser: authUser,
+        authStateLoaded: true,
+      })
     }
 
     render() {
