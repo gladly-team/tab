@@ -30,6 +30,8 @@ const withUser = (options = {}) => WrappedComponent => {
     }
 
     componentDidMount() {
+      const { createUserIfPossible = true } = options
+
       // Store unsubscribe function.
       // https://firebase.google.com/docs/reference/js/firebase.auth.Auth#onAuthStateChanged
       this.authListenerUnsubscribe = onAuthStateChanged(user => {
@@ -38,7 +40,7 @@ const withUser = (options = {}) => WrappedComponent => {
             authUser: user,
             authStateLoaded: true,
           })
-        } else {
+        } else if (createUserIfPossible) {
           // Create the user, if possible.
           createAnonymousUserIfPossible()
             .then(user => {
@@ -49,6 +51,7 @@ const withUser = (options = {}) => WrappedComponent => {
               }
             })
             .catch(e => {
+              // TODO: logger
               // console.error(e)
             })
             // Equivalent to .finally()
@@ -57,6 +60,10 @@ const withUser = (options = {}) => WrappedComponent => {
                 authStateLoaded: true,
               })
             })
+        } else {
+          this.setState({
+            authStateLoaded: true,
+          })
         }
       })
     }

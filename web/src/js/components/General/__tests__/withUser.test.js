@@ -332,4 +332,33 @@ describe('withUser', () => {
       mockCreatedUser
     )
   })
+
+  it('does not create an anonymous user when the createUserIfPossible option is false', async () => {
+    expect.assertions(2)
+
+    const mockCreatedUser = {
+      id: 'abc123',
+      email: null,
+      username: null,
+      isAnonymous: true,
+      emailVerified: false,
+    }
+    createAnonymousUserIfPossible.mockResolvedValue(mockCreatedUser)
+
+    const withUser = require('js/components/General/withUser').default
+    const MockComponent = () => null
+    const WrappedComponent = withUser({
+      createUserIfPossible: false,
+      renderIfNoUser: true,
+    })(MockComponent)
+    const wrapper = shallow(<WrappedComponent />)
+
+    // User is not authed.
+    __triggerAuthStateChange(null)
+
+    await flushAllPromises()
+    wrapper.update()
+    expect(createAnonymousUserIfPossible).not.toHaveBeenCalled()
+    expect(wrapper.find(MockComponent).prop('authUser')).toBeNull()
+  })
 })
