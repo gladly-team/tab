@@ -503,4 +503,47 @@ describe('withUser', () => {
     await flushAllPromises()
     expect(logger.error).toHaveBeenCalledWith(mockErr)
   })
+
+  it('does not throw or log an error if the new user creation query returns after the component has unmounted', async () => {
+    expect.assertions(1)
+
+    jest.useFakeTimers()
+
+    // Mock a delay in creating a new user.
+    createAnonymousUserIfPossible.mockImplementation(
+      () =>
+        new Promise(resolve => {
+          setTimeout(() => {
+            resolve({
+              id: 'abc123',
+              email: null,
+              username: null,
+              isAnonymous: true,
+              emailVerified: false,
+            })
+          }, 3e4)
+        })
+    )
+
+    const withUser = require('js/components/General/withUser').default
+    const MockComponent = () => null
+    const WrappedComponent = withUser({
+      renderIfNoUser: true,
+    })(MockComponent)
+
+    const wrapper = shallow(<WrappedComponent />)
+
+    // User is not authed.
+    __triggerAuthStateChange(null)
+    await flushAllPromises()
+
+    // Unmount
+    wrapper.unmount()
+
+    // Now, createAnonymousUserIfPossible will return the user after the
+    // component has unmounted.
+    jest.advanceTimersByTime(4e4)
+    await flushAllPromises()
+    expect(logger.error).not.toHaveBeenCalled()
+  })
 })

@@ -5,6 +5,7 @@ import {
   redirectToAuthIfNeeded,
 } from 'js/authentication/helpers'
 import logger from 'js/utils/logger'
+import { makePromiseCancelable } from 'js/utils/utils'
 
 // https://reactjs.org/docs/higher-order-components.html#convention-wrap-the-display-name-for-easy-debugging
 function getDisplayName(WrappedComponent) {
@@ -37,6 +38,7 @@ const withUser = (options = {}) => WrappedComponent => {
         authStateLoaded: false,
         userCreationInProgress: false,
       }
+      this.userCreatePromise = null
     }
 
     componentDidMount() {
@@ -50,6 +52,9 @@ const withUser = (options = {}) => WrappedComponent => {
     componentWillUnmount() {
       if (typeof this.authListenerUnsubscribe === 'function') {
         this.authListenerUnsubscribe()
+      }
+      if (this.userCreatePromise && this.userCreatePromise.cancel) {
+        this.userCreatePromise.cancel()
       }
     }
 
@@ -69,15 +74,21 @@ const withUser = (options = {}) => WrappedComponent => {
           userCreationInProgress: true,
         })
         try {
-          // TODO: probably need to make this cancelable
-          authUser = await createAnonymousUserIfPossible()
+          this.userCreatePromise = makePromiseCancelable(
+            createAnonymousUserIfPossible()
+          )
+          authUser = await this.userCreatePromise.promise
         } catch (e) {
+          // If the component already unmounted, don't do anything with
+          // the returned data.
+          if (e && e.isCanceled) {
+            return
+          }
           logger.error(e)
-        } finally {
-          this.setState({
-            userCreationInProgress: false,
-          })
         }
+        this.setState({
+          userCreationInProgress: false,
+        })
       }
 
       // If the user must complete the authentication process, optionally
