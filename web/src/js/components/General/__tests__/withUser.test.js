@@ -9,9 +9,11 @@ import {
 } from 'js/authentication/user'
 import { flushAllPromises } from 'js/utils/test-utils'
 import { createAnonymousUserIfPossible } from 'js/authentication/helpers'
+import logger from 'js/utils/logger'
 
 jest.mock('js/authentication/user')
 jest.mock('js/authentication/helpers')
+jest.mock('js/utils/logger')
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -303,6 +305,26 @@ describe('withUser', () => {
     await flushAllPromises()
     wrapper.update()
     expect(wrapper.find(MockComponent).exists()).toBe(false)
+  })
+
+  it('logs an error when createAnonymousUserIfPossible throws', async () => {
+    expect.assertions(1)
+
+    // Attempting to create a new anonymous user will error.
+    const mockErr = new Error('To new user creation – we say, "Not today."')
+    createAnonymousUserIfPossible.mockRejectedValue(mockErr)
+
+    const withUser = require('js/components/General/withUser').default
+    const MockComponent = () => null
+    const WrappedComponent = withUser({ renderIfNoUser: true })(MockComponent)
+    const wrapper = shallow(<WrappedComponent />)
+
+    // User is not authed.
+    __triggerAuthStateChange(null)
+
+    await flushAllPromises()
+    wrapper.update()
+    expect(logger.error).toHaveBeenCalledWith(mockErr)
   })
 
   it('passes the anonymous user to the child component when a new user is created', async () => {

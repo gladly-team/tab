@@ -1,6 +1,7 @@
 import React from 'react'
 import { onAuthStateChanged } from 'js/authentication/user'
 import { createAnonymousUserIfPossible } from 'js/authentication/helpers'
+import logger from 'js/utils/logger'
 
 // https://reactjs.org/docs/higher-order-components.html#convention-wrap-the-display-name-for-easy-debugging
 function getDisplayName(WrappedComponent) {
@@ -51,8 +52,7 @@ const withUser = (options = {}) => WrappedComponent => {
               }
             })
             .catch(e => {
-              // TODO: logger
-              // console.error(e)
+              logger.error(e)
             })
             // Equivalent to .finally()
             .then(() => {
