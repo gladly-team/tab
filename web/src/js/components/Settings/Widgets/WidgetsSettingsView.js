@@ -1,18 +1,25 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { QueryRenderer } from 'react-relay'
 import graphql from 'babel-plugin-relay/macro'
 import environment from 'js/relay-env'
 
 import SettingsChildWrapper from 'js/components/Settings/SettingsChildWrapperComponent'
 import WidgetsSettings from 'js/components/Settings/Widgets/WidgetsSettingsContainer'
-import AuthUserComponent from 'js/components/General/AuthUserComponent'
 import ErrorMessage from 'js/components/General/ErrorMessage'
 import logger from 'js/utils/logger'
+import withUser from 'js/components/General/withUser'
 
 class WidgetsSettingsView extends React.Component {
   render() {
+    const { authUser } = this.props
     return (
-      <AuthUserComponent>
+      <div
+        style={{
+          height: '100%',
+          width: '100%',
+        }}
+      >
         <QueryRenderer
           environment={environment}
           query={graphql`
@@ -25,6 +32,9 @@ class WidgetsSettingsView extends React.Component {
               }
             }
           `}
+          variables={{
+            userId: authUser.id,
+          }}
           render={({ error, props }) => {
             if (error) {
               logger.error(error)
@@ -46,9 +56,18 @@ class WidgetsSettingsView extends React.Component {
             )
           }}
         />
-      </AuthUserComponent>
+      </div>
     )
   }
 }
 
-export default WidgetsSettingsView
+WidgetsSettingsView.propTypes = {
+  authUser: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+  }).isRequired,
+  showError: PropTypes.func.isRequired,
+}
+
+WidgetsSettingsView.defaultProps = {}
+
+export default withUser()(WidgetsSettingsView)
