@@ -170,6 +170,7 @@ class SettingsPage extends React.Component {
               render={props => (
                 <ProfileDonateHearts
                   {...props}
+                  authUser={authUser}
                   showError={showError.bind(this)}
                 />
               )}
@@ -180,6 +181,7 @@ class SettingsPage extends React.Component {
               render={props => (
                 <ProfileInviteFriend
                   {...props}
+                  authUser={authUser}
                   showError={showError.bind(this)}
                 />
               )}
@@ -188,7 +190,11 @@ class SettingsPage extends React.Component {
               exact
               path="/newtab/account/"
               render={props => (
-                <AccountView {...props} showError={showError.bind(this)} />
+                <AccountView
+                  {...props}
+                  authUser={authUser}
+                  showError={showError.bind(this)}
+                />
               )}
             />
             {/* Redirect any incorrect paths */}
