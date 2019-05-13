@@ -8,7 +8,6 @@ import SettingsChildWrapper from 'js/components/Settings/SettingsChildWrapperCom
 import WidgetsSettings from 'js/components/Settings/Widgets/WidgetsSettingsContainer'
 import ErrorMessage from 'js/components/General/ErrorMessage'
 import logger from 'js/utils/logger'
-import withUser from 'js/components/General/withUser'
 
 class WidgetsSettingsView extends React.Component {
   render() {
@@ -70,5 +69,4 @@ WidgetsSettingsView.propTypes = {
 
 WidgetsSettingsView.defaultProps = {}
 
-// TODO: receive authUser from parent
-export default withUser()(WidgetsSettingsView)
+export default WidgetsSettingsView

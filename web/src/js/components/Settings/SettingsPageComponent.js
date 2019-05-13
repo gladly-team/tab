@@ -59,7 +59,7 @@ class SettingsPage extends React.Component {
   }
 
   render() {
-    const { classes } = this.props
+    const { authUser, classes } = this.props
     const showError = this.showError
     const errorMessage = this.state.errorMessage
     const sidebarWidth = 240
@@ -136,6 +136,7 @@ class SettingsPage extends React.Component {
               render={props => (
                 <WidgetsSettingsView
                   {...props}
+                  authUser={authUser}
                   showError={showError.bind(this)}
                 />
               )}

@@ -19,48 +19,30 @@ afterEach(() => {
 })
 
 const getMockProps = () => ({
+  authUser: {
+    id: 'example-user-id',
+    email: 'foo@example.com',
+    username: 'example',
+    isAnonymous: false,
+    emailVerified: true,
+  },
   showError: jest.fn(),
-})
-
-describe('withUser HOC in WidgetsSettingsView', () => {
-  beforeEach(() => {
-    jest.resetModules()
-  })
-
-  it('is called with the expected options', () => {
-    const withUser = require('js/components/General/withUser').default
-
-    /* eslint-disable-next-line no-unused-expressions */
-    require('js/components/Settings/Widgets/WidgetsSettingsView').default
-    expect(withUser).toHaveBeenCalledWith()
-  })
-
-  it('wraps the WidgetsSettingsView component', () => {
-    const {
-      __mockWithUserWrappedFunction,
-    } = require('js/components/General/withUser')
-
-    /* eslint-disable-next-line no-unused-expressions */
-    require('js/components/Settings/Widgets/WidgetsSettingsView').default
-    const wrappedComponent = __mockWithUserWrappedFunction.mock.calls[0][0]
-    expect(wrappedComponent.name).toEqual('WidgetsSettingsView')
-  })
 })
 
 describe('WidgetsSettingsView', () => {
   it('renders without error', () => {
     const mockProps = getMockProps()
-    shallow(<WidgetsSettingsView {...mockProps} />).dive()
+    shallow(<WidgetsSettingsView {...mockProps} />)
   })
 
   it('sets a root style of 100% width and height', () => {
     const mockProps = getMockProps()
-    shallow(<WidgetsSettingsView {...mockProps} />).dive()
+    shallow(<WidgetsSettingsView {...mockProps} />)
   })
 
   it('includes a QueryRenderer', () => {
     const mockProps = getMockProps()
-    const wrapper = shallow(<WidgetsSettingsView {...mockProps} />).dive()
+    const wrapper = shallow(<WidgetsSettingsView {...mockProps} />)
     expect(wrapper.find(QueryRenderer).exists()).toBe(true)
   })
 
@@ -68,7 +50,7 @@ describe('WidgetsSettingsView', () => {
     const mockProps = getMockProps()
     const wrapper = mount(<WidgetsSettingsView {...mockProps} />)
     expect(wrapper.find(QueryRenderer).prop('variables')).toEqual({
-      userId: 'abc123xyz456', // default value in `withUser` mock
+      userId: 'example-user-id', // from the authUser prop
     })
   })
 

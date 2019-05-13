@@ -111,6 +111,14 @@ describe('SettingsPage', () => {
     )
     expect(ThisRouteComponentElem.type()).toEqual(WidgetsSettingsView)
     expect(ThisRouteComponentElem.prop('fakeProp')).toEqual('abc')
+    expect(ThisRouteComponentElem.prop('authUser')).toEqual({
+      // From the default withUser mock
+      id: 'abc123xyz456',
+      email: 'foo@example.com',
+      username: 'example',
+      isAnonymous: false,
+      emailVerified: true,
+    })
     expect(ThisRouteComponentElem.prop('showError')).toEqual(
       expect.any(Function)
     )
@@ -350,6 +358,5 @@ describe('SettingsPage', () => {
   })
 
   // TODO:
-  //  - pass authUser to WidgetsSettingsView and test for that prop; remove
-  //    the withUser HOC from WidgetsSettingsView
+  //  - pass authUser to other child components
 })
