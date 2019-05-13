@@ -11,7 +11,6 @@ import { goTo, loginURL } from 'js/navigation/navigation'
 import { ERROR_USER_DOES_NOT_EXIST } from 'js/constants'
 
 jest.mock('react-relay')
-jest.mock('js/components/General/AuthUserComponent') // TODO: remove these
 jest.mock('js/components/General/ErrorMessage')
 jest.mock('js/analytics/logEvent')
 jest.mock('js/components/Dashboard/DashboardContainer')
