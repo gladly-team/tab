@@ -37,7 +37,11 @@ describe('WidgetsSettingsView', () => {
 
   it('sets a root style of 100% width and height', () => {
     const mockProps = getMockProps()
-    shallow(<WidgetsSettingsView {...mockProps} />)
+    const wrapper = shallow(<WidgetsSettingsView {...mockProps} />)
+    expect(wrapper.at(0).prop('style')).toEqual({
+      width: '100%',
+      height: '100%',
+    })
   })
 
   it('includes a QueryRenderer', () => {
