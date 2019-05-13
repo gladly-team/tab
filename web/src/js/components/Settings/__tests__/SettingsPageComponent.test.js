@@ -10,7 +10,7 @@ import SettingsPage from 'js/components/Settings/SettingsPageComponent'
 // import ProfileStatsView from 'js/components/Settings/Profile/ProfileStatsView'
 // import ProfileDonateHearts from 'js/components/Settings/Profile/ProfileDonateHeartsView'
 // import ProfileInviteFriend from 'js/components/Settings/Profile/ProfileInviteFriendView'
-// import SettingsMenuItem from 'js/components/Settings/SettingsMenuItem'
+import SettingsMenuItem from 'js/components/Settings/SettingsMenuItem'
 // import WidgetsSettingsView from 'js/components/Settings/Widgets/WidgetsSettingsView'
 
 jest.mock('js/components/Settings/Account/AccountView')
@@ -58,6 +58,27 @@ describe('withUser HOC in SettingsPage', () => {
 describe('SettingsPage', () => {
   it('renders without error', () => {
     const mockProps = getMockProps()
-    shallow(<SettingsPage {...mockProps} />).dive()
+    shallow(<SettingsPage {...mockProps} />)
+      .dive()
+      .dive()
+  })
+
+  it('renders the expected side menu items', () => {
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SettingsPage {...mockProps} />)
+      .dive()
+      .dive()
+    const menuItems = wrapper.find(SettingsMenuItem)
+    const expectedMenuItems = [
+      'Widgets',
+      'Background',
+      'Your Stats',
+      'Donate Hearts',
+      'Invite Friends',
+      'Account',
+    ]
+    menuItems.forEach((menuItem, index) => {
+      expect(menuItem.prop('children')).toEqual(expectedMenuItems[index])
+    })
   })
 })
