@@ -22,6 +22,22 @@ const getMockProps = () => ({
   showError: jest.fn(),
 })
 
+describe('withUser HOC in WidgetsSettingsView', () => {
+  beforeEach(() => {
+    jest.resetModules()
+  })
+
+  it('is called with the expected options', () => {
+    const withUser = require('js/components/General/withUser').default
+
+    /* eslint-disable-next-line no-unused-expressions */
+    require('js/components/Settings/Widgets/WidgetsSettingsView').default
+    expect(withUser).toHaveBeenCalledWith()
+  })
+
+  // TODO: test it actually wraps the WidgetsSettingsView component
+})
+
 describe('WidgetsSettingsView', () => {
   it('renders without error', () => {
     const mockProps = getMockProps()
