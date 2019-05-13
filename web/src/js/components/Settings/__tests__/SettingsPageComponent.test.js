@@ -30,6 +30,31 @@ afterEach(() => {
 
 const getMockProps = () => ({})
 
+describe('withUser HOC in SettingsPage', () => {
+  beforeEach(() => {
+    jest.resetModules()
+  })
+
+  it('is called with the expected options', () => {
+    const withUser = require('js/components/General/withUser').default
+
+    /* eslint-disable-next-line no-unused-expressions */
+    require('js/components/Settings/SettingsPageComponent').default
+    expect(withUser).toHaveBeenCalledWith()
+  })
+
+  it('wraps the SettingsPage component', () => {
+    const {
+      __mockWithUserWrappedFunction,
+    } = require('js/components/General/withUser')
+
+    /* eslint-disable-next-line no-unused-expressions */
+    require('js/components/Settings/SettingsPageComponent').default
+    const wrappedComponent = __mockWithUserWrappedFunction.mock.calls[0][0]
+    expect(wrappedComponent.name).toEqual('SettingsPage')
+  })
+})
+
 describe('SettingsPage', () => {
   it('renders without error', () => {
     const mockProps = getMockProps()

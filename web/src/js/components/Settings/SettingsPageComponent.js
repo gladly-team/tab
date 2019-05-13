@@ -1,7 +1,25 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Redirect, Route, Switch } from 'react-router-dom'
+import { withStyles } from '@material-ui/core/styles'
+import AppBar from '@material-ui/core/AppBar'
+import Divider from '@material-ui/core/Divider'
+import IconButton from '@material-ui/core/IconButton'
+import List from '@material-ui/core/List'
+import ListSubheader from '@material-ui/core/ListSubheader'
+import Toolbar from '@material-ui/core/Toolbar'
+import CloseIcon from 'material-ui/svg-icons/navigation/close'
+
+import AccountView from 'js/components/Settings/Account/AccountView'
+import BackgroundSettingsView from 'js/components/Settings/Background/BackgroundSettingsView'
 import ErrorMessage from 'js/components/General/ErrorMessage'
+import Logo from 'js/components/Logo/Logo'
+import ProfileStatsView from 'js/components/Settings/Profile/ProfileStatsView'
+import ProfileDonateHearts from 'js/components/Settings/Profile/ProfileDonateHeartsView'
+import ProfileInviteFriend from 'js/components/Settings/Profile/ProfileInviteFriendView'
+import SettingsMenuItem from 'js/components/Settings/SettingsMenuItem'
+import WidgetsSettingsView from 'js/components/Settings/Widgets/WidgetsSettingsView'
+import withUser from 'js/components/General/withUser'
 import {
   goToDashboard,
   accountURL,
@@ -11,22 +29,6 @@ import {
   statsURL,
   widgetSettingsURL,
 } from 'js/navigation/navigation'
-import { withStyles } from '@material-ui/core/styles'
-import AppBar from '@material-ui/core/AppBar'
-import Divider from '@material-ui/core/Divider'
-import IconButton from '@material-ui/core/IconButton'
-import List from '@material-ui/core/List'
-import ListSubheader from '@material-ui/core/ListSubheader'
-import SettingsMenuItem from 'js/components/Settings/SettingsMenuItem'
-import Toolbar from '@material-ui/core/Toolbar'
-import Logo from 'js/components/Logo/Logo'
-import CloseIcon from 'material-ui/svg-icons/navigation/close'
-import BackgroundSettingsView from 'js/components/Settings/Background/BackgroundSettingsView'
-import WidgetsSettingsView from 'js/components/Settings/Widgets/WidgetsSettingsView'
-import ProfileStatsView from 'js/components/Settings/Profile/ProfileStatsView'
-import ProfileDonateHearts from 'js/components/Settings/Profile/ProfileDonateHeartsView'
-import ProfileInviteFriend from 'js/components/Settings/Profile/ProfileInviteFriendView'
-import AccountView from 'js/components/Settings/Account/AccountView'
 
 const styles = theme => ({
   listSubheader: {
@@ -204,7 +206,10 @@ class SettingsPage extends React.Component {
 }
 
 SettingsPage.propTypes = {
+  authUser: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+  }).isRequired,
   classes: PropTypes.object.isRequired,
 }
 
-export default withStyles(styles)(SettingsPage)
+export default withStyles(styles)(withUser()(SettingsPage))
