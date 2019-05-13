@@ -396,7 +396,4 @@ describe('SettingsPage', () => {
       'We made a mistake :('
     )
   })
-
-  // TODO:
-  //  - pass authUser to other child components
 })
