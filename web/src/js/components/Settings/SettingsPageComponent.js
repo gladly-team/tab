@@ -148,6 +148,7 @@ class SettingsPage extends React.Component {
               render={props => (
                 <BackgroundSettingsView
                   {...props}
+                  authUser={authUser}
                   showError={showError.bind(this)}
                 />
               )}
