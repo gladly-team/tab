@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { shallow } from 'enzyme'
+import { Route, Switch } from 'react-router-dom'
 import SettingsPage from 'js/components/Settings/SettingsPageComponent'
 // import AccountView from 'js/components/Settings/Account/AccountView'
 // import BackgroundSettingsView from 'js/components/Settings/Background/BackgroundSettingsView'
@@ -11,8 +12,9 @@ import SettingsPage from 'js/components/Settings/SettingsPageComponent'
 // import ProfileDonateHearts from 'js/components/Settings/Profile/ProfileDonateHeartsView'
 // import ProfileInviteFriend from 'js/components/Settings/Profile/ProfileInviteFriendView'
 import SettingsMenuItem from 'js/components/Settings/SettingsMenuItem'
-// import WidgetsSettingsView from 'js/components/Settings/Widgets/WidgetsSettingsView'
+import WidgetsSettingsView from 'js/components/Settings/Widgets/WidgetsSettingsView'
 
+jest.mock('react-router-dom')
 jest.mock('js/components/Settings/Account/AccountView')
 jest.mock('js/components/Settings/Background/BackgroundSettingsView')
 jest.mock('js/components/General/ErrorMessage')
@@ -80,5 +82,38 @@ describe('SettingsPage', () => {
     menuItems.forEach((menuItem, index) => {
       expect(menuItem.prop('children')).toEqual(expectedMenuItems[index])
     })
+  })
+
+  it('includes a WidgetsSettingsView route', () => {
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SettingsPage {...mockProps} />)
+      .dive()
+      .dive()
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/settings/widgets/')
+    expect(routeElem.exists()).toBe(true)
+  })
+
+  it('renders the expected WidgetsSettingsView component with the expected props', () => {
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SettingsPage {...mockProps} />)
+      .dive()
+      .dive()
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/settings/widgets/')
+    expect(routeElem.exists()).toBe(true)
+    const ThisRouteComponent = routeElem.prop('render')
+    const ThisRouteComponentElem = shallow(
+      <ThisRouteComponent fakeProp={'abc'} />
+    )
+    expect(ThisRouteComponentElem.type()).toEqual(WidgetsSettingsView)
+    expect(ThisRouteComponentElem.prop('fakeProp')).toEqual('abc')
+    expect(ThisRouteComponentElem.prop('showError')).toEqual(
+      expect.any(Function)
+    )
   })
 })
