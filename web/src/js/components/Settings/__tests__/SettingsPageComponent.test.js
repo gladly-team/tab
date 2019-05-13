@@ -4,13 +4,13 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import { Route, Switch } from 'react-router-dom'
 import SettingsPage from 'js/components/Settings/SettingsPageComponent'
-// import AccountView from 'js/components/Settings/Account/AccountView'
-// import BackgroundSettingsView from 'js/components/Settings/Background/BackgroundSettingsView'
+import AccountView from 'js/components/Settings/Account/AccountView'
+import BackgroundSettingsView from 'js/components/Settings/Background/BackgroundSettingsView'
 // import ErrorMessage from 'js/components/General/ErrorMessage'
 // import Logo from 'js/components/Logo/Logo'
-// import ProfileStatsView from 'js/components/Settings/Profile/ProfileStatsView'
-// import ProfileDonateHearts from 'js/components/Settings/Profile/ProfileDonateHeartsView'
-// import ProfileInviteFriend from 'js/components/Settings/Profile/ProfileInviteFriendView'
+import ProfileStatsView from 'js/components/Settings/Profile/ProfileStatsView'
+import ProfileDonateHearts from 'js/components/Settings/Profile/ProfileDonateHeartsView'
+import ProfileInviteFriend from 'js/components/Settings/Profile/ProfileInviteFriendView'
 import SettingsMenuItem from 'js/components/Settings/SettingsMenuItem'
 import WidgetsSettingsView from 'js/components/Settings/Widgets/WidgetsSettingsView'
 
@@ -105,7 +105,6 @@ describe('SettingsPage', () => {
       .find(Switch)
       .find(Route)
       .filterWhere(elem => elem.prop('path') === '/newtab/settings/widgets/')
-    expect(routeElem.exists()).toBe(true)
     const ThisRouteComponent = routeElem.prop('render')
     const ThisRouteComponentElem = shallow(
       <ThisRouteComponent fakeProp={'abc'} />
@@ -117,8 +116,167 @@ describe('SettingsPage', () => {
     )
   })
 
+  it('includes a BackgroundSettingsView route', () => {
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SettingsPage {...mockProps} />)
+      .dive()
+      .dive()
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/settings/background/')
+    expect(routeElem.exists()).toBe(true)
+  })
+
+  it('renders the expected BackgroundSettingsView component with the expected props', () => {
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SettingsPage {...mockProps} />)
+      .dive()
+      .dive()
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/settings/background/')
+    const ThisRouteComponent = routeElem.prop('render')
+    const ThisRouteComponentElem = shallow(
+      <ThisRouteComponent fakeProp={'abc'} />
+    )
+    expect(ThisRouteComponentElem.type()).toEqual(BackgroundSettingsView)
+    expect(ThisRouteComponentElem.prop('fakeProp')).toEqual('abc')
+    expect(ThisRouteComponentElem.prop('showError')).toEqual(
+      expect.any(Function)
+    )
+  })
+
+  it('includes a ProfileStatsView route', () => {
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SettingsPage {...mockProps} />)
+      .dive()
+      .dive()
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/profile/stats/')
+    expect(routeElem.exists()).toBe(true)
+  })
+
+  it('renders the expected ProfileStatsView component with the expected props', () => {
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SettingsPage {...mockProps} />)
+      .dive()
+      .dive()
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/profile/stats/')
+    const ThisRouteComponent = routeElem.prop('render')
+    const ThisRouteComponentElem = shallow(
+      <ThisRouteComponent fakeProp={'abc'} />
+    )
+    expect(ThisRouteComponentElem.type()).toEqual(ProfileStatsView)
+    expect(ThisRouteComponentElem.prop('fakeProp')).toEqual('abc')
+    expect(ThisRouteComponentElem.prop('showError')).toEqual(
+      expect.any(Function)
+    )
+  })
+
+  it('includes a ProfileDonateHearts route', () => {
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SettingsPage {...mockProps} />)
+      .dive()
+      .dive()
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/profile/donate/')
+    expect(routeElem.exists()).toBe(true)
+  })
+
+  it('renders the expected ProfileDonateHearts component with the expected props', () => {
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SettingsPage {...mockProps} />)
+      .dive()
+      .dive()
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/profile/donate/')
+    const ThisRouteComponent = routeElem.prop('render')
+    const ThisRouteComponentElem = shallow(
+      <ThisRouteComponent fakeProp={'abc'} />
+    )
+    expect(ThisRouteComponentElem.type()).toEqual(ProfileDonateHearts)
+    expect(ThisRouteComponentElem.prop('fakeProp')).toEqual('abc')
+    expect(ThisRouteComponentElem.prop('showError')).toEqual(
+      expect.any(Function)
+    )
+  })
+
+  it('includes a ProfileInviteFriend route', () => {
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SettingsPage {...mockProps} />)
+      .dive()
+      .dive()
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/profile/invite/')
+    expect(routeElem.exists()).toBe(true)
+  })
+
+  it('renders the expected ProfileInviteFriend component with the expected props', () => {
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SettingsPage {...mockProps} />)
+      .dive()
+      .dive()
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/profile/invite/')
+    const ThisRouteComponent = routeElem.prop('render')
+    const ThisRouteComponentElem = shallow(
+      <ThisRouteComponent fakeProp={'abc'} />
+    )
+    expect(ThisRouteComponentElem.type()).toEqual(ProfileInviteFriend)
+    expect(ThisRouteComponentElem.prop('fakeProp')).toEqual('abc')
+    expect(ThisRouteComponentElem.prop('showError')).toEqual(
+      expect.any(Function)
+    )
+  })
+
+  it('includes a AccountView route', () => {
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SettingsPage {...mockProps} />)
+      .dive()
+      .dive()
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/account/')
+    expect(routeElem.exists()).toBe(true)
+  })
+
+  it('renders the expected AccountView component with the expected props', () => {
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SettingsPage {...mockProps} />)
+      .dive()
+      .dive()
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/account/')
+    const ThisRouteComponent = routeElem.prop('render')
+    const ThisRouteComponentElem = shallow(
+      <ThisRouteComponent fakeProp={'abc'} />
+    )
+    expect(ThisRouteComponentElem.type()).toEqual(AccountView)
+    expect(ThisRouteComponentElem.prop('fakeProp')).toEqual('abc')
+    expect(ThisRouteComponentElem.prop('showError')).toEqual(
+      expect.any(Function)
+    )
+  })
+
   // TODO:
-  //  - add tests for remaining route components
   //  - add tests for existence of the Redirect components
   //  - add tests for the showError prop functionality
   //  - pass authUser to WidgetsSettingsView and test for that prop; remove

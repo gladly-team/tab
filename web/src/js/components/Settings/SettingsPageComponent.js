@@ -153,7 +153,7 @@ class SettingsPage extends React.Component {
             />
             <Route
               exact
-              path="/newtab/profile/stats"
+              path="/newtab/profile/stats/"
               render={props => (
                 <ProfileStatsView {...props} showError={showError.bind(this)} />
               )}
