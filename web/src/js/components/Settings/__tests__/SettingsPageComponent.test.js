@@ -116,4 +116,11 @@ describe('SettingsPage', () => {
       expect.any(Function)
     )
   })
+
+  // TODO:
+  //  - add tests for remaining route components
+  //  - add tests for existence of the Redirect components
+  //  - add tests for the showError prop functionality
+  //  - pass authUser to WidgetsSettingsView and test for that prop; remove
+  //    the withUser HOC from WidgetsSettingsView
 })
