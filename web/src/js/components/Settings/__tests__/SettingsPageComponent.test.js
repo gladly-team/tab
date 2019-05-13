@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { shallow } from 'enzyme'
-import { Route, Switch } from 'react-router-dom'
+import { Redirect, Route, Switch } from 'react-router-dom'
 import SettingsPage from 'js/components/Settings/SettingsPageComponent'
 import AccountView from 'js/components/Settings/Account/AccountView'
 import BackgroundSettingsView from 'js/components/Settings/Background/BackgroundSettingsView'
@@ -276,8 +276,55 @@ describe('SettingsPage', () => {
     )
   })
 
+  it('redirects from any nonexistent settings page to the widgets settings page', () => {
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SettingsPage {...mockProps} />)
+      .dive()
+      .dive()
+    const redirectElem = wrapper
+      .find(Switch)
+      .find(Redirect)
+      .filterWhere(elem => elem.prop('from') === '/newtab/settings/*')
+    expect(redirectElem.prop('to')).toEqual('/newtab/settings/widgets/')
+  })
+
+  it('redirects from any nonexistent settings page to the widgets settings page', () => {
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SettingsPage {...mockProps} />)
+      .dive()
+      .dive()
+    const redirectElem = wrapper
+      .find(Switch)
+      .find(Redirect)
+      .filterWhere(elem => elem.prop('from') === '/newtab/settings/*')
+    expect(redirectElem.prop('to')).toEqual('/newtab/settings/widgets/')
+  })
+
+  it('redirects from any nonexistent profile page to the profile stats page', () => {
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SettingsPage {...mockProps} />)
+      .dive()
+      .dive()
+    const redirectElem = wrapper
+      .find(Switch)
+      .find(Redirect)
+      .filterWhere(elem => elem.prop('from') === '/newtab/profile/*')
+    expect(redirectElem.prop('to')).toEqual('/newtab/profile/stats/')
+  })
+
+  it('redirects from any nonexistent account page to the main account page', () => {
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SettingsPage {...mockProps} />)
+      .dive()
+      .dive()
+    const redirectElem = wrapper
+      .find(Switch)
+      .find(Redirect)
+      .filterWhere(elem => elem.prop('from') === '/newtab/account/*')
+    expect(redirectElem.prop('to')).toEqual('/newtab/account/')
+  })
+
   // TODO:
-  //  - add tests for existence of the Redirect components
   //  - add tests for the showError prop functionality
   //  - pass authUser to WidgetsSettingsView and test for that prop; remove
   //    the withUser HOC from WidgetsSettingsView
