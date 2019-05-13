@@ -7,7 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import { cardHeaderSubtitleStyle } from 'js/theme/default'
 import brokenImage from 'js/assets/nopicture.jpg'
 
-class BackgroundCustomeImagePicker extends React.Component {
+class BackgroundCustomImagePicker extends React.Component {
   constructor(props) {
     super(props)
 
@@ -135,7 +135,7 @@ class BackgroundCustomeImagePicker extends React.Component {
   }
 }
 
-BackgroundCustomeImagePicker.propTypes = {
+BackgroundCustomImagePicker.propTypes = {
   user: PropTypes.shape({
     customImage: PropTypes.string.isRequired,
   }),
@@ -143,4 +143,4 @@ BackgroundCustomeImagePicker.propTypes = {
   onCustomImageSelection: PropTypes.func.isRequired,
 }
 
-export default BackgroundCustomeImagePicker
+export default BackgroundCustomImagePicker

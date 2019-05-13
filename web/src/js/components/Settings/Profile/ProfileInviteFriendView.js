@@ -1,18 +1,24 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { QueryRenderer } from 'react-relay'
 import graphql from 'babel-plugin-relay/macro'
 import environment from 'js/relay-env'
 
 import SettingsChildWrapper from 'js/components/Settings/SettingsChildWrapperComponent'
 import ProfileInviteFriend from 'js/components/Settings/Profile/ProfileInviteFriendContainer'
-import AuthUserComponent from 'js/components/General/AuthUserComponent'
 import ErrorMessage from 'js/components/General/ErrorMessage'
 import logger from 'js/utils/logger'
 
 class ProfileInviteFriendView extends React.Component {
   render() {
+    const { authUser } = this.props
     return (
-      <AuthUserComponent>
+      <div
+        style={{
+          height: '100%',
+          width: '100%',
+        }}
+      >
         <QueryRenderer
           environment={environment}
           query={graphql`
@@ -25,6 +31,9 @@ class ProfileInviteFriendView extends React.Component {
               }
             }
           `}
+          variables={{
+            userId: authUser.id,
+          }}
           render={({ error, props }) => {
             if (error) {
               logger.error(error)
@@ -46,9 +55,18 @@ class ProfileInviteFriendView extends React.Component {
             )
           }}
         />
-      </AuthUserComponent>
+      </div>
     )
   }
 }
+
+ProfileInviteFriendView.propTypes = {
+  authUser: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+  }).isRequired,
+  showError: PropTypes.func.isRequired,
+}
+
+ProfileInviteFriendView.defaultProps = {}
 
 export default ProfileInviteFriendView

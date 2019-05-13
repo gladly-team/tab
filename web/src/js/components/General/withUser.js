@@ -117,7 +117,6 @@ const withUser = (options = {}) => WrappedComponent => {
       const { renderIfNoUser = false } = options
       const { authUser, authStateLoaded, userCreationInProgress } = this.state
       // Don't render the children until we've determined the auth state.
-      // if (!authStateLoaded) {
       if (!authStateLoaded || userCreationInProgress) {
         return null
       }
@@ -129,7 +128,7 @@ const withUser = (options = {}) => WrappedComponent => {
       return <WrappedComponent authUser={authUser} {...this.props} />
     }
   }
-  CompWithUser.displayName = `CompWithUser(${getDisplayName(WrappedComponent)})`
+  CompWithUser.displayName = `withUser(${getDisplayName(WrappedComponent)})`
   return CompWithUser
 }
 
