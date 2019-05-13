@@ -6,7 +6,7 @@ import { Redirect, Route, Switch } from 'react-router-dom'
 import SettingsPage from 'js/components/Settings/SettingsPageComponent'
 import AccountView from 'js/components/Settings/Account/AccountView'
 import BackgroundSettingsView from 'js/components/Settings/Background/BackgroundSettingsView'
-// import ErrorMessage from 'js/components/General/ErrorMessage'
+import ErrorMessage from 'js/components/General/ErrorMessage'
 // import Logo from 'js/components/Logo/Logo'
 import ProfileStatsView from 'js/components/Settings/Profile/ProfileStatsView'
 import ProfileDonateHearts from 'js/components/Settings/Profile/ProfileDonateHeartsView'
@@ -324,8 +324,32 @@ describe('SettingsPage', () => {
     expect(redirectElem.prop('to')).toEqual('/newtab/account/')
   })
 
+  it('displays an error message when a child route calls the showError prop', () => {
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SettingsPage {...mockProps} />)
+      .dive()
+      .dive()
+
+    // We should not show an error message yet.
+    expect(wrapper.find(ErrorMessage).exists()).toBe(false)
+
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/settings/widgets/')
+    const ThisRouteComponent = routeElem.prop('render')
+    const ThisRouteComponentElem = shallow(
+      <ThisRouteComponent fakeProp={'abc'} />
+    )
+    const showErrorFunc = ThisRouteComponentElem.prop('showError')
+    showErrorFunc('We made a mistake :(')
+    expect(wrapper.find(ErrorMessage).exists()).toBe(true)
+    expect(wrapper.find(ErrorMessage).prop('message')).toEqual(
+      'We made a mistake :('
+    )
+  })
+
   // TODO:
-  //  - add tests for the showError prop functionality
   //  - pass authUser to WidgetsSettingsView and test for that prop; remove
   //    the withUser HOC from WidgetsSettingsView
 })
