@@ -157,7 +157,11 @@ class SettingsPage extends React.Component {
               exact
               path="/newtab/profile/stats/"
               render={props => (
-                <ProfileStatsView {...props} showError={showError.bind(this)} />
+                <ProfileStatsView
+                  {...props}
+                  authUser={authUser}
+                  showError={showError.bind(this)}
+                />
               )}
             />
             <Route
