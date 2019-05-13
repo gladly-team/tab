@@ -70,4 +70,5 @@ WidgetsSettingsView.propTypes = {
 
 WidgetsSettingsView.defaultProps = {}
 
+// TODO: receive authUser from parent
 export default withUser()(WidgetsSettingsView)
