@@ -35,7 +35,16 @@ describe('withUser HOC in WidgetsSettingsView', () => {
     expect(withUser).toHaveBeenCalledWith()
   })
 
-  // TODO: test it actually wraps the WidgetsSettingsView component
+  it('wraps the WidgetsSettingsView component', () => {
+    const {
+      __mockWithUserWrappedFunction,
+    } = require('js/components/General/withUser')
+
+    /* eslint-disable-next-line no-unused-expressions */
+    require('js/components/Settings/Widgets/WidgetsSettingsView').default
+    const wrappedComponent = __mockWithUserWrappedFunction.mock.calls[0][0]
+    expect(wrappedComponent.name).toEqual('WidgetsSettingsView')
+  })
 })
 
 describe('WidgetsSettingsView', () => {
