@@ -3,7 +3,6 @@
 import React from 'react'
 import { mount, shallow } from 'enzyme'
 import DashboardView from 'js/components/Dashboard/DashboardView'
-import AuthUserComponent from 'js/components/General/AuthUserComponent'
 import { QueryRenderer } from 'react-relay'
 import DashboardContainer from 'js/components/Dashboard/DashboardContainer'
 import ErrorMessage from 'js/components/General/ErrorMessage'
@@ -11,42 +10,80 @@ import { createNewUser } from 'js/authentication/helpers'
 import { goTo, loginURL } from 'js/navigation/navigation'
 import { ERROR_USER_DOES_NOT_EXIST } from 'js/constants'
 
-jest.mock('js/components/General/AuthUserComponent')
+jest.mock('react-relay')
+jest.mock('js/components/General/AuthUserComponent') // TODO: remove these
 jest.mock('js/components/General/ErrorMessage')
 jest.mock('js/analytics/logEvent')
-jest.mock('react-relay')
 jest.mock('js/components/Dashboard/DashboardContainer')
 jest.mock('js/authentication/helpers')
 jest.mock('js/navigation/navigation')
+jest.mock('js/components/General/withUser')
+
+const getMockProps = () => ({
+  authUser: {
+    id: 'example-user-id',
+    email: 'foo@example.com',
+    username: 'example',
+    isAnonymous: false,
+    emailVerified: true,
+  },
+})
 
 afterEach(() => {
   jest.clearAllMocks()
 })
 
-describe('DashboardView', () => {
-  it('renders without error', () => {
-    shallow(<DashboardView />)
+describe('withUser HOC in DashboardView', () => {
+  beforeEach(() => {
+    jest.resetModules()
   })
 
-  it('includes AuthUserComponent', () => {
-    const wrapper = shallow(<DashboardView />)
-    expect(wrapper.find(AuthUserComponent).length).toBe(1)
+  it('is called with the expected options', () => {
+    const withUser = require('js/components/General/withUser').default
 
-    // Make sure AuthUserComponent is the top-level component.
-    // We're not using Enzyme's .type() here because the
-    // component is mocked.
-    expect(wrapper.name()).toEqual('AuthUserComponent')
+    /* eslint-disable-next-line no-unused-expressions */
+    require('js/components/Dashboard/DashboardView').default
+    expect(withUser).toHaveBeenCalledWith()
+  })
+
+  it('wraps the DashboardView component', () => {
+    const {
+      __mockWithUserWrappedFunction,
+    } = require('js/components/General/withUser')
+
+    /* eslint-disable-next-line no-unused-expressions */
+    require('js/components/Dashboard/DashboardView').default
+    const wrappedComponent = __mockWithUserWrappedFunction.mock.calls[0][0]
+    expect(wrappedComponent.name).toEqual('DashboardView')
+  })
+})
+
+describe('DashboardView', () => {
+  it('renders without error', () => {
+    const mockProps = getMockProps()
+    shallow(<DashboardView {...mockProps} />).dive()
+  })
+
+  it('sets a root style of 100% width and height', () => {
+    const mockProps = getMockProps()
+    const wrapper = shallow(<DashboardView {...mockProps} />).dive()
+    expect(wrapper.at(0).prop('style')).toEqual({
+      width: '100%',
+      height: '100%',
+    })
   })
 
   it('includes QueryRenderer', () => {
-    const wrapper = shallow(<DashboardView />)
+    const mockProps = getMockProps()
+    const wrapper = shallow(<DashboardView {...mockProps} />).dive()
     expect(wrapper.find(QueryRenderer).length).toBe(1)
   })
 
-  it('QueryRenderer receives the "variables" prop', () => {
-    const wrapper = mount(<DashboardView />)
+  it('passes the expected variables to the QueryRenderer', () => {
+    const mockProps = getMockProps()
+    const wrapper = mount(<DashboardView {...mockProps} />)
     expect(wrapper.find(QueryRenderer).prop('variables')).toEqual({
-      userId: 'abc123xyz456', // default value in AuthUser mock
+      userId: 'example-user-id', // from the authUser prop
     })
   })
 
@@ -57,7 +94,8 @@ describe('DashboardView', () => {
       retry: jest.fn(),
     })
 
-    const wrapper = mount(<DashboardView />)
+    const mockProps = getMockProps()
+    const wrapper = mount(<DashboardView {...mockProps} />)
     expect(wrapper.find(DashboardContainer).length).toBe(1)
   })
 
@@ -77,7 +115,8 @@ describe('DashboardView', () => {
       retry: jest.fn(),
     })
 
-    const wrapper = mount(<DashboardView />)
+    const mockProps = getMockProps()
+    const wrapper = mount(<DashboardView {...mockProps} />)
     const dashboardContainer = wrapper.find(DashboardContainer)
     expect(dashboardContainer.prop('app')).toEqual(fakeProps.app)
     expect(dashboardContainer.prop('user')).toEqual(fakeProps.user)
@@ -111,7 +150,8 @@ describe('DashboardView', () => {
       retry: jest.fn(),
     })
 
-    const wrapper = mount(<DashboardView />)
+    const mockProps = getMockProps()
+    const wrapper = mount(<DashboardView {...mockProps} />)
 
     // Dashboard should not render.
     expect(wrapper.find(DashboardContainer).length).toBe(0)
@@ -160,7 +200,8 @@ describe('DashboardView', () => {
       email: null,
     })
 
-    mount(<DashboardView />)
+    const mockProps = getMockProps()
+    mount(<DashboardView {...mockProps} />)
 
     // Flush all promises
     await new Promise(resolve => setImmediate(resolve))
@@ -203,7 +244,8 @@ describe('DashboardView', () => {
     // Failed to create a new user.
     createNewUser.mockRejectedValue(new Error('Failure'))
 
-    mount(<DashboardView />)
+    const mockProps = getMockProps()
+    mount(<DashboardView {...mockProps} />)
 
     // Flush all promises
     await new Promise(resolve => setImmediate(resolve))
