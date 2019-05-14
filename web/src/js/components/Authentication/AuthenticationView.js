@@ -19,14 +19,20 @@ class AuthenticationView extends React.Component {
     this.state = {
       refetchCounter: 0,
     }
+    this.mounted = false
     this.createNewUserAttempts = 0
     this.createNewUserPromise = null
+  }
+
+  componentDidMount() {
+    this.mounted = true
   }
 
   componentWillUnmount() {
     if (this.createNewUserPromise && this.createNewUserPromise.cancel) {
       this.createNewUserPromise.cancel()
     }
+    this.mounted = false
   }
 
   // If we have an authed user with a user ID, fetch the
@@ -37,6 +43,17 @@ class AuthenticationView extends React.Component {
   // Pass this to children to allow a forced refetch after
   // we create a new user in our database.
   async fetchUser() {
+    // This is an antipattern, and canceling our promises on unmount
+    // should handle the problem. However, in practice, the component
+    // sometimes unmounts between the userCreatePromise resolving and
+    // this point, causing an error when we try to update state on the
+    // unmounted component. It shouldn't cause a memory leak, as we've
+    // also canceled the promise.
+    // Note that this might be an error in our code, but it's not a
+    // priority to investigate.
+    if (!this.mounted) {
+      return
+    }
     const { refetchCounter } = this.state
     this.setState({
       refetchCounter: refetchCounter + 1,

@@ -104,6 +104,8 @@ const withUser = (options = {}) => WrappedComponent => {
         // this point, causing an error when we try to update state on the
         // unmounted component. It shouldn't cause a memory leak, as we've
         // canceled the promise and unsubscribed the auth listener.
+        // Note that this might be an error in our code, but it's not a
+        // priority to investigate.
         if (!this.mounted) {
           return
         }
@@ -123,7 +125,7 @@ const withUser = (options = {}) => WrappedComponent => {
         }
       }
 
-      if (!redirected) {
+      if (!redirected && this.mounted) {
         this.setState({
           authUser: authUser,
           authStateLoaded: true,
