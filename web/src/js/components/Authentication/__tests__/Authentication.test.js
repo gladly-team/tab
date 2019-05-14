@@ -6,7 +6,7 @@ import MockDate from 'mockdate'
 import { shallow } from 'enzyme'
 import {
   createNewUser,
-  checkAuthStateAndRedirectIfNeeded,
+  redirectToAuthIfNeeded,
 } from 'js/authentication/helpers'
 import {
   goTo,
@@ -15,7 +15,7 @@ import {
   missingEmailMessageURL,
   verifyEmailURL,
 } from 'js/navigation/navigation'
-import { getCurrentUser, sendVerificationEmail } from 'js/authentication/user'
+import { sendVerificationEmail } from 'js/authentication/user'
 import { getUrlParameters } from 'js/utils/utils'
 import { getBrowserExtensionInstallId } from 'js/utils/local-user-data-mgr'
 import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
@@ -50,8 +50,7 @@ beforeEach(() => {
   MockDate.set(moment(mockNow))
 
   // Reset an unauthed user as the default.
-  checkAuthStateAndRedirectIfNeeded.mockResolvedValue(true)
-  getCurrentUser.mockResolvedValue(null)
+  redirectToAuthIfNeeded.mockReturnValue(true)
   getUrlParameters.mockReturnValue({})
   getBrowserExtensionInstallId.mockReturnValue('some-install-id')
 })
@@ -69,17 +68,13 @@ describe('Authentication.js tests', function() {
     shallow(<Authentication {...mockProps} />)
   })
 
-  it('shows the logo with expected props', async () => {
+  it('shows the logo with expected props', () => {
     expect.assertions(3)
 
     const Authentication = require('js/components/Authentication/Authentication')
       .default
     const mockProps = MockProps()
     const wrapper = shallow(<Authentication {...mockProps} />)
-
-    // Wait for mount to complete.
-    const component = wrapper.instance()
-    await component.componentDidMount()
     wrapper.update()
 
     const logoComponent = wrapper.find(Logo)
@@ -90,39 +85,31 @@ describe('Authentication.js tests', function() {
     })
   })
 
-  it('displays the endorsement quote', async () => {
+  it('displays the endorsement quote', () => {
     expect.assertions(1)
 
     const Authentication = require('js/components/Authentication/Authentication')
       .default
     const mockProps = MockProps()
     const wrapper = shallow(<Authentication {...mockProps} />)
-
-    // Wait for mount to complete.
-    const component = wrapper.instance()
-    await component.componentDidMount()
     wrapper.update()
 
     expect(wrapper.find('[data-test-id="endorsement-quote"]').length).toBe(1)
   })
 
-  it('typically does not display the sign-in explanation', async () => {
+  it('typically does not display the sign-in explanation', () => {
     expect.assertions(1)
 
     const Authentication = require('js/components/Authentication/Authentication')
       .default
     const mockProps = MockProps()
     const wrapper = shallow(<Authentication {...mockProps} />)
-
-    // Wait for mount to complete.
-    const component = wrapper.instance()
-    await component.componentDidMount()
     wrapper.update()
 
     expect(wrapper.find('[data-test-id="anon-sign-in-fyi"]').length).toBe(0)
   })
 
-  it('displays the sign-in explanation (and hides the quote) when it is a mandatory sign-in', async () => {
+  it('displays the sign-in explanation (and hides the quote) when it is a mandatory sign-in', () => {
     expect.assertions(2)
 
     const Authentication = require('js/components/Authentication/Authentication')
@@ -134,26 +121,15 @@ describe('Authentication.js tests', function() {
     getUrlParameters.mockReturnValue({
       mandatory: 'true',
     })
-    getCurrentUser.mockResolvedValue({
-      id: 'abc123',
-      email: null,
-      username: null,
-      isAnonymous: true,
-      emailVerified: false,
-    })
 
     const wrapper = shallow(<Authentication {...mockProps} />)
-
-    // Wait for mount to complete.
-    const component = wrapper.instance()
-    await component.componentDidMount()
     wrapper.update()
 
     expect(wrapper.find('[data-test-id="anon-sign-in-fyi"]').length).toBe(1)
     expect(wrapper.find('[data-test-id="endorsement-quote"]').length).toBe(0)
   })
 
-  it("does not display the sign-in explanation when it is a mandatory sign-in but we're on the iframe message page", async () => {
+  it("does not display the sign-in explanation when it is a mandatory sign-in but we're on the iframe message page", () => {
     expect.assertions(2)
 
     const Authentication = require('js/components/Authentication/Authentication')
@@ -165,101 +141,34 @@ describe('Authentication.js tests', function() {
     getUrlParameters.mockReturnValue({
       mandatory: 'true',
     })
-    getCurrentUser.mockResolvedValue({
-      id: 'abc123',
-      email: null,
-      username: null,
-      isAnonymous: true,
-      emailVerified: false,
-    })
 
     const wrapper = shallow(<Authentication {...mockProps} />)
-
-    // Wait for mount to complete.
-    const component = wrapper.instance()
-    await component.componentDidMount()
     wrapper.update()
 
     expect(wrapper.find('[data-test-id="anon-sign-in-fyi"]').length).toBe(0)
     expect(wrapper.find('[data-test-id="endorsement-quote"]').length).toBe(1)
   })
 
-  it('calls the `navigateToAuthStep` method on mount', async () => {
-    expect.assertions(1)
-    const Authentication = require('js/components/Authentication/Authentication')
-      .default
-    const mockProps = MockProps()
-    const wrapper = shallow(<Authentication {...mockProps} />)
-
-    // Mock method and simulate mount.
-    const component = wrapper.instance()
-    component.navigateToAuthStep = jest.fn()
-    await component.componentDidMount()
-    expect(component.navigateToAuthStep).toHaveBeenCalled()
-  })
-
-  it('sets "loadChildren" state to true when mounting', async () => {
+  it('redirects to the app if the user is fully authenticated', () => {
     expect.assertions(1)
 
     // User is fully authed.
-    checkAuthStateAndRedirectIfNeeded.mockResolvedValue(false)
-    getCurrentUser.mockResolvedValue({
-      id: 'abc123',
-      email: 'foo@bar.com',
-      username: 'SomeUsername',
-      isAnonymous: false,
-      emailVerified: true,
-    })
+    redirectToAuthIfNeeded.mockReturnValue(false)
+
+    getUrlParameters.mockReturnValue({})
 
     const Authentication = require('js/components/Authentication/Authentication')
       .default
     const mockProps = MockProps()
-    const wrapper = shallow(<Authentication {...mockProps} />)
-
-    // Mock method and simulate mount.
-    const component = wrapper.instance()
-    component.navigateToAuthStep = jest.fn()
-    await component.componentDidMount()
-    expect(wrapper.state().loadChildren).toBe(true)
-  })
-
-  it('redirects to the app if the user is fully authenticated', async () => {
-    expect.assertions(1)
-
-    // User is fully authed.
-    checkAuthStateAndRedirectIfNeeded.mockResolvedValue(false)
-    getCurrentUser.mockResolvedValue({
-      id: 'abc123',
-      email: 'foo@bar.com',
-      username: 'SomeUsername',
-      isAnonymous: false,
-      emailVerified: true,
-    })
-
-    const Authentication = require('js/components/Authentication/Authentication')
-      .default
-    const mockProps = MockProps()
-    const wrapper = shallow(<Authentication {...mockProps} />)
-
-    // Wait for mount to complete.
-    const component = wrapper.instance()
-    await component.componentDidMount()
-
+    shallow(<Authentication {...mockProps} />)
     expect(goToDashboard).toHaveBeenCalled()
   })
 
-  it('does not redirect to the app if the user is fully authenticated but the URL has the noredirect param', async () => {
+  it('does not redirect to the app if the user is fully authenticated but the URL has the noredirect param', () => {
     expect.assertions(1)
 
     // User is fully authed.
-    checkAuthStateAndRedirectIfNeeded.mockResolvedValue(false)
-    getCurrentUser.mockResolvedValue({
-      id: 'abc123',
-      email: 'foo@bar.com',
-      username: 'SomeUsername',
-      isAnonymous: false,
-      emailVerified: true,
-    })
+    redirectToAuthIfNeeded.mockReturnValue(false)
 
     getUrlParameters.mockReturnValue({
       noredirect: 'true',
@@ -268,27 +177,16 @@ describe('Authentication.js tests', function() {
     const Authentication = require('js/components/Authentication/Authentication')
       .default
     const mockProps = MockProps()
-    const wrapper = shallow(<Authentication {...mockProps} />)
-
-    // Wait for mount to complete.
-    const component = wrapper.instance()
-    await component.componentDidMount()
+    shallow(<Authentication {...mockProps} />)
 
     expect(goToDashboard).not.toHaveBeenCalled()
   })
 
-  it('redirect to the app if the user is fully authenticated but the URL has an invalid noredirect param', async () => {
+  it('redirects to the app if the user is fully authenticated but the URL has an invalid noredirect param', async () => {
     expect.assertions(1)
 
     // User is fully authed.
-    checkAuthStateAndRedirectIfNeeded.mockResolvedValue(false)
-    getCurrentUser.mockResolvedValue({
-      id: 'abc123',
-      email: 'foo@bar.com',
-      username: 'SomeUsername',
-      isAnonymous: false,
-      emailVerified: true,
-    })
+    redirectToAuthIfNeeded.mockReturnValue(false)
 
     getUrlParameters.mockReturnValue({
       noredirect: 'something',
@@ -297,41 +195,26 @@ describe('Authentication.js tests', function() {
     const Authentication = require('js/components/Authentication/Authentication')
       .default
     const mockProps = MockProps()
-    const wrapper = shallow(<Authentication {...mockProps} />)
-
-    // Wait for mount to complete.
-    const component = wrapper.instance()
-    await component.componentDidMount()
+    shallow(<Authentication {...mockProps} />)
 
     expect(goToDashboard).toHaveBeenCalled()
   })
 
-  it('does not redirect to the app if the user is not fully authenticated', async () => {
+  it('does not redirect to the app if the user is not fully authenticated', () => {
     expect.assertions(1)
 
     // User is not fully authed.
-    checkAuthStateAndRedirectIfNeeded.mockResolvedValue(true)
-    getCurrentUser.mockResolvedValue({
-      id: 'abc123',
-      email: null,
-      username: 'SomeUsername',
-      isAnonymous: false,
-      emailVerified: false,
-    })
+    redirectToAuthIfNeeded.mockReturnValue(true)
 
     const Authentication = require('js/components/Authentication/Authentication')
       .default
     const mockProps = MockProps()
-    const wrapper = shallow(<Authentication {...mockProps} />)
-
-    // Wait for mount to complete.
-    const component = wrapper.instance()
-    await component.componentDidMount()
+    shallow(<Authentication {...mockProps} />)
 
     expect(goToDashboard).not.toHaveBeenCalled()
   })
 
-  it('does not redirect at all if the URL is /auth/action/*', async () => {
+  it('does not redirect at all if the URL is /auth/action/*', () => {
     expect.assertions(3)
     const Authentication = require('js/components/Authentication/Authentication')
       .default
@@ -339,18 +222,9 @@ describe('Authentication.js tests', function() {
     mockProps.location.pathname = '/auth/action/verify/'
 
     // User does not have a verified email but is on the email verification page.
-    checkAuthStateAndRedirectIfNeeded.mockResolvedValue(false)
-    getCurrentUser.mockResolvedValue({
-      id: 'abc123',
-      email: 'foo@bar.com',
-      username: null,
-      isAnonymous: false,
-      emailVerified: false,
-    })
+    redirectToAuthIfNeeded.mockReturnValue(false)
 
-    const wrapper = shallow(<Authentication {...mockProps} />)
-    const component = wrapper.instance()
-    await component.navigateToAuthStep()
+    shallow(<Authentication {...mockProps} />)
     expect(goTo).not.toHaveBeenCalled()
     expect(replaceUrl).not.toHaveBeenCalled()
     expect(goToDashboard).not.toHaveBeenCalled()
@@ -410,13 +284,6 @@ describe('Authentication.js tests', function() {
     const mockFirebaseCredential = {}
     const mockFirebaseDefaultRedirectURL = ''
 
-    getCurrentUser.mockResolvedValue({
-      id: 'abc123',
-      email: 'foo@bar.com',
-      username: null,
-      isAnonymous: false,
-      emailVerified: false, // Note that email is unverified
-    })
     createNewUser.mockResolvedValue({
       id: 'abc123',
       email: 'foo@bar.com',
@@ -462,13 +329,6 @@ describe('Authentication.js tests', function() {
     const mockFirebaseCredential = {}
     const mockFirebaseDefaultRedirectURL = ''
 
-    getCurrentUser.mockResolvedValue({
-      id: 'abc123',
-      email: 'foo@bar.com',
-      username: null,
-      isAnonymous: false,
-      emailVerified: true,
-    })
     createNewUser.mockResolvedValue({
       id: 'abc123',
       email: 'foo@bar.com',

@@ -9,9 +9,9 @@ import VerifyEmailMessage from 'js/components/Authentication/VerifyEmailMessage'
 import EnterUsernameForm from 'js/components/Authentication/EnterUsernameForm'
 import SignInIframeMessage from 'js/components/Authentication/SignInIframeMessage'
 import MissingEmailMessage from 'js/components/Authentication/MissingEmailMessage'
-import { getCurrentUser, sendVerificationEmail } from 'js/authentication/user'
+import { sendVerificationEmail } from 'js/authentication/user'
 import {
-  checkAuthStateAndRedirectIfNeeded,
+  redirectToAuthIfNeeded,
   createNewUser,
 } from 'js/authentication/helpers'
 import {
@@ -51,34 +51,13 @@ class Authentication extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      loadChildren: false,
       // Whether we are requiring the anonymous user to sign in.
       isMandatoryAnonymousSignIn: getUrlParameters()['mandatory'] === 'true',
     }
   }
 
-  async componentDidMount() {
-    this.mounted = true
-
+  componentDidMount() {
     this.navigateToAuthStep()
-
-    // Don't render any children until after checking the user's
-    // authed state. Otherwise, immediate unmounting of
-    // FirebaseAuthenticationUI can cause errors.
-    // We check `this.mounted` to make sure we don't set state after
-    // the component has unmounted. This is hacky; it would be
-    // better to cancel the async call on unmount or use a flux-like
-    // data flow. See:
-    // https://reactjs.org/blog/2015/12/16/ismounted-antipattern.html
-    if (this.mounted) {
-      this.setState({
-        loadChildren: true,
-      })
-    }
-  }
-
-  componentWillUnmount() {
-    this.mounted = false
   }
 
   componentWillReceiveProps(nextProps) {
@@ -99,7 +78,7 @@ class Authentication extends React.Component {
     if (this.isAuthActionURL()) {
       return
     }
-    const redirected = redirectToAuthIfNeeded(authUser)
+    const redirected = redirectToAuthIfNeeded()
 
     // When anonymous users choose to sign in, do not go back to the
     // dashboard.
@@ -214,40 +193,38 @@ class Authentication extends React.Component {
               padding: 20,
             }}
           >
-            {this.state.loadChildren ? (
-              <Switch>
-                <Route
-                  exact
-                  path="/newtab/auth/verify-email/"
-                  component={VerifyEmailMessage}
-                />
-                <Route
-                  exact
-                  path="/newtab/auth/username/"
-                  render={props => <EnterUsernameForm {...props} user={user} />}
-                />
-                <Route
-                  exact
-                  path="/newtab/auth/welcome/"
-                  component={SignInIframeMessage}
-                />
-                <Route
-                  exact
-                  path="/newtab/auth/missing-email/"
-                  component={MissingEmailMessage}
-                />
-                <Route
-                  path="/newtab/auth/"
-                  render={props => (
-                    <FirebaseAuthenticationUI
-                      {...props}
-                      onSignInSuccess={this.onSignInSuccess.bind(this)}
-                      user={user}
-                    />
-                  )}
-                />
-              </Switch>
-            ) : null}
+            <Switch>
+              <Route
+                exact
+                path="/newtab/auth/verify-email/"
+                component={VerifyEmailMessage}
+              />
+              <Route
+                exact
+                path="/newtab/auth/username/"
+                render={props => <EnterUsernameForm {...props} user={user} />}
+              />
+              <Route
+                exact
+                path="/newtab/auth/welcome/"
+                component={SignInIframeMessage}
+              />
+              <Route
+                exact
+                path="/newtab/auth/missing-email/"
+                component={MissingEmailMessage}
+              />
+              <Route
+                path="/newtab/auth/"
+                render={props => (
+                  <FirebaseAuthenticationUI
+                    {...props}
+                    onSignInSuccess={this.onSignInSuccess.bind(this)}
+                    user={user}
+                  />
+                )}
+              />
+            </Switch>
           </span>
           {!showRequiredSignInExplanation ? (
             // Using same style as homepage
