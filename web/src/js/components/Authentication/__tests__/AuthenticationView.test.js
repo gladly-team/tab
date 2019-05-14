@@ -22,6 +22,34 @@ afterEach(() => {
   __setMockAuthUser(null)
 })
 
+describe('withUser HOC in AuthenticationView', () => {
+  beforeEach(() => {
+    jest.resetModules()
+  })
+
+  it('is called with the expected options', () => {
+    const withUser = require('js/components/General/withUser').default
+
+    /* eslint-disable-next-line no-unused-expressions */
+    require('js/components/Authentication/AuthenticationView').default
+    expect(withUser).toHaveBeenCalledWith({
+      redirectToAuthIfIncomplete: false,
+      renderIfNoUser: true,
+    })
+  })
+
+  it('wraps the AuthenticationView component', () => {
+    const {
+      __mockWithUserWrappedFunction,
+    } = require('js/components/General/withUser')
+
+    /* eslint-disable-next-line no-unused-expressions */
+    require('js/components/Authentication/AuthenticationView').default
+    const wrappedComponent = __mockWithUserWrappedFunction.mock.calls[0][0]
+    expect(wrappedComponent.name).toEqual('AuthenticationView')
+  })
+})
+
 describe('AuthenticationView', () => {
   it('renders without error', () => {
     shallow(<AuthenticationView />).dive()
@@ -307,7 +335,7 @@ describe('AuthenticationView', () => {
           resolve({
             id: 'acbdegfh2468',
             username: null,
-            email: null,
+            email: 'foo@example.com',
           })
         }, 8e3)
       })
