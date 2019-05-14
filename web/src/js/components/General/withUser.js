@@ -44,6 +44,7 @@ const withUser = (options = {}) => WrappedComponent => {
         authStateLoaded: false,
         userCreationInProgress: false,
       }
+      this.authListenerUnsubscribe = null
       this.userCreatePromise = null
     }
 
