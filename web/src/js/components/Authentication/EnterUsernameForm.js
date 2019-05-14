@@ -21,6 +21,16 @@ class EnterUsernameForm extends React.Component {
   }
 
   componentDidMount() {
+    // If the user has a username, set it in local storage and
+    // redirect to the dashboard. This can happen when an existing
+    // user signs in on a new client.
+    const { user } = this.props
+    if (user.username) {
+      setUsernameInLocalStorage(user.username)
+      goToDashboard()
+      return
+    }
+
     // See if the user verified their email address so that we can
     // log the verification. It would be better to user a cloud
     // function for this, or at least an official callback from the
@@ -156,7 +166,8 @@ class EnterUsernameForm extends React.Component {
 EnterUsernameForm.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.string.isRequired,
-  }),
+    username: PropTypes.string,
+  }).isRequired,
 }
 
 export default EnterUsernameForm
