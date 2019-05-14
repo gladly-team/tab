@@ -46,9 +46,12 @@ const withUser = (options = {}) => WrappedComponent => {
       }
       this.authListenerUnsubscribe = null
       this.userCreatePromise = null
+      this.mounted = false
     }
 
     componentDidMount() {
+      this.mounted = true
+
       // Store unsubscribe function.
       // https://firebase.google.com/docs/reference/js/firebase.auth.Auth#onAuthStateChanged
       this.authListenerUnsubscribe = onAuthStateChanged(user => {
@@ -61,8 +64,10 @@ const withUser = (options = {}) => WrappedComponent => {
         this.authListenerUnsubscribe()
       }
       if (this.userCreatePromise && this.userCreatePromise.cancel) {
+        console.log('userCreatePromise CANCELED')
         this.userCreatePromise.cancel()
       }
+      this.mounted = false
     }
 
     async determineAuthState(user) {
@@ -85,14 +90,20 @@ const withUser = (options = {}) => WrappedComponent => {
             createAnonymousUserIfPossible()
           )
           authUser = await this.userCreatePromise.promise
+          console.log('userCreatePromise just resolved', authUser)
         } catch (e) {
           // If the component already unmounted, don't do anything with
           // the returned data.
           if (e && e.isCanceled) {
+            console.log('userCreatePromise was previously canceled; returning')
             return
           }
           logger.error(e)
         }
+
+        // FIXME: even when the userCreatePromise is canceled, we
+        // reach this point instead of catching above. Unsure why.
+        console.log('about to update state. is mounted?', this.mounted)
         this.setState({
           userCreationInProgress: false,
         })
