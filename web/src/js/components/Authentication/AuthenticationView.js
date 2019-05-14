@@ -77,6 +77,7 @@ class AuthenticationView extends React.Component {
               this.createNewUserAttempts = this.createNewUserAttempts + 1
               createNewUser()
                 .then(user => {
+                  // FIXME: cancel this on unmount
                   this.fetchUser()
                 })
                 .catch(e => {
