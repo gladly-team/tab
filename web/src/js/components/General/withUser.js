@@ -12,6 +12,9 @@ function getDisplayName(WrappedComponent) {
   return WrappedComponent.displayName || WrappedComponent.name || 'Component'
 }
 
+// FIXME: signing in or signing out gives an error of trying to
+//   update state on an unmounted component.
+
 /**
  * Adds an "authUser" prop, an AuthUser object from our authentication, to
  * the wrapped child component. Optionally, it attempts to create a user if
