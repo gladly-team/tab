@@ -60,7 +60,7 @@ class Authentication extends React.Component {
   async componentDidMount() {
     this.mounted = true
 
-    await this.navigateToAuthStep()
+    this.navigateToAuthStep()
 
     // Don't render any children until after checking the user's
     // authed state. Otherwise, immediate unmounting of
@@ -93,29 +93,13 @@ class Authentication extends React.Component {
     return this.props.location.pathname.indexOf('/auth/action/') !== -1
   }
 
-  async navigateToAuthStep() {
+  navigateToAuthStep() {
     // Don't do anything on /auth/action/ pages, which include
     // email confirmation links and password reset links.
     if (this.isAuthActionURL()) {
       return
     }
-
-    // Send the user to the appropriate page for the next
-    // step in sign-up, or send them to the dashboard if
-    // the sign-up is completed.
-    const authTokenUser = await getCurrentUser()
-
-    // Redirect to the appropriate authentication view if the
-    // user is not fully authenticated.
-    const usernameFromServer = this.props.user ? this.props.user.username : null
-    try {
-      var redirected = await checkAuthStateAndRedirectIfNeeded(
-        authTokenUser,
-        usernameFromServer
-      )
-    } catch (e) {
-      throw e
-    }
+    const redirected = redirectToAuthIfNeeded(authUser)
 
     // When anonymous users choose to sign in, do not go back to the
     // dashboard.
@@ -168,6 +152,8 @@ class Authentication extends React.Component {
               logger.error(err)
             })
         } else {
+          // TODO: may not need this now that we listen for auth status (?)
+
           // Fetch the user from our database. This will update the `user`
           // prop, which will let us navigate to the appropriate step in
           // authentication.
