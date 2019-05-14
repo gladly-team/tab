@@ -230,7 +230,7 @@ export const getAllDomainNames = () => {
  * https://reactjs.org/blog/2015/12/16/ismounted-antipattern.html
  * https://github.com/facebook/react/issues/5465#issuecomment-157888325
  * @param {Promise}
- * @return {Object} An object containing a promise and cancel methodd.
+ * @return {Object} An object containing a promise and cancel method.
  */
 export const makePromiseCancelable = promise => {
   let hasCanceled_ = false
