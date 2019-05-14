@@ -7,56 +7,92 @@ import { QueryRenderer } from 'react-relay'
 import AuthenticationContainer from 'js/components/Authentication/AuthenticationContainer'
 import { createNewUser } from 'js/authentication/helpers'
 import { ERROR_USER_DOES_NOT_EXIST } from 'js/constants'
-import { getCurrentUser } from 'js/authentication/user'
+import { __setMockAuthUser } from 'js/components/General/withUser'
+import { flushAllPromises } from 'js/utils/test-utils'
 
 jest.mock('react-relay')
 jest.mock('js/components/Authentication/AuthenticationContainer')
-jest.mock('js/authentication/user')
 jest.mock('js/authentication/helpers')
+jest.mock('js/components/General/withUser')
 
 afterEach(() => {
   jest.clearAllMocks()
-  getCurrentUser.mockResolvedValue(null)
+  __setMockAuthUser(null)
 })
 
 describe('AuthenticationView', () => {
   it('renders without error', () => {
-    shallow(<AuthenticationView />)
+    shallow(<AuthenticationView />).dive()
   })
 
   it('QueryRenderer receives the "variables" prop', async () => {
     expect.assertions(1)
 
-    getCurrentUser.mockResolvedValue({
-      id: 'xyz987',
-      email: 'somebody@example.com',
-      username: null,
+    __setMockAuthUser({
+      id: 'abc123xyz456',
+      email: 'foo@example.com',
+      username: 'example',
       isAnonymous: false,
       emailVerified: true,
     })
     const wrapper = mount(<AuthenticationView />)
-    await wrapper.instance().fetchUser()
     wrapper.update()
     expect(wrapper.find(QueryRenderer).prop('variables')).toEqual({
-      userId: 'xyz987',
-      refetchCounter: 2,
+      userId: 'abc123xyz456',
+      refetchCounter: 0,
     })
   })
 
-  it('does not render AuthenticationContainer before receiving a query response', () => {
+  it('QueryRenderer receives the "query" prop', async () => {
+    expect.assertions(1)
+
+    __setMockAuthUser({
+      id: 'abc123xyz456',
+      email: 'foo@example.com',
+      username: 'example',
+      isAnonymous: false,
+      emailVerified: true,
+    })
+    const wrapper = mount(<AuthenticationView />)
+    wrapper.update()
+    expect(wrapper.find(QueryRenderer).prop('query')).toEqual(
+      expect.any(Function)
+    )
+  })
+
+  it('QueryRenderer receives empty "variables" and "query" props if there is no authed user', async () => {
+    expect.assertions(2)
+
+    __setMockAuthUser(null)
+    const wrapper = mount(<AuthenticationView />)
+    wrapper.update()
+    expect(wrapper.find(QueryRenderer).prop('variables')).toEqual({})
+    expect(wrapper.find(QueryRenderer).prop('query')).toBeUndefined()
+  })
+
+  it('does not render AuthenticationContainer before receiving a query response', async () => {
+    expect.assertions(1)
+    __setMockAuthUser(null)
     QueryRenderer.__setQueryResponse({
       error: null,
       props: null,
       retry: jest.fn(),
     })
-
     const wrapper = mount(<AuthenticationView />)
+    await flushAllPromises()
+    wrapper.update()
     expect(wrapper.find(AuthenticationContainer).exists()).toBe(false)
   })
 
-  it('passes "user" prop to the AuthenticationContainer', () => {
+  it('passes "user" prop to the AuthenticationContainer', async () => {
     expect.assertions(1)
-
+    __setMockAuthUser({
+      id: 'abc123xyz456',
+      email: 'foo@example.com',
+      username: null,
+      isAnonymous: false,
+      emailVerified: true,
+    })
     const fakeProps = {
       user: {
         id: 'abc123xyz456',
@@ -71,6 +107,8 @@ describe('AuthenticationView', () => {
     })
 
     const wrapper = mount(<AuthenticationView />)
+    await flushAllPromises()
+    wrapper.update()
 
     const authContainer = wrapper.find(AuthenticationContainer)
     expect(authContainer.prop('user')).toEqual(fakeProps.user)
@@ -79,10 +117,10 @@ describe('AuthenticationView', () => {
   it('attempts to create a new user and refetch when there is a "user does not exist" error', async () => {
     expect.assertions(2)
 
-    getCurrentUser.mockResolvedValue({
+    __setMockAuthUser({
       id: 'acbdegfh2468',
-      email: 'somebody@example.com',
-      username: null,
+      email: 'foo@example.com',
+      username: 'example',
       isAnonymous: false,
       emailVerified: true,
     })
@@ -121,7 +159,7 @@ describe('AuthenticationView', () => {
       error: null,
       props: {
         user: {
-          id: 'abc123xyz456',
+          id: 'acbdegfh2468',
           email: 'foo@example.com',
           username: null,
         },
@@ -136,7 +174,7 @@ describe('AuthenticationView', () => {
     })
 
     const wrapper = mount(<AuthenticationView />)
-    await wrapper.instance().fetchUser()
+    await flushAllPromises()
     wrapper.update()
 
     expect(createNewUser).toHaveBeenCalledTimes(1)
@@ -145,7 +183,7 @@ describe('AuthenticationView', () => {
     // refetch of data.
     expect(wrapper.find(QueryRenderer).prop('variables')).toEqual({
       userId: 'acbdegfh2468',
-      refetchCounter: 3,
+      refetchCounter: 1,
     })
   })
 
@@ -156,10 +194,10 @@ describe('AuthenticationView', () => {
     const mockConsoleErr = jest.fn()
     jest.spyOn(console, 'error').mockImplementation(mockConsoleErr)
 
-    getCurrentUser.mockResolvedValue({
-      id: 'acbdegfh2468',
-      email: 'somebody@example.com',
-      username: null,
+    __setMockAuthUser({
+      id: 'abc123xyz456',
+      email: 'foo@example.com',
+      username: 'example',
       isAnonymous: false,
       emailVerified: true,
     })
@@ -201,7 +239,7 @@ describe('AuthenticationView', () => {
     })
 
     const wrapper = mount(<AuthenticationView />)
-    await wrapper.instance().fetchUser()
+    await flushAllPromises()
     wrapper.update()
 
     expect(createNewUser).toHaveBeenCalledTimes(3)
