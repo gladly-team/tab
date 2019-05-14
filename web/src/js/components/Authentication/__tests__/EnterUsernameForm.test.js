@@ -43,6 +43,16 @@ describe('EnterUsernameForm tests', () => {
     expect(checkIfEmailVerified).toHaveBeenCalledTimes(1)
   })
 
+  it('does not set the username in local storage or redirect to the dashboard if the user does not have a username', () => {
+    const EnterUsernameForm = require('js/components/Authentication/EnterUsernameForm')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user.username = undefined
+    shallow(<EnterUsernameForm {...mockProps} />)
+    expect(setUsernameInLocalStorage).not.toHaveBeenCalled()
+    expect(goToDashboard).not.toHaveBeenCalled()
+  })
+
   it('calls checkIfEmailVerified on mount', () => {
     const EnterUsernameForm = require('js/components/Authentication/EnterUsernameForm')
       .default

@@ -25,7 +25,7 @@ class EnterUsernameForm extends React.Component {
     // redirect to the dashboard. This can happen when an existing
     // user signs in on a new client.
     const { user } = this.props
-    if (user.username) {
+    if (user && user.username) {
       setUsernameInLocalStorage(user.username)
       goToDashboard()
       return
@@ -167,7 +167,7 @@ EnterUsernameForm.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.string.isRequired,
     username: PropTypes.string,
-  }).isRequired,
+  }),
 }
 
 export default EnterUsernameForm
