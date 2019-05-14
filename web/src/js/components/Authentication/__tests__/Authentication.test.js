@@ -36,6 +36,7 @@ const MockProps = () => {
     location: {
       pathname: '/newtab/auth/',
     },
+    authUser: null,
     user: {
       id: null,
       username: null,

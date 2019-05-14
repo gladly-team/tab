@@ -26,6 +26,7 @@ class EnterUsernameForm extends React.Component {
     // user signs in on a new client.
     const { user } = this.props
     if (user && user.username) {
+      // FIXME: doesn't work on first page load (user is null at first)
       setUsernameInLocalStorage(user.username)
       goToDashboard()
       return

@@ -61,7 +61,7 @@ class Authentication extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!isEqual(nextProps.user, this.props.user)) {
+    if (!isEqual(nextProps.authUser, this.props.authUser)) {
       this.navigateToAuthStep()
     }
   }
@@ -78,7 +78,8 @@ class Authentication extends React.Component {
     if (this.isAuthActionURL()) {
       return
     }
-    const redirected = redirectToAuthIfNeeded()
+    const { authUser } = this.props
+    const redirected = redirectToAuthIfNeeded(authUser)
 
     // When anonymous users choose to sign in, do not go back to the
     // dashboard.
@@ -288,6 +289,14 @@ class Authentication extends React.Component {
 Authentication.propTypes = {
   location: PropTypes.shape({
     pathname: PropTypes.string.isRequired,
+  }),
+  // User fetched from the auth service.
+  authUser: PropTypes.shape({
+    id: PropTypes.string,
+    email: PropTypes.string,
+    username: PropTypes.string,
+    isAnonymous: PropTypes.bool,
+    emailVerified: PropTypes.bool,
   }),
   // User fetched from our database (not the auth service user).
   user: PropTypes.shape({
