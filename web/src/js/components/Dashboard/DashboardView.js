@@ -1,21 +1,27 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import graphql from 'babel-plugin-relay/macro'
 import { QueryRenderer } from 'react-relay'
 import { get } from 'lodash/object'
 import environment from 'js/relay-env'
 
-import AuthUserComponent from 'js/components/General/AuthUserComponent'
 import ErrorMessage from 'js/components/General/ErrorMessage'
-
 import DashboardContainer from 'js/components/Dashboard/DashboardContainer'
 import { createNewUser } from 'js/authentication/helpers'
 import { goTo, loginURL } from 'js/navigation/navigation'
 import { ERROR_USER_DOES_NOT_EXIST } from 'js/constants'
+import withUser from 'js/components/General/withUser'
 
 class DashboardView extends React.Component {
   render() {
+    const { authUser } = this.props
     return (
-      <AuthUserComponent>
+      <div
+        style={{
+          height: '100%',
+          width: '100%',
+        }}
+      >
         <QueryRenderer
           environment={environment}
           query={graphql`
@@ -28,6 +34,9 @@ class DashboardView extends React.Component {
               }
             }
           `}
+          variables={{
+            userId: authUser.id,
+          }}
           render={({ error, props, retry }) => {
             if (error && get(error, 'source.errors')) {
               // If any of the errors is because the user does not exist
@@ -59,9 +68,17 @@ class DashboardView extends React.Component {
             return <DashboardContainer app={app} user={user} />
           }}
         />
-      </AuthUserComponent>
+      </div>
     )
   }
 }
 
-export default DashboardView
+DashboardView.propTypes = {
+  authUser: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+  }).isRequired,
+}
+
+DashboardView.defaultProps = {}
+
+export default withUser()(DashboardView)
