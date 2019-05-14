@@ -9,6 +9,9 @@ import ErrorMessage from 'js/components/General/ErrorMessage'
 import { createNewUser } from 'js/authentication/helpers'
 import { goTo, loginURL } from 'js/navigation/navigation'
 import { ERROR_USER_DOES_NOT_EXIST } from 'js/constants'
+import { __setMockAuthUser } from 'js/components/General/withUser'
+import { flushAllPromises } from 'js/utils/test-utils'
+import logger from 'js/utils/logger'
 
 jest.mock('react-relay')
 jest.mock('js/components/General/ErrorMessage')
@@ -17,6 +20,7 @@ jest.mock('js/components/Dashboard/DashboardContainer')
 jest.mock('js/authentication/helpers')
 jest.mock('js/navigation/navigation')
 jest.mock('js/components/General/withUser')
+jest.mock('js/utils/logger')
 
 const getMockProps = () => ({
   authUser: {
@@ -209,8 +213,8 @@ describe('DashboardView', () => {
     expect(mockRetryFn).toHaveBeenCalledTimes(1)
   })
 
-  it('redirects to the login page if it cannot create the user after a "user does not exist" error', async () => {
-    expect.assertions(3)
+  it('redirects to the login page and logs an error if it cannot create the user after a "user does not exist" error', async () => {
+    expect.assertions(4)
 
     const mockRetryFn = jest.fn()
     QueryRenderer.__setQueryResponse({
@@ -252,5 +256,89 @@ describe('DashboardView', () => {
     expect(createNewUser).toHaveBeenCalledTimes(1)
     expect(mockRetryFn).not.toHaveBeenCalled()
     expect(goTo).toHaveBeenCalledWith(loginURL)
+    expect(logger.error).toHaveBeenCalled()
+  })
+
+  // Note: Jest warnings will fail the test, because we include this
+  // in our setupTests.js file:
+  // https://github.com/facebook/jest/issues/6121#issuecomment-444269677
+  it('does not throw an error, log an error, retry the user fetch, or redirect if the component unmounts during the async createNewUser call', async () => {
+    expect.assertions(3)
+
+    __setMockAuthUser({
+      id: 'acbdegfh2468',
+      email: 'foo@example.com',
+      username: 'example',
+      isAnonymous: false,
+      emailVerified: true,
+    })
+
+    // Have the server return an error on the first request.
+    const mockRetryFn = jest.fn()
+    QueryRenderer.__setQueryResponseOnce({
+      error: {
+        name: 'RelayNetwork',
+        type: 'mustfix',
+        framesToPop: 2,
+        source: {
+          errors: [
+            {
+              message: 'No user exists with this ID.',
+              locations: [
+                {
+                  line: 8,
+                  column: 3,
+                },
+              ],
+              path: ['user'],
+              code: ERROR_USER_DOES_NOT_EXIST,
+            },
+          ],
+          operation: { foo: 'bar' },
+          variables: { foo: 'baz' },
+        },
+      },
+      props: null,
+      retry: mockRetryFn,
+    })
+
+    // The server returns the user on the second request.
+    QueryRenderer.__setQueryResponse({
+      error: null,
+      props: {
+        user: {
+          id: 'acbdegfh2468',
+          email: 'foo@example.com',
+          username: null,
+        },
+      },
+      retry: jest.fn(),
+    })
+
+    jest.useFakeTimers()
+    createNewUser.mockImplementation(() => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve({
+            id: 'acbdegfh2468',
+            username: null,
+            email: 'foo@example.com',
+          })
+        }, 4e3)
+      })
+    })
+
+    const mockProps = getMockProps()
+    const wrapper = mount(<DashboardView {...mockProps} />)
+    await flushAllPromises()
+
+    // Unmount
+    wrapper.unmount()
+
+    jest.advanceTimersByTime(10e3)
+    await flushAllPromises()
+    expect(mockRetryFn).not.toHaveBeenCalled()
+    expect(logger.error).not.toHaveBeenCalled()
+    expect(goTo).not.toHaveBeenCalled()
   })
 })
