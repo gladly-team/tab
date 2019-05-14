@@ -1,13 +1,14 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { QueryRenderer } from 'react-relay'
 import graphql from 'babel-plugin-relay/macro'
 import { get } from 'lodash/object'
 import environment from 'js/relay-env'
 import AuthenticationContainer from 'js/components/Authentication/AuthenticationContainer'
-import { getCurrentUser } from 'js/authentication/user'
 import { createNewUser } from 'js/authentication/helpers'
 import { ERROR_USER_DOES_NOT_EXIST } from 'js/constants'
 import logger from 'js/utils/logger'
+import withUser from 'js/components/General/withUser'
 
 // Fetch the user from our database if the user is
 // authenticated.
@@ -15,16 +16,9 @@ class AuthenticationView extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      relayVariables: {
-        userId: null,
-        refetchCounter: 0,
-      },
+      refetchCounter: 0,
     }
     this.createNewUserAttempts = 0
-  }
-
-  componentDidMount() {
-    this.fetchUser()
   }
 
   // If we have an authed user with a user ID, fetch the
@@ -35,33 +29,38 @@ class AuthenticationView extends React.Component {
   // Pass this to children to allow a forced refetch after
   // we create a new user in our database.
   async fetchUser() {
-    const user = await getCurrentUser()
-    if (user && user.id) {
-      this.setState({
-        relayVariables: Object.assign({}, this.state.relayVariables, {
-          userId: user.id,
-          refetchCounter: this.state.relayVariables.refetchCounter + 1,
-        }),
-      })
-    }
+    const { refetchCounter } = this.state
+    this.setState({
+      refetchCounter: refetchCounter + 1,
+    })
   }
 
   render() {
-    var query
-    if (this.state.relayVariables.userId) {
-      query = graphql`
-        query AuthenticationViewQuery($userId: String!) {
-          user(userId: $userId) {
-            ...AuthenticationContainer_user
-          }
-        }
-      `
-    }
+    const { authUser } = this.props
+    const { refetchCounter } = this.state
+    const userId = authUser && authUser.id ? authUser.id : null
     return (
       <QueryRenderer
         environment={environment}
-        query={query}
-        variables={this.state.relayVariables}
+        query={
+          userId
+            ? graphql`
+                query AuthenticationViewQuery($userId: String!) {
+                  user(userId: $userId) {
+                    ...AuthenticationContainer_user
+                  }
+                }
+              `
+            : undefined
+        }
+        variables={
+          userId
+            ? {
+                userId: userId,
+                refetchCounter: refetchCounter,
+              }
+            : {}
+        }
         render={({ error, props }) => {
           if (error && get(error, 'source.errors')) {
             // If any of the errors is because the user does not exist
@@ -106,4 +105,15 @@ class AuthenticationView extends React.Component {
   }
 }
 
-export default AuthenticationView
+AuthenticationView.propTypes = {
+  authUser: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+  }),
+}
+
+AuthenticationView.defaultProps = {}
+
+export default withUser({
+  renderIfNoUser: true,
+  redirectToAuthIfIncomplete: false,
+})(AuthenticationView)
