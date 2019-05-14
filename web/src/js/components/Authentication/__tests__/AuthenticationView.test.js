@@ -43,7 +43,7 @@ describe('AuthenticationView', () => {
     })
   })
 
-  it('renders AuthenticationContainer before receiving a query response', () => {
+  it('does not render AuthenticationContainer before receiving a query response', () => {
     QueryRenderer.__setQueryResponse({
       error: null,
       props: null,
@@ -51,7 +51,7 @@ describe('AuthenticationView', () => {
     })
 
     const wrapper = mount(<AuthenticationView />)
-    expect(wrapper.find(AuthenticationContainer).length).toBe(1)
+    expect(wrapper.find(AuthenticationContainer).exists()).toBe(false)
   })
 
   it('passes "user" prop to the AuthenticationContainer', () => {

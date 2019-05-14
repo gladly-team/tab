@@ -87,8 +87,10 @@ class AuthenticationView extends React.Component {
               logger.error(error)
             }
           }
+
+          // Wait for the query to return to render content.
           if (!props) {
-            props = {}
+            return null
           }
           const user = props.user || null
           return (
