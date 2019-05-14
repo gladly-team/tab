@@ -64,7 +64,6 @@ const withUser = (options = {}) => WrappedComponent => {
         this.authListenerUnsubscribe()
       }
       if (this.userCreatePromise && this.userCreatePromise.cancel) {
-        console.log('userCreatePromise CANCELED')
         this.userCreatePromise.cancel()
       }
       this.mounted = false
@@ -90,20 +89,24 @@ const withUser = (options = {}) => WrappedComponent => {
             createAnonymousUserIfPossible()
           )
           authUser = await this.userCreatePromise.promise
-          console.log('userCreatePromise just resolved', authUser)
         } catch (e) {
           // If the component already unmounted, don't do anything with
           // the returned data.
           if (e && e.isCanceled) {
-            console.log('userCreatePromise was previously canceled; returning')
             return
           }
           logger.error(e)
         }
 
-        // FIXME: even when the userCreatePromise is canceled, we
-        // reach this point instead of catching above. Unsure why.
-        console.log('about to update state. is mounted?', this.mounted)
+        // This is an antipattern, and canceling our promises on unmount
+        // should handle the problem. However, in practice, the component
+        // sometimes unmounts between the userCreatePromise resolving and
+        // this point, causing an error when we try to update state on the
+        // unmounted component. It shouldn't cause a memory leak, as we've
+        // canceled the promise and unsubscribed the auth listener.
+        if (!this.mounted) {
+          return
+        }
         this.setState({
           userCreationInProgress: false,
         })
