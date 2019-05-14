@@ -9,6 +9,7 @@ import { createNewUser } from 'js/authentication/helpers'
 import { ERROR_USER_DOES_NOT_EXIST } from 'js/constants'
 import logger from 'js/utils/logger'
 import withUser from 'js/components/General/withUser'
+import { makePromiseCancelable } from 'js/utils/utils'
 
 // Fetch the user from our database if the user is
 // authenticated.
@@ -19,6 +20,13 @@ class AuthenticationView extends React.Component {
       refetchCounter: 0,
     }
     this.createNewUserAttempts = 0
+    this.createNewUserPromise = null
+  }
+
+  componentWillUnmount() {
+    if (this.createNewUserPromise && this.createNewUserPromise.cancel) {
+      this.createNewUserPromise.cancel()
+    }
   }
 
   // If we have an authed user with a user ID, fetch the
@@ -75,12 +83,17 @@ class AuthenticationView extends React.Component {
             // any bugs.
             if (userDoesNotExistError && this.createNewUserAttempts < 3) {
               this.createNewUserAttempts = this.createNewUserAttempts + 1
-              createNewUser()
+
+              // Cancel new user creation on unmount.
+              this.createNewUserPromise = makePromiseCancelable(createNewUser())
+              this.createNewUserPromise.promise
                 .then(user => {
-                  // FIXME: cancel this on unmount
                   this.fetchUser()
                 })
                 .catch(e => {
+                  if (e && e.isCanceled) {
+                    return
+                  }
                   throw e
                 })
             } else {
