@@ -6,7 +6,6 @@ exports[`EnterUsernameForm tests it does not call SetUsernameMutation when the u
     user={
       Object {
         "id": "abc-123",
-        "username": null,
       }
     }
   >
@@ -1265,7 +1264,6 @@ exports[`EnterUsernameForm tests it shows an error message when the username is 
     user={
       Object {
         "id": "abc-123",
-        "username": null,
       }
     }
   >

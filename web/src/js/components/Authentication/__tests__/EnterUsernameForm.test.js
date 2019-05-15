@@ -17,7 +17,6 @@ jest.mock('js/navigation/navigation')
 const getMockProps = () => ({
   user: {
     id: 'abc-123',
-    username: null,
   },
 })
 

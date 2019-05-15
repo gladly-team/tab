@@ -156,7 +156,6 @@ class EnterUsernameForm extends React.Component {
 EnterUsernameForm.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.string.isRequired,
-    username: PropTypes.string,
   }),
 }
 
