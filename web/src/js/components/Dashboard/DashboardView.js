@@ -11,8 +11,21 @@ import { createNewUser } from 'js/authentication/helpers'
 import { goTo, loginURL } from 'js/navigation/navigation'
 import { ERROR_USER_DOES_NOT_EXIST } from 'js/constants'
 import withUser from 'js/components/General/withUser'
+import logger from 'js/utils/logger'
+import { makePromiseCancelable } from 'js/utils/utils'
 
 class DashboardView extends React.Component {
+  constructor(props) {
+    super(props)
+    this.createNewUserPromise = null
+  }
+
+  componentWillUnmount() {
+    if (this.createNewUserPromise && this.createNewUserPromise.cancel) {
+      this.createNewUserPromise.cancel()
+    }
+  }
+
   render() {
     const { authUser } = this.props
     return (
@@ -48,11 +61,19 @@ class DashboardView extends React.Component {
               )
 
               if (userDoesNotExistError) {
-                createNewUser()
+                // Cancel new user creation on unmount.
+                this.createNewUserPromise = makePromiseCancelable(
+                  createNewUser()
+                )
+                this.createNewUserPromise.promise
                   .then(user => {
                     retry()
                   })
                   .catch(e => {
+                    if (e && e.isCanceled) {
+                      return
+                    }
+                    logger.error(e)
                     goTo(loginURL)
                   })
               } else {

@@ -18,6 +18,7 @@ import {
   getUserToken,
   getCurrentUser,
   reloadUser,
+  setUsernameInLocalStorage,
   signInAnonymously,
 } from 'js/authentication/user'
 import { flushAllPromises, runAsyncTimerLoops } from 'js/utils/test-utils'
@@ -276,14 +277,14 @@ describe('redirectToAuthIfNeeded tests', () => {
     setIfAnonymousUserIsAllowed(false)
 
     const { redirectToAuthIfNeeded } = require('js/authentication/helpers')
-    const user = {
+    const authUser = {
       id: 'abc123',
       email: 'foo@bar.com',
       username: 'foo',
       isAnonymous: false,
       emailVerified: true,
     }
-    const redirected = redirectToAuthIfNeeded(user)
+    const redirected = redirectToAuthIfNeeded(authUser)
     expect(redirected).toBe(false)
     expect(goTo).not.toHaveBeenCalled()
     expect(replaceUrl).not.toHaveBeenCalled()
@@ -292,7 +293,7 @@ describe('redirectToAuthIfNeeded tests', () => {
   it('[anon] does not redirect when the user is anonymous and is allowed to be anonymous', () => {
     setIfAnonymousUserIsAllowed(true)
 
-    const user = {
+    const authUser = {
       id: 'abc123',
       email: null,
       username: null,
@@ -301,7 +302,7 @@ describe('redirectToAuthIfNeeded tests', () => {
     }
 
     const { redirectToAuthIfNeeded } = require('js/authentication/helpers')
-    const redirected = redirectToAuthIfNeeded(user)
+    const redirected = redirectToAuthIfNeeded(authUser)
     expect(redirected).toBe(false)
     expect(goToDashboard).not.toHaveBeenCalled()
     expect(goTo).not.toHaveBeenCalled()
@@ -311,10 +312,10 @@ describe('redirectToAuthIfNeeded tests', () => {
   it('[anon] redirects to the main login page when the user is null', () => {
     setIfAnonymousUserIsAllowed(true)
 
-    const user = null
+    const authUser = null
     isInIframe.mockReturnValue(false)
     const { redirectToAuthIfNeeded } = require('js/authentication/helpers')
-    const redirected = redirectToAuthIfNeeded(user)
+    const redirected = redirectToAuthIfNeeded(authUser)
     expect(redirected).toBe(true)
     expect(replaceUrl).toHaveBeenCalledWith(loginURL, {})
   })
@@ -322,7 +323,7 @@ describe('redirectToAuthIfNeeded tests', () => {
   it('[no-anon-allowed] redirects to the sign-in view if the user is unauthed and NOT within an iframe', () => {
     setIfAnonymousUserIsAllowed(false)
 
-    const user = {
+    const authUser = {
       uid: null,
       email: null,
       username: null,
@@ -331,7 +332,7 @@ describe('redirectToAuthIfNeeded tests', () => {
     }
     isInIframe.mockReturnValue(false)
     const { redirectToAuthIfNeeded } = require('js/authentication/helpers')
-    const redirected = redirectToAuthIfNeeded(user)
+    const redirected = redirectToAuthIfNeeded(authUser)
     expect(replaceUrl).toHaveBeenCalledWith(loginURL, {})
     expect(redirected).toBe(true)
   })
@@ -345,7 +346,7 @@ describe('redirectToAuthIfNeeded tests', () => {
 
     isInIframe.mockReturnValue(true)
 
-    const user = {
+    const authUser = {
       id: null,
       email: null,
       username: null,
@@ -354,7 +355,7 @@ describe('redirectToAuthIfNeeded tests', () => {
     }
 
     const { redirectToAuthIfNeeded } = require('js/authentication/helpers')
-    redirectToAuthIfNeeded(user)
+    redirectToAuthIfNeeded(authUser)
 
     expect(replaceUrl).toHaveBeenCalledWith(authMessageURL, {})
   })
@@ -369,7 +370,7 @@ describe('redirectToAuthIfNeeded tests', () => {
     isAnonymousUserSignInEnabled.mockReturnValue(true)
 
     isInIframe.mockReturnValue(false)
-    const user = {
+    const authUser = {
       id: 'abc123',
       email: null,
       username: null,
@@ -377,7 +378,7 @@ describe('redirectToAuthIfNeeded tests', () => {
       emailVerified: false,
     }
     const { redirectToAuthIfNeeded } = require('js/authentication/helpers')
-    redirectToAuthIfNeeded(user)
+    redirectToAuthIfNeeded(authUser)
     expect(replaceUrl).toHaveBeenCalledWith(loginURL, { mandatory: 'true' }) // includes URL param
   })
 
@@ -391,7 +392,7 @@ describe('redirectToAuthIfNeeded tests', () => {
     isAnonymousUserSignInEnabled.mockReturnValue(true)
 
     isInIframe.mockReturnValue(false)
-    const user = {
+    const authUser = {
       id: 'abc123',
       email: null,
       username: null,
@@ -399,7 +400,7 @@ describe('redirectToAuthIfNeeded tests', () => {
       emailVerified: false,
     }
     const { redirectToAuthIfNeeded } = require('js/authentication/helpers')
-    redirectToAuthIfNeeded(user)
+    redirectToAuthIfNeeded(authUser)
     expect(replaceUrl).not.toHaveBeenCalled()
   })
 
@@ -407,14 +408,14 @@ describe('redirectToAuthIfNeeded tests', () => {
     setIfAnonymousUserIsAllowed(false)
 
     const { redirectToAuthIfNeeded } = require('js/authentication/helpers')
-    const user = {
+    const authUser = {
       id: 'abc123',
       email: null,
       username: 'foo',
       isAnonymous: false,
       emailVerified: false,
     }
-    const redirected = redirectToAuthIfNeeded(user)
+    const redirected = redirectToAuthIfNeeded(authUser)
     expect(replaceUrl).toHaveBeenCalledWith(missingEmailMessageURL)
     expect(redirected).toBe(true)
   })
@@ -423,14 +424,14 @@ describe('redirectToAuthIfNeeded tests', () => {
     setIfAnonymousUserIsAllowed(false)
 
     const { redirectToAuthIfNeeded } = require('js/authentication/helpers')
-    const user = {
+    const authUser = {
       id: 'abc123',
       email: 'foo@bar.com',
       username: 'foo',
       isAnonymous: false,
       emailVerified: false,
     }
-    const redirected = redirectToAuthIfNeeded(user)
+    const redirected = redirectToAuthIfNeeded(authUser)
     expect(replaceUrl).toHaveBeenCalledWith(verifyEmailURL)
     expect(redirected).toBe(true)
   })
@@ -439,613 +440,35 @@ describe('redirectToAuthIfNeeded tests', () => {
     setIfAnonymousUserIsAllowed(false)
 
     const { redirectToAuthIfNeeded } = require('js/authentication/helpers')
-    const user = {
+    const authUser = {
       id: 'abc123',
       email: 'foo@bar.com',
       username: null,
       isAnonymous: false,
       emailVerified: true,
     }
-    const redirected = redirectToAuthIfNeeded(user)
-    expect(replaceUrl).toHaveBeenCalledWith(enterUsernameURL)
-    expect(redirected).toBe(true)
-  })
-})
-
-describe('checkAuthStateAndRedirectIfNeeded tests', () => {
-  it('[no-anon-allowed] does not redirect if the user is fully authenticated', async () => {
-    expect.assertions(3)
-    setIfAnonymousUserIsAllowed(false)
-
-    const {
-      checkAuthStateAndRedirectIfNeeded,
-    } = require('js/authentication/helpers')
-    const user = {
-      id: 'abc123',
-      email: 'foo@bar.com',
-      username: 'foo',
-      isAnonymous: false,
-      emailVerified: true,
-    }
-    const redirected = await checkAuthStateAndRedirectIfNeeded(user)
-
-    expect(redirected).toBe(false)
-    expect(goTo).not.toHaveBeenCalled()
-    expect(replaceUrl).not.toHaveBeenCalled()
-  })
-
-  it('[anon] does not redirect when the user is anonymous and is allowed to be anonymous', async () => {
-    expect.assertions(4)
-    setIfAnonymousUserIsAllowed(true)
-
-    const user = {
-      id: 'abc123',
-      email: null,
-      username: null,
-      isAnonymous: true,
-      emailVerified: false,
-    }
-
-    const {
-      checkAuthStateAndRedirectIfNeeded,
-    } = require('js/authentication/helpers')
-    const redirected = await checkAuthStateAndRedirectIfNeeded(user)
-
-    expect(redirected).toBe(false)
-    expect(goToDashboard).not.toHaveBeenCalled()
-    expect(goTo).not.toHaveBeenCalled()
-    expect(replaceUrl).not.toHaveBeenCalled()
-  })
-
-  it('[anon] does not create a new user when the user is unauthed and the user installed the extension not-too-recently', async () => {
-    expect.assertions(2)
-    setIfAnonymousUserIsAllowed(true)
-
-    // User installed not-too-recently
-    getBrowserExtensionInstallTime.mockReturnValue(
-      moment(mockNow).subtract(55, 'seconds')
-    )
-
-    const user = {
-      id: null,
-      email: null,
-      username: null,
-      isAnonymous: null,
-      emailVerified: false,
-    }
-    isInIframe.mockReturnValue(false)
-
-    CreateNewUserMutation.mockImplementation(
-      (
-        environment,
-        userId,
-        email,
-        referralData,
-        experimentGroups,
-        installId,
-        installTime,
-        onCompleted,
-        onError
-      ) => {
-        onCompleted({
-          createNewUser: {
-            id: 'abc123',
-            email: null,
-            username: null,
-          },
-        })
-      }
-    )
-
-    const {
-      checkAuthStateAndRedirectIfNeeded,
-    } = require('js/authentication/helpers')
-    await checkAuthStateAndRedirectIfNeeded(user)
-
-    expect(signInAnonymously).not.toHaveBeenCalled()
-    expect(CreateNewUserMutation).not.toHaveBeenCalled()
-  })
-
-  it('[anon] does not create a new user when the user is unauthed and the user does not have an extension install time in local storage', async () => {
-    expect.assertions(2)
-    setIfAnonymousUserIsAllowed(true)
-
-    // We don't know when the user installed
-    getBrowserExtensionInstallTime.mockReturnValue(null)
-
-    const user = {
-      id: null,
-      email: null,
-      username: null,
-      isAnonymous: null,
-      emailVerified: false,
-    }
-    isInIframe.mockReturnValue(false)
-
-    CreateNewUserMutation.mockImplementation(
-      (
-        environment,
-        userId,
-        email,
-        referralData,
-        experimentGroups,
-        installId,
-        installTime,
-        onCompleted,
-        onError
-      ) => {
-        onCompleted({
-          createNewUser: {
-            id: 'abc123',
-            email: null,
-            username: null,
-          },
-        })
-      }
-    )
-
-    const {
-      checkAuthStateAndRedirectIfNeeded,
-    } = require('js/authentication/helpers')
-    await checkAuthStateAndRedirectIfNeeded(user)
-
-    expect(signInAnonymously).not.toHaveBeenCalled()
-    expect(CreateNewUserMutation).not.toHaveBeenCalled()
-  })
-
-  it('[anon] creates a new user when the user is unauthed and the user installed very recently', async () => {
-    expect.assertions(2)
-    setIfAnonymousUserIsAllowed(true)
-
-    // The user installed just now
-    getBrowserExtensionInstallTime.mockReturnValue(
-      moment(mockNow).subtract(28, 'seconds')
-    )
-
-    const user = {
-      id: null,
-      email: null,
-      username: null,
-      isAnonymous: null,
-      emailVerified: false,
-    }
-    isInIframe.mockReturnValue(false)
-
-    CreateNewUserMutation.mockImplementation(
-      (
-        environment,
-        userId,
-        email,
-        referralData,
-        experimentGroups,
-        installId,
-        installTime,
-        onCompleted,
-        onError
-      ) => {
-        onCompleted({
-          createNewUser: {
-            id: 'abc123',
-            email: null,
-            username: null,
-          },
-        })
-      }
-    )
-
-    const {
-      checkAuthStateAndRedirectIfNeeded,
-    } = require('js/authentication/helpers')
-    await checkAuthStateAndRedirectIfNeeded(user)
-
-    expect(signInAnonymously).toHaveBeenCalledTimes(1)
-    expect(CreateNewUserMutation).toHaveBeenCalledTimes(1)
-  })
-
-  it('[anon] redirects when the user is unauthed and the user installed the extension not-too-recently', async () => {
-    expect.assertions(2)
-    setIfAnonymousUserIsAllowed(true)
-
-    // User installed not-too-recently
-    getBrowserExtensionInstallTime.mockReturnValue(
-      moment(mockNow).subtract(55, 'seconds')
-    )
-
-    const user = {
-      id: null,
-      email: null,
-      username: null,
-      isAnonymous: null,
-      emailVerified: false,
-    }
-    isInIframe.mockReturnValue(false)
-
-    CreateNewUserMutation.mockImplementation(
-      (
-        environment,
-        userId,
-        email,
-        referralData,
-        experimentGroups,
-        installId,
-        installTime,
-        onCompleted,
-        onError
-      ) => {
-        onCompleted({
-          createNewUser: {
-            id: 'abc123',
-            email: null,
-            username: null,
-          },
-        })
-      }
-    )
-
-    const {
-      checkAuthStateAndRedirectIfNeeded,
-    } = require('js/authentication/helpers')
-    const redirected = await checkAuthStateAndRedirectIfNeeded(user)
-
-    expect(redirected).toBe(true)
-    expect(replaceUrl).toHaveBeenCalledWith(loginURL, {})
-  })
-
-  it('[anon] redirects when the user is unauthed and the user does not have an extension install time in local storage', async () => {
-    expect.assertions(2)
-    setIfAnonymousUserIsAllowed(true)
-
-    // We don't know when the user installed
-    getBrowserExtensionInstallTime.mockReturnValue(null)
-
-    const user = {
-      id: null,
-      email: null,
-      username: null,
-      isAnonymous: null,
-      emailVerified: false,
-    }
-    isInIframe.mockReturnValue(false)
-
-    CreateNewUserMutation.mockImplementation(
-      (
-        environment,
-        userId,
-        email,
-        referralData,
-        experimentGroups,
-        installId,
-        installTime,
-        onCompleted,
-        onError
-      ) => {
-        onCompleted({
-          createNewUser: {
-            id: 'abc123',
-            email: null,
-            username: null,
-          },
-        })
-      }
-    )
-
-    const {
-      checkAuthStateAndRedirectIfNeeded,
-    } = require('js/authentication/helpers')
-    const redirected = await checkAuthStateAndRedirectIfNeeded(user)
-
-    expect(redirected).toBe(true)
-    expect(replaceUrl).toHaveBeenCalledWith(loginURL, {})
-  })
-
-  it('[anon] does not redirect when the user is unauthed and the user installed very recently', async () => {
-    expect.assertions(4)
-    setIfAnonymousUserIsAllowed(true)
-
-    // The user installed just now
-    getBrowserExtensionInstallTime.mockReturnValue(
-      moment(mockNow).subtract(28, 'seconds')
-    )
-
-    const user = {
-      id: null,
-      email: null,
-      username: null,
-      isAnonymous: null,
-      emailVerified: false,
-    }
-    isInIframe.mockReturnValue(false)
-
-    CreateNewUserMutation.mockImplementation(
-      (
-        environment,
-        userId,
-        email,
-        referralData,
-        experimentGroups,
-        installId,
-        installTime,
-        onCompleted,
-        onError
-      ) => {
-        onCompleted({
-          createNewUser: {
-            id: 'abc123',
-            email: null,
-            username: null,
-          },
-        })
-      }
-    )
-
-    const {
-      checkAuthStateAndRedirectIfNeeded,
-    } = require('js/authentication/helpers')
-    const redirected = await checkAuthStateAndRedirectIfNeeded(user)
-
-    expect(redirected).toBe(false)
-    expect(goToDashboard).not.toHaveBeenCalled()
-    expect(goTo).not.toHaveBeenCalled()
-    expect(replaceUrl).not.toHaveBeenCalled()
-  })
-
-  it('[no-anon-allowed] redirects to the sign-in view if the user is unauthed and NOT within an iframe', async () => {
-    expect.assertions(2)
-    setIfAnonymousUserIsAllowed(false)
-
-    const user = {
-      uid: null,
-      email: null,
-      username: null,
-      isAnonymous: false,
-      emailVerified: false,
-    }
-
-    // Mock a response from new user creation
-    CreateNewUserMutation.mockImplementation(
-      (
-        environment,
-        userId,
-        email,
-        referralData,
-        experimentGroups,
-        installId,
-        installTime,
-        onCompleted,
-        onError
-      ) => {
-        onCompleted({
-          createNewUser: {
-            id: 'abc123',
-            email: null,
-            username: null,
-          },
-        })
-      }
-    )
-
-    isInIframe.mockReturnValue(false)
-
-    const {
-      checkAuthStateAndRedirectIfNeeded,
-    } = require('js/authentication/helpers')
-    const redirected = await checkAuthStateAndRedirectIfNeeded(user)
-
-    expect(replaceUrl).toHaveBeenCalledWith(loginURL, {})
-    expect(redirected).toBe(true)
-  })
-
-  it('[no-anon-allowed] redirects to the sign-in message if the user is unauthed and within an iframe', async () => {
-    expect.assertions(1)
-
-    // Otherwise, the user is allowed to be anonymous.
-    isAnonymousUserSignInEnabled.mockReturnValue(true)
-    getBrowserExtensionInstallTime.mockReturnValue(
-      moment(mockNow).subtract(2, 'minutes')
-    )
-
-    isInIframe.mockReturnValue(true)
-
-    const user = {
-      id: null,
-      email: null,
-      username: null,
-      isAnonymous: false,
-      emailVerified: false,
-    }
-
-    const {
-      checkAuthStateAndRedirectIfNeeded,
-    } = require('js/authentication/helpers')
-    await checkAuthStateAndRedirectIfNeeded(user)
-
-    expect(replaceUrl).toHaveBeenCalledWith(authMessageURL, {})
-  })
-
-  it('[no-anon-allowed] still creates an anonymous user before requiring sign-in', async () => {
-    expect.assertions(2)
-    setIfAnonymousUserIsAllowed(false)
-
-    // The user installed just now
-    getBrowserExtensionInstallTime.mockReturnValue(
-      moment(mockNow).subtract(28, 'seconds')
-    )
-
-    const user = {
-      uid: null,
-      email: null,
-      username: null,
-      isAnonymous: false,
-      emailVerified: false,
-    }
-
-    // Mock a response from new user creation
-    CreateNewUserMutation.mockImplementation(
-      (
-        environment,
-        userId,
-        email,
-        referralData,
-        experimentGroups,
-        installId,
-        installTime,
-        onCompleted,
-        onError
-      ) => {
-        onCompleted({
-          createNewUser: {
-            id: 'abc123',
-            email: null,
-            username: null,
-          },
-        })
-      }
-    )
-
-    isInIframe.mockReturnValue(false)
-
-    const {
-      checkAuthStateAndRedirectIfNeeded,
-    } = require('js/authentication/helpers')
-    await checkAuthStateAndRedirectIfNeeded(user)
-
-    expect(signInAnonymously).toHaveBeenCalledTimes(1)
-    expect(CreateNewUserMutation).toHaveBeenCalledTimes(1)
-  })
-
-  it('redirects to the login screen if the user is anonymous but has been around long enough for us to ask them to sign in', async () => {
-    expect.assertions(1)
-
-    // This is longer than users are allowed to remain anonymous.
-    getBrowserExtensionInstallTime.mockReturnValue(
-      moment(mockNow).subtract(5, 'days')
-    )
-
-    // Otherwise, anonymous users are allowed.
-    isAnonymousUserSignInEnabled.mockReturnValue(true)
-
-    isInIframe.mockReturnValue(false)
-
-    const user = {
-      id: 'abc123',
-      email: null,
-      username: null,
-      isAnonymous: true,
-      emailVerified: false,
-    }
-
-    const {
-      checkAuthStateAndRedirectIfNeeded,
-    } = require('js/authentication/helpers')
-    await checkAuthStateAndRedirectIfNeeded(user)
-
-    expect(replaceUrl).toHaveBeenCalledWith(loginURL, { mandatory: 'true' }) // includes URL param
-  })
-
-  it('does not redirect to the login screen if the user is anonymous and has been around less than the time needed for us to ask them to sign in', async () => {
-    expect.assertions(1)
-
-    // This is less than the max time users are allowed to remain anonymous.
-    getBrowserExtensionInstallTime.mockReturnValue(
-      moment(mockNow).subtract(3, 'days')
-    )
-
-    // Otherwise, anonymous users are allowed.
-    isAnonymousUserSignInEnabled.mockReturnValue(true)
-
-    isInIframe.mockReturnValue(false)
-
-    const user = {
-      id: 'abc123',
-      email: null,
-      username: null,
-      isAnonymous: true,
-      emailVerified: false,
-    }
-
-    const {
-      checkAuthStateAndRedirectIfNeeded,
-    } = require('js/authentication/helpers')
-    await checkAuthStateAndRedirectIfNeeded(user)
-
-    expect(replaceUrl).not.toHaveBeenCalled()
-  })
-
-  it('[no-anon-allowed] redirects to missing email screen if authed and there is no email address', async () => {
-    expect.assertions(2)
-    setIfAnonymousUserIsAllowed(false)
-
-    const {
-      checkAuthStateAndRedirectIfNeeded,
-    } = require('js/authentication/helpers')
-    const user = {
-      id: 'abc123',
-      email: null,
-      username: 'foo',
-      isAnonymous: false,
-      emailVerified: false,
-    }
-    const redirected = await checkAuthStateAndRedirectIfNeeded(user)
-    expect(replaceUrl).toHaveBeenCalledWith(missingEmailMessageURL)
-    expect(redirected).toBe(true)
-  })
-
-  it('[no-anon-allowed] redirects to email verification screen if authed and email is unverified', async () => {
-    expect.assertions(2)
-    setIfAnonymousUserIsAllowed(false)
-
-    const {
-      checkAuthStateAndRedirectIfNeeded,
-    } = require('js/authentication/helpers')
-    const user = {
-      id: 'abc123',
-      email: 'foo@bar.com',
-      username: 'foo',
-      isAnonymous: false,
-      emailVerified: false,
-    }
-    const redirected = await checkAuthStateAndRedirectIfNeeded(user)
-    expect(replaceUrl).toHaveBeenCalledWith(verifyEmailURL)
-    expect(redirected).toBe(true)
-  })
-
-  it('[no-anon-allowed] redirects to new username screen if authed and username is not set', async () => {
-    expect.assertions(2)
-    setIfAnonymousUserIsAllowed(false)
-
-    const {
-      checkAuthStateAndRedirectIfNeeded,
-    } = require('js/authentication/helpers')
-    const user = {
-      id: 'abc123',
-      email: 'foo@bar.com',
-      username: null,
-      isAnonymous: false,
-      emailVerified: true,
-    }
-    const redirected = await checkAuthStateAndRedirectIfNeeded(user)
+    const redirected = redirectToAuthIfNeeded(authUser)
     expect(replaceUrl).toHaveBeenCalledWith(enterUsernameURL)
     expect(redirected).toBe(true)
   })
 
-  it('[no-anon-allowed] does not redirect to the new username screen if the username exists on the server', async () => {
-    expect.assertions(1)
+  it('[no-anon-allowed] sets the username in local storage and does not redirect if the username exists on the server but on locally', () => {
     setIfAnonymousUserIsAllowed(false)
 
-    const {
-      checkAuthStateAndRedirectIfNeeded,
-    } = require('js/authentication/helpers')
-    const user = {
+    const { redirectToAuthIfNeeded } = require('js/authentication/helpers')
+    const authUser = {
       id: 'abc123',
       email: 'foo@bar.com',
       username: null,
       isAnonymous: false,
       emailVerified: true,
     }
-    const redirected = await checkAuthStateAndRedirectIfNeeded(
-      user,
-      'SomeUsername'
-    )
+    const user = {
+      username: 'MisterTee',
+    }
+    const redirected = redirectToAuthIfNeeded(authUser, user)
+    expect(setUsernameInLocalStorage).toHaveBeenCalledWith('MisterTee')
+    expect(replaceUrl).not.toHaveBeenCalled()
     expect(redirected).toBe(false)
   })
 })

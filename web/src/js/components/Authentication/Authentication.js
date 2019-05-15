@@ -9,17 +9,18 @@ import VerifyEmailMessage from 'js/components/Authentication/VerifyEmailMessage'
 import EnterUsernameForm from 'js/components/Authentication/EnterUsernameForm'
 import SignInIframeMessage from 'js/components/Authentication/SignInIframeMessage'
 import MissingEmailMessage from 'js/components/Authentication/MissingEmailMessage'
-import { getCurrentUser, sendVerificationEmail } from 'js/authentication/user'
+import { sendVerificationEmail } from 'js/authentication/user'
 import {
-  checkAuthStateAndRedirectIfNeeded,
+  redirectToAuthIfNeeded,
   createNewUser,
 } from 'js/authentication/helpers'
 import {
   goTo,
+  replaceUrl,
   authMessageURL,
+  dashboardURL,
   missingEmailMessageURL,
   verifyEmailURL,
-  goToDashboard,
 } from 'js/navigation/navigation'
 import Logo from 'js/components/Logo/Logo'
 import { getUrlParameters } from 'js/utils/utils'
@@ -51,38 +52,19 @@ class Authentication extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      loadChildren: false,
       // Whether we are requiring the anonymous user to sign in.
       isMandatoryAnonymousSignIn: getUrlParameters()['mandatory'] === 'true',
     }
   }
 
-  async componentDidMount() {
-    this.mounted = true
-
-    await this.navigateToAuthStep()
-
-    // Don't render any children until after checking the user's
-    // authed state. Otherwise, immediate unmounting of
-    // FirebaseAuthenticationUI can cause errors.
-    // We check `this.mounted` to make sure we don't set state after
-    // the component has unmounted. This is hacky; it would be
-    // better to cancel the async call on unmount or use a flux-like
-    // data flow. See:
-    // https://reactjs.org/blog/2015/12/16/ismounted-antipattern.html
-    if (this.mounted) {
-      this.setState({
-        loadChildren: true,
-      })
-    }
-  }
-
-  componentWillUnmount() {
-    this.mounted = false
+  componentDidMount() {
+    this.navigateToAuthStep()
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!isEqual(nextProps.user, this.props.user)) {
+    // After the authUser object changes, automatically redirect
+    // to the current authentication step.
+    if (!isEqual(nextProps.authUser, this.props.authUser)) {
       this.navigateToAuthStep()
     }
   }
@@ -93,29 +75,14 @@ class Authentication extends React.Component {
     return this.props.location.pathname.indexOf('/auth/action/') !== -1
   }
 
-  async navigateToAuthStep() {
+  navigateToAuthStep() {
     // Don't do anything on /auth/action/ pages, which include
     // email confirmation links and password reset links.
     if (this.isAuthActionURL()) {
       return
     }
-
-    // Send the user to the appropriate page for the next
-    // step in sign-up, or send them to the dashboard if
-    // the sign-up is completed.
-    const authTokenUser = await getCurrentUser()
-
-    // Redirect to the appropriate authentication view if the
-    // user is not fully authenticated.
-    const usernameFromServer = this.props.user ? this.props.user.username : null
-    try {
-      var redirected = await checkAuthStateAndRedirectIfNeeded(
-        authTokenUser,
-        usernameFromServer
-      )
-    } catch (e) {
-      throw e
-    }
+    const { authUser, user } = this.props
+    const redirected = redirectToAuthIfNeeded(authUser, user)
 
     // When anonymous users choose to sign in, do not go back to the
     // dashboard.
@@ -123,7 +90,7 @@ class Authentication extends React.Component {
 
     // The user is fully authed, so go to the dashboard.
     if (!redirected && !stayOnAuthPage) {
-      goToDashboard()
+      replaceUrl(dashboardURL)
     }
   }
 
@@ -167,11 +134,6 @@ class Authentication extends React.Component {
               // TODO: show error message to the user
               logger.error(err)
             })
-        } else {
-          // Fetch the user from our database. This will update the `user`
-          // prop, which will let us navigate to the appropriate step in
-          // authentication.
-          this.props.fetchUser()
         }
       })
       .catch(err => {
@@ -228,40 +190,38 @@ class Authentication extends React.Component {
               padding: 20,
             }}
           >
-            {this.state.loadChildren ? (
-              <Switch>
-                <Route
-                  exact
-                  path="/newtab/auth/verify-email/"
-                  component={VerifyEmailMessage}
-                />
-                <Route
-                  exact
-                  path="/newtab/auth/username/"
-                  render={props => <EnterUsernameForm {...props} user={user} />}
-                />
-                <Route
-                  exact
-                  path="/newtab/auth/welcome/"
-                  component={SignInIframeMessage}
-                />
-                <Route
-                  exact
-                  path="/newtab/auth/missing-email/"
-                  component={MissingEmailMessage}
-                />
-                <Route
-                  path="/newtab/auth/"
-                  render={props => (
-                    <FirebaseAuthenticationUI
-                      {...props}
-                      onSignInSuccess={this.onSignInSuccess.bind(this)}
-                      user={user}
-                    />
-                  )}
-                />
-              </Switch>
-            ) : null}
+            <Switch>
+              <Route
+                exact
+                path="/newtab/auth/verify-email/"
+                component={VerifyEmailMessage}
+              />
+              <Route
+                exact
+                path="/newtab/auth/username/"
+                render={props => <EnterUsernameForm {...props} user={user} />}
+              />
+              <Route
+                exact
+                path="/newtab/auth/welcome/"
+                component={SignInIframeMessage}
+              />
+              <Route
+                exact
+                path="/newtab/auth/missing-email/"
+                component={MissingEmailMessage}
+              />
+              <Route
+                path="/newtab/auth/"
+                render={props => (
+                  <FirebaseAuthenticationUI
+                    {...props}
+                    onSignInSuccess={this.onSignInSuccess.bind(this)}
+                    user={user}
+                  />
+                )}
+              />
+            </Switch>
           </span>
           {!showRequiredSignInExplanation ? (
             // Using same style as homepage
@@ -326,12 +286,19 @@ Authentication.propTypes = {
   location: PropTypes.shape({
     pathname: PropTypes.string.isRequired,
   }),
+  // User fetched from the auth service.
+  authUser: PropTypes.shape({
+    id: PropTypes.string,
+    email: PropTypes.string,
+    username: PropTypes.string,
+    isAnonymous: PropTypes.bool,
+    emailVerified: PropTypes.bool,
+  }),
   // User fetched from our database (not the auth service user).
   user: PropTypes.shape({
     id: PropTypes.string,
     username: PropTypes.string,
   }),
-  fetchUser: PropTypes.func.isRequired,
 }
 
 export default Authentication

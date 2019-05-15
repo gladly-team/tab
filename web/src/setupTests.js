@@ -25,3 +25,11 @@ if (global) {
 }
 
 global.fetch = jest.fn(() => new Promise.resolve(mockFetchResponse()))
+
+// Force warnings to fail Jest tests.
+// https://github.com/facebook/jest/issues/6121#issuecomment-444269677
+let error = console.error
+console.error = function(message) {
+  error.apply(console, arguments) // keep default behaviour
+  throw message instanceof Error ? message : new Error(message)
+}

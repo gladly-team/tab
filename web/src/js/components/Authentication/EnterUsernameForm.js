@@ -7,7 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import SetUsernameMutation from 'js/mutations/SetUsernameMutation'
 import { setUsernameInLocalStorage } from 'js/authentication/user'
 import { checkIfEmailVerified } from 'js/authentication/helpers'
-import { goToDashboard } from 'js/navigation/navigation'
+import { dashboardURL, goTo } from 'js/navigation/navigation'
 import logger from 'js/utils/logger'
 
 class EnterUsernameForm extends React.Component {
@@ -81,7 +81,7 @@ class EnterUsernameForm extends React.Component {
     // Username saved successfully. Set the username in localStorage
     // and redirect to the app.
     setUsernameInLocalStorage(data.user.username)
-    goToDashboard()
+    goTo(dashboardURL)
   }
 
   onMutationError(response) {

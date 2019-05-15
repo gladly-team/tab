@@ -11,34 +11,39 @@ import { checkIfEmailVerified } from 'js/authentication/helpers'
 
 jest.mock('js/mutations/SetUsernameMutation')
 jest.mock('js/authentication/helpers')
+jest.mock('js/authentication/user')
+jest.mock('js/navigation/navigation')
 
-const mockUserData = {
-  id: 'abc-123',
-}
+const getMockProps = () => ({
+  user: {
+    id: 'abc-123',
+  },
+})
 
 afterEach(() => {
   jest.clearAllMocks()
 })
 
-describe('EnterUsernameForm tests', function() {
-  it('renders without error', function() {
+describe('EnterUsernameForm tests', () => {
+  it('renders without error', () => {
     const EnterUsernameForm = require('js/components/Authentication/EnterUsernameForm')
       .default
-    shallow(<EnterUsernameForm user={mockUserData} />)
+    const mockProps = getMockProps()
+    shallow(<EnterUsernameForm {...mockProps} />)
   })
 
-  it('calls checkIfEmailVerified on mount', async () => {
-    expect.assertions(1)
-
+  it('calls checkIfEmailVerified on mount', () => {
     const EnterUsernameForm = require('js/components/Authentication/EnterUsernameForm')
       .default
-    shallow(<EnterUsernameForm {...mockUserData} />)
-    expect(checkIfEmailVerified).toHaveBeenCalledTimes(1)
+    const mockProps = getMockProps()
+    shallow(<EnterUsernameForm {...mockProps} />)
+    expect(checkIfEmailVerified).toHaveBeenCalled()
   })
 
-  it('calls SetUsernameMutation when entering a username', function() {
+  it('calls SetUsernameMutation when entering a username', () => {
     const EnterUsernameForm = require('js/components/Authentication/EnterUsernameForm')
       .default
+    const mockProps = getMockProps()
 
     // TODO:
     // After updating to Material UI 1.x, we shouldn't have to wrap our tested
@@ -47,7 +52,7 @@ describe('EnterUsernameForm tests', function() {
     // @material-ui-1-todo: remove MuiThemeProvider wrapper
     const wrapper = mount(
       <MuiThemeProvider>
-        <EnterUsernameForm user={mockUserData} />
+        <EnterUsernameForm {...mockProps} />
       </MuiThemeProvider>
     )
     const usernameTextField = wrapper.find(
@@ -68,14 +73,15 @@ describe('EnterUsernameForm tests', function() {
     expect(SetUsernameMutation).toHaveBeenCalled()
   })
 
-  it('it does not call SetUsernameMutation when the username is too short and instead shows an error message', function() {
+  it('it does not call SetUsernameMutation when the username is too short and instead shows an error message', () => {
     const EnterUsernameForm = require('js/components/Authentication/EnterUsernameForm')
       .default
+    const mockProps = getMockProps()
 
     // @material-ui-1-todo: remove MuiThemeProvider wrapper
     const wrapper = mount(
       <MuiThemeProvider>
-        <EnterUsernameForm user={mockUserData} />
+        <EnterUsernameForm {...mockProps} />
       </MuiThemeProvider>
     )
     // @material-ui-1-todo: use specific selector
@@ -99,14 +105,15 @@ describe('EnterUsernameForm tests', function() {
     expect(toJson(wrapper)).toMatchSnapshot()
   })
 
-  it('it shows an error message when the username is a duplicate', function() {
+  it('it shows an error message when the username is a duplicate', () => {
     const EnterUsernameForm = require('js/components/Authentication/EnterUsernameForm')
       .default
+    const mockProps = getMockProps()
 
     // @material-ui-1-todo: remove MuiThemeProvider wrapper
     const wrapper = mount(
       <MuiThemeProvider>
-        <EnterUsernameForm user={mockUserData} />
+        <EnterUsernameForm {...mockProps} />
       </MuiThemeProvider>
     )
 
@@ -138,10 +145,11 @@ describe('EnterUsernameForm tests', function() {
     expect(toJson(wrapper)).toMatchSnapshot()
   })
 
-  it('matches expected snapshot', function() {
+  it('matches expected snapshot', () => {
+    const mockProps = getMockProps()
     const EnterUsernameForm = require('js/components/Authentication/EnterUsernameForm')
       .default
-    const wrapper = shallow(<EnterUsernameForm user={mockUserData} />)
+    const wrapper = shallow(<EnterUsernameForm {...mockProps} />)
     expect(toJson(wrapper)).toMatchSnapshot()
   })
 })
