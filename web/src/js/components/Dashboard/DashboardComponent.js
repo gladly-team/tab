@@ -261,12 +261,12 @@ class Dashboard extends React.Component {
               {this.state.showNotification ? (
                 <Notification
                   data-test-id={'global-notification'}
-                  title={`Vote for the April Charity Spotlight`}
+                  title={`Vote for the May Charity Spotlight`}
                   message={`
                         Each month this year, we're highlighting a charity chosen by our
                         community. Nominate and vote for the nonprofit that means the most to you.`}
                   buttonText={'Vote'}
-                  buttonURL={'https://forms.gle/VwXxZkbLSmnBYaFx7'}
+                  buttonURL={'https://forms.gle/TotNELDfdudoqrrC7'}
                   onDismiss={() => {
                     this.setState({
                       showNotification: false,
