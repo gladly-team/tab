@@ -7,7 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import SetUsernameMutation from 'js/mutations/SetUsernameMutation'
 import { setUsernameInLocalStorage } from 'js/authentication/user'
 import { checkIfEmailVerified } from 'js/authentication/helpers'
-import { goToDashboard } from 'js/navigation/navigation'
+import { dashboardURL, goTo } from 'js/navigation/navigation'
 import logger from 'js/utils/logger'
 
 class EnterUsernameForm extends React.Component {
@@ -26,9 +26,10 @@ class EnterUsernameForm extends React.Component {
     // user signs in on a new client.
     const { user } = this.props
     if (user && user.username) {
-      // FIXME: doesn't work on first page load (user is null at first)
+      // FIXME: doesn't work on first page load.
+      // It's overriden by redirectToAuthIfNeeded in Authentication.js.
       setUsernameInLocalStorage(user.username)
-      goToDashboard()
+      goTo(dashboardURL)
       return
     }
 
@@ -92,7 +93,7 @@ class EnterUsernameForm extends React.Component {
     // Username saved successfully. Set the username in localStorage
     // and redirect to the app.
     setUsernameInLocalStorage(data.user.username)
-    goToDashboard()
+    goTo(dashboardURL)
   }
 
   onMutationError(response) {
