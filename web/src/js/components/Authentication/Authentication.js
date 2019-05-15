@@ -62,6 +62,8 @@ class Authentication extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    // After the authUser object changes, automatically redirect
+    // to the current authentication step.
     if (!isEqual(nextProps.authUser, this.props.authUser)) {
       this.navigateToAuthStep()
     }
@@ -132,13 +134,6 @@ class Authentication extends React.Component {
               // TODO: show error message to the user
               logger.error(err)
             })
-        } else {
-          // TODO: may not need this now that we listen for auth status (?)
-
-          // Fetch the user from our database. This will update the `user`
-          // prop, which will let us navigate to the appropriate step in
-          // authentication.
-          this.props.fetchUser()
         }
       })
       .catch(err => {
@@ -304,7 +299,6 @@ Authentication.propTypes = {
     id: PropTypes.string,
     username: PropTypes.string,
   }),
-  fetchUser: PropTypes.func.isRequired,
 }
 
 export default Authentication

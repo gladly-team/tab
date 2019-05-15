@@ -29,8 +29,6 @@ jest.mock('js/utils/local-user-data-mgr')
 jest.mock('js/components/Dashboard/AssignExperimentGroupsContainer')
 jest.mock('js/components/Logo/Logo')
 
-const mockFetchUser = jest.fn()
-
 const MockProps = () => {
   return {
     location: {
@@ -41,7 +39,6 @@ const MockProps = () => {
       id: null,
       username: null,
     },
-    fetchUser: mockFetchUser,
   }
 }
 
@@ -337,49 +334,6 @@ describe('Authentication.js tests', function() {
 
     expect(sendVerificationEmail).toHaveBeenCalledTimes(1)
     expect(goTo).toHaveBeenCalledWith(verifyEmailURL)
-  })
-
-  it('refetches the user after sign-in', async () => {
-    expect.assertions(1)
-
-    // Args for onSignInSuccess
-    const mockFirebaseUserInstance = {
-      displayName: '',
-      email: 'foo@bar.com',
-      emailVerified: true,
-      isAnonymous: false,
-      metadata: {},
-      phoneNumber: null,
-      photoURL: null,
-      providerData: {},
-      providerId: 'some-id',
-      refreshToken: 'xyzxyz',
-      uid: 'abc123',
-    }
-    const mockFirebaseCredential = {}
-    const mockFirebaseDefaultRedirectURL = ''
-
-    createNewUser.mockResolvedValue({
-      id: 'abc123',
-      email: 'foo@bar.com',
-      username: null,
-      justCreated: true,
-    })
-
-    const Authentication = require('js/components/Authentication/Authentication')
-      .default
-    const mockProps = MockProps()
-    const wrapper = shallow(<Authentication {...mockProps} />)
-    const component = wrapper.instance()
-
-    // Mock a call from FirebaseUI after user signs in
-    await component.onSignInSuccess(
-      mockFirebaseUserInstance,
-      mockFirebaseCredential,
-      mockFirebaseDefaultRedirectURL
-    )
-
-    expect(mockFetchUser).toHaveBeenCalledTimes(1)
   })
 
   it('renders AssignExperimentGroups component', () => {
