@@ -21,7 +21,6 @@ import {
   dashboardURL,
   missingEmailMessageURL,
   verifyEmailURL,
-  goToDashboard,
 } from 'js/navigation/navigation'
 import Logo from 'js/components/Logo/Logo'
 import { getUrlParameters } from 'js/utils/utils'

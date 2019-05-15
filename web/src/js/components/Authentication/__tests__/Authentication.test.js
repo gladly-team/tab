@@ -11,7 +11,7 @@ import {
 import {
   goTo,
   replaceUrl,
-  goToDashboard,
+  dashboardURL,
   missingEmailMessageURL,
   verifyEmailURL,
 } from 'js/navigation/navigation'
@@ -191,7 +191,7 @@ describe('Authentication.js tests', function() {
       .default
     const mockProps = MockProps()
     shallow(<Authentication {...mockProps} />)
-    expect(goToDashboard).toHaveBeenCalled()
+    expect(replaceUrl).toHaveBeenCalledWith(dashboardURL)
   })
 
   it('does not redirect to the app if the user is fully authenticated but the URL has the noredirect param', () => {
@@ -209,7 +209,7 @@ describe('Authentication.js tests', function() {
     const mockProps = MockProps()
     shallow(<Authentication {...mockProps} />)
 
-    expect(goToDashboard).not.toHaveBeenCalled()
+    expect(replaceUrl).not.toHaveBeenCalled()
   })
 
   it('redirects to the app if the user is fully authenticated but the URL has an invalid noredirect param', async () => {
@@ -227,7 +227,7 @@ describe('Authentication.js tests', function() {
     const mockProps = MockProps()
     shallow(<Authentication {...mockProps} />)
 
-    expect(goToDashboard).toHaveBeenCalled()
+    expect(replaceUrl).toHaveBeenCalledWith(dashboardURL)
   })
 
   it('does not redirect to the app if the user is not fully authenticated', () => {
@@ -241,7 +241,7 @@ describe('Authentication.js tests', function() {
     const mockProps = MockProps()
     shallow(<Authentication {...mockProps} />)
 
-    expect(goToDashboard).not.toHaveBeenCalled()
+    expect(replaceUrl).not.toHaveBeenCalled()
   })
 
   it('does not redirect at all if the URL is /auth/action/*', () => {
@@ -257,7 +257,7 @@ describe('Authentication.js tests', function() {
     shallow(<Authentication {...mockProps} />)
     expect(goTo).not.toHaveBeenCalled()
     expect(replaceUrl).not.toHaveBeenCalled()
-    expect(goToDashboard).not.toHaveBeenCalled()
+    expect(replaceUrl).not.toHaveBeenCalled()
   })
 
   it('after sign-in, goes to missing email message screen if no email address', () => {
