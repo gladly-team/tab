@@ -150,6 +150,28 @@ describe('Authentication.js tests', function() {
     expect(wrapper.find('[data-test-id="endorsement-quote"]').length).toBe(1)
   })
 
+  it('calls redirectToAuthIfNeeded with the authUser object', () => {
+    expect.assertions(1)
+
+    // User is fully authed.
+    redirectToAuthIfNeeded.mockReturnValue(false)
+
+    getUrlParameters.mockReturnValue({})
+
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.authUser = {
+      id: 'qwertyqwerty',
+      email: 'charles@example.com',
+      username: 'charles',
+      isAnonymous: false,
+      emailVerified: true,
+    }
+    shallow(<Authentication {...mockProps} />)
+    expect(redirectToAuthIfNeeded).toHaveBeenCalledWith(mockProps.authUser)
+  })
+
   it('redirects to the app if the user is fully authenticated', () => {
     expect.assertions(1)
 
