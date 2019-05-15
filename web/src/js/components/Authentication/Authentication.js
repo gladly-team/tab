@@ -16,7 +16,9 @@ import {
 } from 'js/authentication/helpers'
 import {
   goTo,
+  replaceUrl,
   authMessageURL,
+  dashboardURL,
   missingEmailMessageURL,
   verifyEmailURL,
   goToDashboard,
@@ -78,8 +80,8 @@ class Authentication extends React.Component {
     if (this.isAuthActionURL()) {
       return
     }
-    const { authUser } = this.props
-    const redirected = redirectToAuthIfNeeded(authUser)
+    const { authUser, user } = this.props
+    const redirected = redirectToAuthIfNeeded(authUser, user)
 
     // When anonymous users choose to sign in, do not go back to the
     // dashboard.
@@ -87,7 +89,7 @@ class Authentication extends React.Component {
 
     // The user is fully authed, so go to the dashboard.
     if (!redirected && !stayOnAuthPage) {
-      goToDashboard()
+      replaceUrl(dashboardURL)
     }
   }
 

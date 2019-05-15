@@ -8,8 +8,6 @@ import SetUsernameMutation, {
   __runOnCompleted,
 } from 'js/mutations/SetUsernameMutation'
 import { checkIfEmailVerified } from 'js/authentication/helpers'
-import { setUsernameInLocalStorage } from 'js/authentication/user'
-import { goTo, dashboardURL } from 'js/navigation/navigation'
 
 jest.mock('js/mutations/SetUsernameMutation')
 jest.mock('js/authentication/helpers')
@@ -35,42 +33,12 @@ describe('EnterUsernameForm tests', () => {
     shallow(<EnterUsernameForm {...mockProps} />)
   })
 
-  it('sets the username in local storage and redirects to the dashboard if the user already has a username', () => {
+  it('calls checkIfEmailVerified on mount', () => {
     const EnterUsernameForm = require('js/components/Authentication/EnterUsernameForm')
       .default
     const mockProps = getMockProps()
-    mockProps.user.username = 'e.warren'
-    shallow(<EnterUsernameForm {...mockProps} />)
-    expect(setUsernameInLocalStorage).toHaveBeenCalledWith('e.warren')
-    expect(goTo).toHaveBeenCalledWith(dashboardURL)
-  })
-
-  it('does not set the username in local storage or redirect to the dashboard if the user does not have a username', () => {
-    const EnterUsernameForm = require('js/components/Authentication/EnterUsernameForm')
-      .default
-    const mockProps = getMockProps()
-    mockProps.user.username = undefined
-    shallow(<EnterUsernameForm {...mockProps} />)
-    expect(setUsernameInLocalStorage).not.toHaveBeenCalled()
-    expect(goTo).not.toHaveBeenCalled()
-  })
-
-  it('calls checkIfEmailVerified on mount if the username does not exist', () => {
-    const EnterUsernameForm = require('js/components/Authentication/EnterUsernameForm')
-      .default
-    const mockProps = getMockProps()
-    mockProps.user.username = null
     shallow(<EnterUsernameForm {...mockProps} />)
     expect(checkIfEmailVerified).toHaveBeenCalled()
-  })
-
-  it('does not call checkIfEmailVerified on mount if the username exists', () => {
-    const EnterUsernameForm = require('js/components/Authentication/EnterUsernameForm')
-      .default
-    const mockProps = getMockProps()
-    mockProps.user.username = 'b.ross'
-    shallow(<EnterUsernameForm {...mockProps} />)
-    expect(checkIfEmailVerified).not.toHaveBeenCalled()
   })
 
   it('calls SetUsernameMutation when entering a username', () => {

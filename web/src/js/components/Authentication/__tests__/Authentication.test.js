@@ -150,7 +150,7 @@ describe('Authentication.js tests', function() {
     expect(wrapper.find('[data-test-id="endorsement-quote"]').length).toBe(1)
   })
 
-  it('calls redirectToAuthIfNeeded with the authUser object', () => {
+  it('calls redirectToAuthIfNeeded with the authUser and user objects', () => {
     expect.assertions(1)
 
     // User is fully authed.
@@ -168,8 +168,15 @@ describe('Authentication.js tests', function() {
       isAnonymous: false,
       emailVerified: true,
     }
+    mockProps.user = {
+      id: 'qwertyqwerty',
+      username: 'charles',
+    }
     shallow(<Authentication {...mockProps} />)
-    expect(redirectToAuthIfNeeded).toHaveBeenCalledWith(mockProps.authUser)
+    expect(redirectToAuthIfNeeded).toHaveBeenCalledWith(
+      mockProps.authUser,
+      mockProps.user
+    )
   })
 
   it('redirects to the app if the user is fully authenticated', () => {

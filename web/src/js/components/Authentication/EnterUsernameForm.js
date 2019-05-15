@@ -21,18 +21,6 @@ class EnterUsernameForm extends React.Component {
   }
 
   componentDidMount() {
-    // If the user has a username, set it in local storage and
-    // redirect to the dashboard. This can happen when an existing
-    // user signs in on a new client.
-    const { user } = this.props
-    if (user && user.username) {
-      // FIXME: doesn't work on first page load.
-      // It's overriden by redirectToAuthIfNeeded in Authentication.js.
-      setUsernameInLocalStorage(user.username)
-      goTo(dashboardURL)
-      return
-    }
-
     // See if the user verified their email address so that we can
     // log the verification. It would be better to user a cloud
     // function for this, or at least an official callback from the
