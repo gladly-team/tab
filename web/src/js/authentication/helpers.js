@@ -139,26 +139,30 @@ export const createAnonymousUserIfPossible = async () => {
  * to an authentication page. If the user is not fully authenticated,
  * redirect and return true. If the user is fully authenticated, do
  * not redirect and return false.
- * @param {object} user - The AuthUser object
- * @param {string} user.id - The user's ID
- * @param {string} user.email - The user's email
- * @param {string} user.username - The user's username
- * @param {boolean} user.isAnonymous - Whether the user is anonymous
- * @param {boolean} user.emailVerified - Whether the user has verified their email
+ * @param {object} authUser - The AuthUser object
+ * @param {string} authUser.id - The user's ID
+ * @param {string} authUser.email - The user's email
+ * @param {string} authUser.username - The user's username from local storage
+ * @param {boolean} authUser.isAnonymous - Whether the user is anonymous
+ * @param {boolean} authUser.emailVerified - Whether the user has verified their email
+ * @param {object} user - The user object from our API
+ * @param {object} user.username - The user's username from our database. This
+ *   may exist when authUser.username does not; for example, if a user clears
+ *   their local storage.
  * @return {Boolean} Whether or not we redirected (e.g. true if the
  *   user was not fully authenticated).
  */
-export const redirectToAuthIfNeeded = user => {
+export const redirectToAuthIfNeeded = (authUser, user = null) => {
   var redirected = true
 
   // User does not exist. Require login.
-  if (!user || !user.id) {
+  if (!authUser || !authUser.id) {
     goToMainLoginPage()
     redirected = true
     // If the user has an anonymous account and is allowed to be
     // anonymous, do nothing. If they're anonymous but are not
     // allowed to be anonymous, go to the login page.
-  } else if (user.isAnonymous) {
+  } else if (authUser.isAnonymous) {
     if (allowAnonymousUser()) {
       redirected = false
     } else {
@@ -176,123 +180,19 @@ export const redirectToAuthIfNeeded = user => {
     }
     // If the user does not have an email address, show a message
     // asking them to sign in with a different method.
-  } else if (!user.email) {
+  } else if (!authUser.email) {
     replaceUrl(missingEmailMessageURL)
     redirected = true
     // User is logged in but their email is not verified.
-  } else if (!user.emailVerified) {
+  } else if (!authUser.emailVerified) {
     replaceUrl(verifyEmailURL)
     redirected = true
     // User is logged in but has not set a username.
-  } else if (!user.username) {
-    // The "enter username" view needs to fetch the user from the
-    // server to confirm there isn't a username set. The username
-    // from AuthUser relies on local storage.
-    replaceUrl(enterUsernameURL)
-    redirected = true
-  } else {
-    redirected = false
-  }
-  return redirected
-}
-
-// TODO: break into simpler pieces
-/**
- * Based on the user object state, determine if we need to redirect
- * to an authentication page. If the user is not fully authenticated,
- * redirect and return true. If the user is fully authenticated, do
- * not redirect and return false.
- * @param {object} user - The user object for the app.
- * @param {string} user.id - The user's ID
- * @param {string} user.email - The user's email
- * @param {string} user.username - The user's username
- * @param {boolean} user.isAnonymous - Whether the user is anonymous
- * @param {boolean} user.emailVerified - Whether the user has verified their email
- * @param {string} fetchedUsername - The user's username from the server, which
- *   may differ from the one in localStorage.
- * @return {Promise<boolean>} A Promise resolving into a Boolean, which
- *   represents whether or not we redirected (e.g. true if the user was not fully
- *   authenticated).
- */
-export const checkAuthStateAndRedirectIfNeeded = async (
-  user,
-  fetchedUsername = null
-) => {
-  var redirected = true
-
-  // If the user is not fully logged in, redirect to the
-  // appropriate auth page.
-  // User is not logged in.
-  if (!user || !user.id) {
-    // To reduce noise in user creation stats, only create an anonymous
-    // user if the user recently installed the browser extension.
-    if (shouldCreateAnonymousUser()) {
-      // Authenticate the user anonymously.
-      try {
-        await signInAnonymously()
-      } catch (e) {
-        throw e
-      }
-
-      // Create a user in our database.
-      try {
-        await createNewUser()
-      } catch (e) {
-        throw e
-      }
-
-      // Determine if anonymous authentication is sufficient.
-      if (allowAnonymousUser()) {
-        // If the user is allowed to be anonymous, do not redirect.
-        redirected = false
-      } else {
-        goToMainLoginPage()
-        redirected = true
-      }
-      // If not creating an anonymous user, go to the login page.
-    } else {
-      goToMainLoginPage()
-      redirected = true
-    }
-    // If the user has an anonymous account and is allowed to be
-    // anonymous, do nothing. If they're anonymous but are not
-    // allowed to be anonymous, go to the login page.
-  } else if (user.isAnonymous) {
-    if (allowAnonymousUser()) {
-      redirected = false
-    } else {
-      // This is an anonymous user who was using the app but is now
-      // required to sign in.
-      if (anonymousUserMandatorySignIn()) {
-        // Include the "mandatory" URL parameter so we're able to
-        // show an explanation on the sign-in views.
-        goToMainLoginPage({ mandatory: 'true' })
-        redirected = true
-      } else {
-        goToMainLoginPage()
-        redirected = true
-      }
-    }
-    // If the user does not have an email address, show a message
-    // asking them to sign in with a different method.
-  } else if (!user.email) {
-    replaceUrl(missingEmailMessageURL)
-    redirected = true
-    // User is logged in but their email is not verified.
-  } else if (!user.emailVerified) {
-    replaceUrl(verifyEmailURL)
-    redirected = true
-    // User is logged in but has not set a username.
-  } else if (!user.username) {
-    // If the username isn't in localStorage, check if it
-    // exists on the user from the database.
-    // We use the user fetched from the database because
-    // the username property isn't present on our auth token
-    // user identity.
-    if (fetchedUsername) {
-      // The username exists; set it in localStorage and do not redirect
-      // to an auth page.
-      setUsernameInLocalStorage(fetchedUsername)
+  } else if (!authUser.username) {
+    // If the username exists but is not in local storage, set the
+    // username. The username from AuthUser relies on local storage.
+    if (user && user.username) {
+      setUsernameInLocalStorage(user.username)
       redirected = false
     } else {
       replaceUrl(enterUsernameURL)

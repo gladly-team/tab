@@ -41,10 +41,14 @@ const withUser = (options = {}) => WrappedComponent => {
         authStateLoaded: false,
         userCreationInProgress: false,
       }
+      this.authListenerUnsubscribe = null
       this.userCreatePromise = null
+      this.mounted = false
     }
 
     componentDidMount() {
+      this.mounted = true
+
       // Store unsubscribe function.
       // https://firebase.google.com/docs/reference/js/firebase.auth.Auth#onAuthStateChanged
       this.authListenerUnsubscribe = onAuthStateChanged(user => {
@@ -59,6 +63,7 @@ const withUser = (options = {}) => WrappedComponent => {
       if (this.userCreatePromise && this.userCreatePromise.cancel) {
         this.userCreatePromise.cancel()
       }
+      this.mounted = false
     }
 
     async determineAuthState(user) {
@@ -89,6 +94,18 @@ const withUser = (options = {}) => WrappedComponent => {
           }
           logger.error(e)
         }
+
+        // This is an antipattern, and canceling our promises on unmount
+        // should handle the problem. However, in practice, the component
+        // sometimes unmounts between the userCreatePromise resolving and
+        // this point, causing an error when we try to update state on the
+        // unmounted component. It shouldn't cause a memory leak, as we've
+        // canceled the promise and unsubscribed the auth listener.
+        // Note that this might be an error in our code, but it's not a
+        // priority to investigate.
+        if (!this.mounted) {
+          return
+        }
         this.setState({
           userCreationInProgress: false,
         })
@@ -105,7 +122,7 @@ const withUser = (options = {}) => WrappedComponent => {
         }
       }
 
-      if (!redirected) {
+      if (!redirected && this.mounted) {
         this.setState({
           authUser: authUser,
           authStateLoaded: true,
