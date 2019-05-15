@@ -142,13 +142,17 @@ export const createAnonymousUserIfPossible = async () => {
  * @param {object} authUser - The AuthUser object
  * @param {string} authUser.id - The user's ID
  * @param {string} authUser.email - The user's email
- * @param {string} authUser.username - The user's username
+ * @param {string} authUser.username - The user's username from local storage
  * @param {boolean} authUser.isAnonymous - Whether the user is anonymous
  * @param {boolean} authUser.emailVerified - Whether the user has verified their email
+ * @param {object} user - The user object from our API
+ * @param {object} user.username - The user's username from our database. This
+ *   may exist when authUser.username does not; for example, if a user clears
+ *   their local storage.
  * @return {Boolean} Whether or not we redirected (e.g. true if the
  *   user was not fully authenticated).
  */
-export const redirectToAuthIfNeeded = authUser => {
+export const redirectToAuthIfNeeded = (authUser, user = null) => {
   var redirected = true
 
   // User does not exist. Require login.
@@ -185,11 +189,15 @@ export const redirectToAuthIfNeeded = authUser => {
     redirected = true
     // User is logged in but has not set a username.
   } else if (!authUser.username) {
-    // The "enter username" view needs to fetch the user from the
-    // server to confirm there isn't a username set. The username
-    // from AuthUser relies on local storage.
-    replaceUrl(enterUsernameURL)
-    redirected = true
+    // If the username exists but is not in local storage, set the
+    // username. The username from AuthUser relies on local storage.
+    if (user && user.username) {
+      setUsernameInLocalStorage(user.username)
+      redirected = false
+    } else {
+      replaceUrl(enterUsernameURL)
+      redirected = true
+    }
   } else {
     redirected = false
   }
