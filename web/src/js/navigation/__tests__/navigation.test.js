@@ -7,9 +7,9 @@ const mockBrowserHistory = {
   push: jest.fn(),
   replace: jest.fn(),
 }
-jest.mock('history/createBrowserHistory', () =>
-  jest.fn(() => mockBrowserHistory)
-)
+jest.mock('history', () => ({
+  createBrowserHistory: jest.fn(() => mockBrowserHistory),
+}))
 jest.mock('js/navigation/utils')
 
 beforeAll(() => {
