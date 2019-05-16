@@ -279,8 +279,8 @@ export const _experimentsConfig = [
   // @experiment-search-intro
   createExperiment({
     name: EXPERIMENT_SEARCH_INTRO,
-    active: true,
-    disabled: false,
+    active: false,
+    disabled: true,
     percentageOfExistingUsersInExperiment: 10.0,
     percentageOfNewUsersInExperiment: 40.0,
     filters: [
@@ -305,8 +305,8 @@ export const _experimentsConfig = [
   // @experiment-referral-notification
   createExperiment({
     name: EXPERIMENT_REFERRAL_NOTIFICATION,
-    active: true,
-    disabled: false,
+    active: false,
+    disabled: true,
     percentageOfExistingUsersInExperiment: 30.0,
     percentageOfNewUsersInExperiment: 0,
     filters: [
