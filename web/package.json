@@ -37,7 +37,7 @@
     "@material-ui/lab": "^3.0.0-alpha.23",
     "blockadblock": "^3.2.1",
     "browser-detect": "^0.2.28",
-    "firebase": "^5.6.0",
+    "firebase": "^6.0.2",
     "hex-to-rgba": "^1.0.2",
     "history": "^4.7.2",
     "lodash": "^4.17.11",
