@@ -35,7 +35,7 @@
     "delete-tables": "babel-node ./scripts/deleteTables.js",
     "load-fixtures": "babel-node ./scripts/loadFixtures.js",
     "test": "npm-run-all -s lint test:run test:codecov",
-    "test:run": "jest --coverage",
+    "test:run": "jest --coverage --watchAll=false",
     "test:codecov": "if-env LOG_TEST_COVERAGE=true && codecov || echo 'Skipping test coverage logging.'",
     "test:watch": "jest --watch",
     "format": "prettier \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",

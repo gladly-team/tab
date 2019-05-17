@@ -45,7 +45,7 @@
     "build": "rm -rf ./build && npm run build:compile",
     "build:compile": "cross-env NODE_ENV=production babel --out-dir='build' --ignore='build,coverage,__mocks__,__tests__,node_modules' ./src/",
     "test": "npm-run-all -s lint test:run test:codecov",
-    "test:run": "jest --coverage",
+    "test:run": "jest --coverage --watchAll=false",
     "test:codecov": "if-env LOG_TEST_COVERAGE=true && codecov || echo 'Skipping test coverage logging.'",
     "test:watch": "jest --watch",
     "format": "prettier \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
