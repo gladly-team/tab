@@ -48,7 +48,7 @@ function startGraphQLServer(callback) {
           pretty: true,
           schema: Schema,
           context,
-          formatError: handleError,
+          customFormatErrorFn: handleError,
         }
       })
     )

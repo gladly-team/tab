@@ -4,10 +4,10 @@
   "description": "S3 dev server for Tab for a Cause.",
   "private": true,
   "dependencies": {
-    "express": "^4.16.3"
+    "express": "^4.17.0"
   },
   "devDependencies": {
-    "serverless": "^1.32.0"
+    "serverless": "^1.42.3"
   },
   "scripts": {
     "start": "node ./server.js",

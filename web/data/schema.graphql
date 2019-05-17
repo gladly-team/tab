@@ -336,9 +336,7 @@ input LogUserRevenueInput {
   userId: String!
   revenue: Float
 
-  """
-  A revenue value encoded because it is not available on the client side
-  """
+  """A revenue value encoded because it is not available on the client side"""
   encodedRevenue: EncodedRevenueValue
   aggregationOperation: LogUserRevenueAggregationOperationEnum
   dfpAdvertiserId: String
