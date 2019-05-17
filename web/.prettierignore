@@ -3,3 +3,4 @@ coverage
 build
 data
 __generated__
+src/js/ads/prebid/prebid.js

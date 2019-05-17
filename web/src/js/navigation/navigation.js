@@ -1,4 +1,4 @@
-import createBrowserHistory from 'history/createBrowserHistory'
+import { createBrowserHistory } from 'history'
 import { externalRedirect, isURLForDifferentApp } from 'js/navigation/utils'
 import { getUrlParameters } from 'js/utils/utils'
 import qs from 'qs'
