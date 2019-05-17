@@ -1,4 +1,3 @@
-import '@babel/polyfill' // For async/await support.
 import { graphql } from 'graphql'
 import { Schema } from './data/schema'
 import {

@@ -4,7 +4,6 @@
   "description": "GraphQL server for Tab for a Cause.",
   "private": true,
   "dependencies": {
-    "@babel/polyfill": "^7.4.4",
     "@babel/runtime": "^7.4.4",
     "aws-sdk": "^2.457.0",
     "bluebird": "^3.5.4",
