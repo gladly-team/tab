@@ -87,7 +87,7 @@
     "relay": "relay-compiler --src ./src/ --schema ./data/schema.graphql",
     "relay:watch": "nodemon --watch src/ --watch data/schema.graphql --ignore **/__generated__/**/* --exec \"yarn run relay\"",
     "test": "cross-env NODE_PATH=src/ npm-run-all -s format:check test:run test:codecov",
-    "test:run": "cross-env NODE_PATH=src/ react-scripts test --env=jsdom --testPathIgnorePatterns=e2e-tests --testPathIgnorePatterns=prebidPatches --maxWorkers=2 --coverage",
+    "test:run": "cross-env NODE_PATH=src/ react-scripts test --env=jsdom --testPathIgnorePatterns=e2e-tests --testPathIgnorePatterns=prebidPatches --maxWorkers=2 --coverage --watchAll=false",
     "test:integration": "cross-env NODE_PATH=src/ react-scripts test --testPathPattern=e2e-tests",
     "test:codecov": "if-env LOG_TEST_COVERAGE=true && codecov || echo 'Skipping test coverage logging.'",
     "test:watch": "cross-env NODE_PATH=src/ react-scripts test --env=jsdom --testPathIgnorePatterns=e2e-tests --testPathIgnorePatterns=prebidPatches --watch",
