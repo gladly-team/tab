@@ -35,7 +35,7 @@ class CampaignBase extends React.Component {
             start: moment(campaignStartTimeISO),
             end: moment(campaignEndTimeISO),
           },
-          heartsGoal: 6e6,
+          heartsGoal: 5e6,
           endContent: (
             <div>
               <Typography
@@ -45,7 +45,7 @@ class CampaignBase extends React.Component {
                   marginTop: 4,
                 }}
               >
-                Thank You for Supporting Cool Earth!
+                Thanks for Helping our 4-Pawed Friends!
               </Typography>
               <div
                 style={{
@@ -56,15 +56,15 @@ class CampaignBase extends React.Component {
                 <Typography variant={'body2'} gutterBottom>
                   With your help,{' '}
                   <a
-                    href="https://www.coolearth.org"
+                    href="http://www.friendswithfourpaws.org"
                     target="_blank"
                     rel="noopener noreferrer"
                     style={anchorStyle}
                   >
-                    Cool Earth
+                    Friends with Four Paws
                   </a>{' '}
-                  is working alongside local communities to halt deforestation
-                  and combat climate change. Thank you!{' '}
+                  will continue their work rescuing cats and dogs by finding
+                  them wonderful new homes. Thank you!{' '}
                 </Typography>
                 <Typography>
                   <span style={{ fontWeight: 'bold' }}>
@@ -104,7 +104,7 @@ class CampaignBase extends React.Component {
             marginTop: 4,
           }}
         >
-          April Spotlight: Cool Earth
+          May Spotlight: Friends with Four Paws
         </Typography>
         <div
           style={{
@@ -115,14 +115,14 @@ class CampaignBase extends React.Component {
           <Typography variant={'body2'} gutterBottom>
             This month, Tabbers selected{' '}
             <a
-              href="https://www.coolearth.org"
+              href="http://www.friendswithfourpaws.org"
               target="_blank"
               rel="noopener noreferrer"
               style={anchorStyle}
             >
-              Cool Earth
+              Friends with Four Paws
             </a>{' '}
-            for our April{' '}
+            for our May{' '}
             <a
               href="https://www.facebook.com/notes/tab-for-a-cause/introducing-monthly-charity-spotlight/2071986076177802/"
               target="_blank"
@@ -131,14 +131,12 @@ class CampaignBase extends React.Component {
             >
               Charity Spotlight
             </a>
-            —a particularly fitting choice for Earth Day on April 22nd! Cool
-            Earth works alongside rainforest communities to halt deforestation
-            and its impact on climate change. We continue to rapidly lose
-            rainforest, and their mission is to curb that loss by putting local
-            people back in control of their forest.
+            . Friends with Four Paws rescues animals by providing foster care
+            and then matching the animals to loving homes through their mobile
+            adoption locations.
           </Typography>
           <Typography variant={'body2'} gutterBottom>
-            Join us in supporting Cool Earth!
+            Join us in supporting Friends with Four Paws!
           </Typography>
         </div>
       </HeartDonationCampaign>
