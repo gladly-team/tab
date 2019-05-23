@@ -35,7 +35,7 @@ class CampaignBase extends React.Component {
             start: moment(campaignStartTimeISO),
             end: moment(campaignEndTimeISO),
           },
-          heartsGoal: 6e6,
+          heartsGoal: 5e6,
           endContent: (
             <div>
               <Typography
@@ -132,8 +132,8 @@ class CampaignBase extends React.Component {
               Charity Spotlight
             </a>
             . Friends with Four Paws rescues animals by providing foster care
-            and then matching the animals to wonderful homes through their
-            mobile adoption locations.
+            and then matching the animals to loving homes through their mobile
+            adoption locations.
           </Typography>
           <Typography variant={'body2'} gutterBottom>
             Join us in supporting Friends with Four Paws!
