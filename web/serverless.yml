@@ -35,6 +35,7 @@ resources:
     # New tab app S3 bucket
     TabS3Bucket:
       Type: AWS::S3::Bucket
+      DeletionPolicy: Retain
       Properties:
         BucketName: ${self:custom.newTabAppS3Bucket}
         AccessControl: PublicRead
@@ -48,6 +49,7 @@ resources:
           ErrorDocument: newtab/index.html
     TabS3BucketPolicy:
       Type: AWS::S3::BucketPolicy
+      DeletionPolicy: Retain
       Properties:
         Bucket:
           Ref: TabS3Bucket
@@ -63,6 +65,7 @@ resources:
     # Search app S3 bucket
     SearchAppS3Bucket:
       Type: AWS::S3::Bucket
+      DeletionPolicy: Retain
       Properties:
         BucketName: ${self:custom.searchAppS3Bucket}
         AccessControl: PublicRead
@@ -71,6 +74,7 @@ resources:
           ErrorDocument: search/index.html
     SearchAppS3BucketPolicy:
       Type: AWS::S3::BucketPolicy
+      DeletionPolicy: Retain
       Properties:
         Bucket:
           Ref: SearchAppS3Bucket
@@ -86,6 +90,7 @@ resources:
     # Serve the app through Cloudfront.
     WebAppCloudFrontDistribution:
       Type: AWS::CloudFront::Distribution
+      DeletionPolicy: Retain
       Properties:
         # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distributionconfig.html
         DistributionConfig:
