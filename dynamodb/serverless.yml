@@ -553,6 +553,7 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+      DeletionPolicy: Retain
 
     backgroundImagesTable:  
       Type: AWS::DynamoDB::Table
@@ -662,20 +663,21 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
 
-    referralLinkClickLog:  
-      Type: AWS::DynamoDB::Table
-      Properties:  
-        TableName: ReferralLinkClickLog-${self:provider.stage}
-        KeySchema:
-          - AttributeName: userId
-            KeyType: HASH
-          - AttributeName: timestamp
-            KeyType: RANGE
-        AttributeDefinitions:
-          - AttributeName: userId
-            AttributeType: S
-          - AttributeName: timestamp
-            AttributeType: S
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
+    ### Deleting to confirm the resource will be destroyed by default.
+    # referralLinkClickLog:  
+    #   Type: AWS::DynamoDB::Table
+    #   Properties:  
+    #     TableName: ReferralLinkClickLog-${self:provider.stage}
+    #     KeySchema:
+    #       - AttributeName: userId
+    #         KeyType: HASH
+    #       - AttributeName: timestamp
+    #         KeyType: RANGE
+    #     AttributeDefinitions:
+    #       - AttributeName: userId
+    #         AttributeType: S
+    #       - AttributeName: timestamp
+    #         AttributeType: S
+    #     ProvisionedThroughput:
+    #       ReadCapacityUnits: 1
+    #       WriteCapacityUnits: 1
