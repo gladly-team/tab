@@ -17,6 +17,14 @@ provider:
   region: us-east-1
   stage: ${env:SLS_STAGE, self:custom.stageDefault}
   role: gladlyLambdaEdgeRole
+  # Let's be conservative and prevent any unexpected changes
+  # to the stack. See:
+  # https://github.com/gladly-team/tab/issues/582
+  stackPolicy:
+    - Effect: Deny
+      Principal: "*"
+      Action: "Update:*"
+      Resource: "*"
 
 custom:
   stageDefault: dev
