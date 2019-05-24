@@ -8,6 +8,15 @@ provider:
   region: us-west-2
   stage: ${env:SLS_STAGE, self:custom.stageDefault}
 
+# Let's be conservative and prevent any unexpected changes
+# to the stack. See:
+# https://github.com/gladly-team/tab/issues/582
+stackPolicy:
+  - Effect: Deny
+    Principal: "*"
+    Action: "Update:*"
+    Resource: "*"
+
 plugins:
   # https://github.com/sbstjn/serverless-dynamodb-autoscaling
   # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-table.html#cfn-dynamodb-table-examples-application-autoscaling
