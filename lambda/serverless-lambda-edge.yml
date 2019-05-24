@@ -21,7 +21,7 @@ provider:
   # to the stack. See:
   # https://github.com/gladly-team/tab/issues/582
   stackPolicy:
-    - Effect: Deny
+    - Effect: Allow # TODO: change to Deny
       Principal: "*"
       Action: "Update:*"
       Resource: "*"
