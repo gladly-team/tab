@@ -21,6 +21,7 @@ resources:
     # S3 Bucket
     TabMediaBucket:
       Type: AWS::S3::Bucket
+      DeletionPolicy: Retain
       Properties:
         BucketName: ${self:custom.s3Bucket}
         AccessControl: PublicRead
@@ -31,6 +32,7 @@ resources:
     # Bucket policy (public read)
     TabS3BucketPolicy:
       Type: AWS::S3::BucketPolicy
+      DeletionPolicy: Retain
       Properties:
         Bucket:
           Ref: TabMediaBucket
@@ -46,6 +48,7 @@ resources:
     # Serve media through Cloudfront.
     WebAppCloudFrontDistribution:
       Type: AWS::CloudFront::Distribution
+      DeletionPolicy: Retain
       Properties:
         # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distributionconfig.html
         DistributionConfig:
