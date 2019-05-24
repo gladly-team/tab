@@ -7,14 +7,14 @@ provider:
   runtime: nodejs8.10
   region: us-west-2
   stage: ${env:SLS_STAGE, self:custom.stageDefault}
-  # Let's be conservative and prevent any unexpected changes
-  # to the stack. See:
-  # https://github.com/gladly-team/tab/issues/582
-  stackPolicy:
-    - Effect: Deny
-      Principal: "*"
-      Action: "Update:*"
-      Resource: "*"
+  # # Let's be conservative and prevent any unexpected changes
+  # # to the stack. See:
+  # # https://github.com/gladly-team/tab/issues/582
+  # stackPolicy:
+  #   - Effect: Deny
+  #     Principal: "*"
+  #     Action: "Update:*"
+  #     Resource: "*"
 
 plugins:
   # https://github.com/sbstjn/serverless-dynamodb-autoscaling
