@@ -83,15 +83,15 @@ custom:
           minimum: 1
           maximum: 1000
           usage: 0.60
-      # userDataConsentLogTable:
-      #   read:
-      #     minimum: 1
-      #     maximum: 1000
-      #     usage: 0.75
-      #   write:
-      #     minimum: 1
-      #     maximum: 1000
-      #     usage: 0.60
+      userDataConsentLogTable:
+        read:
+          minimum: 1
+          maximum: 1000
+          usage: 0.75
+        write:
+          minimum: 1
+          maximum: 1000
+          usage: 0.60
       backgroundImagesTable:
         read:
           minimum: 1
@@ -137,15 +137,15 @@ custom:
           minimum: 1
           maximum: 1000
           usage: 0.60
-      # referralLinkClickLog:
-      #   read:
-      #     minimum: 1
-      #     maximum: 1000
-      #     usage: 0.75
-      #   write:
-      #     minimum: 1
-      #     maximum: 1000
-      #     usage: 0.60
+      referralLinkClickLog:
+        read:
+          minimum: 1
+          maximum: 1000
+          usage: 0.75
+        write:
+          minimum: 1
+          maximum: 1000
+          usage: 0.60
     # prod stage table capacities
     prod: 
       usersTable:
@@ -212,15 +212,15 @@ custom:
           minimum: 20
           maximum: 9001
           usage: 0.60
-      # userDataConsentLogTable:
-      #   read:
-      #     minimum: 1
-      #     maximum: 9001
-      #     usage: 0.75
-      #   write:
-      #     minimum: 1
-      #     maximum: 9001
-      #     usage: 0.60
+      userDataConsentLogTable:
+        read:
+          minimum: 1
+          maximum: 9001
+          usage: 0.75
+        write:
+          minimum: 1
+          maximum: 9001
+          usage: 0.60
       backgroundImagesTable:
         read:
           minimum: 5
@@ -266,15 +266,15 @@ custom:
           minimum: 10
           maximum: 9001
           usage: 0.60
-      # referralLinkClickLog:
-      #   read:
-      #     minimum: 1
-      #     maximum: 1000
-      #     usage: 0.75
-      #   write:
-      #     minimum: 1
-      #     maximum: 1000
-      #     usage: 0.60
+      referralLinkClickLog:
+        read:
+          minimum: 1
+          maximum: 1000
+          usage: 0.75
+        write:
+          minimum: 1
+          maximum: 1000
+          usage: 0.60
 
   # https://github.com/sbstjn/serverless-dynamodb-autoscaling
   capacities:
@@ -343,15 +343,15 @@ custom:
         minimum: ${self:custom.customCapacities.${self:provider.stage}.userRevenueLogTable.write.minimum}
         maximum: ${self:custom.customCapacities.${self:provider.stage}.userRevenueLogTable.write.maximum}
         usage: ${self:custom.customCapacities.${self:provider.stage}.userRevenueLogTable.write.usage}
-    # - table: userDataConsentLogTable
-    #   read:
-    #     minimum: ${self:custom.customCapacities.${self:provider.stage}.userDataConsentLogTable.read.minimum}
-    #     maximum: ${self:custom.customCapacities.${self:provider.stage}.userDataConsentLogTable.read.maximum}
-    #     usage: ${self:custom.customCapacities.${self:provider.stage}.userDataConsentLogTable.read.usage}
-    #   write:
-    #     minimum: ${self:custom.customCapacities.${self:provider.stage}.userDataConsentLogTable.write.minimum}
-    #     maximum: ${self:custom.customCapacities.${self:provider.stage}.userDataConsentLogTable.write.maximum}
-    #     usage: ${self:custom.customCapacities.${self:provider.stage}.userDataConsentLogTable.write.usage}
+    - table: userDataConsentLogTable
+      read:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.userDataConsentLogTable.read.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.userDataConsentLogTable.read.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.userDataConsentLogTable.read.usage}
+      write:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.userDataConsentLogTable.write.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.userDataConsentLogTable.write.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.userDataConsentLogTable.write.usage}
     - table: backgroundImagesTable
       read:
         minimum: ${self:custom.customCapacities.${self:provider.stage}.backgroundImagesTable.read.minimum}
@@ -401,15 +401,15 @@ custom:
         minimum: ${self:custom.customCapacities.${self:provider.stage}.referralDataLogTable.write.minimum}
         maximum: ${self:custom.customCapacities.${self:provider.stage}.referralDataLogTable.write.maximum}
         usage: ${self:custom.customCapacities.${self:provider.stage}.referralDataLogTable.write.usage}
-    # - table: referralLinkClickLog
-    #   read:
-    #     minimum: ${self:custom.customCapacities.${self:provider.stage}.referralLinkClickLog.read.minimum}
-    #     maximum: ${self:custom.customCapacities.${self:provider.stage}.referralLinkClickLog.read.maximum}
-    #     usage: ${self:custom.customCapacities.${self:provider.stage}.referralLinkClickLog.read.usage}
-    #   write:
-    #     minimum: ${self:custom.customCapacities.${self:provider.stage}.referralLinkClickLog.write.minimum}
-    #     maximum: ${self:custom.customCapacities.${self:provider.stage}.referralLinkClickLog.write.maximum}
-    #     usage: ${self:custom.customCapacities.${self:provider.stage}.referralLinkClickLog.write.usage}
+    - table: referralLinkClickLog
+      read:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.referralLinkClickLog.read.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.referralLinkClickLog.read.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.referralLinkClickLog.read.usage}
+      write:
+        minimum: ${self:custom.customCapacities.${self:provider.stage}.referralLinkClickLog.write.minimum}
+        maximum: ${self:custom.customCapacities.${self:provider.stage}.referralLinkClickLog.write.maximum}
+        usage: ${self:custom.customCapacities.${self:provider.stage}.referralLinkClickLog.write.usage}
 
 resources:
   Resources:
@@ -536,24 +536,24 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
 
-    # userDataConsentLogTable:  
-    #   Type: AWS::DynamoDB::Table
-    #   Properties:  
-    #     TableName: UserDataConsentLog-${self:provider.stage}
-    #     KeySchema:
-    #       - AttributeName: userId
-    #         KeyType: HASH
-    #       - AttributeName: timestamp
-    #         KeyType: RANGE
-    #     AttributeDefinitions:
-    #       - AttributeName: userId
-    #         AttributeType: S
-    #       - AttributeName: timestamp
-    #         AttributeType: S
-    #     ProvisionedThroughput:
-    #       ReadCapacityUnits: 1
-    #       WriteCapacityUnits: 1
-    #   DeletionPolicy: Retain
+    userDataConsentLogTable:  
+      Type: AWS::DynamoDB::Table
+      Properties:  
+        TableName: UserDataConsentLog-${self:provider.stage}
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+          - AttributeName: timestamp
+            KeyType: RANGE
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: timestamp
+            AttributeType: S
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+      DeletionPolicy: Retain
 
     backgroundImagesTable:  
       Type: AWS::DynamoDB::Table
@@ -663,21 +663,20 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
 
-    ### Deleting to confirm the resource will be destroyed by default.
-    # referralLinkClickLog:  
-    #   Type: AWS::DynamoDB::Table
-    #   Properties:  
-    #     TableName: ReferralLinkClickLog-${self:provider.stage}
-    #     KeySchema:
-    #       - AttributeName: userId
-    #         KeyType: HASH
-    #       - AttributeName: timestamp
-    #         KeyType: RANGE
-    #     AttributeDefinitions:
-    #       - AttributeName: userId
-    #         AttributeType: S
-    #       - AttributeName: timestamp
-    #         AttributeType: S
-    #     ProvisionedThroughput:
-    #       ReadCapacityUnits: 1
-    #       WriteCapacityUnits: 1
+    referralLinkClickLog:  
+      Type: AWS::DynamoDB::Table
+      Properties:  
+        TableName: ReferralLinkClickLog-${self:provider.stage}
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+          - AttributeName: timestamp
+            KeyType: RANGE
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: timestamp
+            AttributeType: S
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
