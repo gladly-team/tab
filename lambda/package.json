@@ -41,7 +41,7 @@
   },
   "scripts": {
     "start": "nodemon -e js,json,yml --exec \"babel-node\" ./server.js",
-    "deploy": "yarn run build && cp serverless-lambda.yml serverless.yml && serverless deploy -v --force && cp serverless-lambda-edge.yml serverless.yml && serverless deploy -v --force ",
+    "deploy": "yarn run build && cp serverless-lambda.yml serverless.yml && serverless deploy -v && cp serverless-lambda-edge.yml serverless.yml && serverless deploy -v ",
     "build": "rm -rf ./build && npm run build:compile",
     "build:compile": "cross-env NODE_ENV=production babel --out-dir='build' --ignore='build,coverage,__mocks__,__tests__,node_modules' ./src/",
     "test": "npm-run-all -s lint test:run test:codecov",
