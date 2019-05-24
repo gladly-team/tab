@@ -145,15 +145,15 @@ custom:
           minimum: 1
           maximum: 1000
           usage: 0.60
-      referralLinkClickLog:
-        read:
-          minimum: 1
-          maximum: 1000
-          usage: 0.75
-        write:
-          minimum: 1
-          maximum: 1000
-          usage: 0.60
+      # referralLinkClickLog:
+      #   read:
+      #     minimum: 1
+      #     maximum: 1000
+      #     usage: 0.75
+      #   write:
+      #     minimum: 1
+      #     maximum: 1000
+      #     usage: 0.60
     # prod stage table capacities
     prod: 
       usersTable:
@@ -274,15 +274,15 @@ custom:
           minimum: 10
           maximum: 9001
           usage: 0.60
-      referralLinkClickLog:
-        read:
-          minimum: 1
-          maximum: 1000
-          usage: 0.75
-        write:
-          minimum: 1
-          maximum: 1000
-          usage: 0.60
+      # referralLinkClickLog:
+      #   read:
+      #     minimum: 1
+      #     maximum: 1000
+      #     usage: 0.75
+      #   write:
+      #     minimum: 1
+      #     maximum: 1000
+      #     usage: 0.60
 
   # https://github.com/sbstjn/serverless-dynamodb-autoscaling
   capacities:
@@ -409,15 +409,15 @@ custom:
         minimum: ${self:custom.customCapacities.${self:provider.stage}.referralDataLogTable.write.minimum}
         maximum: ${self:custom.customCapacities.${self:provider.stage}.referralDataLogTable.write.maximum}
         usage: ${self:custom.customCapacities.${self:provider.stage}.referralDataLogTable.write.usage}
-    - table: referralLinkClickLog
-      read:
-        minimum: ${self:custom.customCapacities.${self:provider.stage}.referralLinkClickLog.read.minimum}
-        maximum: ${self:custom.customCapacities.${self:provider.stage}.referralLinkClickLog.read.maximum}
-        usage: ${self:custom.customCapacities.${self:provider.stage}.referralLinkClickLog.read.usage}
-      write:
-        minimum: ${self:custom.customCapacities.${self:provider.stage}.referralLinkClickLog.write.minimum}
-        maximum: ${self:custom.customCapacities.${self:provider.stage}.referralLinkClickLog.write.maximum}
-        usage: ${self:custom.customCapacities.${self:provider.stage}.referralLinkClickLog.write.usage}
+    # - table: referralLinkClickLog
+    #   read:
+    #     minimum: ${self:custom.customCapacities.${self:provider.stage}.referralLinkClickLog.read.minimum}
+    #     maximum: ${self:custom.customCapacities.${self:provider.stage}.referralLinkClickLog.read.maximum}
+    #     usage: ${self:custom.customCapacities.${self:provider.stage}.referralLinkClickLog.read.usage}
+    #   write:
+    #     minimum: ${self:custom.customCapacities.${self:provider.stage}.referralLinkClickLog.write.minimum}
+    #     maximum: ${self:custom.customCapacities.${self:provider.stage}.referralLinkClickLog.write.maximum}
+    #     usage: ${self:custom.customCapacities.${self:provider.stage}.referralLinkClickLog.write.usage}
 
 resources:
   Resources:
@@ -683,21 +683,21 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
 
-    referralLinkClickLog:  
-      Type: AWS::DynamoDB::Table
-      DeletionPolicy: Retain
-      Properties:  
-        TableName: ReferralLinkClickLog-${self:provider.stage}
-        KeySchema:
-          - AttributeName: userId
-            KeyType: HASH
-          - AttributeName: timestamp
-            KeyType: RANGE
-        AttributeDefinitions:
-          - AttributeName: userId
-            AttributeType: S
-          - AttributeName: timestamp
-            AttributeType: S
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
+    # referralLinkClickLog:  
+    #   Type: AWS::DynamoDB::Table
+    #   DeletionPolicy: Retain
+    #   Properties:  
+    #     TableName: ReferralLinkClickLog-${self:provider.stage}
+    #     KeySchema:
+    #       - AttributeName: userId
+    #         KeyType: HASH
+    #       - AttributeName: timestamp
+    #         KeyType: RANGE
+    #     AttributeDefinitions:
+    #       - AttributeName: userId
+    #         AttributeType: S
+    #       - AttributeName: timestamp
+    #         AttributeType: S
+    #     ProvisionedThroughput:
+    #       ReadCapacityUnits: 1
+    #       WriteCapacityUnits: 1
