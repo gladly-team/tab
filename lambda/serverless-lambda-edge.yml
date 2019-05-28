@@ -36,10 +36,7 @@ provider:
     - Effect: Allow
       Principal: "*"
       Action: "Update:*"
-      Resource:
-        - "LogicalResourceId/NewtabAppLambdaEdgeLambdaFunction"
-        - "LogicalResourceId/SearchAppLambdaEdgeLambdaFunction"
-        - "LogicalResourceId/gladlyLambdaEdgeRole"
+      Resource: "*"
 
 custom:
   stageDefault: dev
