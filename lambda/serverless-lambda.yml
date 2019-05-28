@@ -32,7 +32,7 @@ provider:
       Resource: "*"
     - Effect: Allow
       Principal: "*"
-      Action: "Update:Modify"
+      Action: "Update:*"
       Resource: "LogicalResourceId/FirebaseAuthorizerLambdaFunction"
 
 custom:

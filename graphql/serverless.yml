@@ -28,7 +28,7 @@ provider:
       Resource: "*"
     - Effect: Allow
       Principal: "*"
-      Action: "Update:Modify"
+      Action: "Update:*"
       Resource: "LogicalResourceId/GraphqlLambdaFunction"
   # Rules for fine-grained DynamoDB access:
   #   https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/specifying-conditions.html
