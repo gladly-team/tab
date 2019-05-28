@@ -41,7 +41,7 @@
     "format": "prettier \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
     "format:fix": "yarn run format --write",
     "lint": "eslint \"**/*.{js,jsx}\"",
-    "deploy": "serverless deploy -v"
+    "deploy": "serverless deploy -v --force"
   },
   "repository": {
     "type": "git",
