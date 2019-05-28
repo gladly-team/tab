@@ -22,10 +22,14 @@ provider:
   # to the stack. See:
   # https://github.com/gladly-team/tab/issues/582
   stackPolicy:
-    - Effect: Allow # TODO: change to Deny
+    - Effect: Deny
       Principal: "*"
       Action: "Update:*"
       Resource: "*"
+    - Effect: Allow
+      Principal: "*"
+      Action: "Update:Modify"
+      Resource: "LogicalResourceId/GraphqlLambdaFunction"
   # Rules for fine-grained DynamoDB access:
   #   https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/specifying-conditions.html
   #   https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/using-identity-based-policies.html

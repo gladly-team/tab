@@ -32,10 +32,22 @@ provider:
   # Opened a Serverless feature request:
   # https://github.com/serverless/serverless/issues/6182
   stackPolicy:
-    - Effect: Allow # TODO: change to Deny
+    - Effect: Deny
       Principal: "*"
       Action: "Update:*"
       Resource: "*"
+    - Effect: Allow
+      Principal: "*"
+      Action: "Update:Modify"
+      Resource: "LogicalResourceId/NewtabAppLambdaEdgeLambdaFunction"
+    - Effect: Allow
+      Principal: "*"
+      Action: "Update:Modify"
+      Resource: "LogicalResourceId/SearchAppLambdaEdgeLambdaFunction"
+    - Effect: Allow
+      Principal: "*"
+      Action: "Update:Modify"
+      Resource: "LogicalResourceId/gladlyLambdaEdgeRole"
 
 custom:
   stageDefault: dev
