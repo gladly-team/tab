@@ -18,6 +18,14 @@ provider:
   runtime: nodejs8.10
   region: us-west-2
   stage: ${env:SLS_STAGE, self:custom.stageDefault}
+  # Let's be conservative and prevent any unexpected changes
+  # to the stack. See:
+  # https://github.com/gladly-team/tab/issues/582
+  stackPolicy:
+    - Effect: Allow # TODO: change to Deny
+      Principal: "*"
+      Action: "Update:*"
+      Resource: "*"
   # Rules for fine-grained DynamoDB access:
   #   https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/specifying-conditions.html
   #   https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/using-identity-based-policies.html

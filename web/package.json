@@ -101,7 +101,7 @@
     "prebid:create-patches": "yarn patch-package prebid.js --include '^(src|modules)/'",
     "prebid:test-patches": "yarn run prebid:test-patches:explanation && cross-env NODE_PATH=node_modules/prebid.js/ react-scripts test --testMatch **/**/prebidPatches* --watchAll=false",
     "prebid:test-patches:explanation": "echo \"Testing Prebid patches. Be sure to run prebid:install first. Note this doesn't currently work because CRA doesn't support Jest's transformIgnorePatterns, which we need to transform Prebid source code.\"",
-    "sls:deploy": "serverless deploy -v"
+    "sls:deploy": "serverless deploy -v --force"
   },
   "proxy": "http://localhost:8080",
   "jest": {

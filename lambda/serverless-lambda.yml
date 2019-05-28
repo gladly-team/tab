@@ -22,6 +22,14 @@ provider:
       Action:
         - KMS:Decrypt
       Resource: ${self:custom.awsKmsKeyArn} 
+  # Let's be conservative and prevent any unexpected changes
+  # to the stack. See:
+  # https://github.com/gladly-team/tab/issues/582
+  stackPolicy:
+    - Effect: Allow # TODO: change to Deny
+      Principal: "*"
+      Action: "Update:*"
+      Resource: "*"
 
 custom:
   stageDefault: dev
