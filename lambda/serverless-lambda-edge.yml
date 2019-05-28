@@ -20,6 +20,15 @@ provider:
   # Let's be conservative and prevent any unexpected changes
   # to the stack. See:
   # https://github.com/gladly-team/tab/issues/582
+  # To update the stack policy when the deploy is failing due to
+  # stack policy restrictions, set the policy with the AWS CLI. Docs:
+  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/protect-stack-resources.html#protect-stack-resources-modifying
+  # https://docs.aws.amazon.com/cli/latest/reference/cloudformation/set-stack-policy.html
+  # Example:
+  #  aws cloudformation set-stack-policy --stack-name lambda-edge-dev --region us-east-1 --stack-policy-body '{"Statement":[{"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"*"}]}'
+  # We could also set a temporary policy, but it's unclear how we'd
+  # do this with the Serverless framework:
+  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/protect-stack-resources.html#protect-stack-resources-updating
   stackPolicy:
     - Effect: Allow # TODO: change to Deny
       Principal: "*"
