@@ -29,6 +29,8 @@ provider:
   # We could also set a temporary policy, but it's unclear how we'd
   # do this with the Serverless framework:
   # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/protect-stack-resources.html#protect-stack-resources-updating
+  # Opened a Serverless feature request:
+  # https://github.com/serverless/serverless/issues/6182
   stackPolicy:
     - Effect: Allow # TODO: change to Deny
       Principal: "*"
