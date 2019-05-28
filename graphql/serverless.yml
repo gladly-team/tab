@@ -22,10 +22,7 @@ provider:
   # to the stack. See:
   # https://github.com/gladly-team/tab/issues/582
   stackPolicy:
-    - Effect: Deny
-      Principal: "*"
-      Action: "Update:*"
-      Resource: "*"
+    # If not specified here, Cloudformation denies updates by default.
     - Effect: Allow
       Principal: "*"
       Action: "Update:*"
