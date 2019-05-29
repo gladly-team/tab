@@ -21,12 +21,27 @@ provider:
   # Let's be conservative and prevent any unexpected changes
   # to the stack. See:
   # https://github.com/gladly-team/tab/issues/582
+  # Example to update policy:
+  #   aws cloudformation set-stack-policy --stack-name graphql-test --region us-west-2 --stack-policy-body \
+  #   '{"Statement":[
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/GraphqlLambdaFunction"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/GraphqlLambdaVersion*"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/GraphqlLogGroup"}
+  #   ]}'
   stackPolicy:
     # If not specified here, Cloudformation denies updates by default.
     - Effect: Allow
       Principal: "*"
-      Action: "Update:*"
+      Action: "Update:Modify"
       Resource: "LogicalResourceId/GraphqlLambdaFunction"
+    - Effect: Allow
+      Principal: "*"
+      Action: "Update:*"
+      Resource: "LogicalResourceId/GraphqlLambdaVersion*"
+    - Effect: Allow
+      Principal: "*"
+      Action: "Update:Modify"
+      Resource: "LogicalResourceId/GraphqlLogGroup"
   # Rules for fine-grained DynamoDB access:
   #   https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/specifying-conditions.html
   #   https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/using-identity-based-policies.html

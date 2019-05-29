@@ -25,12 +25,27 @@ provider:
   # Let's be conservative and prevent any unexpected changes
   # to the stack. See:
   # https://github.com/gladly-team/tab/issues/582
+  # Example to update policy:
+  #   aws cloudformation set-stack-policy --stack-name lambda-test --region us-west-2 --stack-policy-body \
+  #   '{"Statement":[
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/FirebaseAuthorizerLambdaFunction"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/FirebaseAuthorizerLambdaVersion*"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/FirebaseAuthorizerLogGroup"}
+  #   ]}'
   stackPolicy:
     # If not specified here, Cloudformation denies updates by default.
     - Effect: Allow
       Principal: "*"
-      Action: "Update:*"
+      Action: "Update:Modify"
       Resource: "LogicalResourceId/FirebaseAuthorizerLambdaFunction"
+    - Effect: Allow
+      Principal: "*"
+      Action: "Update:*"
+      Resource: "LogicalResourceId/FirebaseAuthorizerLambdaVersion*"
+    - Effect: Allow
+      Principal: "*"
+      Action: "Update:Modify"
+      Resource: "LogicalResourceId/FirebaseAuthorizerLogGroup"
 
 custom:
   stageDefault: dev
