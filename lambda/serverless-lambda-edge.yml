@@ -138,6 +138,7 @@ functions:
   # https://github.com/serverless/serverless/issues/3944
   newtabAppLambdaEdge:
     handler: build/newtab-app-lambda-edge/newtab-app-lambda-edge.handler
-  searchAppLambdaEdge:
-    handler: build/search-app-lambda-edge/search-app-lambda-edge.handler
+  ## FIXME: Revert this. Testing out that deleting a function fails in deployment.
+  # searchAppLambdaEdge:
+  #   handler: build/search-app-lambda-edge/search-app-lambda-edge.handler
     
