@@ -53,18 +53,19 @@ provider:
       Principal: "*"
       Action: "Update:Modify"
       Resource: "LogicalResourceId/NewtabAppLambdaEdgeLogGroup"
-    - Effect: Allow
-      Principal: "*"
-      Action: "Update:Modify"
-      Resource: "LogicalResourceId/SearchAppLambdaEdgeLambdaFunction"
-    - Effect: Allow
-      Principal: "*"
-      Action: "Update:*"
-      Resource: "LogicalResourceId/SearchAppLambdaEdgeLambdaVersion*"
-    - Effect: Allow
-      Principal: "*"
-      Action: "Update:Modify"
-      Resource: "LogicalResourceId/SearchAppLambdaEdgeLogGroup"
+    ## FIXME: Revert this. Testing out that deleting a function fails in deployment.
+    # - Effect: Allow
+    #   Principal: "*"
+    #   Action: "Update:Modify"
+    #   Resource: "LogicalResourceId/SearchAppLambdaEdgeLambdaFunction"
+    # - Effect: Allow
+    #   Principal: "*"
+    #   Action: "Update:*"
+    #   Resource: "LogicalResourceId/SearchAppLambdaEdgeLambdaVersion*"
+    # - Effect: Allow
+    #   Principal: "*"
+    #   Action: "Update:Modify"
+    #   Resource: "LogicalResourceId/SearchAppLambdaEdgeLogGroup"
 
 custom:
   stageDefault: dev
