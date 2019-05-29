@@ -8,7 +8,7 @@
 # so we just cp the file before deploying.
 # https://github.com/serverless/serverless/issues/4473
 service:
-  name: lambda
+  name: lambda # Important: this must be unique in AWS Cloudformation!
   awsKmsKeyArn: ${self:custom.awsKmsKeyArn} 
 frameworkVersion: ">=1.12.0 <2.0.0"
 
@@ -25,11 +25,27 @@ provider:
   # Let's be conservative and prevent any unexpected changes
   # to the stack. See:
   # https://github.com/gladly-team/tab/issues/582
+  # Example to update policy:
+  #   aws cloudformation set-stack-policy --stack-name lambda-test --region us-west-2 --stack-policy-body \
+  #   '{"Statement":[
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/FirebaseAuthorizerLambdaFunction"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/FirebaseAuthorizerLambdaVersion*"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/FirebaseAuthorizerLogGroup"}
+  #   ]}'
   stackPolicy:
-    - Effect: Allow # TODO: change to Deny
+    # If not specified here, Cloudformation denies updates by default.
+    - Effect: Allow
+      Principal: "*"
+      Action: "Update:Modify"
+      Resource: "LogicalResourceId/FirebaseAuthorizerLambdaFunction"
+    - Effect: Allow
       Principal: "*"
       Action: "Update:*"
-      Resource: "*"
+      Resource: "LogicalResourceId/FirebaseAuthorizerLambdaVersion*"
+    - Effect: Allow
+      Principal: "*"
+      Action: "Update:Modify"
+      Resource: "LogicalResourceId/FirebaseAuthorizerLogGroup"
 
 custom:
   stageDefault: dev

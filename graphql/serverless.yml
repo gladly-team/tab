@@ -21,11 +21,47 @@ provider:
   # Let's be conservative and prevent any unexpected changes
   # to the stack. See:
   # https://github.com/gladly-team/tab/issues/582
+  # Example to update policy:
+  #   aws cloudformation set-stack-policy --stack-name graphql-test --region us-west-2 --stack-policy-body \
+  #   '{"Statement":[
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/GraphqlLambdaFunction"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/GraphqlLambdaVersion*"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/GraphqlLogGroup"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/ApiGatewayDeployment*"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/ApiGatewayMethodGraphqlOptions"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/ApiGatewayRestApi"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/IamRoleLambdaExecution"}
+  #   ]}'
   stackPolicy:
-    - Effect: Allow # TODO: change to Deny
+    # If not specified here, Cloudformation denies updates by default.
+    - Effect: Allow
+      Principal: "*"
+      Action: "Update:Modify"
+      Resource: "LogicalResourceId/GraphqlLambdaFunction"
+    - Effect: Allow
       Principal: "*"
       Action: "Update:*"
-      Resource: "*"
+      Resource: "LogicalResourceId/GraphqlLambdaVersion*"
+    - Effect: Allow
+      Principal: "*"
+      Action: "Update:Modify"
+      Resource: "LogicalResourceId/GraphqlLogGroup"
+    - Effect: Allow
+      Principal: "*"
+      Action: "Update:*"
+      Resource: "LogicalResourceId/ApiGatewayDeployment*"
+    - Effect: Allow
+      Principal: "*"
+      Action: "Update:Modify"
+      Resource: "LogicalResourceId/ApiGatewayMethodGraphqlOptions" 
+    - Effect: Allow
+      Principal: "*"
+      Action: "Update:Modify"
+      Resource: "LogicalResourceId/ApiGatewayRestApi" 
+    - Effect: Allow
+      Principal: "*"
+      Action: "Update:Modify"
+      Resource: "LogicalResourceId/IamRoleLambdaExecution" 
   # Rules for fine-grained DynamoDB access:
   #   https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/specifying-conditions.html
   #   https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/using-identity-based-policies.html
