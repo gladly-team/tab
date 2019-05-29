@@ -53,19 +53,18 @@ provider:
       Principal: "*"
       Action: "Update:Modify"
       Resource: "LogicalResourceId/NewtabAppLambdaEdgeLogGroup"
-    ## FIXME: Revert this. Testing out that deleting a function fails in deployment.
-    # - Effect: Allow
-    #   Principal: "*"
-    #   Action: "Update:Modify"
-    #   Resource: "LogicalResourceId/SearchAppLambdaEdgeLambdaFunction"
-    # - Effect: Allow
-    #   Principal: "*"
-    #   Action: "Update:*"
-    #   Resource: "LogicalResourceId/SearchAppLambdaEdgeLambdaVersion*"
-    # - Effect: Allow
-    #   Principal: "*"
-    #   Action: "Update:Modify"
-    #   Resource: "LogicalResourceId/SearchAppLambdaEdgeLogGroup"
+    - Effect: Allow
+      Principal: "*"
+      Action: "Update:Modify"
+      Resource: "LogicalResourceId/SearchAppLambdaEdgeLambdaFunction"
+    - Effect: Allow
+      Principal: "*"
+      Action: "Update:*"
+      Resource: "LogicalResourceId/SearchAppLambdaEdgeLambdaVersion*"
+    - Effect: Allow
+      Principal: "*"
+      Action: "Update:Modify"
+      Resource: "LogicalResourceId/SearchAppLambdaEdgeLogGroup"
 
 custom:
   stageDefault: dev
@@ -139,7 +138,6 @@ functions:
   # https://github.com/serverless/serverless/issues/3944
   newtabAppLambdaEdge:
     handler: build/newtab-app-lambda-edge/newtab-app-lambda-edge.handler
-  ## FIXME: Revert this. Testing out that deleting a function fails in deployment.
-  # searchAppLambdaEdge:
-  #   handler: build/search-app-lambda-edge/search-app-lambda-edge.handler
+  searchAppLambdaEdge:
+    handler: build/search-app-lambda-edge/search-app-lambda-edge.handler
     
