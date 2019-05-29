@@ -44,6 +44,7 @@ resources:
     TabS3Bucket:
       Type: AWS::S3::Bucket
       DeletionPolicy: Retain
+      UpdateReplacePolicy: Retain
       Properties:
         BucketName: ${self:custom.newTabAppS3Bucket}
         AccessControl: PublicRead
@@ -58,6 +59,7 @@ resources:
     TabS3BucketPolicy:
       Type: AWS::S3::BucketPolicy
       DeletionPolicy: Retain
+      UpdateReplacePolicy: Retain
       Properties:
         Bucket:
           Ref: TabS3Bucket
@@ -74,6 +76,7 @@ resources:
     SearchAppS3Bucket:
       Type: AWS::S3::Bucket
       DeletionPolicy: Retain
+      UpdateReplacePolicy: Retain
       Properties:
         BucketName: ${self:custom.searchAppS3Bucket}
         AccessControl: PublicRead
@@ -83,6 +86,7 @@ resources:
     SearchAppS3BucketPolicy:
       Type: AWS::S3::BucketPolicy
       DeletionPolicy: Retain
+      UpdateReplacePolicy: Retain
       Properties:
         Bucket:
           Ref: SearchAppS3Bucket
@@ -99,6 +103,7 @@ resources:
     WebAppCloudFrontDistribution:
       Type: AWS::CloudFront::Distribution
       DeletionPolicy: Retain
+      UpdateReplacePolicy: Retain
       Properties:
         # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distributionconfig.html
         DistributionConfig:
