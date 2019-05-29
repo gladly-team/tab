@@ -11,7 +11,7 @@
   },
   "scripts": {
     "start": "node ./server.js",
-    "deploy": "serverless deploy -v --force"
+    "deploy": "serverless deploy -v"
   },
   "repository": {
     "type": "git",
