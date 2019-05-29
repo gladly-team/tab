@@ -27,14 +27,12 @@ provider:
   # Example:
   #   aws cloudformation set-stack-policy --stack-name lambda-edge-test --region us-east-1 --stack-policy-body \
   #   '{"Statement":[
-  #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/NewtabAppLambdaEdgeLambdaFunction"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/NewtabAppLambdaEdgeLambdaFunction"},
   #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/NewtabAppLambdaEdgeLambdaVersion*"},
-  #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/NewtabAppLambdaEdgeLogGroup"},
-  #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/SearchAppLambdaEdgeLambdaFunction"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/NewtabAppLambdaEdgeLogGroup"},
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/SearchAppLambdaEdgeLambdaFunction"},
   #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/SearchAppLambdaEdgeLambdaVersion*"},
-  #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/SearchAppLambdaEdgeLogGroup"},
-  #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/ServerlessDeploymentBucket"},
-  #     {"Effect":"Allow","Principal":"*","Action":"Update:*","Resource":"LogicalResourceId/gladlyLambdaEdgeRole"}
+  #     {"Effect":"Allow","Principal":"*","Action":"Update:Modify","Resource":"LogicalResourceId/SearchAppLambdaEdgeLogGroup"}
   #   ]}'
   # We could also set a temporary policy, but it's unclear how we'd
   # do this with the Serverless framework:
@@ -48,7 +46,7 @@ provider:
     #   aws cloudformation describe-stack-resources --stack-name lambda-edge-test --region us-east-1
     - Effect: Allow
       Principal: "*"
-      Action: "Update:*"
+      Action: "Update:Modify"
       Resource: "LogicalResourceId/NewtabAppLambdaEdgeLambdaFunction"
     - Effect: Allow
       Principal: "*"
@@ -56,11 +54,11 @@ provider:
       Resource: "LogicalResourceId/NewtabAppLambdaEdgeLambdaVersion*"
     - Effect: Allow
       Principal: "*"
-      Action: "Update:*"
+      Action: "Update:Modify"
       Resource: "LogicalResourceId/NewtabAppLambdaEdgeLogGroup"
     - Effect: Allow
       Principal: "*"
-      Action: "Update:*"
+      Action: "Update:Modify"
       Resource: "LogicalResourceId/SearchAppLambdaEdgeLambdaFunction"
     - Effect: Allow
       Principal: "*"
@@ -68,16 +66,8 @@ provider:
       Resource: "LogicalResourceId/SearchAppLambdaEdgeLambdaVersion*"
     - Effect: Allow
       Principal: "*"
-      Action: "Update:*"
+      Action: "Update:Modify"
       Resource: "LogicalResourceId/SearchAppLambdaEdgeLogGroup"
-    - Effect: Allow
-      Principal: "*"
-      Action: "Update:*"
-      Resource: "LogicalResourceId/ServerlessDeploymentBucket"
-    - Effect: Allow
-      Principal: "*"
-      Action: "Update:*"
-      Resource: "LogicalResourceId/gladlyLambdaEdgeRole"
 
 custom:
   stageDefault: dev
