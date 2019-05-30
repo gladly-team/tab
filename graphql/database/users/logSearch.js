@@ -4,7 +4,7 @@ import UserSearchLogModel from './UserSearchLogModel'
 import addVc from './addVc'
 import { getTodaySearchCount } from './user-utils'
 
-const MAX_DAILY_HEARTS_FROM_SEARCHES = 150
+const MAX_DAILY_HEARTS_FROM_SEARCHES = 50
 
 /**
  * Log a user's search event and change related stats.
