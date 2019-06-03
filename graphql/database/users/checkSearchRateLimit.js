@@ -5,16 +5,18 @@ import UserSearchLogModel from './UserSearchLogModel'
 import UserModel from './UserModel'
 import { getTodaySearchCount } from './user-utils'
 
-const MAX_DAILY_HEARTS_FROM_SEARCHES = 150
+// const MAX_SEARCHES_ONE_MINUTE = 6
+// const MAX_SEARCHES_FIVE_MINUTES = 15
+const MAX_SEARCHES_ONE_DAY = 150
 
-// const ONE_MINUTE_MAX = 'ONE_MINUTE_MAX'
-// const FIVE_MINUTE_MAX = 'FIVE_MINUTE_MAX'
-const DAILY_MAX = 'DAILY_MAX'
-const NONE = 'NONE'
+// const LIMIT_REASON_ONE_MINUTE_MAX = 'ONE_MINUTE_MAX'
+// const LIMIT_REASON_FIVE_MINUTE_MAX = 'FIVE_MINUTE_MAX'
+const LIMIT_REASON_DAILY_MAX = 'DAILY_MAX'
+const LIMIT_REASON_NONE = 'NONE'
 
 const createSearchRateLimit = ({
   limitReached = false,
-  reason = NONE,
+  reason = LIMIT_REASON_NONE,
   checkIfHuman = false,
 }) => ({
   limitReached,
@@ -83,10 +85,10 @@ const checkSearchRateLimit = async (userContext, userId) => {
 
   const user = await UserModel.get(userContext, userId)
   const searchesToday = getTodaySearchCount(user)
-  if (searchesToday > MAX_DAILY_HEARTS_FROM_SEARCHES) {
+  if (searchesToday > MAX_SEARCHES_ONE_DAY) {
     return createSearchRateLimit({
       limitReached: true,
-      reason: DAILY_MAX,
+      reason: LIMIT_REASON_DAILY_MAX,
       checkIfHuman: false,
     })
   }
