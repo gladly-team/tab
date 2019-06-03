@@ -29,11 +29,11 @@ beforeAll(() => {
 
 beforeEach(() => {
   jest.clearAllMocks()
-  clearAllMockDBResponses()
 })
 
 afterAll(() => {
   mockDate.off()
+  clearAllMockDBResponses()
 })
 
 describe('logSearch', () => {
