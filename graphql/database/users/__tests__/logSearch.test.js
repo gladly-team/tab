@@ -8,6 +8,7 @@ import addVc from '../addVc'
 import {
   DatabaseOperation,
   addTimestampFieldsToItem,
+  clearAllMockDBResponses,
   getMockUserContext,
   getMockUserInstance,
   mockDate,
@@ -28,6 +29,7 @@ beforeAll(() => {
 
 beforeEach(() => {
   jest.clearAllMocks()
+  clearAllMockDBResponses()
 })
 
 afterAll(() => {
