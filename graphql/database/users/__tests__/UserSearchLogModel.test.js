@@ -20,7 +20,9 @@ describe('UserSearchLogModel', () => {
   })
 
   it('has the correct get permission', () => {
-    expect(UserSearchLogModel.permissions.get).toBeUndefined()
+    expect(UserSearchLogModel.permissions.get).toBe(
+      permissionAuthorizers.userIdMatchesHashKey
+    )
   })
 
   it('has the correct getAll permission', () => {
