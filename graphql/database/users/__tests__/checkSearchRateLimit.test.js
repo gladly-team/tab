@@ -36,7 +36,6 @@ describe('checkSearchRateLimit', () => {
     const userId = getMockUserInfo().id
     const checkSearchRateLimit = require('../checkSearchRateLimit').default
 
-    // Spy on query methods
     const query = jest.spyOn(UserSearchLogModel, 'query')
     const queryExec = jest.spyOn(UserSearchLogModel, '_execAsync')
 
@@ -46,17 +45,17 @@ describe('checkSearchRateLimit', () => {
     expect(queryExec).toHaveBeenCalled()
   })
 
-  test('checkSearchRateLimit ReferralDataLog database queries as expected', async () => {
+  test('checkSearchRateLimit UserSearchLog database queries as expected', async () => {
     const userId = getMockUserInfo().id
     const checkSearchRateLimit = require('../checkSearchRateLimit').default
 
     // Mock UserSearchLogModel query
-    const referralLogQueryMock = setMockDBResponse(DatabaseOperation.QUERY, {
+    const queryMock = setMockDBResponse(DatabaseOperation.QUERY, {
       Items: [],
     })
     await checkSearchRateLimit(userContext, userId)
 
-    expect(referralLogQueryMock.mock.calls[0][0]).toEqual({
+    expect(queryMock.mock.calls[0][0]).toEqual({
       ExpressionAttributeNames: {
         '#created': 'created',
         '#userId': 'userId',
@@ -76,25 +75,12 @@ describe('checkSearchRateLimit', () => {
     const userId = getMockUserInfo().id
     const checkSearchRateLimit = require('../checkSearchRateLimit').default
 
-    // Mock UserSearchLogModel query
-    const referralDataLogsToReturn = []
+    const itemsToReturn = []
     setMockDBResponse(DatabaseOperation.QUERY, {
-      Items: referralDataLogsToReturn,
+      Items: itemsToReturn,
     })
 
-    // Mock User query
-    const recruitedUsersToReturn = []
-    const recruitedUsersQueryMock = setMockDBResponse(
-      DatabaseOperation.GET_BATCH,
-      {
-        Responses: {
-          [UserModel.tableName]: recruitedUsersToReturn,
-        },
-      }
-    )
-
     const returnedVal = await checkSearchRateLimit(userContext, userId)
-    expect(recruitedUsersQueryMock).not.toHaveBeenCalled()
     expect(returnedVal).toEqual({
       limitReached: false,
       reason: 'NONE',
