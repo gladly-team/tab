@@ -1,16 +1,17 @@
 /* eslint-env jest */
 
+import moment from 'moment'
 import {
   DatabaseOperation,
   clearAllMockDBResponses,
   getMockUserContext,
   getMockUserInfo,
+  getMockUserInstance,
   mockDate,
   setMockDBResponse,
 } from '../../test-utils'
 
 import UserSearchLogModel from '../UserSearchLogModel'
-import UserModel from '../UserModel'
 
 jest.mock('../../databaseClient')
 const userContext = getMockUserContext()
@@ -32,9 +33,15 @@ afterAll(() => {
 })
 
 describe('checkSearchRateLimit', () => {
-  test('checkSearchRateLimit calls the database', async () => {
+  it('calls the database', async () => {
+    expect.assertions(2)
     const userId = getMockUserInfo().id
     const checkSearchRateLimit = require('../checkSearchRateLimit').default
+
+    // Mock getting this user.
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: getMockUserInstance(),
+    })
 
     const query = jest.spyOn(UserSearchLogModel, 'query')
     const queryExec = jest.spyOn(UserSearchLogModel, '_execAsync')
@@ -45,9 +52,15 @@ describe('checkSearchRateLimit', () => {
     expect(queryExec).toHaveBeenCalled()
   })
 
-  test('checkSearchRateLimit UserSearchLog database queries as expected', async () => {
+  it('queries UserSearchLog as expected', async () => {
+    expect.assertions(1)
     const userId = getMockUserInfo().id
     const checkSearchRateLimit = require('../checkSearchRateLimit').default
+
+    // Mock getting this user.
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: getMockUserInstance(),
+    })
 
     // Mock UserSearchLogModel query
     const queryMock = setMockDBResponse(DatabaseOperation.QUERY, {
@@ -71,13 +84,79 @@ describe('checkSearchRateLimit', () => {
     })
   })
 
-  test('checkSearchRateLimit (with no search logs) returns expected value', async () => {
+  it('returns the expected value when the user has exceeded the max daily limit', async () => {
+    expect.assertions(1)
     const userId = getMockUserInfo().id
     const checkSearchRateLimit = require('../checkSearchRateLimit').default
 
-    const itemsToReturn = []
+    // Mock getting this user.
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: getMockUserInstance({
+        maxSearchesDay: {
+          maxDay: {
+            date: moment.utc().toISOString(),
+            numSearches: 400,
+          },
+          recentDay: {
+            date: moment.utc().toISOString(),
+            numSearches: 153, // above daily maximum
+          },
+        },
+      }),
+    })
+
+    // Mock UserSearchLogModel query
     setMockDBResponse(DatabaseOperation.QUERY, {
-      Items: itemsToReturn,
+      Items: [],
+    })
+
+    const returnedVal = await checkSearchRateLimit(userContext, userId)
+    expect(returnedVal).toEqual({
+      limitReached: true,
+      reason: 'DAILY_MAX',
+      checkIfHuman: false,
+    })
+  })
+
+  it('does not query UserSearchLog when we already know the user has exceeded the daily max', async () => {
+    expect.assertions(1)
+    const userId = getMockUserInfo().id
+    const checkSearchRateLimit = require('../checkSearchRateLimit').default
+
+    // Mock getting this user.
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: getMockUserInstance({
+        maxSearchesDay: {
+          maxDay: {
+            date: moment.utc().toISOString(),
+            numSearches: 400,
+          },
+          recentDay: {
+            date: moment.utc().toISOString(),
+            numSearches: 153, // above daily maximum
+          },
+        },
+      }),
+    })
+
+    const userSearchLogQuery = jest.spyOn(UserSearchLogModel, 'query')
+    await checkSearchRateLimit(userContext, userId)
+    expect(userSearchLogQuery).not.toHaveBeenCalled()
+  })
+
+  it('returns the expected value when there are no search logs', async () => {
+    expect.assertions(1)
+    const userId = getMockUserInfo().id
+    const checkSearchRateLimit = require('../checkSearchRateLimit').default
+
+    // Mock getting this user.
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: getMockUserInstance(),
+    })
+
+    // Mock UserSearchLogModel query
+    setMockDBResponse(DatabaseOperation.QUERY, {
+      Items: [],
     })
 
     const returnedVal = await checkSearchRateLimit(userContext, userId)

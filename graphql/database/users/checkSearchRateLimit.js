@@ -2,7 +2,25 @@ import moment from 'moment'
 
 import { isValidISOString } from '../../utils/utils'
 import UserSearchLogModel from './UserSearchLogModel'
-// import UserModel from './UserModel'
+import UserModel from './UserModel'
+import { getTodaySearchCount } from './user-utils'
+
+const MAX_DAILY_HEARTS_FROM_SEARCHES = 150
+
+// const ONE_MINUTE_MAX = 'ONE_MINUTE_MAX'
+// const FIVE_MINUTE_MAX = 'FIVE_MINUTE_MAX'
+const DAILY_MAX = 'DAILY_MAX'
+const NONE = 'NONE'
+
+const createSearchRateLimit = ({
+  limitReached = false,
+  reason = NONE,
+  checkIfHuman = false,
+}) => ({
+  limitReached,
+  reason,
+  checkIfHuman,
+})
 
 /**
  * Get an array of a user's search logs in a certain time period.
@@ -61,6 +79,16 @@ const checkSearchRateLimit = async (userContext, userId) => {
       .subtract(10, 'minutes')
       .toISOString(),
     end: now.clone().toISOString(),
+  }
+
+  const user = await UserModel.get(userContext, userId)
+  const searchesToday = getTodaySearchCount(user)
+  if (searchesToday > MAX_DAILY_HEARTS_FROM_SEARCHES) {
+    return createSearchRateLimit({
+      limitReached: true,
+      reason: DAILY_MAX,
+      checkIfHuman: false,
+    })
   }
 
   // eslint-disable-next-line no-unused-vars
