@@ -40,8 +40,8 @@ const fetchBingSearchResults = async (query = null, { offset } = {}) => {
         // Computation, Entities, Images, News, RelatedSearches, SpellSuggestions,
         // TimeZone, Videos, Webpages
         // Makes sure commas for list items are not encoded.
-        // Bing makes this mandatory.
-        responseFilter: 'Webpages,News',
+        // We should only include answer types that we will display.
+        responseFilter: 'Webpages,News,Ads',
       },
       { arrayFormat: 'comma', encode: false }
     )}`
