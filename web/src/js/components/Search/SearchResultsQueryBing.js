@@ -10,7 +10,6 @@ import { getCurrentUser } from 'js/authentication/user'
 import LogSearchMutation from 'js/mutations/LogSearchMutation'
 import { makePromiseCancelable } from 'js/utils/utils'
 import { setBingClientID } from 'js/utils/local-user-data-mgr'
-import { getSearchResultCountPerPage } from 'js/utils/search-utils'
 
 class SearchResultsQueryBing extends React.Component {
   constructor(props) {
@@ -86,10 +85,9 @@ class SearchResultsQueryBing extends React.Component {
     })
 
     try {
-      const offset = getSearchResultCountPerPage() * (page - 1)
       this.cancelablePromise = makePromiseCancelable(
         fetchBingSearchResults(query, {
-          ...(offset && { offset }),
+          ...(page && { page }),
         })
       )
       const searchResults = await this.cancelablePromise.promise
