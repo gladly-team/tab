@@ -32,6 +32,16 @@ const fetchBingSearchResults = async (query = null, { offset } = {}) => {
     const searchURL = `${endpoint}?${qs.stringify({
       q: query,
       count: getSearchResultCountPerPage(),
+      // The maximum number of mainline ads to return.
+      mainlineCount: 3,
+      // The zero-based page number, used for ads.
+      pageNumber: 0, // TODO: use the page number
+      // The maximum number of sidebar ads to return.
+      sidebarCount: 4,
+      // A list of extensions to include with the text ads.
+      // By default, ads will not include extensions. See ads
+      // documentation for possible values.
+      // supportedAdExtensions: '',
       ...(bingClientID && { bingClientID }),
       ...(offset && { offset }),
     })}&${qs.stringify(
@@ -42,6 +52,8 @@ const fetchBingSearchResults = async (query = null, { offset } = {}) => {
         // Makes sure commas for list items are not encoded.
         // We should only include answer types that we will display.
         responseFilter: 'Webpages,News,Ads',
+        // Possible values: TextAds (required), AppInstallAds, ProductAds
+        adTypesFilter: 'TextAds',
       },
       { arrayFormat: 'comma', encode: false }
     )}`

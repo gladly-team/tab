@@ -77,6 +77,69 @@ describe('fetchBingSearchResults', () => {
     expect(searchParams.get('count')).toEqual('132')
   })
 
+  it('uses the expected mainlineCount value', async () => {
+    expect.assertions(1)
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults('blue whales')
+    const calledURL = fetch.mock.calls[0][0]
+    const { searchParams } = new URL(calledURL)
+    expect(searchParams.get('mainlineCount')).toEqual('3')
+  })
+
+  it('uses the expected pageNumber value', async () => {
+    expect.assertions(1)
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults('blue whales')
+    const calledURL = fetch.mock.calls[0][0]
+    const { searchParams } = new URL(calledURL)
+    expect(searchParams.get('pageNumber')).toEqual('0')
+  })
+
+  it('uses the expected sidebarCount value', async () => {
+    expect.assertions(1)
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults('blue whales')
+    const calledURL = fetch.mock.calls[0][0]
+    const { searchParams } = new URL(calledURL)
+    expect(searchParams.get('sidebarCount')).toEqual('4')
+  })
+
+  it('does not specify any supportedAdExtensions, defaulting to none', async () => {
+    expect.assertions(1)
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults('blue whales')
+    const calledURL = fetch.mock.calls[0][0]
+    const { searchParams } = new URL(calledURL)
+    expect(searchParams.get('supportedAdExtensions')).toBeNull()
+  })
+
+  it('uses the expected adTypesFilter value', async () => {
+    expect.assertions(1)
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults('blue whales')
+    const calledURL = fetch.mock.calls[0][0]
+    const { searchParams } = new URL(calledURL)
+    expect(searchParams.get('adTypesFilter')).toEqual('TextAds')
+  })
+
+  // The commas are required by the Bing API. Other encodings fail.
+  it('comma-encodes the adTypesFilter list', async () => {
+    expect.assertions(1)
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults('blue whales')
+    const calledURL = fetch.mock.calls[0][0]
+    const rawAdTypesFilterStrVal = calledURL
+      .split('adTypesFilter=')
+      [calledURL.split('adTypesFilter=').length - 1].split('&')[0]
+    expect(rawAdTypesFilterStrVal).toEqual('TextAds')
+  })
+
   it('sends the Bing client ID if one exists', async () => {
     expect.assertions(1)
     const { getBingClientID } = require('js/utils/local-user-data-mgr')
