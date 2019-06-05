@@ -35,8 +35,10 @@ describe('fetchBingSearchResults', () => {
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
       .default
     await fetchBingSearchResults('blue whales')
-    expect(fetch.mock.calls[0][0]).toEqual(
-      'https://some-endpoint.example.com/api/query?q=blue%20whales&count=10&responseFilter=Webpages,News'
+    const calledURL = fetch.mock.calls[0][0]
+    const url = new URL(calledURL)
+    expect(`${url.origin}${url.pathname}`).toEqual(
+      'https://some-endpoint.example.com/api/query'
     )
   })
 
@@ -47,7 +49,20 @@ describe('fetchBingSearchResults', () => {
     await fetchBingSearchResults('blue whales')
     const calledURL = fetch.mock.calls[0][0]
     const { searchParams } = new URL(calledURL)
-    expect(searchParams.get('responseFilter')).toEqual('Webpages,News')
+    expect(searchParams.get('responseFilter')).toEqual('Webpages,News,Ads')
+  })
+
+  // The commas are required by the Bing API. Other encodings fail.
+  it('comma-encodes the responseFilter list', async () => {
+    expect.assertions(1)
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults('blue whales')
+    const calledURL = fetch.mock.calls[0][0]
+    const rawResponseFilterStrVal = calledURL
+      .split('responseFilter=')
+      [calledURL.split('responseFilter=').length - 1].split('&')[0]
+    expect(rawResponseFilterStrVal).toEqual('Webpages,News,Ads')
   })
 
   it('uses the "count" value from getSearchResultCountPerPage', async () => {
