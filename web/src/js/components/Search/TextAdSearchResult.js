@@ -3,6 +3,14 @@ import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 
 const styles = () => ({
+  adLabel: {
+    fontSize: 10,
+    color: 'rgba(0, 0, 0, 0.46)', // same color as results count
+    border: '1px solid #cecece', // same color as lightest page text
+    borderRadius: 4,
+    padding: '1px 2px',
+    marginRight: 4,
+  },
   container: {
     fontFamily: 'arial, sans-serif',
     marginBottom: 26,
@@ -46,6 +54,7 @@ const TextAdSearchResult = props => {
   if (!(displayUrl && title && url)) {
     return null
   }
+
   return (
     <div className={classes.container}>
       <a href={url} className={classes.titleLink}>
@@ -61,6 +70,7 @@ const TextAdSearchResult = props => {
         data-test-id={'search-result-webpage-snippet'}
         className={classes.snippet}
       >
+        <span className={classes.adLabel}>Ad</span>
         {description}
       </div>
     </div>
