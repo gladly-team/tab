@@ -98,6 +98,28 @@ export const getMockBingNewsArticleResult = overrides => {
   )
 }
 
+export const getMockBingTextAdResult = overrides => {
+  return Object.assign(
+    {},
+    {
+      _type: 'Ads/TextAd',
+      businessName: 'A-moo-zon',
+      description: 'Hoof it to our website to shop dairy good electronics!',
+      displayUrl: 'www.example.com/cow/',
+      extensions: [],
+      id: 'https://www.bingapis.com/api/v7/#Ads.1',
+      isAdult: false,
+      phoneNumber: '',
+      position: 'Mainline',
+      rank: 1,
+      title: 'Buy Cow-puters on A-moo-zon',
+      url: 'https://www.bing.com/fake-ad-url/',
+      urlPingSuffix: '',
+    },
+    overrides
+  )
+}
+
 // A successful search response object. Add more types as
 // we use them.
 // https://docs.microsoft.com/en-us/rest/api/cognitiveservices/bing-web-api-v7-reference#searchresponse
