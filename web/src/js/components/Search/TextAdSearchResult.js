@@ -72,12 +72,14 @@ const TextAdSearchResult = props => {
       >
         {displayUrl}
       </div>
-      <div
-        data-test-id={'search-result-webpage-snippet'}
-        className={classes.snippetContainer}
-      >
+      <div className={classes.snippetContainer}>
         <span className={classes.adLabel}>Ad</span>
-        <span className={classes.snippet}>{description}</span>
+        <span
+          data-test-id={'search-result-webpage-snippet'}
+          className={classes.snippet}
+        >
+          {description}
+        </span>
       </div>
     </div>
   )
