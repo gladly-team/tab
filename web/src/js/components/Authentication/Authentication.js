@@ -134,6 +134,12 @@ class Authentication extends React.Component {
               // TODO: show error message to the user
               logger.error(err)
             })
+        } else {
+          // Fetch the user from our database. This will update the `user`
+          // prop, which will let us navigate to the appropriate step in
+          // authentication.
+          // https://github.com/gladly-team/tab/issues/589
+          this.props.fetchUser()
         }
       })
       .catch(err => {
@@ -286,6 +292,7 @@ Authentication.propTypes = {
   location: PropTypes.shape({
     pathname: PropTypes.string.isRequired,
   }),
+  fetchUser: PropTypes.func.isRequired,
   // User fetched from the auth service.
   authUser: PropTypes.shape({
     id: PropTypes.string,
