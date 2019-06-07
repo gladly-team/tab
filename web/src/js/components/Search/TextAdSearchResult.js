@@ -4,12 +4,13 @@ import { withStyles } from '@material-ui/core/styles'
 
 const styles = () => ({
   adLabel: {
-    fontSize: 10,
+    fontSize: 9,
     color: 'rgba(0, 0, 0, 0.46)', // same color as results count
     border: '1px solid #cecece', // same color as lightest page text
     borderRadius: 4,
     padding: '1px 2px',
-    marginRight: 4,
+    marginRight: 5,
+    marginBottom: 1,
   },
   container: {
     fontFamily: 'arial, sans-serif',
@@ -34,6 +35,11 @@ const styles = () => ({
     fontSize: 13,
     color: '#007526',
     lineHeight: 1.56,
+  },
+  snippetContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   // Note: we cannot truncate the description/snippet.
   snippet: {
@@ -68,10 +74,10 @@ const TextAdSearchResult = props => {
       </div>
       <div
         data-test-id={'search-result-webpage-snippet'}
-        className={classes.snippet}
+        className={classes.snippetContainer}
       >
         <span className={classes.adLabel}>Ad</span>
-        {description}
+        <span className={classes.snippet}>{description}</span>
       </div>
     </div>
   )
