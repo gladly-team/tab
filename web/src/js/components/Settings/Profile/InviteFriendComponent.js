@@ -25,9 +25,12 @@ const styles = theme => ({
 
 class InviteFriend extends React.Component {
   getReferralUrl() {
+    const {
+      user: { username },
+    } = this.props
     const baseURL = 'https://tab.gladly.io'
-    const referralUrl = this.props.user.username
-      ? `${baseURL}/?u=${this.props.user.username}`
+    const referralUrl = username
+      ? `${baseURL}/?u=${encodeURIComponent(username)}`
       : baseURL
     return referralUrl
   }
