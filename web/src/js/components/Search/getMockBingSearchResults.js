@@ -5,7 +5,7 @@ export default () =>
       queryContext: {
         originalQuery: 'johh mayer',
         alteredQuery: 'john mayer',
-        alterationDisplayQuery: '<b>john</b> mayer',
+        alterationDisplayQuery: 'john mayer',
         alterationOverrideQuery: '+johh mayer',
         adultIntent: false,
       },
@@ -64,7 +64,7 @@ export default () =>
         value: [
           {
             id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.0',
-            name: '<b>John Mayer</b> - Official Site',
+            name: 'John Mayer - Official Site',
             url: 'http://johnmayer.com/',
             about: [
               {
@@ -78,9 +78,9 @@ export default () =>
               },
             ],
             isFamilyFriendly: true,
-            displayUrl: '<b>johnmayer</b>.com',
+            displayUrl: 'johnmayer.com',
             snippet:
-              'Official Website of <b>John</b> <b>Mayer</b>. Newsletter Sign Up. SUBMIT',
+              'Official Website of John Mayer. Newsletter Sign Up. SUBMIT',
             dateLastCrawled: '2019-04-04T04:21:00.0000000Z',
             language: 'en',
             isNavigational: false,
@@ -98,10 +98,9 @@ export default () =>
               },
             ],
             isFamilyFriendly: true,
-            displayUrl:
-              'https://<b>en.wikipedia.org</b>/wiki/<b>John_Mayer</b>',
+            displayUrl: 'https://en.wikipedia.org/wiki/John_Mayer',
             snippet:
-              '<b>John Mayer</b> is a guitar collector and has collaborated with elite guitar companies to design his own instruments. He owns over 200 guitars. In 2003, Martin Guitars gave <b>Mayer</b> his own signature model acoustic guitar called the OM-28 <b>John Mayer</b>. The guitar was limited to a run of only 404, an Atlanta area code.',
+              'John Mayer is a guitar collector and has collaborated with elite guitar companies to design his own instruments. He owns over 200 guitars. In 2003, Martin Guitars gave Mayer his own signature model acoustic guitar called the OM-28 John Mayer. The guitar was limited to a run of only 404, an Atlanta area code.',
             snippetAttribution: {
               license: {
                 name: 'CC-BY-SA',
@@ -396,9 +395,9 @@ export default () =>
               },
             ],
             isFamilyFriendly: true,
-            displayUrl: 'https://<b>www.youtube.com</b>/watch?v=20Ov0cDPZy8',
+            displayUrl: 'https://www.youtube.com/watch?v=20Ov0cDPZy8',
             snippet:
-              '<b>John</b> <b>Mayer</b>&#39;s official live video for &#39;Free Fallin&#39;<b> (Live</b> At the Nokia Theatre)&#39;. Click to listen to <b>John</b> <b>Mayer</b> on Spotify: http://smarturl.it/JMayerSpotify?IQid... As ...',
+              'John Mayer&#39;s official live video for &#39;Free Fallin&#39; (Live At the Nokia Theatre)&#39;. Click to listen to John Mayer on Spotify: http://smarturl.it/JMayerSpotify?IQid... As ...',
             dateLastCrawled: '2019-04-03T01:42:00.0000000Z',
             language: 'en',
             isNavigational: false,
@@ -419,7 +418,7 @@ export default () =>
               },
             ],
             isFamilyFriendly: true,
-            displayUrl: 'https://<b>twitter.com</b>/<b>JohnMayer</b>',
+            displayUrl: 'https://twitter.com/JohnMayer',
             snippet:
               'Big thanks to @halsey for joining me on this week’s episode of Current Mood. There’s a lot of joy in making this little show, and it’s beginning to reveal itself as something very special. See ya next week.',
             dateLastCrawled: '2019-01-09T16:01:00.0000000Z',
@@ -439,9 +438,9 @@ export default () =>
               },
             ],
             isFamilyFriendly: true,
-            displayUrl: 'https://<b>www.youtube.com</b>/watch?v=7VBex8zbDRs',
+            displayUrl: 'https://www.youtube.com/watch?v=7VBex8zbDRs',
             snippet:
-              '<b>John</b> <b>Mayer</b> Licensed to <b>YouTube</b> by SME (on behalf of Columbia); CMRRA, ARESA, Reach Music Publishing, LatinAutor, Global Music Rights LLC, UBEM, LatinAutor - PeerMusic, and 20 Music Rights Societies',
+              'John Mayer Licensed to YouTube by SME (on behalf of Columbia); CMRRA, ARESA, Reach Music Publishing, LatinAutor, Global Music Rights LLC, UBEM, LatinAutor - PeerMusic, and 20 Music Rights Societies',
             dateLastCrawled: '2019-04-05T04:02:00.0000000Z',
             language: 'en',
             isNavigational: false,
@@ -456,10 +455,9 @@ export default () =>
               },
             ],
             isFamilyFriendly: true,
-            displayUrl:
-              'https://<b>en.wikipedia.org</b>/wiki/<b>John_Mayer_discography</b>',
+            displayUrl: 'https://en.wikipedia.org/wiki/John_Mayer_discography',
             snippet:
-              'The discography of American singer-songwriter and guitarist <b>John</b> <b>Mayer</b> consists of seven studio albums, seven live albums, three compilation albums, two video albums, four extended plays, twenty-four singles and seventeen music videos.',
+              'The discography of American singer-songwriter and guitarist John Mayer consists of seven studio albums, seven live albums, three compilation albums, two video albums, four extended plays, twenty-four singles and seventeen music videos.',
             snippetAttribution: {
               license: {
                 name: 'CC-BY-SA',
@@ -490,9 +488,9 @@ export default () =>
               },
             ],
             isFamilyFriendly: true,
-            displayUrl: 'https://<b>www.facebook.com</b>/<b>johnmayer</b>',
+            displayUrl: 'https://www.facebook.com/johnmayer',
             snippet:
-              '<b>Facebook</b> is showing information to help you better understand the purpose of a Page. See actions taken by the people who manage and post content.',
+              'Facebook is showing information to help you better understand the purpose of a Page. See actions taken by the people who manage and post content.',
             dateLastCrawled: '2019-04-04T20:29:00.0000000Z',
             language: 'en',
             isNavigational: false,
@@ -510,9 +508,9 @@ export default () =>
               },
             ],
             isFamilyFriendly: true,
-            displayUrl: 'https://<b>www.imdb.com</b>/name/nm1243604',
+            displayUrl: 'https://www.imdb.com/name/nm1243604',
             snippet:
-              '<b>John Mayer</b> was born on October 16, 1977 in Bridgeport, Connecticut, USA as <b>John</b> Clayton <b>Mayer</b>. See full bio »',
+              'John Mayer was born on October 16, 1977 in Bridgeport, Connecticut, USA as John Clayton Mayer. See full bio »',
             dateLastCrawled: '2019-04-01T00:16:00.0000000Z',
             language: 'en',
             isNavigational: false,
@@ -534,9 +532,9 @@ export default () =>
             ],
             isFamilyFriendly: true,
             displayUrl:
-              'https://<b>www.allmusic.com</b>/artist/<b>john</b>-<b>mayer</b>-mn0000239827',
+              'https://www.allmusic.com/artist/john-mayer-mn0000239827',
             snippet:
-              '<b>John</b> <b>Mayer</b> Biography by Andrew Leahey A talented guitarist with a plaintive vocal style, <b>Mayer</b> updated the confessional singer/songwriter style for the new millennium.',
+              'John Mayer Biography by Andrew Leahey A talented guitarist with a plaintive vocal style, Mayer updated the confessional singer/songwriter style for the new millennium.',
             dateLastCrawled: '2019-03-30T02:59:00.0000000Z',
             language: 'en',
             isNavigational: false,
@@ -557,9 +555,9 @@ export default () =>
               },
             ],
             isFamilyFriendly: true,
-            displayUrl: 'https://www.instagram.com/<b>johnmayer</b>',
+            displayUrl: 'https://www.instagram.com/johnmayer',
             snippet:
-              '4.1m Followers, 1,301 Following, 1,340 Posts - See Instagram photos and videos from <b>John Mayer</b> 💎 (@<b>johnmayer</b>)',
+              '4.1m Followers, 1,301 Following, 1,340 Posts - See Instagram photos and videos from John Mayer 💎 (@johnmayer)',
             dateLastCrawled: '2019-04-02T12:53:00.0000000Z',
             language: 'en',
             isNavigational: false,
@@ -577,9 +575,9 @@ export default () =>
               },
             ],
             isFamilyFriendly: true,
-            displayUrl: 'https://www.last.fm/music/<b>John+Mayer</b>',
+            displayUrl: 'https://www.last.fm/music/John+Mayer',
             snippet:
-              '1) <b>John</b> Clayton <b>Mayer</b> was born October 16, 1977, in Fairfield, Connecticut, USA, and started playing guitar at 13 after being inspired by a Stevie Ray Vaughan tape his neighbor gave him. In 1998 he moved to Atlanta, Georgia where he refined his skills and gained a…',
+              '1) John Clayton Mayer was born October 16, 1977, in Fairfield, Connecticut, USA, and started playing guitar at 13 after being inspired by a Stevie Ray Vaughan tape his neighbor gave him. In 1998 he moved to Atlanta, Georgia where he refined his skills and gained a…',
             dateLastCrawled: '2019-04-05T03:09:00.0000000Z',
             language: 'en',
             isNavigational: false,
@@ -597,9 +595,9 @@ export default () =>
               },
             ],
             isFamilyFriendly: true,
-            displayUrl: 'https://www.amazon.com/<b>John-Mayer</b>/e/B000AQW0EI',
+            displayUrl: 'https://www.amazon.com/John-Mayer/e/B000AQW0EI',
             snippet:
-              'Check out <b>John Mayer</b> on Amazon Music. Stream ad-free or purchase CD&#39;s and MP3s now on Amazon.',
+              'Check out John Mayer on Amazon Music. Stream ad-free or purchase CD&#39;s and MP3s now on Amazon.',
             dateLastCrawled: '2019-04-06T03:19:00.0000000Z',
             language: 'en',
             isNavigational: false,
@@ -620,9 +618,9 @@ export default () =>
             ],
             isFamilyFriendly: true,
             displayUrl:
-              'https://<b>www.ticketmaster.com</b>/<b>John-Mayer</b>-tickets/artist/770494',
+              'https://www.ticketmaster.com/John-Mayer-tickets/artist/770494',
             snippet:
-              '<b>John Mayer</b> is perhaps the best guitarist on the planet, and a brilliant composer and lyricist - and he’s taking good care of himself and that incredible voice. He’s still a bit young for timeless legend status, but that’s his trajectory.',
+              'John Mayer is perhaps the best guitarist on the planet, and a brilliant composer and lyricist - and he’s taking good care of himself and that incredible voice. He’s still a bit young for timeless legend status, but that’s his trajectory.',
             dateLastCrawled: '2019-04-05T22:55:00.0000000Z',
             language: 'en',
             isNavigational: false,
@@ -1234,11 +1232,11 @@ export default () =>
               },
             ],
             name:
-              '<b>John</b> <b>Mayer</b> sings hymn &#39;How Great Thou Art&#39; in touching Christchurch tribute',
+              'John Mayer sings hymn "How Great Thou Art" in touching Christchurch tribute',
             url:
               'https://www.foxnews.com/entertainment/john-mayer-sings-hymn-how-great-thou-art-in-touching-christchurch-tribute',
             description:
-              '<b>John</b> <b>Mayer</b> opened a recent concert with an iconic hymn as a tribute to the Christchurch, New Zealand mosque shooting victims. Just days after the massacre that took at least 49 lives and injured dozens more at two mosques engaging in Friday prayers, the ...',
+              'John Mayer opened a recent concert with an iconic hymn as a tribute to the Christchurch, New Zealand mosque shooting victims. Just days after the massacre that took at least 49 lives and injured dozens more at two mosques engaging in Friday prayers, the ...',
             about: [
               {
                 readLink:
@@ -1290,7 +1288,7 @@ export default () =>
               },
             ],
             name:
-              'NEIGHBORHOOD Rejoins <b>John</b> <b>Mayer</b> for Racing-Inspired Tour Merch',
+              'NEIGHBORHOOD Rejoins John Mayer for Racing-Inspired Tour Merch',
             url: 'https://hypebeast.com/?post=4549767',
             image: {
               contentUrl:
@@ -1303,7 +1301,7 @@ export default () =>
               },
             },
             description:
-              'Long-time pals NEIGHBORHOOD and <b>John</b> <b>Mayer</b> reunite for the first time in approximately five years to issue a merch capsule in time for the Tokyo stop on <b>Mayer</b>’s world tour. encompassing a ...',
+              'Long-time pals NEIGHBORHOOD and John Mayer reunite for the first time in approximately five years to issue a merch capsule in time for the Tokyo stop on Mayer’s world tour. encompassing a ...',
             provider: [
               {
                 _type: 'Organization',
@@ -1327,7 +1325,7 @@ export default () =>
               },
             ],
             name:
-              '<b>John</b> <b>Mayer</b>: “90 per cent of a guitar to me is the slack in the strings”',
+              'John Mayer: “90 per cent of a guitar to me is the slack in the strings”',
             url:
               'https://www.musicradar.com/news/john-mayer-90-per-cent-of-a-guitar-to-me-is-the-slack-in-the-strings',
             image: {
@@ -1341,7 +1339,7 @@ export default () =>
               },
             },
             description:
-              'Blues heartthrob and mastermind behind the PRS Silver Sky <b>John</b> <b>Mayer</b> has outlined what he believes is the key to a good electric guitar in a new video promoting his signature model. Speaking to Guitar Center, the elusive guitar hero claims it’s all down ...',
+              'Blues heartthrob and mastermind behind the PRS Silver Sky John Mayer has outlined what he believes is the key to a good electric guitar in a new video promoting his signature model. Speaking to Guitar Center, the elusive guitar hero claims it’s all down ...',
             provider: [
               {
                 _type: 'Organization',
@@ -1363,7 +1361,7 @@ export default () =>
                 text: 'The Jakarta Post',
               },
             ],
-            name: '<b>John</b> <b>Mayer</b> hypnotizes Jakarta',
+            name: 'John Mayer hypnotizes Jakarta',
             url:
               'https://www.thejakartapost.com/life/2019/04/05/john-mayer-hypnotizes-jakarta.html',
             image: {
@@ -1377,7 +1375,7 @@ export default () =>
               },
             },
             description:
-              'American singer-songwriter <b>John</b> <b>Mayer</b> performs at ICE BSD City in Tangerang, Banten, on Friday, April 5, as part of his Asia Tour 2019. (JP/Donny Fernando) With the Jakarta show of the <b>John</b> <b>Mayer</b> Australia &amp; Asia Tour 2019 at ICE BSD City in Tangerang ...',
+              'American singer-songwriter John Mayer performs at ICE BSD City in Tangerang, Banten, on Friday, April 5, as part of his Asia Tour 2019. (JP/Donny Fernando) With the Jakarta show of the John Mayer Australia &amp; Asia Tour 2019 at ICE BSD City in Tangerang ...',
             about: [
               {
                 readLink:
@@ -1413,7 +1411,7 @@ export default () =>
               },
             ],
             name:
-              'Sam <b>Mayer</b> Dominates Bristol For First K&amp;N Pro Series Victory',
+              'Sam Mayer Dominates Bristol For First K&amp;N Pro Series Victory',
             url:
               'https://hometracks.nascar.com/2019/04/06/sam-mayer-dominates-bristol-for-first-kn-pro-series-victory/',
             image: {
@@ -1427,7 +1425,7 @@ export default () =>
               },
             },
             description:
-              'Sam <b>Mayer</b>’s No. 21 rode the low lane to his first career K&amp;N Pro Series victory. (<b>John</b> Harrelson/Nigel Kinrade Photography)',
+              'Sam Mayer’s No. 21 rode the low lane to his first career K&amp;N Pro Series victory. (John Harrelson/Nigel Kinrade Photography)',
             about: [
               {
                 readLink:
@@ -1456,45 +1454,45 @@ export default () =>
         value: [
           {
             text: 'john mayer tour 2019 schedule',
-            displayText: 'john mayer <b>tour</b> <b>2019</b> <b>schedule</b>',
+            displayText: 'john mayer tour 2019 schedule',
             webSearchUrl:
               'https://www.bing.com/search?q=john+mayer+tour+2019+schedule',
           },
           {
             text: 'john mayer merch',
-            displayText: 'john mayer <b>merch</b>',
+            displayText: 'john mayer merch',
             webSearchUrl: 'https://www.bing.com/search?q=john+mayer+merch',
           },
           {
             text: 'john mayer current girlfriend',
-            displayText: 'john mayer <b>current</b> <b>girlfriend</b>',
+            displayText: 'john mayer current girlfriend',
             webSearchUrl:
               'https://www.bing.com/search?q=john+mayer+current+girlfriend',
           },
           {
             text: 'john mayer new girlfriend',
-            displayText: 'john mayer <b>new</b> <b>girlfriend</b>',
+            displayText: 'john mayer new girlfriend',
             webSearchUrl:
               'https://www.bing.com/search?q=john+mayer+new+girlfriend',
           },
           {
             text: 'john mayer apparel',
-            displayText: 'john mayer <b>apparel</b>',
+            displayText: 'john mayer apparel',
             webSearchUrl: 'https://www.bing.com/search?q=john+mayer+apparel',
           },
           {
             text: 'john mayer songs',
-            displayText: 'john mayer <b>songs</b>',
+            displayText: 'john mayer songs',
             webSearchUrl: 'https://www.bing.com/search?q=john+mayer+songs',
           },
           {
             text: 'john mayer youtube',
-            displayText: 'john mayer <b>youtube</b>',
+            displayText: 'john mayer youtube',
             webSearchUrl: 'https://www.bing.com/search?q=john+mayer+youtube',
           },
           {
             text: 'john mayer gravity',
-            displayText: 'john mayer <b>gravity</b>',
+            displayText: 'john mayer gravity',
             webSearchUrl: 'https://www.bing.com/search?q=john+mayer+gravity',
           },
         ],
