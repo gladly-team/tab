@@ -12,41 +12,86 @@ afterEach(() => {
 describe('validating username', () => {
   it('accepts alphanumeric usernames', () => {
     const validateUsername = require('js/utils/utils').validateUsername
-    expect(validateUsername('blah')).toEqual(true)
-    expect(validateUsername('somebody123')).toEqual(true)
+    expect(validateUsername('blah')).toEqual({
+      isValid: true,
+      reason: 'NONE',
+    })
+    expect(validateUsername('somebody123')).toEqual({
+      isValid: true,
+      reason: 'NONE',
+    })
   })
 
   it('rejects usernames that are too short', () => {
     const validateUsername = require('js/utils/utils').validateUsername
-    expect(validateUsername('')).toEqual(false)
-    expect(validateUsername('a')).toEqual(false)
-    expect(validateUsername('aa')).toEqual(true)
+    expect(validateUsername('')).toEqual({
+      isValid: false,
+      reason: 'TOO_SHORT',
+    })
+    expect(validateUsername('a')).toEqual({
+      isValid: false,
+      reason: 'TOO_SHORT',
+    })
+    expect(validateUsername('aa')).toEqual({
+      isValid: true,
+      reason: 'NONE',
+    })
   })
 
   it('accepts common special characters', () => {
     const validateUsername = require('js/utils/utils').validateUsername
-    expect(validateUsername('somebody_123')).toEqual(true)
-    expect(validateUsername('somebody-123')).toEqual(true)
-    expect(validateUsername('somebody$123')).toEqual(true)
-    expect(validateUsername('somebody*123')).toEqual(true)
-    expect(validateUsername('somebody!123')).toEqual(true)
+    expect(validateUsername('somebody_123')).toEqual({
+      isValid: true,
+      reason: 'NONE',
+    })
+    expect(validateUsername('somebody-123')).toEqual({
+      isValid: true,
+      reason: 'NONE',
+    })
+    expect(validateUsername('somebody$123')).toEqual({
+      isValid: true,
+      reason: 'NONE',
+    })
+    expect(validateUsername('somebody*123')).toEqual({
+      isValid: true,
+      reason: 'NONE',
+    })
+    expect(validateUsername('somebody!123')).toEqual({
+      isValid: true,
+      reason: 'NONE',
+    })
   })
 
   it('accepts modified Roman letters', () => {
     const validateUsername = require('js/utils/utils').validateUsername
-    expect(validateUsername('óóóó')).toEqual(true)
-    expect(validateUsername('åååå')).toEqual(true)
+    expect(validateUsername('óóóó')).toEqual({
+      isValid: true,
+      reason: 'NONE',
+    })
+    expect(validateUsername('åååå')).toEqual({
+      isValid: true,
+      reason: 'NONE',
+    })
   })
 
   it('accepts Mandarin', () => {
     const validateUsername = require('js/utils/utils').validateUsername
-    expect(validateUsername('我我我我')).toEqual(true)
+    expect(validateUsername('我我我我')).toEqual({
+      isValid: true,
+      reason: 'NONE',
+    })
   })
 
   it('accpets other special characters', () => {
     const validateUsername = require('js/utils/utils').validateUsername
-    expect(validateUsername('©©©©')).toEqual(true)
-    expect(validateUsername('💩💩💩💩')).toEqual(true)
+    expect(validateUsername('©©©©')).toEqual({
+      isValid: true,
+      reason: 'NONE',
+    })
+    expect(validateUsername('💩💩💩💩')).toEqual({
+      isValid: true,
+      reason: 'NONE',
+    })
   })
 })
 

@@ -14,9 +14,15 @@ import qs from 'qs'
  */
 export const validateUsername = username => {
   if (username.length < 2) {
-    return false
+    return {
+      isValid: false,
+      reason: 'TOO_SHORT',
+    }
   }
-  return true
+  return {
+    isValid: true,
+    reason: 'NONE',
+  }
 }
 
 // Note: in general, we should probably use react-router's
