@@ -9,6 +9,55 @@ export default () =>
         alterationOverrideQuery: '+johh mayer',
         adultIntent: false,
       },
+      ads: {
+        value: [
+          {
+            _type: 'Ads/TextAd',
+            id: 'https://www.bingapis.com/api/v7/#Ads.0',
+            url: 'https://www.bing.com/fake-ad-click-id-0',
+            urlPingSuffix: 'Foo,1234',
+            description:
+              'Hoof It On Over and Shop High Performance Cow-Puters on Amazon',
+            rank: 1,
+            position: 'Mainline',
+            impressionToken: '1',
+            title: 'Cow-puters on A-moo-zon.com - Official Site',
+            displayUrl: 'www.example.com/cow',
+            isAdult: false,
+            phoneNumber: '',
+          },
+          {
+            _type: 'Ads/TextAd',
+            id: 'https://www.bingapis.com/api/v7/#Ads.1',
+            url: 'https://www.bing.com/fake-ad-click-id-1',
+            urlPingSuffix: 'Foo,1234',
+            description:
+              'This is the fakey-est link you could imagine. Not real at all!',
+            rank: 1,
+            position: 'Mainline',
+            impressionToken: '1',
+            title: 'Fakey-fake Search Result - Visit Now for Imaginary Stuff!',
+            displayUrl: 'www.example.com/fakey',
+            isAdult: false,
+            phoneNumber: '',
+          },
+          {
+            _type: 'Ads/TextAd',
+            id: 'https://www.bingapis.com/api/v7/#Ads.2',
+            url: 'https://www.bing.com/fake-ad-click-id-2',
+            urlPingSuffix: 'Foo,1234',
+            description:
+              'Wow - Unbelievable Deals - Ridiculous Advertising Syntax - Woohoo!',
+            rank: 1,
+            position: 'Mainline',
+            impressionToken: '1',
+            title: `Deals You Won't Even Believe, Wowzer`,
+            displayUrl: 'www.example.com/Unbelievable',
+            isAdult: false,
+            phoneNumber: '',
+          },
+        ],
+      },
       webPages: {
         webSearchUrl: 'https://www.bing.com/search?q=johh+mayer',
         totalEstimatedMatches: 14700000,
@@ -575,228 +624,6 @@ export default () =>
             snippet:
               '<b>John Mayer</b> is perhaps the best guitarist on the planet, and a brilliant composer and lyricist - and he’s taking good care of himself and that incredible voice. He’s still a bit young for timeless legend status, but that’s his trajectory.',
             dateLastCrawled: '2019-04-05T22:55:00.0000000Z',
-            language: 'en',
-            isNavigational: false,
-          },
-          {
-            id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.13',
-            name: 'John Mayer tickets - John Mayer Tour Dates on StubHub!',
-            url: 'https://www.stubhub.com/john-mayer-tickets/performer/14867/',
-            about: [
-              {
-                name: 'John Mayer',
-              },
-            ],
-            isFamilyFriendly: true,
-            displayUrl:
-              'https://<b>www.stubhub.com</b>/<b>john</b>-<b>mayer</b>-tickets',
-            snippet:
-              '<b>Mayer</b> is again performing as a solo act, as well, to the delight of fans with <b>John</b> <b>Mayer</b> tickets in hand. Artist Background <b>John</b> <b>Mayer</b> was born and raised in suburban Connecticut, his musical inspiration tracing to the popular ‘80s classic Back to the Future .',
-            dateLastCrawled: '2019-04-05T19:46:00.0000000Z',
-            language: 'en',
-            isNavigational: false,
-          },
-          {
-            id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.14',
-            name:
-              'John Mayer Radio: Listen to Free Music &amp; Get The Latest ...',
-            url: 'https://www.iheart.com/artist/john-mayer-16227/',
-            about: [
-              {
-                name: 'John Mayer',
-              },
-            ],
-            isFamilyFriendly: true,
-            displayUrl:
-              'https://<b>www.iheart.com</b>/artist/<b>john-mayer</b>-16227',
-            snippet:
-              'Biography. After making his introduction as a sensitive, acoustic-styled songwriter on 2001&#39;s Room for Squares, <b>John Mayer</b> steadily widened his approach over the subsequent years, encompassing everything from blues-rock to adult contemporary in the process.',
-            dateLastCrawled: '2019-04-05T17:59:00.0000000Z',
-            language: 'en',
-            isNavigational: false,
-          },
-          {
-            id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.15',
-            name: 'John Mayer | PEOPLE.com',
-            url: 'https://people.com/tag/john-mayer/',
-            about: [
-              {
-                name: 'John Mayer',
-              },
-              {
-                name: 'John Mayer',
-              },
-              {
-                name: 'John Mayer',
-              },
-            ],
-            isFamilyFriendly: true,
-            displayUrl: 'https://people.com/tag/<b>john</b>-<b>mayer</b>',
-            snippet:
-              '<b>John</b> <b>Mayer</b> Takes Over WWHL for Andy Cohen&#39;s 50th Birthday — and Jokes About Romance Rumors Shawn Mendes Talks &#39;Truthful&#39; New Music and Why Mentor <b>John</b> <b>Mayer</b> Is a &#39;Badass&#39;',
-            dateLastCrawled: '2019-04-02T07:24:00.0000000Z',
-            language: 'en',
-            isNavigational: false,
-          },
-          {
-            id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.16',
-            name: 'John Mayer - Continuum - Amazon.com Music',
-            url: 'https://www.amazon.com/Continuum-John-Mayer/dp/B0014VPFTA',
-            isFamilyFriendly: true,
-            displayUrl:
-              'https://www.amazon.com/<b>Continuum</b>-<b>John</b>-<b>Mayer</b>/dp/B0014VPFTA',
-            snippet:
-              'The magic of <b>John</b> <b>Mayer</b>&#39;s music lies in the way how simple and easy to understand it is to an average listener, while keeping excellent quality that should satisfy even the most morose and sharp critics.',
-            dateLastCrawled: '2019-04-05T15:56:00.0000000Z',
-            language: 'en',
-            isNavigational: false,
-          },
-          {
-            id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.17',
-            name: 'John Mayer Announces European Fall Tour 2019',
-            url:
-              'https://www.jambase.com/article/john-mayer-2019-european-tour',
-            isFamilyFriendly: true,
-            displayUrl:
-              'https://<b>www.jambase.com</b>/article/<b>john</b>-<b>mayer</b>-2019-european-tour',
-            snippet:
-              '<b>John</b> <b>Mayer</b> continues to roll out new solo dates. The singer-guitarist, who previously detailed a 27-date North American tour has announced new round of shows in Europe for this October. <b>Mayer</b>’s ...',
-            dateLastCrawled: '2019-04-05T19:05:00.0000000Z',
-            language: 'en',
-            isNavigational: false,
-          },
-          {
-            id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.18',
-            name: 'John Mayer - YouTube',
-            url: 'https://m.youtube.com/user/mayermusic',
-            about: [
-              {
-                name: 'John Mayer',
-              },
-            ],
-            isFamilyFriendly: true,
-            displayUrl: 'https://<b>m.youtube.com</b>/user/<b>mayer</b>music',
-            snippet:
-              '<b>John Mayer</b> - You&#39;re No One &#39;Til Someone Lets You Down (Audio) - Duration: 2 minutes, 46 seconds. <b>John Mayer</b>. 275,890 views; 5 years ago; This item has been hidden. Featured Channels johnmayerVEVO - Channel. Subscribe Subscribed Unsubscribe. Related channels Maroon 5 - Channel.',
-            dateLastCrawled: '2019-04-03T13:44:00.0000000Z',
-            language: 'en',
-            isNavigational: false,
-          },
-          {
-            id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.19',
-            name: 'johnmayerVEVO - YouTube',
-            url: 'https://m.youtube.com/user/johnmayerVEVO',
-            about: [
-              {
-                name: 'John Mayer',
-              },
-            ],
-            isFamilyFriendly: true,
-            displayUrl:
-              'https://<b>m.youtube.com</b>/user/<b>johnmayerVEVO</b>',
-            snippet:
-              '<b>John</b> <b>Mayer</b> “New Light” I’m the boy in your other phone Lighting up inside your drawer at home all alone Pushin 40 in the friend zone We talk and then you walk away every day Oh you don’t think twice bout me And maybe you’re right to doubt me but But if you give me just one night You’re gonna see me in a new light',
-            dateLastCrawled: '2019-03-29T13:59:00.0000000Z',
-            language: 'en',
-            isNavigational: false,
-          },
-          {
-            id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.20',
-            name: 'JM News, Discussion, and Music',
-            url: 'https://www.reddit.com/r/JohnMayer/',
-            about: [
-              {
-                name: 'John Mayer',
-              },
-            ],
-            isFamilyFriendly: true,
-            displayUrl: 'https://<b>www.reddit.com</b>/r/<b>JohnMayer</b>',
-            snippet: 'A space where <b>John Mayer</b> fans can come together.',
-            dateLastCrawled: '2019-04-03T00:13:00.0000000Z',
-            language: 'en',
-            isNavigational: false,
-          },
-          {
-            id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.21',
-            name: 'John Mayer - Biography - IMDb',
-            url: 'https://www.imdb.com/name/nm1243604/bio',
-            about: [
-              {
-                name: 'John Mayer',
-              },
-              {
-                name: 'John Mayer',
-              },
-              {
-                name: 'John Mayer',
-              },
-            ],
-            isFamilyFriendly: true,
-            displayUrl: 'https://<b>www.imdb.com</b>/name/nm1243604/bio',
-            snippet:
-              '<b>John</b> <b>Mayer</b> was born on October 16, 1977 in Bridgeport, Connecticut, USA as <b>John</b> Clayton <b>Mayer</b>. Trade Mark (2) Fender Stratocaster. Paul Reed Smith Super Eagle. Trivia (28) Attended Berklee School of Music in Boston.',
-            dateLastCrawled: '2019-03-23T00:26:00.0000000Z',
-            language: 'en',
-            isNavigational: false,
-          },
-          {
-            id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.22',
-            name:
-              'John Mayer | News, Music Performances and Show Video ... - MTV',
-            url: 'http://www.mtv.com/artists/john-mayer',
-            about: [
-              {
-                name: 'John Mayer',
-              },
-              {
-                name: 'John Mayer',
-              },
-            ],
-            isFamilyFriendly: true,
-            displayUrl: '<b>www.mtv.com</b>/artists/<b>john-mayer</b>',
-            snippet:
-              '<b>John Mayer</b> Isn’t At All Mad That He Has To Share A Release Date With Kendrick Lamar. TFW it’s totally fine. Sasha Geffen. 04/14/2017. Music News.',
-            dateLastCrawled: '2019-04-05T07:20:00.0000000Z',
-            language: 'en',
-            isNavigational: false,
-          },
-          {
-            id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.23',
-            name: '‎John Mayer on Apple Music - iTunes - Apple',
-            url: 'https://itunes.apple.com/us/artist/john-mayer/472054',
-            about: [
-              {
-                name: 'John Mayer',
-              },
-            ],
-            isFamilyFriendly: true,
-            displayUrl:
-              'https://itunes.apple.com/us/artist/<b>john-mayer</b>/472054',
-            snippet:
-              'He also assembled the <b>John Mayer</b> Trio, whose bluesy rock &amp; roll was displayed on the band&#39;s first and only release, Try! <b>Mayer</b> returned to his solo career with 2006&#39;s Continuum, a warmly received album that saw him focusing on blues, pop, and contemporary soul.',
-            dateLastCrawled: '2019-04-01T05:48:00.0000000Z',
-            language: 'en',
-            isNavigational: false,
-          },
-          {
-            id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.24',
-            name:
-              '<b>John</b> <b>Mayer</b> News, Pictures, and Videos | <b>TMZ.com</b>',
-            url: 'https://www.tmz.com/person/john-mayer/',
-            about: [
-              {
-                name: 'John Mayer',
-              },
-              {
-                name: 'John Mayer',
-              },
-            ],
-            isFamilyFriendly: true,
-            displayUrl:
-              'https://<b>www.tmz.com</b>/person/<b>john</b>-<b>mayer</b>',
-            snippet:
-              '<b>John</b> <b>Mayer</b> is the latest celeb to be hit by burglars ... TMZ has learned. Law enforcement sources tell us, someone broke into the singer&#39;s Beverly Hills-area home mid-morning Friday.',
-            dateLastCrawled: '2019-03-26T03:52:00.0000000Z',
             language: 'en',
             isNavigational: false,
           },
@@ -2034,8 +1861,29 @@ export default () =>
         mainline: {
           items: [
             {
-              answerType: 'WebPages',
+              answerType: 'Ads',
               resultIndex: 0,
+              value: {
+                id: 'https://www.bingapis.com/api/v7/#Ads.0',
+              },
+            },
+            {
+              answerType: 'Ads',
+              resultIndex: 1,
+              value: {
+                id: 'https://www.bingapis.com/api/v7/#Ads.1',
+              },
+            },
+            {
+              answerType: 'Ads',
+              resultIndex: 2,
+              value: {
+                id: 'https://www.bingapis.com/api/v7/#Ads.2',
+              },
+            },
+            {
+              answerType: 'WebPages',
+              resultIndex: 3,
               value: {
                 id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.0',
               },
@@ -2048,14 +1896,14 @@ export default () =>
             },
             {
               answerType: 'WebPages',
-              resultIndex: 1,
+              resultIndex: 4,
               value: {
                 id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.1',
               },
             },
             {
               answerType: 'WebPages',
-              resultIndex: 2,
+              resultIndex: 5,
               value: {
                 id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.2',
               },
@@ -2068,156 +1916,72 @@ export default () =>
             },
             {
               answerType: 'WebPages',
-              resultIndex: 3,
+              resultIndex: 6,
               value: {
                 id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.3',
               },
             },
             {
               answerType: 'WebPages',
-              resultIndex: 4,
+              resultIndex: 7,
               value: {
                 id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.4',
               },
             },
             {
               answerType: 'WebPages',
-              resultIndex: 5,
+              resultIndex: 8,
               value: {
                 id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.5',
               },
             },
             {
               answerType: 'WebPages',
-              resultIndex: 6,
+              resultIndex: 9,
               value: {
                 id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.6',
               },
             },
             {
               answerType: 'WebPages',
-              resultIndex: 7,
+              resultIndex: 10,
               value: {
                 id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.7',
               },
             },
             {
               answerType: 'WebPages',
-              resultIndex: 8,
+              resultIndex: 11,
               value: {
                 id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.8',
               },
             },
             {
               answerType: 'WebPages',
-              resultIndex: 9,
+              resultIndex: 12,
               value: {
                 id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.9',
               },
             },
             {
               answerType: 'WebPages',
-              resultIndex: 10,
+              resultIndex: 13,
               value: {
                 id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.10',
               },
             },
             {
               answerType: 'WebPages',
-              resultIndex: 11,
+              resultIndex: 14,
               value: {
                 id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.11',
               },
             },
             {
               answerType: 'WebPages',
-              resultIndex: 12,
-              value: {
-                id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.12',
-              },
-            },
-            {
-              answerType: 'WebPages',
-              resultIndex: 13,
-              value: {
-                id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.13',
-              },
-            },
-            {
-              answerType: 'WebPages',
-              resultIndex: 14,
-              value: {
-                id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.14',
-              },
-            },
-            {
-              answerType: 'WebPages',
               resultIndex: 15,
               value: {
-                id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.15',
-              },
-            },
-            {
-              answerType: 'WebPages',
-              resultIndex: 16,
-              value: {
-                id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.16',
-              },
-            },
-            {
-              answerType: 'WebPages',
-              resultIndex: 17,
-              value: {
-                id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.17',
-              },
-            },
-            {
-              answerType: 'WebPages',
-              resultIndex: 18,
-              value: {
-                id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.18',
-              },
-            },
-            {
-              answerType: 'WebPages',
-              resultIndex: 19,
-              value: {
-                id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.19',
-              },
-            },
-            {
-              answerType: 'WebPages',
-              resultIndex: 20,
-              value: {
-                id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.20',
-              },
-            },
-            {
-              answerType: 'WebPages',
-              resultIndex: 21,
-              value: {
-                id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.21',
-              },
-            },
-            {
-              answerType: 'WebPages',
-              resultIndex: 22,
-              value: {
-                id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.22',
-              },
-            },
-            {
-              answerType: 'WebPages',
-              resultIndex: 23,
-              value: {
-                id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.23',
-              },
-            },
-            {
-              answerType: 'WebPages',
-              resultIndex: 24,
-              value: {
-                id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.24',
+                id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.12',
               },
             },
             {
