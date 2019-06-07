@@ -2,7 +2,6 @@
 
 import React from 'react'
 import TextField from '@material-ui/core/TextField'
-import { cloneDeep } from 'lodash/lang'
 import { mount, shallow } from 'enzyme'
 import LogReferralLinkClick from 'js/mutations/LogReferralLinkClickMutation'
 import logger from 'js/utils/logger'
@@ -10,7 +9,7 @@ import logger from 'js/utils/logger'
 jest.mock('js/mutations/LogReferralLinkClickMutation')
 jest.mock('js/utils/logger')
 
-const mockProps = {
+const getMockProps = () => ({
   user: {
     id: 'abc-123',
     username: 'bob',
@@ -20,7 +19,7 @@ const mockProps = {
     formLabelRoot: 'something',
     formLabelFocused: 'something',
   },
-}
+})
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -30,25 +29,70 @@ describe('Invite friend component', () => {
   it('renders without error', () => {
     const InviteFriendComponent = require('js/components/Settings/Profile/InviteFriendComponent')
       .default
+    const mockProps = getMockProps()
     shallow(<InviteFriendComponent {...mockProps} />)
   })
 
   it('contains the correct referral URL', () => {
     const InviteFriendComponent = require('js/components/Settings/Profile/InviteFriendComponent')
       .default
+    const mockProps = getMockProps()
+    mockProps.user.username = 'bob'
     const wrapper = mount(<InviteFriendComponent {...mockProps} />)
-    const referralUrl = 'https://tab.gladly.io/?u=bob'
     expect(
       wrapper
         .find(TextField)
         .first()
         .prop('value')
-    ).toBe(referralUrl)
+    ).toBe('https://tab.gladly.io/?u=bob')
+  })
+
+  it('encodes the referral URL correctly when the username contains a space', () => {
+    const InviteFriendComponent = require('js/components/Settings/Profile/InviteFriendComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user.username = 'Bugs Bunny'
+    const wrapper = mount(<InviteFriendComponent {...mockProps} />)
+    expect(
+      wrapper
+        .find(TextField)
+        .first()
+        .prop('value')
+    ).toBe('https://tab.gladly.io/?u=Bugs%20Bunny')
+  })
+
+  it('encodes the referral URL correctly when the username contains a plus sign', () => {
+    const InviteFriendComponent = require('js/components/Settings/Profile/InviteFriendComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user.username = 'my+username'
+    const wrapper = mount(<InviteFriendComponent {...mockProps} />)
+    expect(
+      wrapper
+        .find(TextField)
+        .first()
+        .prop('value')
+    ).toBe('https://tab.gladly.io/?u=my%2Busername')
+  })
+
+  it('encodes the referral URL correctly when the username contains an emoji', () => {
+    const InviteFriendComponent = require('js/components/Settings/Profile/InviteFriendComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user.username = 'Stinky💩'
+    const wrapper = mount(<InviteFriendComponent {...mockProps} />)
+    expect(
+      wrapper
+        .find(TextField)
+        .first()
+        .prop('value')
+    ).toBe('https://tab.gladly.io/?u=Stinky%F0%9F%92%A9')
   })
 
   it('contains the correct description text', () => {
     const InviteFriendComponent = require('js/components/Settings/Profile/InviteFriendComponent')
       .default
+    const mockProps = getMockProps()
     const wrapper = mount(<InviteFriendComponent {...mockProps} />)
     expect(
       wrapper
@@ -67,9 +111,9 @@ describe('Invite friend component', () => {
   it('contains the correct referral URL when there is no provided username', () => {
     const InviteFriendComponent = require('js/components/Settings/Profile/InviteFriendComponent')
       .default
-    const newMockProps = cloneDeep(mockProps)
-    newMockProps.user.username = undefined
-    const wrapper = mount(<InviteFriendComponent {...newMockProps} />)
+    const mockProps = getMockProps()
+    mockProps.user.username = undefined
+    const wrapper = mount(<InviteFriendComponent {...mockProps} />)
     const referralUrl = 'https://tab.gladly.io'
     expect(
       wrapper
@@ -82,9 +126,9 @@ describe('Invite friend component', () => {
   it('contains the correct description text when there is no provided username', () => {
     const InviteFriendComponent = require('js/components/Settings/Profile/InviteFriendComponent')
       .default
-    const newMockProps = cloneDeep(mockProps)
-    newMockProps.user.username = undefined
-    const wrapper = mount(<InviteFriendComponent {...newMockProps} />)
+    const mockProps = getMockProps()
+    mockProps.user.username = undefined
+    const wrapper = mount(<InviteFriendComponent {...mockProps} />)
     expect(
       wrapper
         .find(TextField)
@@ -102,6 +146,7 @@ describe('Invite friend component', () => {
   it('logs when the user clicks on their referral link', () => {
     const InviteFriendComponent = require('js/components/Settings/Profile/InviteFriendComponent')
       .default
+    const mockProps = getMockProps()
     const wrapper = shallow(<InviteFriendComponent {...mockProps} />).dive()
     const onClickCallback = wrapper
       .find(TextField)
@@ -119,6 +164,7 @@ describe('Invite friend component', () => {
     LogReferralLinkClick.mockImplementationOnce(() => Promise.reject(mockErr))
     const InviteFriendComponent = require('js/components/Settings/Profile/InviteFriendComponent')
       .default
+    const mockProps = getMockProps()
     const wrapper = shallow(<InviteFriendComponent {...mockProps} />).dive()
     const onClickCallback = wrapper
       .find(TextField)
