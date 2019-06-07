@@ -56,6 +56,14 @@ class UsernameField extends React.Component {
             this.setErrorMessage('Must be at least two characters.')
             break
           }
+          case 'NO_SPACES': {
+            this.setErrorMessage('Cannot contain spaces.')
+            break
+          }
+          case 'NO_AT_SIGN': {
+            this.setErrorMessage('Should not contain "@".')
+            break
+          }
           default: {
             this.setErrorMessage('Username is invalid.')
             break

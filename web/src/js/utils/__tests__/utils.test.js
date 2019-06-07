@@ -38,6 +38,42 @@ describe('validating username', () => {
     })
   })
 
+  it('rejects usernames with "@"', () => {
+    const validateUsername = require('js/utils/utils').validateUsername
+    expect(validateUsername('@@')).toEqual({
+      isValid: false,
+      reason: 'NO_AT_SIGN',
+    })
+    expect(validateUsername('hi@blah')).toEqual({
+      isValid: false,
+      reason: 'NO_AT_SIGN',
+    })
+    expect(validateUsername('x@@@@@@x')).toEqual({
+      isValid: false,
+      reason: 'NO_AT_SIGN',
+    })
+    expect(validateUsername('hello@')).toEqual({
+      isValid: false,
+      reason: 'NO_AT_SIGN',
+    })
+  })
+
+  it('rejects usernames with spaces', () => {
+    const validateUsername = require('js/utils/utils').validateUsername
+    expect(validateUsername('My Name')).toEqual({
+      isValid: false,
+      reason: 'NO_SPACES',
+    })
+    expect(validateUsername('   ')).toEqual({
+      isValid: false,
+      reason: 'NO_SPACES',
+    })
+    expect(validateUsername('SpaceAtEndOops ')).toEqual({
+      isValid: false,
+      reason: 'NO_SPACES',
+    })
+  })
+
   it('accepts common special characters', () => {
     const validateUsername = require('js/utils/utils').validateUsername
     expect(validateUsername('somebody_123')).toEqual({

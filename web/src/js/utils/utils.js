@@ -19,6 +19,20 @@ export const validateUsername = username => {
       reason: 'TOO_SHORT',
     }
   }
+  // This validation rule added 2019 June 7.
+  if (username.indexOf('@') > -1) {
+    return {
+      isValid: false,
+      reason: 'NO_AT_SIGN',
+    }
+  }
+  // This validation rule added 2019 June 7.
+  if (username.indexOf(' ') > -1) {
+    return {
+      isValid: false,
+      reason: 'NO_SPACES',
+    }
+  }
   return {
     isValid: true,
     reason: 'NONE',
