@@ -123,7 +123,13 @@ class AuthenticationView extends React.Component {
             return null
           }
           const user = props.user || null
-          return <AuthenticationContainer user={user} {...this.props} />
+          return (
+            <AuthenticationContainer
+              user={user}
+              fetchUser={this.fetchUser.bind(this)}
+              {...this.props}
+            />
+          )
         }}
       />
     )

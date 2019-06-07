@@ -66,7 +66,7 @@ exports[`EnterUsernameForm tests it does not call SetUsernameMutation when the u
             floatingLabelFixed={false}
             floatingLabelText={
               <span>
-                Username
+                Username for Tab for a Cause
               </span>
             }
             fullWidth={false}
@@ -548,7 +548,7 @@ exports[`EnterUsernameForm tests it does not call SetUsernameMutation when the u
                   }
                 >
                   <span>
-                    Username
+                    Username for Tab for a Cause
                   </span>
                 </label>
               </TextFieldLabel>
@@ -1324,7 +1324,7 @@ exports[`EnterUsernameForm tests it shows an error message when the username is 
             floatingLabelFixed={false}
             floatingLabelText={
               <span>
-                Username
+                Username for Tab for a Cause
               </span>
             }
             fullWidth={false}
@@ -1806,7 +1806,7 @@ exports[`EnterUsernameForm tests it shows an error message when the username is 
                   }
                 >
                   <span>
-                    Username
+                    Username for Tab for a Cause
                   </span>
                 </label>
               </TextFieldLabel>
