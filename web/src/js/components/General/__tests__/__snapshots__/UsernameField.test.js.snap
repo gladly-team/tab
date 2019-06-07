@@ -8,7 +8,7 @@ exports[`UsernameField tests matches expected snapshot 1`] = `
   floatingLabelFixed={false}
   floatingLabelText={
     <span>
-      Username
+      Username for Tab for a Cause
     </span>
   }
   fullWidth={false}

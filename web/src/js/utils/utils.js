@@ -14,9 +14,29 @@ import qs from 'qs'
  */
 export const validateUsername = username => {
   if (username.length < 2) {
-    return false
+    return {
+      isValid: false,
+      reason: 'TOO_SHORT',
+    }
   }
-  return true
+  // This validation rule added 2019 June 7.
+  if (username.indexOf('@') > -1) {
+    return {
+      isValid: false,
+      reason: 'NO_AT_SIGN',
+    }
+  }
+  // This validation rule added 2019 June 7.
+  if (username.indexOf(' ') > -1) {
+    return {
+      isValid: false,
+      reason: 'NO_SPACES',
+    }
+  }
+  return {
+    isValid: true,
+    reason: 'NONE',
+  }
 }
 
 // Note: in general, we should probably use react-router's
