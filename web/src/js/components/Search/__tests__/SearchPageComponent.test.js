@@ -893,6 +893,26 @@ describe('Search results from Yahoo', () => {
     getSearchProvider.mockReturnValue('yahoo')
   })
 
+  it('[yahoo] uses Bing if the searchProvider prop equals "bing" (overriding the default search provider)', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.searchProvider = 'bing'
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.find(SearchResults).exists()).toBe(false) // not using Yahoo
+    expect(wrapper.find(SearchResultsQueryBing).exists()).toBe(true) // using Bing
+  })
+
+  it('[yahoo] uses Yahoo by default if the searchProvider prop is undefined', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.searchProvider = undefined
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.find(SearchResults).exists()).toBe(true) // using Yahoo
+    expect(wrapper.find(SearchResultsQueryBing).exists()).toBe(false) // not using Bing
+  })
+
   it('[yahoo] passes the decoded query to the SearchResults component', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default

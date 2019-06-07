@@ -7,6 +7,7 @@ import defaultSearchTheme from 'js/theme/searchTheme'
 import SearchPageComponent from 'js/components/Search/SearchPageComponent'
 import SearchPostUninstallView from 'js/components/Search/SearchPostUninstallView'
 import SearchRandomQueryView from 'js/components/Search/SearchRandomQueryView'
+import { SEARCH_PROVIDER_BING } from 'js/constants'
 
 const muiTheme = createMuiTheme(defaultSearchTheme)
 
@@ -20,6 +21,16 @@ class SearchApp extends React.Component {
             {/* Redirect all /search/* URLs to /search/ for now. */}
             <Switch>
               <Route exact path="/search" component={SearchPageComponent} />
+              <Route
+                exact
+                path="/search/bing"
+                render={props => (
+                  <SearchPageComponent
+                    {...props}
+                    searchProvider={SEARCH_PROVIDER_BING}
+                  />
+                )}
+              />
               <Route
                 exact
                 path="/search/uninstalled/"
