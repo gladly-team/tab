@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import NewsSearchResults from 'js/components/Search/NewsSearchResults'
+import TextAdSearchResult from 'js/components/Search/TextAdSearchResult'
 import WebPageSearchResult from 'js/components/Search/WebPageSearchResult'
 
 // Delegates search result item rendering to the appropriate component.
@@ -19,7 +20,26 @@ const SearchResultItem = props => {
       }
       return <NewsSearchResults key={'news-results'} newsItems={itemData} />
     }
+    case 'Ads': {
+      const adType = itemData._type
+      if (!adType) {
+        console.error('"Ads" item did not have a _type value.', itemData)
+        return null
+      }
+
+      // Determine which type of ad to render.
+      switch (adType) {
+        case 'Ads/TextAd': {
+          return <TextAdSearchResult key={itemData.id} item={itemData} />
+        }
+        default: {
+          console.error(`Could not render an ad with unhandled type ${adType}.`)
+          return null
+        }
+      }
+    }
     default: {
+      // console.log(`Could not render item of type ${type}.`)
       return null
     }
   }
