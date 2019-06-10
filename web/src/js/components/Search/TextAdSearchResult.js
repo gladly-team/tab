@@ -1,6 +1,39 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
+import { find } from 'lodash/collection'
+import { get } from 'lodash/object'
+
+export const SiteLink = props => {
+  const {
+    classes,
+    item: { text, descriptionLine1, descriptionLine2, link },
+  } = props
+
+  return (
+    <div className={classes.siteLink}>
+      <a href={link} className={classes.titleLink}>
+        <h3 className={classes.title}>{text}</h3>
+      </a>
+      {descriptionLine1 ? (
+        <div className={classes.snippet}>
+          {descriptionLine1} {descriptionLine2}
+        </div>
+      ) : null}
+    </div>
+  )
+}
+
+SiteLink.propTypes = {
+  classes: PropTypes.object.isRequired,
+  item: PropTypes.shape({
+    descriptionLine1: PropTypes.string,
+    descriptionLine2: PropTypes.string,
+    link: PropTypes.string.isRequired,
+    pingUrlSuffix: PropTypes.string,
+    text: PropTypes.string.isRequired,
+  }).isRequired,
+}
 
 const styles = () => ({
   adLabel: {
@@ -48,13 +81,28 @@ const styles = () => ({
     color: '#505050',
     overflowWrap: 'break-word',
   },
+  siteLinkContainer: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
+    paddingLeft: 0,
+  },
+  siteLink: {
+    flex: '42%',
+    maxWidth: '42%',
+    padding: '10px 24px',
+  },
 })
 
 const TextAdSearchResult = props => {
   const {
     classes,
-    item: { description, displayUrl, title, url },
+    item: { description, displayUrl, extensions = [], title, url },
   } = props
+  const siteLinks = get(
+    find(extensions, { _type: 'Ads/SiteLinkExtension' }),
+    'sitelinks'
+  )
 
   // If any required props are missing, don't render anything.
   if (!(displayUrl && title && url)) {
@@ -81,6 +129,18 @@ const TextAdSearchResult = props => {
           {description}
         </span>
       </div>
+      {siteLinks ? (
+        <div
+          data-test-id={'search-result-webpage-deep-link-container'}
+          className={classes.siteLinkContainer}
+        >
+          {siteLinks.map((siteLink, index) => {
+            return (
+              <SiteLink key={siteLink.link} classes={classes} item={siteLink} />
+            )
+          })}
+        </div>
+      ) : null}
     </div>
   )
 }

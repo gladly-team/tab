@@ -106,7 +106,7 @@ export const getMockBingTextAdResult = overrides => {
       businessName: 'A-moo-zon',
       description: 'Hoof it to our website to shop dairy good electronics!',
       displayUrl: 'www.example.com/cow/',
-      extensions: [],
+      extensions: [getMockBingTextAdSiteLinkExtensionObject()],
       id: 'https://www.bingapis.com/api/v7/#Ads.1',
       isAdult: false,
       phoneNumber: '',
@@ -115,6 +115,40 @@ export const getMockBingTextAdResult = overrides => {
       title: 'Buy Cow-puters on A-moo-zon',
       url: 'https://www.bing.com/fake-ad-url/',
       urlPingSuffix: '',
+    },
+    overrides
+  )
+}
+
+export const getMockBingTextAdSiteLinkExtensionObject = overrides => {
+  return Object.assign(
+    {},
+    {
+      _type: 'Ads/SiteLinkExtension',
+      impressionToken: '17',
+      isCreatedDynamically: false,
+      sitelinks: [
+        getMockBingTextAdSiteLink(),
+        getMockBingTextAdSiteLink(),
+        getMockBingTextAdSiteLink(),
+        getMockBingTextAdSiteLink(),
+      ],
+    },
+    overrides
+  )
+}
+
+export const getMockBingTextAdSiteLink = overrides => {
+  return Object.assign(
+    {},
+    {
+      // The descriptions will be a max of 35 characters each.
+      descriptionLine1: 'This is a helpful other link.',
+      descriptionLine2: 'Check it out!',
+      text: 'Some Related Link',
+      link: getMockUniqueURL(),
+      pingUrlSuffix: 'Foo,1234.0',
+      impressionToken: '18',
     },
     overrides
   )

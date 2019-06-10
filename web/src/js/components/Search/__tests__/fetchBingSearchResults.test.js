@@ -109,14 +109,16 @@ describe('fetchBingSearchResults', () => {
     expect(searchParams.get('sidebarCount')).toEqual('4')
   })
 
-  it('does not specify any supportedAdExtensions, defaulting to none', async () => {
+  it('specifies some supportedAdExtensions', async () => {
     expect.assertions(1)
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
       .default
     await fetchBingSearchResults('blue whales')
     const calledURL = fetch.mock.calls[0][0]
     const { searchParams } = new URL(calledURL)
-    expect(searchParams.get('supportedAdExtensions')).toBeNull()
+    expect(searchParams.get('supportedAdExtensions')).toEqual(
+      'EnhancedSiteLinks,SiteLinks'
+    )
   })
 
   it('uses the expected adTypesFilter value', async () => {
