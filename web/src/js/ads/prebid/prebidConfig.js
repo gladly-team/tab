@@ -5,11 +5,11 @@ import {
   getVerticalAdSizes,
   getHorizontalAdSizes,
   CONSENT_MANAGEMENT_TIMEOUT,
-  // VERTICAL_AD_UNIT_ID,
+  VERTICAL_AD_UNIT_ID,
   VERTICAL_AD_SLOT_DOM_ID,
-  // SECOND_VERTICAL_AD_UNIT_ID,
+  SECOND_VERTICAL_AD_UNIT_ID,
   SECOND_VERTICAL_AD_SLOT_DOM_ID,
-  // HORIZONTAL_AD_UNIT_ID,
+  HORIZONTAL_AD_UNIT_ID,
   HORIZONTAL_AD_SLOT_DOM_ID,
 } from 'js/ads/adSettings'
 
@@ -25,13 +25,13 @@ const getAdUnits = () => {
       },
     },
     bids: [
-      // {
-      //   bidder: 'sonobi',
-      //   params: {
-      //     dom_id: HORIZONTAL_AD_SLOT_DOM_ID,
-      //     ad_unit: HORIZONTAL_AD_UNIT_ID,
-      //   },
-      // },
+      {
+        bidder: 'sonobi',
+        params: {
+          dom_id: HORIZONTAL_AD_SLOT_DOM_ID,
+          ad_unit: HORIZONTAL_AD_UNIT_ID,
+        },
+      },
       {
         bidder: 'pulsepoint',
         params: {
@@ -87,13 +87,13 @@ const getAdUnits = () => {
       },
     },
     bids: [
-      // {
-      //   bidder: 'sonobi',
-      //   params: {
-      //     dom_id: VERTICAL_AD_SLOT_DOM_ID,
-      //     ad_unit: VERTICAL_AD_UNIT_ID,
-      //   },
-      // },
+      {
+        bidder: 'sonobi',
+        params: {
+          dom_id: VERTICAL_AD_SLOT_DOM_ID,
+          ad_unit: VERTICAL_AD_UNIT_ID,
+        },
+      },
       {
         bidder: 'pulsepoint',
         params: {
@@ -152,13 +152,13 @@ const getAdUnits = () => {
       },
     },
     bids: [
-      // {
-      //   bidder: 'sonobi',
-      //   params: {
-      //     dom_id: SECOND_VERTICAL_AD_SLOT_DOM_ID,
-      //     ad_unit: SECOND_VERTICAL_AD_UNIT_ID,
-      //   },
-      // },
+      {
+        bidder: 'sonobi',
+        params: {
+          dom_id: SECOND_VERTICAL_AD_SLOT_DOM_ID,
+          ad_unit: SECOND_VERTICAL_AD_UNIT_ID,
+        },
+      },
       {
         bidder: 'pulsepoint',
         params: {
