@@ -44,7 +44,7 @@ const fetchBingSearchResults = async (query = null, { page } = {}) => {
       // A list of extensions to include with the text ads.
       // By default, ads will not include extensions. See ads
       // documentation for possible values.
-      // supportedAdExtensions: '',
+      supportedAdExtensions: 'EnhancedSiteLinks,SiteLinks',
       ...(bingClientID && { bingClientID }),
       ...(offset && { offset }),
     })}&${qs.stringify(

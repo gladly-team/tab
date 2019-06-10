@@ -1,8 +1,12 @@
 /* eslint-env jest */
 
 import React from 'react'
-import { shallow } from 'enzyme'
-import { getMockBingTextAdResult } from 'js/utils/test-utils-search'
+import { mount, shallow } from 'enzyme'
+import {
+  getMockBingTextAdResult,
+  getMockBingTextAdSiteLink,
+  getMockBingTextAdSiteLinkExtensionObject,
+} from 'js/utils/test-utils-search'
 
 const getMockProps = () => ({
   item: getMockBingTextAdResult(),
@@ -107,5 +111,108 @@ describe('TextAdSearchResult', () => {
         .first()
         .text()
     ).toEqual(mockProps.item.description)
+  })
+})
+
+describe('TextAdSearchResult: site links', () => {
+  it('[site link] does not create any site links when there is no site link data', () => {
+    const TextAdSearchResult = require('js/components/Search/TextAdSearchResult')
+      .default
+    const mockProps = getMockProps()
+    mockProps.item.extensions = []
+    const wrapper = mount(<TextAdSearchResult {...mockProps} />)
+    const siteLinkContainer = wrapper.find(
+      '[data-test-id="search-result-webpage-deep-link-container"]'
+    )
+    expect(siteLinkContainer.exists()).toBe(false)
+  })
+
+  it('[site link] dislays the expected site link title', () => {
+    const TextAdSearchResult = require('js/components/Search/TextAdSearchResult')
+      .default
+    const mockProps = getMockProps()
+    mockProps.item.extensions = [
+      getMockBingTextAdSiteLinkExtensionObject({
+        sitelinks: [
+          getMockBingTextAdSiteLink({
+            text: 'I am a site link!',
+          }),
+        ],
+      }),
+    ]
+    const wrapper = mount(<TextAdSearchResult {...mockProps} />)
+    const siteLinkContainer = wrapper.find(
+      '[data-test-id="search-result-webpage-deep-link-container"]'
+    )
+    expect(
+      siteLinkContainer
+        .find('h3')
+        .first()
+        .text()
+    ).toEqual('I am a site link!')
+  })
+
+  it('[site link] creates an anchor tag as the parent of the title, with a link to the URL', () => {
+    const TextAdSearchResult = require('js/components/Search/TextAdSearchResult')
+      .default
+    const mockProps = getMockProps()
+    mockProps.item.extensions = [
+      getMockBingTextAdSiteLinkExtensionObject({
+        sitelinks: [
+          getMockBingTextAdSiteLink({
+            link: 'https://example.com/site-linky/',
+          }),
+        ],
+      }),
+    ]
+    const wrapper = mount(<TextAdSearchResult {...mockProps} />)
+    const siteLinkContainer = wrapper.find(
+      '[data-test-id="search-result-webpage-deep-link-container"]'
+    )
+    expect(
+      siteLinkContainer
+        .find('h3')
+        .first()
+        .parent()
+        .type()
+    ).toEqual('a')
+    expect(
+      siteLinkContainer
+        .find('h3')
+        .first()
+        .parent()
+        .prop('href')
+    ).toEqual('https://example.com/site-linky/')
+  })
+
+  it('[site link] dislays the description', () => {
+    const TextAdSearchResult = require('js/components/Search/TextAdSearchResult')
+      .default
+    const mockProps = getMockProps()
+    mockProps.item.extensions = [
+      getMockBingTextAdSiteLinkExtensionObject({
+        sitelinks: [
+          getMockBingTextAdSiteLink({
+            descriptionLine1: 'I am a site link description.',
+            descriptionLine2: 'And I am the second part.',
+          }),
+        ],
+      }),
+    ]
+    const wrapper = mount(<TextAdSearchResult {...mockProps} />)
+    const siteLinkContainer = wrapper.find(
+      '[data-test-id="search-result-webpage-deep-link-container"]'
+    )
+    expect(
+      siteLinkContainer
+        .find('div')
+        .findWhere(elem => {
+          return (
+            elem.text() ===
+            'I am a site link description. And I am the second part.'
+          )
+        })
+        .exists()
+    ).toBe(true)
   })
 })

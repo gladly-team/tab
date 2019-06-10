@@ -25,6 +25,42 @@ export default () =>
             displayUrl: 'www.example.com/cow',
             isAdult: false,
             phoneNumber: '',
+            extensions: [
+              {
+                _type: 'Ads/SiteLinkExtension',
+                impressionToken: '17',
+                sitelinks: [
+                  {
+                    descriptionLine1: 'Get the best view of Seattle.',
+                    descriptionLine2: "Don't be left out",
+                    text: '#1 Seattle Experience',
+                    link: 'https://www.bing.com/fake-ad-click-id-0-sitelink-0',
+                    pingUrlSuffix: 'Foo,1234.0',
+                    impressionToken: '18',
+                  },
+                  {
+                    descriptionLine1: 'Great rates for corporate events.',
+                    descriptionLine2: 'Share the experience with friends.',
+                    text: 'Group Rates Available',
+                    link: 'https://www.bing.com/fake-ad-click-id-0-sitelink-1',
+                    pingUrlSuffix: 'Foo,1234.1',
+                    impressionToken: '19',
+                  },
+                  {
+                    descriptionLine1: 'Best experience of my life.',
+                    descriptionLine2: 'First rate operation. Best ever.',
+                    text: 'Testimonials',
+                    link: 'https://www.bing.com/fake-ad-click-id-0-sitelink-2',
+                    pingUrlSuffix: 'Foo,1234.2',
+                    impressionToken: '20',
+                  },
+                  {
+                    impressionToken: '21',
+                  },
+                ],
+                isCreatedDynamically: false,
+              },
+            ],
           },
           {
             _type: 'Ads/TextAd',
