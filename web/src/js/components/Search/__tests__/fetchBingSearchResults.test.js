@@ -290,6 +290,23 @@ describe('fetchBingSearchResults', () => {
     )
   })
 
+  it('throws if the response has a 500 status', async () => {
+    expect.assertions(1)
+    global.fetch.mockImplementation(() =>
+      Promise.resolve(
+        mockFetchResponse({
+          ok: false,
+          status: 500,
+        })
+      )
+    )
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    expect(fetchBingSearchResults('blue whales')).rejects.toThrow(
+      'Request failed with status 500'
+    )
+  })
+
   it('throws if the response cannot be converted to JSON', async () => {
     expect.assertions(1)
     global.fetch.mockImplementation(() =>
