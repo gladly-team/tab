@@ -31,7 +31,7 @@ const fetchBingSearchResults = async (query = null, { page } = {}) => {
     }
     const pageNumber = page && page > 0 ? page - 1 : 0
 
-    // The mkt parameter is not required but highly recommended
+    // The mkt parameter is not required but highly recommended.
     const mkt = await getBingMarketCode()
 
     const offset = getSearchResultCountPerPage() * pageNumber

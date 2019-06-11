@@ -53,7 +53,6 @@ describe('getBingMarketCode', () => {
     // already defines the country/region.
     getCountry.mockImplementation(() => Promise.resolve('US'))
 
-    // French
     Object.defineProperty(window.navigator, 'languages', {
       value: ['es-ES'],
       configurable: true,
@@ -75,10 +74,7 @@ describe('getBingMarketCode', () => {
   it('returns null when we know the language but not the country', async () => {
     expect.assertions(1)
 
-    // Belgium
     getCountry.mockImplementation(() => Promise.resolve(null))
-
-    // French
     Object.defineProperty(window.navigator, 'languages', {
       value: ['fr'],
       configurable: true,
@@ -99,12 +95,9 @@ describe('getBingMarketCode', () => {
   it('returns null when getting the country code throws an error', async () => {
     expect.assertions(1)
 
-    // Belgium
     getCountry.mockImplementation(() => {
       throw new Error('eeeee!')
     })
-
-    // French
     Object.defineProperty(window.navigator, 'languages', {
       value: ['fr'],
       configurable: true,
@@ -125,10 +118,7 @@ describe('getBingMarketCode', () => {
   it('returns null when we know the country but not the language', async () => {
     expect.assertions(1)
 
-    // Belgium
     getCountry.mockImplementation(() => Promise.resolve('FR'))
-
-    // French
     Object.defineProperty(window.navigator, 'languages', {
       value: [],
       configurable: true,
@@ -149,10 +139,7 @@ describe('getBingMarketCode', () => {
   it('prioritizes the top language preference from navigator.languages over navigator.language', async () => {
     expect.assertions(1)
 
-    // Belgium
     getCountry.mockImplementation(() => Promise.resolve('MX'))
-
-    // French
     Object.defineProperty(window.navigator, 'languages', {
       value: ['es'],
       configurable: true,
