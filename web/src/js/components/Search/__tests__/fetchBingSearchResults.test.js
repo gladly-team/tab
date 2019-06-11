@@ -106,7 +106,7 @@ describe('fetchBingSearchResults', () => {
     await fetchBingSearchResults('blue whales')
     const calledURL = fetch.mock.calls[0][0]
     const { searchParams } = new URL(calledURL)
-    expect(searchParams.get('sidebarCount')).toEqual('4')
+    expect(searchParams.get('sidebarCount')).toEqual('0')
   })
 
   it('specifies some supportedAdExtensions', async () => {
