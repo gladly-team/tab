@@ -45,7 +45,7 @@ const fetchBingSearchResults = async (query = null, { page } = {}) => {
       // The zero-based page number, used for ads.
       pageNumber: pageNumber,
       // The maximum number of sidebar ads to return.
-      sidebarCount: 4,
+      sidebarCount: 0,
       // A list of extensions to include with the text ads.
       // By default, ads will not include extensions. See ads
       // documentation for possible values.
