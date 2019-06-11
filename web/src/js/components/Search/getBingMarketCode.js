@@ -1,4 +1,4 @@
-// import { getCountry } from 'js/utils/client-location'
+import { getCountry } from 'js/utils/client-location'
 
 /**
  * Get the market code for the Bing search request. This parameter
@@ -12,13 +12,32 @@
  *   are known; else, null.
  */
 const getBingMarketCode = async () => {
-  // TODO
-  // // This may be a 2-character or 5-character code.
-  // // https://stackoverflow.com/a/25603630
-  // const language = navigator.languages
-  //     ? navigator.languages[0]
-  //     : navigator.language || navigator.userLanguage
-  return 'en-US'
+  // This may be a 2-character or 5-character code.
+  // https://stackoverflow.com/a/25603630
+  const language = navigator.languages
+    ? navigator.languages[0]
+    : navigator.language || navigator.userLanguage
+  // We do not know the language.
+  if (!language) {
+    return null
+    // The language preference includes a country code.
+  } else if (language.length === 5) {
+    return language
+    // The language preference does not include a country code.
+    // Get the country code ourselves.
+  } else {
+    try {
+      const countryCode = await getCountry()
+      if (!countryCode) {
+        // We don't know the country.
+        return null
+      } else {
+        return `${language}-${countryCode}`
+      }
+    } catch (e) {
+      return null
+    }
+  }
 }
 
 export default getBingMarketCode
