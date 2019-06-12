@@ -5,7 +5,8 @@ import { goTo } from 'js/navigation/navigation'
 // To complete some async function before navigating; e.g.,
 // to log the click event.
 class LinkWithActionBeforeNavigate extends React.Component {
-  async onClick() {
+  async onClick(e) {
+    e.preventDefault()
     const { beforeNavigate, to } = this.props
     if (beforeNavigate) {
       await beforeNavigate()
@@ -16,7 +17,7 @@ class LinkWithActionBeforeNavigate extends React.Component {
   render() {
     const { beforeNavigate, children, to, ...otherProps } = this.props
     return (
-      <a {...otherProps} onClick={this.onClick.bind(this)}>
+      <a href={to} {...otherProps} onClick={this.onClick.bind(this)}>
         {children}
       </a>
     )

@@ -7,6 +7,10 @@ import { flushAllPromises } from 'js/utils/test-utils'
 
 jest.mock('js/navigation/navigation')
 
+const getMockClickEvent = () => ({
+  preventDefault: jest.fn(),
+})
+
 afterEach(() => {
   jest.clearAllMocks()
   jest.useRealTimers()
@@ -24,6 +28,31 @@ describe('LinkWithActionBeforeNavigate', () => {
     )
   })
 
+  it('sets the href value but calls event.preventDefault on click', async () => {
+    expect.assertions(2)
+    const LinkWithActionBeforeNavigate = require('js/components/General/LinkWithActionBeforeNavigate')
+      .default
+    const mockBeforeNav = jest.fn()
+    const wrapper = shallow(
+      <LinkWithActionBeforeNavigate
+        to={'https://example.com/blah/'}
+        beforeNavigate={mockBeforeNav}
+      />
+    )
+    expect(
+      wrapper
+        .find('a')
+        .first()
+        .prop('href')
+    ).toEqual('https://example.com/blah/')
+    const event = getMockClickEvent()
+    await wrapper
+      .find('a')
+      .first()
+      .prop('onClick')(event)
+    expect(event.preventDefault).toHaveBeenCalled()
+  })
+
   it('navigates to the value of the "to" prop on click', async () => {
     expect.assertions(3)
     const LinkWithActionBeforeNavigate = require('js/components/General/LinkWithActionBeforeNavigate')
@@ -39,7 +68,7 @@ describe('LinkWithActionBeforeNavigate', () => {
     await wrapper
       .find('a')
       .first()
-      .prop('onClick')()
+      .prop('onClick')(getMockClickEvent())
     expect(goTo).toHaveBeenCalledWith('https://example.com/foo/')
     expect(goTo).toHaveBeenCalledTimes(1)
   })
@@ -57,7 +86,7 @@ describe('LinkWithActionBeforeNavigate', () => {
     await wrapper
       .find('a')
       .first()
-      .prop('onClick')()
+      .prop('onClick')(getMockClickEvent())
     expect(goTo).toHaveBeenCalledWith('https://example.com/foo/')
   })
 
@@ -75,7 +104,7 @@ describe('LinkWithActionBeforeNavigate', () => {
     wrapper
       .find('a')
       .first()
-      .simulate('click')
+      .simulate('click', getMockClickEvent())
     expect(mockBeforeNav).toHaveBeenCalledTimes(1)
   })
 
@@ -106,7 +135,7 @@ describe('LinkWithActionBeforeNavigate', () => {
     wrapper
       .find('a')
       .first()
-      .prop('onClick')()
+      .prop('onClick')(getMockClickEvent())
     expect(mockBeforeNav).toHaveBeenCalledTimes(1)
     jest.advanceTimersByTime(10e3)
     expect(mockEvent).toHaveBeenCalledTimes(1)
