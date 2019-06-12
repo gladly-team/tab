@@ -110,6 +110,17 @@ describe('SearchResultItem: web page item', () => {
       "This <b>really awesome</b> website is definitely what you're looking for."
     )
   })
+
+  it('passes extra props to the child', () => {
+    const SearchResultItem = require('js/components/Search/SearchResultItem')
+      .default
+    const mockProps = getMockProps()
+    mockProps.type = 'WebPages'
+    mockProps.itemData = getMockBingWebPageResult()
+    mockProps.extraThingy = 'hi'
+    const wrapper = shallow(<SearchResultItem {...mockProps} />)
+    expect(wrapper.at(0).prop('extraThingy')).toEqual('hi')
+  })
 })
 
 describe('SearchResultItem: news items', () => {
@@ -173,6 +184,20 @@ describe('SearchResultItem: news items', () => {
       'An <b>Incredible</b> Event in NYC'
     )
   })
+
+  it('passes extra props to the child', () => {
+    const SearchResultItem = require('js/components/Search/SearchResultItem')
+      .default
+    const mockProps = getMockProps()
+    mockProps.type = 'News'
+    mockProps.itemData = [
+      getMockBingNewsArticleResult(),
+      getMockBingNewsArticleResult(),
+    ]
+    mockProps.extraThingy = 'hi'
+    const wrapper = shallow(<SearchResultItem {...mockProps} />)
+    expect(wrapper.at(0).prop('extraThingy')).toEqual('hi')
+  })
 })
 
 describe('SearchResultItem: ad items', () => {
@@ -199,5 +224,16 @@ describe('SearchResultItem: ad items', () => {
     }
     const wrapper = shallow(<SearchResultItem {...mockProps} />)
     expect(wrapper.at(0).type()).toBeNull()
+  })
+
+  it('passes extra props to the child', () => {
+    const SearchResultItem = require('js/components/Search/SearchResultItem')
+      .default
+    const mockProps = getMockProps()
+    mockProps.type = 'Ads'
+    mockProps.itemData = getMockBingTextAdResult()
+    mockProps.extraThingy = 'hi'
+    const wrapper = shallow(<SearchResultItem {...mockProps} />)
+    expect(wrapper.at(0).prop('extraThingy')).toEqual('hi')
   })
 })
