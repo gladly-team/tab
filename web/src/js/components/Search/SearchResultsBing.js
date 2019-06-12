@@ -78,10 +78,13 @@ const SearchResultsBing = props => {
     Math.min(MAX_PAGE + 1, Math.max(page + 3, MIN_PAGE + 5))
   )
 
-  const noSearchResultsReturned = queryReturned && !data.mainline.length
+  const noSearchResultsReturned = queryReturned && !data.results.mainline.length
 
   const noResultsToDisplay =
-    isEmptyQuery || !data.mainline.length || isQueryInProgress || isError
+    isEmptyQuery ||
+    !data.results.mainline.length ||
+    isQueryInProgress ||
+    isError
 
   return (
     <div
@@ -136,7 +139,7 @@ const SearchResultsBing = props => {
               {commaFormatted(data.resultsCount)} results
             </Typography>
           ) : null}
-          {data.mainline.map(searchResultItemData => {
+          {data.results.mainline.map(searchResultItemData => {
             return (
               <SearchResultItem
                 key={searchResultItemData.key}
@@ -224,30 +227,32 @@ SearchResultsBing.propTypes = {
   classes: PropTypes.object.isRequired,
   data: PropTypes.shape({
     resultsCount: PropTypes.number,
-    pole: PropTypes.arrayOf(
-      PropTypes.shape({
-        type: PropTypes.string.isRequired,
-        key: PropTypes.string.isRequired,
-        value: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
-          .isRequired,
-      })
-    ).isRequired,
-    mainline: PropTypes.arrayOf(
-      PropTypes.shape({
-        type: PropTypes.string.isRequired,
-        key: PropTypes.string.isRequired,
-        value: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
-          .isRequired,
-      })
-    ).isRequired,
-    sidebar: PropTypes.arrayOf(
-      PropTypes.shape({
-        type: PropTypes.string.isRequired,
-        key: PropTypes.string.isRequired,
-        value: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
-          .isRequired,
-      })
-    ).isRequired,
+    results: PropTypes.shape({
+      pole: PropTypes.arrayOf(
+        PropTypes.shape({
+          type: PropTypes.string.isRequired,
+          key: PropTypes.string.isRequired,
+          value: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
+            .isRequired,
+        })
+      ).isRequired,
+      mainline: PropTypes.arrayOf(
+        PropTypes.shape({
+          type: PropTypes.string.isRequired,
+          key: PropTypes.string.isRequired,
+          value: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
+            .isRequired,
+        })
+      ).isRequired,
+      sidebar: PropTypes.arrayOf(
+        PropTypes.shape({
+          type: PropTypes.string.isRequired,
+          key: PropTypes.string.isRequired,
+          value: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
+            .isRequired,
+        })
+      ).isRequired,
+    }).isRequired,
   }).isRequired,
   isEmptyQuery: PropTypes.bool.isRequired,
   isError: PropTypes.bool.isRequired,
