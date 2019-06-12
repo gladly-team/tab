@@ -10,6 +10,12 @@ import {
 
 const getMockProps = () => ({
   item: getMockBingTextAdResult(),
+  instrumentation: {
+    _type: 'ResponseInstrumentation',
+    pageLoadPingUrl:
+      'https://www.bingapis.com/api/ping/pageload?Some=Data&Type=Thing',
+    pingUrlBase: 'https://www.bingapis.com/api/ping?Some=Data',
+  },
 })
 
 beforeEach(() => {

@@ -145,6 +145,7 @@ const SearchResultsBing = props => {
                 key={searchResultItemData.key}
                 type={searchResultItemData.type}
                 itemData={searchResultItemData.value}
+                instrumentation={data.instrumentation}
               />
             )
           })}

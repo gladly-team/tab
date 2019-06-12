@@ -109,6 +109,7 @@ const TextAdSearchResult = props => {
     return null
   }
 
+  // TODO: on ad click, add Bing signal before navigation.
   return (
     <div className={classes.container}>
       <a href={url} className={classes.titleLink}>
@@ -161,6 +162,11 @@ TextAdSearchResult.propTypes = {
     title: PropTypes.string.isRequired,
     url: PropTypes.string.isRequired,
     urlPingSuffix: PropTypes.string,
+  }).isRequired,
+  instrumentation: PropTypes.shape({
+    _type: PropTypes.string,
+    pageLoadPingUrl: PropTypes.string.isRequired,
+    pingUrlBase: PropTypes.string.isRequired,
   }).isRequired,
 }
 
