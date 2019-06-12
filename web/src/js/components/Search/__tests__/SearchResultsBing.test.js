@@ -108,13 +108,13 @@ describe('SearchResultsBing: tests for non-results display', () => {
     const SearchResultsBing = require('js/components/Search/SearchResultsBing')
       .default
     const mockProps = getMockProps()
-    mockProps.data = {
+    mockProps.data = Object.assign({}, mockProps.data, {
       results: {
         pole: [],
         mainline: [],
         sidebar: [],
       },
-    }
+    })
     mockProps.query = 'foo'
     mockProps.queryReturned = true
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
@@ -132,13 +132,13 @@ describe('SearchResultsBing: tests for non-results display', () => {
       .default
     const mockProps = getMockProps()
     mockProps.query = 'pizza'
-    mockProps.data = {
+    mockProps.data = Object.assign({}, mockProps.data, {
       results: {
         pole: [],
         mainline: [],
         sidebar: [],
       },
-    }
+    })
     mockProps.isError = false
     mockProps.isEmptyQuery = false
     mockProps.isQueryInProgress = true // waiting for a response
@@ -165,13 +165,13 @@ describe('SearchResultsBing: tests for non-results display', () => {
       .default
     const mockProps = getMockProps()
     mockProps.query = 'pizza'
-    mockProps.data = {
+    mockProps.data = Object.assign({}, mockProps.data, {
       results: {
         pole: [],
         mainline: [],
         sidebar: [],
       },
-    }
+    })
     mockProps.isError = false
     mockProps.isEmptyQuery = false
     mockProps.isQueryInProgress = false
@@ -199,13 +199,13 @@ describe('SearchResultsBing: tests for non-results display', () => {
     const mockProps = getMockProps()
     mockProps.query = 'this search will yield no results, sadly'
     mockProps.queryReturned = true
-    mockProps.data = {
+    mockProps.data = Object.assign({}, mockProps.data, {
       results: {
         pole: [],
         mainline: [],
         sidebar: [],
       },
-    }
+    })
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
     expect(wrapper.get(0).props.style.minHeight).toBe(0)
   })
@@ -217,13 +217,13 @@ describe('SearchResultsBing: tests for non-results display', () => {
     mockProps.query = 'tacos please'
     mockProps.isError = true
     mockProps.queryReturned = true
-    mockProps.data = {
+    mockProps.data = Object.assign({}, mockProps.data, {
       results: {
         pole: [],
         mainline: [],
         sidebar: [],
       },
-    }
+    })
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
     expect(wrapper.get(0).props.style.minHeight).toBe(0)
   })
@@ -245,13 +245,13 @@ describe('SearchResultsBing: tests for non-results display', () => {
     mockProps.query = 'foo'
     mockProps.isError = true
     mockProps.queryReturned = true
-    mockProps.data = {
+    mockProps.data = Object.assign({}, mockProps.data, {
       results: {
         pole: [],
         mainline: [],
         sidebar: [],
       },
-    }
+    })
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
     expect(wrapper.find(SearchResultErrorMessage).exists()).toBe(true)
     expect(
@@ -283,7 +283,7 @@ describe('SearchResultsBing: tests for non-results display', () => {
     mockProps.query = 'foo'
     mockProps.isError = true
     mockProps.queryReturned = true
-    mockProps.data = {
+    mockProps.data = Object.assign({}, mockProps.data, {
       results: {
         pole: [],
         mainline: [
@@ -304,7 +304,7 @@ describe('SearchResultsBing: tests for non-results display', () => {
         ],
         sidebar: [],
       },
-    }
+    })
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
     expect(wrapper.find(SearchResultItem).exists()).toBe(false)
   })
@@ -336,7 +336,7 @@ describe('SearchResultsBing: tests for non-results display', () => {
     mockProps.isError = false
     mockProps.isEmptyQuery = true
     mockProps.queryReturned = true
-    mockProps.data = {
+    mockProps.data = Object.assign({}, mockProps.data, {
       results: {
         pole: [],
         mainline: [
@@ -357,7 +357,7 @@ describe('SearchResultsBing: tests for non-results display', () => {
         ],
         sidebar: [],
       },
-    }
+    })
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
     expect(wrapper.find(SearchResultItem).exists()).toBe(false)
   })
@@ -410,7 +410,7 @@ describe('SearchResultsBing: tests for non-results display', () => {
     mockProps.isEmptyQuery = true
     mockProps.isQueryInProgress = false
     mockProps.queryReturned = true
-    mockProps.data = {
+    mockProps.data = Object.assign({}, mockProps.data, {
       results: {
         pole: [],
         mainline: [
@@ -431,7 +431,7 @@ describe('SearchResultsBing: tests for non-results display', () => {
         ],
         sidebar: [],
       },
-    }
+    })
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
     expect(
       wrapper.find('[data-test-id="search-results-attribution"]').exists()
@@ -447,13 +447,13 @@ describe('SearchResultsBing: tests for non-results display', () => {
     mockProps.isEmptyQuery = false
     mockProps.isQueryInProgress = false
     mockProps.queryReturned = true
-    mockProps.data = {
+    mockProps.data = Object.assign({}, mockProps.data, {
       results: {
         pole: [],
         mainline: [],
         sidebar: [],
       },
-    }
+    })
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
     expect(
       wrapper.find('[data-test-id="search-results-attribution"]').exists()
@@ -506,7 +506,7 @@ describe('SearchResultsBing: tests for non-results display', () => {
     mockProps.isEmptyQuery = true
     mockProps.isQueryInProgress = false
     mockProps.queryReturned = true
-    mockProps.data = {
+    mockProps.data = Object.assign({}, mockProps.data, {
       results: {
         pole: [],
         mainline: [
@@ -527,7 +527,7 @@ describe('SearchResultsBing: tests for non-results display', () => {
         ],
         sidebar: [],
       },
-    }
+    })
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
     expect(wrapper.find('[data-test-id="search-results-count"]').exists()).toBe(
       false
@@ -544,13 +544,13 @@ describe('SearchResultsBing: tests for non-results display', () => {
     mockProps.isEmptyQuery = false
     mockProps.isQueryInProgress = false
     mockProps.queryReturned = true
-    mockProps.data = {
+    mockProps.data = Object.assign({}, mockProps.data, {
       results: {
         pole: [],
         mainline: [],
         sidebar: [],
       },
-    }
+    })
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
     expect(wrapper.find('[data-test-id="search-results-count"]').exists()).toBe(
       false
@@ -654,13 +654,13 @@ describe('SearchResultsBing: tests for pagination', () => {
       .default
     const mockProps = getMockProps()
     mockProps.query = 'pizza'
-    mockProps.data = {
+    mockProps.data = Object.assign({}, mockProps.data, {
       results: {
         pole: [],
         mainline: [],
         sidebar: [],
       },
-    }
+    })
     mockProps.isError = false
     mockProps.isEmptyQuery = false
     mockProps.isQueryInProgress = true // waiting for a response
@@ -677,7 +677,7 @@ describe('SearchResultsBing: tests for pagination', () => {
       .default
     const mockProps = getMockProps()
     mockProps.query = 'pizza'
-    mockProps.data = {
+    mockProps.data = Object.assign({}, mockProps.data, {
       results: {
         pole: [],
         mainline: [
@@ -698,7 +698,7 @@ describe('SearchResultsBing: tests for pagination', () => {
         ],
         sidebar: [],
       },
-    }
+    })
     mockProps.isError = false
     mockProps.isEmptyQuery = false
     mockProps.isQueryInProgress = true // waiting for a response
@@ -715,13 +715,13 @@ describe('SearchResultsBing: tests for pagination', () => {
       .default
     const mockProps = getMockProps()
     mockProps.query = 'pizza'
-    mockProps.data = {
+    mockProps.data = Object.assign({}, mockProps.data, {
       results: {
         pole: [],
         mainline: [],
         sidebar: [],
       },
-    }
+    })
     mockProps.isError = false
     mockProps.isEmptyQuery = false
     mockProps.isQueryInProgress = false
