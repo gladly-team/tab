@@ -12,6 +12,7 @@ class LinkWithActionBeforeNavigate extends React.Component {
     }
     goTo(to)
   }
+
   render() {
     const { beforeNavigate, children, to, ...otherProps } = this.props
     return (
