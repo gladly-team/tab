@@ -2,6 +2,7 @@ import qs from 'qs'
 import getMockBingSearchResults from 'js/components/Search/getMockBingSearchResults'
 import { getSearchResultCountPerPage } from 'js/utils/search-utils'
 import { getBingClientID } from 'js/utils/local-user-data-mgr'
+import getBingMarketCode from 'js/components/Search/getBingMarketCode'
 
 /**
  * Call our search API endpoint.
@@ -29,6 +30,10 @@ const fetchBingSearchResults = async (query = null, { page } = {}) => {
       throw new Error('Search query endpoint is not defined.')
     }
     const pageNumber = page && page > 0 ? page - 1 : 0
+
+    // The mkt parameter is not required but highly recommended.
+    const mkt = await getBingMarketCode()
+
     const offset = getSearchResultCountPerPage() * pageNumber
 
     const bingClientID = getBingClientID()
@@ -46,6 +51,7 @@ const fetchBingSearchResults = async (query = null, { page } = {}) => {
       // documentation for possible values.
       supportedAdExtensions: 'EnhancedSiteLinks,SiteLinks',
       ...(bingClientID && { bingClientID }),
+      ...(mkt && { mkt }),
       ...(offset && { offset }),
     })}&${qs.stringify(
       {

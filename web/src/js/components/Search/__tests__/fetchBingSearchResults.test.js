@@ -2,10 +2,12 @@
 
 import { mockFetchResponse } from 'js/utils/test-utils'
 import { getSearchResultCountPerPage } from 'js/utils/search-utils'
+import getBingMarketCode from 'js/components/Search/getBingMarketCode'
 
 jest.mock('js/components/Search/getMockBingSearchResults')
 jest.mock('js/utils/search-utils')
 jest.mock('js/utils/local-user-data-mgr')
+jest.mock('js/components/Search/getBingMarketCode')
 
 beforeEach(() => {
   process.env.NODE_ENV = 'test'
@@ -166,6 +168,28 @@ describe('fetchBingSearchResults', () => {
     const calledURL = fetch.mock.calls[0][0]
     const { searchParams } = new URL(calledURL)
     expect(searchParams.get('bingClientID')).toBeNull()
+  })
+
+  it('sets the "mkt" parameter value, when known', async () => {
+    expect.assertions(1)
+    getBingMarketCode.mockResolvedValueOnce('es-MX')
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults('blue whales')
+    const calledURL = fetch.mock.calls[0][0]
+    const { searchParams } = new URL(calledURL)
+    expect(searchParams.get('mkt')).toEqual('es-MX')
+  })
+
+  it('does not sets the "mkt" parameter value when it is not known', async () => {
+    expect.assertions(1)
+    getBingMarketCode.mockResolvedValueOnce(null)
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults('blue whales')
+    const calledURL = fetch.mock.calls[0][0]
+    const { searchParams } = new URL(calledURL)
+    expect(searchParams.get('mkt')).toBeNull()
   })
 
   it('sets the "offset" parameter value if a page number is provided', async () => {
