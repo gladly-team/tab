@@ -60,9 +60,6 @@ export default () =>
                     pingUrlSuffix: 'Foo,1234.2',
                     impressionToken: '20',
                   },
-                  {
-                    impressionToken: '21',
-                  },
                 ],
                 isCreatedDynamically: false,
               },
