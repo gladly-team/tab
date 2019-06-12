@@ -226,6 +226,11 @@ const SearchResultsBing = props => {
 SearchResultsBing.propTypes = {
   classes: PropTypes.object.isRequired,
   data: PropTypes.shape({
+    instrumentation: PropTypes.shape({
+      _type: PropTypes.string,
+      pageLoadPingUrl: PropTypes.string,
+      pingUrlBase: PropTypes.string,
+    }),
     resultsCount: PropTypes.number,
     results: PropTypes.shape({
       pole: PropTypes.arrayOf(
