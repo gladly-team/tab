@@ -162,6 +162,18 @@ export const getMockSuccessfulSearchQuery = () => {
   return {
     bing: {
       _type: 'SearchResponse',
+      instrumentation: {
+        _type: 'ResponseInstrumentation',
+        pageLoadPingUrl:
+          'https://www.bingapis.com/api/ping/pageload?Some=Data&Type=Thing',
+        pingUrlBase: 'https://www.bingapis.com/api/ping?Some=Data',
+      },
+      queryContext: {
+        alteredQuery: 'tacos',
+        adultIntent: false,
+        askUserForLocation: true,
+        originalQuery: query,
+      },
       // computation: {},
       // entities: {},
       // images: {},
@@ -174,12 +186,6 @@ export const getMockSuccessfulSearchQuery = () => {
           getMockBingNewsArticleResult(),
           getMockBingNewsArticleResult(),
         ],
-      },
-      queryContext: {
-        alteredQuery: 'tacos',
-        adultIntent: false,
-        askUserForLocation: true,
-        originalQuery: query,
       },
       rankingResponse: {
         // Very top results (e.g. computations, timezone)

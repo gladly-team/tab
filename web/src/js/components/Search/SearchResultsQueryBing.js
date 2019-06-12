@@ -155,6 +155,7 @@ class SearchResultsQueryBing extends React.Component {
   restructureSearchResultsData(data) {
     const searchResultSections = ['pole', 'mainline', 'sidebar']
     const restructuredData = {
+      instrumentation: get(data, 'instrumentation'),
       results: searchResultSections.reduce((newData, sectionName) => {
         // Get the ranked list for this section.
         const rankingItems = get(

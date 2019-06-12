@@ -641,6 +641,12 @@ describe('SearchResultsQueryBing', () => {
     await flushAllPromises()
     const passedData = wrapper.find(SearchResultsBing).prop('data')
     expect(passedData).toEqual({
+      instrumentation: {
+        _type: 'ResponseInstrumentation',
+        pageLoadPingUrl:
+          'https://www.bingapis.com/api/ping/pageload?Some=Data&Type=Thing',
+        pingUrlBase: 'https://www.bingapis.com/api/ping?Some=Data',
+      },
       resultsCount: 5250000,
       results: {
         mainline: [
