@@ -4,12 +4,15 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import {
   getMockBingNewsArticleResult,
+  getMockBingTextAdResult,
   getMockBingWebPageResult,
 } from 'js/utils/test-utils-search'
 import NewsSearchResults from 'js/components/Search/NewsSearchResults'
+import TextAdSearchResult from 'js/components/Search/TextAdSearchResult'
 import WebPageSearchResult from 'js/components/Search/WebPageSearchResult'
 
 jest.mock('js/components/Search/NewsSearchResults')
+jest.mock('js/components/Search/TextAdSearchResult')
 jest.mock('js/components/Search/WebPageSearchResult')
 
 const getMockProps = () => ({
@@ -23,7 +26,7 @@ beforeEach(() => {
   jest.clearAllMocks()
 })
 
-describe('SearchResultItem', () => {
+describe('SearchResultItem: no item', () => {
   it('renders without error', () => {
     const SearchResultItem = require('js/components/Search/SearchResultItem')
       .default
@@ -40,7 +43,9 @@ describe('SearchResultItem', () => {
     const wrapper = shallow(<SearchResultItem {...mockProps} />)
     expect(wrapper.at(0).type()).toBeNull()
   })
+})
 
+describe('SearchResultItem: web page item', () => {
   it('renders a WebPageSearchResult when providing a web page data object', () => {
     const SearchResultItem = require('js/components/Search/SearchResultItem')
       .default
@@ -105,7 +110,9 @@ describe('SearchResultItem', () => {
       "This <b>really awesome</b> website is definitely what you're looking for."
     )
   })
+})
 
+describe('SearchResultItem: news items', () => {
   it('renders a NewsSearchResults when providing a news data object', () => {
     const SearchResultItem = require('js/components/Search/SearchResultItem')
       .default
@@ -165,5 +172,32 @@ describe('SearchResultItem', () => {
     expect(wrapper.at(0).prop('newsItems')[0].name).toEqual(
       'An <b>Incredible</b> Event in NYC'
     )
+  })
+})
+
+describe('SearchResultItem: ad items', () => {
+  it('renders a TextAdSearchResult when providing a text ad data object', () => {
+    const SearchResultItem = require('js/components/Search/SearchResultItem')
+      .default
+    const mockProps = getMockProps()
+    mockProps.type = 'Ads'
+    mockProps.itemData = getMockBingTextAdResult()
+    const wrapper = shallow(<SearchResultItem {...mockProps} />)
+    expect(wrapper.at(0).type()).toEqual(TextAdSearchResult)
+  })
+
+  it("returns null if we don't support the ad type", () => {
+    // Suppress expected console log.
+    jest.spyOn(console, 'error').mockImplementationOnce(() => {})
+
+    const SearchResultItem = require('js/components/Search/SearchResultItem')
+      .default
+    const mockProps = getMockProps()
+    mockProps.type = 'Ads'
+    mockProps.itemData = {
+      _type: 'Ads/SomeFancyAd',
+    }
+    const wrapper = shallow(<SearchResultItem {...mockProps} />)
+    expect(wrapper.at(0).type()).toBeNull()
   })
 })
