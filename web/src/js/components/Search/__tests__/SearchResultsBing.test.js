@@ -74,7 +74,9 @@ beforeEach(() => {
   showBingPagination.mockReturnValue(false)
 
   global.fetch.mockImplementation(() => Promise.resolve(mockFetchResponse()))
+})
 
+afterEach(() => {
   jest.clearAllMocks()
 })
 
@@ -972,7 +974,7 @@ describe('SearchResultsBing: tests for pagination', () => {
 })
 
 describe('SearchResultsBing: tests for the Bing page load ping', () => {
-  it('calls the pageLoadPingUrl when search results load', () => {
+  it('calls the pageLoadPingUrl once when search results load', () => {
     const SearchResultsBing = require('js/components/Search/SearchResultsBing')
       .default
     const mockProps = getMockProps()
@@ -980,16 +982,78 @@ describe('SearchResultsBing: tests for the Bing page load ping', () => {
     expect(fetch).toHaveBeenCalledWith(
       'https://www.bingapis.com/api/ping/pageload?Some=Data&Type=Thing'
     )
+    expect(fetch).toHaveBeenCalledTimes(1)
   })
 
-  // TODO: more tests
-  // it('does not call the pageLoadPingUrl when search results have not loaded', () => {
-  //   const SearchResultsBing = require('js/components/Search/SearchResultsBing')
-  //     .default
-  //   const mockProps = getMockProps()
-  //   const wrapper = mount(<SearchResultsBing {...mockProps} />)
-  //   expect(fetch).toHaveBeenCalledWith(
-  //     'https://www.bingapis.com/api/ping/pageload?Some=Data&Type=Thing'
-  //   )
-  // })
+  it('calls the pageLoadPingUrl again if it changes', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.data.instrumentation.pageLoadPingUrl =
+      'https://www.bingapis.com/api/ping/pageload?numeroUno'
+    const wrapper = mount(<SearchResultsBing {...mockProps} />)
+    expect(fetch).toHaveBeenCalledWith(
+      'https://www.bingapis.com/api/ping/pageload?numeroUno'
+    )
+    expect(fetch).toHaveBeenCalledTimes(1)
+    wrapper.setProps({
+      data: {
+        ...mockProps.data,
+        instrumentation: {
+          ...mockProps.data.instrumentation,
+          pageLoadPingUrl:
+            'https://www.bingapis.com/api/ping/pageload?numeroDos',
+        },
+      },
+    })
+    expect(fetch).toHaveBeenCalledWith(
+      'https://www.bingapis.com/api/ping/pageload?numeroDos'
+    )
+    expect(fetch).toHaveBeenCalledTimes(2)
+  })
+
+  it('does not call the pageLoadPingUrl more than once when other props change', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = mount(<SearchResultsBing {...mockProps} />)
+    expect(fetch).toHaveBeenCalledTimes(1)
+    wrapper.setProps({ someProps: 'foo' })
+    wrapper.update()
+    expect(fetch).toHaveBeenCalledTimes(1)
+  })
+
+  it('does not call the pageLoadPingUrl when search results have not loaded', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.data = Object.assign({}, mockProps.data, {
+      results: {
+        pole: [],
+        mainline: [],
+        sidebar: [],
+      },
+    })
+    mockProps.query = 'foo'
+    mockProps.queryReturned = true
+    mount(<SearchResultsBing {...mockProps} />)
+    expect(fetch).not.toHaveBeenCalled()
+  })
+
+  it('does not call the pageLoadPingUrl when it does not exist', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.data.instrumentation = {}
+    mount(<SearchResultsBing {...mockProps} />)
+    expect(fetch).not.toHaveBeenCalled()
+  })
+
+  it('does not throw an error if `fetch` throws', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    fetch.mockImplementation(() => Promise.reject('My bad.'))
+    mount(<SearchResultsBing {...mockProps} />)
+  })
 })

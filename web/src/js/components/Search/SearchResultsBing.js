@@ -16,7 +16,7 @@ class BingPageLoadPing extends React.Component {
   componentDidMount() {
     const { pageLoadPingUrl } = this.props
     if (pageLoadPingUrl) {
-      fetch(pageLoadPingUrl)
+      fetch(pageLoadPingUrl).catch(e => {})
     }
   }
 
@@ -150,7 +150,10 @@ const SearchResultsBing = props => {
           }}
         >
           {pageLoadPingUrl ? (
-            <BingPageLoadPing pageLoadPingUrl={pageLoadPingUrl} />
+            <BingPageLoadPing
+              key={pageLoadPingUrl}
+              pageLoadPingUrl={pageLoadPingUrl}
+            />
           ) : null}
           {data.resultsCount ? (
             <Typography
