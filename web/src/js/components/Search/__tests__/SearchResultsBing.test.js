@@ -8,6 +8,7 @@ import Link from 'js/components/General/Link'
 import { showBingPagination } from 'js/utils/search-utils'
 import SearchResultItem from 'js/components/Search/SearchResultItem'
 import SearchResultErrorMessage from 'js/components/Search/SearchResultErrorMessage'
+import { mockFetchResponse } from 'js/utils/test-utils'
 
 jest.mock('js/components/Search/SearchResultItem')
 jest.mock('js/components/General/Link')
@@ -16,6 +17,12 @@ jest.mock('js/utils/search-utils')
 const getMockProps = () => ({
   classes: {},
   data: {
+    instrumentation: {
+      _type: 'ResponseInstrumentation',
+      pageLoadPingUrl:
+        'https://www.bingapis.com/api/ping/pageload?Some=Data&Type=Thing',
+      pingUrlBase: 'https://www.bingapis.com/api/ping?Some=Data',
+    },
     results: {
       pole: [],
       mainline: [
@@ -65,6 +72,8 @@ const getMockProps = () => ({
 beforeEach(() => {
   // Disable pagination until it's fully functional.
   showBingPagination.mockReturnValue(false)
+
+  global.fetch.mockImplementation(() => Promise.resolve(mockFetchResponse()))
 
   jest.clearAllMocks()
 })
@@ -960,4 +969,27 @@ describe('SearchResultsBing: tests for pagination', () => {
         .prop('style')
     ).toHaveProperty('color', 'rgba(0, 0, 0, 0.87)')
   })
+})
+
+describe('SearchResultsBing: tests for the Bing page load ping', () => {
+  it('calls the pageLoadPingUrl when search results load', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    mount(<SearchResultsBing {...mockProps} />)
+    expect(fetch).toHaveBeenCalledWith(
+      'https://www.bingapis.com/api/ping/pageload?Some=Data&Type=Thing'
+    )
+  })
+
+  // TODO: more tests
+  // it('does not call the pageLoadPingUrl when search results have not loaded', () => {
+  //   const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+  //     .default
+  //   const mockProps = getMockProps()
+  //   const wrapper = mount(<SearchResultsBing {...mockProps} />)
+  //   expect(fetch).toHaveBeenCalledWith(
+  //     'https://www.bingapis.com/api/ping/pageload?Some=Data&Type=Thing'
+  //   )
+  // })
 })

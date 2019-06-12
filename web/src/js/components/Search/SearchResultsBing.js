@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { get } from 'lodash/object'
 import { range } from 'lodash/util'
 import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
@@ -9,6 +10,24 @@ import SearchResultItem from 'js/components/Search/SearchResultItem'
 import SearchResultErrorMessage from 'js/components/Search/SearchResultErrorMessage'
 import { showBingPagination } from 'js/utils/search-utils'
 import { commaFormatted } from 'js/utils/utils'
+
+// Pings Bing when the search results page loads.
+class BingPageLoadPing extends React.Component {
+  componentDidMount() {
+    const { pageLoadPingUrl } = this.props
+    if (pageLoadPingUrl) {
+      fetch(pageLoadPingUrl)
+    }
+  }
+
+  render() {
+    return null
+  }
+}
+
+BingPageLoadPing.propTypes = {
+  pageLoadPingUrl: PropTypes.string.isRequired,
+}
 
 const styles = theme => ({
   searchResultsParentContainer: {
@@ -78,8 +97,8 @@ const SearchResultsBing = props => {
     Math.min(MAX_PAGE + 1, Math.max(page + 3, MIN_PAGE + 5))
   )
 
+  const pageLoadPingUrl = get(data, 'instrumentation.pageLoadPingUrl')
   const noSearchResultsReturned = queryReturned && !data.results.mainline.length
-
   const noResultsToDisplay =
     isEmptyQuery ||
     !data.results.mainline.length ||
@@ -130,6 +149,9 @@ const SearchResultsBing = props => {
             display: noResultsToDisplay ? 'none' : 'block',
           }}
         >
+          {pageLoadPingUrl ? (
+            <BingPageLoadPing pageLoadPingUrl={pageLoadPingUrl} />
+          ) : null}
           {data.resultsCount ? (
             <Typography
               data-test-id={'search-results-count'}
