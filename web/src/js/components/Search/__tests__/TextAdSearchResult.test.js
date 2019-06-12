@@ -197,40 +197,41 @@ describe('TextAdSearchResult: site links', () => {
     ).toEqual('I am a site link!')
   })
 
-  // // FIXME
-  // it('creates an LinkWithActionBeforeNavigate with a link to the URL', () => {
-  //   const TextAdSearchResult = require('js/components/Search/TextAdSearchResult')
-  //     .default
-  //   const mockProps = getMockProps()
-  //   mockProps.item.extensions = [
-  //     getMockBingTextAdSiteLinkExtensionObject({
-  //       sitelinks: [
-  //         getMockBingTextAdSiteLink({
-  //           link: 'https://example.com/site-linky/',
-  //           pingUrlSuffix: 'Hola,1357',
-  //         }),
-  //       ],
-  //     }),
-  //   ]
-  //   const wrapper = mount(<TextAdSearchResult {...mockProps} />)
-  //   const siteLinkContainer = wrapper.find(
-  //     '[data-test-id="search-result-webpage-deep-link-container"]'
-  //   )
-  //   expect(
-  //     siteLinkContainer
-  //       .find('h3')
-  //       .first()
-  //       .parent()
-  //       .type()
-  //   ).toEqual(LinkWithActionBeforeNavigate)
-  //   expect(
-  //     siteLinkContainer
-  //       .find('h3')
-  //       .first()
-  //       .parent()
-  //       .prop('href')
-  //   ).toEqual('https://example.com/site-linky/')
-  // })
+  it('creates an LinkWithActionBeforeNavigate with a link to the URL', () => {
+    const TextAdSearchResult = require('js/components/Search/TextAdSearchResult')
+      .default
+    const TextAdSiteLink = require('js/components/Search/TextAdSearchResult')
+      .SiteLink
+    const mockProps = getMockProps()
+    mockProps.item.extensions = [
+      getMockBingTextAdSiteLinkExtensionObject({
+        sitelinks: [
+          getMockBingTextAdSiteLink({
+            link: 'https://example.com/site-linky/',
+            pingUrlSuffix: 'Hola,1357',
+          }),
+        ],
+      }),
+    ]
+    const siteLinkContainer = shallow(<TextAdSearchResult {...mockProps} />)
+      .dive()
+      .find(TextAdSiteLink)
+      .dive()
+    expect(
+      siteLinkContainer
+        .find('h3')
+        .first()
+        .parent()
+        .type()
+    ).toEqual(LinkWithActionBeforeNavigate)
+    expect(
+      siteLinkContainer
+        .find('h3')
+        .first()
+        .parent()
+        .prop('to')
+    ).toEqual('https://example.com/site-linky/')
+  })
 
   it('calls the ping URL on click', async () => {
     expect.assertions(1)
