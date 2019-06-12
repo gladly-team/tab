@@ -197,15 +197,54 @@ describe('TextAdSearchResult: site links', () => {
     ).toEqual('I am a site link!')
   })
 
-  it('[site link] creates an anchor tag as the parent of the title, with a link to the URL', () => {
+  // // FIXME
+  // it('creates an LinkWithActionBeforeNavigate with a link to the URL', () => {
+  //   const TextAdSearchResult = require('js/components/Search/TextAdSearchResult')
+  //     .default
+  //   const mockProps = getMockProps()
+  //   mockProps.item.extensions = [
+  //     getMockBingTextAdSiteLinkExtensionObject({
+  //       sitelinks: [
+  //         getMockBingTextAdSiteLink({
+  //           link: 'https://example.com/site-linky/',
+  //           pingUrlSuffix: 'Hola,1357',
+  //         }),
+  //       ],
+  //     }),
+  //   ]
+  //   const wrapper = mount(<TextAdSearchResult {...mockProps} />)
+  //   const siteLinkContainer = wrapper.find(
+  //     '[data-test-id="search-result-webpage-deep-link-container"]'
+  //   )
+  //   expect(
+  //     siteLinkContainer
+  //       .find('h3')
+  //       .first()
+  //       .parent()
+  //       .type()
+  //   ).toEqual(LinkWithActionBeforeNavigate)
+  //   expect(
+  //     siteLinkContainer
+  //       .find('h3')
+  //       .first()
+  //       .parent()
+  //       .prop('href')
+  //   ).toEqual('https://example.com/site-linky/')
+  // })
+
+  it('calls the ping URL on click', async () => {
+    expect.assertions(1)
     const TextAdSearchResult = require('js/components/Search/TextAdSearchResult')
       .default
     const mockProps = getMockProps()
+    mockProps.instrumentation.pingUrlBase =
+      'https://www.bingapis.com/api/ping?Some=Data&ID='
     mockProps.item.extensions = [
       getMockBingTextAdSiteLinkExtensionObject({
         sitelinks: [
           getMockBingTextAdSiteLink({
             link: 'https://example.com/site-linky/',
+            pingUrlSuffix: 'Hola,1357',
           }),
         ],
       }),
@@ -214,20 +253,55 @@ describe('TextAdSearchResult: site links', () => {
     const siteLinkContainer = wrapper.find(
       '[data-test-id="search-result-webpage-deep-link-container"]'
     )
+    await siteLinkContainer
+      .find(LinkWithActionBeforeNavigate)
+      .first()
+      .prop('beforeNavigate')()
+    expect(fetch).toHaveBeenCalledWith(
+      'https://www.bingapis.com/api/ping?Some=Data&ID=Hola,1357'
+    )
+  })
+
+  it('does not call the ping URL on click if the pingUrlSuffix is not defined', async () => {
+    expect.assertions(1)
+    const TextAdSearchResult = require('js/components/Search/TextAdSearchResult')
+      .default
+    const mockProps = getMockProps()
+    mockProps.instrumentation.pingUrlBase =
+      'https://www.bingapis.com/api/ping?Some=Data&ID='
+    mockProps.item.extensions = [
+      getMockBingTextAdSiteLinkExtensionObject({
+        sitelinks: [
+          getMockBingTextAdSiteLink({
+            link: 'https://example.com/site-linky/',
+            pingUrlSuffix: undefined,
+          }),
+        ],
+      }),
+    ]
+    const wrapper = mount(<TextAdSearchResult {...mockProps} />)
+    const siteLinkContainer = wrapper.find(
+      '[data-test-id="search-result-webpage-deep-link-container"]'
+    )
+    await siteLinkContainer
+      .find(LinkWithActionBeforeNavigate)
+      .first()
+      .prop('beforeNavigate')()
+    expect(fetch).not.toHaveBeenCalled()
+  })
+
+  it('displays the page URL', () => {
+    const TextAdSearchResult = require('js/components/Search/TextAdSearchResult')
+      .default
+    const mockProps = getMockProps()
+    mockProps.item.displayUrl = 'https://some.example.com'
+    const wrapper = shallow(<TextAdSearchResult {...mockProps} />).dive()
     expect(
-      siteLinkContainer
-        .find('h3')
+      wrapper
+        .find('[data-test-id="search-result-webpage-url"]')
         .first()
-        .parent()
-        .type()
-    ).toEqual('a')
-    expect(
-      siteLinkContainer
-        .find('h3')
-        .first()
-        .parent()
-        .prop('href')
-    ).toEqual('https://example.com/site-linky/')
+        .text()
+    ).toEqual('https://some.example.com')
   })
 
   it('[site link] dislays the description', () => {
