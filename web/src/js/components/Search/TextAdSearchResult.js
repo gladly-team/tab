@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import { find } from 'lodash/collection'
 import { get } from 'lodash/object'
+import LinkWithActionBeforeNavigate from 'js/components/General/LinkWithActionBeforeNavigate'
 
 export const SiteLink = props => {
   const {
@@ -10,6 +11,7 @@ export const SiteLink = props => {
     item: { text, descriptionLine1, descriptionLine2, link },
   } = props
 
+  // TODO: on ad click, add Bing signal before navigation.
   return (
     <div className={classes.siteLink}>
       <a href={link} className={classes.titleLink}>
@@ -97,7 +99,15 @@ const styles = () => ({
 const TextAdSearchResult = props => {
   const {
     classes,
-    item: { description, displayUrl, extensions = [], title, url },
+    instrumentation,
+    item: {
+      description,
+      displayUrl,
+      extensions = [],
+      title,
+      url,
+      urlPingSuffix,
+    },
   } = props
   const siteLinks = get(
     find(extensions, { _type: 'Ads/SiteLinkExtension' }),
@@ -109,12 +119,22 @@ const TextAdSearchResult = props => {
     return null
   }
 
-  // TODO: on ad click, add Bing signal before navigation.
   return (
     <div className={classes.container}>
-      <a href={url} className={classes.titleLink}>
+      <LinkWithActionBeforeNavigate
+        to={url}
+        beforeNavigate={async () => {
+          const pingUrlBase = get(instrumentation, 'pingUrlBase')
+          if (!(pingUrlBase && urlPingSuffix)) {
+            return
+          }
+          const pingURL = `${pingUrlBase}${urlPingSuffix}`
+          return fetch(pingURL).catch(e => {})
+        }}
+        className={classes.titleLink}
+      >
         <h3 className={classes.title}>{title}</h3>
-      </a>
+      </LinkWithActionBeforeNavigate>
       <div
         data-test-id={'search-result-webpage-url'}
         className={classes.displayUrl}

@@ -6,7 +6,7 @@ export default () =>
         _type: 'ResponseInstrumentation',
         pageLoadPingUrl:
           'https://www.bingapis.com/api/ping/pageload?Some=Data&Type=Thing',
-        pingUrlBase: 'https://www.bingapis.com/api/ping?Some=Data',
+        pingUrlBase: 'https://www.bingapis.com/api/ping?Some=Data&ID=',
       },
       queryContext: {
         originalQuery: 'johh mayer',

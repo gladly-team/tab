@@ -2,11 +2,15 @@
 
 import React from 'react'
 import { mount, shallow } from 'enzyme'
+import { mockFetchResponse } from 'js/utils/test-utils'
 import {
   getMockBingTextAdResult,
   getMockBingTextAdSiteLink,
   getMockBingTextAdSiteLinkExtensionObject,
 } from 'js/utils/test-utils-search'
+import LinkWithActionBeforeNavigate from 'js/components/General/LinkWithActionBeforeNavigate'
+
+jest.mock('js/components/General/LinkWithActionBeforeNavigate')
 
 const getMockProps = () => ({
   item: getMockBingTextAdResult(),
@@ -14,12 +18,13 @@ const getMockProps = () => ({
     _type: 'ResponseInstrumentation',
     pageLoadPingUrl:
       'https://www.bingapis.com/api/ping/pageload?Some=Data&Type=Thing',
-    pingUrlBase: 'https://www.bingapis.com/api/ping?Some=Data',
+    pingUrlBase: 'https://www.bingapis.com/api/ping?Some=Data&ID=',
   },
 })
 
 beforeEach(() => {
   jest.clearAllMocks()
+  global.fetch.mockImplementation(() => Promise.resolve(mockFetchResponse()))
 
   // If we silenced console.error, restore it.
   if (console.error.mockRestore) {
@@ -79,15 +84,49 @@ describe('TextAdSearchResult', () => {
     ).toEqual('I am an ad ad ad!')
   })
 
-  it('creates an anchor tag as the parent of the title, with a link to the URL', () => {
+  it('creates an LinkWithActionBeforeNavigate with a link to the URL', () => {
     const TextAdSearchResult = require('js/components/Search/TextAdSearchResult')
       .default
     const mockProps = getMockProps()
     mockProps.item.url = 'https://example.com/foo/bar/'
     const wrapper = shallow(<TextAdSearchResult {...mockProps} />).dive()
     const title = wrapper.find('h3').first()
-    expect(title.parent().type()).toEqual('a')
-    expect(title.parent().prop('href')).toEqual('https://example.com/foo/bar/')
+    expect(title.parent().type()).toEqual(LinkWithActionBeforeNavigate)
+    expect(title.parent().prop('to')).toEqual('https://example.com/foo/bar/')
+  })
+
+  it('calls the ping URL on click', async () => {
+    expect.assertions(1)
+    const TextAdSearchResult = require('js/components/Search/TextAdSearchResult')
+      .default
+    const mockProps = getMockProps()
+    mockProps.instrumentation.pingUrlBase =
+      'https://www.bingapis.com/api/ping?Some=Data&ID='
+    mockProps.item.urlPingSuffix = 'Hi,2468'
+    const wrapper = shallow(<TextAdSearchResult {...mockProps} />).dive()
+    await wrapper
+      .find(LinkWithActionBeforeNavigate)
+      .first()
+      .prop('beforeNavigate')()
+    expect(fetch).toHaveBeenCalledWith(
+      'https://www.bingapis.com/api/ping?Some=Data&ID=Hi,2468'
+    )
+  })
+
+  it('does not call the ping URL on click if the urlPingSuffix is not defined', async () => {
+    expect.assertions(1)
+    const TextAdSearchResult = require('js/components/Search/TextAdSearchResult')
+      .default
+    const mockProps = getMockProps()
+    mockProps.instrumentation.pingUrlBase =
+      'https://www.bingapis.com/api/ping?Some=Data&ID='
+    mockProps.item.urlPingSuffix = undefined
+    const wrapper = shallow(<TextAdSearchResult {...mockProps} />).dive()
+    await wrapper
+      .find(LinkWithActionBeforeNavigate)
+      .first()
+      .prop('beforeNavigate')()
+    expect(fetch).not.toHaveBeenCalled()
   })
 
   it('displays the page URL', () => {

@@ -114,7 +114,7 @@ export const getMockBingTextAdResult = overrides => {
       rank: 1,
       title: 'Buy Cow-puters on A-moo-zon',
       url: 'https://www.bing.com/fake-ad-url/',
-      urlPingSuffix: '',
+      urlPingSuffix: 'Something,123',
     },
     overrides
   )
