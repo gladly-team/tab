@@ -2,6 +2,12 @@ export default () =>
   Promise.resolve({
     bing: {
       _type: 'SearchResponse',
+      instrumentation: {
+        _type: 'ResponseInstrumentation',
+        pageLoadPingUrl:
+          'https://www.bingapis.com/api/ping/pageload?Some=Data&Type=Thing',
+        pingUrlBase: 'https://www.bingapis.com/api/ping?Some=Data&ID=',
+      },
       queryContext: {
         originalQuery: 'johh mayer',
         alteredQuery: 'john mayer',
@@ -53,9 +59,6 @@ export default () =>
                     link: 'https://www.bing.com/fake-ad-click-id-0-sitelink-2',
                     pingUrlSuffix: 'Foo,1234.2',
                     impressionToken: '20',
-                  },
-                  {
-                    impressionToken: '21',
                   },
                 ],
                 isCreatedDynamically: false,

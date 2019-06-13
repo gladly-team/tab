@@ -3,18 +3,31 @@ import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import { find } from 'lodash/collection'
 import { get } from 'lodash/object'
+import LinkWithActionBeforeNavigate from 'js/components/General/LinkWithActionBeforeNavigate'
 
 export const SiteLink = props => {
   const {
     classes,
-    item: { text, descriptionLine1, descriptionLine2, link },
+    instrumentation,
+    item: { text, descriptionLine1, descriptionLine2, link, pingUrlSuffix },
   } = props
 
   return (
     <div className={classes.siteLink}>
-      <a href={link} className={classes.titleLink}>
+      <LinkWithActionBeforeNavigate
+        to={link}
+        beforeNavigate={async () => {
+          const pingUrlBase = get(instrumentation, 'pingUrlBase')
+          if (!(pingUrlBase && pingUrlSuffix)) {
+            return
+          }
+          const pingURL = `${pingUrlBase}${pingUrlSuffix}`
+          return fetch(pingURL).catch(e => {})
+        }}
+        className={classes.titleLink}
+      >
         <h3 className={classes.title}>{text}</h3>
-      </a>
+      </LinkWithActionBeforeNavigate>
       {descriptionLine1 ? (
         <div className={classes.snippet}>
           {descriptionLine1} {descriptionLine2}
@@ -32,6 +45,11 @@ SiteLink.propTypes = {
     link: PropTypes.string.isRequired,
     pingUrlSuffix: PropTypes.string,
     text: PropTypes.string.isRequired,
+  }).isRequired,
+  instrumentation: PropTypes.shape({
+    _type: PropTypes.string,
+    pageLoadPingUrl: PropTypes.string.isRequired,
+    pingUrlBase: PropTypes.string.isRequired,
   }).isRequired,
 }
 
@@ -97,7 +115,15 @@ const styles = () => ({
 const TextAdSearchResult = props => {
   const {
     classes,
-    item: { description, displayUrl, extensions = [], title, url },
+    instrumentation,
+    item: {
+      description,
+      displayUrl,
+      extensions = [],
+      title,
+      url,
+      urlPingSuffix,
+    },
   } = props
   const siteLinks = get(
     find(extensions, { _type: 'Ads/SiteLinkExtension' }),
@@ -111,9 +137,20 @@ const TextAdSearchResult = props => {
 
   return (
     <div className={classes.container}>
-      <a href={url} className={classes.titleLink}>
+      <LinkWithActionBeforeNavigate
+        to={url}
+        beforeNavigate={async () => {
+          const pingUrlBase = get(instrumentation, 'pingUrlBase')
+          if (!(pingUrlBase && urlPingSuffix)) {
+            return
+          }
+          const pingURL = `${pingUrlBase}${urlPingSuffix}`
+          return fetch(pingURL).catch(e => {})
+        }}
+        className={classes.titleLink}
+      >
         <h3 className={classes.title}>{title}</h3>
-      </a>
+      </LinkWithActionBeforeNavigate>
       <div
         data-test-id={'search-result-webpage-url'}
         className={classes.displayUrl}
@@ -136,7 +173,12 @@ const TextAdSearchResult = props => {
         >
           {siteLinks.map((siteLink, index) => {
             return (
-              <SiteLink key={siteLink.link} classes={classes} item={siteLink} />
+              <SiteLink
+                key={siteLink.link}
+                classes={classes}
+                item={siteLink}
+                instrumentation={instrumentation}
+              />
             )
           })}
         </div>
@@ -161,6 +203,11 @@ TextAdSearchResult.propTypes = {
     title: PropTypes.string.isRequired,
     url: PropTypes.string.isRequired,
     urlPingSuffix: PropTypes.string,
+  }).isRequired,
+  instrumentation: PropTypes.shape({
+    _type: PropTypes.string,
+    pageLoadPingUrl: PropTypes.string.isRequired,
+    pingUrlBase: PropTypes.string.isRequired,
   }).isRequired,
 }
 
