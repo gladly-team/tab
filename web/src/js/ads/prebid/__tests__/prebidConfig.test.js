@@ -201,7 +201,7 @@ describe('prebidConfig', function() {
       'openx',
       'pulsepoint',
       'rhythmone',
-      // 'sonobi',
+      'sonobi',
       'sovrn',
     ])
   })
@@ -218,7 +218,7 @@ describe('prebidConfig', function() {
       'openx',
       'pulsepoint',
       'rhythmone',
-      // 'sonobi',
+      'sonobi',
       'sovrn',
     ])
     expect(adUnitConfig[1]['bids'].map(bid => bid.bidder).sort()).toEqual([
@@ -227,7 +227,7 @@ describe('prebidConfig', function() {
       'openx',
       'pulsepoint',
       'rhythmone',
-      // 'sonobi',
+      'sonobi',
       'sovrn',
     ])
   })
@@ -245,7 +245,7 @@ describe('prebidConfig', function() {
       'openx',
       'pulsepoint',
       'rhythmone',
-      // 'sonobi',
+      'sonobi',
       'sovrn',
     ])
     expect(adUnitConfig[1]['bids'].map(bid => bid.bidder).sort()).toEqual([
@@ -254,7 +254,7 @@ describe('prebidConfig', function() {
       'openx',
       'pulsepoint',
       'rhythmone',
-      // 'sonobi',
+      'sonobi',
       'sovrn',
     ])
     expect(adUnitConfig[2]['bids'].map(bid => bid.bidder).sort()).toEqual([
@@ -263,7 +263,7 @@ describe('prebidConfig', function() {
       'openx',
       'pulsepoint',
       'rhythmone',
-      // 'sonobi',
+      'sonobi',
       'sovrn',
     ])
   })

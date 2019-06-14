@@ -13,10 +13,7 @@ import logger from 'js/utils/logger'
 import LogSearchMutation from 'js/mutations/LogSearchMutation'
 import { getCurrentUser } from 'js/authentication/user'
 import { setBingClientID } from 'js/utils/local-user-data-mgr'
-import {
-  isReactSnapClient,
-  getSearchResultCountPerPage,
-} from 'js/utils/search-utils'
+import { isReactSnapClient } from 'js/utils/search-utils'
 
 jest.mock('js/components/Search/fetchBingSearchResults')
 jest.mock('js/components/Search/SearchResultsBing')
@@ -35,7 +32,6 @@ const getMockProps = () => ({
 
 beforeEach(() => {
   jest.clearAllMocks()
-  getSearchResultCountPerPage.mockReturnValue(10)
   fetchBingSearchResults.mockResolvedValue(getMockSuccessfulSearchQuery())
   getCurrentUser.mockResolvedValue({
     id: 'abc123xyz789',
@@ -63,7 +59,7 @@ describe('SearchResultsQueryBing', () => {
     shallow(<SearchResultsQueryBing {...mockProps} />)
     await flushAllPromises()
     expect(fetchBingSearchResults).toHaveBeenCalledTimes(1)
-    expect(fetchBingSearchResults).toHaveBeenCalledWith('tacos', {})
+    expect(fetchBingSearchResults).toHaveBeenCalledWith('tacos', { page: 1 })
   })
 
   it('calls fetchBingSearchResults when the query changes', async () => {
@@ -77,60 +73,22 @@ describe('SearchResultsQueryBing', () => {
     fetchBingSearchResults.mockClear()
     wrapper.setProps({ query: 'pizza' })
     expect(fetchBingSearchResults).toHaveBeenCalledTimes(1)
-    expect(fetchBingSearchResults).toHaveBeenCalledWith('pizza', {})
+    expect(fetchBingSearchResults).toHaveBeenCalledWith('pizza', { page: 1 })
   })
 
-  it('calls fetchBingSearchResults when the page changes', async () => {
+  it('calls fetchBingSearchResults when the page changes, passing the new page number', async () => {
     expect.assertions(3)
     const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
       .default
     const mockProps = getMockProps()
     mockProps.query = 'tacos'
-    getSearchResultCountPerPage.mockReturnValue(10)
     const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
     await flushAllPromises()
     fetchBingSearchResults.mockClear()
     expect(fetchBingSearchResults).not.toHaveBeenCalled()
-    wrapper.setProps({ page: 2 })
+    wrapper.setProps({ page: 48 })
     expect(fetchBingSearchResults).toHaveBeenCalledTimes(1)
-    expect(fetchBingSearchResults).toHaveBeenCalledWith('tacos', { offset: 10 })
-  })
-
-  it('calls fetchBingSearchResults with the expected offset value based on the page number and results per page', async () => {
-    expect.assertions(5)
-    const SearchResultsQueryBing = require('js/components/Search/SearchResultsQueryBing')
-      .default
-    const mockProps = getMockProps()
-
-    // No offset value for the first page.
-    mockProps.query = 'tacos'
-    mockProps.page = 1
-    getSearchResultCountPerPage.mockReturnValue(10)
-    const wrapper = shallow(<SearchResultsQueryBing {...mockProps} />)
-    await flushAllPromises()
-    expect(fetchBingSearchResults.mock.calls[0][1]).not.toHaveProperty('offset')
-    fetchBingSearchResults.mockClear()
-
-    // Expected offset value for the second page.
-    wrapper.setProps({ page: 2 })
-    expect(fetchBingSearchResults.mock.calls[0][1]).toHaveProperty('offset', 10)
-    fetchBingSearchResults.mockClear()
-
-    // Expected offset value for the eighth page.
-    wrapper.setProps({ page: 8 })
-    expect(fetchBingSearchResults.mock.calls[0][1]).toHaveProperty('offset', 70)
-    fetchBingSearchResults.mockClear()
-
-    // The offset for the pages changes if we change how many
-    // results per page to show.
-    getSearchResultCountPerPage.mockReturnValue(12)
-    wrapper.setProps({ page: 3 })
-    expect(fetchBingSearchResults.mock.calls[0][1]).toHaveProperty('offset', 24)
-    fetchBingSearchResults.mockClear()
-
-    wrapper.setProps({ page: 8 })
-    expect(fetchBingSearchResults.mock.calls[0][1]).toHaveProperty('offset', 84)
-    fetchBingSearchResults.mockClear()
+    expect(fetchBingSearchResults).toHaveBeenCalledWith('tacos', { page: 48 })
   })
 
   it('does not call fetchBingSearchResults when some unrelated prop changes', async () => {
@@ -683,284 +641,292 @@ describe('SearchResultsQueryBing', () => {
     await flushAllPromises()
     const passedData = wrapper.find(SearchResultsBing).prop('data')
     expect(passedData).toEqual({
+      instrumentation: {
+        _type: 'ResponseInstrumentation',
+        pageLoadPingUrl:
+          'https://www.bingapis.com/api/ping/pageload?Some=Data&Type=Thing',
+        pingUrlBase: 'https://www.bingapis.com/api/ping?Some=Data',
+      },
       resultsCount: 5250000,
-      mainline: [
-        {
-          key:
-            'WebPages-https://api.cognitive.microsoft.com/api/v7/#WebPages.0',
-          type: 'WebPages',
-          value: {
-            dateLastCrawled: '2018-12-24T15:23:39',
-            deepLinks: [
+      results: {
+        mainline: [
+          {
+            key:
+              'WebPages-https://api.cognitive.microsoft.com/api/v7/#WebPages.0',
+            type: 'WebPages',
+            value: {
+              dateLastCrawled: '2018-12-24T15:23:39',
+              deepLinks: [
+                {
+                  name: 'This site is related',
+                  snippet: 'This is a snippet related to the site.',
+                  url: expect.any(String),
+                  urlPingSuffix: 'something',
+                },
+                {
+                  name: 'This site is related',
+                  snippet: 'This is a snippet related to the site.',
+                  url: expect.any(String),
+                  urlPingSuffix: 'something',
+                },
+              ],
+              displayUrl: 'https://example.com',
+              id: expect.any(String),
+              name: 'A <b>Really Awesome</b> Webpage',
+              searchTags: [],
+              snippet:
+                "This <b>really awesome</b> website is definitely what you're looking for.",
+              url: expect.any(String),
+            },
+          },
+          {
+            key: 'News',
+            type: 'News',
+            value: [
               {
-                name: 'This site is related',
-                snippet: 'This is a snippet related to the site.',
+                category: 'Politics',
+                clusteredArticles: undefined,
+                contractualRules: [
+                  {
+                    _type: 'ContractualRules/TextAttribution',
+                    text: 'A Good News Site',
+                  },
+                ],
+                datePublished: '2018-12-24T15:23:39',
+                description:
+                  'Something <b>truly incredible</b> and newsworthy happened! Wow. You cannot miss this article.',
+                headline: undefined,
+                id: expect.any(String),
+                image: {
+                  contentUrl: 'https://media.example.com/foo.png',
+                  thumbnail: {
+                    contentUrl: 'https://www.bing.com/some-url/',
+                    height: 466,
+                    width: 700,
+                  },
+                },
+                mentions: [
+                  {
+                    name: 'New York City',
+                  },
+                  {
+                    name: 'Madonna',
+                  },
+                ],
+                name: 'An <b>Incredible</b> Event in NYC',
+                provider: [
+                  {
+                    _type: 'Organization',
+                    image: {
+                      thumbnail: {
+                        contentUrl: 'https://www.bing.com/some-image-url/',
+                      },
+                    },
+                    name: 'A Good News Site',
+                  },
+                ],
                 url: expect.any(String),
-                urlPingSuffix: 'something',
+                video: undefined,
               },
               {
-                name: 'This site is related',
-                snippet: 'This is a snippet related to the site.',
+                category: 'Politics',
+                clusteredArticles: undefined,
+                contractualRules: [
+                  {
+                    _type: 'ContractualRules/TextAttribution',
+                    text: 'A Good News Site',
+                  },
+                ],
+                datePublished: '2018-12-24T15:23:39',
+                description:
+                  'Something <b>truly incredible</b> and newsworthy happened! Wow. You cannot miss this article.',
+                headline: undefined,
+                id: expect.any(String),
+                image: {
+                  contentUrl: 'https://media.example.com/foo.png',
+                  thumbnail: {
+                    contentUrl: 'https://www.bing.com/some-url/',
+                    height: 466,
+                    width: 700,
+                  },
+                },
+                mentions: [
+                  {
+                    name: 'New York City',
+                  },
+                  {
+                    name: 'Madonna',
+                  },
+                ],
+                name: 'An <b>Incredible</b> Event in NYC',
+                provider: [
+                  {
+                    _type: 'Organization',
+                    image: {
+                      thumbnail: {
+                        contentUrl: 'https://www.bing.com/some-image-url/',
+                      },
+                    },
+                    name: 'A Good News Site',
+                  },
+                ],
                 url: expect.any(String),
-                urlPingSuffix: 'something',
+                video: undefined,
+              },
+              {
+                category: 'Politics',
+                clusteredArticles: undefined,
+                contractualRules: [
+                  {
+                    _type: 'ContractualRules/TextAttribution',
+                    text: 'A Good News Site',
+                  },
+                ],
+                datePublished: '2018-12-24T15:23:39',
+                description:
+                  'Something <b>truly incredible</b> and newsworthy happened! Wow. You cannot miss this article.',
+                headline: undefined,
+                id: expect.any(String),
+                image: {
+                  contentUrl: 'https://media.example.com/foo.png',
+                  thumbnail: {
+                    contentUrl: 'https://www.bing.com/some-url/',
+                    height: 466,
+                    width: 700,
+                  },
+                },
+                mentions: [
+                  {
+                    name: 'New York City',
+                  },
+                  {
+                    name: 'Madonna',
+                  },
+                ],
+                name: 'An <b>Incredible</b> Event in NYC',
+                provider: [
+                  {
+                    _type: 'Organization',
+                    image: {
+                      thumbnail: {
+                        contentUrl: 'https://www.bing.com/some-image-url/',
+                      },
+                    },
+                    name: 'A Good News Site',
+                  },
+                ],
+                url: expect.any(String),
+                video: undefined,
+              },
+              {
+                category: 'Politics',
+                clusteredArticles: undefined,
+                contractualRules: [
+                  {
+                    _type: 'ContractualRules/TextAttribution',
+                    text: 'A Good News Site',
+                  },
+                ],
+                datePublished: '2018-12-24T15:23:39',
+                description:
+                  'Something <b>truly incredible</b> and newsworthy happened! Wow. You cannot miss this article.',
+                headline: undefined,
+                id: expect.any(String),
+                image: {
+                  contentUrl: 'https://media.example.com/foo.png',
+                  thumbnail: {
+                    contentUrl: 'https://www.bing.com/some-url/',
+                    height: 466,
+                    width: 700,
+                  },
+                },
+                mentions: [
+                  {
+                    name: 'New York City',
+                  },
+                  {
+                    name: 'Madonna',
+                  },
+                ],
+                name: 'An <b>Incredible</b> Event in NYC',
+                provider: [
+                  {
+                    _type: 'Organization',
+                    image: {
+                      thumbnail: {
+                        contentUrl: 'https://www.bing.com/some-image-url/',
+                      },
+                    },
+                    name: 'A Good News Site',
+                  },
+                ],
+                url: expect.any(String),
+                video: undefined,
               },
             ],
-            displayUrl: 'https://example.com',
-            id: expect.any(String),
-            name: 'A <b>Really Awesome</b> Webpage',
-            searchTags: [],
-            snippet:
-              "This <b>really awesome</b> website is definitely what you're looking for.",
-            url: expect.any(String),
           },
-        },
-        {
-          key: 'News',
-          type: 'News',
-          value: [
-            {
-              category: 'Politics',
-              clusteredArticles: undefined,
-              contractualRules: [
+          {
+            key:
+              'WebPages-https://api.cognitive.microsoft.com/api/v7/#WebPages.1',
+            type: 'WebPages',
+            value: {
+              dateLastCrawled: '2018-12-24T15:23:39',
+              deepLinks: [
                 {
-                  _type: 'ContractualRules/TextAttribution',
-                  text: 'A Good News Site',
+                  name: 'This site is related',
+                  snippet: 'This is a snippet related to the site.',
+                  url: expect.any(String),
+                  urlPingSuffix: 'something',
+                },
+                {
+                  name: 'This site is related',
+                  snippet: 'This is a snippet related to the site.',
+                  url: expect.any(String),
+                  urlPingSuffix: 'something',
                 },
               ],
-              datePublished: '2018-12-24T15:23:39',
-              description:
-                'Something <b>truly incredible</b> and newsworthy happened! Wow. You cannot miss this article.',
-              headline: undefined,
+              displayUrl: 'https://example.com',
               id: expect.any(String),
-              image: {
-                contentUrl: 'https://media.example.com/foo.png',
-                thumbnail: {
-                  contentUrl: 'https://www.bing.com/some-url/',
-                  height: 466,
-                  width: 700,
-                },
-              },
-              mentions: [
-                {
-                  name: 'New York City',
-                },
-                {
-                  name: 'Madonna',
-                },
-              ],
-              name: 'An <b>Incredible</b> Event in NYC',
-              provider: [
-                {
-                  _type: 'Organization',
-                  image: {
-                    thumbnail: {
-                      contentUrl: 'https://www.bing.com/some-image-url/',
-                    },
-                  },
-                  name: 'A Good News Site',
-                },
-              ],
+              name: 'A <b>Really Awesome</b> Webpage',
+              searchTags: [],
+              snippet:
+                "This <b>really awesome</b> website is definitely what you're looking for.",
               url: expect.any(String),
-              video: undefined,
             },
-            {
-              category: 'Politics',
-              clusteredArticles: undefined,
-              contractualRules: [
-                {
-                  _type: 'ContractualRules/TextAttribution',
-                  text: 'A Good News Site',
-                },
-              ],
-              datePublished: '2018-12-24T15:23:39',
-              description:
-                'Something <b>truly incredible</b> and newsworthy happened! Wow. You cannot miss this article.',
-              headline: undefined,
-              id: expect.any(String),
-              image: {
-                contentUrl: 'https://media.example.com/foo.png',
-                thumbnail: {
-                  contentUrl: 'https://www.bing.com/some-url/',
-                  height: 466,
-                  width: 700,
-                },
-              },
-              mentions: [
-                {
-                  name: 'New York City',
-                },
-                {
-                  name: 'Madonna',
-                },
-              ],
-              name: 'An <b>Incredible</b> Event in NYC',
-              provider: [
-                {
-                  _type: 'Organization',
-                  image: {
-                    thumbnail: {
-                      contentUrl: 'https://www.bing.com/some-image-url/',
-                    },
-                  },
-                  name: 'A Good News Site',
-                },
-              ],
-              url: expect.any(String),
-              video: undefined,
-            },
-            {
-              category: 'Politics',
-              clusteredArticles: undefined,
-              contractualRules: [
-                {
-                  _type: 'ContractualRules/TextAttribution',
-                  text: 'A Good News Site',
-                },
-              ],
-              datePublished: '2018-12-24T15:23:39',
-              description:
-                'Something <b>truly incredible</b> and newsworthy happened! Wow. You cannot miss this article.',
-              headline: undefined,
-              id: expect.any(String),
-              image: {
-                contentUrl: 'https://media.example.com/foo.png',
-                thumbnail: {
-                  contentUrl: 'https://www.bing.com/some-url/',
-                  height: 466,
-                  width: 700,
-                },
-              },
-              mentions: [
-                {
-                  name: 'New York City',
-                },
-                {
-                  name: 'Madonna',
-                },
-              ],
-              name: 'An <b>Incredible</b> Event in NYC',
-              provider: [
-                {
-                  _type: 'Organization',
-                  image: {
-                    thumbnail: {
-                      contentUrl: 'https://www.bing.com/some-image-url/',
-                    },
-                  },
-                  name: 'A Good News Site',
-                },
-              ],
-              url: expect.any(String),
-              video: undefined,
-            },
-            {
-              category: 'Politics',
-              clusteredArticles: undefined,
-              contractualRules: [
-                {
-                  _type: 'ContractualRules/TextAttribution',
-                  text: 'A Good News Site',
-                },
-              ],
-              datePublished: '2018-12-24T15:23:39',
-              description:
-                'Something <b>truly incredible</b> and newsworthy happened! Wow. You cannot miss this article.',
-              headline: undefined,
-              id: expect.any(String),
-              image: {
-                contentUrl: 'https://media.example.com/foo.png',
-                thumbnail: {
-                  contentUrl: 'https://www.bing.com/some-url/',
-                  height: 466,
-                  width: 700,
-                },
-              },
-              mentions: [
-                {
-                  name: 'New York City',
-                },
-                {
-                  name: 'Madonna',
-                },
-              ],
-              name: 'An <b>Incredible</b> Event in NYC',
-              provider: [
-                {
-                  _type: 'Organization',
-                  image: {
-                    thumbnail: {
-                      contentUrl: 'https://www.bing.com/some-image-url/',
-                    },
-                  },
-                  name: 'A Good News Site',
-                },
-              ],
-              url: expect.any(String),
-              video: undefined,
-            },
-          ],
-        },
-        {
-          key:
-            'WebPages-https://api.cognitive.microsoft.com/api/v7/#WebPages.1',
-          type: 'WebPages',
-          value: {
-            dateLastCrawled: '2018-12-24T15:23:39',
-            deepLinks: [
-              {
-                name: 'This site is related',
-                snippet: 'This is a snippet related to the site.',
-                url: expect.any(String),
-                urlPingSuffix: 'something',
-              },
-              {
-                name: 'This site is related',
-                snippet: 'This is a snippet related to the site.',
-                url: expect.any(String),
-                urlPingSuffix: 'something',
-              },
-            ],
-            displayUrl: 'https://example.com',
-            id: expect.any(String),
-            name: 'A <b>Really Awesome</b> Webpage',
-            searchTags: [],
-            snippet:
-              "This <b>really awesome</b> website is definitely what you're looking for.",
-            url: expect.any(String),
           },
-        },
-        {
-          key:
-            'WebPages-https://api.cognitive.microsoft.com/api/v7/#WebPages.2',
-          type: 'WebPages',
-          value: {
-            dateLastCrawled: '2018-12-24T15:23:39',
-            deepLinks: [
-              {
-                name: 'This site is related',
-                snippet: 'This is a snippet related to the site.',
-                url: expect.any(String),
-                urlPingSuffix: 'something',
-              },
-              {
-                name: 'This site is related',
-                snippet: 'This is a snippet related to the site.',
-                url: expect.any(String),
-                urlPingSuffix: 'something',
-              },
-            ],
-            displayUrl: 'https://example.com',
-            id: expect.any(String),
-            name: 'A <b>Really Awesome</b> Webpage',
-            searchTags: [],
-            snippet:
-              "This <b>really awesome</b> website is definitely what you're looking for.",
-            url: expect.any(String),
+          {
+            key:
+              'WebPages-https://api.cognitive.microsoft.com/api/v7/#WebPages.2',
+            type: 'WebPages',
+            value: {
+              dateLastCrawled: '2018-12-24T15:23:39',
+              deepLinks: [
+                {
+                  name: 'This site is related',
+                  snippet: 'This is a snippet related to the site.',
+                  url: expect.any(String),
+                  urlPingSuffix: 'something',
+                },
+                {
+                  name: 'This site is related',
+                  snippet: 'This is a snippet related to the site.',
+                  url: expect.any(String),
+                  urlPingSuffix: 'something',
+                },
+              ],
+              displayUrl: 'https://example.com',
+              id: expect.any(String),
+              name: 'A <b>Really Awesome</b> Webpage',
+              searchTags: [],
+              snippet:
+                "This <b>really awesome</b> website is definitely what you're looking for.",
+              url: expect.any(String),
+            },
           },
-        },
-      ],
-      pole: [],
-      sidebar: [],
+        ],
+        pole: [],
+        sidebar: [],
+      },
     })
   })
 })

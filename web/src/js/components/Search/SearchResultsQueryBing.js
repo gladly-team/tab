@@ -10,7 +10,6 @@ import { getCurrentUser } from 'js/authentication/user'
 import LogSearchMutation from 'js/mutations/LogSearchMutation'
 import { makePromiseCancelable } from 'js/utils/utils'
 import { setBingClientID } from 'js/utils/local-user-data-mgr'
-import { getSearchResultCountPerPage } from 'js/utils/search-utils'
 
 class SearchResultsQueryBing extends React.Component {
   constructor(props) {
@@ -86,10 +85,9 @@ class SearchResultsQueryBing extends React.Component {
     })
 
     try {
-      const offset = getSearchResultCountPerPage() * (page - 1)
       this.cancelablePromise = makePromiseCancelable(
         fetchBingSearchResults(query, {
-          ...(offset && { offset }),
+          ...(page && { page }),
         })
       )
       const searchResults = await this.cancelablePromise.promise
@@ -138,13 +136,16 @@ class SearchResultsQueryBing extends React.Component {
    * Restructure the raw search results data into search sections with
    * each item's full data.
    * @param {Object} data - The search results data returned from the API
-   * @return {Object} searchResults - The restructured search results data
-   * @return {Array<SearchResultItem>} searchResults.pole - Search result items in the "pole"
-   *   (i.e. most prominent) display position.
-   * @return {Array<SearchResultItem>} searchResults.mainline - Search result items in the
-   *   "mainline" (i.e. second-most-prominent) display position.
-   * @return {Array<SearchResultItem>} searchResults.sidebar - Search result items in the "sidebar"
-   *   (i.e. less prominent) display position.
+   * @return {Object} searchData - The restructured search results data
+   * @return {Object} searchData.resultsCount - The estimated number of webpages
+   *   in results
+   * @return {Object} searchData.results
+   * @return {Array<SearchResultItem>} searchData.results.pole - Search result items in
+   *   the "pole"(i.e. most prominent) display position.
+   * @return {Array<SearchResultItem>} searchData.results.mainline - Search result items
+   *   in the "mainline" (i.e. second-most-prominent) display position.
+   * @return {Array<SearchResultItem>} searchData.results.sidebar - Search result items
+   *   in the "sidebar" (i.e. less prominent) display position.
    * The SearchResultItem has a structure of:
    *   {String} SearchResultItem.type - The type of search result (e.g. WebPages, News, Videos).
    *   {String} SearchResultItem.key - A unique key for this search result item
@@ -153,9 +154,9 @@ class SearchResultsQueryBing extends React.Component {
    */
   restructureSearchResultsData(data) {
     const searchResultSections = ['pole', 'mainline', 'sidebar']
-    const restructuredData = Object.assign(
-      {},
-      searchResultSections.reduce((newData, sectionName) => {
+    const restructuredData = {
+      instrumentation: get(data, 'instrumentation', null),
+      results: searchResultSections.reduce((newData, sectionName) => {
         // Get the ranked list for this section.
         const rankingItems = get(
           data,
@@ -193,10 +194,8 @@ class SearchResultsQueryBing extends React.Component {
           .filter(itemData => !!itemData)
         return newData
       }, {}),
-      {
-        resultsCount: get(data, 'webPages.totalEstimatedMatches'),
-      }
-    )
+      resultsCount: get(data, 'webPages.totalEstimatedMatches'),
+    }
     return restructuredData
   }
 

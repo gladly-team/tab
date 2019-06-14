@@ -98,6 +98,62 @@ export const getMockBingNewsArticleResult = overrides => {
   )
 }
 
+export const getMockBingTextAdResult = overrides => {
+  return Object.assign(
+    {},
+    {
+      _type: 'Ads/TextAd',
+      businessName: 'A-moo-zon',
+      description: 'Hoof it to our website to shop dairy good electronics!',
+      displayUrl: 'www.example.com/cow/',
+      extensions: [getMockBingTextAdSiteLinkExtensionObject()],
+      id: 'https://www.bingapis.com/api/v7/#Ads.1',
+      isAdult: false,
+      phoneNumber: '',
+      position: 'Mainline',
+      rank: 1,
+      title: 'Buy Cow-puters on A-moo-zon',
+      url: 'https://www.bing.com/fake-ad-url/',
+      urlPingSuffix: 'Something,123',
+    },
+    overrides
+  )
+}
+
+export const getMockBingTextAdSiteLinkExtensionObject = overrides => {
+  return Object.assign(
+    {},
+    {
+      _type: 'Ads/SiteLinkExtension',
+      impressionToken: '17',
+      isCreatedDynamically: false,
+      sitelinks: [
+        getMockBingTextAdSiteLink(),
+        getMockBingTextAdSiteLink(),
+        getMockBingTextAdSiteLink(),
+        getMockBingTextAdSiteLink(),
+      ],
+    },
+    overrides
+  )
+}
+
+export const getMockBingTextAdSiteLink = overrides => {
+  return Object.assign(
+    {},
+    {
+      // The descriptions will be a max of 35 characters each.
+      descriptionLine1: 'This is a helpful other link.',
+      descriptionLine2: 'Check it out!',
+      text: 'Some Related Link',
+      link: getMockUniqueURL(),
+      pingUrlSuffix: 'Foo,1234.0',
+      impressionToken: '18',
+    },
+    overrides
+  )
+}
+
 // A successful search response object. Add more types as
 // we use them.
 // https://docs.microsoft.com/en-us/rest/api/cognitiveservices/bing-web-api-v7-reference#searchresponse
@@ -106,6 +162,18 @@ export const getMockSuccessfulSearchQuery = () => {
   return {
     bing: {
       _type: 'SearchResponse',
+      instrumentation: {
+        _type: 'ResponseInstrumentation',
+        pageLoadPingUrl:
+          'https://www.bingapis.com/api/ping/pageload?Some=Data&Type=Thing',
+        pingUrlBase: 'https://www.bingapis.com/api/ping?Some=Data',
+      },
+      queryContext: {
+        alteredQuery: 'tacos',
+        adultIntent: false,
+        askUserForLocation: true,
+        originalQuery: query,
+      },
       // computation: {},
       // entities: {},
       // images: {},
@@ -118,12 +186,6 @@ export const getMockSuccessfulSearchQuery = () => {
           getMockBingNewsArticleResult(),
           getMockBingNewsArticleResult(),
         ],
-      },
-      queryContext: {
-        alteredQuery: 'tacos',
-        adultIntent: false,
-        askUserForLocation: true,
-        originalQuery: query,
       },
       rankingResponse: {
         // Very top results (e.g. computations, timezone)

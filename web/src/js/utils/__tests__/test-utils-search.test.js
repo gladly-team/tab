@@ -190,6 +190,7 @@ describe('getMockSuccessfulSearchQuery', () => {
     } = require('js/utils/test-utils-search')
     expect(Object.keys(getMockSuccessfulSearchQuery().bing).sort()).toEqual([
       '_type',
+      'instrumentation',
       'news',
       'queryContext',
       'rankingResponse',

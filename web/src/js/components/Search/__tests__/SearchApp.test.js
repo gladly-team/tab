@@ -51,6 +51,28 @@ describe('SearchApp', () => {
     expect(route.prop('component')).toBe(SearchPageComponent)
   })
 
+  it('contains the Bing testing search page route', async () => {
+    const SearchApp = require('js/components/Search/SearchApp').default
+    const wrapper = shallow(<SearchApp />)
+    const route = wrapper
+      .find(Route)
+      .filterWhere(n => n.prop('path') === '/search/bing')
+    expect(route.exists()).toBe(true)
+  })
+
+  it('sets the the Bing testing search page searchProvider to Bing', async () => {
+    const SearchApp = require('js/components/Search/SearchApp').default
+    const wrapper = shallow(<SearchApp />)
+    const route = wrapper
+      .find(Route)
+      .filterWhere(n => n.prop('path') === '/search/bing')
+    expect(route.prop('component')).not.toBeDefined()
+    const RenderedComp = route.prop('render')()
+    expect(RenderedComp).toEqual(
+      <SearchPageComponent searchProvider={'bing'} />
+    )
+  })
+
   it('contains the search browser extension post-uninstall route', async () => {
     const SearchApp = require('js/components/Search/SearchApp').default
     const wrapper = shallow(<SearchApp />)

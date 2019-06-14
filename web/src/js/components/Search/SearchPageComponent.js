@@ -85,7 +85,7 @@ class SearchPage extends React.Component {
       isAdBlockerEnabled: false,
       query: '',
       searchFeatureEnabled: isSearchPageEnabled(),
-      searchProvider: getSearchProvider(),
+      defaultSearchProvider: getSearchProvider(),
       searchRedirectToThirdParty: shouldRedirectSearchToThirdParty(),
       searchSource: null,
       searchText: '',
@@ -194,14 +194,14 @@ class SearchPage extends React.Component {
   }
 
   render() {
-    const { classes } = this.props
+    const { classes, searchProvider } = this.props
     const {
       isAdBlockerEnabled,
       mounted,
       page,
       query,
       showIntroMessage,
-      searchProvider,
+      defaultSearchProvider,
       searchSource,
       searchText,
     } = this.state
@@ -466,7 +466,8 @@ class SearchPage extends React.Component {
                 </Paper>
               </div>
             ) : null}
-            {searchProvider === SEARCH_PROVIDER_BING ? (
+            {(searchProvider || defaultSearchProvider) ===
+            SEARCH_PROVIDER_BING ? (
               <ErrorBoundarySearchResults>
                 <SearchResultsQueryBing
                   query={query}
@@ -598,6 +599,7 @@ SearchPage.propTypes = {
   location: PropTypes.shape({
     search: PropTypes.string.isRequired,
   }),
+  searchProvider: PropTypes.string,
   theme: PropTypes.object.isRequired,
 }
 

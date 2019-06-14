@@ -48,12 +48,26 @@ class UsernameField extends React.Component {
   validate() {
     if (this.hasValue()) {
       const username = this.username.input.value.trim()
-      const isValid = validateUsername(username)
+
+      const { isValid, reason } = validateUsername(username)
       if (!isValid) {
-        if (username.length < 2) {
-          this.setErrorMessage('Must be at least two characters.')
-        } else {
-          this.setErrorMessage('Username is invalid.')
+        switch (reason) {
+          case 'TOO_SHORT': {
+            this.setErrorMessage('Must be at least two characters.')
+            break
+          }
+          case 'NO_SPACES': {
+            this.setErrorMessage('Cannot contain spaces.')
+            break
+          }
+          case 'NO_AT_SIGN': {
+            this.setErrorMessage('Should not contain "@".')
+            break
+          }
+          default: {
+            this.setErrorMessage('Username is invalid.')
+            break
+          }
         }
       } else {
         this.setErrorMessage(null)
@@ -66,10 +80,7 @@ class UsernameField extends React.Component {
   }
 
   render() {
-    const props = Object.assign({}, this.props)
-    delete props['usernameDuplicate']
-    delete props['otherError']
-
+    const { usernameDuplicate, otherError, ...otherProps } = this.props
     return (
       <TextField
         id={'username-input'}
@@ -77,8 +88,8 @@ class UsernameField extends React.Component {
         ref={input => {
           this.username = input
         }}
-        floatingLabelText={<span>Username</span>}
-        {...props}
+        floatingLabelText={<span>Username for Tab for a Cause</span>}
+        {...otherProps}
         errorText={this.state.error}
       />
     )

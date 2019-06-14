@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { get } from 'lodash/object'
 import { range } from 'lodash/util'
 import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
@@ -9,6 +10,24 @@ import SearchResultItem from 'js/components/Search/SearchResultItem'
 import SearchResultErrorMessage from 'js/components/Search/SearchResultErrorMessage'
 import { showBingPagination } from 'js/utils/search-utils'
 import { commaFormatted } from 'js/utils/utils'
+
+// Pings Bing when the search results page loads.
+class BingPageLoadPing extends React.Component {
+  componentDidMount() {
+    const { pageLoadPingUrl } = this.props
+    if (pageLoadPingUrl) {
+      fetch(pageLoadPingUrl).catch(e => {})
+    }
+  }
+
+  render() {
+    return null
+  }
+}
+
+BingPageLoadPing.propTypes = {
+  pageLoadPingUrl: PropTypes.string.isRequired,
+}
 
 const styles = theme => ({
   searchResultsParentContainer: {
@@ -78,10 +97,13 @@ const SearchResultsBing = props => {
     Math.min(MAX_PAGE + 1, Math.max(page + 3, MIN_PAGE + 5))
   )
 
-  const noSearchResultsReturned = queryReturned && !data.mainline.length
-
+  const pageLoadPingUrl = get(data, 'instrumentation.pageLoadPingUrl')
+  const noSearchResultsReturned = queryReturned && !data.results.mainline.length
   const noResultsToDisplay =
-    isEmptyQuery || !data.mainline.length || isQueryInProgress || isError
+    isEmptyQuery ||
+    !data.results.mainline.length ||
+    isQueryInProgress ||
+    isError
 
   return (
     <div
@@ -127,6 +149,12 @@ const SearchResultsBing = props => {
             display: noResultsToDisplay ? 'none' : 'block',
           }}
         >
+          {pageLoadPingUrl ? (
+            <BingPageLoadPing
+              key={pageLoadPingUrl}
+              pageLoadPingUrl={pageLoadPingUrl}
+            />
+          ) : null}
           {data.resultsCount ? (
             <Typography
               data-test-id={'search-results-count'}
@@ -136,12 +164,13 @@ const SearchResultsBing = props => {
               {commaFormatted(data.resultsCount)} results
             </Typography>
           ) : null}
-          {data.mainline.map(searchResultItemData => {
+          {data.results.mainline.map(searchResultItemData => {
             return (
               <SearchResultItem
                 key={searchResultItemData.key}
                 type={searchResultItemData.type}
                 itemData={searchResultItemData.value}
+                instrumentation={data.instrumentation}
               />
             )
           })}
@@ -223,31 +252,38 @@ const SearchResultsBing = props => {
 SearchResultsBing.propTypes = {
   classes: PropTypes.object.isRequired,
   data: PropTypes.shape({
+    instrumentation: PropTypes.shape({
+      _type: PropTypes.string,
+      pageLoadPingUrl: PropTypes.string,
+      pingUrlBase: PropTypes.string,
+    }),
     resultsCount: PropTypes.number,
-    pole: PropTypes.arrayOf(
-      PropTypes.shape({
-        type: PropTypes.string.isRequired,
-        key: PropTypes.string.isRequired,
-        value: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
-          .isRequired,
-      })
-    ).isRequired,
-    mainline: PropTypes.arrayOf(
-      PropTypes.shape({
-        type: PropTypes.string.isRequired,
-        key: PropTypes.string.isRequired,
-        value: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
-          .isRequired,
-      })
-    ).isRequired,
-    sidebar: PropTypes.arrayOf(
-      PropTypes.shape({
-        type: PropTypes.string.isRequired,
-        key: PropTypes.string.isRequired,
-        value: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
-          .isRequired,
-      })
-    ).isRequired,
+    results: PropTypes.shape({
+      pole: PropTypes.arrayOf(
+        PropTypes.shape({
+          type: PropTypes.string.isRequired,
+          key: PropTypes.string.isRequired,
+          value: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
+            .isRequired,
+        })
+      ).isRequired,
+      mainline: PropTypes.arrayOf(
+        PropTypes.shape({
+          type: PropTypes.string.isRequired,
+          key: PropTypes.string.isRequired,
+          value: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
+            .isRequired,
+        })
+      ).isRequired,
+      sidebar: PropTypes.arrayOf(
+        PropTypes.shape({
+          type: PropTypes.string.isRequired,
+          key: PropTypes.string.isRequired,
+          value: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
+            .isRequired,
+        })
+      ).isRequired,
+    }).isRequired,
   }).isRequired,
   isEmptyQuery: PropTypes.bool.isRequired,
   isError: PropTypes.bool.isRequired,

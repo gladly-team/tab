@@ -8,6 +8,7 @@ import Link from 'js/components/General/Link'
 import { showBingPagination } from 'js/utils/search-utils'
 import SearchResultItem from 'js/components/Search/SearchResultItem'
 import SearchResultErrorMessage from 'js/components/Search/SearchResultErrorMessage'
+import { mockFetchResponse } from 'js/utils/test-utils'
 
 jest.mock('js/components/Search/SearchResultItem')
 jest.mock('js/components/General/Link')
@@ -16,40 +17,48 @@ jest.mock('js/utils/search-utils')
 const getMockProps = () => ({
   classes: {},
   data: {
+    instrumentation: {
+      _type: 'ResponseInstrumentation',
+      pageLoadPingUrl:
+        'https://www.bingapis.com/api/ping/pageload?Some=Data&Type=Thing',
+      pingUrlBase: 'https://www.bingapis.com/api/ping?Some=Data',
+    },
+    results: {
+      pole: [],
+      mainline: [
+        {
+          type: 'WebPages',
+          key: 'some-key-1',
+          value: {
+            data: 'here',
+          },
+        },
+        {
+          type: 'WebPages',
+          key: 'some-key-2',
+          value: {
+            data: 'here',
+          },
+        },
+      ],
+      sidebar: [
+        {
+          type: 'WebPages',
+          key: 'some-key-3',
+          value: {
+            data: 'here',
+          },
+        },
+        {
+          type: 'WebPages',
+          key: 'some-key-4',
+          value: {
+            data: 'here',
+          },
+        },
+      ],
+    },
     resultsCount: 3,
-    pole: [],
-    mainline: [
-      {
-        type: 'WebPages',
-        key: 'some-key-1',
-        value: {
-          data: 'here',
-        },
-      },
-      {
-        type: 'WebPages',
-        key: 'some-key-2',
-        value: {
-          data: 'here',
-        },
-      },
-    ],
-    sidebar: [
-      {
-        type: 'WebPages',
-        key: 'some-key-3',
-        value: {
-          data: 'here',
-        },
-      },
-      {
-        type: 'WebPages',
-        key: 'some-key-4',
-        value: {
-          data: 'here',
-        },
-      },
-    ],
   },
   isEmptyQuery: false,
   isError: false,
@@ -64,6 +73,10 @@ beforeEach(() => {
   // Disable pagination until it's fully functional.
   showBingPagination.mockReturnValue(false)
 
+  global.fetch.mockImplementation(() => Promise.resolve(mockFetchResponse()))
+})
+
+afterEach(() => {
   jest.clearAllMocks()
 })
 
@@ -97,11 +110,13 @@ describe('SearchResultsBing: tests for non-results display', () => {
     const SearchResultsBing = require('js/components/Search/SearchResultsBing')
       .default
     const mockProps = getMockProps()
-    mockProps.data = {
-      pole: [],
-      mainline: [],
-      sidebar: [],
-    }
+    mockProps.data = Object.assign({}, mockProps.data, {
+      results: {
+        pole: [],
+        mainline: [],
+        sidebar: [],
+      },
+    })
     mockProps.query = 'foo'
     mockProps.queryReturned = true
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
@@ -119,11 +134,13 @@ describe('SearchResultsBing: tests for non-results display', () => {
       .default
     const mockProps = getMockProps()
     mockProps.query = 'pizza'
-    mockProps.data = {
-      pole: [],
-      mainline: [],
-      sidebar: [],
-    }
+    mockProps.data = Object.assign({}, mockProps.data, {
+      results: {
+        pole: [],
+        mainline: [],
+        sidebar: [],
+      },
+    })
     mockProps.isError = false
     mockProps.isEmptyQuery = false
     mockProps.isQueryInProgress = true // waiting for a response
@@ -150,11 +167,13 @@ describe('SearchResultsBing: tests for non-results display', () => {
       .default
     const mockProps = getMockProps()
     mockProps.query = 'pizza'
-    mockProps.data = {
-      pole: [],
-      mainline: [],
-      sidebar: [],
-    }
+    mockProps.data = Object.assign({}, mockProps.data, {
+      results: {
+        pole: [],
+        mainline: [],
+        sidebar: [],
+      },
+    })
     mockProps.isError = false
     mockProps.isEmptyQuery = false
     mockProps.isQueryInProgress = false
@@ -182,11 +201,13 @@ describe('SearchResultsBing: tests for non-results display', () => {
     const mockProps = getMockProps()
     mockProps.query = 'this search will yield no results, sadly'
     mockProps.queryReturned = true
-    mockProps.data = {
-      pole: [],
-      mainline: [],
-      sidebar: [],
-    }
+    mockProps.data = Object.assign({}, mockProps.data, {
+      results: {
+        pole: [],
+        mainline: [],
+        sidebar: [],
+      },
+    })
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
     expect(wrapper.get(0).props.style.minHeight).toBe(0)
   })
@@ -198,11 +219,13 @@ describe('SearchResultsBing: tests for non-results display', () => {
     mockProps.query = 'tacos please'
     mockProps.isError = true
     mockProps.queryReturned = true
-    mockProps.data = {
-      pole: [],
-      mainline: [],
-      sidebar: [],
-    }
+    mockProps.data = Object.assign({}, mockProps.data, {
+      results: {
+        pole: [],
+        mainline: [],
+        sidebar: [],
+      },
+    })
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
     expect(wrapper.get(0).props.style.minHeight).toBe(0)
   })
@@ -224,11 +247,13 @@ describe('SearchResultsBing: tests for non-results display', () => {
     mockProps.query = 'foo'
     mockProps.isError = true
     mockProps.queryReturned = true
-    mockProps.data = {
-      pole: [],
-      mainline: [],
-      sidebar: [],
-    }
+    mockProps.data = Object.assign({}, mockProps.data, {
+      results: {
+        pole: [],
+        mainline: [],
+        sidebar: [],
+      },
+    })
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
     expect(wrapper.find(SearchResultErrorMessage).exists()).toBe(true)
     expect(
@@ -260,26 +285,28 @@ describe('SearchResultsBing: tests for non-results display', () => {
     mockProps.query = 'foo'
     mockProps.isError = true
     mockProps.queryReturned = true
-    mockProps.data = {
-      pole: [],
-      mainline: [
-        {
-          type: 'WebPages',
-          key: 'some-key-1',
-          value: {
-            data: 'here',
+    mockProps.data = Object.assign({}, mockProps.data, {
+      results: {
+        pole: [],
+        mainline: [
+          {
+            type: 'WebPages',
+            key: 'some-key-1',
+            value: {
+              data: 'here',
+            },
           },
-        },
-        {
-          type: 'WebPages',
-          key: 'some-key-2',
-          value: {
-            data: 'here',
+          {
+            type: 'WebPages',
+            key: 'some-key-2',
+            value: {
+              data: 'here',
+            },
           },
-        },
-      ],
-      sidebar: [],
-    }
+        ],
+        sidebar: [],
+      },
+    })
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
     expect(wrapper.find(SearchResultItem).exists()).toBe(false)
   })
@@ -311,26 +338,28 @@ describe('SearchResultsBing: tests for non-results display', () => {
     mockProps.isError = false
     mockProps.isEmptyQuery = true
     mockProps.queryReturned = true
-    mockProps.data = {
-      pole: [],
-      mainline: [
-        {
-          type: 'WebPages',
-          key: 'some-key-1',
-          value: {
-            data: 'here',
+    mockProps.data = Object.assign({}, mockProps.data, {
+      results: {
+        pole: [],
+        mainline: [
+          {
+            type: 'WebPages',
+            key: 'some-key-1',
+            value: {
+              data: 'here',
+            },
           },
-        },
-        {
-          type: 'WebPages',
-          key: 'some-key-2',
-          value: {
-            data: 'here',
+          {
+            type: 'WebPages',
+            key: 'some-key-2',
+            value: {
+              data: 'here',
+            },
           },
-        },
-      ],
-      sidebar: [],
-    }
+        ],
+        sidebar: [],
+      },
+    })
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
     expect(wrapper.find(SearchResultItem).exists()).toBe(false)
   })
@@ -383,26 +412,28 @@ describe('SearchResultsBing: tests for non-results display', () => {
     mockProps.isEmptyQuery = true
     mockProps.isQueryInProgress = false
     mockProps.queryReturned = true
-    mockProps.data = {
-      pole: [],
-      mainline: [
-        {
-          type: 'WebPages',
-          key: 'some-key-1',
-          value: {
-            data: 'here',
+    mockProps.data = Object.assign({}, mockProps.data, {
+      results: {
+        pole: [],
+        mainline: [
+          {
+            type: 'WebPages',
+            key: 'some-key-1',
+            value: {
+              data: 'here',
+            },
           },
-        },
-        {
-          type: 'WebPages',
-          key: 'some-key-2',
-          value: {
-            data: 'here',
+          {
+            type: 'WebPages',
+            key: 'some-key-2',
+            value: {
+              data: 'here',
+            },
           },
-        },
-      ],
-      sidebar: [],
-    }
+        ],
+        sidebar: [],
+      },
+    })
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
     expect(
       wrapper.find('[data-test-id="search-results-attribution"]').exists()
@@ -418,11 +449,13 @@ describe('SearchResultsBing: tests for non-results display', () => {
     mockProps.isEmptyQuery = false
     mockProps.isQueryInProgress = false
     mockProps.queryReturned = true
-    mockProps.data = {
-      pole: [],
-      mainline: [],
-      sidebar: [],
-    }
+    mockProps.data = Object.assign({}, mockProps.data, {
+      results: {
+        pole: [],
+        mainline: [],
+        sidebar: [],
+      },
+    })
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
     expect(
       wrapper.find('[data-test-id="search-results-attribution"]').exists()
@@ -475,26 +508,28 @@ describe('SearchResultsBing: tests for non-results display', () => {
     mockProps.isEmptyQuery = true
     mockProps.isQueryInProgress = false
     mockProps.queryReturned = true
-    mockProps.data = {
-      pole: [],
-      mainline: [
-        {
-          type: 'WebPages',
-          key: 'some-key-1',
-          value: {
-            data: 'here',
+    mockProps.data = Object.assign({}, mockProps.data, {
+      results: {
+        pole: [],
+        mainline: [
+          {
+            type: 'WebPages',
+            key: 'some-key-1',
+            value: {
+              data: 'here',
+            },
           },
-        },
-        {
-          type: 'WebPages',
-          key: 'some-key-2',
-          value: {
-            data: 'here',
+          {
+            type: 'WebPages',
+            key: 'some-key-2',
+            value: {
+              data: 'here',
+            },
           },
-        },
-      ],
-      sidebar: [],
-    }
+        ],
+        sidebar: [],
+      },
+    })
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
     expect(wrapper.find('[data-test-id="search-results-count"]').exists()).toBe(
       false
@@ -511,11 +546,13 @@ describe('SearchResultsBing: tests for non-results display', () => {
     mockProps.isEmptyQuery = false
     mockProps.isQueryInProgress = false
     mockProps.queryReturned = true
-    mockProps.data = {
-      pole: [],
-      mainline: [],
-      sidebar: [],
-    }
+    mockProps.data = Object.assign({}, mockProps.data, {
+      results: {
+        pole: [],
+        mainline: [],
+        sidebar: [],
+      },
+    })
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
     expect(wrapper.find('[data-test-id="search-results-count"]').exists()).toBe(
       false
@@ -538,8 +575,10 @@ describe('SearchResultsBing: tests for displaying search results', () => {
     const mockProps = getMockProps()
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
     const elem = wrapper.find(SearchResultItem).first()
-    expect(elem.prop('type')).toEqual(mockProps.data.mainline[0].type)
-    expect(elem.prop('itemData')).toEqual(mockProps.data.mainline[0].value)
+    expect(elem.prop('type')).toEqual(mockProps.data.results.mainline[0].type)
+    expect(elem.prop('itemData')).toEqual(
+      mockProps.data.results.mainline[0].value
+    )
   })
 
   it('passes the expected data to the second search result item', () => {
@@ -548,8 +587,10 @@ describe('SearchResultsBing: tests for displaying search results', () => {
     const mockProps = getMockProps()
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
     const elem = wrapper.find(SearchResultItem).at(1)
-    expect(elem.prop('type')).toEqual(mockProps.data.mainline[1].type)
-    expect(elem.prop('itemData')).toEqual(mockProps.data.mainline[1].value)
+    expect(elem.prop('type')).toEqual(mockProps.data.results.mainline[1].type)
+    expect(elem.prop('itemData')).toEqual(
+      mockProps.data.results.mainline[1].value
+    )
   })
 })
 
@@ -615,11 +656,13 @@ describe('SearchResultsBing: tests for pagination', () => {
       .default
     const mockProps = getMockProps()
     mockProps.query = 'pizza'
-    mockProps.data = {
-      pole: [],
-      mainline: [],
-      sidebar: [],
-    }
+    mockProps.data = Object.assign({}, mockProps.data, {
+      results: {
+        pole: [],
+        mainline: [],
+        sidebar: [],
+      },
+    })
     mockProps.isError = false
     mockProps.isEmptyQuery = false
     mockProps.isQueryInProgress = true // waiting for a response
@@ -636,26 +679,28 @@ describe('SearchResultsBing: tests for pagination', () => {
       .default
     const mockProps = getMockProps()
     mockProps.query = 'pizza'
-    mockProps.data = {
-      pole: [],
-      mainline: [
-        {
-          type: 'WebPages',
-          key: 'some-key-1',
-          value: {
-            data: 'here',
+    mockProps.data = Object.assign({}, mockProps.data, {
+      results: {
+        pole: [],
+        mainline: [
+          {
+            type: 'WebPages',
+            key: 'some-key-1',
+            value: {
+              data: 'here',
+            },
           },
-        },
-        {
-          type: 'WebPages',
-          key: 'some-key-2',
-          value: {
-            data: 'here',
+          {
+            type: 'WebPages',
+            key: 'some-key-2',
+            value: {
+              data: 'here',
+            },
           },
-        },
-      ],
-      sidebar: [],
-    }
+        ],
+        sidebar: [],
+      },
+    })
     mockProps.isError = false
     mockProps.isEmptyQuery = false
     mockProps.isQueryInProgress = true // waiting for a response
@@ -672,11 +717,13 @@ describe('SearchResultsBing: tests for pagination', () => {
       .default
     const mockProps = getMockProps()
     mockProps.query = 'pizza'
-    mockProps.data = {
-      pole: [],
-      mainline: [],
-      sidebar: [],
-    }
+    mockProps.data = Object.assign({}, mockProps.data, {
+      results: {
+        pole: [],
+        mainline: [],
+        sidebar: [],
+      },
+    })
     mockProps.isError = false
     mockProps.isEmptyQuery = false
     mockProps.isQueryInProgress = false
@@ -923,5 +970,90 @@ describe('SearchResultsBing: tests for pagination', () => {
         .first()
         .prop('style')
     ).toHaveProperty('color', 'rgba(0, 0, 0, 0.87)')
+  })
+})
+
+describe('SearchResultsBing: tests for the Bing page load ping', () => {
+  it('calls the pageLoadPingUrl once when search results load', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    mount(<SearchResultsBing {...mockProps} />)
+    expect(fetch).toHaveBeenCalledWith(
+      'https://www.bingapis.com/api/ping/pageload?Some=Data&Type=Thing'
+    )
+    expect(fetch).toHaveBeenCalledTimes(1)
+  })
+
+  it('calls the pageLoadPingUrl again if it changes', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.data.instrumentation.pageLoadPingUrl =
+      'https://www.bingapis.com/api/ping/pageload?numeroUno'
+    const wrapper = mount(<SearchResultsBing {...mockProps} />)
+    expect(fetch).toHaveBeenCalledWith(
+      'https://www.bingapis.com/api/ping/pageload?numeroUno'
+    )
+    expect(fetch).toHaveBeenCalledTimes(1)
+    wrapper.setProps({
+      data: {
+        ...mockProps.data,
+        instrumentation: {
+          ...mockProps.data.instrumentation,
+          pageLoadPingUrl:
+            'https://www.bingapis.com/api/ping/pageload?numeroDos',
+        },
+      },
+    })
+    expect(fetch).toHaveBeenCalledWith(
+      'https://www.bingapis.com/api/ping/pageload?numeroDos'
+    )
+    expect(fetch).toHaveBeenCalledTimes(2)
+  })
+
+  it('does not call the pageLoadPingUrl more than once when other props change', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = mount(<SearchResultsBing {...mockProps} />)
+    expect(fetch).toHaveBeenCalledTimes(1)
+    wrapper.setProps({ someProps: 'foo' })
+    wrapper.update()
+    expect(fetch).toHaveBeenCalledTimes(1)
+  })
+
+  it('does not call the pageLoadPingUrl when search results have not loaded', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.data = Object.assign({}, mockProps.data, {
+      results: {
+        pole: [],
+        mainline: [],
+        sidebar: [],
+      },
+    })
+    mockProps.query = 'foo'
+    mockProps.queryReturned = true
+    mount(<SearchResultsBing {...mockProps} />)
+    expect(fetch).not.toHaveBeenCalled()
+  })
+
+  it('does not call the pageLoadPingUrl when it does not exist', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    mockProps.data.instrumentation = {}
+    mount(<SearchResultsBing {...mockProps} />)
+    expect(fetch).not.toHaveBeenCalled()
+  })
+
+  it('does not throw an error if `fetch` throws', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    fetch.mockImplementation(() => Promise.reject('My bad.'))
+    mount(<SearchResultsBing {...mockProps} />)
   })
 })
