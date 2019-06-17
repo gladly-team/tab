@@ -195,5 +195,19 @@
     "updated": "2019-05-23T18:00:000Z",
     "inactive": false,
     "isPermanentPartner": false
+  },
+  {
+    "id": "4d951126-b0dc-42fd-acb5-a2eff158cca6",
+    "name": "Sea Turtle Inc",
+    "category": "Animals",
+    "logo": "placeholder.png",
+    "image": "sea-turtle-inc.jpg",
+    "website": "https://www.seaturtleinc.org",
+    "impact": "Together, we can help Sea Turtle Inc continue their work rescuing and rehabilitating injured sea turtles. Thanks for your support!",
+    "description": "Rescues sea turtles and assists with marine conservation efforts",
+    "created": "2019-06-17T18:00:000Z",
+    "updated": "2019-06-17T18:00:000Z",
+    "inactive": false,
+    "isPermanentPartner": false
   }
 ]

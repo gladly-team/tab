@@ -45,7 +45,7 @@ class CampaignBase extends React.Component {
                   marginTop: 4,
                 }}
               >
-                Thanks for Helping our 4-Pawed Friends!
+                Thanks for Helping our Turtle Friends!
               </Typography>
               <div
                 style={{
@@ -56,15 +56,15 @@ class CampaignBase extends React.Component {
                 <Typography variant={'body2'} gutterBottom>
                   With your help,{' '}
                   <a
-                    href="http://www.friendswithfourpaws.org"
+                    href="https://www.seaturtleinc.org/about-us/"
                     target="_blank"
                     rel="noopener noreferrer"
                     style={anchorStyle}
                   >
-                    Friends with Four Paws
+                    Sea Turtle Inc
                   </a>{' '}
-                  will continue their work rescuing cats and dogs by finding
-                  them wonderful new homes. Thank you!{' '}
+                  will continue their work rescuing sea turtles and assisting
+                  with marine turtle conservation efforts.{' '}
                 </Typography>
                 <Typography>
                   <span style={{ fontWeight: 'bold' }}>
@@ -104,7 +104,7 @@ class CampaignBase extends React.Component {
             marginTop: 4,
           }}
         >
-          May Spotlight: Friends with Four Paws
+          June Spotlight: Sea Turtle Inc
         </Typography>
         <div
           style={{
@@ -115,14 +115,14 @@ class CampaignBase extends React.Component {
           <Typography variant={'body2'} gutterBottom>
             This month, Tabbers selected{' '}
             <a
-              href="http://www.friendswithfourpaws.org"
+              href="https://www.seaturtleinc.org/about-us/"
               target="_blank"
               rel="noopener noreferrer"
               style={anchorStyle}
             >
-              Friends with Four Paws
+              Sea Turtle Inc
             </a>{' '}
-            for our May{' '}
+            for our June{' '}
             <a
               href="https://www.facebook.com/notes/tab-for-a-cause/introducing-monthly-charity-spotlight/2071986076177802/"
               target="_blank"
@@ -131,12 +131,37 @@ class CampaignBase extends React.Component {
             >
               Charity Spotlight
             </a>
-            . Friends with Four Paws rescues animals by providing foster care
-            and then matching the animals to loving homes through their mobile
-            adoption locations.
+            . Sea Turtle Inc’s mission is to rescue and{' '}
+            <a
+              href="http://www.seaturtleinc.org/rehabilitation/"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={anchorStyle}
+            >
+              rehabilitate
+            </a>{' '}
+            injured sea turtles for release back into the wild,{' '}
+            <a
+              href="http://www.seaturtleinc.org/education/"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={anchorStyle}
+            >
+              educate
+            </a>{' '}
+            the public, and assist with{' '}
+            <a
+              href="http://www.seaturtleinc.org/conservation/"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={anchorStyle}
+            >
+              conservation
+            </a>{' '}
+            efforts for all marine turtle species.
           </Typography>
           <Typography variant={'body2'} gutterBottom>
-            Join us in supporting Friends with Four Paws!
+            Join us in supporting Sea Turtle Inc!
           </Typography>
         </div>
       </HeartDonationCampaign>
