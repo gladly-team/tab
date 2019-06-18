@@ -81,7 +81,7 @@ function initApstag() {
 
   return new Promise((resolve, reject) => {
     apstag.init({
-      pubID: '3397',
+      pubID: 'ea374841-51b0-4335-9960-99200427f7c8',
       adServer: 'googletag',
       gdpr: {
         cmpTimeout: CONSENT_MANAGEMENT_TIMEOUT,
