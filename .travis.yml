@@ -191,7 +191,7 @@ env:
   - secure: qlZ0YAeyIPNqdc3mNYMuvzpsYidLk4fooBpbEGCyeU9l+9OPzrZDc6Cut5p9g8jk6pw6OuCGd+gdKhgoKh/XoW7S5u1EVfu6Ggmoy3jZJKfouKHVnRsrnFlUj1mnP9Q0qI6IZy8mXeEvJlQUtZ5j2VWt3LfH59iK8sALtkFpbQfmeFYV71AGjKlUFm1F68cKph3qPbbjGgGtrCbprLOHcpzLjEQLBhLl7zSgEE/eubwzeGHJKW1x1iCxrT8rn8ryBJZJRDOPPKZ/dX52VsJjHBxa/WZY0riocs5WYh5imQNGHt2sVrAdWuvXzGlPnDDKKGR3QMAxEUXPaT0Gq4VZz9/Xm6WgDdQRT01XFbztmZfSmQCnajpv2RfCdU0HLdZt0LN5mQGXP+Iekngk3AOJxw7yEfVgMN1xEU0NxGHrTqiXMcXQQDgybM2X7lLo/MiwViyNmKODzKJUoN5mDp5J3ORSGFymQ4y16eltkiWuZcynN2WIeEsKcM+OX8+savK/Rl7htWkdFh+AkBQHXXX8k3LdRDrS7IOPkAjtQQFmGoMMfPTkTyX395BUgpT8c1gvE9eiJC5OkVIyQ1ebNTx8HEcpAUwIRfR12icX6jC+eW+qhaaHW1MKSTCN9vl5o3Ug12RjfLlTFAvAs//XjJrOklyAdbikV8HU7AtHQF24ny4=
 before_install:
   # Decrypt amazon-cpm-codes.json
-  - openssl aes-256-cbc -K $encrypted_a337bde16f21_key -iv $encrypted_a337bde16f21_iv
+  - openssl aes-256-cbc -K $encrypted_588fdee4d9e2_key -iv $encrypted_588fdee4d9e2_iv
     -in ./graphql/database/userRevenue/amazon-cpm-codes-v2.json.enc
     -out ./graphql/database/userRevenue/amazon-cpm-codes.json
     -d
