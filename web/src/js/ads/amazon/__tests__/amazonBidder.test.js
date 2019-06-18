@@ -48,7 +48,7 @@ describe('amazonBidder', () => {
     await amazonBidder()
 
     expect(apstag.init.mock.calls[0][0]).toMatchObject({
-      pubID: '3397',
+      pubID: 'ea374841-51b0-4335-9960-99200427f7c8',
       adServer: 'googletag',
     })
   })
