@@ -192,7 +192,7 @@ env:
 before_install:
   # Decrypt amazon-cpm-codes.json
   - openssl aes-256-cbc -K $encrypted_a337bde16f21_key -iv $encrypted_a337bde16f21_iv
-    -in ./graphql/database/userRevenue/amazon-cpm-codes.json.enc
+    -in ./graphql/database/userRevenue/amazon-cpm-codes-v2.json.enc
     -out ./graphql/database/userRevenue/amazon-cpm-codes.json
     -d
   # Install Yarn
