@@ -62,6 +62,8 @@ class HeartsComponent extends React.Component {
     } = this.props
     const { isHovering, isPopoverOpen } = this.state
     const anchorElement = this.anchorElement
+
+    // TODO: use this for search rate limit
     console.log('searchRateLimit', user.searchRateLimit)
 
     // Let the user know they aren't earning any more Hearts from
@@ -193,6 +195,7 @@ HeartsComponent.displayName = 'HeartsComponent'
 HeartsComponent.propTypes = {
   classes: PropTypes.object.isRequired,
   user: PropTypes.shape({
+    // TODO: to reduce DB load, may only want to fetch when logging search
     searchRateLimit: PropTypes.shape({
       limitReached: PropTypes.bool.isRequired,
       reason: PropTypes.string,
