@@ -62,6 +62,7 @@ class HeartsComponent extends React.Component {
     } = this.props
     const { isHovering, isPopoverOpen } = this.state
     const anchorElement = this.anchorElement
+    console.log('searchRateLimit', user.searchRateLimit)
 
     // Let the user know they aren't earning any more Hearts from
     // tabs or searches today.
@@ -192,6 +193,10 @@ HeartsComponent.displayName = 'HeartsComponent'
 HeartsComponent.propTypes = {
   classes: PropTypes.object.isRequired,
   user: PropTypes.shape({
+    searchRateLimit: PropTypes.shape({
+      limitReached: PropTypes.bool.isRequired,
+      reason: PropTypes.string,
+    }),
     searchesToday: PropTypes.number.isRequired,
     tabsToday: PropTypes.number.isRequired,
     vcCurrent: PropTypes.number.isRequired,

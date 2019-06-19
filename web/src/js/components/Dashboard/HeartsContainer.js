@@ -12,6 +12,10 @@ export default createFragmentContainer(Hearts, {
   user: graphql`
     fragment HeartsContainer_user on User {
       vcCurrent
+      searchRateLimit {
+        limitReached
+        reason
+      }
       searchesToday
       tabsToday
       ...HeartsDropdownContainer_user
