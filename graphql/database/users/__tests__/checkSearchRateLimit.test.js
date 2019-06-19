@@ -17,9 +17,9 @@ jest.mock('../../databaseClient')
 const userContext = getMockUserContext()
 const mockCurrentTime = '2017-06-22T01:13:28.000Z'
 
-const MAX_SEARCHES_ONE_MINUTE = 6
-const MAX_SEARCHES_FIVE_MINUTES = 15
-const MAX_SEARCHES_ONE_DAY = 150
+const MAX_SEARCHES_ONE_MINUTE = 5
+const MAX_SEARCHES_FIVE_MINUTES = 12
+const MAX_SEARCHES_ONE_DAY = 40
 
 const createMockSearchLogItem = item =>
   Object.assign(

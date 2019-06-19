@@ -5,9 +5,9 @@ import UserSearchLogModel from './UserSearchLogModel'
 import UserModel from './UserModel'
 import { getTodaySearchCount } from './user-utils'
 
-const MAX_SEARCHES_ONE_MINUTE = 6
-const MAX_SEARCHES_FIVE_MINUTES = 15
-const MAX_SEARCHES_ONE_DAY = 150
+const MAX_SEARCHES_ONE_MINUTE = 5
+const MAX_SEARCHES_FIVE_MINUTES = 12
+const MAX_SEARCHES_ONE_DAY = 40
 
 const LIMIT_REASON_ONE_MINUTE_MAX = 'ONE_MINUTE_MAX'
 const LIMIT_REASON_FIVE_MINUTE_MAX = 'FIVE_MINUTE_MAX'
