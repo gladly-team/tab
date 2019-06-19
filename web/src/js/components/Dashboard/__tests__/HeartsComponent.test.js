@@ -14,14 +14,13 @@ import { mountWithHOC } from 'js/utils/test-utils'
 jest.mock('js/components/Dashboard/HeartsDropdownContainer')
 jest.mock('js/components/Dashboard/MaxHeartsDropdownMessageComponent')
 jest.mock('js/constants', () => ({
-  MAX_DAILY_HEARTS_FROM_SEARCHES: 1000,
   MAX_DAILY_HEARTS_FROM_TABS: 1000,
 }))
 
 const getMockProps = () => ({
   user: {
-    searchesToday: 0,
-    tabsToday: 31,
+    searchRateLimit: undefined,
+    tabsToday: undefined,
     vcCurrent: 482,
   },
   showMaxHeartsFromSearchesMessage: false,
@@ -115,7 +114,9 @@ describe('HeartsComponent', () => {
       .default
     const mockProps = getMockProps()
     mockProps.showMaxHeartsFromSearchesMessage = true
-    mockProps.user.searchesToday = 999
+    mockProps.user.searchRateLimit = {
+      limitReached: false,
+    }
     const wrapper = shallow(<HeartsComponent {...mockProps} />).dive()
     expect(wrapper.find(CheckmarkIcon).exists()).toBe(false)
   })
@@ -125,7 +126,9 @@ describe('HeartsComponent', () => {
       .default
     const mockProps = getMockProps()
     mockProps.showMaxHeartsFromSearchesMessage = true
-    mockProps.user.searchesToday = 1000
+    mockProps.user.searchRateLimit = {
+      limitReached: true,
+    }
     const wrapper = shallow(<HeartsComponent {...mockProps} />).dive()
     expect(wrapper.find(CheckmarkIcon).exists()).toBe(true)
   })
@@ -135,7 +138,9 @@ describe('HeartsComponent', () => {
       .default
     const mockProps = getMockProps()
     mockProps.showMaxHeartsFromSearchesMessage = false
-    mockProps.user.searchesToday = 1000
+    mockProps.user.searchRateLimit = {
+      limitReached: true,
+    }
     const wrapper = shallow(<HeartsComponent {...mockProps} />).dive()
     expect(wrapper.find(CheckmarkIcon).exists()).toBe(false)
   })
@@ -184,7 +189,9 @@ describe('HeartsComponent', () => {
       .default
     const mockProps = getMockProps()
     mockProps.showMaxHeartsFromSearchesMessage = true
-    mockProps.user.searchesToday = 999
+    mockProps.user.searchRateLimit = {
+      limitReached: false,
+    }
     const wrapper = shallow(<HeartsComponent {...mockProps} />).dive()
     wrapper.find('[data-tour-id="hearts"]').simulate('mouseenter')
     expect(wrapper.find(MaxHeartsDropdownMessageComponent).prop('open')).toBe(
@@ -197,7 +204,9 @@ describe('HeartsComponent', () => {
       .default
     const mockProps = getMockProps()
     mockProps.showMaxHeartsFromSearchesMessage = true
-    mockProps.user.searchesToday = 1000
+    mockProps.user.searchRateLimit = {
+      limitReached: true,
+    }
     const wrapper = shallow(<HeartsComponent {...mockProps} />).dive()
     wrapper.find('[data-tour-id="hearts"]').simulate('mouseenter')
     expect(wrapper.find(MaxHeartsDropdownMessageComponent).prop('open')).toBe(
@@ -210,7 +219,9 @@ describe('HeartsComponent', () => {
       .default
     const mockProps = getMockProps()
     mockProps.showMaxHeartsFromSearchesMessage = false
-    mockProps.user.searchesToday = 1000
+    mockProps.user.searchRateLimit = {
+      limitReached: true,
+    }
     const wrapper = shallow(<HeartsComponent {...mockProps} />).dive()
     wrapper.find('[data-tour-id="hearts"]').simulate('mouseenter')
     expect(wrapper.find(MaxHeartsDropdownMessageComponent).prop('open')).toBe(
@@ -247,7 +258,7 @@ describe('HeartsComponent', () => {
     expect(
       wrapper.find(MaxHeartsDropdownMessageComponent).prop('message')
     ).toBe(
-      `You've earned the maximum Hearts from opening tabs today! You'll be able to earn more Hearts in a while.`
+      `You've earned the maximum Hearts from opening tabs for now! You'll be able to earn more Hearts in a while.`
     )
   })
 
@@ -256,13 +267,15 @@ describe('HeartsComponent', () => {
       .default
     const mockProps = getMockProps()
     mockProps.showMaxHeartsFromSearchesMessage = true
-    mockProps.user.searchesToday = 1000
+    mockProps.user.searchRateLimit = {
+      limitReached: true,
+    }
     const wrapper = shallow(<HeartsComponent {...mockProps} />).dive()
     wrapper.find('[data-tour-id="hearts"]').simulate('mouseenter')
     expect(
       wrapper.find(MaxHeartsDropdownMessageComponent).prop('message')
     ).toBe(
-      `You've earned the maximum Hearts from searching today! You'll be able to earn more Hearts in a while.`
+      `You've earned the maximum Hearts from searching for now! You'll be able to earn more Hearts in a while.`
     )
   })
 
@@ -273,7 +286,9 @@ describe('HeartsComponent', () => {
     mockProps.showMaxHeartsFromTabsMessage = true
     mockProps.user.tabsToday = 1000
     mockProps.showMaxHeartsFromSearchesMessage = true
-    mockProps.user.searchesToday = 1000
+    mockProps.user.searchRateLimit = {
+      limitReached: true,
+    }
     const wrapper = shallow(<HeartsComponent {...mockProps} />).dive()
     wrapper.find('[data-tour-id="hearts"]').simulate('mouseenter')
     expect(

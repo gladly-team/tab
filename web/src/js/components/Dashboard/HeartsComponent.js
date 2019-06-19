@@ -66,9 +66,13 @@ class HeartsComponent extends React.Component {
       ? user.tabsToday >= MAX_DAILY_HEARTS_FROM_TABS
       : false
 
-    // TODO: use this for search rate limit
-    console.log('searchRateLimit', user.searchRateLimit)
-    const reachedMaxDailyHeartsFromSearches = false
+    const reachedMaxDailyHeartsFromSearches = user.searchRateLimit
+      ? user.searchRateLimit.limitReached
+      : false
+
+    const isRateLimitedHearts =
+      (showMaxHeartsFromTabsMessage && reachedMaxDailyHeartsFromTabs) ||
+      (showMaxHeartsFromSearchesMessage && reachedMaxDailyHeartsFromSearches)
     return (
       <div>
         <ButtonBase className={classes.buttonBase}>
@@ -128,10 +132,7 @@ class HeartsComponent extends React.Component {
                 }}
                 className={classes.heartIcon}
               />
-              {(showMaxHeartsFromTabsMessage &&
-                reachedMaxDailyHeartsFromTabs) ||
-              (showMaxHeartsFromSearchesMessage &&
-                reachedMaxDailyHeartsFromSearches) ? (
+              {isRateLimitedHearts ? (
                 <CheckmarkIcon
                   style={{
                     color:
@@ -164,21 +165,15 @@ class HeartsComponent extends React.Component {
           }}
         />
         <MaxHeartsDropdownMessageComponent
-          open={
-            ((showMaxHeartsFromTabsMessage && reachedMaxDailyHeartsFromTabs) ||
-              (showMaxHeartsFromSearchesMessage &&
-                reachedMaxDailyHeartsFromSearches)) &&
-            isHovering &&
-            !isPopoverOpen
-          }
+          open={isRateLimitedHearts && isHovering && !isPopoverOpen}
           anchorElement={anchorElement}
           message={
             reachedMaxDailyHeartsFromTabs && reachedMaxDailyHeartsFromSearches
               ? `You've earned the maximum Hearts for now. You'll be able to earn more Hearts in a while.`
               : reachedMaxDailyHeartsFromTabs
-              ? `You've earned the maximum Hearts from opening tabs today! You'll be able to earn more Hearts in a while.`
+              ? `You've earned the maximum Hearts from opening tabs for now! You'll be able to earn more Hearts in a while.`
               : reachedMaxDailyHeartsFromSearches
-              ? `You've earned the maximum Hearts from searching today! You'll be able to earn more Hearts in a while.`
+              ? `You've earned the maximum Hearts from searching for now! You'll be able to earn more Hearts in a while.`
               : `You've earned the maximum Hearts for now.`
           }
         />
@@ -192,7 +187,6 @@ HeartsComponent.displayName = 'HeartsComponent'
 HeartsComponent.propTypes = {
   classes: PropTypes.object.isRequired,
   user: PropTypes.shape({
-    // TODO: to reduce DB load, may only want to fetch when logging search
     searchRateLimit: PropTypes.shape({
       limitReached: PropTypes.bool.isRequired,
       reason: PropTypes.string,
