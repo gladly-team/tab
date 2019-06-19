@@ -7,10 +7,7 @@ import HeartBorderIcon from '@material-ui/icons/FavoriteBorder'
 import CheckmarkIcon from '@material-ui/icons/Done'
 import Typography from '@material-ui/core/Typography'
 import { commaFormatted } from 'js/utils/utils'
-import {
-  MAX_DAILY_HEARTS_FROM_SEARCHES,
-  MAX_DAILY_HEARTS_FROM_TABS,
-} from 'js/constants'
+import { MAX_DAILY_HEARTS_FROM_TABS } from 'js/constants'
 import HeartsDropdown from 'js/components/Dashboard/HeartsDropdownContainer'
 import MaxHeartsDropdownMessageComponent from 'js/components/Dashboard/MaxHeartsDropdownMessageComponent'
 
@@ -63,15 +60,15 @@ class HeartsComponent extends React.Component {
     const { isHovering, isPopoverOpen } = this.state
     const anchorElement = this.anchorElement
 
-    // TODO: use this for search rate limit
-    console.log('searchRateLimit', user.searchRateLimit)
-
     // Let the user know they aren't earning any more Hearts from
     // tabs or searches today.
-    const reachedMaxDailyHeartsFromTabs =
-      user.tabsToday >= MAX_DAILY_HEARTS_FROM_TABS
-    const reachedMaxDailyHeartsFromSearches =
-      user.searchesToday >= MAX_DAILY_HEARTS_FROM_SEARCHES
+    const reachedMaxDailyHeartsFromTabs = user.tabsToday
+      ? user.tabsToday >= MAX_DAILY_HEARTS_FROM_TABS
+      : false
+
+    // TODO: use this for search rate limit
+    console.log('searchRateLimit', user.searchRateLimit)
+    const reachedMaxDailyHeartsFromSearches = false
     return (
       <div>
         <ButtonBase className={classes.buttonBase}>
@@ -200,8 +197,7 @@ HeartsComponent.propTypes = {
       limitReached: PropTypes.bool.isRequired,
       reason: PropTypes.string,
     }),
-    searchesToday: PropTypes.number.isRequired,
-    tabsToday: PropTypes.number.isRequired,
+    tabsToday: PropTypes.number,
     vcCurrent: PropTypes.number.isRequired,
   }),
   showMaxHeartsFromSearchesMessage: PropTypes.bool,

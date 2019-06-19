@@ -3,13 +3,13 @@
 import React from 'react'
 import { mount, shallow } from 'enzyme'
 import { MuiThemeProvider } from '@material-ui/core/styles'
-import Hearts from 'js/components/Dashboard/HeartsContainer'
+import Hearts from 'js/components/Search/SearchHeartsContainer'
 import CircleIcon from '@material-ui/icons/Lens'
 import SettingsButton from 'js/components/Dashboard/SettingsButtonComponent'
 import MoneyRaised from 'js/components/MoneyRaised/MoneyRaisedContainer'
 
 jest.mock('react-relay')
-jest.mock('js/components/Dashboard/HeartsContainer')
+jest.mock('js/components/Search/SearchHeartsContainer')
 jest.mock('js/components/Dashboard/SettingsButtonComponent')
 jest.mock('js/components/MoneyRaised/MoneyRaisedContainer')
 
