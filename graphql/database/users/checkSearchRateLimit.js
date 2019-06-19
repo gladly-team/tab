@@ -74,6 +74,13 @@ const getSearchLogs = async (userContext, userId, time = {}) => {
  *   bot, and we should chec,k
  */
 const checkSearchRateLimit = async (userContext, userId) => {
+  // Validate the required parameters.
+  if (!(userContext && userId)) {
+    throw new Error(
+      'checkSearchRateLimit requires params "userContext" and "userId".'
+    )
+  }
+
   const now = moment.utc()
   const time = {
     start: now

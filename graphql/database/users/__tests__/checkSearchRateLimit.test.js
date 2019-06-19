@@ -400,4 +400,21 @@ describe('checkSearchRateLimit', () => {
       checkIfHuman: false,
     })
   })
+
+  it('throws if the userContext parameter is not provided', async () => {
+    expect.assertions(1)
+    const userId = getMockUserInfo().id
+    const checkSearchRateLimit = require('../checkSearchRateLimit').default
+    await expect(checkSearchRateLimit(null, userId)).rejects.toThrow(
+      'checkSearchRateLimit requires params "userContext" and "userId".'
+    )
+  })
+
+  it('throws if the userId parameter is not provided', async () => {
+    expect.assertions(1)
+    const checkSearchRateLimit = require('../checkSearchRateLimit').default
+    await expect(checkSearchRateLimit(userContext, null)).rejects.toThrow(
+      'checkSearchRateLimit requires params "userContext" and "userId".'
+    )
+  })
 })
