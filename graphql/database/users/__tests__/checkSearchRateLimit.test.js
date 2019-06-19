@@ -85,16 +85,16 @@ describe('checkSearchRateLimit', () => {
 
     expect(queryMock.mock.calls[0][0]).toEqual({
       ExpressionAttributeNames: {
-        '#created': 'created',
+        '#timestamp': 'timestamp',
         '#userId': 'userId',
       },
       ExpressionAttributeValues: {
-        ':created': '2017-06-22T01:03:28.000Z', // 10 minutes earlier
-        ':created_2': '2017-06-22T01:13:28.000Z',
+        ':timestamp': '2017-06-22T01:03:28.000Z', // 10 minutes earlier
+        ':timestamp_2': '2017-06-22T01:13:28.000Z',
         ':userId': userId,
       },
       KeyConditionExpression:
-        '(#created BETWEEN :created AND :created_2) AND (#userId = :userId)',
+        '(#timestamp BETWEEN :timestamp AND :timestamp_2) AND (#userId = :userId)',
       TableName: UserSearchLogModel.tableName,
     })
   })

@@ -49,11 +49,11 @@ const getSearchLogs = async (userContext, userId, time = {}) => {
 
   // Filter by time.start and/or time.end, if provided
   if (time.start && time.end) {
-    searchLogsQuery.where('created').between(time.start, time.end)
+    searchLogsQuery.where('timestamp').between(time.start, time.end)
   } else if (time.start) {
-    searchLogsQuery.where('created').gte(time.start)
+    searchLogsQuery.where('timestamp').gte(time.start)
   } else if (time.end) {
-    searchLogsQuery.where('created').lte(time.end)
+    searchLogsQuery.where('timestamp').lte(time.end)
   }
   return searchLogsQuery.execute()
 }

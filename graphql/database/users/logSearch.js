@@ -2,9 +2,8 @@ import moment from 'moment'
 import UserModel from './UserModel'
 import UserSearchLogModel from './UserSearchLogModel'
 import addVc from './addVc'
+import checkSearchRateLimit from './checkSearchRateLimit'
 import { getTodaySearchCount } from './user-utils'
-
-const MAX_DAILY_HEARTS_FROM_SEARCHES = 150
 
 /**
  * Log a user's search event and change related stats.
@@ -20,16 +19,12 @@ const logSearch = async (userContext, userId, searchData = {}) => {
     throw e
   }
 
-  // Limit how many hearts from searches a user can earn in
-  // one day to prevent abuse.
-  const todaySearchCount = getTodaySearchCount(user) + 1
-  const isHeartEarned = todaySearchCount <= MAX_DAILY_HEARTS_FROM_SEARCHES
-
   // Update the user's counter for max searches in a day.
   // If this is the user's first search today, reset the counter
   // for the user's "current day" search count.
   // If today is also the day of all time max searches,
   // update the max searches day value.
+  const todaySearchCount = getTodaySearchCount(user) + 1
   const isTodayMax = todaySearchCount >= user.maxSearchesDay.maxDay.numSearches
   const maxSearchesDayVal = {
     maxDay: {
@@ -47,7 +42,10 @@ const logSearch = async (userContext, userId, searchData = {}) => {
   }
 
   try {
-    if (isHeartEarned) {
+    // Limit how many hearts from searches a user can earn, to
+    // prevent abuse.
+    const { limitReached } = await checkSearchRateLimit(userContext, userId)
+    if (!limitReached) {
       user = await addVc(userContext, userId, 1)
     }
 
