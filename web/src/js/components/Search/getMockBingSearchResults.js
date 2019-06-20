@@ -16,6 +16,7 @@ export default () =>
         adultIntent: false,
       },
       ads: {
+        readLink: 'https://www.bingapis.com/some-readlink/',
         value: [
           {
             _type: 'Ads/TextAd',
