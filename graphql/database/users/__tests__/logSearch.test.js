@@ -4,10 +4,12 @@ import moment from 'moment'
 import UserModel from '../UserModel'
 import UserSearchLogModel from '../UserSearchLogModel'
 import logSearch from '../logSearch'
+import checkSearchRateLimit from '../checkSearchRateLimit'
 import addVc from '../addVc'
 import {
   DatabaseOperation,
   addTimestampFieldsToItem,
+  clearAllMockDBResponses,
   getMockUserContext,
   getMockUserInstance,
   mockDate,
@@ -16,9 +18,21 @@ import {
 
 jest.mock('../../databaseClient')
 jest.mock('../addVc')
+jest.mock('../checkSearchRateLimit')
 
 const userContext = getMockUserContext()
 const mockCurrentTime = '2017-06-22T01:13:28.000Z'
+
+const mockCheckSearchRateLimitResponse = overrides =>
+  Object.assign(
+    {},
+    {
+      limitReached: false,
+      reason: 'NONE',
+      checkIfHuman: false,
+    },
+    overrides
+  )
 
 beforeAll(() => {
   mockDate.on(mockCurrentTime, {
@@ -28,10 +42,12 @@ beforeAll(() => {
 
 beforeEach(() => {
   jest.clearAllMocks()
+  checkSearchRateLimit.mockResolvedValue(mockCheckSearchRateLimitResponse())
 })
 
 afterAll(() => {
   mockDate.off()
+  clearAllMockDBResponses()
 })
 
 describe('logSearch', () => {
@@ -48,13 +64,22 @@ describe('logSearch', () => {
         },
         recentDay: {
           date: moment.utc().toISOString(),
-          numSearches: 148, // valid: below daily maximum
+          numSearches: 148,
         },
       },
     })
     setMockDBResponse(DatabaseOperation.GET, {
       Item: mockUser,
     })
+
+    // Mock that the user SHOULD receive a heart.
+    checkSearchRateLimit.mockResolvedValue(
+      mockCheckSearchRateLimitResponse({
+        limitReached: false,
+        reason: 'NONE',
+      })
+    )
+
     const updateMethod = jest
       .spyOn(UserModel, 'update')
       .mockImplementationOnce(() => mockUser)
@@ -82,7 +107,7 @@ describe('logSearch', () => {
     })
   })
 
-  test('it logs the search for analytics', async () => {
+  test('when the user has reached a VC limit, it does not increment the VC', async () => {
     expect.assertions(1)
 
     const userId = userContext.id
@@ -95,13 +120,42 @@ describe('logSearch', () => {
         },
         recentDay: {
           date: moment.utc().toISOString(),
-          numSearches: 148, // valid: below daily maximum
+          numSearches: 148,
         },
       },
     })
     setMockDBResponse(DatabaseOperation.GET, {
       Item: mockUser,
     })
+
+    // Mock that the user should NOT receive a heart.
+    checkSearchRateLimit.mockResolvedValue(
+      mockCheckSearchRateLimitResponse({
+        limitReached: true,
+        reason: 'ONE_MINUTE_MAX',
+      })
+    )
+    await logSearch(userContext, userId)
+    expect(addVc).not.toHaveBeenCalled()
+  })
+
+  test('it logs the search for analytics', async () => {
+    expect.assertions(1)
+
+    const userId = userContext.id
+    const mockUser = getMockUserInstance({
+      lastSearchTimestamp: '2017-06-22T01:13:25.000Z',
+    })
+    setMockDBResponse(DatabaseOperation.GET, {
+      Item: mockUser,
+    })
+    checkSearchRateLimit.mockResolvedValue(
+      mockCheckSearchRateLimitResponse({
+        limitReached: false,
+        reason: 'NONE',
+      })
+    )
+
     const userSearchLogCreate = jest.spyOn(UserSearchLogModel, 'create')
     await logSearch(userContext, userId)
 
@@ -120,20 +174,19 @@ describe('logSearch', () => {
     const userId = userContext.id
     const mockUser = getMockUserInstance({
       lastSearchTimestamp: '2017-06-22T01:13:25.000Z',
-      maxSearchesDay: {
-        maxDay: {
-          date: moment.utc().toISOString(),
-          numSearches: 10213,
-        },
-        recentDay: {
-          date: moment.utc().toISOString(),
-          numSearches: 10213, // above daily maximum
-        },
-      },
     })
     setMockDBResponse(DatabaseOperation.GET, {
       Item: mockUser,
     })
+
+    // Mock that the user should NOT receive a heart.
+    checkSearchRateLimit.mockResolvedValue(
+      mockCheckSearchRateLimitResponse({
+        limitReached: true,
+        reason: 'DAILY_MAX',
+      })
+    )
+
     const userSearchLogCreate = jest.spyOn(UserSearchLogModel, 'create')
     await logSearch(userContext, userId)
 

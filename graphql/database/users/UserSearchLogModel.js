@@ -38,6 +38,7 @@ class UserSearchLog extends BaseModel {
   static get permissions() {
     return {
       create: permissionAuthorizers.userIdMatchesHashKey,
+      get: permissionAuthorizers.userIdMatchesHashKey,
     }
   }
 }

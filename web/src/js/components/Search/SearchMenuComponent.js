@@ -9,7 +9,7 @@ import {
 import CircleIcon from '@material-ui/icons/Lens'
 import theme from 'js/theme/searchTheme'
 import MoneyRaised from 'js/components/MoneyRaised/MoneyRaisedContainer'
-import Hearts from 'js/components/Dashboard/HeartsContainer'
+import Hearts from 'js/components/Search/SearchHeartsContainer'
 import SettingsButton from 'js/components/Dashboard/SettingsButtonComponent'
 
 const defaultTheme = createMuiTheme(theme)

@@ -141,7 +141,9 @@ provider:
     # UserSearchLog table
     - Effect: "Allow"
       Action:
+        - "dynamodb:GetItem"
         - "dynamodb:PutItem"
+        - "dynamodb:Query"
       Resource: "${self:custom.dbTableArnBase}UserSearchLog-${self:provider.stage}"
     # UserRevenueLog table
     - Effect: "Allow"

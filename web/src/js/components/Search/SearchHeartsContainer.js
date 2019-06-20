@@ -5,14 +5,17 @@ import Hearts from 'js/components/Dashboard/HeartsComponent'
 
 export default createFragmentContainer(Hearts, {
   app: graphql`
-    fragment HeartsContainer_app on App {
+    fragment SearchHeartsContainer_app on App {
       ...HeartsDropdownContainer_app
     }
   `,
   user: graphql`
-    fragment HeartsContainer_user on User {
+    fragment SearchHeartsContainer_user on User {
       vcCurrent
-      tabsToday
+      searchRateLimit {
+        limitReached
+        reason
+      }
       ...HeartsDropdownContainer_user
     }
   `,

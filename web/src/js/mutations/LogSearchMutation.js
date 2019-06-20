@@ -10,6 +10,10 @@ const mutation = graphql`
         heartsUntilNextLevel
         level
         searches
+        searchRateLimit {
+          limitReached
+          reason
+        }
         searchesToday
         vcCurrent
         vcAllTime
