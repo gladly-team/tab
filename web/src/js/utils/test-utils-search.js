@@ -174,12 +174,24 @@ export const getMockSuccessfulSearchQuery = () => {
         askUserForLocation: true,
         originalQuery: query,
       },
+      ads: {
+        // Our API will not return the impressionFeedbackUrl
+        // impressionFeedbackUrl: 'https://www.bingapis.com/some-impression-url/',
+        readLink: 'https://www.bingapis.com/some-readlink/',
+        value: [
+          getMockBingTextAdResult(),
+          getMockBingTextAdResult(),
+          getMockBingTextAdResult(),
+        ],
+        visibilityFeedbackUrl: 'https://www.bingapis.com/some-visibility-url/',
+      },
       // computation: {},
       // entities: {},
       // images: {},
       news: {
         _type: 'News',
         id: 'https://api.cognitive.microsoft.com/api/v7/#News',
+        readLink: 'https://www.bingapis.com/some-readlink/',
         value: [
           getMockBingNewsArticleResult(),
           getMockBingNewsArticleResult(),
@@ -232,8 +244,9 @@ export const getMockSuccessfulSearchQuery = () => {
       // videos: {}
       webPages: {
         _type: 'Web/WebAnswer',
+        readLink: 'https://www.bingapis.com/some-readlink/',
+        someResultsRemoved: true,
         totalEstimatedMatches: 5250000,
-        id: 'https://api.cognitive.microsoft.com/api/v7/#News',
         value: [
           getMockBingWebPageResult({
             id: 'https://api.cognitive.microsoft.com/api/v7/#WebPages.0',
@@ -246,6 +259,7 @@ export const getMockSuccessfulSearchQuery = () => {
           }),
         ],
         webSearchUrl: `https://www.bing.com/search?q=${query}`,
+        webSearchUrlPingSuffix: 'Foo,1234.1',
       },
     },
     bingExtras: {},
