@@ -569,7 +569,7 @@ describe('Search page component', () => {
         .render()
         .text()
     ).toEqual(
-      `We use search ads to raise money for charity. You'll likely need to whitelist Search for a Cause for search results to show.`
+      `We use search ads to raise money for charity! You'll likely need to whitelist Search for a Cause in your ad blocker to start doing good.`
     )
   })
 
