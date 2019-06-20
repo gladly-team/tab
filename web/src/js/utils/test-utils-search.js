@@ -175,7 +175,8 @@ export const getMockSuccessfulSearchQuery = () => {
         originalQuery: query,
       },
       ads: {
-        impressionFeedbackUrl: 'https://www.bingapis.com/some-impression-url/',
+        // Our API will not return the impressionFeedbackUrl
+        // impressionFeedbackUrl: 'https://www.bingapis.com/some-impression-url/',
         readLink: 'https://www.bingapis.com/some-readlink/',
         value: [
           getMockBingTextAdResult(),
