@@ -45,6 +45,18 @@ export const getMockBingWebPageResult = overrides => {
   )
 }
 
+export const getMockBingComputationResult = overrides => {
+  return Object.assign(
+    {},
+    {
+      id: 'https://www.bing.com/api/v7/#Computation',
+      expression: 'sqrt((4^2)+(8^2))',
+      value: '8.94427191',
+    },
+    overrides
+  )
+}
+
 // https://docs.microsoft.com/en-us/rest/api/cognitiveservices/bing-news-api-v7-reference#newsarticle
 export const getMockBingNewsArticleResult = overrides => {
   return Object.assign(
@@ -185,7 +197,11 @@ export const getMockSuccessfulSearchQuery = () => {
         ],
         visibilityFeedbackUrl: 'https://www.bingapis.com/some-visibility-url/',
       },
-      // computation: {},
+      computation: {
+        expression: 'sqrt((4^2) + (8^2))',
+        id: 'https://www.bingapis.com/api/v7/#Computation',
+        value: '8.94427191',
+      },
       // entities: {},
       // images: {},
       news: {
@@ -205,6 +221,11 @@ export const getMockSuccessfulSearchQuery = () => {
         // Main results
         mainline: {
           items: [
+            {
+              answerType: 'Computation',
+              value: { id: 'https://www.bingapis.com/api/v7/#Computation' },
+              id: 'https://www.bingapis.com/api/v7/#Computation',
+            },
             {
               answerType: 'WebPages',
               resultIndex: 0,

@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import ComputationSearchResult from 'js/components/Search/ComputationSearchResult'
 import NewsSearchResults from 'js/components/Search/NewsSearchResults'
 import TextAdSearchResult from 'js/components/Search/TextAdSearchResult'
 import WebPageSearchResult from 'js/components/Search/WebPageSearchResult'
@@ -55,6 +56,15 @@ const SearchResultItem = props => {
           return null
         }
       }
+    }
+    case 'Computation': {
+      return (
+        <ComputationSearchResult
+          key={itemData.id}
+          item={itemData}
+          {...otherProps}
+        />
+      )
     }
     default: {
       // console.log(`Could not render item of type ${type}.`)

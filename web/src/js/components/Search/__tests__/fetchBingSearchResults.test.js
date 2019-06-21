@@ -53,7 +53,9 @@ describe('fetchBingSearchResults', () => {
     await fetchBingSearchResults('blue whales')
     const calledURL = fetch.mock.calls[0][0]
     const { searchParams } = new URL(calledURL)
-    expect(searchParams.get('responseFilter')).toEqual('Webpages,News,Ads')
+    expect(searchParams.get('responseFilter')).toEqual(
+      'Webpages,News,Ads,Computation'
+    )
   })
 
   // The commas are required by the Bing API. Other encodings fail.
@@ -66,7 +68,7 @@ describe('fetchBingSearchResults', () => {
     const rawResponseFilterStrVal = calledURL
       .split('responseFilter=')
       [calledURL.split('responseFilter=').length - 1].split('&')[0]
-    expect(rawResponseFilterStrVal).toEqual('Webpages,News,Ads')
+    expect(rawResponseFilterStrVal).toEqual('Webpages,News,Ads,Computation')
   })
 
   it('uses the "count" value from getSearchResultCountPerPage', async () => {

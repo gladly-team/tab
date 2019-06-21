@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { isNil } from 'lodash/lang'
 import { get } from 'lodash/object'
 import logger from 'js/utils/logger'
 import SearchResultsBing from 'js/components/Search/SearchResultsBing'
@@ -171,12 +170,39 @@ class SearchResultsQueryBing extends React.Component {
             const typeName =
               itemRankingData.answerType[0].toLowerCase() +
               itemRankingData.answerType.slice(1)
+
             // https://github.com/Azure-Samples/cognitive-services-REST-api-samples/blob/master/Tutorials/Bing-Web-Search/public/js/script.js#L172
-            const itemData = !isNil(itemRankingData.resultIndex)
-              ? // One result of the specified type (e.g., one webpage link)
-                get(data, `${typeName}.value[${itemRankingData.resultIndex}]`)
-              : // All results of the specified type (e.g., all videos)
-                get(data, `${typeName}.value`)
+            let itemData
+            switch (typeName) {
+              case 'ads': {
+                itemData = get(
+                  data,
+                  `${typeName}.value[${itemRankingData.resultIndex}]`
+                )
+                break
+              }
+              case 'computation': {
+                itemData = get(data, `${typeName}`)
+                break
+              }
+              case 'news': {
+                itemData = get(data, `${typeName}.value`)
+                break
+              }
+              case 'webPages': {
+                itemData = get(
+                  data,
+                  `${typeName}.value[${itemRankingData.resultIndex}]`
+                )
+                break
+              }
+              default: {
+                itemData = get(
+                  data,
+                  `${typeName}.value[${itemRankingData.resultIndex}]`
+                )
+              }
+            }
 
             // Return null if we couldn't find the result item data.
             if (!(itemRankingData.answerType && itemData)) {

@@ -173,6 +173,36 @@ describe('getMockBingWebPageResult', () => {
   })
 })
 
+describe('getMockBingComputationResult', () => {
+  it('includes the expected keys', () => {
+    const {
+      getMockBingComputationResult,
+    } = require('js/utils/test-utils-search')
+    expect(Object.keys(getMockBingComputationResult()).sort()).toEqual([
+      'expression',
+      'id',
+      'value',
+    ])
+  })
+
+  it('allows overriding values', () => {
+    const {
+      getMockBingComputationResult,
+    } = require('js/utils/test-utils-search')
+    const defaultData = getMockBingComputationResult()
+    expect(defaultData).toMatchObject({
+      id: 'https://www.bing.com/api/v7/#Computation',
+    })
+    expect(
+      getMockBingComputationResult({
+        id: 'foo',
+      })
+    ).toMatchObject({
+      id: 'foo',
+    })
+  })
+})
+
 describe('getMockSuccessfulSearchQuery', () => {
   it('includes the expected keys', () => {
     const {
@@ -191,6 +221,7 @@ describe('getMockSuccessfulSearchQuery', () => {
     expect(Object.keys(getMockSuccessfulSearchQuery().bing).sort()).toEqual([
       '_type',
       'ads',
+      'computation',
       'instrumentation',
       'news',
       'queryContext',
