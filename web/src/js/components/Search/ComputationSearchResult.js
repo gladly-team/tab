@@ -6,8 +6,8 @@ import Typography from '@material-ui/core/Typography'
 
 const styles = () => ({
   container: {
-    // fontFamily: 'arial, sans-serif',
-    // marginBottom: 26,
+    padding: 20,
+    marginBottom: 26,
   },
 })
 
@@ -16,19 +16,24 @@ const ComputationSearchResult = props => {
     classes,
     item: { expression, value },
   } = props
-  // console.log('ComputationSearchResult props', props)
 
   // If any required props are missing, don't render anything.
   if (!(expression && value)) {
     return null
   }
   return (
-    <Paper className={classes.container}>
+    <Paper className={classes.container} elevation={1}>
       <Typography
-        variant={'h5'}
-        data-test-id={'search-result-computation-text'}
+        variant={'body2'}
+        data-test-id={'search-result-computation-expression'}
       >
-        {expression} = {value}
+        {expression} =
+      </Typography>
+      <Typography
+        variant={'h4'}
+        data-test-id={'search-result-computation-value'}
+      >
+        {value}
       </Typography>
     </Paper>
   )
