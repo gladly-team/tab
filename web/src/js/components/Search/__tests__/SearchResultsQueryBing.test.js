@@ -651,6 +651,15 @@ describe('SearchResultsQueryBing', () => {
       results: {
         mainline: [
           {
+            key: 'Computation-https://www.bingapis.com/api/v7/#Computation',
+            type: 'Computation',
+            value: {
+              expression: 'sqrt((4^2) + (8^2))',
+              id: 'https://www.bingapis.com/api/v7/#Computation',
+              value: '8.94427191',
+            },
+          },
+          {
             key:
               'WebPages-https://api.cognitive.microsoft.com/api/v7/#WebPages.0',
             type: 'WebPages',
