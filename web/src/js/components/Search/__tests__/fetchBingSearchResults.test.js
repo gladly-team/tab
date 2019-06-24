@@ -54,7 +54,7 @@ describe('fetchBingSearchResults', () => {
     const calledURL = fetch.mock.calls[0][0]
     const { searchParams } = new URL(calledURL)
     expect(searchParams.get('responseFilter')).toEqual(
-      'Webpages,News,Ads,Computation'
+      'Webpages,News,Ads,Computation,TimeZone'
     )
   })
 
@@ -68,7 +68,9 @@ describe('fetchBingSearchResults', () => {
     const rawResponseFilterStrVal = calledURL
       .split('responseFilter=')
       [calledURL.split('responseFilter=').length - 1].split('&')[0]
-    expect(rawResponseFilterStrVal).toEqual('Webpages,News,Ads,Computation')
+    expect(rawResponseFilterStrVal).toEqual(
+      'Webpages,News,Ads,Computation,TimeZone'
+    )
   })
 
   it('uses the "count" value from getSearchResultCountPerPage', async () => {
