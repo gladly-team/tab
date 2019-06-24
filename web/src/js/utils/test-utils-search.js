@@ -57,6 +57,29 @@ export const getMockBingComputationResult = overrides => {
   )
 }
 
+export const getMockBingTimeZoneResult = overrides => {
+  return Object.assign(
+    {},
+    {
+      id: 'https://www.bing.com/api/v7/#TimeZone',
+      // Query: "time in florida"
+      primaryCityTime: {
+        location: 'Tallahassee, Florida, United States',
+        time: '2015-10-23T13:04:56.6774389Z',
+        utcOffset: 'UTC-4',
+      },
+      otherCityTimes: [
+        {
+          location: 'Pensacola',
+          time: '2015-10-23T12:04:56.6664294Z',
+          utcOffset: 'UTC-5',
+        },
+      ],
+    },
+    overrides
+  )
+}
+
 // https://docs.microsoft.com/en-us/rest/api/cognitiveservices/bing-news-api-v7-reference#newsarticle
 export const getMockBingNewsArticleResult = overrides => {
   return Object.assign(
