@@ -651,6 +651,25 @@ describe('SearchResultsQueryBing', () => {
       results: {
         mainline: [
           {
+            key: 'TimeZone-https://www.bing.com/api/v7/#TimeZone',
+            type: 'TimeZone',
+            value: {
+              id: 'https://www.bing.com/api/v7/#TimeZone',
+              otherCityTimes: [
+                {
+                  location: 'Pensacola',
+                  time: '2015-10-23T12:04:56.6664294Z',
+                  utcOffset: 'UTC-5',
+                },
+              ],
+              primaryCityTime: {
+                location: 'Tallahassee, Florida, United States',
+                time: '2015-10-23T13:04:56.6774389Z',
+                utcOffset: 'UTC-4',
+              },
+            },
+          },
+          {
             key: 'Computation-https://www.bingapis.com/api/v7/#Computation',
             type: 'Computation',
             value: {

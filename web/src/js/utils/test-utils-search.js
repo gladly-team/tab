@@ -245,6 +245,11 @@ export const getMockSuccessfulSearchQuery = () => {
         mainline: {
           items: [
             {
+              answerType: 'TimeZone',
+              value: { id: 'https://www.bingapis.com/api/v7/#TimeZone' },
+              id: 'https://www.bingapis.com/api/v7/#TimeZone',
+            },
+            {
               answerType: 'Computation',
               value: { id: 'https://www.bingapis.com/api/v7/#Computation' },
               id: 'https://www.bingapis.com/api/v7/#Computation',
@@ -283,8 +288,24 @@ export const getMockSuccessfulSearchQuery = () => {
         //   items: [],
         // },
       },
-      // spellSuggestions: {},
       // relatedSearches: {},
+      // spellSuggestions: {},
+      timeZone: {
+        id: 'https://www.bing.com/api/v7/#TimeZone',
+        // Query: "time in florida"
+        primaryCityTime: {
+          location: 'Tallahassee, Florida, United States',
+          time: '2015-10-23T13:04:56.6774389Z',
+          utcOffset: 'UTC-4',
+        },
+        otherCityTimes: [
+          {
+            location: 'Pensacola',
+            time: '2015-10-23T12:04:56.6664294Z',
+            utcOffset: 'UTC-5',
+          },
+        ],
+      },
       // videos: {}
       webPages: {
         _type: 'Web/WebAnswer',

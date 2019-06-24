@@ -259,6 +259,7 @@ describe('getMockSuccessfulSearchQuery', () => {
       'news',
       'queryContext',
       'rankingResponse',
+      'timeZone',
       'webPages',
     ])
   })
