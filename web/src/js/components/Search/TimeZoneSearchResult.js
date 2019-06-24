@@ -26,6 +26,8 @@ const TimeZoneSearchResult = props => {
   if (!(location && utcOffset && time)) {
     return null
   }
+  const formatDate = isoTime => moment(isoTime).format('dddd, MMMM D, YYYY')
+  const formatTime = isoTime => moment(isoTime).format('h:mm A')
   return (
     <Paper className={classes.container} elevation={1}>
       <div>
@@ -34,13 +36,13 @@ const TimeZoneSearchResult = props => {
           data-test-id={'search-result-time-zone-time'}
           gutterBottom
         >
-          {moment(time).format('h:mm A')}
+          {formatTime(time)}
         </Typography>
         <Typography
           variant={'body2'}
           data-test-id={'search-result-time-zone-date'}
         >
-          {moment().format('dddd, MMMM D, YYYY')}
+          {formatDate(time)}
         </Typography>
         <Typography
           variant={'body2'}

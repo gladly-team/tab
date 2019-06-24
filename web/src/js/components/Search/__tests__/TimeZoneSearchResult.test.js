@@ -84,7 +84,7 @@ describe('TimeZoneSearchResult', () => {
     const elem = wrapper
       .find('[data-test-id="search-result-time-zone-date"]')
       .first()
-    expect(elem.render().text()).toEqual('Monday, June 24, 2019')
+    expect(elem.render().text()).toEqual('Friday, October 23, 2015')
   })
 
   it('displays the date in the expected Typography component', () => {
