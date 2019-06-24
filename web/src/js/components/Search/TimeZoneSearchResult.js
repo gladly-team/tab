@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import moment from 'moment'
 import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
@@ -31,13 +32,19 @@ const TimeZoneSearchResult = props => {
         <Typography
           variant={'h4'}
           data-test-id={'search-result-time-zone-time'}
+          gutterBottom
         >
-          {time}
+          {moment(time).format('h:mm A')}
+        </Typography>
+        <Typography
+          variant={'body2'}
+          data-test-id={'search-result-time-zone-date'}
+        >
+          {moment().format('dddd, MMMM D, YYYY')}
         </Typography>
         <Typography
           variant={'body2'}
           data-test-id={'search-result-time-zone-location'}
-          gutterBottom
         >
           Time in {location} ({utcOffset})
         </Typography>
