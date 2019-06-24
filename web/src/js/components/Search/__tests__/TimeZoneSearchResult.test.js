@@ -2,8 +2,9 @@
 
 import React from 'react'
 import { shallow } from 'enzyme'
-import { getMockBingTimeZoneResult } from 'js/utils/test-utils-search'
+import Divider from '@material-ui/core/Divider'
 import Typography from '@material-ui/core/Typography'
+import { getMockBingTimeZoneResult } from 'js/utils/test-utils-search'
 
 const getMockProps = () => ({
   item: getMockBingTimeZoneResult(),
@@ -128,5 +129,124 @@ describe('TimeZoneSearchResult', () => {
       .first()
     expect(elem.type()).toEqual(Typography)
     expect(elem.prop('variant')).toEqual('body2')
+  })
+
+  it('does not display the "other cities" times when no other cities are provided', () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {})
+    const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
+      .default
+    const mockProps = getMockProps()
+    mockProps.item.otherCityTimes = undefined
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find('[data-test-id="search-result-time-zone-other-locations"]')
+        .exists()
+    ).toBe(false)
+  })
+
+  it('does not display the "other cities" times when the other cities data is an empty array', () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {})
+    const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
+      .default
+    const mockProps = getMockProps()
+    mockProps.item.otherCityTimes = []
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find('[data-test-id="search-result-time-zone-other-locations"]')
+        .exists()
+    ).toBe(false)
+  })
+
+  it('displays the "other cities" times when provided', () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {})
+    const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
+      .default
+    const mockProps = getMockProps()
+    mockProps.item.otherCityTimes = [
+      {
+        location: 'Honolulu',
+        time: '2019-06-24T12:32:03.1293302Z',
+        utcOffset: 'UTC-10',
+      },
+      {
+        location: 'Anchorage',
+        time: '2019-06-24T14:32:03.1283295Z',
+        utcOffset: 'UTC-8',
+      },
+    ]
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find('[data-test-id="search-result-time-zone-other-locations"]')
+        .exists()
+    ).toBe(true)
+  })
+
+  it('separates the "other cities" times with a divider', () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {})
+    const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
+      .default
+    const mockProps = getMockProps()
+    mockProps.item.otherCityTimes = [
+      {
+        location: 'Honolulu',
+        time: '2019-06-24T12:32:03.1293302Z',
+        utcOffset: 'UTC-10',
+      },
+      {
+        location: 'Anchorage',
+        time: '2019-06-24T14:32:03.1283295Z',
+        utcOffset: 'UTC-8',
+      },
+    ]
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find('[data-test-id="search-result-time-zone-other-locations"]')
+        .children()
+        .first()
+        .type()
+    ).toEqual(Divider)
+  })
+
+  it('displays the "other cities" times as expected', () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {})
+    const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
+      .default
+    const mockProps = getMockProps()
+    mockProps.item.otherCityTimes = [
+      {
+        location: 'Honolulu',
+        time: '2019-06-24T12:32:03.1293302Z',
+        utcOffset: 'UTC-10',
+      },
+      {
+        location: 'Anchorage',
+        time: '2019-06-24T14:32:03.1283295Z',
+        utcOffset: 'UTC-8',
+      },
+    ]
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />).dive()
+    const secondOtherCityTime = wrapper
+      .find('[data-test-id="search-result-time-zone-other-locations"]')
+      .children()
+      .filter('div')
+      .at(1)
+    expect(
+      secondOtherCityTime
+        .children()
+        .first()
+        .render()
+        .text()
+    ).toEqual('2:32 PM')
+    expect(
+      secondOtherCityTime
+        .children()
+        .at(1)
+        .render()
+        .text()
+    ).toEqual('Anchorage (UTC-8)')
   })
 })

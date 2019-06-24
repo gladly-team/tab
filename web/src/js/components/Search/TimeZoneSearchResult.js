@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import { withStyles } from '@material-ui/core/styles'
+import Divider from '@material-ui/core/Divider'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 
@@ -9,8 +10,19 @@ const styles = () => ({
   container: {
     padding: 20,
     marginBottom: 26,
+  },
+  otherCityTimesDivider: {
+    margin: '20px 0px',
+  },
+  otherCityTimeContainer: {
     display: 'flex',
-    justifyContent: 'space-between',
+  },
+  otherCityTime: {
+    color: 'rgba(0, 0, 0, 0.46)',
+  },
+  otherCityTimeLocation: {
+    color: 'rgba(0, 0, 0, 0.46)',
+    marginLeft: 20,
   },
 })
 
@@ -18,6 +30,7 @@ const TimeZoneSearchResult = props => {
   const {
     classes,
     item: {
+      otherCityTimes,
       primaryCityTime: { location, time, utcOffset },
     },
   } = props
@@ -33,27 +46,52 @@ const TimeZoneSearchResult = props => {
       .format('h:mm A')
   return (
     <Paper className={classes.container} elevation={1}>
-      <div>
-        <Typography
-          variant={'h4'}
-          data-test-id={'search-result-time-zone-time'}
-          gutterBottom
-        >
-          {formatTime(time)}
-        </Typography>
-        <Typography
-          variant={'body2'}
-          data-test-id={'search-result-time-zone-date'}
-        >
-          {formatDate(time)}
-        </Typography>
-        <Typography
-          variant={'body2'}
-          data-test-id={'search-result-time-zone-location'}
-        >
-          Time in {location} ({utcOffset})
-        </Typography>
-      </div>
+      <Typography
+        variant={'h4'}
+        data-test-id={'search-result-time-zone-time'}
+        gutterBottom
+      >
+        {formatTime(time)}
+      </Typography>
+      <Typography
+        variant={'body2'}
+        data-test-id={'search-result-time-zone-date'}
+      >
+        {formatDate(time)}
+      </Typography>
+      <Typography
+        variant={'body2'}
+        data-test-id={'search-result-time-zone-location'}
+      >
+        Time in {location} ({utcOffset})
+      </Typography>
+      {otherCityTimes && otherCityTimes.length ? (
+        <div data-test-id={'search-result-time-zone-other-locations'}>
+          <Divider className={classes.otherCityTimesDivider} />
+          {otherCityTimes.map(cityTime => {
+            return (
+              <div
+                key={cityTime.location}
+                className={classes.otherCityTimeContainer}
+              >
+                <Typography
+                  variant={'body2'}
+                  className={classes.otherCityTime}
+                  gutterBottom
+                >
+                  {formatTime(cityTime.time)}
+                </Typography>
+                <Typography
+                  variant={'body2'}
+                  className={classes.otherCityTimeLocation}
+                >
+                  {cityTime.location} ({cityTime.utcOffset})
+                </Typography>
+              </div>
+            )
+          })}
+        </div>
+      ) : null}
     </Paper>
   )
 }
