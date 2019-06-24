@@ -57,7 +57,7 @@ describe('TimeZoneSearchResult', () => {
     const elem = wrapper
       .find('[data-test-id="search-result-time-zone-time"]')
       .first()
-    expect(elem.render().text()).toEqual('8:27 AM')
+    expect(elem.render().text()).toEqual('3:27 PM')
   })
 
   it('displays the time value in the expected Typography component', () => {

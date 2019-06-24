@@ -27,7 +27,10 @@ const TimeZoneSearchResult = props => {
     return null
   }
   const formatDate = isoTime => moment(isoTime).format('dddd, MMMM D, YYYY')
-  const formatTime = isoTime => moment(isoTime).format('h:mm A')
+  const formatTime = isoTime =>
+    moment(isoTime)
+      .utc()
+      .format('h:mm A')
   return (
     <Paper className={classes.container} elevation={1}>
       <div>
