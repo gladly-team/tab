@@ -98,6 +98,26 @@ export default () =>
           },
         ],
       },
+      computation: {
+        expression: 'sqrt((4^2) + (8^2))',
+        id: 'https://www.bingapis.com/api/v7/#Computation',
+        value: '8.94427191',
+      },
+      timeZone: {
+        id: 'https://www.bing.com/api/v7/#TimeZone',
+        primaryCityTime: {
+          location: 'Tallahassee, Florida, United States',
+          time: '2015-10-23T13:04:56.6774389Z',
+          utcOffset: 'UTC-4',
+        },
+        otherCityTimes: [
+          {
+            location: 'Pensacola',
+            time: '2015-10-23T12:04:56.6664294Z',
+            utcOffset: 'UTC-5',
+          },
+        ],
+      },
       webPages: {
         webSearchUrl: 'https://www.bing.com/search?q=johh+mayer',
         totalEstimatedMatches: 14700000,
@@ -1898,6 +1918,16 @@ export default () =>
       rankingResponse: {
         mainline: {
           items: [
+            {
+              answerType: 'TimeZone',
+              value: { id: 'https://www.bingapis.com/api/v7/#TimeZone' },
+              id: 'https://www.bingapis.com/api/v7/#TimeZone',
+            },
+            {
+              answerType: 'Computation',
+              value: { id: 'https://www.bingapis.com/api/v7/#Computation' },
+              id: 'https://www.bingapis.com/api/v7/#Computation',
+            },
             {
               answerType: 'Ads',
               resultIndex: 0,

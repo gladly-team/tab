@@ -6,16 +6,19 @@ import {
   getMockBingComputationResult,
   getMockBingNewsArticleResult,
   getMockBingTextAdResult,
+  getMockBingTimeZoneResult,
   getMockBingWebPageResult,
 } from 'js/utils/test-utils-search'
 import ComputationSearchResult from 'js/components/Search/ComputationSearchResult'
 import NewsSearchResults from 'js/components/Search/NewsSearchResults'
 import TextAdSearchResult from 'js/components/Search/TextAdSearchResult'
+import TimeZoneSearchResult from 'js/components/Search/TimeZoneSearchResult'
 import WebPageSearchResult from 'js/components/Search/WebPageSearchResult'
 
 jest.mock('js/components/Search/ComputationSearchResult')
 jest.mock('js/components/Search/NewsSearchResults')
 jest.mock('js/components/Search/TextAdSearchResult')
+jest.mock('js/components/Search/TimeZoneSearchResult')
 jest.mock('js/components/Search/WebPageSearchResult')
 
 const getMockProps = () => ({
@@ -155,6 +158,41 @@ describe('SearchResultItem: computation result', () => {
     const mockProps = getMockProps()
     mockProps.type = 'Computation'
     mockProps.itemData = getMockBingComputationResult()
+    mockProps.extraThingy = 'hi'
+    const wrapper = shallow(<SearchResultItem {...mockProps} />)
+    expect(wrapper.at(0).prop('extraThingy')).toEqual('hi')
+  })
+})
+
+describe('SearchResultItem: time zone result', () => {
+  it('renders a TimeZoneSearchResult when providing a computation data object', () => {
+    const SearchResultItem = require('js/components/Search/SearchResultItem')
+      .default
+    const mockProps = getMockProps()
+    mockProps.type = 'TimeZone'
+    mockProps.itemData = getMockBingTimeZoneResult()
+    const wrapper = shallow(<SearchResultItem {...mockProps} />)
+    expect(wrapper.at(0).type()).toEqual(TimeZoneSearchResult)
+  })
+
+  it('uses the item ID as a key for a TimeZoneSearchResult', () => {
+    const SearchResultItem = require('js/components/Search/SearchResultItem')
+      .default
+    const mockProps = getMockProps()
+    mockProps.type = 'TimeZone'
+    mockProps.itemData = getMockBingTimeZoneResult({
+      id: 'my-nice-id',
+    })
+    const wrapper = shallow(<SearchResultItem {...mockProps} />)
+    expect(wrapper.at(0).key()).toEqual('my-nice-id')
+  })
+
+  it('passes extra props to the child', () => {
+    const SearchResultItem = require('js/components/Search/SearchResultItem')
+      .default
+    const mockProps = getMockProps()
+    mockProps.type = 'TimeZone'
+    mockProps.itemData = getMockBingTimeZoneResult()
     mockProps.extraThingy = 'hi'
     const wrapper = shallow(<SearchResultItem {...mockProps} />)
     expect(wrapper.at(0).prop('extraThingy')).toEqual('hi')
