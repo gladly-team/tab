@@ -96,8 +96,8 @@ export const VideoSearchItem = props => {
   const title = clipTextToNearestWord(name, 80)
 
   const timeSincePublished =
-    datePublished && moment(datePublished).isValid()
-      ? moment(datePublished).fromNow()
+    datePublished && moment.utc(datePublished).isValid()
+      ? moment.utc(datePublished).format('MMM D, YYYY')
       : null
   return (
     <Paper
@@ -142,7 +142,7 @@ export const VideoSearchItem = props => {
           ) : null}
           {timeSincePublished ? (
             <p
-              data-test-id={'search-result-video-time-since'}
+              data-test-id={'search-result-video-date-published'}
               className={classes.timeSincePublishedText}
             >
               &nbsp;· {timeSincePublished}

@@ -266,131 +266,61 @@ describe('VideoSearchItem', () => {
     expect(attributionElems.exists()).toBe(false)
   })
 
-  // it('displays the "time since published" text if a date is provided', () => {
-  //   const {
-  //     VideoSearchItem,
-  //   } = require('js/components/Search/VideoSearchResults')
-  //   const mockProps = getMockNewsStoryProps()
-  //   mockProps.item.datePublished = moment(
-  //     '2017-05-19T11:30:00.000Z'
-  //   ).toISOString()
-  //   const wrapper = shallow(<VideoSearchItem {...mockProps} />).dive()
-  //   const elem = wrapper.find('[data-test-id="search-result-video-time-since"]')
-  //   expect(elem.exists()).toBe(true)
-  // })
+  it('displays the "date published" text if a date is provided', () => {
+    const {
+      VideoSearchItem,
+    } = require('js/components/Search/VideoSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.datePublished = moment(
+      '2017-05-19T11:30:00.000Z'
+    ).toISOString()
+    const wrapper = shallow(<VideoSearchItem {...mockProps} />).dive()
+    const elem = wrapper.find(
+      '[data-test-id="search-result-video-date-published"]'
+    )
+    expect(elem.exists()).toBe(true)
+  })
 
-  // it('does not display the "time since published" text if no date is provided', () => {
-  //   const {
-  //     VideoSearchItem,
-  //   } = require('js/components/Search/VideoSearchResults')
-  //   const mockProps = getMockNewsStoryProps()
-  //   mockProps.item.datePublished = undefined
-  //   const wrapper = shallow(<VideoSearchItem {...mockProps} />).dive()
-  //   const elem = wrapper.find('[data-test-id="search-result-video-time-since"]')
-  //   expect(elem.exists()).toBe(false)
-  // })
+  it('does not display the "date published" text if no date is provided', () => {
+    const {
+      VideoSearchItem,
+    } = require('js/components/Search/VideoSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.datePublished = undefined
+    const wrapper = shallow(<VideoSearchItem {...mockProps} />).dive()
+    const elem = wrapper.find(
+      '[data-test-id="search-result-video-date-published"]'
+    )
+    expect(elem.exists()).toBe(false)
+  })
 
-  // it('shows a seconds abbreviation in the "time since published" text if published a few seconds ago', () => {
-  //   const {
-  //     VideoSearchItem,
-  //   } = require('js/components/Search/VideoSearchResults')
-  //   const mockProps = getMockNewsStoryProps()
-  //   mockProps.item.datePublished = moment(
-  //     '2017-05-19T13:59:56.412Z'
-  //   ).toISOString()
-  //   const wrapper = shallow(<VideoSearchItem {...mockProps} />).dive()
-  //   const elem = wrapper.find('[data-test-id="search-result-video-time-since"]')
-  //   expect(elem.text()).toEqual(' · 2s')
-  // })
+  it('formats the "date published" correctly [test 1]', () => {
+    const {
+      VideoSearchItem,
+    } = require('js/components/Search/VideoSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.datePublished = moment(
+      '2017-05-19T11:30:00.000Z'
+    ).toISOString()
+    const wrapper = shallow(<VideoSearchItem {...mockProps} />).dive()
+    const elem = wrapper.find(
+      '[data-test-id="search-result-video-date-published"]'
+    )
+    expect(elem.text()).toEqual(' · May 19, 2017')
+  })
 
-  // it('shows a seconds abbreviation in the "time since published" text if published 40 seconds ago', () => {
-  //   const {
-  //     VideoSearchItem,
-  //   } = require('js/components/Search/VideoSearchResults')
-  //   const mockProps = getMockNewsStoryProps()
-  //   mockProps.item.datePublished = moment(
-  //     '2017-05-19T13:59:18.412Z'
-  //   ).toISOString()
-  //   const wrapper = shallow(<VideoSearchItem {...mockProps} />).dive()
-  //   const elem = wrapper.find('[data-test-id="search-result-video-time-since"]')
-  //   expect(elem.text()).toEqual(' · 40s')
-  // })
-
-  // it('shows a minute abbreviation in the "time since published" text if published almost 1 minute ago', () => {
-  //   const {
-  //     VideoSearchItem,
-  //   } = require('js/components/Search/VideoSearchResults')
-  //   const mockProps = getMockNewsStoryProps()
-  //   mockProps.item.datePublished = moment(
-  //     '2017-05-19T13:59:02.412Z'
-  //   ).toISOString()
-  //   const wrapper = shallow(<VideoSearchItem {...mockProps} />).dive()
-  //   const elem = wrapper.find('[data-test-id="search-result-video-time-since"]')
-  //   expect(elem.text()).toEqual(' · 1m')
-  // })
-
-  // it('shows a minute abbreviation in the "time since published" text if published ~30 minutes ago', () => {
-  //   const {
-  //     VideoSearchItem,
-  //   } = require('js/components/Search/VideoSearchResults')
-  //   const mockProps = getMockNewsStoryProps()
-  //   mockProps.item.datePublished = moment(
-  //     '2017-05-19T13:29:30.000Z'
-  //   ).toISOString()
-  //   const wrapper = shallow(<VideoSearchItem {...mockProps} />).dive()
-  //   const elem = wrapper.find('[data-test-id="search-result-video-time-since"]')
-  //   expect(elem.text()).toEqual(' · 30m')
-  // })
-
-  // it('shows an hour abbreviation in the "time since published" text if published ~50 minutes ago', () => {
-  //   const {
-  //     VideoSearchItem,
-  //   } = require('js/components/Search/VideoSearchResults')
-  //   const mockProps = getMockNewsStoryProps()
-  //   mockProps.item.datePublished = moment(
-  //     '2017-05-19T13:08:30.000Z'
-  //   ).toISOString()
-  //   const wrapper = shallow(<VideoSearchItem {...mockProps} />).dive()
-  //   const elem = wrapper.find('[data-test-id="search-result-video-time-since"]')
-  //   expect(elem.text()).toEqual(' · 1h')
-  // })
-
-  // it('shows an hour abbreviation in the "time since published" text if published ~18 hours ago', () => {
-  //   const {
-  //     VideoSearchItem,
-  //   } = require('js/components/Search/VideoSearchResults')
-  //   const mockProps = getMockNewsStoryProps()
-  //   mockProps.item.datePublished = moment(
-  //     '2017-05-18T19:59:41.000Z'
-  //   ).toISOString()
-  //   const wrapper = shallow(<VideoSearchItem {...mockProps} />).dive()
-  //   const elem = wrapper.find('[data-test-id="search-result-video-time-since"]')
-  //   expect(elem.text()).toEqual(' · 18h')
-  // })
-
-  // it('shows a days abbreviation in the "time since published" text if published ~2 days ago', () => {
-  //   const {
-  //     VideoSearchItem,
-  //   } = require('js/components/Search/VideoSearchResults')
-  //   const mockProps = getMockNewsStoryProps()
-  //   mockProps.item.datePublished = moment(
-  //     '2017-05-17T19:59:41.000Z'
-  //   ).toISOString()
-  //   const wrapper = shallow(<VideoSearchItem {...mockProps} />).dive()
-  //   const elem = wrapper.find('[data-test-id="search-result-video-time-since"]')
-  //   expect(elem.text()).toEqual(' · 2d')
-  // })
-
-  // it('shows a months abbreviation in the "time since published" text if published ~40 days ago', () => {
-  //   const {
-  //     VideoSearchItem,
-  //   } = require('js/components/Search/VideoSearchResults')
-  //   const mockProps = getMockNewsStoryProps()
-  //   mockProps.item.datePublished = moment(
-  //     '2017-04-11T19:59:41.000Z'
-  //   ).toISOString()
-  //   const wrapper = shallow(<VideoSearchItem {...mockProps} />).dive()
-  //   const elem = wrapper.find('[data-test-id="search-result-video-time-since"]')
-  //   expect(elem.text()).toEqual(' · 1M')
-  // })
+  it('formats the "date published" correctly [test 2]', () => {
+    const {
+      VideoSearchItem,
+    } = require('js/components/Search/VideoSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.datePublished = moment(
+      '2009-10-25T06:57:33.0000000'
+    ).toISOString()
+    const wrapper = shallow(<VideoSearchItem {...mockProps} />).dive()
+    const elem = wrapper.find(
+      '[data-test-id="search-result-video-date-published"]'
+    )
+    expect(elem.text()).toEqual(' · Oct 25, 2009')
+  })
 })
