@@ -141,6 +141,20 @@ describe('VideoSearchItem', () => {
     expect(titleElem.type()).toEqual('h3')
   })
 
+  it('crops long title text', () => {
+    const {
+      VideoSearchItem,
+    } = require('js/components/Search/VideoSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.name =
+      'EPIC VIDEO SO GREAT CLICK CLICK CLICK THAT SUBSCRIBE BUTTON!!1'
+    const wrapper = shallow(<VideoSearchItem {...mockProps} />).dive()
+    const titleElem = wrapper.find('[data-test-id="search-result-video-title"]')
+    expect(titleElem.text()).toEqual(
+      'EPIC VIDEO SO GREAT CLICK CLICK CLICK THAT SUBSCRIBE ...'
+    )
+  })
+
   it('puts the title text in an anchor tag', () => {
     const {
       VideoSearchItem,
@@ -154,21 +168,6 @@ describe('VideoSearchItem', () => {
     expect(titleElem.parent().prop('href')).toEqual(
       'https://example.com/foobar/'
     )
-  })
-
-  it('crops the title text if it is too long', () => {
-    const {
-      VideoSearchItem,
-    } = require('js/components/Search/VideoSearchResults')
-    const mockProps = getMockNewsStoryProps()
-    mockProps.item.name =
-      'This is A Nice Title, But It is a Bit Wordy, Would You Not Agree? Especially This Last Part.'
-    const wrapper = shallow(<VideoSearchItem {...mockProps} />).dive()
-    const titleElem = wrapper.find('[data-test-id="search-result-video-title"]')
-    expect(titleElem.text()).toEqual(
-      'This is A Nice Title, But It is a Bit Wordy, Would You Not Agree? Especially ...'
-    )
-    expect(titleElem.type()).toEqual('h3')
   })
 
   it('displays the image content when an image exists', () => {

@@ -122,7 +122,7 @@ export const VideoSearchItem = props => {
   } = props
 
   // If the title is too long, slice it and add ellipses.
-  const title = clipTextToNearestWord(name, 80)
+  const title = clipTextToNearestWord(name, 58)
 
   const timePublished =
     datePublished && moment.utc(datePublished).isValid()
