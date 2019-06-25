@@ -9,6 +9,7 @@ import {
   getMockBingVideoItem,
 } from 'js/utils/test-utils-search'
 import Typography from '@material-ui/core/Typography'
+import PlayCircleIcon from '@material-ui/icons/PlayCircleFilled'
 
 const getMockProps = () => ({
   videoItems: getMockBingVideosResult().value,
@@ -175,14 +176,8 @@ describe('VideoSearchItem', () => {
       VideoSearchItem,
     } = require('js/components/Search/VideoSearchResults')
     const mockProps = getMockNewsStoryProps()
-    mockProps.item.image = {
-      contentUrl: 'https://media.example.com/foo.png',
-      thumbnail: {
-        contentUrl: 'https://www.bing.com/some-url/',
-        width: 700,
-        height: 466,
-      },
-    }
+    mockProps.item.contentUrl = 'https://media.example.com/foo.png'
+    mockProps.item.thumbnailUrl = 'https://www.bing.com/some-url/'
     const wrapper = shallow(<VideoSearchItem {...mockProps} />).dive()
     const elem = wrapper.find(
       '[data-test-id="search-result-video-img-container"]'
@@ -233,6 +228,31 @@ describe('VideoSearchItem', () => {
       'https://www.bing.com/some-url/?w=200&h=100&c=7'
     )
     expect(imgElem.prop('alt')).toEqual('')
+  })
+
+  it('displays a play button over the image when an image exists', () => {
+    const {
+      VideoSearchItem,
+    } = require('js/components/Search/VideoSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.contentUrl = 'https://media.example.com/foo.png'
+    mockProps.item.thumbnailUrl = 'https://www.bing.com/some-url/'
+    const wrapper = shallow(<VideoSearchItem {...mockProps} />).dive()
+    const parent = wrapper.find(
+      '[data-test-id="search-result-video-img-container"]'
+    )
+    expect(parent.find(PlayCircleIcon).exists()).toBe(true)
+  })
+
+  it('does not display a play button when no thumbnail image exists', () => {
+    const {
+      VideoSearchItem,
+    } = require('js/components/Search/VideoSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.contentUrl = 'https://media.example.com/foo.png'
+    mockProps.item.thumbnailUrl = undefined
+    const wrapper = shallow(<VideoSearchItem {...mockProps} />).dive()
+    expect(wrapper.find(PlayCircleIcon).exists()).toBe(false)
   })
 
   it('displays the first publisher name if one exists', () => {

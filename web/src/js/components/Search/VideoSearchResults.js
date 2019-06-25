@@ -5,6 +5,7 @@ import { get } from 'lodash/object'
 import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
+import PlayCircleIcon from '@material-ui/icons/PlayCircleFilled'
 import {
   clipTextToNearestWord,
   getBingThumbnailURLToFillDimensions,
@@ -42,6 +43,14 @@ const styles = () => ({
     overflow: 'hidden',
     minHeight: 0,
     minWidth: 0,
+    position: 'relative',
+  },
+  videoItemPlayButtonIcon: {
+    position: 'absolute',
+    width: 50,
+    height: 50,
+    color: 'rgba(255, 255, 255, 0.8)',
+    pointerEvents: 'none',
   },
   videoItemTextContainer: {
     flex: 1,
@@ -139,6 +148,7 @@ export const VideoSearchItem = props => {
               })}
               alt=""
             />
+            <PlayCircleIcon className={classes.videoItemPlayButtonIcon} />
           </div>
         </a>
       ) : null}
