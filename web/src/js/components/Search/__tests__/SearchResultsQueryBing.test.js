@@ -951,6 +951,151 @@ describe('SearchResultsQueryBing', () => {
               url: expect.any(String),
             },
           },
+          {
+            key: 'Videos',
+            type: 'Videos',
+            value: [
+              {
+                allowHttpsEmbed: true,
+                allowMobileEmbed: true,
+                contentUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+                datePublished: '2009-10-25T06:57:33.0000000',
+                description:
+                  'Rick Astley - Never Gonna Give You Up (Official Video) - Listen On Spotify: http://smarturl.it/AstleySpotify Learn more about the brand new album ‘Beautiful Life’: https://RickAstley.lnk.to/BeautifulLi... Buy On iTunes: http://smarturl.it/AstleyGHiTunes Amazon: http://smarturl.it/AstleyGHAmazon Follow Rick Astley Website: http://www ...',
+                duration: 'PT3M33S',
+                embedHtml:
+                  '<iframe width="1280" height="720" src="http://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1" frameborder="0" allowfullscreen></iframe>',
+                encodingFormat: 'mp4',
+                height: 720,
+                hostPageDisplayUrl:
+                  'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+                hostPageUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+                hostPageUrlPingSuffix: 'DevEx,5617.1',
+                isAccessibleForFree: true,
+                isSuperfresh: false,
+                motionThumbnailUrl:
+                  'https://tse3.mm.bing.net/th?id=OM.NrH36WeODxx7Tg_1557133268&pid=Api',
+                name: 'Rick Astley - Never Gonna Give You Up (Video)',
+                publisher: [{ name: 'YouTube' }],
+                thumbnail: { width: 160, height: 119 },
+                thumbnailUrl:
+                  'https://tse3.mm.bing.net/th?id=OVP.6PGH-QJhVEnKeMu2-91ajQHfFn&pid=Api',
+                viewCount: 573320051,
+                webSearchUrl:
+                  'https://www.bing.com/videos/search?q=rick%20roll&view=detail&mid=4E7B1C0F8E67E9F7B1364E7B1C0F8E67E9F7B136',
+                webSearchUrlPingSuffix: 'DevEx,5618.1',
+                width: 1280,
+              },
+              {
+                webSearchUrl:
+                  'https://www.bing.com/videos/search?q=rick%20roll&view=detail&mid=CA767BEE3A9FFDBBE775CA767BEE3A9FFDBBE775',
+                webSearchUrlPingSuffix: 'DevEx,5620.1',
+                name: 'Rick astley Together Forever remix tema',
+                description: 'Rick astley Together Forever remix tema',
+                thumbnailUrl:
+                  'https://tse1.mm.bing.net/th?id=OVF.jRV6abk10leVreAar%2fx1Zg&pid=Api',
+                datePublished: '2019-06-25T02:25:35.0000000',
+                publisher: [
+                  {
+                    name: 'YouTube',
+                  },
+                ],
+                isAccessibleForFree: true,
+                contentUrl: 'https://www.youtube.com/watch?v=kg9_lJbH8Fw',
+                hostPageUrl: 'https://www.youtube.com/watch?v=kg9_lJbH8Fw',
+                hostPageUrlPingSuffix: 'DevEx,5619.1',
+                encodingFormat: '',
+                hostPageDisplayUrl:
+                  'https://www.youtube.com/watch?v=kg9_lJbH8Fw',
+                width: 1280,
+                height: 720,
+                duration: 'PT6M54S',
+                embedHtml:
+                  '<iframe width="1280" height="720" src="http://www.youtube.com/embed/kg9_lJbH8Fw?autoplay=1" frameborder="0" allowfullscreen></iframe>',
+                allowHttpsEmbed: true,
+                viewCount: 2,
+                thumbnail: {
+                  width: 160,
+                  height: 120,
+                },
+                allowMobileEmbed: true,
+                isSuperfresh: true,
+              },
+              {
+                webSearchUrl:
+                  'https://www.bing.com/videos/search?q=rick%20roll&view=detail&mid=150ED418D5753FA363B9150ED418D5753FA363B9',
+                webSearchUrlPingSuffix: 'DevEx,5622.1',
+                name:
+                  'Rick Astley - Never Gonna Give You Up | Dark: Season 2 OST',
+                description:
+                  'Music from Dark: Season 2 (2019) distributed by Netflix. Dark: Season 2 (Soundtrack) by Various Artists. Playlist: https://www.youtube.com/playlist?list=PLDisKgcnAC4S1uAqB-rNIGvmocSvexdRB',
+                thumbnailUrl:
+                  'https://tse3.mm.bing.net/th?id=OVF.x3pEJBaPXV3CVbY3T%2fD1kg&pid=Api',
+                datePublished: '2019-06-22T20:11:46.0000000',
+                publisher: [
+                  {
+                    name: 'YouTube',
+                  },
+                ],
+                isAccessibleForFree: true,
+                contentUrl: 'https://www.youtube.com/watch?v=qlGq-ZlDlus',
+                hostPageUrl: 'https://www.youtube.com/watch?v=qlGq-ZlDlus',
+                hostPageUrlPingSuffix: 'DevEx,5621.1',
+                encodingFormat: '',
+                hostPageDisplayUrl:
+                  'https://www.youtube.com/watch?v=qlGq-ZlDlus',
+                width: 1280,
+                height: 720,
+                duration: 'PT4M6S',
+                embedHtml:
+                  '<iframe width="1280" height="720" src="http://www.youtube.com/embed/qlGq-ZlDlus?autoplay=1" frameborder="0" allowfullscreen></iframe>',
+                allowHttpsEmbed: true,
+                viewCount: 2973,
+                thumbnail: {
+                  width: 160,
+                  height: 120,
+                },
+                allowMobileEmbed: true,
+                isSuperfresh: true,
+              },
+              {
+                webSearchUrl:
+                  'https://www.bing.com/videos/search?q=rick%20roll&view=detail&mid=6438FA6C7D3B90C886B36438FA6C7D3B90C886B3',
+                webSearchUrlPingSuffix: 'DevEx,5624.1',
+                name: 'Rick Roll 2019 (Shot-for-Shot Recreation)',
+                description:
+                  "Lyrics We're no strangers to love You know the rules and so do I A full commitment's what I'm thinking of You wouldn't get this from any other guy I just wanna tell you how I'm feeling Gotta make you understand Never gonna give you up Never gonna let you down Never gonna run around and desert you Never gonna make you cry Never gonna say goodbye ...",
+                thumbnailUrl:
+                  'https://tse4.mm.bing.net/th?id=OVF.pBT6HBIt8%2fgAlcWyV8TZbg&pid=Api',
+                datePublished: '2019-06-21T21:56:30.0000000',
+                publisher: [
+                  {
+                    name: 'YouTube',
+                  },
+                ],
+                isAccessibleForFree: true,
+                contentUrl: 'https://www.youtube.com/watch?v=_GpjEyFSq-0',
+                hostPageUrl: 'https://www.youtube.com/watch?v=_GpjEyFSq-0',
+                hostPageUrlPingSuffix: 'DevEx,5623.1',
+                encodingFormat: '',
+                hostPageDisplayUrl:
+                  'https://www.youtube.com/watch?v=_GpjEyFSq-0',
+                width: 1280,
+                height: 720,
+                duration: 'PT3M33S',
+                embedHtml:
+                  '<iframe width="1280" height="720" src="http://www.youtube.com/embed/_GpjEyFSq-0?autoplay=1" frameborder="0" allowfullscreen></iframe>',
+                allowHttpsEmbed: true,
+                viewCount: 133,
+                thumbnail: {
+                  width: 160,
+                  height: 120,
+                },
+                allowMobileEmbed: true,
+                isSuperfresh: true,
+              },
+            ],
+          },
         ],
         pole: [],
         sidebar: [],

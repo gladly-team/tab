@@ -200,6 +200,10 @@ class SearchResultsQueryBing extends React.Component {
                 )
                 break
               }
+              case 'videos': {
+                itemData = get(data, `${typeName}.value`)
+                break
+              }
               default: {
                 itemData = get(
                   data,
