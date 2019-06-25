@@ -37,11 +37,8 @@ const TimeZoneSearchResult = props => {
   if (!(location && utcOffset && time)) {
     return null
   }
-  const formatDate = isoTime => moment(isoTime).format('dddd, MMMM D, YYYY')
-  const formatTime = isoTime =>
-    moment(isoTime)
-      .utc()
-      .format('h:mm A')
+  const formatDate = isoTime => moment.utc(isoTime).format('dddd, MMMM D, YYYY')
+  const formatTime = isoTime => moment.utc(isoTime).format('h:mm A')
   return (
     <Paper className={classes.container} elevation={1}>
       <Typography

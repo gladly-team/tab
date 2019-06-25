@@ -48,7 +48,7 @@ describe('TimeZoneSearchResult', () => {
     expect(wrapper.html()).toBeNull()
   })
 
-  it('formats the time value as expected', () => {
+  it('formats the time value as expected [test 1]', () => {
     jest.spyOn(console, 'error').mockImplementation(() => {})
     const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
       .default
@@ -59,6 +59,19 @@ describe('TimeZoneSearchResult', () => {
       .find('[data-test-id="search-result-time-zone-time"]')
       .first()
     expect(elem.render().text()).toEqual('3:27 PM')
+  })
+
+  it('formats the time value as expected [test 2]', () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {})
+    const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
+      .default
+    const mockProps = getMockProps()
+    mockProps.item.primaryCityTime.time = '2019-06-25T05:59:53.0114595Z'
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />).dive()
+    const elem = wrapper
+      .find('[data-test-id="search-result-time-zone-time"]')
+      .first()
+    expect(elem.render().text()).toEqual('5:59 AM')
   })
 
   it('displays the time value in the expected Typography component', () => {
@@ -75,7 +88,7 @@ describe('TimeZoneSearchResult', () => {
     expect(elem.prop('variant')).toEqual('h4')
   })
 
-  it('formats the date as expected', () => {
+  it('formats the date as expected [test 1]', () => {
     jest.spyOn(console, 'error').mockImplementation(() => {})
     const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
       .default
@@ -86,6 +99,19 @@ describe('TimeZoneSearchResult', () => {
       .find('[data-test-id="search-result-time-zone-date"]')
       .first()
     expect(elem.render().text()).toEqual('Friday, October 23, 2015')
+  })
+
+  it('formats the date as expected [test 2]', () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {})
+    const TimeZoneSearchResult = require('js/components/Search/TimeZoneSearchResult')
+      .default
+    const mockProps = getMockProps()
+    mockProps.item.primaryCityTime.time = '2019-06-25T05:59:53.0114595Z'
+    const wrapper = shallow(<TimeZoneSearchResult {...mockProps} />).dive()
+    const elem = wrapper
+      .find('[data-test-id="search-result-time-zone-date"]')
+      .first()
+    expect(elem.render().text()).toEqual('Tuesday, June 25, 2019')
   })
 
   it('displays the date in the expected Typography component', () => {
