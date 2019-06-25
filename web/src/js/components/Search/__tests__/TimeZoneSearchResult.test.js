@@ -232,11 +232,12 @@ describe('TimeZoneSearchResult', () => {
     const secondOtherCityTime = wrapper
       .find('[data-test-id="search-result-time-zone-other-locations"]')
       .children()
-      .filter('div')
+      .find('tr')
       .at(1)
     expect(
       secondOtherCityTime
         .children()
+        .find(Typography)
         .first()
         .render()
         .text()
@@ -244,6 +245,7 @@ describe('TimeZoneSearchResult', () => {
     expect(
       secondOtherCityTime
         .children()
+        .find(Typography)
         .at(1)
         .render()
         .text()

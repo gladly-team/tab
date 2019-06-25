@@ -14,11 +14,9 @@ const styles = () => ({
   otherCityTimesDivider: {
     margin: '20px 0px',
   },
-  otherCityTimeContainer: {
-    display: 'flex',
-  },
   otherCityTime: {
     color: 'rgba(0, 0, 0, 0.46)',
+    textAlign: 'right',
   },
   otherCityTimeLocation: {
     color: 'rgba(0, 0, 0, 0.46)',
@@ -68,28 +66,33 @@ const TimeZoneSearchResult = props => {
       {otherCityTimes && otherCityTimes.length ? (
         <div data-test-id={'search-result-time-zone-other-locations'}>
           <Divider className={classes.otherCityTimesDivider} />
-          {otherCityTimes.map(cityTime => {
-            return (
-              <div
-                key={cityTime.location}
-                className={classes.otherCityTimeContainer}
-              >
-                <Typography
-                  variant={'body2'}
-                  className={classes.otherCityTime}
-                  gutterBottom
-                >
-                  {formatTime(cityTime.time)}
-                </Typography>
-                <Typography
-                  variant={'body2'}
-                  className={classes.otherCityTimeLocation}
-                >
-                  {cityTime.location} ({cityTime.utcOffset})
-                </Typography>
-              </div>
-            )
-          })}
+          <table>
+            <tbody>
+              {otherCityTimes.map(cityTime => {
+                return (
+                  <tr key={cityTime.location}>
+                    <td>
+                      <Typography
+                        variant={'body2'}
+                        className={classes.otherCityTime}
+                        gutterBottom
+                      >
+                        {formatTime(cityTime.time)}
+                      </Typography>
+                    </td>
+                    <td>
+                      <Typography
+                        variant={'body2'}
+                        className={classes.otherCityTimeLocation}
+                      >
+                        {cityTime.location} ({cityTime.utcOffset})
+                      </Typography>
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
         </div>
       ) : null}
     </Paper>
