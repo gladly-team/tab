@@ -9,6 +9,7 @@ import {
   clipTextToNearestWord,
   getBingThumbnailURLToFillDimensions,
 } from 'js/utils/search-utils'
+import { abbreviateNumber } from 'js/utils/utils'
 
 const styles = () => ({
   container: {
@@ -64,6 +65,11 @@ const styles = () => ({
     minHeight: 0,
     minWidth: 0,
   },
+  videoItemTagsContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    marginTop: 'auto',
+  },
   attributionText: {
     textOverflow: 'ellipsis',
     flexShrink: 1,
@@ -77,7 +83,14 @@ const styles = () => ({
     minHeight: 0,
     minWidth: 0,
   },
-  timeSincePublishedText: {
+  timePublishedText: {
+    flexShrink: 0,
+    fontSize: 13,
+    lineHeight: 1.5,
+    color: 'rgba(0, 0, 0, 0.66)', // same color as search menu
+    margin: 0,
+  },
+  viewCountText: {
     flexShrink: 0,
     fontSize: 13,
     lineHeight: 1.5,
@@ -89,13 +102,20 @@ const styles = () => ({
 export const VideoSearchItem = props => {
   const {
     classes,
-    item: { datePublished, hostPageUrl, name, publisher, thumbnailUrl },
+    item: {
+      datePublished,
+      hostPageUrl,
+      name,
+      publisher,
+      thumbnailUrl,
+      viewCount,
+    },
   } = props
 
   // If the title is too long, slice it and add ellipses.
   const title = clipTextToNearestWord(name, 80)
 
-  const timeSincePublished =
+  const timePublished =
     datePublished && moment.utc(datePublished).isValid()
       ? moment.utc(datePublished).format('MMM D, YYYY')
       : null
@@ -131,23 +151,35 @@ export const VideoSearchItem = props => {
             {title}
           </h3>
         </a>
-        <div style={{ display: 'flex', marginTop: 'auto' }}>
-          {get(publisher, '[0].name') ? (
-            <p
-              data-test-id={'search-result-video-attribution'}
-              className={classes.attributionText}
-            >
-              {get(publisher, '[0].name')}
-            </p>
-          ) : null}
-          {timeSincePublished ? (
-            <p
-              data-test-id={'search-result-video-date-published'}
-              className={classes.timeSincePublishedText}
-            >
-              &nbsp;· {timeSincePublished}
-            </p>
-          ) : null}
+        <div className={classes.videoItemTagsContainer}>
+          <div>
+            {viewCount ? (
+              <p
+                data-test-id={'search-result-video-view-count'}
+                className={classes.viewCountText}
+              >
+                {abbreviateNumber(viewCount)} views
+              </p>
+            ) : null}
+          </div>
+          <div style={{ display: 'flex' }}>
+            {get(publisher, '[0].name') ? (
+              <p
+                data-test-id={'search-result-video-attribution'}
+                className={classes.attributionText}
+              >
+                {get(publisher, '[0].name')}
+              </p>
+            ) : null}
+            {timePublished ? (
+              <p
+                data-test-id={'search-result-video-date-published'}
+                className={classes.timePublishedText}
+              >
+                &nbsp;· {timePublished}
+              </p>
+            ) : null}
+          </div>
         </div>
       </div>
     </Paper>

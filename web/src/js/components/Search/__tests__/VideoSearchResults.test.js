@@ -323,4 +323,62 @@ describe('VideoSearchItem', () => {
     )
     expect(elem.text()).toEqual(' · Oct 25, 2009')
   })
+
+  it('displays the view count, if provided', () => {
+    const {
+      VideoSearchItem,
+    } = require('js/components/Search/VideoSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.viewCount = 45781231
+    const wrapper = shallow(<VideoSearchItem {...mockProps} />).dive()
+    const elem = wrapper.find('[data-test-id="search-result-video-view-count"]')
+    expect(elem.exists()).toBe(true)
+  })
+
+  it('does not display the view count, if not provided', () => {
+    const {
+      VideoSearchItem,
+    } = require('js/components/Search/VideoSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.viewCount = undefined
+    const wrapper = shallow(<VideoSearchItem {...mockProps} />).dive()
+    const elem = wrapper.find('[data-test-id="search-result-video-view-count"]')
+    expect(elem.exists()).toBe(false)
+  })
+
+  it('formats the view count as expected [test 1]', () => {
+    const {
+      VideoSearchItem,
+    } = require('js/components/Search/VideoSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.viewCount = 45781231
+    const wrapper = shallow(<VideoSearchItem {...mockProps} />).dive()
+    const elem = wrapper.find('[data-test-id="search-result-video-view-count"]')
+    expect(elem.exists()).toBe(true)
+    expect(elem.first().text()).toEqual('45.8M views')
+  })
+
+  it('formats the view count as expected [test 2]', () => {
+    const {
+      VideoSearchItem,
+    } = require('js/components/Search/VideoSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.viewCount = 132
+    const wrapper = shallow(<VideoSearchItem {...mockProps} />).dive()
+    const elem = wrapper.find('[data-test-id="search-result-video-view-count"]')
+    expect(elem.exists()).toBe(true)
+    expect(elem.first().text()).toEqual('132 views')
+  })
+
+  it('formats the view count as expected [test 3]', () => {
+    const {
+      VideoSearchItem,
+    } = require('js/components/Search/VideoSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.viewCount = 4981
+    const wrapper = shallow(<VideoSearchItem {...mockProps} />).dive()
+    const elem = wrapper.find('[data-test-id="search-result-video-view-count"]')
+    expect(elem.exists()).toBe(true)
+    expect(elem.first().text()).toEqual('5K views')
+  })
 })
