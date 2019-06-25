@@ -235,136 +235,36 @@ describe('VideoSearchItem', () => {
     expect(imgElem.prop('alt')).toEqual('')
   })
 
-  // it('displays contractual rules text if one rule exists', () => {
-  //   const {
-  //     VideoSearchItem,
-  //   } = require('js/components/Search/VideoSearchResults')
-  //   const mockProps = getMockNewsStoryProps()
-  //   mockProps.item.contractualRules = [
-  //     {
-  //       _type: 'ContractualRules/TextAttribution',
-  //       text: 'A Good News Site',
-  //     },
-  //   ]
-  //   const wrapper = shallow(<VideoSearchItem {...mockProps} />).dive()
-  //   const attributionElems = wrapper.find(
-  //     '[data-test-id="search-result-video-attribution"]'
-  //   )
-  //   expect(attributionElems.length).toEqual(1)
-  //   expect(attributionElems.first().text()).toEqual('A Good News Site')
-  // })
+  it('displays the first publisher name if one exists', () => {
+    const {
+      VideoSearchItem,
+    } = require('js/components/Search/VideoSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.publisher = [
+      {
+        name: 'The YouTubes',
+      },
+    ]
+    const wrapper = shallow(<VideoSearchItem {...mockProps} />).dive()
+    const attributionElems = wrapper.find(
+      '[data-test-id="search-result-video-attribution"]'
+    )
+    expect(attributionElems.exists()).toBe(true)
+    expect(attributionElems.first().text()).toEqual('The YouTubes')
+  })
 
-  // it('displays contractual rules text if more than one rule exists', () => {
-  //   const {
-  //     VideoSearchItem,
-  //   } = require('js/components/Search/VideoSearchResults')
-  //   const mockProps = getMockNewsStoryProps()
-  //   mockProps.item.contractualRules = [
-  //     {
-  //       _type: 'ContractualRules/TextAttribution',
-  //       text: 'A Good News Site',
-  //     },
-  //     {
-  //       _type: 'ContractualRules/TextAttribution',
-  //       text: 'Newsy News Daily',
-  //     },
-  //   ]
-  //   const wrapper = shallow(<VideoSearchItem {...mockProps} />).dive()
-  //   const attributionElems = wrapper.find(
-  //     '[data-test-id="search-result-video-attribution"]'
-  //   )
-  //   expect(attributionElems.length).toEqual(2)
-  //   expect(attributionElems.first().text()).toEqual('A Good News Site')
-  //   expect(attributionElems.at(1).text()).toEqual('Newsy News Daily')
-  // })
-
-  // it('does not display contractual rules text if not provided a rules item', () => {
-  //   const {
-  //     VideoSearchItem,
-  //   } = require('js/components/Search/VideoSearchResults')
-  //   const mockProps = getMockNewsStoryProps()
-  //   delete mockProps.item.contractualRules
-  //   const wrapper = shallow(<VideoSearchItem {...mockProps} />).dive()
-  //   const attributionElems = wrapper.find(
-  //     '[data-test-id="search-result-video-attribution"]'
-  //   )
-  //   expect(attributionElems.exists()).toBe(false)
-  // })
-
-  // it('does not display contractual rules text if provided undefined rules', () => {
-  //   const {
-  //     VideoSearchItem,
-  //   } = require('js/components/Search/VideoSearchResults')
-  //   const mockProps = getMockNewsStoryProps()
-  //   mockProps.item.contractualRules = undefined
-  //   const wrapper = shallow(<VideoSearchItem {...mockProps} />).dive()
-  //   const attributionElems = wrapper.find(
-  //     '[data-test-id="search-result-video-attribution"]'
-  //   )
-  //   expect(attributionElems.exists()).toBe(false)
-  // })
-
-  // it('does not display contractual rules text if provided empty array of rules', () => {
-  //   const {
-  //     VideoSearchItem,
-  //   } = require('js/components/Search/VideoSearchResults')
-  //   const mockProps = getMockNewsStoryProps()
-  //   mockProps.item.contractualRules = []
-  //   const wrapper = shallow(<VideoSearchItem {...mockProps} />).dive()
-  //   const attributionElems = wrapper.find(
-  //     '[data-test-id="search-result-video-attribution"]'
-  //   )
-  //   expect(attributionElems.exists()).toBe(false)
-  // })
-
-  // it('does not display the provider name if a contractual rule exists', () => {
-  //   const {
-  //     VideoSearchItem,
-  //   } = require('js/components/Search/VideoSearchResults')
-  //   const mockProps = getMockNewsStoryProps()
-  //   mockProps.item.contractualRules = [
-  //     {
-  //       _type: 'ContractualRules/TextAttribution',
-  //       text: 'A Good News Site',
-  //     },
-  //   ]
-  //   mockProps.item.provider = [
-  //     {
-  //       _type: 'Organization',
-  //       name: 'The Pretty Good News Site',
-  //     },
-  //   ]
-  //   const wrapper = shallow(<VideoSearchItem {...mockProps} />).dive()
-  //   expect(
-  //     wrapper.find('[data-test-id="search-result-video-attribution"]').exists()
-  //   ).toBe(true)
-  //   expect(
-  //     wrapper.find('[data-test-id="search-result-video-provider"]').exists()
-  //   ).toBe(false)
-  // })
-
-  // it('displays the provider name if no contractual rules exist', () => {
-  //   const {
-  //     VideoSearchItem,
-  //   } = require('js/components/Search/VideoSearchResults')
-  //   const mockProps = getMockNewsStoryProps()
-  //   mockProps.item.contractualRules = undefined
-  //   mockProps.item.provider = [
-  //     {
-  //       _type: 'Organization',
-  //       name: 'The Pretty Good News Site',
-  //     },
-  //   ]
-  //   const wrapper = shallow(<VideoSearchItem {...mockProps} />).dive()
-  //   expect(
-  //     wrapper.find('[data-test-id="search-result-video-attribution"]').exists()
-  //   ).toBe(false)
-  //   const providerTextElem = wrapper.find(
-  //     '[data-test-id="search-result-video-provider"]'
-  //   )
-  //   expect(providerTextElem.exists()).toBe(true)
-  //   expect(providerTextElem.text()).toEqual('The Pretty Good News Site')
-  // })
+  it('does not display the publisher name if none exists', () => {
+    const {
+      VideoSearchItem,
+    } = require('js/components/Search/VideoSearchResults')
+    const mockProps = getMockNewsStoryProps()
+    mockProps.item.publisher = undefined
+    const wrapper = shallow(<VideoSearchItem {...mockProps} />).dive()
+    const attributionElems = wrapper.find(
+      '[data-test-id="search-result-video-attribution"]'
+    )
+    expect(attributionElems.exists()).toBe(false)
+  })
 
   // it('displays the "time since published" text if a date is provided', () => {
   //   const {

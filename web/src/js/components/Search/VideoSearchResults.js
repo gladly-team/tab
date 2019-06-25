@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
+import { get } from 'lodash/object'
 import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
@@ -88,19 +89,10 @@ const styles = () => ({
 export const VideoSearchItem = props => {
   const {
     classes,
-    item: {
-      datePublished,
-      hostPageDisplayUrl,
-      hostPageUrl,
-      name,
-      // publisher,
-      thumbnailUrl,
-    },
+    item: { datePublished, hostPageUrl, name, publisher, thumbnailUrl },
   } = props
-  // console.log('video item', props.item)
 
-  // If the title or description are too long, slice them
-  // and add ellipses.
+  // If the title is too long, slice it and add ellipses.
   const title = clipTextToNearestWord(name, 80)
 
   const timeSincePublished =
@@ -140,12 +132,12 @@ export const VideoSearchItem = props => {
           </h3>
         </a>
         <div style={{ display: 'flex', marginTop: 'auto' }}>
-          {hostPageDisplayUrl ? (
+          {get(publisher, '[0].name') ? (
             <p
               data-test-id={'search-result-video-attribution'}
               className={classes.attributionText}
             >
-              {hostPageDisplayUrl}
+              {get(publisher, '[0].name')}
             </p>
           ) : null}
           {timeSincePublished ? (
