@@ -118,6 +118,150 @@ export default () =>
           },
         ],
       },
+      videos: {
+        id: 'https://www.bingapis.com/api/v7/#Videos',
+        isFamilyFriendly: true,
+        readLink: 'https://www.bingapis.com/api/v7/videos/search?q=rick+roll',
+        scenario: 'List',
+        value: [
+          {
+            allowHttpsEmbed: true,
+            allowMobileEmbed: true,
+            contentUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+            datePublished: '2009-10-25T06:57:33.0000000',
+            description:
+              'Rick Astley - Never Gonna Give You Up (Official Video) - Listen On Spotify: http://smarturl.it/AstleySpotify Learn more about the brand new album ‘Beautiful Life’: https://RickAstley.lnk.to/BeautifulLi... Buy On iTunes: http://smarturl.it/AstleyGHiTunes Amazon: http://smarturl.it/AstleyGHAmazon Follow Rick Astley Website: http://www ...',
+            duration: 'PT3M33S',
+            embedHtml:
+              '<iframe width="1280" height="720" src="http://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1" frameborder="0" allowfullscreen></iframe>',
+            encodingFormat: 'mp4',
+            height: 720,
+            hostPageDisplayUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+            hostPageUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+            hostPageUrlPingSuffix: 'DevEx,5617.1',
+            isAccessibleForFree: true,
+            isSuperfresh: false,
+            motionThumbnailUrl:
+              'https://tse3.mm.bing.net/th?id=OM.NrH36WeODxx7Tg_1557133268&pid=Api',
+            name: 'Rick Astley - Never Gonna Give You Up (Video)',
+            publisher: [{ name: 'YouTube' }],
+            thumbnail: { width: 160, height: 119 },
+            thumbnailUrl:
+              'https://tse3.mm.bing.net/th?id=OVP.6PGH-QJhVEnKeMu2-91ajQHfFn&pid=Api',
+            viewCount: 573320051,
+            webSearchUrl:
+              'https://www.bing.com/videos/search?q=rick%20roll&view=detail&mid=4E7B1C0F8E67E9F7B1364E7B1C0F8E67E9F7B136',
+            webSearchUrlPingSuffix: 'DevEx,5618.1',
+            width: 1280,
+          },
+          {
+            webSearchUrl:
+              'https://www.bing.com/videos/search?q=rick%20roll&view=detail&mid=CA767BEE3A9FFDBBE775CA767BEE3A9FFDBBE775',
+            webSearchUrlPingSuffix: 'DevEx,5620.1',
+            name: 'Rick astley Together Forever remix tema',
+            description: 'Rick astley Together Forever remix tema',
+            thumbnailUrl:
+              'https://tse1.mm.bing.net/th?id=OVF.jRV6abk10leVreAar%2fx1Zg&pid=Api',
+            datePublished: '2019-06-25T02:25:35.0000000',
+            publisher: [
+              {
+                name: 'YouTube',
+              },
+            ],
+            isAccessibleForFree: true,
+            contentUrl: 'https://www.youtube.com/watch?v=kg9_lJbH8Fw',
+            hostPageUrl: 'https://www.youtube.com/watch?v=kg9_lJbH8Fw',
+            hostPageUrlPingSuffix: 'DevEx,5619.1',
+            encodingFormat: '',
+            hostPageDisplayUrl: 'https://www.youtube.com/watch?v=kg9_lJbH8Fw',
+            width: 1280,
+            height: 720,
+            duration: 'PT6M54S',
+            embedHtml:
+              '<iframe width="1280" height="720" src="http://www.youtube.com/embed/kg9_lJbH8Fw?autoplay=1" frameborder="0" allowfullscreen></iframe>',
+            allowHttpsEmbed: true,
+            viewCount: 2,
+            thumbnail: {
+              width: 160,
+              height: 120,
+            },
+            allowMobileEmbed: true,
+            isSuperfresh: true,
+          },
+          {
+            webSearchUrl:
+              'https://www.bing.com/videos/search?q=rick%20roll&view=detail&mid=150ED418D5753FA363B9150ED418D5753FA363B9',
+            webSearchUrlPingSuffix: 'DevEx,5622.1',
+            name: 'Rick Astley - Never Gonna Give You Up | Dark: Season 2 OST',
+            description:
+              'Music from Dark: Season 2 (2019) distributed by Netflix. Dark: Season 2 (Soundtrack) by Various Artists. Playlist: https://www.youtube.com/playlist?list=PLDisKgcnAC4S1uAqB-rNIGvmocSvexdRB',
+            thumbnailUrl:
+              'https://tse3.mm.bing.net/th?id=OVF.x3pEJBaPXV3CVbY3T%2fD1kg&pid=Api',
+            datePublished: '2019-06-22T20:11:46.0000000',
+            publisher: [
+              {
+                name: 'YouTube',
+              },
+            ],
+            isAccessibleForFree: true,
+            contentUrl: 'https://www.youtube.com/watch?v=qlGq-ZlDlus',
+            hostPageUrl: 'https://www.youtube.com/watch?v=qlGq-ZlDlus',
+            hostPageUrlPingSuffix: 'DevEx,5621.1',
+            encodingFormat: '',
+            hostPageDisplayUrl: 'https://www.youtube.com/watch?v=qlGq-ZlDlus',
+            width: 1280,
+            height: 720,
+            duration: 'PT4M6S',
+            embedHtml:
+              '<iframe width="1280" height="720" src="http://www.youtube.com/embed/qlGq-ZlDlus?autoplay=1" frameborder="0" allowfullscreen></iframe>',
+            allowHttpsEmbed: true,
+            viewCount: 2973,
+            thumbnail: {
+              width: 160,
+              height: 120,
+            },
+            allowMobileEmbed: true,
+            isSuperfresh: true,
+          },
+          {
+            webSearchUrl:
+              'https://www.bing.com/videos/search?q=rick%20roll&view=detail&mid=6438FA6C7D3B90C886B36438FA6C7D3B90C886B3',
+            webSearchUrlPingSuffix: 'DevEx,5624.1',
+            name: 'Rick Roll 2019 (Shot-for-Shot Recreation)',
+            description:
+              "Lyrics We're no strangers to love You know the rules and so do I A full commitment's what I'm thinking of You wouldn't get this from any other guy I just wanna tell you how I'm feeling Gotta make you understand Never gonna give you up Never gonna let you down Never gonna run around and desert you Never gonna make you cry Never gonna say goodbye ...",
+            thumbnailUrl:
+              'https://tse4.mm.bing.net/th?id=OVF.pBT6HBIt8%2fgAlcWyV8TZbg&pid=Api',
+            datePublished: '2019-06-21T21:56:30.0000000',
+            publisher: [
+              {
+                name: 'YouTube',
+              },
+            ],
+            isAccessibleForFree: true,
+            contentUrl: 'https://www.youtube.com/watch?v=_GpjEyFSq-0',
+            hostPageUrl: 'https://www.youtube.com/watch?v=_GpjEyFSq-0',
+            hostPageUrlPingSuffix: 'DevEx,5623.1',
+            encodingFormat: '',
+            hostPageDisplayUrl: 'https://www.youtube.com/watch?v=_GpjEyFSq-0',
+            width: 1280,
+            height: 720,
+            duration: 'PT3M33S',
+            embedHtml:
+              '<iframe width="1280" height="720" src="http://www.youtube.com/embed/_GpjEyFSq-0?autoplay=1" frameborder="0" allowfullscreen></iframe>',
+            allowHttpsEmbed: true,
+            viewCount: 133,
+            thumbnail: {
+              width: 160,
+              height: 120,
+            },
+            allowMobileEmbed: true,
+            isSuperfresh: true,
+          },
+        ],
+        webSearchUrl: 'https://www.bing.com/videos/search?q=rick+roll',
+        webSearchUrlPingSuffix: 'Foo,1234.1',
+      },
       webPages: {
         webSearchUrl: 'https://www.bing.com/search?q=johh+mayer',
         totalEstimatedMatches: 14700000,
@@ -1556,364 +1700,6 @@ export default () =>
             webSearchUrl: 'https://www.bing.com/search?q=john+mayer+gravity',
           },
         ],
-      },
-      videos: {
-        id: 'https://api.cognitive.microsoft.com/api/v7/#Videos',
-        readLink:
-          'https://api.cognitive.microsoft.com/api/v7/videos/search?q=johh+mayer',
-        webSearchUrl: 'https://www.bing.com/videos/search?q=johh+mayer',
-        isFamilyFriendly: true,
-        value: [
-          {
-            webSearchUrl:
-              'https://www.bing.com/videos/search?q=johh%20mayer&view=detail&mid=ADDDA48A9DACDED1B531ADDDA48A9DACDED1B531',
-            name: 'John Mayer - New Light',
-            description:
-              'Spotify: http://radi.al/NewLightSpotify Apple: http://radi.al/NewLightApple Amazon: http://radi.al/NewLightAMZ John Mayer “New Light” I’m the boy in your other phone Lighting up inside your drawer at home all alone Pushin 40 in the friend zone We talk and then you walk away every day Oh you don’t think twice bout me And maybe you’re ...',
-            thumbnailUrl:
-              'https://tse3.mm.bing.net/th?id=OVP.0X4diZoAEyyadIFNbaS6ewHgFo&pid=Api',
-            datePublished: '2018-05-10T17:00:01.0000000',
-            publisher: [
-              {
-                name: 'YouTube',
-              },
-            ],
-            isAccessibleForFree: true,
-            contentUrl: 'https://www.youtube.com/watch?v=2PH7dK6SLC8',
-            hostPageUrl: 'https://www.youtube.com/watch?v=2PH7dK6SLC8',
-            encodingFormat: 'mp4',
-            hostPageDisplayUrl: 'https://www.youtube.com/watch?v=2PH7dK6SLC8',
-            width: 1280,
-            height: 720,
-            duration: 'PT3M37S',
-            motionThumbnailUrl:
-              'https://tse3.mm.bing.net/th?id=OM.MbXR3qydiqTdrQ_1550014794&pid=Api',
-            embedHtml:
-              '&lt;iframe width=&quot;1280&quot; height=&quot;720&quot; src=&quot;http://www.youtube.com/embed/2PH7dK6SLC8?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;',
-            allowHttpsEmbed: true,
-            viewCount: 12932499,
-            thumbnail: {
-              width: 160,
-              height: 120,
-            },
-            allowMobileEmbed: true,
-            isSuperfresh: false,
-          },
-          {
-            webSearchUrl:
-              'https://www.bing.com/videos/search?q=johh%20mayer&view=detail&mid=FEE55A29A7C504EBB099FEE55A29A7C504EBB099',
-            name: 'John Mayer - New Light (Premium Content!)',
-            description:
-              '“New Light” available now: http://johnmayer.com (C) 2018 Snack Money',
-            thumbnailUrl:
-              'https://tse2.mm.bing.net/th?id=OVT.VF_mbDrBMWnKVrl_g_1554694818&pid=Api',
-            datePublished: '2018-05-24T13:42:02.0000000',
-            publisher: [
-              {
-                name: 'YouTube',
-              },
-            ],
-            isAccessibleForFree: true,
-            contentUrl: 'https://www.youtube.com/watch?v=mQ055hHdxbE',
-            hostPageUrl: 'https://www.youtube.com/watch?v=mQ055hHdxbE',
-            encodingFormat: 'mp4',
-            hostPageDisplayUrl: 'https://www.youtube.com/watch?v=mQ055hHdxbE',
-            width: 1280,
-            height: 720,
-            duration: 'PT3M49S',
-            embedHtml:
-              '&lt;iframe width=&quot;1280&quot; height=&quot;720&quot; src=&quot;http://www.youtube.com/embed/mQ055hHdxbE?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;',
-            allowHttpsEmbed: true,
-            viewCount: 39163922,
-            thumbnail: {
-              width: 160,
-              height: 119,
-            },
-            allowMobileEmbed: true,
-            isSuperfresh: false,
-          },
-          {
-            webSearchUrl:
-              'https://www.bing.com/videos/search?q=johh%20mayer&view=detail&mid=D3FA4E01E8022EA3987DD3FA4E01E8022EA3987D',
-            name: 'John Mayer - I Guess I Just Feel Like (Lyric Video)',
-            description:
-              '“I Guess I Just Feel Like” is available now: http://smarturl.it/iguessijustfeellike Amazon Music: http://smarturl.it/iguessijustfeellike/az Apple Music: http://smarturl.it/iguessijustfeellike/applemusic iTunes: http://smarturl.it/iguessijustfeellike/itunes Soundcloud: http://smarturl.it/iguessijustfeellike/soundcloud Spotify: http ...',
-            thumbnailUrl:
-              'https://tse2.mm.bing.net/th?id=OVP.e1ZKfFBh6feG4bgAbgnqHwHgFo&pid=Api',
-            datePublished: '2019-02-22T05:00:00.0000000',
-            publisher: [
-              {
-                name: 'YouTube',
-              },
-            ],
-            isAccessibleForFree: true,
-            contentUrl: 'https://www.youtube.com/watch?v=CQEoLHeI0tA',
-            hostPageUrl: 'https://www.youtube.com/watch?v=CQEoLHeI0tA',
-            encodingFormat: '',
-            hostPageDisplayUrl: 'https://www.youtube.com/watch?v=CQEoLHeI0tA',
-            width: 1280,
-            height: 720,
-            duration: 'PT4M47S',
-            embedHtml:
-              '&lt;iframe width=&quot;1280&quot; height=&quot;720&quot; src=&quot;http://www.youtube.com/embed/CQEoLHeI0tA?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;',
-            allowHttpsEmbed: true,
-            viewCount: 2641598,
-            thumbnail: {
-              width: 160,
-              height: 120,
-            },
-            allowMobileEmbed: true,
-            isSuperfresh: false,
-          },
-          {
-            webSearchUrl:
-              'https://www.bing.com/videos/search?q=johh%20mayer&view=detail&mid=9C5D2832B286BF21A7419C5D2832B286BF21A741',
-            name: 'John Mayer - Say',
-            description:
-              'Music video by John Mayer performing Say. (C) 2007 Aware Records LLC http://vevo.ly/pRORaV',
-            thumbnailUrl:
-              'https://tse2.mm.bing.net/th?id=OVP.nzop4HXFC38MEOWLJcPOGwHgFo&pid=Api',
-            datePublished: '2018-05-05T00:21:19.0000000',
-            publisher: [
-              {
-                name: 'YouTube',
-              },
-            ],
-            isAccessibleForFree: true,
-            contentUrl: 'https://www.youtube.com/watch?v=phaIklEphSM',
-            hostPageUrl: 'https://www.youtube.com/watch?v=phaIklEphSM',
-            encodingFormat: 'mp4',
-            hostPageDisplayUrl: 'https://www.youtube.com/watch?v=phaIklEphSM',
-            width: 1280,
-            height: 720,
-            duration: 'PT3M52S',
-            motionThumbnailUrl:
-              'https://tse2.mm.bing.net/th?id=OM.Qachv4ayMihdnA_1553689274&pid=Api',
-            embedHtml:
-              '&lt;iframe width=&quot;1280&quot; height=&quot;720&quot; src=&quot;http://www.youtube.com/embed/phaIklEphSM?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;',
-            allowHttpsEmbed: true,
-            viewCount: 3127777,
-            thumbnail: {
-              width: 160,
-              height: 120,
-            },
-            allowMobileEmbed: true,
-            isSuperfresh: false,
-          },
-          {
-            webSearchUrl:
-              'https://www.bing.com/videos/search?q=johh%20mayer&view=detail&mid=8B6DD33531D85098B2A48B6DD33531D85098B2A4',
-            name: 'John Mayer - Still Feel Like Your Man (Video)',
-            description:
-              '&quot;Still Feel Like Your Man&quot; off John Mayer&#39;s album &#39;The Search for Everything&#39; is available now: http://smarturl.it/TSFE?iqid=SFLYM.video iTunes: http://smarturl.it/tsfe-it?iqid=SFLYM.video Spotify: http://smarturl.it/tsfe-sp?iqid=SFLYM.video Apple Music: http://smarturl.it/tsfe-am?iqid=SFLYM.video Amazon Music: http://smarturl.it/tsfe-amz?iqid ...',
-            thumbnailUrl:
-              'https://tse2.mm.bing.net/th?id=OVP.R59ekSBvbcSrLUcCub4gdwHgFo&pid=Api',
-            datePublished: '2017-04-05T14:00:02.0000000',
-            publisher: [
-              {
-                name: 'YouTube',
-              },
-            ],
-            isAccessibleForFree: true,
-            contentUrl: 'https://www.youtube.com/watch?v=NyCst7We6Uw',
-            hostPageUrl: 'https://www.youtube.com/watch?v=NyCst7We6Uw',
-            encodingFormat: 'mp4',
-            hostPageDisplayUrl: 'https://www.youtube.com/watch?v=NyCst7We6Uw',
-            width: 1280,
-            height: 720,
-            duration: 'PT4M11S',
-            motionThumbnailUrl:
-              'https://tse2.mm.bing.net/th?id=OM.pLKYUNgxNdNtiw_1554419512&pid=Api',
-            embedHtml:
-              '&lt;iframe width=&quot;1280&quot; height=&quot;720&quot; src=&quot;http://www.youtube.com/embed/NyCst7We6Uw?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;',
-            allowHttpsEmbed: true,
-            viewCount: 13115482,
-            thumbnail: {
-              width: 160,
-              height: 120,
-            },
-            allowMobileEmbed: true,
-            isSuperfresh: false,
-          },
-          {
-            webSearchUrl:
-              'https://www.bing.com/videos/search?q=johh%20mayer&view=detail&mid=E7911F903716E07AF5EFE7911F903716E07AF5EF',
-            name:
-              'John Mayer - Your Body Is A Wonderland (Official Music Video)',
-            description:
-              'John Mayer&#39;s official music video for &#39;Your Body Is A Wonderland&#39;. Click to listen to John Mayer on Spotify: http://smarturl.it/JMayerSpotify?IQid=JMayerYBisW As featured on Room For Squares. Click to buy the track or album via iTunes: http://smarturl.it/JMayerClctniTunes?IQid=JMayerYBisW Google Play: http://smarturl.it/JMayerYBiaWplay?IQid ...',
-            thumbnailUrl:
-              'https://tse2.mm.bing.net/th?id=OVP.b5s5YGxPECo4TritYH2pZQHgFo&pid=Api',
-            datePublished: '2009-10-03T04:47:25.0000000',
-            publisher: [
-              {
-                name: 'YouTube',
-              },
-            ],
-            isAccessibleForFree: true,
-            contentUrl: 'https://www.youtube.com/watch?v=N5EnGwXV_Pg',
-            hostPageUrl: 'https://www.youtube.com/watch?v=N5EnGwXV_Pg',
-            encodingFormat: 'mp4',
-            hostPageDisplayUrl: 'https://www.youtube.com/watch?v=N5EnGwXV_Pg',
-            width: 1280,
-            height: 720,
-            duration: 'PT4M17S',
-            motionThumbnailUrl:
-              'https://tse2.mm.bing.net/th?id=OM.7_V64BY3kB-R5w_1551940911&pid=Api',
-            embedHtml:
-              '&lt;iframe width=&quot;1280&quot; height=&quot;720&quot; src=&quot;http://www.youtube.com/embed/N5EnGwXV_Pg?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;',
-            allowHttpsEmbed: true,
-            viewCount: 63109704,
-            thumbnail: {
-              width: 160,
-              height: 120,
-            },
-            allowMobileEmbed: true,
-            isSuperfresh: false,
-          },
-          {
-            webSearchUrl:
-              'https://www.bing.com/videos/search?q=johh%20mayer&view=detail&mid=8D12C56D64C33A0DB69D8D12C56D64C33A0DB69D',
-            name:
-              'John Mayer - Waiting On the World to Change (Official Music Video)',
-            description:
-              'John Mayer&#39;s official music video for &#39;Waiting On The World To Change&#39;. Click to listen to John Mayer on Spotify: http://smarturl.it/JMayerSpotify?IQid... As featured on Continuum. Click to buy the track or album via iTunes: http://smarturl.it/JMayerClctniTunes?... Google Play: http://smarturl.it/JMayerWftWtCplay?I... Amazon: http://smarturl.it ...',
-            thumbnailUrl:
-              'https://tse1.mm.bing.net/th?id=OVP.6klZbL6ptA1sLacNOc-vGQHgFo&pid=Api',
-            datePublished: '2009-10-03T20:59:04.0000000',
-            publisher: [
-              {
-                name: 'YouTube',
-              },
-            ],
-            isAccessibleForFree: true,
-            contentUrl: 'https://www.youtube.com/watch?v=oBIxScJ5rlY',
-            hostPageUrl: 'https://www.youtube.com/watch?v=oBIxScJ5rlY',
-            encodingFormat: 'mp4',
-            hostPageDisplayUrl: 'https://www.youtube.com/watch?v=oBIxScJ5rlY',
-            width: 1280,
-            height: 720,
-            duration: 'PT3M22S',
-            motionThumbnailUrl:
-              'https://tse1.mm.bing.net/th?id=OM.nbYNOsNkbcUSjQ_1551069724&pid=Api',
-            embedHtml:
-              '&lt;iframe width=&quot;1280&quot; height=&quot;720&quot; src=&quot;http://www.youtube.com/embed/oBIxScJ5rlY?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;',
-            allowHttpsEmbed: true,
-            viewCount: 40640146,
-            thumbnail: {
-              width: 160,
-              height: 120,
-            },
-            allowMobileEmbed: true,
-            isSuperfresh: false,
-          },
-          {
-            webSearchUrl:
-              'https://www.bing.com/videos/search?q=johh%20mayer&view=detail&mid=CED2C5C365C2703E75BACED2C5C365C2703E75BA',
-            name: 'John Mayer - Daughters (Official Music Video)',
-            description:
-              'John Mayer&#39;s official music video for &#39;Daughters&#39;. Click to listen to John Mayer on Spotify: http://smarturl.it/JMayerSpotify?IQid=JMayerDau As featured on Heavier Things. Click to buy the track or album via iTunes: http://smarturl.it/JMayerClctniTunes?IQid=JMayerDau Google Play: http://smarturl.it/JMayerDauplay?IQid=JMayerDau Amazon: http ...',
-            thumbnailUrl:
-              'https://tse1.mm.bing.net/th?id=OVP.hw6VijaKCTcOnn1Tol6kEwHfFn&pid=Api',
-            datePublished: '2009-10-03T04:48:27.0000000',
-            publisher: [
-              {
-                name: 'YouTube',
-              },
-            ],
-            isAccessibleForFree: true,
-            contentUrl: 'https://www.youtube.com/watch?v=rZLbUIa7exE',
-            hostPageUrl: 'https://www.youtube.com/watch?v=rZLbUIa7exE',
-            encodingFormat: 'mp4',
-            hostPageDisplayUrl: 'https://www.youtube.com/watch?v=rZLbUIa7exE',
-            width: 1280,
-            height: 720,
-            duration: 'PT3M58S',
-            motionThumbnailUrl:
-              'https://tse1.mm.bing.net/th?id=OM.unU-cMJlw8XSzg_1549843874&pid=Api',
-            embedHtml:
-              '&lt;iframe width=&quot;1280&quot; height=&quot;720&quot; src=&quot;http://www.youtube.com/embed/rZLbUIa7exE?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;',
-            allowHttpsEmbed: true,
-            viewCount: 26985405,
-            thumbnail: {
-              width: 160,
-              height: 119,
-            },
-            allowMobileEmbed: true,
-            isSuperfresh: false,
-          },
-          {
-            webSearchUrl:
-              'https://www.bing.com/videos/search?q=johh%20mayer&view=detail&mid=53BA72A7DBB30A9A147653BA72A7DBB30A9A1476',
-            name: 'John Mayer - Half of My Heart (Official Music Video)',
-            description:
-              'John Mayer&#39;s official music video for &#39;Half Of My Heart&#39;. Click to listen to John Mayer on Spotify: http://smarturl.it/JMayerSpotify?IQid... As featured on Battle Studies. Click to buy the track or album via iTunes: http://smarturl.it/JMayerClctniTunes?... Google Play: http://smarturl.it/JMayerHomHplay?IQi... Amazon: http://smarturl.it ...',
-            thumbnailUrl:
-              'https://tse3.mm.bing.net/th?id=OVP.YI5klfU9C8AcBhU16sWhlQHgFo&pid=Api',
-            datePublished: '2010-06-01T22:50:18.0000000',
-            publisher: [
-              {
-                name: 'YouTube',
-              },
-            ],
-            isAccessibleForFree: true,
-            contentUrl: 'https://www.youtube.com/watch?v=aojTGWAqUIQ',
-            hostPageUrl: 'https://www.youtube.com/watch?v=aojTGWAqUIQ',
-            encodingFormat: 'mp4',
-            hostPageDisplayUrl: 'https://www.youtube.com/watch?v=aojTGWAqUIQ',
-            width: 1280,
-            height: 720,
-            duration: 'PT4M2S',
-            motionThumbnailUrl:
-              'https://tse3.mm.bing.net/th?id=OM.dhSaCrPbp3K6Uw_1551020243&pid=Api',
-            embedHtml:
-              '&lt;iframe width=&quot;1280&quot; height=&quot;720&quot; src=&quot;http://www.youtube.com/embed/aojTGWAqUIQ?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;',
-            allowHttpsEmbed: true,
-            viewCount: 30830606,
-            thumbnail: {
-              width: 160,
-              height: 120,
-            },
-            allowMobileEmbed: true,
-            isSuperfresh: false,
-          },
-          {
-            webSearchUrl:
-              'https://www.bing.com/videos/search?q=johh%20mayer&view=detail&mid=87652D67BEC6E7AF3A1087652D67BEC6E7AF3A10',
-            name: 'John Mayer - Queen of California (Video)',
-            description:
-              'John Mayer&#39;s official music video for &#39;Queen Of California&#39;. Click to listen to John Mayer on Spotify: http://smarturl.it/JMayerSpotify?IQid=JMayerQoC As featured on Born And Raised. Click to buy the track or album via iTunes: http://smarturl.it/JMayerBaRiTunes?IQid=JMayerQoC Google Play: http://smarturl.it/JMayerQoCplay?IQid=JMayerQoC Amazon ...',
-            thumbnailUrl:
-              'https://tse4.mm.bing.net/th?id=OVP.wcU1Se1MxxeywL8vMKJMYQHfFn&pid=Api',
-            datePublished: '2012-07-30T07:00:24.0000000',
-            publisher: [
-              {
-                name: 'YouTube',
-              },
-            ],
-            isAccessibleForFree: true,
-            contentUrl: 'https://www.youtube.com/watch?v=cSdjo0W4Tvs',
-            hostPageUrl: 'https://www.youtube.com/watch?v=cSdjo0W4Tvs',
-            encodingFormat: 'mp4',
-            hostPageDisplayUrl: 'https://www.youtube.com/watch?v=cSdjo0W4Tvs',
-            width: 1280,
-            height: 720,
-            duration: 'PT4M33S',
-            motionThumbnailUrl:
-              'https://tse4.mm.bing.net/th?id=OM.EDqv58a-Zy1lhw_1551962093&pid=Api',
-            embedHtml:
-              '&lt;iframe width=&quot;1280&quot; height=&quot;720&quot; src=&quot;http://www.youtube.com/embed/cSdjo0W4Tvs?autoplay=1&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;',
-            allowHttpsEmbed: true,
-            viewCount: 6673616,
-            thumbnail: {
-              width: 160,
-              height: 119,
-            },
-            allowMobileEmbed: true,
-            isSuperfresh: false,
-          },
-        ],
-        scenario: 'List',
       },
       rankingResponse: {
         mainline: {

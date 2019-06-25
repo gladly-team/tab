@@ -260,6 +260,7 @@ describe('getMockSuccessfulSearchQuery', () => {
       'queryContext',
       'rankingResponse',
       'timeZone',
+      'videos',
       'webPages',
     ])
   })
