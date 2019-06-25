@@ -182,11 +182,15 @@ class SearchResultsQueryBing extends React.Component {
                 break
               }
               case 'computation': {
-                itemData = get(data, `${typeName}`)
+                itemData = get(data, typeName)
                 break
               }
               case 'news': {
                 itemData = get(data, `${typeName}.value`)
+                break
+              }
+              case 'timeZone': {
+                itemData = get(data, typeName)
                 break
               }
               case 'webPages': {

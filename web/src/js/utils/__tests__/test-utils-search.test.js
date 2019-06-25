@@ -203,6 +203,39 @@ describe('getMockBingComputationResult', () => {
   })
 })
 
+describe('getMockBingTimeZoneResult', () => {
+  it('includes the expected keys', () => {
+    const { getMockBingTimeZoneResult } = require('js/utils/test-utils-search')
+    expect(Object.keys(getMockBingTimeZoneResult()).sort()).toEqual([
+      'id',
+      'otherCityTimes',
+      'primaryCityTime',
+    ])
+  })
+
+  it('includes the expected keys in primaryCityTime', () => {
+    const { getMockBingTimeZoneResult } = require('js/utils/test-utils-search')
+    expect(
+      Object.keys(getMockBingTimeZoneResult().primaryCityTime).sort()
+    ).toEqual(['location', 'time', 'utcOffset'])
+  })
+
+  it('allows overriding values', () => {
+    const { getMockBingTimeZoneResult } = require('js/utils/test-utils-search')
+    const defaultData = getMockBingTimeZoneResult()
+    expect(defaultData).toMatchObject({
+      id: 'https://www.bing.com/api/v7/#TimeZone',
+    })
+    expect(
+      getMockBingTimeZoneResult({
+        id: 'foo',
+      })
+    ).toMatchObject({
+      id: 'foo',
+    })
+  })
+})
+
 describe('getMockSuccessfulSearchQuery', () => {
   it('includes the expected keys', () => {
     const {
@@ -226,6 +259,7 @@ describe('getMockSuccessfulSearchQuery', () => {
       'news',
       'queryContext',
       'rankingResponse',
+      'timeZone',
       'webPages',
     ])
   })

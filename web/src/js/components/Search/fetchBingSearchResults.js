@@ -60,7 +60,7 @@ const fetchBingSearchResults = async (query = null, { page } = {}) => {
         // TimeZone, Videos, Webpages
         // Makes sure commas for list items are not encoded.
         // We should only include answer types that we will display.
-        responseFilter: 'Webpages,News,Ads,Computation',
+        responseFilter: 'Webpages,News,Ads,Computation,TimeZone',
         // Possible values: TextAds (required), AppInstallAds, ProductAds
         adTypesFilter: 'TextAds',
       },
