@@ -84,6 +84,7 @@ const TimeZoneSearchResult = props => {
                       <Typography
                         variant={'body2'}
                         className={classes.otherCityTimeLocation}
+                        gutterBottom
                       >
                         {cityTime.location} ({cityTime.utcOffset})
                       </Typography>
