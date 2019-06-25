@@ -47,6 +47,7 @@ const styles = () => ({
     fontFamily: 'arial, sans-serif',
     display: 'flex',
     flexDirection: 'column',
+    overflow: 'hidden',
   },
   newsItemImgAnchor: {
     textDecoration: 'none',
