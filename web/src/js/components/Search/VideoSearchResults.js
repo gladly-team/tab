@@ -4,7 +4,6 @@ import moment from 'moment'
 import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
-import { get } from 'lodash/object'
 import {
   clipTextToNearestWord,
   getBingThumbnailURLToFillDimensions,
@@ -173,7 +172,7 @@ VideoSearchItem.propTypes = {
     duration: PropTypes.string,
     embedHtml: PropTypes.string,
     encodingFormat: PropTypes.string,
-    height: 720,
+    height: PropTypes.number,
     hostPageDisplayUrl: PropTypes.string,
     hostPageUrl: PropTypes.string.isRequired,
     hostPageUrlPingSuffix: PropTypes.string,
@@ -218,7 +217,7 @@ const VideoSearchResults = props => {
       >
         {videoItemsToShow.map(videoItem => (
           <VideoSearchItem
-            key={videoItem.url}
+            key={videoItem.hostPageUrl}
             classes={classes}
             item={videoItem}
           />
