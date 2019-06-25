@@ -9,6 +9,7 @@ import { showBingPagination } from 'js/utils/search-utils'
 import SearchResultItem from 'js/components/Search/SearchResultItem'
 import SearchResultErrorMessage from 'js/components/Search/SearchResultErrorMessage'
 import { mockFetchResponse } from 'js/utils/test-utils'
+import ErrorBoundary from 'js/components/General/ErrorBoundary'
 
 jest.mock('js/components/Search/SearchResultItem')
 jest.mock('js/components/General/Link')
@@ -567,6 +568,19 @@ describe('SearchResultsBing: tests for displaying search results', () => {
     const mockProps = getMockProps()
     const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
     expect(wrapper.find(SearchResultItem).length).toEqual(2)
+  })
+
+  it('wraps the search result item in an error boundary that ignores caught errors', () => {
+    const SearchResultsBing = require('js/components/Search/SearchResultsBing')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchResultsBing {...mockProps} />).dive()
+    const errBoundary = wrapper
+      .find(SearchResultItem)
+      .first()
+      .parent()
+    expect(errBoundary.type()).toEqual(ErrorBoundary)
+    expect(errBoundary.prop('ignoreErrors')).toBe(true)
   })
 
   it('passes the expected data to the first search result item', () => {

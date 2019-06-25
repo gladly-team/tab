@@ -236,6 +236,84 @@ describe('getMockBingTimeZoneResult', () => {
   })
 })
 
+describe('getMockBingVideosResult', () => {
+  it('includes the expected keys', () => {
+    const { getMockBingVideosResult } = require('js/utils/test-utils-search')
+    expect(Object.keys(getMockBingVideosResult()).sort()).toEqual([
+      'id',
+      'isFamilyFriendly',
+      'readLink',
+      'scenario',
+      'value',
+      'webSearchUrl',
+      'webSearchUrlPingSuffix',
+    ])
+  })
+
+  it('allows overriding values', () => {
+    const { getMockBingVideosResult } = require('js/utils/test-utils-search')
+    const defaultData = getMockBingVideosResult()
+    expect(defaultData).toMatchObject({
+      id: 'https://www.bingapis.com/api/v7/#Videos',
+    })
+    expect(
+      getMockBingVideosResult({
+        webSearchUrl: 'https://example.com/foo/',
+      })
+    ).toMatchObject({
+      id: 'https://www.bingapis.com/api/v7/#Videos', // did not change
+      webSearchUrl: 'https://example.com/foo/',
+    })
+  })
+})
+
+describe('getMockBingVideosItem', () => {
+  it('includes the expected keys', () => {
+    const { getMockBingVideoItem } = require('js/utils/test-utils-search')
+    expect(Object.keys(getMockBingVideoItem()).sort()).toEqual([
+      'allowHttpsEmbed',
+      'allowMobileEmbed',
+      'contentUrl',
+      'datePublished',
+      'description',
+      'duration',
+      'embedHtml',
+      'encodingFormat',
+      'height',
+      'hostPageDisplayUrl',
+      'hostPageUrl',
+      'hostPageUrlPingSuffix',
+      'isAccessibleForFree',
+      'isSuperfresh',
+      'motionThumbnailUrl',
+      'name',
+      'publisher',
+      'thumbnail',
+      'thumbnailUrl',
+      'viewCount',
+      'webSearchUrl',
+      'webSearchUrlPingSuffix',
+      'width',
+    ])
+  })
+
+  it('allows overriding values', () => {
+    const { getMockBingVideoItem } = require('js/utils/test-utils-search')
+    const defaultData = getMockBingVideoItem()
+    expect(defaultData).toMatchObject({
+      hostPageUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    })
+    expect(
+      getMockBingVideoItem({
+        name: 'Rick Astley - Unfortunately, I Have to Give You Up Now (Video)',
+      })
+    ).toMatchObject({
+      hostPageUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', // did not change
+      name: 'Rick Astley - Unfortunately, I Have to Give You Up Now (Video)',
+    })
+  })
+})
+
 describe('getMockSuccessfulSearchQuery', () => {
   it('includes the expected keys', () => {
     const {
@@ -260,6 +338,7 @@ describe('getMockSuccessfulSearchQuery', () => {
       'queryContext',
       'rankingResponse',
       'timeZone',
+      'videos',
       'webPages',
     ])
   })

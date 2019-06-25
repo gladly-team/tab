@@ -14,12 +14,14 @@ import NewsSearchResults from 'js/components/Search/NewsSearchResults'
 import TextAdSearchResult from 'js/components/Search/TextAdSearchResult'
 import TimeZoneSearchResult from 'js/components/Search/TimeZoneSearchResult'
 import WebPageSearchResult from 'js/components/Search/WebPageSearchResult'
+import VideoSearchResults from 'js/components/Search/VideoSearchResults'
 
 jest.mock('js/components/Search/ComputationSearchResult')
 jest.mock('js/components/Search/NewsSearchResults')
 jest.mock('js/components/Search/TextAdSearchResult')
 jest.mock('js/components/Search/TimeZoneSearchResult')
 jest.mock('js/components/Search/WebPageSearchResult')
+jest.mock('js/components/Search/VideoSearchResults')
 
 const getMockProps = () => ({
   type: 'SomeType',
@@ -308,6 +310,48 @@ describe('SearchResultItem: ad items', () => {
     const mockProps = getMockProps()
     mockProps.type = 'Ads'
     mockProps.itemData = getMockBingTextAdResult()
+    mockProps.extraThingy = 'hi'
+    const wrapper = shallow(<SearchResultItem {...mockProps} />)
+    expect(wrapper.at(0).prop('extraThingy')).toEqual('hi')
+  })
+})
+
+describe('SearchResultItem: video items', () => {
+  it('renders a VideoSearchResults when providing a news data object', () => {
+    const SearchResultItem = require('js/components/Search/SearchResultItem')
+      .default
+    const mockProps = getMockProps()
+    mockProps.type = 'Videos'
+    mockProps.itemData = [
+      getMockBingNewsArticleResult(),
+      getMockBingNewsArticleResult(),
+    ]
+    const wrapper = shallow(<SearchResultItem {...mockProps} />)
+    expect(wrapper.at(0).type()).toEqual(VideoSearchResults)
+  })
+
+  it('uses a "video-results" key for a VideoSearchResults', () => {
+    const SearchResultItem = require('js/components/Search/SearchResultItem')
+      .default
+    const mockProps = getMockProps()
+    mockProps.type = 'Videos'
+    mockProps.itemData = [
+      getMockBingNewsArticleResult(),
+      getMockBingNewsArticleResult(),
+    ]
+    const wrapper = shallow(<SearchResultItem {...mockProps} />)
+    expect(wrapper.at(0).key()).toEqual('video-results')
+  })
+
+  it('passes extra props to the child', () => {
+    const SearchResultItem = require('js/components/Search/SearchResultItem')
+      .default
+    const mockProps = getMockProps()
+    mockProps.type = 'Videos'
+    mockProps.itemData = [
+      getMockBingNewsArticleResult(),
+      getMockBingNewsArticleResult(),
+    ]
     mockProps.extraThingy = 'hi'
     const wrapper = shallow(<SearchResultItem {...mockProps} />)
     expect(wrapper.at(0).prop('extraThingy')).toEqual('hi')

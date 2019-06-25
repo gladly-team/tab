@@ -10,6 +10,7 @@ import SearchResultItem from 'js/components/Search/SearchResultItem'
 import SearchResultErrorMessage from 'js/components/Search/SearchResultErrorMessage'
 import { showBingPagination } from 'js/utils/search-utils'
 import { commaFormatted } from 'js/utils/utils'
+import ErrorBoundary from 'js/components/General/ErrorBoundary'
 
 // Pings Bing when the search results page loads.
 class BingPageLoadPing extends React.Component {
@@ -166,12 +167,18 @@ const SearchResultsBing = props => {
           ) : null}
           {data.results.mainline.map(searchResultItemData => {
             return (
-              <SearchResultItem
+              <ErrorBoundary
+                ignoreErrors
+                brand={'tab'}
                 key={searchResultItemData.key}
-                type={searchResultItemData.type}
-                itemData={searchResultItemData.value}
-                instrumentation={data.instrumentation}
-              />
+              >
+                <SearchResultItem
+                  key={searchResultItemData.key}
+                  type={searchResultItemData.type}
+                  itemData={searchResultItemData.value}
+                  instrumentation={data.instrumentation}
+                />
+              </ErrorBoundary>
             )
           })}
           <div

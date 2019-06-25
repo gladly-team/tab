@@ -4,6 +4,7 @@ import ComputationSearchResult from 'js/components/Search/ComputationSearchResul
 import NewsSearchResults from 'js/components/Search/NewsSearchResults'
 import TextAdSearchResult from 'js/components/Search/TextAdSearchResult'
 import TimeZoneSearchResult from 'js/components/Search/TimeZoneSearchResult'
+import VideoSearchResults from 'js/components/Search/VideoSearchResults'
 import WebPageSearchResult from 'js/components/Search/WebPageSearchResult'
 
 // Delegates search result item rendering to the appropriate component.
@@ -72,6 +73,15 @@ const SearchResultItem = props => {
         <TimeZoneSearchResult
           key={itemData.id}
           item={itemData}
+          {...otherProps}
+        />
+      )
+    }
+    case 'Videos': {
+      return (
+        <VideoSearchResults
+          key={'video-results'}
+          videoItems={itemData}
           {...otherProps}
         />
       )
