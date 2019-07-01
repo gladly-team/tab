@@ -4,6 +4,9 @@ import { USER_REFERRAL_VC_REWARD } from '../constants'
 
 class Globals {
   constructor() {
+    // When updating these nubmers, also update them:
+    // * in the tab-homepage repository
+    // * in the search-homepage repository
     this.raised = 678810.0
     this.raisedUpdateTime = moment('2019-01-11T18:02:00.000Z')
     this.dollarsPerDayRate = 450.0
