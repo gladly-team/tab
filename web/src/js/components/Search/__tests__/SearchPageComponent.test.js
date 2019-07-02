@@ -38,6 +38,7 @@ import {
   isReactSnapClient,
   isSearchExtensionInstalled,
 } from 'js/utils/search-utils'
+import { detectSupportedBrowser } from 'js/utils/detectBrowser'
 
 jest.mock('js/utils/feature-flags')
 jest.mock('js/navigation/navigation')
@@ -50,6 +51,7 @@ jest.mock('js/components/Logo/Logo')
 jest.mock('js/components/General/Link')
 jest.mock('js/components/Search/WikipediaQuery')
 jest.mock('js/utils/search-utils')
+jest.mock('js/utils/detectBrowser')
 
 // Enzyme does not yet support React.lazy and React.Suspense,
 // so let's just not render lazy-loaded children for now.
@@ -76,6 +78,7 @@ beforeEach(() => {
   shouldRedirectSearchToThirdParty.mockReturnValue(false)
   getSearchProvider.mockReturnValue('bing')
   isSearchExtensionInstalled.mockReturnValue(false)
+  detectSupportedBrowser.mockReturnValue('chrome')
 })
 
 afterEach(() => {
@@ -521,6 +524,40 @@ describe('Search page component', () => {
       .default
     const mockProps = getMockProps()
     isSearchExtensionInstalled.mockReturnValue(true)
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(
+      wrapper.find('[data-test-id="search-add-extension-cta"]').exists()
+    ).toBe(false)
+  })
+
+  it('the "Add extension" button says "Add to Chrome" when the browser is Chrome', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    isSearchExtensionInstalled.mockReturnValue(false)
+    detectSupportedBrowser.mockReturnValue('chrome')
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const button = wrapper.find('[data-test-id="search-add-extension-cta"]')
+    expect(button.text()).toEqual('Add to Chrome')
+  })
+
+  it('the "Add extension" button says "Add to Firefox" when the browser is Firefox', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    isSearchExtensionInstalled.mockReturnValue(false)
+    detectSupportedBrowser.mockReturnValue('firefox')
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const button = wrapper.find('[data-test-id="search-add-extension-cta"]')
+    expect(button.text()).toEqual('Add to Firefox')
+  })
+
+  it('the "Add extension" button does not appear if the browser is not Chrome or Firefox', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    isSearchExtensionInstalled.mockReturnValue(false)
+    detectSupportedBrowser.mockReturnValue('safari')
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
     expect(
       wrapper.find('[data-test-id="search-add-extension-cta"]').exists()

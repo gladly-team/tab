@@ -40,7 +40,12 @@ import {
 } from 'js/utils/local-user-data-mgr'
 import ErrorBoundary from 'js/components/General/ErrorBoundary'
 import ErrorBoundarySearchResults from 'js/components/Search/ErrorBoundarySearchResults'
-import { SEARCH_PROVIDER_BING } from 'js/constants'
+import {
+  SEARCH_PROVIDER_BING,
+  CHROME_BROWSER,
+  FIREFOX_BROWSER,
+} from 'js/constants'
+import { detectSupportedBrowser } from 'js/utils/detectBrowser'
 
 const Footer = lazy(() => import('js/components/General/Footer'))
 
@@ -85,6 +90,7 @@ class SearchPage extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      browser: detectSupportedBrowser(),
       showIntroMessage: false,
       isAdBlockerEnabled: false,
       isSearchExtensionInstalled: isSearchExtensionInstalled(),
@@ -201,6 +207,7 @@ class SearchPage extends React.Component {
   render() {
     const { classes, searchProvider } = this.props
     const {
+      browser,
       isSearchExtensionInstalled,
       isAdBlockerEnabled,
       mounted,
@@ -314,13 +321,19 @@ class SearchPage extends React.Component {
                 }
               />
             </div>
-            {!isSearchExtensionInstalled ? (
-              <div data-test-id={'search-add-extension-cta'}>
-                EXT NOT INSTALLED
+            {!isSearchExtensionInstalled &&
+            [CHROME_BROWSER, FIREFOX_BROWSER].indexOf(browser) > -1 ? (
+              <div
+                data-test-id={'search-add-extension-cta'}
+                style={{ marginLeft: 30, marginRight: 10 }}
+              >
+                {browser === CHROME_BROWSER
+                  ? 'Add to Chrome'
+                  : browser === FIREFOX_BROWSER
+                  ? 'Add to Firefox'
+                  : null}
               </div>
-            ) : (
-              <div>installed :)</div>
-            )}
+            ) : null}
             <div
               style={{
                 marginLeft: 'auto',
