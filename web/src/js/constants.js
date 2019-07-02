@@ -103,3 +103,8 @@ export const UNSUPPORTED_BROWSER = 'other'
 
 export const SEARCH_PROVIDER_BING = 'bing'
 export const SEARCH_PROVIDER_YAHOO = 'yahoo'
+
+export const SEARCH_SRC_CHROME_EXTENSION = 'chrome'
+export const SEARCH_SRC_FIREFOX_EXTENSION = 'ff'
+export const SEARCH_SRC_TAB_FOR_A_CAUSE = 'tab'
+export const SEARCH_SRC_OWN_PAGE = 'self'
