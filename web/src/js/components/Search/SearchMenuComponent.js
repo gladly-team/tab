@@ -7,6 +7,9 @@ import {
   withStyles,
 } from '@material-ui/core/styles'
 import CircleIcon from '@material-ui/icons/Lens'
+import Paper from '@material-ui/core/Paper'
+import Button from '@material-ui/core/Button'
+import Typography from '@material-ui/core/Typography'
 import theme from 'js/theme/searchTheme'
 import MoneyRaised from 'js/components/MoneyRaised/MoneyRaisedContainer'
 import Hearts from 'js/components/Search/SearchHeartsContainer'
@@ -28,7 +31,7 @@ const styles = {
 const menuFontSize = 22
 
 const SearchMenuComponent = props => {
-  const { app, classes, style, user } = props
+  const { app, classes, showIntroMessage, style, user } = props
   const userExists = !!user
   return (
     <MuiThemeProvider
@@ -72,7 +75,64 @@ const SearchMenuComponent = props => {
           style
         )}
       >
-        <MoneyRaised app={app} />
+        <div style={{ position: 'relative' }}>
+          <MoneyRaised app={app} />
+          {showIntroMessage ? (
+            <Paper
+              data-test-id={'search-intro-msg'}
+              elevation={1}
+              style={{
+                position: 'absolute',
+                top: 40,
+                right: 0,
+                width: 400,
+                boxSizing: 'border-box',
+                padding: '10px 18px',
+                marginBottom: 20,
+              }}
+            >
+              <span
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'flex-start',
+                }}
+              >
+                <Typography
+                  variant={'h6'}
+                  style={{ marginTop: 8, marginBottom: 8 }}
+                >
+                  Your searches do good :)
+                </Typography>
+                <Typography variant={'body2'}>
+                  When you search, you raise money for charity! The money comes
+                  from the ads in search results, and you decide where the money
+                  goes by donating your Hearts to your favorite nonprofit.
+                </Typography>
+                <div
+                  style={{
+                    display: 'flex',
+                    alignSelf: 'flex-end',
+                    marginTop: 10,
+                  }}
+                >
+                  <Button
+                    color={'primary'}
+                    variant={'contained'}
+                    // onClick={() => {
+                    //   setUserDismissedSearchIntro()
+                    //   this.setState({
+                    //     showIntroMessage: false,
+                    //   })
+                    // }}
+                  >
+                    Great!
+                  </Button>
+                </div>
+              </span>
+            </Paper>
+          ) : null}
+        </div>
         {userExists ? (
           <div
             style={{
@@ -105,9 +165,11 @@ SearchMenuComponent.propTypes = {
   style: PropTypes.object,
   // May not exist if the user is not signed in.
   user: PropTypes.shape({}),
+  showIntroMessage: PropTypes.bool.isRequired,
 }
 
 SearchMenuComponent.defaultProps = {
+  showIntroMessage: false,
   style: {},
 }
 
