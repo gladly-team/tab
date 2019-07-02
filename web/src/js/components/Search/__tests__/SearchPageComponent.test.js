@@ -537,8 +537,10 @@ describe('Search page component', () => {
     isSearchExtensionInstalled.mockReturnValue(false)
     detectSupportedBrowser.mockReturnValue('chrome')
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
-    const button = wrapper.find('[data-test-id="search-add-extension-cta"]')
-    expect(button.text()).toEqual('Add to Chrome')
+    const button = wrapper
+      .find('[data-test-id="search-add-extension-cta"]')
+      .find(Button)
+    expect(button.render().text()).toEqual('Add to Chrome')
   })
 
   it('the "Add extension" button says "Add to Firefox" when the browser is Firefox', () => {
@@ -548,8 +550,40 @@ describe('Search page component', () => {
     isSearchExtensionInstalled.mockReturnValue(false)
     detectSupportedBrowser.mockReturnValue('firefox')
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
-    const button = wrapper.find('[data-test-id="search-add-extension-cta"]')
-    expect(button.text()).toEqual('Add to Firefox')
+    const button = wrapper
+      .find('[data-test-id="search-add-extension-cta"]')
+      .find(Button)
+    expect(button.render().text()).toEqual('Add to Firefox')
+  })
+
+  it('the "Add extension" button links to the Chrome Web Store when the browser is Chrome', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    isSearchExtensionInstalled.mockReturnValue(false)
+    detectSupportedBrowser.mockReturnValue('chrome')
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const elem = wrapper
+      .find('[data-test-id="search-add-extension-cta"]')
+      .find(Link)
+    expect(elem.prop('to')).toEqual(
+      'https://chrome.google.com/webstore/detail/search-for-a-cause/eeiiknnphladbapfamiamfimnnnodife/'
+    )
+  })
+
+  it('the "Add extension" button links to the Firefox Add-ons page when the browser is Firefox', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    isSearchExtensionInstalled.mockReturnValue(false)
+    detectSupportedBrowser.mockReturnValue('firefox')
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const elem = wrapper
+      .find('[data-test-id="search-add-extension-cta"]')
+      .find(Link)
+    expect(elem.prop('to')).toEqual(
+      'https://addons.mozilla.org/en-US/firefox/addon/search-for-a-cause/'
+    )
   })
 
   it('the "Add extension" button does not appear if the browser is not Chrome or Firefox', () => {
@@ -789,7 +823,7 @@ describe('Search page component', () => {
       .default
     const mockProps = getMockProps()
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
-    const feedbackLink = wrapper.find(Link)
+    const feedbackLink = wrapper.find('[data-test-id="search-feedback"]')
     expect(feedbackLink.prop('to')).toEqual(searchBetaFeedback)
     expect(
       feedbackLink

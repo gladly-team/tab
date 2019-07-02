@@ -19,6 +19,8 @@ import {
   dashboardURL,
   modifyURLParams,
   searchBetaFeedback,
+  searchChromeExtensionPage,
+  searchFirefoxExtensionPage,
 } from 'js/navigation/navigation'
 import { externalRedirect } from 'js/navigation/utils'
 import Logo from 'js/components/Logo/Logo'
@@ -327,11 +329,19 @@ class SearchPage extends React.Component {
                 data-test-id={'search-add-extension-cta'}
                 style={{ marginLeft: 30, marginRight: 10 }}
               >
-                {browser === CHROME_BROWSER
-                  ? 'Add to Chrome'
-                  : browser === FIREFOX_BROWSER
-                  ? 'Add to Firefox'
-                  : null}
+                {browser === CHROME_BROWSER ? (
+                  <Link to={searchChromeExtensionPage}>
+                    <Button color={'primary'} variant={'contained'}>
+                      Add to Chrome
+                    </Button>
+                  </Link>
+                ) : browser === FIREFOX_BROWSER ? (
+                  <Link to={searchFirefoxExtensionPage}>
+                    <Button color={'primary'} variant={'contained'}>
+                      Add to Firefox
+                    </Button>
+                  </Link>
+                ) : null}
               </div>
             ) : null}
             <div
@@ -342,6 +352,7 @@ class SearchPage extends React.Component {
               }}
             >
               <Link
+                data-test-id={'search-feedback'}
                 to={searchBetaFeedback}
                 target="_blank"
                 rel="noopener noreferrer"
