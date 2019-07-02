@@ -92,10 +92,12 @@ class SearchPage extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      browser: detectSupportedBrowser(),
+      // Important: set all client-specific state in componentDidMount,
+      // because we do HTML prerendering with these values.
+      browser: null,
       showIntroMessage: false,
       isAdBlockerEnabled: false,
-      isSearchExtensionInstalled: isSearchExtensionInstalled(),
+      isSearchExtensionInstalled: false,
       query: '',
       searchFeatureEnabled: isSearchPageEnabled(),
       defaultSearchProvider: getSearchProvider(),
@@ -132,6 +134,8 @@ class SearchPage extends React.Component {
       // time we do not know search state. We can remove this
       // from state if we switch to server-side rendering.
       mounted: true, // in other words, this is not React Snap prerendering
+      browser: detectSupportedBrowser(),
+      isSearchExtensionInstalled: isSearchExtensionInstalled(),
       query: query,
       page: this.getPageNumberFromSearchString(location.search),
       searchSource: parseUrlSearchString(location.search).src || null,
@@ -323,7 +327,8 @@ class SearchPage extends React.Component {
                 }
               />
             </div>
-            {!isSearchExtensionInstalled &&
+            {mounted &&
+            !isSearchExtensionInstalled &&
             [CHROME_BROWSER, FIREFOX_BROWSER].indexOf(browser) > -1 ? (
               <div
                 data-test-id={'search-add-extension-cta'}

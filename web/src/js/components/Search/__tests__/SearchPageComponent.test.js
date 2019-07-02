@@ -586,6 +586,18 @@ describe('Search page component', () => {
     )
   })
 
+  it('does not render the "Add extension" button when prerendering with React Snap', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    isSearchExtensionInstalled.mockReturnValue(false)
+    const mockProps = getMockProps()
+    isReactSnapClient.mockReturnValue(true)
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(
+      wrapper.find('[data-test-id="search-add-extension-cta"]').exists()
+    ).toBe(false)
+  })
+
   it('the "Add extension" button does not appear if the browser is not Chrome or Firefox', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
