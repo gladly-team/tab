@@ -25,7 +25,11 @@ import Logo from 'js/components/Logo/Logo'
 import { parseUrlSearchString } from 'js/utils/utils'
 import SearchResults from 'js/components/Search/SearchResults'
 import SearchResultsQueryBing from 'js/components/Search/SearchResultsQueryBing'
-import { getSearchProvider, isReactSnapClient } from 'js/utils/search-utils'
+import {
+  getSearchProvider,
+  isReactSnapClient,
+  isSearchExtensionInstalled,
+} from 'js/utils/search-utils'
 import SearchMenuQuery from 'js/components/Search/SearchMenuQuery'
 import WikipediaQuery from 'js/components/Search/WikipediaQuery'
 import detectAdblocker from 'js/utils/detectAdblocker'
@@ -83,6 +87,7 @@ class SearchPage extends React.Component {
     this.state = {
       showIntroMessage: false,
       isAdBlockerEnabled: false,
+      isSearchExtensionInstalled: isSearchExtensionInstalled(),
       query: '',
       searchFeatureEnabled: isSearchPageEnabled(),
       defaultSearchProvider: getSearchProvider(),
@@ -196,6 +201,7 @@ class SearchPage extends React.Component {
   render() {
     const { classes, searchProvider } = this.props
     const {
+      isSearchExtensionInstalled,
       isAdBlockerEnabled,
       mounted,
       page,
@@ -308,6 +314,13 @@ class SearchPage extends React.Component {
                 }
               />
             </div>
+            {!isSearchExtensionInstalled ? (
+              <div data-test-id={'search-add-extension-cta'}>
+                EXT NOT INSTALLED
+              </div>
+            ) : (
+              <div>installed :)</div>
+            )}
             <div
               style={{
                 marginLeft: 'auto',
