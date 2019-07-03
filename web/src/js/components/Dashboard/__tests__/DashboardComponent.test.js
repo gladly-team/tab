@@ -131,160 +131,6 @@ describe('Dashboard component', () => {
     expect(wrapper.find(WidgetsContainer).length).toBe(1)
   })
 
-  // TODO: enable when Enzyme supports React.Suspense:
-  // https://github.com/airbnb/enzyme/issues/1917
-
-  // it('renders CampaignBase component when the campaign is live and the user has not dismissed it', () => {
-  //   const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
-  //     .default
-  //   const modifiedProps = cloneDeep(mockProps)
-  //   modifiedProps.app.isGlobalCampaignLive = true
-  //   hasUserDismissedCampaignRecently.mockReturnValueOnce(false)
-  //   const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
-  //   expect(wrapper.find(CampaignBase).length).toBe(1)
-  // })
-
-  // it('does not render the CampaignBase component when the campaign is live but the user has dismissed it', () => {
-  //   const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
-  //     .default
-  //   const modifiedProps = cloneDeep(mockProps)
-  //   modifiedProps.app.isGlobalCampaignLive = true
-  //   hasUserDismissedCampaignRecently.mockReturnValueOnce(true)
-  //   const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
-  //   expect(wrapper.find(CampaignBase).length).toBe(0)
-  // })
-
-  // it("does not render the CampaignBase component when the campaign is live but the it's the user's first tab", () => {
-  //   const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
-  //     .default
-  //   const modifiedProps = cloneDeep(mockProps)
-  //   modifiedProps.user.tabs = 1
-  //   modifiedProps.app.isGlobalCampaignLive = true
-  //   hasUserDismissedCampaignRecently.mockReturnValueOnce(false)
-  //   const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
-  //   expect(wrapper.find(CampaignBase).length).toBe(0)
-  // })
-
-  // it("does render the CampaignBase component when the campaign is live and it's the user's second tab", () => {
-  //   const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
-  //     .default
-  //   const modifiedProps = cloneDeep(mockProps)
-  //   modifiedProps.user.tabs = 2
-  //   modifiedProps.app.isGlobalCampaignLive = true
-  //   hasUserDismissedCampaignRecently.mockReturnValueOnce(false)
-  //   const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
-  //   expect(wrapper.find(CampaignBase).length).toBe(1)
-  // })
-
-  // it('does not render CampaignBase component when the campaign is not live', () => {
-  //   const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
-  //     .default
-  //   const modifiedProps = cloneDeep(mockProps)
-  //   modifiedProps.app.isGlobalCampaignLive = false
-  //   hasUserDismissedCampaignRecently.mockReturnValueOnce(false)
-  //   const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
-  //   expect(wrapper.find(CampaignBase).length).toBe(0)
-  // })
-
-  // it('hides the campaign when the onDismiss callback is called', () => {
-  //   const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
-  //     .default
-  //   const modifiedProps = cloneDeep(mockProps)
-  //   modifiedProps.app.isGlobalCampaignLive = true
-  //   hasUserDismissedCampaignRecently.mockReturnValueOnce(false)
-  //   const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
-
-  //   // Campaign should be visible.
-  //   expect(wrapper.find(CampaignBase).length).toBe(1)
-
-  //   // Mock that the user dismisses the notification.
-  //   wrapper.find(CampaignBase).prop('onDismiss')()
-
-  //   // Notification should be gone.
-  //   expect(wrapper.find(CampaignBase).length).toBe(0)
-  // })
-
-  // it('changes the value of the isCampaignLive passed to widgets when the campaign is dismissed', () => {
-  //   const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
-  //     .default
-  //   const modifiedProps = cloneDeep(mockProps)
-  //   modifiedProps.app.isGlobalCampaignLive = true
-  //   hasUserDismissedCampaignRecently.mockReturnValueOnce(false)
-  //   const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
-
-  //   expect(wrapper.find(WidgetsContainer).prop('isCampaignLive')).toBe(true)
-
-  //   // Mock that the user dismisses the notification.
-  //   wrapper.find(CampaignBase).prop('onDismiss')()
-
-  //   // Prop should change.
-  //   expect(wrapper.find(WidgetsContainer).prop('isCampaignLive')).toBe(false)
-  // })
-
-  it('does not render any ad components when 0 ads are enabled', () => {
-    getNumberOfAdsToShow.mockReturnValue(0)
-    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
-      .default
-    const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    expect(wrapper.find(Ad).length).toBe(0)
-  })
-
-  it('renders the expected 1 ad component when 1 ad is enabled', () => {
-    getNumberOfAdsToShow.mockReturnValue(1)
-    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
-      .default
-    const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    expect(wrapper.find(Ad).length).toBe(1)
-    const leaderboardAd = wrapper.find(Ad).at(0)
-    expect(leaderboardAd.prop('adId')).toBe(HORIZONTAL_AD_SLOT_DOM_ID)
-  })
-
-  it('renders the expected 2 ad components when 2 ads are enabled', () => {
-    getNumberOfAdsToShow.mockReturnValue(2)
-    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
-      .default
-    const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    expect(wrapper.find(Ad).length).toBe(2)
-    const rectangleAd = wrapper.find(Ad).at(0)
-    const leaderboardAd = wrapper.find(Ad).at(1)
-    expect(rectangleAd.prop('adId')).toBe(VERTICAL_AD_SLOT_DOM_ID)
-    expect(leaderboardAd.prop('adId')).toBe(HORIZONTAL_AD_SLOT_DOM_ID)
-  })
-
-  it('renders the expected 3 ad components when 3 ads are enabled', () => {
-    getNumberOfAdsToShow.mockReturnValue(3)
-    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
-      .default
-    const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    expect(wrapper.find(Ad).length).toBe(3)
-    const rectangleAdNumberTwo = wrapper.find(Ad).at(0)
-    const rectangleAd = wrapper.find(Ad).at(1)
-    const leaderboardAd = wrapper.find(Ad).at(2)
-    expect(rectangleAd.prop('adId')).toBe(VERTICAL_AD_SLOT_DOM_ID)
-    expect(rectangleAdNumberTwo.prop('adId')).toBe(
-      SECOND_VERTICAL_AD_SLOT_DOM_ID
-    )
-    expect(leaderboardAd.prop('adId')).toBe(HORIZONTAL_AD_SLOT_DOM_ID)
-  })
-
-  it('the ads have expected IDs matched with their sizes', () => {
-    getNumberOfAdsToShow.mockReturnValue(3)
-    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
-      .default
-    const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    const rectangleAdNumberTwo = wrapper.find(Ad).at(0)
-    const rectangleAd = wrapper.find(Ad).at(1)
-    const leaderboardAd = wrapper.find(Ad).at(2)
-    expect(rectangleAd.prop('adId')).toBe(VERTICAL_AD_SLOT_DOM_ID)
-    expect(rectangleAd.prop('style').minWidth).toBe(300)
-    expect(rectangleAdNumberTwo.prop('adId')).toBe(
-      SECOND_VERTICAL_AD_SLOT_DOM_ID
-    )
-    expect(rectangleAdNumberTwo.prop('style').minWidth).toBe(300)
-    expect(leaderboardAd.prop('adId')).toBe(HORIZONTAL_AD_SLOT_DOM_ID)
-    expect(leaderboardAd.prop('style').minWidth).toBe(728)
-  })
-
   it('renders LogTab component', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
@@ -583,7 +429,154 @@ describe('Dashboard component', () => {
       wrapper.find('[data-test-id="ad-explanation"]').find(Button).length
     ).toBe(0)
   })
+})
 
+describe('Dashboard component: campaign / charity spotlight', () => {
+  // TODO: enable when Enzyme supports React.Suspense:
+  // https://github.com/airbnb/enzyme/issues/1917
+  // it('renders CampaignBase component when the campaign is live and the user has not dismissed it', () => {
+  //   const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+  //     .default
+  //   const modifiedProps = cloneDeep(mockProps)
+  //   modifiedProps.app.isGlobalCampaignLive = true
+  //   hasUserDismissedCampaignRecently.mockReturnValueOnce(false)
+  //   const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+  //   expect(wrapper.find(CampaignBase).length).toBe(1)
+  // })
+  // it('does not render the CampaignBase component when the campaign is live but the user has dismissed it', () => {
+  //   const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+  //     .default
+  //   const modifiedProps = cloneDeep(mockProps)
+  //   modifiedProps.app.isGlobalCampaignLive = true
+  //   hasUserDismissedCampaignRecently.mockReturnValueOnce(true)
+  //   const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+  //   expect(wrapper.find(CampaignBase).length).toBe(0)
+  // })
+  // it("does not render the CampaignBase component when the campaign is live but the it's the user's first tab", () => {
+  //   const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+  //     .default
+  //   const modifiedProps = cloneDeep(mockProps)
+  //   modifiedProps.user.tabs = 1
+  //   modifiedProps.app.isGlobalCampaignLive = true
+  //   hasUserDismissedCampaignRecently.mockReturnValueOnce(false)
+  //   const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+  //   expect(wrapper.find(CampaignBase).length).toBe(0)
+  // })
+  // it("does render the CampaignBase component when the campaign is live and it's the user's second tab", () => {
+  //   const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+  //     .default
+  //   const modifiedProps = cloneDeep(mockProps)
+  //   modifiedProps.user.tabs = 2
+  //   modifiedProps.app.isGlobalCampaignLive = true
+  //   hasUserDismissedCampaignRecently.mockReturnValueOnce(false)
+  //   const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+  //   expect(wrapper.find(CampaignBase).length).toBe(1)
+  // })
+  // it('does not render CampaignBase component when the campaign is not live', () => {
+  //   const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+  //     .default
+  //   const modifiedProps = cloneDeep(mockProps)
+  //   modifiedProps.app.isGlobalCampaignLive = false
+  //   hasUserDismissedCampaignRecently.mockReturnValueOnce(false)
+  //   const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+  //   expect(wrapper.find(CampaignBase).length).toBe(0)
+  // })
+  // it('hides the campaign when the onDismiss callback is called', () => {
+  //   const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+  //     .default
+  //   const modifiedProps = cloneDeep(mockProps)
+  //   modifiedProps.app.isGlobalCampaignLive = true
+  //   hasUserDismissedCampaignRecently.mockReturnValueOnce(false)
+  //   const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+  //   // Campaign should be visible.
+  //   expect(wrapper.find(CampaignBase).length).toBe(1)
+  //   // Mock that the user dismisses the notification.
+  //   wrapper.find(CampaignBase).prop('onDismiss')()
+  //   // Notification should be gone.
+  //   expect(wrapper.find(CampaignBase).length).toBe(0)
+  // })
+  // it('changes the value of the isCampaignLive passed to widgets when the campaign is dismissed', () => {
+  //   const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+  //     .default
+  //   const modifiedProps = cloneDeep(mockProps)
+  //   modifiedProps.app.isGlobalCampaignLive = true
+  //   hasUserDismissedCampaignRecently.mockReturnValueOnce(false)
+  //   const wrapper = shallow(<DashboardComponent {...modifiedProps} />)
+  //   expect(wrapper.find(WidgetsContainer).prop('isCampaignLive')).toBe(true)
+  //   // Mock that the user dismisses the notification.
+  //   wrapper.find(CampaignBase).prop('onDismiss')()
+  //   // Prop should change.
+  //   expect(wrapper.find(WidgetsContainer).prop('isCampaignLive')).toBe(false)
+  // })
+})
+
+describe('Dashboard component: ads logic', () => {
+  it('does not render any ad components when 0 ads are enabled', () => {
+    getNumberOfAdsToShow.mockReturnValue(0)
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    expect(wrapper.find(Ad).length).toBe(0)
+  })
+
+  it('renders the expected 1 ad component when 1 ad is enabled', () => {
+    getNumberOfAdsToShow.mockReturnValue(1)
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    expect(wrapper.find(Ad).length).toBe(1)
+    const leaderboardAd = wrapper.find(Ad).at(0)
+    expect(leaderboardAd.prop('adId')).toBe(HORIZONTAL_AD_SLOT_DOM_ID)
+  })
+
+  it('renders the expected 2 ad components when 2 ads are enabled', () => {
+    getNumberOfAdsToShow.mockReturnValue(2)
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    expect(wrapper.find(Ad).length).toBe(2)
+    const rectangleAd = wrapper.find(Ad).at(0)
+    const leaderboardAd = wrapper.find(Ad).at(1)
+    expect(rectangleAd.prop('adId')).toBe(VERTICAL_AD_SLOT_DOM_ID)
+    expect(leaderboardAd.prop('adId')).toBe(HORIZONTAL_AD_SLOT_DOM_ID)
+  })
+
+  it('renders the expected 3 ad components when 3 ads are enabled', () => {
+    getNumberOfAdsToShow.mockReturnValue(3)
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    expect(wrapper.find(Ad).length).toBe(3)
+    const rectangleAdNumberTwo = wrapper.find(Ad).at(0)
+    const rectangleAd = wrapper.find(Ad).at(1)
+    const leaderboardAd = wrapper.find(Ad).at(2)
+    expect(rectangleAd.prop('adId')).toBe(VERTICAL_AD_SLOT_DOM_ID)
+    expect(rectangleAdNumberTwo.prop('adId')).toBe(
+      SECOND_VERTICAL_AD_SLOT_DOM_ID
+    )
+    expect(leaderboardAd.prop('adId')).toBe(HORIZONTAL_AD_SLOT_DOM_ID)
+  })
+
+  it('the ads have expected IDs matched with their sizes', () => {
+    getNumberOfAdsToShow.mockReturnValue(3)
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    const rectangleAdNumberTwo = wrapper.find(Ad).at(0)
+    const rectangleAd = wrapper.find(Ad).at(1)
+    const leaderboardAd = wrapper.find(Ad).at(2)
+    expect(rectangleAd.prop('adId')).toBe(VERTICAL_AD_SLOT_DOM_ID)
+    expect(rectangleAd.prop('style').minWidth).toBe(300)
+    expect(rectangleAdNumberTwo.prop('adId')).toBe(
+      SECOND_VERTICAL_AD_SLOT_DOM_ID
+    )
+    expect(rectangleAdNumberTwo.prop('style').minWidth).toBe(300)
+    expect(leaderboardAd.prop('adId')).toBe(HORIZONTAL_AD_SLOT_DOM_ID)
+    expect(leaderboardAd.prop('style').minWidth).toBe(728)
+  })
+})
+
+describe('Dashboard component: global notification', () => {
   it('renders a notification when one is live and the user has not dismissed it', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
@@ -650,7 +643,9 @@ describe('Dashboard component', () => {
     // Notification should be gone.
     expect(wrapper.find('[data-test-id="global-notification"]').length).toBe(0)
   })
+})
 
+describe('Dashboard component: search intro experiment', () => {
   it('[search-intro-A] does not render the search intro notification when the user is not in the experiment', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
@@ -820,7 +815,9 @@ describe('Dashboard component', () => {
     const elem = wrapper.find('[data-test-id="search-intro-a"]')
     expect(elem.prop('useGlobalDismissalTime')).toBe(false)
   })
+})
 
+describe('Dashboard component: referral notification experiment', () => {
   it('[referral-notification-experiment] does not render the notification when the user is not in the experiment', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
