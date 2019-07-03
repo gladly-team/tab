@@ -565,6 +565,8 @@ class SearchPage extends React.Component {
                   width: '100%',
                   boxSizing: 'border-box',
                   padding: '10px 18px',
+                  marginTop: -50, // for more prominence
+                  backgroundColor: '#ebfffc',
                   marginBottom: 20,
                 }}
               >
@@ -579,13 +581,12 @@ class SearchPage extends React.Component {
                     variant={'h6'}
                     style={{ marginTop: 8, marginBottom: 8 }}
                   >
-                    Your searches do good :)
+                    Your searches do good!
                   </Typography>
                   <Typography variant={'body2'}>
-                    When you search, you raise money for charity! The money
-                    comes from the ads in search results, and you decide where
-                    the money goes by donating your Hearts to your favorite
-                    nonprofit.
+                    When you search, you raise money for charity! You pick what
+                    cause to support, from conserving the rainforest to giving
+                    cash to people who need it most.
                   </Typography>
                   <div
                     style={{
