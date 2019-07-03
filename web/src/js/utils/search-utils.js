@@ -1,4 +1,13 @@
+import { get, set } from 'lodash/object'
 import { SEARCH_PROVIDER_BING, SEARCH_PROVIDER_YAHOO } from 'js/constants'
+import { getUrlParameters } from 'js/utils/utils'
+import { detectSupportedBrowser } from 'js/utils/detectBrowser'
+import {
+  CHROME_BROWSER,
+  FIREFOX_BROWSER,
+  SEARCH_SRC_CHROME_EXTENSION,
+  SEARCH_SRC_FIREFOX_EXTENSION,
+} from 'js/constants'
 
 // Returns whether react-snap is the one running the app.
 // This is useful to adjust what we want to prerender.
@@ -104,4 +113,33 @@ export const clipTextToNearestWord = (text, maxCharacters) => {
       ? maxCharacters
       : indexOfPrevWhitespace
   return `${text.substring(0, indexToClip)} ...`
+}
+
+/**
+ * Determine if the search browser extension is currently
+ * installed in the browser. This is a best-guess of whether
+ * the extension is installed, because we don't yet support
+ * messaging the extension directly. See:
+ * https://github.com/gladly-team/tab/issues/616
+ * @return {Boolean} Whether the extension is installed
+ */
+export const isSearchExtensionInstalled = () => {
+  const detectedExtPreviously = !!get(
+    window,
+    'searchforacause.extension.isInstalled'
+  )
+  let isSearchFromExt = false
+  if (!detectedExtPreviously) {
+    const searchSrc = getUrlParameters()['src']
+    const browser = detectSupportedBrowser()
+    isSearchFromExt =
+      (browser === CHROME_BROWSER &&
+        searchSrc === SEARCH_SRC_CHROME_EXTENSION) ||
+      (browser === FIREFOX_BROWSER &&
+        searchSrc === SEARCH_SRC_FIREFOX_EXTENSION)
+    if (isSearchFromExt) {
+      set(window, 'searchforacause.extension.isInstalled', true)
+    }
+  }
+  return detectedExtPreviously || isSearchFromExt
 }

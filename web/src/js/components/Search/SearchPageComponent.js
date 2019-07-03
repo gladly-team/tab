@@ -19,13 +19,19 @@ import {
   dashboardURL,
   modifyURLParams,
   searchBetaFeedback,
+  searchChromeExtensionPage,
+  searchFirefoxExtensionPage,
 } from 'js/navigation/navigation'
 import { externalRedirect } from 'js/navigation/utils'
 import Logo from 'js/components/Logo/Logo'
 import { parseUrlSearchString } from 'js/utils/utils'
 import SearchResults from 'js/components/Search/SearchResults'
 import SearchResultsQueryBing from 'js/components/Search/SearchResultsQueryBing'
-import { getSearchProvider, isReactSnapClient } from 'js/utils/search-utils'
+import {
+  getSearchProvider,
+  isReactSnapClient,
+  isSearchExtensionInstalled,
+} from 'js/utils/search-utils'
 import SearchMenuQuery from 'js/components/Search/SearchMenuQuery'
 import WikipediaQuery from 'js/components/Search/WikipediaQuery'
 import detectAdblocker from 'js/utils/detectAdblocker'
@@ -36,7 +42,12 @@ import {
 } from 'js/utils/local-user-data-mgr'
 import ErrorBoundary from 'js/components/General/ErrorBoundary'
 import ErrorBoundarySearchResults from 'js/components/Search/ErrorBoundarySearchResults'
-import { SEARCH_PROVIDER_BING } from 'js/constants'
+import {
+  SEARCH_PROVIDER_BING,
+  CHROME_BROWSER,
+  FIREFOX_BROWSER,
+} from 'js/constants'
+import { detectSupportedBrowser } from 'js/utils/detectBrowser'
 
 const Footer = lazy(() => import('js/components/General/Footer'))
 
@@ -81,8 +92,12 @@ class SearchPage extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      // Important: set all client-specific state in componentDidMount,
+      // because we do HTML prerendering with these values.
+      browser: null,
       showIntroMessage: false,
       isAdBlockerEnabled: false,
+      isSearchExtensionInstalled: false,
       query: '',
       searchFeatureEnabled: isSearchPageEnabled(),
       defaultSearchProvider: getSearchProvider(),
@@ -119,6 +134,8 @@ class SearchPage extends React.Component {
       // time we do not know search state. We can remove this
       // from state if we switch to server-side rendering.
       mounted: true, // in other words, this is not React Snap prerendering
+      browser: detectSupportedBrowser(),
+      isSearchExtensionInstalled: isSearchExtensionInstalled(),
       query: query,
       page: this.getPageNumberFromSearchString(location.search),
       searchSource: parseUrlSearchString(location.search).src || null,
@@ -196,6 +213,8 @@ class SearchPage extends React.Component {
   render() {
     const { classes, searchProvider } = this.props
     const {
+      browser,
+      isSearchExtensionInstalled,
       isAdBlockerEnabled,
       mounted,
       page,
@@ -308,6 +327,28 @@ class SearchPage extends React.Component {
                 }
               />
             </div>
+            {mounted &&
+            !isSearchExtensionInstalled &&
+            [CHROME_BROWSER, FIREFOX_BROWSER].indexOf(browser) > -1 ? (
+              <div
+                data-test-id={'search-add-extension-cta'}
+                style={{ marginLeft: 30, marginRight: 10 }}
+              >
+                {browser === CHROME_BROWSER ? (
+                  <Link to={searchChromeExtensionPage}>
+                    <Button color={'primary'} variant={'contained'}>
+                      Add to Chrome
+                    </Button>
+                  </Link>
+                ) : browser === FIREFOX_BROWSER ? (
+                  <Link to={searchFirefoxExtensionPage}>
+                    <Button color={'primary'} variant={'contained'}>
+                      Add to Firefox
+                    </Button>
+                  </Link>
+                ) : null}
+              </div>
+            ) : null}
             <div
               style={{
                 marginLeft: 'auto',
@@ -316,6 +357,7 @@ class SearchPage extends React.Component {
               }}
             >
               <Link
+                data-test-id={'search-feedback'}
                 to={searchBetaFeedback}
                 target="_blank"
                 rel="noopener noreferrer"

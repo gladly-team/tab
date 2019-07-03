@@ -6,4 +6,5 @@ searchUtilsActual.isReactSnapClient = jest.fn(() => false)
 searchUtilsActual.getSearchProvider = jest.fn(() => 'yahoo')
 searchUtilsActual.showBingPagination = jest.fn(() => false)
 searchUtilsActual.getSearchResultCountPerPage = jest.fn(() => 10)
+searchUtilsActual.isSearchExtensionInstalled = jest.fn(() => false)
 module.exports = searchUtilsActual

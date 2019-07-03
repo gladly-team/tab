@@ -1,5 +1,20 @@
 /* eslint-env jest */
 
+import { getDefaultSearchGlobal } from 'js/utils/test-utils'
+import { detectSupportedBrowser } from 'js/utils/detectBrowser'
+import { getUrlParameters } from 'js/utils/utils'
+
+jest.mock('js/utils/detectBrowser')
+jest.mock('js/utils/utils')
+
+beforeEach(() => {
+  window.searchforacause = getDefaultSearchGlobal()
+  getUrlParameters.mockReturnValue({
+    q: 'coffee',
+  })
+  detectSupportedBrowser.mockReturnValue('chrome')
+})
+
 afterEach(() => {
   delete process.env.REACT_APP_SEARCH_PROVIDER
 })
@@ -183,5 +198,81 @@ describe('getSearchResultCountPerPage', () => {
   it('returns 10', () => {
     const { getSearchResultCountPerPage } = require('js/utils/search-utils')
     expect(getSearchResultCountPerPage()).toBe(10)
+  })
+})
+
+describe('isSearchExtensionInstalled', () => {
+  it('returns false if window.searchforacause is not defined', () => {
+    delete window.searchforacause
+    const { isSearchExtensionInstalled } = require('js/utils/search-utils')
+    expect(isSearchExtensionInstalled()).toBe(false)
+  })
+
+  it('returns false if window.searchforacause.extension.isInstalled is false', () => {
+    window.searchforacause.extension.isInstalled = false
+    const { isSearchExtensionInstalled } = require('js/utils/search-utils')
+    expect(isSearchExtensionInstalled()).toBe(false)
+  })
+
+  it('returns true if window.searchforacause.extension.isInstalled is true', () => {
+    window.searchforacause.extension.isInstalled = true
+    const { isSearchExtensionInstalled } = require('js/utils/search-utils')
+    expect(isSearchExtensionInstalled()).toBe(true)
+  })
+
+  it('returns true if the search "src" URL param is Chrome and the browser is Chrome, even when window.searchforacause.extension.isInstalled is false', () => {
+    window.searchforacause.extension.isInstalled = false
+    getUrlParameters.mockReturnValue({
+      q: 'coffee',
+      src: 'chrome',
+    })
+    detectSupportedBrowser.mockReturnValue('chrome')
+    const { isSearchExtensionInstalled } = require('js/utils/search-utils')
+    expect(isSearchExtensionInstalled()).toBe(true)
+  })
+
+  it('returns true if the search "src" URL param is Firefox and the browser is Firefox, even when window.searchforacause.extension.isInstalled is false', () => {
+    window.searchforacause.extension.isInstalled = false
+    getUrlParameters.mockReturnValue({
+      q: 'coffee',
+      src: 'ff',
+    })
+    detectSupportedBrowser.mockReturnValue('firefox')
+    const { isSearchExtensionInstalled } = require('js/utils/search-utils')
+    expect(isSearchExtensionInstalled()).toBe(true)
+  })
+
+  it('returns false if the search "src" URL param is Firefox but the browser is Chrome', () => {
+    window.searchforacause.extension.isInstalled = false
+    getUrlParameters.mockReturnValue({
+      q: 'coffee',
+      src: 'ff',
+    })
+    detectSupportedBrowser.mockReturnValue('chrome')
+    const { isSearchExtensionInstalled } = require('js/utils/search-utils')
+    expect(isSearchExtensionInstalled()).toBe(false)
+  })
+
+  it('returns false if the search "src" URL param is "self" but the browser is Chrome', () => {
+    window.searchforacause.extension.isInstalled = false
+    getUrlParameters.mockReturnValue({
+      q: 'coffee',
+      src: 'self',
+    })
+    detectSupportedBrowser.mockReturnValue('chrome')
+    const { isSearchExtensionInstalled } = require('js/utils/search-utils')
+    expect(isSearchExtensionInstalled()).toBe(false)
+  })
+
+  it('sets window.searchforacause.extension.isInstalled to true when the search source browser extension matches the browser', () => {
+    window.searchforacause.extension.isInstalled = false
+    getUrlParameters.mockReturnValue({
+      q: 'coffee',
+      src: 'ff',
+    })
+    detectSupportedBrowser.mockReturnValue('firefox')
+    const { isSearchExtensionInstalled } = require('js/utils/search-utils')
+    isSearchExtensionInstalled()
+    expect(window.searchforacause.extension.isInstalled).toBe(true)
   })
 })
