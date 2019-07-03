@@ -235,6 +235,10 @@ class SearchPage extends React.Component {
       return null
     }
 
+    const showExtensionInstallCTA =
+      !isSearchExtensionInstalled &&
+      [CHROME_BROWSER, FIREFOX_BROWSER].indexOf(browser) > -1
+
     return (
       <div
         data-test-id={'search-page'}
@@ -327,9 +331,7 @@ class SearchPage extends React.Component {
                 }
               />
             </div>
-            {mounted &&
-            !isSearchExtensionInstalled &&
-            [CHROME_BROWSER, FIREFOX_BROWSER].indexOf(browser) > -1 ? (
+            {mounted && showExtensionInstallCTA ? (
               <div
                 data-test-id={'search-add-extension-cta'}
                 style={{ marginLeft: 30, marginRight: 10 }}
@@ -557,7 +559,7 @@ class SearchPage extends React.Component {
             }}
           >
             {' '}
-            {showIntroMessage ? (
+            {mounted && showIntroMessage ? (
               <Paper
                 data-test-id={'search-intro-msg'}
                 elevation={1}
@@ -565,6 +567,8 @@ class SearchPage extends React.Component {
                   width: '100%',
                   boxSizing: 'border-box',
                   padding: '10px 18px',
+                  marginTop: -50, // for more prominence
+                  backgroundColor: '#ebfffc',
                   marginBottom: 20,
                 }}
               >
@@ -579,14 +583,20 @@ class SearchPage extends React.Component {
                     variant={'h6'}
                     style={{ marginTop: 8, marginBottom: 8 }}
                   >
-                    Your searches do good :)
+                    Your searches do good!
                   </Typography>
-                  <Typography variant={'body2'}>
-                    When you search, you raise money for charity! The money
-                    comes from the ads in search results, and you decide where
-                    the money goes by donating your Hearts to your favorite
-                    nonprofit.
+                  <Typography variant={'body2'} gutterBottom>
+                    When you search, you're raising money for charity! Choose
+                    your cause, from protecting the rainforest to giving cash to
+                    people who need it most.
                   </Typography>
+                  {showExtensionInstallCTA ? (
+                    <Typography variant={'body2'} gutterBottom>
+                      Make Search for a Cause your default search engine to
+                      change lives with{' '}
+                      <span style={{ fontStyle: 'italic' }}>every</span> search.
+                    </Typography>
+                  ) : null}
                   <div
                     style={{
                       display: 'flex',
@@ -596,7 +606,9 @@ class SearchPage extends React.Component {
                   >
                     <Button
                       color={'primary'}
-                      variant={'contained'}
+                      variant={
+                        showExtensionInstallCTA ? 'outlined' : 'contained'
+                      }
                       onClick={() => {
                         setUserDismissedSearchIntro()
                         this.setState({
@@ -606,6 +618,26 @@ class SearchPage extends React.Component {
                     >
                       Great!
                     </Button>
+                    {showExtensionInstallCTA ? (
+                      <div
+                        data-test-id={'search-intro-add-extension-cta'}
+                        style={{ marginLeft: 10 }}
+                      >
+                        {browser === CHROME_BROWSER ? (
+                          <Link to={searchChromeExtensionPage}>
+                            <Button color={'primary'} variant={'contained'}>
+                              Add to Chrome
+                            </Button>
+                          </Link>
+                        ) : browser === FIREFOX_BROWSER ? (
+                          <Link to={searchFirefoxExtensionPage}>
+                            <Button color={'primary'} variant={'contained'}>
+                              Add to Firefox
+                            </Button>
+                          </Link>
+                        ) : null}
+                      </div>
+                    ) : null}
                   </div>
                 </span>
               </Paper>
