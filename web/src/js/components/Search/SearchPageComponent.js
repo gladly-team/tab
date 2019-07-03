@@ -38,7 +38,7 @@ import detectAdblocker from 'js/utils/detectAdblocker'
 import Link from 'js/components/General/Link'
 import {
   hasUserDismissedSearchIntro,
-  // setUserDismissedSearchIntro,
+  setUserDismissedSearchIntro,
 } from 'js/utils/local-user-data-mgr'
 import ErrorBoundary from 'js/components/General/ErrorBoundary'
 import ErrorBoundarySearchResults from 'js/components/Search/ErrorBoundarySearchResults'
@@ -367,7 +367,7 @@ class SearchPage extends React.Component {
               >
                 <Button color={'primary'}>Feedback</Button>
               </Link>
-              <SearchMenuQuery showIntroMessage={showIntroMessage} />
+              <SearchMenuQuery />
             </div>
           </div>
           <Tabs
@@ -556,6 +556,60 @@ class SearchPage extends React.Component {
               minWidth: 300,
             }}
           >
+            {' '}
+            {showIntroMessage ? (
+              <Paper
+                data-test-id={'search-intro-msg'}
+                elevation={1}
+                style={{
+                  width: '100%',
+                  boxSizing: 'border-box',
+                  padding: '10px 18px',
+                  marginBottom: 20,
+                }}
+              >
+                <span
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'flex-start',
+                  }}
+                >
+                  <Typography
+                    variant={'h6'}
+                    style={{ marginTop: 8, marginBottom: 8 }}
+                  >
+                    Your searches do good :)
+                  </Typography>
+                  <Typography variant={'body2'}>
+                    When you search, you raise money for charity! The money
+                    comes from the ads in search results, and you decide where
+                    the money goes by donating your Hearts to your favorite
+                    nonprofit.
+                  </Typography>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignSelf: 'flex-end',
+                      marginTop: 10,
+                    }}
+                  >
+                    <Button
+                      color={'primary'}
+                      variant={'contained'}
+                      onClick={() => {
+                        setUserDismissedSearchIntro()
+                        this.setState({
+                          showIntroMessage: false,
+                        })
+                      }}
+                    >
+                      Great!
+                    </Button>
+                  </div>
+                </span>
+              </Paper>
+            ) : null}
             <ErrorBoundary brand={'search'} ignoreErrors>
               {query ? (
                 <WikipediaQuery
