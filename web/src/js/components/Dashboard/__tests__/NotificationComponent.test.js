@@ -16,6 +16,7 @@ const getMockProps = () => ({
   buttonURL: 'http://example.com/some-link/',
   onClick: undefined,
   onDismiss: undefined,
+  useGlobalDismissalTime: false,
 })
 
 afterEach(() => {
@@ -159,16 +160,30 @@ describe('Notification component', () => {
     ).toBe(false)
   })
 
-  it('sets the dismiss time in local storage when clicking the "dismiss" button', () => {
+  it('sets the dismiss time in local storage when clicking the "dismiss" button and the "useGlobalDismissalTime" prop is true', () => {
     const Notification = require('js/components/Dashboard/NotificationComponent')
       .default
     const mockProps = getMockProps()
+    mockProps.useGlobalDismissalTime = true
     const wrapper = shallow(<Notification {...mockProps} />)
     wrapper
       .find(Button)
       .first()
       .simulate('click')
     expect(setNotificationDismissTime).toHaveBeenCalled()
+  })
+
+  it('does not set the dismiss time in local storage when clicking the "dismiss" button if the "useGlobalDismissalTime" is false', () => {
+    const Notification = require('js/components/Dashboard/NotificationComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.useGlobalDismissalTime = false
+    const wrapper = shallow(<Notification {...mockProps} />)
+    wrapper
+      .find(Button)
+      .first()
+      .simulate('click')
+    expect(setNotificationDismissTime).not.toHaveBeenCalled()
   })
 
   it('calls the onDismiss prop when clicking the "dismiss" button', () => {

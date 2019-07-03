@@ -617,6 +617,21 @@ describe('Dashboard component', () => {
     expect(wrapper.find('[data-test-id="global-notification"]').length).toBe(0)
   })
 
+  it('sets the "useGlobalDismissalTime" on the global notification', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    showGlobalNotification.mockReset()
+    hasUserDismissedNotificationRecently.mockReset()
+    showGlobalNotification.mockReturnValueOnce(true)
+    hasUserDismissedNotificationRecently.mockReturnValueOnce(false)
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    expect(
+      wrapper
+        .find('[data-test-id="global-notification"]')
+        .prop('useGlobalDismissalTime')
+    ).toBe(true)
+  })
+
   it('hides the notification when the onDismiss callback is called', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
@@ -795,6 +810,15 @@ describe('Dashboard component', () => {
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
     await wrapper.find('[data-test-id="search-intro-a"]').prop('onClick')()
     expect(goTo).toHaveBeenCalledWith(searchChromeExtensionPage)
+  })
+
+  it('[search-intro-A] does not sets the "useGlobalDismissalTime" on the experiment notification', () => {
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    getUserExperimentGroup.mockReturnValue('introA')
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    const elem = wrapper.find('[data-test-id="search-intro-a"]')
+    expect(elem.prop('useGlobalDismissalTime')).toBe(false)
   })
 
   it('[referral-notification-experiment] does not render the notification when the user is not in the experiment', () => {

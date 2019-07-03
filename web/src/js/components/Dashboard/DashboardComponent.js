@@ -261,6 +261,7 @@ class Dashboard extends React.Component {
               {this.state.showNotification ? (
                 <Notification
                   data-test-id={'global-notification'}
+                  useGlobalDismissalTime
                   title={`Vote for the June Charity Spotlight`}
                   message={`
                         Each month this year, we're highlighting a charity chosen by our
