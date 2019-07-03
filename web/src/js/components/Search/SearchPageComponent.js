@@ -557,7 +557,7 @@ class SearchPage extends React.Component {
             }}
           >
             {' '}
-            {showIntroMessage ? (
+            {mounted && showIntroMessage ? (
               <Paper
                 data-test-id={'search-intro-msg'}
                 elevation={1}
@@ -583,11 +583,18 @@ class SearchPage extends React.Component {
                   >
                     Your searches do good!
                   </Typography>
-                  <Typography variant={'body2'}>
-                    When you search, you raise money for charity! You pick what
-                    cause to support, from conserving the rainforest to giving
-                    cash to people who need it most.
+                  <Typography variant={'body2'} gutterBottom>
+                    When you search, you're raising money for charity! Choose
+                    your cause, from protecting the rainforest to giving cash to
+                    people who need it most.
                   </Typography>
+                  {!isSearchExtensionInstalled ? (
+                    <Typography variant={'body2'} gutterBottom>
+                      Make Search for a Cause your default search engine to
+                      change lives with{' '}
+                      <span style={{ fontStyle: 'italic' }}>every</span> search.
+                    </Typography>
+                  ) : null}
                   <div
                     style={{
                       display: 'flex',
@@ -597,7 +604,9 @@ class SearchPage extends React.Component {
                   >
                     <Button
                       color={'primary'}
-                      variant={'contained'}
+                      variant={
+                        isSearchExtensionInstalled ? 'contained' : 'outlined'
+                      }
                       onClick={() => {
                         setUserDismissedSearchIntro()
                         this.setState({
@@ -607,6 +616,27 @@ class SearchPage extends React.Component {
                     >
                       Great!
                     </Button>
+                    {!isSearchExtensionInstalled &&
+                    [CHROME_BROWSER, FIREFOX_BROWSER].indexOf(browser) > -1 ? (
+                      <div
+                        data-test-id={'search-intro-add-extension-cta'}
+                        style={{ marginLeft: 10 }}
+                      >
+                        {browser === CHROME_BROWSER ? (
+                          <Link to={searchChromeExtensionPage}>
+                            <Button color={'primary'} variant={'contained'}>
+                              Add to Chrome
+                            </Button>
+                          </Link>
+                        ) : browser === FIREFOX_BROWSER ? (
+                          <Link to={searchFirefoxExtensionPage}>
+                            <Button color={'primary'} variant={'contained'}>
+                              Add to Firefox
+                            </Button>
+                          </Link>
+                        ) : null}
+                      </div>
+                    ) : null}
                   </div>
                 </span>
               </Paper>

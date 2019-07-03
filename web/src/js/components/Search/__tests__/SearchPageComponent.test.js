@@ -780,7 +780,7 @@ describe('Search page component', () => {
         .first()
         .render()
         .text()
-    ).toEqual('Your searches do good :)')
+    ).toEqual('Your searches do good!')
   })
 
   it('shows the expected intro message description', () => {
@@ -797,7 +797,7 @@ describe('Search page component', () => {
         .render()
         .text()
     ).toEqual(
-      'When you search, you raise money for charity! The money comes from the ads in search results, and you decide where the money goes by donating your Hearts to your favorite nonprofit.'
+      "When you search, you're raising money for charity! Choose your cause, from protecting the rainforest to giving cash to people who need it most."
     )
   })
 
