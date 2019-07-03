@@ -279,7 +279,7 @@ export const _experimentsConfig = [
   // @experiment-search-intro
   createExperiment({
     name: EXPERIMENT_SEARCH_INTRO,
-    active: false,
+    active: true,
     disabled: false,
     percentageOfExistingUsersInExperiment: 20.0,
     percentageOfNewUsersInExperiment: 50.0,
