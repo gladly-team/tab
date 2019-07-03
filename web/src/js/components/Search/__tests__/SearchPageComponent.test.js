@@ -379,6 +379,25 @@ describe('Search page component', () => {
     expect(modifyURLParams).not.toHaveBeenCalled()
   })
 
+  it('includes a feedback button', () => {
+    isSearchPageEnabled.mockReturnValue(true)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const feedbackLink = wrapper.find('[data-test-id="search-feedback"]')
+    expect(feedbackLink.prop('to')).toEqual(searchBetaFeedback)
+    expect(
+      feedbackLink
+        .find(Button)
+        .first()
+        .render()
+        .text()
+    ).toEqual('Feedback')
+  })
+})
+
+describe('Search page: search category tabs', () => {
   it('contains all the expected search category tabs', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
@@ -507,109 +526,52 @@ describe('Search page component', () => {
       .filterWhere(n => n.render().text() === 'Maps')
     expect(tab.prop('href')).toBe('https://www.google.com/maps')
   })
+})
 
-  it('shows the "Add extension" button when the extension is not installed', () => {
+describe('Search page: Wikipedia component', () => {
+  it('does not render the WikipediaQuery component if there is no query', () => {
+    isSearchPageEnabled.mockReturnValue(true)
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
-    isSearchExtensionInstalled.mockReturnValue(false)
+    mockProps.location.search = ''
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.find(WikipediaQuery).exists()).toBe(false)
+  })
+
+  it('passes the query to the WikipediaQuery component', () => {
+    isSearchPageEnabled.mockReturnValue(true)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location.search = '?q=big%20bad%20wolf'
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.find(WikipediaQuery).prop('query')).toEqual('big bad wolf')
+  })
+
+  it('wraps the WikipediaQuery component in an error boundary that swallows errors', () => {
+    isSearchPageEnabled.mockReturnValue(true)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location.search = '?q=big%20bad%20wolf'
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
     expect(
-      wrapper.find('[data-test-id="search-add-extension-cta"]').exists()
+      wrapper
+        .find(WikipediaQuery)
+        .parent()
+        .type()
+    ).toEqual(ErrorBoundary)
+    expect(
+      wrapper
+        .find(WikipediaQuery)
+        .parent()
+        .prop('ignoreErrors')
     ).toBe(true)
   })
+})
 
-  it('does not show the "Add extension" button when the extension is not installed', () => {
-    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
-      .default
-    const mockProps = getMockProps()
-    isSearchExtensionInstalled.mockReturnValue(true)
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
-    expect(
-      wrapper.find('[data-test-id="search-add-extension-cta"]').exists()
-    ).toBe(false)
-  })
-
-  it('the "Add extension" button says "Add to Chrome" when the browser is Chrome', () => {
-    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
-      .default
-    const mockProps = getMockProps()
-    isSearchExtensionInstalled.mockReturnValue(false)
-    detectSupportedBrowser.mockReturnValue('chrome')
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
-    const button = wrapper
-      .find('[data-test-id="search-add-extension-cta"]')
-      .find(Button)
-    expect(button.render().text()).toEqual('Add to Chrome')
-  })
-
-  it('the "Add extension" button says "Add to Firefox" when the browser is Firefox', () => {
-    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
-      .default
-    const mockProps = getMockProps()
-    isSearchExtensionInstalled.mockReturnValue(false)
-    detectSupportedBrowser.mockReturnValue('firefox')
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
-    const button = wrapper
-      .find('[data-test-id="search-add-extension-cta"]')
-      .find(Button)
-    expect(button.render().text()).toEqual('Add to Firefox')
-  })
-
-  it('the "Add extension" button links to the Chrome Web Store when the browser is Chrome', () => {
-    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
-      .default
-    const mockProps = getMockProps()
-    isSearchExtensionInstalled.mockReturnValue(false)
-    detectSupportedBrowser.mockReturnValue('chrome')
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
-    const elem = wrapper
-      .find('[data-test-id="search-add-extension-cta"]')
-      .find(Link)
-    expect(elem.prop('to')).toEqual(
-      'https://chrome.google.com/webstore/detail/search-for-a-cause/eeiiknnphladbapfamiamfimnnnodife/'
-    )
-  })
-
-  it('the "Add extension" button links to the Firefox Add-ons page when the browser is Firefox', () => {
-    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
-      .default
-    const mockProps = getMockProps()
-    isSearchExtensionInstalled.mockReturnValue(false)
-    detectSupportedBrowser.mockReturnValue('firefox')
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
-    const elem = wrapper
-      .find('[data-test-id="search-add-extension-cta"]')
-      .find(Link)
-    expect(elem.prop('to')).toEqual(
-      'https://addons.mozilla.org/en-US/firefox/addon/search-for-a-cause/'
-    )
-  })
-
-  it('does not render the "Add extension" button when prerendering with React Snap', () => {
-    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
-      .default
-    isSearchExtensionInstalled.mockReturnValue(false)
-    const mockProps = getMockProps()
-    isReactSnapClient.mockReturnValue(true)
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
-    expect(
-      wrapper.find('[data-test-id="search-add-extension-cta"]').exists()
-    ).toBe(false)
-  })
-
-  it('the "Add extension" button does not appear if the browser is not Chrome or Firefox', () => {
-    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
-      .default
-    const mockProps = getMockProps()
-    isSearchExtensionInstalled.mockReturnValue(false)
-    detectSupportedBrowser.mockReturnValue('safari')
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
-    expect(
-      wrapper.find('[data-test-id="search-add-extension-cta"]').exists()
-    ).toBe(false)
-  })
-
+describe('Search page: ad blocker message', () => {
   it('shows the "ad blocker enabled" message when we detect an ad blocker', async () => {
     expect.assertions(1)
 
@@ -711,7 +673,113 @@ describe('Search page component', () => {
         .text()
     ).toEqual('Show me how')
   })
+})
 
+describe('Search page: "add extension" button', () => {
+  it('shows the "Add extension" button when the extension is not installed', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    isSearchExtensionInstalled.mockReturnValue(false)
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(
+      wrapper.find('[data-test-id="search-add-extension-cta"]').exists()
+    ).toBe(true)
+  })
+
+  it('does not show the "Add extension" button when the extension is not installed', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    isSearchExtensionInstalled.mockReturnValue(true)
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(
+      wrapper.find('[data-test-id="search-add-extension-cta"]').exists()
+    ).toBe(false)
+  })
+
+  it('the "Add extension" button says "Add to Chrome" when the browser is Chrome', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    isSearchExtensionInstalled.mockReturnValue(false)
+    detectSupportedBrowser.mockReturnValue('chrome')
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const button = wrapper
+      .find('[data-test-id="search-add-extension-cta"]')
+      .find(Button)
+    expect(button.render().text()).toEqual('Add to Chrome')
+  })
+
+  it('the "Add extension" button says "Add to Firefox" when the browser is Firefox', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    isSearchExtensionInstalled.mockReturnValue(false)
+    detectSupportedBrowser.mockReturnValue('firefox')
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const button = wrapper
+      .find('[data-test-id="search-add-extension-cta"]')
+      .find(Button)
+    expect(button.render().text()).toEqual('Add to Firefox')
+  })
+
+  it('the "Add extension" button links to the Chrome Web Store when the browser is Chrome', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    isSearchExtensionInstalled.mockReturnValue(false)
+    detectSupportedBrowser.mockReturnValue('chrome')
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const elem = wrapper
+      .find('[data-test-id="search-add-extension-cta"]')
+      .find(Link)
+    expect(elem.prop('to')).toEqual(
+      'https://chrome.google.com/webstore/detail/search-for-a-cause/eeiiknnphladbapfamiamfimnnnodife/'
+    )
+  })
+
+  it('the "Add extension" button links to the Firefox Add-ons page when the browser is Firefox', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    isSearchExtensionInstalled.mockReturnValue(false)
+    detectSupportedBrowser.mockReturnValue('firefox')
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const elem = wrapper
+      .find('[data-test-id="search-add-extension-cta"]')
+      .find(Link)
+    expect(elem.prop('to')).toEqual(
+      'https://addons.mozilla.org/en-US/firefox/addon/search-for-a-cause/'
+    )
+  })
+
+  it('does not render the "Add extension" button when prerendering with React Snap', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    isSearchExtensionInstalled.mockReturnValue(false)
+    const mockProps = getMockProps()
+    isReactSnapClient.mockReturnValue(true)
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(
+      wrapper.find('[data-test-id="search-add-extension-cta"]').exists()
+    ).toBe(false)
+  })
+
+  it('the "Add extension" button does not appear if the browser is not Chrome or Firefox', () => {
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    isSearchExtensionInstalled.mockReturnValue(false)
+    detectSupportedBrowser.mockReturnValue('safari')
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(
+      wrapper.find('[data-test-id="search-add-extension-cta"]').exists()
+    ).toBe(false)
+  })
+})
+
+describe('Search page: intro message', () => {
   it('shows the intro message if the user has not dismissed it', () => {
     hasUserDismissedSearchIntro.mockReturnValueOnce(false)
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
@@ -827,64 +895,6 @@ describe('Search page component', () => {
     expect(wrapper.find('[data-test-id="search-intro-msg"]').exists()).toBe(
       false
     )
-  })
-
-  it('includes a feedback button', () => {
-    isSearchPageEnabled.mockReturnValue(true)
-    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
-      .default
-    const mockProps = getMockProps()
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
-    const feedbackLink = wrapper.find('[data-test-id="search-feedback"]')
-    expect(feedbackLink.prop('to')).toEqual(searchBetaFeedback)
-    expect(
-      feedbackLink
-        .find(Button)
-        .first()
-        .render()
-        .text()
-    ).toEqual('Feedback')
-  })
-
-  it('does not render the WikipediaQuery component if there is no query', () => {
-    isSearchPageEnabled.mockReturnValue(true)
-    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
-      .default
-    const mockProps = getMockProps()
-    mockProps.location.search = ''
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
-    expect(wrapper.find(WikipediaQuery).exists()).toBe(false)
-  })
-
-  it('passes the query to the WikipediaQuery component', () => {
-    isSearchPageEnabled.mockReturnValue(true)
-    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
-      .default
-    const mockProps = getMockProps()
-    mockProps.location.search = '?q=big%20bad%20wolf'
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
-    expect(wrapper.find(WikipediaQuery).prop('query')).toEqual('big bad wolf')
-  })
-
-  it('wraps the WikipediaQuery component in an error boundary that swallows errors', () => {
-    isSearchPageEnabled.mockReturnValue(true)
-    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
-      .default
-    const mockProps = getMockProps()
-    mockProps.location.search = '?q=big%20bad%20wolf'
-    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
-    expect(
-      wrapper
-        .find(WikipediaQuery)
-        .parent()
-        .type()
-    ).toEqual(ErrorBoundary)
-    expect(
-      wrapper
-        .find(WikipediaQuery)
-        .parent()
-        .prop('ignoreErrors')
-    ).toBe(true)
   })
 })
 
