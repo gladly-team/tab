@@ -323,15 +323,18 @@ class Dashboard extends React.Component {
                 />
               ) : null}
               {// @experiment-search-intro
-              searchIntroExperimentGroup ===
-                getExperimentGroups(EXPERIMENT_SEARCH_INTRO).INTRO_A &&
+              (searchIntroExperimentGroup ===
+                getExperimentGroups(EXPERIMENT_SEARCH_INTRO).INTRO_A ||
+                searchIntroExperimentGroup ===
+                  getExperimentGroups(EXPERIMENT_SEARCH_INTRO)
+                    .INTRO_HOMEPAGE) &&
               !(
                 user.experimentActions.searchIntro === 'CLICK' ||
                 user.experimentActions.searchIntro === 'DISMISS'
               ) &&
               user.tabs > 3 ? (
                 <Notification
-                  data-test-id={'search-intro-a'}
+                  data-test-id={'search-intro-notif'}
                   title={`We're working on Search for a Cause`}
                   message={
                     <span>
@@ -366,12 +369,20 @@ class Dashboard extends React.Component {
                       searchIntroExperimentGroup: false,
                     })
 
-                    if (browser === CHROME_BROWSER) {
-                      goTo(searchChromeExtensionPage)
-                    } else if (browser === FIREFOX_BROWSER) {
-                      goTo(searchFirefoxExtensionPage)
+                    if (
+                      searchIntroExperimentGroup ===
+                      getExperimentGroups(EXPERIMENT_SEARCH_INTRO)
+                        .INTRO_HOMEPAGE
+                    ) {
+                      goTo('https://search.gladly.io')
                     } else {
-                      goTo(searchChromeExtensionPage)
+                      if (browser === CHROME_BROWSER) {
+                        goTo(searchChromeExtensionPage)
+                      } else if (browser === FIREFOX_BROWSER) {
+                        goTo(searchFirefoxExtensionPage)
+                      } else {
+                        goTo(searchChromeExtensionPage)
+                      }
                     }
                   }}
                   onDismiss={async () => {
