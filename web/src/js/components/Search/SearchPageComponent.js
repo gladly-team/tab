@@ -235,6 +235,10 @@ class SearchPage extends React.Component {
       return null
     }
 
+    const showExtensionInstallCTA =
+      !isSearchExtensionInstalled &&
+      [CHROME_BROWSER, FIREFOX_BROWSER].indexOf(browser) > -1
+
     return (
       <div
         data-test-id={'search-page'}
@@ -327,9 +331,7 @@ class SearchPage extends React.Component {
                 }
               />
             </div>
-            {mounted &&
-            !isSearchExtensionInstalled &&
-            [CHROME_BROWSER, FIREFOX_BROWSER].indexOf(browser) > -1 ? (
+            {mounted && showExtensionInstallCTA ? (
               <div
                 data-test-id={'search-add-extension-cta'}
                 style={{ marginLeft: 30, marginRight: 10 }}
@@ -588,7 +590,7 @@ class SearchPage extends React.Component {
                     your cause, from protecting the rainforest to giving cash to
                     people who need it most.
                   </Typography>
-                  {!isSearchExtensionInstalled ? (
+                  {showExtensionInstallCTA ? (
                     <Typography variant={'body2'} gutterBottom>
                       Make Search for a Cause your default search engine to
                       change lives with{' '}
@@ -605,7 +607,7 @@ class SearchPage extends React.Component {
                     <Button
                       color={'primary'}
                       variant={
-                        isSearchExtensionInstalled ? 'contained' : 'outlined'
+                        showExtensionInstallCTA ? 'outlined' : 'contained'
                       }
                       onClick={() => {
                         setUserDismissedSearchIntro()
@@ -616,8 +618,7 @@ class SearchPage extends React.Component {
                     >
                       Great!
                     </Button>
-                    {!isSearchExtensionInstalled &&
-                    [CHROME_BROWSER, FIREFOX_BROWSER].indexOf(browser) > -1 ? (
+                    {showExtensionInstallCTA ? (
                       <div
                         data-test-id={'search-intro-add-extension-cta'}
                         style={{ marginLeft: 10 }}

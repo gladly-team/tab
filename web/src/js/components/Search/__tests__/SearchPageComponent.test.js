@@ -687,7 +687,7 @@ describe('Search page: "add extension" button', () => {
     ).toBe(true)
   })
 
-  it('does not show the "Add extension" button when the extension is not installed', () => {
+  it('does not show the "Add extension" button when the extension IS installed', () => {
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
@@ -835,7 +835,20 @@ describe('Search page: intro message', () => {
     expect(setUserDismissedSearchIntro).toHaveBeenCalledTimes(1)
   })
 
-  it('shows the expected intro message title', () => {
+  it('does not show the intro message if prerendering with React Snap', () => {
+    hasUserDismissedSearchIntro.mockReturnValueOnce(false)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    isReactSnapClient.mockReturnValue(true)
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(wrapper.find('[data-test-id="search-intro-msg"]').exists()).toBe(
+      false
+    )
+  })
+
+  it('[extension installed] shows the expected intro message title', () => {
+    isSearchExtensionInstalled.mockReturnValue(true) // extension already installed
     hasUserDismissedSearchIntro.mockReturnValueOnce(false)
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
@@ -851,7 +864,8 @@ describe('Search page: intro message', () => {
     ).toEqual('Your searches do good!')
   })
 
-  it('shows the expected intro message description', () => {
+  it('[extension installed] shows the expected intro message description', () => {
+    isSearchExtensionInstalled.mockReturnValue(true) // extension already installed
     hasUserDismissedSearchIntro.mockReturnValueOnce(false)
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
@@ -867,9 +881,13 @@ describe('Search page: intro message', () => {
     ).toEqual(
       "When you search, you're raising money for charity! Choose your cause, from protecting the rainforest to giving cash to people who need it most."
     )
+    expect(
+      wrapper.find('[data-test-id="search-intro-msg"]').find(Typography).length
+    ).toBe(2)
   })
 
-  it('shows the expected intro message button text', () => {
+  it('[extension installed] shows the expected intro message button text', () => {
+    isSearchExtensionInstalled.mockReturnValue(true) // extension already installed
     hasUserDismissedSearchIntro.mockReturnValueOnce(false)
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
@@ -885,15 +903,145 @@ describe('Search page: intro message', () => {
     ).toEqual('Great!')
   })
 
-  it('does not show the intro message if prerendering with React Snap', () => {
+  it('[extension installed] does not show the "Add extension" button', () => {
+    isSearchExtensionInstalled.mockReturnValue(true) // extension already installed
     hasUserDismissedSearchIntro.mockReturnValueOnce(false)
     const SearchPageComponent = require('js/components/Search/SearchPageComponent')
       .default
     const mockProps = getMockProps()
-    isReactSnapClient.mockReturnValue(true)
     const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
-    expect(wrapper.find('[data-test-id="search-intro-msg"]').exists()).toBe(
-      false
+    const introElem = wrapper.find('[data-test-id="search-intro-msg"]')
+    expect(
+      introElem.find('[data-test-id="search-intro-add-extension-cta"]').exists()
+    ).toBe(false)
+    expect(introElem.find(Button).length).toBe(1)
+  })
+
+  it('[not installed] shows the "Add extension" button when the extension is not installed', () => {
+    isSearchExtensionInstalled.mockReturnValue(false) // extension not installed
+    hasUserDismissedSearchIntro.mockReturnValueOnce(false)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const introElem = wrapper.find('[data-test-id="search-intro-msg"]')
+    expect(
+      introElem.find('[data-test-id="search-intro-add-extension-cta"]').exists()
+    ).toBe(true)
+    expect(introElem.find(Button).length).toBe(2)
+  })
+
+  it('[not installed] the "Add extension" button says "Add to Chrome" when the browser is Chrome', () => {
+    isSearchExtensionInstalled.mockReturnValue(false) // extension not installed
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    detectSupportedBrowser.mockReturnValue('chrome')
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const introElem = wrapper.find('[data-test-id="search-intro-msg"]')
+    const button = introElem.find(Button).at(1)
+    expect(button.render().text()).toEqual('Add to Chrome')
+  })
+
+  it('[not installed] the "Add extension" button says "Add to Firefox" when the browser is Firefox', () => {
+    isSearchExtensionInstalled.mockReturnValue(false) // extension not installed
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    detectSupportedBrowser.mockReturnValue('firefox')
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const introElem = wrapper.find('[data-test-id="search-intro-msg"]')
+    const button = introElem.find(Button).at(1)
+    expect(button.render().text()).toEqual('Add to Firefox')
+  })
+
+  it('[not installed] the "Add extension" button links to the Chrome Web Store when the browser is Chrome', () => {
+    isSearchExtensionInstalled.mockReturnValue(false) // extension not installed
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    detectSupportedBrowser.mockReturnValue('chrome')
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const introElem = wrapper.find('[data-test-id="search-intro-msg"]')
+    const elem = introElem.find(Link)
+    expect(elem.prop('to')).toEqual(
+      'https://chrome.google.com/webstore/detail/search-for-a-cause/eeiiknnphladbapfamiamfimnnnodife/'
+    )
+  })
+
+  it('[not installed] the "Add extension" button links to the Firefox Add-ons page when the browser is Firefox', () => {
+    isSearchExtensionInstalled.mockReturnValue(false) // extension not installed
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    detectSupportedBrowser.mockReturnValue('firefox')
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const introElem = wrapper.find('[data-test-id="search-intro-msg"]')
+    const elem = introElem.find(Link)
+    expect(elem.prop('to')).toEqual(
+      'https://addons.mozilla.org/en-US/firefox/addon/search-for-a-cause/'
+    )
+  })
+
+  it('[not installed] the "Add extension" button does not appear if the browser is not Chrome or Firefox', () => {
+    isSearchExtensionInstalled.mockReturnValue(false) // extension not installed
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    detectSupportedBrowser.mockReturnValue('safari')
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const introElem = wrapper.find('[data-test-id="search-intro-msg"]')
+    expect(
+      introElem.find('[data-test-id="search-intro-add-extension-cta"]').exists()
+    ).toBe(false)
+  })
+
+  it('[not installed] shows the expected intro message title', () => {
+    isSearchExtensionInstalled.mockReturnValue(false) // extension not installed
+    hasUserDismissedSearchIntro.mockReturnValueOnce(false)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find('[data-test-id="search-intro-msg"]')
+        .find(Typography)
+        .first()
+        .render()
+        .text()
+    ).toEqual('Your searches do good!')
+  })
+
+  it('[not installed] shows the expected intro message description', () => {
+    isSearchExtensionInstalled.mockReturnValue(false) // extension not installed
+    hasUserDismissedSearchIntro.mockReturnValueOnce(false)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(
+      wrapper.find('[data-test-id="search-intro-msg"]').find(Typography).length
+    ).toBe(3)
+    expect(
+      wrapper
+        .find('[data-test-id="search-intro-msg"]')
+        .find(Typography)
+        .at(1)
+        .render()
+        .text()
+    ).toEqual(
+      "When you search, you're raising money for charity! Choose your cause, from protecting the rainforest to giving cash to people who need it most."
+    )
+    expect(
+      wrapper
+        .find('[data-test-id="search-intro-msg"]')
+        .find(Typography)
+        .at(2)
+        .render()
+        .text()
+    ).toEqual(
+      'Make Search for a Cause your default search engine to change lives with every search.'
     )
   })
 })
