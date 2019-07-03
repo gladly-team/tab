@@ -322,6 +322,9 @@ const ExperimentGroupsType = new GraphQLInputObjectType({
           INTRO_A: {
             value: experimentConfig.searchIntro.INTRO_A,
           },
+          INTRO_HOMEPAGE: {
+            value: experimentConfig.searchIntro.INTRO_HOMEPAGE,
+          },
         },
       }),
     },

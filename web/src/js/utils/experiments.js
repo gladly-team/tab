@@ -280,9 +280,9 @@ export const _experimentsConfig = [
   createExperiment({
     name: EXPERIMENT_SEARCH_INTRO,
     active: false,
-    disabled: true,
-    percentageOfExistingUsersInExperiment: 10.0,
-    percentageOfNewUsersInExperiment: 40.0,
+    disabled: false,
+    percentageOfExistingUsersInExperiment: 20.0,
+    percentageOfNewUsersInExperiment: 50.0,
     filters: [
       // In this test, include brand new users and users
       // who joined more than 2 months ago.
@@ -299,6 +299,10 @@ export const _experimentsConfig = [
       INTRO_A: createExperimentGroup({
         value: 'introA',
         schemaValue: 'INTRO_A',
+      }),
+      INTRO_HOMEPAGE: createExperimentGroup({
+        value: 'introHomepage',
+        schemaValue: 'INTRO_HOMEPAGE',
       }),
     },
   }),
