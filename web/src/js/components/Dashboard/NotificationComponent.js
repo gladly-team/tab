@@ -83,7 +83,12 @@ class Notification extends React.Component {
                     textDecoration: 'none',
                   }}
                 >
-                  <Button color={'primary'}>{buttonText}</Button>
+                  <Button
+                    color={'primary'}
+                    onClick={onClick ? onClick : () => {}}
+                  >
+                    {buttonText}
+                  </Button>
                 </Link>
               ) : buttonText && onClick ? (
                 <Button onClick={onClick} color={'primary'}>

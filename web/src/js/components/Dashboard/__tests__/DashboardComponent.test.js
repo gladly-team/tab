@@ -796,70 +796,76 @@ describe('Dashboard component: search intro experiment', () => {
     })
   })
 
-  it('[search-intro-A] redirects to the Chrome web store when the user clicks the search intro action button on a Chrome browser', async () => {
+  it('[search-intro-A] links to the Chrome web store when the user clicks the search intro action button on a Chrome browser', async () => {
     expect.assertions(1)
     detectSupportedBrowser.mockReturnValue(CHROME_BROWSER)
     getUserExperimentGroup.mockReturnValue('introA')
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    await wrapper.find('[data-test-id="search-intro-notif"]').prop('onClick')()
-    expect(goTo).toHaveBeenCalledWith(searchChromeExtensionPage)
+    expect(
+      wrapper.find('[data-test-id="search-intro-notif"]').prop('buttonURL')
+    ).toEqual(searchChromeExtensionPage)
   })
 
-  it('[search-intro-A] redirects to the Firefox addons store when the user clicks the search intro action button on a Firefox browser', async () => {
+  it('[search-intro-A] links to the Firefox addons store when the user clicks the search intro action button on a Firefox browser', async () => {
     expect.assertions(1)
     detectSupportedBrowser.mockReturnValue(FIREFOX_BROWSER)
     getUserExperimentGroup.mockReturnValue('introA')
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    await wrapper.find('[data-test-id="search-intro-notif"]').prop('onClick')()
-    expect(goTo).toHaveBeenCalledWith(searchFirefoxExtensionPage)
+    expect(
+      wrapper.find('[data-test-id="search-intro-notif"]').prop('buttonURL')
+    ).toEqual(searchFirefoxExtensionPage)
   })
 
-  it('[search-intro-homepage] redirects to the Search for a Cause homepage when the user clicks the search intro action button on an unknown/unsupported browser', async () => {
+  it('[search-intro-homepage] links to the Search for a Cause homepage when the user clicks the search intro action button on an unknown/unsupported browser', async () => {
     expect.assertions(1)
     detectSupportedBrowser.mockReturnValue(UNSUPPORTED_BROWSER)
     getUserExperimentGroup.mockReturnValue('introHomepage')
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    await wrapper.find('[data-test-id="search-intro-notif"]').prop('onClick')()
-    expect(goTo).toHaveBeenCalledWith('https://search.gladly.io')
+    expect(
+      wrapper.find('[data-test-id="search-intro-notif"]').prop('buttonURL')
+    ).toEqual('https://search.gladly.io')
   })
 
-  it('[search-intro-homepage] redirects to the Search for a Cause homepage when the user clicks the search intro action button on a Chrome browser', async () => {
+  it('[search-intro-homepage] links to the Search for a Cause homepage when the user clicks the search intro action button on a Chrome browser', async () => {
     expect.assertions(1)
     detectSupportedBrowser.mockReturnValue(CHROME_BROWSER)
     getUserExperimentGroup.mockReturnValue('introHomepage')
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    await wrapper.find('[data-test-id="search-intro-notif"]').prop('onClick')()
-    expect(goTo).toHaveBeenCalledWith('https://search.gladly.io')
+    expect(
+      wrapper.find('[data-test-id="search-intro-notif"]').prop('buttonURL')
+    ).toEqual('https://search.gladly.io')
   })
 
-  it('[search-intro-homepage] redirects to the Search for a Cause homepage when the user clicks the search intro action button on a Firefox browser', async () => {
+  it('[search-intro-homepage] links to the Search for a Cause homepage when the user clicks the search intro action button on a Firefox browser', async () => {
     expect.assertions(1)
     detectSupportedBrowser.mockReturnValue(FIREFOX_BROWSER)
     getUserExperimentGroup.mockReturnValue('introHomepage')
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    await wrapper.find('[data-test-id="search-intro-notif"]').prop('onClick')()
-    expect(goTo).toHaveBeenCalledWith('https://search.gladly.io')
+    expect(
+      wrapper.find('[data-test-id="search-intro-notif"]').prop('buttonURL')
+    ).toEqual('https://search.gladly.io')
   })
 
-  it('[search-intro-homepage] redirects to the Search for a Cause homepage when the user clicks the search intro action button on an unknown/unsupported browser', async () => {
+  it('[search-intro-homepage] links to the Search for a Cause homepage when the user clicks the search intro action button on an unknown/unsupported browser', async () => {
     expect.assertions(1)
     detectSupportedBrowser.mockReturnValue(UNSUPPORTED_BROWSER)
     getUserExperimentGroup.mockReturnValue('introHomepage')
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    await wrapper.find('[data-test-id="search-intro-notif"]').prop('onClick')()
-    expect(goTo).toHaveBeenCalledWith('https://search.gladly.io')
+    expect(
+      wrapper.find('[data-test-id="search-intro-notif"]').prop('buttonURL')
+    ).toEqual('https://search.gladly.io')
   })
 
   it('[experimental group] does not sets the "useGlobalDismissalTime" on the experiment notification', () => {
