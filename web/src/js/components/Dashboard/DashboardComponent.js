@@ -353,14 +353,28 @@ class Dashboard extends React.Component {
                     </span>
                   }
                   buttonText={'Try it out'}
+                  buttonURL={
+                    searchIntroExperimentGroup ===
+                    getExperimentGroups(EXPERIMENT_SEARCH_INTRO).INTRO_HOMEPAGE
+                      ? 'https://search.gladly.io'
+                      : browser === CHROME_BROWSER
+                      ? searchChromeExtensionPage
+                      : browser === FIREFOX_BROWSER
+                      ? searchFirefoxExtensionPage
+                      : searchChromeExtensionPage
+                  }
                   onClick={async () => {
-                    // Log the click.
-                    await LogUserExperimentActionsMutation({
-                      userId: user.id,
-                      experimentActions: {
-                        [EXPERIMENT_SEARCH_INTRO]: 'CLICK',
-                      },
-                    })
+                    try {
+                      // Log the click.
+                      await LogUserExperimentActionsMutation({
+                        userId: user.id,
+                        experimentActions: {
+                          [EXPERIMENT_SEARCH_INTRO]: 'CLICK',
+                        },
+                      })
+                    } catch (e) {
+                      console.error(e)
+                    }
 
                     // Hide the message because we don't want the user to
                     // need to dismiss it after clicking the action, which
@@ -368,31 +382,19 @@ class Dashboard extends React.Component {
                     this.setState({
                       searchIntroExperimentGroup: false,
                     })
-
-                    if (
-                      searchIntroExperimentGroup ===
-                      getExperimentGroups(EXPERIMENT_SEARCH_INTRO)
-                        .INTRO_HOMEPAGE
-                    ) {
-                      goTo('https://search.gladly.io')
-                    } else {
-                      if (browser === CHROME_BROWSER) {
-                        goTo(searchChromeExtensionPage)
-                      } else if (browser === FIREFOX_BROWSER) {
-                        goTo(searchFirefoxExtensionPage)
-                      } else {
-                        goTo(searchChromeExtensionPage)
-                      }
-                    }
                   }}
                   onDismiss={async () => {
-                    // Log the dismissal.
-                    await LogUserExperimentActionsMutation({
-                      userId: user.id,
-                      experimentActions: {
-                        [EXPERIMENT_SEARCH_INTRO]: 'DISMISS',
-                      },
-                    })
+                    try {
+                      // Log the dismissal.
+                      await LogUserExperimentActionsMutation({
+                        userId: user.id,
+                        experimentActions: {
+                          [EXPERIMENT_SEARCH_INTRO]: 'DISMISS',
+                        },
+                      })
+                    } catch (e) {
+                      console.error(e)
+                    }
                     this.setState({
                       searchIntroExperimentGroup: false,
                     })

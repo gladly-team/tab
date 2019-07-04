@@ -231,4 +231,25 @@ describe('Notification component', () => {
       .simulate('click')
     expect(mockProps.onClick).toHaveBeenCalled()
   })
+
+  it('creates an outbound button link with the "buttonURL" and calls "onClick" when both are provided', () => {
+    const Notification = require('js/components/Dashboard/NotificationComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.buttonURL = 'http://example.com'
+    mockProps.buttonText = 'Do the thing'
+    mockProps.onClick = jest.fn()
+    const wrapper = shallow(<Notification {...mockProps} />)
+    expect(
+      wrapper
+        .find(Link)
+        .first()
+        .prop('to')
+    ).toBe('http://example.com')
+    wrapper
+      .find(Button)
+      .at(1)
+      .simulate('click')
+    expect(mockProps.onClick).toHaveBeenCalled()
+  })
 })
