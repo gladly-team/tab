@@ -37,6 +37,7 @@ const experimentConfig = {
     NONE: 0,
     NO_INTRO: 1,
     INTRO_A: 2,
+    INTRO_HOMEPAGE: 3,
   },
   // @experiment-referral-notification
   referralNotification: {

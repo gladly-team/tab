@@ -247,6 +247,7 @@ enum ExperimentGroupSearchIntro {
   NONE
   NO_INTRO
   INTRO_A
+  INTRO_HOMEPAGE
 }
 
 """The test of enabling a third ad"""

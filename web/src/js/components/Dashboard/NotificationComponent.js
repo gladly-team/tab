@@ -16,6 +16,7 @@ class Notification extends React.Component {
       buttonURL,
       onClick,
       onDismiss,
+      useGlobalDismissalTime,
     } = this.props
     return (
       <div style={Object.assign({ width: 340 }, style)}>
@@ -61,7 +62,11 @@ class Notification extends React.Component {
               <Button
                 color={'default'}
                 onClick={() => {
-                  setNotificationDismissTime()
+                  // If useGlobalDismissalTime is true, dismissing this notification
+                  // will hide future global notifications for ~10 days.
+                  if (useGlobalDismissalTime) {
+                    setNotificationDismissTime()
+                  }
                   if (onDismiss) {
                     onDismiss()
                   }
@@ -101,11 +106,13 @@ Notification.propTypes = {
   buttonURL: PropTypes.string,
   onDismiss: PropTypes.func,
   onClick: PropTypes.func,
+  useGlobalDismissalTime: PropTypes.bool.isRequired,
 }
 
 Notification.defaultProps = {
   style: {},
   onDismiss: () => {},
+  useGlobalDismissalTime: false,
 }
 
 export default Notification
