@@ -12,6 +12,11 @@ import getBingMarketCode from 'js/components/Search/getBingMarketCode'
  * @return {Object}
  */
 const fetchBingSearchResults = async (query = null, { page } = {}) => {
+  // MEASURING PERFORMANCE
+  var t = performance.now()
+  console.log('query', t)
+  window.debug.query = t
+
   if (!query) {
     throw new Error(`Search query must be a non-empty string.`)
   }
