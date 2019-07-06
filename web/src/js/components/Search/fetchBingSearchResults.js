@@ -8,7 +8,7 @@ import getBingMarketCode from 'js/components/Search/getBingMarketCode'
  * Call our search API endpoint.
  * @param {String} query - The search query, unencoded.
  * @param {Object} options - Additional search parameters to send.
- * @param {Number} options.page - The 1-based search results age number.
+ * @param {Number} options.page - The 1-based search results page number.
  * @return {Object}
  */
 const fetchBingSearchResults = async (query = null, { page } = {}) => {
