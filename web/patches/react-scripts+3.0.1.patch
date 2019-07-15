@@ -30,10 +30,10 @@ index e5a3e0b..e394698 100644
      appSrc: resolveOwn('template/src'),
      appTsConfig: resolveOwn('template/tsconfig.json'),
 diff --git a/node_modules/react-scripts/config/webpack.config.js b/node_modules/react-scripts/config/webpack.config.js
-index 8f70442..574496d 100644
+index 8f70442..9a7ea00 100644
 --- a/node_modules/react-scripts/config/webpack.config.js
 +++ b/node_modules/react-scripts/config/webpack.config.js
-@@ -138,25 +138,29 @@ module.exports = function(webpackEnv) {
+@@ -138,25 +138,30 @@ module.exports = function(webpackEnv) {
        : isEnvDevelopment && 'cheap-module-source-map',
      // These are the "entry points" to our application.
      // This means they will be the "root" imports that are included in JS bundle.
@@ -56,7 +56,8 @@ index 8f70442..574496d 100644
 -      // initialization, it doesn't blow up the WebpackDevServer client, and
 -      // changing JS code would still trigger a refresh.
 -    ].filter(Boolean),
-+    // @gladly-edited: changed from one entry to multiple
++    // @gladly-edited: changed from one entry to multiple:
++    // https://github.com/facebook/create-react-app/issues/1084#issuecomment-308731651
 +    entry: {
 +      foo: paths.searchInlineJs,
 +      index: [
