@@ -209,5 +209,19 @@
     "updated": "2019-06-17T18:00:000Z",
     "inactive": false,
     "isPermanentPartner": false
+  },
+  {
+    "id": "d874dc7f-f7f1-4364-b07d-1e6dd5ab1cf9",
+    "name": "Against Malaria Foundation",
+    "category": "Health",
+    "logo": "placeholder.png",
+    "image": "against-malaria-foundation.jpg",
+    "website": "https://www.againstmalaria.com",
+    "impact": "Together, we can help the Against Malaria Foundation continue their work protecting people from malaria. Thanks for your support!",
+    "description": "Protects people from malaria through the purchase and distribution of nets",
+    "created": "2019-07-25T18:00:000Z",
+    "updated": "2019-07-25T18:00:000Z",
+    "inactive": false,
+    "isPermanentPartner": false
   }
 ]
