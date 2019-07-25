@@ -45,7 +45,7 @@ class CampaignBase extends React.Component {
                   marginTop: 4,
                 }}
               >
-                Thanks for Helping our Turtle Friends!
+                Thank You for Supporting the AMF!
               </Typography>
               <div
                 style={{
@@ -54,17 +54,17 @@ class CampaignBase extends React.Component {
                 }}
               >
                 <Typography variant={'body2'} gutterBottom>
-                  With your help,{' '}
+                  With your help, the{' '}
                   <a
-                    href="https://www.seaturtleinc.org/about-us/"
+                    href="https://www.againstmalaria.com"
                     target="_blank"
                     rel="noopener noreferrer"
                     style={anchorStyle}
                   >
-                    Sea Turtle Inc
+                    Against Malaria Foundation
                   </a>{' '}
-                  will continue their work rescuing sea turtles and assisting
-                  with marine turtle conservation efforts.{' '}
+                  will continue their work protecting people from malaria
+                  through the purchase and distribution of nets.{' '}
                 </Typography>
                 <Typography>
                   <span style={{ fontWeight: 'bold' }}>
@@ -104,7 +104,7 @@ class CampaignBase extends React.Component {
             marginTop: 4,
           }}
         >
-          June Spotlight: Sea Turtle Inc
+          July Spotlight: Against Malaria Foundation
         </Typography>
         <div
           style={{
@@ -115,14 +115,14 @@ class CampaignBase extends React.Component {
           <Typography variant={'body2'} gutterBottom>
             This month, Tabbers selected{' '}
             <a
-              href="https://www.seaturtleinc.org/about-us/"
+              href="https://www.againstmalaria.com"
               target="_blank"
               rel="noopener noreferrer"
               style={anchorStyle}
             >
-              Sea Turtle Inc
+              Against Malaria Foundation
             </a>{' '}
-            for our June{' '}
+            for our July{' '}
             <a
               href="https://www.facebook.com/notes/tab-for-a-cause/introducing-monthly-charity-spotlight/2071986076177802/"
               target="_blank"
@@ -131,37 +131,13 @@ class CampaignBase extends React.Component {
             >
               Charity Spotlight
             </a>
-            . Sea Turtle Inc’s mission is to rescue and{' '}
-            <a
-              href="http://www.seaturtleinc.org/rehabilitation/"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={anchorStyle}
-            >
-              rehabilitate
-            </a>{' '}
-            injured sea turtles for release back into the wild,{' '}
-            <a
-              href="http://www.seaturtleinc.org/education/"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={anchorStyle}
-            >
-              educate
-            </a>{' '}
-            the public, and assist with{' '}
-            <a
-              href="http://www.seaturtleinc.org/conservation/"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={anchorStyle}
-            >
-              conservation
-            </a>{' '}
-            efforts for all marine turtle species.
+            . The Against Malaria foundation protects people from malaria by
+            funding long-lasting insecticidal nets (LLINs), and working with
+            distribution partners to ensure they are used. Each net costs
+            roughly $2, lasts for 3-4 years and protects on average 2 people.
           </Typography>
           <Typography variant={'body2'} gutterBottom>
-            Join us in supporting Sea Turtle Inc!
+            Join us in supporting the Against Malaria Foundation!
           </Typography>
         </div>
       </HeartDonationCampaign>
