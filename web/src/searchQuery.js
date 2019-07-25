@@ -7,9 +7,14 @@ import fetchBingSearchResults from 'js/components/Search/fetchBingSearchResults'
 // point. After modifying files in react-scripts, commit the
 // patches with:
 // `yarn patch-package react-scripts`
+
+// TODO: return an empty script when building the newtab app.
 const foo = () => {
   var t = performance.now()
   console.log('searchQuery', t)
+
+  // TODO: call fetchBingSearchResults. Let it handle the
+  // logic of determining the query text, etc.
 }
 
 foo()

@@ -17,6 +17,12 @@ const fetchBingSearchResults = async (query = null, { page } = {}) => {
   console.log('query', t)
   window.debug.query = t
 
+  // TODO:
+  // If a search query is in progress via an earlier request,
+  // wait for it. If one is complete, use its data. This may
+  // happen via another JS entry point that we prioritize to
+  // speed up fetching the search results.
+
   if (!query) {
     throw new Error(`Search query must be a non-empty string.`)
   }
@@ -97,5 +103,8 @@ const fetchBingSearchResults = async (query = null, { page } = {}) => {
     throw e
   }
 }
+
+// TODO: on load, if the path is /query, try to get the
+// search query and page and make the query.
 
 export default fetchBingSearchResults
