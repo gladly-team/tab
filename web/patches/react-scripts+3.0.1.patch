@@ -30,7 +30,7 @@ index e5a3e0b..fa5436e 100644
      appSrc: resolveOwn('template/src'),
      appTsConfig: resolveOwn('template/tsconfig.json'),
 diff --git a/node_modules/react-scripts/config/webpack.config.js b/node_modules/react-scripts/config/webpack.config.js
-index 8f70442..1cf62ed 100644
+index 8f70442..185d7e5 100644
 --- a/node_modules/react-scripts/config/webpack.config.js
 +++ b/node_modules/react-scripts/config/webpack.config.js
 @@ -138,25 +138,34 @@ module.exports = function(webpackEnv) {
@@ -109,14 +109,3 @@ index 8f70442..1cf62ed 100644
          name: false,
        },
        // Keep the runtime chunk separated to enable long term caching
-@@ -530,6 +543,10 @@ module.exports = function(webpackEnv) {
-           {
-             inject: true,
-             template: paths.appHtml,
-+            // @gladly-edited: manually order chunks so that the searchQuery
-+            //   entry point is inserted first.
-+            chunks: ['searchQuery', 'index'],
-+            chunksSortMode: 'manual',
-           },
-           isEnvProduction
-             ? {
