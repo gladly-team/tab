@@ -1,6 +1,3 @@
-// eslint-disable-next-line no-unused-vars
-import fetchBingSearchResults from 'js/components/Search/fetchBingSearchResults'
-
 // This is a second entry point to speed up our query
 // to fetch search results.
 // We've patched react-scripts to add this as another entry
@@ -8,13 +5,20 @@ import fetchBingSearchResults from 'js/components/Search/fetchBingSearchResults'
 // patches with:
 // `yarn patch-package react-scripts`
 
-// TODO: return an empty script when building the newtab app.
-const foo = () => {
-  var t = performance.now()
-  console.log('searchQuery', t)
+// Return an empty script when building the newtab app.
+// The newtab app will still build this entry point because
+// we share Webpack configs.
+if (process.env.REACT_APP_WHICH_APP === 'search') {
+  // eslint-disable-next-line no-unused-vars
+  const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+    .default
+  const foo = () => {
+    var t = performance.now()
+    console.log('searchQuery', t)
 
-  // TODO: call fetchBingSearchResults. Let it handle the
-  // logic of determining the query text, etc.
+    // TODO: call fetchBingSearchResults. Let it handle the
+    // logic of determining the query text, etc.
+  }
+
+  foo()
 }
-
-foo()
