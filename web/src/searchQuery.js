@@ -1,7 +1,9 @@
 // This is a second entry point to speed up our query
 // to fetch search results.
 // We've patched react-scripts to add this as another entry
-// point. After modifying files in react-scripts, commit the
+// point. E.g., the Webpack config by running lives at
+// web/node_modules/react-scripts/config/webpack.config.js.
+// After modifying files in react-scripts, commit the
 // patches with:
 // `yarn patch-package react-scripts`
 // You can view the patch diff in ./web/patches.

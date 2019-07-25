@@ -30,7 +30,7 @@ index e5a3e0b..fa5436e 100644
      appSrc: resolveOwn('template/src'),
      appTsConfig: resolveOwn('template/tsconfig.json'),
 diff --git a/node_modules/react-scripts/config/webpack.config.js b/node_modules/react-scripts/config/webpack.config.js
-index 8f70442..849fc19 100644
+index 8f70442..1cf62ed 100644
 --- a/node_modules/react-scripts/config/webpack.config.js
 +++ b/node_modules/react-scripts/config/webpack.config.js
 @@ -138,25 +138,34 @@ module.exports = function(webpackEnv) {
@@ -93,8 +93,30 @@ index 8f70442..849fc19 100644
          ? 'static/js/[name].[contenthash:8].js'
 -        : isEnvDevelopment && 'static/js/bundle.js',
 +        // @gladly-edited: added support for multiple bundles in development.
-+        // : isEnvDevelopment && 'static/js/bundle.js',
++        // Original env development was 'static/js/bundle.js'.
 +        : isEnvDevelopment && 'static/js/[name].js',
        // TODO: remove this when upgrading to webpack 5
        futureEmitAssets: true,
        // There are also additional JS chunk files if you use code splitting.
+@@ -254,7 +265,9 @@ module.exports = function(webpackEnv) {
+       // https://twitter.com/wSokra/status/969633336732905474
+       // https://medium.com/webpack/webpack-4-code-splitting-chunk-graph-and-the-splitchunks-optimization-be739a861366
+       splitChunks: {
+-        chunks: 'all',
++        // @gladly-edited: exclude the searchQuery chunk from code-splitting.
++        //   The original setting was `chunks: 'all'`.`
++        chunks: chunk => chunk.name !== 'searchQuery',
+         name: false,
+       },
+       // Keep the runtime chunk separated to enable long term caching
+@@ -530,6 +543,10 @@ module.exports = function(webpackEnv) {
+           {
+             inject: true,
+             template: paths.appHtml,
++            // @gladly-edited: manually order chunks so that the searchQuery
++            //   entry point is inserted first.
++            chunks: ['searchQuery', 'index'],
++            chunksSortMode: 'manual',
+           },
+           isEnvProduction
+             ? {
