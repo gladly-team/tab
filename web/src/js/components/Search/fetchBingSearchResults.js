@@ -5,13 +5,13 @@ import { getBingClientID } from 'js/utils/local-user-data-mgr'
 import getBingMarketCode from 'js/components/Search/getBingMarketCode'
 import { getUrlParameters } from 'js/utils/utils'
 
-// Note: this modules should reasonably stand on its own because
+// Note: this module should reasonably stand on its own because
 // it may load prior to app code via a separate JS entry point,
-// which speeds up fetching search resultas. We also call this
+// which speeds up fetching search results. We also call this
 // module via app code.
 
 /**
- * Call our search API endpoint.
+ * Call our search API endpoint. All parameters must be optional.
  * @param {String} providedQuery - The search query, unencoded.
  * @param {Object} options - Additional search parameters to send.
  * @param {Number} options.page - The 1-based search results page number.
@@ -22,6 +22,7 @@ const fetchBingSearchResults = async (providedQuery = null, { page } = {}) => {
   if (window && window.performance && window.debug) {
     var t = performance.now()
     console.log('query', t)
+    console.log('provided query value', providedQuery)
     window.debug.query = t
   }
 

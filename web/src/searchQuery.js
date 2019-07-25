@@ -21,8 +21,10 @@ if (process.env.REACT_APP_WHICH_APP === 'search') {
     var t = performance.now()
     console.log('searchQuery', t)
 
-    // TODO: call fetchBingSearchResults. Let it handle the
-    // logic of determining the query text, etc.
+    // TODO
+    // If the path is /query, call fetchBingSearchResults.
+    // Let it handle the logic of determining the query text, etc.
+    // fetchBingSearchResults()
   }
 
   foo()
