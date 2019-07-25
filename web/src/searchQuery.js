@@ -7,8 +7,6 @@
 // patches with:
 // `yarn patch-package react-scripts`
 // You can view the patch diff in ./web/patches.
-
-// TODO
 // For this to be meaningful, we have to make sure we inject
 // this script first, before all other app code.
 

@@ -4,6 +4,11 @@ import { getSearchResultCountPerPage } from 'js/utils/search-utils'
 import { getBingClientID } from 'js/utils/local-user-data-mgr'
 import getBingMarketCode from 'js/components/Search/getBingMarketCode'
 
+// Note: this modules should reasonably stand on its own because
+// it may load prior to app code via a separate JS entry point,
+// which speeds up fetching search resultas. We also call this
+// module via app code.
+
 /**
  * Call our search API endpoint.
  * @param {String} query - The search query, unencoded.
