@@ -146,20 +146,17 @@
     <script type="text/javascript">
       /* eslint-disable */
       (() => {
+        // See search-utils.js for documentation.
         window.searchforacause = window.searchforacause || {
-          // We rely on this in the SearchResults component.
           search: {
             fetchedOnPageLoad: false,
             YPAErrorOnPageLoad: null,
           },
-          // TODO
-          // We rely on this in the SearchResultsQueryBing component.
-          // queryRequest: {
-          //   inProgress: false,
-          //   complete: false,
-          //   usedOnPageLoad: false,
-          //   result: null,
-          // },
+          queryRequest: {
+            status: 'NONE',
+            usedOnPageLoad: false,
+            responseData: null,
+          },
           extension: {
             isInstalled: false,
           },

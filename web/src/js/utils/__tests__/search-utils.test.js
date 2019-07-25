@@ -276,3 +276,50 @@ describe('isSearchExtensionInstalled', () => {
     expect(window.searchforacause.extension.isInstalled).toBe(true)
   })
 })
+
+describe('getSearchGlobal', () => {
+  beforeEach(() => {
+    // Because we set this in the global beforeEach above.
+    delete window.searchforacause
+  })
+
+  afterEach(() => {
+    delete window.searchforacause
+  })
+
+  it('returns an object with the expected keys', () => {
+    const { getSearchGlobal } = require('js/utils/search-utils')
+    expect(Object.keys(getSearchGlobal()).sort()).toEqual([
+      'extension',
+      'queryRequest',
+      'search',
+    ])
+  })
+
+  it('returns a queryRequest object with the expected keys', () => {
+    const { getSearchGlobal } = require('js/utils/search-utils')
+    expect(Object.keys(getSearchGlobal().queryRequest).sort()).toEqual([
+      'responseData',
+      'status',
+      'usedOnPageLoad',
+    ])
+  })
+
+  it('sets window.searchforacause', () => {
+    delete window.searchforacause
+    expect(window.searchforacause).toBeUndefined()
+    const { getSearchGlobal } = require('js/utils/search-utils')
+    getSearchGlobal()
+    expect(window.searchforacause).not.toBeUndefined()
+  })
+
+  it('uses existing window.searchforacause object if one exists', () => {
+    const existingSearchGlobal = {
+      foo: 'bar',
+    }
+    window.searchforacause = existingSearchGlobal
+    const { getSearchGlobal } = require('js/utils/search-utils')
+    const tabGlobal = getSearchGlobal()
+    expect(tabGlobal).toBe(existingSearchGlobal)
+  })
+})

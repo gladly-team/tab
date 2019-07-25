@@ -143,3 +143,43 @@ export const isSearchExtensionInstalled = () => {
   }
   return detectedExtPreviously || isSearchFromExt
 }
+
+/**
+ * Get the "window.searchforacause" global variable.
+ * @return {Object}
+ */
+export const getSearchGlobal = () => {
+  const searchforacause = window.searchforacause || {
+    // Deprecated.
+    search: {
+      fetchedOnPageLoad: false,
+      YPAErrorOnPageLoad: null,
+    },
+    // We rely on this in the SearchResultsQueryBing component.
+    // It allows us to fetch search results before loading all of
+    // the app JS.
+    queryRequest: {
+      // The status of any request to get search results data.
+      // One of: 'NONE', 'IN_PROGRESS', 'COMPLETE'
+      status: 'NONE',
+      // Whether our app already used the search response data here
+      // to render results. Our app can display these results if
+      // "usedOnPageLoad" == false, "status" == "COMPLETE", and
+      // "responseData" !== null.
+      usedOnPageLoad: false,
+      // Response data from the search results request.
+      responseData: null,
+    },
+    extension: {
+      // Whether the browser extension is installed, to the best
+      // of our knowledge.
+      isInstalled: false,
+    },
+  }
+  // We're not running in global scope, so make sure to
+  // assign to the window.
+  if (!window.searchforacause) {
+    window.searchforacause = searchforacause
+  }
+  return searchforacause
+}

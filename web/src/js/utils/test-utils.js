@@ -233,6 +233,11 @@ export const getDefaultSearchGlobal = (properties = {}) => ({
     fetchedOnPageLoad: false,
     YPAErrorOnPageLoad: null,
   },
+  queryRequest: {
+    status: 'NONE',
+    usedOnPageLoad: false,
+    responseData: null,
+  },
   extension: {
     isInstalled: false,
   },
