@@ -3,11 +3,13 @@
 import { mockFetchResponse } from 'js/utils/test-utils'
 import { getSearchResultCountPerPage } from 'js/utils/search-utils'
 import getBingMarketCode from 'js/components/Search/getBingMarketCode'
+import { getUrlParameters } from 'js/utils/utils'
 
 jest.mock('js/components/Search/getMockBingSearchResults')
 jest.mock('js/utils/search-utils')
 jest.mock('js/utils/local-user-data-mgr')
 jest.mock('js/components/Search/getBingMarketCode')
+jest.mock('js/utils/utils')
 
 beforeEach(() => {
   process.env.NODE_ENV = 'test'
@@ -16,6 +18,7 @@ beforeEach(() => {
     'https://search-api.example.com/query'
   global.fetch.mockImplementation(() => Promise.resolve(mockFetchResponse()))
   getSearchResultCountPerPage.mockReturnValue(10)
+  getUrlParameters.mockReturnValue({})
   jest.useFakeTimers()
 })
 
@@ -44,6 +47,16 @@ describe('fetchBingSearchResults', () => {
     expect(`${url.origin}${url.pathname}`).toEqual(
       'https://some-endpoint.example.com/api/query'
     )
+  })
+
+  it('uses the expected query value', async () => {
+    expect.assertions(1)
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults('blue whales')
+    const calledURL = fetch.mock.calls[0][0]
+    const { searchParams } = new URL(calledURL)
+    expect(searchParams.get('q')).toEqual('blue whales')
   })
 
   it('uses the expected responseFilter value', async () => {
@@ -311,13 +324,82 @@ describe('fetchBingSearchResults', () => {
     })
   })
 
-  it('throws if the provided query is null', async () => {
+  it('throws if the provided query is null and there isn\'t a "q" parameter value', async () => {
     expect.assertions(1)
+    getUrlParameters.mockReturnValue({})
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
       .default
     expect(fetchBingSearchResults(null)).rejects.toThrow(
       'Search query must be a non-empty string.'
     )
+  })
+
+  it('uses the "q" parameter value if not passed a query value', async () => {
+    expect.assertions(1)
+    getUrlParameters.mockReturnValue({
+      q: 'paris',
+    })
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults() // no query value provided
+    const calledURL = fetch.mock.calls[0][0]
+    const { searchParams } = new URL(calledURL)
+    expect(searchParams.get('q')).toEqual('paris')
+  })
+
+  it('ignores the "q" parameter value when passed a query value', async () => {
+    expect.assertions(1)
+    getUrlParameters.mockReturnValue({
+      q: 'paris',
+    })
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults('london')
+    const calledURL = fetch.mock.calls[0][0]
+    const { searchParams } = new URL(calledURL)
+    expect(searchParams.get('q')).toEqual('london')
+  })
+
+  it('uses the "page" parameter value if no page number is provided', async () => {
+    expect.assertions(1)
+    getUrlParameters.mockReturnValue({
+      q: 'belgium',
+      page: '4',
+    })
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults('belgium') // no page number value provided
+    const calledURL = fetch.mock.calls[0][0]
+    const { searchParams } = new URL(calledURL)
+    expect(searchParams.get('pageNumber')).toEqual('3')
+  })
+
+  it('does not use the "page" parameter value if it is less than zero', async () => {
+    expect.assertions(1)
+    getUrlParameters.mockReturnValue({
+      q: 'belgium',
+      page: '-2',
+    })
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults('belgium') // no page number value provided
+    const calledURL = fetch.mock.calls[0][0]
+    const { searchParams } = new URL(calledURL)
+    expect(searchParams.get('pageNumber')).toEqual('0')
+  })
+
+  it('does not use the "page" parameter value if it is not a number', async () => {
+    expect.assertions(1)
+    getUrlParameters.mockReturnValue({
+      q: 'belgium',
+      page: 'hello',
+    })
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults('belgium') // no page number value provided
+    const calledURL = fetch.mock.calls[0][0]
+    const { searchParams } = new URL(calledURL)
+    expect(searchParams.get('pageNumber')).toEqual('0')
   })
 
   it('throws if the response has a 500 status', async () => {

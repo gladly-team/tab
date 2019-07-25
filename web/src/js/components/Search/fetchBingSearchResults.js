@@ -3,6 +3,7 @@ import getMockBingSearchResults from 'js/components/Search/getMockBingSearchResu
 import { getSearchResultCountPerPage } from 'js/utils/search-utils'
 import { getBingClientID } from 'js/utils/local-user-data-mgr'
 import getBingMarketCode from 'js/components/Search/getBingMarketCode'
+import { getUrlParameters } from 'js/utils/utils'
 
 // Note: this modules should reasonably stand on its own because
 // it may load prior to app code via a separate JS entry point,
@@ -11,18 +12,23 @@ import getBingMarketCode from 'js/components/Search/getBingMarketCode'
 
 /**
  * Call our search API endpoint.
- * @param {String} query - The search query, unencoded.
+ * @param {String} providedQuery - The search query, unencoded.
  * @param {Object} options - Additional search parameters to send.
  * @param {Number} options.page - The 1-based search results page number.
  * @return {Object}
  */
-const fetchBingSearchResults = async (query = null, { page } = {}) => {
+const fetchBingSearchResults = async (providedQuery = null, { page } = {}) => {
   // MEASURING PERFORMANCE
   if (window && window.performance && window.debug) {
     var t = performance.now()
     console.log('query', t)
     window.debug.query = t
   }
+
+  // If no query value is provided, try to get it from the "q"
+  // URL parameter.
+  const urlParams = getUrlParameters()
+  const query = providedQuery || urlParams.q || null
 
   // TODO:
   // If a search query is in progress via an earlier request,
@@ -47,7 +53,18 @@ const fetchBingSearchResults = async (query = null, { page } = {}) => {
     if (!endpoint) {
       throw new Error('Search query endpoint is not defined.')
     }
-    const pageNumber = page && page > 0 ? page - 1 : 0
+
+    // Determine the search results page number, using the "page"
+    // query parameter if not provided.
+    let pageNumber = 0
+    if (page && page > 0) {
+      pageNumber = page - 1
+    } else {
+      const paramPageNum = parseInt(urlParams.page, 10)
+      if (!isNaN(paramPageNum) && paramPageNum > 0) {
+        pageNumber = paramPageNum - 1
+      }
+    }
 
     // The mkt parameter is not required but highly recommended.
     const mkt = await getBingMarketCode()
