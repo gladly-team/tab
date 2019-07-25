@@ -4,6 +4,11 @@
 // point. After modifying files in react-scripts, commit the
 // patches with:
 // `yarn patch-package react-scripts`
+// You can view the patch diff in ./web/patches.
+
+// TODO
+// For this to be meaningful, we have to make sure we inject
+// this script first, before all other app code.
 
 // Return an empty script when building the newtab app.
 // The newtab app will still build this entry point because
