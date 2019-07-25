@@ -130,9 +130,11 @@
       /* eslint-disable */
       // MEASURING PERFORMANCE
       window.debug = {}
-      var t = performance.now()
-      console.log('inline', t)
-      window.debug.inline = t
+      if (window && window.performance) {
+        var t = performance.now()
+        console.log('inline', t)
+        window.debug.inline = t
+      }
     </script>
 
     <noscript>You need to enable JavaScript to run this app.</noscript>

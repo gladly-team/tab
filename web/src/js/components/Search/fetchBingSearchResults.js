@@ -18,9 +18,11 @@ import getBingMarketCode from 'js/components/Search/getBingMarketCode'
  */
 const fetchBingSearchResults = async (query = null, { page } = {}) => {
   // MEASURING PERFORMANCE
-  var t = performance.now()
-  console.log('query', t)
-  window.debug.query = t
+  if (window && window.performance && window.debug) {
+    var t = performance.now()
+    console.log('query', t)
+    window.debug.query = t
+  }
 
   // TODO:
   // If a search query is in progress via an earlier request,
