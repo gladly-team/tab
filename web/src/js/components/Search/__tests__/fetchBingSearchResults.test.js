@@ -536,5 +536,85 @@ describe('fetchBingSearchResults: previously-fetched data and in-progress reques
     expect(fetch).toHaveBeenCalledTimes(1)
   })
 
+  it('[completed request with data]: does not fetch new data', async () => {
+    expect.assertions(1)
+    window.searchforacause.queryRequest = {
+      status: 'COMPLETE',
+      usedOnPageLoad: false,
+      responseData: { some: 'data' },
+    }
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults('blue whales')
+    expect(fetch).not.toHaveBeenCalled()
+  })
+
+  it('[completed request with data]: uses the expected data', async () => {
+    expect.assertions(1)
+    window.searchforacause.queryRequest = {
+      status: 'COMPLETE',
+      usedOnPageLoad: false,
+      responseData: { some: 'data', abc: 123 },
+    }
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    const data = await fetchBingSearchResults('blue whales')
+    expect(data).toEqual({ some: 'data', abc: 123 })
+  })
+
+  it('[completed request with data]: saves that we have rendered the data after using it for the first time', async () => {
+    expect.assertions(1)
+    window.searchforacause.queryRequest = {
+      status: 'COMPLETE',
+      usedOnPageLoad: false,
+      responseData: { some: 'data', abc: 123 },
+    }
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults('blue whales')
+    expect(window.searchforacause.queryRequest.usedOnPageLoad).toBe(true)
+  })
+
+  it('[completed request with data]: fetches new data if we have already displayed these results once', async () => {
+    expect.assertions(1)
+    window.searchforacause.queryRequest = {
+      status: 'COMPLETE',
+      usedOnPageLoad: true, // already displayed these results
+      responseData: { some: 'data' },
+    }
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults('blue whales')
+    expect(fetch).toHaveBeenCalledTimes(1)
+  })
+
+  it('[completed request with data]: fetches fresh data on the second query request', async () => {
+    expect.assertions(2)
+    window.searchforacause.queryRequest = {
+      status: 'COMPLETE',
+      usedOnPageLoad: false,
+      responseData: { some: 'data', abc: 123 },
+    }
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults('blue whales')
+    expect(fetch).not.toHaveBeenCalled()
+    await fetchBingSearchResults('blue whales')
+    expect(fetch).toHaveBeenCalledTimes(1)
+  })
+
+  it('[completed request, no data]: fetches new data', async () => {
+    expect.assertions(1)
+    window.searchforacause.queryRequest = {
+      status: 'COMPLETE',
+      usedOnPageLoad: false,
+      responseData: null,
+    }
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults('blue whales')
+    expect(fetch).toHaveBeenCalledTimes(1)
+  })
+
   // TODO: more tests
 })

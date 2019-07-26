@@ -24,7 +24,6 @@ import { getUrlParameters } from 'js/utils/utils'
 const getPreviouslyFetchedData = async () => {
   const searchGlobalObj = getSearchGlobal()
   const queryRequest = get(searchGlobalObj, 'queryRequest')
-  // console.log('queryRequest', queryRequest)
 
   // If we don't have any info in the global object, then we
   // have no previously-fetched search data.
@@ -34,7 +33,7 @@ const getPreviouslyFetchedData = async () => {
 
   // If we already used the search results data, don't re-use it.
   // Return null so we fetch fresh data.
-  if (queryRequest.alreadyUsedData) {
+  if (queryRequest.usedOnPageLoad) {
     return null
   }
 
@@ -94,9 +93,12 @@ const fetchBingSearchResults = async (providedQuery = null, { page } = {}) => {
   // If the search results request is already complete or in
   // progress, use that request's data.
   try {
-    // TODO: add tests
     const priorFetchedData = await getPreviouslyFetchedData()
     if (priorFetchedData) {
+      // Save that we've used this data already so that we fetch fresh
+      // data the next time the user queries.
+      const searchGlobalObj = getSearchGlobal()
+      searchGlobalObj.queryRequest.usedOnPageLoad = true
       return priorFetchedData
     }
   } catch (e) {
