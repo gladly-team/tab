@@ -18,6 +18,8 @@ const eventNameResultsFetched = 'SearchResultsFetched'
 const QUERY_IN_PROGRESS = 'IN_PROGRESS'
 const QUERY_COMPLETE = 'COMPLETE'
 
+const DEBUG = true
+
 /**
  * Make a request for search results potentially prior to our app
  * initializing, and store those results in a window variable.
@@ -25,6 +27,9 @@ const QUERY_COMPLETE = 'COMPLETE'
  * @return {undefined}
  */
 export const prefetchSearchResults = async () => {
+  if (DEBUG) {
+    console.log('Prefetch: started')
+  }
   // Mark that a search query is in progress.
   const searchGlobalObj = getSearchGlobal()
   set(searchGlobalObj, 'queryRequest.status', QUERY_IN_PROGRESS)
@@ -35,6 +40,9 @@ export const prefetchSearchResults = async () => {
     results = await fetchBingSearchResults({
       ignoreStoredData: true,
     })
+    if (DEBUG) {
+      console.log('Prefetch: complete')
+    }
   } catch (e) {
     console.error(e)
   }
@@ -59,6 +67,9 @@ export const prefetchSearchResults = async () => {
  * @return {Promise<Object|null>}
  */
 const getPreviouslyFetchedData = async () => {
+  if (DEBUG) {
+    console.log('App fetch: getting previously-fetched data')
+  }
   const searchGlobalObj = getSearchGlobal()
   const queryRequest = get(searchGlobalObj, 'queryRequest')
 
@@ -77,12 +88,13 @@ const getPreviouslyFetchedData = async () => {
   // Else, if a search query is in progress, wait for it. Listen
   // for an event to know when it's completed.
   else if (queryRequest.status === QUERY_IN_PROGRESS) {
-    // console.log('Query in progress.')
+    if (DEBUG) {
+      console.log('App fetch: waiting for in-progress request')
+    }
 
     // Resolve when we receive search result data or we time out.
     return new Promise(resolve => {
       function queryCompleteHandler() {
-        // console.log('Pending query complete!')
         window.removeEventListener(
           eventNameResultsFetched,
           queryCompleteHandler,
@@ -116,7 +128,9 @@ const getPreviouslyFetchedData = async () => {
     queryRequest.status === QUERY_COMPLETE &&
     !!queryRequest.responseData
   ) {
-    // console.log('Query complete. Using data.', queryRequest.responseData)
+    if (DEBUG) {
+      console.log('App fetch: prefetched data was complete, using it')
+    }
     return queryRequest.responseData
   }
 
@@ -143,8 +157,8 @@ const fetchBingSearchResults = async ({
   // MEASURING PERFORMANCE
   if (window && window.performance && window.debug) {
     var t = performance.now()
-    console.log('query', t)
-    console.log('provided query value', providedQuery)
+    // console.log('query', t)
+    // console.log('provided query value', providedQuery)
     window.debug.query = t
   }
 
@@ -175,6 +189,10 @@ const fetchBingSearchResults = async ({
         const searchGlobalObj = getSearchGlobal()
         set(searchGlobalObj, 'queryRequest.displayedResults', true)
         return priorFetchedData
+      } else {
+        if (DEBUG) {
+          console.log('App fetch: not using previously-fetched data')
+        }
       }
     } catch (e) {
       console.error(e)

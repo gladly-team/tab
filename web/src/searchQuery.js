@@ -20,7 +20,8 @@ if (process.env.REACT_APP_WHICH_APP === 'search') {
   } = require('js/components/Search/fetchBingSearchResults')
   const getSearchResults = () => {
     var t = performance.now()
-    console.log('searchQuery', t)
+    // console.log('searchQuery', t)
+    window.debug.searchQuery = t
 
     // TODO
     // If the path is /query, call fetchBingSearchResults.
