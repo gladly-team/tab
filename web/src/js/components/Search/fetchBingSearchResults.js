@@ -15,6 +15,15 @@ import { getUrlParameters } from 'js/utils/utils'
 // module via app code.
 
 /**
+ * Make a request for search results potentially prior to our app
+ * initializing, and store those results in a window variable.
+ * @return {undefined}
+ */
+export const prefetchData = async () => {
+  // TODO
+}
+
+/**
  * Return data from any previously-completed or pending search results
  * requests. The previous request may happen via another JS entry point
  * that we prioritize to speed up fetching the search results. If there
