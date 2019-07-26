@@ -1,5 +1,5 @@
 import qs from 'qs'
-import { get } from 'lodash/object'
+import { get, set } from 'lodash/object'
 import getMockBingSearchResults from 'js/components/Search/getMockBingSearchResults'
 import {
   getSearchGlobal,
@@ -98,7 +98,7 @@ const fetchBingSearchResults = async (providedQuery = null, { page } = {}) => {
       // Save that we've used this data already so that we fetch fresh
       // data the next time the user queries.
       const searchGlobalObj = getSearchGlobal()
-      searchGlobalObj.queryRequest.usedOnPageLoad = true
+      set(searchGlobalObj, 'queryRequest.usedOnPageLoad', true)
       return priorFetchedData
     }
   } catch (e) {
@@ -113,6 +113,10 @@ const fetchBingSearchResults = async (providedQuery = null, { page } = {}) => {
     if (!endpoint) {
       throw new Error('Search query endpoint is not defined.')
     }
+
+    // Mark that a search query is in progress.
+    const searchGlobalObj = getSearchGlobal()
+    set(searchGlobalObj, 'queryRequest.status', 'IN_PROGRESS')
 
     // Determine the search results page number, using the "page"
     // query parameter if not provided.
@@ -175,7 +179,15 @@ const fetchBingSearchResults = async (providedQuery = null, { page } = {}) => {
         }
         return response
           .json()
-          .then(response => response)
+          .then(response => {
+            // Store the search response. Used to retrieve data that's
+            // fetched before our app code loads.
+            set(searchGlobalObj, 'queryRequest.responseData', response)
+
+            // Mark the request as complete.
+            // set(searchGlobalObj, 'queryRequest.status', 'COMPLETE')
+            return response
+          })
           .catch(e => {
             throw e
           })

@@ -500,7 +500,7 @@ describe('fetchBingSearchResults: development-only mock data', () => {
   })
 })
 
-describe('fetchBingSearchResults: previously-fetched data and in-progress requests', () => {
+describe('fetchBingSearchResults: using previously-fetched data', () => {
   beforeEach(() => {
     window.searchforacause = getDefaultSearchGlobal()
   })
@@ -615,6 +615,54 @@ describe('fetchBingSearchResults: previously-fetched data and in-progress reques
     await fetchBingSearchResults('blue whales')
     expect(fetch).toHaveBeenCalledTimes(1)
   })
+})
 
-  // TODO: more tests
+describe('fetchBingSearchResults: in-progress requests', () => {
+  beforeEach(() => {
+    window.searchforacause = getDefaultSearchGlobal()
+  })
+
+  // TODO
+})
+
+describe('fetchBingSearchResults: storing request data to the search global', () => {
+  beforeEach(() => {
+    window.searchforacause = getDefaultSearchGlobal()
+  })
+
+  it('stores fetched data to the search global', async () => {
+    expect.assertions(1)
+    global.fetch.mockImplementation(() =>
+      Promise.resolve(
+        mockFetchResponse({
+          json: () =>
+            Promise.resolve({
+              bing: {
+                foo: 'bar',
+                hi: 'there',
+                abc: [1, 2, 3],
+              },
+              bingQuery: {
+                msEdgeClientID: 'abc-123',
+              },
+            }),
+        })
+      )
+    )
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults('blue whales')
+    expect(window.searchforacause.queryRequest.responseData).toEqual({
+      bing: {
+        foo: 'bar',
+        hi: 'there',
+        abc: [1, 2, 3],
+      },
+      bingQuery: {
+        msEdgeClientID: 'abc-123',
+      },
+    })
+  })
+
+  // TODO
 })
