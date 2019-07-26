@@ -1,10 +1,9 @@
 /* eslint-env jest */
 
-import { mockFetchResponse } from 'js/utils/test-utils'
+import { getDefaultSearchGlobal, mockFetchResponse } from 'js/utils/test-utils'
 import { getSearchResultCountPerPage } from 'js/utils/search-utils'
 import getBingMarketCode from 'js/components/Search/getBingMarketCode'
 import { getUrlParameters } from 'js/utils/utils'
-import { flushAllPromises } from 'js/utils/test-utils'
 
 jest.mock('js/components/Search/getMockBingSearchResults')
 jest.mock('js/utils/search-utils')
@@ -438,7 +437,9 @@ describe('fetchBingSearchResults', () => {
       'Bad JSON problem!'
     )
   })
+})
 
+describe('fetchBingSearchResults: development-only mock data', () => {
   it('calls for mock search results if NODE_ENV=development and REACT_APP_MOCK_SEARCH_RESULTS=true', done => {
     expect.assertions(2)
     process.env.NODE_ENV = 'development'
@@ -497,4 +498,43 @@ describe('fetchBingSearchResults', () => {
       })
     jest.runAllTimers()
   })
+})
+
+describe('fetchBingSearchResults: previously-fetched data and in-progress requests', () => {
+  beforeEach(() => {
+    window.searchforacause = getDefaultSearchGlobal()
+  })
+
+  it("[no previous request data]: fetches new data when the search global doesn't exist", async () => {
+    expect.assertions(1)
+    delete window.searchforacause
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults('blue whales')
+    expect(fetch).toHaveBeenCalledTimes(1)
+  })
+
+  it("[no previous request data]: fetches new data when the search global query tracker doesn't exist", async () => {
+    expect.assertions(1)
+    delete window.searchforacause.queryRequest
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults('blue whales')
+    expect(fetch).toHaveBeenCalledTimes(1)
+  })
+
+  it('[no previous request data]: fetches new data when no previous request was made', async () => {
+    expect.assertions(1)
+    window.searchforacause.queryRequest = {
+      status: 'NONE',
+      usedOnPageLoad: false,
+      responseData: null,
+    }
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults('blue whales')
+    expect(fetch).toHaveBeenCalledTimes(1)
+  })
+
+  // TODO: more tests
 })

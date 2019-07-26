@@ -1,6 +1,10 @@
 import qs from 'qs'
+import { get } from 'lodash/object'
 import getMockBingSearchResults from 'js/components/Search/getMockBingSearchResults'
-import { getSearchResultCountPerPage } from 'js/utils/search-utils'
+import {
+  getSearchGlobal,
+  getSearchResultCountPerPage,
+} from 'js/utils/search-utils'
 import { getBingClientID } from 'js/utils/local-user-data-mgr'
 import getBingMarketCode from 'js/components/Search/getBingMarketCode'
 import { getUrlParameters } from 'js/utils/utils'
@@ -18,15 +22,40 @@ import { getUrlParameters } from 'js/utils/utils'
  * @return {Promise<Object|null>}
  */
 const getPreviouslyFetchedData = async () => {
-  // TODO
+  const searchGlobalObj = getSearchGlobal()
+  const queryRequest = get(searchGlobalObj, 'queryRequest')
+  // console.log('queryRequest', queryRequest)
+
+  // If we don't have any info in the global object, then we
+  // have no previously-fetched search data.
+  if (!queryRequest) {
+    return null
+  }
+
   // If we already used the search results data, don't re-use it.
   // Return null so we fetch fresh data.
+  if (queryRequest.alreadyUsedData) {
+    return null
+  }
 
   // Else, if a search query is in progress, wait for it. Listen
   // for an event to know when it's completed.
-  // Unregister our event listener before returning the data.
+  if (queryRequest.status === 'IN_PROGRESS') {
+    // TODO
+    // Unregister our event listener before returning the data.
+    console.log('Query in progress.')
+
+    // TODO: return a Promise that resolves when the event emits.
+    return null
+  }
 
   // Else, if a search query is complete, use its data.
+  if (queryRequest.status === 'COMPLETE' && !!queryRequest.responseData) {
+    console.log('Query complete. Using data.', queryRequest.responseData)
+    return queryRequest.responseData
+  }
+
+  // For any other situation, return no data.
   return null
 }
 
