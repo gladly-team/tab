@@ -299,9 +299,9 @@ describe('getSearchGlobal', () => {
   it('returns a queryRequest object with the expected keys', () => {
     const { getSearchGlobal } = require('js/utils/search-utils')
     expect(Object.keys(getSearchGlobal().queryRequest).sort()).toEqual([
+      'displayedResults',
       'responseData',
       'status',
-      'usedOnPageLoad',
     ])
   })
 

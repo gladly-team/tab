@@ -553,7 +553,7 @@ describe('fetchBingSearchResults: using previously-fetched data', () => {
     expect.assertions(1)
     window.searchforacause.queryRequest = {
       status: 'NONE',
-      usedOnPageLoad: false,
+      displayedResults: false,
       responseData: null,
     }
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
@@ -566,7 +566,7 @@ describe('fetchBingSearchResults: using previously-fetched data', () => {
     expect.assertions(1)
     window.searchforacause.queryRequest = {
       status: 'COMPLETE',
-      usedOnPageLoad: false,
+      displayedResults: false,
       responseData: { some: 'data' },
     }
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
@@ -579,7 +579,7 @@ describe('fetchBingSearchResults: using previously-fetched data', () => {
     expect.assertions(1)
     window.searchforacause.queryRequest = {
       status: 'COMPLETE',
-      usedOnPageLoad: false,
+      displayedResults: false,
       responseData: { some: 'data', abc: 123 },
     }
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
@@ -592,20 +592,20 @@ describe('fetchBingSearchResults: using previously-fetched data', () => {
     expect.assertions(1)
     window.searchforacause.queryRequest = {
       status: 'COMPLETE',
-      usedOnPageLoad: false,
+      displayedResults: false,
       responseData: { some: 'data', abc: 123 },
     }
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
       .default
     await fetchBingSearchResults({ query: 'blue whales' })
-    expect(window.searchforacause.queryRequest.usedOnPageLoad).toBe(true)
+    expect(window.searchforacause.queryRequest.displayedResults).toBe(true)
   })
 
   it('[completed request with data]: fetches new data if we have already displayed these results once', async () => {
     expect.assertions(1)
     window.searchforacause.queryRequest = {
       status: 'COMPLETE',
-      usedOnPageLoad: true, // already displayed these results
+      displayedResults: true, // already displayed these results
       responseData: { some: 'data' },
     }
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
@@ -618,7 +618,7 @@ describe('fetchBingSearchResults: using previously-fetched data', () => {
     expect.assertions(2)
     window.searchforacause.queryRequest = {
       status: 'COMPLETE',
-      usedOnPageLoad: false,
+      displayedResults: false,
       responseData: { some: 'data', abc: 123 },
     }
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
@@ -633,7 +633,7 @@ describe('fetchBingSearchResults: using previously-fetched data', () => {
     expect.assertions(2)
     window.searchforacause.queryRequest = {
       status: 'COMPLETE',
-      usedOnPageLoad: false,
+      displayedResults: false,
       responseData: { some: 'data', abc: 123 },
     }
     global.fetch.mockImplementation(() =>
@@ -657,7 +657,7 @@ describe('fetchBingSearchResults: using previously-fetched data', () => {
     expect.assertions(1)
     window.searchforacause.queryRequest = {
       status: 'COMPLETE',
-      usedOnPageLoad: false,
+      displayedResults: false,
       responseData: null,
     }
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
@@ -747,7 +747,7 @@ describe('prefetchSearchResults: storing "prefetched" request data to the search
     })
     window.searchforacause.queryRequest = {
       status: 'COMPLETE',
-      usedOnPageLoad: false,
+      displayedResults: false,
       responseData: { some: 'data', abc: 123 },
     }
     global.fetch.mockImplementation(() =>

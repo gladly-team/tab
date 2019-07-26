@@ -164,9 +164,9 @@ export const getSearchGlobal = () => {
       status: 'NONE',
       // Whether our app already used the search response data here
       // to render results. Our app can display these results if
-      // "usedOnPageLoad" == false, "status" == "COMPLETE", and
+      // "displayedResults" == false, "status" == "COMPLETE", and
       // "responseData" !== null.
-      usedOnPageLoad: false,
+      displayedResults: false,
       // Response data from the search results request.
       responseData: null,
     },

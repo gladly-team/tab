@@ -235,7 +235,7 @@ export const getDefaultSearchGlobal = () => ({
   },
   queryRequest: {
     status: 'NONE',
-    usedOnPageLoad: false,
+    displayedResults: false,
     responseData: null,
   },
   extension: {

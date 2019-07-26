@@ -62,7 +62,7 @@ const getPreviouslyFetchedData = async () => {
 
   // If we already used the search results data, don't re-use it.
   // Return null so we fetch fresh data.
-  if (queryRequest.usedOnPageLoad) {
+  if (queryRequest.displayedResults) {
     return null
   }
 
@@ -134,7 +134,7 @@ const fetchBingSearchResults = async ({
         // Save that we've used this data already so that we fetch fresh
         // data the next time the user queries.
         const searchGlobalObj = getSearchGlobal()
-        set(searchGlobalObj, 'queryRequest.usedOnPageLoad', true)
+        set(searchGlobalObj, 'queryRequest.displayedResults', true)
         return priorFetchedData
       }
     } catch (e) {
