@@ -10,6 +10,8 @@
 // For this to be meaningful, we have to make sure we inject
 // this script first, before all other app code.
 
+// TODO: add tests for env var and other logic
+
 // Return an empty script when building the newtab app.
 // The newtab app will still build this entry point because
 // we share Webpack configs.
@@ -26,7 +28,7 @@ if (process.env.REACT_APP_WHICH_APP === 'search') {
     // TODO
     // If the path is /query, call fetchBingSearchResults.
     // Let it handle the logic of determining the search query, etc.
-    // prefetchSearchResults()
+    prefetchSearchResults()
   }
 
   getSearchResults()
