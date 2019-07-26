@@ -11,11 +11,31 @@ import { getUrlParameters } from 'js/utils/utils'
 // module via app code.
 
 /**
+ * Return data from any previously-completed or pending search results
+ * requests. The previous request may happen via another JS entry point
+ * that we prioritize to speed up fetching the search results. If there
+ * is no valid data, return null.
+ * @return {Promise<Object|null>}
+ */
+const getPreviouslyFetchedData = async () => {
+  // TODO
+  // If we already used the search results data, don't re-use it.
+  // Return null so we fetch fresh data.
+
+  // Else, if a search query is in progress, wait for it. Listen
+  // for an event to know when it's completed.
+  // Unregister our event listener before returning the data.
+
+  // Else, if a search query is complete, use its data.
+  return null
+}
+
+/**
  * Call our search API endpoint. All parameters must be optional.
  * @param {String} providedQuery - The search query, unencoded.
  * @param {Object} options - Additional search parameters to send.
  * @param {Number} options.page - The 1-based search results page number.
- * @return {Object}
+ * @return {Promise<Object>}
  */
 const fetchBingSearchResults = async (providedQuery = null, { page } = {}) => {
   // MEASURING PERFORMANCE
@@ -26,20 +46,7 @@ const fetchBingSearchResults = async (providedQuery = null, { page } = {}) => {
     window.debug.query = t
   }
 
-  // If no query value is provided, try to get it from the "q"
-  // URL parameter.
-  const urlParams = getUrlParameters()
-  const query = providedQuery || urlParams.q || null
-
-  // TODO:
-  // If a search query is in progress via an earlier request,
-  // wait for it. If one is complete, use its data. This may
-  // happen via another JS entry point that we prioritize to
-  // speed up fetching the search results.
-
-  if (!query) {
-    throw new Error(`Search query must be a non-empty string.`)
-  }
+  // Return mock search results as needed in development.
   if (
     process.env.NODE_ENV === 'development' &&
     process.env.REACT_APP_MOCK_SEARCH_RESULTS === 'true'
@@ -48,6 +55,27 @@ const fetchBingSearchResults = async (providedQuery = null, { page } = {}) => {
     return new Promise(resolve => {
       setTimeout(() => resolve(getMockBingSearchResults()), 400)
     })
+  }
+
+  // If no query value is provided, try to get it from the "q"
+  // URL parameter.
+  const urlParams = getUrlParameters()
+  const query = providedQuery || urlParams.q || null
+
+  // If the search results request is already complete or in
+  // progress, use that request's data.
+  try {
+    // TODO: add tests
+    const priorFetchedData = await getPreviouslyFetchedData()
+    if (priorFetchedData) {
+      return priorFetchedData
+    }
+  } catch (e) {
+    console.error(e)
+  }
+
+  if (!query) {
+    throw new Error(`Search query must be a non-empty string.`)
   }
   try {
     const endpoint = process.env.REACT_APP_SEARCH_QUERY_ENDPOINT
@@ -128,8 +156,5 @@ const fetchBingSearchResults = async (providedQuery = null, { page } = {}) => {
     throw e
   }
 }
-
-// TODO: on load, if the path is /query, try to get the
-// search query and page and make the query.
 
 export default fetchBingSearchResults

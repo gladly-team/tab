@@ -4,6 +4,7 @@ import { mockFetchResponse } from 'js/utils/test-utils'
 import { getSearchResultCountPerPage } from 'js/utils/search-utils'
 import getBingMarketCode from 'js/components/Search/getBingMarketCode'
 import { getUrlParameters } from 'js/utils/utils'
+import { flushAllPromises } from 'js/utils/test-utils'
 
 jest.mock('js/components/Search/getMockBingSearchResults')
 jest.mock('js/utils/search-utils')
@@ -414,7 +415,7 @@ describe('fetchBingSearchResults', () => {
     )
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
       .default
-    expect(fetchBingSearchResults('blue whales')).rejects.toThrow(
+    return expect(fetchBingSearchResults('blue whales')).rejects.toThrow(
       'Request failed with status 500'
     )
   })
@@ -432,7 +433,8 @@ describe('fetchBingSearchResults', () => {
     )
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
       .default
-    expect(fetchBingSearchResults('blue whales')).rejects.toThrow(
+
+    return expect(fetchBingSearchResults('blue whales')).rejects.toThrow(
       'Bad JSON problem!'
     )
   })
