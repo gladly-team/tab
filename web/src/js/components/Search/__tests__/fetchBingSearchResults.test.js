@@ -297,7 +297,7 @@ describe('fetchBingSearchResults', () => {
     delete process.env.REACT_APP_SEARCH_QUERY_ENDPOINT
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
       .default
-    expect(fetchBingSearchResults('blue whales')).rejects.toThrow(
+    return expect(fetchBingSearchResults('blue whales')).rejects.toThrow(
       'Search query endpoint is not defined.'
     )
   })
@@ -330,7 +330,7 @@ describe('fetchBingSearchResults', () => {
     getUrlParameters.mockReturnValue({})
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
       .default
-    expect(fetchBingSearchResults(null)).rejects.toThrow(
+    return expect(fetchBingSearchResults(null)).rejects.toThrow(
       'Search query must be a non-empty string.'
     )
   })

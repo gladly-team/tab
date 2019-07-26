@@ -54,7 +54,7 @@ describe('fetchWikipediaResults', () => {
     expect.assertions(1)
     const fetchWikipediaResults = require('js/components/Search/fetchWikipediaResults')
       .default
-    expect(fetchWikipediaResults(null)).rejects.toThrow(
+    return expect(fetchWikipediaResults(null)).rejects.toThrow(
       'Wikipedia query must be a non-empty string.'
     )
   })
@@ -63,7 +63,7 @@ describe('fetchWikipediaResults', () => {
     expect.assertions(1)
     const fetchWikipediaResults = require('js/components/Search/fetchWikipediaResults')
       .default
-    expect(fetchWikipediaResults('')).rejects.toThrow(
+    return expect(fetchWikipediaResults('')).rejects.toThrow(
       'Wikipedia query must be a non-empty string.'
     )
   })
@@ -75,7 +75,7 @@ describe('fetchWikipediaResults', () => {
     )
     const fetchWikipediaResults = require('js/components/Search/fetchWikipediaResults')
       .default
-    expect(fetchWikipediaResults('blue whales')).rejects.toThrow(
+    return expect(fetchWikipediaResults('blue whales')).rejects.toThrow(
       'I failed to fetch'
     )
   })
@@ -91,7 +91,9 @@ describe('fetchWikipediaResults', () => {
     )
     const fetchWikipediaResults = require('js/components/Search/fetchWikipediaResults')
       .default
-    expect(fetchWikipediaResults('blue whales')).rejects.toThrow('Bad JSON!')
+    return expect(fetchWikipediaResults('blue whales')).rejects.toThrow(
+      'Bad JSON!'
+    )
   })
 
   it('sets the URL parameter "action" to "query"', async () => {
