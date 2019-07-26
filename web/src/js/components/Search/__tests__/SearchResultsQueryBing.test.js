@@ -59,7 +59,10 @@ describe('SearchResultsQueryBing', () => {
     shallow(<SearchResultsQueryBing {...mockProps} />)
     await flushAllPromises()
     expect(fetchBingSearchResults).toHaveBeenCalledTimes(1)
-    expect(fetchBingSearchResults).toHaveBeenCalledWith('tacos', { page: 1 })
+    expect(fetchBingSearchResults).toHaveBeenCalledWith({
+      query: 'tacos',
+      page: 1,
+    })
   })
 
   it('calls fetchBingSearchResults when the query changes', async () => {
@@ -73,7 +76,10 @@ describe('SearchResultsQueryBing', () => {
     fetchBingSearchResults.mockClear()
     wrapper.setProps({ query: 'pizza' })
     expect(fetchBingSearchResults).toHaveBeenCalledTimes(1)
-    expect(fetchBingSearchResults).toHaveBeenCalledWith('pizza', { page: 1 })
+    expect(fetchBingSearchResults).toHaveBeenCalledWith({
+      query: 'pizza',
+      page: 1,
+    })
   })
 
   it('calls fetchBingSearchResults when the page changes, passing the new page number', async () => {
@@ -88,7 +94,10 @@ describe('SearchResultsQueryBing', () => {
     expect(fetchBingSearchResults).not.toHaveBeenCalled()
     wrapper.setProps({ page: 48 })
     expect(fetchBingSearchResults).toHaveBeenCalledTimes(1)
-    expect(fetchBingSearchResults).toHaveBeenCalledWith('tacos', { page: 48 })
+    expect(fetchBingSearchResults).toHaveBeenCalledWith({
+      query: 'tacos',
+      page: 48,
+    })
   })
 
   it('does not call fetchBingSearchResults when some unrelated prop changes', async () => {

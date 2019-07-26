@@ -69,12 +69,15 @@ const getPreviouslyFetchedData = async () => {
 
 /**
  * Call our search API endpoint. All parameters must be optional.
- * @param {String} providedQuery - The search query, unencoded.
- * @param {Object} options - Additional search parameters to send.
+ * @param {Object} options
+ * @param {String} options.query - The search query, unencoded.
  * @param {Number} options.page - The 1-based search results page number.
  * @return {Promise<Object>}
  */
-const fetchBingSearchResults = async (providedQuery = null, { page } = {}) => {
+const fetchBingSearchResults = async ({
+  query: providedQuery = null,
+  page,
+} = {}) => {
   // MEASURING PERFORMANCE
   if (window && window.performance && window.debug) {
     var t = performance.now()
