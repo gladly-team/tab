@@ -166,35 +166,26 @@ const fetchBingSearchResults = async (providedQuery = null, { page } = {}) => {
       { arrayFormat: 'comma', encode: false }
     )}`
 
-    return fetch(searchURL, {
+    const response = await fetch(searchURL, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
     })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`Request failed with status ${response.status}`)
-        }
-        return response
-          .json()
-          .then(response => {
-            // Store the search response. Used to retrieve data that's
-            // fetched before our app code loads.
-            set(searchGlobalObj, 'queryRequest.responseData', response)
+    if (!response.ok) {
+      throw new Error(`Request failed with status ${response.status}`)
+    }
 
-            // Mark the request as complete.
-            // set(searchGlobalObj, 'queryRequest.status', 'COMPLETE')
-            return response
-          })
-          .catch(e => {
-            throw e
-          })
-      })
-      .catch(e => {
-        throw e
-      })
+    const responseJSON = await response.json()
+
+    // Store the search response. Used to retrieve data that's
+    // fetched before our app code loads.
+    set(searchGlobalObj, 'queryRequest.responseData', responseJSON)
+
+    // Mark the request as complete.
+    // set(searchGlobalObj, 'queryRequest.status', 'COMPLETE')
+    return responseJSON
   } catch (e) {
     throw e
   }
