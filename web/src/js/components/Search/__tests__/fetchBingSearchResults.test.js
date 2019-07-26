@@ -766,5 +766,106 @@ describe('prefetchSearchResults: storing "prefetched" request data to the search
     })
   })
 
+  it('dispatches a "SearchResultsFetched" event when the fetch is complete', async done => {
+    expect.assertions(0)
+    getUrlParameters.mockReturnValue({
+      q: 'how to boil water',
+    })
+
+    // Expect the listener to be called.
+    window.addEventListener(
+      'SearchResultsFetched',
+      function testing() {
+        window.removeEventListener('SearchResultsFetched', testing, false)
+        done()
+      },
+      false
+    )
+    const {
+      prefetchSearchResults,
+    } = require('js/components/Search/fetchBingSearchResults')
+    await prefetchSearchResults()
+  })
+
+  it('does not dispatch a "SearchResultsFetched" event until the fetch is complete', async done => {
+    expect.assertions(2)
+    getUrlParameters.mockReturnValue({
+      q: 'how to boil water',
+    })
+
+    // Expect the listener to be called.
+    window.addEventListener(
+      'SearchResultsFetched',
+      function testing() {
+        window.removeEventListener('SearchResultsFetched', testing, false)
+        expect(true).toBe(true) // to make sure both assertions are called
+        done()
+      },
+      false
+    )
+
+    global.fetch.mockImplementation(
+      () =>
+        new Promise(resolve => {
+          setTimeout(
+            () =>
+              resolve(
+                mockFetchResponse({
+                  json: () => Promise.resolve({ some: 'data' }),
+                })
+              ),
+            400
+          )
+        })
+    )
+    const {
+      prefetchSearchResults,
+    } = require('js/components/Search/fetchBingSearchResults')
+    prefetchSearchResults()
+    jest.advanceTimersByTime(100)
+    await flushAllPromises()
+    expect(true).toBe(true) // to make sure both assertions are called
+    jest.advanceTimersByTime(500)
+    await flushAllPromises()
+  })
+
+  it('dispatches a "SearchResultsFetched" event after a timeout period to make sure we aren\'t waiting on a bad request', async done => {
+    expect.assertions(0)
+    getUrlParameters.mockReturnValue({
+      q: 'how to boil water',
+    })
+
+    // Expect the listener to be called.
+    window.addEventListener(
+      'SearchResultsFetched',
+      function testing() {
+        window.removeEventListener('SearchResultsFetched', testing, false)
+        done()
+      },
+      false
+    )
+
+    global.fetch.mockImplementation(
+      () =>
+        new Promise(resolve => {
+          setTimeout(
+            () =>
+              resolve(
+                mockFetchResponse({
+                  json: () => Promise.resolve({ some: 'data' }),
+                })
+              ),
+            2300
+          )
+        })
+    )
+    const {
+      prefetchSearchResults,
+    } = require('js/components/Search/fetchBingSearchResults')
+    prefetchSearchResults()
+    jest.advanceTimersByTime(1200) // less time than the request but more than the timeout
+    await flushAllPromises()
+  })
+
   // TODO
 })

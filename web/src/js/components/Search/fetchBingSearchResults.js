@@ -14,6 +14,10 @@ import { getUrlParameters } from 'js/utils/utils'
 // which speeds up fetching search results. We also call this
 // module via app code.
 
+const eventNameResultsFetched = 'SearchResultsFetched'
+const QUERY_IN_PROGRESS = 'IN_PROGRESS'
+const QUERY_COMPLETE = 'COMPLETE'
+
 /**
  * Make a request for search results potentially prior to our app
  * initializing, and store those results in a window variable.
@@ -23,7 +27,7 @@ import { getUrlParameters } from 'js/utils/utils'
 export const prefetchSearchResults = async () => {
   // Mark that a search query is in progress.
   const searchGlobalObj = getSearchGlobal()
-  set(searchGlobalObj, 'queryRequest.status', 'IN_PROGRESS')
+  set(searchGlobalObj, 'queryRequest.status', QUERY_IN_PROGRESS)
 
   // Fetch search results.
   let results = null
@@ -39,8 +43,12 @@ export const prefetchSearchResults = async () => {
   // fetched before our app code loads.
   set(searchGlobalObj, 'queryRequest.responseData', results)
 
+  // Dispatch an event if the app code's loaded and waiting
+  // for search results.
+  window.dispatchEvent(new CustomEvent(eventNameResultsFetched))
+
   // Mark the request as complete.
-  set(searchGlobalObj, 'queryRequest.status', 'COMPLETE')
+  set(searchGlobalObj, 'queryRequest.status', QUERY_COMPLETE)
 }
 
 /**
@@ -62,29 +70,60 @@ const getPreviouslyFetchedData = async () => {
 
   // If we already used the search results data, don't re-use it.
   // Return null so we fetch fresh data.
-  if (queryRequest.displayedResults) {
+  else if (queryRequest.displayedResults) {
     return null
   }
 
   // Else, if a search query is in progress, wait for it. Listen
   // for an event to know when it's completed.
-  if (queryRequest.status === 'IN_PROGRESS') {
-    // TODO
-    // Unregister our event listener before returning the data.
+  else if (queryRequest.status === QUERY_IN_PROGRESS) {
     // console.log('Query in progress.')
 
-    // TODO: return a Promise that resolves when the event emits.
-    return null
+    // Resolve when we receive search result data or we time out.
+    return new Promise(resolve => {
+      function queryCompleteHandler() {
+        // console.log('Pending query complete!')
+        window.removeEventListener(
+          eventNameResultsFetched,
+          queryCompleteHandler,
+          false
+        )
+        resolve(get(getSearchGlobal(), 'queryRequest.responseData'))
+      }
+
+      // Listen for the dispatched event when we receive results.
+      window.addEventListener(
+        eventNameResultsFetched,
+        queryCompleteHandler,
+        false
+      )
+
+      // // Set a max time to wait.
+      // const msToWaitBeforeRetrying = 800
+      // setTimeout(() => {
+      //   window.removeEventListener(
+      //     eventNameResultsFetched,
+      //     queryCompleteHandler,
+      //     false
+      //   )
+      //   resolve()
+      // }, msToWaitBeforeRetrying)
+    })
   }
 
   // Else, if a search query is complete, use its data.
-  if (queryRequest.status === 'COMPLETE' && !!queryRequest.responseData) {
+  else if (
+    queryRequest.status === QUERY_COMPLETE &&
+    !!queryRequest.responseData
+  ) {
     // console.log('Query complete. Using data.', queryRequest.responseData)
     return queryRequest.responseData
   }
 
   // For any other situation, return no data.
-  return null
+  else {
+    return null
+  }
 }
 
 /**
