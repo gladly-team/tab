@@ -667,15 +667,118 @@ describe('fetchBingSearchResults: using previously-fetched data', () => {
   })
 })
 
-describe('prefetchSearchResults: in-progress requests', () => {
-  // TODO
+describe('fetchBingSearchResults: using data from in-progress requests', () => {
+  it('resolves when it receives the SearchResultsFetched event', async done => {
+    expect.assertions(2)
+    getUrlParameters.mockReturnValue({
+      q: 'how to make boiled water',
+    })
+    window.searchforacause.queryRequest = {
+      status: 'IN_PROGRESS',
+      displayedResults: false,
+      responseData: null,
+    }
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    fetchBingSearchResults().then(data => {
+      expect(data).toEqual({ my: 'stuff' })
+      expect(fetch).not.toHaveBeenCalled()
+      done()
+    })
+
+    window.searchforacause.queryRequest.responseData = { my: 'stuff' }
+    window.dispatchEvent(new CustomEvent('SearchResultsFetched'))
+  })
+
+  it('removes its event listener when it receives the SearchResultsFetched event', async done => {
+    expect.assertions(1)
+    getUrlParameters.mockReturnValue({
+      q: 'how to make boiled water',
+    })
+    window.searchforacause.queryRequest = {
+      status: 'IN_PROGRESS',
+      displayedResults: false,
+      responseData: null,
+    }
+    const spyRemoveEventListener = jest.spyOn(window, 'removeEventListener')
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    fetchBingSearchResults().then(data => {
+      expect(spyRemoveEventListener).toHaveBeenCalledWith(
+        'SearchResultsFetched',
+        expect.any(Function),
+        false
+      )
+      done()
+    })
+    window.dispatchEvent(new CustomEvent('SearchResultsFetched'))
+  })
+
+  it("resolves and refetches after a timeout period to make sure we aren't waiting on a bad request", async done => {
+    expect.assertions(1)
+    getUrlParameters.mockReturnValue({
+      q: 'how to make boiled water',
+    })
+    window.searchforacause.queryRequest = {
+      status: 'IN_PROGRESS',
+      displayedResults: false,
+      responseData: null,
+    }
+    const spyRemoveEventListener = jest.spyOn(window, 'removeEventListener')
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+
+    // Note that we don't dispatch the SearchResultsFetched event.
+    fetchBingSearchResults().then(data => {
+      expect(spyRemoveEventListener).toHaveBeenCalledWith(
+        'SearchResultsFetched',
+        expect.any(Function),
+        false
+      )
+      done()
+    })
+
+    jest.advanceTimersByTime(1000)
+  })
+
+  it('removes its event listener when it times out', async done => {
+    expect.assertions(2)
+    getUrlParameters.mockReturnValue({
+      q: 'how to make boiled water',
+    })
+    window.searchforacause.queryRequest = {
+      status: 'IN_PROGRESS',
+      displayedResults: false,
+      responseData: null,
+    }
+    global.fetch.mockImplementation(() =>
+      Promise.resolve(
+        mockFetchResponse({
+          json: () =>
+            Promise.resolve({ answer: 'add lots of heat to cold water' }),
+        })
+      )
+    )
+
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+
+    // Note that we don't dispatch the SearchResultsFetched event.
+    fetchBingSearchResults().then(data => {
+      expect(data).toEqual({ answer: 'add lots of heat to cold water' })
+      expect(fetch).toHaveBeenCalledTimes(1)
+      done()
+    })
+
+    jest.advanceTimersByTime(1000)
+  })
 })
 
 describe('prefetchSearchResults: storing "prefetched" request data to the search global', () => {
   it('stores fetched data to the search global', async () => {
     expect.assertions(1)
     getUrlParameters.mockReturnValue({
-      q: 'how to boil water',
+      q: 'how to make boiled water',
     })
     global.fetch.mockImplementation(() =>
       Promise.resolve(
@@ -713,7 +816,7 @@ describe('prefetchSearchResults: storing "prefetched" request data to the search
   it('stores each stage of the request (NONE, IN_PROGRESS, COMPLETE) to the search global', async () => {
     expect.assertions(3)
     getUrlParameters.mockReturnValue({
-      q: 'how to boil water',
+      q: 'how to make boiled water',
     })
     expect(window.searchforacause.queryRequest.status).toEqual('NONE')
     global.fetch.mockImplementation(
@@ -743,7 +846,7 @@ describe('prefetchSearchResults: storing "prefetched" request data to the search
   it('ignores any existing prefetched data (this is a precaution; other prefetch data should not exist)', async () => {
     expect.assertions(1)
     getUrlParameters.mockReturnValue({
-      q: 'how to boil water',
+      q: 'how to make boiled water',
     })
     window.searchforacause.queryRequest = {
       status: 'COMPLETE',
@@ -769,7 +872,7 @@ describe('prefetchSearchResults: storing "prefetched" request data to the search
   it('dispatches a "SearchResultsFetched" event when the fetch is complete', async done => {
     expect.assertions(0)
     getUrlParameters.mockReturnValue({
-      q: 'how to boil water',
+      q: 'how to make boiled water',
     })
 
     // Expect the listener to be called.
@@ -790,7 +893,7 @@ describe('prefetchSearchResults: storing "prefetched" request data to the search
   it('does not dispatch a "SearchResultsFetched" event until the fetch is complete', async done => {
     expect.assertions(2)
     getUrlParameters.mockReturnValue({
-      q: 'how to boil water',
+      q: 'how to make boiled water',
     })
 
     // Expect the listener to be called.
