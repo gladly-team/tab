@@ -18,7 +18,7 @@ if (process.env.REACT_APP_WHICH_APP === 'search') {
     // eslint-disable-next-line no-unused-vars
     prefetchSearchResults,
   } = require('js/components/Search/fetchBingSearchResults')
-  const foo = () => {
+  const getSearchResults = () => {
     var t = performance.now()
     console.log('searchQuery', t)
 
@@ -28,5 +28,5 @@ if (process.env.REACT_APP_WHICH_APP === 'search') {
     // prefetchSearchResults()
   }
 
-  foo()
+  getSearchResults()
 }
