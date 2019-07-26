@@ -14,17 +14,18 @@
 // The newtab app will still build this entry point because
 // we share Webpack configs.
 if (process.env.REACT_APP_WHICH_APP === 'search') {
-  // eslint-disable-next-line no-unused-vars
-  const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
-    .default
+  const {
+    // eslint-disable-next-line no-unused-vars
+    prefetchSearchResults,
+  } = require('js/components/Search/fetchBingSearchResults')
   const foo = () => {
     var t = performance.now()
     console.log('searchQuery', t)
 
     // TODO
     // If the path is /query, call fetchBingSearchResults.
-    // Let it handle the logic of determining the query text, etc.
-    // fetchBingSearchResults()
+    // Let it handle the logic of determining the search query, etc.
+    prefetchSearchResults()
   }
 
   foo()

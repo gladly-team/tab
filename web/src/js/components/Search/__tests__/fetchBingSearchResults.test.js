@@ -643,13 +643,16 @@ describe('fetchBingSearchResults: using previously-fetched data', () => {
   })
 })
 
-describe('fetchBingSearchResults: in-progress requests', () => {
+describe('prefetchSearchResults: in-progress requests', () => {
   // TODO
 })
 
-describe('fetchBingSearchResults: storing request data to the search global', () => {
+describe('prefetchSearchResults: storing "prefetched" request data to the search global', () => {
   it('stores fetched data to the search global', async () => {
     expect.assertions(1)
+    getUrlParameters.mockReturnValue({
+      q: 'how to boil water',
+    })
     global.fetch.mockImplementation(() =>
       Promise.resolve(
         mockFetchResponse({
@@ -667,9 +670,10 @@ describe('fetchBingSearchResults: storing request data to the search global', ()
         })
       )
     )
-    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
-      .default
-    await fetchBingSearchResults({ query: 'blue whales' })
+    const {
+      prefetchSearchResults,
+    } = require('js/components/Search/fetchBingSearchResults')
+    await prefetchSearchResults({ query: 'blue whales' })
     expect(window.searchforacause.queryRequest.responseData).toEqual({
       bing: {
         foo: 'bar',
@@ -684,6 +688,9 @@ describe('fetchBingSearchResults: storing request data to the search global', ()
 
   it('stores each stage of the request (NONE, IN_PROGRESS, COMPLETE) to the search global', async () => {
     expect.assertions(3)
+    getUrlParameters.mockReturnValue({
+      q: 'how to boil water',
+    })
     expect(window.searchforacause.queryRequest.status).toEqual('NONE')
     global.fetch.mockImplementation(
       () =>
@@ -699,9 +706,10 @@ describe('fetchBingSearchResults: storing request data to the search global', ()
           )
         })
     )
-    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
-      .default
-    fetchBingSearchResults({ query: 'blue whales' })
+    const {
+      prefetchSearchResults,
+    } = require('js/components/Search/fetchBingSearchResults')
+    prefetchSearchResults({ query: 'blue whales' })
     await flushAllPromises()
     expect(window.searchforacause.queryRequest.status).toEqual('IN_PROGRESS')
     await runAsyncTimerLoops(2)

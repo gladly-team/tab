@@ -17,10 +17,28 @@ import { getUrlParameters } from 'js/utils/utils'
 /**
  * Make a request for search results potentially prior to our app
  * initializing, and store those results in a window variable.
+ * This relies on URL parameter values for the search query, etc.
  * @return {undefined}
  */
-export const prefetchData = async () => {
-  // TODO
+export const prefetchSearchResults = async () => {
+  // Mark that a search query is in progress.
+  const searchGlobalObj = getSearchGlobal()
+  set(searchGlobalObj, 'queryRequest.status', 'IN_PROGRESS')
+
+  // Fetch search results.
+  let results = null
+  try {
+    results = await fetchBingSearchResults()
+  } catch (e) {
+    console.error(e)
+  }
+
+  // Store the search response. Used to retrieve data that's
+  // fetched before our app code loads.
+  set(searchGlobalObj, 'queryRequest.responseData', results)
+
+  // Mark the request as complete.
+  set(searchGlobalObj, 'queryRequest.status', 'COMPLETE')
 }
 
 /**
@@ -126,10 +144,6 @@ const fetchBingSearchResults = async ({
       throw new Error('Search query endpoint is not defined.')
     }
 
-    // Mark that a search query is in progress.
-    const searchGlobalObj = getSearchGlobal()
-    set(searchGlobalObj, 'queryRequest.status', 'IN_PROGRESS')
-
     // Determine the search results page number, using the "page"
     // query parameter if not provided.
     let pageNumber = 0
@@ -189,13 +203,6 @@ const fetchBingSearchResults = async ({
       throw new Error(`Request failed with status ${response.status}`)
     }
     const responseJSON = await response.json()
-
-    // Store the search response. Used to retrieve data that's
-    // fetched before our app code loads.
-    set(searchGlobalObj, 'queryRequest.responseData', responseJSON)
-
-    // Mark the request as complete.
-    set(searchGlobalObj, 'queryRequest.status', 'COMPLETE')
     return responseJSON
   } catch (e) {
     throw e
