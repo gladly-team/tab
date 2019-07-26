@@ -1,6 +1,11 @@
 /* eslint-env jest */
 
-import { getDefaultSearchGlobal, mockFetchResponse } from 'js/utils/test-utils'
+import {
+  flushAllPromises,
+  getDefaultSearchGlobal,
+  mockFetchResponse,
+  runAsyncTimerLoops,
+} from 'js/utils/test-utils'
 import { getSearchResultCountPerPage } from 'js/utils/search-utils'
 import getBingMarketCode from 'js/components/Search/getBingMarketCode'
 import { getUrlParameters } from 'js/utils/utils'
@@ -662,6 +667,32 @@ describe('fetchBingSearchResults: storing request data to the search global', ()
         msEdgeClientID: 'abc-123',
       },
     })
+  })
+
+  it('stores each stage of the request (NONE, IN_PROGRESS, COMPLETE) to the search global', async () => {
+    expect.assertions(3)
+    expect(window.searchforacause.queryRequest.status).toEqual('NONE')
+    global.fetch.mockImplementation(
+      () =>
+        new Promise(resolve => {
+          setTimeout(
+            () =>
+              resolve(
+                mockFetchResponse({
+                  json: () => Promise.resolve({ some: 'data' }),
+                })
+              ),
+            400
+          )
+        })
+    )
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    fetchBingSearchResults('blue whales')
+    await flushAllPromises()
+    expect(window.searchforacause.queryRequest.status).toEqual('IN_PROGRESS')
+    await runAsyncTimerLoops(2)
+    expect(window.searchforacause.queryRequest.status).toEqual('COMPLETE')
   })
 
   // TODO

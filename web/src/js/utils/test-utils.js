@@ -284,7 +284,7 @@ export const flushAllPromises = async () => {
  * https://github.com/facebook/jest/issues/2157
  * @return {Promise<undefined>}
  */
-export const runAsyncTimerLoops = async numLoops => {
+export const runAsyncTimerLoops = async (numLoops = 2) => {
   for (var i = 0; i < numLoops; i++) {
     await flushAllPromises()
     jest.runAllTimers()

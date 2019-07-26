@@ -42,7 +42,7 @@ const getPreviouslyFetchedData = async () => {
   if (queryRequest.status === 'IN_PROGRESS') {
     // TODO
     // Unregister our event listener before returning the data.
-    console.log('Query in progress.')
+    // console.log('Query in progress.')
 
     // TODO: return a Promise that resolves when the event emits.
     return null
@@ -50,7 +50,7 @@ const getPreviouslyFetchedData = async () => {
 
   // Else, if a search query is complete, use its data.
   if (queryRequest.status === 'COMPLETE' && !!queryRequest.responseData) {
-    console.log('Query complete. Using data.', queryRequest.responseData)
+    // console.log('Query complete. Using data.', queryRequest.responseData)
     return queryRequest.responseData
   }
 
@@ -176,7 +176,6 @@ const fetchBingSearchResults = async (providedQuery = null, { page } = {}) => {
     if (!response.ok) {
       throw new Error(`Request failed with status ${response.status}`)
     }
-
     const responseJSON = await response.json()
 
     // Store the search response. Used to retrieve data that's
@@ -184,7 +183,7 @@ const fetchBingSearchResults = async (providedQuery = null, { page } = {}) => {
     set(searchGlobalObj, 'queryRequest.responseData', responseJSON)
 
     // Mark the request as complete.
-    // set(searchGlobalObj, 'queryRequest.status', 'COMPLETE')
+    set(searchGlobalObj, 'queryRequest.status', 'COMPLETE')
     return responseJSON
   } catch (e) {
     throw e
