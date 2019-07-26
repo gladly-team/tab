@@ -24,6 +24,7 @@ beforeEach(() => {
   global.fetch.mockImplementation(() => Promise.resolve(mockFetchResponse()))
   getSearchResultCountPerPage.mockReturnValue(10)
   getUrlParameters.mockReturnValue({})
+  window.searchforacause = getDefaultSearchGlobal()
   jest.useFakeTimers()
 })
 
@@ -506,10 +507,6 @@ describe('fetchBingSearchResults: development-only mock data', () => {
 })
 
 describe('fetchBingSearchResults: using previously-fetched data', () => {
-  beforeEach(() => {
-    window.searchforacause = getDefaultSearchGlobal()
-  })
-
   it("[no previous request data]: fetches new data when the search global doesn't exist", async () => {
     expect.assertions(1)
     delete window.searchforacause
@@ -623,18 +620,10 @@ describe('fetchBingSearchResults: using previously-fetched data', () => {
 })
 
 describe('fetchBingSearchResults: in-progress requests', () => {
-  beforeEach(() => {
-    window.searchforacause = getDefaultSearchGlobal()
-  })
-
   // TODO
 })
 
 describe('fetchBingSearchResults: storing request data to the search global', () => {
-  beforeEach(() => {
-    window.searchforacause = getDefaultSearchGlobal()
-  })
-
   it('stores fetched data to the search global', async () => {
     expect.assertions(1)
     global.fetch.mockImplementation(() =>

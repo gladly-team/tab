@@ -228,7 +228,7 @@ export const deleteTabGlobal = () => {
  * Return the default starting value of `window.searchforacause`
  * @return {Object}
  */
-export const getDefaultSearchGlobal = (properties = {}) => ({
+export const getDefaultSearchGlobal = () => ({
   search: {
     fetchedOnPageLoad: false,
     YPAErrorOnPageLoad: null,
