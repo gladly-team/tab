@@ -25,7 +25,7 @@ if (process.env.REACT_APP_WHICH_APP === 'search') {
     // TODO
     // If the path is /query, call fetchBingSearchResults.
     // Let it handle the logic of determining the search query, etc.
-    prefetchSearchResults()
+    // prefetchSearchResults()
   }
 
   foo()

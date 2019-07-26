@@ -629,6 +629,30 @@ describe('fetchBingSearchResults: using previously-fetched data', () => {
     expect(fetch).toHaveBeenCalledTimes(1)
   })
 
+  it('[completed request with data]: fetches when "ignoreStoredData" is true', async () => {
+    expect.assertions(2)
+    window.searchforacause.queryRequest = {
+      status: 'COMPLETE',
+      usedOnPageLoad: false,
+      responseData: { some: 'data', abc: 123 },
+    }
+    global.fetch.mockImplementation(() =>
+      Promise.resolve(
+        mockFetchResponse({
+          json: () => Promise.resolve({ my: 'other-data' }),
+        })
+      )
+    )
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    const data = await fetchBingSearchResults({
+      query: 'blue whales',
+      ignoreStoredData: true,
+    })
+    expect(fetch).toHaveBeenCalledTimes(1) // fetches data (not using the stored data)
+    expect(data).toEqual({ my: 'other-data' }) // uses data from fetch, not the stored data
+  })
+
   it('[completed request, no data]: fetches new data', async () => {
     expect.assertions(1)
     window.searchforacause.queryRequest = {
@@ -673,7 +697,7 @@ describe('prefetchSearchResults: storing "prefetched" request data to the search
     const {
       prefetchSearchResults,
     } = require('js/components/Search/fetchBingSearchResults')
-    await prefetchSearchResults({ query: 'blue whales' })
+    await prefetchSearchResults()
     expect(window.searchforacause.queryRequest.responseData).toEqual({
       bing: {
         foo: 'bar',
@@ -709,11 +733,37 @@ describe('prefetchSearchResults: storing "prefetched" request data to the search
     const {
       prefetchSearchResults,
     } = require('js/components/Search/fetchBingSearchResults')
-    prefetchSearchResults({ query: 'blue whales' })
+    prefetchSearchResults()
     await flushAllPromises()
     expect(window.searchforacause.queryRequest.status).toEqual('IN_PROGRESS')
     await runAsyncTimerLoops(2)
     expect(window.searchforacause.queryRequest.status).toEqual('COMPLETE')
+  })
+
+  it('ignores any existing prefetched data (this is a precaution; other prefetch data should not exist)', async () => {
+    expect.assertions(1)
+    getUrlParameters.mockReturnValue({
+      q: 'how to boil water',
+    })
+    window.searchforacause.queryRequest = {
+      status: 'COMPLETE',
+      usedOnPageLoad: false,
+      responseData: { some: 'data', abc: 123 },
+    }
+    global.fetch.mockImplementation(() =>
+      Promise.resolve(
+        mockFetchResponse({
+          json: () => Promise.resolve({ the: 'info' }),
+        })
+      )
+    )
+    const {
+      prefetchSearchResults,
+    } = require('js/components/Search/fetchBingSearchResults')
+    await prefetchSearchResults()
+    expect(window.searchforacause.queryRequest.responseData).toEqual({
+      the: 'info',
+    })
   })
 
   // TODO

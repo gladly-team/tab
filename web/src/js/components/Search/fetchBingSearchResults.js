@@ -28,7 +28,9 @@ export const prefetchSearchResults = async () => {
   // Fetch search results.
   let results = null
   try {
-    results = await fetchBingSearchResults()
+    results = await fetchBingSearchResults({
+      ignoreStoredData: true,
+    })
   } catch (e) {
     console.error(e)
   }
@@ -90,11 +92,14 @@ const getPreviouslyFetchedData = async () => {
  * @param {Object} options
  * @param {String} options.query - The search query, unencoded.
  * @param {Number} options.page - The 1-based search results page number.
+ * @param {Boolean} options.ignoreStoredData - If true, it will not use
+ *   any data that we "prefetched" and stored.
  * @return {Promise<Object>}
  */
 const fetchBingSearchResults = async ({
   query: providedQuery = null,
   page,
+  ignoreStoredData,
 } = {}) => {
   // MEASURING PERFORMANCE
   if (window && window.performance && window.debug) {
@@ -122,17 +127,19 @@ const fetchBingSearchResults = async ({
 
   // If the search results request is already complete or in
   // progress, use that request's data.
-  try {
-    const priorFetchedData = await getPreviouslyFetchedData()
-    if (priorFetchedData) {
-      // Save that we've used this data already so that we fetch fresh
-      // data the next time the user queries.
-      const searchGlobalObj = getSearchGlobal()
-      set(searchGlobalObj, 'queryRequest.usedOnPageLoad', true)
-      return priorFetchedData
+  if (!ignoreStoredData) {
+    try {
+      const priorFetchedData = await getPreviouslyFetchedData()
+      if (priorFetchedData) {
+        // Save that we've used this data already so that we fetch fresh
+        // data the next time the user queries.
+        const searchGlobalObj = getSearchGlobal()
+        set(searchGlobalObj, 'queryRequest.usedOnPageLoad', true)
+        return priorFetchedData
+      }
+    } catch (e) {
+      console.error(e)
     }
-  } catch (e) {
-    console.error(e)
   }
 
   if (!query) {
