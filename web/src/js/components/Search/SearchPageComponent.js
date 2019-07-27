@@ -48,8 +48,7 @@ import {
   FIREFOX_BROWSER,
 } from 'js/constants'
 import { detectSupportedBrowser } from 'js/utils/detectBrowser'
-
-const Footer = lazy(() => import('js/components/General/Footer'))
+import Footer from 'js/components/General/Footer'
 
 const searchBoxBorderColor = '#ced4da'
 const searchBoxBorderColorFocused = '#bdbdbd'
@@ -656,13 +655,11 @@ class SearchPage extends React.Component {
             </ErrorBoundary>
           </div>
         </div>
-        <Suspense fallback={null}>
-          <Footer
-            style={{
-              marginTop: 'auto',
-            }}
-          />
-        </Suspense>
+        <Footer
+          style={{
+            marginTop: 'auto',
+          }}
+        />
       </div>
     )
   }
