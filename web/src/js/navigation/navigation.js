@@ -5,8 +5,22 @@ import qs from 'qs'
 
 export const browserHistory = createBrowserHistory()
 
-export const goTo = (path, paramsObj = {}) => {
-  const queryString = qs.stringify(paramsObj)
+/**
+ * Push a browser history entry with the specified URL.
+ * @param {String} path - The path or URL to navigate to
+ * @param {Object} paramsObj - An object of URL parameter values
+ *   to add to the search string
+ * @param {Object} options
+ * @param {Boolean} options.keepURLParams - If true, the new
+ *   URL's search string will contain the same values as the
+ *   current URL, plus any additional values provided in the
+ *   paramsObj parameter.
+ * @return undefined
+ */
+export const goTo = (path, paramsObj = {}, { keepURLParams = false } = {}) => {
+  const queryString = keepURLParams
+    ? qs.stringify(Object.assign({}, getUrlParameters(), paramsObj))
+    : qs.stringify(paramsObj)
   if (isURLForDifferentApp(path)) {
     let externalURL = queryString ? `${path}?${queryString}` : path
     externalRedirect(externalURL)
@@ -18,15 +32,33 @@ export const goTo = (path, paramsObj = {}) => {
   }
 }
 
-export const replaceUrl = (path, paramsObj = {}) => {
-  const queryString = qs.stringify(paramsObj)
+/**
+ * Replace the browser history entry with the specified URL.
+ * @param {String} path - The path or URL to navigate to
+ * @param {Object} paramsObj - An object of URL parameter values
+ *   to add to the search string
+ * @param {Object} options
+ * @param {Boolean} options.keepURLParams - If true, the new
+ *   URL's search string will contain the same values as the
+ *   current URL, plus any additional values provided in the
+ *   paramsObj parameter.
+ * @return undefined
+ */
+export const replaceUrl = (
+  path,
+  paramsObj = {},
+  { keepURLParams = false } = {}
+) => {
+  const queryString = keepURLParams
+    ? qs.stringify(Object.assign({}, getUrlParameters(), paramsObj))
+    : qs.stringify(paramsObj)
   if (isURLForDifferentApp(path)) {
     let externalURL = queryString ? `${path}?${queryString}` : path
     externalRedirect(externalURL)
   } else {
     browserHistory.replace({
       pathname: path,
-      search: qs.stringify(paramsObj) ? `?${qs.stringify(paramsObj)}` : null,
+      search: queryString ? `?${queryString}` : null,
     })
   }
 }

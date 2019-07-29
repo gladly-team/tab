@@ -2,6 +2,7 @@
 /* globals process */
 
 import { externalRedirect, isURLForDifferentApp } from 'js/navigation/utils'
+import { getUrlParameters } from 'js/utils/utils'
 
 const mockBrowserHistory = {
   push: jest.fn(),
@@ -11,9 +12,14 @@ jest.mock('history', () => ({
   createBrowserHistory: jest.fn(() => mockBrowserHistory),
 }))
 jest.mock('js/navigation/utils')
+jest.mock('js/utils/utils')
 
 beforeAll(() => {
   process.env.REACT_APP_WEBSITE_PROTOCOL = 'https'
+})
+
+beforeEach(() => {
+  getUrlParameters.mockReturnValue({})
 })
 
 afterEach(() => {
@@ -37,6 +43,46 @@ describe('goTo', () => {
     expect(mockBrowserHistory.push).toHaveBeenCalledWith({
       pathname: '/some/path/',
       search: '?someParam=abc&foo=blah',
+    })
+  })
+
+  it('does not preserve existing query parameters by default', () => {
+    getUrlParameters.mockReturnValue({
+      doNotIncludeMe: 'plz',
+    })
+    const { goTo } = require('js/navigation/navigation')
+    goTo('/some/path/', { someParam: 'abc', foo: 'blah' })
+    expect(mockBrowserHistory.push).toHaveBeenCalledWith({
+      pathname: '/some/path/',
+      search: '?someParam=abc&foo=blah',
+    })
+  })
+
+  it('preserves existing query parameters if options.keepURLParams is true', () => {
+    getUrlParameters.mockReturnValue({
+      plzIncludeMe: 'thx',
+    })
+    const { goTo } = require('js/navigation/navigation')
+    goTo('/some/path/', null, { keepURLParams: true })
+    expect(mockBrowserHistory.push).toHaveBeenCalledWith({
+      pathname: '/some/path/',
+      search: '?plzIncludeMe=thx',
+    })
+  })
+
+  it('sets existing query parameters, along with new parameters, if options.keepURLParams is true', () => {
+    getUrlParameters.mockReturnValue({
+      plzIncludeMe: 'thx',
+    })
+    const { goTo } = require('js/navigation/navigation')
+    goTo(
+      '/some/path/',
+      { someParam: 'abc', foo: 'blah' },
+      { keepURLParams: true }
+    )
+    expect(mockBrowserHistory.push).toHaveBeenCalledWith({
+      pathname: '/some/path/',
+      search: '?plzIncludeMe=thx&someParam=abc&foo=blah',
     })
   })
 
@@ -73,6 +119,46 @@ describe('replaceUrl', () => {
     expect(mockBrowserHistory.replace).toHaveBeenCalledWith({
       pathname: '/some/path/',
       search: '?someParam=abc&foo=blah',
+    })
+  })
+
+  it('does not preserve existing query parameters by default', () => {
+    getUrlParameters.mockReturnValue({
+      doNotIncludeMe: 'plz',
+    })
+    const { replaceUrl } = require('js/navigation/navigation')
+    replaceUrl('/some/path/', { someParam: 'abc', foo: 'blah' })
+    expect(mockBrowserHistory.replace).toHaveBeenCalledWith({
+      pathname: '/some/path/',
+      search: '?someParam=abc&foo=blah',
+    })
+  })
+
+  it('preserves existing query parameters if options.keepURLParams is true', () => {
+    getUrlParameters.mockReturnValue({
+      plzIncludeMe: 'thx',
+    })
+    const { replaceUrl } = require('js/navigation/navigation')
+    replaceUrl('/some/path/', null, { keepURLParams: true })
+    expect(mockBrowserHistory.replace).toHaveBeenCalledWith({
+      pathname: '/some/path/',
+      search: '?plzIncludeMe=thx',
+    })
+  })
+
+  it('sets existing query parameters, along with new parameters, if options.keepURLParams is true', () => {
+    getUrlParameters.mockReturnValue({
+      plzIncludeMe: 'thx',
+    })
+    const { replaceUrl } = require('js/navigation/navigation')
+    replaceUrl(
+      '/some/path/',
+      { someParam: 'abc', foo: 'blah' },
+      { keepURLParams: true }
+    )
+    expect(mockBrowserHistory.replace).toHaveBeenCalledWith({
+      pathname: '/some/path/',
+      search: '?plzIncludeMe=thx&someParam=abc&foo=blah',
     })
   })
 
