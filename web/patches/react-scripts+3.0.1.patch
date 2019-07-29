@@ -1,0 +1,111 @@
+diff --git a/node_modules/react-scripts/config/paths.js b/node_modules/react-scripts/config/paths.js
+index e5a3e0b..fa5436e 100644
+--- a/node_modules/react-scripts/config/paths.js
++++ b/node_modules/react-scripts/config/paths.js
+@@ -81,6 +81,8 @@ module.exports = {
+   appPublic: resolveApp('public'),
+   appHtml: resolveApp('public/index.html'),
+   appIndexJs: resolveModule(resolveApp, 'src/index'),
++  // @gladly-edited
++  searchQueryJs: resolveModule(resolveApp, 'src/searchQuery'),
+   appPackageJson: resolveApp('package.json'),
+   appSrc: resolveApp('src'),
+   appTsConfig: resolveApp('tsconfig.json'),
+@@ -104,6 +106,8 @@ module.exports = {
+   appPublic: resolveApp('public'),
+   appHtml: resolveApp('public/index.html'),
+   appIndexJs: resolveModule(resolveApp, 'src/index'),
++  // @gladly-edited
++  searchQueryJs: resolveModule(resolveApp, 'src/searchQuery'),
+   appPackageJson: resolveApp('package.json'),
+   appSrc: resolveApp('src'),
+   appTsConfig: resolveApp('tsconfig.json'),
+@@ -139,6 +143,8 @@ if (
+     appPublic: resolveOwn('template/public'),
+     appHtml: resolveOwn('template/public/index.html'),
+     appIndexJs: resolveModule(resolveOwn, 'template/src/index'),
++    // @gladly-edited
++    searchQueryJs: resolveModule(resolveOwn, 'template/src/searchQuery'),
+     appPackageJson: resolveOwn('package.json'),
+     appSrc: resolveOwn('template/src'),
+     appTsConfig: resolveOwn('template/tsconfig.json'),
+diff --git a/node_modules/react-scripts/config/webpack.config.js b/node_modules/react-scripts/config/webpack.config.js
+index 8f70442..185d7e5 100644
+--- a/node_modules/react-scripts/config/webpack.config.js
++++ b/node_modules/react-scripts/config/webpack.config.js
+@@ -138,25 +138,34 @@ module.exports = function(webpackEnv) {
+       : isEnvDevelopment && 'cheap-module-source-map',
+     // These are the "entry points" to our application.
+     // This means they will be the "root" imports that are included in JS bundle.
+-    entry: [
+-      // Include an alternative client for WebpackDevServer. A client's job is to
+-      // connect to WebpackDevServer by a socket and get notified about changes.
+-      // When you save a file, the client will either apply hot updates (in case
+-      // of CSS changes), or refresh the page (in case of JS changes). When you
+-      // make a syntax error, this client will display a syntax error overlay.
+-      // Note: instead of the default WebpackDevServer client, we use a custom one
+-      // to bring better experience for Create React App users. You can replace
+-      // the line below with these two lines if you prefer the stock client:
+-      // require.resolve('webpack-dev-server/client') + '?/',
+-      // require.resolve('webpack/hot/dev-server'),
+-      isEnvDevelopment &&
+-        require.resolve('react-dev-utils/webpackHotDevClient'),
+-      // Finally, this is your app's code:
+-      paths.appIndexJs,
+-      // We include the app code last so that if there is a runtime error during
+-      // initialization, it doesn't blow up the WebpackDevServer client, and
+-      // changing JS code would still trigger a refresh.
+-    ].filter(Boolean),
++    // @gladly-edited: changed from one entry to multiple:
++    // https://github.com/facebook/create-react-app/issues/1084#issuecomment-308731651
++    entry: {
++      searchQuery: [
++        isEnvDevelopment &&
++          require.resolve('react-dev-utils/webpackHotDevClient'),
++        paths.searchQueryJs,
++      ].filter(Boolean),
++      index: [
++        // Include an alternative client for WebpackDevServer. A client's job is to
++        // connect to WebpackDevServer by a socket and get notified about changes.
++        // When you save a file, the client will either apply hot updates (in case
++        // of CSS changes), or refresh the page (in case of JS changes). When you
++        // make a syntax error, this client will display a syntax error overlay.
++        // Note: instead of the default WebpackDevServer client, we use a custom one
++        // to bring better experience for Create React App users. You can replace
++        // the line below with these two lines if you prefer the stock client:
++        // require.resolve('webpack-dev-server/client') + '?/',
++        // require.resolve('webpack/hot/dev-server'),
++        isEnvDevelopment &&
++          require.resolve('react-dev-utils/webpackHotDevClient'),
++        // Finally, this is your app's code:
++        paths.appIndexJs,
++        // We include the app code last so that if there is a runtime error during
++        // initialization, it doesn't blow up the WebpackDevServer client, and
++        // changing JS code would still trigger a refresh.
++      ].filter(Boolean),
++    },
+     output: {
+       // The build folder.
+       path: isEnvProduction ? paths.appBuild : undefined,
+@@ -166,7 +175,9 @@ module.exports = function(webpackEnv) {
+       // In development, it does not produce real files.
+       filename: isEnvProduction
+         ? 'static/js/[name].[contenthash:8].js'
+-        : isEnvDevelopment && 'static/js/bundle.js',
++        // @gladly-edited: added support for multiple bundles in development.
++        // Original env development was 'static/js/bundle.js'.
++        : isEnvDevelopment && 'static/js/[name].js',
+       // TODO: remove this when upgrading to webpack 5
+       futureEmitAssets: true,
+       // There are also additional JS chunk files if you use code splitting.
+@@ -254,7 +265,9 @@ module.exports = function(webpackEnv) {
+       // https://twitter.com/wSokra/status/969633336732905474
+       // https://medium.com/webpack/webpack-4-code-splitting-chunk-graph-and-the-splitchunks-optimization-be739a861366
+       splitChunks: {
+-        chunks: 'all',
++        // @gladly-edited: exclude the searchQuery chunk from code-splitting.
++        //   The original setting was `chunks: 'all'`.`
++        chunks: chunk => chunk.name !== 'searchQuery',
+         name: false,
+       },
+       // Keep the runtime chunk separated to enable long term caching

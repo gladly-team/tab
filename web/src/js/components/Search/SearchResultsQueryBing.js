@@ -85,7 +85,8 @@ class SearchResultsQueryBing extends React.Component {
 
     try {
       this.cancelablePromise = makePromiseCancelable(
-        fetchBingSearchResults(query, {
+        fetchBingSearchResults({
+          query,
           ...(page && { page }),
         })
       )

@@ -228,10 +228,15 @@ export const deleteTabGlobal = () => {
  * Return the default starting value of `window.searchforacause`
  * @return {Object}
  */
-export const getDefaultSearchGlobal = (properties = {}) => ({
+export const getDefaultSearchGlobal = () => ({
   search: {
     fetchedOnPageLoad: false,
     YPAErrorOnPageLoad: null,
+  },
+  queryRequest: {
+    status: 'NONE',
+    displayedResults: false,
+    responseData: null,
   },
   extension: {
     isInstalled: false,
@@ -279,7 +284,7 @@ export const flushAllPromises = async () => {
  * https://github.com/facebook/jest/issues/2157
  * @return {Promise<undefined>}
  */
-export const runAsyncTimerLoops = async numLoops => {
+export const runAsyncTimerLoops = async (numLoops = 2) => {
   for (var i = 0; i < numLoops; i++) {
     await flushAllPromises()
     jest.runAllTimers()

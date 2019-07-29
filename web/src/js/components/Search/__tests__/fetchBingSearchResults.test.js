@@ -1,13 +1,20 @@
 /* eslint-env jest */
 
-import { mockFetchResponse } from 'js/utils/test-utils'
+import {
+  flushAllPromises,
+  getDefaultSearchGlobal,
+  mockFetchResponse,
+  runAsyncTimerLoops,
+} from 'js/utils/test-utils'
 import { getSearchResultCountPerPage } from 'js/utils/search-utils'
 import getBingMarketCode from 'js/components/Search/getBingMarketCode'
+import { getUrlParameters } from 'js/utils/utils'
 
 jest.mock('js/components/Search/getMockBingSearchResults')
 jest.mock('js/utils/search-utils')
 jest.mock('js/utils/local-user-data-mgr')
 jest.mock('js/components/Search/getBingMarketCode')
+jest.mock('js/utils/utils')
 
 beforeEach(() => {
   process.env.NODE_ENV = 'test'
@@ -16,6 +23,8 @@ beforeEach(() => {
     'https://search-api.example.com/query'
   global.fetch.mockImplementation(() => Promise.resolve(mockFetchResponse()))
   getSearchResultCountPerPage.mockReturnValue(10)
+  getUrlParameters.mockReturnValue({})
+  window.searchforacause = getDefaultSearchGlobal()
   jest.useFakeTimers()
 })
 
@@ -28,7 +37,7 @@ describe('fetchBingSearchResults', () => {
     expect.assertions(1)
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
       .default
-    await fetchBingSearchResults('blue whales')
+    await fetchBingSearchResults({ query: 'blue whales' })
     expect(fetch).toHaveBeenCalledTimes(1)
   })
 
@@ -38,7 +47,7 @@ describe('fetchBingSearchResults', () => {
       'https://some-endpoint.example.com/api/query'
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
       .default
-    await fetchBingSearchResults('blue whales')
+    await fetchBingSearchResults({ query: 'blue whales' })
     const calledURL = fetch.mock.calls[0][0]
     const url = new URL(calledURL)
     expect(`${url.origin}${url.pathname}`).toEqual(
@@ -46,11 +55,21 @@ describe('fetchBingSearchResults', () => {
     )
   })
 
+  it('uses the expected query value', async () => {
+    expect.assertions(1)
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'blue whales' })
+    const calledURL = fetch.mock.calls[0][0]
+    const { searchParams } = new URL(calledURL)
+    expect(searchParams.get('q')).toEqual('blue whales')
+  })
+
   it('uses the expected responseFilter value', async () => {
     expect.assertions(1)
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
       .default
-    await fetchBingSearchResults('blue whales')
+    await fetchBingSearchResults({ query: 'blue whales' })
     const calledURL = fetch.mock.calls[0][0]
     const { searchParams } = new URL(calledURL)
     expect(searchParams.get('responseFilter')).toEqual(
@@ -63,7 +82,7 @@ describe('fetchBingSearchResults', () => {
     expect.assertions(1)
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
       .default
-    await fetchBingSearchResults('blue whales')
+    await fetchBingSearchResults({ query: 'blue whales' })
     const calledURL = fetch.mock.calls[0][0]
     const rawResponseFilterStrVal = calledURL
       .split('responseFilter=')
@@ -79,7 +98,7 @@ describe('fetchBingSearchResults', () => {
     getSearchResultCountPerPage.mockReturnValue(132)
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
       .default
-    await fetchBingSearchResults('blue whales')
+    await fetchBingSearchResults({ query: 'blue whales' })
     const calledURL = fetch.mock.calls[0][0]
     const { searchParams } = new URL(calledURL)
     expect(searchParams.get('count')).toEqual('132')
@@ -89,7 +108,7 @@ describe('fetchBingSearchResults', () => {
     expect.assertions(1)
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
       .default
-    await fetchBingSearchResults('blue whales')
+    await fetchBingSearchResults({ query: 'blue whales' })
     const calledURL = fetch.mock.calls[0][0]
     const { searchParams } = new URL(calledURL)
     expect(searchParams.get('mainlineCount')).toEqual('3')
@@ -99,7 +118,7 @@ describe('fetchBingSearchResults', () => {
     expect.assertions(1)
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
       .default
-    await fetchBingSearchResults('blue whales', { page: 12 })
+    await fetchBingSearchResults({ query: 'blue whales', page: 12 })
     const calledURL = fetch.mock.calls[0][0]
     const { searchParams } = new URL(calledURL)
     expect(searchParams.get('pageNumber')).toEqual('11')
@@ -109,7 +128,7 @@ describe('fetchBingSearchResults', () => {
     expect.assertions(1)
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
       .default
-    await fetchBingSearchResults('blue whales')
+    await fetchBingSearchResults({ query: 'blue whales' })
     const calledURL = fetch.mock.calls[0][0]
     const { searchParams } = new URL(calledURL)
     expect(searchParams.get('sidebarCount')).toEqual('0')
@@ -119,7 +138,7 @@ describe('fetchBingSearchResults', () => {
     expect.assertions(1)
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
       .default
-    await fetchBingSearchResults('blue whales')
+    await fetchBingSearchResults({ query: 'blue whales' })
     const calledURL = fetch.mock.calls[0][0]
     const { searchParams } = new URL(calledURL)
     expect(searchParams.get('supportedAdExtensions')).toEqual(
@@ -131,7 +150,7 @@ describe('fetchBingSearchResults', () => {
     expect.assertions(1)
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
       .default
-    await fetchBingSearchResults('blue whales')
+    await fetchBingSearchResults({ query: 'blue whales' })
     const calledURL = fetch.mock.calls[0][0]
     const { searchParams } = new URL(calledURL)
     expect(searchParams.get('adTypesFilter')).toEqual('TextAds')
@@ -142,7 +161,7 @@ describe('fetchBingSearchResults', () => {
     expect.assertions(1)
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
       .default
-    await fetchBingSearchResults('blue whales')
+    await fetchBingSearchResults({ query: 'blue whales' })
     const calledURL = fetch.mock.calls[0][0]
     const rawAdTypesFilterStrVal = calledURL
       .split('adTypesFilter=')
@@ -156,7 +175,7 @@ describe('fetchBingSearchResults', () => {
     getBingClientID.mockReturnValue('bing-id-987654321')
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
       .default
-    await fetchBingSearchResults('blue whales')
+    await fetchBingSearchResults({ query: 'blue whales' })
     const calledURL = fetch.mock.calls[0][0]
     const { searchParams } = new URL(calledURL)
     expect(searchParams.get('bingClientID')).toEqual('bing-id-987654321')
@@ -168,7 +187,7 @@ describe('fetchBingSearchResults', () => {
     getBingClientID.mockReturnValue(null)
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
       .default
-    await fetchBingSearchResults('blue whales')
+    await fetchBingSearchResults({ query: 'blue whales' })
     const calledURL = fetch.mock.calls[0][0]
     const { searchParams } = new URL(calledURL)
     expect(searchParams.get('bingClientID')).toBeNull()
@@ -179,7 +198,7 @@ describe('fetchBingSearchResults', () => {
     getBingMarketCode.mockResolvedValueOnce('es-MX')
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
       .default
-    await fetchBingSearchResults('blue whales')
+    await fetchBingSearchResults({ query: 'blue whales' })
     const calledURL = fetch.mock.calls[0][0]
     const { searchParams } = new URL(calledURL)
     expect(searchParams.get('mkt')).toEqual('es-MX')
@@ -190,7 +209,7 @@ describe('fetchBingSearchResults', () => {
     getBingMarketCode.mockResolvedValueOnce(null)
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
       .default
-    await fetchBingSearchResults('blue whales')
+    await fetchBingSearchResults({ query: 'blue whales' })
     const calledURL = fetch.mock.calls[0][0]
     const { searchParams } = new URL(calledURL)
     expect(searchParams.get('mkt')).toBeNull()
@@ -200,7 +219,7 @@ describe('fetchBingSearchResults', () => {
     expect.assertions(1)
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
       .default
-    await fetchBingSearchResults('blue whales', { page: 3 })
+    await fetchBingSearchResults({ query: 'blue whales', page: 3 })
     const calledURL = fetch.mock.calls[0][0]
     const { searchParams } = new URL(calledURL)
     expect(searchParams.get('offset')).toEqual('20')
@@ -212,12 +231,12 @@ describe('fetchBingSearchResults', () => {
       .default
 
     // Expected offset value for the second page.
-    await fetchBingSearchResults('blue whales', { page: 2 })
+    await fetchBingSearchResults({ query: 'blue whales', page: 2 })
     const searchParamsA = new URL(fetch.mock.calls[0][0]).searchParams
     expect(searchParamsA.get('offset')).toEqual('10')
 
     // Expected offset value for the eighth page.
-    await fetchBingSearchResults('blue whales', { page: 8 })
+    await fetchBingSearchResults({ query: 'blue whales', page: 8 })
     const searchParamsB = new URL(fetch.mock.calls[1][0]).searchParams
     expect(searchParamsB.get('offset')).toEqual('70')
 
@@ -225,11 +244,11 @@ describe('fetchBingSearchResults', () => {
     // results per page to show.
     getSearchResultCountPerPage.mockReturnValue(12)
 
-    await fetchBingSearchResults('blue whales', { page: 3 })
+    await fetchBingSearchResults({ query: 'blue whales', page: 3 })
     const searchParamsC = new URL(fetch.mock.calls[2][0]).searchParams
     expect(searchParamsC.get('offset')).toEqual('24')
 
-    await fetchBingSearchResults('blue whales', { page: 8 })
+    await fetchBingSearchResults({ query: 'blue whales', page: 8 })
     const searchParamsD = new URL(fetch.mock.calls[3][0]).searchParams
     expect(searchParamsD.get('offset')).toEqual('84')
   })
@@ -238,7 +257,7 @@ describe('fetchBingSearchResults', () => {
     expect.assertions(1)
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
       .default
-    await fetchBingSearchResults('blue whales', {})
+    await fetchBingSearchResults({ query: 'blue whales' })
     const calledURL = fetch.mock.calls[0][0]
     const { searchParams } = new URL(calledURL)
     expect(searchParams.get('offset')).toBeNull()
@@ -265,7 +284,7 @@ describe('fetchBingSearchResults', () => {
     )
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
       .default
-    const results = await fetchBingSearchResults('blue whales')
+    const results = await fetchBingSearchResults({ query: 'blue whales' })
     expect(results).toEqual({
       bing: {
         foo: 'bar',
@@ -283,16 +302,16 @@ describe('fetchBingSearchResults', () => {
     delete process.env.REACT_APP_SEARCH_QUERY_ENDPOINT
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
       .default
-    expect(fetchBingSearchResults('blue whales')).rejects.toThrow(
-      'Search query endpoint is not defined.'
-    )
+    return expect(
+      fetchBingSearchResults({ query: 'blue whales' })
+    ).rejects.toThrow('Search query endpoint is not defined.')
   })
 
   it('fetches with a GET request', async () => {
     expect.assertions(1)
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
       .default
-    await fetchBingSearchResults('blue whales')
+    await fetchBingSearchResults({ query: 'blue whales' })
     expect(fetch.mock.calls[0][1]).toMatchObject({
       method: 'GET',
     })
@@ -302,7 +321,7 @@ describe('fetchBingSearchResults', () => {
     expect.assertions(1)
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
       .default
-    await fetchBingSearchResults('blue whales')
+    await fetchBingSearchResults({ query: 'blue whales' })
     expect(fetch.mock.calls[0][1]).toMatchObject({
       headers: {
         Accept: 'application/json',
@@ -311,13 +330,105 @@ describe('fetchBingSearchResults', () => {
     })
   })
 
-  it('throws if the provided query is null', async () => {
+  it('throws if the provided query is null and there isn\'t a "q" parameter value', async () => {
     expect.assertions(1)
+    getUrlParameters.mockReturnValue({})
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
       .default
-    expect(fetchBingSearchResults(null)).rejects.toThrow(
+    return expect(fetchBingSearchResults({ query: null })).rejects.toThrow(
       'Search query must be a non-empty string.'
     )
+  })
+
+  it('throws if not passed any arguments and there isn\'t a "q" parameter value', async () => {
+    expect.assertions(1)
+    getUrlParameters.mockReturnValue({})
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    return expect(fetchBingSearchResults()).rejects.toThrow(
+      'Search query must be a non-empty string.'
+    )
+  })
+
+  it('uses the "q" URL parameter value if not passed a query value', async () => {
+    expect.assertions(1)
+    getUrlParameters.mockReturnValue({
+      q: 'paris',
+    })
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults() // no query value provided
+    const calledURL = fetch.mock.calls[0][0]
+    const { searchParams } = new URL(calledURL)
+    expect(searchParams.get('q')).toEqual('paris')
+  })
+
+  it('uses the "q" URL parameter value if not passed any arguments', async () => {
+    expect.assertions(1)
+    getUrlParameters.mockReturnValue({
+      q: 'paris',
+    })
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults() // no arguments
+    const calledURL = fetch.mock.calls[0][0]
+    const { searchParams } = new URL(calledURL)
+    expect(searchParams.get('q')).toEqual('paris')
+  })
+
+  it('ignores the "q" parameter value when passed a query value', async () => {
+    expect.assertions(1)
+    getUrlParameters.mockReturnValue({
+      q: 'paris',
+    })
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'london' })
+    const calledURL = fetch.mock.calls[0][0]
+    const { searchParams } = new URL(calledURL)
+    expect(searchParams.get('q')).toEqual('london')
+  })
+
+  it('uses the "page" parameter value if no page number is provided', async () => {
+    expect.assertions(1)
+    getUrlParameters.mockReturnValue({
+      q: 'belgium',
+      page: '4',
+    })
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'belgium' }) // no page number value provided
+    const calledURL = fetch.mock.calls[0][0]
+    const { searchParams } = new URL(calledURL)
+    expect(searchParams.get('pageNumber')).toEqual('3')
+  })
+
+  it('does not use the "page" parameter value if it is less than zero', async () => {
+    expect.assertions(1)
+    getUrlParameters.mockReturnValue({
+      q: 'belgium',
+      page: '-2',
+    })
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'belgium' }) // no page number value provided
+    const calledURL = fetch.mock.calls[0][0]
+    const { searchParams } = new URL(calledURL)
+    expect(searchParams.get('pageNumber')).toEqual('0')
+  })
+
+  it('does not use the "page" parameter value if it is not a number', async () => {
+    expect.assertions(1)
+    getUrlParameters.mockReturnValue({
+      q: 'belgium',
+      page: 'hello',
+    })
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'belgium' }) // no page number value provided
+    const calledURL = fetch.mock.calls[0][0]
+    const { searchParams } = new URL(calledURL)
+    expect(searchParams.get('pageNumber')).toEqual('0')
   })
 
   it('throws if the response has a 500 status', async () => {
@@ -332,9 +443,9 @@ describe('fetchBingSearchResults', () => {
     )
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
       .default
-    expect(fetchBingSearchResults('blue whales')).rejects.toThrow(
-      'Request failed with status 500'
-    )
+    return expect(
+      fetchBingSearchResults({ query: 'blue whales' })
+    ).rejects.toThrow('Request failed with status 500')
   })
 
   it('throws if the response cannot be converted to JSON', async () => {
@@ -350,11 +461,14 @@ describe('fetchBingSearchResults', () => {
     )
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
       .default
-    expect(fetchBingSearchResults('blue whales')).rejects.toThrow(
-      'Bad JSON problem!'
-    )
-  })
 
+    return expect(
+      fetchBingSearchResults({ query: 'blue whales' })
+    ).rejects.toThrow('Bad JSON problem!')
+  })
+})
+
+describe('fetchBingSearchResults: development-only mock data', () => {
   it('calls for mock search results if NODE_ENV=development and REACT_APP_MOCK_SEARCH_RESULTS=true', done => {
     expect.assertions(2)
     process.env.NODE_ENV = 'development'
@@ -366,7 +480,7 @@ describe('fetchBingSearchResults', () => {
     })
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
       .default
-    fetchBingSearchResults('blue whales').then(result => {
+    fetchBingSearchResults({ query: 'blue whales' }).then(result => {
       expect(getMockBingSearchResults).toHaveBeenCalledTimes(1)
       expect(result).toEqual({
         some: 'stuff',
@@ -384,7 +498,7 @@ describe('fetchBingSearchResults', () => {
       .default
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
       .default
-    fetchBingSearchResults('blue whales')
+    fetchBingSearchResults({ query: 'blue whales' })
       .then(result => {
         expect(getMockBingSearchResults).not.toHaveBeenCalled()
         done()
@@ -403,7 +517,7 @@ describe('fetchBingSearchResults', () => {
       .default
     const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
       .default
-    fetchBingSearchResults('blue whales')
+    fetchBingSearchResults({ query: 'blue whales' })
       .then(result => {
         expect(getMockBingSearchResults).not.toHaveBeenCalled()
         done()
@@ -412,5 +526,408 @@ describe('fetchBingSearchResults', () => {
         throw e
       })
     jest.runAllTimers()
+  })
+})
+
+describe('fetchBingSearchResults: using previously-fetched data', () => {
+  it("[no previous request data]: fetches new data when the search global doesn't exist", async () => {
+    expect.assertions(1)
+    delete window.searchforacause
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'blue whales' })
+    expect(fetch).toHaveBeenCalledTimes(1)
+  })
+
+  it("[no previous request data]: fetches new data when the search global query tracker doesn't exist", async () => {
+    expect.assertions(1)
+    delete window.searchforacause.queryRequest
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'blue whales' })
+    expect(fetch).toHaveBeenCalledTimes(1)
+  })
+
+  it('[no previous request data]: fetches new data when no previous request was made', async () => {
+    expect.assertions(1)
+    window.searchforacause.queryRequest = {
+      status: 'NONE',
+      displayedResults: false,
+      responseData: null,
+    }
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'blue whales' })
+    expect(fetch).toHaveBeenCalledTimes(1)
+  })
+
+  it('[completed request with data]: does not fetch new data', async () => {
+    expect.assertions(1)
+    window.searchforacause.queryRequest = {
+      status: 'COMPLETE',
+      displayedResults: false,
+      responseData: { some: 'data' },
+    }
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'blue whales' })
+    expect(fetch).not.toHaveBeenCalled()
+  })
+
+  it('[completed request with data]: uses the expected data', async () => {
+    expect.assertions(1)
+    window.searchforacause.queryRequest = {
+      status: 'COMPLETE',
+      displayedResults: false,
+      responseData: { some: 'data', abc: 123 },
+    }
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    const data = await fetchBingSearchResults({ query: 'blue whales' })
+    expect(data).toEqual({ some: 'data', abc: 123 })
+  })
+
+  it('[completed request with data]: saves that we have rendered the data after using it for the first time', async () => {
+    expect.assertions(1)
+    window.searchforacause.queryRequest = {
+      status: 'COMPLETE',
+      displayedResults: false,
+      responseData: { some: 'data', abc: 123 },
+    }
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'blue whales' })
+    expect(window.searchforacause.queryRequest.displayedResults).toBe(true)
+  })
+
+  it('[completed request with data]: fetches new data if we have already displayed these results once', async () => {
+    expect.assertions(1)
+    window.searchforacause.queryRequest = {
+      status: 'COMPLETE',
+      displayedResults: true, // already displayed these results
+      responseData: { some: 'data' },
+    }
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'blue whales' })
+    expect(fetch).toHaveBeenCalledTimes(1)
+  })
+
+  it('[completed request with data]: fetches fresh data on the second query request', async () => {
+    expect.assertions(2)
+    window.searchforacause.queryRequest = {
+      status: 'COMPLETE',
+      displayedResults: false,
+      responseData: { some: 'data', abc: 123 },
+    }
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'blue whales' })
+    expect(fetch).not.toHaveBeenCalled()
+    await fetchBingSearchResults({ query: 'blue whales' })
+    expect(fetch).toHaveBeenCalledTimes(1)
+  })
+
+  it('[completed request with data]: fetches when "ignoreStoredData" is true', async () => {
+    expect.assertions(2)
+    window.searchforacause.queryRequest = {
+      status: 'COMPLETE',
+      displayedResults: false,
+      responseData: { some: 'data', abc: 123 },
+    }
+    global.fetch.mockImplementation(() =>
+      Promise.resolve(
+        mockFetchResponse({
+          json: () => Promise.resolve({ my: 'other-data' }),
+        })
+      )
+    )
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    const data = await fetchBingSearchResults({
+      query: 'blue whales',
+      ignoreStoredData: true,
+    })
+    expect(fetch).toHaveBeenCalledTimes(1) // fetches data (not using the stored data)
+    expect(data).toEqual({ my: 'other-data' }) // uses data from fetch, not the stored data
+  })
+
+  it('[completed request, no data]: fetches new data', async () => {
+    expect.assertions(1)
+    window.searchforacause.queryRequest = {
+      status: 'COMPLETE',
+      displayedResults: false,
+      responseData: null,
+    }
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    await fetchBingSearchResults({ query: 'blue whales' })
+    expect(fetch).toHaveBeenCalledTimes(1)
+  })
+})
+
+describe('fetchBingSearchResults: using data from in-progress requests', () => {
+  it('resolves when it receives the SearchResultsFetched event', async done => {
+    expect.assertions(2)
+    getUrlParameters.mockReturnValue({
+      q: 'how to make boiled water',
+    })
+    window.searchforacause.queryRequest = {
+      status: 'IN_PROGRESS',
+      displayedResults: false,
+      responseData: null,
+    }
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    fetchBingSearchResults().then(data => {
+      expect(data).toEqual({ my: 'stuff' })
+      expect(fetch).not.toHaveBeenCalled()
+      done()
+    })
+
+    window.searchforacause.queryRequest.responseData = { my: 'stuff' }
+    window.dispatchEvent(new CustomEvent('SearchResultsFetched'))
+  })
+
+  it('removes its event listener when it receives the SearchResultsFetched event', async done => {
+    expect.assertions(1)
+    getUrlParameters.mockReturnValue({
+      q: 'how to make boiled water',
+    })
+    window.searchforacause.queryRequest = {
+      status: 'IN_PROGRESS',
+      displayedResults: false,
+      responseData: null,
+    }
+    const spyRemoveEventListener = jest.spyOn(window, 'removeEventListener')
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+    fetchBingSearchResults().then(data => {
+      expect(spyRemoveEventListener).toHaveBeenCalledWith(
+        'SearchResultsFetched',
+        expect.any(Function),
+        false
+      )
+      done()
+    })
+    window.dispatchEvent(new CustomEvent('SearchResultsFetched'))
+  })
+
+  it("resolves and refetches after a timeout period to make sure we aren't waiting on a bad request", async done => {
+    expect.assertions(1)
+    getUrlParameters.mockReturnValue({
+      q: 'how to make boiled water',
+    })
+    window.searchforacause.queryRequest = {
+      status: 'IN_PROGRESS',
+      displayedResults: false,
+      responseData: null,
+    }
+    const spyRemoveEventListener = jest.spyOn(window, 'removeEventListener')
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+
+    // Note that we don't dispatch the SearchResultsFetched event.
+    fetchBingSearchResults().then(data => {
+      expect(spyRemoveEventListener).toHaveBeenCalledWith(
+        'SearchResultsFetched',
+        expect.any(Function),
+        false
+      )
+      done()
+    })
+
+    jest.advanceTimersByTime(1000)
+  })
+
+  it('removes its event listener when it times out', async done => {
+    expect.assertions(2)
+    getUrlParameters.mockReturnValue({
+      q: 'how to make boiled water',
+    })
+    window.searchforacause.queryRequest = {
+      status: 'IN_PROGRESS',
+      displayedResults: false,
+      responseData: null,
+    }
+    global.fetch.mockImplementation(() =>
+      Promise.resolve(
+        mockFetchResponse({
+          json: () =>
+            Promise.resolve({ answer: 'add lots of heat to cold water' }),
+        })
+      )
+    )
+
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
+
+    // Note that we don't dispatch the SearchResultsFetched event.
+    fetchBingSearchResults().then(data => {
+      expect(data).toEqual({ answer: 'add lots of heat to cold water' })
+      expect(fetch).toHaveBeenCalledTimes(1)
+      done()
+    })
+
+    jest.advanceTimersByTime(1000)
+  })
+})
+
+describe('prefetchSearchResults: storing "prefetched" request data to the search global', () => {
+  it('stores fetched data to the search global', async () => {
+    expect.assertions(1)
+    getUrlParameters.mockReturnValue({
+      q: 'how to make boiled water',
+    })
+    global.fetch.mockImplementation(() =>
+      Promise.resolve(
+        mockFetchResponse({
+          json: () =>
+            Promise.resolve({
+              bing: {
+                foo: 'bar',
+                hi: 'there',
+                abc: [1, 2, 3],
+              },
+              bingQuery: {
+                msEdgeClientID: 'abc-123',
+              },
+            }),
+        })
+      )
+    )
+    const {
+      prefetchSearchResults,
+    } = require('js/components/Search/fetchBingSearchResults')
+    await prefetchSearchResults()
+    expect(window.searchforacause.queryRequest.responseData).toEqual({
+      bing: {
+        foo: 'bar',
+        hi: 'there',
+        abc: [1, 2, 3],
+      },
+      bingQuery: {
+        msEdgeClientID: 'abc-123',
+      },
+    })
+  })
+
+  it('stores each stage of the request (NONE, IN_PROGRESS, COMPLETE) to the search global', async () => {
+    expect.assertions(3)
+    getUrlParameters.mockReturnValue({
+      q: 'how to make boiled water',
+    })
+    expect(window.searchforacause.queryRequest.status).toEqual('NONE')
+    global.fetch.mockImplementation(
+      () =>
+        new Promise(resolve => {
+          setTimeout(
+            () =>
+              resolve(
+                mockFetchResponse({
+                  json: () => Promise.resolve({ some: 'data' }),
+                })
+              ),
+            400
+          )
+        })
+    )
+    const {
+      prefetchSearchResults,
+    } = require('js/components/Search/fetchBingSearchResults')
+    prefetchSearchResults()
+    await flushAllPromises()
+    expect(window.searchforacause.queryRequest.status).toEqual('IN_PROGRESS')
+    await runAsyncTimerLoops(2)
+    expect(window.searchforacause.queryRequest.status).toEqual('COMPLETE')
+  })
+
+  it('ignores any existing prefetched data (this is a precaution; other prefetch data should not exist)', async () => {
+    expect.assertions(1)
+    getUrlParameters.mockReturnValue({
+      q: 'how to make boiled water',
+    })
+    window.searchforacause.queryRequest = {
+      status: 'COMPLETE',
+      displayedResults: false,
+      responseData: { some: 'data', abc: 123 },
+    }
+    global.fetch.mockImplementation(() =>
+      Promise.resolve(
+        mockFetchResponse({
+          json: () => Promise.resolve({ the: 'info' }),
+        })
+      )
+    )
+    const {
+      prefetchSearchResults,
+    } = require('js/components/Search/fetchBingSearchResults')
+    await prefetchSearchResults()
+    expect(window.searchforacause.queryRequest.responseData).toEqual({
+      the: 'info',
+    })
+  })
+
+  it('dispatches a "SearchResultsFetched" event when the fetch is complete', async done => {
+    expect.assertions(0)
+    getUrlParameters.mockReturnValue({
+      q: 'how to make boiled water',
+    })
+
+    // Expect the listener to be called.
+    window.addEventListener(
+      'SearchResultsFetched',
+      function testing() {
+        window.removeEventListener('SearchResultsFetched', testing, false)
+        done()
+      },
+      false
+    )
+    const {
+      prefetchSearchResults,
+    } = require('js/components/Search/fetchBingSearchResults')
+    await prefetchSearchResults()
+  })
+
+  it('does not dispatch a "SearchResultsFetched" event until the fetch is complete', async done => {
+    expect.assertions(2)
+    getUrlParameters.mockReturnValue({
+      q: 'how to make boiled water',
+    })
+
+    // Expect the listener to be called.
+    window.addEventListener(
+      'SearchResultsFetched',
+      function testing() {
+        window.removeEventListener('SearchResultsFetched', testing, false)
+        expect(true).toBe(true) // to make sure both assertions are called
+        done()
+      },
+      false
+    )
+
+    global.fetch.mockImplementation(
+      () =>
+        new Promise(resolve => {
+          setTimeout(
+            () =>
+              resolve(
+                mockFetchResponse({
+                  json: () => Promise.resolve({ some: 'data' }),
+                })
+              ),
+            400
+          )
+        })
+    )
+    const {
+      prefetchSearchResults,
+    } = require('js/components/Search/fetchBingSearchResults')
+    prefetchSearchResults()
+    jest.advanceTimersByTime(100)
+    await flushAllPromises()
+    expect(true).toBe(true) // to make sure both assertions are called
+    jest.advanceTimersByTime(500)
+    await flushAllPromises()
   })
 })
