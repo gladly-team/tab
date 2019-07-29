@@ -2,8 +2,12 @@
 
 jest.mock('js/components/Search/fetchBingSearchResults')
 
-beforeAll(() => {
+beforeEach(() => {
   process.env.REACT_APP_WHICH_APP = 'search'
+  const { setWindowLocation } = require('js/utils/test-utils')
+  setWindowLocation({
+    pathname: '/search',
+  })
 })
 
 afterEach(() => {
@@ -22,6 +26,30 @@ describe('searchQuery entry point', () => {
     } = require('js/components/Search/fetchBingSearchResults')
     require('searchQuery')
     expect(prefetchSearchResults).toHaveBeenCalled()
+  })
+
+  it('calls prefetchSearchResults on load if the location pathname has a trailing slash', () => {
+    const { setWindowLocation } = require('js/utils/test-utils')
+    setWindowLocation({
+      pathname: '/search/',
+    })
+    const {
+      prefetchSearchResults,
+    } = require('js/components/Search/fetchBingSearchResults')
+    require('searchQuery')
+    expect(prefetchSearchResults).toHaveBeenCalled()
+  })
+
+  it('does not call prefetchSearchResults on load if the location pathname is not /search', () => {
+    const { setWindowLocation } = require('js/utils/test-utils')
+    setWindowLocation({
+      pathname: '/search/settings/',
+    })
+    const {
+      prefetchSearchResults,
+    } = require('js/components/Search/fetchBingSearchResults')
+    require('searchQuery')
+    expect(prefetchSearchResults).not.toHaveBeenCalled()
   })
 
   it('does not throw if prefetchSearchResults throws', () => {
