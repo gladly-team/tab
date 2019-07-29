@@ -134,6 +134,7 @@ export const createAnonymousUserIfPossible = async () => {
   }
 }
 
+// TODO: preserve query parameters when redirecting to other auth pages
 /**
  * Based on the AuthUser object state, determine if we need to redirect
  * to an authentication page. If the user is not fully authenticated,

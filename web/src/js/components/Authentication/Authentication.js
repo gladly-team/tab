@@ -109,7 +109,7 @@ class Authentication extends React.Component {
     // email address. In this case, ask the user to sign in
     // via another method.
     if (!currentUser.email) {
-      goTo(missingEmailMessageURL)
+      goTo(missingEmailMessageURL) // TODO: retain URL params
       return
     }
 
@@ -128,7 +128,7 @@ class Authentication extends React.Component {
           // Ask the user to verify their email.
           sendVerificationEmail() // TODO: pass "continue" URL
             .then(emailSent => {
-              goTo(verifyEmailURL)
+              goTo(verifyEmailURL) // TODO: retain URL params
             })
             .catch(err => {
               // TODO: show error message to the user
