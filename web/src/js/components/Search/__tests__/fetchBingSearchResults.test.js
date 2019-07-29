@@ -225,34 +225,33 @@ describe('fetchBingSearchResults', () => {
     expect(searchParams.get('offset')).toEqual('20')
   })
 
-  // FIXME: fix fetching/storage logic
-  // it('sets the "offset" parameter with the expected value based on the page number and results per page', async () => {
-  //   expect.assertions(4)
-  //   const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
-  //     .default
+  it('sets the "offset" parameter with the expected value based on the page number and results per page', async () => {
+    expect.assertions(4)
+    const fetchBingSearchResults = require('js/components/Search/fetchBingSearchResults')
+      .default
 
-  //   // Expected offset value for the second page.
-  //   await fetchBingSearchResults({ query: 'blue whales', page: 2 })
-  //   const searchParamsA = new URL(fetch.mock.calls[0][0]).searchParams
-  //   expect(searchParamsA.get('offset')).toEqual('10')
+    // Expected offset value for the second page.
+    await fetchBingSearchResults({ query: 'blue whales', page: 2 })
+    const searchParamsA = new URL(fetch.mock.calls[0][0]).searchParams
+    expect(searchParamsA.get('offset')).toEqual('10')
 
-  //   // Expected offset value for the eighth page.
-  //   await fetchBingSearchResults({ query: 'blue whales', page: 8 })
-  //   const searchParamsB = new URL(fetch.mock.calls[1][0]).searchParams
-  //   expect(searchParamsB.get('offset')).toEqual('70')
+    // Expected offset value for the eighth page.
+    await fetchBingSearchResults({ query: 'blue whales', page: 8 })
+    const searchParamsB = new URL(fetch.mock.calls[1][0]).searchParams
+    expect(searchParamsB.get('offset')).toEqual('70')
 
-  //   // The offset for the pages changes if we change how many
-  //   // results per page to show.
-  //   getSearchResultCountPerPage.mockReturnValue(12)
+    // The offset for the pages changes if we change how many
+    // results per page to show.
+    getSearchResultCountPerPage.mockReturnValue(12)
 
-  //   await fetchBingSearchResults({ query: 'blue whales', page: 3 })
-  //   const searchParamsC = new URL(fetch.mock.calls[2][0]).searchParams
-  //   expect(searchParamsC.get('offset')).toEqual('24')
+    await fetchBingSearchResults({ query: 'blue whales', page: 3 })
+    const searchParamsC = new URL(fetch.mock.calls[2][0]).searchParams
+    expect(searchParamsC.get('offset')).toEqual('24')
 
-  //   await fetchBingSearchResults({ query: 'blue whales', page: 8 })
-  //   const searchParamsD = new URL(fetch.mock.calls[3][0]).searchParams
-  //   expect(searchParamsD.get('offset')).toEqual('84')
-  // })
+    await fetchBingSearchResults({ query: 'blue whales', page: 8 })
+    const searchParamsD = new URL(fetch.mock.calls[3][0]).searchParams
+    expect(searchParamsD.get('offset')).toEqual('84')
+  })
 
   it('does not set the "offset" parameter value if a page number is not provided', async () => {
     expect.assertions(1)
