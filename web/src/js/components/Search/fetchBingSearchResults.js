@@ -18,7 +18,7 @@ const eventNameResultsFetched = 'SearchResultsFetched'
 const QUERY_IN_PROGRESS = 'IN_PROGRESS'
 const QUERY_COMPLETE = 'COMPLETE'
 
-const DEBUG = true
+const DEBUG = false
 
 /**
  * Make a request for search results potentially prior to our app
