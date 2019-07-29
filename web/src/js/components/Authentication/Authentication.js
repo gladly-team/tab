@@ -23,7 +23,7 @@ import {
   verifyEmailURL,
 } from 'js/navigation/navigation'
 import Logo from 'js/components/Logo/Logo'
-import { getUrlParameters } from 'js/utils/utils'
+import { getUrlParameters, parseUrlSearchString } from 'js/utils/utils'
 import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
 import logger from 'js/utils/logger'
 
@@ -150,6 +150,16 @@ class Authentication extends React.Component {
 
   render() {
     const { user, location } = this.props
+
+    // TODO: add tests
+    // Show a different logo depending on the app for which the user is
+    // signing in.
+    const appQueryParamVal = parseUrlSearchString(location.search).app
+    const app =
+      ['tab', 'search'].indexOf(appQueryParamVal) > -1
+        ? appQueryParamVal
+        : 'tab'
+
     const showRequiredSignInExplanation =
       this.state.isMandatoryAnonymousSignIn &&
       // Don't display the message on the iframe auth message page, because
@@ -176,7 +186,7 @@ class Authentication extends React.Component {
             left: 0,
           }}
         >
-          <Logo brand={'tab'} includeText style={{ height: 40 }} />
+          <Logo brand={app} includeText style={{ height: 40 }} />
         </div>
         <span
           style={{
@@ -291,6 +301,7 @@ class Authentication extends React.Component {
 Authentication.propTypes = {
   location: PropTypes.shape({
     pathname: PropTypes.string.isRequired,
+    search: PropTypes.string.isRequired,
   }),
   fetchUser: PropTypes.func.isRequired,
   // User fetched from the auth service.
