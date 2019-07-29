@@ -126,7 +126,7 @@ class Authentication extends React.Component {
         // https://github.com/firebase/firebaseui-web/issues/21
         if (!currentUser.emailVerified) {
           // Ask the user to verify their email.
-          sendVerificationEmail()
+          sendVerificationEmail() // TODO: pass "continue" URL
             .then(emailSent => {
               goTo(verifyEmailURL)
             })

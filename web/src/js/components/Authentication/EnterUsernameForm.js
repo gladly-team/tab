@@ -81,7 +81,7 @@ class EnterUsernameForm extends React.Component {
     // Username saved successfully. Set the username in localStorage
     // and redirect to the app.
     setUsernameInLocalStorage(data.user.username)
-    goTo(dashboardURL)
+    goTo(dashboardURL) // TODO: use app-specific URL
   }
 
   onMutationError(response) {

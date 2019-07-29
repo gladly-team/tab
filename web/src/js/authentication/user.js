@@ -245,7 +245,7 @@ const sendFirebaseVerificationEmail = async firebaseUser => {
       firebaseUser
         .sendEmailVerification({
           // The "continue" URL after verifying.
-          url: absoluteUrl(enterUsernameURL),
+          url: absoluteUrl(enterUsernameURL), // TODO: make app-specific
         })
         .then(() => {
           resolve(true)

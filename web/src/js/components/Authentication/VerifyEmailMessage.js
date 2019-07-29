@@ -19,7 +19,7 @@ class VerifyEmailMessage extends React.Component {
       emailResendingInProgress: true,
       emailResendingError: false,
     })
-    const emailSent = await sendVerificationEmail()
+    const emailSent = await sendVerificationEmail() // TODO: pass "continue" URL
     if (emailSent) {
       this.setState({
         emailResent: true,
