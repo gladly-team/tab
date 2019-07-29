@@ -154,14 +154,6 @@ const fetchBingSearchResults = async ({
   page,
   ignoreStoredData,
 } = {}) => {
-  // MEASURING PERFORMANCE
-  if (window && window.performance && window.debug) {
-    var t = performance.now()
-    // console.log('query', t)
-    // console.log('provided query value', providedQuery)
-    window.debug.query = t
-  }
-
   // Return mock search results as needed in development.
   if (
     process.env.NODE_ENV === 'development' &&

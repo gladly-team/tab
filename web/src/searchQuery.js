@@ -17,14 +17,9 @@
 // we share Webpack configs.
 if (process.env.REACT_APP_WHICH_APP === 'search') {
   const {
-    // eslint-disable-next-line no-unused-vars
     prefetchSearchResults,
   } = require('js/components/Search/fetchBingSearchResults')
   const getSearchResults = () => {
-    var t = performance.now()
-    // console.log('searchQuery', t)
-    window.debug.searchQuery = t
-
     // TODO
     // If the path is /query, call fetchBingSearchResults.
     // Let it handle the logic of determining the search query, etc.
