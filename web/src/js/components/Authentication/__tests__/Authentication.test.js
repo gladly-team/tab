@@ -20,6 +20,7 @@ import { sendVerificationEmail } from 'js/authentication/user'
 import { getBrowserExtensionInstallId } from 'js/utils/local-user-data-mgr'
 import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
 import Logo from 'js/components/Logo/Logo'
+import EnterUsernameForm from 'js/components/Authentication/EnterUsernameForm'
 
 jest.mock('react-router-dom')
 jest.mock('js/authentication/helpers')
@@ -29,6 +30,7 @@ jest.mock('js/utils/utils')
 jest.mock('js/utils/local-user-data-mgr')
 jest.mock('js/components/Dashboard/AssignExperimentGroupsContainer')
 jest.mock('js/components/Logo/Logo')
+jest.mock('js/components/Authentication/EnterUsernameForm')
 
 const mockFetchUser = jest.fn()
 
@@ -485,5 +487,47 @@ describe('Authentication.js tests', function() {
       .find(Route)
       .filterWhere(elem => elem.prop('path') === '/newtab/auth/')
     expect(routeElem.exists()).toBe(true)
+  })
+
+  it('passes the "app" URL parameter value to the EnterUsernameForm', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = '?app=search'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/username/')
+    const RenderedComponent = routeElem.prop('render')
+    expect(shallow(<RenderedComponent />).prop('app')).toEqual('search')
+  })
+
+  it('passes "tab" to the EnterUsernameForm "app" prop by default', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = ''
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/username/')
+    const RenderedComponent = routeElem.prop('render')
+    expect(shallow(<RenderedComponent />).prop('app')).toEqual('tab')
+  })
+
+  it('passes "tab" to the EnterUsernameForm "app" prop when the "app" URL param value is invalid', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = '?app=blahblah'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/username/')
+    const RenderedComponent = routeElem.prop('render')
+    expect(shallow(<RenderedComponent />).prop('app')).toEqual('tab')
   })
 })

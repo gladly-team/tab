@@ -105,6 +105,7 @@ class EnterUsernameForm extends React.Component {
   }
 
   render() {
+    // TODO: change floatingLabelText based on this.props.app
     return (
       <Paper
         zDepth={1}
@@ -154,9 +155,14 @@ class EnterUsernameForm extends React.Component {
 }
 
 EnterUsernameForm.propTypes = {
+  app: PropTypes.oneOf(['tab', 'search']),
   user: PropTypes.shape({
     id: PropTypes.string.isRequired,
   }),
+}
+
+EnterUsernameForm.defaultProps = {
+  app: 'tab',
 }
 
 export default EnterUsernameForm

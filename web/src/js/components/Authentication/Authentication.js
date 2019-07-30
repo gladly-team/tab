@@ -210,7 +210,9 @@ class Authentication extends React.Component {
               <Route
                 exact
                 path="/newtab/auth/username/"
-                render={props => <EnterUsernameForm {...props} user={user} />}
+                render={props => (
+                  <EnterUsernameForm {...props} user={user} app={app} />
+                )}
               />
               <Route
                 exact
