@@ -96,18 +96,20 @@ export const absoluteUrl = path => {
  *   URL's search string will contain the same values as the
  *   current URL, plus any additional values provided in the
  *   paramsObj parameter.
+ * @param {Boolean} options.absolute - If true, we make the URL
+ *   absolute.
  * @return {String} A URL
  */
 export const constructUrl = (
   path,
   paramsObj = {},
-  { keepURLParams = false } = {}
+  { absolute = false, keepURLParams = false } = {}
 ) => {
   const queryString = keepURLParams
     ? qs.stringify(Object.assign({}, getUrlParameters(), paramsObj))
     : qs.stringify(paramsObj)
-  const url = queryString ? `${path}?${queryString}` : path
-  return url
+  const baseUrl = absolute ? absoluteUrl(path) : path
+  return queryString ? `${baseUrl}?${queryString}` : baseUrl
 }
 
 // ROUTES

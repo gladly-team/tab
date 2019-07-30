@@ -251,4 +251,31 @@ describe('constructUrl', () => {
       '/some/path/?plzIncludeMe=thx&someParam=abc&foo=blah'
     )
   })
+
+  it('makes the URL absolute if options.absolute is true', () => {
+    // Set the domain env var
+    process.env.REACT_APP_WEBSITE_DOMAIN = 'some.example.com'
+
+    const { constructUrl } = require('js/navigation/navigation')
+    expect(constructUrl('/some/path/', null, { absolute: true })).toBe(
+      'https://some.example.com/some/path/'
+    )
+  })
+
+  it('makes the URL absolute, keeping URL params, if options.absolute and options.keepURLParams are true', () => {
+    // Set the domain env var
+    process.env.REACT_APP_WEBSITE_DOMAIN = 'some.example.com'
+    getUrlParameters.mockReturnValue({
+      hello: 'there',
+    })
+
+    const { constructUrl } = require('js/navigation/navigation')
+    expect(
+      constructUrl(
+        '/some/path/',
+        { foo: 'bar' },
+        { absolute: true, keepURLParams: true }
+      )
+    ).toBe('https://some.example.com/some/path/?hello=there&foo=bar')
+  })
 })
