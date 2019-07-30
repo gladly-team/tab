@@ -30,10 +30,22 @@ describe('Link', () => {
     expect(wrapper.find('a').exists()).toBe(false)
   })
 
-  it('uses anchor elem when navigating to a URL outside of the current single-page app', () => {
+  it('uses an anchor elem when navigating to a URL outside of the current single-page app', () => {
     const Link = require('../Link').default
     isURLForDifferentApp.mockReturnValue(true) // external URL
     const wrapper = shallow(<Link to={'/some/path/'} />)
+    expect(wrapper.find('a').exists()).toBe(true)
+    expect(wrapper.find(LinkReactRouter).exists()).toBe(false)
+  })
+
+  it('uses an anchor elem when navigating to an absolute URL', () => {
+    const Link = require('../Link').default
+
+    // An "internal" URL, but we'll still render an anchor element
+    // because of the absolute URL.
+    isURLForDifferentApp.mockReturnValue(false)
+
+    const wrapper = shallow(<Link to={'https://example.com/some/path/'} />)
     expect(wrapper.find('a').exists()).toBe(true)
     expect(wrapper.find(LinkReactRouter).exists()).toBe(false)
   })
@@ -46,6 +58,13 @@ describe('Link', () => {
       <Link to={'/'} style={someStyle} hoverStyle={{ color: 'red' }} />
     )
     expect(wrapper.find(LinkReactRouter).props().style).toEqual(someStyle)
+  })
+
+  it('passes other props to the react-router-dom Link component', () => {
+    const Link = require('../Link').default
+    isURLForDifferentApp.mockReturnValue(false)
+    const wrapper = shallow(<Link to={'/some/path/'} rel={'noopener'} />)
+    expect(wrapper.find(LinkReactRouter).props().rel).toEqual('noopener')
   })
 
   it('passes style prop to anchor elem and defaults to textDecoration = "none"', () => {
