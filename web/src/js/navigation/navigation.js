@@ -86,6 +86,30 @@ export const absoluteUrl = path => {
   return `${baseUrl}${path}`
 }
 
+/**
+ * Build and return a URL with given URL params and other options.
+ * @param {String} path - The path or URL to navigate to
+ * @param {Object} paramsObj - An object of URL parameter values
+ *   to add to the search string
+ * @param {Object} options
+ * @param {Boolean} options.keepURLParams - If true, the new
+ *   URL's search string will contain the same values as the
+ *   current URL, plus any additional values provided in the
+ *   paramsObj parameter.
+ * @return {String} A URL
+ */
+export const constructUrl = (
+  path,
+  paramsObj = {},
+  { keepURLParams = false } = {}
+) => {
+  const queryString = keepURLParams
+    ? qs.stringify(Object.assign({}, getUrlParameters(), paramsObj))
+    : qs.stringify(paramsObj)
+  const url = queryString ? `${path}?${queryString}` : path
+  return url
+}
+
 // ROUTES
 
 export const dashboardURL = '/newtab/'

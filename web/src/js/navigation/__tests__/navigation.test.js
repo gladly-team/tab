@@ -197,3 +197,58 @@ describe('absoluteUrl', () => {
     expect(absoluteUrl('https://foo.com/blah/')).toBe('https://foo.com/blah/')
   })
 })
+
+describe('constructUrl', () => {
+  it('returns the same URL when not provided any options', () => {
+    const { constructUrl } = require('js/navigation/navigation')
+    const returnedUrl = constructUrl('/some/path/')
+    expect(returnedUrl).toEqual('/some/path/')
+  })
+
+  it('sets query parameters as expected', () => {
+    const { constructUrl } = require('js/navigation/navigation')
+    const returnedUrl = constructUrl('/some/path/', {
+      someParam: 'abc',
+      foo: 'blah',
+    })
+    expect(returnedUrl).toEqual('/some/path/?someParam=abc&foo=blah')
+  })
+
+  it('does not preserve existing query parameters by default', () => {
+    getUrlParameters.mockReturnValue({
+      doNotIncludeMe: 'plz',
+    })
+    const { constructUrl } = require('js/navigation/navigation')
+    const returnedUrl = constructUrl('/some/path/', {
+      someParam: 'abc',
+      foo: 'blah',
+    })
+    expect(returnedUrl).toEqual('/some/path/?someParam=abc&foo=blah')
+  })
+
+  it('preserves existing query parameters if options.keepURLParams is true', () => {
+    getUrlParameters.mockReturnValue({
+      plzIncludeMe: 'thx',
+    })
+    const { constructUrl } = require('js/navigation/navigation')
+    const returnedUrl = constructUrl('/some/path/', null, {
+      keepURLParams: true,
+    })
+    expect(returnedUrl).toEqual('/some/path/?plzIncludeMe=thx')
+  })
+
+  it('sets existing query parameters, along with new parameters, if options.keepURLParams is true', () => {
+    getUrlParameters.mockReturnValue({
+      plzIncludeMe: 'thx',
+    })
+    const { constructUrl } = require('js/navigation/navigation')
+    const returnedUrl = constructUrl(
+      '/some/path/',
+      { someParam: 'abc', foo: 'blah' },
+      { keepURLParams: true }
+    )
+    expect(returnedUrl).toEqual(
+      '/some/path/?plzIncludeMe=thx&someParam=abc&foo=blah'
+    )
+  })
+})
