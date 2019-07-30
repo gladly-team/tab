@@ -1,5 +1,9 @@
 import { createBrowserHistory } from 'history'
-import { externalRedirect, isURLForDifferentApp } from 'js/navigation/utils'
+import {
+  externalRedirect,
+  isURLForDifferentApp,
+  isAbsoluteURL,
+} from 'js/navigation/utils'
 import { getUrlParameters } from 'js/utils/utils'
 import qs from 'qs'
 
@@ -76,7 +80,7 @@ export const modifyURLParams = (paramsObj = {}) => {
 export const absoluteUrl = path => {
   // If the passed path is already an absolute URL,
   // just return it.
-  if (path.startsWith('http://') || path.startsWith('https://')) {
+  if (isAbsoluteURL(path)) {
     return path
   }
   const protocol = process.env.REACT_APP_WEBSITE_PROTOCOL
