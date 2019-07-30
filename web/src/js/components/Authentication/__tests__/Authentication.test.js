@@ -292,7 +292,9 @@ describe('Authentication.js tests', function() {
       mockFirebaseCredential,
       mockFirebaseDefaultRedirectURL
     )
-    expect(goTo).toHaveBeenCalledWith(missingEmailMessageURL)
+    expect(goTo).toHaveBeenCalledWith(missingEmailMessageURL, null, {
+      keepURLParams: true,
+    })
   })
 
   it('after sign-in, send email verification if email is not verified', async () => {
@@ -337,7 +339,9 @@ describe('Authentication.js tests', function() {
     )
 
     expect(sendVerificationEmail).toHaveBeenCalledTimes(1)
-    expect(goTo).toHaveBeenCalledWith(verifyEmailURL)
+    expect(goTo).toHaveBeenCalledWith(verifyEmailURL, null, {
+      keepURLParams: true,
+    })
   })
 
   it('refetches the user after sign-in', async () => {

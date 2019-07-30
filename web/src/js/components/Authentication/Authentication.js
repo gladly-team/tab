@@ -52,6 +52,7 @@ class Authentication extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      // TODO: use router prop
       // Whether we are requiring the anonymous user to sign in.
       isMandatoryAnonymousSignIn: getUrlParameters()['mandatory'] === 'true',
     }
@@ -86,6 +87,7 @@ class Authentication extends React.Component {
 
     // When anonymous users choose to sign in, do not go back to the
     // dashboard.
+    // TODO: use router prop
     const stayOnAuthPage = getUrlParameters()['noredirect'] === 'true'
 
     // The user is fully authed, so go to the dashboard.
@@ -109,7 +111,7 @@ class Authentication extends React.Component {
     // email address. In this case, ask the user to sign in
     // via another method.
     if (!currentUser.email) {
-      goTo(missingEmailMessageURL) // TODO: retain URL params
+      goTo(missingEmailMessageURL, null, { keepURLParams: true })
       return
     }
 
@@ -128,7 +130,7 @@ class Authentication extends React.Component {
           // Ask the user to verify their email.
           sendVerificationEmail() // TODO: pass "continue" URL
             .then(emailSent => {
-              goTo(verifyEmailURL) // TODO: retain URL params
+              goTo(verifyEmailURL, null, { keepURLParams: true })
             })
             .catch(err => {
               // TODO: show error message to the user

@@ -16,12 +16,15 @@ class SignInIframeMessage extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      // TODO: use react-router prop
       // Whether we are requiring the anonymous user to sign in.
       isMandatoryAnonymousSignIn: getUrlParameters()['mandatory'] === 'true',
     }
   }
 
   openAuthOutsideIframe() {
+    // TODO: preserve URL params, such as app
+    // TODO: use an anchor tag instead of JS.
     window.open(absoluteUrl(loginURL), '_top')
   }
 

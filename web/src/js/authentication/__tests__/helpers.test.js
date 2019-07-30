@@ -317,7 +317,11 @@ describe('redirectToAuthIfNeeded tests', () => {
     const { redirectToAuthIfNeeded } = require('js/authentication/helpers')
     const redirected = redirectToAuthIfNeeded(authUser)
     expect(redirected).toBe(true)
-    expect(replaceUrl).toHaveBeenCalledWith(loginURL, {})
+    expect(replaceUrl).toHaveBeenCalledWith(
+      loginURL,
+      {},
+      { keepURLParams: true }
+    )
   })
 
   it('[no-anon-allowed] redirects to the sign-in view if the user is unauthed and NOT within an iframe', () => {
@@ -333,7 +337,11 @@ describe('redirectToAuthIfNeeded tests', () => {
     isInIframe.mockReturnValue(false)
     const { redirectToAuthIfNeeded } = require('js/authentication/helpers')
     const redirected = redirectToAuthIfNeeded(authUser)
-    expect(replaceUrl).toHaveBeenCalledWith(loginURL, {})
+    expect(replaceUrl).toHaveBeenCalledWith(
+      loginURL,
+      {},
+      { keepURLParams: true }
+    )
     expect(redirected).toBe(true)
   })
 
@@ -357,7 +365,11 @@ describe('redirectToAuthIfNeeded tests', () => {
     const { redirectToAuthIfNeeded } = require('js/authentication/helpers')
     redirectToAuthIfNeeded(authUser)
 
-    expect(replaceUrl).toHaveBeenCalledWith(authMessageURL, {})
+    expect(replaceUrl).toHaveBeenCalledWith(
+      authMessageURL,
+      {},
+      { keepURLParams: true }
+    )
   })
 
   it('redirects to the login screen if the user is anonymous but has been around long enough for us to ask them to sign in', () => {
@@ -379,7 +391,11 @@ describe('redirectToAuthIfNeeded tests', () => {
     }
     const { redirectToAuthIfNeeded } = require('js/authentication/helpers')
     redirectToAuthIfNeeded(authUser)
-    expect(replaceUrl).toHaveBeenCalledWith(loginURL, { mandatory: 'true' }) // includes URL param
+    expect(replaceUrl).toHaveBeenCalledWith(
+      loginURL,
+      { mandatory: 'true' },
+      { keepURLParams: true }
+    ) // includes URL param
   })
 
   it('does not redirect to the login screen if the user is anonymous and has been around less than the time needed for us to ask them to sign in', () => {
@@ -416,7 +432,9 @@ describe('redirectToAuthIfNeeded tests', () => {
       emailVerified: false,
     }
     const redirected = redirectToAuthIfNeeded(authUser)
-    expect(replaceUrl).toHaveBeenCalledWith(missingEmailMessageURL)
+    expect(replaceUrl).toHaveBeenCalledWith(missingEmailMessageURL, null, {
+      keepURLParams: true,
+    })
     expect(redirected).toBe(true)
   })
 
@@ -432,7 +450,9 @@ describe('redirectToAuthIfNeeded tests', () => {
       emailVerified: false,
     }
     const redirected = redirectToAuthIfNeeded(authUser)
-    expect(replaceUrl).toHaveBeenCalledWith(verifyEmailURL)
+    expect(replaceUrl).toHaveBeenCalledWith(verifyEmailURL, null, {
+      keepURLParams: true,
+    })
     expect(redirected).toBe(true)
   })
 
@@ -448,7 +468,9 @@ describe('redirectToAuthIfNeeded tests', () => {
       emailVerified: true,
     }
     const redirected = redirectToAuthIfNeeded(authUser)
-    expect(replaceUrl).toHaveBeenCalledWith(enterUsernameURL)
+    expect(replaceUrl).toHaveBeenCalledWith(enterUsernameURL, null, {
+      keepURLParams: true,
+    })
     expect(redirected).toBe(true)
   })
 
