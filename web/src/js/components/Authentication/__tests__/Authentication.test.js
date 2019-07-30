@@ -16,7 +16,6 @@ import {
   verifyEmailURL,
 } from 'js/navigation/navigation'
 import { sendVerificationEmail } from 'js/authentication/user'
-import { getUrlParameters } from 'js/utils/utils'
 import { getBrowserExtensionInstallId } from 'js/utils/local-user-data-mgr'
 import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
 import Logo from 'js/components/Logo/Logo'
@@ -53,7 +52,6 @@ beforeEach(() => {
 
   // Reset an unauthed user as the default.
   redirectToAuthIfNeeded.mockReturnValue(true)
-  getUrlParameters.mockReturnValue({})
   getBrowserExtensionInstallId.mockReturnValue('some-install-id')
 })
 
@@ -120,9 +118,7 @@ describe('Authentication.js tests', function() {
     mockProps.location.pathname = '/newtab/auth/'
 
     // Sign-in is mandatory when there is a "mandatory=true" URL param.
-    getUrlParameters.mockReturnValue({
-      mandatory: 'true',
-    })
+    mockProps.location.search = '?mandatory=true'
 
     const wrapper = shallow(<Authentication {...mockProps} />)
     wrapper.update()
@@ -140,9 +136,7 @@ describe('Authentication.js tests', function() {
     mockProps.location.pathname = '/newtab/auth/welcome/'
 
     // Sign-in is mandatory when there is a "mandatory=true" URL param.
-    getUrlParameters.mockReturnValue({
-      mandatory: 'true',
-    })
+    mockProps.location.search = '?mandatory=true'
 
     const wrapper = shallow(<Authentication {...mockProps} />)
     wrapper.update()
@@ -157,11 +151,10 @@ describe('Authentication.js tests', function() {
     // User is fully authed.
     redirectToAuthIfNeeded.mockReturnValue(false)
 
-    getUrlParameters.mockReturnValue({})
-
     const Authentication = require('js/components/Authentication/Authentication')
       .default
     const mockProps = MockProps()
+    mockProps.location.search = ''
     mockProps.authUser = {
       id: 'qwertyqwerty',
       email: 'charles@example.com',
@@ -186,11 +179,10 @@ describe('Authentication.js tests', function() {
     // User is fully authed.
     redirectToAuthIfNeeded.mockReturnValue(false)
 
-    getUrlParameters.mockReturnValue({})
-
     const Authentication = require('js/components/Authentication/Authentication')
       .default
     const mockProps = MockProps()
+    mockProps.location.search = ''
     shallow(<Authentication {...mockProps} />)
     expect(replaceUrl).toHaveBeenCalledWith(dashboardURL)
   })
@@ -201,13 +193,10 @@ describe('Authentication.js tests', function() {
     // User is fully authed.
     redirectToAuthIfNeeded.mockReturnValue(false)
 
-    getUrlParameters.mockReturnValue({
-      noredirect: 'true',
-    })
-
     const Authentication = require('js/components/Authentication/Authentication')
       .default
     const mockProps = MockProps()
+    mockProps.location.search = '?noredirect=true'
     shallow(<Authentication {...mockProps} />)
 
     expect(replaceUrl).not.toHaveBeenCalled()
@@ -219,13 +208,10 @@ describe('Authentication.js tests', function() {
     // User is fully authed.
     redirectToAuthIfNeeded.mockReturnValue(false)
 
-    getUrlParameters.mockReturnValue({
-      noredirect: 'something',
-    })
-
     const Authentication = require('js/components/Authentication/Authentication')
       .default
     const mockProps = MockProps()
+    mockProps.location.search = '?noredirect=something'
     shallow(<Authentication {...mockProps} />)
 
     expect(replaceUrl).toHaveBeenCalledWith(dashboardURL)

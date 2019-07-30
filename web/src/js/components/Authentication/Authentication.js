@@ -23,7 +23,7 @@ import {
   verifyEmailURL,
 } from 'js/navigation/navigation'
 import Logo from 'js/components/Logo/Logo'
-import { getUrlParameters, parseUrlSearchString } from 'js/utils/utils'
+import { parseUrlSearchString } from 'js/utils/utils'
 import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
 import logger from 'js/utils/logger'
 
@@ -49,15 +49,6 @@ import logger from 'js/utils/logger'
 //  * we're making the username mandatory but can't rely on a field
 //    from the authentication user token to store this info
 class Authentication extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      // TODO: use router prop
-      // Whether we are requiring the anonymous user to sign in.
-      isMandatoryAnonymousSignIn: getUrlParameters()['mandatory'] === 'true',
-    }
-  }
-
   componentDidMount() {
     this.navigateToAuthStep()
   }
@@ -82,13 +73,13 @@ class Authentication extends React.Component {
     if (this.isAuthActionURL()) {
       return
     }
-    const { authUser, user } = this.props
+    const { authUser, location, user } = this.props
     const redirected = redirectToAuthIfNeeded(authUser, user)
 
     // When anonymous users choose to sign in, do not go back to the
     // dashboard.
-    // TODO: use router prop
-    const stayOnAuthPage = getUrlParameters()['noredirect'] === 'true'
+    const urlParams = parseUrlSearchString(location.search)
+    const stayOnAuthPage = urlParams.noredirect === 'true'
 
     // The user is fully authed, so go to the dashboard.
     if (!redirected && !stayOnAuthPage) {
@@ -152,18 +143,21 @@ class Authentication extends React.Component {
 
   render() {
     const { user, location } = this.props
+    const urlParams = parseUrlSearchString(location.search)
 
     // TODO: add tests
     // Show a different logo depending on the app for which the user is
     // signing in.
-    const appQueryParamVal = parseUrlSearchString(location.search).app
+    const appQueryParamVal = urlParams.app
     const app =
       ['tab', 'search'].indexOf(appQueryParamVal) > -1
         ? appQueryParamVal
         : 'tab'
 
+    // Whether we are requiring the anonymous user to sign in.
+    const isMandatoryAnonymousSignIn = urlParams.mandatory === 'true'
     const showRequiredSignInExplanation =
-      this.state.isMandatoryAnonymousSignIn &&
+      isMandatoryAnonymousSignIn &&
       // Don't display the message on the iframe auth message page, because
       // it will have its own message.
       location.pathname.indexOf(authMessageURL) === -1
