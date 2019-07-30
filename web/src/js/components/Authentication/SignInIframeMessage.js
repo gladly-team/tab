@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import Paper from 'material-ui/Paper'
 import Typography from '@material-ui/core/Typography'
 import RaisedButton from 'material-ui/RaisedButton'
+import Link from 'js/components/General/Link'
 import { absoluteUrl, loginURL } from 'js/navigation/navigation'
 import { parseUrlSearchString } from 'js/utils/utils'
 
@@ -14,12 +15,6 @@ import { parseUrlSearchString } from 'js/utils/utils'
 // and open a new tab; our browser extensions currently iframe
 // the page.
 class SignInIframeMessage extends React.Component {
-  openAuthOutsideIframe() {
-    // TODO: preserve URL params, such as app
-    // TODO: use an anchor tag instead of JS.
-    window.open(absoluteUrl(loginURL), '_top')
-  }
-
   render() {
     const { location: { search = '' } = {} } = this.props
     const urlParams = parseUrlSearchString(search)
@@ -28,6 +23,8 @@ class SignInIframeMessage extends React.Component {
     const showRequiredSignInExplanation = urlParams.mandatory === 'true'
 
     var buttonLabel = 'SIGN IN'
+
+    // TODO: preserve URL params in link, such as app
     return (
       <Paper
         zDepth={1}
@@ -63,12 +60,13 @@ class SignInIframeMessage extends React.Component {
             marginTop: 24,
           }}
         >
-          <RaisedButton
-            data-test-id={'sign-in-iframe-message-button'}
-            label={buttonLabel}
-            primary
-            onClick={this.openAuthOutsideIframe.bind(this)}
-          />
+          <Link to={absoluteUrl(loginURL)} target="_top">
+            <RaisedButton
+              data-test-id={'sign-in-iframe-message-button'}
+              label={buttonLabel}
+              primary
+            />
+          </Link>
         </span>
       </Paper>
     )

@@ -3,8 +3,11 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import Typography from '@material-ui/core/Typography'
+import Link from 'js/components/General/Link'
 
+jest.mock('js/navigation/navigation')
 jest.mock('js/utils/utils')
+jest.mock('js/components/General/Link')
 
 const getMockProps = () => ({
   location: {
@@ -20,21 +23,21 @@ describe('SignInIframeMessage tests', () => {
     shallow(<SignInIframeMessage {...mockProps} />)
   })
 
-  it('redirects the page when clicking the sign-in button', () => {
+  it('wraps the sign-in button in a link that opens the expected auth page in the top of the frame', () => {
     const SignInIframeMessage = require('js/components/Authentication/SignInIframeMessage')
       .default
-
-    // Mock window.open
-    window.open = jest.fn()
     const mockProps = getMockProps()
     const wrapper = shallow(<SignInIframeMessage {...mockProps} />)
     const signInButton = wrapper.find(
       '[data-test-id="sign-in-iframe-message-button"]'
     )
+    const linkElem = signInButton.parent()
 
-    expect(window.open).not.toHaveBeenCalled()
-    signInButton.simulate('click')
-    expect(window.open).toHaveBeenCalled()
+    expect(linkElem.type()).toEqual(Link)
+    expect(linkElem.prop('to')).toEqual(
+      'https://tab-test-env.gladly.io/newtab/auth/'
+    )
+    expect(linkElem.prop('target')).toEqual('_top')
   })
 
   it('has the expected copy', () => {
