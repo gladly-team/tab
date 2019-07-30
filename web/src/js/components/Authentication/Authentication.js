@@ -145,7 +145,6 @@ class Authentication extends React.Component {
     const { user, location } = this.props
     const urlParams = parseUrlSearchString(location.search)
 
-    // TODO: add tests
     // Show a different logo depending on the app for which the user is
     // signing in.
     const appQueryParamVal = urlParams.app

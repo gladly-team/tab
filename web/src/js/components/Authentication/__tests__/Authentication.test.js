@@ -68,7 +68,7 @@ describe('Authentication.js tests', function() {
     shallow(<Authentication {...mockProps} />)
   })
 
-  it('shows the logo with expected props', () => {
+  it('shows the Tab for a Cause logo by default with expected props', () => {
     expect.assertions(3)
 
     const Authentication = require('js/components/Authentication/Authentication')
@@ -83,6 +83,48 @@ describe('Authentication.js tests', function() {
     expect(logoComponent.prop('style')).toEqual({
       height: 40,
     })
+  })
+
+  it('shows the Tab for a Cause logo when the URL param "app" == "tab"', () => {
+    expect.assertions(1)
+
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = '?app=tab'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    wrapper.update()
+
+    const logoComponent = wrapper.find(Logo)
+    expect(logoComponent.prop('brand')).toEqual('tab')
+  })
+
+  it('shows the Search for a Cause logo when the URL param "app" == "search"', () => {
+    expect.assertions(1)
+
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = '?app=search'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    wrapper.update()
+
+    const logoComponent = wrapper.find(Logo)
+    expect(logoComponent.prop('brand')).toEqual('search')
+  })
+
+  it('shows the Tab for a Cause logo when the URL param "app" is some invalid value', () => {
+    expect.assertions(1)
+
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = '?app=foobar'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    wrapper.update()
+
+    const logoComponent = wrapper.find(Logo)
+    expect(logoComponent.prop('brand')).toEqual('tab')
   })
 
   it('displays the endorsement quote', () => {
