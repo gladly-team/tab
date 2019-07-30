@@ -3,15 +3,21 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import Typography from '@material-ui/core/Typography'
-import { getUrlParameters } from 'js/utils/utils'
 
 jest.mock('js/utils/utils')
+
+const getMockProps = () => ({
+  location: {
+    search: '',
+  },
+})
 
 describe('SignInIframeMessage tests', () => {
   it('renders without error', () => {
     const SignInIframeMessage = require('js/components/Authentication/SignInIframeMessage')
       .default
-    shallow(<SignInIframeMessage />)
+    const mockProps = getMockProps()
+    shallow(<SignInIframeMessage {...mockProps} />)
   })
 
   it('redirects the page when clicking the sign-in button', () => {
@@ -20,8 +26,8 @@ describe('SignInIframeMessage tests', () => {
 
     // Mock window.open
     window.open = jest.fn()
-
-    const wrapper = shallow(<SignInIframeMessage />)
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SignInIframeMessage {...mockProps} />)
     const signInButton = wrapper.find(
       '[data-test-id="sign-in-iframe-message-button"]'
     )
@@ -34,7 +40,8 @@ describe('SignInIframeMessage tests', () => {
   it('has the expected copy', () => {
     const SignInIframeMessage = require('js/components/Authentication/SignInIframeMessage')
       .default
-    const wrapper = shallow(<SignInIframeMessage />)
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SignInIframeMessage {...mockProps} />)
     expect(
       wrapper
         .find(Typography)
@@ -54,12 +61,11 @@ describe('SignInIframeMessage tests', () => {
   })
 
   it('shows the explanation copy when an anonymous user is now required to sign in', () => {
-    getUrlParameters.mockReturnValueOnce({
-      mandatory: 'true',
-    })
     const SignInIframeMessage = require('js/components/Authentication/SignInIframeMessage')
       .default
-    const wrapper = shallow(<SignInIframeMessage />)
+    const mockProps = getMockProps()
+    mockProps.location.search = '?mandatory=true'
+    const wrapper = shallow(<SignInIframeMessage {...mockProps} />)
     expect(
       wrapper
         .find(Typography)

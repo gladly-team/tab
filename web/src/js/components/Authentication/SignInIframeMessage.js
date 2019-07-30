@@ -1,9 +1,10 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Paper from 'material-ui/Paper'
 import Typography from '@material-ui/core/Typography'
 import RaisedButton from 'material-ui/RaisedButton'
 import { absoluteUrl, loginURL } from 'js/navigation/navigation'
-import { getUrlParameters } from 'js/utils/utils'
+import { parseUrlSearchString } from 'js/utils/utils'
 
 // This view primarily exists as an intermediary to open
 // the authentication page outside of an iframe, because
@@ -13,15 +14,6 @@ import { getUrlParameters } from 'js/utils/utils'
 // and open a new tab; our browser extensions currently iframe
 // the page.
 class SignInIframeMessage extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      // TODO: use react-router prop
-      // Whether we are requiring the anonymous user to sign in.
-      isMandatoryAnonymousSignIn: getUrlParameters()['mandatory'] === 'true',
-    }
-  }
-
   openAuthOutsideIframe() {
     // TODO: preserve URL params, such as app
     // TODO: use an anchor tag instead of JS.
@@ -29,7 +21,12 @@ class SignInIframeMessage extends React.Component {
   }
 
   render() {
-    const showRequiredSignInExplanation = this.state.isMandatoryAnonymousSignIn
+    const { location: { search = '' } = {} } = this.props
+    const urlParams = parseUrlSearchString(search)
+
+    // Whether we are requiring the anonymous user to sign in.
+    const showRequiredSignInExplanation = urlParams.mandatory === 'true'
+
     var buttonLabel = 'SIGN IN'
     return (
       <Paper
@@ -76,6 +73,12 @@ class SignInIframeMessage extends React.Component {
       </Paper>
     )
   }
+}
+
+SignInIframeMessage.propTypes = {
+  location: PropTypes.shape({
+    search: PropTypes.string.isRequired,
+  }),
 }
 
 export default SignInIframeMessage
