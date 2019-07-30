@@ -4,6 +4,7 @@ import React from 'react'
 import moment from 'moment'
 import MockDate from 'mockdate'
 import { shallow } from 'enzyme'
+import { Route, Switch } from 'react-router-dom'
 import {
   createNewUser,
   redirectToAuthIfNeeded,
@@ -20,6 +21,7 @@ import { getBrowserExtensionInstallId } from 'js/utils/local-user-data-mgr'
 import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
 import Logo from 'js/components/Logo/Logo'
 
+jest.mock('react-router-dom')
 jest.mock('js/authentication/helpers')
 jest.mock('js/authentication/user')
 jest.mock('js/navigation/navigation')
@@ -423,5 +425,65 @@ describe('Authentication.js tests', function() {
     const comp = wrapper.find(AssignExperimentGroups)
     expect(comp.length).toBe(1)
     expect(comp.prop('isNewUser')).toBe(true)
+  })
+
+  it('includes a "verify email" route', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/verify-email/')
+    expect(routeElem.exists()).toBe(true)
+  })
+
+  it('includes a "set username" route', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/username/')
+    expect(routeElem.exists()).toBe(true)
+  })
+
+  it('includes an "iframe message" route', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/welcome/')
+    expect(routeElem.exists()).toBe(true)
+  })
+
+  it('includes a "missing email" route', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/missing-email/')
+    expect(routeElem.exists()).toBe(true)
+  })
+
+  it('includes a default auth page route', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/')
+    expect(routeElem.exists()).toBe(true)
   })
 })
