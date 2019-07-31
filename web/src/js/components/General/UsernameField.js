@@ -1,13 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import TextField from 'material-ui/TextField'
+import TextField from '@material-ui/core/TextField'
 
 import { validateUsername } from 'js/utils/utils'
 
 class UsernameField extends React.Component {
   constructor(props) {
     super(props)
-    this.username = null
+    this.inputElem = null
     this.state = {
       username: null,
       error: null,
@@ -25,16 +25,16 @@ class UsernameField extends React.Component {
   }
 
   hasValue() {
-    return (
-      this.username.input &&
-      this.username.input.value &&
-      this.username.input.value.trim()
+    return !!(
+      this.inputElem &&
+      this.inputElem.value &&
+      this.inputElem.value.trim()
     )
   }
 
   getValue() {
-    if (this.hasValue) {
-      return this.username.input.value.trim()
+    if (this.hasValue()) {
+      return this.inputElem.value.trim()
     }
     return null
   }
@@ -47,7 +47,7 @@ class UsernameField extends React.Component {
 
   validate() {
     if (this.hasValue()) {
-      const username = this.username.input.value.trim()
+      const username = this.inputElem.value.trim()
 
       const { isValid, reason } = validateUsername(username)
       if (!isValid) {
@@ -85,11 +85,12 @@ class UsernameField extends React.Component {
       <TextField
         id={'username-input'}
         data-test-id={'username-field-text-input'}
-        ref={input => {
-          this.username = input
+        inputRef={input => {
+          this.inputElem = input
         }}
         {...otherProps}
-        errorText={this.state.error}
+        error={!!this.state.error}
+        helperText={this.state.error}
       />
     )
   }

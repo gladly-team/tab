@@ -13,6 +13,7 @@ import logger from 'js/utils/logger'
 class EnterUsernameForm extends React.Component {
   constructor(props) {
     super(props)
+    this.usernameFieldRef = null
     this.state = {
       usernameDuplicate: false,
       otherError: false,
@@ -34,8 +35,8 @@ class EnterUsernameForm extends React.Component {
   }
 
   submit(e) {
-    const usernameValid = this.username.validate()
-    const username = this.username.getValue()
+    const usernameValid = this.usernameFieldRef.validate()
+    const username = this.usernameFieldRef.getValue()
     this.setState({
       usernameDuplicate: false,
       otherError: false,
@@ -123,19 +124,24 @@ class EnterUsernameForm extends React.Component {
           Choose a username
         </span>
         <UsernameField
+          data-test-id={'enter-username-form-username-field'}
+          ref={elem => {
+            this.usernameFieldRef = elem
+          }}
           usernameDuplicate={this.state.usernameDuplicate}
           otherError={this.state.otherError}
           onKeyPress={this.handleKeyPress.bind(this)}
-          floatingLabelText={`Username for ${
+          label={`Username for ${
             app === 'search' ? 'Search for a Cause' : 'Tab for a Cause'
           }`}
-          ref={elem => {
-            this.username = elem
-          }}
           style={{
             display: 'block',
+            width: 256,
+            minHeight: 72,
+            marginTop: 20,
           }}
-          data-test-id={'enter-username-form-username-field'}
+          fullWidth
+          autoFocus
         />
         <span
           style={{
