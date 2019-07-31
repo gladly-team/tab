@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Paper from 'material-ui/Paper'
+import Paper from '@material-ui/core/Paper'
 import environment from 'js/relay-env'
 import UsernameField from 'js/components/General/UsernameField'
 import Button from '@material-ui/core/Button'
@@ -108,7 +108,7 @@ class EnterUsernameForm extends React.Component {
     const { app } = this.props
     return (
       <Paper
-        zDepth={1}
+        elevation={1}
         style={{
           padding: 24,
           backgroundColor: '#FFF',
