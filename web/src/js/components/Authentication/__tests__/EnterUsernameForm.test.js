@@ -7,6 +7,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import SetUsernameMutation, {
   __runOnCompleted,
 } from 'js/mutations/SetUsernameMutation'
+import UsernameField from 'js/components/General/UsernameField'
 import { checkIfEmailVerified } from 'js/authentication/helpers'
 
 jest.mock('js/mutations/SetUsernameMutation')
@@ -15,6 +16,7 @@ jest.mock('js/authentication/user')
 jest.mock('js/navigation/navigation')
 
 const getMockProps = () => ({
+  app: 'tab',
   user: {
     id: 'abc-123',
   },
@@ -151,5 +153,27 @@ describe('EnterUsernameForm tests', () => {
       .default
     const wrapper = shallow(<EnterUsernameForm {...mockProps} />)
     expect(toJson(wrapper)).toMatchSnapshot()
+  })
+
+  it('has an input field text of "Username for Tab for a Cause" when the "app" prop === "tab"', () => {
+    const mockProps = getMockProps()
+    mockProps.app = 'tab'
+    const EnterUsernameForm = require('js/components/Authentication/EnterUsernameForm')
+      .default
+    const wrapper = shallow(<EnterUsernameForm {...mockProps} />)
+    expect(wrapper.find(UsernameField).prop('floatingLabelText')).toEqual(
+      'Username for Tab for a Cause'
+    )
+  })
+
+  it('has an input field text of "Username for Search for a Cause" when the "app" prop === "tab"', () => {
+    const mockProps = getMockProps()
+    mockProps.app = 'search'
+    const EnterUsernameForm = require('js/components/Authentication/EnterUsernameForm')
+      .default
+    const wrapper = shallow(<EnterUsernameForm {...mockProps} />)
+    expect(wrapper.find(UsernameField).prop('floatingLabelText')).toEqual(
+      'Username for Search for a Cause'
+    )
   })
 })

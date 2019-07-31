@@ -105,7 +105,7 @@ class EnterUsernameForm extends React.Component {
   }
 
   render() {
-    // TODO: change floatingLabelText based on this.props.app
+    const { app } = this.props
     return (
       <Paper
         zDepth={1}
@@ -126,6 +126,9 @@ class EnterUsernameForm extends React.Component {
           usernameDuplicate={this.state.usernameDuplicate}
           otherError={this.state.otherError}
           onKeyPress={this.handleKeyPress.bind(this)}
+          floatingLabelText={`Username for ${
+            app === 'search' ? 'Search for a Cause' : 'Tab for a Cause'
+          }`}
           ref={elem => {
             this.username = elem
           }}

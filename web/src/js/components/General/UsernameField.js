@@ -88,7 +88,6 @@ class UsernameField extends React.Component {
         ref={input => {
           this.username = input
         }}
-        floatingLabelText={<span>Username for Tab for a Cause</span>}
         {...otherProps}
         errorText={this.state.error}
       />

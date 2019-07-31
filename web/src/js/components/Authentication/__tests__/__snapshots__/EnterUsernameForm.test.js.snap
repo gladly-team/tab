@@ -51,6 +51,7 @@ exports[`EnterUsernameForm tests it does not call SetUsernameMutation when the u
         </span>
         <UsernameField
           data-test-id="enter-username-form-username-field"
+          floatingLabelText="Username for Tab for a Cause"
           onKeyPress={[Function]}
           otherError={false}
           style={
@@ -65,11 +66,7 @@ exports[`EnterUsernameForm tests it does not call SetUsernameMutation when the u
             disabled={false}
             errorText="Must be at least two characters."
             floatingLabelFixed={false}
-            floatingLabelText={
-              <span>
-                Username for Tab for a Cause
-              </span>
-            }
+            floatingLabelText="Username for Tab for a Cause"
             fullWidth={false}
             id="username-input"
             multiLine={false}
@@ -548,9 +545,7 @@ exports[`EnterUsernameForm tests it does not call SetUsernameMutation when the u
                     }
                   }
                 >
-                  <span>
-                    Username for Tab for a Cause
-                  </span>
+                  Username for Tab for a Cause
                 </label>
               </TextFieldLabel>
               <input
@@ -1310,6 +1305,7 @@ exports[`EnterUsernameForm tests it shows an error message when the username is 
         </span>
         <UsernameField
           data-test-id="enter-username-form-username-field"
+          floatingLabelText="Username for Tab for a Cause"
           onKeyPress={[Function]}
           otherError={false}
           style={
@@ -1324,11 +1320,7 @@ exports[`EnterUsernameForm tests it shows an error message when the username is 
             disabled={false}
             errorText="Username is already taken. Please choose another."
             floatingLabelFixed={false}
-            floatingLabelText={
-              <span>
-                Username for Tab for a Cause
-              </span>
-            }
+            floatingLabelText="Username for Tab for a Cause"
             fullWidth={false}
             id="username-input"
             multiLine={false}
@@ -1807,9 +1799,7 @@ exports[`EnterUsernameForm tests it shows an error message when the username is 
                     }
                   }
                 >
-                  <span>
-                    Username for Tab for a Cause
-                  </span>
+                  Username for Tab for a Cause
                 </label>
               </TextFieldLabel>
               <input
@@ -2543,6 +2533,7 @@ exports[`EnterUsernameForm tests matches expected snapshot 1`] = `
   </span>
   <UsernameField
     data-test-id="enter-username-form-username-field"
+    floatingLabelText="Username for Tab for a Cause"
     onKeyPress={[Function]}
     otherError={false}
     style={

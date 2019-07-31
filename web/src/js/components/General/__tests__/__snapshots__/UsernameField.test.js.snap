@@ -6,11 +6,6 @@ exports[`UsernameField tests matches expected snapshot 1`] = `
   disabled={false}
   errorText={null}
   floatingLabelFixed={false}
-  floatingLabelText={
-    <span>
-      Username for Tab for a Cause
-    </span>
-  }
   fullWidth={false}
   id="username-input"
   multiLine={false}
