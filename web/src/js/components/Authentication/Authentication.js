@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Paper from '@material-ui/core/Paper'
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import { isEqual } from 'lodash/lang'
 import { Route, Switch } from 'react-router-dom'
@@ -26,6 +27,10 @@ import Logo from 'js/components/Logo/Logo'
 import { parseUrlSearchString } from 'js/utils/utils'
 import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
 import logger from 'js/utils/logger'
+import searchTheme from 'js/theme/searchTheme'
+
+// TODO: different theme depending on app
+const defaultTheme = createMuiTheme(searchTheme)
 
 // Handle the authentication flow:
 //   check if current user is fully authenticated and redirect
@@ -161,136 +166,140 @@ class Authentication extends React.Component {
       // it will have its own message.
       location.pathname.indexOf(authMessageURL) === -1
     return (
-      <span
-        data-test-id={'authentication-page'}
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          height: '100%',
-          width: '100%',
-          backgroundColor: '#FAFAFA',
-        }}
-      >
-        {/* This is a similar style to the homepage */}
-        <div
-          style={{
-            padding: '20px 40px',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-          }}
-        >
-          <Logo brand={app} includeText style={{ height: 40 }} />
-        </div>
+      <MuiThemeProvider theme={defaultTheme}>
         <span
+          data-test-id={'authentication-page'}
           style={{
             display: 'flex',
             flexDirection: 'column',
-            flex: 1,
-            alignSelf: 'stretch',
-            justifyContent: 'center',
             alignItems: 'center',
+            height: '100%',
+            width: '100%',
+            backgroundColor: '#FAFAFA',
           }}
         >
+          {/* This is a similar style to the homepage */}
+          <div
+            style={{
+              padding: '20px 40px',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+            }}
+          >
+            <Logo brand={app} includeText style={{ height: 40 }} />
+          </div>
           <span
             style={{
-              flex: 1,
               display: 'flex',
+              flexDirection: 'column',
+              flex: 1,
+              alignSelf: 'stretch',
+              justifyContent: 'center',
               alignItems: 'center',
-              padding: 20,
             }}
           >
-            <Switch>
-              <Route
-                exact
-                path="/newtab/auth/verify-email/"
-                component={VerifyEmailMessage}
-              />
-              <Route
-                exact
-                path="/newtab/auth/username/"
-                render={props => (
-                  <EnterUsernameForm {...props} user={user} app={app} />
-                )}
-              />
-              <Route
-                exact
-                path="/newtab/auth/welcome/"
-                component={SignInIframeMessage}
-              />
-              <Route
-                exact
-                path="/newtab/auth/missing-email/"
-                component={MissingEmailMessage}
-              />
-              <Route
-                path="/newtab/auth/"
-                render={props => (
-                  <FirebaseAuthenticationUI
-                    {...props}
-                    onSignInSuccess={this.onSignInSuccess.bind(this)}
-                    user={user}
-                  />
-                )}
-              />
-            </Switch>
-          </span>
-          {!showRequiredSignInExplanation ? (
-            // Using same style as homepage
             <span
-              data-test-id={'endorsement-quote'}
               style={{
-                color: 'rgba(33, 33, 33, 0.82)',
-                fontFamily: "'Helvetica Neue','Helvetica','Arial',sans-serif",
-                fontWeight: '500',
-                lineHeight: '1.1',
-                textAlign: 'center',
-                padding: 10,
+                flex: 1,
+                display: 'flex',
+                alignItems: 'center',
+                padding: 20,
               }}
             >
-              <h1>"One of the simplest ways to raise money"</h1>
-              <p style={{ color: '#838383', fontWeight: '400' }}>- USA Today</p>
+              <Switch>
+                <Route
+                  exact
+                  path="/newtab/auth/verify-email/"
+                  component={VerifyEmailMessage}
+                />
+                <Route
+                  exact
+                  path="/newtab/auth/username/"
+                  render={props => (
+                    <EnterUsernameForm {...props} user={user} app={app} />
+                  )}
+                />
+                <Route
+                  exact
+                  path="/newtab/auth/welcome/"
+                  component={SignInIframeMessage}
+                />
+                <Route
+                  exact
+                  path="/newtab/auth/missing-email/"
+                  component={MissingEmailMessage}
+                />
+                <Route
+                  path="/newtab/auth/"
+                  render={props => (
+                    <FirebaseAuthenticationUI
+                      {...props}
+                      onSignInSuccess={this.onSignInSuccess.bind(this)}
+                      user={user}
+                    />
+                  )}
+                />
+              </Switch>
             </span>
-          ) : null}
-        </span>
-        {showRequiredSignInExplanation ? (
-          <div
-            data-test-id={'anon-sign-in-fyi'}
-            style={{
-              position: 'absolute',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              bottom: 24,
-            }}
-          >
-            <Paper>
-              <div
+            {!showRequiredSignInExplanation ? (
+              // Using same style as homepage
+              <span
+                data-test-id={'endorsement-quote'}
                 style={{
-                  padding: '14px 18px',
-                  maxWidth: 600,
+                  color: 'rgba(33, 33, 33, 0.82)',
+                  fontFamily: "'Helvetica Neue','Helvetica','Arial',sans-serif",
+                  fontWeight: '500',
+                  lineHeight: '1.1',
+                  textAlign: 'center',
+                  padding: 10,
                 }}
               >
-                <Typography variant={'body2'} style={{ fontWeight: 'bold' }}>
-                  Hey there!
-                </Typography>
-                <Typography variant={'body2'}>
-                  We ask you to sign in after a while so you don't lose access
-                  to your notes, bookmarks, and Hearts (even if you drop your
-                  computer in a puddle). Signing in also lets you sync your tab
-                  between browsers – nice!
-                </Typography>
-              </div>
-            </Paper>
-          </div>
-        ) : null}
-        {/*
+                <h1>"One of the simplest ways to raise money"</h1>
+                <p style={{ color: '#838383', fontWeight: '400' }}>
+                  - USA Today
+                </p>
+              </span>
+            ) : null}
+          </span>
+          {showRequiredSignInExplanation ? (
+            <div
+              data-test-id={'anon-sign-in-fyi'}
+              style={{
+                position: 'absolute',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                bottom: 24,
+              }}
+            >
+              <Paper>
+                <div
+                  style={{
+                    padding: '14px 18px',
+                    maxWidth: 600,
+                  }}
+                >
+                  <Typography variant={'body2'} style={{ fontWeight: 'bold' }}>
+                    Hey there!
+                  </Typography>
+                  <Typography variant={'body2'}>
+                    We ask you to sign in after a while so you don't lose access
+                    to your notes, bookmarks, and Hearts (even if you drop your
+                    computer in a puddle). Signing in also lets you sync your
+                    tab between browsers – nice!
+                  </Typography>
+                </div>
+              </Paper>
+            </div>
+          ) : null}
+          {/*
           If we don't assign experiment groups here because we redirect or the
           user does not yet exist, that's okay. We'll try to assign the user to
           experiments on the dashboard as well.
         */}
-        {user ? <AssignExperimentGroups user={user} isNewUser /> : null}
-      </span>
+          {user ? <AssignExperimentGroups user={user} isNewUser /> : null}
+        </span>
+      </MuiThemeProvider>
     )
   }
 }
