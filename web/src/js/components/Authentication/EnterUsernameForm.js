@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Paper from 'material-ui/Paper'
 import environment from 'js/relay-env'
 import UsernameField from 'js/components/General/UsernameField'
-import RaisedButton from 'material-ui/RaisedButton'
+import Button from '@material-ui/core/Button'
 import SetUsernameMutation from 'js/mutations/SetUsernameMutation'
 import { setUsernameInLocalStorage } from 'js/authentication/user'
 import { checkIfEmailVerified } from 'js/authentication/helpers'
@@ -145,12 +145,14 @@ class EnterUsernameForm extends React.Component {
           }}
           data-test-id={'enter-username-form-button-container'}
         >
-          <RaisedButton
-            label={this.state.savingUsernameInProgress ? 'SAVING...' : 'NEXT'}
-            primary
+          <Button
+            color={'primary'}
+            variant={'contained'}
             disabled={this.state.savingUsernameInProgress}
             onClick={this.submit.bind(this)}
-          />
+          >
+            {this.state.savingUsernameInProgress ? 'Saving...' : 'Next'}
+          </Button>
         </span>
       </Paper>
     )
