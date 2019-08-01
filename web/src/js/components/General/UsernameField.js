@@ -79,6 +79,7 @@ class UsernameField extends React.Component {
     }
   }
 
+  // TODO: fix tests and add better tests
   render() {
     const { usernameDuplicate, otherError, ...otherProps } = this.props
     return (
