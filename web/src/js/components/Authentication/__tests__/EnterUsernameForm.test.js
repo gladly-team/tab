@@ -8,11 +8,14 @@ import SetUsernameMutation, {
 import UsernameField from 'js/components/General/UsernameField'
 import { checkIfEmailVerified } from 'js/authentication/helpers'
 import TextField from '@material-ui/core/TextField'
+import { goTo } from 'js/navigation/navigation'
+import { setUsernameInLocalStorage } from 'js/authentication/user'
 
 jest.mock('js/mutations/SetUsernameMutation')
 jest.mock('js/authentication/helpers')
 jest.mock('js/authentication/user')
 jest.mock('js/navigation/navigation')
+jest.mock('js/authentication/user')
 
 const getMockProps = () => ({
   app: 'tab',
@@ -61,7 +64,7 @@ describe('EnterUsernameForm tests', () => {
     expect(SetUsernameMutation).toHaveBeenCalled()
   })
 
-  it('it does not call SetUsernameMutation when the username is too short and instead shows an error message', () => {
+  it('does not call SetUsernameMutation when the username is too short and instead shows an error message', () => {
     const EnterUsernameForm = require('js/components/Authentication/EnterUsernameForm')
       .default
     const mockProps = getMockProps()
@@ -89,7 +92,7 @@ describe('EnterUsernameForm tests', () => {
     expect(textFieldComp.prop('error')).toBe(true)
   })
 
-  it('it shows an error message when the username is a duplicate', () => {
+  it('shows an error message when the username is a duplicate', () => {
     const EnterUsernameForm = require('js/components/Authentication/EnterUsernameForm')
       .default
     const mockProps = getMockProps()
@@ -128,6 +131,44 @@ describe('EnterUsernameForm tests', () => {
     expect(textFieldComp.prop('error')).toBe(true)
   })
 
+  it('shows a generic error message when request fails for an unexpected reason', () => {
+    const EnterUsernameForm = require('js/components/Authentication/EnterUsernameForm')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = mount(<EnterUsernameForm {...mockProps} />)
+
+    // Enter a username
+    const usernameTextField = wrapper.find(
+      '[data-test-id="enter-username-form-username-field"] input'
+    )
+    usernameTextField.instance().value = 'Sunol'
+    const button = wrapper
+      .find('[data-test-id="enter-username-form-button"]')
+      .first()
+    button.simulate('click')
+
+    // Mock a response with a duplicate username error
+    __runOnCompleted({
+      setUsername: {
+        user: null,
+        errors: [
+          {
+            problem: 'UNEXPECTED_THING',
+          },
+        ],
+      },
+    })
+    wrapper.update()
+
+    const textFieldComp = wrapper
+      .find('[data-test-id="enter-username-form-username-field"]')
+      .find(TextField)
+    expect(textFieldComp.prop('helperText')).toEqual(
+      'There was an error saving your username. Please try again later.'
+    )
+    expect(textFieldComp.prop('error')).toBe(true)
+  })
+
   it('has an input field label of "Username for Tab for a Cause" when the "app" prop === "tab"', () => {
     const mockProps = getMockProps()
     mockProps.app = 'tab'
@@ -148,5 +189,60 @@ describe('EnterUsernameForm tests', () => {
     expect(wrapper.find(UsernameField).prop('label')).toEqual(
       'Username for Search for a Cause'
     )
+  })
+
+  it('saves the username to localStorage when successfully saved server-side ', () => {
+    const EnterUsernameForm = require('js/components/Authentication/EnterUsernameForm')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = mount(<EnterUsernameForm {...mockProps} />)
+
+    // Enter a username
+    const usernameTextField = wrapper.find(
+      '[data-test-id="enter-username-form-username-field"] input'
+    )
+    usernameTextField.instance().value = 'Sunol'
+    const button = wrapper
+      .find('[data-test-id="enter-username-form-button"]')
+      .first()
+    button.simulate('click')
+    __runOnCompleted({
+      setUsername: {
+        user: {
+          username: 'AirplaneLover',
+        },
+        errors: null,
+      },
+    })
+
+    expect(setUsernameInLocalStorage).toHaveBeenCalledWith('AirplaneLover')
+  })
+
+  it('redirects to the app after saving the username', () => {
+    const EnterUsernameForm = require('js/components/Authentication/EnterUsernameForm')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = mount(<EnterUsernameForm {...mockProps} />)
+
+    // Enter a username
+    const usernameTextField = wrapper.find(
+      '[data-test-id="enter-username-form-username-field"] input'
+    )
+    usernameTextField.instance().value = 'Sunol'
+    const button = wrapper
+      .find('[data-test-id="enter-username-form-button"]')
+      .first()
+    button.simulate('click')
+    __runOnCompleted({
+      setUsername: {
+        user: {
+          username: 'Sunol',
+        },
+        errors: null,
+      },
+    })
+
+    // TODO: this should be app-specific
+    expect(goTo).toHaveBeenCalledWith('/newtab/')
   })
 })
