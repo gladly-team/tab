@@ -138,7 +138,7 @@ class EnterUsernameForm extends React.Component {
           style={{
             display: 'block',
             width: 256,
-            minHeight: 72,
+            minHeight: 84,
             marginTop: 20,
           }}
           fullWidth
@@ -148,7 +148,7 @@ class EnterUsernameForm extends React.Component {
           style={{
             display: 'flex',
             justifyContent: 'flex-end',
-            marginTop: 30,
+            marginTop: 4,
           }}
           data-test-id={'enter-username-form-button-container'}
         >
