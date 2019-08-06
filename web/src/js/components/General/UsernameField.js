@@ -10,17 +10,7 @@ class UsernameField extends React.Component {
     this.inputElem = null
     this.state = {
       username: null,
-      error: null,
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.usernameDuplicate) {
-      this.setErrorMessage('Username is already taken. Please choose another.')
-    } else if (nextProps.otherError) {
-      this.setErrorMessage(
-        'There was an error saving your username. Please try again later.'
-      )
+      validationErrorMessage: null,
     }
   }
 
@@ -41,7 +31,7 @@ class UsernameField extends React.Component {
 
   setErrorMessage(message) {
     this.setState({
-      error: message,
+      validationErrorMessage: message,
     })
   }
 
@@ -79,9 +69,14 @@ class UsernameField extends React.Component {
     }
   }
 
-  // TODO: fix tests and add better tests
   render() {
     const { usernameDuplicate, otherError, ...otherProps } = this.props
+    const { validationErrorMessage } = this.state
+    const errMessage = usernameDuplicate
+      ? 'Username is already taken. Please choose another.'
+      : otherError
+      ? 'There was an error saving your username. Please try again later.'
+      : validationErrorMessage
     return (
       <TextField
         id={'username-input'}
@@ -90,8 +85,8 @@ class UsernameField extends React.Component {
           this.inputElem = input
         }}
         {...otherProps}
-        error={!!this.state.error}
-        helperText={this.state.error}
+        error={!!errMessage}
+        helperText={errMessage}
       />
     )
   }
