@@ -63,6 +63,9 @@ class App extends React.Component {
   }
 
   render() {
+    // TODO: pass location to FullPageLoader
+    // const { location } = this.props
+
     // @material-ui-1-todo: remove legacy theme provider
     return (
       <MuiThemeProvider theme={muiTheme}>

@@ -165,6 +165,9 @@ class Authentication extends React.Component {
       // Don't display the message on the iframe auth message page, because
       // it will have its own message.
       location.pathname.indexOf(authMessageURL) === -1
+
+    // TODO: change the title and favicon. Probably need to upgrade
+    //   react-helmet to v6beta.
     return (
       <MuiThemeProvider theme={defaultTheme}>
         <span

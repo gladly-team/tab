@@ -5,6 +5,7 @@ import Logo from 'js/components/Logo/Logo'
 import Typography from '@material-ui/core/Typography'
 
 const FullPageLoader = props => {
+  // TODO: show a different logo depending on the "app" prop
   return (
     <Timeout ms={props.delay}>
       {timedOut =>
