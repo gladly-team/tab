@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Paper from 'material-ui/Paper'
 import Typography from '@material-ui/core/Typography'
+
+// TODO: use latest MUI
 import RaisedButton from 'material-ui/RaisedButton'
 import Link from 'js/components/General/Link'
 import { constructUrl, loginURL } from 'js/navigation/navigation'

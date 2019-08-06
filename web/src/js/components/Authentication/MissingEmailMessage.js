@@ -1,4 +1,6 @@
 import React from 'react'
+
+// TODO: use latest MUI
 import Paper from 'material-ui/Paper'
 import RaisedButton from 'material-ui/RaisedButton'
 import { logout } from 'js/authentication/user'
