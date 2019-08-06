@@ -150,9 +150,9 @@ class EnterUsernameForm extends React.Component {
             justifyContent: 'flex-end',
             marginTop: 4,
           }}
-          data-test-id={'enter-username-form-button-container'}
         >
           <Button
+            data-test-id={'enter-username-form-button'}
             color={'primary'}
             variant={'contained'}
             disabled={this.state.savingUsernameInProgress}
