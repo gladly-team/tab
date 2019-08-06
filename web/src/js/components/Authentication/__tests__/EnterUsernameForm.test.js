@@ -7,6 +7,7 @@ import SetUsernameMutation, {
 } from 'js/mutations/SetUsernameMutation'
 import UsernameField from 'js/components/General/UsernameField'
 import { checkIfEmailVerified } from 'js/authentication/helpers'
+import TextField from '@material-ui/core/TextField'
 
 jest.mock('js/mutations/SetUsernameMutation')
 jest.mock('js/authentication/helpers')
@@ -79,11 +80,13 @@ describe('EnterUsernameForm tests', () => {
     // We shouldn't call to save the username
     expect(SetUsernameMutation).not.toHaveBeenCalled()
 
-    // FIXME: replace this snapshot with a more specific test
-    // // Compare to snapshot, which should have an error message state.
-    // // Probably better to find and test the actual error message component,
-    // // but this is okay for now.
-    // expect(toJson(wrapper)).toMatchSnapshot()
+    const textFieldComp = wrapper
+      .find('[data-test-id="enter-username-form-username-field"]')
+      .find(TextField)
+    expect(textFieldComp.prop('helperText')).toEqual(
+      'Must be at least two characters.'
+    )
+    expect(textFieldComp.prop('error')).toBe(true)
   })
 
   it('it shows an error message when the username is a duplicate', () => {
@@ -116,9 +119,13 @@ describe('EnterUsernameForm tests', () => {
     })
     wrapper.update()
 
-    // FIXME: replace this snapshot with a more specific test
-    // // Compare to snapshot, which should have an error message state
-    // expect(toJson(wrapper)).toMatchSnapshot()
+    const textFieldComp = wrapper
+      .find('[data-test-id="enter-username-form-username-field"]')
+      .find(TextField)
+    expect(textFieldComp.prop('helperText')).toEqual(
+      'Username is already taken. Please choose another.'
+    )
+    expect(textFieldComp.prop('error')).toBe(true)
   })
 
   it('has an input field label of "Username for Tab for a Cause" when the "app" prop === "tab"', () => {
