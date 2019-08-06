@@ -105,7 +105,6 @@ class EnterUsernameForm extends React.Component {
     }
   }
 
-  // TODO: fix tests and add better tests
   render() {
     const { app } = this.props
     return (

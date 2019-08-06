@@ -7,6 +7,7 @@ import SetUsernameMutation, {
 } from 'js/mutations/SetUsernameMutation'
 import UsernameField from 'js/components/General/UsernameField'
 import { checkIfEmailVerified } from 'js/authentication/helpers'
+import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import { goTo } from 'js/navigation/navigation'
 import { setUsernameInLocalStorage } from 'js/authentication/user'
@@ -44,7 +45,7 @@ describe('EnterUsernameForm tests', () => {
     expect(checkIfEmailVerified).toHaveBeenCalled()
   })
 
-  it('calls SetUsernameMutation when entering a username', () => {
+  it('calls SetUsernameMutation when clicking the submission button with a username in the input', () => {
     const EnterUsernameForm = require('js/components/Authentication/EnterUsernameForm')
       .default
     const mockProps = getMockProps()
@@ -62,6 +63,84 @@ describe('EnterUsernameForm tests', () => {
       .first()
     button.simulate('click')
     expect(SetUsernameMutation).toHaveBeenCalled()
+  })
+
+  it('calls SetUsernameMutation when hitting the "enter" key button with a username in the input', () => {
+    const EnterUsernameForm = require('js/components/Authentication/EnterUsernameForm')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = mount(<EnterUsernameForm {...mockProps} />)
+    const usernameTextField = wrapper.find(
+      '[data-test-id="enter-username-form-username-field"] input'
+    )
+    usernameTextField.instance().value = 'TMorrison'
+    usernameTextField.simulate('keypress', { key: 'Enter' })
+
+    expect(SetUsernameMutation).toHaveBeenCalled()
+  })
+
+  it('changes the button text from "Next" to "Saving..." when the request is pending, and back to "Next" if there is an error', () => {
+    const EnterUsernameForm = require('js/components/Authentication/EnterUsernameForm')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = mount(<EnterUsernameForm {...mockProps} />)
+
+    // Enter a username
+    const usernameTextField = wrapper.find(
+      '[data-test-id="enter-username-form-username-field"] input'
+    )
+    usernameTextField.instance().value = 'Sunol'
+    expect(wrapper.find(Button).text()).toEqual('Next')
+    wrapper.find(Button).simulate('click')
+    expect(wrapper.find(Button).text()).toEqual('Saving...')
+
+    // Mock a response with a duplicate username error
+    __runOnCompleted({
+      setUsername: {
+        user: null,
+        errors: [
+          {
+            code: 'USERNAME_DUPLICATE',
+            message: 'Username already exists',
+          },
+        ],
+      },
+    })
+    wrapper.update()
+
+    expect(wrapper.find(Button).text()).toEqual('Next')
+  })
+
+  it('disables the button when the request is pending ', () => {
+    const EnterUsernameForm = require('js/components/Authentication/EnterUsernameForm')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = mount(<EnterUsernameForm {...mockProps} />)
+
+    // Enter a username
+    const usernameTextField = wrapper.find(
+      '[data-test-id="enter-username-form-username-field"] input'
+    )
+    usernameTextField.instance().value = 'Sunol'
+    expect(wrapper.find(Button).prop('disabled')).toBe(false)
+    wrapper.find(Button).simulate('click')
+    expect(wrapper.find(Button).prop('disabled')).toBe(true)
+
+    // Mock a response with a duplicate username error
+    __runOnCompleted({
+      setUsername: {
+        user: null,
+        errors: [
+          {
+            code: 'USERNAME_DUPLICATE',
+            message: 'Username already exists',
+          },
+        ],
+      },
+    })
+    wrapper.update()
+
+    expect(wrapper.find(Button).prop('disabled')).toBe(false)
   })
 
   it('does not call SetUsernameMutation when the username is too short and instead shows an error message', () => {
