@@ -84,9 +84,6 @@ const styles = theme => ({
   },
 })
 
-// Note: do not use react-helmet until v6 is published, due to
-// this stack overflow bug:
-// https://github.com/nfl/react-helmet/issues/373
 class SearchPage extends React.Component {
   constructor(props) {
     super(props)

@@ -83,9 +83,8 @@
     <% if (process.env.REACT_APP_WHICH_APP === "search"){ %>
     <!--
       @gladly-customization:
-      Include Roboto for the search results styling. We cannot currently
-      use react-helmet to add this link because of this bug in v5:
-      https://github.com/nfl/react-helmet/issues/373
+      Include Roboto for the search results styling. We can move this
+      into the JS with react-helmet if we want.
     -->
     <link
       rel="stylesheet"
