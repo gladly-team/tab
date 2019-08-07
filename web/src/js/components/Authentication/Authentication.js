@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Helmet } from 'react-helmet'
 import Paper from '@material-ui/core/Paper'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
@@ -24,6 +25,8 @@ import {
   verifyEmailURL,
 } from 'js/navigation/navigation'
 import Logo from 'js/components/Logo/Logo'
+import searchFavicon from 'js/assets/logos/search-favicon.png'
+import tabFavicon from 'js/assets/logos/favicon.ico'
 import { parseUrlSearchString } from 'js/utils/utils'
 import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
 import logger from 'js/utils/logger'
@@ -166,8 +169,6 @@ class Authentication extends React.Component {
       // it will have its own message.
       location.pathname.indexOf(authMessageURL) === -1
 
-    // TODO: change the title and favicon. Probably need to upgrade
-    //   react-helmet to v6beta.
     return (
       <MuiThemeProvider theme={defaultTheme}>
         <span
@@ -181,6 +182,17 @@ class Authentication extends React.Component {
             backgroundColor: '#FAFAFA',
           }}
         >
+          {app === 'tab' ? (
+            <Helmet>
+              <title>Sign in - Tab for a Cause</title>
+              <link rel="icon" href={tabFavicon} />
+            </Helmet>
+          ) : (
+            <Helmet>
+              <title>Sign in - Search for a Cause</title>
+              <link rel="icon" href={searchFavicon} key={'favicon'} />
+            </Helmet>
+          )}
           {/* This is a similar style to the homepage */}
           <div
             style={{

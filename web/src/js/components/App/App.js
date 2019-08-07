@@ -1,5 +1,6 @@
 import React, { Suspense, lazy } from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
+import { Helmet } from 'react-helmet'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import V0MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
@@ -16,6 +17,7 @@ import {
 import FullPageLoader from 'js/components/General/FullPageLoader'
 import DashboardView from 'js/components/Dashboard/DashboardView'
 import QuantcastChoiceCMP from 'js/components/General/QuantcastChoiceCMP'
+import tabFavicon from 'js/assets/logos/favicon.ico'
 
 const AuthenticationView = lazy(() =>
   import('js/components/Authentication/AuthenticationView')
@@ -71,6 +73,10 @@ class App extends React.Component {
       <MuiThemeProvider theme={muiTheme}>
         <V0MuiThemeProvider muiTheme={legacyMuiTheme}>
           <ErrorBoundary brand={'tab'}>
+            <Helmet>
+              <title>Tab for a Cause</title>
+              <link rel="icon" href={tabFavicon} />
+            </Helmet>
             <div
               style={{
                 position: 'absolute',

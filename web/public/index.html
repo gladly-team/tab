@@ -2,13 +2,6 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <% if (process.env.REACT_APP_WHICH_APP === "newtab"){ %>
-      <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
-    <% } %>
-    <% if (process.env.REACT_APP_WHICH_APP === "search"){ %>
-      <link rel="shortcut icon" href="%PUBLIC_URL%/search-favicon.png" />
-    <% } %>
-
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
@@ -19,23 +12,6 @@
       homescreen on Android. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
-
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    
-    <% if (process.env.REACT_APP_WHICH_APP === "newtab"){ %>
-      <title>Tab for a Cause</title>
-    <% } %>
-
-    <% if (process.env.REACT_APP_WHICH_APP === "search"){ %>
-      <title>Search for a Cause</title>
-    <% } %>
 
     <% if (process.env.REACT_APP_MEASURE_TIME_TO_INTERACTIVE === "true"){ %>
     <!--

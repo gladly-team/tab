@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Helmet } from 'react-helmet'
 import { Redirect, Route, Switch } from 'react-router-dom'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import ErrorBoundary from 'js/components/General/ErrorBoundary'
@@ -8,6 +9,7 @@ import SearchPageComponent from 'js/components/Search/SearchPageComponent'
 import SearchPostUninstallView from 'js/components/Search/SearchPostUninstallView'
 import SearchRandomQueryView from 'js/components/Search/SearchRandomQueryView'
 import { SEARCH_PROVIDER_BING, SEARCH_PROVIDER_YAHOO } from 'js/constants'
+import searchFavicon from 'js/assets/logos/search-favicon.png'
 
 const muiTheme = createMuiTheme(defaultSearchTheme)
 
@@ -17,6 +19,10 @@ class SearchApp extends React.Component {
     return (
       <MuiThemeProvider theme={muiTheme}>
         <ErrorBoundary brand={'search'}>
+          <Helmet>
+            <title>Search for a Cause</title>
+            <link rel="icon" href={searchFavicon} />
+          </Helmet>
           <div>
             {/* Redirect all /search/* URLs to /search/ for now. */}
             <Switch>

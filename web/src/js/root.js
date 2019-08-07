@@ -1,5 +1,8 @@
 import React from 'react'
 import { Route, Router, Switch } from 'react-router-dom'
+import { filter } from 'lodash/collection'
+import { get } from 'lodash/object'
+import { Helmet } from 'react-helmet'
 import { browserHistory } from 'js/navigation/navigation'
 import BaseContainer from 'js/components/General/BaseContainer'
 import ErrorBoundary from 'js/components/General/ErrorBoundary'
@@ -71,6 +74,31 @@ class Root extends React.Component {
     return (
       <ErrorBoundary>
         <BaseContainer>
+          <Helmet
+            // Handle a react-helmet bug that doesn't replace or remove
+            // existing favicon <link /> elements when a new favicon is set.
+            // https://github.com/nfl/react-helmet/issues/430
+            onChangeClientState={(newState, addedTags) => {
+              // TODO: clean up
+              try {
+                const linkTags = get(newState, 'linkTags', [])
+                const favicons = filter(linkTags, { rel: 'icon' })
+
+                // Remove all link[rel="icon"] elements except the last one.
+                // This assumes that the last react-helmet link tag in the
+                // array is the one added most recently.
+                for (var i = 0; i < favicons.length - 1; i++) {
+                  let extraFavicon = favicons[i]
+                  const extraFaviconElem = document.querySelector(
+                    `link[rel="icon"][href="${extraFavicon.href}"`
+                  )
+                  extraFaviconElem.parentNode.removeChild(extraFaviconElem)
+                }
+              } catch (e) {
+                console.error(e)
+              }
+            }}
+          />
           <Router history={browserHistory}>
             <Switch>
               <Route path={appPath} component={TheApp} />
