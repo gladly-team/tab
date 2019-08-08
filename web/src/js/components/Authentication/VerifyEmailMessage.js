@@ -1,9 +1,16 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import { logout, sendVerificationEmail } from 'js/authentication/user'
-import { goTo, loginURL } from 'js/navigation/navigation'
+import {
+  goTo,
+  constructUrl,
+  enterUsernameURL,
+  loginURL,
+} from 'js/navigation/navigation'
+import { SEARCH_APP, TAB_APP } from 'js/constants'
 
 class VerifyEmailMessage extends React.Component {
   constructor(props) {
@@ -20,7 +27,16 @@ class VerifyEmailMessage extends React.Component {
       emailResendingInProgress: true,
       emailResendingError: false,
     })
-    const emailSent = await sendVerificationEmail() // TODO: pass "continue" URL
+
+    const { app } = this.props
+    const emailSent = await sendVerificationEmail({
+      // Pass the "app" URL parameter value in the verification email.
+      continueURL: constructUrl(
+        enterUsernameURL,
+        { app: app },
+        { absolute: true }
+      ),
+    })
     if (emailSent) {
       this.setState({
         emailResent: true,
@@ -100,6 +116,14 @@ class VerifyEmailMessage extends React.Component {
       </Paper>
     )
   }
+}
+
+VerifyEmailMessage.propTypes = {
+  app: PropTypes.oneOf([TAB_APP, SEARCH_APP]).isRequired,
+}
+
+VerifyEmailMessage.defaultProps = {
+  app: TAB_APP,
 }
 
 export default VerifyEmailMessage

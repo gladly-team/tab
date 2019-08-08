@@ -255,7 +255,9 @@ class Authentication extends React.Component {
                 <Route
                   exact
                   path="/newtab/auth/verify-email/"
-                  component={VerifyEmailMessage}
+                  render={props => (
+                    <VerifyEmailMessage {...props} user={user} app={app} />
+                  )}
                 />
                 <Route
                   exact
