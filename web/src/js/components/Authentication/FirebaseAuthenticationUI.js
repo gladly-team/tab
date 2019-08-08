@@ -234,6 +234,8 @@ class FirebaseAuthenticationUI extends React.Component {
       // https://github.com/firebase/firebaseui-web#credential-helper
       // https://github.com/firebase/firebaseui-web/blob/bd710448caa34c4a47a2fd578d76be8506d392d8/javascript/widgets/config.js#L83
       credentialHelper: 'none',
+      // TODO: after rolling out separate TOS and PP for search, update
+      //   these based on an "app" parameter.
       // Terms of service URL
       tosUrl: termsOfServiceURL, // TODO: app-specific
       // Privacy policy URL
