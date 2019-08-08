@@ -78,7 +78,7 @@ class Root extends React.Component {
             // Handle a react-helmet bug that doesn't replace or remove
             // existing favicon <link /> elements when a new favicon is set.
             // https://github.com/nfl/react-helmet/issues/430
-            // If we adde a new favicon link element, remove all other favicon
+            // If we add a new favicon link element, remove all other favicon
             // link elements and re-add the new favicon link element.
             onChangeClientState={(newState, addedTags) => {
               // TODO: add tests
