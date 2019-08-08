@@ -5,6 +5,7 @@ import moment from 'moment'
 import MockDate from 'mockdate'
 import { shallow } from 'enzyme'
 import { Route, Switch } from 'react-router-dom'
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import {
   createNewUser,
   redirectToAuthIfNeeded,
@@ -20,6 +21,8 @@ import { sendVerificationEmail } from 'js/authentication/user'
 import { getBrowserExtensionInstallId } from 'js/utils/local-user-data-mgr'
 import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
 import Logo from 'js/components/Logo/Logo'
+import tabTheme from 'js/theme/defaultV1'
+import searchTheme from 'js/theme/searchTheme'
 
 jest.mock('react-router-dom')
 jest.mock('js/authentication/helpers')
@@ -528,5 +531,49 @@ describe('Authentication.js tests', function() {
       .filterWhere(elem => elem.prop('path') === '/newtab/auth/username/')
     const RenderedComponent = routeElem.prop('render')
     expect(shallow(<RenderedComponent />).prop('app')).toEqual('tab')
+  })
+
+  it('uses the "tab" app theme by default', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = ''
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    expect(wrapper.find(MuiThemeProvider).prop('theme')).toEqual(
+      createMuiTheme(tabTheme)
+    )
+  })
+
+  it('uses the "tab" app theme when the "app" URL param value === "tab"', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = '?app=tab'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    expect(wrapper.find(MuiThemeProvider).prop('theme')).toEqual(
+      createMuiTheme(tabTheme)
+    )
+  })
+
+  it('uses the "tab" app theme when the "app" URL param value is invalid', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = '?app=blahblah'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    expect(wrapper.find(MuiThemeProvider).prop('theme')).toEqual(
+      createMuiTheme(tabTheme)
+    )
+  })
+
+  it('uses the "search" app theme when the "app" URL param value === "tab"', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = '?app=search'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    expect(wrapper.find(MuiThemeProvider).prop('theme')).toEqual(
+      createMuiTheme(searchTheme)
+    )
   })
 })

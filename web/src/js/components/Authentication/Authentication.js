@@ -30,11 +30,9 @@ import tabFavicon from 'js/assets/logos/favicon.ico'
 import { parseUrlSearchString, validateAppName } from 'js/utils/utils'
 import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
 import logger from 'js/utils/logger'
+import tabTheme from 'js/theme/defaultV1'
 import searchTheme from 'js/theme/searchTheme'
-import { TAB_APP } from 'js/constants'
-
-// TODO: different theme depending on app
-const defaultTheme = createMuiTheme(searchTheme)
+import { SEARCH_APP, TAB_APP } from 'js/constants'
 
 // Handle the authentication flow:
 //   check if current user is fully authenticated and redirect
@@ -157,6 +155,20 @@ class Authentication extends React.Component {
     // Show a different logo depending on the app for which the user is
     // signing in.
     const app = validateAppName(urlParams.app)
+
+    // Set a different theme depending on the app.
+    let theme = tabTheme
+    switch (app) {
+      case TAB_APP:
+        theme = tabTheme
+        break
+      case SEARCH_APP:
+        theme = searchTheme
+        break
+      default:
+        theme = tabTheme
+    }
+    const defaultTheme = createMuiTheme(theme)
 
     // Whether we are requiring the anonymous user to sign in.
     const isMandatoryAnonymousSignIn = urlParams.mandatory === 'true'
