@@ -297,7 +297,7 @@ describe('EnterUsernameForm tests', () => {
     expect(setUsernameInLocalStorage).toHaveBeenCalledWith('AirplaneLover')
   })
 
-  it('redirects to the app after saving the username', () => {
+  it('redirects to the Tab for a Cause app (by default) after saving the username', () => {
     const EnterUsernameForm = require('js/components/Authentication/EnterUsernameForm')
       .default
     const mockProps = getMockProps()
@@ -321,7 +321,34 @@ describe('EnterUsernameForm tests', () => {
       },
     })
 
-    // TODO: this should be app-specific
     expect(goTo).toHaveBeenCalledWith('/newtab/')
+  })
+
+  it('redirects to the Search for a Cause app (when the "app" prop === "search") after saving the username', () => {
+    const EnterUsernameForm = require('js/components/Authentication/EnterUsernameForm')
+      .default
+    const mockProps = getMockProps()
+    mockProps.app = 'search'
+    const wrapper = mount(<EnterUsernameForm {...mockProps} />)
+
+    // Enter a username
+    const usernameTextField = wrapper.find(
+      '[data-test-id="enter-username-form-username-field"] input'
+    )
+    usernameTextField.instance().value = 'Sunol'
+    const button = wrapper
+      .find('[data-test-id="enter-username-form-button"]')
+      .first()
+    button.simulate('click')
+    __runOnCompleted({
+      setUsername: {
+        user: {
+          username: 'Sunol',
+        },
+        errors: null,
+      },
+    })
+
+    expect(goTo).toHaveBeenCalledWith('/search')
   })
 })

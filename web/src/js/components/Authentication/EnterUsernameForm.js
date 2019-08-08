@@ -7,7 +7,7 @@ import UsernameField from 'js/components/General/UsernameField'
 import SetUsernameMutation from 'js/mutations/SetUsernameMutation'
 import { setUsernameInLocalStorage } from 'js/authentication/user'
 import { checkIfEmailVerified } from 'js/authentication/helpers'
-import { dashboardURL, goTo } from 'js/navigation/navigation'
+import { goTo, dashboardURL, searchBaseURL } from 'js/navigation/navigation'
 import logger from 'js/utils/logger'
 import { SEARCH_APP, TAB_APP } from 'js/constants'
 
@@ -83,7 +83,11 @@ class EnterUsernameForm extends React.Component {
     // Username saved successfully. Set the username in localStorage
     // and redirect to the app.
     setUsernameInLocalStorage(data.user.username)
-    goTo(dashboardURL) // TODO: use app-specific URL
+
+    // Go to a different URL depending on the app.
+    const { app } = this.props
+    const destination = app === SEARCH_APP ? searchBaseURL : dashboardURL
+    goTo(destination)
   }
 
   onMutationError(response) {
