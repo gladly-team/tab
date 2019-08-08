@@ -80,8 +80,7 @@ class Root extends React.Component {
             // https://github.com/nfl/react-helmet/issues/430
             // If we add a new favicon link element, remove all other favicon
             // link elements and re-add the new favicon link element.
-            onChangeClientState={(newState, addedTags) => {
-              // TODO: add tests
+            onChangeClientState={(_, addedTags) => {
               try {
                 // Check if we added any new link[rel="icon"] elements.
                 const newFaviconElems = filter(get(addedTags, 'linkTags', []), {
