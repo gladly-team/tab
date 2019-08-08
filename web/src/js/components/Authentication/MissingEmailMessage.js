@@ -1,34 +1,34 @@
 import React from 'react'
-
-// TODO: use latest MUI
-import Paper from 'material-ui/Paper'
-import RaisedButton from 'material-ui/RaisedButton'
+import Paper from '@material-ui/core/Paper'
+import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
 import { logout } from 'js/authentication/user'
 import { goTo, loginURL } from 'js/navigation/navigation'
 
 class MissingEmailMessage extends React.Component {
   async restartAuthFlow() {
     await logout()
-    goTo(loginURL)
+    goTo(loginURL, null, { keepURLParams: true })
   }
 
   render() {
-    var buttonLabel = 'SIGN IN USING ANOTHER METHOD'
     return (
       <Paper
-        zDepth={1}
+        elevation={1}
         style={{
           padding: 24,
           maxWidth: 400,
           backgroundColor: '#FFF',
         }}
       >
-        <h3>We couldn't sign you in</h3>
-        <p>
+        <Typography variant={'h6'} gutterBottom>
+          We couldn't sign you in
+        </Typography>
+        <Typography variant={'body2'}>
           This can happen when Facebook or Google doesn't have your email
           address on file, which we use to create your account. Please try
           signing in with another method, such as an email and password.
-        </p>
+        </Typography>
 
         <span
           style={{
@@ -36,13 +36,15 @@ class MissingEmailMessage extends React.Component {
             justifyContent: 'flex-end',
             marginTop: 24,
           }}
-          data-test-id="missing-email-message-button-container"
         >
-          <RaisedButton
-            label={buttonLabel}
-            primary
+          <Button
+            data-test-id="missing-email-message-button"
+            color={'primary'}
+            variant={'contained'}
             onClick={this.restartAuthFlow.bind(this)}
-          />
+          >
+            Sign in using another method
+          </Button>
         </span>
       </Paper>
     )
