@@ -1,4 +1,5 @@
 import React, { Suspense, lazy } from 'react'
+import PropTypes from 'prop-types'
 import { Redirect, Route, Switch } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
@@ -65,7 +66,7 @@ class App extends React.Component {
   }
 
   render() {
-    // TODO: pass location to FullPageLoader
+    // TODO: determine the app and pass it to FullPageLoader
     // const { location } = this.props
 
     // @material-ui-1-todo: remove legacy theme provider
@@ -128,5 +129,13 @@ class App extends React.Component {
     )
   }
 }
+
+App.propTypes = {
+  location: PropTypes.shape({
+    search: PropTypes.string.isRequired,
+  }),
+}
+
+App.defaultProps = {}
 
 export default withPageviewTracking(App)
