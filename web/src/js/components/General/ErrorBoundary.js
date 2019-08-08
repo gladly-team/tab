@@ -106,7 +106,7 @@ class ErrorBoundary extends React.Component {
 }
 
 ErrorBoundary.propTypes = {
-  brand: PropTypes.oneOf([TAB_APP, SEARCH_APP]),
+  brand: PropTypes.oneOf([TAB_APP, SEARCH_APP]).isRequired,
   ignoreErrors: PropTypes.bool,
 }
 

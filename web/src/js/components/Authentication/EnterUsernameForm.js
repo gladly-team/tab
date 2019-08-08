@@ -167,7 +167,7 @@ class EnterUsernameForm extends React.Component {
 }
 
 EnterUsernameForm.propTypes = {
-  app: PropTypes.oneOf([TAB_APP, SEARCH_APP]),
+  app: PropTypes.oneOf([TAB_APP, SEARCH_APP]).isRequired,
   user: PropTypes.shape({
     id: PropTypes.string.isRequired,
   }),

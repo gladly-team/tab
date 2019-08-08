@@ -58,7 +58,7 @@ class Logo extends React.Component {
 }
 
 Logo.props = {
-  brand: PropTypes.oneOf([TAB_APP, SEARCH_APP]),
+  brand: PropTypes.oneOf([TAB_APP, SEARCH_APP]).isRequired,
   includeText: PropTypes.bool.isRequired,
   style: PropTypes.object,
   color: PropTypes.oneOf(['purple', 'white']),
