@@ -10,6 +10,7 @@ import SearchPostUninstallView from 'js/components/Search/SearchPostUninstallVie
 import SearchRandomQueryView from 'js/components/Search/SearchRandomQueryView'
 import { SEARCH_PROVIDER_BING, SEARCH_PROVIDER_YAHOO } from 'js/constants'
 import searchFavicon from 'js/assets/logos/search-favicon.png'
+import { SEARCH_APP } from 'js/constants'
 
 const muiTheme = createMuiTheme(defaultSearchTheme)
 
@@ -18,7 +19,7 @@ class SearchApp extends React.Component {
     const { location } = this.props
     return (
       <MuiThemeProvider theme={muiTheme}>
-        <ErrorBoundary brand={'search'}>
+        <ErrorBoundary brand={SEARCH_APP}>
           <Helmet>
             <title>Search for a Cause</title>
             <link rel="icon" href={searchFavicon} />

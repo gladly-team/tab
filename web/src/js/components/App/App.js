@@ -19,6 +19,7 @@ import FullPageLoader from 'js/components/General/FullPageLoader'
 import DashboardView from 'js/components/Dashboard/DashboardView'
 import QuantcastChoiceCMP from 'js/components/General/QuantcastChoiceCMP'
 import tabFavicon from 'js/assets/logos/favicon.ico'
+import { TAB_APP } from 'js/constants'
 
 const AuthenticationView = lazy(() =>
   import('js/components/Authentication/AuthenticationView')
@@ -73,7 +74,7 @@ class App extends React.Component {
     return (
       <MuiThemeProvider theme={muiTheme}>
         <V0MuiThemeProvider muiTheme={legacyMuiTheme}>
-          <ErrorBoundary brand={'tab'}>
+          <ErrorBoundary brand={TAB_APP}>
             <Helmet>
               <title>Tab for a Cause</title>
               <link rel="icon" href={tabFavicon} />
@@ -119,7 +120,7 @@ class App extends React.Component {
                   <Redirect from="*" to="/newtab/" />
                 </Switch>
               </Suspense>
-              <ErrorBoundary ignoreErrors brand={'tab'}>
+              <ErrorBoundary ignoreErrors brand={TAB_APP}>
                 <QuantcastChoiceCMP />
               </ErrorBoundary>
             </div>

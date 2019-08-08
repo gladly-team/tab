@@ -97,6 +97,9 @@ export const ERROR_USER_DOES_NOT_EXIST = 'USER_DOES_NOT_EXIST'
 /**
   Code constants.
 **/
+export const TAB_APP = 'tab'
+export const SEARCH_APP = 'search'
+
 export const CHROME_BROWSER = 'chrome'
 export const FIREFOX_BROWSER = 'firefox'
 export const UNSUPPORTED_BROWSER = 'other'

@@ -27,10 +27,11 @@ import {
 import Logo from 'js/components/Logo/Logo'
 import searchFavicon from 'js/assets/logos/search-favicon.png'
 import tabFavicon from 'js/assets/logos/favicon.ico'
-import { parseUrlSearchString } from 'js/utils/utils'
+import { parseUrlSearchString, validateAppName } from 'js/utils/utils'
 import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
 import logger from 'js/utils/logger'
 import searchTheme from 'js/theme/searchTheme'
+import { TAB_APP } from 'js/constants'
 
 // TODO: different theme depending on app
 const defaultTheme = createMuiTheme(searchTheme)
@@ -155,11 +156,7 @@ class Authentication extends React.Component {
 
     // Show a different logo depending on the app for which the user is
     // signing in.
-    const appQueryParamVal = urlParams.app
-    const app =
-      ['tab', 'search'].indexOf(appQueryParamVal) > -1
-        ? appQueryParamVal
-        : 'tab'
+    const app = validateAppName(urlParams.app)
 
     // Whether we are requiring the anonymous user to sign in.
     const isMandatoryAnonymousSignIn = urlParams.mandatory === 'true'
@@ -182,7 +179,7 @@ class Authentication extends React.Component {
             backgroundColor: '#FAFAFA',
           }}
         >
-          {app === 'tab' ? (
+          {app === TAB_APP ? (
             <Helmet>
               <title>Sign in - Tab for a Cause</title>
               <link rel="icon" href={tabFavicon} />

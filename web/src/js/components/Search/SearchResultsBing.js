@@ -167,11 +167,7 @@ const SearchResultsBing = props => {
           ) : null}
           {data.results.mainline.map(searchResultItemData => {
             return (
-              <ErrorBoundary
-                ignoreErrors
-                brand={'tab'}
-                key={searchResultItemData.key}
-              >
+              <ErrorBoundary ignoreErrors key={searchResultItemData.key}>
                 <SearchResultItem
                   key={searchResultItemData.key}
                   type={searchResultItemData.type}

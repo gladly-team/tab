@@ -9,6 +9,7 @@ import { setUsernameInLocalStorage } from 'js/authentication/user'
 import { checkIfEmailVerified } from 'js/authentication/helpers'
 import { dashboardURL, goTo } from 'js/navigation/navigation'
 import logger from 'js/utils/logger'
+import { SEARCH_APP, TAB_APP } from 'js/constants'
 
 class EnterUsernameForm extends React.Component {
   constructor(props) {
@@ -132,7 +133,7 @@ class EnterUsernameForm extends React.Component {
           otherError={this.state.otherError}
           onKeyPress={this.handleKeyPress.bind(this)}
           label={`Username for ${
-            app === 'search' ? 'Search for a Cause' : 'Tab for a Cause'
+            app === SEARCH_APP ? 'Search for a Cause' : 'Tab for a Cause'
           }`}
           style={{
             display: 'block',
@@ -166,14 +167,14 @@ class EnterUsernameForm extends React.Component {
 }
 
 EnterUsernameForm.propTypes = {
-  app: PropTypes.oneOf(['tab', 'search']),
+  app: PropTypes.oneOf([TAB_APP, SEARCH_APP]),
   user: PropTypes.shape({
     id: PropTypes.string.isRequired,
   }),
 }
 
 EnterUsernameForm.defaultProps = {
-  app: 'tab',
+  app: TAB_APP,
 }
 
 export default EnterUsernameForm
