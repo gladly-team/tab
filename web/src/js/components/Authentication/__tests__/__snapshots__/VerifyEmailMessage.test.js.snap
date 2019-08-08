@@ -12,8 +12,13 @@ exports[`VerifyEmailMessage tests matches expected snapshot 1`] = `
   }
 >
   <WithStyles(Typography)
-    gutterBottom={true}
-    variant="body2"
+    style={
+      Object {
+        "marginBottom": 36,
+        "marginTop": 8,
+      }
+    }
+    variant="body1"
   >
     Please check your email to verify your account.
   </WithStyles(Typography)>

@@ -51,12 +51,14 @@ class VerifyEmailMessage extends React.Component {
         elevation={1}
         style={{
           padding: 24,
-          // padding: '40px 24px',
           maxWidth: 400,
           backgroundColor: '#FFF',
         }}
       >
-        <Typography variant={'body2'} gutterBottom>
+        <Typography
+          variant={'body1'}
+          style={{ marginTop: 8, marginBottom: 36 }}
+        >
           Please check your email to verify your account.
         </Typography>
         <span
