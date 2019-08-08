@@ -20,7 +20,6 @@ import { sendVerificationEmail } from 'js/authentication/user'
 import { getBrowserExtensionInstallId } from 'js/utils/local-user-data-mgr'
 import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
 import Logo from 'js/components/Logo/Logo'
-import EnterUsernameForm from 'js/components/Authentication/EnterUsernameForm'
 
 jest.mock('react-router-dom')
 jest.mock('js/authentication/helpers')
