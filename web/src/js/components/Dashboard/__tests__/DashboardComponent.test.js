@@ -168,8 +168,9 @@ describe('Dashboard component', () => {
     expect(comp.prop('isNewUser')).toBe(false)
   })
 
-  // Disabling test until Enzyme support React.lazy and React.Suspense:
-  // https://github.com/airbnb/enzyme/issues/1917
+  // Disabling test until Enzyme fixes a bug with React.lazy and React.Suspense:
+  // https://github.com/airbnb/enzyme/issues/2200
+
   // it('renders the NewUserTour component when the user recently joined and has not already viewed it', () => {
   //   const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
   //     .default
@@ -432,7 +433,8 @@ describe('Dashboard component', () => {
 })
 
 describe('Dashboard component: campaign / charity spotlight', () => {
-  // TODO: enable when Enzyme supports React.Suspense:
+  // Disabling test until Enzyme fixes a bug with React.lazy and React.Suspense:
+  // https://github.com/airbnb/enzyme/issues/2200
   // https://github.com/airbnb/enzyme/issues/1917
   // it('renders CampaignBase component when the campaign is live and the user has not dismissed it', () => {
   //   const DashboardComponent = require('js/components/Dashboard/DashboardComponent')

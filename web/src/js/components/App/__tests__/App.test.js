@@ -169,3 +169,7 @@ describe('App.js: consent management logic', () => {
     expect(unregisterConsentCallback).toHaveBeenCalled()
   })
 })
+
+// Add Suspense/fallback tests after Enzyme fixes a bug with React.lazy
+// and React.Suspense:
+// https://github.com/airbnb/enzyme/issues/2200
