@@ -1,10 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Paper from 'material-ui/Paper'
+import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
-
-// TODO: use latest MUI
-import RaisedButton from 'material-ui/RaisedButton'
+import Button from '@material-ui/core/Button'
 import Link from 'js/components/General/Link'
 import { constructUrl, loginURL } from 'js/navigation/navigation'
 import { parseUrlSearchString } from 'js/utils/utils'
@@ -24,18 +22,18 @@ class SignInIframeMessage extends React.Component {
     // Whether we are requiring the anonymous user to sign in.
     const showRequiredSignInExplanation = urlParams.mandatory === 'true'
 
-    var buttonLabel = 'SIGN IN'
+    // TODO: different messages per app
     return (
       <Paper
-        zDepth={1}
+        elevation={1}
         style={{
           padding: 24,
-          maxWidth: 400,
+          maxWidth: 340,
           backgroundColor: '#FFF',
           marginBottom: 60,
         }}
       >
-        <Typography variant={'h6'}>
+        <Typography variant={'h6'} gutterBottom>
           {showRequiredSignInExplanation
             ? `Great job so far!`
             : `Let's get started!`}
@@ -70,11 +68,13 @@ class SignInIframeMessage extends React.Component {
             )}
             target="_top"
           >
-            <RaisedButton
+            <Button
               data-test-id={'sign-in-iframe-message-button'}
-              label={buttonLabel}
-              primary
-            />
+              color={'primary'}
+              variant={'contained'}
+            >
+              Sign in
+            </Button>
           </Link>
         </span>
       </Paper>
