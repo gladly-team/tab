@@ -20,6 +20,7 @@ import DashboardView from 'js/components/Dashboard/DashboardView'
 import QuantcastChoiceCMP from 'js/components/General/QuantcastChoiceCMP'
 import tabFavicon from 'js/assets/logos/favicon.ico'
 import { TAB_APP } from 'js/constants'
+import { parseUrlSearchString, validateAppName } from 'js/utils/utils'
 
 const AuthenticationView = lazy(() =>
   import('js/components/Authentication/AuthenticationView')
@@ -67,11 +68,11 @@ class App extends React.Component {
   }
 
   render() {
-    // TODO: determine the app and pass it to FullPageLoader
-    // Get the app for branding purposes (e.g. used in the auth flow).
-    // const { location } = this.props
-    // const urlParams = parseUrlSearchString(location.search)
-    // const app = validateAppName(urlParams.app)
+    // Get the app for branding purposes (e.g. we use the auth flow for
+    // multiple apps).
+    const { location } = this.props
+    const urlParams = parseUrlSearchString(location.search)
+    const app = validateAppName(urlParams.app)
 
     // @material-ui-1-todo: remove legacy theme provider
     return (
@@ -94,7 +95,7 @@ class App extends React.Component {
                 border: 'none',
               }}
             >
-              <Suspense fallback={<FullPageLoader delay={350} />}>
+              <Suspense fallback={<FullPageLoader app={app} delay={350} />}>
                 <Switch>
                   <Route exact path="/newtab/" component={DashboardView} />
                   <Route

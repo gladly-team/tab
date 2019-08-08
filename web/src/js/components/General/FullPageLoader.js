@@ -3,9 +3,10 @@ import PropTypes from 'prop-types'
 import Timeout from 'js/components/General/Timeout'
 import Logo from 'js/components/Logo/Logo'
 import Typography from '@material-ui/core/Typography'
+import { SEARCH_APP, TAB_APP } from 'js/constants'
 
 const FullPageLoader = props => {
-  // TODO: show a different logo depending on the "app" prop
+  const { app } = props
   return (
     <Timeout ms={props.delay}>
       {timedOut =>
@@ -21,7 +22,10 @@ const FullPageLoader = props => {
               boxSizing: 'border-box',
             }}
           >
-            <Logo style={{ height: 40, minHeight: 40, minWidth: 40 }} />
+            <Logo
+              brand={app}
+              style={{ height: 40, minHeight: 40, minWidth: 40 }}
+            />
             <Typography variant={'h5'} style={{ margin: 10 }}>
               Loading...
             </Typography>
@@ -33,7 +37,12 @@ const FullPageLoader = props => {
 }
 
 FullPageLoader.propTypes = {
+  app: PropTypes.oneOf([TAB_APP, SEARCH_APP]).isRequired,
   delay: PropTypes.number.isRequired,
+}
+
+FullPageLoader.defaultProps = {
+  app: TAB_APP,
 }
 
 export default FullPageLoader
