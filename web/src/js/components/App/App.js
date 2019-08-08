@@ -68,7 +68,10 @@ class App extends React.Component {
 
   render() {
     // TODO: determine the app and pass it to FullPageLoader
+    // Get the app for branding purposes (e.g. used in the auth flow).
     // const { location } = this.props
+    // const urlParams = parseUrlSearchString(location.search)
+    // const app = validateAppName(urlParams.app)
 
     // @material-ui-1-todo: remove legacy theme provider
     return (

@@ -24,7 +24,7 @@ beforeEach(() => {
   jest.clearAllMocks()
 })
 
-describe('App', () => {
+describe('App.js: general', () => {
   it('renders without error', () => {
     const App = require('js/components/App/App').default
     const mockProps = getMockProps()
@@ -63,7 +63,9 @@ describe('App', () => {
         .prop('brand')
     ).toEqual('tab')
   })
+})
 
+describe('App.js: consent management logic', () => {
   it('wraps our CMP in an error boundary that ignores caught errors', async () => {
     const App = require('js/components/App/App').default
     const mockProps = getMockProps()
