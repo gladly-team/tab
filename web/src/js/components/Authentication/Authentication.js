@@ -17,10 +17,12 @@ import {
   createNewUser,
 } from 'js/authentication/helpers'
 import {
+  constructUrl,
   goTo,
   replaceUrl,
   authMessageURL,
   dashboardURL,
+  enterUsernameURL,
   missingEmailMessageURL,
   verifyEmailURL,
 } from 'js/navigation/navigation'
@@ -74,6 +76,15 @@ class Authentication extends React.Component {
     return this.props.location.pathname.indexOf('/auth/action/') !== -1
   }
 
+  getApp() {
+    const { location } = this.props
+
+    // FIXME: need to also parse the URL param value for Firebase's
+    // "next" URL after verification.
+    const urlParams = parseUrlSearchString(location.search)
+    return validateAppName(urlParams.app)
+  }
+
   navigateToAuthStep() {
     // Don't do anything on /auth/action/ pages, which include
     // email confirmation links and password reset links.
@@ -113,6 +124,8 @@ class Authentication extends React.Component {
       return
     }
 
+    const app = this.getApp()
+
     // Get or create the user.
     // Important: we expect to call this on every sign-in event,
     // even for anonymous users who already have a user in our
@@ -126,7 +139,14 @@ class Authentication extends React.Component {
         // https://github.com/firebase/firebaseui-web/issues/21
         if (!currentUser.emailVerified) {
           // Ask the user to verify their email.
-          sendVerificationEmail() // TODO: pass "continue" URL
+          sendVerificationEmail({
+            // Pass the "app" URL parameter value in the verification email.
+            continueURL: constructUrl(
+              enterUsernameURL,
+              { app: app },
+              { absolute: true }
+            ),
+          })
             .then(emailSent => {
               goTo(verifyEmailURL, null, { keepURLParams: true })
             })
@@ -150,11 +170,10 @@ class Authentication extends React.Component {
 
   render() {
     const { user, location } = this.props
-    const urlParams = parseUrlSearchString(location.search)
 
     // Show a different logo depending on the app for which the user is
     // signing in.
-    const app = validateAppName(urlParams.app)
+    const app = this.getApp()
 
     // Set a different theme depending on the app.
     let theme = tabTheme
@@ -171,6 +190,7 @@ class Authentication extends React.Component {
     const defaultTheme = createMuiTheme(theme)
 
     // Whether we are requiring the anonymous user to sign in.
+    const urlParams = parseUrlSearchString(location.search)
     const isMandatoryAnonymousSignIn = urlParams.mandatory === 'true'
     const showRequiredSignInExplanation =
       isMandatoryAnonymousSignIn &&

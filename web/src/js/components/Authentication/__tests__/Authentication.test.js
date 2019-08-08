@@ -331,7 +331,7 @@ describe('Authentication.js tests', function() {
     })
   })
 
-  it('after sign-in, send email verification if email is not verified', async () => {
+  it('sends an email verification after sign in if the email is not verified', async () => {
     expect.assertions(2)
 
     // Args for onSignInSuccess
@@ -375,6 +375,150 @@ describe('Authentication.js tests', function() {
     expect(sendVerificationEmail).toHaveBeenCalledTimes(1)
     expect(goTo).toHaveBeenCalledWith(verifyEmailURL, null, {
       keepURLParams: true,
+    })
+  })
+
+  it('sets the "continueURL" in the email verification with URL param "app" === "tab" if the "app" URL param is not specified', async () => {
+    expect.assertions(1)
+
+    // Args for onSignInSuccess
+    const mockFirebaseUserInstance = {
+      displayName: '',
+      email: 'foo@bar.com',
+      emailVerified: false, // Note that email is unverified
+      isAnonymous: false,
+      metadata: {},
+      phoneNumber: null,
+      photoURL: null,
+      providerData: {},
+      providerId: 'some-id',
+      refreshToken: 'xyzxyz',
+      uid: 'abc123',
+    }
+    const mockFirebaseCredential = {}
+    const mockFirebaseDefaultRedirectURL = ''
+
+    createNewUser.mockResolvedValue({
+      id: 'abc123',
+      email: 'foo@bar.com',
+      username: null,
+    })
+
+    sendVerificationEmail.mockImplementation(() => Promise.resolve(true))
+
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = ''
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const component = wrapper.instance()
+
+    // Mock a call from FirebaseUI after user signs in
+    await component.onSignInSuccess(
+      mockFirebaseUserInstance,
+      mockFirebaseCredential,
+      mockFirebaseDefaultRedirectURL
+    )
+
+    expect(sendVerificationEmail).toHaveBeenCalledWith({
+      continueURL:
+        'https://tab-test-env.gladly.io/newtab/auth/username/?app=tab',
+    })
+  })
+
+  it('sets the "continueURL" in the email verification with URL param "app" === "tab" if the "app" URL param === "tab"', async () => {
+    expect.assertions(1)
+
+    // Args for onSignInSuccess
+    const mockFirebaseUserInstance = {
+      displayName: '',
+      email: 'foo@bar.com',
+      emailVerified: false, // Note that email is unverified
+      isAnonymous: false,
+      metadata: {},
+      phoneNumber: null,
+      photoURL: null,
+      providerData: {},
+      providerId: 'some-id',
+      refreshToken: 'xyzxyz',
+      uid: 'abc123',
+    }
+    const mockFirebaseCredential = {}
+    const mockFirebaseDefaultRedirectURL = ''
+
+    createNewUser.mockResolvedValue({
+      id: 'abc123',
+      email: 'foo@bar.com',
+      username: null,
+    })
+
+    sendVerificationEmail.mockImplementation(() => Promise.resolve(true))
+
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = '?app=tab'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const component = wrapper.instance()
+
+    // Mock a call from FirebaseUI after user signs in
+    await component.onSignInSuccess(
+      mockFirebaseUserInstance,
+      mockFirebaseCredential,
+      mockFirebaseDefaultRedirectURL
+    )
+
+    expect(sendVerificationEmail).toHaveBeenCalledWith({
+      continueURL:
+        'https://tab-test-env.gladly.io/newtab/auth/username/?app=tab',
+    })
+  })
+
+  it('sets the "continueURL" in the email verification with URL param "app" === "search" if the "app" URL param === "search"', async () => {
+    expect.assertions(1)
+
+    // Args for onSignInSuccess
+    const mockFirebaseUserInstance = {
+      displayName: '',
+      email: 'foo@bar.com',
+      emailVerified: false, // Note that email is unverified
+      isAnonymous: false,
+      metadata: {},
+      phoneNumber: null,
+      photoURL: null,
+      providerData: {},
+      providerId: 'some-id',
+      refreshToken: 'xyzxyz',
+      uid: 'abc123',
+    }
+    const mockFirebaseCredential = {}
+    const mockFirebaseDefaultRedirectURL = ''
+
+    createNewUser.mockResolvedValue({
+      id: 'abc123',
+      email: 'foo@bar.com',
+      username: null,
+    })
+
+    sendVerificationEmail.mockImplementation(() => Promise.resolve(true))
+
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = '?app=search'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const component = wrapper.instance()
+
+    // Mock a call from FirebaseUI after user signs in
+    await component.onSignInSuccess(
+      mockFirebaseUserInstance,
+      mockFirebaseCredential,
+      mockFirebaseDefaultRedirectURL
+    )
+
+    expect(sendVerificationEmail).toHaveBeenCalledWith({
+      continueURL:
+        'https://tab-test-env.gladly.io/newtab/auth/username/?app=search',
     })
   })
 
