@@ -137,7 +137,7 @@ class EnterUsernameForm extends React.Component {
           }`}
           style={{
             display: 'block',
-            width: 256,
+            width: 280,
             minHeight: 84,
             marginTop: 20,
           }}
@@ -157,6 +157,7 @@ class EnterUsernameForm extends React.Component {
             variant={'contained'}
             disabled={this.state.savingUsernameInProgress}
             onClick={this.submit.bind(this)}
+            style={{ minWidth: 96 }}
           >
             {this.state.savingUsernameInProgress ? 'Saving...' : 'Next'}
           </Button>
