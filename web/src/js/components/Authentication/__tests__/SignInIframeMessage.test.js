@@ -10,6 +10,7 @@ jest.mock('js/utils/utils')
 jest.mock('js/components/General/Link')
 
 const getMockProps = () => ({
+  app: undefined,
   location: {
     search: '',
   },
@@ -57,7 +58,7 @@ describe('SignInIframeMessage tests', () => {
     )
   })
 
-  it('has the expected copy', () => {
+  it('has the expected Tab for a Cause copy by default', () => {
     const SignInIframeMessage = require('js/components/Authentication/SignInIframeMessage')
       .default
     const mockProps = getMockProps()
@@ -77,6 +78,30 @@ describe('SignInIframeMessage tests', () => {
         .text()
     ).toBe(
       `Sign in to customize your new tab page and raise money for your favorite causes.`
+    )
+  })
+
+  it('has Search for a Cause copy when the "app" prop === "search"', () => {
+    const SignInIframeMessage = require('js/components/Authentication/SignInIframeMessage')
+      .default
+    const mockProps = getMockProps()
+    mockProps.app = 'search'
+    const wrapper = shallow(<SignInIframeMessage {...mockProps} />)
+    expect(
+      wrapper
+        .find(Typography)
+        .first()
+        .children()
+        .text()
+    ).toBe(`Let's get started!`)
+    expect(
+      wrapper
+        .find(Typography)
+        .at(1)
+        .children()
+        .text()
+    ).toBe(
+      `Sign in to track your progress as you raise money for your favorite causes.`
     )
   })
 

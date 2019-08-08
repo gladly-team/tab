@@ -491,7 +491,7 @@ describe('Authentication.js tests', function() {
     expect(routeElem.exists()).toBe(true)
   })
 
-  it('passes the "app" URL parameter value to the EnterUsernameForm', () => {
+  it('passes "search" to the EnterUsernameForm "app" prop when the "app" URL param value === "search"', () => {
     const Authentication = require('js/components/Authentication/Authentication')
       .default
     const mockProps = MockProps()
@@ -529,6 +529,48 @@ describe('Authentication.js tests', function() {
       .find(Switch)
       .find(Route)
       .filterWhere(elem => elem.prop('path') === '/newtab/auth/username/')
+    const RenderedComponent = routeElem.prop('render')
+    expect(shallow(<RenderedComponent />).prop('app')).toEqual('tab')
+  })
+
+  it('passes "search" to the to the SignInIframeMessage "app" prop when the URL param value === "search"', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = '?app=search'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/welcome/')
+    const RenderedComponent = routeElem.prop('render')
+    expect(shallow(<RenderedComponent />).prop('app')).toEqual('search')
+  })
+
+  it('passes "tab" to the SignInIframeMessage "app" prop by default', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = ''
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/welcome/')
+    const RenderedComponent = routeElem.prop('render')
+    expect(shallow(<RenderedComponent />).prop('app')).toEqual('tab')
+  })
+
+  it('passes "tab" to the SignInIframeMessage "app" prop when the "app" URL param value is invalid', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = '?app=blahblah'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/welcome/')
     const RenderedComponent = routeElem.prop('render')
     expect(shallow(<RenderedComponent />).prop('app')).toEqual('tab')
   })

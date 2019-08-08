@@ -247,7 +247,9 @@ class Authentication extends React.Component {
                 <Route
                   exact
                   path="/newtab/auth/welcome/"
-                  component={SignInIframeMessage}
+                  render={props => (
+                    <SignInIframeMessage {...props} user={user} app={app} />
+                  )}
                 />
                 <Route
                   exact

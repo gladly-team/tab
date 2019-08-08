@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button'
 import Link from 'js/components/General/Link'
 import { constructUrl, loginURL } from 'js/navigation/navigation'
 import { parseUrlSearchString } from 'js/utils/utils'
+import { SEARCH_APP, TAB_APP } from 'js/constants'
 
 // This view primarily exists as an intermediary to open
 // the authentication page outside of an iframe, because
@@ -16,7 +17,7 @@ import { parseUrlSearchString } from 'js/utils/utils'
 // the page.
 class SignInIframeMessage extends React.Component {
   render() {
-    const { location: { search = '' } = {} } = this.props
+    const { app, location: { search = '' } = {} } = this.props
     const urlParams = parseUrlSearchString(search)
 
     // Whether we are requiring the anonymous user to sign in.
@@ -47,8 +48,9 @@ class SignInIframeMessage extends React.Component {
           </Typography>
         ) : (
           <Typography variant={'body2'}>
-            Sign in to customize your new tab page and raise money for your
-            favorite causes.
+            {app === SEARCH_APP
+              ? 'Sign in to track your progress as you raise money for your favorite causes.'
+              : 'Sign in to customize your new tab page and raise money for your favorite causes.'}
           </Typography>
         )}
         <span
@@ -83,9 +85,14 @@ class SignInIframeMessage extends React.Component {
 }
 
 SignInIframeMessage.propTypes = {
+  app: PropTypes.oneOf([TAB_APP, SEARCH_APP]).isRequired,
   location: PropTypes.shape({
     search: PropTypes.string.isRequired,
   }),
+}
+
+SignInIframeMessage.defaultProps = {
+  app: TAB_APP,
 }
 
 export default SignInIframeMessage
