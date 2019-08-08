@@ -5,7 +5,6 @@ import { mount, shallow } from 'enzyme'
 import toJson from 'enzyme-to-json'
 import { logout, sendVerificationEmail } from 'js/authentication/user'
 import { goTo, loginURL } from 'js/navigation/navigation'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 
 jest.mock('js/authentication/user')
 jest.mock('js/navigation/navigation')
@@ -20,17 +19,9 @@ describe('VerifyEmailMessage tests', function() {
   it('restarts the auth flow when clicking cancel button', done => {
     const VerifyEmailMessage = require('js/components/Authentication/VerifyEmailMessage')
       .default
-
-    // @material-ui-1-todo: remove MuiThemeProvider wrapper
-    const wrapper = mount(
-      <MuiThemeProvider>
-        <VerifyEmailMessage />
-      </MuiThemeProvider>
-    )
-
-    // @material-ui-1-todo: use specific selector
+    const wrapper = mount(<VerifyEmailMessage />)
     const button = wrapper
-      .find('[data-test-id="verify-email-message-button-container"] button')
+      .find('[data-test-id="verify-email-message-cancel-button"]')
       .first()
     button.simulate('click')
 
@@ -38,7 +29,7 @@ describe('VerifyEmailMessage tests', function() {
     // https://stackoverflow.com/a/43855794/1332513
     setImmediate(() => {
       expect(logout).toHaveBeenCalled()
-      expect(goTo).toHaveBeenCalledWith(loginURL)
+      expect(goTo).toHaveBeenCalledWith(loginURL, null, { keepURLParams: true })
       done()
     })
   })
@@ -46,17 +37,9 @@ describe('VerifyEmailMessage tests', function() {
   it('the "resend email" button calls to send a new verification email', done => {
     const VerifyEmailMessage = require('js/components/Authentication/VerifyEmailMessage')
       .default
-
-    // @material-ui-1-todo: remove MuiThemeProvider wrapper
-    const wrapper = mount(
-      <MuiThemeProvider>
-        <VerifyEmailMessage />
-      </MuiThemeProvider>
-    )
-
-    // @material-ui-1-todo: use specific selector
+    const wrapper = mount(<VerifyEmailMessage />)
     const button = wrapper
-      .find('[data-test-id="verify-email-message-button-container"] button')
+      .find('[data-test-id="verify-email-message-resend-button"]')
       .last()
     button.simulate('click')
 

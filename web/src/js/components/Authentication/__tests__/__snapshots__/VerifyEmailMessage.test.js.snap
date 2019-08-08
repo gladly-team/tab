@@ -1,9 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`VerifyEmailMessage tests matches expected snapshot 1`] = `
-<Paper
-  circle={false}
-  rounded={true}
+<WithStyles(Paper)
+  elevation={1}
   style={
     Object {
       "backgroundColor": "#FFF",
@@ -11,14 +10,14 @@ exports[`VerifyEmailMessage tests matches expected snapshot 1`] = `
       "padding": 24,
     }
   }
-  transitionEnabled={true}
-  zDepth={1}
 >
-  <p>
+  <WithStyles(Typography)
+    gutterBottom={true}
+    variant="body2"
+  >
     Please check your email to verify your account.
-  </p>
+  </WithStyles(Typography)>
   <span
-    data-test-id="verify-email-message-button-container"
     style={
       Object {
         "display": "flex",
@@ -27,29 +26,28 @@ exports[`VerifyEmailMessage tests matches expected snapshot 1`] = `
       }
     }
   >
-    <RaisedButton
-      disabled={false}
-      fullWidth={false}
-      label="CANCEL"
-      labelPosition="after"
+    <WithStyles(Button)
+      color="default"
+      data-test-id="verify-email-message-cancel-button"
       onClick={[Function]}
-      primary={false}
-      secondary={false}
       style={
         Object {
           "marginRight": 8,
         }
       }
-    />
-    <RaisedButton
+      variant="contained"
+    >
+      Cancel
+    </WithStyles(Button)>
+    <WithStyles(Button)
+      color="default"
+      data-test-id="verify-email-message-resend-button"
       disabled={false}
-      fullWidth={false}
-      label="RESEND EMAIL"
-      labelPosition="after"
       onClick={[Function]}
-      primary={true}
-      secondary={false}
-    />
+      variant="contained"
+    >
+      Resend email
+    </WithStyles(Button)>
   </span>
-</Paper>
+</WithStyles(Paper)>
 `;
