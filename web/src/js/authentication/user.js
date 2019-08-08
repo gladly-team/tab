@@ -238,14 +238,14 @@ export const logout = async () => {
  * @return {Promise<Boolean>}  A promise that resolves into a boolean,
  *   whether or not the email was sent successfully.
  */
-const sendFirebaseVerificationEmail = async firebaseUser => {
+const sendFirebaseVerificationEmail = async (firebaseUser, { continueURL }) => {
   return new Promise((resolve, reject) => {
     try {
       // https://firebase.google.com/docs/auth/web/manage-users#send_a_user_a_verification_email
       firebaseUser
         .sendEmailVerification({
-          // The "continue" URL after verifying.
-          url: absoluteUrl(enterUsernameURL), // TODO: make app-specific
+          // The "continue" URL after verifying. It must be absolute.
+          url: continueURL,
         })
         .then(() => {
           resolve(true)
@@ -265,7 +265,9 @@ const sendFirebaseVerificationEmail = async firebaseUser => {
  * @return {Promise<Boolean>}  A promise that resolves into a boolean,
  *   whether or not the email was sent successfully.
  */
-export const sendVerificationEmail = async () => {
+export const sendVerificationEmail = async ({
+  continueURL = absoluteUrl(enterUsernameURL),
+} = {}) => {
   try {
     const authUser = await getCurrentFirebaseUser()
 
@@ -276,7 +278,9 @@ export const sendVerificationEmail = async () => {
     }
 
     // Send the email.
-    const emailSent = await sendFirebaseVerificationEmail(authUser)
+    const emailSent = await sendFirebaseVerificationEmail(authUser, {
+      continueURL,
+    })
     return emailSent
   } catch (e) {
     logger.error(e)
