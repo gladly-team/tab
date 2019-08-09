@@ -23,7 +23,6 @@ class SignInIframeMessage extends React.Component {
     // Whether we are requiring the anonymous user to sign in.
     const showRequiredSignInExplanation = urlParams.mandatory === 'true'
 
-    // TODO: different messages per app
     return (
       <Paper
         elevation={1}
