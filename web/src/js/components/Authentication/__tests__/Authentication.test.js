@@ -677,6 +677,36 @@ describe('Authentication.js tests', function() {
     expect(shallow(<RenderedComponent />).prop('app')).toEqual('tab')
   })
 
+  it('passes "search" to the VerifyEmailMessage "app" prop when the "app" URL param value does not exist but the continueUrl value has ?app=search', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search =
+      '?foo=bar&continueUrl=https%3A%2F%2Ftab.gladly.io%2Fnewtab%2Fauth%2Fusername%2F%3Fapp%3Dsearch%26lang%3Den'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/verify-email/')
+    const RenderedComponent = routeElem.prop('render')
+    expect(shallow(<RenderedComponent />).prop('app')).toEqual('search')
+  })
+
+  it('passes "tab" to the VerifyEmailMessage "app" prop when the "app" URL param value does not exist but the continueUrl value has ?app=tab', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search =
+      '?foo=bar&continueUrl=https%3A%2F%2Ftab.gladly.io%2Fnewtab%2Fauth%2Fusername%2F%3Fapp%3Dtab%26lang%3Den'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/verify-email/')
+    const RenderedComponent = routeElem.prop('render')
+    expect(shallow(<RenderedComponent />).prop('app')).toEqual('tab')
+  })
+
   it('passes "search" to the EnterUsernameForm "app" prop when the "app" URL param value === "search"', () => {
     const Authentication = require('js/components/Authentication/Authentication')
       .default
@@ -719,6 +749,36 @@ describe('Authentication.js tests', function() {
     expect(shallow(<RenderedComponent />).prop('app')).toEqual('tab')
   })
 
+  it('passes "search" to the EnterUsernameForm "app" prop when the "app" URL param value does not exist but the continueUrl value has ?app=search', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search =
+      '?foo=bar&continueUrl=https%3A%2F%2Ftab.gladly.io%2Fnewtab%2Fauth%2Fusername%2F%3Fapp%3Dsearch%26lang%3Den'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/username/')
+    const RenderedComponent = routeElem.prop('render')
+    expect(shallow(<RenderedComponent />).prop('app')).toEqual('search')
+  })
+
+  it('passes "tab" to the EnterUsernameForm "app" prop when the "app" URL param value does not exist but the continueUrl value has ?app=tab', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search =
+      '?foo=bar&continueUrl=https%3A%2F%2Ftab.gladly.io%2Fnewtab%2Fauth%2Fusername%2F%3Fapp%3Dtab%26lang%3Den'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/username/')
+    const RenderedComponent = routeElem.prop('render')
+    expect(shallow(<RenderedComponent />).prop('app')).toEqual('tab')
+  })
+
   it('passes "search" to the to the SignInIframeMessage "app" prop when the URL param value === "search"', () => {
     const Authentication = require('js/components/Authentication/Authentication')
       .default
@@ -752,6 +812,36 @@ describe('Authentication.js tests', function() {
       .default
     const mockProps = MockProps()
     mockProps.location.search = '?app=blahblah'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/welcome/')
+    const RenderedComponent = routeElem.prop('render')
+    expect(shallow(<RenderedComponent />).prop('app')).toEqual('tab')
+  })
+
+  it('passes "search" to the SignInIframeMessage "app" prop when the "app" URL param value does not exist but the continueUrl value has ?app=search', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search =
+      '?foo=bar&continueUrl=https%3A%2F%2Ftab.gladly.io%2Fnewtab%2Fauth%2Fusername%2F%3Fapp%3Dsearch%26lang%3Den'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/welcome/')
+    const RenderedComponent = routeElem.prop('render')
+    expect(shallow(<RenderedComponent />).prop('app')).toEqual('search')
+  })
+
+  it('passes "tab" to the SignInIframeMessage "app" prop when the "app" URL param value does not exist but the continueUrl value has ?app=tab', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search =
+      '?foo=bar&continueUrl=https%3A%2F%2Ftab.gladly.io%2Fnewtab%2Fauth%2Fusername%2F%3Fapp%3Dtab%26lang%3Den'
     const wrapper = shallow(<Authentication {...mockProps} />)
     const routeElem = wrapper
       .find(Switch)

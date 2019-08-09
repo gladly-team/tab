@@ -78,11 +78,21 @@ class Authentication extends React.Component {
 
   getApp() {
     const { location } = this.props
-
-    // FIXME: need to also parse the URL param value for Firebase's
-    // "next" URL after verification.
     const urlParams = parseUrlSearchString(location.search)
-    return validateAppName(urlParams.app)
+
+    // To determine the app, we also need to check the "app" URL
+    // parameter value in the "continueUrl" parameter for when users
+    // verify their email via Firebase.
+    let firebaseContinueURLAppVal = null
+    try {
+      const continueURL = urlParams.continueUrl
+      if (continueURL) {
+        firebaseContinueURLAppVal = new URL(continueURL).searchParams.get('app')
+      }
+    } catch (e) {
+      console.error(e)
+    }
+    return validateAppName(urlParams.app || firebaseContinueURLAppVal)
   }
 
   navigateToAuthStep() {
