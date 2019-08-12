@@ -138,9 +138,7 @@ export const accountURL = '/newtab/account/'
 
 // Search
 export const searchBaseURL = '/search'
-
-// TODO: for convenience, make '/search/auth/' redirect to
-//   /newtab/auth/?app=search
+export const searchAuthURL = '/search/auth/'
 
 // Homepage
 

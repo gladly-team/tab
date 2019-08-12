@@ -5,6 +5,7 @@ import { Redirect, Route, Switch } from 'react-router-dom'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import ErrorBoundary from 'js/components/General/ErrorBoundary'
 import defaultSearchTheme from 'js/theme/searchTheme'
+import SearchAuthRedirect from 'js/components/Search/SearchAuthRedirect'
 import SearchPageComponent from 'js/components/Search/SearchPageComponent'
 import SearchPostUninstallView from 'js/components/Search/SearchPostUninstallView'
 import SearchRandomQueryView from 'js/components/Search/SearchRandomQueryView'
@@ -52,6 +53,11 @@ class SearchApp extends React.Component {
                 exact
                 path="/search/uninstalled/"
                 component={SearchPostUninstallView}
+              />
+              <Route
+                exact
+                path="/search/auth/"
+                component={SearchAuthRedirect}
               />
               <Route
                 exact
