@@ -128,20 +128,29 @@ export const isSearchExtensionInstalled = () => {
     window,
     'searchforacause.extension.isInstalled'
   )
-  let isSearchFromExt = false
+  let isInstalled = false
   if (!detectedExtPreviously) {
-    const searchSrc = getUrlParameters()['src']
+    const urlParams = getUrlParameters()
+    const searchSrc = urlParams.src
     const browser = detectSupportedBrowser()
-    isSearchFromExt =
+    const isSearchFromExt =
       (browser === CHROME_BROWSER &&
         searchSrc === SEARCH_SRC_CHROME_EXTENSION) ||
       (browser === FIREFOX_BROWSER &&
         searchSrc === SEARCH_SRC_FIREFOX_EXTENSION)
-    if (isSearchFromExt) {
+
+    // If there is no search query, let's say the extension is
+    // installed even if we're not sure. This avoids showing the
+    // "Add extension" button at inopportune times, like right after
+    // we send the user to the search page after sign-in without any
+    // URL parameter values set.
+    const hasSearchQuery = !!urlParams.q
+    isInstalled = !hasSearchQuery || isSearchFromExt
+    if (isInstalled) {
       set(window, 'searchforacause.extension.isInstalled', true)
     }
   }
-  return detectedExtPreviously || isSearchFromExt
+  return detectedExtPreviously || isInstalled
 }
 
 /**
