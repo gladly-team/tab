@@ -24,6 +24,7 @@ import {
   dashboardURL,
   enterUsernameURL,
   missingEmailMessageURL,
+  searchBaseURL,
   verifyEmailURL,
 } from 'js/navigation/navigation'
 import Logo from 'js/components/Logo/Logo'
@@ -111,7 +112,9 @@ class Authentication extends React.Component {
 
     // The user is fully authed, so go to the dashboard.
     if (!redirected && !stayOnAuthPage) {
-      replaceUrl(dashboardURL)
+      const app = this.getApp()
+      const destinationUrl = app === SEARCH_APP ? searchBaseURL : dashboardURL
+      replaceUrl(destinationUrl)
     }
   }
 

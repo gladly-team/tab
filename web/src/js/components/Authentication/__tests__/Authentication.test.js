@@ -15,6 +15,7 @@ import {
   replaceUrl,
   dashboardURL,
   missingEmailMessageURL,
+  searchBaseURL,
   verifyEmailURL,
 } from 'js/navigation/navigation'
 import { sendVerificationEmail } from 'js/authentication/user'
@@ -221,7 +222,7 @@ describe('Authentication.js tests', function() {
     )
   })
 
-  it('redirects to the app if the user is fully authenticated', () => {
+  it('redirects to the app (Tab for a Cause, by default) if the user is fully authenticated', () => {
     expect.assertions(1)
 
     // User is fully authed.
@@ -231,6 +232,34 @@ describe('Authentication.js tests', function() {
       .default
     const mockProps = MockProps()
     mockProps.location.search = ''
+    shallow(<Authentication {...mockProps} />)
+    expect(replaceUrl).toHaveBeenCalledWith(dashboardURL)
+  })
+
+  it('redirects to Search for a Cause if the user is fully authenticated and the "app" URL param === "search"', () => {
+    expect.assertions(1)
+
+    // User is fully authed.
+    redirectToAuthIfNeeded.mockReturnValue(false)
+
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = '?app=search'
+    shallow(<Authentication {...mockProps} />)
+    expect(replaceUrl).toHaveBeenCalledWith(searchBaseURL)
+  })
+
+  it('redirects to Tab for a Cause if the user is fully authenticated and the "app" URL param is some invalid value', () => {
+    expect.assertions(1)
+
+    // User is fully authed.
+    redirectToAuthIfNeeded.mockReturnValue(false)
+
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = '?app=foobar'
     shallow(<Authentication {...mockProps} />)
     expect(replaceUrl).toHaveBeenCalledWith(dashboardURL)
   })
