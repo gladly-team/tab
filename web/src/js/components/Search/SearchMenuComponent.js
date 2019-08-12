@@ -6,11 +6,14 @@ import {
   MuiThemeProvider,
   withStyles,
 } from '@material-ui/core/styles'
+import Button from '@material-ui/core/Button'
 import CircleIcon from '@material-ui/icons/Lens'
 import theme from 'js/theme/searchTheme'
+import Link from 'js/components/General/Link'
 import MoneyRaised from 'js/components/MoneyRaised/MoneyRaisedContainer'
 import Hearts from 'js/components/Search/SearchHeartsContainer'
 import SettingsButton from 'js/components/Dashboard/SettingsButtonComponent'
+import { searchAuthURL } from 'js/navigation/navigation'
 
 const defaultTheme = createMuiTheme(theme)
 
@@ -28,9 +31,13 @@ const styles = {
 const menuFontSize = 22
 
 const SearchMenuComponent = props => {
-  // TODO: use isSearchExtensionInstalled
-  const { app, classes, style, user } = props
+  const { app, classes, isSearchExtensionInstalled, style, user } = props
   const userExists = !!user
+
+  // We only want to show the sign in button if the user is
+  // not signed in and has already installed the extension.
+  // Adding the extension is a higher priority.
+  const showSignInButton = !userExists && isSearchExtensionInstalled
   return (
     <MuiThemeProvider
       theme={{
@@ -74,7 +81,7 @@ const SearchMenuComponent = props => {
         )}
       >
         <MoneyRaised app={app} />
-        {userExists ? (
+        {userExists || showSignInButton ? (
           <div
             style={{
               display: 'flex',
@@ -89,8 +96,22 @@ const SearchMenuComponent = props => {
                 root: classes.circleIcon,
               }}
             />
-            <Hearts app={app} user={user} showMaxHeartsFromSearchesMessage />
-            <SettingsButton isUserAnonymous={false} />
+            {userExists ? (
+              <>
+                <Hearts
+                  app={app}
+                  user={user}
+                  showMaxHeartsFromSearchesMessage
+                />
+                <SettingsButton isUserAnonymous={false} />
+              </>
+            ) : showSignInButton ? (
+              <Link to={searchAuthURL} data-test-id={'search-sign-in-link'}>
+                <Button color={'primary'} variant={'contained'}>
+                  Sign in
+                </Button>
+              </Link>
+            ) : null}
           </div>
         ) : null}
       </div>
