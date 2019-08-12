@@ -83,12 +83,15 @@ SearchMenuQuery.propTypes = {
     isAnonymous: PropTypes.bool,
     emailVerified: PropTypes.bool,
   }),
+  isSearchExtensionInstalled: PropTypes.bool.isRequired,
   location: PropTypes.shape({
     search: PropTypes.string.isRequired,
   }),
 }
 
-SearchMenuQuery.defaultProps = {}
+SearchMenuQuery.defaultProps = {
+  isSearchExtensionInstalled: true,
+}
 
 export default withUser({
   redirectToAuthIfIncomplete: false,

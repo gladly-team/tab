@@ -28,6 +28,7 @@ const styles = {
 const menuFontSize = 22
 
 const SearchMenuComponent = props => {
+  // TODO: use isSearchExtensionInstalled
   const { app, classes, style, user } = props
   const userExists = !!user
   return (
@@ -102,12 +103,14 @@ SearchMenuComponent.displayName = 'SearchMenuComponent'
 SearchMenuComponent.propTypes = {
   app: PropTypes.shape({}).isRequired,
   classes: PropTypes.object.isRequired,
+  isSearchExtensionInstalled: PropTypes.bool.isRequired,
   style: PropTypes.object,
   // May not exist if the user is not signed in.
   user: PropTypes.shape({}),
 }
 
 SearchMenuComponent.defaultProps = {
+  isSearchExtensionInstalled: true,
   style: {},
 }
 

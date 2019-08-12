@@ -124,4 +124,48 @@ describe('SearchMenuQuery', () => {
       .default
     expect(wrapper.find(SearchMenuContainer).length).toBe(0)
   })
+
+  it('passes the "isSearchExtensionInstalled" prop to the SearchMenuContainer', () => {
+    const fakeProps = {
+      app: {
+        some: 'value',
+      },
+      user: {
+        id: 'abc123xyz456',
+        vc: 233,
+      },
+    }
+    const { QueryRenderer } = require('react-relay')
+    QueryRenderer.__setQueryResponse({
+      error: null,
+      props: fakeProps,
+      retry: jest.fn(),
+    })
+
+    const SearchMenuQuery = require('js/components/Search/SearchMenuQuery')
+      .default
+    const wrapper = mount(
+      <SearchMenuQuery
+        isSearchExtensionInstalled={false}
+        location={{
+          search: '?q=tacos',
+        }}
+      />
+    )
+    const SearchMenuContainer = require('js/components/Search/SearchMenuContainer')
+      .default
+    expect(
+      wrapper.find(SearchMenuContainer).prop('isSearchExtensionInstalled')
+    ).toEqual(false)
+    wrapper.setProps({ isSearchExtensionInstalled: true })
+    expect(
+      wrapper.find(SearchMenuContainer).prop('isSearchExtensionInstalled')
+    ).toEqual(true)
+
+    // By default, pass that the search extension is installed.
+    wrapper.setProps({ isSearchExtensionInstalled: undefined })
+    expect(
+      wrapper.find(SearchMenuContainer).prop('isSearchExtensionInstalled')
+    ).toEqual(true)
+  })
 })

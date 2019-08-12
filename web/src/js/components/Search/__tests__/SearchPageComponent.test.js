@@ -19,6 +19,7 @@ import {
   searchBetaFeedback,
 } from 'js/navigation/navigation'
 import { externalRedirect } from 'js/navigation/utils'
+import SearchMenuQuery from 'js/components/Search/SearchMenuQuery'
 import SearchResults from 'js/components/Search/SearchResults'
 import SearchResultsQueryBing from 'js/components/Search/SearchResultsQueryBing'
 import Tabs from '@material-ui/core/Tabs'
@@ -384,6 +385,35 @@ describe('Search page component', () => {
         .render()
         .text()
     ).toEqual('Feedback')
+  })
+
+  it('includes the SearchMenuQuery component', () => {
+    isSearchPageEnabled.mockReturnValue(true)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    const elem = wrapper.find(SearchMenuQuery)
+    expect(elem.exists()).toEqual(true)
+  })
+
+  it('passes the extension install state to the SearchMenuQuery component', () => {
+    isSearchPageEnabled.mockReturnValue(true)
+    const SearchPageComponent = require('js/components/Search/SearchPageComponent')
+      .default
+    const mockProps = getMockProps()
+
+    isSearchExtensionInstalled.mockReturnValue(false)
+    const wrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(
+      wrapper.find(SearchMenuQuery).prop('isSearchExtensionInstalled')
+    ).toEqual(false)
+
+    isSearchExtensionInstalled.mockReturnValue(true)
+    const newWrapper = shallow(<SearchPageComponent {...mockProps} />).dive()
+    expect(
+      newWrapper.find(SearchMenuQuery).prop('isSearchExtensionInstalled')
+    ).toEqual(true)
   })
 })
 

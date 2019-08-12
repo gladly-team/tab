@@ -366,7 +366,9 @@ class SearchPage extends React.Component {
               >
                 <Button color={'primary'}>Feedback</Button>
               </Link>
-              <SearchMenuQuery />
+              <SearchMenuQuery
+                isSearchExtensionInstalled={isSearchExtensionInstalled}
+              />
             </div>
           </div>
           <Tabs
