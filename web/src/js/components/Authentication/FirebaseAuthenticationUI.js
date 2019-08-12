@@ -6,8 +6,10 @@ import { FirebaseAuth } from 'react-firebaseui'
 import { Route } from 'react-router-dom'
 import FirebaseAuthenticationUIAction from 'js/components/Authentication/FirebaseAuthenticationUIAction'
 import {
+  constructUrl,
   dashboardURL,
   privacyPolicyURL,
+  searchBaseURL,
   termsOfServiceURL,
 } from 'js/navigation/navigation'
 import {
@@ -18,6 +20,7 @@ import {
 import logger from 'js/utils/logger'
 import environment from 'js/relay-env'
 import MergeIntoExistingUserMutation from 'js/mutations/MergeIntoExistingUserMutation'
+import { SEARCH_APP, TAB_APP } from 'js/constants'
 
 class FirebaseAuthenticationUI extends React.Component {
   constructor(props) {
@@ -133,13 +136,19 @@ class FirebaseAuthenticationUI extends React.Component {
   }
 
   configureFirebaseUI() {
+    const { app } = this.props
+
     // Configure FirebaseUI.
     // https://github.com/firebase/firebaseui-web#example-with-all-parameters-used
     this.uiConfig = {
       // Either 'popup' or 'redirect'
       signInFlow: 'popup',
-      // Redirect path after successful sign in, or a callbacks.signInSuccess function
-      signInSuccessUrl: dashboardURL,
+      // Redirect to the appropriate app after a successful third-party
+      // sign-in.
+      signInSuccessUrl:
+        app === SEARCH_APP
+          ? constructUrl(searchBaseURL, null, { absolute: true })
+          : constructUrl(dashboardURL, null, { absolute: true }),
       // Auth providers
       // https://github.com/firebase/firebaseui-web#configure-oauth-providers
       signInOptions: [
@@ -258,12 +267,14 @@ class FirebaseAuthenticationUI extends React.Component {
 }
 
 FirebaseAuthenticationUI.propTypes = {
+  app: PropTypes.oneOf([TAB_APP, SEARCH_APP]).isRequired,
   onSignInSuccess: PropTypes.func.isRequired,
   children: PropTypes.element,
 }
 
 // https://github.com/facebook/react/issues/6653
 FirebaseAuthenticationUI.defaultProps = {
+  app: TAB_APP,
   onSignInSuccess: () => {},
 }
 

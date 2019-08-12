@@ -635,6 +635,47 @@ describe('Authentication.js tests', function() {
     expect(routeElem.exists()).toBe(true)
   })
 
+  it('passes "tab" to the FirebaseAuthenticationUI "app" prop by default', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/')
+    const RenderedComponent = routeElem.prop('render')
+    expect(shallow(<RenderedComponent />).prop('app')).toEqual('tab')
+  })
+
+  it('passes "search" to the FirebaseAuthenticationUI "app" prop when the "app" URL param value === "search"', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = '?app=search'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/')
+    const RenderedComponent = routeElem.prop('render')
+    expect(shallow(<RenderedComponent />).prop('app')).toEqual('search')
+  })
+
+  it('passes "tab" to the FirebaseAuthenticationUI "app" prop when the "app" URL param value === "tab"', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = '?app=tab'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/')
+    const RenderedComponent = routeElem.prop('render')
+    expect(shallow(<RenderedComponent />).prop('app')).toEqual('tab')
+  })
+
   it('passes "search" to the VerifyEmailMessage "app" prop when the "app" URL param value === "search"', () => {
     const Authentication = require('js/components/Authentication/Authentication')
       .default

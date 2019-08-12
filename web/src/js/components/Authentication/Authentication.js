@@ -295,6 +295,7 @@ class Authentication extends React.Component {
                       {...props}
                       onSignInSuccess={this.onSignInSuccess.bind(this)}
                       user={user}
+                      app={app}
                     />
                   )}
                 />
