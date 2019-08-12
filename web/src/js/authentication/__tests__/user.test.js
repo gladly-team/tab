@@ -341,7 +341,7 @@ describe('getUserToken tests', () => {
 
 describe('sendVerificationEmail tests', () => {
   it('works as expected', async () => {
-    expect.assertions(3)
+    expect.assertions(2)
     const mockSendEmailVerification = jest.fn(() => Promise.resolve())
 
     // A user must exist to be able to send a verification email.
@@ -358,12 +358,57 @@ describe('sendVerificationEmail tests', () => {
     const sendVerificationEmail = require('js/authentication/user')
       .sendVerificationEmail
     const response = await sendVerificationEmail()
+    expect(mockSendEmailVerification).toHaveBeenCalledTimes(1)
+    expect(response).toBe(true)
+  })
+
+  it('uses the "enterUsernameURL" for Tab for a Cause as the default "continueURL"', async () => {
+    expect.assertions(1)
+    const mockSendEmailVerification = jest.fn(() => Promise.resolve())
+
+    // A user must exist to be able to send a verification email.
+    const __setFirebaseUser = require('firebase/app').__setFirebaseUser
+    __setFirebaseUser({
+      uid: 'xyz987',
+      email: 'foo@example.com',
+      isAnonymous: false,
+      emailVerified: true,
+      getIdToken: jest.fn(() => 'fake-token-123'),
+      sendEmailVerification: mockSendEmailVerification,
+    })
+
+    const sendVerificationEmail = require('js/authentication/user')
+      .sendVerificationEmail
+    await sendVerificationEmail()
     expect(mockSendEmailVerification).toHaveBeenCalledWith({
       // Make sure post-verification page redirect is correct.
       url: absoluteUrl(enterUsernameURL),
     })
-    expect(mockSendEmailVerification).toHaveBeenCalledTimes(1)
-    expect(response).toBe(true)
+  })
+
+  it('accepts a custom "continueURL"', async () => {
+    expect.assertions(1)
+    const mockSendEmailVerification = jest.fn(() => Promise.resolve())
+
+    // A user must exist to be able to send a verification email.
+    const __setFirebaseUser = require('firebase/app').__setFirebaseUser
+    __setFirebaseUser({
+      uid: 'xyz987',
+      email: 'foo@example.com',
+      isAnonymous: false,
+      emailVerified: true,
+      getIdToken: jest.fn(() => 'fake-token-123'),
+      sendEmailVerification: mockSendEmailVerification,
+    })
+
+    const sendVerificationEmail = require('js/authentication/user')
+      .sendVerificationEmail
+    await sendVerificationEmail({
+      continueURL: 'https://example.com/some/thing/',
+    })
+    expect(mockSendEmailVerification).toHaveBeenCalledWith({
+      url: absoluteUrl('https://example.com/some/thing/'),
+    })
   })
 
   it('fails if no user exists', async () => {

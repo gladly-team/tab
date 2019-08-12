@@ -1,12 +1,30 @@
 import { createBrowserHistory } from 'history'
-import { externalRedirect, isURLForDifferentApp } from 'js/navigation/utils'
+import {
+  externalRedirect,
+  isURLForDifferentApp,
+  isAbsoluteURL,
+} from 'js/navigation/utils'
 import { getUrlParameters } from 'js/utils/utils'
 import qs from 'qs'
 
 export const browserHistory = createBrowserHistory()
 
-export const goTo = (path, paramsObj = {}) => {
-  const queryString = qs.stringify(paramsObj)
+/**
+ * Push a browser history entry with the specified URL.
+ * @param {String} path - The path or URL to navigate to
+ * @param {Object} paramsObj - An object of URL parameter values
+ *   to add to the search string
+ * @param {Object} options
+ * @param {Boolean} options.keepURLParams - If true, the new
+ *   URL's search string will contain the same values as the
+ *   current URL, plus any additional values provided in the
+ *   paramsObj parameter.
+ * @return undefined
+ */
+export const goTo = (path, paramsObj = {}, { keepURLParams = false } = {}) => {
+  const queryString = keepURLParams
+    ? qs.stringify(Object.assign({}, getUrlParameters(), paramsObj))
+    : qs.stringify(paramsObj)
   if (isURLForDifferentApp(path)) {
     let externalURL = queryString ? `${path}?${queryString}` : path
     externalRedirect(externalURL)
@@ -18,15 +36,33 @@ export const goTo = (path, paramsObj = {}) => {
   }
 }
 
-export const replaceUrl = (path, paramsObj = {}) => {
-  const queryString = qs.stringify(paramsObj)
+/**
+ * Replace the browser history entry with the specified URL.
+ * @param {String} path - The path or URL to navigate to
+ * @param {Object} paramsObj - An object of URL parameter values
+ *   to add to the search string
+ * @param {Object} options
+ * @param {Boolean} options.keepURLParams - If true, the new
+ *   URL's search string will contain the same values as the
+ *   current URL, plus any additional values provided in the
+ *   paramsObj parameter.
+ * @return undefined
+ */
+export const replaceUrl = (
+  path,
+  paramsObj = {},
+  { keepURLParams = false } = {}
+) => {
+  const queryString = keepURLParams
+    ? qs.stringify(Object.assign({}, getUrlParameters(), paramsObj))
+    : qs.stringify(paramsObj)
   if (isURLForDifferentApp(path)) {
     let externalURL = queryString ? `${path}?${queryString}` : path
     externalRedirect(externalURL)
   } else {
     browserHistory.replace({
       pathname: path,
-      search: qs.stringify(paramsObj) ? `?${qs.stringify(paramsObj)}` : null,
+      search: queryString ? `?${queryString}` : null,
     })
   }
 }
@@ -44,7 +80,7 @@ export const modifyURLParams = (paramsObj = {}) => {
 export const absoluteUrl = path => {
   // If the passed path is already an absolute URL,
   // just return it.
-  if (path.startsWith('http://') || path.startsWith('https://')) {
+  if (isAbsoluteURL(path)) {
     return path
   }
   const protocol = process.env.REACT_APP_WEBSITE_PROTOCOL
@@ -52,6 +88,32 @@ export const absoluteUrl = path => {
     : 'https'
   const baseUrl = `${protocol}://${process.env.REACT_APP_WEBSITE_DOMAIN}`
   return `${baseUrl}${path}`
+}
+
+/**
+ * Build and return a URL with given URL params and other options.
+ * @param {String} path - The path or URL to navigate to
+ * @param {Object} paramsObj - An object of URL parameter values
+ *   to add to the search string
+ * @param {Object} options
+ * @param {Boolean} options.keepURLParams - If true, the new
+ *   URL's search string will contain the same values as the
+ *   current URL, plus any additional values provided in the
+ *   paramsObj parameter.
+ * @param {Boolean} options.absolute - If true, we make the URL
+ *   absolute.
+ * @return {String} A URL
+ */
+export const constructUrl = (
+  path,
+  paramsObj = {},
+  { absolute = false, keepURLParams = false } = {}
+) => {
+  const queryString = keepURLParams
+    ? qs.stringify(Object.assign({}, getUrlParameters(), paramsObj))
+    : qs.stringify(paramsObj)
+  const baseUrl = absolute ? absoluteUrl(path) : path
+  return queryString ? `${baseUrl}?${queryString}` : baseUrl
 }
 
 // ROUTES
@@ -76,6 +138,9 @@ export const accountURL = '/newtab/account/'
 
 // Search
 export const searchBaseURL = '/search'
+
+// TODO: for convenience, make '/search/auth/' redirect to
+//   /newtab/auth/?app=search
 
 // Homepage
 

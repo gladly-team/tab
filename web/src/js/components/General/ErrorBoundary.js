@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button'
 import Logo from 'js/components/Logo/Logo'
 import { externalContactUsURL } from 'js/navigation/navigation'
 import { externalRedirect } from 'js/navigation/utils'
+import { SEARCH_APP, TAB_APP } from 'js/constants'
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -105,12 +106,12 @@ class ErrorBoundary extends React.Component {
 }
 
 ErrorBoundary.propTypes = {
-  brand: PropTypes.oneOf(['tab', 'search']),
+  brand: PropTypes.oneOf([TAB_APP, SEARCH_APP]).isRequired,
   ignoreErrors: PropTypes.bool,
 }
 
 ErrorBoundary.defaultProps = {
-  brand: 'tab',
+  brand: TAB_APP,
   ignoreErrors: false,
 }
 

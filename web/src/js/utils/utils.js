@@ -4,6 +4,8 @@ import localStorageMgr from 'js/utils/localstorage-mgr'
 import {
   STORAGE_REFERRAL_DATA_REFERRING_CHANNEL,
   STORAGE_REFERRAL_DATA_REFERRING_USER,
+  SEARCH_APP,
+  TAB_APP,
 } from 'js/constants'
 import qs from 'qs'
 
@@ -324,4 +326,15 @@ export const getTabGlobal = () => {
     window.tabforacause = tabforacause
   }
   return tabforacause
+}
+
+/**
+ * Return the app name if it's valid or return the Tab for a Caise
+ * app name ("tab") as a fallback.
+ * @param {String} appName -
+ * @return {String} The value of appName, if it is one of our apps,
+ *   or "tab".
+ */
+export const validateAppName = appName => {
+  return [TAB_APP, SEARCH_APP].indexOf(appName) > -1 ? appName : TAB_APP
 }

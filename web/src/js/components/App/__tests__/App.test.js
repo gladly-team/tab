@@ -13,31 +13,42 @@ jest.mock('js/components/General/QuantcastChoiceCMP')
 jest.mock('js/ads/consentManagement')
 jest.mock('js/analytics/withPageviewTracking', () => child => child)
 
+const getMockProps = () => ({
+  location: {
+    pathname: '/newtab/',
+    search: '',
+  },
+})
+
 beforeEach(() => {
   jest.clearAllMocks()
 })
 
-describe('App', () => {
+describe('App.js: general', () => {
   it('renders without error', () => {
     const App = require('js/components/App/App').default
-    shallow(<App />)
+    const mockProps = getMockProps()
+    shallow(<App {...mockProps} />)
   })
 
   it('contains the legacy MUI theme provider', async () => {
     const App = require('js/components/App/App').default
-    const wrapper = shallow(<App />)
+    const mockProps = getMockProps()
+    const wrapper = shallow(<App {...mockProps} />)
     expect(wrapper.find(V0MuiThemeProvider).exists()).toBe(true)
   })
 
   it('contains the MUI theme provider', async () => {
     const App = require('js/components/App/App').default
-    const wrapper = shallow(<App />)
+    const mockProps = getMockProps()
+    const wrapper = shallow(<App {...mockProps} />)
     expect(wrapper.find(MuiThemeProvider).exists()).toBe(true)
   })
 
   it('contains an error boundary that does not ignore errors', async () => {
     const App = require('js/components/App/App').default
-    const wrapper = shallow(<App />)
+    const mockProps = getMockProps()
+    const wrapper = shallow(<App {...mockProps} />)
     expect(wrapper.find(ErrorBoundary).exists()).toBe(true)
     expect(
       wrapper
@@ -52,10 +63,13 @@ describe('App', () => {
         .prop('brand')
     ).toEqual('tab')
   })
+})
 
+describe('App.js: consent management logic', () => {
   it('wraps our CMP in an error boundary that ignores caught errors', async () => {
     const App = require('js/components/App/App').default
-    const wrapper = shallow(<App />)
+    const mockProps = getMockProps()
+    const wrapper = shallow(<App {...mockProps} />)
     expect(wrapper.find(ErrorBoundary).exists()).toBe(true)
     expect(
       wrapper
@@ -80,7 +94,8 @@ describe('App', () => {
     isInEuropeanUnion.mockResolvedValue(true)
 
     const App = require('js/components/App/App').default
-    const wrapper = shallow(<App />)
+    const mockProps = getMockProps()
+    const wrapper = shallow(<App {...mockProps} />)
     await wrapper.instance().componentDidMount()
     wrapper.update()
     const registerConsentCallback = require('js/ads/consentManagement')
@@ -95,7 +110,8 @@ describe('App', () => {
     isInEuropeanUnion.mockResolvedValue(false)
 
     const App = require('js/components/App/App').default
-    const wrapper = shallow(<App />)
+    const mockProps = getMockProps()
+    const wrapper = shallow(<App {...mockProps} />)
     await wrapper.instance().componentDidMount()
     wrapper.update()
     const registerConsentCallback = require('js/ads/consentManagement')
@@ -120,7 +136,8 @@ describe('App', () => {
       .isInEuropeanUnion
     isInEuropeanUnion.mockResolvedValue(true)
     const App = require('js/components/App/App').default
-    const wrapper = shallow(<App />)
+    const mockProps = getMockProps()
+    const wrapper = shallow(<App {...mockProps} />)
     await wrapper.instance().componentDidMount()
     wrapper.update()
 
@@ -140,7 +157,8 @@ describe('App', () => {
       .isInEuropeanUnion
     isInEuropeanUnion.mockResolvedValue(true)
     const App = require('js/components/App/App').default
-    const wrapper = shallow(<App />)
+    const mockProps = getMockProps()
+    const wrapper = shallow(<App {...mockProps} />)
     await wrapper.instance().componentDidMount()
     wrapper.update()
 
@@ -151,3 +169,7 @@ describe('App', () => {
     expect(unregisterConsentCallback).toHaveBeenCalled()
   })
 })
+
+// Add Suspense/fallback tests after Enzyme fixes a bug with React.lazy
+// and React.Suspense:
+// https://github.com/airbnb/enzyme/issues/2200

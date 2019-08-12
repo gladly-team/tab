@@ -1,5 +1,8 @@
 import React from 'react'
 import { Route, Router, Switch } from 'react-router-dom'
+import { filter } from 'lodash/collection'
+import { get } from 'lodash/object'
+import { Helmet } from 'react-helmet'
 import { browserHistory } from 'js/navigation/navigation'
 import BaseContainer from 'js/components/General/BaseContainer'
 import ErrorBoundary from 'js/components/General/ErrorBoundary'
@@ -71,6 +74,54 @@ class Root extends React.Component {
     return (
       <ErrorBoundary>
         <BaseContainer>
+          <Helmet
+            // Handle a react-helmet bug that doesn't replace or remove
+            // existing favicon <link /> elements when a new favicon is set.
+            // https://github.com/nfl/react-helmet/issues/430
+            // If we add a new favicon link element, remove all other favicon
+            // link elements and re-add the new favicon link element.
+            onChangeClientState={(_, addedTags) => {
+              try {
+                // Check if we added any new link[rel="icon"] elements.
+                const newFaviconElems = filter(get(addedTags, 'linkTags', []), {
+                  rel: 'icon',
+                })
+                if (!newFaviconElems.length) {
+                  return
+                }
+
+                // Get the href of the last link element we just added, which
+                // we assume is the most recently-added favicon.
+                const newFaviconHref =
+                  newFaviconElems[newFaviconElems.length - 1].href
+
+                // Remove all react-helmet link elements with rel="icon" that
+                // do not have the href of our recently-added favicon.
+                // If no other favicon elements exist, we don't have to do
+                // anything.
+                const existingFavicons = document.querySelectorAll(
+                  `link[rel="icon"][data-react-helmet]:not([href="${newFaviconHref}"])`
+                )
+                if (!existingFavicons.length) {
+                  return
+                }
+                existingFavicons.forEach(e => e.parentNode.removeChild(e))
+
+                // Remove and re-add the latest link element to make sure
+                // the browser uses it.
+                const newFaviconElem = document.querySelector(
+                  `link[rel="icon"][data-react-helmet][href="${newFaviconHref}"]`
+                )
+                if (newFaviconElem) {
+                  const parentElem = newFaviconElem.parentNode
+                  parentElem.removeChild(newFaviconElem)
+                  parentElem.appendChild(newFaviconElem)
+                }
+              } catch (e) {
+                console.error(e)
+              }
+            }}
+          />
           <Router history={browserHistory}>
             <Switch>
               <Route path={appPath} component={TheApp} />

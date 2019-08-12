@@ -389,3 +389,25 @@ describe('getTabGlobal', () => {
     expect(tabGlobal).toBe(existingTabGlobal)
   })
 })
+
+describe('validateAppName', () => {
+  it('returns "tab" when provided "tab"', () => {
+    const { validateAppName } = require('js/utils/utils')
+    expect(validateAppName('tab')).toEqual('tab')
+  })
+
+  it('returns "search" when provided "search"', () => {
+    const { validateAppName } = require('js/utils/utils')
+    expect(validateAppName('search')).toEqual('search')
+  })
+
+  it('returns "tab" when provided undefined', () => {
+    const { validateAppName } = require('js/utils/utils')
+    expect(validateAppName()).toEqual('tab')
+  })
+
+  it('returns "tab" when provided some nonsense value', () => {
+    const { validateAppName } = require('js/utils/utils')
+    expect(validateAppName('beebop')).toEqual('tab')
+  })
+})

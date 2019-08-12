@@ -1,18 +1,20 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Paper from 'material-ui/Paper'
+import Button from '@material-ui/core/Button'
+import Paper from '@material-ui/core/Paper'
 import environment from 'js/relay-env'
 import UsernameField from 'js/components/General/UsernameField'
-import RaisedButton from 'material-ui/RaisedButton'
 import SetUsernameMutation from 'js/mutations/SetUsernameMutation'
 import { setUsernameInLocalStorage } from 'js/authentication/user'
 import { checkIfEmailVerified } from 'js/authentication/helpers'
-import { dashboardURL, goTo } from 'js/navigation/navigation'
+import { goTo, dashboardURL, searchBaseURL } from 'js/navigation/navigation'
 import logger from 'js/utils/logger'
+import { SEARCH_APP, TAB_APP } from 'js/constants'
 
 class EnterUsernameForm extends React.Component {
   constructor(props) {
     super(props)
+    this.usernameFieldRef = null
     this.state = {
       usernameDuplicate: false,
       otherError: false,
@@ -34,8 +36,8 @@ class EnterUsernameForm extends React.Component {
   }
 
   submit(e) {
-    const usernameValid = this.username.validate()
-    const username = this.username.getValue()
+    const usernameValid = this.usernameFieldRef.validate()
+    const username = this.usernameFieldRef.getValue()
     this.setState({
       usernameDuplicate: false,
       otherError: false,
@@ -81,7 +83,11 @@ class EnterUsernameForm extends React.Component {
     // Username saved successfully. Set the username in localStorage
     // and redirect to the app.
     setUsernameInLocalStorage(data.user.username)
-    goTo(dashboardURL)
+
+    // Go to a different URL depending on the app.
+    const { app } = this.props
+    const destination = app === SEARCH_APP ? searchBaseURL : dashboardURL
+    goTo(destination)
   }
 
   onMutationError(response) {
@@ -105,9 +111,10 @@ class EnterUsernameForm extends React.Component {
   }
 
   render() {
+    const { app } = this.props
     return (
       <Paper
-        zDepth={1}
+        elevation={1}
         style={{
           padding: 24,
           backgroundColor: '#FFF',
@@ -122,31 +129,42 @@ class EnterUsernameForm extends React.Component {
           Choose a username
         </span>
         <UsernameField
+          data-test-id={'enter-username-form-username-field'}
+          ref={elem => {
+            this.usernameFieldRef = elem
+          }}
           usernameDuplicate={this.state.usernameDuplicate}
           otherError={this.state.otherError}
           onKeyPress={this.handleKeyPress.bind(this)}
-          ref={elem => {
-            this.username = elem
-          }}
+          label={`Username for ${
+            app === SEARCH_APP ? 'Search for a Cause' : 'Tab for a Cause'
+          }`}
           style={{
             display: 'block',
+            width: 280,
+            minHeight: 84,
+            marginTop: 20,
           }}
-          data-test-id={'enter-username-form-username-field'}
+          fullWidth
+          autoFocus
         />
         <span
           style={{
             display: 'flex',
             justifyContent: 'flex-end',
-            marginTop: 30,
+            marginTop: 4,
           }}
-          data-test-id={'enter-username-form-button-container'}
         >
-          <RaisedButton
-            label={this.state.savingUsernameInProgress ? 'SAVING...' : 'NEXT'}
-            primary
+          <Button
+            data-test-id={'enter-username-form-button'}
+            color={'primary'}
+            variant={'contained'}
             disabled={this.state.savingUsernameInProgress}
             onClick={this.submit.bind(this)}
-          />
+            style={{ minWidth: 96 }}
+          >
+            {this.state.savingUsernameInProgress ? 'Saving...' : 'Next'}
+          </Button>
         </span>
       </Paper>
     )
@@ -154,9 +172,14 @@ class EnterUsernameForm extends React.Component {
 }
 
 EnterUsernameForm.propTypes = {
+  app: PropTypes.oneOf([TAB_APP, SEARCH_APP]).isRequired,
   user: PropTypes.shape({
     id: PropTypes.string.isRequired,
   }),
+}
+
+EnterUsernameForm.defaultProps = {
+  app: TAB_APP,
 }
 
 export default EnterUsernameForm

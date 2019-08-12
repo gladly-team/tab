@@ -29,9 +29,10 @@ jest.mock('js/relay-env', () => {
 })
 
 const onSignInSuccessMock = jest.fn()
-const mockProps = {
+const getMockProps = () => ({
+  app: undefined,
   onSignInSuccess: onSignInSuccessMock,
-}
+})
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -41,20 +42,23 @@ describe('FirebaseAuthenticationUI tests', function() {
   it('renders without error', () => {
     const FirebaseAuthenticationUI = require('js/components/Authentication/FirebaseAuthenticationUI')
       .default
+    const mockProps = getMockProps()
     shallow(<FirebaseAuthenticationUI {...mockProps} />)
   })
 
-  it('shows the expected Terms of Service URL', () => {
+  it('shows the Tab for a Cause Terms of Service URL', () => {
     const FirebaseAuthenticationUI = require('js/components/Authentication/FirebaseAuthenticationUI')
       .default
+    const mockProps = getMockProps()
     const wrapper = shallow(<FirebaseAuthenticationUI {...mockProps} />)
     const uiConfig = wrapper.find(FirebaseAuth).prop('uiConfig')
     expect(uiConfig.tosUrl).toBe('https://tab-test-env.gladly.io/terms/')
   })
 
-  it('shows the expected Privacy Policy URL', () => {
+  it('shows the Tab for a Cause Privacy Policy URL', () => {
     const FirebaseAuthenticationUI = require('js/components/Authentication/FirebaseAuthenticationUI')
       .default
+    const mockProps = getMockProps()
     const wrapper = shallow(<FirebaseAuthenticationUI {...mockProps} />)
     const uiConfig = wrapper.find(FirebaseAuth).prop('uiConfig')
     expect(uiConfig.privacyPolicyUrl).toBe(
@@ -62,17 +66,45 @@ describe('FirebaseAuthenticationUI tests', function() {
     )
   })
 
-  it('redirects to the dashboard on sign in success', () => {
+  it('redirects to the Tab for a Cause dashboard on sign in success (by default)', () => {
     const FirebaseAuthenticationUI = require('js/components/Authentication/FirebaseAuthenticationUI')
       .default
+    const mockProps = getMockProps()
     const wrapper = shallow(<FirebaseAuthenticationUI {...mockProps} />)
     const uiConfig = wrapper.find(FirebaseAuth).prop('uiConfig')
-    expect(uiConfig.signInSuccessUrl).toBe('/newtab/')
+    expect(uiConfig.signInSuccessUrl).toEqual(
+      'https://tab-test-env.gladly.io/newtab/'
+    )
+  })
+
+  it('redirects to the Tab for a Cause dashboard on sign in success when "app" === "tab"', () => {
+    const FirebaseAuthenticationUI = require('js/components/Authentication/FirebaseAuthenticationUI')
+      .default
+    const mockProps = getMockProps()
+    mockProps.app = 'tab'
+    const wrapper = shallow(<FirebaseAuthenticationUI {...mockProps} />)
+    const uiConfig = wrapper.find(FirebaseAuth).prop('uiConfig')
+    expect(uiConfig.signInSuccessUrl).toEqual(
+      'https://tab-test-env.gladly.io/newtab/'
+    )
+  })
+
+  it('redirects to Search for a Cause on sign in success when "app" === "search"', () => {
+    const FirebaseAuthenticationUI = require('js/components/Authentication/FirebaseAuthenticationUI')
+      .default
+    const mockProps = getMockProps()
+    mockProps.app = 'search'
+    const wrapper = shallow(<FirebaseAuthenticationUI {...mockProps} />)
+    const uiConfig = wrapper.find(FirebaseAuth).prop('uiConfig')
+    expect(uiConfig.signInSuccessUrl).toEqual(
+      'https://tab-test-env.gladly.io/search'
+    )
   })
 
   it('is set to auto-upgrade anonymous users when they sign in', () => {
     const FirebaseAuthenticationUI = require('js/components/Authentication/FirebaseAuthenticationUI')
       .default
+    const mockProps = getMockProps()
     const wrapper = shallow(<FirebaseAuthenticationUI {...mockProps} />)
     const uiConfig = wrapper.find(FirebaseAuth).prop('uiConfig')
     expect(uiConfig.autoUpgradeAnonymousUsers).toBe(true)
@@ -81,6 +113,7 @@ describe('FirebaseAuthenticationUI tests', function() {
   it('does not use any credential helper', () => {
     const FirebaseAuthenticationUI = require('js/components/Authentication/FirebaseAuthenticationUI')
       .default
+    const mockProps = getMockProps()
     const wrapper = shallow(<FirebaseAuthenticationUI {...mockProps} />)
     const uiConfig = wrapper.find(FirebaseAuth).prop('uiConfig')
     expect(uiConfig.credentialHelper).toBe('none')
@@ -89,6 +122,7 @@ describe('FirebaseAuthenticationUI tests', function() {
   it('shows the expected sign-in providers', () => {
     const FirebaseAuthenticationUI = require('js/components/Authentication/FirebaseAuthenticationUI')
       .default
+    const mockProps = getMockProps()
     const wrapper = shallow(<FirebaseAuthenticationUI {...mockProps} />)
     const uiConfig = wrapper.find(FirebaseAuth).prop('uiConfig')
     expect(map(uiConfig.signInOptions, 'provider')).toEqual([
@@ -101,6 +135,7 @@ describe('FirebaseAuthenticationUI tests', function() {
   it('calls the "onSignInSuccess" prop when FirebaseUI calls "signInSuccessWithAuthResult"', () => {
     const FirebaseAuthenticationUI = require('js/components/Authentication/FirebaseAuthenticationUI')
       .default
+    const mockProps = getMockProps()
     const wrapper = shallow(<FirebaseAuthenticationUI {...mockProps} />)
     const uiConfig = wrapper.find(FirebaseAuth).prop('uiConfig')
     const signInSuccessWithAuthResult =
@@ -120,6 +155,7 @@ describe('FirebaseAuthenticationUI tests', function() {
 
     const FirebaseAuthenticationUI = require('js/components/Authentication/FirebaseAuthenticationUI')
       .default
+    const mockProps = getMockProps()
     const wrapper = shallow(<FirebaseAuthenticationUI {...mockProps} />)
     const uiConfig = wrapper.find(FirebaseAuth).prop('uiConfig')
     const signInFailure = uiConfig.callbacks.signInFailure
@@ -145,6 +181,7 @@ describe('FirebaseAuthenticationUI tests', function() {
 
     const FirebaseAuthenticationUI = require('js/components/Authentication/FirebaseAuthenticationUI')
       .default
+    const mockProps = getMockProps()
     const wrapper = shallow(<FirebaseAuthenticationUI {...mockProps} />)
     const uiConfig = wrapper.find(FirebaseAuth).prop('uiConfig')
     const signInFailure = uiConfig.callbacks.signInFailure
@@ -170,6 +207,7 @@ describe('FirebaseAuthenticationUI tests', function() {
 
     const FirebaseAuthenticationUI = require('js/components/Authentication/FirebaseAuthenticationUI')
       .default
+    const mockProps = getMockProps()
     const wrapper = shallow(<FirebaseAuthenticationUI {...mockProps} />)
     const uiConfig = wrapper.find(FirebaseAuth).prop('uiConfig')
     const signInFailure = uiConfig.callbacks.signInFailure
@@ -196,6 +234,7 @@ describe('FirebaseAuthenticationUI tests', function() {
 
     const FirebaseAuthenticationUI = require('js/components/Authentication/FirebaseAuthenticationUI')
       .default
+    const mockProps = getMockProps()
     const wrapper = shallow(<FirebaseAuthenticationUI {...mockProps} />)
     const uiConfig = wrapper.find(FirebaseAuth).prop('uiConfig')
     const signInFailure = uiConfig.callbacks.signInFailure
@@ -228,6 +267,7 @@ describe('FirebaseAuthenticationUI tests', function() {
 
     const FirebaseAuthenticationUI = require('js/components/Authentication/FirebaseAuthenticationUI')
       .default
+    const mockProps = getMockProps()
     const wrapper = shallow(<FirebaseAuthenticationUI {...mockProps} />)
     const uiConfig = wrapper.find(FirebaseAuth).prop('uiConfig')
     const signInFailure = uiConfig.callbacks.signInFailure
@@ -255,6 +295,7 @@ describe('FirebaseAuthenticationUI tests', function() {
 
     const FirebaseAuthenticationUI = require('js/components/Authentication/FirebaseAuthenticationUI')
       .default
+    const mockProps = getMockProps()
     const wrapper = shallow(<FirebaseAuthenticationUI {...mockProps} />)
     const uiConfig = wrapper.find(FirebaseAuth).prop('uiConfig')
     const signInFailure = uiConfig.callbacks.signInFailure
@@ -286,6 +327,7 @@ describe('FirebaseAuthenticationUI tests', function() {
 
     const FirebaseAuthenticationUI = require('js/components/Authentication/FirebaseAuthenticationUI')
       .default
+    const mockProps = getMockProps()
     const wrapper = shallow(<FirebaseAuthenticationUI {...mockProps} />)
     const uiConfig = wrapper.find(FirebaseAuth).prop('uiConfig')
     const signInFailure = uiConfig.callbacks.signInFailure
@@ -315,6 +357,7 @@ describe('FirebaseAuthenticationUI tests', function() {
 
     const FirebaseAuthenticationUI = require('js/components/Authentication/FirebaseAuthenticationUI')
       .default
+    const mockProps = getMockProps()
     const wrapper = shallow(<FirebaseAuthenticationUI {...mockProps} />)
     const uiConfig = wrapper.find(FirebaseAuth).prop('uiConfig')
     const signInFailure = uiConfig.callbacks.signInFailure

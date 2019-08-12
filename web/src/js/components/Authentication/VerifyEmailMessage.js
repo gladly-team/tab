@@ -1,8 +1,16 @@
 import React from 'react'
-import Paper from 'material-ui/Paper'
-import RaisedButton from 'material-ui/RaisedButton'
+import PropTypes from 'prop-types'
+import Paper from '@material-ui/core/Paper'
+import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
 import { logout, sendVerificationEmail } from 'js/authentication/user'
-import { goTo, loginURL } from 'js/navigation/navigation'
+import {
+  goTo,
+  constructUrl,
+  enterUsernameURL,
+  loginURL,
+} from 'js/navigation/navigation'
+import { SEARCH_APP, TAB_APP } from 'js/constants'
 
 class VerifyEmailMessage extends React.Component {
   constructor(props) {
@@ -19,7 +27,16 @@ class VerifyEmailMessage extends React.Component {
       emailResendingInProgress: true,
       emailResendingError: false,
     })
-    const emailSent = await sendVerificationEmail()
+
+    const { app } = this.props
+    const emailSent = await sendVerificationEmail({
+      // Pass the "app" URL parameter value in the verification email.
+      continueURL: constructUrl(
+        enterUsernameURL,
+        { app: app },
+        { absolute: true }
+      ),
+    })
     if (emailSent) {
       this.setState({
         emailResent: true,
@@ -36,61 +53,77 @@ class VerifyEmailMessage extends React.Component {
 
   async restartAuthFlow() {
     await logout()
-    goTo(loginURL)
+    goTo(loginURL, null, { keepURLParams: true })
   }
 
   render() {
-    var buttonLabel = 'RESEND EMAIL'
-    var buttonDisabled = false
-    if (this.state.emailResendingInProgress) {
-      buttonLabel = 'SENDING EMAIL...'
-      buttonDisabled = true
-    } else if (this.state.emailResent) {
-      buttonLabel = 'EMAIL RESENT'
-      buttonDisabled = true
-    } else if (this.state.emailResendingError) {
-      buttonLabel = 'ERROR SENDING EMAIL'
-      buttonDisabled = true
-    }
-
-    const cancelButtonLabel = 'CANCEL'
-
+    const {
+      emailResendingInProgress,
+      emailResent,
+      emailResendingError,
+    } = this.state
     return (
       <Paper
-        zDepth={1}
+        elevation={1}
         style={{
           padding: 24,
           maxWidth: 400,
           backgroundColor: '#FFF',
         }}
       >
-        <p>Please check your email to verify your account.</p>
+        <Typography
+          variant={'body1'}
+          style={{ marginTop: 8, marginBottom: 36 }}
+        >
+          Please check your email to verify your account.
+        </Typography>
         <span
           style={{
             display: 'flex',
             justifyContent: 'flex-end',
             marginTop: 24,
           }}
-          data-test-id={'verify-email-message-button-container'}
         >
-          <RaisedButton
-            label={cancelButtonLabel}
-            disabled={buttonDisabled}
+          <Button
+            data-test-id={'verify-email-message-cancel-button'}
+            color={'default'}
+            variant={'contained'}
             onClick={this.restartAuthFlow.bind(this)}
             style={{
               marginRight: 8,
             }}
-          />
-          <RaisedButton
-            label={buttonLabel}
-            primary
-            disabled={buttonDisabled}
+          >
+            Cancel
+          </Button>
+          <Button
+            data-test-id={'verify-email-message-resend-button'}
+            color={'default'}
+            variant={'contained'}
+            disabled={
+              emailResendingInProgress || emailResent || emailResendingError
+            }
             onClick={this.resendEmailClick.bind(this)}
-          />
+          >
+            {emailResendingInProgress
+              ? 'Sending email...'
+              : emailResent
+              ? 'Email resent'
+              : emailResendingError
+              ? 'Error sending email'
+              : 'Resend email'}
+          </Button>
         </span>
       </Paper>
     )
   }
+}
+
+VerifyEmailMessage.propTypes = {
+  app: PropTypes.oneOf([TAB_APP, SEARCH_APP]).isRequired,
+}
+
+VerifyEmailMessage.defaultProps = {
+  app: TAB_APP,
 }
 
 export default VerifyEmailMessage

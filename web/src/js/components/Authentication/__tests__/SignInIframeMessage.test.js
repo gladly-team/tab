@@ -3,38 +3,66 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import Typography from '@material-ui/core/Typography'
-import { getUrlParameters } from 'js/utils/utils'
+import Link from 'js/components/General/Link'
 
+jest.mock('js/navigation/navigation')
 jest.mock('js/utils/utils')
+jest.mock('js/components/General/Link')
+
+const getMockProps = () => ({
+  app: undefined,
+  location: {
+    search: '',
+  },
+})
 
 describe('SignInIframeMessage tests', () => {
   it('renders without error', () => {
     const SignInIframeMessage = require('js/components/Authentication/SignInIframeMessage')
       .default
-    shallow(<SignInIframeMessage />)
+    const mockProps = getMockProps()
+    shallow(<SignInIframeMessage {...mockProps} />)
   })
 
-  it('redirects the page when clicking the sign-in button', () => {
+  it('wraps the sign-in button in a link that opens the expected auth page in the top of the frame', () => {
     const SignInIframeMessage = require('js/components/Authentication/SignInIframeMessage')
       .default
-
-    // Mock window.open
-    window.open = jest.fn()
-
-    const wrapper = shallow(<SignInIframeMessage />)
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SignInIframeMessage {...mockProps} />)
     const signInButton = wrapper.find(
       '[data-test-id="sign-in-iframe-message-button"]'
     )
+    const linkElem = signInButton.parent()
 
-    expect(window.open).not.toHaveBeenCalled()
-    signInButton.simulate('click')
-    expect(window.open).toHaveBeenCalled()
+    expect(linkElem.type()).toEqual(Link)
+    expect(linkElem.prop('to')).toEqual(
+      'https://tab-test-env.gladly.io/newtab/auth/'
+    )
+    expect(linkElem.prop('target')).toEqual('_top')
   })
 
-  it('has the expected copy', () => {
+  it('the sign-in button link passes forward any existing URL query parameters', () => {
     const SignInIframeMessage = require('js/components/Authentication/SignInIframeMessage')
       .default
-    const wrapper = shallow(<SignInIframeMessage />)
+    const mockProps = getMockProps()
+    mockProps.location.search = '?app=search&some=datums'
+    const wrapper = shallow(<SignInIframeMessage {...mockProps} />)
+    const signInButton = wrapper.find(
+      '[data-test-id="sign-in-iframe-message-button"]'
+    )
+    const linkElem = signInButton.parent()
+
+    expect(linkElem.type()).toEqual(Link)
+    expect(linkElem.prop('to')).toEqual(
+      'https://tab-test-env.gladly.io/newtab/auth/?app=search&some=datums'
+    )
+  })
+
+  it('has the expected Tab for a Cause copy by default', () => {
+    const SignInIframeMessage = require('js/components/Authentication/SignInIframeMessage')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SignInIframeMessage {...mockProps} />)
     expect(
       wrapper
         .find(Typography)
@@ -53,13 +81,36 @@ describe('SignInIframeMessage tests', () => {
     )
   })
 
-  it('shows the explanation copy when an anonymous user is now required to sign in', () => {
-    getUrlParameters.mockReturnValueOnce({
-      mandatory: 'true',
-    })
+  it('has Search for a Cause copy when the "app" prop === "search"', () => {
     const SignInIframeMessage = require('js/components/Authentication/SignInIframeMessage')
       .default
-    const wrapper = shallow(<SignInIframeMessage />)
+    const mockProps = getMockProps()
+    mockProps.app = 'search'
+    const wrapper = shallow(<SignInIframeMessage {...mockProps} />)
+    expect(
+      wrapper
+        .find(Typography)
+        .first()
+        .children()
+        .text()
+    ).toBe(`Let's get started!`)
+    expect(
+      wrapper
+        .find(Typography)
+        .at(1)
+        .children()
+        .text()
+    ).toBe(
+      `Sign in to track your progress as you raise money for your favorite causes.`
+    )
+  })
+
+  it('shows the explanation copy when an anonymous user is now required to sign in', () => {
+    const SignInIframeMessage = require('js/components/Authentication/SignInIframeMessage')
+      .default
+    const mockProps = getMockProps()
+    mockProps.location.search = '?mandatory=true'
+    const wrapper = shallow(<SignInIframeMessage {...mockProps} />)
     expect(
       wrapper
         .find(Typography)

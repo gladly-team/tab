@@ -275,3 +275,21 @@ describe('isURLForDifferentApp', () => {
     expect(isURLForDifferentApp('/search/foobar/')).toBe(true)
   })
 })
+
+describe('isAbsoluteURL', () => {
+  it('works as expected', () => {
+    const { isAbsoluteURL } = require('js/navigation/utils')
+
+    // Relative URLs
+    expect(isAbsoluteURL('')).toBe(false)
+    expect(isAbsoluteURL('/')).toBe(false)
+    expect(isAbsoluteURL('/some/path')).toBe(false)
+    expect(isAbsoluteURL('localhost:3000')).toBe(false)
+
+    // Absolute URLs
+    expect(isAbsoluteURL('https://example.com/blah/path/')).toBe(true)
+    expect(isAbsoluteURL('http://example.com/blah/path/')).toBe(true)
+    expect(isAbsoluteURL('https://example.com')).toBe(true)
+    expect(isAbsoluteURL('http://localhost:3000')).toBe(true)
+  })
+})

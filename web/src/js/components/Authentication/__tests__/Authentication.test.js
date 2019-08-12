@@ -4,6 +4,8 @@ import React from 'react'
 import moment from 'moment'
 import MockDate from 'mockdate'
 import { shallow } from 'enzyme'
+import { Route, Switch } from 'react-router-dom'
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import {
   createNewUser,
   redirectToAuthIfNeeded,
@@ -13,14 +15,17 @@ import {
   replaceUrl,
   dashboardURL,
   missingEmailMessageURL,
+  searchBaseURL,
   verifyEmailURL,
 } from 'js/navigation/navigation'
 import { sendVerificationEmail } from 'js/authentication/user'
-import { getUrlParameters } from 'js/utils/utils'
 import { getBrowserExtensionInstallId } from 'js/utils/local-user-data-mgr'
 import AssignExperimentGroups from 'js/components/Dashboard/AssignExperimentGroupsContainer'
 import Logo from 'js/components/Logo/Logo'
+import tabTheme from 'js/theme/defaultV1'
+import searchTheme from 'js/theme/searchTheme'
 
+jest.mock('react-router-dom')
 jest.mock('js/authentication/helpers')
 jest.mock('js/authentication/user')
 jest.mock('js/navigation/navigation')
@@ -28,6 +33,7 @@ jest.mock('js/utils/utils')
 jest.mock('js/utils/local-user-data-mgr')
 jest.mock('js/components/Dashboard/AssignExperimentGroupsContainer')
 jest.mock('js/components/Logo/Logo')
+jest.mock('js/components/Authentication/EnterUsernameForm')
 
 const mockFetchUser = jest.fn()
 
@@ -35,6 +41,7 @@ const MockProps = () => {
   return {
     location: {
       pathname: '/newtab/auth/',
+      search: '',
     },
     authUser: null,
     user: {
@@ -52,7 +59,6 @@ beforeEach(() => {
 
   // Reset an unauthed user as the default.
   redirectToAuthIfNeeded.mockReturnValue(true)
-  getUrlParameters.mockReturnValue({})
   getBrowserExtensionInstallId.mockReturnValue('some-install-id')
 })
 
@@ -69,7 +75,7 @@ describe('Authentication.js tests', function() {
     shallow(<Authentication {...mockProps} />)
   })
 
-  it('shows the logo with expected props', () => {
+  it('shows the Tab for a Cause logo by default with expected props', () => {
     expect.assertions(3)
 
     const Authentication = require('js/components/Authentication/Authentication')
@@ -84,6 +90,48 @@ describe('Authentication.js tests', function() {
     expect(logoComponent.prop('style')).toEqual({
       height: 40,
     })
+  })
+
+  it('shows the Tab for a Cause logo when the URL param "app" == "tab"', () => {
+    expect.assertions(1)
+
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = '?app=tab'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    wrapper.update()
+
+    const logoComponent = wrapper.find(Logo)
+    expect(logoComponent.prop('brand')).toEqual('tab')
+  })
+
+  it('shows the Search for a Cause logo when the URL param "app" == "search"', () => {
+    expect.assertions(1)
+
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = '?app=search'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    wrapper.update()
+
+    const logoComponent = wrapper.find(Logo)
+    expect(logoComponent.prop('brand')).toEqual('search')
+  })
+
+  it('shows the Tab for a Cause logo when the URL param "app" is some invalid value', () => {
+    expect.assertions(1)
+
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = '?app=foobar'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    wrapper.update()
+
+    const logoComponent = wrapper.find(Logo)
+    expect(logoComponent.prop('brand')).toEqual('tab')
   })
 
   it('displays the endorsement quote', () => {
@@ -119,9 +167,7 @@ describe('Authentication.js tests', function() {
     mockProps.location.pathname = '/newtab/auth/'
 
     // Sign-in is mandatory when there is a "mandatory=true" URL param.
-    getUrlParameters.mockReturnValue({
-      mandatory: 'true',
-    })
+    mockProps.location.search = '?mandatory=true'
 
     const wrapper = shallow(<Authentication {...mockProps} />)
     wrapper.update()
@@ -139,9 +185,7 @@ describe('Authentication.js tests', function() {
     mockProps.location.pathname = '/newtab/auth/welcome/'
 
     // Sign-in is mandatory when there is a "mandatory=true" URL param.
-    getUrlParameters.mockReturnValue({
-      mandatory: 'true',
-    })
+    mockProps.location.search = '?mandatory=true'
 
     const wrapper = shallow(<Authentication {...mockProps} />)
     wrapper.update()
@@ -156,11 +200,10 @@ describe('Authentication.js tests', function() {
     // User is fully authed.
     redirectToAuthIfNeeded.mockReturnValue(false)
 
-    getUrlParameters.mockReturnValue({})
-
     const Authentication = require('js/components/Authentication/Authentication')
       .default
     const mockProps = MockProps()
+    mockProps.location.search = ''
     mockProps.authUser = {
       id: 'qwertyqwerty',
       email: 'charles@example.com',
@@ -179,17 +222,44 @@ describe('Authentication.js tests', function() {
     )
   })
 
-  it('redirects to the app if the user is fully authenticated', () => {
+  it('redirects to the app (Tab for a Cause, by default) if the user is fully authenticated', () => {
     expect.assertions(1)
 
     // User is fully authed.
     redirectToAuthIfNeeded.mockReturnValue(false)
 
-    getUrlParameters.mockReturnValue({})
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = ''
+    shallow(<Authentication {...mockProps} />)
+    expect(replaceUrl).toHaveBeenCalledWith(dashboardURL)
+  })
+
+  it('redirects to Search for a Cause if the user is fully authenticated and the "app" URL param === "search"', () => {
+    expect.assertions(1)
+
+    // User is fully authed.
+    redirectToAuthIfNeeded.mockReturnValue(false)
 
     const Authentication = require('js/components/Authentication/Authentication')
       .default
     const mockProps = MockProps()
+    mockProps.location.search = '?app=search'
+    shallow(<Authentication {...mockProps} />)
+    expect(replaceUrl).toHaveBeenCalledWith(searchBaseURL)
+  })
+
+  it('redirects to Tab for a Cause if the user is fully authenticated and the "app" URL param is some invalid value', () => {
+    expect.assertions(1)
+
+    // User is fully authed.
+    redirectToAuthIfNeeded.mockReturnValue(false)
+
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = '?app=foobar'
     shallow(<Authentication {...mockProps} />)
     expect(replaceUrl).toHaveBeenCalledWith(dashboardURL)
   })
@@ -200,13 +270,10 @@ describe('Authentication.js tests', function() {
     // User is fully authed.
     redirectToAuthIfNeeded.mockReturnValue(false)
 
-    getUrlParameters.mockReturnValue({
-      noredirect: 'true',
-    })
-
     const Authentication = require('js/components/Authentication/Authentication')
       .default
     const mockProps = MockProps()
+    mockProps.location.search = '?noredirect=true'
     shallow(<Authentication {...mockProps} />)
 
     expect(replaceUrl).not.toHaveBeenCalled()
@@ -218,13 +285,10 @@ describe('Authentication.js tests', function() {
     // User is fully authed.
     redirectToAuthIfNeeded.mockReturnValue(false)
 
-    getUrlParameters.mockReturnValue({
-      noredirect: 'something',
-    })
-
     const Authentication = require('js/components/Authentication/Authentication')
       .default
     const mockProps = MockProps()
+    mockProps.location.search = '?noredirect=something'
     shallow(<Authentication {...mockProps} />)
 
     expect(replaceUrl).toHaveBeenCalledWith(dashboardURL)
@@ -291,10 +355,12 @@ describe('Authentication.js tests', function() {
       mockFirebaseCredential,
       mockFirebaseDefaultRedirectURL
     )
-    expect(goTo).toHaveBeenCalledWith(missingEmailMessageURL)
+    expect(goTo).toHaveBeenCalledWith(missingEmailMessageURL, null, {
+      keepURLParams: true,
+    })
   })
 
-  it('after sign-in, send email verification if email is not verified', async () => {
+  it('sends an email verification after sign in if the email is not verified', async () => {
     expect.assertions(2)
 
     // Args for onSignInSuccess
@@ -336,7 +402,153 @@ describe('Authentication.js tests', function() {
     )
 
     expect(sendVerificationEmail).toHaveBeenCalledTimes(1)
-    expect(goTo).toHaveBeenCalledWith(verifyEmailURL)
+    expect(goTo).toHaveBeenCalledWith(verifyEmailURL, null, {
+      keepURLParams: true,
+    })
+  })
+
+  it('sets the "continueURL" in the email verification with URL param "app" === "tab" if the "app" URL param is not specified', async () => {
+    expect.assertions(1)
+
+    // Args for onSignInSuccess
+    const mockFirebaseUserInstance = {
+      displayName: '',
+      email: 'foo@bar.com',
+      emailVerified: false, // Note that email is unverified
+      isAnonymous: false,
+      metadata: {},
+      phoneNumber: null,
+      photoURL: null,
+      providerData: {},
+      providerId: 'some-id',
+      refreshToken: 'xyzxyz',
+      uid: 'abc123',
+    }
+    const mockFirebaseCredential = {}
+    const mockFirebaseDefaultRedirectURL = ''
+
+    createNewUser.mockResolvedValue({
+      id: 'abc123',
+      email: 'foo@bar.com',
+      username: null,
+    })
+
+    sendVerificationEmail.mockImplementation(() => Promise.resolve(true))
+
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = ''
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const component = wrapper.instance()
+
+    // Mock a call from FirebaseUI after user signs in
+    await component.onSignInSuccess(
+      mockFirebaseUserInstance,
+      mockFirebaseCredential,
+      mockFirebaseDefaultRedirectURL
+    )
+
+    expect(sendVerificationEmail).toHaveBeenCalledWith({
+      continueURL:
+        'https://tab-test-env.gladly.io/newtab/auth/username/?app=tab',
+    })
+  })
+
+  it('sets the "continueURL" in the email verification with URL param "app" === "tab" if the "app" URL param === "tab"', async () => {
+    expect.assertions(1)
+
+    // Args for onSignInSuccess
+    const mockFirebaseUserInstance = {
+      displayName: '',
+      email: 'foo@bar.com',
+      emailVerified: false, // Note that email is unverified
+      isAnonymous: false,
+      metadata: {},
+      phoneNumber: null,
+      photoURL: null,
+      providerData: {},
+      providerId: 'some-id',
+      refreshToken: 'xyzxyz',
+      uid: 'abc123',
+    }
+    const mockFirebaseCredential = {}
+    const mockFirebaseDefaultRedirectURL = ''
+
+    createNewUser.mockResolvedValue({
+      id: 'abc123',
+      email: 'foo@bar.com',
+      username: null,
+    })
+
+    sendVerificationEmail.mockImplementation(() => Promise.resolve(true))
+
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = '?app=tab'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const component = wrapper.instance()
+
+    // Mock a call from FirebaseUI after user signs in
+    await component.onSignInSuccess(
+      mockFirebaseUserInstance,
+      mockFirebaseCredential,
+      mockFirebaseDefaultRedirectURL
+    )
+
+    expect(sendVerificationEmail).toHaveBeenCalledWith({
+      continueURL:
+        'https://tab-test-env.gladly.io/newtab/auth/username/?app=tab',
+    })
+  })
+
+  it('sets the "continueURL" in the email verification with URL param "app" === "search" if the "app" URL param === "search"', async () => {
+    expect.assertions(1)
+
+    // Args for onSignInSuccess
+    const mockFirebaseUserInstance = {
+      displayName: '',
+      email: 'foo@bar.com',
+      emailVerified: false, // Note that email is unverified
+      isAnonymous: false,
+      metadata: {},
+      phoneNumber: null,
+      photoURL: null,
+      providerData: {},
+      providerId: 'some-id',
+      refreshToken: 'xyzxyz',
+      uid: 'abc123',
+    }
+    const mockFirebaseCredential = {}
+    const mockFirebaseDefaultRedirectURL = ''
+
+    createNewUser.mockResolvedValue({
+      id: 'abc123',
+      email: 'foo@bar.com',
+      username: null,
+    })
+
+    sendVerificationEmail.mockImplementation(() => Promise.resolve(true))
+
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = '?app=search'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const component = wrapper.instance()
+
+    // Mock a call from FirebaseUI after user signs in
+    await component.onSignInSuccess(
+      mockFirebaseUserInstance,
+      mockFirebaseCredential,
+      mockFirebaseDefaultRedirectURL
+    )
+
+    expect(sendVerificationEmail).toHaveBeenCalledWith({
+      continueURL:
+        'https://tab-test-env.gladly.io/newtab/auth/username/?app=search',
+    })
   })
 
   it('refetches the user after sign-in', async () => {
@@ -390,5 +602,366 @@ describe('Authentication.js tests', function() {
     const comp = wrapper.find(AssignExperimentGroups)
     expect(comp.length).toBe(1)
     expect(comp.prop('isNewUser')).toBe(true)
+  })
+
+  it('includes a "verify email" route', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/verify-email/')
+    expect(routeElem.exists()).toBe(true)
+  })
+
+  it('includes a "set username" route', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/username/')
+    expect(routeElem.exists()).toBe(true)
+  })
+
+  it('includes an "iframe message" route', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/welcome/')
+    expect(routeElem.exists()).toBe(true)
+  })
+
+  it('includes a "missing email" route', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/missing-email/')
+    expect(routeElem.exists()).toBe(true)
+  })
+
+  it('includes a default auth page route', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/')
+    expect(routeElem.exists()).toBe(true)
+  })
+
+  it('passes "tab" to the FirebaseAuthenticationUI "app" prop by default', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/')
+    const RenderedComponent = routeElem.prop('render')
+    expect(shallow(<RenderedComponent />).prop('app')).toEqual('tab')
+  })
+
+  it('passes "search" to the FirebaseAuthenticationUI "app" prop when the "app" URL param value === "search"', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = '?app=search'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/')
+    const RenderedComponent = routeElem.prop('render')
+    expect(shallow(<RenderedComponent />).prop('app')).toEqual('search')
+  })
+
+  it('passes "tab" to the FirebaseAuthenticationUI "app" prop when the "app" URL param value === "tab"', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = '?app=tab'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/')
+    const RenderedComponent = routeElem.prop('render')
+    expect(shallow(<RenderedComponent />).prop('app')).toEqual('tab')
+  })
+
+  it('passes "search" to the VerifyEmailMessage "app" prop when the "app" URL param value === "search"', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = '?app=search'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/verify-email/')
+    const RenderedComponent = routeElem.prop('render')
+    expect(shallow(<RenderedComponent />).prop('app')).toEqual('search')
+  })
+
+  it('passes "tab" to the VerifyEmailMessage "app" prop by default', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = ''
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/verify-email/')
+    const RenderedComponent = routeElem.prop('render')
+    expect(shallow(<RenderedComponent />).prop('app')).toEqual('tab')
+  })
+
+  it('passes "tab" to the VerifyEmailMessage "app" prop when the "app" URL param value is invalid', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = '?app=blahblah'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/verify-email/')
+    const RenderedComponent = routeElem.prop('render')
+    expect(shallow(<RenderedComponent />).prop('app')).toEqual('tab')
+  })
+
+  it('passes "search" to the VerifyEmailMessage "app" prop when the "app" URL param value does not exist but the continueUrl value has ?app=search', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search =
+      '?foo=bar&continueUrl=https%3A%2F%2Ftab.gladly.io%2Fnewtab%2Fauth%2Fusername%2F%3Fapp%3Dsearch%26lang%3Den'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/verify-email/')
+    const RenderedComponent = routeElem.prop('render')
+    expect(shallow(<RenderedComponent />).prop('app')).toEqual('search')
+  })
+
+  it('passes "tab" to the VerifyEmailMessage "app" prop when the "app" URL param value does not exist but the continueUrl value has ?app=tab', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search =
+      '?foo=bar&continueUrl=https%3A%2F%2Ftab.gladly.io%2Fnewtab%2Fauth%2Fusername%2F%3Fapp%3Dtab%26lang%3Den'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/verify-email/')
+    const RenderedComponent = routeElem.prop('render')
+    expect(shallow(<RenderedComponent />).prop('app')).toEqual('tab')
+  })
+
+  it('passes "search" to the EnterUsernameForm "app" prop when the "app" URL param value === "search"', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = '?app=search'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/username/')
+    const RenderedComponent = routeElem.prop('render')
+    expect(shallow(<RenderedComponent />).prop('app')).toEqual('search')
+  })
+
+  it('passes "tab" to the EnterUsernameForm "app" prop by default', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = ''
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/username/')
+    const RenderedComponent = routeElem.prop('render')
+    expect(shallow(<RenderedComponent />).prop('app')).toEqual('tab')
+  })
+
+  it('passes "tab" to the EnterUsernameForm "app" prop when the "app" URL param value is invalid', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = '?app=blahblah'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/username/')
+    const RenderedComponent = routeElem.prop('render')
+    expect(shallow(<RenderedComponent />).prop('app')).toEqual('tab')
+  })
+
+  it('passes "search" to the EnterUsernameForm "app" prop when the "app" URL param value does not exist but the continueUrl value has ?app=search', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search =
+      '?foo=bar&continueUrl=https%3A%2F%2Ftab.gladly.io%2Fnewtab%2Fauth%2Fusername%2F%3Fapp%3Dsearch%26lang%3Den'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/username/')
+    const RenderedComponent = routeElem.prop('render')
+    expect(shallow(<RenderedComponent />).prop('app')).toEqual('search')
+  })
+
+  it('passes "tab" to the EnterUsernameForm "app" prop when the "app" URL param value does not exist but the continueUrl value has ?app=tab', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search =
+      '?foo=bar&continueUrl=https%3A%2F%2Ftab.gladly.io%2Fnewtab%2Fauth%2Fusername%2F%3Fapp%3Dtab%26lang%3Den'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/username/')
+    const RenderedComponent = routeElem.prop('render')
+    expect(shallow(<RenderedComponent />).prop('app')).toEqual('tab')
+  })
+
+  it('passes "search" to the to the SignInIframeMessage "app" prop when the URL param value === "search"', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = '?app=search'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/welcome/')
+    const RenderedComponent = routeElem.prop('render')
+    expect(shallow(<RenderedComponent />).prop('app')).toEqual('search')
+  })
+
+  it('passes "tab" to the SignInIframeMessage "app" prop by default', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = ''
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/welcome/')
+    const RenderedComponent = routeElem.prop('render')
+    expect(shallow(<RenderedComponent />).prop('app')).toEqual('tab')
+  })
+
+  it('passes "tab" to the SignInIframeMessage "app" prop when the "app" URL param value is invalid', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = '?app=blahblah'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/welcome/')
+    const RenderedComponent = routeElem.prop('render')
+    expect(shallow(<RenderedComponent />).prop('app')).toEqual('tab')
+  })
+
+  it('passes "search" to the SignInIframeMessage "app" prop when the "app" URL param value does not exist but the continueUrl value has ?app=search', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search =
+      '?foo=bar&continueUrl=https%3A%2F%2Ftab.gladly.io%2Fnewtab%2Fauth%2Fusername%2F%3Fapp%3Dsearch%26lang%3Den'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/welcome/')
+    const RenderedComponent = routeElem.prop('render')
+    expect(shallow(<RenderedComponent />).prop('app')).toEqual('search')
+  })
+
+  it('passes "tab" to the SignInIframeMessage "app" prop when the "app" URL param value does not exist but the continueUrl value has ?app=tab', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search =
+      '?foo=bar&continueUrl=https%3A%2F%2Ftab.gladly.io%2Fnewtab%2Fauth%2Fusername%2F%3Fapp%3Dtab%26lang%3Den'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    const routeElem = wrapper
+      .find(Switch)
+      .find(Route)
+      .filterWhere(elem => elem.prop('path') === '/newtab/auth/welcome/')
+    const RenderedComponent = routeElem.prop('render')
+    expect(shallow(<RenderedComponent />).prop('app')).toEqual('tab')
+  })
+
+  it('uses the "tab" app theme by default', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = ''
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    expect(wrapper.find(MuiThemeProvider).prop('theme')).toEqual(
+      createMuiTheme(tabTheme)
+    )
+  })
+
+  it('uses the "tab" app theme when the "app" URL param value === "tab"', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = '?app=tab'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    expect(wrapper.find(MuiThemeProvider).prop('theme')).toEqual(
+      createMuiTheme(tabTheme)
+    )
+  })
+
+  it('uses the "tab" app theme when the "app" URL param value is invalid', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = '?app=blahblah'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    expect(wrapper.find(MuiThemeProvider).prop('theme')).toEqual(
+      createMuiTheme(tabTheme)
+    )
+  })
+
+  it('uses the "search" app theme when the "app" URL param value === "tab"', () => {
+    const Authentication = require('js/components/Authentication/Authentication')
+      .default
+    const mockProps = MockProps()
+    mockProps.location.search = '?app=search'
+    const wrapper = shallow(<Authentication {...mockProps} />)
+    expect(wrapper.find(MuiThemeProvider).prop('theme')).toEqual(
+      createMuiTheme(searchTheme)
+    )
   })
 })

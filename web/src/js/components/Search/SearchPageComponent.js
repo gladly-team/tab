@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import Input from '@material-ui/core/Input'
@@ -46,6 +46,7 @@ import {
   SEARCH_PROVIDER_BING,
   CHROME_BROWSER,
   FIREFOX_BROWSER,
+  SEARCH_APP,
 } from 'js/constants'
 import { detectSupportedBrowser } from 'js/utils/detectBrowser'
 import Footer from 'js/components/General/Footer'
@@ -84,9 +85,6 @@ const styles = theme => ({
   },
 })
 
-// Note: do not use react-helmet until v6 is published, due to
-// this stack overflow bug:
-// https://github.com/nfl/react-helmet/issues/373
 class SearchPage extends React.Component {
   constructor(props) {
     super(props)
@@ -270,7 +268,7 @@ class SearchPage extends React.Component {
               }}
             >
               <Logo
-                brand={'search'}
+                brand={SEARCH_APP}
                 includeText
                 style={{
                   width: 116,
@@ -641,7 +639,7 @@ class SearchPage extends React.Component {
                 </span>
               </Paper>
             ) : null}
-            <ErrorBoundary brand={'search'} ignoreErrors>
+            <ErrorBoundary brand={SEARCH_APP} ignoreErrors>
               {query ? (
                 <WikipediaQuery
                   query={query}

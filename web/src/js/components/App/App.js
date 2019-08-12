@@ -1,5 +1,7 @@
 import React, { Suspense, lazy } from 'react'
+import PropTypes from 'prop-types'
 import { Redirect, Route, Switch } from 'react-router-dom'
+import { Helmet } from 'react-helmet'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import V0MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
@@ -16,6 +18,9 @@ import {
 import FullPageLoader from 'js/components/General/FullPageLoader'
 import DashboardView from 'js/components/Dashboard/DashboardView'
 import QuantcastChoiceCMP from 'js/components/General/QuantcastChoiceCMP'
+import tabFavicon from 'js/assets/logos/favicon.ico'
+import { TAB_APP } from 'js/constants'
+import { parseUrlSearchString, validateAppName } from 'js/utils/utils'
 
 const AuthenticationView = lazy(() =>
   import('js/components/Authentication/AuthenticationView')
@@ -63,11 +68,21 @@ class App extends React.Component {
   }
 
   render() {
+    // Get the app for branding purposes (e.g. we use the auth flow for
+    // multiple apps).
+    const { location } = this.props
+    const urlParams = parseUrlSearchString(location.search)
+    const app = validateAppName(urlParams.app)
+
     // @material-ui-1-todo: remove legacy theme provider
     return (
       <MuiThemeProvider theme={muiTheme}>
         <V0MuiThemeProvider muiTheme={legacyMuiTheme}>
-          <ErrorBoundary brand={'tab'}>
+          <ErrorBoundary brand={TAB_APP}>
+            <Helmet>
+              <title>Tab for a Cause</title>
+              <link rel="icon" href={tabFavicon} />
+            </Helmet>
             <div
               style={{
                 position: 'absolute',
@@ -80,7 +95,7 @@ class App extends React.Component {
                 border: 'none',
               }}
             >
-              <Suspense fallback={<FullPageLoader delay={350} />}>
+              <Suspense fallback={<FullPageLoader app={app} delay={350} />}>
                 <Switch>
                   <Route exact path="/newtab/" component={DashboardView} />
                   <Route
@@ -109,7 +124,7 @@ class App extends React.Component {
                   <Redirect from="*" to="/newtab/" />
                 </Switch>
               </Suspense>
-              <ErrorBoundary ignoreErrors brand={'tab'}>
+              <ErrorBoundary ignoreErrors brand={TAB_APP}>
                 <QuantcastChoiceCMP />
               </ErrorBoundary>
             </div>
@@ -119,5 +134,13 @@ class App extends React.Component {
     )
   }
 }
+
+App.propTypes = {
+  location: PropTypes.shape({
+    search: PropTypes.string.isRequired,
+  }),
+}
+
+App.defaultProps = {}
 
 export default withPageviewTracking(App)

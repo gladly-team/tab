@@ -44,3 +44,6 @@ export const isURLForDifferentApp = newURL => {
 export const externalRedirect = externalURL => {
   window.location = externalURL
 }
+
+export const isAbsoluteURL = url =>
+  !!(url.startsWith('http://') || url.startsWith('https://'))

@@ -1,9 +1,12 @@
 import React from 'react'
-import Paper from 'material-ui/Paper'
+import PropTypes from 'prop-types'
+import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
-import RaisedButton from 'material-ui/RaisedButton'
-import { absoluteUrl, loginURL } from 'js/navigation/navigation'
-import { getUrlParameters } from 'js/utils/utils'
+import Button from '@material-ui/core/Button'
+import Link from 'js/components/General/Link'
+import { constructUrl, loginURL } from 'js/navigation/navigation'
+import { parseUrlSearchString } from 'js/utils/utils'
+import { SEARCH_APP, TAB_APP } from 'js/constants'
 
 // This view primarily exists as an intermediary to open
 // the authentication page outside of an iframe, because
@@ -13,32 +16,24 @@ import { getUrlParameters } from 'js/utils/utils'
 // and open a new tab; our browser extensions currently iframe
 // the page.
 class SignInIframeMessage extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      // Whether we are requiring the anonymous user to sign in.
-      isMandatoryAnonymousSignIn: getUrlParameters()['mandatory'] === 'true',
-    }
-  }
-
-  openAuthOutsideIframe() {
-    window.open(absoluteUrl(loginURL), '_top')
-  }
-
   render() {
-    const showRequiredSignInExplanation = this.state.isMandatoryAnonymousSignIn
-    var buttonLabel = 'SIGN IN'
+    const { app, location: { search = '' } = {} } = this.props
+    const urlParams = parseUrlSearchString(search)
+
+    // Whether we are requiring the anonymous user to sign in.
+    const showRequiredSignInExplanation = urlParams.mandatory === 'true'
+
     return (
       <Paper
-        zDepth={1}
+        elevation={1}
         style={{
           padding: 24,
-          maxWidth: 400,
+          maxWidth: 340,
           backgroundColor: '#FFF',
           marginBottom: 60,
         }}
       >
-        <Typography variant={'h6'}>
+        <Typography variant={'h6'} gutterBottom>
           {showRequiredSignInExplanation
             ? `Great job so far!`
             : `Let's get started!`}
@@ -52,8 +47,9 @@ class SignInIframeMessage extends React.Component {
           </Typography>
         ) : (
           <Typography variant={'body2'}>
-            Sign in to customize your new tab page and raise money for your
-            favorite causes.
+            {app === SEARCH_APP
+              ? 'Sign in to track your progress as you raise money for your favorite causes.'
+              : 'Sign in to customize your new tab page and raise money for your favorite causes.'}
           </Typography>
         )}
         <span
@@ -63,16 +59,39 @@ class SignInIframeMessage extends React.Component {
             marginTop: 24,
           }}
         >
-          <RaisedButton
-            data-test-id={'sign-in-iframe-message-button'}
-            label={buttonLabel}
-            primary
-            onClick={this.openAuthOutsideIframe.bind(this)}
-          />
+          <Link
+            to={constructUrl(
+              loginURL,
+              { ...urlParams },
+              {
+                absolute: true,
+              }
+            )}
+            target="_top"
+          >
+            <Button
+              data-test-id={'sign-in-iframe-message-button'}
+              color={'primary'}
+              variant={'contained'}
+            >
+              Sign in
+            </Button>
+          </Link>
         </span>
       </Paper>
     )
   }
+}
+
+SignInIframeMessage.propTypes = {
+  app: PropTypes.oneOf([TAB_APP, SEARCH_APP]).isRequired,
+  location: PropTypes.shape({
+    search: PropTypes.string.isRequired,
+  }),
+}
+
+SignInIframeMessage.defaultProps = {
+  app: TAB_APP,
 }
 
 export default SignInIframeMessage

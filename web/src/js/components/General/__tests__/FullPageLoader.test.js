@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography'
 jest.mock('js/components/Logo/Logo')
 
 const getMockProps = () => ({
+  app: undefined,
   delay: 250,
 })
 
@@ -31,7 +32,42 @@ describe('FullPageLoader', function() {
     const wrapper = mount(<FullPageLoader {...mockProps} />)
     jest.runAllTimers()
     wrapper.update()
-    expect(wrapper.find(Logo).length).toBe(1)
+    expect(wrapper.find(Logo).exists()).toBe(true)
+  })
+
+  it('shows the Tab logo by default', () => {
+    const FullPageLoader = require('js/components/General/FullPageLoader')
+      .default
+    jest.useFakeTimers()
+    const mockProps = getMockProps()
+    const wrapper = mount(<FullPageLoader {...mockProps} />)
+    jest.runAllTimers()
+    wrapper.update()
+    expect(wrapper.find(Logo).prop('brand')).toEqual('tab')
+  })
+
+  it('shows the Tab logo if the "app" prop === "tab"', () => {
+    const FullPageLoader = require('js/components/General/FullPageLoader')
+      .default
+    jest.useFakeTimers()
+    const mockProps = getMockProps()
+    mockProps.app = 'tab'
+    const wrapper = mount(<FullPageLoader {...mockProps} />)
+    jest.runAllTimers()
+    wrapper.update()
+    expect(wrapper.find(Logo).prop('brand')).toEqual('tab')
+  })
+
+  it('shows the Search logo if the "app" prop === "search"', () => {
+    const FullPageLoader = require('js/components/General/FullPageLoader')
+      .default
+    jest.useFakeTimers()
+    const mockProps = getMockProps()
+    mockProps.app = 'search'
+    const wrapper = mount(<FullPageLoader {...mockProps} />)
+    jest.runAllTimers()
+    wrapper.update()
+    expect(wrapper.find(Logo).prop('brand')).toEqual('search')
   })
 
   it('says "Loading"', () => {
@@ -63,6 +99,6 @@ describe('FullPageLoader', function() {
     expect(wrapper.find('div').length).toBe(0)
     jest.advanceTimersByTime(2)
     wrapper.update()
-    expect(wrapper.find('div').length).toBe(1)
+    expect(wrapper.find('div').exists()).toBe(true)
   })
 })

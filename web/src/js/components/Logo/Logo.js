@@ -5,6 +5,7 @@ import tabLogoWhite from 'js/assets/logos/logo-white.svg'
 import tabLogoWithText from 'js/assets/logos/logo-with-text.svg'
 import searchLogoDefault from 'js/assets/logos/search-logo.svg'
 import searchLogoWithText from 'js/assets/logos/search-logo-with-text.svg'
+import { SEARCH_APP, TAB_APP } from 'js/constants'
 
 class Logo extends React.Component {
   render() {
@@ -18,7 +19,7 @@ class Logo extends React.Component {
     )
     let logo
     switch (brand) {
-      case 'tab': {
+      case TAB_APP: {
         if (includeText) {
           logo = tabLogoWithText
           break
@@ -38,7 +39,7 @@ class Logo extends React.Component {
         }
         break
       }
-      case 'search': {
+      case SEARCH_APP: {
         if (includeText) {
           logo = searchLogoWithText
           break
@@ -57,14 +58,14 @@ class Logo extends React.Component {
 }
 
 Logo.props = {
-  brand: PropTypes.oneOf(['tab', 'search']),
+  brand: PropTypes.oneOf([TAB_APP, SEARCH_APP]).isRequired,
   includeText: PropTypes.bool.isRequired,
   style: PropTypes.object,
   color: PropTypes.oneOf(['purple', 'white']),
 }
 
 Logo.defaultProps = {
-  brand: 'tab',
+  brand: TAB_APP,
   includeText: false,
   style: {},
   color: 'purple',
