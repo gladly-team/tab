@@ -14,7 +14,7 @@ describe('StatComponent', () => {
     const StatComponent = require('js/components/Settings/Profile/StatComponent')
       .default
     const mockProps = getMockProps()
-    shallow(<StatComponent {...mockProps} />)
+    shallow(<StatComponent {...mockProps} />).dive()
   })
 
   it('displays the "stat" value in the expected typography component', () => {
@@ -22,7 +22,7 @@ describe('StatComponent', () => {
       .default
     const mockProps = getMockProps()
     mockProps.stat = 142
-    const wrapper = shallow(<StatComponent {...mockProps} />)
+    const wrapper = shallow(<StatComponent {...mockProps} />).dive()
     expect(
       wrapper
         .find(Typography)
@@ -37,7 +37,7 @@ describe('StatComponent', () => {
       .default
     const mockProps = getMockProps()
     mockProps.statText = 'friends recruited'
-    const wrapper = shallow(<StatComponent {...mockProps} />)
+    const wrapper = shallow(<StatComponent {...mockProps} />).dive()
     expect(
       wrapper
         .find(Typography)
