@@ -36,10 +36,13 @@ const styles = theme => ({
     margin: spacingPx,
   },
   happyIcon: {
-    minHeight: 24,
-    minWidth: 24,
+    height: 20,
+    width: 20,
     marginRight: 8,
-    color: 'black', // TODO: fix colors
+    color: theme.palette.action.active,
+  },
+  thankYouText: {
+    color: theme.palette.action.active,
   },
 })
 
@@ -75,7 +78,7 @@ const ProfileInviteFriend = props => {
       />
       <Paper className={classes.thankYouPaper}>
         <HappyIcon className={classes.happyIcon} />
-        <Typography variant={'body2'}>
+        <Typography variant={'body2'} className={classes.thankYouText}>
           Thank you! Every new person raises more money for charity, and we
           depend on people like you to get the word out.
         </Typography>
