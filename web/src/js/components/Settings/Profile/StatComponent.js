@@ -12,7 +12,6 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    alignContent: 'middle',
   },
   mainContentContainer: {
     display: 'flex',

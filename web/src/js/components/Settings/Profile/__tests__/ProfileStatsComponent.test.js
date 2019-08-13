@@ -27,13 +27,13 @@ describe('Profile stats component', () => {
   it('renders without error', () => {
     const ProfileStatsComponent = require('js/components/Settings/Profile/ProfileStatsComponent')
       .default
-    shallow(<ProfileStatsComponent {...mockProps} />)
+    shallow(<ProfileStatsComponent {...mockProps} />).dive()
   })
 
   it('has the expected number of stats', () => {
     const ProfileStatsComponent = require('js/components/Settings/Profile/ProfileStatsComponent')
       .default
-    const wrapper = shallow(<ProfileStatsComponent {...mockProps} />)
+    const wrapper = shallow(<ProfileStatsComponent {...mockProps} />).dive()
     expect(wrapper.find(Stat).length).toBe(6)
   })
 
