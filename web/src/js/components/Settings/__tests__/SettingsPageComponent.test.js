@@ -3,6 +3,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import { Redirect, Route, Switch } from 'react-router-dom'
+import IconButton from '@material-ui/core/IconButton'
 import SettingsPage from 'js/components/Settings/SettingsPageComponent'
 import AccountView from 'js/components/Settings/Account/AccountView'
 import BackgroundSettingsView from 'js/components/Settings/Background/BackgroundSettingsView'
@@ -13,6 +14,7 @@ import ProfileDonateHearts from 'js/components/Settings/Profile/ProfileDonateHea
 import ProfileInviteFriend from 'js/components/Settings/Profile/ProfileInviteFriendView'
 import SettingsMenuItem from 'js/components/Settings/SettingsMenuItem'
 import WidgetsSettingsView from 'js/components/Settings/Widgets/WidgetsSettingsView'
+import { goToDashboard } from 'js/navigation/navigation'
 
 jest.mock('react-router-dom')
 jest.mock('js/components/Settings/Account/AccountView')
@@ -25,6 +27,7 @@ jest.mock('js/components/Settings/Profile/ProfileInviteFriendView')
 jest.mock('js/components/Settings/SettingsMenuItem')
 jest.mock('js/components/Settings/Widgets/WidgetsSettingsView')
 jest.mock('js/components/General/withUser')
+jest.mock('js/navigation/navigation')
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -395,5 +398,15 @@ describe('SettingsPage', () => {
     expect(wrapper.find(ErrorMessage).prop('message')).toEqual(
       'We made a mistake :('
     )
+  })
+
+  it('goes to the Tab dashboard when clicking the close IconButton', () => {
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SettingsPage {...mockProps} />)
+      .dive()
+      .dive()
+    expect(goToDashboard).not.toHaveBeenCalled()
+    wrapper.find(IconButton).simulate('click')
+    expect(goToDashboard).toHaveBeenCalled()
   })
 })
