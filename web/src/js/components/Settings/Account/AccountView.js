@@ -41,7 +41,7 @@ class AccountView extends React.Component {
             const showError = this.props.showError
             const dataLoaded = !!props
             return (
-              <SettingsChildWrapper loaded={dataLoaded}>
+              <SettingsChildWrapper>
                 {dataLoaded ? (
                   <Account user={props.user} showError={showError} />
                 ) : null}

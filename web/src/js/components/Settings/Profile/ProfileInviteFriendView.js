@@ -45,7 +45,7 @@ class ProfileInviteFriendView extends React.Component {
             const showError = this.props.showError
             const dataLoaded = !!props
             return (
-              <SettingsChildWrapper loaded={dataLoaded}>
+              <SettingsChildWrapper>
                 {dataLoaded ? (
                   <ProfileInviteFriend
                     app={props.app}
