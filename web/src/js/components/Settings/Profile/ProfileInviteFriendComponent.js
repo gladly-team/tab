@@ -25,7 +25,6 @@ const styles = theme => ({
     flexBasis: '40%',
     minWidth: 200,
   },
-  // stat: {}, // TODO: need to override inline styles in StatComponent
   thankYouPaper: {
     display: 'flex',
     justifyContent: 'center',
@@ -44,47 +43,45 @@ const styles = theme => ({
   },
 })
 
-class ProfileInviteFriend extends React.Component {
-  render() {
-    const { app, classes, user } = this.props
-    const friendWord = user.numUsersRecruited === 1 ? 'friend' : 'friends'
-    const statStyle = {
-      margin: spacingPx,
-      flex: 1,
-      paddingTop: 40,
-      paddingBottom: 40,
-    }
-    return (
-      <span className={classes.container}>
-        <Paper elevation={1} className={classes.inviteFriendPaper}>
-          <InviteFriend
-            user={user}
-            style={{
-              width: '100%',
-              maxWidth: 300,
-            }}
-          />
-        </Paper>
-        <Stat
-          stat={user.numUsersRecruited}
-          statText={`${friendWord} recruited`}
-          style={statStyle}
-        />
-        <Stat
-          stat={app.referralVcReward}
-          statText={'extra Hearts when you recruit a new friend'}
-          style={statStyle}
-        />
-        <Paper className={classes.thankYouPaper}>
-          <HappyIcon className={classes.happyIcon} />
-          <Typography variant={'body2'}>
-            Thank you! Every new person raises more money for charity, and we
-            depend on people like you to get the word out.
-          </Typography>
-        </Paper>
-      </span>
-    )
+const ProfileInviteFriend = props => {
+  const { app, classes, user } = props
+  const friendWord = user.numUsersRecruited === 1 ? 'friend' : 'friends'
+  const statStyle = {
+    margin: spacingPx,
+    flex: 1,
+    paddingTop: 40,
+    paddingBottom: 40,
   }
+  return (
+    <span className={classes.container}>
+      <Paper elevation={1} className={classes.inviteFriendPaper}>
+        <InviteFriend
+          user={user}
+          style={{
+            width: '100%',
+            maxWidth: 300,
+          }}
+        />
+      </Paper>
+      <Stat
+        stat={user.numUsersRecruited}
+        statText={`${friendWord} recruited`}
+        style={statStyle}
+      />
+      <Stat
+        stat={app.referralVcReward}
+        statText={'extra Hearts when you recruit a new friend'}
+        style={statStyle}
+      />
+      <Paper className={classes.thankYouPaper}>
+        <HappyIcon className={classes.happyIcon} />
+        <Typography variant={'body2'}>
+          Thank you! Every new person raises more money for charity, and we
+          depend on people like you to get the word out.
+        </Typography>
+      </Paper>
+    </span>
+  )
 }
 
 ProfileInviteFriend.propTypes = {
