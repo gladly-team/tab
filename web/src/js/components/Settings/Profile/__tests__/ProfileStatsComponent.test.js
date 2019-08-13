@@ -1,12 +1,11 @@
 /* eslint-env jest */
 
 import React from 'react'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import { cloneDeep } from 'lodash/lang'
-import { mount, shallow } from 'enzyme'
+import { shallow } from 'enzyme'
 import Stat from 'js/components/Settings/Profile/StatComponent'
+import Typography from '@material-ui/core/Typography'
 
-const mockProps = {
+const getMockProps = () => ({
   user: {
     id: 'some-user-id-here',
     username: 'Bob',
@@ -21,58 +20,50 @@ const mockProps = {
     tabs: 3121,
     vcDonatedAllTime: 2539,
   },
-}
+})
 
 describe('Profile stats component', () => {
   it('renders without error', () => {
     const ProfileStatsComponent = require('js/components/Settings/Profile/ProfileStatsComponent')
       .default
+    const mockProps = getMockProps()
     shallow(<ProfileStatsComponent {...mockProps} />).dive()
   })
 
   it('has the expected number of stats', () => {
     const ProfileStatsComponent = require('js/components/Settings/Profile/ProfileStatsComponent')
       .default
+    const mockProps = getMockProps()
     const wrapper = shallow(<ProfileStatsComponent {...mockProps} />).dive()
     expect(wrapper.find(Stat).length).toBe(6)
   })
 
-  it('contains the correct greeting when there is a username', () => {
+  it('contains the correct greeting text when there is a username', () => {
     const ProfileStatsComponent = require('js/components/Settings/Profile/ProfileStatsComponent')
       .default
-    // @material-ui-1-todo: remove MuiThemeProvider wrapper
-    const wrapper = mount(
-      <MuiThemeProvider>
-        <ProfileStatsComponent {...mockProps} />
-      </MuiThemeProvider>
-    )
+    const mockProps = getMockProps()
+    const wrapper = shallow(<ProfileStatsComponent {...mockProps} />).dive()
     expect(
       wrapper
-        .find('p')
+        .find(Typography)
         .first()
-        .find('span')
-        .first()
+        .render()
         .text()
-    ).toBe('Hi, Bob!')
+    ).toEqual("Hi, Bob! Here's all your great work Tabbing, by the numbers.")
   })
 
   it('contains the correct greeting when there is no username', () => {
     const ProfileStatsComponent = require('js/components/Settings/Profile/ProfileStatsComponent')
       .default
-    const newMockProps = cloneDeep(mockProps)
-    delete newMockProps.user.username
-    const wrapper = mount(
-      <MuiThemeProvider>
-        <ProfileStatsComponent {...newMockProps} />
-      </MuiThemeProvider>
-    )
+    const mockProps = getMockProps()
+    mockProps.user.username = undefined
+    const wrapper = shallow(<ProfileStatsComponent {...mockProps} />).dive()
     expect(
       wrapper
-        .find('p')
+        .find(Typography)
         .first()
-        .find('span')
-        .first()
+        .render()
         .text()
-    ).toBe('Hi!')
+    ).toEqual("Hi! Here's all your great work Tabbing, by the numbers.")
   })
 })
