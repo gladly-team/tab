@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
+
+// TODO: update MUI components
 import RaisedButton from 'material-ui/RaisedButton'
 import HeartBorderIcon from 'material-ui/svg-icons/action/favorite-border'
 import Stat from 'js/components/Settings/Profile/StatComponent'
