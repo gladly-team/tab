@@ -66,4 +66,6 @@ describe('Profile stats component', () => {
         .text()
     ).toEqual("Hi! Here's all your great work Tabbing, by the numbers.")
   })
+
+  // TODO: add tests for stats and stat-related buttons
 })
