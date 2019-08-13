@@ -75,6 +75,7 @@ class Dashboard extends React.Component {
 
     this.state = {
       errorMessage: null,
+      errorOpen: false,
       tabId: uuid(),
       isUserAnonymous: false, // Set after mount if true
       // This may be false if the user cleared their storage,
@@ -132,12 +133,15 @@ class Dashboard extends React.Component {
 
   showError(msg) {
     this.setState({
+      errorOpen: true,
       errorMessage: msg,
     })
   }
 
   clearError() {
-    this.showError(null)
+    this.setState({
+      errorOpen: false,
+    })
   }
 
   render() {
@@ -151,7 +155,7 @@ class Dashboard extends React.Component {
       searchIntroExperimentGroup,
       tabId,
     } = this.state
-    const errorMessage = this.state.errorMessage
+    const { errorMessage, errorOpen } = this.state
 
     // Whether or not a campaign should show on the dashboard
     const showCampaign = !!(
@@ -587,12 +591,11 @@ class Dashboard extends React.Component {
         {user ? <LogConsentData user={user} /> : null}
         {user ? <LogAccountCreation user={user} /> : null}
         {user ? <AssignExperimentGroups user={user} isNewUser={false} /> : null}
-        {errorMessage ? (
-          <ErrorMessage
-            message={errorMessage}
-            onRequestClose={this.clearError.bind(this)}
-          />
-        ) : null}
+        <ErrorMessage
+          message={errorMessage}
+          open={errorOpen}
+          onClose={this.clearError.bind(this)}
+        />
       </div>
     )
   }

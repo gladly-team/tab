@@ -40,6 +40,7 @@ class SettingsPage extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      errorOpen: false,
       errorMessage: null,
     }
   }
@@ -50,18 +51,21 @@ class SettingsPage extends React.Component {
 
   showError(msg) {
     this.setState({
+      errorOpen: true,
       errorMessage: msg,
     })
   }
 
   clearError() {
-    this.showError(null)
+    this.setState({
+      errorOpen: false,
+    })
   }
 
   render() {
     const { authUser, classes } = this.props
+    const { errorMessage, errorOpen } = this.state
     const showError = this.showError
-    const errorMessage = this.state.errorMessage
     const sidebarWidth = 240
     const sidebarLeftMargin = 10
     return (
@@ -206,12 +210,11 @@ class SettingsPage extends React.Component {
             <Redirect from="/newtab/account/*" to="/newtab/account/" />
           </Switch>
         </div>
-        {errorMessage ? (
-          <ErrorMessage
-            message={errorMessage}
-            onRequestClose={this.clearError.bind(this)}
-          />
-        ) : null}
+        <ErrorMessage
+          message={errorMessage}
+          onClose={this.clearError.bind(this)}
+          open={errorOpen}
+        />
       </div>
     )
   }

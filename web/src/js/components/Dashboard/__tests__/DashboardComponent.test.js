@@ -280,20 +280,20 @@ describe('Dashboard component', () => {
     expect(wrapper.find(NewUserTour).length).toBe(0)
   })
 
-  it('does not render the ErrorMessage component when no error message is set', () => {
+  it('does not display the ErrorMessage component when no error message is set', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
-    expect(wrapper.find(ErrorMessage).length).toBe(0)
+    expect(wrapper.find(ErrorMessage).prop('open')).toBe(false)
   })
 
-  it('renders the ErrorMessage component when WidgetsContainer calls its "showError" prop', () => {
+  it('displays the ErrorMessage component when WidgetsContainer calls its "showError" prop', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
     const wrapper = shallow(<DashboardComponent {...mockProps} />)
     wrapper.find(WidgetsContainer).prop('showError')('Big widget problem!')
     wrapper.update()
-    expect(wrapper.find(ErrorMessage).length).toBe(1)
+    expect(wrapper.find(ErrorMessage).prop('open')).toBe(true)
     expect(wrapper.find(ErrorMessage).prop('message')).toBe(
       'Big widget problem!'
     )

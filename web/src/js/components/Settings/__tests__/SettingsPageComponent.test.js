@@ -382,7 +382,7 @@ describe('SettingsPage', () => {
       .dive()
 
     // We should not show an error message yet.
-    expect(wrapper.find(ErrorMessage).exists()).toBe(false)
+    expect(wrapper.find(ErrorMessage).prop('open')).toBe(false)
 
     const routeElem = wrapper
       .find(Switch)
@@ -394,7 +394,7 @@ describe('SettingsPage', () => {
     )
     const showErrorFunc = ThisRouteComponentElem.prop('showError')
     showErrorFunc('We made a mistake :(')
-    expect(wrapper.find(ErrorMessage).exists()).toBe(true)
+    expect(wrapper.find(ErrorMessage).prop('open')).toBe(true)
     expect(wrapper.find(ErrorMessage).prop('message')).toEqual(
       'We made a mistake :('
     )

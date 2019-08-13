@@ -38,6 +38,7 @@ class ProfileInviteFriendView extends React.Component {
             if (error) {
               logger.error(error)
               const errMsg = 'We had a problem loading this page :('
+              // FIXME
               return <ErrorMessage message={errMsg} />
             }
             const showError = this.props.showError

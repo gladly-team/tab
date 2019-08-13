@@ -38,6 +38,7 @@ class WidgetsSettingsView extends React.Component {
             if (error) {
               logger.error(error)
               const errMsg = 'We had a problem loading the widget settings :('
+              // FIXME
               return <ErrorMessage message={errMsg} />
             }
             const showError = this.props.showError
