@@ -2,22 +2,18 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import TextField from '@material-ui/core/TextField'
 import { withStyles } from '@material-ui/core/styles'
-import { alternateAccentColor } from 'js/theme/default'
 import LogReferralLinkClick from 'js/mutations/LogReferralLinkClickMutation'
 import logger from 'js/utils/logger'
 
-// Can replace this with a proper theme after fully migrating to
-// material-ui 1.0.
-// https://github.com/callemall/material-ui/blob/v1-beta/src/Input/Input.js#L78
 const styles = theme => ({
   inputUnderline: {
     '&:after': {
-      borderColor: alternateAccentColor,
+      borderColor: theme.palette.secondary.main,
     },
   },
   formLabelRoot: {
     '&$formLabelFocused': {
-      color: alternateAccentColor,
+      color: theme.palette.secondary.main,
     },
   },
   formLabelFocused: {},
@@ -72,12 +68,6 @@ class InviteFriend extends React.Component {
         InputProps={{
           classes: {
             underline: classes.inputUnderline,
-          },
-        }}
-        /* eslint-disable-next-line react/jsx-no-duplicate-props */
-        inputProps={{
-          style: {
-            textAlign: 'left',
           },
         }}
         InputLabelProps={{
