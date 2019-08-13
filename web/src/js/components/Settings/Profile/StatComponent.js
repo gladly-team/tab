@@ -21,6 +21,7 @@ const styles = theme => ({
   },
   stat: {
     textAlign: 'center',
+    marginBottom: 6,
   },
   statText: {
     textAlign: 'center',

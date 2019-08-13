@@ -6,6 +6,7 @@ import Paper from '@material-ui/core/Paper'
 import Button from '@material-ui/core/Button'
 import ChartIcon from '@material-ui/icons/InsertChart'
 import HeartBorderIcon from '@material-ui/icons/FavoriteBorder'
+import Typography from '@material-ui/core/Typography'
 
 // TODO: update MUI components
 import appTheme, { lighterTextColor } from 'js/theme/default'
@@ -42,8 +43,7 @@ class ProfileStats extends React.Component {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            paddingLeft: 20,
-            paddingRight: 20,
+            padding: 14,
             marginBottom: 2 * spacingPx,
             color: lighterTextColor,
           }}
@@ -56,10 +56,10 @@ class ProfileStats extends React.Component {
               minWidth: 24,
             }}
           />
-          <p>
+          <Typography variant={'body2'}>
             <span style={{ fontWeight: 500 }}>{greeting}</span>
             <span> Here's all your great work Tabbing, by the numbers.</span>
-          </p>
+          </Typography>
         </Paper>
         <span
           style={{
@@ -82,9 +82,9 @@ class ProfileStats extends React.Component {
             stat={commaFormatted(user.maxTabsDay.numTabs)}
             statText={'max tabs in one day'}
             extraContent={
-              <span style={extraContentTextStyle}>
+              <Typography variant={'body2'} style={extraContentTextStyle}>
                 on {moment(user.maxTabsDay.date).format('LL')}
-              </span>
+              </Typography>
             }
             style={statStyle}
           />
@@ -92,7 +92,7 @@ class ProfileStats extends React.Component {
             stat={user.level}
             statText={'your level'}
             extraContent={
-              <span style={extraContentTextStyle}>
+              <Typography variant={'body2'} style={extraContentTextStyle}>
                 <span>{user.heartsUntilNextLevel}</span>
                 <HeartBorderIcon
                   style={{
@@ -105,7 +105,7 @@ class ProfileStats extends React.Component {
                   }}
                 />
                 <span>until next level</span>
-              </span>
+              </Typography>
             }
             style={statStyle}
           />
