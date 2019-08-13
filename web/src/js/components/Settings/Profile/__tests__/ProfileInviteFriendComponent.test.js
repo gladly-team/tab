@@ -25,14 +25,14 @@ describe('ProfileInviteFriendComponent', () => {
     const ProfileInviteFriend = require('js/components/Settings/Profile/ProfileInviteFriendComponent')
       .default
     const mockProps = getMockProps()
-    shallow(<ProfileInviteFriend {...mockProps} />)
+    shallow(<ProfileInviteFriend {...mockProps} />).dive()
   })
 
   it('renders the InviteFriend component and passes it the "user" prop', () => {
     const ProfileInviteFriend = require('js/components/Settings/Profile/ProfileInviteFriendComponent')
       .default
     const mockProps = getMockProps()
-    const wrapper = shallow(<ProfileInviteFriend {...mockProps} />)
+    const wrapper = shallow(<ProfileInviteFriend {...mockProps} />).dive()
     const inviteFriendElem = wrapper.find(InviteFriend)
     expect(inviteFriendElem.exists()).toBe(true)
     expect(inviteFriendElem.prop('user')).toEqual({
@@ -44,7 +44,7 @@ describe('ProfileInviteFriendComponent', () => {
     const ProfileInviteFriend = require('js/components/Settings/Profile/ProfileInviteFriendComponent')
       .default
     const mockProps = getMockProps()
-    const wrapper = shallow(<ProfileInviteFriend {...mockProps} />)
+    const wrapper = shallow(<ProfileInviteFriend {...mockProps} />).dive()
     const elem = wrapper.find(Stat).first()
     expect(elem.prop('stat')).toEqual(2)
     expect(elem.prop('statText')).toEqual('friends recruited')
@@ -55,7 +55,7 @@ describe('ProfileInviteFriendComponent', () => {
       .default
     const mockProps = getMockProps()
     mockProps.user.numUsersRecruited = 1
-    const wrapper = shallow(<ProfileInviteFriend {...mockProps} />)
+    const wrapper = shallow(<ProfileInviteFriend {...mockProps} />).dive()
     const elem = wrapper.find(Stat).first()
     expect(elem.prop('stat')).toEqual(1)
     expect(elem.prop('statText')).toEqual('friend recruited')
@@ -65,7 +65,7 @@ describe('ProfileInviteFriendComponent', () => {
     const ProfileInviteFriend = require('js/components/Settings/Profile/ProfileInviteFriendComponent')
       .default
     const mockProps = getMockProps()
-    const wrapper = shallow(<ProfileInviteFriend {...mockProps} />)
+    const wrapper = shallow(<ProfileInviteFriend {...mockProps} />).dive()
     const elem = wrapper.find(Stat).at(1)
     expect(elem.prop('stat')).toEqual(300)
     expect(elem.prop('statText')).toEqual(
@@ -77,7 +77,7 @@ describe('ProfileInviteFriendComponent', () => {
     const ProfileInviteFriend = require('js/components/Settings/Profile/ProfileInviteFriendComponent')
       .default
     const mockProps = getMockProps()
-    const wrapper = shallow(<ProfileInviteFriend {...mockProps} />)
+    const wrapper = shallow(<ProfileInviteFriend {...mockProps} />).dive()
     expect(
       wrapper
         .find(Paper)
@@ -94,7 +94,7 @@ describe('ProfileInviteFriendComponent', () => {
     const ProfileInviteFriend = require('js/components/Settings/Profile/ProfileInviteFriendComponent')
       .default
     const mockProps = getMockProps()
-    const wrapper = shallow(<ProfileInviteFriend {...mockProps} />)
+    const wrapper = shallow(<ProfileInviteFriend {...mockProps} />).dive()
     expect(
       wrapper
         .find(Paper)
