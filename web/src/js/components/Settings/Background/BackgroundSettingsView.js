@@ -39,7 +39,8 @@ class BackgroundSettingsView extends React.Component {
               logger.error(error)
               const errMsg =
                 'We had a problem loading the background settings :('
-              // FIXME
+
+              // Error will not autohide.
               return <ErrorMessage message={errMsg} />
             }
             const showError = this.props.showError
