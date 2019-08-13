@@ -2,13 +2,15 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 
+import Paper from '@material-ui/core/Paper'
+import Button from '@material-ui/core/Button'
+import ChartIcon from '@material-ui/icons/InsertChart'
+import HeartBorderIcon from '@material-ui/icons/FavoriteBorder'
+
 // TODO: update MUI components
-import RaisedButton from 'material-ui/RaisedButton'
-import HeartBorderIcon from 'material-ui/svg-icons/action/favorite-border'
-import Stat from 'js/components/Settings/Profile/StatComponent'
-import Paper from 'material-ui/Paper'
 import appTheme, { lighterTextColor } from 'js/theme/default'
-import ChartIcon from 'material-ui/svg-icons/editor/insert-chart'
+
+import Stat from 'js/components/Settings/Profile/StatComponent'
 import { goToInviteFriends, goToDonate } from 'js/navigation/navigation'
 import { abbreviateNumber, commaFormatted } from 'js/utils/utils'
 
@@ -94,13 +96,13 @@ class ProfileStats extends React.Component {
                 <span>{user.heartsUntilNextLevel}</span>
                 <HeartBorderIcon
                   style={{
+                    color: appTheme.palette.disabledColor,
                     marginLeft: 0,
                     marginRight: 2,
                     height: 16,
                     width: 16,
                     paddingBottom: 0,
                   }}
-                  color={appTheme.palette.disabledColor}
                 />
                 <span>until next level</span>
               </span>
@@ -112,12 +114,14 @@ class ProfileStats extends React.Component {
             statText={`${tabberWord} recruited`}
             style={statStyle}
             extraContent={
-              <RaisedButton
-                label="Invite Friends"
-                style={{ marginTop: 14 }}
-                primary
+              <Button
+                color={'primary'}
+                variant={'contained'}
                 onClick={goToInviteFriends}
-              />
+                style={{ marginTop: 14 }}
+              >
+                Invite Friends
+              </Button>
             }
           />
           <Stat
@@ -125,12 +129,14 @@ class ProfileStats extends React.Component {
             statText={`${heartsWord} donated`}
             style={statStyle}
             extraContent={
-              <RaisedButton
-                label="Donate Hearts"
-                style={{ marginTop: 14 }}
-                primary
+              <Button
+                color={'primary'}
+                variant={'contained'}
                 onClick={goToDonate}
-              />
+                style={{ marginTop: 14 }}
+              >
+                Donate Hearts
+              </Button>
             }
           />
         </span>
