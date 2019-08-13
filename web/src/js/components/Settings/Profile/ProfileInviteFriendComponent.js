@@ -2,9 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import InviteFriend from 'js/components/Settings/Profile/InviteFriendContainer'
 import Stat from 'js/components/Settings/Profile/StatComponent'
-import { lighterTextColor } from 'js/theme/default'
-import HappyIcon from 'material-ui/svg-icons/social/mood'
-import Paper from 'material-ui/Paper'
+import HappyIcon from '@material-ui/icons/Mood'
+import Paper from '@material-ui/core/Paper'
+import Typography from '@material-ui/core/Typography'
 
 class ProfileInviteFriend extends React.Component {
   render() {
@@ -26,6 +26,7 @@ class ProfileInviteFriend extends React.Component {
         }}
       >
         <Paper
+          elevation={1}
           style={{
             display: 'flex',
             justifyContent: 'center',
@@ -74,7 +75,6 @@ class ProfileInviteFriend extends React.Component {
             flexBasis: '50%',
             minWidth: 200,
             padding: 20,
-            color: lighterTextColor,
             margin: spacingPx,
           }}
         >
@@ -83,13 +83,13 @@ class ProfileInviteFriend extends React.Component {
               minHeight: 24,
               minWidth: 24,
               marginRight: 8,
-              color: lighterTextColor,
+              color: 'black', // TODO: fix colors
             }}
           />
-          <p>
+          <Typography variant={'body2'}>
             Thank you! Every new person raises more money for charity, and we
             depend on people like you to get the word out.
-          </p>
+          </Typography>
         </Paper>
       </span>
     )
