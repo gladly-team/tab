@@ -33,14 +33,14 @@ describe('ProfileDonateHearts component', () => {
     const ProfileDonateHearts = require('js/components/Settings/Profile/ProfileDonateHeartsComponent')
       .default
     const mockProps = getMockProps()
-    shallow(<ProfileDonateHearts {...mockProps} />)
+    shallow(<ProfileDonateHearts {...mockProps} />).dive()
   })
 
   it('renders the Charity components', () => {
     const ProfileDonateHearts = require('js/components/Settings/Profile/ProfileDonateHeartsComponent')
       .default
     const mockProps = getMockProps()
-    const wrapper = shallow(<ProfileDonateHearts {...mockProps} />)
+    const wrapper = shallow(<ProfileDonateHearts {...mockProps} />).dive()
 
     const charity1 = wrapper.find(Charity).first()
     expect(charity1.prop('charity')).toEqual(
