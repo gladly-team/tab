@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles'
 import Charity from 'js/components/Donate/CharityContainer'
 import Paper from '@material-ui/core/Paper'
 import InfoIcon from '@material-ui/icons/InfoOutlined'
+import Typography from '@material-ui/core/Typography'
 
 const spacingPx = 6
 
@@ -12,9 +13,10 @@ const styles = theme => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingLeft: 20,
-    paddingRight: 20,
+    padding: 14,
     marginBottom: 2 * spacingPx,
+  },
+  messageText: {
     color: theme.palette.action.active,
   },
   infoIcon: {
@@ -38,10 +40,10 @@ class ProfileDonateHearts extends React.Component {
       <div key={'charities-container-key'}>
         <Paper className={classes.messageContainer}>
           <InfoIcon className={classes.infoIcon} />
-          <p>
+          <Typography variant={'body2'} className={classes.messageText}>
             When you donate Hearts, you're telling us to give more of the money
             we raise to that charity.
-          </p>
+          </Typography>
         </Paper>
         <span className={classes.charitiesContainer}>
           {app.charities.edges.map(edge => {
