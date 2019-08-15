@@ -36,7 +36,7 @@ const styles = theme => ({
   },
 })
 
-class SettingsPage extends React.Component {
+class TabSettingsPage extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -220,11 +220,11 @@ class SettingsPage extends React.Component {
   }
 }
 
-SettingsPage.propTypes = {
+TabSettingsPage.propTypes = {
   authUser: PropTypes.shape({
     id: PropTypes.string.isRequired,
   }).isRequired,
   classes: PropTypes.object.isRequired,
 }
 
-export default withStyles(styles)(withUser()(SettingsPage))
+export default withStyles(styles)(withUser()(TabSettingsPage))

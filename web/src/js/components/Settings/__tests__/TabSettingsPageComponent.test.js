@@ -4,7 +4,7 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import { Redirect, Route, Switch } from 'react-router-dom'
 import IconButton from '@material-ui/core/IconButton'
-import SettingsPage from 'js/components/Settings/SettingsPageComponent'
+import TabSettingsPage from 'js/components/Settings/TabSettingsPageComponent'
 import AccountView from 'js/components/Settings/Account/AccountView'
 import BackgroundSettingsView from 'js/components/Settings/Background/BackgroundSettingsView'
 import ErrorMessage from 'js/components/General/ErrorMessage'
@@ -35,7 +35,7 @@ afterEach(() => {
 
 const getMockProps = () => ({})
 
-describe('withUser HOC in SettingsPage', () => {
+describe('withUser HOC in TabSettingsPage', () => {
   beforeEach(() => {
     jest.resetModules()
   })
@@ -44,33 +44,33 @@ describe('withUser HOC in SettingsPage', () => {
     const withUser = require('js/components/General/withUser').default
 
     /* eslint-disable-next-line no-unused-expressions */
-    require('js/components/Settings/SettingsPageComponent').default
+    require('js/components/Settings/TabSettingsPageComponent').default
     expect(withUser).toHaveBeenCalledWith()
   })
 
-  it('wraps the SettingsPage component', () => {
+  it('wraps the TabSettingsPage component', () => {
     const {
       __mockWithUserWrappedFunction,
     } = require('js/components/General/withUser')
 
     /* eslint-disable-next-line no-unused-expressions */
-    require('js/components/Settings/SettingsPageComponent').default
+    require('js/components/Settings/TabSettingsPageComponent').default
     const wrappedComponent = __mockWithUserWrappedFunction.mock.calls[0][0]
-    expect(wrappedComponent.name).toEqual('SettingsPage')
+    expect(wrappedComponent.name).toEqual('TabSettingsPage')
   })
 })
 
-describe('SettingsPage', () => {
+describe('TabSettingsPage', () => {
   it('renders without error', () => {
     const mockProps = getMockProps()
-    shallow(<SettingsPage {...mockProps} />)
+    shallow(<TabSettingsPage {...mockProps} />)
       .dive()
       .dive()
   })
 
   it('renders the expected side menu items', () => {
     const mockProps = getMockProps()
-    const wrapper = shallow(<SettingsPage {...mockProps} />)
+    const wrapper = shallow(<TabSettingsPage {...mockProps} />)
       .dive()
       .dive()
     const menuItems = wrapper.find(SettingsMenuItem)
@@ -89,7 +89,7 @@ describe('SettingsPage', () => {
 
   it('includes a WidgetsSettingsView route', () => {
     const mockProps = getMockProps()
-    const wrapper = shallow(<SettingsPage {...mockProps} />)
+    const wrapper = shallow(<TabSettingsPage {...mockProps} />)
       .dive()
       .dive()
     const routeElem = wrapper
@@ -101,7 +101,7 @@ describe('SettingsPage', () => {
 
   it('renders the expected WidgetsSettingsView component with the expected props', () => {
     const mockProps = getMockProps()
-    const wrapper = shallow(<SettingsPage {...mockProps} />)
+    const wrapper = shallow(<TabSettingsPage {...mockProps} />)
       .dive()
       .dive()
     const routeElem = wrapper
@@ -129,7 +129,7 @@ describe('SettingsPage', () => {
 
   it('includes a BackgroundSettingsView route', () => {
     const mockProps = getMockProps()
-    const wrapper = shallow(<SettingsPage {...mockProps} />)
+    const wrapper = shallow(<TabSettingsPage {...mockProps} />)
       .dive()
       .dive()
     const routeElem = wrapper
@@ -141,7 +141,7 @@ describe('SettingsPage', () => {
 
   it('renders the expected BackgroundSettingsView component with the expected props', () => {
     const mockProps = getMockProps()
-    const wrapper = shallow(<SettingsPage {...mockProps} />)
+    const wrapper = shallow(<TabSettingsPage {...mockProps} />)
       .dive()
       .dive()
     const routeElem = wrapper
@@ -169,7 +169,7 @@ describe('SettingsPage', () => {
 
   it('includes a ProfileStatsView route', () => {
     const mockProps = getMockProps()
-    const wrapper = shallow(<SettingsPage {...mockProps} />)
+    const wrapper = shallow(<TabSettingsPage {...mockProps} />)
       .dive()
       .dive()
     const routeElem = wrapper
@@ -181,7 +181,7 @@ describe('SettingsPage', () => {
 
   it('renders the expected ProfileStatsView component with the expected props', () => {
     const mockProps = getMockProps()
-    const wrapper = shallow(<SettingsPage {...mockProps} />)
+    const wrapper = shallow(<TabSettingsPage {...mockProps} />)
       .dive()
       .dive()
     const routeElem = wrapper
@@ -209,7 +209,7 @@ describe('SettingsPage', () => {
 
   it('includes a ProfileDonateHearts route', () => {
     const mockProps = getMockProps()
-    const wrapper = shallow(<SettingsPage {...mockProps} />)
+    const wrapper = shallow(<TabSettingsPage {...mockProps} />)
       .dive()
       .dive()
     const routeElem = wrapper
@@ -221,7 +221,7 @@ describe('SettingsPage', () => {
 
   it('renders the expected ProfileDonateHearts component with the expected props', () => {
     const mockProps = getMockProps()
-    const wrapper = shallow(<SettingsPage {...mockProps} />)
+    const wrapper = shallow(<TabSettingsPage {...mockProps} />)
       .dive()
       .dive()
     const routeElem = wrapper
@@ -249,7 +249,7 @@ describe('SettingsPage', () => {
 
   it('includes a ProfileInviteFriend route', () => {
     const mockProps = getMockProps()
-    const wrapper = shallow(<SettingsPage {...mockProps} />)
+    const wrapper = shallow(<TabSettingsPage {...mockProps} />)
       .dive()
       .dive()
     const routeElem = wrapper
@@ -261,7 +261,7 @@ describe('SettingsPage', () => {
 
   it('renders the expected ProfileInviteFriend component with the expected props', () => {
     const mockProps = getMockProps()
-    const wrapper = shallow(<SettingsPage {...mockProps} />)
+    const wrapper = shallow(<TabSettingsPage {...mockProps} />)
       .dive()
       .dive()
     const routeElem = wrapper
@@ -289,7 +289,7 @@ describe('SettingsPage', () => {
 
   it('includes a AccountView route', () => {
     const mockProps = getMockProps()
-    const wrapper = shallow(<SettingsPage {...mockProps} />)
+    const wrapper = shallow(<TabSettingsPage {...mockProps} />)
       .dive()
       .dive()
     const routeElem = wrapper
@@ -301,7 +301,7 @@ describe('SettingsPage', () => {
 
   it('renders the expected AccountView component with the expected props', () => {
     const mockProps = getMockProps()
-    const wrapper = shallow(<SettingsPage {...mockProps} />)
+    const wrapper = shallow(<TabSettingsPage {...mockProps} />)
       .dive()
       .dive()
     const routeElem = wrapper
@@ -329,7 +329,7 @@ describe('SettingsPage', () => {
 
   it('redirects from any nonexistent settings page to the widgets settings page', () => {
     const mockProps = getMockProps()
-    const wrapper = shallow(<SettingsPage {...mockProps} />)
+    const wrapper = shallow(<TabSettingsPage {...mockProps} />)
       .dive()
       .dive()
     const redirectElem = wrapper
@@ -341,7 +341,7 @@ describe('SettingsPage', () => {
 
   it('redirects from any nonexistent settings page to the widgets settings page', () => {
     const mockProps = getMockProps()
-    const wrapper = shallow(<SettingsPage {...mockProps} />)
+    const wrapper = shallow(<TabSettingsPage {...mockProps} />)
       .dive()
       .dive()
     const redirectElem = wrapper
@@ -353,7 +353,7 @@ describe('SettingsPage', () => {
 
   it('redirects from any nonexistent profile page to the profile stats page', () => {
     const mockProps = getMockProps()
-    const wrapper = shallow(<SettingsPage {...mockProps} />)
+    const wrapper = shallow(<TabSettingsPage {...mockProps} />)
       .dive()
       .dive()
     const redirectElem = wrapper
@@ -365,7 +365,7 @@ describe('SettingsPage', () => {
 
   it('redirects from any nonexistent account page to the main account page', () => {
     const mockProps = getMockProps()
-    const wrapper = shallow(<SettingsPage {...mockProps} />)
+    const wrapper = shallow(<TabSettingsPage {...mockProps} />)
       .dive()
       .dive()
     const redirectElem = wrapper
@@ -377,7 +377,7 @@ describe('SettingsPage', () => {
 
   it('displays an error message when a child route calls the showError prop', () => {
     const mockProps = getMockProps()
-    const wrapper = shallow(<SettingsPage {...mockProps} />)
+    const wrapper = shallow(<TabSettingsPage {...mockProps} />)
       .dive()
       .dive()
 
@@ -402,7 +402,7 @@ describe('SettingsPage', () => {
 
   it('goes to the Tab dashboard when clicking the close IconButton', () => {
     const mockProps = getMockProps()
-    const wrapper = shallow(<SettingsPage {...mockProps} />)
+    const wrapper = shallow(<TabSettingsPage {...mockProps} />)
       .dive()
       .dive()
     expect(goToDashboard).not.toHaveBeenCalled()
