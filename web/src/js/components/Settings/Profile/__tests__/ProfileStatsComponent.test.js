@@ -6,9 +6,10 @@ import moment from 'moment'
 import MockDate from 'mockdate'
 import Stat from 'js/components/Settings/Profile/StatComponent'
 import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button'
+import { goTo, donateURL, inviteFriendsURL } from 'js/navigation/navigation'
 
 jest.mock('@material-ui/icons/FavoriteBorder', () => () => '[HEART-ICON] ')
+jest.mock('js/navigation/navigation')
 
 const mockNow = '2019-05-19T13:59:58.000Z'
 
@@ -166,5 +167,40 @@ describe('Profile stats component', () => {
     expect(statElem.prop('statText')).toEqual('Tabbers recruited')
   })
 
-  // TODO: add tests for stats and stat-related buttons
+  it('goes to the "invite friends" page when clicking the button below the "friends recruited" stat', () => {
+    const ProfileStatsComponent = require('js/components/Settings/Profile/ProfileStatsComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<ProfileStatsComponent {...mockProps} />).dive()
+    const statElem = wrapper.find(Stat).at(4)
+    expect(statElem.prop('statText')).toEqual('Tabbers recruited')
+    const extraStatContent = shallow(statElem.prop('extraContent'))
+    extraStatContent.at(0).simulate('click')
+    expect(goTo).toHaveBeenCalledTimes(1)
+    expect(goTo).toHaveBeenCalledWith(inviteFriendsURL)
+  })
+
+  it('shows the correct "Hearts donated" stat', () => {
+    const ProfileStatsComponent = require('js/components/Settings/Profile/ProfileStatsComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user.vcDonatedAllTime = 2539
+    const wrapper = shallow(<ProfileStatsComponent {...mockProps} />).dive()
+    const statElem = wrapper.find(Stat).at(5)
+    expect(statElem.prop('stat')).toEqual('2.5K')
+    expect(statElem.prop('statText')).toEqual('Hearts donated')
+  })
+
+  it('goes to the "donate Hearts" page when clicking the button below the "Hearts donated" stat', () => {
+    const ProfileStatsComponent = require('js/components/Settings/Profile/ProfileStatsComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<ProfileStatsComponent {...mockProps} />).dive()
+    const statElem = wrapper.find(Stat).at(5)
+    expect(statElem.prop('statText')).toEqual('Hearts donated')
+    const extraStatContent = shallow(statElem.prop('extraContent'))
+    extraStatContent.at(0).simulate('click')
+    expect(goTo).toHaveBeenCalledTimes(1)
+    expect(goTo).toHaveBeenCalledWith(donateURL)
+  })
 })

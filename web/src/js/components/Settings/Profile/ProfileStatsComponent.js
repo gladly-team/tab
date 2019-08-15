@@ -9,7 +9,7 @@ import HeartBorderIcon from '@material-ui/icons/FavoriteBorder'
 import Typography from '@material-ui/core/Typography'
 
 import Stat from 'js/components/Settings/Profile/StatComponent'
-import { goToInviteFriends, goToDonate } from 'js/navigation/navigation'
+import { goTo, donateURL, inviteFriendsURL } from 'js/navigation/navigation'
 import { abbreviateNumber, commaFormatted } from 'js/utils/utils'
 
 const spacingPx = 6
@@ -123,7 +123,9 @@ const ProfileStats = props => {
             <Button
               color={'primary'}
               variant={'contained'}
-              onClick={goToInviteFriends}
+              onClick={() => {
+                goTo(inviteFriendsURL)
+              }}
               style={{ marginTop: 14 }}
             >
               Invite Friends
@@ -138,7 +140,9 @@ const ProfileStats = props => {
             <Button
               color={'primary'}
               variant={'contained'}
-              onClick={goToDonate}
+              onClick={() => {
+                goTo(donateURL)
+              }}
               style={{ marginTop: 14 }}
             >
               Donate Hearts
