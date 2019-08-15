@@ -1,31 +1,37 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Snackbar from 'material-ui/Snackbar'
+import Snackbar from '@material-ui/core/Snackbar'
 
-class ErrorMessage extends React.Component {
-  render() {
-    const { message } = this.props
-    // TODO: set theme color.
-    return (
-      <Snackbar
-        contentStyle={{ textAlign: 'center' }}
-        {...this.props}
-        data-test-id={'error-message'}
-        message={message}
-        open
-        autoHideDuration={4000}
-      />
-    )
+const ErrorMessage = props => {
+  const { message, open, style, ...otherProps } = props
+  if (!message) {
+    return null
   }
+  return (
+    <Snackbar
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'center',
+      }}
+      style={style}
+      data-test-id={'error-message'}
+      autoHideDuration={4000}
+      {...otherProps}
+      message={message}
+      open={open}
+    />
+  )
 }
 
 ErrorMessage.propTypes = {
   message: PropTypes.string,
+  open: PropTypes.bool.isRequired,
   style: PropTypes.object,
 }
 
 ErrorMessage.defaultProps = {
   message: null,
+  open: true,
   style: {},
 }
 

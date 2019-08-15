@@ -38,12 +38,14 @@ class ProfileInviteFriendView extends React.Component {
             if (error) {
               logger.error(error)
               const errMsg = 'We had a problem loading this page :('
-              return <ErrorMessage message={errMsg} />
+
+              // Error will not autohide.
+              return <ErrorMessage message={errMsg} open />
             }
             const showError = this.props.showError
             const dataLoaded = !!props
             return (
-              <SettingsChildWrapper loaded={dataLoaded}>
+              <SettingsChildWrapper>
                 {dataLoaded ? (
                   <ProfileInviteFriend
                     app={props.app}

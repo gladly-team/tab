@@ -34,12 +34,14 @@ class AccountView extends React.Component {
             if (error) {
               logger.error(error)
               const errMsg = 'We had a problem loading your account :('
+
+              // Error will not autohide.
               return <ErrorMessage message={errMsg} />
             }
             const showError = this.props.showError
             const dataLoaded = !!props
             return (
-              <SettingsChildWrapper loaded={dataLoaded}>
+              <SettingsChildWrapper>
                 {dataLoaded ? (
                   <Account user={props.user} showError={showError} />
                 ) : null}

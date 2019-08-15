@@ -38,12 +38,14 @@ class ProfileDonateHeartsView extends React.Component {
             if (error) {
               logger.error(error)
               const errMsg = 'We had a problem loading the Donate Hearts page.'
+
+              // Error will not autohide.
               return <ErrorMessage message={errMsg} />
             }
             const showError = this.props.showError
             const dataLoaded = !!props
             return (
-              <SettingsChildWrapper loaded={dataLoaded}>
+              <SettingsChildWrapper>
                 {dataLoaded ? (
                   <ProfileDonateHearts
                     app={props.app}

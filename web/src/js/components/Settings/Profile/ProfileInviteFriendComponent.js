@@ -1,108 +1,100 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { withStyles } from '@material-ui/core/styles'
 import InviteFriend from 'js/components/Settings/Profile/InviteFriendContainer'
 import Stat from 'js/components/Settings/Profile/StatComponent'
-import { lighterTextColor } from 'js/theme/default'
-import HappyIcon from 'material-ui/svg-icons/social/mood'
-import Paper from 'material-ui/Paper'
+import HappyIcon from '@material-ui/icons/Mood'
+import Paper from '@material-ui/core/Paper'
+import Typography from '@material-ui/core/Typography'
 
-class ProfileInviteFriend extends React.Component {
-  render() {
-    const { app, user } = this.props
-    const friendWord = user.numUsersRecruited === 1 ? 'friend' : 'friends'
-    const spacingPx = 6
-    const statStyle = {
-      margin: spacingPx,
-      flex: 1,
-      paddingTop: 40,
-      paddingBottom: 40,
-    }
-    return (
-      <span
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          margin: -spacingPx,
-        }}
-      >
-        <Paper
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignContent: 'middle',
-            padding: 10,
-            margin: spacingPx,
-            flex: 2,
-            flexBasis: '40%',
-            minWidth: 200,
-          }}
-        >
-          <span
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignContent: 'middle',
-              width: '100%',
-              maxWidth: 300,
-              marginTop: 30,
-              marginBottom: 30,
-              marginLeft: 8,
-              marginRight: 8,
-              boxSizing: 'border-box',
-            }}
-          >
-            <InviteFriend user={user} />
-          </span>
-        </Paper>
-        <Stat
-          stat={user.numUsersRecruited}
-          statText={`${friendWord} recruited`}
-          style={statStyle}
-        />
-        <Stat
-          stat={app.referralVcReward}
-          statText={'extra Hearts when you recruit a new friend'}
-          style={statStyle}
-        />
-        <Paper
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            flex: 1,
-            flexBasis: '50%',
-            minWidth: 200,
-            padding: 20,
-            color: lighterTextColor,
-            margin: spacingPx,
-          }}
-        >
-          <HappyIcon
-            style={{
-              minHeight: 24,
-              minWidth: 24,
-              marginRight: 8,
-              color: lighterTextColor,
-            }}
-          />
-          <p>
-            Thank you! Every new person raises more money for charity, and we
-            depend on people like you to get the word out.
-          </p>
-        </Paper>
-      </span>
-    )
+const spacingPx = 6
+
+const styles = theme => ({
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    margin: -spacingPx,
+  },
+  inviteFriendPaper: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 18,
+    margin: spacingPx,
+    flex: 2,
+    flexBasis: '40%',
+    minWidth: 200,
+  },
+  thankYouPaper: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+    flexBasis: '50%',
+    minWidth: 200,
+    padding: 20,
+    margin: spacingPx,
+  },
+  happyIcon: {
+    height: 20,
+    width: 20,
+    marginRight: 8,
+    color: theme.palette.action.active,
+  },
+  thankYouText: {
+    color: theme.palette.action.active,
+  },
+})
+
+const ProfileInviteFriend = props => {
+  const { app, classes, user } = props
+  const friendWord = user.numUsersRecruited === 1 ? 'friend' : 'friends'
+  const statStyle = {
+    margin: spacingPx,
+    flex: 1,
+    paddingTop: 40,
+    paddingBottom: 40,
   }
+  return (
+    <span className={classes.container}>
+      <Paper elevation={1} className={classes.inviteFriendPaper}>
+        <InviteFriend
+          user={user}
+          style={{
+            width: '100%',
+            maxWidth: 300,
+          }}
+        />
+      </Paper>
+      <Stat
+        stat={user.numUsersRecruited}
+        statText={`${friendWord} recruited`}
+        style={statStyle}
+      />
+      <Stat
+        stat={app.referralVcReward}
+        statText={'extra Hearts when you recruit a new friend'}
+        style={statStyle}
+      />
+      <Paper className={classes.thankYouPaper}>
+        <HappyIcon className={classes.happyIcon} />
+        <Typography variant={'body2'} className={classes.thankYouText}>
+          Thank you! Every new person raises more money for charity, and we
+          depend on people like you to get the word out.
+        </Typography>
+      </Paper>
+    </span>
+  )
 }
 
 ProfileInviteFriend.propTypes = {
   app: PropTypes.shape({
     referralVcReward: PropTypes.number.isRequired,
   }),
+  classes: PropTypes.object.isRequired,
   user: PropTypes.shape({
     numUsersRecruited: PropTypes.number.isRequired,
   }),
 }
 
-export default ProfileInviteFriend
+export default withStyles(styles)(ProfileInviteFriend)
