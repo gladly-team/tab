@@ -47,6 +47,10 @@ class Charity extends React.Component {
                 cursor: 'pointer',
                 maxWidth: '100%',
                 minWidth: '100%',
+                // The minHeight specification may break flexibility in sizing
+                // but it also prevents shifting content before the image has
+                // loaded.
+                minHeight: 180,
               }}
               src={charity.logo}
               onClick={this.openCharityWebsite.bind(this)}
