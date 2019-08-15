@@ -10,8 +10,29 @@ import ErrorMessage from 'js/components/General/ErrorMessage'
 import Logo from 'js/components/Logo/Logo'
 import { goToDashboard } from 'js/navigation/navigation'
 
+const sidebarWidth = 240
 const styles = theme => ({
-  // TODO
+  container: {
+    color: '#fff',
+    backgroundColor: '#F2F2F2',
+    minWidth: '100vw',
+    minHeight: '100vh',
+  },
+  closeIcon: {
+    color: '#fff',
+    width: 28,
+    height: 28,
+  },
+  sidebarContentContainer: {
+    width: sidebarWidth,
+    position: 'fixed',
+  },
+  mainContentContainer: {
+    marginLeft: sidebarWidth,
+    boxSizing: 'border-box',
+    display: 'flex',
+    justifyContent: 'center',
+  },
 })
 
 class SettingsPage extends React.Component {
@@ -47,47 +68,20 @@ class SettingsPage extends React.Component {
     // TODO: maybe pass via render props
     // const showError = this.showError
 
-    const sidebarWidth = 240
     return (
-      <div
-        data-test-id={'app-settings-id'}
-        key={'settings-view-key'}
-        style={{
-          color: '#fff',
-          backgroundColor: '#F2F2F2',
-          minWidth: '100vw',
-          minHeight: '100vh',
-        }}
-      >
+      <div className={classes.container}>
         <AppBar color={'primary'} position={'sticky'}>
           <Toolbar>
             <div style={{ flex: 1 }}>
               <Logo color={'white'} />
             </div>
             <IconButton onClick={this.goToHome.bind(this)}>
-              <CloseIcon
-                style={{
-                  color: '#fff',
-                  width: 28,
-                  height: 28,
-                }}
-              />
+              <CloseIcon className={classes.closeIcon} />
             </IconButton>
           </Toolbar>
         </AppBar>
-        <div style={{ width: sidebarWidth, position: 'fixed' }}>
-          {sidebarContent}
-        </div>
-        <div
-          style={{
-            marginLeft: sidebarWidth,
-            boxSizing: 'border-box',
-            display: 'flex',
-            justifyContent: 'center',
-          }}
-        >
-          {mainContent}
-        </div>
+        <div className={classes.sidebarContentContainer}>{sidebarContent}</div>
+        <div className={classes.mainContentContainer}>{mainContent}</div>
         <ErrorMessage
           message={errorMessage}
           onClose={this.clearError.bind(this)}
