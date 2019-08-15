@@ -65,6 +65,19 @@ describe('TabSettingsPage', () => {
       .dive()
   })
 
+  // FIXME
+  // it('goes to the Tab dashboard when clicking the close IconButton', () => {
+  //   const mockProps = getMockProps()
+  //   const wrapper = shallow(<TabSettingsPage {...mockProps} />)
+  //     .dive()
+  //     .dive()
+  //   expect(goToDashboard).not.toHaveBeenCalled()
+  //   wrapper.find(IconButton).simulate('click')
+  //   expect(goToDashboard).toHaveBeenCalled()
+  // })
+})
+
+describe('TabSettingsPage: sidebar content', () => {
   it('renders the expected side menu items', () => {
     const mockProps = getMockProps()
     const wrapper = shallow(<TabSettingsPage {...mockProps} />)
@@ -83,7 +96,10 @@ describe('TabSettingsPage', () => {
       expect(menuItem.prop('children')).toEqual(expectedMenuItems[index])
     })
   })
+})
 
+// TODO: need to test showError logic
+describe('TabSettingsPage: main content', () => {
   it('includes a WidgetsSettingsView route', () => {
     const mockProps = getMockProps()
     const wrapper = shallow(<TabSettingsPage {...mockProps} />)
@@ -371,15 +387,4 @@ describe('TabSettingsPage', () => {
       .filterWhere(elem => elem.prop('from') === '/newtab/account/*')
     expect(redirectElem.prop('to')).toEqual('/newtab/account/')
   })
-
-  // FIXME
-  // it('goes to the Tab dashboard when clicking the close IconButton', () => {
-  //   const mockProps = getMockProps()
-  //   const wrapper = shallow(<TabSettingsPage {...mockProps} />)
-  //     .dive()
-  //     .dive()
-  //   expect(goToDashboard).not.toHaveBeenCalled()
-  //   wrapper.find(IconButton).simulate('click')
-  //   expect(goToDashboard).toHaveBeenCalled()
-  // })
 })
