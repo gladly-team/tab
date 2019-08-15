@@ -66,9 +66,25 @@ class ProfileDonateHearts extends React.Component {
 }
 
 ProfileDonateHearts.propTypes = {
-  app: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired,
+  app: PropTypes.shape({
+    charities: PropTypes.shape({
+      edges: PropTypes.arrayOf(
+        PropTypes.shape({
+          node: PropTypes.shape({
+            id: PropTypes.string.isRequired,
+            image: PropTypes.string.isRequired,
+            impact: PropTypes.string.isRequired,
+            name: PropTypes.string.isRequired,
+            website: PropTypes.string.isRequired,
+          }),
+        })
+      ),
+    }).isRequired,
+  }).isRequired,
+  user: PropTypes.shape({}).isRequired,
   showError: PropTypes.func.isRequired,
 }
+
+ProfileDonateHearts.defaultProps = {}
 
 export default ProfileDonateHearts
