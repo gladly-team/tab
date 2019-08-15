@@ -10,30 +10,20 @@ const getMockProps = () => ({
       edges: [
         {
           node: {
-            id: 'some-charity-id',
-            image:
-              'http://static.example.com/img/charities/charity-post-donation-images/some-charity.jpg',
-            impact: 'Your donation helps do something in particular.',
-            name: 'Some Charity',
-            website: 'https://www.example.com/something/',
+            // Other attributes here are passed to child components.
+            id: 'some-id',
           },
         },
         {
           node: {
-            id: 'another-charity-id',
-            image:
-              'http://static.example.com/img/charities/charity-post-donation-images/another-charity.jpg',
-            impact: 'Your donation helps do another thing.',
-            name: 'Some Charity',
-            website: 'https://www.example.com/another-thing/',
+            id: 'some-other-id',
           },
         },
       ],
     },
   },
   user: {
-    // No attributes available to the the top component. They're passed
-    // to child components.
+    // Attributes here are passed to child components.
   },
   showError: jest.fn(),
 })

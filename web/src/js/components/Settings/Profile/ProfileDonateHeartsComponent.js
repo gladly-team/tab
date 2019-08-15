@@ -71,17 +71,15 @@ ProfileDonateHearts.propTypes = {
       edges: PropTypes.arrayOf(
         PropTypes.shape({
           node: PropTypes.shape({
-            id: PropTypes.string.isRequired,
-            image: PropTypes.string.isRequired,
-            impact: PropTypes.string.isRequired,
-            name: PropTypes.string.isRequired,
-            website: PropTypes.string.isRequired,
+            // Passes field defined in CharityContainer
           }),
         })
       ),
     }).isRequired,
   }).isRequired,
-  user: PropTypes.shape({}).isRequired,
+  user: PropTypes.shape({
+    // Passes field defined in CharityContainer
+  }).isRequired,
   showError: PropTypes.func.isRequired,
 }
 
