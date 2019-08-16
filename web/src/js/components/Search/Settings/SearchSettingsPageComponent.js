@@ -4,26 +4,19 @@ import { Redirect, Route, Switch } from 'react-router-dom'
 import { withStyles } from '@material-ui/core/styles'
 import Divider from '@material-ui/core/Divider'
 import List from '@material-ui/core/List'
-import ListSubheader from '@material-ui/core/ListSubheader'
 
 import AccountView from 'js/components/Settings/Account/AccountView'
-import BackgroundSettingsView from 'js/components/Settings/Background/BackgroundSettingsView'
-import ProfileStatsView from 'js/components/Settings/Profile/ProfileStatsView'
 import ProfileDonateHearts from 'js/components/Settings/Profile/ProfileDonateHeartsView'
 import ProfileInviteFriend from 'js/components/Settings/Profile/ProfileInviteFriendView'
 import SettingsMenuItem from 'js/components/Settings/SettingsMenuItem'
 import SettingsPage from 'js/components/Settings/SettingsPageComponent'
-import WidgetsSettingsView from 'js/components/Settings/Widgets/WidgetsSettingsView'
 import withUser from 'js/components/General/withUser'
 import {
   goTo,
-  accountURL,
-  backgroundSettingsURL,
-  dashboardURL,
-  donateURL,
-  inviteFriendsURL,
-  statsURL,
-  widgetSettingsURL,
+  searchAccountURL,
+  searchBaseURL,
+  searchDonateHeartsURL,
+  searchInviteFriendsURL,
 } from 'js/navigation/navigation'
 
 const styles = theme => ({
@@ -40,34 +33,18 @@ const SearchSettingsPage = props => {
   return (
     <SettingsPage
       onClose={() => {
-        goTo(dashboardURL)
+        goTo(searchBaseURL)
       }}
       sidebarContent={({ showError }) => (
         <List className={classes.listSubheader}>
-          <ListSubheader disableSticky className={classes.listSubheader}>
-            Settings
-          </ListSubheader>
-          <SettingsMenuItem key={'widgets'} to={widgetSettingsURL}>
-            Widgets
-          </SettingsMenuItem>
-          <SettingsMenuItem key={'background'} to={backgroundSettingsURL}>
-            Background
-          </SettingsMenuItem>
-          <Divider />
-          <ListSubheader disableSticky className={classes.listSubheader}>
-            Your Profile
-          </ListSubheader>
-          <SettingsMenuItem key={'stats'} to={statsURL}>
-            Your Stats
-          </SettingsMenuItem>
-          <SettingsMenuItem key={'donate'} to={donateURL}>
+          <SettingsMenuItem key={'donate'} to={searchDonateHeartsURL}>
             Donate Hearts
           </SettingsMenuItem>
-          <SettingsMenuItem key={'invite'} to={inviteFriendsURL}>
+          <SettingsMenuItem key={'invite'} to={searchInviteFriendsURL}>
             Invite Friends
           </SettingsMenuItem>
           <Divider />
-          <SettingsMenuItem key={'account'} to={accountURL}>
+          <SettingsMenuItem key={'account'} to={searchAccountURL}>
             Account
           </SettingsMenuItem>
         </List>
@@ -76,41 +53,7 @@ const SearchSettingsPage = props => {
         <Switch>
           <Route
             exact
-            path="/newtab/settings/widgets/"
-            render={props => (
-              <WidgetsSettingsView
-                {...props}
-                authUser={authUser}
-                showError={showError}
-              />
-            )}
-          />
-
-          <Route
-            exact
-            path="/newtab/settings/background/"
-            render={props => (
-              <BackgroundSettingsView
-                {...props}
-                authUser={authUser}
-                showError={showError}
-              />
-            )}
-          />
-          <Route
-            exact
-            path="/newtab/profile/stats/"
-            render={props => (
-              <ProfileStatsView
-                {...props}
-                authUser={authUser}
-                showError={showError}
-              />
-            )}
-          />
-          <Route
-            exact
-            path="/newtab/profile/donate/"
+            path="/search/profile/donate/"
             render={props => (
               <ProfileDonateHearts
                 {...props}
@@ -121,7 +64,7 @@ const SearchSettingsPage = props => {
           />
           <Route
             exact
-            path="/newtab/profile/invite/"
+            path="/search/profile/invite/"
             render={props => (
               <ProfileInviteFriend
                 {...props}
@@ -132,7 +75,7 @@ const SearchSettingsPage = props => {
           />
           <Route
             exact
-            path="/newtab/account/"
+            path="/search/account/"
             render={props => (
               <AccountView
                 {...props}
@@ -142,9 +85,8 @@ const SearchSettingsPage = props => {
             )}
           />
           {/* Redirect any incorrect paths */}
-          <Redirect from="/newtab/settings/*" to="/newtab/settings/widgets/" />
-          <Redirect from="/newtab/profile/*" to="/newtab/profile/stats/" />
-          <Redirect from="/newtab/account/*" to="/newtab/account/" />
+          <Redirect from="/search/profile/*" to="/search/profile/donate/" />
+          <Redirect from="/search/account/*" to="/search/account/" />
         </Switch>
       )}
     />

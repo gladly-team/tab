@@ -9,6 +9,7 @@ import SearchAuthRedirect from 'js/components/Search/SearchAuthRedirect'
 import SearchPageComponent from 'js/components/Search/SearchPageComponent'
 import SearchPostUninstallView from 'js/components/Search/SearchPostUninstallView'
 import SearchRandomQueryView from 'js/components/Search/SearchRandomQueryView'
+import SearchSettingsPageComponent from 'js/components/Search/Settings/SearchSettingsPageComponent'
 import ErrorBoundary from 'js/components/General/ErrorBoundary'
 
 jest.mock('js/components/Search/SearchPageComponent')
@@ -126,5 +127,31 @@ describe('SearchApp', () => {
       .filterWhere(n => n.prop('path') === '/search/random/')
     expect(route.exists()).toBe(true)
     expect(route.prop('component')).toBe(SearchRandomQueryView)
+  })
+
+  it('contains the "profile" route', async () => {
+    const SearchApp = require('js/components/Search/SearchApp').default
+    const wrapper = shallow(<SearchApp />)
+    const route = wrapper
+      .find(Route)
+      .filterWhere(n => n.prop('path') === '/search/profile/')
+    expect(route.exists()).toBe(true)
+
+    // FIXME
+    // expect(route.renderProp('component').type()).toBe(
+    //   SearchSettingsPageComponent
+    // )
+  })
+
+  it('contains the "account" route', async () => {
+    const SearchApp = require('js/components/Search/SearchApp').default
+    const wrapper = shallow(<SearchApp />)
+    const route = wrapper
+      .find(Route)
+      .filterWhere(n => n.prop('path') === '/search/account/')
+    expect(route.exists()).toBe(true)
+
+    // FIXME
+    // expect(route.prop('component')).toBe(SearchSettingsPageComponent)
   })
 })
