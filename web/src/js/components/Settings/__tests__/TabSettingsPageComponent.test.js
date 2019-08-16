@@ -380,20 +380,6 @@ describe('TabSettingsPage: main content', () => {
     expect(redirectElem.prop('to')).toEqual('/newtab/settings/widgets/')
   })
 
-  it('redirects from any nonexistent settings page to the widgets settings page', () => {
-    const mockProps = getMockProps()
-    const mainContentRenderPropArgs = getMainContentRenderPropArgs()
-    const wrapper = shallow(<TabSettingsPage {...mockProps} />)
-      .dive()
-      .dive()
-      .renderProp('mainContent')(mainContentRenderPropArgs)
-    const redirectElem = wrapper
-      .find(Switch)
-      .find(Redirect)
-      .filterWhere(elem => elem.prop('from') === '/newtab/settings/*')
-    expect(redirectElem.prop('to')).toEqual('/newtab/settings/widgets/')
-  })
-
   it('redirects from any nonexistent profile page to the profile stats page', () => {
     const mockProps = getMockProps()
     const mainContentRenderPropArgs = getMainContentRenderPropArgs()
