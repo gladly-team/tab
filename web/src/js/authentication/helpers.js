@@ -139,20 +139,21 @@ export const createAnonymousUserIfPossible = async () => {
  * to an authentication page. If the user is not fully authenticated,
  * redirect and return true. If the user is fully authenticated, do
  * not redirect and return false.
- * @param {object} authUser - The AuthUser object
- * @param {string} authUser.id - The user's ID
- * @param {string} authUser.email - The user's email
- * @param {string} authUser.username - The user's username from local storage
- * @param {boolean} authUser.isAnonymous - Whether the user is anonymous
- * @param {boolean} authUser.emailVerified - Whether the user has verified their email
- * @param {object} user - The user object from our API
- * @param {object} user.username - The user's username from our database. This
+ * @param {Object} params
+ * @param {Object} params.authUser - The AuthUser object
+ * @param {String} params.authUser.id - The user's ID
+ * @param {String} params.authUser.email - The user's email
+ * @param {String} params.authUser.username - The user's username from local storage
+ * @param {Boolean} params.authUser.isAnonymous - Whether the user is anonymous
+ * @param {Boolean} params.authUser.emailVerified - Whether the user has verified their email
+ * @param {Object} params.user - The user object from our API
+ * @param {Object} params.user.username - The user's username from our database. This
  *   may exist when authUser.username does not; for example, if a user clears
  *   their local storage.
  * @return {Boolean} Whether or not we redirected (e.g. true if the
  *   user was not fully authenticated).
  */
-export const redirectToAuthIfNeeded = (authUser, user = null) => {
+export const redirectToAuthIfNeeded = ({ authUser, user = null }) => {
   var redirected = true
 
   // User does not exist. Require login.
@@ -209,11 +210,11 @@ export const redirectToAuthIfNeeded = (authUser, user = null) => {
  * exist. This is idempotent and may be called when returning users sign in.
  * @returns {Promise<object>} user - A promise that resolves into a
  *   user object
- * @returns {string} user.id - The user's ID, the same value as the
+ * @returns {String} user.id - The user's ID, the same value as the
  *   userId argument
- * @returns {string|null} user.email - The user's email, the same value as the
+ * @returns {String|null} user.email - The user's email, the same value as the
  *   email argument
- * @returns {string|null} user.username - The user's username, if already
+ * @returns {String|null} user.username - The user's username, if already
  *   set; or null, if not yet set
  */
 export const createNewUser = () => {

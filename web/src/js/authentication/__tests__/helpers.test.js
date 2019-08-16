@@ -284,7 +284,7 @@ describe('redirectToAuthIfNeeded tests', () => {
       isAnonymous: false,
       emailVerified: true,
     }
-    const redirected = redirectToAuthIfNeeded(authUser)
+    const redirected = redirectToAuthIfNeeded({ authUser })
     expect(redirected).toBe(false)
     expect(goTo).not.toHaveBeenCalled()
     expect(replaceUrl).not.toHaveBeenCalled()
@@ -302,7 +302,7 @@ describe('redirectToAuthIfNeeded tests', () => {
     }
 
     const { redirectToAuthIfNeeded } = require('js/authentication/helpers')
-    const redirected = redirectToAuthIfNeeded(authUser)
+    const redirected = redirectToAuthIfNeeded({ authUser })
     expect(redirected).toBe(false)
     expect(goToDashboard).not.toHaveBeenCalled()
     expect(goTo).not.toHaveBeenCalled()
@@ -315,7 +315,7 @@ describe('redirectToAuthIfNeeded tests', () => {
     const authUser = null
     isInIframe.mockReturnValue(false)
     const { redirectToAuthIfNeeded } = require('js/authentication/helpers')
-    const redirected = redirectToAuthIfNeeded(authUser)
+    const redirected = redirectToAuthIfNeeded({ authUser })
     expect(redirected).toBe(true)
     expect(replaceUrl).toHaveBeenCalledWith(
       loginURL,
@@ -336,7 +336,7 @@ describe('redirectToAuthIfNeeded tests', () => {
     }
     isInIframe.mockReturnValue(false)
     const { redirectToAuthIfNeeded } = require('js/authentication/helpers')
-    const redirected = redirectToAuthIfNeeded(authUser)
+    const redirected = redirectToAuthIfNeeded({ authUser })
     expect(replaceUrl).toHaveBeenCalledWith(
       loginURL,
       {},
@@ -363,7 +363,7 @@ describe('redirectToAuthIfNeeded tests', () => {
     }
 
     const { redirectToAuthIfNeeded } = require('js/authentication/helpers')
-    redirectToAuthIfNeeded(authUser)
+    redirectToAuthIfNeeded({ authUser })
 
     expect(replaceUrl).toHaveBeenCalledWith(
       authMessageURL,
@@ -390,7 +390,7 @@ describe('redirectToAuthIfNeeded tests', () => {
       emailVerified: false,
     }
     const { redirectToAuthIfNeeded } = require('js/authentication/helpers')
-    redirectToAuthIfNeeded(authUser)
+    redirectToAuthIfNeeded({ authUser })
     expect(replaceUrl).toHaveBeenCalledWith(
       loginURL,
       { mandatory: 'true' },
@@ -416,7 +416,7 @@ describe('redirectToAuthIfNeeded tests', () => {
       emailVerified: false,
     }
     const { redirectToAuthIfNeeded } = require('js/authentication/helpers')
-    redirectToAuthIfNeeded(authUser)
+    redirectToAuthIfNeeded({ authUser })
     expect(replaceUrl).not.toHaveBeenCalled()
   })
 
@@ -431,7 +431,7 @@ describe('redirectToAuthIfNeeded tests', () => {
       isAnonymous: false,
       emailVerified: false,
     }
-    const redirected = redirectToAuthIfNeeded(authUser)
+    const redirected = redirectToAuthIfNeeded({ authUser })
     expect(replaceUrl).toHaveBeenCalledWith(missingEmailMessageURL, null, {
       keepURLParams: true,
     })
@@ -449,7 +449,7 @@ describe('redirectToAuthIfNeeded tests', () => {
       isAnonymous: false,
       emailVerified: false,
     }
-    const redirected = redirectToAuthIfNeeded(authUser)
+    const redirected = redirectToAuthIfNeeded({ authUser })
     expect(replaceUrl).toHaveBeenCalledWith(verifyEmailURL, null, {
       keepURLParams: true,
     })
@@ -467,7 +467,7 @@ describe('redirectToAuthIfNeeded tests', () => {
       isAnonymous: false,
       emailVerified: true,
     }
-    const redirected = redirectToAuthIfNeeded(authUser)
+    const redirected = redirectToAuthIfNeeded({ authUser })
     expect(replaceUrl).toHaveBeenCalledWith(enterUsernameURL, null, {
       keepURLParams: true,
     })
@@ -488,7 +488,7 @@ describe('redirectToAuthIfNeeded tests', () => {
     const user = {
       username: 'MisterTee',
     }
-    const redirected = redirectToAuthIfNeeded(authUser, user)
+    const redirected = redirectToAuthIfNeeded({ authUser, user })
     expect(setUsernameInLocalStorage).toHaveBeenCalledWith('MisterTee')
     expect(replaceUrl).not.toHaveBeenCalled()
     expect(redirected).toBe(false)

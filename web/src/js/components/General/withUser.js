@@ -125,7 +125,7 @@ const withUser = (options = {}) => WrappedComponent => {
       if (redirectToAuthIfIncomplete) {
         try {
           // TODO: redirect to different URLs depending on the app
-          redirected = redirectToAuthIfNeeded(authUser)
+          redirected = redirectToAuthIfNeeded({ authUser })
         } catch (e) {
           logger.error(e)
         }

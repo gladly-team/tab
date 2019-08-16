@@ -103,7 +103,7 @@ class Authentication extends React.Component {
       return
     }
     const { authUser, location, user } = this.props
-    const redirected = redirectToAuthIfNeeded(authUser, user)
+    const redirected = redirectToAuthIfNeeded({ authUser, user })
 
     // When anonymous users choose to sign in, do not go back to the
     // dashboard.
