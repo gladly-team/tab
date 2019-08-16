@@ -86,6 +86,18 @@ describe('goTo', () => {
     })
   })
 
+  it('uses the new parameter value if one is provided that conflicts with an existing URL parameter and options.keepURLParams is true ', () => {
+    getUrlParameters.mockReturnValue({
+      dupe: 'versionToIgnore',
+    })
+    const { goTo } = require('js/navigation/navigation')
+    goTo('/some/path/', { dupe: 'versionToUse' }, { keepURLParams: true })
+    expect(mockBrowserHistory.push).toHaveBeenCalledWith({
+      pathname: '/some/path/',
+      search: '?dupe=versionToUse',
+    })
+  })
+
   it('calls externalRedirect when the new URL is on a different app', () => {
     const { goTo } = require('js/navigation/navigation')
     isURLForDifferentApp.mockReturnValueOnce(true)
@@ -159,6 +171,18 @@ describe('replaceUrl', () => {
     expect(mockBrowserHistory.replace).toHaveBeenCalledWith({
       pathname: '/some/path/',
       search: '?plzIncludeMe=thx&someParam=abc&foo=blah',
+    })
+  })
+
+  it('uses the new parameter value if one is provided that conflicts with an existing URL parameter and options.keepURLParams is true ', () => {
+    getUrlParameters.mockReturnValue({
+      dupe: 'versionToIgnore',
+    })
+    const { replaceUrl } = require('js/navigation/navigation')
+    replaceUrl('/some/path/', { dupe: 'versionToUse' }, { keepURLParams: true })
+    expect(mockBrowserHistory.replace).toHaveBeenCalledWith({
+      pathname: '/some/path/',
+      search: '?dupe=versionToUse',
     })
   })
 
