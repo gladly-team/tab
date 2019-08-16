@@ -35,7 +35,7 @@ const styles = theme => ({
   },
 })
 
-const TabSettingsPage = props => {
+const SearchSettingsPage = props => {
   const { authUser, classes } = props
   return (
     <SettingsPage
@@ -151,11 +151,11 @@ const TabSettingsPage = props => {
   )
 }
 
-TabSettingsPage.propTypes = {
+SearchSettingsPage.propTypes = {
   authUser: PropTypes.shape({
     id: PropTypes.string.isRequired,
   }).isRequired,
   classes: PropTypes.object.isRequired,
 }
 
-export default withStyles(styles)(withUser()(TabSettingsPage))
+export default withStyles(styles)(withUser()(SearchSettingsPage))

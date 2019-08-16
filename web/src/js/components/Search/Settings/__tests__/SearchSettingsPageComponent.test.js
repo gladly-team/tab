@@ -3,7 +3,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import { Redirect, Route, Switch } from 'react-router-dom'
-import TabSettingsPage from 'js/components/Settings/TabSettingsPageComponent'
+import SearchSettingsPage from 'js/components/Search/Settings/SearchSettingsPageComponent'
 import AccountView from 'js/components/Settings/Account/AccountView'
 import BackgroundSettingsView from 'js/components/Settings/Background/BackgroundSettingsView'
 import ProfileStatsView from 'js/components/Settings/Profile/ProfileStatsView'
@@ -32,7 +32,7 @@ afterEach(() => {
 
 const getMockProps = () => ({})
 
-describe('withUser HOC in TabSettingsPage', () => {
+describe('withUser HOC in SearchSettingsPage', () => {
   beforeEach(() => {
     jest.resetModules()
   })
@@ -41,33 +41,33 @@ describe('withUser HOC in TabSettingsPage', () => {
     const withUser = require('js/components/General/withUser').default
 
     /* eslint-disable-next-line no-unused-expressions */
-    require('js/components/Settings/TabSettingsPageComponent').default
+    require('js/components/Search/Settings/SearchSettingsPageComponent').default
     expect(withUser).toHaveBeenCalledWith()
   })
 
-  it('wraps the TabSettingsPage component', () => {
+  it('wraps the SearchSettingsPage component', () => {
     const {
       __mockWithUserWrappedFunction,
     } = require('js/components/General/withUser')
 
     /* eslint-disable-next-line no-unused-expressions */
-    require('js/components/Settings/TabSettingsPageComponent').default
+    require('js/components/Search/Settings/SearchSettingsPageComponent').default
     const wrappedComponent = __mockWithUserWrappedFunction.mock.calls[0][0]
-    expect(wrappedComponent.name).toEqual('TabSettingsPage')
+    expect(wrappedComponent.name).toEqual('SearchSettingsPage')
   })
 })
 
-describe('TabSettingsPage', () => {
+describe('SearchSettingsPage', () => {
   it('renders without error', () => {
     const mockProps = getMockProps()
-    shallow(<TabSettingsPage {...mockProps} />)
+    shallow(<SearchSettingsPage {...mockProps} />)
       .dive()
       .dive()
   })
 
   it('goes to the Tab dashboard when the SettingsPage "onClose" callback is called', () => {
     const mockProps = getMockProps()
-    const wrapper = shallow(<TabSettingsPage {...mockProps} />)
+    const wrapper = shallow(<SearchSettingsPage {...mockProps} />)
       .dive()
       .dive()
     expect(goTo).not.toHaveBeenCalled()
@@ -76,10 +76,10 @@ describe('TabSettingsPage', () => {
   })
 })
 
-describe('TabSettingsPage: sidebar content', () => {
+describe('SearchSettingsPage: sidebar content', () => {
   it('renders the expected side menu items', () => {
     const mockProps = getMockProps()
-    const wrapper = shallow(<TabSettingsPage {...mockProps} />)
+    const wrapper = shallow(<SearchSettingsPage {...mockProps} />)
       .dive()
       .dive()
     const menuItems = wrapper.find(SettingsMenuItem)
@@ -97,7 +97,7 @@ describe('TabSettingsPage: sidebar content', () => {
   })
 })
 
-describe('TabSettingsPage: main content', () => {
+describe('SearchSettingsPage: main content', () => {
   const getMainContentRenderPropArgs = () => ({
     showError: jest.fn(),
   })
@@ -105,7 +105,7 @@ describe('TabSettingsPage: main content', () => {
   it('includes a WidgetsSettingsView route', () => {
     const mockProps = getMockProps()
     const mainContentRenderPropArgs = getMainContentRenderPropArgs()
-    const wrapper = shallow(<TabSettingsPage {...mockProps} />)
+    const wrapper = shallow(<SearchSettingsPage {...mockProps} />)
       .dive()
       .dive()
       .renderProp('mainContent')(mainContentRenderPropArgs)
@@ -119,7 +119,7 @@ describe('TabSettingsPage: main content', () => {
   it('renders the expected WidgetsSettingsView component with the expected props', () => {
     const mockProps = getMockProps()
     const mainContentRenderPropArgs = getMainContentRenderPropArgs()
-    const wrapper = shallow(<TabSettingsPage {...mockProps} />)
+    const wrapper = shallow(<SearchSettingsPage {...mockProps} />)
       .dive()
       .dive()
       .renderProp('mainContent')(mainContentRenderPropArgs)
@@ -149,7 +149,7 @@ describe('TabSettingsPage: main content', () => {
   it('includes a BackgroundSettingsView route', () => {
     const mockProps = getMockProps()
     const mainContentRenderPropArgs = getMainContentRenderPropArgs()
-    const wrapper = shallow(<TabSettingsPage {...mockProps} />)
+    const wrapper = shallow(<SearchSettingsPage {...mockProps} />)
       .dive()
       .dive()
       .renderProp('mainContent')(mainContentRenderPropArgs)
@@ -163,7 +163,7 @@ describe('TabSettingsPage: main content', () => {
   it('renders the expected BackgroundSettingsView component with the expected props', () => {
     const mockProps = getMockProps()
     const mainContentRenderPropArgs = getMainContentRenderPropArgs()
-    const wrapper = shallow(<TabSettingsPage {...mockProps} />)
+    const wrapper = shallow(<SearchSettingsPage {...mockProps} />)
       .dive()
       .dive()
       .renderProp('mainContent')(mainContentRenderPropArgs)
@@ -193,7 +193,7 @@ describe('TabSettingsPage: main content', () => {
   it('includes a ProfileStatsView route', () => {
     const mockProps = getMockProps()
     const mainContentRenderPropArgs = getMainContentRenderPropArgs()
-    const wrapper = shallow(<TabSettingsPage {...mockProps} />)
+    const wrapper = shallow(<SearchSettingsPage {...mockProps} />)
       .dive()
       .dive()
       .renderProp('mainContent')(mainContentRenderPropArgs)
@@ -207,7 +207,7 @@ describe('TabSettingsPage: main content', () => {
   it('renders the expected ProfileStatsView component with the expected props', () => {
     const mockProps = getMockProps()
     const mainContentRenderPropArgs = getMainContentRenderPropArgs()
-    const wrapper = shallow(<TabSettingsPage {...mockProps} />)
+    const wrapper = shallow(<SearchSettingsPage {...mockProps} />)
       .dive()
       .dive()
       .renderProp('mainContent')(mainContentRenderPropArgs)
@@ -237,7 +237,7 @@ describe('TabSettingsPage: main content', () => {
   it('includes a ProfileDonateHearts route', () => {
     const mockProps = getMockProps()
     const mainContentRenderPropArgs = getMainContentRenderPropArgs()
-    const wrapper = shallow(<TabSettingsPage {...mockProps} />)
+    const wrapper = shallow(<SearchSettingsPage {...mockProps} />)
       .dive()
       .dive()
       .renderProp('mainContent')(mainContentRenderPropArgs)
@@ -251,7 +251,7 @@ describe('TabSettingsPage: main content', () => {
   it('renders the expected ProfileDonateHearts component with the expected props', () => {
     const mockProps = getMockProps()
     const mainContentRenderPropArgs = getMainContentRenderPropArgs()
-    const wrapper = shallow(<TabSettingsPage {...mockProps} />)
+    const wrapper = shallow(<SearchSettingsPage {...mockProps} />)
       .dive()
       .dive()
       .renderProp('mainContent')(mainContentRenderPropArgs)
@@ -281,7 +281,7 @@ describe('TabSettingsPage: main content', () => {
   it('includes a ProfileInviteFriend route', () => {
     const mockProps = getMockProps()
     const mainContentRenderPropArgs = getMainContentRenderPropArgs()
-    const wrapper = shallow(<TabSettingsPage {...mockProps} />)
+    const wrapper = shallow(<SearchSettingsPage {...mockProps} />)
       .dive()
       .dive()
       .renderProp('mainContent')(mainContentRenderPropArgs)
@@ -295,7 +295,7 @@ describe('TabSettingsPage: main content', () => {
   it('renders the expected ProfileInviteFriend component with the expected props', () => {
     const mockProps = getMockProps()
     const mainContentRenderPropArgs = getMainContentRenderPropArgs()
-    const wrapper = shallow(<TabSettingsPage {...mockProps} />)
+    const wrapper = shallow(<SearchSettingsPage {...mockProps} />)
       .dive()
       .dive()
       .renderProp('mainContent')(mainContentRenderPropArgs)
@@ -325,7 +325,7 @@ describe('TabSettingsPage: main content', () => {
   it('includes a AccountView route', () => {
     const mockProps = getMockProps()
     const mainContentRenderPropArgs = getMainContentRenderPropArgs()
-    const wrapper = shallow(<TabSettingsPage {...mockProps} />)
+    const wrapper = shallow(<SearchSettingsPage {...mockProps} />)
       .dive()
       .dive()
       .renderProp('mainContent')(mainContentRenderPropArgs)
@@ -339,7 +339,7 @@ describe('TabSettingsPage: main content', () => {
   it('renders the expected AccountView component with the expected props', () => {
     const mockProps = getMockProps()
     const mainContentRenderPropArgs = getMainContentRenderPropArgs()
-    const wrapper = shallow(<TabSettingsPage {...mockProps} />)
+    const wrapper = shallow(<SearchSettingsPage {...mockProps} />)
       .dive()
       .dive()
       .renderProp('mainContent')(mainContentRenderPropArgs)
@@ -369,7 +369,7 @@ describe('TabSettingsPage: main content', () => {
   it('redirects from any nonexistent settings page to the widgets settings page', () => {
     const mockProps = getMockProps()
     const mainContentRenderPropArgs = getMainContentRenderPropArgs()
-    const wrapper = shallow(<TabSettingsPage {...mockProps} />)
+    const wrapper = shallow(<SearchSettingsPage {...mockProps} />)
       .dive()
       .dive()
       .renderProp('mainContent')(mainContentRenderPropArgs)
@@ -383,7 +383,7 @@ describe('TabSettingsPage: main content', () => {
   it('redirects from any nonexistent settings page to the widgets settings page', () => {
     const mockProps = getMockProps()
     const mainContentRenderPropArgs = getMainContentRenderPropArgs()
-    const wrapper = shallow(<TabSettingsPage {...mockProps} />)
+    const wrapper = shallow(<SearchSettingsPage {...mockProps} />)
       .dive()
       .dive()
       .renderProp('mainContent')(mainContentRenderPropArgs)
@@ -397,7 +397,7 @@ describe('TabSettingsPage: main content', () => {
   it('redirects from any nonexistent profile page to the profile stats page', () => {
     const mockProps = getMockProps()
     const mainContentRenderPropArgs = getMainContentRenderPropArgs()
-    const wrapper = shallow(<TabSettingsPage {...mockProps} />)
+    const wrapper = shallow(<SearchSettingsPage {...mockProps} />)
       .dive()
       .dive()
       .renderProp('mainContent')(mainContentRenderPropArgs)
@@ -411,7 +411,7 @@ describe('TabSettingsPage: main content', () => {
   it('redirects from any nonexistent account page to the main account page', () => {
     const mockProps = getMockProps()
     const mainContentRenderPropArgs = getMainContentRenderPropArgs()
-    const wrapper = shallow(<TabSettingsPage {...mockProps} />)
+    const wrapper = shallow(<SearchSettingsPage {...mockProps} />)
       .dive()
       .dive()
       .renderProp('mainContent')(mainContentRenderPropArgs)
