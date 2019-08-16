@@ -28,7 +28,7 @@ import {
 
 const styles = theme => ({
   list: {
-    marginLeft: 10,
+    marginLeft: 14,
   },
   listSubheader: {
     paddingLeft: 14,
@@ -43,7 +43,7 @@ const TabSettingsPage = props => {
         goTo(dashboardURL)
       }}
       sidebarContent={({ showError }) => (
-        <List className={classes.listSubheader}>
+        <List className={classes.list}>
           <ListSubheader disableSticky className={classes.listSubheader}>
             Settings
           </ListSubheader>
