@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
@@ -35,63 +35,43 @@ const styles = theme => ({
   },
 })
 
-class SettingsPage extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      errorOpen: false,
-      errorMessage: null,
-    }
+const SettingsPage = props => {
+  const { classes, mainContent, sidebarContent } = props
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [isErrorOpen, setIsErrorOpen] = useState(false)
+  const showError = msg => {
+    setIsErrorOpen(true)
+    setErrorMessage(msg)
+  }
+  const clearError = () => {
+    setIsErrorOpen(false)
   }
 
-  goToHome() {
-    goToDashboard()
-  }
-
-  showError(msg) {
-    this.setState({
-      errorOpen: true,
-      errorMessage: msg,
-    })
-  }
-
-  clearError() {
-    this.setState({
-      errorOpen: false,
-    })
-  }
-
-  render() {
-    const { classes, mainContent, sidebarContent } = this.props
-    const { errorMessage, errorOpen } = this.state
-    const showError = this.showError.bind(this)
-
-    return (
-      <div className={classes.container}>
-        <AppBar color={'primary'} position={'sticky'}>
-          <Toolbar>
-            <div style={{ flex: 1 }}>
-              <Logo color={'white'} />
-            </div>
-            <IconButton onClick={this.goToHome.bind(this)}>
-              <CloseIcon className={classes.closeIcon} />
-            </IconButton>
-          </Toolbar>
-        </AppBar>
-        <div className={classes.sidebarContentContainer}>
-          {sidebarContent({ showError })}
-        </div>
-        <div className={classes.mainContentContainer}>
-          {mainContent({ showError })}
-        </div>
-        <ErrorMessage
-          message={errorMessage}
-          onClose={this.clearError.bind(this)}
-          open={errorOpen}
-        />
+  return (
+    <div className={classes.container}>
+      <AppBar color={'primary'} position={'sticky'}>
+        <Toolbar>
+          <div style={{ flex: 1 }}>
+            <Logo color={'white'} />
+          </div>
+          <IconButton onClick={goToDashboard}>
+            <CloseIcon className={classes.closeIcon} />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+      <div className={classes.sidebarContentContainer}>
+        {sidebarContent({ showError })}
       </div>
-    )
-  }
+      <div className={classes.mainContentContainer}>
+        {mainContent({ showError })}
+      </div>
+      <ErrorMessage
+        message={errorMessage}
+        onClose={clearError}
+        open={isErrorOpen}
+      />
+    </div>
+  )
 }
 
 SettingsPage.propTypes = {
