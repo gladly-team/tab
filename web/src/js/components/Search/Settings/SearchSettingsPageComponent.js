@@ -4,6 +4,7 @@ import { Redirect, Route, Switch } from 'react-router-dom'
 import { withStyles } from '@material-ui/core/styles'
 import Divider from '@material-ui/core/Divider'
 import List from '@material-ui/core/List'
+import ListSubheader from '@material-ui/core/ListSubheader'
 
 import AccountView from 'js/components/Settings/Account/AccountView'
 import ProfileDonateHearts from 'js/components/Settings/Profile/ProfileDonateHeartsView'
@@ -21,7 +22,7 @@ import {
 
 const styles = theme => ({
   list: {
-    marginLeft: 10,
+    marginLeft: 14,
   },
   listSubheader: {
     paddingLeft: 14,
@@ -36,7 +37,10 @@ const SearchSettingsPage = props => {
         goTo(searchBaseURL)
       }}
       sidebarContent={({ showError }) => (
-        <List className={classes.listSubheader}>
+        <List className={classes.list}>
+          <ListSubheader disableSticky className={classes.listSubheader}>
+            Your Profile
+          </ListSubheader>
           <SettingsMenuItem key={'donate'} to={searchDonateHeartsURL}>
             Donate Hearts
           </SettingsMenuItem>
