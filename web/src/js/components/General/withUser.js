@@ -6,6 +6,7 @@ import {
 } from 'js/authentication/helpers'
 import logger from 'js/utils/logger'
 import { makePromiseCancelable } from 'js/utils/utils'
+// import { SEARCH_APP, TAB_APP } from 'js/constants'
 
 // https://reactjs.org/docs/higher-order-components.html#convention-wrap-the-display-name-for-easy-debugging
 function getDisplayName(WrappedComponent) {
@@ -18,6 +19,8 @@ function getDisplayName(WrappedComponent) {
  * one does not exist and redirects to the authentication page if the user
  * is not fully authenticated.
  * @param {Object} options
+ * @param {String} options.app - One of "search" or "tab". This determines
+ *   app-specific behavior, like the redirect URL. Defaults to "tab".
  * @param {Boolean} options.renderIfNoUser - If true, we will render the
  *   children even if there is no user ID (the user is not signed in).
  *   Defaults to false.
@@ -74,7 +77,12 @@ const withUser = (options = {}) => WrappedComponent => {
       let authUser = user
 
       // If the user doesn't exist, create one if possible.
+      // IMPORTANT: this logic only works for Tab for a Cause, not Search.
       if (!(user && user.id) && createUserIfPossible) {
+        // If options.app === 'search', warn that we don't support this
+        // logic and don't do anything.
+        // TODO
+
         // Mark that user creation is in process so that we don't
         // don't render child components after the user is authed
         // but before the user exists in our database.
@@ -116,6 +124,7 @@ const withUser = (options = {}) => WrappedComponent => {
       let redirected = false
       if (redirectToAuthIfIncomplete) {
         try {
+          // TODO: redirect to different URLs depending on the app
           redirected = redirectToAuthIfNeeded(authUser)
         } catch (e) {
           logger.error(e)
