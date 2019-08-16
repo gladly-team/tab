@@ -25,8 +25,8 @@ import { parseUrlSearchString, validateAppName } from 'js/utils/utils'
 const AuthenticationView = lazy(() =>
   import('js/components/Authentication/AuthenticationView')
 )
-const SettingsPageComponent = lazy(() =>
-  import('js/components/Settings/SettingsPageComponent')
+const TabSettingsPageComponent = lazy(() =>
+  import('js/components/Settings/TabSettingsPageComponent')
 )
 const FirstTabView = lazy(() => import('js/components/Dashboard/FirstTabView'))
 const PostUninstallView = lazy(() =>
@@ -100,15 +100,15 @@ class App extends React.Component {
                   <Route exact path="/newtab/" component={DashboardView} />
                   <Route
                     path="/newtab/settings/"
-                    component={SettingsPageComponent}
+                    component={TabSettingsPageComponent}
                   />
                   <Route
                     path="/newtab/account/"
-                    component={SettingsPageComponent}
+                    component={TabSettingsPageComponent}
                   />
                   <Route
                     path="/newtab/profile/"
-                    component={SettingsPageComponent}
+                    component={TabSettingsPageComponent}
                   />
                   <Route
                     exact
