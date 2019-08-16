@@ -6,7 +6,7 @@ import {
 } from 'js/authentication/helpers'
 import logger from 'js/utils/logger'
 import { makePromiseCancelable } from 'js/utils/utils'
-// import { SEARCH_APP, TAB_APP } from 'js/constants'
+import { TAB_APP } from 'js/constants'
 
 // https://reactjs.org/docs/higher-order-components.html#convention-wrap-the-display-name-for-easy-debugging
 function getDisplayName(WrappedComponent) {
@@ -71,6 +71,7 @@ const withUser = (options = {}) => WrappedComponent => {
 
     async determineAuthState(user) {
       const {
+        app = TAB_APP,
         createUserIfPossible = true,
         redirectToAuthIfIncomplete = true,
       } = options
@@ -124,8 +125,8 @@ const withUser = (options = {}) => WrappedComponent => {
       let redirected = false
       if (redirectToAuthIfIncomplete) {
         try {
-          // TODO: redirect to different URLs depending on the app
-          redirected = redirectToAuthIfNeeded({ authUser })
+          const urlParams = { app: app }
+          redirected = redirectToAuthIfNeeded({ authUser, urlParams })
         } catch (e) {
           logger.error(e)
         }

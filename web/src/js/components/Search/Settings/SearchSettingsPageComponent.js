@@ -12,6 +12,7 @@ import ProfileInviteFriend from 'js/components/Settings/Profile/ProfileInviteFri
 import SettingsMenuItem from 'js/components/Settings/SettingsMenuItem'
 import SettingsPage from 'js/components/Settings/SettingsPageComponent'
 import withUser from 'js/components/General/withUser'
+import { SEARCH_APP } from 'js/constants'
 import {
   goTo,
   searchAccountURL,
@@ -104,4 +105,6 @@ SearchSettingsPage.propTypes = {
   classes: PropTypes.object.isRequired,
 }
 
-export default withStyles(styles)(withUser()(SearchSettingsPage))
+export default withStyles(styles)(
+  withUser({ app: SEARCH_APP })(SearchSettingsPage)
+)
