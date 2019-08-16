@@ -64,9 +64,7 @@ class SettingsPage extends React.Component {
   render() {
     const { classes, mainContent, sidebarContent } = this.props
     const { errorMessage, errorOpen } = this.state
-
-    // TODO: maybe pass via render props
-    // const showError = this.showError
+    const showError = this.showError.bind(this)
 
     return (
       <div className={classes.container}>
@@ -80,8 +78,12 @@ class SettingsPage extends React.Component {
             </IconButton>
           </Toolbar>
         </AppBar>
-        <div className={classes.sidebarContentContainer}>{sidebarContent}</div>
-        <div className={classes.mainContentContainer}>{mainContent}</div>
+        <div className={classes.sidebarContentContainer}>
+          {sidebarContent({ showError })}
+        </div>
+        <div className={classes.mainContentContainer}>
+          {mainContent({ showError })}
+        </div>
         <ErrorMessage
           message={errorMessage}
           onClose={this.clearError.bind(this)}
@@ -93,8 +95,8 @@ class SettingsPage extends React.Component {
 }
 
 SettingsPage.propTypes = {
-  mainContent: PropTypes.node.isRequired,
-  sidebarContent: PropTypes.node.isRequired,
+  mainContent: PropTypes.func.isRequired,
+  sidebarContent: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
 }
 

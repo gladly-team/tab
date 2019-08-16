@@ -3,7 +3,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import { Redirect, Route, Switch } from 'react-router-dom'
-import IconButton from '@material-ui/core/IconButton'
+// import IconButton from '@material-ui/core/IconButton'
 import TabSettingsPage from 'js/components/Settings/TabSettingsPageComponent'
 import AccountView from 'js/components/Settings/Account/AccountView'
 import BackgroundSettingsView from 'js/components/Settings/Background/BackgroundSettingsView'
@@ -12,7 +12,7 @@ import ProfileDonateHearts from 'js/components/Settings/Profile/ProfileDonateHea
 import ProfileInviteFriend from 'js/components/Settings/Profile/ProfileInviteFriendView'
 import SettingsMenuItem from 'js/components/Settings/SettingsMenuItem'
 import WidgetsSettingsView from 'js/components/Settings/Widgets/WidgetsSettingsView'
-import { goToDashboard } from 'js/navigation/navigation'
+// import { goToDashboard } from 'js/navigation/navigation'
 
 jest.mock('react-router-dom')
 jest.mock('js/components/Settings/Account/AccountView')
@@ -98,13 +98,18 @@ describe('TabSettingsPage: sidebar content', () => {
   })
 })
 
-// TODO: need to test showError logic
 describe('TabSettingsPage: main content', () => {
+  const getMainContentRenderPropArgs = () => ({
+    showError: jest.fn(),
+  })
+
   it('includes a WidgetsSettingsView route', () => {
     const mockProps = getMockProps()
+    const mainContentRenderPropArgs = getMainContentRenderPropArgs()
     const wrapper = shallow(<TabSettingsPage {...mockProps} />)
       .dive()
       .dive()
+      .renderProp('mainContent')(mainContentRenderPropArgs)
     const routeElem = wrapper
       .find(Switch)
       .find(Route)
@@ -114,9 +119,11 @@ describe('TabSettingsPage: main content', () => {
 
   it('renders the expected WidgetsSettingsView component with the expected props', () => {
     const mockProps = getMockProps()
+    const mainContentRenderPropArgs = getMainContentRenderPropArgs()
     const wrapper = shallow(<TabSettingsPage {...mockProps} />)
       .dive()
       .dive()
+      .renderProp('mainContent')(mainContentRenderPropArgs)
     const routeElem = wrapper
       .find(Switch)
       .find(Route)
@@ -136,15 +143,17 @@ describe('TabSettingsPage: main content', () => {
       emailVerified: true,
     })
     expect(ThisRouteComponentElem.prop('showError')).toEqual(
-      expect.any(Function)
+      mainContentRenderPropArgs.showError
     )
   })
 
   it('includes a BackgroundSettingsView route', () => {
     const mockProps = getMockProps()
+    const mainContentRenderPropArgs = getMainContentRenderPropArgs()
     const wrapper = shallow(<TabSettingsPage {...mockProps} />)
       .dive()
       .dive()
+      .renderProp('mainContent')(mainContentRenderPropArgs)
     const routeElem = wrapper
       .find(Switch)
       .find(Route)
@@ -154,9 +163,11 @@ describe('TabSettingsPage: main content', () => {
 
   it('renders the expected BackgroundSettingsView component with the expected props', () => {
     const mockProps = getMockProps()
+    const mainContentRenderPropArgs = getMainContentRenderPropArgs()
     const wrapper = shallow(<TabSettingsPage {...mockProps} />)
       .dive()
       .dive()
+      .renderProp('mainContent')(mainContentRenderPropArgs)
     const routeElem = wrapper
       .find(Switch)
       .find(Route)
@@ -176,15 +187,17 @@ describe('TabSettingsPage: main content', () => {
       emailVerified: true,
     })
     expect(ThisRouteComponentElem.prop('showError')).toEqual(
-      expect.any(Function)
+      mainContentRenderPropArgs.showError
     )
   })
 
   it('includes a ProfileStatsView route', () => {
     const mockProps = getMockProps()
+    const mainContentRenderPropArgs = getMainContentRenderPropArgs()
     const wrapper = shallow(<TabSettingsPage {...mockProps} />)
       .dive()
       .dive()
+      .renderProp('mainContent')(mainContentRenderPropArgs)
     const routeElem = wrapper
       .find(Switch)
       .find(Route)
@@ -194,9 +207,11 @@ describe('TabSettingsPage: main content', () => {
 
   it('renders the expected ProfileStatsView component with the expected props', () => {
     const mockProps = getMockProps()
+    const mainContentRenderPropArgs = getMainContentRenderPropArgs()
     const wrapper = shallow(<TabSettingsPage {...mockProps} />)
       .dive()
       .dive()
+      .renderProp('mainContent')(mainContentRenderPropArgs)
     const routeElem = wrapper
       .find(Switch)
       .find(Route)
@@ -216,15 +231,17 @@ describe('TabSettingsPage: main content', () => {
       emailVerified: true,
     })
     expect(ThisRouteComponentElem.prop('showError')).toEqual(
-      expect.any(Function)
+      mainContentRenderPropArgs.showError
     )
   })
 
   it('includes a ProfileDonateHearts route', () => {
     const mockProps = getMockProps()
+    const mainContentRenderPropArgs = getMainContentRenderPropArgs()
     const wrapper = shallow(<TabSettingsPage {...mockProps} />)
       .dive()
       .dive()
+      .renderProp('mainContent')(mainContentRenderPropArgs)
     const routeElem = wrapper
       .find(Switch)
       .find(Route)
@@ -234,9 +251,11 @@ describe('TabSettingsPage: main content', () => {
 
   it('renders the expected ProfileDonateHearts component with the expected props', () => {
     const mockProps = getMockProps()
+    const mainContentRenderPropArgs = getMainContentRenderPropArgs()
     const wrapper = shallow(<TabSettingsPage {...mockProps} />)
       .dive()
       .dive()
+      .renderProp('mainContent')(mainContentRenderPropArgs)
     const routeElem = wrapper
       .find(Switch)
       .find(Route)
@@ -256,15 +275,17 @@ describe('TabSettingsPage: main content', () => {
       emailVerified: true,
     })
     expect(ThisRouteComponentElem.prop('showError')).toEqual(
-      expect.any(Function)
+      mainContentRenderPropArgs.showError
     )
   })
 
   it('includes a ProfileInviteFriend route', () => {
     const mockProps = getMockProps()
+    const mainContentRenderPropArgs = getMainContentRenderPropArgs()
     const wrapper = shallow(<TabSettingsPage {...mockProps} />)
       .dive()
       .dive()
+      .renderProp('mainContent')(mainContentRenderPropArgs)
     const routeElem = wrapper
       .find(Switch)
       .find(Route)
@@ -274,9 +295,11 @@ describe('TabSettingsPage: main content', () => {
 
   it('renders the expected ProfileInviteFriend component with the expected props', () => {
     const mockProps = getMockProps()
+    const mainContentRenderPropArgs = getMainContentRenderPropArgs()
     const wrapper = shallow(<TabSettingsPage {...mockProps} />)
       .dive()
       .dive()
+      .renderProp('mainContent')(mainContentRenderPropArgs)
     const routeElem = wrapper
       .find(Switch)
       .find(Route)
@@ -296,15 +319,17 @@ describe('TabSettingsPage: main content', () => {
       emailVerified: true,
     })
     expect(ThisRouteComponentElem.prop('showError')).toEqual(
-      expect.any(Function)
+      mainContentRenderPropArgs.showError
     )
   })
 
   it('includes a AccountView route', () => {
     const mockProps = getMockProps()
+    const mainContentRenderPropArgs = getMainContentRenderPropArgs()
     const wrapper = shallow(<TabSettingsPage {...mockProps} />)
       .dive()
       .dive()
+      .renderProp('mainContent')(mainContentRenderPropArgs)
     const routeElem = wrapper
       .find(Switch)
       .find(Route)
@@ -314,9 +339,11 @@ describe('TabSettingsPage: main content', () => {
 
   it('renders the expected AccountView component with the expected props', () => {
     const mockProps = getMockProps()
+    const mainContentRenderPropArgs = getMainContentRenderPropArgs()
     const wrapper = shallow(<TabSettingsPage {...mockProps} />)
       .dive()
       .dive()
+      .renderProp('mainContent')(mainContentRenderPropArgs)
     const routeElem = wrapper
       .find(Switch)
       .find(Route)
@@ -336,15 +363,17 @@ describe('TabSettingsPage: main content', () => {
       emailVerified: true,
     })
     expect(ThisRouteComponentElem.prop('showError')).toEqual(
-      expect.any(Function)
+      mainContentRenderPropArgs.showError
     )
   })
 
   it('redirects from any nonexistent settings page to the widgets settings page', () => {
     const mockProps = getMockProps()
+    const mainContentRenderPropArgs = getMainContentRenderPropArgs()
     const wrapper = shallow(<TabSettingsPage {...mockProps} />)
       .dive()
       .dive()
+      .renderProp('mainContent')(mainContentRenderPropArgs)
     const redirectElem = wrapper
       .find(Switch)
       .find(Redirect)
@@ -354,9 +383,11 @@ describe('TabSettingsPage: main content', () => {
 
   it('redirects from any nonexistent settings page to the widgets settings page', () => {
     const mockProps = getMockProps()
+    const mainContentRenderPropArgs = getMainContentRenderPropArgs()
     const wrapper = shallow(<TabSettingsPage {...mockProps} />)
       .dive()
       .dive()
+      .renderProp('mainContent')(mainContentRenderPropArgs)
     const redirectElem = wrapper
       .find(Switch)
       .find(Redirect)
@@ -366,9 +397,11 @@ describe('TabSettingsPage: main content', () => {
 
   it('redirects from any nonexistent profile page to the profile stats page', () => {
     const mockProps = getMockProps()
+    const mainContentRenderPropArgs = getMainContentRenderPropArgs()
     const wrapper = shallow(<TabSettingsPage {...mockProps} />)
       .dive()
       .dive()
+      .renderProp('mainContent')(mainContentRenderPropArgs)
     const redirectElem = wrapper
       .find(Switch)
       .find(Redirect)
@@ -378,9 +411,11 @@ describe('TabSettingsPage: main content', () => {
 
   it('redirects from any nonexistent account page to the main account page', () => {
     const mockProps = getMockProps()
+    const mainContentRenderPropArgs = getMainContentRenderPropArgs()
     const wrapper = shallow(<TabSettingsPage {...mockProps} />)
       .dive()
       .dive()
+      .renderProp('mainContent')(mainContentRenderPropArgs)
     const redirectElem = wrapper
       .find(Switch)
       .find(Redirect)

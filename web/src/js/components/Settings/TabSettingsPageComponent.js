@@ -34,13 +34,6 @@ const TabSettingsPage = props => {
   const { authUser, classes } = props
 
   // FIXME
-  // const { errorMessage, errorOpen } = this.state
-  // const showError = this.showError
-  const showError = () => {
-    console.error('Fix me!')
-  }
-
-  // FIXME
   // const onClose = () => {
   //   console.error('Fix me!')
   // }
@@ -48,7 +41,7 @@ const TabSettingsPage = props => {
   const sidebarLeftMargin = 10
   return (
     <SettingsPage
-      sidebarContent={
+      sidebarContent={({ showError }) => (
         <List style={{ marginLeft: sidebarLeftMargin }}>
           <ListSubheader disableSticky className={classes.listSubheader}>
             Settings
@@ -77,8 +70,8 @@ const TabSettingsPage = props => {
             Account
           </SettingsMenuItem>
         </List>
-      }
-      mainContent={
+      )}
+      mainContent={({ showError }) => (
         <Switch>
           <Route
             exact
@@ -152,7 +145,7 @@ const TabSettingsPage = props => {
           <Redirect from="/newtab/profile/*" to="/newtab/profile/stats/" />
           <Redirect from="/newtab/account/*" to="/newtab/account/" />
         </Switch>
-      }
+      )}
     />
   )
 }
