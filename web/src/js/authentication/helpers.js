@@ -150,15 +150,21 @@ export const createAnonymousUserIfPossible = async () => {
  * @param {Object} params.user.username - The user's username from our database. This
  *   may exist when authUser.username does not; for example, if a user clears
  *   their local storage.
+ * @param {Object} params.urlParams - URL parameter values to append to the auth URL
+ *   when redirecting.
  * @return {Boolean} Whether or not we redirected (e.g. true if the
  *   user was not fully authenticated).
  */
-export const redirectToAuthIfNeeded = ({ authUser, user = null }) => {
+export const redirectToAuthIfNeeded = ({
+  authUser,
+  user = null,
+  urlParams = {},
+}) => {
   var redirected = true
 
   // User does not exist. Require login.
   if (!authUser || !authUser.id) {
-    goToMainLoginPage()
+    goToMainLoginPage(urlParams)
     redirected = true
     // If the user has an anonymous account and is allowed to be
     // anonymous, do nothing. If they're anonymous but are not
@@ -172,21 +178,21 @@ export const redirectToAuthIfNeeded = ({ authUser, user = null }) => {
       if (anonymousUserMandatorySignIn()) {
         // Include the "mandatory" URL parameter so we're able to
         // show an explanation on the sign-in views.
-        goToMainLoginPage({ mandatory: 'true' })
+        goToMainLoginPage({ mandatory: 'true', ...urlParams })
         redirected = true
       } else {
-        goToMainLoginPage()
+        goToMainLoginPage(urlParams)
         redirected = true
       }
     }
     // If the user does not have an email address, show a message
     // asking them to sign in with a different method.
   } else if (!authUser.email) {
-    replaceUrl(missingEmailMessageURL, null, { keepURLParams: true })
+    replaceUrl(missingEmailMessageURL, urlParams, { keepURLParams: true })
     redirected = true
     // User is logged in but their email is not verified.
   } else if (!authUser.emailVerified) {
-    replaceUrl(verifyEmailURL, null, { keepURLParams: true })
+    replaceUrl(verifyEmailURL, urlParams, { keepURLParams: true })
     redirected = true
     // User is logged in but has not set a username.
   } else if (!authUser.username) {
@@ -196,7 +202,7 @@ export const redirectToAuthIfNeeded = ({ authUser, user = null }) => {
       setUsernameInLocalStorage(user.username)
       redirected = false
     } else {
-      replaceUrl(enterUsernameURL, null, { keepURLParams: true })
+      replaceUrl(enterUsernameURL, urlParams, { keepURLParams: true })
       redirected = true
     }
   } else {
