@@ -25,6 +25,9 @@ import {
 } from 'js/navigation/navigation'
 
 const styles = theme => ({
+  list: {
+    marginLeft: 10,
+  },
   listSubheader: {
     paddingLeft: 14,
   },
@@ -37,12 +40,10 @@ const TabSettingsPage = props => {
   // const onClose = () => {
   //   console.error('Fix me!')
   // }
-
-  const sidebarLeftMargin = 10
   return (
     <SettingsPage
       sidebarContent={({ showError }) => (
-        <List style={{ marginLeft: sidebarLeftMargin }}>
+        <List className={classes.listSubheader}>
           <ListSubheader disableSticky className={classes.listSubheader}>
             Settings
           </ListSubheader>
