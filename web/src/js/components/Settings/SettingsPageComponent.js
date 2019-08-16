@@ -8,7 +8,6 @@ import CloseIcon from '@material-ui/icons/Close'
 
 import ErrorMessage from 'js/components/General/ErrorMessage'
 import Logo from 'js/components/Logo/Logo'
-import { goToDashboard } from 'js/navigation/navigation'
 
 const sidebarWidth = 240
 const styles = theme => ({
@@ -36,7 +35,7 @@ const styles = theme => ({
 })
 
 const SettingsPage = props => {
-  const { classes, mainContent, sidebarContent } = props
+  const { classes, mainContent, onClose, sidebarContent } = props
   const [errorMessage, setErrorMessage] = useState(null)
   const [isErrorOpen, setIsErrorOpen] = useState(false)
   const showError = msg => {
@@ -54,7 +53,7 @@ const SettingsPage = props => {
           <div style={{ flex: 1 }}>
             <Logo color={'white'} />
           </div>
-          <IconButton onClick={goToDashboard}>
+          <IconButton onClick={onClose}>
             <CloseIcon className={classes.closeIcon} />
           </IconButton>
         </Toolbar>
@@ -77,6 +76,7 @@ const SettingsPage = props => {
 SettingsPage.propTypes = {
   mainContent: PropTypes.func.isRequired,
   sidebarContent: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
 }
 

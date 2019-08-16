@@ -5,7 +5,6 @@ import { shallow } from 'enzyme'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsPage from 'js/components/Settings/SettingsPageComponent'
 import ErrorMessage from 'js/components/General/ErrorMessage'
-import { goToDashboard } from 'js/navigation/navigation'
 
 jest.mock('js/components/General/ErrorMessage')
 jest.mock('js/components/Logo/Logo')
@@ -17,6 +16,7 @@ afterEach(() => {
 
 const getMockProps = () => ({
   mainContent: () => <div>hi</div>,
+  onClose: jest.fn(),
   sidebarContent: () => (
     <ul>
       <li>thing</li>
@@ -68,11 +68,11 @@ describe('SettingsPage', () => {
     )
   })
 
-  it('goes to the Tab dashboard when clicking the close IconButton', () => {
+  it('calls the "onClose" prop when clicking the close IconButton', () => {
     const mockProps = getMockProps()
     const wrapper = shallow(<SettingsPage {...mockProps} />).dive()
-    expect(goToDashboard).not.toHaveBeenCalled()
+    expect(mockProps.onClose).not.toHaveBeenCalled()
     wrapper.find(IconButton).simulate('click')
-    expect(goToDashboard).toHaveBeenCalled()
+    expect(mockProps.onClose).toHaveBeenCalled()
   })
 })

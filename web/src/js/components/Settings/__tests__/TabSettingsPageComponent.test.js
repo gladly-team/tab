@@ -3,7 +3,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import { Redirect, Route, Switch } from 'react-router-dom'
-// import IconButton from '@material-ui/core/IconButton'
 import TabSettingsPage from 'js/components/Settings/TabSettingsPageComponent'
 import AccountView from 'js/components/Settings/Account/AccountView'
 import BackgroundSettingsView from 'js/components/Settings/Background/BackgroundSettingsView'
@@ -11,8 +10,9 @@ import ProfileStatsView from 'js/components/Settings/Profile/ProfileStatsView'
 import ProfileDonateHearts from 'js/components/Settings/Profile/ProfileDonateHeartsView'
 import ProfileInviteFriend from 'js/components/Settings/Profile/ProfileInviteFriendView'
 import SettingsMenuItem from 'js/components/Settings/SettingsMenuItem'
+import SettingsPage from 'js/components/Settings/SettingsPageComponent'
 import WidgetsSettingsView from 'js/components/Settings/Widgets/WidgetsSettingsView'
-// import { goToDashboard } from 'js/navigation/navigation'
+import { goTo, dashboardURL } from 'js/navigation/navigation'
 
 jest.mock('react-router-dom')
 jest.mock('js/components/Settings/Account/AccountView')
@@ -65,16 +65,15 @@ describe('TabSettingsPage', () => {
       .dive()
   })
 
-  // FIXME
-  // it('goes to the Tab dashboard when clicking the close IconButton', () => {
-  //   const mockProps = getMockProps()
-  //   const wrapper = shallow(<TabSettingsPage {...mockProps} />)
-  //     .dive()
-  //     .dive()
-  //   expect(goToDashboard).not.toHaveBeenCalled()
-  //   wrapper.find(IconButton).simulate('click')
-  //   expect(goToDashboard).toHaveBeenCalled()
-  // })
+  it('goes to the Tab dashboard when the SettingsPage "onClose" callback is called', () => {
+    const mockProps = getMockProps()
+    const wrapper = shallow(<TabSettingsPage {...mockProps} />)
+      .dive()
+      .dive()
+    expect(goTo).not.toHaveBeenCalled()
+    wrapper.find(SettingsPage).prop('onClose')()
+    expect(goTo).toHaveBeenCalledWith(dashboardURL)
+  })
 })
 
 describe('TabSettingsPage: sidebar content', () => {

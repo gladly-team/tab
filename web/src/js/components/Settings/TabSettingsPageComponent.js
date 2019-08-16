@@ -16,8 +16,10 @@ import SettingsPage from 'js/components/Settings/SettingsPageComponent'
 import WidgetsSettingsView from 'js/components/Settings/Widgets/WidgetsSettingsView'
 import withUser from 'js/components/General/withUser'
 import {
+  goTo,
   accountURL,
   backgroundSettingsURL,
+  dashboardURL,
   donateURL,
   inviteFriendsURL,
   statsURL,
@@ -42,6 +44,9 @@ const TabSettingsPage = props => {
   // }
   return (
     <SettingsPage
+      onClose={() => {
+        goTo(dashboardURL)
+      }}
       sidebarContent={({ showError }) => (
         <List className={classes.listSubheader}>
           <ListSubheader disableSticky className={classes.listSubheader}>
