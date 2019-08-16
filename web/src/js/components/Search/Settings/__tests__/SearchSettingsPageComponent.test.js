@@ -5,13 +5,10 @@ import { shallow } from 'enzyme'
 import { Redirect, Route, Switch } from 'react-router-dom'
 import SearchSettingsPage from 'js/components/Search/Settings/SearchSettingsPageComponent'
 import AccountView from 'js/components/Settings/Account/AccountView'
-import BackgroundSettingsView from 'js/components/Settings/Background/BackgroundSettingsView'
-import ProfileStatsView from 'js/components/Settings/Profile/ProfileStatsView'
 import ProfileDonateHearts from 'js/components/Settings/Profile/ProfileDonateHeartsView'
 import ProfileInviteFriend from 'js/components/Settings/Profile/ProfileInviteFriendView'
 import SettingsMenuItem from 'js/components/Settings/SettingsMenuItem'
 import SettingsPage from 'js/components/Settings/SettingsPageComponent'
-import WidgetsSettingsView from 'js/components/Settings/Widgets/WidgetsSettingsView'
 import { goTo, searchBaseURL } from 'js/navigation/navigation'
 
 jest.mock('react-router-dom')
