@@ -37,11 +37,6 @@ const styles = theme => ({
 
 const TabSettingsPage = props => {
   const { authUser, classes } = props
-
-  // FIXME
-  // const onClose = () => {
-  //   console.error('Fix me!')
-  // }
   return (
     <SettingsPage
       onClose={() => {
