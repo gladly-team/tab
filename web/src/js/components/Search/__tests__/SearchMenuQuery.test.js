@@ -24,6 +24,7 @@ describe('withUser HOC in SearchMenuQuery', () => {
     require('js/components/Search/SearchMenuQuery').default
     expect(withUser).toHaveBeenCalledWith({
       app: 'search',
+      createUserIfPossible: false,
       redirectToAuthIfIncomplete: false,
       renderIfNoUser: true,
     })

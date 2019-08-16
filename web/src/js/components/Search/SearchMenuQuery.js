@@ -96,6 +96,7 @@ SearchMenuQuery.defaultProps = {
 
 export default withUser({
   app: SEARCH_APP,
+  createUserIfPossible: false,
   redirectToAuthIfIncomplete: false,
   renderIfNoUser: true,
 })(SearchMenuQuery)

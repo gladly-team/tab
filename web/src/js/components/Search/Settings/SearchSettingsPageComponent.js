@@ -106,5 +106,5 @@ SearchSettingsPage.propTypes = {
 }
 
 export default withStyles(styles)(
-  withUser({ app: SEARCH_APP })(SearchSettingsPage)
+  withUser({ app: SEARCH_APP, createUserIfPossible: false })(SearchSettingsPage)
 )

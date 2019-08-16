@@ -39,7 +39,10 @@ describe('withUser HOC in SearchSettingsPage', () => {
 
     /* eslint-disable-next-line no-unused-expressions */
     require('js/components/Search/Settings/SearchSettingsPageComponent').default
-    expect(withUser).toHaveBeenCalledWith({ app: 'search' })
+    expect(withUser).toHaveBeenCalledWith({
+      app: 'search',
+      createUserIfPossible: false,
+    })
   })
 
   it('wraps the SearchSettingsPage component', () => {
