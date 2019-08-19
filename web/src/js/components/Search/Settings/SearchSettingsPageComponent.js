@@ -8,7 +8,7 @@ import ListSubheader from '@material-ui/core/ListSubheader'
 
 import AccountView from 'js/components/Settings/Account/AccountView'
 import ProfileDonateHearts from 'js/components/Settings/Profile/ProfileDonateHeartsView'
-import ProfileInviteFriend from 'js/components/Settings/Profile/ProfileInviteFriendView'
+import SearchProfileInviteFriend from 'js/components/Search/Settings/SearchProfileInviteFriendView'
 import SettingsMenuItem from 'js/components/Settings/SettingsMenuItem'
 import SettingsPage from 'js/components/Settings/SettingsPageComponent'
 import withUser from 'js/components/General/withUser'
@@ -71,7 +71,7 @@ const SearchSettingsPage = props => {
             exact
             path="/search/profile/invite/"
             render={props => (
-              <ProfileInviteFriend
+              <SearchProfileInviteFriend
                 {...props}
                 authUser={authUser}
                 showError={showError}
