@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { get } from 'lodash/object'
 import TextField from '@material-ui/core/TextField'
 import { withStyles } from '@material-ui/core/styles'
 import LogReferralLinkClick from 'js/mutations/LogReferralLinkClickMutation'
@@ -21,9 +22,8 @@ const styles = theme => ({
 
 class InviteFriend extends React.Component {
   getReferralUrl() {
-    const {
-      user: { username },
-    } = this.props
+    const { user } = this.props
+    const username = get(user, 'username')
     const baseURL = 'https://tab.gladly.io'
     const referralUrl = username
       ? `${baseURL}/?u=${encodeURIComponent(username)}`
@@ -40,15 +40,17 @@ class InviteFriend extends React.Component {
     // which helps us gauge attempted but unsuccessful
     // referrals.
     const { user } = this.props
-    return LogReferralLinkClick({
-      userId: user.id,
-    }).catch(e => {
-      logger.error(e)
-    })
+    if (user) {
+      return LogReferralLinkClick({
+        userId: user.id,
+      }).catch(e => {
+        logger.error(e)
+      })
+    }
   }
 
   render() {
-    const { classes } = this.props
+    const { classes, user } = this.props
     const referralUrl = this.getReferralUrl()
 
     return (
@@ -61,7 +63,7 @@ class InviteFriend extends React.Component {
         value={referralUrl}
         label={'Share this link'}
         helperText={
-          this.props.user.username
+          get(user, 'username')
             ? `and you'll get 350 Hearts for every person who joins!`
             : `and have a bigger positive impact!`
         }

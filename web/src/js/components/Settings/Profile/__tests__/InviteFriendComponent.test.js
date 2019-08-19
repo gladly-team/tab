@@ -143,6 +143,41 @@ describe('Invite friend component', () => {
     ).toBe(`and have a bigger positive impact!`)
   })
 
+  it('contains the correct referral URL when there is no user', () => {
+    const InviteFriendComponent = require('js/components/Settings/Profile/InviteFriendComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user = null
+    const wrapper = mount(<InviteFriendComponent {...mockProps} />)
+    const referralUrl = 'https://tab.gladly.io'
+    expect(
+      wrapper
+        .find(TextField)
+        .first()
+        .prop('value')
+    ).toBe(referralUrl)
+  })
+
+  it('contains the correct description text when there is no user', () => {
+    const InviteFriendComponent = require('js/components/Settings/Profile/InviteFriendComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user = undefined
+    const wrapper = mount(<InviteFriendComponent {...mockProps} />)
+    expect(
+      wrapper
+        .find(TextField)
+        .first()
+        .prop('label')
+    ).toBe(`Share this link`)
+    expect(
+      wrapper
+        .find(TextField)
+        .first()
+        .prop('helperText')
+    ).toBe(`and have a bigger positive impact!`)
+  })
+
   it('logs when the user clicks on their referral link', () => {
     const InviteFriendComponent = require('js/components/Settings/Profile/InviteFriendComponent')
       .default
@@ -156,6 +191,20 @@ describe('Invite friend component', () => {
     expect(LogReferralLinkClick).toHaveBeenCalledWith({
       userId: 'abc-123',
     })
+  })
+
+  it('does not log a referral link click if the user does not exist', () => {
+    const InviteFriendComponent = require('js/components/Settings/Profile/InviteFriendComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user = null
+    const wrapper = shallow(<InviteFriendComponent {...mockProps} />).dive()
+    const onClickCallback = wrapper
+      .find(TextField)
+      .first()
+      .prop('onClick')
+    onClickCallback()
+    expect(LogReferralLinkClick).not.toHaveBeenCalled()
   })
 
   it('logs an error if LogReferralLinkClick throws', async () => {
