@@ -6,6 +6,7 @@ import environment from 'js/relay-env'
 import SearchMenuContainer from 'js/components/Search/SearchMenuContainer'
 import withUser from 'js/components/General/withUser'
 import logger from 'js/utils/logger'
+import { SEARCH_APP } from 'js/constants'
 
 // Make a different query for anonymous users than for
 // authenticated users.
@@ -94,6 +95,8 @@ SearchMenuQuery.defaultProps = {
 }
 
 export default withUser({
+  app: SEARCH_APP,
+  createUserIfPossible: false,
   redirectToAuthIfIncomplete: false,
   renderIfNoUser: true,
 })(SearchMenuQuery)

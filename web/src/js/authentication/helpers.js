@@ -139,25 +139,32 @@ export const createAnonymousUserIfPossible = async () => {
  * to an authentication page. If the user is not fully authenticated,
  * redirect and return true. If the user is fully authenticated, do
  * not redirect and return false.
- * @param {object} authUser - The AuthUser object
- * @param {string} authUser.id - The user's ID
- * @param {string} authUser.email - The user's email
- * @param {string} authUser.username - The user's username from local storage
- * @param {boolean} authUser.isAnonymous - Whether the user is anonymous
- * @param {boolean} authUser.emailVerified - Whether the user has verified their email
- * @param {object} user - The user object from our API
- * @param {object} user.username - The user's username from our database. This
+ * @param {Object} params
+ * @param {Object} params.authUser - The AuthUser object
+ * @param {String} params.authUser.id - The user's ID
+ * @param {String} params.authUser.email - The user's email
+ * @param {String} params.authUser.username - The user's username from local storage
+ * @param {Boolean} params.authUser.isAnonymous - Whether the user is anonymous
+ * @param {Boolean} params.authUser.emailVerified - Whether the user has verified their email
+ * @param {Object} params.user - The user object from our API
+ * @param {Object} params.user.username - The user's username from our database. This
  *   may exist when authUser.username does not; for example, if a user clears
  *   their local storage.
+ * @param {Object} params.urlParams - URL parameter values to append to the auth URL
+ *   when redirecting.
  * @return {Boolean} Whether or not we redirected (e.g. true if the
  *   user was not fully authenticated).
  */
-export const redirectToAuthIfNeeded = (authUser, user = null) => {
+export const redirectToAuthIfNeeded = ({
+  authUser,
+  user = null,
+  urlParams = {},
+}) => {
   var redirected = true
 
   // User does not exist. Require login.
   if (!authUser || !authUser.id) {
-    goToMainLoginPage()
+    goToMainLoginPage(urlParams)
     redirected = true
     // If the user has an anonymous account and is allowed to be
     // anonymous, do nothing. If they're anonymous but are not
@@ -171,21 +178,21 @@ export const redirectToAuthIfNeeded = (authUser, user = null) => {
       if (anonymousUserMandatorySignIn()) {
         // Include the "mandatory" URL parameter so we're able to
         // show an explanation on the sign-in views.
-        goToMainLoginPage({ mandatory: 'true' })
+        goToMainLoginPage({ mandatory: 'true', ...urlParams })
         redirected = true
       } else {
-        goToMainLoginPage()
+        goToMainLoginPage(urlParams)
         redirected = true
       }
     }
     // If the user does not have an email address, show a message
     // asking them to sign in with a different method.
   } else if (!authUser.email) {
-    replaceUrl(missingEmailMessageURL, null, { keepURLParams: true })
+    replaceUrl(missingEmailMessageURL, urlParams, { keepURLParams: true })
     redirected = true
     // User is logged in but their email is not verified.
   } else if (!authUser.emailVerified) {
-    replaceUrl(verifyEmailURL, null, { keepURLParams: true })
+    replaceUrl(verifyEmailURL, urlParams, { keepURLParams: true })
     redirected = true
     // User is logged in but has not set a username.
   } else if (!authUser.username) {
@@ -195,7 +202,7 @@ export const redirectToAuthIfNeeded = (authUser, user = null) => {
       setUsernameInLocalStorage(user.username)
       redirected = false
     } else {
-      replaceUrl(enterUsernameURL, null, { keepURLParams: true })
+      replaceUrl(enterUsernameURL, urlParams, { keepURLParams: true })
       redirected = true
     }
   } else {
@@ -209,11 +216,11 @@ export const redirectToAuthIfNeeded = (authUser, user = null) => {
  * exist. This is idempotent and may be called when returning users sign in.
  * @returns {Promise<object>} user - A promise that resolves into a
  *   user object
- * @returns {string} user.id - The user's ID, the same value as the
+ * @returns {String} user.id - The user's ID, the same value as the
  *   userId argument
- * @returns {string|null} user.email - The user's email, the same value as the
+ * @returns {String|null} user.email - The user's email, the same value as the
  *   email argument
- * @returns {string|null} user.username - The user's username, if already
+ * @returns {String|null} user.username - The user's username, if already
  *   set; or null, if not yet set
  */
 export const createNewUser = () => {

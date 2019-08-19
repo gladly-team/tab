@@ -139,6 +139,9 @@ export const accountURL = '/newtab/account/'
 // Search
 export const searchBaseURL = '/search'
 export const searchAuthURL = '/search/auth/'
+export const searchDonateHeartsURL = '/search/profile/donate/'
+export const searchInviteFriendsURL = '/search/profile/invite/'
+export const searchAccountURL = '/search/account/'
 
 // Homepage
 

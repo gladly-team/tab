@@ -127,4 +127,26 @@ describe('SearchApp', () => {
     expect(route.exists()).toBe(true)
     expect(route.prop('component')).toBe(SearchRandomQueryView)
   })
+
+  it('contains the "profile" route', async () => {
+    const SearchApp = require('js/components/Search/SearchApp').default
+    const wrapper = shallow(<SearchApp />)
+    const route = wrapper
+      .find(Route)
+      .filterWhere(n => n.prop('path') === '/search/profile/')
+    expect(route.exists()).toBe(true)
+
+    // TODO: test the component type when Enzyme fully supports React.lazy
+  })
+
+  it('contains the "account" route', async () => {
+    const SearchApp = require('js/components/Search/SearchApp').default
+    const wrapper = shallow(<SearchApp />)
+    const route = wrapper
+      .find(Route)
+      .filterWhere(n => n.prop('path') === '/search/account/')
+    expect(route.exists()).toBe(true)
+
+    // TODO: test the component type when Enzyme fully supports React.lazy
+  })
 })

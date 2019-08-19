@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import InviteFriend from 'js/components/Settings/Profile/InviteFriendContainer'
-import Stat from 'js/components/Settings/Profile/StatComponent'
 import HappyIcon from '@material-ui/icons/Mood'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
@@ -21,65 +20,60 @@ const styles = theme => ({
     alignItems: 'center',
     padding: 18,
     margin: spacingPx,
-    flex: 2,
-    flexBasis: '40%',
+    flex: 5,
     minWidth: 200,
+    height: 220,
   },
   thankYouPaper: {
     display: 'flex',
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    flex: 1,
-    flexBasis: '50%',
+    textAlign: 'center',
+    flex: 3,
     minWidth: 200,
     padding: 20,
     margin: spacingPx,
   },
   happyIcon: {
-    height: 20,
-    width: 20,
+    height: 26,
+    width: 26,
     marginRight: 8,
-    color: theme.palette.action.active,
+    color: theme.typography.h6.color,
+  },
+  thankYouHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    marginBottom: '0.35em',
   },
   thankYouText: {
     color: theme.palette.action.active,
   },
 })
 
-const ProfileInviteFriend = props => {
-  const { app, classes, user } = props
-  const friendWord = user.numUsersRecruited === 1 ? 'friend' : 'friends'
-  const statStyle = {
-    margin: spacingPx,
-    flex: 1,
-    paddingTop: 40,
-    paddingBottom: 40,
-  }
+// Note: we can start using the same ProfileInviteFriend component
+// as Tab for a Cause when we make the content more similar.
+const SearchProfileInviteFriend = props => {
+  const { classes } = props
   return (
     <span className={classes.container}>
       <Paper elevation={1} className={classes.inviteFriendPaper}>
         <InviteFriend
-          user={user}
+          baseURL={'https://search.gladly.io'}
+          user={null}
           style={{
             width: '100%',
             maxWidth: 300,
           }}
         />
       </Paper>
-      <Stat
-        stat={user.numUsersRecruited}
-        statText={`${friendWord} recruited`}
-        style={statStyle}
-      />
-      <Stat
-        stat={app.referralVcReward}
-        statText={'extra Hearts when you recruit a new friend'}
-        style={statStyle}
-      />
       <Paper elevation={1} className={classes.thankYouPaper}>
-        <HappyIcon className={classes.happyIcon} />
+        <div className={classes.thankYouHeader}>
+          <HappyIcon className={classes.happyIcon} />
+          <Typography variant={'h6'}>Thank you!</Typography>
+        </div>
         <Typography variant={'body2'} className={classes.thankYouText}>
-          Thank you! Every new person raises more money for charity, and we
+          You're one of the first people to use Search for a Cause, and we
           depend on people like you to get the word out.
         </Typography>
       </Paper>
@@ -87,14 +81,8 @@ const ProfileInviteFriend = props => {
   )
 }
 
-ProfileInviteFriend.propTypes = {
-  app: PropTypes.shape({
-    referralVcReward: PropTypes.number.isRequired,
-  }),
+SearchProfileInviteFriend.propTypes = {
   classes: PropTypes.object.isRequired,
-  user: PropTypes.shape({
-    numUsersRecruited: PropTypes.number.isRequired,
-  }),
 }
 
-export default withStyles(styles)(ProfileInviteFriend)
+export default withStyles(styles)(SearchProfileInviteFriend)

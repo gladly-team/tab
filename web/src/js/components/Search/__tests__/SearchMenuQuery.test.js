@@ -12,6 +12,36 @@ afterEach(() => {
   jest.resetModules()
 })
 
+describe('withUser HOC in SearchMenuQuery', () => {
+  beforeEach(() => {
+    jest.resetModules()
+  })
+
+  it('is called with the expected options', () => {
+    const withUser = require('js/components/General/withUser').default
+
+    /* eslint-disable-next-line no-unused-expressions */
+    require('js/components/Search/SearchMenuQuery').default
+    expect(withUser).toHaveBeenCalledWith({
+      app: 'search',
+      createUserIfPossible: false,
+      redirectToAuthIfIncomplete: false,
+      renderIfNoUser: true,
+    })
+  })
+
+  it('wraps the SearchMenuQuery component', () => {
+    const {
+      __mockWithUserWrappedFunction,
+    } = require('js/components/General/withUser')
+
+    /* eslint-disable-next-line no-unused-expressions */
+    require('js/components/Search/SearchMenuQuery').default
+    const wrappedComponent = __mockWithUserWrappedFunction.mock.calls[0][0]
+    expect(wrappedComponent.name).toEqual('SearchMenuQuery')
+  })
+})
+
 describe('SearchMenuQuery', () => {
   it('renders without error', () => {
     const SearchMenuQuery = require('js/components/Search/SearchMenuQuery')

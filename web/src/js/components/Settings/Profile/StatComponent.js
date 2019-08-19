@@ -39,6 +39,7 @@ const Stat = props => {
   const { classes, extraContent, stat, statText, style } = props
   return (
     <Paper
+      elevation={1}
       className={classes.root}
       style={{
         ...style,

@@ -216,10 +216,10 @@ describe('Authentication.js tests', function() {
       username: 'charles',
     }
     shallow(<Authentication {...mockProps} />)
-    expect(redirectToAuthIfNeeded).toHaveBeenCalledWith(
-      mockProps.authUser,
-      mockProps.user
-    )
+    expect(redirectToAuthIfNeeded).toHaveBeenCalledWith({
+      authUser: mockProps.authUser,
+      user: mockProps.user,
+    })
   })
 
   it('redirects to the app (Tab for a Cause, by default) if the user is fully authenticated', () => {

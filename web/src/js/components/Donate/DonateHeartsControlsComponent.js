@@ -15,14 +15,14 @@ import DonateVcMutation from 'js/mutations/DonateVcMutation'
 
 const styles = theme => ({
   charityTitleLink: {
-    color: '#9d4ba3',
+    color: theme.palette.primary.main,
     textDecoration: 'none',
     cursor: 'pointer',
     whiteSpace: 'nowrap',
   },
   charityImpactText: {
     '& a': {
-      color: '#9d4ba3',
+      color: theme.palette.primary.main,
       textDecoration: 'none',
     },
   },

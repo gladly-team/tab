@@ -68,7 +68,7 @@ class Account extends React.Component {
   render() {
     const { user } = this.props
     return (
-      <Paper>
+      <Paper elevation={1}>
         <Typography variant={'h5'} style={{ padding: 20 }}>
           Account
         </Typography>

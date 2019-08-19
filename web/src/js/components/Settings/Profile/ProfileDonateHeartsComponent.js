@@ -9,12 +9,18 @@ import Typography from '@material-ui/core/Typography'
 const spacingPx = 6
 
 const styles = theme => ({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
   messageContainer: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 14,
+    padding: '14px 18px',
     marginBottom: 2 * spacingPx,
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
   messageText: {
     color: theme.palette.action.active,
@@ -29,7 +35,7 @@ const styles = theme => ({
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'center',
-    marginBottom: 34,
+    marginBottom: 40,
   },
 })
 
@@ -37,8 +43,8 @@ class ProfileDonateHearts extends React.Component {
   render() {
     const { app, classes, user } = this.props
     return (
-      <div key={'charities-container-key'}>
-        <Paper className={classes.messageContainer}>
+      <div className={classes.container}>
+        <Paper elevation={1} className={classes.messageContainer}>
           <InfoIcon className={classes.infoIcon} />
           <Typography variant={'body2'} className={classes.messageText}>
             When you donate Hearts, you're telling us to give more of the money

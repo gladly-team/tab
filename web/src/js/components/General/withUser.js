@@ -6,6 +6,7 @@ import {
 } from 'js/authentication/helpers'
 import logger from 'js/utils/logger'
 import { makePromiseCancelable } from 'js/utils/utils'
+import { SEARCH_APP, TAB_APP } from 'js/constants'
 
 // https://reactjs.org/docs/higher-order-components.html#convention-wrap-the-display-name-for-easy-debugging
 function getDisplayName(WrappedComponent) {
@@ -18,6 +19,8 @@ function getDisplayName(WrappedComponent) {
  * one does not exist and redirects to the authentication page if the user
  * is not fully authenticated.
  * @param {Object} options
+ * @param {String} options.app - One of "search" or "tab". This determines
+ *   app-specific behavior, like the redirect URL. Defaults to "tab".
  * @param {Boolean} options.renderIfNoUser - If true, we will render the
  *   children even if there is no user ID (the user is not signed in).
  *   Defaults to false.
@@ -68,47 +71,57 @@ const withUser = (options = {}) => WrappedComponent => {
 
     async determineAuthState(user) {
       const {
+        app = TAB_APP,
         createUserIfPossible = true,
         redirectToAuthIfIncomplete = true,
       } = options
       let authUser = user
 
       // If the user doesn't exist, create one if possible.
+      // IMPORTANT: this logic only works for Tab for a Cause, not Search.
       if (!(user && user.id) && createUserIfPossible) {
-        // Mark that user creation is in process so that we don't
-        // don't render child components after the user is authed
-        // but before the user exists in our database.
-        this.setState({
-          userCreationInProgress: true,
-        })
-        try {
-          this.userCreatePromise = makePromiseCancelable(
-            createAnonymousUserIfPossible()
+        // If options.app === 'search', warn that we don't support this
+        // logic and don't do anything.
+        if (app === SEARCH_APP) {
+          console.warn(
+            'Anonymous user creation is not yet supported in the Search app.'
           )
-          authUser = await this.userCreatePromise.promise
-        } catch (e) {
-          // If the component already unmounted, don't do anything with
-          // the returned data.
-          if (e && e.isCanceled) {
+        } else {
+          // Mark that user creation is in process so that we don't
+          // don't render child components after the user is authed
+          // but before the user exists in our database.
+          this.setState({
+            userCreationInProgress: true,
+          })
+          try {
+            this.userCreatePromise = makePromiseCancelable(
+              createAnonymousUserIfPossible()
+            )
+            authUser = await this.userCreatePromise.promise
+          } catch (e) {
+            // If the component already unmounted, don't do anything with
+            // the returned data.
+            if (e && e.isCanceled) {
+              return
+            }
+            logger.error(e)
+          }
+
+          // This is an antipattern, and canceling our promises on unmount
+          // should handle the problem. However, in practice, the component
+          // sometimes unmounts between the userCreatePromise resolving and
+          // this point, causing an error when we try to update state on the
+          // unmounted component. It shouldn't cause a memory leak, as we've
+          // canceled the promise and unsubscribed the auth listener.
+          // Note that this might be an error in our code, but it's not a
+          // priority to investigate.
+          if (!this.mounted) {
             return
           }
-          logger.error(e)
+          this.setState({
+            userCreationInProgress: false,
+          })
         }
-
-        // This is an antipattern, and canceling our promises on unmount
-        // should handle the problem. However, in practice, the component
-        // sometimes unmounts between the userCreatePromise resolving and
-        // this point, causing an error when we try to update state on the
-        // unmounted component. It shouldn't cause a memory leak, as we've
-        // canceled the promise and unsubscribed the auth listener.
-        // Note that this might be an error in our code, but it's not a
-        // priority to investigate.
-        if (!this.mounted) {
-          return
-        }
-        this.setState({
-          userCreationInProgress: false,
-        })
       }
 
       // If the user must complete the authentication process, optionally
@@ -116,7 +129,8 @@ const withUser = (options = {}) => WrappedComponent => {
       let redirected = false
       if (redirectToAuthIfIncomplete) {
         try {
-          redirected = redirectToAuthIfNeeded(authUser)
+          const urlParams = { app: app }
+          redirected = redirectToAuthIfNeeded({ authUser, urlParams })
         } catch (e) {
           logger.error(e)
         }

@@ -10,6 +10,7 @@ jest.mock('js/mutations/LogReferralLinkClickMutation')
 jest.mock('js/utils/logger')
 
 const getMockProps = () => ({
+  baseURL: undefined,
   user: {
     id: 'abc-123',
     username: 'bob',
@@ -33,7 +34,7 @@ describe('Invite friend component', () => {
     shallow(<InviteFriendComponent {...mockProps} />)
   })
 
-  it('contains the correct referral URL', () => {
+  it('contains the correct referral URL, using tab.gladly.io by default', () => {
     const InviteFriendComponent = require('js/components/Settings/Profile/InviteFriendComponent')
       .default
     const mockProps = getMockProps()
@@ -45,6 +46,20 @@ describe('Invite friend component', () => {
         .first()
         .prop('value')
     ).toBe('https://tab.gladly.io/?u=bob')
+  })
+
+  it('contains the correct referral URL when passed a custom "baseURL" prop value', () => {
+    const InviteFriendComponent = require('js/components/Settings/Profile/InviteFriendComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.baseURL = 'https://foo.example.com'
+    const wrapper = mount(<InviteFriendComponent {...mockProps} />)
+    expect(
+      wrapper
+        .find(TextField)
+        .first()
+        .prop('value')
+    ).toBe('https://foo.example.com/?u=bob')
   })
 
   it('encodes the referral URL correctly when the username contains a space', () => {
@@ -143,6 +158,41 @@ describe('Invite friend component', () => {
     ).toBe(`and have a bigger positive impact!`)
   })
 
+  it('contains the correct referral URL when there is no user', () => {
+    const InviteFriendComponent = require('js/components/Settings/Profile/InviteFriendComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user = null
+    const wrapper = mount(<InviteFriendComponent {...mockProps} />)
+    const referralUrl = 'https://tab.gladly.io'
+    expect(
+      wrapper
+        .find(TextField)
+        .first()
+        .prop('value')
+    ).toBe(referralUrl)
+  })
+
+  it('contains the correct description text when there is no user', () => {
+    const InviteFriendComponent = require('js/components/Settings/Profile/InviteFriendComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user = undefined
+    const wrapper = mount(<InviteFriendComponent {...mockProps} />)
+    expect(
+      wrapper
+        .find(TextField)
+        .first()
+        .prop('label')
+    ).toBe(`Share this link`)
+    expect(
+      wrapper
+        .find(TextField)
+        .first()
+        .prop('helperText')
+    ).toBe(`and have a bigger positive impact!`)
+  })
+
   it('logs when the user clicks on their referral link', () => {
     const InviteFriendComponent = require('js/components/Settings/Profile/InviteFriendComponent')
       .default
@@ -156,6 +206,20 @@ describe('Invite friend component', () => {
     expect(LogReferralLinkClick).toHaveBeenCalledWith({
       userId: 'abc-123',
     })
+  })
+
+  it('does not log a referral link click if the user does not exist', () => {
+    const InviteFriendComponent = require('js/components/Settings/Profile/InviteFriendComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user = null
+    const wrapper = shallow(<InviteFriendComponent {...mockProps} />).dive()
+    const onClickCallback = wrapper
+      .find(TextField)
+      .first()
+      .prop('onClick')
+    onClickCallback()
+    expect(LogReferralLinkClick).not.toHaveBeenCalled()
   })
 
   it('logs an error if LogReferralLinkClick throws', async () => {

@@ -13,6 +13,7 @@ import {
   redirectToAuthIfNeeded,
 } from 'js/authentication/helpers'
 import logger from 'js/utils/logger'
+import { SEARCH_APP, TAB_APP } from 'js/constants'
 
 jest.mock('js/authentication/user')
 jest.mock('js/authentication/helpers')
@@ -441,6 +442,40 @@ describe('withUser', () => {
     expect(wrapper.find(MockComponent).prop('authUser')).toBeNull()
   })
 
+  it('does not create an anonymous user when the app === "search" and the createUserIfPossible option is true and logs a warning that it is unsupported', async () => {
+    expect.assertions(2)
+
+    const mockConsoleWarn = jest
+      .spyOn(console, 'warn')
+      .mockImplementationOnce(() => {})
+    const mockCreatedUser = {
+      id: 'abc123',
+      email: null,
+      username: null,
+      isAnonymous: true,
+      emailVerified: false,
+    }
+    createAnonymousUserIfPossible.mockResolvedValue(mockCreatedUser)
+
+    const withUser = require('js/components/General/withUser').default
+    const MockComponent = () => null
+    const WrappedComponent = withUser({
+      app: SEARCH_APP,
+      createUserIfPossible: true,
+    })(MockComponent)
+    const wrapper = shallow(<WrappedComponent />)
+
+    // User is not authed.
+    __triggerAuthStateChange(null)
+
+    await flushAllPromises()
+    wrapper.update()
+    expect(createAnonymousUserIfPossible).not.toHaveBeenCalled()
+    expect(mockConsoleWarn).toHaveBeenCalledWith(
+      'Anonymous user creation is not yet supported in the Search app.'
+    )
+  })
+
   it('does not render children if we are redirecting to an auth page', async () => {
     expect.assertions(1)
 
@@ -458,6 +493,72 @@ describe('withUser', () => {
     })
     await flushAllPromises()
     expect(wrapper.find(MockComponent).exists()).toBe(false)
+  })
+
+  it('passes the "app" URL parameter value to redirectToAuthIfNeeded, defaulting to "tab" when options.app is not set', async () => {
+    expect.assertions(1)
+
+    const withUser = require('js/components/General/withUser').default
+    const MockComponent = () => null
+    const WrappedComponent = withUser()(MockComponent)
+    shallow(<WrappedComponent />)
+    __triggerAuthStateChange({
+      id: 'abc123',
+      email: null,
+      username: null,
+      isAnonymous: false,
+      emailVerified: false,
+    })
+    await flushAllPromises()
+    expect(redirectToAuthIfNeeded.mock.calls[0][0]).toMatchObject({
+      urlParams: {
+        app: TAB_APP,
+      },
+    })
+  })
+
+  it('passes the "app" URL parameter value to redirectToAuthIfNeeded when options.app === "tab"', async () => {
+    expect.assertions(1)
+
+    const withUser = require('js/components/General/withUser').default
+    const MockComponent = () => null
+    const WrappedComponent = withUser({ app: TAB_APP })(MockComponent)
+    shallow(<WrappedComponent />)
+    __triggerAuthStateChange({
+      id: 'abc123',
+      email: null,
+      username: null,
+      isAnonymous: false,
+      emailVerified: false,
+    })
+    await flushAllPromises()
+    expect(redirectToAuthIfNeeded.mock.calls[0][0]).toMatchObject({
+      urlParams: {
+        app: TAB_APP,
+      },
+    })
+  })
+
+  it('passes the "app" URL parameter value to redirectToAuthIfNeeded when options.app === "search"', async () => {
+    expect.assertions(1)
+
+    const withUser = require('js/components/General/withUser').default
+    const MockComponent = () => null
+    const WrappedComponent = withUser({ app: SEARCH_APP })(MockComponent)
+    shallow(<WrappedComponent />)
+    __triggerAuthStateChange({
+      id: 'abc123',
+      email: null,
+      username: null,
+      isAnonymous: false,
+      emailVerified: false,
+    })
+    await flushAllPromises()
+    expect(redirectToAuthIfNeeded.mock.calls[0][0]).toMatchObject({
+      urlParams: {
+        app: SEARCH_APP,
+      },
+    })
   })
 
   it('renders children when we would have redirected to an auth page but the "redirectToAuthIfIncomplete" option is false', async () => {

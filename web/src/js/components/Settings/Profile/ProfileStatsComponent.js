@@ -69,7 +69,7 @@ const ProfileStats = props => {
   const greeting = user.username ? `Hi, ${user.username}!` : 'Hi!'
   return (
     <div>
-      <Paper className={classes.messageContainer}>
+      <Paper elevation={1} className={classes.messageContainer}>
         <ChartIcon className={classes.chartIcon} />
         <Typography variant={'body2'} className={classes.messageText}>
           <span className={classes.greetingText}>{greeting}</span>
