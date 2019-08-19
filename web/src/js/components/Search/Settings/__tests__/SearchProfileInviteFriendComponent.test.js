@@ -20,6 +20,7 @@ const getMockProps = () => ({
   },
 })
 
+//
 describe('SearchProfileInviteFriendComponent', () => {
   it('renders without error', () => {
     const SearchProfileInviteFriend = require('js/components/Search/Settings/SearchProfileInviteFriendComponent')
@@ -28,52 +29,17 @@ describe('SearchProfileInviteFriendComponent', () => {
     shallow(<SearchProfileInviteFriend {...mockProps} />).dive()
   })
 
-  it('renders the InviteFriend component and passes it the "user" prop', () => {
+  it('renders the InviteFriend component and passes it a null "user" prop value', () => {
     const SearchProfileInviteFriend = require('js/components/Search/Settings/SearchProfileInviteFriendComponent')
       .default
     const mockProps = getMockProps()
     const wrapper = shallow(<SearchProfileInviteFriend {...mockProps} />).dive()
     const inviteFriendElem = wrapper.find(InviteFriend)
     expect(inviteFriendElem.exists()).toBe(true)
-    expect(inviteFriendElem.prop('user')).toEqual({
-      numUsersRecruited: 2,
-    })
+    expect(inviteFriendElem.prop('user')).toBeNull()
   })
 
-  it('renders the "friends recruited" statistic', () => {
-    const SearchProfileInviteFriend = require('js/components/Search/Settings/SearchProfileInviteFriendComponent')
-      .default
-    const mockProps = getMockProps()
-    const wrapper = shallow(<SearchProfileInviteFriend {...mockProps} />).dive()
-    const elem = wrapper.find(Stat).first()
-    expect(elem.prop('stat')).toEqual(2)
-    expect(elem.prop('statText')).toEqual('friends recruited')
-  })
-
-  it('renders the "friends recruited" statistic with a singular "friend" when numUsersRecruited == 1', () => {
-    const SearchProfileInviteFriend = require('js/components/Search/Settings/SearchProfileInviteFriendComponent')
-      .default
-    const mockProps = getMockProps()
-    mockProps.user.numUsersRecruited = 1
-    const wrapper = shallow(<SearchProfileInviteFriend {...mockProps} />).dive()
-    const elem = wrapper.find(Stat).first()
-    expect(elem.prop('stat')).toEqual(1)
-    expect(elem.prop('statText')).toEqual('friend recruited')
-  })
-
-  it('renders the "VC reward" statistic', () => {
-    const SearchProfileInviteFriend = require('js/components/Search/Settings/SearchProfileInviteFriendComponent')
-      .default
-    const mockProps = getMockProps()
-    const wrapper = shallow(<SearchProfileInviteFriend {...mockProps} />).dive()
-    const elem = wrapper.find(Stat).at(1)
-    expect(elem.prop('stat')).toEqual(300)
-    expect(elem.prop('statText')).toEqual(
-      'extra Hearts when you recruit a new friend'
-    )
-  })
-
-  it('shows a "thank you" message at the bottom', () => {
+  it('shows a "thank you" message', () => {
     const SearchProfileInviteFriend = require('js/components/Search/Settings/SearchProfileInviteFriendComponent')
       .default
     const mockProps = getMockProps()

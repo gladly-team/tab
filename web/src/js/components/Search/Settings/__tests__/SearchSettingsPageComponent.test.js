@@ -6,7 +6,7 @@ import { Redirect, Route, Switch } from 'react-router-dom'
 import SearchSettingsPage from 'js/components/Search/Settings/SearchSettingsPageComponent'
 import AccountView from 'js/components/Settings/Account/AccountView'
 import ProfileDonateHearts from 'js/components/Settings/Profile/ProfileDonateHeartsView'
-import ProfileInviteFriend from 'js/components/Settings/Profile/ProfileInviteFriendView'
+import SearchProfileInviteFriend from 'js/components/Search/Settings/SearchProfileInviteFriendView'
 import SettingsMenuItem from 'js/components/Settings/SettingsMenuItem'
 import SettingsPage from 'js/components/Settings/SettingsPageComponent'
 import { goTo, searchBaseURL } from 'js/navigation/navigation'
@@ -168,7 +168,7 @@ describe('SearchSettingsPage: main content', () => {
     const ThisRouteComponentElem = shallow(
       <ThisRouteComponent fakeProp={'abc'} />
     )
-    expect(ThisRouteComponentElem.type()).toEqual(ProfileInviteFriend)
+    expect(ThisRouteComponentElem.type()).toEqual(SearchProfileInviteFriend)
     expect(ThisRouteComponentElem.prop('fakeProp')).toEqual('abc')
     expect(ThisRouteComponentElem.prop('authUser')).toEqual({
       // From the default withUser mock
