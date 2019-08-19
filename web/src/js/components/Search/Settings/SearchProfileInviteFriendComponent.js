@@ -20,25 +20,31 @@ const styles = theme => ({
     alignItems: 'center',
     padding: 18,
     margin: spacingPx,
-    flex: 2,
-    flexBasis: '40%',
+    flex: 5,
     minWidth: 200,
+    height: 220,
   },
   thankYouPaper: {
     display: 'flex',
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    flex: 1,
-    flexBasis: '50%',
+    textAlign: 'center',
+    flex: 3,
     minWidth: 200,
     padding: 20,
     margin: spacingPx,
   },
   happyIcon: {
-    height: 20,
-    width: 20,
+    height: 26,
+    width: 26,
     marginRight: 8,
-    color: theme.palette.action.active,
+    color: theme.typography.h6.color,
+  },
+  thankYouHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    marginBottom: '0.35em',
   },
   thankYouText: {
     color: theme.palette.action.active,
@@ -49,6 +55,8 @@ const styles = theme => ({
 // as Tab for a Cause when we make the content more similar.
 const SearchProfileInviteFriend = props => {
   const { classes } = props
+
+  // FIXME: invite URL
   return (
     <span className={classes.container}>
       <Paper elevation={1} className={classes.inviteFriendPaper}>
@@ -61,9 +69,12 @@ const SearchProfileInviteFriend = props => {
         />
       </Paper>
       <Paper className={classes.thankYouPaper}>
-        <HappyIcon className={classes.happyIcon} />
+        <div className={classes.thankYouHeader}>
+          <HappyIcon className={classes.happyIcon} />
+          <Typography variant={'h6'}>Thank you!</Typography>
+        </div>
         <Typography variant={'body2'} className={classes.thankYouText}>
-          Thank you! Every new person raises more money for charity, and we
+          You're one of the first people to use Search for a Cause, and we
           depend on people like you to get the word out.
         </Typography>
       </Paper>

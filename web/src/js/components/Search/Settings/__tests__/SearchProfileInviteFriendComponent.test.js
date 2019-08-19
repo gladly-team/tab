@@ -39,7 +39,7 @@ describe('SearchProfileInviteFriendComponent', () => {
     expect(inviteFriendElem.prop('user')).toBeNull()
   })
 
-  it('shows a "thank you" message', () => {
+  it('shows a "thank you" message title', () => {
     const SearchProfileInviteFriend = require('js/components/Search/Settings/SearchProfileInviteFriendComponent')
       .default
     const mockProps = getMockProps()
@@ -49,14 +49,13 @@ describe('SearchProfileInviteFriendComponent', () => {
         .find(Paper)
         .last()
         .find(Typography)
+        .first()
         .render()
         .text()
-    ).toEqual(
-      'Thank you! Every new person raises more money for charity, and we depend on people like you to get the word out.'
-    )
+    ).toEqual('Thank you!')
   })
 
-  it('includes a smiley face icon in the "thank you" message at the bottom', () => {
+  it('includes a smiley face icon in the "thank you" message title', () => {
     const SearchProfileInviteFriend = require('js/components/Search/Settings/SearchProfileInviteFriendComponent')
       .default
     const mockProps = getMockProps()
@@ -68,5 +67,23 @@ describe('SearchProfileInviteFriendComponent', () => {
         .find(HappyIcon)
         .exists()
     ).toBe(true)
+  })
+
+  it('shows a "thank you" message', () => {
+    const SearchProfileInviteFriend = require('js/components/Search/Settings/SearchProfileInviteFriendComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchProfileInviteFriend {...mockProps} />).dive()
+    expect(
+      wrapper
+        .find(Paper)
+        .last()
+        .find(Typography)
+        .last()
+        .render()
+        .text()
+    ).toEqual(
+      "You're one of the first people to use Search for a Cause, and we depend on people like you to get the word out."
+    )
   })
 })
