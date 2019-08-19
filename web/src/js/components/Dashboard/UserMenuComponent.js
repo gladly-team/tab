@@ -10,6 +10,7 @@ import CircleIcon from '@material-ui/icons/Lens'
 import theme from 'js/theme/defaultV1'
 import MoneyRaised from 'js/components/MoneyRaised/MoneyRaisedContainer'
 import Hearts from 'js/components/Dashboard/HeartsContainer'
+import HeartsDropdown from 'js/components/Dashboard/HeartsDropdownContainer'
 import SettingsButton from 'js/components/Dashboard/SettingsButtonComponent'
 
 const defaultTheme = createMuiTheme(theme)
@@ -125,7 +126,23 @@ class UserMenu extends React.Component {
               root: classes.circleIcon,
             }}
           />
-          <Hearts app={app} user={user} showMaxHeartsFromTabsMessage />
+          <Hearts
+            app={app}
+            user={user}
+            showMaxHeartsFromTabsMessage
+            dropdown={({ open, onClose, anchorElement }) => (
+              <HeartsDropdown
+                app={app}
+                user={user}
+                open={open}
+                onClose={onClose}
+                anchorElement={anchorElement}
+                style={{
+                  marginTop: 6,
+                }}
+              />
+            )}
+          />
           <SettingsButton isUserAnonymous={isUserAnonymous} />
         </div>
       </MuiThemeProvider>
