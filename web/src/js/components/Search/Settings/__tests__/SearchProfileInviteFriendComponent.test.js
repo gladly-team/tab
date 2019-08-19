@@ -3,7 +3,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import InviteFriend from 'js/components/Settings/Profile/InviteFriendContainer'
-import Stat from 'js/components/Settings/Profile/StatComponent'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import HappyIcon from '@material-ui/icons/Mood'
@@ -11,16 +10,8 @@ import HappyIcon from '@material-ui/icons/Mood'
 jest.mock('js/mutations/LogReferralLinkClickMutation')
 jest.mock('js/utils/logger')
 
-const getMockProps = () => ({
-  app: {
-    referralVcReward: 300,
-  },
-  user: {
-    numUsersRecruited: 2,
-  },
-})
+const getMockProps = () => ({})
 
-//
 describe('SearchProfileInviteFriendComponent', () => {
   it('renders without error', () => {
     const SearchProfileInviteFriend = require('js/components/Search/Settings/SearchProfileInviteFriendComponent')
@@ -37,6 +28,15 @@ describe('SearchProfileInviteFriendComponent', () => {
     const inviteFriendElem = wrapper.find(InviteFriend)
     expect(inviteFriendElem.exists()).toBe(true)
     expect(inviteFriendElem.prop('user')).toBeNull()
+  })
+
+  it('sets the "baseURL" in the InviteFriend component to search.gladly.io', () => {
+    const SearchProfileInviteFriend = require('js/components/Search/Settings/SearchProfileInviteFriendComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SearchProfileInviteFriend {...mockProps} />).dive()
+    const inviteFriendElem = wrapper.find(InviteFriend)
+    expect(inviteFriendElem.prop('baseURL')).toEqual('https://search.gladly.io')
   })
 
   it('shows a "thank you" message title', () => {

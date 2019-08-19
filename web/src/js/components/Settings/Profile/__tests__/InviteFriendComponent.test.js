@@ -10,6 +10,7 @@ jest.mock('js/mutations/LogReferralLinkClickMutation')
 jest.mock('js/utils/logger')
 
 const getMockProps = () => ({
+  baseURL: undefined,
   user: {
     id: 'abc-123',
     username: 'bob',
@@ -33,7 +34,7 @@ describe('Invite friend component', () => {
     shallow(<InviteFriendComponent {...mockProps} />)
   })
 
-  it('contains the correct referral URL', () => {
+  it('contains the correct referral URL, using tab.gladly.io by default', () => {
     const InviteFriendComponent = require('js/components/Settings/Profile/InviteFriendComponent')
       .default
     const mockProps = getMockProps()
@@ -45,6 +46,20 @@ describe('Invite friend component', () => {
         .first()
         .prop('value')
     ).toBe('https://tab.gladly.io/?u=bob')
+  })
+
+  it('contains the correct referral URL when passed a custom "baseURL" prop value', () => {
+    const InviteFriendComponent = require('js/components/Settings/Profile/InviteFriendComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.baseURL = 'https://foo.example.com'
+    const wrapper = mount(<InviteFriendComponent {...mockProps} />)
+    expect(
+      wrapper
+        .find(TextField)
+        .first()
+        .prop('value')
+    ).toBe('https://foo.example.com/?u=bob')
   })
 
   it('encodes the referral URL correctly when the username contains a space', () => {

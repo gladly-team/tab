@@ -55,12 +55,11 @@ const styles = theme => ({
 // as Tab for a Cause when we make the content more similar.
 const SearchProfileInviteFriend = props => {
   const { classes } = props
-
-  // FIXME: invite URL
   return (
     <span className={classes.container}>
       <Paper elevation={1} className={classes.inviteFriendPaper}>
         <InviteFriend
+          baseURL={'https://search.gladly.io'}
           user={null}
           style={{
             width: '100%',
