@@ -44,7 +44,7 @@ class ProfileDonateHearts extends React.Component {
     const { app, classes, user } = this.props
     return (
       <div className={classes.container}>
-        <Paper className={classes.messageContainer}>
+        <Paper elevation={1} className={classes.messageContainer}>
           <InfoIcon className={classes.infoIcon} />
           <Typography variant={'body2'} className={classes.messageText}>
             When you donate Hearts, you're telling us to give more of the money

@@ -76,7 +76,7 @@ const ProfileInviteFriend = props => {
         statText={'extra Hearts when you recruit a new friend'}
         style={statStyle}
       />
-      <Paper className={classes.thankYouPaper}>
+      <Paper elevation={1} className={classes.thankYouPaper}>
         <HappyIcon className={classes.happyIcon} />
         <Typography variant={'body2'} className={classes.thankYouText}>
           Thank you! Every new person raises more money for charity, and we

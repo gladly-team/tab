@@ -67,7 +67,7 @@ const SearchProfileInviteFriend = props => {
           }}
         />
       </Paper>
-      <Paper className={classes.thankYouPaper}>
+      <Paper elevation={1} className={classes.thankYouPaper}>
         <div className={classes.thankYouHeader}>
           <HappyIcon className={classes.happyIcon} />
           <Typography variant={'h6'}>Thank you!</Typography>

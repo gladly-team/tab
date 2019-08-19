@@ -334,7 +334,7 @@ class Authentication extends React.Component {
                 bottom: 24,
               }}
             >
-              <Paper>
+              <Paper elevation={1}>
                 <div
                   style={{
                     padding: '14px 18px',
