@@ -19,6 +19,7 @@
 4. On first run, you'll have to create database tables and load fixtures.
     * `cd dynamodb`
     * `yarn run init`
+5. Visit http://localhost:3000/newtab/
 
 ### Development Tips
 
