@@ -254,6 +254,27 @@ describe('SearchMenuComponent', () => {
 })
 
 describe('SearchMenuComponent: Hearts dropdown component', () => {
+  it('receives the renderProp arguments for open, onClose, and anchorElement', () => {
+    const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user = getMockUserData()
+    const mockOnClose = () => {
+      console.log('hi')
+    }
+    const mockAnchorElement = <span>hi</span>
+    const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
+    const heartsElem = wrapper.find(Hearts)
+    const dropdownElem = heartsElem.renderProp('dropdown')({
+      open: true,
+      onClose: mockOnClose,
+      anchorElement: mockAnchorElement,
+    })
+    expect(dropdownElem.prop('open')).toBe(true)
+    expect(dropdownElem.prop('onClose')).toBe(mockOnClose)
+    expect(dropdownElem.prop('anchorEl')).toBe(mockAnchorElement)
+  })
+
   it('sets a marginTop', () => {
     const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
       .default
@@ -320,17 +341,38 @@ describe('SearchMenuComponent: Hearts dropdown component', () => {
 })
 
 describe('SearchMenuComponent: settings dropdown component', () => {
+  it('receives the renderProp arguments for open, onClose, and anchorElement', () => {
+    const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user = getMockUserData()
+    const mockOnClose = () => {
+      console.log('hi')
+    }
+    const mockAnchorElement = <span>hi</span>
+    const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
+    const settingsElem = wrapper.find(SettingsButton)
+    const dropdownElem = settingsElem.renderProp('dropdown')({
+      open: true,
+      onClose: mockOnClose,
+      anchorElement: mockAnchorElement,
+    })
+    expect(dropdownElem.prop('open')).toBe(true)
+    expect(dropdownElem.prop('onClose')).toBe(mockOnClose)
+    expect(dropdownElem.prop('anchorEl')).toBe(mockAnchorElement)
+  })
+
   it('sets a marginTop', () => {
     const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
       .default
     const mockProps = getMockProps()
     mockProps.user = getMockUserData()
     const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
-    const heartsElem = wrapper.find(SettingsButton)
-    const dropdownElem = heartsElem.renderProp('dropdown')({
+    const settingsElem = wrapper.find(SettingsButton)
+    const dropdownElem = settingsElem.renderProp('dropdown')({
       open: false,
       onClose: () => {},
-      anchorElement: heartsElem,
+      anchorElement: settingsElem,
     })
     expect(dropdownElem.prop('style')).toHaveProperty('marginTop', 6)
   })
@@ -341,11 +383,11 @@ describe('SearchMenuComponent: settings dropdown component', () => {
     const mockProps = getMockProps()
     mockProps.user = getMockUserData()
     const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
-    const heartsElem = wrapper.find(SettingsButton)
-    const dropdownElem = heartsElem.renderProp('dropdown')({
+    const settingsElem = wrapper.find(SettingsButton)
+    const dropdownElem = settingsElem.renderProp('dropdown')({
       open: false,
       onClose: () => {},
-      anchorElement: heartsElem,
+      anchorElement: settingsElem,
     })
     expect(
       dropdownElem
@@ -362,11 +404,11 @@ describe('SearchMenuComponent: settings dropdown component', () => {
     const mockProps = getMockProps()
     mockProps.user = getMockUserData()
     const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
-    const heartsElem = wrapper.find(SettingsButton)
-    const dropdownElem = heartsElem.renderProp('dropdown')({
+    const settingsElem = wrapper.find(SettingsButton)
+    const dropdownElem = settingsElem.renderProp('dropdown')({
       open: false,
       onClose: () => {},
-      anchorElement: heartsElem,
+      anchorElement: settingsElem,
     })
     const elem = dropdownElem.find(MenuItem).filterWhere(elem => {
       return elem.render().text() === 'Donate Hearts'
@@ -380,11 +422,11 @@ describe('SearchMenuComponent: settings dropdown component', () => {
     const mockProps = getMockProps()
     mockProps.user = getMockUserData()
     const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
-    const heartsElem = wrapper.find(SettingsButton)
-    const dropdownElem = heartsElem.renderProp('dropdown')({
+    const settingsElem = wrapper.find(SettingsButton)
+    const dropdownElem = settingsElem.renderProp('dropdown')({
       open: false,
       onClose: () => {},
-      anchorElement: heartsElem,
+      anchorElement: settingsElem,
     })
     const elem = dropdownElem.find(MenuItem).filterWhere(elem => {
       return elem.render().text() === 'Donate Hearts'
@@ -399,11 +441,11 @@ describe('SearchMenuComponent: settings dropdown component', () => {
     const mockProps = getMockProps()
     mockProps.user = getMockUserData()
     const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
-    const heartsElem = wrapper.find(SettingsButton)
-    const dropdownElem = heartsElem.renderProp('dropdown')({
+    const settingsElem = wrapper.find(SettingsButton)
+    const dropdownElem = settingsElem.renderProp('dropdown')({
       open: false,
       onClose: () => {},
-      anchorElement: heartsElem,
+      anchorElement: settingsElem,
     })
     const elem = dropdownElem.find(MenuItem).filterWhere(elem => {
       return elem.render().text() === 'Invite Friends'
@@ -417,11 +459,11 @@ describe('SearchMenuComponent: settings dropdown component', () => {
     const mockProps = getMockProps()
     mockProps.user = getMockUserData()
     const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
-    const heartsElem = wrapper.find(SettingsButton)
-    const dropdownElem = heartsElem.renderProp('dropdown')({
+    const settingsElem = wrapper.find(SettingsButton)
+    const dropdownElem = settingsElem.renderProp('dropdown')({
       open: false,
       onClose: () => {},
-      anchorElement: heartsElem,
+      anchorElement: settingsElem,
     })
     const elem = dropdownElem.find(MenuItem).filterWhere(elem => {
       return elem.render().text() === 'Invite Friends'
@@ -436,11 +478,11 @@ describe('SearchMenuComponent: settings dropdown component', () => {
     const mockProps = getMockProps()
     mockProps.user = getMockUserData()
     const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
-    const heartsElem = wrapper.find(SettingsButton)
-    const dropdownElem = heartsElem.renderProp('dropdown')({
+    const settingsElem = wrapper.find(SettingsButton)
+    const dropdownElem = settingsElem.renderProp('dropdown')({
       open: false,
       onClose: () => {},
-      anchorElement: heartsElem,
+      anchorElement: settingsElem,
     })
     const elem = dropdownElem.find(MenuItem).filterWhere(elem => {
       return elem.render().text() === 'Help'
@@ -454,11 +496,11 @@ describe('SearchMenuComponent: settings dropdown component', () => {
     const mockProps = getMockProps()
     mockProps.user = getMockUserData()
     const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
-    const heartsElem = wrapper.find(SettingsButton)
-    const dropdownElem = heartsElem.renderProp('dropdown')({
+    const settingsElem = wrapper.find(SettingsButton)
+    const dropdownElem = settingsElem.renderProp('dropdown')({
       open: false,
       onClose: () => {},
-      anchorElement: heartsElem,
+      anchorElement: settingsElem,
     })
     const elem = dropdownElem.find(MenuItem).filterWhere(elem => {
       return elem.render().text() === 'Help'
@@ -473,11 +515,11 @@ describe('SearchMenuComponent: settings dropdown component', () => {
     const mockProps = getMockProps()
     mockProps.user = getMockUserData()
     const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
-    const heartsElem = wrapper.find(SettingsButton)
-    const dropdownElem = heartsElem.renderProp('dropdown')({
+    const settingsElem = wrapper.find(SettingsButton)
+    const dropdownElem = settingsElem.renderProp('dropdown')({
       open: false,
       onClose: () => {},
-      anchorElement: heartsElem,
+      anchorElement: settingsElem,
     })
     const elem = dropdownElem.find(MenuItem).filterWhere(elem => {
       return elem.render().text() === 'Sign Out'
@@ -491,11 +533,11 @@ describe('SearchMenuComponent: settings dropdown component', () => {
     const mockProps = getMockProps()
     mockProps.user = getMockUserData()
     const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
-    const heartsElem = wrapper.find(SettingsButton)
-    const dropdownElem = heartsElem.renderProp('dropdown')({
+    const settingsElem = wrapper.find(SettingsButton)
+    const dropdownElem = settingsElem.renderProp('dropdown')({
       open: false,
       onClose: () => {},
-      anchorElement: heartsElem,
+      anchorElement: settingsElem,
     })
     const elem = dropdownElem.find(MenuItem).filterWhere(elem => {
       return elem.render().text() === 'Sign Out'
@@ -514,11 +556,11 @@ describe('SearchMenuComponent: settings dropdown component', () => {
       done()
     })
     const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
-    const heartsElem = wrapper.find(SettingsButton)
-    const dropdownElem = heartsElem.renderProp('dropdown')({
+    const settingsElem = wrapper.find(SettingsButton)
+    const dropdownElem = settingsElem.renderProp('dropdown')({
       open: false,
       onClose: () => {},
-      anchorElement: heartsElem,
+      anchorElement: settingsElem,
     })
     const elem = dropdownElem.find(MenuItem).filterWhere(elem => {
       return elem.render().text() === 'Sign Out'
@@ -538,11 +580,11 @@ describe('SearchMenuComponent: settings dropdown component', () => {
       done()
     })
     const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
-    const heartsElem = wrapper.find(SettingsButton)
-    const dropdownElem = heartsElem.renderProp('dropdown')({
+    const settingsElem = wrapper.find(SettingsButton)
+    const dropdownElem = settingsElem.renderProp('dropdown')({
       open: false,
       onClose: () => {},
-      anchorElement: heartsElem,
+      anchorElement: settingsElem,
     })
     const elem = dropdownElem.find(MenuItem).filterWhere(elem => {
       return elem.render().text() === 'Sign Out'
