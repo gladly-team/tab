@@ -255,3 +255,20 @@ describe('SearchMenuComponent: Hearts dropdown component', () => {
     expect(dropdownElem.prop('style')).toHaveProperty('marginTop', 6)
   })
 })
+
+describe('SearchMenuComponent: settings dropdown component', () => {
+  it('sets a marginTop', () => {
+    const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user = getMockUserData()
+    const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
+    const heartsElem = wrapper.find(SettingsButtonComponent)
+    const dropdownElem = heartsElem.renderProp('dropdown')({
+      open: false,
+      onClose: () => {},
+      anchorElement: heartsElem,
+    })
+    expect(dropdownElem.prop('style')).toHaveProperty('marginTop', 6)
+  })
+})

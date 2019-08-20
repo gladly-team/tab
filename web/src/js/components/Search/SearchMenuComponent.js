@@ -166,7 +166,22 @@ const SearchMenuComponent = props => {
                     </DashboardPopover>
                   )}
                 />
-                <SettingsButton isUserAnonymous={false} />
+                <SettingsButton
+                  dropdown={({ open, onClose, anchorElement }) => (
+                    <DashboardPopover
+                      open={open}
+                      anchorEl={anchorElement}
+                      onClose={onClose}
+                      style={{
+                        marginTop: 6,
+                      }}
+                    >
+                      <div className={classes.heartsDropdownContainer}>
+                        <Typography variant={'h5'}>PLACEHOLDER!</Typography>
+                      </div>
+                    </DashboardPopover>
+                  )}
+                />
               </>
             ) : showSignInButton ? (
               <Link to={searchAuthURL} data-test-id={'search-sign-in-link'}>
