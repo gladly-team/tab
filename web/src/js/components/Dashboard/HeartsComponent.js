@@ -8,7 +8,6 @@ import CheckmarkIcon from '@material-ui/icons/Done'
 import Typography from '@material-ui/core/Typography'
 import { commaFormatted } from 'js/utils/utils'
 import { MAX_DAILY_HEARTS_FROM_TABS } from 'js/constants'
-import HeartsDropdown from 'js/components/Dashboard/HeartsDropdownContainer'
 import MaxHeartsDropdownMessageComponent from 'js/components/Dashboard/MaxHeartsDropdownMessageComponent'
 
 const styles = {
@@ -50,8 +49,8 @@ class HeartsComponent extends React.Component {
 
   render() {
     const {
-      app,
       classes,
+      dropdown,
       showMaxHeartsFromSearchesMessage,
       showMaxHeartsFromTabsMessage,
       theme,
@@ -150,20 +149,15 @@ class HeartsComponent extends React.Component {
             </div>
           </div>
         </ButtonBase>
-        <HeartsDropdown
-          app={app}
-          user={user}
-          open={isPopoverOpen}
-          onClose={() => {
+        {dropdown({
+          open: isPopoverOpen,
+          onClose: () => {
             this.setState({
               isPopoverOpen: false,
             })
-          }}
-          anchorElement={anchorElement}
-          style={{
-            marginTop: 6,
-          }}
-        />
+          },
+          anchorElement: anchorElement,
+        })}
         <MaxHeartsDropdownMessageComponent
           open={isRateLimitedHearts && isHovering && !isPopoverOpen}
           anchorElement={anchorElement}
@@ -186,6 +180,7 @@ HeartsComponent.displayName = 'HeartsComponent'
 
 HeartsComponent.propTypes = {
   classes: PropTypes.object.isRequired,
+  dropdown: PropTypes.func.isRequired,
   user: PropTypes.shape({
     searchRateLimit: PropTypes.shape({
       limitReached: PropTypes.bool.isRequired,

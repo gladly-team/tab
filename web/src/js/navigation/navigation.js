@@ -142,6 +142,8 @@ export const searchAuthURL = '/search/auth/'
 export const searchDonateHeartsURL = '/search/profile/donate/'
 export const searchInviteFriendsURL = '/search/profile/invite/'
 export const searchAccountURL = '/search/account/'
+export const searchExternalHelpURL =
+  'https://gladly.zendesk.com/hc/en-us/categories/360001779552-Search-for-a-Cause'
 
 // Homepage
 
