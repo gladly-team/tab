@@ -368,6 +368,7 @@ describe('SearchMenuComponent: money raised dropdown component', () => {
   it('does not have a link to invite friends when the user is NOT signed in', () => {
     const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
       .default
+    const mockProps = getMockProps()
     mockProps.user = null
     const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
     const heartsElem = wrapper.find(MoneyRaised)
