@@ -7,17 +7,15 @@ import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import HeartBorderIcon from '@material-ui/icons/FavoriteBorder'
 import CheckmarkIcon from '@material-ui/icons/Done'
-import HeartsDropdown from 'js/components/Dashboard/HeartsDropdownContainer'
 import MaxHeartsDropdownMessageComponent from 'js/components/Dashboard/MaxHeartsDropdownMessageComponent'
-import { mountWithHOC } from 'js/utils/test-utils'
 
-jest.mock('js/components/Dashboard/HeartsDropdownContainer')
 jest.mock('js/components/Dashboard/MaxHeartsDropdownMessageComponent')
 jest.mock('js/constants', () => ({
   MAX_DAILY_HEARTS_FROM_TABS: 1000,
 }))
 
 const getMockProps = () => ({
+  dropdown: () => <div />,
   user: {
     searchRateLimit: undefined,
     tabsToday: undefined,
@@ -68,15 +66,13 @@ describe('HeartsComponent', () => {
   it('opens the dropdown on click', () => {
     const HeartsComponent = require('js/components/Dashboard/HeartsComponent')
       .default
+    const MockHeartsDropdown = () => <div />
     const mockProps = getMockProps()
-    const wrapper = mountWithHOC(<HeartsComponent {...mockProps} />)
-
-    expect(wrapper.find(HeartsDropdown).prop('open')).toBe(false)
-    wrapper
-      .find(Typography)
-      .first()
-      .simulate('click')
-    expect(wrapper.find(HeartsDropdown).prop('open')).toBe(true)
+    mockProps.dropdown = args => <MockHeartsDropdown {...args} />
+    const wrapper = shallow(<HeartsComponent {...mockProps} />).dive()
+    expect(wrapper.find(MockHeartsDropdown).prop('open')).toBe(false)
+    wrapper.find('[data-tour-id="hearts"]').simulate('click')
+    expect(wrapper.find(MockHeartsDropdown).prop('open')).toBe(true)
   })
 
   it('does not show a checkmark in the heart if the user has not maxed out daily hearts from tabs', () => {
@@ -232,7 +228,9 @@ describe('HeartsComponent', () => {
   it('does not show the "max hearts" dropdown if the hearts dropdown is open', () => {
     const HeartsComponent = require('js/components/Dashboard/HeartsComponent')
       .default
+    const MockHeartsDropdown = () => <div />
     const mockProps = getMockProps()
+    mockProps.dropdown = args => <MockHeartsDropdown {...args} />
     mockProps.showMaxHeartsFromTabsMessage = true
     mockProps.user.tabsToday = 1000
     const wrapper = shallow(<HeartsComponent {...mockProps} />).dive()
@@ -244,7 +242,7 @@ describe('HeartsComponent', () => {
     expect(wrapper.find(MaxHeartsDropdownMessageComponent).prop('open')).toBe(
       false
     )
-    expect(wrapper.find(HeartsDropdown).prop('open')).toBe(true)
+    expect(wrapper.find(MockHeartsDropdown).prop('open')).toBe(true)
   })
 
   it('shows the expected "max hearts" message if the user has maxed out daily hearts from tabs', () => {
@@ -573,16 +571,5 @@ describe('HeartsComponent', () => {
         .first()
         .prop('style')
     ).toHaveProperty('color', 'inherit')
-  })
-
-  it('sets a marginTop on the HeartsDropdown component', () => {
-    const HeartsComponent = require('js/components/Dashboard/HeartsComponent')
-      .default
-    const mockProps = getMockProps()
-    const wrapper = shallow(<HeartsComponent {...mockProps} />).dive()
-    expect(wrapper.find(HeartsDropdown).prop('style')).toHaveProperty(
-      'marginTop',
-      6
-    )
   })
 })
