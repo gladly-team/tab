@@ -191,8 +191,6 @@ SearchMenuComponent.propTypes = {
   style: PropTypes.object,
   // May not exist if the user is not signed in.
   user: PropTypes.shape({
-    // level: PropTypes.number.isRequired,
-    // heartsUntilNextLevel: PropTypes.number.isRequired,
     vcDonatedAllTime: PropTypes.number.isRequired,
   }),
 }
