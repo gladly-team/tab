@@ -2,13 +2,9 @@ import React, { Suspense, lazy } from 'react'
 import PropTypes from 'prop-types'
 import { get } from 'lodash/object'
 import { withStyles } from '@material-ui/core/styles'
-import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button'
 import ButtonBase from '@material-ui/core/ButtonBase'
+import Typography from '@material-ui/core/Typography'
 import { commaFormatted, currencyFormatted } from 'js/utils/utils'
-import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
-import { inviteFriendsURL } from 'js/navigation/navigation'
-import Link from 'js/components/General/Link'
 
 const Sparkle = lazy(() => import('react-sparkle'))
 
@@ -78,7 +74,7 @@ class MoneyRaised extends React.Component {
   }
 
   render() {
-    const { app, classes, launchFireworks, theme } = this.props
+    const { app, classes, dropdown, launchFireworks, theme } = this.props
     const { moneyRaised, isPopoverOpen } = this.state
     if (!app) {
       return null
@@ -138,48 +134,15 @@ class MoneyRaised extends React.Component {
             ) : null}
           </div>
         </ButtonBase>
-        <DashboardPopover
-          open={isPopoverOpen}
-          anchorEl={this.anchorEl}
-          onClose={() => {
+        {dropdown({
+          open: isPopoverOpen,
+          onClose: () => {
             this.setState({
               isPopoverOpen: false,
             })
-          }}
-          style={{
-            marginTop: 6,
-          }}
-        >
-          <div style={{ padding: 12, width: 160 }}>
-            <Typography
-              variant={'body2'}
-              className={classes.dropdownText}
-              gutterBottom
-            >
-              This is how much money our community has raised for charity.
-            </Typography>
-            <Typography
-              variant={'body2'}
-              className={classes.dropdownText}
-              gutterBottom
-            >
-              Recruit your friends to raise more!
-            </Typography>
-            <div
-              style={{
-                marginTop: 14,
-                display: 'flex',
-                justifyContent: 'center',
-              }}
-            >
-              <Link to={inviteFriendsURL}>
-                <Button variant={'contained'} color={'primary'}>
-                  Invite Friends
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </DashboardPopover>
+          },
+          anchorElement: this.anchorEl,
+        })}
       </div>
     )
   }
@@ -191,6 +154,7 @@ MoneyRaised.propTypes = {
     dollarsPerDayRate: PropTypes.number.isRequired,
   }).isRequired,
   classes: PropTypes.object.isRequired,
+  dropdown: PropTypes.func.isRequired,
   launchFireworks: PropTypes.func,
   theme: PropTypes.object.isRequired,
 }

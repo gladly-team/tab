@@ -7,12 +7,13 @@ export default createFragmentContainer(UserMenu, {
   app: graphql`
     fragment UserMenuContainer_app on App {
       ...MoneyRaisedContainer_app
-      ...HeartsContainer_app
+      ...HeartsDropdownContainer_app
     }
   `,
   user: graphql`
     fragment UserMenuContainer_user on User {
       ...HeartsContainer_user
+      ...HeartsDropdownContainer_user
     }
   `,
 })

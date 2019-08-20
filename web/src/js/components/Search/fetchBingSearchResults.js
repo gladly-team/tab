@@ -44,7 +44,7 @@ export const prefetchSearchResults = async () => {
       console.log('Prefetch: complete')
     }
   } catch (e) {
-    console.error(e)
+    // console.error(e)
   }
 
   // Store the search response. Used to retrieve data that's

@@ -6,17 +6,9 @@ import { mount, shallow } from 'enzyme'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
-import { mountWithHOC } from 'js/utils/test-utils'
-import SettingsDropdown from 'js/components/Dashboard/SettingsDropdownComponent'
-import { logout } from 'js/authentication/user'
-import { goToLogin } from 'js/navigation/navigation'
-import logger from 'js/utils/logger'
-
-jest.mock('js/authentication/user')
-jest.mock('js/navigation/navigation')
-jest.mock('js/utils/logger')
 
 const getMockProps = () => ({
+  dropdown: () => <div />,
   isUserAnonymous: false,
 })
 
@@ -46,62 +38,16 @@ describe('SettingsButtonComponent', () => {
   it('opens the dropdown on click', () => {
     const SettingsButtonComponent = require('js/components/Dashboard/SettingsButtonComponent')
       .default
+    const MockDropdown = () => <div />
     const mockProps = getMockProps()
-    const wrapper = mountWithHOC(<SettingsButtonComponent {...mockProps} />)
-
-    expect(wrapper.find(SettingsDropdown).prop('open')).toBe(false)
+    mockProps.dropdown = args => <MockDropdown {...args} />
+    const wrapper = shallow(<SettingsButtonComponent {...mockProps} />).dive()
+    expect(wrapper.find(MockDropdown).prop('open')).toBe(false)
     wrapper
       .find('[data-test-id="settings-button"]')
       .first()
       .simulate('click')
-    expect(wrapper.find(SettingsDropdown).prop('open')).toBe(true)
-  })
-
-  it('calls to log out when SettingsDropdown calls onLogoutClick', () => {
-    const SettingsButtonComponent = require('js/components/Dashboard/SettingsButtonComponent')
-      .default
-    const mockProps = getMockProps()
-    const wrapper = mountWithHOC(<SettingsButtonComponent {...mockProps} />)
-
-    const onLogoutClickFunc = wrapper
-      .find(SettingsDropdown)
-      .prop('onLogoutClick')
-    onLogoutClickFunc()
-    expect(logout).toHaveBeenCalled()
-  })
-
-  it('redirects to the login page on a successful logout', done => {
-    const SettingsButtonComponent = require('js/components/Dashboard/SettingsButtonComponent')
-      .default
-    const mockProps = getMockProps()
-    const wrapper = mountWithHOC(<SettingsButtonComponent {...mockProps} />)
-
-    logout.mockResolvedValueOnce(true)
-    goToLogin.mockImplementationOnce(async () => {
-      done()
-    })
-    const onLogoutClickFunc = wrapper
-      .find(SettingsDropdown)
-      .prop('onLogoutClick')
-    onLogoutClickFunc()
-  })
-
-  it('logs an error on a failed logout', done => {
-    const SettingsButtonComponent = require('js/components/Dashboard/SettingsButtonComponent')
-      .default
-    const mockProps = getMockProps()
-    const wrapper = mountWithHOC(<SettingsButtonComponent {...mockProps} />)
-
-    logout.mockImplementationOnce(async () => {
-      throw new Error('Uh oh :(')
-    })
-    logger.error.mockImplementationOnce(async () => {
-      done()
-    })
-    const onLogoutClickFunc = wrapper
-      .find(SettingsDropdown)
-      .prop('onLogoutClick')
-    onLogoutClickFunc()
+    expect(wrapper.find(MockDropdown).prop('open')).toBe(true)
   })
 
   it('uses the MUI theme h2 color for the settings button icon', () => {

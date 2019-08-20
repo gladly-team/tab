@@ -13,6 +13,7 @@ export default createFragmentContainer(SearchMenu, {
   user: graphql`
     fragment SearchMenuContainer_user on User {
       id
+      vcDonatedAllTime
       ...SearchHeartsContainer_user
     }
   `,

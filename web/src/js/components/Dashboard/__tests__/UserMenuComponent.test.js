@@ -4,14 +4,23 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import CircleIcon from '@material-ui/icons/Lens'
+import Typography from '@material-ui/core/Typography'
 import { mountWithHOC } from 'js/utils/test-utils'
 import MoneyRaised from 'js/components/MoneyRaised/MoneyRaisedContainer'
 import Hearts from 'js/components/Dashboard/HeartsContainer'
 import SettingsButton from 'js/components/Dashboard/SettingsButtonComponent'
+import { logout } from 'js/authentication/user'
+import { goTo, inviteFriendsURL, loginURL } from 'js/navigation/navigation'
+import logger from 'js/utils/logger'
+import Link from 'js/components/General/Link'
 
 jest.mock('js/components/MoneyRaised/MoneyRaisedContainer')
 jest.mock('js/components/Dashboard/HeartsContainer')
+jest.mock('js/components/Dashboard/HeartsDropdownContainer')
 jest.mock('js/components/Dashboard/SettingsButtonComponent')
+jest.mock('js/authentication/user')
+jest.mock('js/navigation/navigation')
+jest.mock('js/utils/logger')
 
 const getMockProps = () => {
   return {
@@ -54,19 +63,6 @@ describe('User menu component', () => {
       .default
     const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
     expect(wrapper.find(Hearts).prop('showMaxHeartsFromTabsMessage')).toBe(true)
-  })
-
-  it('passes the isUserAnonymous prop to the SettingsButton component', () => {
-    const mockProps = getMockProps()
-    mockProps.isUserAnonymous = false
-    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
-      .default
-    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
-    expect(wrapper.find(SettingsButton).prop('isUserAnonymous')).toBe(false)
-    wrapper.setProps({
-      isUserAnonymous: true,
-    })
-    expect(wrapper.find(SettingsButton).prop('isUserAnonymous')).toBe(true)
   })
 
   it('sets the expected color for the circle divider icon', () => {
@@ -212,5 +208,247 @@ describe('User menu component', () => {
         color: '#fff',
       },
     })
+  })
+})
+
+describe('User menu component: money raised dropdown component', () => {
+  it('receives the renderProp arguments for open, onClose, and anchorElement', () => {
+    const mockProps = getMockProps()
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
+      .default
+    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
+    const moneyRaisedElem = wrapper.find(MoneyRaised)
+    const mockOnClose = () => {
+      console.log('hi')
+    }
+    const mockAnchorElement = <span>hi</span>
+    const dropdownElem = moneyRaisedElem.renderProp('dropdown')({
+      open: true,
+      onClose: mockOnClose,
+      anchorElement: mockAnchorElement,
+    })
+    expect(dropdownElem.prop('open')).toBe(true)
+    expect(dropdownElem.prop('onClose')).toBe(mockOnClose)
+    expect(dropdownElem.prop('anchorEl')).toBe(mockAnchorElement)
+  })
+
+  it('has the expected copy', () => {
+    const mockProps = getMockProps()
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
+      .default
+    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
+    const moneyRaisedElem = wrapper.find(MoneyRaised)
+    const dropdownElem = moneyRaisedElem.renderProp('dropdown')({
+      open: false,
+      onClose: () => {},
+      anchorElement: moneyRaisedElem,
+    })
+    expect(
+      dropdownElem
+        .find(Typography)
+        .at(0)
+        .render()
+        .text()
+    ).toEqual('This is how much money our community has raised for charity.')
+    expect(
+      dropdownElem
+        .find(Typography)
+        .at(1)
+        .render()
+        .text()
+    ).toEqual('Recruit your friends to raise more!')
+  })
+
+  it('has a link to invite friends', () => {
+    const mockProps = getMockProps()
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
+      .default
+    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
+    const moneyRaisedElem = wrapper.find(MoneyRaised)
+    const dropdownElem = moneyRaisedElem.renderProp('dropdown')({
+      open: false,
+      onClose: () => {},
+      anchorElement: moneyRaisedElem,
+    })
+    expect(dropdownElem.find(Link).prop('to')).toEqual(inviteFriendsURL)
+  })
+
+  it('sets a marginTop', () => {
+    const mockProps = getMockProps()
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
+      .default
+    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
+    const moneyRaisedElem = wrapper.find(MoneyRaised)
+    const dropdownElem = moneyRaisedElem.renderProp('dropdown')({
+      open: false,
+      onClose: () => {},
+      anchorElement: moneyRaisedElem,
+    })
+    expect(dropdownElem.prop('style')).toHaveProperty('marginTop', 6)
+  })
+})
+
+describe('User menu component: Hearts dropdown component', () => {
+  it('receives the "user" and "app" props', () => {
+    const mockProps = getMockProps()
+    mockProps.app = {
+      hi: 'there',
+    }
+    mockProps.user = {
+      some: 'thing',
+      abc: 123,
+    }
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
+      .default
+    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
+    const heartsElem = wrapper.find(Hearts)
+    const dropdownElem = heartsElem.renderProp('dropdown')({
+      open: false,
+      onClose: () => {},
+      anchorElement: heartsElem,
+    })
+    expect(dropdownElem.prop('app')).toEqual(mockProps.app)
+    expect(dropdownElem.prop('user')).toEqual(mockProps.user)
+  })
+
+  it('receives the renderProp arguments for open, onClose, and anchorElement', () => {
+    const mockProps = getMockProps()
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
+      .default
+    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
+    const heartsElem = wrapper.find(Hearts)
+    const mockOnClose = () => {
+      console.log('hi')
+    }
+    const mockAnchorElement = <span>hi</span>
+    const dropdownElem = heartsElem.renderProp('dropdown')({
+      open: true,
+      onClose: mockOnClose,
+      anchorElement: mockAnchorElement,
+    })
+    expect(dropdownElem.prop('open')).toBe(true)
+    expect(dropdownElem.prop('onClose')).toBe(mockOnClose)
+    expect(dropdownElem.prop('anchorElement')).toBe(mockAnchorElement)
+  })
+
+  it('sets a marginTop', () => {
+    const mockProps = getMockProps()
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
+      .default
+    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
+    const heartsElem = wrapper.find(Hearts)
+    const dropdownElem = heartsElem.renderProp('dropdown')({
+      open: false,
+      onClose: () => {},
+      anchorElement: heartsElem,
+    })
+    expect(dropdownElem.prop('style')).toHaveProperty('marginTop', 6)
+  })
+})
+
+describe('User menu component: settings dropdown component', () => {
+  it('receives the "isUserAnonymous" prop', () => {
+    const mockProps = getMockProps()
+    mockProps.isUserAnonymous = true
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
+      .default
+    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
+    const settingsElem = wrapper.find(SettingsButton)
+    const dropdownElem = settingsElem.renderProp('dropdown')({
+      open: false,
+      onClose: () => {},
+      anchorElement: settingsElem,
+    })
+    expect(dropdownElem.prop('isUserAnonymous')).toBe(true)
+
+    mockProps.isUserAnonymous = false
+    const wrapper2 = shallow(<UserMenuComponent {...mockProps} />).dive()
+    const settingsElem2 = wrapper2.find(SettingsButton)
+    const dropdownElem2 = settingsElem2.renderProp('dropdown')({
+      open: false,
+      onClose: () => {},
+      anchorElement: settingsElem2,
+    })
+    expect(dropdownElem2.prop('isUserAnonymous')).toBe(false)
+  })
+
+  it('receives the renderProp arguments for open, onClose, and anchorElement', () => {
+    const mockProps = getMockProps()
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
+      .default
+    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
+    const settingsElem = wrapper.find(SettingsButton)
+    const mockOnClose = () => {
+      console.log('hi')
+    }
+    const mockAnchorElement = <span>hi</span>
+    const dropdownElem = settingsElem.renderProp('dropdown')({
+      open: true,
+      onClose: mockOnClose,
+      anchorElement: mockAnchorElement,
+    })
+    expect(dropdownElem.prop('open')).toBe(true)
+    expect(dropdownElem.prop('onClose')).toBe(mockOnClose)
+    expect(dropdownElem.prop('anchorElement')).toBe(mockAnchorElement)
+  })
+
+  it('calls to log out when SettingsDropdown calls onLogoutClick', () => {
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
+    const settingsElem = wrapper.find(SettingsButton)
+    const dropdownElem = settingsElem.renderProp('dropdown')({
+      open: false,
+      onClose: () => {},
+      anchorElement: settingsElem,
+    })
+
+    const onLogoutClickFunc = dropdownElem.prop('onLogoutClick')
+    onLogoutClickFunc()
+    expect(logout).toHaveBeenCalled()
+  })
+
+  it('redirects to the login page on a successful logout', done => {
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
+    const settingsElem = wrapper.find(SettingsButton)
+    const dropdownElem = settingsElem.renderProp('dropdown')({
+      open: false,
+      onClose: () => {},
+      anchorElement: settingsElem,
+    })
+
+    logout.mockResolvedValueOnce(true)
+    goTo.mockImplementationOnce(async url => {
+      expect(url).toEqual(loginURL)
+      done()
+    })
+    const onLogoutClickFunc = dropdownElem.prop('onLogoutClick')
+    onLogoutClickFunc()
+  })
+
+  it('logs an error on a failed logout', done => {
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
+    const settingsElem = wrapper.find(SettingsButton)
+    const dropdownElem = settingsElem.renderProp('dropdown')({
+      open: false,
+      onClose: () => {},
+      anchorElement: settingsElem,
+    })
+
+    logout.mockImplementationOnce(async () => {
+      throw new Error('Uh oh :(')
+    })
+    logger.error.mockImplementationOnce(async () => {
+      done()
+    })
+    const onLogoutClickFunc = dropdownElem.prop('onLogoutClick')
+    onLogoutClickFunc()
   })
 })
