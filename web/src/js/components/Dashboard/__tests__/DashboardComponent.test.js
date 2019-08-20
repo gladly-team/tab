@@ -797,6 +797,17 @@ describe('Dashboard component: search intro experiment', () => {
     ).toEqual(searchFirefoxExtensionPage)
   })
 
+  it('links to the Chrome web store when the user clicks the search intro action button on an unsupported browser', async () => {
+    expect.assertions(1)
+    detectSupportedBrowser.mockReturnValue(UNSUPPORTED_BROWSER)
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    expect(
+      wrapper.find('[data-test-id="search-intro-notif"]').prop('buttonURL')
+    ).toEqual(searchChromeExtensionPage)
+  })
+
   it('does NOT log the search intro experiment action when the onClick callback is called', async () => {
     expect.assertions(1)
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
