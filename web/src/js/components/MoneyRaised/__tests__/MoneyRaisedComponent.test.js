@@ -17,6 +17,7 @@ const getMockProps = () => ({
     moneyRaised: 650200,
     dollarsPerDayRate: 450,
   },
+  dropdown: () => <div />,
 })
 
 afterEach(() => {
@@ -159,25 +160,13 @@ describe('MoneyRaisedComponent', () => {
   it('opens the dropdown on click', () => {
     const MoneyRaisedComponent = require('js/components/MoneyRaised/MoneyRaisedComponent')
       .default
+    const MockDropdown = () => <div />
     const mockProps = getMockProps()
+    mockProps.dropdown = args => <MockDropdown {...args} />
     const wrapper = shallow(<MoneyRaisedComponent {...mockProps} />).dive()
-    expect(wrapper.find(DashboardPopover).prop('open')).toBe(false)
+    expect(wrapper.find(MockDropdown).prop('open')).toBe(false)
     wrapper.find('[data-test-id="money-raised-button"]').simulate('click')
-    expect(wrapper.find(DashboardPopover).prop('open')).toBe(true)
-  })
-
-  it('has a link to invite friends in the dropdown', () => {
-    const MoneyRaisedComponent = require('js/components/MoneyRaised/MoneyRaisedComponent')
-      .default
-    const mockProps = getMockProps()
-    const wrapper = shallow(<MoneyRaisedComponent {...mockProps} />).dive()
-    expect(
-      wrapper
-        .find(DashboardPopover)
-        .children()
-        .find(Link)
-        .prop('to')
-    ).toEqual(inviteFriendsURL)
+    expect(wrapper.find(MockDropdown).prop('open')).toBe(true)
   })
 
   it('clears the interval on unmount', () => {
@@ -189,16 +178,5 @@ describe('MoneyRaisedComponent', () => {
     expect(clearIntervalSpy).not.toHaveBeenCalled()
     wrapper.unmount()
     expect(clearIntervalSpy).toHaveBeenCalledTimes(1)
-  })
-
-  it('sets a marginTop on the DashboardPopover component', () => {
-    const MoneyRaisedComponent = require('js/components/MoneyRaised/MoneyRaisedComponent')
-      .default
-    const mockProps = getMockProps()
-    const wrapper = shallow(<MoneyRaisedComponent {...mockProps} />).dive()
-    expect(wrapper.find(DashboardPopover).prop('style')).toHaveProperty(
-      'marginTop',
-      6
-    )
   })
 })

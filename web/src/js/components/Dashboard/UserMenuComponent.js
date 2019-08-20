@@ -46,6 +46,7 @@ class UserMenu extends React.Component {
       logger.error(e)
     }
     if (logoutSuccess) {
+      // FIXME: use goTo
       goToLogin()
     }
   }

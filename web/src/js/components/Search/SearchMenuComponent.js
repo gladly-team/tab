@@ -241,6 +241,7 @@ const SearchMenuComponent = props => {
                               logger.error(e)
                             }
                             if (logoutSuccess) {
+                              // FIXME
                               goToLogin()
                             }
                           }}
