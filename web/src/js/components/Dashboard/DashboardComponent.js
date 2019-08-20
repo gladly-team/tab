@@ -369,7 +369,6 @@ class Dashboard extends React.Component {
                     setUserClickedNewTabSearchIntroNotif()
                   }}
                   onDismiss={() => {
-                    // FIXME: click logic
                     this.setState({
                       showSearchIntro: false,
                     })
