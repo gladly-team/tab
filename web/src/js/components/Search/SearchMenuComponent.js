@@ -30,6 +30,27 @@ const styles = {
     marginLeft: 12,
     marginRight: 12,
   },
+  heartsDropdownContainer: {
+    paddingTop: 22,
+    paddingBottom: 22,
+    width: 210,
+    textAlign: 'center',
+  },
+  heartsDropdownDonateHeartsContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  heartsDropdownHeartIcon: {
+    marginLeft: 2,
+    height: 24,
+    width: 24,
+    paddingBottom: 1,
+  },
+  heartsDropdownDonateHeartsButton: {
+    marginTop: 12,
+    marginBottom: 0,
+  },
 }
 
 const menuFontSize = 22
@@ -115,55 +136,31 @@ const SearchMenuComponent = props => {
                         marginTop: 6,
                       }}
                     >
-                      <div
-                        style={{
-                          paddingTop: 10,
-                          paddingBottom: 10,
-                          width: 210,
-                          textAlign: 'center',
-                        }}
-                      >
-                        <div
-                          style={{
-                            paddingTop: 12,
-                            paddingBottom: 12,
-                          }}
-                        >
-                          <span>
-                            <span
-                              style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                              }}
-                            >
-                              <Typography variant={'h5'}>
-                                {commaFormatted(user.vcDonatedAllTime)}
-                              </Typography>
-                              <HeartBorderIcon
-                                style={{
-                                  marginLeft: 2,
-                                  height: 24,
-                                  width: 24,
-                                  paddingBottom: 1,
-                                }}
-                              />
-                            </span>
-                            <Typography variant={'body2'}>donated</Typography>
+                      <div className={classes.heartsDropdownContainer}>
+                        <span>
+                          <span
+                            className={
+                              classes.heartsDropdownDonateHeartsContainer
+                            }
+                          >
+                            <Typography variant={'h5'}>
+                              {commaFormatted(user.vcDonatedAllTime)}
+                            </Typography>
+                            <HeartBorderIcon
+                              className={classes.heartsDropdownHeartIcon}
+                            />
                           </span>
-                          <Link to={searchDonateHeartsURL}>
-                            <Button
-                              variant={'contained'}
-                              color={'primary'}
-                              style={{
-                                marginTop: 12,
-                                marginBottom: 0,
-                              }}
-                            >
-                              Donate Hearts
-                            </Button>
-                          </Link>
-                        </div>
+                          <Typography variant={'body2'}>donated</Typography>
+                        </span>
+                        <Link to={searchDonateHeartsURL}>
+                          <Button
+                            variant={'contained'}
+                            color={'primary'}
+                            className={classes.heartsDropdownDonateHeartsButton}
+                          >
+                            Donate Hearts
+                          </Button>
+                        </Link>
                       </div>
                     </DashboardPopover>
                   )}
