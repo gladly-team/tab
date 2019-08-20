@@ -280,7 +280,7 @@ export const _experimentsConfig = [
   createExperiment({
     name: EXPERIMENT_SEARCH_INTRO,
     active: true,
-    disabled: false,
+    disabled: true,
     percentageOfExistingUsersInExperiment: 20.0,
     percentageOfNewUsersInExperiment: 50.0,
     filters: [
