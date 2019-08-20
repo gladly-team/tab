@@ -10,7 +10,7 @@ import MoneyRaised from 'js/components/MoneyRaised/MoneyRaisedContainer'
 import Hearts from 'js/components/Dashboard/HeartsContainer'
 import SettingsButton from 'js/components/Dashboard/SettingsButtonComponent'
 import { logout } from 'js/authentication/user'
-import { goToLogin, inviteFriendsURL } from 'js/navigation/navigation'
+import { goTo, inviteFriendsURL, loginURL } from 'js/navigation/navigation'
 import logger from 'js/utils/logger'
 import Link from 'js/components/General/Link'
 
@@ -422,7 +422,8 @@ describe('User menu component: settings dropdown component', () => {
     })
 
     logout.mockResolvedValueOnce(true)
-    goToLogin.mockImplementationOnce(async () => {
+    goTo.mockImplementationOnce(async url => {
+      expect(url).toEqual(loginURL)
       done()
     })
     const onLogoutClickFunc = dropdownElem.prop('onLogoutClick')

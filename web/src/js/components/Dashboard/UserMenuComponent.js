@@ -16,7 +16,7 @@ import HeartsDropdown from 'js/components/Dashboard/HeartsDropdownContainer'
 import SettingsButton from 'js/components/Dashboard/SettingsButtonComponent'
 import SettingsDropdown from 'js/components/Dashboard/SettingsDropdownComponent'
 import { logout } from 'js/authentication/user'
-import { goToLogin } from 'js/navigation/navigation'
+import { goTo, loginURL } from 'js/navigation/navigation'
 import logger from 'js/utils/logger'
 import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 import { inviteFriendsURL } from 'js/navigation/navigation'
@@ -46,8 +46,7 @@ class UserMenu extends React.Component {
       logger.error(e)
     }
     if (logoutSuccess) {
-      // FIXME: use goTo
-      goToLogin()
+      goTo(loginURL)
     }
   }
 
