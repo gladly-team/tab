@@ -123,7 +123,49 @@ const SearchMenuComponent = props => {
           style
         )}
       >
-        <MoneyRaised app={app} />
+        <MoneyRaised
+          app={app}
+          dropdown={({ open, onClose, anchorElement }) => (
+            <DashboardPopover
+              open={open}
+              anchorEl={anchorElement}
+              onClose={onClose}
+              style={{
+                marginTop: 6,
+              }}
+            >
+              <div style={{ padding: 12, width: 160 }}>
+                <Typography
+                  variant={'body2'}
+                  className={classes.dropdownText}
+                  gutterBottom
+                >
+                  This is how much money our community has raised for charity.
+                </Typography>
+                <Typography
+                  variant={'body2'}
+                  className={classes.dropdownText}
+                  gutterBottom
+                >
+                  Recruit your friends to raise more!
+                </Typography>
+                <div
+                  style={{
+                    marginTop: 14,
+                    display: 'flex',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Link to={searchInviteFriendsURL}>
+                    <Button variant={'contained'} color={'primary'}>
+                      Invite Friends
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </DashboardPopover>
+          )}
+        />
         {userExists || showSignInButton ? (
           <div
             style={{

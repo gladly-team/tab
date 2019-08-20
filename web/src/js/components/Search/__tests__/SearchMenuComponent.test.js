@@ -253,6 +253,96 @@ describe('SearchMenuComponent', () => {
   })
 })
 
+describe('SearchMenuComponent: money raised dropdown component', () => {
+  it('receives the renderProp arguments for open, onClose, and anchorElement', () => {
+    const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user = getMockUserData()
+    const mockOnClose = () => {
+      console.log('hi')
+    }
+    const mockAnchorElement = <span>hi</span>
+    const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
+    const moneyRaisedElem = wrapper.find(MoneyRaised)
+    const dropdownElem = moneyRaisedElem.renderProp('dropdown')({
+      open: true,
+      onClose: mockOnClose,
+      anchorElement: mockAnchorElement,
+    })
+    expect(dropdownElem.prop('open')).toBe(true)
+    expect(dropdownElem.prop('onClose')).toBe(mockOnClose)
+    expect(dropdownElem.prop('anchorEl')).toBe(mockAnchorElement)
+  })
+
+  it('sets a marginTop', () => {
+    const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user = getMockUserData()
+    const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
+    const moneyRaisedElem = wrapper.find(MoneyRaised)
+    const dropdownElem = moneyRaisedElem.renderProp('dropdown')({
+      open: false,
+      onClose: () => {},
+      anchorElement: moneyRaisedElem,
+    })
+    expect(dropdownElem.prop('style')).toHaveProperty('marginTop', 6)
+  })
+
+  it('displays the expected copy', () => {
+    const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user = getMockUserData()
+    mockProps.user.vcDonatedAllTime = 3002
+    const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
+    const moneyRaisedElem = wrapper.find(MoneyRaised)
+    const dropdownElem = moneyRaisedElem.renderProp('dropdown')({
+      open: false,
+      onClose: () => {},
+      anchorElement: moneyRaisedElem,
+    })
+    expect(
+      dropdownElem
+        .find(Typography)
+        .at(0)
+        .render()
+        .text()
+    ).toEqual('This is how much money our community has raised for charity.')
+    expect(
+      dropdownElem
+        .find(Typography)
+        .at(1)
+        .render()
+        .text()
+    ).toEqual('Recruit your friends to raise more!')
+  })
+
+  it('has a link to invite friends', () => {
+    const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user = getMockUserData()
+    const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
+    const heartsElem = wrapper.find(MoneyRaised)
+    const dropdownElem = heartsElem.renderProp('dropdown')({
+      open: false,
+      onClose: () => {},
+      anchorElement: heartsElem,
+    })
+    const linkElem = dropdownElem.find(Link).first()
+    expect(linkElem.prop('to')).toEqual(searchInviteFriendsURL)
+    expect(
+      linkElem
+        .children()
+        .first()
+        .render()
+        .text()
+    ).toEqual('Invite Friends')
+  })
+})
+
 describe('SearchMenuComponent: Hearts dropdown component', () => {
   it('receives the renderProp arguments for open, onClose, and anchorElement', () => {
     const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
