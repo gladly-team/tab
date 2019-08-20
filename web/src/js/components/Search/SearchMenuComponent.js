@@ -8,12 +8,16 @@ import {
 } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import CircleIcon from '@material-ui/icons/Lens'
+import Typography from '@material-ui/core/Typography'
+import HeartBorderIcon from '@material-ui/icons/FavoriteBorder'
+import { commaFormatted } from 'js/utils/utils'
 import theme from 'js/theme/searchTheme'
 import Link from 'js/components/General/Link'
 import MoneyRaised from 'js/components/MoneyRaised/MoneyRaisedContainer'
 import Hearts from 'js/components/Search/SearchHeartsContainer'
 import SettingsButton from 'js/components/Dashboard/SettingsButtonComponent'
-import { searchAuthURL } from 'js/navigation/navigation'
+import { searchAuthURL, searchDonateHeartsURL } from 'js/navigation/navigation'
+import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 
 const defaultTheme = createMuiTheme(theme)
 
@@ -102,6 +106,67 @@ const SearchMenuComponent = props => {
                   app={app}
                   user={user}
                   showMaxHeartsFromSearchesMessage
+                  dropdown={({ open, onClose, anchorElement }) => (
+                    <DashboardPopover
+                      open={open}
+                      anchorEl={anchorElement}
+                      onClose={onClose}
+                      style={{
+                        marginTop: 6,
+                      }}
+                    >
+                      <div
+                        style={{
+                          paddingTop: 10,
+                          paddingBottom: 10,
+                          width: 210,
+                          textAlign: 'center',
+                        }}
+                      >
+                        <div
+                          style={{
+                            paddingTop: 12,
+                            paddingBottom: 12,
+                          }}
+                        >
+                          <span>
+                            <span
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                              }}
+                            >
+                              <Typography variant={'h5'}>
+                                {commaFormatted(user.vcDonatedAllTime)}
+                              </Typography>
+                              <HeartBorderIcon
+                                style={{
+                                  marginLeft: 2,
+                                  height: 24,
+                                  width: 24,
+                                  paddingBottom: 1,
+                                }}
+                              />
+                            </span>
+                            <Typography variant={'body2'}>donated</Typography>
+                          </span>
+                          <Link to={searchDonateHeartsURL}>
+                            <Button
+                              variant={'contained'}
+                              color={'primary'}
+                              style={{
+                                marginTop: 12,
+                                marginBottom: 0,
+                              }}
+                            >
+                              Donate Hearts
+                            </Button>
+                          </Link>
+                        </div>
+                      </div>
+                    </DashboardPopover>
+                  )}
                 />
                 <SettingsButton isUserAnonymous={false} />
               </>
@@ -127,7 +192,11 @@ SearchMenuComponent.propTypes = {
   isSearchExtensionInstalled: PropTypes.bool.isRequired,
   style: PropTypes.object,
   // May not exist if the user is not signed in.
-  user: PropTypes.shape({}),
+  user: PropTypes.shape({
+    // level: PropTypes.number.isRequired,
+    // heartsUntilNextLevel: PropTypes.number.isRequired,
+    vcDonatedAllTime: PropTypes.number.isRequired,
+  }),
 }
 
 SearchMenuComponent.defaultProps = {
