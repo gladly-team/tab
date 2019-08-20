@@ -25,6 +25,10 @@ const getMockProps = () => ({
   user: null,
 })
 
+const getMockUserData = () => ({
+  vcDonatedAllTime: 1201,
+})
+
 describe('SearchMenuComponent', () => {
   it('renders without error', () => {
     const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
@@ -70,10 +74,7 @@ describe('SearchMenuComponent', () => {
     const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
       .default
     const mockProps = getMockProps()
-    mockProps.user = {
-      tabsToday: 123,
-      vcCurrent: 864,
-    }
+    mockProps.user = getMockUserData()
     const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
     expect(wrapper.find(Hearts).exists()).toBe(true)
   })
@@ -82,10 +83,7 @@ describe('SearchMenuComponent', () => {
     const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
       .default
     const mockProps = getMockProps()
-    mockProps.user = {
-      tabsToday: 123,
-      vcCurrent: 864,
-    }
+    mockProps.user = getMockUserData()
     const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
     expect(wrapper.find(Hearts).prop('showMaxHeartsFromSearchesMessage')).toBe(
       true
@@ -116,10 +114,7 @@ describe('SearchMenuComponent', () => {
     const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
       .default
     const mockProps = getMockProps()
-    mockProps.user = {
-      tabsToday: 123,
-      vcCurrent: 864,
-    }
+    mockProps.user = getMockUserData()
     const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
     expect(wrapper.find(CircleIcon).exists()).toBe(true)
   })
@@ -137,10 +132,7 @@ describe('SearchMenuComponent', () => {
     const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
       .default
     const mockProps = getMockProps()
-    mockProps.user = {
-      tabsToday: 123,
-      vcCurrent: 864,
-    }
+    mockProps.user = getMockUserData()
     const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
     expect(wrapper.find(SettingsButton).exists()).toBe(true)
   })
@@ -162,10 +154,7 @@ describe('SearchMenuComponent', () => {
       .default
     const mockProps = getMockProps()
     mockProps.isSearchExtensionInstalled = true
-    mockProps.user = {
-      tabsToday: 123,
-      vcCurrent: 864,
-    }
+    mockProps.user = getMockUserData()
     const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
     expect(wrapper.find('[data-test-id="search-sign-in-link"]').exists()).toBe(
       false
@@ -247,5 +236,22 @@ describe('SearchMenuComponent', () => {
         color: 'rgba(0, 0, 0, 0.87)',
       },
     })
+  })
+})
+
+describe('SearchMenuComponent: Hearts dropdown component', () => {
+  it('sets a marginTop', () => {
+    const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user = getMockUserData()
+    const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
+    const heartsElem = wrapper.find(Hearts)
+    const dropdownElem = heartsElem.renderProp('dropdown')({
+      open: false,
+      onClose: () => {},
+      anchorElement: heartsElem,
+    })
+    expect(dropdownElem.prop('style')).toHaveProperty('marginTop', 6)
   })
 })
