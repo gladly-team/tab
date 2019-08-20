@@ -27,6 +27,8 @@ import {
   setUserDismissedAdExplanation,
   hasUserDismissedNotificationRecently,
   hasUserDismissedCampaignRecently,
+  hasUserClickedNewTabSearchIntroNotif,
+  setUserClickedNewTabSearchIntroNotif,
 } from 'js/utils/local-user-data-mgr'
 import {
   CHROME_BROWSER,
@@ -88,7 +90,7 @@ class Dashboard extends React.Component {
       showNotification:
         showGlobalNotification() && !hasUserDismissedNotificationRecently(),
       // Whether to show an introduction to Search.
-      showSearchIntro: true, // FIXME
+      showSearchIntro: !hasUserClickedNewTabSearchIntroNotif(),
       // @experiment-referral-notification
       referralNotificationExperimentGroup: getUserExperimentGroup(
         EXPERIMENT_REFERRAL_NOTIFICATION
@@ -150,7 +152,7 @@ class Dashboard extends React.Component {
       referralNotificationExperimentGroup,
       tabId,
     } = this.state
-    const { errorMessage, errorOpen } = this.state
+    const { errorMessage, errorOpen, showSearchIntro } = this.state
 
     // Whether or not a campaign should show on the dashboard
     const showCampaign = !!(
@@ -325,11 +327,12 @@ class Dashboard extends React.Component {
               // * haven't already clicked it
               // * haven't already interacted with the intro in our previous experiment
               // * have opened at least three tabs
-              // TODO: click logic
+              showSearchIntro &&
               !(
                 user.experimentActions.searchIntro === 'CLICK' ||
                 user.experimentActions.searchIntro === 'DISMISS'
-              ) && user.tabs > 3 ? (
+              ) &&
+              user.tabs > 3 ? (
                 <Notification
                   data-test-id={'search-intro-notif'}
                   title={`We're working on Search for a Cause`}
@@ -360,16 +363,17 @@ class Dashboard extends React.Component {
                   onClick={() => {
                     // Hide the message because we don't want the user to
                     // need to dismiss it after clicking.
-                    // FIXME: click logic
                     this.setState({
                       showSearchIntro: false,
                     })
+                    setUserClickedNewTabSearchIntroNotif()
                   }}
                   onDismiss={() => {
                     // FIXME: click logic
                     this.setState({
                       showSearchIntro: false,
                     })
+                    setUserClickedNewTabSearchIntroNotif()
                   }}
                   style={{
                     width: 440,
