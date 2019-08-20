@@ -6,7 +6,9 @@ import {
   MuiThemeProvider,
   withStyles,
 } from '@material-ui/core/styles'
+import Button from '@material-ui/core/Button'
 import CircleIcon from '@material-ui/icons/Lens'
+import Typography from '@material-ui/core/Typography'
 import theme from 'js/theme/defaultV1'
 import MoneyRaised from 'js/components/MoneyRaised/MoneyRaisedContainer'
 import Hearts from 'js/components/Dashboard/HeartsContainer'
@@ -16,6 +18,9 @@ import SettingsDropdown from 'js/components/Dashboard/SettingsDropdownComponent'
 import { logout } from 'js/authentication/user'
 import { goToLogin } from 'js/navigation/navigation'
 import logger from 'js/utils/logger'
+import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
+import { inviteFriendsURL } from 'js/navigation/navigation'
+import Link from 'js/components/General/Link'
 
 const defaultTheme = createMuiTheme(theme)
 
@@ -133,7 +138,49 @@ class UserMenu extends React.Component {
             justifyContent: 'flex-end',
           }}
         >
-          <MoneyRaised app={app} />
+          <MoneyRaised
+            app={app}
+            dropdown={({ open, onClose, anchorElement }) => (
+              <DashboardPopover
+                open={open}
+                anchorEl={anchorElement}
+                onClose={onClose}
+                style={{
+                  marginTop: 6,
+                }}
+              >
+                <div style={{ padding: 12, width: 160 }}>
+                  <Typography
+                    variant={'body2'}
+                    className={classes.dropdownText}
+                    gutterBottom
+                  >
+                    This is how much money our community has raised for charity.
+                  </Typography>
+                  <Typography
+                    variant={'body2'}
+                    className={classes.dropdownText}
+                    gutterBottom
+                  >
+                    Recruit your friends to raise more!
+                  </Typography>
+                  <div
+                    style={{
+                      marginTop: 14,
+                      display: 'flex',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Link to={inviteFriendsURL}>
+                      <Button variant={'contained'} color={'primary'}>
+                        Invite Friends
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </DashboardPopover>
+            )}
+          />
           <CircleIcon
             style={{
               color: 'rgba(255, 255, 255, 0.8)',
