@@ -797,6 +797,26 @@ describe('Dashboard component: search intro experiment', () => {
     ).toEqual(searchFirefoxExtensionPage)
   })
 
+  it('does NOT log the search intro experiment action when the onClick callback is called', async () => {
+    expect.assertions(1)
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    await wrapper.find('[data-test-id="search-intro-notif"]').prop('onClick')()
+    expect(LogUserExperimentActionsMutation).not.toHaveBeenCalled()
+  })
+
+  it('does NOT log the search intro experiment action when the onDismiss callback is called', async () => {
+    expect.assertions(1)
+    const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
+      .default
+    const wrapper = shallow(<DashboardComponent {...mockProps} />)
+    await wrapper
+      .find('[data-test-id="search-intro-notif"]')
+      .prop('onDismiss')()
+    expect(LogUserExperimentActionsMutation).not.toHaveBeenCalled()
+  })
+
   it('does not sets the "useGlobalDismissalTime" on the experiment notification', () => {
     const DashboardComponent = require('js/components/Dashboard/DashboardComponent')
       .default
