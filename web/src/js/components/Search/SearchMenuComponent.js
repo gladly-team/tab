@@ -21,7 +21,7 @@ import DashboardPopover from 'js/components/Dashboard/DashboardPopover'
 
 const defaultTheme = createMuiTheme(theme)
 
-const styles = {
+const styles = theme => ({
   circleIcon: {
     alignSelf: 'center',
     width: 5,
@@ -42,6 +42,7 @@ const styles = {
     justifyContent: 'center',
   },
   heartsDropdownHeartIcon: {
+    color: theme.typography.h5.color,
     marginLeft: 2,
     height: 24,
     width: 24,
@@ -51,7 +52,7 @@ const styles = {
     marginTop: 12,
     marginBottom: 0,
   },
-}
+})
 
 const menuFontSize = 22
 
