@@ -6,11 +6,13 @@ import { MuiThemeProvider } from '@material-ui/core/styles'
 import Hearts from 'js/components/Search/SearchHeartsContainer'
 import Button from '@material-ui/core/Button'
 import CircleIcon from '@material-ui/icons/Lens'
+import Typography from '@material-ui/core/Typography'
 import SettingsButton from 'js/components/Dashboard/SettingsButtonComponent'
 import MoneyRaised from 'js/components/MoneyRaised/MoneyRaisedContainer'
 import Link from 'js/components/General/Link'
+import { searchDonateHeartsURL } from 'js/navigation/navigation'
 
-jest.mock('react-relay')
+jest.mock('@material-ui/icons/FavoriteBorder', () => () => '[heart icon]')
 jest.mock('js/components/Search/SearchHeartsContainer')
 jest.mock('js/components/Dashboard/SettingsButtonComponent')
 jest.mock('js/components/MoneyRaised/MoneyRaisedContainer')
@@ -254,6 +256,55 @@ describe('SearchMenuComponent: Hearts dropdown component', () => {
     })
     expect(dropdownElem.prop('style')).toHaveProperty('marginTop', 6)
   })
+
+  it('displays the expected "donate hearts" text', () => {
+    const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user = getMockUserData()
+    mockProps.user.vcDonatedAllTime = 3002
+    const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
+    const heartsElem = wrapper.find(Hearts)
+    const dropdownElem = heartsElem.renderProp('dropdown')({
+      open: false,
+      onClose: () => {},
+      anchorElement: heartsElem,
+    })
+    const elem = dropdownElem
+      .find(Typography)
+      .filterWhere(
+        n =>
+          n
+            .render()
+            .text()
+            .indexOf('donated') > -1
+      )
+      .parent()
+    expect(elem.render().text()).toEqual('3,002[heart icon]donated')
+  })
+
+  it('shows a "donate hearts" button that links to the donate hearts page', () => {
+    const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user = getMockUserData()
+    const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
+    const heartsElem = wrapper.find(Hearts)
+    const dropdownElem = heartsElem.renderProp('dropdown')({
+      open: false,
+      onClose: () => {},
+      anchorElement: heartsElem,
+    })
+    const linkElem = dropdownElem.find(Link).first()
+    expect(linkElem.prop('to')).toEqual(searchDonateHeartsURL)
+    expect(
+      linkElem
+        .children()
+        .first()
+        .render()
+        .text()
+    ).toEqual('Donate Hearts')
+  })
 })
 
 describe('SearchMenuComponent: settings dropdown component', () => {
@@ -263,7 +314,7 @@ describe('SearchMenuComponent: settings dropdown component', () => {
     const mockProps = getMockProps()
     mockProps.user = getMockUserData()
     const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
-    const heartsElem = wrapper.find(SettingsButtonComponent)
+    const heartsElem = wrapper.find(SettingsButton)
     const dropdownElem = heartsElem.renderProp('dropdown')({
       open: false,
       onClose: () => {},
