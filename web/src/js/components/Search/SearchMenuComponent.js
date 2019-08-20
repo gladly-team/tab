@@ -189,9 +189,6 @@ const SearchMenuComponent = props => {
                       open={open}
                       anchorEl={anchorElement}
                       onClose={onClose}
-                      style={{
-                        marginTop: 6,
-                      }}
                     >
                       <MenuList style={{ width: 200 }}>
                         <Link to={searchDonateHeartsURL}>

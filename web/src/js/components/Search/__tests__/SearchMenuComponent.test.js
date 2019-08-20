@@ -362,7 +362,7 @@ describe('SearchMenuComponent: settings dropdown component', () => {
     expect(dropdownElem.prop('anchorEl')).toBe(mockAnchorElement)
   })
 
-  it('sets a marginTop', () => {
+  it('does not set a marginTop', () => {
     const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
       .default
     const mockProps = getMockProps()
@@ -374,7 +374,7 @@ describe('SearchMenuComponent: settings dropdown component', () => {
       onClose: () => {},
       anchorElement: settingsElem,
     })
-    expect(dropdownElem.prop('style')).toHaveProperty('marginTop', 6)
+    expect(dropdownElem.prop('style')).toBeUndefined()
   })
 
   it('has the expected width', () => {
