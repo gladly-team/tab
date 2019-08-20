@@ -4,10 +4,6 @@ import { get } from 'lodash/object'
 import { withStyles } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
-import SettingsDropdown from 'js/components/Dashboard/SettingsDropdownComponent'
-import { logout } from 'js/authentication/user'
-import { goToLogin } from 'js/navigation/navigation'
-import logger from 'js/utils/logger'
 
 const styles = {
   settingsIcon: {
@@ -31,20 +27,8 @@ class SettingsButtonComponent extends React.Component {
     this.anchorElement = null
   }
 
-  async logout() {
-    var logoutSuccess = false
-    try {
-      logoutSuccess = await logout()
-    } catch (e) {
-      logger.error(e)
-    }
-    if (logoutSuccess) {
-      goToLogin()
-    }
-  }
-
   render() {
-    const { classes, isUserAnonymous, theme } = this.props
+    const { classes, dropdown, theme } = this.props
     const { isHovering, isPopoverOpen } = this.state
     const anchorElement = this.anchorElement
     return (
@@ -84,17 +68,15 @@ class SettingsButtonComponent extends React.Component {
             }}
           />
         </IconButton>
-        <SettingsDropdown
-          open={isPopoverOpen}
-          anchorElement={anchorElement}
-          onClose={() => {
+        {dropdown({
+          open: isPopoverOpen,
+          onClose: () => {
             this.setState({
               isPopoverOpen: false,
             })
-          }}
-          onLogoutClick={this.logout.bind(this)}
-          isUserAnonymous={isUserAnonymous}
-        />
+          },
+          anchorElement: anchorElement,
+        })}
       </div>
     )
   }
@@ -102,7 +84,7 @@ class SettingsButtonComponent extends React.Component {
 
 SettingsButtonComponent.propTypes = {
   classes: PropTypes.object.isRequired,
-  isUserAnonymous: PropTypes.bool.isRequired,
+  dropdown: PropTypes.func.isRequired,
   theme: PropTypes.object.isRequired,
 }
 

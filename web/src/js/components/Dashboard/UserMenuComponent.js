@@ -12,6 +12,10 @@ import MoneyRaised from 'js/components/MoneyRaised/MoneyRaisedContainer'
 import Hearts from 'js/components/Dashboard/HeartsContainer'
 import HeartsDropdown from 'js/components/Dashboard/HeartsDropdownContainer'
 import SettingsButton from 'js/components/Dashboard/SettingsButtonComponent'
+import SettingsDropdown from 'js/components/Dashboard/SettingsDropdownComponent'
+import { logout } from 'js/authentication/user'
+import { goToLogin } from 'js/navigation/navigation'
+import logger from 'js/utils/logger'
 
 const defaultTheme = createMuiTheme(theme)
 
@@ -29,6 +33,18 @@ const styles = {
 const menuFontSize = 24
 
 class UserMenu extends React.Component {
+  async logout() {
+    var logoutSuccess = false
+    try {
+      logoutSuccess = await logout()
+    } catch (e) {
+      logger.error(e)
+    }
+    if (logoutSuccess) {
+      goToLogin()
+    }
+  }
+
   render() {
     const { app, classes, user, isUserAnonymous } = this.props
     return (
@@ -143,7 +159,17 @@ class UserMenu extends React.Component {
               />
             )}
           />
-          <SettingsButton isUserAnonymous={isUserAnonymous} />
+          <SettingsButton
+            dropdown={({ open, onClose, anchorElement }) => (
+              <SettingsDropdown
+                open={open}
+                anchorElement={anchorElement}
+                onClose={onClose}
+                onLogoutClick={this.logout.bind(this)}
+                isUserAnonymous={isUserAnonymous}
+              />
+            )}
+          />
         </div>
       </MuiThemeProvider>
     )
