@@ -11,6 +11,7 @@ import SettingsButton from 'js/components/Dashboard/SettingsButtonComponent'
 
 jest.mock('js/components/MoneyRaised/MoneyRaisedContainer')
 jest.mock('js/components/Dashboard/HeartsContainer')
+jest.mock('js/components/Dashboard/HeartsDropdownContainer')
 jest.mock('js/components/Dashboard/SettingsButtonComponent')
 
 const getMockProps = () => {
@@ -212,5 +213,63 @@ describe('User menu component', () => {
         color: '#fff',
       },
     })
+  })
+})
+
+describe('User menu component: Hearts dropdown component', () => {
+  it('receives the "user" and "app" props', () => {
+    const mockProps = getMockProps()
+    mockProps.app = {
+      hi: 'there',
+    }
+    mockProps.user = {
+      some: 'thing',
+      abc: 123,
+    }
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
+      .default
+    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
+    const heartsElem = wrapper.find(Hearts)
+    const dropdownElem = heartsElem.renderProp('dropdown')({
+      open: false,
+      onClose: () => {},
+      anchorElement: heartsElem,
+    })
+    expect(dropdownElem.prop('app')).toEqual(mockProps.app)
+    expect(dropdownElem.prop('user')).toEqual(mockProps.user)
+  })
+
+  it('receives the renderProp arguments for open, onClose, and anchorElement', () => {
+    const mockProps = getMockProps()
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
+      .default
+    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
+    const heartsElem = wrapper.find(Hearts)
+    const mockOnClose = () => {
+      console.log('hi')
+    }
+    const mockAnchorElement = <span>hi</span>
+    const dropdownElem = heartsElem.renderProp('dropdown')({
+      open: true,
+      onClose: mockOnClose,
+      anchorElement: mockAnchorElement,
+    })
+    expect(dropdownElem.prop('open')).toBe(true)
+    expect(dropdownElem.prop('onClose')).toBe(mockOnClose)
+    expect(dropdownElem.prop('anchorElement')).toBe(mockAnchorElement)
+  })
+
+  it('sets a marginTop', () => {
+    const mockProps = getMockProps()
+    const UserMenuComponent = require('js/components/Dashboard/UserMenuComponent')
+      .default
+    const wrapper = shallow(<UserMenuComponent {...mockProps} />).dive()
+    const heartsElem = wrapper.find(Hearts)
+    const dropdownElem = heartsElem.renderProp('dropdown')({
+      open: false,
+      onClose: () => {},
+      anchorElement: heartsElem,
+    })
+    expect(dropdownElem.prop('style')).toHaveProperty('marginTop', 6)
   })
 })
