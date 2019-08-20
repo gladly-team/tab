@@ -142,26 +142,30 @@ const SearchMenuComponent = props => {
                 >
                   This is how much money our community has raised for charity.
                 </Typography>
-                <Typography
-                  variant={'body2'}
-                  className={classes.dropdownText}
-                  gutterBottom
-                >
-                  Recruit your friends to raise more!
-                </Typography>
-                <div
-                  style={{
-                    marginTop: 14,
-                    display: 'flex',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Link to={searchInviteFriendsURL}>
-                    <Button variant={'contained'} color={'primary'}>
-                      Invite Friends
-                    </Button>
-                  </Link>
-                </div>
+                {userExists ? (
+                  <>
+                    <Typography
+                      variant={'body2'}
+                      className={classes.dropdownText}
+                      gutterBottom
+                    >
+                      Recruit your friends to raise more!
+                    </Typography>
+                    <div
+                      style={{
+                        marginTop: 14,
+                        display: 'flex',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <Link to={searchInviteFriendsURL}>
+                        <Button variant={'contained'} color={'primary'}>
+                          Invite Friends
+                        </Button>
+                      </Link>
+                    </div>
+                  </>
+                ) : null}
               </div>
             </DashboardPopover>
           )}

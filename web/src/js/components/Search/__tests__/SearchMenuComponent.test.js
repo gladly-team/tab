@@ -290,7 +290,7 @@ describe('SearchMenuComponent: money raised dropdown component', () => {
     expect(dropdownElem.prop('style')).toHaveProperty('marginTop', 6)
   })
 
-  it('displays the expected copy', () => {
+  it('displays the expected copy when the user is signed in', () => {
     const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
       .default
     const mockProps = getMockProps()
@@ -303,6 +303,7 @@ describe('SearchMenuComponent: money raised dropdown component', () => {
       onClose: () => {},
       anchorElement: moneyRaisedElem,
     })
+    expect(dropdownElem.find(Typography).length).toEqual(2)
     expect(
       dropdownElem
         .find(Typography)
@@ -319,7 +320,7 @@ describe('SearchMenuComponent: money raised dropdown component', () => {
     ).toEqual('Recruit your friends to raise more!')
   })
 
-  it('has a link to invite friends', () => {
+  it('has a link to invite friends when the user is signed in', () => {
     const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
       .default
     const mockProps = getMockProps()
@@ -340,6 +341,42 @@ describe('SearchMenuComponent: money raised dropdown component', () => {
         .render()
         .text()
     ).toEqual('Invite Friends')
+  })
+
+  it('displays the expected copy when the user is NOT signed in', () => {
+    const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
+      .default
+    const mockProps = getMockProps()
+    mockProps.user = null
+    const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
+    const moneyRaisedElem = wrapper.find(MoneyRaised)
+    const dropdownElem = moneyRaisedElem.renderProp('dropdown')({
+      open: false,
+      onClose: () => {},
+      anchorElement: moneyRaisedElem,
+    })
+    expect(dropdownElem.find(Typography).length).toEqual(1)
+    expect(
+      dropdownElem
+        .find(Typography)
+        .at(0)
+        .render()
+        .text()
+    ).toEqual('This is how much money our community has raised for charity.')
+  })
+
+  it('does not have a link to invite friends when the user is NOT signed in', () => {
+    const SearchMenuComponent = require('js/components/Search/SearchMenuComponent')
+      .default
+    mockProps.user = null
+    const wrapper = shallow(<SearchMenuComponent {...mockProps} />).dive()
+    const heartsElem = wrapper.find(MoneyRaised)
+    const dropdownElem = heartsElem.renderProp('dropdown')({
+      open: false,
+      onClose: () => {},
+      anchorElement: heartsElem,
+    })
+    expect(dropdownElem.find(Link).exists()).toBe(false)
   })
 })
 
